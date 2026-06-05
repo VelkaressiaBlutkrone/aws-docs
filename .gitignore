@@ -1,4 +1,21 @@
-node_modules
-dist
-.vite
+# Flutter / Dart
+flutter_app/build/
+flutter_app/.dart_tool/
+flutter_app/.flutter-plugins
+flutter_app/.flutter-plugins-dependencies
+flutter_app/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+.dart_tool/
+build/
+
+# Editors / OS
+*.iml
+.idea/
+.vscode/
 *.local
+.DS_Store
+
+# Tooling
+.gstack/
+.omc/

@@ -17,26 +17,32 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flutter_app
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          node-version: 24
-          cache: npm
+          channel: stable
+          cache: true
 
       - name: Install dependencies
-        run: npm ci
+        run: flutter pub get
 
-      - name: Build
-        run: npm run build
+      - name: Build web
+        run: flutter build web --release --base-href /aws-docs/
+
+      - name: Disable Jekyll processing
+        run: touch build/web/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: flutter_app/build/web
 
   deploy:
     environment:

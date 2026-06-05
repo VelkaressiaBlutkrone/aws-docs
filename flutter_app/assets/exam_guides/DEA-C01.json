@@ -1,0 +1,281 @@
+{
+  "code": "DEA-C01",
+  "slug": "data-engineer-associate-01",
+  "overview": {
+    "level": "Associate",
+    "passingScore": 720,
+    "scoredQuestions": 50,
+    "unscoredQuestions": 15,
+    "durationMinutes": null
+  },
+  "domains": [
+    {
+      "no": 1,
+      "name": "데이터 수집 및 변환",
+      "weightPct": 34,
+      "tasks": [
+        {
+          "no": "1.1",
+          "title": "데이터 수집 수행",
+          "knowledge": [],
+          "skills": [
+            "스트리밍 소스에서 데이터 읽기(예: Amazon Kinesis, Amazon Managed Streaming for Apache Kafka(Amazon MSK), Amazon DynamoDB Streams, AWS Database Migration Service(AWS DMS), AWS Glue, Amazon Redshift)",
+            "배치 소스에서 데이터 읽기(예: Amazon S3, AWS Glue, Amazon EMR, AWS DMS, Amazon Redshift, AWS Lambda, Amazon AppFlow)",
+            "배치 수집을 위한 적절한 구성 옵션 구현",
+            "데이터 API 사용",
+            "Amazon EventBridge, Apache Airflow 또는 작업 및 크롤러에 대한 시간 기반 일정을 사용하여 스케줄러 설정",
+            "이벤트 트리거 설정(예: Amazon S3 이벤트 알림, EventBridge)",
+            "Kinesis에서 Lambda 함수 호출",
+            "데이터 소스에 연결할 수 있도록 IP 주소에 대한 허용 목록 만들기",
+            "제한 구현 및 속도 제한 극복(예: DynamoDB, Amazon RDS, Kinesis)",
+            "스트리밍 데이터 배포를 위한 팬인 및 팬아웃 관리",
+            "데이터 수집 파이프라인의 반복 재생 가능성 설명",
+            "스테이트풀 및 스테이트리스 데이터 트랜잭션 정의"
+          ]
+        },
+        {
+          "no": "1.2",
+          "title": "데이터 변환 및 처리",
+          "knowledge": [],
+          "skills": [
+            "성능 요구 사항에 맞게 컨테이너 사용 최적화(예: Amazon Elastic Kubernetes Service(Amazon EKS), Amazon Elastic Container Service(Amazon ECS))",
+            "다양한 데이터 소스에 연결(예: Java Database Connectivity(JDBC), Open Database Connectivity(ODBC))",
+            "여러 소스의 데이터 통합",
+            "데이터 처리 중 비용 최적화",
+            "요구 사항에 따라 데이터 변환 서비스 구현(예: Amazon EMR, AWS Glue, Lambda, Amazon Redshift)",
+            "형식 간 데이터 변환(예: .csv에서 Apache Parquet으로 변환)",
+            "일반적인 변환 실패 및 성능 문제를 해결하고 디버깅 수행",
+            "AWS 서비스를 사용하여 다른 시스템에서 데이터를 사용할 수 있도록 데이터 API 만들기",
+            "데이터의 볼륨, 속도 및 다양성 정의(예: 정형 데이터, 비정형 데이터)",
+            "데이터 처리를 위한 대규모 언어 모델(LLM) 통합"
+          ]
+        },
+        {
+          "no": "1.3",
+          "title": "데이터 파이프라인 오케스트레이션",
+          "knowledge": [],
+          "skills": [
+            "오케스트레이션 서비스를 사용하여 데이터 ETL 파이프라인의 워크플로 구축(예: Lambda, EventBridge, Amazon Managed Workflows for Apache Airflow(Amazon MWAA), AWS Step Functions, AWS Glue 워크플로)",
+            "성능, 가용성, 확장성, 복원성 및 내결함성이 우수한 데이터 파이프라인 구축",
+            "서버리스 워크플로 구현 및 유지 관리",
+            "알림 서비스를 사용하여 알림 전송(예: Amazon Simple Notification Service(Amazon SNS), Amazon Simple Queue Service(Amazon SQS))"
+          ]
+        },
+        {
+          "no": "1.4",
+          "title": "프로그래밍 개념 적용",
+          "knowledge": [],
+          "skills": [
+            "코드 최적화를 통해 데이터를 수집하고 변환 런타임 단축",
+            "동시성 및 성능 요구 사항을 충족하도록 Lambda 함수 구성",
+            "데이터 엔지니어링을 위한 프로그래밍 언어 및 프레임워크 사용(예: Python, SQL, Scala, R, Java, Bash, PowerShell)",
+            "데이터 엔지니어링에 소프트웨어 엔지니어링 모범 사례 사용(예: 버전 제어, 테스트, 로깅, 모니터링)",
+            "코드형 인프라(IaC)를 사용하여 데이터 엔지니어링 솔루션 배포",
+            "AWS Serverless Application Model(AWS SAM)을 사용하여 서버리스 데이터 파이프라인 패키징 및 배포(예: Lambda 함수, Step Functions, Amazon DynamoDB 테이블)",
+            "Lambda 함수 내에서 스토리지 볼륨 사용 및 탑재",
+            "반복 가능한 리소스 배포를 위해 코드형 인프라(IaC) 사용(예: AWS CloudFormation 및 AWS Cloud Development Kit(AWS CDK))",
+            "지속적 통합 및 지속적 전달(CI/CD) 설명(데이터 파이프라인의 구현, 테스트 및 배포)",
+            "분산 컴퓨팅 정의",
+            "데이터 구조 및 알고리즘 설명(예: 그래프 데이터 구조 및 트리 데이터 구조)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "name": "데이터 스토어 관리",
+      "weightPct": 26,
+      "tasks": [
+        {
+          "no": "2.1",
+          "title": "데이터 스토어 선택",
+          "knowledge": [],
+          "skills": [
+            "특정 비용 및 성능 요구 사항에 따라 적합한 스토리지 서비스 구현(예: Amazon Redshift, Amazon EMR, AWS Lake Formation, Amazon RDS, Amazon DynamoDB, Amazon Kinesis Data Streams, Amazon Managed Streaming for Apache Kafka(Amazon MSK))",
+            "특정 액세스 패턴 및 요구 사항에 따라 적합한 스토리지 서비스 구성(예: Amazon Redshift, Amazon EMR, Lake Formation, Amazon RDS, DynamoDB)",
+            "스토리지 서비스를 적절한 사용 사례에 적용(예: Amazon Aurora PostgreSQL에서 HNSW(Hierarchical Navigable Small Worlds)와 같은 인덱싱 알고리즘을 사용하고, 빠른 키/값 페어 액세스를 위해 Amazon MemoryDB 사용)",
+            "마이그레이션 도구를 데이터 처리 시스템에 통합(예: AWS Transfer Family)",
+            "데이터 마이그레이션 또는 원격 액세스 방법 구현(예: Amazon Redshift 페더레이션 쿼리, Amazon Redshift 구체화된 뷰, Amazon Redshift Spectrum)",
+            "데이터 액세스 방지하기 위해 잠금 관리(예: Amazon Redshift 및 Amazon RDS)",
+            "오픈 테이블 형식 관리(예: Apache Iceberg)",
+            "벡터 인덱스 유형 설명(예: HNSW, IVF)"
+          ]
+        },
+        {
+          "no": "2.2",
+          "title": "데이터 카탈로그 시스템 이해",
+          "knowledge": [],
+          "skills": [
+            "데이터 카탈로그를 사용하여 데이터 소스의 데이터 사용",
+            "기술 데이터 카탈로그 작성 및 참조(예: AWS Glue Data Catalog, Apache Hive 메타스토어)",
+            "스키마를 검색하고 AWS Glue 크롤러를 사용하여 데이터 카탈로그 채우기",
+            "파티션을 데이터 카탈로그와 동기화",
+            "카탈로그 구축을 위한 새 소스 또는 대상 연결 만들기(예: AWS Glue)",
+            "비즈니스 데이터 카탈로그 만들기 및 관리(예: Amazon SageMaker Catalog)"
+          ]
+        },
+        {
+          "no": "2.3",
+          "title": "데이터의 수명 주기 관리",
+          "knowledge": [],
+          "skills": [
+            "로드 및 언로드 작업을 수행하여 Amazon S3와 Amazon Redshift 간에 데이터 마이그레이션",
+            "S3 수명 주기 정책을 관리하여 S3 데이터의 스토리지 계층 변경",
+            "S3 수명 주기 정책을 사용하여 데이터가 특정 기간에 도달하면 데이터 만료 설정",
+            "S3 버전 관리 및 DynamoDB TTL 관리",
+            "비즈니스 및 법적 요구 사항을 충족하기 위해 데이터 삭제",
+            "적절한 복원성 및 가용성으로 데이터 보호"
+          ]
+        },
+        {
+          "no": "2.4",
+          "title": "데이터 모델 및 스키마 진화 설계",
+          "knowledge": [],
+          "skills": [
+            "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계",
+            "데이터 특성에 대한 변경 사항 해결",
+            "스키마 변환 수행(예: AWS 스키마 변환 도구(AWS SCT) 및 AWS Database Migration Service(AWS DMS) 스키마 변환 사용)",
+            "AWS 도구를 사용하여 데이터 계보 설정(예: Amazon SageMaker ML Lineage Tracking 및 Amazon SageMaker Catalog)",
+            "인덱싱, 파티셔닝 전략, 압축 및 기타 데이터 최적화 기술에 대한 모범 사례 설명",
+            "벡터화 개념 설명(예: Amazon Bedrock Knowledge Base)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "name": "데이터 운영 및 지원",
+      "weightPct": 22,
+      "tasks": [
+        {
+          "no": "3.1",
+          "title": "AWS 서비스를 사용하여 데이터 처리 자동화",
+          "knowledge": [],
+          "skills": [
+            "데이터 파이프라인 오케스트레이션(예: Amazon Managed Workflows for Apache Airflow(Amazon MWAA), AWS Step Functions)",
+            "Amazon 관리형 워크플로 문제 해결",
+            "SDK를 호출하여 코드로 Amazon 기능에 액세스",
+            "AWS 서비스의 기능을 사용하여 데이터 처리(예: Amazon EMR, Amazon Redshift, AWS Glue)",
+            "데이터 API 사용 및 유지 관리",
+            "변환을 위한 데이터 준비(예: AWS Glue DataBrew 및 Amazon SageMaker Unified Studio)",
+            "데이터 쿼리(예: Amazon Athena)",
+            "AWS Lambda를 사용하여 데이터 처리 자동화",
+            "이벤트 및 스케줄러 관리(예: Amazon EventBridge)"
+          ]
+        },
+        {
+          "no": "3.2",
+          "title": "AWS 서비스를 사용하여 데이터 분석",
+          "knowledge": [],
+          "skills": [
+            "AWS 서비스와 도구를 사용하여 데이터 시각화(예: DataBrew, Amazon QuickSight)",
+            "데이터 확인 및 정리(예: Lambda, Athena, QuickSight, Jupyter Notebooks, Amazon SageMaker Data Wrangler)",
+            "Amazon Redshift와 Athena의 SQL을 사용하여 데이터 쿼리 또는 뷰 만들기",
+            "Apache Spark를 사용하여 데이터를 탐색하는 Athena 노트북 사용",
+            "프로비저닝된 서비스와 서버리스 서비스 간의 절충점 설명",
+            "데이터 집계, 롤링 평균, 그룹화 및 피벗 정의"
+          ]
+        },
+        {
+          "no": "3.3",
+          "title": "데이터 파이프라인 유지 관리 및 모니터링",
+          "knowledge": [],
+          "skills": [
+            "감사를 위해 로그 추출",
+            "감사 및 추적을 지원하는 로깅 및 모니터링 솔루션 배포",
+            "모니터링 중 알림 기능을 사용하여 경고 전송",
+            "성능 문제 해결",
+            "AWS CloudTrail을 사용하여 API 호출 추적",
+            "파이프라인 문제 해결 및 유지 관리(예: AWS Glue, Amazon EMR)",
+            "Amazon CloudWatch Logs를 사용하여 애플리케이션 데이터 로깅(구성 및 자동화에 중점을 둠)",
+            "AWS 서비스를 통해 로그 분석(예: Athena, Amazon EMR, Amazon OpenSearch Service, CloudWatch Logs Insights, 빅 데이터 애플리케이션 로그)"
+          ]
+        },
+        {
+          "no": "3.4",
+          "title": "데이터 품질 보장",
+          "knowledge": [],
+          "skills": [
+            "데이터를 처리하는 동안 데이터 품질 검사 실행(예: 빈 필드 확인)",
+            "데이터 품질 규칙 정의(예: DataBrew)",
+            "데이터 일관성 조사(예: DataBrew)",
+            "데이터 샘플링 기법 설명",
+            "데이터 스큐 메커니즘 구현"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "name": "데이터 보안 및 거버넌스",
+      "weightPct": 18,
+      "tasks": [
+        {
+          "no": "4.1",
+          "title": "인증 메커니즘 적용",
+          "knowledge": [],
+          "skills": [
+            "VPC 보안 그룹 업데이트",
+            "AWS Identity and Access Management(AWS IAM) 그룹, 역할, 엔드포인트 및 서비스 생성 및 업데이트",
+            "암호 관리를 위한 자격 증명 만들기 및 회전(예: AWS Secrets Manager)",
+            "액세스를 위한 IAM 역할 설정(예: AWS Lambda, Amazon API Gateway, AWS CLI, AWS CloudFormation)",
+            "역할, 엔드포인트 및 서비스에 IAM 정책 적용(예: S3 Access Points, AWS PrivateLink)",
+            "관리형 서비스와 비관리형 서비스의 차이점 설명",
+            "SageMaker Unified Studio의 도메인, 도메인 단위 및 프로젝트 사용"
+          ]
+        },
+        {
+          "no": "4.2",
+          "title": "권한 부여 메커니즘 적용",
+          "knowledge": [],
+          "skills": [
+            "관리형 정책이 요구 사항을 충족하지 못하면 사용자 지정 IAM 정책 만들기",
+            "애플리케이션 및 데이터베이스 자격 증명 저장(예: Secrets Manager 및 AWS Systems Manager Parameter Store)",
+            "데이터베이스 사용자, 그룹 및 역할에 데이터베이스 액세스와 권한 제공(예: Amazon Redshift)",
+            "AWS Lake Formation을 통해 권한 관리(Amazon Redshift, Amazon EMR, Amazon Athena, Amazon S3)",
+            "비즈니스 요구 사항을 해결하는 권한 부여 방법 적용(역할 기반, 태그 기반 및 속성 기반)",
+            "최소 권한의 원칙을 충족하는 사용자 지정 정책 구성"
+          ]
+        },
+        {
+          "no": "4.3",
+          "title": "데이터 암호화 및 마스킹 보장",
+          "knowledge": [],
+          "skills": [
+            "규정 준수 법률 또는 회사 정책에 따른 데이터 마스킹 및 익명화 적용",
+            "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))",
+            "AWS 계정 경계 간에 암호화 구성",
+            "전송 중 또는 전송 전 데이터 암호화 사용"
+          ]
+        },
+        {
+          "no": "4.4",
+          "title": "감사용 로그 준비",
+          "knowledge": [],
+          "skills": [
+            "AWS CloudTrail을 사용하여 API 호출 추적",
+            "Amazon CloudWatch Logs를 사용하여 애플리케이션 로그 저장",
+            "중앙 집중식 로깅 쿼리에 AWS CloudTrail Lake 사용",
+            "AWS 서비스를 사용하여 로그 분석(예: Athena, CloudWatch Logs Insights, Amazon OpenSearch Service)",
+            "다양한 AWS 서비스를 통합하여 로깅 수행(예: 대용량 로그 데이터의 경우 Amazon EMR)"
+          ]
+        },
+        {
+          "no": "4.5",
+          "title": "데이터 프라이버시 및 거버넌스 이해",
+          "knowledge": [],
+          "skills": [
+            "데이터 공유 권한 부여(예: Amazon Redshift의 데이터 공유)",
+            "PII 식별 구현(예: Lake Formation을 사용하는 Amazon Macie)",
+            "허용되지 않는 AWS 리전으로의 데이터 백업 또는 복제를 방지하기 위해 데이터 프라이버시 전략 구현",
+            "계정에서 발생한 구성 변경 보기(예: AWS Config)",
+            "데이터 주권 유지 관리",
+            "Amazon SageMaker Catalog 프로젝트를 통해 데이터 액세스 관리",
+            "거버넌스 데이터 프레임워크 및 데이터 공유 패턴 설명"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceUrl": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01.html"
+}

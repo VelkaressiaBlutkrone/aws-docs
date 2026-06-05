@@ -1,0 +1,238 @@
+{
+  "code": "SCS-C03",
+  "slug": "security-specialty-03",
+  "overview": {
+    "level": "Specialty",
+    "passingScore": 750,
+    "scoredQuestions": 50,
+    "unscoredQuestions": 15,
+    "durationMinutes": null
+  },
+  "domains": [
+    {
+      "no": 1,
+      "name": "탐지",
+      "weightPct": 16,
+      "tasks": [
+        {
+          "no": "1.1",
+          "title": "AWS 계정 또는 조직용 모니터링 및 경보 솔루션 설계 및 구현",
+          "knowledge": [],
+          "skills": [
+            "워크로드를 분석하여 모니터링 요구 사항 결정",
+            "워크로드 모니터링 전략 설계 및 구현(예: 리소스 상태 확인 구성)",
+            "보안 및 모니터링 이벤트 집계",
+            "지표, 알림 및 대시보드를 만들어 이상 데이터 및 이벤트 탐지(예: Amazon GuardDuty, Amazon Security Lake, AWS Security Hub, Amazon Macie)",
+            "자동화 기능을 만들고 관리하여 정기적인 평가 및 조사 수행(예: AWS Config 준수 팩, Security Hub, AWS Systems Manager State Manager 배포)"
+          ]
+        },
+        {
+          "no": "1.2",
+          "title": "로깅 솔루션 설계 및 구현",
+          "knowledge": [],
+          "skills": [
+            "요구 사항에 따라 로그 수집과 스토리지를 보장할 소스 파악",
+            "AWS 서비스 및 애플리케이션에 대한 로깅 구성(예: 조직의 AWS CloudTrail 추적 구성, 전용 Amazon CloudWatch 로깅 계정 만들기, Amazon CloudWatch Logs 에이전트 구성)",
+            "로그 스토리지 및 로그 데이터 레이크(예: Security Lake)를 구현하고 타사 보안 도구와 통합",
+            "AWS 서비스를 사용하여 로그 분석(예: CloudWatch Logs Insights, Amazon Athena, Security Hub 조사 결과)",
+            "AWS 서비스를 사용하여 로그 정규화, 구문 분석 및 상관 관계 분석(예: Amazon OpenSearch Service, AWS Lambda, Amazon Managed Grafana)",
+            "네트워크 설계, 위협 및 공격을 기반으로 적절한 로그 소스를 결정 및 구성(예: VPC 흐름 로그, 전송 게이트웨이 흐름 로그, Amazon Route 53 Resolver 로그)"
+          ]
+        },
+        {
+          "no": "1.3",
+          "title": "보안 모니터링, 로깅 및 경보 솔루션 문제 해결",
+          "knowledge": [],
+          "skills": [
+            "리소스의 기능, 권한 및 구성 분석(예: Lambda 함수 로깅, Amazon API Gateway 로깅, 상태 확인, Amazon CloudFront 로깅)",
+            "리소스의 잘못된 구성 문제 해결(예: CloudWatch 에이전트 구성 문제 해결, 누락된 로그 문제 해결)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "name": "인시던트 대응",
+      "weightPct": 14,
+      "tasks": [
+        {
+          "no": "2.1",
+          "title": "인시던트 대응 계획 설계 및 테스트",
+          "knowledge": [],
+          "skills": [
+            "보안 인시던트에 대응하기 위한 대응 계획 및 런북 설계 및 구현(예: Systems Manager OpsCenter, Amazon SageMaker AI 노트북)",
+            "AWS 서비스 특성과 기능을 사용하여 인시던트에 대비할 서비스 구성(예: 액세스 프로비저닝, 보안 도구 배포, 영향 범위 최소화, AWS Shield Advanced 보호 기능 구성)",
+            "인시던트 대응 계획의 효과를 테스트하고 확인하기 위한 절차 추천(예: AWS Fault Injection Service, AWS Resilience Hub)",
+            "AWS 서비스를 사용하여 자동으로 인시던트 해결(예: Systems Manager, Amazon EC2용 Automated Forensics Orchestrator, AWS Step Functions, Amazon Application Recovery Controller, Lambda 함수)"
+          ]
+        },
+        {
+          "no": "2.2",
+          "title": "보안 이벤트에 대응",
+          "knowledge": [],
+          "skills": [
+            "관련 시스템과 애플리케이션 로그를 포렌식 아티팩트로 캡처 및 저장",
+            "애플리케이션과 AWS 서비스 전반의 보안 이벤트 로그를 검색하고 상관 관계 분석",
+            "AWS 보안 서비스의 조사 결과를 확인하여 이벤트의 범위와 영향 평가",
+            "위협을 억제하고 근절하여 영향을 받는 리소스에 대응하고 리소스 복구(예: 네트워크 격리 제어 구현, 백업 복원)",
+            "근본 원인 분석을 수행하는 방법 설명(예: Amazon Detective)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "name": "인프라 보안",
+      "weightPct": 18,
+      "tasks": [
+        {
+          "no": "3.1",
+          "title": "네트워크 엣지 서비스의 보안 제어 설계, 구현 및 문제 해결",
+          "knowledge": [],
+          "skills": [
+            "예상되는 위협과 공격을 기반으로 엣지 보안 전략 정의 및 선택",
+            "적절한 네트워크 엣지 보호 기능 구현(예: CloudFront 헤더, AWS WAF, AWS IoT 정책, OWASP 상위 10개 위협에 대한 보호, Amazon S3 크로스 오리진 리소스 공유(CORS), Shield Advanced)",
+            "요구 사항을 기반으로 AWS 엣지 제어 및 규칙 설계 및 구현(예: 지리, 지리적 위치, 속도 제한, 클라이언트 핑거프린팅)",
+            "AWS 엣지 서비스 및 타사 서비스와의 통합 구성(예: 개방형 사이버 보안 스키마 프레임워크(OCSF) 형식으로 데이터 수집, 타사 WAF 규칙 사용)"
+          ]
+        },
+        {
+          "no": "3.2",
+          "title": "컴퓨팅 워크로드에 대한 보안 제어 설계, 구현 및 문제 해결",
+          "knowledge": [],
+          "skills": [
+            "강화된 Amazon EC2 AMI와 컨테이너 이미지를 설계 및 구현하여 컴퓨팅 워크로드를 보호하고 보안 제어 기능 내장(예: Systems Manager, EC2 Image Builder)",
+            "인스턴스 프로파일, 서비스 역할 및 실행 역할을 적절하게 적용하여 컴퓨팅 워크로드 승인",
+            "컴퓨팅 리소스를 스캔하여 알려진 취약성 찾기(예: Amazon Inspector를 사용하여 컨테이너 이미지와 Lambda 함수 스캔, GuardDuty를 사용하여 컴퓨팅 런타임 모니터링)",
+            "업데이트 프로세스를 자동화하고 지속적인 확인 기능을 통합하여 컴퓨팅 리소스 전체에 패치를 배포해 안전하고 규정을 준수하는 환경 유지 관리(예: Systems Manager Patch Manager, Amazon Inspector)",
+            "컴퓨팅 리소스에 대한 보안 관리 액세스 구성(예: Systems Manager Session Manager, EC2 Instance Connect)",
+            "파이프라인 내에서 취약성을 발견하고 해결하기 위한 보안 도구 구성(예: Amazon Q Developer, Amazon CodeGuru 보안)",
+            "생성형 AI 애플리케이션용 보호 및 가드레일 구현(예: LLM 애플리케이션 보호용 GenAI OWASP 상위 10개 적용)"
+          ]
+        },
+        {
+          "no": "3.3",
+          "title": "네트워크 보안 제어 설계 및 문제 해결",
+          "knowledge": [],
+          "skills": [
+            "필요 시 네트워크 트래픽을 허용하거나 차단하기 위한 적절한 네트워크 제어 설계 및 문제 해결(예: 보안 그룹, 네트워크 ACL, AWS Network Firewall)",
+            "하이브리드 네트워크와 멀티 클라우드 네트워크 간의 보안 연결 설계(예: AWS Site-to-Site VPN, AWS Direct Connect, MAC 보안(MACsec))",
+            "하이브리드 환경과 AWS 간의 통신에 맞는 보안 워크로드 요구 사항 결정 및 구성(예: AWS Verified Access 사용)",
+            "보안 요구 사항을 기반으로 네트워크 세분화 설계(예: 북부/남부 및 동부/서부 트래픽 보호, 격리된 서브넷)",
+            "불필요한 네트워크 액세스 식별(예: AWS Verified Access, Network Access Analyzer, Amazon Inspector 네트워크 연결성 조사 결과)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "name": "ID 및 액세스 관리",
+      "weightPct": 20,
+      "tasks": [
+        {
+          "no": "4.1",
+          "title": "인증 전략 설계, 구현 및 문제 해결",
+          "knowledge": [],
+          "skills": [
+            "사용자, 애플리케이션 및 시스템 인증용 ID 솔루션 설계 및 설정(예: AWS IAM Identity Center, Amazon Cognito, 다중 인증(MFA), ID 공급자(IdP) 통합)",
+            "임시 자격 증명을 발급하는 메커니즘 구성(예: AWS STS, Amazon S3의 미리 서명된 URL)",
+            "인증 문제 해결(예: CloudTrail, Amazon Cognito, IAM Identity Center 권한 세트, AWS Directory Service)"
+          ]
+        },
+        {
+          "no": "4.2",
+          "title": "권한 부여 전략 설계, 구현 및 문제 해결",
+          "knowledge": [],
+          "skills": [
+            "사용자, 애플리케이션 및 시스템 액세스에 대한 권한 부여 제어 설계 및 평가(예: Amazon Verified Permissions, IAM 경로, IAM 역할 Anywhere, 크로스 계정 액세스를 위한 리소스 정책, IAM 역할 신뢰 정책)",
+            "속성 기반 액세스 제어(ABAC) 및 역할 기반 액세스 제어(RBAC) 전략 설계(예: 태그 또는 속성을 기반으로 리소스 액세스 구성)",
+            "최소 권한의 원칙에 따라 IAM 정책 설계, 해석 및 구현(예: 권한 범위, 세션 정책)",
+            "인증 실패를 분석하여 원인 또는 영향 확인(예: IAM 정책 시뮬레이터, IAM Access Analyzer)",
+            "리소스, 서비스 또는 엔터티에 부여된 의도하지 않은 권한, 인증 또는 상위 권한 조사 및 수정(예: IAM Access Analyzer)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 5,
+      "name": "데이터 보호",
+      "weightPct": 18,
+      "tasks": [
+        {
+          "no": "5.1",
+          "title": "전송 중인 데이터에 대한 제어 설계 및 구현",
+          "knowledge": [],
+          "skills": [
+            "리소스에 접근하기 위해 연결할 때 암호화가 필요한 메커니즘 설계 및 구성(예: Elastic Load Balancing(ELB) 보안 정책 구성, TLS 구성 적용)",
+            "리소스에 안전하게 비공개로 액세스할 수 있는 메커니즘 설계 및 구성(예: AWS PrivateLink, VPC 엔드포인트, AWS Client VPN, AWS Verified Access)",
+            "전송 중인 리소스 간에 암호화 설계 및 구성(예: Amazon EMR, Amazon EKS, SageMaker AI, Nitro 암호화에서 노드 간 암호화 구성)"
+          ]
+        },
+        {
+          "no": "5.2",
+          "title": "저장 데이터에 대한 제어 설계 및 구현",
+          "knowledge": [],
+          "skills": [
+            "특정 요구 사항에 따라 저장 데이터 암호화 설계, 구현 및 구성(예: AWS CloudHSM 또는 AWS KMS 등의 적절한 암호화 키 서비스 선택, 클라이언트측 암호화 또는 서버 측 암호화 등의 적절한 암호화 유형 선택)",
+            "데이터 무결성을 보호하는 메커니즘 설계 및 구성(예: S3 객체 잠금, S3 Glacier 저장소 잠금, 버전 관리, 디지털 코드 서명, 파일 유효성 확인)",
+            "데이터에 대한 자동 수명 주기 관리 및 보존 솔루션 설계(예: S3 수명 주기 정책, S3 객체 잠금, Amazon EFS 수명 주기 정책, Amazon FSx for Lustre 백업 정책)",
+            "안전한 데이터 복제 및 백업 솔루션 설계 및 구성(예: Amazon Data Lifecycle Manager, AWS Backup, 랜섬웨어 보호, AWS DataSync)"
+          ]
+        },
+        {
+          "no": "5.3",
+          "title": "기밀 데이터, ID, 보안 암호, 암호화 키 자료를 보호하기 위한 제어 기능 설계 및 구현",
+          "knowledge": [],
+          "skills": [
+            "자격 증명과 보안 암호의 관리 방식 및 회전 기능 설계(예: AWS Secrets Manager)",
+            "가져온 키 자료 관리 및 사용(예: 가져온 키 자료를 관리 및 회전, 외부 키 저장소 관리 및 구성)",
+            "가져온 키 자료와 AWS에서 생성한 키 자료 간 차이점 설명",
+            "민감한 데이터 마스킹(예: CloudWatch Logs 데이터 보호 정책, Amazon SNS 메시지 데이터 보호)",
+            "단일 AWS 리전이나 여러 리전에서 암호화 키와 인증서 만들기 및 관리(예: AWS KMS 고객 관리형 AWS KMS 키, AWS Private Certificate Authority)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 6,
+      "name": "보안 기반 및 거버넌스",
+      "weightPct": 14,
+      "tasks": [
+        {
+          "no": "6.1",
+          "title": "AWS 계정을 중앙에서 배포하고 관리하기 위한 전략 개발",
+          "knowledge": [],
+          "skills": [
+            "AWS Organizations을 사용하여 조직 배포 및 구성",
+            "새 환경 및 기존 환경에서 AWS Control Tower를 구현 및 관리하고 필요 시 선택할 수 있는 제어 및 사용자 지정 제어 기능 배포",
+            "조직 정책을 구현하여 권한 관리(예: SCP, RCP, AI 서비스 비동의 정책, 선언적 정책)",
+            "보안 서비스를 한곳에서 관리(예: 위임된 관리자 계정)",
+            "AWS 계정 루트 사용자 자격 증명 관리(예: 멤버 계정의 루트 액세스 중앙 집중화, MFA 관리, 비상용 우회 절차)"
+          ]
+        },
+        {
+          "no": "6.2",
+          "title": "클라우드 리소스를 안전하고 일관성 있게 배포할 수 있는 전략 구현",
+          "knowledge": [],
+          "skills": [
+            "코드형 인프라(IaC)를 사용하여 계정 전체에 클라우드 리소스를 일관성 있고 안전하게 배포(예: CloudFormation 스택 세트, 타사 IaC 도구, CloudFormation Guard, cfn-lint)",
+            "태그를 사용하여 AWS 리소스를 그룹화하여 관리(예: 부서, 비용 센터, 환경별로 그룹화)",
+            "중앙 집중화된 소스에서 정책 및 구성 배포 및 적용(예: AWS Firewall Manager)",
+            "AWS 계정 간에 리소스를 안전하게 공유(예: AWS Service Catalog, AWS Resource Access Manager(AWSRAM))"
+          ]
+        },
+        {
+          "no": "6.3",
+          "title": "AWS 리소스의 규정 준수 평가",
+          "knowledge": [],
+          "skills": [
+            "규정 비준수 AWS 리소스를 탐지 및 해결하고 알림을 전송하는 규칙 만들기 및 사용(예: AWS Config를 사용하여 경보를 집계하고 규정 비준수 리소스를 해결, Security Hub)",
+            "AWS 감사 서비스를 사용하여 증거 수집 및 정리(예: AWS Audit Manager, AWS Artifact)",
+            "AWS 서비스를 사용하여 아키텍처가 AWS 보안 모범 사례를 준수하는지 평가(예: AWS Well-Architected Framework 도구)"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceUrl": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/security-specialty-03/security-specialty-03.html"
+}

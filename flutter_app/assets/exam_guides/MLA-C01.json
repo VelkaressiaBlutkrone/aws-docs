@@ -1,0 +1,271 @@
+{
+  "code": "MLA-C01",
+  "slug": "machine-learning-engineer-associate-01",
+  "overview": {
+    "level": "Associate",
+    "passingScore": 720,
+    "scoredQuestions": 50,
+    "unscoredQuestions": 15,
+    "durationMinutes": null
+  },
+  "domains": [
+    {
+      "no": 1,
+      "name": "ML을 위한 데이터 준비",
+      "weightPct": 28,
+      "tasks": [
+        {
+          "no": "1.1",
+          "title": "데이터를 수집 및 저장",
+          "knowledge": [
+            "데이터 형식 및 수집 메커니즘(예: 유효성이 검증된 형식 및 검증되지 않은 형식, Apache Parquet, JSON, CSV, Apache ORC, Apache Avro, RecordIO)",
+            "핵심 AWS 데이터 소스 사용 방법(예: Amazon S3, Amazon EFS, Amazon FSx for NetApp ONTAP)",
+            "AWS 스트리밍 데이터 소스를 사용하여 데이터를 수집하는 방법(예: Amazon Kinesis, Apache Flink, Apache Kafka)",
+            "사용 사례 및 절충점을 포함한 AWS 스토리지 옵션"
+          ],
+          "skills": [
+            "관련 AWS 서비스 옵션(예: Amazon S3 Transfer Acceleration, Amazon EBS 프로비저닝된 IOPS)을 사용하여 스토리지(예: Amazon S3, Amazon EBS, Amazon EFS, Amazon RDS, Amazon DynamoDB)에서 데이터 추출",
+            "데이터 액세스 패턴에 따라 적절한 데이터 형식 선택(예: Parquet, JSON, CSV, ORC)",
+            "Amazon SageMaker Data Wrangler 및 SageMaker Feature Store로 데이터 수집",
+            "여러 소스의 데이터 병합(예: 프로그래밍 기법, AWS Glue, Apache Spark 사용)",
+            "용량 및 확장성과 관련된 데이터 수집 및 저장 문제 해결 및 디버깅",
+            "비용, 성능, 데이터 구조를 기반으로 초기 스토리지 구성 결정"
+          ]
+        },
+        {
+          "no": "1.2",
+          "title": "데이터 변환 및 특성 추출 수행",
+          "knowledge": [
+            "데이터 정리 및 변환 기법(예: 이상값 감지 및 처리, 누락된 데이터 임퓨팅, 결합, 중복 제거)",
+            "특성 추출 기법(예: 데이터 규모 조정 및 표준화, 특성 분할, 비닝, 로그 변환, 정규화)",
+            "인코딩 기법(예: 원핫 인코딩, 바이너리 인코딩, 레이블 인코딩, 토큰화)",
+            "데이터 및 특성을 탐색, 시각화 또는 변환하는 도구(예: SageMaker Data Wrangler, AWS Glue, AWS Glue DataBrew)",
+            "스트리밍 데이터를 변환하는 서비스(예: AWS Lambda, Spark)",
+            "레이블이 지정된 고품질 데이터세트를 만들기하는 데이터 주석 및 레이블링 서비스"
+          ],
+          "skills": [
+            "AWS 도구를 사용하여 데이터 변환(예: AWS Glue, DataBrew, Amazon EMR에서 실행되는 Spark, SageMaker Data Wrangler)",
+            "AWS 도구를 사용하여 특성 만들기 및 관리(예: SageMaker Feature Store)",
+            "AWS 서비스를 사용하여 데이터 유효성 검사 및 레이블링(예: SageMaker Ground Truth, Amazon Mechanical Turk)"
+          ]
+        },
+        {
+          "no": "1.3",
+          "title": "데이터 무결성을 보장하고 모델링을 위한 데이터 준비",
+          "knowledge": [
+            "숫자, 텍스트 및 이미지 데이터에 대한 편향 지표 사전 훈련(예: 클래스 불균형(CI), 레이블 비율 차이(DPL))",
+            "숫자, 텍스트 및 이미지 데이터세트에서 CI를 해결하기 위한 전략(예: 합성 데이터 생성, 리샘플링)",
+            "데이터 암호화 기법",
+            "데이터 분류, 익명화 및 마스킹",
+            "규정 준수 요구 사항의 의미(예: 개인 식별 정보(PII), 개인 건강 정보(PHI), 데이터 레지던시)"
+          ],
+          "skills": [
+            "데이터 품질 유효성 검사(예: DataBrew 및 AWS Glue Data Quality 사용)",
+            "AWS 도구(예: SageMaker Clarify)를 사용하여 데이터의 편향 소스(예: 선택 편향, 측정 편향) 파악 및 완화",
+            "예측 편향을 줄이기 위한 데이터 준비(예: 데이터세트 분할, 셔플링 및 보강 사용)",
+            "모델 훈련 리소스에 로드할 데이터 구성(예: Amazon EFS, Amazon FSx)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "name": "ML 모델 개발",
+      "weightPct": 26,
+      "tasks": [
+        {
+          "no": "2.1",
+          "title": "모델링 접근 방식 선택",
+          "knowledge": [
+            "비즈니스 문제 해결을 위한 ML 알고리즘의 기능 및 적절한 사용",
+            "특정 비즈니스 문제를 해결하기 위해 AWS 인공 지능 서비스를 사용하는 방법(예: Amazon Translate, Amazon Transcribe, Amazon Rekognition, Amazon Bedrock)",
+            "모델 선택 또는 알고리즘 선택 시 해석 가능성을 고려하는 방법",
+            "Amazon SageMaker AI 기본 제공 알고리즘 및 해당 알고리즘을 적용하는 상황"
+          ],
+          "skills": [
+            "사용 가능한 데이터와 문제 복잡도를 평가하여 ML 솔루션의 적합성 결정",
+            "특정 문제를 해결하기 위해 적절한 ML 모델 또는 알고리즘 비교 및 선택",
+            "기본 제공 알고리즘, 파운데이션 모델 및 솔루션 템플릿 선택(예: SageMaker JumpStart 및 Amazon Bedrock에서)",
+            "비용에 따라 모델 또는 알고리즘 선택",
+            "일반적인 비즈니스 요구 사항을 해결하기 위한 AI 서비스 선택"
+          ]
+        },
+        {
+          "no": "2.2",
+          "title": "모델 훈련 및 개선",
+          "knowledge": [
+            "훈련 프로세스의 요소(예: 에포크, 단계, 배치 크기)",
+            "모델 훈련 시간을 줄이는 방법(예: 조기 중지, 분산 훈련)",
+            "모델 크기에 영향을 미치는 요인",
+            "모델 성능을 개선하는 방법",
+            "정규화 기법의 이점(예: 드롭아웃, 가중치 감쇠, L1 및 L2)",
+            "하이퍼파라미터 튜닝 기법(예: 무작위 검색, 베이지안 최적화)",
+            "모델 하이퍼파라미터 및 모델 성능에 미치는 영향(예: 트리 기반 모델의 트리 수, 신경망의 계층 수)",
+            "SageMaker AI 외부에서 구축한 모델을 SageMaker AI로 통합하는 방법"
+          ],
+          "skills": [
+            "SageMaker AI 기본 제공 알고리즘과 공통 ML 라이브러리를 사용하여 ML 모델 개발",
+            "SageMaker AI 지원 프레임워크와 함께 SageMaker AI 스크립트 모드를 사용하여 모델 훈련(예: TensorFlow, PyTorch)",
+            "사용자 지정 데이터세트를 사용하여 사전 훈련된 모델 파인 튜닝(예: Amazon Bedrock, SageMaker JumpStart)",
+            "하이퍼파라미터 튜닝 수행(예: SageMaker AI 자동 모델 튜닝(AMT) 사용)",
+            "자동화된 하이퍼파라미터 최적화 기능 통합",
+            "모델 과적합, 과소적합 및 치명적인 망각 방지(예: 정규화 기법, 특성 선택 사용)",
+            "여러 훈련 모델을 결합하여 성능 향상(예: 앙상블, 스태킹, 부스팅)",
+            "모델 크기 축소(예: 데이터 유형 변경, 정리, 특성 선택 업데이트, 압축)",
+            "반복성 및 감사를 위한 모델 버전 관리(예: SageMaker Model Registry 사용)"
+          ]
+        },
+        {
+          "no": "2.3",
+          "title": "모델 성능 분석",
+          "knowledge": [
+            "모델 평가 기법 및 지표(예: 혼동 행렬, 히트 맵, F1 점수, 정확도, 정밀도, 리콜, 루트 평균 제곱 오차(RMSE), 수신기 작동 특성(ROC), ROC 곡선 아래 면적(AUC))",
+            "성능 기준선을 만드는 방법",
+            "모델 과적합 및 과소적합을 식별하는 방법",
+            "ML 훈련 데이터 및 모델에 대한 인사이트를 얻기 위해 SageMaker Clarify에서 사용할 수 있는 지표",
+            "수렴 문제"
+          ],
+          "skills": [
+            "평가 지표 선택 및 해석, 모델 편향성 감지",
+            "모델 성능, 훈련 시간, 비용 간의 절충점 평가",
+            "AWS 서비스를 사용하여 재현 가능한 실험 수행",
+            "섀도 변형의 성능을 프로덕션 변형의 성능과 비교",
+            "SageMaker Clarify를 사용하여 모델 출력 해석",
+            "SageMaker Model Debugger를 사용하여 모델 컨버전스 디버깅"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "name": "ML 워크플로의 배포 및 오케스트레이션",
+      "weightPct": 22,
+      "tasks": [
+        {
+          "no": "3.1",
+          "title": "기존 아키텍처 및 요구 사항에 따라 배포 인프라를 선택합니다.",
+          "knowledge": [
+            "배포 모범 사례(예: 버전 관리, 롤백 전략)",
+            "AWS 배포 서비스(예: Amazon SageMaker AI)",
+            "ML 모델을 실시간 및 배치로 처리하는 방법",
+            "프로덕션 환경 및 테스트 환경(예: CPU, GPU)에서 컴퓨팅 리소스를 프로비저닝하는 방법",
+            "배포 엔드포인트에 대한 모델 및 엔드포인트 요구 사항(예: 서버리스 엔드포인트, 실시간 엔드포인트, 비동기 엔드포인트, 배치 추론)",
+            "적절한 컨테이너를 선택하는 방법(예: 제공 또는 사용자 지정)",
+            "엣지 디바이스에서 모델을 최적화하는 방법(예: SageMaker Neo)"
+          ],
+          "skills": [
+            "성능, 비용, 지연 시간 절충점 평가",
+            "요구 사항(예: GPU 또는 CPU 사양, 프로세서 제품군, 네트워킹 대역폭)에 따라 훈련 및 추론에 적합한 컴퓨팅 환경 선택",
+            "올바른 배포 오케스트레이터 선택(예: Apache Airflow, SageMaker Pipelines)",
+            "다중 모델 또는 다중 컨테이너 배포 선택",
+            "올바른 배포 대상 선택(예: SageMaker AI 엔드포인트, Kubernetes, Amazon ECS, Amazon Elastic Kubernetes Service(Amazon EKS), AWS Lambda)",
+            "모델 배포 전략 선택(예: 실시간, 배치 처리)"
+          ]
+        },
+        {
+          "no": "3.2",
+          "title": "기존 아키텍처 및 요구 사항을 기반으로 인프라 만들기 및 스크립팅",
+          "knowledge": [
+            "온디맨드 리소스와 프로비저닝된 리소스의 차이점",
+            "스케일링 정책을 비교하는 방법",
+            "코드형 인프라(IaC) 옵션의 절충점 및 사용 사례(예: AWS CloudFormation, AWS CDK)",
+            "컨테이너화 개념과 AWS 컨테이너 서비스",
+            "확장성 요구 사항(예: 수요, 시간 기준)을 충족하기 위해 SageMaker AI 엔드포인트 오토 스케일링 정책을 사용하는 방법"
+          ],
+          "skills": [
+            "모범 사례를 적용하여 유지 관리 가능하고 확장 가능하며 비용 효율적인 ML 솔루션 지원(예: SageMaker AI 엔드포인트에서 오토 스케일링, Amazon EC2 인스턴스 사용, 엔드포인트 뒤에서 Lambda 사용으로 스팟 인스턴스 동적 추가)",
+            "스택 간 통신을 포함한 컴퓨팅 리소스 프로비저닝 자동화(예: CloudFormation, AWS CDK 사용)",
+            "컨테이너 구축 및 유지 관리(예: Amazon ECR, Amazon EKS, Amazon ECS, SageMaker AI와 함께 BYOC(Bring Your Own Container) 사용)",
+            "VPC 네트워크 내에서 SageMaker AI 엔드포인트 구성",
+            "SageMaker AI SDK를 사용하여 모델 배포 및 호스팅",
+            "오토 스케일링을 위한 특정 지표 선택(예: 모델 지연 시간, CPU 사용률, 인스턴스당 호출 수)"
+          ]
+        },
+        {
+          "no": "3.3",
+          "title": "자동화된 오케스트레이션 도구를 사용하여 지속적 통합 및 지속적 전달(CI/CD) 파이프라인 설정",
+          "knowledge": [
+            "AWS CodePipeline, AWS CodeBuild 및 AWS CodeDeploy의 기능 및 할당량",
+            "데이터 수집 자동화 및 오케스트레이션 서비스와의 통합",
+            "버전 관리 시스템 및 기본 사용법(예: Git)",
+            "CI/CD 원칙과 이를 ML 워크플로에 적용하는 방법",
+            "배포 전략 및 롤백 작업(예: 블루/그린 배포, canary, 선형)",
+            "코드 리포지토리와 파이프라인이 함께 작동하는 방식"
+          ],
+          "skills": [
+            "단계를 포함한 CodeBuild, CodeDeploy 및 CodePipeline 구성 및 문제 해결",
+            "지속적 배포 흐름 구조를 적용하여 파이프라인 호출(예: Gitflow, GitHub Flow)",
+            "AWS 서비스를 사용하여 오케스트레이션 자동화(예: ML 모델 배포, 모델 구축 자동화)",
+            "훈련 및 추론 작업 구성(예: Amazon EventBridge 규칙, SageMaker Pipelines, CodePipeline 사용)",
+            "CI/CD 파이프라인에서 자동화된 테스트 만들기(예: 통합 테스트, 단위 테스트, 엔드투엔드 테스트)",
+            "모델 재훈련을 위한 메커니즘 구축 및 통합"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "name": "ML 솔루션 모니터링, 유지 관리 및 보안",
+      "weightPct": 24,
+      "tasks": [
+        {
+          "no": "4.1",
+          "title": "모델 추론 모니터링",
+          "knowledge": [
+            "ML 모델의 드리프트",
+            "데이터 품질 및 모델 성능을 모니터링하는 기법",
+            "모니터링과 관련된 ML 렌즈의 설계 원칙"
+          ],
+          "skills": [
+            "프로덕션 모델 모니터링(예: Amazon SageMaker Model Monitor 사용)",
+            "데이터 처리 또는 모델 추론의 이상 징후나 오류를 감지하기 위한 워크플로 모니터링",
+            "모델 성능에 영향을 줄 수 있는 데이터 분포의 변화 감지(예: SageMaker Clarify 사용)",
+            "A/B 테스트를 사용하여 프로덕션 환경에서의 모델 성능 모니터링"
+          ]
+        },
+        {
+          "no": "4.2",
+          "title": "인프라 및 비용 모니터링 및 최적화",
+          "knowledge": [
+            "ML 인프라의 주요 성능 지표(예: 활용률, 처리량, 가용성, 확장성, 내결함성)",
+            "지연 시간 및 성능 문제를 해결하기 위한 모니터링 및 관찰성 도구(예: AWS X-Ray, Amazon CloudWatch Lambda Insights, Amazon CloudWatch 로그 인사이트)",
+            "AWS CloudTrail을 사용하여 재훈련 활동을 기록, 모니터링 및 호출하는 방법",
+            "인스턴스 유형 간의 차이점 및 성능에 미치는 영향(예: 메모리 최적화, 컴퓨팅 최적화, 범용, 추론 최적화)",
+            "비용 분석 도구의 기능(예: AWS Cost Explorer, AWS Billing and Cost Management, AWS Trusted Advisor)",
+            "비용 추적 및 할당 기술(예: 리소스 태깅)"
+          ],
+          "skills": [
+            "리소스 문제 해결 및 분석을 위한 도구 구성 및 사용(예: CloudWatch 로그, CloudWatch 경보)",
+            "CloudTrail 추적 만들기",
+            "성능 지표를 모니터링하기 위한 대시보드 설정(예: Amazon Quick Sight, CloudWatch 대시보드 사용)",
+            "인프라 모니터링(예: Amazon EventBridge 이벤트 사용)",
+            "인스턴스 패밀리 및 적정 규모 조정(예: SageMaker AI Inference Recommender 및 AWS Compute Optimizer 사용)",
+            "지연 시간 및 스케일링 문제 모니터링 및 해결",
+            "비용 모니터링을 위한 인프라 준비(예: 태깅 전략 적용 등)",
+            "비용 및 성능과 관련된 용량 문제 해결(예: 프로비저닝된 동시성, 서비스 할당량, 오토 스케일링)",
+            "적절한 비용 관리 도구를 사용하여 비용 최적화 및 비용 할당량 설정(예: AWS Cost Explorer, AWS Trusted Advisor, AWS Budgets)",
+            "구매 옵션을 선택하여 인프라 비용 최적화(예: 스팟 인스턴스, 온디맨드 인스턴스, 예약 인스턴스, SageMaker AI 절감형 플랜)"
+          ]
+        },
+        {
+          "no": "4.3",
+          "title": "AWS 리소스 보호",
+          "knowledge": [
+            "AWS 서비스에 대한 액세스를 제어하는 IAM 역할, 정책 및 그룹(예: IAM, 버킷 정책, SageMaker Role Manager)",
+            "SageMaker AI 보안 및 규정 준수 기능",
+            "ML 리소스에 대한 네트워크 액세스 제어",
+            "CI/CD 파이프라인을 위한 보안 모범 사례"
+          ],
+          "skills": [
+            "ML 아티팩트에 대한 최소 권한 액세스 구성",
+            "ML 시스템과 상호 작용하는 사용자 및 애플리케이션에 대한 IAM 정책 및 역할 구성",
+            "지속적인 보안 및 규정 준수를 위한 ML 시스템 모니터링, 감사 및 로깅",
+            "보안 문제 해결 및 디버깅",
+            "ML 시스템을 안전하게 격리하기 위한 VPC, 서브넷 및 보안 그룹 구축"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceUrl": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html"
+}

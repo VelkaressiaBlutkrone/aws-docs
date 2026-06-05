@@ -1,0 +1,347 @@
+{
+  "code": "ANS-C01",
+  "slug": "advanced-networking-specialty-01",
+  "overview": {
+    "level": "Specialty",
+    "passingScore": 700,
+    "scoredQuestions": 50,
+    "unscoredQuestions": 15,
+    "durationMinutes": null
+  },
+  "domains": [
+    {
+      "no": 1,
+      "name": "네트워크 설계",
+      "weightPct": 30,
+      "tasks": [
+        {
+          "no": "1.1",
+          "title": "엣지 네트워크 서비스를 통합하여 글로벌 아키텍처에 대한 사용자 성능 및 트래픽 관리를 최적화하는 솔루션 설계",
+          "knowledge": [
+            "콘텐츠 배포 네트워크 사용에 대한 패턴 설계(예: Amazon CloudFront)",
+            "글로벌 트래픽 관리를 위한 패턴 설계(예: AWS Global Accelerator)",
+            "콘텐츠 배포 네트워크를 위한 통합 패턴 및 다른 서비스와의 글로벌 트래픽 관리(예: Elastic Load Balancing(ELB), Amazon API Gateway)"
+          ],
+          "skills": [
+            "인터넷에서 유입되는 글로벌 인바운드 및 아웃바운드 트래픽의 요구 사항을 평가하여 적절한 콘텐츠 배포 솔루션 설계"
+          ]
+        },
+        {
+          "no": "1.2",
+          "title": "퍼블릭, 프라이빗 및 하이브리드 요구 사항을 충족하는 DNS 솔루션 설계",
+          "knowledge": [
+            "DNS 프로토콜(예: DNS 레코드, TTL, DNSSEC, DNS 위임, 영역)",
+            "DNS 로깅 및 모니터링",
+            "Amazon Route 53 기능(예: 별칭 레코드, 트래픽 정책, 리졸버, 상태 확인)",
+            "Route 53을 다른 AWS 네트워킹 서비스와 통합(예: Amazon VPC)",
+            "Route 53을 하이브리드, 다중 계정 및 다중 리전 옵션과 통합",
+            "도메인 등록"
+          ],
+          "skills": [
+            "Route 53 퍼블릭 호스팅 영역 사용",
+            "Route 53 프라이빗 호스팅 영역 사용",
+            "하이브리드 및 AWS 아키텍처에서 Route 53 Resolver 엔드포인트 사용",
+            "글로벌 트래픽 관리에 Route 53 사용",
+            "도메인 등록 만들기 및 관리"
+          ]
+        },
+        {
+          "no": "1.3",
+          "title": "고가용성, 확장성 및 보안 요구 사항을 충족하기 위해 로드 밸런싱을 통합하는 솔루션 설계",
+          "knowledge": [
+            "OSI 모델의 계층 3, 계층 4 및 계층 7에서 로드 밸런싱이 작동하는 방식",
+            "다양한 유형의 로드 밸런서와 이러한 로드 밸런서가 네트워크 설계, 고가용성 및 보안에 대한 요구 사항을 충족하는 방법",
+            "사용 사례에 따라 로드 밸런싱에 적용되는 연결 패턴(예: 내부 로드 밸런서, 외부 로드 밸런서)",
+            "로드 밸런서의 스케일링 요인",
+            "로드 밸런서와 기타 AWS 서비스 통합(예: Global Accelerator, CloudFront, AWS WAF, Route 53, Amazon Elastic Kubernetes Service(Amazon EKS), AWS Certificate Manager(ACM))",
+            "로드 밸런서 구성 옵션(예: 프록시 프로토콜, 크로스 영역 로드 밸런싱, 세션 어피니티(스티키 세션), 라우팅 알고리즘)",
+            "로드 밸런서 대상 그룹에 대한 구성 옵션(예: TCP, GENEVE, 인스턴스와 IP 비교)",
+            "Kubernetes 클러스터용 AWS Load Balancer Controller",
+            "로드 밸런서를 사용한 암호화 및 인증에 대한 고려 사항(예: TLS 종료, TLS 패스스루)"
+          ],
+          "skills": [
+            "사용 사례에 따라 적절한 로드 밸런서 선택",
+            "오토 스케일링과 로드 밸런싱 솔루션 통합",
+            "기존 애플리케이션 배포와 로드 밸런서 통합"
+          ]
+        },
+        {
+          "no": "1.4",
+          "title": "AWS 및 하이브리드 네트워크에서 로깅 및 모니터링 요구 사항 정의",
+          "knowledge": [
+            "가시성을 제공하는 AWS 아키텍처의 Amazon CloudWatch 지표, 에이전트, 로그, 경보, 대시보드 및 인사이트",
+            "가시성을 제공하는 아키텍처의 AWS Transit Gateway Network Manager",
+            "가시성을 제공하는 아키텍처의 VPC Reachability Analyzer",
+            "가시성을 제공하는 아키텍처의 흐름 로그 및 트래픽 미러링",
+            "액세스 로깅(예: 로드 밸런서, CloudFront)"
+          ],
+          "skills": [
+            "로깅 및 모니터링 요구 사항 파악",
+            "네트워크 상태에 대한 가시성을 제공하기 위한 적절한 지표 추천",
+            "기본 네트워크 성능 캡처"
+          ]
+        },
+        {
+          "no": "1.5",
+          "title": "온프레미스 네트워크와 AWS 클라우드 간의 라우팅 전략 및 연결 아키텍처 설계",
+          "knowledge": [
+            "라우팅 기본 사항(예: 정적과 동적 비교, BGP)",
+            "물리적 상호 연결에 대한 계층 1 및 계층 2 개념(예: VLAN, 링크 집계 그룹(LAG), 광학, 점보 프레임)",
+            "캡슐화 및 암호화 기술(예: 일반 라우팅 캡슐화(GRE), IPsec)",
+            "AWS 계정 간 리소스 공유",
+            "오버레이 네트워크"
+          ],
+          "skills": [
+            "하이브리드 연결에 대한 요구 사항 파악",
+            "AWS 서비스를 사용하여 중복 하이브리드 연결 모델 설계(예: AWS Direct Connect, AWS Site-to-Site VPN)",
+            "원하는 트래픽 패턴(로드 공유, 액티브/패시브)을 기반으로 트래픽 흐름에 영향을 주는 BGP 속성으로 BGP 라우팅 설계",
+            "소프트웨어 정의 광역 네트워크(SD-WAN)와 AWS의 통합을 위한 설계(예: Transit Gateway Connect, 오버레이 네트워크)"
+          ]
+        },
+        {
+          "no": "1.6",
+          "title": "다양한 연결 패턴을 지원하기 위해 여러 AWS 계정, AWS 리전 및 VPC를 포함하는 라우팅 전략 및 연결 아키텍처 설계",
+          "knowledge": [
+            "다양한 연결 패턴 및 사용 사례(예: VPC 피어링, Transit Gateway, AWS PrivateLink)",
+            "VPC 공유의 기능 및 이점",
+            "IP 주소 중복을 고려한 IP 서브넷 및 솔루션"
+          ],
+          "skills": [
+            "요구 사항에 따라 가장 적합한 서비스를 사용하여 여러 VPC 연결(예: VPC 피어링, Transit Gateway, PrivateLink 사용)",
+            "다중 계정 설정에서 VPC 공유 사용",
+            "사용 가능한 여러 서비스 및 옵션을 사용하여 IP 중복 관리(예: NAT, PrivateLink, Transit Gateway 라우팅)"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "name": "네트워크 구현",
+      "weightPct": 26,
+      "tasks": [
+        {
+          "no": "2.1",
+          "title": "온프레미스 네트워크와 AWS 클라우드 간의 라우팅 및 연결 구현",
+          "knowledge": [
+            "라우팅 프로토콜(예: 정적, 동적)",
+            "VPN(예: 보안, 가속 VPN)",
+            "계층 1 및 사용할 하드웨어 유형(예: 위임장(LOA) 문서, 콜로케이션 시설, Direct Connect)",
+            "계층 2 및 계층 3(예: VLAN, IP 주소 지정, 게이트웨이, 라우팅, 스위칭)",
+            "트래픽 관리 및 SD-WAN(예: Transit Gateway Connect)",
+            "DNS(예: 조건부 전달, 호스팅 영역, 리졸버)",
+            "보안 어플라이언스(예: 방화벽)",
+            "로드 밸런싱(예: 계층 7과 비교한 계층 4, 역방향 프록시, 계층 3)",
+            "인프라 자동화",
+            "AWS Organizations 및 AWS Resource Access Manager(AWS RAM)(예: 다중 계정 Transit Gateway, Direct Connect, Amazon VPC, Route 53)",
+            "연결 테스트(예: Route Analyzer, Reachability Analyzer)",
+            "VPC의 네트워킹 서비스"
+          ],
+          "skills": [
+            "하이브리드 연결 솔루션에 대한 물리적 네트워크 요구 사항 구성",
+            "하이브리드 연결 솔루션과 함께 작동하도록 정적 또는 동적 라우팅 프로토콜 구성",
+            "AWS 클라우드에 연결하도록 기존 온프레미스 네트워크 구성",
+            "AWS 클라우드로 기존 온프레미스 이름 확인 구성",
+            "로드 밸런싱 솔루션 구성 및 구현",
+            "AWS 서비스에 대한 네트워크 모니터링 및 로깅 구성",
+            "환경 간 연결 테스트 및 검증"
+          ]
+        },
+        {
+          "no": "2.2",
+          "title": "여러 AWS 계정, 리전 및 VPC에 라우팅 및 연결을 구현하여 다양한 연결 패턴 지원",
+          "knowledge": [
+            "VPC 간 연결 및 다중 계정 연결(예: VPC 피어링, Transit Gateway, VPN, 타사 공급자, SD-WAN, 다중 프로토콜 레이블 스위칭(MPLS))",
+            "프라이빗 애플리케이션 연결(예: PrivateLink)",
+            "AWS 네트워킹 연결을 확장하는 방법(예: Organizations, AWS RAM)",
+            "애플리케이션 및 클라이언트에 대한 호스트 및 서비스 이름 확인(예: DNS)",
+            "인프라 자동화",
+            "인증 및 권한 부여(예: SAML, Active Directory)",
+            "보안(예: 보안 그룹, 네트워크 ACL, AWS Network Firewall)",
+            "연결 테스트(예: Route Analyzer, Reachability Analyzer, 도구)"
+          ],
+          "skills": [
+            "단일 VPC 또는 다중 VPC 설계에서 AWS 서비스를 사용하여 네트워크 연결 아키텍처 구성(예: DHCP, 라우팅, 보안 그룹)",
+            "기존 타사 공급자 솔루션과 하이브리드 연결 구성",
+            "허브 앤 스포크 네트워크 아키텍처 구성(예: Transit Gateway, 전송 VPC)",
+            "하이브리드 연결이 가능하도록 DNS 솔루션 구성",
+            "네트워크 경계 간 보안 구현",
+            "AWS 솔루션을 사용하여 네트워크 모니터링 및 로깅 구성"
+          ]
+        },
+        {
+          "no": "2.3",
+          "title": "복잡한 하이브리드 및 다중 계정 DNS 아키텍처 구현",
+          "knowledge": [
+            "프라이빗 호스팅 영역 및 퍼블릭 호스팅 영역을 사용해야 하는 경우",
+            "트래픽 관리를 변경하는 방법(예: 지연 시간, 지리적 위치, 가중치 기반)",
+            "DNS 위임 및 전달(예: 조건부 전달)",
+            "다양한 DNS 레코드 유형(예: A, AAAA, TXT, 포인터 레코드, 별칭 레코드)",
+            "DNSSEC",
+            "계정 간에 DNS 서비스를 공유하는 방법(예: AWS RAM)",
+            "아웃바운드 및 인바운드 엔드포인트에 대한 요구 사항 및 구현 옵션"
+          ],
+          "skills": [
+            "DNS 영역 및 조건부 전달 구성",
+            "DNS 솔루션을 사용하여 트래픽 관리 구성",
+            "하이브리드 네트워크용 DNS 구성",
+            "적절한 DNS 레코드 구성",
+            "Route 53에서 DNSSEC 구성",
+            "중앙 집중식 또는 분산식 네트워크 아키텍처 내에서 DNS 구성",
+            "Route 53에서 DNS 모니터링 및 로깅 구성"
+          ]
+        },
+        {
+          "no": "2.4",
+          "title": "네트워크 인프라 자동화 및 구성",
+          "knowledge": [
+            "코드형 인프라(IaC)(예: AWS Cloud Development Kit(AWS CDK), AWS CloudFormation, AWS CLI, AWS SDK, API)",
+            "이벤트 기반 네트워크 자동화",
+            "클라우드 네트워킹 리소스를 프로비저닝할 때 IaC 템플릿에서 하드 코딩된 명령 사용 시 일반적인 문제"
+          ],
+          "skills": [
+            "반복 가능한 네트워크 구성 만들기 및 관리",
+            "이벤트 기반 네트워킹 기능 통합",
+            "하이브리드 네트워크 자동화 옵션을 AWS 기반 IaC와 통합",
+            "가능한 최저 비용을 유지하면서 클라우드 네트워킹 환경에서 위험을 제거하고 효율성을 달성",
+            "IaC로 클라우드 네트워크 리소스 최적화 프로세스 자동화"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "name": "네트워크 관리 및 운영",
+      "weightPct": 20,
+      "tasks": [
+        {
+          "no": "3.1",
+          "title": "AWS 및 하이브리드 네트워크에서 라우팅 및 연결 유지 관리",
+          "knowledge": [
+            "AWS 하이브리드 네트워크에서 사용되는 업계 표준 라우팅 프로토콜(예: Direct Connect를 통한 BGP)",
+            "AWS 및 하이브리드 네트워크에 대한 연결 방법(예: Direct Connect 게이트웨이, Transit Gateway, VIF)",
+            "제한 및 할당량이 AWS 네트워킹 서비스에 미치는 영향(예: 대역폭 제한, 경로 제한)",
+            "사용자 지정 서비스에 사용할 수 있는 프라이빗 및 퍼블릭 액세스 방법(예: PrivateLink, VPC 피어링)",
+            "사용 가능한 리전 간 커뮤니케이션 및 리전 내 커뮤니케이션 패턴"
+          ],
+          "skills": [
+            "AWS 및 하이브리드 연결 옵션에 대한 라우팅 프로토콜 관리(예: Direct Connect 연결, VPN)",
+            "사용자 지정 서비스에 대한 프라이빗 액세스 유지 관리(예: PrivateLink, VPC 피어링)",
+            "라우팅 테이블을 사용하여 트래픽을 적절히 전달(예: 자동 전파, BGP)",
+            "AWS 서비스에 대한 프라이빗 액세스 또는 퍼블릭 액세스 설정(예: Direct Connect, VPN)",
+            "동적 및 정적 라우팅 프로토콜을 통한 라우팅 최적화(예: 경로 요약, CIDR 중복)"
+          ]
+        },
+        {
+          "no": "3.2",
+          "title": "네트워크 트래픽을 모니터링하고 분석하여 연결 패턴의 문제 해결 및 연결 패턴 최적화",
+          "knowledge": [
+            "네트워크 성능 지표 및 도달 가능성 제약 조건(예: 라우팅, 패킷 크기)",
+            "네트워크 성능 및 연결 가능성 문제(예: 패킷 손실)를 평가하기 위한 적절한 로그 및 지표",
+            "로그와 지표를 수집하고 분석하는 도구(예: CloudWatch, VPC 흐름 로그, VPC 트래픽 미러링)",
+            "라우팅 패턴 및 문제를 분석하는 도구(예: Reachability Analyzer, Transit Gateway Network Manager)"
+          ],
+          "skills": [
+            "도구 출력을 분석하여 네트워크 성능을 평가하고 연결 문제를 해결(예: VPC 흐름 로그, Amazon CloudWatch Logs)",
+            "네트워크 토폴로지 매핑 또는 이해(예: Transit Gateway Network Manager)",
+            "패킷을 분석하여 패킷 셰이핑에서의 문제 식별(예: VPC 트래픽 미러링)",
+            "네트워크 구성 오류로 인해 발생하는 연결 문제 해결(예: Reachability Analyzer)",
+            "네트워크 구성이 네트워크 설계 요구 사항을 충족하는지 확인(예: Reachability Analyzer)",
+            "네트워크 구성 변경에 따른 연결 의도 확인 자동화(예: Reachability Analyzer)",
+            "네트워크 연결을 복원하기 위해 VPC의 패킷 크기 불일치 문제 해결"
+          ]
+        },
+        {
+          "no": "3.3",
+          "title": "성능, 신뢰성 및 비용 효율성을 위해 AWS 네트워크 최적화",
+          "knowledge": [
+            "VPC 피어 또는 Transit Gateway가 적절한 상황",
+            "대역폭 사용률을 줄이는 다양한 방법(예: 멀티캐스트와 비교한 유니캐스트, CloudFront)",
+            "VPC와 온프레미스 환경 간의 데이터 전송을 위한 비용 효율적인 연결 옵션",
+            "AWS 기반 다양한 유형의 네트워크 인터페이스",
+            "Route 53의 고가용성 기능(예: 지연 시간 및 가중치 기반 레코드 세트와 함께 상태 확인을 사용한 DNS 로드 밸런싱)",
+            "신뢰성을 제공하는 Route 53에서 옵션의 사용 가능성",
+            "로드 밸런싱 및 트래픽 분산 패턴",
+            "VPC 서브넷 최적화",
+            "다양한 연결 유형에서 대역폭에 대한 프레임 크기 최적화"
+          ],
+          "skills": [
+            "네트워크 처리량(throughput) 최적화",
+            "최상의 성능을 위한 올바른 네트워크 인터페이스 선택(예: 탄력적 네트워크 인터페이스, Elastic Network Adapter(ENA), Elastic Fabric Adapter(EFA))",
+            "제공된 네트워크 요구 사항 분석을 기반으로 VPC 피어링, 프록시 패턴 또는 Transit Gateway 연결 중에서 선택",
+            "네트워크 요구 사항을 충족하기 위해 적절한 네트워크 연결 서비스(예: VPC 피어링, Transit Gateway, VPN 연결)에 솔루션 구현",
+            "VPC 및 온프레미스 환경 내에서 멀티캐스트 기능 구현",
+            "애플리케이션 가용성을 최적화하기 위해 Route 53 퍼블릭 호스팅 영역 및 프라이빗 호스팅 영역 및 레코드 만들기(예: 트래픽을 여러 가용 영역으로 라우팅하기 위한 프라이빗 영역 DNS 항목)",
+            "증가된 애플리케이션 로드를 지원하기 위해 오토 스케일링 구성의 서브넷 업데이트 및 최적화",
+            "VPC 내 사용 가능한 IP 주소의 고갈을 방지하기 위한 서브넷 업데이트 및 최적화(예: 보조 CIDR)",
+            "연결 유형 간에 점보 프레임 지원 구성",
+            "네트워크 성능 및 애플리케이션 가용성을 개선하기 위해 Global Accelerator로 네트워크 연결 최적화"
+          ]
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "name": "네트워크 보안, 규정 준수 및 거버넌스",
+      "weightPct": 24,
+      "tasks": [
+        {
+          "no": "4.1",
+          "title": "보안 및 규정 준수 요구 사항을 충족하는 네트워크 기능 구현 및 유지 관리",
+          "knowledge": [
+            "애플리케이션 아키텍처를 기반으로 한 다양한 위협 모델",
+            "일반적인 보안 위협",
+            "다양한 애플리케이션 흐름을 보호하는 메커니즘",
+            "보안 및 규정 준수 요구 사항을 충족하는 AWS 네트워크 아키텍처"
+          ],
+          "skills": [
+            "AWS로 유입되는 인바운드 트래픽 흐름 보호(예: AWS WAF, AWS Shield, Network Firewall)",
+            "AWS의 아웃바운드 트래픽 흐름 보호(예: Network Firewall, 프록시, Gateway Load Balancer)",
+            "계정 내 또는 여러 계정에서 VPC 간 트래픽 보호(예: 보안 그룹, 네트워크 ACL, VPC 엔드포인트 정책)",
+            "보안 및 규정 준수 요구 사항을 충족하는 AWS 네트워크 아키텍처 구현(예: 신뢰할 수 없는 네트워크, 경계 VPC, 3티어 아키텍처)",
+            "위협 모델 개발 및 지정된 네트워크 아키텍처에 대한 적절한 완화 전략 파악",
+            "초기 요구 사항 준수 테스트(예: 장애 조치 테스트, 복원력)",
+            "AWS를 사용하여 보안 인시던트 보고 및 알림 자동화"
+          ]
+        },
+        {
+          "no": "4.2",
+          "title": "네트워크 모니터링 및 로깅 서비스를 사용하여 보안 검증 및 감사 수행",
+          "knowledge": [
+            "AWS에서 사용할 수 있는 네트워크 모니터링 및 로깅 서비스(예: CloudWatch, AWS CloudTrail, VPC 트래픽 미러링, VPC 흐름 로그, Transit Gateway Network Manager)",
+            "알림 메커니즘(예: CloudWatch 경보)",
+            "다양한 AWS 서비스에서 로그 만들기(예: VPC 흐름 로그, 로드 밸런서 액세스 로그, CloudFront 액세스 로그)",
+            "로그 전달 메커니즘(예: Amazon Kinesis, Route 53, CloudWatch)",
+            "네트워크 보안 구성을 감사하는 메커니즘(예: 보안 그룹, AWS Firewall Manager, AWS Trusted Advisor)"
+          ],
+          "skills": [
+            "VPC 흐름 로그 만들기 및 분석(흐름 로그의 기본 및 확장 필드 포함)",
+            "네트워크 트래픽 미러링 만들기 및 분석(예: VPC 트래픽 미러링 사용)",
+            "CloudWatch를 사용하여 자동화된 경보 구현",
+            "CloudWatch를 사용하여 사용자 지정 지표 구현",
+            "단일 또는 여러 AWS 로그 소스에서 정보 상관 관계 파악 및 분석",
+            "로그 전달 솔루션 구현",
+            "단일 또는 여러 AWS 네트워크 서비스 및 계정에서 네트워크 감사 전략 구현(예: Firewall Manager, 보안 그룹, 네트워크 ACL)"
+          ]
+        },
+        {
+          "no": "4.3",
+          "title": "네트워크 데이터 및 통신의 기밀성 구현 및 유지 관리",
+          "knowledge": [
+            "AWS에서 사용할 수 있는 네트워크 암호화 옵션",
+            "Direct Connect를 통한 VPN 연결",
+            "전송 중인 데이터의 암호화 방법(예: IPsec)",
+            "AWS 공동 책임 모델에 따른 네트워크 암호화",
+            "DNS 통신의 보안 방법(예: DNSSEC)"
+          ],
+          "skills": [
+            "애플리케이션 규정 준수 요구 사항(예: IPsec, TLS)을 충족하기 위한 네트워크 암호화 방법 구현",
+            "전송 중인 데이터를 보호하기 위한 암호화 솔루션 구현(예: CloudFront, Application Load Balancer와 Network Load Balancer, Direct Connect를 통한 VPN, AWS 관리형 데이터베이스, Amazon S3, Amazon EC2의 사용자 지정 솔루션, Transit Gateway)",
+            "인증 기관을 사용하여 인증서 관리 솔루션 구현(예: ACM, AWS Private Certificate Authority(ACM PCA))",
+            "보안 DNS 통신 구현"
+          ]
+        }
+      ]
+    }
+  ],
+  "sourceUrl": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/advanced-networking-specialty-01/advanced-networking-specialty-01.html"
+}
