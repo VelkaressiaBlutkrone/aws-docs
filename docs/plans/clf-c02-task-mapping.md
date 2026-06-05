@@ -35,7 +35,7 @@
 
 ## Domain 2: Security and Compliance (30%)
 
-### Task 2.1 — 공동 책임 모델 `clf-t2-1` · 문서 ☐ · 문항 0/5
+### Task 2.1 — 공동 책임 모델 `clf-t2-1` · 문서 ☑ · 문항 5/5 ✅
 - **Knowledge:** AWS 공동 책임 모델
 - **Skills:** 모델 구성요소 / 고객 책임 / AWS 책임 / 공유 책임 / 서비스에 따른 책임 이동(RDS vs Lambda vs EC2)
 
@@ -102,10 +102,20 @@
 | Domain | 가중치 | Tasks | 문서 | 검증 문항 | 목표 |
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
-| 2 Security & Compliance | 30% | 4 | 0/4 | 0 | ≥20 |
+| 2 Security & Compliance | 30% | 4 | 1/4 | 5 | ≥20 |
 | 3 Technology & Services | 34% | 8 | 0/8 | 0 | ≥40 |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **0/19** | **0** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **1/19** | **5** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
+> ⚠️ 스택 정정: 콘텐츠 레이어는 이제 Flutter 자산(`flutter_app/assets/content/clf/`)이다. 위의 `src/content/...`는 철거된 옛 Vite 경로(역사적 참조).
+
+## 진척 로그
+
+- **2026-06-06 — 첫 verified 배치 완료: `clf-t2-1` (공동 책임 모델).**
+  - 산출물: `flutter_app/assets/content/clf/t2-1.md`(학습문서) + `t2-1.questions.json`(검증 문항 5/5).
+  - 규율: 문항마다 공식 AWS 출처 URL 기록(verified 게이트) + 독립 서브에이전트 **AI 역대조 통과(5/5 CORRECT, 수정 0)**.
+  - 출처: 공동 책임 모델 페이지(ko/en), Security in Amazon RDS, Security in AWS Lambda, AWS Data Center Controls(NIST 800-88), CLF-C02 공식 가이드.
+  - ⏱ **측정:** 1문항 AI 작성 ≈ **55초**(4지선다+정답/오답해설+출처 4개 대조 포함). 역대조 ≈ 배치당 66초(문항당 ~13초 균등). → 병목은 작성이 아니라 **사람 검수**이며, 그 시간은 본인이 실제 리뷰할 때 측정해야 진짜 분당 단가가 나온다(플레이북 가설과 일치).
+  - 다음: 이 2파일이 나머지 18개 Task의 복제 템플릿.

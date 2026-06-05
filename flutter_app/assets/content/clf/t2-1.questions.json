@@ -1,0 +1,175 @@
+{
+  "examGuideTaskId": "clf-t2-1",
+  "taskTitle": "공동 책임 모델",
+  "domain": 2,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t2-1-q1",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "서비스에 따른 책임 이동(RDS vs Lambda vs EC2)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 여러 AWS 서비스를 함께 사용하고 있다. 공동 책임 모델에 따라, 게스트 운영체제(guest OS)의 보안 패치 적용을 고객이 직접 책임져야 하는 서비스는 무엇인가?",
+      "options": [
+        "Amazon RDS",
+        "Amazon EC2",
+        "AWS Lambda",
+        "Amazon S3"
+      ],
+      "correct": 1,
+      "explanation": "Amazon EC2는 IaaS이므로 고객 책임이 가장 큽니다. AWS는 하드웨어·호스트 OS·가상화 계층까지만 책임지고, 그 위의 게스트 OS 업데이트·보안 패치, 애플리케이션, 보안 그룹(방화벽) 구성은 고객의 책임입니다('클라우드 내부의 보안').",
+      "wrongExplanations": {
+        "0": "Amazon RDS는 관리형 데이터베이스 서비스로, 게스트 OS와 DB 엔진의 패치를 AWS가 수행합니다. 고객은 DB 계정·권한, 보안 그룹, IAM, 암호화 옵션을 책임집니다 — 게스트 OS 패치는 아닙니다.",
+        "2": "AWS Lambda는 서버리스로, 운영체제·런타임·서버의 패치와 유지관리를 전부 AWS가 담당합니다. 고객은 함수 코드와 그 의존성, 실행 역할(IAM), 데이터만 책임집니다.",
+        "3": "Amazon S3는 추상화된 스토리지 서비스로 AWS가 인프라·운영체제·플랫폼을 운영합니다. 고객이 다룰 '게스트 OS' 자체가 없으며, 고객은 데이터·접근 정책·암호화 옵션을 책임집니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Shared Responsibility Model — 고객은 게스트 OS(업데이트·보안 패치) 책임, EC2가 IaaS 예시",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 클라우드 자체 vs 내부의 보안",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "Security in Amazon RDS — '책임 범위는 사용하는 서비스에 따라 결정됨'",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.html"
+        },
+        {
+          "title": "Security in AWS Lambda — 인프라·OS는 AWS, 코드·IAM·데이터는 고객",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-security.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-1-q2",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "AWS 책임 (클라우드 자체의 보안)",
+      "difficulty": "foundational",
+      "stem": "공동 책임 모델에서 다음 중 '클라우드 자체의 보안(security of the cloud)'으로서 항상 AWS의 책임에 해당하는 것은?",
+      "options": [
+        "EC2 인스턴스에 적용할 IAM 사용자와 권한 설정",
+        "데이터센터의 물리적 보안과 폐기되는 스토리지 하드웨어의 처리",
+        "VPC 보안 그룹의 인바운드 규칙 구성",
+        "S3 버킷에 저장하는 데이터의 암호화 활성화 여부 선택"
+      ],
+      "correct": 1,
+      "explanation": "데이터센터의 물리적 보안, 전력·냉각 등 환경 제어, 하드웨어(폐기 포함), 네트워킹, 가상화 계층은 AWS의 'of the cloud' 책임입니다. 고객은 이 영역에 접근하거나 구성할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "IAM 사용자·그룹·권한 설정은 고객 책임('in the cloud')입니다. 자격증명과 접근 관리는 어떤 서비스를 쓰든 고객이 담당합니다.",
+        "2": "보안 그룹(방화벽) 규칙 구성은 고객 책임입니다. AWS는 방화벽 '기능'을 제공하지만, 어떤 트래픽을 허용할지 규칙을 정하는 것은 고객입니다.",
+        "3": "데이터 암호화를 켤지, 어떤 방식으로 쓸지 선택하는 것은 고객 책임입니다. AWS는 암호화 기능과 키 인프라를 제공하지만, 적용 여부와 옵션 선택은 고객의 몫입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — AWS 책임: 호스트 OS·가상화·물리 시설·하드웨어",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS Shared Responsibility Model — Security 'of' the Cloud(하드웨어/시설 물리 보안)",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS Data Center Controls — 수명 종료 스토리지 매체를 NIST 800-88 기법으로 AWS가 폐기",
+          "url": "https://aws.amazon.com/compliance/data-center/controls/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-1-q3",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "서비스에 따른 책임 이동(RDS) / AWS 책임",
+      "difficulty": "foundational",
+      "stem": "Amazon RDS를 사용할 때, 공동 책임 모델에 따라 AWS가 책임지는 것은 무엇인가?",
+      "options": [
+        "데이터베이스 사용자 계정과 권한 관리",
+        "DB 인스턴스에 연결되는 보안 그룹 규칙 구성",
+        "기본 운영체제와 데이터베이스 엔진에 대한 패치",
+        "저장 데이터(at rest) 암호화의 활성화 여부 결정"
+      ],
+      "correct": 2,
+      "explanation": "Amazon RDS는 관리형 데이터베이스 서비스입니다. AWS가 하부 인프라, 게스트 운영체제, 데이터베이스 엔진의 패치, 자동 백업·복제 같은 운영 작업을 수행합니다. 그래서 고객은 EC2에 직접 DB를 설치할 때와 달리 OS·엔진 패치 부담에서 벗어납니다.",
+      "wrongExplanations": {
+        "0": "데이터베이스 사용자 계정과 권한 관리는 고객 책임입니다. RDS가 관리형이라도 DB 내부 계정·접근 제어는 고객이 설정합니다.",
+        "1": "DB 인스턴스의 네트워크 접근을 제어하는 보안 그룹 규칙 구성은 고객 책임입니다.",
+        "3": "저장 데이터 암호화를 켤지 여부와 옵션 선택은 고객 책임입니다. AWS는 암호화 기능을 제공하지만 적용 결정은 고객이 합니다."
+      },
+      "sources": [
+        {
+          "title": "Security in Amazon RDS — AWS가 관리하는 프로세스(백업·복제 등)는 고객이 보안 구성 불필요",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.html"
+        },
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 관리형 서비스에서 AWS가 OS·플랫폼 운영",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-1-q4",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "공유 책임 (Shared Controls)",
+      "difficulty": "foundational",
+      "stem": "패치 관리(patch management)가 공동 책임 모델에서 '공유 통제(shared control)'로 분류되는 이유를 가장 잘 설명한 것은?",
+      "options": [
+        "AWS가 인프라, 게스트 OS, 애플리케이션의 모든 패치를 담당하기 때문",
+        "고객이 인프라, 게스트 OS, 애플리케이션의 모든 패치를 담당하기 때문",
+        "AWS는 인프라를 패치하고, 고객은 자신의 게스트 OS와 애플리케이션을 패치하기 때문",
+        "제3자 감사 기관이 양측의 패치 적용 여부를 점검하기 때문"
+      ],
+      "correct": 2,
+      "explanation": "공유 통제는 하나의 주제를 AWS와 고객이 '층'을 나눠 함께 책임지는 영역입니다. 패치 관리에서 AWS는 인프라의 결함을 패치하고, 고객은 자신의 게스트 OS와 애플리케이션을 패치합니다. 구성 관리와 인식·교육도 같은 방식의 공유 통제입니다.",
+      "wrongExplanations": {
+        "0": "AWS가 모든 패치를 담당하지 않습니다. 게스트 OS와 애플리케이션 패치는 고객 몫이며, 그래서 '공유'입니다.",
+        "1": "고객이 모든 패치를 담당하지도 않습니다. 인프라 패치는 AWS가 합니다.",
+        "3": "제3자 감사 기관의 점검은 컴플라이언스 검증 활동이지, 패치 책임을 양측이 나눠 갖는다는 '공유 통제'의 정의가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 공유 통제: 패치/구성/인식·교육",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS Shared Responsibility Model — Shared Controls(Patch/Configuration/Awareness & Training)",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-1-q5",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "고객 책임 / 모델 구성요소 (서비스 불변 요소)",
+      "difficulty": "foundational",
+      "stem": "사용하는 AWS 서비스의 종류(EC2, RDS, Lambda 등)와 관계없이, 공동 책임 모델에서 '항상' 고객의 책임으로 남는 것은?",
+      "options": [
+        "호스트 운영체제와 하이퍼바이저(가상화 계층)의 보안",
+        "고객 데이터의 분류와 IAM을 통한 접근 권한 관리",
+        "데이터센터를 연결하는 물리적 네트워크 장비의 구성",
+        "관리형 서비스를 구동하는 기반 소프트웨어의 패치"
+      ],
+      "correct": 1,
+      "explanation": "서비스의 추상화 수준이 아무리 높아져도 고객 데이터 자체, 자산 분류, IAM을 통한 접근 권한 관리는 항상 고객의 책임으로 남습니다. 책임이 이동해도 이 세 가지는 AWS로 넘어가지 않습니다.",
+      "wrongExplanations": {
+        "0": "호스트 OS와 하이퍼바이저(가상화 계층)는 항상 AWS의 책임입니다.",
+        "2": "데이터센터의 물리적 네트워크 장비 구성은 항상 AWS의 책임입니다.",
+        "3": "관리형 서비스를 구동하는 기반 소프트웨어의 패치는 AWS의 책임입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Shared Responsibility Model — 고객 책임: Customer Data / IAM / 자산 분류",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 추상화 서비스에서도 데이터·IAM은 고객",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

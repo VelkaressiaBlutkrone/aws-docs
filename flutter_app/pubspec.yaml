@@ -60,6 +60,7 @@ flutter:
   assets:
     - assets/exam_guides/
     - assets/exam_summaries.json
+    - assets/content/clf/
 
   fonts:
     - family: Pretendard
