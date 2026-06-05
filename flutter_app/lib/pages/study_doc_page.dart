@@ -90,7 +90,13 @@ class _DocHeader extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             _badge(c.correctWeak, c.correct, '✓ 검증됨'),
-            _chip(context, '도메인 ${doc.domain}'),
+            _chip(
+                context,
+                doc.domainName != null
+                    ? '도메인 ${doc.domain} · ${doc.domainName}'
+                    : '도메인 ${doc.domain}'),
+            if (doc.domainWeightPct != null)
+              _chip(context, '${doc.domainWeightPct}%'),
             for (final tk in doc.coversTasks) _chip(context, 'Task $tk'),
             if (doc.lastVerified != null)
               _chip(context, '검수 ${doc.lastVerified}'),

@@ -49,5 +49,9 @@ void main() {
     expect(finished!.correct, 1);
     expect(finished!.total, 1);
     expect(finished!.wrongQuestionIds, isEmpty);
+
+    // 결과 화면 복기(스펙 §9.3): 정답 라벨 + 해설 재표시
+    expect(find.textContaining('정답'), findsWidgets);
+    expect(find.textContaining('EC2는 IaaS'), findsOneWidget);
   });
 }

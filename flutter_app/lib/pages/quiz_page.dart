@@ -295,27 +295,83 @@ class _Results extends StatelessWidget {
               style: t.displayMedium?.copyWith(color: c.accent)),
           const SizedBox(height: Gap.xl),
           for (var k = 0; k < qs.length; k++)
-            Padding(
-              padding: const EdgeInsets.only(bottom: Gap.sm),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                      picked[k] == qs[k].correct
-                          ? Icons.check_circle
-                          : Icons.cancel,
-                      size: 18,
-                      color:
-                          picked[k] == qs[k].correct ? c.correct : c.wrong),
-                  const SizedBox(width: Gap.sm),
-                  Expanded(
-                      child: Text('${k + 1}. ${qs[k].stem}',
-                          style: t.bodyMedium?.copyWith(color: c.text))),
-                ],
-              ),
-            ),
+            _ResultCard(index: k, q: qs[k], pickedIndex: picked[k]),
         ],
       ),
+    );
+  }
+}
+
+/// 결과 화면의 문항별 복기 카드: stem + 내 답/정답 + 해설 재표시(스펙 §9.3).
+class _ResultCard extends StatelessWidget {
+  const _ResultCard(
+      {required this.index, required this.q, required this.pickedIndex});
+  final int index;
+  final Question q;
+  final int? pickedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final t = Theme.of(context).textTheme;
+    final isCorrect = pickedIndex == q.correct;
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: Gap.md),
+      padding: const EdgeInsets.all(Gap.md),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: Border.all(color: c.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(isCorrect ? Icons.check_circle : Icons.cancel,
+                  size: 18, color: isCorrect ? c.correct : c.wrong),
+              const SizedBox(width: Gap.sm),
+              Expanded(
+                  child: Text('${index + 1}. ${q.stem}',
+                      style: t.bodyLarge
+                          ?.copyWith(fontSize: 15, fontWeight: FontWeight.w700))),
+            ],
+          ),
+          const SizedBox(height: Gap.sm),
+          if (pickedIndex != null && !isCorrect)
+            _answerLine(context, '내 답', q.options[pickedIndex!], c.wrong),
+          _answerLine(context, '정답', q.options[q.correct], c.correct),
+          const SizedBox(height: Gap.xs),
+          Text(q.explanation,
+              style: t.bodyMedium?.copyWith(color: c.text, height: 1.6)),
+          if (pickedIndex != null &&
+              !isCorrect &&
+              q.wrongExplanations[pickedIndex!] != null) ...[
+            const SizedBox(height: Gap.xs),
+            Text(q.wrongExplanations[pickedIndex!]!,
+                style: t.bodyMedium?.copyWith(color: c.wrong, height: 1.6)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _answerLine(
+      BuildContext context, String label, String text, Color color) {
+    final c = context.c;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Text.rich(TextSpan(children: [
+        TextSpan(
+            text: '$label  ',
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w800, color: color)),
+        TextSpan(
+            text: text,
+            style: TextStyle(fontSize: 14, color: c.text, height: 1.5)),
+      ])),
     );
   }
 }
