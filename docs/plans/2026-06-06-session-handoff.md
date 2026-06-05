@@ -1,12 +1,14 @@
 # Session Handoff — 2026-06-06 (START HERE 다음 세션)
 
-> 한 줄 상태: **AWS 자격증 한국어 학습 사이트가 Flutter Web으로 라이브 배포됨. 다음 할 일 = CLF 검증 콘텐츠 생산 시작 (단, 1 Task부터).**
+> 한 줄 상태: **clf-t2-1 검증 콘텐츠 + 학습 루프 기반(#1: 렌더러·퀴즈·이력) 완성·main 병합·배포. 다음 = (1순위) 다음 CLF Task 콘텐츠 → (2순위) 하위 프로젝트 #2(타이머·플래그).**
+
+> 갱신: 2026-06-06 세션 2 (clf-t2-1 콘텐츠 + 학습 루프 #1 구현 완료 시점)
 
 ## 지금 어디에 있나
 - **라이브:** https://velkaressiablutkrone.github.io/aws-docs/ (GitHub Pages, `main` push 시 자동 배포)
 - **저장소:** VelkaressiaBlutkrone/aws-docs · 브랜치 `main`
 - **스택:** Flutter Web. 앱 코드 `flutter_app/`. (옛 Vite/바닐라-TS는 철거됨)
-- **상태:** 그릇 완성. 콘텐츠(검증 문항) = CLF 0개. 이게 유일한 진짜 병목.
+- **상태:** clf-t2-1 검증 콘텐츠 완성(학습문서 + 문항 5/5) + 학습 루프 **#1(렌더러·퀴즈·localStorage 이력)** 구현·main 병합. 콘텐츠 CLF **1/19 Task**. 렌더러 완성 → 이후 Task는 콘텐츠만 추가하면 즉시 노출.
 
 ## 이번 세션(들)에서 한 것
 1. **디자인 시스템** — `DESIGN.md` ("조용한 레퍼런스", verified 틸 `#0E8175`, Pretendard+JetBrains Mono, 라이트/다크). 구현: `flutter_app/lib/theme/app_theme.dart`.
@@ -15,12 +17,21 @@
 4. **배포** — `.github/workflows/pages.yml` = Flutter web 빌드(`--base-href /aws-docs/`). CI success 확인.
 5. **콘텐츠 플레이북** — `docs/plans/2026-06-06-content-production-playbook.md` (이번 office-hours 산출물).
 
-## ▶ 다음 행동 (이것 하나만)
-**CLF `clf-t2-1`(공동 책임 모델) 한 Task를 끝까지 돌린다:**
-- 학습문서 1개 (files.zip 템플릿: 목표→왜중요→핵심개념→시험포인트→흔한함정→자가점검. **취업/DIO 섹션 제외**. 머리말에 커버하는 공식 Task ID 명시)
-- 검증 문항 5개: AI 초안 → 공식 문서 대조 + **출처 URL 기록(verified 필수조건)** → AI 역대조 → `verified:true`
-- **타이머로 실제 1문항 시간 측정** (감 말고 숫자)
-- 목적: 분당 단가 확정 + 18개 Task 복제 템플릿 + 규율 실전 검증. 19개 계획 금지, 1개 완성.
+## ▶ 다음 행동 (다음 세션 — 순서대로)
+
+> 직전 세션(2) 완료: clf-t2-1 콘텐츠 + 학습 루프 **하위 프로젝트 #1(기반: 렌더러·퀴즈·이력)** 구현·main 병합·배포.
+> 설계/계획: `docs/designs/2026-06-06-clf-learning-loop-foundation-spec.md`(4개 하위 프로젝트 분해), `docs/plans/2026-06-06-clf-learning-loop-foundation-plan.md`.
+
+**1순위 — 다음 CLF Task 콘텐츠 생산**
+- `clf-t2-1` 템플릿(`flutter_app/assets/content/clf/t2-1.{md,questions.json}`)을 복제. 추천: 비중 큰 도메인 2의 `clf-t2-3`(접근 관리/IAM) 또는 `clf-t2-2`.
+- 복제 경로 3단계: ① `t2-X.md`(YAML 프런트매터 + 섹션: 목표→🎯왜→📖핵심→✍️시험포인트→⚠️함정→🧪자가점검→📌출처) ② `t2-X.questions.json`(검증 문항 ≥5, 각 문항 sources[] + verified) ③ `lib/data/content_index.dart`에 `ContentEntry` 한 줄 추가.
+- 규율 유지: **verified 게이트(출처 URL 필수) + AI 역대조** 2차 점검. 렌더러가 이미 있어 추가 즉시 사이트 노출. **취업/DIO 섹션 제외.**
+
+**2순위 — 학습 루프 하위 프로젝트 #2**
+- E3 실전 타이머 + 자동 제출 + 세션 복원, E4 문항 플래그. 같은 흐름(spec → plan → subagent-driven).
+- 이력 스키마 D14는 이미 `wrongQuestionIds`/`durationSpentSec` 기록 중 → #2뿐 아니라 #3(E1 오답노트/E2 약점리포트)의 데이터 기반도 준비됨.
+
+> 게이트 유지: CLF 1개 완성 우선. 콘텐츠 커버리지(현재 1/19)를 늘리는 게 여전히 진짜 병목.
 
 ## 생산 규율 (플레이북 합의)
 - 문항 = **A+B 혼합** (Task 직렬 척추 + 약점 우선, C(AI 소크라테스)는 어려운 Task 옵션)

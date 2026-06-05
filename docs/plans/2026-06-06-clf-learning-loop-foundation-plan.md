@@ -10,6 +10,11 @@
 
 **Spec:** `docs/designs/2026-06-06-clf-learning-loop-foundation-spec.md` (승인 완료).
 
+> ⚠️ **구현 후 정정(2026-06-06, 이 계획은 구현·병합 완료):** 아래 Task 코드 두 곳이 실제 구현에서 수정됨 — **코드와 git 이력이 진실 공급원**.
+> - **Task 5 `history_store.dart`:** 단일 `import 'package:web/web.dart'`는 VM 테스트 컴파일을 깨뜨려 **조건부 import**로 분리했다(`web_backend_stub.dart` / `web_backend_web.dart` 2파일 추가, `if (dart.library.js_interop)` 분기). `kIsWeb ? WebBackend() : MemoryBackend()` 선택 로직은 유지.
+> - **Task 7 `_Results`:** 최종 리뷰(스펙 §9.3) 반영해 **문항별 복기 카드 `_ResultCard`**(stem + 내 답 + 정답 + 해설/오답해설 재표시)로 강화.
+> 둘 다 일회성 인프라 — 새 콘텐츠 Task 복제 경로(`t2-X.md` + `t2-X.questions.json` + content_index 한 줄)와 무관.
+
 ---
 
 ## 작업 디렉터리 / 사전 규칙

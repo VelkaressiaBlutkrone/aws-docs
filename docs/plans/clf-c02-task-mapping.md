@@ -119,3 +119,5 @@
   - 출처: 공동 책임 모델 페이지(ko/en), Security in Amazon RDS, Security in AWS Lambda, AWS Data Center Controls(NIST 800-88), CLF-C02 공식 가이드.
   - ⏱ **측정:** 1문항 AI 작성 ≈ **55초**(4지선다+정답/오답해설+출처 4개 대조 포함). 역대조 ≈ 배치당 66초(문항당 ~13초 균등). → 병목은 작성이 아니라 **사람 검수**이며, 그 시간은 본인이 실제 리뷰할 때 측정해야 진짜 분당 단가가 나온다(플레이북 가설과 일치).
   - 다음: 이 2파일이 나머지 18개 Task의 복제 템플릿.
+
+- **2026-06-06 (세션 2) — 학습 루프 #1(기반) 구현·main 병합·배포.** 렌더러(Markdown 섹션 뷰) + 퀴즈 러너(정답/오답해설·점수·문항별 복기) + localStorage 이력(D14) + CLF 상세 진입 섹션. `flutter analyze` 무이슈 / 테스트 11 / `build web` 성공 / opus 최종 리뷰 반영. 설계·계획: `docs/designs/2026-06-06-clf-learning-loop-foundation-spec.md`, `docs/plans/2026-06-06-clf-learning-loop-foundation-plan.md`. **렌더러 완성 → 이후 검증 콘텐츠는 추가 즉시 사이트 노출.** 다음 세션: (1) 다음 CLF Task 콘텐츠 → (2) 하위 프로젝트 #2(타이머·플래그).
