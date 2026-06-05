@@ -1,0 +1,209 @@
+{
+  "examGuideTaskId": "clf-t2-3",
+  "taskTitle": "접근 관리 (IAM)",
+  "domain": 2,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t2-3-q1",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "루트 전용 작업 식별",
+      "difficulty": "foundational",
+      "stem": "한 관리자가 IAM 관리(administrator) 권한을 가진 사용자로 로그인해 있다. 다음 중 이 IAM 사용자로는 수행할 수 없고, 반드시 AWS 계정 루트 사용자로 로그인해야만 할 수 있는 작업은?",
+      "options": [
+        "새 Amazon EC2 인스턴스를 시작한다",
+        "새 IAM 사용자와 권한 정책을 생성한다",
+        "AWS 계정을 해지(close)한다",
+        "Amazon S3 버킷을 만들고 객체를 업로드한다"
+      ],
+      "correct": 2,
+      "explanation": "AWS 계정 해지는 루트 사용자 자격증명이 필요한 '루트 전용 작업' 중 하나입니다(단독 계정 기준). 이런 작업은 대개 계정 *자체*에 대한 것이거나 잠긴 상황을 푸는 것으로, 계정 설정(루트 이메일·암호) 변경, AWS Support 플랜 변경/취소, Reserved Instance Marketplace 판매자 등록, IAM 권한 복구 등이 함께 묶입니다.",
+      "wrongExplanations": {
+        "0": "EC2 인스턴스 시작은 일상적인 리소스 작업으로, 적절한 권한을 가진 IAM 사용자가 수행할 수 있습니다. 루트가 필요 없습니다.",
+        "1": "IAM 사용자·정책 생성은 IAM 관리 권한을 가진 사용자가 할 수 있는 일상 작업입니다. 오히려 AWS는 이런 작업을 루트가 아닌 IAM 신원으로 하라고 권장합니다.",
+        "3": "S3 버킷 생성과 객체 업로드는 권한을 가진 IAM 사용자가 수행하는 일상 작업입니다. 루트 전용 작업이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS account root user — Tasks that require root user credentials(계정 해지 등 루트 전용 작업 목록)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q2",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "루트 보호 방법",
+      "difficulty": "foundational",
+      "stem": "방금 새 AWS 계정을 만들었다. 공동 책임 모델과 IAM 모범 사례에 따라 루트 사용자를 보호하기 위한 조치로 가장 적절한 것은?",
+      "options": [
+        "루트 사용자의 액세스 키를 생성해 애플리케이션의 프로그래밍 인증에 사용한다",
+        "루트 사용자에 MFA를 활성화하고, 일상 작업은 별도의 관리(IAM) 신원으로 수행한다",
+        "편의를 위해 루트 사용자 암호를 팀원들과 공유한다",
+        "모든 일상적인 리소스 작업을 루트 사용자로 수행한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS는 루트 사용자에 MFA를 켜고, 루트 자격증명은 잠가 보관하며, 일상 작업은 별도의 관리 신원(IAM 또는 IAM Identity Center의 관리 사용자)으로 하라고 강하게 권장합니다. 루트는 계정의 모든 것에 완전히 접근하므로 사고 시 피해가 가장 큽니다.",
+      "wrongExplanations": {
+        "0": "루트 사용자의 액세스 키는 만들지 않는 것이 모범 사례입니다. 프로그래밍 접근에는 IAM 역할(임시 자격증명)이나 IAM 사용자 키를 사용합니다.",
+        "2": "루트 암호를 공유하면 완전 접근 권한이 통제 불능 상태로 퍼집니다. 루트 자격증명은 안전하게 잠가 보관해야 합니다.",
+        "3": "루트로 일상 작업을 하는 것은 정확히 AWS가 하지 말라고 권고하는 행위입니다. 일상은 최소 권한의 IAM 신원으로 수행합니다."
+      },
+      "sources": [
+        {
+          "title": "Security best practices in IAM — Follow best practices to protect your root user credentials",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        },
+        {
+          "title": "AWS account root user — 루트를 일상 작업에 쓰지 말 것, MFA 권장",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q3",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "최소 권한 원칙",
+      "difficulty": "foundational",
+      "stem": "IAM 정책으로 권한을 설정할 때 따라야 하는 '최소 권한 원칙(principle of least privilege)'을 가장 정확하게 설명한 것은?",
+      "options": [
+        "작업을 수행하는 데 필요한 권한만 부여한다",
+        "처음에 모든 사용자에게 관리자 권한을 주고 문제가 생기면 회수한다",
+        "관리를 단순하게 하기 위해 모든 사용자에게 동일한 권한 집합을 부여한다",
+        "정책에서 거부(Deny)보다 허용(Allow)을 항상 우선 적용한다"
+      ],
+      "correct": 0,
+      "explanation": "최소 권한이란 특정 작업을 수행하는 데 '필요한 권한만' 부여하는 것입니다. 처음에는 넓게 시작하더라도 사용 패턴이 잡히면 권한을 줄여 최소 권한으로 수렴시키며, AWS 관리형 정책에서 시작해 고객 관리형 정책으로 좁히는 식으로 적용합니다.",
+      "wrongExplanations": {
+        "1": "관리자 권한을 먼저 주고 회수하는 방식은 최소 권한의 정반대입니다. 과도한 권한이 부여된 시간 동안 위험에 노출됩니다.",
+        "2": "모두에게 동일 권한을 주는 것은 어떤 사용자에게는 과도한 권한이 됩니다. 권한은 역할과 필요에 맞춰 좁혀야 합니다.",
+        "3": "Allow를 Deny보다 우선한다는 것은 사실과 다릅니다. IAM 정책 평가에서는 명시적(explicit) Deny가 어떤 Allow보다 우선하며, 아무 정책에도 매칭되지 않으면 기본은 암묵적 거부(implicit deny)입니다. 또한 이는 최소 권한의 정의와도 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Security best practices in IAM — Apply least-privilege permissions('grant only the permissions required to perform a task')",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q4",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "인증 방법 (MFA)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 IAM 사용자와 루트 사용자의 콘솔 로그인 보안을 강화하려 한다. 사용자 이름·암호 외에 사용자가 가진 기기가 생성하는 추가 인증 요소를 요구하는 AWS 보안 기능은?",
+      "options": [
+        "보안 그룹(Security Group)",
+        "다중 인증(MFA, Multi-Factor Authentication)",
+        "IAM 사용자 그룹(IAM User Group)",
+        "액세스 키(Access Key)"
+      ],
+      "correct": 1,
+      "explanation": "MFA는 로그인 자격증명(아는 것: 암호)에 더해 AWS가 지원하는 MFA 메커니즘이 생성하는 추가 인증(가진 것)을 요구합니다. 암호가 유출돼도 두 번째 요소가 없으면 로그인할 수 없습니다. 유형으로는 피싱에 강한 패스키/보안 키(FIDO), 가상 인증 앱(TOTP), 하드웨어 TOTP 토큰이 있습니다.",
+      "wrongExplanations": {
+        "0": "보안 그룹은 인스턴스 수준의 가상 방화벽으로 네트워크 트래픽을 제어합니다. 사용자 로그인 인증 요소와 무관합니다.",
+        "2": "IAM 사용자 그룹은 사용자들을 묶어 권한을 일괄 부여하는 수단이지, 로그인 시 추가 인증 요소를 요구하는 기능이 아닙니다.",
+        "3": "액세스 키는 프로그래밍 접근에 쓰는 장기 자격증명입니다. 추가 인증 요소를 더하는 것이 아니라 그 자체가 하나의 자격증명입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Multi-factor authentication in IAM — MFA가 로그인에 추가 인증을 요구, MFA 유형(패스키/보안키·가상앱·하드웨어 TOTP)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q5",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "IAM Identity Center / 페더레이션",
+      "difficulty": "foundational",
+      "stem": "한 조직이 다수의 AWS 계정과 여러 애플리케이션에 대한 직원(workforce)들의 접근을 한곳에서 중앙 관리하고, 단일 로그인(SSO)을 제공하며, 기존의 외부 자격증명 공급자(IdP)와 연결(페더레이션)하려 한다. 가장 적합한 AWS 서비스는? (이 서비스는 이전에 AWS Single Sign-On으로 불렸다)",
+      "options": [
+        "AWS IAM Identity Center",
+        "AWS Organizations",
+        "AWS Secrets Manager",
+        "IAM 사용자 그룹(IAM User Group)"
+      ],
+      "correct": 0,
+      "explanation": "AWS IAM Identity Center(이전 명칭 AWS Single Sign-On, 2022-07-26 리네이밍)는 직원 사용자가 여러 AWS 계정과 애플리케이션에 접근하는 것을 중앙에서 관리합니다. 단일 로그인을 제공하고, 기존 외부 IdP를 연결하거나 Identity Center에서 사용자를 직접 만들 수 있으며, 하나의 페더레이션 지점을 제공합니다.",
+      "wrongExplanations": {
+        "1": "AWS Organizations는 여러 AWS 계정을 묶어 통합 결제·정책으로 거버넌스하는 서비스입니다. 계정을 묶는 것이지 사용자에게 SSO 로그인을 제공하는 것이 목적은 아닙니다.",
+        "2": "AWS Secrets Manager는 DB 자격증명·API 키 같은 비밀을 저장·교체하는 서비스로, 사람의 다중 계정 SSO 접근 관리와는 다릅니다.",
+        "3": "IAM 사용자 그룹은 한 계정 안에서 사용자들에게 권한을 일괄 부여하는 수단으로, 여러 계정·앱에 걸친 SSO나 외부 IdP 페더레이션을 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is IAM Identity Center? — 다중 계정·앱 인력 접근 중앙 관리, SSO, 단일 페더레이션 지점, 이전 명칭 AWS SSO(2022-07-26)",
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+        },
+        {
+          "title": "Security best practices in IAM — 사람은 IdP 페더레이션과 임시 자격증명 사용 권장(IAM Identity Center)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q6",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "최소 권한에 따른 그룹·사용자·정책 정의",
+      "difficulty": "foundational",
+      "stem": "동일한 권한 집합이 필요한 새 개발자 5명에게 권한을 부여하고, 이후 권한 변경 시에도 효율적으로 일괄 관리하려 한다. IAM 모범 사례에 따라 가장 권장되는 방법은?",
+      "options": [
+        "각 개발자에게 동일한 정책을 개별적으로 따로 연결한다",
+        "IAM 사용자 그룹을 만들어 정책을 그룹에 연결하고, 5명을 그 그룹에 추가한다",
+        "편의를 위해 루트 사용자 자격증명을 5명과 공유한다",
+        "개발자마다 별도의 AWS 계정을 새로 만들어 각자 관리자 권한을 준다"
+      ],
+      "correct": 1,
+      "explanation": "IAM 사용자 그룹은 IAM 사용자들의 모음으로, 그룹에 정책을 연결하면 소속 사용자 전원이 그 권한을 받습니다. 권한 변경이 필요하면 그룹 정책만 수정하면 되므로, 같은 역할의 다수 사용자를 일관되고 효율적으로 관리할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "사용자마다 정책을 따로 붙이면 권한 변경 시 모든 사용자를 일일이 수정해야 해 비효율적이고 실수가 생기기 쉽습니다. 그룹이 이 문제를 해결합니다.",
+        "2": "루트 자격증명 공유는 심각한 보안 위반입니다. 루트는 완전 접근 권한을 가지며 일상 권한 부여 수단이 아닙니다.",
+        "3": "단지 동일 권한 부여를 위해 개발자마다 계정을 새로 만드는 것은 과도하며 관리 부담만 키웁니다. 한 계정 안에서 그룹으로 해결하는 것이 적절합니다."
+      },
+      "sources": [
+        {
+          "title": "IAM Identities — IAM user group은 IAM 사용자들의 모음(정책을 그룹에 연결)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id.html"
+        },
+        {
+          "title": "Security best practices in IAM — 최소 권한 적용, 그룹/정책으로 권한 관리",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q7",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "자격증명 저장 (Secrets Manager)",
+      "difficulty": "foundational",
+      "stem": "한 애플리케이션이 데이터베이스 자격증명을 사용한다. 이 자격증명을 소스 코드에 하드코딩하지 않고 안전하게 저장하면서, 정기적으로 자동 교체(rotation)까지 하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "자격증명을 Amazon S3 버킷에 평문 텍스트 파일로 저장한다",
+        "AWS Secrets Manager에 저장하고 자동 교체를 구성한다",
+        "자격증명을 코드 저장소(Git)에 설정 파일로 커밋한다",
+        "IAM 사용자 그룹에 비밀번호 형태로 저장한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Secrets Manager는 데이터베이스 자격증명, API 키 같은 비밀을 안전하게 저장·조회하고 자동 교체(rotation)할 수 있게 합니다. 코드에 비밀을 하드코딩하는 대신 런타임에 Secrets Manager를 호출해 동적으로 가져오므로, 소스나 로그 노출로 인한 유출 위험을 줄입니다.",
+      "wrongExplanations": {
+        "0": "S3에 평문으로 저장하면 자격증명이 그대로 노출될 위험이 있고 자동 교체 기능도 없습니다. 비밀 관리 용도로 적절하지 않습니다.",
+        "2": "자격증명을 Git에 커밋하는 것은 대표적인 하드코딩 안티패턴입니다. 저장소에 접근할 수 있는 누구에게나 노출됩니다.",
+        "3": "IAM 사용자 그룹은 권한을 묶는 수단일 뿐, 애플리케이션 비밀을 저장하거나 교체하는 기능이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Secrets Manager? — DB 자격증명·API 키 저장/조회/자동 교체, 하드코딩 제거",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

@@ -43,7 +43,7 @@
 - **Knowledge:** 컴플라이언스·거버넌스 개념 / 클라우드 보안의 이점(암호화) / 보안 로그 위치
 - **Skills:** 컴플라이언스 정보 위치(AWS Artifact) / 지역·산업별 요구(AWS Compliance) / 리소스 보호 서비스(Inspector, Security Hub, GuardDuty, Shield) / 암호화 옵션(전송 중/저장 시) / 거버넌스 서비스(CloudWatch 모니터링, CloudTrail·Audit Manager·Config 감사) / 서비스별 컴플라이언스 차이
 
-### Task 2.3 — 접근 관리 기능 식별 `clf-t2-3` · 문서 ☐ · 문항 0/5
+### Task 2.3 — 접근 관리 기능 식별 `clf-t2-3` · 문서 ☑ · 문항 7/7 ✅
 - **Knowledge:** IAM / 루트 사용자 보호의 중요성 / 최소 권한 원칙 / IAM Identity Center(SSO)
 - **Skills:** 액세스 키·암호 정책·자격증명 저장(Secrets Manager, Systems Manager) / 인증 방법(MFA, IAM Identity Center, 교차 계정 역할) / 최소 권한에 따른 그룹·사용자·정책 정의 / 루트 전용 작업 식별 / 루트 보호 방법 / 자격증명 유형(페더레이션)
 
@@ -102,10 +102,10 @@
 | Domain | 가중치 | Tasks | 문서 | 검증 문항 | 목표 |
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
-| 2 Security & Compliance | 30% | 4 | 1/4 | 5 | ≥20 |
+| 2 Security & Compliance | 30% | 4 | 2/4 | 12 | ≥20 |
 | 3 Technology & Services | 34% | 8 | 0/8 | 0 | ≥40 |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **1/19** | **5** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **2/19** | **12** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -121,3 +121,10 @@
   - 다음: 이 2파일이 나머지 18개 Task의 복제 템플릿.
 
 - **2026-06-06 (세션 2) — 학습 루프 #1(기반) 구현·main 병합·배포.** 렌더러(Markdown 섹션 뷰) + 퀴즈 러너(정답/오답해설·점수·문항별 복기) + localStorage 이력(D14) + CLF 상세 진입 섹션. `flutter analyze` 무이슈 / 테스트 11 / `build web` 성공 / opus 최종 리뷰 반영. 설계·계획: `docs/designs/2026-06-06-clf-learning-loop-foundation-spec.md`, `docs/plans/2026-06-06-clf-learning-loop-foundation-plan.md`. **렌더러 완성 → 이후 검증 콘텐츠는 추가 즉시 사이트 노출.** 다음 세션: (1) 다음 CLF Task 콘텐츠 → (2) 하위 프로젝트 #2(타이머·플래그).
+
+- **2026-06-06 (세션 3) — 두 번째 verified 배치 완료: `clf-t2-3` (접근 관리/IAM).**
+  - 산출물: `flutter_app/assets/content/clf/t2-3.md`(학습문서) + `t2-3.questions.json`(검증 문항 **7/7**) + `lib/data/content_index.dart` 등록.
+  - 커버한 Task 2.3 Skill: 루트 전용 작업 식별 / 루트 보호 / 최소 권한 / MFA(인증) / IAM Identity Center·페더레이션 / 그룹·사용자·정책 / 자격증명 저장(Secrets Manager). (Task 2.1보다 표면이 넓어 5개가 아닌 7문항.)
+  - 규율: 문항·문서 작성 전 **공식 AWS 문서 9종을 실제로 페치해 사실 대조**(verified 게이트 honor) — IAM 개요/자격증명(id)/루트 사용자·루트 전용 작업/보안 모범 사례/MFA/암호 정책/IAM Identity Center(리네이밍 2022-07-26)/Secrets Manager/CLF 공식 가이드. 독립 서브에이전트 **AI 역대조 = 7/7 CORRECT, 수정 강제 0건**(해설 정밀도 1건만 보강: Q3 명시적 vs 암묵적 Deny).
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 11 통과(런타임 verified 게이트·QuestionBank 파싱 포함). 렌더러가 이미 있어 main push 시 사이트 즉시 노출.
+  - 커버리지: **1/19 → 2/19 Task, 검증 문항 5 → 12.**

@@ -34,6 +34,15 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t2-1.questions.json',
       questionCount: 5,
     ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t2-3',
+      title: '접근 관리 (IAM)',
+      domain: 2,
+      mdAsset: 'assets/content/clf/t2-3.md',
+      questionsAsset: 'assets/content/clf/t2-3.questions.json',
+      questionCount: 7,
+    ),
   ],
 };
 
