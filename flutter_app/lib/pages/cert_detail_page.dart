@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../data/content_index.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
 import '../theme/app_theme.dart';
+import 'study_doc_page.dart';
 
 typedef _Loaded = ({ExamGuide? guide, ExamSummary? summary});
 
@@ -74,6 +76,8 @@ class CertDetailPage extends StatelessWidget {
                         children: [
                           _Header(cert: cert, guide: guide),
                           if (summary != null) _SummaryBlock(summary: summary),
+                          if (contentFor(cert.code).isNotEmpty)
+                            _LearningContent(entries: contentFor(cert.code)),
                           if (guide != null)
                             _OfficialGuide(guide: guide)
                           else
@@ -132,6 +136,86 @@ class _Header extends StatelessWidget {
         ],
         const SizedBox(height: Gap.xl2),
       ],
+    );
+  }
+}
+
+/// 검증된 학습 콘텐츠(학습문서 + 연습 문제) 진입 섹션.
+class _LearningContent extends StatelessWidget {
+  const _LearningContent({required this.entries});
+  final List<ContentEntry> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final t = Theme.of(context).textTheme;
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: Gap.xl2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Icon(Icons.menu_book_outlined, size: 18, color: c.accent),
+            const SizedBox(width: 8),
+            Text('학습 콘텐츠 · 검증 문항', style: t.headlineSmall),
+          ]),
+          const SizedBox(height: 4),
+          Text('AWS 공식 출처로 검증한 한국어 학습문서와 연습 문제.',
+              style: t.bodyMedium),
+          const SizedBox(height: Gap.lg),
+          for (final e in entries)
+            Padding(
+              padding: const EdgeInsets.only(bottom: Gap.md),
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => StudyDocPage(entry: e))),
+                borderRadius: BorderRadius.circular(Radii.md),
+                child: Container(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  decoration: BoxDecoration(
+                    color: c.surface,
+                    borderRadius: BorderRadius.circular(Radii.md),
+                    border: Border.all(color: c.border),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                'Task ${e.taskId.replaceAll('clf-t', '').replaceAll('-', '.')} · ${e.title}',
+                                style: t.titleMedium),
+                            const SizedBox(height: Gap.xs),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 3),
+                              decoration: BoxDecoration(
+                                  color: c.correctWeak,
+                                  borderRadius:
+                                      BorderRadius.circular(Radii.full)),
+                              child: Text('검증 문항 ${e.questionCount}',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w800,
+                                      color: c.correct)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text('학습문서 →',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: c.accent)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
