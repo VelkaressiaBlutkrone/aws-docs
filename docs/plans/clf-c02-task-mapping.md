@@ -1,0 +1,111 @@
+# CLF-C02 Task/Skill 매핑표
+
+출처: AWS Certified Cloud Practitioner (CLF-C02) 공식 Exam Guide v1.0
+원문: https://d1.awsstatic.com/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf
+작성: 2026-06-05 (공식 PDF에서 직접 추출 — AI 초안, 본인 대조 검수 필요)
+검수 상태: ☐ 미검수 (PDF 대조 후 체크)
+
+시험: 65문항(채점 50 + 비채점 15) / 90분 / 합격 700/1000
+커버리지 기준: **Task당 검증 문항 ≥5개** (CEO 플랜 E2/T10 기준)
+
+| 진행 표기 | 의미 |
+|---|---|
+| 문서 ☐ | 해당 Task를 다루는 학습문서 작성 여부 |
+| 문항 0/5 | 검증(verified) 문항 수 / 목표 |
+
+---
+
+## Domain 1: Cloud Concepts (24%)
+
+### Task 1.1 — AWS 클라우드의 이점 정의 `clf-t1-1` · 문서 ☐ · 문항 0/5
+- **Knowledge:** AWS 클라우드의 가치 제안
+- **Skills:** 규모의 경제(비용 절감) / 글로벌 인프라의 이점(배포 속도, 글로벌 도달) / 고가용성·탄력성·민첩성의 장점
+
+### Task 1.2 — AWS 클라우드 설계 원칙 식별 `clf-t1-2` · 문서 ☐ · 문항 0/5
+- **Knowledge:** AWS Well-Architected Framework
+- **Skills:** 6개 기둥 이해(운영 우수성, 보안, 안정성, 성능 효율, 비용 최적화, 지속 가능성) / 기둥 간 차이 식별
+
+### Task 1.3 — 클라우드 마이그레이션의 이점과 전략 `clf-t1-3` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 클라우드 도입 전략 / 마이그레이션 여정 지원 리소스
+- **Skills:** AWS CAF의 이점(비즈니스 위험 감소, ESG 개선, 매출·운영 효율 증가) / 적절한 마이그레이션 전략 식별(DB 복제, AWS Snowball)
+
+### Task 1.4 — 클라우드 경제학 개념 `clf-t1-4` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 클라우드 경제학 요소 / 클라우드 이전의 비용 절감
+- **Skills:** 고정비 vs 변동비 / 온프레미스 비용 / 라이선스 전략 차이(BYOL vs 포함) / rightsizing / 자동화 이점(CloudFormation) / 관리형 서비스 식별(RDS, ECS, EKS, DynamoDB)
+
+## Domain 2: Security and Compliance (30%)
+
+### Task 2.1 — 공동 책임 모델 `clf-t2-1` · 문서 ☐ · 문항 0/5
+- **Knowledge:** AWS 공동 책임 모델
+- **Skills:** 모델 구성요소 / 고객 책임 / AWS 책임 / 공유 책임 / 서비스에 따른 책임 이동(RDS vs Lambda vs EC2)
+
+### Task 2.2 — 보안·거버넌스·컴플라이언스 개념 `clf-t2-2` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 컴플라이언스·거버넌스 개념 / 클라우드 보안의 이점(암호화) / 보안 로그 위치
+- **Skills:** 컴플라이언스 정보 위치(AWS Artifact) / 지역·산업별 요구(AWS Compliance) / 리소스 보호 서비스(Inspector, Security Hub, GuardDuty, Shield) / 암호화 옵션(전송 중/저장 시) / 거버넌스 서비스(CloudWatch 모니터링, CloudTrail·Audit Manager·Config 감사) / 서비스별 컴플라이언스 차이
+
+### Task 2.3 — 접근 관리 기능 식별 `clf-t2-3` · 문서 ☐ · 문항 0/5
+- **Knowledge:** IAM / 루트 사용자 보호의 중요성 / 최소 권한 원칙 / IAM Identity Center(SSO)
+- **Skills:** 액세스 키·암호 정책·자격증명 저장(Secrets Manager, Systems Manager) / 인증 방법(MFA, IAM Identity Center, 교차 계정 역할) / 최소 권한에 따른 그룹·사용자·정책 정의 / 루트 전용 작업 식별 / 루트 보호 방법 / 자격증명 유형(페더레이션)
+
+### Task 2.4 — 보안 구성요소·리소스 식별 `clf-t2-4` · 문서 ☐ · 문항 0/5
+- **Knowledge:** AWS 보안 기능 / 보안 문서
+- **Skills:** 보안 기능·서비스(보안 그룹, 네트워크 ACL, WAF) / Marketplace 서드파티 보안 제품 / 보안 정보 위치(Knowledge Center, Security Blog) / 보안 이슈 식별 서비스(Trusted Advisor)
+
+## Domain 3: Cloud Technology and Services (34%)
+
+### Task 3.1 — 배포·운영 방법 정의 `clf-t3-1` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 프로비저닝·운영 방식 / 서비스 접근 방식 / 배포 모델 / 연결 옵션
+- **Skills:** 프로그래밍 접근(API, SDK, CLI) vs 콘솔 vs IaC / 일회성 vs 반복 프로세스 / 배포 모델(클라우드·하이브리드·온프레미스) / 연결 옵션(VPN, Direct Connect, 공용 인터넷)
+
+### Task 3.2 — 글로벌 인프라 정의 `clf-t3-2` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 리전·AZ·엣지 로케이션 / 고가용성 / 멀티 리전 / Wavelength·Local Zones
+- **Skills:** 리전-AZ-엣지 관계 / 멀티 AZ 고가용성 / AZ는 단일 장애점 비공유 / 멀티 리전 사용 시점(DR, 비즈니스 연속성, 지연시간, 데이터 주권) / 엣지의 이점(CloudFront, Global Accelerator)
+
+### Task 3.3 — 컴퓨팅 서비스 식별 `clf-t3-3` · 문서 ☐ · 문항 0/5
+- **Skills:** EC2 인스턴스 유형 용도(컴퓨팅/스토리지 최적화) / 컨테이너(ECS, EKS) / 서버리스(Fargate, Lambda) / Auto Scaling=탄력성 / 로드 밸런서 목적
+
+### Task 3.4 — 데이터베이스 서비스 식별 `clf-t3-4` · 문서 ☐ · 문항 0/5
+- **Knowledge:** DB 서비스 / DB 마이그레이션
+- **Skills:** EC2 호스팅 vs 관리형 DB / 관계형(RDS, Aurora) / NoSQL(DynamoDB) / 인메모리 / 마이그레이션 도구(DMS, SCT)
+
+### Task 3.5 — 네트워크 서비스 식별 `clf-t3-5` · 문서 ☐ · 문항 0/5
+- **Skills:** VPC 구성요소(서브넷, 게이트웨이) / VPC 보안(NACL, 보안 그룹) / Route 53 목적 / 엣지 서비스(CloudFront, Global Accelerator) / 연결 옵션(VPN, Direct Connect)
+
+### Task 3.6 — 스토리지 서비스 식별 `clf-t3-6` · 문서 ☐ · 문항 0/5
+- **Skills:** 객체 스토리지 용도 / S3 스토리지 클래스 차이 / 블록 스토리지(EBS, 인스턴스 스토어) / 파일 서비스(EFS, FSx) / 캐시 파일 시스템(Storage Gateway) / 수명 주기 정책 / AWS Backup
+
+### Task 3.7 — AI/ML·분석 서비스 식별 `clf-t3-7` · 문서 ☐ · 문항 0/5
+- **Skills:** AI/ML 서비스와 역할(SageMaker, Lex, Kendra) / 분석 서비스(Athena, Kinesis, Glue, QuickSight)
+
+### Task 3.8 — 기타 범위 내 서비스 식별 `clf-t3-8` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 앱 통합(EventBridge, SNS, SQS) / 비즈니스 앱(Connect, SES) / 고객 지원(Activate, IQ, AMS, Support) / 개발자 도구(AppConfig, Cloud9, CloudShell, CodeArtifact/Build/Commit/Deploy/Pipeline/Star, X-Ray) / 최종 사용자 컴퓨팅(AppStream 2.0, WorkSpaces) / 프런트엔드·모바일(Amplify, AppSync) / IoT(IoT Core, Greengrass)
+- **Skills:** 메시지·알림 서비스 선택 / 비즈니스 앱 서비스 선택 / 지원 옵션 선택 / 개발·배포·트러블슈팅 도구 식별 / VM 출력 표시 서비스 / 프런트엔드·모바일 서비스 / IoT 관리 서비스
+
+## Domain 4: Billing, Pricing, and Support (12%)
+
+### Task 4.1 — 요금 모델 비교 `clf-t4-1` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 컴퓨팅 구매 옵션(On-Demand, RI, Spot, Savings Plans, Dedicated Hosts/Instances, Capacity Reservations) / 데이터 전송 요금 / 스토리지 옵션·계층
+- **Skills:** 구매 옵션 비교·선택 시점 / RI 유연성 / Organizations에서의 RI 동작 / 수신·발신 데이터 전송 비용(리전 간, 리전 내) / 스토리지 계층별 요금
+
+### Task 4.2 — 결제·예산·비용 관리 리소스 `clf-t4-2` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 결제 지원·정보 / 서비스 요금 정보 / AWS Organizations / 비용 할당 태그
+- **Skills:** Budgets·Cost Explorer·Billing Conductor 용도 / Pricing Calculator / Organizations 통합 결제·비용 할당 / 비용 할당 태그와 보고서(Cost and Usage Report)
+
+### Task 4.3 — 기술 리소스·Support 옵션 식별 `clf-t4-3` · 문서 ☐ · 문항 0/5
+- **Knowledge:** 공식 웹사이트 리소스·문서 / Support 플랜 / APN(ISV, SI) 역할 / Support Center
+- **Skills:** 백서·블로그·문서 위치 / 기술 리소스 식별(Prescriptive Guidance, Knowledge Center, re:Post) / Support 옵션 식별(고객 서비스·커뮤니티, Developer, Business, Enterprise)
+
+---
+
+## 커버리지 집계
+
+| Domain | 가중치 | Tasks | 문서 | 검증 문항 | 목표 |
+|--------|-------|-------|------|----------|------|
+| 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
+| 2 Security & Compliance | 30% | 4 | 0/4 | 0 | ≥20 |
+| 3 Technology & Services | 34% | 8 | 0/8 | 0 | ≥40 |
+| 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
+| **합계** | 100% | **19** | **0/19** | **0** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+
+> 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
+> 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
