@@ -26,6 +26,27 @@ QuestionBank _bank(List<String> ids) => QuestionBank(
     );
 
 void main() {
+  test('questionIds 라운드트립 + 누락 시 빈 목록(하위호환)', () {
+    const s = ExamSession(
+      examId: 'exam:CLF-C02-mock',
+      certId: 'CLF-C02',
+      taskId: 'CLF-C02-mock',
+      startedAtIso: '2026-06-06T00:00:00.000',
+      durationSec: 5400,
+      index: 0,
+      picked: {},
+      flagged: [],
+      bankFingerprint: 'fp',
+      submitted: false,
+      questionIds: ['clf-t1-1-q1', 'clf-t2-1-q3'],
+    );
+    final back = ExamSession.fromJson(s.toJson());
+    expect(back.questionIds, ['clf-t1-1-q1', 'clf-t2-1-q3']);
+    // 구버전 JSON(questionIds 없음) → 빈 목록
+    final old = ExamSession.fromJson({'examId': 'x'});
+    expect(old.questionIds, isEmpty);
+  });
+
   test('ExamSession JSON 왕복(picked 문자열키 복원)', () {
     const s = ExamSession(
       examId: 'exam:clf-t2-3',

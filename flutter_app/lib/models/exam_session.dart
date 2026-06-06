@@ -12,6 +12,7 @@ class ExamSession {
     required this.picked,
     required this.flagged,
     required this.bankFingerprint,
+    this.questionIds = const [],
     required this.submitted,
   });
 
@@ -24,6 +25,7 @@ class ExamSession {
   final Map<int, int> picked; // 문항 → 선택 보기
   final List<int> flagged;
   final String bankFingerprint;
+  final List<String> questionIds; // 통합 모의고사 출제 문항 ID(순서) — 복원용
   final bool submitted;
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +38,7 @@ class ExamSession {
         'picked': picked.map((k, v) => MapEntry(k.toString(), v)),
         'flagged': flagged,
         'bankFingerprint': bankFingerprint,
+        'questionIds': questionIds,
         'submitted': submitted,
       };
 
@@ -62,6 +65,9 @@ class ExamSession {
           .map((e) => e.toInt())
           .toList(),
       bankFingerprint: (j['bankFingerprint'] ?? '').toString(),
+      questionIds: ((j['questionIds'] as List?) ?? const [])
+          .map((e) => e.toString())
+          .toList(),
       submitted: j['submitted'] == true,
     );
   }
