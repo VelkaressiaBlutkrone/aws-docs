@@ -5,11 +5,18 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../data/content_index.dart';
+import '../data/history_store.dart';
+import '../data/wrong_answer_index.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
+import '../models/question.dart';
 import '../theme/app_theme.dart';
 
-typedef _Loaded = ({ExamGuide? guide, ExamSummary? summary});
+typedef _Loaded = ({
+  ExamGuide? guide,
+  ExamSummary? summary,
+  Map<String, int> weakByTask,
+});
 
 class CertDetailPage extends StatelessWidget {
   const CertDetailPage({super.key, required this.cert});
@@ -29,7 +36,26 @@ class CertDetailPage extends StatelessWidget {
       final entry = m[cert.code];
       if (entry is Map<String, dynamic>) summary = ExamSummary.fromJson(entry);
     } catch (_) {}
-    return (guide: guide, summary: summary);
+
+    // 오답노트 배지: 뱅크 로드 → taskByQuestionId → 약점 인덱스.
+    final taskByQuestionId = <String, String>{};
+    for (final e in contentFor(cert.code)) {
+      try {
+        final raw = await rootBundle.loadString(e.questionsAsset);
+        final bank =
+            QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
+        for (final q in bank.questions) {
+          taskByQuestionId[q.id] = e.taskId;
+        }
+      } catch (_) {}
+    }
+    final weakByTask = WrongAnswerIndex.build(
+      certId: cert.code,
+      history: HistoryStore().all(),
+      taskByQuestionId: taskByQuestionId,
+    ).weakByTask();
+
+    return (guide: guide, summary: summary, weakByTask: weakByTask);
   }
 
   @override
@@ -77,7 +103,10 @@ class CertDetailPage extends StatelessWidget {
                           _Header(cert: cert, guide: guide),
                           if (summary != null) _SummaryBlock(summary: summary),
                           if (contentFor(cert.code).isNotEmpty)
-                            _LearningContent(entries: contentFor(cert.code)),
+                            _LearningContent(
+                              entries: contentFor(cert.code),
+                              weakByTask: snap.data?.weakByTask ?? const {},
+                            ),
                           if (guide != null)
                             _OfficialGuide(guide: guide)
                           else
@@ -142,8 +171,9 @@ class _Header extends StatelessWidget {
 
 /// 검증된 학습 콘텐츠(학습문서 + 연습 문제) 진입 섹션.
 class _LearningContent extends StatelessWidget {
-  const _LearningContent({required this.entries});
+  const _LearningContent({required this.entries, required this.weakByTask});
   final List<ContentEntry> entries;
+  final Map<String, int> weakByTask;
 
   @override
   Widget build(BuildContext context) {
@@ -188,18 +218,38 @@ class _LearningContent extends StatelessWidget {
                                 'Task ${e.taskId.replaceAll('clf-t', '').replaceAll('-', '.')} · ${e.title}',
                                 style: t.titleMedium),
                             const SizedBox(height: Gap.xs),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 3),
-                              decoration: BoxDecoration(
-                                  color: c.correctWeak,
-                                  borderRadius:
-                                      BorderRadius.circular(Radii.full)),
-                              child: Text('검증 문항 ${e.questionCount}',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800,
-                                      color: c.correct)),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 3),
+                                  decoration: BoxDecoration(
+                                      color: c.correctWeak,
+                                      borderRadius:
+                                          BorderRadius.circular(Radii.full)),
+                                  child: Text('검증 문항 ${e.questionCount}',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w800,
+                                          color: c.correct)),
+                                ),
+                                if ((weakByTask[e.taskId] ?? 0) > 0) ...[
+                                  const SizedBox(width: Gap.xs),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 3),
+                                    decoration: BoxDecoration(
+                                        color: c.wrongWeak,
+                                        borderRadius:
+                                            BorderRadius.circular(Radii.full)),
+                                    child: Text('오답 ${weakByTask[e.taskId]}',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w800,
+                                            color: c.wrong)),
+                                  ),
+                                ],
+                              ],
                             ),
                           ],
                         ),
@@ -209,6 +259,39 @@ class _LearningContent extends StatelessWidget {
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                               color: c.accent)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          if (weakByTask.values.fold(0, (a, b) => a + b) > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: Gap.xs),
+              child: InkWell(
+                onTap: () =>
+                    context.push('/cert/${entries.first.certCode}/review'),
+                borderRadius: BorderRadius.circular(Radii.md),
+                child: Container(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  decoration: BoxDecoration(
+                    color: c.wrongWeak,
+                    borderRadius: BorderRadius.circular(Radii.md),
+                    border: Border.all(color: c.wrong.withValues(alpha: 0.35)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.refresh, size: 18, color: c.wrong),
+                      const SizedBox(width: Gap.sm),
+                      Expanded(
+                        child: Text(
+                            '오답노트 · 틀린 ${weakByTask.values.fold(0, (a, b) => a + b)}문항 다시 풀기',
+                            style: t.titleMedium?.copyWith(color: c.text)),
+                      ),
+                      Text('복습 →',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: c.wrong)),
                     ],
                   ),
                 ),
