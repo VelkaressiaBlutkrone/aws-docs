@@ -1,12 +1,12 @@
 {
-    "name": "aws_docs",
-    "short_name": "aws_docs",
+    "name": "AWS Docs Roadmap — AWS 자격증 한국어 학습 로드맵",
+    "short_name": "AWS Docs",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
-    "orientation": "portrait-primary",
+    "background_color": "#FBFAF8",
+    "theme_color": "#FBFAF8",
+    "description": "AWS 자격증을 한국어로, 이해 중심으로 공부하는 통합 학습 로드맵과 검증된 모의고사.",
+    "orientation": "any",
     "prefer_related_applications": false,
     "icons": [
         {

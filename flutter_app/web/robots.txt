@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://velkaressiablutkrone.github.io/aws-docs/sitemap.xml

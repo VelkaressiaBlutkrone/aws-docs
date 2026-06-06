@@ -1,5 +1,5 @@
 name: aws_docs
-description: "A new Flutter project."
+description: "AWS 자격증을 한국어로, 이해 중심으로 공부하는 통합 학습 로드맵과 검증된 모의고사."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
