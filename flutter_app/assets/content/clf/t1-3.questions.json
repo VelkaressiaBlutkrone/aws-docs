@@ -1,0 +1,143 @@
+{
+  "examGuideTaskId": "clf-t1-3",
+  "taskTitle": "클라우드 마이그레이션과 AWS CAF",
+  "domain": 1,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t1-3-q1",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "클라우드 도입 전략 (AWS CAF)",
+      "difficulty": "foundational",
+      "stem": "한 조직이 AWS의 경험과 모범 사례를 활용해 클라우드 도입 여정을 가속하고, 전환 기회를 식별하며 전환 로드맵을 세우려 한다. 가장 적합한 것은?",
+      "options": [
+        "AWS Cloud Adoption Framework(CAF)",
+        "AWS Well-Architected Framework",
+        "AWS Snowball",
+        "AWS Budgets"
+      ],
+      "correct": 0,
+      "explanation": "AWS Cloud Adoption Framework(CAF)는 AWS의 경험과 모범 사례를 활용해 디지털 전환과 클라우드 도입을 가속하는 프레임워크입니다. 전환 기회를 식별·우선순위화하고, 클라우드 준비도를 평가·개선하며, 전환 로드맵을 반복적으로 발전시킵니다.",
+      "wrongExplanations": {
+        "1": "AWS Well-Architected Framework는 기술 아키텍처의 모범 사례(6대 기둥)를 다루는 프레임워크로, 조직 차원의 클라우드 도입 여정 가속이 목적이 아닙니다.",
+        "2": "AWS Snowball은 대량 데이터를 물리 디바이스로 전송하는 서비스로, 도입 전략 프레임워크가 아닙니다.",
+        "3": "AWS Budgets는 비용·사용량 예산을 설정·모니터링하는 도구로, 클라우드 도입 여정 프레임워크가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "An Overview of the AWS CAF — AWS 경험·모범 사례로 디지털 전환·클라우드 도입 가속",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-3-q2",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "AWS CAF의 이점",
+      "difficulty": "foundational",
+      "stem": "AWS Cloud Adoption Framework(CAF)를 활용한 클라우드 도입에서 기대할 수 있는 비즈니스 이점으로 '가장 거리가 먼' 것은?",
+      "options": [
+        "사내 물리 서버 하드웨어의 제조사 보증 기간 연장",
+        "비즈니스 위험 감소",
+        "운영 효율 개선",
+        "새로운 매출원 창출"
+      ],
+      "correct": 0,
+      "explanation": "AWS CAF를 통한 클라우드 도입의 이점에는 비용 절감, 비즈니스 위험 감소, 운영 효율 개선, 민첩성, 빠른 혁신, 새로운 매출원 창출, 고객·직원 경험 재창조 등이 있습니다. '사내 물리 서버 하드웨어의 보증 기간 연장'은 이러한 클라우드 도입의 비즈니스 이점과 무관합니다.",
+      "wrongExplanations": {
+        "1": "비즈니스 위험 감소는 CAF를 통한 클라우드 도입의 대표적 이점 중 하나입니다.",
+        "2": "운영 효율 개선은 CAF를 통한 클라우드 도입의 이점 중 하나입니다.",
+        "3": "새로운 매출원 창출(새 수익 흐름)은 CAF를 통한 클라우드 도입의 이점 중 하나입니다."
+      },
+      "sources": [
+        {
+          "title": "An Overview of the AWS CAF — 비용 절감·비즈니스 위험 감소·운영 효율·매출 창출 등의 이점",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-3-q3",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "마이그레이션 전략 (Snowball)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 수백 테라바이트의 데이터를 AWS로 옮겨야 하는데, 인터넷 대역폭이 부족해 네트워크 전송이 너무 느리고 비용이 많이 든다. 물리 디바이스를 사용해 대량 데이터를 오프라인으로 전송하는 가장 적합한 서비스는?",
+      "options": [
+        "AWS Snowball",
+        "AWS Database Migration Service(DMS)",
+        "Amazon S3 콘솔에서 직접 업로드",
+        "AWS Cloud Adoption Framework(CAF)"
+      ],
+      "correct": 0,
+      "explanation": "AWS Snowball은 물리 디바이스를 사용해 대량(테라바이트급 이상) 데이터를 AWS로 또는 AWS에서 전송하는 서비스입니다. 네트워크를 통한 전송이 너무 느리거나 비싸거나 비현실적일 때, 디바이스를 배송받아 오프라인으로 데이터를 적재한 뒤 반송해 업로드합니다.",
+      "wrongExplanations": {
+        "1": "AWS DMS는 데이터베이스를 네트워크를 통해 마이그레이션하는 서비스로, 네트워크 대역폭이 부족한 대량 데이터의 오프라인 물리 전송에는 적합하지 않습니다.",
+        "2": "S3 콘솔에서 직접 업로드하는 것도 네트워크를 사용하므로, 대역폭이 부족해 전송이 느린 상황을 해결하지 못합니다.",
+        "3": "AWS CAF는 클라우드 도입 전략 프레임워크로, 데이터 전송 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Snowball? — 물리 디바이스로 대량 데이터 전송, 네트워크 전송이 느리거나 비현실적일 때",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-3-q4",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "DMS vs Snowball",
+      "difficulty": "foundational",
+      "stem": "한 회사가 운영 중인 관계형 데이터베이스를 최소한의 다운타임으로 AWS로 마이그레이션하려 하며, 데이터는 네트워크를 통해 전송할 수 있다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Database Migration Service(DMS)",
+        "AWS Snowball",
+        "Amazon QuickSight",
+        "AWS Cloud Adoption Framework(CAF)"
+      ],
+      "correct": 0,
+      "explanation": "AWS DMS는 데이터베이스를 AWS로 마이그레이션하며, 진행 중인 변경을 복제해 소스와 타겟을 동기화하므로 다운타임을 최소화합니다. 운영 중인 DB를 네트워크로 옮기는 데 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Snowball은 대량 데이터를 물리 디바이스로 오프라인 전송하는 서비스로, 운영 중인 DB를 최소 다운타임으로 실시간 마이그레이션하는 용도가 아닙니다.",
+        "2": "Amazon QuickSight는 BI 대시보드·시각화 서비스로, 데이터베이스 마이그레이션 도구가 아닙니다.",
+        "3": "AWS CAF는 클라우드 도입 전략 프레임워크로, 데이터베이스 마이그레이션 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS DMS? — 진행 중 변경 복제로 최소 다운타임 DB 마이그레이션(네트워크)",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-3-q5",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "CAF vs Well-Architected 구분",
+      "difficulty": "foundational",
+      "stem": "AWS Cloud Adoption Framework(CAF)와 AWS Well-Architected Framework의 관계를 가장 정확하게 설명한 것은?",
+      "options": [
+        "CAF는 조직의 클라우드 도입 여정을 다루고, Well-Architected는 기술 아키텍처의 모범 사례(6대 기둥)를 다룬다",
+        "CAF는 기술 아키텍처의 6대 기둥이고, Well-Architected는 조직의 도입 여정이다",
+        "둘 다 데이터 마이그레이션을 수행하는 도구다",
+        "둘 다 월 청구서를 생성하는 결제 도구다"
+      ],
+      "correct": 0,
+      "explanation": "AWS CAF는 조직 차원의 클라우드 도입 여정(전환 전략·준비도·로드맵)을 다루는 프레임워크이고, AWS Well-Architected Framework는 기술 아키텍처를 6대 기둥의 모범 사례에 비추어 설계·평가하는 프레임워크입니다. 다루는 층위가 다릅니다.",
+      "wrongExplanations": {
+        "1": "역할이 뒤바뀌었습니다. 6대 기둥(기술 아키텍처)은 Well-Architected이고, 조직의 도입 여정은 CAF입니다.",
+        "2": "둘 다 프레임워크이며, 데이터 마이그레이션을 수행하는 도구(DMS·Snowball)가 아닙니다.",
+        "3": "둘 다 청구서를 생성하는 결제 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "An Overview of the AWS CAF — CAF(도입 여정) vs Well-Architected(아키텍처 6대 기둥) 구분",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

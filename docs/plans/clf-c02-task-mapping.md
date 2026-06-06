@@ -25,11 +25,11 @@
 - **Knowledge:** AWS Well-Architected Framework
 - **Skills:** 6개 기둥 이해(운영 우수성, 보안, 안정성, 성능 효율, 비용 최적화, 지속 가능성) / 기둥 간 차이 식별
 
-### Task 1.3 — 클라우드 마이그레이션의 이점과 전략 `clf-t1-3` · 문서 ☐ · 문항 0/5
+### Task 1.3 — 클라우드 마이그레이션의 이점과 전략 `clf-t1-3` · 문서 ☑ · 문항 5/5 ✅
 - **Knowledge:** 클라우드 도입 전략 / 마이그레이션 여정 지원 리소스
 - **Skills:** AWS CAF의 이점(비즈니스 위험 감소, ESG 개선, 매출·운영 효율 증가) / 적절한 마이그레이션 전략 식별(DB 복제, AWS Snowball)
 
-### Task 1.4 — 클라우드 경제학 개념 `clf-t1-4` · 문서 ☐ · 문항 0/5
+### Task 1.4 — 클라우드 경제학 개념 `clf-t1-4` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** 클라우드 경제학 요소 / 클라우드 이전의 비용 절감
 - **Skills:** 고정비 vs 변동비 / 온프레미스 비용 / 라이선스 전략 차이(BYOL vs 포함) / rightsizing / 자동화 이점(CloudFormation) / 관리형 서비스 식별(RDS, ECS, EKS, DynamoDB)
 
@@ -101,11 +101,11 @@
 
 | Domain | 가중치 | Tasks | 문서 | 검증 문항 | 목표 |
 |--------|-------|-------|------|----------|------|
-| 1 Cloud Concepts | 24% | 4 | 2/4 | 12 | ≥20 |
+| 1 Cloud Concepts | 24% | 4 | 4/4 ✅ | 23 | ≥20 ✅ |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
 | 3 Technology & Services | 34% | 8 | 8/8 ✅ | 51 | ≥40 ✅ |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **14/19** | **90** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **16/19** | **101** | **≥95** ✅ (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -170,3 +170,10 @@
   - 규율: 공식 AWS 문서 5종 실페치 대조(각 기둥 페이지 포함). 독립 서브에이전트 역대조 **t1-1 6/6 + t1-2 6/6 CORRECT**. t1-1 **출처 정합성 2건 보강**(q5 'deploy in minutes' 1차 출처, q6 고가용성 근거→글로벌 인프라 페이지).
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
   - 커버리지: **12/19 → 14/19 Task, 검증 문항 78 → 90.** (목표 ≥95의 95% — 거의 도달.)
+
+- **2026-06-06 (세션 10) — 열다섯·열여섯 번째 verified 배치: `clf-t1-3`(마이그레이션, 5문항) + `clf-t1-4`(클라우드 경제학, 6문항) → 🎉 도메인 1(24%) 완성(4/4).**
+  - 산출물: `t1-3.md`+`t1-3.questions.json`(5), `t1-4.md`+`t1-4.questions.json`(6), `content_index.dart` 2줄 등록.
+  - 커버: t1-3 AWS CAF(도입 여정·이점) · Snowball(오프라인 대량 전송) · DMS vs Snowball · CAF vs Well-Architected. t1-4 고정비 vs 변동비 · Compute Optimizer(rightsizing) · BYOL · CloudFormation 자동화 · 관리형 서비스(TCO).
+  - 규율: 공식 AWS 문서 8종 실페치 대조. 독립 서브에이전트 역대조 **t1-3 5/5 + t1-4 6/6 CORRECT**. 정직성 보강: Snowball '신규 고객 중단' 메모·"페타바이트"→"테라바이트급" 완화; **출처 정합성 보강**(t1-4 q3 BYOL→Marketplace 용어 근거, q1 온프레 비용→RDS 책임표).
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **14/19 → 16/19 Task, 검증 문항 90 → 101. 🎯 목표 ≥95 달성! 도메인 1·2·3 완성** → 남은 = 도메인 4(12%, 3 Task)뿐.
