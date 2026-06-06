@@ -151,7 +151,8 @@ class _StartQuizButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (entry.questionCount <= 0) return const SizedBox.shrink();
-    // 시험 시간(라벨용 추정): 공식 페이스로 계산(메타 없으면 폴백).
+    // 시험 시간(라벨용 추정): CLF-C02 공식 페이스(90분 / 50채점+15비채점).
+    // 실제 시간은 ExamPage가 cert 메타로 계산. 비-CLF 자격증 추가 시 per-cert 조회로 교체.
     final mins = (examDurationSec(
                 durationMinutes: 90,
                 scored: 50,
