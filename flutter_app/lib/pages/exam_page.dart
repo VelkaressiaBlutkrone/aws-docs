@@ -48,10 +48,13 @@ class ExamView extends StatefulWidget {
 }
 
 class _ExamViewState extends State<ExamView> {
-  late int _index = widget.initialIndex;
+  late int _index = widget.bank.questions.isEmpty
+      ? 0
+      : widget.initialIndex.clamp(0, widget.bank.questions.length - 1);
   late final Map<int, int> _picked = {...widget.initialPicked};
   late final Set<int> _flagged = {...widget.initialFlagged};
   bool _submitted = false;
+  bool _dialogOpen = false;
   Timer? _ticker;
 
   List<Question> get _qs => widget.bank.questions;
@@ -66,6 +69,8 @@ class _ExamViewState extends State<ExamView> {
   @override
   void initState() {
     super.initState();
+    assert(widget.bank.questions.isNotEmpty,
+        'ExamView requires a non-empty question bank');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (_remainingSec <= 0) {
@@ -130,6 +135,10 @@ class _ExamViewState extends State<ExamView> {
     if (_submitted) return;
     _submitted = true;
     _ticker?.cancel();
+    if (auto && _dialogOpen && mounted) {
+      Navigator.of(context).pop();
+      _dialogOpen = false;
+    }
     final wrong = <String>[];
     var correct = 0;
     for (var k = 0; k < _qs.length; k++) {
@@ -163,6 +172,7 @@ class _ExamViewState extends State<ExamView> {
       _submit(auto: false);
       return;
     }
+    _dialogOpen = true;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -178,6 +188,8 @@ class _ExamViewState extends State<ExamView> {
         ],
       ),
     );
+    _dialogOpen = false;
+    if (!mounted || _submitted) return;
     if (ok == true) _submit(auto: false);
   }
 

@@ -78,4 +78,61 @@ void main() {
     expect(calls, 1); // 가드: 1회만
     expect(find.text('결과'), findsOneWidget); // 결과 진입
   });
+
+  testWidgets('다이얼로그 중 시간 만료 → 단일 제출, 고립 다이얼로그 없음', (tester) async {
+    var calls = 0;
+    final started = DateTime(2026, 6, 6, 0, 0, 0);
+    var clock = started;
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
+      startedAt: started, durationSec: 5,
+      now: () => clock,
+      onFinished: (_) => calls++,
+    )));
+    await tester.pump();
+
+    await tester.tap(find.byIcon(Icons.flag_outlined)); // 1번 문항 플래그
+    await tester.pump();
+    await tester.tap(find.text('다음')); // 마지막 문항으로 이동(제출 버튼 노출)
+    await tester.pump();
+    await tester.tap(find.text('제출')); // 확인 다이얼로그 오픈
+    await tester.pump();
+    expect(find.text('제출하기'), findsOneWidget); // 다이얼로그 노출 확인
+
+    clock = started.add(const Duration(seconds: 10)); // 만료
+    await tester.pump(const Duration(seconds: 1)); // 틱 1회 → 자동 제출
+    await tester.pump();
+
+    expect(calls, 1); // 가드: 1회만
+    expect(find.text('결과'), findsOneWidget); // 결과 진입
+    expect(find.text('제출하기'), findsNothing); // 다이얼로그 해소(고립 아님)
+  });
+
+  testWidgets('복원 경로 → 복원 노트 표시 + 답/플래그 보존 후 제출', (tester) async {
+    AttemptRecord? finished;
+    final started = DateTime(2026, 6, 6, 0, 0, 0);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
+      startedAt: started, durationSec: 600,
+      restored: true,
+      initialIndex: 1,
+      initialPicked: const {0: 1, 1: 0}, // 둘 다 정답(q1 correct=1, q2 correct=0)
+      initialFlagged: const {1},
+      now: () => started.add(const Duration(seconds: 30)), // 미만료 고정 시계
+      onFinished: (r) => finished = r,
+    )));
+    await tester.pump();
+
+    expect(find.text('이전 진행을 복원했습니다.'), findsOneWidget); // 복원 노트
+
+    // 마지막 문항(index 1)이므로 '제출' 노출 → 플래그 존재 → 다이얼로그 처리
+    await tester.tap(find.text('제출'));
+    await tester.pump();
+    await tester.tap(find.text('제출하기'));
+    await tester.pump();
+
+    expect(finished, isNotNull);
+    expect(finished!.correct, 2); // 복원된 답 둘 다 정답
+    expect(finished!.flaggedQuestionIds, ['q2']); // 복원된 플래그 보존
+  });
 }
