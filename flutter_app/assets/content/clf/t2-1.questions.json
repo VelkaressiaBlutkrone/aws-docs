@@ -170,6 +170,122 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-1-q6",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "고객 책임 (데이터·접근 정책) — S3",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Amazon S3 버킷의 접근 정책을 잘못 구성해 민감한 데이터가 인터넷에 공개되었고, 그 결과 데이터가 유출되었다. 공동 책임 모델에 따라 이 접근 구성과 데이터 보호의 책임은 누구에게 있는가?",
+      "options": [
+        "고객 — 데이터 분류·접근 정책·암호화 옵션 선택은 고객 책임이다",
+        "AWS — S3는 관리형 서비스이므로 데이터 보호도 AWS 책임이다",
+        "제3자 감사 기관 — 컴플라이언스 점검의 책임이다",
+        "인터넷 서비스 제공자(ISP) — 네트워크 전송의 책임이다"
+      ],
+      "correct": 0,
+      "explanation": "S3 같은 추상화된 스토리지에서도 데이터 자체, 데이터 분류, 접근 정책(버킷 정책·권한), 암호화 옵션 선택은 고객 책임('in the cloud')입니다. 버킷을 공개로 잘못 설정해 발생한 유출은 고객 책임 영역입니다. AWS는 기반 인프라·플랫폼 운영을 책임집니다.",
+      "wrongExplanations": {
+        "1": "S3가 관리형이라도 데이터 자체와 접근 정책·암호화 옵션 선택은 고객 책임입니다. AWS는 인프라·플랫폼을 운영할 뿐 고객의 접근 구성 실수까지 책임지지 않습니다.",
+        "2": "제3자 감사 기관은 컴플라이언스 검증을 수행할 뿐, 고객의 버킷 접근 구성 책임 주체가 아닙니다.",
+        "3": "ISP는 네트워크 전송 사업자로, AWS 리소스의 접근 정책 구성 책임과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 데이터·분류·접근 관리·암호화 옵션은 고객 책임",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS Shared Responsibility Model — Customer responsibility for data and access controls",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t2-1-q7",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "서비스에 따른 책임 이동 (Lambda)",
+      "difficulty": "foundational",
+      "stem": "AWS Lambda(서버리스)를 사용할 때, 공동 책임 모델에 따라 '고객'이 책임지는 것은?",
+      "options": [
+        "함수가 실행되는 운영체제의 보안 패치",
+        "기반 컴퓨팅 서버의 프로비저닝과 확장",
+        "함수 코드와 그 의존성, 실행 역할(IAM 권한), 데이터",
+        "런타임 환경의 유지관리와 패치"
+      ],
+      "correct": 2,
+      "explanation": "Lambda는 서버리스이므로 운영체제·서버·런타임의 프로비저닝·확장·패치를 전부 AWS가 담당합니다. 고객은 함수 코드와 그 의존성, 함수에 부여하는 실행 역할(IAM 권한), 그리고 데이터를 책임집니다.",
+      "wrongExplanations": {
+        "0": "Lambda 함수가 실행되는 운영체제의 패치는 AWS 책임입니다(서버리스).",
+        "1": "기반 컴퓨팅 서버의 프로비저닝과 확장은 AWS가 자동으로 처리합니다.",
+        "3": "런타임 환경의 유지관리·패치는 AWS 책임입니다. 고객은 코드·의존성·IAM·데이터만 책임집니다."
+      },
+      "sources": [
+        {
+          "title": "Security in AWS Lambda — 인프라·OS·런타임은 AWS, 코드·실행역할(IAM)·데이터는 고객",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-security.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t2-1-q8",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "상속 통제 (Inherited Controls)",
+      "difficulty": "foundational",
+      "stem": "공동 책임 모델에서 고객이 AWS로부터 '완전히 상속(inherit)'받는 통제(Inherited Controls)에 가장 잘 해당하는 것은?",
+      "options": [
+        "데이터센터의 물리적·환경적 통제",
+        "S3 버킷의 접근 정책 구성",
+        "IAM 사용자와 권한 설정",
+        "EC2 게스트 OS의 보안 패치"
+      ],
+      "correct": 0,
+      "explanation": "상속 통제(Inherited Controls)는 고객이 AWS로부터 완전히 물려받는 통제로, 물리적·환경적 통제(데이터센터 물리 보안, 전력·냉각 등)가 대표적입니다. 온프레미스라면 고객이 직접 했어야 할 일을 AWS가 떠안아 줍니다.",
+      "wrongExplanations": {
+        "1": "S3 버킷 접근 정책 구성은 고객 책임('in the cloud')이며, AWS로부터 상속받는 통제가 아닙니다.",
+        "2": "IAM 사용자·권한 설정은 항상 고객 책임으로, 상속 통제가 아닙니다.",
+        "3": "EC2 게스트 OS 보안 패치는 고객 책임(IaaS)으로, 상속 통제가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 상속 통제(물리·환경)와 책임 분담",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "AWS Shared Responsibility Model — Inherited Controls (physical and environmental)",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t2-1-q9",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "암호화 책임 분담 (기능 제공 vs 적용 선택)",
+      "difficulty": "foundational",
+      "stem": "데이터 암호화와 관련해 공동 책임 모델의 경계를 가장 정확하게 설명한 것은?",
+      "options": [
+        "AWS는 암호화 기능과 키 관리 인프라를 제공하고, 그것을 켤지·어떻게 적용할지 선택은 고객이 한다",
+        "AWS가 모든 고객 데이터를 자동으로 암호화하므로 고객은 아무것도 하지 않는다",
+        "고객이 암호화 알고리즘 자체를 직접 구현해 AWS 하드웨어에 설치해야 한다",
+        "암호화는 제3자 감사 기관이 일괄 적용한다"
+      ],
+      "correct": 0,
+      "explanation": "암호화에서 AWS는 암호화 기능과 키 관리 인프라(예: KMS)를 제공합니다. 그러나 그 기능을 켤지 여부, 전송 중/저장 시 어떻게 적용할지 선택하는 것은 고객 책임입니다. '기능 제공(AWS)'과 '적용 선택(고객)'을 구분하는 것이 핵심입니다.",
+      "wrongExplanations": {
+        "1": "AWS가 모든 데이터를 자동 암호화하지는 않습니다. 암호화 적용 여부·방식 선택은 고객 책임입니다.",
+        "2": "고객이 암호화 알고리즘을 직접 구현해 AWS 하드웨어에 설치하지 않습니다. AWS가 암호화 기능과 키 인프라를 제공합니다.",
+        "3": "제3자 감사 기관은 컴플라이언스 검증을 할 뿐 암호화를 일괄 적용하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 (한국어) — 암호화 기능·키 인프라(AWS) vs 적용 선택(고객)",
+          "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": false
     }
   ]
 }

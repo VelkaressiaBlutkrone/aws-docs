@@ -138,6 +138,118 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-3-q6",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "AWS CAF의 구성 (6대 관점)",
+      "difficulty": "foundational",
+      "stem": "AWS Cloud Adoption Framework(CAF)는 클라우드 도입에 필요한 조직의 역량을 여러 '관점(Perspective)'으로 묶어 제시한다. 다음 중 CAF의 6대 관점에 '해당하지 않는' 것은?",
+      "options": [
+        "비즈니스(Business)",
+        "인력(People)",
+        "거버넌스(Governance)",
+        "결제(Billing)"
+      ],
+      "correct": 3,
+      "explanation": "AWS CAF는 역량을 여섯 가지 관점 — 비즈니스(Business)·인력(People)·거버넌스(Governance)·플랫폼(Platform)·보안(Security)·운영(Operations) — 으로 구성합니다. '결제(Billing)'는 CAF의 관점이 아닙니다.",
+      "wrongExplanations": {
+        "0": "비즈니스(Business)는 CAF의 6대 관점 중 하나입니다.",
+        "1": "인력(People)은 CAF의 6대 관점 중 하나입니다.",
+        "2": "거버넌스(Governance)는 CAF의 6대 관점 중 하나입니다."
+      },
+      "sources": [
+        {
+          "title": "An Overview of the AWS CAF — 6 Perspectives (Business·People·Governance·Platform·Security·Operations)",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t1-3-q7",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "이기종 DB 마이그레이션 (DMS + SCT)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 온프레미스의 상용 데이터베이스(예: Oracle)를 엔진이 다른 오픈소스 호환 데이터베이스(예: Amazon Aurora PostgreSQL)로 마이그레이션하려 한다. 소스와 타겟 엔진이 달라 스키마와 코드를 변환해야 할 때, AWS DMS와 함께 사용하는 도구는?",
+      "options": [
+        "AWS Snowball",
+        "Amazon CloudWatch",
+        "AWS Schema Conversion Tool(SCT)",
+        "AWS Cost Explorer"
+      ],
+      "correct": 2,
+      "explanation": "소스와 타겟의 데이터베이스 엔진이 다른 '이기종(heterogeneous)' 마이그레이션에서는 AWS Schema Conversion Tool(SCT)로 스키마와 코드를 타겟 엔진에 맞게 변환한 뒤, AWS DMS로 데이터를 이전합니다. 같은 엔진끼리의 '동종(homogeneous)' 마이그레이션에는 SCT가 필요 없습니다.",
+      "wrongExplanations": {
+        "0": "AWS Snowball은 대량 데이터를 물리 디바이스로 오프라인 전송하는 서비스로, 이기종 DB의 스키마 변환 도구가 아닙니다.",
+        "1": "Amazon CloudWatch는 모니터링 서비스로, 스키마 변환과 무관합니다.",
+        "3": "AWS Cost Explorer는 비용 분석 도구로, 스키마 변환과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS DMS? — 이기종 마이그레이션은 AWS Schema Conversion Tool(SCT)로 스키마 변환",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t1-3-q8",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "Snowball 동작 방식 (오프라인)",
+      "difficulty": "foundational",
+      "stem": "AWS Snowball을 사용한 데이터 전송의 동작 방식으로 가장 정확한 것은?",
+      "options": [
+        "고속 전용 인터넷 회선을 자동으로 임대해 네트워크로 데이터를 전송한다",
+        "물리 디바이스를 배송받아 사내에서 오프라인으로 데이터를 적재한 뒤 AWS로 반송하면 업로드된다",
+        "데이터베이스의 진행 중 변경을 실시간으로 복제해 동기화한다",
+        "여러 AWS 계정의 청구서를 하나로 통합한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Snowball은 물리 디바이스를 배송받아 사내 네트워크에서 오프라인으로 데이터를 적재한 뒤, 디바이스를 AWS로 반송하면 데이터가 업로드되는 방식입니다. 인터넷 대역폭에 의존하지 않으므로 네트워크 전송이 느리거나 비현실적인 대량 데이터에 적합합니다.",
+      "wrongExplanations": {
+        "0": "Snowball은 전용 회선을 임대하는 네트워크 전송 방식이 아니라, 물리 디바이스로 오프라인 전송하는 방식입니다.",
+        "2": "진행 중 변경을 실시간 복제하는 것은 AWS DMS(데이터베이스 마이그레이션)의 동작이며, Snowball의 방식이 아닙니다.",
+        "3": "여러 계정의 청구서 통합은 AWS Organizations의 통합 결제 기능으로, Snowball과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Snowball? — 디바이스 배송→오프라인 적재→반송 업로드, 네트워크 비의존",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t1-3-q9",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "마이그레이션 도구 조합 (DMS + Snowball)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 (A) 운영 중인 트랜잭션 데이터베이스를 최소 다운타임으로 옮기고, 동시에 (B) 네트워크 연결이 매우 제한된 지사에 있는 수백 TB의 과거 파일 아카이브를 옮기려 한다. 각각에 가장 적합한 서비스 조합은?",
+      "options": [
+        "(A) AWS DMS, (B) AWS Snowball",
+        "(A) AWS Snowball, (B) AWS DMS",
+        "(A)와 (B) 모두 AWS Snowball",
+        "(A)와 (B) 모두 Amazon S3 콘솔 직접 업로드"
+      ],
+      "correct": 0,
+      "explanation": "운영 중인 DB의 최소 다운타임 마이그레이션은 진행 중 변경을 복제하는 AWS DMS가 적합하고, 네트워크가 제한된 환경의 수백 TB 아카이브는 물리 디바이스로 오프라인 전송하는 AWS Snowball이 적합합니다. 상황에 따라 두 도구를 함께 쓰는 것이 일반적입니다.",
+      "wrongExplanations": {
+        "1": "역할이 뒤바뀌었습니다. 운영 DB의 최소 다운타임은 DMS, 네트워크가 제한된 환경의 대량 아카이브는 Snowball입니다.",
+        "2": "운영 중인 DB의 최소 다운타임 마이그레이션에는 Snowball이 아니라 DMS가 적합합니다.",
+        "3": "네트워크가 제한적이고 데이터가 수백 TB이면 S3 콘솔 직접 업로드(네트워크 전송)는 너무 느리고 비현실적입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS DMS? — 최소 다운타임 DB 마이그레이션",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
+        },
+        {
+          "title": "What is AWS Snowball? — 네트워크가 비현실적인 대량 데이터의 오프라인 전송",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }
