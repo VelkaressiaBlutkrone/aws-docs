@@ -1,6 +1,6 @@
 # Session Handoff — 2026-06-07 (START HERE 다음 세션)
 
-> 한 줄 상태: **🏁 Spec 1·Spec 2 배포 완료 + 작업 우선순위 로드맵 수립 + Phase 0(정리/부채) 완료(로컬 커밋). 로드맵: 정리→루프완결(E1/E2,E5/E6)→콘텐츠 4단계 게이트(`docs/superpowers/specs/2026-06-07-work-priority-roadmap-design.md`). Phase 0 = _MockLoad→_Restorable 하드닝·quiz_widgets 간격 토큰화·DESIGN.md 폰트 표기 정정(항목② QuizPage 분기는 이미 구현돼 있어 제외). analyze 무결·41 테스트·릴리스 빌드 통과. 다음 = Phase 1(E1 오답노트+E2 약점리포트) — E1 설계 이미 승인됨(`2026-06-06-learning-loop-e1-design.md`).**
+> 한 줄 상태: **🏁 Spec 1·Spec 2 배포 + 우선순위 로드맵 + Phase 0(정리) 완료(origin push) + Phase 1 E1a(오답노트 데이터 기반) 완료(로컬 커밋). E1a = `AttemptRecord.presentedQuestionIds`(하위호환) + 연습/시험 작성자 기록 + 순수 `WrongAnswerIndex`(약점/졸업 파생). analyze 무결·51 테스트·릴리스 빌드 통과. 다음 = Phase 1 E1b(복습 UI: ReviewView+ReviewListPage+cert상세 "오답 N" 배지+라우트). 계획: `docs/superpowers/plans/2026-06-07-phase1-e1a-data-foundation.md`(E1a, 완료) → E1b는 신규 작성 예정.**
 
 > 갱신: 2026-06-07 — 브레인스토밍으로 우선순위 로드맵 작성 → Phase 0 구현 계획 → executing-plans로 Phase 0 4개 Task 완료(로컬 커밋 `debd590`·`44d1bc9`·`4ce5124`, 아직 origin push 전이면 다음 세션에서 push). 직전 세션: Spec 2 통합 모의고사 배포(`d00f656`).
 
@@ -30,7 +30,7 @@
 ## ▶ 다음 행동 (로드맵 기준)
 **확정 로드맵:** `docs/superpowers/specs/2026-06-07-work-priority-roadmap-design.md` — 정리(Phase 0 ✅) → 루프완결 Phase 1(E1/E2) → Phase 2(E5/E6) → Phase 3(콘텐츠).
 
-**다음 = Phase 1 (E1 오답노트 + E2 약점 리포트).** E1은 설계 이미 승인됨(`docs/superpowers/specs/2026-06-06-learning-loop-e1-design.md`) → writing-plans로 구현 계획부터. 공통 기반 = `WrongAnswerIndex`(순수 집계) + cert 상세 진입(새 결과화면 X). `AttemptRecord.presentedQuestionIds` 추가(하위호환). E2는 같은 집계 위 Task별 정답률 표 + 70%↓ 학습문서 앵커.
+**다음 = Phase 1 E1b (복습 UI).** E1a(데이터 기반) 완료 — `AttemptRecord.presentedQuestionIds`·작성자 기록·순수 `WrongAnswerIndex`(`lib/data/wrong_answer_index.dart`: weak/mastered, weakByTask, weakEntries, stale 제외, 레거시 폴백) 전부 단위 테스트(51 green). **E1b 할 일:** ① `ReviewView`(연습형 즉시피드백 러너, mode:'review', examId `review:<taskId>`, presentedQuestionIds=큐 — QuizView 패턴, 모델주입 테스트 가능) ② `ReviewListPage`(cert별 weak를 Task별로, '복습 시작'; 로더라 Selectionarea 렌더테스트 금지→dogfood) ③ cert 상세 `_LearningContent` Task 행에 "오답 N" 배지(weakByTask) + cert 레벨 오답노트 진입 ④ 라우트(예: `/cert/:code/review`) — 단, cert 상세/리뷰 페이지는 SelectionArea 함정이라 라우팅 테스트는 HomePage/에러 도달만(app_router_test 패턴). E1b는 19개 뱅크 로드해 `taskByQuestionId`(qid→taskId)·`indexById` 구성 후 `WrongAnswerIndex.build` 호출. **그 다음 = E2(약점 리포트, 별도 brainstorm→spec): 같은 집계 위 Task별 정답률 표 + 70%↓ 학습문서 앵커.**
 - **Phase 0 잔여(후속 결정):** quiz_widgets **폰트 크기 토큰화**는 보류 — DESIGN.md 타입스케일(13·15·16·17·20·28)이 코드 실제값(12·14)과 어긋나 "코드 유지 vs 문서 정렬(소폭 시각 변화)" 사용자 결정 필요. 테두리 두께 토큰도 DESIGN.md 미정의.
 
 ### (이전) 1순위 참고 — 학습 루프 #3 (E1 오답노트 + E2 약점 리포트)
