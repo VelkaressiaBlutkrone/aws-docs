@@ -1,4 +1,5 @@
 import '../models/attempt_record.dart';
+import 'attempt_presented.dart';
 
 /// 약점 문항 상태: weak(미졸업) / mastered(서로 다른 응시 연속 2회 정답으로 졸업).
 enum WrongStatus { weak, mastered }
@@ -45,7 +46,7 @@ class WrongAnswerIndex {
     final lastSeen = <String, String>{};
     for (final r in records) {
       final wrongSet = r.wrongQuestionIds.toSet();
-      for (final qid in _presentedOf(r, taskByQuestionId)) {
+      for (final qid in resolvePresented(r, taskByQuestionId)) {
         if (!taskByQuestionId.containsKey(qid)) continue; // stale 제외
         (timeline[qid] ??= <bool>[]).add(!wrongSet.contains(qid));
         lastSeen[qid] = r.date;
@@ -92,27 +93,4 @@ class WrongAnswerIndex {
             e,
       ];
 
-  /// 한 응시에 출제된 문항 ID 집합. presentedQuestionIds가 있으면 그대로,
-  /// 없으면(레거시) examId의 Task 현재 뱅크 전체로 폴백, 그것도 불가하면 오답만.
-  static Iterable<String> _presentedOf(
-      AttemptRecord r, Map<String, String> taskByQuestionId) {
-    if (r.presentedQuestionIds.isNotEmpty) return r.presentedQuestionIds;
-    final task = _taskFromExamId(r.examId);
-    if (task == null) return r.wrongQuestionIds;
-    final taskQs = [
-      for (final e in taskByQuestionId.entries)
-        if (e.value == task) e.key,
-    ];
-    return taskQs.isEmpty ? r.wrongQuestionIds : taskQs;
-  }
-
-  /// 'practice:clf-t2-1' / 'exam:clf-t2-1' / 'review:clf-t2-1' → 'clf-t2-1'.
-  /// 통합 모의고사('exam:CLF-C02-mock')처럼 단일 Task가 아니면 null.
-  static String? _taskFromExamId(String examId) {
-    final i = examId.indexOf(':');
-    if (i < 0) return null;
-    final rest = examId.substring(i + 1);
-    if (rest.isEmpty || rest.endsWith('-mock')) return null;
-    return rest;
-  }
 }
