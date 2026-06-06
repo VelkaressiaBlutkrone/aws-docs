@@ -39,6 +39,11 @@ class QuizPage extends StatelessWidget {
           if (snap.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
+          if (snap.hasError) {
+            return Center(
+                child: Text('문항을 불러오지 못했습니다.',
+                    style: TextStyle(color: c.textMuted)));
+          }
           final bank = snap.data;
           if (bank == null || bank.questions.isEmpty) {
             return Center(
