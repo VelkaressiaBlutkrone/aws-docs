@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:go_router/go_router.dart';
 
 import '../content/markdown_parser.dart';
 import '../content/study_markdown_view.dart';
 import '../data/content_index.dart';
+import '../models/exam_session.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
-import 'exam_page.dart';
-import 'quiz_page.dart';
-import '../models/exam_session.dart';
 
 class StudyDocPage extends StatelessWidget {
   const StudyDocPage({super.key, required this.entry});
@@ -167,16 +166,16 @@ class _StartQuizButton extends StatelessWidget {
           context,
           label: '연습 문제 풀기 (${entry.questionCount}문항)',
           filled: true,
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => QuizPage(entry: entry))),
+          onTap: () => context.push(
+              '/cert/${entry.certCode}/study/${entry.taskId}/quiz'),
         ),
         const SizedBox(height: Gap.sm),
         _cta(
           context,
           label: '시험처럼 풀기 (${entry.questionCount}문항 · ~$mins분)',
           filled: false,
-          onTap: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => ExamPage(entry: entry))),
+          onTap: () => context.push(
+              '/cert/${entry.certCode}/study/${entry.taskId}/exam'),
         ),
       ],
     );

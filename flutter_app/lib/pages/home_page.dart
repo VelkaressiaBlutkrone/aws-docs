@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../data/site_data.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
-import 'cert_detail_page.dart';
+import '../theme/theme_scope.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    required this.isDark,
-    required this.onToggleTheme,
-  });
-
-  final bool isDark;
-  final VoidCallback onToggleTheme;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -50,8 +44,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: c.bg,
       appBar: _Header(
-        isDark: widget.isDark,
-        onToggleTheme: widget.onToggleTheme,
+        isDark: ThemeScope.of(context).isDark,
+        onToggleTheme: ThemeScope.of(context).toggle,
         onNav: {
           '단계': () => _goto(_levels),
           '추천 순서': () => _goto(_paths),
@@ -366,8 +360,7 @@ class _CertCard extends StatelessWidget {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     return InkWell(
-      onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => CertDetailPage(cert: cert))),
+      onTap: () => context.push('/cert/${cert.code}'),
       borderRadius: BorderRadius.circular(Radii.md),
       child: Container(
         width: 320,

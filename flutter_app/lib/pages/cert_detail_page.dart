@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:go_router/go_router.dart';
 
 import '../data/content_index.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
 import '../theme/app_theme.dart';
-import 'study_doc_page.dart';
 
 typedef _Loaded = ({ExamGuide? guide, ExamSummary? summary});
 
@@ -168,8 +168,8 @@ class _LearningContent extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: Gap.md),
               child: InkWell(
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => StudyDocPage(entry: e))),
+                onTap: () =>
+                    context.push('/cert/${e.certCode}/study/${e.taskId}'),
                 borderRadius: BorderRadius.circular(Radii.md),
                 child: Container(
                   padding: const EdgeInsets.all(Gap.lg),

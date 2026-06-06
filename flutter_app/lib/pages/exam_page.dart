@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
@@ -544,7 +545,7 @@ class _ExamPageState extends State<ExamPage> {
                   _history.add(r);
                   _store.clear(examId);
                 },
-                onExit: () => Navigator.of(context).maybePop(),
+                onExit: () => context.pop(),
               ),
             ),
           );
