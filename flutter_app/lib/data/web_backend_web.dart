@@ -1,8 +1,8 @@
 import 'package:web/web.dart' as web;
-import 'history_store.dart';
+import 'local_kv.dart';
 
 /// Real localStorage backend — compiled only when targeting web.
-class WebBackend implements HistoryBackend {
+class WebBackend implements KvBackend {
   @override
   String? read(String key) => web.window.localStorage.getItem(key);
   @override

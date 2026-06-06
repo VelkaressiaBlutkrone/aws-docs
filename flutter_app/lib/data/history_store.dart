@@ -1,31 +1,16 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart' show kIsWeb;
-
-// Conditional import: web platform gets real localStorage; VM/test gets stub.
-import 'web_backend_stub.dart'
-    if (dart.library.js_interop) 'web_backend_web.dart';
 
 import '../models/attempt_record.dart';
+import 'local_kv.dart';
 
-/// 키-값 백엔드(테스트는 MemoryBackend 주입).
-abstract interface class HistoryBackend {
-  String? read(String key);
-  void write(String key, String value);
-}
-
-class MemoryBackend implements HistoryBackend {
-  final _m = <String, String>{};
-  @override
-  String? read(String key) => _m[key];
-  @override
-  void write(String key, String value) => _m[key] = value;
-}
+// 기존 소비자(import 'history_store.dart')가 KvBackend/MemoryBackend를 계속
+// 보도록 re-export(하위 호환).
+export 'local_kv.dart' show KvBackend, MemoryBackend, defaultBackend;
 
 class HistoryStore {
-  HistoryStore({HistoryBackend? backend})
-      : _b = backend ?? (kIsWeb ? WebBackend() : MemoryBackend());
+  HistoryStore({KvBackend? backend}) : _b = backend ?? defaultBackend();
 
-  final HistoryBackend _b;
+  final KvBackend _b;
   static const _key = 'awsdocs.history.v1';
 
   List<AttemptRecord> all() {
