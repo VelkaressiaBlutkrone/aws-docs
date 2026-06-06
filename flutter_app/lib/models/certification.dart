@@ -19,30 +19,6 @@ extension LevelLabel on Level {
       };
 }
 
-class StudyDoc {
-  const StudyDoc({
-    required this.title,
-    required this.outcome,
-    required this.topics,
-  });
-
-  final String title;
-  final String outcome;
-  final List<String> topics;
-}
-
-class PracticeExam {
-  const PracticeExam({
-    required this.title,
-    required this.scenario,
-    required this.checks,
-  });
-
-  final String title;
-  final String scenario;
-  final List<String> checks;
-}
-
 class Certification {
   const Certification({
     required this.id,
@@ -52,8 +28,6 @@ class Certification {
     required this.audience,
     required this.focus,
     required this.roadmap,
-    required this.studyDocs,
-    required this.exams,
   });
 
   final String id;
@@ -63,8 +37,6 @@ class Certification {
   final String audience;
   final List<String> focus;
   final List<String> roadmap;
-  final List<StudyDoc> studyDocs;
-  final List<PracticeExam> exams;
 }
 
 class RecommendedPath {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../data/content_index.dart';
 import '../data/site_data.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
@@ -547,65 +548,36 @@ class _StudyDocsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final withContent =
+        certifications.where((c) => certHasContent(c.code)).toList();
+    final pending =
+        certifications.where((c) => !certHasContent(c.code)).toList();
     return _Band(
       title: '상세 학습 문서',
-      meta: '문서 단위 학습 목표',
-      child: Wrap(
-        spacing: Gap.lg,
-        runSpacing: Gap.lg,
-        children: [
-          for (final cert in certifications)
-            Container(
-              width: 380,
-              padding: const EdgeInsets.all(Gap.lg),
-              decoration: BoxDecoration(
-                color: context.c.surface,
-                borderRadius: BorderRadius.circular(Radii.md),
-                border: Border.all(color: context.c.border),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(cert.title,
-                      style: Theme.of(context).textTheme.titleMedium),
-                  const SizedBox(height: Gap.md),
-                  for (final doc in cert.studyDocs) _DocItem(doc: doc),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DocItem extends StatelessWidget {
-  const _DocItem({required this.doc});
-  final StudyDoc doc;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    final t = Theme.of(context).textTheme;
-    return Container(
-      margin: const EdgeInsets.only(bottom: Gap.md),
-      padding: const EdgeInsets.all(Gap.md),
-      decoration: BoxDecoration(
-        color: c.surface2,
-        borderRadius: BorderRadius.circular(Radii.sm),
-      ),
+      meta: '검증된 학습 콘텐츠',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(doc.title, style: t.labelLarge),
-          const SizedBox(height: Gap.xs),
-          Text(doc.outcome, style: t.bodyMedium),
-          const SizedBox(height: Gap.sm),
           Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: [for (final topic in doc.topics) _Chip(label: topic)],
+            spacing: Gap.lg,
+            runSpacing: Gap.lg,
+            children: [
+              for (final cert in withContent)
+                _ContentCertCard(
+                  cert: cert,
+                  summaryLabel: () {
+                    final s = certContentSummary(cert.code);
+                    return '검증 학습문서 ${s.docs} · 총 ${s.questions}문항';
+                  }(),
+                  cta: '학습문서 보기 →',
+                  onTap: () => context.push('/cert/${cert.code}'),
+                ),
+            ],
           ),
+          if (pending.isNotEmpty) ...[
+            const SizedBox(height: Gap.lg),
+            _PendingGroup(certs: pending),
+          ],
         ],
       ),
     );
@@ -619,42 +591,122 @@ class _ExamsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final withContent =
+        certifications.where((c) => certHasContent(c.code)).toList();
+    final pending =
+        certifications.where((c) => !certHasContent(c.code)).toList();
     return _Band(
       title: '학습 문서 기반 모의고사',
-      meta: '자격증별 6회차 구성',
+      meta: '검증 문항 기반',
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final cert in certifications)
-            Padding(
-              padding: const EdgeInsets.only(bottom: Gap.lg),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(Gap.lg),
-                decoration: BoxDecoration(
-                  color: context.c.surface,
-                  borderRadius: BorderRadius.circular(Radii.md),
-                  border: Border.all(color: context.c.border),
+          Wrap(
+            spacing: Gap.lg,
+            runSpacing: Gap.lg,
+            children: [
+              for (final cert in withContent)
+                _ContentCertCard(
+                  cert: cert,
+                  summaryLabel: '통합 모의고사 · 준비 중',
+                  cta: '모의고사 →',
+                  onTap: () => context.push('/cert/${cert.code}/exam'),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(cert.title,
-                        style: Theme.of(context).textTheme.titleMedium),
-                    const SizedBox(height: Gap.md),
-                    Wrap(
-                      spacing: Gap.sm,
-                      runSpacing: Gap.sm,
-                      children: [
-                        for (final exam in cert.exams)
-                          _Pill(
-                              label: exam.title.split(' ').last,
-                              tone: _Tone.soon),
-                      ],
-                    ),
-                  ],
-                ),
+            ],
+          ),
+          if (pending.isNotEmpty) ...[
+            const SizedBox(height: Gap.lg),
+            _PendingGroup(certs: pending),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// 콘텐츠 보유 자격증 진입 카드(학습문서/모의고사 공용).
+class _ContentCertCard extends StatelessWidget {
+  const _ContentCertCard({
+    required this.cert,
+    required this.summaryLabel,
+    required this.cta,
+    required this.onTap,
+  });
+  final Certification cert;
+  final String summaryLabel;
+  final String cta;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final t = Theme.of(context).textTheme;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(Radii.md),
+      child: Container(
+        width: 380,
+        padding: const EdgeInsets.all(Gap.lg),
+        decoration: BoxDecoration(
+          color: c.surface,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(color: c.border),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(cert.title, style: t.titleMedium),
+            const SizedBox(height: Gap.sm),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: c.surface2,
+                borderRadius: BorderRadius.circular(Radii.full),
               ),
+              child: Text(summaryLabel,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: c.textMuted)),
             ),
+            const SizedBox(height: Gap.md),
+            Text(cta,
+                style: TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w700, color: c.accent)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 콘텐츠 미보유 자격증을 "준비 중" 코드 칩으로 묶음.
+class _PendingGroup extends StatelessWidget {
+  const _PendingGroup({required this.certs});
+  final List<Certification> certs;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(Gap.lg),
+      decoration: BoxDecoration(
+        color: c.surface2,
+        borderRadius: BorderRadius.circular(Radii.md),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('준비 중',
+              style: TextStyle(
+                  fontSize: 12, fontWeight: FontWeight.w800, color: c.textMuted)),
+          const SizedBox(height: Gap.sm),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [for (final cert in certs) _Chip(label: cert.code)],
+          ),
         ],
       ),
     );

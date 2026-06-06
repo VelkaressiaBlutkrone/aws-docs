@@ -2,46 +2,6 @@ import '../models/certification.dart';
 
 /// Ported from `src/data.ts`. Single source of truth for cert metadata.
 
-const _commonFoundation = [
-  'AWS 글로벌 인프라, 리전, 가용 영역',
-  '공동 책임 모델과 기본 보안',
-  '핵심 서비스와 과금 구조',
-];
-const _commonArchitecture = [
-  'Well-Architected Framework',
-  '고가용성 네트워크와 컴퓨팅 설계',
-  '스토리지, 데이터베이스, 비용 최적화',
-];
-const _commonDeveloper = [
-  'SDK, CLI, IAM 권한 경계',
-  '서버리스 애플리케이션 개발',
-  'CI/CD, 관측성, 오류 처리',
-];
-const _commonOps = [
-  '모니터링과 이벤트 대응',
-  '백업, 복구, 패치 운영',
-  '성능, 비용, 보안 운영',
-];
-const _commonAi = [
-  'AI/ML 기본 개념',
-  'Amazon Bedrock와 SageMaker',
-  '책임 있는 AI와 보안',
-];
-
-List<PracticeExam> _examSets(String prefix) => List.generate(6, (index) {
-      return PracticeExam(
-        title: '$prefix 모의고사 ${index + 1}회차',
-        scenario: index.isEven
-            ? '공식 시험 가이드의 도메인 비중을 따라 시나리오형 문항으로 구성합니다.'
-            : '실무 상황을 제시하고 가장 적절한 AWS 서비스와 설계 판단을 고르게 합니다.',
-        checks: const [
-          '정답뿐 아니라 오답 제거 근거를 기록',
-          '도메인별 취약 영역 태깅',
-          '재응시 전 관련 상세 학습 문서로 회귀',
-        ],
-      );
-    });
-
 const List<Level> certificationLevels = [
   Level.foundational,
   Level.associate,
@@ -63,19 +23,6 @@ final List<Certification> certifications = [
       'EC2, S3, RDS, VPC, Lambda의 역할을 구분합니다.',
       '요금, 지원 플랜, 비용 관리 도구를 문제풀이로 확인합니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: '클라우드 입문 문서',
-        outcome: 'AWS 서비스 이름을 목적별로 설명할 수 있습니다.',
-        topics: _commonFoundation,
-      ),
-      StudyDoc(
-        title: '시험 직전 요약',
-        outcome: '공식 가이드 도메인별 핵심 개념을 빠르게 회독합니다.',
-        topics: ['책임 모델', '비용 도구', '지원 플랜', '기본 보안'],
-      ),
-    ],
-    exams: _examSets('Cloud Practitioner'),
   ),
   Certification(
     id: 'ai-practitioner',
@@ -90,19 +37,6 @@ final List<Certification> certifications = [
       '프롬프트, RAG, 모델 평가, 보안 고려사항을 학습합니다.',
       '책임 있는 AI와 비용/운영 리스크를 점검합니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: 'AI Practitioner 기본 문서',
-        outcome: 'AWS AI 서비스의 쓰임새와 제한사항을 설명합니다.',
-        topics: _commonAi,
-      ),
-      StudyDoc(
-        title: '생성형 AI 핵심 문서',
-        outcome: 'Bedrock 기반 생성형 AI 구성요소를 구분합니다.',
-        topics: ['모델 선택', '프롬프트', 'RAG', '가드레일'],
-      ),
-    ],
-    exams: _examSets('AI Practitioner'),
   ),
   Certification(
     id: 'solutions-architect-associate',
@@ -117,19 +51,6 @@ final List<Certification> certifications = [
       'S3, EBS, EFS, RDS, DynamoDB의 설계 패턴을 비교합니다.',
       'Well-Architected 원칙으로 시나리오형 문제를 풉니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: '아키텍처 설계 기본 문서',
-        outcome: '요구사항에 맞는 AWS 구성안을 선택합니다.',
-        topics: _commonArchitecture,
-      ),
-      StudyDoc(
-        title: '서비스 선택 기준 문서',
-        outcome: '컴퓨팅, 스토리지, 데이터베이스 선택 근거를 설명합니다.',
-        topics: ['EC2 vs Lambda', 'RDS vs DynamoDB', 'S3 스토리지 클래스'],
-      ),
-    ],
-    exams: _examSets('Solutions Architect Associate'),
   ),
   Certification(
     id: 'developer-associate',
@@ -144,19 +65,6 @@ final List<Certification> certifications = [
       'DynamoDB, S3, ElastiCache 사용 패턴을 비교합니다.',
       'X-Ray, CloudWatch, CodePipeline 기반 운영 문제를 풉니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: '개발자 핵심 문서',
-        outcome: '서버리스 애플리케이션의 배포와 디버깅 흐름을 설명합니다.',
-        topics: _commonDeveloper,
-      ),
-      StudyDoc(
-        title: '이벤트 기반 개발 문서',
-        outcome: '비동기 서비스 조합의 실패 처리 방식을 설명합니다.',
-        topics: ['SQS DLQ', 'SNS fan-out', 'EventBridge 규칙'],
-      ),
-    ],
-    exams: _examSets('Developer Associate'),
   ),
   Certification(
     id: 'cloudops-engineer-associate',
@@ -171,19 +79,6 @@ final List<Certification> certifications = [
       'VPC 연결, DNS, 보안 제어의 운영 이슈를 풉니다.',
       '비용과 성능 최적화 관점에서 운영 결정을 연습합니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: 'CloudOps 운영 문서',
-        outcome: '장애, 배포, 백업 상황에서 적절한 운영 액션을 고릅니다.',
-        topics: _commonOps,
-      ),
-      StudyDoc(
-        title: '운영 네트워크 문서',
-        outcome: 'DNS, 라우팅, 접근 제어 이슈를 진단합니다.',
-        topics: ['Route 53', 'VPC Flow Logs', 'NACL', '보안 그룹'],
-      ),
-    ],
-    exams: _examSets('CloudOps Engineer Associate'),
   ),
   Certification(
     id: 'data-engineer-associate',
@@ -198,19 +93,6 @@ final List<Certification> certifications = [
       'Redshift, Athena, Lake Formation 보안 구성을 학습합니다.',
       '데이터 품질, 모니터링, 비용 최적화 문제를 풉니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: '데이터 파이프라인 문서',
-        outcome: '배치/스트리밍 요구사항에 맞는 서비스를 선택합니다.',
-        topics: ['Glue', 'Kinesis', 'Redshift', 'Athena'],
-      ),
-      StudyDoc(
-        title: '데이터 거버넌스 문서',
-        outcome: '권한과 품질 관리 경계를 설명합니다.',
-        topics: ['Lake Formation', 'IAM', '암호화', '데이터 품질'],
-      ),
-    ],
-    exams: _examSets('Data Engineer Associate'),
   ),
   Certification(
     id: 'machine-learning-engineer-associate',
@@ -225,19 +107,6 @@ final List<Certification> certifications = [
       'MLOps, 모니터링, 모델 품질 관리를 익힙니다.',
       '보안, 비용, 성능 요구사항을 반영한 시나리오를 풉니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: 'ML 엔지니어링 문서',
-        outcome: 'SageMaker 기반 ML 수명주기를 설명합니다.',
-        topics: ['데이터 준비', '학습', '튜닝', '엔드포인트'],
-      ),
-      StudyDoc(
-        title: 'MLOps 문서',
-        outcome: '모델 배포 후 운영과 품질 관리 방식을 설명합니다.',
-        topics: ['모델 모니터', '파이프라인', '피처 저장소', '드리프트'],
-      ),
-    ],
-    exams: _examSets('Machine Learning Engineer Associate'),
   ),
   Certification(
     id: 'solutions-architect-professional',
@@ -252,14 +121,6 @@ final List<Certification> certifications = [
       'DR, 고가용성, 보안 경계를 고급 시나리오로 풉니다.',
       '비용 최적화와 운영 효율을 설계안에 반영합니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: '프로페셔널 아키텍처 문서',
-        outcome: '복잡한 제약 조건에서 최적 설계를 선택합니다.',
-        topics: ['Organizations', 'Transit Gateway', 'DR', 'Migration Hub'],
-      ),
-    ],
-    exams: _examSets('Solutions Architect Professional'),
   ),
   Certification(
     id: 'devops-engineer-professional',
@@ -274,14 +135,6 @@ final List<Certification> certifications = [
       '장애 대응, 롤백, DR 자동화 시나리오를 풉니다.',
       '보안 제어와 컴플라이언스 자동화를 학습합니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: 'DevOps Professional 문서',
-        outcome: '운영 자동화와 배포 안정성 요구사항을 해결합니다.',
-        topics: ['CodePipeline', 'CloudFormation', 'Config', 'CloudWatch'],
-      ),
-    ],
-    exams: _examSets('DevOps Engineer Professional'),
   ),
   Certification(
     id: 'generative-ai-developer-professional',
@@ -296,14 +149,6 @@ final List<Certification> certifications = [
       '평가, 비용, 지연시간, 보안 통제를 설계합니다.',
       '프로덕션 배포와 운영 시나리오를 풉니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: '생성형 AI 개발 문서',
-        outcome: 'Bedrock 기반 프로덕션 애플리케이션을 설계합니다.',
-        topics: ['Foundation Model', 'RAG', 'Agents', 'Guardrails'],
-      ),
-    ],
-    exams: _examSets('Generative AI Developer Professional'),
   ),
   Certification(
     id: 'security-specialty',
@@ -318,14 +163,6 @@ final List<Certification> certifications = [
       'KMS, Secrets Manager, 암호화 전략을 비교합니다.',
       '침해 대응과 로그 분석 시나리오를 풉니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: 'Security Specialty 문서',
-        outcome: '보안 요구사항에 맞는 예방/탐지/대응 구성을 선택합니다.',
-        topics: ['IAM', 'KMS', 'GuardDuty', 'Security Hub'],
-      ),
-    ],
-    exams: _examSets('Security Specialty'),
   ),
   Certification(
     id: 'advanced-networking-specialty',
@@ -340,14 +177,6 @@ final List<Certification> certifications = [
       '멀티리전/멀티계정 네트워크 보안 경계를 설계합니다.',
       '트러블슈팅 중심 시나리오를 반복합니다.',
     ],
-    studyDocs: const [
-      StudyDoc(
-        title: 'Advanced Networking 문서',
-        outcome: '복잡한 네트워크 연결과 장애 원인을 분석합니다.',
-        topics: ['Transit Gateway', 'Direct Connect', 'Route 53', 'Network Firewall'],
-      ),
-    ],
-    exams: _examSets('Advanced Networking Specialty'),
   ),
 ];
 
