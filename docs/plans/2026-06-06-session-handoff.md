@@ -1,14 +1,14 @@
 # Session Handoff — 2026-06-06 (START HERE 다음 세션)
 
-> 한 줄 상태: **clf-t1-3(마이그레이션, 5문항) + clf-t1-4(클라우드 경제학, 6문항) 콘텐츠 완성 → 🎉 도메인 1(24%) 완성(4/4). 커버리지 16/19 Task·검증 101문항(목표 ≥95 달성). analyze 무이슈·test 21·build web green·main 커밋·push·배포 완료. 도메인 1·2·3 완성(비중 88%). 다음 = (1순위) 도메인 4(12%, 3 Task: t4-1 요금·t4-2 결제·t4-3 Support)로 CLF 19/19 완주 → (2순위) 하위 프로젝트 #3(오답노트·약점리포트).**
+> 한 줄 상태: **🏁 clf-t4-1(요금 모델, 6) + clf-t4-2(결제·예산, 6) + clf-t4-3(Support·리소스, 5) 콘텐츠 완성 → 🎉 도메인 4(12%) 완성(3/3) → CLF 19/19 전체 완주. 커버리지 19/19 Task·검증 118문항(목표 ≥95 초과, 4개 도메인 100% 커버). analyze 무이슈·test 21·build web green·main 커밋·push·배포 완료. 다음 = (2순위) 하위 프로젝트 #3(E1 오답노트·E2 약점 리포트).**
 
-> 갱신: 2026-06-06 세션 10 종료 (clf-t1-3 + clf-t1-4 콘텐츠 완성·커밋·배포 시점. 도메인 1 완성 4/4, 커버리지 16/19·검증 101문항·목표 ≥95 달성)
+> 갱신: 2026-06-06 세션 11 종료 (clf-t4-1 + clf-t4-2 + clf-t4-3 콘텐츠 완성·커밋·배포 시점. 🏁 도메인 4 완성 3/3 → CLF 19/19 전체 완주, 검증 118문항·목표 ≥95 초과, 4개 도메인 100% 커버)
 
 ## 지금 어디에 있나
 - **라이브:** https://velkaressiablutkrone.github.io/aws-docs/ (GitHub Pages, `main` push 시 자동 배포)
 - **저장소:** VelkaressiaBlutkrone/aws-docs · 브랜치 `main`
 - **스택:** Flutter Web. 앱 코드 `flutter_app/`. (옛 Vite/바닐라-TS는 철거됨)
-- **상태:** 렌더러·퀴즈·시험모드 그릇 완성. 콘텐츠 CLF **16/19 Task**(도메인 1: t1-1~t1-4 4개 / 도메인 2: t2-1~t2-4 4개 / 도메인 3: t3-1~t3-8 8개 = **검증 101문항, 목표 ≥95 달성**). **도메인 1(24%)+2(30%)+3(34%) 모두 완성 → 시험 비중 88% 커버.** 남은 = 도메인 4(12%·3 Task)뿐. 렌더러 완성 → 콘텐츠 추가 즉시 노출.
+- **상태:** 렌더러·퀴즈·시험모드 그릇 완성. 콘텐츠 CLF **19/19 Task 완주 🎉**(도메인 1: t1-1~t1-4 4개 / 도메인 2: t2-1~t2-4 4개 / 도메인 3: t3-1~t3-8 8개 / 도메인 4: t4-1~t4-3 3개 = **검증 118문항, 목표 ≥95 초과**). **도메인 1(24%)+2(30%)+3(34%)+4(12%) 모두 완성 → 시험 비중 100% 커버.** 렌더러 완성 → 콘텐츠 추가 즉시 노출.
 
 ## 이번 세션(들)에서 한 것
 1. **디자인 시스템** — `DESIGN.md` ("조용한 레퍼런스", verified 틸 `#0E8175`, Pretendard+JetBrains Mono, 라이트/다크). 구현: `flutter_app/lib/theme/app_theme.dart`.
@@ -19,18 +19,18 @@
 
 ## ▶ 다음 행동 (다음 세션 — 순서대로)
 
-> 직전 세션(10) 완료: **clf-t1-3 콘텐츠(마이그레이션, 검증 5문항)** + **clf-t1-4 콘텐츠(클라우드 경제학, 검증 6문항)** → **🎉 도메인 1 완성(4/4)**. 공식 AWS 문서 8종 실페치 대조, 독립 서브에이전트 역대조 **t1-3 5/5 + t1-4 6/6 CORRECT**(정직성 보강: Snowball '신규 고객 중단' 메모; 출처 정합성 보강: t1-4 q3 BYOL→Marketplace 용어 근거, q1 온프레 비용→RDS 책임표). analyze 무이슈·test 21·`build web --release` green·main 커밋·push·배포 완료. 직전 세션(9): clf-t1-1 + clf-t1-2 → 도메인 1 착수(커밋 `0ad19f8`).
+> 직전 세션(11) 완료: **🏁 clf-t4-1(요금 모델, 6) + clf-t4-2(결제·예산, 6) + clf-t4-3(Support·리소스, 5)** → **🎉 도메인 4 완성(3/3) → CLF 19/19 전체 완주.** 공식 AWS 문서 6종 실페치 대조, 독립 서브에이전트 역대조 **t4-1 6/6 + t4-2 6/6 + t4-3 5/5 CORRECT**(정직성 보강: Support 플랜 재편 2027 단종 메모; 출처 정합성 보강: t4-1 q3 Spot '최대 90%'→제품 페이지, q4 데이터 전송→CloudFront 아웃바운드 과금 근거). analyze 무이슈·test 21·`build web --release` green·main 커밋·push·배포 완료. 직전 세션(10): clf-t1-3 + clf-t1-4 → 도메인 1 완성(4/4).
 > 설계/계획: `docs/designs/2026-06-06-clf-learning-loop-subproject-2-spec.md`, `docs/plans/2026-06-06-clf-learning-loop-subproject-2-plan.md`.
 
-**1순위 — 다음 CLF Task 콘텐츠 생산 (진짜 병목)** — **도메인 1·2·3 완성(16/19). 남은 = 도메인 4(12%, 3 Task: t4-1·t4-2·t4-3)뿐 → 이 3개면 CLF 19/19 콘텐츠 완주.**
-- 추천: **도메인 4(결제·요금·지원)** — `clf-t4-1` 요금 모델(On-Demand·Reserved·Spot·Savings Plans·Dedicated Hosts / 데이터 전송 비용 / 스토리지 계층), `clf-t4-2` 결제·예산·비용 관리(AWS Budgets·Cost Explorer·Pricing Calculator·Organizations 통합 결제·비용 할당 태그), `clf-t4-3` 기술 리소스·Support 옵션(Support 플랜 Basic/Developer/Business/Enterprise·re:Post·Knowledge Center·APN).
+**1순위 — CLF Task 콘텐츠 생산 ✅ 완주 (19/19).** 도메인 1·2·3·4 모두 완성, 검증 118문항(목표 ≥95 초과). **→ CLF 콘텐츠 생산은 완료. 다음 세션의 1순위는 아래 2순위(하위 프로젝트 #3)로 승격.** 추가 강화(선택): 약점 Task 문항 보강(스트레치 ~130), 수동 스모크(`flutter run -d chrome`).
+- ✅ 도메인 4 완료: `clf-t4-1` 요금 모델(구매 옵션 6종·데이터 전송·스토리지 계층) / `clf-t4-2` 결제·예산·비용 관리(Pricing Calculator·Cost Explorer·Budgets·Organizations 통합 결제·비용 할당 태그) / `clf-t4-3` Support 플랜(Basic/Developer/Business/Enterprise)·기술 리소스(re:Post·Knowledge Center·Prescriptive Guidance)·APN.
 - `t1-1`~`t3-8` (14개 Task)가 복제 템플릿. 복제 경로 3단계: ① `tX-Y.md`(목표→🎯왜→📖핵심→✍️시험포인트→⚠️함정→🧪자가점검→📌출처) ② `tX-Y.questions.json`(검증 ≥5, sources[]+verified:true) ③ `content_index.dart` 한 줄(에셋 폴더는 pubspec에 디렉터리 통째 등록돼 자동 번들).
 - 규율 유지: **verified 게이트(출처 URL 필수) + AI 역대조** 2차 점검(실제 공식 문서 페치 대조). 취업/DIO 제외. 커밋 방식: 이 세션은 main 직접 커밋·push(사용자 선택).
 
 **2순위 — 학습 루프 하위 프로젝트 #3**
 - E1 오답노트(틀린 문항 재응시) + E2 약점 리포트. 이력 D14의 `wrongQuestionIds`·`flaggedQuestionIds`(이제 시험 모드가 기록 중) + `durationSpentSec`가 데이터 기반. 같은 흐름(brainstorm → spec → plan → subagent-driven).
 
-> 게이트: CLF 콘텐츠 커버리지(현재 **16/19**). 🎯 **검증 101문항으로 목표 ≥95 달성.** 도메인 1·2·3 완성(비중 88%). 남은 = 도메인 4(12%, 3 Task)뿐 → **이 3개면 19/19 완주.**
+> 게이트: CLF 콘텐츠 커버리지 **19/19 완주 🎉**. 🎯 **검증 118문항으로 목표 ≥95 초과.** 도메인 1·2·3·4 모두 완성(비중 100%). **CLF 콘텐츠 생산 완료 → 다음은 2순위(하위 프로젝트 #3) 또는 합격 후 SAA.**
 
 ## 생산 규율 (플레이북 합의)
 - 문항 = **A+B 혼합** (Task 직렬 척추 + 약점 우선, C(AI 소크라테스)는 어려운 Task 옵션)

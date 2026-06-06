@@ -169,6 +169,33 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-8.questions.json',
       questionCount: 6,
     ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t4-1',
+      title: '요금 모델 (구매 옵션·데이터 전송·스토리지)',
+      domain: 4,
+      mdAsset: 'assets/content/clf/t4-1.md',
+      questionsAsset: 'assets/content/clf/t4-1.questions.json',
+      questionCount: 6,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t4-2',
+      title: '결제·예산·비용 관리 도구',
+      domain: 4,
+      mdAsset: 'assets/content/clf/t4-2.md',
+      questionsAsset: 'assets/content/clf/t4-2.questions.json',
+      questionCount: 6,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t4-3',
+      title: '기술 리소스와 Support 플랜',
+      domain: 4,
+      mdAsset: 'assets/content/clf/t4-3.md',
+      questionsAsset: 'assets/content/clf/t4-3.questions.json',
+      questionCount: 5,
+    ),
   ],
 };
 

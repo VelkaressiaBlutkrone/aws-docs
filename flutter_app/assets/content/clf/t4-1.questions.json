@@ -1,0 +1,178 @@
+{
+  "examGuideTaskId": "clf-t4-1",
+  "taskTitle": "요금 모델",
+  "domain": 4,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t4-1-q1",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "구매 옵션 (On-Demand)",
+      "difficulty": "foundational",
+      "stem": "예측이 어렵고 단기적인 개발·테스트 워크로드를, 장기 약정이나 선결제 없이 사용한 만큼만 정가로 실행하려 한다. 가장 적합한 EC2 구매 옵션은?",
+      "options": [
+        "On-Demand Instances",
+        "Reserved Instances",
+        "Spot Instances",
+        "Savings Plans"
+      ],
+      "correct": 0,
+      "explanation": "On-Demand는 장기 약정이나 선결제 없이 사용한 만큼(초 단위) 정가로 지불하는 옵션입니다. 예측이 어렵거나 단기적인 워크로드, 처음 시작하거나 테스트하는 경우에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Reserved Instances는 1년 또는 3년 약정으로 할인받는 옵션으로, 단기·예측 불가 워크로드에는 맞지 않습니다.",
+        "2": "Spot Instances는 AWS 미사용 용량을 저렴하게 쓰지만 중단될 수 있어, 안정적으로 단기 테스트를 정가로 돌리려는 요구와는 다릅니다.",
+        "3": "Savings Plans는 1~3년 사용량 약정 할인으로, 약정 없이 단기로 쓰려는 경우에는 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 — On-Demand: 초 단위 과금, 장기 약정·선결제 없음",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q2",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "구매 옵션 (Savings Plans)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 향후 1~3년간 꾸준한 컴퓨팅 사용량이 예상되며, 인스턴스 패밀리·크기·리전이 바뀌어도 할인이 적용되고 AWS Fargate·Lambda 사용에도 적용되는 유연한 약정 할인을 원한다. 가장 적합한 것은?",
+      "options": [
+        "Savings Plans",
+        "On-Demand Instances",
+        "Spot Instances",
+        "Dedicated Hosts"
+      ],
+      "correct": 0,
+      "explanation": "Savings Plans는 1년 또는 3년 동안 시간당 일정한 컴퓨팅 사용량($/시간)을 약정하는 대신 On-Demand보다 낮은 가격을 제공합니다. Compute Savings Plans는 인스턴스 패밀리·크기·OS·테넌시·리전과 무관하게 EC2에 적용되고 Fargate·Lambda 사용에도 적용되어 유연합니다(최대 72% 절감).",
+      "wrongExplanations": {
+        "1": "On-Demand는 약정 없이 정가로 지불하는 옵션으로, 약정 기반 할인을 원하는 요구와 다릅니다.",
+        "2": "Spot Instances는 미사용 용량을 저렴하게 쓰지만 중단될 수 있고, 약정 기반의 안정적 할인이 아닙니다.",
+        "3": "Dedicated Hosts는 전용 물리 서버 옵션으로, 사용량 기반의 유연한 약정 할인이 목적이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What are Savings Plans? — 1/3년 사용량 약정, On-Demand보다 할인, EC2·Fargate·Lambda 유연 적용(최대 72%)",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q3",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "구매 옵션 (Spot)",
+      "difficulty": "foundational",
+      "stem": "중단되어도 자동으로 재시작하면 되는 대량 배치 처리 작업을, AWS의 미사용 컴퓨팅 용량을 활용해 가장 저렴하게(최대 90% 할인) 실행하려 한다. 가장 적합한 EC2 구매 옵션은?",
+      "options": [
+        "Spot Instances",
+        "On-Demand Instances",
+        "Reserved Instances",
+        "Dedicated Hosts"
+      ],
+      "correct": 0,
+      "explanation": "Spot Instances는 AWS의 미사용 EC2 용량을 크게 할인된 가격(최대 90%)에 사용하는 옵션입니다. AWS가 용량을 회수하면 중단될 수 있으므로, 중단을 견디고 재시작할 수 있는 배치·내결함성·스테이트리스 워크로드에 적합합니다.",
+      "wrongExplanations": {
+        "1": "On-Demand는 정가로 지불하는 옵션으로, 미사용 용량을 활용한 최대 할인과는 다릅니다.",
+        "2": "Reserved Instances는 1~3년 약정 할인 옵션으로, 미사용 용량 기반의 중단 가능 옵션이 아닙니다.",
+        "3": "Dedicated Hosts는 전용 물리 서버 옵션으로, 저렴한 미사용 용량 활용이 목적이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 — Spot Instances: 미사용 EC2 용량을 크게 할인된 가격에 사용(중단 가능)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        },
+        {
+          "title": "Amazon EC2 Spot Instances — On-Demand 대비 최대 90% 할인(공식 제품 페이지, 90% 수치 근거)",
+          "url": "https://aws.amazon.com/ec2/spot/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q4",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "데이터 전송 비용",
+      "difficulty": "foundational",
+      "stem": "AWS의 데이터 전송 요금에 대한 일반 원리로 가장 정확한 것은?",
+      "options": [
+        "AWS로 들어오는 수신(인바운드) 데이터 전송은 일반적으로 무료이고, 인터넷으로 나가는 발신(아웃바운드)·리전 간 전송은 과금된다",
+        "수신(인바운드) 데이터는 과금되고 발신(아웃바운드) 데이터는 무료다",
+        "모든 데이터 전송은 항상 무료다",
+        "같은 가용 영역 내 전송이 리전 간 전송보다 항상 더 비싸다"
+      ],
+      "correct": 0,
+      "explanation": "일반적으로 AWS로 들어오는 수신(인바운드) 데이터 전송은 무료이고, 인터넷으로 나가는 발신(아웃바운드) 데이터 전송과 리전 간 전송은 과금됩니다. 데이터가 적게 나가도록 아키텍처를 설계하면 데이터 전송 비용을 줄일 수 있습니다.",
+      "wrongExplanations": {
+        "1": "방향이 반대입니다. 보통 수신(인바운드)이 무료이고 발신(아웃바운드)이 과금됩니다.",
+        "2": "데이터 전송이 항상 무료인 것은 아닙니다. 발신·리전 간 전송은 과금됩니다.",
+        "3": "같은 가용 영역/리전 내 전송이 리전 간 전송보다 일반적으로 더 저렴하거나 무료입니다. '항상 더 비싸다'는 틀립니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 — Task 4.1 Skill '수신·발신 데이터 전송 비용(리전 간/리전 내)' 명시",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "Amazon CloudFront — AWS origin→CloudFront 데이터 전송은 무료, CloudFront→viewer 아웃바운드 전송은 과금(아웃바운드 과금 근거)",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q5",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "Savings Plans vs Reserved Instances",
+      "difficulty": "foundational",
+      "stem": "Savings Plans와 Reserved Instances(RI)의 공통점·차이를 가장 정확하게 설명한 것은?",
+      "options": [
+        "둘 다 1년 또는 3년 약정으로 On-Demand보다 할인되며, Savings Plans는 사용량 기반으로 더 유연하고(EC2·Fargate·Lambda) RI는 특정 인스턴스 구성에 약정한다",
+        "Savings Plans는 약정이 없고 RI만 약정한다",
+        "둘 다 중단될 수 있는 AWS 미사용 용량 옵션이다",
+        "둘 다 완전히 무료로 제공된다"
+      ],
+      "correct": 0,
+      "explanation": "Savings Plans와 RI는 모두 1년 또는 3년 약정으로 On-Demand보다 할인을 제공합니다. Savings Plans는 시간당 사용량($/h)을 약정해 인스턴스 패밀리·리전이 바뀌어도 적용되고 Fargate·Lambda에도 적용되어 더 유연합니다. RI는 특정 인스턴스 구성에 약정합니다.",
+      "wrongExplanations": {
+        "1": "Savings Plans도 약정 기반입니다(1년 또는 3년 사용량 약정). '약정이 없다'는 틀립니다.",
+        "2": "중단될 수 있는 미사용 용량 옵션은 Spot Instances입니다. Savings Plans·RI는 약정 할인 옵션입니다.",
+        "3": "둘 다 무료가 아니라, 약정을 대가로 On-Demand보다 할인된 가격을 내는 옵션입니다."
+      },
+      "sources": [
+        {
+          "title": "What are Savings Plans? — 1/3년 약정 할인, 'Compute Savings Plans and Reserved Instances' 비교 섹션",
+          "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q6",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "스토리지 계층별 요금",
+      "difficulty": "foundational",
+      "stem": "거의 접근하지 않는 데이터를 저장하면서 보관 비용을 낮추려 한다. 스토리지 계층 선택의 일반 원리로 가장 정확한 것은?",
+      "options": [
+        "접근 빈도가 낮을수록 더 저렴한 계층(예: S3 Standard-IA·Glacier)을 선택해 보관 단가를 낮춘다(대신 검색 수수료·검색 시간이 늘 수 있음)",
+        "모든 데이터는 항상 가장 비싼 계층에 둬야 안전하다",
+        "접근 빈도와 보관 비용은 서로 무관하다",
+        "스토리지 계층 선택은 비용에 전혀 영향을 주지 않는다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon S3 같은 스토리지는 접근 빈도와 비용의 트레이드오프로 계층이 나뉩니다. 자주 접근하지 않는 데이터는 더 저렴한 계층(S3 Standard-IA·One Zone-IA·Glacier 등)으로 옮겨 보관 단가를 낮출 수 있으며, 대신 검색 수수료나 검색 시간이 늘 수 있습니다. 수명 주기 정책으로 자동 전환할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "모든 데이터를 가장 비싼 계층에 두는 것은 비용 낭비입니다. 접근 빈도에 맞는 계층을 선택해야 합니다.",
+        "2": "접근 빈도와 보관 비용은 밀접한 관련이 있습니다(덜 접근할수록 더 저렴한 계층 선택 가능).",
+        "3": "스토리지 계층 선택은 보관 단가·검색 비용에 직접 영향을 줍니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon S3 storage classes — 접근 빈도↔비용 트레이드오프(Standard·IA·Glacier), 검색 수수료",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

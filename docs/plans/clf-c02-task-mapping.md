@@ -83,15 +83,15 @@
 
 ## Domain 4: Billing, Pricing, and Support (12%)
 
-### Task 4.1 — 요금 모델 비교 `clf-t4-1` · 문서 ☐ · 문항 0/5
+### Task 4.1 — 요금 모델 비교 `clf-t4-1` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** 컴퓨팅 구매 옵션(On-Demand, RI, Spot, Savings Plans, Dedicated Hosts/Instances, Capacity Reservations) / 데이터 전송 요금 / 스토리지 옵션·계층
 - **Skills:** 구매 옵션 비교·선택 시점 / RI 유연성 / Organizations에서의 RI 동작 / 수신·발신 데이터 전송 비용(리전 간, 리전 내) / 스토리지 계층별 요금
 
-### Task 4.2 — 결제·예산·비용 관리 리소스 `clf-t4-2` · 문서 ☐ · 문항 0/5
+### Task 4.2 — 결제·예산·비용 관리 리소스 `clf-t4-2` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** 결제 지원·정보 / 서비스 요금 정보 / AWS Organizations / 비용 할당 태그
 - **Skills:** Budgets·Cost Explorer·Billing Conductor 용도 / Pricing Calculator / Organizations 통합 결제·비용 할당 / 비용 할당 태그와 보고서(Cost and Usage Report)
 
-### Task 4.3 — 기술 리소스·Support 옵션 식별 `clf-t4-3` · 문서 ☐ · 문항 0/5
+### Task 4.3 — 기술 리소스·Support 옵션 식별 `clf-t4-3` · 문서 ☑ · 문항 5/5 ✅
 - **Knowledge:** 공식 웹사이트 리소스·문서 / Support 플랜 / APN(ISV, SI) 역할 / Support Center
 - **Skills:** 백서·블로그·문서 위치 / 기술 리소스 식별(Prescriptive Guidance, Knowledge Center, re:Post) / Support 옵션 식별(고객 서비스·커뮤니티, Developer, Business, Enterprise)
 
@@ -104,8 +104,8 @@
 | 1 Cloud Concepts | 24% | 4 | 4/4 ✅ | 23 | ≥20 ✅ |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
 | 3 Technology & Services | 34% | 8 | 8/8 ✅ | 51 | ≥40 ✅ |
-| 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **16/19** | **101** | **≥95** ✅ (모의고사 2회차 130문항 목표와 정합) |
+| 4 Billing, Pricing & Support | 12% | 3 | 3/3 ✅ | 17 | ≥15 ✅ |
+| **합계** | 100% | **19** | **19/19 🎉** | **118** | **≥95** ✅ (스트레치 130에 근접) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -177,3 +177,10 @@
   - 규율: 공식 AWS 문서 8종 실페치 대조. 독립 서브에이전트 역대조 **t1-3 5/5 + t1-4 6/6 CORRECT**. 정직성 보강: Snowball '신규 고객 중단' 메모·"페타바이트"→"테라바이트급" 완화; **출처 정합성 보강**(t1-4 q3 BYOL→Marketplace 용어 근거, q1 온프레 비용→RDS 책임표).
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
   - 커버리지: **14/19 → 16/19 Task, 검증 문항 90 → 101. 🎯 목표 ≥95 달성! 도메인 1·2·3 완성** → 남은 = 도메인 4(12%, 3 Task)뿐.
+
+- **2026-06-06 (세션 11) — 🏁 CLF 19/19 완주: `clf-t4-1`(요금 모델, 6) + `clf-t4-2`(결제·예산, 6) + `clf-t4-3`(Support·리소스, 5) → 도메인 4 완성(3/3), CLF 전체 19/19.**
+  - 산출물: t4-1·t4-2·t4-3 (각 md+questions.json), `content_index.dart` 3줄 등록.
+  - 커버: t4-1 구매 옵션 6종(On-Demand·Savings Plans·RI·Spot·Dedicated Hosts·Capacity Reservations)·데이터 전송·스토리지 계층. t4-2 Pricing Calculator(구축 전 추정)·Cost Explorer(발생 후 분석)·Budgets(알림)·Organizations(통합 결제·SCP)·비용 할당 태그. t4-3 Support 플랜(Basic/Developer/Business/Enterprise)·기술 리소스(re:Post·Knowledge Center·Prescriptive Guidance)·APN.
+  - 규율: 공식 AWS 문서 6종 실페치 대조. 독립 서브에이전트 역대조 **t4-1 6/6 + t4-2 6/6 + t4-3 5/5 CORRECT**. 정직성: Support 플랜 재편(2027 단종) 메모; 출처 보강: t4-1 Spot '최대 90%'→제품 페이지, q4 데이터 전송 출처 보강.
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **16/19 → 19/19 🎉 CLF 콘텐츠 완주. 검증 문항 101 → 118(목표 ≥95 초과, 스트레치 130 근접). 4개 도메인 모두 완성.**

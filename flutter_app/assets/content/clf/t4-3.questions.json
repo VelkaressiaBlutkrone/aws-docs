@@ -1,0 +1,143 @@
+{
+  "examGuideTaskId": "clf-t4-3",
+  "taskTitle": "기술 리소스와 Support 플랜",
+  "domain": 4,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t4-3-q1",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "Support 플랜 (Basic)",
+      "difficulty": "foundational",
+      "stem": "한 개인 개발자가 비용을 들이지 않고 계정·결제 질문 지원, 문서·백서·포럼, 서비스 상태 점검, Trusted Advisor 핵심 점검을 받으려 한다. 모든 AWS 고객에게 자동 제공되는 무료 Support 플랜은?",
+      "options": [
+        "Basic Support",
+        "Business Support",
+        "Enterprise Support",
+        "Developer Support"
+      ],
+      "correct": 0,
+      "explanation": "Basic Support는 모든 AWS 고객에게 자동으로 제공되는 무료 플랜으로, 계정·결제 질문에 대한 일대일 응답, 지원 포럼, 서비스 상태 점검, 문서·기술 백서·모범 사례 가이드, 그리고 Trusted Advisor의 핵심 점검을 제공합니다.",
+      "wrongExplanations": {
+        "1": "Business Support는 유료 플랜으로 24x7 기술 지원과 전체 Trusted Advisor 등을 제공합니다. 무료 기본 플랜이 아닙니다.",
+        "2": "Enterprise Support는 전담 TAM 등을 포함하는 최상위 유료 플랜으로, 무료 기본 플랜이 아닙니다.",
+        "3": "Developer Support는 유료 플랜으로 업무 시간 기술 지원을 제공합니다. 무료 기본 플랜이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Support Plans — Basic은 무료, 계정·결제 질문·포럼·서비스 상태·문서·Trusted Advisor 핵심 점검",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-3-q2",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "Support 플랜 (Business — 24x7)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 프로덕션 워크로드를 위해 24시간 연중무휴(24x7) 기술 지원(전화·웹·채팅)과 전체 Trusted Advisor 점검이 필요하다. 이를 충족하는 최소한의 Support 플랜은?(Enterprise 미만)",
+      "options": [
+        "Business Support",
+        "Basic Support",
+        "Developer Support",
+        "무료 Basic으로 충분하다"
+      ],
+      "correct": 0,
+      "explanation": "Business Support는 24x7 기술 지원(전화·웹·채팅)과 전체 Trusted Advisor 점검을 제공하는 유료 플랜으로, 프로덕션 워크로드에 적합합니다(Enterprise는 여기에 TAM 등을 더한 상위 플랜).",
+      "wrongExplanations": {
+        "1": "Basic Support는 무료이지만 24x7 기술 케이스 지원을 제공하지 않습니다(계정·결제 질문과 핵심 Trusted Advisor 점검 수준).",
+        "2": "Developer Support는 업무 시간 기술 지원만 제공하며 24x7 지원이 아닙니다.",
+        "3": "무료 Basic으로는 24x7 기술 지원과 전체 Trusted Advisor 점검 요건을 충족할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Support Plans — Business 이상: 24x7 기술 지원·전체 Trusted Advisor(500+ 점검)",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-3-q3",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "Support 플랜 (Enterprise — TAM)",
+      "difficulty": "foundational",
+      "stem": "대규모 미션 크리티컬 환경에서 전담 Technical Account Manager(TAM)와 프로덕션 중요 케이스에 대한 가장 빠른(약 15분) 응답이 필요하다. 가장 적합한 Support 플랜은?",
+      "options": [
+        "Enterprise Support",
+        "Business Support",
+        "Developer Support",
+        "Basic Support"
+      ],
+      "correct": 0,
+      "explanation": "Enterprise Support는 Business의 모든 혜택에 더해 전담 Technical Account Manager(TAM), 프로덕션 중요 케이스에 대한 약 15분 응답, 전략 검토 등을 제공하는 최상위 플랜입니다. 대규모·미션 크리티컬 환경에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Business Support는 24x7 기술 지원과 전체 Trusted Advisor를 제공하지만 전담 TAM은 포함하지 않습니다(TAM은 Enterprise).",
+        "2": "Developer Support는 업무 시간 기술 지원 수준으로, 전담 TAM이나 15분 응답을 제공하지 않습니다.",
+        "3": "Basic Support는 무료 기본 플랜으로, 전담 TAM이나 빠른 케이스 응답을 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Support Plans — Enterprise: 전담 TAM, 프로덕션 중요 케이스 ~15분 응답",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-3-q4",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "기술 리소스 위치 (re:Post)",
+      "difficulty": "foundational",
+      "stem": "한 개발자가 Support 케이스를 열기 전에, 다른 사용자들의 질문과 답변을 모은 커뮤니티 기반 Q&A 사이트에서 무료로 해결책을 찾으려 한다. 가장 적합한 곳은?",
+      "options": [
+        "AWS re:Post",
+        "AWS Trusted Advisor",
+        "Amazon CloudWatch",
+        "AWS Cost Explorer"
+      ],
+      "correct": 0,
+      "explanation": "AWS re:Post는 커뮤니티 기반의 질문·답변 서비스(이전 AWS 포럼)로, 다른 사용자·전문가의 답변에서 무료로 해결책을 찾을 수 있습니다. 자주 묻는 질문의 how-to는 AWS Knowledge Center, 모범 사례·패턴은 AWS Prescriptive Guidance에서 찾습니다.",
+      "wrongExplanations": {
+        "1": "AWS Trusted Advisor는 모범 사례를 점검·권고하는 도구로, 커뮤니티 Q&A 사이트가 아닙니다.",
+        "2": "Amazon CloudWatch는 성능·운영 모니터링 서비스로, 기술 질문 커뮤니티가 아닙니다.",
+        "3": "AWS Cost Explorer는 비용 분석 도구로, 기술 질문 커뮤니티가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 — Task 4.3 Skill '기술 리소스 식별(Prescriptive Guidance·Knowledge Center·re:Post)' 명시",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-3-q5",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "APN (파트너)",
+      "difficulty": "foundational",
+      "stem": "한 기업이 AWS 도입·마이그레이션을, AWS에서 동작하는 소프트웨어를 만드는 독립 소프트웨어 공급자(ISV)나 도입을 설계·구현하는 시스템 통합업체(SI) 같은 전문 파트너의 도움을 받아 진행하려 한다. 이런 AWS 파트너 생태계는?",
+      "options": [
+        "AWS Partner Network(APN)",
+        "AWS Organizations",
+        "AWS Trusted Advisor",
+        "AWS IAM Identity Center"
+      ],
+      "correct": 0,
+      "explanation": "AWS Partner Network(APN)는 ISV(독립 소프트웨어 공급자)·SI(시스템 통합업체) 등 전문 파트너로 구성된 생태계로, 고객의 AWS 솔루션 구축·마이그레이션·운영을 돕습니다.",
+      "wrongExplanations": {
+        "1": "AWS Organizations는 여러 AWS 계정을 중앙 관리·통합 결제하는 서비스로, 외부 전문 파트너 생태계가 아닙니다.",
+        "2": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, 파트너 생태계가 아닙니다.",
+        "3": "AWS IAM Identity Center는 인력의 다중 계정 SSO 접근을 관리하는 서비스로, 외부 파트너 생태계가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 — Task 4.3 Skill 'APN(ISV, SI) 역할' 명시; AWS Support의 Partner-Led Support 연계",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}
