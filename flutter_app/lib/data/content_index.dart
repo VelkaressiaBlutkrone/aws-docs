@@ -115,6 +115,24 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-6.questions.json',
       questionCount: 7,
     ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t3-7',
+      title: 'AI/ML·분석 서비스',
+      domain: 3,
+      mdAsset: 'assets/content/clf/t3-7.md',
+      questionsAsset: 'assets/content/clf/t3-7.questions.json',
+      questionCount: 7,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t3-8',
+      title: '기타 범위 내 서비스 (메시징·EUC·IoT)',
+      domain: 3,
+      mdAsset: 'assets/content/clf/t3-8.md',
+      questionsAsset: 'assets/content/clf/t3-8.questions.json',
+      questionCount: 6,
+    ),
   ],
 };
 

@@ -74,10 +74,10 @@
 ### Task 3.6 — 스토리지 서비스 식별 `clf-t3-6` · 문서 ☑ · 문항 7/7 ✅
 - **Skills:** 객체 스토리지 용도 / S3 스토리지 클래스 차이 / 블록 스토리지(EBS, 인스턴스 스토어) / 파일 서비스(EFS, FSx) / 캐시 파일 시스템(Storage Gateway) / 수명 주기 정책 / AWS Backup
 
-### Task 3.7 — AI/ML·분석 서비스 식별 `clf-t3-7` · 문서 ☐ · 문항 0/5
+### Task 3.7 — AI/ML·분석 서비스 식별 `clf-t3-7` · 문서 ☑ · 문항 7/7 ✅
 - **Skills:** AI/ML 서비스와 역할(SageMaker, Lex, Kendra) / 분석 서비스(Athena, Kinesis, Glue, QuickSight)
 
-### Task 3.8 — 기타 범위 내 서비스 식별 `clf-t3-8` · 문서 ☐ · 문항 0/5
+### Task 3.8 — 기타 범위 내 서비스 식별 `clf-t3-8` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** 앱 통합(EventBridge, SNS, SQS) / 비즈니스 앱(Connect, SES) / 고객 지원(Activate, IQ, AMS, Support) / 개발자 도구(AppConfig, Cloud9, CloudShell, CodeArtifact/Build/Commit/Deploy/Pipeline/Star, X-Ray) / 최종 사용자 컴퓨팅(AppStream 2.0, WorkSpaces) / 프런트엔드·모바일(Amplify, AppSync) / IoT(IoT Core, Greengrass)
 - **Skills:** 메시지·알림 서비스 선택 / 비즈니스 앱 서비스 선택 / 지원 옵션 선택 / 개발·배포·트러블슈팅 도구 식별 / VM 출력 표시 서비스 / 프런트엔드·모바일 서비스 / IoT 관리 서비스
 
@@ -103,9 +103,9 @@
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
-| 3 Technology & Services | 34% | 8 | 6/8 | 38 | ≥40 |
+| 3 Technology & Services | 34% | 8 | 8/8 ✅ | 51 | ≥40 ✅ |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **10/19** | **65** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **12/19** | **78** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -156,3 +156,10 @@
   - 규율: 공식 문서 6종 실페치 대조. 독립 서브에이전트 역대조 **t3-5 6/6 + t3-1 6/6 CORRECT**. t3-1 **출처 정합성 2건 보강**(q3 SDK 정의 출처, q4 배포 모델→CLF 가이드) — 정답은 정확하나 출처가 진술을 직접 뒷받침하도록 교체(verified 게이트 엄격 적용).
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
   - 커버리지: **8/19 → 10/19 Task, 검증 문항 53 → 65.** (검증 문항 수가 CLF 실제 시험 65문항과 같아짐 — 절반 넘김.)
+
+- **2026-06-06 (세션 8) — 열한·열두 번째 verified 배치: `clf-t3-7`(AI/ML·분석, 7문항) + `clf-t3-8`(기타 서비스, 6문항) → 🎉 도메인 3(34%) 완성(8/8).**
+  - 산출물: `t3-7.md`+`t3-7.questions.json`(7), `t3-8.md`+`t3-8.questions.json`(6), `content_index.dart` 2줄 등록.
+  - 커버: t3-7 AI/ML(SageMaker·Lex·Kendra) · 분석(Athena·Kinesis·Glue·QuickSight). t3-8 앱 통합(SNS·SQS·EventBridge) · WorkSpaces(DaaS) · IoT Core.
+  - 규율: 공식 AWS 문서 12종 실페치 대조. 독립 서브에이전트 역대조 **t3-7 7/7 + t3-8 6/6 CORRECT**. 발견·정정: SageMaker→**SageMaker AI**(2024-12), QuickSight→**Amazon Quick(Sight)** 리네이밍 병기 + 출처 표기 보정(q7·q6).
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **10/19 → 12/19 Task, 검증 문항 65 → 78. 도메인 3(34%) 8/8 완성** → 도메인 2(30%) + 3(34%) = **시험 비중 64% 완성**.

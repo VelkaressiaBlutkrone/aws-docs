@@ -1,0 +1,170 @@
+{
+  "examGuideTaskId": "clf-t3-8",
+  "taskTitle": "기타 범위 내 서비스",
+  "domain": 3,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t3-8-q1",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (SNS — pub/sub 알림)",
+      "difficulty": "foundational",
+      "stem": "한 애플리케이션이 주문이 생성될 때마다 하나의 메시지를 여러 구독자(여러 SQS 큐, Lambda 함수, 이메일)에게 동시에 전달하려 한다. 발행/구독(pub/sub) 방식으로 구독자에게 메시지를 푸시하는 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon SNS",
+        "Amazon SQS",
+        "Amazon Athena",
+        "Amazon WorkSpaces"
+      ],
+      "correct": 0,
+      "explanation": "Amazon SNS는 발행자가 주제(topic)에 메시지를 보내면 여러 구독자에게 전달하는 완전관리형 pub/sub 메시징 서비스입니다. 한 메시지를 여러 엔드포인트(SQS·Lambda·이메일·SMS 등)로 복제해 푸시하는 팬아웃에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Amazon SQS는 메시지를 큐에 저장하고 소비자가 폴링해 가져가는 큐 서비스로, 한 메시지를 여러 구독자에게 동시에 푸시하는 pub/sub 모델이 아닙니다.",
+        "2": "Amazon Athena는 S3 데이터를 SQL로 분석하는 서비스로, 메시지 알림과 무관합니다.",
+        "3": "Amazon WorkSpaces는 가상 데스크톱 서비스로, 메시지 발행/구독과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon SNS? — 발행자→주제→여러 구독자에 전달하는 pub/sub 메시징(팬아웃, A2A·A2P)",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q2",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (SQS — 메시지 큐)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 분산 시스템의 마이크로서비스 컴포넌트들을 느슨하게 결합(디커플링)하기 위해, 메시지를 큐에 안전하게 보관하고 소비자가 가져가(폴링) 처리하게 하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon SQS",
+        "Amazon SNS",
+        "Amazon EventBridge",
+        "Amazon Kinesis"
+      ],
+      "correct": 0,
+      "explanation": "Amazon SQS는 완전관리형 메시지 큐 서비스로, 분산 시스템과 컴포넌트를 통합·디커플링합니다. 메시지를 여러 서버에 중복 저장하고 소비자가 폴링해 처리하므로, 생산자와 소비자를 분리하고 부하를 평준화할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Amazon SNS는 한 메시지를 여러 구독자에게 푸시하는 pub/sub 알림 서비스로, 메시지를 큐에 보관해 소비자가 폴링하는 큐 모델이 아닙니다(둘을 함께 쓰기도 함).",
+        "2": "Amazon EventBridge는 이벤트를 규칙으로 라우팅하는 서버리스 이벤트 버스로, 컴포넌트 디커플링용 메시지 큐 자체는 아닙니다.",
+        "3": "Amazon Kinesis는 실시간 스트리밍 데이터 수집·처리 서비스로, 메시지 큐 디커플링이 주목적이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon SQS? — 분산 시스템·컴포넌트를 디커플링하는 호스팅 메시지 큐(소비자가 폴링)",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q3",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (EventBridge — 이벤트 버스)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 AWS 서비스, 자체 애플리케이션, 서드파티 SaaS에서 발생하는 이벤트를 규칙에 따라 여러 타겟으로 라우팅해 이벤트 기반(event-driven) 애플리케이션을 구축하려 한다. 가장 적합한 서버리스 이벤트 버스 서비스는?",
+      "options": [
+        "Amazon EventBridge",
+        "Amazon SQS",
+        "Amazon WorkSpaces",
+        "AWS IoT Core"
+      ],
+      "correct": 0,
+      "explanation": "Amazon EventBridge는 이벤트를 사용해 애플리케이션 컴포넌트를 연결하는 서버리스 서비스로, 이벤트 기반 애플리케이션을 쉽게 구축하게 합니다. 이벤트 버스가 소스(자체 앱·AWS 서비스·서드파티 SW)의 이벤트를 받아 규칙에 따라 여러 타겟으로 라우팅합니다.",
+      "wrongExplanations": {
+        "1": "Amazon SQS는 메시지 큐 서비스로, 여러 소스의 이벤트를 규칙으로 여러 타겟에 라우팅하는 이벤트 버스가 아닙니다.",
+        "2": "Amazon WorkSpaces는 가상 데스크톱 서비스로, 이벤트 라우팅과 무관합니다.",
+        "3": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 범용 이벤트 버스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What Is Amazon EventBridge? — 이벤트로 컴포넌트를 연결하는 서버리스 이벤트 버스(소스→규칙→타겟 라우팅)",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q4",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "최종 사용자 컴퓨팅 (WorkSpaces)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 직원들에게 클라우드 기반 가상 데스크톱(Windows 또는 Linux)을 제공해, 하드웨어를 조달하거나 복잡한 소프트웨어를 설치하지 않고도 여러 기기·웹 브라우저에서 어디서나 접근하게 하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon WorkSpaces",
+        "Amazon EC2",
+        "AWS IoT Core",
+        "Amazon SNS"
+      ],
+      "correct": 0,
+      "explanation": "Amazon WorkSpaces는 사용자에게 가상의 클라우드 기반 데스크톱(DaaS)을 프로비저닝하는 관리형 서비스입니다. Windows·Linux 데스크톱을 제공하고 하드웨어 조달·복잡한 SW 설치가 필요 없으며, 사용자는 여러 기기나 웹 브라우저에서 어디서나 접근할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Amazon EC2는 서버 역할의 가상 머신(컴퓨팅 인스턴스)을 제공합니다. 최종 사용자용 관리형 가상 '데스크톱(DaaS)'을 제공하는 것은 WorkSpaces입니다.",
+        "2": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 사용자 가상 데스크톱과 무관합니다.",
+        "3": "Amazon SNS는 pub/sub 알림 메시징 서비스로, 가상 데스크톱과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon WorkSpaces? — 가상 클라우드 기반 데스크톱(Windows/Linux) 프로비저닝, 어디서나 접근",
+          "url": "https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q5",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "IoT (IoT Core)",
+      "difficulty": "foundational",
+      "stem": "한 제조사가 현장의 수많은 센서·스마트 기기(IoT)를 AWS 클라우드에 안전하게 연결해 메시지를 주고받고 관리하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS IoT Core",
+        "Amazon WorkSpaces",
+        "Amazon SQS",
+        "Amazon Kendra"
+      ],
+      "correct": 0,
+      "explanation": "AWS IoT Core는 IoT 기기를 AWS 클라우드 서비스 및 다른 기기에 연결하는 관리형 서비스입니다. 기기가 MQTT·HTTPS 같은 프로토콜로 메시지 브로커를 통해 안전하게 클라우드와 메시지를 주고받게 합니다.",
+      "wrongExplanations": {
+        "1": "Amazon WorkSpaces는 사용자용 가상 데스크톱 서비스로, IoT 기기 연결과 무관합니다.",
+        "2": "Amazon SQS는 메시지 큐 서비스로, IoT 기기를 클라우드에 직접 연결·관리하는 전용 서비스가 아닙니다.",
+        "3": "Amazon Kendra는 지능형 검색 서비스로, IoT 기기 연결과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS IoT (Core)? — IoT 기기를 AWS 클라우드·다른 기기에 연결, 메시지 브로커(MQTT 등)",
+          "url": "https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q6",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "SNS vs SQS 구분",
+      "difficulty": "foundational",
+      "stem": "Amazon SNS와 Amazon SQS의 차이를 가장 정확하게 설명한 것은?",
+      "options": [
+        "SNS는 발행/구독(pub/sub)으로 한 메시지를 여러 구독자에게 푸시하고, SQS는 메시지를 큐에 저장해 소비자가 폴링해 처리한다",
+        "SNS는 메시지를 큐에 저장해 폴링하게 하고, SQS는 여러 구독자에게 푸시한다",
+        "둘 다 사용자에게 가상 데스크톱을 제공하는 서비스다",
+        "둘 다 IoT 기기를 클라우드에 연결하는 서비스다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon SNS는 발행/구독(pub/sub) 모델로 발행자가 주제에 보낸 한 메시지를 여러 구독자 엔드포인트로 푸시합니다. Amazon SQS는 메시지를 큐에 저장하고 소비자가 폴링해 가져가 처리하는 큐 서비스로, 컴포넌트를 디커플링합니다. 둘을 함께 써(SNS→여러 SQS) 팬아웃 패턴을 만들기도 합니다.",
+      "wrongExplanations": {
+        "1": "방향이 반대입니다. 큐에 저장해 폴링하는 것은 SQS, 여러 구독자에게 푸시하는 것은 SNS입니다.",
+        "2": "SNS·SQS는 메시징 서비스이지 가상 데스크톱(WorkSpaces) 서비스가 아닙니다.",
+        "3": "SNS·SQS는 메시징 서비스이지 IoT 기기 연결(IoT Core) 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Differences between Amazon SQS, Amazon MQ, and Amazon SNS — SQS는 큐(디커플링), SNS는 pub/sub(여러 구독자에 전달)",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}
