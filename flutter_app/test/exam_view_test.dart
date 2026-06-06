@@ -79,6 +79,7 @@ void main() {
     expect(finished!.correct, 2);
     expect(finished!.wrongQuestionIds, isEmpty);
     expect(finished!.flaggedQuestionIds, ['q1']);
+    expect(finished!.presentedQuestionIds, ['q1', 'q2']);
   });
 
   testWidgets('시간 소진 시 자동 제출 — 미응답=오답, 1회만', (tester) async {

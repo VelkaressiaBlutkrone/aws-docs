@@ -112,6 +112,7 @@ class _QuizViewState extends State<QuizView> {
       total: _qs.length,
       wrongQuestionIds: wrong,
       flaggedQuestionIds: const [],
+      presentedQuestionIds: [for (final q in _qs) q.id],
       durationSpentSec: DateTime.now().difference(_startedAt).inSeconds,
     ));
     setState(() => _finished = true);

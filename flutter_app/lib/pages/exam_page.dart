@@ -168,6 +168,7 @@ class _ExamViewState extends State<ExamView> {
       total: _qs.length,
       wrongQuestionIds: wrong,
       flaggedQuestionIds: flaggedIds,
+      presentedQuestionIds: [for (final q in _qs) q.id],
       durationSpentSec: spent > widget.durationSec ? widget.durationSec : spent,
     ));
     setState(() {});
