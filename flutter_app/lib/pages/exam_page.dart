@@ -436,6 +436,8 @@ class _ExamPageState extends State<ExamPage> {
   final _store = ExamSessionStore();
   final _history = HistoryStore();
 
+  String get _examId => 'exam:${widget.entry.taskId}';
+
   Future<_ExamLoad> _load() async {
     final qRaw = await rootBundle.loadString(widget.entry.questionsAsset);
     final bank =
@@ -451,7 +453,7 @@ class _ExamPageState extends State<ExamPage> {
       overview = null; // 메타 없으면 폴백 페이스(examDurationSec)
     }
 
-    final examId = 'exam:${widget.entry.taskId}';
+    final examId = _examId;
     final fp = bankFingerprint(bank);
     final existing = _store.load(examId);
     final restorable = existing != null &&
@@ -464,8 +466,8 @@ class _ExamPageState extends State<ExamPage> {
     final Map<int, int> initialPicked;
     final Set<int> initialFlagged;
     if (restorable) {
-      startedAt =
-          DateTime.tryParse(existing.startedAtIso) ?? DateTime.now();
+      // 손상된 startedAt이면 now로 폴백(타이머 리셋 가능 — 정상 흐름에선 항상 기록됨).
+      startedAt = DateTime.tryParse(existing.startedAtIso) ?? DateTime.now();
       durationSec = existing.durationSec;
       initialIndex = existing.index;
       initialPicked = existing.picked;
@@ -514,13 +516,18 @@ class _ExamPageState extends State<ExamPage> {
           if (snap.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
           }
+          if (snap.hasError) {
+            return Center(
+                child: Text('문항을 불러오지 못했습니다.',
+                    style: TextStyle(color: c.textMuted)));
+          }
           final data = snap.data;
           if (data == null || data.bank.questions.isEmpty) {
             return Center(
                 child: Text('검증된 문항이 아직 없습니다.',
                     style: TextStyle(color: c.textMuted)));
           }
-          final examId = 'exam:${widget.entry.taskId}';
+          final examId = _examId;
           return Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: Layout.exam),
