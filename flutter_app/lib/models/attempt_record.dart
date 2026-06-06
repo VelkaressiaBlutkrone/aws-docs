@@ -9,6 +9,7 @@ class AttemptRecord {
     required this.total,
     required this.wrongQuestionIds,
     required this.flaggedQuestionIds,
+    this.presentedQuestionIds = const [],
     required this.durationSpentSec,
   });
 
@@ -20,6 +21,9 @@ class AttemptRecord {
   final int total;
   final List<String> wrongQuestionIds;
   final List<String> flaggedQuestionIds;
+
+  /// 그 응시에 출제된 전체 문항 ID(약점 파생용). 레거시 레코드는 빈 리스트.
+  final List<String> presentedQuestionIds;
   final int durationSpentSec;
 
   Map<String, dynamic> toJson() => {
@@ -31,6 +35,7 @@ class AttemptRecord {
         'total': total,
         'wrongQuestionIds': wrongQuestionIds,
         'flaggedQuestionIds': flaggedQuestionIds,
+        'presentedQuestionIds': presentedQuestionIds,
         'durationSpentSec': durationSpentSec,
       };
 
@@ -45,6 +50,9 @@ class AttemptRecord {
             .map((e) => e.toString())
             .toList(),
         flaggedQuestionIds: ((j['flaggedQuestionIds'] as List?) ?? const [])
+            .map((e) => e.toString())
+            .toList(),
+        presentedQuestionIds: ((j['presentedQuestionIds'] as List?) ?? const [])
             .map((e) => e.toString())
             .toList(),
         durationSpentSec: (j['durationSpentSec'] as num?)?.toInt() ?? 0,
