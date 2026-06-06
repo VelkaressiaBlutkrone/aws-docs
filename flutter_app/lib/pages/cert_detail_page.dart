@@ -264,6 +264,37 @@ class _LearningContent extends StatelessWidget {
                 ),
               ),
             ),
+          Padding(
+            padding: const EdgeInsets.only(top: Gap.xs),
+            child: InkWell(
+              onTap: () =>
+                  context.push('/cert/${entries.first.certCode}/report'),
+              borderRadius: BorderRadius.circular(Radii.md),
+              child: Container(
+                padding: const EdgeInsets.all(Gap.lg),
+                decoration: BoxDecoration(
+                  color: c.surface,
+                  borderRadius: BorderRadius.circular(Radii.md),
+                  border: Border.all(color: c.border),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.insights_outlined, size: 18, color: c.accent),
+                    const SizedBox(width: Gap.sm),
+                    Expanded(
+                      child: Text('약점 리포트 · Task별 정답률 보기',
+                          style: t.titleMedium?.copyWith(color: c.text)),
+                    ),
+                    Text('리포트 →',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: c.accent)),
+                  ],
+                ),
+              ),
+            ),
+          ),
           if (weakByTask.values.fold(0, (a, b) => a + b) > 0)
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
