@@ -1,8 +1,8 @@
 # Session Handoff — 2026-06-06 (START HERE 다음 세션)
 
-> 한 줄 상태: **clf-t2-3 콘텐츠(IAM, 7문항) main 배포 완료 + 하위 프로젝트 #2(시험 모드: 타이머·자동제출·세션복원·플래그) 구현 완료(브랜치 `feat/clf-learning-loop-subproject-2`, 21테스트·build green). 다음 = (0순위) #2 머지 → (1순위) 다음 CLF 콘텐츠 → (2순위) 하위 프로젝트 #3(오답노트·약점리포트).**
+> 한 줄 상태: **clf-t2-3 콘텐츠(IAM, 7문항) + 하위 프로젝트 #2(시험 모드: 타이머·자동제출·세션복원·플래그) 둘 다 완성·main 병합·push·배포 완료(브랜치 삭제). 다음 = (1순위) 다음 CLF 콘텐츠(현재 2/19) → (2순위) 하위 프로젝트 #3(오답노트·약점리포트).**
 
-> 갱신: 2026-06-06 세션 3 (clf-t2-3 콘텐츠 배포 + 하위 프로젝트 #2 시험 모드 구현 완료 시점)
+> 갱신: 2026-06-06 세션 3 종료 (clf-t2-3 콘텐츠 + 하위 프로젝트 #2 시험 모드 main 병합·push·배포 완료 시점)
 
 ## 지금 어디에 있나
 - **라이브:** https://velkaressiablutkrone.github.io/aws-docs/ (GitHub Pages, `main` push 시 자동 배포)
@@ -19,11 +19,8 @@
 
 ## ▶ 다음 행동 (다음 세션 — 순서대로)
 
-> 직전 세션(3) 완료: **clf-t2-3 콘텐츠(IAM, 검증 7문항) main 배포** + **하위 프로젝트 #2(시험 모드: E3 타이머·자동제출·세션복원 + E4 플래그)** 구현(브랜치 `feat/clf-learning-loop-subproject-2`, subagent-driven, analyze·21테스트·web build green, 2단계 리뷰 통과).
+> 직전 세션(3) 완료: **clf-t2-3 콘텐츠(IAM, 검증 7문항)** + **하위 프로젝트 #2(시험 모드: E3 타이머·자동제출·세션복원 + E4 플래그)** — 둘 다 main 병합·push·**배포 완료**(피처 브랜치 삭제). subagent-driven 8 Task, analyze·21테스트·web build green, Task별 2단계 리뷰 + 최종 전체-브랜치 리뷰 통과(머지 SHA `281dff2`).
 > 설계/계획: `docs/designs/2026-06-06-clf-learning-loop-subproject-2-spec.md`, `docs/plans/2026-06-06-clf-learning-loop-subproject-2-plan.md`.
-
-**0순위 — 하위 프로젝트 #2 머지**
-- `feat/clf-learning-loop-subproject-2` → main 머지/PR(미완 시). 머지·push 시 시험 모드가 사이트에 노출.
 
 **1순위 — 다음 CLF Task 콘텐츠 생산 (진짜 병목)**
 - `clf-t2-1`/`t2-3` 템플릿 복제. 추천: 도메인 2 마무리 `clf-t2-2`(보안·거버넌스·컴플라이언스)/`clf-t2-4`(보안 구성요소), 이후 비중 큰 도메인 3(34%).
@@ -43,6 +40,8 @@
 - 커버리지 목표: CLF 19 Task × ≥5 = **≥95 verified** (스트레치 ~130)
 
 ## 열린 항목 / 주의
+- **#2 시험 모드 후속(비차단 · 리뷰 지적):** ① `QuizPage`도 "로드 에러 vs 빈 bank" 메시지 혼동(`ExamPage`엔 `snap.hasError` 분기 넣음 — 동일 적용 권장) · ② `quiz_widgets`의 기존 매직넘버(width:3·height:4·bottom:2) 토큰화 · ③ `ExamPage._load()` 복원/clear 분기는 페이지 레벨 테스트 없음(자산 결합 — 순수 로직 추출 시 가능) · ④ `AttemptRecord.mode`/`flaggedQuestionIds`는 #3까지 write-only(의도된 선행 계약, #3에서 소비).
+- **수동 스모크 미실행:** #2는 자동 테스트(21)·web build로만 검증. 권장: `flutter run -d chrome`로 시험 모드 직접 확인(타이머·새로고침 복원·자동제출·플래그 점프).
 - **SEO:** Flutter 캔버스라 한국어 검색 노출 약함. CLF 콘텐츠 완성 후 보완(메타/프리렌더/핵심 HTML 병행) — 지금은 불필요.
 - **SAA 자료(`D:\Download\files.zip`):** 본인이 만든 완성 SAA 코퍼스(27 학습문서 + Mock ~110 + 종합 325 + HTML 앱). **템플릿만 지금 차용, 콘텐츠는 CLF 합격 후.** 그 325 문항은 출처 기록 없는 비검증 초안 → SAA 단계에서 출처 앵커 재검증 필수.
 - **게이트:** CLF 1개 완성 우선. 12개 동시 진행 금지(메타데이터 수정은 예외).
