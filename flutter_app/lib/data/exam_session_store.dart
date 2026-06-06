@@ -20,7 +20,9 @@ class ExamSessionStore {
     }
   }
 
-  void save(ExamSession s) => _b.write(_key(s.examId), jsonEncode(s.toJson()));
+  void save(ExamSession session) =>
+      _b.write(_key(session.examId), jsonEncode(session.toJson()));
 
+  /// 빈 문자열 기록 = load에서 null 처리(KvBackend에 삭제 API 없음).
   void clear(String examId) => _b.write(_key(examId), '');
 }
