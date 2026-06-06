@@ -1,0 +1,201 @@
+{
+  "examGuideTaskId": "clf-t3-3",
+  "taskTitle": "컴퓨팅 서비스",
+  "domain": 3,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t3-3-q1",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "EC2 인스턴스 유형·가상 서버",
+      "difficulty": "foundational",
+      "stem": "한 회사가 운영체제 수준까지 제어할 수 있는, 크기 조절 가능한 가상 서버를 클라우드에서 실행하려 한다. 워크로드에 맞춰 CPU·메모리·스토리지의 조합(인스턴스 유형)을 선택하고 싶다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EC2",
+        "AWS Lambda",
+        "Amazon S3",
+        "Amazon CloudFront"
+      ],
+      "correct": 0,
+      "explanation": "Amazon EC2는 클라우드에서 온디맨드로 크기 조절 가능한 컴퓨팅 용량(가상 서버)을 제공합니다. 인스턴스 유형이 인스턴스의 하드웨어(컴퓨팅·메모리·네트워크·스토리지의 균형)를 결정하므로 워크로드에 맞춰 선택할 수 있고, 고객이 운영체제 등 인스턴스를 직접 제어합니다.",
+      "wrongExplanations": {
+        "1": "AWS Lambda는 서버를 관리하지 않고 코드를 실행하는 서버리스 서비스로, 고객이 운영체제 수준에서 제어하는 가상 서버를 제공하지 않습니다.",
+        "2": "Amazon S3는 객체 스토리지 서비스로, 가상 서버(컴퓨팅)가 아닙니다.",
+        "3": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 가상 서버를 실행하는 컴퓨팅 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EC2? — 크기 조절 가능한 컴퓨팅 용량(가상 서버), 인스턴스 유형이 하드웨어 결정",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q2",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "서버리스 컴퓨팅 (Lambda)",
+      "difficulty": "foundational",
+      "stem": "한 개발팀이 Amazon S3에 파일이 업로드되는 이벤트에 반응해 짧은 코드를 실행하려 한다. 서버를 프로비저닝하거나 관리하지 않고, 코드가 실제로 실행된 컴퓨팅 시간만큼만 비용을 내고 싶다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Lambda",
+        "Amazon EC2",
+        "Amazon EKS",
+        "Elastic Load Balancing"
+      ],
+      "correct": 0,
+      "explanation": "AWS Lambda는 서버를 관리하지 않고 코드를 실행하는 서버리스 컴퓨팅 서비스입니다. 이벤트(예: S3 업로드)에 반응해 코드를 실행하고, 서버·OS 유지보수와 용량 프로비저닝·자동 확장을 AWS가 처리하며, 사용한 컴퓨팅 시간만큼만 과금합니다.",
+      "wrongExplanations": {
+        "1": "Amazon EC2는 가상 서버로, 고객이 인스턴스를 프로비저닝·관리해야 하며 보통 상시 실행됩니다. 이벤트 기반으로 짧게 실행하고 사용한 시간만 과금하는 모델과는 다릅니다.",
+        "2": "Amazon EKS는 컨테이너용 관리형 Kubernetes 서비스로, 이벤트에 반응해 코드를 실행하는 서버리스 함수 서비스가 아닙니다.",
+        "3": "Elastic Load Balancing은 트래픽을 여러 대상에 분산하는 서비스로, 코드를 실행하는 컴퓨팅 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Lambda? — 서버 관리 없이 코드 실행, 자동 확장, 사용량 기반 과금",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q3",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "컨테이너 (EKS — 관리형 Kubernetes)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 표준 Kubernetes로 컨테이너 워크로드를 운영하려 하지만, Kubernetes 컨트롤 플레인을 직접 설치하고 운영하는 부담은 지고 싶지 않다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EKS",
+        "Amazon ECS",
+        "AWS Lambda",
+        "Amazon EC2"
+      ],
+      "correct": 0,
+      "explanation": "Amazon EKS(Elastic Kubernetes Service)는 완전관리형 Kubernetes 서비스로, Kubernetes 클러스터를 직접 설치·운영하는 복잡성을 없애 줍니다. EKS 표준에서는 AWS가 Kubernetes 컨트롤 플레인을 관리합니다.",
+      "wrongExplanations": {
+        "1": "Amazon ECS는 AWS의 완전관리형 컨테이너 오케스트레이션 서비스이지만 Kubernetes가 아닙니다. 표준 Kubernetes가 필요하면 EKS를 선택합니다.",
+        "2": "AWS Lambda는 서버리스 함수 서비스로, Kubernetes 클러스터를 운영하는 서비스가 아닙니다.",
+        "3": "Amazon EC2는 가상 서버로, 그 위에 직접 Kubernetes를 설치·운영할 수는 있으나 컨트롤 플레인 관리 부담을 덜어 주는 관리형 Kubernetes 서비스는 EKS입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EKS? — 완전관리형 Kubernetes, AWS가 컨트롤 플레인 관리",
+          "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q4",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "서버리스 컨테이너 (Fargate)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 컨테이너로 애플리케이션을 운영하되, 컨테이너를 실행할 Amazon EC2 인스턴스 클러스터를 프로비저닝하거나 관리하고 싶지 않다. Amazon ECS·EKS와 함께 사용하는 서버리스 컨테이너 컴퓨팅 엔진은?",
+      "options": [
+        "AWS Fargate",
+        "Amazon EC2",
+        "Amazon S3",
+        "AWS Lambda"
+      ],
+      "correct": 0,
+      "explanation": "AWS Fargate는 서버나 EC2 인스턴스 클러스터를 관리하지 않고 컨테이너를 실행하는 서버리스 컴퓨팅 엔진입니다. Amazon ECS·EKS와 함께 사용하며, 서버 유형 선택·확장 시점 결정·클러스터 패킹 최적화 같은 인프라 관리 부담을 없애 줍니다.",
+      "wrongExplanations": {
+        "1": "Amazon EC2는 고객이 직접 프로비저닝·관리하는 가상 서버로, 클러스터 관리를 없애 주는 서버리스 컨테이너 엔진이 아닙니다.",
+        "2": "Amazon S3는 객체 스토리지로, 컨테이너를 실행하는 컴퓨팅 엔진이 아닙니다.",
+        "3": "AWS Lambda는 서버리스 함수 서비스입니다. 컨테이너를 ECS·EKS와 함께 서버 관리 없이 실행하는 컴퓨팅 엔진은 Fargate입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Fargate — 서버·EC2 클러스터 관리 없이 컨테이너 실행, ECS·EKS와 함께 쓰는 서버리스 엔진",
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q5",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "탄력성 (EC2 Auto Scaling)",
+      "difficulty": "foundational",
+      "stem": "한 웹 애플리케이션의 트래픽이 시간대별로 크게 변동한다. 수요가 늘면 EC2 인스턴스를 자동으로 추가하고 수요가 줄면 제거해, 적절한 용량을 유지하면서 비용을 최적화하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EC2 Auto Scaling",
+        "Elastic Load Balancing",
+        "AWS Lambda",
+        "Amazon EKS"
+      ],
+      "correct": 0,
+      "explanation": "Amazon EC2 Auto Scaling은 애플리케이션 부하를 처리할 올바른 수의 EC2 인스턴스를 유지합니다. 정의한 조건(스케일링 정책)에 따라 수요가 늘면 인스턴스를 추가하고 줄면 제거해, 가용성을 유지하면서 비용을 절감합니다(탄력성).",
+      "wrongExplanations": {
+        "1": "Elastic Load Balancing은 들어오는 트래픽을 여러 인스턴스에 분산하는 서비스이지, 인스턴스의 수를 자동으로 늘리고 줄이는 서비스가 아닙니다(둘은 함께 쓰입니다).",
+        "2": "AWS Lambda는 서버리스 함수 서비스로, EC2 인스턴스 그룹의 수를 조절하는 것과는 다릅니다.",
+        "3": "Amazon EKS는 관리형 Kubernetes 서비스로, EC2 인스턴스 수를 수요에 맞춰 자동 조절하는 탄력성 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EC2 Auto Scaling? — 부하에 맞는 올바른 수의 인스턴스 유지, 조건에 따라 자동 추가/제거",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q6",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "로드 밸런서 (ELB)",
+      "difficulty": "foundational",
+      "stem": "한 애플리케이션이 여러 가용 영역의 여러 EC2 인스턴스에서 실행된다. 들어오는 애플리케이션 트래픽을 건강한 인스턴스들에 자동으로 분산해 가용성과 내결함성을 높이려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Elastic Load Balancing(ELB)",
+        "Amazon EC2 Auto Scaling",
+        "Amazon CloudFront",
+        "AWS Global Accelerator"
+      ],
+      "correct": 0,
+      "explanation": "Elastic Load Balancing은 들어오는 트래픽을 하나 이상의 가용 영역에 걸친 여러 대상(EC2 인스턴스 등)에 자동으로 분산합니다. 등록된 대상의 상태를 검사해 건강한 대상에만 트래픽을 보내므로 애플리케이션의 가용성과 내결함성이 높아집니다.",
+      "wrongExplanations": {
+        "1": "Amazon EC2 Auto Scaling은 인스턴스의 '수'를 자동으로 조절하는 서비스이지, 트래픽을 인스턴스들에 분산하는 서비스가 아닙니다(ELB와 함께 쓰입니다).",
+        "2": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 백엔드 EC2 인스턴스들 사이에서 애플리케이션 트래픽을 분산하는 로드 밸런서가 아닙니다.",
+        "3": "AWS Global Accelerator는 고정 IP와 글로벌 네트워크로 트래픽을 최적 리전 엔드포인트로 라우팅합니다. 한 애플리케이션의 여러 인스턴스에 트래픽을 분산하는 역할은 ELB입니다(Global Accelerator는 종종 로드 밸런서 앞단에서 함께 쓰입니다)."
+      },
+      "sources": [
+        {
+          "title": "What is Elastic Load Balancing? — 들어오는 트래픽을 여러 AZ의 여러 대상에 분산, 건강한 대상에만 라우팅, 가용성·내결함성 증가",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q7",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "컴퓨팅 관리 부담 (EC2 vs Lambda)",
+      "difficulty": "foundational",
+      "stem": "AWS Lambda와 Amazon EC2의 차이를 '서버 관리 부담' 관점에서 가장 정확하게 설명한 것은?",
+      "options": [
+        "Lambda는 서버를 관리하지 않고 코드를 실행하는 서버리스 서비스이고, EC2는 고객이 운영체제 등 가상 서버를 직접 관리한다",
+        "EC2는 서버리스여서 관리가 필요 없고, Lambda는 고객이 서버를 직접 관리한다",
+        "둘 다 고객이 직접 서버를 프로비저닝·관리해야 한다",
+        "Lambda는 컨테이너 오케스트레이션 서비스이고 EC2는 객체 스토리지 서비스다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Lambda는 서버리스 서비스로, 서버·OS 유지보수와 용량 프로비저닝·자동 확장을 AWS가 처리하고 고객은 코드만 책임집니다. 반면 Amazon EC2는 가상 서버를 제공하며 고객이 운영체제·확장 등 많은 부분을 직접 관리합니다(관리 부담의 양 끝).",
+      "wrongExplanations": {
+        "1": "반대로 설명했습니다. 서버리스로 관리가 필요 없는 쪽은 Lambda이고, 가상 서버를 직접 관리하는 쪽은 EC2입니다.",
+        "2": "Lambda는 고객이 서버를 관리하지 않습니다. 서버를 직접 관리하는 것은 EC2입니다.",
+        "3": "Lambda는 함수를 실행하는 서버리스 컴퓨팅이지 컨테이너 오케스트레이션 서비스가 아니며, EC2는 가상 서버이지 객체 스토리지가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Lambda? — 서버 관리 없이 코드 실행(서버리스)",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        },
+        {
+          "title": "What is Amazon EC2? — 고객이 제어하는 가상 서버(IaaS)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

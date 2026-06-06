@@ -57,11 +57,11 @@
 - **Knowledge:** 프로비저닝·운영 방식 / 서비스 접근 방식 / 배포 모델 / 연결 옵션
 - **Skills:** 프로그래밍 접근(API, SDK, CLI) vs 콘솔 vs IaC / 일회성 vs 반복 프로세스 / 배포 모델(클라우드·하이브리드·온프레미스) / 연결 옵션(VPN, Direct Connect, 공용 인터넷)
 
-### Task 3.2 — 글로벌 인프라 정의 `clf-t3-2` · 문서 ☐ · 문항 0/5
+### Task 3.2 — 글로벌 인프라 정의 `clf-t3-2` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** 리전·AZ·엣지 로케이션 / 고가용성 / 멀티 리전 / Wavelength·Local Zones
 - **Skills:** 리전-AZ-엣지 관계 / 멀티 AZ 고가용성 / AZ는 단일 장애점 비공유 / 멀티 리전 사용 시점(DR, 비즈니스 연속성, 지연시간, 데이터 주권) / 엣지의 이점(CloudFront, Global Accelerator)
 
-### Task 3.3 — 컴퓨팅 서비스 식별 `clf-t3-3` · 문서 ☐ · 문항 0/5
+### Task 3.3 — 컴퓨팅 서비스 식별 `clf-t3-3` · 문서 ☑ · 문항 7/7 ✅
 - **Skills:** EC2 인스턴스 유형 용도(컴퓨팅/스토리지 최적화) / 컨테이너(ECS, EKS) / 서버리스(Fargate, Lambda) / Auto Scaling=탄력성 / 로드 밸런서 목적
 
 ### Task 3.4 — 데이터베이스 서비스 식별 `clf-t3-4` · 문서 ☐ · 문항 0/5
@@ -103,9 +103,9 @@
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
-| 3 Technology & Services | 34% | 8 | 0/8 | 0 | ≥40 |
+| 3 Technology & Services | 34% | 8 | 2/8 | 13 | ≥40 |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **4/19** | **27** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **6/19** | **40** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -135,3 +135,10 @@
   - 규율: 공식 AWS 문서 16종을 실제 페치해 사실 대조(verified 게이트 honor). 독립 서브에이전트 **AI 역대조 = t2-2 9/9 + t2-4 6/6 CORRECT, 강제 수정 0건**(t2-2 q5 출처 1건 선택 보강만). 발견·정정: Security Hub→CSPM 리네이밍 병기, Audit Manager '신규 고객 등록 중단' 각주.
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 통과 / `flutter build web --release --base-href /aws-docs/` 성공(exit 0).
   - 커버리지: **2/19 → 4/19 Task, 검증 문항 12 → 27. 도메인 2(보안·규정 준수, 30%) 4/4 완성.**
+
+- **2026-06-06 (세션 5) — 다섯 번째·여섯 번째 verified 배치: `clf-t3-2`(글로벌 인프라, 6문항) + `clf-t3-3`(컴퓨팅, 7문항) → 도메인 3(34%) 착수(2/8).**
+  - 산출물: `t3-2.md`+`t3-2.questions.json`(6), `t3-3.md`+`t3-3.questions.json`(7), `content_index.dart` 2줄 등록.
+  - 커버: t3-2 리전·AZ·엣지 관계 · 멀티AZ 고가용성 · 리전 격리/데이터 주권 · CloudFront(CDN 캐싱) vs Global Accelerator(고정 IP 라우팅) · Local Zones/Wavelength/Outposts. t3-3 EC2(가상 서버·인스턴스 유형) · ECS vs EKS(Kubernetes) · 서버리스(Lambda 함수/Fargate 컨테이너) · Auto Scaling(탄력성) · ELB(분산, ALB L7/NLB L4).
+  - 규율: 공식 AWS 문서 11종 실페치 대조. 독립 서브에이전트 역대조 **t3-2 6/6 + t3-3 7/7 CORRECT, 정식 문항 수정 0건**(t3-2 학습문서 자가점검 "한 자릿수 ms" 과장만 "저지연"으로 완화).
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **4/19 → 6/19 Task, 검증 문항 27 → 40. 도메인 3(클라우드 기술·서비스, 34%) 2/8 착수.**

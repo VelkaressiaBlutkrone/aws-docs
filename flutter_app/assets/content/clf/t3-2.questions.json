@@ -1,0 +1,170 @@
+{
+  "examGuideTaskId": "clf-t3-2",
+  "taskTitle": "글로벌 인프라",
+  "domain": 3,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t3-2-q1",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "멀티 AZ 고가용성",
+      "difficulty": "foundational",
+      "stem": "한 회사가 단일 데이터센터(위치) 수준의 장애가 발생해도 웹 애플리케이션이 계속 가용하도록 설계하려 한다. 하나의 AWS 리전 안에서 고가용성을 확보하는 가장 적절한 방법은?",
+      "options": [
+        "여러 가용 영역(AZ)에 인스턴스를 분산 배치한다",
+        "하나의 가용 영역 안에 인스턴스를 여러 개 띄운다",
+        "단일 인스턴스를 더 큰 인스턴스 유형으로 교체한다",
+        "모든 리소스를 하나의 엣지 로케이션에 배치한다"
+      ],
+      "correct": 0,
+      "explanation": "여러 가용 영역(AZ)에 인스턴스를 분산하면 한 AZ(위치)에 장애가 발생해도 다른 AZ의 인스턴스가 요청을 처리할 수 있습니다. AZ는 서로 격리돼 있어 한 위치의 장애가 다른 AZ로 번지지 않으므로, 이것이 한 리전 안에서 고가용성을 확보하는 기본 방법입니다.",
+      "wrongExplanations": {
+        "1": "같은 AZ 안에 인스턴스를 여러 개 두는 것은 그 AZ 자체에 장애가 나면 모두 영향을 받으므로 단일 위치 장애를 견디지 못합니다.",
+        "2": "인스턴스를 더 크게 만들어도 여전히 하나의 위치에 있는 단일 장애점입니다. 용량은 늘지만 가용성은 높아지지 않습니다.",
+        "3": "엣지 로케이션은 콘텐츠를 사용자 가까이 캐시·전달하는 거점으로, 애플리케이션 인스턴스를 실행해 고가용성을 확보하는 용도가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Regions and Zones — 여러 AZ에 EC2를 띄워 단일 위치 장애로부터 보호",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-2-q2",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "리전 선택 (데이터 주권) / 리전 격리",
+      "difficulty": "foundational",
+      "stem": "한 기업이 규제 때문에 고객 데이터를 특정 국가의 지리적 경계 안에만 저장해야 한다. AWS 글로벌 인프라에서 이 데이터 주권 요건을 충족하는 방법으로 옳은 것은?",
+      "options": [
+        "데이터를 저장할, 해당 국가에 위치한 리전을 선택한다",
+        "여러 가용 영역을 사용하면 데이터 위치가 자동으로 보장된다",
+        "엣지 로케이션을 그 국가에 추가하면 데이터가 거기에 저장된다",
+        "리전은 리소스를 자동으로 복제하므로 위치를 신경 쓸 필요가 없다"
+      ],
+      "correct": 0,
+      "explanation": "리전은 서로 격리된 별개의 지리적 영역이므로, 데이터를 보관해야 하는 국가에 위치한 리전을 선택해 그 안에 리소스를 두면 데이터 주권 요건을 충족합니다. 리전은 서로 격리돼 있고 리소스는 리전 간에 자동으로 복제되지 않습니다.",
+      "wrongExplanations": {
+        "1": "가용 영역은 한 리전 안의 격리된 위치로 고가용성을 위한 것이며, 데이터가 어느 국가에 저장되는지를 결정하는 것은 리전 선택입니다.",
+        "2": "엣지 로케이션은 콘텐츠를 캐시·전달하는 거점이지 데이터의 영구 저장 위치를 규제에 맞게 한정하는 수단이 아닙니다.",
+        "3": "리전은 서로 격리돼 있으며 AWS는 리소스를 리전 간에 자동 복제하지 않습니다. 따라서 데이터를 둘 리전을 직접 선택해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Regions and Zones — 리전은 격리된 지리적 영역, 리소스는 리전 간 자동 복제 안 됨",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-2-q3",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "리전·AZ·엣지 관계",
+      "difficulty": "foundational",
+      "stem": "AWS 글로벌 인프라에서 '가용 영역(Availability Zone)'을 가장 정확하게 설명한 것은?",
+      "options": [
+        "한 리전 안의 여러 격리된 위치로, 인스턴스를 분산하면 단일 위치 장애로부터 보호된다",
+        "서로 격리된 별개의 지리적 영역으로, 보통 도시나 국가 단위로 구분된다",
+        "사용자와 가까운 곳에서 콘텐츠를 캐시해 전달하는 거점이다",
+        "고객의 온프레미스 데이터센터에 설치하는 AWS 관리형 하드웨어다"
+      ],
+      "correct": 0,
+      "explanation": "가용 영역(AZ)은 각 리전 안에 있는 여러 개의 격리된 위치입니다. 여러 AZ에 인스턴스를 분산하면 한 AZ(위치)의 장애로부터 애플리케이션을 보호할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "서로 격리된 별개의 '지리적 영역'은 리전(Region)의 설명입니다. AZ는 한 리전 '안의' 격리된 위치입니다.",
+        "2": "사용자 가까이 콘텐츠를 캐시·전달하는 거점은 엣지 로케이션입니다.",
+        "3": "고객 온프레미스에 설치하는 AWS 관리형 인프라는 AWS Outposts입니다."
+      },
+      "sources": [
+        {
+          "title": "Regions and Zones — AZ는 리전 내 다수의 격리된 위치",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-2-q4",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "엣지 이점 (CloudFront — CDN)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 전 세계 사용자에게 이미지와 웹 페이지 같은 정적·동적 콘텐츠를 낮은 지연으로 전달하기 위해, 콘텐츠를 사용자와 가까운 엣지 로케이션에 캐시하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon CloudFront",
+        "AWS Global Accelerator",
+        "Amazon EC2",
+        "AWS Outposts"
+      ],
+      "correct": 0,
+      "explanation": "Amazon CloudFront는 정적·동적 웹 콘텐츠의 배포 속도를 높이는 콘텐츠 전송 네트워크(CDN)입니다. 전 세계 엣지 로케이션 네트워크를 통해 콘텐츠를 전달하며, 사용자 요청을 가장 낮은 지연의 엣지로 라우팅하고 그곳에 콘텐츠를 캐시해 성능을 높입니다.",
+      "wrongExplanations": {
+        "1": "AWS Global Accelerator는 고정 IP와 AWS 글로벌 네트워크로 트래픽을 최적 엔드포인트로 라우팅하는 서비스로, 콘텐츠를 엣지에 캐시하지 않습니다.",
+        "2": "Amazon EC2는 가상 서버(컴퓨팅)로, 콘텐츠를 전 세계 엣지에 캐시해 전달하는 CDN이 아닙니다.",
+        "3": "AWS Outposts는 AWS 인프라를 온프레미스로 확장하는 서비스로, 글로벌 콘텐츠 캐싱과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon CloudFront? — 정적/동적 웹 콘텐츠를 엣지 로케이션 네트워크로 저지연 전송하는 CDN",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-2-q5",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "엣지 이점 (Global Accelerator vs CloudFront)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 TCP/UDP 기반 멀티플레이어 게임 서버를 운영한다. 변하지 않는 고정 IP 주소를 진입점으로 제공하고, AWS 글로벌 네트워크를 통해 트래픽을 가장 가까운 건강한 리전 엔드포인트로 라우팅하려 한다(콘텐츠 캐싱은 필요 없음). 가장 적합한 서비스는?",
+      "options": [
+        "AWS Global Accelerator",
+        "Amazon CloudFront",
+        "Amazon Route 53",
+        "가용 영역(Availability Zone)"
+      ],
+      "correct": 0,
+      "explanation": "AWS Global Accelerator는 정적(애니캐스트) IP 주소를 고정 진입점으로 제공하고, AWS 글로벌 네트워크를 통해 트래픽을 health와 클라이언트 위치 기반으로 최적의 리전 엔드포인트(ALB·NLB·EC2·EIP)로 라우팅합니다. 콘텐츠를 캐시하지 않고 경로를 최적화하므로 TCP/UDP 기반 애플리케이션에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 고정 IP 진입점 제공과 비-HTTP(TCP/UDP) 트래픽 라우팅이 주목적이 아닙니다.",
+        "2": "Amazon Route 53은 DNS 웹 서비스로 도메인 이름을 IP로 해석해 라우팅하지만, 고정 애니캐스트 IP 진입점을 두고 AWS 글로벌 네트워크로 패킷을 가속·라우팅하는 Global Accelerator와는 다릅니다.",
+        "3": "가용 영역은 인프라 단위(리전 안의 격리된 위치)이지, 고정 IP로 트래픽을 라우팅하는 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Global Accelerator? — 정적 애니캐스트 IP, AWS 글로벌 네트워크로 최적 리전 엔드포인트 라우팅",
+          "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-2-q6",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "근접·확장 인프라 (Local Zones vs Wavelength vs Outposts)",
+      "difficulty": "foundational",
+      "stem": "한 미디어 회사가 특정 대도시의 사용자에게 실시간 영상 편집 워크스테이션을 매우 낮은 지연으로 제공하려 한다. 컴퓨팅·스토리지를 그 인구 밀집지 가까이 배치하는 AWS 인프라는?",
+      "options": [
+        "AWS Local Zones",
+        "AWS Wavelength",
+        "AWS Outposts",
+        "엣지 로케이션(Edge Location)"
+      ],
+      "correct": 0,
+      "explanation": "AWS Local Zones는 컴퓨팅·스토리지·데이터베이스 등 일부 AWS 서비스를 대규모 인구·산업 중심지 가까이에 배치해, 그 지역 사용자에게 저지연 액세스를 제공합니다. 실시간 게임·라이브 스트리밍·AR/VR·가상 워크스테이션 같은 지연에 민감한 애플리케이션에 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Wavelength는 통신사 5G 네트워크의 엣지에 AWS 컴퓨팅·스토리지를 배포해 5G 모바일 기기에 초저지연을 제공합니다. 대도시 일반 사용자 근접 배치와는 초점이 다릅니다.",
+        "2": "AWS Outposts는 AWS 인프라를 고객의 온프레미스 데이터센터로 확장하는 서비스로, 인구 밀집지에 AWS가 배치한 위치가 아니라 고객 시설 안에 둡니다.",
+        "3": "엣지 로케이션은 콘텐츠를 캐시·전달하는 거점으로, 컴퓨팅·스토리지 워크로드를 실행하는 인프라가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Local Zones? — 컴퓨팅·스토리지를 인구·산업 중심지 가까이 배치해 저지연 제공",
+          "url": "https://docs.aws.amazon.com/local-zones/latest/ug/what-is-aws-local-zones.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}
