@@ -55,9 +55,9 @@ void main() {
   });
 
   test('examDurationSec: CLF 90분/65문항 페이스 비례', () {
-    // 90*60/65 ≈ 83.08s/문항 → 7문항 ≈ 581s
+    // 90*60/65 ≈ 83.08s/문항 → 7문항 = 581.54 → round 582
     expect(examDurationSec(durationMinutes: 90, scored: 50, unscored: 15, count: 7),
-        581);
+        582);
     // 메타 null → 폴백 84s/문항
     expect(examDurationSec(durationMinutes: null, scored: null, unscored: null, count: 5),
         420);

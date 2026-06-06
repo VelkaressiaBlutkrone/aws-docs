@@ -78,9 +78,9 @@ int examDurationSec({
   required int count,
 }) {
   if (durationMinutes == null && scored == null && unscored == null) {
-    return (84.0 * count).floor();
+    return (84.0 * count).round();
   }
   final total = (scored ?? 50) + (unscored ?? 15);
   final perQ = total > 0 ? (durationMinutes ?? 90) * 60 / total : 84.0;
-  return (perQ * count).floor();
+  return (perQ * count).round();
 }
