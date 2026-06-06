@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../models/attempt_record.dart';
@@ -61,7 +62,7 @@ class QuizPage extends StatelessWidget {
   }
 }
 
-/// 모델 주입식 퀴즈 러너(테스트 대상).
+/// 모델 주입식 연습 러너(즉시 공개). 테스트 대상.
 class QuizView extends StatefulWidget {
   const QuizView({
     super.key,
@@ -113,7 +114,12 @@ class _QuizViewState extends State<QuizView> {
 
   @override
   Widget build(BuildContext context) {
-    if (_finished) return _Results(bank: widget.bank, picked: _picked);
+    if (_finished) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.all(Gap.xl),
+        child: ResultsView(bank: widget.bank, picked: _picked),
+      );
+    }
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final q = _qs[_index];
@@ -125,25 +131,24 @@ class _QuizViewState extends State<QuizView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('문항 ${_index + 1} / ${_qs.length}',
-              style: t.labelSmall),
+          Text('문항 ${_index + 1} / ${_qs.length}', style: t.labelSmall),
           const SizedBox(height: Gap.sm),
           Text(q.stem, style: t.titleLarge),
           const SizedBox(height: Gap.lg),
           for (var k = 0; k < q.options.length; k++)
-            _OptionTile(
+            OptionTile(
               text: q.options[k],
               selected: picked == k,
               state: !revealed
-                  ? _OptState.idle
+                  ? OptState.idle
                   : k == q.correct
-                      ? _OptState.correct
-                      : (picked == k ? _OptState.wrong : _OptState.idle),
+                      ? OptState.correct
+                      : (picked == k ? OptState.wrong : OptState.idle),
               onTap: revealed ? null : () => setState(() => _picked[_index] = k),
             ),
           const SizedBox(height: Gap.lg),
           if (revealed) ...[
-            _Explain(
+            ExplainBox(
                 bg: c.accentWeak,
                 bar: c.accent,
                 label: '해설',
@@ -153,14 +158,14 @@ class _QuizViewState extends State<QuizView> {
                 q.wrongExplanations[picked] != null)
               Padding(
                 padding: const EdgeInsets.only(top: Gap.sm),
-                child: _Explain(
+                child: ExplainBox(
                     bg: c.wrongWeak,
                     bar: c.wrong,
                     label: '왜 아닌가',
                     text: q.wrongExplanations[picked]!),
               ),
             const SizedBox(height: Gap.lg),
-            _PrimaryButton(
+            PrimaryButton(
               label: _index < _qs.length - 1 ? '다음' : '결과 보기',
               onTap: () {
                 if (_index < _qs.length - 1) {
@@ -171,236 +176,13 @@ class _QuizViewState extends State<QuizView> {
               },
             ),
           ] else
-            _PrimaryButton(
+            PrimaryButton(
               label: '확인',
               onTap: picked == null
                   ? null
                   : () => setState(() => _revealed.add(_index)),
             ),
         ],
-      ),
-    );
-  }
-}
-
-enum _OptState { idle, correct, wrong }
-
-class _OptionTile extends StatelessWidget {
-  const _OptionTile(
-      {required this.text,
-      required this.selected,
-      required this.state,
-      required this.onTap});
-  final String text;
-  final bool selected;
-  final _OptState state;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    late Color border;
-    late Color bg;
-    switch (state) {
-      case _OptState.correct:
-        border = c.correct;
-        bg = c.correctWeak;
-      case _OptState.wrong:
-        border = c.wrong;
-        bg = c.wrongWeak;
-      case _OptState.idle:
-        border = selected ? c.accent : c.border;
-        bg = selected ? c.accentWeak : c.surface;
-    }
-    return Padding(
-      padding: const EdgeInsets.only(bottom: Gap.sm),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(Radii.md),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(Gap.md),
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: border, width: selected ? 2 : 1),
-          ),
-          child: Text(text,
-              style: TextStyle(fontSize: 15, height: 1.5, color: c.text)),
-        ),
-      ),
-    );
-  }
-}
-
-class _Explain extends StatelessWidget {
-  const _Explain(
-      {required this.bg,
-      required this.bar,
-      required this.label,
-      required this.text});
-  final Color bg;
-  final Color bar;
-  final String label;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(Gap.md),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(Radii.sm),
-        border: Border(left: BorderSide(color: bar, width: 3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label,
-              style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, color: bar)),
-          const SizedBox(height: 4),
-          Text(text, style: TextStyle(fontSize: 15, height: 1.6, color: c.text)),
-        ],
-      ),
-    );
-  }
-}
-
-class _Results extends StatelessWidget {
-  const _Results({required this.bank, required this.picked});
-  final QuestionBank bank;
-  final Map<int, int> picked;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    final t = Theme.of(context).textTheme;
-    final qs = bank.questions;
-    var correct = 0;
-    for (var k = 0; k < qs.length; k++) {
-      if (picked[k] == qs[k].correct) correct++;
-    }
-    final pct = qs.isEmpty ? 0 : (correct * 100 / qs.length).round();
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(Gap.xl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('결과', style: t.headlineSmall),
-          const SizedBox(height: Gap.sm),
-          Text('$correct / ${qs.length}  ·  $pct%',
-              style: t.displayMedium?.copyWith(color: c.accent)),
-          const SizedBox(height: Gap.xl),
-          for (var k = 0; k < qs.length; k++)
-            _ResultCard(index: k, q: qs[k], pickedIndex: picked[k]),
-        ],
-      ),
-    );
-  }
-}
-
-/// 결과 화면의 문항별 복기 카드: stem + 내 답/정답 + 해설 재표시(스펙 §9.3).
-class _ResultCard extends StatelessWidget {
-  const _ResultCard(
-      {required this.index, required this.q, required this.pickedIndex});
-  final int index;
-  final Question q;
-  final int? pickedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    final t = Theme.of(context).textTheme;
-    final isCorrect = pickedIndex == q.correct;
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: Gap.md),
-      padding: const EdgeInsets.all(Gap.md),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radii.md),
-        border: Border.all(color: c.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(isCorrect ? Icons.check_circle : Icons.cancel,
-                  size: 18, color: isCorrect ? c.correct : c.wrong),
-              const SizedBox(width: Gap.sm),
-              Expanded(
-                  child: Text('${index + 1}. ${q.stem}',
-                      style: t.bodyLarge
-                          ?.copyWith(fontSize: 15, fontWeight: FontWeight.w700))),
-            ],
-          ),
-          const SizedBox(height: Gap.sm),
-          if (pickedIndex != null && !isCorrect)
-            _answerLine(context, '내 답', q.options[pickedIndex!], c.wrong),
-          _answerLine(context, '정답', q.options[q.correct], c.correct),
-          const SizedBox(height: Gap.xs),
-          Text(q.explanation,
-              style: t.bodyMedium?.copyWith(color: c.text, height: 1.6)),
-          if (pickedIndex != null &&
-              !isCorrect &&
-              q.wrongExplanations[pickedIndex!] != null) ...[
-            const SizedBox(height: Gap.xs),
-            Text(q.wrongExplanations[pickedIndex!]!,
-                style: t.bodyMedium?.copyWith(color: c.wrong, height: 1.6)),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _answerLine(
-      BuildContext context, String label, String text, Color color) {
-    final c = context.c;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Text.rich(TextSpan(children: [
-        TextSpan(
-            text: '$label  ',
-            style: TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w800, color: color)),
-        TextSpan(
-            text: text,
-            style: TextStyle(fontSize: 14, color: c.text, height: 1.5)),
-      ])),
-    );
-  }
-}
-
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({required this.label, required this.onTap});
-  final String label;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    final enabled = onTap != null;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(Radii.sm),
-      child: Container(
-        height: 44,
-        padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: enabled ? c.accent : c.surface2,
-          borderRadius: BorderRadius.circular(Radii.sm),
-        ),
-        child: Text(label,
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                color: enabled ? c.onAccent : c.textFaint)),
       ),
     );
   }
