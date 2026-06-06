@@ -30,12 +30,9 @@
 - **제목:** Pretendard 700, letter-spacing -0.01~-0.02em
 - **데이터 / 표 / 숫자:** Pretendard + `font-variant-numeric: tabular-nums` (점수·문항번호·진도 정렬)
 - **코드 / 식별자:** JetBrains Mono — ARN, CLI, `s3://`, IAM 정책 등 AWS 콘텐츠에 필수. 14px / 1.7
-- **로딩 (CDN, SRI 고정):**
-  - Pretendard: `https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css`
-    `integrity="sha384-uGEvnSEpW2nM9xJFsrxrwakwrk9QdDTQIBJh0hVMu90OaVyMAMpAK1rIn0/Kh1/k"` crossorigin
-  - JetBrains Mono: `https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5.1.1/index.css`
-    `integrity="sha384-8X0qYYsBdYZ9bk70hw4HTDsWIeMfYCwYmUcsezfamiqI024ZDkBKbaTx68Kwh6wx"` crossorigin
-  - 모든 외부 CSS는 SRI integrity + crossorigin 필수
+- **로딩 (로컬 번들 — 오프라인·무추적):** 폰트는 외부 CDN이 아니라 앱에 번들된 OTF/TTF 에셋으로 로드한다.
+  - Pretendard(Regular/Medium/Bold/ExtraBold OTF) · JetBrainsMono(Regular/Medium/Bold TTF): `flutter_app/assets/fonts/`에 두고 `flutter_app/pubspec.yaml`의 `fonts:`로 등록. `app_theme.dart`가 `Pretendard`/`JetBrainsMono` 패밀리로 참조.
+  - 근거: GitHub Pages 정적 배포 + 한국어 학습 제품 — CDN 의존·외부 추적·SRI 관리 비용을 피하고 오프라인에서도 렌더. (번들 목록의 단일 진실은 pubspec.)
 - **font stack:**
   - sans: `"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif`
   - mono: `"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace`
