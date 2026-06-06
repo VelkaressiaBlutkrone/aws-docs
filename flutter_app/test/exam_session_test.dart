@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/models/exam_session.dart';
 import 'package:aws_docs/models/question.dart';
+import 'package:aws_docs/data/exam_session_store.dart';
+import 'package:aws_docs/data/local_kv.dart';
 
 QuestionBank _bank(List<String> ids) => QuestionBank(
       examGuideTaskId: 'clf-t2-3',
@@ -69,5 +71,36 @@ void main() {
     // 메타 null → 폴백 84s/문항
     expect(examDurationSec(durationMinutes: null, scored: null, unscored: null, count: 5),
         420);
+  });
+
+  ExamSession session({bool submitted = false}) => ExamSession(
+        examId: 'exam:clf-t2-3',
+        certId: 'CLF-C02',
+        taskId: 'clf-t2-3',
+        startedAtIso: '2026-06-06T00:00:00.000',
+        durationSec: 581,
+        index: 1,
+        picked: const {0: 1},
+        flagged: const [1],
+        bankFingerprint: '7:a',
+        submitted: submitted,
+      );
+
+  test('ExamSessionStore save→load 동일, clear 후 null', () {
+    final store = ExamSessionStore(backend: MemoryBackend());
+    expect(store.load('exam:clf-t2-3'), isNull);
+    store.save(session());
+    final loaded = store.load('exam:clf-t2-3');
+    expect(loaded, isNotNull);
+    expect(loaded!.index, 1);
+    expect(loaded.picked, {0: 1});
+    store.clear('exam:clf-t2-3');
+    expect(store.load('exam:clf-t2-3'), isNull);
+  });
+
+  test('손상 데이터는 null로 무시', () {
+    final b = MemoryBackend()
+      ..write('awsdocs.examSession.v1:exam:clf-t2-3', '{not json');
+    expect(ExamSessionStore(backend: b).load('exam:clf-t2-3'), isNull);
   });
 }
