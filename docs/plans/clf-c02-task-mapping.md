@@ -64,14 +64,14 @@
 ### Task 3.3 — 컴퓨팅 서비스 식별 `clf-t3-3` · 문서 ☑ · 문항 7/7 ✅
 - **Skills:** EC2 인스턴스 유형 용도(컴퓨팅/스토리지 최적화) / 컨테이너(ECS, EKS) / 서버리스(Fargate, Lambda) / Auto Scaling=탄력성 / 로드 밸런서 목적
 
-### Task 3.4 — 데이터베이스 서비스 식별 `clf-t3-4` · 문서 ☐ · 문항 0/5
+### Task 3.4 — 데이터베이스 서비스 식별 `clf-t3-4` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** DB 서비스 / DB 마이그레이션
 - **Skills:** EC2 호스팅 vs 관리형 DB / 관계형(RDS, Aurora) / NoSQL(DynamoDB) / 인메모리 / 마이그레이션 도구(DMS, SCT)
 
 ### Task 3.5 — 네트워크 서비스 식별 `clf-t3-5` · 문서 ☐ · 문항 0/5
 - **Skills:** VPC 구성요소(서브넷, 게이트웨이) / VPC 보안(NACL, 보안 그룹) / Route 53 목적 / 엣지 서비스(CloudFront, Global Accelerator) / 연결 옵션(VPN, Direct Connect)
 
-### Task 3.6 — 스토리지 서비스 식별 `clf-t3-6` · 문서 ☐ · 문항 0/5
+### Task 3.6 — 스토리지 서비스 식별 `clf-t3-6` · 문서 ☑ · 문항 7/7 ✅
 - **Skills:** 객체 스토리지 용도 / S3 스토리지 클래스 차이 / 블록 스토리지(EBS, 인스턴스 스토어) / 파일 서비스(EFS, FSx) / 캐시 파일 시스템(Storage Gateway) / 수명 주기 정책 / AWS Backup
 
 ### Task 3.7 — AI/ML·분석 서비스 식별 `clf-t3-7` · 문서 ☐ · 문항 0/5
@@ -103,9 +103,9 @@
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
-| 3 Technology & Services | 34% | 8 | 2/8 | 13 | ≥40 |
+| 3 Technology & Services | 34% | 8 | 4/8 | 26 | ≥40 |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **6/19** | **40** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **8/19** | **53** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -142,3 +142,10 @@
   - 규율: 공식 AWS 문서 11종 실페치 대조. 독립 서브에이전트 역대조 **t3-2 6/6 + t3-3 7/7 CORRECT, 정식 문항 수정 0건**(t3-2 학습문서 자가점검 "한 자릿수 ms" 과장만 "저지연"으로 완화).
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
   - 커버리지: **4/19 → 6/19 Task, 검증 문항 27 → 40. 도메인 3(클라우드 기술·서비스, 34%) 2/8 착수.**
+
+- **2026-06-06 (세션 6) — 일곱·여덟 번째 verified 배치: `clf-t3-6`(스토리지, 7문항) + `clf-t3-4`(데이터베이스, 6문항) → 도메인 3 4/8.**
+  - 산출물: `t3-6.md`+`t3-6.questions.json`(7), `t3-4.md`+`t3-4.questions.json`(6), `content_index.dart` 2줄 등록.
+  - 커버: t3-6 객체(S3)·블록(EBS)·파일(EFS/FSx) 구분 · S3 클래스(Intelligent-Tiering vs Glacier Deep Archive) · Lifecycle · Storage Gateway(하이브리드) · AWS Backup(중앙 백업). t3-4 EC2 vs RDS 책임 · RDS/Aurora(관계형) · DynamoDB(NoSQL) · ElastiCache(인메모리) · DMS/SCT(마이그레이션).
+  - 규율: 공식 AWS 문서 11종 실페치 대조. 독립 서브에이전트 역대조 **t3-6 7/7 + t3-4 6/6 CORRECT, 수정 0건**.
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **6/19 → 8/19 Task, 검증 문항 40 → 53. 도메인 3 4/8.**
