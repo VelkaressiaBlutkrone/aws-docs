@@ -27,7 +27,6 @@ class ExamView extends StatefulWidget {
     this.initialPicked = const {},
     this.initialFlagged = const {},
     this.restored = false,
-    this.passingHintPct = 70,
     this.onChanged,
     this.onFinished,
     this.onExit,
@@ -43,7 +42,6 @@ class ExamView extends StatefulWidget {
   final Map<int, int> initialPicked;
   final Set<int> initialFlagged;
   final bool restored;
-  final int passingHintPct;
   final void Function(ExamSession)? onChanged;
   final void Function(AttemptRecord)? onFinished;
   final VoidCallback? onExit;
@@ -310,7 +308,7 @@ class _ExamViewState extends State<ExamView> {
             picked: _picked,
             flagged: _flagged,
             subtitle:
-                '실전 합격 기준 ≈ ${widget.passingHintPct}% · 플래그 ${_flagged.length}개',
+                '플래그 ${_flagged.length}개 · 실제 합격선은 1000점 만점 환산 700점(정답률과 다름)',
           ),
           const SizedBox(height: Gap.lg),
           if (widget.onExit != null)
