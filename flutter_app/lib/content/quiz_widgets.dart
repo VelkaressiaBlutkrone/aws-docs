@@ -86,7 +86,7 @@ class ExplainBox extends StatelessWidget {
           Text(label,
               style: TextStyle(
                   fontSize: 12, fontWeight: FontWeight.w800, color: bar)),
-          const SizedBox(height: 4),
+          const SizedBox(height: Gap.xs),
           Text(text, style: TextStyle(fontSize: 15, height: 1.6, color: c.text)),
         ],
       ),
@@ -244,7 +244,7 @@ class ResultCard extends StatelessWidget {
       BuildContext context, String label, String text, Color color) {
     final c = context.c;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.only(bottom: Gap.xs2),
       child: Text.rich(TextSpan(children: [
         TextSpan(
             text: '$label  ',
