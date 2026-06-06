@@ -69,10 +69,14 @@ class _CertExamPageState extends State<CertExamPage> {
 
     // 복원 가능한 진행 세션?
     final existing = _store.load(_examId);
-    List<Question>? restored;
+    _Restorable? restorable;
     if (existing != null && !existing.submitted) {
-      restored = restoreOrdered(existing.questionIds, byId);
-      if (restored == null) _store.clear(_examId); // 개정/불일치 폐기
+      final restored = restoreOrdered(existing.questionIds, byId);
+      if (restored == null) {
+        _store.clear(_examId); // 개정/불일치 폐기
+      } else {
+        restorable = _Restorable(existing, restored);
+      }
     }
 
     return _MockLoad(
@@ -80,8 +84,7 @@ class _CertExamPageState extends State<CertExamPage> {
       weights: weights,
       overview: overview,
       total: all.length,
-      existing: restored == null ? null : existing,
-      restoredQuestions: restored,
+      restorable: restorable,
     );
   }
 
@@ -106,9 +109,8 @@ class _CertExamPageState extends State<CertExamPage> {
     setState(() => _running = _RunParams.fresh(sampled, startedAt, durationSec));
   }
 
-  void _resume(_MockLoad d) {
-    setState(() =>
-        _running = _RunParams.restored(d.existing!, d.restoredQuestions!));
+  void _resume(_Restorable r) {
+    setState(() => _running = _RunParams.restored(r.session, r.questions));
   }
 
   @override
@@ -189,6 +191,7 @@ class _CertExamPageState extends State<CertExamPage> {
             60)
         .round();
     final pass = d.overview?.passingScore;
+    final restorable = d.restorable;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 560),
@@ -209,11 +212,11 @@ class _CertExamPageState extends State<CertExamPage> {
                 _infoRow(c, t, '합격선', '$pass / 1000 (정답률과 다름)'),
               _infoRow(c, t, '도메인 비중', _weightLabel(d.weights)),
               const SizedBox(height: Gap.xl),
-              if (d.restoredQuestions != null) ...[
+              if (restorable != null) ...[
                 SizedBox(
                     width: 220,
-                    child:
-                        PrimaryButton(label: '이어서 풀기', onTap: () => _resume(d))),
+                    child: PrimaryButton(
+                        label: '이어서 풀기', onTap: () => _resume(restorable))),
                 const SizedBox(height: Gap.sm),
                 InkWell(
                   onTap: () => _startFresh(d),
@@ -259,6 +262,14 @@ class _CertExamPageState extends State<CertExamPage> {
   }
 }
 
+/// 복원 가능한 진행 세션 — 세션과 그에 맞춰 정렬 복원된 문항은 항상 함께 존재한다.
+/// (둘 중 하나만 있는 상태를 타입으로 배제.)
+class _Restorable {
+  const _Restorable(this.session, this.questions);
+  final ExamSession session;
+  final List<Question> questions;
+}
+
 /// 로드 결과(풀·인덱스·가중·메타·복원 후보).
 class _MockLoad {
   const _MockLoad({
@@ -266,15 +277,13 @@ class _MockLoad {
     required this.weights,
     required this.overview,
     required this.total,
-    required this.existing,
-    required this.restoredQuestions,
+    required this.restorable,
   });
   final Map<int, List<Question>> pool;
   final Map<int, int> weights;
   final ExamOverview? overview;
   final int total;
-  final ExamSession? existing;
-  final List<Question>? restoredQuestions;
+  final _Restorable? restorable;
 }
 
 /// ExamView에 주입할 실행 파라미터(새 시험 / 복원).
