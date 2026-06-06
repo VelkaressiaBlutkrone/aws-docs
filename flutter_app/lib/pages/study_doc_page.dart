@@ -6,7 +6,9 @@ import '../content/study_markdown_view.dart';
 import '../data/content_index.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
+import 'exam_page.dart';
 import 'quiz_page.dart';
+import '../models/exam_session.dart';
 
 class StudyDocPage extends StatelessWidget {
   const StudyDocPage({super.key, required this.entry});
@@ -148,23 +150,58 @@ class _StartQuizButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.c;
     if (entry.questionCount <= 0) return const SizedBox.shrink();
+    // 시험 시간(라벨용 추정): 공식 페이스로 계산(메타 없으면 폴백).
+    final mins = (examDurationSec(
+                durationMinutes: 90,
+                scored: 50,
+                unscored: 15,
+                count: entry.questionCount) /
+            60)
+        .round();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _cta(
+          context,
+          label: '연습 문제 풀기 (${entry.questionCount}문항)',
+          filled: true,
+          onTap: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => QuizPage(entry: entry))),
+        ),
+        const SizedBox(height: Gap.sm),
+        _cta(
+          context,
+          label: '시험처럼 풀기 (${entry.questionCount}문항 · ~$mins분)',
+          filled: false,
+          onTap: () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => ExamPage(entry: entry))),
+        ),
+      ],
+    );
+  }
+
+  Widget _cta(BuildContext context,
+      {required String label,
+      required bool filled,
+      required VoidCallback onTap}) {
+    final c = context.c;
     return InkWell(
-      onTap: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => QuizPage(entry: entry))),
+      onTap: onTap,
       borderRadius: BorderRadius.circular(Radii.sm),
       child: Container(
         height: 48,
-        padding: const EdgeInsets.symmetric(horizontal: Gap.xl),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: c.accent,
+          color: filled ? c.accent : c.surface,
           borderRadius: BorderRadius.circular(Radii.sm),
+          border: filled ? null : Border.all(color: c.accent, width: 1.5),
         ),
-        child: Text('연습 문제 풀기 (${entry.questionCount}문항)',
+        child: Text(label,
             style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w700, color: c.onAccent)),
+                fontSize: 15,
+                fontWeight: FontWeight.w700,
+                color: filled ? c.onAccent : c.accent)),
       ),
     );
   }
