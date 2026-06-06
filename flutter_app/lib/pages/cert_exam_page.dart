@@ -179,7 +179,15 @@ class _CertExamPageState extends State<CertExamPage> {
     final t = Theme.of(context).textTheme;
     final target = _targetN(d.overview);
     final cap = target < d.total ? target : d.total;
-    final mins = d.overview?.durationMinutes ?? 90;
+    // 실제 타이머(examDurationSec, count=cap)와 동일 기준으로 표시 — 풀 부족 시 오도 방지.
+    final mins = (examDurationSec(
+              durationMinutes: d.overview?.durationMinutes,
+              scored: d.overview?.scoredQuestions,
+              unscored: d.overview?.unscoredQuestions,
+              count: cap,
+            ) /
+            60)
+        .round();
     final pass = d.overview?.passingScore;
     return Center(
       child: ConstrainedBox(
