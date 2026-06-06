@@ -63,6 +63,15 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ),
     ContentEntry(
       certCode: 'CLF-C02',
+      taskId: 'clf-t3-1',
+      title: '배포·운영 방법 (콘솔·CLI·SDK·IaC)',
+      domain: 3,
+      mdAsset: 'assets/content/clf/t3-1.md',
+      questionsAsset: 'assets/content/clf/t3-1.questions.json',
+      questionCount: 6,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
       taskId: 'clf-t3-2',
       title: '글로벌 인프라 (리전·AZ·엣지)',
       domain: 3,
@@ -86,6 +95,15 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 3,
       mdAsset: 'assets/content/clf/t3-4.md',
       questionsAsset: 'assets/content/clf/t3-4.questions.json',
+      questionCount: 6,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t3-5',
+      title: '네트워크 서비스 (VPC·Route 53·연결)',
+      domain: 3,
+      mdAsset: 'assets/content/clf/t3-5.md',
+      questionsAsset: 'assets/content/clf/t3-5.questions.json',
       questionCount: 6,
     ),
     ContentEntry(

@@ -1,0 +1,178 @@
+{
+  "examGuideTaskId": "clf-t3-1",
+  "taskTitle": "배포·운영 방법",
+  "domain": 3,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t3-1-q1",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "IaC (CloudFormation)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 EC2·RDS·로드 밸런서로 구성된 동일한 인프라를 여러 AWS 리전에 일관되고 반복 가능하게 프로비저닝하고, 인프라 변경을 소스 코드처럼 버전 관리하려 한다. 가장 적합한 접근/서비스는?",
+      "options": [
+        "AWS CloudFormation(코드형 인프라, IaC)",
+        "AWS Management Console에서 매번 수동으로 생성",
+        "Amazon EC2",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS CloudFormation은 템플릿(텍스트)에 원하는 리소스를 기술하면 프로비저닝·구성을 대신 해 주는 IaC 서비스입니다. 템플릿을 재사용해 여러 리전·계정에 동일하게 반복 생성할 수 있고, 템플릿이 텍스트라 소스 코드처럼 변경을 추적·버전 관리하고 이전 버전으로 롤백할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "콘솔에서 매번 수동으로 만들면 일관성·반복성을 보장하기 어렵고 실수가 생기기 쉽습니다. 여러 리전에 동일하게 반복하려는 요구에 부적합합니다.",
+        "2": "Amazon EC2는 가상 서버(컴퓨팅 리소스)로, 인프라 전체를 코드로 정의해 프로비저닝하는 IaC 서비스가 아닙니다.",
+        "3": "AWS Trusted Advisor는 모범 사례를 점검·권고하는 도구로, 인프라를 템플릿으로 프로비저닝하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is CloudFormation? — 템플릿으로 리소스 프로비저닝, 일관·반복 복제(여러 리전), 텍스트라 버전 관리·롤백",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q2",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "프로그래밍 접근 (AWS CLI)",
+      "difficulty": "foundational",
+      "stem": "한 운영자가 웹 콘솔(GUI) 대신 터미널에서 명령과 셸 스크립트로 여러 AWS 서비스를 제어해 반복 작업을 자동화하려 한다. 가장 적합한 도구는?",
+      "options": [
+        "AWS CLI(Command Line Interface)",
+        "AWS Management Console",
+        "Amazon CloudWatch",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS CLI는 명령줄 셸에서 AWS 서비스와 상호작용하는 도구로, AWS Management Console과 동등한 기능을 명령으로 실행합니다. 셸 스크립트를 작성해 리소스 관리를 자동화할 수 있어 반복 작업에 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Management Console은 브라우저 기반 GUI입니다. 명령과 스크립트로 자동화하려는 요구와 반대입니다.",
+        "2": "Amazon CloudWatch는 메트릭·로그·알람 기반 모니터링 서비스로, 명령줄에서 AWS 서비스를 제어·자동화하는 도구가 아닙니다.",
+        "3": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, 명령줄 제어·자동화 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is the AWS CLI? — 명령줄 셸에서 AWS 서비스 제어, 콘솔과 동등 기능, 셸 스크립트로 자동화",
+          "url": "https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q3",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "서비스 접근 방식 (SDK vs 콘솔/CLI)",
+      "difficulty": "foundational",
+      "stem": "한 개발자가 자신이 작성하는 애플리케이션 코드(예: Python, Java) 안에서 언어별 라이브러리를 사용해 AWS 서비스를 프로그래밍 방식으로 호출하려 한다. 가장 적합한 것은?",
+      "options": [
+        "AWS SDK",
+        "AWS Management Console",
+        "AWS CLI",
+        "AWS CloudFormation"
+      ],
+      "correct": 0,
+      "explanation": "AWS SDK는 다양한 프로그래밍 언어(Java·Python 등)용 라이브러리로, 애플리케이션 코드 안에서 AWS 서비스를 프로그래밍 방식으로 호출하게 해 줍니다(요청 서명·재시도·오류 처리 등 연결 세부도 처리).",
+      "wrongExplanations": {
+        "1": "AWS Management Console은 브라우저 기반 GUI로, 애플리케이션 코드에서 호출하는 라이브러리가 아닙니다.",
+        "2": "AWS CLI는 명령줄에서 명령을 실행하는 도구로, 애플리케이션 코드 안에서 쓰는 언어별 라이브러리가 아닙니다.",
+        "3": "AWS CloudFormation은 인프라를 템플릿으로 프로비저닝하는 IaC 서비스로, 애플리케이션 코드에서 AWS를 호출하는 라이브러리가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS SDK 공식 정의 — 애플리케이션용 언어별 API 라이브러리, 연결 세부(요청 서명·재시도·오류 처리) 처리 (S2S VPN UG의 '리소스 관리 인터페이스' 섹션 내 AWS SDKs 정의)",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        },
+        {
+          "title": "AWS CLI — 콘솔/CLI 접근 방식 구분(CLI는 명령줄 도구로 SDK와 다름)",
+          "url": "https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q4",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "배포 모델 (하이브리드)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 일부 워크로드는 자체 온프레미스 데이터센터에 유지하고 일부는 AWS 클라우드에서 운영하며, 둘을 네트워크로 연결해 함께 사용한다. 이 배포 모델을 가장 잘 설명하는 것은?",
+      "options": [
+        "하이브리드(Hybrid) 배포 모델",
+        "클라우드(Cloud) 배포 모델",
+        "온프레미스(On-premises) 배포 모델",
+        "단일 가용 영역(Single-AZ) 배포 모델"
+      ],
+      "correct": 0,
+      "explanation": "하이브리드 배포 모델은 온프레미스(자체 데이터센터)와 AWS 클라우드를 함께 사용하고 둘을 네트워크로 연결(예: Site-to-Site VPN, Direct Connect)해 운영하는 방식입니다.",
+      "wrongExplanations": {
+        "1": "클라우드(클라우드 네이티브) 배포 모델은 애플리케이션을 전부 클라우드에서 운영하는 것으로, 온프레미스를 함께 쓰는 구성이 아닙니다.",
+        "2": "온프레미스 배포 모델은 전부 자체 데이터센터에서 운영하는 것으로, 클라우드와 결합한 구성이 아닙니다.",
+        "3": "단일 가용 영역 배포는 한 AZ에 배포하는 것을 가리키며, 온프레미스와 클라우드를 결합한 배포 모델 분류와는 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 — Task 3.1 Skill에 배포 모델(클라우드·하이브리드·온프레미스) 시험 범위 명시",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "AWS Site-to-Site VPN — 온프레미스와 VPC 연결(하이브리드 구성의 연결 수단)",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q5",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "일회성 vs 반복 프로세스",
+      "difficulty": "foundational",
+      "stem": "한 팀이 동일한 테스트 환경을 매주 여러 번 똑같이 만들고 지워야 한다. 매번 콘솔에서 손으로 클릭하면 실수와 환경 간 불일치가 생긴다. 가장 적합한 방법은?",
+      "options": [
+        "CloudFormation 템플릿(IaC)으로 인프라를 코드화해 반복 생성한다",
+        "매번 AWS Management Console에서 수동으로 클릭해 생성한다",
+        "한 번 만든 환경을 절대 삭제하지 않고 계속 둔다",
+        "환경 구성을 문서로만 적어 두고 매번 사람이 수동으로 재현한다"
+      ],
+      "correct": 0,
+      "explanation": "반복적이고 재현 가능해야 하는 인프라 프로비저닝은 CloudFormation 같은 IaC로 코드화하는 것이 적합합니다. 템플릿으로 동일한 환경을 일관되게 반복 생성·삭제할 수 있어, 사람이 매번 수동으로 만들 때 생기는 실수와 불일치를 없앱니다.",
+      "wrongExplanations": {
+        "1": "매번 수동으로 클릭하는 방식이 바로 문제의 원인(실수·불일치)입니다.",
+        "2": "환경을 삭제하지 않고 두는 것은 '매주 만들고 지워야 한다'는 요구를 충족하지 못하고 비용도 낭비됩니다.",
+        "3": "문서를 보고 사람이 수동으로 재현하는 것도 결국 수동 작업이라 실수·불일치 문제가 그대로 남습니다."
+      },
+      "sources": [
+        {
+          "title": "What is CloudFormation? — 템플릿 재사용으로 일관되고 반복 가능한(consistent and repeatable) 리소스 생성",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q6",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "연결 옵션 (배포 맥락)",
+      "difficulty": "foundational",
+      "stem": "하이브리드 구성에서 온프레미스 데이터센터를 AWS에 연결하려 한다. 전용 물리 회선 없이 공용 인터넷을 통해 빠르고 비용 효율적으로 IPsec 암호화 연결을 구축하려면 어떤 옵션이 가장 적합한가?",
+      "options": [
+        "AWS Site-to-Site VPN",
+        "AWS Direct Connect",
+        "인터넷 게이트웨이(Internet Gateway)",
+        "AWS CloudFormation"
+      ],
+      "correct": 0,
+      "explanation": "AWS Site-to-Site VPN은 온프레미스 네트워크와 VPC를 공용 인터넷 위 IPsec VPN 터널로 연결합니다. 전용 물리 회선이 필요 없어 빠르고 비용 효율적으로 암호화 연결을 구축할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "AWS Direct Connect는 공용 인터넷을 우회하는 전용 물리 회선으로, 구축에 시간이 더 걸리고 비용이 큽니다. '전용 회선 없이 인터넷을 통해'라는 조건에 맞지 않습니다.",
+        "2": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소로, 온프레미스와 VPC를 잇는 IPsec 암호화 터널을 제공하지 않습니다.",
+        "3": "AWS CloudFormation은 인프라를 코드로 프로비저닝하는 IaC 서비스로, 네트워크 연결 옵션이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Site-to-Site VPN? — 온프레미스와 VPC를 공용 인터넷 위 IPsec 터널로 연결(전용 회선 불필요)",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

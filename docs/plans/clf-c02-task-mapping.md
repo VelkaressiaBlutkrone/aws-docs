@@ -53,7 +53,7 @@
 
 ## Domain 3: Cloud Technology and Services (34%)
 
-### Task 3.1 — 배포·운영 방법 정의 `clf-t3-1` · 문서 ☐ · 문항 0/5
+### Task 3.1 — 배포·운영 방법 정의 `clf-t3-1` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** 프로비저닝·운영 방식 / 서비스 접근 방식 / 배포 모델 / 연결 옵션
 - **Skills:** 프로그래밍 접근(API, SDK, CLI) vs 콘솔 vs IaC / 일회성 vs 반복 프로세스 / 배포 모델(클라우드·하이브리드·온프레미스) / 연결 옵션(VPN, Direct Connect, 공용 인터넷)
 
@@ -68,7 +68,7 @@
 - **Knowledge:** DB 서비스 / DB 마이그레이션
 - **Skills:** EC2 호스팅 vs 관리형 DB / 관계형(RDS, Aurora) / NoSQL(DynamoDB) / 인메모리 / 마이그레이션 도구(DMS, SCT)
 
-### Task 3.5 — 네트워크 서비스 식별 `clf-t3-5` · 문서 ☐ · 문항 0/5
+### Task 3.5 — 네트워크 서비스 식별 `clf-t3-5` · 문서 ☑ · 문항 6/6 ✅
 - **Skills:** VPC 구성요소(서브넷, 게이트웨이) / VPC 보안(NACL, 보안 그룹) / Route 53 목적 / 엣지 서비스(CloudFront, Global Accelerator) / 연결 옵션(VPN, Direct Connect)
 
 ### Task 3.6 — 스토리지 서비스 식별 `clf-t3-6` · 문서 ☑ · 문항 7/7 ✅
@@ -103,9 +103,9 @@
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
-| 3 Technology & Services | 34% | 8 | 4/8 | 26 | ≥40 |
+| 3 Technology & Services | 34% | 8 | 6/8 | 38 | ≥40 |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **8/19** | **53** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **10/19** | **65** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -149,3 +149,10 @@
   - 규율: 공식 AWS 문서 11종 실페치 대조. 독립 서브에이전트 역대조 **t3-6 7/7 + t3-4 6/6 CORRECT, 수정 0건**.
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
   - 커버리지: **6/19 → 8/19 Task, 검증 문항 40 → 53. 도메인 3 4/8.**
+
+- **2026-06-06 (세션 7) — 아홉·열 번째 verified 배치: `clf-t3-5`(네트워킹, 6문항) + `clf-t3-1`(배포·운영, 6문항) → 도메인 3 6/8.**
+  - 산출물: `t3-5.md`+`t3-5.questions.json`(6), `t3-1.md`+`t3-1.questions.json`(6), `content_index.dart` 2줄 등록(taskId 정렬 t3-1~t3-6).
+  - 커버: t3-5 VPC 구성요소(서브넷·인터넷 게이트웨이·라우트 테이블)·Route 53(DNS)·Direct Connect(전용 회선) vs Site-to-Site VPN(인터넷 IPsec). t3-1 콘솔/CLI/SDK/IaC(CloudFormation)·일회성 vs 반복·배포 모델(하이브리드)·연결 옵션.
+  - 규율: 공식 문서 6종 실페치 대조. 독립 서브에이전트 역대조 **t3-5 6/6 + t3-1 6/6 CORRECT**. t3-1 **출처 정합성 2건 보강**(q3 SDK 정의 출처, q4 배포 모델→CLF 가이드) — 정답은 정확하나 출처가 진술을 직접 뒷받침하도록 교체(verified 게이트 엄격 적용).
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **8/19 → 10/19 Task, 검증 문항 53 → 65.** (검증 문항 수가 CLF 실제 시험 65문항과 같아짐 — 절반 넘김.)

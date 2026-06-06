@@ -1,0 +1,170 @@
+{
+  "examGuideTaskId": "clf-t3-5",
+  "taskTitle": "네트워크 서비스",
+  "domain": 3,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t3-5-q1",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "VPC 구성요소 식별",
+      "difficulty": "foundational",
+      "stem": "한 회사가 AWS 리소스를 논리적으로 격리된, 자체 정의한 가상 네트워크 안에서 실행하면서 IP 주소 범위·서브넷·라우트 테이블·게이트웨이를 직접 제어하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon VPC",
+        "Amazon Route 53",
+        "AWS Direct Connect",
+        "Amazon CloudFront"
+      ],
+      "correct": 0,
+      "explanation": "Amazon VPC(Virtual Private Cloud)는 사용자가 정의한, 논리적으로 격리된 가상 네트워크에 AWS 리소스를 시작하게 해 줍니다. IP 주소 범위, 서브넷, 라우트 테이블, 게이트웨이 등을 제어할 수 있어 자체 데이터센터의 전통적 네트워크와 유사한 환경을 AWS 위에 구성합니다.",
+      "wrongExplanations": {
+        "1": "Amazon Route 53은 DNS 웹 서비스로, 도메인 이름을 IP로 해석·라우팅합니다. 격리된 가상 네트워크를 정의하는 서비스가 아닙니다.",
+        "2": "AWS Direct Connect는 온프레미스를 AWS에 전용 회선으로 연결하는 서비스로, 가상 네트워크 자체를 정의하는 서비스가 아닙니다.",
+        "3": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 가상 네트워크 구성과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon VPC? — 논리적으로 격리된 가상 네트워크에 리소스 시작, 서브넷·라우트 테이블·게이트웨이 제어",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q2",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "VPC 구성요소 (인터넷 게이트웨이)",
+      "difficulty": "foundational",
+      "stem": "Amazon VPC에서 퍼블릭 서브넷의 리소스(예: 웹 서버)가 인터넷과 통신할 수 있도록, VPC를 인터넷에 연결하는 구성요소는?",
+      "options": [
+        "인터넷 게이트웨이(Internet Gateway)",
+        "서브넷(Subnet)",
+        "라우트 테이블(Route Table)",
+        "보안 그룹(Security Group)"
+      ],
+      "correct": 0,
+      "explanation": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소로, VPC 안의 리소스와 인터넷 간 통신을 가능하게 합니다.",
+      "wrongExplanations": {
+        "1": "서브넷은 VPC 안의 IP 주소 범위로 하나의 가용 영역에 속합니다. 그 자체가 VPC를 인터넷에 연결하지는 않습니다.",
+        "2": "라우트 테이블은 서브넷·게이트웨이의 트래픽이 어디로 갈지 경로를 결정합니다. 인터넷으로의 경로를 가리키지만, 인터넷에 연결하는 '게이트웨이'는 인터넷 게이트웨이입니다.",
+        "3": "보안 그룹은 인스턴스 수준의 가상 방화벽으로 허용할 트래픽을 정합니다. VPC를 인터넷에 연결하는 구성요소가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon VPC? — 인터넷 게이트웨이로 VPC를 인터넷에 연결, 서브넷은 AZ 내 IP 범위, 라우트 테이블은 경로 결정",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q3",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "Route 53 (DNS)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 도메인 이름(example.com)을 등록하고, 사용자가 브라우저에 그 이름을 입력하면 해당 웹 애플리케이션의 IP 주소로 연결되도록 인터넷 트래픽을 라우팅하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon Route 53",
+        "Amazon VPC",
+        "Elastic Load Balancing",
+        "AWS Direct Connect"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Route 53은 고가용성·확장성 있는 DNS(Domain Name System) 웹 서비스로, 도메인 등록, 도메인 이름을 리소스의 IP로 변환하는 DNS 라우팅, 리소스 상태 확인의 세 기능을 수행합니다. 사용자가 도메인 이름을 입력하면 해당 리소스로 연결해 줍니다.",
+      "wrongExplanations": {
+        "1": "Amazon VPC는 격리된 가상 네트워크를 정의하는 서비스로, 도메인 이름을 IP로 해석하는 DNS 서비스가 아닙니다.",
+        "2": "Elastic Load Balancing은 들어오는 트래픽을 여러 대상에 분산하는 서비스로, 도메인 이름 등록·DNS 라우팅을 수행하지 않습니다.",
+        "3": "AWS Direct Connect는 온프레미스를 AWS에 전용 회선으로 연결하는 서비스로, DNS 기능과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Route 53? — DNS 웹 서비스(도메인 등록·DNS 라우팅·헬스 체크)",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q4",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "연결 옵션 (Direct Connect)",
+      "difficulty": "foundational",
+      "stem": "한 기업이 온프레미스 데이터센터를 AWS에 연결하면서, 공용 인터넷을 거치지 않는 전용 물리 회선으로 일관되고 안정적인 네트워크 성능을 얻으려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Direct Connect",
+        "AWS Site-to-Site VPN",
+        "Amazon VPC",
+        "Amazon Route 53"
+      ],
+      "correct": 0,
+      "explanation": "AWS Direct Connect는 내부 네트워크를 표준 이더넷 광케이블로 Direct Connect 위치에 연결해, 공용 인터넷(ISP)을 우회하는 전용 네트워크 연결을 제공합니다. 이를 통해 퍼블릭 AWS 서비스나 VPC에 직접 연결하며 일관되고 안정적인 네트워크 경험을 얻습니다.",
+      "wrongExplanations": {
+        "1": "AWS Site-to-Site VPN은 공용 인터넷 위로 IPsec 암호화 터널을 만들어 연결합니다. 인터넷을 우회하는 전용 물리 회선이 아니므로 인터넷 상태에 성능이 좌우됩니다.",
+        "2": "Amazon VPC는 격리된 가상 네트워크를 정의하는 서비스로, 온프레미스를 AWS에 연결하는 전용 회선 자체가 아닙니다.",
+        "3": "Amazon Route 53은 DNS 서비스로, 온프레미스-AWS 전용 네트워크 연결과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Direct Connect? — 표준 이더넷 광케이블 전용 연결, ISP(공용 인터넷) 우회, VPC·퍼블릭 서비스 직접 연결",
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q5",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "연결 옵션 (Site-to-Site VPN)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 온프레미스 네트워크와 Amazon VPC를 공용 인터넷을 통해 IPsec으로 암호화된 터널로 연결하려 하며, 전용 물리 회선 없이 빠르고 비용 효율적으로 구축하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Site-to-Site VPN",
+        "AWS Direct Connect",
+        "Amazon CloudFront",
+        "인터넷 게이트웨이(Internet Gateway)"
+      ],
+      "correct": 0,
+      "explanation": "AWS Site-to-Site VPN은 온프레미스 네트워크와 VPC 사이에 IPsec VPN 터널로 보안 연결을 만듭니다. 공용 인터넷 위로 암호화된 터널을 사용하므로 전용 물리 회선 없이 빠르고 비용 효율적으로 구축할 수 있습니다(AWS 측 가상 프라이빗 게이트웨이/Transit Gateway + 고객 측 고객 게이트웨이).",
+      "wrongExplanations": {
+        "1": "AWS Direct Connect는 공용 인터넷을 우회하는 전용 물리 회선으로, 구축에 시간이 더 걸리고 비용이 큽니다. 인터넷 위 IPsec 암호화 터널이 아닙니다.",
+        "2": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 온프레미스-VPC 간 보안 연결을 만드는 서비스가 아닙니다.",
+        "3": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소로, 온프레미스와 VPC를 잇는 암호화된 IPsec 터널을 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Site-to-Site VPN? — 온프레미스와 VPC를 IPsec VPN 터널로 보안 연결(고객 게이트웨이 + 가상 프라이빗/Transit Gateway)",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q6",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "Direct Connect vs Site-to-Site VPN 구분",
+      "difficulty": "foundational",
+      "stem": "온프레미스를 AWS에 연결하는 AWS Direct Connect와 AWS Site-to-Site VPN의 차이로 가장 정확한 설명은?",
+      "options": [
+        "Direct Connect는 공용 인터넷을 우회하는 전용 물리 회선이고, Site-to-Site VPN은 공용 인터넷 위 IPsec 암호화 터널이다",
+        "Direct Connect는 인터넷 위 암호화 터널이고, Site-to-Site VPN은 전용 물리 회선이다",
+        "둘 다 공용 인터넷을 우회하는 전용 물리 회선이다",
+        "둘 다 도메인 이름을 IP로 변환하는 DNS 라우팅 서비스다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Direct Connect는 표준 이더넷 광케이블로 내부 네트워크를 AWS에 직접 연결해 공용 인터넷을 우회하는 전용 회선입니다. AWS Site-to-Site VPN은 공용 인터넷 위로 IPsec 암호화 터널을 만들어 온프레미스와 VPC를 연결합니다. 전자는 일관된 성능, 후자는 빠르고 비용 효율적인 구축이 특징입니다.",
+      "wrongExplanations": {
+        "1": "방향이 반대입니다. 인터넷 위 암호화 터널은 Site-to-Site VPN이고, 전용 물리 회선은 Direct Connect입니다.",
+        "2": "Site-to-Site VPN은 전용 물리 회선이 아니라 공용 인터넷 위 IPsec 터널을 사용합니다. '둘 다 전용 회선'은 틀립니다.",
+        "3": "둘 다 온프레미스-AWS 네트워크 연결 서비스이며, 도메인 이름을 IP로 변환하는 DNS 라우팅(Route 53) 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Direct Connect(전용 회선, 인터넷 우회) vs Site-to-Site VPN(인터넷 위 IPsec 터널) 공식 정의 대조",
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}
