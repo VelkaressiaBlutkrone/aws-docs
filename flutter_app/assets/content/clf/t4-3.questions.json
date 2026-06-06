@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-3-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-3-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-3-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

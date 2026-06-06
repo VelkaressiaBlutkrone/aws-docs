@@ -50,7 +50,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 1,
       mdAsset: 'assets/content/clf/t1-3.md',
       questionsAsset: 'assets/content/clf/t1-3.questions.json',
-      questionCount: 5,
+      questionCount: 9,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -68,7 +68,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 2,
       mdAsset: 'assets/content/clf/t2-1.md',
       questionsAsset: 'assets/content/clf/t2-1.questions.json',
-      questionCount: 5,
+      questionCount: 9,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -194,7 +194,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 4,
       mdAsset: 'assets/content/clf/t4-3.md',
       questionsAsset: 'assets/content/clf/t4-3.questions.json',
-      questionCount: 5,
+      questionCount: 9,
     ),
   ],
 };

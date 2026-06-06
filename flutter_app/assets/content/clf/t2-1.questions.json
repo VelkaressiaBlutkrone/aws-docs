@@ -200,7 +200,7 @@
           "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-1-q7",
@@ -227,7 +227,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-security.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-1-q8",
@@ -258,7 +258,7 @@
           "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-1-q9",
@@ -285,7 +285,7 @@
           "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
