@@ -1,7 +1,7 @@
 # CLAUDE.md — AWS Docs Roadmap
 
 AWS 자격증을 한국어로, 이해 중심으로 공부하는 통합 학습 로드맵 + 모의고사 정적 사이트.
-Vite + 바닐라 TypeScript, GitHub Pages 배포. 한국어 콘텐츠.
+Flutter Web (Dart) + go_router(해시 라우팅), GitHub Pages 배포. 한국어 콘텐츠.
 
 ## Design System
 시각/UI 결정을 하기 전에 **항상 `DESIGN.md`를 먼저 읽으세요.**

@@ -12,7 +12,7 @@
 - **공간/업계:** 클라우드 자격증 학습 (peers: Tutorials Dojo, AWS Skill Builder, Maarek, roadmap.sh)
 - **차별화:** 한국어 · 이해 중심(왜를 가르침) · 통합 로드맵 · 무료/최신
 - **핵심 가치:** 정직함. 가짜 문제 폐기, verified 문항만 노출, "준비 중"을 정직하게 표기
-- **프로젝트 타입:** 정적 웹앱 + 에디토리얼(학습 문서) 하이브리드. Vite + 바닐라 TypeScript, GitHub Pages
+- **프로젝트 타입:** 정적 웹앱 + 에디토리얼(학습 문서) 하이브리드. Flutter Web (Dart), GitHub Pages
 - **메모러블 (작업 가설, 사용자 확정 대기):** "덤프랑 다르게, 여기선 진짜 이해됐다"
 
 ## Aesthetic Direction
