@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../models/question.dart';
 
 /// 자격증 통합 모의고사용 순수 로직(샘플링·병합·복원). Flutter 무의존 → 단위 테스트 가능.
@@ -36,6 +38,36 @@ Map<int, int> allocateByWeight(Map<int, int> weightByDomain, int n) {
     alloc[d] = alloc[d]! + 1;
   }
   return alloc;
+}
+
+/// 도메인 가중으로 n문항을 샘플링해 순서를 섞어 반환. [rng] 주입으로 결정적.
+/// 특정 도메인 풀이 배분량보다 적으면 잔여 도메인 문항에서 보충(총 n 유지, 풀<n이면 최대).
+List<Question> buildMockExam({
+  required Map<int, List<Question>> poolByDomain,
+  required Map<int, int> weightByDomain,
+  required int n,
+  required Random rng,
+}) {
+  final alloc = allocateByWeight(weightByDomain, n);
+  final picked = <Question>[];
+  final leftovers = <Question>[];
+
+  final domains = {...poolByDomain.keys, ...alloc.keys}.toList()..sort();
+  for (final d in domains) {
+    final pool = [...?poolByDomain[d]]..shuffle(rng);
+    final want = alloc[d] ?? 0;
+    final take = want < pool.length ? want : pool.length;
+    picked.addAll(pool.take(take));
+    leftovers.addAll(pool.skip(take));
+  }
+
+  if (picked.length < n && leftovers.isNotEmpty) {
+    leftovers.shuffle(rng);
+    picked.addAll(leftovers.take(n - picked.length));
+  }
+
+  picked.shuffle(rng);
+  return picked;
 }
 
 /// 로드한 뱅크들을 도메인 번호 → 검증 문항 리스트로 묶는다.

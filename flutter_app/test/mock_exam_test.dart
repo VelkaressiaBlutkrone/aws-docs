@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/mock_exam.dart';
 import 'package:aws_docs/models/question.dart';
@@ -45,6 +47,44 @@ void main() {
     expect(pool[2]!.length, 1);
     final byId = indexById([for (final b in banks) ...b.questions]);
     expect(byId.keys.toSet(), {'a', 'b', 'c'});
+  });
+
+  test('buildMockExam: 결정적(동일 seed) · 길이 N · 전부 풀 소속 · 중복 없음', () {
+    final pool = {
+      1: [for (var i = 0; i < 10; i++) _q('d1q$i', 1)],
+      2: [for (var i = 0; i < 10; i++) _q('d2q$i', 2)],
+    };
+    const w = {1: 50, 2: 50};
+    final a =
+        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 8, rng: Random(42));
+    final b =
+        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 8, rng: Random(42));
+    expect(a.map((q) => q.id).toList(), b.map((q) => q.id).toList());
+    expect(a.length, 8);
+    final allIds = {for (final d in pool.values) for (final q in d) q.id};
+    expect(a.every((q) => allIds.contains(q.id)), isTrue);
+    expect(a.map((q) => q.id).toSet().length, 8);
+  });
+
+  test('buildMockExam: 도메인 풀 부족 → 잔여 도메인에서 보충해 N 유지', () {
+    final pool = {
+      1: [_q('d1q0', 1)],
+      2: [for (var i = 0; i < 10; i++) _q('d2q$i', 2)],
+    };
+    const w = {1: 50, 2: 50};
+    final r =
+        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 8, rng: Random(1));
+    expect(r.length, 8);
+    expect(r.where((q) => q.id == 'd1q0').length, 1);
+  });
+
+  test('buildMockExam: 풀 총량 < N이면 가능한 최대', () {
+    final pool = {
+      1: [_q('a', 1), _q('b', 1)]
+    };
+    final r =
+        buildMockExam(poolByDomain: pool, weightByDomain: {1: 100}, n: 8, rng: Random(1));
+    expect(r.length, 2);
   });
 
   test('restoreOrdered: 모든 ID 존재 시 순서대로, 누락/빈목록 시 null', () {
