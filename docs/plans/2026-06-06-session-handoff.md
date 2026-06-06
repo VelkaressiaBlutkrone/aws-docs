@@ -1,6 +1,6 @@
 # Session Handoff — 2026-06-07 (START HERE 다음 세션)
 
-> 한 줄 상태: **🏁 Spec 1·Spec 2 + 우선순위 로드맵 + Phase 0(정리) + Phase 1 E1(오답노트 E1a+E1b) 완료. E1 라이브 흐름: 연습/시험 오답 → cert 상세 Task별 "오답 N" 배지 + 오답노트 진입 → `/cert/:code/review`(Task별 weak, "복습 시작") → 연습형 재응시(QuizView mode:'review') → 서로 다른 회차 연속 2회 정답 졸업. 순수 `WrongAnswerIndex`로 파생. analyze 무결·53 테스트·릴리스 빌드·실브라우저 dogfood(배지·진입·목록·러너) 통과. E1a는 origin push 완료(`1636319`), E1b는 로컬 커밋(push 전이면 다음 세션). 다음 = E2(약점 리포트, 별도 brainstorm→spec). 계획: `2026-06-07-phase1-e1a-data-foundation.md`·`2026-06-07-phase1-e1b-review-ui.md`(둘 다 완료).**
+> 한 줄 상태: **🏁 Spec 1·Spec 2 + 우선순위 로드맵 + Phase 0(정리) + Phase 1 전체(E1 오답노트 + E2 약점리포트) 완료. E2 라이브: cert 상세 "약점 리포트" 진입 → `/cert/:code/report` → 요약(전체 정답률) + Task별 정답률 표(문항별 최신결과, 복습 제외), weak(<70%)은 wrong 톤 + 학습문서 "처방" 링크, 미응시 구분. 순수 `TaskScoreReport`로 파생, E1의 출제해석은 `attempt_presented` 공유 헬퍼로 추출. analyze 무결·63 테스트·릴리스 빌드·실브라우저 dogfood(요약 50%·weak 33% 처방링크 동작·미응시) 통과. E1은 origin push 완료, E2는 로컬 커밋(push 전이면 다음 세션). 다음 = Phase 2(E5 진행률 + E6 가중 모의고사). 계획: `2026-06-07-phase1-e2-weakness-report.md`(완료).**
 
 > 갱신: 2026-06-07 — 브레인스토밍으로 우선순위 로드맵 작성 → Phase 0 구현 계획 → executing-plans로 Phase 0 4개 Task 완료(로컬 커밋 `debd590`·`44d1bc9`·`4ce5124`, 아직 origin push 전이면 다음 세션에서 push). 직전 세션: Spec 2 통합 모의고사 배포(`d00f656`).
 
@@ -30,8 +30,9 @@
 ## ▶ 다음 행동 (로드맵 기준)
 **확정 로드맵:** `docs/superpowers/specs/2026-06-07-work-priority-roadmap-design.md` — 정리(Phase 0 ✅) → 루프완결 Phase 1(E1/E2) → Phase 2(E5/E6) → Phase 3(콘텐츠).
 
-**다음 = E2 (약점 리포트, 별도 brainstorm→spec→plan).** E1(오답노트) 완료 — E1a(데이터: `presentedQuestionIds`·작성자·`WrongAnswerIndex`) + E1b(UI: `QuizView` mode/examId 재사용·`ReviewListPage`·`/cert/:code/review` 라우트·cert 상세 "오답 N" 배지+오답노트 진입). 53 테스트·dogfood 통과. **E2 범위(로드맵 §4):** 같은 `WrongAnswerIndex`/이력에서 **Task별 누적 정답률 표** 파생 + "처방" = 정답률 **70% 미만 Task → 학습문서(`examGuideTaskId`) 앵커 링크**. Task 매핑 없는 cert는 전체/회차 점수로 강등(현재 CLF만 매핑). 빈 상태(이력 0건) 안내. cert 상세는 SelectionArea라 렌더 테스트 금지 → 순수 파생은 단위 테스트, 표시는 dogfood. **그 후 = Phase 2(E5 진행률 + E6 가중 모의고사).**
-- **E1b 구현 노트(다음 작업자용):** `QuizView`에 `mode`(기본 'practice')·`examId`(null이면 'practice:...') 주입 추가 → 복습은 별도 클래스 없이 이 둘로 재사용(`mode:'review'`, `examId:'review:<taskId>'`). `lib/pages/review_page.dart`(`ReviewListPage` 로더: 19뱅크 로드→`taskByQuestionId`→`WrongAnswerIndex.build`→Task별 weak 목록; 복습 종료 시 `_load()` 재실행으로 졸업 반영). cert 상세 `_load()`가 `weakByTask` 계산해 `_LearningContent`에 전달.
+**다음 = Phase 2 (E5 진행률 + E6 가중 모의고사, 별도 brainstorm→spec→plan).** Phase 1 전체(E1 오답노트 + E2 약점리포트) 완료. **Phase 2 범위(로드맵 §5):** E5 진행률(문서 열람률 + 최고점수·마지막 응시일, 정직 표시) · E6 약점 가중 모의고사(Task별 누적 오답률 비례 가중, 이력 3회+ 게이트, `buildMockExam` 확장). E6는 `WrongAnswerIndex`/`TaskScoreReport` 데이터에 의존.
+- **E2 구현 노트(다음 작업자용):** `lib/data/attempt_presented.dart`(공유 헬퍼: `resolvePresented`·`taskFromExamId` — E1·E2 공용, "무엇이 출제됐나" 단일 정의). `lib/data/task_score_report.dart`(`TaskScoreReport.build({certId,history,taskByQuestionId,taskOrder})` → tasks/overallRate/hasAnyAttempt; review 제외, 문항별 최신결과, `kWeakThreshold=0.7`). `lib/pages/report_page.dart`(`/cert/:code/report`, 19뱅크 로드→build→표). cert 상세에 약점 리포트 진입(accent) + 오답노트 진입(wrong) 둘 다 존재.
+- **Phase 1 누적 구현 노트:** E1 — `QuizView` mode/examId 재사용·`review_page.dart`·`wrong_answer_index.dart`·cert 상세 "오답 N" 배지. 페이지는 SelectionArea라 렌더 테스트 금지 → 순수 모듈 단위 테스트 + 라우팅 redirect + dogfood.
 - **Phase 0 잔여(후속 결정):** quiz_widgets **폰트 크기 토큰화**는 보류 — DESIGN.md 타입스케일(13·15·16·17·20·28)이 코드 실제값(12·14)과 어긋나 "코드 유지 vs 문서 정렬(소폭 시각 변화)" 사용자 결정 필요. 테두리 두께 토큰도 DESIGN.md 미정의.
 
 ### (이전) 1순위 참고 — 학습 루프 #3 (E1 오답노트 + E2 약점 리포트)
