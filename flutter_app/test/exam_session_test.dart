@@ -45,6 +45,14 @@ void main() {
     expect(back.submitted, isFalse);
   });
 
+  test('fromJson은 손상된 flagged 항목을 건너뛴다(방어적)', () {
+    final back = ExamSession.fromJson({
+      'examId': 'exam:x',
+      'flagged': [1, 'x', 2],
+    });
+    expect(back.flagged, [1, 2]);
+  });
+
   test('bankFingerprint는 문항 변경 시 달라진다', () {
     expect(bankFingerprint(_bank(['a', 'b', 'c'])),
         bankFingerprint(_bank(['a', 'b', 'c'])));

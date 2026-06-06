@@ -58,7 +58,8 @@ class ExamSession {
       index: (j['index'] as num?)?.toInt() ?? 0,
       picked: picked,
       flagged: ((j['flagged'] as List?) ?? const [])
-          .map((e) => (e as num).toInt())
+          .whereType<num>()
+          .map((e) => e.toInt())
           .toList(),
       bankFingerprint: (j['bankFingerprint'] ?? '').toString(),
       submitted: j['submitted'] == true,
