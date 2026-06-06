@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/models/attempt_record.dart';
+import 'package:aws_docs/models/exam_session.dart';
 import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/pages/exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
@@ -28,6 +29,27 @@ Widget _host(Widget child) =>
     MaterialApp(theme: AppTheme.light, home: Scaffold(body: child));
 
 void main() {
+  testWidgets('onChanged 세션에 출제 문항 ID가 순서대로 담긴다', (tester) async {
+    ExamSession? saved;
+    final started = DateTime(2026, 6, 6);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(),
+      certId: 'CLF-C02',
+      taskId: 'clf-t2-3',
+      startedAt: started,
+      durationSec: 600,
+      now: () => started.add(const Duration(seconds: 5)),
+      onChanged: (s) => saved = s,
+    )));
+    await tester.pump();
+
+    await tester.tap(find.text('계정 해지')); // 선택 → onChanged 발화
+    await tester.pump();
+
+    expect(saved, isNotNull);
+    expect(saved!.questionIds, ['q1', 'q2']);
+  });
+
   testWidgets('정답 선택 후 제출 → 채점, flagged 기록', (tester) async {
     AttemptRecord? finished;
     final started = DateTime(2026, 6, 6, 0, 0, 0);

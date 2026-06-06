@@ -109,6 +109,7 @@ class _ExamViewState extends State<ExamView> {
         picked: _picked,
         flagged: _flagged.toList()..sort(),
         bankFingerprint: bankFingerprint(widget.bank),
+        questionIds: _qs.map((q) => q.id).toList(),
         submitted: _submitted,
       );
 
