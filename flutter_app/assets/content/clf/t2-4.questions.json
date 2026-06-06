@@ -1,0 +1,178 @@
+{
+  "examGuideTaskId": "clf-t2-4",
+  "taskTitle": "보안 구성요소·리소스",
+  "domain": 2,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t2-4-q1",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 기능·서비스 식별 (보안 그룹)",
+      "difficulty": "foundational",
+      "stem": "Amazon EC2 인스턴스 수준에서 인바운드·아웃바운드 트래픽을 제어하는 가상 방화벽으로, 허용한 요청에 대한 응답 트래픽은 아웃바운드 규칙과 무관하게 자동으로 허용되는(stateful) AWS 구성요소는?",
+      "options": [
+        "보안 그룹(Security Group)",
+        "네트워크 ACL(Network ACL)",
+        "AWS WAF",
+        "IAM 정책(IAM Policy)"
+      ],
+      "correct": 0,
+      "explanation": "보안 그룹은 연결된 리소스(예: EC2 인스턴스)의 인바운드·아웃바운드 트래픽을 제어하는 가상 방화벽으로, 인스턴스 수준에서 동작합니다. 보안 그룹은 stateful이어서, 인스턴스가 보낸 요청의 응답은 인바운드 규칙과 무관하게 허용되고, 허용된 인바운드 트래픽의 응답도 아웃바운드 규칙과 무관하게 내보내집니다.",
+      "wrongExplanations": {
+        "1": "네트워크 ACL은 인스턴스가 아니라 서브넷 수준에서 동작하며 stateless입니다. 응답 트래픽이 자동 허용되지 않아 별도 규칙이 필요합니다.",
+        "2": "AWS WAF는 HTTP/HTTPS 웹 요청을 검사하는 웹 애플리케이션 방화벽으로, EC2 인스턴스 수준의 네트워크 트래픽을 제어하는 구성요소가 아닙니다.",
+        "3": "IAM 정책은 자격증명에 권한을 부여하는 문서로, 네트워크 트래픽을 허용·차단하는 방화벽이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Control traffic to your AWS resources using security groups — 인스턴스 수준 가상 방화벽, stateful(응답 자동 허용)",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q2",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 기능·서비스 식별 (네트워크 ACL — 서브넷 수준 deny)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 특정 IP 주소 범위에서 오는 트래픽을 서브넷 수준에서 명시적으로 차단(deny)하려 한다. 허용(allow)뿐 아니라 거부(deny) 규칙도 지원하고 서브넷 경계에서 트래픽을 제어하는 AWS 구성요소는?",
+      "options": [
+        "네트워크 ACL(Network ACL)",
+        "보안 그룹(Security Group)",
+        "AWS WAF",
+        "IAM 정책(IAM Policy)"
+      ],
+      "correct": 0,
+      "explanation": "네트워크 ACL은 서브넷 수준에서 특정 인바운드·아웃바운드 트래픽을 허용하거나 거부합니다. 허용과 거부 규칙을 모두 지원하므로, 특정 IP 범위를 명시적으로 차단할 수 있습니다(규칙은 번호 순서대로 평가).",
+      "wrongExplanations": {
+        "1": "보안 그룹은 허용(Allow) 규칙만 지정할 수 있어 특정 IP를 명시적으로 차단(Deny)할 수 없습니다. 또한 서브넷이 아니라 인스턴스 수준에서 동작합니다.",
+        "2": "AWS WAF는 웹 애플리케이션(CloudFront·ALB 등)으로 가는 HTTP/HTTPS 요청을 필터링합니다. 서브넷 수준의 네트워크 트래픽을 allow/deny하는 구성요소가 아닙니다.",
+        "3": "IAM 정책은 사용자·역할의 권한을 정의하는 것으로, 서브넷의 네트워크 트래픽을 차단하는 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Control subnet traffic with network ACLs — 서브넷 수준에서 inbound/outbound 트래픽 allow 또는 deny, stateless",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        },
+        {
+          "title": "Security groups — 보안 그룹은 stateful·허용 규칙만(차단 불가) 대비",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q3",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 기능·서비스 식별 (AWS WAF — 웹 공격)",
+      "difficulty": "foundational",
+      "stem": "퍼블릭 웹 애플리케이션(Amazon CloudFront 또는 Application Load Balancer 뒤)으로 들어오는 HTTP/HTTPS 요청 중 SQL 인젝션과 크로스 사이트 스크립팅(XSS) 같은 흔한 웹 애플리케이션 공격을 규칙으로 탐지·차단하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS WAF",
+        "AWS Shield Standard",
+        "보안 그룹(Security Group)",
+        "네트워크 ACL(Network ACL)"
+      ],
+      "correct": 0,
+      "explanation": "AWS WAF는 보호 대상 웹 리소스로 전달되는 HTTP/HTTPS 요청을 모니터링하는 웹 애플리케이션 방화벽입니다. SQL 인젝션·크로스 사이트 스크립팅 같은 악성 요청을 식별하는 조건으로 web ACL과 규칙을 만들어 요청을 허용·차단·카운트할 수 있으며, CloudFront·ALB·API Gateway 등에 적용합니다.",
+      "wrongExplanations": {
+        "1": "AWS Shield(Standard)는 대량 트래픽 DDoS 공격으로부터 보호합니다. SQL 인젝션·XSS 같은 애플리케이션 계층 요청 내용을 규칙으로 검사·차단하는 것은 WAF입니다.",
+        "2": "보안 그룹은 IP·포트·프로토콜 기준으로 네트워크 트래픽을 허용하는 인스턴스 방화벽으로, HTTP 요청 본문의 SQL 인젝션·XSS 같은 애플리케이션 계층 공격을 검사하지 못합니다.",
+        "3": "네트워크 ACL은 서브넷 수준에서 IP·포트 기준으로 트래픽을 allow/deny할 뿐, 웹 요청 내용(SQLi·XSS)을 분석하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS WAF? — HTTP/HTTPS 요청 모니터링, SQL injection·XSS 등 웹 공격을 web ACL·규칙으로 제어",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q4",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 이슈 식별 서비스 (Trusted Advisor)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 자사 AWS 환경을 AWS 모범 사례에 따라 점검받아 비용 절감, 성능 개선, 보안 격차 해소, 내결함성, 서비스 한도 등에 대한 권고를 받으려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Trusted Advisor",
+        "AWS Config",
+        "Amazon Inspector",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "AWS Trusted Advisor는 수많은 고객 지원에서 얻은 모범 사례를 바탕으로 AWS 환경을 점검(inspect)하고, 비용 절감·시스템 가용성과 성능 개선·보안 격차 해소 등의 기회가 있을 때 권고합니다. 보안·내결함성·서비스 한도 등 여러 카테고리의 모범 사례를 점검합니다.",
+      "wrongExplanations": {
+        "1": "AWS Config는 리소스의 구성 상태와 변경 이력을 기록·평가하는 서비스로, 모범 사례 전반에 대한 권고를 제공하는 도구가 아닙니다.",
+        "2": "Amazon Inspector는 EC2·컨테이너 이미지·Lambda의 소프트웨어 취약점(CVE)을 스캔하는 서비스로, 비용·성능·서비스 한도 같은 폭넓은 모범 사례 점검을 하지 않습니다.",
+        "3": "AWS Artifact는 AWS의 컴플라이언스 보고서를 다운로드하는 포털로, 내 환경을 모범 사례로 점검·권고하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Trusted Advisor — 환경을 점검해 비용 절감·가용성·성능 개선·보안 격차 해소 권고",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q5",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "Marketplace 서드파티 보안 제품",
+      "difficulty": "foundational",
+      "stem": "한 회사가 독립 소프트웨어 공급업체(ISV)의 타사 보안 소프트웨어(예: 방화벽 어플라이언스)를 찾아 구독하고 AWS에 배포하려 하며, 요금은 AWS 청구서로 통합되기를 원한다. 가장 적합한 것은?",
+      "options": [
+        "AWS Marketplace",
+        "AWS Artifact",
+        "AWS Config",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS Marketplace는 AWS에서 실행되는 서드파티 소프트웨어·데이터·서비스를 찾고 구매(구독)·배포·관리하는 큐레이트된 디지털 카탈로그입니다. 보안은 대표 카테고리 중 하나이며, ISV의 제품을 AMI·SaaS 등 형태로 제공하고 요금은 AWS 청구서에 합산됩니다.",
+      "wrongExplanations": {
+        "1": "AWS Artifact는 AWS의 보안·컴플라이언스 보고서를 다운로드하는 포털로, 타사 보안 소프트웨어를 구매·배포하는 곳이 아닙니다.",
+        "2": "AWS Config는 리소스 구성을 평가·기록하는 서비스로, 소프트웨어 구매·배포 카탈로그가 아닙니다.",
+        "3": "AWS Trusted Advisor는 모범 사례를 점검·권고하는 도구로, 타사 소프트웨어를 구매·배포하는 마켓플레이스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Marketplace? — 서드파티 소프트웨어(보안 포함) 찾기·구매·배포, ISV 제품, AWS 청구서 통합",
+          "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/what-is-marketplace.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q6",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 그룹 vs 네트워크 ACL 구분",
+      "difficulty": "foundational",
+      "stem": "Amazon VPC의 보안 그룹과 네트워크 ACL의 차이를 가장 정확하게 설명한 것은?",
+      "options": [
+        "보안 그룹은 인스턴스 수준에서 동작하며 stateful이고, 네트워크 ACL은 서브넷 수준에서 동작하며 stateless이다",
+        "보안 그룹은 서브넷 수준에서, 네트워크 ACL은 인스턴스 수준에서 동작한다",
+        "둘 다 stateless이며 허용(Allow) 규칙만 지원한다",
+        "네트워크 ACL은 stateful이어서 허용된 트래픽의 응답이 자동으로 허용된다"
+      ],
+      "correct": 0,
+      "explanation": "보안 그룹은 인스턴스(리소스) 수준에서 동작하는 stateful 방화벽으로 허용 규칙만 지정합니다. 네트워크 ACL은 서브넷 수준에서 동작하는 stateless 필터로 허용·거부 규칙을 모두 지원합니다. stateful이라 응답이 자동 허용되는 것은 보안 그룹입니다.",
+      "wrongExplanations": {
+        "1": "수준이 뒤바뀌었습니다. 보안 그룹이 인스턴스 수준, 네트워크 ACL이 서브넷 수준입니다.",
+        "2": "보안 그룹은 stateful이며, 보안 그룹은 허용 규칙만, 네트워크 ACL은 허용과 거부 규칙을 모두 지원합니다. '둘 다 stateless·허용만'은 틀립니다.",
+        "3": "stateful이어서 응답이 자동 허용되는 것은 보안 그룹입니다. 네트워크 ACL은 stateless여서 응답 트래픽도 별도 규칙이 필요합니다."
+      },
+      "sources": [
+        {
+          "title": "Security groups — 인스턴스 수준·stateful·허용 규칙",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        },
+        {
+          "title": "Network ACLs — 서브넷 수준·stateless·허용과 거부 규칙(보안 그룹과의 대비 명시)",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

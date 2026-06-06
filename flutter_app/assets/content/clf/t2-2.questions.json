@@ -1,0 +1,259 @@
+{
+  "examGuideTaskId": "clf-t2-2",
+  "taskTitle": "보안·거버넌스·컴플라이언스",
+  "domain": 2,
+  "certCode": "CLF-C02",
+  "questions": [
+    {
+      "id": "clf-t2-2-q1",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "리소스 보호 서비스 식별 (위협 탐지 — GuardDuty)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 AWS 계정의 CloudTrail 관리 이벤트, VPC 흐름 로그, DNS 로그를 지속적으로 분석해 침해된 자격증명이나 비정상적인 동작 같은 악성·잠재적 위협 활동을 자동으로 탐지하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon GuardDuty",
+        "Amazon Inspector",
+        "Amazon Macie",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "Amazon GuardDuty는 위협 탐지(threat detection) 서비스로, CloudTrail 관리 이벤트·VPC 흐름 로그·DNS 로그 같은 데이터 소스를 머신러닝과 위협 인텔리전스 피드로 지속 분석해 악성·비정상 활동을 식별하고 보안 finding을 생성합니다.",
+      "wrongExplanations": {
+        "1": "Amazon Inspector는 취약점 관리 서비스로, EC2·ECR 컨테이너 이미지·Lambda를 스캔해 소프트웨어 취약점(CVE)과 네트워크 노출을 찾습니다. 로그를 분석해 '활동'을 탐지하는 것이 아닙니다.",
+        "2": "Amazon Macie는 데이터 보안 서비스로, Amazon S3의 민감 데이터(PII 등)를 발견·분류합니다. 위협 활동 탐지가 목적이 아닙니다.",
+        "3": "AWS Trusted Advisor는 비용·보안·성능 등에 대한 모범 사례 점검과 권고를 제공하는 도구로, 로그 기반 위협 탐지를 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon GuardDuty? — 위협 탐지, CloudTrail·VPC Flow·DNS 로그를 ML·위협 인텔로 분석",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q2",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "리소스 보호 서비스 식별 (취약점 관리 — Inspector)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 Amazon EC2 인스턴스, Amazon ECR의 컨테이너 이미지, AWS Lambda 함수에 알려진 소프트웨어 취약점(CVE)이나 의도치 않은 네트워크 노출이 있는지 자동으로 발견하고 지속적으로 스캔하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon Inspector",
+        "Amazon GuardDuty",
+        "Amazon Macie",
+        "AWS Config"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Inspector는 자동화된 취약점 관리 서비스로, 워크로드를 자동으로 발견해 EC2 인스턴스·ECR 컨테이너 이미지·Lambda 함수를 소프트웨어 취약점과 의도치 않은 네트워크 노출에 대해 지속 스캔하고, 발견 시 상세 finding을 생성합니다.",
+      "wrongExplanations": {
+        "1": "Amazon GuardDuty는 로그(CloudTrail·VPC 흐름·DNS)를 분석해 악성·비정상 '활동'을 탐지하는 위협 탐지 서비스입니다. 워크로드의 취약점(CVE)을 스캔하지는 않습니다.",
+        "2": "Amazon Macie는 Amazon S3의 민감 데이터를 발견·분류하는 데이터 보안 서비스로, 소프트웨어 취약점 스캔과는 무관합니다.",
+        "3": "AWS Config는 리소스의 구성 상태와 변경 이력을 기록·평가합니다. 소프트웨어 취약점을 스캔하는 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Inspector? — 자동 취약점 관리, EC2·ECR 이미지·Lambda 스캔(소프트웨어 취약점·네트워크 노출)",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q3",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "리소스 보호 서비스 식별 (민감 데이터 — Macie)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Amazon S3에 저장된 방대한 객체 중에서 개인 식별 정보(PII)나 금융 정보 같은 민감 데이터가 어디에 있는지 머신러닝과 패턴 매칭으로 발견하고 분류하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon Macie",
+        "Amazon GuardDuty",
+        "Amazon Inspector",
+        "AWS Key Management Service(KMS)"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Macie는 데이터 보안 서비스로, 머신러닝과 패턴 매칭(관리형 데이터 식별자)을 사용해 Amazon S3의 민감 데이터(여러 유형의 PII·금융 정보·자격증명 등)를 발견·분류하고, 발견 시 finding을 생성합니다.",
+      "wrongExplanations": {
+        "1": "Amazon GuardDuty는 로그를 분석해 위협 활동을 탐지하는 서비스로, S3 객체 내부의 민감 데이터를 분류하지 않습니다.",
+        "2": "Amazon Inspector는 EC2·컨테이너 이미지·Lambda의 소프트웨어 취약점을 스캔하는 서비스로, 데이터 분류 기능이 없습니다.",
+        "3": "AWS KMS는 암호화 키를 생성·관리하는 서비스입니다. 데이터를 암호화하는 키를 다루지, S3 안의 민감 데이터를 찾아 분류하지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Macie? — ML·패턴 매칭으로 S3의 민감 데이터(PII 등) 발견·분류하는 데이터 보안 서비스",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q4",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "보안 findings 집계 (Security Hub)",
+      "difficulty": "foundational",
+      "stem": "한 조직이 GuardDuty, Inspector, Macie와 일부 파트너 보안 제품을 함께 사용 중이다. 이 모든 보안 findings를 표준 형식으로 한곳에 모아 통합된 화면에서 보고, 동시에 CIS·PCI DSS 같은 산업 표준과 모범 사례 대비 자동 점검까지 하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Security Hub",
+        "Amazon GuardDuty",
+        "Amazon CloudWatch",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "AWS Security Hub(현재 공식 명칭 AWS Security Hub CSPM)는 GuardDuty·Inspector·Macie 등 여러 AWS 서비스와 파트너 제품의 findings를 표준 형식(ASFF)으로 집계해 단일 화면(single pane of glass)으로 보여 주고, FSBP·CIS·PCI DSS·NIST 같은 표준 대비 자동 보안 점검과 보안 점수를 제공합니다.",
+      "wrongExplanations": {
+        "1": "Amazon GuardDuty는 위협을 직접 탐지하는 서비스로, 여러 서비스의 findings를 집계하는 역할은 하지 않습니다. 그 findings는 오히려 Security Hub로 모입니다.",
+        "2": "Amazon CloudWatch는 메트릭·로그·알람 기반의 성능·운영 모니터링 서비스로, 보안 findings를 표준 대비 점검·집계하는 도구가 아닙니다.",
+        "3": "AWS Artifact는 AWS의 컴플라이언스 보고서를 다운로드하는 포털로, 보안 findings를 집계하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Introduction to AWS Security Hub CSPM — 여러 서비스·파트너 findings 집계, FSBP·CIS·PCI·NIST 표준 점검",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q5",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "리소스 보호 서비스 식별 (DDoS — Shield)",
+      "difficulty": "foundational",
+      "stem": "인터넷에 노출된 애플리케이션을 UDP 반사나 TCP SYN 플러드 같은 흔한 분산 서비스 거부(DDoS) 공격으로부터 보호하려 한다. 모든 AWS 고객에게 추가 비용 없이 자동으로 적용되는 보호 기능은?",
+      "options": [
+        "AWS Shield Standard",
+        "AWS WAF",
+        "AWS Shield Advanced",
+        "보안 그룹(Security Group)"
+      ],
+      "correct": 0,
+      "explanation": "AWS Shield Standard는 모든 AWS 고객에게 추가 비용 없이 자동으로 제공되며, UDP 반사·TCP SYN 플러드 같은 흔한 볼류메트릭 DDoS 공격 벡터를 자동으로 방어합니다.",
+      "wrongExplanations": {
+        "1": "AWS WAF는 웹 애플리케이션 방화벽으로 SQL 인젝션·XSS 같은 애플리케이션 계층(L7) 요청을 규칙으로 필터링합니다. DDoS 대량 트래픽 방어가 주목적이 아니며 별도로 구성·과금됩니다.",
+        "2": "AWS Shield Advanced도 DDoS를 보호하지만 추가 요금이 부과되는 유료 서비스입니다. 추가적인 DDoS 탐지·완화와 Shield 대응팀(SRT)의 전담 지원 등을 제공하며, '추가 비용 없이 자동 적용'이라는 조건에 맞지 않습니다.",
+        "3": "보안 그룹은 인스턴스 수준의 가상 방화벽으로 허용할 트래픽 규칙을 정하는 것이며, DDoS 공격 방어 전용 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Shield — 빌드 시 흔한 볼류메트릭 DDoS(UDP 반사·TCP SYN 플러드)에 대한 자동·무료 보호",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/shield-chapter.html"
+        },
+        {
+          "title": "What are AWS WAF, AWS Shield...? — Shield Standard는 추가 비용 없이 자동 포함, Shield Advanced는 추가 과금·Shield 대응팀(SRT) 전담 지원",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q6",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "컴플라이언스 정보 위치 (AWS Artifact)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 외부 감사를 준비하면서 AWS의 SOC, PCI DSS, ISO 같은 보안·규정 준수 보고서와 인증서를 직접 내려받아 감사자에게 제출하려 한다. 이 문서를 온디맨드로 다운로드할 수 있는 AWS 서비스는?",
+      "options": [
+        "AWS Artifact",
+        "AWS Audit Manager",
+        "AWS Config",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS Artifact는 AWS의 보안·컴플라이언스 문서를 온디맨드로 다운로드하는 셀프서비스 포털입니다. ISO·PCI·SOC 보고서와 인증서를 제공하며, 이를 감사자나 규제기관에 제출하는 audit artifact로 사용할 수 있습니다. 이 문서들은 무료로 제공됩니다.",
+      "wrongExplanations": {
+        "1": "AWS Audit Manager는 '내 AWS 사용'이 규정을 준수하는지 증거를 자동 수집·관리해 감사 준비를 돕습니다. AWS 인프라의 컴플라이언스 보고서를 다운로드하는 곳은 Artifact입니다.",
+        "2": "AWS Config는 리소스 구성 상태·변경 이력을 기록·평가하는 서비스로, AWS의 컴플라이언스 보고서를 제공하지 않습니다.",
+        "3": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, AWS의 규정 준수 보고서를 다운로드하는 기능이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Artifact? — ISO·PCI·SOC 등 AWS 보안·컴플라이언스 문서 온디맨드 다운로드(무료)",
+          "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
+        },
+        {
+          "title": "What is AWS Audit Manager? — Artifact는 AWS 인프라 컴플라이언스 증명, Audit Manager는 고객 사용의 컴플라이언스 증거 수집(구분)",
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q7",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "거버넌스 서비스 식별 (감사 — CloudTrail)",
+      "difficulty": "foundational",
+      "stem": "보안 조사를 위해 '특정 사용자나 역할이 언제, 어디서, 어떤 AWS API 작업을 호출했는지' 계정 활동 기록을 확인하려 한다. 이런 거버넌스·운영·위험 감사를 위해 API 호출과 계정 활동을 이벤트로 기록하는 서비스는?",
+      "options": [
+        "AWS CloudTrail",
+        "Amazon CloudWatch",
+        "AWS Config",
+        "Amazon GuardDuty"
+      ],
+      "correct": 0,
+      "explanation": "AWS CloudTrail은 AWS 계정의 거버넌스·컴플라이언스·운영·위험 감사를 돕습니다. 사용자·역할·AWS 서비스가 콘솔·CLI·SDK·API로 취한 행동이 이벤트로 기록되어, 누가·언제·어떤 리소스에 대해·무슨 작업을 했는지 확인할 수 있습니다(Event history는 최근 90일).",
+      "wrongExplanations": {
+        "1": "Amazon CloudWatch는 메트릭·로그·알람으로 성능과 운영 상태를 모니터링합니다. '누가 어떤 API를 호출했는지'를 기록하는 활동 감사 도구가 아닙니다.",
+        "2": "AWS Config는 리소스가 '어떻게 구성됐고 어떻게 바뀌었는지'(구성 상태·이력)를 다룹니다. 누가 그 호출을 했는지는 CloudTrail이 기록합니다(둘은 짝으로 함께 쓰임).",
+        "3": "Amazon GuardDuty는 로그를 분석해 위협을 탐지한 '결과'를 제공합니다. 모든 API 호출의 감사 원장을 보존하는 서비스는 CloudTrail입니다."
+      },
+      "sources": [
+        {
+          "title": "What Is AWS CloudTrail? — 거버넌스·컴플라이언스·운영·위험 감사, 사용자·역할·서비스의 행동을 이벤트로 기록",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q8",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "거버넌스 서비스 식별 (구성 평가·감사 — Config)",
+      "difficulty": "foundational",
+      "stem": "규정 준수를 위해 AWS 리소스(예: 보안 그룹, EBS 볼륨)의 구성이 시간에 따라 어떻게 변경됐는지 이력을 추적하고, 원하는 구성 기준을 계속 충족하는지 지속적으로 평가하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Config",
+        "AWS CloudTrail",
+        "Amazon CloudWatch",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "AWS Config는 AWS 리소스의 구성을 상세히 보여 주고, 과거에 어떻게 구성됐는지와 시간에 따른 변경을 추적합니다. Config 규칙으로 리소스가 원하는 구성을 준수하는지 지속 평가하고, 위반 시 비준수로 표시·알림을 보냅니다.",
+      "wrongExplanations": {
+        "1": "AWS CloudTrail은 '누가 어떤 API를 호출했는지'(활동)를 기록합니다. 리소스의 구성 상태와 그 변경 이력을 추적·평가하는 것은 Config입니다.",
+        "2": "Amazon CloudWatch는 성능·운영 메트릭과 알람에 초점이 있으며, 리소스 구성의 준수 여부를 평가하지 않습니다.",
+        "3": "AWS Artifact는 AWS의 컴플라이언스 보고서를 다운로드하는 포털로, 내 리소스의 구성을 추적·평가하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What Is AWS Config? — 리소스 구성의 상세 뷰와 과거 구성·변경 추적, Config 규칙으로 준수 평가",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q9",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "암호화 옵션 (저장 시 암호화 키 관리 — KMS)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Amazon S3와 Amazon EBS에 저장되는 데이터(at rest)를 암호화하면서, 암호화에 사용하는 키를 중앙에서 생성·관리하고 키 사용 권한을 정책으로 통제하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Key Management Service(KMS)",
+        "AWS Secrets Manager",
+        "AWS Artifact",
+        "Amazon Macie"
+      ],
+      "correct": 0,
+      "explanation": "AWS KMS(Key Management Service)는 데이터를 암호화·서명하는 데 쓰는 암호화 키를 쉽게 생성·제어하게 해 주는 관리형 서비스입니다. KMS 키는 FIPS 140-3 검증 HSM으로 보호되어 암호화되지 않은 채 KMS를 떠나지 않으며, 키 정책으로 접근을 통제하고 S3·EBS 등 많은 서비스의 저장 시 암호화에 통합됩니다.",
+      "wrongExplanations": {
+        "1": "AWS Secrets Manager는 데이터베이스 자격증명·API 키 같은 '비밀'을 저장·조회·자동 교체하는 서비스입니다. 데이터 암호화에 쓰는 '암호화 키' 자체를 생성·관리하는 것은 KMS입니다.",
+        "2": "AWS Artifact는 AWS의 컴플라이언스 보고서를 다운로드하는 포털로, 암호화 키 관리와 무관합니다.",
+        "3": "Amazon Macie는 S3의 민감 데이터를 발견·분류하는 데이터 보안 서비스로, 암호화 키를 생성·관리하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Key Management Service — 암호화 키 생성·제어, FIPS 140-3 검증 HSM, 키 정책으로 접근 통제",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+        }
+      ],
+      "verified": true
+    }
+  ]
+}

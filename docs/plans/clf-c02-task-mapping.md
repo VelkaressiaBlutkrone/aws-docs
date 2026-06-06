@@ -39,7 +39,7 @@
 - **Knowledge:** AWS 공동 책임 모델
 - **Skills:** 모델 구성요소 / 고객 책임 / AWS 책임 / 공유 책임 / 서비스에 따른 책임 이동(RDS vs Lambda vs EC2)
 
-### Task 2.2 — 보안·거버넌스·컴플라이언스 개념 `clf-t2-2` · 문서 ☐ · 문항 0/5
+### Task 2.2 — 보안·거버넌스·컴플라이언스 개념 `clf-t2-2` · 문서 ☑ · 문항 9/9 ✅
 - **Knowledge:** 컴플라이언스·거버넌스 개념 / 클라우드 보안의 이점(암호화) / 보안 로그 위치
 - **Skills:** 컴플라이언스 정보 위치(AWS Artifact) / 지역·산업별 요구(AWS Compliance) / 리소스 보호 서비스(Inspector, Security Hub, GuardDuty, Shield) / 암호화 옵션(전송 중/저장 시) / 거버넌스 서비스(CloudWatch 모니터링, CloudTrail·Audit Manager·Config 감사) / 서비스별 컴플라이언스 차이
 
@@ -47,7 +47,7 @@
 - **Knowledge:** IAM / 루트 사용자 보호의 중요성 / 최소 권한 원칙 / IAM Identity Center(SSO)
 - **Skills:** 액세스 키·암호 정책·자격증명 저장(Secrets Manager, Systems Manager) / 인증 방법(MFA, IAM Identity Center, 교차 계정 역할) / 최소 권한에 따른 그룹·사용자·정책 정의 / 루트 전용 작업 식별 / 루트 보호 방법 / 자격증명 유형(페더레이션)
 
-### Task 2.4 — 보안 구성요소·리소스 식별 `clf-t2-4` · 문서 ☐ · 문항 0/5
+### Task 2.4 — 보안 구성요소·리소스 식별 `clf-t2-4` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** AWS 보안 기능 / 보안 문서
 - **Skills:** 보안 기능·서비스(보안 그룹, 네트워크 ACL, WAF) / Marketplace 서드파티 보안 제품 / 보안 정보 위치(Knowledge Center, Security Blog) / 보안 이슈 식별 서비스(Trusted Advisor)
 
@@ -102,10 +102,10 @@
 | Domain | 가중치 | Tasks | 문서 | 검증 문항 | 목표 |
 |--------|-------|-------|------|----------|------|
 | 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
-| 2 Security & Compliance | 30% | 4 | 2/4 | 12 | ≥20 |
+| 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
 | 3 Technology & Services | 34% | 8 | 0/8 | 0 | ≥40 |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **2/19** | **12** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **4/19** | **27** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -128,3 +128,10 @@
   - 규율: 문항·문서 작성 전 **공식 AWS 문서 9종을 실제로 페치해 사실 대조**(verified 게이트 honor) — IAM 개요/자격증명(id)/루트 사용자·루트 전용 작업/보안 모범 사례/MFA/암호 정책/IAM Identity Center(리네이밍 2022-07-26)/Secrets Manager/CLF 공식 가이드. 독립 서브에이전트 **AI 역대조 = 7/7 CORRECT, 수정 강제 0건**(해설 정밀도 1건만 보강: Q3 명시적 vs 암묵적 Deny).
   - 검증: `flutter analyze` 무이슈 / `flutter test` 11 통과(런타임 verified 게이트·QuestionBank 파싱 포함). 렌더러가 이미 있어 main push 시 사이트 즉시 노출.
   - 커버리지: **1/19 → 2/19 Task, 검증 문항 5 → 12.**
+
+- **2026-06-06 (세션 4) — 세 번째·네 번째 verified 배치 완료: `clf-t2-2`(보안·거버넌스·컴플라이언스, 9문항) + `clf-t2-4`(보안 구성요소·리소스, 6문항) → 도메인 2 완성(4/4).**
+  - 산출물: `t2-2.md`+`t2-2.questions.json`(9), `t2-4.md`+`t2-4.questions.json`(6), `lib/data/content_index.dart` 2줄 등록.
+  - 커버한 Task 2.2: 탐지 3종(GuardDuty=위협/Inspector=취약점/Macie=민감데이터) · Security Hub(CSPM) 집계 · Shield(DDoS Standard 무료/Advanced 유료) · 암호화(KMS, 전송/저장) · 감사 3종(CloudTrail=누가/Config=구성/CloudWatch=성능) · Artifact vs Audit Manager. Task 2.4: 보안그룹(인스턴스·stateful·allow전용) vs NACL(서브넷·stateless·allow+deny) · WAF(L7 SQLi/XSS) · Trusted Advisor · Marketplace 서드파티 · 정보 위치(Knowledge Center/Security Blog/re:Post).
+  - 규율: 공식 AWS 문서 16종을 실제 페치해 사실 대조(verified 게이트 honor). 독립 서브에이전트 **AI 역대조 = t2-2 9/9 + t2-4 6/6 CORRECT, 강제 수정 0건**(t2-2 q5 출처 1건 선택 보강만). 발견·정정: Security Hub→CSPM 리네이밍 병기, Audit Manager '신규 고객 등록 중단' 각주.
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 통과 / `flutter build web --release --base-href /aws-docs/` 성공(exit 0).
+  - 커버리지: **2/19 → 4/19 Task, 검증 문항 12 → 27. 도메인 2(보안·규정 준수, 30%) 4/4 완성.**
