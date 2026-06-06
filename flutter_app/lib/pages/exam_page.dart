@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import '../content/quiz_widgets.dart';
+import '../data/content_index.dart';
+import '../data/exam_session_store.dart';
+import '../data/history_store.dart';
 import '../models/attempt_record.dart';
+import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
@@ -414,4 +420,150 @@ class _SecondaryButton extends StatelessWidget {
       ),
     );
   }
+}
+
+/// 얇은 로더: 문제은행 + 공식 시험 메타를 읽고 세션을 복원해 ExamView에 주입.
+class ExamPage extends StatefulWidget {
+  const ExamPage({super.key, required this.entry});
+  final ContentEntry entry;
+
+  @override
+  State<ExamPage> createState() => _ExamPageState();
+}
+
+class _ExamPageState extends State<ExamPage> {
+  late final Future<_ExamLoad> _future = _load();
+  final _store = ExamSessionStore();
+  final _history = HistoryStore();
+
+  Future<_ExamLoad> _load() async {
+    final qRaw = await rootBundle.loadString(widget.entry.questionsAsset);
+    final bank =
+        QuestionBank.fromJson(json.decode(qRaw) as Map<String, dynamic>);
+
+    ExamOverview? overview;
+    try {
+      final gRaw = await rootBundle
+          .loadString('assets/exam_guides/${widget.entry.certCode}.json');
+      overview =
+          ExamGuide.fromJson(json.decode(gRaw) as Map<String, dynamic>).overview;
+    } catch (_) {
+      overview = null; // 메타 없으면 폴백 페이스(examDurationSec)
+    }
+
+    final examId = 'exam:${widget.entry.taskId}';
+    final fp = bankFingerprint(bank);
+    final existing = _store.load(examId);
+    final restorable = existing != null &&
+        !existing.submitted &&
+        existing.bankFingerprint == fp;
+
+    final DateTime startedAt;
+    final int durationSec;
+    final int initialIndex;
+    final Map<int, int> initialPicked;
+    final Set<int> initialFlagged;
+    if (restorable) {
+      startedAt =
+          DateTime.tryParse(existing.startedAtIso) ?? DateTime.now();
+      durationSec = existing.durationSec;
+      initialIndex = existing.index;
+      initialPicked = existing.picked;
+      initialFlagged = existing.flagged.toSet();
+    } else {
+      if (existing != null) _store.clear(examId); // 개정/제출된 세션 폐기
+      startedAt = DateTime.now();
+      durationSec = examDurationSec(
+        durationMinutes: overview?.durationMinutes,
+        scored: overview?.scoredQuestions,
+        unscored: overview?.unscoredQuestions,
+        count: bank.questions.length,
+      );
+      initialIndex = 0;
+      initialPicked = const {};
+      initialFlagged = const {};
+    }
+
+    return _ExamLoad(
+      bank: bank,
+      startedAt: startedAt,
+      durationSec: durationSec,
+      initialIndex: initialIndex,
+      initialPicked: initialPicked,
+      initialFlagged: initialFlagged,
+      restored: restorable,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return Scaffold(
+      backgroundColor: c.bg,
+      appBar: AppBar(
+        backgroundColor: c.bg,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shape: Border(bottom: BorderSide(color: c.border)),
+        title: Text('${widget.entry.title} · 시험 모드',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+      ),
+      body: FutureBuilder<_ExamLoad>(
+        future: _future,
+        builder: (context, snap) {
+          if (snap.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snap.data;
+          if (data == null || data.bank.questions.isEmpty) {
+            return Center(
+                child: Text('검증된 문항이 아직 없습니다.',
+                    style: TextStyle(color: c.textMuted)));
+          }
+          final examId = 'exam:${widget.entry.taskId}';
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: Layout.exam),
+              child: ExamView(
+                bank: data.bank,
+                certId: widget.entry.certForHistory,
+                taskId: widget.entry.taskId,
+                startedAt: data.startedAt,
+                durationSec: data.durationSec,
+                initialIndex: data.initialIndex,
+                initialPicked: data.initialPicked,
+                initialFlagged: data.initialFlagged,
+                restored: data.restored,
+                onChanged: _store.save,
+                onFinished: (r) {
+                  _history.add(r);
+                  _store.clear(examId);
+                },
+                onExit: () => Navigator.of(context).maybePop(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _ExamLoad {
+  const _ExamLoad({
+    required this.bank,
+    required this.startedAt,
+    required this.durationSec,
+    required this.initialIndex,
+    required this.initialPicked,
+    required this.initialFlagged,
+    required this.restored,
+  });
+  final QuestionBank bank;
+  final DateTime startedAt;
+  final int durationSec;
+  final int initialIndex;
+  final Map<int, int> initialPicked;
+  final Set<int> initialFlagged;
+  final bool restored;
 }
