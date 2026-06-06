@@ -34,6 +34,8 @@ Task 매핑 + 응시 이력 = 약점 리포트, 가중 출제, 진행률, (미�
 
 ## E-세트 구현 사양 (적대적 리뷰 반영)
 
+> **구현 진척(2026-06-06):** 하위 프로젝트 **#1(기반: 렌더러·퀴즈·이력)** 완료(세션 2, main). **#2 = E3·E4(시험 모드: 타이머·자동제출·세션복원·플래그) 구현 완료**(세션 3, 브랜치 `feat/clf-learning-loop-subproject-2`, 21테스트·web build green). 남은 것: **#3 = E1 오답노트·E2 약점리포트**, **#4 = E5 진행률·E6 가중 모의고사**.
+
 **E1 오답 노트**
 - D14 이력 스키마 확장: `{certId, examId, date, correct, total, wrongQuestionIds[], flaggedQuestionIds[], durationSpentSec}` — **이 플랜이 설계 문서 D14의 상위 사양이며, 설계 문서 D14 항목도 동일하게 갱신함**
 - stale ID 처리: 오답 노트 로드 시 현재 questionBank에 존재하지 않는 ID는 필터링하고 "개정으로 제외된 문항 N개" 안내 표시

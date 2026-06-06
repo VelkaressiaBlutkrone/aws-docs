@@ -1,8 +1,8 @@
 # Session Handoff — 2026-06-06 (START HERE 다음 세션)
 
-> 한 줄 상태: **clf-t2-1 검증 콘텐츠 + 학습 루프 기반(#1: 렌더러·퀴즈·이력) 완성·main 병합·배포. 다음 = (1순위) 다음 CLF Task 콘텐츠 → (2순위) 하위 프로젝트 #2(타이머·플래그).**
+> 한 줄 상태: **clf-t2-3 콘텐츠(IAM, 7문항) main 배포 완료 + 하위 프로젝트 #2(시험 모드: 타이머·자동제출·세션복원·플래그) 구현 완료(브랜치 `feat/clf-learning-loop-subproject-2`, 21테스트·build green). 다음 = (0순위) #2 머지 → (1순위) 다음 CLF 콘텐츠 → (2순위) 하위 프로젝트 #3(오답노트·약점리포트).**
 
-> 갱신: 2026-06-06 세션 2 (clf-t2-1 콘텐츠 + 학습 루프 #1 구현 완료 시점)
+> 갱신: 2026-06-06 세션 3 (clf-t2-3 콘텐츠 배포 + 하위 프로젝트 #2 시험 모드 구현 완료 시점)
 
 ## 지금 어디에 있나
 - **라이브:** https://velkaressiablutkrone.github.io/aws-docs/ (GitHub Pages, `main` push 시 자동 배포)
@@ -19,19 +19,21 @@
 
 ## ▶ 다음 행동 (다음 세션 — 순서대로)
 
-> 직전 세션(2) 완료: clf-t2-1 콘텐츠 + 학습 루프 **하위 프로젝트 #1(기반: 렌더러·퀴즈·이력)** 구현·main 병합·배포.
-> 설계/계획: `docs/designs/2026-06-06-clf-learning-loop-foundation-spec.md`(4개 하위 프로젝트 분해), `docs/plans/2026-06-06-clf-learning-loop-foundation-plan.md`.
+> 직전 세션(3) 완료: **clf-t2-3 콘텐츠(IAM, 검증 7문항) main 배포** + **하위 프로젝트 #2(시험 모드: E3 타이머·자동제출·세션복원 + E4 플래그)** 구현(브랜치 `feat/clf-learning-loop-subproject-2`, subagent-driven, analyze·21테스트·web build green, 2단계 리뷰 통과).
+> 설계/계획: `docs/designs/2026-06-06-clf-learning-loop-subproject-2-spec.md`, `docs/plans/2026-06-06-clf-learning-loop-subproject-2-plan.md`.
 
-**1순위 — 다음 CLF Task 콘텐츠 생산**
-- `clf-t2-1` 템플릿(`flutter_app/assets/content/clf/t2-1.{md,questions.json}`)을 복제. 추천: 비중 큰 도메인 2의 `clf-t2-3`(접근 관리/IAM) 또는 `clf-t2-2`.
-- 복제 경로 3단계: ① `t2-X.md`(YAML 프런트매터 + 섹션: 목표→🎯왜→📖핵심→✍️시험포인트→⚠️함정→🧪자가점검→📌출처) ② `t2-X.questions.json`(검증 문항 ≥5, 각 문항 sources[] + verified) ③ `lib/data/content_index.dart`에 `ContentEntry` 한 줄 추가.
-- 규율 유지: **verified 게이트(출처 URL 필수) + AI 역대조** 2차 점검. 렌더러가 이미 있어 추가 즉시 사이트 노출. **취업/DIO 섹션 제외.**
+**0순위 — 하위 프로젝트 #2 머지**
+- `feat/clf-learning-loop-subproject-2` → main 머지/PR(미완 시). 머지·push 시 시험 모드가 사이트에 노출.
 
-**2순위 — 학습 루프 하위 프로젝트 #2**
-- E3 실전 타이머 + 자동 제출 + 세션 복원, E4 문항 플래그. 같은 흐름(spec → plan → subagent-driven).
-- 이력 스키마 D14는 이미 `wrongQuestionIds`/`durationSpentSec` 기록 중 → #2뿐 아니라 #3(E1 오답노트/E2 약점리포트)의 데이터 기반도 준비됨.
+**1순위 — 다음 CLF Task 콘텐츠 생산 (진짜 병목)**
+- `clf-t2-1`/`t2-3` 템플릿 복제. 추천: 도메인 2 마무리 `clf-t2-2`(보안·거버넌스·컴플라이언스)/`clf-t2-4`(보안 구성요소), 이후 비중 큰 도메인 3(34%).
+- 복제 경로 3단계: ① `t2-X.md`(목표→🎯왜→📖핵심→✍️시험포인트→⚠️함정→🧪자가점검→📌출처) ② `t2-X.questions.json`(검증 ≥5, sources[]+verified) ③ `content_index.dart` 한 줄.
+- 규율 유지: **verified 게이트(출처 URL 필수) + AI 역대조** 2차 점검(실제 공식 문서 페치 대조). 취업/DIO 제외.
 
-> 게이트 유지: CLF 1개 완성 우선. 콘텐츠 커버리지(현재 1/19)를 늘리는 게 여전히 진짜 병목.
+**2순위 — 학습 루프 하위 프로젝트 #3**
+- E1 오답노트(틀린 문항 재응시) + E2 약점 리포트. 이력 D14의 `wrongQuestionIds`·`flaggedQuestionIds`(이제 시험 모드가 기록 중) + `durationSpentSec`가 데이터 기반. 같은 흐름(brainstorm → spec → plan → subagent-driven).
+
+> 게이트 유지: CLF 콘텐츠 커버리지(현재 **2/19**)를 늘리는 게 여전히 진짜 병목. 시험 모드는 그릇 완성도이지 콘텐츠가 아님.
 
 ## 생산 규율 (플레이북 합의)
 - 문항 = **A+B 혼합** (Task 직렬 척추 + 약점 우선, C(AI 소크라테스)는 어려운 Task 옵션)
