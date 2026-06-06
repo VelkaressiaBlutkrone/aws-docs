@@ -1,13 +1,13 @@
-# Session Handoff — 2026-06-06 (START HERE 다음 세션)
+# Session Handoff — 2026-06-07 (START HERE 다음 세션)
 
-> 한 줄 상태: **🏁 Spec 1(IA 재조정 + go_router 라우팅) + Spec 2(cert-wide 통합 모의고사) 배포 완료. CLF 검증 문항 118 → 130(드래프트 12 flip). 통합 모의고사 라이브: `/cert/CLF-C02/exam` → 시작화면 → 도메인 가중 65문항 샘플·채점·복원. analyze 무결·41 테스트·web 빌드·opus 리뷰 APPROVE·실브라우저 headless dogfood 통과·origin/main push(`d00f656`). 다음 = 학습 루프 하위 프로젝트 #3(E1 오답노트·E2 약점 리포트) 또는 비-CLF 콘텐츠.**
+> 한 줄 상태: **🏁 Spec 1·Spec 2 배포 완료 + 작업 우선순위 로드맵 수립 + Phase 0(정리/부채) 완료(로컬 커밋). 로드맵: 정리→루프완결(E1/E2,E5/E6)→콘텐츠 4단계 게이트(`docs/superpowers/specs/2026-06-07-work-priority-roadmap-design.md`). Phase 0 = _MockLoad→_Restorable 하드닝·quiz_widgets 간격 토큰화·DESIGN.md 폰트 표기 정정(항목② QuizPage 분기는 이미 구현돼 있어 제외). analyze 무결·41 테스트·릴리스 빌드 통과. 다음 = Phase 1(E1 오답노트+E2 약점리포트) — E1 설계 이미 승인됨(`2026-06-06-learning-loop-e1-design.md`).**
 
-> 갱신: 2026-06-06 — "3-2-1" 세션 종료(문서 정리 + 문항 12 flip + Spec 2 통합 모의고사 brainstorm→spec→plan→구현→리뷰→dogfood→배포). 직전: Spec 1(라우팅) 배포(`18322ce`), 그 이전: 세션 11 CLF 콘텐츠 19/19 완주.
+> 갱신: 2026-06-07 — 브레인스토밍으로 우선순위 로드맵 작성 → Phase 0 구현 계획 → executing-plans로 Phase 0 4개 Task 완료(로컬 커밋 `debd590`·`44d1bc9`·`4ce5124`, 아직 origin push 전이면 다음 세션에서 push). 직전 세션: Spec 2 통합 모의고사 배포(`d00f656`).
 
 ## ⚠️ 환경 (먼저 읽기 — 매 세션 함정)
-- **이중 폴더:** 작업 루트는 `D:\workspace\awc-docs`이고, 실제 저장소·코드는 그 안의 **`aws-docs\`** 하위에 있다. 즉 코드 = `D:\workspace\awc-docs\aws-docs\flutter_app`. **상대경로에 `aws-docs\` 접두사를 빼면 파일을 못 찾는다.**
-- **작업 디렉터리:** flutter/test/analyze는 `aws-docs\flutter_app`에서, git은 `aws-docs`에서(`git -C "D:\workspace\awc-docs\aws-docs" …`).
-- **flutter 명령은 PowerShell로** 실행(Git Bash는 `--base-href` 경로를 망가뜨림). PowerShell `Set-Location`은 이후 파일 도구의 상대경로 베이스도 바꾸니 주의 → 절대경로 권장.
+- **폴더 구조(정정 2026-06-07):** git 루트 = `D:\workspace\awc-docs`이고, Flutter 코드는 그 **바로 아래 `flutter_app\`**에 있다(= `D:\workspace\awc-docs\flutter_app`). 과거 핸드오프의 "`aws-docs\` 하위" 표기는 이 체크아웃에선 **틀림** — `aws-docs\` 중간 폴더는 없다. docs는 루트의 `docs\`.
+- **작업 디렉터리:** flutter/test/analyze는 `flutter_app`에서, git은 루트에서. **git은 절대 `-C D:/workspace/awc-docs` 사용**(PowerShell Set-Location이 Bash 도구 cwd까지 바꿔 상대경로가 깨진 사례 있음).
+- **flutter 명령은 PowerShell로** 실행(Git Bash는 `--base-href` 경로를 망가뜨림). PowerShell `Set-Location`은 이후 파일 도구·Bash 도구의 cwd 베이스도 바꾸니 주의 → 절대경로 권장.
 - **커밋:** 사용자 선택으로 `main` 직접 커밋·push(피처 브랜치 아님).
 
 ## 지금 어디에 있나
@@ -27,8 +27,13 @@
    - 검증: analyze 무결 · **41 테스트** green · 릴리스 web 빌드 · **opus 코드리뷰 APPROVE**(allocateByWeight 2만 케이스 스트레스) · **실브라우저 headless dogfood**(gstack browse) 시작화면·'시작'→65문항 가중 출제·타이머 90:00 확인.
    - Spec: `docs/superpowers/specs/2026-06-06-cert-wide-exam-design.md` · Plan: `docs/superpowers/plans/2026-06-06-cert-wide-exam.md`.
 
-## ▶ 다음 행동 후보 (우선순위 제안)
-**1순위 — 학습 루프 하위 프로젝트 #3 (E1 오답노트 + E2 약점 리포트).**
+## ▶ 다음 행동 (로드맵 기준)
+**확정 로드맵:** `docs/superpowers/specs/2026-06-07-work-priority-roadmap-design.md` — 정리(Phase 0 ✅) → 루프완결 Phase 1(E1/E2) → Phase 2(E5/E6) → Phase 3(콘텐츠).
+
+**다음 = Phase 1 (E1 오답노트 + E2 약점 리포트).** E1은 설계 이미 승인됨(`docs/superpowers/specs/2026-06-06-learning-loop-e1-design.md`) → writing-plans로 구현 계획부터. 공통 기반 = `WrongAnswerIndex`(순수 집계) + cert 상세 진입(새 결과화면 X). `AttemptRecord.presentedQuestionIds` 추가(하위호환). E2는 같은 집계 위 Task별 정답률 표 + 70%↓ 학습문서 앵커.
+- **Phase 0 잔여(후속 결정):** quiz_widgets **폰트 크기 토큰화**는 보류 — DESIGN.md 타입스케일(13·15·16·17·20·28)이 코드 실제값(12·14)과 어긋나 "코드 유지 vs 문서 정렬(소폭 시각 변화)" 사용자 결정 필요. 테두리 두께 토큰도 DESIGN.md 미정의.
+
+### (이전) 1순위 참고 — 학습 루프 #3 (E1 오답노트 + E2 약점 리포트)
 - 데이터 준비됨: 시험/퀴즈가 `AttemptRecord`(D14)에 `wrongQuestionIds`·`flaggedQuestionIds`·`durationSpentSec` 기록 중(`HistoryStore.add`). 단, **현재 이력을 표시하는 화면이 없음**(기록만) → #3가 첫 소비자.
 - 흐름: brainstorm → spec → plan → subagent-driven (이번 세션과 동일).
 - 설계 참고: `docs/designs/clf-learning-loop.md`, `docs/designs/2026-06-06-clf-learning-loop-subproject-2-spec.md`.
