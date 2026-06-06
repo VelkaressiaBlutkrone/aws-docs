@@ -27,6 +27,24 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   'CLF-C02': [
     ContentEntry(
       certCode: 'CLF-C02',
+      taskId: 'clf-t1-1',
+      title: 'AWS 클라우드의 이점',
+      domain: 1,
+      mdAsset: 'assets/content/clf/t1-1.md',
+      questionsAsset: 'assets/content/clf/t1-1.questions.json',
+      questionCount: 6,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'clf-t1-2',
+      title: 'Well-Architected Framework (6대 기둥)',
+      domain: 1,
+      mdAsset: 'assets/content/clf/t1-2.md',
+      questionsAsset: 'assets/content/clf/t1-2.questions.json',
+      questionCount: 6,
+    ),
+    ContentEntry(
+      certCode: 'CLF-C02',
       taskId: 'clf-t2-1',
       title: '공동 책임 모델',
       domain: 2,

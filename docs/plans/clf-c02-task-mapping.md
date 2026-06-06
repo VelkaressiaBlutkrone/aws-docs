@@ -17,11 +17,11 @@
 
 ## Domain 1: Cloud Concepts (24%)
 
-### Task 1.1 — AWS 클라우드의 이점 정의 `clf-t1-1` · 문서 ☐ · 문항 0/5
+### Task 1.1 — AWS 클라우드의 이점 정의 `clf-t1-1` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** AWS 클라우드의 가치 제안
 - **Skills:** 규모의 경제(비용 절감) / 글로벌 인프라의 이점(배포 속도, 글로벌 도달) / 고가용성·탄력성·민첩성의 장점
 
-### Task 1.2 — AWS 클라우드 설계 원칙 식별 `clf-t1-2` · 문서 ☐ · 문항 0/5
+### Task 1.2 — AWS 클라우드 설계 원칙 식별 `clf-t1-2` · 문서 ☑ · 문항 6/6 ✅
 - **Knowledge:** AWS Well-Architected Framework
 - **Skills:** 6개 기둥 이해(운영 우수성, 보안, 안정성, 성능 효율, 비용 최적화, 지속 가능성) / 기둥 간 차이 식별
 
@@ -101,11 +101,11 @@
 
 | Domain | 가중치 | Tasks | 문서 | 검증 문항 | 목표 |
 |--------|-------|-------|------|----------|------|
-| 1 Cloud Concepts | 24% | 4 | 0/4 | 0 | ≥20 |
+| 1 Cloud Concepts | 24% | 4 | 2/4 | 12 | ≥20 |
 | 2 Security & Compliance | 30% | 4 | 4/4 | 27 | ≥20 |
 | 3 Technology & Services | 34% | 8 | 8/8 ✅ | 51 | ≥40 ✅ |
 | 4 Billing, Pricing & Support | 12% | 3 | 0/3 | 0 | ≥15 |
-| **합계** | 100% | **19** | **12/19** | **78** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
+| **합계** | 100% | **19** | **14/19** | **90** | **≥95** (모의고사 2회차 130문항 목표와 정합) |
 
 > 이 표가 `src/content/clf/examGuide.ts`(T8)의 원본 데이터다. Task ID(`clf-t1-1` 형식)는 문항의 `examGuideTaskId`로 그대로 사용한다.
 > 부록: 공식 가이드 끝의 in-scope 서비스 전체 목록은 문항 보기(선택지) 구성 시 참조.
@@ -163,3 +163,10 @@
   - 규율: 공식 AWS 문서 12종 실페치 대조. 독립 서브에이전트 역대조 **t3-7 7/7 + t3-8 6/6 CORRECT**. 발견·정정: SageMaker→**SageMaker AI**(2024-12), QuickSight→**Amazon Quick(Sight)** 리네이밍 병기 + 출처 표기 보정(q7·q6).
   - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
   - 커버리지: **10/19 → 12/19 Task, 검증 문항 65 → 78. 도메인 3(34%) 8/8 완성** → 도메인 2(30%) + 3(34%) = **시험 비중 64% 완성**.
+
+- **2026-06-06 (세션 9) — 열셋·열넷 번째 verified 배치: `clf-t1-1`(클라우드 이점, 6문항) + `clf-t1-2`(Well-Architected, 6문항) → 도메인 1(24%) 착수(2/4).**
+  - 산출물: `t1-1.md`+`t1-1.questions.json`(6), `t1-2.md`+`t1-2.questions.json`(6), `content_index.dart` 2줄 등록(맨 앞, 도메인 1).
+  - 커버: t1-1 클라우드 정의(온디맨드·종량 과금) · 4대 이점(민첩성·탄력성·비용 절감/규모의 경제·글로벌 배포) · 고가용성 vs 탄력성 vs 민첩성 구분. t1-2 Well-Architected **6대 기둥**(운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성) · 감사 아님 · 무료 WA Tool.
+  - 규율: 공식 AWS 문서 5종 실페치 대조(각 기둥 페이지 포함). 독립 서브에이전트 역대조 **t1-1 6/6 + t1-2 6/6 CORRECT**. t1-1 **출처 정합성 2건 보강**(q5 'deploy in minutes' 1차 출처, q6 고가용성 근거→글로벌 인프라 페이지).
+  - 검증: `flutter analyze` 무이슈 / `flutter test` 21 / `build web --release` green(exit 0).
+  - 커버리지: **12/19 → 14/19 Task, 검증 문항 78 → 90.** (목표 ≥95의 95% — 거의 도달.)
