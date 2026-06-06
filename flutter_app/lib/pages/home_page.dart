@@ -798,7 +798,7 @@ class _Eyebrow extends StatelessWidget {
   }
 }
 
-enum _Tone { level, code, soon }
+enum _Tone { level, code }
 
 class _Pill extends StatelessWidget {
   const _Pill({required this.label, required this.tone});
@@ -815,9 +815,6 @@ class _Pill extends StatelessWidget {
         bg = c.infoWeak;
         fg = c.info;
       case _Tone.code:
-        bg = c.surface2;
-        fg = c.textMuted;
-      case _Tone.soon:
         bg = c.surface2;
         fg = c.textMuted;
     }

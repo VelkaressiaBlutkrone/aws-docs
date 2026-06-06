@@ -87,7 +87,7 @@ class _RouteErrorPage extends StatelessWidget {
           children: [
             Text('페이지를 찾을 수 없습니다.',
                 style: TextStyle(color: c.text, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 12),
+            const SizedBox(height: Gap.md),
             FilledButton(
               onPressed: () => context.go('/'),
               child: const Text('홈으로'),
