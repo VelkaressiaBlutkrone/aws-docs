@@ -201,3 +201,16 @@ const Map<String, List<ContentEntry>> kContentIndex = {
 
 List<ContentEntry> contentFor(String certCode) =>
     kContentIndex[certCode] ?? const [];
+
+/// 해당 자격증에 검증 콘텐츠(학습문서)가 존재하는가.
+bool certHasContent(String certCode) => contentFor(certCode).isNotEmpty;
+
+/// 랜딩 요약용: 학습문서 수 + 총 검증 문항 수.
+({int docs, int questions}) certContentSummary(String certCode) {
+  final entries = contentFor(certCode);
+  var questions = 0;
+  for (final e in entries) {
+    questions += e.questionCount;
+  }
+  return (docs: entries.length, questions: questions);
+}
