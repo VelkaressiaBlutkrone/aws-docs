@@ -55,4 +55,32 @@ void main() {
     expect(find.textContaining('정답'), findsWidgets);
     expect(find.textContaining('EC2는 IaaS'), findsOneWidget);
   });
+
+  testWidgets('mode/examId 주입 시 review 레코드로 기록', (tester) async {
+    AttemptRecord? finished;
+    await tester.pumpWidget(MaterialApp(
+      theme: AppTheme.light,
+      home: Scaffold(
+        body: QuizView(
+          bank: _bank(),
+          certId: 'CLF-C02',
+          mode: 'review',
+          examId: 'review:clf-t2-1',
+          onFinished: (r) => finished = r,
+        ),
+      ),
+    ));
+
+    await tester.tap(find.text('EC2'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('확인'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('결과 보기'));
+    await tester.pumpAndSettle();
+
+    expect(finished, isNotNull);
+    expect(finished!.mode, 'review');
+    expect(finished!.examId, 'review:clf-t2-1');
+    expect(finished!.presentedQuestionIds, ['q1']);
+  });
 }

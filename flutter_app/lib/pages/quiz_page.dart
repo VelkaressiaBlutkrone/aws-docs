@@ -73,11 +73,19 @@ class QuizView extends StatefulWidget {
     super.key,
     required this.bank,
     required this.certId,
+    this.mode = 'practice',
+    this.examId,
     this.onFinished,
   });
 
   final QuestionBank bank;
   final String certId;
+
+  /// 기록 모드: 'practice'(기본) | 'review'. 헤드라인 통계 분리용.
+  final String mode;
+
+  /// 기록 examId. null이면 'practice:${bank.examGuideTaskId}'.
+  final String? examId;
   final void Function(AttemptRecord)? onFinished;
 
   @override
@@ -105,8 +113,8 @@ class _QuizViewState extends State<QuizView> {
     }
     widget.onFinished?.call(AttemptRecord(
       certId: widget.certId,
-      examId: 'practice:${widget.bank.examGuideTaskId}',
-      mode: 'practice',
+      examId: widget.examId ?? 'practice:${widget.bank.examGuideTaskId}',
+      mode: widget.mode,
       date: DateTime.now().toIso8601String(),
       correct: correct,
       total: _qs.length,
