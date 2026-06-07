@@ -214,3 +214,8 @@ bool certHasContent(String certCode) => contentFor(certCode).isNotEmpty;
   }
   return (docs: entries.length, questions: questions);
 }
+
+/// 해당 자격증에 노출 가능한(verified) 문항이 1개 이상 있는가.
+/// "학습문서만(문항 0)" 상태를 모의고사·리포트 노출에서 가르는 정적 판정.
+bool certHasVerifiedQuestions(String certCode) =>
+    certContentSummary(certCode).questions > 0;

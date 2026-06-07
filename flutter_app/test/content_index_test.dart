@@ -25,4 +25,9 @@ void main() {
     expect(s.docs, 0);
     expect(s.questions, 0);
   });
+
+  test('certHasVerifiedQuestions: 문항 있으면 true, 없으면 false', () {
+    expect(certHasVerifiedQuestions('CLF-C02'), isTrue);
+    expect(certHasVerifiedQuestions('NOPE'), isFalse);
+  });
 }
