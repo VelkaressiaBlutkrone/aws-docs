@@ -1,0 +1,268 @@
+---
+examGuideTaskId: saa-t3-3
+certCode: SAA-C03
+domain: 3
+domainName: 고성능 아키텍처 설계
+domainWeightPct: 24
+title: EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략
+coversTasks:
+  - "3.2"
+sources:
+  - title: Amazon EC2 인스턴스 유형 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
+  - title: EC2 배치 그룹 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html
+  - title: 배치 전략 상세 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html
+  - title: EC2 구매 옵션 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+  - title: 향상된 네트워킹 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html
+  - title: Elastic Fabric Adapter (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
+  - title: SAA-C03 공식 시험 가이드 (한국어)
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+lastVerified: 2026-06-07
+---
+
+# EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략
+
+> **커버하는 공식 Task** — SAA-C03 · 도메인 3 「고성능 아키텍처 설계」(24%) · **Task 3.2 고성능 및 탄력적 컴퓨팅 솔루션 결정** (`saa-t3-3`)
+> 이 문서는 위 한 Task에 1:1로 매핑됩니다. 비용 비교는 도메인 4 「비용 최적화」(saa-t4-2)에서 다루고, 여기서는 **성능과 배치** 관점에 집중합니다.
+
+---
+
+## ✅ 학습 목표 체크리스트
+
+이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.2의 Skill 항목 기반)
+
+- [ ] **인스턴스 패밀리 선택** — 워크로드 요건(CPU·메모리·스토리지·GPU)에 맞는 패밀리 코드를 고를 수 있다
+- [ ] **구매 옵션 매핑** — 온디맨드·예약·Savings Plans·스팟·전용 호스트를 워크로드 특성에 맞게 선택할 수 있다
+- [ ] **배치 그룹 3종 구분** — 클러스터·파티션·분산의 차이와 제한을 설명하고, 시나리오에 맞게 고를 수 있다
+- [ ] **향상된 네트워킹** — ENA와 EFA의 차이, OS-bypass 메커니즘을 설명할 수 있다
+- [ ] **인스턴스 명명 규칙** — `m7g.2xlarge` 같은 이름에서 패밀리·세대·프로세서·크기를 읽을 수 있다
+- [ ] **스팟 인터럽션** — 2분 경고와 중단 동작(종료·중지·최대 절전)을 안다
+
+---
+
+## 🎯 왜 중요한가
+
+- 도메인 3(24%)는 SAA에서 두 번째로 높은 비중입니다. "어떤 인스턴스 유형을 골라야 하는가"와 "어떻게 배치해야 하는가"는 거의 모든 컴퓨팅 시나리오 문항의 출발점입니다.
+- 시험은 구체적인 요건(저지연·고처리량·장애 격리·비용 최소화 등)을 주고 **인스턴스 패밀리 + 배치 전략 + 구매 옵션의 조합**을 고르게 합니다.
+- Nitro 하이퍼바이저, ENA, EFA 같은 성능 기반 기술은 HPC·ML 시나리오에서 단골로 등장합니다.
+
+---
+
+## 📖 핵심 개념
+
+### 1) 인스턴스 명명 규칙
+
+인스턴스 유형은 `[패밀리][세대][프로세서][기능].[크기]` 형식입니다.
+
+```
+m  7  g  d  .  2xlarge
+│  │  │  │     └─ 크기 (nano / micro / small / medium / large / xlarge / …)
+│  │  │  └──── 기능 접미사 (d=NVMe, n=네트워크 강화, b=EBS 최적화 등)
+│  │  └─────── 프로세서 (없음=Intel, a=AMD, g=Graviton/ARM)
+│  └────────── 세대 (숫자가 클수록 최신)
+└───────────── 패밀리 (m=범용, c=컴퓨팅, r=메모리 등)
+```
+
+> 현재 세대(6·7·8세대)는 모두 **Nitro 하이퍼바이저** 기반입니다. Nitro는 전용 하드웨어에 가상화 기능을 오프로드해 호스트 CPU 오버헤드를 최소화하고, 거의 베어메탈 수준의 성능을 제공합니다.
+
+### 2) 인스턴스 패밀리 비교
+
+| 패밀리 | 코드 | vCPU : 메모리 비율 | 주요 용도 | 대표 최신 유형 |
+|---|---|---|---|---|
+| **범용** | M, T | 균형 (약 1:4) | 웹 서버·앱 서버·중소 DB | M8i, M8g, T4g |
+| **버스트 범용** | T | 균형 (기준선+버스트) | 낮은 기준 CPU, 간헐적 스파이크 | T4g, T3 |
+| **컴퓨팅 최적화** | C | 높음 (약 1:2) | 배치 처리·미디어 인코딩·과학 계산·게임 서버 | C8i, C8g, C7gn |
+| **메모리 최적화** | R, X, U | 낮음 (약 1:8 이상) | 인메모리 DB·SAP HANA·실시간 빅데이터 | R8i, R8g, X8i |
+| **초대용량 메모리** | U | 매우 낮음 (TB급) | SAP HANA, 인메모리 분석 | U7i-12tb, U7in-32tb |
+| **스토리지 최적화** | I, D, Im, Is | 균형 + 고 I/O | NoSQL·데이터 웨어하우스·분산 파일시스템 | I4i, I7i, D3en |
+| **가속 컴퓨팅** | P, G, Trn, Inf, DL | GPU/가속칩 특화 | ML 학습·추론·HPC·그래픽 렌더링 | P5, G6, Trn2, Inf2 |
+| **HPC** | Hpc | EFA 내장 | 고성능 컴퓨팅 클러스터 | Hpc7g, Hpc8a |
+
+> **T 패밀리 버스트 메커니즘**: 인스턴스는 CPU 크레딧을 축적하고, 기준선 이상의 CPU가 필요할 때 소모합니다. 크레딧이 소진되면 기준선으로 성능이 제한됩니다. 지속적인 고부하 워크로드에는 **M 패밀리**가 적합합니다.
+
+### 3) 프로세서 선택
+
+| 프로세서 | 코드 접미사 | 특징 |
+|---|---|---|
+| Intel (Xeon) | 없음 | 광범위한 소프트웨어 호환성 |
+| AMD (EPYC) | `a` | Intel 대비 유사 성능, 가격 경쟁력 |
+| AWS Graviton (ARM) | `g` | 동급 x86 대비 최대 40% 가격-성능비 우위 (AWS 발표 기준), 전력 효율 |
+| AWS Trainium | Trn | ML 학습 전용 칩 |
+| AWS Inferentia | Inf | ML 추론 전용 칩, 저비용 고처리량 |
+
+### 4) 구매 옵션 — 성능·가용성 관점
+
+> 비용 상세 분석은 `saa-t4-2`에서 다룹니다. 여기서는 **워크로드 특성과 가용성 트레이드오프**에 집중합니다.
+
+| 구매 옵션 | 가용성 보장 | 중단 위험 | 적합 워크로드 |
+|---|---|---|---|
+| **온디맨드** | 용량 있으면 즉시 | 없음 (직접 제어) | 예측 불가·단기·불규칙 워크로드 |
+| **예약 인스턴스 (RI)** | 특정 유형·리전 약정 | 없음 | 안정적 상시 워크로드 (1·3년) |
+| **Savings Plans** | 사용량($) 약정, 유형 유연 | 없음 | 상시 워크로드, 인스턴스 유형 변경 가능성 있음 |
+| **스팟** | 여유 용량 의존 | **있음** (최대 90% 할인) | 중단 가능 배치·데이터 분석·스테이트리스 |
+| **전용 호스트** | 물리 서버 전용 | 없음 | BYOL 라이선스·규정 준수 |
+| **전용 인스턴스** | 단일 테넌트 하드웨어 | 없음 | 하드웨어 격리 요건 |
+| **용량 예약** | 특정 AZ 용량 선점 | 없음 | 중요 이벤트 전 용량 확보 |
+
+**스팟 인터럽션 메커니즘:**
+
+```
+EC2가 용량을 회수할 때 →
+  2분 전 중단 경고(인스턴스 메타데이터 + EventBridge 이벤트)
+  → 지정된 중단 동작 실행:
+     - terminate (기본): 인스턴스 종료
+     - stop: EBS 지원 인스턴스 중지
+     - hibernate: 메모리 상태를 EBS에 저장 후 중지
+```
+
+> **EC2 인스턴스 재조정 권장(Rebalance Recommendation)**: 중단 2분 경고보다 앞서 "높은 중단 위험" 신호를 보냅니다. Auto Scaling과 연동하면 사전에 다른 스팟 풀로 재배치할 수 있습니다.
+
+### 5) 배치 그룹 3종 비교
+
+배치 그룹(Placement Group)은 EC2 인스턴스의 물리적 배치를 제어해 성능 또는 가용성 목표를 달성하는 논리적 그룹입니다. 생성 자체는 무료입니다.
+
+| 속성 | 클러스터(Cluster) | 파티션(Partition) | 분산(Spread) |
+|---|---|---|---|
+| **배치 방식** | 단일 AZ 내 밀집 배치 | 파티션(랙 집합)별 분리 | 인스턴스마다 별도 랙 |
+| **AZ 범위** | 단일 AZ만 | 동일 리전 다중 AZ 가능 | 동일 리전 다중 AZ 가능 |
+| **최대 인스턴스 수** | 제한 없음(용량 의존) | AZ당 최대 7파티션, 인스턴스 수 제한 없음 | AZ당 최대 **7개** |
+| **네트워크 성능** | 인스턴스 내 단일 플로우 최대 **10 Gbps** (ENA 기준) | 파티션 내 일반 성능 | 일반 성능 |
+| **장애 격리** | 낮음 (동일 랙 공유 가능) | 파티션 단위 (랙·전원 분리) | 최고 (인스턴스별 별도 랙) |
+| **주요 워크로드** | HPC·MPI·저지연 클러스터 | Hadoop·Cassandra·Kafka | 소수 핵심 인스턴스 (ZooKeeper·마스터 노드) |
+| **전용 호스트** | 불가 | 불가 | 불가 |
+| **Spot 중지/최대 절전** | 불가 | 불가 | 불가 |
+
+**클러스터 배치 그룹 주의사항:**
+
+```
+권장 사항:
+- 단일 런칭 요청으로 필요한 인스턴스 전부 시작
+- 동일 인스턴스 유형 사용
+- 이유: 나중에 추가하거나 다른 유형 혼합 시 Insufficient Capacity Error(ICE) 위험 증가
+```
+
+> **파티션 배치 그룹 토폴로지 공개**: HDFS, HBase, Cassandra 같은 분산 시스템은 파티션 배치 그룹이 제공하는 **"어떤 인스턴스가 어느 파티션에 있는가"** 정보를 읽어 데이터 복제 결정을 최적화합니다.
+
+### 6) 향상된 네트워킹 — ENA와 EFA
+
+**향상된 네트워킹(Enhanced Networking)** 은 SR-IOV(Single Root I/O Virtualization)를 사용해 가상화 오버헤드 없이 고대역폭·저지연·고 PPS를 제공합니다. 추가 요금이 없습니다.
+
+| 항목 | ENA | EFA |
+|---|---|---|
+| **정식 명칭** | Elastic Network Adapter | Elastic Fabric Adapter |
+| **최대 대역폭** | 최대 100 Gbps | ENA 대역폭 + OS-bypass 통신 |
+| **OS-bypass** | 없음 (표준 TCP/IP 스택) | 있음 (Libfabric API → EFA 디바이스 직접 통신) |
+| **프로토콜** | 표준 IP | SRD(Scalable Reliable Datagram) + IP |
+| **대상 워크로드** | 범용 고성능 네트워킹 | HPC(MPI)·ML 학습(NCCL)·추론(NIXL) |
+| **지원 인스턴스** | 모든 Nitro 기반 인스턴스 | 특정 대형 인스턴스 (P5, Trn2, Hpc 계열 등) |
+| **추가 요금** | 없음 | 없음 |
+
+**EFA OS-bypass 원리:**
+
+```
+기존 경로 (ENA):
+  애플리케이션 → MPI/NCCL → OS TCP/IP 스택 → ENA 드라이버 → 네트워크
+
+EFA 경로:
+  애플리케이션 → MPI/NCCL → Libfabric API → EFA 디바이스 (커널 우회)
+  → 오버헤드 최소화 → 지연 감소·일관성 향상
+```
+
+> **EFA 제약**: EFA 트래픽은 AZ 또는 VPC를 넘을 수 없습니다. EFA를 붙이면 IP 네트워킹을 위한 ENA 기능도 함께 제공됩니다(EFA-only 모드 제외).
+
+---
+
+## ✍️ 시험 포인트
+
+- **HPC 노드 간 초저지연** → 클러스터 배치 그룹 + 향상된 네트워킹(ENA). MPI 워크로드라면 EFA.
+- **대규모 분산 DB(Hadoop·Cassandra)의 랙 장애 격리** → 파티션 배치 그룹. 각 파티션은 독립 랙·전원·네트워크를 사용합니다.
+- **소수의 핵심 인스턴스를 물리적으로 완전히 분리** → 분산(Spread) 배치 그룹. AZ당 최대 7개 제한에 주의.
+- **분산 배치 그룹 + 전용 인스턴스** → 불가. 분산 배치 그룹은 전용 인스턴스를 지원하지 않습니다.
+- **클러스터 배치 그룹 + 다중 AZ** → 불가. 클러스터는 단일 AZ에만 생성할 수 있습니다.
+- **중단 가능한 배치 작업, 비용 최소화** → 스팟 인스턴스. 단, 상태 저장·DB는 금지.
+- **SAP HANA·인메모리 DB** → R 패밀리(메모리 최적화) 또는 U 패밀리(TB급 초대용량).
+- **ML 학습 비용 효율** → Trn(AWS Trainium) 또는 P 패밀리. 추론에는 Inf(AWS Inferentia).
+- **BYOL 라이선스(소켓·코어 기준)** → 전용 호스트(Dedicated Host). 하드웨어 격리만 필요하면 전용 인스턴스.
+- **T 패밀리를 지속적 고부하에** → 오답. 크레딧 소진 후 성능이 기준선으로 제한됩니다.
+- **Graviton(g 접미사)** → 동급 x86 대비 가격-성능비 우위. ARM 호환 소프트웨어 필요.
+
+---
+
+## ⚠️ 흔한 함정
+
+1. **"클러스터 배치 그룹은 고가용성을 보장한다."** → 반대입니다. 클러스터는 단일 AZ 내 밀집 배치로 저지연을 얻지만, AZ 장애 시 모든 인스턴스가 영향받는 단점이 있습니다. 고가용성이 목적이라면 분산 또는 파티션을 선택하십시오.
+
+2. **"스팟 인스턴스에 데이터베이스를 올린다."** → 중단 위험 때문에 부적합합니다. 스팟은 중단을 허용할 수 있는 배치 처리·스테이트리스 계층에만 사용합니다. 상태를 저장하는 워크로드에는 온디맨드 또는 예약 인스턴스를 사용합니다.
+
+3. **"분산 배치 그룹에 인스턴스를 무제한 넣을 수 있다."** → AZ당 최대 7개입니다. 3개 AZ 리전이라면 총 21개가 상한입니다. 7개를 초과하면 8번째 인스턴스 시작이 실패합니다.
+
+4. **"EFA는 ENA 대신 표준 IP 통신을 하지 않는다."** → EFA(EFA with ENA)는 ENA 디바이스도 함께 제공하므로 표준 IP 통신이 가능합니다. OS-bypass는 EFA 디바이스를 통하는 별도 경로입니다.
+
+5. **"T3 인스턴스를 클러스터 배치 그룹에 배치할 수 있다."** → 불가입니다. 버스트 성능 인스턴스(T 패밀리)는 클러스터 배치 그룹을 지원하지 않습니다.
+
+6. **"예약 인스턴스와 Savings Plans는 같다."** → RI는 **특정 인스턴스 유형·리전을 고정**해 약정합니다. Savings Plans는 **달러 단위 사용량**을 약정하므로 인스턴스 유형 변경에 유연합니다. 성능 관점에서는 둘 다 중단 없는 온디맨드 용량을 사용합니다.
+
+---
+
+## 🧪 자가 점검
+
+> 아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)
+
+**Q1.** 기상 시뮬레이션 HPC 클러스터를 구축합니다. 수백 개의 노드가 MPI로 통신하며 초저지연이 필수입니다. 어떤 배치 그룹과 네트워킹을 선택해야 합니까?
+
+<details><summary>정답 보기</summary>
+
+**클러스터 배치 그룹** + **EFA(Elastic Fabric Adapter)** 를 선택합니다.
+
+클러스터 배치 그룹은 단일 AZ 내 인스턴스를 고대역폭 네트워크 세그먼트에 밀집 배치해 노드 간 지연을 최소화합니다. EFA는 OS-bypass(Libfabric → EFA 디바이스 직접 통신)로 커널 오버헤드를 제거해 MPI 워크로드의 성능을 극대화합니다. 인스턴스는 **단일 런칭 요청으로 동일 유형을 한꺼번에 시작**해야 용량 부족 오류를 줄일 수 있습니다.
+</details>
+
+**Q2.** Cassandra 클러스터를 AWS에 배포합니다. 단일 랙 장애 시 클러스터 전체가 중단되지 않도록 랙 수준 격리가 필요합니다. 어떤 배치 전략을 사용합니까?
+
+<details><summary>정답 보기</summary>
+
+**파티션 배치 그룹**을 사용합니다.
+
+파티션 배치 그룹은 인스턴스를 논리적 파티션으로 분리하고, 각 파티션이 독립적인 랙·네트워크·전원을 사용하도록 보장합니다. AZ당 최대 7개 파티션을 구성할 수 있으며, Cassandra가 파티션 정보를 읽어 복제 배치를 최적화할 수 있습니다. 분산(Spread) 배치 그룹은 AZ당 7개 인스턴스로 제한되므로 대규모 Cassandra 클러스터에는 부적합합니다.
+</details>
+
+**Q3.** 야간에 수TB 로그 파일을 처리하는 배치 파이프라인이 있습니다. 처리 중 인스턴스가 중단되면 해당 태스크를 재시작할 수 있습니다. 비용을 최소화하려면 어떤 구매 옵션을 선택합니까?
+
+<details><summary>정답 보기</summary>
+
+**스팟 인스턴스**를 선택합니다.
+
+스팟 인스턴스는 AWS의 미사용 용량을 사용해 온디맨드 대비 최대 90% 절감이 가능합니다. EC2가 용량을 회수할 때 2분 전 중단 경고를 제공하므로, 태스크 체크포인팅이나 재시작 메커니즘을 갖춘 배치 시스템에서는 중단 위험을 수용할 수 있습니다. 데이터베이스나 상태를 저장하는 워크로드에는 스팟을 사용하지 않습니다.
+</details>
+
+**Q4.** `r7g.4xlarge` 인스턴스 유형에서 각 부분이 의미하는 것은 무엇이며, 이 인스턴스가 적합한 워크로드는 무엇입니까?
+
+<details><summary>정답 보기</summary>
+
+이름을 분해하면:
+- `r` = 메모리 최적화 패밀리 (RAM)
+- `7` = 7세대 (현재 Nitro 기반)
+- `g` = AWS Graviton 프로세서 (ARM 아키텍처)
+- `4xlarge` = 크기 (16 vCPU, 128 GiB 메모리 수준)
+
+**적합 워크로드**: 인메모리 데이터베이스(Redis, Memcached), SAP HANA, 실시간 빅데이터 처리, 인메모리 캐시처럼 **메모리 대비 CPU 비율이 높아야** 하는 워크로드에 적합합니다. Graviton 프로세서이므로 ARM 바이너리 호환성이 필요합니다.
+</details>
+
+---
+
+### 📌 출처 (verified)
+
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, HTTP 200 확인)
+
+1. Amazon EC2 인스턴스 유형 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
+2. EC2 배치 그룹 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html
+3. 배치 전략 상세 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html
+4. EC2 구매 옵션 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html
+5. 향상된 네트워킹 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html
+6. Elastic Fabric Adapter — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

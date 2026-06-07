@@ -33,15 +33,15 @@
 | saa-t2-3 | ELB + Auto Scaling — 탄력적 확장 설계 | 2 | 2.1 · 2.2 | Phase-02-Step-4-ELB-AutoScaling.md | ☑ |
 | saa-t2-4 | 고가용성 패턴 — Multi-AZ·단일 실패점 제거 | 2 | 2.2 | Phase-06-Step-1-고가용성-패턴.md | ☑ |
 | saa-t2-5 | DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active | 2 | 2.2 | Phase-06-Step-2-DR-전략.md | ☑ |
-| saa-t3-1 | S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어 | 3 | 3.1 | Phase-02-Step-3-S3.md | ☐ |
-| saa-t3-2 | 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택 | 3 | 3.1 | Phase-07-Step-2-Storage-스트리밍.md | ☐ |
-| saa-t3-3 | EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략 | 3 | 3.2 | Phase-02-Step-2-EC2.md | ☐ |
-| saa-t3-4 | 컨테이너·서버리스·배치 컴퓨팅 선택 | 3 | 3.2 | Phase-07-Step-1-Compute-성능.md | ☐ |
-| saa-t3-5 | RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시 | 3 | 3.3 | Phase-03-Step-1-RDS-Aurora.md | ☐ |
-| saa-t3-6 | DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략 | 3 | 3.3 | Phase-03-Step-2-DynamoDB.md · Phase-03-Step-3-ElastiCache.md | ☐ |
-| saa-t3-7 | 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서 | 3 | 3.4 | Phase-04-Step-2-Route53.md · Phase-04-Step-3-CloudFront.md | ☐ |
-| saa-t3-8 | 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink | 3 | 3.4 | Phase-04-Step-1-VPC-심화.md · Phase-04-Step-4-하이브리드.md | ☐ |
-| saa-t3-9 | 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation | 3 | 3.5 | Phase-07-Step-2-Storage-스트리밍.md | ☐ |
+| saa-t3-1 | S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어 | 3 | 3.1 | Phase-02-Step-3-S3.md | ☑ |
+| saa-t3-2 | 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택 | 3 | 3.1 | Phase-07-Step-2-Storage-스트리밍.md | ☑ |
+| saa-t3-3 | EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략 | 3 | 3.2 | Phase-02-Step-2-EC2.md | ☑ |
+| saa-t3-4 | 컨테이너·서버리스·배치 컴퓨팅 선택 | 3 | 3.2 | Phase-07-Step-1-Compute-성능.md | ☑ |
+| saa-t3-5 | RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시 | 3 | 3.3 | Phase-03-Step-1-RDS-Aurora.md | ☑ |
+| saa-t3-6 | DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략 | 3 | 3.3 | Phase-03-Step-2-DynamoDB.md · Phase-03-Step-3-ElastiCache.md | ☑ |
+| saa-t3-7 | 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서 | 3 | 3.4 | Phase-04-Step-2-Route53.md · Phase-04-Step-3-CloudFront.md | ☑ |
+| saa-t3-8 | 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink | 3 | 3.4 | Phase-04-Step-1-VPC-심화.md · Phase-04-Step-4-하이브리드.md | ☑ |
+| saa-t3-9 | 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation | 3 | 3.5 | Phase-07-Step-2-Storage-스트리밍.md | ☑ |
 | saa-t4-1 | 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용 | 4 | 4.1 | Phase-08-Step-1-비용절감-패턴.md · Phase-02-Step-3-S3.md | ☐ |
 | saa-t4-2 | 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing | 4 | 4.2 | Phase-08-Step-1-비용절감-패턴.md · Phase-02-Step-2-EC2.md | ☐ |
 | saa-t4-3 | 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션 | 4 | 4.3 | Phase-08-Step-2-비용-시험전략.md · Phase-03-Step-1-RDS-Aurora.md | ☐ |
