@@ -573,7 +573,9 @@ class _StudyDocsSection extends StatelessWidget {
                   cert: cert,
                   summaryLabel: () {
                     final s = certContentSummary(cert.code);
-                    return '검증 학습문서 ${s.docs} · 총 ${s.questions}문항';
+                    return s.questions > 0
+                        ? '검증 학습문서 ${s.docs} · 총 ${s.questions}문항'
+                        : '학습문서 ${s.docs} · 문항 준비 중';
                   }(),
                   cta: '학습문서 보기 →',
                   onTap: () => context.push('/cert/${cert.code}'),
