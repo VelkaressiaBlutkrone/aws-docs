@@ -20,9 +20,7 @@ class ViewedDocsStore {
       final m = jsonDecode(raw) as Map<String, dynamic>;
       return {
         for (final e in m.entries)
-          e.key: ((e.value as List?) ?? const [])
-              .map((x) => x.toString())
-              .toList(),
+          e.key: (e.value as List).map((x) => x as String).toList(),
       };
     } catch (_) {
       return {}; // 손상 데이터 무시
