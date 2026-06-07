@@ -4,27 +4,27 @@ import '../models/question.dart';
 
 /// 자격증 통합 모의고사용 순수 로직(샘플링·병합·복원). Flutter 무의존 → 단위 테스트 가능.
 
-/// 도메인 번호 → 출제 문항 수. weightByDomain 비중에 비례해 n을 배분하되,
-/// floor 후 잔여를 소수부가 큰 순(largest-remainder)으로 +1. 합 == n 보장.
-Map<int, int> allocateByWeight(Map<int, int> weightByDomain, int n) {
-  if (weightByDomain.isEmpty) return {};
-  if (n <= 0) return {for (final d in weightByDomain.keys) d: 0};
+/// 키별 가중에 비례해 n을 배분(floor 후 largest-remainder로 +1). 합 == n 보장.
+/// 키 타입 비의존(도메인 int·Task String 공용).
+Map<K, int> allocateByWeight<K>(Map<K, int> weightByKey, int n) {
+  if (weightByKey.isEmpty) return {};
+  if (n <= 0) return {for (final k in weightByKey.keys) k: 0};
 
-  final totalWeight = weightByDomain.values.fold(0, (s, w) => s + w);
+  final totalWeight = weightByKey.values.fold(0, (s, w) => s + w);
   if (totalWeight <= 0) {
-    final domains = weightByDomain.keys.toList();
-    final base = n ~/ domains.length;
-    final alloc = {for (final d in domains) d: base};
-    var rem = n - base * domains.length;
-    for (var i = 0; i < domains.length && rem > 0; i++, rem--) {
-      alloc[domains[i]] = alloc[domains[i]]! + 1;
+    final keys = weightByKey.keys.toList();
+    final base = n ~/ keys.length;
+    final alloc = {for (final k in keys) k: base};
+    var rem = n - base * keys.length;
+    for (var i = 0; i < keys.length && rem > 0; i++, rem--) {
+      alloc[keys[i]] = alloc[keys[i]]! + 1;
     }
     return alloc;
   }
 
-  final exact = <int, double>{};
-  final alloc = <int, int>{};
-  for (final e in weightByDomain.entries) {
+  final exact = <K, double>{};
+  final alloc = <K, int>{};
+  for (final e in weightByKey.entries) {
     final v = n * e.value / totalWeight;
     exact[e.key] = v;
     alloc[e.key] = v.floor();
@@ -34,28 +34,28 @@ Map<int, int> allocateByWeight(Map<int, int> weightByDomain, int n) {
     ..sort((a, b) => (exact[b]! - exact[b]!.floorToDouble())
         .compareTo(exact[a]! - exact[a]!.floorToDouble()));
   for (var i = 0; assigned < n; i++, assigned++) {
-    final d = byFraction[i % byFraction.length];
-    alloc[d] = alloc[d]! + 1;
+    final k = byFraction[i % byFraction.length];
+    alloc[k] = alloc[k]! + 1;
   }
   return alloc;
 }
 
-/// 도메인 가중으로 n문항을 샘플링해 순서를 섞어 반환. [rng] 주입으로 결정적.
-/// 특정 도메인 풀이 배분량보다 적으면 잔여 도메인 문항에서 보충(총 n 유지, 풀<n이면 최대).
-List<Question> buildMockExam({
-  required Map<int, List<Question>> poolByDomain,
-  required Map<int, int> weightByDomain,
+/// 키별 가중으로 n문항을 샘플링해 순서를 섞어 반환. [rng] 주입으로 결정적.
+/// 특정 키 풀이 배분량보다 적으면 잔여 키 문항에서 보충(총 n 유지, 풀<n이면 최대).
+List<Question> buildSampledExam<K>({
+  required Map<K, List<Question>> poolByKey,
+  required Map<K, int> weightByKey,
   required int n,
   required Random rng,
 }) {
-  final alloc = allocateByWeight(weightByDomain, n);
+  final alloc = allocateByWeight<K>(weightByKey, n);
   final picked = <Question>[];
   final leftovers = <Question>[];
 
-  final domains = {...poolByDomain.keys, ...alloc.keys}.toList()..sort();
-  for (final d in domains) {
-    final pool = [...?poolByDomain[d]]..shuffle(rng);
-    final want = alloc[d] ?? 0;
+  final keys = <K>{...poolByKey.keys, ...alloc.keys}.toList();
+  for (final k in keys) {
+    final pool = [...?poolByKey[k]]..shuffle(rng);
+    final want = alloc[k] ?? 0;
     final take = want < pool.length ? want : pool.length;
     picked.addAll(pool.take(take));
     leftovers.addAll(pool.skip(take));
@@ -69,6 +69,16 @@ List<Question> buildMockExam({
   picked.shuffle(rng);
   return picked;
 }
+
+/// 도메인 가중 통합 모의고사(호환 래퍼). 키=도메인 번호(int).
+List<Question> buildMockExam({
+  required Map<int, List<Question>> poolByDomain,
+  required Map<int, int> weightByDomain,
+  required int n,
+  required Random rng,
+}) =>
+    buildSampledExam<int>(
+        poolByKey: poolByDomain, weightByKey: weightByDomain, n: n, rng: rng);
 
 /// 로드한 뱅크들을 도메인 번호 → 검증 문항 리스트로 묶는다.
 Map<int, List<Question>> groupByDomain(List<QuestionBank> banks) {

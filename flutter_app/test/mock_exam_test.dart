@@ -94,4 +94,27 @@ void main() {
     expect(restoreOrdered(['a', 'z'], byId), isNull);
     expect(restoreOrdered(const [], byId), isNull);
   });
+
+  test('buildSampledExam<String>: Task 키 — 합 N · 전부 풀 소속 · 결정적', () {
+    final pool = {
+      'clf-t2-1': [for (var i = 0; i < 10; i++) _q('t21q$i', 2)],
+      'clf-t3-1': [for (var i = 0; i < 10; i++) _q('t31q$i', 3)],
+    };
+    const w = {'clf-t2-1': 70, 'clf-t3-1': 30};
+    final a = buildSampledExam<String>(
+        poolByKey: pool, weightByKey: w, n: 10, rng: Random(7));
+    final b = buildSampledExam<String>(
+        poolByKey: pool, weightByKey: w, n: 10, rng: Random(7));
+    expect(a.map((q) => q.id).toList(), b.map((q) => q.id).toList());
+    expect(a.length, 10);
+    final allIds = {for (final t in pool.values) for (final q in t) q.id};
+    expect(a.every((q) => allIds.contains(q.id)), isTrue);
+    expect(a.map((q) => q.id).toSet().length, 10);
+  });
+
+  test('allocateByWeight<String>: 합이 N', () {
+    final a = allocateByWeight<String>({'a': 70, 'b': 30}, 10);
+    expect(a.values.fold(0, (s, v) => s + v), 10);
+    expect(a['a']! > a['b']!, isTrue); // 가중 큰 쪽 더 많이
+  });
 }
