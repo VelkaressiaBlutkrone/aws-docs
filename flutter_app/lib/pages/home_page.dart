@@ -613,7 +613,7 @@ class _ExamsSection extends StatelessWidget {
     final c = context.c;
     final history = HistoryStore().all();
     final withContent =
-        certifications.where((cert) => certHasContent(cert.code)).toList();
+        certifications.where((cert) => certHasVerifiedQuestions(cert.code)).toList();
     final pending =
         certifications.where((cert) => !certHasContent(cert.code)).toList();
     return _Band(
