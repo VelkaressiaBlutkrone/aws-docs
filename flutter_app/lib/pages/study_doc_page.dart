@@ -5,16 +5,29 @@ import 'package:go_router/go_router.dart';
 import '../content/markdown_parser.dart';
 import '../content/study_markdown_view.dart';
 import '../data/content_index.dart';
+import '../data/viewed_docs_store.dart';
 import '../models/exam_session.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
 
-class StudyDocPage extends StatelessWidget {
+class StudyDocPage extends StatefulWidget {
   const StudyDocPage({super.key, required this.entry});
   final ContentEntry entry;
 
+  @override
+  State<StudyDocPage> createState() => _StudyDocPageState();
+}
+
+class _StudyDocPageState extends State<StudyDocPage> {
+  @override
+  void initState() {
+    super.initState();
+    // 방문 = 열람. 부수효과만, 렌더와 분리.
+    ViewedDocsStore().markViewed(widget.entry.certCode, widget.entry.taskId);
+  }
+
   Future<StudyContent> _load() async {
-    final raw = await rootBundle.loadString(entry.mdAsset);
+    final raw = await rootBundle.loadString(widget.entry.mdAsset);
     return parseStudyDoc(raw);
   }
 
@@ -28,7 +41,7 @@ class StudyDocPage extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text(entry.title,
+        title: Text(widget.entry.title,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       ),
       body: SelectionArea(
@@ -58,7 +71,7 @@ class StudyDocPage extends StatelessWidget {
                           _DocHeader(doc: doc),
                           StudyMarkdownView(blocks: doc.blocks),
                           const SizedBox(height: Gap.xl2),
-                          _StartQuizButton(entry: entry),
+                          _StartQuizButton(entry: widget.entry),
                         ],
                       ),
                     ),
