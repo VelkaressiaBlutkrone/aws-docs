@@ -197,6 +197,17 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionCount: 9,
     ),
   ],
+  'SAA-C03': [
+    ContentEntry(
+      certCode: 'SAA-C03',
+      taskId: 'saa-t1-1',
+      title: 'IAM — 자격증명·권한·페더레이션',
+      domain: 1,
+      mdAsset: 'assets/content/saa/saa-t1-1.md',
+      questionsAsset: 'assets/content/saa/saa-t1-1.questions.json',
+      questionCount: 0,
+    ),
+  ],
 };
 
 List<ContentEntry> contentFor(String certCode) =>
