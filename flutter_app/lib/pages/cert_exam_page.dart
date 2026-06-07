@@ -10,6 +10,8 @@ import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
+import '../data/task_score_report.dart';
+import '../data/weighted_exam.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
@@ -20,8 +22,9 @@ import 'exam_page.dart'; // ExamView
 /// 통합 모의고사 진입점. 자격증 전체 검증 문항 풀을 병합해 도메인 가중으로
 /// N문항을 샘플링·출제하고, 진행 중 세션을 복원한다. ExamView를 재사용한다.
 class CertExamPage extends StatefulWidget {
-  const CertExamPage({super.key, required this.cert});
+  const CertExamPage({super.key, required this.cert, this.weighted = false});
   final Certification cert;
+  final bool weighted;
 
   @override
   State<CertExamPage> createState() => _CertExamPageState();
@@ -33,16 +36,26 @@ class _CertExamPageState extends State<CertExamPage> {
   late final Future<_MockLoad> _future = _load();
   _RunParams? _running;
 
-  String get _examId => 'exam:${widget.cert.code}-mock';
+  String get _examId =>
+      'exam:${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}';
 
   Future<_MockLoad> _load() async {
     final entries = contentFor(widget.cert.code);
     final banks = <QuestionBank>[];
+    final taskByQuestionId = <String, String>{};
+    final taskOrder = <String>[];
+    final taskPool = <String, List<Question>>{};
     for (final e in entries) {
       try {
         final raw = await rootBundle.loadString(e.questionsAsset);
-        banks.add(
-            QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>));
+        final bank =
+            QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
+        banks.add(bank);
+        taskOrder.add(e.taskId);
+        taskPool[e.taskId] = bank.questions;
+        for (final q in bank.questions) {
+          taskByQuestionId[q.id] = e.taskId;
+        }
       } catch (_) {
         // 개별 뱅크 로드 실패는 무시(나머지로 진행)
       }
@@ -67,6 +80,15 @@ class _CertExamPageState extends State<CertExamPage> {
       weights = {for (final d in pool.keys) d: 1}; // 균등 폴백
     }
 
+    // 약점 가중(약점 모드에서만 사용). TaskScoreReport → Task별 오답률 가중.
+    final report = TaskScoreReport.build(
+      certId: widget.cert.code,
+      history: _history.all(),
+      taskByQuestionId: taskByQuestionId,
+      taskOrder: taskOrder,
+    );
+    final taskWeights = weightByTaskFromReport(report);
+
     // 복원 가능한 진행 세션?
     final existing = _store.load(_examId);
     _Restorable? restorable;
@@ -82,6 +104,8 @@ class _CertExamPageState extends State<CertExamPage> {
     return _MockLoad(
       pool: pool,
       weights: weights,
+      taskPool: taskPool,
+      taskWeights: taskWeights,
       overview: overview,
       total: all.length,
       restorable: restorable,
@@ -93,12 +117,19 @@ class _CertExamPageState extends State<CertExamPage> {
 
   void _startFresh(_MockLoad d) {
     _store.clear(_examId);
-    final sampled = buildMockExam(
-      poolByDomain: d.pool,
-      weightByDomain: d.weights,
-      n: _targetN(d.overview),
-      rng: Random(),
-    );
+    final sampled = widget.weighted
+        ? buildSampledExam<String>(
+            poolByKey: d.taskPool,
+            weightByKey: d.taskWeights,
+            n: _targetN(d.overview),
+            rng: Random(),
+          )
+        : buildMockExam(
+            poolByDomain: d.pool,
+            weightByDomain: d.weights,
+            n: _targetN(d.overview),
+            rng: Random(),
+          );
     final startedAt = DateTime.now();
     final durationSec = examDurationSec(
       durationMinutes: d.overview?.durationMinutes,
@@ -123,7 +154,8 @@ class _CertExamPageState extends State<CertExamPage> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.cert.title} · 통합 모의고사',
+        title: Text(
+            '${widget.cert.title} · ${widget.weighted ? '약점 집중 모의고사' : '통합 모의고사'}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       ),
       body: FutureBuilder<_MockLoad>(
@@ -151,14 +183,15 @@ class _CertExamPageState extends State<CertExamPage> {
         constraints: const BoxConstraints(maxWidth: Layout.exam),
         child: ExamView(
           bank: QuestionBank(
-            examGuideTaskId: '${widget.cert.code}-mock',
-            taskTitle: '통합 모의고사',
+            examGuideTaskId:
+                '${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}',
+            taskTitle: widget.weighted ? '약점 집중 모의고사' : '통합 모의고사',
             certCode: widget.cert.code,
             domain: 0,
             questions: r.questions,
           ),
           certId: widget.cert.code,
-          taskId: '${widget.cert.code}-mock',
+          taskId: '${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}',
           startedAt: r.startedAt,
           durationSec: r.durationSec,
           initialIndex: r.index,
@@ -201,16 +234,21 @@ class _CertExamPageState extends State<CertExamPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('통합 모의고사', style: t.headlineSmall),
+              Text(widget.weighted ? '약점 집중 모의고사' : '통합 모의고사',
+                  style: t.headlineSmall),
               const SizedBox(height: Gap.sm),
-              Text('자격증 전체 검증 문항 풀(${d.total}개)에서 도메인 비중에 맞춰 출제합니다.',
+              Text(
+                  widget.weighted
+                      ? '지금까지 자주 틀린 Task가 더 자주 출제됩니다. 전체 검증 문항 풀(${d.total}개) 기반.'
+                      : '자격증 전체 검증 문항 풀(${d.total}개)에서 도메인 비중에 맞춰 출제합니다.',
                   style: t.bodyMedium),
               const SizedBox(height: Gap.lg),
               _infoRow(c, t, '문항 수', '$cap문항'),
               _infoRow(c, t, '제한 시간', '$mins분'),
               if (pass != null)
                 _infoRow(c, t, '합격선', '$pass / 1000 (정답률과 다름)'),
-              _infoRow(c, t, '도메인 비중', _weightLabel(d.weights)),
+              _infoRow(c, t, '출제 방식',
+                  widget.weighted ? '약점 Task 가중(자주 틀린 Task 우선)' : _weightLabel(d.weights)),
               const SizedBox(height: Gap.xl),
               if (restorable != null) ...[
                 SizedBox(
@@ -275,12 +313,16 @@ class _MockLoad {
   const _MockLoad({
     required this.pool,
     required this.weights,
+    required this.taskPool,
+    required this.taskWeights,
     required this.overview,
     required this.total,
     required this.restorable,
   });
-  final Map<int, List<Question>> pool;
-  final Map<int, int> weights;
+  final Map<int, List<Question>> pool; // 도메인 모드
+  final Map<int, int> weights; // 도메인 모드
+  final Map<String, List<Question>> taskPool; // 약점 모드
+  final Map<String, int> taskWeights; // 약점 모드
   final ExamOverview? overview;
   final int total;
   final _Restorable? restorable;

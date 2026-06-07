@@ -34,6 +34,13 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                       CertExamPage(cert: certByCode(state.pathParameters['code']!)!),
                 ),
                 GoRoute(
+                  path: 'exam/weak',
+                  builder: (context, state) => CertExamPage(
+                    cert: certByCode(state.pathParameters['code']!)!,
+                    weighted: true,
+                  ),
+                ),
+                GoRoute(
                   path: 'review',
                   builder: (context, state) =>
                       ReviewListPage(cert: certByCode(state.pathParameters['code']!)!),
