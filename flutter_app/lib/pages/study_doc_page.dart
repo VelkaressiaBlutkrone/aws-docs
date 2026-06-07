@@ -19,9 +19,12 @@ class StudyDocPage extends StatefulWidget {
 }
 
 class _StudyDocPageState extends State<StudyDocPage> {
+  late final Future<StudyContent> _future;
+
   @override
   void initState() {
     super.initState();
+    _future = _load();
     // 방문 = 열람. 부수효과만, 렌더와 분리.
     ViewedDocsStore().markViewed(widget.entry.certCode, widget.entry.taskId);
   }
@@ -46,7 +49,7 @@ class _StudyDocPageState extends State<StudyDocPage> {
       ),
       body: SelectionArea(
         child: FutureBuilder<StudyContent>(
-          future: _load(),
+          future: _future,
           builder: (context, snap) {
             if (snap.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());
