@@ -23,11 +23,11 @@
 
 | taskId | 제목 | domain | coversTasks | files.zip 출처 | 상태 |
 |---|---|---|---|---|---|
-| saa-t1-1 | IAM — 자격증명·권한·페더레이션 | 1 | 1.1 | Phase-02-Step-1-IAM.md | ☐ |
-| saa-t1-2 | 다중 계정 보안 — Organizations·Control Tower·SCP | 1 | 1.1 | (신규 작성 필요) | ☐ |
-| saa-t1-3 | VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트 | 1 | 1.2 | Phase-01-Step-2-네트워크-기초.md · Phase-04-Step-1-VPC-심화.md | ☐ |
-| saa-t1-4 | 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager | 1 | 1.2 | Phase-05-Step-1-암호화.md | ☐ |
-| saa-t1-5 | 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스 | 1 | 1.3 | Phase-05-Step-1-암호화.md · Phase-05-Step-2-모니터링-감사.md | ☐ |
+| saa-t1-1 | IAM — 자격증명·권한·페더레이션 | 1 | 1.1 | Phase-02-Step-1-IAM.md | ☑ |
+| saa-t1-2 | 다중 계정 보안 — Organizations·Control Tower·SCP | 1 | 1.1 | (신규 작성) | ☑ |
+| saa-t1-3 | VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트 | 1 | 1.2 | Phase-01-Step-2-네트워크-기초.md · Phase-04-Step-1-VPC-심화.md | ☑ |
+| saa-t1-4 | 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager | 1 | 1.2 | Phase-05-Step-1-암호화.md | ☑ |
+| saa-t1-5 | 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스 | 1 | 1.3 | Phase-05-Step-1-암호화.md · Phase-05-Step-2-모니터링-감사.md | ☑ |
 | saa-t2-1 | 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions | 2 | 2.1 | Phase-09-Step-3-SQS-SNS-EventBridge.md | ☐ |
 | saa-t2-2 | 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS | 2 | 2.1 | Phase-09-Step-1-Lambda.md · Phase-09-Step-2-API-Gateway.md | ☐ |
 | saa-t2-3 | ELB + Auto Scaling — 탄력적 확장 설계 | 2 | 2.1 · 2.2 | Phase-02-Step-4-ELB-AutoScaling.md | ☐ |
