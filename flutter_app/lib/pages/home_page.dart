@@ -611,9 +611,9 @@ class _ExamsSection extends StatelessWidget {
     final c = context.c;
     final history = HistoryStore().all();
     final withContent =
-        certifications.where((c) => certHasContent(c.code)).toList();
+        certifications.where((cert) => certHasContent(cert.code)).toList();
     final pending =
-        certifications.where((c) => !certHasContent(c.code)).toList();
+        certifications.where((cert) => !certHasContent(cert.code)).toList();
     return _Band(
       title: '학습 문서 기반 모의고사',
       meta: '검증 문항 기반',
@@ -666,7 +666,7 @@ class _ExamsSection extends StatelessWidget {
                             child: Text(
                                 unlocked
                                     ? '${cert.title} · 약점 집중 모의고사'
-                                    : '${cert.title} · 약점 집중 모의고사 (응시 3회 후 열림)',
+                                    : '${cert.title} · 약점 집중 모의고사 (응시 $kWeightedExamMinAttempts회 후 열림)',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
