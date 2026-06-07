@@ -80,14 +80,17 @@ class _CertExamPageState extends State<CertExamPage> {
       weights = {for (final d in pool.keys) d: 1}; // 균등 폴백
     }
 
-    // 약점 가중(약점 모드에서만 사용). TaskScoreReport → Task별 오답률 가중.
-    final report = TaskScoreReport.build(
-      certId: widget.cert.code,
-      history: _history.all(),
-      taskByQuestionId: taskByQuestionId,
-      taskOrder: taskOrder,
-    );
-    final taskWeights = weightByTaskFromReport(report);
+    // 약점 가중은 약점 모드에서만 계산(도메인 모드는 불필요).
+    var taskWeights = <String, int>{};
+    if (widget.weighted) {
+      final report = TaskScoreReport.build(
+        certId: widget.cert.code,
+        history: _history.all(),
+        taskByQuestionId: taskByQuestionId,
+        taskOrder: taskOrder,
+      );
+      taskWeights = weightByTaskFromReport(report);
+    }
 
     // 복원 가능한 진행 세션?
     final existing = _store.load(_examId);
