@@ -52,9 +52,10 @@ class CertDetailPage extends StatelessWidget {
         }
       } catch (_) {}
     }
+    final history = HistoryStore().all();
     final weakByTask = WrongAnswerIndex.build(
       certId: cert.code,
-      history: HistoryStore().all(),
+      history: history,
       taskByQuestionId: taskByQuestionId,
     ).weakByTask();
 
@@ -62,7 +63,7 @@ class CertDetailPage extends StatelessWidget {
       certId: cert.code,
       allTaskIds: [for (final e in contentFor(cert.code)) e.taskId],
       viewedTaskIds: ViewedDocsStore().viewed(cert.code),
-      history: HistoryStore().all(),
+      history: history,
     );
 
     return (
@@ -190,7 +191,7 @@ class _LearningContent extends StatelessWidget {
   const _LearningContent({
     required this.entries,
     required this.weakByTask,
-    required this.progress,
+    this.progress,
   });
   final List<ContentEntry> entries;
   final Map<String, int> weakByTask;
