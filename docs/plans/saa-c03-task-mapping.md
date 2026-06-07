@@ -28,11 +28,11 @@
 | saa-t1-3 | VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트 | 1 | 1.2 | Phase-01-Step-2-네트워크-기초.md · Phase-04-Step-1-VPC-심화.md | ☑ |
 | saa-t1-4 | 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager | 1 | 1.2 | Phase-05-Step-1-암호화.md | ☑ |
 | saa-t1-5 | 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스 | 1 | 1.3 | Phase-05-Step-1-암호화.md · Phase-05-Step-2-모니터링-감사.md | ☑ |
-| saa-t2-1 | 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions | 2 | 2.1 | Phase-09-Step-3-SQS-SNS-EventBridge.md | ☐ |
-| saa-t2-2 | 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS | 2 | 2.1 | Phase-09-Step-1-Lambda.md · Phase-09-Step-2-API-Gateway.md | ☐ |
-| saa-t2-3 | ELB + Auto Scaling — 탄력적 확장 설계 | 2 | 2.1 · 2.2 | Phase-02-Step-4-ELB-AutoScaling.md | ☐ |
-| saa-t2-4 | 고가용성 패턴 — Multi-AZ·단일 실패점 제거 | 2 | 2.2 | Phase-06-Step-1-고가용성-패턴.md | ☐ |
-| saa-t2-5 | DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active | 2 | 2.2 | Phase-06-Step-2-DR-전략.md | ☐ |
+| saa-t2-1 | 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions | 2 | 2.1 | Phase-09-Step-3-SQS-SNS-EventBridge.md | ☑ |
+| saa-t2-2 | 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS | 2 | 2.1 | Phase-09-Step-1-Lambda.md · Phase-09-Step-2-API-Gateway.md | ☑ |
+| saa-t2-3 | ELB + Auto Scaling — 탄력적 확장 설계 | 2 | 2.1 · 2.2 | Phase-02-Step-4-ELB-AutoScaling.md | ☑ |
+| saa-t2-4 | 고가용성 패턴 — Multi-AZ·단일 실패점 제거 | 2 | 2.2 | Phase-06-Step-1-고가용성-패턴.md | ☑ |
+| saa-t2-5 | DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active | 2 | 2.2 | Phase-06-Step-2-DR-전략.md | ☑ |
 | saa-t3-1 | S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어 | 3 | 3.1 | Phase-02-Step-3-S3.md | ☐ |
 | saa-t3-2 | 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택 | 3 | 3.1 | Phase-07-Step-2-Storage-스트리밍.md | ☐ |
 | saa-t3-3 | EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략 | 3 | 3.2 | Phase-02-Step-2-EC2.md | ☐ |
