@@ -8,6 +8,7 @@ import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/study_progress.dart';
 import '../data/viewed_docs_store.dart';
+import '../data/weighted_exam.dart';
 import '../data/wrong_answer_index.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
@@ -19,6 +20,7 @@ typedef _Loaded = ({
   ExamSummary? summary,
   Map<String, int> weakByTask,
   StudyProgress progress,
+  int attemptCount,
 });
 
 class CertDetailPage extends StatelessWidget {
@@ -66,11 +68,14 @@ class CertDetailPage extends StatelessWidget {
       history: history,
     );
 
+    final attemptCount = nonReviewAttemptCount(cert.code, history);
+
     return (
       guide: guide,
       summary: summary,
       weakByTask: weakByTask,
       progress: progress,
+      attemptCount: attemptCount,
     );
   }
 
@@ -123,6 +128,7 @@ class CertDetailPage extends StatelessWidget {
                               entries: contentFor(cert.code),
                               weakByTask: snap.data?.weakByTask ?? const {},
                               progress: snap.data?.progress,
+                              attemptCount: snap.data?.attemptCount ?? 0,
                             ),
                           if (guide != null)
                             _OfficialGuide(guide: guide)
@@ -192,10 +198,12 @@ class _LearningContent extends StatelessWidget {
     required this.entries,
     required this.weakByTask,
     this.progress,
+    required this.attemptCount,
   });
   final List<ContentEntry> entries;
   final Map<String, int> weakByTask;
   final StudyProgress? progress;
+  final int attemptCount;
 
   @override
   Widget build(BuildContext context) {
@@ -320,6 +328,49 @@ class _LearningContent extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: Gap.xs),
+            child: () {
+              final unlocked = attemptCount >= kWeightedExamMinAttempts;
+              final certCode = entries.first.certCode;
+              return InkWell(
+                onTap: unlocked
+                    ? () => context.push('/cert/$certCode/exam/weak')
+                    : null,
+                borderRadius: BorderRadius.circular(Radii.md),
+                child: Container(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  decoration: BoxDecoration(
+                    color: c.surface,
+                    borderRadius: BorderRadius.circular(Radii.md),
+                    border: Border.all(color: c.border),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(unlocked ? Icons.bolt_outlined : Icons.lock_outline,
+                          size: 18,
+                          color: unlocked ? c.accent : c.textFaint),
+                      const SizedBox(width: Gap.sm),
+                      Expanded(
+                        child: Text(
+                            unlocked
+                                ? '약점 집중 모의고사 · 자주 틀린 Task 가중 출제'
+                                : '약점 집중 모의고사 · 응시 기록이 3회 쌓이면 열립니다 ($attemptCount/$kWeightedExamMinAttempts)',
+                            style: t.titleMedium?.copyWith(
+                                color: unlocked ? c.text : c.textMuted)),
+                      ),
+                      if (unlocked)
+                        Text('시작 →',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: c.accent)),
+                    ],
+                  ),
+                ),
+              );
+            }(),
           ),
           if (weakByTask.values.fold(0, (a, b) => a + b) > 0)
             Padding(

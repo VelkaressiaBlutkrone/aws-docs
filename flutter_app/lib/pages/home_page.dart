@@ -6,6 +6,7 @@ import '../data/history_store.dart';
 import '../data/site_data.dart';
 import '../data/study_progress.dart';
 import '../data/viewed_docs_store.dart';
+import '../data/weighted_exam.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
@@ -607,6 +608,8 @@ class _ExamsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = context.c;
+    final history = HistoryStore().all();
     final withContent =
         certifications.where((c) => certHasContent(c.code)).toList();
     final pending =
@@ -630,6 +633,58 @@ class _ExamsSection extends StatelessWidget {
                 ),
             ],
           ),
+          ...[
+            const SizedBox(height: Gap.lg),
+            for (final cert in withContent)
+              () {
+                final unlocked = weightedExamUnlocked(cert.code, history);
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: Gap.sm),
+                  child: InkWell(
+                    onTap: unlocked
+                        ? () => context.push('/cert/${cert.code}/exam/weak')
+                        : null,
+                    borderRadius: BorderRadius.circular(Radii.md),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(Gap.lg),
+                      decoration: BoxDecoration(
+                        color: c.surface,
+                        borderRadius: BorderRadius.circular(Radii.md),
+                        border: Border.all(color: c.border),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                              unlocked
+                                  ? Icons.bolt_outlined
+                                  : Icons.lock_outline,
+                              size: 18,
+                              color: unlocked ? c.accent : c.textFaint),
+                          const SizedBox(width: Gap.sm),
+                          Expanded(
+                            child: Text(
+                                unlocked
+                                    ? '${cert.title} · 약점 집중 모의고사'
+                                    : '${cert.title} · 약점 집중 모의고사 (응시 3회 후 열림)',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: unlocked ? c.text : c.textMuted)),
+                          ),
+                          if (unlocked)
+                            Text('약점 모의고사 →',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: c.accent)),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }(),
+          ],
           if (pending.isNotEmpty) ...[
             const SizedBox(height: Gap.lg),
             _PendingGroup(certs: pending),
