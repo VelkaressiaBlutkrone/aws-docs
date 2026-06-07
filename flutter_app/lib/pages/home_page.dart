@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../data/content_index.dart';
+import '../data/history_store.dart';
 import '../data/site_data.dart';
+import '../data/study_progress.dart';
+import '../data/viewed_docs_store.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
@@ -552,6 +555,8 @@ class _StudyDocsSection extends StatelessWidget {
         certifications.where((c) => certHasContent(c.code)).toList();
     final pending =
         certifications.where((c) => !certHasContent(c.code)).toList();
+    final viewedStore = ViewedDocsStore();
+    final history = HistoryStore().all();
     return _Band(
       title: '상세 학습 문서',
       meta: '검증된 학습 콘텐츠',
@@ -571,6 +576,17 @@ class _StudyDocsSection extends StatelessWidget {
                   }(),
                   cta: '학습문서 보기 →',
                   onTap: () => context.push('/cert/${cert.code}'),
+                  viewedBadge: () {
+                    final p = StudyProgress.build(
+                      certId: cert.code,
+                      allTaskIds: [for (final e in contentFor(cert.code)) e.taskId],
+                      viewedTaskIds: viewedStore.viewed(cert.code),
+                      history: history,
+                    );
+                    return p.viewedCount > 0
+                        ? '열람 ${p.viewedCount}/${p.totalDocs}'
+                        : null;
+                  }(),
                 ),
             ],
           ),
@@ -631,11 +647,13 @@ class _ContentCertCard extends StatelessWidget {
     required this.summaryLabel,
     required this.cta,
     required this.onTap,
+    this.viewedBadge,
   });
   final Certification cert;
   final String summaryLabel;
   final String cta;
   final VoidCallback onTap;
+  final String? viewedBadge; // 예: '열람 5/19' — null이면 미표시
 
   @override
   Widget build(BuildContext context) {
@@ -669,6 +687,21 @@ class _ContentCertCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       color: c.textMuted)),
             ),
+            if (viewedBadge != null) ...[
+              const SizedBox(height: Gap.xs),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: c.accentWeak,
+                  borderRadius: BorderRadius.circular(Radii.full),
+                ),
+                child: Text(viewedBadge!,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        color: c.accentStrong)),
+              ),
+            ],
             const SizedBox(height: Gap.md),
             Text(cta,
                 style: TextStyle(
