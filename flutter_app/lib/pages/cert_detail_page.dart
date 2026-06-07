@@ -209,6 +209,7 @@ class _LearningContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
+    final hasQuestions = entries.any((e) => e.questionCount > 0);
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: Gap.xl2),
@@ -254,19 +255,20 @@ class _LearningContent extends StatelessWidget {
                             const SizedBox(height: Gap.xs),
                             Row(
                               children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 3),
-                                  decoration: BoxDecoration(
-                                      color: c.correctWeak,
-                                      borderRadius:
-                                          BorderRadius.circular(Radii.full)),
-                                  child: Text('검증 문항 ${e.questionCount}',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w800,
-                                          color: c.correct)),
-                                ),
+                                if (e.questionCount > 0)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 3),
+                                    decoration: BoxDecoration(
+                                        color: c.correctWeak,
+                                        borderRadius:
+                                            BorderRadius.circular(Radii.full)),
+                                    child: Text('검증 문항 ${e.questionCount}',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w800,
+                                            color: c.correct)),
+                                  ),
                                 if ((weakByTask[e.taskId] ?? 0) > 0) ...[
                                   const SizedBox(width: Gap.xs),
                                   Container(
@@ -298,41 +300,43 @@ class _LearningContent extends StatelessWidget {
                 ),
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.only(top: Gap.xs),
-            child: InkWell(
-              onTap: () =>
-                  context.push('/cert/${entries.first.certCode}/report'),
-              borderRadius: BorderRadius.circular(Radii.md),
-              child: Container(
-                padding: const EdgeInsets.all(Gap.lg),
-                decoration: BoxDecoration(
-                  color: c.surface,
-                  borderRadius: BorderRadius.circular(Radii.md),
-                  border: Border.all(color: c.border),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.insights_outlined, size: 18, color: c.accent),
-                    const SizedBox(width: Gap.sm),
-                    Expanded(
-                      child: Text('약점 리포트 · Task별 정답률 보기',
-                          style: t.titleMedium?.copyWith(color: c.text)),
-                    ),
-                    Text('리포트 →',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: c.accent)),
-                  ],
+          if (hasQuestions)
+            Padding(
+              padding: const EdgeInsets.only(top: Gap.xs),
+              child: InkWell(
+                onTap: () =>
+                    context.push('/cert/${entries.first.certCode}/report'),
+                borderRadius: BorderRadius.circular(Radii.md),
+                child: Container(
+                  padding: const EdgeInsets.all(Gap.lg),
+                  decoration: BoxDecoration(
+                    color: c.surface,
+                    borderRadius: BorderRadius.circular(Radii.md),
+                    border: Border.all(color: c.border),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.insights_outlined, size: 18, color: c.accent),
+                      const SizedBox(width: Gap.sm),
+                      Expanded(
+                        child: Text('약점 리포트 · Task별 정답률 보기',
+                            style: t.titleMedium?.copyWith(color: c.text)),
+                      ),
+                      Text('리포트 →',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: c.accent)),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: Gap.xs),
-            child: () {
-              final unlocked = attemptCount >= kWeightedExamMinAttempts;
+          if (hasQuestions)
+            Padding(
+              padding: const EdgeInsets.only(top: Gap.xs),
+              child: () {
+                final unlocked = attemptCount >= kWeightedExamMinAttempts;
               final certCode = entries.first.certCode;
               return InkWell(
                 onTap: unlocked
