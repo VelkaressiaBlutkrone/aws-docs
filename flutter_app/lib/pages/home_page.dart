@@ -633,11 +633,12 @@ class _ExamsSection extends StatelessWidget {
                 ),
             ],
           ),
-          ...[
+          if (withContent.isNotEmpty) ...[
             const SizedBox(height: Gap.lg),
             for (final cert in withContent)
               () {
                 final unlocked = weightedExamUnlocked(cert.code, history);
+                final attempts = nonReviewAttemptCount(cert.code, history);
                 return Padding(
                   padding: const EdgeInsets.only(bottom: Gap.sm),
                   child: InkWell(
@@ -666,7 +667,7 @@ class _ExamsSection extends StatelessWidget {
                             child: Text(
                                 unlocked
                                     ? '${cert.title} · 약점 집중 모의고사'
-                                    : '${cert.title} · 약점 집중 모의고사 (응시 $kWeightedExamMinAttempts회 후 열림)',
+                                    : '${cert.title} · 약점 집중 모의고사 (응시 기록 $attempts/$kWeightedExamMinAttempts)',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
