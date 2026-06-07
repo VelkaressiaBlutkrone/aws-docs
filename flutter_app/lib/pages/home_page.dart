@@ -614,6 +614,8 @@ class _ExamsSection extends StatelessWidget {
     final history = HistoryStore().all();
     final withContent =
         certifications.where((cert) => certHasVerifiedQuestions(cert.code)).toList();
+    // 콘텐츠는 있으나 문항이 0인 cert(학습문서만)는 모의고사 섹션에서 의도적으로 제외
+    // — 학습문서 섹션에만 노출된다.
     final pending =
         certifications.where((cert) => !certHasContent(cert.code)).toList();
     return _Band(
