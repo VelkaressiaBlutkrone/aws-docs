@@ -16,11 +16,12 @@ Iterable<String> resolvePresented(
 }
 
 /// 'practice:clf-t2-1' / 'exam:clf-t2-1' / 'review:clf-t2-1' → 'clf-t2-1'.
-/// 통합 모의고사('exam:CLF-C02-mock')처럼 단일 Task가 아니면 null.
+/// 집계 시험('...-mock' 통합 / '...-weak' 약점 집중)은 단일 Task 아님 → null.
 String? taskFromExamId(String examId) {
   final i = examId.indexOf(':');
   if (i < 0) return null;
   final rest = examId.substring(i + 1);
-  if (rest.isEmpty || rest.endsWith('-mock')) return null;
+  if (rest.isEmpty) return null;
+  if (rest.endsWith('-mock') || rest.endsWith('-weak')) return null;
   return rest;
 }
