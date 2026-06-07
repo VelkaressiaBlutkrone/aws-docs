@@ -42,11 +42,11 @@
 | saa-t3-7 | 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서 | 3 | 3.4 | Phase-04-Step-2-Route53.md · Phase-04-Step-3-CloudFront.md | ☑ |
 | saa-t3-8 | 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink | 3 | 3.4 | Phase-04-Step-1-VPC-심화.md · Phase-04-Step-4-하이브리드.md | ☑ |
 | saa-t3-9 | 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation | 3 | 3.5 | Phase-07-Step-2-Storage-스트리밍.md | ☑ |
-| saa-t4-1 | 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용 | 4 | 4.1 | Phase-08-Step-1-비용절감-패턴.md · Phase-02-Step-3-S3.md | ☐ |
-| saa-t4-2 | 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing | 4 | 4.2 | Phase-08-Step-1-비용절감-패턴.md · Phase-02-Step-2-EC2.md | ☐ |
-| saa-t4-3 | 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션 | 4 | 4.3 | Phase-08-Step-2-비용-시험전략.md · Phase-03-Step-1-RDS-Aurora.md | ☐ |
-| saa-t4-4 | 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink | 4 | 4.4 | Phase-08-Step-2-비용-시험전략.md | ☐ |
-| saa-t4-5 | 비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected | 4 | 4.1 · 4.2 · 4.3 · 4.4 | Phase-08-Step-1-비용절감-패턴.md · Phase-11-Well-Architected.md | ☐ |
+| saa-t4-1 | 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용 | 4 | 4.1 | Phase-08-Step-1-비용절감-패턴.md · Phase-02-Step-3-S3.md | ☑ |
+| saa-t4-2 | 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing | 4 | 4.2 | Phase-08-Step-1-비용절감-패턴.md · Phase-02-Step-2-EC2.md | ☑ |
+| saa-t4-3 | 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션 | 4 | 4.3 | Phase-08-Step-2-비용-시험전략.md · Phase-03-Step-1-RDS-Aurora.md | ☑ |
+| saa-t4-4 | 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink | 4 | 4.4 | Phase-08-Step-2-비용-시험전략.md | ☑ |
+| saa-t4-5 | 비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected | 4 | 4.1 · 4.2 · 4.3 · 4.4 | Phase-08-Step-1-비용절감-패턴.md · Phase-11-Well-Architected.md | ☑ |
 
 ---
 
