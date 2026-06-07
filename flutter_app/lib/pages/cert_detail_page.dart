@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/study_progress.dart';
+import '../data/viewed_docs_store.dart';
 import '../data/wrong_answer_index.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
@@ -16,6 +18,7 @@ typedef _Loaded = ({
   ExamGuide? guide,
   ExamSummary? summary,
   Map<String, int> weakByTask,
+  StudyProgress progress,
 });
 
 class CertDetailPage extends StatelessWidget {
@@ -55,7 +58,19 @@ class CertDetailPage extends StatelessWidget {
       taskByQuestionId: taskByQuestionId,
     ).weakByTask();
 
-    return (guide: guide, summary: summary, weakByTask: weakByTask);
+    final progress = StudyProgress.build(
+      certId: cert.code,
+      allTaskIds: [for (final e in contentFor(cert.code)) e.taskId],
+      viewedTaskIds: ViewedDocsStore().viewed(cert.code),
+      history: HistoryStore().all(),
+    );
+
+    return (
+      guide: guide,
+      summary: summary,
+      weakByTask: weakByTask,
+      progress: progress,
+    );
   }
 
   @override
@@ -106,6 +121,7 @@ class CertDetailPage extends StatelessWidget {
                             _LearningContent(
                               entries: contentFor(cert.code),
                               weakByTask: snap.data?.weakByTask ?? const {},
+                              progress: snap.data?.progress,
                             ),
                           if (guide != null)
                             _OfficialGuide(guide: guide)
@@ -171,9 +187,14 @@ class _Header extends StatelessWidget {
 
 /// 검증된 학습 콘텐츠(학습문서 + 연습 문제) 진입 섹션.
 class _LearningContent extends StatelessWidget {
-  const _LearningContent({required this.entries, required this.weakByTask});
+  const _LearningContent({
+    required this.entries,
+    required this.weakByTask,
+    required this.progress,
+  });
   final List<ContentEntry> entries;
   final Map<String, int> weakByTask;
+  final StudyProgress? progress;
 
   @override
   Widget build(BuildContext context) {
@@ -194,6 +215,10 @@ class _LearningContent extends StatelessWidget {
           Text('AWS 공식 출처로 검증한 한국어 학습문서와 연습 문제.',
               style: t.bodyMedium),
           const SizedBox(height: Gap.lg),
+          if (progress != null && progress!.hasAny) ...[
+            _ProgressBanner(progress: progress!),
+            const SizedBox(height: Gap.lg),
+          ],
           for (final e in entries)
             Padding(
               padding: const EdgeInsets.only(bottom: Gap.md),
@@ -546,6 +571,55 @@ class _GuideMissing extends StatelessWidget {
           style: TextStyle(color: c.text)),
     );
   }
+}
+
+/// 학습 진행률 배너(열람률 + 최고 정답률 + 마지막 응시일). 정직 표기 툴팁.
+class _ProgressBanner extends StatelessWidget {
+  const _ProgressBanner({required this.progress});
+  final StudyProgress progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final t = Theme.of(context).textTheme;
+    final p = progress;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(Gap.lg),
+      decoration: BoxDecoration(
+        color: c.surface2,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: Border.all(color: c.border),
+      ),
+      child: Wrap(
+        spacing: Gap.xl,
+        runSpacing: Gap.sm,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Tooltip(
+            message: '학습 자료가 추가되면 진도율이 변할 수 있습니다.',
+            child: _stat(c, t, '문서 열람', '${p.viewedCount}/${p.totalDocs}'),
+          ),
+          if (p.bestRatePct != null)
+            _stat(c, t, '최고 정답률', '${p.bestRatePct}%'),
+          if (p.lastAttemptIso != null)
+            _stat(c, t, '마지막 응시', p.lastAttemptIso!.split('T').first),
+        ],
+      ),
+    );
+  }
+
+  Widget _stat(AppColors c, TextTheme t, String label, String value) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: t.labelSmall?.copyWith(color: c.textFaint)),
+          const SizedBox(height: 2),
+          Text(value,
+              style: t.titleMedium?.copyWith(
+                  color: c.accent, fontFamily: AppTheme.monoFamily)),
+        ],
+      );
 }
 
 // ── small shared widgets ──
