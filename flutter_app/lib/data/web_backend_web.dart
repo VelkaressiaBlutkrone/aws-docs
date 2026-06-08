@@ -8,4 +8,11 @@ class WebBackend implements KvBackend {
   @override
   void write(String key, String value) =>
       web.window.localStorage.setItem(key, value);
+  @override
+  Iterable<String> keys() {
+    final ls = web.window.localStorage;
+    return [
+      for (var i = 0; i < ls.length; i++) ?ls.key(i),
+    ];
+  }
 }

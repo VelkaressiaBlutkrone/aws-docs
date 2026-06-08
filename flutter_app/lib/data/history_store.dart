@@ -30,4 +30,13 @@ class HistoryStore {
     final list = all()..add(r);
     _b.write(_key, jsonEncode(list.map((e) => e.toJson()).toList()));
   }
+
+  /// 해당 자격증 레코드만 제거하고 나머지는 보존(전 자격증 통합 단일 키).
+  void clearCert(String certId) {
+    final kept = all().where((r) => r.certId != certId).toList();
+    _b.write(_key, jsonEncode(kept.map((e) => e.toJson()).toList()));
+  }
+
+  /// 모든 응시 이력 삭제(빈 값 = all()에서 빈 리스트).
+  void clearAll() => _b.write(_key, '');
 }

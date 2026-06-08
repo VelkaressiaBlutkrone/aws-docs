@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../content/quiz_widgets.dart';
+import '../content/reset_dialog.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
+import '../data/study_reset.dart';
 import '../data/wrong_answer_index.dart';
 import '../models/attempt_record.dart';
 import '../models/certification.dart';
@@ -84,6 +86,28 @@ class _ReviewListPageState extends State<ReviewListPage> {
     });
   }
 
+  Future<void> _resetCert() async {
+    final attempts =
+        _history.all().where((r) => r.certId == widget.cert.code).length;
+    final ok = await confirmReset(
+      context,
+      title: '${widget.cert.code} 학습 기록 초기화',
+      message: '이 자격증의 응시 기록 $attempts회와 오답노트·약점 리포트·진행률·약점 모의고사 '
+          '잠금 해제 상태가 모두 삭제됩니다. 다른 자격증은 그대로입니다.\n\n이 작업은 되돌릴 수 없습니다.',
+    );
+    if (!ok || !mounted) return;
+    resetCert(widget.cert.code);
+    setState(() {
+      _running = null;
+      _future = _load();
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${widget.cert.code} 학습 기록을 초기화했습니다.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.c;
@@ -96,6 +120,13 @@ class _ReviewListPageState extends State<ReviewListPage> {
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text('${widget.cert.code} · 오답노트',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        actions: [
+          IconButton(
+            onPressed: _resetCert,
+            tooltip: '이 자격증 학습 기록 초기화',
+            icon: Icon(Icons.delete_outline, size: 20, color: c.textMuted),
+          ),
+        ],
       ),
       body: FutureBuilder<_ReviewLoad>(
         future: _future,

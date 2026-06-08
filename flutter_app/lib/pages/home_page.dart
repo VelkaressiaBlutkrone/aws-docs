@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../content/reset_dialog.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/site_data.dart';
 import '../data/study_progress.dart';
+import '../data/study_reset.dart';
 import '../data/viewed_docs_store.dart';
 import '../data/weighted_exam.dart';
 import '../models/certification.dart';
@@ -43,6 +45,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _resetAll() async {
+    final ok = await confirmReset(
+      context,
+      title: '모든 학습 기록 초기화',
+      message: '모든 자격증의 응시 이력·오답노트·약점 리포트·진행률·열람 기록이 '
+          '전부 삭제됩니다. 진행 중인 시험 세션도 사라집니다.\n\n이 작업은 되돌릴 수 없습니다.',
+      confirmLabel: '모두 초기화',
+    );
+    if (!ok || !mounted) return;
+    resetAll();
+    if (mounted) {
+      setState(() {}); // 진행률 배지 등 갱신
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('모든 학습 기록을 초기화했습니다.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.c;
@@ -51,6 +71,7 @@ class _HomePageState extends State<HomePage> {
       appBar: _Header(
         isDark: ThemeScope.of(context).isDark,
         onToggleTheme: ThemeScope.of(context).toggle,
+        onResetAll: _resetAll,
         onNav: {
           '단계': () => _goto(_levels),
           '추천 순서': () => _goto(_paths),
@@ -99,11 +120,13 @@ class _Header extends StatelessWidget implements PreferredSizeWidget {
   const _Header({
     required this.isDark,
     required this.onToggleTheme,
+    required this.onResetAll,
     required this.onNav,
   });
 
   final bool isDark;
   final VoidCallback onToggleTheme;
+  final VoidCallback onResetAll;
   final Map<String, VoidCallback> onNav;
 
   static const _navBreakpoint = 768.0;
@@ -134,17 +157,23 @@ class _Header extends StatelessWidget implements PreferredSizeWidget {
                     children: [
                       const _Brand(),
                       const Spacer(),
-                      if (compact)
-                        _NavMenuButton(onNav: onNav)
-                      else
+                      if (compact) ...[
+                        // 좁은 폭: 설정 액션을 햄버거 메뉴에 통합(버튼 과다 방지).
+                        _NavMenuButton(onNav: onNav, onResetAll: onResetAll),
+                        const SizedBox(width: Gap.sm),
+                        _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
+                      ] else ...[
                         ...onNav.entries.map(
                           (e) => Padding(
                             padding: const EdgeInsets.only(left: Gap.lg),
                             child: _NavLink(label: e.key, onTap: e.value),
                           ),
                         ),
-                      const SizedBox(width: Gap.lg),
-                      _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
+                        const SizedBox(width: Gap.lg),
+                        _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
+                        const SizedBox(width: Gap.sm),
+                        _SettingsButton(onResetAll: onResetAll),
+                      ],
                     ],
                   );
                 },
@@ -214,8 +243,11 @@ class _NavLink extends StatelessWidget {
 }
 
 class _NavMenuButton extends StatelessWidget {
-  const _NavMenuButton({required this.onNav});
+  const _NavMenuButton({required this.onNav, this.onResetAll});
   final Map<String, VoidCallback> onNav;
+  final VoidCallback? onResetAll;
+
+  static const _resetKey = '__reset_all__';
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +260,13 @@ class _NavMenuButton extends StatelessWidget {
         side: BorderSide(color: c.border),
         borderRadius: BorderRadius.circular(Radii.md),
       ),
-      onSelected: (key) => onNav[key]?.call(),
+      onSelected: (key) {
+        if (key == _resetKey) {
+          onResetAll?.call();
+        } else {
+          onNav[key]?.call();
+        }
+      },
       itemBuilder: (context) => [
         for (final key in onNav.keys)
           PopupMenuItem<String>(
@@ -239,6 +277,23 @@ class _NavMenuButton extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: c.text)),
           ),
+        if (onResetAll != null) ...[
+          const PopupMenuDivider(),
+          PopupMenuItem<String>(
+            value: _resetKey,
+            child: Row(
+              children: [
+                Icon(Icons.delete_outline, size: 18, color: c.wrong),
+                const SizedBox(width: Gap.sm),
+                Text('모든 학습 기록 초기화',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: c.text)),
+              ],
+            ),
+          ),
+        ],
       ],
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -278,6 +333,48 @@ class _ThemeToggle extends StatelessWidget {
             size: 18,
             color: c.textMuted,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 설정 버튼 — 현재는 "모든 학습 기록 초기화" 단일 액션(전역, 파괴적).
+class _SettingsButton extends StatelessWidget {
+  const _SettingsButton({required this.onResetAll});
+  final VoidCallback onResetAll;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return Tooltip(
+      message: '설정',
+      child: PopupMenuButton<String>(
+        tooltip: '설정',
+        position: PopupMenuPosition.under,
+        onSelected: (v) {
+          if (v == 'reset') onResetAll();
+        },
+        itemBuilder: (ctx) => [
+          PopupMenuItem<String>(
+            value: 'reset',
+            child: Row(
+              children: [
+                Icon(Icons.delete_outline, size: 18, color: c.wrong),
+                const SizedBox(width: Gap.sm),
+                const Text('모든 학습 기록 초기화'),
+              ],
+            ),
+          ),
+        ],
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: c.surface2,
+            borderRadius: BorderRadius.circular(Radii.full),
+            border: Border.all(color: c.border),
+          ),
+          child: Icon(Icons.settings_outlined, size: 18, color: c.textMuted),
         ),
       ),
     );

@@ -38,4 +38,13 @@ class ViewedDocsStore {
     m[certId] = [...list, taskId];
     _b.write(_key, jsonEncode(m));
   }
+
+  /// 해당 자격증 열람 기록만 제거.
+  void clearCert(String certId) {
+    final m = _read()..remove(certId);
+    _b.write(_key, jsonEncode(m));
+  }
+
+  /// 모든 열람 기록 삭제.
+  void clearAll() => _b.write(_key, '');
 }

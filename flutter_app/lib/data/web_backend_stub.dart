@@ -6,4 +6,6 @@ class WebBackend implements KvBackend {
   String? read(String key) => null;
   @override
   void write(String key, String value) {}
+  @override
+  Iterable<String> keys() => const [];
 }

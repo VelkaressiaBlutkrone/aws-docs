@@ -25,4 +25,12 @@ class ExamSessionStore {
 
   /// 빈 문자열 기록 = load에서 null 처리(KvBackend에 삭제 API 없음).
   void clear(String examId) => _b.write(_key(examId), '');
+
+  /// 진행 중인 모든 시험 세션 삭제(키 접두사 일괄 정리).
+  void clearAll() {
+    const prefix = 'awsdocs.examSession.v1:';
+    for (final k in _b.keys()) {
+      if (k.startsWith(prefix)) _b.write(k, '');
+    }
+  }
 }
