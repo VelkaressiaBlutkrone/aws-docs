@@ -60,7 +60,7 @@ class _ReportPageState extends State<ReportPage> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.cert.title} · 약점 리포트',
+        title: Text('${widget.cert.code} · 약점 리포트',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       ),
       body: FutureBuilder<_ReportLoad>(

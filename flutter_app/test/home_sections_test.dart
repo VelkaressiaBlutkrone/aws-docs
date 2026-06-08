@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/app_router.dart';
+import 'package:aws_docs/data/cert_lookup.dart';
+import 'package:aws_docs/pages/cert_exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
 
@@ -65,5 +67,20 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('모의고사').evaluate().length, before + 1);
     });
+  });
+
+  testWidgets('통합 모의고사 AppBar 제목은 자격증 코드 기반', (tester) async {
+    // 라우터 스택(하단 HomePage의 SelectionArea + 전환)을 피해 페이지를 직접 펌프.
+    final cert = certByCode('CLF-C02')!;
+    await tester.pumpWidget(ThemeScope(
+      isDark: false,
+      toggle: () {},
+      child: MaterialApp(
+        theme: AppTheme.light,
+        home: CertExamPage(cert: cert),
+      ),
+    ));
+    await tester.pump();
+    expect(find.text('CLF-C02 · 통합 모의고사'), findsOneWidget);
   });
 }

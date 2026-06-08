@@ -164,7 +164,7 @@ class _CertExamPageState extends State<CertExamPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text(
-            '${widget.cert.title} · ${widget.weighted ? '약점 집중 모의고사' : '통합 모의고사'}',
+            '${widget.cert.code} · ${widget.weighted ? '약점 집중 모의고사' : '통합 모의고사'}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       ),
       body: FutureBuilder<_MockLoad>(

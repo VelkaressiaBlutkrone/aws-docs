@@ -94,7 +94,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.cert.title} · 오답노트',
+        title: Text('${widget.cert.code} · 오답노트',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       ),
       body: FutureBuilder<_ReviewLoad>(
