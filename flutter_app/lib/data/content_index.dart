@@ -21,6 +21,10 @@ class ContentEntry {
 
   /// 이력 기록용 자격증 ID(현재는 certCode와 동일).
   String get certForHistory => certCode;
+
+  /// 노출 가능한 검증 문항이 있는가(questions.json 존재 여부와 1:1).
+  /// 학습문서만 있는(문항 0) Task의 불필요한 에셋 로드/404를 막는 가드.
+  bool get hasQuestions => questionCount > 0;
 }
 
 const Map<String, List<ContentEntry>> kContentIndex = {

@@ -46,6 +46,8 @@ class _CertExamPageState extends State<CertExamPage> {
     final taskOrder = <String>[];
     final taskPool = <String, List<Question>>{};
     for (final e in entries) {
+      // 학습문서만 있는(문항 0) Task는 questions.json이 없다 → 로드 생략(404 방지).
+      if (!e.hasQuestions) continue;
       try {
         final raw = await rootBundle.loadString(e.questionsAsset);
         final bank =

@@ -47,6 +47,8 @@ class CertDetailPage extends StatelessWidget {
     // 오답노트 배지: 뱅크 로드 → taskByQuestionId → 약점 인덱스.
     final taskByQuestionId = <String, String>{};
     for (final e in contentFor(cert.code)) {
+      // 학습문서만 있는(문항 0) Task는 questions.json이 없다 → 로드 생략(404 방지).
+      if (!e.hasQuestions) continue;
       try {
         final raw = await rootBundle.loadString(e.questionsAsset);
         final bank = QuestionBank.fromJson(

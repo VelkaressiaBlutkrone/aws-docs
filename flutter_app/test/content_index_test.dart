@@ -37,4 +37,11 @@ void main() {
     expect(certHasVerifiedQuestions('CLF-C02'), isTrue);
     expect(certHasVerifiedQuestions('NOPE'), isFalse);
   });
+
+  test('ContentEntry.hasQuestions: questionCount>0과 1:1 (뱅크 로드 가드의 불변식)', () {
+    // CLF는 모든 Task에 검증 문항 → 전부 로드 대상.
+    expect(contentFor('CLF-C02').every((e) => e.hasQuestions), isTrue);
+    // SAA는 학습문서만(문항 0) → 전부 로드 생략 대상(questions.json 404 방지).
+    expect(contentFor('SAA-C03').any((e) => e.hasQuestions), isFalse);
+  });
 }
