@@ -92,15 +92,17 @@ class _CertExamPageState extends State<CertExamPage> {
       taskWeights = weightByTaskFromReport(report);
     }
 
-    // 복원 가능한 진행 세션?
+    // 복원 가능한 진행 세션? — 문항 ID 복원 + 선택지 순서 완비 검증(스펙 §3.3)
     final existing = _store.load(_examId);
     _Restorable? restorable;
     if (existing != null && !existing.submitted) {
       final restored = restoreOrdered(existing.questionIds, byId);
-      if (restored == null) {
-        _store.clear(_examId); // 개정/불일치 폐기
+      if (restored == null ||
+          !ordersCoverQuestions(restored, existing.optionOrders)) {
+        _store.clear(_examId); // 개정/불일치/구버전 폐기
       } else {
-        restorable = _Restorable(existing, restored);
+        restorable = _Restorable(
+            existing, applyOptionOrders(restored, existing.optionOrders));
       }
     }
 
@@ -120,27 +122,31 @@ class _CertExamPageState extends State<CertExamPage> {
 
   void _startFresh(_MockLoad d) {
     _store.clear(_examId);
+    final rng = Random();
     final sampled = widget.weighted
         ? buildSampledExam<String>(
             poolByKey: d.taskPool,
             weightByKey: d.taskWeights,
             n: _targetN(d.overview),
-            rng: Random(),
+            rng: rng,
           )
         : buildMockExam(
             poolByDomain: d.pool,
             weightByDomain: d.weights,
             n: _targetN(d.overview),
-            rng: Random(),
+            rng: rng,
           );
+    final orders = randomOptionOrders(sampled, rng); // 선택지 셔플(스펙 §3.2)
+    final questions = applyOptionOrders(sampled, orders);
     final startedAt = DateTime.now();
     final durationSec = examDurationSec(
       durationMinutes: d.overview?.durationMinutes,
       scored: d.overview?.scoredQuestions,
       unscored: d.overview?.unscoredQuestions,
-      count: sampled.length,
+      count: questions.length,
     );
-    setState(() => _running = _RunParams.fresh(sampled, startedAt, durationSec));
+    setState(() =>
+        _running = _RunParams.fresh(questions, orders, startedAt, durationSec));
   }
 
   void _resume(_Restorable r) {
@@ -201,6 +207,7 @@ class _CertExamPageState extends State<CertExamPage> {
           initialPicked: r.picked,
           initialFlagged: r.flagged,
           restored: r.restored,
+          optionOrders: r.optionOrders,
           onChanged: _store.save,
           onFinished: (rec) {
             _history.add(rec);
@@ -334,6 +341,7 @@ class _MockLoad {
 /// ExamView에 주입할 실행 파라미터(새 시험 / 복원).
 class _RunParams {
   final List<Question> questions;
+  final Map<String, List<int>> optionOrders;
   final DateTime startedAt;
   final int durationSec;
   final int index;
@@ -341,14 +349,16 @@ class _RunParams {
   final Set<int> flagged;
   final bool restored;
 
-  _RunParams.fresh(this.questions, this.startedAt, this.durationSec)
+  _RunParams.fresh(
+      this.questions, this.optionOrders, this.startedAt, this.durationSec)
       : index = 0,
         picked = const <int, int>{},
         flagged = const <int>{},
         restored = false;
 
   _RunParams.restored(ExamSession s, this.questions)
-      : startedAt = DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
+      : optionOrders = s.optionOrders,
+        startedAt = DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
         durationSec = s.durationSec,
         index = s.index,
         picked = s.picked,
