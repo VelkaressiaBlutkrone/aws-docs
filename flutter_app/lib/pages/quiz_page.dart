@@ -24,6 +24,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   // late final: 리빌드 시 재샘플링 방지 — 풀이 중 문항이 바뀌면 안 된다.
   late final Future<QuestionBank> _future = _load();
+  final _store = HistoryStore();
 
   Future<QuestionBank> _load() async {
     final raw = await rootBundle.loadString(widget.entry.questionsAsset);
@@ -72,14 +73,13 @@ class _QuizPageState extends State<QuizPage> {
                 child: Text('검증된 연습 문제가 아직 없습니다.',
                     style: TextStyle(color: c.textMuted)));
           }
-          final store = HistoryStore();
           return Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: Layout.exam),
               child: QuizView(
                 bank: bank,
                 certId: widget.entry.certForHistory,
-                onFinished: store.add,
+                onFinished: _store.add,
               ),
             ),
           );
