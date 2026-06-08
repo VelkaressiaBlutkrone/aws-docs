@@ -199,7 +199,7 @@
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-1-q8",
@@ -226,7 +226,7 @@
           "url": "https://aws.amazon.com/about-aws/global-infrastructure/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-1-q9",
@@ -253,7 +253,7 @@
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-1-q10",
@@ -280,7 +280,7 @@
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

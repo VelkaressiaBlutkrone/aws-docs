@@ -203,7 +203,7 @@
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-4-q8",
@@ -234,7 +234,7 @@
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-4-q9",
@@ -265,7 +265,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-4-q10",
@@ -296,7 +296,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

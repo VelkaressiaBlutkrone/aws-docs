@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-2-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-2-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-2-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

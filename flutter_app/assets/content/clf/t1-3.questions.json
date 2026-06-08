@@ -276,7 +276,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-migration-strategies.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
