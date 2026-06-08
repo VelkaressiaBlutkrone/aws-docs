@@ -106,6 +106,8 @@ class _Header extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onToggleTheme;
   final Map<String, VoidCallback> onNav;
 
+  static const _navBreakpoint = 768.0;
+
   @override
   Size get preferredSize => const Size.fromHeight(60);
 
@@ -125,19 +127,27 @@ class _Header extends StatelessWidget implements PreferredSizeWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal: Gap.xl, vertical: Gap.md),
-              child: Row(
-                children: [
-                  const _Brand(),
-                  const Spacer(),
-                  ...onNav.entries.map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(left: Gap.lg),
-                      child: _NavLink(label: e.key, onTap: e.value),
-                    ),
-                  ),
-                  const SizedBox(width: Gap.lg),
-                  _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
-                ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final compact = constraints.maxWidth < _navBreakpoint;
+                  return Row(
+                    children: [
+                      const _Brand(),
+                      const Spacer(),
+                      if (compact)
+                        _NavMenuButton(onNav: onNav)
+                      else
+                        ...onNav.entries.map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.only(left: Gap.lg),
+                            child: _NavLink(label: e.key, onTap: e.value),
+                          ),
+                        ),
+                      const SizedBox(width: Gap.lg),
+                      _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -198,6 +208,46 @@ class _NavLink extends StatelessWidget {
         child: Text(label,
             style: TextStyle(
                 fontSize: 14, fontWeight: FontWeight.w600, color: c.textMuted)),
+      ),
+    );
+  }
+}
+
+class _NavMenuButton extends StatelessWidget {
+  const _NavMenuButton({required this.onNav});
+  final Map<String, VoidCallback> onNav;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return PopupMenuButton<String>(
+      tooltip: '메뉴',
+      color: c.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: c.border),
+        borderRadius: BorderRadius.circular(Radii.md),
+      ),
+      onSelected: (key) => onNav[key]?.call(),
+      itemBuilder: (context) => [
+        for (final key in onNav.keys)
+          PopupMenuItem<String>(
+            value: key,
+            child: Text(key,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: c.text)),
+          ),
+      ],
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: c.surface2,
+          borderRadius: BorderRadius.circular(Radii.full),
+          border: Border.all(color: c.border),
+        ),
+        child: Icon(Icons.menu, size: 18, color: c.textMuted),
       ),
     );
   }
