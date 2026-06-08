@@ -104,3 +104,37 @@ List<Question>? restoreOrdered(List<String> ids, Map<String, Question> byId) {
   }
   return out;
 }
+
+/// Task 연습/시험 차출 수(스펙 §2). 풀이 이보다 작으면 전부 출제.
+const taskSampleCount = 5;
+
+/// 풀에서 n개 무작위 차출. 풀 ≤ n이면 전부. 반환 순서도 섞인다. [rng] 주입으로 결정적.
+List<Question> samplePool(List<Question> pool, int n, Random rng) {
+  final copy = [...pool]..shuffle(rng);
+  return n < copy.length ? copy.sublist(0, n) : copy;
+}
+
+/// 문항별 선택지 표시 순서를 무작위 생성(questionId → 원본 인덱스 순열).
+/// 생성(랜덤)과 적용(applyOptionOrders, 결정적)을 분리 — 복원·테스트 용이(스펙 §3.1).
+Map<String, List<int>> randomOptionOrders(
+    Iterable<Question> questions, Random rng) {
+  final out = <String, List<int>>{};
+  for (final q in questions) {
+    out[q.id] = [for (var i = 0; i < q.options.length; i++) i]..shuffle(rng);
+  }
+  return out;
+}
+
+/// 생성/저장된 표시 순서를 적용. 순서가 없는 문항은 그대로 둔다.
+List<Question> applyOptionOrders(
+        List<Question> questions, Map<String, List<int>> orders) =>
+    [
+      for (final q in questions)
+        orders[q.id] == null ? q : q.withOptionOrder(orders[q.id]!)
+    ];
+
+/// 복원 전 검증: 모든 문항에 길이가 맞는 표시 순서가 있는가(스펙 §3.3).
+/// 구버전 세션(optionOrders 없음)은 여기서 걸러져 새 시험으로 시작된다.
+bool ordersCoverQuestions(
+        List<Question> questions, Map<String, List<int>> orders) =>
+    questions.every((q) => orders[q.id]?.length == q.options.length);
