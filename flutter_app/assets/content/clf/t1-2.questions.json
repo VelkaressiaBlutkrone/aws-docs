@@ -165,6 +165,114 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-2-q7",
+      "examGuideTaskId": "clf-t1-2",
+      "skill": "운영 우수성 기둥",
+      "difficulty": "applied",
+      "stem": "한 운영팀이 워크로드 실행 상태를 지속적으로 모니터링하고, 배포 절차를 자동화하며, 사후 분석으로 운영 프로세스를 계속 개선해 비즈니스 가치를 전달하려 한다. 이는 Well-Architected의 어느 기둥에 가장 잘 부합하는가?",
+      "options": [
+        "보안(Security)",
+        "운영 우수성(Operational Excellence)",
+        "성능 효율성(Performance Efficiency)",
+        "비용 최적화(Cost Optimization)"
+      ],
+      "correct": 1,
+      "explanation": "운영 우수성(Operational Excellence) 기둥은 워크로드를 효과적으로 실행·모니터링하고, 절차를 자동화하며, 프로세스를 지속적으로 개선해 비즈니스 가치를 전달하는 능력을 다룹니다. 모니터링·자동화·지속 개선이 이 기둥의 핵심 키워드입니다.",
+      "wrongExplanations": {
+        "0": "보안은 데이터·시스템·자산을 보호하는 기둥으로, 운영 모니터링·자동화·지속 개선과는 초점이 다릅니다.",
+        "2": "성능 효율성은 컴퓨팅 리소스를 효율적으로 선택·사용하는 기둥으로, 운영 프로세스 개선 자체를 다루지 않습니다.",
+        "3": "비용 최적화는 불필요한 비용을 제거해 최저 비용으로 가치를 실현하는 기둥으로, 운영 모니터링·자동화와는 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "The pillars of the framework — 운영 우수성(Operational Excellence) 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t1-2-q8",
+      "examGuideTaskId": "clf-t1-2",
+      "skill": "보안 기둥",
+      "difficulty": "applied",
+      "stem": "한 회사가 고객 데이터의 기밀성과 무결성을 지키기 위해 데이터를 암호화하고, 최소 권한 원칙으로 접근을 통제하며, 위험을 평가·완화하려 한다. 이는 Well-Architected의 어느 기둥에 해당하는가?",
+      "options": [
+        "안정성(Reliability)",
+        "운영 우수성(Operational Excellence)",
+        "보안(Security)",
+        "지속 가능성(Sustainability)"
+      ],
+      "correct": 2,
+      "explanation": "보안(Security) 기둥은 데이터·시스템·자산을 보호(기밀성·무결성)하고, 권한 관리·암호화를 통해 위험을 평가하고 완화하는 능력을 다룹니다. 데이터 보호·접근 통제·암호화가 이 기둥의 핵심입니다.",
+      "wrongExplanations": {
+        "0": "안정성은 장애 복구와 일관된 동작을 다루는 기둥으로, 데이터 보호·암호화·접근 통제가 핵심이 아닙니다.",
+        "1": "운영 우수성은 워크로드 실행·모니터링과 프로세스 지속 개선을 다루는 기둥으로, 데이터 보호 자체와는 초점이 다릅니다.",
+        "3": "지속 가능성은 환경·에너지 영향 최소화를 다루는 기둥으로, 데이터 보호·접근 통제와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "The pillars of the framework — 보안(Security) 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t1-2-q9",
+      "examGuideTaskId": "clf-t1-2",
+      "skill": "기둥 개수 (지속 가능성 추가)",
+      "difficulty": "foundational",
+      "stem": "AWS Well-Architected Framework의 기둥 개수에 대한 설명으로 옳은 것은?",
+      "options": [
+        "기둥은 4개이며, 보안은 별도 프레임워크로 분리되어 있다",
+        "기둥은 5개이며, 이후 추가된 기둥은 없다",
+        "기둥은 6개이며, 지속 가능성(Sustainability)이 가장 나중에 추가되었다",
+        "기둥은 7개이며, 확장성(Scalability)이 포함된다"
+      ],
+      "correct": 2,
+      "explanation": "AWS Well-Architected Framework의 기둥은 6개(운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성)입니다. 지속 가능성(Sustainability)이 2021년에 여섯 번째 기둥으로 추가되었습니다.",
+      "wrongExplanations": {
+        "0": "기둥은 4개가 아니라 6개이며, 보안(Security)은 별도 프레임워크가 아니라 6대 기둥 중 하나입니다.",
+        "1": "기둥은 5개가 아니라 6개입니다. 지속 가능성이 추가되어 현재 6개입니다.",
+        "3": "기둥은 7개가 아니라 6개이며, 확장성(Scalability)은 별도의 기둥이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Well-Architected Framework — 6대 기둥 구성",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t1-2-q10",
+      "examGuideTaskId": "clf-t1-2",
+      "skill": "프레임워크 목적",
+      "difficulty": "foundational",
+      "stem": "AWS Well-Architected Framework가 아키텍트에게 제공하는 가장 핵심적인 목적은 무엇인가?",
+      "options": [
+        "클라우드에서 시스템을 구축할 때 내리는 설계 결정의 장단점(트레이드오프)을 이해하도록 돕는 것",
+        "모든 워크로드에 적용해야 하는 단일 정답 아키텍처를 강제하는 것",
+        "AWS 리소스의 월별 청구 금액을 자동으로 계산해 주는 것",
+        "특정 규정 준수 인증서를 자동으로 발급해 주는 것"
+      ],
+      "correct": 0,
+      "explanation": "AWS Well-Architected Framework의 핵심 목적은 클라우드에서 시스템을 구축할 때 내리는 결정의 장단점(트레이드오프)을 이해하도록 돕는 것입니다. 모범 사례에 비추어 안전·신뢰·효율·비용 효율·지속 가능한 시스템을 설계하는 데 일관된 접근법을 제공합니다.",
+      "wrongExplanations": {
+        "1": "Well-Architected는 단일 정답 아키텍처를 강제하지 않습니다. 워크로드별 트레이드오프를 이해하고 모범 사례에 비추어 개선점을 찾도록 돕는 도구입니다.",
+        "2": "월별 청구 금액 계산은 AWS Billing/Cost Management의 기능으로, Well-Architected Framework의 목적이 아닙니다.",
+        "3": "규정 준수 인증서 발급은 Well-Architected Framework의 기능이 아닙니다. 이는 설계 모범 사례 점검 프레임워크입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Well-Architected Framework — 설계 결정의 트레이드오프 이해를 돕는 모범 사례",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

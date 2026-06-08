@@ -250,6 +250,33 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-3-q10",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "마이그레이션 전략 (7 R - Rehost)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 온프레미스 애플리케이션을 코드나 아키텍처를 거의 변경하지 않고 그대로 AWS의 EC2로 옮겨, 최소한의 노력으로 빠르게 마이그레이션하려 한다. AWS가 정의한 7가지 마이그레이션 전략(7 R) 중 이 '리프트 앤 시프트(lift-and-shift)' 방식에 해당하는 것은?",
+      "options": [
+        "Refactor(리팩터링) — 클라우드 네이티브하게 애플리케이션을 재설계",
+        "Repurchase(재구매) — 기존 제품을 버리고 SaaS 등 다른 제품으로 교체",
+        "Rehost(리호스트) — 변경 없이 그대로 옮기는 리프트 앤 시프트",
+        "Retire(폐기) — 더 이상 필요 없는 애플리케이션을 정리·종료"
+      ],
+      "correct": 2,
+      "explanation": "AWS가 정의한 7가지 마이그레이션 전략(7 R: Rehost·Replatform·Refactor·Repurchase·Retire·Retain·Relocate) 중 Rehost(리호스트)는 애플리케이션의 코드나 아키텍처를 거의 변경하지 않고 그대로 클라우드로 옮기는 '리프트 앤 시프트(lift-and-shift)' 방식입니다. 변경이 적어 가장 빠르게 마이그레이션할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Refactor(리팩터링/리아키텍팅)는 클라우드 네이티브 기능을 최대한 활용하도록 애플리케이션을 재설계하는 전략으로, 변경이 가장 많은 방식입니다. 변경 없이 옮기는 리프트 앤 시프트와는 반대입니다.",
+        "1": "Repurchase(재구매, drop-and-shop)는 기존 애플리케이션을 버리고 SaaS 같은 다른 제품으로 교체하는 전략으로, 기존 애플리케이션을 그대로 옮기는 방식이 아닙니다.",
+        "3": "Retire(폐기)는 더 이상 필요 없는 애플리케이션을 정리·종료하는 전략으로, 애플리케이션을 클라우드로 옮기는 것이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Migration strategies for application migration — 7 R(Rehost·Replatform·Refactor·Repurchase·Retire·Retain·Relocate), Rehost는 리프트 앤 시프트",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-migration-strategies.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }
