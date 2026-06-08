@@ -173,6 +173,114 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-4-q7",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "위협 탐지 (Amazon GuardDuty)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 VPC 흐름 로그, DNS 로그, CloudTrail 이벤트 등을 지속적으로 분석해 비정상적인 API 호출, 권한 없는 배포, 손상된 인스턴스 같은 악의적 활동·위협을 탐지하는 관리형 서비스를 찾고 있다. 가장 적합한 것은?",
+      "options": [
+        "Amazon GuardDuty",
+        "Amazon Inspector",
+        "Amazon Macie",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "Amazon GuardDuty는 AWS 계정과 워크로드를 지속적으로 모니터링하는 위협 탐지 서비스로, CloudTrail 이벤트, VPC 흐름 로그, DNS 로그 등을 분석해 비정상 API 호출이나 손상된 인스턴스 같은 악의적·무단 활동을 식별합니다.",
+      "wrongExplanations": {
+        "1": "Amazon Inspector는 EC2·컨테이너 이미지·Lambda의 소프트웨어 취약점(CVE)과 네트워크 노출을 스캔하는 서비스로, 로그 기반의 위협 활동 탐지가 주 목적이 아닙니다.",
+        "2": "Amazon Macie는 Amazon S3의 민감 데이터(개인정보 등)를 발견·분류하는 서비스로, 계정 활동 위협 탐지 도구가 아닙니다.",
+        "3": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, 로그를 지속 분석해 위협을 실시간 탐지하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon GuardDuty? — 계정·워크로드 지속 모니터링, CloudTrail·VPC 흐름 로그·DNS 로그 분석으로 위협 탐지",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q8",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "취약점 스캔 (Amazon Inspector)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 자사 Amazon EC2 인스턴스, 컨테이너 이미지, AWS Lambda 함수의 소프트웨어 취약점(CVE)과 의도치 않은 네트워크 노출을 자동·지속적으로 스캔하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon GuardDuty",
+        "Amazon Inspector",
+        "AWS Secrets Manager",
+        "Amazon Macie"
+      ],
+      "correct": 1,
+      "explanation": "Amazon Inspector는 워크로드를 자동으로 검색하고 취약점을 지속적으로 스캔하는 서비스로, Amazon EC2 인스턴스, 컨테이너 이미지(Amazon ECR), AWS Lambda 함수에서 알려진 소프트웨어 취약점(CVE)과 의도하지 않은 네트워크 노출을 점검합니다.",
+      "wrongExplanations": {
+        "0": "Amazon GuardDuty는 로그를 분석해 악의적 활동·위협을 탐지하는 서비스로, 소프트웨어 패키지의 CVE 취약점을 스캔하는 도구가 아닙니다.",
+        "2": "AWS Secrets Manager는 데이터베이스 자격증명·API 키 같은 비밀을 안전하게 저장·교체하는 서비스로, 취약점 스캔 도구가 아닙니다.",
+        "3": "Amazon Macie는 Amazon S3의 민감 데이터를 발견·분류하는 서비스로, 소프트웨어 취약점 스캔과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Inspector? — EC2·ECR 컨테이너 이미지·Lambda의 소프트웨어 취약점·네트워크 노출 자동·지속 스캔",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q9",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "민감 데이터 보호 (Amazon Macie)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Amazon S3 버킷에 저장된 데이터에서 개인 식별 정보(PII) 같은 민감 데이터를 자동으로 발견·분류하고 그 노출 여부를 파악하려 한다. 머신러닝과 패턴 매칭을 사용하는 가장 적합한 서비스는?",
+      "options": [
+        "AWS Key Management Service(KMS)",
+        "Amazon Inspector",
+        "Amazon Macie",
+        "Amazon GuardDuty"
+      ],
+      "correct": 2,
+      "explanation": "Amazon Macie는 머신러닝과 패턴 매칭을 사용해 Amazon S3에 저장된 민감 데이터(예: 개인 식별 정보, PII)를 자동으로 발견·분류하고, S3 환경의 데이터 보안·프라이버시 가시성을 제공하는 데이터 보안 서비스입니다.",
+      "wrongExplanations": {
+        "0": "AWS KMS는 암호화 키를 생성·관리하는 서비스로, S3에 저장된 데이터에서 민감 정보를 찾아 분류하지 않습니다.",
+        "1": "Amazon Inspector는 EC2·컨테이너·Lambda의 소프트웨어 취약점을 스캔하는 서비스로, S3의 민감 데이터를 발견하는 도구가 아닙니다.",
+        "3": "Amazon GuardDuty는 로그 분석으로 위협 활동을 탐지하는 서비스로, S3 데이터 내용을 분류해 민감 데이터를 식별하는 것이 주 목적이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Macie? — 머신러닝·패턴 매칭으로 Amazon S3의 민감 데이터(PII 등) 발견·분류",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q10",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "키 관리 vs 비밀 관리 (KMS / Secrets Manager)",
+      "difficulty": "foundational",
+      "stem": "한 개발팀이 애플리케이션이 사용하는 데이터베이스 자격증명과 API 키를 코드에 하드코딩하지 않고 안전하게 저장하며, 정기적으로 자동 교체(rotation)되도록 관리하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Key Management Service(KMS)",
+        "AWS WAF",
+        "Amazon Macie",
+        "AWS Secrets Manager"
+      ],
+      "correct": 3,
+      "explanation": "AWS Secrets Manager는 데이터베이스 자격증명, API 키 등 비밀을 안전하게 저장·검색하고, 코드에 하드코딩하지 않고 호출해 사용하며, 비밀을 자동으로 교체(rotation)하도록 관리하는 서비스입니다.",
+      "wrongExplanations": {
+        "0": "AWS KMS는 데이터 암호화에 쓰는 암호화 키를 생성·관리하는 서비스로, 데이터베이스 자격증명·API 키 같은 비밀 문자열의 저장·자동 교체를 위한 전용 서비스가 아닙니다.",
+        "1": "AWS WAF는 웹 애플리케이션으로 오는 HTTP/HTTPS 요청을 필터링하는 방화벽으로, 비밀 저장·교체와 무관합니다.",
+        "2": "Amazon Macie는 Amazon S3의 민감 데이터를 발견·분류하는 서비스로, 애플리케이션 비밀을 저장·교체하는 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Secrets Manager? — 데이터베이스 자격증명·API 키 등 비밀 안전 저장·검색·자동 교체",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

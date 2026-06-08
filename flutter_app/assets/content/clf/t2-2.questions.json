@@ -254,6 +254,33 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-2-q10",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "컴플라이언스 증거 자동 수집 (Audit Manager)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 자사의 AWS 사용이 PCI DSS, GDPR, SOC 2 같은 규정·표준을 준수하는지 입증하기 위해, AWS 사용에 대한 감사 증거를 지속적으로 자동 수집하고 이를 미리 구축된 컴플라이언스 프레임워크에 매핑해 감사에 바로 쓸 수 있는 보고서를 만들려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Artifact",
+        "Amazon GuardDuty",
+        "AWS Audit Manager",
+        "AWS Config"
+      ],
+      "correct": 2,
+      "explanation": "AWS Audit Manager는 AWS 사용에 대한 증거 수집을 자동화해 위험과 규정 준수를 지속적으로 평가하도록 돕습니다. CIS·PCI DSS·GDPR·HIPAA·SOC 2 같은 사전 구축 프레임워크에 증거를 매핑해 감사 준비를 단순화하고, 감사자에게 제출할 수 있는 보고서를 생성합니다. '내 AWS 사용이 규정을 준수함을 증거로 입증'하는 것이 핵심입니다.",
+      "wrongExplanations": {
+        "0": "AWS Artifact는 AWS 인프라 자체의 컴플라이언스 보고서(SOC·PCI·ISO 등)를 온디맨드로 다운로드하는 포털입니다. '내 AWS 사용'에 대한 감사 증거를 자동 수집·매핑하는 것은 Audit Manager입니다.",
+        "1": "Amazon GuardDuty는 로그를 분석해 악성·비정상 활동을 탐지하는 위협 탐지 서비스로, 컴플라이언스 프레임워크에 증거를 매핑·수집하는 기능이 없습니다.",
+        "3": "AWS Config는 리소스의 구성 상태·변경 이력을 기록·평가합니다. Audit Manager가 증거 소스로 Config 데이터를 활용할 수는 있으나, 프레임워크 매핑과 감사 보고서 생성을 자동화하는 것은 Audit Manager입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Audit Manager? — AWS 사용에 대한 증거 수집 자동화, 사전 구축 프레임워크(PCI DSS·GDPR·SOC 2 등) 매핑·감사 보고서 생성",
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

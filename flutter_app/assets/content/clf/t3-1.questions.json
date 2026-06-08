@@ -173,6 +173,114 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-1-q7",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "관리 콘솔 (GUI)",
+      "difficulty": "foundational",
+      "stem": "AWS를 처음 접하는 한 사용자가 코드를 작성하지 않고 웹 브라우저에서 그래픽 인터페이스로 AWS 서비스를 탐색하고 일회성으로 리소스를 만들어 보려 한다. 가장 적합한 것은?",
+      "options": [
+        "AWS CloudFormation",
+        "AWS Management Console",
+        "AWS CLI",
+        "AWS SDK"
+      ],
+      "correct": 1,
+      "explanation": "AWS Management Console은 웹 브라우저 기반의 그래픽 사용자 인터페이스(GUI)로, 코드 없이 클릭만으로 AWS 서비스를 탐색하고 리소스를 만들 수 있습니다. 학습·탐색이나 일회성 수동 작업에 적합합니다.",
+      "wrongExplanations": {
+        "0": "AWS CloudFormation은 템플릿(코드)으로 인프라를 정의하는 IaC 서비스로, 코드 없이 클릭으로 탐색하려는 요구와 맞지 않습니다.",
+        "2": "AWS CLI는 명령줄에서 명령을 입력해 제어하는 도구로, 브라우저 기반 그래픽 인터페이스가 아닙니다.",
+        "3": "AWS SDK는 애플리케이션 코드 안에서 쓰는 언어별 라이브러리로, 브라우저 GUI가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Management Console 시작하기 — 웹 기반 GUI로 AWS 서비스에 접근·관리",
+          "url": "https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/getting-started.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q8",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "PaaS 배포 (Elastic Beanstalk)",
+      "difficulty": "foundational",
+      "stem": "한 개발자가 웹 애플리케이션 코드를 업로드하기만 하면 용량 프로비저닝, 로드 밸런싱, 오토 스케일링, 애플리케이션 상태 모니터링 같은 배포 세부 사항을 AWS가 자동으로 처리해 주기를 원한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Elastic Beanstalk",
+        "Amazon S3",
+        "AWS CLI",
+        "Amazon Route 53"
+      ],
+      "correct": 0,
+      "explanation": "AWS Elastic Beanstalk은 코드를 업로드하면 용량 프로비저닝, 로드 밸런싱, 오토 스케일링, 애플리케이션 상태 모니터링 같은 배포 세부 사항을 자동으로 처리해 주는 서비스입니다. 개발자는 인프라를 직접 관리하지 않고 애플리케이션에 집중할 수 있으며, 기반 리소스에 대한 제어권은 그대로 유지합니다.",
+      "wrongExplanations": {
+        "1": "Amazon S3는 객체 스토리지 서비스로, 웹 애플리케이션의 용량 프로비저닝·스케일링·상태 모니터링을 자동 처리하는 애플리케이션 배포 플랫폼이 아닙니다.",
+        "2": "AWS CLI는 명령줄에서 AWS 서비스를 제어하는 도구일 뿐, 애플리케이션 배포·확장·모니터링을 자동으로 관리해 주지 않습니다.",
+        "3": "Amazon Route 53은 DNS·도메인 등록 서비스로, 애플리케이션 배포 세부 사항을 자동 처리하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Elastic Beanstalk? — 코드 업로드만으로 용량 프로비저닝·로드 밸런싱·오토 스케일링·상태 모니터링 자동 처리",
+          "url": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q9",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "프로그래밍 방식 접근 (API)",
+      "difficulty": "foundational",
+      "stem": "AWS Management Console, AWS CLI, AWS SDK는 모두 결국 동일한 무엇을 통해 AWS 서비스와 통신하는가? 즉 이들 모든 도구가 호출하는 공통 기반은 무엇인가?",
+      "options": [
+        "각 서비스의 AWS API(애플리케이션 프로그래밍 인터페이스)",
+        "AWS Direct Connect 전용 회선",
+        "AWS CloudFormation 템플릿",
+        "Amazon CloudWatch 메트릭"
+      ],
+      "correct": 0,
+      "explanation": "AWS Management Console, AWS CLI, AWS SDK는 모두 각 AWS 서비스가 노출하는 API(애플리케이션 프로그래밍 인터페이스)에 HTTPS 요청을 보내 동작합니다. 콘솔은 GUI로, CLI는 명령으로, SDK는 코드로 같은 API를 호출하는 서로 다른 인터페이스입니다.",
+      "wrongExplanations": {
+        "1": "AWS Direct Connect는 온프레미스와 AWS를 잇는 전용 네트워크 회선으로, 콘솔·CLI·SDK가 공통으로 호출하는 프로그래밍 인터페이스가 아닙니다.",
+        "2": "AWS CloudFormation 템플릿은 인프라를 정의하는 IaC 수단일 뿐, 모든 도구가 통신하는 공통 API 기반이 아닙니다.",
+        "3": "Amazon CloudWatch 메트릭은 모니터링 데이터로, 도구들이 AWS 서비스를 제어하기 위해 호출하는 공통 API가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is the AWS CLI? — CLI는 AWS 서비스의 퍼블릭 API를 호출하는 도구이며, 콘솔과 동등한 기능 제공",
+          "url": "https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q10",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "IaC vs 코드 실행 (CloudFormation 범위)",
+      "difficulty": "foundational",
+      "stem": "AWS CloudFormation의 역할을 가장 정확하게 설명한 것은?",
+      "options": [
+        "업로드된 애플리케이션 비즈니스 로직 코드를 서버 없이 실행한다",
+        "온프레미스와 VPC 사이에 IPsec 암호화 터널을 만든다",
+        "템플릿(JSON/YAML)으로 AWS 리소스를 정의해 자동으로 프로비저닝·관리한다",
+        "실행 중인 리소스의 메트릭과 로그를 수집해 알람을 보낸다"
+      ],
+      "correct": 2,
+      "explanation": "AWS CloudFormation은 JSON/YAML 템플릿에 원하는 AWS 리소스를 기술하면, 의존성까지 처리하며 자동으로 프로비저닝·구성하고 스택 단위로 관리하는 IaC 서비스입니다. 인프라(리소스)를 코드로 다루는 것이 핵심 역할입니다.",
+      "wrongExplanations": {
+        "0": "애플리케이션 코드를 서버 없이 실행하는 것은 AWS Lambda의 역할입니다. CloudFormation은 코드를 실행하지 않고 인프라를 프로비저닝합니다.",
+        "1": "온프레미스와 VPC 사이 IPsec 터널을 만드는 것은 AWS Site-to-Site VPN입니다. CloudFormation의 역할이 아닙니다.",
+        "3": "메트릭·로그 수집과 알람은 Amazon CloudWatch의 역할입니다. CloudFormation은 모니터링 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is CloudFormation? — JSON/YAML 템플릿으로 리소스를 모델링·프로비저닝(IaC), 의존성 처리·스택 관리",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

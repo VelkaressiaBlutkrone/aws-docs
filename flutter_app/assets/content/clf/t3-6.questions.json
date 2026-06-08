@@ -192,6 +192,91 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-6-q8",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "EBS vs 인스턴스 스토어 (영속성)",
+      "difficulty": "foundational",
+      "stem": "한 EC2 인스턴스에 중요한 데이터를 저장하려 한다. 인스턴스를 중지(stop)하거나 종료(terminate)해도 데이터가 보존되어야 하며, 스냅샷으로 백업할 수도 있어야 한다. 인스턴스 스토어(instance store)와 비교했을 때 이 요구에 맞는 스토리지는?",
+      "options": [
+        "인스턴스 스토어 볼륨에 저장한다 — 영속적이므로",
+        "Amazon S3 Glacier 볼륨을 인스턴스에 마운트한다",
+        "Amazon EBS 볼륨에 저장한다 — 인스턴스와 독립적으로 영속하므로",
+        "Amazon CloudFront 캐시에 저장한다"
+      ],
+      "correct": 2,
+      "explanation": "Amazon EBS 볼륨은 영속적 스토리지로, 연결된 EC2 인스턴스를 중지하거나 종료해도 데이터가 보존되며(루트 볼륨의 종료 시 삭제 설정 제외) 스냅샷으로 백업할 수 있습니다. 반면 인스턴스 스토어는 인스턴스에 물리적으로 붙은 임시(ephemeral) 스토리지로, 인스턴스를 중지·최대절전·종료하면 데이터가 사라집니다. 따라서 영속이 필요한 중요한 데이터는 EBS에 둡니다.",
+      "wrongExplanations": {
+        "0": "인스턴스 스토어는 임시 스토리지입니다. 인스턴스를 중지·최대절전·종료하면 데이터가 삭제되므로, 보존이 필요한 중요한 데이터에는 적합하지 않습니다.",
+        "1": "S3 Glacier는 S3의 아카이브 스토리지 클래스이며, EC2 인스턴스에 블록 볼륨처럼 마운트하는 대상이 아닙니다.",
+        "3": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 데이터를 영속 저장하는 스토리지가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 instance store — 인스턴스 스토어는 임시(ephemeral), 중지·최대절전·종료 시 데이터 삭제",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html"
+        },
+        {
+          "title": "What is Amazon EBS? — EC2에 연결하는 영속 블록 볼륨, 인스턴스와 독립적, 스냅샷 백업",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-6-q9",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "S3 수명 주기 정책 (Lifecycle)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 S3 Standard에 업로드한 로그 객체를 30일 뒤에는 더 저렴한 스토리지 클래스로 자동 전환하고 365일 뒤에는 자동으로 삭제해 운영자의 수작업 없이 비용을 최적화하려 한다. 이를 가능하게 하는 Amazon S3 기능은?",
+      "options": [
+        "S3 버전 관리(Versioning)",
+        "S3 수명 주기 구성(Lifecycle configuration)",
+        "S3 교차 리전 복제(Cross-Region Replication)",
+        "S3 객체 잠금(Object Lock)"
+      ],
+      "correct": 1,
+      "explanation": "S3 수명 주기 구성(Lifecycle configuration)은 객체에 적용하는 규칙 집합으로, 일정 기간이 지난 객체를 더 저렴한 스토리지 클래스로 자동 전환(transition)하거나 만료(expiration)시켜 삭제합니다. 예시처럼 '30일 후 Standard-IA로 전환, 365일 후 만료(삭제)' 같은 규칙으로 수작업 없이 비용을 최적화할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "S3 버전 관리는 같은 키의 여러 버전을 보존해 실수 삭제·덮어쓰기로부터 보호하는 기능으로, 객체를 자동으로 더 싼 클래스로 전환하거나 만료시키지 않습니다.",
+        "2": "S3 교차 리전 복제는 객체를 다른 리전 버킷으로 비동기 복제하는 기능으로, 시간 경과에 따른 클래스 전환·삭제 자동화 기능이 아닙니다.",
+        "3": "S3 객체 잠금은 객체를 WORM(쓰기 후 변경 불가) 방식으로 일정 기간 보존·삭제 방지하는 기능으로, 비용 최적화를 위한 자동 전환·만료와는 반대 목적입니다."
+      },
+      "sources": [
+        {
+          "title": "Managing the lifecycle of objects — 수명 주기 규칙: 전환(transition) 및 만료(expiration) 액션으로 비용 최적화",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-6-q10",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "파일 서비스 (FSx for Windows)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Windows EC2 인스턴스들이 SMB 프로토콜로 접근하는 완전관리형 Windows 호환 공유 파일 스토리지가 필요하다. Amazon EFS는 Linux 워크로드용이라 Windows 환경에는 적합하지 않다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EFS",
+        "Amazon S3",
+        "Amazon EBS",
+        "Amazon FSx for Windows File Server"
+      ],
+      "correct": 3,
+      "explanation": "Amazon FSx for Windows File Server는 완전관리형 Windows 기반 파일 스토리지로, SMB 프로토콜과 Windows NTFS·Active Directory 통합을 제공해 Windows 애플리케이션과 인스턴스가 공유 파일 시스템으로 사용하기에 적합합니다. Amazon EFS는 NFS 기반 Linux 워크로드용이므로 Windows SMB 공유에는 FSx for Windows File Server를 사용합니다.",
+      "wrongExplanations": {
+        "0": "Amazon EFS는 NFS 기반의 Linux 워크로드용 공유 파일 시스템으로, Windows(SMB) 환경에는 적합하지 않습니다.",
+        "1": "Amazon S3는 객체 스토리지로, Windows 인스턴스가 SMB로 마운트하는 파일 시스템이 아닙니다.",
+        "2": "Amazon EBS는 보통 하나의 EC2 인스턴스에 연결하는 블록 볼륨으로, 여러 Windows 인스턴스가 동시에 공유하는 SMB 파일 시스템이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon FSx for Windows File Server? — 완전관리형 Windows 파일 시스템, SMB·NTFS·Active Directory",
+          "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

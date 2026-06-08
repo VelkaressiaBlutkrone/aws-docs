@@ -204,6 +204,91 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-3-q8",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "IAM 역할 vs 사용자 (임시 자격증명)",
+      "difficulty": "foundational",
+      "stem": "Amazon EC2 인스턴스에서 실행되는 애플리케이션이 Amazon S3 버킷에 접근해야 한다. IAM 모범 사례에 따라, 장기 액세스 키를 코드나 인스턴스에 저장하지 않고 권한을 부여하는 가장 권장되는 방법은?",
+      "options": [
+        "IAM 역할(Role)을 만들어 EC2 인스턴스에 연결하고, 애플리케이션이 역할을 맡아 임시 자격증명을 사용하도록 한다",
+        "IAM 사용자를 만들어 액세스 키를 발급하고, 그 키를 애플리케이션 소스 코드에 하드코딩한다",
+        "루트 사용자의 액세스 키를 생성해 인스턴스 환경 변수에 저장한다",
+        "버킷 정책에서 모든 사람(*)에게 접근을 허용해 인증을 생략한다"
+      ],
+      "correct": 0,
+      "explanation": "IAM 역할은 특정 사람에 묶이지 않은 신원으로, 맡아서(assume) 사용할 때 자동으로 교체되는 임시 자격증명을 발급합니다. EC2에 역할을 연결하면 애플리케이션은 장기 액세스 키를 저장할 필요 없이 일시적 자격증명으로 S3에 접근하므로, 키 유출 위험이 크게 줄어듭니다. AWS는 사람·워크로드 모두 장기 자격증명보다 역할 기반 임시 자격증명을 권장합니다.",
+      "wrongExplanations": {
+        "1": "액세스 키를 코드에 하드코딩하는 것은 대표적인 안티패턴으로, 소스나 로그를 통해 키가 유출될 수 있고 키를 수동으로 교체해야 합니다. 역할 기반 임시 자격증명이 더 안전합니다.",
+        "2": "루트 사용자의 액세스 키는 절대 만들지 않는 것이 모범 사례입니다. 루트는 완전 접근 권한을 가지므로 유출 시 피해가 최대가 됩니다.",
+        "3": "모든 사람에게 접근을 허용하면 인증·인가 통제가 사라져 데이터가 공개 노출됩니다. 이는 최소 권한 원칙에 정면으로 위배됩니다."
+      },
+      "sources": [
+        {
+          "title": "IAM Identities — IAM roles는 임시 자격증명을 제공하며 특정 사람에 묶이지 않는 신원",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id.html"
+        },
+        {
+          "title": "Security best practices in IAM — Require human/workload identities to use temporary credentials(역할 사용 권장)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q9",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "암호 정책의 적용 범위",
+      "difficulty": "foundational",
+      "stem": "한 회사가 AWS 계정에 사용자 지정 암호 정책(최소 길이, 문자 종류, 만료, 재사용 금지)을 설정했다. 이 암호 정책에 관한 설명으로 옳은 것은?",
+      "options": [
+        "정책은 계정의 모든 신원(루트 사용자 포함)의 암호에 자동으로 적용된다",
+        "정책은 IAM 사용자의 콘솔 암호에 적용되며, 루트 사용자 암호나 액세스 키에는 적용되지 않는다",
+        "정책은 IAM 사용자의 액세스 키 형식만 제어하고 콘솔 암호에는 영향을 주지 않는다",
+        "정책은 루트 사용자 암호에만 적용되고 IAM 사용자에게는 적용되지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "계정의 IAM 암호 정책은 IAM 사용자의 콘솔(암호) 로그인에 대한 요구사항(최소 길이, 문자 종류, 만료, 재사용 방지 등)을 강제합니다. 이 정책은 IAM 사용자에게만 적용되며, 루트 사용자 암호나 액세스 키에는 적용되지 않습니다.",
+      "wrongExplanations": {
+        "0": "암호 정책은 루트 사용자에게는 적용되지 않습니다. 따라서 '모든 신원에 자동 적용'은 틀립니다.",
+        "2": "암호 정책은 콘솔 로그인 암호의 요구사항을 제어합니다. 액세스 키 형식을 제어하는 것이 아닙니다.",
+        "3": "정확히 반대입니다. 암호 정책은 IAM 사용자에게 적용되고 루트 사용자에게는 적용되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Setting an account password policy for IAM users — 암호 정책은 IAM 사용자에게 적용되며 루트에는 적용되지 않음",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_passwords_account-policy.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q10",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "MFA 유형 (피싱 저항)",
+      "difficulty": "foundational",
+      "stem": "한 보안 팀이 IAM 사용자에게 MFA를 적용하면서, 피싱(phishing) 공격에 가장 강한(phishing-resistant) MFA 유형을 선택하려 한다. AWS가 가능한 경우 가장 권장하는 MFA 유형은?",
+      "options": [
+        "SMS 문자 메시지로 받는 일회용 코드",
+        "이메일로 전송되는 인증 링크",
+        "관리자가 구두로 알려주는 공유 PIN 번호",
+        "패스키 또는 FIDO 보안 키(하드웨어/플랫폼 인증기)"
+      ],
+      "correct": 3,
+      "explanation": "패스키와 FIDO 보안 키는 공개키 암호 기반으로 동작해 피싱에 강합니다(phishing-resistant). AWS는 가능한 경우 이 유형을 가장 권장합니다. 그 밖의 지원 유형으로는 가상 인증 앱(TOTP)과 하드웨어 TOTP 토큰이 있습니다.",
+      "wrongExplanations": {
+        "0": "AWS는 SMS 문자 기반 MFA 지원을 종료했으며, SMS는 SIM 스와핑·피싱 등에 취약해 피싱에 강한 방식이 아닙니다.",
+        "1": "이메일 인증 링크는 AWS IAM의 MFA 유형이 아니며, 피싱에 취약한 방식입니다.",
+        "2": "구두로 공유하는 PIN은 MFA 메커니즘이 아니라 단순 공유 비밀로, 가진 것(기기)에 기반한 인증 요소가 아니며 쉽게 유출·피싱됩니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Multi-factor authentication in IAM — 패스키/FIDO 보안 키는 phishing-resistant, MFA 유형 목록",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

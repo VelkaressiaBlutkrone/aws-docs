@@ -196,6 +196,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-3-q8",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "EC2 구매 옵션 (Spot Instances)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 중단되어도 괜찮은(내결함성·유연한) 배치 처리 워크로드를 실행하려 한다. 사용하지 않는 EC2 용량을 온디맨드 가격보다 크게 할인된 가격으로 활용해 비용을 최대한 절감하고 싶다. 가장 적합한 EC2 구매 옵션은?",
+      "options": [
+        "온디맨드 인스턴스(On-Demand Instances)",
+        "예약 인스턴스(Reserved Instances)",
+        "스팟 인스턴스(Spot Instances)",
+        "전용 호스트(Dedicated Hosts)"
+      ],
+      "correct": 2,
+      "explanation": "Amazon EC2 스팟 인스턴스는 사용되지 않는 EC2 용량을 온디맨드 가격보다 최대 큰 폭으로 할인된 가격에 사용하게 해 줍니다. EC2가 용량을 회수하면 인스턴스가 중단될 수 있으므로, 중단을 견딜 수 있는 내결함성·유연한 워크로드(배치 처리, 빅데이터, CI/CD 등)에 적합하며 비용 절감에 이상적입니다.",
+      "wrongExplanations": {
+        "0": "온디맨드 인스턴스는 약정 없이 초/시간 단위로 사용한 만큼 표준 요금을 내는 옵션으로, 큰 폭의 용량 할인은 제공하지 않습니다. 중단 가능한 워크로드에서 비용을 최대로 절감하려면 스팟이 더 적합합니다.",
+        "1": "예약 인스턴스는 1년 또는 3년 약정으로 온디맨드 대비 할인을 받는 옵션으로, 안정적이고 지속적인 사용량에 적합합니다. 사용하지 않는 용량을 할인가에 쓰면서 중단을 감수하는 워크로드용은 스팟입니다.",
+        "3": "전용 호스트는 물리적 서버 전체를 전용으로 사용하는 옵션으로(라이선스·규정 준수 목적), 유휴 용량을 할인가에 쓰는 비용 절감 옵션이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Spot Instances — 미사용 EC2 용량을 온디맨드보다 큰 폭 할인가로 제공, 내결함성·중단 허용 워크로드에 적합",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q9",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "배치 컴퓨팅 (AWS Batch)",
+      "difficulty": "foundational",
+      "stem": "한 연구팀이 수천 개의 배치 컴퓨팅 작업(batch job)을 실행하려 한다. 작업량에 맞춰 컴퓨팅 리소스를 자동으로 프로비저닝하고 작업을 큐에 넣어 스케줄링·실행하는 일을, 클러스터나 스케줄링 소프트웨어를 직접 운영하지 않고 처리하고 싶다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EC2 Auto Scaling",
+        "AWS Batch",
+        "Amazon Lightsail",
+        "Elastic Load Balancing"
+      ],
+      "correct": 1,
+      "explanation": "AWS Batch는 AWS에서 배치 컴퓨팅 작업을 손쉽고 효율적으로 실행하게 해 주는 완전관리형 서비스입니다. 제출된 작업량과 리소스 요구에 맞춰 컴퓨팅 리소스(예: EC2, Fargate)를 동적으로 프로비저닝하고 작업을 큐잉·스케줄링·실행하므로, 배치 처리 소프트웨어나 클러스터를 직접 설치·관리할 필요가 없습니다.",
+      "wrongExplanations": {
+        "0": "Amazon EC2 Auto Scaling은 부하에 맞춰 EC2 인스턴스의 수를 조절하는 탄력성 서비스로, 배치 작업을 큐잉·스케줄링·실행하는 배치 컴퓨팅 서비스가 아닙니다.",
+        "2": "Amazon Lightsail은 간단한 웹사이트·앱을 예측 가능한 월정액으로 빠르게 띄우는 서비스로, 대규모 배치 작업을 스케줄링·실행하는 서비스가 아닙니다.",
+        "3": "Elastic Load Balancing은 들어오는 트래픽을 여러 대상에 분산하는 서비스로, 배치 작업을 실행하는 컴퓨팅 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Batch? — 완전관리형 배치 컴퓨팅, 작업량에 맞춰 컴퓨팅 리소스 동적 프로비저닝·스케줄링",
+          "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-3-q10",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "단순 컴퓨팅 (Amazon Lightsail)",
+      "difficulty": "foundational",
+      "stem": "AWS를 처음 쓰는 한 소규모 팀이 간단한 웹사이트와 블로그를 빠르게 띄우려 한다. 가상 서버·스토리지·네트워킹이 미리 구성된 패키지를, 저렴하고 예측 가능한 월정액 요금으로 손쉽게 시작하고 싶다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EKS",
+        "AWS Lambda",
+        "AWS Batch",
+        "Amazon Lightsail"
+      ],
+      "correct": 3,
+      "explanation": "Amazon Lightsail은 가상 서버, 스토리지, 데이터베이스, 네트워킹 등을 예측 가능한 저렴한 월정액 요금으로 묶어 제공하는, 시작하기 쉬운 서비스입니다. 간단한 웹사이트·블로그·소규모 애플리케이션을 빠르게 구축·배포하려는 사용자에게 적합합니다.",
+      "wrongExplanations": {
+        "0": "Amazon EKS는 관리형 Kubernetes 서비스로, 간단한 웹사이트를 월정액으로 빠르게 띄우려는 소규모 팀의 단순 요구에는 과도하게 복잡합니다.",
+        "1": "AWS Lambda는 이벤트 기반 서버리스 함수 서비스로, 가상 서버·스토리지·네트워킹을 묶어 월정액으로 제공하는 단순 호스팅 패키지가 아닙니다.",
+        "2": "AWS Batch는 대규모 배치 컴퓨팅 작업을 실행하는 서비스로, 간단한 웹사이트를 월정액으로 호스팅하는 용도가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Lightsail? — 가상 서버·스토리지·네트워킹을 예측 가능한 저렴한 월정액으로 묶어 제공, 시작하기 쉬움",
+          "url": "https://docs.aws.amazon.com/lightsail/latest/userguide/what-is-amazon-lightsail.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

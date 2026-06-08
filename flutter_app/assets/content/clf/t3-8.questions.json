@@ -165,6 +165,114 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-8-q7",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (Step Functions — 워크플로 오케스트레이션)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 여러 AWS 서비스(Lambda 함수, ECS 작업 등)를 정해진 순서와 분기·재시도 로직에 따라 호출하는 비즈니스 워크플로를, 시각적 상태 머신으로 정의해 오케스트레이션하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon SQS",
+        "AWS Step Functions",
+        "Amazon WorkSpaces",
+        "AWS IoT Core"
+      ],
+      "correct": 1,
+      "explanation": "AWS Step Functions는 여러 AWS 서비스를 상태 머신(워크플로)으로 묶어 순서·분기·재시도·오류 처리를 시각적으로 오케스트레이션하는 서버리스 워크플로 서비스입니다. 단계(state)를 정의해 Lambda 등 작업을 정해진 순서대로 조정합니다.",
+      "wrongExplanations": {
+        "0": "Amazon SQS는 메시지를 큐에 보관해 컴포넌트를 디커플링하는 큐 서비스로, 여러 단계의 워크플로를 순서대로 오케스트레이션하는 상태 머신이 아닙니다.",
+        "2": "Amazon WorkSpaces는 사용자용 가상 데스크톱 서비스로, 워크플로 오케스트레이션과 무관합니다.",
+        "3": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 워크플로 오케스트레이션과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Step Functions? — 상태 머신 워크플로로 여러 AWS 서비스를 순서대로 오케스트레이션하는 서버리스 서비스",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q8",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "최종 사용자 컴퓨팅 (AppStream 2.0)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 데스크톱 애플리케이션 한두 개를 사용자에게 설치 없이 웹 브라우저로 스트리밍해 제공하려 한다(전체 데스크톱이 아닌 특정 애플리케이션만 스트리밍). 가장 적합한 완전관리형 AWS 서비스는?",
+      "options": [
+        "Amazon SNS",
+        "AWS IoT Core",
+        "Amazon AppStream 2.0",
+        "Amazon SQS"
+      ],
+      "correct": 2,
+      "explanation": "Amazon AppStream 2.0은 완전관리형 애플리케이션 스트리밍 서비스로, 데스크톱 애플리케이션을 사용자에게 중앙에서 관리·스트리밍해 어떤 기기의 웹 브라우저에서도 설치 없이 안전하게 사용하게 합니다. (전체 가상 데스크톱은 WorkSpaces, 특정 애플리케이션 스트리밍은 AppStream 2.0.)",
+      "wrongExplanations": {
+        "0": "Amazon SNS는 pub/sub 알림 메시징 서비스로, 애플리케이션 스트리밍과 무관합니다.",
+        "1": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 애플리케이션 스트리밍과 무관합니다.",
+        "3": "Amazon SQS는 메시지 큐 서비스로, 애플리케이션 스트리밍과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon AppStream 2.0? — 데스크톱 애플리케이션을 브라우저로 스트리밍하는 완전관리형 애플리케이션 스트리밍 서비스",
+          "url": "https://docs.aws.amazon.com/appstream2/latest/developerguide/what-is-appstream.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q9",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (API Gateway — API 관리)",
+      "difficulty": "foundational",
+      "stem": "한 개발팀이 백엔드(Lambda 함수, HTTP 엔드포인트 등)를 노출하는 REST·HTTP·WebSocket API를 만들고, 트래픽 관리·인증·스로틀링·모니터링을 갖춘 단일 진입점으로 게시·운영하려 한다. 가장 적합한 완전관리형 AWS 서비스는?",
+      "options": [
+        "Amazon WorkSpaces",
+        "Amazon SQS",
+        "AWS IoT Core",
+        "Amazon API Gateway"
+      ],
+      "correct": 3,
+      "explanation": "Amazon API Gateway는 어떤 규모로든 API를 생성·게시·유지·모니터링·보안할 수 있는 완전관리형 서비스입니다. REST·HTTP·WebSocket API의 '정문' 역할로 트래픽 관리, 인증·권한 부여, 스로틀링, 모니터링을 제공합니다.",
+      "wrongExplanations": {
+        "0": "Amazon WorkSpaces는 사용자용 가상 데스크톱 서비스로, API 생성·관리와 무관합니다.",
+        "1": "Amazon SQS는 메시지 큐 서비스로, API를 게시·관리하는 게이트웨이가 아닙니다.",
+        "2": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 범용 API 관리 게이트웨이가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon API Gateway? — API를 생성·게시·유지·모니터링·보안하는 완전관리형 서비스(REST·HTTP·WebSocket)",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q10",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (SNS + SQS 팬아웃 조합)",
+      "difficulty": "foundational",
+      "stem": "한 이벤트(예: 주문 생성)가 발생하면 그 메시지를 여러 SQS 큐로 동시에 보내, 각 큐의 소비자가 독립적으로 비동기 처리하게 하는 팬아웃(fan-out) 패턴을 구성하려 한다. 일반적으로 어떻게 조합하는가?",
+      "options": [
+        "SNS 주제(topic)에 발행하고 여러 SQS 큐를 그 주제에 구독시킨다",
+        "여러 SQS 큐를 만들고 각 큐가 다른 큐를 자동으로 구독하게 한다",
+        "WorkSpaces로 메시지를 여러 큐에 복제한다",
+        "IoT Core로 SQS 큐들에 메시지를 푸시한다"
+      ],
+      "correct": 0,
+      "explanation": "팬아웃 패턴에서는 메시지를 Amazon SNS 주제에 발행하고, 여러 Amazon SQS 큐를 그 주제에 구독시킵니다. 그러면 SNS가 한 메시지를 각 SQS 큐로 동시에 복제해 전달하고, 각 큐의 소비자가 독립적·비동기적으로 처리합니다(SNS=푸시 팬아웃, SQS=버퍼링 디커플링).",
+      "wrongExplanations": {
+        "1": "SQS 큐는 다른 큐를 구독하는 pub/sub 기능이 없습니다. 한 메시지를 여러 큐로 팬아웃하려면 SNS 주제에 SQS 큐들을 구독시켜야 합니다.",
+        "2": "Amazon WorkSpaces는 가상 데스크톱 서비스로, 메시지 팬아웃과 무관합니다.",
+        "3": "AWS IoT Core는 IoT 기기 연결용 서비스로, 일반 애플리케이션의 SNS→SQS 팬아웃 메시징 조합과는 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SNS fanout to Amazon SQS queues — SNS 주제에 발행 → 구독된 여러 SQS 큐로 메시지 복제 전달(팬아웃)",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

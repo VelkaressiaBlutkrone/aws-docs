@@ -165,6 +165,114 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-5-q7",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "보안 그룹 vs 네트워크 ACL",
+      "difficulty": "foundational",
+      "stem": "VPC의 보안 계층 중 EC2 인스턴스 수준에서 작동하고 상태 저장(stateful)이라서, 인바운드로 허용된 요청에 대한 응답 트래픽이 아웃바운드 규칙과 무관하게 자동으로 허용되는 것은 무엇인가?",
+      "options": [
+        "네트워크 ACL(Network ACL)",
+        "보안 그룹(Security Group)",
+        "라우트 테이블(Route Table)",
+        "인터넷 게이트웨이(Internet Gateway)"
+      ],
+      "correct": 1,
+      "explanation": "보안 그룹은 EC2 인스턴스 등 리소스 수준에서 작동하는 가상 방화벽이며 상태 저장(stateful)입니다. 인스턴스에서 보낸 요청의 응답 트래픽은 인바운드 규칙과 무관하게 인스턴스로 돌아올 수 있고, 허용된 인바운드 트래픽에 대한 응답도 아웃바운드 규칙과 무관하게 나갈 수 있습니다.",
+      "wrongExplanations": {
+        "0": "네트워크 ACL은 서브넷 수준에서 작동하고 상태 비저장(stateless)입니다. 인바운드를 허용해도 그 응답이 자동으로 허용되지 않으며, 응답을 위한 규칙을 별도로 둬야 합니다.",
+        "2": "라우트 테이블은 트래픽이 어디로 갈지 경로를 결정하는 구성요소로, 트래픽을 허용/거부하는 방화벽 계층이 아닙니다.",
+        "3": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소로, 인스턴스 수준 stateful 방화벽이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Security groups — 보안 그룹은 stateful, 인스턴스에서 보낸 요청의 응답은 인바운드 규칙과 무관하게 허용됨",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q8",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "네트워크 ACL (서브넷·stateless)",
+      "difficulty": "foundational",
+      "stem": "VPC에서 서브넷 수준에서 인바운드·아웃바운드 트래픽을 허용(allow) 또는 거부(deny)할 수 있고, 상태 비저장(stateless)이라 응답 트래픽도 별도 규칙으로 명시해야 하는 보안 계층은?",
+      "options": [
+        "보안 그룹(Security Group)",
+        "Route 53 Resolver",
+        "네트워크 ACL(Network ACL)",
+        "NAT 게이트웨이(NAT Gateway)"
+      ],
+      "correct": 2,
+      "explanation": "네트워크 ACL은 서브넷 수준에서 인바운드·아웃바운드 트래픽을 허용 또는 거부하는 보안 계층입니다. 상태 비저장(stateless)이므로 이전 트래픽 정보를 저장하지 않으며, 인바운드를 허용해도 그 응답이 자동 허용되지 않아 응답을 위한 규칙을 별도로 둬야 합니다.",
+      "wrongExplanations": {
+        "0": "보안 그룹은 인스턴스 수준에서 작동하고 stateful이며 허용(allow) 규칙만 지정합니다. 서브넷 수준의 stateless 거부(deny) 규칙을 제공하지 않습니다.",
+        "1": "Route 53 Resolver는 VPC의 DNS 질의를 해석하는 기능으로, 서브넷 수준 트래픽을 허용/거부하는 보안 계층이 아닙니다.",
+        "3": "NAT 게이트웨이는 프라이빗 서브넷 인스턴스의 아웃바운드 인터넷 연결을 가능하게 하는 서비스로, 트래픽을 허용/거부하는 ACL 계층이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Network ACLs — 서브넷 수준에서 인바운드/아웃바운드 트래픽 허용·거부, NACL은 stateless(응답 자동 허용 안 됨)",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q9",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "NAT 게이트웨이",
+      "difficulty": "foundational",
+      "stem": "프라이빗 서브넷의 인스턴스가 인터넷이나 VPC 외부 서비스로 아웃바운드 연결(예: 소프트웨어 업데이트)은 할 수 있되, 외부에서 인스턴스로 먼저 연결을 시작하는 것은 차단하려 한다. 어떤 구성요소를 사용해야 하는가?",
+      "options": [
+        "VPC 엔드포인트(VPC Endpoint)",
+        "보안 그룹(Security Group)",
+        "라우트 테이블(Route Table)",
+        "NAT 게이트웨이(NAT Gateway)"
+      ],
+      "correct": 3,
+      "explanation": "NAT 게이트웨이는 네트워크 주소 변환(NAT) 서비스로, 프라이빗 서브넷의 인스턴스가 VPC 외부 서비스(인터넷 등)로 연결할 수 있게 해 주는 반면, 외부 서비스가 그 인스턴스로 먼저 연결을 시작하지 못하도록 합니다. 즉 아웃바운드만 허용하고 외부에서 시작하는 인바운드 연결은 차단합니다.",
+      "wrongExplanations": {
+        "0": "VPC 엔드포인트는 인터넷 게이트웨이 없이 AWS 서비스에 프라이빗하게 연결하는 구성요소로, 일반적인 인터넷 아웃바운드 연결을 위한 NAT 기능을 제공하지 않습니다.",
+        "1": "보안 그룹은 인스턴스 수준 방화벽으로 허용 트래픽을 정하지만, 프라이빗 서브넷에서 인터넷으로 나가는 주소 변환(NAT) 경로 자체를 제공하지 않습니다.",
+        "2": "라우트 테이블은 트래픽 경로를 결정할 뿐, 프라이빗 서브넷 인스턴스의 아웃바운드 인터넷 연결을 가능하게 하는 NAT 변환을 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "NAT gateways — 프라이빗 서브넷 인스턴스가 외부 서비스로 연결 가능, 외부에서 인스턴스로의 연결 시작은 차단",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q10",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "Elastic Load Balancing",
+      "difficulty": "foundational",
+      "stem": "한 웹 애플리케이션의 들어오는 트래픽을 하나 이상의 가용 영역에 있는 여러 EC2 인스턴스에 자동으로 분산하고, 정상 상태인 대상에만 트래픽을 보내 가용성과 내결함성을 높이려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Elastic Load Balancing",
+        "Amazon Route 53",
+        "Amazon VPC",
+        "AWS Direct Connect"
+      ],
+      "correct": 0,
+      "explanation": "Elastic Load Balancing(ELB)은 들어오는 트래픽을 하나 이상의 가용 영역에 있는 EC2 인스턴스·컨테이너·IP 주소 등 여러 대상에 자동으로 분산합니다. 등록된 대상의 상태를 모니터링해 정상 대상에만 트래픽을 보내고, 트래픽 변화에 따라 용량을 자동 조정해 애플리케이션의 가용성과 내결함성을 높입니다.",
+      "wrongExplanations": {
+        "1": "Amazon Route 53은 DNS 서비스로 도메인 이름을 IP로 해석·라우팅합니다. 인스턴스 간 트래픽을 직접 분산하고 대상 상태를 모니터링해 분배하는 로드 밸런서가 아닙니다.",
+        "2": "Amazon VPC는 격리된 가상 네트워크를 정의하는 서비스로, 트래픽을 여러 인스턴스에 분산하는 로드 밸런싱 기능을 제공하지 않습니다.",
+        "3": "AWS Direct Connect는 온프레미스를 AWS에 전용 회선으로 연결하는 서비스로, 트래픽 분산과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Elastic Load Balancing? — 하나 이상의 AZ에 있는 여러 대상(EC2 등)에 들어오는 트래픽 자동 분산, 정상 대상에만 라우팅",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

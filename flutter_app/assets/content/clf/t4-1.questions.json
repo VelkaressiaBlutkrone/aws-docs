@@ -173,6 +173,114 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-1-q7",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "구매 옵션 (Reserved Instances)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 특정 인스턴스 패밀리·크기·리전으로 1년 또는 3년간 안정적이고 예측 가능한 정상 상태(steady-state) 워크로드를 운영한다. 그 특정 구성에 약정해 On-Demand보다 큰 할인을 받으려 한다. 가장 적합한 EC2 구매 옵션은?",
+      "options": [
+        "Spot Instances",
+        "Reserved Instances",
+        "On-Demand Instances",
+        "Capacity Reservations"
+      ],
+      "correct": 1,
+      "explanation": "Reserved Instances(RI)는 특정 인스턴스 구성(패밀리·크기·리전 등)으로 1년 또는 3년 약정하는 대신 On-Demand보다 큰 할인을 제공합니다. 안정적이고 예측 가능한 정상 상태 워크로드에 적합합니다.",
+      "wrongExplanations": {
+        "0": "Spot Instances는 미사용 용량을 저렴하게 쓰지만 중단될 수 있어, 안정적인 정상 상태 워크로드를 약정 할인으로 운영하려는 요구와 다릅니다.",
+        "2": "On-Demand는 약정 없이 정가로 지불하는 옵션으로, 특정 구성 약정 할인을 원하는 경우와 맞지 않습니다.",
+        "3": "Capacity Reservations는 특정 AZ에 용량을 미리 예약하는 옵션으로, 약정 기반 가격 할인 자체가 목적이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 — Reserved Instances: 특정 인스턴스 구성에 1/3년 약정, On-Demand 대비 큰 할인(정상 상태 워크로드)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q8",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "데이터 전송 비용 (방향)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 매일 대량의 데이터를 인터넷을 통해 Amazon S3로 업로드(AWS로 수신)한다. 이 인바운드(수신) 데이터 전송의 일반적인 요금은?",
+      "options": [
+        "업로드 용량에 비례해 GB당 과금된다",
+        "리전 간 전송 요금이 추가로 부과된다",
+        "일반적으로 무료다(인터넷에서 AWS로 들어오는 데이터 전송은 보통 과금하지 않음)",
+        "인터넷으로 나가는 발신 데이터와 동일한 요금이 부과된다"
+      ],
+      "correct": 2,
+      "explanation": "인터넷에서 AWS로 들어오는 수신(인바운드) 데이터 전송은 일반적으로 무료입니다. 과금되는 것은 주로 인터넷으로 나가는 발신(아웃바운드) 데이터 전송과 리전 간 전송입니다.",
+      "wrongExplanations": {
+        "0": "인바운드(수신) 데이터 전송은 보통 무료이며 업로드 용량에 비례해 과금되지 않습니다.",
+        "1": "단순히 인터넷에서 같은 리전의 S3로 업로드하는 것은 리전 간 전송이 아니며, 인바운드는 보통 무료입니다.",
+        "3": "방향이 반대입니다. 발신(아웃바운드)은 과금되지만 수신(인바운드)은 보통 무료라 동일하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon S3 pricing — 인터넷에서 S3로 데이터 전송(수신/인바운드)은 무료, 인터넷으로 나가는 전송(발신/아웃바운드)은 과금",
+          "url": "https://aws.amazon.com/s3/pricing/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q9",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "S3 스토리지 요금 구성",
+      "difficulty": "foundational",
+      "stem": "Amazon S3 비용을 정확히 예측하려고 한다. S3 요금이 청구되는 일반적인 구성 요소로 가장 정확한 것은?",
+      "options": [
+        "선결제 라이선스 비용만 청구된다",
+        "EC2 인스턴스 실행 시간에 따라서만 청구된다",
+        "물리 디스크를 미리 프로비저닝한 용량에 대해 고정 월정액만 청구된다",
+        "저장한 데이터량(GB·스토리지 클래스별), 요청 수(PUT/GET 등), 인터넷으로 나가는 데이터 전송 등에 따라 청구된다"
+      ],
+      "correct": 3,
+      "explanation": "Amazon S3 요금은 주로 저장한 데이터량(GB, 스토리지 클래스별 단가), 요청 및 데이터 검색(PUT·GET 등 요청 수와 검색량), 그리고 인터넷으로 나가는 데이터 전송(아웃바운드) 등으로 구성됩니다. 사용한 만큼만 지불하며 디스크를 미리 프로비저닝하지 않습니다.",
+      "wrongExplanations": {
+        "0": "S3는 선결제 라이선스 모델이 아니라 사용량 기반 과금입니다.",
+        "1": "EC2 실행 시간은 EC2 컴퓨팅 요금이며, S3 스토리지 요금 구성과 다릅니다.",
+        "2": "S3는 디스크를 미리 프로비저닝하지 않고 저장한 데이터량에 따라 청구하는 사용량 기반 모델입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon S3 pricing — 스토리지(GB·클래스별), 요청·데이터 검색, 데이터 전송(아웃바운드) 등 사용량 기반 과금 구성",
+          "url": "https://aws.amazon.com/s3/pricing/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q10",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "프리 티어 3종",
+      "difficulty": "foundational",
+      "stem": "AWS 프리 티어(AWS Free Tier)는 세 가지 유형의 무료 제공을 포함한다. 이 세 가지 유형을 가장 정확하게 나열한 것은?",
+      "options": [
+        "12개월 무료(가입일로부터 12개월), 상시 무료(만료 없이 월 사용 한도 내 무료), 단기 평가판(서비스 활성화 시점부터 일정 기간 무료)",
+        "1년 약정 무료, 3년 약정 무료, 영구 무료",
+        "온디맨드 무료, 예약 무료, 스팟 무료",
+        "교육용 무료, 스타트업 무료, 엔터프라이즈 무료"
+      ],
+      "correct": 0,
+      "explanation": "AWS 프리 티어는 ① 12개월 무료(AWS 가입일로부터 12개월간 제공), ② 상시 무료(Always Free, 만료 없이 모든 고객에게 월 사용 한도 내 무료), ③ 단기 평가판(Short-term trials, 특정 서비스를 활성화한 시점부터 일정 기간 무료) 세 가지 유형으로 구성됩니다.",
+      "wrongExplanations": {
+        "1": "프리 티어는 약정(1/3년) 기반 할인 옵션이 아니라 신규/기존 고객용 무료 제공이며, '약정 무료'라는 유형은 없습니다.",
+        "2": "온디맨드·예약·스팟은 EC2 구매 옵션이지 프리 티어 유형이 아닙니다.",
+        "3": "교육용·스타트업·엔터프라이즈는 프리 티어의 공식 세 유형이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Billing 사용 설명서 — AWS Free Tier 세 가지 유형: Always free, 12 months free, Short-term trials",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-free-tier.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

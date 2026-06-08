@@ -246,6 +246,33 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-3-q10",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "AWS Support API (프로그래밍 방식 케이스)",
+      "difficulty": "foundational",
+      "stem": "한 운영팀이 Support 케이스 생성·조회와 Trusted Advisor 점검 결과 조회를 콘솔이 아닌 코드(API)로 자동화하려 한다. AWS Support API에 프로그래밍 방식으로 접근하려면 어떤 Support 플랜 이상이어야 하는가?",
+      "options": [
+        "Basic Support 이상(모든 플랜)",
+        "Developer Support 이상",
+        "Business Support 이상",
+        "Enterprise Support에서만"
+      ],
+      "correct": 2,
+      "explanation": "AWS Support API(프로그래밍 방식 케이스 생성·관리 및 Trusted Advisor 점검 결과 조회)에 접근하려면 Business, Enterprise On-Ramp, 또는 Enterprise Support 플랜이 필요합니다. 따라서 최소 요건은 Business Support 이상입니다.",
+      "wrongExplanations": {
+        "0": "Basic·Developer 플랜에서는 AWS Support API에 프로그래밍 방식으로 접근할 수 없습니다. API 접근은 Business 이상부터입니다.",
+        "1": "Developer 플랜에서는 AWS Support API에 접근할 수 없습니다. Business 이상이어야 합니다.",
+        "3": "Enterprise에서만 제공되는 것이 아니라 Business(및 Enterprise On-Ramp) 플랜부터 AWS Support API에 접근할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Support — 프로그래밍 방식 접근(AWS Support API)은 Business/Enterprise On-Ramp/Enterprise 플랜 필요",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/getting-started.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

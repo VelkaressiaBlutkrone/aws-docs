@@ -10,7 +10,7 @@ void main() {
   test('QuestionBank를 파싱하고 검증 문항만 남긴다', () {
     final bank = QuestionBank.fromJson(map);
     expect(bank.examGuideTaskId, 'clf-t2-1');
-    expect(bank.questions.length, 9);
+    expect(bank.questions.length, 10);
     for (final q in bank.questions) {
       expect(q.verified, isTrue);
       expect(q.correct, inInclusiveRange(0, q.options.length - 1));
