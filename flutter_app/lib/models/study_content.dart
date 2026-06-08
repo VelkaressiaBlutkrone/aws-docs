@@ -61,8 +61,8 @@ class MdChecklist extends MdBlock {
 
 class MdTable extends MdBlock {
   const MdTable(this.headers, this.rows);
-  final List<String> headers;
-  final List<List<String>> rows;
+  final List<List<MdSpan>> headers; // 열 → spans
+  final List<List<List<MdSpan>>> rows; // 행 → 열 → spans
 }
 
 class MdQuote extends MdBlock {

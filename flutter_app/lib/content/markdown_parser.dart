@@ -136,10 +136,14 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
         i++;
       }
       if (tbl.length >= 2) {
-        List<String> cells(String r) =>
-            r.split('|').map((c) => c.trim()).where((c) => c.isNotEmpty).toList();
+        List<List<MdSpan>> cells(String r) => r
+            .split('|')
+            .map((c) => c.trim())
+            .where((c) => c.isNotEmpty)
+            .map(_inline)
+            .toList();
         final headers = cells(tbl[0]);
-        final rows = <List<String>>[];
+        final rows = <List<List<MdSpan>>>[];
         for (var r = 2; r < tbl.length; r++) {
           rows.add(cells(tbl[r]));
         }

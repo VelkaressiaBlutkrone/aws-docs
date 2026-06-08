@@ -36,4 +36,24 @@ void main() {
     final doc = parseStudyDoc('---\ntitle: X\n---\n\n@@이상한 줄@@');
     expect(doc.blocks.whereType<MdParagraph>().isNotEmpty, isTrue);
   });
+
+  test('표 셀의 **굵게**를 인라인 spans로 파싱한다', () {
+    const md = '''
+---
+title: X
+---
+
+| 용어 | 설명 |
+| --- | --- |
+| **탄력성** | 수요에 맞춰 `조절` |
+''';
+    final doc = parseStudyDoc(md);
+    final table = doc.blocks.whereType<MdTable>().first;
+    // 헤더: 평문
+    expect(table.headers[0].first.text, '용어');
+    // 첫 행 첫 셀: 굵게 span
+    expect(table.rows[0][0].any((s) => s.bold && s.text == '탄력성'), isTrue);
+    // 첫 행 둘째 셀: code span 포함
+    expect(table.rows[0][1].any((s) => s.code && s.text == '조절'), isTrue);
+  });
 }

@@ -239,36 +239,56 @@ class StudyMarkdownView extends StatelessWidget {
     );
   }
 
-  Widget _table(
-      BuildContext context, List<String> headers, List<List<String>> rows) {
+  Widget _table(BuildContext context, List<List<MdSpan>> headers,
+      List<List<List<MdSpan>>> rows) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
-    TableRow buildRow(List<String> cells, {required bool header}) => TableRow(
+    TableRow buildRow(List<List<MdSpan>> cells, {required bool header}) =>
+        TableRow(
           decoration: BoxDecoration(color: header ? c.surface2 : null),
           children: [
             for (var k = 0; k < headers.length; k++)
               Padding(
                 padding: const EdgeInsets.all(Gap.sm),
-                child: Text(k < cells.length ? cells[k] : '',
-                    style: header
-                        ? t.labelLarge
+                child: _spans(
+                    context,
+                    k < cells.length ? cells[k] : const [MdSpan('')],
+                    header
+                        ? t.labelLarge!
                         : t.bodyMedium!.copyWith(color: c.text)),
               ),
           ],
         );
-    return Container(
-      margin: const EdgeInsets.only(bottom: Gap.md),
-      decoration: BoxDecoration(
-          border: Border.all(color: c.border),
-          borderRadius: BorderRadius.circular(Radii.sm)),
-      child: Table(
-        border: TableBorder.symmetric(inside: BorderSide(color: c.border)),
-        defaultVerticalAlignment: TableCellVerticalAlignment.top,
-        children: [
-          buildRow(headers, header: true),
-          for (final r in rows) buildRow(r, header: false),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const minCol = 140.0;
+        final tableWidth = headers.isEmpty
+            ? constraints.maxWidth
+            : (constraints.maxWidth > headers.length * minCol
+                ? constraints.maxWidth
+                : headers.length * minCol);
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: tableWidth,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: Gap.md),
+              decoration: BoxDecoration(
+                  border: Border.all(color: c.border),
+                  borderRadius: BorderRadius.circular(Radii.sm)),
+              child: Table(
+                border:
+                    TableBorder.symmetric(inside: BorderSide(color: c.border)),
+                defaultVerticalAlignment: TableCellVerticalAlignment.top,
+                children: [
+                  buildRow(headers, header: true),
+                  for (final r in rows) buildRow(r, header: false),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
