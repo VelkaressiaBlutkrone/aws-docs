@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -6,6 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/mock_exam.dart';
 import '../data/wrong_answer_index.dart';
 import '../models/attempt_record.dart';
 import '../models/certification.dart';
@@ -68,7 +70,10 @@ class _ReviewListPageState extends State<ReviewListPage> {
         if (d.byId[e.questionId] != null) d.byId[e.questionId]!,
     ];
     if (queue.isEmpty) return;
-    setState(() => _running = _ReviewRun(taskId, queue));
+    final rng = Random();
+    // 차출 없이 weak 전부 + 선택지만 셔플(스펙 §3.2). 세션 저장 없음 → 매 회차 자유 셔플.
+    final shuffled = applyOptionOrders(queue, randomOptionOrders(queue, rng));
+    setState(() => _running = _ReviewRun(taskId, shuffled));
   }
 
   void _onFinished(AttemptRecord rec) {
