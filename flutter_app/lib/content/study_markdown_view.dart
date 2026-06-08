@@ -183,20 +183,25 @@ class StudyMarkdownView extends StatelessWidget {
       case MdDetails(:final summary, :final body):
         return Container(
           margin: const EdgeInsets.only(bottom: Gap.sm),
+          // 배경색은 Material이 담당한다. DecoratedBox(Container)에 배경색을 두면
+          // ExpansionTile 내부 ListTile의 잉크/배경이 가려진다는 assertion이 난다.
           decoration: BoxDecoration(
-            color: c.surface,
             borderRadius: BorderRadius.circular(Radii.sm),
             border: Border.all(color: c.border),
           ),
-          child: Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              tilePadding: const EdgeInsets.symmetric(horizontal: Gap.md),
-              childrenPadding:
-                  const EdgeInsets.fromLTRB(Gap.md, 0, Gap.md, Gap.md),
-              expandedCrossAxisAlignment: CrossAxisAlignment.start,
-              title: Text(summary, style: t.labelLarge),
-              children: [for (final ib in body) _block(context, ib)],
+          clipBehavior: Clip.antiAlias,
+          child: Material(
+            color: c.surface,
+            child: Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                tilePadding: const EdgeInsets.symmetric(horizontal: Gap.md),
+                childrenPadding:
+                    const EdgeInsets.fromLTRB(Gap.md, 0, Gap.md, Gap.md),
+                expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                title: Text(summary, style: t.labelLarge),
+                children: [for (final ib in body) _block(context, ib)],
+              ),
             ),
           ),
         );
