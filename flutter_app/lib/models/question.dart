@@ -54,6 +54,34 @@ class Question {
       verified: j['verified'] == true,
     );
   }
+
+  /// [order] = 표시 순서대로 나열한 원본 인덱스 순열(예: [2,0,3,1]).
+  /// options 재배열 + correct 재매핑 + wrongExplanations 키 재매핑한 새 Question 반환.
+  /// 유효하지 않은 순열(길이 불일치·중복·범위 밖)이면 원본을 그대로 반환한다
+  /// — 손상된 복원 데이터로 답이 어긋나는 것보다 셔플 미적용이 안전(스펙 §3.1).
+  Question withOptionOrder(List<int> order) {
+    final n = options.length;
+    final valid = order.length == n &&
+        order.toSet().length == n &&
+        order.every((i) => i >= 0 && i < n);
+    if (!valid) return this;
+    return Question(
+      id: id,
+      examGuideTaskId: examGuideTaskId,
+      skill: skill,
+      difficulty: difficulty,
+      stem: stem,
+      options: [for (final i in order) options[i]],
+      correct: order.indexOf(correct),
+      explanation: explanation,
+      wrongExplanations: {
+        for (final e in wrongExplanations.entries)
+          if (order.contains(e.key)) order.indexOf(e.key): e.value,
+      },
+      sources: sources,
+      verified: verified,
+    );
+  }
 }
 
 class QuestionBank {

@@ -35,4 +35,47 @@ void main() {
     final bank = QuestionBank.fromJson(m);
     expect(bank.questions.map((q) => q.id), ['a']);
   });
+
+  group('withOptionOrder', () {
+    const q = Question(
+      id: 'q1',
+      examGuideTaskId: 't',
+      stem: 's',
+      options: ['A', 'B', 'C', 'D'],
+      correct: 0,
+      explanation: 'e',
+      wrongExplanations: {1: 'w1', 3: 'w3'},
+      sources: [],
+      verified: true,
+    );
+
+    test('옵션·correct·wrongExplanations를 함께 재매핑한다', () {
+      // order = 표시 순서대로 나열한 원본 인덱스: 표시0=원본2, 표시1=원본0 …
+      final r = q.withOptionOrder([2, 0, 3, 1]);
+      expect(r.options, ['C', 'A', 'D', 'B']);
+      expect(r.correct, 1); // 원본 0번(A)이 표시 1번으로
+      expect(r.options[r.correct], 'A'); // 정답 텍스트 보존
+      expect(r.wrongExplanations, {3: 'w1', 2: 'w3'});
+      expect(r.id, 'q1'); // 메타 보존
+    });
+
+    test('원본은 불변이다', () {
+      q.withOptionOrder([3, 2, 1, 0]);
+      expect(q.options, ['A', 'B', 'C', 'D']);
+      expect(q.correct, 0);
+      expect(q.wrongExplanations, {1: 'w1', 3: 'w3'});
+    });
+
+    test('잘못된 순열이면 원본을 그대로 반환한다(방어)', () {
+      expect(identical(q.withOptionOrder([0, 0, 1, 2]), q), isTrue); // 중복
+      expect(identical(q.withOptionOrder([0, 1, 2]), q), isTrue); // 길이
+      expect(identical(q.withOptionOrder([0, 1, 2, 4]), q), isTrue); // 범위 밖
+    });
+
+    test('항등 순열은 동일 내용을 반환한다', () {
+      final r = q.withOptionOrder([0, 1, 2, 3]);
+      expect(r.options, q.options);
+      expect(r.correct, q.correct);
+    });
+  });
 }
