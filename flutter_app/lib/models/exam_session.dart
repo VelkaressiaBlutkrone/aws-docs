@@ -13,6 +13,7 @@ class ExamSession {
     required this.flagged,
     required this.bankFingerprint,
     this.questionIds = const [],
+    this.optionOrders = const {},
     required this.submitted,
   });
 
@@ -26,6 +27,7 @@ class ExamSession {
   final List<int> flagged;
   final String bankFingerprint;
   final List<String> questionIds; // 통합 모의고사 출제 문항 ID(순서) — 복원용
+  final Map<String, List<int>> optionOrders; // 문항 ID → 선택지 표시 순서(원본 인덱스 순열) — 셔플 복원용(스펙 §3.3)
   final bool submitted;
 
   Map<String, dynamic> toJson() => {
@@ -39,6 +41,7 @@ class ExamSession {
         'flagged': flagged,
         'bankFingerprint': bankFingerprint,
         'questionIds': questionIds,
+        'optionOrders': optionOrders,
         'submitted': submitted,
       };
 
@@ -50,6 +53,16 @@ class ExamSession {
         final ki = int.tryParse(k.toString());
         final vi = (v as num?)?.toInt();
         if (ki != null && vi != null) picked[ki] = vi;
+      });
+    }
+    final orders = <String, List<int>>{};
+    final rawO = j['optionOrders'];
+    if (rawO is Map) {
+      rawO.forEach((k, v) {
+        if (v is List) {
+          orders[k.toString()] =
+              v.whereType<num>().map((e) => e.toInt()).toList();
+        }
       });
     }
     return ExamSession(
@@ -68,6 +81,7 @@ class ExamSession {
       questionIds: ((j['questionIds'] as List?) ?? const [])
           .map((e) => e.toString())
           .toList(),
+      optionOrders: orders,
       submitted: j['submitted'] == true,
     );
   }

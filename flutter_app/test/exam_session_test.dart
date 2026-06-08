@@ -124,4 +124,45 @@ void main() {
       ..write('awsdocs.examSession.v1:exam:clf-t2-3', '{not json');
     expect(ExamSessionStore(backend: b).load('exam:clf-t2-3'), isNull);
   });
+
+  test('optionOrders 직렬화 왕복 + 구버전(필드 없음) 빈 맵', () {
+    const s = ExamSession(
+      examId: 'exam:clf-t2-3',
+      certId: 'CLF-C02',
+      taskId: 'clf-t2-3',
+      startedAtIso: '2026-06-08T00:00:00.000',
+      durationSec: 420,
+      index: 0,
+      picked: {},
+      flagged: [],
+      bankFingerprint: 'fp',
+      submitted: false,
+      questionIds: ['q1', 'q2'],
+      optionOrders: {
+        'q1': [2, 0, 3, 1],
+        'q2': [1, 0],
+      },
+    );
+    final back = ExamSession.fromJson(s.toJson());
+    expect(back.optionOrders, {
+      'q1': [2, 0, 3, 1],
+      'q2': [1, 0],
+    });
+    // 구버전 JSON(optionOrders 없음) → 빈 맵
+    final old = ExamSession.fromJson({'examId': 'x'});
+    expect(old.optionOrders, isEmpty);
+  });
+
+  test('fromJson은 손상된 optionOrders 항목을 건너뛴다(방어적)', () {
+    final back = ExamSession.fromJson({
+      'examId': 'exam:x',
+      'optionOrders': {
+        'q1': [1, 0],
+        'q2': 'broken', // 리스트 아님 → 스킵
+      },
+    });
+    expect(back.optionOrders, {
+      'q1': [1, 0],
+    });
+  });
 }
