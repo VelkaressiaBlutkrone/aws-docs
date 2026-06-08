@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -6,18 +7,39 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/mock_exam.dart';
 import '../models/attempt_record.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 
-/// 얇은 로더: 자산에서 QuestionBank를 읽어 QuizView에 주입.
-class QuizPage extends StatelessWidget {
+/// 얇은 로더: 자산에서 QuestionBank를 읽어 5문항 차출+선택지 셔플 후 QuizView에 주입.
+class QuizPage extends StatefulWidget {
   const QuizPage({super.key, required this.entry});
   final ContentEntry entry;
 
+  @override
+  State<QuizPage> createState() => _QuizPageState();
+}
+
+class _QuizPageState extends State<QuizPage> {
+  // late final: 리빌드 시 재샘플링 방지 — 풀이 중 문항이 바뀌면 안 된다.
+  late final Future<QuestionBank> _future = _load();
+
   Future<QuestionBank> _load() async {
-    final raw = await rootBundle.loadString(entry.questionsAsset);
-    return QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
+    final raw = await rootBundle.loadString(widget.entry.questionsAsset);
+    final bank =
+        QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
+    final rng = Random();
+    final sampled = samplePool(bank.questions, taskSampleCount, rng);
+    final shuffled =
+        applyOptionOrders(sampled, randomOptionOrders(sampled, rng));
+    return QuestionBank(
+      examGuideTaskId: bank.examGuideTaskId,
+      taskTitle: bank.taskTitle,
+      certCode: bank.certCode,
+      domain: bank.domain,
+      questions: shuffled,
+    );
   }
 
   @override
@@ -30,11 +52,11 @@ class QuizPage extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${entry.title} · 연습 문제',
+        title: Text('${widget.entry.title} · 연습 문제',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
       ),
       body: FutureBuilder<QuestionBank>(
-        future: _load(),
+        future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
@@ -56,7 +78,7 @@ class QuizPage extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: Layout.exam),
               child: QuizView(
                 bank: bank,
-                certId: entry.certForHistory,
+                certId: widget.entry.certForHistory,
                 onFinished: store.add,
               ),
             ),
