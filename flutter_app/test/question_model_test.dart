@@ -76,6 +76,7 @@ void main() {
       final r = q.withOptionOrder([0, 1, 2, 3]);
       expect(r.options, q.options);
       expect(r.correct, q.correct);
+      expect(r.wrongExplanations, q.wrongExplanations);
     });
   });
 }
