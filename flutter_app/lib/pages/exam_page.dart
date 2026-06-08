@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -9,6 +10,7 @@ import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
 import '../data/history_store.dart';
+import '../data/mock_exam.dart';
 import '../models/attempt_record.dart';
 import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
@@ -453,7 +455,7 @@ class _ExamPageState extends State<ExamPage> {
 
   Future<_ExamLoad> _load() async {
     final qRaw = await rootBundle.loadString(widget.entry.questionsAsset);
-    final bank =
+    final fullBank =
         QuestionBank.fromJson(json.decode(qRaw) as Map<String, dynamic>);
 
     ExamOverview? overview;
@@ -467,18 +469,33 @@ class _ExamPageState extends State<ExamPage> {
     }
 
     final examId = _examId;
-    final fp = bankFingerprint(bank);
+    final fp = bankFingerprint(fullBank);
     final existing = _store.load(examId);
-    final restorable = existing != null &&
+
+    // 복원 조건: 미제출 + 전체 뱅크 지문 일치 + 차출 ID 전부 존재 + 선택지 순서 완비(스펙 §3.3).
+    // 구버전 세션(optionOrders 없음)은 ordersCoverQuestions에서 걸러져 새 시험으로 시작.
+    List<Question>? restoredQs;
+    if (existing != null &&
         !existing.submitted &&
-        existing.bankFingerprint == fp;
+        existing.bankFingerprint == fp) {
+      final ordered =
+          restoreOrdered(existing.questionIds, indexById(fullBank.questions));
+      if (ordered != null &&
+          ordersCoverQuestions(ordered, existing.optionOrders)) {
+        restoredQs = applyOptionOrders(ordered, existing.optionOrders);
+      }
+    }
 
     final DateTime startedAt;
     final int durationSec;
     final int initialIndex;
     final Map<int, int> initialPicked;
     final Set<int> initialFlagged;
-    if (restorable) {
+    final List<Question> presented;
+    final Map<String, List<int>> optionOrders;
+    if (restoredQs != null) {
+      presented = restoredQs;
+      optionOrders = existing!.optionOrders;
       // 손상된 startedAt이면 now로 폴백(타이머 리셋 가능 — 정상 흐름에선 항상 기록됨).
       startedAt = DateTime.tryParse(existing.startedAtIso) ?? DateTime.now();
       durationSec = existing.durationSec;
@@ -486,13 +503,17 @@ class _ExamPageState extends State<ExamPage> {
       initialPicked = existing.picked;
       initialFlagged = existing.flagged.toSet();
     } else {
-      if (existing != null) _store.clear(examId); // 개정/제출된 세션 폐기
+      if (existing != null) _store.clear(examId); // 개정/제출/구버전 세션 폐기
+      final rng = Random();
+      final sampled = samplePool(fullBank.questions, taskSampleCount, rng);
+      optionOrders = randomOptionOrders(sampled, rng);
+      presented = applyOptionOrders(sampled, optionOrders);
       startedAt = DateTime.now();
       durationSec = examDurationSec(
         durationMinutes: overview?.durationMinutes,
         scored: overview?.scoredQuestions,
         unscored: overview?.unscoredQuestions,
-        count: bank.questions.length,
+        count: presented.length, // 차출 수 기준 — 시간 자동 단축
       );
       initialIndex = 0;
       initialPicked = const {};
@@ -500,13 +521,21 @@ class _ExamPageState extends State<ExamPage> {
     }
 
     return _ExamLoad(
-      bank: bank,
+      bank: QuestionBank(
+        examGuideTaskId: fullBank.examGuideTaskId,
+        taskTitle: fullBank.taskTitle,
+        certCode: fullBank.certCode,
+        domain: fullBank.domain,
+        questions: presented,
+      ),
+      fullBankFingerprint: fp,
+      optionOrders: optionOrders,
       startedAt: startedAt,
       durationSec: durationSec,
       initialIndex: initialIndex,
       initialPicked: initialPicked,
       initialFlagged: initialFlagged,
-      restored: restorable,
+      restored: restoredQs != null,
     );
   }
 
@@ -554,6 +583,8 @@ class _ExamPageState extends State<ExamPage> {
                 initialPicked: data.initialPicked,
                 initialFlagged: data.initialFlagged,
                 restored: data.restored,
+                optionOrders: data.optionOrders,
+                sessionFingerprint: data.fullBankFingerprint,
                 onChanged: _store.save,
                 onFinished: (r) {
                   _history.add(r);
@@ -569,9 +600,12 @@ class _ExamPageState extends State<ExamPage> {
   }
 }
 
+/// 로드 결과(표시 뱅크 = 차출+셔플 적용 / 지문·순서는 세션 기록용).
 class _ExamLoad {
   const _ExamLoad({
     required this.bank,
+    required this.fullBankFingerprint,
+    required this.optionOrders,
     required this.startedAt,
     required this.durationSec,
     required this.initialIndex,
@@ -580,6 +614,8 @@ class _ExamLoad {
     required this.restored,
   });
   final QuestionBank bank;
+  final String fullBankFingerprint;
+  final Map<String, List<int>> optionOrders;
   final DateTime startedAt;
   final int durationSec;
   final int initialIndex;
