@@ -158,4 +158,34 @@ void main() {
     expect(finished!.correct, 2); // 복원된 답 둘 다 정답
     expect(finished!.flaggedQuestionIds, ['q2']); // 복원된 플래그 보존
   });
+
+  testWidgets('세션에 optionOrders와 주입된 전체 뱅크 지문이 기록된다', (tester) async {
+    ExamSession? saved;
+    final started = DateTime(2026, 6, 8);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(),
+      certId: 'CLF-C02',
+      taskId: 'clf-t2-3',
+      startedAt: started,
+      durationSec: 600,
+      optionOrders: const {
+        'q1': [1, 0],
+        'q2': [0, 1],
+      },
+      sessionFingerprint: 'fp-full-bank',
+      now: () => started.add(const Duration(seconds: 5)),
+      onChanged: (s) => saved = s,
+    )));
+    await tester.pump();
+
+    await tester.tap(find.text('계정 해지')); // 선택 → onChanged 발화
+    await tester.pump();
+
+    expect(saved, isNotNull);
+    expect(saved!.optionOrders, {
+      'q1': [1, 0],
+      'q2': [0, 1],
+    });
+    expect(saved!.bankFingerprint, 'fp-full-bank'); // 주입 지문 우선
+  });
 }

@@ -28,6 +28,8 @@ class ExamView extends StatefulWidget {
     this.initialPicked = const {},
     this.initialFlagged = const {},
     this.restored = false,
+    this.optionOrders = const {},
+    this.sessionFingerprint,
     this.onChanged,
     this.onFinished,
     this.onExit,
@@ -43,6 +45,14 @@ class ExamView extends StatefulWidget {
   final Map<int, int> initialPicked;
   final Set<int> initialFlagged;
   final bool restored;
+
+  /// 세션에 기록할 문항별 선택지 표시 순서(복원용). 셔플 미적용 호출부는 빈 맵.
+  final Map<String, List<int>> optionOrders;
+
+  /// 세션에 기록할 뱅크 지문. null이면 표시 뱅크에서 계산.
+  /// 차출 시험은 표시 뱅크(5문항)가 아니라 전체 뱅크 지문으로 개정을 감지해야 하므로 주입한다.
+  final String? sessionFingerprint;
+
   final void Function(ExamSession)? onChanged;
   final void Function(AttemptRecord)? onFinished;
   final VoidCallback? onExit;
@@ -108,8 +118,10 @@ class _ExamViewState extends State<ExamView> {
         index: _index,
         picked: _picked,
         flagged: _flagged.toList()..sort(),
-        bankFingerprint: bankFingerprint(widget.bank),
+        bankFingerprint:
+            widget.sessionFingerprint ?? bankFingerprint(widget.bank),
         questionIds: _qs.map((q) => q.id).toList(),
+        optionOrders: widget.optionOrders,
         submitted: _submitted,
       );
 
