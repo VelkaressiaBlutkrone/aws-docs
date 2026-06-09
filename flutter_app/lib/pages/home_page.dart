@@ -10,6 +10,7 @@ import '../data/study_reset.dart';
 import '../data/viewed_docs_store.dart';
 import '../data/weighted_exam.dart';
 import '../models/certification.dart';
+import '../util/open_link.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
 
@@ -445,30 +446,54 @@ class _Sources extends StatelessWidget {
         spacing: Gap.sm,
         runSpacing: Gap.sm,
         children: [
-          for (final s in officialSources) _SourcePill(label: s.title),
+          for (final s in officialSources)
+            _SourcePill(label: s.title, href: s.href),
         ],
       ),
     );
   }
 }
 
-class _SourcePill extends StatelessWidget {
-  const _SourcePill({required this.label});
+class _SourcePill extends StatefulWidget {
+  const _SourcePill({required this.label, required this.href});
   final String label;
+  final String href;
+
+  @override
+  State<_SourcePill> createState() => _SourcePillState();
+}
+
+class _SourcePillState extends State<_SourcePill> {
+  bool _hover = false;
 
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(Radii.sm),
-        border: Border.all(color: c.border),
+    final active = _hover;
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
+      child: Semantics(
+        link: true,
+        label: '${widget.label} (공식 자료, 새 탭으로 열기)',
+        child: GestureDetector(
+          onTap: () => openLink(widget.href),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: c.surface,
+              borderRadius: BorderRadius.circular(Radii.sm),
+              border: Border.all(color: active ? c.accent : c.border),
+            ),
+            child: Text(widget.label,
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: active ? c.accent : c.textMuted)),
+          ),
+        ),
       ),
-      child: Text(label,
-          style: TextStyle(
-              fontSize: 13, fontWeight: FontWeight.w700, color: c.textMuted)),
     );
   }
 }
