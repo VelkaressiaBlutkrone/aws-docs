@@ -14,7 +14,7 @@ void main() {
       : <File>[];
 
   const requiredMarkers = <String>[
-    '> 커버하는 공식 Task',
+    '커버하는 공식 Task',
     '## ✅ 학습 목표 체크리스트',
     '## 🎯 왜 중요한가',
     '## 📖 핵심 개념',

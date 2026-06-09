@@ -154,7 +154,7 @@ void main() {
       : <File>[];
 
   const requiredMarkers = <String>[
-    '> 커버하는 공식 Task',
+    '커버하는 공식 Task',
     '## ✅ 학습 목표 체크리스트',
     '## 🎯 왜 중요한가',
     '## 📖 핵심 개념',
@@ -201,6 +201,8 @@ Expected: FAIL — `SOA 문서 디렉터리에 .md가 1개 이상 존재`가 빈
 - [ ] **Step 3: soa-t1-1.md 집필 (레퍼런스 exemplar)**
 
 `assets/content/soa/soa-t1-1.md` 생성. 아래 골격을 따르되, 본문은 **AWS CloudWatch 공식 문서를 열어** 정확히 채운다. `📌 출처`에는 실제로 연 문서 URL을 넣는다(예: `https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/...`).
+
+> **컨벤션(SAA 동일, 전 SOA 문서 공통):** ① 머리말 블록쿼트는 `> **커버하는 공식 Task** — …` 굵게 형식. 구조 테스트 마커는 `커버하는 공식 Task` 문구만 보므로 굵게/일반 무관하지만 SAA와 맞춰 굵게 쓴다. ② 본문 H1 위에 SAA 프런트매터(`examGuideTaskId·certCode·domain·domainName·domainWeightPct·title·coversTasks·sources[]·lastVerified`)를 둔다. SAA 문서 `assets/content/saa/saa-t3-1.md`를 형식 기준으로 연다.
 
 ```markdown
 # CloudWatch 지표·경보·대시보드
