@@ -277,6 +277,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-6-q11",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "객체 스토리지 내구성 (S3)",
+      "difficulty": "foundational",
+      "stem": "Amazon S3 표준 스토리지가 데이터를 여러 시설·디바이스에 중복 저장하도록 설계된 핵심 특성을 가장 잘 설명한 것은?",
+      "options": [
+        "매우 높은 내구성(여러 AZ에 중복 저장, 99.999999999%로 설계)",
+        "데이터를 단일 디스크에만 저장",
+        "저장한 객체를 30일 후 자동으로 영구 삭제",
+        "인터넷 없이 로컬에서만 접근 가능"
+      ],
+      "correct": 0,
+      "explanation": "Amazon S3 표준은 데이터를 한 리전 내 여러 가용 영역에 중복 저장해 매우 높은 내구성(99.999999999%, '11 nines'로 설계)을 제공합니다. 시설·디바이스 장애에도 데이터 손실 위험이 극히 낮습니다.",
+      "wrongExplanations": {
+        "1": "S3는 단일 디스크가 아니라 여러 AZ·디바이스에 중복 저장합니다.",
+        "2": "수명 주기 정책을 직접 설정하지 않는 한 객체가 자동으로 삭제되지는 않습니다.",
+        "3": "S3는 인터넷 기반 객체 스토리지로, 로컬 전용 접근이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon S3? — 여러 AZ에 중복 저장하는 고내구성 객체 스토리지",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-6-q12",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "스토리지 유형 선택 (객체·블록·파일)",
+      "difficulty": "foundational",
+      "stem": "단일 EC2 인스턴스에 연결해 운영체제와 데이터베이스 파일을 두는, 저지연 블록 수준 볼륨이 필요하다. 가장 적합한 스토리지 유형은?",
+      "options": [
+        "블록 스토리지(Amazon EBS)",
+        "객체 스토리지(Amazon S3)",
+        "공유 파일 스토리지(Amazon EFS)",
+        "DNS 서비스(Amazon Route 53)"
+      ],
+      "correct": 0,
+      "explanation": "단일 인스턴스에 연결되는 저지연 블록 볼륨에는 Amazon EBS 같은 블록 스토리지가 적합합니다. OS·DB처럼 빈번한 읽기/쓰기와 블록 수준 접근이 필요한 워크로드에 맞습니다. S3는 객체(웹 규모, HTTP 접근), EFS는 다수 인스턴스가 공유하는 파일 시스템입니다.",
+      "wrongExplanations": {
+        "1": "Amazon S3는 객체 스토리지로, OS 부팅 볼륨 같은 블록 수준 접근에는 적합하지 않습니다.",
+        "2": "Amazon EFS는 다수 인스턴스가 공유하는 파일 시스템으로, 단일 인스턴스 전용 블록 볼륨 요구와는 결이 다릅니다.",
+        "3": "Amazon Route 53은 DNS 서비스로, 스토리지가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EBS? — 단일 인스턴스용 저지연 블록 스토리지",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

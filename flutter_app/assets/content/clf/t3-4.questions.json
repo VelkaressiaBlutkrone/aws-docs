@@ -273,6 +273,64 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-4-q11",
+      "examGuideTaskId": "clf-t3-4",
+      "skill": "데이터베이스 선택 (관계형 vs NoSQL)",
+      "difficulty": "foundational",
+      "stem": "정형 스키마와 테이블 간 조인, 트랜잭션 일관성이 중요한 전통적 업무 애플리케이션의 데이터 저장소로 가장 적합한 유형은?",
+      "options": [
+        "관계형 데이터베이스(예: Amazon RDS)",
+        "키-값 NoSQL 데이터베이스(예: DynamoDB)",
+        "객체 스토리지(예: Amazon S3)",
+        "인메모리 캐시(예: ElastiCache)"
+      ],
+      "correct": 0,
+      "explanation": "정해진 스키마, 테이블 간 조인, 강한 트랜잭션 일관성이 필요한 업무 애플리케이션에는 관계형 데이터베이스가 적합합니다. Amazon RDS 같은 관리형 관계형 DB가 이런 요구를 충족합니다. NoSQL은 유연한 스키마와 대규모 확장에 강하지만 복잡한 조인·강한 관계 모델에는 관계형이 더 맞습니다.",
+      "wrongExplanations": {
+        "1": "DynamoDB는 유연한 스키마와 대규모 키-값에 강하지만, 복잡한 조인과 강한 관계 모델 요구에는 관계형이 더 적합합니다.",
+        "2": "Amazon S3는 객체 스토리지로, 트랜잭션 일관성을 가진 업무용 데이터베이스가 아닙니다.",
+        "3": "ElastiCache는 인메모리 캐시로, 영속적인 기본 저장소 용도가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon RDS? — 관리형 관계형 데이터베이스",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        },
+        {
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 데이터베이스 서비스",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-4-q12",
+      "examGuideTaskId": "clf-t3-4",
+      "skill": "고가용성 (RDS Multi-AZ)",
+      "difficulty": "foundational",
+      "stem": "운영 중인 Amazon RDS 데이터베이스가 한 가용 영역 장애 시에도 자동으로 장애 조치(failover)되어 가용성을 유지하게 하려 한다. 가장 적합한 구성은?",
+      "options": [
+        "Multi-AZ 배포(대기 복제본을 다른 AZ에 두고 자동 장애 조치)",
+        "단일 AZ 배포",
+        "읽기 전용 복제본(Read Replica)만 추가",
+        "DB를 EC2 인스턴스에 직접 설치"
+      ],
+      "correct": 0,
+      "explanation": "RDS Multi-AZ 배포는 기본 DB와 동기 복제되는 대기(standby) 복제본을 다른 가용 영역에 둡니다. 기본 인스턴스나 해당 AZ에 장애가 나면 자동으로 대기본으로 장애 조치되어 가용성을 유지합니다.",
+      "wrongExplanations": {
+        "1": "단일 AZ 배포는 그 AZ에 장애가 나면 DB가 중단되어 자동 장애 조치를 제공하지 않습니다.",
+        "2": "읽기 전용 복제본은 읽기 확장·일부 재해 복구 보조용으로, Multi-AZ의 자동 장애 조치(HA)와는 목적이 다릅니다.",
+        "3": "EC2에 직접 설치하면 패치·백업·고가용성을 모두 직접 관리해야 하며 자동 장애 조치가 기본 제공되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon RDS Multi-AZ — 다른 AZ의 대기 복제본으로 자동 장애 조치",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
