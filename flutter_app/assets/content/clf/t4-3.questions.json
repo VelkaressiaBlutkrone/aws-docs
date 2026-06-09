@@ -281,13 +281,13 @@
       "difficulty": "foundational",
       "stem": "운영 시스템이 다운된 긴급 상황에서 24x7 전화·채팅·이메일 지원과 짧은 응답 시간 보장이 필요하다. 이를 충족하는 최소 Support 플랜은?",
       "options": [
-        "Business Support+(또는 그 이상)",
+        "Business Support(현 Business Support+) 또는 그 이상",
         "Basic Support",
         "Developer Support",
         "Support 플랜과 무관하다"
       ],
       "correct": 0,
-      "explanation": "현재 AWS Support 플랜 비교에서 Business Support+는 프로덕션 워크로드에 대한 최소 권장 플랜이며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 짧은 응답 시간 목표를 제공합니다. Basic은 기술 지원 케이스가 없고, Developer Support는 이 24x7 운영 장애 요건을 충족하지 못합니다.",
+      "explanation": "시험 대비로는 전통 분류인 Business Support를 최소 24x7 프로덕션 기술 지원 플랜으로 기억합니다. 현재 AWS Support 플랜 비교에서는 이에 해당하는 프로덕션 워크로드 최소 권장 플랜이 Business Support+로 표시되며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 짧은 응답 시간 목표를 제공합니다. Basic은 기술 지원 케이스가 없고, Developer Support는 이 24x7 운영 장애 요건을 충족하지 못합니다.",
       "wrongExplanations": {
         "1": "Basic Support는 기술 지원 케이스를 제공하지 않아 긴급 운영 장애 지원에 부적합합니다.",
         "2": "Developer Support는 업무 시간 이메일 지원으로, 24x7·짧은 응답 시간 요건을 충족하지 못합니다.",
