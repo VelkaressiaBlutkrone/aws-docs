@@ -132,11 +132,15 @@ class ResultsView extends StatelessWidget {
     required this.picked,
     this.flagged = const {},
     this.subtitle,
+    this.onOpenStudy,
   });
   final QuestionBank bank;
   final Map<int, int> picked;
   final Set<int> flagged;
   final String? subtitle;
+
+  /// 오답 카드의 개념 라벨 → 해당 Task 학습문서 이동. null이면 링크 숨김.
+  final void Function(String taskId)? onOpenStudy;
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +169,8 @@ class ResultsView extends StatelessWidget {
               index: k,
               q: qs[k],
               pickedIndex: picked[k],
-              flagged: flagged.contains(k)),
+              flagged: flagged.contains(k),
+              onOpenStudy: onOpenStudy),
       ],
     );
   }
@@ -179,11 +184,15 @@ class ResultCard extends StatelessWidget {
     required this.q,
     required this.pickedIndex,
     this.flagged = false,
+    this.onOpenStudy,
   });
   final int index;
   final Question q;
   final int? pickedIndex;
   final bool flagged;
+
+  /// 오답이고 개념(skill) 태그가 있을 때 학습문서로 보내는 콜백. null이면 링크 숨김.
+  final void Function(String taskId)? onOpenStudy;
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +244,17 @@ class ResultCard extends StatelessWidget {
             Text(q.wrongExplanations[pickedIndex!]!,
                 style: t.bodyMedium?.copyWith(color: c.wrong, height: 1.6)),
           ],
+          // 처방(C-경량): 오답이고 개념 태그가 있으면 개념 라벨 + 학습문서 링크.
+          // 정답 문항·무태그 문항은 표시하지 않는다.
+          if (!isCorrect && q.skill.isNotEmpty) ...[
+            const SizedBox(height: Gap.md),
+            _ConceptCue(
+              skill: q.skill,
+              onOpenStudy: onOpenStudy == null
+                  ? null
+                  : () => onOpenStudy!(q.examGuideTaskId),
+            ),
+          ],
         ],
       ),
     );
@@ -254,6 +274,53 @@ class ResultCard extends StatelessWidget {
             text: text,
             style: TextStyle(fontSize: 14, color: c.text, height: 1.5)),
       ])),
+    );
+  }
+}
+
+/// 오답 복기 카드의 개념 처방 큐.
+/// DESIGN.md 정합(2026-06-09 D3): 칩은 중립색(라벨), 액센트는 학습 링크에만.
+///   [ skill 라벨 ]  → 학습문서
+class _ConceptCue extends StatelessWidget {
+  const _ConceptCue({required this.skill, this.onOpenStudy});
+  final String skill;
+  final VoidCallback? onOpenStudy;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final chip = Container(
+      padding: const EdgeInsets.symmetric(horizontal: Gap.sm, vertical: Gap.xs),
+      decoration: BoxDecoration(
+        color: c.surface2,
+        borderRadius: BorderRadius.circular(Radii.full),
+      ),
+      child: Text(skill,
+          style: TextStyle(
+              fontSize: 12, fontWeight: FontWeight.w700, color: c.textMuted)),
+    );
+    return Wrap(
+      spacing: Gap.sm,
+      runSpacing: Gap.xs,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        chip,
+        if (onOpenStudy != null)
+          InkWell(
+            onTap: onOpenStudy,
+            borderRadius: BorderRadius.circular(Radii.sm),
+            child: Padding(
+              // 44px 터치 타깃 확보.
+              padding: const EdgeInsets.symmetric(
+                  vertical: Gap.md, horizontal: Gap.xs),
+              child: Text('→ 학습문서',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: c.accent)),
+            ),
+          ),
+      ],
     );
   }
 }

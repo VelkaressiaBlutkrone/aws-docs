@@ -19,3 +19,20 @@
 - **Cons/시점:** 콘텐츠가 CLF 1개일 때 홍보하면 "준비 중 11개"가 첫인상 — 반드시 CLF 완성 후
 - **Context:** 2026-06-05 Codex outside-voice 지적, D18 수용
 - **Depends on:** CLF 완성, 외부 검증자 테스트와 연계 가능
+
+## C-중량: 개념→학습문서 섹션 앵커 딥링크 (P3)
+- **What:** report_page를 Task→개념 중첩 구조로 개조 + `study_doc_page.dart`에 마크다운 섹션 앵커/스크롤 인프라 + `concept_step_map.dart`(개념→stepId 매핑)
+- **Why:** 현재 개념 라벨은 Task 문서로만 보낸다(스크롤은 사용자 몫). 앵커가 있으면 "이 개념 → 바로 그 문단"으로 정밀 처방. Codex outside-voice도 "앵커 없으면 skill은 라벨/필터 단서지 정밀 내비 타깃이 아니다"라고 지적
+- **Cons:** 마크다운 파서·라우트 파싱·스크롤 타이밍·콘텐츠 매핑까지 PR이 7~8파일로 번짐. 가치 증명 전 인프라 선건축 위험
+- **Context:** 2026-06-09 /plan-eng-review D5. A+C-경량(이번 PR)이 동선·개념 라벨을 깐 뒤, 라벨 클릭/스크롤 마찰이 실제 문제로 드러나면 착수. 개념 태그(`Question.skill`)는 이미 채워져 데이터는 준비됨
+- **Depends on:** A+C-경량 출고 + 개념 라벨 사용 관찰
+
+## AttemptRecord.wrongSkills[] 비정규화 (P3)
+- **What:** 응시 레코드에 오답 개념(skill) 목록을 저장해 report/review에서 다회차 누적 "약점 개념" 추세를 파생
+- **Why:** 현재 개념 진단은 단일 응시(결과 화면)뿐. 다회차 누적은 wrongQuestionIds→뱅크 조인으로만 가능한데, 개정으로 사라진 문항은 개념이 유실됨. 비정규화하면 stale 문항에도 개념 보존
+- **Cons:** 스키마 확장 + 마이그레이션(레거시 레코드는 빈 배열). C-중량과 함께여야 의미
+- **Context:** 2026-06-09 /plan-eng-review D6. C-중량(위 TODO)과 짝
+- **Depends on:** C-중량 방향 확정
+
+<!-- 참고(stale flag, 2026-06-09): 상단 "코드 스플리팅" TODO의 `src/content/index.ts`는
+     Flutter 마이그레이션 이전 Vite/TS 경로. 현재는 lib/data/content_index.dart. 경로 갱신 필요(미수정 — 별도 결정). -->>

@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
+import '../content/prescription_hub.dart';
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
+import '../data/weighted_exam.dart';
 import '../models/attempt_record.dart';
 import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
@@ -36,6 +38,8 @@ class ExamView extends StatefulWidget {
     this.onFinished,
     this.onExit,
     this.now,
+    this.resultsActionsBuilder,
+    this.onOpenStudy,
   });
 
   final QuestionBank bank;
@@ -60,6 +64,15 @@ class ExamView extends StatefulWidget {
   final VoidCallback? onExit;
   final DateTime Function()? now;
 
+  /// 결과 화면 처방 허브 빌더. 제출 후 _results 렌더 시점에 호출되어
+  /// 방금 끝난 응시(justFinished)를 반영 → 약점 모의고사 잠금해제 stale 방지.
+  /// null이면 기존 동작(onExit "학습문서로" 버튼)을 유지(하위호환).
+  final Widget Function(BuildContext context, AttemptRecord? justFinished)?
+      resultsActionsBuilder;
+
+  /// 오답 복기 카드의 개념 라벨 → 해당 Task 학습문서 이동. null이면 링크 숨김.
+  final void Function(String taskId)? onOpenStudy;
+
   @override
   State<ExamView> createState() => _ExamViewState();
 }
@@ -72,6 +85,7 @@ class _ExamViewState extends State<ExamView> {
   late final Set<int> _flagged = {...widget.initialFlagged};
   bool _submitted = false;
   bool _dialogOpen = false;
+  AttemptRecord? _justFinished; // 제출된 응시(처방 허브가 잠금/현재응시 계산에 사용)
   Timer? _ticker;
 
   List<Question> get _qs => widget.bank.questions;
@@ -173,7 +187,7 @@ class _ExamViewState extends State<ExamView> {
         if (i >= 0 && i < _qs.length) _qs[i].id,
     ];
     final spent = _clock().difference(widget.startedAt).inSeconds;
-    widget.onFinished?.call(AttemptRecord(
+    final rec = AttemptRecord(
       certId: widget.certId,
       examId: 'exam:${widget.taskId}',
       mode: 'exam',
@@ -184,7 +198,9 @@ class _ExamViewState extends State<ExamView> {
       flaggedQuestionIds: flaggedIds,
       presentedQuestionIds: [for (final q in _qs) q.id],
       durationSpentSec: spent > widget.durationSec ? widget.durationSec : spent,
-    ));
+    );
+    _justFinished = rec;
+    widget.onFinished?.call(rec);
     setState(() {});
   }
 
@@ -324,11 +340,14 @@ class _ExamViewState extends State<ExamView> {
             bank: widget.bank,
             picked: _picked,
             flagged: _flagged,
+            onOpenStudy: widget.onOpenStudy,
             subtitle:
                 '플래그 ${_flagged.length}개 · 실제 합격선은 1000점 만점 환산 700점(정답률과 다름)',
           ),
           const SizedBox(height: Gap.lg),
-          if (widget.onExit != null)
+          if (widget.resultsActionsBuilder != null)
+            widget.resultsActionsBuilder!(context, _justFinished)
+          else if (widget.onExit != null)
             SizedBox(
               width: 180,
               child: PrimaryButton(label: '학습문서로', onTap: widget.onExit),
@@ -590,6 +609,24 @@ class _ExamPageState extends State<ExamPage> {
                   _history.add(r);
                   _store.clear(examId);
                 },
+                resultsActionsBuilder: (ctx, justFinished) {
+                  // history는 onFinished의 add 직후라 현재 응시를 포함한다.
+                  final history = _history.all();
+                  final code = widget.entry.certCode;
+                  final unlocked = weightedExamUnlocked(code, history);
+                  return PrescriptionHub(
+                    allCorrect: justFinished != null &&
+                        justFinished.wrongQuestionIds.isEmpty,
+                    onReview: () => ctx.push('/cert/$code/review'),
+                    onReport: () => ctx.push('/cert/$code/report'),
+                    onWeightedExam: unlocked
+                        ? () => ctx.push('/cert/$code/exam/weak')
+                        : null,
+                    weightedAttemptCount: nonReviewAttemptCount(code, history),
+                  );
+                },
+                onOpenStudy: (taskId) =>
+                    context.push('/cert/${widget.entry.certCode}/study/$taskId'),
                 onExit: () => context.pop(),
               ),
             ),

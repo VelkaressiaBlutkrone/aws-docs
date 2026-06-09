@@ -188,4 +188,55 @@ void main() {
     });
     expect(saved!.bankFingerprint, 'fp-full-bank'); // 주입 지문 우선
   });
+
+  testWidgets('R1: resultsActionsBuilder 없으면 기존 학습문서로 버튼 유지', (tester) async {
+    final started = DateTime(2026, 6, 6);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
+      startedAt: started, durationSec: 600,
+      now: () => started.add(const Duration(seconds: 5)),
+      onExit: () {},
+    )));
+    await tester.pump();
+    await tester.tap(find.text('계정 해지'));
+    await tester.pump();
+    await tester.tap(find.text('다음'));
+    await tester.pump();
+    await tester.tap(find.text('필요한 권한만'));
+    await tester.pump();
+    await tester.tap(find.text('제출')); // 플래그 없음 → 즉시 제출
+    await tester.pump();
+
+    expect(find.text('결과'), findsOneWidget);
+    expect(find.text('학습문서로'), findsOneWidget); // 하위호환 유지
+  });
+
+  testWidgets('빌더 제공 시 학습문서로 숨김 + justFinished 전달', (tester) async {
+    AttemptRecord? seen;
+    final started = DateTime(2026, 6, 6);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
+      startedAt: started, durationSec: 600,
+      now: () => started.add(const Duration(seconds: 5)),
+      onExit: () {},
+      resultsActionsBuilder: (ctx, jf) {
+        seen = jf;
+        return const Text('처방허브');
+      },
+    )));
+    await tester.pump();
+    await tester.tap(find.text('계정 해지'));
+    await tester.pump();
+    await tester.tap(find.text('다음'));
+    await tester.pump();
+    await tester.tap(find.text('필요한 권한만'));
+    await tester.pump();
+    await tester.tap(find.text('제출'));
+    await tester.pump();
+
+    expect(find.text('처방허브'), findsOneWidget);
+    expect(find.text('학습문서로'), findsNothing); // 빌더가 대체
+    expect(seen, isNotNull);
+    expect(seen!.correct, 2); // 방금 끝난 응시 전달
+  });
 }
