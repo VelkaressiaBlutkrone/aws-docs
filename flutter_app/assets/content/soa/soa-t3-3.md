@@ -1,0 +1,238 @@
+---
+examGuideTaskId: soa-t3-3
+certCode: SOA-C03
+domain: 3
+domainName: 배포, 프로비저닝 및 자동화
+domainWeightPct: 22
+title: Systems Manager 운영 자동화 (Run Command·Patch·State Manager·Parameter Store)
+coversTasks:
+  - "3.2"
+sources:
+  - title: AWS Systems Manager란 무엇인가 (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html
+  - title: Systems Manager Run Command (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html
+  - title: Systems Manager Session Manager (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
+  - title: Systems Manager State Manager (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html
+  - title: Systems Manager Parameter Store (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
+  - title: Parameter Store vs Secrets Manager 선택 (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/integration-ps-secretsmanager.html
+lastVerified: 2026-06-09
+---
+
+# Systems Manager 운영 자동화 (Run Command·Patch·State Manager·Parameter Store)
+
+> **커버하는 공식 Task** — SOA-C03 · 도메인 3 「배포, 프로비저닝 및 자동화」(22%) · **Task 3.2 기존 리소스 관리 자동화** (`soa-t3-3`)
+> 이 문서는 Systems Manager로 인스턴스 플릿을 SSH 없이 일괄 운영·패치하는 절차에 집중합니다. EventBridge/Lambda 기반 자동화는 `soa-t3-4`에서 다룹니다.
+
+---
+
+## ✅ 학습 목표 체크리스트
+
+이 문서를 끝내면 다음을 스스로 설명하고, 콘솔/CLI에서 직접 구성할 수 있어야 합니다.
+
+- [ ] **관리형 인스턴스 조건** — SSM Agent + IAM 인스턴스 프로파일 + 엔드포인트 도달성을 설명할 수 있다
+- [ ] **Run Command** — SSH 없이 명령을 일괄 실행하는 용도와 전제 조건을 안다
+- [ ] **Session Manager** — 인바운드 포트·베이스천 없이 셸을 열고 감사 로깅하는 이점을 안다
+- [ ] **Patch Manager** — 베이스라인·패치 그룹·유지 관리 기간으로 패치를 운영하는 절차를 안다
+- [ ] **State Manager** — "원하는 상태"를 지속적으로 유지하는 용도를 안다
+- [ ] **Automation 런북** — 다단계 운영 작업을 자동화하는 용도를 안다
+- [ ] **Parameter Store** — 평문/SecureString·계층 구조, vs Secrets Manager(자동 교체·비용)를 구분한다
+- [ ] **Inventory/Compliance** — 소프트웨어·패치 준수 상태를 수집·집계하는 용도를 안다
+
+---
+
+## 🎯 왜 중요한가
+
+- Task 3.2의 본질은 **"이미 떠 있는 수십~수백 대 인스턴스를 어떻게 SSH 없이 안전하게 일괄 운영·패치하는가"**입니다. Systems Manager(SSM)는 SOA 운영의 중추이며, 시험에서 가장 자주 정답이 되는 서비스 묶음입니다.
+- 시험은 **전제 조건**을 함정으로 냅니다. Run Command·Session Manager·Patch Manager가 동작하려면 인스턴스에 **SSM Agent**가 있어야 하고, **IAM 인스턴스 프로파일**(보통 `AmazonSSMManagedInstanceCore`)이 붙어야 하며, SSM 엔드포인트에 **도달 가능**해야 합니다. 이 셋이 빠지면 인스턴스가 콘솔의 관리형 목록에 안 보입니다.
+- 보안 관점에서 SSM은 **인바운드 포트·베이스천·SSH 키를 없애는** 방향을 줍니다. Session Manager로 22번 포트를 열지 않고도 셸을 얻고, 모든 세션을 **감사 로깅**합니다. Parameter Store와 Secrets Manager의 선택(자동 교체가 필요한가, 비용은)도 단골 출제입니다.
+
+---
+
+## 📖 핵심 개념
+
+### 1) 관리형 인스턴스 — SSM이 동작하기 위한 전제
+
+> 공식 정의: **"관리형 노드(managed node)는 Systems Manager용으로 구성된 인스턴스로, SSM Agent가 설치되어 있고 Systems Manager가 관리할 수 있는 상태다."**
+
+**3가지 전제 조건:**
+
+| 조건 | 내용 |
+|---|---|
+| **SSM Agent** | 인스턴스에 SSM Agent 설치·실행(최신 Amazon Linux·Windows AMI엔 기본 포함) |
+| **IAM 인스턴스 프로파일** | SSM 권한 역할 연결(관리형 정책 **`AmazonSSMManagedInstanceCore`**) |
+| **엔드포인트 도달성** | SSM 서비스 엔드포인트에 도달(NAT/IGW 또는 **VPC 인터페이스 엔드포인트**) |
+
+> 셋 중 하나라도 빠지면 인스턴스가 **Fleet Manager의 관리형 노드 목록에 나타나지 않습니다.** "인스턴스가 SSM에 안 보인다"는 문제의 90%는 IAM 역할 누락 또는 엔드포인트 도달 불가입니다. 프라이빗 서브넷이면 인터넷 없이도 **VPC 인터페이스 엔드포인트**(ssm, ssmmessages, ec2messages)로 SSM을 쓸 수 있습니다.
+
+### 2) Run Command — SSH 없이 일괄 명령 실행
+
+> 공식 정의: **"Run Command를 사용하면 관리형 노드의 구성을 원격으로·안전하게 관리할 수 있으며, SSH나 RDP로 로그인하지 않고 명령을 실행한다."**
+
+- **SSM Agent를 통해** 명령을 실행하므로 **인바운드 포트·SSH 키가 필요 없습니다.**
+- 대상은 **인스턴스 ID·태그·리소스 그룹**으로 지정해 한 번에 수백 대에 명령을 보냅니다(예: 패키지 설치, 스크립트 실행, 로그 수집).
+- **속도 제어(concurrency)·오류 임계값(error threshold)**으로 점진적·안전하게 실행하고, 결과·출력을 S3/CloudWatch Logs에 남겨 감사합니다.
+
+```
+# 태그로 대상 지정해 셸 명령 일괄 실행 (SSH 불필요)
+aws ssm send-command \
+  --document-name "AWS-RunShellScript" \
+  --targets "Key=tag:Role,Values=web" \
+  --parameters 'commands=["yum -y update httpd"]' \
+  --max-concurrency "10%" --max-errors "5"
+```
+
+### 3) Session Manager — 포트·베이스천 없는 셸 + 감사
+
+> 공식 정의: **"Session Manager는 인바운드 포트를 열거나 베이스천 호스트를 유지하거나 SSH 키를 관리할 필요 없이 관리형 노드에 대한 대화형 셸·원클릭 액세스를 제공한다."**
+
+| 이점 | 설명 |
+|---|---|
+| **인바운드 포트 0** | 22/3389 포트를 열지 않음 → 공격 표면 축소 |
+| **베이스천 불필요** | 점프 박스 없이 콘솔/CLI에서 바로 셸 |
+| **SSH 키 불필요** | 키 배포·회전 관리 부담 제거 |
+| **감사 로깅** | 세션 활동을 **CloudWatch Logs·S3**에 기록, **CloudTrail**로 시작/종료 감사 |
+| **IAM 기반 접근 제어** | 누가 어느 인스턴스에 접속할지 IAM 정책으로 통제 |
+
+> Session Manager는 **"베이스천을 없애라"**는 보안 단서가 나오면 거의 항상 정답입니다. 프라이빗 서브넷 인스턴스에도 인터넷·인바운드 없이(인터페이스 엔드포인트로) 안전하게 접속하고, 모든 명령을 로깅해 규정 준수를 만족합니다.
+
+### 4) Patch Manager — 베이스라인·패치 그룹·유지 관리 기간
+
+> 공식 정의: **"Patch Manager는 보안 관련 업데이트 및 기타 유형의 업데이트로 관리형 노드에 패치를 적용하는 작업을 자동화한다."**
+
+| 구성요소 | 역할 |
+|---|---|
+| **패치 베이스라인(Patch Baseline)** | 승인/거부할 패치 규칙(분류·심각도·자동 승인 지연·예외) |
+| **패치 그룹(Patch Group)** | **`Patch Group` 태그**로 인스턴스를 묶어 그룹별 베이스라인 적용 |
+| **유지 관리 기간(Maintenance Window)** | 패치를 적용할 정해진 시간 창(서비스 영향 최소화) |
+
+**운영 절차:**
+
+```
+① 인스턴스에 Patch Group 태그 부여 (예: Patch Group = prod-web)
+② 같은 값을 패치 베이스라인에 등록(승인 규칙 정의)
+③ 유지 관리 기간에 AWS-RunPatchBaseline 실행
+   - Scan(스캔만, 설치 안 함) 또는 Install(설치+필요 시 재부팅)
+④ Compliance에서 패치 준수 상태 확인
+```
+
+> 패치는 **언제(유지 관리 기간) · 무엇을(베이스라인) · 어디에(패치 그룹)**로 분리됩니다. dev는 빨리, prod는 검증 후 늦게 승인하는 식으로 환경별 정책을 다르게 운영합니다. 태그 키는 **`Patch Group`(공백·대소문자 정확히)**여야 인식됩니다.
+
+### 5) State Manager — 원하는 상태 유지
+
+> 공식 정의: **"State Manager는 관리형 노드를 정의한 상태로 유지하도록 하는 안전하고 확장 가능한 구성 관리 서비스다."**
+
+- **연결(association)**을 만들어 "이 인스턴스들은 항상 이 구성이어야 한다"를 선언하고, **일정에 따라 반복 적용**합니다(예: 에이전트가 항상 실행 중, 특정 포트 닫힘, 안티바이러스 설치됨).
+- 인스턴스가 부팅되거나 드리프트되면 State Manager가 **원하는 상태로 다시 수렴**시킵니다.
+- Run Command가 **일회성 명령**이라면, State Manager는 **지속적으로 상태를 강제**하는 구성 관리입니다.
+
+### 6) Automation 런북 — 다단계 작업 자동화
+
+> 공식 정의: **"Automation을 사용하면 EC2 인스턴스·기타 AWS 리소스에 대한 일반적인 유지 관리·배포·교정 작업을 자동화하는 런북(runbook)을 정의할 수 있다."**
+
+- **여러 단계로 이뤄진 운영 작업**(예: 인스턴스 중지 → 패치 → AMI 생성 → 재시작, 또는 비규정 리소스 교정)을 **런북(SSM 문서)**으로 정의해 한 번에 실행합니다.
+- `AWS-*`로 시작하는 **사전 정의 런북**이 많고(예: `AWS-RestartEC2Instance`), 직접 만들 수도 있습니다.
+- EventBridge·Config·CloudWatch 경보의 **자동 교정 대상**으로 자주 쓰입니다(상세는 `soa-t3-4`).
+
+### 7) Parameter Store vs Secrets Manager
+
+> 공식 정의: **"Parameter Store는 구성 데이터·비밀 관리를 위한 안전한 계층형 저장소를 제공한다."**
+
+| 항목 | Parameter Store | Secrets Manager |
+|---|---|---|
+| **주 용도** | 구성값·비밀(평문 + SecureString) | 비밀(자격 증명) 전용 |
+| **암호화** | **SecureString**(KMS로 암호화) | 항상 KMS 암호화 |
+| **자동 교체(rotation)** | **기본 제공 안 함**(직접 Lambda 구성) | **기본 제공**(RDS 등 통합 자동 교체) |
+| **계층 구조** | 경로형(`/app/prod/db/password`) | 태그·이름 기반 |
+| **비용** | 표준 파라미터 **무료**(고급은 유료) | **비밀당 월 요금 + API 호출 요금** |
+
+**핵심 사실:**
+
+- **Parameter Store SecureString**은 **KMS로 암호화**된 값입니다. 단순 비밀 저장은 표준 파라미터로 무료에 가깝게 처리할 수 있습니다.
+- **자동 교체(rotation)가 필요하면 Secrets Manager**입니다. RDS 자격 증명을 주기적으로 자동 회전하는 기능이 기본 내장입니다(Parameter Store는 직접 Lambda를 짜야 함).
+- 비용에 민감하고 교체가 필요 없으면 Parameter Store, **자동 교체·교차 계정 비밀 공유가 핵심이면 Secrets Manager**를 선택합니다.
+
+### 8) Inventory와 Compliance
+
+- **Inventory**: 관리형 노드의 **설치된 소프트웨어·OS·네트워크 구성·업데이트** 등을 수집해 집계합니다(플릿 가시성).
+- **Compliance**: 패치 적용 상태·State Manager 연결 상태가 **규정에 맞는지** 준수/비준수로 보고합니다. 패치 운영의 검증 단계가 여기서 닫힙니다.
+
+---
+
+## ✍️ 시험 포인트
+
+- **관리형 노드 3대 전제**: **SSM Agent + IAM 인스턴스 프로파일(`AmazonSSMManagedInstanceCore`) + 엔드포인트 도달성**. 안 보이면 보통 IAM 또는 엔드포인트 문제.
+- **Run Command = SSH 없이 일괄 명령**. 대상은 인스턴스 ID·태그. concurrency·error threshold로 안전 실행.
+- **Session Manager = 인바운드 포트 0 · 베이스천/SSH 키 불필요 + CloudWatch Logs/S3 감사 + CloudTrail**. "베이스천 제거" 단서면 정답.
+- **Patch Manager = 베이스라인(무엇) + 패치 그룹(`Patch Group` 태그, 어디) + 유지 관리 기간(언제)**. `AWS-RunPatchBaseline`로 Scan/Install.
+- **State Manager = 원하는 상태 지속 유지**(구성 관리). Run Command(일회성)와 구분.
+- **Automation 런북 = 다단계 운영/교정 자동화**(SSM 문서).
+- **Parameter Store SecureString(KMS)** vs **Secrets Manager(자동 교체 내장·비용 높음)**. **자동 교체 필요 → Secrets Manager**.
+- 프라이빗 서브넷은 **VPC 인터페이스 엔드포인트(ssm·ssmmessages·ec2messages)**로 인터넷 없이 SSM 사용.
+
+---
+
+## ⚠️ 흔한 함정
+
+1. **"SSM Agent만 깔면 Run Command가 된다."** → 에이전트뿐 아니라 **IAM 인스턴스 프로파일**(`AmazonSSMManagedInstanceCore`)과 **SSM 엔드포인트 도달성**이 모두 있어야 관리형 노드가 됩니다. 보통 누락된 것은 IAM 역할입니다.
+
+2. **"Session Manager를 쓰려면 22번 포트를 열어야 한다."** → 정반대입니다. Session Manager는 **인바운드 포트를 전혀 열지 않고** 셸을 제공합니다(에이전트가 아웃바운드로 SSM에 연결). 베이스천도 SSH 키도 필요 없습니다.
+
+3. **"패치 그룹은 콘솔에서 그룹 객체를 만든다."** → 패치 그룹은 **`Patch Group` 태그**로 정의합니다. 태그 키 철자(공백 포함)가 정확해야 하며, 같은 값을 베이스라인에 등록해야 연결됩니다.
+
+4. **"Run Command로 구성을 한 번 맞추면 계속 유지된다."** → Run Command는 **일회성 실행**입니다. 부팅/드리프트 후에도 상태를 **지속적으로 강제**하려면 **State Manager**(연결)를 써야 합니다.
+
+5. **"비밀은 무조건 Secrets Manager여야 한다."** → 자동 교체가 필요 없고 비용을 아끼려면 **Parameter Store SecureString**(KMS 암호화)으로 충분합니다. **자동 교체(rotation)**가 핵심일 때만 Secrets Manager가 정답입니다.
+
+6. **"프라이빗 서브넷에선 SSM을 못 쓴다."** → 인터넷이 없어도 **VPC 인터페이스 엔드포인트(ssm·ssmmessages·ec2messages)**를 만들면 SSM(Run Command·Session Manager·Patch)을 정상 사용할 수 있습니다.
+
+---
+
+## 🧪 자가 점검
+
+> 아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)
+
+**Q1.** 새로 띄운 EC2 인스턴스가 Systems Manager 콘솔의 관리형 노드 목록에 나타나지 않습니다. 무엇을 점검해야 하나요?
+
+<details><summary>정답 보기</summary>
+
+세 가지를 점검합니다. ① **SSM Agent** 설치·실행 여부, ② **IAM 인스턴스 프로파일**에 `AmazonSSMManagedInstanceCore` 권한이 붙어 있는지, ③ 인스턴스가 **SSM 엔드포인트에 도달 가능한지**(퍼블릭은 IGW/NAT, 프라이빗은 ssm·ssmmessages·ec2messages **VPC 인터페이스 엔드포인트**). 가장 흔한 원인은 IAM 역할 누락 또는 엔드포인트 도달 불가입니다.
+</details>
+
+**Q2.** 보안팀이 "베이스천 호스트와 SSH 키를 모두 없애되, 운영자가 인스턴스 셸에 접속한 모든 활동을 감사 로깅하라"고 요구합니다. 어떤 기능을 쓰나요?
+
+<details><summary>정답 보기</summary>
+
+**Session Manager**를 사용합니다. 인바운드 포트를 열지 않고 베이스천·SSH 키 없이 셸을 제공하며, 접근은 **IAM 정책**으로 통제합니다. 세션 활동은 **CloudWatch Logs·S3**에 기록하고 시작/종료는 **CloudTrail**로 감사할 수 있어 규정 준수 요구를 만족합니다.
+</details>
+
+**Q3.** 수백 대 인스턴스를 환경별(dev/prod)로 다른 정책에 따라 정기 패치하고, 서비스 영향이 적은 시간대에만 설치되게 하려 합니다. 어떻게 구성하나요?
+
+<details><summary>정답 보기</summary>
+
+**Patch Manager**로 구성합니다. 인스턴스에 **`Patch Group` 태그**(예: dev/prod)를 부여하고, 각 그룹에 맞는 **패치 베이스라인**(승인 규칙)을 등록합니다. **유지 관리 기간(Maintenance Window)**을 서비스 영향이 적은 시간대로 잡아 `AWS-RunPatchBaseline`을 실행(Scan/Install)하고, **Compliance**에서 준수 상태를 확인합니다. 즉 무엇을(베이스라인)·어디에(패치 그룹)·언제(유지 관리 기간)를 분리해 환경별로 다르게 운영합니다.
+</details>
+
+**Q4.** 애플리케이션이 사용하는 RDS 자격 증명을 30일마다 자동으로 교체하려 합니다. Parameter Store와 Secrets Manager 중 무엇을 쓰고, 그 이유는?
+
+<details><summary>정답 보기</summary>
+
+**Secrets Manager**를 사용합니다. RDS 등과 통합된 **자동 교체(rotation)가 기본 제공**되어 Lambda를 직접 작성하지 않아도 주기적 회전이 가능합니다. Parameter Store의 SecureString은 KMS 암호화는 되지만 자동 교체가 내장돼 있지 않아 직접 구현해야 합니다. 비용은 Secrets Manager가 비밀당 요금이 있어 더 높지만, 자동 교체가 요구사항이면 이를 감수합니다.
+</details>
+
+---
+
+### 📌 출처 (verified)
+
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+
+1. AWS Systems Manager란 무엇인가 — https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html
+2. Run Command — https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html
+3. Session Manager — https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
+4. State Manager — https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html
+5. Parameter Store — https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
+6. Parameter Store vs Secrets Manager 선택 — https://docs.aws.amazon.com/systems-manager/latest/userguide/integration-ps-secretsmanager.html
