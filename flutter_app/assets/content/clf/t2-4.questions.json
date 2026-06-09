@@ -281,6 +281,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-4-q11",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "WAF vs Shield 역할 구분",
+      "difficulty": "foundational",
+      "stem": "한 웹 애플리케이션을 SQL 인젝션·크로스 사이트 스크립팅(XSS) 같은 계층 7(L7) 웹 공격으로부터 보호하려 한다. DDoS 보호용 Shield가 아니라, 이 목적에 가장 적합한 서비스는?",
+      "options": [
+        "AWS WAF",
+        "AWS Shield Standard",
+        "Amazon Inspector",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS WAF는 SQL 인젝션·XSS 등 일반적인 웹 익스플로잇(계층 7)으로부터 웹 애플리케이션을 보호하는 웹 애플리케이션 방화벽입니다. AWS Shield는 네트워크·전송 계층의 DDoS 공격 보호에 초점을 둡니다.",
+      "wrongExplanations": {
+        "1": "AWS Shield는 DDoS 공격 보호용으로, SQL 인젝션·XSS 같은 L7 웹 익스플로잇 필터링이 주 기능이 아닙니다.",
+        "2": "Amazon Inspector는 취약점 스캔·관리 서비스로, 실시간 웹 요청 필터링 방화벽이 아닙니다.",
+        "3": "AWS Trusted Advisor는 모범 사례 점검 도구로, 웹 공격을 차단하는 방화벽이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS WAF? — 일반적인 웹 익스플로잇으로부터 보호",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q12",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 그룹 기본 동작",
+      "difficulty": "foundational",
+      "stem": "새로 만든 보안 그룹의 기본(default) 동작을 가장 정확히 설명한 것은?",
+      "options": [
+        "인바운드는 모두 거부, 아웃바운드는 모두 허용된 상태로 시작한다",
+        "인바운드·아웃바운드 모두 전부 허용으로 시작한다",
+        "인바운드·아웃바운드 모두 전부 거부로 시작한다",
+        "규칙을 추가할 수 없다"
+      ],
+      "correct": 0,
+      "explanation": "보안 그룹은 새로 만들면 인바운드 규칙이 없어 들어오는 트래픽은 모두 거부되고, 기본 아웃바운드 규칙이 있어 나가는 트래픽은 모두 허용됩니다. 보안 그룹은 허용(allow) 규칙만 지정하며 stateful로 동작합니다.",
+      "wrongExplanations": {
+        "1": "기본 보안 그룹은 인바운드를 허용하지 않습니다 — 필요한 인바운드는 규칙을 추가해야 합니다.",
+        "2": "기본 인바운드는 거부 상태입니다(규칙 없음).",
+        "3": "보안 그룹에는 허용 규칙을 자유롭게 추가할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "보안 그룹으로 트래픽 제어 — 기본 인바운드 거부·아웃바운드 허용",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

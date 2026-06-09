@@ -281,6 +281,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-1-q11",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "전용 호스트 (Dedicated Hosts)",
+      "difficulty": "foundational",
+      "stem": "규정·라이선스 요건상 EC2 인스턴스를 다른 고객과 공유하지 않는 전용 물리 서버에서 실행하고, 소켓·코어 단위의 기존 서버 바운드 라이선스를 사용하려 한다. 가장 적합한 구매 옵션은?",
+      "options": [
+        "Dedicated Hosts(전용 호스트)",
+        "Spot Instances",
+        "On-Demand Instances",
+        "Savings Plans"
+      ],
+      "correct": 0,
+      "explanation": "Dedicated Hosts는 고객 전용 물리 서버를 제공해, 소켓·코어·VM 단위로 묶인 기존 라이선스(BYOL)를 사용하거나 규정상 물리 격리가 필요한 워크로드에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Spot Instances는 여유 용량을 저렴하게 쓰지만 중단될 수 있고 전용 물리 서버·라이선스 요건을 위한 옵션이 아닙니다.",
+        "2": "On-Demand는 사용한 만큼 내는 표준 옵션으로, 전용 물리 서버·소켓 단위 라이선스 요건을 충족하는 옵션이 아닙니다.",
+        "3": "Savings Plans는 약정 기반 할인 모델로, 물리 격리·라이선스 바운드를 위한 구매 옵션이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Dedicated Hosts — 전용 물리 서버·BYOL",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-1-q12",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "비용의 3대 동인",
+      "difficulty": "foundational",
+      "stem": "AWS 요금이 결정되는 근본적인 세 가지 비용 동인을 가장 정확히 묶은 것은?",
+      "options": [
+        "컴퓨팅, 스토리지, 아웃바운드 데이터 전송",
+        "직원 수, 사무실 임대료, 전기 요금",
+        "리전 이름, 계정 수, 태그 개수",
+        "콘솔 로그인 횟수, 클릭 수, 세션 시간"
+      ],
+      "correct": 0,
+      "explanation": "AWS 요금의 근본 동인은 일반적으로 컴퓨팅(사용 시간·유형), 스토리지(저장량·클래스), 아웃바운드 데이터 전송(AWS 밖으로 나가는 전송)입니다. 인바운드 전송은 보통 무료입니다.",
+      "wrongExplanations": {
+        "1": "직원 수·임대료·전기 요금은 온프레미스 운영 비용 항목으로, AWS 요금 동인이 아닙니다.",
+        "2": "리전 이름·계정 수·태그 개수 자체가 요금을 결정하는 근본 동인은 아닙니다.",
+        "3": "콘솔 로그인·클릭·세션 시간은 과금 단위가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 요금 작동 방식 — 컴퓨팅·스토리지·아웃바운드 데이터 전송",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/key-principles.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

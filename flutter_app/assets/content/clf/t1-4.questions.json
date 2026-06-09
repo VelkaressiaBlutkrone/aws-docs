@@ -297,6 +297,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-4-q11",
+      "examGuideTaskId": "clf-t1-4",
+      "skill": "종량 과금 활용 (미사용 시 종료)",
+      "difficulty": "foundational",
+      "stem": "개발·테스트용 EC2 인스턴스가 업무 시간에만 쓰인다. 종량 과금(pay-as-you-go) 특성을 활용해 비용을 낮추는 가장 적절한 방법은?",
+      "options": [
+        "사용하지 않는 시간(야간·주말)에는 인스턴스를 중지한다",
+        "인스턴스를 항상 켜 둔다",
+        "가장 큰 인스턴스 유형으로 바꾼다",
+        "인스턴스를 여러 대로 늘린다"
+      ],
+      "correct": 0,
+      "explanation": "AWS는 사용한 만큼만 내는 종량 과금이므로, 쓰지 않는 시간에 인스턴스를 중지하면 그만큼 컴퓨팅 비용이 발생하지 않습니다. 개발·테스트처럼 업무 시간에만 쓰는 자원의 비용을 효과적으로 줄입니다.",
+      "wrongExplanations": {
+        "1": "항상 켜 두면 쓰지 않는 시간에도 비용이 계속 발생합니다.",
+        "2": "더 큰 인스턴스는 시간당 비용이 오히려 늘어, 비용 절감과 반대입니다.",
+        "3": "대수를 늘리면 비용이 늘어납니다. 절감과 반대입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 요금 작동 방식 — 사용한 만큼 지불(pay-as-you-go)",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/key-principles.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-4-q12",
+      "examGuideTaskId": "clf-t1-4",
+      "skill": "탄력성으로 과대 프로비저닝 제거",
+      "difficulty": "foundational",
+      "stem": "수요가 시간대별로 변하는 웹 애플리케이션에서, 과대(또는 과소) 프로비저닝 없이 수요에 맞춰 용량을 자동 조절해 비용을 최적화하려 한다. 가장 적절한 접근은?",
+      "options": [
+        "EC2 Auto Scaling으로 수요에 맞춰 인스턴스 수를 자동 조절한다",
+        "항상 피크 수요 기준의 고정 용량을 유지한다",
+        "수요와 무관하게 최소 용량만 고정한다",
+        "용량을 1년에 한 번만 수동으로 조정한다"
+      ],
+      "correct": 0,
+      "explanation": "탄력성(Elasticity)은 수요에 맞춰 용량을 자동으로 늘리고 줄이는 능력입니다. EC2 Auto Scaling을 쓰면 트래픽이 많을 때 인스턴스를 늘리고 적을 때 줄여, 피크 기준 고정 용량이 부르는 과대 프로비저닝 비용을 없앱니다.",
+      "wrongExplanations": {
+        "1": "피크 기준 고정 용량은 한가한 시간대에 과대 프로비저닝되어 비용이 낭비됩니다.",
+        "2": "최소 용량 고정은 수요가 늘 때 성능 부족(과소 프로비저닝)을 일으킵니다.",
+        "3": "수동 연 1회 조정으로는 시간대별 변동 수요를 따라가지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EC2 Auto Scaling? — 수요에 맞춘 용량 자동 조절",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

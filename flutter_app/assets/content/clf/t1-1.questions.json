@@ -281,6 +281,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-1-q11",
+      "examGuideTaskId": "clf-t1-1",
+      "skill": "글로벌 도달 (지연 감소)",
+      "difficulty": "foundational",
+      "stem": "전 세계에 사용자를 둔 서비스가 각 지역 사용자에게 더 빠른 응답을 주려 한다. 클라우드의 이점을 활용한 접근으로 가장 적절한 것은?",
+      "options": [
+        "사용자와 가까운 여러 AWS 리전에 배포해 지연을 줄인다",
+        "한 데이터센터에만 배포하고 회선 속도를 높인다",
+        "모든 사용자를 한 국가로 모은다",
+        "서버를 더 크게 한 대만 둔다"
+      ],
+      "correct": 0,
+      "explanation": "클라우드의 이점 중 하나는 '몇 분 만에 전 세계로 확장(go global in minutes)'입니다. 사용자와 가까운 여러 리전에 손쉽게 배포하면 네트워크 거리가 짧아져 각 지역 사용자의 지연이 줄고 경험이 좋아집니다.",
+      "wrongExplanations": {
+        "1": "한 데이터센터만으로는 먼 지역 사용자의 물리적 거리에서 오는 지연을 근본적으로 줄이기 어렵습니다.",
+        "2": "사용자의 물리적 위치는 통제 대상이 아닙니다. 인프라를 사용자 가까이 두는 것이 해법입니다.",
+        "3": "단일 대형 서버는 처리 용량을 늘릴 뿐, 지리적 지연을 줄이지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "여섯 가지 클라우드 컴퓨팅의 이점 — 몇 분 만에 전 세계로 확장",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-1-q12",
+      "examGuideTaskId": "clf-t1-1",
+      "skill": "민첩성 (실험 비용 절감)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 새 아이디어를 빠르게 시험하고, 안 되면 즉시 접고 싶어 한다. 클라우드가 이를 가능하게 하는 핵심 이점은?",
+      "options": [
+        "필요할 때 즉시 자원을 띄우고 끝나면 없애 실험 비용·위험을 낮춘다",
+        "새 아이디어마다 서버를 구매해야 한다",
+        "한 번 만든 자원은 폐기할 수 없다",
+        "실험에는 항상 장기 약정이 필요하다"
+      ],
+      "correct": 0,
+      "explanation": "클라우드는 속도와 민첩성을 높입니다. 자원을 클릭 몇 번으로 즉시 마련하고, 실험이 끝나면 없애 사용한 만큼만 비용을 냅니다. 그 결과 실패 비용과 위험이 낮아져 빠르게 시도·학습할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "클라우드는 선구매 없이 온디맨드로 자원을 쓰므로, 아이디어마다 서버를 살 필요가 없습니다.",
+        "2": "클라우드 자원은 필요 없으면 종료·삭제할 수 있습니다.",
+        "3": "온디맨드로 약정 없이 단기간만 쓸 수 있어 실험에 적합합니다."
+      },
+      "sources": [
+        {
+          "title": "여섯 가지 클라우드 컴퓨팅의 이점 — 속도와 민첩성 향상",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

@@ -317,6 +317,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-1-q11",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "of the cloud vs in the cloud",
+      "difficulty": "foundational",
+      "stem": "공동 책임 모델에서 AWS와 고객의 책임을 한 문장으로 가장 잘 구분한 것은?",
+      "options": [
+        "AWS는 '클라우드의 보안(security OF the cloud)', 고객은 '클라우드 안의 보안(security IN the cloud)'을 책임진다",
+        "AWS가 고객 데이터까지 모두 책임진다",
+        "고객이 물리 데이터센터 보안까지 책임진다",
+        "책임은 서비스와 무관하게 항상 고정이다"
+      ],
+      "correct": 0,
+      "explanation": "공동 책임 모델에서 AWS는 클라우드를 실행하는 인프라(하드웨어·소프트웨어·네트워킹·시설)의 보안, 즉 '클라우드의 보안'을 책임집니다. 고객은 그 위에 올린 데이터·구성·접근 관리 등 '클라우드 안의 보안'을 책임집니다.",
+      "wrongExplanations": {
+        "1": "고객 데이터의 분류·접근·암호화 선택은 고객 책임입니다.",
+        "2": "데이터센터의 물리 보안은 AWS 책임입니다.",
+        "3": "책임 경계는 서비스 유형(예: EC2 vs RDS vs Lambda)에 따라 이동합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 — 클라우드의 보안 vs 클라우드 안의 보안",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-1-q12",
+      "examGuideTaskId": "clf-t2-1",
+      "skill": "EC2 게스트 OS 패치 책임",
+      "difficulty": "foundational",
+      "stem": "고객이 Amazon EC2 인스턴스를 운영한다. 공동 책임 모델에서 인스턴스의 게스트 운영체제 패치는 누구의 책임인가?",
+      "options": [
+        "고객 — 게스트 OS·애플리케이션 패치는 고객 책임",
+        "AWS — 게스트 OS까지 AWS가 패치",
+        "책임자가 없다 — 패치가 불필요하다",
+        "리전에 따라 책임이 바뀐다"
+      ],
+      "correct": 0,
+      "explanation": "EC2(IaaS) 환경에서 AWS는 호스트 인프라와 하이퍼바이저를 책임지고, 고객은 게스트 운영체제(패치 포함)와 그 위 애플리케이션, 보안 그룹 구성 등을 책임집니다.",
+      "wrongExplanations": {
+        "1": "AWS는 기반 인프라·하이퍼바이저를 책임지며, EC2의 게스트 OS 패치는 고객 몫입니다.",
+        "2": "OS 패치는 보안상 필수이며 책임 주체는 고객입니다.",
+        "3": "EC2 게스트 OS 패치 책임은 리전과 무관하게 고객입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS 공동 책임 모델 — 고객의 게스트 OS·애플리케이션 책임",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        }
+      ],
+      "verified": true
     }
   ]
 }

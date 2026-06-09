@@ -277,6 +277,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-3-q11",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "마이그레이션 전략 (7R — Refactor)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 모놀리식 온프레미스 애플리케이션을 클라우드 네이티브(서버리스·관리형) 아키텍처로 다시 설계해 옮기려 한다. 7R 중 이 전략은?",
+      "options": [
+        "Refactor/Re-architect(재설계)",
+        "Rehost(리프트 앤 시프트)",
+        "Retain(그대로 유지)",
+        "Retire(폐기)"
+      ],
+      "correct": 0,
+      "explanation": "Refactor(또는 Re-architect)는 애플리케이션을 클라우드 네이티브 방식으로 다시 설계해 옮기는 전략입니다. 변경 없이 옮기는 Rehost보다 노력이 크지만, 확장성·민첩성 같은 클라우드 이점을 더 크게 얻습니다.",
+      "wrongExplanations": {
+        "1": "Rehost는 변경 없이 그대로 옮기는 리프트 앤 시프트로, 재설계(클라우드 네이티브 전환)와 다릅니다.",
+        "2": "Retain은 일부 시스템을 옮기지 않고 온프레미스에 유지하는 전략입니다.",
+        "3": "Retire는 더 이상 필요 없는 애플리케이션을 폐기하는 전략입니다."
+      },
+      "sources": [
+        {
+          "title": "7 Rs — 마이그레이션 전략(Rehost·Replatform·Refactor 등)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-7-rs.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-3-q12",
+      "examGuideTaskId": "clf-t1-3",
+      "skill": "온라인 데이터 전송 (AWS DataSync)",
+      "difficulty": "foundational",
+      "stem": "온프레미스 NFS 파일 서버의 데이터를 네트워크를 통해 온라인으로, 자동화·스케줄링해 Amazon S3·EFS로 옮기려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS DataSync",
+        "AWS Snowball",
+        "AWS Direct Connect",
+        "Amazon S3 Glacier"
+      ],
+      "correct": 0,
+      "explanation": "AWS DataSync는 온프레미스 스토리지와 AWS 스토리지 서비스 간 데이터 전송을 자동화·가속하는 온라인 전송 서비스로, 네트워크를 통해 예약·반복 전송을 처리합니다.",
+      "wrongExplanations": {
+        "1": "AWS Snowball은 물리 디바이스를 배송받아 오프라인으로 옮기는 방식으로, 네트워크 기반 온라인 전송이 아닙니다.",
+        "2": "AWS Direct Connect는 전용 네트워크 연결을 제공하는 서비스로, 데이터 전송을 자동화·스케줄링하는 도구 자체는 아닙니다.",
+        "3": "Amazon S3 Glacier는 저비용 아카이브 스토리지 클래스로, 데이터 전송 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS DataSync? — 온라인 데이터 전송 자동화",
+          "url": "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

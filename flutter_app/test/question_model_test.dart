@@ -10,7 +10,12 @@ void main() {
   test('QuestionBank를 파싱하고 검증 문항만 남긴다', () {
     final bank = QuestionBank.fromJson(map);
     expect(bank.examGuideTaskId, 'clf-t2-1');
-    expect(bank.questions.length, 10);
+    // fromJson은 verified 문항만 남긴다 — 콘텐츠가 늘어도 깨지지 않게 raw의 verified 수와 대조.
+    final rawVerified = (map['questions'] as List)
+        .where((q) => (q as Map)['verified'] == true)
+        .length;
+    expect(bank.questions.length, rawVerified);
+    expect(rawVerified, greaterThanOrEqualTo(12)); // 밀도 목표(Task당 ≥12 verified)
     for (final q in bank.questions) {
       expect(q.verified, isTrue);
       expect(q.correct, inInclusiveRange(0, q.options.length - 1));

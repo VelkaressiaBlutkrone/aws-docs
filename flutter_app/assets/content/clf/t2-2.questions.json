@@ -281,6 +281,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-2-q11",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "모니터링·관측성 (CloudWatch)",
+      "difficulty": "foundational",
+      "stem": "운영 중인 AWS 리소스의 지표(metrics)·로그를 수집하고 임계값 기반 알람을 설정해 상태를 모니터링하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon CloudWatch",
+        "AWS Artifact",
+        "Amazon Macie",
+        "AWS Shield"
+      ],
+      "correct": 0,
+      "explanation": "Amazon CloudWatch는 AWS 리소스와 애플리케이션의 지표·로그·이벤트를 수집·시각화하고, 임계값 기반 알람으로 상태를 모니터링하는 관측성 서비스입니다.",
+      "wrongExplanations": {
+        "1": "AWS Artifact는 컴플라이언스 문서를 온디맨드로 제공하는 서비스로, 모니터링 도구가 아닙니다.",
+        "2": "Amazon Macie는 S3의 민감 데이터를 탐지·보호하는 서비스로, 일반 리소스 모니터링 도구가 아닙니다.",
+        "3": "AWS Shield는 DDoS 보호 서비스로, 지표·로그 모니터링 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon CloudWatch? — 지표·로그·알람 모니터링",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q12",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "CloudTrail vs Config 구분",
+      "difficulty": "foundational",
+      "stem": "'누가 언제 어떤 API 호출을 했는지'(계정 활동 감사)를 기록하려 한다. 리소스의 구성 변경 이력을 평가하는 Config가 아니라, 이 목적에 맞는 서비스는?",
+      "options": [
+        "AWS CloudTrail",
+        "AWS Config",
+        "Amazon CloudWatch",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS CloudTrail은 계정의 API 호출·활동을 기록해 '누가 무엇을 했는가'를 감사합니다. 반면 AWS Config는 리소스의 '구성 상태와 변경 이력'을 기록·평가합니다. 활동 감사 목적에는 CloudTrail이 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Config는 리소스 구성 상태·이력 평가에 초점을 두며, API 활동 감사 자체가 주 목적이 아닙니다.",
+        "2": "Amazon CloudWatch는 지표·로그·알람 모니터링 서비스로, API 호출 감사 기록이 주 목적은 아닙니다.",
+        "3": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, 활동 감사 기록 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS CloudTrail? — 계정 API 활동 기록·감사",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
