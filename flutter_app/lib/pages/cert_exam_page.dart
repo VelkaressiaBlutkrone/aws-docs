@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
+import '../content/prescription_hub.dart';
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
@@ -215,6 +216,23 @@ class _CertExamPageState extends State<CertExamPage> {
             _history.add(rec);
             _store.clear(_examId);
           },
+          resultsActionsBuilder: (ctx, justFinished) {
+            // history는 onFinished의 add 직후라 현재 응시를 포함한다(잠금해제 stale 방지).
+            final history = _history.all();
+            final code = widget.cert.code;
+            final unlocked = weightedExamUnlocked(code, history);
+            return PrescriptionHub(
+              allCorrect:
+                  justFinished != null && justFinished.wrongQuestionIds.isEmpty,
+              onReview: () => ctx.push('/cert/$code/review'),
+              onReport: () => ctx.push('/cert/$code/report'),
+              onWeightedExam:
+                  unlocked ? () => ctx.push('/cert/$code/exam/weak') : null,
+              weightedAttemptCount: nonReviewAttemptCount(code, history),
+            );
+          },
+          onOpenStudy: (taskId) =>
+              context.push('/cert/${widget.cert.code}/study/$taskId'),
           onExit: () => context.pop(),
         ),
       ),
