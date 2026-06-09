@@ -1,0 +1,236 @@
+---
+examGuideTaskId: soa-t4-3
+certCode: SOA-C03
+domain: 4
+domainName: 보안 및 규정 준수
+domainWeightPct: 16
+title: 데이터·인프라 보호 — KMS·암호화·Secrets Manager·ACM
+coversTasks:
+  - "4.2"
+sources:
+  - title: AWS Key Management Service — 개요 (공식)
+    url: https://docs.aws.amazon.com/kms/latest/developerguide/overview.html
+  - title: KMS 키 교체 (Rotation) (공식)
+    url: https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html
+  - title: Amazon S3 서버 측 암호화 (SSE-S3·SSE-KMS·SSE-C) (공식)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html
+  - title: AWS Secrets Manager — 소개 (공식)
+    url: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
+  - title: AWS Certificate Manager — 개요 (공식)
+    url: https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html
+  - title: S3 퍼블릭 액세스 차단 (Block Public Access) (공식)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+lastVerified: 2026-06-09
+---
+
+# 데이터·인프라 보호 — KMS·암호화·Secrets Manager·ACM
+
+> **커버하는 공식 Task** — SOA-C03 · 도메인 4 「보안 및 규정 준수」(16%) · **Task 4.2 데이터 및 인프라를 보호하기 위한 전략 구현** (`soa-t4-3`)
+> 이 문서는 **저장·전송 데이터 암호화, 키·시크릿·인증서 운영**에 집중합니다. IAM·계정 보안은 `soa-t4-1`, 거버넌스 도구는 `soa-t4-2`에서 다룹니다.
+
+---
+
+## ✅ 학습 목표 체크리스트
+
+이 문서를 끝내면 다음을 스스로 설명하고, 콘솔/CLI에서 직접 운영할 수 있어야 합니다.
+
+- [ ] **KMS 키 유형** — AWS 관리형 vs 고객 관리형(CMK), 대칭/비대칭, 키 정책을 구분한다
+- [ ] **키 교체** — 고객 관리형 키의 자동 교체와 AWS 관리형 키 교체 주기를 안다
+- [ ] **봉투 암호화** — 데이터 키와 KMS 키의 관계를 순서대로 설명할 수 있다
+- [ ] **저장 데이터 암호화** — EBS·S3(SSE-S3/SSE-KMS/SSE-C)·RDS 적용 방식을 안다
+- [ ] **전송 중 암호화** — TLS와 ACM 인증서를 연결할 수 있다
+- [ ] **Secrets Manager vs Parameter Store** — 자동 교체 유무로 선택할 수 있다
+- [ ] **ACM 리전 제약** — CloudFront 인증서는 us-east-1에서 발급함을 안다
+- [ ] **S3 접근 보호** — 버킷 정책·퍼블릭 액세스 차단·VPC 엔드포인트 정책을 운영할 수 있다
+
+---
+
+## 🎯 왜 중요한가
+
+- Task 4.2는 "데이터·인프라를 **어떻게 보호하느냐**"를 운영 관점에서 묻습니다. 키 관리, 암호화 적용, 시크릿 교체는 운영자의 일상 업무입니다.
+- 시험은 **세부 옵션**을 헷갈리게 냅니다. SSE-S3 vs SSE-KMS vs SSE-C, Secrets Manager(자동 교체) vs Parameter Store(교체 없음), CloudFront 인증서의 us-east-1 제약 등이 단골입니다.
+- SOA는 일회성 설정이 아니라 **지속 운영**을 강조합니다. 키를 정기 교체하고, 시크릿을 자동 교체하며, 운영 중인 리소스의 암호화 전환 절차(예: RDS는 스냅샷 경유)를 정확히 수행하도록 요구합니다.
+
+---
+
+## 📖 핵심 개념
+
+### 1) AWS KMS — 키 유형과 키 정책
+
+> 공식 정의: **"데이터를 암호화·복호화·서명하는 키를 생성·제어하는 관리형 서비스."** KMS 키 자료(key material)는 평문 상태로 KMS를 절대 벗어나지 않습니다.
+
+| 키 유형 | 관리 주체 | 키 정책 제어 | 자동 교체 | 비용 |
+|---|---|---|---|---|
+| **AWS 관리형 키** (`aws/서비스`) | AWS | 불가 | **연 1회 자동(고정)** | 무료(키 자체) |
+| **고객 관리형 키 (CMK)** | 고객 | 가능(세밀 제어) | **선택적 활성화**(기본 연 1회) | 유료 |
+| **AWS 소유 키** | AWS | 없음 | AWS 관리 | 무료 |
+
+**대칭 vs 비대칭:**
+
+| 종류 | 용도 |
+|---|---|
+| **대칭(Symmetric)** | 단일 키로 암·복호화. KMS 기본값. S3·EBS 등 대부분의 저장 데이터 암호화 |
+| **비대칭(Asymmetric)** | 공개/개인 키 쌍. 암호화 또는 **서명/검증**. KMS 밖 대상과의 암호화·디지털 서명에 사용 |
+
+> **키 정책(Key Policy)**: CMK에 직접 붙는 **리소스 기반 정책**입니다. IAM 정책만으로는 CMK에 접근할 수 없고, **키 정책이 반드시 허용**해야 합니다(키 정책 + IAM 정책의 교집합).
+
+### 2) 키 교체 (Key Rotation)
+
+| 키 | 교체 |
+|---|---|
+| **AWS 관리형 키** | **연 1회 자동**, 끄거나 주기 변경 **불가** |
+| **고객 관리형 키 — 자동 교체** | **활성화 시 매년 자동** 교체(주기 사용자 지정 가능). 키 ID·ARN·정책 그대로, 키 자료만 새로 |
+| **고객 관리형 키 — 수동 교체** | 새 키를 만들고 **별칭(alias)**을 옮겨 전환(이전 키 자료로 암호화된 데이터는 이전 키로 복호화) |
+
+> **자동 교체의 핵심**: 키 자료만 바뀔 뿐 **키 ID/ARN/별칭/정책은 그대로**라 애플리케이션 변경이 없습니다. 과거 데이터는 과거 키 자료로 자동 복호화되어 재암호화가 필요 없습니다. 가져온 키 자료(imported key material)는 자동 교체를 지원하지 않습니다.
+
+### 3) 봉투 암호화 (Envelope Encryption)
+
+KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호화는 호출당 최대 4KB). 대신 **데이터 키**를 발급받아 데이터를 암호화하고, 그 데이터 키를 KMS 키로 암호화합니다.
+
+```
+1. GenerateDataKey 호출 → KMS가 (평문 데이터 키 + 암호화된 데이터 키) 반환
+2. 평문 데이터 키로 실제 데이터(S3 객체·EBS 볼륨 등) 암호화
+3. 평문 데이터 키는 메모리에서 즉시 폐기
+4. 암호화된 데이터 키만 데이터와 함께 저장
+5. 복호화 시: 암호화된 데이터 키를 KMS Decrypt로 보내 평문 복원 → 데이터 복호화
+```
+
+> S3 SSE-KMS, EBS 암호화 등은 내부적으로 이 봉투 암호화를 사용합니다. **버킷 키(S3 Bucket Key)**를 켜면 객체마다 KMS를 호출하는 대신 버킷 수준 데이터 키를 재사용해 **KMS 호출·비용을 줄입니다.**
+
+### 4) 저장 데이터 암호화 — EBS·S3·RDS
+
+**S3 서버 측 암호화(SSE) 3종 (★ 단골 출제):**
+
+| 방식 | 키 관리 주체 | 키 정책 제어 | 특징 |
+|---|---|---|---|
+| **SSE-S3** | AWS(S3 관리, AES-256) | 불가 | 가장 간단. 기본 적용 |
+| **SSE-KMS** | KMS의 CMK/AWS 관리형 키 | 가능 | 키 정책·CloudTrail 감사·접근 제어 세밀. 버킷 키로 비용 절감 |
+| **SSE-C** | **고객이 키 제공** | 고객 전담 | AWS가 키 저장 안 함. 요청마다 키 헤더 제공, **키 분실 시 복구 불가** |
+
+| 리소스 | 암호화 운영 |
+|---|---|
+| **EBS** | 볼륨 생성 시 KMS 키 지정. 스냅샷·그로부터 만든 볼륨도 암호화 유지. 계정 기본 암호화 설정 가능 |
+| **S3** | 기본적으로 모든 새 객체가 SSE로 암호화(기본 SSE-S3). 버킷 기본 암호화로 SSE-KMS 지정 가능 |
+| **RDS** | 인스턴스 생성 시 암호화 활성화. **생성 후 직접 전환 불가** → 스냅샷 생성 → 암호화 복사 → 복원 |
+
+### 5) 전송 중 암호화 — TLS
+
+- 클라이언트↔서버 구간은 **TLS/HTTPS**로 보호합니다. ELB·CloudFront·API Gateway 등에 **ACM 인증서**를 연결해 TLS 종료를 처리합니다.
+- S3·RDS 등도 `aws:SecureTransport` 조건이나 강제 SSL 설정으로 평문(HTTP) 접근을 거부할 수 있습니다.
+
+### 6) Secrets Manager vs Parameter Store (★ 자동 교체가 갈림길)
+
+| 항목 | **Secrets Manager** | **SSM Parameter Store** |
+|---|---|---|
+| **자동 교체(Rotation)** | **내장 지원**(Lambda 기반, RDS/Aurora/Redshift 등 통합) | **없음**(직접 구현해야) |
+| **암호화** | KMS로 암호화 | SecureString은 KMS로 암호화 |
+| **비용** | 시크릿당 + API 호출 과금 | 표준 파라미터 **무료**(고급은 유료) |
+| **주 용도** | DB 자격증명·API 키 등 **교체가 필요한 시크릿** | 설정값·구성·시크릿(교체 불요), 환경 변수 |
+
+> **선택 규칙**: "자동 교체가 필요하다"·"RDS 자격증명을 주기적으로 바꾼다" → **Secrets Manager**. "단순 구성값/교체 불요"이고 비용을 아끼려면 → **Parameter Store(SecureString)**. Parameter Store는 Secrets Manager 시크릿을 참조할 수도 있습니다.
+
+### 7) ACM — 인증서 발급·자동 갱신·리전 제약
+
+> 공식 정의: **"공인·사설 SSL/TLS 인증서를 생성·저장·갱신하는 서비스."**
+
+- **공인 인증서**: ACM이 발급하는 공인 TLS 인증서는 **무료**이며, ACM이 직접 발급한 경우 **만료 전 자동 갱신**(DNS/이메일 검증 유효 시).
+- **사설 인증서**: **ACM Private CA(AWS Private CA)**로 내부용 사설 인증서 발급.
+- **가져온 인증서**: 외부 CA 인증서를 가져올 수 있으나 **자동 갱신은 미지원**.
+
+| 서비스 | 인증서 리전 |
+|---|---|
+| **Amazon CloudFront** | **반드시 us-east-1(버지니아 북부)** |
+| ALB·NLB·API Gateway | 해당 리소스와 **같은 리전** |
+
+> CloudFront는 글로벌 엣지 서비스지만 인증서는 **us-east-1에서만** 연결됩니다. 다른 리전에서 발급하면 CloudFront 배포 목록에 나타나지 않습니다.
+
+### 8) S3 접근 보호 — 버킷 정책·퍼블릭 차단·VPC 엔드포인트
+
+| 제어 | 역할 |
+|---|---|
+| **버킷 정책(Resource policy)** | 버킷·객체 수준 접근 허용/거부. `aws:SecureTransport`로 HTTPS 강제, 특정 VPC/계정만 허용 등 |
+| **퍼블릭 액세스 차단(Block Public Access)** | **계정·버킷 수준**에서 퍼블릭 ACL·정책을 일괄 무력화. 실수로 인한 공개를 방지하는 **마스터 스위치** |
+| **VPC 엔드포인트 정책** | S3 게이트웨이 엔드포인트에서 어떤 버킷·작업만 통과시킬지 제한 → 데이터를 VPC 내부 경로로만 접근 |
+
+> **운영 권장**: 계정 수준 **퍼블릭 액세스 차단을 켜두고**, 필요한 접근만 버킷 정책으로 명시합니다. Config 규칙(`s3-bucket-public-read-prohibited` 등)으로 퍼블릭 버킷을 지속 탐지·교정하면 좋습니다(`soa-t4-2` 참조).
+
+---
+
+## ✍️ 시험 포인트
+
+- **AWS 관리형 키 = 연 1회 자동 교체(끄기 불가).** **고객 관리형 키 = 자동 교체 선택 활성화**(키 ID/ARN/정책 유지, 키 자료만 교체).
+- **봉투 암호화**: KMS는 데이터 키를 발급, 평문 데이터 키로 데이터 암호화 후 즉시 폐기, 암호화된 데이터 키만 저장.
+- **SSE-S3**(AWS 관리·간단) / **SSE-KMS**(키 정책·감사·버킷 키로 비용 절감) / **SSE-C**(고객 키 제공·AWS가 저장 안 함·분실 시 복구 불가).
+- **RDS 암호화는 생성 후 직접 전환 불가** → 스냅샷 → 암호화 복사 → 복원.
+- **Secrets Manager = 자동 교체 내장**(RDS 통합), **Parameter Store = 자동 교체 없음**(SecureString은 무료).
+- **ACM 공인 인증서 무료 + 자동 갱신**. **CloudFront 인증서는 us-east-1**, ALB/API GW는 같은 리전.
+- **S3 보호**: 버킷 정책 + **퍼블릭 액세스 차단(마스터 스위치)** + VPC 엔드포인트 정책. `aws:SecureTransport`로 HTTPS 강제.
+- **CMK 접근 = 키 정책 + IAM 정책 둘 다 Allow**여야 한다.
+
+---
+
+## ⚠️ 흔한 함정
+
+1. **"AWS 관리형 키도 자동 교체를 끌 수 있다."** → 불가능합니다. AWS 관리형 키는 **연 1회 자동 교체가 고정**입니다. 교체 주기를 제어하려면 **고객 관리형 키(CMK)**를 쓰고 자동 교체를 활성화합니다.
+
+2. **"키를 교체하면 과거 데이터를 다시 암호화해야 한다."** → 아닙니다. 자동 교체는 **키 자료만** 바꾸고 키 ID/ARN/정책은 유지합니다. 과거 데이터는 과거 키 자료로 자동 복호화되어 재암호화가 필요 없습니다.
+
+3. **"SSE-C는 AWS가 키를 안전하게 보관해준다."** → 정반대입니다. **SSE-C는 고객이 키를 제공·관리**하며 AWS는 저장하지 않습니다. 키를 잃으면 데이터 복구가 불가능합니다.
+
+4. **"운영 중인 RDS 인스턴스를 콘솔에서 바로 암호화로 전환한다."** → 불가능. **스냅샷 생성 → 암호화 복사 → 복원** 절차를 거쳐야 합니다.
+
+5. **"Parameter Store도 시크릿을 자동 교체한다."** → 아닙니다. **자동 교체는 Secrets Manager의 기능**입니다. Parameter Store에는 내장 교체가 없어 직접 구현해야 합니다.
+
+6. **"CloudFront 인증서를 서비스 리전(예: 서울)에서 발급하면 된다."** → CloudFront 인증서는 반드시 **us-east-1**에서 발급해야 연결됩니다.
+
+7. **"CMK는 IAM 정책만 Allow하면 쓸 수 있다."** → CMK는 **키 정책**이 별도로 필요합니다. 키 정책에 해당 주체가 허용되지 않으면 IAM 정책이 Allow여도 접근 불가입니다.
+
+8. **"퍼블릭 액세스 차단을 켜도 버킷 정책으로 공개할 수 있다."** → 퍼블릭 액세스 차단은 **마스터 스위치**라 퍼블릭을 부여하는 ACL·버킷 정책을 무력화합니다. 차단이 켜져 있으면 공개되지 않습니다.
+
+---
+
+## 🧪 자가 점검
+
+> 아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)
+
+**Q1.** 규정상 데이터 암호화 키를 매년 교체해야 하고, 교체 후에도 애플리케이션 변경이나 과거 데이터 재암호화가 없어야 합니다. 어떤 키와 설정을 쓰나요?
+
+<details><summary>정답 보기</summary>
+
+**고객 관리형 키(CMK)**를 만들고 **자동 키 교체**를 활성화합니다. 자동 교체는 키 자료만 매년 새로 만들고 **키 ID·ARN·별칭·정책은 그대로** 유지하므로 애플리케이션 변경이 필요 없습니다. 과거 데이터는 과거 키 자료로 자동 복호화되어 재암호화도 불필요합니다. AWS 관리형 키도 연 1회 교체되지만 키 정책을 제어할 수 없어, 규정 통제가 필요하면 CMK가 적합합니다.
+</details>
+
+**Q2.** RDS DB 자격증명을 30일마다 자동으로 교체하고 애플리케이션이 항상 최신 비밀번호를 받도록 하려 합니다. 어떤 서비스를 쓰나요?
+
+<details><summary>정답 보기</summary>
+
+**AWS Secrets Manager**입니다. Secrets Manager는 Lambda 기반의 **자동 교체**를 내장하고 있으며 RDS·Aurora·Redshift 등과 통합되어 비밀번호를 주기적으로 교체하고 시크릿을 갱신합니다. 애플리케이션은 Secrets Manager에서 최신 값을 조회하면 됩니다. Parameter Store는 자동 교체 기능이 없어 적합하지 않습니다.
+</details>
+
+**Q3.** S3에 저장하는 객체를 KMS 키로 암호화하되, 누가 언제 복호화했는지 CloudTrail로 감사하고 객체별 KMS 호출 비용을 줄이고 싶습니다. 어떤 암호화 방식과 옵션을 쓰나요?
+
+<details><summary>정답 보기</summary>
+
+**SSE-KMS**를 사용합니다. KMS 키 사용은 CloudTrail에 기록되어 누가 언제 `Decrypt`했는지 감사할 수 있고, 키 정책으로 접근을 세밀하게 제어할 수 있습니다. 객체마다 KMS를 호출하는 비용을 줄이려면 **S3 버킷 키(Bucket Key)**를 활성화해 버킷 수준 데이터 키를 재사용합니다. SSE-S3는 감사·키 정책 제어가 약하고, SSE-C는 고객이 키를 직접 관리해야 합니다.
+</details>
+
+**Q4.** CloudFront 배포에 회사 도메인의 HTTPS 인증서를 연결하려는데, 서울 리전에서 발급한 ACM 인증서가 CloudFront 콘솔 목록에 보이지 않습니다. 원인과 해결책은?
+
+<details><summary>정답 보기</summary>
+
+CloudFront에 연결하는 ACM 인증서는 **반드시 us-east-1(버지니아 북부)에서 발급**해야 합니다. 서울 리전 인증서는 CloudFront에 연결할 수 없어 목록에 나타나지 않습니다. us-east-1에서 동일 도메인 인증서를 새로 요청·검증한 뒤 CloudFront 배포에 연결하면 됩니다. ALB·API Gateway는 반대로 리소스와 같은 리전의 인증서를 씁니다.
+</details>
+
+---
+
+### 📌 출처 (verified)
+
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+
+1. AWS Key Management Service — 개요 — https://docs.aws.amazon.com/kms/latest/developerguide/overview.html
+2. KMS 키 교체(Rotation) — https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html
+3. Amazon S3 서버 측 암호화(SSE-S3·SSE-KMS·SSE-C) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html
+4. AWS Secrets Manager — 소개 — https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
+5. AWS Certificate Manager — 개요 — https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html
+6. S3 퍼블릭 액세스 차단 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
