@@ -226,8 +226,8 @@
       },
       "sources": [
         {
-          "title": "AWS Pricing Calculator — TCO 추정 및 온프레미스 대비 비용 비교 지원(직접·간접 비용 포함)",
-          "url": "https://calculator.aws/"
+          "title": "AWS Pricing Calculator 사용 설명서(공식 문서) — TCO 추정·온프레미스 대비 비용 비교(직접·간접 비용 포함)",
+          "url": "https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html"
         },
         {
           "title": "What is cloud computing? (AWS) — 온프레미스의 숨은 비용(전력·냉각·공간·인력)을 포함한 비용 비교",
