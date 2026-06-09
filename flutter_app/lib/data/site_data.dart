@@ -203,8 +203,9 @@ const List<RecommendedPath> recommendedPaths = [
 const List<OfficialSource> officialSources = [
   OfficialSource(title: 'AWS Certification', href: 'https://aws.amazon.com/certification/'),
   OfficialSource(
-      title: 'AWS Certified CloudOps Engineer - Associate',
-      href: 'https://aws.amazon.com/certification/certified-cloudops-engineer-associate/'),
+      title: '공식 시험 가이드 (한국어)',
+      href:
+          'https://docs.aws.amazon.com/ko_kr/aws-certification/latest/examguides/aws-certification-exam-guides.html'),
   OfficialSource(
       title: 'AWS Certification 시험 안내서 PDF',
       href:
