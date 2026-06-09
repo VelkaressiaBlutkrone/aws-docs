@@ -108,7 +108,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 3,
       mdAsset: 'assets/content/clf/t3-1.md',
       questionsAsset: 'assets/content/clf/t3-1.questions.json',
-      questionCount: 10,
+      questionCount: 12,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
