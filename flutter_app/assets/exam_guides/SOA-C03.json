@@ -131,7 +131,7 @@
             "AWS 도구를 사용하여 액세스 문제 해결 및 감사(AWS CloudTrail, IAM Access Analyzer, IAM 정책 시뮬레이터)",
             "다중 계정 전략을 안전하게 구현",
             "AWS Trusted Advisor 보안 검사 결과를 기반으로 문제 해결 구현",
-            "규정 준수 요구 사항 적용(AWS 리전 선택, AWS 서비스 선택)"
+            "규정 준수 요구 사항 적용(예: AWS 리전 및 서비스 선택)"
           ]
         },
         {
