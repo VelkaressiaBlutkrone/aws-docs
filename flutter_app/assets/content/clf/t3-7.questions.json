@@ -273,6 +273,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-7-q11",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "AI/ML 서비스 (Translate — 번역)",
+      "difficulty": "foundational",
+      "stem": "한 애플리케이션이 사용자가 입력한 텍스트를 여러 언어로 실시간 자동 번역하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon Translate",
+        "Amazon Polly",
+        "Amazon Rekognition",
+        "Amazon Athena"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Translate는 신경망 기반 기계 번역 서비스로, 텍스트를 여러 언어로 빠르고 자동으로 번역합니다.",
+      "wrongExplanations": {
+        "1": "Amazon Polly는 텍스트를 음성으로 합성하는 서비스로, 언어 번역 서비스가 아닙니다.",
+        "2": "Amazon Rekognition은 이미지·영상 분석 서비스로, 텍스트 번역과 무관합니다.",
+        "3": "Amazon Athena는 S3 데이터를 SQL로 쿼리하는 분석 서비스로, 번역 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Translate? — 신경망 기계 번역",
+          "url": "https://docs.aws.amazon.com/translate/latest/dg/what-is.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-7-q12",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "AI/ML 서비스 (Transcribe — 음성→텍스트)",
+      "difficulty": "foundational",
+      "stem": "녹음된 고객 통화 오디오를 자동으로 텍스트로 변환(음성 인식)해 검색·분석에 쓰려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon Transcribe",
+        "Amazon Polly",
+        "Amazon Lex",
+        "Amazon QuickSight"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Transcribe는 음성을 텍스트로 변환하는 자동 음성 인식(ASR) 서비스로, 오디오·통화 녹취를 텍스트로 만들어 검색·분석에 활용하게 합니다(텍스트를 음성으로 만드는 Polly의 반대 방향).",
+      "wrongExplanations": {
+        "1": "Amazon Polly는 텍스트를 음성으로 합성하는 서비스로, 음성을 텍스트로 변환하는 요구와 방향이 반대입니다.",
+        "2": "Amazon Lex는 대화형 챗봇을 만드는 서비스로, 음성→텍스트 변환 전용 서비스가 아닙니다.",
+        "3": "Amazon QuickSight는 BI 시각화 서비스로, 음성 인식과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Transcribe? — 음성을 텍스트로 변환하는 ASR",
+          "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

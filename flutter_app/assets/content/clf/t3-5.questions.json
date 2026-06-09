@@ -273,6 +273,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-5-q11",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "VPC 서브넷 (퍼블릭 vs 프라이빗)",
+      "difficulty": "foundational",
+      "stem": "한 VPC에서 데이터베이스 서버를 인터넷에서 직접 접근할 수 없도록 격리하려 한다. 인터넷 게이트웨이로 향하는 경로가 없는 서브넷에 두려고 할 때, 이 서브넷을 가장 잘 설명하는 것은?",
+      "options": [
+        "프라이빗 서브넷(Private subnet)",
+        "퍼블릭 서브넷(Public subnet)",
+        "엣지 로케이션(Edge location)",
+        "가용 영역(Availability Zone)"
+      ],
+      "correct": 0,
+      "explanation": "퍼블릭 서브넷은 라우팅 테이블에 인터넷 게이트웨이로 향하는 경로가 있어 인터넷과 직접 통신할 수 있고, 프라이빗 서브넷은 그 경로가 없어 인터넷에서 직접 접근되지 않습니다. DB처럼 외부 노출을 막아야 하는 리소스는 프라이빗 서브넷에 둡니다.",
+      "wrongExplanations": {
+        "1": "퍼블릭 서브넷은 인터넷 게이트웨이 경로가 있어 직접 접근이 가능하므로, 격리하려는 요구와 반대입니다.",
+        "2": "엣지 로케이션은 CDN 콘텐츠 캐시 위치로, VPC 서브넷의 종류가 아닙니다.",
+        "3": "가용 영역은 데이터센터 묶음(격리 위치)으로, 서브넷의 공개/비공개 구분과 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon VPC? — 퍼블릭/프라이빗 서브넷과 라우팅",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-5-q12",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "VPC 연결 (VPC 피어링)",
+      "difficulty": "foundational",
+      "stem": "서로 다른 두 VPC의 리소스가 공용 인터넷을 거치지 않고 사설 IP로 직접 통신하게 연결하려 한다. 가장 적합한 것은?",
+      "options": [
+        "VPC 피어링(VPC Peering)",
+        "인터넷 게이트웨이(Internet Gateway)",
+        "Amazon Route 53",
+        "Amazon CloudFront"
+      ],
+      "correct": 0,
+      "explanation": "VPC 피어링은 두 VPC를 사설 네트워크로 연결해, 같은 네트워크에 있는 것처럼 사설 IP로 직접 통신하게 합니다. 트래픽이 공용 인터넷을 거치지 않습니다.",
+      "wrongExplanations": {
+        "1": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소로, 두 VPC 간 사설 연결을 제공하지 않습니다.",
+        "2": "Amazon Route 53은 DNS 서비스로, VPC 간 네트워크 연결 수단이 아닙니다.",
+        "3": "Amazon CloudFront는 콘텐츠 전송 CDN으로, VPC 간 사설 연결이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is VPC peering? — 두 VPC를 사설 IP로 직접 라우팅",
+          "url": "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

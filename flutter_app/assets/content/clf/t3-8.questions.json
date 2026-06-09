@@ -273,6 +273,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-8-q11",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "고객 참여 (Amazon Connect — 컨택 센터)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 전화·채팅 기반 고객 지원을 위한 클라우드 컨택 센터를 빠르게 구축하려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon Connect",
+        "Amazon SQS",
+        "Amazon WorkSpaces",
+        "AWS IoT Core"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Connect는 클라우드 기반 컨택 센터 서비스로, 전화·채팅 등 고객 응대 채널을 손쉽게 구성·운영하게 합니다.",
+      "wrongExplanations": {
+        "1": "Amazon SQS는 메시지 큐 서비스로, 고객 응대 컨택 센터가 아닙니다.",
+        "2": "Amazon WorkSpaces는 가상 데스크톱(DaaS)으로, 컨택 센터 서비스가 아닙니다.",
+        "3": "AWS IoT Core는 IoT 기기 연결 서비스로, 컨택 센터와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Connect? — 클라우드 컨택 센터",
+          "url": "https://docs.aws.amazon.com/connect/latest/adminguide/what-is-amazon-connect.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-8-q12",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "메시지 큐 유형 (SQS 표준 vs FIFO)",
+      "difficulty": "foundational",
+      "stem": "주문 처리 시스템에서 메시지가 보낸 순서대로 정확히 한 번만 처리되어야 한다. Amazon SQS에서 이 요구에 가장 적합한 큐 유형은?",
+      "options": [
+        "FIFO 큐(순서 보장·정확히 한 번 처리)",
+        "표준 큐(최선 순서·최소 한 번 처리)",
+        "SNS 주제(topic)",
+        "DynamoDB 테이블"
+      ],
+      "correct": 0,
+      "explanation": "SQS FIFO 큐는 메시지의 순서를 보장하고 정확히 한 번(exactly-once) 처리를 제공해, 순서와 중복 제거가 중요한 워크로드(예: 주문 처리)에 적합합니다. 표준 큐는 높은 처리량을 제공하지만 순서는 최선 노력이고 메시지가 두 번 이상 전달될 수 있습니다.",
+      "wrongExplanations": {
+        "1": "표준 큐는 높은 처리량을 제공하지만 순서를 보장하지 않고 메시지가 중복 전달될 수 있어, 순서·정확히 한 번 요구에는 부적합합니다.",
+        "2": "SNS 주제는 발행/구독 알림으로, SQS의 큐 유형이 아닙니다.",
+        "3": "DynamoDB 테이블은 데이터베이스로, 메시지 큐 유형이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SQS — FIFO 큐는 순서 보장·정확히 한 번 처리",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

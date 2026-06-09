@@ -273,6 +273,64 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-2-q11",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "리전 선택 기준 (지연·근접)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 주 사용자층이 모두 한국에 있는 웹 서비스를 배포한다. 규정·서비스 가용성 제약은 없을 때, 응답 지연을 줄이기 위한 리전 선택 기준으로 가장 적절한 것은?",
+      "options": [
+        "사용자와 지리적으로 가장 가까운 리전을 선택한다",
+        "가장 먼저 출시된 리전을 선택한다",
+        "이름이 알파벳순으로 앞선 리전을 선택한다",
+        "가장 많은 가용 영역을 가진 리전을 선택한다"
+      ],
+      "correct": 0,
+      "explanation": "리전을 고르는 주요 기준의 하나는 지연 시간(latency)입니다. 사용자와 지리적으로 가까운 리전을 선택하면 네트워크 왕복 거리가 짧아져 응답이 빨라집니다. 한국 사용자라면 근접 리전(예: 서울)이 적합합니다.",
+      "wrongExplanations": {
+        "1": "리전의 출시 시점은 지연과 무관합니다. 사용자와의 거리가 응답 속도를 좌우합니다.",
+        "2": "리전 이름의 알파벳 순서는 선택 기준이 아닙니다.",
+        "3": "가용 영역 수가 많아도 사용자와 멀면 네트워크 지연은 줄지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "리전 및 가용 영역 — 지연에 민감한 워크로드는 사용자에 가까운 리전 선택",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+        },
+        {
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 리전 선택 기준",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-2-q12",
+      "examGuideTaskId": "clf-t3-2",
+      "skill": "리전 선택 기준 (비용)",
+      "difficulty": "foundational",
+      "stem": "규정·지연 제약이 없는 배치 작업을 운영할 리전을 고른다. 동일 서비스라도 리전마다 요금이 다를 때, 비용 관점의 선택 기준으로 가장 적절한 것은?",
+      "options": [
+        "요금이 더 낮은 리전을 선택한다",
+        "항상 가장 비싼 리전을 선택한다",
+        "요금은 모든 리전이 동일하므로 고려할 필요가 없다",
+        "가장 최근에 추가된 리전을 선택한다"
+      ],
+      "correct": 0,
+      "explanation": "AWS 요금은 리전마다 다를 수 있어, 규정·지연 같은 다른 제약이 없다면 비용이 더 낮은 리전을 선택해 같은 워크로드를 더 저렴하게 운영할 수 있습니다. 리전 선택 기준에는 규정 준수, 지연, 서비스 가용성과 함께 가격이 포함됩니다.",
+      "wrongExplanations": {
+        "1": "비싼 리전을 일부러 고를 이유는 없습니다. 다른 제약이 없으면 저렴한 리전이 유리합니다.",
+        "2": "요금은 리전마다 다를 수 있으므로 비용 최적화 시 고려 대상입니다.",
+        "3": "최근 추가 여부는 비용과 직접 관련이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 리전 선택 기준(가격 포함)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
