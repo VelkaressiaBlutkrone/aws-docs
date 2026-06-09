@@ -411,7 +411,7 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: Gap.lg),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 620),
+            constraints: const BoxConstraints(maxWidth: 760),
             child: Text(
               '입문부터 전문 분야까지 자격증 단계, 추천 순서, 상세 학습 문서, 모의고사를 한국어로 한 곳에서. '
               '덤프 암기가 아니라 "왜"를 가르치는 이해 중심 학습 사이트입니다.',
