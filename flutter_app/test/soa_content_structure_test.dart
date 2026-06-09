@@ -50,4 +50,18 @@ void main() {
           reason: '$name 출처 섹션에 https:// URL 필요(게이트 규율)');
     });
   }
+
+  test('인수: 인덱스 20 엔트리의 mdAsset 파일이 모두 존재', () {
+    // content_index의 SOA 도메인 분배(D1:5 D2:4 D3:4 D4:3 D5:4)와 1:1.
+    const counts = {1: 5, 2: 4, 3: 4, 4: 3, 5: 4};
+    final expected = <String>[
+      for (final d in [1, 2, 3, 4, 5])
+        for (var i = 1; i <= counts[d]!; i++)
+          'assets/content/soa/soa-t$d-$i.md',
+    ];
+    for (final path in expected) {
+      expect(File(path).existsSync(), isTrue, reason: '$path 누락');
+    }
+    expect(expected.length, 20);
+  });
 }
