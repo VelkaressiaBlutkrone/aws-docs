@@ -1,0 +1,250 @@
+---
+examGuideTaskId: soa-t1-5
+certCode: SOA-C03
+domain: 1
+domainName: 모니터링, 로깅, 분석, 문제 해결 및 성능 최적화
+domainWeightPct: 22
+title: 컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)
+coversTasks:
+  - "1.3"
+sources:
+  - title: EC2 인스턴스 유형 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
+  - title: 버스트 가능 성능 인스턴스 (T 계열·CPU 크레딧) (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
+  - title: Amazon EBS 볼륨 유형 (gp3/gp2/io1/io2/st1/sc1) (공식)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
+  - title: Amazon RDS 읽기 전용 복제본 (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
+  - title: Amazon ElastiCache 캐싱 전략 (공식)
+    url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
+lastVerified: 2026-06-09
+---
+
+# 컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)
+
+> **커버하는 공식 Task** — SOA-C03 · 도메인 1 「모니터링, 로깅, 분석, 문제 해결 및 성능 최적화」(22%) · **Task 1.3 컴퓨팅, 스토리지 및 데이터베이스 리소스에 대한 성능 최적화 전략 구현** (`soa-t1-5`)
+> 이 문서는 병목 지표를 보고 어느 자원을 어떻게 조정하는지에 집중합니다. 지표·경보 기초는 `soa-t1-1`을 참조하세요.
+
+---
+
+## ✅ 학습 목표 체크리스트
+
+이 문서를 끝내면 다음을 스스로 설명하고, 콘솔/CLI에서 직접 구성할 수 있어야 합니다.
+
+- [ ] **EC2 최적화** — 인스턴스 패밀리·크기 조정, T 계열 CPU 크레딧/버스트 동작을 설명할 수 있다
+- [ ] **네트워크 성능** — 향상된 네트워킹·배치 그룹의 용도를 구분한다
+- [ ] **EBS 볼륨 타입** — gp3/gp2/io1/io2/st1/sc1의 특성과 선택 기준을 안다
+- [ ] **EBS 핵심 수치** — gp3 베이스라인(3000 IOPS/125 MB/s), gp2의 3 IOPS/GB·버스트를 안다
+- [ ] **RDS 읽기 확장** — 읽기 전용 복제본·파라미터 그룹·Performance Insights의 용도를 안다
+- [ ] **ElastiCache** — Redis vs Memcached, lazy loading vs write-through 전략을 구분한다
+- [ ] **병목 진단** — 지표를 보고 CPU/IOPS/처리량/메모리 중 무엇이 병목인지 식별할 수 있다
+
+---
+
+## 🎯 왜 중요한가
+
+- Task 1.3은 "성능이 나쁘다"를 넘어 **"어느 자원이 병목이고 어떻게 조정하는가"**를 요구합니다. CPU 부족, IOPS 한계, 메모리 압박, DB 읽기 과부하는 각각 다른 해법을 갖습니다.
+- 시험은 **구체적 수치**를 묻습니다 — gp3 베이스라인 3000 IOPS/125 MB/s, gp2의 3 IOPS/GB(버스트 3000), T 계열 CPU 크레딧 고갈 시 동작 등이 함정으로 반복됩니다. 잘못된 볼륨 타입·인스턴스 패밀리를 고르면 비용과 성능을 모두 잃습니다.
+- 운영자는 **지표를 보고 자원을 고릅니다.** CPU 크레딧 잔량, EBS 큐 길이·IOPS, RDS의 읽기/쓰기 부하, 캐시 적중률 같은 지표를 읽고 올바른 조정(스케일 업, 볼륨 타입 변경, 읽기 복제본, 캐시 도입)을 선택하는 것이 핵심입니다.
+
+---
+
+## 📖 핵심 개념
+
+### 1) EC2 — 인스턴스 패밀리·크기·T 계열 버스트
+
+> 공식: **"인스턴스 유형은 컴퓨팅·메모리·스토리지·네트워킹 용량의 서로 다른 조합을 제공하며, 워크로드에 맞는 자원 균형을 선택하게 한다."**
+
+**인스턴스 패밀리(워크로드 유형별):**
+
+| 패밀리 | 최적화 대상 | 예시 워크로드 |
+|---|---|---|
+| **범용(General Purpose, M·T)** | CPU·메모리·네트워크 균형 | 웹 서버, 소규모 DB, 일반 앱 |
+| **컴퓨팅 최적화(Compute, C)** | 높은 CPU 비중 | 배치 처리, 고성능 연산, 게임 서버 |
+| **메모리 최적화(Memory, R·X)** | 큰 메모리 | 인메모리 DB, 대용량 캐시, 분석 |
+| **스토리지 최적화(Storage, I·D)** | 높은 로컬 디스크 IOPS/처리량 | NoSQL, 데이터 웨어하우스 |
+| **가속 컴퓨팅(Accelerated, P·G)** | GPU/가속기 | ML 학습/추론, 그래픽 |
+
+> **크기 조정(Right-sizing)**: CPU 사용률이 만성적으로 낮으면 더 작은 크기로, 만성적으로 높으면 더 큰 크기나 다른 패밀리로 조정합니다. 잘못된 패밀리(예: 메모리 부족인데 컴퓨팅 최적화)를 고치는 것이 단순 크기 키우기보다 효과적일 때가 많습니다.
+
+**T 계열(버스트 가능 성능 인스턴스) — CPU 크레딧:**
+
+> 공식: **"버스트 가능 성능 인스턴스(T 계열)는 기준 수준의 CPU 성능을 제공하면서, 필요 시 기준 이상으로 버스트할 수 있는 능력을 CPU 크레딧으로 관리한다."**
+
+- **CPU 크레딧**: 기준선 미만으로 동작할 때 크레딧을 적립하고, 기준선 이상으로 버스트할 때 크레딧을 소비합니다.
+- **크레딧이 소진되면** 성능이 기준선(baseline)으로 제한됩니다(standard 모드). 만성적으로 높은 CPU가 필요하면 T 계열은 부적합합니다.
+- **Unlimited 모드**: 크레딧이 부족해도 버스트를 유지하되, 초과분에 **추가 요금**이 부과됩니다. 가끔 튀는 워크로드엔 유용하지만 지속 고부하면 M/C 계열이 더 경제적입니다.
+
+> 운영 신호: `CPUCreditBalance`(크레딧 잔량)와 `CPUCreditUsage`를 모니터링합니다. 크레딧 잔량이 0에 수렴하며 CPU가 기준선에 붙어 있으면 → 인스턴스 성능이 throttling되고 있다는 뜻 → 패밀리 변경(M/C) 또는 Unlimited 검토.
+
+**향상된 네트워킹·배치 그룹:**
+
+| 기능 | 효과 |
+|---|---|
+| **향상된 네트워킹(Enhanced Networking, ENA)** | SR-IOV 기반으로 **높은 PPS·낮은 지연·낮은 지터** 제공 |
+| **클러스터 배치 그룹(Cluster Placement Group)** | 같은 AZ에 인스턴스를 밀집 배치 → 낮은 지연·높은 처리량(HPC) |
+| **스프레드 배치 그룹(Spread)** | 인스턴스를 서로 다른 하드웨어에 분산 → 동시 장애 위험 감소 |
+| **파티션 배치 그룹(Partition)** | 파티션 단위로 분산(대규모 분산 시스템: HDFS·Kafka 등) |
+
+### 2) EBS — 볼륨 타입과 핵심 수치
+
+> 공식: **"Amazon EBS는 SSD 기반(gp3·gp2·io2·io1)과 HDD 기반(st1·sc1) 볼륨 유형을 제공하며, 각 유형은 IOPS·처리량·가격 특성이 다르다."**
+
+| 타입 | 미디어 | 특성 | 베이스라인/한도(핵심) | 용도 |
+|---|---|---|---|---|
+| **gp3** | SSD | 범용, IOPS·처리량을 용량과 **독립적으로** 조정 | **베이스라인 3,000 IOPS / 125 MB/s**(용량 무관), 추가 프로비저닝 가능 | 대부분의 범용 워크로드(기본 권장) |
+| **gp2** | SSD | 범용, 성능이 **용량에 비례** | **3 IOPS/GB**, 소용량은 **버스트 3,000 IOPS**, 최대 16,000 IOPS | 레거시 범용(gp3로 대체 권장) |
+| **io2 / io1** | SSD | 프로비저닝 IOPS(고성능·고내구성) | 매우 높은 IOPS, io2 Block Express는 더 높은 한도 | 지연 민감·고IOPS DB |
+| **st1** | HDD | 처리량 최적화 | 높은 **순차 처리량**, IOPS는 낮음 | 빅데이터·로그·스트리밍(순차 접근) |
+| **sc1** | HDD | 콜드(저비용) | 최저 비용, 낮은 처리량 | 거의 접근 안 하는 콜드 데이터 |
+
+**시험 빈출 수치(반드시 기억):**
+
+- **gp3 베이스라인 = 3,000 IOPS + 125 MB/s**, 용량과 **무관**하게 제공. IOPS와 처리량을 **용량과 독립적으로** 추가 프로비저닝할 수 있어, 작은 볼륨에도 높은 성능을 줄 수 있습니다(gp2 대비 비용·유연성 우위).
+- **gp2 = 1GB당 3 IOPS**(용량에 비례). 작은 볼륨은 **버스트 버킷**으로 일시적으로 **최대 3,000 IOPS**까지 끌어올릴 수 있고, 약 1,000 GB(≈3,334 GB에서 16,000 IOPS 상한) 이상부터 버스트 없이도 높은 IOPS를 갖습니다. 버스트 크레딧이 소진되면 베이스라인(3 IOPS/GB)으로 제한됩니다.
+- **io2/io1**은 용량과 별개로 **IOPS를 직접 프로비저닝**하며, 고지속 IOPS·높은 내구성이 필요한 DB에 씁니다.
+
+> 운영 신호: `VolumeQueueLength`(I/O 대기 큐)가 지속적으로 높고 `VolumeReadOps`/`VolumeWriteOps`가 한도에 붙어 있으면 IOPS 병목입니다. gp2에서 버스트 소진이 의심되면 **gp3로 전환해 베이스라인을 확보**하거나 IOPS/처리량을 추가 프로비저닝합니다.
+
+**EBS 최적화 인스턴스(EBS-optimized):**
+
+- EBS 트래픽 전용 대역폭을 제공해, 네트워크 트래픽과 EBS I/O가 경합하지 않게 합니다. 대부분의 최신 인스턴스 유형은 기본 활성화되어 있습니다.
+- 인스턴스의 EBS 대역폭 한도가 볼륨 성능보다 낮으면, 볼륨 IOPS를 아무리 높여도 인스턴스 한도에서 막힙니다 → 인스턴스 크기도 함께 고려해야 합니다.
+
+### 3) RDS — 읽기 확장·파라미터·Performance Insights
+
+**인스턴스 클래스·스토리지:**
+
+- RDS DB 인스턴스도 EC2처럼 **클래스(컴퓨팅/메모리)**를 선택하며, 스토리지는 **gp3/gp2(범용 SSD)·프로비저닝 IOPS(io1/io2)·마그네틱** 중 선택합니다. 고IOPS DB는 프로비저닝 IOPS 스토리지를 씁니다.
+
+**읽기 전용 복제본(Read Replica) — 읽기 확장:**
+
+> 공식: **"읽기 전용 복제본은 소스 DB 인스턴스의 읽기 트래픽을 분산하여 읽기 처리량을 확장한다."**
+
+- 읽기 부하가 병목이면 **읽기 전용 복제본**을 추가해 SELECT 트래픽을 분산합니다. 복제는 **비동기**라 약간의 복제 지연(replica lag)이 있을 수 있습니다.
+- **읽기 확장 ≠ 고가용성.** 읽기 복제본은 읽기 성능용입니다. **자동 장애 조치(HA)**는 **Multi-AZ 배포**의 역할입니다(동기 복제 대기본). 둘을 혼동하지 마세요.
+- 쓰기 부하가 병목이면 읽기 복제본은 도움이 안 됩니다 → 인스턴스 스케일 업, 스토리지 IOPS 증설, 또는 샤딩/Aurora 등을 검토합니다.
+
+**파라미터 그룹·Performance Insights:**
+
+| 도구 | 용도 |
+|---|---|
+| **DB 파라미터 그룹** | 엔진 설정(버퍼 풀 크기, 연결 수, 타임아웃 등)을 조정. 동적/정적 파라미터 구분(정적은 재부팅 필요) |
+| **Performance Insights** | DB 부하를 **대기 이벤트·SQL 단위로 시각화**해 어떤 쿼리/락이 부하를 유발하는지 진단 |
+
+> 운영 신호: `CPUUtilization`·`DatabaseConnections`·`ReadIOPS`/`WriteIOPS`·`ReadLatency`·`FreeableMemory`를 봅니다. 읽기 지연·읽기 IOPS가 높으면 읽기 복제본/캐시를, 연결 수 폭주면 연결 풀링(RDS Proxy)을, 특정 쿼리 부하면 Performance Insights로 범인 쿼리를 찾습니다.
+
+### 4) ElastiCache — 캐시로 DB 부하 완화
+
+> 공식: **"Amazon ElastiCache는 인메모리 캐시를 제공해, 자주 접근하는 데이터를 빠르게 반환하고 백엔드 데이터베이스 부하를 줄인다."**
+
+**Redis vs Memcached:**
+
+| 항목 | Redis (ElastiCache for Redis/Valkey) | Memcached |
+|---|---|---|
+| **데이터 구조** | 문자열·해시·리스트·정렬 집합 등 풍부 | 단순 키-값 |
+| **영속성/복제** | 스냅샷·복제·자동 장애 조치 지원(HA) | 없음(휘발성) |
+| **확장** | 클러스터 모드로 샤딩 + 복제 | 노드 추가로 수평 분할(멀티스레드) |
+| **용도** | 세션·리더보드·pub/sub·HA 캐시 등 풍부한 기능 | 단순·대용량 캐시, 멀티스레드 처리량 |
+
+> 풍부한 기능·고가용성·영속성이 필요하면 **Redis**, 단순하고 멀티스레드로 큰 처리량만 필요하면 **Memcached**를 고르는 것이 시험의 기본 갈림입니다.
+
+**캐싱 전략:**
+
+| 전략 | 동작 | 특성 |
+|---|---|---|
+| **Lazy Loading(지연 로딩/Cache-Aside)** | 캐시 미스 시에만 DB에서 읽어 캐시에 채움 | 실제로 요청된 데이터만 캐싱(효율적), 첫 요청은 느림, **stale 데이터** 가능 |
+| **Write-Through(쓰기 시 갱신)** | 쓰기 때 DB와 캐시를 함께 갱신 | 캐시가 항상 최신, 쓰기 지연 증가, 안 읽힐 데이터도 캐싱(낭비 가능) |
+
+> **TTL(만료 시간)**을 두 전략과 함께 사용해 stale 데이터를 제한합니다. 흔한 패턴은 **Lazy Loading + TTL**(읽기 위주, 약간의 stale 허용)이며, 쓰기 직후 즉시 정확한 읽기가 필요하면 Write-Through를 더합니다.
+
+> 운영 관점: DB의 `ReadIOPS`·읽기 지연이 높고 같은 데이터가 반복 조회되면 **캐시를 앞단에 두어 DB 부하를 완화**합니다. 캐시 적중률(hit rate)이 낮으면 TTL·캐시 키 설계·캐시 크기를 재검토합니다.
+
+### 5) 병목별 처방 요약
+
+| 병목 신호(지표) | 의미 | 처방 |
+|---|---|---|
+| CPU 만성 高 / `CPUCreditBalance`→0 | 컴퓨팅 부족·T 계열 크레딧 소진 | 크기 업·C 계열 전환·Unlimited 검토 |
+| `VolumeQueueLength` 高 / IOPS 한도 | 스토리지 IOPS 병목 | gp3 전환·IOPS 프로비저닝·io2 |
+| DB `ReadLatency`·`ReadIOPS` 高 | 읽기 과부하 | 읽기 복제본·ElastiCache 캐시 |
+| DB `DatabaseConnections` 폭주 | 연결 과다 | 연결 풀링(RDS Proxy) |
+| 메모리 부족(`FreeableMemory`↓) | 메모리 압박 | R 계열·인스턴스 클래스 업 |
+
+---
+
+## ✍️ 시험 포인트
+
+- **인스턴스 패밀리**: 범용(M/T)·컴퓨팅(C)·메모리(R/X)·스토리지(I/D)·가속(P/G). 병목에 맞는 패밀리 선택이 단순 크기 키우기보다 중요.
+- **T 계열 = CPU 크레딧**. 크레딧 소진 시 **baseline으로 제한**(standard) 또는 **Unlimited(추가 요금)**. 만성 고CPU엔 부적합. 신호: `CPUCreditBalance`.
+- **gp3 베이스라인 = 3,000 IOPS / 125 MB/s**(용량 무관), IOPS·처리량을 **독립 프로비저닝**. 보통 gp2보다 저렴·유연 → 기본 권장.
+- **gp2 = 3 IOPS/GB**, 소용량은 **버스트 3,000 IOPS**, 최대 16,000 IOPS. 버스트 크레딧 소진 시 baseline 제한.
+- **io2/io1 = 프로비저닝 IOPS**(고지속·고내구성 DB). **st1 = 순차 처리량 HDD**, **sc1 = 콜드 저비용 HDD**.
+- **EBS 최적화 인스턴스**: 인스턴스의 EBS 대역폭 한도가 볼륨 성능 상한이 될 수 있음 → 인스턴스 크기도 고려.
+- **RDS 읽기 복제본 = 읽기 확장(비동기)**, **Multi-AZ = 고가용성/장애 조치(동기)**. 혼동 금지.
+- **Performance Insights**로 부하 유발 쿼리/대기 이벤트 진단. **파라미터 그룹**으로 엔진 튜닝(정적 파라미터는 재부팅).
+- **Redis = 풍부한 기능·HA·영속성**, **Memcached = 단순·멀티스레드 처리량**.
+- **Lazy Loading(미스 시 적재, stale 가능)** vs **Write-Through(쓰기 시 갱신, 최신성↑·쓰기 지연↑)**, 보통 **TTL** 병행.
+
+---
+
+## ⚠️ 흔한 함정
+
+1. **"CPU가 부족하면 무조건 인스턴스를 키운다."** → 먼저 **패밀리**를 확인합니다. 메모리 부족인데 컴퓨팅 최적화(C)를 키우면 낭비입니다. 또 만성 고CPU인데 **T 계열**을 쓰고 있다면 크레딧 소진으로 throttling되는 것이니, M/C 계열 전환이 정답일 수 있습니다.
+
+2. **"gp2에서 용량을 늘리지 않고 IOPS만 올린다."** → gp2는 **IOPS가 용량에 비례(3 IOPS/GB)**합니다. IOPS를 용량과 독립적으로 올리려면 **gp3로 전환**(베이스라인 3,000 IOPS, 추가 프로비저닝 가능)하거나 io1/io2를 씁니다.
+
+3. **"작은 gp2 볼륨인데 항상 3,000 IOPS가 나온다."** → 그건 **버스트**입니다. 버스트 크레딧이 소진되면 baseline(용량×3 IOPS)으로 떨어집니다. 지속적으로 높은 IOPS가 필요하면 gp3/io2로 가야 합니다.
+
+4. **"읽기 복제본을 추가하면 고가용성도 확보된다."** → 읽기 복제본은 **읽기 성능 확장(비동기)**용입니다. 자동 장애 조치(HA)는 **Multi-AZ**의 역할입니다. 또 **쓰기 병목**에는 읽기 복제본이 도움이 되지 않습니다.
+
+5. **"볼륨 IOPS만 높이면 디스크 성능이 그만큼 나온다."** → 인스턴스의 **EBS 대역폭 한도**(또는 EBS 최적화 미지원/소형 인스턴스)가 상한이 될 수 있습니다. 볼륨과 인스턴스 양쪽 한도를 함께 봐야 합니다.
+
+6. **"캐시는 항상 최신 데이터를 준다."** → **Lazy Loading**은 캐시에 들어간 뒤 원본이 바뀌면 **stale 데이터**를 줄 수 있습니다. TTL로 만료시키거나, 쓰기 직후 정확성이 중요하면 **Write-Through**를 병행합니다. 반대로 Write-Through만 쓰면 안 읽힐 데이터까지 캐싱해 메모리를 낭비할 수 있습니다.
+
+---
+
+## 🧪 자가 점검
+
+> 아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)
+
+**Q1.** 작은 T 계열 웹 서버가 평소엔 한가하다가 트래픽이 몰리면 응답이 급격히 느려지고, 모니터링상 `CPUCreditBalance`가 0에 가깝습니다. 원인과 대응은?
+
+<details><summary>정답 보기</summary>
+
+**CPU 크레딧 소진**입니다. T 계열은 기준선 이상으로 버스트할 때 크레딧을 소비하는데, 크레딧이 바닥나면 성능이 baseline으로 제한(throttling)됩니다. 대응은 (1) 버스트가 가끔이면 **Unlimited 모드**(추가 요금)로 버스트를 보장하거나, (2) 만성적으로 높은 CPU가 필요하면 **M/C 계열**로 전환합니다. 크레딧 잔량 지표를 경보로 감시하는 것도 좋습니다.
+</details>
+
+**Q2.** 200 GB gp2 볼륨을 쓰는 DB가 평소엔 괜찮다가 부하가 길어지면 I/O 지연이 커지고 `VolumeQueueLength`가 높아집니다. 가장 적절한 조치는?
+
+<details><summary>정답 보기</summary>
+
+200 GB gp2의 baseline은 200×3 = **600 IOPS**이고, 부하 초기엔 버스트로 최대 3,000 IOPS까지 견디다가 **버스트 크레딧이 소진되면 600 IOPS로 제한**됩니다. 큐가 쌓이는 이유입니다. **gp3로 전환**하면 용량과 무관하게 **베이스라인 3,000 IOPS/125 MB/s**를 얻고 필요 시 IOPS·처리량을 추가 프로비저닝할 수 있습니다(보통 gp2보다 저렴). 더 높은 지속 IOPS가 필요하면 io2를 검토합니다.
+</details>
+
+**Q3.** 읽기 트래픽이 폭증해 RDS의 읽기 지연이 커졌습니다. 쓰기 부하는 낮습니다. 두 가지 보완책은?
+
+<details><summary>정답 보기</summary>
+
+(1) **읽기 전용 복제본(Read Replica)**을 추가해 SELECT 트래픽을 분산합니다(비동기 복제, 약간의 lag 허용). (2) 반복 조회되는 데이터는 **ElastiCache**(Lazy Loading + TTL 등)로 캐싱해 DB 읽기 자체를 줄입니다. 주의: 읽기 복제본은 **읽기 확장**용이지 고가용성(HA)을 위한 것이 아닙니다 — HA는 Multi-AZ입니다.
+</details>
+
+**Q4.** 캐시를 도입했는데 쓰기 직후 사용자가 가끔 옛 데이터를 봅니다. 어떤 캐싱 전략 문제이며 해결책은?
+
+<details><summary>정답 보기</summary>
+
+**Lazy Loading(Cache-Aside)**의 stale 데이터 문제입니다. 캐시에 값이 들어간 뒤 원본이 바뀌어도 캐시는 갱신되지 않아 옛 값을 줍니다. 해결책은 (1) 적절한 **TTL**로 캐시를 만료시키거나, (2) 쓰기 시 캐시도 함께 갱신하는 **Write-Through**(또는 쓰기 시 캐시 무효화)를 병행하는 것입니다. Write-Through는 최신성을 높이지만 쓰기 지연과 미사용 데이터 캐싱 비용을 감수합니다.
+</details>
+
+---
+
+### 📌 출처 (verified)
+
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+
+1. EC2 인스턴스 유형 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
+2. 버스트 가능 성능 인스턴스(T 계열·CPU 크레딧) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
+3. Amazon EBS 볼륨 유형(gp3/gp2/io1/io2/st1/sc1) — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
+4. Amazon RDS 읽기 전용 복제본 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
+5. Amazon ElastiCache 캐싱 전략 — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
+</content>
