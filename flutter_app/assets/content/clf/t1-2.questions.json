@@ -273,6 +273,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t1-2-q11",
+      "examGuideTaskId": "clf-t1-2",
+      "skill": "지속 가능성 기둥 (Sustainability)",
+      "difficulty": "foundational",
+      "stem": "한 회사가 워크로드의 에너지 소비와 환경 영향을 줄이는 설계를 하려 한다. Well-Architected Framework에서 이를 직접 다루는 기둥은?",
+      "options": [
+        "지속 가능성(Sustainability)",
+        "보안(Security)",
+        "비용 최적화(Cost Optimization)",
+        "안정성(Reliability)"
+      ],
+      "correct": 0,
+      "explanation": "지속 가능성(Sustainability) 기둥은 워크로드의 환경 영향, 특히 에너지 소비와 효율을 다루며, 자원을 더 효율적으로 사용해 영향을 줄이는 설계를 안내합니다. 6대 기둥 중 가장 나중에 추가됐습니다.",
+      "wrongExplanations": {
+        "1": "보안 기둥은 데이터·시스템·자산 보호를 다루며 환경 영향이 주제가 아닙니다.",
+        "2": "비용 최적화 기둥은 불필요한 비용을 줄이는 데 초점을 두며, 환경 영향 자체가 목적은 아닙니다.",
+        "3": "안정성 기둥은 워크로드가 의도대로 정확히, 일관되게 동작·복구하는 것을 다룹니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Well-Architected Framework — 지속 가능성 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/sustainability-pillar/sustainability-pillar.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t1-2-q12",
+      "examGuideTaskId": "clf-t1-2",
+      "skill": "Well-Architected Tool",
+      "difficulty": "foundational",
+      "stem": "한 팀이 운영 중인 워크로드를 Well-Architected 모범 사례에 비추어 무료로 검토하고 개선점을 식별하려 한다. 가장 적합한 것은?",
+      "options": [
+        "AWS Well-Architected Tool",
+        "AWS Trusted Advisor만으로 대체",
+        "AWS CloudFormation",
+        "Amazon Inspector"
+      ],
+      "correct": 0,
+      "explanation": "AWS Well-Architected Tool은 워크로드를 프레임워크의 기둥별 모범 사례에 비추어 검토하고 위험과 개선 기회를 식별하게 해 주는 무료 도구입니다.",
+      "wrongExplanations": {
+        "1": "Trusted Advisor는 모범 사례 점검·권고 도구지만, 기둥 기반의 구조적 워크로드 검토 도구는 Well-Architected Tool입니다.",
+        "2": "CloudFormation은 인프라를 코드로 프로비저닝하는 IaC 서비스로, 아키텍처 검토 도구가 아닙니다.",
+        "3": "Amazon Inspector는 취약점 관리 서비스로, Well-Architected 검토 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Well-Architected Tool 소개",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

@@ -273,6 +273,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-3-q11",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "Support 플랜별 응답 시간·채널",
+      "difficulty": "foundational",
+      "stem": "운영 시스템이 다운된 긴급 상황에서 24x7 전화·채팅·이메일 지원과 짧은 응답 시간 보장이 필요하다. 이를 충족하는 최소 Support 플랜은?",
+      "options": [
+        "Business Support+(또는 그 이상)",
+        "Basic Support",
+        "Developer Support",
+        "Support 플랜과 무관하다"
+      ],
+      "correct": 0,
+      "explanation": "현재 AWS Support 플랜 비교에서 Business Support+는 프로덕션 워크로드에 대한 최소 권장 플랜이며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 짧은 응답 시간 목표를 제공합니다. Basic은 기술 지원 케이스가 없고, Developer Support는 이 24x7 운영 장애 요건을 충족하지 못합니다.",
+      "wrongExplanations": {
+        "1": "Basic Support는 기술 지원 케이스를 제공하지 않아 긴급 운영 장애 지원에 부적합합니다.",
+        "2": "Developer Support는 업무 시간 이메일 지원으로, 24x7·짧은 응답 시간 요건을 충족하지 못합니다.",
+        "3": "응답 시간·지원 채널은 Support 플랜에 따라 달라집니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Support 플랜 — 플랜별 응답 시간·지원 채널",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-3-q12",
+      "examGuideTaskId": "clf-t4-3",
+      "skill": "AWS Health Dashboard",
+      "difficulty": "foundational",
+      "stem": "내 계정의 리소스에 영향을 주는 AWS 서비스 이벤트와 예정된 변경을 개인화된 형태로 확인하려 한다. 가장 적합한 것은?",
+      "options": [
+        "AWS Health Dashboard",
+        "AWS Trusted Advisor",
+        "AWS Cost Explorer",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "AWS Health Dashboard는 AWS 서비스 상태와, 내 계정·리소스에 영향을 주는 이벤트·예정 변경을 개인화해 보여 줍니다.",
+      "wrongExplanations": {
+        "1": "AWS Trusted Advisor는 비용·보안·성능 등 모범 사례 점검 권고 도구로, 서비스 상태 이벤트 대시보드가 아닙니다.",
+        "2": "AWS Cost Explorer는 비용 분석 도구로, 서비스 상태 이벤트를 보여 주지 않습니다.",
+        "3": "AWS Artifact는 컴플라이언스 문서 제공 서비스로, 서비스 상태 대시보드가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Health? — 계정에 영향을 주는 이벤트 개인화 대시보드",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

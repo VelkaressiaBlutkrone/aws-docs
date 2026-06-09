@@ -273,6 +273,60 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-2-q11",
+      "examGuideTaskId": "clf-t4-2",
+      "skill": "Budgets vs Cost Anomaly Detection",
+      "difficulty": "foundational",
+      "stem": "월 비용이 미리 정한 임계값을 넘으면 알림을 받고 싶다. 머신러닝으로 비정상 지출을 자동 탐지하는 Cost Anomaly Detection이 아니라, 임계값 기반 알림에 가장 적합한 것은?",
+      "options": [
+        "AWS Budgets",
+        "AWS Cost Anomaly Detection",
+        "AWS Pricing Calculator",
+        "AWS Organizations"
+      ],
+      "correct": 0,
+      "explanation": "AWS Budgets는 비용·사용량 임계값(예산)을 설정하고 초과(또는 예측 초과) 시 알림을 보냅니다. Cost Anomaly Detection은 머신러닝으로 평소와 다른 비정상 지출을 자동 탐지하는 다른 접근입니다.",
+      "wrongExplanations": {
+        "1": "Cost Anomaly Detection은 임계값 설정이 아니라 ML로 비정상 패턴을 탐지합니다 — 사용자가 정한 임계값 알림 요구와는 결이 다릅니다.",
+        "2": "AWS Pricing Calculator는 구축 전 비용을 추정하는 도구로, 실제 지출 임계값 알림 기능이 아닙니다.",
+        "3": "AWS Organizations는 다계정 관리·통합 결제 서비스로, 예산 임계값 알림 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Budgets — 예산 설정·임계값 알림",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t4-2-q12",
+      "examGuideTaskId": "clf-t4-2",
+      "skill": "Cost Explorer 예측(forecast)",
+      "difficulty": "foundational",
+      "stem": "지난 비용·사용량 추세를 바탕으로 향후 비용을 예측하고 시각적으로 분석하려 한다. 가장 적합한 도구는?",
+      "options": [
+        "AWS Cost Explorer",
+        "AWS Pricing Calculator",
+        "AWS Trusted Advisor",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "AWS Cost Explorer는 과거 비용·사용량을 시각화·분석하고, 추세를 바탕으로 향후 비용을 예측(forecast)하는 기능을 제공합니다.",
+      "wrongExplanations": {
+        "1": "AWS Pricing Calculator는 아직 만들지 않은 구성의 예상 비용을 추정하는 도구로, 실제 사용 추세 기반 예측·분석 도구가 아닙니다.",
+        "2": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, 비용 추세 예측 분석 도구가 아닙니다.",
+        "3": "AWS Artifact는 컴플라이언스 문서 제공 서비스로, 비용 분석 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Cost Explorer — 비용 분석·예측(forecast)",
+          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

@@ -289,6 +289,64 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-3-q11",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "IAM 정책 (권한 문서)",
+      "difficulty": "foundational",
+      "stem": "IAM에서 특정 사용자·역할이 어떤 작업을 어떤 리소스에 허용(Allow)/거부(Deny)할지 정의하는, JSON 형식의 권한 문서는?",
+      "options": [
+        "IAM 정책(Policy)",
+        "IAM 사용자(User)",
+        "IAM 그룹(Group)",
+        "액세스 키(Access Key)"
+      ],
+      "correct": 0,
+      "explanation": "IAM 정책은 권한을 정의하는 JSON 문서로, 어떤 작업(Action)을 어떤 리소스(Resource)에 대해 허용/거부할지 기술합니다. 사용자·그룹·역할에 연결되어 권한을 부여합니다.",
+      "wrongExplanations": {
+        "1": "IAM 사용자는 신원(자격증명)이며, 권한을 정의하는 문서 자체가 아닙니다.",
+        "2": "IAM 그룹은 사용자 묶음으로, 권한을 정의하는 문서가 아니라 정책을 연결하는 대상입니다.",
+        "3": "액세스 키는 프로그래밍 방식 인증용 자격증명으로, 권한 정의 문서가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 정책 — 권한을 정의하는 JSON 문서",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q12",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "IAM은 글로벌 서비스",
+      "difficulty": "foundational",
+      "stem": "한 관리자가 IAM 사용자·역할이 특정 리전에만 존재하는지 묻는다. AWS IAM의 범위를 가장 정확히 설명한 것은?",
+      "options": [
+        "IAM은 글로벌 서비스로, 사용자·역할이 모든 리전에서 동일하게 적용된다",
+        "IAM은 리전별로 따로 사용자·역할을 만들어야 한다",
+        "IAM은 한 가용 영역에만 존재한다",
+        "IAM은 온프레미스에서만 동작한다"
+      ],
+      "correct": 0,
+      "explanation": "IAM은 글로벌 서비스입니다. 생성한 사용자·그룹·역할·정책은 특정 리전에 묶이지 않고 계정 전체(모든 리전)에서 동일하게 적용됩니다.",
+      "wrongExplanations": {
+        "1": "IAM 엔터티는 리전별로 따로 만들 필요가 없습니다 — 계정 전역에서 동일합니다.",
+        "2": "IAM은 가용 영역 단위로 존재하지 않습니다.",
+        "3": "IAM은 AWS 클라우드의 신원·접근 관리 서비스로, 온프레미스 전용이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is IAM? — IAM 자격 증명은 글로벌하게 적용",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+        },
+        {
+          "title": "Global services — IAM은 리전별 리소스가 아닌 글로벌 서비스",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
