@@ -1,0 +1,217 @@
+---
+examGuideTaskId: soa-t1-3
+certCode: SOA-C03
+domain: 1
+domainName: 모니터링, 로깅, 분석, 문제 해결 및 성능 최적화
+domainWeightPct: 22
+title: CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)
+coversTasks:
+  - "1.1"
+sources:
+  - title: AWS CloudTrail이란 무엇인가 (공식)
+    url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
+  - title: CloudTrail 이벤트 (관리·데이터·인사이트 이벤트) (공식)
+    url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html
+  - title: CloudTrail 로그 파일 무결성 검증 (공식)
+    url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
+  - title: Amazon EventBridge란 무엇인가 (공식)
+    url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
+  - title: AWS X-Ray란 무엇인가 (공식)
+    url: https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
+lastVerified: 2026-06-09
+---
+
+# CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)
+
+> **커버하는 공식 Task** — SOA-C03 · 도메인 1 「모니터링, 로깅, 분석, 문제 해결 및 성능 최적화」(22%) · **Task 1.1 AWS 모니터링 및 로깅 서비스를 사용하여 지표, 경보 및 필터 구현** (`soa-t1-3`)
+> 이 문서는 API 감사(CloudTrail)·이벤트 기반 자동화(EventBridge)·분산 추적(X-Ray)에 집중합니다. 지표/경보는 `soa-t1-1`, 로그는 `soa-t1-2`에서 다룹니다.
+
+---
+
+## ✅ 학습 목표 체크리스트
+
+이 문서를 끝내면 다음을 스스로 설명하고, 콘솔/CLI에서 직접 구성할 수 있어야 합니다.
+
+- [ ] **CloudTrail 이벤트 유형** — 관리 이벤트 vs 데이터 이벤트의 차이와 기본 기록 여부를 안다
+- [ ] **추적(Trail) 범위** — 다중 리전 추적·조직 추적의 용도를 설명할 수 있다
+- [ ] **무결성 검증** — 로그 파일 무결성 검증(다이제스트)이 변조 탐지에 쓰임을 안다
+- [ ] **CloudTrail Lake/Insights** — 쿼리 기반 분석과 비정상 API 활동 탐지의 용도를 구분한다
+- [ ] **EventBridge** — 이벤트 버스·규칙·이벤트 패턴·대상의 관계를 설명할 수 있다
+- [ ] **스케줄 규칙** — cron/rate로 정기 작업을 트리거하는 방법을 안다
+- [ ] **X-Ray** — 세그먼트·서브세그먼트·서비스 맵·샘플링으로 분산 추적을 이해한다
+
+---
+
+## 🎯 왜 중요한가
+
+- 운영의 핵심 질문은 **"누가, 언제, 무엇을 바꿨나"**입니다. CloudTrail은 모든 AWS API 호출을 기록해 이 질문에 답합니다. 보안 사고·구성 변경 추적·규정 준수에서 시험이 반복적으로 묻습니다.
+- 현대 운영은 **이벤트 기반 자동 대응**으로 움직입니다. EventBridge는 "이런 일이 일어나면 자동으로 이렇게 대응하라"를 규칙으로 표현해, 장애·보안 이벤트에 사람이 개입하기 전에 자동 조치를 연결합니다.
+- 마이크로서비스·서버리스에서 "어느 구간이 느린가"는 단일 로그로 답하기 어렵습니다. **X-Ray**의 분산 추적·서비스 맵은 요청이 서비스들을 거치는 경로와 병목을 시각화해, 성능 문제 진단(도메인 1)을 직접 지원합니다.
+
+---
+
+## 📖 핵심 개념
+
+### 1) CloudTrail — 관리 이벤트 vs 데이터 이벤트
+
+> 공식 정의: **"AWS CloudTrail은 AWS 계정의 거버넌스·규정 준수·운영 및 위험 감사를 지원하며, 계정에서 발생한 작업을 이벤트로 기록한다."**
+
+| 구분 | 무엇을 기록 | 기본 기록 여부 |
+|---|---|---|
+| **관리 이벤트(Management event)** | 리소스에 대한 **제어 평면(control plane)** 작업 — `RunInstances`, `CreateBucket`, IAM 변경 등 | **기본 기록됨**(읽기/쓰기) |
+| **데이터 이벤트(Data event)** | 리소스에 대한 **데이터 평면(data plane)** 작업 — S3 `GetObject`/`PutObject`, Lambda `Invoke` 등 고볼륨 | **기본 기록 안 됨**(명시적 활성화 필요, 추가 비용) |
+| **Insights 이벤트(Insights event)** | 비정상적인 쓰기 API 호출량 변화 탐지 | **별도 활성화 필요** |
+
+**핵심 사실:**
+
+- **관리 이벤트는 기본으로 기록**되지만, **데이터 이벤트(S3 객체 수준·Lambda 호출 등)는 기본으로 기록되지 않습니다.** 객체 단위 접근 감사를 원하면 명시적으로 활성화해야 합니다(고볼륨이라 추가 비용).
+- **최근 90일 이벤트 기록(Event history)**은 추적을 만들지 않아도 콘솔에서 무료로 조회할 수 있습니다(관리 이벤트). 90일 초과 장기 보관·전체 기록은 **추적(Trail)을 만들어 S3로 전달**해야 합니다.
+
+> 운영 관점: "누가 이 보안 그룹을 열었나", "이 인스턴스를 누가 종료했나" 같은 감사는 관리 이벤트로 답합니다. "어떤 IAM 주체가 이 민감한 S3 객체를 다운로드했나"는 **데이터 이벤트를 켜야** 답할 수 있습니다.
+
+### 2) 추적(Trail) — 다중 리전·조직 추적
+
+- **추적(Trail)**: 이벤트를 지속적으로 **S3 버킷에 전달**하도록 구성한 설정. CloudWatch Logs로도 전달해 경보/지표화할 수 있습니다.
+- **다중 리전 추적(Multi-Region Trail)**: 한 번 구성으로 **모든 리전의 이벤트를 단일 S3 버킷에 통합** 수집합니다. 보안 모범 사례로 권장됩니다(신규 리전도 자동 포함).
+- **조직 추적(Organization Trail)**: AWS Organizations의 **모든 멤버 계정 이벤트를 관리 계정의 단일 위치로** 통합 수집. 멤버 계정은 이 추적을 끌 수 없어 중앙 감사가 보장됩니다.
+
+> 운영 절차: 보안 기준선은 보통 "**조직 단위 다중 리전 추적**으로 모든 계정·리전의 관리 이벤트를 중앙 S3에 모으고, CloudWatch Logs로도 보내 핵심 API에 경보를 건다"입니다.
+
+### 3) 로그 파일 무결성 검증 & 저장 보안
+
+> 공식: **"로그 파일 무결성 검증(Log file integrity validation)을 활성화하면 CloudTrail이 다이제스트 파일을 생성하여, 로그 파일이 전달 후 변경·삭제되었는지 판단할 수 있다."**
+
+- CloudTrail은 **SHA-256 해시와 RSA 서명**으로 다이제스트 파일을 만들어, 로그가 전달 이후 **변조·삭제되었는지** 암호학적으로 검증하게 합니다(`aws cloudtrail validate-logs`).
+- 규정 준수·포렌식에서 "이 감사 로그는 변조되지 않았다"를 증명할 때 핵심입니다.
+- 대상 S3 버킷에 **버킷 정책·MFA Delete·Object Lock·SSE 암호화**를 더해 로그 보관을 강화합니다.
+
+### 4) CloudTrail Lake & Insights
+
+| 기능 | 용도 |
+|---|---|
+| **CloudTrail Lake** | 이벤트를 **불변(immutable) 데이터 스토어**에 보관하고 **SQL로 쿼리**·분석. 장기 보관·감사 조회에 적합 |
+| **CloudTrail Insights** | 평소 대비 **비정상적인 API 호출량/오류율 급증**을 자동 탐지(예: 갑작스러운 대량 리소스 생성) |
+
+> Insights는 "정상 패턴 학습 → 이상 징후 탐지" 방식으로, 잘못된 자동화·자격 증명 탈취로 인한 이상 활동을 잡는 데 씁니다. Lake는 Athena를 따로 구성하지 않고도 CloudTrail 이벤트를 SQL로 직접 질의하게 해줍니다.
+
+### 5) EventBridge — 이벤트 버스·규칙·패턴·대상
+
+> 공식 정의: **"Amazon EventBridge는 이벤트를 사용하여 애플리케이션 구성 요소를 연결하는 서버리스 서비스로, 이벤트 소스의 실시간 데이터 스트림을 규칙에 따라 대상으로 라우팅한다."**
+
+| 구성요소 | 의미 |
+|---|---|
+| **이벤트 버스(Event bus)** | 이벤트가 도착하는 파이프. 기본 버스(AWS 서비스 이벤트) + 사용자 지정/파트너 버스 |
+| **규칙(Rule)** | 이벤트를 **이벤트 패턴**으로 매칭하거나 **스케줄**로 트리거 |
+| **이벤트 패턴(Event pattern)** | JSON으로 매칭 조건 지정(예: `source`, `detail-type`, `detail` 값) |
+| **대상(Target)** | 매칭 시 호출할 대상 — Lambda, SNS, SQS, Step Functions, ECS, Systems Manager 등 |
+
+**CloudWatch Events와의 관계(시험 포인트):** EventBridge는 **CloudWatch Events의 상위 호환·후속 서비스**입니다. 동일한 기본 이벤트 버스와 API를 공유하며, CloudWatch Events 기능을 모두 포함하고 사용자 지정/파트너 이벤트 버스, 스키마 레지스트리 등을 추가했습니다. 새 작업은 EventBridge로 합니다.
+
+**스케줄 규칙(Scheduled rule):**
+
+```
+# 매일 새벽 3시(UTC)에 Lambda 실행하는 cron 표현식
+cron(0 3 * * ? *)
+
+# 5분마다 실행하는 rate 표현식
+rate(5 minutes)
+```
+
+> 운영 절차 — 이벤트 기반 자동 대응: 예를 들어 **GuardDuty 위협 탐지 → EventBridge 규칙 매칭 → Lambda/SSM 자동화로 해당 인스턴스 격리**를 연결합니다. CloudWatch 경보 상태 변경, EC2 상태 변경, CloudTrail로 들어온 특정 API 호출 등도 EventBridge 이벤트로 받아 자동 조치를 트리거할 수 있습니다.
+
+### 6) X-Ray — 분산 추적
+
+> 공식 정의: **"AWS X-Ray는 애플리케이션이 처리하는 요청에 대한 데이터를 수집하여, 요청을 보고 분석하고 문제를 식별·최적화하게 해준다."**
+
+| 개념 | 의미 |
+|---|---|
+| **세그먼트(Segment)** | 한 서비스/리소스가 처리한 작업 단위(요청의 한 구간) 데이터 |
+| **서브세그먼트(Subsegment)** | 세그먼트 내부의 더 세밀한 작업(예: DB 호출, 외부 HTTP 호출) |
+| **트레이스(Trace)** | 하나의 요청이 여러 서비스를 거치며 만든 세그먼트들의 집합(end-to-end) |
+| **서비스 맵(Service map)** | 서비스 간 호출 관계와 지연·오류율을 시각화한 그래프 |
+| **샘플링(Sampling)** | 모든 요청이 아니라 일부만 추적해 비용·오버헤드 절감 |
+
+**핵심 사실:**
+
+- **서비스 맵**으로 "요청이 어떤 서비스들을 거치는가"와 **각 구간의 지연·오류율**을 한눈에 봅니다. 마이크로서비스 병목 진단의 출발점입니다.
+- **샘플링 규칙**으로 추적 대상 비율을 조절합니다(예: 초당 1건 + 나머지의 5%). 전수 추적은 비용·오버헤드가 크므로 샘플링이 기본입니다.
+- 데이터는 보통 **X-Ray 데몬/에이전트나 ADOT(OpenTelemetry)**를 통해 전송되며, 코드에 SDK를 계측(instrument)합니다.
+
+> 운영 관점: CloudWatch가 "지표로 느려졌다"를 알려주면, X-Ray 서비스 맵으로 **어느 다운스트림 호출(DB·외부 API)이 지연의 원인인지** 좁혀 근본 원인을 찾습니다.
+
+---
+
+## ✍️ 시험 포인트
+
+- **CloudTrail 관리 이벤트 = 기본 기록**, **데이터 이벤트(S3 객체·Lambda Invoke) = 기본 미기록**(명시 활성화·추가 비용).
+- **Event history(최근 90일)**는 추적 없이 무료 조회. 장기 보관·전체 수집은 **추적 → S3** 구성.
+- **다중 리전 추적**: 한 번 설정으로 전 리전 통합. **조직 추적**: 모든 멤버 계정 중앙 수집(멤버가 끌 수 없음).
+- **로그 파일 무결성 검증**: 다이제스트 + SHA-256/RSA 서명으로 **변조 탐지**. `validate-logs`.
+- **CloudTrail Lake = SQL 쿼리 기반 감사 분석**, **Insights = 비정상 API 활동 탐지**.
+- **EventBridge = 이벤트 버스 + 규칙(이벤트 패턴/스케줄) + 대상**. **CloudWatch Events의 후속/상위 호환**.
+- **스케줄 규칙**: `cron(...)` 또는 `rate(...)`로 정기 작업 트리거.
+- **이벤트 기반 자동 대응**: (GuardDuty/CloudTrail/경보 등) 이벤트 → EventBridge 규칙 → Lambda/SSM/Step Functions.
+- **X-Ray**: 트레이스 = 세그먼트들의 집합, **서브세그먼트**는 DB/외부 호출 같은 세부 구간, **서비스 맵**으로 병목 시각화, **샘플링**으로 비용 절감.
+
+---
+
+## ⚠️ 흔한 함정
+
+1. **"CloudTrail은 S3 객체 다운로드까지 기본으로 다 기록한다."** → S3 `GetObject` 같은 **데이터 이벤트는 기본 기록되지 않습니다.** 객체 수준 감사는 데이터 이벤트를 명시적으로 켜야 하며 고볼륨이라 추가 비용이 듭니다.
+
+2. **"CloudTrail은 실시간 모니터링/지표 서비스다."** → CloudTrail은 **API 활동 감사 로그**입니다. 지표·실시간 알림은 CloudWatch의 역할입니다. CloudTrail을 CloudWatch Logs로 보내야 특정 API에 경보를 걸 수 있습니다(전달에 약간의 지연 존재).
+
+3. **"리전마다 따로 추적을 만들어야 한다."** → **다중 리전 추적**을 한 번 설정하면 모든 리전 이벤트가 단일 S3 버킷에 모입니다. 리전별 개별 구성은 불필요하고 누락 위험이 큽니다.
+
+4. **"EventBridge와 CloudWatch Events는 전혀 다른 서비스다."** → EventBridge는 CloudWatch Events의 **후속·상위 호환** 서비스로 같은 기본 버스/API를 공유합니다. 새 구성은 EventBridge 이름으로 합니다.
+
+5. **"X-Ray를 켜면 모든 요청이 추적된다."** → 기본적으로 **샘플링**됩니다(일부만 추적). 비용·오버헤드 때문이며, 샘플링 규칙으로 비율을 조정합니다. 전수 추적을 가정하면 안 됩니다.
+
+6. **"로그 무결성 검증을 켜면 로그가 변조되지 않게 막아준다."** → 검증은 **변조를 방지(prevent)하는 것이 아니라 탐지(detect)**하는 기능입니다. 변조 방지는 S3 버킷 정책·Object Lock·MFA Delete 등으로 보강합니다.
+
+---
+
+## 🧪 자가 점검
+
+> 아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)
+
+**Q1.** 누군가 프로덕션 보안 그룹의 인바운드 규칙을 변경했습니다. "누가 언제 변경했는지"를 확인하려면 어떤 서비스를 보나요? 또 이 변경은 기본으로 기록되나요?
+
+<details><summary>정답 보기</summary>
+
+**CloudTrail**의 **관리 이벤트**를 봅니다. 보안 그룹 규칙 변경(`AuthorizeSecurityGroupIngress` 등)은 제어 평면 작업이므로 **기본으로 기록**되며, 최근 90일은 Event history에서 바로 조회할 수 있습니다. 변경한 IAM 주체·시간·소스 IP가 이벤트에 담깁니다. 장기 보관이 필요하면 추적을 S3로 구성합니다.
+</details>
+
+**Q2.** 어떤 민감한 S3 버킷에서 "누가 어떤 객체를 다운로드했는지"를 감사해야 합니다. CloudTrail 기본 설정으로 충분한가요?
+
+<details><summary>정답 보기</summary>
+
+충분하지 않습니다. S3 객체 수준 `GetObject`는 **데이터 이벤트**이며 **기본으로 기록되지 않습니다.** 해당 버킷에 대해 CloudTrail **데이터 이벤트를 명시적으로 활성화**해야 객체 단위 접근이 기록됩니다(고볼륨이라 추가 비용 고려). 관리 이벤트만으로는 객체 다운로드 행위를 감사할 수 없습니다.
+</details>
+
+**Q3.** GuardDuty가 EC2 인스턴스에서 위협을 탐지하면 자동으로 해당 인스턴스를 격리하고 운영팀에 알리고 싶습니다. 어떻게 연결하나요?
+
+<details><summary>정답 보기</summary>
+
+**EventBridge** 규칙을 만들어 GuardDuty Finding 이벤트를 **이벤트 패턴**으로 매칭하고, 대상으로 **Lambda나 Systems Manager 자동화 런북**(인스턴스를 격리 보안 그룹으로 이동)과 **SNS**(알림)를 연결합니다. 이벤트 → 규칙 매칭 → 자동 대응 + 알림으로 이어지는 이벤트 기반 자동화입니다.
+</details>
+
+**Q4.** 마이크로서비스 애플리케이션에서 특정 API의 응답이 느려졌습니다. 여러 서비스 중 어느 구간이 병목인지 찾으려면?
+
+<details><summary>정답 보기</summary>
+
+**AWS X-Ray**를 사용합니다. 서비스에 X-Ray를 계측한 뒤 **서비스 맵**에서 요청 경로와 각 구간의 지연·오류율을 확인하고, 느린 세그먼트의 **서브세그먼트**(예: 특정 DB 호출이나 외부 API 호출)를 들여다봐 근본 원인을 좁힙니다. 전수가 아니라 샘플링된 트레이스를 분석합니다.
+</details>
+
+---
+
+### 📌 출처 (verified)
+
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+
+1. AWS CloudTrail이란 무엇인가 — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
+2. CloudTrail 이벤트(관리·데이터·인사이트) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html
+3. CloudTrail 로그 파일 무결성 검증 — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
+4. Amazon EventBridge란 무엇인가 — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
+5. AWS X-Ray란 무엇인가 — https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
+</content>
