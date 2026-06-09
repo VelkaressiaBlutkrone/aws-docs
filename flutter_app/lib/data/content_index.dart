@@ -419,6 +419,28 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionCount: 0,
     ),
   ],
+  'SOA-C03': [
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-1', title: 'CloudWatch 지표·경보·대시보드', domain: 1, mdAsset: 'assets/content/soa/soa-t1-1.md', questionsAsset: 'assets/content/soa/soa-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-2', title: 'CloudWatch Logs·Logs Insights·구독 필터·에이전트', domain: 1, mdAsset: 'assets/content/soa/soa-t1-2.md', questionsAsset: 'assets/content/soa/soa-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-3', title: 'CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)', domain: 1, mdAsset: 'assets/content/soa/soa-t1-3.md', questionsAsset: 'assets/content/soa/soa-t1-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-4', title: '가용성 지표 기반 문제 식별·해결 (Health Dashboard)', domain: 1, mdAsset: 'assets/content/soa/soa-t1-4.md', questionsAsset: 'assets/content/soa/soa-t1-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-5', title: '컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)', domain: 1, mdAsset: 'assets/content/soa/soa-t1-5.md', questionsAsset: 'assets/content/soa/soa-t1-5.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t2-1', title: 'Auto Scaling·ELB로 확장성·탄력성 구현', domain: 2, mdAsset: 'assets/content/soa/soa-t2-1.md', questionsAsset: 'assets/content/soa/soa-t2-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t2-2', title: 'Multi-AZ·고가용성·복원력 설계', domain: 2, mdAsset: 'assets/content/soa/soa-t2-2.md', questionsAsset: 'assets/content/soa/soa-t2-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t2-3', title: '백업·복원 전략 (AWS Backup·스냅샷·수명주기)', domain: 2, mdAsset: 'assets/content/soa/soa-t2-3.md', questionsAsset: 'assets/content/soa/soa-t2-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t2-4', title: 'DR·데이터 복원력 (RTO/RPO·S3 복제)', domain: 2, mdAsset: 'assets/content/soa/soa-t2-4.md', questionsAsset: 'assets/content/soa/soa-t2-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t3-1', title: 'CloudFormation 프로비저닝 (템플릿·스택·StackSets·드리프트)', domain: 3, mdAsset: 'assets/content/soa/soa-t3-1.md', questionsAsset: 'assets/content/soa/soa-t3-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t3-2', title: 'AMI·리소스 배포·유지 관리·패치 전략', domain: 3, mdAsset: 'assets/content/soa/soa-t3-2.md', questionsAsset: 'assets/content/soa/soa-t3-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t3-3', title: 'Systems Manager 운영 자동화 (Run Command·Patch·State Manager·Parameter Store)', domain: 3, mdAsset: 'assets/content/soa/soa-t3-3.md', questionsAsset: 'assets/content/soa/soa-t3-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t3-4', title: '자동화 패턴 (EventBridge·Lambda·자동 복구)', domain: 3, mdAsset: 'assets/content/soa/soa-t3-4.md', questionsAsset: 'assets/content/soa/soa-t3-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t4-1', title: 'IAM·계정 보안 운영 (정책·역할·MFA·자격증명 보고서)', domain: 4, mdAsset: 'assets/content/soa/soa-t4-1.md', questionsAsset: 'assets/content/soa/soa-t4-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t4-2', title: '규정 준수·거버넌스 (Config·Security Hub·GuardDuty·Inspector)', domain: 4, mdAsset: 'assets/content/soa/soa-t4-2.md', questionsAsset: 'assets/content/soa/soa-t4-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t4-3', title: '데이터·인프라 보호 (KMS·암호화·Secrets Manager·ACM)', domain: 4, mdAsset: 'assets/content/soa/soa-t4-3.md', questionsAsset: 'assets/content/soa/soa-t4-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-1', title: 'VPC 네트워킹 구현 (서브넷·라우팅·SG·NACL·NAT)', domain: 5, mdAsset: 'assets/content/soa/soa-t5-1.md', questionsAsset: 'assets/content/soa/soa-t5-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-2', title: '하이브리드·연결 (피어링·TGW·VPN·Direct Connect·엔드포인트)', domain: 5, mdAsset: 'assets/content/soa/soa-t5-2.md', questionsAsset: 'assets/content/soa/soa-t5-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-3', title: 'Route 53 DNS·CloudFront 콘텐츠 전송', domain: 5, mdAsset: 'assets/content/soa/soa-t5-3.md', questionsAsset: 'assets/content/soa/soa-t5-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-4', title: '네트워크 문제 해결 (Flow Logs·Reachability Analyzer)', domain: 5, mdAsset: 'assets/content/soa/soa-t5-4.md', questionsAsset: 'assets/content/soa/soa-t5-4.questions.json', questionCount: 0),
+  ],
 };
 
 List<ContentEntry> contentFor(String certCode) =>
