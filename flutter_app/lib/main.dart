@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 
 import 'app_router.dart';
+import 'data/cloud/firebase_auth_service.dart';
+import 'data/cloud/firebase_bootstrap.dart';
+import 'data/cloud/firestore_cloud_store.dart';
+import 'data/cloud/sync_controller.dart';
+import 'data/local_kv.dart';
 import 'theme/app_theme.dart';
 import 'theme/theme_scope.dart';
 
-void main() => runApp(const AwsDocsApp());
+/// null iff firebase not configured (stub / REPLACE_ME state → graceful degrade).
+SyncController? syncController;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final configured = await initFirebaseIfConfigured();
+  if (configured) {
+    syncController = SyncController(
+      auth: FirebaseAuthService(),
+      cloud: FirestoreCloudStore(),
+      local: defaultBackend(),
+    )..start();
+  }
+
+  runApp(const AwsDocsApp());
+}
 
 class AwsDocsApp extends StatefulWidget {
   const AwsDocsApp({super.key});

@@ -12,12 +12,14 @@ import '../data/study_plan_store.dart';
 import '../data/study_progress.dart';
 import '../data/study_reset.dart';
 import '../data/viewed_docs_store.dart';
+import '../main.dart' show syncController;
 import '../models/attempt_record.dart';
 import '../data/weighted_exam.dart';
 import '../models/certification.dart';
 import '../util/open_link.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
+import 'sync_entry.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -419,10 +421,43 @@ class _ThemeToggle extends StatelessWidget {
   }
 }
 
-/// 설정 버튼 — 현재는 "모든 학습 기록 초기화" 단일 액션(전역, 파괴적).
+/// 설정 버튼 — "기기 간 동기" + "모든 학습 기록 초기화".
 class _SettingsButton extends StatelessWidget {
   const _SettingsButton({required this.onResetAll});
   final VoidCallback onResetAll;
+
+  void _openSync(BuildContext context) {
+    final c = context.c;
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: c.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(Radii.lg)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.xl, Gap.xl, Gap.xl2),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('기기 간 동기',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: c.text)),
+            const SizedBox(height: Gap.lg),
+            SyncEntry(controller: syncController),
+            const SizedBox(height: Gap.md),
+            Text(
+              '동기를 켜면 여러 기기에서 같은 Google 계정으로 학습 기록을 공유합니다.',
+              style: TextStyle(fontSize: 13, color: c.textMuted),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -434,8 +469,20 @@ class _SettingsButton extends StatelessWidget {
         position: PopupMenuPosition.under,
         onSelected: (v) {
           if (v == 'reset') onResetAll();
+          if (v == 'sync') _openSync(context);
         },
         itemBuilder: (ctx) => [
+          PopupMenuItem<String>(
+            value: 'sync',
+            child: Row(
+              children: [
+                Icon(Icons.sync_outlined, size: 18, color: c.accent),
+                const SizedBox(width: Gap.sm),
+                const Text('기기 간 동기'),
+              ],
+            ),
+          ),
+          const PopupMenuDivider(),
           PopupMenuItem<String>(
             value: 'reset',
             child: Row(
