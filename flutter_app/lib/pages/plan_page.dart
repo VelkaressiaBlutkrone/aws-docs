@@ -271,9 +271,9 @@ class _PlanAgendaState extends State<_PlanAgenda> {
     final code = widget.cert.code;
     switch (it.type) {
       case PlanItemType.doc:
-        context.push('/cert/$code/study/${it.refId}');
+        if (it.refId != null) context.push('/cert/$code/study/${it.refId}');
       case PlanItemType.quiz:
-        context.push('/cert/$code/study/${it.refId}/quiz');
+        if (it.refId != null) context.push('/cert/$code/study/${it.refId}/quiz');
       case PlanItemType.mockExam:
         context.push('/cert/$code/exam');
       case PlanItemType.weakExam:
@@ -294,7 +294,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
   String _title(PlanItem it) {
     if (it.refId == null) return _typeLabel[it.type]!;
     final e = entryByTask(widget.cert.code, it.refId!);
-    return e?.title ?? it.refId!;
+    return e?.title ?? '(삭제된 항목)';
   }
 
   @override
@@ -378,6 +378,8 @@ class _PlanAgendaState extends State<_PlanAgenda> {
               value: done,
               onChanged: (_) => _toggle(it.id, done),
               activeColor: c.accent,
+              visualDensity: VisualDensity.compact,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
             Expanded(
               child: InkWell(

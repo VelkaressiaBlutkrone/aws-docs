@@ -27,4 +27,22 @@ void main() {
     expect(s.percent, 0);
     expect(s.daysLeft, 0);
   });
+
+  test('만료된 플랜은 daysLeft=0', () {
+    final plan = StudyPlan(
+      certCode: 'CLF-C02', startIso: '2026-06-01', endIso: '2026-06-09',
+      mode: PlanMode.period, createdIso: '2026-06-01', items: [_it('a')]);
+    final s = planSummary(plan, const {}, '2026-06-10');
+    expect(s.daysLeft, 0);
+  });
+
+  test('전부 완료면 100%', () {
+    final plan = StudyPlan(
+      certCode: 'CLF-C02', startIso: '2026-06-10', endIso: '2026-06-24',
+      mode: PlanMode.period, createdIso: '2026-06-10',
+      items: [_it('a'), _it('b')]);
+    final s = planSummary(plan, {'a': true, 'b': true}, '2026-06-12');
+    expect(s.percent, 100);
+    expect(s.done, 2);
+  });
 }
