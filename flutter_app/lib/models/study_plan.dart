@@ -25,7 +25,7 @@ class PlanItem {
   });
 
   final String id;
-  final String dateIso; // 'YYYY-MM-DD'
+  final String dateIso; // 'YYYY-MM-DD'; fromJson fallback은 '' — 파싱 전 검증 필요
   final PlanItemType type;
   final PlanPhase phase;
   final String? refId; // doc/quiz=taskId, 시험류=null
@@ -81,7 +81,8 @@ class StudyPlan {
         mode: _enumByName(PlanMode.values, j['mode'], PlanMode.period),
         createdIso: (j['createdIso'] ?? '').toString(),
         items: ((j['items'] as List?) ?? const [])
-            .map((e) => PlanItem.fromJson(e as Map<String, dynamic>))
+            .whereType<Map<String, dynamic>>()
+            .map(PlanItem.fromJson)
             .toList(),
       );
 }

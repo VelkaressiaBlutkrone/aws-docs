@@ -41,6 +41,19 @@ void main() {
     expect(back.items.single.refId, isNull);
   });
 
+  test('StudyPlan.fromJson은 손상된 items 항목을 건너뛴다', () {
+    final p = StudyPlan.fromJson({
+      'certCode': 'CLF-C02',
+      'items': [
+        null,
+        'bad',
+        {'id': 'ok', 'dateIso': '2026-01-01', 'type': 'doc', 'phase': 'learn'},
+      ],
+    });
+    expect(p.items.length, 1);
+    expect(p.items.single.id, 'ok');
+  });
+
   test('알 수 없는 enum/결손 필드는 안전 기본값', () {
     final it = PlanItem.fromJson({'id': 'x', 'dateIso': '2026-01-01', 'type': '몰라', 'phase': null});
     expect(it.type, PlanItemType.doc); // fallback
