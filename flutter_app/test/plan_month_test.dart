@@ -52,4 +52,22 @@ void main() {
     expect(cells.firstWhere((d) => d.dateIso == '2026-06-23').inRange, isTrue);  // 마지막 학습일
     expect(cells.firstWhere((d) => d.dateIso == '2026-06-24').inRange, isFalse); // 시험일은 기간 밖
   });
+
+  test('연도 경계(12월→1월)도 블록 2개로 롤오버', () {
+    final plan = _plan(
+      [_it('a', '2026-12-30'), _it('b', '2027-01-02')],
+      start: '2026-12-28', end: '2027-01-05');
+    final blocks = planMonthBlocks(plan, const {});
+    expect(blocks.length, 2);
+    expect(blocks[0].year, 2026);
+    expect(blocks[0].month, 12);
+    expect(blocks[1].year, 2027);
+    expect(blocks[1].month, 1);
+    // 모든 주는 7칸
+    for (final b in blocks) {
+      for (final w in b.weeks) {
+        expect(w.length, 7);
+      }
+    }
+  });
 }
