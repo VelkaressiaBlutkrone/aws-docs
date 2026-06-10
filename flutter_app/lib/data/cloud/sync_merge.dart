@@ -73,7 +73,7 @@ String attemptKey(AttemptRecord r) =>
       merged[cert] = data;
       mergedMeta[cert] = cloudMs;
     } else if (local.containsKey(cert)) {
-      merged[cert] = local[cert]!;
+      merged[cert] = Map<String, dynamic>.from(local[cert]!); // 방어적 복사(순수 계약)
       mergedMeta[cert] = localMs;
       toCloud[cert] = {...local[cert]!, 'updatedAt': localMs};
     }

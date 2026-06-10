@@ -33,4 +33,13 @@ void main() {
     expect(r.mergedMeta['CLF-C02'], 500);
     expect(r.toCloud, isEmpty); // 클라우드가 최신 → push 안 함
   });
+
+  test('mergeLww: 동률(updatedAt==localMs)이면 클라우드 우선', () {
+    final r = mergeLww(
+      {'CLF-C02': {'v': 'local'}}, {'CLF-C02': 100},
+      {'CLF-C02': {'v': 'cloud', 'updatedAt': 100}});
+    expect(r.merged['CLF-C02'], {'v': 'cloud'}); // 동률 → 클라우드 채택
+    expect(r.mergedMeta['CLF-C02'], 100);
+    expect(r.toCloud, isEmpty); // 클라우드 채택이므로 push 없음
+  });
 }

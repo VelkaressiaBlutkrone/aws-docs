@@ -35,4 +35,16 @@ void main() {
     // 클라우드에 없던 로컬(l1)만 push
     expect(r.toCloud.keys.toSet(), {attemptKey(l1)});
   });
+
+  test('mergeAttempts: 빈 입력 경계 — 로컬만/클라우드만', () {
+    final a = _r('exam:CLF-C02-mock', '2026-06-10T09:00:00.000');
+    // 클라우드 비었음 → 병합=로컬, 전부 push
+    final r1 = mergeAttempts([a], const {});
+    expect(r1.merged.length, 1);
+    expect(r1.toCloud.keys.toSet(), {attemptKey(a)});
+    // 로컬 비었음 → 병합=클라우드, push 없음
+    final r2 = mergeAttempts(const [], {attemptKey(a): a.toJson()});
+    expect(r2.merged.length, 1);
+    expect(r2.toCloud, isEmpty);
+  });
 }
