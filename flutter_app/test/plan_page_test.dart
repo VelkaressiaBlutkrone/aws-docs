@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:aws_docs/data/local_kv.dart';
 import 'package:aws_docs/data/study_plan_store.dart';
 import 'package:aws_docs/data/plan_check_store.dart';
 import 'package:aws_docs/data/cert_lookup.dart';
