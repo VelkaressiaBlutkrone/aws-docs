@@ -48,3 +48,35 @@ String attemptKey(AttemptRecord r) =>
   }
   return (merged: merged, toCloud: toCloud);
 }
+
+/// plan·checks LWW: 로컬 {cert:json} + 사이드카 localMeta{cert:ms}
+/// + 클라우드 {cert:json+updatedAt} → 병합 doc/메타 + 로컬이 최신/단독인 cert만 toCloud(+updatedAt).
+/// 동률·클라우드 우선은 클라우드 채택. 로컬 doc은 updatedAt 미포함(청결).
+({
+  Map<String, Map<String, dynamic>> merged,
+  Map<String, int> mergedMeta,
+  Map<String, Map<String, dynamic>> toCloud,
+}) mergeLww(
+    Map<String, Map<String, dynamic>> local,
+    Map<String, int> localMeta,
+    Map<String, Map<String, dynamic>> cloud) {
+  final merged = <String, Map<String, dynamic>>{};
+  final mergedMeta = <String, int>{};
+  final toCloud = <String, Map<String, dynamic>>{};
+  final certs = {...local.keys, ...cloud.keys};
+  for (final cert in certs) {
+    final localMs = localMeta[cert] ?? 0;
+    final c = cloud[cert];
+    final cloudMs = (c?['updatedAt'] as num?)?.toInt() ?? -1;
+    if (c != null && cloudMs >= localMs && cloudMs >= 0) {
+      final data = Map<String, dynamic>.from(c)..remove('updatedAt');
+      merged[cert] = data;
+      mergedMeta[cert] = cloudMs;
+    } else if (local.containsKey(cert)) {
+      merged[cert] = local[cert]!;
+      mergedMeta[cert] = localMs;
+      toCloud[cert] = {...local[cert]!, 'updatedAt': localMs};
+    }
+  }
+  return (merged: merged, mergedMeta: mergedMeta, toCloud: toCloud);
+}
