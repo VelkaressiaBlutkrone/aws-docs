@@ -48,7 +48,12 @@ class SyncService {
   Map<String, int> _meta(String section) {
     final m = _readJsonMap(_kMeta)[section];
     if (m is! Map) return {};
-    return {for (final e in m.entries) e.key.toString(): (e.value as num).toInt()};
+    final out = <String, int>{};
+    for (final e in m.entries) {
+      final v = e.value;
+      if (v is num) out[e.key.toString()] = v.toInt(); // 손상 stamp는 무시(미스탬프로 강등)
+    }
+    return out;
   }
 
   void _writeMeta(String section, Map<String, int> data) {

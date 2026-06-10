@@ -96,6 +96,26 @@ void main() {
     expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
   });
 
+  test('reconcileAll: 손상 사이드카 stamp가 reconcile를 중단시키지 않음', () async {
+    final local = MemoryBackend();
+    local.write('awsdocs.plan.v1', jsonEncode({
+      'CLF-C02': {
+        'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-06-24',
+        'mode': 'period', 'createdIso': '2026-06-10', 'items': []
+      }
+    }));
+    local.write('awsdocs.sync.v1', jsonEncode({
+      'plans': {'CLF-C02': 'oops'} // 손상 stamp(숫자 아님)
+    }));
+    final cloud = FakeCloudStore();
+    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
+    await svc.reconcileAll('u1'); // 예외 없이 완료(손상 stamp는 미스탬프로 강등)
+    // now(5000)로 스탬프 후 push
+    final cp = await cloud.loadCollection('u1', 'plans');
+    expect(cp.containsKey('CLF-C02'), isTrue);
+    expect(cp['CLF-C02']!['updatedAt'], 5000);
+  });
+
   test('reconcileAll: plan LWW — 로컬이 최신이면 클라우드로 push', () async {
     final local = MemoryBackend();
     local.write('awsdocs.plan.v1', jsonEncode({

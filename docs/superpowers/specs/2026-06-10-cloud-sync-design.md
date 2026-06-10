@@ -62,7 +62,7 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 *
 - **`attempts/{key}`** — `AttemptRecord` 1건=1문서. key = 안정적 합성 `sanitize("{certId}|{examId}|{date}")`(응시당 유일; Firestore 금지문자 `/` 등 치환). **union·무손실**(append-only, 수정 안 함). 로컬은 기존 `awsdocs.history.v1` 블롭 유지.
 - **`viewed/{certCode}`** — `{ taskIds: [...] }`. **set union** 병합(arrayUnion).
 - **`plans/{certCode}`** — `StudyPlan.toJson()` + `updatedAt`(ms). **LWW**.
-- **`checks/{certCode}`** — `{ map: {itemId:bool}, updatedAt }`. **LWW**(저빈도).
+- **`checks/{certCode}`** — `{itemId:bool}` 맵 + top-level `updatedAt`(평탄 — `map` 래퍼 없음). **LWW**(저빈도). (itemId는 `cert:type:refId:i` 콜론 구분이라 `updatedAt`과 충돌 불가.)
 
 > 로컬 스키마·키(`awsdocs.*`)는 불변. SyncService가 로컬 블롭 ↔ 위 클라우드 모델을 변환.
 
