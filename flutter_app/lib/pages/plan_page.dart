@@ -35,15 +35,16 @@ PlanSummary planSummary(StudyPlan plan, Map<String, bool> done, String todayIso)
 
 /// 학습 일정 화면. 플랜이 없으면 생성 폼, 있으면 어젠다(Task 7).
 class PlanPage extends StatefulWidget {
-  const PlanPage({super.key, required this.cert});
+  const PlanPage({super.key, required this.cert, this.backend});
   final Certification cert;
+  final KvBackend? backend;
 
   @override
   State<PlanPage> createState() => _PlanPageState();
 }
 
 class _PlanPageState extends State<PlanPage> {
-  final _store = StudyPlanStore();
+  late final _store = StudyPlanStore(backend: widget.backend);
   StudyPlan? _plan;
   late final String _today;
 
@@ -88,7 +89,8 @@ class _PlanPageState extends State<PlanPage> {
               plan: _plan!,
               today: _today,
               onEdit: () => setState(() => _plan = null),
-              onChanged: (p) => _onSaved(p)),
+              onChanged: (p) => _onSaved(p),
+              backend: widget.backend),
     );
   }
 }
@@ -248,21 +250,23 @@ class _PlanAgenda extends StatefulWidget {
       required this.plan,
       required this.today,
       required this.onEdit,
-      required this.onChanged});
+      required this.onChanged,
+      this.backend});
   final Certification cert;
   final StudyPlan plan;
   final String today;
   final VoidCallback onEdit;
   final ValueChanged<StudyPlan> onChanged;
+  final KvBackend? backend;
 
   @override
   State<_PlanAgenda> createState() => _PlanAgendaState();
 }
 
 class _PlanAgendaState extends State<_PlanAgenda> {
-  final _checks = PlanCheckStore();
-  final _history = HistoryStore();
-  final _viewed = ViewedDocsStore();
+  late final _checks = PlanCheckStore(backend: widget.backend);
+  late final _history = HistoryStore(backend: widget.backend);
+  late final _viewed = ViewedDocsStore(backend: widget.backend);
   bool _month = false;
 
   Map<String, bool> _done() => computePlanDone(
