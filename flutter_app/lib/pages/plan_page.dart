@@ -268,6 +268,15 @@ class _PlanAgendaState extends State<_PlanAgenda> {
   late final _history = HistoryStore(backend: widget.backend);
   late final _viewed = ViewedDocsStore(backend: widget.backend);
   bool _month = false;
+  final _scrollCtrl = ScrollController();
+  final _dateKeys = <String, GlobalKey>{};
+  String? _scrollToDate;
+
+  @override
+  void dispose() {
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
 
   Map<String, bool> _done() => computePlanDone(
         widget.plan,
@@ -325,11 +334,27 @@ class _PlanAgendaState extends State<_PlanAgenda> {
     }
     final dates = byDate.keys.toList()..sort();
 
+    if (!_month && _scrollToDate != null) {
+      final target = _scrollToDate!;
+      _scrollToDate = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final ctx = _dateKeys[target]?.currentContext;
+        if (ctx != null) {
+          Scrollable.ensureVisible(ctx,
+              duration: const Duration(milliseconds: 300),
+              alignment: 0.05,
+              curve: Curves.easeOut);
+        }
+      });
+    }
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 720),
         child: ListView(
+          controller: _scrollCtrl,
           padding: const EdgeInsets.all(Gap.xl),
+          cacheExtent: 9999,
           children: [
             if (daysBetween(widget.today, widget.plan.endIso) < 0)
               Container(
@@ -414,7 +439,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
               _monthView(c, t, done)
             else
               for (final date in dates) ...[
-                _dayHeader(c, t, date),
+                _dayHeader(c, t, date, _dateKeys.putIfAbsent(date, () => GlobalKey())),
                 for (final it in byDate[date]!)
                   _itemRow(c, t, it, done[it.id] == true,
                       isOverdue(it, widget.today, done[it.id] == true)),
@@ -426,9 +451,10 @@ class _PlanAgendaState extends State<_PlanAgenda> {
     );
   }
 
-  Widget _dayHeader(AppColors c, TextTheme t, String date) {
+  Widget _dayHeader(AppColors c, TextTheme t, String date, Key key) {
     final isToday = date == widget.today;
     return Padding(
+      key: key,
       padding: const EdgeInsets.only(bottom: Gap.xs),
       child: Text(isToday ? '$date · 오늘' : date,
           style: t.labelLarge?.copyWith(
@@ -537,7 +563,12 @@ class _PlanAgendaState extends State<_PlanAgenda> {
     final dayNum = int.parse(day.dateIso!.split('-')[2]).toString();
     final allDone = day.total > 0 && day.done >= day.total;
     return InkWell(
-      onTap: day.total > 0 ? () => setState(() => _month = false) : null,
+      onTap: day.total > 0
+          ? () => setState(() {
+                _month = false;
+                _scrollToDate = day.dateIso;
+              })
+          : null,
       borderRadius: BorderRadius.circular(Radii.sm),
       child: Container(
         height: 56,
