@@ -73,6 +73,8 @@ class _HomePageState extends State<HomePage> {
   Widget? _dueBanner(BuildContext context) {
     final c = context.c;
     final todayIso = DateTime.now().toIso8601String().substring(0, 10);
+    // TODO: _ScheduleSection과 동일하게 스토어·computePlanDone를 build마다 로드한다.
+    // cert 수가 늘면 둘의 공유 계산을 고려.
     final planStore = StudyPlanStore();
     final checkStore = PlanCheckStore();
     final viewedStore = ViewedDocsStore();
@@ -166,20 +168,20 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) {
                       final dueBanner = _dueBanner(context);
                       return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const _Hero(),
-                      ?dueBanner,
-                      const _Sources(),
-                      _LevelsSection(key: _levels),
-                      _PathsSection(key: _paths),
-                      _RoadmapSection(key: _roadmaps),
-                      _StudyDocsSection(key: _docs),
-                      _ExamsSection(key: _exams),
-                      _ScheduleSection(key: _schedule),
-                      const _Footer(),
-                    ],
-                  );
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const _Hero(),
+                          ?dueBanner,
+                          const _Sources(),
+                          _LevelsSection(key: _levels),
+                          _PathsSection(key: _paths),
+                          _RoadmapSection(key: _roadmaps),
+                          _StudyDocsSection(key: _docs),
+                          _ExamsSection(key: _exams),
+                          _ScheduleSection(key: _schedule),
+                          const _Footer(),
+                        ],
+                      );
                     },
                   ),
                 ),
