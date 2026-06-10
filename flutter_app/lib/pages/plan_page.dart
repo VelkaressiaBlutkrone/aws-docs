@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart' show PrimaryButton;
+import '../data/cert_lookup.dart';
 import '../data/content_index.dart';
+import '../data/history_store.dart';
+import '../data/plan_check_store.dart';
+import '../data/plan_progress.dart';
 import '../data/plan_scheduler.dart';
 import '../data/study_plan_store.dart';
+import '../data/viewed_docs_store.dart';
 import '../models/study_plan.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
+
+/// 어젠다 헤더용 순수 요약.
+class PlanSummary {
+  const PlanSummary(
+      {required this.total, required this.done, required this.percent, required this.daysLeft});
+  final int total;
+  final int done;
+  final int percent;
+  final int daysLeft;
+}
+
+PlanSummary planSummary(StudyPlan plan, Map<String, bool> done, String todayIso) {
+  final total = plan.items.length;
+  final d = plan.items.where((i) => done[i.id] == true).length;
+  final pct = total == 0 ? 0 : (d / total * 100).round();
+  final left = daysBetween(todayIso, plan.endIso);
+  return PlanSummary(total: total, done: d, percent: pct, daysLeft: left < 0 ? 0 : left);
+}
 
 /// 학습 일정 화면. 플랜이 없으면 생성 폼, 있으면 어젠다(Task 7).
 class PlanPage extends StatefulWidget {
@@ -209,8 +233,7 @@ class _PlanCreateFormState extends State<_PlanCreateForm> {
       );
 }
 
-/// Task 7에서 구현. 지금은 자리표시.
-class _PlanAgenda extends StatelessWidget {
+class _PlanAgenda extends StatefulWidget {
   const _PlanAgenda(
       {required this.cert,
       required this.plan,
@@ -221,20 +244,175 @@ class _PlanAgenda extends StatelessWidget {
   final StudyPlan plan;
   final String today;
   final VoidCallback onEdit;
-  final ValueChanged<StudyPlan> onChanged; // Task 7(어젠다)에서 재분배·저장에 사용
+  final ValueChanged<StudyPlan> onChanged;
+
+  @override
+  State<_PlanAgenda> createState() => _PlanAgendaState();
+}
+
+class _PlanAgendaState extends State<_PlanAgenda> {
+  final _checks = PlanCheckStore();
+  final _history = HistoryStore();
+  final _viewed = ViewedDocsStore();
+
+  Map<String, bool> _done() => computePlanDone(
+        widget.plan,
+        manual: _checks.overrides(widget.cert.code),
+        viewedTaskIds: _viewed.viewed(widget.cert.code),
+        history: _history.all(),
+      );
+
+  void _toggle(String itemId, bool current) {
+    _checks.set(widget.cert.code, itemId, !current);
+    setState(() {});
+  }
+
+  void _open(PlanItem it) {
+    final code = widget.cert.code;
+    switch (it.type) {
+      case PlanItemType.doc:
+        context.push('/cert/$code/study/${it.refId}');
+      case PlanItemType.quiz:
+        context.push('/cert/$code/study/${it.refId}/quiz');
+      case PlanItemType.mockExam:
+        context.push('/cert/$code/exam');
+      case PlanItemType.weakExam:
+        context.push('/cert/$code/exam/weak');
+      case PlanItemType.finalReview:
+        context.push('/cert/$code/review');
+    }
+  }
+
+  static const _typeLabel = {
+    PlanItemType.doc: '학습',
+    PlanItemType.quiz: '연습',
+    PlanItemType.mockExam: '모의고사',
+    PlanItemType.weakExam: '약점',
+    PlanItemType.finalReview: '점검',
+  };
+
+  String _title(PlanItem it) {
+    if (it.refId == null) return _typeLabel[it.type]!;
+    final e = entryByTask(widget.cert.code, it.refId!);
+    return e?.title ?? it.refId!;
+  }
 
   @override
   Widget build(BuildContext context) {
     final c = context.c;
+    final t = Theme.of(context).textTheme;
+    final done = _done();
+    final s = planSummary(widget.plan, done, widget.today);
+
+    final byDate = <String, List<PlanItem>>{};
+    for (final it in [...widget.plan.items]
+      ..sort((a, b) => a.dateIso.compareTo(b.dateIso))) {
+      (byDate[it.dateIso] ??= []).add(it);
+    }
+    final dates = byDate.keys.toList()..sort();
+
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('플랜 ${plan.items.length}개 항목 (어젠다는 Task 7에서)',
-              style: TextStyle(color: c.text)),
-          const SizedBox(height: Gap.md),
-          TextButton(onPressed: onEdit, child: const Text('다시 만들기')),
-        ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 720),
+        child: ListView(
+          padding: const EdgeInsets.all(Gap.xl),
+          children: [
+            Row(
+              children: [
+                Text('D-${s.daysLeft}',
+                    style: t.titleLarge?.copyWith(
+                        color: c.accent, fontFamily: AppTheme.monoFamily)),
+                const SizedBox(width: Gap.md),
+                Text('진행 ${s.done}/${s.total} (${s.percent}%)',
+                    style: t.bodyMedium?.copyWith(color: c.textMuted)),
+                const Spacer(),
+                TextButton(onPressed: widget.onEdit, child: const Text('다시 만들기')),
+              ],
+            ),
+            const SizedBox(height: Gap.sm),
+            LinearProgressIndicator(
+              value: s.total == 0 ? 0 : s.done / s.total,
+              backgroundColor: c.surface2,
+              color: c.accent,
+            ),
+            const SizedBox(height: Gap.lg),
+            for (final date in dates) ...[
+              _dayHeader(c, t, date),
+              for (final it in byDate[date]!)
+                _itemRow(c, t, it, done[it.id] == true,
+                    isOverdue(it, widget.today, done[it.id] == true)),
+              const SizedBox(height: Gap.md),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _dayHeader(AppColors c, TextTheme t, String date) {
+    final isToday = date == widget.today;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Gap.xs),
+      child: Text(isToday ? '$date · 오늘' : date,
+          style: t.labelLarge?.copyWith(
+              color: isToday ? c.accent : c.textMuted,
+              fontWeight: FontWeight.w800)),
+    );
+  }
+
+  Widget _itemRow(
+      AppColors c, TextTheme t, PlanItem it, bool done, bool overdue) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: Gap.xs2),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: Gap.md, vertical: Gap.sm),
+        decoration: BoxDecoration(
+          color: overdue ? c.wrongWeak : c.surface,
+          borderRadius: BorderRadius.circular(Radii.md),
+          border: Border.all(
+              color: overdue ? c.wrong.withValues(alpha: 0.35) : c.border),
+        ),
+        child: Row(
+          children: [
+            Checkbox(
+              value: done,
+              onChanged: (_) => _toggle(it.id, done),
+              activeColor: c.accent,
+            ),
+            Expanded(
+              child: InkWell(
+                onTap: () => _open(it),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Gap.sm),
+                  child: Row(
+                    children: [
+                      Text(_typeLabel[it.type]!,
+                          style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: c.textMuted)),
+                      const SizedBox(width: Gap.sm),
+                      Expanded(
+                        child: Text(_title(it),
+                            style: TextStyle(
+                                color: c.text,
+                                decoration: done
+                                    ? TextDecoration.lineThrough
+                                    : null)),
+                      ),
+                      if (overdue)
+                        Text('밀림',
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w800,
+                                color: c.wrong)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
