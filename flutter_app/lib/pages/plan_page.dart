@@ -53,6 +53,14 @@ class _PlanPageState extends State<PlanPage> {
     _plan = _store.planFor(widget.cert.code);
   }
 
+  @override
+  void didUpdateWidget(covariant PlanPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.cert.code != widget.cert.code) {
+      setState(() => _plan = _store.planFor(widget.cert.code));
+    }
+  }
+
   void _onSaved(StudyPlan p) {
     _store.save(p);
     setState(() => _plan = p);
