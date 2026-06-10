@@ -7,6 +7,7 @@ import 'pages/cert_exam_page.dart';
 import 'pages/exam_page.dart';
 import 'pages/home_page.dart';
 import 'pages/quiz_page.dart';
+import 'pages/plan_page.dart';
 import 'pages/report_page.dart';
 import 'pages/review_page.dart';
 import 'pages/study_doc_page.dart';
@@ -49,6 +50,11 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                   path: 'report',
                   builder: (context, state) =>
                       ReportPage(cert: certByCode(state.pathParameters['code']!)!),
+                ),
+                GoRoute(
+                  path: 'plan',
+                  builder: (context, state) =>
+                      PlanPage(cert: certByCode(state.pathParameters['code']!)!),
                 ),
                 GoRoute(
                   path: 'study/:taskId',

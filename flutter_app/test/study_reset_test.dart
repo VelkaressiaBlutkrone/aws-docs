@@ -5,6 +5,9 @@ import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/study_reset.dart';
 import 'package:aws_docs/models/attempt_record.dart';
 import 'package:aws_docs/models/exam_session.dart';
+import 'package:aws_docs/models/study_plan.dart';
+import 'package:aws_docs/data/study_plan_store.dart';
+import 'package:aws_docs/data/plan_check_store.dart';
 
 AttemptRecord _rec(String certId, String examId) => AttemptRecord(
       certId: certId,
@@ -135,6 +138,19 @@ void main() {
       expect(HistoryStore(backend: b).all(), isEmpty);
       expect(ViewedDocsStore(backend: b).viewed('CLF-C02'), isEmpty);
       expect(ExamSessionStore(backend: b).load('exam:CLF-C02-mock'), isNull);
+    });
+
+    test('resetCert는 플랜·체크도 정리', () {
+      final b = MemoryBackend();
+      StudyPlanStore(backend: b).save(StudyPlan(
+          certCode: 'CLF-C02', startIso: '2026-06-10', endIso: '2026-06-20',
+          mode: PlanMode.period, createdIso: '2026-06-10', items: const []));
+      PlanCheckStore(backend: b).set('CLF-C02', 'x', true);
+
+      resetCert('CLF-C02', backend: b);
+
+      expect(StudyPlanStore(backend: b).planFor('CLF-C02'), isNull);
+      expect(PlanCheckStore(backend: b).overrides('CLF-C02'), isEmpty);
     });
   });
 }

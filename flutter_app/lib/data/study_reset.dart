@@ -1,6 +1,8 @@
 import 'content_index.dart';
 import 'exam_session_store.dart';
 import 'history_store.dart';
+import 'plan_check_store.dart';
+import 'study_plan_store.dart';
 import 'viewed_docs_store.dart';
 
 /// 학습 기록 초기화의 단일 진입점. localStorage 3계층(응시 이력·열람·진행 세션)을
@@ -24,6 +26,8 @@ void resetCert(String certCode, {KvBackend? backend}) {
   final b = backend ?? defaultBackend();
   HistoryStore(backend: b).clearCert(certCode);
   ViewedDocsStore(backend: b).clearCert(certCode);
+  StudyPlanStore(backend: b).clearCert(certCode);
+  PlanCheckStore(backend: b).clearCert(certCode);
   final sessions = ExamSessionStore(backend: b);
   for (final id in examIdsForCert(certCode)) {
     sessions.clear(id);
@@ -35,5 +39,7 @@ void resetAll({KvBackend? backend}) {
   final b = backend ?? defaultBackend();
   HistoryStore(backend: b).clearAll();
   ViewedDocsStore(backend: b).clearAll();
+  StudyPlanStore(backend: b).clearAll();
+  PlanCheckStore(backend: b).clearAll();
   ExamSessionStore(backend: b).clearAll();
 }
