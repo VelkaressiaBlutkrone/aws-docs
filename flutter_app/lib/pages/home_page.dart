@@ -4,10 +4,15 @@ import 'package:go_router/go_router.dart';
 import '../content/reset_dialog.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/plan_check_store.dart';
+import '../data/plan_progress.dart';
+import '../data/plan_scheduler.dart';
 import '../data/site_data.dart';
+import '../data/study_plan_store.dart';
 import '../data/study_progress.dart';
 import '../data/study_reset.dart';
 import '../data/viewed_docs_store.dart';
+import '../models/attempt_record.dart';
 import '../data/weighted_exam.dart';
 import '../models/certification.dart';
 import '../util/open_link.dart';
@@ -28,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   final _roadmaps = GlobalKey();
   final _docs = GlobalKey();
   final _exams = GlobalKey();
+  final _schedule = GlobalKey();
 
   @override
   void dispose() {
@@ -79,6 +85,7 @@ class _HomePageState extends State<HomePage> {
           '로드맵': () => _goto(_roadmaps),
           '학습 문서': () => _goto(_docs),
           '모의고사': () => _goto(_exams),
+          '일정': () => _goto(_schedule),
         },
       ),
       body: SelectionArea(
@@ -102,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                       _RoadmapSection(key: _roadmaps),
                       _StudyDocsSection(key: _docs),
                       _ExamsSection(key: _exams),
+                      _ScheduleSection(key: _schedule),
                       const _Footer(),
                     ],
                   ),
@@ -869,6 +877,65 @@ class _ExamsSection extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ─────────────────────────────────────────────────────────── Schedule
+
+/// 학습 일정 섹션 — 콘텐츠 보유 자격증별 플랜 진입(있으면 D-day·진행%, 없으면 만들기).
+class _ScheduleSection extends StatelessWidget {
+  const _ScheduleSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final todayIso = DateTime.now().toIso8601String().substring(0, 10);
+    final planStore = StudyPlanStore();
+    final checkStore = PlanCheckStore();
+    final viewedStore = ViewedDocsStore();
+    final history = HistoryStore().all();
+    final certs =
+        certifications.where((cert) => certHasContent(cert.code)).toList();
+    return _Band(
+      title: '학습 일정',
+      meta: '시험일까지 단계별 계획',
+      child: Wrap(
+        spacing: Gap.lg,
+        runSpacing: Gap.lg,
+        children: [
+          for (final cert in certs)
+            _ContentCertCard(
+              cert: cert,
+              summaryLabel: _label(cert.code, planStore, checkStore,
+                  viewedStore, history, todayIso),
+              cta: '일정 →',
+              onTap: () => context.push('/cert/${cert.code}/plan'),
+            ),
+        ],
+      ),
+    );
+  }
+
+  String _label(
+    String code,
+    StudyPlanStore planStore,
+    PlanCheckStore checkStore,
+    ViewedDocsStore viewedStore,
+    List<AttemptRecord> history,
+    String todayIso,
+  ) {
+    final plan = planStore.planFor(code);
+    if (plan == null) return '시험일·기간을 정하면 일정 생성';
+    final done = computePlanDone(
+      plan,
+      manual: checkStore.overrides(code),
+      viewedTaskIds: viewedStore.viewed(code),
+      history: history,
+    );
+    final total = plan.items.length;
+    final doneN = done.values.where((v) => v).length;
+    final pct = total == 0 ? 0 : (doneN / total * 100).round();
+    final left = daysBetween(todayIso, plan.endIso);
+    return '일정 있음 · D-${left < 0 ? 0 : left} · 진행 $pct%';
   }
 }
 
