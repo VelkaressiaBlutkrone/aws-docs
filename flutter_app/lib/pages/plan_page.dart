@@ -345,8 +345,11 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                     style: t.titleLarge?.copyWith(
                         color: c.accent, fontFamily: AppTheme.monoFamily)),
                 const SizedBox(width: Gap.md),
-                Text('진행 ${s.done}/${s.total} (${s.percent}%)',
-                    style: t.bodyMedium?.copyWith(color: c.textMuted)),
+                Flexible(
+                  child: Text('진행 ${s.done}/${s.total} (${s.percent}%)',
+                      overflow: TextOverflow.ellipsis,
+                      style: t.bodyMedium?.copyWith(color: c.textMuted)),
+                ),
                 const Spacer(),
                 IconButton(
                   tooltip: _month ? '어젠다' : '월 보기',
@@ -357,6 +360,11 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                   onPressed: () => setState(() => _month = !_month),
                 ),
                 TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: const EdgeInsets.symmetric(horizontal: Gap.sm),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                   onPressed: () {
                     final messenger = ScaffoldMessenger.of(context);
                     final done = _done();
@@ -380,7 +388,15 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                   },
                   child: const Text('재분배'),
                 ),
-                TextButton(onPressed: widget.onEdit, child: const Text('다시 만들기')),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: const EdgeInsets.symmetric(horizontal: Gap.sm),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: widget.onEdit,
+                  child: const Text('다시 만들기'),
+                ),
               ],
             ),
             const SizedBox(height: Gap.sm),
