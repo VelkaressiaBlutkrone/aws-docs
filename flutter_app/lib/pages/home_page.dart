@@ -330,6 +330,7 @@ class _NavMenuButton extends StatelessWidget {
   final VoidCallback? onResetAll;
 
   static const _resetKey = '__reset_all__';
+  static const _syncKey = '__sync__';
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +344,9 @@ class _NavMenuButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(Radii.md),
       ),
       onSelected: (key) {
-        if (key == _resetKey) {
+        if (key == _syncKey) {
+          _SettingsButton.openSyncSheet(context);
+        } else if (key == _resetKey) {
           onResetAll?.call();
         } else {
           onNav[key]?.call();
@@ -359,6 +362,21 @@ class _NavMenuButton extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: c.text)),
           ),
+        const PopupMenuDivider(),
+        PopupMenuItem<String>(
+          value: _syncKey,
+          child: Row(
+            children: [
+              Icon(Icons.sync_outlined, size: 18, color: c.accent),
+              const SizedBox(width: Gap.sm),
+              Text('기기 간 동기',
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: c.text)),
+            ],
+          ),
+        ),
         if (onResetAll != null) ...[
           const PopupMenuDivider(),
           PopupMenuItem<String>(
@@ -426,7 +444,8 @@ class _SettingsButton extends StatelessWidget {
   const _SettingsButton({required this.onResetAll});
   final VoidCallback onResetAll;
 
-  void _openSync(BuildContext context) {
+  static void openSyncSheet(BuildContext context) {
+    if (!context.mounted) return;
     final c = context.c;
     showModalBottomSheet<void>(
       context: context,
@@ -469,7 +488,7 @@ class _SettingsButton extends StatelessWidget {
         position: PopupMenuPosition.under,
         onSelected: (v) {
           if (v == 'reset') onResetAll();
-          if (v == 'sync') _openSync(context);
+          if (v == 'sync') openSyncSheet(context);
         },
         itemBuilder: (ctx) => [
           PopupMenuItem<String>(
