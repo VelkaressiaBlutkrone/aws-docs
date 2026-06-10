@@ -67,7 +67,8 @@ class SyncService {
 
   Future<void> _reconcileAttempts(String uid) async {
     final local = _readJsonList(_kHistory)
-        .map((e) => AttemptRecord.fromJson(e as Map<String, dynamic>))
+        .whereType<Map<String, dynamic>>()
+        .map(AttemptRecord.fromJson)
         .toList();
     final cloud = await _cloud.loadCollection(uid, 'attempts');
     final r = mergeAttempts(local, cloud);
@@ -81,7 +82,9 @@ class SyncService {
     final raw = _readJsonMap(_kViewed);
     final local = <String, Set<String>>{
       for (final e in raw.entries)
-        e.key: ((e.value as List?) ?? const []).map((x) => x.toString()).toSet(),
+        e.key: (e.value is List ? (e.value as List) : const [])
+            .map((x) => x.toString())
+            .toSet(),
     };
     final cloud = await _cloud.loadCollection(uid, 'viewed');
     final r = mergeViewed(local, cloud);
@@ -97,7 +100,7 @@ class SyncService {
     final rawLocal = _readJsonMap(localKey);
     final local = <String, Map<String, dynamic>>{
       for (final e in rawLocal.entries)
-        e.key: Map<String, dynamic>.from(e.value as Map),
+        if (e.value is Map) e.key: Map<String, dynamic>.from(e.value as Map),
     };
     var meta = _meta(metaSection);
     // 사이드카 없는 기존 로컬 엔티티는 now로 스탬프(클라우드 stale가 덮지 않게).
