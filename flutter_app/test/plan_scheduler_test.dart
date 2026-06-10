@@ -47,7 +47,7 @@ void main() {
     final firstDoc = r.items.firstWhere((i) => i.type == PlanItemType.doc);
     final review = r.items.firstWhere((i) => i.type == PlanItemType.finalReview);
     expect(firstDoc.dateIso.compareTo(review.dateIso) <= 0, isTrue);
-    expect(review.dateIso, '2026-07-01');
+    expect(review.dateIso, '2026-07-01'); // = endIso (period 모드의 마지막 학습일 = finalReview)
   });
 
   test('결정성: 같은 입력 → 같은 결과', () {
@@ -76,6 +76,21 @@ void main() {
       startIso: '2026-06-10', endIso: '2026-06-12', mode: PlanMode.period,
     );
     expect(r.warnings.any((w) => w.contains('빡빡')), isTrue);
+  });
+
+  test('혼합 cert: doc는 전부, quiz는 hasQuestions만', () {
+    final mixed = [
+      _e('m1', 1, q: 12),
+      _e('m2', 1, q: 0),
+      _e('m3', 2, q: 12),
+      _e('m4', 2, q: 0),
+    ];
+    final r = buildPlan(
+      certCode: 'CLF-C02', content: mixed,
+      startIso: '2026-06-01', endIso: '2026-06-20', mode: PlanMode.period,
+    );
+    expect(r.items.where((i) => i.type == PlanItemType.doc).length, 4);
+    expect(r.items.where((i) => i.type == PlanItemType.quiz).length, 2);
   });
 
   test('경계: 1일 플랜·역전·빈 콘텐츠', () {

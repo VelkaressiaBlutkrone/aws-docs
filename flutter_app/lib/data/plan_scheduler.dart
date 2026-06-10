@@ -33,12 +33,12 @@ PlanBuildResult buildPlan({
   required PlanMode mode,
 }) {
   if (content.isEmpty) {
-    return const PlanBuildResult(
+    return PlanBuildResult(
         items: [], warnings: ['이 자격증에는 학습 콘텐츠가 없습니다.']);
   }
   final lastDay = mode == PlanMode.examDate ? addDays(endIso, -1) : endIso;
   if (daysBetween(startIso, lastDay) < 0) {
-    return const PlanBuildResult(
+    return PlanBuildResult(
         items: [], warnings: ['기간이 올바르지 않습니다(종료일이 시작일보다 빠릅니다).']);
   }
   final windowDays = daysBetween(startIso, lastDay) + 1; // inclusive, >=1
@@ -89,22 +89,19 @@ PlanBuildResult buildPlan({
 /// 단계 일수 분할(45/20/20/15). 합 = windowDays 보존. docs-only면 learn에 전부.
 List<int> _segmentDays(int windowDays, bool hasQ) {
   if (!hasQ) return [windowDays, 0, 0, 0];
-  var learn = (windowDays * 0.45).round();
+  final learn = (windowDays * 0.45).round();
   final practice = (windowDays * 0.20).round();
   final mock = (windowDays * 0.20).round();
-  var reinforce = windowDays - learn - practice - mock;
-  if (reinforce < 0) {
-    learn += reinforce; // 반올림 초과분 흡수
-    reinforce = 0;
-    if (learn < 0) learn = 0;
-  }
+  final reinforce = windowDays - learn - practice - mock;
+  // reinforce ≥ 0 by construction (잔여 = n - round(0.85n) ≥ 0; n<10 열거 확인, n≥10 0.15n-1.5≥0)
+  assert(reinforce >= 0);
   return [learn, practice, mock, reinforce];
 }
 
 /// 통합 모의고사 횟수: 최소 3(약점 게이트), 최대 6.
 int _mockCount(int mockSpan) {
   final n = (mockSpan / 2).floor();
-  return n < 3 ? 3 : (n > 6 ? 6 : n);
+  return n.clamp(3, 6);
 }
 
 /// refs(K개)를 [phaseStart, phaseStart+phaseSpan) 일수에 균등 배치.
@@ -132,7 +129,6 @@ void _spread(
     } else {
       off = phaseStart + (i * phaseSpan ~/ k);
     }
-    if (off < 0) off = 0;
     if (off > windowDays - 1) off = windowDays - 1;
     final refId = refs[i];
     out.add(PlanItem(
