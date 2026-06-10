@@ -70,6 +70,69 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Widget? _dueBanner(BuildContext context) {
+    final c = context.c;
+    final todayIso = DateTime.now().toIso8601String().substring(0, 10);
+    final planStore = StudyPlanStore();
+    final checkStore = PlanCheckStore();
+    final viewedStore = ViewedDocsStore();
+    final history = HistoryStore().all();
+    var today = 0, overdue = 0, active = 0;
+    String? oneCert;
+    for (final cert in certifications.where((cc) => certHasContent(cc.code))) {
+      final plan = planStore.planFor(cert.code);
+      if (plan == null) continue;
+      active++;
+      oneCert = cert.code;
+      final done = computePlanDone(plan,
+          manual: checkStore.overrides(cert.code),
+          viewedTaskIds: viewedStore.viewed(cert.code),
+          history: history);
+      final d = planDueCounts(plan, done, todayIso);
+      today += d.today;
+      overdue += d.overdue;
+    }
+    if (today == 0 && overdue == 0) return null;
+    final parts = <String>[
+      if (today > 0) '오늘 학습할 항목 $today개',
+      if (overdue > 0) '지난 일정 $overdue개',
+    ];
+    return Padding(
+      padding: const EdgeInsets.only(top: Gap.lg),
+      child: InkWell(
+        onTap: active == 1
+            ? () => context.push('/cert/$oneCert/plan')
+            : () => _goto(_schedule),
+        borderRadius: BorderRadius.circular(Radii.md),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(Gap.lg),
+          decoration: BoxDecoration(
+            color: c.surface2,
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: c.border),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.event_available_outlined, size: 18, color: c.accent),
+              const SizedBox(width: Gap.sm),
+              Expanded(
+                child: Text(parts.join(' · '),
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, color: c.text)),
+              ),
+              Text('일정 보기 →',
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: c.accent)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.c;
@@ -99,10 +162,14 @@ class _HomePageState extends State<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                       Gap.xl, 0, Gap.xl, Gap.xl4),
-                  child: Column(
+                  child: Builder(
+                    builder: (context) {
+                      final dueBanner = _dueBanner(context);
+                      return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const _Hero(),
+                      ?dueBanner,
                       const _Sources(),
                       _LevelsSection(key: _levels),
                       _PathsSection(key: _paths),
@@ -112,6 +179,8 @@ class _HomePageState extends State<HomePage> {
                       _ScheduleSection(key: _schedule),
                       const _Footer(),
                     ],
+                  );
+                    },
                   ),
                 ),
               ),

@@ -67,3 +67,19 @@ Map<String, bool> computePlanDone(
 /// 밀림: 미완 + 배정일이 오늘보다 과거.
 bool isOverdue(PlanItem item, String todayIso, bool done) =>
     !done && item.dateIso.compareTo(todayIso) < 0;
+
+/// 플랜의 '오늘 할 일'·'밀림(지난)' 개수(미완 항목 기준). 순수.
+({int today, int overdue}) planDueCounts(
+    StudyPlan plan, Map<String, bool> done, String todayIso) {
+  var t = 0, o = 0;
+  for (final it in plan.items) {
+    if (done[it.id] == true) continue;
+    final cmp = it.dateIso.compareTo(todayIso);
+    if (cmp == 0) {
+      t++;
+    } else if (cmp < 0) {
+      o++;
+    }
+  }
+  return (today: t, overdue: o);
+}
