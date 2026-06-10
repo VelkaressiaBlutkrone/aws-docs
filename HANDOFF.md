@@ -1,75 +1,62 @@
 # HANDOFF — 다음 세션 이관
 
-_작성: 2026-06-09 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_작성: 2026-06-10 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+
+🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/ (main = 동기 **코어까지** 배포됨, 단 휴면)
 
 ---
 
-## 0. 지금까지 (전부 라이브)
+## 0. 지금 IN-FLIGHT: 클라우드 동기 Phase 1 — 브랜치 미병합
 
-🔗 https://velkaressiablutkrone.github.io/aws-docs/
+**무엇:** Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 **기기 간 동기**. 로컬-퍼스트 + *선택적* 로그인. 미설정/미로그인은 **로컬-only(graceful degrade)** — 지금 배포된 앱은 현재와 동작 동일.
 
-| 영역 | 상태 | 근거 |
-|---|---|---|
-| **처방 허브 (A+C-경량)** | ✅ 라이브 | 시험 결과화면 → 복습/약점모의고사/리포트 1탭 + 오답 개념 라벨→학습문서 |
-| **CLF 문항 밀도 (B)** | ✅ 19 Task × **12 verified = 228문항** | D1~D4 전 도메인 진단 유의미 밀도 |
-| **학습문서 정합** | ✅ 9개 문서 보강 | 새 문항이 도입한 개념을 문서에도 추가(처방 링크가 빈 문서로 안 떨어지게) |
+- 설계 스펙: `docs/superpowers/specs/2026-06-10-cloud-sync-design.md` (reconcile-on-trigger 반영본)
+- 타당성·방향: `docs/plans/2026-06-10-firebase-fcm-feasibility.md` (Phase 1 지향 / 푸시 Phase 2 보류 결정)
+- 플랜: Plan 1 `docs/superpowers/plans/2026-06-10-cloud-sync-core.md` · Plan 2 `docs/superpowers/plans/2026-06-10-cloud-sync-integration.md`
 
-주요 커밋(main): `f6da516`(처방 허브 머지) · `5690f14`(D3) · `d9f87bf`(D1·D2·D4) · `8c2c57e`(학습문서 보강).
-설계 문서: `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/G-main-design-20260609-113031.md`
+### 상태
+| | 상태 |
+|---|---|
+| **Plan 1 (동기 코어)** | ✅ **main 병합·배포 완료.** 인터페이스+Fake · 병합 엔진(attempts union·viewed set union·plan/checks LWW) · `SyncService`. |
+| **Plan 2 (앱 통합)** | ⏳ 브랜치 **`feat/cloud-sync-integration`** (main +8커밋, **256 테스트**, 미병합). Firebase 의존성·스텁·게이트 · Firestore/Auth 구현(컴파일만) · `SyncController` · 부트스트랩+UI. 6 Task 전부 구현+리뷰. **시각 QA 통과**(데스크톱 ⚙ + 모바일 햄버거 → "기기 간 동기" → 미설정 시트, 콘솔 에러 0). |
 
----
+### ⚠️ 다음 세션이 **먼저** 할 일 — 머지 전 닫아야 할 갭
+**1. 로컬→클라우드 트리거 미배선 (실질 기능 누락).**
+- 현재 `SyncController`는 **로그인 + 클라우드 변경 수신(watch)**에만 reconcile 발동.
+- 스펙 §6.2가 명시한 **앱 복귀·주기 트리거가 구현에서 빠짐** → *이 기기에서 만든 로컬 변경이 다음 로그인(앱 재시작) 전까지 클라우드로 안 올라감*(단일 기기 사용 시 백업 지연).
+- **Fix:** `SyncController`에 (a) 주기 `Timer`(예: 30s, signed-in일 때만) + (b) 선택적 web `visibilitychange`(앱 복귀) → `sync()` 호출. 둘 다 `dispose`/`signOut`에서 정리. 테스트: 트리거가 `sync()`를 부르는지(주입 시계/수동 발화). 파일: `lib/data/cloud/sync_controller.dart` (+ `test/cloud/sync_controller_test.dart`).
 
-## 1. 검증된 워크플로 (그대로 재사용)
+**2. 종합 리뷰 판정 확정.** Plan 2 최종 종합 리뷰(opus, 백그라운드)가 완료됐으나 최종 판정 텍스트를 회수 못 함(세션 중단). 위 트리거 갭이 그 리뷰의 핵심 지적일 공산이 큼 — **트리거 보강 후** 짧은 재리뷰 1회 권장.
 
-**콘텐츠 밀도 루프** — 정직함 원칙: `verified:true`는 **사람이 공식 문서와 대조 검수한 것만** (AI 자동 verified 금지).
-
-1. AI가 각 Task **학습문서(`t*.md`) 근거 + 공식 출처**로 `verified:false` 초안 작성 → `*.questions.json`에 삽입.
-   - `QuestionBank.fromJson`이 verified만 노출하므로 초안은 시험에 안 뜸 → **안전, 무해**.
-   - 삽입은 Python 문자열 삽입(`\n  ]` 앞)으로 **+N만 깔끔한 diff**. 전체 재포맷 금지.
-2. 초안을 **단일 리뷰 파일**(`C:\workspace\clf-*_for_review.json` 등)로 추출 → 본인이 공식 문서 대조 검수 → `verified:true`.
-3. 검수본을 각 파일에 반영 + `lib/data/content_index.dart`의 해당 Task `questionCount` 갱신(배지·로드 가드의 단일 진실).
-4. `flutter test` + 커밋 + (원하면) `git push`(→ GitHub Pages 자동 배포).
-
-**철칙 — 문항·문서 정합:** 새 개념을 문항에 넣으면 **학습문서(`t*.md`)에도 보강**해야 한다. 안 그러면 "오답 → 이 개념 틀림 → 학습문서" 처방이 *그 개념이 없는 문서*로 떨어진다. (이번 세션이 그래서 9개 문서를 보강함.)
-
-스키마: `id`/`examGuideTaskId`/`skill`/`difficulty`/`stem`/`options[4]`/`correct`/`explanation`/`wrongExplanations{정답 아닌 인덱스→text}`/`sources[{title,url}]`/`verified`.
+### 그다음 — 마무리 + 라이브
+3. 트리거·리뷰 반영 → `cd flutter_app && flutter analyze lib && flutter test` → **브랜치 마무리(main 병합 + 푸시 → 배포)**. 휴면 코드라 배포해도 사용자 화면 변화 0.
+4. **라이브 검증 = 사용자 액션 필요(에이전트 크레덴셜 없음, Plan 2 Task 6):** Firebase 프로젝트 생성 → `flutterfire configure`(→ `lib/firebase_options.dart` 실값으로 덮음, *현재 `REPLACE_ME` 스텁*) → Cloud Firestore + Google Auth 활성화 → 보안 규칙(스펙 §8) 배포 → Auth authorized domains에 `velkaressiablutkrone.github.io` 추가 → 2기기 같은 Google 계정 로그인 동기 확인.
 
 ---
 
-## 2. 다음 수 3개
-
-### ① ≥15 심화 (문항 밀도 12 → 15)  ← **추천 1순위**
-- **What:** CLF 각 Task를 12→15 verified로 (+3씩, 19 Task = **+57문항**).
-- **Why:** 실전 65문항 모의고사가 매 회차 더 다양해지고, 약점 진단 표본이 두꺼워져 신뢰도↑.
-- **How:** §1 워크플로 그대로. 각 Task의 *아직 안 다룬 각도* 3개씩(기존 12문항 skill/정답 덤프로 중복 회피).
-- **파일:** `flutter_app/assets/content/clf/t*.questions.json`, `content_index.dart`(questionCount 12→15), 보강 필요 시 `t*.md`.
-- **주의:** `question_model_test`의 `≥12` 가드는 통과(15면). 새 서비스 개념은 학습문서에도 보강.
-- **Effort:** 큼(콘텐츠 노동). **Dep:** 본인 검수 시간. **Risk:** 낮음(엔진·문서 정합 이미 됨, 문항만 추가).
-
-### ② SAA-C03 착수 (현재 문항 0)
-- **What:** SAA-C03은 학습문서만 있고 **문항 0**(`content_index`의 saa-* 전부 `questionCount: 0` → "준비 중" 게이트). 첫 검증 문항 세트 작성.
-- **Why:** 두 번째 자격증 — "포맷이 통한다"는 증명 확장. (원 설계 쐐기: CLF 완성 후 SAA.)
-- **현황:** `assets/content/saa/saa-t1-1.md`…(학습문서 존재). **별개 주의:** 과거 `saaQuestions`(구 325문항, Vite 시절)가 있었는지/현 구조와 정합되는지 먼저 확인.
-- **How:** SAA 학습문서 기반 Task당 검증 문항 작성(§1 루프). `content_index` questionCount 0→N + `certHasVerifiedQuestions('SAA-C03')` true 전환.
-- **주의:** `content_index_test`의 SAA 단언(`certContentSummary('SAA-C03').questions == 0`, hasQuestions 전부 false)을 **갱신**해야 함. 게이트(questionCount>0, hasQuestions, 모의고사 시작 버튼)가 SAA에 켜지는지 확인.
-- **Effort:** 매우 큼(신규 자격증). **Dep:** SAA 학습 진도.
-
-### ③ C-중량 (개념 → 학습문서 *섹션* 앵커 딥링크)
-- **What:** 처방 링크를 Task 문서가 아니라 **그 개념 문단으로 점프**. ⓐ `report_page` Task→개념 중첩 개조 ⓑ `study_doc_page` 마크다운 앵커/스크롤 인프라(현재 없음) ⓒ `concept_step_map.dart`(개념→stepId).
-- **Why:** 지금 개념 라벨은 Task 문서로만 보냄(스크롤은 사용자 몫). 앵커면 "이 개념 → 정확히 그 문단".
-- **현황:** `TODOS.md`에 대기(P3). 짝 작업: `AttemptRecord.wrongSkills[]` 비정규화(다회차 개념 추세).
-- **How:** 설계 문서의 "C-중량" 섹션 + `TODOS.md` 참조. **A+C-경량 사용 관찰로 가치(스크롤 마찰) 증명 후 착수** 권장.
-- **Effort:** 큼(파서·라우트·스크롤). **Risk:** 가치 증명 전 인프라 선건축 주의(Codex도 연기 동의함).
+## 1. 아키텍처 핵심 (이어받기 전 알아야 할 것)
+- **reconcile-on-trigger (가로채기 없음):** 스토어와 `SyncService`가 **같은 localStorage**(`defaultBackend()`=WebBackend)를 읽고/써서 reconcile 결과가 스토어 다음 읽기에 자동 반영 → 쓰기 가로채기 불필요. 트리거에 **멱등** `reconcileAll` 재실행. (단순·저위험 위해 스펙의 SyncedKvBackend 가로채기를 이 방식으로 교체함 — 사용자 승인.)
+- **graceful degrade 게이트:** `firebase_bootstrap.dart`의 `cloudConfigured()`가 `firebase_options.dart`의 `projectId == 'REPLACE_ME'`면 false → `Firebase.initializeApp` 미호출 → cloud 전부 off. 그래서 지금 빌드·배포·동작 전부 현재와 동일.
+- **충돌 해소(D2):** history=레코드 union(무손실, 키 `sanitize(certId|examId|date)`), viewed=set union, plan/checks=LWW(사이드카 `awsdocs.sync.v1`에 per-cert ms 스탬프). 순수 함수 `sync_merge.dart`(완전 단위테스트).
+- **파일:** `lib/data/cloud/{auth_user,auth_service,cloud_store,sync_merge,sync_service,firebase_bootstrap,firestore_cloud_store,firebase_auth_service,sync_controller}.dart` · `lib/firebase_options.dart`(스텁) · `lib/pages/sync_entry.dart` · `lib/main.dart`(부트스트랩) · `lib/pages/home_page.dart`(⚙ `_SettingsButton.openSyncSheet` static + 햄버거 `_NavMenuButton` 진입점).
+- **Firebase 버전:** firebase_core ^4.10 · firebase_auth ^6.5 · cloud_firestore ^6.5. 컴파일·release 빌드 검증됨. **라이브 미검증.**
+- **검증:** `cd flutter_app && flutter analyze lib && flutter test` (현재 256). 라이브는 사용자 Firebase 후.
 
 ---
 
-## 3. 잊지 말 것 (제약·아키텍처)
+## 2. 기타 대기 작업 (콘텐츠 백로그 — cloud-sync와 별개, 여전히 유효)
+이전 핸드오프 상세는 git `9c30e72`의 `HANDOFF.md` 참조. 요약:
+- **① ≥15 심화:** CLF 각 Task 12→15 verified(+57문항). 리스크 최저·즉시 가치. 워크플로 메모리 [[content-density-loop]].
+- **② SAA-C03 착수:** 현재 문항 0(학습문서만). 첫 검증 문항 세트 + `content_index` questionCount·`content_index_test` 단언 갱신.
+- **③ C-중량:** 개념 → 학습문서 *섹션* 앵커 딥링크. 가치(스크롤 마찰) 증명 후 착수.
+- **철칙:** `verified=사람 검수만`(AI가 true 금지) · 문항 새 개념은 학습문서(`t*.md`)도 보강 · 시각/UI는 `DESIGN.md` 먼저.
 
-- **verified = 사람 검수만.** AI가 `verified:true` 직접 박지 말 것.
-- **시각/UI는 `DESIGN.md` 먼저.** 반마케팅 에디토리얼, 액센트(verified 틸 `#0E8175`) 드물게, 3단 CTA·그라데이션 금지.
-- **처방 루프(이미 구현):** `report_page`(약점 리포트) · `wrong_answer_index`(오답노트 졸업) · `weighted_exam`(약점 집중 모의고사). 결과화면 진입점 = `ExamView.resultsActionsBuilder(ctx, justFinished)` 빌더(잠금 stale 방지).
-- **Support 플랜 표기:** 시험 대비는 전통 분류(Basic·Developer·Business·Enterprise), 현 명칭은 **Business(현 Business Support+)** 병기로 통일됨.
-- **워킹트리:** `flutter_app/pubspec.lock`이 미커밋으로 남아 있음(테스트 중 `flutter pub get`의 의존성 범프, 무해 — 되돌리려면 `git checkout`).
-- **검증:** 변경 후 항상 `cd flutter_app && flutter analyze lib && flutter test`.
+---
 
-**추천 다음 1수: ①(≥15 심화).** 리스크 최저, 즉시 가치. ②는 큰 신규 착수, ③은 가치 증명 후.
+## 3. 워킹트리 / 메모
+- 미커밋: 없음(테스트 깨끗). Firebase 의존성 `pubspec.lock`은 Task 1에서 커밋됨.
+- 이 세션 시각 QA 산출물 `qa-*.png`·`.playwright-mcp/`가 워킹트리에 **untracked**로 남아 있음(무해 — 지우려면 `rm -f qa-*.png && rm -rf .playwright-mcp`). 푸시엔 미포함.
+- 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]] (web-server + Playwright + `flt-semantics-placeholder` 클릭으로 시맨틱스 켜기).
+- 방향·결정 메모리: [[study-app-cloud-direction]].
+
+**다음 세션 첫 수: §0의 트리거 갭(1) 보강 → 재리뷰(2) → 브랜치 마무리(3).**
