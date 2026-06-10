@@ -69,10 +69,31 @@ void main() {
     expect(done['fr'], isTrue);
   });
 
+  test('manual=false는 랭크 슬롯을 소비하지 않음 — 뒤 항목이 자동 완료', () {
+    final plan = _plan([
+      _it('m0', PlanItemType.mockExam, date: '2026-06-18'),
+      _it('m1', PlanItemType.mockExam, date: '2026-06-19'),
+      _it('m2', PlanItemType.mockExam, date: '2026-06-20'),
+    ]);
+    final done = computePlanDone(plan,
+      manual: const {'m1': false},
+      viewedTaskIds: const {},
+      history: [
+        _rec('exam:CLF-C02-mock'),
+        _rec('exam:CLF-C02-mock'),
+        _rec('exam:CLF-C02-mock'),
+      ],
+    );
+    expect(done['m0'], isTrue); // rank 0 < 3
+    expect(done['m1'], isFalse); // 수동 강제 미완
+    expect(done['m2'], isTrue); // rank 1 < 3
+  });
+
   test('isOverdue: 미완 + 과거', () {
     final it = _it('d1', PlanItemType.doc, date: '2026-06-12');
     expect(isOverdue(it, '2026-06-15', false), isTrue);
     expect(isOverdue(it, '2026-06-15', true), isFalse);
     expect(isOverdue(it, '2026-06-10', false), isFalse);
+    expect(isOverdue(it, '2026-06-12', false), isFalse); // 당일은 밀림 아님
   });
 }

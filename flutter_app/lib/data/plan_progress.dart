@@ -7,6 +7,8 @@ import 'attempt_presented.dart';
 /// 날짜·id 순으로 정렬해 실제 응시 횟수만큼 앞에서부터 완료 처리.
 ///
 /// 한계(MVP): 수동 오버라이드된 반복형 항목은 자동 순위 계산에서 제외된다.
+/// 즉 manual=true 오버라이드가 있으면 자동 완료 항목이 실제 응시 횟수를 초과할 수 있다
+/// (예: 응시 1회 + m0 수동 완료 → m0·m1 모두 done). UI는 진행률 표시 시 유의.
 Map<String, bool> computePlanDone(
   StudyPlan plan, {
   required Map<String, bool> manual,
