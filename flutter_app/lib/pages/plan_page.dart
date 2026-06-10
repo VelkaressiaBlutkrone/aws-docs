@@ -326,6 +326,25 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                 Text('진행 ${s.done}/${s.total} (${s.percent}%)',
                     style: t.bodyMedium?.copyWith(color: c.textMuted)),
                 const Spacer(),
+                TextButton(
+                  onPressed: () {
+                    final done = _done();
+                    final doneIds = {
+                      for (final e in done.entries)
+                        if (e.value) e.key
+                    };
+                    final r = redistribute(widget.plan, widget.today, doneIds);
+                    widget.onChanged(StudyPlan(
+                      certCode: widget.plan.certCode,
+                      startIso: widget.plan.startIso,
+                      endIso: widget.plan.endIso,
+                      mode: widget.plan.mode,
+                      createdIso: widget.plan.createdIso,
+                      items: r.items,
+                    ));
+                  },
+                  child: const Text('오늘부터 재분배'),
+                ),
                 TextButton(onPressed: widget.onEdit, child: const Text('다시 만들기')),
               ],
             ),

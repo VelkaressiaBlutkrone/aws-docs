@@ -24,6 +24,50 @@ class PlanBuildResult {
   final List<String> warnings;
 }
 
+/// 미완 항목만 [today, lastDay] 창에 단계 순서 유지한 채 재배치.
+/// 완료 항목은 날짜를 보존한다. 사용자 명시 동작(자동 호출 금지).
+PlanBuildResult redistribute(
+  StudyPlan plan,
+  String todayIso,
+  Set<String> doneItemIds,
+) {
+  final lastDay = plan.mode == PlanMode.examDate
+      ? addDays(plan.endIso, -1)
+      : plan.endIso;
+  final winStart =
+      daysBetween(plan.startIso, todayIso) > 0 ? todayIso : plan.startIso;
+  if (daysBetween(winStart, lastDay) < 0) {
+    return PlanBuildResult(
+        items: plan.items, warnings: ['남은 기간이 없어 재분배할 수 없습니다.']);
+  }
+  final windowDays = daysBetween(winStart, lastDay) + 1;
+
+  final done = plan.items.where((i) => doneItemIds.contains(i.id)).toList();
+  // plan.items는 이미 단계 순서 → todo도 그 순서 보존.
+  final todo = plan.items.where((i) => !doneItemIds.contains(i.id)).toList();
+
+  final out = <PlanItem>[...done];
+  final k = todo.length;
+  for (var i = 0; i < k; i++) {
+    var off = windowDays <= 1 ? 0 : (i * windowDays ~/ k);
+    if (off > windowDays - 1) off = windowDays - 1;
+    out.add(PlanItem(
+      id: todo[i].id,
+      dateIso: addDays(winStart, off),
+      type: todo[i].type,
+      phase: todo[i].phase,
+      refId: todo[i].refId,
+    ));
+  }
+  out.sort((a, b) => a.dateIso.compareTo(b.dateIso));
+
+  final warnings = <String>[];
+  if (k > windowDays) {
+    warnings.add('남은 $k개를 $windowDays일에 재배치 — 하루 평균 약 ${(k / windowDays).ceil()}개.');
+  }
+  return PlanBuildResult(items: out, warnings: warnings);
+}
+
 /// 단계형 분배(순수·결정적). 부작용 없음.
 PlanBuildResult buildPlan({
   required String certCode,
