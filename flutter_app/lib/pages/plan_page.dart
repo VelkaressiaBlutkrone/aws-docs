@@ -7,6 +7,7 @@ import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/plan_check_store.dart';
 import '../data/plan_progress.dart';
+import '../data/plan_month.dart';
 import '../data/plan_scheduler.dart';
 import '../data/study_plan_store.dart';
 import '../data/viewed_docs_store.dart';
@@ -262,6 +263,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
   final _checks = PlanCheckStore();
   final _history = HistoryStore();
   final _viewed = ViewedDocsStore();
+  bool _month = false;
 
   Map<String, bool> _done() => computePlanDone(
         widget.plan,
@@ -346,6 +348,14 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                 Text('진행 ${s.done}/${s.total} (${s.percent}%)',
                     style: t.bodyMedium?.copyWith(color: c.textMuted)),
                 const Spacer(),
+                IconButton(
+                  tooltip: _month ? '어젠다' : '월 보기',
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(
+                      _month ? Icons.view_agenda_outlined : Icons.calendar_month_outlined,
+                      size: 20, color: c.textMuted),
+                  onPressed: () => setState(() => _month = !_month),
+                ),
                 TextButton(
                   onPressed: () {
                     final messenger = ScaffoldMessenger.of(context);
@@ -380,13 +390,16 @@ class _PlanAgendaState extends State<_PlanAgenda> {
               color: c.accent,
             ),
             const SizedBox(height: Gap.lg),
-            for (final date in dates) ...[
-              _dayHeader(c, t, date),
-              for (final it in byDate[date]!)
-                _itemRow(c, t, it, done[it.id] == true,
-                    isOverdue(it, widget.today, done[it.id] == true)),
-              const SizedBox(height: Gap.md),
-            ],
+            if (_month)
+              _monthView(c, t, done)
+            else
+              for (final date in dates) ...[
+                _dayHeader(c, t, date),
+                for (final it in byDate[date]!)
+                  _itemRow(c, t, it, done[it.id] == true,
+                      isOverdue(it, widget.today, done[it.id] == true)),
+                const SizedBox(height: Gap.md),
+              ],
           ],
         ),
       ),
@@ -457,6 +470,84 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _monthView(AppColors c, TextTheme t, Map<String, bool> done) {
+    final blocks = planMonthBlocks(widget.plan, done);
+    const wd = ['일', '월', '화', '수', '목', '금', '토'];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final b in blocks) ...[
+          Padding(
+            padding: const EdgeInsets.only(top: Gap.sm, bottom: Gap.sm),
+            child: Text('${b.year}년 ${b.month}월',
+                style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+          ),
+          Row(
+            children: [
+              for (final d in wd)
+                Expanded(
+                    child: Center(
+                        child: Text(d,
+                            style: t.labelSmall?.copyWith(color: c.textFaint)))),
+            ],
+          ),
+          const SizedBox(height: Gap.xs),
+          for (final week in b.weeks)
+            Row(
+              children: [
+                for (final day in week) Expanded(child: _monthCell(c, t, day)),
+              ],
+            ),
+        ],
+      ],
+    );
+  }
+
+  Widget _monthCell(AppColors c, TextTheme t, MonthDay day) {
+    if (day.dateIso == null) return const SizedBox(height: 56);
+    final isToday = day.dateIso == widget.today;
+    final isExam = widget.plan.mode == PlanMode.examDate && day.dateIso == widget.plan.endIso;
+    final accent = isToday || isExam;
+    final dayNum = int.parse(day.dateIso!.split('-')[2]).toString();
+    final allDone = day.total > 0 && day.done >= day.total;
+    return InkWell(
+      onTap: day.total > 0 ? () => setState(() => _month = false) : null,
+      borderRadius: BorderRadius.circular(Radii.sm),
+      child: Container(
+        height: 56,
+        margin: const EdgeInsets.all(2),
+        padding: const EdgeInsets.all(Gap.xs2),
+        decoration: BoxDecoration(
+          color: accent ? c.surface2 : Colors.transparent,
+          borderRadius: BorderRadius.circular(Radii.sm),
+          border: Border.all(
+              color: accent
+                  ? c.accent
+                  : c.border.withValues(alpha: day.inRange ? 1 : 0.35)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(isExam ? '$dayNum·시험' : dayNum,
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: accent
+                        ? c.accent
+                        : (day.inRange ? c.text : c.textFaint))),
+            const Spacer(),
+            if (day.total > 0)
+              Text('${day.done}/${day.total}',
+                  style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: allDone ? c.correct : c.textMuted)),
           ],
         ),
       ),
