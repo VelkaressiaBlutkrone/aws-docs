@@ -38,7 +38,7 @@ PlanBuildResult redistribute(
       daysBetween(plan.startIso, todayIso) > 0 ? todayIso : plan.startIso;
   if (daysBetween(winStart, lastDay) < 0) {
     return PlanBuildResult(
-        items: plan.items, warnings: ['남은 기간이 없어 재분배할 수 없습니다.']);
+        items: [...plan.items], warnings: ['남은 기간이 없어 재분배할 수 없습니다.']);
   }
   final windowDays = daysBetween(winStart, lastDay) + 1;
 
@@ -48,6 +48,7 @@ PlanBuildResult redistribute(
 
   final out = <PlanItem>[...done];
   final k = todo.length;
+  // k==0(전부 완료)이면 루프는 건너뛰고 out은 완료 항목(복사본)만 — 정상.
   for (var i = 0; i < k; i++) {
     var off = windowDays <= 1 ? 0 : (i * windowDays ~/ k);
     if (off > windowDays - 1) off = windowDays - 1;

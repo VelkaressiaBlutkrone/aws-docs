@@ -328,6 +328,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                 const Spacer(),
                 TextButton(
                   onPressed: () {
+                    final messenger = ScaffoldMessenger.of(context);
                     final done = _done();
                     final doneIds = {
                       for (final e in done.entries)
@@ -342,8 +343,12 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                       createdIso: widget.plan.createdIso,
                       items: r.items,
                     ));
+                    if (r.warnings.isNotEmpty) {
+                      messenger.showSnackBar(
+                          SnackBar(content: Text(r.warnings.first)));
+                    }
                   },
-                  child: const Text('오늘부터 재분배'),
+                  child: const Text('재분배'),
                 ),
                 TextButton(onPressed: widget.onEdit, child: const Text('다시 만들기')),
               ],

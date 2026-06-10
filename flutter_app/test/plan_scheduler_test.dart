@@ -142,4 +142,34 @@ void main() {
     final r = redistribute(plan, '2026-06-10', {});
     expect(r.warnings, isNotEmpty);
   });
+
+  test('redistribute: 전체 완료 → 완료 항목만 그대로', () {
+    final plan = StudyPlan(
+      certCode: 'CLF-C02', startIso: '2026-06-01', endIso: '2026-06-20',
+      mode: PlanMode.period, createdIso: '2026-06-01',
+      items: const [
+        PlanItem(id: 'a', dateIso: '2026-06-02', type: PlanItemType.doc, phase: PlanPhase.learn),
+        PlanItem(id: 'b', dateIso: '2026-06-03', type: PlanItemType.doc, phase: PlanPhase.learn),
+      ],
+    );
+    final r = redistribute(plan, '2026-06-10', {'a', 'b'});
+    expect(r.items.map((i) => i.id).toSet(), {'a', 'b'});
+    expect(r.warnings, isEmpty);
+  });
+
+  test('redistribute: 미완 항목 > 남은 일수 → 경고', () {
+    final plan = StudyPlan(
+      certCode: 'CLF-C02', startIso: '2026-06-18', endIso: '2026-06-20',
+      mode: PlanMode.period, createdIso: '2026-06-18',
+      items: const [
+        PlanItem(id: 'a', dateIso: '2026-06-18', type: PlanItemType.doc, phase: PlanPhase.learn),
+        PlanItem(id: 'b', dateIso: '2026-06-18', type: PlanItemType.doc, phase: PlanPhase.learn),
+        PlanItem(id: 'c', dateIso: '2026-06-19', type: PlanItemType.doc, phase: PlanPhase.learn),
+        PlanItem(id: 'd', dateIso: '2026-06-19', type: PlanItemType.doc, phase: PlanPhase.learn),
+        PlanItem(id: 'e', dateIso: '2026-06-20', type: PlanItemType.doc, phase: PlanPhase.learn),
+      ],
+    );
+    final r = redistribute(plan, '2026-06-19', {}); // winStart=6/19, lastDay=6/20 → 2일, 5개
+    expect(r.warnings.any((w) => w.contains('재배치')), isTrue);
+  });
 }
