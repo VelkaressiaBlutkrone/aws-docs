@@ -26,3 +26,25 @@ String attemptKey(AttemptRecord r) =>
   }
   return (merged: byKey.values.toList(), toCloud: toCloud);
 }
+
+/// viewed set union: 로컬 {cert:set} + 클라우드 {cert:{taskIds:[]}}
+/// → 병합 {cert:set} + 클라우드와 달라진 cert만 toCloud {cert:{taskIds:[]}}.
+({Map<String, Set<String>> merged, Map<String, Map<String, dynamic>> toCloud})
+    mergeViewed(Map<String, Set<String>> local,
+        Map<String, Map<String, dynamic>> cloud) {
+  final merged = <String, Set<String>>{};
+  final toCloud = <String, Map<String, dynamic>>{};
+  final certs = {...local.keys, ...cloud.keys};
+  for (final cert in certs) {
+    final l = local[cert] ?? const <String>{};
+    final cRaw = (cloud[cert]?['taskIds'] as List?)?.cast<String>() ?? const [];
+    final c = cRaw.toSet();
+    final union = {...l, ...c};
+    merged[cert] = union;
+    // 클라우드 집합과 다르면(로컬이 더한 게 있으면) push
+    if (union.length != c.length) {
+      toCloud[cert] = {'taskIds': union.toList()};
+    }
+  }
+  return (merged: merged, toCloud: toCloud);
+}
