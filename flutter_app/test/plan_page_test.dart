@@ -54,9 +54,16 @@ void main() {
     await tester.pumpWidget(_host(backend, 'CLF-C02'));
     await tester.pumpAndSettle();
 
-    // 어젠다 시작 시 스크롤 오프셋 0
-    final sc0 = tester.widget<ListView>(find.byType(ListView)).controller!;
-    expect(sc0.offset, 0);
+    // 본문 스크롤러(NestedScrollView body의 CustomScrollView)의 Scrollable.
+    ScrollableState bodyScrollable() => tester.state<ScrollableState>(
+          find.descendant(
+            of: find.byKey(const Key('plan-agenda-scroll')),
+            matching: find.byType(Scrollable),
+          ),
+        );
+
+    // 어젠다 시작 시 본문 스크롤 오프셋 0
+    expect(bodyScrollable().position.pixels, 0);
 
     // 월 보기 토글
     await tester.tap(find.byTooltip('월 보기'));
@@ -67,9 +74,25 @@ void main() {
         of: find.text('24'), matching: find.byType(InkWell)).first);
     await tester.pumpAndSettle();
 
-    // 어젠다로 돌아오고 늦은 날짜로 스크롤됨 → 오프셋 > 0
-    final sc1 = tester.widget<ListView>(find.byType(ListView)).controller!;
-    expect(sc1.offset, greaterThan(0));
+    // (1) 어젠다로 돌아오고 늦은 날짜로 스크롤됨 → 본문 오프셋 > 0
+    expect(bodyScrollable().position.pixels, greaterThan(0),
+        reason: '24일 셀을 탭하면 본문이 늦은 날짜로 스크롤돼야 한다');
+
+    // (2) 실제로 "그 날짜"로 갔는지 검증: 6/24 어젠다 날짜 헤더가 보이는 뷰포트
+    //     안(상단~하단)에 들어와 있어야 한다. 시작 오프셋(0)에서는 6/24가 뷰포트
+    //     아래쪽(또는 cacheExtent 영역)에 있으므로, 이 검증은 trivially-true가 아니라
+    //     "실제로 그 날짜까지 스크롤됐음"을 보장한다.
+    final dayHeader = find.text('2026-06-24');
+    expect(dayHeader, findsOneWidget,
+        reason: '대상 날짜 헤더가 마운트(=해당 위치로 스크롤)돼 있어야 한다');
+
+    final viewportBox = tester.getRect(find.byKey(const Key('plan-agenda-scroll')));
+    final headerTop = tester.getTopLeft(dayHeader).dy;
+    // 헤더가 보이는 뷰포트 범위(top..bottom) 안에 있다 = 화면에 실제로 보인다.
+    expect(headerTop, greaterThanOrEqualTo(viewportBox.top - 1),
+        reason: '6/24 헤더가 뷰포트 상단 위로 잘려 있으면 안 된다');
+    expect(headerTop, lessThanOrEqualTo(viewportBox.bottom),
+        reason: '6/24 헤더가 보이는 뷰포트 안으로 스크롤돼 들어와야 한다');
   });
 
   testWidgets('체크박스 토글이 PlanCheckStore에 영속 + 진행률 UI 반영', (tester) async {
