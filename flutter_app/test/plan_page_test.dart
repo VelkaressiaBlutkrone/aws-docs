@@ -82,7 +82,7 @@ void main() {
     //     안(상단~하단)에 들어와 있어야 한다. 시작 오프셋(0)에서는 6/24가 뷰포트
     //     아래쪽(또는 cacheExtent 영역)에 있으므로, 이 검증은 trivially-true가 아니라
     //     "실제로 그 날짜까지 스크롤됐음"을 보장한다.
-    final dayHeader = find.text('2026-06-24');
+    final dayHeader = find.textContaining('2026-06-24');
     expect(dayHeader, findsOneWidget,
         reason: '대상 날짜 헤더가 마운트(=해당 위치로 스크롤)돼 있어야 한다');
 
@@ -93,6 +93,48 @@ void main() {
         reason: '6/24 헤더가 뷰포트 상단 위로 잘려 있으면 안 된다');
     expect(headerTop, lessThanOrEqualTo(viewportBox.bottom),
         reason: '6/24 헤더가 보이는 뷰포트 안으로 스크롤돼 들어와야 한다');
+  });
+
+  testWidgets('먼 날짜(미마운트) 월 셀 탭도 스테핑으로 스크롤', (tester) async {
+    final backend = MemoryBackend();
+    final items = <PlanItem>[];
+    var d = DateTime.utc(2026, 6, 10);
+    final end = DateTime.utc(2026, 7, 31);
+    var n = 0;
+    while (!d.isAfter(end)) {
+      final iso = '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+      items.add(PlanItem(id: 'i${n++}', dateIso: iso, type: PlanItemType.doc, phase: PlanPhase.learn));
+      d = d.add(const Duration(days: 1));
+    }
+    StudyPlanStore(backend: backend).save(StudyPlan(
+      certCode: 'CLF-C02', startIso: '2026-06-10', endIso: '2026-07-31',
+      mode: PlanMode.period, createdIso: '2026-06-10', items: items));
+
+    await tester.pumpWidget(_host(backend, 'CLF-C02'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('월 보기'));
+    await tester.pumpAndSettle();
+    // 월 뷰가 길어서 July 31 셀이 초기에 뷰포트 밖에 있다 → 스크롤해서 드러낸 뒤 탭
+    await tester.scrollUntilVisible(
+      find.ancestor(of: find.text('31'), matching: find.byType(InkWell)).first,
+      100,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    // July 31 — '31'은 이 범위에서 7월에만 존재(6월은 30일까지)
+    await tester.tap(find.ancestor(of: find.text('31'), matching: find.byType(InkWell)).first);
+    await tester.pumpAndSettle();
+
+    final header = find.textContaining('2026-07-31');
+    expect(header, findsOneWidget,
+        reason: '2026-07-31 헤더가 스크롤 후 뷰포트에 마운트돼야 한다');
+    final rect = tester.getRect(header);
+    final view = tester.view;
+    final screenHeight = view.physicalSize.height / view.devicePixelRatio;
+    expect(rect.top, greaterThanOrEqualTo(-1),
+        reason: '헤더가 뷰포트 상단 위로 잘려 있으면 안 된다');
+    expect(rect.top, lessThanOrEqualTo(screenHeight),
+        reason: '헤더가 보이는 뷰포트 안으로 스크롤돼 들어와야 한다');
   });
 
   testWidgets('체크박스 토글이 PlanCheckStore에 영속 + 진행률 UI 반영', (tester) async {

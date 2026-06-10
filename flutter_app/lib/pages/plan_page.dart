@@ -269,15 +269,8 @@ class _PlanAgendaState extends State<_PlanAgenda> {
   late final _history = HistoryStore(backend: widget.backend);
   late final _viewed = ViewedDocsStore(backend: widget.backend);
   bool _month = false;
-  final _scrollCtrl = ScrollController();
   final _dateKeys = <String, GlobalKey>{};
   String? _scrollToDate;
-
-  @override
-  void dispose() {
-    _scrollCtrl.dispose();
-    super.dispose();
-  }
 
   Map<String, bool> _done() => computePlanDone(
         widget.plan,
@@ -419,7 +412,6 @@ class _PlanAgendaState extends State<_PlanAgenda> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 720),
         child: NestedScrollView(
-          controller: _scrollCtrl,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverOverlapAbsorber(
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
