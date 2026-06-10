@@ -19,3 +19,4 @@ build/
 # Tooling
 .gstack/
 .omc/
+.superpowers/
