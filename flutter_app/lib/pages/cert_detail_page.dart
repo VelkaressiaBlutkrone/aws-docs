@@ -352,7 +352,7 @@ class _LearningContent extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.event_note_outlined, size: 18, color: c.accent),
+                    Icon(Icons.event_note_outlined, size: 18, color: c.textMuted),
                     const SizedBox(width: Gap.sm),
                     Expanded(
                       child: Text('학습 일정 · 시험일까지 무엇을 언제 공부할지',

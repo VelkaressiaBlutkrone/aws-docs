@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../content/quiz_widgets.dart' show PrimaryButton;
 import '../data/content_index.dart';
 import '../data/plan_scheduler.dart';
 import '../data/study_plan_store.dart';
@@ -19,12 +20,12 @@ class PlanPage extends StatefulWidget {
 class _PlanPageState extends State<PlanPage> {
   final _store = StudyPlanStore();
   StudyPlan? _plan;
-
-  String get _today => DateTime.now().toIso8601String().substring(0, 10);
+  late final String _today;
 
   @override
   void initState() {
     super.initState();
+    _today = DateTime.now().toIso8601String().substring(0, 10);
     _plan = _store.planFor(widget.cert.code);
   }
 
@@ -85,20 +86,23 @@ class _PlanCreateFormState extends State<_PlanCreateForm> {
       );
 
   Future<void> _pick(bool isStart) async {
-    final init = DateTime.parse(isStart ? _start : _end);
+    final first = DateTime.parse(widget.today);
+    final last = first.add(const Duration(days: 365));
+    var init = DateTime.parse(isStart ? _start : _end);
+    if (init.isBefore(first)) init = first;
+    if (init.isAfter(last)) init = last;
     final picked = await showDatePicker(
       context: context,
       initialDate: init,
-      firstDate: DateTime.parse(widget.today),
-      lastDate: DateTime.parse(widget.today).add(const Duration(days: 365)),
+      firstDate: first,
+      lastDate: last,
     );
     if (picked == null) return;
     final iso = picked.toIso8601String().substring(0, 10);
     setState(() => isStart ? _start = iso : _end = iso);
   }
 
-  void _save() {
-    final r = _preview();
+  void _save(PlanBuildResult r) {
     widget.onSaved(StudyPlan(
       certCode: widget.cert.code,
       startIso: _start,
@@ -162,9 +166,9 @@ class _PlanCreateFormState extends State<_PlanCreateForm> {
               ),
             ),
             const SizedBox(height: Gap.lg),
-            FilledButton(
-              onPressed: r.items.isEmpty ? null : _save,
-              child: const Text('일정 저장'),
+            PrimaryButton(
+              label: '일정 저장',
+              onTap: r.items.isEmpty ? null : () => _save(r),
             ),
           ],
         ),
@@ -217,7 +221,7 @@ class _PlanAgenda extends StatelessWidget {
   final StudyPlan plan;
   final String today;
   final VoidCallback onEdit;
-  final ValueChanged<StudyPlan> onChanged;
+  final ValueChanged<StudyPlan> onChanged; // Task 7(어젠다)에서 재분배·저장에 사용
 
   @override
   Widget build(BuildContext context) {
