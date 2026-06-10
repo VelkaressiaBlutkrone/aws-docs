@@ -60,6 +60,12 @@ void main() {
     expect(find.byType(HomePage), findsOneWidget);
   });
 
+  testWidgets('잘못된 cert plan 경로 → "/"로 redirect', (tester) async {
+    await tester.pumpWidget(_app('/cert/NOPE/plan'));
+    await tester.pump();
+    expect(find.byType(HomePage), findsOneWidget);
+  });
+
   testWidgets('알 수 없는 경로 → 에러 페이지', (tester) async {
     await tester.pumpWidget(_app('/no/such/route'));
     await tester.pump();

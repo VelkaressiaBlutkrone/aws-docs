@@ -338,6 +338,36 @@ class _LearningContent extends StatelessWidget {
                 ),
               ),
             ),
+          Padding(
+            padding: const EdgeInsets.only(top: Gap.xs),
+            child: InkWell(
+              onTap: () => context.push('/cert/${entries.first.certCode}/plan'),
+              borderRadius: BorderRadius.circular(Radii.md),
+              child: Container(
+                padding: const EdgeInsets.all(Gap.lg),
+                decoration: BoxDecoration(
+                  color: c.surface,
+                  borderRadius: BorderRadius.circular(Radii.md),
+                  border: Border.all(color: c.border),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.event_note_outlined, size: 18, color: c.accent),
+                    const SizedBox(width: Gap.sm),
+                    Expanded(
+                      child: Text('학습 일정 · 시험일까지 무엇을 언제 공부할지',
+                          style: t.titleMedium?.copyWith(color: c.text)),
+                    ),
+                    Text('일정 →',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: c.accent)),
+                  ],
+                ),
+              ),
+            ),
+          ),
           if (hasQuestions)
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
