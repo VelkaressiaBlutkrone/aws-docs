@@ -83,4 +83,11 @@ void main() {
     await tester.pump();
     expect(find.text('CLF-C02 · 통합 모의고사'), findsOneWidget);
   });
+
+  testWidgets('플랜 없으면 오늘-할-일 배너 미표시', (tester) async {
+    await tester.pumpWidget(_home());
+    await tester.pump();
+    expect(find.textContaining('오늘 학습할 항목'), findsNothing);
+    expect(find.textContaining('지난 일정'), findsNothing);
+  });
 }

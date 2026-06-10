@@ -97,6 +97,18 @@ void main() {
     expect(isOverdue(it, '2026-06-12', false), isFalse); // 당일은 밀림 아님
   });
 
+  test('planDueCounts: 오늘·밀림 미완만 카운트', () {
+    final plan = _plan([
+      _it('a', PlanItemType.doc, date: '2026-06-09'), // 과거 → 밀림
+      _it('b', PlanItemType.doc, date: '2026-06-10'), // 오늘
+      _it('c', PlanItemType.doc, date: '2026-06-10'), // 오늘
+      _it('d', PlanItemType.doc, date: '2026-06-11'), // 미래(제외)
+    ]);
+    final r = planDueCounts(plan, {'b': true}, '2026-06-10'); // b 완료
+    expect(r.today, 1);   // c (b는 완료라 제외)
+    expect(r.overdue, 1); // a
+  });
+
   test('플랜 생성 전 응시는 카운트 안 함(사전 이력 오염 방지)', () {
     final plan = _plan([
       _it('m0', PlanItemType.mockExam, date: '2026-06-18'),
