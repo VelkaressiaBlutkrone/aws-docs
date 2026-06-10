@@ -96,4 +96,32 @@ void main() {
     expect(isOverdue(it, '2026-06-10', false), isFalse);
     expect(isOverdue(it, '2026-06-12', false), isFalse); // 당일은 밀림 아님
   });
+
+  test('플랜 생성 전 응시는 카운트 안 함(사전 이력 오염 방지)', () {
+    final plan = _plan([
+      _it('m0', PlanItemType.mockExam, date: '2026-06-18'),
+    ]);
+    // plan.createdIso = '2026-06-10' (from _plan helper)
+    final before = computePlanDone(plan,
+      manual: const {}, viewedTaskIds: const {},
+      history: [
+        AttemptRecord(
+          certId: 'CLF-C02', examId: 'exam:CLF-C02-mock', mode: 'exam',
+          date: '2026-06-05T10:00:00.000', correct: 1, total: 1,
+          wrongQuestionIds: const [], flaggedQuestionIds: const [], durationSpentSec: 60),
+      ],
+    );
+    expect(before['m0'], isFalse); // 생성(6/10) 전(6/5) 응시 → 미카운트
+
+    final after = computePlanDone(plan,
+      manual: const {}, viewedTaskIds: const {},
+      history: [
+        AttemptRecord(
+          certId: 'CLF-C02', examId: 'exam:CLF-C02-mock', mode: 'exam',
+          date: '2026-06-12T10:00:00.000', correct: 1, total: 1,
+          wrongQuestionIds: const [], flaggedQuestionIds: const [], durationSpentSec: 60),
+      ],
+    );
+    expect(after['m0'], isTrue); // 생성 후(6/12) 응시 → 카운트
+  });
 }

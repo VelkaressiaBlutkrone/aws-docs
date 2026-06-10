@@ -317,6 +317,18 @@ class _PlanAgendaState extends State<_PlanAgenda> {
         child: ListView(
           padding: const EdgeInsets.all(Gap.xl),
           children: [
+            if (daysBetween(widget.today, widget.plan.endIso) < 0)
+              Container(
+                margin: const EdgeInsets.only(bottom: Gap.md),
+                padding: const EdgeInsets.all(Gap.md),
+                decoration: BoxDecoration(
+                  color: c.surface2,
+                  borderRadius: BorderRadius.circular(Radii.md),
+                  border: Border.all(color: c.border),
+                ),
+                child: Text('학습 기간이 종료됐습니다. "다시 만들기"로 새 일정을 만들거나 기간을 연장하세요.',
+                    style: t.bodySmall?.copyWith(color: c.textMuted)),
+              ),
             Row(
               children: [
                 Text('D-${s.daysLeft}',

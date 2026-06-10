@@ -26,7 +26,9 @@ class StudyPlanStore {
     final j = _read()[certCode];
     if (j is! Map<String, dynamic>) return null;
     try {
-      return StudyPlan.fromJson(j);
+      final p = StudyPlan.fromJson(j);
+      if (p.startIso.isEmpty || p.endIso.isEmpty) return null; // 손상 플랜 무시
+      return p;
     } catch (_) {
       return null;
     }

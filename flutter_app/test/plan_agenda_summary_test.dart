@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/models/study_plan.dart';
-import 'package:aws_docs/pages/plan_page.dart' show planSummary, PlanSummary;
+import 'package:aws_docs/pages/plan_page.dart' show planSummary;
 
 PlanItem _it(String id, {String date = '2026-06-12'}) => PlanItem(
     id: id, dateIso: date, type: PlanItemType.doc, phase: PlanPhase.learn);

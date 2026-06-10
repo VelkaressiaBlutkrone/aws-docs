@@ -156,11 +156,11 @@ bool planItemDone(PlanItem item, {
 우선순위:
 1. `manualOverride != null` → 그 값(수동이 자동을 덮어씀).
 2. 자동 감지(타입별):
-   - `doc`: `viewedTaskIds.contains(refId)`.
-   - `mockExam`: history에 `mode=='exam'`(통합) 응시가 `item.dateIso` 이후 1건+.
-   - `weakExam`: history에 약점 모드 응시가 `item.dateIso` 이후 1건+.
-   - `quiz`: history에 그 Task의 연습 응시가 `item.dateIso` 이후 — **best-effort**(연습 이력의 Task 식별이 모호하면 false; 사용자는 항상 수동 체크 가능).
-   - `finalReview`: history에 `mode=='review'`(오답노트) 응시가 `item.dateIso` 이후 1건+, 없으면 수동.
+   - `doc`: `viewedTaskIds.contains(refId)` — **날짜 게이팅 없음**(ViewedDocsStore에 타임스탬프 없음, 열람=완료).
+   - `mockExam`: history에 `mode=='exam'`(통합) 응시가 **`plan.createdIso` 이후** 1건+.
+   - `weakExam`: history에 약점 모드 응시가 **`plan.createdIso` 이후** 1건+.
+   - `quiz`: history에 그 Task의 연습 응시가 **`plan.createdIso` 이후** — **best-effort**(연습 이력의 Task 식별이 모호하면 false; 사용자는 항상 수동 체크 가능).
+   - `finalReview`: history에 `mode=='review'`(오답노트) 응시가 **`plan.createdIso` 이후** 1건+, 없으면 수동.
 - **밀림(overdue)**: `!done && item.dateIso < 오늘`. 어젠다 상단에 모아 표시.
 - **진행률**: `done 수 / 전체 항목 수`.
 
