@@ -23,7 +23,7 @@ Future<void> main() async {
       cloud: FirestoreCloudStore(),
       local: defaultBackend(),
       // 로컬→클라우드 트리거: 주기(이 기기 변경 백업 지연 최소화) + 앱 복귀.
-      syncInterval: const Duration(seconds: 30),
+      syncInterval: SyncController.defaultSyncInterval,
       onAppResume: appResumeSignal(),
     )..start();
   }

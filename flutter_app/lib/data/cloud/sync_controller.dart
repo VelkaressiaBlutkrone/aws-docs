@@ -14,6 +14,10 @@ enum SyncStatus { off, idle, syncing, error }
 /// 인증·트리거를 받아 SyncService.reconcileAll을 멱등 재실행(reconcile-on-trigger).
 /// 가로채기 없음 — SyncService가 스토어와 같은 localStorage를 읽고/쓴다.
 class SyncController extends ChangeNotifier {
+  /// 기본 주기 트리거 간격. 변경이 없어도 틱마다 컬렉션 로드가 발생하는
+  /// 비용↔백업 지연 트레이드오프의 단일 조정점.
+  static const Duration defaultSyncInterval = Duration(seconds: 30);
+
   SyncController({
     required AuthService auth,
     required CloudStore cloud,
@@ -47,6 +51,11 @@ class SyncController extends ChangeNotifier {
   bool _pending = false;
   // Guard: signIn/signOut already handle _onUser directly; skip the stream echo.
   bool _explicitTransition = false;
+  // 전환 세대. auth 스트림이 _onUser를 await 없이 부르므로 전환이 인터리브될 수
+  // 있다 — await sync() 뒤 세대가 다르면(더 새 전환 또는 dispose가 추월) 스테일
+  // 측이 watch/timer를 부착해 고아를 만들기에, 최신 세대만 부착을 진행한다.
+  int _gen = 0;
+  bool _disposed = false;
 
   AuthUser? get user => _user;
   SyncStatus get status => _status;
@@ -80,17 +89,31 @@ class SyncController extends ChangeNotifier {
   }
 
   Future<void> _onUser(AuthUser? u) async {
+    final gen = ++_gen;
     _user = u;
-    await _cancelWatches();
-    _periodic?.cancel();
-    _periodic = null;
+    _teardownTriggers();
     if (u == null) {
+      _pending = false; // 로그아웃: 큐된 재동기 요청은 무의미
       _set(SyncStatus.off);
       return;
     }
     await sync(); // 초기 화해
+    if (gen != _gen) return; // 추월당한 스테일 전환은 watch/timer 부착 금지
     _startWatches(u.uid); // 클라우드 변경 수신
     _startPeriodic(); // 로컬→클라우드 주기 푸시(멱등 reconcile)
+  }
+
+  /// 주기 타이머·watch 구독 해제. 의도적으로 **동기** — cancel()이 리턴되는
+  /// 순간 이벤트 전달은 멈춘다(Dart stream 보장). 정리-완료 future를 기다리면
+  /// 해제가 await 너머로 밀려, 로그아웃 직후에도 타이머가 살아있는 창이 생긴다.
+  void _teardownTriggers() {
+    _periodic?.cancel();
+    _periodic = null;
+    final subs = List<StreamSubscription<dynamic>>.from(_watchSubs);
+    _watchSubs.clear();
+    for (final s in subs) {
+      s.cancel();
+    }
   }
 
   void _startPeriodic() {
@@ -130,25 +153,19 @@ class SyncController extends ChangeNotifier {
     }
   }
 
-  Future<void> _cancelWatches() async {
-    final subs = List<StreamSubscription<dynamic>>.from(_watchSubs);
-    _watchSubs.clear();
-    for (final s in subs) {
-      await s.cancel();
-    }
-  }
-
   void _set(SyncStatus s) {
+    if (_disposed) return; // 비행 중 reconcile이 dispose 뒤 완료될 수 있음
     _status = s;
     notifyListeners();
   }
 
   @override
   void dispose() {
+    _disposed = true;
+    _gen++; // 비행 중 _onUser가 깨어나도 부착 못 하게
     _authSub?.cancel();
     _resumeSub?.cancel();
-    _periodic?.cancel();
-    _cancelWatches();
+    _teardownTriggers();
     super.dispose();
   }
 }

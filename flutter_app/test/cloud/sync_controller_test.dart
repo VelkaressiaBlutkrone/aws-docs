@@ -9,12 +9,15 @@ import 'package:aws_docs/data/cloud/auth_user.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
 import 'package:aws_docs/data/cloud/sync_controller.dart';
 
-/// loadCollection 호출 수 카운트 + 선택적 throw로 reconcile 횟수·에러 경로 검증.
+/// loadCollection 호출 수 카운트 + 선택적 throw/지연으로 reconcile 횟수·에러·인터리브 검증.
 class _SpyCloud implements CloudStore {
   _SpyCloud(this._inner);
   final CloudStore _inner;
   int loads = 0;
   bool throwOnLoad = false;
+
+  /// fakeAsync에서 reconcile을 파킹시켜 _onUser 인터리브를 결정론적으로 재현.
+  Duration loadDelay = Duration.zero;
 
   @override
   Future<void> setDoc(
@@ -26,6 +29,7 @@ class _SpyCloud implements CloudStore {
       String uid, String collection) async {
     loads++;
     if (throwOnLoad) throw Exception('boom');
+    if (loadDelay > Duration.zero) await Future<void>.delayed(loadDelay);
     return _inner.loadCollection(uid, collection);
   }
 
@@ -33,6 +37,26 @@ class _SpyCloud implements CloudStore {
   Stream<Map<String, Map<String, dynamic>>> watchCollection(
           String uid, String collection) =>
       _inner.watchCollection(uid, collection);
+}
+
+/// sync() 호출을 센다 — signOut 후엔 sync가 null-가드로 no-op이라
+/// loads로는 고아 타이머가 안 보이기 때문(타이머 발화 자체를 관측).
+class _ProbeController extends SyncController {
+  _ProbeController({
+    required super.auth,
+    required super.cloud,
+    required super.local,
+    super.nowMs,
+    super.syncInterval,
+    super.onAppResume,
+  });
+  int syncCalls = 0;
+
+  @override
+  Future<void> sync() {
+    syncCalls++;
+    return super.sync();
+  }
 }
 
 void main() {
@@ -201,5 +225,52 @@ void main() {
     expect(spy.loads, greaterThan(after));
     await ctrl.signOut();
     await resume.close();
+  });
+
+  // --- 인터리브 하드닝: 동시 _onUser가 고아 타이머/스테일 부착을 못 만들게 ---
+
+  test('빠른 인증 전환 인터리브: signOut 후 어떤 타이머도 sync를 발화하지 않음(고아 없음)', () {
+    fakeAsync((async) {
+      final spy = _SpyCloud(FakeCloudStore())
+        ..loadDelay = const Duration(seconds: 10); // 첫 reconcile 파킹
+      final auth = FakeAuthService();
+      final ctrl = _ProbeController(
+          auth: auth, cloud: spy, local: MemoryBackend(),
+          nowMs: () => 1000, syncInterval: const Duration(seconds: 30));
+      ctrl.start();
+      auth.emit(const AuthUser(uid: 'u-a', email: 'a@example.com'));
+      async.flushMicrotasks(); // _onUser(A)가 느린 reconcile에 파킹
+      auth.emit(const AuthUser(uid: 'u-b', email: 'b@example.com'));
+      async.flushMicrotasks(); // _onUser(B)가 추월해 watch/timer 부착
+      async.elapse(const Duration(seconds: 60)); // 지연 로드 진행
+      spy.loadDelay = Duration.zero;
+      ctrl.signOut();
+      async.flushMicrotasks(); // 참조된 타이머·watch 정리
+      final calls = ctrl.syncCalls;
+      async.elapse(const Duration(minutes: 3));
+      async.flushMicrotasks();
+      // 고아 주기 타이머가 남았다면 틱마다 sync()가 불려 증가한다.
+      expect(ctrl.syncCalls, calls);
+    });
+  });
+
+  test('전환 비행 중 dispose: 이후 타이머 발화 0 + notify-after-dispose 없음', () {
+    fakeAsync((async) {
+      final spy = _SpyCloud(FakeCloudStore())
+        ..loadDelay = const Duration(seconds: 10);
+      final auth = FakeAuthService();
+      final ctrl = _ProbeController(
+          auth: auth, cloud: spy, local: MemoryBackend(),
+          nowMs: () => 1000, syncInterval: const Duration(seconds: 30));
+      ctrl.start();
+      auth.emit(const AuthUser(uid: 'u-a', email: 'a@example.com'));
+      async.flushMicrotasks(); // 초기 reconcile에 파킹된 채로
+      ctrl.dispose();
+      final calls = ctrl.syncCalls;
+      // 비행 중이던 reconcile이 완료돼도(throw 없이) watch/timer를 부착하면 안 된다.
+      async.elapse(const Duration(minutes: 5));
+      async.flushMicrotasks();
+      expect(ctrl.syncCalls, calls);
+    });
   });
 }
