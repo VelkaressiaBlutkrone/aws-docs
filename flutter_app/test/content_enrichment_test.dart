@@ -5,8 +5,16 @@ import 'package:flutter_test/flutter_test.dart';
 /// 고도화 완료 문서만 목록에 올린다(점진적 롤아웃 지원 — soa_content_structure_test 패턴).
 void main() {
   const enriched = <String>[
-    'assets/content/clf/t1-1.md',
-    'assets/content/clf/t3-1.md',
+    'assets/content/clf/t1-1.md', 'assets/content/clf/t1-2.md',
+    'assets/content/clf/t1-3.md', 'assets/content/clf/t1-4.md',
+    'assets/content/clf/t2-1.md', 'assets/content/clf/t2-2.md',
+    'assets/content/clf/t2-3.md', 'assets/content/clf/t2-4.md',
+    'assets/content/clf/t3-1.md', 'assets/content/clf/t3-2.md',
+    'assets/content/clf/t3-3.md', 'assets/content/clf/t3-4.md',
+    'assets/content/clf/t3-5.md', 'assets/content/clf/t3-6.md',
+    'assets/content/clf/t3-7.md', 'assets/content/clf/t3-8.md',
+    'assets/content/clf/t4-1.md', 'assets/content/clf/t4-2.md',
+    'assets/content/clf/t4-3.md',
   ];
 
   for (final path in enriched) {
