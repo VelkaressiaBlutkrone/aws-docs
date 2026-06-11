@@ -59,8 +59,6 @@ lastVerified: 2026-06-07
 |---|---|---|
 | **CIDR** | Classless Inter-Domain Routing | IP 범위를 `/숫자` 접두사 길이로 표현하는 방식 |
 | **ENI** | Elastic Network Interface | EC2 등에 붙이는 가상 네트워크 카드 — SG는 여기에 적용됨 |
-| **상태 저장** | Stateful | 연결 상태를 추적해 요청·응답을 한 쌍으로 처리하는 방식 |
-| **상태 비저장** | Stateless | 각 패킷을 독립적으로 평가 — 응답도 별도 규칙이 필요 |
 | **임시 포트** | ephemeral port | 클라이언트가 연결 시 OS가 자동 할당하는 고번호 포트(1024~65535) |
 | **prefix list** | prefix list | CIDR 블록 집합을 하나의 논리 ID로 묶어 라우트·정책에서 참조하는 객체 |
 | **전이 라우팅** | transitive routing | A→B→C 중간 노드를 경유해 간접 목적지에 도달하는 라우팅 |
