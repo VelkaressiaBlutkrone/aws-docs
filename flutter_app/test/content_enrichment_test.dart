@@ -15,6 +15,18 @@ void main() {
     'assets/content/clf/t3-7.md', 'assets/content/clf/t3-8.md',
     'assets/content/clf/t4-1.md', 'assets/content/clf/t4-2.md',
     'assets/content/clf/t4-3.md',
+    'assets/content/saa/saa-t1-1.md', 'assets/content/saa/saa-t1-2.md',
+    'assets/content/saa/saa-t1-3.md', 'assets/content/saa/saa-t1-4.md',
+    'assets/content/saa/saa-t1-5.md', 'assets/content/saa/saa-t2-1.md',
+    'assets/content/saa/saa-t2-2.md', 'assets/content/saa/saa-t2-3.md',
+    'assets/content/saa/saa-t2-4.md', 'assets/content/saa/saa-t2-5.md',
+    'assets/content/saa/saa-t3-1.md', 'assets/content/saa/saa-t3-2.md',
+    'assets/content/saa/saa-t3-3.md', 'assets/content/saa/saa-t3-4.md',
+    'assets/content/saa/saa-t3-5.md', 'assets/content/saa/saa-t3-6.md',
+    'assets/content/saa/saa-t3-7.md', 'assets/content/saa/saa-t3-8.md',
+    'assets/content/saa/saa-t3-9.md', 'assets/content/saa/saa-t4-1.md',
+    'assets/content/saa/saa-t4-2.md', 'assets/content/saa/saa-t4-3.md',
+    'assets/content/saa/saa-t4-4.md', 'assets/content/saa/saa-t4-5.md',
   ];
 
   for (final path in enriched) {
