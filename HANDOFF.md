@@ -6,14 +6,14 @@ _갱신: 2026-06-11(오후) · 다음 작업자(사람 또는 새 세션)가 이
 
 ---
 
-## 0. 지금 IN-FLIGHT: 학습문서 고도화 — 파일럿 출고, **롤아웃 대기**
+## 0. 지금 IN-FLIGHT: 학습문서 고도화 — **배치 A(CLF) 출고 완료, 배치 B(SAA) 대기**
 
 **방향 결정(2026-06-11, 사용자):** 모의고사 중량화·문항 증가보다 **학습 내용 고도화 우선**. 고도화 완료 후 모의고사 중량·증가 검토.
 
-- **완료(main 배포됨):** 파일럿 2개(`clf/t1-1`·`t3-1`) — 🔤 용어 표 + 🧠 원리 블록 + 함정-원리 포인터 + 원리형 Q5. 리뷰 2사이클 + **본인 검수·공식 대조 완료**(lastVerified 2026-06-11). 구조 테스트(`content_enrichment_test.dart`) 도입, 268 테스트 그린.
-- **템플릿 freeze:** 스펙 §4.4 체크리스트 (수사 패턴 금지·단일 메커니즘·단정 보수화·용어 grep 검증 등 — 리뷰에서 실제 잡힌 것들). **롤아웃 시 필수 준수.**
-- **다음 첫 수:** Plan 2 `docs/superpowers/plans/2026-06-11-content-enrichment-rollout.md` Task 1부터 — **CLF 17 → SAA 24 → SOA 20**, cert 배치마다 검수 게이트→lastVerified→머지·배포. 스펙: `docs/superpowers/specs/2026-06-11-content-enrichment-design.md`. 파일럿 절차 전례: `plans/2026-06-11-content-enrichment-pilot.md`.
-- ⚠️ SOA 배치 전 코드 펜스 내 `###` 카운트 오염 사전 점검(Plan 2 Task 7에 명시).
+- **✅ 배치 A 완료(main 배포, 2026-06-11):** **CLF 19/19 전부 고도화** (파일럿 2 + 롤아웃 17). 🔤 용어 표 + 🧠 원리 블록 + 함정-원리 포인터 + 원리형 Q. 문서별 2단 리뷰 루프(~30건 교정) + **본인 검수·공식 대조 완료**(5건 보수화 반영: S3 기본암호화·SecurityHub CSPM·Support 최신성·SP/RI·VPN-DX), lastVerified 2026-06-11. 구조 테스트 19문서 그린, **전체 319 테스트**.
+- **템플릿 freeze:** 스펙 §4.4 + 배치 A에서 정제된 기준 — 용어 표 금지 대상은 "시험이 구분을 묻는 개념"(보조 어휘는 본문 언급 있어도 허용) · 비템플릿 요소(ℹ️ 메모) 금지 · 추가 줄에 할인율/수치 재인용 금지.
+- **다음 첫 수: 배치 B (SAA 24)** — Plan 2 Task 4부터. **배치 A 검수 코멘트 반영사항:** SAA는 이미 두꺼우니(평균 272줄) 원리 블록 4~6줄로 더 절제, 함정 포인터 문장 짧게(t2-2·t2-3 warning 박스가 길어졌다는 피드백), 분량 +50~80. 이후 배치 C(SOA 20) — 코드 펜스 내 `###` 카운트 오염 사전 점검 필수(Plan 2 Task 7).
+- 문서: 스펙 `docs/superpowers/specs/2026-06-11-content-enrichment-design.md` · 플랜 `docs/superpowers/plans/2026-06-11-content-enrichment-rollout.md` · 파일럿 전례 `plans/2026-06-11-content-enrichment-pilot.md`.
 
 ---
 
