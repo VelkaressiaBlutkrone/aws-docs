@@ -131,9 +131,9 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > Aurora Global Database는 RPO를 가장 낮추고 싶을 때 최선택입니다. "리전 간 1초 미만 복제"가 시험 문구로 자주 등장합니다.
 
 > 🧠 원리: 왜 리전 간 데이터 복제는 대부분 비동기 방식을 사용할까요?
-> 두 리전 사이의 물리적 거리로 인해 네트워크 왕복 지연(RTT)이 수십~수백 ms 수준이며, 동기 복제는 모든 쓰기 작업이 보조 리전의 확인 응답을 기다려야 하므로 쓰기마다 그 지연이 추가됩니다.
+> 두 리전 사이의 물리적 거리로 인해 네트워크 왕복 지연이 상당하며, 동기 복제는 모든 쓰기 작업이 보조 리전의 확인 응답을 기다려야 하므로 쓰기마다 그 지연이 추가됩니다.
 > 이 지연이 데이터베이스 트랜잭션에 누적되면 애플리케이션 응답시간이 허용 수준을 넘어 사실상 프로덕션 사용이 어려워집니다.
-> 따라서 리전 간 복제는 비동기를 기본으로 하고, Aurora Global Database처럼 전용 인프라로 복제 지연을 1초 미만으로 줄이는 방식이 RPO 최소화의 현실적 상한선이 됩니다.
+> 따라서 리전 간 복제는 비동기를 기본으로 하고, Aurora Global Database처럼 전용 복제 인프라로 지연을 최소화하는 방식이 RPO 최소화의 현실적 상한선이 됩니다.
 
 ### 5) 페일오버 자동화 — Route 53
 
@@ -159,8 +159,8 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 > RDS Multi-AZ는 같은 리전 내 **동기** 복제(AZ 장애 대응), 교차 리전 Read Replica는 **비동기** 복제(리전 장애 대응).
 
 > 🧠 원리: 왜 동기 복제는 같은 리전 내 AZ 간에는 실용적이지만 리전 간에는 잘 쓰지 않을까요?
-> 같은 리전의 AZ 간 RTT는 수 ms 이내라 동기 복제로 인한 쓰기 지연이 애플리케이션에서 체감되지 않는 수준입니다.
-> 반면 리전 간 RTT는 수십~수백 ms로, 동기 복제를 강제하면 모든 DB 쓰기가 그 지연을 기다려야 해 초당 처리량이 급감합니다.
+> 같은 리전의 AZ 간 왕복 지연은 충분히 짧아 동기 복제로 인한 쓰기 지연이 애플리케이션에서 체감되지 않는 수준입니다.
+> 반면 리전 간 왕복 지연은 물리적 거리로 인해 상당히 크며, 동기 복제를 강제하면 모든 DB 쓰기가 그 지연을 기다려야 해 초당 처리량이 급감합니다.
 > 이 물리적 한계가 "같은 리전 = 동기(RDS Multi-AZ), 리전 간 = 비동기(Read Replica/Aurora Global DB)"라는 복제 방식 이분법의 근거입니다.
 
 ### 7) AWS Elastic Disaster Recovery (DRS)
@@ -205,7 +205,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
    *(원리: §3 — Pilot Light가 DB만 상시 복제하는 이유는 앱은 기동 가능하지만 데이터는 사전 복제 없이 복구 불가이기 때문이다.)*
 
 3. **"RDS Multi-AZ와 교차 리전 Read Replica는 같다."** → Multi-AZ는 동일 리전 내 동기 복제(AZ 장애 대응), Read Replica는 비동기 교차 리전 복제(리전 장애 DR). 목적과 복제 방식이 다릅니다.
-   *(원리: §6 — AZ 간 RTT는 수 ms라 동기 복제가 실용적이고, 리전 간 RTT는 수십~수백 ms라 비동기가 불가피하다.)*
+   *(원리: §6 — AZ 간 왕복 지연은 짧아 동기 복제가 실용적이고, 리전 간 왕복 지연은 물리적으로 커서 비동기가 불가피하다.)*
 
 4. **"RPO=0이면 Backup & Restore로 된다."** → Backup & Restore는 RPO가 마지막 백업 이후(수 시간)입니다. RPO 0 요구에는 동기 복제 또는 Active-Active가 필요합니다.
    *(원리: §1 — RPO는 복구 가능한 가장 최근 시점까지의 거리이며, 백업 주기만큼 반드시 손실이 발생한다.)*
@@ -254,7 +254,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 
 <details><summary>정답 보기</summary>
 
-Aurora Global Database는 전용 복제 인프라와 로그 기반 스트리밍을 사용해 보조 리전 복제 지연을 1초 미만으로 유지합니다. 일반 RDS Read Replica는 공용 네트워크 경로를 통한 비동기 복제로 지연이 수 초 이상 발생할 수 있으며, 복제 지연 동안 Primary에 쓰인 데이터가 보조 리전에 반영되지 않아 해당 구간이 RPO 손실로 이어집니다. 복제 지연이 짧을수록 페일오버 시점의 RPO가 작아지므로, Aurora Global Database가 엄격한 RPO 요구 환경에서 RDS Read Replica보다 유리합니다.
+Aurora Global Database는 전용 복제 인프라를 사용해 보조 리전 복제 지연을 최소화합니다. 일반 RDS Read Replica는 비동기 복제 특성상 복제 지연이 발생할 수 있으며, 복제 지연 동안 Primary에 쓰인 데이터가 보조 리전에 반영되지 않아 해당 구간이 RPO 손실로 이어집니다. 복제 지연이 짧을수록 페일오버 시점의 RPO가 작아지므로, Aurora Global Database가 엄격한 RPO 요구 환경에서 RDS Read Replica보다 유리합니다.
 </details>
 
 ---
