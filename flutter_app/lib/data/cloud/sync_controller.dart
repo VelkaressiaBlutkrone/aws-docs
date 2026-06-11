@@ -19,15 +19,27 @@ class SyncController extends ChangeNotifier {
     required CloudStore cloud,
     required KvBackend local,
     int Function()? nowMs,
+    Duration? syncInterval,
+    Stream<void>? onAppResume,
   })  : _auth = auth,
         _cloud = cloud,
+        _syncInterval = syncInterval,
+        _onAppResume = onAppResume,
         _svc = SyncService(local: local, cloud: cloud, nowMs: nowMs);
 
   final AuthService _auth;
   final CloudStore _cloud;
   final SyncService _svc;
 
+  /// signed-in 동안 멱등 reconcile을 재실행할 주기. null이면 주기 트리거 off.
+  final Duration? _syncInterval;
+
+  /// 앱 복귀(예: web visibilitychange) 신호. 수신 시 sync() — 비로그인이면 무시(가드).
+  final Stream<void>? _onAppResume;
+
   StreamSubscription<AuthUser?>? _authSub;
+  StreamSubscription<void>? _resumeSub;
+  Timer? _periodic;
   final List<StreamSubscription<dynamic>> _watchSubs = [];
   AuthUser? _user;
   SyncStatus _status = SyncStatus.off;
@@ -43,6 +55,8 @@ class SyncController extends ChangeNotifier {
     _authSub ??= _auth.authChanges().listen((u) {
       if (!_explicitTransition) _onUser(u);
     });
+    // 앱 복귀 신호 → reconcile. sync()가 비로그인을 가드하므로 추가 게이트 불필요.
+    _resumeSub ??= _onAppResume?.listen((_) => sync());
   }
 
   Future<void> signIn() async {
@@ -68,12 +82,21 @@ class SyncController extends ChangeNotifier {
   Future<void> _onUser(AuthUser? u) async {
     _user = u;
     await _cancelWatches();
+    _periodic?.cancel();
+    _periodic = null;
     if (u == null) {
       _set(SyncStatus.off);
       return;
     }
     await sync(); // 초기 화해
     _startWatches(u.uid); // 클라우드 변경 수신
+    _startPeriodic(); // 로컬→클라우드 주기 푸시(멱등 reconcile)
+  }
+
+  void _startPeriodic() {
+    final interval = _syncInterval;
+    if (interval == null) return;
+    _periodic = Timer.periodic(interval, (_) => sync());
   }
 
   /// 멱등 reconcile. 재진입 가드: 진행 중이면 pending 표시 후 1회 재실행.
@@ -123,6 +146,8 @@ class SyncController extends ChangeNotifier {
   @override
   void dispose() {
     _authSub?.cancel();
+    _resumeSub?.cancel();
+    _periodic?.cancel();
     _cancelWatches();
     super.dispose();
   }

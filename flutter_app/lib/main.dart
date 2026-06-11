@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_router.dart';
+import 'data/cloud/app_resume.dart';
 import 'data/cloud/firebase_auth_service.dart';
 import 'data/cloud/firebase_bootstrap.dart';
 import 'data/cloud/firestore_cloud_store.dart';
@@ -21,6 +22,9 @@ Future<void> main() async {
       auth: FirebaseAuthService(),
       cloud: FirestoreCloudStore(),
       local: defaultBackend(),
+      // 로컬→클라우드 트리거: 주기(이 기기 변경 백업 지연 최소화) + 앱 복귀.
+      syncInterval: const Duration(seconds: 30),
+      onAppResume: appResumeSignal(),
     )..start();
   }
 

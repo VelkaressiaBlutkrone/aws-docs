@@ -1,5 +1,7 @@
 // flutter_app/test/cloud/sync_controller_test.dart
+import 'dart:async';
 import 'dart:convert';
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/local_kv.dart';
 import 'package:aws_docs/data/cloud/auth_service.dart';
@@ -125,5 +127,79 @@ void main() {
     ctrl.start();
     await ctrl.signIn(); // reconcile가 throwOnLoad로 실패
     expect(ctrl.status, SyncStatus.error);
+  });
+
+  // --- 트리거 갭: 로컬→클라우드 (주기 + 앱 복귀) ---
+
+  test('주기 트리거: signed-in 동안 interval마다 reconcile 재실행', () {
+    fakeAsync((async) {
+      final spy = _SpyCloud(FakeCloudStore());
+      final ctrl = SyncController(
+          auth: FakeAuthService(), cloud: spy, local: MemoryBackend(),
+          nowMs: () => 1000, syncInterval: const Duration(seconds: 30));
+      ctrl.start();
+      ctrl.signIn();
+      async.flushMicrotasks();
+      final after = spy.loads; // 초기 화해 완료
+      async.elapse(const Duration(seconds: 30));
+      async.flushMicrotasks();
+      expect(spy.loads, greaterThan(after)); // 주기 틱이 sync 재실행
+    });
+  });
+
+  test('주기 트리거: signOut 후 멈춤', () {
+    fakeAsync((async) {
+      final spy = _SpyCloud(FakeCloudStore());
+      final ctrl = SyncController(
+          auth: FakeAuthService(), cloud: spy, local: MemoryBackend(),
+          nowMs: () => 1000, syncInterval: const Duration(seconds: 30));
+      ctrl.start();
+      ctrl.signIn();
+      async.flushMicrotasks();
+      ctrl.signOut();
+      async.flushMicrotasks();
+      final after = spy.loads;
+      async.elapse(const Duration(seconds: 90));
+      async.flushMicrotasks();
+      expect(spy.loads, after); // 비로그인 → 주기 트리거 정지
+    });
+  });
+
+  test('주기 트리거: dispose 후 멈춤', () {
+    fakeAsync((async) {
+      final spy = _SpyCloud(FakeCloudStore());
+      final ctrl = SyncController(
+          auth: FakeAuthService(), cloud: spy, local: MemoryBackend(),
+          nowMs: () => 1000, syncInterval: const Duration(seconds: 30));
+      ctrl.start();
+      ctrl.signIn();
+      async.flushMicrotasks();
+      final after = spy.loads;
+      ctrl.dispose();
+      async.elapse(const Duration(seconds: 90));
+      async.flushMicrotasks();
+      expect(spy.loads, after); // dispose가 타이머 정리
+    });
+  });
+
+  test('앱 복귀 신호: signed-in이면 reconcile, 비로그인이면 무시', () async {
+    final resume = StreamController<void>.broadcast();
+    final spy = _SpyCloud(FakeCloudStore());
+    final ctrl = SyncController(
+        auth: FakeAuthService(), cloud: spy, local: MemoryBackend(),
+        nowMs: () => 1000, onAppResume: resume.stream);
+    ctrl.start();
+    // 비로그인 상태 복귀 → 무시
+    resume.add(null);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(spy.loads, 0);
+    // 로그인 후 복귀 → reconcile
+    await ctrl.signIn();
+    final after = spy.loads;
+    resume.add(null);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(spy.loads, greaterThan(after));
+    await ctrl.signOut();
+    await resume.close();
   });
 }
