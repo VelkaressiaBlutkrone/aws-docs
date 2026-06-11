@@ -49,8 +49,7 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 *
 - **`CloudStore`**(추상 인터페이스): 엔티티별 push/pull/listen. 구현 = `FirestoreCloudStore` · `FakeCloudStore`(메모리). → **Firebase 없이 SyncService 단위 테스트.**
 - **`AuthService`**(추상): `signInWithGoogle()`·`signOut()`·`Stream<AuthUser?>`. 구현 = `FirebaseAuthService` · `FakeAuthService`.
 - **`SyncService`**: 인증 상태 구독. 로그인 시 화해 시작, 로그아웃 시 정지. CloudStore와 로컬 KvBackend 사이 엔티티 병합.
-- **`SyncedKvBackend implements KvBackend`**: 로컬 백엔드를 래핑. `write(key,value)` = 로컬 쓰기 + (알려진 `awsdocs.*` 키면) SyncService에 엔티티 푸시 디스패치. `read`/`keys`는 로컬 위임.
-- **백엔드 홀더(싱글톤):** 앱 전역 활성 `KvBackend`를 보유. 기본 = `WebBackend`(로컬). 로그인 시 `SyncedKvBackend`로 교체. 스토어들의 `defaultBackend()`가 이 홀더의 현재 값을 반환하도록 변경(현재 매 호출 신규 생성 → 홀더 기반으로).
+- **`SyncController`**(앱 전역 1개, reconcile-on-trigger): 인증 상태 구독 → 로그인 시 `SyncService.reconcileAll` + Firestore watch 시작; **변경 수신·앱 복귀·주기** 트리거에 reconcile 재실행(멱등). `SyncNotifier`로 UI 통지. **스토어·`defaultBackend()` 불변** — SyncService가 스토어와 같은 localStorage(WebBackend)를 읽고/써서 reconcile 결과가 다음 읽기에 자동 반영(가로채기 불필요).
 - **Firebase 초기화 선택적**: `firebase_bootstrap.dart`가 설정 여부 확인 후 init. 미설정이면 cloud 기능 전부 off.
 
 ## 4. Firebase 설정 게이트 (컴파일·배포 안전)
@@ -71,9 +70,9 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 *
    - attempts: 두 집합 union(dedupe by key) → 로컬 블롭 갱신 + 클라우드에 로컬 신규 upsert.
    - viewed: set union → 양쪽 반영.
    - plan/checks: `updatedAt` 큰 쪽 채택(LWW), 동률이면 클라우드 우선 → 반영.
-2. **로컬 쓰기 → 푸시:** `SyncedKvBackend.write`가 키 판별 → 해당 엔티티 upsert(멱등). attempts는 새 레코드만 set, viewed는 union, plan/checks는 doc set + updatedAt.
+2. **로컬 변경 → 푸시(트리거):** 가로채기 없음. `SyncController`가 **앱 복귀·주기(예: 30s)·라우트 변경** 트리거에 `reconcileAll` 재실행(멱등 → 로컬 신규만 push).
 3. **클라우드 변경 수신:** Firestore 리스너 → 로컬 병합 반영 → **`SyncNotifier`(ChangeNotifier)** 통지 → UI 재읽기. (Firestore 오프라인 지속성으로 끊겨도 자동 재동기.)
-4. **루프 가드:** 클라우드-출처 변경을 로컬에 반영할 때는 `SyncedKvBackend`(디스패치 래퍼)를 **우회해 내부 로컬 백엔드에 직접** 기록 → 푸시 재트리거 없음. (SyncService가 raw 로컬 백엔드 참조를 보유.)
+4. **재진입·루프 가드:** reconcile 진행 중 재트리거는 무시(in-progress 플래그). 클라우드 watch→reconcile→push→watch는 멱등이라 신규 push가 없으면 1~2라운드에 수렴.
 
 ## 7. UI (opt-in · 절제, DESIGN.md)
 - 진입: 홈 설정(⚙) 메뉴 또는 그 근처 **"기기 간 동기"** 항목.
@@ -112,18 +111,17 @@ service cloud.firestore {
 | `lib/data/cloud/fake_cloud_store.dart` | 테스트용 메모리 구현 |
 | `lib/data/cloud/auth_service.dart` | `AuthService` 인터페이스 + `FakeAuthService` |
 | `lib/data/cloud/firebase_auth_service.dart` | Google 로그인 구현 |
-| `lib/data/cloud/sync_service.dart` | 엔티티 화해·푸시·수신·루프가드 + `SyncNotifier` |
-| `lib/data/cloud/synced_kv_backend.dart` | `KvBackend` 래퍼(로컬 + 디스패치) |
+| `lib/data/cloud/sync_service.dart` | 엔티티 화해(reconcileAll) — **완료(Plan 1)** |
+| `lib/data/cloud/sync_controller.dart` | 인증·트리거 오케스트레이션 + `SyncNotifier`(reconcile-on-trigger) |
 | `lib/data/cloud/firebase_bootstrap.dart` | 선택적 init + 설정 게이트 |
 | `lib/firebase_options.dart` | **스텁**(사용자가 flutterfire로 덮음) |
-| `lib/data/local_kv.dart`(수정) | 전역 백엔드 홀더(싱글톤·교체 가능) |
 | `lib/pages/…`(수정) | 동기 진입점·상태 UI |
 | `test/cloud/*` | 단위 테스트 |
 
 ## 12. 구현 증분 순서 (→ 플랜)
 1. `CloudStore`/`AuthService` 인터페이스 + `FakeCloudStore`/`FakeAuthService`.
 2. `SyncService` 화해 로직(엔티티별 병합) + 단위 테스트(가짜로 무손실·LWW 검증). ← **여기까지 Firebase 없이.**
-3. 전역 백엔드 홀더 + `SyncedKvBackend` + 디스패치 + 테스트.
+3. `SyncController`(reconcile-on-trigger: 로그인·watch·복귀/주기) + `SyncNotifier` + 테스트(Fake).
 4. `firebase_bootstrap` 스텁 게이트 + graceful degrade.
 5. `FirestoreCloudStore`·`FirebaseAuthService`(실연동, 컴파일만·라이브 미검증).
 6. UI 진입점·상태.
