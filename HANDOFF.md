@@ -1,19 +1,29 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-06-11(오후) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-06-11(저녁) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
 ---
 
-## 0. 지금 IN-FLIGHT: 학습문서 고도화 — **배치 A(CLF) 출고 완료, 배치 B(SAA) 대기**
+## 0. 지금 IN-FLIGHT: 학습문서 고도화 배치 B(SAA) — **10/24 완료, 일시 중지**
 
-**방향 결정(2026-06-11, 사용자):** 모의고사 중량화·문항 증가보다 **학습 내용 고도화 우선**. 고도화 완료 후 모의고사 중량·증가 검토.
+**브랜치 `feat/content-enrichment-saa` (origin 푸시됨, main 미병합).** 구조 테스트 tail: `+87 -42`.
 
-- **✅ 배치 A 완료(main 배포, 2026-06-11):** **CLF 19/19 전부 고도화** (파일럿 2 + 롤아웃 17). 🔤 용어 표 + 🧠 원리 블록 + 함정-원리 포인터 + 원리형 Q. 문서별 2단 리뷰 루프(~30건 교정) + **본인 검수·공식 대조 완료**(5건 보수화 반영: S3 기본암호화·SecurityHub CSPM·Support 최신성·SP/RI·VPN-DX), lastVerified 2026-06-11. 구조 테스트 19문서 그린, **전체 319 테스트**.
-- **템플릿 freeze:** 스펙 §4.4 + 배치 A에서 정제된 기준 — 용어 표 금지 대상은 "시험이 구분을 묻는 개념"(보조 어휘는 본문 언급 있어도 허용) · 비템플릿 요소(ℹ️ 메모) 금지 · 추가 줄에 할인율/수치 재인용 금지.
-- **다음 첫 수: 배치 B (SAA 24)** — Plan 2 Task 4부터. **배치 A 검수 코멘트 반영사항:** SAA는 이미 두꺼우니(평균 272줄) 원리 블록 4~6줄로 더 절제, 함정 포인터 문장 짧게(t2-2·t2-3 warning 박스가 길어졌다는 피드백), 분량 +50~80. 이후 배치 C(SOA 20) — 코드 펜스 내 `###` 카운트 오염 사전 점검 필수(Plan 2 Task 7).
-- 문서: 스펙 `docs/superpowers/specs/2026-06-11-content-enrichment-design.md` · 플랜 `docs/superpowers/plans/2026-06-11-content-enrichment-rollout.md` · 파일럿 전례 `plans/2026-06-11-content-enrichment-pilot.md`.
+- **완료 10개 (구현 + 통합 spec·quality 리뷰 + 수정, lastVerified는 게이트 후):** saa-t1-1 ~ t1-5, saa-t2-1 ~ t2-5. 리뷰가 잡은 실질 교정: 사실 오류 3건(rotation 4단계 순서·마이크로초 스케일·AWSPREVIOUS 의미, t1-4) · 부정확 포인터(t2-4 함정#1) · RTT/TPS/1초미만 수치 재인용 제거(t2-1·t2-5) · 재포장 블록·Q 교체 다수 · Stateful/Stateless 행 제거(t1-3, t2-4 전례 적용).
+- **남은 14개:** saa-t3-1 ~ t3-9, saa-t4-1 ~ t4-5. 문서당 tail -3씩 감소(남은 문서엔 기존 왜-Q 없음 — t1-5만 있었음), 전부 완료 시 구조 스위트 All passed.
+- **다음 첫 수: saa-t3-1 디스패치.** 루프 패턴(이 세션 검증): 문서별 ①구현(sonnet) → ②통합 spec+quality 리뷰+수정 권한(sonnet) → ③컨트롤러가 tail 직접 실측(리뷰어가 test tail과 diff stat을 자주 혼동 — tail은 신뢰하지 말고 직접 `flutter test test/content_enrichment_test.dart -r compact | tail -1`).
+- **배치 B 절제 규칙(프롬프트에 주입할 것):** 블록 4~6줄 · 블록 수 = min(^###, 8) · `####`는 부모 커버(블록 금지) · 분량 +50~80 · 포인터 ~60자 요지 · 본문 why 재포장 금지(기존 why-블록 있으면 다른 축) · 수치 ADDED 재인용 금지 · Q답 1~3문장·비공식 추론 금지 · 기존 본문 불가침 · 용어 표는 "시험 구분 양 축" 금지(glossary-레이어: 정의 1줄 vs 본문 상세 분리면 허용).
+- **테스트 카운팅(이 브랜치에서 변경됨, faa16d9):** `^### `만 카운트(#### 제외) + 하한 캡 8.
+- **게이트 플래그 누적(배치 B 검수 시 제시):** saa-t1-2 용어 표 '권한 세트·전체 기능 모드' 행 — 시험 구분 경계 사례.
+- 게이트 절차(배치 A와 동일): 24개 완료 → 검수 STOP → 피드백 반영 → lastVerified(+출처 줄 병기) → main 병합 → push(=배포) → 배치 C.
+
+## 0-a. 완료: 배치 A(CLF) — main 배포됨
+
+**CLF 19/19 고도화 출고(2026-06-11).** 본인 검수 5건 보수화 반영(S3 기본암호화·SecurityHub CSPM·Support 최신성·SP/RI·VPN-DX), lastVerified 갱신, 319 테스트. 배치 C(SOA 20)는 코드 펜스 `###` 오염 사전 점검 필수(Plan 2 Task 7 — 배치 B의 사전 점검에선 SAA 오염 0건이었음).
+
+- 문서: 스펙 `docs/superpowers/specs/2026-06-11-content-enrichment-design.md`(§4.4 freeze) · 플랜 `docs/superpowers/plans/2026-06-11-content-enrichment-rollout.md` · 파일럿 전례 `plans/2026-06-11-content-enrichment-pilot.md`.
+- **방향 결정(2026-06-11, 사용자):** 모의고사 중량화·문항 증가보다 학습 내용 고도화 우선. 고도화(배치 B·C) 완료 후 모의고사 중량·증가 검토.
 
 ---
 
