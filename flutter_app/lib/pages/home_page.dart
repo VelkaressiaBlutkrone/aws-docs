@@ -12,15 +12,13 @@ import '../data/study_plan_store.dart';
 import '../data/study_progress.dart';
 import '../data/study_reset.dart';
 import '../data/viewed_docs_store.dart';
-import '../main.dart' show syncController;
 import '../models/attempt_record.dart';
 import '../data/weighted_exam.dart';
 import '../models/certification.dart';
 import '../util/open_link.dart';
 import '../theme/app_theme.dart';
-import '../theme/theme_scope.dart';
-import '../widgets/focus_ring.dart';
-import 'sync_entry.dart';
+import '../widgets/app_header.dart';
+import 'home/home_header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,11 +45,16 @@ class _HomePageState extends State<HomePage> {
   void _goto(GlobalKey key) {
     final ctx = key.currentContext;
     if (ctx == null) return;
+    // 콘텐츠가 글래스 헤더(56px) 밑으로 흐르므로(extendBodyBehindAppBar),
+    // 앵커 섹션이 헤더 아래에 보이도록 헤더 높이만큼 내려 정렬한다 —
+    // 이전 alignment 0.02(불투명 헤더 바로 아래)와 같은 체감.
+    final viewport = _scroll.position.viewportDimension;
     Scrollable.ensureVisible(
       ctx,
       duration: const Duration(milliseconds: 350),
       curve: Curves.easeOut,
-      alignment: 0.02,
+      alignment:
+          viewport <= 0 ? 0.02 : (AppHeaderShell.height + Gap.sm) / viewport,
     );
   }
 
@@ -143,9 +146,10 @@ class _HomePageState extends State<HomePage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: _Header(
-        isDark: ThemeScope.of(context).isDark,
-        onToggleTheme: ThemeScope.of(context).toggle,
+      // 글래스 헤더: 콘텐츠가 헤더 밑으로 스크롤되어 blur·반투명이 실재한다.
+      // 스크롤 상단 인셋은 body MediaQuery padding(=헤더 높이)으로 보전.
+      extendBodyBehindAppBar: true,
+      appBar: HomeHeader(
         onResetAll: _resetAll,
         onNav: {
           '단계': () => _goto(_levels),
@@ -156,375 +160,46 @@ class _HomePageState extends State<HomePage> {
           '일정': () => _goto(_schedule),
         },
       ),
-      body: SelectionArea(
-        child: Scrollbar(
-          controller: _scroll,
-          child: SingleChildScrollView(
+      // Builder: body MediaQuery(padding.top = 헤더 높이)를 읽으려면
+      // Scaffold 아래 컨텍스트가 필요하다(페이지 컨텍스트에선 0).
+      body: Builder(
+        builder: (context) => SelectionArea(
+          child: Scrollbar(
             controller: _scroll,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: Layout.content),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      Gap.xl, 0, Gap.xl, Gap.xl4),
-                  child: Builder(
-                    builder: (context) {
-                      final dueBanner = _dueBanner(context);
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const _Hero(),
-                          ?dueBanner,
-                          const _Sources(),
-                          _LevelsSection(key: _levels),
-                          _PathsSection(key: _paths),
-                          _RoadmapSection(key: _roadmaps),
-                          _StudyDocsSection(key: _docs),
-                          _ExamsSection(key: _exams),
-                          _ScheduleSection(key: _schedule),
-                          const _Footer(),
-                        ],
-                      );
-                    },
+            child: SingleChildScrollView(
+              controller: _scroll,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxWidth: Layout.content),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(Gap.xl,
+                        MediaQuery.paddingOf(context).top, Gap.xl, Gap.xl4),
+                    child: Builder(
+                      builder: (context) {
+                        final dueBanner = _dueBanner(context);
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const _Hero(),
+                            ?dueBanner,
+                            const _Sources(),
+                            _LevelsSection(key: _levels),
+                            _PathsSection(key: _paths),
+                            _RoadmapSection(key: _roadmaps),
+                            _StudyDocsSection(key: _docs),
+                            _ExamsSection(key: _exams),
+                            _ScheduleSection(key: _schedule),
+                            const _Footer(),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────── Header
-
-class _Header extends StatelessWidget implements PreferredSizeWidget {
-  const _Header({
-    required this.isDark,
-    required this.onToggleTheme,
-    required this.onResetAll,
-    required this.onNav,
-  });
-
-  final bool isDark;
-  final VoidCallback onToggleTheme;
-  final VoidCallback onResetAll;
-  final Map<String, VoidCallback> onNav;
-
-  static const _navBreakpoint = 768.0;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(60);
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return Material(
-      color: c.bg.withValues(alpha: 0.9),
-      elevation: 0,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: c.border)),
-        ),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: Layout.content),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Gap.xl, vertical: Gap.md),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final compact = constraints.maxWidth < _navBreakpoint;
-                  return Row(
-                    children: [
-                      const _Brand(),
-                      const Spacer(),
-                      if (compact) ...[
-                        // 좁은 폭: 설정 액션을 햄버거 메뉴에 통합(버튼 과다 방지).
-                        _NavMenuButton(onNav: onNav, onResetAll: onResetAll),
-                        const SizedBox(width: Gap.sm),
-                        _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
-                      ] else ...[
-                        ...onNav.entries.map(
-                          (e) => Padding(
-                            padding: const EdgeInsets.only(left: Gap.lg),
-                            child: _NavLink(label: e.key, onTap: e.value),
-                          ),
-                        ),
-                        const SizedBox(width: Gap.lg),
-                        _ThemeToggle(isDark: isDark, onTap: onToggleTheme),
-                        const SizedBox(width: Gap.sm),
-                        _SettingsButton(onResetAll: onResetAll),
-                      ],
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Brand extends StatelessWidget {
-  const _Brand();
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 26,
-          height: 26,
-          decoration: BoxDecoration(
-            color: c.accent,
-            borderRadius: BorderRadius.circular(7),
-          ),
-          alignment: Alignment.center,
-          child: Text('A',
-              style: TextStyle(
-                  color: c.onAccent,
-                  fontWeight: FontWeight.w800, fontVariations: Wght.w800,
-                  fontSize: 14)),
-        ),
-        const SizedBox(width: Gap.sm),
-        Text('AWS Docs Roadmap',
-            style: TextStyle(
-                fontWeight: FontWeight.w800, fontVariations: Wght.w800,
-                fontSize: 16,
-                letterSpacing: -0.4,
-                color: c.text)),
-      ],
-    );
-  }
-}
-
-class _NavLink extends StatelessWidget {
-  const _NavLink({required this.label, required this.onTap});
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(Radii.sm),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        child: Text(label,
-            style: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w600, fontVariations: Wght.w600, color: c.textMuted)),
-      ),
-    );
-  }
-}
-
-class _NavMenuButton extends StatelessWidget {
-  const _NavMenuButton({required this.onNav, this.onResetAll});
-  final Map<String, VoidCallback> onNav;
-  final VoidCallback? onResetAll;
-
-  static const _resetKey = '__reset_all__';
-  static const _syncKey = '__sync__';
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return PopupMenuButton<String>(
-      tooltip: '메뉴',
-      color: c.surface,
-      surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: c.border),
-        borderRadius: BorderRadius.circular(Radii.md),
-      ),
-      onSelected: (key) {
-        if (key == _syncKey) {
-          _SettingsButton.openSyncSheet(context);
-        } else if (key == _resetKey) {
-          onResetAll?.call();
-        } else {
-          onNav[key]?.call();
-        }
-      },
-      itemBuilder: (context) => [
-        for (final key in onNav.keys)
-          PopupMenuItem<String>(
-            value: key,
-            child: Text(key,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600, fontVariations: Wght.w600,
-                    color: c.text)),
-          ),
-        const PopupMenuDivider(),
-        PopupMenuItem<String>(
-          value: _syncKey,
-          child: Row(
-            children: [
-              Icon(Icons.sync_outlined, size: 18, color: c.accent),
-              const SizedBox(width: Gap.sm),
-              Text('기기 간 동기',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600, fontVariations: Wght.w600,
-                      color: c.text)),
-            ],
-          ),
-        ),
-        if (onResetAll != null) ...[
-          const PopupMenuDivider(),
-          PopupMenuItem<String>(
-            value: _resetKey,
-            child: Row(
-              children: [
-                Icon(Icons.delete_outline, size: 18, color: c.wrong),
-                const SizedBox(width: Gap.sm),
-                Text('모든 학습 기록 초기화',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600, fontVariations: Wght.w600,
-                        color: c.text)),
-              ],
-            ),
-          ),
-        ],
-      ],
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: c.surface2,
-          borderRadius: BorderRadius.circular(Radii.full),
-          border: Border.all(color: c.border),
-        ),
-        child: Icon(Icons.menu, size: 18, color: c.textMuted),
-      ),
-    );
-  }
-}
-
-class _ThemeToggle extends StatelessWidget {
-  const _ThemeToggle({required this.isDark, required this.onTap});
-  final bool isDark;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return Tooltip(
-      message: isDark ? '라이트 모드' : '다크 모드',
-      child: FocusRing(
-        borderRadius: BorderRadius.circular(Radii.full),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(Radii.full),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: c.surface2,
-              borderRadius: BorderRadius.circular(Radii.full),
-              border: Border.all(color: c.border),
-            ),
-            child: Icon(
-              isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-              size: 18,
-              color: c.textMuted,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// 설정 버튼 — "기기 간 동기" + "모든 학습 기록 초기화".
-class _SettingsButton extends StatelessWidget {
-  const _SettingsButton({required this.onResetAll});
-  final VoidCallback onResetAll;
-
-  static void openSyncSheet(BuildContext context) {
-    if (!context.mounted) return;
-    final c = context.c;
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: c.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius:
-            BorderRadius.vertical(top: Radius.circular(Radii.lg)),
-      ),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.xl, Gap.xl, Gap.xl2),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('기기 간 동기',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: c.text)),
-            const SizedBox(height: Gap.lg),
-            SyncEntry(controller: syncController),
-            const SizedBox(height: Gap.md),
-            Text(
-              '동기를 켜면 여러 기기에서 같은 Google 계정으로 학습 기록을 공유합니다.',
-              style: TextStyle(fontSize: 13, color: c.textMuted),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final c = context.c;
-    return Tooltip(
-      message: '설정',
-      child: PopupMenuButton<String>(
-        tooltip: '설정',
-        position: PopupMenuPosition.under,
-        onSelected: (v) {
-          if (v == 'reset') onResetAll();
-          if (v == 'sync') openSyncSheet(context);
-        },
-        itemBuilder: (ctx) => [
-          PopupMenuItem<String>(
-            value: 'sync',
-            child: Row(
-              children: [
-                Icon(Icons.sync_outlined, size: 18, color: c.accent),
-                const SizedBox(width: Gap.sm),
-                const Text('기기 간 동기'),
-              ],
-            ),
-          ),
-          const PopupMenuDivider(),
-          PopupMenuItem<String>(
-            value: 'reset',
-            child: Row(
-              children: [
-                Icon(Icons.delete_outline, size: 18, color: c.wrong),
-                const SizedBox(width: Gap.sm),
-                const Text('모든 학습 기록 초기화'),
-              ],
-            ),
-          ),
-        ],
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: c.surface2,
-            borderRadius: BorderRadius.circular(Radii.full),
-            border: Border.all(color: c.border),
-          ),
-          child: Icon(Icons.settings_outlined, size: 18, color: c.textMuted),
         ),
       ),
     );
