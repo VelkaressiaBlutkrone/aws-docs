@@ -57,7 +57,7 @@ class _QuizPageState extends State<QuizPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text('${widget.entry.title} · 연습 문제',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
       ),
       body: FutureBuilder<QuestionBank>(
         future: _future,

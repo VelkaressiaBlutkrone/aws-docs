@@ -96,7 +96,7 @@ class _HubLink extends StatelessWidget {
         enabled ? '$label →' : '$label · ${lockedNote ?? '준비 중'}',
         style: TextStyle(
           fontSize: 15,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
           color: enabled ? c.accent : c.textMuted,
         ),
       ),

@@ -215,6 +215,19 @@ abstract final class Layout {
 const String _sans = 'Pretendard';
 const String _mono = 'JetBrainsMono';
 
+/// Pretendard Variable의 `wght` 축 토큰 — [TextStyle.fontWeight]와 항상 쌍으로 쓴다.
+/// Flutter는 FontWeight를 가변축에 자동 매핑하지 않으므로, 이게 없으면 Variable
+/// 본문이 전부 기본 굵기(400)로 렌더된다. fontWeight 자체는 폴백 폰트(한자 Noto 등)의
+/// 합성 굵기와 위젯 시맨틱을 위해 유지한다. 정적 폰트(JetBrainsMono)에선 무시되므로
+/// 병기해도 무해하다. 게이트: lib 전체에서 fontWeight:와 fontVariations:는 1:1.
+abstract final class Wght {
+  static const List<FontVariation> w400 = [FontVariation('wght', 400)];
+  static const List<FontVariation> w500 = [FontVariation('wght', 500)];
+  static const List<FontVariation> w600 = [FontVariation('wght', 600)];
+  static const List<FontVariation> w700 = [FontVariation('wght', 700)];
+  static const List<FontVariation> w800 = [FontVariation('wght', 800)];
+}
+
 /// 전 라우트 공통 순수 fade 전환 (DESIGN.md Motion — enter 200ms ease-out /
 /// exit 150ms ease-in). 웹은 호스트 OS를 [TargetPlatform]으로 보고하므로
 /// 6키 전부에 등록해야 한다 — 누락된 플랫폼의 방문자는 스톡 전환(iOS/macOS는
@@ -295,53 +308,53 @@ TextTheme _textTheme(AppColors c) {
     displayLarge: TextStyle(
         fontSize: 52,
         height: 1.05,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
         letterSpacing: -1.3,
         color: c.text),
     displayMedium: TextStyle(
         fontSize: 40,
         height: 1.08,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
         letterSpacing: -1,
         color: c.text),
     headlineMedium: TextStyle(
         fontSize: 30,
         height: 1.15,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
         letterSpacing: -0.6,
         color: c.text),
     headlineSmall: TextStyle(
         fontSize: 24,
         height: 1.2,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         letterSpacing: -0.3,
         color: c.text),
     titleLarge: TextStyle(
         fontSize: 20,
         height: 1.3,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         color: c.text),
     titleMedium: TextStyle(
         fontSize: 16,
         height: 1.4,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         color: c.text),
     bodyLarge: TextStyle(
-        fontSize: 17, height: 1.75, fontWeight: FontWeight.w400, color: c.text),
+        fontSize: 17, height: 1.75, fontWeight: FontWeight.w400, fontVariations: Wght.w400, color: c.text),
     bodyMedium: TextStyle(
         fontSize: 15,
         height: 1.6,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w400, fontVariations: Wght.w400,
         color: c.textMuted),
     labelLarge: TextStyle(
         fontSize: 14,
         height: 1.4,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         color: c.text),
     labelSmall: TextStyle(
         fontSize: 12,
         height: 1.3,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         letterSpacing: 0.4,
         color: c.textFaint),
   );

@@ -90,9 +90,10 @@ const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript',
   '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm',
   '.png': 'image/png', '.ico': 'image/x-icon', '.svg': 'image/svg+xml',
-  '.otf': 'font/otf', '.ttf': 'font/ttf', '.frag': 'application/octet-stream',
+  '.otf': 'font/otf', '.ttf': 'font/ttf', '.woff2': 'font/woff2',
+  '.frag': 'application/octet-stream',
 };
-const HEAVY = /\.(wasm|otf|ttf)$|main\.dart\.js$|canvaskit/;
+const HEAVY = /\.(wasm|otf|ttf|woff2)$|main\.dart\.js$|canvaskit/;
 
 const server = http.createServer((req, res) => {
   const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
@@ -164,7 +165,7 @@ try {
   step(`최종 화면 → ${shot('after')}`);
 
   // 네트워크 타이밍(임계 경로 리소스만) + 콘솔 에러.
-  const timingJs = "JSON.stringify((()=>{const nav=performance.getEntriesByType('navigation')[0]||{};const rs=performance.getEntriesByType('resource').filter(r=>/main\\.dart|canvaskit|\\.otf|\\.ttf|flutter_bootstrap|\\.wasm/.test(r.name)).map(r=>({name:r.name.split('/').pop().slice(0,48),durMs:Math.round(r.duration),bytes:r.transferSize||r.decodedBodySize||0}));return {nav:{dclMs:Math.round(nav.domContentLoadedEventEnd||0),loadMs:Math.round(nav.loadEventEnd||0)},rs};})())";
+  const timingJs = "JSON.stringify((()=>{const nav=performance.getEntriesByType('navigation')[0]||{};const rs=performance.getEntriesByType('resource').filter(r=>/main\\.dart|canvaskit|\\.otf|\\.ttf|\\.woff2|flutter_bootstrap|\\.wasm/.test(r.name)).map(r=>({name:r.name.split('/').pop().slice(0,48),durMs:Math.round(r.duration),bytes:r.transferSize||r.decodedBodySize||0}));return {nav:{dclMs:Math.round(nav.domContentLoadedEventEnd||0),loadMs:Math.round(nav.loadEventEnd||0)},rs};})())";
   try {
     const t = JSON.parse(payload(await browse('js', timingJs)));
     result.nav = t.nav; result.resources = t.rs;

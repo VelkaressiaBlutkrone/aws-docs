@@ -121,7 +121,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text('${widget.cert.code} · 오답노트',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
         actions: [
           IconButton(
             onPressed: _resetCert,
@@ -246,7 +246,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                     child: Text('오답 $count',
                         style: TextStyle(
                             fontSize: 12,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                             color: c.wrong)),
                   ),
                 ],

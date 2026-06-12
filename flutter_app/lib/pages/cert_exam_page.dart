@@ -169,7 +169,7 @@ class _CertExamPageState extends State<CertExamPage> {
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text(
             '${widget.cert.code} · ${widget.weighted ? '약점 집중 모의고사' : '통합 모의고사'}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
       ),
       body: FutureBuilder<_MockLoad>(
         future: _future,
@@ -309,7 +309,7 @@ class _CertExamPageState extends State<CertExamPage> {
                         vertical: Gap.sm, horizontal: Gap.xs),
                     child: Text('새로 시작',
                         style: TextStyle(
-                            color: c.textMuted, fontWeight: FontWeight.w700)),
+                            color: c.textMuted, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
                   ),
                 ),
               ] else

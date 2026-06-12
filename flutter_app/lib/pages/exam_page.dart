@@ -260,7 +260,7 @@ class _ExamViewState extends State<ExamView> {
                   style: TextStyle(
                       fontFamily: AppTheme.monoFamily,
                       fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                       color: low ? c.warning : c.text)),
               const Spacer(),
               Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
@@ -399,7 +399,7 @@ class _GridChip extends StatelessWidget {
                 style: TextStyle(
                     fontFamily: AppTheme.monoFamily,
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                     color: answered ? c.accentStrong : c.textMuted)),
             if (flagged)
               Positioned(
@@ -448,7 +448,7 @@ class _SecondaryButton extends StatelessWidget {
             Text(label,
                 style: TextStyle(
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                     color: active ? c.warning : c.textMuted)),
           ],
         ),
@@ -570,7 +570,7 @@ class _ExamPageState extends State<ExamPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text('${widget.entry.title} · 시험 모드',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
       ),
       body: FutureBuilder<_ExamLoad>(
         future: _future,

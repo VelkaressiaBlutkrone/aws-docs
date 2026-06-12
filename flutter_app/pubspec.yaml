@@ -70,16 +70,12 @@ flutter:
     - assets/content/soa/
 
   fonts:
+    # Pretendard Variable 단일 파일(woff2 ~2.0MB — 정적 4 OTF 6.3MB 대체, PR3).
+    # canvaskit의 FreeType이 woff2를 디코드한다(엔진 Noto 폴백과 같은 경로).
+    # 굵기는 TextStyle.fontVariations(wght 축)로 제어 — app_theme.dart의 Wght 토큰.
     - family: Pretendard
       fonts:
-        - asset: assets/fonts/Pretendard-Regular.otf
-          weight: 400
-        - asset: assets/fonts/Pretendard-Medium.otf
-          weight: 500
-        - asset: assets/fonts/Pretendard-Bold.otf
-          weight: 700
-        - asset: assets/fonts/Pretendard-ExtraBold.otf
-          weight: 800
+        - asset: assets/fonts/PretendardVariable.woff2
     - family: JetBrainsMono
       fonts:
         - asset: assets/fonts/JetBrainsMono-Regular.ttf
