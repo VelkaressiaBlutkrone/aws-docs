@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
   - title: S3 정적 웹사이트 호스팅 (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # Route 53 DNS·CloudFront 콘텐츠 전송
@@ -54,6 +54,21 @@ lastVerified: 2026-06-09
 
 ---
 
+## 🔤 먼저 알아야 할 용어
+
+이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.
+
+| 용어 | 영문 | 한 줄 풀이 |
+|---|---|---|
+| **Zone Apex** | Zone Apex / Naked Domain | 서브도메인 없이 등록된 루트 도메인 자체(예: `example.com`). DNS 표준상 CNAME을 붙일 수 없어 별도 처리가 필요하다 |
+| **TTL** | Time To Live | DNS 응답 또는 캐시 객체를 저장해 두는 시간(초). 값이 클수록 재조회 비용이 줄지만 변경 반영이 느리다 |
+| **캐시 무효화** | Cache Invalidation | CDN 엣지에 남아 있는 오래된 객체를 강제로 제거해 다음 요청이 오리진에서 새 버전을 가져오게 하는 작업 |
+| **VPC DNS 지원** | enableDnsSupport / enableDnsHostnames | VPC에서 AWS 제공 DNS 서버를 사용하고 EC2에 DNS 이름을 부여하는 두 설정. 프라이빗 호스팅 영역 동작에 필요하다 |
+| **bias** | Bias (Geoproximity) | Geoproximity 라우팅에서 특정 리소스 쪽으로 트래픽 범위를 넓히거나 좁히는 조정값. Route 53 Traffic Flow에서만 사용한다 |
+| **Traffic Flow** | Route 53 Traffic Flow | 복잡한 라우팅 규칙을 시각적 정책 트리로 구성하는 Route 53 기능. Geoproximity 정책은 이 기능이 있어야 사용 가능하다 |
+
+---
+
 ## 📖 핵심 개념
 
 ### 1) Route 53 — 관리형 DNS와 호스팅 영역
@@ -67,6 +82,11 @@ lastVerified: 2026-06-09
 
 > 프라이빗 호스팅 영역이 동작하려면 연결된 VPC의 **enableDnsSupport / enableDnsHostnames** 가 켜져 있어야 합니다.
 
+> 🧠 원리: 왜 프라이빗 호스팅 영역은 특정 VPC에만 연결되어 동작할까요?
+> DNS 조회 요청이 어느 네임서버로 전달될지는 VPC의 DNS 리졸버가 결정합니다. 퍼블릭 호스팅 영역은 인터넷 전체에 공개된 Route 53 권한 네임서버로 쿼리가 라우팅되지만, 프라이빗 호스팅 영역은 연결된 VPC가 제공하는 DNS 리졸버에서만 응답합니다.
+> VPC 외부에서는 프라이빗 영역의 네임서버가 보이지 않으므로, 동일한 도메인 이름을 인터넷용(퍼블릭)과 내부용(프라이빗)으로 분리해 VPC 안팎에서 다른 IP를 반환하는 스플릿-호라이즌 DNS 구성이 가능합니다.
+> enableDnsSupport 설정은 VPC가 해당 DNS 리졸버를 사용하도록 활성화하는 조건이며, 이것이 꺼져 있으면 프라이빗 영역 응답 자체가 전달되지 않습니다.
+
 ### 2) 레코드 타입 — A / AAAA / CNAME / Alias
 
 | 타입 | 의미 |
@@ -75,6 +95,11 @@ lastVerified: 2026-06-09
 | **AAAA** | 도메인 → **IPv6 주소** |
 | **CNAME** | 도메인 → **다른 도메인 이름**(별칭). **Zone Apex 불가** |
 | **Alias** | Route 53 전용 확장. 도메인 → **AWS 리소스**(ALB·CloudFront·S3 웹사이트·API GW 등) |
+
+> 🧠 원리: 왜 DNS는 IPv4 주소와 IPv6 주소를 별도 레코드 타입(A와 AAAA)으로 나눠 관리할까요?
+> 클라이언트가 DNS를 조회할 때 자신이 지원하는 프로토콜 버전에 맞는 레코드만 요청합니다. IPv4 전용 클라이언트는 A 레코드를 묻고, IPv6 지원 클라이언트는 AAAA 레코드를 먼저 시도한 뒤 실패 시 A로 폴백합니다.
+> 타입을 분리함으로써 같은 도메인에 IPv4 주소와 IPv6 주소를 독립적으로 등록하고 각각 다른 대상(예: IPv6 전용 ALB)으로 보낼 수 있습니다.
+> 운영 측면에서 하나의 IP 버전 주소만 바꿔야 할 때 다른 버전 레코드에 영향을 주지 않아 배포·롤백 단위가 명확해집니다.
 
 ### 3) Alias vs CNAME (★ 단골 출제)
 
@@ -86,6 +111,11 @@ lastVerified: 2026-06-09
 | IP 자동 추적 | AWS 리소스 IP 변경 자동 반영 | 직접 관리 |
 
 > **운영 핵심:** 루트 도메인(`example.com`)을 ALB나 CloudFront로 보내야 할 때는 **반드시 Alias** 입니다. CNAME은 Zone Apex에 쓸 수 없습니다. 서브도메인(`www.example.com`)은 CNAME도 가능하지만, AWS 리소스 대상이라면 Alias가 비용·관리 면에서 유리합니다.
+
+> 🧠 원리: 운영 중 "Zone Apex에 CNAME을 쓸 수 없다"는 오류는 왜 발생하며, Alias가 이를 어떻게 해소할까요?
+> Route 53 콘솔에서 example.com(루트 도메인)에 CNAME을 만들려 하면 생성이 거부됩니다. 루트 도메인에는 영역 위임에 필요한 NS·SOA 레코드가 이미 있고, DNS 표준은 CNAME이 있는 이름에 다른 레코드를 허용하지 않기 때문입니다.
+> Alias 레코드는 Route 53이 내부적으로 대상 AWS 리소스의 현재 IP를 조회해 A(또는 AAAA) 응답으로 반환하므로, 리다이렉션 없이 NS·SOA와 공존합니다. 운영자는 "루트 도메인 → ALB/CloudFront"가 필요할 때 Alias를 선택하고, ALB IP 변경에 따른 레코드 수동 갱신도 없앨 수 있습니다.
+> 반면 서브도메인(www.example.com)에서는 CNAME도 표준 위반이 아니지만, AWS 리소스 대상이라면 Alias가 IP 자동 추적과 무료 쿼리 혜택을 제공하므로 운영상 Alias가 권장됩니다.
 
 ### 4) 라우팅 정책 7종 (★ 핵심 비교)
 
@@ -102,6 +132,11 @@ lastVerified: 2026-06-09
 > **Latency vs Geolocation:** Latency는 **측정된 네트워크 지연**으로, Geolocation은 **사용자 IP의 지리적 위치**로 결정합니다. "가장 빠른 응답"은 Latency, "국가별 콘텐츠/규제"는 Geolocation.
 > **Geoproximity**는 **Route 53 Traffic Flow** 에서만 사용하며 bias 값으로 트래픽 비중을 조정합니다.
 
+> 🧠 원리: 운영자가 Latency와 Geolocation 정책을 혼동하면 어떤 장애 패턴이 생길까요?
+> Latency 정책을 Geolocation처럼 잘못 이해하면 "한국 사용자는 서울 리전으로 가겠지"라고 가정하게 되지만, Latency는 실측 왕복 시간 기준이므로 인터넷 피어링 경로에 따라 도쿄 리전이 선택될 수도 있습니다. 이 경우 지역 규제·데이터 거주 요건을 만족하지 못할 수 있습니다.
+> Geolocation 정책을 Latency처럼 오해하면 "국가 코드로 가장 빠른 리전에 보낸다"고 착각하지만, Geolocation은 네트워크 지연을 전혀 측정하지 않으므로 물리적으로 멀어도 국가 규칙에 따라 라우팅됩니다. 성능 최적화가 목적인데 Geolocation을 선택하면 일부 사용자 응답이 불필요하게 느려집니다.
+> 설계 단계에서 "이 요구사항이 성능인가, 아니면 데이터 주권·콘텐츠 현지화인가"를 먼저 결정해야 정책 혼용 오류를 예방할 수 있습니다.
+
 ### 5) 상태 확인(Health Check) + Failover
 
 - **엔드포인트 상태 확인:** HTTP/HTTPS/TCP로 엔드포인트를 주기적으로 점검.
@@ -109,6 +144,11 @@ lastVerified: 2026-06-09
 - **CloudWatch 경보 기반:** 경보 상태를 상태 확인 결과로 사용.
 
 헬스 체크와 연동되는 정책: **Failover**(Primary 실패 시 Secondary), **Multivalue**(비정상 레코드 제외), Weighted/Latency/Geolocation(실패 레코드 응답 제외).
+
+> 🧠 원리: 왜 계산형 상태 확인(Calculated Health Check)을 사용하면 복합 서비스의 장애 감지를 더 정밀하게 제어할 수 있을까요?
+> 서비스가 여러 컴포넌트(웹 서버, DB, 외부 API)로 구성된 경우, 단일 엔드포인트 체크만으로는 "어느 컴포넌트가 문제인가"를 구분하기 어렵고 부분 장애에서 과잉 페일오버가 일어날 수 있습니다.
+> 계산형 체크는 하위 체크들을 AND/OR 논리로 묶어 "핵심 DB가 실패하면 전체 실패로 처리하되, 읽기 복제본 중 하나만 실패하면 정상 유지"처럼 세분화된 장애 조건을 정의할 수 있습니다.
+> 이 계층 구조 덕분에 페일오버 임계값을 서비스 실제 가용성 정의와 맞출 수 있어, 불필요한 트래픽 전환을 줄이면서 실질적 장애만 감지하게 됩니다.
 
 ### 6) CloudFront — 글로벌 CDN
 
@@ -150,11 +190,21 @@ aws cloudfront create-invalidation \
 - **지역 제한(Geo Restriction)**: 특정 국가의 접근을 허용/차단.
 - **WAF 연동**: SQL Injection·XSS 등 방어.
 
+> 🧠 원리: 왜 CloudFront는 TTL 만료 전에 캐시를 갱신하려면 무효화나 버전 파일명 중 하나를 선택해야 할까요?
+> 엣지 로케이션은 각 객체를 TTL 기간 동안 오리진에 재요청 없이 로컬에서 반환합니다. TTL이 남아 있는 동안 오리진에서 객체를 교체해도 엣지는 이를 모르므로, 운영자가 명시적으로 알려줘야만 갱신이 일어납니다.
+> 무효화는 엣지에 "해당 경로 캐시를 지워라"라고 직접 지시하는 방법이고, 버전 파일명은 URL 자체를 바꿔 엣지가 완전히 새로운 객체로 인식하게 하는 방법입니다.
+> 두 방법 모두 TTL 설계를 우회하는 것이므로, 잦은 전체 무효화는 운영 비용과 오리진 부하를 높이고 버전 파일명 방식이 이를 피하는 운영 정석으로 문서화되어 있습니다.
+
 ### 7) S3 정적 웹사이트 호스팅
 
 - S3 버킷의 **정적 웹사이트 호스팅**을 켜면 인덱스/오류 문서를 지정하고 **웹사이트 엔드포인트**를 얻습니다.
 - 웹사이트 엔드포인트는 **HTTP만** 지원합니다. **HTTPS와 사용자 도메인·캐싱**이 필요하면 앞에 **CloudFront**를 둡니다.
 - 루트 도메인을 S3 정적 웹사이트로 연결하려면 Route 53 **Alias**(S3 웹사이트 엔드포인트 대상)를 사용합니다.
+
+> 🧠 원리: 왜 S3 정적 웹사이트 엔드포인트는 HTTPS를 지원하지 않을까요?
+> S3 웹사이트 엔드포인트는 S3 서비스가 HTTP 기반 정적 파일 서빙을 위해 노출하는 간단한 인터페이스로, TLS 인증서 처리 인프라가 없습니다.
+> S3 버킷의 REST API 엔드포인트(`s3.amazonaws.com/…`)는 HTTPS를 지원하지만 HTML의 인덱스·오류 문서 리다이렉트 기능이 없어 웹사이트 호스팅 용도와 다릅니다.
+> HTTPS와 사용자 정의 도메인을 함께 제공하려면 TLS 종료와 인증서 관리를 담당할 CloudFront를 앞에 두어야 하며, ACM 인증서는 CloudFront 연동 조건상 us-east-1에서 발급해야 합니다.
 
 ---
 
@@ -175,20 +225,28 @@ aws cloudfront create-invalidation \
 ## ⚠️ 흔한 함정
 
 1. **"루트 도메인(example.com)을 CNAME으로 ALB에 연결한다."** → CNAME은 **Zone Apex에 사용할 수 없습니다**. 루트 도메인은 **Alias** 레코드를 써야 합니다.
+   *(원리: §3 — CNAME은 SOA·NS와 공존 불가여서 루트 도메인에 사용할 수 없다.)*
 
 2. **"Geolocation은 가장 가까운/빠른 리전으로 보낸다."** → Geolocation은 **지리적 위치(국가·대륙)** 로만 결정하며 네트워크 속도를 보장하지 않습니다. "가장 빠른 응답"은 **Latency** 정책입니다.
+   *(원리: §4 — Geolocation은 IP 위치 판별이고 네트워크 지연은 측정하지 않는다.)*
 
 3. **"CloudFront용 ACM 인증서를 서울 리전에서 발급했다."** → CloudFront는 **us-east-1** 의 ACM 인증서만 사용합니다. 다른 리전 인증서는 연결할 수 없습니다(ALB용 인증서는 ALB와 같은 리전).
+   *(원리: §6 본문 — CloudFront는 us-east-1 외 리전 인증서를 연결할 수 없다.)*
 
 4. **"콘텐츠를 바꿨는데 옛 버전이 보인다 → CloudFront 장애."** → 엣지 캐시 **TTL** 때문입니다. 즉시 갱신하려면 **무효화(Invalidation)** 를 하거나, 더 나은 운영으로 **버전 파일명**을 사용합니다.
+   *(원리: §6 — 엣지는 TTL 만료 전 오리진 교체를 모르므로 명시적 무효화가 필요하다.)*
 
 5. **"무효화를 항상 `/*` 로 돌린다."** → 전체 무효화를 자주 하면 비용과 오리진 부하가 큽니다. 변경된 경로만 무효화하거나 버전 문자열 패턴으로 무효화 자체를 줄이는 것이 운영 정석입니다.
+   *(원리: §6 — 무효화는 TTL 설계를 우회하며 전체 경로는 오리진 부하를 높인다.)*
 
 6. **"OAI가 현재 권장 방식이다."** → OAI(Origin Access Identity)는 구형입니다. 현재 권장은 **OAC(Origin Access Control)** 입니다.
+   *(원리: §6 본문 — OAC는 서비스 주체 기반 정책으로 OAI보다 세밀한 접근 제어가 가능하다.)*
 
 7. **"S3 정적 웹사이트 엔드포인트로 HTTPS를 제공한다."** → S3 웹사이트 엔드포인트는 **HTTP만** 지원합니다. HTTPS·사용자 도메인·캐싱이 필요하면 **CloudFront**를 앞에 둡니다.
+   *(원리: §7 — S3 웹사이트 엔드포인트는 TLS 처리 인프라가 없어 HTTP만 응답한다.)*
 
 8. **"Multivalue 정책은 로드 밸런서다."** → Multivalue는 DNS가 최대 8개 정상 IP를 반환할 뿐, **세션 관리·연결 중개가 없는** DNS 기능입니다. 로드 밸런서가 필요하면 ELB를 씁니다.
+   *(원리: §4 — Multivalue는 DNS 레벨 반환이고 연결 관리·세션 중개 기능이 없다.)*
 
 ---
 
@@ -224,11 +282,18 @@ aws cloudfront create-invalidation \
 **Failover 라우팅 정책**을 사용하고, Primary(서울)·Secondary(도쿄) 레코드를 만든 뒤 **각각에 상태 확인(Health Check)** 을 연결합니다. Primary 상태 확인이 실패하면 Route 53이 자동으로 Secondary 레코드를 반환합니다. 두 엔드포인트가 ALB라면 각 레코드는 ALB 대상 Alias로 만들고, 상태 확인은 엔드포인트 또는 CloudWatch 경보 기반으로 구성합니다.
 </details>
 
+**Q5 (원리).** 왜 프라이빗 호스팅 영역을 사용하는 VPC에서 enableDnsSupport를 꺼두면 내부 도메인 이름 해석이 동작하지 않는가?
+
+<details><summary>정답 보기</summary>
+
+enableDnsSupport를 끄면 VPC 내 인스턴스는 VPC가 제공하는 DNS 리졸버를 사용하지 않습니다. 프라이빗 호스팅 영역의 레코드는 이 리졸버를 통해서만 응답되므로, 리졸버가 비활성화된 상태에서는 쿼리 자체가 Route 53 권한 네임서버에 도달하지 못해 이름 해석이 실패합니다. 퍼블릭 호스팅 영역은 인터넷 네임서버로 조회되므로 영향이 없습니다.
+</details>
+
 ---
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. Amazon Route 53 개발자 가이드 — 소개 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html
 2. Route 53 라우팅 정책 선택 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html

@@ -27,6 +27,16 @@ void main() {
     'assets/content/saa/saa-t3-9.md', 'assets/content/saa/saa-t4-1.md',
     'assets/content/saa/saa-t4-2.md', 'assets/content/saa/saa-t4-3.md',
     'assets/content/saa/saa-t4-4.md', 'assets/content/saa/saa-t4-5.md',
+    'assets/content/soa/soa-t1-1.md', 'assets/content/soa/soa-t1-2.md',
+    'assets/content/soa/soa-t1-3.md', 'assets/content/soa/soa-t1-4.md',
+    'assets/content/soa/soa-t1-5.md', 'assets/content/soa/soa-t2-1.md',
+    'assets/content/soa/soa-t2-2.md', 'assets/content/soa/soa-t2-3.md',
+    'assets/content/soa/soa-t2-4.md', 'assets/content/soa/soa-t3-1.md',
+    'assets/content/soa/soa-t3-2.md', 'assets/content/soa/soa-t3-3.md',
+    'assets/content/soa/soa-t3-4.md', 'assets/content/soa/soa-t4-1.md',
+    'assets/content/soa/soa-t4-2.md', 'assets/content/soa/soa-t4-3.md',
+    'assets/content/soa/soa-t5-1.md', 'assets/content/soa/soa-t5-2.md',
+    'assets/content/soa/soa-t5-3.md', 'assets/content/soa/soa-t5-4.md',
   ];
 
   for (final path in enriched) {
