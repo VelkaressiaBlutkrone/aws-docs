@@ -124,12 +124,12 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: Text(parts.join(' · '),
                     style:
-                        TextStyle(fontWeight: FontWeight.w700, color: c.text)),
+                        TextStyle(fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.text)),
               ),
               Text('일정 보기 →',
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                       color: c.accent)),
             ],
           ),
@@ -289,13 +289,13 @@ class _Brand extends StatelessWidget {
           child: Text('A',
               style: TextStyle(
                   color: c.onAccent,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                   fontSize: 14)),
         ),
         const SizedBox(width: Gap.sm),
         Text('AWS Docs Roadmap',
             style: TextStyle(
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                 fontSize: 16,
                 letterSpacing: -0.4,
                 color: c.text)),
@@ -319,7 +319,7 @@ class _NavLink extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         child: Text(label,
             style: TextStyle(
-                fontSize: 14, fontWeight: FontWeight.w600, color: c.textMuted)),
+                fontSize: 14, fontWeight: FontWeight.w600, fontVariations: Wght.w600, color: c.textMuted)),
       ),
     );
   }
@@ -360,7 +360,7 @@ class _NavMenuButton extends StatelessWidget {
             child: Text(key,
                 style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w600, fontVariations: Wght.w600,
                     color: c.text)),
           ),
         const PopupMenuDivider(),
@@ -373,7 +373,7 @@ class _NavMenuButton extends StatelessWidget {
               Text('기기 간 동기',
                   style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w600, fontVariations: Wght.w600,
                       color: c.text)),
             ],
           ),
@@ -389,7 +389,7 @@ class _NavMenuButton extends StatelessWidget {
                 Text('모든 학습 기록 초기화',
                     style: TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w600, fontVariations: Wght.w600,
                         color: c.text)),
               ],
             ),
@@ -638,7 +638,7 @@ class _SourcePillState extends State<_SourcePill> {
             child: Text(widget.label,
                 style: TextStyle(
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                     color: active ? c.accent : c.textMuted)),
           ),
         ),
@@ -849,7 +849,7 @@ class _Step extends StatelessWidget {
             child: Text('$index',
                 style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                     color: c.accentStrong)),
           ),
           const SizedBox(width: Gap.md),
@@ -995,14 +995,14 @@ class _ExamsSection extends StatelessWidget {
                                     : '${cert.title} · 약점 집중 모의고사 (응시 기록 $attempts/$kWeightedExamMinAttempts)',
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                                     color: unlocked ? c.text : c.textMuted)),
                           ),
                           if (unlocked)
                             Text('약점 모의고사 →',
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                                     color: c.accent)),
                         ],
                       ),
@@ -1124,7 +1124,7 @@ class _ContentCertCard extends StatelessWidget {
               child: Text(summaryLabel,
                   style: TextStyle(
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                       color: c.textMuted)),
             ),
             if (viewedBadge != null) ...[
@@ -1138,14 +1138,14 @@ class _ContentCertCard extends StatelessWidget {
                 child: Text(viewedBadge!,
                     style: TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                         color: c.accentStrong)),
               ),
             ],
             const SizedBox(height: Gap.md),
             Text(cta,
                 style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w700, color: c.accent)),
+                    fontSize: 14, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.accent)),
           ],
         ),
       ),
@@ -1173,7 +1173,7 @@ class _PendingGroup extends StatelessWidget {
         children: [
           Text('준비 중',
               style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, color: c.textMuted)),
+                  fontSize: 12, fontWeight: FontWeight.w800, fontVariations: Wght.w800, color: c.textMuted)),
           const SizedBox(height: Gap.sm),
           Wrap(
             spacing: 6,
@@ -1238,7 +1238,7 @@ class _Band extends StatelessWidget {
               Text(meta,
                   style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w600, fontVariations: Wght.w600,
                       color: c.textFaint)),
             ],
           ),
@@ -1266,7 +1266,7 @@ class _Eyebrow extends StatelessWidget {
       ),
       child: Text(text,
           style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w700, color: c.textMuted)),
+              fontSize: 12, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.textMuted)),
     );
   }
 }
@@ -1300,7 +1300,7 @@ class _Pill extends StatelessWidget {
       child: Text(label,
           style: TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w700, fontVariations: Wght.w700,
             color: fg,
             fontFamily: tone == _Tone.code ? AppTheme.monoFamily : null,
           )),
@@ -1324,7 +1324,7 @@ class _Chip extends StatelessWidget {
       ),
       child: Text(label,
           style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w600, color: c.textMuted)),
+              fontSize: 12, fontWeight: FontWeight.w600, fontVariations: Wght.w600, color: c.textMuted)),
     );
   }
 }
@@ -1338,7 +1338,7 @@ class _LinkText extends StatelessWidget {
     final c = context.c;
     return Text(label,
         style: TextStyle(
-            fontSize: 14, fontWeight: FontWeight.w700, color: c.accent));
+            fontSize: 14, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.accent));
   }
 }
 
@@ -1362,7 +1362,7 @@ class _Button extends StatelessWidget {
       child: Text(label,
           style: TextStyle(
               fontSize: 15,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w700, fontVariations: Wght.w700,
               color: primary ? c.onAccent : c.text)),
     );
   }

@@ -121,7 +121,7 @@ class EmptyView extends StatelessWidget {
                 foregroundColor: c.accent,
                 side: BorderSide(color: c.borderStrong),
                 textStyle: const TextStyle(
-                    fontSize: 15, fontWeight: FontWeight.w600),
+                    fontSize: 15, fontWeight: FontWeight.w600, fontVariations: Wght.w600),
               ),
               child: Text(ctaLabel!),
             ),
@@ -190,7 +190,7 @@ class ErrorView extends StatelessWidget {
                   '홈으로',
                   style: TextStyle(
                     fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w500, fontVariations: Wght.w500,
                     color: c.textMuted,
                     decoration: TextDecoration.underline,
                     decorationColor: c.textMuted,

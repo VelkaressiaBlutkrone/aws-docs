@@ -40,7 +40,7 @@ class SyncEntry extends StatelessWidget {
               TextButton(
                 onPressed: ctrl.signIn,
                 child: Text('Google로 동기 켜기',
-                    style: TextStyle(color: c.accent, fontWeight: FontWeight.w700)),
+                    style: TextStyle(color: c.accent, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
               ),
             ]),
           );

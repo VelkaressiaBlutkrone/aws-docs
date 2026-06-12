@@ -80,7 +80,7 @@ class _PlanPageState extends State<PlanPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text('${widget.cert.code} · 학습 일정',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
       ),
       body: _plan == null
           ? _PlanCreateForm(
@@ -232,7 +232,7 @@ class _PlanCreateFormState extends State<_PlanCreateForm> {
           child: Row(
             children: [
               Text(label,
-                  style: TextStyle(fontWeight: FontWeight.w700, color: c.textMuted)),
+                  style: TextStyle(fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.textMuted)),
               const Spacer(),
               Text(iso,
                   style: TextStyle(
@@ -560,7 +560,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
       child: Text(isToday ? '$date · 오늘' : date,
           style: t.labelLarge?.copyWith(
               color: isToday ? c.accent : c.textMuted,
-              fontWeight: FontWeight.w800)),
+              fontWeight: FontWeight.w800, fontVariations: Wght.w800)),
     );
   }
 
@@ -595,7 +595,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                       Text(_typeLabel[it.type]!,
                           style: TextStyle(
                               fontSize: 11,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                               color: c.textMuted)),
                       const SizedBox(width: Gap.sm),
                       Expanded(
@@ -610,7 +610,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
                         Text('밀림',
                             style: TextStyle(
                                 fontSize: 11,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                                 color: c.wrong)),
                     ],
                   ),
@@ -633,7 +633,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
           Padding(
             padding: const EdgeInsets.only(top: Gap.sm, bottom: Gap.sm),
             child: Text('${b.year}년 ${b.month}월',
-                style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+                style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800, fontVariations: Wght.w800)),
           ),
           Row(
             children: [
@@ -689,7 +689,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
             Text(isExam ? '$dayNum·시험' : dayNum,
                 style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                     color: accent
                         ? c.accent
                         : (day.inRange ? c.text : c.textFaint))),
@@ -698,7 +698,7 @@ class _PlanAgendaState extends State<_PlanAgenda> {
               Text('${day.done}/${day.total}',
                   style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                       color: allDone ? c.correct : c.textMuted)),
           ],
         ),

@@ -113,7 +113,7 @@ class _CertDetailPageState extends State<CertDetailPage> {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                 ),
               ),
             ),
@@ -211,7 +211,7 @@ class _Header extends StatelessWidget {
           cert.level.short,
           style: TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w800, fontVariations: Wght.w800,
             letterSpacing: 0.6,
             color: c.accent,
           ),
@@ -315,7 +315,7 @@ class _LearningContent extends StatelessWidget {
                                       '검증 문항 ${e.questionCount}',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                                         color: c.correct,
                                       ),
                                     ),
@@ -337,7 +337,7 @@ class _LearningContent extends StatelessWidget {
                                       '오답 ${weakByTask[e.taskId]}',
                                       style: TextStyle(
                                         fontSize: 12,
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                                         color: c.wrong,
                                       ),
                                     ),
@@ -352,7 +352,7 @@ class _LearningContent extends StatelessWidget {
                         '학습문서 →',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                           color: c.accent,
                         ),
                       ),
@@ -384,7 +384,7 @@ class _LearningContent extends StatelessWidget {
                     Text('일정 →',
                         style: TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                             color: c.accent)),
                   ],
                 ),
@@ -419,7 +419,7 @@ class _LearningContent extends StatelessWidget {
                         '리포트 →',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                           color: c.accent,
                         ),
                       ),
@@ -469,7 +469,7 @@ class _LearningContent extends StatelessWidget {
                             '시작 →',
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                               color: c.accent,
                             ),
                           ),
@@ -507,7 +507,7 @@ class _LearningContent extends StatelessWidget {
                         '복습 →',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                           color: c.wrong,
                         ),
                       ),
@@ -551,7 +551,7 @@ class _SummaryBlock extends StatelessWidget {
                 '한국어 학습 요약본',
                 style: TextStyle(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                   letterSpacing: 0.4,
                   color: c.accent,
                 ),
@@ -594,7 +594,7 @@ class _MiniList extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 12,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w800, fontVariations: Wght.w800,
             color: c.textMuted,
           ),
         ),
@@ -713,7 +713,7 @@ class _TaskBlock extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: AppTheme.monoFamily,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                   color: c.accent,
                 ),
               ),
@@ -858,7 +858,7 @@ class _SubLabel extends StatelessWidget {
       text,
       style: TextStyle(
         fontSize: 11,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
         letterSpacing: 0.6,
         color: c.textFaint,
       ),
@@ -883,7 +883,7 @@ class _CodePill extends StatelessWidget {
         style: TextStyle(
           fontFamily: AppTheme.monoFamily,
           fontSize: 12,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
           color: c.textMuted,
         ),
       ),
@@ -907,7 +907,7 @@ class _WeightPill extends StatelessWidget {
         '$pct%',
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w800, fontVariations: Wght.w800,
           color: c.accentStrong,
         ),
       ),
@@ -932,7 +932,7 @@ class _FactPill extends StatelessWidget {
         text,
         style: TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
           color: c.textMuted,
         ),
       ),

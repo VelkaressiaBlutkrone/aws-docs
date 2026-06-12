@@ -30,8 +30,10 @@
 - **제목:** Pretendard 700, letter-spacing -0.01~-0.02em
 - **데이터 / 표 / 숫자:** Pretendard + `font-variant-numeric: tabular-nums` (점수·문항번호·진도 정렬)
 - **코드 / 식별자:** JetBrains Mono — ARN, CLI, `s3://`, IAM 정책 등 AWS 콘텐츠에 필수. 14px / 1.7
-- **로딩 (로컬 번들 — 오프라인·무추적):** 폰트는 외부 CDN이 아니라 앱에 번들된 OTF/TTF 에셋으로 로드한다.
-  - Pretendard(Regular/Medium/Bold/ExtraBold OTF) · JetBrainsMono(Regular/Medium/Bold TTF): `flutter_app/assets/fonts/`에 두고 `flutter_app/pubspec.yaml`의 `fonts:`로 등록. `app_theme.dart`가 `Pretendard`/`JetBrainsMono` 패밀리로 참조.
+- **로딩 (로컬 번들 — 오프라인·무추적):** 폰트는 외부 CDN이 아니라 앱에 번들된 에셋으로 로드한다.
+  - **Pretendard = Variable 단일 파일** `PretendardVariable.woff2`(~2.0MB — 정적 4 OTF 6.3MB 대체, 2026-06-13 PR3) · JetBrainsMono(Regular/Medium/Bold TTF, 0.83MB) 정적 유지: `flutter_app/assets/fonts/` + `pubspec.yaml`의 `fonts:`. 폰트 합계 6.9MB → **2.75MB**.
+  - **가변 굵기 규율:** Flutter는 `FontWeight`를 가변 `wght` 축에 자동 매핑하지 않는다 — fontWeight를 쓰는 모든 TextStyle에 `Wght` 토큰(`app_theme.dart`)을 병기한다. 게이트: lib 전체 `fontWeight:` ↔ `fontVariations:` 1:1(누락 시 해당 텍스트가 400으로 균일화). fontWeight 자체는 폴백 폰트(한자 Noto)의 합성 굵기를 위해 유지.
+  - woff2 번들 가능 근거: canvaskit의 FreeType이 woff2를 직접 디코드한다(엔진 Noto 폴백과 같은 `Typeface.MakeFreeTypeFaceFromData` 경로). Flutter 마이너 업그레이드 시 이 전제 재확인.
   - 근거: GitHub Pages 정적 배포 + 한국어 학습 제품 — CDN 의존·외부 추적·SRI 관리 비용을 피하고 오프라인에서도 렌더. (번들 목록의 단일 진실은 pubspec.)
 - **font stack:**
   - sans: `"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif`
@@ -153,3 +155,4 @@
 | 2026-06-05 | 미감 = 반(反)마케팅 에디토리얼 | EUREKA: AWS 학습 사이트는 더 시끄러운 마케팅으로 경쟁하지만, 신뢰하는 공부 도구는 레퍼런스 책처럼 생긴다. 절제가 곧 브랜드 |
 | 2026-06-13 | 스플래시 + 보이스(합니다체) + 테마 영속화 (PR1) | 백색 화면 제거(시각 리펙토링 B안 WS1·WS2·WS9). 2026-06-12 디자인 리뷰 8건 결정 반영 — 헤어라인 진짜 진행률, 워치독 비차단, 워드마크만(통계 기각), reduced-motion |
 | 2026-06-13 | 라우트 fade 전환(6키) + 상태뷰 3종 + focus-visible 토큰 (PR2) | 시각 리펙토링 B안 WS3·WS4. 전환 enter 200/exit 150ms, Loading 150ms 유예, Empty 아이콘 없음(2A), Error wrong 시맨틱+복구 2경로, 카피 매트릭스 합니다체(3A), disableAnimations 존중(7A) |
+| 2026-06-13 | Pretendard Variable(woff2) 전환 + Wght 토큰 (PR3) | 시각 리펙토링 B안 WS5. 폰트 6.9→2.75MB(임계 경로 단축), 모든 weight 정확 렌더(디퍼럴 스와프 문제 없음), fontWeight↔fontVariations 1:1 게이트 |

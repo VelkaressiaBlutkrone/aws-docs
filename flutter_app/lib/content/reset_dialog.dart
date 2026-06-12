@@ -22,7 +22,7 @@ Future<bool> confirmReset(
         side: BorderSide(color: c.border),
       ),
       title: Text(title,
-          style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+          style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800, fontVariations: Wght.w800)),
       content: Text(message, style: t.bodyMedium?.copyWith(color: c.text)),
       actions: [
         TextButton(
@@ -32,7 +32,7 @@ Future<bool> confirmReset(
         TextButton(
           onPressed: () => Navigator.of(ctx).pop(true),
           child: Text(confirmLabel,
-              style: TextStyle(color: c.wrong, fontWeight: FontWeight.w800)),
+              style: TextStyle(color: c.wrong, fontWeight: FontWeight.w800, fontVariations: Wght.w800)),
         ),
       ],
     ),

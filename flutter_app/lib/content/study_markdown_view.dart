@@ -135,7 +135,7 @@ class StudyMarkdownView extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 8, top: 1),
                         child: Text('${k + 1}.',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700, color: c.accent))),
+                                fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.accent))),
                     child: _spans(context, items[k], t.bodyLarge!)),
             ],
           ),
@@ -234,7 +234,7 @@ class StudyMarkdownView extends StatelessWidget {
                     fontSize: (base.fontSize ?? 15) - 1,
                     color: c.accentStrong)
                 : s.bold
-                    ? base.copyWith(fontWeight: FontWeight.w700, color: c.text)
+                    ? base.copyWith(fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.text)
                     : s.url != null
                         ? base.copyWith(color: c.accent)
                         : base,

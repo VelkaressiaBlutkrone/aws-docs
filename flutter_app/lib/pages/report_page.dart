@@ -83,7 +83,7 @@ class _ReportPageState extends State<ReportPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text('${widget.cert.code} · 약점 리포트',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
         actions: [
           IconButton(
             onPressed: _resetCert,
@@ -210,7 +210,7 @@ class _ReportPageState extends State<ReportPage> {
                 Text(rateLabel,
                     style: TextStyle(
                         fontSize: 13,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                         color: tone)),
               ],
             ),
@@ -230,7 +230,7 @@ class _ReportPageState extends State<ReportPage> {
                     child: Text('학습문서 →',
                         style: TextStyle(
                             fontSize: 13,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                             color: c.accent)),
                   ),
               ],

@@ -46,7 +46,7 @@ class _StudyDocPageState extends State<StudyDocPage> {
         elevation: 0,
         shape: Border(bottom: BorderSide(color: c.border)),
         title: Text(widget.entry.title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
       ),
       body: SelectionArea(
         child: FutureBuilder<StudyContent>(
@@ -146,7 +146,7 @@ class _DocHeader extends StatelessWidget {
               color: bg, borderRadius: BorderRadius.circular(Radii.full)),
           child: Text(text,
               style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, color: fg)),
+                  fontSize: 12, fontWeight: FontWeight.w800, fontVariations: Wght.w800, color: fg)),
         ),
       );
 
@@ -160,7 +160,7 @@ class _DocHeader extends StatelessWidget {
       ),
       child: Text(text,
           style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w700, color: c.textMuted)),
+              fontSize: 12, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.textMuted)),
     );
   }
 }
@@ -222,7 +222,7 @@ class _StartQuizButton extends StatelessWidget {
         child: Text(label,
             style: TextStyle(
                 fontSize: 15,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                 color: filled ? c.onAccent : c.accent)),
       ),
     );

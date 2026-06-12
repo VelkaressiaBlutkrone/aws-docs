@@ -85,7 +85,7 @@ class ExplainBox extends StatelessWidget {
         children: [
           Text(label,
               style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, color: bar)),
+                  fontSize: 12, fontWeight: FontWeight.w800, fontVariations: Wght.w800, color: bar)),
           const SizedBox(height: Gap.xs),
           Text(text, style: TextStyle(fontSize: 15, height: 1.6, color: c.text)),
         ],
@@ -117,7 +117,7 @@ class PrimaryButton extends StatelessWidget {
         child: Text(label,
             style: TextStyle(
                 fontSize: 15,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                 color: enabled ? c.onAccent : c.textFaint)),
       ),
     );
@@ -220,7 +220,7 @@ class ResultCard extends StatelessWidget {
               Expanded(
                   child: Text('${index + 1}. ${q.stem}',
                       style: t.bodyLarge
-                          ?.copyWith(fontSize: 15, fontWeight: FontWeight.w700))),
+                          ?.copyWith(fontSize: 15, fontWeight: FontWeight.w700, fontVariations: Wght.w700))),
               if (flagged)
                 Padding(
                   padding: const EdgeInsets.only(left: Gap.sm),
@@ -269,7 +269,7 @@ class ResultCard extends StatelessWidget {
         TextSpan(
             text: '$label  ',
             style: TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w800, color: color)),
+                fontSize: 12, fontWeight: FontWeight.w800, fontVariations: Wght.w800, color: color)),
         TextSpan(
             text: text,
             style: TextStyle(fontSize: 14, color: c.text, height: 1.5)),
@@ -297,7 +297,7 @@ class _ConceptCue extends StatelessWidget {
       ),
       child: Text(skill,
           style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w700, color: c.textMuted)),
+              fontSize: 12, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.textMuted)),
     );
     return Wrap(
       spacing: Gap.sm,
@@ -316,7 +316,7 @@ class _ConceptCue extends StatelessWidget {
               child: Text('→ 학습문서',
                   style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
                       color: c.accent)),
             ),
           ),
