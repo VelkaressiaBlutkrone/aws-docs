@@ -20,6 +20,8 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+  - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
 lastVerified: 2026-06-07
 ---
 
@@ -118,12 +120,12 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 | 온프레미스 통합 | 불가 (VPN/DX 별도) | 가능 (VPN/DX 어태치먼트) |
 | 적합 규모 | VPC 소수 (2~3개) | VPC 다수 또는 하이브리드 |
 | 비용 | 데이터 전송비만 | 어태치먼트 + 데이터 처리비 |
-| CIDR 중복 | 불가 | 라우팅 테이블로 관리 가능 |
+| CIDR 중복 | 불가 | 불가 (중복 경로는 라우팅 테이블에 전파되지 않음) |
 
-> 🧠 원리: 왜 Transit Gateway는 CIDR이 겹치는 VPC도 라우팅 테이블로 관리할 수 있을까요?
-> TGW는 VPC 간 직접 IP 경로를 합치지 않고, 각 어태치먼트마다 독립된 라우팅 테이블 항목으로 경로를 결정합니다. 관리자는 어느 CIDR 대역이 어느 어태치먼트로 향할지 명시적으로 제어할 수 있습니다.
-> 피어링은 두 VPC의 라우팅 테이블에 상대 CIDR을 직접 등록하므로 중복이 충돌을 일으키지만, TGW는 목적지를 어태치먼트 ID로 추상화하므로 CIDR이 겹치는 VPC도 TGW에 어태치하는 것 자체는 가능합니다.
-> 단, 겹치는 CIDR로 두 VPC가 동시에 통신하려면 여전히 라우팅 정책을 신중하게 설계해야 합니다.
+> 🧠 원리: 왜 Transit Gateway 허브 설계에서 CIDR 계획이 반드시 전제되어야 할까요?
+> TGW는 중복 CIDR이 있는 VPC 간 라우팅을 지원하지 않습니다. 이미 어태치된 VPC와 CIDR이 동일하거나 겹치는 VPC를 추가로 어태치하면, 새로 어태치된 VPC의 경로는 TGW 라우팅 테이블에 전파되지 않아 해당 VPC와의 통신이 불가능해집니다.
+> 이는 TGW가 허브-스포크 전이 라우팅을 위해 각 어태치먼트의 CIDR을 고유한 경로로 등록해야 하는 구조이기 때문입니다. CIDR이 겹치면 어느 어태치먼트로 트래픽을 보내야 하는지 결정할 수 없으므로 중복 경로 자체가 허용되지 않습니다.
+> 따라서 TGW 기반 허브 설계에서는 모든 연결 VPC의 CIDR이 겹치지 않도록 사전에 주소 계획을 수립하는 것이 전제입니다. CIDR이 겹치는 환경에서 서비스를 노출해야 한다면 PrivateLink(§7)처럼 IP 공간을 격리하는 별도 패턴이 필요합니다.
 
 ### 3) Site-to-Site VPN — 인터넷 위 IPsec 터널
 
@@ -356,3 +358,4 @@ VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모�
 4. AWS Transit Gateway — 소개 — https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html
 5. AWS PrivateLink — 소개 — https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. AWS Transit Gateway — VPC 어태치먼트 (공식) — https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html (게이트 검수 반영: 2026-06-12)
