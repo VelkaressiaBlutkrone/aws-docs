@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션
@@ -293,7 +293,7 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon RDS 예약 인스턴스 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html
 2. Aurora Serverless v2 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html

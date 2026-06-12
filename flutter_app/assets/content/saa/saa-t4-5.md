@@ -27,7 +27,7 @@ sources:
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html
   - title: 비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected
@@ -350,7 +350,7 @@ CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 �
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Cost Explorer — https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html
 2. AWS Budgets — https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html

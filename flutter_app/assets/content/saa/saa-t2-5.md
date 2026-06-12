@@ -16,7 +16,7 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active
@@ -261,7 +261,7 @@ Aurora Global Database는 전용 복제 인프라를 사용해 보조 리전 복
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. 클라우드의 재해 복구 옵션 — AWS 백서 — https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
 2. AWS Elastic Disaster Recovery란? — https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html

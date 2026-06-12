@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # IAM — 자격증명·권한·페더레이션
@@ -292,7 +292,7 @@ Principal → sts:AssumeRole 호출
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Identity and Access Management — 소개 — https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html
 2. IAM 정책과 권한 — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html

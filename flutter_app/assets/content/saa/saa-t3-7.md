@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서
@@ -332,7 +332,7 @@ NLB는 L4(TCP·UDP) 수준에서 패킷 흐름만 보고 대상 엔드포인트�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon Route 53 개발자 가이드 — 소개 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html
 2. Route 53 라우팅 정책 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html

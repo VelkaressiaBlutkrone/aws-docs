@@ -22,7 +22,7 @@ sources:
     url: https://aws.amazon.com/directconnect/pricing/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink
@@ -286,7 +286,7 @@ VPC 피어링은 완전한 연결을 위해 VPC 쌍마다 개별 연결이 필�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. VPC 게이트웨이 엔드포인트 — https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html
 2. NAT 게이트웨이 요금 — https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html

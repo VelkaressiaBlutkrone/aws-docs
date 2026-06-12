@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어
@@ -329,7 +329,7 @@ S3의 접근 제어는 여러 계층이 겹쳐서 작동합니다. 요청은 아
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. 모든 URL은 WebFetch로 HTTP 200 응답을 확인했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. 모든 URL은 WebFetch로 HTTP 200 응답을 확인했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon S3 소개 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html
 2. S3 스토리지 클래스 비교 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html

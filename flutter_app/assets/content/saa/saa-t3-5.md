@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시
@@ -313,7 +313,7 @@ Lambda는 동시 실행마다 별도 컨테이너에서 새 DB 연결을 생성�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon RDS — 소개 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html
 2. RDS 읽기 복제본 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html

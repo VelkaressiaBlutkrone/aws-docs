@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
   - title: 버스트 성능 인스턴스 구성 (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략
@@ -323,7 +323,7 @@ EFA 경로:
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, HTTP 200 확인)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, HTTP 200 확인 · 고도화 검수: 2026-06-12)
 
 1. Amazon EC2 인스턴스 유형 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
 2. EC2 배치 그룹 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html

@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -321,7 +321,7 @@ ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Lambda — 소개 — https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 2. Amazon API Gateway — 소개 — https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html

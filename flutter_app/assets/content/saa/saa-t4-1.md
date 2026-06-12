@@ -20,7 +20,7 @@ sources:
     url: https://aws.amazon.com/ec2/pricing/on-demand/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용
@@ -342,7 +342,7 @@ gp2는 IOPS가 볼륨 크기(GB)에 연동되어 결정되는 구조였습니다
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. 모든 URL은 WebFetch로 HTTP 200 응답을 확인했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. 모든 URL은 WebFetch로 HTTP 200 응답을 확인했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. S3 스토리지 클래스 비교 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html
 2. S3 Storage Lens — 기본 개념과 지표·권장사항 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage_lens_basics_metrics_recommendations.html

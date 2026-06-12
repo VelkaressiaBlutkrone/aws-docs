@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -350,7 +350,7 @@ VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Site-to-Site VPN — 소개 — https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html
 2. AWS Direct Connect — 소개 — https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html

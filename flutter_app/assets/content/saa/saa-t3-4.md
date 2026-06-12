@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 컨테이너·서버리스·배치 컴퓨팅 선택
@@ -327,7 +327,7 @@ Lambda의 실행 환경은 요청 처리 후 언제든 종료·재생성될 수 
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon ECS — What is Amazon Elastic Container Service — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
 2. AWS Fargate — Architect for AWS Fargate for Amazon ECS — https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html

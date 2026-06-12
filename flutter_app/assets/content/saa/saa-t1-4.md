@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager
@@ -348,7 +348,7 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. What is AWS WAF? (공식) — https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html
 2. How AWS Shield and Shield Advanced work (공식) — https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html

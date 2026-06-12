@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions
@@ -306,7 +306,7 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. URL은 2026-06-07 WebFetch로 200 응답 확인. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. URL은 2026-06-07 WebFetch로 200 응답 확인. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon SQS — 개발자 가이드 — https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html
 2. Amazon SNS — 개발자 가이드 — https://docs.aws.amazon.com/sns/latest/dg/welcome.html

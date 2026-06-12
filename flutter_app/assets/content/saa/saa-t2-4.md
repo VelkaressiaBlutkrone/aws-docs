@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 고가용성 패턴 — Multi-AZ·단일 실패점 제거
@@ -369,7 +369,7 @@ RDS Multi-AZ는 다른 AZ에 동기 스탠바이를 유지하므로 Primary 장�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, WebFetch 200 확인)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, WebFetch 200 확인 · 고도화 검수: 2026-06-12)
 
 1. AWS Well-Architected Framework — Reliability Pillar — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
 2. RDS Multi-AZ DB 인스턴스 배포 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html

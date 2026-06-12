@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스
@@ -333,7 +333,7 @@ CloudFront 배포에 사용하는 ACM 인증서는 **us-east-1(버지니아 북�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Key Management Service — 개요 — https://docs.aws.amazon.com/kms/latest/developerguide/overview.html
 2. AWS CloudHSM — 소개 — https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html

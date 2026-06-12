@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: Compute Savings Plans and Reserved Instances (공식)
     url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing
@@ -331,7 +331,7 @@ Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 �
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Savings Plans — 개요 — https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html
 2. Amazon EC2 예약 인스턴스 개요 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html

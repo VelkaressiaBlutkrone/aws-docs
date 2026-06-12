@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략
@@ -337,7 +337,7 @@ DynamoDB는 파티션 키를 해시해 데이터를 여러 물리 파티션에 �
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon DynamoDB 개발자 안내서 — 소개 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html
 2. DynamoDB 보조 인덱스 (GSI·LSI) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html

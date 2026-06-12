@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation
@@ -372,7 +372,7 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. 모든 URL은 WebFetch로 HTTP 200 확인 완료. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. 모든 URL은 WebFetch로 HTTP 200 확인 완료. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon Kinesis Data Streams — 소개 — https://docs.aws.amazon.com/streams/latest/dev/introduction.html
 2. Amazon Data Firehose — 서비스 소개 — https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html

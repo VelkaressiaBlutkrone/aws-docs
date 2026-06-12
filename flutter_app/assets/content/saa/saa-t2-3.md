@@ -19,7 +19,7 @@ sources:
     url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # ELB + Auto Scaling — 탄력적 확장 설계
@@ -326,7 +326,7 @@ ASG에 ELB를 연결하면 인스턴스가 시작될 때 자동으로 대상 그
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Elastic Load Balancing — 개요 (공식) — https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html
 2. Application Load Balancer — 소개 (공식) — https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html

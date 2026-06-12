@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택
@@ -358,7 +358,7 @@ EBS Multi-Attach는 동일 볼륨을 여러 Nitro 인스턴스에 동시 연결�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon EBS — What is Amazon Elastic Block Store? — https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html
 2. Amazon EBS 볼륨 타입 — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html

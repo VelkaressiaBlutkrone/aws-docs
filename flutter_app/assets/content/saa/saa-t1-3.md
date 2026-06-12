@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트
@@ -338,7 +338,7 @@ VPC Flow Logs는 VPC 내 네트워크 인터페이스를 오가는 **IP 트래�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon VPC — 소개 — https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
 2. 보안 그룹으로 트래픽 제어 — https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html
