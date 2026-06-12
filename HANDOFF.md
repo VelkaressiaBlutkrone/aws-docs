@@ -6,18 +6,22 @@ _갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 
 ---
 
-## 0. 다음: 시각 리펙토링 B안 PR2 — 전환 모션 + state_views (4분할 중 2번째)
+## 0. 다음: 시각 리펙토링 B안 PR3 ∥ PR4 (4분할 중 남은 2개 — 병렬 가능)
 
-**설계 정본:** `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-main-design-20260612-200051.md` (승인 8/10, eng+design CLEARED). 와이어프레임 정답지: 같은 폴더 `designs/splash-20260612/wireframe-board.html`(+.png) **3번 섹션**. PR1은 출고 완료(§0-x) — PR4가 PR2에 의존하므로 PR2가 다음 슬라이스.
+**설계 정본:** `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-main-design-20260612-200051.md` (승인 8/10, eng+design CLEARED). PR1(§0-x)·PR2(§0-w) 출고 완료. PR2 머지로 PR4 착수 가능 — PR3와 병렬 워크트리 가능(겹치는 파일 없음).
 
-- **범위 (T4·T5·DT1 + DT3 일부):**
-  - **T4 전환 모션:** `app_theme.dart`의 `pageTransitionsTheme`에 커스텀 fade 빌더(enter 200ms ease-out / exit 150ms ease-in) — **TargetPlatform 6키 전부** 등록(웹은 호스트 OS 보고 — 누락 시 iOS/macOS 방문자가 Cupertino 슬라이드를 봄). `app_router.dart` 무변경. `MediaQuery.disableAnimations` 존중.
-  - **T5 state_views:** `lib/widgets/state_views.dart` 신설 — Loading(표시 전 **150ms 유예**+80ms 페이드인+틸 링+"무엇을 불러오는지" 한 줄) / Empty(**아이콘 없음**, 텍스트+CTA만) / Error(wrong 시맨틱 #C0392B/weak + 재시도 FilledButton + 홈 링크). **fatal/optional 분류**로 비동기 7페이지(StudyDoc/Quiz/Exam/CertExam/CertDetail/Review/Report) 와이어링 — cert_detail 메인 Future만 fatal 승격(유일한 침묵 결함), cert_detail:39·45·60의 의도적 optional degrade는 주석과 함께 보존. 기존 plain text 빈 상태 3곳(exam·quiz·review)도 EmptyView 편입.
-  - **DT1 카피 매트릭스:** 페이지(7)×상태(로딩/빈/에러) 합니다체 카피 확정본 — PR 본문 첨부 + DESIGN.md Voice 섹션에 편입.
-  - **DT3 일부:** 상태뷰·테마 토글 focus-visible(액센트 2px/오프셋 2px) — 헤더 쪽은 PR4.
-- **게이트:** 6키 등록 스모크 테스트 + state_views 위젯 테스트 + fatal/optional 분류표·빈 상태 매핑·카피 매트릭스 첨부 + **DESIGN.md 갱신(상태뷰·모션 확정값·focus 토큰)** + dogfood. 신규 카피 grep 해요체 0건.
-- **주의:** SelectionArea+비동기 페이지는 위젯 테스트 렌더 불가(§1 함정) — state_views는 셸 밖 단독 렌더로 테스트.
-- **이후:** PR3(Pretendard Variable 전환, PR1과 main.dart 공유 — 이미 충족) ∥ PR4(공용 위젯+AppHeader 롤아웃+페이지 분해+키보드 감사, **PR2 머지 후 시작**).
+- **PR3 — Pretendard Variable 전환 (T6):** 정적 4 weight OTF(6.3MB) → `PretendardVariable.ttf` 단일(~2.3MB), 폰트 합계 6.9→~3.1MB. **핵심**: Flutter는 가변 `wght` 축을 `FontWeight`에 자동 매핑하지 않음 → `app_theme.dart` 중앙 TextStyle에 `fontVariations: [FontVariation('wght', N)]` + 전 코드 `fontWeight:` 사용처 스윕(grep 게이트 0건). 게이트: `verify_splash` 타이밍 전/후 + weight 4종(400/500/700/800) 렌더 스크린샷 비교(미적용 시 전부 400 균일화가 즉시 보임), **DESIGN.md 갱신(폰트 로딩 항목)**.
+- **PR4 — 공용 위젯 + AppHeader 롤아웃 + 페이지 분해 (T7·T8·T9·T12·DT4 + DT3 잔여):** 8페이지 AppBar 인벤토리 선행 → AppHeader 슬롯(back/title/actions)·collapse 규약 → 문서형 5페이지 교체·세션형 3페이지 시각 셸 → home/cert_detail/plan 분해(섹션 단위 위젯 테스트 선행) → 글로벌 에러 핸들러(`FlutterError.onError` — state_views의 ErrorView와 연결) → **전 화면 키보드 접근성 감사**(Tab 순서·focus-visible 전 인터랙티브·Enter/Space) + 17종 패턴 매핑표. 와이어프레임 정답지 2번 섹션(AppHeader). 게이트: 단계별 analyze+전체 테스트+dogfood, AppBar 기능 손실 0, **DESIGN.md 갱신(헤더 2변형+collapse 규약)**.
+- **재사용 인프라:** state_views/FocusRing(`lib/widgets/`)은 PR4 헤더 내비 focus-visible에 그대로 사용. 카피 매트릭스 정본: `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md`.
+
+## 0-w. 완료: 시각 리펙토링 PR2 — 전환 모션 6키 + state_views 7페이지, main 배포됨 (2026-06-13)
+
+게이트 전부 그린: **474 테스트**(신규 14 — 6키 등록·duration 150–250·iOS fade·disableAnimations 생략·Loading 150ms 유예/해소 시 미표시·Empty 아이콘 금지·Error 콜백·FocusRing 점등/소등), analyze 신규 0건(기존 3건 잔존), 해요체 grep 0건, dogfood(빈 상태 라이트/다크 와이어프레임 대조·cert 상세·학습문서·퀴즈 골든 패스·콘솔 에러 0).
+
+- **T4 전환 모션:** `app_theme.dart`의 `AppFadePageTransitionsBuilder` — enter 200ms ease-out / exit 150ms ease-in(`transitionDuration`/`reverseTransitionDuration` 오버라이드), TargetPlatform 6키 전부, `MediaQuery.disableAnimationsOf` 시 child 그대로. `app_router.dart` 무변경.
+- **T5 state_views:** `lib/widgets/state_views.dart`(Loading 150ms 유예+80ms 페이드인 / Empty 아이콘 없음+선택 CTA / Error wrong 시맨틱+재시도+홈) + `lib/widgets/focus_ring.dart`(액센트 2px+오프셋 2px, 레이아웃 시프트 없음). 7페이지 와이어링: **cert_detail StatefulWidget 전환+fatal 승격**(승인된 변경 ③ — build마다 `_load()` 재호출 패턴은 보존해 복귀 시 진행률 재계산 동작 유지, 재시도=`setState`), cert_exam **에러/빈 분기 분리**(로드 실패가 "문항 없음"으로 위장하던 것 교정), 나머지 5페이지 `late final`→`late`+재시도 재할당. optional degrade(cert_detail:guide/summary/뱅크, review/report/cert_exam:개별 뱅크, exam:가이드 메타) 전부 주석과 함께 보존. review/report 빈 상태에 "모의고사 시작하기" CTA(와이어프레임 3번 섹션 승인 패턴).
+- **DT1·DT2·DT3 일부:** 카피 매트릭스+fatal/optional 분류표+빈 상태 매핑 = `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md`. DESIGN.md 갱신(Motion 확정값·Focus 토큰 섹션·State Views 섹션·Voice 카피 패턴·Decisions Log). focus-visible 적용: 상태뷰 버튼+홈 테마 토글(헤더는 PR4).
+- **dogfood 교훈:** 학습문서 딥링크 taskId는 `clf-t1-1` 형식(`t1-1` 아님 — 틀리면 redirect 가드가 홈으로, 라이브도 동일한 정상 동작). SPA 부팅 후 해시 goto는 풀 리로드가 아님 — 테마 키 주입 후엔 `reload` 필요.
 
 **그 외 대기(사용자 우선순위 결정 사항):**
 - **모의고사 중량·증가 검토 브레인스토밍(직전 §0, 사용자 지시 2026-06-11):** §2 백로그(①CLF ≥15 심화 ②SAA-C03 문항 ③C-중량) 우선순위 재검토. 시각 리펙토링 트랙(PR2~4)과의 선후는 사용자 결정 — 끼어들기 가능.
@@ -94,9 +98,9 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 �
 ---
 
 ## 3. 워킹트리 / 메모
-- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **460 테스트** 그린 기준점(2026-06-13).
+- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **474 테스트** 그린 기준점(2026-06-13, PR2 +14).
 - `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3 폰트 전환의 전/후 타이밍 비교에 그대로 재사용.
 - **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
-**다음 세션 첫 수: §0 시각 리펙토링 PR2(전환 모션 6키 + state_views 7페이지). 끼어들기 후보: 모의고사 중량·증가 브레인스토밍(§0 대기 목록). 그 외: §0-b 선택 항목(2기기 pull·개인정보 고지).**
+**다음 세션 첫 수: §0 시각 리펙토링 PR3(Pretendard Variable) ∥ PR4(AppHeader·페이지 분해 — PR2 머지로 착수 가능). 끼어들기 후보: 모의고사 중량·증가 브레인스토밍(§0 대기 목록). 그 외: §0-b 선택 항목(2기기 pull·개인정보 고지).**
