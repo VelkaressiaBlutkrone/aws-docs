@@ -1,17 +1,36 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-06-12 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
 ---
 
-## 0. 다음: 모의고사 중량·증가 검토 브레인스토밍 (사용자 지시 순서)
+## 0. 다음: 시각 리펙토링 B안 PR2 — 전환 모션 + state_views (4분할 중 2번째)
 
-**학습문서 고도화 롤아웃 63/63 완료·전량 라이브(2026-06-12).** 배치 A(CLF 19, 06-11) · 배치 B(SAA 24, 06-12) · 배치 C(SOA 20, 06-12) 전부 검수 게이트 통과 → lastVerified 갱신 → main 병합·배포. 전 문서 = 🔤 용어 표 + 서브섹션별 `> 🧠 원리:` 블록 + 함정 원리 포인터 + 원리형 Q. 전체 스위트 451 테스트 그린. 스펙 상태 갱신됨(`docs/superpowers/specs/2026-06-11-content-enrichment-design.md`).
+**설계 정본:** `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-main-design-20260612-200051.md` (승인 8/10, eng+design CLEARED). 와이어프레임 정답지: 같은 폴더 `designs/splash-20260612/wireframe-board.html`(+.png) **3번 섹션**. PR1은 출고 완료(§0-x) — PR4가 PR2에 의존하므로 PR2가 다음 슬라이스.
 
-- **다음 첫 수:** 모의고사 **중량·증가 검토 브레인스토밍** — §2 콘텐츠 백로그(①CLF ≥15 심화 ②SAA-C03 문항 착수 ③C-중량)의 연기 조건("고도화 완료 이후")이 충족됨. 우선순위 재검토부터 시작(superpowers:brainstorming).
-- **잔여 존치 항목(필요 시 재론):** 배치 B 검수-미지적 플래그 5건(§0-z) · 배치 C 검수 판정 중 [유지] t2-3 "참조 구조".
+- **범위 (T4·T5·DT1 + DT3 일부):**
+  - **T4 전환 모션:** `app_theme.dart`의 `pageTransitionsTheme`에 커스텀 fade 빌더(enter 200ms ease-out / exit 150ms ease-in) — **TargetPlatform 6키 전부** 등록(웹은 호스트 OS 보고 — 누락 시 iOS/macOS 방문자가 Cupertino 슬라이드를 봄). `app_router.dart` 무변경. `MediaQuery.disableAnimations` 존중.
+  - **T5 state_views:** `lib/widgets/state_views.dart` 신설 — Loading(표시 전 **150ms 유예**+80ms 페이드인+틸 링+"무엇을 불러오는지" 한 줄) / Empty(**아이콘 없음**, 텍스트+CTA만) / Error(wrong 시맨틱 #C0392B/weak + 재시도 FilledButton + 홈 링크). **fatal/optional 분류**로 비동기 7페이지(StudyDoc/Quiz/Exam/CertExam/CertDetail/Review/Report) 와이어링 — cert_detail 메인 Future만 fatal 승격(유일한 침묵 결함), cert_detail:39·45·60의 의도적 optional degrade는 주석과 함께 보존. 기존 plain text 빈 상태 3곳(exam·quiz·review)도 EmptyView 편입.
+  - **DT1 카피 매트릭스:** 페이지(7)×상태(로딩/빈/에러) 합니다체 카피 확정본 — PR 본문 첨부 + DESIGN.md Voice 섹션에 편입.
+  - **DT3 일부:** 상태뷰·테마 토글 focus-visible(액센트 2px/오프셋 2px) — 헤더 쪽은 PR4.
+- **게이트:** 6키 등록 스모크 테스트 + state_views 위젯 테스트 + fatal/optional 분류표·빈 상태 매핑·카피 매트릭스 첨부 + **DESIGN.md 갱신(상태뷰·모션 확정값·focus 토큰)** + dogfood. 신규 카피 grep 해요체 0건.
+- **주의:** SelectionArea+비동기 페이지는 위젯 테스트 렌더 불가(§1 함정) — state_views는 셸 밖 단독 렌더로 테스트.
+- **이후:** PR3(Pretendard Variable 전환, PR1과 main.dart 공유 — 이미 충족) ∥ PR4(공용 위젯+AppHeader 롤아웃+페이지 분해+키보드 감사, **PR2 머지 후 시작**).
+
+**그 외 대기(사용자 우선순위 결정 사항):**
+- **모의고사 중량·증가 검토 브레인스토밍(직전 §0, 사용자 지시 2026-06-11):** §2 백로그(①CLF ≥15 심화 ②SAA-C03 문항 ③C-중량) 우선순위 재검토. 시각 리펙토링 트랙(PR2~4)과의 선후는 사용자 결정 — 끼어들기 가능.
+- 잔여 존치 플래그(필요 시 재론): 배치 B 미지적 5건(§0-z) · 배치 C [유지] t2-3 "참조 구조".
+- §0-b 선택 항목(2기기 pull 검증·개인정보 고지).
+
+## 0-x. 완료: 시각 리펙토링 PR1 — 스플래시·부팅 재배열·테마 영속화, main 배포됨 (2026-06-13)
+
+**백색 화면 2,957ms → 123ms(실측, 스로틀 700ms 동일 조건 전/후).** main `925df74` 머지·push → Pages 자동 배포 → 실사이트 dogfood(스플래시 표시→소멸·콘솔 에러 0) 확인. 게이트 전부 그린: 테스트 460케이스(신규 9 — SyncEntry 늦은 주입 회귀·테마 라운드트립·파손 폴백·init 실패 degrade), analyze 신규 0건(기존 3건 잔존: plan_page cacheExtent deprecated·sync_controller_test 2건 — PR1 범위 외 보존), 라이트/다크 스크린샷 와이어프레임 대조.
+
+- **구현:** `web/index.html` 커스텀 부트스트랩(단계 문구 3종 합니다체 + 헤어라인 진짜 진행률 33/66/100 + stall 워치독 20s 비차단 + flutter-first-frame 페이드아웃 250ms + reduced-motion) · `ThemePrefStore` 신설(테마 영속화) · `main.dart` 부팅 재배열 · `tool/verify_splash.mjs`(T3 검증 도구) · DESIGN.md Voice/Splash 섹션(DT2-PR1).
+- **승인된 의도적 동작 변경 2건 발효:** Sync 시작이 첫 프레임 뒤로(수백 ms) · 테마 영속화(세션 한정→영속). 나머지 동작 변화는 결함으로 취급.
+- **도구 교훈:** verify_splash에서 같은 node 프로세스가 정적 서버를 돌리며 browse를 `spawnSync`로 부르면 이벤트 루프 데드락(서버가 browse 요청에 응답 불가) — browse 호출은 반드시 비동기 spawn. 자세한 수치·경위: 메모리 [[visual-refactor-design-approved]].
 
 ## 0-y. 완료: 배치 C(SOA 20) — main 배포됨 (2026-06-12)
 
@@ -53,6 +72,9 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 �
 ---
 
 ## 1. 아키텍처 핵심 (이어받기 전 알아야 할 것)
+- **부팅 순서(PR1, 2026-06-13):** `main()`은 `runApp()` 즉시 호출 → `addPostFrameCallback`에서 `initCloudSync()`(Firebase/SyncController 후행 초기화). 전역 `syncController`는 `ValueNotifier<SyncController?>` — `SyncEntry`가 `ValueListenableBuilder`로 구독해 늦은 주입 시 리빌드. init 실패는 try/catch → 로컬 전용 degrade + debugPrint(글로벌 핸들러 연결은 PR4/WS8). **Firebase init을 첫 프레임 앞에 await로 되돌리면 안 됨** — 백색 화면 주범 ②였음.
+- **테마 키 계약(PR1):** localStorage `awsdocs.theme.v1` = `'dark'|'light'` **평문**(JSON 금지 — `web/index.html` 스플래시 JS가 파싱 없이 직접 읽어 첫 페인트 색을 맞춤). Dart 쪽은 `lib/data/theme_pref_store.dart`(파손/미존재 → 라이트 폴백). 키/값 계약 테스트: `test/theme_pref_store_test.dart`.
+- **스플래시 유지비(PR1):** `web/index.html`이 `{{flutter_js}}`/`{{flutter_build_config}}` 토큰 기반 커스텀 부트스트랩 — Flutter 마이너 업그레이드 시 토큰 호환 확인 후 `node tool/verify_splash.mjs` 1회 실행(존재→소멸 어서션+타이밍). browse 데몬(gstack) 필요.
 - **reconcile-on-trigger (가로채기 없음):** 스토어와 `SyncService`가 **같은 localStorage**(`defaultBackend()`)를 읽고/써서 reconcile 결과가 스토어 다음 읽기에 자동 반영. 트리거(로그인·cloud watch·주기 30s·앱 복귀)에 **멱등** `reconcileAll` 재실행.
 - **graceful degrade 게이트:** `firebase_bootstrap.dart`의 `cloudConfigured()` — `DefaultFirebaseOptions.web.projectId`로 판독(웹 전용 앱; `currentPlatform`은 테스트 VM에서 throw하므로 금지).
 - **충돌 해소:** history=레코드 union(무손실), viewed=set union, plan/checks=LWW(사이드카 `awsdocs.sync.v1`). 순수 함수 `sync_merge.dart`.
@@ -62,7 +84,7 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 �
 
 ---
 
-## 2. 대기 작업 (콘텐츠 백로그 — **전부 §0 고도화 완료 이후로 연기**, 사용자 지시 2026-06-11)
+## 2. 대기 작업 (콘텐츠 백로그 — 연기 조건 "고도화 완료"는 2026-06-12 충족, **모의고사 중량·증가 브레인스토밍에서 우선순위 재검토 대기**)
 이전 핸드오프 상세는 git `9c30e72`의 `HANDOFF.md` 참조. 요약:
 - **① ≥15 심화:** CLF 각 Task 12→15 verified(+57문항). 워크플로 메모리 [[content-density-loop]]. **고도화 후 재검토.**
 - **② SAA-C03 문항 착수:** 현재 문항 0(학습문서만). **고도화 후 재검토.**
@@ -72,6 +94,9 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 �
 ---
 
 ## 3. 워킹트리 / 메모
-- 미커밋: 없음. 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]].
+- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **460 테스트** 그린 기준점(2026-06-13).
+- `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3 폰트 전환의 전/후 타이밍 비교에 그대로 재사용.
+- **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
+- 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
-**다음 세션 첫 수: §0 모의고사 중량·증가 검토 브레인스토밍. 그 외 대기: §0-b 선택 항목(2기기 pull·개인정보 고지).**
+**다음 세션 첫 수: §0 시각 리펙토링 PR2(전환 모션 6키 + state_views 7페이지). 끼어들기 후보: 모의고사 중량·증가 브레인스토밍(§0 대기 목록). 그 외: §0-b 선택 항목(2기기 pull·개인정보 고지).**
