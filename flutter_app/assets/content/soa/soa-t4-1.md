@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
   - title: 서비스 제어 정책 (SCP) (공식)
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # IAM·계정 보안 운영 — 정책·역할·MFA·자격증명 보고서
@@ -303,7 +303,7 @@ SCP는 계정·OU에 적용되어 해당 계정의 IAM 주체가 수행할 수 �
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. IAM 정책과 권한 — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
 2. IAM 정책 평가 로직(명시적 Deny 우선) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html

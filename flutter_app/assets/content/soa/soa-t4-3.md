@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html
   - title: S3 퍼블릭 액세스 차단 (Block Public Access) (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 데이터·인프라 보호 — KMS·암호화·Secrets Manager·ACM
@@ -298,7 +298,7 @@ SSE-KMS 기본 구성에서는 객체 1개를 쓰거나 읽을 때마다 KMS API
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS Key Management Service — 개요 — https://docs.aws.amazon.com/kms/latest/developerguide/overview.html
 2. KMS 키 교체(Rotation) — https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html

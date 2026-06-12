@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
   - title: S3 정적 웹사이트 호스팅 (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # Route 53 DNS·CloudFront 콘텐츠 전송
@@ -293,7 +293,7 @@ enableDnsSupport를 끄면 VPC 내 인스턴스는 VPC가 제공하는 DNS 리�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. Amazon Route 53 개발자 가이드 — 소개 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html
 2. Route 53 라우팅 정책 선택 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html

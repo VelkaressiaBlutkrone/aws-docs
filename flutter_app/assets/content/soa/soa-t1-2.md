@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html
   - title: CloudWatch 에이전트 설치 (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # CloudWatch Logs·Logs Insights·구독 필터·에이전트
@@ -320,7 +320,7 @@ CloudWatch의 기본 EC2 지표는 하이퍼바이저가 외부에서 관찰할 
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. CloudWatch Logs란 무엇인가 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html
 2. 로그 그룹과 로그 스트림 작업 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html

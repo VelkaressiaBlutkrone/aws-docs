@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html
   - title: DeletionPolicy 속성 (공식)
     url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # CloudFormation 프로비저닝 (템플릿·스택·StackSets·드리프트)
@@ -298,7 +298,7 @@ RDS 리소스에 **`DeletionPolicy: Retain`**(리소스를 남김) 또는 **`Sna
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS CloudFormation이란 무엇인가 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html
 2. 템플릿 구조(Anatomy) — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html

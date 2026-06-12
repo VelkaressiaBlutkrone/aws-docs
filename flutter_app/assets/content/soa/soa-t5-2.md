@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
   - title: 게이트웨이 VPC 엔드포인트 (S3·DynamoDB) (공식)
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 하이브리드·연결 — 피어링·TGW·VPN·Direct Connect·엔드포인트
@@ -269,7 +269,7 @@ Gateway 엔드포인트는 서브넷 라우팅 테이블에 경로를 추가하�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. VPC 피어링이란 무엇인가 — https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html
 2. AWS Transit Gateway란 무엇인가 — https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html

@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/config/latest/developerguide/remediation.html
   - title: Lambda로 운영 작업 자동화 (공식)
     url: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 자동화 패턴 (EventBridge·Lambda·자동 복구)
@@ -265,7 +265,7 @@ ASG가 기본 **EC2 상태 점검만** 사용하면 인스턴스(VM)는 정상�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. Amazon EventBridge란 무엇인가 — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
 2. EventBridge 규칙(이벤트 패턴·스케줄) — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html

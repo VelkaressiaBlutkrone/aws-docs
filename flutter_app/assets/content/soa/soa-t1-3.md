@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
   - title: AWS X-Ray란 무엇인가 (공식)
     url: https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)
@@ -265,7 +265,7 @@ rate(5 minutes)
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS CloudTrail이란 무엇인가 — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html
 2. CloudTrail 이벤트(관리·데이터·인사이트) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html

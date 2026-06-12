@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
   - title: S3 버전 관리 (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 백업·복원 전략 — AWS Backup·스냅샷·수명주기
@@ -265,7 +265,7 @@ S3 복제는 소스 버킷에서 발생하는 객체 변경을 대상 버킷에 
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS Backup이란? — https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html
 2. AWS Backup Vault Lock — https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html

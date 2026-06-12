@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
   - title: Parameter Store vs Secrets Manager 선택 (공식)
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/integration-ps-secretsmanager.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # Systems Manager 운영 자동화 (Run Command·Patch·State Manager·Parameter Store)
@@ -297,7 +297,7 @@ State Manager 연결은 일정 주기마다 지정된 SSM 문서를 인스턴스
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS Systems Manager란 무엇인가 — https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html
 2. Run Command — https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html

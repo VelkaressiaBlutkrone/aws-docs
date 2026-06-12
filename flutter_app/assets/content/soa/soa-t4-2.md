@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html
   - title: AWS Trusted Advisor (공식)
     url: https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 규정 준수·거버넌스 — Config·Security Hub·GuardDuty·Inspector
@@ -271,7 +271,7 @@ Config 자동 교정은 실행 흐름을 SSM Automation에 위임하며, 런북�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS Config — 소개 — https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html
 2. AWS Config 규칙으로 리소스 평가 — https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html

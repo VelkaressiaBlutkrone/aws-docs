@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html
   - title: 신뢰성 기둥 — AWS Well-Architected Framework (공식)
     url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # DR·데이터 복원력 — RTO/RPO·S3 복제·리전 장애 대비
@@ -274,7 +274,7 @@ CRR은 버킷에서 발생하는 변경 이벤트(PUT·DELETE 등)를 감지해 
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. 클라우드의 재해 복구 옵션 — AWS 백서 — https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
 2. S3 객체 복제(CRR·SRR) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html

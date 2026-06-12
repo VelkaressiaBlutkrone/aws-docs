@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
   - title: Amazon ElastiCache 캐싱 전략 (공식)
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)
@@ -294,7 +294,7 @@ EC2 인스턴스의 컴퓨팅 자원과 RDS의 읽기 처리 경로는 독립된
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. EC2 인스턴스 유형 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html
 2. 버스트 가능 성능 인스턴스(T 계열·CPU 크레딧) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html

@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
   - title: EC2 인스턴스 모니터링 (기본 vs 세부) (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # CloudWatch 지표·경보·대시보드
@@ -322,7 +322,7 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. CloudWatch 개념(네임스페이스·차원·기간·통계·해상도) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
 2. 지표 작업 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html

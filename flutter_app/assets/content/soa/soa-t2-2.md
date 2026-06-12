@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
   - title: Route 53 DNS 장애 조치 구성 (공식)
     url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # Multi-AZ·고가용성·복원력 설계
@@ -301,7 +301,7 @@ RDS Multi-AZ는 장애 조치 시 스탠바이를 Primary로 승격하면서 **R
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
 2. RDS Multi-AZ 배포 구성 및 관리 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html

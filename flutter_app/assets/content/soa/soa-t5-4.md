@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html
   - title: 보안 그룹과 네트워크 ACL 비교 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 네트워크 문제 해결 — Flow Logs·Reachability Analyzer
@@ -275,7 +275,7 @@ SG는 stateful이라 허용한 인바운드 연결의 응답 트래픽을 상태
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. VPC 흐름 로그 — https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html
 2. 흐름 로그 레코드(필드) — https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-records-examples.html

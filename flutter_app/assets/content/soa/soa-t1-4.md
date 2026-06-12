@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recovery.html
   - title: ELB 대상 상태 확인 (Application Load Balancer) (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # 가용성 지표 기반 문제 식별·해결 (Health Dashboard·상태 확인)
@@ -266,7 +266,7 @@ ELB는 트래픽 라우팅 담당이고 인스턴스 수명 주기 관리는 Aut
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. AWS Health란 무엇인가(Health Dashboard) — https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html
 2. AWS Health를 EventBridge와 통합 — https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html

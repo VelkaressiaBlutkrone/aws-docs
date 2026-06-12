@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
   - title: NAT 게이트웨이 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # VPC 네트워킹 구현 — 서브넷·라우팅·SG·NACL·NAT
@@ -279,7 +279,7 @@ NAT Gateway는 **단일 AZ 리소스**이므로 AZ-a 장애 시 **AZ-b 프라이
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. Amazon VPC란 무엇인가 — https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html
 2. VPC의 서브넷 — https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html

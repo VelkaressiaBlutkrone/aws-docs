@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager.html
   - title: 패치 그룹 (Patch Groups) (공식)
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-patchgroups.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # AMI·리소스 배포·유지 관리·패치 전략
@@ -256,7 +256,7 @@ AMI를 **등록 해제(deregister)해도 연결된 EBS 스냅샷은 자동 삭�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. Amazon Machine Image(AMI) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
 2. 블록 디바이스 매핑 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html

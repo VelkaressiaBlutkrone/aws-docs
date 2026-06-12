@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html
   - title: Elastic Load Balancing 작동 방식 (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
-lastVerified: 2026-06-09
+lastVerified: 2026-06-12
 ---
 
 # Auto Scaling·ELB로 확장성·탄력성 구현
@@ -285,7 +285,7 @@ ASG의 **상태 확인 유형에 ELB 상태 확인을 추가(활성화)**합니�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09)
+이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
 1. Amazon EC2 Auto Scaling이란? — https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html
 2. Auto Scaling 그룹의 동적 조정(타깃 추적·단계·단순) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html
