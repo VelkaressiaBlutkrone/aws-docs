@@ -281,7 +281,7 @@ CUR (S3 CSV)
 ## ⚠️ 흔한 함정
 
 1. **"Cost Explorer로 예산 초과를 막을 수 있다."** → Cost Explorer는 분석·시각화 도구이고, 알림·차단은 AWS Budgets입니다. 예산 초과 알림이 필요하면 Budgets를 써야 합니다.
-   *(원리: §2 — Cost Explorer와 CUR은 같은 데이터셋을 공유하지만 Cost Explorer는 집계·시각화 레이어이며 제어 기능은 없다.)*
+   *(원리: §1 본문 — 비교표에서 Cost Explorer의 출력은 그래프·예측·추천이며, 알림·차단은 Budgets의 역할로 분리된다.)*
 
 2. **"CUR은 Cost Explorer와 같다."** → CUR은 S3에 저장되는 CSV 원시 데이터(라인 아이템), Cost Explorer는 그 위에 올라간 인터랙티브 UI입니다. 둘은 같은 데이터셋을 공유하지만 용도가 다릅니다. 시간 단위 세분화·Athena 쿼리가 필요하면 CUR입니다.
    *(원리: §2 — CUR은 심층 감사·파이프라인용 원시 데이터이고, Cost Explorer는 즉각 분석용 집계 레이어로 역할이 분리된다.)*
