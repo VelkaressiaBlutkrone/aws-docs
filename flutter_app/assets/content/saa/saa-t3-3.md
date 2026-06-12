@@ -22,6 +22,10 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+  - title: 버스트 성능 인스턴스 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
+  - title: 버스트 성능 인스턴스 구성 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html
 lastVerified: 2026-06-07
 ---
 
@@ -104,12 +108,11 @@ m  7  g  d  .  2xlarge
 | **가속 컴퓨팅** | P, G, Trn, Inf, DL | GPU/가속칩 특화 | ML 학습·추론·HPC·그래픽 렌더링 | P5, G6, Trn2, Inf2 |
 | **HPC** | Hpc | EFA 내장 | 고성능 컴퓨팅 클러스터 | Hpc7g, Hpc8a |
 
-> **T 패밀리 버스트 메커니즘**: 인스턴스는 CPU 크레딧을 축적하고, 기준선 이상의 CPU가 필요할 때 소모합니다. 크레딧이 소진되면 기준선으로 성능이 제한됩니다. 지속적인 고부하 워크로드에는 **M 패밀리**가 적합합니다.
+> **T 패밀리 버스트 메커니즘**: 인스턴스는 CPU 크레딧을 축적하고, 기준선 이상의 CPU가 필요할 때 소모합니다. T3/T3a/T4g는 기본 모드가 `unlimited`이며, 크레딧이 소진된 후에도 기준선 이상을 계속 사용할 수 있으나 surplus credit으로 추가 과금이 발생할 수 있습니다. `standard` 모드에서는 크레딧 소진 시 기준선으로 성능이 제한됩니다. 지속적인 고부하 워크로드에는 **M 패밀리**가 적합합니다.
 
-> 🧠 원리: 왜 T 패밀리는 기준선을 넘는 CPU를 지속적으로 사용할 수 없을까요?
-> T 패밀리 인스턴스는 물리 호스트의 유휴 CPU 자원을 공유 풀 방식으로 빌려 쓰는 구조로 설계됐습니다.
-> 기준선은 해당 인스턴스 크기에 배정된 지속 가능한 CPU 몫이고, 크레딧은 기준선 미만으로 운영하는 동안 쌓인 "미래 사용권"입니다.
-> 크레딧 풀이 고갈되면 AWS는 해당 인스턴스가 다른 테넌트에게 할당돼야 할 용량을 독점하지 못하도록 CPU를 다시 기준선으로 제한합니다.
+> 🧠 원리: 왜 T 패밀리 크레딧 모델은 모드에 따라 동작이 달라질까요?
+> T 패밀리 인스턴스는 기준선(해당 크기에 배정된 지속 가능한 CPU 몫)과 크레딧(기준선 미만 운영 시 축적되는 사용권) 두 가지 개념으로 성능을 관리합니다.
+> `standard` 모드에서는 크레딧이 소진되면 CPU가 기준선으로 제한됩니다. `unlimited` 모드(T3/T3a/T4g의 기본값)에서는 크레딧 소진 후에도 surplus credit으로 기준선 이상을 계속 쓸 수 있으나, surplus credit 사용량에 따라 추가 비용이 청구될 수 있습니다.
 > 이 설계 덕분에 간헐적 스파이크 패턴에는 저비용 T 패밀리가, 지속 고부하에는 전용 용량이 보장되는 M 패밀리가 각각 적합한 선택이 됩니다.
 
 ### 3) 프로세서 선택
@@ -220,9 +223,9 @@ EFA 경로:
 > **EFA 제약**: EFA 트래픽은 AZ 또는 VPC를 넘을 수 없습니다. EFA를 붙이면 IP 네트워킹을 위한 ENA 기능도 함께 제공됩니다(EFA-only 모드 제외).
 
 > 🧠 원리: 왜 SR-IOV는 일반 가상 네트워크 인터페이스보다 지연이 낮을까요?
-> 전통적인 가상 네트워크 인터페이스는 패킷이 하이퍼바이저 소프트웨어 계층을 두 번(송신·수신 각 1회) 통과해야 해 CPU 사이클과 메모리 복사가 발생합니다.
-> SR-IOV는 물리 NIC를 다수의 가상 함수(VF)로 하드웨어 수준에서 분할해, 가상 머신이 하이퍼바이저를 거치지 않고 VF에 직접 DMA(Direct Memory Access)로 데이터를 쓸 수 있게 합니다.
-> 소프트웨어 계층 통과 횟수가 줄면 CPU 오버헤드와 지연이 함께 감소하고, 초당 패킷 처리량(PPS)도 높아집니다.
+> 전통적인 가상 네트워크 인터페이스는 패킷이 하이퍼바이저 소프트웨어 계층을 거쳐야 해 CPU 사이클 소모와 지연이 발생합니다.
+> SR-IOV는 물리 NIC를 하드웨어 수준에서 여러 가상 함수(Virtual Function)로 분할해, 가상 머신이 소프트웨어 가상화 계층을 경유하지 않고 네트워크 인터페이스와 직접 통신할 수 있도록 합니다.
+> 이로 인해 I/O 성능이 높아지고 CPU 사용률이 낮아지며, 초당 패킷 처리량(PPS)이 높아지고 지연이 일관되게 낮아집니다.
 > 이 원리가 ENA가 추가 요금 없이 고 PPS·저지연을 제공할 수 있는 이유입니다.
 
 ---
@@ -258,7 +261,7 @@ EFA 경로:
    *(원리: §6 본문 — EFA를 붙이면 IP 네트워킹용 ENA 기능도 함께 제공되어, OS-bypass 경로와 표준 IP 경로가 동시에 존재한다.)*
 
 5. **"T3 인스턴스를 클러스터 배치 그룹에 배치할 수 있다."** → 불가입니다. 버스트 성능 인스턴스(T 패밀리)는 클러스터 배치 그룹을 지원하지 않습니다.
-   *(원리: §2 — T 패밀리는 유휴 CPU를 공유 풀로 빌려 쓰는 구조여서, 전용 고대역폭 세그먼트를 전제로 하는 클러스터 배치 그룹과 설계 전제가 맞지 않는다.)*
+   *(제약: §5 본문 — 클러스터 배치 그룹 지원 인스턴스 규칙에서 버스트 성능 인스턴스(T 패밀리)는 명시적으로 제외됩니다.)*
 
 6. **"예약 인스턴스와 Savings Plans는 같다."** → RI는 **특정 인스턴스 유형·리전을 고정**해 약정합니다. Savings Plans는 **달러 단위 사용량**을 약정하므로 인스턴스 유형 변경에 유연합니다. 성능 관점에서는 둘 다 중단 없는 온디맨드 용량을 사용합니다.
    *(원리: §4 본문 — RI는 유형·리전을 고정해 약정하고, Savings Plans는 사용량($)을 약정하므로 유연성 범위가 다르다.)*
@@ -329,3 +332,5 @@ EFA 경로:
 5. 향상된 네트워킹 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html
 6. Elastic Fabric Adapter — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+8. 버스트 성능 인스턴스 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html (게이트 검수 반영: 2026-06-12)
+9. 버스트 성능 인스턴스 구성 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html (게이트 검수 반영: 2026-06-12)
