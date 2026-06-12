@@ -19,6 +19,7 @@ import '../models/certification.dart';
 import '../util/open_link.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
+import '../widgets/focus_ring.dart';
 import 'sync_entry.dart';
 
 class HomePage extends StatefulWidget {
@@ -418,20 +419,23 @@ class _ThemeToggle extends StatelessWidget {
     final c = context.c;
     return Tooltip(
       message: isDark ? '라이트 모드' : '다크 모드',
-      child: InkWell(
-        onTap: onTap,
+      child: FocusRing(
         borderRadius: BorderRadius.circular(Radii.full),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: c.surface2,
-            borderRadius: BorderRadius.circular(Radii.full),
-            border: Border.all(color: c.border),
-          ),
-          child: Icon(
-            isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-            size: 18,
-            color: c.textMuted,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.full),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: c.surface2,
+              borderRadius: BorderRadius.circular(Radii.full),
+              border: Border.all(color: c.border),
+            ),
+            child: Icon(
+              isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+              size: 18,
+              color: c.textMuted,
+            ),
           ),
         ),
       ),

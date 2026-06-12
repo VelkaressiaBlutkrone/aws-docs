@@ -9,6 +9,7 @@ import '../data/viewed_docs_store.dart';
 import '../models/exam_session.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 
 class StudyDocPage extends StatefulWidget {
   const StudyDocPage({super.key, required this.entry});
@@ -19,7 +20,7 @@ class StudyDocPage extends StatefulWidget {
 }
 
 class _StudyDocPageState extends State<StudyDocPage> {
-  late final Future<StudyContent> _future;
+  late Future<StudyContent> _future; // 재할당은 에러 재시도에서만
 
   @override
   void initState() {
@@ -52,13 +53,18 @@ class _StudyDocPageState extends State<StudyDocPage> {
           future: _future,
           builder: (context, snap) {
             if (snap.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: LoadingView(label: '학습문서를 불러오고 있습니다…'));
             }
             final doc = snap.data;
-            if (doc == null) {
+            if (snap.hasError || doc == null) {
               return Center(
-                  child: Text('콘텐츠를 불러오지 못했습니다.',
-                      style: TextStyle(color: c.textMuted)));
+                child: ErrorView(
+                  message: '콘텐츠를 불러오지 못했습니다.',
+                  onRetry: () => setState(() => _future = _load()),
+                  onHome: () => context.go('/'),
+                ),
+              );
             }
             return Scrollbar(
               child: SingleChildScrollView(

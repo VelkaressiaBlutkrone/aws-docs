@@ -215,6 +215,40 @@ abstract final class Layout {
 const String _sans = 'Pretendard';
 const String _mono = 'JetBrainsMono';
 
+/// 전 라우트 공통 순수 fade 전환 (DESIGN.md Motion — enter 200ms ease-out /
+/// exit 150ms ease-in). 웹은 호스트 OS를 [TargetPlatform]으로 보고하므로
+/// 6키 전부에 등록해야 한다 — 누락된 플랫폼의 방문자는 스톡 전환(iOS/macOS는
+/// Cupertino 슬라이드)을 본다. `MediaQuery.disableAnimations`(OS 모션 감소)
+/// 설정 시 전환 없이 즉시 표시한다.
+class AppFadePageTransitionsBuilder extends PageTransitionsBuilder {
+  const AppFadePageTransitionsBuilder();
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 200);
+
+  @override
+  Duration get reverseTransitionDuration => const Duration(milliseconds: 150);
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    if (MediaQuery.disableAnimationsOf(context)) return child;
+    return FadeTransition(
+      opacity: CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOut,
+        reverseCurve: Curves.easeIn,
+      ),
+      child: child,
+    );
+  }
+}
+
 ThemeData _build(AppColors c, Brightness brightness) {
   final scheme = ColorScheme(
     brightness: brightness,
@@ -247,6 +281,12 @@ ThemeData _build(AppColors c, Brightness brightness) {
     dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
     splashFactory: InkRipple.splashFactory,
     visualDensity: VisualDensity.standard,
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        for (final platform in TargetPlatform.values)
+          platform: const AppFadePageTransitionsBuilder(),
+      },
+    ),
   );
 }
 

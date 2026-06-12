@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart';
 import '../content/reset_dialog.dart';
@@ -15,6 +16,7 @@ import '../models/attempt_record.dart';
 import '../models/certification.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 import 'quiz_page.dart'; // QuizView
 
 /// 오답노트: cert의 weak 문항을 Task별로 모아 보여주고 연습형으로 재응시.
@@ -132,13 +134,18 @@ class _ReviewListPageState extends State<ReviewListPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: LoadingView(label: '오답노트를 불러오고 있습니다…'));
           }
           final data = snap.data;
           if (snap.hasError || data == null) {
             return Center(
-                child: Text('오답노트를 불러오지 못했습니다.',
-                    style: TextStyle(color: c.textMuted)));
+              child: ErrorView(
+                message: '오답노트를 불러오지 못했습니다.',
+                onRetry: () => setState(() => _future = _load()),
+                onHome: () => context.go('/'),
+              ),
+            );
           }
           if (_running != null) return _runner(data, _running!);
           return _list(data);
@@ -189,7 +196,18 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   style: t.bodyMedium),
               const SizedBox(height: Gap.xl),
               if (weakTasks.isEmpty)
-                _empty(c, t)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Gap.xl2),
+                  child: Center(
+                    child: EmptyView(
+                      title: '아직 오답이 없습니다',
+                      description: '연습이나 시험을 풀면 여기에 모입니다.',
+                      ctaLabel: '모의고사 시작하기',
+                      onCta: () =>
+                          context.push('/cert/${widget.cert.code}/exam'),
+                    ),
+                  ),
+                )
               else
                 for (final taskId in weakTasks) _taskRow(c, t, d, taskId),
             ],
@@ -198,18 +216,6 @@ class _ReviewListPageState extends State<ReviewListPage> {
       ),
     );
   }
-
-  Widget _empty(AppColors c, TextTheme t) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(Gap.xl),
-        decoration: BoxDecoration(
-          color: c.surface,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: c.border),
-        ),
-        child: Text('아직 오답이 없습니다 — 연습이나 시험을 풀면 여기에 모입니다.',
-            style: t.bodyMedium?.copyWith(color: c.text)),
-      );
 
   Widget _taskRow(AppColors c, TextTheme t, _ReviewLoad d, String taskId) {
     final count = d.index.weakEntries(taskId).length;

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
@@ -11,6 +12,7 @@ import '../data/mock_exam.dart';
 import '../models/attempt_record.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 
 /// 얇은 로더: 자산에서 QuestionBank를 읽어 5문항 차출+선택지 셔플 후 QuizView에 주입.
 class QuizPage extends StatefulWidget {
@@ -22,8 +24,9 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  // late final: 리빌드 시 재샘플링 방지 — 풀이 중 문항이 바뀌면 안 된다.
-  late final Future<QuestionBank> _future = _load();
+  // late(재할당은 에러 재시도에서만): 리빌드 시 재샘플링 방지 — 풀이 중 문항이
+  // 바뀌면 안 된다.
+  late Future<QuestionBank> _future = _load();
   final _store = HistoryStore();
 
   Future<QuestionBank> _load() async {
@@ -60,18 +63,26 @@ class _QuizPageState extends State<QuizPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: LoadingView(label: '연습 문제를 불러오고 있습니다…'));
           }
           if (snap.hasError) {
             return Center(
-                child: Text('문항을 불러오지 못했습니다.',
-                    style: TextStyle(color: c.textMuted)));
+              child: ErrorView(
+                message: '문항을 불러오지 못했습니다.',
+                onRetry: () => setState(() => _future = _load()),
+                onHome: () => context.go('/'),
+              ),
+            );
           }
           final bank = snap.data;
           if (bank == null || bank.questions.isEmpty) {
-            return Center(
-                child: Text('검증된 연습 문제가 아직 없습니다.',
-                    style: TextStyle(color: c.textMuted)));
+            return const Center(
+              child: EmptyView(
+                title: '검증된 연습 문제가 아직 없습니다.',
+                description: '사람 검수를 통과한 문항만 출제합니다.',
+              ),
+            );
           }
           return Center(
             child: ConstrainedBox(

@@ -12,6 +12,7 @@ import '../data/task_score_report.dart';
 import '../models/certification.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 
 /// 약점 리포트: cert의 Task별 정답률 표 + 70% 미만 Task 학습문서 처방.
 class ReportPage extends StatefulWidget {
@@ -95,13 +96,18 @@ class _ReportPageState extends State<ReportPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: LoadingView(label: '약점 리포트를 계산하고 있습니다…'));
           }
           final data = snap.data;
           if (snap.hasError || data == null) {
             return Center(
-                child: Text('리포트를 불러오지 못했습니다.',
-                    style: TextStyle(color: c.textMuted)));
+              child: ErrorView(
+                message: '리포트를 불러오지 못했습니다.',
+                onRetry: () => setState(() => _future = _load()),
+                onHome: () => context.go('/'),
+              ),
+            );
           }
           return _body(data);
         },
@@ -127,7 +133,18 @@ class _ReportPageState extends State<ReportPage> {
                   style: t.bodyMedium),
               const SizedBox(height: Gap.lg),
               if (!r.hasAnyAttempt)
-                _empty(c, t)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Gap.xl2),
+                  child: Center(
+                    child: EmptyView(
+                      title: '아직 리포트가 없습니다',
+                      description: '모의고사나 연습을 풀면 Task별 약점이 여기 표시됩니다.',
+                      ctaLabel: '모의고사 시작하기',
+                      onCta: () =>
+                          context.push('/cert/${widget.cert.code}/exam'),
+                    ),
+                  ),
+                )
               else ...[
                 _summary(c, t, r),
                 const SizedBox(height: Gap.lg),
@@ -139,18 +156,6 @@ class _ReportPageState extends State<ReportPage> {
       ),
     );
   }
-
-  Widget _empty(AppColors c, TextTheme t) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(Gap.xl),
-        decoration: BoxDecoration(
-          color: c.surface,
-          borderRadius: BorderRadius.circular(Radii.md),
-          border: Border.all(color: c.border),
-        ),
-        child: Text('모의고사나 연습을 풀면 Task별 약점이 여기 표시됩니다.',
-            style: t.bodyMedium?.copyWith(color: c.text)),
-      );
 
   Widget _summary(AppColors c, TextTheme t, TaskScoreReport r) {
     final pct = ((r.overallRate ?? 0) * 100).round();

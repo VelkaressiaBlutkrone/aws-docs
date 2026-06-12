@@ -14,6 +14,7 @@ import '../models/certification.dart';
 import '../models/exam_guide.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 
 typedef _Loaded = ({
   ExamGuide? guide,
@@ -23,10 +24,17 @@ typedef _Loaded = ({
   int attemptCount,
 });
 
-class CertDetailPage extends StatelessWidget {
+class CertDetailPage extends StatefulWidget {
   const CertDetailPage({super.key, required this.cert});
 
   final Certification cert;
+
+  @override
+  State<CertDetailPage> createState() => _CertDetailPageState();
+}
+
+class _CertDetailPageState extends State<CertDetailPage> {
+  Certification get cert => widget.cert;
 
   Future<_Loaded> _load() async {
     ExamGuide? guide;
@@ -114,10 +122,25 @@ class CertDetailPage extends StatelessWidget {
       ),
       body: SelectionArea(
         child: FutureBuilder<_Loaded>(
+          // StatelessWidget 시절처럼 build마다 _load()를 호출한다 — 학습문서 열람·
+          // 응시 후 이 페이지로 돌아올 때 진행률·오답 배지가 재계산되는 동작 보존.
           future: _load(),
           builder: (context, snap) {
             if (snap.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: LoadingView(label: '자격증 정보를 불러오고 있습니다…'));
+            }
+            if (snap.hasError) {
+              // fatal 승격(승인된 의도적 변경 ③): 이전엔 메타 없는 빈 화면으로
+              // 침묵 렌더했다. guide/summary/개별 뱅크의 부가 실패(optional)는
+              // _load() 안의 try/catch가 계속 흡수한다 — 여기 오는 건 그 밖의 실패.
+              return Center(
+                child: ErrorView(
+                  message: '자격증 정보를 불러오지 못했습니다.',
+                  onRetry: () => setState(() {}), // build가 _load()를 재호출
+                  onHome: () => context.go('/'),
+                ),
+              );
             }
             final guide = snap.data?.guide;
             final summary = snap.data?.summary;

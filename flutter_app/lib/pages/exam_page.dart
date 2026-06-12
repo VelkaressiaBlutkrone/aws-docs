@@ -18,6 +18,7 @@ import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 
 /// 모델 주입식 시험 러너(테스트 대상). 자산/localStorage 의존 없음.
 class ExamView extends StatefulWidget {
@@ -466,7 +467,7 @@ class ExamPage extends StatefulWidget {
 }
 
 class _ExamPageState extends State<ExamPage> {
-  late final Future<_ExamLoad> _future = _load();
+  late Future<_ExamLoad> _future = _load(); // 재할당은 에러 재시도에서만
   final _store = ExamSessionStore();
   final _history = HistoryStore();
 
@@ -575,18 +576,26 @@ class _ExamPageState extends State<ExamPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: LoadingView(label: '시험을 준비하고 있습니다…'));
           }
           if (snap.hasError) {
             return Center(
-                child: Text('문항을 불러오지 못했습니다.',
-                    style: TextStyle(color: c.textMuted)));
+              child: ErrorView(
+                message: '문항을 불러오지 못했습니다.',
+                onRetry: () => setState(() => _future = _load()),
+                onHome: () => context.go('/'),
+              ),
+            );
           }
           final data = snap.data;
           if (data == null || data.bank.questions.isEmpty) {
-            return Center(
-                child: Text('검증된 문항이 아직 없습니다.',
-                    style: TextStyle(color: c.textMuted)));
+            return const Center(
+              child: EmptyView(
+                title: '검증된 문항이 아직 없습니다.',
+                description: '사람 검수를 통과한 문항만 출제합니다.',
+              ),
+            );
           }
           final examId = _examId;
           return Center(
