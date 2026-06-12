@@ -23,6 +23,10 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+  - title: 비용 할당 태그 Backfill — 공식 문서 (게이트 검수 반영: 2026-06-12)
+    url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html
+  - title: 비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)
+    url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
 lastVerified: 2026-06-07
 ---
 
@@ -204,7 +208,7 @@ CUR (S3 CSV)
 > 🧠 원리: 왜 리소스에 태그를 붙이는 것만으로는 충분하지 않고 Billing Console에서 별도 활성화가 필요할까요?
 > AWS 리소스 태그는 운영 목적(검색·자동화·접근 제어)으로 폭넓게 사용되고, 모든 태그를 자동으로 청구 데이터에 포함하면 관련 없는 태그까지 CUR 컬럼으로 추가되어 데이터가 과도하게 커집니다.
 > Billing Console에서 비용 할당 태그를 명시적으로 활성화하는 단계는 "이 태그 키를 청구 분류 기준으로 사용하겠다"는 의도를 선언하는 것으로, 이후 생성되는 CUR 데이터부터 해당 컬럼이 포함됩니다.
-> 활성화 전 데이터가 소급되지 않는 이유도 여기에 있습니다 — 그 기간의 CUR 파일은 해당 컬럼 자체가 없는 상태로 이미 생성되었기 때문입니다.
+> 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, **backfill 요청으로 최대 12개월까지 소급 적용**할 수 있습니다 — backfill은 Cost Explorer·Data Exports·CUR을 자동으로 갱신합니다(단, 리소스에 해당 태그가 실제로 붙어 있었던 기간에 한합니다).
 
 ### 7) AWS Organizations 통합 결제와 볼륨 할인
 
@@ -292,8 +296,8 @@ CUR (S3 CSV)
 4. **"통합 결제를 사용하면 비용이 합산되어 볼륨 할인을 받지 못한다."** → 반대입니다. 통합 결제는 멤버 계정의 사용량을 **합산**해 볼륨 할인 티어를 유리하게 적용받습니다.
    *(원리: §7 — 합산 사용량이 더 높은 할인 티어를 충족해 개별 계정 분리보다 단가가 낮아질 수 있다.)*
 
-5. **"비용 할당 태그는 붙이면 바로 CUR에 나온다."** → Billing Console에서 해당 태그 키를 **비용 할당 태그로 활성화**해야 합니다. 활성화 전 사용된 데이터는 소급 반영되지 않습니다.
-   *(원리: §6 — 활성화 단계가 "이 태그를 청구 분류 기준으로 사용"하겠다는 선언이며, 이전 CUR 파일에는 해당 컬럼 자체가 없다.)*
+5. **"비용 할당 태그는 붙이면 바로 CUR에 나온다."** → Billing Console에서 해당 태그 키를 **비용 할당 태그로 활성화**해야 합니다. 활성화 이전 기간 데이터는 기본적으로 소급 반영되지 않으나, backfill 요청으로 최대 12개월 소급이 가능합니다.
+   *(원리: §6 — 활성화 단계가 "이 태그를 청구 분류 기준으로 사용"하겠다는 선언이며, 활성화 전 기간은 기본적으로 미반영이지만 backfill 요청으로 소급 적용할 수 있다.)*
 
 6. **"Well-Architected 비용 최적화 원칙은 단순히 '아끼는 것'이다."** → 비용 최적화는 기능 요구사항을 **충족하는 범위에서** 비용을 최소화하는 것입니다. 보안·안정성을 희생하는 비용 절감은 Well-Architected 원칙 위반입니다.
    *(원리: §9 — 5개 기둥은 균형을 맞추도록 설계되어 있어, 비용 최적화는 다른 기둥 원칙을 지키는 범위 안에서만 유효하다.)*
@@ -339,7 +343,7 @@ CUR (S3 CSV)
 
 <details><summary>정답 보기</summary>
 
-CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 키를 비용 할당 태그로 활성화해야 하는데, 활성화 이전에 생성된 CUR 파일에는 그 컬럼 자체가 없습니다. 따라서 리소스에 태그가 존재하더라도 활성화 전 기간의 데이터는 소급 반영되지 않아, 그 기간의 태그 필터링이 불가합니다.
+CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 키를 비용 할당 태그로 활성화해야 합니다. 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않으므로, 리소스에 태그가 존재하더라도 활성화 전 기간의 태그 필터링이 되지 않는 상황이 발생합니다. 단, backfill 요청을 통해 최대 12개월까지 소급 적용이 가능하며, 이 경우 Cost Explorer·Data Exports·CUR이 자동으로 갱신됩니다(리소스에 해당 태그가 실제로 붙어 있었던 기간에 한함).
 </details>
 
 ---
@@ -354,3 +358,5 @@ CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 �
 4. AWS Cost Anomaly Detection — https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html
 5. Well-Architected 비용 최적화 기둥 설계 원칙 — https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. 비용 할당 태그 Backfill — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html (게이트 검수 반영: 2026-06-12)
+8. 비용 할당 태그 활성화 — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html (게이트 검수 반영: 2026-06-12)
