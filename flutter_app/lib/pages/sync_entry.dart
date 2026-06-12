@@ -1,20 +1,33 @@
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 
 import '../data/cloud/sync_controller.dart';
 import '../theme/app_theme.dart';
 
-/// 동기 진입점. controller==null이면 미설정(비활성) 안내.
+/// 동기 진입점. 부팅 재배열(WS2)로 컨트롤러가 첫 프레임 뒤 늦게 주입되므로
+/// ValueListenable을 구독해 주입 시점에 리빌드한다. value==null이면 미설정(비활성) 안내.
 class SyncEntry extends StatelessWidget {
-  const SyncEntry({super.key, this.controller});
-  final SyncController? controller;
+  const SyncEntry({super.key, required this.controller});
+  final ValueListenable<SyncController?> controller;
 
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    final ctrl = controller;
-    if (ctrl == null) {
-      return _box(c, Text('기기 간 동기 — 미설정', style: TextStyle(color: c.textMuted)));
-    }
+    return ValueListenableBuilder<SyncController?>(
+      valueListenable: controller,
+      builder: (context, ctrl, _) {
+        if (ctrl == null) {
+          return _box(
+              c,
+              Text('기기 간 동기 — 미설정',
+                  style: TextStyle(color: c.textMuted)));
+        }
+        return _body(ctrl, c);
+      },
+    );
+  }
+
+  Widget _body(SyncController ctrl, AppColors c) {
     return AnimatedBuilder(
       animation: ctrl,
       builder: (context, _) {

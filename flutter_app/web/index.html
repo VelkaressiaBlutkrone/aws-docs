@@ -94,8 +94,90 @@
     }
   ]
   </script>
+
+  <!-- Splash (WS1) — DESIGN.md 토큰 인라인. 외부 CSS/폰트 로드 전 첫 페인트가 목적이라
+       시스템 폰트 폴백으로 렌더되고, 색은 html[data-theme]로 저장 테마와 일치시킨다. -->
+  <style>
+    html { background: #FBFAF8; }
+    html[data-theme="dark"] { background: #14181F; }
+
+    /* JS 가용(html.js)일 때만 표시 — noscript 사용자는 아래 정적 콘텐츠를 본다. */
+    #splash { display: none; }
+    html.js #splash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 28px;
+      background: #FBFAF8; color: #1B2430;
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+        system-ui, "Segoe UI", sans-serif;
+      opacity: 1; transition: opacity 250ms ease-in; /* 페이드아웃 250ms ease-in */
+    }
+    .splash-wordmark {
+      font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+    }
+    .splash-wordmark span { color: #0E8175; }
+    .splash-stage {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; line-height: 1.6;
+    }
+    .splash-dot {
+      width: 6px; height: 6px; border-radius: 999px; background: #0E8175;
+      animation: splash-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes splash-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+    .splash-rail {
+      width: 160px; height: 2px; background: #E7E4DD; /* 헤어라인 트랙 */
+    }
+    #splash-fill {
+      width: 0; height: 100%; background: #1B2430;
+      transition: width 200ms ease-out; /* 진짜 진행률 33/66/100 전이 */
+    }
+    #splash-stall {
+      position: absolute; bottom: 48px; left: 0; right: 0;
+      margin: 0; text-align: center;
+      font-size: 13px; color: #8A93A0; /* 비차단 안내 — text-faint */
+    }
+    #splash-stall[hidden] { display: none; }
+    #splash-stall a { color: #0E8175; text-decoration: underline; }
+
+    html[data-theme="dark"] #splash { background: #14181F; color: #E8EAED; }
+    html[data-theme="dark"] .splash-wordmark span { color: #3FB8AA; }
+    html[data-theme="dark"] .splash-dot { background: #3FB8AA; }
+    html[data-theme="dark"] .splash-rail { background: #2A323F; }
+    html[data-theme="dark"] #splash-fill { background: #E8EAED; }
+    html[data-theme="dark"] #splash-stall { color: #6B7585; }
+    html[data-theme="dark"] #splash-stall a { color: #3FB8AA; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .splash-dot { animation: none; }
+      html.js #splash { transition: none; }
+      #splash-fill { transition: none; }
+    }
+  </style>
+  <script>
+    // JS 가용 표시(noscript 가드) + 저장 테마 즉시 반영 — 스플래시와 첫 프레임 색 일치(WS1·WS9).
+    // 키/값 계약: awsdocs.theme.v1 = 'dark' | 'light' (lib/data/theme_pref_store.dart와 공유).
+    document.documentElement.classList.add('js');
+    try {
+      if (localStorage.getItem('awsdocs.theme.v1') === 'dark') {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    } catch (e) { /* localStorage 불가 → 라이트 폴백 */ }
+  </script>
 </head>
 <body>
+  <div id="splash" aria-live="polite">
+    <div class="splash-wordmark">AWS Docs <span>Roadmap</span></div>
+    <div class="splash-stage">
+      <span class="splash-dot" aria-hidden="true"></span>
+      <span id="splash-msg">학습 환경을 준비하고 있습니다&#8230;</span>
+    </div>
+    <div class="splash-rail" aria-hidden="true"><div id="splash-fill"></div></div>
+    <p id="splash-stall" hidden>로딩이 길어지고 있습니다 — <a href="">새로고침</a>하거나 잠시 기다려 주세요.</p>
+  </div>
   <!-- 크롤러/비-JS 클라이언트용 정적 콘텐츠. Flutter 부팅 시 화면에는 영향 없음(noscript). -->
   <noscript>
     <main style="max-width:42rem;margin:0 auto;padding:2rem;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.8;color:#1B2430;background:#FBFAF8;">
@@ -127,6 +209,64 @@
       </ul>
     </main>
   </noscript>
-  <script src="flutter_bootstrap.js" async></script>
+  <!-- 커스텀 부트스트랩(WS1): 토큰은 flutter build가 치환. 단계 문구/진행률은 진짜
+       부트스트랩 이벤트에 매핑하고, 제거는 flutter-first-frame(첫 프레임 렌더)에서만 한다.
+       유지비: Flutter 마이너 업그레이드 시 토큰 호환 확인. -->
+  <script>
+    {{flutter_js}}
+    {{flutter_build_config}}
+
+    (function () {
+      var msg = document.getElementById('splash-msg');
+      var fill = document.getElementById('splash-fill');
+      var stall = document.getElementById('splash-stall');
+      var stallTimer = null;
+      var STAGES = {
+        1: { text: '학습 환경을 준비하고 있습니다…', pct: 33 },
+        2: { text: '거의 다 됐습니다…', pct: 66 },
+        3: { text: '시작합니다…', pct: 100 }
+      };
+
+      // stall 워치독: 단계 전이마다 리셋되는 20s 타이머. 발동해도 진행 UI를 유지한 채
+      // 비차단 안내 한 줄만 추가한다(실패 선언 아님 — 느린 회선 오발 방지, 절대 시계 금지).
+      function armWatchdog() {
+        clearTimeout(stallTimer);
+        stallTimer = setTimeout(function () { stall.hidden = false; }, 20000);
+      }
+
+      function setStage(n) {
+        msg.textContent = STAGES[n].text;
+        fill.style.width = STAGES[n].pct + '%';
+        stall.hidden = true;
+        armWatchdog();
+      }
+
+      // 제거 트리거는 첫 프레임 렌더 이벤트 — runApp 해소 시점이 아니다(백색 플래시 재발 방지).
+      function removeSplash() {
+        clearTimeout(stallTimer);
+        var splash = document.getElementById('splash');
+        if (!splash) return;
+        fill.style.width = '100%';
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          splash.remove(); // 모션 감소: 페이드아웃 대신 즉시 제거
+          return;
+        }
+        splash.style.opacity = '0';
+        setTimeout(function () { splash.remove(); }, 300);
+      }
+      window.addEventListener('flutter-first-frame', removeSplash);
+
+      setStage(1); // 엔트리포인트 로드
+      _flutter.loader.load({
+        onEntrypointLoaded: function (engineInitializer) {
+          setStage(2); // 엔진 초기화
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            setStage(3); // 앱 시작
+            return appRunner.runApp();
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

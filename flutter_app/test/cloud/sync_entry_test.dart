@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/local_kv.dart';
@@ -8,7 +9,7 @@ import 'package:aws_docs/pages/sync_entry.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
 
-Widget _host(SyncController? ctrl) => ThemeScope(
+Widget _host(ValueListenable<SyncController?> ctrl) => ThemeScope(
       isDark: false,
       toggle: () {},
       child: MaterialApp(
@@ -17,24 +18,39 @@ Widget _host(SyncController? ctrl) => ThemeScope(
       ),
     );
 
+SyncController _ctrl() => SyncController(
+      auth: FakeAuthService(),
+      cloud: FakeCloudStore(),
+      local: MemoryBackend(),
+      nowMs: () => 1000,
+    )..start();
+
 void main() {
   testWidgets('미설정(controller null): 비활성 안내', (tester) async {
-    await tester.pumpWidget(_host(null));
+    await tester.pumpWidget(_host(ValueNotifier<SyncController?>(null)));
     expect(find.textContaining('동기'), findsWidgets);
   });
 
   testWidgets('비로그인: "Google로 동기 켜기" 표시 → 탭 시 로그인', (tester) async {
-    final ctrl = SyncController(
-        auth: FakeAuthService(),
-        cloud: FakeCloudStore(),
-        local: MemoryBackend(),
-        nowMs: () => 1000);
-    ctrl.start();
-    await tester.pumpWidget(_host(ctrl));
+    await tester.pumpWidget(_host(ValueNotifier<SyncController?>(_ctrl())));
     expect(find.textContaining('Google'), findsOneWidget);
     await tester.tap(find.textContaining('Google'));
     await tester.pumpAndSettle();
     // 로그인 후 이메일 표시
     expect(find.textContaining('test@example.com'), findsOneWidget);
+  });
+
+  testWidgets('REGRESSION 늦은 주입: null로 부팅 → 첫 프레임 뒤 주입 시 리빌드',
+      (tester) async {
+    final notifier = ValueNotifier<SyncController?>(null);
+    await tester.pumpWidget(_host(notifier));
+    expect(find.textContaining('미설정'), findsOneWidget);
+
+    // 부팅 재배열(WS2): 첫 프레임 뒤 비동기 초기화가 끝난 시점을 모사.
+    notifier.value = _ctrl();
+    await tester.pump();
+
+    expect(find.textContaining('미설정'), findsNothing);
+    expect(find.textContaining('Google'), findsOneWidget);
   });
 }
