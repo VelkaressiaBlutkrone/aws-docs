@@ -6,13 +6,20 @@ _갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 
 ---
 
-## 0. 다음: 시각 리펙토링 B안 PR3 ∥ PR4 (4분할 중 남은 2개 — 병렬 가능)
+## 0. 다음: 시각 리펙토링 B안 PR4 (4분할 중 마지막)
 
-**설계 정본:** `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-main-design-20260612-200051.md` (승인 8/10, eng+design CLEARED). PR1(§0-x)·PR2(§0-w) 출고 완료. PR2 머지로 PR4 착수 가능 — PR3와 병렬 워크트리 가능(겹치는 파일 없음).
+**설계 정본:** `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-main-design-20260612-200051.md` (승인 8/10, eng+design CLEARED). PR1(§0-x)·PR2(§0-w)·PR3(§0-v) 출고 완료.
 
-- **PR3 — Pretendard Variable 전환 (T6):** 정적 4 weight OTF(6.3MB) → `PretendardVariable.ttf` 단일(~2.3MB), 폰트 합계 6.9→~3.1MB. **핵심**: Flutter는 가변 `wght` 축을 `FontWeight`에 자동 매핑하지 않음 → `app_theme.dart` 중앙 TextStyle에 `fontVariations: [FontVariation('wght', N)]` + 전 코드 `fontWeight:` 사용처 스윕(grep 게이트 0건). 게이트: `verify_splash` 타이밍 전/후 + weight 4종(400/500/700/800) 렌더 스크린샷 비교(미적용 시 전부 400 균일화가 즉시 보임), **DESIGN.md 갱신(폰트 로딩 항목)**.
-- **PR4 — 공용 위젯 + AppHeader 롤아웃 + 페이지 분해 (T7·T8·T9·T12·DT4 + DT3 잔여):** 8페이지 AppBar 인벤토리 선행 → AppHeader 슬롯(back/title/actions)·collapse 규약 → 문서형 5페이지 교체·세션형 3페이지 시각 셸 → home/cert_detail/plan 분해(섹션 단위 위젯 테스트 선행) → 글로벌 에러 핸들러(`FlutterError.onError` — state_views의 ErrorView와 연결) → **전 화면 키보드 접근성 감사**(Tab 순서·focus-visible 전 인터랙티브·Enter/Space) + 17종 패턴 매핑표. 와이어프레임 정답지 2번 섹션(AppHeader). 게이트: 단계별 analyze+전체 테스트+dogfood, AppBar 기능 손실 0, **DESIGN.md 갱신(헤더 2변형+collapse 규약)**.
-- **재사용 인프라:** state_views/FocusRing(`lib/widgets/`)은 PR4 헤더 내비 focus-visible에 그대로 사용. 카피 매트릭스 정본: `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md`.
+- **PR4 — 공용 위젯 + AppHeader 롤아웃 + 페이지 분해 (T7·T8·T9·T12·DT4 + DT3 잔여 + T10):** 8페이지 AppBar 인벤토리 선행 → AppHeader 슬롯(back/title/actions)·collapse 규약(날짜→배지→섹션라벨→ellipsis·햄버거 금지) → 문서형 5페이지(cert_detail·study_doc·review·report·plan) 교체·세션형 3페이지 시각 셸 공통 → home/cert_detail/plan 분해(섹션 단위 위젯 테스트 선행, home 내부 섹션 클래스는 이미 위젯 단위라 파일 이동 위주) → 글로벌 에러 핸들러(`FlutterError.onError`/`PlatformDispatcher.onError` — state_views의 ErrorView와 연결) → **전 화면 키보드 접근성 감사**(Tab 순서·focus-visible 전 인터랙티브·Enter/Space — 퀴즈 선택지·플래그·카드·로드맵 노드 포함) + **17종 패턴 매핑표(T10/SC7)**. 와이어프레임 정답지 2번 섹션(AppHeader). 게이트: 단계별 analyze+전체 테스트+dogfood(360/768/1180px), AppBar 기능 손실 0(인벤토리 대조), Tab 전 화면 내비 dogfood, **DESIGN.md 갱신(헤더 2변형+collapse 규약)**.
+- **재사용 인프라:** state_views/FocusRing(`lib/widgets/`)을 헤더 내비 focus-visible에 그대로 사용. 카피 매트릭스 정본: `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md`. 새 weight 토큰 규율: **fontWeight를 추가하면 반드시 `Wght` 토큰 병기**(§0-v).
+
+## 0-v. 완료: 시각 리펙토링 PR3 — Pretendard Variable(woff2) 전환, main 배포됨 (2026-06-13)
+
+**폰트 6.9MB → 2.75MB(−4.15MB), flutter view 2,579→1,611ms(−37%, 스로틀 700ms 동일 조건).** 474 테스트 그린·analyze 신규 0건·weight 렌더 전/후 동등(홈·학습문서·오답노트 스크린샷 대조 — 400 균일화 회귀 없음).
+
+- **구현:** `PretendardVariable.woff2`(2.06MB, v1.3.9) 단일 등록 — 정적 4 OTF 삭제. **woff2 번들 가능 확인 경위**: 설계 가정 ~2.3MB는 woff2 수치였고 Variable TTF는 6.7MB(전환 무의미) → 엔진 소스에서 Noto 폴백이 woff2를 에셋과 같은 `Typeface.MakeFreeTypeFaceFromData`로 디코드함을 확인 → 실증 빌드로 입증. `Wght` const 토큰(`app_theme.dart`) 신설 + lib 전체 `fontWeight:` 88곳에 `fontVariations:` 1:1 병기(일괄 치환, mono 포함 — 정적 폰트에선 무시되어 무해, 게이트 단순화). `verify_splash.mjs` 보정: 리소스 필터·스로틀(HEAVY)·MIME에 woff2 추가(미보정 시 전/후 비교 불공정).
+- **게이트 산출물:** `build/verify_splash/pr3-before-light.json`(전)·`pr3-after2-light.json`(후). 한자는 기존대로 엔진 Noto 폴백(콘솔 경고 1건 = 기존 동작).
+- **유지 규율:** 새 코드에 fontWeight 추가 시 Wght 병기(1:1 게이트 grep: `fontWeight: FontWeight\.w\d{3}(?!, fontVariations)` 0건). Flutter 업그레이드 시 woff2 디코드 전제 재확인(DESIGN.md Typography 참조).
 
 ## 0-w. 완료: 시각 리펙토링 PR2 — 전환 모션 6키 + state_views 7페이지, main 배포됨 (2026-06-13)
 
@@ -98,9 +105,9 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 �
 ---
 
 ## 3. 워킹트리 / 메모
-- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **474 테스트** 그린 기준점(2026-06-13, PR2 +14).
+- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **474 테스트** 그린 기준점(2026-06-13, PR3까지 출고 후에도 동일).
 - `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3 폰트 전환의 전/후 타이밍 비교에 그대로 재사용.
 - **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
-**다음 세션 첫 수: §0 시각 리펙토링 PR3(Pretendard Variable) ∥ PR4(AppHeader·페이지 분해 — PR2 머지로 착수 가능). 끼어들기 후보: 모의고사 중량·증가 브레인스토밍(§0 대기 목록). 그 외: §0-b 선택 항목(2기기 pull·개인정보 고지).**
+**다음 세션 첫 수: §0 시각 리펙토링 PR4(AppHeader 롤아웃·페이지 분해·키보드 감사·17종 매핑표 — B안 마지막 슬라이스). 끼어들기 후보: 모의고사 중량·증가 브레인스토밍(§0 대기 목록). 그 외: §0-b 선택 항목(2기기 pull·개인정보 고지).**
