@@ -221,7 +221,7 @@ lastVerified: 2026-06-09
    *(원리: §0 — 각 도구는 서로 다른 데이터 소스에 최적화되어 역할이 분리되어 있어, Inspector는 소프트웨어 상태를, Macie는 데이터 내용을 본다.)*
 
 6. **"Config 자동 교정은 Lambda를 직접 호출한다."** → Config의 자동 교정은 **SSM Automation 런북**을 실행합니다(런북 안에서 Lambda를 부를 수는 있음).
-   *(원리: §1 — Config 운영 흐름에서 교정 단계는 SSM Automation 런북을 실행하며, 런북이 필요에 따라 추가 서비스를 호출하는 구조다.)*
+   *(원리: §1 본문 — Config 운영 흐름에서 교정 단계는 SSM Automation 런북을 실행하며, 런북이 필요에 따라 추가 서비스를 호출하는 구조다.)*
 
 7. **"Trusted Advisor 모든 점검이 무료다."** → 전체 점검 항목은 **Business/Enterprise Support 플랜**에서 제공됩니다. 기본 플랜은 일부만 열립니다.
    *(원리: §5 — 전체 점검은 Business/Enterprise Support 플랜에서만 제공되며, 기본 플랜은 일부 보안·서비스 한도 점검만 열린다.)*
