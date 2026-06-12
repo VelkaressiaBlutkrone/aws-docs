@@ -93,7 +93,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 > 루트 도메인(example.com)을 ALB 또는 CloudFront로 보내야 할 때는 반드시 **Alias 레코드**를 사용합니다. CNAME은 Zone Apex에 사용할 수 없습니다.
 
 > 🧠 원리: 왜 Zone Apex에는 CNAME을 쓸 수 없고 Alias가 필요할까요?
-> DNS 표준(RFC 1034)은 CNAME이 있는 이름에 다른 레코드(NS·SOA 등)가 공존할 수 없다고 규정합니다.
+> DNS 프로토콜은 CNAME이 있는 이름에 다른 레코드(NS·SOA 등)가 공존할 수 없도록 규정합니다.
 > Zone Apex(루트 도메인)는 DNS 영역 자체의 NS·SOA 레코드를 반드시 보유해야 하므로, 그 이름에 CNAME을 추가하면 표준 위반이 되어 해석기가 정상 동작하지 않을 수 있습니다.
 > Alias는 Route 53 전용 확장으로, 실제로 레코드 유형이 A 또는 AAAA로 동작하면서 AWS 리소스의 현재 IP를 자동으로 따라가 Zone Apex 제약을 우회합니다.
 > 이 메커니즘 덕분에 루트 도메인을 ALB·CloudFront 같은 가변 IP 리소스로 안전하게 연결할 수 있습니다.
