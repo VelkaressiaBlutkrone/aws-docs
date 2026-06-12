@@ -18,6 +18,7 @@ import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/state_views.dart';
 import 'exam_page.dart'; // ExamView
 
 /// 통합 모의고사 진입점. 자격증 전체 검증 문항 풀을 병합해 도메인 가중으로
@@ -34,7 +35,7 @@ class CertExamPage extends StatefulWidget {
 class _CertExamPageState extends State<CertExamPage> {
   final _store = ExamSessionStore();
   final _history = HistoryStore();
-  late final Future<_MockLoad> _future = _load();
+  late Future<_MockLoad> _future = _load(); // 재할당은 에러 재시도에서만
   _RunParams? _running;
 
   String get _examId =>
@@ -174,13 +175,27 @@ class _CertExamPageState extends State<CertExamPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: LoadingView(label: '모의고사를 준비하고 있습니다…'));
           }
           final data = snap.data;
-          if (snap.hasError || data == null || data.total == 0) {
+          // 에러와 빈 풀을 분리 — 로드 실패를 "문항 없음"으로 가장하지 않는다(fatal 분류).
+          if (snap.hasError || data == null) {
             return Center(
-                child: Text('검증된 문항이 아직 없습니다.',
-                    style: TextStyle(color: c.textMuted)));
+              child: ErrorView(
+                message: '모의고사를 준비하지 못했습니다.',
+                onRetry: () => setState(() => _future = _load()),
+                onHome: () => context.go('/'),
+              ),
+            );
+          }
+          if (data.total == 0) {
+            return const Center(
+              child: EmptyView(
+                title: '검증된 문항이 아직 없습니다.',
+                description: '문항이 사람 검수를 통과하면 모의고사가 열립니다.',
+              ),
+            );
           }
           if (_running != null) return _examView(_running!);
           return _startScreen(data);

@@ -100,11 +100,30 @@
 - **Easing:** enter `ease-out` · exit `ease-in` · move/일반 `ease` (.15s 기본 전환)
 - **Duration:** micro 50–120ms · short 150–250ms · medium 250–400ms
 - **사용처:** 정답/오답 공개 페이드, 카드 hover(translateY -2px + border 액센트), 테마 전환(.25s), 부드러운 스크롤. **스크롤 안무/시차 효과 금지**
+- **모션 확정값 (2026-06-12 디자인 리뷰 5A):**
+  - 라우트 전환: 순수 fade — **enter 200ms ease-out / exit 150ms ease-in**. `app_theme.dart`의 `AppFadePageTransitionsBuilder`가 `pageTransitionsTheme`에 **TargetPlatform 6키 전부** 등록(웹은 호스트 OS를 platform으로 보고 — 누락 시 해당 OS 방문자가 스톡 전환을 봄). 슬라이드/줌 전환 금지
+  - 스플래시 페이드아웃 250ms ease-in 후 DOM 제거 · 헤어라인 전이 200ms ease-out
+  - 로딩 상태 등장 페이드인 80ms ease-out (150ms 유예 후) · 스플래시 펄스 1.2s 무한
+  - **접근성:** Flutter 측은 `MediaQuery.disableAnimations` 존중(전환·페이드 생략, 7A), 스플래시는 `prefers-reduced-motion` 존중
+
+## Focus — focus-visible 토큰 (2026-06-12 디자인 리뷰 7A)
+- 키보드 포커스 표시: **액센트 2px 아웃라인 + 2px 오프셋** (`lib/widgets/focus_ring.dart`의 `FocusRing`)
+- 링 공간(2+2px)은 평시에도 투명하게 확보 — 포커스 이동 시 레이아웃 시프트 없음
+- 적용 표면: 상태뷰 버튼·테마 토글(PR2 적용 완료) · 헤더 내비(PR4 예정)
+
+## State Views — 비동기 페이지 공용 상태 뷰 (lib/widgets/state_views.dart)
+비동기 페이지 7종(StudyDoc/Quiz/Exam/CertExam/CertDetail/Review/Report)의 로딩/빈/에러 표시 표준.
+페이지별 임의 로딩 표시 금지 — 전부 이 3종을 쓴다. 모두 surface가 아닌 bg 위, 콘텐츠 블록 중앙 정렬.
+- **Loading:** 표시 전 **150ms 유예**(그 안에 해소되면 한 번도 그리지 않음 — 깜빡임 방지) + 등장 80ms ease-out 페이드인. 28px 틸 링(트랙 accent-weak / 진행 accent, 3px) + "무엇을 불러오는지" 한 줄(text-muted)
+- **Empty:** **아이콘 없음** — 텍스트(+선택 CTA)만 (2A, 에디토리얼 절제). 빈 이유와 다음 행동을 정직하게 설명. CTA는 ghost 버튼(액센트 텍스트 + border-strong)
+- **Error (fatal):** wrong 시맨틱 — 40px 원형 `!` 아이콘(wrong-weak 배경/wrong 전경) + 메시지 + 보조 설명 + 복구 경로 2개: [다시 시도] FilledButton + 홈으로 밑줄 링크
+- **fatal/optional 분류:** 페이지의 주된 콘텐츠 실패 = fatal → ErrorView. 부가 메타 실패 = optional → 의도적 부분 degrade 유지(주석 보존). 페이지별 분류표·빈 상태 매핑: `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md`
 
 ## Voice — 제품 카피 보이스
 - **전 제품 카피는 합니다체** — 해요체 금지. 기존 제품 카피(시험·퀴즈·오답노트)와 정합 (2026-06-12 디자인 리뷰 3A)
 - 개발자 어휘를 사용자에게 노출하지 않는다 — '엔진', '엔트리포인트', '런타임' 등 금지. 사용자 언어로 치환("학습 환경을 준비하고 있습니다…")
-- 로딩/빈/에러 상태의 페이지별 카피 매트릭스는 PR2에서 이 섹션에 편입 예정
+- **상태 카피 패턴(PR2 편입):** 로딩 "〈무엇〉을 불러오고/준비하고/계산하고 있습니다…" · 빈 "검증된 〈무엇〉이 아직 없습니다" / "아직 〈무엇〉이 없습니다"(+빈 이유·다음 행동) · 에러 "〈무엇〉을 불러오지/준비하지 못했습니다."(+공통 보조 "네트워크가 잠시 불안정했을 수 있습니다. 다시 시도하면 대부분 해결됩니다.")
+- 페이지(7)×상태(로딩/빈/에러) 전체 카피 매트릭스 정본: `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md` — 카피 변경 시 이 표와 코드를 함께 갱신
 
 ## Splash — 부팅 스플래시 (web/index.html)
 첫 페인트부터 브랜드 — 흰 화면 대신 웜 페이퍼/다크 스플래시. 외부 CSS·폰트 로드 전에 떠야 하므로 토큰을 인라인하고 시스템 폰트 폴백으로 렌더한다. 로딩조차 이 문서의 일부다.
@@ -133,3 +152,4 @@
 | 2026-06-05 | 폰트 = Pretendard + JetBrains Mono (Inter 교체) | 한국어 우선 제품에 한글 렌더링이 약한 Inter는 부적합. 단일 최대 개선점 |
 | 2026-06-05 | 미감 = 반(反)마케팅 에디토리얼 | EUREKA: AWS 학습 사이트는 더 시끄러운 마케팅으로 경쟁하지만, 신뢰하는 공부 도구는 레퍼런스 책처럼 생긴다. 절제가 곧 브랜드 |
 | 2026-06-13 | 스플래시 + 보이스(합니다체) + 테마 영속화 (PR1) | 백색 화면 제거(시각 리펙토링 B안 WS1·WS2·WS9). 2026-06-12 디자인 리뷰 8건 결정 반영 — 헤어라인 진짜 진행률, 워치독 비차단, 워드마크만(통계 기각), reduced-motion |
+| 2026-06-13 | 라우트 fade 전환(6키) + 상태뷰 3종 + focus-visible 토큰 (PR2) | 시각 리펙토링 B안 WS3·WS4. 전환 enter 200/exit 150ms, Loading 150ms 유예, Empty 아이콘 없음(2A), Error wrong 시맨틱+복구 2경로, 카피 매트릭스 합니다체(3A), disableAnimations 존중(7A) |
