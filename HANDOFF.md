@@ -43,37 +43,17 @@ _갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 - **승인된 의도적 동작 변경 2건 발효:** Sync 시작이 첫 프레임 뒤로(수백 ms) · 테마 영속화(세션 한정→영속). 나머지 동작 변화는 결함으로 취급.
 - **도구 교훈:** verify_splash에서 같은 node 프로세스가 정적 서버를 돌리며 browse를 `spawnSync`로 부르면 이벤트 루프 데드락(서버가 browse 요청에 응답 불가) — browse 호출은 반드시 비동기 spawn. 자세한 수치·경위: 메모리 [[visual-refactor-design-approved]].
 
-## 0-y. 완료: 배치 C(SOA 20) — main 배포됨 (2026-06-12)
+## 0-y~0-a. 완료(2026-06-11~12): 콘텐츠 고도화 배치 A(CLF 19)·B(SAA 24)·C(SOA 20) — 전부 main 배포됨
 
-검수 게이트 판정 5건 반영(필수 2: t2-4 §4 버전 ID 인과·t4-2 §3 "반드시" 단정 / 권장 2: t2-1 "비례 응답"·t4-2 Q5 관리형 Automation 문서 용어 / 유지 1) → 20개 lastVerified=2026-06-12(+출처 줄 병기) → main 병합·배포·브랜치 삭제. 리뷰 실적: 단정·내부 구현 보수화 ~25건, SAA 동주제 표절 블록 5건 재작성, 무출처 수치 4건 제거, T 패밀리 모드 일반화 선제 교정, 포인터 라벨·길이 교정 ~27건.
-
-## 0-z. 완료: 배치 B(SAA 24) — main 배포됨 (2026-06-12)
-
-검수 피드백 8건(공식 문서 WebFetch 대조) 반영 → 24개 lastVerified=2026-06-12 → main 병합(681b193)·배포·브랜치 삭제. 핵심 교정: 스팟 '경매' 모델(기존 본문 포함)·TGW 중복 CIDR 미지원·T 패밀리 모드 구분·SR-IOV DMA 제거·LSI 보수화·CUR backfill. **검수-존치 플래그(미지적 — 필요 시 재론):** t1-2 '권한 세트' 행 · t3-6 RCU/WCU 행 · t3-8 '비전이' 행 · t3-9 Kinesis 설계 의도 · t4-4 '캐시 히트율' 행.
-
-- **배치 C 준비·실행 기록:** 사전 점검 결과 SOA 코드 펜스 오염 0건(테스트 보강 불필요), `####` 0건, 캡 케이스 없음(서브섹션 5~8), 기존 왜-Q 4개 문서(t2-2·t3-2·t3-4·t5-1)는 Q 생략(t1-5 전례). RED 29e7c67(+133 -56) → 문서별 루프(배치 B 검증 패턴 + 개선: 블록 줄 수 직접 세기·포인터 1:1 대조·실재성 전수 검사표 강제·교차 정합 재검·컨트롤러 tail 실측+스팟 체크) → 전체 그린.
-- **테스트 카운팅(main 반영됨, faa16d9):** `^### `만 카운트(#### 제외) + 하한 캡 8.
-
-## 0-a. 완료: 배치 A(CLF) — main 배포됨
-
-**CLF 19/19 고도화 출고(2026-06-11).** 본인 검수 5건 보수화 반영(S3 기본암호화·SecurityHub CSPM·Support 최신성·SP/RI·VPN-DX), lastVerified 갱신, 319 테스트. 배치 C(SOA 20)는 코드 펜스 `###` 오염 사전 점검 필수(Plan 2 Task 7 — 배치 B의 사전 점검에선 SAA 오염 0건이었음).
-
-- 문서: 스펙 `docs/superpowers/specs/2026-06-11-content-enrichment-design.md`(§4.4 freeze) · 플랜 `docs/superpowers/plans/2026-06-11-content-enrichment-rollout.md` · 파일럿 전례 `plans/2026-06-11-content-enrichment-pilot.md`.
-- **방향 결정(2026-06-11, 사용자):** 모의고사 중량화·문항 증가보다 학습 내용 고도화 우선. 고도화(배치 B·C) 완료 후 모의고사 중량·증가 검토.
+3개 배치 전체 검수·고도화·lastVerified 갱신 완료. 검수 경위·교정 실적·테스트 카운팅 변경 전문은 **git `a9e4463`의 HANDOFF.md(§0-y·0-z·0-a)** 참조.
+- **살아있는 플래그(필요 시 재론):** 배치 B 검수-존치 5건 — t1-2 '권한 세트' · t3-6 RCU/WCU · t3-8 '비전이' · t3-9 Kinesis 설계 의도 · t4-4 '캐시 히트율' / 배치 C [유지] 1건 — t2-3 "참조 구조".
+- **방향 결정(2026-06-11, 사용자):** 고도화 우선 → 완료됐으므로 모의고사 중량·증가 브레인스토밍이 §0 대기 목록에 올라가 있음. 스펙·플랜: `docs/superpowers/specs/2026-06-11-content-enrichment-design.md` 외(§0-a 전문 참조).
 
 ---
 
-## 0-b. 같은 날 완료: 클라우드 동기 Phase 1 — **전체 출고**
+## 0-b. 완료(2026-06-11): 클라우드 동기 Phase 1 전체 출고 — 라이브 Firebase `awc-docs-cf67d`
 
-Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 기기 간 동기. 로컬-퍼스트 + *선택적* 로그인, 미로그인은 로컬-only.
-
-**2026-06-11 세션에서 닫은 것 (모두 main 병합·배포):**
-- **라이브 Firebase 연결** — 사용자 프로젝트 `awc-docs-cf67d` 생성, `flutterfire configure`로 `firebase_options.dart` 실값(게이트 ON), Google Auth + Firestore + 보안 규칙(스펙 §8) + authorized domain(`velkaressiablutkrone.github.io`) 설정 완료.
-- **로컬→클라우드 트리거 갭 보강** — `SyncController`에 주기 Timer(`defaultSyncInterval` 30s, signed-in 한정) + 앱 복귀(web `visibilitychange`, `app_resume*.dart` 조건부 import) 트리거. 스펙 §6.2 충족.
-- **리뷰 후속 하드닝** — 전환 인터리브 시 고아 타이머/스테일 부착 차단(세대 가드 `_gen`), 트리거 해제를 진입 시 **동기** teardown으로(await 뒤로 밀리는 창 제거), dispose 후 notify 가드, signOut 시 `_pending` 클리어.
-- **라이브 e2e 검증(실측):** 로그인 → 데이터 생성 → **재로그인 없이** 30s/탭복귀로 Firestore `users/{uid}/*` 반영 확인. 콘솔 에러 0.
-
-**검증:** `cd flutter_app && flutter analyze lib && flutter test` (**262 테스트**). 배포는 main 푸시 시 GitHub Actions(`pages.yml`) 자동.
+로컬-퍼스트 + *선택적* Google 로그인 동기(미로그인=로컬-only), 라이브 e2e 실측 완료. 아키텍처는 §1에 살아 있고, 구축 경위 전문은 **git `a9e4463`의 HANDOFF.md(§0-b)** 참조.
 
 ### 남은 선택 항목 (작음)
 1. **2기기 pull 검증(사용자 5분):** 두 번째 기기/브라우저에서 같은 계정 로그인 → 첫 기기 데이터가 내려오는지. push 방향·병합 로직은 검증됨, pull 실기기 확인만 남음.
@@ -106,7 +86,8 @@ Google 로그인 시 학습 데이터(일정·응시이력·열람·체크)를 �
 
 ## 3. 워킹트리 / 메모
 - 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **474 테스트** 그린 기준점(2026-06-13, PR3까지 출고 후에도 동일).
-- `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3 폰트 전환의 전/후 타이밍 비교에 그대로 재사용.
+- `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3에서 리소스 필터·스로틀(HEAVY)·MIME에 woff2 보정 완료(otf/ttf/woff2 동등 취급). 전/후 비교 보고서: `pr3-before-light.json` / `pr3-after2-light.json`.
+- **로컬 dogfood 서버 주의:** 포트 8124에 이전 세션의 진단용 node 서버(cwd 기준 `build/web` 서빙)가 살아 있을 수 있음 — `EADDRINUSE`면 새로 띄우지 말고 서빙 콘텐츠 해시를 로컬 빌드와 대조 후 재사용(요청 시점에 파일을 읽는 구조라 재빌드가 그대로 반영됨). browse dogfood 함정 모음(SW 캐시·taskId `clf-t1-1` 형식·해시 goto≠리로드·main.dart.js 한국어 grep 무효): 메모리 [[flutter-web-dogfood-browse]].
 - **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
