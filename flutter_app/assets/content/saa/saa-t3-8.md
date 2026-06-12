@@ -20,7 +20,9 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+  - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
+lastVerified: 2026-06-12
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -52,6 +54,21 @@ lastVerified: 2026-06-07
 
 ---
 
+## 🔤 먼저 알아야 할 용어
+
+이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.
+
+| 용어 | 영문 | 한 줄 풀이 |
+|---|---|---|
+| **비전이** | Non-transitive | A-B, B-C 연결이 있어도 A-C 연결이 자동으로 생기지 않는 성질 — 다리를 건너도 다음 다리가 이어지지 않는 것과 같음 |
+| **CIDR** | Classless Inter-Domain Routing | IP 주소 범위를 `10.0.0.0/16`처럼 프리픽스 길이로 표기하는 방식 |
+| **IPsec** | IP Security | 인터넷 레이어에서 패킷을 암호화·인증하는 프로토콜 묶음 |
+| **ENI** | Elastic Network Interface | VPC 내 가상 네트워크 카드 — 사설 IP를 가지며 인스턴스에 탈부착 가능 |
+| **NLB** | Network Load Balancer | OSI 4계층(TCP/UDP) 기반 고성능 로드 밸런서. PrivateLink 엔드포인트 서비스의 앞단으로 사용됨 |
+| **VGW** | Virtual Private Gateway | AWS 측 VPN 엔드포인트 — 단일 VPC에 연결되며 온프레미스 터널의 AWS 종단점 역할 |
+
+---
+
 ## 📖 핵심 개념
 
 ### 1) VPC 피어링 — 1:1 직접 연결, 전이 불가
@@ -76,6 +93,11 @@ VPC 피어링은 같은 계정, 다른 계정, 다른 리전(인터-리전 피�
 
 VPC 수가 늘어날수록 필요한 피어링 쌍은 n(n-1)/2로 증가합니다. VPC 4개면 6개, 10개면 45개입니다.
 
+> 🧠 원리: 왜 VPC 피어링은 전이를 허용하지 않을까요?
+> 피어링은 두 VPC 사이에만 라우팅 경로를 추가하는 1:1 네트워크 약속이어서, B가 A와 C 양쪽에 피어링되어 있어도 B는 A-C 사이의 트래픽을 대신 전달할 중계 역할을 하지 않습니다.
+> 전이 라우팅을 허용하면 중간 VPC가 경로를 제어하기 어려워지고, 네트워크 관리자가 의도하지 않은 경로로 트래픽이 흐를 수 있기 때문에 각 연결은 명시적으로 쌍마다 설정해야 합니다.
+> 이 비전이 특성이 VPC 수가 많아질수록 피어링 관리 부담이 급격히 증가하는 근본 이유이며, 그래서 Transit Gateway가 등장했습니다.
+
 ### 2) Transit Gateway — 허브-스포크, 전이 라우팅
 
 > 공식 정의: VPC와 온프레미스 네트워크를 상호 연결하는 네트워크 전송 허브.
@@ -98,7 +120,12 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 | 온프레미스 통합 | 불가 (VPN/DX 별도) | 가능 (VPN/DX 어태치먼트) |
 | 적합 규모 | VPC 소수 (2~3개) | VPC 다수 또는 하이브리드 |
 | 비용 | 데이터 전송비만 | 어태치먼트 + 데이터 처리비 |
-| CIDR 중복 | 불가 | 라우팅 테이블로 관리 가능 |
+| CIDR 중복 | 불가 | 불가 (중복 경로는 라우팅 테이블에 전파되지 않음) |
+
+> 🧠 원리: 왜 Transit Gateway 허브 설계에서 CIDR 계획이 반드시 전제되어야 할까요?
+> TGW는 중복 CIDR이 있는 VPC 간 라우팅을 지원하지 않습니다. 이미 어태치된 VPC와 CIDR이 동일하거나 겹치는 VPC를 추가로 어태치하면, 새로 어태치된 VPC의 경로는 TGW 라우팅 테이블에 전파되지 않아 해당 VPC와의 통신이 불가능해집니다.
+> 이는 TGW가 허브-스포크 전이 라우팅을 위해 각 어태치먼트의 CIDR을 고유한 경로로 등록해야 하는 구조이기 때문입니다. CIDR이 겹치면 어느 어태치먼트로 트래픽을 보내야 하는지 결정할 수 없으므로 중복 경로 자체가 허용되지 않습니다.
+> 따라서 TGW 기반 허브 설계에서는 모든 연결 VPC의 CIDR이 겹치지 않도록 사전에 주소 계획을 수립하는 것이 전제입니다. CIDR이 겹치는 환경에서 서비스를 노출해야 한다면 PrivateLink(§7)처럼 IP 공간을 격리하는 별도 패턴이 필요합니다.
 
 ### 3) Site-to-Site VPN — 인터넷 위 IPsec 터널
 
@@ -122,6 +149,11 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 - 암호화: 기본 포함 (IPsec)
 - 비용: 연결 시간당 + 데이터 전송비
 
+> 🧠 원리: 왜 Site-to-Site VPN은 연결당 터널을 2개 제공할까요?
+> VPN 터널은 특정 AWS 가용 영역의 엔드포인트 장비에 종단되는데, 단일 터널이면 그 장비나 AZ에 문제가 생길 때 연결 전체가 끊깁니다.
+> 2개의 터널은 서로 다른 AWS 엔드포인트로 각각 연결되어 있어, 하나가 장애를 일으키면 온프레미스 장비가 자동으로 다른 터널로 트래픽을 넘길 수 있습니다.
+> 이 중복 구조가 VPN 연결의 기본 가용성을 높이는 메커니즘이며, 두 터널을 동시에 활성화하면 부하 분산도 가능합니다.
+
 ### 4) Direct Connect (DX) — 전용 물리 회선
 
 > 공식 정의: 표준 이더넷 광섬유 케이블로 내부 네트워크를 Direct Connect 위치에 직접 연결. 인터넷 서비스 공급자를 우회합니다.
@@ -140,6 +172,11 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 - 경로: 전용 물리 회선 → 일관된 대역폭·저지연
 - 암호화: **기본 없음**. 암호화가 필요하면 DX 위에 VPN을 얹음 (DX over VPN 패턴)
 - 비용: 포트 시간당 + 아웃바운드 데이터 전송비 (인터넷 대비 낮은 단가)
+
+> 🧠 원리: 왜 Direct Connect는 기본 암호화를 포함하지 않을까요?
+> Direct Connect는 ISP를 거치지 않는 전용 물리 회선으로, 공용 인터넷과 달리 경로상 제3자가 패킷을 가로채기 어려운 물리적 격리를 제공합니다.
+> 그러나 물리적 격리는 전송 계층 암호화와 다르며, 내부 위협이나 DX 위치(교환 시설)에서의 트래픽 접근 가능성을 배제하지 않습니다.
+> 암호화가 필요한 규정 환경에서는 DX 위에 IPsec VPN 터널을 얹는 패턴으로 물리 회선의 낮은 지연과 전송 암호화를 함께 확보할 수 있습니다.
 
 ### 5) Direct Connect Gateway — 단일 DX로 다중 리전 접근
 
@@ -161,6 +198,11 @@ Direct Connect Gateway (글로벌)
 - DXGW 자체는 데이터 경로에 있지 않아 단일 장애점이 되지 않습니다.
 - 같은 DXGW에 연결된 VGW 사이의 트래픽은 기본적으로 차단됩니다(VPC-to-VPC 브리지 목적이 아님).
 
+> 🧠 원리: 왜 Direct Connect Gateway는 특정 리전에 종속되지 않는 글로벌 리소스로 설계됐을까요?
+> DX 연결은 물리 회선이 설치된 위치(교환 시설)에 종속되고, 그 위치가 반드시 접근하려는 AWS 리전과 같은 곳에 있지 않을 수 있습니다.
+> DXGW가 글로벌 리소스이기 때문에 물리 회선 위치와 무관하게 여러 리전의 VPC를 단일 논리 엔티티에 연결할 수 있으며, 리전별로 각각 DX 연결을 구축하지 않아도 됩니다.
+> 이 설계 덕분에 온프레미스 네트워크가 단일 DX 위치에서 글로벌 멀티 리전 아키텍처에 접근하는 구성을 비교적 간단하게 만들 수 있습니다.
+
 ### 6) VPN vs Direct Connect 비교 (★ 단골)
 
 | 항목 | Site-to-Site VPN | Direct Connect |
@@ -177,6 +219,11 @@ Direct Connect Gateway (글로벌)
 
 1. **DX + VPN 백업**: 평시 DX로 안정적으로 운영, DX 장애 시 VPN으로 자동 우회. 가용성과 성능을 동시에 확보합니다.
 2. **DX over VPN (암호화 DX)**: DX 자체는 암호화가 없으므로, 규정상 전송 암호화가 필요한 경우 DX 위에 VPN 터널을 얹습니다.
+
+> 🧠 원리: 왜 DX + VPN 백업 패턴이 두 서비스의 단점을 서로 보완할 수 있을까요?
+> VPN은 구축이 빠르고 암호화가 포함되어 있지만 공용 인터넷 경로를 사용해 대역폭과 지연이 변동될 수 있고, DX는 일관된 전용 회선을 제공하지만 회선 장애 시 대체 경로가 없습니다.
+> DX를 기본 경로로 두고 VPN을 백업으로 구성하면, 정상 운영 시에는 DX의 안정적인 대역폭을 쓰면서 DX 장애 시에는 VPN이 자동으로 우회 경로를 제공합니다.
+> 이 조합은 두 서비스 중 어느 하나만 쓸 때보다 연결 가용성이 높아지며, 각각의 구축 시간·비용 특성도 단계적으로 활용할 수 있습니다.
 
 ### 7) PrivateLink와 인터페이스 엔드포인트
 
@@ -206,6 +253,11 @@ Direct Connect Gateway (글로벌)
 
 - PrivateLink를 사용하면 소비자 VPC와 제공자 VPC의 **CIDR이 겹쳐도 통신 가능**합니다(피어링과의 차이).
 
+> 🧠 원리: 왜 PrivateLink는 CIDR이 겹치는 VPC 사이에서도 작동할 수 있을까요?
+> VPC 피어링은 두 VPC의 IP 공간을 직접 연결해 서로의 IP 주소로 통신하므로 CIDR이 겹치면 어느 VPC의 주소인지 구분할 수 없습니다.
+> PrivateLink는 소비자 VPC 안에 ENI를 생성하고 해당 ENI의 사설 IP로만 서비스에 접근하는 방식이어서, 소비자는 제공자 VPC의 IP 공간을 전혀 볼 필요가 없습니다.
+> 두 VPC의 IP 공간이 서로 격리된 채 ENI라는 단일 접점만 노출되기 때문에 CIDR 겹침이 라우팅 충돌로 이어지지 않습니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -233,18 +285,25 @@ Direct Connect Gateway (글로벌)
 ## ⚠️ 흔한 함정
 
 1. **"지금 당장 연결이 필요하다" → Direct Connect 선택.** Direct Connect 구축에는 수 주의 리드타임이 걸립니다. 즉시성이 요구되면 **Site-to-Site VPN**이 답입니다.
+   *(원리: §3 본문 — VPN은 공용 인터넷을 이용한 소프트웨어 설정만으로 즉시 연결이 가능하고, DX는 물리 회선 설치가 선행되어야 한다.)*
 
 2. **"Direct Connect는 기본 암호화된다."** Direct Connect는 전용 물리 회선이지만 **기본 암호화가 없습니다.** 전송 암호화가 필요하면 DX over VPN 패턴을 사용해야 합니다.
+   *(원리: §4 — 물리적 격리는 전송 계층 암호화가 아니며, 암호화가 필요하면 DX 위에 IPsec 터널을 얹어야 한다.)*
 
 3. **"VPC 피어링을 통해 세 VPC가 서로 통신한다."** 피어링은 비전이입니다. A-B, B-C가 있어도 A는 C를 볼 수 없습니다. 세 VPC 모두 통신하려면 Transit Gateway 또는 각 쌍을 직접 피어링해야 합니다.
+   *(원리: §1 — 피어링은 1:1 네트워크 약속이어서 중간 VPC가 트래픽을 중계하지 않으므로 전이 통신이 성립하지 않는다.)*
 
 4. **"게이트웨이 엔드포인트로 모든 AWS 서비스에 접근한다."** 게이트웨이 엔드포인트는 **S3와 DynamoDB 전용**입니다. 나머지 AWS 서비스에는 인터페이스 엔드포인트(PrivateLink)를 사용해야 합니다.
+   *(원리: §7 본문 — 엔드포인트 유형 표에서 게이트웨이 엔드포인트 대상은 S3·DynamoDB 전용이고 나머지는 인터페이스 엔드포인트다.)*
 
 5. **"PrivateLink는 CIDR이 겹치면 사용 불가다."** CIDR 겹침 제약은 VPC 피어링에 해당합니다. PrivateLink는 ENI 기반으로 동작하므로 소비자-제공자 VPC의 CIDR이 겹쳐도 사용할 수 있습니다.
+   *(원리: §7 — 소비자 VPC 내 ENI가 서비스 접점 역할을 하므로 제공자 VPC IP 공간이 노출되지 않아 CIDR 충돌이 발생하지 않는다.)*
 
 6. **"Direct Connect Gateway는 VPC 간 통신 브리지다."** DXGW에 연결된 VGW끼리는 기본적으로 트래픽이 차단됩니다. VPC 간 통신이 목적이라면 Transit Gateway를 사용해야 합니다.
+   *(원리: §5 본문 — DXGW는 온프레미스-VPC 연결 목적이며 같은 DXGW의 VGW 사이 트래픽은 기본 차단된다.)*
 
 7. **"VPN은 터널이 하나다."** Site-to-Site VPN 연결에는 **항상 터널 2개**가 포함됩니다. 고가용성을 위해 두 터널을 동시에 사용할 수 있습니다.
+   *(원리: §3 — 터널 2개가 서로 다른 AWS 엔드포인트에 연결되어 하나 장애 시 다른 터널로 자동 우회가 가능하다.)*
 
 ---
 
@@ -280,11 +339,18 @@ Direct Connect는 **기본 암호화를 제공하지 않습니다.** 전용 회�
 **AWS PrivateLink(엔드포인트 서비스)**를 사용합니다. 공급자 VPC에서 서비스를 NLB 뒤에 두고 VPC 엔드포인트 서비스를 생성합니다. 각 고객은 자신의 VPC에 인터페이스 엔드포인트를 생성해 접근합니다. VPC 피어링과 달리 PrivateLink는 CIDR 겹침 제약이 없고, 고객 VPC에서 공급자 VPC의 다른 리소스에 접근할 수 없어 보안 경계도 명확합니다. 인터넷을 거치지 않으므로 트래픽은 AWS 백본 내부에서만 이동합니다.
 </details>
 
+**Q5 (원리).** 왜 VPC 피어링으로 연결된 5개 VPC 환경에서 온프레미스 연결을 추가할 때 Transit Gateway로 전환하는 것이 유리한가요?
+
+<details><summary>정답 보기</summary>
+
+VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모든 VPC마다 개별 VPN 또는 DX 연결을 설정해야 합니다. 반면 Transit Gateway에 온프레미스 연결을 어태치먼트로 한 번만 등록하면, TGW에 연결된 모든 VPC가 전이 라우팅을 통해 온프레미스와 통신할 수 있어 연결 수와 관리 부담이 크게 줄어듭니다. VPC 수가 늘수록 이 차이는 더욱 커집니다.
+</details>
+
 ---
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. AWS Site-to-Site VPN — 소개 — https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html
 2. AWS Direct Connect — 소개 — https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html
@@ -292,3 +358,4 @@ Direct Connect는 **기본 암호화를 제공하지 않습니다.** 전용 회�
 4. AWS Transit Gateway — 소개 — https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html
 5. AWS PrivateLink — 소개 — https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. AWS Transit Gateway — VPC 어태치먼트 (공식) — https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html (게이트 검수 반영: 2026-06-12)

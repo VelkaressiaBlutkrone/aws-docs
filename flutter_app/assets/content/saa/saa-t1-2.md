@@ -16,7 +16,7 @@ sources:
     url: https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-07
+lastVerified: 2026-06-12
 ---
 
 # 다중 계정 보안 — Organizations·Control Tower·SCP
@@ -48,6 +48,23 @@ lastVerified: 2026-06-07
 
 ---
 
+## 🔤 먼저 알아야 할 용어
+
+이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.
+
+| 용어 | 영문 | 한 줄 풀이 |
+|---|---|---|
+| **관리 계정** | Management account | Organizations를 소유하는 단일 계정 — SCP 미적용·결제 집계 역할 |
+| **멤버 계정** | Member account | 실제 워크로드가 돌아가는 계정 — SCP 적용 대상 |
+| **폭발 반경** | blast radius | 침해 사고가 퍼질 수 있는 최대 범위 — 계정 격리로 좁힘 |
+| **Landing Zone** | Landing Zone | Control Tower가 자동 구성하는 다계정 환경 전체(관리·로그·감사 계정 포함) |
+| **권한 세트** | Permission Set | IAM Identity Center에서 각 계정에 재사용 가능한 IAM 권한 템플릿 |
+| **서비스 연결 역할** | Service-linked role | AWS 서비스가 위임받아 직접 사용하는 역할 — SCP 적용 예외 |
+| **통합 결제** | Consolidated Billing | 조직 내 모든 계정 사용량을 하나의 청구서로 합산하는 기능 |
+| **전체 기능 모드** | All features | SCP를 비롯한 Organizations 정책 기능을 사용하기 위한 활성화 모드 |
+
+---
+
 ## 📖 핵심 개념
 
 ### 1) AWS Organizations
@@ -72,6 +89,11 @@ lastVerified: 2026-06-07
 
 > 중요: Organizations는 **전체 기능 모드(All features)**를 활성화해야 SCP를 사용할 수 있습니다. 통합 결제 전용 모드에서는 SCP가 비활성화됩니다.
 
+> 🧠 원리: 왜 Organizations는 계정을 단순 목록이 아닌 OU 트리 계층으로 묶을까요?
+> 계정이 수십~수백 개로 늘면 각 계정에 정책을 개별 붙이면 중복이 폭발하고 누락 계정이 생깁니다.
+> OU 트리 모델에서는 상위 노드(루트·OU)에 SCP 한 번만 설정하면 하위 계정 전체로 자동 상속되어 새 계정을 OU에 추가하는 순간 가드레일이 즉시 적용됩니다.
+> 또한 환경(개발·운영)·사업부·규정 요건이 다른 그룹을 별도 OU로 분리해 각각 다른 SCP를 중첩 없이 독립적으로 관리할 수 있습니다.
+
 ### 2) 다계정 전략 — 계정 분리 모범 사례
 
 AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입니다.
@@ -84,6 +106,11 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 | **개발·스테이징·운영 계정** | 워크로드 실행 환경 분리 | 각 환경 SCP로 가드레일 적용 |
 
 > 폭발 반경 원칙: 운영 계정이 침해되어도 로그 계정의 감사 기록은 변조할 수 없습니다. 계정 분리 = 보안 격리입니다.
+
+> 🧠 원리: 왜 CloudTrail 로그를 워크로드 계정과 별개의 로그 아카이브 계정에 보관할까요?
+> 로그가 보호 대상 계정 안에 있으면 그 계정이 침해된 공격자는 자신의 행적을 지우기 위해 로그도 삭제하거나 변조할 수 있습니다.
+> 로그를 별도 계정에 격리하면 워크로드 계정의 IAM 권한·SCP와 무관하게 로그 계정 자체의 접근 제어가 독립적으로 작동합니다.
+> 이 계정 경계가 로그의 무결성을 보장하는 물리적 분리선이 되며, SCP + S3 Object Lock으로 로그 계정 내부에서도 삭제를 이중으로 차단할 수 있습니다.
 
 ### 3) SCP(서비스 제어 정책)
 
@@ -128,6 +155,11 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 
 > 이 SCP를 OU에 적용하면 해당 OU 내 모든 계정의 모든 IAM 아이덴티티(루트 포함)가 서울 리전 외에서 어떤 API도 호출할 수 없습니다.
 
+> 🧠 원리: 왜 SCP는 IAM 정책과 별도 레이어로 존재하며 서비스 연결 역할에는 적용되지 않을까요?
+> SCP는 계정 내부 IAM 시스템이 아닌 Organizations 레이어(계정 외부)에서 평가됩니다 — 계정 IAM 관리자가 수정할 수 없는 이유입니다.
+> 서비스 연결 역할은 AWS 서비스가 해당 계정에서 작동하기 위해 필요한 최소 권한으로 사전 정의되어 있어, SCP로 막으면 서비스 자체가 동작하지 않는 부작용이 생깁니다.
+> 따라서 Organizations는 서비스 연결 역할을 SCP 평가에서 제외해 SCP 강화가 AWS 서비스 기능을 의도치 않게 중단시키는 상황을 방지합니다.
+
 **SCP vs 권한 경계 비교 (★ 시험 핵심):**
 
 `saa-t1-1`에서 자세히 다뤘으나 다계정 맥락에서의 핵심만 요약합니다.
@@ -170,6 +202,11 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 
 > **Control Tower vs Organizations 직접 구성:** Organizations를 직접 구성하면 유연하지만 복잡합니다. Control Tower는 모범 사례를 사전 탑재한 오케스트레이션 레이어로, 빠르게 규정 준수 환경을 만들 때 적합합니다.
 
+> 🧠 원리: 왜 Control Tower는 예방적 가드레일만으로 충분하지 않아 탐지·사전예방 유형을 별도로 두었을까요?
+> 예방적 가드레일(SCP)은 IAM API 호출을 차단하지만, 기존에 이미 잘못 구성된 리소스나 콘솔 외부 경로로 생성된 리소스는 감지하지 못합니다.
+> 탐지적 가드레일(AWS Config)은 실시간 구성 변화를 감시해 SCP가 놓친 드리프트를 발견하고, 사전예방적 가드레일(CloudFormation 훅)은 IaC 배포 단계에서 비준수 리소스가 생성되기 전에 차단합니다.
+> 세 유형이 계층을 이루면 배포 전·배포 중·배포 후 세 시점을 모두 커버해 가드레일 사각지대를 줄입니다.
+
 ### 5) IAM Identity Center — 다계정 거버넌스 관점
 
 IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다계정 거버넌스 관점에 집중합니다.
@@ -187,6 +224,11 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
     → STS 임시 자격증명 발급
     → 해당 계정 리소스 접근
 ```
+
+> 🧠 원리: 왜 IAM Identity Center는 각 계정에 IAM 정책을 직접 붙이지 않고 권한 세트(Permission Set) 템플릿을 사용할까요?
+> 계정 수가 많을수록 각 계정에 동일한 IAM 정책을 개별 생성하면 변경 시 전 계정을 순회해야 하고, 한 계정이라도 누락되면 권한 불일치가 생깁니다.
+> 권한 세트는 중앙에서 한 번 정의하면 IAM Identity Center가 할당된 모든 계정에 자동 프로비저닝하므로, 권한 변경 한 번으로 수백 계정에 즉시 반영됩니다.
+> 이 구조 덕분에 권한 감사도 각 계정의 IAM이 아닌 IAM Identity Center 한 곳에서 일괄 확인할 수 있습니다.
 
 ---
 
@@ -207,16 +249,22 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 ## ⚠️ 흔한 함정
 
 1. **"SCP에 Allow를 추가하면 그 계정의 사용자가 자동으로 접근 가능해진다."** → 그렇지 않습니다. SCP의 Allow는 최대치를 허용하는 것이고, 실제 접근은 IAM 정책의 Allow가 별도로 필요합니다.
+   *(원리: §3 — SCP는 Organizations 레이어 상한선이고 IAM 정책은 계정 레이어 허용이므로 두 레이어의 교집합이 유효 권한이다.)*
 
 2. **"관리 계정에 SCP를 붙이면 관리 계정도 제한된다."** → 관리 계정은 SCP의 적용을 받지 않습니다. 이것이 관리 계정에 워크로드를 실행하면 안 되는 이유 중 하나입니다.
+   *(원리: §1 — 관리 계정이 Organizations를 소유하므로 스스로에게 적용할 SCP를 관리하는 주체가 되는 순환이 생겨 예외 처리된다.)*
 
 3. **"Control Tower는 Organizations를 대체한다."** → Control Tower는 Organizations를 *오케스트레이션*하는 레이어입니다. 내부적으로 Organizations를 사용하며, 대체가 아닌 추상화입니다.
+   *(원리: §4 — Control Tower는 가드레일·Account Factory를 더하는 추상화층이며 Organizations 트리가 실제 구조를 담당한다.)*
 
 4. **"가드레일 = SCP다."** → 예방적 가드레일만 SCP로 구현됩니다. 탐지적 가드레일은 AWS Config 규칙, 사전예방적 가드레일은 CloudFormation 훅으로 구현됩니다.
+   *(원리: §4 — 세 유형은 배포 전·후·중 시점을 분담해 SCP가 커버하지 못하는 드리프트와 IaC 단계 위반을 보완한다.)*
 
 5. **"OU에 SCP를 붙이면 상위 OU의 SCP가 무시된다."** → SCP는 **누적 교집합**입니다. 루트→OU→계정 순서로 모든 SCP를 AND로 교집합한 결과가 유효 권한의 상한선입니다. 상위 SCP가 막은 권한은 하위에서 열 수 없습니다.
+   *(원리: §3 — 루트→OU→계정 평가 순서가 상위 권한 결정자를 우선시하므로 하위 SCP가 상위 차단을 Allow로 복구하는 경로 자체가 없다.)*
 
 6. **"서비스 연결 역할도 SCP로 제한할 수 있다."** → 서비스 연결 역할(Service-linked role)에는 SCP가 적용되지 않습니다. AWS 서비스가 위임받아 사용하는 역할이므로 예외입니다.
+   *(원리: §3 — 서비스 연결 역할을 SCP로 막으면 AWS 서비스 자체가 동작 불가해지므로 Organizations가 이 역할 유형을 SCP 평가에서 제외한다.)*
 
 ---
 
@@ -254,9 +302,18 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 
 ---
 
+**Q5 (원리).** 왜 SCP의 권한 상한선은 루트→OU→계정 계층 순서로 누적 교집합 방식으로 작동할까요?
+
+<details><summary>정답 보기</summary>
+
+**Organizations 정책 평가가 루트(조직 소유자)에서 계정(피소유자) 방향으로 단방향 위임 구조이기 때문입니다.** 루트는 SCP를 소유하는 유일한 권위 지점입니다. 만약 하위 OU나 계정 SCP가 상위 결정을 덮어쓸 수 있다면, 권한 위임을 받은 쪽이 위임한 쪽의 제한을 무력화하는 — 위임의 의미가 성립하지 않는 — 구조가 됩니다. AND 교집합은 이 단방향 위임을 수학적으로 표현한 것입니다. 상위 SCP에서 Deny된 항목은 하위에서 Allow로 재정의될 수 없고, 이것이 루트에 설정한 조직 전체 가드레일이 특정 OU나 계정에서 무력화되지 않는 구조적 이유입니다.
+</details>
+
+---
+
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, WebFetch 200 확인)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, WebFetch 200 확인 · 고도화 검수: 2026-06-12)
 
 1. AWS Organizations 소개 — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html
 2. 서비스 제어 정책(SCP) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html

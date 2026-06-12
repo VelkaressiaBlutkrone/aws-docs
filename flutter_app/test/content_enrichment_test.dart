@@ -15,6 +15,18 @@ void main() {
     'assets/content/clf/t3-7.md', 'assets/content/clf/t3-8.md',
     'assets/content/clf/t4-1.md', 'assets/content/clf/t4-2.md',
     'assets/content/clf/t4-3.md',
+    'assets/content/saa/saa-t1-1.md', 'assets/content/saa/saa-t1-2.md',
+    'assets/content/saa/saa-t1-3.md', 'assets/content/saa/saa-t1-4.md',
+    'assets/content/saa/saa-t1-5.md', 'assets/content/saa/saa-t2-1.md',
+    'assets/content/saa/saa-t2-2.md', 'assets/content/saa/saa-t2-3.md',
+    'assets/content/saa/saa-t2-4.md', 'assets/content/saa/saa-t2-5.md',
+    'assets/content/saa/saa-t3-1.md', 'assets/content/saa/saa-t3-2.md',
+    'assets/content/saa/saa-t3-3.md', 'assets/content/saa/saa-t3-4.md',
+    'assets/content/saa/saa-t3-5.md', 'assets/content/saa/saa-t3-6.md',
+    'assets/content/saa/saa-t3-7.md', 'assets/content/saa/saa-t3-8.md',
+    'assets/content/saa/saa-t3-9.md', 'assets/content/saa/saa-t4-1.md',
+    'assets/content/saa/saa-t4-2.md', 'assets/content/saa/saa-t4-3.md',
+    'assets/content/saa/saa-t4-4.md', 'assets/content/saa/saa-t4-5.md',
   ];
 
   for (final path in enriched) {
@@ -30,14 +42,18 @@ void main() {
       expect(terms, lessThan(concepts), reason: '$name 용어 섹션은 📖 앞');
     });
 
-    test('$name: 모든 개념 서브섹션에 🧠 원리 블록 ≥1', () {
+    test('$name: 개념 서브섹션에 🧠 원리 블록 (하한 = min(서브섹션, 8))', () {
       final concepts = body.substring(body.indexOf('## 📖 핵심 개념'),
           body.indexOf('## ✍️ 시험 포인트'));
-      final subsections = '### '.allMatches(concepts).length;
+      // ^### 만 카운트(#### 세부 facet 제외). 14-섹션급 레퍼런스형 문서의
+      // 과밀을 막기 위해 하한은 8로 캡(절제 지침) — 초과분은 고가치 섹션 우선.
+      final subsections =
+          RegExp(r'^### ', multiLine: true).allMatches(concepts).length;
       final principles = '> 🧠 원리:'.allMatches(concepts).length;
       expect(subsections, greaterThan(0), reason: '$name 서브섹션 파싱 실패');
-      expect(principles, greaterThanOrEqualTo(subsections),
-          reason: '$name 서브섹션 $subsections개 중 원리 블록 $principles개');
+      final required = subsections > 8 ? 8 : subsections;
+      expect(principles, greaterThanOrEqualTo(required),
+          reason: '$name 서브섹션 $subsections개(하한 $required) 중 원리 블록 $principles개');
     });
 
     test('$name: 자가 점검에 원리형(왜) 문항 존재', () {
