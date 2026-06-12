@@ -18,6 +18,8 @@ sources:
     url: https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+  - title: Compute Savings Plans and Reserved Instances (공식)
+    url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
 lastVerified: 2026-06-07
 ---
 
@@ -60,7 +62,7 @@ lastVerified: 2026-06-07
 | **과프로비저닝** | Over-provisioning | 실제 수요보다 더 많은 컴퓨팅 자원을 할당해 유휴 용량이 발생하는 상태 |
 | **CloudWatch** | Amazon CloudWatch | AWS 리소스의 지표(CPU·메모리·네트워크 등)를 수집·모니터링하는 관측 서비스 |
 | **ARM 아키텍처** | ARM Architecture | 모바일·임베디드에서 출발한 명령어 집합 구조로, 동일 작업량 대비 전력 소모가 낮아 클라우드 서버 칩(Graviton 등)에 채택 |
-| **경매 방식** | Spot Price Auction | 스팟 시장에서 잉여 용량의 현재 가격이 수요·공급에 따라 실시간으로 결정되는 구조 |
+| **스팟 가격** | Spot Price | EC2가 설정하며 장기적인 수요·공급 추세에 따라 점진적으로 조정되는 할인 가격 |
 
 ---
 
@@ -114,8 +116,8 @@ lastVerified: 2026-06-07
 
 > 🧠 원리: 왜 Savings Plans 약정이 스팟 비용에는 적용되지 않을까요?
 > Savings Plans는 온디맨드 요금에서 일정 사용량을 약속하는 구조로, 온디맨드 비용을 기준으로 할인을 산정합니다.
-> 스팟 인스턴스는 이미 경매 방식으로 온디맨드보다 낮은 가격이 결정되므로, 여기에 Savings Plans 할인을 추가로 적용하면 두 가지 별도 할인 체계가 겹치게 됩니다.
-> 두 할인이 독립된 메커니즘으로 설계되어 있어 스팟 비용은 Savings Plans 약정 소진 대상이 아닙니다.
+> 스팟 인스턴스는 EC2가 수요·공급 추세에 따라 가격을 설정·조정하는 자체 할인 가격 메커니즘으로 운영되며, AWS 공식 문서는 스팟 사용량에 Savings Plans가 적용되지 않는다고 명시합니다.
+> 두 할인 체계는 별개로 설계되어 있어 스팟 비용은 Savings Plans 약정 소진 대상이 아닙니다.
 
 ### 4) RI 납입 옵션 (Savings Plans도 동일 구조)
 
@@ -134,7 +136,7 @@ lastVerified: 2026-06-07
 
 ### 5) 스팟 인스턴스
 
-스팟 인스턴스는 EC2의 **잉여 용량**을 경매 방식으로 제공하는 옵션입니다.
+스팟 인스턴스는 EC2의 **잉여 용량**을 활용하며, 스팟 가격은 EC2가 설정하고 장기적인 수요·공급 추세에 따라 점진적으로 조정됩니다.
 
 **핵심 특성:**
 
@@ -270,7 +272,7 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
    *(원리: §5 — 2분 알림은 정리 작업을 가능하게 하지만, 중단 자체를 막지는 못하므로 상태 저장 워크로드에는 스팟이 적합하지 않다.)*
 
 2. **"Savings Plans가 스팟에도 적용된다."** → Savings Plans는 스팟 인스턴스에 **적용되지 않습니다.** Spot 비용은 Savings Plans 약정 소진으로 처리되지 않습니다.
-   *(원리: §3 — Savings Plans와 스팟 경매 방식은 독립된 할인 체계여서 두 할인이 겹치지 않는다.)*
+   *(원리: §3 — 스팟은 EC2가 수요·공급 추세에 따라 가격을 설정·조정하는 자체 할인 가격 메커니즘으로 운영되며, Savings Plans 약정 소진 대상에 포함되지 않는다.)*
 
 3. **"RI를 구매하면 언제든 취소할 수 있다."** → RI는 구매 후 **취소 불가**입니다. Standard RI는 Reserved Instance Marketplace에서 제3자에게 판매할 수 있지만, Convertible RI는 판매가 불가합니다.
    *(원리: §1 — 절감률이 높은 구매 옵션일수록 인스턴스 유형·리전·기간을 구체적으로 고정해 유연성을 희생하는 트레이드오프가 적용된다.)*
@@ -322,7 +324,7 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 
 <details><summary>정답 보기</summary>
 
-Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 구조이며, 스팟 비용은 경매 방식으로 결정되는 별개의 할인 체계입니다. 두 메커니즘은 독립적으로 동작하므로 스팟에서 발생한 비용은 Savings Plans 약정 소진으로 처리되지 않습니다. 결과적으로 스팟 사용량이 아무리 늘어도 Savings Plans 잔여 약정은 변하지 않습니다.
+Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 구조입니다. 스팟 인스턴스는 EC2가 수요·공급 추세에 따라 가격을 설정·조정하는 자체 할인 가격 메커니즘으로 운영되며, AWS 공식 문서는 스팟 사용량에 Savings Plans가 적용되지 않는다고 명시합니다. 따라서 스팟에서 발생한 비용은 Savings Plans 약정 소진으로 처리되지 않고, 스팟 사용량이 아무리 늘어도 Savings Plans 잔여 약정은 변하지 않습니다.
 </details>
 
 ---
@@ -336,3 +338,4 @@ Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 �
 3. Amazon EC2 스팟 인스턴스 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html
 4. AWS Compute Optimizer — 소개 — https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
 5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+6. Compute Savings Plans and Reserved Instances — https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html (게이트 검수 반영: 2026-06-12)
