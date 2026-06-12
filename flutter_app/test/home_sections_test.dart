@@ -69,8 +69,10 @@ void main() {
     });
   });
 
-  testWidgets('통합 모의고사 AppBar 제목은 자격증 코드 기반', (tester) async {
+  testWidgets('통합 모의고사 헤더는 자격증 코드 기반(브레드크럼 "코드 / 모드")', (tester) async {
     // 라우터 스택(하단 HomePage의 SelectionArea + 전환)을 피해 페이지를 직접 펌프.
+    // PR4: 단일 타이틀 'CLF-C02 · 통합 모의고사' → AppHeader 브레드크럼
+    // (sectionLabel 'CLF-C02' / title '통합 모의고사')로 분해 — 정보 손실 0.
     final cert = certByCode('CLF-C02')!;
     await tester.pumpWidget(ThemeScope(
       isDark: false,
@@ -81,7 +83,8 @@ void main() {
       ),
     ));
     await tester.pump();
-    expect(find.text('CLF-C02 · 통합 모의고사'), findsOneWidget);
+    expect(find.text('CLF-C02'), findsOneWidget);
+    expect(find.text('통합 모의고사'), findsWidgets); // 헤더(+시작 화면)
   });
 
   testWidgets('플랜 없으면 오늘-할-일 배너 미표시', (tester) async {

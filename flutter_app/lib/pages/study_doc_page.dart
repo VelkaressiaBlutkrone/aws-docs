@@ -9,6 +9,7 @@ import '../data/viewed_docs_store.dart';
 import '../models/exam_session.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 
 class StudyDocPage extends StatefulWidget {
@@ -38,59 +39,71 @@ class _StudyDocPageState extends State<StudyDocPage> {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return Scaffold(
-      backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text(widget.entry.title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
-      ),
-      body: SelectionArea(
-        child: FutureBuilder<StudyContent>(
-          future: _future,
-          builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done) {
-              return const Center(
-                  child: LoadingView(label: '학습문서를 불러오고 있습니다…'));
-            }
-            final doc = snap.data;
-            if (snap.hasError || doc == null) {
-              return Center(
-                child: ErrorView(
-                  message: '콘텐츠를 불러오지 못했습니다.',
-                  onRetry: () => setState(() => _future = _load()),
-                  onHome: () => context.go('/'),
-                ),
-              );
-            }
-            return Scrollbar(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: Layout.measure),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                          Gap.xl, Gap.xl, Gap.xl, Gap.xl4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _DocHeader(doc: doc),
-                          StudyMarkdownView(blocks: doc.blocks),
-                          const SizedBox(height: Gap.xl2),
-                          _StartQuizButton(entry: widget.entry),
-                        ],
+    // FutureBuilder가 Scaffold를 감싼다(PR4) — 헤더의 검수 메타(✓ 검증됨·
+    // 검수일)가 본문 로드 결과를 받아야 해서다. 로딩/에러 분기 표시는 기존과
+    // 동일하게 body 안에서 일어난다.
+    return FutureBuilder<StudyContent>(
+      future: _future,
+      builder: (context, snap) {
+        final done = snap.connectionState == ConnectionState.done;
+        final doc = done && !snap.hasError ? snap.data : null;
+        return Scaffold(
+          backgroundColor: c.bg,
+          extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+          appBar: AppHeader.document(
+            backLabel: widget.entry.certCode,
+            sectionLabel: '학습 문서',
+            title: widget.entry.title,
+            metaBadge: doc != null ? '✓ 검증됨' : null,
+            metaDate: doc?.lastVerified,
+          ),
+          body: SelectionArea(
+            child: Builder(
+              builder: (context) {
+                if (!done) {
+                  return const Center(
+                      child: LoadingView(label: '학습문서를 불러오고 있습니다…'));
+                }
+                if (doc == null) {
+                  return Center(
+                    child: ErrorView(
+                      message: '콘텐츠를 불러오지 못했습니다.',
+                      onRetry: () => setState(() => _future = _load()),
+                      onHome: () => context.go('/'),
+                    ),
+                  );
+                }
+                return Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(maxWidth: Layout.measure),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              Gap.xl,
+                              headerScrollInset(context),
+                              Gap.xl,
+                              Gap.xl4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _DocHeader(doc: doc),
+                              StudyMarkdownView(blocks: doc.blocks),
+                              const SizedBox(height: Gap.xl2),
+                              _StartQuizButton(entry: widget.entry),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

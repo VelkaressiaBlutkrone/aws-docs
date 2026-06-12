@@ -12,6 +12,7 @@ import '../data/task_score_report.dart';
 import '../models/certification.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 
 /// 약점 리포트: cert의 Task별 정답률 표 + 70% 미만 Task 학습문서 처방.
@@ -77,18 +78,15 @@ class _ReportPageState extends State<ReportPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.cert.code} · 약점 리포트',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+      extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+      appBar: AppHeader.document(
+        sectionLabel: widget.cert.code,
+        title: '약점 리포트',
         actions: [
-          IconButton(
-            onPressed: _resetCert,
+          HeaderIconButton(
+            onTap: _resetCert,
             tooltip: '이 자격증 학습 기록 초기화',
-            icon: Icon(Icons.delete_outline, size: 20, color: c.textMuted),
+            icon: Icons.delete_outline,
           ),
         ],
       ),
@@ -109,13 +107,14 @@ class _ReportPageState extends State<ReportPage> {
               ),
             );
           }
-          return _body(data);
+          return _body(context, data);
         },
       ),
     );
   }
 
-  Widget _body(_ReportLoad d) {
+  // context: Scaffold body 아래(FutureBuilder builder) — headerScrollInset용.
+  Widget _body(BuildContext context, _ReportLoad d) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final r = d.report;
@@ -123,7 +122,8 @@ class _ReportPageState extends State<ReportPage> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 720),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(Gap.xl),
+          padding: EdgeInsets.all(Gap.xl)
+              .copyWith(top: headerScrollInset(context)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

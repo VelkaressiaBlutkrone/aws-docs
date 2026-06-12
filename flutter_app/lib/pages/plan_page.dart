@@ -15,6 +15,7 @@ import '../data/viewed_docs_store.dart';
 import '../models/study_plan.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 
 /// 어젠다 헤더용 순수 요약.
 class PlanSummary {
@@ -74,13 +75,11 @@ class _PlanPageState extends State<PlanPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.cert.code} · 학습 일정',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+      // extend 없음(인벤토리 §5 재량 결정 3): 본문 NestedScrollView의 내부
+      // sticky 헤더(88px)가 글래스 헤더 밑으로 핀 고정되면 겹침 충돌.
+      appBar: AppHeader.document(
+        sectionLabel: widget.cert.code,
+        title: '학습 일정',
       ),
       body: _plan == null
           ? _PlanCreateForm(

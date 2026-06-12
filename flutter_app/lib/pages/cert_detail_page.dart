@@ -14,6 +14,7 @@ import '../models/certification.dart';
 import '../models/exam_guide.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 
 typedef _Loaded = ({
@@ -97,28 +98,10 @@ class _CertDetailPageState extends State<CertDetailPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _CodePill(cert.code),
-            const SizedBox(width: Gap.md),
-            Flexible(
-              child: Text(
-                cert.title,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
+      extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+      appBar: AppHeader.document(
+        titleLeading: _CodePill(cert.code),
+        title: cert.title,
       ),
       body: SelectionArea(
         child: FutureBuilder<_Loaded>(
@@ -150,9 +133,9 @@ class _CertDetailPageState extends State<CertDetailPage> {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 900),
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
+                      padding: EdgeInsets.fromLTRB(
                         Gap.xl,
-                        Gap.xl,
+                        headerScrollInset(context),
                         Gap.xl,
                         Gap.xl4,
                       ),

@@ -18,6 +18,7 @@ import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 
 /// 모델 주입식 시험 러너(테스트 대상). 자산/localStorage 의존 없음.
@@ -247,7 +248,8 @@ class _ExamViewState extends State<ExamView> {
     final low = remaining <= (widget.durationSec * 0.1).ceil();
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(Gap.xl),
+      padding:
+          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -333,7 +335,8 @@ class _ExamViewState extends State<ExamView> {
 
   Widget _results(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(Gap.xl),
+      padding:
+          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -564,13 +567,10 @@ class _ExamPageState extends State<ExamPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.entry.title} · 시험 모드',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+      extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+      appBar: AppHeader.document(
+        sectionLabel: widget.entry.title,
+        title: '시험 모드',
       ),
       body: FutureBuilder<_ExamLoad>(
         future: _future,

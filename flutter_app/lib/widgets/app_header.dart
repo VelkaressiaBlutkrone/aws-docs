@@ -184,6 +184,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
+/// 글래스 헤더 페이지(extendBodyBehindAppBar)의 스크롤 상단 인셋.
+/// Scaffold가 body MediaQuery padding.top에 헤더 높이를 실어 주므로
+/// 그 값 + 기존 상단 여백을 돌려준다. **반드시 Scaffold body 아래
+/// 컨텍스트로 호출할 것** — 페이지(State) 컨텍스트에선 0이 나온다.
+/// 위젯 테스트(Scaffold 없이 단독 렌더)에선 0 + gap이라 기존과 동일.
+double headerScrollInset(BuildContext context, {double gap = Gap.xl}) =>
+    MediaQuery.paddingOf(context).top + gap;
+
 /// collapse 드롭 판정(순수 함수, 테스트 대상) — 우선순위 고정:
 /// 날짜 → 배지 → 섹션 라벨 → backLabel. 각 단계는 "제목 최소폭까지 포함해
 /// 가용 폭에 들어가는가"로 판정한다. 폭 0인 파트는 처음부터 미표시.
