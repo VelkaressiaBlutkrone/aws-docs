@@ -14,7 +14,9 @@ _갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 - §0-b 선택 항목(2기기 pull 검증·개인정보 고지) · 잔여 존치 플래그(§0-y).
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
-## 0-u. 완료: 시각 리펙토링 PR4 — AppHeader 롤아웃·페이지 분해·키보드 감사 (2026-06-13)
+## 0-u. 완료: 시각 리펙토링 PR4 — AppHeader 롤아웃·페이지 분해·키보드 감사, main 배포됨 (2026-06-13)
+
+**main `914bcb1` 머지·push → Pages 배포 성공 → 실사이트 dogfood ✓**(홈 글래스 헤더·학습문서 브레드크럼+검수 메타·콘솔 에러 0 — 기존 Noto 한자 폴백 경고만).
 
 **B안 마지막 슬라이스 (T7·T8·T9·T12·DT4+DT3 잔여·T10).** 게이트: analyze 신규 0건(기존 3건 잔존 — cacheExtent는 plan_agenda.dart로 이주) · **499 테스트 전부 그린**(474→499: AppHeader 14·cert_detail 섹션 8·에러 핸들러 3) · Wght 1:1 게이트 0건 · dogfood 9페이지×(1180+반응형 360/768+다크) 콘솔 에러 0 · 키보드 Tab/Enter/FocusRing 실증.
 
