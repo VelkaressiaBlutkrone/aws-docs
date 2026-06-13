@@ -95,7 +95,15 @@
 - **그리드:** 카드 `repeat(auto-fill, minmax(230px, 1fr))`, 컴포넌트 `repeat(auto-fit, minmax(280px, 1fr))`
 - **로드맵 뷰:** roadmap.sh식 수직 단계 경로 — 연결선 + 노드(done/current/locked). current 노드는 액센트 + 4px weak 글로우
 - **Border radius (계층):** sm `6px` · md `10px` · lg `16px` · full `999px` (모든 요소 동일 반경 금지 — 칩/배지만 full)
-- **헤더:** sticky, `backdrop-filter: blur(14px)`, 배경 88% 불투명, 하단 1px border
+- **헤더:** sticky, `backdrop-filter: blur(14px)`, 배경 88% 불투명, 하단 1px border — 상세 규약은 아래 Header 섹션
+
+## Header — AppHeader 2변형 (2026-06-13 PR4, 디자인 리뷰 1A)
+두 변형 모두 **56px · blur 14 · bg 88% 불투명 · 하단 1px border · 콘텐츠 폭 1180 정렬**. 셸은 `lib/widgets/app_header.dart`의 `AppHeaderShell`.
+- **홈형**(`lib/pages/home/home_header.dart` — 홈 전용 구성이라 페이지 폴더): 브랜드 + 내비 앵커 + 테마 토글 + 설정. compact(<768px)에선 내비·설정을 햄버거 메뉴로 통합(기존 동작 이식 — 문서형의 햄버거 신설 금지와 별개). 내비 활성탭 2px 틸 언더라인은 허브형 라우팅 도입 시 적용(홈은 단일 스크롤 페이지라 활성 개념 없음).
+- **문서형**(`AppHeader.document`, 나머지 8페이지): ‹뒤로[+맥락 라벨] + 브레드크럼 "섹션 라벨 / **제목**(w700·ellipsis)" + 우측 **메타 텍스트 → 페이지 액션 → 테마 토글**(슬롯 순서 고정). back은 `Navigator.maybePop`(AppBar 기본과 동일 — 스택 루트에선 숨김). 파괴적 액션(기록 초기화)은 muted 아이콘+확인 다이얼로그, wrong 색 상시 사용 금지.
+- **collapse 우선순위**(좁아질 때, TextPainter 실측 기반 — 제목 최소 가시 12자 확보까지 순서대로 드롭): 검수 날짜 → '✓ 검증됨' 배지 → 섹션 라벨 → 제목 ellipsis → (최후) back 맥락 라벨 텍스트(셰브론 유지). **햄버거 도입 금지.**
+- **글래스 실재 조건:** 페이지가 `extendBodyBehindAppBar: true` + 스크롤 상단 인셋(`headerScrollInset`)으로 콘텐츠를 헤더 밑에 흘릴 때. 예외: plan(본문 NestedScrollView의 내부 sticky 헤더와 겹침 충돌 — 불투명 폴백).
+- 검수 메타: study_doc 헤더 우측에 `✓ 검증됨 · 검수일`(textMuted/textFaint, 본문 검수 배지의 절제된 에코 — 로드 후 표시).
 
 ## Motion
 - **접근:** minimal-functional — 이해를 돕지 않는 모션은 집중 도구에선 방해
@@ -108,10 +116,12 @@
   - 로딩 상태 등장 페이드인 80ms ease-out (150ms 유예 후) · 스플래시 펄스 1.2s 무한
   - **접근성:** Flutter 측은 `MediaQuery.disableAnimations` 존중(전환·페이드 생략, 7A), 스플래시는 `prefers-reduced-motion` 존중
 
-## Focus — focus-visible 토큰 (2026-06-12 디자인 리뷰 7A)
+## Focus — focus-visible 토큰 (2026-06-12 디자인 리뷰 7A · 2026-06-13 PR4 확장)
 - 키보드 포커스 표시: **액센트 2px 아웃라인 + 2px 오프셋** (`lib/widgets/focus_ring.dart`의 `FocusRing`)
 - 링 공간(2+2px)은 평시에도 투명하게 확보 — 포커스 이동 시 레이아웃 시프트 없음
-- 적용 표면: 상태뷰 버튼·테마 토글(PR2 적용 완료) · 헤더 내비(PR4 예정)
+- **인셋 변형 `InsetFocusRing`/합성 `FocusTap`(PR4 DT4):** 카드 그리드·퀴즈 선택지·34px 문항 칩처럼 바깥 4px 확보가 격자 간격을 바꾸는 표면은 경계 **안쪽**에 액센트 2px 링(foregroundDecoration, 레이아웃 영향 0)
+- 적용 표면: 상태뷰 버튼·테마 토글(PR2) · 헤더 전체(back·내비·토글·설정·메뉴·초기화) + 퀴즈 선택지·버튼·문항 그리드·플래그·카드·CTA·출처 필·플랜 행/월 셀(PR4 — 감사표: docs/superpowers/specs/2026-06-13-pr4-pattern-mapping.md §2)
+- 규칙: 모든 인터랙티브는 ①Tab 도달 ②링 표시 ③Enter/Space 동작. GestureDetector 단독 인터랙티브 금지(InkWell 계열 사용)
 
 ## State Views — 비동기 페이지 공용 상태 뷰 (lib/widgets/state_views.dart)
 비동기 페이지 7종(StudyDoc/Quiz/Exam/CertExam/CertDetail/Review/Report)의 로딩/빈/에러 표시 표준.
@@ -156,3 +166,4 @@
 | 2026-06-13 | 스플래시 + 보이스(합니다체) + 테마 영속화 (PR1) | 백색 화면 제거(시각 리펙토링 B안 WS1·WS2·WS9). 2026-06-12 디자인 리뷰 8건 결정 반영 — 헤어라인 진짜 진행률, 워치독 비차단, 워드마크만(통계 기각), reduced-motion |
 | 2026-06-13 | 라우트 fade 전환(6키) + 상태뷰 3종 + focus-visible 토큰 (PR2) | 시각 리펙토링 B안 WS3·WS4. 전환 enter 200/exit 150ms, Loading 150ms 유예, Empty 아이콘 없음(2A), Error wrong 시맨틱+복구 2경로, 카피 매트릭스 합니다체(3A), disableAnimations 존중(7A) |
 | 2026-06-13 | Pretendard Variable(woff2) 전환 + Wght 토큰 (PR3) | 시각 리펙토링 B안 WS5. 폰트 6.9→2.75MB(임계 경로 단축), 모든 weight 정확 렌더(디퍼럴 스와프 문제 없음), fontWeight↔fontVariations 1:1 게이트 |
+| 2026-06-13 | AppHeader 2변형 롤아웃(9페이지) + collapse 규약 + 글래스(extend) + focus 인셋 변형 + 키보드 감사 (PR4) | 시각 리펙토링 B안 WS6·7·8 + DT4. 헤더 셸 56px 통일(홈 60→56), 브레드크럼 분해(정보 손실 0 — 인벤토리 대조), 세션 액션은 본문 유지(OQ2), plan만 비확장(NestedScrollView 충돌), GestureDetector 인터랙티브 0건화 |

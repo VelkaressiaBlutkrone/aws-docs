@@ -10,6 +10,8 @@ import '../models/exam_session.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
+import '../widgets/badges.dart';
+import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
 
 class StudyDocPage extends StatefulWidget {
@@ -125,7 +127,7 @@ class _DocHeader extends StatelessWidget {
           runSpacing: Gap.sm,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            _badge(c.correctWeak, c.correct, '✓ 검증됨'),
+            AppBadge(label: '✓ 검증됨', bg: c.correctWeak, fg: c.correct),
             _chip(
                 context,
                 doc.domainName != null
@@ -152,29 +154,10 @@ class _DocHeader extends StatelessWidget {
     );
   }
 
-  Widget _badge(Color bg, Color fg, String text) => Builder(
-        builder: (_) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-              color: bg, borderRadius: BorderRadius.circular(Radii.full)),
-          child: Text(text,
-              style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, fontVariations: Wght.w800, color: fg)),
-        ),
-      );
-
   Widget _chip(BuildContext context, String text) {
     final c = context.c;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: c.surface2,
-        borderRadius: BorderRadius.circular(Radii.full),
-      ),
-      child: Text(text,
-          style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.textMuted)),
-    );
+    return AppBadge(
+        label: text, bg: c.surface2, fg: c.textMuted, strong: false);
   }
 }
 
@@ -221,22 +204,25 @@ class _StartQuizButton extends StatelessWidget {
       required bool filled,
       required VoidCallback onTap}) {
     final c = context.c;
-    return InkWell(
-      onTap: onTap,
+    return InsetFocusRing(
       borderRadius: BorderRadius.circular(Radii.sm),
-      child: Container(
-        height: 48,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: filled ? c.accent : c.surface,
-          borderRadius: BorderRadius.circular(Radii.sm),
-          border: filled ? null : Border.all(color: c.accent, width: 1.5),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Radii.sm),
+        child: Container(
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: filled ? c.accent : c.surface,
+            borderRadius: BorderRadius.circular(Radii.sm),
+            border: filled ? null : Border.all(color: c.accent, width: 1.5),
+          ),
+          child: Text(label,
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                  color: filled ? c.onAccent : c.accent)),
         ),
-        child: Text(label,
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                color: filled ? c.onAccent : c.accent)),
       ),
     );
   }

@@ -17,6 +17,7 @@ import '../models/certification.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
+import '../widgets/badges.dart';
 import '../widgets/state_views.dart';
 import 'quiz_page.dart'; // QuizView
 
@@ -237,18 +238,11 @@ class _ReviewListPageState extends State<ReviewListPage> {
                 children: [
                   Text(title, style: t.titleMedium),
                   const SizedBox(height: Gap.xs),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(
-                        color: c.wrongWeak,
-                        borderRadius: BorderRadius.circular(Radii.full)),
-                    child: Text('오답 $count',
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800, fontVariations: Wght.w800,
-                            color: c.wrong)),
-                  ),
+                  AppBadge(
+                      label: '오답 $count',
+                      bg: c.wrongWeak,
+                      fg: c.wrong,
+                      vPad: 3),
                 ],
               ),
             ),
