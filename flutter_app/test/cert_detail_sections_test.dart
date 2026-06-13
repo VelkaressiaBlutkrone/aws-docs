@@ -23,6 +23,22 @@ Widget _host(Widget child) => MaterialApp(
     );
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  // 에셋은 setUpAll에서 1회만 로드 — testWidgets 본문에서 실제 비동기를
+  // await하면 연속 실행에서 해소가 지연/유실되어 행이 걸릴 수 있다(실측:
+  // 단독 통과·파일 연속 실행 10분 타임아웃).
+  late final ExamGuide guide;
+  late final ExamSummary summary;
+  setUpAll(() async {
+    final gRaw =
+        await rootBundle.loadString('assets/exam_guides/CLF-C02.json');
+    guide = ExamGuide.fromJson(json.decode(gRaw) as Map<String, dynamic>);
+    final sRaw = await rootBundle.loadString('assets/exam_summaries.json');
+    final m = json.decode(sRaw) as Map<String, dynamic>;
+    summary = ExamSummary.fromJson(m['CLF-C02'] as Map<String, dynamic>);
+  });
+
   testWidgets('CertHeaderSection: 레벨·타이틀·대상 렌더(guide 없음 → 팩트 필 없음)',
       (tester) async {
     final cert = certByCode('CLF-C02')!;
@@ -34,17 +50,11 @@ void main() {
 
   testWidgets('CertHeaderSection: guide가 있으면 팩트 필(합격선 등) 노출', (tester) async {
     final cert = certByCode('CLF-C02')!;
-    final raw = await rootBundle.loadString('assets/exam_guides/CLF-C02.json');
-    final guide = ExamGuide.fromJson(json.decode(raw) as Map<String, dynamic>);
     await tester.pumpWidget(_host(CertHeaderSection(cert: cert, guide: guide)));
     expect(find.textContaining('합격'), findsWidgets);
   });
 
   testWidgets('SummaryBlock: 요약본 라벨·목적·비공식 고지 렌더', (tester) async {
-    final raw = await rootBundle.loadString('assets/exam_summaries.json');
-    final m = json.decode(raw) as Map<String, dynamic>;
-    final summary =
-        ExamSummary.fromJson(m['CLF-C02'] as Map<String, dynamic>);
     await tester.pumpWidget(_host(SummaryBlock(summary: summary)));
     expect(find.text('한국어 학습 요약본'), findsOneWidget);
     expect(find.textContaining('비공식 학습 요약본'), findsOneWidget);
@@ -84,8 +94,6 @@ void main() {
   });
 
   testWidgets('OfficialGuideSection: 도메인 카드 + 비중 필 렌더', (tester) async {
-    final raw = await rootBundle.loadString('assets/exam_guides/CLF-C02.json');
-    final guide = ExamGuide.fromJson(json.decode(raw) as Map<String, dynamic>);
     await tester.pumpWidget(_host(OfficialGuideSection(guide: guide)));
     expect(find.text('공식 시험 가이드'), findsOneWidget);
     expect(find.textContaining('도메인 1.'), findsOneWidget);
