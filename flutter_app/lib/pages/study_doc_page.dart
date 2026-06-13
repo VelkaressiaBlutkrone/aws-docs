@@ -9,6 +9,9 @@ import '../data/viewed_docs_store.dart';
 import '../models/exam_session.dart';
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
+import '../widgets/badges.dart';
+import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
 
 class StudyDocPage extends StatefulWidget {
@@ -38,59 +41,71 @@ class _StudyDocPageState extends State<StudyDocPage> {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return Scaffold(
-      backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text(widget.entry.title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
-      ),
-      body: SelectionArea(
-        child: FutureBuilder<StudyContent>(
-          future: _future,
-          builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done) {
-              return const Center(
-                  child: LoadingView(label: '학습문서를 불러오고 있습니다…'));
-            }
-            final doc = snap.data;
-            if (snap.hasError || doc == null) {
-              return Center(
-                child: ErrorView(
-                  message: '콘텐츠를 불러오지 못했습니다.',
-                  onRetry: () => setState(() => _future = _load()),
-                  onHome: () => context.go('/'),
-                ),
-              );
-            }
-            return Scrollbar(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: Layout.measure),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                          Gap.xl, Gap.xl, Gap.xl, Gap.xl4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _DocHeader(doc: doc),
-                          StudyMarkdownView(blocks: doc.blocks),
-                          const SizedBox(height: Gap.xl2),
-                          _StartQuizButton(entry: widget.entry),
-                        ],
+    // FutureBuilder가 Scaffold를 감싼다(PR4) — 헤더의 검수 메타(✓ 검증됨·
+    // 검수일)가 본문 로드 결과를 받아야 해서다. 로딩/에러 분기 표시는 기존과
+    // 동일하게 body 안에서 일어난다.
+    return FutureBuilder<StudyContent>(
+      future: _future,
+      builder: (context, snap) {
+        final done = snap.connectionState == ConnectionState.done;
+        final doc = done && !snap.hasError ? snap.data : null;
+        return Scaffold(
+          backgroundColor: c.bg,
+          extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+          appBar: AppHeader.document(
+            backLabel: widget.entry.certCode,
+            sectionLabel: '학습 문서',
+            title: widget.entry.title,
+            metaBadge: doc != null ? '✓ 검증됨' : null,
+            metaDate: doc?.lastVerified,
+          ),
+          body: SelectionArea(
+            child: Builder(
+              builder: (context) {
+                if (!done) {
+                  return const Center(
+                      child: LoadingView(label: '학습문서를 불러오고 있습니다…'));
+                }
+                if (doc == null) {
+                  return Center(
+                    child: ErrorView(
+                      message: '콘텐츠를 불러오지 못했습니다.',
+                      onRetry: () => setState(() => _future = _load()),
+                      onHome: () => context.go('/'),
+                    ),
+                  );
+                }
+                return Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints(maxWidth: Layout.measure),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                              Gap.xl,
+                              headerScrollInset(context),
+                              Gap.xl,
+                              Gap.xl4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _DocHeader(doc: doc),
+                              StudyMarkdownView(blocks: doc.blocks),
+                              const SizedBox(height: Gap.xl2),
+                              _StartQuizButton(entry: widget.entry),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -112,7 +127,7 @@ class _DocHeader extends StatelessWidget {
           runSpacing: Gap.sm,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            _badge(c.correctWeak, c.correct, '✓ 검증됨'),
+            AppBadge(label: '✓ 검증됨', bg: c.correctWeak, fg: c.correct),
             _chip(
                 context,
                 doc.domainName != null
@@ -139,29 +154,10 @@ class _DocHeader extends StatelessWidget {
     );
   }
 
-  Widget _badge(Color bg, Color fg, String text) => Builder(
-        builder: (_) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-              color: bg, borderRadius: BorderRadius.circular(Radii.full)),
-          child: Text(text,
-              style: TextStyle(
-                  fontSize: 12, fontWeight: FontWeight.w800, fontVariations: Wght.w800, color: fg)),
-        ),
-      );
-
   Widget _chip(BuildContext context, String text) {
     final c = context.c;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: c.surface2,
-        borderRadius: BorderRadius.circular(Radii.full),
-      ),
-      child: Text(text,
-          style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.textMuted)),
-    );
+    return AppBadge(
+        label: text, bg: c.surface2, fg: c.textMuted, strong: false);
   }
 }
 
@@ -208,22 +204,25 @@ class _StartQuizButton extends StatelessWidget {
       required bool filled,
       required VoidCallback onTap}) {
     final c = context.c;
-    return InkWell(
-      onTap: onTap,
+    return InsetFocusRing(
       borderRadius: BorderRadius.circular(Radii.sm),
-      child: Container(
-        height: 48,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: filled ? c.accent : c.surface,
-          borderRadius: BorderRadius.circular(Radii.sm),
-          border: filled ? null : Border.all(color: c.accent, width: 1.5),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Radii.sm),
+        child: Container(
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: filled ? c.accent : c.surface,
+            borderRadius: BorderRadius.circular(Radii.sm),
+            border: filled ? null : Border.all(color: c.accent, width: 1.5),
+          ),
+          child: Text(label,
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                  color: filled ? c.onAccent : c.accent)),
         ),
-        child: Text(label,
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                color: filled ? c.onAccent : c.accent)),
       ),
     );
   }

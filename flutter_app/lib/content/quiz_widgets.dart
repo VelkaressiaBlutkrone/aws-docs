@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/focus_ring.dart';
 
 /// 보기 카드 상태(연습: 공개 후 correct/wrong / 시험: 항상 idle).
 enum OptState { idle, correct, wrong }
@@ -37,19 +38,22 @@ class OptionTile extends StatelessWidget {
     }
     return Padding(
       padding: const EdgeInsets.only(bottom: Gap.sm),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(Radii.md),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(Gap.md),
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(Radii.md),
-            border: Border.all(color: border, width: selected ? 2 : 1),
+      // 인셋 링(DT4): 선택지는 키보드(Tab→Enter/Space)로도 답할 수 있어야 한다.
+      child: InsetFocusRing(
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.md),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(Gap.md),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(Radii.md),
+              border: Border.all(color: border, width: selected ? 2 : 1),
+            ),
+            child: Text(text,
+                style: TextStyle(fontSize: 15, height: 1.5, color: c.text)),
           ),
-          child: Text(text,
-              style: TextStyle(fontSize: 15, height: 1.5, color: c.text)),
         ),
       ),
     );
@@ -103,22 +107,25 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     final enabled = onTap != null;
-    return InkWell(
-      onTap: onTap,
+    return InsetFocusRing(
       borderRadius: BorderRadius.circular(Radii.sm),
-      child: Container(
-        height: 44,
-        padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: enabled ? c.accent : c.surface2,
-          borderRadius: BorderRadius.circular(Radii.sm),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Radii.sm),
+        child: Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: enabled ? c.accent : c.surface2,
+            borderRadius: BorderRadius.circular(Radii.sm),
+          ),
+          child: Text(label,
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                  color: enabled ? c.onAccent : c.textFaint)),
         ),
-        child: Text(label,
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                color: enabled ? c.onAccent : c.textFaint)),
       ),
     );
   }
@@ -306,18 +313,21 @@ class _ConceptCue extends StatelessWidget {
       children: [
         chip,
         if (onOpenStudy != null)
-          InkWell(
-            onTap: onOpenStudy,
+          InsetFocusRing(
             borderRadius: BorderRadius.circular(Radii.sm),
-            child: Padding(
-              // 44px 터치 타깃 확보.
-              padding: const EdgeInsets.symmetric(
-                  vertical: Gap.md, horizontal: Gap.xs),
-              child: Text('→ 학습문서',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: c.accent)),
+            child: InkWell(
+              onTap: onOpenStudy,
+              borderRadius: BorderRadius.circular(Radii.sm),
+              child: Padding(
+                // 44px 터치 타깃 확보.
+                padding: const EdgeInsets.symmetric(
+                    vertical: Gap.md, horizontal: Gap.xs),
+                child: Text('→ 학습문서',
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                        color: c.accent)),
+              ),
             ),
           ),
       ],

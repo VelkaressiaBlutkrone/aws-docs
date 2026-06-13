@@ -6,12 +6,24 @@ _갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 
 ---
 
-## 0. 다음: 시각 리펙토링 B안 PR4 (4분할 중 마지막)
+## 0. 다음: 사용자 우선순위 결정 — 시각 리펙토링 B안 전체(PR1~4) 종료
 
-**설계 정본:** `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-main-design-20260612-200051.md` (승인 8/10, eng+design CLEARED). PR1(§0-x)·PR2(§0-w)·PR3(§0-v) 출고 완료.
+**시각 리펙토링 B안 4분할 전부 출고 완료** (PR4 = §0-u). 다음 후보는 사용자 결정 사항:
+- **모의고사 중량·증가 검토 브레인스토밍(사용자 지시 2026-06-11):** §2 백로그(①CLF ≥15 심화 ②SAA-C03 문항 ③C-중량) 우선순위 재검토.
+- SAA-C03 학습문서 잔여 23개(§2, 정본=saa-t1-1.md) 진행.
+- §0-b 선택 항목(2기기 pull 검증·개인정보 고지) · 잔여 존치 플래그(§0-y).
+- (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
-- **PR4 — 공용 위젯 + AppHeader 롤아웃 + 페이지 분해 (T7·T8·T9·T12·DT4 + DT3 잔여 + T10):** 8페이지 AppBar 인벤토리 선행 → AppHeader 슬롯(back/title/actions)·collapse 규약(날짜→배지→섹션라벨→ellipsis·햄버거 금지) → 문서형 5페이지(cert_detail·study_doc·review·report·plan) 교체·세션형 3페이지 시각 셸 공통 → home/cert_detail/plan 분해(섹션 단위 위젯 테스트 선행, home 내부 섹션 클래스는 이미 위젯 단위라 파일 이동 위주) → 글로벌 에러 핸들러(`FlutterError.onError`/`PlatformDispatcher.onError` — state_views의 ErrorView와 연결) → **전 화면 키보드 접근성 감사**(Tab 순서·focus-visible 전 인터랙티브·Enter/Space — 퀴즈 선택지·플래그·카드·로드맵 노드 포함) + **17종 패턴 매핑표(T10/SC7)**. 와이어프레임 정답지 2번 섹션(AppHeader). 게이트: 단계별 analyze+전체 테스트+dogfood(360/768/1180px), AppBar 기능 손실 0(인벤토리 대조), Tab 전 화면 내비 dogfood, **DESIGN.md 갱신(헤더 2변형+collapse 규약)**.
-- **재사용 인프라:** state_views/FocusRing(`lib/widgets/`)을 헤더 내비 focus-visible에 그대로 사용. 카피 매트릭스 정본: `docs/superpowers/specs/2026-06-13-pr2-state-views-copy-matrix.md`. 새 weight 토큰 규율: **fontWeight를 추가하면 반드시 `Wght` 토큰 병기**(§0-v).
+## 0-u. 완료: 시각 리펙토링 PR4 — AppHeader 롤아웃·페이지 분해·키보드 감사 (2026-06-13)
+
+**B안 마지막 슬라이스 (T7·T8·T9·T12·DT4+DT3 잔여·T10).** 게이트: analyze 신규 0건(기존 3건 잔존 — cacheExtent는 plan_agenda.dart로 이주) · **499 테스트 전부 그린**(474→499: AppHeader 14·cert_detail 섹션 8·에러 핸들러 3) · Wght 1:1 게이트 0건 · dogfood 9페이지×(1180+반응형 360/768+다크) 콘솔 에러 0 · 키보드 Tab/Enter/FocusRing 실증.
+
+- **T12 AppHeader 롤아웃:** `widgets/app_header.dart`(문서형+셸 56px·blur 14·88%+`HeaderCollapse` 순수 함수+`ThemeToggleButton`+`HeaderIconButton`+`headerScrollInset`) — 9페이지 전부 교체. 홈형은 `pages/home/home_header.dart`(60→56px, compact 햄버거 이식). 브레드크럼 "섹션 / 제목"으로 기존 타이틀 분해(정보 손실 0 — 인벤토리 대조 체크리스트 전 항목 ✓). collapse는 TextPainter 실측 기반(날짜→배지→섹션→ellipsis 12자→backLabel 최후). **글래스(extend)는 plan 제외 전 페이지** — plan은 내부 SliverAppBar 충돌(재량 결정 3). 세션 액션(타이머·플래그)은 본문 유지=OQ2 해소. 홈 앵커 스크롤은 헤더 높이 보정(`_goto` alignment). study_doc은 FutureBuilder가 Scaffold를 감싸도록 재구조화(헤더 검수 메타 `✓ 검증됨 · 날짜` 로드 후 표시). 테마 토글이 전 페이지 헤더에 신설(ThemeScope 셀프서비스). 인벤토리·재량 결정 정본: `docs/superpowers/specs/2026-06-13-pr4-appbar-inventory.md`.
+- **T8 분해:** home 1,286→**202줄**(`pages/home/` 10파일) · cert_detail 904→**164줄**(`pages/cert_detail/` 5파일, **섹션 위젯 테스트 8케이스 선행** — SelectionArea 셸 밖 단독 렌더) · plan 707→**64줄**(`pages/plan/` 3파일, planSummary는 plan_page가 re-export해 테스트 import 보존). 전부 ≤400 게이트 ✓. 분해가 잠재 결함 1건 노출·수정: cert_detail 도메인 아코디언의 잉크가 장식 밑에 그려지던 문제(투명 Material 삽입).
+- **T7 공용 위젯:** `AppBadge`(4페이지 중복 배지 레시피 통합) 신설 + 헤더 4종 + FocusRing 계열 + state_views 3종 = lib/widgets/ ≥5종 ✓. 카드·진행률바·섹션헤더는 페이지별 기하가 달라 미승격(선제 승격 금지 — 매핑표에 기록).
+- **T9 에러 핸들러:** `lib/app_errors.dart` — FlutterError.onError(presentError+로그)·PlatformDispatcher.onError(true)·ErrorWidget.builder(절제 박스)·`appLog` 단일 훅(부팅 degrade 경로 연결). 단위 테스트 3(핸들러 저장→복원 필수 — 테스트 프레임워크가 onError 소유).
+- **DT4 키보드 감사:** focus-visible **인셋 변형 신설**(`InsetFocusRing`/`FocusTap` — 밀집 그리드에서 레이아웃 불변) + 전 인터랙티브 적용(선택지·버튼·그리드 칩·플래그·카드·CTA·플랜 행/월 셀). **히어로 출처 필이 GestureDetector라 키보드 조작 불가였던 결함 수정**(InkWell 전환). 감사표+17종 매핑표(T10): `docs/superpowers/specs/2026-06-13-pr4-pattern-mapping.md` (SC7의 "16 적용"은 10 Local Storage의 오기로 판단·기록).
+- **유지 규율:** 새 인터랙티브는 InkWell 계열+(Inset)FocusRing 필수, GestureDetector 단독 금지(DESIGN.md Focus 규칙). 헤더 슬롯 변경 시 인벤토리 문서의 기능 손실 0 체크리스트 갱신.
 
 ## 0-v. 완료: 시각 리펙토링 PR3 — Pretendard Variable(woff2) 전환, main 배포됨 (2026-06-13)
 
@@ -85,10 +97,11 @@ _갱신: 2026-06-13 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 ---
 
 ## 3. 워킹트리 / 메모
-- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **474 테스트** 그린 기준점(2026-06-13, PR3까지 출고 후에도 동일).
+- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **499 테스트** 그린 기준점(2026-06-13, PR4 출고 후).
+- **테스트 함정 추가(PR4):** testWidgets 본문에서 `rootBundle.loadString`을 await하면 파일 연속 실행에서 행(10분 타임아웃, 단독은 통과) — 에셋은 `setUpAll` 1회 로드. 메모리 [[flutter-selectionarea-widget-test-pitfall]] 갱신됨.
 - `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3에서 리소스 필터·스로틀(HEAVY)·MIME에 woff2 보정 완료(otf/ttf/woff2 동등 취급). 전/후 비교 보고서: `pr3-before-light.json` / `pr3-after2-light.json`.
 - **로컬 dogfood 서버 주의:** 포트 8124에 이전 세션의 진단용 node 서버(cwd 기준 `build/web` 서빙)가 살아 있을 수 있음 — `EADDRINUSE`면 새로 띄우지 말고 서빙 콘텐츠 해시를 로컬 빌드와 대조 후 재사용(요청 시점에 파일을 읽는 구조라 재빌드가 그대로 반영됨). browse dogfood 함정 모음(SW 캐시·taskId `clf-t1-1` 형식·해시 goto≠리로드·main.dart.js 한국어 grep 무효): 메모리 [[flutter-web-dogfood-browse]].
 - **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
-**다음 세션 첫 수: §0 시각 리펙토링 PR4(AppHeader 롤아웃·페이지 분해·키보드 감사·17종 매핑표 — B안 마지막 슬라이스). 끼어들기 후보: 모의고사 중량·증가 브레인스토밍(§0 대기 목록). 그 외: §0-b 선택 항목(2기기 pull·개인정보 고지).**
+**다음 세션 첫 수: §0 우선순위 결정(사용자) — 1순위 후보는 모의고사 중량·증가 브레인스토밍(2026-06-11 사용자 지시). 시각 리펙토링 B안은 PR1~4 전부 출고 종료(§0-u). 그 외: SAA-C03 잔여 문서 · §0-b 선택 항목(2기기 pull·개인정보 고지).**

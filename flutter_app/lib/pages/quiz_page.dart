@@ -12,6 +12,7 @@ import '../data/mock_exam.dart';
 import '../models/attempt_record.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 
 /// 얇은 로더: 자산에서 QuestionBank를 읽어 5문항 차출+선택지 셔플 후 QuizView에 주입.
@@ -51,13 +52,10 @@ class _QuizPageState extends State<QuizPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.entry.title} · 연습 문제',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+      extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+      appBar: AppHeader.document(
+        sectionLabel: widget.entry.title,
+        title: '연습 문제',
       ),
       body: FutureBuilder<QuestionBank>(
         future: _future,
@@ -163,7 +161,8 @@ class _QuizViewState extends State<QuizView> {
   Widget build(BuildContext context) {
     if (_finished) {
       return SingleChildScrollView(
-        padding: const EdgeInsets.all(Gap.xl),
+        padding: EdgeInsets.all(Gap.xl)
+            .copyWith(top: headerScrollInset(context)),
         child: ResultsView(bank: widget.bank, picked: _picked),
       );
     }
@@ -174,7 +173,8 @@ class _QuizViewState extends State<QuizView> {
     final picked = _picked[_index];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(Gap.xl),
+      padding:
+          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

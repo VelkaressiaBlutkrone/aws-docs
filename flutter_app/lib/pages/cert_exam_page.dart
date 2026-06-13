@@ -18,6 +18,7 @@ import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 import 'exam_page.dart'; // ExamView
 
@@ -162,14 +163,10 @@ class _CertExamPageState extends State<CertExamPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text(
-            '${widget.cert.code} · ${widget.weighted ? '약점 집중 모의고사' : '통합 모의고사'}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+      extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+      appBar: AppHeader.document(
+        sectionLabel: widget.cert.code,
+        title: widget.weighted ? '약점 집중 모의고사' : '통합 모의고사',
       ),
       body: FutureBuilder<_MockLoad>(
         future: _future,

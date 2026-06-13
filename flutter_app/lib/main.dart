@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'app_errors.dart';
 import 'app_router.dart';
 import 'data/cloud/app_resume.dart';
 import 'data/cloud/firebase_auth_service.dart';
@@ -18,6 +19,7 @@ final ValueNotifier<SyncController?> syncController = ValueNotifier(null);
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  installGlobalErrorHandlers(); // WS8 — 프레임워크/비동기 에러 로깅+비정지
 
   // 첫 프레임을 Firebase init 뒤로 미루지 않는다(백색 화면 주범 ② — WS2).
   // 스플래시 제거 트리거인 flutter-first-frame이 최대한 일찍 발생해야 한다.
@@ -30,7 +32,7 @@ void main() {
 
 /// 첫 프레임 뒤 호출되는 클라우드 동기 후행 초기화.
 /// 미설정이면 아무것도 하지 않고(기존 graceful degrade 계약), 예외 시 로컬 전용으로
-/// degrade한다 — 앱은 클라우드 없이 계속 동작. (전역 핸들러 연결은 PR4/WS8)
+/// degrade한다 — 앱은 클라우드 없이 계속 동작. 로깅은 WS8 공용 훅(appLog).
 Future<void> initCloudSync(
     {Future<bool> Function() init = initFirebaseIfConfigured}) async {
   try {
@@ -44,7 +46,7 @@ Future<void> initCloudSync(
       onAppResume: appResumeSignal(),
     )..start();
   } catch (e, st) {
-    debugPrint('cloud sync init 실패 — 로컬 전용으로 동작: $e\n$st');
+    appLog('cloud sync init 실패 — 로컬 전용으로 동작: $e\n$st');
   }
 }
 

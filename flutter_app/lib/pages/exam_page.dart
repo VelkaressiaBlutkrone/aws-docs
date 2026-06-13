@@ -18,6 +18,8 @@ import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
+import '../widgets/app_header.dart';
+import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
 
 /// 모델 주입식 시험 러너(테스트 대상). 자산/localStorage 의존 없음.
@@ -247,7 +249,8 @@ class _ExamViewState extends State<ExamView> {
     final low = remaining <= (widget.durationSec * 0.1).ceil();
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(Gap.xl),
+      padding:
+          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -333,7 +336,8 @@ class _ExamViewState extends State<ExamView> {
 
   Widget _results(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(Gap.xl),
+      padding:
+          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -376,38 +380,42 @@ class _GridChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return InkWell(
-      onTap: onTap,
+    // 인셋 링(DT4): 34px 밀집 그리드라 바깥 링(4px)은 간격을 깨뜨린다.
+    return InsetFocusRing(
       borderRadius: BorderRadius.circular(Radii.sm),
-      child: Container(
-        width: 34,
-        height: 34,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: answered ? c.accentWeak : c.surface,
-          borderRadius: BorderRadius.circular(Radii.sm),
-          border: Border.all(
-            color: current ? c.accent : (flagged ? c.warning : c.border),
-            width: current ? 2 : 1,
-          ),
-        ),
-        child: Stack(
-          clipBehavior: Clip.none,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Radii.sm),
+        child: Container(
+          width: 34,
+          height: 34,
           alignment: Alignment.center,
-          children: [
-            Text(label,
-                style: TextStyle(
-                    fontFamily: AppTheme.monoFamily,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                    color: answered ? c.accentStrong : c.textMuted)),
-            if (flagged)
-              Positioned(
-                top: -2,
-                right: -2,
-                child: Icon(Icons.flag, size: 11, color: c.warning),
-              ),
-          ],
+          decoration: BoxDecoration(
+            color: answered ? c.accentWeak : c.surface,
+            borderRadius: BorderRadius.circular(Radii.sm),
+            border: Border.all(
+              color: current ? c.accent : (flagged ? c.warning : c.border),
+              width: current ? 2 : 1,
+            ),
+          ),
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              Text(label,
+                  style: TextStyle(
+                      fontFamily: AppTheme.monoFamily,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                      color: answered ? c.accentStrong : c.textMuted)),
+              if (flagged)
+                Positioned(
+                  top: -2,
+                  right: -2,
+                  child: Icon(Icons.flag, size: 11, color: c.warning),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -429,28 +437,32 @@ class _SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return InkWell(
-      onTap: onTap,
+    // 인셋 링(DT4): 플래그·이전 버튼 — Tab으로 닿고 Enter/Space로 동작.
+    return InsetFocusRing(
       borderRadius: BorderRadius.circular(Radii.sm),
-      child: Container(
-        height: 44,
-        padding: const EdgeInsets.symmetric(horizontal: Gap.md),
-        decoration: BoxDecoration(
-          color: active ? c.warningWeak : c.surface,
-          borderRadius: BorderRadius.circular(Radii.sm),
-          border: Border.all(color: active ? c.warning : c.border),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 16, color: active ? c.warning : c.textMuted),
-            const SizedBox(width: Gap.xs),
-            Text(label,
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                    color: active ? c.warning : c.textMuted)),
-          ],
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Radii.sm),
+        child: Container(
+          height: 44,
+          padding: const EdgeInsets.symmetric(horizontal: Gap.md),
+          decoration: BoxDecoration(
+            color: active ? c.warningWeak : c.surface,
+            borderRadius: BorderRadius.circular(Radii.sm),
+            border: Border.all(color: active ? c.warning : c.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 16, color: active ? c.warning : c.textMuted),
+              const SizedBox(width: Gap.xs),
+              Text(label,
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                      color: active ? c.warning : c.textMuted)),
+            ],
+          ),
         ),
       ),
     );
@@ -564,13 +576,10 @@ class _ExamPageState extends State<ExamPage> {
     final c = context.c;
     return Scaffold(
       backgroundColor: c.bg,
-      appBar: AppBar(
-        backgroundColor: c.bg,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        shape: Border(bottom: BorderSide(color: c.border)),
-        title: Text('${widget.entry.title} · 시험 모드',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+      extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
+      appBar: AppHeader.document(
+        sectionLabel: widget.entry.title,
+        title: '시험 모드',
       ),
       body: FutureBuilder<_ExamLoad>(
         future: _future,
