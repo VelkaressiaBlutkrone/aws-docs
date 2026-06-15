@@ -365,14 +365,14 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-4-q14",
       "examGuideTaskId": "clf-t2-4",
       "skill": "Trusted Advisor vs Config 혼동 교정",
       "difficulty": "applied",
-      "stem": "한 보안 담당자가 \"지난 30일 동안 누가 어떤 보안 그룹 규칙을 언제 변경했는지\" 그 구성 변경 이력을 시간 순으로 추적·확인하려 한다. 마침 팀에서 모범 사례 점검 도구인 AWS Trusted Advisor를 쓰고 있어 거기서 찾으려 했으나 적절하지 않다. 이 요구에 가장 적합한 AWS 서비스는?",
+      "stem": "한 보안 담당자가 특정 보안 그룹이 지난 30일 동안 어떤 규칙 구성으로 바뀌어 왔는지(구성 상태의 시간별 변경 이력)를 추적하고, 현재 구성이 정해진 규칙을 준수하는지 평가하려 한다. 마침 팀에서 모범 사례 점검 도구인 AWS Trusted Advisor를 쓰고 있어 거기서 찾으려 했으나 적절하지 않다. 이 요구에 가장 적합한 AWS 서비스는?",
       "options": [
         "AWS Config",
         "AWS Trusted Advisor",
@@ -380,7 +380,7 @@
         "AWS WAF"
       ],
       "correct": 0,
-      "explanation": "리소스의 구성 상태와 변경 이력(누가·언제·무엇을 바꿨는지)을 기록·추적하는 것은 AWS Config의 역할입니다. AWS Trusted Advisor는 모범 사례에 따라 환경을 점검하고 개선 기회를 권고하는 도구일 뿐, 구성 변경 이력을 시간 순으로 보여 주지 않습니다.",
+      "explanation": "리소스의 구성 상태와 시간에 따른 변경 이력(무엇이 언제 어떻게 바뀌었는지), 그리고 구성이 규칙을 준수하는지 평가하는 것은 AWS Config의 역할입니다. (변경을 일으킨 API를 '누가' 호출했는지는 CloudTrail의 영역으로 구분됩니다.) AWS Trusted Advisor는 모범 사례에 따라 환경을 점검하고 개선 기회를 권고하는 도구일 뿐, 구성 변경 이력을 시간 순으로 보여 주지 않습니다.",
       "wrongExplanations": {
         "1": "AWS Trusted Advisor는 비용·성능·보안·내결함성·서비스 한도 등 모범 사례 위반을 점검·권고하는 도구입니다. 모범 사례 점검 도구라는 점이 매력적인 오답이지만, 구성 변경 이력 추적은 Config의 기능입니다.",
         "2": "AWS Marketplace는 타사 소프트웨어를 찾아 구매·배포하는 카탈로그로, 리소스 구성 변경 이력을 기록하지 않습니다.",
@@ -392,7 +392,7 @@
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-4-q15",
@@ -417,9 +417,13 @@
         {
           "title": "CLF-C02 공식 시험 가이드 — 보안 정보 위치(Knowledge Center·Security Blog·re:Post)",
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "AWS re:Post Knowledge Center — 자주 묻는 질문의 how-to·트러블슈팅 공식 답변 모음",
+          "url": "https://repost.aws/knowledge-center"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

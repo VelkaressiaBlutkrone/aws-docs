@@ -401,7 +401,7 @@
           "url": "https://aws.amazon.com/ko/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-1-q14",
@@ -432,7 +432,7 @@
           "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-1-q15",
@@ -463,7 +463,7 @@
           "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

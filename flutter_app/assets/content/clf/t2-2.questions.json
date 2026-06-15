@@ -361,7 +361,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-2-q14",
@@ -392,7 +392,7 @@
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-2-q15",
@@ -417,9 +417,13 @@
         {
           "title": "CLF-C02 공식 시험 가이드 (ko) — 암호화 옵션: 전송 중 암호화·저장 시 암호화",
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "AWS Well-Architected SEC09-BP02 — 전송 중 암호화 강제(TLS로 네트워크 통신 보호)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_encrypt.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
