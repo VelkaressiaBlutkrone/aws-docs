@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-3-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-3-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

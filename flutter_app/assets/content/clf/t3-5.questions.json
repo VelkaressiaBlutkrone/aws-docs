@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-5-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-5-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

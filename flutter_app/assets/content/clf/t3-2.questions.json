@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-2-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-2-q15",
@@ -415,7 +415,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

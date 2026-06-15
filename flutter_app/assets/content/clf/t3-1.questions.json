@@ -385,7 +385,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-1-q14",
@@ -416,7 +416,7 @@
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-1-q15",
@@ -447,7 +447,7 @@
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

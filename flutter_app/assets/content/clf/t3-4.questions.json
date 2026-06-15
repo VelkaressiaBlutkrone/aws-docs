@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-4-q14",
@@ -366,25 +366,25 @@
       "difficulty": "applied",
       "stem": "한 팀이 \"ElastiCache가 인메모리라 매우 빠르니, 주문 데이터를 영구 보관하는 유일한 기본 데이터베이스로 ElastiCache만 사용하겠다\"고 제안한다. 이 제안의 가장 정확한 평가는?",
       "options": [
-        "부적절하다 — ElastiCache는 DB 부하를 줄이는 캐시 계층이지 내구성 있는 주 저장소가 아니므로, RDS·DynamoDB 같은 영구 DB를 주 저장소로 두고 그 앞에 캐시로 써야 한다",
+        "부적절하다 — ElastiCache는 보통 DB 부하를 줄이는 캐시·초저지연 계층으로 쓰며, 영구 거래 데이터의 기준(주) 저장소로는 RDS·DynamoDB 같은 DB가 더 적합하므로, 그런 DB를 주 저장소로 두고 그 앞에 캐시로 써야 한다",
         "적절하다 — ElastiCache는 인메모리라 빠르므로 모든 영구 데이터베이스를 대체할 수 있다",
         "적절하다 — ElastiCache는 데이터를 디스크에 영구 저장하는 관계형 데이터베이스이기 때문이다",
         "부적절하다 — ElastiCache는 읽기를 지원하지 않아 조회 가속에 쓸 수 없기 때문이다"
       ],
       "correct": 0,
-      "explanation": "ElastiCache는 자주 조회되는 데이터를 메모리에 캐시해 애플리케이션 성능을 높이고 백엔드 DB 부하를 줄이는 인메모리 캐시 계층입니다. 목적은 읽기 성능 가속·부하 경감이지 내구성 있는 주 데이터 저장소가 아닙니다. 따라서 주문 같은 영구 데이터는 RDS·DynamoDB 같은 기본 DB에 저장하고, ElastiCache는 그 앞단 캐시로 두는 구성이 적절합니다.",
+      "explanation": "ElastiCache는 자주 조회되는 데이터를 메모리에 캐시해 애플리케이션 성능을 높이고 백엔드 DB 부하를 줄이는 인메모리 캐시·초저지연 계층입니다. 주 용도는 읽기 성능 가속·부하 경감이며, 백업·복제 같은 기능이 있더라도 주문 같은 영구 거래 데이터의 기준(주) 저장소로는 RDS·DynamoDB 같은 DB가 더 적합합니다. 따라서 그런 DB를 주 저장소로 두고 ElastiCache는 그 앞단 캐시로 두는 구성이 적절합니다.",
       "wrongExplanations": {
-        "1": "\"인메모리라 빠르니 영구 DB를 대체한다\"는 흔한 함정입니다. 속도와 내구성은 별개로, ElastiCache는 성능 가속용 캐시이지 주 저장소 대체재가 아닙니다.",
+        "1": "\"인메모리라 빠르니 영구 DB를 대체한다\"는 흔한 함정입니다. 속도가 빠르다고 모든 영구 데이터베이스를 대체할 수 있는 것은 아니며, 영구 거래 데이터의 기준 저장소로는 RDS·DynamoDB가 더 적합합니다.",
         "2": "ElastiCache는 디스크 기반 관계형 데이터베이스가 아니라 분산 인메모리 캐시/스토어입니다. 전제가 사실과 다릅니다.",
         "3": "ElastiCache는 오히려 반복 읽기를 메모리에서 초고속으로 처리하는 것이 핵심 용도입니다. \"읽기를 지원하지 않는다\"는 사실과 반대입니다."
       },
       "sources": [
         {
-          "title": "What is Amazon ElastiCache? — 인메모리 캐시로 성능 가속·백엔드 DB 부하 경감(주 저장소 아님)",
+          "title": "What is Amazon ElastiCache? — 인메모리 캐시로 성능 가속·백엔드 DB 부하 경감(주로 캐시 계층)",
           "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-4-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

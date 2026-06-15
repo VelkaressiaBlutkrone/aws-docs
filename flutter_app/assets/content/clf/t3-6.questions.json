@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-6-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-6-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
