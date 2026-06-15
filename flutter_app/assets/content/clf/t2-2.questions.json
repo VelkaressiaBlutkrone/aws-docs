@@ -335,6 +335,95 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-2-q13",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "거버넌스 서비스 식별 (행동 신호 vs 구성 신호 — CloudTrail/Config 구분 적용)",
+      "difficulty": "applied",
+      "stem": "한 보안 담당자가 어느 시점부터 특정 보안 그룹에 0.0.0.0/0으로 SSH를 허용하는 규칙이 추가된 것을 발견했다. 담당자는 무엇보다 먼저 '이 변경을 일으킨 API 호출을 어떤 사용자나 역할이 언제 실행했는지' 책임 소재를 특정하려 한다. 이 목적에 가장 적합한 서비스는?",
+      "options": [
+        "AWS CloudTrail",
+        "AWS Config",
+        "Amazon CloudWatch",
+        "Amazon GuardDuty"
+      ],
+      "correct": 0,
+      "explanation": "담당자가 원하는 답은 '누가 그 변경 API를 호출했는가'입니다. CloudTrail은 사용자·역할·서비스가 콘솔/CLI/SDK로 취한 행동을 API 호출 이벤트로 기록하므로, 보안 그룹 규칙을 추가한 주체·시각·출처를 행동 감사 기록에서 특정할 수 있습니다. 입력 신호가 'API 호출 이벤트(행동)'이기 때문에 책임 소재 추적은 CloudTrail의 영역입니다.",
+      "wrongExplanations": {
+        "1": "AWS Config는 보안 그룹이 '지금 어떤 규칙으로 구성돼 있고 시간에 따라 어떻게 바뀌었는지'(구성 상태·이력)는 보여 주지만, 그 변경을 일으킨 API를 '누가 호출했는지'라는 행동 주체는 기록하지 않습니다. 무엇이 바뀌었나(Config)와 누가 바꿨나(CloudTrail)는 서로 다른 신호여서, 책임 소재 특정에는 CloudTrail이 맞습니다.",
+        "2": "Amazon CloudWatch는 메트릭·로그·알람으로 성능과 운영 상태를 모니터링합니다. 누가 보안 그룹을 변경했는지 같은 API 활동의 책임 소재를 기록하는 도구가 아닙니다.",
+        "3": "Amazon GuardDuty는 로그를 분석해 악성·비정상 활동(예: 노출된 포트로의 의심스러운 접속)을 위협 finding으로 알릴 수는 있지만, 특정 구성 변경 API를 호출한 주체를 감사 원장으로 특정하는 서비스는 CloudTrail입니다."
+      },
+      "sources": [
+        {
+          "title": "What Is AWS CloudTrail? — 사용자·역할·서비스의 행동을 API 호출 이벤트로 기록(누가·언제·무슨 액션)",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q14",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "리소스 보호 서비스 식별 (위협 탐지 vs 집계 구분 — GuardDuty)",
+      "difficulty": "applied",
+      "stem": "한 회사가 이미 AWS Security Hub로 여러 보안 서비스의 findings를 한 화면에 모아 보고 있다. 그런데 아직 어떤 서비스도 계정 활동을 분석해 침해된 자격증명이나 크립토마이닝 같은 악성·비정상 활동을 실제로 탐지하고 있지 않다는 것을 알게 됐다. 이 위협 활동 탐지 자체를 수행하도록 활성화해야 할 서비스는?",
+      "options": [
+        "Amazon GuardDuty",
+        "AWS Security Hub",
+        "AWS Config",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "Amazon GuardDuty는 CloudTrail 관리 이벤트·VPC 흐름 로그·DNS 로그를 ML·위협 인텔리전스로 분석해 침해된 자격증명·크립토마이닝 같은 악성·비정상 활동을 실제로 탐지하고 finding을 생성하는 위협 탐지 서비스입니다. 회사가 빠뜨린 것은 '탐지를 하는 서비스'이므로 GuardDuty를 활성화해야 합니다.",
+      "wrongExplanations": {
+        "1": "AWS Security Hub는 GuardDuty·Inspector·Macie 등의 findings를 표준 형식으로 집계하고 표준 대비 자동 점검을 수행하는 '집계자'이지, 계정 활동을 분석해 위협을 직접 탐지하는 서비스가 아닙니다. Security Hub가 모을 위협 finding을 만들어 내려면 그 소스인 GuardDuty가 별도로 켜져 있어야 합니다 — 집계 화면이 있어도 탐지 소스가 없으면 위협 활동은 탐지되지 않습니다.",
+        "2": "AWS Config는 리소스 구성 상태·변경 이력을 평가하는 서비스로, 로그 기반 위협 활동 탐지를 수행하지 않습니다.",
+        "3": "AWS Artifact는 AWS의 컴플라이언스 보고서를 다운로드하는 포털로, 위협 탐지와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon GuardDuty? — 위협 탐지, CloudTrail·VPC Flow·DNS 로그를 ML·위협 인텔로 분석",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        },
+        {
+          "title": "Introduction to AWS Security Hub CSPM — 여러 서비스·파트너 findings 집계(탐지 자체는 개별 서비스가 수행)",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-2-q15",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "암호화 옵션 (전송 중 암호화 — TLS/SSL)",
+      "difficulty": "applied",
+      "stem": "한 회사가 사용자의 웹 브라우저와 자사 애플리케이션 사이를 네트워크로 오가는(in transit) 데이터가 도청되지 않도록 암호화하려 한다. 이 '전송 중 암호화'를 구현하는 데 사용하는 표준 메커니즘은?",
+      "options": [
+        "TLS/SSL(HTTPS)을 통한 전송 중 암호화",
+        "AWS KMS 키로 보호되는 저장 시 암호화",
+        "Amazon Macie를 통한 민감 데이터 분류",
+        "AWS Shield를 통한 DDoS 보호"
+      ],
+      "correct": 0,
+      "explanation": "전송 중(in transit) 암호화는 네트워크를 이동하는 데이터(클라이언트↔서비스, 서비스↔서비스)를 보호하며, TLS/SSL(대표적으로 HTTPS)을 사용해 구현합니다. 브라우저와 애플리케이션 사이의 통신을 암호화해 이동 중 도청을 막는 목적에 맞는 메커니즘입니다.",
+      "wrongExplanations": {
+        "1": "AWS KMS 키로 보호되는 암호화는 디스크·스토리지에 저장된 데이터(S3·EBS·RDS 등)를 다루는 '저장 시(at rest)' 암호화입니다. 네트워크를 이동 중인 데이터를 보호하는 것은 전송 중 암호화(TLS/SSL)로, 보호 대상이 다릅니다.",
+        "2": "Amazon Macie는 S3에 저장된 민감 데이터(PII 등)를 발견·분류하는 데이터 보안 서비스로, 네트워크 전송 구간을 암호화하지 않습니다.",
+        "3": "AWS Shield는 DDoS(대량 트래픽) 공격으로부터 가용성을 보호하는 서비스로, 데이터의 기밀성을 위한 전송 중 암호화와는 목적이 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 (ko) — 암호화 옵션: 전송 중 암호화·저장 시 암호화",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "AWS Well-Architected SEC09-BP02 — 전송 중 암호화 강제(TLS로 네트워크 통신 보호)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_encrypt.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

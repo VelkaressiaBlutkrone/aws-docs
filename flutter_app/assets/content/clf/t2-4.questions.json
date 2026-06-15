@@ -335,6 +335,95 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-4-q13",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "네트워크 ACL stateless 원리 적용 (응답 트래픽 규칙)",
+      "difficulty": "applied",
+      "stem": "한 운영팀이 서브넷의 네트워크 ACL 인바운드 규칙에 HTTPS(443) 허용 규칙을 추가했더니, 클라이언트가 서버로 요청은 보낼 수 있지만 서버의 응답이 클라이언트에 도달하지 않는 현상이 발생했다. 보안 그룹은 동일 트래픽을 허용하도록 올바르게 구성돼 있다. 이 문제의 원인으로 가장 적절한 것은?",
+      "options": [
+        "네트워크 ACL은 stateless여서 응답(아웃바운드) 트래픽을 위한 규칙을 별도로 추가하지 않으면 차단되기 때문이다",
+        "네트워크 ACL은 stateful이므로 인바운드 규칙만으로 응답이 자동 허용되어야 하는데, 규칙 번호가 잘못 지정됐기 때문이다",
+        "보안 그룹이 stateless여서 인바운드를 허용해도 응답이 자동으로 나가지 못하기 때문이다",
+        "네트워크 ACL은 인스턴스 수준에서 동작하므로 서브넷 트래픽에는 적용되지 않기 때문이다"
+      ],
+      "correct": 0,
+      "explanation": "네트워크 ACL은 stateless여서, 서브넷을 통과하는 인바운드·아웃바운드 패킷을 각각 독립적으로 평가합니다. 인바운드로 HTTPS 요청을 허용해도, 응답 트래픽은 아웃바운드 규칙으로 따로 허용하지 않으면 차단됩니다. 응답이 사용하는 임시 포트 범위를 아웃바운드 규칙으로 열어야 통신이 완성됩니다.",
+      "wrongExplanations": {
+        "1": "stateful이라 인바운드 규칙만으로 응답이 자동 허용되는 것은 네트워크 ACL이 아니라 보안 그룹입니다. 네트워크 ACL은 stateless여서 응답에 별도 규칙이 필요하며, 문제 원인은 규칙 번호가 아니라 아웃바운드 규칙 부재입니다.",
+        "2": "stateless·stateful이 뒤바뀐 설명입니다. 보안 그룹은 stateful이어서 허용된 요청의 응답이 자동으로 나갑니다. 또한 문제에서 보안 그룹은 올바르게 구성돼 있다고 했습니다.",
+        "3": "인스턴스 수준에서 동작하는 것은 보안 그룹이고, 네트워크 ACL은 서브넷 수준에서 동작합니다. 따라서 서브넷 트래픽에 적용되지 않는다는 설명은 틀립니다."
+      },
+      "sources": [
+        {
+          "title": "네트워크 ACL로 서브넷 트래픽 제어 — stateless, 응답 트래픽도 별도 규칙 필요",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        },
+        {
+          "title": "보안 그룹 — stateful(응답 자동 허용) 대비",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q14",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "Trusted Advisor vs Config 혼동 교정",
+      "difficulty": "applied",
+      "stem": "한 보안 담당자가 특정 보안 그룹이 지난 30일 동안 어떤 규칙 구성으로 바뀌어 왔는지(구성 상태의 시간별 변경 이력)를 추적하고, 현재 구성이 정해진 규칙을 준수하는지 평가하려 한다. 마침 팀에서 모범 사례 점검 도구인 AWS Trusted Advisor를 쓰고 있어 거기서 찾으려 했으나 적절하지 않다. 이 요구에 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Config",
+        "AWS Trusted Advisor",
+        "AWS Marketplace",
+        "AWS WAF"
+      ],
+      "correct": 0,
+      "explanation": "리소스의 구성 상태와 시간에 따른 변경 이력(무엇이 언제 어떻게 바뀌었는지), 그리고 구성이 규칙을 준수하는지 평가하는 것은 AWS Config의 역할입니다. (변경을 일으킨 API를 '누가' 호출했는지는 CloudTrail의 영역으로 구분됩니다.) AWS Trusted Advisor는 모범 사례에 따라 환경을 점검하고 개선 기회를 권고하는 도구일 뿐, 구성 변경 이력을 시간 순으로 보여 주지 않습니다.",
+      "wrongExplanations": {
+        "1": "AWS Trusted Advisor는 비용·성능·보안·내결함성·서비스 한도 등 모범 사례 위반을 점검·권고하는 도구입니다. 모범 사례 점검 도구라는 점이 매력적인 오답이지만, 구성 변경 이력 추적은 Config의 기능입니다.",
+        "2": "AWS Marketplace는 타사 소프트웨어를 찾아 구매·배포하는 카탈로그로, 리소스 구성 변경 이력을 기록하지 않습니다.",
+        "3": "AWS WAF는 웹 애플리케이션으로 오는 HTTP/HTTPS 요청을 필터링하는 방화벽으로, 구성 변경 이력 추적과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Trusted Advisor — 모범 사례 점검·권고(구성 이력 추적은 Config) 대비",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-4-q15",
+      "examGuideTaskId": "clf-t2-4",
+      "skill": "보안 정보 위치 파악 (Knowledge Center vs Security Blog)",
+      "difficulty": "foundational",
+      "stem": "한 엔지니어가 자주 발생하는 AWS 설정 문제에 대한 구체적인 how-to·문제 해결(트러블슈팅) 답변을 찾고 있다. 이런 질문 기반 해결 답변을 제공하는 AWS 보안·기술 정보 위치로 가장 적합한 것은?",
+      "options": [
+        "AWS Knowledge Center",
+        "AWS Security Blog",
+        "AWS Marketplace",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "AWS Knowledge Center(re:Post 내)는 자주 묻는 질문에 대한 how-to와 문제 해결 답변을 제공하는 위치입니다. 구체적인 설정 문제의 트러블슈팅 답변을 찾을 때 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Security Blog는 최신 보안 발표, 심층 모범 사례, 사고 대응 가이드 같은 글을 제공하는 채널로, 개별 설정 문제의 how-to 트러블슈팅 답변을 모아 둔 곳은 아닙니다.",
+        "2": "AWS Marketplace는 타사 소프트웨어를 찾아 구매·배포하는 카탈로그로, 기술 문제 해결 답변을 제공하는 정보 위치가 아닙니다.",
+        "3": "AWS Trusted Advisor는 내 환경을 모범 사례로 점검·권고하는 도구로, how-to·트러블슈팅 답변 문서를 제공하는 정보 위치가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 — 보안 정보 위치(Knowledge Center·Security Blog·re:Post)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "AWS re:Post Knowledge Center — 자주 묻는 질문의 how-to·트러블슈팅 공식 답변 모음",
+          "url": "https://repost.aws/knowledge-center"
+        }
+      ],
+      "verified": true
     }
   ]
 }
