@@ -335,6 +335,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-1-q13",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "데이터 전송 비용 (아키텍처 설계)",
+      "difficulty": "applied",
+      "stem": "한 회사가 ap-northeast-2(서울) 리전의 애플리케이션에서 us-east-1(버지니아) 리전의 데이터를 매번 가져와 처리하면서, 리전 간 데이터 전송 요금이 계속 발생해 비용이 높다. 동일한 작업을 유지하면서 데이터 전송 비용을 줄이는 방향으로 가장 적절한 것은?",
+      "options": [
+        "데이터를 소비하는 애플리케이션과 같은 리전에 두어, 리전 간 전송 대신 리전 내 처리가 일어나도록 설계한다",
+        "모든 데이터를 인터넷을 통해 사용자에게 직접 발신(아웃바운드)하도록 바꿔 리전 간 전송을 없앤다",
+        "데이터를 AWS로 더 자주 업로드(인바운드)하면 리전 간 발신 요금이 상쇄된다",
+        "두 리전 모두에서 인스턴스를 On-Demand에서 Spot으로 바꾸면 리전 간 전송 요금이 사라진다"
+      ],
+      "correct": 0,
+      "explanation": "리전 간(Region 간) 데이터 전송은 두 데이터센터를 잇는 내부 네트워크 비용 때문에 과금됩니다. 데이터를 소비하는 애플리케이션과 같은 리전에 위치시키면 리전을 넘는 전송 대신 리전 내 처리가 일어나, 데이터가 적게 나가도록 설계하는 것이 곧 비용 절감으로 이어집니다.",
+      "wrongExplanations": {
+        "1": "인터넷으로 나가는 발신(아웃바운드) 전송 역시 과금 대상이므로, 리전 간 전송을 아웃바운드로 바꾸는 것은 비용을 줄이는 방향이 아닙니다.",
+        "2": "수신(인바운드)이 보통 무료인 것과 발신·리전 간 전송 과금은 별개이며, 업로드를 늘린다고 리전 간 발신 요금이 상쇄되지 않습니다.",
+        "3": "Spot은 컴퓨팅 구매 옵션으로 인스턴스 단가에만 영향을 줄 뿐, 리전 간 데이터 전송 요금과는 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 — Task 4.1 Skill '수신·발신 데이터 전송 비용(리전 간/리전 내)' 명시",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t4-1-q14",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "구매 옵션 (Spot 중단 함정)",
+      "difficulty": "applied",
+      "stem": "한 회사가 24시간 중단 없이 가동되어야 하는 결제 처리 애플리케이션을 운영한다. 비용을 줄이려고 '가장 싼 옵션'을 찾던 담당자가 Spot Instances로 전환하려 한다. 이 선택에 대한 가장 정확한 평가는?",
+      "options": [
+        "Spot은 AWS가 용량을 회수하면 중단될 수 있어, 중단 없이 계속 실행되어야 하는 워크로드에는 부적합하다",
+        "Spot은 가장 싼 옵션이므로 어떤 워크로드에도 항상 먼저 선택하는 것이 옳다",
+        "Spot은 약정 기반이라 중단 없이 24시간 가동이 보장된다",
+        "Spot은 인바운드 데이터 전송이 무료라서 결제 애플리케이션에 가장 적합하다"
+      ],
+      "correct": 0,
+      "explanation": "Spot Instances는 AWS의 미사용 용량을 크게 할인해 제공하지만, 다른 고객에게 해당 용량이 필요하면 AWS가 회수해 인스턴스가 중단될 수 있습니다. 따라서 24시간 중단 없이 가동되어야 하는 결제 처리 같은 워크로드에는 부적합하며, 중단을 견디고 재시작할 수 있는 배치·내결함성 워크로드에 적합합니다.",
+      "wrongExplanations": {
+        "1": "'가장 싸니 항상 먼저 선택'은 흔한 오해입니다. Spot은 중단을 견디는 워크로드에만 적합하며 모든 워크로드에 우선 적용하는 옵션이 아닙니다.",
+        "2": "Spot은 약정 기반이 아니라 AWS 미사용 용량을 쓰는 옵션이며, 중단 없는 가동을 보장하지 않습니다(약정 할인은 Savings Plans·RI).",
+        "3": "인바운드 전송이 보통 무료인 것은 모든 옵션에 공통이며, 이것이 중단 가능한 Spot을 중단 불가 워크로드에 적합하게 만들지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Spot Instances — 미사용 용량 활용, AWS 회수 시 중단(중단 견디는 워크로드용)",
+          "url": "https://aws.amazon.com/ec2/spot/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t4-1-q15",
+      "examGuideTaskId": "clf-t4-1",
+      "skill": "예약 인스턴스 유연성 (Convertible RI)",
+      "difficulty": "applied",
+      "stem": "한 회사가 Reserved Instances(RI)로 1~3년 약정 할인을 받고 있으나, 약정 기간 중 워크로드가 바뀌어 다른 인스턴스 유형으로 변경해야 할 가능성이 있다. RI 내에서 인스턴스 유형 변경이 가능한 유연성을 제공하는 것은?",
+      "options": [
+        "Convertible Reserved Instances(전환형 예약 인스턴스)",
+        "Spot Instances",
+        "On-Demand Instances",
+        "Dedicated Hosts"
+      ],
+      "correct": 0,
+      "explanation": "RI는 특정 인스턴스 구성에 약정하지만, Convertible RI(전환형 예약 인스턴스)는 약정 기간 중에도 인스턴스 유형을 변경할 수 있어 RI 내에서도 유연성 차이가 있습니다. 따라서 약정 기간 중 인스턴스 유형 변경 가능성이 있는 경우 Convertible RI가 적합합니다.",
+      "wrongExplanations": {
+        "1": "Spot Instances는 약정 할인이 아니라 미사용 용량을 쓰는 중단 가능 옵션으로, RI의 유형 변경 유연성과는 다른 범주입니다.",
+        "2": "On-Demand는 약정 없이 정가로 지불하는 옵션으로, 약정 할인을 유지하면서 유형을 바꾸려는 요구와 맞지 않습니다.",
+        "3": "Dedicated Hosts는 전용 물리 서버 옵션으로, RI 약정의 인스턴스 유형 변경 유연성을 제공하는 옵션이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 — Reserved Instances(Convertible RI: 약정 기간 중 인스턴스 속성 변경 가능)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

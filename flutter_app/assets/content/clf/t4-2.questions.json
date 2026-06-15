@@ -327,6 +327,91 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t4-2-q13",
+      "examGuideTaskId": "clf-t4-2",
+      "skill": "Pricing Calculator (계정 데이터 불필요)",
+      "difficulty": "applied",
+      "stem": "한 스타트업이 아직 AWS 계정도 만들지 않은 상태에서, 신규 서비스의 월 인프라 비용을 사내 예산 회의에 제출할 견적으로 미리 산출하려 한다. 실제 사용 이력이 전혀 없는 이 상황에서 비용을 추정할 수 있는 도구는?",
+      "options": [
+        "AWS Pricing Calculator",
+        "AWS Cost Explorer",
+        "AWS Cost and Usage Report(CUR)",
+        "AWS Cost Anomaly Detection"
+      ],
+      "correct": 0,
+      "explanation": "AWS Pricing Calculator는 공개 요금표를 기반으로 서비스 구성·수량·리전을 입력해 예상 비용을 시뮬레이션하므로, 계정의 실제 사용 데이터가 전혀 없어도 동작합니다. 따라서 계정조차 없는 사전 계획 단계의 견적 산출에 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Cost Explorer는 계정에 이미 발생한 비용·사용량 이력을 집계·시각화하므로, 사용 이력이 전혀 없는 신규 상황에서는 분석할 데이터가 없어 견적 도구로 쓸 수 없습니다.",
+        "2": "CUR은 실제 발생한 비용·사용량을 리소스 수준까지 상세 보고하는 도구로, 발생 데이터가 없는 사전 계획 단계의 견적에는 사용할 수 없습니다.",
+        "3": "Cost Anomaly Detection은 과거 지출 패턴을 머신러닝으로 학습해 이상을 탐지하므로, 학습할 이력이 없는 신규 상황에서는 견적을 제공하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Pricing Calculator? — 공개 요금표 기반 구축 전 비용 추정(계정 사용 데이터 불필요)",
+          "url": "https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t4-2-q14",
+      "examGuideTaskId": "clf-t4-2",
+      "skill": "SCP는 거버넌스 (비용 절감 아님)",
+      "difficulty": "applied",
+      "stem": "한 회사가 비용을 낮추려고 'AWS Organizations의 서비스 제어 정책(SCP)으로 고비용 서비스 사용을 막으면 그 자체가 비용 절감 도구'라고 판단했다. 이 판단을 가장 정확하게 바로잡은 설명은?",
+      "options": [
+        "SCP는 계정·OU가 할 수 있는 작업(서비스·리전)을 통제하는 거버넌스 메커니즘이며, 비용 자체를 측정·예산화하는 기능은 Budgets·Cost Explorer가 담당한다",
+        "SCP는 사용량을 합산해 볼륨 할인을 적용하는 비용 절감 기능이다",
+        "SCP는 구축 전 예상 비용을 자동으로 견적 내 비용을 줄여 준다",
+        "SCP는 머신러닝으로 비정상 지출을 탐지해 비용을 줄여 준다"
+      ],
+      "correct": 0,
+      "explanation": "SCP(서비스 제어 정책)는 조직 내 계정·OU에서 허용하거나 금지할 서비스·리전·작업을 중앙에서 정의하는 정책 거버넌스 메커니즘입니다. 특정 서비스 사용을 막는 부수 효과로 지출에 영향을 줄 수는 있어도, 비용을 측정·분석하거나 예산을 설정·통제하는 도구가 아닙니다. 비용 측정·예산은 Cost Explorer와 Budgets의 역할입니다.",
+      "wrongExplanations": {
+        "1": "사용량을 합산해 볼륨 할인을 적용하는 것은 Organizations의 통합 결제(consolidated billing)이며, SCP의 기능이 아닙니다. 통합 결제와 SCP를 혼동한 설명입니다.",
+        "2": "구축 전 예상 비용 견적은 Pricing Calculator의 역할로, 작업을 통제하는 SCP와는 무관합니다.",
+        "3": "머신러닝 기반 비정상 지출 탐지는 Cost Anomaly Detection의 역할이며, 정책 거버넌스 도구인 SCP의 기능이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Organizations? — SCP는 계정·OU의 허용 작업을 통제하는 거버넌스(비용 측정·예산 아님)",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t4-2-q15",
+      "examGuideTaskId": "clf-t4-2",
+      "skill": "Organizations 통합 결제 + 비용 할당",
+      "difficulty": "applied",
+      "stem": "한 기업이 AWS Organizations 통합 결제로 여러 멤버 계정을 단일 청구서로 묶었다. 이제 그 합산된 청구 안에서 어느 비용이 어떤 프로젝트·팀에 속하는지 분류해 부서별로 책임을 배분(cost allocation)하려 한다. 가장 적합한 방법은?",
+      "options": [
+        "리소스에 비용 할당 태그(Cost Allocation Tags)를 붙여 태그별로 비용을 분류·집계한다",
+        "각 멤버 계정의 SCP를 수정해 비용을 부서별로 나눈다",
+        "Pricing Calculator로 부서별 예상 비용을 다시 견적 낸다",
+        "Cost Anomaly Detection을 켜면 비용이 부서별로 자동 분류된다"
+      ],
+      "correct": 0,
+      "explanation": "AWS 청구는 기본적으로 서비스·리전 단위로 집계되므로, 통합 결제로 묶인 비용을 프로젝트·팀 등 조직 기준으로 나누려면 리소스에 비용 할당 태그(예: 팀=마케팅, 프로젝트=A)를 붙여야 합니다. Cost Explorer·CUR에서 이 태그로 비용을 필터링·그룹화해 부서별 비용 책임을 배분할 수 있습니다. 통합 결제(비용 합산)와 비용 할당 태그(비용 분류)는 함께 쓰여 다계정 비용 가시성을 완성합니다.",
+      "wrongExplanations": {
+        "1": "SCP는 계정·OU의 허용 작업을 통제하는 거버넌스 기능으로, 발생한 비용을 프로젝트·팀별로 분류·집계하는 수단이 아닙니다.",
+        "2": "Pricing Calculator는 구축 전 예상 비용을 추정하는 도구로, 이미 발생한 비용을 부서별로 분류하지 못합니다.",
+        "3": "Cost Anomaly Detection은 머신러닝으로 비정상 지출을 탐지할 뿐, 비용을 부서·프로젝트별로 분류·배분하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Organizations? — 통합 결제(다계정 합산 청구)",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
+        },
+        {
+          "title": "CLF-C02 공식 시험 가이드 — Task 4.2 'Organizations 통합 결제 및 비용 할당', '비용 할당 태그' Skill",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }
