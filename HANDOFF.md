@@ -112,11 +112,12 @@ _갱신: 2026-06-15 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 ---
 
 ## 3. 워킹트리 / 메모
-- 미커밋: 없음(이 문서 갱신 커밋 제외). 전체 스위트 **499 테스트** 그린 기준점(2026-06-13, PR4 출고 후).
+- 미커밋: 없음. 전체 스위트 **499 테스트** 그린 기준점(2026-06-15, CLF ≥15 출고 후 — 문항 +57은 verified 카운트만 늘 뿐 테스트 케이스 수 불변).
+- **브랜치(2026-06-15~):** `main`(보호·배포)·`develop`(통합)만 존재. 작업은 `feat/*`→develop PR→(릴리스)develop→main PR. main은 develop보다 릴리스 머지커밋만큼 앞설 수 있으나 콘텐츠 동일. 문항 추가 워크플로·서브에이전트 위임 규율: [[question-bank-verified-workflow]]·[[subagent-git-branch-pollution]].
 - **테스트 함정 추가(PR4):** testWidgets 본문에서 `rootBundle.loadString`을 await하면 파일 연속 실행에서 행(10분 타임아웃, 단독은 통과) — 에셋은 `setUpAll` 1회 로드. 메모리 [[flutter-selectionarea-widget-test-pitfall]] 갱신됨.
 - `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3에서 리소스 필터·스로틀(HEAVY)·MIME에 woff2 보정 완료(otf/ttf/woff2 동등 취급). 전/후 비교 보고서: `pr3-before-light.json` / `pr3-after2-light.json`.
 - **로컬 dogfood 서버 주의:** 포트 8124에 이전 세션의 진단용 node 서버(cwd 기준 `build/web` 서빙)가 살아 있을 수 있음 — `EADDRINUSE`면 새로 띄우지 말고 서빙 콘텐츠 해시를 로컬 빌드와 대조 후 재사용(요청 시점에 파일을 읽는 구조라 재빌드가 그대로 반영됨). browse dogfood 함정 모음(SW 캐시·taskId `clf-t1-1` 형식·해시 goto≠리로드·main.dart.js 한국어 grep 무효): 메모리 [[flutter-web-dogfood-browse]].
 - **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
-**다음 세션 첫 수: §0 우선순위 결정(사용자) — 1순위 후보는 모의고사 중량·증가 브레인스토밍(2026-06-11 사용자 지시). 시각 리펙토링 B안은 PR1~4 전부 출고 종료(§0-u). 그 외: SAA-C03 잔여 문서 · §0-b 선택 항목(2기기 pull·개인정보 고지).**
+**다음 세션 첫 수: §0 우선순위 결정(사용자).** 직전 세션(2026-06-15)에 모의고사 중량·증가 브레인스토밍 → **백로그 ① CLF 문항 ≥15 완료·라이브 배포**(§0-q). 다음 후보: **②SAA-C03 문항 착수**(현재 0) · **③C-중량 딥링크** · SAA-C03 학습문서 잔여 23개 · §0-b 선택 항목(2기기 pull·개인정보 고지). 문항 생산은 §0-q와 동일 파이프라인(서브에이전트 드래프터→AI 리뷰→컨트롤러 실측→사람 검수 게이트→flip) 재사용 가능.
