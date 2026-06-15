@@ -331,6 +331,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-4-q13",
+      "examGuideTaskId": "clf-t3-4",
+      "skill": "NoSQL 설계 원리 (비정규화)",
+      "difficulty": "applied",
+      "stem": "한 팀이 테이블 간 JOIN이 많은 기존 관계형 애플리케이션을 Amazon DynamoDB로 옮기려 한다. DynamoDB가 어떤 규모에서도 일관된 한 자릿수 밀리초 성능을 유지하려면 데이터 모델을 어떻게 설계해야 하는가?",
+      "options": [
+        "관련 데이터를 한 항목에 미리 함께 저장(비정규화)해 단일 키 조회로 읽기를 완결되게 한다",
+        "테이블을 여러 개로 정규화하고 조회 시 DynamoDB의 JOIN 기능으로 결합한다",
+        "모든 데이터를 하나의 파티션 키에 몰아넣어 한 파티션에서만 읽도록 한다",
+        "조회 때마다 관계형 DB로 되돌아가 JOIN한 결과를 받아온다"
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB는 키 기반으로 데이터를 파티션에 분산해 한 항목 조회가 단일 파티션 안에서 완결되도록 설계되어, 어떤 규모에서도 한 자릿수 밀리초가 가능합니다. 분산 환경에서 JOIN은 서버 간 조율로 지연이 급증하므로, DynamoDB는 JOIN 대신 관련 데이터를 한 항목에 미리 중복 저장하는 비정규화를 설계 원칙으로 삼습니다. 따라서 JOIN이 많던 모델은 접근 패턴에 맞춰 비정규화해 단일 키 조회로 끝나게 설계해야 합니다.",
+      "wrongExplanations": {
+        "1": "DynamoDB는 JOIN을 지원하지 않습니다. 관계형의 정규화·JOIN 사고를 그대로 옮기려는 혼동으로, DynamoDB에는 없는 기능을 가정한 오답입니다.",
+        "2": "모든 데이터를 한 파티션 키에 몰면 그 파티션에 트래픽이 집중(핫 파티션)되어 오히려 분산 확장의 이점을 잃습니다. 비정규화의 핵심은 단일 키 조회이지 단일 파티션 집중이 아닙니다.",
+        "3": "조회마다 관계형 DB로 되돌아가면 DynamoDB로 옮긴 의미가 없고, 네트워크 왕복으로 일관된 밀리초 성능을 보장할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon DynamoDB? — 키 기반 파티션 분산, JOIN 미지원, 어떤 규모에서도 한 자릿수 밀리초",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-4-q14",
+      "examGuideTaskId": "clf-t3-4",
+      "skill": "인메모리 캐시의 역할 (ElastiCache)",
+      "difficulty": "applied",
+      "stem": "한 팀이 \"ElastiCache가 인메모리라 매우 빠르니, 주문 데이터를 영구 보관하는 유일한 기본 데이터베이스로 ElastiCache만 사용하겠다\"고 제안한다. 이 제안의 가장 정확한 평가는?",
+      "options": [
+        "부적절하다 — ElastiCache는 보통 DB 부하를 줄이는 캐시·초저지연 계층으로 쓰며, 영구 거래 데이터의 기준(주) 저장소로는 RDS·DynamoDB 같은 DB가 더 적합하므로, 그런 DB를 주 저장소로 두고 그 앞에 캐시로 써야 한다",
+        "적절하다 — ElastiCache는 인메모리라 빠르므로 모든 영구 데이터베이스를 대체할 수 있다",
+        "적절하다 — ElastiCache는 데이터를 디스크에 영구 저장하는 관계형 데이터베이스이기 때문이다",
+        "부적절하다 — ElastiCache는 읽기를 지원하지 않아 조회 가속에 쓸 수 없기 때문이다"
+      ],
+      "correct": 0,
+      "explanation": "ElastiCache는 자주 조회되는 데이터를 메모리에 캐시해 애플리케이션 성능을 높이고 백엔드 DB 부하를 줄이는 인메모리 캐시·초저지연 계층입니다. 주 용도는 읽기 성능 가속·부하 경감이며, 백업·복제 같은 기능이 있더라도 주문 같은 영구 거래 데이터의 기준(주) 저장소로는 RDS·DynamoDB 같은 DB가 더 적합합니다. 따라서 그런 DB를 주 저장소로 두고 ElastiCache는 그 앞단 캐시로 두는 구성이 적절합니다.",
+      "wrongExplanations": {
+        "1": "\"인메모리라 빠르니 영구 DB를 대체한다\"는 흔한 함정입니다. 속도가 빠르다고 모든 영구 데이터베이스를 대체할 수 있는 것은 아니며, 영구 거래 데이터의 기준 저장소로는 RDS·DynamoDB가 더 적합합니다.",
+        "2": "ElastiCache는 디스크 기반 관계형 데이터베이스가 아니라 분산 인메모리 캐시/스토어입니다. 전제가 사실과 다릅니다.",
+        "3": "ElastiCache는 오히려 반복 읽기를 메모리에서 초고속으로 처리하는 것이 핵심 용도입니다. \"읽기를 지원하지 않는다\"는 사실과 반대입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon ElastiCache? — 인메모리 캐시로 성능 가속·백엔드 DB 부하 경감(주로 캐시 계층)",
+          "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-4-q15",
+      "examGuideTaskId": "clf-t3-4",
+      "skill": "관계형 읽기 확장 (RDS 읽기 복제본)",
+      "difficulty": "applied",
+      "stem": "한 Amazon RDS 데이터베이스가 읽기 요청(조회 트래픽)이 급증해 원본 인스턴스의 부하가 높다. 쓰기는 원본에서 유지하면서 읽기 요청을 여러 인스턴스로 분산해 원본 부하를 줄이려 한다. 가장 적합한 구성은?",
+      "options": [
+        "읽기 전용 복제본(Read Replica)을 추가해 읽기 요청을 분산한다",
+        "데이터베이스를 Amazon ElastiCache로 교체한다",
+        "원본을 단일 AZ 배포로 변경한다",
+        "데이터베이스를 Amazon S3로 옮긴다"
+      ],
+      "correct": 0,
+      "explanation": "RDS 읽기 전용 복제본(Read Replica)은 원본 DB의 데이터를 읽기 전용으로 복사한 인스턴스로, 읽기 요청을 복제본으로 분산해 원본 DB의 읽기 부하를 줄입니다. 쓰기는 원본에서 처리하고 조회 트래픽을 복제본이 나눠 받는 읽기 확장 용도입니다.",
+      "wrongExplanations": {
+        "1": "ElastiCache로 데이터베이스 자체를 교체하는 것은 적절하지 않습니다. ElastiCache는 캐시 계층이지 관계형 DB 대체재가 아니며, 질문은 RDS의 읽기 확장 구성을 묻습니다.",
+        "2": "단일 AZ 배포는 가용성·읽기 확장 모두에 도움이 되지 않으며, 오히려 장애 대응이 약해집니다. 읽기 부하 분산과 무관합니다.",
+        "3": "Amazon S3는 객체 스토리지로, 관계형 데이터베이스의 읽기 쿼리 부하를 분산하는 용도가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon RDS? — 읽기 전용 복제본(read replica)으로 읽기 확장, Multi-AZ로 고가용성",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

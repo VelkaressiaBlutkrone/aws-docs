@@ -327,6 +327,91 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-7-q13",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "분석 파이프라인 단계별 서비스 매칭",
+      "difficulty": "applied",
+      "stem": "한 소매 기업이 매장 센서에서 발생하는 이벤트를 발생 즉시 대규모로 수집하고, 여러 시스템에서 모은 데이터의 형식을 통일해 정제한 뒤, 그 결과를 경영진이 대화형 대시보드로 살펴보게 하려 한다. 이 세 가지 요구(실시간 수집 → 정제·통합 → 대시보드 시각화)에 각각 가장 적합하게 매칭되는 서비스 조합은?",
+      "options": [
+        "Amazon Kinesis → AWS Glue → Amazon QuickSight",
+        "AWS Glue → Amazon Kinesis → Amazon Athena",
+        "Amazon QuickSight → Amazon Kinesis → AWS Glue",
+        "Amazon Kinesis → Amazon QuickSight → AWS Glue"
+      ],
+      "correct": 0,
+      "explanation": "분석의 각 단계는 처리 특성이 달라 서로 다른 서비스가 대응합니다. 발생 즉시 대규모로 받아내는 실시간 수집은 Amazon Kinesis, 여러 소스의 형식을 통일·정제하는 단계는 AWS Glue(ETL), 그 결과를 대화형 대시보드로 탐색하는 단계는 Amazon QuickSight(BI)입니다. 따라서 Kinesis → Glue → QuickSight 순서가 요구와 1:1로 맞습니다.",
+      "wrongExplanations": {
+        "1": "순서가 어긋납니다. 실시간 수집이 첫 단계인데 Glue(정제)를 먼저 두었고, 마지막을 대시보드가 아닌 Athena(SQL 쿼리)로 두어 '대화형 대시보드 시각화' 요구와 맞지 않습니다.",
+        "2": "QuickSight를 첫 단계(실시간 수집)에 둔 것이 틀렸습니다. QuickSight는 시각화 레이어이지 수집 서비스가 아니며, 수집은 Kinesis가 담당합니다.",
+        "3": "Glue와 QuickSight의 역할을 맞바꿨습니다. 정제·통합(ETL)은 Glue, 대시보드 시각화는 QuickSight인데 순서를 반대로 두어 마지막 정제 단계와 중간 시각화 단계가 요구와 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Glue? — 서버리스 데이터 통합, ETL(추출·변환·적재)",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html"
+        },
+        {
+          "title": "What is Amazon Kinesis Data Streams? — 대량 데이터 레코드 스트림을 실시간 수집·처리",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-7-q14",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "Athena 인플레이스 쿼리(이전 불필요)",
+      "difficulty": "applied",
+      "stem": "한 분석가가 Amazon S3에 이미 쌓여 있는 대량 로그를 가끔(ad-hoc) 표준 SQL로 분석하려 한다. 인프라 운영 부담과 비용을 최소화하면서 가장 빠르게 시작할 수 있는 접근은?",
+      "options": [
+        "Amazon Athena로 S3 데이터를 그 자리에서 표준 SQL로 직접 쿼리한다",
+        "데이터를 먼저 관계형 데이터베이스로 옮긴 뒤 그 DB에 SQL을 실행한다",
+        "데이터를 데이터 웨어하우스에 적재한 뒤 거기서 SQL을 실행한다",
+        "Amazon Kinesis로 S3 데이터를 실시간 스트림으로 받아 SQL로 처리한다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Athena는 서버리스로 S3에 저장된 데이터를 별도 이전 없이 표준 SQL로 직접 쿼리하고, 실제로 스캔한 데이터 양만큼만 과금합니다. 쿼리 빈도가 낮은 임시(ad-hoc) 분석에서는 DB나 웨어하우스 적재에 드는 로드 작업·인프라 비용을 들이지 않고 필요할 때만 분석할 수 있어 운영 부담과 비용이 가장 적습니다.",
+      "wrongExplanations": {
+        "1": "흔한 오해입니다. S3 데이터를 SQL로 분석하려면 먼저 DB로 옮겨야 한다는 통념과 달리, Athena는 이전 없이 S3를 그 자리에서 쿼리합니다. DB로 옮기면 불필요한 로드 작업과 상시 인프라 비용이 추가됩니다.",
+        "2": "웨어하우스 적재 역시 가끔 하는 임시 분석에는 과도합니다. 적재 비용과 상시 운영 부담이 생겨, 인프라 없이 스캔량만 과금하는 Athena보다 비용·시작 속도 면에서 불리합니다.",
+        "3": "Kinesis는 발생하는 즉시 흘러오는 실시간 스트림을 수집·처리하는 서비스입니다. 이미 S3에 저장된 데이터를 SQL로 조회하는 용도가 아니며, 처리 시점(실시간 vs 저장 후)이 요구와 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Athena? — S3 데이터를 표준 SQL로 직접 분석, 서버리스, 쿼리당 과금",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-7-q15",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "Glue 데이터 카탈로그(메타데이터)",
+      "difficulty": "applied",
+      "stem": "한 데이터 팀이 여러 곳에 흩어진 데이터의 위치·스키마·형식 같은 메타데이터를 한곳에 등록·검색해, 분석 도구들이 그 데이터를 일관되게 찾아 쓰게 하려 한다. ETL과 함께 이 데이터 카탈로그 기능을 제공하는 AWS 서비스는?",
+      "options": [
+        "AWS Glue",
+        "Amazon QuickSight",
+        "Amazon Kendra",
+        "Amazon Kinesis"
+      ],
+      "correct": 0,
+      "explanation": "AWS Glue는 서버리스 데이터 통합 서비스로, ETL(추출·변환·적재)과 함께 데이터 카탈로그를 제공합니다. 데이터의 위치·스키마·형식 같은 메타데이터를 중앙에 등록·검색할 수 있게 해, 여러 분석 도구가 같은 데이터를 일관되게 찾아 쓰도록 돕습니다.",
+      "wrongExplanations": {
+        "1": "Amazon QuickSight는 정제된 데이터를 대화형 대시보드로 시각화하는 BI 서비스로, 데이터의 메타데이터를 등록·관리하는 데이터 카탈로그 서비스가 아닙니다.",
+        "2": "Amazon Kendra는 문서·콘텐츠를 자연어로 검색하는 지능형 검색 서비스입니다. 사람이 콘텐츠를 검색하는 것이 목적이며, 분석 데이터의 스키마·위치 메타데이터를 관리하는 데이터 카탈로그와는 다릅니다.",
+        "3": "Amazon Kinesis는 실시간 스트리밍 데이터를 수집·처리하는 서비스로, 데이터의 메타데이터를 등록·검색하는 카탈로그 기능을 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Glue? — 서버리스 데이터 통합, ETL, 데이터 카탈로그",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

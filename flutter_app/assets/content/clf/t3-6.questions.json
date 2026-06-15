@@ -331,6 +331,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-6-q13",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "EBS 스냅샷 재해 복구 (다른 리전 복원)",
+      "difficulty": "applied",
+      "stem": "한 EC2 인스턴스의 EBS 볼륨이 단일 가용 영역(AZ)에 존재한다. 재해 복구를 위해 이 볼륨의 데이터를 다른 리전에서도 복원할 수 있어야 한다. EBS 볼륨 자체는 한 AZ에 묶여 있다는 점을 고려할 때, 이 요구를 충족하는 가장 적절한 방법은?",
+      "options": [
+        "볼륨의 EBS 스냅샷을 만들어 대상 리전으로 복사하고, 필요 시 그 리전에서 스냅샷으로 볼륨을 복원한다",
+        "EBS 볼륨을 원래 AZ에서 분리해 다른 리전의 AZ에 그대로 다시 연결한다",
+        "EBS 볼륨을 인스턴스 스토어로 전환해 여러 리전에 자동 복제되게 한다",
+        "EBS 볼륨을 EFS 파일 시스템으로 변경해 모든 리전에서 동시에 마운트한다"
+      ],
+      "correct": 0,
+      "explanation": "EBS 볼륨은 한 AZ 안에 존재하지만, EBS 스냅샷은 볼륨과 독립적으로 보존되며 다른 AZ·리전·계정으로 복사·복원할 수 있습니다. 따라서 스냅샷을 만들어 대상 리전으로 복사해 두면, 재해 시 그 리전에서 스냅샷으로 새 볼륨을 복원할 수 있어 볼륨의 AZ 경계를 넘는 재해 복구가 가능합니다.",
+      "wrongExplanations": {
+        "1": "EBS 볼륨은 생성된 AZ에 묶여 있어 다른 리전의 AZ에 그대로 분리·재연결할 수 없습니다. 리전을 넘으려면 스냅샷을 복사해 복원해야 합니다.",
+        "2": "인스턴스 스토어는 인스턴스에 물리적으로 붙은 임시 스토리지로, 인스턴스를 중지·종료하면 데이터가 사라집니다. 리전 간 자동 복제로 재해 복구를 제공하지 않습니다.",
+        "3": "EBS 볼륨을 EFS로 '변경'하는 기능은 없으며, EFS도 리전 단위 서비스라 모든 리전에서 동시에 마운트되는 방식이 아닙니다. 블록 볼륨의 리전 간 복원은 스냅샷으로 처리합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EBS? — 스냅샷은 볼륨과 독립적으로 보존, 다른 AZ·리전·계정으로 복원·이동",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-6-q14",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "S3 Glacier는 스토리지 클래스 (별도 서비스 오해)",
+      "difficulty": "applied",
+      "stem": "한 운영자가 'S3 Glacier는 S3와는 별개의 서비스이므로, 오래된 객체를 아카이브하려면 객체를 S3 버킷에서 꺼내 Glacier라는 다른 서비스로 옮겨야 한다'고 생각하고 있다. Amazon S3와 Glacier의 관계를 가장 정확하게 설명한 것은?",
+      "options": [
+        "Glacier는 S3와 완전히 분리된 서비스라, 아카이브하려면 객체를 S3에서 내려받아 Glacier에 다시 업로드해야 한다",
+        "Glacier는 S3의 스토리지 클래스 중 하나로, 객체는 같은 S3 버킷에 그대로 있고 수명 주기 정책으로 클래스만 자동 전환할 수 있다",
+        "Glacier로 전환하려면 먼저 객체를 EBS 볼륨에 복사한 뒤 거기서 Glacier로 이동해야 한다",
+        "Glacier는 S3 버킷이 아니라 EFS 파일 시스템 위에서만 동작하는 아카이브 계층이다"
+      ],
+      "correct": 1,
+      "explanation": "S3 Glacier(Instant Retrieval·Flexible Retrieval·Deep Archive)는 별개 서비스가 아니라 Amazon S3의 스토리지 클래스입니다. 객체는 동일한 S3 버킷에 그대로 존재하며, 수명 주기 정책으로 시간이 지난 객체의 스토리지 클래스만 Glacier로 자동 전환할 수 있습니다. 객체를 다른 서비스로 꺼냈다 다시 넣을 필요가 없습니다.",
+      "wrongExplanations": {
+        "0": "이것이 바로 흔한 오해입니다. Glacier는 S3 클래스이므로 객체를 내려받아 다시 업로드할 필요가 없으며, 클래스 전환은 같은 버킷 안에서 일어납니다.",
+        "2": "Glacier 전환은 S3 안의 스토리지 클래스 변경이며, 블록 스토리지인 EBS 볼륨을 거치지 않습니다.",
+        "3": "Glacier는 S3 객체 스토리지의 클래스이며, EFS 파일 시스템 위에서 동작하는 계층이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "S3 storage classes — Glacier는 S3 스토리지 클래스(객체는 같은 버킷에 유지, 수명 주기로 전환)",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-6-q15",
+      "examGuideTaskId": "clf-t3-6",
+      "skill": "캐시된 하이브리드 스토리지 (Tape Gateway)",
+      "difficulty": "applied",
+      "stem": "한 회사가 온프레미스에서 물리 테이프 라이브러리로 백업을 보관해 왔는데, 물리 테이프 운영 부담을 없애고 기존 백업 애플리케이션은 그대로 둔 채 백업 데이터를 AWS 클라우드 스토리지에 가상 테이프로 저장하려 한다. 이 요구에 가장 적합한 AWS 서비스(유형)는?",
+      "options": [
+        "AWS Storage Gateway의 Tape Gateway(가상 테이프 아카이브)",
+        "Amazon EFS 파일 시스템",
+        "Amazon EBS 볼륨 스냅샷",
+        "Amazon S3에 직접 업로드하는 정적 웹사이트 호스팅"
+      ],
+      "correct": 0,
+      "explanation": "AWS Storage Gateway는 온프레미스 환경을 AWS 클라우드 스토리지에 연결하는 하이브리드 스토리지 서비스이며, 그중 Tape Gateway는 물리 테이프 라이브러리를 가상 테이프 아카이브로 대체합니다. 기존 백업 애플리케이션은 그대로 사용하면서 백업 데이터를 AWS 클라우드 스토리지에 가상 테이프로 저장해, 물리 테이프 운영 부담을 없앨 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Amazon EFS는 여러 컴퓨트가 동시에 마운트하는 공유 파일 시스템으로, 온프레미스 물리 테이프 백업을 가상 테이프로 대체하는 하이브리드 게이트웨이 역할을 하지 않습니다.",
+        "2": "EBS 볼륨 스냅샷은 EBS 블록 볼륨의 시점 백업이며, 온프레미스 백업 애플리케이션을 그대로 둔 채 가상 테이프로 연결하는 용도가 아닙니다.",
+        "3": "S3 정적 웹사이트 호스팅은 웹 콘텐츠를 인터넷에 게시하는 기능으로, 온프레미스 테이프 백업을 가상 테이프로 대체하는 것과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Storage Gateway? — Tape Gateway(가상 테이프 아카이브)로 물리 테이프 대체, 하이브리드 백업",
+          "url": "https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
