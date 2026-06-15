@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/pricing-calculator/latest/userguide/what-is-pricing-calculator.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-2-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-2-q15",
@@ -395,7 +395,7 @@
         "Cost Anomaly Detection을 켜면 비용이 부서별로 자동 분류된다"
       ],
       "correct": 0,
-      "explanation": "AWS 청구는 기본적으로 서비스·리전 단위로 집계되므로, 통합 결제로 묶인 비용을 프로젝트·팀 등 조직 기준으로 나누려면 리소스에 비용 할당 태그(예: 팀=마케팅, 프로젝트=A)를 붙여야 합니다. Cost Explorer·CUR에서 이 태그로 비용을 필터링·그룹화해 부서별 비용 책임을 배분할 수 있습니다. 통합 결제(비용 합산)와 비용 할당 태그(비용 분류)는 함께 쓰여 다계정 비용 가시성을 완성합니다.",
+      "explanation": "AWS 청구는 기본적으로 서비스·리전 단위로 집계되므로, 통합 결제로 묶인 비용을 프로젝트·팀 등 조직 기준으로 나누려면 리소스에 비용 할당 태그(예: 팀=마케팅, 프로젝트=A)를 붙여야 합니다. 이때 붙인 태그는 Billing 콘솔에서 '비용 할당 태그'로 활성화해야 Cost Explorer·CUR에 나타나며, 활성화 후 그 태그로 비용을 필터링·그룹화해 부서별 비용 책임을 배분할 수 있습니다. 통합 결제(비용 합산)와 비용 할당 태그(비용 분류)는 함께 쓰여 다계정 비용 가시성을 완성합니다.",
       "wrongExplanations": {
         "1": "SCP는 계정·OU의 허용 작업을 통제하는 거버넌스 기능으로, 발생한 비용을 프로젝트·팀별로 분류·집계하는 수단이 아닙니다.",
         "2": "Pricing Calculator는 구축 전 예상 비용을 추정하는 도구로, 이미 발생한 비용을 부서별로 분류하지 못합니다.",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

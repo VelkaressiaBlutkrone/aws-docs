@@ -15,7 +15,7 @@ void main() {
         .where((q) => (q as Map)['verified'] == true)
         .length;
     expect(bank.questions.length, rawVerified);
-    expect(rawVerified, greaterThanOrEqualTo(12)); // 밀도 목표(Task당 ≥12 verified)
+    expect(rawVerified, greaterThanOrEqualTo(15)); // 밀도 목표(Task당 ≥15 verified)
     for (final q in bank.questions) {
       expect(q.verified, isTrue);
       expect(q.correct, inInclusiveRange(0, q.options.length - 1));

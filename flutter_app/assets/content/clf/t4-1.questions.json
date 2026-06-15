@@ -349,7 +349,7 @@
         "두 리전 모두에서 인스턴스를 On-Demand에서 Spot으로 바꾸면 리전 간 전송 요금이 사라진다"
       ],
       "correct": 0,
-      "explanation": "리전 간(Region 간) 데이터 전송은 두 데이터센터를 잇는 내부 네트워크 비용 때문에 과금됩니다. 데이터를 소비하는 애플리케이션과 같은 리전에 위치시키면 리전을 넘는 전송 대신 리전 내 처리가 일어나, 데이터가 적게 나가도록 설계하는 것이 곧 비용 절감으로 이어집니다.",
+      "explanation": "리전 간(Region 간) 데이터 전송은 발신 리전 기준으로 과금됩니다. 데이터를 소비하는 애플리케이션과 같은 리전에 위치시키면 리전을 넘는 전송을 없애 그 비용을 줄일 수 있습니다. 다만 같은 리전 안이라도 AZ 간이나 일부 서비스 구성에서는 데이터 전송 요금이 발생할 수 있으므로 '리전 내는 무조건 무료'는 아니며, 핵심은 비싼 리전 간 전송을 줄이도록 설계하는 것입니다.",
       "wrongExplanations": {
         "1": "인터넷으로 나가는 발신(아웃바운드) 전송 역시 과금 대상이므로, 리전 간 전송을 아웃바운드로 바꾸는 것은 비용을 줄이는 방향이 아닙니다.",
         "2": "수신(인바운드)이 보통 무료인 것과 발신·리전 간 전송 과금은 별개이며, 업로드를 늘린다고 리전 간 발신 요금이 상쇄되지 않습니다.",
@@ -359,9 +359,13 @@
         {
           "title": "CLF-C02 공식 시험 가이드 — Task 4.1 Skill '수신·발신 데이터 전송 비용(리전 간/리전 내)' 명시",
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        },
+        {
+          "title": "Understanding data transfer charges (AWS) — 인바운드 무료·리전 간은 발신 리전 기준 과금·리전 내에서도 리소스별 전송 과금 가능",
+          "url": "https://docs.aws.amazon.com/cur/latest/userguide/cur-data-transfers-charges.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-1-q14",
@@ -388,7 +392,7 @@
           "url": "https://aws.amazon.com/ec2/spot/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t4-1-q15",
@@ -403,7 +407,7 @@
         "Dedicated Hosts"
       ],
       "correct": 0,
-      "explanation": "RI는 특정 인스턴스 구성에 약정하지만, Convertible RI(전환형 예약 인스턴스)는 약정 기간 중에도 인스턴스 유형을 변경할 수 있어 RI 내에서도 유연성 차이가 있습니다. 따라서 약정 기간 중 인스턴스 유형 변경 가능성이 있는 경우 Convertible RI가 적합합니다.",
+      "explanation": "RI는 특정 인스턴스 구성에 약정하지만, Convertible RI(전환형 예약 인스턴스)는 약정 기간 중 다른 인스턴스 속성의 RI로 '교환(exchange)'할 수 있어 RI 내에서도 유연성 차이가 있습니다(임의 즉시 변경이 아니라 동등 이상 가치로의 교환). 따라서 약정 기간 중 인스턴스 유형 변경 가능성이 있는 경우 Convertible RI가 적합합니다.",
       "wrongExplanations": {
         "1": "Spot Instances는 약정 할인이 아니라 미사용 용량을 쓰는 중단 가능 옵션으로, RI의 유형 변경 유연성과는 다른 범주입니다.",
         "2": "On-Demand는 약정 없이 정가로 지불하는 옵션으로, 약정 할인을 유지하면서 유형을 바꾸려는 요구와 맞지 않습니다.",
@@ -415,7 +419,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
