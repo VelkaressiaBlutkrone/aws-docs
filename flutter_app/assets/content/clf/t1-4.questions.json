@@ -381,7 +381,7 @@
           "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/what-is-marketplace.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-4-q14",
@@ -408,7 +408,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-4-q15",
@@ -435,7 +435,7 @@
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
