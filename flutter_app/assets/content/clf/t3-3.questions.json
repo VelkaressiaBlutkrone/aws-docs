@@ -331,6 +331,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-3-q13",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "EC2 인스턴스 유형 선택 (메모리 최적화)",
+      "difficulty": "applied",
+      "stem": "한 팀이 대용량 데이터셋을 메모리에 통째로 올려 처리하는 인메모리 데이터베이스를 EC2에서 운영하려 한다. 이 워크로드는 CPU나 디스크보다 대용량 메모리가 성능을 좌우한다. 인스턴스 유형을 고를 때 가장 적절한 선택은?",
+      "options": [
+        "메모리 최적화 인스턴스 유형을 선택한다",
+        "컴퓨팅 최적화 인스턴스 유형을 선택한다",
+        "스토리지 최적화 인스턴스 유형을 선택한다",
+        "워크로드와 무관하게 모든 EC2 인스턴스는 동일한 하드웨어 균형을 제공하므로 어느 유형이든 같다"
+      ],
+      "correct": 0,
+      "explanation": "EC2 인스턴스 유형은 컴퓨팅·메모리·네트워크·스토리지의 서로 다른 균형을 제공하므로, 워크로드가 가장 많이 요구하는 자원에 맞춰 골라야 합니다. 인메모리 데이터베이스처럼 대용량 메모리가 성능을 좌우하는 워크로드에는 메모리 최적화 유형이 적합합니다.",
+      "wrongExplanations": {
+        "1": "컴퓨팅 최적화는 CPU 집약적 워크로드(예: 고성능 연산)에 맞춘 유형으로, 대용량 메모리가 핵심인 인메모리 DB에는 메모리 자원이 부족할 수 있습니다.",
+        "2": "스토리지 최적화는 높은 디스크 처리량이 필요한 워크로드에 맞춘 유형으로, 데이터를 디스크가 아니라 메모리에 올려 처리하는 인메모리 DB의 핵심 요구(대용량 메모리)와 맞지 않습니다.",
+        "3": "EC2 인스턴스 유형은 용도별로 컴퓨팅·메모리·스토리지·GPU의 다른 균형을 제공합니다. 모든 유형이 동일하다는 설명은 틀렸으며, 그래서 워크로드에 맞춰 유형을 선택합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EC2? — 인스턴스 유형이 하드웨어(컴퓨팅·메모리·스토리지 균형)를 결정, 용도별 선택",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-3-q14",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "Auto Scaling vs ELB 역할 구분",
+      "difficulty": "applied",
+      "stem": "한 웹 애플리케이션이 이미 여러 가용 영역의 여러 EC2 인스턴스에서 실행되고 있고, 인스턴스 수는 충분하다. 그런데 들어오는 요청이 일부 인스턴스에만 몰리고 다른 인스턴스는 놀고 있다. 요청을 건강한 인스턴스들에 고르게 나눠 보내려 한다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon EC2 Auto Scaling으로 인스턴스를 더 추가한다",
+        "Elastic Load Balancing으로 트래픽을 여러 인스턴스에 분산한다",
+        "AWS Lambda로 워크로드를 옮긴다",
+        "Amazon CloudFront로 콘텐츠를 엣지에 캐시한다"
+      ],
+      "correct": 1,
+      "explanation": "이미 인스턴스 수는 충분하고 문제는 '요청이 고르게 나뉘지 않는 것'입니다. Elastic Load Balancing은 들어오는 트래픽을 여러 대상에 자동으로 분산하고 상태 검사로 건강한 대상에만 보내므로, 일부 인스턴스에 쏠린 요청을 고르게 분산하는 데 적합합니다.",
+      "wrongExplanations": {
+        "0": "Auto Scaling은 인스턴스의 '수'를 늘리고 줄이는 서비스입니다. 인스턴스가 이미 충분한데 트래픽이 한쪽에 쏠리는 문제는 수를 더 늘려도 해결되지 않으며, 트래픽을 고르게 나누는 것은 ELB의 역할입니다(둘은 함께 쓰이지만 역할이 다릅니다).",
+        "2": "AWS Lambda로 옮기는 것은 서버리스 함수로의 아키텍처 변경이며, 이미 EC2에서 잘 돌고 있는 인스턴스들 사이의 트래픽 분산 문제를 직접 해결하지 않습니다.",
+        "3": "Amazon CloudFront는 콘텐츠를 엣지에 캐시하는 CDN으로, 백엔드 EC2 인스턴스들 사이에서 애플리케이션 요청을 고르게 분산하는 로드 밸런서가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Elastic Load Balancing? — 트래픽을 여러 대상에 분산, 건강한 대상에만 라우팅",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-3-q15",
+      "examGuideTaskId": "clf-t3-3",
+      "skill": "로드 밸런서 유형 (ALB vs NLB)",
+      "difficulty": "applied",
+      "stem": "한 팀이 HTTP/HTTPS 기반 웹 애플리케이션의 들어오는 요청을 여러 대상에 분산하려 한다. 요청 경로 같은 애플리케이션 계층(L7) 정보를 기준으로 트래픽을 처리하고 싶다. 가장 적합한 Elastic Load Balancing 유형은?",
+      "options": [
+        "Application Load Balancer(ALB)",
+        "Network Load Balancer(NLB)",
+        "Gateway Load Balancer(GWLB)",
+        "Amazon EC2 Auto Scaling"
+      ],
+      "correct": 0,
+      "explanation": "Application Load Balancer(ALB)는 애플리케이션 계층(L7)에서 동작하며 HTTP/HTTPS 웹 트래픽 처리에 적합합니다. 따라서 HTTP/HTTPS 기반 웹 애플리케이션의 요청을 분산할 때 알맞은 ELB 유형입니다.",
+      "wrongExplanations": {
+        "1": "Network Load Balancer(NLB)는 전송 계층(L4)에서 TCP/UDP 트래픽을 초고성능·저지연으로 처리하는 유형으로, HTTP/HTTPS 같은 애플리케이션 계층(L7) 기반 처리가 핵심인 웹 트래픽에는 ALB가 더 적합합니다.",
+        "2": "Gateway Load Balancer(GWLB)는 방화벽 같은 서드파티 가상 어플라이언스를 배포·확장하기 위한 유형으로, 일반적인 HTTP/HTTPS 웹 트래픽 분산 용도가 아닙니다.",
+        "3": "Amazon EC2 Auto Scaling은 인스턴스 수를 조절하는 탄력성 서비스이지 트래픽을 분산하는 로드 밸런서가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Elastic Load Balancing? — ALB(L7, HTTP/HTTPS)·NLB(L4, TCP/UDP)·GWLB 유형 구분",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

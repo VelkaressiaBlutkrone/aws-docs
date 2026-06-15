@@ -327,6 +327,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-5-q13",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "Route 53 헬스 체크 라우팅",
+      "difficulty": "applied",
+      "stem": "한 회사가 두 리전에 같은 웹 애플리케이션을 배포해 두고, 기본 리전의 엔드포인트가 응답하지 못하면 사용자 트래픽을 자동으로 정상인 다른 리전 엔드포인트로 넘기려 한다. 별도의 로드 밸런서를 두지 않고 도메인 이름 해석 단계에서 이 동작을 구현하려면 Amazon Route 53의 어떤 기능을 활용해야 하는가?",
+      "options": [
+        "상태 확인(health checking)으로 비정상 엔드포인트를 DNS 응답에서 제외해 정상 리소스로 라우팅한다",
+        "도메인 등록(domain registration) 기능으로 새 도메인을 추가 등록한다",
+        "VPC 엔드포인트를 만들어 두 리전을 사설 IP로 직접 연결한다",
+        "인터넷 게이트웨이를 추가해 두 리전 사이의 트래픽을 우회시킨다"
+      ],
+      "correct": 0,
+      "explanation": "Route 53은 단순히 도메인 이름을 IP로 변환하는 데 그치지 않고 리소스 상태를 주기적으로 확인합니다. 비정상으로 판정된 엔드포인트는 DNS 응답에서 제외하거나 다른 리소스로 자동 라우팅하므로, 애플리케이션 계층의 장애 조치가 DNS 수준에서 이뤄집니다. 이 덕분에 별도의 로드 밸런서 없이도 여러 리전·엔드포인트 사이에서 가용성 기반 라우팅이 가능합니다.",
+      "wrongExplanations": {
+        "1": "도메인 등록은 example.com 같은 이름을 새로 등록하는 기능으로, 엔드포인트 상태에 따라 트래픽을 정상 리소스로 넘기는 장애 조치와는 무관합니다.",
+        "2": "VPC 엔드포인트는 인터넷 게이트웨이 없이 AWS 서비스에 프라이빗하게 연결하는 VPC 구성요소로, DNS 해석 단계에서 비정상 엔드포인트를 우회하는 기능이 아닙니다.",
+        "3": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소일 뿐, 도메인 이름 해석 단계에서 상태 기반 라우팅을 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Route 53? — DNS 라우팅 + 상태 확인(헬스 체크)으로 비정상 리소스에서 트래픽 우회",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-5-q14",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "Route 53 vs 로드 밸런서 구분",
+      "difficulty": "applied",
+      "stem": "한 엔지니어가 \"Amazon Route 53은 로드 밸런서이므로 EC2 인스턴스 풀에 들어오는 트래픽을 직접 분산한다\"고 설명했다. 이 설명의 무엇이 잘못됐는가?",
+      "options": [
+        "Route 53은 도메인 이름을 IP로 해석·라우팅하는 DNS 서비스이고, 인스턴스 풀에 트래픽을 직접 분산하는 것은 Elastic Load Balancing의 역할이다",
+        "Route 53은 온프레미스를 AWS에 연결하는 전용 회선 서비스이므로 트래픽 분산과 무관하다",
+        "Route 53은 콘텐츠를 엣지에 캐시하는 CDN이므로 인스턴스 분산이 아니라 캐싱을 한다",
+        "설명에 잘못된 부분이 없으며 Route 53은 인스턴스 수준 로드 밸런서가 맞다"
+      ],
+      "correct": 0,
+      "explanation": "Route 53은 DNS(Domain Name System) 서비스로, 도메인 이름을 리소스의 IP로 변환하고 상태 기반으로 엔드포인트를 라우팅합니다. 인스턴스 풀에 들어오는 트래픽을 직접 분산하고 대상 상태를 모니터링해 정상 대상에만 보내는 것은 Elastic Load Balancing의 역할로, 두 서비스는 동작하는 계층이 다릅니다. 따라서 'Route 53 = 로드 밸런서'라는 전제 자체가 틀렸습니다.",
+      "wrongExplanations": {
+        "1": "Route 53은 온프레미스-AWS 전용 회선 서비스(Direct Connect)가 아니라 DNS 서비스입니다. 잘못 짚었습니다.",
+        "2": "Route 53은 콘텐츠를 엣지에 캐시하는 CDN(CloudFront)이 아니라 DNS 서비스입니다. 오답의 근거가 틀렸습니다.",
+        "3": "Route 53은 인스턴스 수준 로드 밸런서가 아니라 DNS 서비스이므로 설명에는 잘못된 부분이 있습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Route 53? — DNS 웹 서비스(이름→IP 해석·라우팅), 로드 밸런싱과 동작 계층이 다름",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-5-q15",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "VPC 엔드포인트",
+      "difficulty": "applied",
+      "stem": "한 팀이 프라이빗 서브넷의 인스턴스에서 어떤 AWS 서비스에 접근해야 하는데, 이를 위해 인터넷 게이트웨이를 통해 공용 인터넷으로 트래픽을 내보내고 싶지는 않다. 인터넷 게이트웨이 없이 VPC 내부에서 해당 AWS 서비스에 프라이빗하게 연결하려면 어떤 VPC 구성요소를 사용해야 하는가?",
+      "options": [
+        "VPC 엔드포인트(VPC Endpoint)",
+        "인터넷 게이트웨이(Internet Gateway)",
+        "NAT 게이트웨이(NAT Gateway)",
+        "라우트 테이블(Route Table)"
+      ],
+      "correct": 0,
+      "explanation": "VPC 엔드포인트는 인터넷 게이트웨이 없이 VPC 안에서 AWS 서비스에 프라이빗하게 연결하게 해 주는 구성요소입니다. 트래픽이 공용 인터넷으로 나가지 않으므로, 프라이빗 서브넷 리소스가 인터넷 노출 없이 AWS 서비스에 접근할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "인터넷 게이트웨이는 VPC를 인터넷에 연결하는 구성요소로, 트래픽을 공용 인터넷으로 내보냅니다. 인터넷을 거치지 않으려는 요구와 반대입니다.",
+        "2": "NAT 게이트웨이는 프라이빗 서브넷 인스턴스가 공용 인터넷으로 나가는 아웃바운드 연결을 가능하게 하는 구성요소로, 여전히 인터넷 경로를 사용하므로 프라이빗 연결 요구에 맞지 않습니다.",
+        "3": "라우트 테이블은 트래픽이 어디로 갈지 경로를 결정할 뿐, 그 자체가 AWS 서비스로의 프라이빗 연결 지점을 제공하지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon VPC? — VPC 엔드포인트로 인터넷 게이트웨이 없이 AWS 서비스에 프라이빗 연결",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

@@ -327,6 +327,87 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-8-q13",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "앱 통합 (소비자 다운 시 메시지 보존)",
+      "difficulty": "applied",
+      "stem": "한 결제 처리 컴포넌트가 배포·점검으로 잠시 중단되는 동안에도, 그 시간에 도착한 작업 메시지가 유실되지 않고 컴포넌트가 복구되면 자신의 속도로 가져가 처리할 수 있어야 한다. 이 요구를 가장 잘 충족하는 메시징 방식은?",
+      "options": [
+        "메시지를 Amazon SQS 큐에 보관하고 결제 컴포넌트가 복구 후 폴링해 처리한다",
+        "메시지를 Amazon SNS 주제로만 발행해 결제 컴포넌트 엔드포인트에 즉시 푸시한다",
+        "결제 컴포넌트를 Amazon WorkSpaces 가상 데스크톱으로 옮긴다",
+        "메시지를 AWS IoT Core로 보내 기기 연결로 처리한다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon SQS 큐는 메시지를 내구성 있게 보관하므로, 소비자(결제 컴포넌트)가 잠시 중단돼도 그 사이 도착한 메시지가 큐에 남아 있다가 컴포넌트가 복구되면 폴링해 자신의 속도로 처리할 수 있습니다. 생산자와 소비자의 가용성·처리 속도 차이를 큐가 버퍼로 흡수합니다.",
+      "wrongExplanations": {
+        "1": "SNS는 발행 즉시 구독자 엔드포인트로 메시지를 푸시하는 pub/sub 모델로, 소비자가 다운된 동안 메시지를 보관했다가 나중에 재전달하는 큐 같은 내구성 버퍼가 핵심 역할이 아닙니다. 보존이 필요하면 보통 SNS→SQS로 큐에 받습니다.",
+        "2": "Amazon WorkSpaces는 사용자용 가상 데스크톱(DaaS) 서비스로, 컴포넌트 중단 시 메시지를 보관·재처리하는 메시징과 무관합니다.",
+        "3": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 일반 애플리케이션 컴포넌트의 메시지 버퍼링·디커플링 용도가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon SQS? — 메시지를 큐에 내구성 있게 보관, 소비자가 폴링해 처리(생산자·소비자 디커플링)",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-8-q14",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "함정 — 디커플링은 SNS만으로 충분하다는 오해",
+      "difficulty": "applied",
+      "stem": "한 아키텍트가 \"컴포넌트를 느슨하게 결합(디커플링)하려면 Amazon SNS만 쓰면 된다\"고 주장한다. 디커플링 버퍼 역할의 핵심 수단으로 가장 정확한 설명은?",
+      "options": [
+        "SQS 큐가 메시지를 내구성 있게 보관해 생산자·소비자의 속도 차이를 흡수하므로 디커플링의 핵심 수단이다",
+        "SNS는 메시지를 큐에 쌓아 두므로 단독으로 디커플링 버퍼 역할을 완전히 대신한다",
+        "디커플링은 Amazon WorkSpaces로 데스크톱을 분리해 달성한다",
+        "디커플링은 AWS IoT Core로 기기를 분리 연결해 달성한다"
+      ],
+      "correct": 0,
+      "explanation": "컴포넌트 디커플링의 핵심 수단은 Amazon SQS입니다. SQS 큐는 메시지를 내구성 있게 보관해 생산자와 소비자가 서로의 처리 속도와 무관하게 동작하도록 버퍼 역할을 합니다. SNS는 발행 즉시 구독자에게 푸시할 뿐 메시지를 보관하지 않으므로, 흔히 SNS+SQS 조합으로 팬아웃과 버퍼링을 함께 얻습니다.",
+      "wrongExplanations": {
+        "1": "흔한 오해입니다. SNS는 메시지를 큐에 보관하지 않고 발행 즉시 구독자에게 복제·푸시하는 pub/sub 서비스로, 소비자 속도 차이를 흡수하는 내구성 버퍼는 SQS가 담당합니다. SNS 단독으로 디커플링 버퍼를 대신하지 못합니다.",
+        "2": "Amazon WorkSpaces는 가상 데스크톱(DaaS) 서비스로, 메시징 컴포넌트 디커플링과 무관합니다.",
+        "3": "AWS IoT Core는 IoT 기기 연결 서비스로, 일반 애플리케이션 컴포넌트의 메시지 디커플링 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon SQS? — 분산 시스템·컴포넌트를 디커플링하는 호스팅 메시지 큐(메시지 보관·소비자 폴링)",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-8-q15",
+      "examGuideTaskId": "clf-t3-8",
+      "skill": "비즈니스 앱 (SES — 이메일 발송)",
+      "difficulty": "applied",
+      "stem": "한 회사가 주문 영수증·가입 확인 같은 트랜잭션 이메일과 마케팅 이메일을 대량으로 안정적으로 발송하려 한다. 이 이메일 발송에 특화된 AWS 비즈니스 애플리케이션 서비스는?",
+      "options": [
+        "Amazon SES",
+        "Amazon SQS",
+        "Amazon WorkSpaces",
+        "AWS IoT Core"
+      ],
+      "correct": 0,
+      "explanation": "Amazon SES(Simple Email Service)는 트랜잭션·마케팅 이메일을 대량으로 발송하는 데 특화된 이메일 발송 서비스로, CLF 범위에서 비즈니스 애플리케이션 범주에 속합니다. 이메일 발송 시나리오의 키워드와 매칭됩니다.",
+      "wrongExplanations": {
+        "1": "Amazon SQS는 컴포넌트를 디커플링하는 메시지 큐 서비스로, 이메일 발송에 특화된 서비스가 아닙니다.",
+        "2": "Amazon WorkSpaces는 사용자용 가상 데스크톱(DaaS) 서비스로, 이메일 발송과 무관합니다.",
+        "3": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 이메일 발송과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "CLF-C02 공식 시험 가이드 (한국어) — Task 3.8 비즈니스 애플리케이션 서비스(Amazon SES 이메일)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }
