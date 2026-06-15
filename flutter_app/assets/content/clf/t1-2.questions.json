@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-2-q14",
@@ -380,14 +380,14 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t1-2-q15",
       "examGuideTaskId": "clf-t1-2",
       "skill": "기둥 간 차이점 파악(운영 우수성 vs 성능 효율성)",
       "difficulty": "applied",
-      "stem": "두 시나리오를 각각 알맞은 기둥에 매칭하라. (가) 워크로드 실행 상태를 모니터링하고 배포 절차를 자동화해 운영 프로세스를 지속 개선한다. (나) 워크로드에 알맞은 컴퓨팅 리소스를 골라 효율적으로 사용하고 수요·기술 변화에 맞춰 효율을 유지한다.",
+      "stem": "두 시나리오를 각각 알맞은 기둥에 매칭하라. (가) 장애가 발생할 때마다 사후 검토(post-incident review)를 수행하고, 그 교훈을 런북과 배포 절차에 반영해 운영 방식을 꾸준히 다듬는다. (나) 워크로드에 알맞은 컴퓨팅 리소스를 골라 효율적으로 사용하고 수요·기술 변화에 맞춰 효율을 유지한다.",
       "options": [
         "(가) 운영 우수성 / (나) 성능 효율성",
         "(가) 성능 효율성 / (나) 운영 우수성",
@@ -395,11 +395,11 @@
         "(가) 안정성 / (나) 성능 효율성"
       ],
       "correct": 0,
-      "explanation": "(가) 모니터링·자동화·지속 개선은 운영 우수성(Operational Excellence) 기둥의 신호입니다. (나) 워크로드에 알맞은 리소스를 골라 효율적으로 사용하고 그 효율을 유지하는 것은 성능 효율성(Performance Efficiency) 기둥의 신호입니다. 각 기둥은 서로 다른 실패 양상을 하나씩 전담하므로 시나리오의 핵심 신호는 한 기둥으로 떨어집니다.",
+      "explanation": "(가) 사후 검토로 얻은 교훈을 런북·배포 절차에 반영해 운영 방식을 지속 개선하는 것은 운영 우수성(Operational Excellence) 기둥의 신호입니다. (나) 워크로드에 알맞은 리소스를 골라 효율적으로 사용하고 그 효율을 유지하는 것은 성능 효율성(Performance Efficiency) 기둥의 신호입니다. 각 기둥은 서로 다른 실패 양상을 하나씩 전담하므로 시나리오의 핵심 신호는 한 기둥으로 떨어집니다.",
       "wrongExplanations": {
-        "1": "두 기둥이 뒤바뀌었습니다. 모니터링·자동화·지속 개선은 운영 우수성, 알맞은 리소스의 효율적 사용은 성능 효율성입니다.",
+        "1": "두 기둥이 뒤바뀌었습니다. 사후 검토·런북 반영·운영 방식의 지속 개선은 운영 우수성, 알맞은 리소스의 효율적 사용은 성능 효율성입니다.",
         "2": "(나)는 비용 절감(불필요한 비용 제거)이 아니라 '알맞은 리소스를 효율적으로 사용'하는 신호이므로 비용 최적화가 아니라 성능 효율성입니다.",
-        "3": "(가)는 장애 복구·일관성(안정성)이 아니라 운영 모니터링·자동화·지속 개선 신호이므로 운영 우수성입니다."
+        "3": "(가)는 장애가 나도 기능을 일관되게 수행·복구하는 것(안정성)이 아니라, 장애 이후의 교훈을 운영 절차에 반영해 개선하는 신호이므로 운영 우수성입니다."
       },
       "sources": [
         {
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
