@@ -23,7 +23,7 @@
 - Modify: `flutter_app/assets/content/clf/t{1-1..4-3}.questions.json` (19개 — `questions` 배열 끝에 3문항씩 추가)
 - Modify: `flutter_app/lib/data/content_index.dart` (도메인 게이트마다 해당 Task들 `questionCount: 12,` → `15,`)
 - Modify: `flutter_app/test/question_model_test.dart:18` (D4 게이트에서 `greaterThanOrEqualTo(12)` → `(15)`)
-- Create(repo 밖, 도메인당): `C:\workspace\clf-q15-evidence-d{N}.json` (근거 사이드카) · `C:\workspace\clf-d{N}-q15-drafts_for_review.json` (검수 파일)
+- Create(repo 밖, 도메인당): `D:\workspace\clf-q15-evidence-d{N}.json` (근거 사이드카) · `D:\workspace\clf-d{N}-q15-drafts_for_review.json` (검수 파일)
 - 마무리: `HANDOFF.md` · 스펙 상태 줄 · 메모리 [[content-density-loop]]
 
 ---
@@ -37,7 +37,7 @@
 - 작성: **정확히 3문항** — ①원리형(applied): 🧠 블록 원리의 새 시나리오 적용, 문서 자가점검 문항 전체와 소재·각도 중복 금지, 블록 문장 재진술 금지 ②함정 혼동형(applied): ⚠️ 함정 항목의 통념을 매력적 오답으로, 함정 교정 논리=정답 해설 근거 ③미커버 보완(foundational~applied): 기존 12문항이 안 다룬 skill — 문서 범위 밖이면 저커버 소재 대체+사유 보고.
 - 스키마: `id`(기존 최대 연번 다음 — 실측, 통상 q13~q15) / `examGuideTaskId` / `skill` / `difficulty` / `stem` / `options[4]`(길이·톤 균형) / `correct` / `explanation` / `wrongExplanations`(정답 제외 3키, "왜 틀렸는지+어떤 혼동을 노렸는지") / `sources`(해당 문서 frontmatter 출처 범위) / `"verified": false`(정확히 이 형태).
 - 금지(고도화 절제 규칙 이식): 무출처 수치·내부 구현/설계 의도 단정·새 기술 용어·기존 12문항과 정답 포인트 중복.
-- 근거 사이드카: `C:\workspace\clf-q15-evidence-d{N}.json`(JSON 배열, 없으면 `[]`로 생성)에 문항당 `{"id": "...", "evidence": "원리형: §3 🧠 블록 / 함정형: 함정#2 / 보완: skill '...' (§5 본문)"}` 추가.
+- 근거 사이드카: `D:\workspace\clf-q15-evidence-d{N}.json`(JSON 배열, 없으면 `[]`로 생성)에 문항당 `{"id": "...", "evidence": "원리형: §3 🧠 블록 / 함정형: 함정#2 / 보완: skill '...' (§5 본문)"}` 추가.
 - 검증·커밋: 아래 R3 검증 스크립트 통과 + `flutter test`(전체, `+451` 그린) 확인 후 대상 questions.json만 커밋(푸시 금지):
   `feat(content): clf-t{X-Y} 문항 +3 초안 — 원리·함정·보완 (verified:false, 검수 전)` (+ Co-Authored-By 트레일러)
 - 보고: 문항 3개 각 유형·소재·근거 § / id / 대체 발생 시 사유 / 테스트 마지막 줄 / 커밋 해시.
@@ -57,7 +57,7 @@
 검증 스크립트(대상 파일 경로만 바꿔 실행):
 
 ```powershell
-$p = 'C:\workspace\aws-docs\flutter_app\assets\content\clf\t1-1.questions.json'
+$p = 'D:\workspace\awc-docs\flutter_app\assets\content\clf\t1-1.questions.json'
 $j = Get-Content $p -Raw | ConvertFrom-Json; $qs = $j.questions
 "총 $($qs.Count) / verified $(($qs | Where-Object verified).Count) / 초안 $(($qs | Where-Object { -not $_.verified }).Count)"
 if (($qs.id | Select-Object -Unique).Count -ne $qs.Count) { throw 'id 중복' }
@@ -72,7 +72,7 @@ if ($rawFalse -ne 3) { throw "verified:false 정확 형태가 $rawFalse개 (3 �
 'OK'
 ```
 
-기대: `총 15 / verified 12 / 초안 3` + `OK`. 이어서 `cd C:\workspace\aws-docs\flutter_app; flutter test -r compact` 마지막 줄 `+451: All tests passed!` 직접 실측. fix 디프 스팟 체크(중복 대조표 vs 실제).
+기대: `총 15 / verified 12 / 초안 3` + `OK`. 이어서 `cd D:\workspace\awc-docs\flutter_app; flutter test -r compact` 마지막 줄 `+451: All tests passed!` 직접 실측. fix 디프 스팟 체크(중복 대조표 vs 실제).
 
 ---
 
@@ -82,13 +82,13 @@ if ($rawFalse -ne 3) { throw "verified:false 정확 형태가 $rawFalse개 (3 �
 
 ```powershell
 $N = 1; $tasks = @('t1-1','t1-2','t1-3','t1-4')   # 배치별로 교체
-$ev = Get-Content "C:\workspace\clf-q15-evidence-d$N.json" -Raw | ConvertFrom-Json
+$ev = Get-Content "D:\workspace\clf-q15-evidence-d$N.json" -Raw | ConvertFrom-Json
 $out = @(); foreach ($t in $tasks) {
-  $j = Get-Content "C:\workspace\aws-docs\flutter_app\assets\content\clf\$t.questions.json" -Raw | ConvertFrom-Json
+  $j = Get-Content "D:\workspace\awc-docs\flutter_app\assets\content\clf\$t.questions.json" -Raw | ConvertFrom-Json
   foreach ($q in ($j.questions | Where-Object { -not $_.verified })) {
     $q | Add-Member -NotePropertyName reviewEvidence -NotePropertyValue (($ev | Where-Object id -eq $q.id).evidence)
     $out += $q } }
-ConvertTo-Json $out -Depth 10 | Set-Content "C:\workspace\clf-d$N-q15-drafts_for_review.json" -Encoding utf8
+ConvertTo-Json $out -Depth 10 | Set-Content "D:\workspace\clf-d$N-q15-drafts_for_review.json" -Encoding utf8
 "추출 $($out.Count)문항"   # 기대: D1 12 / D2 12 / D3 24 / D4 9
 ```
 
@@ -101,7 +101,7 @@ ConvertTo-Json $out -Depth 10 | Set-Content "C:\workspace\clf-d$N-q15-drafts_for
 ```powershell
 $tasks = @('t1-1','t1-2','t1-3','t1-4')   # 배치별로 교체
 foreach ($t in $tasks) {
-  $p = "C:\workspace\aws-docs\flutter_app\assets\content\clf\$t.questions.json"
+  $p = "D:\workspace\awc-docs\flutter_app\assets\content\clf\$t.questions.json"
   $raw = Get-Content $p -Raw
   $c = ([regex]::Matches($raw, '"verified": false')).Count
   if ($c -ne 3) { throw "$t : 치환 대상 $c개 (3 기대)" }

@@ -59,7 +59,7 @@
 | D4 | t4-1 ~ t4-3 | 9 |
 
 도메인별 브랜치 `feat/clf-q15-d{1..4}`:
-1. 도메인 내 Task 수만큼 §5 루프 완료 → 리뷰 파일 추출: `C:\workspace\clf-d{N}-q15-drafts_for_review.json` (전례 형식 + **문항별 근거 문서 위치(§ 표기) 병기**로 검수 시간 단축).
+1. 도메인 내 Task 수만큼 §5 루프 완료 → 리뷰 파일 추출: `D:\workspace\clf-d{N}-q15-drafts_for_review.json` (전례 형식 + **문항별 근거 문서 위치(§ 표기) 병기**로 검수 시간 단축).
 2. **STOP — 본인 검수** (피드백 전 진행 금지).
 3. 피드백 반영 → 해당 문항 `verified:true` + 해당 Task들 `content_index.dart` questionCount 12→15 → 전체 테스트(content_index_test 정합 포함) → 커밋 `chore(content): D{N} 문항 검수 반영 — Task당 15 verified`.
 4. main 병합(`--no-ff`) → 머지본 전체 테스트 → push(=배포) → 브랜치 삭제 → 다음 도메인.

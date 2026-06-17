@@ -39,9 +39,9 @@
 - 커밋 `0a2229c`(D1 초안)·`b7e0f9e`(D1 활성화)·`c414d40`(D2~4).
 
 ## 2. 절대 잊지 말 환경 (매 세션 함정)
-- **폴더:** git 루트 `C:\workspace\aws-docs`, Flutter `flutter_app\`. 콘텐츠 `flutter_app\assets\content\<cert>\`.
-- **명령:** flutter/test/analyze는 **PowerShell**에서 `flutter_app` 기준(`cd C:\workspace\aws-docs\flutter_app`). git은 `git -C C:\workspace\aws-docs`. Git Bash로 flutter 빌드 금지(`--base-href` 깨짐).
-- **Bash 도구 cwd:** 백그라운드 `flutter run`은 Bash 도구에서 cwd가 리셋될 수 있음 → `cd /c/workspace/aws-docs/flutter_app && flutter.bat run …`로 명시.
+- **폴더:** git 루트 `D:\workspace\awc-docs`, Flutter `flutter_app\`. 콘텐츠 `flutter_app\assets\content\<cert>\`.
+- **명령:** flutter/test/analyze는 **PowerShell**에서 `flutter_app` 기준(`cd D:\workspace\awc-docs\flutter_app`). git은 `git -C D:\workspace\awc-docs`. Git Bash로 flutter 빌드 금지(`--base-href` 깨짐).
+- **Bash 도구 cwd:** 백그라운드 `flutter run`은 Bash 도구에서 cwd가 리셋될 수 있음 → `cd /d/workspace/awc-docs/flutter_app && flutter.bat run …`로 명시.
 - **pubspec.lock:** `flutter run`/`build`가 추이 의존성 버전을 건드림. 기능 무관하면 `git checkout -- flutter_app/pubspec.lock`으로 되돌리고 배포(이번 세션 내내 그렇게 함).
 - **로컬 콘솔 경고:** SelectionArea의 `hasSize` assertion이 모든 페이지 콘솔/일부 위젯 테스트에서 뜸 — 알려진 Flutter 웹 디버그 경고, 표시·릴리스 무관. AppBar 위젯 테스트는 라우터 스택(하단 HomePage SelectionArea + 전환) 대신 페이지를 직접 펌프해 회피.
 - **커밋:** `main` 직접 커밋·push(사용자 선택). push 시 GitHub Pages 자동 배포(~1분).
