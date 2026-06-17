@@ -208,7 +208,7 @@ abstract final class Radii {
 /// Layout widths (DESIGN.md).
 abstract final class Layout {
   static const double content = 1180;
-  static const double measure = 720; // reading measure for study docs
+  static const double measure = 1080; // reading measure for study docs (web)
   static const double exam = 768;
 }
 
