@@ -113,9 +113,9 @@ git diff HEAD~2 -- assets/content/clf/ | head -100
 ```bash
 cd flutter_app
 # 신규 verified:false 문항만 모아 검수용 JSON 추출 (문항별 근거 문서 § 병기는 드래프터 보고에서 수기 취합)
-node -e "const fs=require('fs');const g=require('glob');let out=[];for(const f of fs.readdirSync('assets/content/clf').filter(x=>/^t{N}-.*\.questions\.json$/.test(x))){const j=JSON.parse(fs.readFileSync('assets/content/clf/'+f));out.push(...j.questions.filter(q=>q.verified===false).map(q=>({file:f,...q})));}fs.writeFileSync('C:/workspace/clf-d{N}-q15-drafts_for_review.json',JSON.stringify(out,null,2));console.log('추출:',out.length,'문항');"
+node -e "const fs=require('fs');const g=require('glob');let out=[];for(const f of fs.readdirSync('assets/content/clf').filter(x=>/^t{N}-.*\.questions\.json$/.test(x))){const j=JSON.parse(fs.readFileSync('assets/content/clf/'+f));out.push(...j.questions.filter(q=>q.verified===false).map(q=>({file:f,...q})));}fs.writeFileSync('D:/workspace/clf-d{N}-q15-drafts_for_review.json',JSON.stringify(out,null,2));console.log('추출:',out.length,'문항');"
 ```
-**STOP — 사람 검수.** 추출 파일 `C:\workspace\clf-d{N}-q15-drafts_for_review.json`을 사용자가 검토하고 피드백을 줄 때까지 **다음 스텝(flip) 진행 금지.**
+**STOP — 사람 검수.** 추출 파일 `D:\workspace\clf-d{N}-q15-drafts_for_review.json`을 사용자가 검토하고 피드백을 줄 때까지 **다음 스텝(flip) 진행 금지.**
 
 ### 절차 E: flip + questionCount 상향 + 커밋 (검수 피드백 반영 후)
 
@@ -162,7 +162,7 @@ Expected: 19개 전부 `12`.
 **Files:**
 - Modify: `flutter_app/assets/content/clf/t1-1.questions.json` ~ `t1-4.questions.json` (각 q13~q15 추가)
 - Modify: `flutter_app/lib/data/content_index.dart` (t1-1~t1-4의 questionCount 12→15, flip 후)
-- Review artifact: `C:\workspace\clf-d1-q15-drafts_for_review.json`
+- Review artifact: `D:\workspace\clf-d1-q15-drafts_for_review.json`
 
 - [ ] **Step 1: 브랜치 확인** — `feat/clf-q15-d1` 위인지 `git branch --show-current`로 확인.
 
@@ -215,7 +215,7 @@ git checkout develop && git pull && git branch -d feat/clf-q15-d1
 **Files:**
 - Modify: `flutter_app/assets/content/clf/t2-1.questions.json` ~ `t2-4.questions.json`
 - Modify: `flutter_app/lib/data/content_index.dart` (t2-1~t2-4 questionCount 12→15)
-- Review artifact: `C:\workspace\clf-d2-q15-drafts_for_review.json`
+- Review artifact: `D:\workspace\clf-d2-q15-drafts_for_review.json`
 
 - [ ] **Step 1: 브랜치 분기** — `git checkout develop && git checkout -b feat/clf-q15-d2` (스펙 경로면 main에서).
 
@@ -246,7 +246,7 @@ git checkout develop && git pull && git branch -d feat/clf-q15-d1
 **Files:**
 - Modify: `flutter_app/assets/content/clf/t3-1.questions.json` ~ `t3-8.questions.json`
 - Modify: `flutter_app/lib/data/content_index.dart` (t3-1~t3-8 questionCount 12→15)
-- Review artifact: `C:\workspace\clf-d3-q15-drafts_for_review.json`
+- Review artifact: `D:\workspace\clf-d3-q15-drafts_for_review.json`
 
 - [ ] **Step 1: 브랜치 분기** — `feat/clf-q15-d3`.
 
@@ -276,7 +276,7 @@ git checkout develop && git pull && git branch -d feat/clf-q15-d1
 - Modify: `flutter_app/assets/content/clf/t4-1.questions.json` ~ `t4-3.questions.json`
 - Modify: `flutter_app/lib/data/content_index.dart` (t4-1~t4-3 questionCount 12→15)
 - Modify: `flutter_app/test/question_model_test.dart:18` (밀도 가드 12→15)
-- Review artifact: `C:\workspace\clf-d4-q15-drafts_for_review.json`
+- Review artifact: `D:\workspace\clf-d4-q15-drafts_for_review.json`
 
 - [ ] **Step 1: 브랜치 분기** — `feat/clf-q15-d4`.
 
