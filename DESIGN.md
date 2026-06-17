@@ -90,7 +90,7 @@
 ## Layout
 - **접근:** 하이브리드 — 학습 문서는 에디토리얼, 대시보드·로드맵은 그리드
 - **최대 콘텐츠 폭:** `1180px` (`--content`)
-- **독서 측정 폭:** `42rem` (`--measure`) — 학습 문서 본문. 한글 한 줄이 너무 길지 않게
+- **독서 측정 폭:** `67.5rem`(1080px, `Layout.measure`) — 학습 문서 본문(웹). 본문 좌우 여백 과다(720/1180) 개선·표/코드 혼재 가독을 위해 720→1080 확대(2026-06-18). 모바일은 화면폭이 상한이라 영향 없음
 - **모의고사 카드 폭:** `48rem`
 - **그리드:** 카드 `repeat(auto-fill, minmax(230px, 1fr))`, 컴포넌트 `repeat(auto-fit, minmax(280px, 1fr))`
 - **로드맵 뷰:** roadmap.sh식 수직 단계 경로 — 연결선 + 노드(done/current/locked). current 노드는 액센트 + 4px weak 글로우
@@ -167,3 +167,4 @@
 | 2026-06-13 | 라우트 fade 전환(6키) + 상태뷰 3종 + focus-visible 토큰 (PR2) | 시각 리펙토링 B안 WS3·WS4. 전환 enter 200/exit 150ms, Loading 150ms 유예, Empty 아이콘 없음(2A), Error wrong 시맨틱+복구 2경로, 카피 매트릭스 합니다체(3A), disableAnimations 존중(7A) |
 | 2026-06-13 | Pretendard Variable(woff2) 전환 + Wght 토큰 (PR3) | 시각 리펙토링 B안 WS5. 폰트 6.9→2.75MB(임계 경로 단축), 모든 weight 정확 렌더(디퍼럴 스와프 문제 없음), fontWeight↔fontVariations 1:1 게이트 |
 | 2026-06-13 | AppHeader 2변형 롤아웃(9페이지) + collapse 규약 + 글래스(extend) + focus 인셋 변형 + 키보드 감사 (PR4) | 시각 리펙토링 B안 WS6·7·8 + DT4. 헤더 셸 56px 통일(홈 60→56), 브레드크럼 분해(정보 손실 0 — 인벤토리 대조), 세션 액션은 본문 유지(OQ2), plan만 비확장(NestedScrollView 충돌), GestureDetector 인터랙티브 0건화 |
+| 2026-06-18 | 학습 문서 독서 측정 폭 720→1080px (`Layout.measure`) | 웹에서 본문 좌우 여백 과다(본문 720 / 콘텐츠 1180 → 여백 각 ~230px). 표·코드 혼재 학습문서 가독 위해 1.5배 확대. 모바일은 화면폭이 상한이라 영향 없음. 사용자 승인하 measure 원칙 완화 |
