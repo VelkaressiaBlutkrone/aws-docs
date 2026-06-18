@@ -70,6 +70,7 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                       state.pathParameters['code']!,
                       state.pathParameters['taskId']!,
                     )!,
+                    targetAnchor: state.uri.queryParameters['at'],
                   ),
                   routes: <RouteBase>[
                     GoRoute(
