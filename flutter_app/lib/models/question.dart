@@ -12,12 +12,14 @@ class Question {
     required this.sources,
     required this.verified,
     this.skill = '',
+    this.section = '',
     this.difficulty = '',
   });
 
   final String id;
   final String examGuideTaskId;
   final String skill;
+  final String section; // 학습문서 섹션 앵커 id (딥링크). 없으면 ''.
   final String difficulty;
   final String stem;
   final List<String> options;
@@ -40,6 +42,7 @@ class Question {
       id: (j['id'] ?? '').toString(),
       examGuideTaskId: (j['examGuideTaskId'] ?? '').toString(),
       skill: (j['skill'] ?? '').toString(),
+      section: (j['section'] ?? '').toString(),
       difficulty: (j['difficulty'] ?? '').toString(),
       stem: (j['stem'] ?? '').toString(),
       options: ((j['options'] as List?) ?? const [])
@@ -69,6 +72,7 @@ class Question {
       id: id,
       examGuideTaskId: examGuideTaskId,
       skill: skill,
+      section: section,
       difficulty: difficulty,
       stem: stem,
       options: [for (final i in order) options[i]],

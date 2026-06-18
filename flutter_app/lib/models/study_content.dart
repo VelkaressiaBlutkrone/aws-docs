@@ -28,9 +28,10 @@ sealed class MdBlock {
 }
 
 class MdHeading extends MdBlock {
-  const MdHeading(this.level, this.text);
+  const MdHeading(this.level, this.text, {this.anchor});
   final int level; // 1..3
   final String text;
+  final String? anchor; // 제목의 {#id} (딥링크 앵커). 없으면 null.
 }
 
 class MdParagraph extends MdBlock {
