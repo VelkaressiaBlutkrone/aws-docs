@@ -1,0 +1,369 @@
+{
+  "examGuideTaskId": "saa-t4-5",
+  "taskTitle": "비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected",
+  "domain": 4,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t4-5-q1",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "비용 관리 도구 선택(분석·예측)",
+      "difficulty": "foundational",
+      "stem": "팀장이 \"지난 6개월간 계정의 서비스별 비용 추세를 시각화하고, 향후 3개월 예측도 확인하고 싶다\"고 요청했다. 가장 적합한 AWS 도구는?",
+      "options": [
+        "AWS Cost Explorer — 과거 13개월 이력과 향후 18개월 예측을 인터랙티브 그래프로 제공한다",
+        "AWS Budgets — 예산 임계값을 설정하고 알림을 받는다",
+        "AWS Cost and Usage Report(CUR) — S3에 CSV를 저장하고 Athena로 쿼리한다",
+        "AWS Cost Anomaly Detection — 머신러닝 모델로 비용 급등을 감지한다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Cost Explorer는 과거 13개월 이력 조회와 향후 18개월 예측을 제공하는 분석·시각화 도구입니다. 서비스·계정·리전·태그·인스턴스 유형 등 다차원 필터와 그룹핑을 지원하며, 콘솔 UI 사용은 무료입니다. 추세 분석과 예측이 필요하면 Cost Explorer가 정답입니다.",
+      "wrongExplanations": {
+        "1": "Budgets는 예산 초과 알림과 자동 조치(Budget Actions)를 위한 도구이지, 과거 추세 시각화나 미래 예측 분석을 제공하지 않습니다.",
+        "2": "CUR은 S3에 저장되는 원시 라인 아이템 데이터로, Athena·Redshift 파이프라인용 심층 감사에 적합합니다. 즉각적인 인터랙티브 시각화 도구가 아닙니다.",
+        "3": "Cost Anomaly Detection은 정상 범위를 벗어난 비용 급등을 머신러닝으로 자동 감지하는 도구로, 추세 시각화나 예측 기능을 제공하지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q2",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "AWS Budgets Budget Actions",
+      "difficulty": "applied",
+      "stem": "개발 팀의 월 AWS 지출이 $5,000을 초과하면 재무팀에 이메일로 알리고, $7,000을 초과하면 추가 EC2 인스턴스 시작을 자동으로 차단해야 한다. 이 요구사항을 충족하는 구성으로 옳은 것은?",
+      "options": [
+        "AWS Cost Explorer에서 $5,000 경보를 설정하고, $7,000 초과 시 수동으로 IAM 정책을 수정한다",
+        "AWS Budgets로 월 비용 예산을 생성하고, $5,000 임계값에 이메일 알림, $7,000 임계값에 Budget Actions로 ec2:RunInstances Deny IAM 정책을 자동 연결한다",
+        "AWS Cost Anomaly Detection으로 $7,000 초과를 감지하고 Lambda로 IAM 정책을 수정한다",
+        "CloudWatch 알람으로 $5,000 초과를 감지하고 SNS로 이메일을 보낸다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Budgets는 예산 초과 알림과 자동 조치를 모두 지원합니다. $5,000 임계값에 이메일 알림을 설정하고, $7,000 임계값에 Budget Actions로 ec2:RunInstances를 Deny하는 IAM 정책을 자동 연결하면 사람 개입 없이 추가 인스턴스 생성이 차단됩니다. Budget Actions는 IAM 정책 연결, SNS 알림, SSM Automation 실행의 세 가지 조치를 지원합니다.",
+      "wrongExplanations": {
+        "0": "Cost Explorer는 분석·시각화 도구로 알림이나 자동 차단 기능이 없습니다. 예산 초과 제어에는 Budgets를 사용해야 합니다.",
+        "2": "Cost Anomaly Detection은 예상치 못한 비용 급등을 ML로 감지하는 도구로, 고정 임계값 기반 알림이나 IAM 정책 자동 연결 기능을 제공하지 않습니다.",
+        "3": "CloudWatch 알람으로 이메일 알림을 보낼 수는 있지만, 예산 임계값 기반 IAM 정책 자동 연결(자동 차단)은 Budget Actions의 기능입니다."
+      },
+      "sources": [
+        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q3",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "CUR 분석 파이프라인",
+      "difficulty": "applied",
+      "stem": "데이터 엔지니어링 팀이 AWS 비용 데이터를 리소스·태그·시간 단위로 세분화해 SQL로 직접 쿼리하고, 결과를 비즈니스 인텔리전스 대시보드로 시각화하려 한다. 이 파이프라인을 구성하는 올바른 순서는?",
+      "options": [
+        "AWS Budgets → SNS → Lambda → QuickSight",
+        "Cost Explorer API → Redshift → QuickSight",
+        "CUR(S3 CSV) → Amazon Athena(SQL 쿼리) → Amazon QuickSight(시각화)",
+        "AWS Cost Anomaly Detection → S3 → Athena"
+      ],
+      "correct": 2,
+      "explanation": "Cost and Usage Report(CUR)는 시간·일·월 단위 라인 아이템을 S3 CSV로 전달합니다. Athena 통합을 활성화하면 Glue 크롤러와 Athena 테이블이 자동 생성되어 SQL 쿼리가 가능하고, QuickSight로 시각화까지 이어지는 통합 파이프라인을 구성할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "이 파이프라인은 예산 알림용 구성으로, SQL 기반 비용 세분화 분석과 BI 시각화에는 맞지 않습니다.",
+        "1": "Cost Explorer는 인터랙티브 UI 기반 분석 도구로, 시간 단위 라인 아이템의 원시 데이터를 Redshift로 직접 전달하는 파이프라인을 제공하지 않습니다.",
+        "3": "Cost Anomaly Detection은 이상 비용 감지용 도구로 SQL 기반 세분화 분석 파이프라인을 제공하지 않습니다. CUR이 SQL 분석의 소스입니다."
+      },
+      "sources": [
+        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q4",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Cost Anomaly Detection 구조",
+      "difficulty": "foundational",
+      "stem": "지난주 특정 계정에서 EC2 비용이 평소의 4배로 급등했으나 아무도 눈치채지 못했다. 앞으로 이런 예상치 못한 비용 급등을 자동으로 감지하고 알림을 받으려면 어떤 서비스를 사용해야 하는가?",
+      "options": [
+        "AWS Budgets — 고정 임계값 초과 시 알림을 설정한다",
+        "AWS Cost Explorer — RI 구매 추천을 활성화한다",
+        "AWS Trusted Advisor — 저사용 EC2 항목을 확인한다",
+        "AWS Cost Anomaly Detection — 비용 모니터를 생성하고 알림 구독을 설정한다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Cost Anomaly Detection은 머신러닝 모델이 계정의 지출 패턴을 학습하고, 정상 범위를 벗어난 이상 비용을 자동으로 감지합니다. 비용 모니터(무엇을 감시할지)와 알림 구독(누구에게, 어떤 임계값으로 알릴지)을 설정하면 이상 감지 시 이메일·SNS로 즉시 통보됩니다.",
+      "wrongExplanations": {
+        "0": "Budgets는 고정 임계값 기반 알림으로, 정상 변동과 진짜 이상을 구분하지 못합니다. 비용이 평소보다 갑자기 4배 급등하는 이상 패턴 감지에는 ML 기반 Cost Anomaly Detection이 적합합니다.",
+        "1": "Cost Explorer의 RI 구매 추천은 예약 인스턴스 최적화 기능으로, 이상 비용 자동 감지와 관계없습니다.",
+        "2": "Trusted Advisor는 저사용 EC2 등 현재 상태 스냅샷을 규칙 기반으로 점검하는 도구로, 시계열 지출 패턴의 이상 급등을 자동 감지하지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Cost Anomaly Detection — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q5",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "비용 할당 태그 활성화",
+      "difficulty": "applied",
+      "stem": "운영팀이 모든 EC2 인스턴스에 `team:finance` 태그를 3개월 전부터 붙여뒀지만, AWS Cost Explorer에서 해당 태그로 필터링해도 비용이 표시되지 않는다. 원인으로 가장 가능성이 높은 것은?",
+      "options": [
+        "Cost Explorer는 태그 필터링을 지원하지 않는다",
+        "태그 키에 콜론(:)이 포함되면 AWS가 자동으로 태그를 거부한다",
+        "Billing Console에서 해당 태그 키를 비용 할당 태그로 활성화하지 않았다",
+        "EC2 인스턴스에 태그를 붙이려면 IAM 관리자 권한이 필요하다"
+      ],
+      "correct": 2,
+      "explanation": "리소스에 태그를 붙이는 것만으로는 Cost Explorer·CUR에서 해당 태그로 필터링할 수 없습니다. Billing Console에서 태그 키를 비용 할당 태그로 명시적으로 활성화해야 청구 데이터에 컬럼이 포함됩니다. 이 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, backfill 요청으로 최대 12개월까지 소급 적용할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Cost Explorer는 태그 필터링을 지원합니다. 다만 Billing Console에서 비용 할당 태그로 활성화된 태그 키에 한해서만 필터에 나타납니다.",
+        "1": "태그 키에 콜론이 포함되는 것은 허용됩니다. `team:finance` 형태의 태그는 유효한 사용자 정의 태그 형식입니다.",
+        "3": "태그 부착 권한은 IAM 정책에서 제어하는 것이 맞지만, 이 시나리오에서 태그가 이미 3개월 전부터 붙어 있다고 했으므로 태그 부착 자체의 권한 문제가 아닙니다."
+      },
+      "sources": [
+        { "title": "비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q6",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Organizations 통합 결제 볼륨 할인",
+      "difficulty": "foundational",
+      "stem": "한 기업이 AWS Organizations에서 5개의 멤버 계정을 운영하고 있다. 각 계정은 S3 사용량이 낮아 개별적으로 볼륨 할인 티어에 도달하지 못한다. 통합 결제(Consolidated Billing)를 활성화하면 어떤 효과가 발생하는가?",
+      "options": [
+        "각 계정이 독립적으로 과금되어 볼륨 할인이 더 어려워진다",
+        "5개 계정의 S3 사용량이 합산되어 더 높은 볼륨 할인 티어가 적용될 수 있다",
+        "통합 결제는 비용을 합산해 청구하므로 할인 없이 총액만 증가한다",
+        "볼륨 할인은 각 계정이 동일한 리전을 사용할 때만 합산된다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Organizations의 통합 결제는 멤버 계정 전체의 사용량을 합산해 단일 사용량으로 간주합니다. 개별 계정이 낮은 할인 구간에 머물러도, 합산 사용량이 더 높은 볼륨 할인 티어를 충족하면 더 낮은 단가가 적용됩니다. 이는 동일 사용량·동일 아키텍처에서도 청구 구조 변경만으로 실질 비용을 줄이는 거버넌스 수단입니다.",
+      "wrongExplanations": {
+        "0": "통합 결제는 사용량 합산으로 볼륨 할인 티어를 유리하게 적용받는 구조로, 개별 분리보다 할인에 더 유리합니다.",
+        "2": "통합 결제는 단순 합산 청구가 아니라 합산된 사용량으로 볼륨 할인 티어를 적용하는 방식입니다. 할인 혜택이 없어지는 것이 아닙니다.",
+        "3": "볼륨 할인 합산은 리전 제약이 없습니다. 멤버 계정 전체의 서비스 사용량이 합산됩니다."
+      },
+      "sources": [
+        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q7",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Compute Optimizer vs Trusted Advisor 역할 구분",
+      "difficulty": "foundational",
+      "stem": "솔루션스 아키텍트가 두 가지 비용 최적화 작업을 수행해야 한다. (1) CPU 사용률이 10% 미만인 EC2 인스턴스를 더 작은 타입으로 변경할 추천이 필요하다. (2) 6개월째 사용하지 않는 EBS 볼륨과 유휴 로드밸런서를 찾아야 한다. 각 작업에 맞는 도구는?",
+      "options": [
+        "(1) AWS Trusted Advisor, (2) AWS Compute Optimizer",
+        "(1) AWS Cost Explorer, (2) AWS Budgets",
+        "(1) AWS Cost Anomaly Detection, (2) AWS Compute Optimizer",
+        "(1) AWS Compute Optimizer, (2) AWS Trusted Advisor"
+      ],
+      "correct": 3,
+      "explanation": "Compute Optimizer는 CloudWatch 지표 14일 이상을 수집해 인스턴스 과/저프로비저닝을 감지하고 적정 크기(Rightsizing)를 추천합니다 — '이 인스턴스 크기가 맞나?'에 답합니다. Trusted Advisor는 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목을 현재 상태 스냅샷 기반으로 탐지합니다 — '이 리소스를 아직도 쓰고 있나?'에 답합니다.",
+      "wrongExplanations": {
+        "0": "역할이 바뀌었습니다. Trusted Advisor는 미사용 리소스 탐지용이고, Compute Optimizer는 인스턴스 크기 추천용입니다.",
+        "1": "Cost Explorer는 비용 추세 분석·예측 도구이고, Budgets는 예산 알림·차단 도구입니다. 두 도구 모두 인스턴스 크기 추천이나 유휴 리소스 탐지를 직접 수행하지 않습니다.",
+        "2": "Cost Anomaly Detection은 이상 비용 자동 감지용이고, Compute Optimizer는 적정 크기 추천용입니다. Compute Optimizer가 유휴 EBS·로드밸런서 탐지를 담당하지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q8",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Well-Architected 소비 모델 채택",
+      "difficulty": "foundational",
+      "stem": "Well-Architected 비용 최적화 기둥의 설계 원칙 중 하나는 '소비 모델 채택(Adopt a consumption model)'이다. 이 원칙을 가장 잘 설명하는 것은?",
+      "options": [
+        "데이터 센터 운영(랙·전원·OS 관리)을 AWS에 위임해 비즈니스에 집중한다",
+        "사용한 만큼만 지불하고, 개발·테스트 환경을 업무 외 시간에 중단해 최대 75%를 절감한다",
+        "워크로드의 비즈니스 산출물과 비용을 함께 측정해 ROI를 파악한다",
+        "비용 효율성을 조직 역량으로 구축하고 전담 인력·프로세스에 투자한다"
+      ],
+      "correct": 1,
+      "explanation": "소비 모델 채택 원칙은 '사용한 만큼만 지불'하는 클라우드의 탄력성을 활용하는 것입니다. 개발·테스트 환경을 업무 외 시간(주 40시간 가동 vs 168시간 가동)에 중단하면 최대 75% 절감이 가능합니다. 필요할 때만 켜고 불필요할 때 끄는 것이 소비 모델의 핵심입니다.",
+      "wrongExplanations": {
+        "0": "이것은 '미분화된 무거운 작업 중단(Stop spending money on undifferentiated heavy lifting)' 원칙입니다. 데이터 센터 운영을 AWS에 위임해 비즈니스에 집중하는 것을 의미합니다.",
+        "2": "이것은 '전반적 효율성 측정(Measure overall efficiency)' 원칙입니다. 비즈니스 산출물과 비용을 함께 측정하는 것을 의미합니다.",
+        "3": "이것은 '클라우드 재무 관리 실천(Practice cloud financial management)' 원칙입니다. 비용 효율성을 조직 역량으로 구축하는 것을 의미합니다."
+      },
+      "sources": [
+        { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q9",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "CUR과 Cost Explorer 차이",
+      "difficulty": "foundational",
+      "stem": "한 회계팀이 AWS 비용 데이터에 대해 두 가지 서로 다른 요구사항을 제시했다. (A) 특정 EC2 인스턴스의 시간 단위 비용을 Athena SQL로 쿼리하는 감사 보고서가 필요하다. (B) 이번 달 전체 계정의 서비스별 비용 분포를 즉시 시각화해서 보고 싶다. 각 요구사항에 맞는 도구는?",
+      "options": [
+        "(A) CUR(Athena 통합), (B) Cost Explorer",
+        "(A) Cost Explorer, (B) AWS Budgets",
+        "(A) AWS Budgets, (B) Cost Explorer",
+        "(A) Cost Anomaly Detection, (B) CUR"
+      ],
+      "correct": 0,
+      "explanation": "CUR은 시간·일·월 단위 라인 아이템을 S3 CSV로 저장하고 Athena 통합으로 SQL 쿼리를 지원합니다 — 심층 감사·파이프라인용 원시 데이터입니다. Cost Explorer는 같은 데이터셋 위에서 집계·필터·그룹핑을 미리 계산해 인터랙티브 그래프로 제공하는 분석 레이어입니다 — 즉각적인 시각적 탐색에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Cost Explorer는 Athena SQL 쿼리 파이프라인을 제공하지 않습니다. Budgets는 시각화 도구가 아닙니다.",
+        "2": "Budgets는 예산 알림·자동 조치용 도구로 시간 단위 SQL 감사나 즉각 시각화 모두 해당하지 않습니다.",
+        "3": "Cost Anomaly Detection은 이상 비용 감지용이고 시간 단위 SQL 감사에 맞지 않습니다. 순서도 바뀌어 있습니다."
+      },
+      "sources": [
+        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" },
+        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q10",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "AWS Budgets 예산 유형",
+      "difficulty": "foundational",
+      "stem": "FinOps 팀이 회사에서 구매한 EC2 예약 인스턴스(RI)가 충분히 활용되고 있는지 모니터링하려 한다. RI 사용률이 70% 미만으로 떨어지면 알림을 받고 싶다. 어떤 AWS Budgets 예산 유형을 사용해야 하는가?",
+      "options": [
+        "비용 예산(Cost Budget) — 지출 금액이 임계값 초과 시 알림",
+        "사용량 예산(Usage Budget) — 서비스 사용량이 임계값 초과 시 알림",
+        "RI 사용률 예산(RI Utilization Budget) — 사용률이 임계값 미달 시 알림",
+        "Savings Plans 커버리지 예산 — SP로 커버된 비율 추적"
+      ],
+      "correct": 2,
+      "explanation": "RI 사용률 예산(RI Utilization Budget)은 예약 인스턴스 활용도를 추적하고 사용률이 임계값 미달 시 알림을 보냅니다. RI를 구매했지만 충분히 사용하지 않으면 미사용 RI 비용이 낭비되므로, 사용률 모니터링은 비용 최적화의 핵심입니다.",
+      "wrongExplanations": {
+        "0": "비용 예산은 지출 금액이 임계값을 초과할 때 알림을 보내는 유형으로, RI 사용률 추적에는 맞지 않습니다.",
+        "1": "사용량 예산은 특정 서비스의 사용량(예: EC2 인스턴스 시간 수)을 추적합니다. RI 활용도(구매한 RI 대비 실제 사용 비율)와는 다릅니다.",
+        "3": "Savings Plans 커버리지 예산은 SP로 커버된 비율을 추적하는 것으로, RI 사용률과는 다른 예산 유형입니다."
+      },
+      "sources": [
+        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q11",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Cost Anomaly Detection 모니터 유형",
+      "difficulty": "applied",
+      "stem": "대기업이 100개 이상의 AWS 계정을 운영하며 새 계정·태그·서비스가 자주 추가된다. Cost Anomaly Detection으로 전체 조직의 이상 비용을 감시하되, 유지 관리 부담을 최소화하려 한다. 어떤 모니터 유형이 적합한가?",
+      "options": [
+        "고객 관리형 모니터 — 최대 10개 특정 값을 수동 선택하고 고유 임계값을 설정한다",
+        "AWS 관리형 모니터 — 새 계정·태그·서비스를 자동으로 포함하고 유지 관리가 최소화된다",
+        "CloudWatch 알람 — 각 서비스별로 고정 임계값을 설정한다",
+        "Budgets 비용 예산 — 계정별로 월 예산을 설정한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS 관리형 모니터(AWS-managed monitor)는 새 계정·태그·서비스를 자동으로 포함하므로 유지 관리가 최소화됩니다. 조직이 빠르게 성장하고 계정·서비스가 자주 추가되는 환경에서 수동 설정 부담 없이 전체 조직을 감시할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "고객 관리형 모니터는 최대 10개의 특정 값을 수동 선택해 고유 임계값을 설정하는 방식으로, 100개 이상 계정과 자주 추가되는 서비스를 관리하기에는 유지 관리 부담이 큽니다.",
+        "2": "CloudWatch 알람은 고정 임계값 기반으로, 정상 지출 패턴 변화를 학습하는 ML 기반 이상 감지와 다릅니다. 서비스별로 수동 설정이 필요합니다.",
+        "3": "Budgets는 고정 예산 임계값 알림·자동 조치 도구로, ML 기반 이상 감지 기능이 없습니다."
+      },
+      "sources": [
+        { "title": "AWS Cost Anomaly Detection — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q12",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "태그 정책(Tag Policy)",
+      "difficulty": "applied",
+      "stem": "여러 팀이 EC2 인스턴스에 환경 태그를 붙이는데, `Env`, `env`, `ENV`, `environment` 등 일관성 없이 혼용하고 있다. Cost Explorer에서 태그 기반 필터링이 제대로 동작하지 않는다. 태그 키 명칭을 조직 전체에 걸쳐 강제 표준화하는 방법은?",
+      "options": [
+        "각 계정의 IAM 정책에서 특정 태그 키만 허용하도록 Condition을 추가한다",
+        "AWS Config 규칙으로 비표준 태그를 사용하는 리소스를 탐지한다",
+        "Cost Explorer에서 태그 그룹핑을 수동으로 설정해 여러 키를 하나로 합친다",
+        "AWS Organizations 태그 정책(Tag Policy)을 OU 또는 계정에 적용해 키·값 규칙을 강제한다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Organizations 태그 정책(Tag Policy)은 태그 키·값의 대소문자와 허용 값을 표준화하는 가드레일입니다. OU 또는 계정에 적용하면 조직 전체에서 `env`·`Env`·`ENV` 혼용을 방지하고 일관된 태그 키 사용을 강제할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "IAM 정책의 Condition으로 태그 강제가 가능하지만, 이는 계정·리소스별로 수동 설정이 필요해 조직 전체 일괄 표준화에는 적합하지 않습니다. 태그 정책이 조직 수준의 집중 관리에 더 적합합니다.",
+        "1": "AWS Config는 현재 상태를 감지해 알리거나 수정할 수 있지만, 태그 키 명칭 규칙을 사전에 강제하는 표준화 도구가 아닙니다.",
+        "2": "Cost Explorer에서 태그를 수동으로 합치는 것은 근본 원인(혼용)을 해결하지 않으며 데이터 정확성을 보장하지 않습니다."
+      },
+      "sources": [
+        { "title": "비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q13",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "비용 할당 태그 backfill",
+      "difficulty": "applied",
+      "stem": "회사가 6개월 전부터 모든 리소스에 `project:alpha` 태그를 붙여왔다. 그런데 이번 달에야 Billing Console에서 해당 태그를 비용 할당 태그로 활성화했다. 과거 6개월 치 CUR 데이터에서도 이 태그로 비용을 분류하고 싶다. 가능한가?",
+      "options": [
+        "불가능하다. 활성화 이전 데이터는 소급 반영이 절대 불가능하다",
+        "가능하다. 비용 할당 태그를 활성화하면 자동으로 전체 이력에 소급 반영된다",
+        "가능하다. backfill 요청을 통해 최대 12개월까지 소급 적용할 수 있으며, 리소스에 해당 태그가 실제로 붙어 있었던 기간에 한해 Cost Explorer·CUR이 자동 갱신된다",
+        "불가능하다. backfill은 AWS 관리 계정에서만 요청할 수 있다"
+      ],
+      "correct": 2,
+      "explanation": "비용 할당 태그 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, backfill 요청을 통해 최대 12개월까지 소급 적용이 가능합니다. 단, 리소스에 해당 태그가 실제로 붙어 있었던 기간에 한합니다. backfill이 완료되면 Cost Explorer·Data Exports·CUR이 자동으로 갱신됩니다.",
+      "wrongExplanations": {
+        "0": "소급 반영이 절대 불가능한 것은 아닙니다. backfill 요청으로 최대 12개월까지 소급 적용이 가능합니다.",
+        "1": "자동으로 전체 이력에 소급 반영되지는 않습니다. 기본 동작은 활성화 시점 이후부터 반영이며, 소급 적용은 backfill 요청을 별도로 해야 합니다.",
+        "3": "backfill 요청이 관리 계정에서만 가능하다는 제한은 이 문서에서 언급되지 않습니다. backfill은 활성화된 태그 키에 대해 요청할 수 있습니다."
+      },
+      "sources": [
+        { "title": "비용 할당 태그 Backfill — 공식 문서 (게이트 검수 반영: 2026-06-12)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q14",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Well-Architected 비용 최적화 기둥 정의",
+      "difficulty": "foundational",
+      "stem": "시험 문제에서 '가장 비용 효율적인(most cost-effective)' 솔루션을 고를 때 Well-Architected 비용 최적화 기둥의 정의가 판단 기준이 된다. 비용 최적화 기둥의 공식 정의에 가장 부합하는 설명은?",
+      "options": [
+        "기능 요구사항을 충족하면서 최저 가격으로 결과를 달성하는 워크로드",
+        "가능한 한 모든 비용을 최소화해 최저 청구액을 달성하는 워크로드",
+        "보안·성능·안정성 요구사항을 일부 완화하면서 비용을 절감하는 워크로드",
+        "온디맨드 인스턴스 대신 스팟 인스턴스를 최대한 활용하는 워크로드"
+      ],
+      "correct": 0,
+      "explanation": "Well-Architected 비용 최적화 기둥의 공식 정의는 '기능 요구사항을 충족하면서 최저 가격으로 결과를 달성하는 워크로드'입니다. '기능 요구사항 충족'이라는 전제가 핵심으로, 보안·안정성·성능을 희생하는 비용 절감은 다른 기둥의 원칙을 위반합니다. 시험에서 'most cost-effective' 선택지는 항상 요구사항을 충족하는 옵션 중에서 고르는 것입니다.",
+      "wrongExplanations": {
+        "1": "무조건 최저 청구액을 추구하는 것이 아닙니다. 기능 요구사항을 충족하는 범위 내에서 최저 비용을 추구하는 것이 정의입니다.",
+        "2": "보안·성능·안정성을 완화하는 비용 절감은 Well-Architected의 5개 기둥 균형 원칙을 위반합니다. 비용 최적화는 다른 기둥을 지키는 범위 안에서만 유효합니다.",
+        "3": "스팟 인스턴스 활용은 비용 효율적 리소스 선택의 한 예이지 비용 최적화 기둥의 정의가 아닙니다."
+      },
+      "sources": [
+        { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-5-q15",
+      "examGuideTaskId": "saa-t4-5",
+      "skill": "Cost Explorer API 요금",
+      "difficulty": "foundational",
+      "stem": "개발팀이 AWS Cost Explorer를 콘솔 UI가 아닌 프로그래밍 방식(API)으로 호출해 비용 데이터를 자동으로 수집하는 파이프라인을 구축하려 한다. Cost Explorer API 호출에 대한 요금 정책으로 옳은 것은?",
+      "options": [
+        "Cost Explorer API는 호출 횟수에 관계없이 완전 무료다",
+        "Cost Explorer 콘솔 UI 사용은 무료이지만 프로그래밍 방식 API 호출은 요청당 $0.01이 부과된다",
+        "Cost Explorer 콘솔 UI와 API 모두 추가 요금이 없다",
+        "Cost Explorer API는 월 1,000회까지 무료이고 초과 시 요청당 $0.01이 부과된다"
+      ],
+      "correct": 1,
+      "explanation": "Cost Explorer 콘솔 UI 사용은 무료이지만, 프로그래밍 방식 API 호출은 요청당 $0.01이 부과됩니다. 자동화 파이프라인에서 API를 빈번하게 호출하면 비용이 발생할 수 있으므로 호출 횟수 설계에 주의가 필요합니다.",
+      "wrongExplanations": {
+        "0": "API 호출은 무료가 아닙니다. 프로그래밍 방식 API 호출은 요청당 $0.01이 부과됩니다.",
+        "2": "콘솔 UI는 무료이지만 API는 무료가 아닙니다. 두 가지 요금 정책이 다릅니다.",
+        "3": "월 1,000회 무료 한도라는 정책은 이 문서에서 언급되지 않습니다. 문서에 따르면 API 호출은 요청당 $0.01로 과금됩니다."
+      },
+      "sources": [
+        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
+      ],
+      "verified": false
+    }
+  ]
+}
