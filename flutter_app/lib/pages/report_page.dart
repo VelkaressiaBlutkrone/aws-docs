@@ -5,6 +5,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../content/reset_dialog.dart';
+import '../content/study_deep_link.dart';
+import '../data/concept_report.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/study_reset.dart';
@@ -13,6 +15,7 @@ import '../models/certification.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
+import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
 
 /// 약점 리포트: cert의 Task별 정답률 표 + 70% 미만 Task 학습문서 처방.
@@ -50,6 +53,8 @@ class _ReportPageState extends State<ReportPage> {
   Future<_ReportLoad> _load() async {
     final entries = contentFor(widget.cert.code);
     final taskByQuestionId = <String, String>{};
+    final questionMeta =
+        <String, ({String taskId, String skill, String section})>{};
     final taskTitleById = <String, String>{};
     final taskOrder = <String>[];
     for (final e in entries) {
@@ -61,16 +66,27 @@ class _ReportPageState extends State<ReportPage> {
             QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
         for (final q in bank.questions) {
           taskByQuestionId[q.id] = e.taskId;
+          questionMeta[q.id] =
+              (taskId: e.taskId, skill: q.skill, section: q.section);
         }
       } catch (_) {}
     }
+    final history = _history.all();
     final report = TaskScoreReport.build(
       certId: widget.cert.code,
-      history: _history.all(),
+      history: history,
       taskByQuestionId: taskByQuestionId,
       taskOrder: taskOrder,
     );
-    return _ReportLoad(report: report, taskTitleById: taskTitleById);
+    final conceptByTask = buildConceptReport(
+      certId: widget.cert.code,
+      history: history,
+      questionMeta: questionMeta,
+    );
+    return _ReportLoad(
+        report: report,
+        taskTitleById: taskTitleById,
+        conceptByTask: conceptByTask);
   }
 
   @override
@@ -235,6 +251,26 @@ class _ReportPageState extends State<ReportPage> {
                   ),
               ],
             ),
+            // 약점 Task: 놓친 개념 칩 + 섹션 딥링크(C-중량). DESIGN.md D3:
+            // 칩=중립 라벨, 액센트는 링크에만.
+            if (isWeak && (d.conceptByTask[s.taskId]?.isNotEmpty ?? false)) ...[
+              const SizedBox(height: Gap.md),
+              Text('놓친 개념',
+                  style: t.labelSmall?.copyWith(color: c.textFaint)),
+              const SizedBox(height: Gap.xs),
+              Wrap(
+                spacing: Gap.sm,
+                runSpacing: Gap.xs,
+                children: [
+                  for (final mc in d.conceptByTask[s.taskId]!)
+                    _ConceptLink(
+                      cert: widget.cert.code,
+                      taskId: s.taskId,
+                      concept: mc,
+                    ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -242,9 +278,64 @@ class _ReportPageState extends State<ReportPage> {
   }
 }
 
-/// 로드 결과(리포트 + Task 제목 조회).
+/// 약점 리포트의 놓친 개념 한 칩 — 라벨(중립) + 섹션 딥링크(액센트).
+/// section 있으면 ?at= 딥링크, 없으면 문서 최상단.
+class _ConceptLink extends StatelessWidget {
+  const _ConceptLink(
+      {required this.cert, required this.taskId, required this.concept});
+  final String cert;
+  final String taskId;
+  final MissedConcept concept;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return InsetFocusRing(
+      borderRadius: BorderRadius.circular(Radii.full),
+      child: InkWell(
+        onTap: () =>
+            context.push(studyDeepLink(cert, taskId, concept.section)),
+        borderRadius: BorderRadius.circular(Radii.full),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+              horizontal: Gap.sm, vertical: Gap.xs),
+          decoration: BoxDecoration(
+            color: c.surface2,
+            borderRadius: BorderRadius.circular(Radii.full),
+            border: Border.all(color: c.border),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(concept.skill,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      fontVariations: Wght.w700,
+                      color: c.textMuted)),
+              const SizedBox(width: Gap.xs),
+              Text('→',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      fontVariations: Wght.w700,
+                      color: c.accent)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 로드 결과(리포트 + Task 제목 조회 + Task별 놓친 개념).
 class _ReportLoad {
-  const _ReportLoad({required this.report, required this.taskTitleById});
+  const _ReportLoad({
+    required this.report,
+    required this.taskTitleById,
+    required this.conceptByTask,
+  });
   final TaskScoreReport report;
   final Map<String, String> taskTitleById;
+  final Map<String, List<MissedConcept>> conceptByTask;
 }

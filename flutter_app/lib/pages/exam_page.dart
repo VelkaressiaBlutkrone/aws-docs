@@ -14,6 +14,7 @@ import '../data/exam_session_store.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
 import '../data/weighted_exam.dart';
+import '../data/wrong_skills.dart';
 import '../models/attempt_record.dart';
 import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
@@ -201,6 +202,7 @@ class _ExamViewState extends State<ExamView> {
       wrongQuestionIds: wrong,
       flaggedQuestionIds: flaggedIds,
       presentedQuestionIds: [for (final q in _qs) q.id],
+      wrongSkills: buildWrongSkills(_qs, _picked),
       durationSpentSec: spent > widget.durationSec ? widget.durationSec : spent,
     );
     _justFinished = rec;

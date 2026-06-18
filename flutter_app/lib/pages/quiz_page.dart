@@ -9,6 +9,7 @@ import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
+import '../data/wrong_skills.dart';
 import '../models/attempt_record.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
@@ -152,6 +153,7 @@ class _QuizViewState extends State<QuizView> {
       wrongQuestionIds: wrong,
       flaggedQuestionIds: const [],
       presentedQuestionIds: [for (final q in _qs) q.id],
+      wrongSkills: buildWrongSkills(_qs, _picked),
       durationSpentSec: DateTime.now().difference(_startedAt).inSeconds,
     ));
     setState(() => _finished = true);
