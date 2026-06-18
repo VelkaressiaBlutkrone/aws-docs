@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../content/prescription_hub.dart';
+import '../content/study_deep_link.dart';
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
@@ -243,8 +244,8 @@ class _CertExamPageState extends State<CertExamPage> {
               weightedAttemptCount: nonReviewAttemptCount(code, history),
             );
           },
-          onOpenStudy: (taskId) =>
-              context.push('/cert/${widget.cert.code}/study/$taskId'),
+          onOpenStudy: (taskId, section) => context.push(
+              studyDeepLink(widget.cert.code, taskId, section)),
           onExit: () => context.pop(),
         ),
       ),

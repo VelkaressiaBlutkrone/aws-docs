@@ -7,6 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../content/prescription_hub.dart';
+import '../content/study_deep_link.dart';
 import '../content/quiz_widgets.dart';
 import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
@@ -74,7 +75,7 @@ class ExamView extends StatefulWidget {
       resultsActionsBuilder;
 
   /// 오답 복기 카드의 개념 라벨 → 해당 Task 학습문서 이동. null이면 링크 숨김.
-  final void Function(String taskId)? onOpenStudy;
+  final void Function(String taskId, String section)? onOpenStudy;
 
   @override
   State<ExamView> createState() => _ExamViewState();
@@ -643,8 +644,8 @@ class _ExamPageState extends State<ExamPage> {
                     weightedAttemptCount: nonReviewAttemptCount(code, history),
                   );
                 },
-                onOpenStudy: (taskId) =>
-                    context.push('/cert/${widget.entry.certCode}/study/$taskId'),
+                onOpenStudy: (taskId, section) => context.push(
+                    studyDeepLink(widget.entry.certCode, taskId, section)),
                 onExit: () => context.pop(),
               ),
             ),

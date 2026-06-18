@@ -35,6 +35,7 @@
       "id": "clf-t1-1-q2",
       "examGuideTaskId": "clf-t1-1",
       "skill": "고정비 vs 변동비",
+      "section": "core-benefits",
       "difficulty": "foundational",
       "stem": "한 스타트업이 데이터센터나 서버를 미리 구매하지 않고 AWS 클라우드에서 바로 시작해, 실제 사용한 만큼만 비용을 낸다. 이는 클라우드의 어떤 이점에 해당하는가?",
       "options": [
@@ -89,6 +90,7 @@
       "id": "clf-t1-1-q4",
       "examGuideTaskId": "clf-t1-1",
       "skill": "규모의 경제 (비용 절감)",
+      "section": "core-benefits",
       "difficulty": "foundational",
       "stem": "AWS 같은 클라우드 제공자가 수많은 고객의 사용량을 모아 개별 기업이 직접 운영할 때보다 더 낮은 종량 요금을 실현할 수 있는 이유를 가장 잘 설명하는 것은?",
       "options": [
@@ -116,6 +118,7 @@
       "id": "clf-t1-1-q5",
       "examGuideTaskId": "clf-t1-1",
       "skill": "글로벌 인프라의 이점",
+      "section": "global-infra",
       "difficulty": "foundational",
       "stem": "한 회사가 전 세계 사용자에게 낮은 지연으로 서비스하기 위해 여러 지역에 애플리케이션을 몇 분 만에 배포하려 한다. 이를 가능하게 하는 클라우드의 이점은?",
       "options": [
@@ -147,6 +150,7 @@
       "id": "clf-t1-1-q6",
       "examGuideTaskId": "clf-t1-1",
       "skill": "고가용성·탄력성·민첩성 구분",
+      "section": "ha-elasticity",
       "difficulty": "foundational",
       "stem": "클라우드 이점 용어를 가장 정확하게 짝지은 것은?",
       "options": [
@@ -205,6 +209,7 @@
       "id": "clf-t1-1-q8",
       "examGuideTaskId": "clf-t1-1",
       "skill": "고가용성 (멀티 AZ)",
+      "section": "ha-elasticity",
       "difficulty": "applied",
       "stem": "한 회사가 한 데이터센터(가용 영역)에 장애가 발생해도 애플리케이션이 중단 없이 계속 작동하도록 설계하려 한다. AWS 글로벌 인프라에서 이를 뒷받침하는 핵심 설계는 무엇인가?",
       "options": [
@@ -286,6 +291,7 @@
       "id": "clf-t1-1-q11",
       "examGuideTaskId": "clf-t1-1",
       "skill": "글로벌 도달 (지연 감소)",
+      "section": "global-infra",
       "difficulty": "foundational",
       "stem": "전 세계에 사용자를 둔 서비스가 각 지역 사용자에게 더 빠른 응답을 주려 한다. 클라우드의 이점을 활용한 접근으로 가장 적절한 것은?",
       "options": [

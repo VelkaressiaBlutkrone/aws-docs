@@ -84,4 +84,30 @@ void main() {
       expect(r.wrongExplanations, q.wrongExplanations);
     });
   });
+
+  group('Question.section', () {
+    Question q(Map<String, dynamic> extra) => Question.fromJson({
+          'id': 't1-1-q1',
+          'examGuideTaskId': 'clf-t1-1',
+          'stem': 's',
+          'options': ['a', 'b', 'c', 'd'],
+          'correct': 0,
+          'explanation': 'e',
+          'verified': true,
+          ...extra,
+        });
+
+    test('parses section from json', () {
+      expect(q({'section': 'core-concepts'}).section, 'core-concepts');
+    });
+
+    test('defaults to empty when absent', () {
+      expect(q({}).section, '');
+    });
+
+    test('withOptionOrder preserves section', () {
+      final shuffled = q({'section': 'benefits'}).withOptionOrder([2, 0, 3, 1]);
+      expect(shuffled.section, 'benefits');
+    });
+  });
 }

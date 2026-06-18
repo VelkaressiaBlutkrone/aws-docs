@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderAbstractViewport, RenderBox;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
+import '../content/anchor_scroll.dart';
 import '../content/markdown_parser.dart';
 import '../content/study_markdown_view.dart';
 import '../data/content_index.dart';
@@ -15,8 +17,9 @@ import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
 
 class StudyDocPage extends StatefulWidget {
-  const StudyDocPage({super.key, required this.entry});
+  const StudyDocPage({super.key, required this.entry, this.targetAnchor});
   final ContentEntry entry;
+  final String? targetAnchor; // ?at= 쿼리. 해당 섹션으로 스크롤. null=최상단.
 
   @override
   State<StudyDocPage> createState() => _StudyDocPageState();
@@ -24,6 +27,9 @@ class StudyDocPage extends StatefulWidget {
 
 class _StudyDocPageState extends State<StudyDocPage> {
   late Future<StudyContent> _future; // 재할당은 에러 재시도에서만
+  final _scroll = ScrollController();
+  Map<String, GlobalKey> _anchorKeys = const {};
+  StudyContent? _keyedDoc; // 키 빌드·스크롤 1회 트리거 기준
 
   @override
   void initState() {
@@ -33,9 +39,44 @@ class _StudyDocPageState extends State<StudyDocPage> {
     ViewedDocsStore().markViewed(widget.entry.certCode, widget.entry.taskId);
   }
 
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
   Future<StudyContent> _load() async {
     final raw = await rootBundle.loadString(widget.entry.mdAsset);
     return parseStudyDoc(raw);
+  }
+
+  // doc 첫 도착 시 앵커 키를 1회 만들고, 레이아웃 후 타깃으로 스크롤.
+  void _onDocReady(StudyContent doc) {
+    if (identical(_keyedDoc, doc)) return;
+    _keyedDoc = doc;
+    _anchorKeys = buildAnchorKeys(doc.blocks);
+    final anchor = widget.targetAnchor;
+    if (anchor == null || anchor.isEmpty) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAnchor(anchor));
+  }
+
+  void _scrollToAnchor(String anchor) {
+    final ctx = _anchorKeys[anchor]?.currentContext;
+    if (ctx == null || !_scroll.hasClients) return;
+    final box = ctx.findRenderObject();
+    if (box is! RenderBox || !box.attached) return;
+    final reveal = RenderAbstractViewport.of(box).getOffsetToReveal(box, 0.0);
+    final target = anchorScrollOffset(
+      revealOffset: reveal.offset,
+      headerInset: headerScrollInset(context),
+      maxScrollExtent: _scroll.position.maxScrollExtent,
+    );
+    if (MediaQuery.disableAnimationsOf(context)) {
+      _scroll.jumpTo(target);
+    } else {
+      _scroll.animateTo(target,
+          duration: const Duration(milliseconds: 220), curve: Curves.easeOut);
+    }
   }
 
   @override
@@ -49,6 +90,7 @@ class _StudyDocPageState extends State<StudyDocPage> {
       builder: (context, snap) {
         final done = snap.connectionState == ConnectionState.done;
         final doc = done && !snap.hasError ? snap.data : null;
+        if (doc != null) _onDocReady(doc);
         return Scaffold(
           backgroundColor: c.bg,
           extendBodyBehindAppBar: true, // 글래스 헤더 — 인벤토리 §5
@@ -76,7 +118,9 @@ class _StudyDocPageState extends State<StudyDocPage> {
                   );
                 }
                 return Scrollbar(
+                  controller: _scroll,
                   child: SingleChildScrollView(
+                    controller: _scroll,
                     child: Center(
                       child: ConstrainedBox(
                         constraints:
@@ -91,7 +135,8 @@ class _StudyDocPageState extends State<StudyDocPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _DocHeader(doc: doc),
-                              StudyMarkdownView(blocks: doc.blocks),
+                              StudyMarkdownView(
+                                  blocks: doc.blocks, anchorKeys: _anchorKeys),
                               const SizedBox(height: Gap.xl2),
                               _StartQuizButton(entry: widget.entry),
                             ],

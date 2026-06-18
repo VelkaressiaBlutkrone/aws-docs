@@ -89,7 +89,8 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
 
     final h = RegExp(r'^(#{1,3})\s+(.*)$').firstMatch(s);
     if (h != null) {
-      blocks.add(MdHeading(h.group(1)!.length, h.group(2)!.trim()));
+      final (text, anchor) = _splitAnchor(h.group(2)!.trim());
+      blocks.add(MdHeading(h.group(1)!.length, text, anchor: anchor));
       i++;
       continue;
     }
@@ -218,6 +219,15 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
     if (buf.isNotEmpty) blocks.add(MdParagraph(_inline(buf.join(' '))));
   }
   return blocks;
+}
+
+// 제목 끝의 {#id} 앵커. id는 소문자/숫자/하이픈만(케밥). 불일치는 리터럴 유지.
+final _anchorRe = RegExp(r'\s*\{#([a-z0-9][a-z0-9-]*)\}$');
+
+(String, String?) _splitAnchor(String text) {
+  final m = _anchorRe.firstMatch(text);
+  if (m == null) return (text, null);
+  return (text.substring(0, m.start).trimRight(), m.group(1));
 }
 
 final _inlineRe =
