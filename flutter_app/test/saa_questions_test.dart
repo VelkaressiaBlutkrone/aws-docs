@@ -13,6 +13,8 @@ void main() {
   const saaTaskIds = [
     // D1 보안
     'saa-t1-1', 'saa-t1-2', 'saa-t1-3', 'saa-t1-4', 'saa-t1-5',
+    // D2 복원력
+    'saa-t2-1', 'saa-t2-2', 'saa-t2-3', 'saa-t2-4', 'saa-t2-5',
     // D3 고성능
     'saa-t3-1', 'saa-t3-2', 'saa-t3-3', 'saa-t3-4', 'saa-t3-5',
     'saa-t3-6', 'saa-t3-7', 'saa-t3-8', 'saa-t3-9',
