@@ -14,8 +14,15 @@ _Kind _kindOf(String h) {
 /// MdBlock 목록을 DESIGN.md 토큰으로 렌더. H2 섹션 단위로 묶어
 /// 🎯=액센트 콜아웃 / ⚠️=warning 블록으로 스타일링.
 class StudyMarkdownView extends StatelessWidget {
-  const StudyMarkdownView({super.key, required this.blocks});
+  const StudyMarkdownView({super.key, required this.blocks, this.anchorKeys});
   final List<MdBlock> blocks;
+  final Map<String, GlobalKey>? anchorKeys;
+
+  Key? _anchorKey(MdHeading? h) {
+    final id = h?.anchor;
+    if (id == null) return null;
+    return anchorKeys?[id];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +53,7 @@ class StudyMarkdownView extends StatelessWidget {
     final children = <Widget>[
       if (head != null)
         Padding(
+          key: _anchorKey(head),
           padding: const EdgeInsets.only(top: Gap.xl, bottom: Gap.sm),
           child: Text(head.text,
               style: Theme.of(context).textTheme.headlineSmall),
@@ -83,8 +91,11 @@ class StudyMarkdownView extends StatelessWidget {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     switch (b) {
-      case MdHeading(:final level, :final text):
+      case MdHeading(:final level, :final text, :final anchor):
+        Key? headingKey;
+        if (anchor != null) headingKey = anchorKeys?[anchor];
         return Padding(
+          key: headingKey,
           padding: EdgeInsets.only(top: level <= 2 ? Gap.lg : Gap.md, bottom: Gap.xs),
           child: Text(text, style: level >= 3 ? t.titleMedium : t.titleLarge),
         );
