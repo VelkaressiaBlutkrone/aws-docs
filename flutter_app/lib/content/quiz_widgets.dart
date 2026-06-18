@@ -146,8 +146,8 @@ class ResultsView extends StatelessWidget {
   final Set<int> flagged;
   final String? subtitle;
 
-  /// 오답 카드의 개념 라벨 → 해당 Task 학습문서 이동. null이면 링크 숨김.
-  final void Function(String taskId)? onOpenStudy;
+  /// 오답 카드의 개념 라벨 → 해당 Task 학습문서의 섹션 이동. null이면 링크 숨김.
+  final void Function(String taskId, String section)? onOpenStudy;
 
   @override
   Widget build(BuildContext context) {
@@ -198,8 +198,8 @@ class ResultCard extends StatelessWidget {
   final int? pickedIndex;
   final bool flagged;
 
-  /// 오답이고 개념(skill) 태그가 있을 때 학습문서로 보내는 콜백. null이면 링크 숨김.
-  final void Function(String taskId)? onOpenStudy;
+  /// 오답이고 개념(skill) 태그가 있을 때 학습문서 섹션으로 보내는 콜백. null이면 링크 숨김.
+  final void Function(String taskId, String section)? onOpenStudy;
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +259,7 @@ class ResultCard extends StatelessWidget {
               skill: q.skill,
               onOpenStudy: onOpenStudy == null
                   ? null
-                  : () => onOpenStudy!(q.examGuideTaskId),
+                  : () => onOpenStudy!(q.examGuideTaskId, q.section),
             ),
           ],
         ],

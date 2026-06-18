@@ -55,11 +55,12 @@ Widget _host(Widget child) => MaterialApp(
 void main() {
   testWidgets('오답+개념 → 칩+학습링크, 정답·무태그 제외, 실제 taskId 전달',
       (tester) async {
-    String? opened;
+    String? openedTask;
+    String? openedSection;
     await tester.pumpWidget(_host(ResultsView(
       bank: _mixedBank(),
       picked: const {0: 1, 1: 1, 2: 1}, // q1 오답, q2 정답, q3 오답
-      onOpenStudy: (t) => opened = t,
+      onOpenStudy: (t, s) { openedTask = t; openedSection = s; },
     )));
 
     expect(find.text('VPC 피어링'), findsOneWidget); // 오답 개념 칩
@@ -68,7 +69,8 @@ void main() {
 
     await tester.ensureVisible(find.text('→ 학습문서'));
     await tester.tap(find.text('→ 학습문서'));
-    expect(opened, 'clf-t1-1'); // synthetic 'CLF-C02-mock' 아닌 문항별 실제 Task
+    expect(openedTask, 'clf-t1-1'); // synthetic 'CLF-C02-mock' 아닌 문항별 실제 Task
+    expect(openedSection, ''); // q1 fixture에 section 없음 → 빈 문자열
   });
 
   testWidgets('onOpenStudy null → 칩은 보이되 학습 링크 숨김', (tester) async {
