@@ -1,0 +1,368 @@
+{
+  "examGuideTaskId": "saa-t4-1",
+  "taskTitle": "비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용",
+  "domain": 4,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t4-1-q1",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 스토리지 클래스 비용 구조 이해",
+      "difficulty": "foundational",
+      "stem": "S3 스토리지 비용을 구성하는 세 가지 축으로 가장 올바르게 묶인 것은?",
+      "options": [
+        "스토리지 요금, 요청 요금, 검색(Retrieval) 요금",
+        "스토리지 요금, 컴퓨팅 요금, 네트워크 요금",
+        "스토리지 요금, 암호화 요금, 복제 요금",
+        "스토리지 요금, IAM 요금, 감사 로그 요금"
+      ],
+      "correct": 0,
+      "explanation": "S3 비용은 크게 세 축으로 구성됩니다 — 저장된 GB·월 기준 스토리지 요금, PUT·GET·LIST 등 API 호출 수 기준 요청 요금, 객체를 꺼낼 때 GB당 부과되는 검색(Retrieval) 요금. 이 세 축을 모두 고려해야 예상치 못한 청구를 피할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "컴퓨팅 요금은 S3 비용 구조에 포함되지 않습니다. S3는 서버리스 오브젝트 스토리지로 EC2 같은 컴퓨팅 비용이 별도로 발생하지 않습니다.",
+        "2": "암호화·복제는 S3의 기능이지만 S3 기본 비용 구조의 세 축이 아닙니다. 복제는 복제 대상 클래스의 스토리지 요금이 추가로 발생하는 방식입니다.",
+        "3": "IAM 요금이나 감사 로그 요금은 S3 스토리지 비용 구조의 축이 아닙니다. IAM은 무료 서비스이며 S3 비용은 스토리지·요청·검색 세 축이 기준입니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q2",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 Intelligent-Tiering 적합 조건",
+      "difficulty": "foundational",
+      "stem": "S3 Intelligent-Tiering에 대한 설명으로 옳은 것은?",
+      "options": [
+        "모든 객체 크기에 동일한 모니터링 요금이 부과되며 검색 요금도 발생한다",
+        "128 KB 미만 소용량 객체는 모니터링 대상에서 제외되어 항상 Frequent Access 계층에 머문다",
+        "접근 여부와 관계없이 객체를 30일 후 자동으로 Infrequent Access로 전환한다",
+        "최소 보관 기간이 180일이므로 단기 데이터에는 적합하지 않다"
+      ],
+      "correct": 1,
+      "explanation": "S3 Intelligent-Tiering에서 128 KB 미만 객체는 모니터링 대상이 아니어서 접근 빈도와 무관하게 항상 Frequent Access 계층에 머뭅니다. 소용량 객체가 수백만 개인 버킷에서는 오브젝트당 모니터링 요금이 절감액을 초과할 수 있으므로 주의가 필요합니다.",
+      "wrongExplanations": {
+        "0": "Intelligent-Tiering은 검색 요금이 없는 것이 핵심 특징입니다. 모니터링 요금은 객체 수에 비례해 발생하지만, 128 KB 미만 객체는 모니터링 대상에서도 제외됩니다.",
+        "2": "Intelligent-Tiering은 30일 미접근 시 Infrequent Access로 이동하지만, '접근 여부와 관계없이'가 아니라 30일간 접근이 없었을 때 자동 전환됩니다.",
+        "3": "Intelligent-Tiering의 최소 보관 기간은 없습니다. 최소 보관 기간이 180일인 것은 S3 Glacier Deep Archive입니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q3",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 스토리지 클래스 선택 — 접근 패턴 불명확",
+      "difficulty": "applied",
+      "stem": "한 기업이 S3에 다양한 사용자 생성 콘텐츠를 저장하고 있다. 콘텐츠별 접근 패턴이 불규칙하고 예측하기 어려우며, 검색 요금이 발생하지 않아야 한다. 가장 비용 효율적인 스토리지 클래스는?",
+      "options": [
+        "S3 Standard — 검색 요금 없음, 접근 패턴 불명확에 무조건 유리",
+        "S3 Standard-IA — 검색 요금이 없고 저장 비용이 낮음",
+        "S3 Intelligent-Tiering — 접근 패턴에 따라 자동으로 계층을 조정하며 검색 요금이 없음",
+        "S3 Glacier Flexible Retrieval — 검색 요금이 없고 최저 비용"
+      ],
+      "correct": 2,
+      "explanation": "접근 패턴이 불규칙하고 검색 요금을 피해야 할 때는 S3 Intelligent-Tiering이 적합합니다. 접근 패턴에 따라 Frequent Access → Infrequent Access → Archive Instant Access 계층을 자동으로 이동하며 검색 요금이 없습니다. 최소 보관 기간도 없어 언제든 삭제·전환이 가능합니다.",
+      "wrongExplanations": {
+        "0": "S3 Standard는 자주 접근하는 데이터(월 1회 이상)에 적합하고, 접근이 드문 경우 저장 요금이 높아 비효율적입니다. 접근 패턴이 불명확한 데이터를 무조건 Standard에 두는 것은 비용 최적화와 거리가 멉니다.",
+        "1": "S3 Standard-IA는 검색 요금이 GB당 과금됩니다. 접근 빈도가 예측 불가한 데이터에서 검색 요금을 피하려면 Intelligent-Tiering이 더 적합합니다.",
+        "3": "S3 Glacier Flexible Retrieval은 검색 요금이 GB당 과금되며 복원에 수분~12시간이 걸립니다. 접근 패턴이 불규칙한 데이터를 즉시 꺼내야 하는 경우에는 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q4",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 수명주기 정책 설계",
+      "difficulty": "applied",
+      "stem": "한 회사가 S3에 로그를 저장합니다. 처음 30일은 자주 접근하고, 30~90일은 가끔 접근합니다. 90일 이후에는 규정상 1년간 보관 후 삭제해야 합니다. 가장 비용 효율적인 수명주기 정책은?",
+      "options": [
+        "Day 0: Standard → Day 15: Standard-IA → Day 45: Glacier Flexible Retrieval → Day 365: Expiration",
+        "Day 0: Standard → Day 30: Glacier Deep Archive → Day 365: Expiration",
+        "Day 0: Intelligent-Tiering → Day 365: Expiration",
+        "Day 0: Standard → Day 30: Standard-IA → Day 90: Glacier Flexible Retrieval → Day 365: Expiration"
+      ],
+      "correct": 3,
+      "explanation": "Day 0~30은 Standard(자주 접근), Day 30에 Standard-IA 전환(Standard-IA 최소 보관 기간 30일과 일치), Day 90에 Glacier Flexible Retrieval 전환(최소 보관 기간 90일 충족), Day 365에 Expiration으로 삭제. 최소 보관 기간 요금 없이 각 접근 패턴에 맞는 비용 절감이 가능합니다.",
+      "wrongExplanations": {
+        "0": "Day 15에 Standard-IA로 전환하면 Standard-IA의 최소 보관 기간(30일)이 충족되지 않아 잔여 15일분 요금이 청구됩니다. 최소 보관 기간 이전 전환은 절감이 아니라 비용 증가로 이어질 수 있습니다.",
+        "1": "Day 30에 바로 Glacier Deep Archive로 전환하면 30~90일 사이 가끔 접근이 필요한 경우 복원에 최대 12시간이 걸립니다. 또한 최소 보관 기간(180일)을 Day 365 Expiration 전까지 채우는지 확인해야 합니다.",
+        "2": "Intelligent-Tiering은 접근 패턴이 불규칙할 때 적합합니다. 접근 패턴이 명확히 알려진 경우에는 수명주기 정책으로 직접 전환 시점을 지정하는 것이 더 비용 효율적입니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q5",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 수명주기 최소 보관 기간 함정",
+      "difficulty": "applied",
+      "stem": "한 팀이 S3 Standard에 업로드된 객체를 업로드 직후 20일 만에 Standard-IA로 전환하는 수명주기 정책을 적용했다. 이 설정의 문제점은?",
+      "options": [
+        "Standard-IA의 최소 보관 기간은 30일이므로 20일 시점에 전환해도 30일분 요금이 청구된다",
+        "Standard-IA는 수명주기 전환 대상이 아니므로 정책이 동작하지 않는다",
+        "수명주기 Transition에는 검색 요금이 발생해 비용이 급증한다",
+        "문제없다. 더 빨리 전환할수록 절감 효과가 크다"
+      ],
+      "correct": 0,
+      "explanation": "Standard-IA의 최소 보관 기간은 30일입니다. 20일 시점에 전환하면 잔여 10일분에 해당하는 Standard-IA 저장 요금이 청구됩니다. 이 구조에서 30일 이전에 Standard-IA로 전환하면 절감이 아니라 오히려 비용이 늘어날 수 있으므로, 전환 시점은 최소 보관 기간 이후로 설정해야 합니다.",
+      "wrongExplanations": {
+        "1": "Standard-IA는 수명주기 전환 대상 클래스입니다. 정책 자체는 동작하지만, 최소 보관 기간 요금이 청구되는 비용 문제가 발생합니다.",
+        "2": "수명주기 Transition 자체에는 GB 검색 요금이 발생하지 않습니다. 전환 PUT 요청 요금은 발생하지만, 이것이 주된 문제는 아닙니다.",
+        "3": "더 빨리 전환한다고 절감 효과가 커지지 않습니다. 최소 보관 기간 이전에 전환하면 잔여 기간 요금이 추가로 청구되어 비용이 증가할 수 있습니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q6",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 Glacier 클래스 선택 — 검색 속도 요구",
+      "difficulty": "applied",
+      "stem": "한 의료 기관이 7년 규정 보관이 필요한 환자 기록을 S3에 저장하려 한다. 데이터는 감사 시 밀리초 이내로 즉시 꺼낼 수 있어야 하며, 접근 빈도는 분기에 한 번 수준이다. 가장 비용 효율적인 클래스는?",
+      "options": [
+        "S3 Standard — 즉시 접근이 보장되는 유일한 클래스",
+        "S3 Glacier Deep Archive — 최저 저장 비용으로 7년 보관에 최적",
+        "S3 Glacier Instant Retrieval — 즉시(밀리초) 복원이 가능하고 분기 1회 수준 접근에 적합",
+        "S3 Glacier Flexible Retrieval — 즉시 접근이 가능하며 저장 비용이 가장 낮음"
+      ],
+      "correct": 2,
+      "explanation": "S3 Glacier Instant Retrieval은 즉시(밀리초) 복원이 가능하고, 분기 1회 수준의 드문 접근에 적합한 클래스입니다. Glacier Deep Archive는 복원에 최대 12시간이 걸려 즉시 접근 요건을 충족하지 못합니다. Glacier Flexible Retrieval도 복원에 수분~12시간이 필요합니다.",
+      "wrongExplanations": {
+        "0": "S3 Standard는 즉시 접근이 가능하지만 분기 1회 수준으로 드물게 접근하는 장기 보관 데이터에는 저장 비용이 불필요하게 높습니다.",
+        "1": "S3 Glacier Deep Archive는 최소 보관 기간 180일, 복원에 최대 12시간이 걸려 밀리초 즉시 접근 요건을 충족하지 못합니다.",
+        "3": "S3 Glacier Flexible Retrieval은 복원에 수분~12시간이 소요됩니다. '즉시 접근 가능'하지 않으며, 즉시(밀리초) 복원을 제공하는 것은 Glacier Instant Retrieval입니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q7",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "EBS gp3 vs gp2 비용 비교",
+      "difficulty": "foundational",
+      "stem": "gp2 EBS 볼륨을 gp3로 전환했을 때 비용과 성능 면에서 기대할 수 있는 변화로 옳은 것은?",
+      "options": [
+        "gp3는 성능이 낮아진 대신 비용이 저렴하다",
+        "gp3는 gp2와 동일한 요금이지만 버스트 성능이 향상된다",
+        "gp3는 볼륨 크기를 늘려야만 IOPS를 높일 수 있어 결국 비용이 더 든다",
+        "gp3는 GB당 요금이 약 20% 저렴하고 기본 IOPS(3,000)가 크기와 무관하게 고정 제공된다"
+      ],
+      "correct": 3,
+      "explanation": "gp3는 gp2보다 GB당 약 20% 저렴하면서 기본 IOPS(3,000)를 크기와 무관하게 고정으로 제공합니다. gp2는 소용량 볼륨일수록 IOPS가 낮고 버스트 크레딧에 의존했지만, gp3는 크기와 IOPS를 독립적으로 설정할 수 있어 실제 필요량에 맞게 프로비전할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "gp3는 성능이 낮아진 것이 아닙니다. gp3는 기본 IOPS 3,000을 고정 제공하며 버스트 없이 일관된 성능을 냅니다. gp2는 소용량일수록 IOPS가 낮아 성능에서도 gp3가 유리한 경우가 많습니다.",
+        "1": "gp3는 gp2보다 GB당 요금이 약 20% 저렴합니다. 동일 요금이 아닙니다. gp3는 버스트 구조 자체가 없고 프로비전된 성능을 항상 유지합니다.",
+        "2": "gp3는 크기와 IOPS를 독립적으로 설정할 수 있습니다. gp2의 크기-IOPS 연동 구조를 분리한 것이 gp3의 핵심 개선점입니다."
+      },
+      "sources": [
+        { "title": "EBS General Purpose SSD (gp2·gp3) (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q8",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "EC2 중지 시 EBS 과금 여부",
+      "difficulty": "foundational",
+      "stem": "팀이 비용 절감을 위해 사용하지 않는 EC2 인스턴스를 Stop(중지) 상태로 유지하고 있다. 이 상황에서 EBS 볼륨 요금에 대한 설명으로 옳은 것은?",
+      "options": [
+        "EC2가 중지 상태이면 EBS 요금도 발생하지 않는다",
+        "EBS 요금은 인스턴스가 실행 중일 때만 GB당 초단위로 과금된다",
+        "EC2가 중지 상태여도 EBS는 프로비전된 볼륨 용량에 대해 계속 과금된다",
+        "EC2 중지 후 7일이 지나면 EBS 볼륨이 자동 삭제되어 요금이 멈춘다"
+      ],
+      "correct": 2,
+      "explanation": "EBS는 인스턴스가 중지(stop)된 상태에서도 프로비전된 볼륨 용량에 대해 계속 과금됩니다. 완전히 삭제(Terminate)해야 볼륨 요금이 멈춥니다. 미사용 인스턴스를 단순히 중지하는 것만으로는 EBS 비용을 제거할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "EC2가 중지 상태여도 EBS 요금은 계속 발생합니다. EBS는 프로비전된 용량에 기반해 과금되므로 인스턴스 상태와 무관합니다.",
+        "1": "EBS 요금은 인스턴스 실행 여부와 무관하게 프로비전된 볼륨 용량에 대해 과금됩니다. 인스턴스가 실행 중일 때만 과금되는 것이 아닙니다.",
+        "3": "EBS 볼륨은 자동으로 삭제되지 않습니다. 사용자가 직접 삭제하거나 인스턴스 종료 시 자동 삭제 설정을 활성화해야 합니다."
+      },
+      "sources": [
+        { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q9",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "미사용 EBS 자원 탐지 및 정리",
+      "difficulty": "applied",
+      "stem": "한 팀이 여러 EC2 인스턴스를 종료(Terminate)했지만 연결되지 않은 EBS 볼륨이 대량으로 남아 있어 비용이 계속 발생하고 있다. 이 낭비를 탐지하고 정리하는 방법으로 가장 적절한 것은?",
+      "options": [
+        "AWS Trusted Advisor 또는 Cost Explorer로 미연결 볼륨을 탐지한 뒤 삭제한다",
+        "CloudTrail 로그를 분석해 볼륨을 수동으로 찾는다",
+        "Auto Scaling 그룹을 설정해 미사용 볼륨을 자동 정리한다",
+        "S3 수명주기 정책으로 미사용 EBS 볼륨을 자동 삭제한다"
+      ],
+      "correct": 0,
+      "explanation": "미연결 EBS 볼륨은 AWS Trusted Advisor 또는 Cost Explorer를 통해 탐지할 수 있습니다. 두 서비스 모두 인스턴스에 연결되지 않은 볼륨을 식별해 줍니다. 또한 Data Lifecycle Manager(DLM)로 누적된 오래된 스냅샷을 자동 정리할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "CloudTrail은 API 호출 감사 로그 도구로, 미연결 볼륨 탐지에는 적합하지 않습니다. Trusted Advisor나 Cost Explorer가 이 목적에 더 직접적입니다.",
+        "2": "Auto Scaling 그룹은 EC2 인스턴스 수를 자동으로 조정하는 기능입니다. 미연결 EBS 볼륨을 정리하는 기능이 아닙니다.",
+        "3": "S3 수명주기 정책은 S3 객체를 관리하는 도구입니다. EBS 볼륨은 S3 수명주기 정책으로 제어할 수 없습니다."
+      },
+      "sources": [
+        { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q10",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 Gateway Endpoint — NAT 비용 회피",
+      "difficulty": "applied",
+      "stem": "프라이빗 서브넷의 EC2 인스턴스가 NAT Gateway를 통해 S3에 대량의 데이터를 업로드하고 있어 NAT Gateway 데이터 처리 비용이 크게 발생하고 있다. 비용을 줄이면서 보안도 강화하는 가장 효과적인 방법은?",
+      "options": [
+        "EC2 인스턴스를 퍼블릭 서브넷으로 이동해 NAT Gateway를 거치지 않게 한다",
+        "VPC에 S3 Gateway Endpoint를 추가하고 프라이빗 서브넷 라우트 테이블에 등록한다",
+        "S3 버킷을 EC2와 같은 AZ로 이동해 전송 비용을 절감한다",
+        "CloudFront를 S3 앞에 배치해 업로드 트래픽을 줄인다"
+      ],
+      "correct": 1,
+      "explanation": "S3 Gateway Endpoint를 VPC에 추가하고 프라이빗 서브넷 라우트 테이블에 등록하면 S3 트래픽이 NAT Gateway를 우회해 AWS 내부 네트워크로 직접 전달됩니다. Gateway Endpoint는 무료이며 NAT Gateway 데이터 처리 요금이 발생하지 않고, S3 트래픽이 인터넷에 노출되지 않아 보안도 강화됩니다.",
+      "wrongExplanations": {
+        "0": "EC2를 퍼블릭 서브넷으로 이동하면 인터넷 아웃바운드 전송 요금이 발생하고 보안이 약화됩니다. Gateway Endpoint는 프라이빗 서브넷을 유지하면서 비용을 줄이는 방법입니다.",
+        "2": "S3는 리전 단위 서비스로 특정 AZ에 배치할 수 없습니다. 또한 AZ를 조정해 NAT Gateway 처리 요금을 회피하는 방법은 존재하지 않습니다.",
+        "3": "CloudFront는 다운로드(읽기) 트래픽 비용 절감에 효과적이지만, EC2에서 S3로의 업로드 경로에는 직접적인 효과가 없습니다."
+      },
+      "sources": [
+        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q11",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "데이터 전송 비용 — AZ 간 전송",
+      "difficulty": "foundational",
+      "stem": "같은 AWS 리전 내에서 서로 다른 가용 영역(AZ)에 있는 두 EC2 인스턴스가 대량의 데이터를 주고받고 있다. 이 트래픽의 요금 처리로 옳은 것은?",
+      "options": [
+        "같은 리전이므로 AZ 간 전송은 무료다",
+        "같은 계정 내 트래픽이므로 무료다",
+        "같은 VPC 내 트래픽은 AZ에 관계없이 무료다",
+        "같은 리전이라도 AZ를 넘는 전송은 과금된다"
+      ],
+      "correct": 3,
+      "explanation": "같은 리전이라도 AZ를 넘는 전송은 과금됩니다. AZ 간 트래픽은 AWS가 관리하는 리전 내부 네트워크를 경유해야 하며 이 구간의 대역폭 비용이 청구됩니다. 무료인 것은 같은 AZ 내 프라이빗 IP 통신입니다. 고가용성을 위해 여러 AZ에 인스턴스를 분산하면 AZ 간 통신이 필연적으로 발생해 예상치 못한 비용이 생길 수 있습니다.",
+      "wrongExplanations": {
+        "0": "같은 리전이어도 AZ 간 전송은 무료가 아닙니다. AZ를 넘는 트래픽은 AWS 리전 내부 네트워크를 경유하며 요금이 발생합니다.",
+        "1": "같은 계정이라는 사실은 AZ 간 전송 요금 면제의 근거가 아닙니다. 전송 비용은 계정보다 트래픽 경로(AZ·리전·인터넷)에 의해 결정됩니다.",
+        "2": "같은 VPC 내부라도 AZ를 넘는 트래픽은 과금됩니다. 무료인 것은 같은 AZ 내 프라이빗 IP 간 통신입니다."
+      },
+      "sources": [
+        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q12",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "CloudFront를 활용한 S3 아웃바운드 비용 절감",
+      "difficulty": "applied",
+      "stem": "한 회사가 S3에 저장된 이미지를 전 세계 사용자에게 직접 서비스하고 있어 S3 인터넷 아웃바운드 전송 요금이 높다. 비용을 줄이면서 사용자 경험도 개선하는 방법은?",
+      "options": [
+        "S3 객체를 여러 리전에 복제해 사용자와 가까운 리전에서 서비스한다",
+        "CloudFront를 S3 앞에 배치한다. S3→CloudFront 전송은 무료이며 캐시 히트 시 S3 요청·전송이 발생하지 않는다",
+        "S3 Transfer Acceleration을 활성화해 전송 비용을 줄인다",
+        "S3 Standard-IA로 전환해 저장 비용과 전송 비용을 동시에 낮춘다"
+      ],
+      "correct": 1,
+      "explanation": "CloudFront를 S3 오리진 앞에 배치하면 S3→CloudFront 전송은 무료이고, 캐시 히트 시 S3 요청 및 전송이 아예 발생하지 않습니다. 사용자에게는 엣지 로케이션에서 캐시된 콘텐츠가 제공되어 응답 속도도 향상됩니다.",
+      "wrongExplanations": {
+        "0": "S3 교차 리전 복제는 복제 대상 리전의 스토리지 요금과 복제 전송 요금이 추가로 발생합니다. 전 세계 사용자 서비스 비용 절감에는 CloudFront가 더 효과적입니다.",
+        "2": "S3 Transfer Acceleration은 업로드 속도 향상을 위한 기능으로 추가 요금이 발생합니다. 아웃바운드 전송 비용을 줄이는 데 적합하지 않습니다.",
+        "3": "S3 Standard-IA는 저장 요금을 낮추지만 검색 요금(GB당)이 발생합니다. 자주 접근하는 이미지를 Standard-IA로 전환하면 검색 요금이 높아져 오히려 비용이 증가할 수 있습니다."
+      },
+      "sources": [
+        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q13",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "S3 Storage Lens 활용",
+      "difficulty": "foundational",
+      "stem": "한 조직이 수십 개의 S3 버킷을 운영하고 있으며 스토리지 비용 최적화 기회를 찾고 싶다. 미완성 멀티파트 업로드, 수명주기 규칙 미적용 버킷, 비접근 객체 분포를 한 번에 파악할 수 있는 AWS 서비스는?",
+      "options": [
+        "AWS Cost Explorer — 전체 비용 분석 및 스토리지 최적화 권장",
+        "AWS Config — 버킷 설정 규정 준수 여부 모니터링",
+        "Amazon S3 Storage Lens — 조직 전체 버킷 스토리지 현황과 권장사항을 일별로 집계",
+        "Amazon CloudWatch — S3 버킷별 접근 패턴 실시간 모니터링"
+      ],
+      "correct": 2,
+      "explanation": "S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 지표를 일별로 집계해 대시보드와 권장사항을 제공합니다. 미완성 멀티파트 업로드 탐지, 수명주기 규칙 미적용 버킷 식별, 비접근 객체 분포 분석을 통해 비용 최적화 기회를 찾아줍니다.",
+      "wrongExplanations": {
+        "0": "Cost Explorer는 전체 비용 추세 분석과 예약 인스턴스 권장 등에 유용하지만, 버킷별 미완성 멀티파트 업로드나 수명주기 규칙 적용 여부를 직접 탐지하는 기능은 없습니다.",
+        "1": "AWS Config는 리소스 설정 변경을 기록하고 규정 준수를 모니터링하는 도구입니다. S3 Storage Lens처럼 스토리지 접근 패턴이나 비용 최적화 권장사항을 일별로 집계하지 않습니다.",
+        "3": "CloudWatch는 운영 메트릭 모니터링 도구로 S3 버킷 요청 수 등을 볼 수 있지만, 조직 전체 버킷의 스토리지 비용 최적화 권장사항을 제공하지 않습니다."
+      },
+      "sources": [
+        { "title": "S3 Storage Lens — 기본 개념과 지표·권장사항 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage_lens_basics_metrics_recommendations.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q14",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "EFS Intelligent-Tiering 비용 최적화",
+      "difficulty": "applied",
+      "stem": "한 팀이 Amazon EFS 파일시스템을 사용하고 있다. 파일 일부는 자주 접근되고, 나머지는 오랫동안 접근되지 않는다. 수동 관리 없이 비용을 자동으로 최적화하는 방법은?",
+      "options": [
+        "EFS Intelligent-Tiering을 활성화해 접근 패턴에 따라 Standard↔IA↔Archive 계층을 자동 전환한다",
+        "EBS gp3로 마이그레이션해 파일당 비용을 낮춘다",
+        "자주 접근하지 않는 파일을 수동으로 S3 Glacier로 이동한다",
+        "FSx for Windows로 마이그레이션해 HDD 계층을 사용한다"
+      ],
+      "correct": 0,
+      "explanation": "EFS Intelligent-Tiering을 활성화하면 접근 패턴에 따라 파일이 Standard↔Infrequent Access↔Archive 계층 간 자동으로 이동합니다. 자주 접근하지 않는 파일은 저렴한 계층으로 이동하고, 다시 접근하면 Standard로 복귀합니다. 수동 관리 없이 비용 최적화가 가능합니다.",
+      "wrongExplanations": {
+        "1": "EBS는 단일 EC2 인스턴스에 블록 장치로 연결되는 스토리지로, 여러 인스턴스가 공유하는 EFS의 대체재가 아닙니다. 파일 단위 계층 이동도 지원하지 않습니다.",
+        "2": "수동으로 S3 Glacier로 이동하면 EFS 파일시스템 인터페이스를 통한 접근이 불가해집니다. 자동화 없이 수동 관리는 운영 부담이 크고 문서에서 설명하는 EFS 계층 최적화 방법이 아닙니다.",
+        "3": "FSx for Windows HDD 계층은 처리량 중심 워크로드에 적합합니다. EFS의 파일 단위 자동 계층 이동 기능과 동등한 대안이 아니며, 공유 파일시스템 요구를 유지하면서 비용을 자동 최적화하려면 EFS Intelligent-Tiering이 맞습니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t4-1-q15",
+      "examGuideTaskId": "saa-t4-1",
+      "skill": "멀티파트 업로드 미완성 비용 처리",
+      "difficulty": "applied",
+      "stem": "한 팀이 S3 버킷에서 예상보다 높은 스토리지 요금을 발견했다. 조사 결과 대량의 미완성 멀티파트 업로드가 장기간 남아 있음을 알게 되었다. 이 비용을 자동으로 제거하는 가장 효율적인 방법은?",
+      "options": [
+        "S3 버킷을 비우고 재생성한다",
+        "수명주기 규칙에 AbortIncompleteMultipartUpload 액션을 추가해 일정 일수 후 자동 정리한다",
+        "AWS Lambda로 매일 미완성 업로드를 탐지·삭제하는 스크립트를 실행한다",
+        "S3 Intelligent-Tiering으로 전환하면 미완성 업로드가 자동으로 정리된다"
+      ],
+      "correct": 1,
+      "explanation": "수명주기 규칙에 AbortIncompleteMultipartUpload 액션을 추가하면 지정한 일수(예: 7일) 이후 완료되지 않은 멀티파트 업로드를 자동으로 정리할 수 있습니다. 이 규칙은 S3 콘솔이나 CLI로 간단히 설정 가능하며 별도 코드 없이 지속적으로 동작합니다.",
+      "wrongExplanations": {
+        "0": "버킷을 비우고 재생성하면 정상적으로 저장된 객체도 모두 삭제됩니다. 미완성 업로드만 선택적으로 정리하는 방법이 아닙니다.",
+        "2": "Lambda 스크립트도 동작하지만, 수명주기 규칙의 AbortIncompleteMultipartUpload는 코드 작성 없이 S3가 네이티브로 제공하는 더 간단하고 권장되는 방법입니다.",
+        "3": "Intelligent-Tiering으로 전환해도 미완성 멀티파트 업로드는 자동으로 정리되지 않습니다. 미완성 업로드 정리는 스토리지 클래스와 무관하며 전용 수명주기 액션이 필요합니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    }
+  ]
+}
