@@ -1,0 +1,369 @@
+{
+  "examGuideTaskId": "saa-t3-4",
+  "taskTitle": "컨테이너·서버리스·배치 컴퓨팅 선택",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-4-q1",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "컴퓨팅 선택 결정 트리 — 운영 부담 스펙트럼",
+      "difficulty": "foundational",
+      "stem": "솔루션스 아키텍트가 팀에게 AWS 컴퓨팅 서비스의 운영 부담 스펙트럼을 설명하고 있다. 운영 부담이 가장 낮은 것부터 높은 순으로 올바르게 나열한 것은?",
+      "options": [
+        "Lambda → Fargate → EKS → ECS EC2 시작 유형 → EC2",
+        "EC2 → ECS EC2 시작 유형 → EKS → Fargate → Lambda",
+        "Fargate → Lambda → ECS EC2 시작 유형 → EKS → EC2",
+        "Lambda → ECS EC2 시작 유형 → Fargate → EKS → EC2"
+      ],
+      "correct": 0,
+      "explanation": "운영 부담 스펙트럼은 EC2(최대 제어·최대 책임) → ECS EC2 시작 유형 → EKS → Fargate → Lambda(최소 제어·최소 책임)입니다. 역방향으로 읽으면 운영 부담이 가장 낮은 것부터 높은 순은 Lambda → Fargate → EKS → ECS EC2 시작 유형 → EC2입니다.",
+      "wrongExplanations": {
+        "1": "이 순서는 운영 부담이 가장 높은 것(EC2)부터 낮은 것(Lambda)까지의 역순입니다. 질문은 낮은 것부터 높은 순서를 요구합니다.",
+        "2": "Fargate는 Lambda보다 운영 부담이 높습니다. Fargate는 노드 관리가 없지만 오케스트레이터(ECS/EKS) 설정이 필요하며, Lambda는 함수 코드만 관리하면 됩니다.",
+        "3": "ECS EC2 시작 유형이 Fargate보다 운영 부담이 낮다고 나열돼 있으나, ECS EC2 시작 유형은 EC2 노드를 직접 프로비저닝·패치·스케일링해야 하므로 Fargate보다 운영 부담이 큽니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" },
+        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q2",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "Lambda 제약 — 최대 실행 시간",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Lambda 함수를 사용해 야간 재무 보고서를 생성하려 한다. 보고서 생성 작업은 평균 20분이 걸린다. 이 설계의 문제점은?",
+      "options": [
+        "Lambda는 메모리 부족으로 대용량 보고서를 처리할 수 없다",
+        "Lambda의 최대 실행 시간은 15분이므로 20분 작업은 강제 종료된다",
+        "Lambda는 야간 스케줄 트리거를 지원하지 않는다",
+        "Lambda는 재무 데이터 처리에 규정상 사용할 수 없다"
+      ],
+      "correct": 1,
+      "explanation": "Lambda의 최대 실행 시간은 15분입니다. 20분 작업은 이 제한을 초과해 강제 종료됩니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용해야 합니다.",
+      "wrongExplanations": {
+        "0": "Lambda의 메모리는 설정으로 조정 가능하며, 보고서 처리 자체가 불가능하다는 설명은 문서에 없습니다. 핵심 문제는 실행 시간 제한입니다.",
+        "2": "Lambda는 EventBridge(CloudWatch Events) 스케줄 트리거를 지원합니다. 야간 스케줄 자체는 문제가 아닙니다.",
+        "3": "규정상 Lambda 사용 제한에 대한 내용은 이 문서에 없습니다. 문제는 15분 실행 시간 제한입니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q3",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "Fargate — 독립 서비스 여부 및 구조",
+      "difficulty": "foundational",
+      "stem": "개발팀이 EC2 노드 관리 없이 컨테이너를 실행하려 한다. AWS Fargate에 대한 설명으로 옳은 것은?",
+      "options": [
+        "Fargate는 독립 서비스로 ECS 없이 단독으로 컨테이너를 실행할 수 있다",
+        "Fargate는 ECS 또는 EKS의 시작 유형(실행 모드)으로, 오케스트레이터 없이 단독 사용이 불가능하다",
+        "Fargate는 EC2 인스턴스 기반이므로 노드 패치는 사용자가 직접 수행해야 한다",
+        "Fargate는 EKS 전용 시작 유형으로 ECS에서는 사용할 수 없다"
+      ],
+      "correct": 1,
+      "explanation": "Fargate는 독립 서비스가 아니라 ECS 또는 EKS의 시작 유형(실행 모드)입니다. 스케줄링 계층(ECS/EKS)과 인프라 계층(Fargate)이 분리된 구조이므로 오케스트레이터 없이 단독으로 존재할 수 없습니다. Fargate를 사용하면 EC2 인스턴스 관리를 AWS가 담당합니다.",
+      "wrongExplanations": {
+        "0": "Fargate는 독립 서비스가 아닙니다. 반드시 ECS 또는 EKS 위에서 동작하는 시작 유형입니다.",
+        "2": "Fargate 시작 유형에서는 인스턴스 관리(프로비저닝·패치·스케일링)를 AWS가 자동으로 처리합니다. 사용자가 직접 수행하는 것은 EC2 시작 유형입니다.",
+        "3": "Fargate는 ECS와 EKS 모두에서 시작 유형으로 사용할 수 있습니다."
+      },
+      "sources": [
+        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q4",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "ECS vs EKS — 선택 기준",
+      "difficulty": "applied",
+      "stem": "한 기업이 온프레미스에서 Kubernetes로 운영하던 마이크로서비스를 AWS로 이전하려 한다. 기존 Kubernetes 매니페스트와 도구를 그대로 유지하고 멀티클라우드 이식성도 필요하다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon ECS — AWS 네이티브 오케스트레이터로 러닝커브가 낮다",
+        "Amazon EKS — 관리형 Kubernetes로 기존 K8s 워크로드와 호환되고 멀티클라우드 이식성을 제공한다",
+        "AWS Lambda — 서버리스로 운영 부담이 가장 낮다",
+        "AWS Batch — 배치 오케스트레이터로 마이크로서비스에 적합하다"
+      ],
+      "correct": 1,
+      "explanation": "기존 Kubernetes 워크로드·도구 호환성과 멀티클라우드 이식성이 필요한 경우 Amazon EKS를 선택합니다. EKS는 Kubernetes 컨트롤 플레인을 AWS가 관리하는 완전 관리형 Kubernetes 서비스로, CNCF 표준을 따라 온프레미스·멀티클라우드와 호환됩니다.",
+      "wrongExplanations": {
+        "0": "ECS는 AWS 독자 오케스트레이터로 Kubernetes 표준을 지원하지 않습니다. 기존 K8s 매니페스트·도구를 그대로 사용할 수 없습니다.",
+        "2": "Lambda는 이벤트 기반·짧은 실행의 스테이트리스 워크로드에 적합합니다. 마이크로서비스 전체를 Lambda로 이전하는 것은 15분 제한과 상태 유지 불가 문제로 부적합할 수 있습니다.",
+        "3": "AWS Batch는 배치 컴퓨팅 워크로드 전용 오케스트레이터로 지속 실행 마이크로서비스 오케스트레이션에 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon EKS — What is Amazon EKS (공식)", "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q5",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "Lambda 성능 튜닝 — 메모리와 CPU 관계",
+      "difficulty": "foundational",
+      "stem": "Lambda 함수의 실행 속도가 느려 성능을 개선하려 한다. Lambda에서 CPU 성능을 높이는 올바른 방법은?",
+      "options": [
+        "Lambda 함수 설정에서 vCPU 수를 직접 늘린다",
+        "Lambda 함수를 여러 AZ에 배포해 병렬 처리한다",
+        "Lambda 함수의 타임아웃 값을 늘리면 더 많은 CPU가 할당된다",
+        "Lambda 함수의 메모리 할당량을 늘린다 — 메모리와 CPU가 비례해 함께 증가한다"
+      ],
+      "correct": 3,
+      "explanation": "Lambda는 메모리를 올리면 CPU도 비례해 증가합니다. Lambda에서 CPU는 독립 설정값이 없으며 메모리 설정이 유일한 성능 손잡이입니다. 메모리를 두 배 늘리면 vCPU도 비례해 증가합니다.",
+      "wrongExplanations": {
+        "0": "Lambda는 vCPU를 직접 설정하는 옵션이 없습니다. CPU 성능은 메모리 설정에 비례해 자동으로 결정됩니다.",
+        "1": "Lambda는 호출 시 자동으로 확장되며 AZ 배포 설정을 직접 하지 않습니다. AZ 배포가 CPU 성능을 높이지도 않습니다.",
+        "2": "타임아웃 값은 최대 실행 시간만 결정하고 CPU 할당량과 무관합니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q6",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "Lambda 콜드 스타트 — Provisioned Concurrency",
+      "difficulty": "applied",
+      "stem": "고객 대면 API Lambda 함수가 유휴 상태 후 첫 호출에서 수백 밀리초의 지연이 발생한다. 이 문제를 근본적으로 해결하는 방법은?",
+      "options": [
+        "Lambda 함수의 메모리를 최대치로 늘린다",
+        "Lambda 함수에 Provisioned Concurrency를 설정해 실행 환경을 미리 초기화 상태로 유지한다",
+        "Lambda 함수를 ECS Fargate로 마이그레이션한다",
+        "Lambda 함수의 타임아웃을 30초로 늘린다"
+      ],
+      "correct": 1,
+      "explanation": "콜드 스타트는 Lambda가 유휴 상태에서 새 실행 환경(컨테이너)을 초기화하는 시간입니다. Provisioned Concurrency는 지정된 수의 실행 환경을 미리 초기화 상태로 유지해 콜드 스타트를 제거합니다.",
+      "wrongExplanations": {
+        "0": "메모리 증가는 함수 실행 속도를 높이지만 실행 환경 초기화 지연(콜드 스타트) 자체를 없애지 않습니다. 콜드 스타트 근본 해결책은 Provisioned Concurrency입니다.",
+        "2": "콜드 스타트 문제를 해결하기 위해 ECS Fargate로 마이그레이션하는 것은 과도한 변경입니다. Provisioned Concurrency가 Lambda 내에서의 올바른 해결책입니다.",
+        "3": "타임아웃을 늘리는 것은 함수가 더 오래 실행될 수 있게 할 뿐이며 콜드 스타트 지연과 무관합니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q7",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "AWS Batch 3계층 구조",
+      "difficulty": "foundational",
+      "stem": "AWS Batch의 구성요소에 대한 설명으로 옳은 것은?",
+      "options": [
+        "Job Definition, Task, Service 3계층으로 구성된다",
+        "Job, Cluster, Service 3계층으로 구성되며 ECS와 동일한 구조다",
+        "Job Definition, Job Queue, Lambda 함수 3계층으로 구성된다",
+        "Job, Job Queue, Compute Environment 3계층으로 구성되며, Job Queue는 우선순위 설정이 가능하다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Batch는 Job(실행 단위, Docker 컨테이너 기반), Job Queue(Job이 대기하는 큐, 우선순위 설정 가능), Compute Environment(Job을 실행하는 컴퓨팅 풀, EC2 On-Demand/Spot 또는 Fargate) 3계층으로 구성됩니다.",
+      "wrongExplanations": {
+        "0": "Job Definition, Task, Service는 ECS의 리소스입니다. AWS Batch는 Job, Job Queue, Compute Environment로 구성됩니다.",
+        "1": "Job, Cluster, Service는 ECS의 개념을 혼합한 것입니다. AWS Batch의 3계층은 Job, Job Queue, Compute Environment입니다.",
+        "2": "AWS Batch는 Lambda 함수를 실행 엔진으로 사용하지 않습니다. 내부적으로 ECS, EKS, Fargate를 실행 엔진으로 사용합니다."
+      },
+      "sources": [
+        { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q8",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "AWS Batch vs Lambda — 배치 워크로드 선택",
+      "difficulty": "applied",
+      "stem": "한 회사가 매일 수천 개의 유전체 데이터 파일을 분석하는 파이프라인을 구축하려 한다. 각 분석 작업은 수 시간이 걸리고, 완료 후 결과를 S3에 저장한다. 가변 컴퓨팅 수요를 운영 부담 최소화로 처리하는 가장 적합한 서비스는?",
+      "options": [
+        "AWS Lambda — 이벤트 기반으로 자동 확장된다",
+        "EC2 인스턴스 고정 풀 — 작업을 항상 처리할 수 있도록 대기한다",
+        "AWS Batch — 실행 시간 제한 없이 Job 제출량에 따라 Compute Environment를 자동 프로비저닝한다",
+        "Amazon ECS Service — 지속 실행 서비스로 작업을 처리한다"
+      ],
+      "correct": 2,
+      "explanation": "대규모 배치 작업·완료 후 종료·가변 컴퓨팅 필요 시나리오에 AWS Batch가 적합합니다. AWS Batch는 Job 제출량에 따라 Compute Environment를 자동 프로비저닝·종료하며 실행 시간 제한이 없습니다. Spot 인스턴스 사용으로 비용도 절감 가능합니다.",
+      "wrongExplanations": {
+        "0": "Lambda는 최대 실행 시간이 15분으로, 수 시간이 걸리는 유전체 분석 작업에 부적합합니다. 15분 초과 시 강제 종료됩니다.",
+        "1": "고정 EC2 풀은 작업이 없는 유휴 시간에도 비용이 발생하며 운영 부담(패치·스케일링)도 큽니다. AWS Batch가 탄력적 프로비저닝으로 이 낭비를 줄입니다.",
+        "3": "ECS Service는 지속 실행 애플리케이션(웹 서버 등)에 적합하며, 완료 후 종료되는 배치 작업의 탄력적 스케줄링에는 AWS Batch가 더 적합합니다."
+      },
+      "sources": [
+        { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q9",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "HPC 아키텍처 — 클러스터 배치 그룹 + EFA",
+      "difficulty": "applied",
+      "stem": "기상 예측 회사가 수백 개의 EC2 노드가 MPI로 긴밀하게 통신하는 HPC 클러스터를 AWS에 구축하려 한다. 노드 간 초저지연 통신을 위한 올바른 구성은?",
+      "options": [
+        "EC2 인스턴스를 여러 AZ에 분산 배치하고 Enhanced Networking을 활성화한다",
+        "EC2 배치 그룹만 구성하면 OS 네트워크 스택을 우회해 초저지연이 실현된다",
+        "AWS Batch의 Compute Environment를 Spot 인스턴스로 구성한다",
+        "EC2 클러스터 배치 그룹과 EFA(Elastic Fabric Adapter)를 함께 구성한다"
+      ],
+      "correct": 3,
+      "explanation": "HPC에서 초저지연 인터노드 통신을 위해서는 클러스터 배치 그룹(물리적 근접 배치로 네트워크 경로 단축)과 EFA(OS-bypass 방식으로 커널 오버헤드 제거)를 함께 구성해야 합니다. 배치 그룹만으로는 OS 네트워크 스택 오버헤드가 남아 MPI 워크로드에 충분하지 않습니다.",
+      "wrongExplanations": {
+        "0": "HPC 클러스터는 여러 AZ에 분산하면 AZ 간 네트워크 지연이 발생합니다. 클러스터 배치 그룹은 동일 물리 랙/AZ 내 배치를 위한 것입니다.",
+        "1": "클러스터 배치 그룹은 물리적 근접성을 제공하지만 여전히 OS 네트워크 스택을 통해 데이터가 전달됩니다. EFA의 OS-bypass로 커널 오버헤드를 제거해야 초저지연이 실현됩니다.",
+        "2": "AWS Batch는 배치 작업 스케줄링 서비스로 HPC 인터노드 통신 최적화를 위한 구성이 아닙니다. 클러스터 배치 그룹+EFA가 HPC 통신 최적화 솔루션입니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q10",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "HPC 공유 스토리지 — FSx for Lustre",
+      "difficulty": "applied",
+      "stem": "분산 ML 훈련 클러스터의 수백 개 노드가 훈련 데이터에 고속으로 동시 접근해야 한다. S3에 저장된 데이터를 HPC 클러스터에서 공유 파일 시스템으로 활용하는 가장 적합한 스토리지 서비스는?",
+      "options": [
+        "Amazon EFS — 완전 관리형 NFS 파일 시스템",
+        "Amazon S3 — 객체 스토리지로 직접 접근",
+        "FSx for Lustre — 고성능 병렬 파일 시스템으로 S3 연동 지원",
+        "Amazon EBS — 블록 스토리지로 다수 노드에 마운트"
+      ],
+      "correct": 2,
+      "explanation": "FSx for Lustre는 HPC 클러스터의 공유 스토리지로 고성능 병렬 파일 시스템이며 S3와 연동됩니다. HPC 공유 스토리지 시나리오에서 FSx for Lustre가 정답입니다.",
+      "wrongExplanations": {
+        "0": "Amazon EFS는 NFS 기반 파일 시스템으로 일반 워크로드에 적합하지만, HPC 클러스터의 수백 노드 병렬 고속 접근에 최적화된 FSx for Lustre보다 성능이 낮습니다.",
+        "1": "S3는 객체 스토리지로 POSIX 파일 시스템 인터페이스를 제공하지 않아 HPC 클러스터의 공유 파일 시스템으로 직접 활용하기 부적합합니다. FSx for Lustre가 S3와 연동해 이를 해결합니다.",
+        "3": "EBS는 단일 EC2 인스턴스에 마운트되는 블록 스토리지입니다(Multi-Attach 제한 있음). 수백 노드가 동시 접근하는 HPC 공유 스토리지 용도로 부적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q11",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "Fargate — 보안 격리 특성",
+      "difficulty": "foundational",
+      "stem": "금융 회사가 컨테이너 워크로드 간 보안 격리를 최대화하고 싶다. ECS EC2 시작 유형과 Fargate 시작 유형의 격리 차이로 옳은 것은?",
+      "options": [
+        "ECS EC2 시작 유형이 태스크별 독립 격리 경계를 제공해 보안이 더 강하다",
+        "Fargate는 각 태스크에 자체 격리 경계를 제공해 커널·CPU·메모리·네트워크 인터페이스를 다른 태스크와 공유하지 않는다",
+        "두 시작 유형 모두 동일한 수준의 격리를 제공한다",
+        "Fargate는 동일 노드의 여러 태스크가 커널을 공유하므로 EC2 시작 유형보다 격리가 약하다"
+      ],
+      "correct": 1,
+      "explanation": "Fargate의 각 태스크는 자체 격리 경계를 가집니다 — 커널·CPU·메모리·네트워크 인터페이스를 다른 태스크와 공유하지 않습니다. ECS EC2 시작 유형은 노드를 공유하므로 태스크별 독립 격리가 Fargate보다 약합니다.",
+      "wrongExplanations": {
+        "0": "태스크별 독립 격리 경계는 Fargate의 특성입니다. EC2 시작 유형은 공유 노드 위에서 동작합니다.",
+        "2": "두 시작 유형의 격리 수준은 다릅니다. Fargate가 태스크별 독립 격리 경계를 제공해 보안 격리가 더 강합니다.",
+        "3": "Fargate는 태스크별 독립 격리 경계를 제공하며 커널·네트워크 인터페이스를 다른 태스크와 공유하지 않습니다. 설명이 반대입니다."
+      },
+      "sources": [
+        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q12",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "ECS 리소스 — Task와 Service 차이",
+      "difficulty": "foundational",
+      "stem": "ECS에서 웹 서버 컨테이너를 항상 3개 유지하며 실행하려 한다. 이 요구사항에 맞는 ECS 리소스는?",
+      "options": [
+        "Task — 실행 후 종료되는 일회성 작업으로 지속 실행에 적합하다",
+        "Task Definition — 컨테이너 설계도로 지속 실행을 보장한다",
+        "Service — 지정된 수의 Task를 지속 실행하며 장기 상주 앱에 사용된다",
+        "Cluster — 논리 단위로 직접 컨테이너 수를 지정한다"
+      ],
+      "correct": 2,
+      "explanation": "ECS Service는 지정된 수의 Task를 지속 실행하며 웹 서버 같은 장기 상주 앱에 사용됩니다. Task는 실행 후 종료되는 일회성 작업, Task Definition은 컨테이너 설계도, Cluster는 Task/Service가 실행되는 논리 단위입니다.",
+      "wrongExplanations": {
+        "0": "Task는 실행 후 종료되는 일회성 작업입니다. 항상 3개를 유지하는 지속 실행에는 Service를 사용합니다.",
+        "1": "Task Definition은 컨테이너의 설계도(이미지, CPU/메모리, 포트, IAM 역할)이며 직접 실행하거나 인스턴스 수를 유지하는 역할이 아닙니다.",
+        "3": "Cluster는 Task/Service가 실행되는 논리 단위이며, 직접 컨테이너 수를 지정하는 리소스가 아닙니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q13",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "컴퓨팅 선택 — 워크로드 특성 기반",
+      "difficulty": "applied",
+      "stem": "한 회사가 HTTP 요청을 받아 이미지를 리사이즈하는 서비스를 구축한다. 요청은 간헐적으로 발생하고 처리 시간은 5초 이내이며 상태를 저장하지 않는다. 운영 부담 최소화를 원한다. 가장 적합한 컴퓨팅 서비스는?",
+      "options": [
+        "EC2 인스턴스 — 최대 제어와 커스텀 OS 구성 가능",
+        "Amazon ECS with EC2 시작 유형 — 컨테이너로 안정적 실행",
+        "AWS Lambda — 이벤트 기반·짧은 실행·스테이트리스에 최적, 운영 부담 최소",
+        "AWS Batch — 배치 작업 오케스트레이터로 가변 요청 처리"
+      ],
+      "correct": 2,
+      "explanation": "이벤트 기반(HTTP 요청), 짧은 처리 시간(5초, 15분 미만), 스테이트리스, 운영 부담 최소화 요구사항이 모두 Lambda에 해당합니다. Lambda는 운영 부담 스펙트럼에서 가장 오른쪽(최소 부담)에 위치합니다.",
+      "wrongExplanations": {
+        "0": "EC2는 운영 부담이 가장 크며, 간헐적 이벤트 처리에 EC2를 상시 유지하는 것은 비효율적입니다. OS 커스텀이나 특수 인스턴스가 필요하지 않은 이 시나리오에 부적합합니다.",
+        "1": "ECS EC2 시작 유형은 EC2 노드 관리 부담이 있어 운영 부담 최소화 요구사항에 맞지 않습니다. 간헐적 이벤트 처리에는 Lambda가 더 적합합니다.",
+        "3": "AWS Batch는 완료 후 종료되는 대규모 배치 작업 전용입니다. HTTP 요청 이벤트에 즉시 응답하는 실시간 처리에는 Lambda가 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q14",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "Lambda 동시성 — Reserved Concurrency vs Provisioned Concurrency",
+      "difficulty": "applied",
+      "stem": "중요한 Lambda 함수가 다른 함수들과 동시성 풀을 공유해 부하 폭증 시 실행 가능 용량이 부족해지는 문제가 발생한다. 이 함수에 최소 실행 용량을 보장하면서 동시에 최대 호출 수를 제한하려면 어떤 설정을 사용해야 하는가?",
+      "options": [
+        "예약 동시성(Reserved Concurrency) — 특정 함수에 동시성을 할당 보장하고 상한선을 설정한다",
+        "Provisioned Concurrency — 미리 초기화된 환경을 유지해 용량을 보장한다",
+        "Lambda 함수의 메모리를 최대로 늘려 동시성 풀을 확대한다",
+        "Lambda 함수를 여러 리전에 배포해 용량을 분산한다"
+      ],
+      "correct": 0,
+      "explanation": "예약 동시성(Reserved Concurrency)은 특정 함수에 동시성을 할당 보장하면서 상한선도 설정합니다. 이 함수만을 위한 동시성이 예약되어 다른 함수와 경쟁하지 않고, 지정한 수를 초과하는 호출은 조절됩니다.",
+      "wrongExplanations": {
+        "1": "Provisioned Concurrency는 콜드 스타트를 제거하기 위해 실행 환경을 미리 초기화 상태로 유지하는 설정입니다. 동시성 할당 보장과 상한선 설정은 예약 동시성(Reserved Concurrency)의 역할입니다.",
+        "2": "메모리를 늘리면 CPU 성능이 향상되지만 계정·리전당 동시성 풀 크기와는 무관합니다.",
+        "3": "여러 리전에 배포하면 각 리전에 독립적인 동시성 풀이 생기지만, 요청이 단일 리전에 집중되는 경우 문제가 해결되지 않으며 복잡성이 증가합니다."
+      },
+      "sources": [
+        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-4-q15",
+      "examGuideTaskId": "saa-t3-4",
+      "skill": "AWS Batch — Spot 인스턴스와 비용 최적화",
+      "difficulty": "applied",
+      "stem": "3D 렌더링 스튜디오가 AWS Batch를 사용해 수천 개의 렌더링 작업을 처리한다. 비용을 최소화하면서 가변 작업 부하를 처리하려 한다. Compute Environment 구성으로 가장 적합한 것은?",
+      "options": [
+        "On-Demand EC2 인스턴스 고정 풀 — 항상 용량을 보장한다",
+        "Lambda 함수를 Compute Environment로 설정한다",
+        "Spot 인스턴스를 Compute Environment로 구성한다 — 배치 작업은 중단·재시작에 적합해 비용 절감 효과가 크다",
+        "EKS Fargate를 Compute Environment로 구성해 쿠버네티스 표준을 따른다"
+      ],
+      "correct": 2,
+      "explanation": "배치 작업은 완료 후 종료되는 특성으로 중단 후 재시작이 가능해 Spot 인스턴스와 결합할 때 비용 절감 효과가 큽니다. AWS Batch Compute Environment에 Spot 인스턴스를 구성하면 탄력적 프로비저닝과 비용 최적화를 동시에 달성합니다.",
+      "wrongExplanations": {
+        "0": "On-Demand 고정 풀은 작업이 없는 유휴 시간에도 비용이 발생합니다. AWS Batch의 탄력적 프로비저닝 구조를 활용해 수요에 따라 축소하는 Spot 인스턴스가 비용 최적화에 유리합니다.",
+        "1": "Lambda는 AWS Batch의 Compute Environment로 설정하는 서비스가 아닙니다. AWS Batch는 내부적으로 ECS, EKS, Fargate를 실행 엔진으로 사용합니다.",
+        "3": "EKS Fargate를 Compute Environment로 구성하는 것은 가능하지만, 비용 최적화 관점에서 Spot 인스턴스보다 효과가 낮을 수 있습니다. 또한 쿠버네티스 표준이 필요하지 않은 렌더링 배치 작업에 EKS를 도입하는 것은 불필요한 복잡성을 추가합니다."
+      },
+      "sources": [
+        { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

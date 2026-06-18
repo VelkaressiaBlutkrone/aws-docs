@@ -9,17 +9,17 @@ import 'package:flutter_test/flutter_test.dart';
 /// 품질 바(question_model_test.dart의 런타임 규칙과 동일):
 /// options 정확히 4개, correct 범위 내, wrongExplanations 키=정답 아닌 인덱스, sources 존재.
 void main() {
-  // D1 보안 배치: 학습문서 saa-t1-1~t1-5에 1:1 대응하는 문항 파일.
-  const d1TaskIds = [
-    'saa-t1-1',
-    'saa-t1-2',
-    'saa-t1-3',
-    'saa-t1-4',
-    'saa-t1-5',
+  // 문항 작성을 완료한(드래프트 포함) Task — 도메인 배치별로 누적 추가한다.
+  const saaTaskIds = [
+    // D1 보안
+    'saa-t1-1', 'saa-t1-2', 'saa-t1-3', 'saa-t1-4', 'saa-t1-5',
+    // D3 고성능
+    'saa-t3-1', 'saa-t3-2', 'saa-t3-3', 'saa-t3-4', 'saa-t3-5',
+    'saa-t3-6', 'saa-t3-7', 'saa-t3-8', 'saa-t3-9',
   ];
   const minPerTask = 15; // CLF 기준선과 동일한 Task당 밀도 목표
 
-  for (final taskId in d1TaskIds) {
+  for (final taskId in saaTaskIds) {
     group(taskId, () {
       final path = 'assets/content/saa/$taskId.questions.json';
 
