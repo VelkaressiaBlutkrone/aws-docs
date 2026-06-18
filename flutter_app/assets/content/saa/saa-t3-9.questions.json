@@ -1,0 +1,371 @@
+{
+  "examGuideTaskId": "saa-t3-9",
+  "taskTitle": "데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-9-q1",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Kinesis Data Streams vs Firehose 선택(다중 컨슈머)",
+      "difficulty": "applied",
+      "stem": "웹 애플리케이션이 초당 수천 건의 클릭스트림 이벤트를 수집한다. 수집된 데이터를 실시간 집계 애플리케이션과 S3 아카이브 애플리케이션이 각각 독립적으로 읽어야 한다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon Data Firehose — 완전 관리형으로 코드 없이 두 목적지에 동시 적재할 수 있다",
+        "Amazon Kinesis Data Streams — 동일 스트림을 여러 컨슈머가 독립적으로 읽는 fan-out을 지원한다",
+        "Amazon Managed Service for Apache Flink — 스트림 분석과 S3 아카이브를 동시에 처리한다",
+        "AWS Glue ETL 잡 — 서버리스로 두 목적지에 병렬 적재할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "여러 컨슈머가 동일 스트림을 각자의 속도로 독립적으로 읽어야 하는 fan-out 요구사항은 Kinesis Data Streams에 적합합니다. 실시간 집계 애플리케이션과 아카이브 애플리케이션이 같은 스트림에서 각자의 오프셋을 유지하며 데이터를 소비할 수 있습니다. Firehose는 단일 목적지 적재 전용이므로 다중 독립 컨슈머 구성에는 적합하지 않습니다.",
+      "wrongExplanations": {
+        "0": "Firehose는 단일 목적지로 데이터를 전달하는 관리형 적재 서비스입니다. 여러 컨슈머가 독립적으로 읽는 fan-out을 지원하지 않으며, 전달 후 데이터를 보존하지 않아 재처리도 불가합니다.",
+        "2": "Managed Flink는 스트림 데이터에 분석 로직을 작성하는 서비스로, 다중 독립 컨슈머 fan-out 문제의 핵심 해결책이 아닙니다. 스트림 소스로 Kinesis Data Streams가 별도로 필요합니다.",
+        "3": "Glue ETL 잡은 배치 ETL 서비스로 실시간 스트리밍 수집에 사용하지 않습니다. 배치 변환·적재 시나리오에 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q2",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Kinesis Data Firehose 관리형 적재",
+      "difficulty": "foundational",
+      "stem": "IoT 센서에서 실시간으로 생성되는 데이터를 Amazon S3에 자동 적재해야 한다. 컨슈머 코드를 작성하지 않고 인프라 관리도 최소화하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon Kinesis Data Streams — KCL로 컨슈머를 구현하고 S3에 직접 기록한다",
+        "AWS DataSync — IoT 데이터를 S3로 실시간 동기화한다",
+        "Amazon EMR — Spark 잡으로 스트리밍 데이터를 S3에 기록한다",
+        "Amazon Data Firehose — 완전 관리형으로 컨슈머 코드 없이 S3에 자동 적재한다"
+      ],
+      "correct": 3,
+      "explanation": "Amazon Data Firehose는 완전 관리형 서비스로 컨슈머 코드 작성이나 인프라 관리 없이 스트리밍 데이터를 S3에 자동 적재합니다. 버퍼 설정(크기/시간)으로 전달 빈도를 제어하며, 적재 전 Lambda를 이용한 변환도 가능합니다.",
+      "wrongExplanations": {
+        "0": "Kinesis Data Streams는 KCL 또는 Lambda 같은 컨슈머 코드를 직접 작성해야 합니다. 코드 없이 S3에 자동 적재하려면 Firehose가 적합합니다.",
+        "1": "DataSync는 NFS·SMB 등 파일 시스템을 S3·EFS·FSx로 반복 동기화하는 전송 도구입니다. 스트리밍 레코드 단위 수집에는 사용하지 않습니다.",
+        "2": "EMR은 Spark·Hadoop 등 빅데이터 프레임워크를 실행하는 관리형 클러스터로, 간단한 스트리밍 수집·적재에는 과도한 인프라 비용과 운영 복잡도가 발생합니다."
+      },
+      "sources": [
+        { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q3",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Kinesis Data Streams 샤드 처리량 한계",
+      "difficulty": "foundational",
+      "stem": "Kinesis Data Streams 스트림의 샤드 1개가 처리할 수 있는 쓰기(수집) 처리량의 한계는?",
+      "options": [
+        "초당 1 MB 또는 초당 1,000 레코드",
+        "초당 10 MB 또는 초당 10,000 레코드",
+        "초당 2 MB 또는 초당 2,000 레코드",
+        "초당 5 MB 또는 초당 5,000 레코드"
+      ],
+      "correct": 0,
+      "explanation": "Kinesis Data Streams 샤드 1개의 쓰기(수집) 한계는 초당 1 MB 또는 초당 1,000 레코드입니다. 읽기(소비) 한계는 초당 2 MB입니다. 처리량이 이 한계를 초과하면 샤드 수를 늘려 스케일 아웃해야 합니다.",
+      "wrongExplanations": {
+        "1": "샤드당 쓰기 한계는 10 MB/s가 아닌 1 MB/s입니다. 10배 과대 추정으로, 실제 한계를 넘으면 ProvisionedThroughputExceededException이 발생합니다.",
+        "2": "초당 2 MB는 쓰기가 아닌 읽기(소비) 처리량 한계입니다. 쓰기와 읽기의 수치가 다르므로 구분해야 합니다.",
+        "3": "샤드당 쓰기 한계는 5 MB/s가 아닌 1 MB/s입니다. 5배 과대 추정입니다."
+      },
+      "sources": [
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q4",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Firehose near real-time 지연과 재처리 불가",
+      "difficulty": "applied",
+      "stem": "실시간 거래 데이터를 처리하는 시스템이 있다. 밀리초 단위 처리와 처리 실패 시 데이터 재처리(replay)가 모두 필요하다. Amazon Data Firehose로 이 요구사항을 충족할 수 있는가?",
+      "options": [
+        "가능하다 — Firehose는 밀리초 단위 실시간 처리와 재처리를 모두 지원한다",
+        "재처리는 가능하지만 밀리초 실시간은 불가하다 — Firehose는 보존 기간 내 재처리를 지원한다",
+        "불가능하다 — Firehose는 버퍼 설정으로 수 초~수 분 지연이 발생하며, 전달 후 데이터를 보존하지 않아 재처리가 불가하다",
+        "가능하다 — Firehose에 Lambda를 연결하면 밀리초 처리와 재처리가 모두 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "Firehose는 버퍼 크기(MB) 또는 시간(초) 조건이 충족될 때 전달하는 near real-time(준실시간) 서비스로 수 초~수 분 지연이 발생합니다. 또한 전달 완료 후 스트림에 데이터를 보존하지 않으므로 재처리가 불가합니다. 밀리초 실시간 처리와 재처리가 필요하면 Kinesis Data Streams를 사용합니다.",
+      "wrongExplanations": {
+        "0": "Firehose는 밀리초 단위 실시간 처리를 지원하지 않습니다. 버퍼 설정으로 인해 최소 수 초의 지연이 발생하며, 재처리도 불가합니다.",
+        "1": "Firehose는 전달 완료 후 데이터를 스트림에 보존하지 않습니다. 재처리가 필요하면 Data Streams처럼 보존 기간(최대 365일)을 지원하는 서비스를 선택해야 합니다.",
+        "3": "Lambda를 Firehose에 연결하면 적재 전 데이터를 변환할 수 있지만, 밀리초 실시간 처리나 재처리 기능을 제공하지는 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" },
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q5",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Firehose Redshift 적재 경로",
+      "difficulty": "foundational",
+      "stem": "Amazon Data Firehose로 스트리밍 데이터를 Amazon Redshift에 적재할 때, Firehose가 사용하는 실제 적재 경로는?",
+      "options": [
+        "Firehose가 Redshift Streaming Ingestion API를 통해 직접 스트리밍으로 적재한다",
+        "Firehose가 데이터를 먼저 S3에 저장한 뒤 Redshift의 COPY 명령으로 로드한다",
+        "Firehose가 Kinesis Data Streams를 경유해 Redshift에 순차 적재한다",
+        "Firehose가 Glue ETL을 통해 변환 후 Redshift에 적재한다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon Data Firehose가 Redshift를 목적지로 사용할 때, 데이터를 먼저 S3에 저장한 뒤 Redshift의 COPY 명령으로 로드하는 S3 경유 방식을 사용합니다. Firehose가 Redshift에 직접 스트리밍으로 적재하는 것이 아님을 기억해야 합니다.",
+      "wrongExplanations": {
+        "0": "Firehose는 Redshift에 직접 스트리밍 적재를 하지 않습니다. S3를 중간 저장소로 거쳐 COPY 명령으로 로드하는 방식을 사용합니다.",
+        "2": "Firehose의 Redshift 적재 경로는 Kinesis Data Streams를 경유하지 않습니다. S3를 중간 저장소로 사용합니다. Kinesis Data Streams는 Firehose의 소스로 연결할 수는 있지만 Redshift 적재 경로와는 무관합니다.",
+        "3": "Firehose의 Redshift 적재는 Glue ETL을 경유하지 않습니다. S3에 저장 후 COPY 명령을 사용하는 직접 경로입니다."
+      },
+      "sources": [
+        { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q6",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "AWS Glue Data Catalog 중앙 메타데이터 허브",
+      "difficulty": "foundational",
+      "stem": "데이터 팀이 S3에 저장된 데이터를 Athena, EMR, Redshift Spectrum으로 각각 분석한다. 세 서비스 모두 동일한 테이블 스키마를 참조하도록 중앙 관리하려 한다. 이를 위해 사용해야 하는 서비스는?",
+      "options": [
+        "각 분석 서비스마다 개별 스키마 정의 파일을 유지한다",
+        "Amazon S3 메타데이터 태그 — 버킷 수준에서 스키마를 정의하면 모든 서비스가 자동 참조한다",
+        "AWS Lake Formation — 자체 메타데이터 저장소로 세 서비스의 스키마를 개별 관리한다",
+        "AWS Glue Data Catalog — Athena·EMR·Redshift Spectrum이 공유하는 중앙 메타데이터 허브다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Glue Data Catalog는 Athena·EMR·Redshift Spectrum이 공통으로 참조하는 중앙 메타데이터 허브입니다. Glue 크롤러가 스키마를 Data Catalog에 한 번 등록하면 세 서비스가 동일 테이블 정의를 공유 참조하므로, 서비스마다 스키마를 별도로 정의하거나 동기화할 필요가 없습니다.",
+      "wrongExplanations": {
+        "0": "서비스마다 스키마 정의를 개별 유지하면, 원본 데이터 구조가 바뀔 때 각 서비스 정의를 개별 갱신해야 해 불일치와 관리 부담이 발생합니다. Data Catalog를 중앙 허브로 두는 이유가 바로 이 문제를 해결하기 위해서입니다.",
+        "1": "S3 메타데이터 태그는 객체 수준의 태깅 기능으로 분석 서비스가 참조하는 테이블 스키마를 저장하는 용도가 아닙니다.",
+        "2": "Lake Formation은 Glue Data Catalog 위에 올라가는 권한 제어 계층입니다. Lake Formation이 자체 메타데이터 저장소를 제공하는 것이 아니라, Data Catalog의 메타데이터를 그대로 활용하면서 접근 제어를 추가합니다."
+      },
+      "sources": [
+        { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q7",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Amazon Athena 서버리스 S3 쿼리",
+      "difficulty": "applied",
+      "stem": "데이터 분석팀이 S3에 적재된 수 TB의 로그 파일을 표준 SQL로 분석해야 한다. 별도 클러스터를 프로비저닝하지 않고 즉시 쿼리하고 싶다. 비용을 최소화하는 방법도 함께 고려한다. 가장 적합한 서비스와 비용 최적화 방법은?",
+      "options": [
+        "Amazon Athena — 서버리스로 S3를 직접 쿼리한다. Parquet 또는 ORC 컬럼형 포맷과 파티셔닝으로 스캔량을 줄여 비용을 낮춘다",
+        "Amazon Redshift — 클러스터를 생성하고 데이터를 S3에서 COPY해 쿼리한다. CSV 형식이 가장 효율적이다",
+        "AWS Glue ETL 잡 — Spark 기반으로 수 TB를 분산 처리하며 클러스터 없이 즉시 실행한다",
+        "Amazon EMR — 관리형 클러스터로 Hive를 사용해 S3 데이터를 쿼리한다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Athena는 서버리스로 S3 데이터를 제자리에서 SQL 쿼리하며, 클러스터 설정·관리가 불필요합니다. 비용은 스캔한 데이터 양 기준으로 부과되므로, Parquet·ORC 같은 컬럼형 포맷을 사용하면 필요한 컬럼만 선택적으로 읽어 스캔량을 줄이고 비용을 낮출 수 있습니다. 파티셔닝으로 스캔 범위를 추가로 좁힐 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Redshift는 클러스터 프로비저닝이 필요하고 데이터를 S3에서 COPY해 로드하는 별도 단계가 필요합니다. 즉시 쿼리에 적합하지 않습니다. 또한 CSV는 컬럼형 포맷이 아니어서 스캔 비용이 높습니다.",
+        "2": "Glue ETL 잡은 데이터를 추출·변환·적재하는 배치 처리 서비스로, 대화형 SQL 쿼리 도구가 아닙니다. 분석팀의 즉시 SQL 쿼리 요구사항에는 Athena가 적합합니다.",
+        "3": "EMR은 클러스터를 프로비저닝하고 관리해야 하므로 인프라 설정이 불필요한 서버리스 요구사항을 충족하지 못합니다."
+      },
+      "sources": [
+        { "title": "Amazon Athena — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q8",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Glue vs EMR 선택 기준",
+      "difficulty": "applied",
+      "stem": "데이터 엔지니어링 팀이 대규모 ETL 파이프라인을 구축해야 한다. 특정 버전의 Spark와 커스텀 머신러닝 라이브러리가 필요하며, 장기 실행 잡에서 노드 인스턴스 유형을 세밀하게 조정해야 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Glue ETL — 서버리스로 인프라 관리 없이 Apache Spark 기반 ETL을 실행한다",
+        "Amazon Athena — 서버리스 SQL로 대용량 변환을 처리한다",
+        "Amazon EMR — 클러스터를 직접 제어해 커스텀 라이브러리 설치, Spark 버전 고정, 인스턴스 유형 조정이 가능하다",
+        "Amazon Data Firehose — 완전 관리형으로 스트리밍 ETL을 처리한다"
+      ],
+      "correct": 2,
+      "explanation": "특정 Spark 버전 고정, 커스텀 라이브러리 설치, 노드 인스턴스 유형 세밀 조정이 필요한 경우는 EMR을 선택합니다. EMR은 클러스터를 직접 제어할 수 있어 실행 환경 커스터마이징이 가능합니다. Glue는 서버리스로 관리가 편하지만 실행 환경 커스터마이징이 제한됩니다.",
+      "wrongExplanations": {
+        "0": "Glue는 서버리스로 관리 편의성이 높지만, 커스텀 라이브러리 설치, 특정 Spark 버전 고정, 인스턴스 유형 세밀 조정이 제한됩니다. 실행 환경을 세밀하게 통제해야 하는 상황에는 EMR이 적합합니다.",
+        "1": "Athena는 서버리스 SQL 쿼리 서비스로 대규모 ETL 변환 파이프라인 구축이나 커스텀 라이브러리 사용에는 적합하지 않습니다.",
+        "3": "Firehose는 스트리밍 데이터를 목적지로 전달하는 관리형 적재 서비스로, 복잡한 ETL 변환 파이프라인에는 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon EMR — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html" },
+        { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q9",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "AWS Lake Formation 역할과 접근 제어 계층",
+      "difficulty": "applied",
+      "stem": "회사가 S3 기반 데이터 레이크를 운영 중이며 Glue Data Catalog로 메타데이터를 관리한다. 분석가 그룹마다 접근 가능한 컬럼을 다르게 제한하고(PII 컬럼 차단), Athena·EMR 쿼리 전체에 이 권한이 일관되게 적용되어야 한다. 어떤 서비스를 추가해야 하는가?",
+      "options": [
+        "AWS IAM — 각 분석가 역할마다 S3 버킷의 컬럼별 접근을 제어하는 IAM 정책을 작성한다",
+        "AWS Lake Formation — Glue Data Catalog 위에 컬럼·행·셀 수준의 세밀한 접근 제어를 추가한다",
+        "Amazon S3 버킷 정책 — 컬럼 이름을 조건으로 접근을 제어한다",
+        "AWS Glue DataBrew — 코드 없이 PII 컬럼을 마스킹하고 분석가에게 정제된 데이터를 제공한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Lake Formation은 Glue Data Catalog 위에 올라가는 권한 제어 계층으로, 컬럼·행·셀 수준의 세밀한(fine-grained) 접근 제어를 지원합니다. Athena·EMR·Redshift Spectrum 쿼리 전반에 Lake Formation 권한이 일관되게 적용되므로, 분석 도구를 바꿔도 동일한 권한 모델이 유지됩니다.",
+      "wrongExplanations": {
+        "0": "IAM 정책으로 S3 객체 수준 접근을 제어할 수 있지만, 테이블의 특정 컬럼에만 접근을 허용하는 세밀한 데이터 수준 제어를 IAM 정책으로 표현하기는 매우 복잡합니다. Lake Formation이 이 데이터 객체 수준 세밀 제어를 별도 모델로 관리합니다.",
+        "2": "S3 버킷 정책은 객체 경로(키) 수준의 접근을 제어하며, 쿼리 결과의 컬럼 수준 접근 제어는 지원하지 않습니다.",
+        "3": "Glue DataBrew는 코드 없이 데이터를 클렌징·정규화하는 시각적 도구로, 분석 쿼리에 적용되는 동적 접근 제어 기능이 아닙니다. 데이터를 사전에 마스킹해 별도 데이터셋으로 만드는 방식이라 권한 관리와는 다릅니다."
+      },
+      "sources": [
+        { "title": "AWS Lake Formation — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q10",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Lake Formation과 IAM의 관계",
+      "difficulty": "foundational",
+      "stem": "AWS Lake Formation을 데이터 레이크에 도입할 때 기존 IAM 권한 모델은 어떻게 되는가?",
+      "options": [
+        "Lake Formation이 IAM을 완전히 대체하며, 기존 IAM 정책은 더 이상 평가되지 않는다",
+        "IAM이 Lake Formation을 포함하므로 Lake Formation 권한만으로 접근이 허용된다",
+        "Lake Formation은 S3 버킷 정책만 대체하며 IAM 정책에는 영향을 주지 않는다",
+        "Lake Formation은 IAM을 대체하지 않고 확장한다. 데이터 레이크 리소스 접근 시 IAM 권한과 Lake Formation 권한 모두 충족해야 허용된다"
+      ],
+      "correct": 3,
+      "explanation": "Lake Formation은 IAM 권한 모델을 대체하지 않고 확장합니다. 데이터 레이크 리소스에 접근할 때 IAM 권한과 Lake Formation 권한 모두 만족해야 접근이 허용됩니다. 이 확장 구조 덕분에 기존 IAM 기반 인프라 보안 설계를 바꾸지 않고도 데이터 레이크에 세밀한 접근 제어를 추가할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Lake Formation은 IAM을 대체하지 않습니다. 기존 IAM 정책은 그대로 유지되며 Lake Formation 권한이 추가 계층으로 작동합니다.",
+        "1": "IAM과 Lake Formation은 별개의 권한 계층으로 모두 만족해야 접근이 허용됩니다. 어느 한쪽만으로는 충분하지 않습니다.",
+        "2": "Lake Formation은 S3 버킷 정책만 대체하는 것이 아니라 Glue Data Catalog 위에서 Athena·EMR·Redshift Spectrum 등 분석 서비스 전반의 데이터 객체 수준 접근을 제어합니다."
+      },
+      "sources": [
+        { "title": "AWS Lake Formation — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q11",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "데이터 전송 서비스 선택(DataSync vs Snow 패밀리)",
+      "difficulty": "applied",
+      "stem": "온프레미스 NAS(NFS)에 있는 500 TB의 데이터를 AWS S3로 이전해야 한다. 회사의 인터넷 대역폭은 1 Gbps이며, 이 속도로 전송하면 수개월이 걸린다. 가장 적합한 이전 방법은?",
+      "options": [
+        "AWS Snow 패밀리(Snowball Edge) — 물리적 장치에 데이터를 담아 배송하면 대역폭에 의존하지 않고 이전할 수 있다",
+        "AWS DataSync — NFS를 S3로 직접 동기화하므로 대역폭과 무관하게 빠르게 이전할 수 있다",
+        "Amazon Data Firehose — 온프레미스 소스를 Firehose에 연결해 S3로 스트리밍 이전한다",
+        "AWS Transfer Family — SFTP 프로토콜로 NFS 데이터를 S3로 직접 전송한다"
+      ],
+      "correct": 0,
+      "explanation": "대역폭이 부족해 네트워크 전송에 수개월이 걸리는 경우, Snow 패밀리(Snowball Edge)를 사용해 물리적 장치에 데이터를 담아 AWS 데이터센터로 배송합니다. 물리적 배송 시간은 가용 대역폭에 의존하지 않으므로 낮은 대역폭 환경에서 네트워크 전송보다 훨씬 빠르게 이전을 완료할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "DataSync는 NFS·SMB를 S3·EFS·FSx로 동기화하는 도구이지만, 네트워크를 통해 전송하므로 가용 대역폭의 제약을 받습니다. 1 Gbps에서 500 TB 전송은 여전히 수개월이 걸립니다.",
+        "2": "Firehose는 스트리밍 레코드를 목적지로 전달하는 서비스로, 온프레미스 파일 시스템 데이터를 대규모로 이전하는 용도가 아닙니다.",
+        "3": "Transfer Family는 SFTP/FTPS/FTP 워크플로우를 S3·EFS로 연결하는 관리형 파일 전송 서버입니다. 네트워크를 통해 전송하므로 대역폭 제약을 피할 수 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q12",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Glue 크롤러 역할",
+      "difficulty": "foundational",
+      "stem": "S3에 매일 새로운 데이터 파일이 추가된다. 데이터 형식이 바뀌더라도 Athena가 항상 최신 스키마로 쿼리할 수 있어야 한다. 어떤 방법이 가장 적합한가?",
+      "options": [
+        "Athena에서 ALTER TABLE로 스키마를 수동으로 갱신한다",
+        "Glue DataBrew로 파일을 변환할 때마다 스키마를 자동 등록한다",
+        "Glue 크롤러를 스케줄로 실행해 S3 데이터를 자동 스캔하고 Data Catalog의 스키마를 최신 상태로 갱신한다",
+        "Amazon EMR Serverless로 스키마를 주기적으로 재등록하는 잡을 실행한다"
+      ],
+      "correct": 2,
+      "explanation": "Glue 크롤러는 S3 등 데이터 소스를 자동 스캔해 스키마를 추론하고 Data Catalog에 등록·갱신하는 구성 요소입니다. 스케줄로 실행하면 데이터 형식이 바뀌어도 크롤러가 최신 스키마를 감지해 Data Catalog를 갱신하고, Athena가 그 정의를 참조해 정확하게 쿼리할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "스키마를 수동으로 갱신하면 변경이 누락될 수 있고, 데이터 파일이 자주 바뀌는 환경에서 운영 부담이 큽니다. 크롤러를 사용하면 스키마 변경을 자동으로 감지합니다.",
+        "1": "Glue DataBrew는 데이터 클렌징·정규화 도구로, 스키마를 자동으로 Data Catalog에 등록하는 기능을 수행하지 않습니다.",
+        "3": "EMR Serverless는 Spark·Hive 잡 실행 서비스로, 스키마 자동 감지·등록이 크롤러의 전용 기능에 비해 훨씬 복잡한 커스텀 코드 작성이 필요합니다."
+      },
+      "sources": [
+        { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q13",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "배치 vs 스트리밍 수집 선택",
+      "difficulty": "applied",
+      "stem": "전자상거래 회사가 두 가지 요구사항을 갖고 있다: ① 고객이 상품을 장바구니에 담는 즉시 실시간 추천 엔진에 이벤트를 전달해야 한다. ② 매일 자정에 전체 주문 데이터를 데이터 웨어하우스에 집계 적재해야 한다. 각 요구사항에 가장 적합한 서비스 조합은?",
+      "options": [
+        "① AWS DataSync ② Amazon Kinesis Data Streams",
+        "① Amazon Kinesis Data Streams ② AWS Glue ETL 잡",
+        "① Amazon Athena ② Amazon Data Firehose",
+        "① AWS Transfer Family ② Amazon EMR"
+      ],
+      "correct": 1,
+      "explanation": "실시간 이벤트 전달(①)에는 Kinesis Data Streams가 적합합니다 — 레코드 단위 실시간 처리, 밀리초~초 지연, 다중 컨슈머 지원. 정기 배치 집계 적재(②)에는 Glue ETL 잡이 적합합니다 — 서버리스 배치 ETL, 잡 실행 시에만 과금, 정기 리포트·대용량 이관에 적합합니다.",
+      "wrongExplanations": {
+        "0": "DataSync는 NFS·SMB 파일 시스템 동기화 도구로 실시간 이벤트 스트리밍에 사용하지 않습니다. Kinesis Data Streams는 실시간 스트리밍이므로 배치 집계보다는 실시간 처리에 적합합니다.",
+        "2": "Athena는 서버리스 SQL 쿼리 서비스로 이벤트 수집 도구가 아닙니다. Firehose는 near real-time 적재 서비스로 매일 자정 배치 집계보다는 스트리밍 적재에 쓰입니다.",
+        "3": "Transfer Family는 SFTP/FTP 파일 전송 서버로 실시간 이벤트 스트리밍에 적합하지 않습니다. EMR은 배치 ETL이 가능하지만 관리형 클러스터가 필요해 서버리스 Glue보다 운영 복잡도가 높습니다."
+      },
+      "sources": [
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" },
+        { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q14",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Kinesis Data Streams 샤드 자동 확장 여부",
+      "difficulty": "foundational",
+      "stem": "Kinesis Data Streams 스트림의 처리량이 한계에 가까워지고 있다. 샤드는 처리량이 한계를 초과하면 자동으로 추가되는가?",
+      "options": [
+        "아니다 — 샤드 수는 자동으로 증가하지 않으며, 처리량 한계에 도달하면 수동으로 샤드를 추가하거나 Shard Split을 사용해야 한다",
+        "그렇다 — Kinesis Data Streams는 Auto Scaling이 내장되어 처리량 초과 시 샤드를 자동 추가한다",
+        "그렇다 — Enhanced Fan-Out이 활성화되면 샤드가 자동 확장된다",
+        "아니다 — 샤드를 늘리려면 스트림을 삭제하고 더 많은 샤드로 재생성해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "Kinesis Data Streams의 샤드 수는 자동으로 증가하지 않습니다. 처리량이 한계에 도달하면 수동으로 샤드 수를 늘리거나 Shard Split을 사용해야 합니다. Enhanced Fan-Out은 소비 측의 읽기 처리량을 높이는 기능(컨슈머당 전용 2 MB/s)이지 샤드를 자동 추가하는 기능이 아닙니다.",
+      "wrongExplanations": {
+        "1": "Kinesis Data Streams에는 자동 샤드 확장(Auto Scaling) 기능이 내장되어 있지 않습니다. 처리량 초과 시 ProvisionedThroughputExceededException이 발생하며, 수동 조정이 필요합니다.",
+        "2": "Enhanced Fan-Out은 각 컨슈머에게 전용 읽기 처리량을 제공하는 기능으로, 샤드의 수나 쓰기 처리량을 자동으로 늘리지 않습니다.",
+        "3": "스트림을 삭제·재생성하지 않아도 기존 스트림에서 샤드 수를 증가시킬 수 있습니다(Shard Split 또는 UpdateShardCount). 재생성은 불필요합니다."
+      },
+      "sources": [
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-9-q15",
+      "examGuideTaskId": "saa-t3-9",
+      "skill": "Kinesis 4종 서비스 구분(Managed Flink vs Video Streams)",
+      "difficulty": "foundational",
+      "stem": "회사가 공장에 설치된 카메라에서 영상 스트림을 AWS로 수집하고, Amazon Rekognition으로 실시간 영상 분석을 수행하려 한다. 영상 수집·저장 단계에 가장 적합한 Kinesis 서비스는?",
+      "options": [
+        "Amazon Kinesis Data Streams — 영상 데이터를 샤드 단위로 수집하고 Rekognition에 전달한다",
+        "Amazon Data Firehose — 영상 데이터를 S3에 적재한 뒤 Rekognition이 S3에서 분석한다",
+        "Amazon Kinesis Video Streams — 카메라·IoT 디바이스에서 영상 스트림을 안전하게 수집·저장하고 Rekognition과 연동한다",
+        "Amazon Managed Service for Apache Flink — Flink로 영상 스트림을 실시간 처리해 Rekognition에 전달한다"
+      ],
+      "correct": 2,
+      "explanation": "Amazon Kinesis Video Streams는 카메라·IoT 디바이스에서 AWS로 비디오 스트림을 안전하게 수집·저장·재생하는 서비스입니다. Amazon Rekognition과 연동해 실시간 영상 분석을 수행할 수 있습니다. 영상 스트리밍 전용 서비스로 설계된 만큼 비디오 수집·저장 단계에 가장 적합합니다.",
+      "wrongExplanations": {
+        "0": "Kinesis Data Streams는 일반 데이터 레코드 스트리밍용 서비스로 영상 스트리밍에 최적화되어 있지 않습니다. 영상은 샤드 기반 레코드 모델이 아닌 Video Streams의 전용 프로토콜과 SDK로 수집합니다.",
+        "1": "Firehose는 스트리밍 레코드를 S3·Redshift 등으로 적재하는 서비스로, 실시간 영상 스트리밍과 Rekognition 연동에 적합하지 않습니다. S3 적재 후 배치 분석은 실시간 처리 요구사항을 충족하지 못합니다.",
+        "3": "Managed Service for Apache Flink는 스트림 데이터에 분석 로직(Java·Scala·SQL)을 작성하는 서비스로, 영상 스트림 수집·저장 기능이 아닙니다. 영상 전용 수집·저장에는 Video Streams를 사용합니다."
+      },
+      "sources": [
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

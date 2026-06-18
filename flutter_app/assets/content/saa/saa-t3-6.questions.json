@@ -1,0 +1,368 @@
+{
+  "examGuideTaskId": "saa-t3-6",
+  "taskTitle": "DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-6-q1",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "DynamoDB 기본 성격(서버리스·밀리초 지연)",
+      "difficulty": "foundational",
+      "stem": "글로벌 모바일 게임 회사가 플레이어 프로필 데이터를 저장할 데이터베이스를 선택하고 있다. 요구 사항은 서버리스 운영, 추가 인프라 관리 불필요, 모든 규모에서 한 자릿수 밀리초 성능이다. 가장 적합한 AWS 서비스는?",
+      "options": [
+        "Amazon Aurora — 관리형 관계형 데이터베이스로 복잡한 쿼리에 최적화되어 있다",
+        "Amazon Redshift — 대용량 데이터 웨어하우스 분석 쿼리에 특화되어 있다",
+        "Amazon DynamoDB — 완전 관리형 서버리스 키-값·문서 NoSQL로 모든 규모에서 한 자릿수 밀리초 성능을 제공한다",
+        "Amazon RDS for MySQL — 오픈소스 관계형 데이터베이스로 스키마 기반 데이터에 적합하다"
+      ],
+      "correct": 2,
+      "explanation": "DynamoDB는 완전 관리형 서버리스 키-값·문서 NoSQL 데이터베이스로 모든 규모에서 한 자릿수 밀리초 성능을 제공합니다. 추가 인프라 관리가 필요 없고, 리전 내 3개 AZ에 자동 복제되어 내구성이 내장되어 있습니다. Aurora와 RDS는 관계형 DB로 스키마·조인이 필요한 워크로드에 적합하고, Redshift는 분석 데이터 웨어하우스 용도입니다.",
+      "wrongExplanations": {
+        "0": "Aurora는 관계형 DB로 고정 스키마와 복잡한 조인 쿼리에 적합합니다. 서버리스 NoSQL 요구사항을 충족하지 못합니다.",
+        "1": "Redshift는 데이터 웨어하우스로 대용량 분석 쿼리에 특화되어 있습니다. 플레이어 프로필 같은 실시간 트랜잭션 워크로드에는 적합하지 않습니다.",
+        "3": "RDS for MySQL은 고정 스키마 관계형 데이터베이스로 인프라 관리(패치·백업 등)가 일부 필요하며, NoSQL 서버리스 요구사항을 충족하지 못합니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q2",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "파티션 키 설계 — 핫 파티션 원인",
+      "difficulty": "foundational",
+      "stem": "한 팀이 DynamoDB 테이블의 파티션 키로 `orderStatus` 필드를 선택했다. 이 필드는 `pending`, `completed`, `cancelled` 세 가지 값만 가진다. 서비스 운영 후 특정 파티션에서만 스로틀이 반복해서 발생하고 있다. 근본 원인은 무엇인가?",
+      "options": [
+        "`orderStatus` 필드의 카디널리티가 낮아 트래픽이 소수 파티션에 집중되는 핫 파티션이 발생했다",
+        "테이블에 Sort Key가 없어서 스로틀이 발생했다",
+        "테이블에 GSI가 없어서 읽기 요청이 집중됐다",
+        "온디맨드 모드가 아닌 프로비저닝 모드를 사용해서 발생했다"
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB는 파티션 키 값을 해시해 데이터를 여러 물리 파티션에 분산합니다. `orderStatus`처럼 고유값이 3개뿐인 저카디널리티 PK를 사용하면 사실상 세 파티션에만 모든 트래픽이 몰려 해당 파티션의 처리량 한도를 초과하는 요청이 스로틀됩니다. 나머지 파티션 용량은 유휴 상태로 낭비됩니다. PK는 고카디널리티 속성(예: orderId, userId)으로 선택해야 트래픽을 고르게 분산할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Sort Key의 유무는 핫 파티션 발생과 직접 관련이 없습니다. 핫 파티션은 파티션 키의 카디널리티 문제로 발생합니다.",
+        "2": "GSI의 유무도 기본 테이블의 핫 파티션 스로틀과는 무관합니다. 문제의 핵심은 PK 설계의 저카디널리티입니다.",
+        "3": "프로비저닝 vs 온디맨드 모드는 총 처리량 설정 방식의 차이이지, 핫 파티션 집중 문제의 원인이 아닙니다. 온디맨드 모드로 바꿔도 PK 설계가 잘못되면 핫 파티션 문제가 발생할 수 있습니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q3",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "GSI vs LSI — 생성 시점 제약",
+      "difficulty": "applied",
+      "stem": "전자상거래 서비스가 이미 운영 중인 DynamoDB 상품 테이블(`productId`가 파티션 키)에 `category`별로 상품을 조회하는 새로운 접근 패턴을 추가해야 한다. 가장 적절한 해결책은?",
+      "options": [
+        "LSI(Local Secondary Index)를 추가한다 — 기존 테이블에 언제든 추가할 수 있다",
+        "새 접근 패턴을 위해 테이블 자체를 다시 생성한다",
+        "GSI(Global Secondary Index)를 추가한다 — `category`를 파티션 키로 설정해 언제든 기존 테이블에 추가할 수 있다",
+        "LSI를 추가한다 — 기본 테이블과 같은 파티션 키를 공유하므로 운영 중인 테이블에도 추가 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "GSI(Global Secondary Index)는 기존 테이블과 다른 파티션 키를 사용할 수 있고, 자체 파티션 공간에 독립적으로 저장되므로 테이블 생성 이후 언제든 추가·삭제가 가능합니다. `category`를 파티션 키로 하는 GSI를 생성하면 카테고리별 조회가 가능합니다. GSI는 최종 일관성 읽기만 지원하며 테이블과 독립적인 처리량을 가집니다.",
+      "wrongExplanations": {
+        "0": "LSI는 테이블 생성 시에만 정의할 수 있습니다. 이미 운영 중인 테이블에는 LSI를 추가할 수 없습니다.",
+        "1": "새로운 접근 패턴 하나를 위해 테이블 전체를 재생성하는 것은 데이터 마이그레이션 부담이 크고, GSI로 해결할 수 있는 불필요한 작업입니다.",
+        "3": "LSI는 기본 테이블과 같은 파티션 키를 공유하는 제약이 있고, 바로 그 이유로 테이블 생성 시에만 추가할 수 있습니다. 운영 중인 테이블에 LSI를 추가하는 것은 불가능합니다."
+      },
+      "sources": [
+        { "title": "DynamoDB 보조 인덱스 (GSI·LSI) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q4",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "GSI vs LSI — 읽기 일관성·처리량 차이",
+      "difficulty": "foundational",
+      "stem": "DynamoDB 보조 인덱스를 설계할 때 GSI(Global Secondary Index)와 LSI(Local Secondary Index)의 차이로 옳은 것은?",
+      "options": [
+        "GSI는 강력한 일관성 읽기를 지원하고, LSI는 최종 일관성 읽기만 지원한다",
+        "GSI는 테이블 생성 시에만 추가할 수 있고, LSI는 언제든 추가할 수 있다",
+        "LSI는 기본 테이블과 독립된 처리량을 가지고, GSI는 테이블과 처리량을 공유한다",
+        "GSI는 최종 일관성 읽기만 지원하고, LSI는 강력한 일관성 읽기를 지원할 수 있다"
+      ],
+      "correct": 3,
+      "explanation": "GSI는 최종 일관성(Eventually Consistent) 읽기만 지원합니다. LSI는 기본 테이블과 동일한 파티션 키를 공유하므로 강력한 일관성(Strongly Consistent) 읽기를 지원할 수 있습니다. 또한 GSI는 테이블과 독립된 처리량을 가지고 언제든 추가·삭제 가능하며, LSI는 테이블과 처리량을 공유하고 테이블 생성 시에만 추가할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "일관성 지원이 반대로 서술되어 있습니다. GSI가 최종 일관성만 지원하고, LSI가 강력한 일관성 읽기를 지원할 수 있습니다.",
+        "1": "생성 시점 제약이 반대입니다. GSI는 언제든 추가·삭제 가능하고, LSI는 테이블 생성 시에만 추가할 수 있습니다.",
+        "2": "처리량 공유 관계가 반대입니다. GSI가 테이블과 독립된 별도 처리량을 가지고, LSI가 테이블과 처리량을 공유합니다."
+      },
+      "sources": [
+        { "title": "DynamoDB 보조 인덱스 (GSI·LSI) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q5",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "읽기 일관성 — 강력 일관성 RCU 비용",
+      "difficulty": "foundational",
+      "stem": "DynamoDB 프로비저닝 모드 테이블에서 최종 일관성 읽기와 강력한 일관성 읽기의 RCU(Read Capacity Unit) 소비 차이에 대한 설명으로 옳은 것은?",
+      "options": [
+        "강력한 일관성 읽기는 최종 일관성 읽기보다 RCU를 두 배 소비한다",
+        "강력한 일관성 읽기는 최종 일관성 읽기와 RCU 소비가 동일하다",
+        "최종 일관성 읽기가 강력한 일관성 읽기보다 RCU를 두 배 소비한다",
+        "GSI에서의 강력한 일관성 읽기는 RCU 추가 비용 없이 지원된다"
+      ],
+      "correct": 0,
+      "explanation": "강력한 일관성(Strongly Consistent) 읽기는 요청 전에 완료된 모든 쓰기가 반영된 값을 반환해야 하므로, 최신 복사본을 확인하는 추가 I/O가 발생합니다. 이 처리 비용이 처리량 예산에서 두 배를 소비하는 방식으로 설계에 반영됩니다. 최종 일관성(Eventually Consistent) 읽기는 어느 복사본에서 응답해도 되어 단일 노드 조회로 처리됩니다.",
+      "wrongExplanations": {
+        "1": "두 모드의 RCU 소비는 동일하지 않습니다. 강력한 일관성 읽기는 추가 I/O 비용으로 RCU를 두 배 소비합니다.",
+        "2": "소비 관계가 반대입니다. 최종 일관성 읽기가 더 저렴하고(0.5 RCU/4KB), 강력한 일관성 읽기가 두 배를 소비합니다(1 RCU/4KB).",
+        "3": "GSI는 최종 일관성 읽기만 지원합니다. 강력한 일관성 읽기 자체가 GSI에서 불가능하므로 이 설명은 성립하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q6",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "용량 모드 선택 — 온디맨드 vs 프로비저닝",
+      "difficulty": "applied",
+      "stem": "신규 스타트업이 이제 막 론칭한 모바일 앱의 DynamoDB 테이블을 설정하려 한다. 초기에는 트래픽 패턴을 전혀 예측할 수 없고, 예상치 못한 스파이크가 발생해도 스로틀 없이 처리해야 한다. 비용 효율적인 용량 모드 선택은?",
+      "options": [
+        "프로비저닝 모드 + Auto Scaling — 트래픽에 맞게 자동으로 용량을 조정해준다",
+        "온디맨드 모드 — 트래픽 예측 없이 AWS가 실시간으로 처리량을 조정하고 사용량만큼만 과금한다",
+        "프로비저닝 모드(고정 RCU/WCU) — 항상 충분한 용량을 미리 확보해두는 것이 안전하다",
+        "온디맨드 모드는 스파이크에 대응하지 못하므로 프로비저닝 모드를 선택해야 한다"
+      ],
+      "correct": 1,
+      "explanation": "온디맨드 모드는 사전에 처리량을 설정하지 않고 AWS가 실시간 트래픽에 맞춰 용량을 자동 조정합니다. 트래픽 예측이 불가능하거나 스파이크가 잦은 초기 서비스에 적합하며, 사용한 읽기·쓰기 요청 수만큼만 과금됩니다. 프로비저닝 모드는 트래픽 패턴이 안정적이고 예측 가능할 때 비용 최적화를 위해 선택합니다.",
+      "wrongExplanations": {
+        "0": "프로비저닝 + Auto Scaling은 트래픽 변화에 일정 수준 대응하지만, Auto Scaling은 실시간 즉각 조정이 아니라 수분 지연이 있을 수 있습니다. 트래픽을 전혀 예측할 수 없는 초기에는 온디맨드가 더 안전합니다.",
+        "2": "트래픽 예측이 불가능한 상황에서 고정 RCU/WCU를 높게 설정하면 유휴 처리량에도 비용이 발생해 낭비입니다.",
+        "3": "온디맨드 모드는 트래픽 스파이크에 가장 효과적으로 대응합니다. 프로비저닝 모드가 스파이크에 더 취약합니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q7",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "DAX — 용도와 제약",
+      "difficulty": "applied",
+      "stem": "소셜 미디어 플랫폼이 DynamoDB 테이블에서 인기 게시물 데이터를 반복해서 읽어 지연이 문제가 되고 있다. 현재 밀리초 단위 지연을 마이크로초 단위로 단축하고, 애플리케이션 코드 변경을 최소화해야 한다. 어떤 솔루션을 사용해야 하는가?",
+      "options": [
+        "ElastiCache for Redis를 DynamoDB 앞단에 배치한다",
+        "DAX(DynamoDB Accelerator)를 사용한다 — DynamoDB API와 호환되는 인메모리 캐시 클러스터로 읽기 지연을 마이크로초로 단축한다",
+        "DynamoDB 테이블을 온디맨드 모드로 전환한다",
+        "DynamoDB Streams를 활성화해 읽기 성능을 개선한다"
+      ],
+      "correct": 1,
+      "explanation": "DAX(DynamoDB Accelerator)는 DynamoDB 앞단에 배치하는 인메모리 캐시 클러스터로, 읽기 지연을 밀리초에서 마이크로초로 단축합니다. DAX 클라이언트가 DynamoDB API와 호환되어 애플리케이션 코드 변경을 최소화할 수 있습니다. 동일 항목을 반복 조회하는 읽기 집약적 워크로드에 효과적입니다.",
+      "wrongExplanations": {
+        "0": "ElastiCache는 DynamoDB 외에도 다양한 백엔드에 범용으로 사용하는 캐시입니다. DynamoDB 전용 API 호환 캐시가 아니므로 코드 변경이 더 많이 필요합니다.",
+        "2": "온디맨드 모드 전환은 처리량 스로틀 해소에 도움이 될 수 있지만, 밀리초를 마이크로초로 단축하는 지연 개선과는 관계가 없습니다.",
+        "3": "DynamoDB Streams는 항목 변경 이벤트를 기록하는 기능으로 읽기 성능 개선과 무관합니다."
+      },
+      "sources": [
+        { "title": "DynamoDB Accelerator (DAX) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q8",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "DAX — 강력 일관성 읽기 우회",
+      "difficulty": "foundational",
+      "stem": "DAX(DynamoDB Accelerator)를 사용하는 애플리케이션에서 특정 쿼리에 강력한 일관성(Strongly Consistent) 읽기가 필요하다. DAX의 동작으로 옳은 것은?",
+      "options": [
+        "DAX는 모든 읽기 요청을 캐시에서 처리하므로 강력 일관성도 캐시에서 반환된다",
+        "강력 일관성 읽기는 DAX 캐시를 우회해 DynamoDB에 직접 요청된다",
+        "강력 일관성 읽기를 사용하면 DAX가 캐시를 즉시 갱신한 뒤 반환한다",
+        "강력 일관성 읽기는 DAX 클러스터 내 여러 노드에서 다수결로 처리된다"
+      ],
+      "correct": 1,
+      "explanation": "DAX는 인메모리 캐시이므로 캐시에 저장된 값과 DynamoDB 원본 사이에는 미세한 시간 차가 있을 수 있습니다. 강력 일관성 읽기는 요청 전에 완료된 모든 쓰기가 반영된 값을 반환해야 하므로, 이 시간 차가 일관성 보장을 깨뜨립니다. 따라서 강력 일관성이 필요한 경우 DAX 캐시를 건너뛰고 DynamoDB 원본에 직접 조회합니다.",
+      "wrongExplanations": {
+        "0": "DAX는 캐시이므로 최신 쓰기가 캐시에 즉시 반영되지 않을 수 있습니다. 강력 일관성 읽기는 캐시에서 처리하면 일관성 보장이 깨질 수 있습니다.",
+        "2": "강력 일관성 읽기 시 DAX가 캐시를 갱신하는 동작은 없습니다. DAX는 해당 요청을 캐시 없이 DynamoDB로 직접 전달합니다.",
+        "3": "DAX의 다수결 처리는 강력 일관성 읽기의 동작 방식이 아닙니다. 강력 일관성 읽기는 DAX를 우회해 DynamoDB에 직접 요청됩니다."
+      },
+      "sources": [
+        { "title": "DynamoDB Accelerator (DAX) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q9",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "Global Tables — Active-Active 다중 리전",
+      "difficulty": "applied",
+      "stem": "글로벌 게임 서비스가 미국, 유럽, 아시아 세 리전 사용자 모두에게 낮은 지연으로 읽기와 쓰기를 동시에 제공해야 한다. 재해 복구도 함께 요구된다. 가장 적합한 솔루션은?",
+      "options": [
+        "RDS 다중 리전 Read Replica — 각 리전에 읽기 전용 복제본을 배치해 지연을 낮춘다",
+        "단일 리전 DynamoDB + CloudFront 배포 — 캐시로 글로벌 지연을 완화한다",
+        "DynamoDB Global Tables — 여러 리전에서 Active-Active로 읽기와 쓰기가 모두 가능한 완전 관리형 다중 리전 복제를 제공한다",
+        "DynamoDB + DynamoDB Streams로 수동 교차 리전 복제를 구현한다"
+      ],
+      "correct": 2,
+      "explanation": "DynamoDB Global Tables는 여러 리전에 Active-Active로 테이블을 복제합니다. 모든 리전에서 읽기와 쓰기가 모두 가능하며, 충돌 해결은 최후 작성자 우선(last-writer-wins) 정책으로 자동 처리됩니다. RDS Read Replica는 읽기 전용이므로 멀티 리전 쓰기 요구사항을 충족하지 못합니다.",
+      "wrongExplanations": {
+        "0": "RDS Read Replica는 읽기 전용 복제본으로, 각 리전에서 쓰기가 불가능합니다. Active-Active 다중 리전 쓰기 요구사항을 충족하지 못합니다.",
+        "1": "CloudFront는 정적 콘텐츠 캐시이며 동적 DynamoDB 쓰기를 처리할 수 없습니다. 단일 리전 DynamoDB는 원거리 리전에서의 지연 문제를 해결하지 못합니다.",
+        "3": "Streams 기반 수동 복제는 구현 복잡성이 높고 완전 관리형이 아닙니다. Global Tables는 이를 완전 관리형으로 제공하므로 더 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q10",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "DynamoDB Streams와 TTL",
+      "difficulty": "applied",
+      "stem": "전자상거래 플랫폼이 DynamoDB 주문 테이블에 새 주문이 추가될 때마다 자동으로 재고 서비스를 업데이트하려 한다. 또한 완료된 주문 데이터는 90일 후 자동으로 삭제되어야 한다. 이 두 요구사항을 충족하는 DynamoDB 기능 조합은?",
+      "options": [
+        "DynamoDB Streams + TTL — Streams로 항목 변경 이벤트를 Lambda에 전달하고, TTL로 만료 항목을 자동 삭제한다",
+        "GSI + DynamoDB Streams — GSI로 새 접근 패턴을 추가하고 Streams로 90일 후 삭제를 처리한다",
+        "DAX + TTL — DAX로 변경 이벤트를 캡처하고 TTL로 자동 삭제한다",
+        "Global Tables + Lambda — 다중 리전 복제로 이벤트를 처리하고 Lambda로 만료 삭제를 구현한다"
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB Streams는 테이블의 항목 생성·수정·삭제 이벤트를 순서대로 기록하며, Lambda와 연동해 새 주문 추가 시 재고 서비스를 자동 업데이트하는 이벤트 기반 처리가 가능합니다. TTL은 항목에 만료 타임스탬프를 지정하면 DynamoDB가 자동으로 삭제하며 추가 비용이 없습니다. 두 기능을 결합하면 두 요구사항을 모두 충족할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "GSI는 새 접근 패턴 인덱스 추가 용도이며 이벤트 처리나 항목 자동 삭제와 관계가 없습니다. Streams만으로는 90일 후 삭제 기능을 구현하기 어렵습니다.",
+        "2": "DAX는 읽기 성능을 높이는 인메모리 캐시로, 항목 변경 이벤트 캡처 기능이 없습니다.",
+        "3": "Global Tables는 다중 리전 복제를 위한 기능으로, 이벤트 기반 처리와 자동 만료 삭제 요구사항과는 직접 관련이 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q11",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "DynamoDB vs RDS 선택 기준",
+      "difficulty": "applied",
+      "stem": "한 아키텍트가 신규 애플리케이션의 데이터베이스를 선택하고 있다. 데이터가 복잡한 조인과 집계 쿼리를 자주 사용하고, 고정된 스키마 구조를 유지하며, 금융 거래 데이터를 다룬다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon DynamoDB — 서버리스이고 한 자릿수 밀리초 성능을 제공하므로 금융 데이터에도 적합하다",
+        "Amazon RDS — 복잡한 조인·집계, 고정 스키마, 금융 거래 데이터에 관계형 데이터베이스가 적합하다",
+        "Amazon DynamoDB Global Tables — 다중 리전 복제로 금융 거래의 고가용성을 보장한다",
+        "DAX + DynamoDB — 캐시를 추가하면 복잡한 조인 쿼리도 처리할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "복잡한 조인·집계 쿼리, 고정 스키마, 금융 거래 데이터는 RDS 선택 신호입니다. RDS는 정규화된 구조와 복잡한 SQL 쿼리를 지원하고 금융 거래와 같은 ACID 트랜잭션 요구사항에 적합합니다. DynamoDB는 조인이 불필요하거나 애플리케이션에서 처리하는 스키마리스 워크로드(세션, IoT, 카탈로그, 장바구니 등)에 적합합니다.",
+      "wrongExplanations": {
+        "0": "DynamoDB는 복잡한 조인·집계 쿼리를 기본적으로 지원하지 않습니다. 조인은 애플리케이션 레이어에서 처리해야 하므로 이런 요구사항에는 부적합합니다.",
+        "2": "Global Tables는 다중 리전 복제 기능으로, 복잡한 조인·집계 쿼리 지원 여부를 바꾸지 않습니다.",
+        "3": "DAX는 읽기 캐시로, DynamoDB에 존재하지 않는 조인 기능을 추가하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q12",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "ElastiCache Redis vs Memcached — 선택 기준",
+      "difficulty": "applied",
+      "stem": "Auto Scaling 그룹 뒤에 있는 수십 대의 웹 서버가 사용자 로그인 세션을 공유 저장소에 보관해야 한다. 특정 노드에 장애가 발생해도 세션이 유지되어야 하며(HA), 복잡한 자료구조가 필요 없다. 가장 적합한 서비스는?",
+      "options": [
+        "ElastiCache for Memcached — 멀티스레드로 높은 처리량을 제공하고 세션 저장에 최적화되어 있다",
+        "ElastiCache for Redis — 복제와 Multi-AZ 자동 Failover를 지원해 노드 장애 시에도 세션이 유지된다",
+        "ElastiCache for Memcached — 영속성 기능이 없어 메모리 사용이 효율적이고 세션 HA에 적합하다",
+        "DynamoDB — 서버리스로 세션 데이터 저장에 Auto Scaling 없이 무한 확장 가능하다"
+      ],
+      "correct": 1,
+      "explanation": "세션 저장 + HA + Failover 요구사항은 ElastiCache for Redis의 정답 신호입니다. Redis는 복제와 Multi-AZ 자동 Failover를 지원해 노드 장애 시에도 세션이 유지됩니다. Memcached는 영속성과 복제 기능이 없으므로 노드 장애 시 저장된 세션이 모두 소실됩니다.",
+      "wrongExplanations": {
+        "0": "Memcached는 멀티스레드 처리 능력은 있지만 복제와 HA 기능이 없습니다. 노드 장애 시 세션이 사라지므로 HA 요구사항을 충족하지 못합니다.",
+        "2": "Memcached의 영속성 없음은 장점이 아닌 제약으로, 세션 HA 요구사항과 정반대입니다. 노드 재시작 시 모든 데이터가 소실됩니다.",
+        "3": "DynamoDB도 세션 스토어로 사용할 수 있지만, 인메모리 속도가 필요하고 HA 캐시가 요구되는 이 시나리오에서는 ElastiCache Redis가 더 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q13",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "ElastiCache Redis vs Memcached — 자료구조·영속성",
+      "difficulty": "foundational",
+      "stem": "실시간 리더보드 기능을 구현하려 한다. 플레이어 점수를 저장하고 상위 100명의 순위를 빠르게 조회해야 하며, 서버 재시작 후에도 데이터가 유지되어야 한다. 가장 적합한 서비스는?",
+      "options": [
+        "ElastiCache for Memcached — 단순 키-값으로 점수를 저장하고 높은 처리량으로 빠른 조회가 가능하다",
+        "ElastiCache for Memcached — 멀티스레드 기능으로 순위 계산을 병렬 처리할 수 있다",
+        "ElastiCache for Redis — Sorted Set 자료구조로 실시간 순위 계산이 가능하고 스냅샷(RDB)으로 영속성을 지원한다",
+        "Amazon DynamoDB — TTL로 만료된 점수를 자동 삭제하고 GSI로 순위를 조회할 수 있다"
+      ],
+      "correct": 2,
+      "explanation": "리더보드·랭킹 + 영속성 조합은 ElastiCache for Redis의 대표 사용 사례입니다. Redis의 Sorted Set 자료구조는 점수 기반 자동 정렬과 상위 N명 조회를 효율적으로 지원합니다. Redis는 스냅샷(RDB)과 AOF 로그로 영속성을 제공해 서버 재시작 후에도 데이터를 복구할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Memcached는 단순 키-값 문자열만 저장하며 Sorted Set 같은 복잡한 자료구조를 지원하지 않습니다. 영속성도 없어 재시작 시 데이터가 소실됩니다.",
+        "1": "Memcached의 멀티스레드 기능은 단순 대용량 캐시 처리량에 유리하지만, 순위 계산에 필요한 Sorted Set 자료구조나 영속성을 제공하지 않습니다.",
+        "3": "DynamoDB의 TTL과 GSI 조합으로 순위 조회는 가능하지만, Redis Sorted Set처럼 인메모리에서 실시간 순위 계산에 최적화되어 있지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q14",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "캐싱 전략 — Lazy Loading vs Write-Through",
+      "difficulty": "applied",
+      "stem": "웹 애플리케이션이 ElastiCache를 사용해 RDS 데이터를 캐싱하고 있다. 데이터가 자주 쓰이지 않아도 DB에 쓰기가 발생할 때마다 캐시가 항상 최신 값을 유지해야 하며 stale 데이터가 없어야 한다. 어떤 캐싱 전략이 가장 적합한가?",
+      "options": [
+        "Lazy Loading(Cache-Aside) — 캐시 미스 시에만 DB를 조회하므로 가장 효율적이다",
+        "Lazy Loading + 짧은 TTL — TTL로 stale 데이터를 주기적으로 만료시킨다",
+        "Write-Through — 쓰기 시 DB와 캐시를 동시에 갱신해 캐시가 항상 최신 값을 유지한다",
+        "Lazy Loading + 긴 TTL — TTL이 길면 DB 조회 횟수가 줄어 stale 문제가 완화된다"
+      ],
+      "correct": 2,
+      "explanation": "Write-Through 전략은 쓰기가 발생할 때 DB와 캐시를 동시에 갱신합니다. 캐시에는 항상 최신 값이 존재하므로 stale 데이터가 발생하지 않습니다. 단점은 쓰기 지연이 증가하고 실제로 읽히지 않는 데이터도 캐시에 적재된다는 점입니다. Lazy Loading은 stale 데이터 위험이 있어 이 요구사항에 부적합합니다.",
+      "wrongExplanations": {
+        "0": "Lazy Loading은 캐시 미스 시에만 DB를 조회해 효율적이지만, DB 값이 변경되어도 캐시는 갱신되지 않아 stale 데이터 위험이 있습니다. '항상 최신 유지' 요구사항을 충족하지 못합니다.",
+        "1": "짧은 TTL로 stale 데이터를 줄일 수 있지만, TTL 만료 전까지는 여전히 stale 가능성이 있습니다. '항상 최신 유지'를 보장하지 못합니다.",
+        "3": "긴 TTL은 stale 데이터를 줄이기는커녕 오래 유지시킵니다. 이 요구사항에 완전히 반대되는 전략입니다."
+      },
+      "sources": [
+        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-6-q15",
+      "examGuideTaskId": "saa-t3-6",
+      "skill": "캐싱 전략 — Lazy Loading stale 위험과 TTL 병행",
+      "difficulty": "applied",
+      "stem": "한 팀이 ElastiCache를 Lazy Loading(Cache-Aside) 전략으로 사용하고 있다. 그런데 캐시에 저장된 데이터가 DB에서 업데이트되었는데도 오래된 값(stale)이 반환되는 문제가 보고되었다. 이 문제를 완화하는 가장 적절한 방법은?",
+      "options": [
+        "Lazy Loading을 Write-Through로 완전히 교체한다",
+        "ElastiCache를 Memcached로 전환해 멀티스레드로 갱신 속도를 높인다",
+        "캐시 항목에 적절한 TTL을 설정해 일정 시간이 지나면 캐시 항목이 만료되고 DB에서 최신 값을 재조회하도록 한다",
+        "DynamoDB Streams를 활성화해 변경 이벤트를 ElastiCache에 전파한다"
+      ],
+      "correct": 2,
+      "explanation": "Lazy Loading은 캐시 미스 시에만 DB를 조회해 저장하므로, 이후 DB 값이 변경되어도 캐시에는 이전 값이 그대로 남아 stale 데이터가 발생할 수 있습니다. TTL을 설정하면 일정 시간 후 캐시 항목이 자동 만료되어 다음 요청 시 DB에서 최신 값을 재조회합니다. TTL 값은 stale 허용 범위와 DB 부하 사이의 균형으로 결정합니다.",
+      "wrongExplanations": {
+        "0": "Write-Through로 전환하면 stale 문제를 근본적으로 해결할 수 있지만, Write-Through는 쓰기 지연 증가와 불필요한 캐시 적재라는 단점이 있습니다. 반드시 전면 교체할 필요는 없으며 TTL 병행이 더 가벼운 해결책입니다.",
+        "1": "Memcached와 Redis의 차이는 자료구조·영속성·HA이며, 캐시 갱신 속도나 stale 문제와는 관련이 없습니다.",
+        "3": "DynamoDB Streams는 DynamoDB 테이블의 변경 이벤트를 캡처하는 기능입니다. 이 시나리오는 RDS 기반 ElastiCache 캐싱 문제이므로 DynamoDB Streams는 해당 사항이 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

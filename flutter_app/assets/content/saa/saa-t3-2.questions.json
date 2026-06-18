@@ -1,0 +1,369 @@
+{
+  "examGuideTaskId": "saa-t3-2",
+  "taskTitle": "블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-2-q1",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "스토리지 3대 유형 구분",
+      "difficulty": "foundational",
+      "stem": "솔루션스 아키텍트가 워크로드 요구사항에 맞는 스토리지 유형을 선택하려 한다. 여러 EC2 인스턴스가 동시에 공유 디렉터리를 네트워크 드라이브처럼 마운트해야 하는 경우, 적합한 스토리지 유형은?",
+      "options": [
+        "블록 스토리지 — EC2 디스크처럼 마운트해 OS 부팅 볼륨으로 사용한다",
+        "파일 스토리지 — NFS·SMB로 네트워크 마운트해 여러 인스턴스가 동시 접근한다",
+        "객체 스토리지 — HTTP API(GET·PUT)로 올리고 내려받는다",
+        "인스턴스 스토어 — EC2에 물리적으로 부착된 임시 블록 스토리지를 공유한다"
+      ],
+      "correct": 1,
+      "explanation": "파일 스토리지(EFS·FSx)는 NFS·SMB 프로토콜로 네트워크 마운트해 여러 인스턴스가 동시 접근하는 '네트워크 드라이브'처럼 사용합니다. 블록 스토리지(EBS·인스턴스 스토어)는 단일 인스턴스에 디스크처럼 연결하고, 객체 스토리지(S3)는 HTTP API 기반으로 파일시스템 마운트 방식이 아닙니다. 인스턴스 스토어는 물리적으로 해당 인스턴스에만 부착돼 공유 자체가 불가합니다.",
+      "wrongExplanations": {
+        "0": "블록 스토리지는 EC2 디스크처럼 단일 인스턴스에 마운트하는 방식입니다. EBS 기본 구성에서는 여러 인스턴스가 동시 마운트할 수 없어 공유 디렉터리 요건에 맞지 않습니다.",
+        "2": "객체 스토리지는 HTTP API(GET·PUT)로 접근하는 방식으로, 파일시스템처럼 네트워크 드라이브로 마운트하는 구조가 아닙니다.",
+        "3": "인스턴스 스토어는 해당 EC2 호스트 서버에 물리적으로 부착된 스토리지입니다. 네트워크를 통한 공유가 불가능하며 인스턴스 중지·종료 시 데이터가 소실됩니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q2",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EBS 볼륨 타입 선택 — gp3 vs gp2",
+      "difficulty": "foundational",
+      "stem": "팀이 기존에 gp2 볼륨을 사용 중인데, 용량을 늘리지 않고 IOPS만 빠르게 늘려야 한다. 올바른 접근법은?",
+      "options": [
+        "gp2 볼륨의 IOPS 설정 항목을 직접 수정해 원하는 값으로 입력한다",
+        "gp2 볼륨의 용량을 늘려 IOPS를 올린다 — gp2는 GB당 3 IOPS로 용량에 자동 비례하기 때문이다",
+        "gp2를 gp3로 전환한다 — gp3는 IOPS와 처리량을 용량과 독립적으로 설정할 수 있다",
+        "gp2에서 IOPS를 올리려면 볼륨을 삭제하고 더 큰 용량으로 재생성해야 한다"
+      ],
+      "correct": 2,
+      "explanation": "gp2는 IOPS가 용량에 자동 비례(GB당 3 IOPS)하므로 IOPS 설정 항목이 따로 없습니다. gp3로 전환하면 IOPS와 처리량을 용량과 독립적으로 설정할 수 있어 용량을 늘리지 않고도 IOPS를 원하는 값으로 조정할 수 있으며, 동일 성능에서 gp2보다 비용 효율이 높습니다.",
+      "wrongExplanations": {
+        "0": "gp2 볼륨에는 IOPS를 직접 입력하는 설정 항목이 없습니다. gp2의 IOPS는 용량에 자동 비례(GB당 3 IOPS)하는 방식으로만 결정됩니다.",
+        "1": "gp2에서 IOPS를 올리려면 용량을 늘리는 것이 유일한 방법이지만, 질문의 조건인 '용량을 늘리지 않고'를 충족하지 못합니다. 또한 gp3로 전환하면 이 제약 없이 더 유연하게 대응할 수 있습니다.",
+        "3": "볼륨을 삭제하고 재생성하는 것은 데이터 손실 위험이 있고 필요하지도 않습니다. 볼륨 타입 변경(gp2→gp3)은 삭제 없이 온라인으로 수행할 수 있습니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q3",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EBS 볼륨 타입 선택 — 고IOPS DB",
+      "difficulty": "applied",
+      "stem": "미션 크리티컬 OLTP 데이터베이스가 초당 200,000 IOPS를 요구하며 99.999% 내구성이 필요하다. 가장 적합한 EBS 볼륨 타입은?",
+      "options": [
+        "gp3 — 최대 80,000 IOPS를 지원하는 범용 SSD",
+        "io1 — 최대 64,000 IOPS를 지원하는 프로비저닝 IOPS SSD",
+        "io2 Block Express — 최대 256,000 IOPS와 99.999% 내구성을 제공하는 프로비저닝 IOPS SSD",
+        "st1 — 처리량 최적화 HDD로 대용량 순차 I/O에 적합"
+      ],
+      "correct": 2,
+      "explanation": "io2 Block Express는 최대 256,000 IOPS와 99.999% 내구성을 제공해 200,000 IOPS 요건과 고내구성 요건을 모두 충족합니다. gp3는 최대 80,000 IOPS, io1은 최대 64,000 IOPS로 200,000 IOPS에 미치지 못합니다. st1은 HDD 기반 처리량 최적화 볼륨으로 대용량 순차 I/O에 적합하며 OLTP DB용이 아닙니다.",
+      "wrongExplanations": {
+        "0": "gp3의 최대 IOPS는 80,000입니다. 200,000 IOPS 요건을 충족하지 못합니다.",
+        "1": "io1의 최대 IOPS는 64,000입니다. 200,000 IOPS 요건을 충족하지 못하며 내구성도 99.8–99.9%로 99.999% 요건을 만족하지 않습니다.",
+        "3": "st1은 HDD 볼륨으로 최대 IOPS가 500(1 MiB I/O 기준)에 불과합니다. 부팅 볼륨으로도 사용할 수 없으며 OLTP 데이터베이스에 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q4",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "HDD 볼륨 부팅 불가 제약",
+      "difficulty": "foundational",
+      "stem": "아키텍트가 비용 절감을 위해 EC2 인스턴스의 루트(부팅) 볼륨을 st1 HDD로 교체하려 한다. 이 계획에 대한 설명으로 옳은 것은?",
+      "options": [
+        "st1은 부팅 볼륨으로 사용할 수 있으며 비용 절감에 효과적이다",
+        "st1은 부팅 볼륨으로 사용할 수 없다 — HDD 볼륨(st1·sc1)은 부팅 볼륨 미지원이다",
+        "st1은 부팅 볼륨으로 사용할 수 있지만 gp3보다 성능이 낮다",
+        "st1은 SSD 볼륨이므로 부팅 볼륨으로 사용할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "HDD 볼륨(st1·sc1)은 부팅 볼륨으로 사용할 수 없습니다. 부팅 볼륨은 SSD(gp2·gp3·io1·io2)만 가능합니다. HDD는 OS 부팅 시 발생하는 랜덤 소규모 I/O 패턴에 대응하지 못해 부팅 볼륨에서 제외됩니다.",
+      "wrongExplanations": {
+        "0": "st1은 부팅 볼륨으로 사용할 수 없습니다. HDD 볼륨은 빅데이터·로그처럼 대용량 순차 처리에 적합하며 OS 부팅에 필요한 랜덤 I/O 성능이 없습니다.",
+        "2": "성능 비교 이전에 st1은 부팅 볼륨 자체가 불가합니다. 부팅 가능 여부가 먼저 제한 조건입니다.",
+        "3": "st1은 SSD가 아닌 HDD(처리량 최적화 HDD) 볼륨입니다. 따라서 부팅 볼륨으로 사용할 수 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q5",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EBS Multi-Attach 조건과 제약",
+      "difficulty": "applied",
+      "stem": "고가용성 클러스터 데이터베이스를 구성하려는 팀이 동일 AZ 내 여러 EC2 Nitro 인스턴스에서 하나의 EBS 볼륨을 동시에 마운트해야 한다. 이 요건을 충족하는 EBS 볼륨 타입과 주의사항으로 옳은 것은?",
+      "options": [
+        "gp3 볼륨을 사용하면 Multi-Attach를 지원하므로 여러 인스턴스에 동시 연결 가능하다",
+        "io1 또는 io2 볼륨으로 Multi-Attach가 가능하지만, 파일 시스템 레벨의 동시성 제어는 애플리케이션이 직접 담당해야 한다",
+        "st1 볼륨을 사용하면 Multi-Attach가 지원되고 EFS처럼 자동으로 동시성을 관리해 준다",
+        "EBS Multi-Attach는 여러 AZ에 걸쳐 연결할 수 있어 리전 수준 고가용성을 제공한다"
+      ],
+      "correct": 1,
+      "explanation": "EBS Multi-Attach는 io1·io2 볼륨에서만 지원되며, 동일 AZ 내 여러 EC2 Nitro 인스턴스에 동시 연결할 수 있습니다. 단, 파일 시스템 레벨의 동시성 제어(잠금 등)는 EFS와 달리 애플리케이션이 직접 담당해야 합니다. gp3·st1·sc1은 Multi-Attach를 지원하지 않으며, Multi-Attach는 동일 AZ 내에서만 동작합니다.",
+      "wrongExplanations": {
+        "0": "gp3는 Multi-Attach를 지원하지 않습니다. Multi-Attach는 io1·io2 볼륨에서만 지원됩니다.",
+        "2": "st1은 Multi-Attach를 지원하지 않습니다. 또한 EBS Multi-Attach는 EFS처럼 자동으로 동시성을 관리해 주지 않습니다 — 애플리케이션이 직접 담당해야 합니다.",
+        "3": "EBS Multi-Attach는 동일 AZ 내에서만 가능합니다. 여러 AZ에 걸쳐 연결하는 것은 지원되지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q6",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "인스턴스 스토어 휘발성 특성",
+      "difficulty": "foundational",
+      "stem": "EC2 인스턴스 스토어에 저장된 데이터의 생명주기로 옳은 것은?",
+      "options": [
+        "인스턴스 재부팅(reboot) 시 데이터가 소실되며, 중지(stop)·종료(terminate)에서는 유지된다",
+        "인스턴스 재부팅(reboot)에서는 데이터가 유지되고, 중지(stop)·종료(terminate) 시 데이터가 소실된다",
+        "인스턴스 스토어 데이터는 EBS 스냅샷처럼 S3에 자동으로 백업된다",
+        "인스턴스 스토어는 인스턴스와 독립적이므로 중지 후에도 볼륨을 다른 인스턴스에 재연결할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "인스턴스 스토어는 EC2 호스트 서버에 물리적으로 부착된 임시 스토리지입니다. 재부팅(reboot)은 같은 물리 호스트에서 OS만 재시작하므로 로컬 디스크 연결이 유지돼 데이터가 보존됩니다. 반면 중지(stop)·종료(terminate)·하드웨어 장애 시에는 호스트 배치가 달라질 수 있어 데이터가 소실됩니다.",
+      "wrongExplanations": {
+        "0": "재부팅과 중지의 동작이 반대로 서술돼 있습니다. 재부팅에서는 데이터가 유지되고, 중지·종료에서 소실됩니다.",
+        "2": "인스턴스 스토어는 S3 자동 백업 기능이 없습니다. 데이터 보존이 필요하면 애플리케이션 레벨에서 S3나 EBS로 직접 복사해야 합니다.",
+        "3": "인스턴스 스토어는 특정 물리 호스트에 묶여 있어 EBS처럼 분리·재연결이 불가합니다. 인스턴스가 종료되면 해당 물리 호스트의 스토리지에 더 이상 접근할 수 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q7",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EBS 스냅샷 특성",
+      "difficulty": "foundational",
+      "stem": "EBS 볼륨 스냅샷에 대한 설명으로 옳은 것은?",
+      "options": [
+        "EBS 스냅샷은 매번 볼륨 전체를 저장하는 전체 백업 방식이다",
+        "EBS 스냅샷은 증분(incremental) 방식으로 최초 이후에는 변경된 블록만 S3에 저장된다",
+        "EBS 스냅샷은 EBS 볼륨이 있는 동일 AZ 내에만 저장되어 리전 간 복사가 불가하다",
+        "EBS 스냅샷에서 볼륨을 복원하면 암호화가 해제된다"
+      ],
+      "correct": 1,
+      "explanation": "EBS 스냅샷은 S3에 증분(incremental) 방식으로 저장됩니다. 최초 스냅샷 이후에는 변경된 블록만 저장하므로 저장 용량과 시간이 크게 줄어듭니다. 스냅샷은 다른 AZ나 리전으로 복사해 마이그레이션이 가능하며, 암호화된 볼륨에서 만든 스냅샷과 그 스냅샷에서 복원한 볼륨도 자동으로 암호화 상태를 유지합니다.",
+      "wrongExplanations": {
+        "0": "EBS 스냅샷은 전체 백업 방식이 아닙니다. 최초 스냅샷 이후에는 변경된 블록만 증분 저장해 비용과 시간을 절감합니다.",
+        "2": "EBS 스냅샷은 S3에 저장되며 다른 AZ·리전으로 복사할 수 있습니다. AZ에 종속되지 않습니다.",
+        "3": "암호화된 볼륨에서 만든 스냅샷과 그 스냅샷에서 복원한 볼륨도 자동으로 암호화됩니다. 복원 시 암호화가 해제되지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q8",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EFS 선택 기준 — 리눅스 공유 파일시스템",
+      "difficulty": "applied",
+      "stem": "웹 서버 Auto Scaling 그룹의 여러 리눅스 EC2 인스턴스가 공통 업로드 파일에 동시 접근해야 한다. 가장 적합한 스토리지 서비스는?",
+      "options": [
+        "Amazon EBS — 단일 볼륨을 여러 인스턴스에 기본적으로 공유할 수 있다",
+        "Amazon EFS — NFSv4 기반 완전 관리형 파일 스토리지로 여러 AZ의 Linux EC2에서 동시 마운트 가능하다",
+        "Amazon S3 — 파일시스템 마운트 방식으로 여러 인스턴스가 공유 접근한다",
+        "FSx for Windows File Server — SMB 프로토콜로 리눅스 EC2에 마운트한다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon EFS는 NFSv4.1·NFSv4.0 프로토콜 기반의 완전 관리형 파일 스토리지로, 여러 AZ에 걸쳐 다수의 Linux EC2 인스턴스에서 동시 마운트가 가능합니다. 용량을 사전 지정하지 않아도 자동 확장됩니다. EBS는 기본적으로 단일 인스턴스 연결이고, S3는 HTTP API 기반 객체 스토리지로 파일시스템 마운트 방식이 아닙니다.",
+      "wrongExplanations": {
+        "0": "EBS는 기본적으로 단일 인스턴스 연결입니다. io1·io2의 Multi-Attach가 있지만 동시성 제어를 애플리케이션이 직접 담당해야 하며 Auto Scaling 그룹의 다수 인스턴스 공유에는 EFS가 적합합니다.",
+        "2": "S3는 HTTP API(GET·PUT) 기반 객체 스토리지입니다. 파일시스템 마운트 방식으로 여러 인스턴스가 동시 접근하는 구조가 아닙니다.",
+        "3": "FSx for Windows File Server는 SMB 프로토콜과 Active Directory 통합이 필요한 Windows 환경용입니다. 리눅스 EC2 공유 파일시스템 요건에는 EFS가 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q9",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EFS vs Windows 공유 파일시스템",
+      "difficulty": "applied",
+      "stem": "기업이 온프레미스에서 사용하던 Windows 파일 서버를 AWS로 마이그레이션하려 한다. Active Directory 인증을 유지하고 SMB 프로토콜로 Windows·Linux 클라이언트 모두 접근해야 한다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon EFS — Windows EC2에서 NFSv4로 마운트해 AD 인증을 적용한다",
+        "Amazon FSx for Windows File Server — SMB 네이티브이며 Active Directory 통합을 지원한다",
+        "Amazon FSx for Lustre — 고성능 파일시스템으로 Windows 환경에 최적이다",
+        "Amazon EBS — Multi-Attach로 여러 Windows 인스턴스에 동시 연결한다"
+      ],
+      "correct": 1,
+      "explanation": "FSx for Windows File Server는 SMB 프로토콜(2.0–3.1.1)을 네이티브로 지원하고 Microsoft Active Directory와 통합(필수)합니다. Windows·Linux 클라이언트 모두 접근 가능하며 Single-AZ·Multi-AZ 배포 옵션이 있습니다. EFS는 NFSv4 기반으로 Windows EC2 공식 미지원이고, FSx for Lustre는 Linux 전용 POSIX 호환 파일시스템입니다.",
+      "wrongExplanations": {
+        "0": "Amazon EFS는 Windows 기반 EC2를 공식 지원하지 않습니다. EFS는 NFSv4 프로토콜 기반으로 Linux 인스턴스에서 마운트하도록 설계되어 Windows의 SMB 프로토콜 스택과 호환되지 않습니다.",
+        "2": "FSx for Lustre는 POSIX 호환 Linux 전용 파일시스템입니다. Windows 클라이언트에서 마운트할 수 없으며 HPC·ML 워크로드에 적합합니다.",
+        "3": "EBS Multi-Attach는 io1·io2 볼륨에서 지원되지만, 파일 시스템 레벨 동시성 제어를 애플리케이션이 직접 담당해야 합니다. SMB·AD 인증이 필요한 Windows 파일 서버 시나리오에는 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon FSx for Windows File Server — What is? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q10",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "FSx for Lustre — HPC·ML S3 통합",
+      "difficulty": "applied",
+      "stem": "머신러닝 훈련 클러스터가 Amazon S3에 저장된 수백 TB 데이터셋을 서브밀리초 지연시간으로 처리해야 한다. 가장 적합한 파일 스토리지는?",
+      "options": [
+        "Amazon EFS — 자동 확장되는 완전 관리형 NFS 스토리지로 ML 클러스터에 마운트한다",
+        "Amazon FSx for NetApp ONTAP — NFS·SMB·iSCSI 멀티 프로토콜을 지원해 ML 데이터셋에 적합하다",
+        "Amazon FSx for Lustre — 수 TBps 처리량·수백만 IOPS와 S3 버킷 직접 연결을 제공한다",
+        "Amazon EBS gp3 — IOPS와 처리량을 용량과 독립적으로 설정할 수 있어 ML 워크로드에 적합하다"
+      ],
+      "correct": 2,
+      "explanation": "FSx for Lustre는 서브밀리초 지연시간, 수 TBps 처리량, 수백만 IOPS를 제공하며 S3 버킷을 데이터 리포지토리로 직접 연결해 S3 객체를 파일처럼 투명하게 접근할 수 있습니다. HPC·머신러닝·딥러닝 워크로드에 특화된 파일 스토리지입니다. EFS는 범용 공유 파일시스템으로 이 규모의 병렬 고성능 접근에는 FSx for Lustre가 적합합니다.",
+      "wrongExplanations": {
+        "0": "EFS는 다수 클라이언트 공유에 적합한 범용 NFS이지만, ML 훈련처럼 수천 노드가 대용량 데이터셋에 초고성능으로 동시 접근하는 워크로드에는 FSx for Lustre가 설계상 더 적합합니다.",
+        "1": "FSx for NetApp ONTAP은 온프레미스 ONTAP 환경의 리프트앤시프트와 멀티 프로토콜 통합에 적합하며, S3 직접 연결과 수 TBps 처리량이 필요한 ML 워크로드 특화 기능은 FSx for Lustre에 있습니다.",
+        "3": "EBS gp3는 단일 인스턴스에 연결하는 블록 스토리지입니다. 수천 컴퓨팅 노드가 동시 접근하는 분산 병렬 파일시스템이 필요한 ML 클러스터에는 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon FSx for Lustre — What is? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q11",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EBS 볼륨 타입 선택 — 빅데이터·순차 처리",
+      "difficulty": "foundational",
+      "stem": "대용량 로그 파일을 순차적으로 읽어 분석하는 배치 워크로드에 비용 효율적인 EBS 볼륨 타입으로 가장 적합한 것은?",
+      "options": [
+        "io2 Block Express — 최대 256,000 IOPS로 빠른 로그 처리가 가능하다",
+        "gp3 — 범용 SSD로 IOPS와 처리량을 독립 설정할 수 있다",
+        "st1 — 처리량 최적화 HDD로 빅데이터·로그 같은 순차 처리 워크로드에 비용 효율적이다",
+        "sc1 — 콜드 HDD로 자주 접근하는 대용량 로그 분석에 적합하다"
+      ],
+      "correct": 2,
+      "explanation": "st1(처리량 최적화 HDD)은 빅데이터·로그·데이터 웨어하우스처럼 대용량 순차 읽기·쓰기가 중심인 워크로드에 비용 효율적입니다. 최대 처리량 500 MiB/s를 제공하며 SSD 대비 저렴합니다. sc1은 자주 접근하지 않는 콜드 데이터에 적합하며, io2는 고IOPS DB용, gp3는 일반 목적 기본 추천이지만 비용 측면에서 st1이 순차 처리에 더 최적화돼 있습니다.",
+      "wrongExplanations": {
+        "0": "io2 Block Express는 미션 크리티컬 DB처럼 초고IOPS가 필요한 워크로드용입니다. 대용량 순차 로그 처리에 io2의 고비용 IOPS 성능은 과잉이며 비용 효율적이지 않습니다.",
+        "1": "gp3는 범용 SSD로 일반 목적의 기본 추천이지만, 대용량 순차 처리 워크로드에서는 처리량 최적화로 설계된 st1이 더 비용 효율적입니다.",
+        "3": "sc1(콜드 HDD)은 자주 접근하지 않는 콜드 데이터에 적합하며 최대 처리량이 250 MiB/s입니다. 정기적으로 처리하는 로그 분석에는 처리량이 더 높은 st1(500 MiB/s)이 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q12",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EFS 성능 모드·처리량 모드",
+      "difficulty": "applied",
+      "stem": "수천 개 EC2 인스턴스가 동시에 접근하는 빅데이터 분석 플랫폼을 EFS로 구성하려 한다. 집합 처리량과 IOPS를 최대화하고 워크로드 변화에 맞게 처리량을 자동 조정해야 한다. 가장 적합한 EFS 설정 조합은?",
+      "options": [
+        "성능 모드: General Purpose, 처리량 모드: Bursting",
+        "성능 모드: Max I/O, 처리량 모드: Elastic",
+        "성능 모드: General Purpose, 처리량 모드: Provisioned",
+        "성능 모드: Max I/O, 처리량 모드: Provisioned"
+      ],
+      "correct": 1,
+      "explanation": "Max I/O 성능 모드는 더 높은 집합 처리량·IOPS를 제공하며 수천 인스턴스가 동시 접근하는 빅데이터 분석에 권장됩니다(다소 높은 지연시간 허용). Elastic 처리량 모드는 워크로드 활동에 따라 처리량을 자동 확장·축소하므로 변화하는 워크로드에 권장됩니다. General Purpose는 지연시간 민감 워크로드용이고, Bursting은 스토리지 크기 비례 처리량이며, Provisioned는 처리량을 직접 지정하는 방식입니다.",
+      "wrongExplanations": {
+        "0": "General Purpose 성능 모드는 지연시간 민감 워크로드(웹 서비스·홈 디렉터리)에 적합합니다. 수천 인스턴스가 동시 접근하는 빅데이터 분석에는 집합 처리량이 더 높은 Max I/O가 맞습니다. Bursting은 스토리지 크기에 비례한 기본 처리량과 버스트 크레딧 방식으로 자동 조정과는 다릅니다.",
+        "2": "General Purpose 성능 모드는 지연시간 민감 워크로드용입니다. Provisioned 처리량 모드는 처리량을 직접 지정해 예측 가능한 워크로드에 적합하며, 워크로드 변화에 자동 조정하는 Elastic보다 유연성이 낮습니다.",
+        "3": "Max I/O 성능 모드는 적합하지만, Provisioned 처리량 모드는 처리량을 직접 지정해야 하므로 워크로드 변화에 자동 조정이 필요한 요건에는 Elastic이 더 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q13",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "FSx for NetApp ONTAP 선택 기준",
+      "difficulty": "applied",
+      "stem": "기업이 온프레미스 NetApp ONTAP 파일 서버를 AWS로 리프트앤시프트(코드 변경 없이 이전)하려 한다. Linux·Windows·macOS 클라이언트가 동시에 접근해야 한다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon EFS — NFS 프로토콜로 Linux·Windows·macOS를 동시 지원한다",
+        "Amazon FSx for OpenZFS — ZFS 기반으로 온프레미스 ONTAP 환경을 그대로 마이그레이션한다",
+        "Amazon FSx for NetApp ONTAP — NFS·SMB·iSCSI 멀티 프로토콜로 Linux·Windows·macOS를 통합 지원하고 온프레미스 ONTAP 리프트앤시프트에 적합하다",
+        "Amazon FSx for Windows File Server — SMB 프로토콜로 멀티 OS 환경을 지원한다"
+      ],
+      "correct": 2,
+      "explanation": "FSx for NetApp ONTAP은 NFS·SMB·iSCSI 프로토콜을 동시 지원해 Linux·Windows·macOS 클라이언트를 통합합니다. 온프레미스 NetApp ONTAP 환경을 AWS로 리프트앤시프트하는 시나리오에 적합하며 Multi-AZ 배포, 자동 스토리지 계층화, 스냅샷·복제 기능을 제공합니다.",
+      "wrongExplanations": {
+        "0": "EFS는 NFSv4 프로토콜로 Linux 인스턴스에서 마운트하도록 설계되어 있으며 Windows EC2를 공식 지원하지 않습니다. 멀티 OS 통합 요건에 맞지 않습니다.",
+        "1": "FSx for OpenZFS는 NFS 프로토콜과 ZFS 기능을 제공하지만, 온프레미스 NetApp ONTAP 환경의 리프트앤시프트에 특화된 것은 FSx for NetApp ONTAP입니다. OpenZFS는 온프레미스 ZFS 워크로드 마이그레이션에 적합합니다.",
+        "3": "FSx for Windows File Server는 SMB 프로토콜과 Active Directory 통합이 핵심으로, iSCSI를 지원하지 않고 온프레미스 ONTAP 환경의 직접 마이그레이션 기능이 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" },
+        { "title": "Amazon FSx for Windows File Server — What is? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q14",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EBS AZ 제약과 스냅샷 마이그레이션",
+      "difficulty": "foundational",
+      "stem": "ap-northeast-2a AZ에 있는 EBS 볼륨을 ap-northeast-2c AZ의 새 EC2 인스턴스에 연결해야 한다. 가장 적합한 방법은?",
+      "options": [
+        "EBS 볼륨은 리전 내 어느 AZ에서도 직접 연결할 수 있으므로 바로 연결한다",
+        "볼륨의 스냅샷을 생성하고, 그 스냅샷에서 ap-northeast-2c AZ에 새 볼륨을 생성해 연결한다",
+        "EBS 볼륨을 다른 AZ로 이동하는 Migration 기능을 콘솔에서 실행한다",
+        "EBS 볼륨은 리전 간 이동만 가능하고 AZ 간 이동은 지원하지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "EBS 볼륨은 특정 AZ에 종속되며 같은 AZ 내 EC2에만 연결할 수 있습니다. 다른 AZ로 이동하려면 스냅샷을 생성한 뒤 대상 AZ에 새 볼륨을 생성하는 것이 유일한 경로입니다. 스냅샷은 S3에 저장되며 다른 AZ나 리전으로 복사해 마이그레이션이 가능합니다.",
+      "wrongExplanations": {
+        "0": "EBS 볼륨은 생성된 AZ에서만 EC2에 연결할 수 있습니다. 다른 AZ의 EC2에 직접 연결하는 것은 불가합니다. AWS가 동일 AZ 내 연결만 허용하는 이유는 일관된 저지연 성능 보장 때문입니다.",
+        "2": "콘솔에 EBS 볼륨을 다른 AZ로 직접 이동하는 Migration 기능은 없습니다. 스냅샷을 경유해야 합니다.",
+        "3": "EBS 스냅샷은 AZ 간·리전 간 복사가 모두 가능합니다. AZ 간 이동이 불가하다는 설명은 틀렸으며, 스냅샷을 통한 우회 방법이 표준 절차입니다."
+      },
+      "sources": [
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-2-q15",
+      "examGuideTaskId": "saa-t3-2",
+      "skill": "EFS 스토리지 클래스 — 비용 최적화",
+      "difficulty": "applied",
+      "stem": "EFS를 사용 중인 팀이 파일 접근 패턴을 분석한 결과, 파일 대부분이 생성 후 30일 이후에는 거의 접근되지 않는다. 가용성은 다중 AZ를 유지하면서 비용을 줄이려 한다. 가장 적합한 전략은?",
+      "options": [
+        "EFS를 One Zone 스토리지 클래스로 전환한다 — 단일 AZ이므로 비용이 낮다",
+        "수명 주기 정책을 설정해 30일 이후 접근되지 않은 파일을 Standard-IA 클래스로 자동 전환한다",
+        "EFS 대신 EBS sc1을 사용해 콜드 데이터를 저비용으로 저장한다",
+        "처리량 모드를 Provisioned로 전환하면 스토리지 비용이 줄어든다"
+      ],
+      "correct": 1,
+      "explanation": "EFS Standard-IA(Infrequent Access)는 자주 접근하지 않는 데이터를 위한 다중 AZ 스토리지 클래스로 Standard보다 저비용입니다. 수명 주기 정책으로 지정 일수 이후 접근되지 않은 파일을 Standard-IA로 자동 전환할 수 있습니다. 다중 AZ 가용성을 유지하면서 비용을 줄이는 전략입니다.",
+      "wrongExplanations": {
+        "0": "EFS One Zone은 단일 AZ에 데이터를 저장하므로 비용이 낮지만, 다중 AZ 가용성 요건을 충족하지 못합니다. 가용성을 희생하는 트레이드오프가 발생합니다.",
+        "2": "EBS sc1은 단일 인스턴스에 연결하는 블록 스토리지로 여러 인스턴스가 공유 접근하는 EFS의 용도를 대체할 수 없습니다. 공유 파일시스템 기능이 필요한 상황에서 sc1으로 전환하면 아키텍처 요건을 충족하지 못합니다.",
+        "3": "처리량 모드는 EFS의 처리량 성능을 결정하는 설정이며 스토리지 용량 비용을 직접 줄이지 않습니다. 스토리지 비용 절감은 스토리지 클래스 전환으로 달성합니다."
+      },
+      "sources": [
+        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

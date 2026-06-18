@@ -1,0 +1,368 @@
+{
+  "examGuideTaskId": "saa-t3-7",
+  "taskTitle": "네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-7-q1",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Route 53 라우팅 정책 선택 — Latency vs Geolocation",
+      "difficulty": "applied",
+      "stem": "글로벌 서비스를 운영 중인 회사가 한국·미국·유럽 세 리전에 동일한 애플리케이션을 배포했다. 각 사용자를 네트워크 응답이 가장 빠른 리전으로 보내야 한다. 가장 적합한 Route 53 라우팅 정책은?",
+      "options": [
+        "Geolocation 정책 — 사용자 IP의 지리적 위치(국가·대륙)를 기준으로 라우팅한다",
+        "Latency 정책 — 사용자 기준 네트워크 지연이 가장 낮은 AWS 리전으로 라우팅한다",
+        "Weighted 정책 — 각 리전에 동일한 가중치를 부여해 균등 분배한다",
+        "Geoproximity 정책 — 리소스 위치 기준으로 가장 가까운 리전으로 보낸다"
+      ],
+      "correct": 1,
+      "explanation": "Latency(지연시간) 정책은 Route 53이 각 리전에 대한 실측 네트워크 지연 데이터를 기반으로 사용자를 가장 낮은 지연의 리전으로 라우팅합니다. Geolocation은 사용자 IP의 지리적 위치(국가·대륙)만 보므로 물리적으로 가깝더라도 네트워크 경로 상태에 따라 더 느릴 수 있어 성능 최적화 목적에는 Latency 정책이 정확합니다.",
+      "wrongExplanations": {
+        "0": "Geolocation은 사용자의 지리적 위치(국가·대륙)를 기준으로 어떤 리소스에 접근 가능한지를 제어합니다. 네트워크 지연이 아니라 지리 규칙으로 라우팅하므로 '가장 빠른 응답'을 보장하지 않습니다.",
+        "2": "Weighted 정책은 레코드별 가중치 비율로 트래픽을 분배합니다. A/B 테스트·점진 배포에 사용하며, 네트워크 지연 기준 라우팅과 관계없습니다.",
+        "3": "Geoproximity는 리소스 위치 + bias(편향값)로 트래픽 이동 범위를 조정하는 정책으로 Route 53 Traffic Flow 기능에서만 사용할 수 있습니다. 실측 지연을 기준으로 라우팅하지 않습니다."
+      },
+      "sources": [
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q2",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Alias 레코드 vs CNAME — Zone Apex 제약",
+      "difficulty": "foundational",
+      "stem": "한 솔루션스 아키텍트가 루트 도메인 example.com을 Application Load Balancer(ALB)로 연결하려 한다. Route 53에서 어떤 레코드 유형을 사용해야 하는가?",
+      "options": [
+        "CNAME 레코드 — ALB의 DNS 이름을 가리키도록 설정한다",
+        "A 레코드 — ALB의 IP 주소를 직접 입력한다",
+        "Alias 레코드 — ALB를 대상으로 Zone Apex에서 사용할 수 있다",
+        "MX 레코드 — AWS 리소스 연결에는 MX 레코드를 사용한다"
+      ],
+      "correct": 2,
+      "explanation": "CNAME 레코드는 DNS 표준상 Zone Apex(루트 도메인)에 사용할 수 없습니다. Zone Apex는 NS·SOA 레코드를 반드시 보유해야 하는데, CNAME이 그 이름에 공존하면 표준 위반이 됩니다. Route 53의 Alias 레코드는 A/AAAA 유형으로 동작하면서 AWS 리소스의 현재 IP를 자동으로 추적해 Zone Apex 제약을 우회하며, 쿼리 비용도 무료입니다.",
+      "wrongExplanations": {
+        "0": "CNAME은 Zone Apex(example.com)에 사용할 수 없습니다. DNS 프로토콜 표준상 루트 도메인에는 NS·SOA 레코드가 반드시 있어야 하므로 CNAME과 공존이 불가합니다.",
+        "1": "ALB는 고정 IP가 없습니다. IP 주소가 변경되면 A 레코드를 수동 업데이트해야 하므로 실용적이지 않습니다. Alias 레코드는 AWS 리소스 IP 변경 시 자동으로 추적합니다.",
+        "3": "MX 레코드는 이메일 서버를 지정하는 레코드로 ALB 연결과 무관합니다."
+      },
+      "sources": [
+        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q3",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Route 53 Failover 정책과 헬스 체크",
+      "difficulty": "applied",
+      "stem": "한 기업이 Route 53 Failover 정책으로 액티브-패시브 DR을 구성하려 한다. Primary 엔드포인트 장애 시 Secondary로 자동 전환되게 하려면 반드시 추가해야 하는 설정은?",
+      "options": [
+        "Route 53 Geolocation 정책을 Failover와 함께 사용한다",
+        "헬스 체크(Health Check)를 Primary 레코드에 연결한다",
+        "TTL을 0으로 설정해 DNS 캐시를 비활성화한다",
+        "Secondary 레코드에만 가중치(Weight)를 설정한다"
+      ],
+      "correct": 1,
+      "explanation": "Failover 정책은 Primary가 비정상일 때 Secondary로 전환하는 것이 유일한 목적입니다. 비정상 여부를 판별할 수단이 없으면 전환 트리거 자체가 없으므로, 헬스 체크 연동은 Failover 정책에서 선택이 아니라 필수입니다. 헬스 체크 없이는 Route 53이 Primary의 상태를 알 방법이 없어 장애가 발생해도 계속 Primary 주소를 반환합니다.",
+      "wrongExplanations": {
+        "0": "Geolocation 정책은 사용자의 지리적 위치를 기준으로 라우팅합니다. Failover 정책과 다른 라우팅 정책으로 함께 사용해도 장애 자동 전환 기능을 제공하지 않습니다.",
+        "2": "TTL을 낮추면 DNS 전파 지연을 줄이는 데 도움이 되지만, 헬스 체크 없이는 Failover 자체가 동작하지 않습니다. TTL 설정만으로는 전환 트리거가 생기지 않습니다.",
+        "3": "가중치(Weight)는 Weighted 라우팅 정책의 요소로, Failover 정책의 Primary/Secondary 전환 메커니즘과 관계없습니다."
+      },
+      "sources": [
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q4",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Route 53 Weighted 정책 — 점진 배포",
+      "difficulty": "foundational",
+      "stem": "한 팀이 신버전 애플리케이션을 배포하면서 전체 트래픽의 10%만 신버전으로 보내고, 나머지 90%는 기존 버전으로 유지하려 한다. 어떤 Route 53 라우팅 정책을 사용해야 하는가?",
+      "options": [
+        "Latency 정책 — 신버전이 더 빠르면 자동으로 10%가 라우팅된다",
+        "Weighted(가중) 정책 — 기존 레코드에 90, 신버전 레코드에 10 가중치를 설정한다",
+        "Failover 정책 — 신버전을 Secondary로 설정한다",
+        "Multivalue Answer 정책 — 두 레코드를 등록하면 50:50으로 분배된다"
+      ],
+      "correct": 1,
+      "explanation": "Weighted(가중) 정책은 레코드별 가중치(0~255) 비율로 트래픽을 분배합니다. 기존 버전 레코드에 90, 신버전 레코드에 10을 설정하면 약 10%의 트래픽이 신버전으로 흐릅니다. A/B 테스트, 카나리(Canary) 배포 등 점진 배포에 대표적으로 사용됩니다.",
+      "wrongExplanations": {
+        "0": "Latency 정책은 사용자 기준 네트워크 지연이 가장 낮은 리전으로 라우팅합니다. 비율 제어 기능이 없어 특정 비율로 트래픽을 나누는 데 사용할 수 없습니다.",
+        "2": "Failover 정책은 Primary 장애 시 Secondary로 자동 전환하는 DR 정책입니다. 정상 상태에서 트래픽을 일정 비율로 분배하는 기능이 없습니다.",
+        "3": "Multivalue Answer는 최대 8개 정상 레코드를 무작위로 반환하는 정책입니다. 무작위 반환이라 정확한 비율 제어가 불가능하며, 50:50 분배를 보장하지 않습니다."
+      },
+      "sources": [
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q5",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Route 53 Geolocation 정책 — 지역 규제 준수",
+      "difficulty": "applied",
+      "stem": "한 미디어 기업이 국가별 저작권 규제로 인해 유럽 사용자에게는 유럽 서버의 콘텐츠를, 미국 사용자에게는 미국 서버의 콘텐츠를 제공해야 한다. 가장 적합한 Route 53 라우팅 정책은?",
+      "options": [
+        "Latency 정책 — 지연이 낮은 리전이 자동으로 해당 국가와 일치한다",
+        "Geolocation(지리위치) 정책 — 사용자 IP의 지리적 위치(국가·대륙) 기준으로 라우팅한다",
+        "Geoproximity 정책 — 리소스 위치 기준으로 가장 가까운 서버로 보낸다",
+        "Multivalue Answer 정책 — 두 서버 IP를 모두 반환해 클라이언트가 선택하게 한다"
+      ],
+      "correct": 1,
+      "explanation": "Geolocation 정책은 사용자 IP의 지리적 위치(국가·대륙)를 기준으로 라우팅합니다. 콘텐츠 현지화, 지역 규제 준수 시나리오에서 사용자가 어느 국가에 있느냐에 따라 다른 리소스로 보낼 수 있습니다. Latency 정책은 네트워크 지연 최적화가 목적이라 국가별 규제 준수 용도와 다릅니다.",
+      "wrongExplanations": {
+        "0": "Latency 정책은 실측 네트워크 지연을 기준으로 가장 빠른 리전을 선택합니다. 지리적 위치가 아니라 지연 측정값이 기준이라, 규제 준수처럼 '반드시 특정 국가 서버만' 사용해야 하는 요구에 적합하지 않습니다.",
+        "2": "Geoproximity는 리소스 위치 + bias 값으로 트래픽 이동 범위를 조정하는 정책이며 Route 53 Traffic Flow에서만 사용 가능합니다. 국가 단위 강제 라우팅을 위한 정책이 아닙니다.",
+        "3": "Multivalue Answer는 최대 8개 정상 레코드를 무작위 반환하는 DNS 응답입니다. 클라이언트가 반환된 IP 중 하나를 선택하므로 국가별 강제 라우팅을 보장하지 않습니다."
+      },
+      "sources": [
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q6",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Geoproximity vs Geolocation 구분",
+      "difficulty": "applied",
+      "stem": "Route 53 Geoproximity 정책에 대한 설명으로 옳은 것은?",
+      "options": [
+        "Geoproximity는 사용자 IP의 국가·대륙 위치를 기준으로 라우팅하며, 기본 Route 53 레코드에서 설정할 수 있다",
+        "Geoproximity는 리소스 위치를 기준으로 하되 bias(편향값)로 트래픽 이동 범위를 조정하며, Route 53 Traffic Flow에서만 사용 가능하다",
+        "Geoproximity는 Latency 정책과 동일하게 실측 네트워크 지연을 기준으로 라우팅한다",
+        "Geoproximity는 bias 없이도 Weighted 정책처럼 트래픽을 수동 비율로 분배할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "Geoproximity는 리소스의 물리적 위치를 기준으로 가장 가까운 리소스로 라우팅하되, bias(편향값)를 양수로 설정하면 해당 리소스 쪽으로 더 많은 트래픽이 흐르고 음수면 줄어듭니다. 중요한 제약으로, Geoproximity는 Route 53 Traffic Flow 기능에서만 사용할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "사용자 IP의 국가·대륙을 기준으로 라우팅하는 것은 Geolocation 정책입니다. 또한 Geoproximity는 기본 Route 53 레코드에서 설정할 수 없고 Traffic Flow에서만 사용 가능합니다.",
+        "2": "Geoproximity는 실측 네트워크 지연이 아니라 리소스의 지리적 위치(+ bias 값)를 기준으로 라우팅합니다. 실측 지연 기준은 Latency 정책의 동작 방식입니다.",
+        "3": "Geoproximity의 bias는 특정 리소스 쪽으로 트래픽 흐름 범위를 늘리거나 줄이는 것이지, Weighted처럼 정확한 수동 비율 분배를 제공하지 않습니다."
+      },
+      "sources": [
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q7",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "CloudFront OAC — S3 직접 접근 차단",
+      "difficulty": "applied",
+      "stem": "한 회사가 S3에 저장된 이미지·CSS·JS를 CloudFront를 통해 전 세계에 배포하고 있다. S3 버킷 URL로 직접 접근하는 것을 완전히 차단하고 CloudFront 경유만 허용하려 한다. 올바른 구성은?",
+      "options": [
+        "S3 버킷을 퍼블릭으로 설정하고 CloudFront 캐시 정책에서 직접 접근 차단 규칙을 추가한다",
+        "OAC(Origin Access Control)를 CloudFront 배포에 연결하고, S3 버킷 Block Public Access를 활성화한 뒤 버킷 정책에서 CloudFront 서비스 주체만 허용한다",
+        "OAI(Origin Access Identity)를 새로 생성해 사용한다 — OAI가 현재 AWS 권장 방식이다",
+        "S3 버킷에 CORS 정책을 설정해 CloudFront 도메인에서만 접근을 허용한다"
+      ],
+      "correct": 1,
+      "explanation": "OAC(Origin Access Control)를 사용하면 S3 버킷 정책에 CloudFront 서비스 주체(Service Principal)만 허용하는 조건을 추가하고, Block Public Access를 활성화해 퍼블릭 접근 자체를 차단합니다. 사용자는 CloudFront 도메인을 통해서만 콘텐츠에 접근할 수 있습니다. OAC는 OAI의 후속이며 현재 AWS 권장 방식입니다.",
+      "wrongExplanations": {
+        "0": "S3 버킷을 퍼블릭으로 설정하면 누구든 S3 URL로 직접 접근할 수 있어 CloudFront 우회가 가능해집니다. CloudFront 캐시 정책은 오리진 직접 접근을 막는 수단이 아닙니다.",
+        "2": "OAI(Origin Access Identity)는 구형 방식입니다. 현재 AWS 권장은 OAC(Origin Access Control)입니다. 신규 구성에는 OAC를 사용해야 합니다.",
+        "3": "CORS는 브라우저에서 다른 오리진으로의 요청을 제어하는 메커니즘입니다. CORS 설정만으로는 S3 URL 직접 접근(비브라우저 클라이언트 포함)을 막을 수 없습니다."
+      },
+      "sources": [
+        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q8",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "CloudFront Signed URL vs Signed Cookie",
+      "difficulty": "foundational",
+      "stem": "한 스트리밍 서비스가 유료 회원에게 콘텐츠 접근을 제한하려 한다. 회원은 로그인 후 여러 강의 영상과 문서 파일에 접근해야 하며, 이 복수 파일에 대한 세션 단위 접근 제한이 필요하다. 어떤 CloudFront 접근 제한 방식을 사용해야 하는가?",
+      "options": [
+        "Signed URL — 각 파일에 대한 임시 URL을 개별 발급한다",
+        "Signed Cookie — 복수 파일 / 세션 단위 접근 제한에 적합하다",
+        "OAC — 원본 S3에 대한 접근 제한을 설정한다",
+        "지역 제한(Geo Restriction) — 특정 국가 사용자만 접근하게 한다"
+      ],
+      "correct": 1,
+      "explanation": "Signed Cookie는 복수 파일 또는 세션 단위 접근 제한에 사용합니다. 회원이 로그인하면 쿠키를 발급하고, 이후 해당 세션 내의 모든 요청(여러 강의 영상·문서)이 쿠키로 인증됩니다. Signed URL은 단일 파일 단위 임시 접근 제한에 사용합니다.",
+      "wrongExplanations": {
+        "0": "Signed URL은 특정 단일 파일 한 편에 대한 임시 접근 링크를 발급할 때 사용합니다. 복수 파일·세션 단위 제어가 필요한 경우에는 파일마다 URL을 발급해야 해 비효율적입니다.",
+        "2": "OAC는 S3 버킷에 대한 CloudFront 전용 접근을 설정하는 메커니즘으로, 최종 사용자의 회원 인증·접근 제한과는 다릅니다.",
+        "3": "지역 제한(Geo Restriction)은 특정 국가에서의 CloudFront 접근을 허용·차단하는 기능입니다. 개별 사용자 회원 인증 기반 접근 제한이 아닙니다."
+      },
+      "sources": [
+        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q9",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "CloudFront ACM 인증서 리전 제약",
+      "difficulty": "foundational",
+      "stem": "한 팀이 CloudFront 배포에 커스텀 도메인을 설정하고 HTTPS를 활성화하려 한다. AWS Certificate Manager(ACM)에서 SSL/TLS 인증서를 발급할 때 반드시 사용해야 하는 리전은?",
+      "options": [
+        "애플리케이션 오리진 서버가 위치한 리전(예: ap-northeast-2 서울)",
+        "CloudFront 배포를 생성한 리전",
+        "us-east-1(버지니아 북부) 리전",
+        "어떤 리전이든 상관없다 — ACM 인증서는 글로벌로 사용 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "CloudFront에 연결할 ACM 인증서는 반드시 us-east-1(버지니아 북부) 리전에서 발급해야 합니다. 다른 리전에서 발급한 인증서는 CloudFront 배포에 연결할 수 없습니다. CloudFront 자체가 글로벌 서비스이지만 인증서 참조는 us-east-1 기준으로 동작하는 아키텍처 제약입니다.",
+      "wrongExplanations": {
+        "0": "오리진 서버 위치와 CloudFront 인증서 리전은 관계없습니다. 서울 리전 오리진을 쓰더라도 인증서는 us-east-1에서 발급해야 합니다.",
+        "1": "CloudFront는 리전 개념 없이 글로벌로 배포됩니다. '배포를 생성한 리전'이라는 개념이 적용되지 않으며 인증서는 항상 us-east-1에서 발급해야 합니다.",
+        "3": "ACM 인증서 자체는 리전 서비스이며 CloudFront용은 반드시 us-east-1 리전에서 발급한 것만 사용할 수 있습니다. 다른 리전 인증서를 CloudFront에 연결하면 오류가 발생합니다."
+      },
+      "sources": [
+        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q10",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "CloudFront vs Global Accelerator — 캐싱 여부",
+      "difficulty": "applied",
+      "stem": "한 회사가 전 세계 사용자에게 정적 이미지와 동영상을 빠르게 제공하려 한다. 오리진 S3 버킷에 대한 반복 요청을 줄이고 엣지에서 캐싱해 응답 속도를 높이는 것이 목표다. 어떤 서비스를 선택해야 하는가?",
+      "options": [
+        "AWS Global Accelerator — 글로벌 저지연 전송을 위한 서비스다",
+        "Amazon CloudFront — 엣지 로케이션에 콘텐츠를 캐싱해 오리진 부하를 줄이고 지연을 낮추는 CDN이다",
+        "Route 53 Latency 정책 — 가장 빠른 리전으로 라우팅한다",
+        "NLB(Network Load Balancer) — 초고성능 처리로 전달 속도를 높인다"
+      ],
+      "correct": 1,
+      "explanation": "CloudFront는 전 세계 엣지 로케이션에 콘텐츠를 캐싱해 반복 요청에 대해 오리진을 거치지 않고 응답합니다. 정적·동적 웹 콘텐츠, 스트리밍에 적합하며 오리진 부하를 줄이는 CDN 기능이 목표와 일치합니다. Global Accelerator는 캐싱이 없고 네트워크 경로만 최적화합니다.",
+      "wrongExplanations": {
+        "0": "Global Accelerator는 네트워크 경로를 최적화하지만 캐싱 기능이 없습니다. 동일 콘텐츠 반복 요청이 많아도 매번 오리진까지 전달되므로 오리진 부하를 줄이는 요구에 적합하지 않습니다.",
+        "2": "Route 53 Latency 정책은 사용자를 가장 지연이 낮은 리전으로 라우팅하지만, 엣지 캐싱 기능이 없어 오리진 부하를 줄이지는 않습니다.",
+        "3": "NLB는 L4 로드 밸런서로 EC2나 컨테이너 대상으로 트래픽을 분산합니다. 콘텐츠 캐싱 기능이 없고 글로벌 엣지 네트워크도 제공하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q11",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Global Accelerator — 고정 IP와 비-HTTP 프로토콜",
+      "difficulty": "applied",
+      "stem": "한 게임 회사가 전 세계 플레이어를 위한 UDP 기반 실시간 멀티플레이어 서버를 AWS에 배포한다. 클라이언트 방화벽에 IP를 화이트리스트로 등록해야 하므로 고정 IP가 필요하고, 초저지연이 요구된다. 가장 적합한 서비스는?",
+      "options": [
+        "Amazon CloudFront — 전 세계 엣지 로케이션에서 UDP 트래픽을 처리한다",
+        "Route 53 Latency 정책 — 가장 낮은 지연의 리전으로 UDP 패킷을 라우팅한다",
+        "AWS Global Accelerator — Anycast 고정 IP 2개로 TCP/UDP를 지원하며 AWS 글로벌 네트워크로 경로를 최적화한다",
+        "ALB(Application Load Balancer) — 글로벌 요청에 고정 IP를 제공한다"
+      ],
+      "correct": 2,
+      "explanation": "Global Accelerator는 Anycast 고정 IP 2개(IPv4)를 제공해 클라이언트 방화벽 화이트리스트를 한 번만 등록하면 됩니다. TCP/UDP를 모두 지원하므로 UDP 게임 트래픽에 사용할 수 있고, AWS 글로벌 백본 네트워크를 통해 최적 경로로 전달해 초저지연을 달성합니다. CloudFront는 HTTP/HTTPS 전용이라 UDP 게임 트래픽에 사용할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "CloudFront는 HTTP/HTTPS 프로토콜 전용 CDN입니다. UDP 트래픽을 처리할 수 없어 게임 서버 시나리오에 적합하지 않습니다. 또한 CloudFront는 고정 IP가 아닌 도메인 기반(가변 IP)입니다.",
+        "1": "Route 53은 DNS 레벨에서 엔드포인트를 지정하는 역할을 하며, DNS 해석 이후의 네트워크 경로를 최적화하거나 고정 IP를 제공하지 않습니다.",
+        "3": "ALB는 L7 HTTP/HTTPS 로드 밸런서로 고정 IP를 기본 제공하지 않습니다(NLB가 고정 IP 지원). UDP 게임 트래픽 처리에도 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q12",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Global Accelerator — 캐싱 없음",
+      "difficulty": "foundational",
+      "stem": "AWS Global Accelerator에 대한 설명으로 옳은 것은?",
+      "options": [
+        "전 세계 엣지 로케이션에 콘텐츠를 캐싱해 오리진 부하를 줄인다",
+        "네트워크 경로만 최적화하며 캐싱 기능이 없다 — 모든 요청은 오리진까지 전달된다",
+        "HTTP/HTTPS 전용 서비스로 TCP/UDP는 지원하지 않는다",
+        "단일 동적 IP 주소를 제공하며 리전에 따라 IP가 달라진다"
+      ],
+      "correct": 1,
+      "explanation": "Global Accelerator는 데이터를 저장하지 않고 AWS 글로벌 네트워크를 통해 최적 경로로 오리진까지 트래픽을 전달합니다. 캐싱 기능이 없으므로 콘텐츠 캐싱이 필요한 시나리오에는 CloudFront를 사용해야 합니다. Global Accelerator의 역할은 '경로 최적화'이며 TCP/UDP를 모두 지원합니다.",
+      "wrongExplanations": {
+        "0": "엣지 로케이션에 콘텐츠를 캐싱하는 서비스는 CloudFront입니다. Global Accelerator는 캐싱 없이 경로만 최적화합니다.",
+        "2": "Global Accelerator는 TCP와 UDP를 모두 지원합니다. HTTP/HTTPS 전용인 것은 CloudFront입니다.",
+        "3": "Global Accelerator는 두 개의 고정 Anycast IP(IPv4)를 제공합니다. 이 IP는 전 세계 어느 엣지에서도 동일하게 수신되며 리전에 따라 달라지지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q13",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "로드 밸런서 선택 — NLB vs ALB",
+      "difficulty": "applied",
+      "stem": "한 핀테크 기업이 초당 수백만 건의 TCP 금융 거래를 처리하는 실시간 시스템을 구축한다. 초저지연·고정 IP·TCP 프로토콜 요구 사항을 충족해야 한다. 어떤 로드 밸런서를 선택해야 하는가?",
+      "options": [
+        "ALB(Application Load Balancer) — L7 경로 기반 라우팅으로 금융 트랜잭션을 지능적으로 분배한다",
+        "GLB(Gateway Load Balancer) — 보안 어플라이언스 투명 전달에 특화되어 있다",
+        "NLB(Network Load Balancer) — L4 TCP/UDP, 초고성능·초저지연, 고정 IP를 제공한다",
+        "Classic Load Balancer — 가장 많은 프로토콜을 지원한다"
+      ],
+      "correct": 2,
+      "explanation": "NLB는 L4(TCP·UDP·TLS) 로드 밸런서로 초고성능·초저지연을 제공하며 수백만 RPS를 처리할 수 있습니다. 고정 IP를 지원해 클라이언트 IP 화이트리스트가 필요한 금융 거래 시스템에 적합합니다. ALB는 L7 파싱이 추가되어 NLB보다 처리 비용이 높습니다.",
+      "wrongExplanations": {
+        "0": "ALB는 HTTP 헤더·경로·호스트를 파싱하는 L7 처리가 필요해 NLB보다 지연이 높습니다. 경로 기반 라우팅은 마이크로서비스·REST API에 유용하지만 초저지연 TCP 금융 거래에는 NLB가 적합합니다.",
+        "1": "GLB는 L3/L4에서 트래픽을 방화벽·IDS 같은 네트워크 어플라이언스로 투명하게 전달하는 특수 목적 로드 밸런서입니다. 일반 애플리케이션 트래픽 분산에는 사용하지 않습니다.",
+        "3": "Classic Load Balancer는 레거시 유형으로 현재 신규 사용이 권장되지 않습니다. 초저지연·고정 IP·수백만 RPS 요구에는 NLB가 적합합니다."
+      },
+      "sources": [
+        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q14",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "Multivalue Answer 정책 — 로드 밸런서와의 차이",
+      "difficulty": "foundational",
+      "stem": "Route 53 Multivalue Answer 정책에 대한 설명으로 옳은 것은?",
+      "options": [
+        "로드 밸런서와 동일하게 세션 지속성과 연결 상태 추적을 제공한다",
+        "DNS 쿼리에 최대 8개의 정상 레코드를 무작위로 반환하지만, 로드 밸런서가 아니며 세션 지속성·상태 추적이 없다",
+        "최대 8개 레코드를 항상 가중치에 따라 정렬해 반환한다",
+        "헬스 체크와 연동할 수 없어 비정상 엔드포인트도 응답에 포함된다"
+      ],
+      "correct": 1,
+      "explanation": "Multivalue Answer는 최대 8개의 정상 레코드를 DNS 쿼리 응답으로 무작위 반환합니다. 헬스 체크와 연동하면 비정상 엔드포인트를 응답 목록에서 자동 제외합니다. 그러나 DNS 레벨 응답이라 연결 지속성·세션 관리가 없어 로드 밸런서의 기능을 대체할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "Multivalue Answer는 DNS 응답이므로 실제 연결을 중개하지 않습니다. 세션 지속성·상태 추적이 필요하면 ALB 같은 로드 밸런서를 사용해야 합니다.",
+        "2": "Multivalue Answer는 가중치 정렬이 아니라 무작위로 레코드를 반환합니다. 가중치 기반 분배는 Weighted 정책의 기능입니다.",
+        "3": "Multivalue Answer는 헬스 체크와 연동할 수 있습니다. 헬스 체크 결과 비정상인 엔드포인트는 응답 목록에서 자동 제외됩니다."
+      },
+      "sources": [
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-7-q15",
+      "examGuideTaskId": "saa-t3-7",
+      "skill": "ALB 선택 신호 — 경로 기반 라우팅·컨테이너",
+      "difficulty": "applied",
+      "stem": "한 회사가 ECS(컨테이너)로 여러 마이크로서비스를 운영 중이다. /api/orders/* 요청은 주문 서비스 컨테이너로, /api/users/* 요청은 사용자 서비스 컨테이너로 라우팅해야 한다. 가장 적합한 로드 밸런서는?",
+      "options": [
+        "NLB(Network Load Balancer) — TCP 레벨에서 경로를 파싱해 마이크로서비스로 분배한다",
+        "GLB(Gateway Load Balancer) — 컨테이너 트래픽을 투명하게 전달한다",
+        "ALB(Application Load Balancer) — L7 경로 기반 라우팅으로 URL 경로에 따라 다른 대상 그룹으로 분배한다",
+        "Route 53 Latency 정책 — 마이크로서비스 경로 분기를 처리한다"
+      ],
+      "correct": 2,
+      "explanation": "ALB는 L7(HTTP/HTTPS) 로드 밸런서로 URL 경로·호스트 기반 라우팅을 지원합니다. /api/orders/* 요청은 주문 서비스 대상 그룹으로, /api/users/* 요청은 사용자 서비스 대상 그룹으로 분배하는 규칙을 설정할 수 있습니다. Lambda 및 ECS·EKS 컨테이너도 대상으로 지원합니다.",
+      "wrongExplanations": {
+        "0": "NLB는 L4(TCP·UDP)에서 동작하며 HTTP 경로를 파싱하지 않습니다. URL 경로 기반 라우팅 기능이 없어 마이크로서비스 경로 분기에 사용할 수 없습니다.",
+        "1": "GLB는 방화벽·IDS 같은 네트워크 어플라이언스로 트래픽을 투명하게 전달하는 특수 목적 로드 밸런서입니다. 애플리케이션 URL 경로 기반 라우팅 기능이 없습니다.",
+        "3": "Route 53은 DNS 레벨에서 엔드포인트를 지정하는 역할이며 URL 경로를 파싱하지 않습니다. 마이크로서비스 내부 경로 분기는 로드 밸런서(ALB)가 담당합니다."
+      },
+      "sources": [
+        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+      ],
+      "verified": false
+    }
+  ]
+}
