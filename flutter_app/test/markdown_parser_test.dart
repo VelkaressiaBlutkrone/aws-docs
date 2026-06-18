@@ -56,4 +56,33 @@ title: X
     // 첫 행 둘째 셀: code span 포함
     expect(table.rows[0][1].any((s) => s.code && s.text == '조절'), isTrue);
   });
+
+  group('heading anchor {#id}', () {
+    MdHeading firstHeading(String md) =>
+        parseStudyDoc(md).blocks.whereType<MdHeading>().first;
+
+    test('extracts anchor and strips it from text', () {
+      final h = firstHeading('## 핵심 개념 {#core-concepts}\n');
+      expect(h.anchor, 'core-concepts');
+      expect(h.text, '핵심 개념');
+    });
+
+    test('no anchor when absent', () {
+      final h = firstHeading('## 핵심 개념\n');
+      expect(h.anchor, isNull);
+      expect(h.text, '핵심 개념');
+    });
+
+    test('malformed anchor stays literal', () {
+      final h = firstHeading('## 핵심 {# Bad ID}\n');
+      expect(h.anchor, isNull);
+      expect(h.text, '핵심 {# Bad ID}');
+    });
+
+    test('anchor on H3 with emoji/parens', () {
+      final h = firstHeading('### 1) 이점 (★) {#benefits}\n');
+      expect(h.anchor, 'benefits');
+      expect(h.text, '### 1) 이점 (★)'.replaceFirst('### ', ''));
+    });
+  });
 }
