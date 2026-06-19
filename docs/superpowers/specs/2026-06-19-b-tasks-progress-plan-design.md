@@ -40,6 +40,8 @@ Phase 3 [병렬]   ┌─ 사용자: SAA 검수(장기) ──→ 배치 완료�
 
 ## 4. Phase 1 — ②+A 릴리스 (상세)
 
+> **2026-06-19 실측 정정:** 이 설계 작성 직후 확인 결과, A는 PR#30으로 develop에 이미 머지됐고 C-중량 Phase2·SAA 드래프트는 PR#29로 이미 main 릴리스됨. **남은 Phase 1 = 멀티 일정 develop→main 릴리스만.** 실행 plan은 이 현실을 반영해 단순화됨(`docs/superpowers/plans/2026-06-19-phase1-develop-main-release.md`). 아래 4a·4b는 설계 기록으로 보존.
+
 ### 4a. A(멀티 일정) 검증
 - `feat/multi-plan-schedule`에서 `flutter test` 전체 그린 + `flutter analyze` 신규 0건을 **눈으로 확인**(종료조건, 현재 미검증).
 - 실패 시 TDD(절대조건 2)로 수정 후 재확인. 막히면 §7 리스크 폴백으로.

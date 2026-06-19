@@ -13,8 +13,8 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 ## A. 진행 중 (즉시)
 
 - [~] **멀티 일정 학습 스케줄** — 자격증당 여러 독립 일정(자동/수동·목록·선택·삭제) + 일정별 진행
-  - **상태: 구현 완료(8 Task 전부 커밋), 검증·머지 대기.** 브랜치 `feat/multi-plan-schedule`, working tree clean, develop 대비 11커밋 앞섬(**develop 미머지**).
-  - **남은 일:** ① `flutter test` 전체 그린 + `flutter analyze` 신규 0건 눈으로 확인(종료 조건, 아직 미확인) → ② develop PR.
+  - **상태(2026-06-19 실측): develop 머지됨(PR#30 `83d1fe7`), main 릴리스 대기.** 8 Task + spec/plan이 develop에 온전 반영(`origin/develop..feat/multi-plan-schedule` 빈 출력).
+  - **남은 일:** develop→main 릴리스 + 라이브 dogfood → [Phase 1 릴리스 plan](docs/superpowers/plans/2026-06-19-phase1-develop-main-release.md).
   - 출처: spec [2026-06-19-multi-plan-study-schedule-spec.md](docs/designs/2026-06-19-multi-plan-study-schedule-spec.md) · plan [Part1 데이터](docs/plans/2026-06-19-multi-plan-schedule-part1-data.md)(Task 1~4) · [Part2 UI](docs/plans/2026-06-19-multi-plan-schedule-part2-ui.md)(Task 5~8)
 
 ---
@@ -23,7 +23,7 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 
 - [ ] **① SAA-C03 문항 사람 검수 → `verified:true` flip** — 전 도메인 360개 `verified:false` 드래프트 완비(PR#22~25 develop 머지됨). 도메인/Task 순으로 검수·보완 후 flip + `content_index`의 해당 Task `questionCount`를 실제 수로 동기화.
   - 함정: `verified=사람 검수만`(AI flip 금지). verified true 1개라도 생기면 모의고사·약점 루프 자동 활성(코드 변경 0). 워크플로 → HANDOFF §0, 메모리 `question-bank-verified-workflow`.
-- [ ] **② develop → main 릴리스** — main(`32e0dc4`, PR#8)이 develop(`3d178e1`, PR#28)보다 한참 뒤. 미릴리스분: PR#21(C-중량 Phase 2) + PR#22~25(SAA 드래프트) **(+ 멀티 일정 — A 머지 시 함께)**. SAA 드래프트는 `verified:false`라 릴리스해도 화면 변화 없음(가드 테스트만 동반). CI는 main push 시 Pages 자동 배포.
+- [~] **② develop → main 릴리스** — **C-중량 Phase2(PR#21)·SAA 드래프트(PR#22~25)는 PR#29로 이미 main 릴리스됨**(2026-06-19, `origin/main 2343260`, 라이브). **남은 릴리스 = 멀티 일정만**(§A) — 절차는 [Phase 1 릴리스 plan](docs/superpowers/plans/2026-06-19-phase1-develop-main-release.md). CI는 main push 시 Pages 자동 배포.
 - [ ] **③ 학습문서 섹션 앵커 점진 채움** — C-중량 딥링크는 `clf-t1-1`만 `{#id}` 시드, 나머지는 graceful 폴백(문서 최상단). 나머지 문서·문항의 앵커를 점진 보강. 출처: HANDOFF §0-r.
 
 ---
@@ -54,9 +54,9 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 
 ## F. 최근 완료 (참조 — TODOS.md에 stale로 남아있던 항목)
 
-- [x] **C-중량: 개념→학습문서 섹션 앵커 딥링크** — Phase 1 main 릴리스(PR#15·#19), Phase 2 develop 복구(PR#21, develop 519 그린). _※ TODOS.md엔 아직 "대기"로 표기 — §E에서 정리 대상._ 출처: HANDOFF §0-r.
+- [x] **C-중량: 개념→학습문서 섹션 앵커 딥링크** — Phase 1·2 모두 **main 릴리스 완료**(Phase1 PR#15·#19 · Phase2 PR#21→PR#29 릴리스, 2026-06-19 라이브). _※ TODOS.md엔 아직 "대기"로 표기 — §E에서 정리 대상._ 출처: HANDOFF §0-r.
 - [x] **AttemptRecord.wrongSkills[] 비정규화** — C-중량 Phase 2에 포함 구현(`WrongSkill` 모델 + `buildWrongSkills` + `buildConceptReport`). _※ TODOS.md엔 아직 "대기"로 표기 — §E에서 정리 대상._
 - [x] **CLF 문항 밀도 ≥15 심화** — 19 Task 12→15 verified(+57). main 배포. 출처: HANDOFF §0-q.
-- [x] **SAA-C03 문항 드래프트 360개** — 전 도메인 `verified:false` 완비(검수는 B-①). 출처: HANDOFF §0.
+- [x] **SAA-C03 문항 드래프트 360개** — 전 도메인 `verified:false` 완비, **main 릴리스됨(PR#29, 화면변화 0)**. 검수→flip은 B-①. 출처: HANDOFF §0.
 - [x] **시각 리펙토링 B안(PR1~4)** — 스플래시·테마·모션·Variable woff2·AppHeader·페이지 분해. main 배포. 출처: HANDOFF §0-u~0-x.
 - [x] **학습 루프 엔진 E1~E6 + Spec 1/2** — 오답노트·약점리포트·진행률·약점 가중 모의고사·통합 모의고사. 과거 plans(`2026-06-06`·`-07`)에 스냅샷, 전부 main 배포·흡수됨.
