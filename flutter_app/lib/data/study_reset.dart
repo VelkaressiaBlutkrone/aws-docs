@@ -2,6 +2,7 @@ import 'content_index.dart';
 import 'exam_session_store.dart';
 import 'history_store.dart';
 import 'plan_check_store.dart';
+import 'plan_progress_store.dart';
 import 'study_plan_store.dart';
 import 'viewed_docs_store.dart';
 
@@ -26,7 +27,12 @@ void resetCert(String certCode, {KvBackend? backend}) {
   final b = backend ?? defaultBackend();
   HistoryStore(backend: b).clearCert(certCode);
   ViewedDocsStore(backend: b).clearCert(certCode);
-  StudyPlanStore(backend: b).clearCert(certCode);
+  final planStore = StudyPlanStore(backend: b);
+  final progress = PlanProgressStore(backend: b);
+  for (final p in planStore.plansFor(certCode)) {
+    progress.clearPlan(p.id);
+  }
+  planStore.clearCert(certCode);
   PlanCheckStore(backend: b).clearCert(certCode);
   final sessions = ExamSessionStore(backend: b);
   for (final id in examIdsForCert(certCode)) {
@@ -41,5 +47,6 @@ void resetAll({KvBackend? backend}) {
   ViewedDocsStore(backend: b).clearAll();
   StudyPlanStore(backend: b).clearAll();
   PlanCheckStore(backend: b).clearAll();
+  PlanProgressStore(backend: b).clearAll();
   ExamSessionStore(backend: b).clearAll();
 }

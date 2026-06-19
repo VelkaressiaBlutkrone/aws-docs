@@ -12,8 +12,7 @@ import 'attempt_presented.dart';
 /// 자동 감지는 플랜 생성일(createdIso) 이후 응시만 카운트한다(doc 열람 제외 — 타임스탬프 없음).
 Map<String, bool> computePlanDone(
   StudyPlan plan, {
-  required Map<String, bool> manual,
-  required Set<String> viewedTaskIds,
+  required Set<String> done,
   required List<AttemptRecord> history,
 }) {
   final cert = plan.certCode;
@@ -43,14 +42,14 @@ Map<String, bool> computePlanDone(
   final seen = <PlanItemType, int>{};
   final result = <String, bool>{};
   for (final it in sorted) {
-    final m = manual[it.id];
-    if (m != null) {
-      result[it.id] = m;
+    if (done.contains(it.id)) {
+      result[it.id] = true;
       continue;
     }
     switch (it.type) {
       case PlanItemType.doc:
-        result[it.id] = it.refId != null && viewedTaskIds.contains(it.refId);
+        // done 아니면 미완 — 전역 열람과 독립(일정별 진행, PlanProgressStore).
+        result[it.id] = false;
       case PlanItemType.quiz:
         result[it.id] = quizDone(it.refId);
       case PlanItemType.mockExam:
