@@ -30,7 +30,7 @@ class _PlanCreateFormState extends State<PlanCreateForm> {
   late String _end = addDays(widget.today, 14);
 
   PlanBuildResult _preview() => buildPlan(
-        certCode: widget.cert.code,
+        planId: widget.cert.code,
         content: contentFor(widget.cert.code),
         startIso: _start,
         endIso: _end,
