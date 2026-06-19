@@ -12,9 +12,9 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 
 ## A. 진행 중 (즉시)
 
-- [~] **멀티 일정 학습 스케줄** — 자격증당 여러 독립 일정(자동/수동·목록·선택·삭제) + 일정별 진행
-  - **상태(2026-06-19 실측): develop 머지됨(PR#30 `83d1fe7`), main 릴리스 대기.** 8 Task + spec/plan이 develop에 온전 반영(`origin/develop..feat/multi-plan-schedule` 빈 출력).
-  - **남은 일:** develop→main 릴리스 + 라이브 dogfood → [Phase 1 릴리스 plan](docs/superpowers/plans/2026-06-19-phase1-develop-main-release.md).
+- [x] **멀티 일정 학습 스케줄** — 자격증당 여러 독립 일정(자동/수동·목록·선택·삭제) + 일정별 진행
+  - **상태(2026-06-20 완료): main 릴리스됨(PR#31 `89e2795`), 라이브 dogfood 통과.** develop test 651 그린·analyze 신규 0 → develop→main(PR#31) → Pages 배포 → 라이브 4페이지 콘솔 에러 0(plan "학습 일정" 빈 상태 정상 렌더).
+  - 릴리스 절차: [Phase 1 릴리스 plan](docs/superpowers/plans/2026-06-19-phase1-develop-main-release.md).
   - 출처: spec [2026-06-19-multi-plan-study-schedule-spec.md](docs/designs/2026-06-19-multi-plan-study-schedule-spec.md) · plan [Part1 데이터](docs/plans/2026-06-19-multi-plan-schedule-part1-data.md)(Task 1~4) · [Part2 UI](docs/plans/2026-06-19-multi-plan-schedule-part2-ui.md)(Task 5~8)
 
 ---
@@ -23,7 +23,7 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 
 - [ ] **① SAA-C03 문항 사람 검수 → `verified:true` flip** — 전 도메인 360개 `verified:false` 드래프트 완비(PR#22~25 develop 머지됨). 도메인/Task 순으로 검수·보완 후 flip + `content_index`의 해당 Task `questionCount`를 실제 수로 동기화.
   - 함정: `verified=사람 검수만`(AI flip 금지). verified true 1개라도 생기면 모의고사·약점 루프 자동 활성(코드 변경 0). 워크플로 → HANDOFF §0, 메모리 `question-bank-verified-workflow`.
-- [~] **② develop → main 릴리스** — **C-중량 Phase2(PR#21)·SAA 드래프트(PR#22~25)는 PR#29로 이미 main 릴리스됨**(2026-06-19, `origin/main 2343260`, 라이브). **남은 릴리스 = 멀티 일정만**(§A) — 절차는 [Phase 1 릴리스 plan](docs/superpowers/plans/2026-06-19-phase1-develop-main-release.md). CI는 main push 시 Pages 자동 배포.
+- [x] **② develop → main 릴리스** — **완료.** C-중량 Phase2·SAA 드래프트는 PR#29(2026-06-19), **멀티 일정은 PR#31 `89e2795`로 main 릴리스**(2026-06-20, 라이브 dogfood 통과). develop=main 동기.
 - [ ] **③ 학습문서 섹션 앵커 점진 채움** — C-중량 딥링크는 `clf-t1-1`만 `{#id}` 시드, 나머지는 graceful 폴백(문서 최상단). 나머지 문서·문항의 앵커를 점진 보강. 출처: HANDOFF §0-r.
 
 ---
