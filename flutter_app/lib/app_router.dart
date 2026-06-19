@@ -66,6 +66,11 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                       ? '/'
                       : null,
                   builder: (context, state) => StudyDocPage(
+                    // 같은 study 라우트로 taskId만 바뀌는 전환(go/주소창/뒤로가기)에서
+                    // State가 재사용돼 옛 본문이 남는 것을 막는다 — taskId별 위젯
+                    // 정체성을 분리해 새 문서마다 initState가 새로 _load 하게 한다.
+                    key: ValueKey(
+                        '${state.pathParameters['code']}/${state.pathParameters['taskId']}'),
                     entry: entryByTask(
                       state.pathParameters['code']!,
                       state.pathParameters['taskId']!,
