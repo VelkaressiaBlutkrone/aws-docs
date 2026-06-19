@@ -46,8 +46,15 @@ class _StudyDocPageState extends State<StudyDocPage> {
   }
 
   Future<StudyContent> _load() async {
-    final raw = await rootBundle.loadString(widget.entry.mdAsset);
-    return parseStudyDoc(raw);
+    try {
+      final raw = await rootBundle.loadString(widget.entry.mdAsset);
+      return parseStudyDoc(raw);
+    } catch (e, st) {
+      // 진단: ErrorView가 표시돼도 실제 원인을 콘솔에서 추적할 수 있게 기록한다.
+      // 동작은 불변(rethrow) — FutureBuilder가 그대로 에러 분기를 그린다.
+      debugPrint('StudyDoc 로드/파싱 실패: ${widget.entry.mdAsset}\n$e\n$st');
+      rethrow;
+    }
   }
 
   // doc 첫 도착 시 앵커 키를 1회 만들고, 레이아웃 후 타깃으로 스크롤.

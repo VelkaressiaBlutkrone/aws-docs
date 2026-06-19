@@ -87,7 +87,7 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
       continue;
     }
 
-    final h = RegExp(r'^(#{1,3})\s+(.*)$').firstMatch(s);
+    final h = RegExp(r'^(#{1,6})\s+(.*)$').firstMatch(s);
     if (h != null) {
       final (text, anchor) = _splitAnchor(h.group(2)!.trim());
       blocks.add(MdHeading(h.group(1)!.length, text, anchor: anchor));
@@ -199,6 +199,7 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
     }
 
     // 문단: 다음 빈 줄/특수 블록 전까지 합침
+    final startI = i;
     final buf = <String>[];
     while (i < end) {
       final l = lines[i].trim();
@@ -216,7 +217,15 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
       buf.add(l);
       i++;
     }
-    if (buf.isNotEmpty) blocks.add(MdParagraph(_inline(buf.join(' '))));
+    if (buf.isNotEmpty) {
+      blocks.add(MdParagraph(_inline(buf.join(' '))));
+    } else if (i == startI) {
+      // 어떤 블록 분기도 이 줄을 소비하지 못했다(미지원 #스타일 등 — 예: #{1,6}을
+      // 벗어나는 ####### 또는 공백 없는 #제목). 리터럴 문단으로 degrade하고
+      // 인덱스를 강제 전진시킨다 — 진전 보장으로 무한루프를 원천 차단한다.
+      blocks.add(MdParagraph(_inline(lines[i].trim())));
+      i++;
+    }
   }
   return blocks;
 }
