@@ -1,6 +1,9 @@
 // SAA 문항 검수 도구 — 읽기 HTML 뷰어 + Task 단위 flip CLI.
 // 순수 함수는 export(테스트용), main()은 import.meta.url 가드로 직접 실행 시만.
 
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
+import { execSync } from 'node:child_process';
+
 /** 문항 1개의 기계적 구조 플래그(빈 배열=정상). 품질 판단 아님. */
 export function questionFlags(q) {
   const flags = [];
@@ -95,9 +98,6 @@ body{font:15px/1.6 system-ui,sans-serif;max-width:900px;margin:2rem auto;padding
 </style></head><body><h1>SAA-C03 문항 검수 (${tasks.reduce((n, t) => n + t.questions.length, 0)}문항)</h1>
 ${sections}</body></html>`;
 }
-
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
-import { execSync } from 'node:child_process';
 
 const SAA_DIR = 'assets/content/saa';
 const INDEX_PATH = 'lib/data/content_index.dart';
