@@ -73,6 +73,17 @@ class StudyPlanStore {
     final id = plan.id.isNotEmpty
         ? plan.id
         : planIdOf(plan.certCode, plan.createdIso, list.length);
+    // items의 itemId를 최종 planId 기반으로 재매핑(자동·수동 일정 정합).
+    final reindexed = [
+      for (var i = 0; i < plan.items.length; i++)
+        PlanItem(
+          id: planItemId(id, plan.items[i].type, plan.items[i].refId, i),
+          dateIso: plan.items[i].dateIso,
+          type: plan.items[i].type,
+          phase: plan.items[i].phase,
+          refId: plan.items[i].refId,
+        ),
+    ];
     final withId = StudyPlan(
       id: id,
       label: plan.label,
@@ -84,7 +95,7 @@ class StudyPlanStore {
       source: plan.source,
       planType: plan.planType,
       taskIds: plan.taskIds,
-      items: plan.items,
+      items: reindexed,
     );
     list.add(withId.toJson());
     m[plan.certCode] = list;

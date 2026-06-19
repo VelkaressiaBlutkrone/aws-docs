@@ -92,8 +92,9 @@ void main() {
     await tester.tap(find.byType(Checkbox).first);
     await tester.pump();
 
-    final planId = StudyPlanStore(backend: b).plansFor('CLF-C02').first.id;
-    expect(PlanProgressStore(backend: b).donePlan(planId), contains('i0'));
+    final saved = StudyPlanStore(backend: b).plansFor('CLF-C02').first;
+    expect(PlanProgressStore(backend: b).donePlan(saved.id),
+        contains(saved.items.first.id));
     expect(find.text('진행 1/1 (100%)'), findsOneWidget);
   });
 
