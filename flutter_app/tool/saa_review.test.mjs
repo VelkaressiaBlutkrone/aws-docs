@@ -76,3 +76,34 @@ test('setQuestionCount: 해당 taskId 블록의 questionCount만 교체', () => 
 test('setQuestionCount: 미발견 taskId는 throw', () => {
   assert.throws(() => setQuestionCount('// empty', 'saa-t9-9', 15));
 });
+
+import { renderHtml } from './saa_review.mjs';
+
+const sampleTask = {
+  taskId: 'saa-t1-1', taskTitle: 'IAM', domain: 1,
+  questions: [{
+    id: 'saa-t1-1-q1', skill: 'IAM', difficulty: 'foundational',
+    stem: '문제 본문', options: ['A', 'B', 'C', 'D'], correct: 1,
+    explanation: '정답 해설', wrongExplanations: { '0': 'wa', '2': 'wc', '3': 'wd' },
+    sources: [{ title: '공식', url: 'https://aws.amazon.com/x' }], verified: false,
+  }],
+};
+
+test('renderHtml: stem·옵션·해설·출처 포함', () => {
+  const html = renderHtml([sampleTask]);
+  assert.ok(html.includes('문제 본문'));
+  assert.ok(html.includes('정답 해설'));
+  assert.ok(html.includes('https://aws.amazon.com/x'));
+  assert.ok(html.startsWith('<!doctype html>') || html.startsWith('<!DOCTYPE html>'));
+});
+
+test('renderHtml: 정답 옵션에 correct 마킹 클래스', () => {
+  const html = renderHtml([sampleTask]);
+  assert.match(html, /class="opt correct"[^>]*>\s*B/);
+});
+
+test('renderHtml: 플래그 있는 문항은 배지 노출', () => {
+  const bad = { ...sampleTask, questions: [{ ...sampleTask.questions[0], options: ['A', 'B', 'C'] }] };
+  const html = renderHtml([bad]);
+  assert.ok(html.includes('flag'));
+});

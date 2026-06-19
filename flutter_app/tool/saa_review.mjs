@@ -47,3 +47,51 @@ export function setQuestionCount(dartText, taskId, count) {
   if (!re.test(dartText)) throw new Error(`content_index에서 taskId '${taskId}' 미발견`);
   return dartText.replace(re, `$1${count}`);
 }
+
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+function renderQuestion(q) {
+  const flags = questionFlags(q);
+  const badge = flags.length ? `<span class="flag">⚠ ${flags.map(esc).join(' · ')}</span>` : '';
+  const opts = (q.options || []).map((o, i) => {
+    const cls = i === q.correct ? 'opt correct' : 'opt';
+    return `<li class="${cls}">${esc(o)}</li>`;
+  }).join('');
+  const wrong = Object.entries(q.wrongExplanations || {})
+    .map(([k, v]) => `<li><b>[${esc(k)}]</b> ${esc(v)}</li>`).join('');
+  const srcs = (q.sources || [])
+    .map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.url)}</a>`)
+    .join(' · ');
+  return `<article class="q">
+    <div class="meta">${esc(q.id)} · ${esc(q.skill)} · ${esc(q.difficulty)} · verified:${q.verified} ${badge}</div>
+    <p class="stem">${esc(q.stem)}</p>
+    <ol class="opts" type="A">${opts}</ol>
+    <p class="exp"><b>해설:</b> ${esc(q.explanation)}</p>
+    <ul class="wrong">${wrong}</ul>
+    <div class="src">${srcs}</div>
+  </article>`;
+}
+
+/** tasks=[{taskId,taskTitle,domain,questions}] → 단일 HTML 문자열. */
+export function renderHtml(tasks) {
+  const sections = tasks.map((t) => {
+    const skew = taskAnswerSkew(t.questions);
+    const skewBadge = skew
+      ? `<span class="flag">⚠ 정답 쏠림 idx${skew.index} ${skew.count}/${t.questions.length}</span>`
+      : '';
+    return `<section class="task"><h2>D${esc(t.domain)} · ${esc(t.taskId)} — ${esc(t.taskTitle)} (${t.questions.length}) ${skewBadge}</h2>
+      ${t.questions.map(renderQuestion).join('\n')}</section>`;
+  }).join('\n');
+  return `<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<title>SAA 문항 검수</title><style>
+body{font:15px/1.6 system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:#1a1a1a}
+.task{margin:2rem 0;border-top:2px solid #0E8175;padding-top:1rem}
+.q{border:1px solid #ddd;border-radius:8px;padding:1rem;margin:1rem 0}
+.meta{font-size:13px;color:#666}
+.opts .correct{background:#d6f5e8;font-weight:600;border-radius:4px}
+.wrong{color:#555;font-size:14px}.src{font-size:13px;color:#0E8175}
+.flag{background:#fde2e2;color:#a00;padding:1px 6px;border-radius:4px;font-size:12px}
+</style></head><body><h1>SAA-C03 문항 검수 (${tasks.reduce((n, t) => n + t.questions.length, 0)}문항)</h1>
+${sections}</body></html>`;
+}
