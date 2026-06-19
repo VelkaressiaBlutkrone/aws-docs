@@ -4,12 +4,12 @@ import 'package:go_router/go_router.dart';
 import '../content/reset_dialog.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
-import '../data/plan_check_store.dart';
 import '../data/plan_progress.dart';
+import '../data/plan_progress_store.dart';
+import '../data/plan_progress_view.dart';
 import '../data/site_data.dart';
 import '../data/study_plan_store.dart';
 import '../data/study_reset.dart';
-import '../data/viewed_docs_store.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
@@ -87,23 +87,21 @@ class _HomePageState extends State<HomePage> {
     // TODO: ScheduleSection과 동일하게 스토어·computePlanDone를 build마다 로드한다.
     // cert 수가 늘면 둘의 공유 계산을 고려.
     final planStore = StudyPlanStore();
-    final checkStore = PlanCheckStore();
-    final viewedStore = ViewedDocsStore();
+    final progress = PlanProgressStore();
     final history = HistoryStore().all();
     var today = 0, overdue = 0, active = 0;
     String? oneCert;
     for (final cert in certifications.where((cc) => certHasContent(cc.code))) {
-      final plan = planStore.planFor(cert.code);
-      if (plan == null) continue;
+      final plans = planStore.plansFor(cert.code);
+      if (plans.isEmpty) continue;
       active++;
       oneCert = cert.code;
-      final done = computePlanDone(plan,
-          manual: checkStore.overrides(cert.code),
-          viewedTaskIds: viewedStore.viewed(cert.code),
-          history: history);
-      final d = planDueCounts(plan, done, todayIso);
-      today += d.today;
-      overdue += d.overdue;
+      for (final plan in plans) {
+        final done = planDone(plan, progress, history);
+        final d = planDueCounts(plan, done, todayIso);
+        today += d.today;
+        overdue += d.overdue;
+      }
     }
     if (today == 0 && overdue == 0) return null;
     final parts = <String>[

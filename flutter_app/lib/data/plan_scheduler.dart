@@ -71,7 +71,7 @@ PlanBuildResult redistribute(
 
 /// 단계형 분배(순수·결정적). 부작용 없음.
 PlanBuildResult buildPlan({
-  required String certCode,
+  required String planId,
   required List<ContentEntry> content,
   required String startIso,
   required String endIso,
@@ -103,23 +103,23 @@ PlanBuildResult buildPlan({
 
   final items = <PlanItem>[];
 
-  _spread(items, certCode, PlanItemType.doc, PlanPhase.learn,
+  _spread(items, planId, PlanItemType.doc, PlanPhase.learn,
       [for (final e in content) e.taskId],
       starts[0], segs[0], windowDays, startIso);
 
   if (hasQ) {
-    _spread(items, certCode, PlanItemType.quiz, PlanPhase.practice,
+    _spread(items, planId, PlanItemType.quiz, PlanPhase.practice,
         [for (final e in content) if (e.hasQuestions) e.taskId],
         starts[1], segs[1], windowDays, startIso);
 
-    _spread(items, certCode, PlanItemType.mockExam, PlanPhase.mock,
+    _spread(items, planId, PlanItemType.mockExam, PlanPhase.mock,
         List<String?>.filled(_mockCount(segs[2]), null),
         starts[2], segs[2], windowDays, startIso);
 
-    _spread(items, certCode, PlanItemType.weakExam, PlanPhase.reinforce,
+    _spread(items, planId, PlanItemType.weakExam, PlanPhase.reinforce,
         <String?>[null], starts[3], segs[3], windowDays, startIso);
 
-    _spread(items, certCode, PlanItemType.finalReview, PlanPhase.reinforce,
+    _spread(items, planId, PlanItemType.finalReview, PlanPhase.reinforce,
         <String?>[null], starts[3], segs[3], windowDays, startIso,
         placeAtEnd: true);
   }
@@ -153,7 +153,7 @@ int _mockCount(int mockSpan) {
 /// placeAtEnd=true면 단계 마지막 날에. off는 [0, windowDays-1]로 clamp.
 void _spread(
   List<PlanItem> out,
-  String certCode,
+  String planId,
   PlanItemType type,
   PlanPhase phase,
   List<String?> refs,
@@ -177,11 +177,47 @@ void _spread(
     if (off > windowDays - 1) off = windowDays - 1;
     final refId = refs[i];
     out.add(PlanItem(
-      id: '$certCode:${type.name}:${refId ?? ''}:$i',
+      id: planItemId(planId, type, refId, i),
       dateIso: addDays(startIso, off),
       type: type,
       phase: phase,
       refId: refId,
     ));
   }
+}
+
+/// 수동 일정의 items 생성(순수). docs/practice는 taskIds를 기간에 균등 분배,
+/// 시험류(mock/weak/review)는 refId 없는 단일 항목.
+List<PlanItem> buildManualPlanItems({
+  required String planId,
+  required PlanItemType planType,
+  required List<String> taskIds,
+  required String startIso,
+  required String endIso,
+}) {
+  final windowDays = daysBetween(startIso, endIso) + 1; // inclusive, >=1
+  final phase = switch (planType) {
+    PlanItemType.doc => PlanPhase.learn,
+    PlanItemType.quiz => PlanPhase.practice,
+    PlanItemType.mockExam => PlanPhase.mock,
+    _ => PlanPhase.reinforce,
+  };
+  final List<String?> refs =
+      (planType == PlanItemType.doc || planType == PlanItemType.quiz)
+          ? taskIds
+          : <String?>[null];
+  final out = <PlanItem>[];
+  final k = refs.length;
+  for (var i = 0; i < k; i++) {
+    var off = (windowDays <= 1 || k <= 1) ? 0 : (i * windowDays ~/ k);
+    if (off > windowDays - 1) off = windowDays - 1;
+    out.add(PlanItem(
+      id: planItemId(planId, planType, refs[i], i),
+      dateIso: addDays(startIso, off),
+      type: planType,
+      phase: phase,
+      refId: refs[i],
+    ));
+  }
+  return out;
 }
