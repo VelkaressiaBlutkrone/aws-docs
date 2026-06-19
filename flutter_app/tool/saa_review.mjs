@@ -35,3 +35,15 @@ export function taskAnswerSkew(questions) {
   const ratio = total ? counts[maxIdx] / total : 0;
   return ratio >= 0.6 ? { index: maxIdx, count: counts[maxIdx], ratio } : null;
 }
+
+/** "verified": false → true 전부(정규식 치환으로 원본 포맷 보존). */
+export function flipVerified(jsonText) {
+  return jsonText.replace(/"verified":\s*false/g, '"verified": true');
+}
+
+/** content_index.dart에서 그 taskId ContentEntry의 questionCount를 count로 교체. */
+export function setQuestionCount(dartText, taskId, count) {
+  const re = new RegExp(`(taskId: '${taskId}',[\\s\\S]*?questionCount: )\\d+`);
+  if (!re.test(dartText)) throw new Error(`content_index에서 taskId '${taskId}' 미발견`);
+  return dartText.replace(re, `$1${count}`);
+}

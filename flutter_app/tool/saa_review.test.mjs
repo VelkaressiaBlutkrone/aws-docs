@@ -44,3 +44,35 @@ test('taskAnswerSkew: 한 인덱스 ≥60%면 객체', () => {
   assert.equal(skew.index, 0);
   assert.equal(skew.count, 7);
 });
+
+import { flipVerified, setQuestionCount } from './saa_review.mjs';
+
+test('flipVerified: verified false→true, 포맷 보존', () => {
+  const src = '{\n  "questions": [\n    { "id": "q1", "verified": false },\n    { "id": "q2", "verified": false }\n  ]\n}\n';
+  const out = flipVerified(src);
+  assert.ok(!out.includes('"verified": false'));
+  assert.equal((out.match(/"verified": true/g) || []).length, 2);
+  assert.ok(out.includes('"id": "q1"'));
+});
+
+test('setQuestionCount: 해당 taskId 블록의 questionCount만 교체', () => {
+  const dart = `
+    ContentEntry(
+      certCode: 'SAA-C03',
+      taskId: 'saa-t1-1',
+      questionsAsset: 'assets/content/saa/saa-t1-1.questions.json',
+      questionCount: 0,
+    ),
+    ContentEntry(
+      certCode: 'SAA-C03',
+      taskId: 'saa-t1-2',
+      questionCount: 0,
+    ),`;
+  const out = setQuestionCount(dart, 'saa-t1-1', 15);
+  assert.match(out, /taskId: 'saa-t1-1',[\s\S]*?questionCount: 15,/);
+  assert.match(out, /taskId: 'saa-t1-2',[\s\S]*?questionCount: 0,/);
+});
+
+test('setQuestionCount: 미발견 taskId는 throw', () => {
+  assert.throws(() => setQuestionCount('// empty', 'saa-t9-9', 15));
+});
