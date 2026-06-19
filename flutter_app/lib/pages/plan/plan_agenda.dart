@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/cert_lookup.dart';
 import '../../data/history_store.dart';
-import '../../data/plan_check_store.dart';
 import '../../data/plan_month.dart';
 import '../../data/plan_progress.dart';
+import '../../data/plan_progress_store.dart';
+import '../../data/plan_progress_view.dart';
 import '../../data/plan_scheduler.dart';
-import '../../data/viewed_docs_store.dart';
 import '../../models/certification.dart';
 import '../../models/study_plan.dart';
 import '../../theme/app_theme.dart';
@@ -25,12 +25,14 @@ class PlanAgenda extends StatefulWidget {
       required this.today,
       required this.onEdit,
       required this.onChanged,
+      this.onDelete,
       this.backend});
   final Certification cert;
   final StudyPlan plan;
   final String today;
   final VoidCallback onEdit;
   final ValueChanged<StudyPlan> onChanged;
+  final VoidCallback? onDelete;
   final KvBackend? backend;
 
   @override
@@ -38,22 +40,17 @@ class PlanAgenda extends StatefulWidget {
 }
 
 class _PlanAgendaState extends State<PlanAgenda> {
-  late final _checks = PlanCheckStore(backend: widget.backend);
+  late final _progress = PlanProgressStore(backend: widget.backend);
   late final _history = HistoryStore(backend: widget.backend);
-  late final _viewed = ViewedDocsStore(backend: widget.backend);
   bool _month = false;
   final _dateKeys = <String, GlobalKey>{};
   String? _scrollToDate;
 
-  Map<String, bool> _done() => computePlanDone(
-        widget.plan,
-        manual: _checks.overrides(widget.cert.code),
-        viewedTaskIds: _viewed.viewed(widget.cert.code),
-        history: _history.all(),
-      );
+  Map<String, bool> _done() =>
+      planDone(widget.plan, _progress, _history.all());
 
   void _toggle(String itemId, bool current) {
-    _checks.set(widget.cert.code, itemId, !current);
+    _progress.setDone(widget.plan.id, itemId, !current);
     setState(() {});
   }
 
@@ -175,6 +172,13 @@ class _PlanAgendaState extends State<PlanAgenda> {
               onPressed: widget.onEdit,
               child: const Text('다시 만들기'),
             ),
+            if (widget.onDelete != null)
+              IconButton(
+                tooltip: '일정 삭제',
+                visualDensity: VisualDensity.compact,
+                icon: Icon(Icons.delete_outline, size: 20, color: c.textMuted),
+                onPressed: widget.onDelete,
+              ),
           ],
         ),
         const SizedBox(height: Gap.sm),
