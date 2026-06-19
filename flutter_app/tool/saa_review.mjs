@@ -95,3 +95,59 @@ body{font:15px/1.6 system-ui,sans-serif;max-width:900px;margin:2rem auto;padding
 </style></head><body><h1>SAA-C03 문항 검수 (${tasks.reduce((n, t) => n + t.questions.length, 0)}문항)</h1>
 ${sections}</body></html>`;
 }
+
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
+import { execSync } from 'node:child_process';
+
+const SAA_DIR = 'assets/content/saa';
+const INDEX_PATH = 'lib/data/content_index.dart';
+
+function loadTasks() {
+  const files = readdirSync(SAA_DIR).filter((f) => f.endsWith('.questions.json')).sort();
+  return files.map((f) => {
+    const j = JSON.parse(readFileSync(`${SAA_DIR}/${f}`, 'utf8'));
+    return { taskId: j.examGuideTaskId, taskTitle: j.taskTitle, domain: j.domain, questions: j.questions };
+  });
+}
+
+function cmdBuild() {
+  const tasks = loadTasks();
+  mkdirSync('build/saa_review', { recursive: true });
+  writeFileSync('build/saa_review/index.html', renderHtml(tasks));
+  const n = tasks.reduce((a, t) => a + t.questions.length, 0);
+  console.log(`build/saa_review/index.html 생성 — ${tasks.length} Task, ${n}문항`);
+}
+
+function cmdFlip(taskId, force) {
+  const path = `${SAA_DIR}/${taskId}.questions.json`;
+  const text = readFileSync(path, 'utf8');
+  const data = JSON.parse(text);
+  const severe = data.questions.flatMap((q) => questionFlags(q));
+  if (severe.length && !force) {
+    console.error(`중단: ${taskId}에 구조 플래그 ${severe.length}건 — ${severe.slice(0, 3).join(' / ')} ...`);
+    console.error('수정 후 재시도하거나 --force로 강행하세요.');
+    process.exit(1);
+  }
+  const count = data.questions.length;
+  writeFileSync(path, flipVerified(text));
+  writeFileSync(INDEX_PATH, setQuestionCount(readFileSync(INDEX_PATH, 'utf8'), taskId, count));
+  console.log(`${taskId}: verified ${count}문항 true, content_index questionCount=${count}`);
+  execSync('flutter test test/saa_questions_test.dart', { stdio: 'inherit' });
+  console.log('saa_questions_test 통과. flip 커밋은 검수자가 직접 하세요.');
+}
+
+export function main(argv) {
+  const [cmd, ...rest] = argv;
+  if (cmd === 'build') return cmdBuild();
+  if (cmd === 'flip') {
+    const taskId = rest.find((a) => !a.startsWith('--'));
+    if (!taskId) { console.error('사용법: flip <taskId> [--force]'); process.exit(1); }
+    return cmdFlip(taskId, rest.includes('--force'));
+  }
+  console.error('사용법: node tool/saa_review.mjs build | flip <taskId> [--force]');
+  process.exit(1);
+}
+
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith('saa_review.mjs')) {
+  main(process.argv.slice(2));
+}
