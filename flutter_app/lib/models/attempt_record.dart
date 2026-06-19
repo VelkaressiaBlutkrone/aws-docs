@@ -1,3 +1,21 @@
+/// 한 응시의 오답 개념(비정규화) — stale 문항에도 개념 보존(report 개념 집계용).
+class WrongSkill {
+  const WrongSkill(
+      {required this.skill, required this.section, required this.taskId});
+  final String skill;
+  final String section; // 학습문서 섹션 앵커 id (없으면 '')
+  final String taskId; // examGuideTaskId
+
+  Map<String, dynamic> toJson() =>
+      {'skill': skill, 'section': section, 'taskId': taskId};
+
+  factory WrongSkill.fromJson(Map<String, dynamic> j) => WrongSkill(
+        skill: (j['skill'] ?? '').toString(),
+        section: (j['section'] ?? '').toString(),
+        taskId: (j['taskId'] ?? '').toString(),
+      );
+}
+
 /// 응시 이력 레코드 — 설계 D14 스키마(+ mode 확장).
 class AttemptRecord {
   const AttemptRecord({
@@ -10,6 +28,7 @@ class AttemptRecord {
     required this.wrongQuestionIds,
     required this.flaggedQuestionIds,
     this.presentedQuestionIds = const [],
+    this.wrongSkills = const [],
     required this.durationSpentSec,
   });
 
@@ -24,6 +43,9 @@ class AttemptRecord {
 
   /// 그 응시에 출제된 전체 문항 ID(약점 파생용). 레거시 레코드는 빈 리스트.
   final List<String> presentedQuestionIds;
+
+  /// 오답 개념(비정규화). 레거시 레코드는 빈 리스트.
+  final List<WrongSkill> wrongSkills;
   final int durationSpentSec;
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +58,7 @@ class AttemptRecord {
         'wrongQuestionIds': wrongQuestionIds,
         'flaggedQuestionIds': flaggedQuestionIds,
         'presentedQuestionIds': presentedQuestionIds,
+        'wrongSkills': [for (final w in wrongSkills) w.toJson()],
         'durationSpentSec': durationSpentSec,
       };
 
@@ -54,6 +77,9 @@ class AttemptRecord {
             .toList(),
         presentedQuestionIds: ((j['presentedQuestionIds'] as List?) ?? const [])
             .map((e) => e.toString())
+            .toList(),
+        wrongSkills: ((j['wrongSkills'] as List?) ?? const [])
+            .map((e) => WrongSkill.fromJson(e as Map<String, dynamic>))
             .toList(),
         durationSpentSec: (j['durationSpentSec'] as num?)?.toInt() ?? 0,
       );

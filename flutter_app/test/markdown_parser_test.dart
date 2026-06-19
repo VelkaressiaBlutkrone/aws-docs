@@ -85,4 +85,43 @@ title: X
       expect(h.text, '### 1) 이점 (★)'.replaceFirst('### ', ''));
     });
   });
+
+  group('H4~H6 헤딩 (회귀: t3-6 등 고도화 문서 무한루프 방지)', () {
+    test('H4 헤딩이 무한루프 없이 level 4 heading으로 파싱된다', () {
+      final doc =
+          parseStudyDoc('---\ntitle: X\n---\n\n#### 세부 facet\n\n본문 문단\n');
+      final h4 = doc.blocks.whereType<MdHeading>().where((h) => h.level == 4);
+      expect(h4, isNotEmpty, reason: 'H4가 heading(level 4)으로 파싱돼야 한다');
+      expect(h4.first.text, '세부 facet');
+      expect(
+          doc.blocks
+              .whereType<MdParagraph>()
+              .any((p) => p.spans.any((s) => s.text.contains('본문 문단'))),
+          isTrue,
+          reason: 'H4 다음 본문이 문단으로 이어져야 한다');
+    }, timeout: const Timeout(Duration(seconds: 10)));
+
+    test('H5·H6도 heading으로 파싱된다', () {
+      final doc = parseStudyDoc('##### 다섯\n\n###### 여섯\n');
+      final levels =
+          doc.blocks.whereType<MdHeading>().map((h) => h.level).toSet();
+      expect(levels.containsAll({5, 6}), isTrue);
+    }, timeout: const Timeout(Duration(seconds: 10)));
+
+    test('지원 범위를 넘는 #######(H7)도 무한루프 없이 degrade 된다', () {
+      final doc = parseStudyDoc('####### 일곱\n\n다음 문단\n');
+      expect(doc.blocks, isNotEmpty,
+          reason: '미지원 헤딩 레벨도 진전 보장으로 멈추지 않아야 한다');
+    }, timeout: const Timeout(Duration(seconds: 10)));
+
+    test('#### 다음 목록이 정상 블록으로 이어진다', () {
+      final doc = parseStudyDoc('#### 제목\n\n- 항목1\n- 항목2\n');
+      expect(
+          doc.blocks
+              .whereType<MdHeading>()
+              .any((h) => h.level == 4 && h.text == '제목'),
+          isTrue);
+      expect(doc.blocks.whereType<MdBullets>().isNotEmpty, isTrue);
+    }, timeout: const Timeout(Duration(seconds: 10)));
+  });
 }

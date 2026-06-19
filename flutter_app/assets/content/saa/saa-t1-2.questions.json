@@ -1,0 +1,370 @@
+{
+  "examGuideTaskId": "saa-t1-2",
+  "taskTitle": "다중 계정 보안 — Organizations·Control Tower·SCP",
+  "domain": 1,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t1-2-q1",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "Organizations 구조(관리 계정·OU)",
+      "difficulty": "foundational",
+      "stem": "AWS Organizations에서 OU(Organizational Unit)를 사용하는 주된 이유로 가장 옳은 것은?",
+      "options": [
+        "계정을 논리적으로 그룹화해 상위 노드에 SCP 한 번으로 하위 계정 전체에 정책을 자동 상속한다",
+        "OU는 계정 간 네트워크 트래픽을 격리하는 VPC 역할을 한다",
+        "OU는 각 계정에 독립적인 청구서를 발행하기 위한 결제 분리 단위다",
+        "OU를 만들면 각 계정의 IAM 사용자가 OU 전체에서 SSO 없이 자동으로 인증된다"
+      ],
+      "correct": 0,
+      "explanation": "OU는 계정을 묶는 논리적 그룹입니다. 상위 노드(루트·OU)에 SCP를 한 번만 설정하면 하위 계정 전체로 자동 상속되어, 새 계정을 OU에 추가하는 순간 가드레일이 즉시 적용됩니다. 환경(개발·운영)·사업부별로 OU를 분리하면 각각 다른 SCP를 독립적으로 관리할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "OU는 네트워크 격리 도구가 아닙니다. 네트워크 격리는 VPC·서브넷·보안 그룹으로 수행하며 OU는 계정 정책 그룹화 단위입니다.",
+        "2": "OU는 결제 분리 단위가 아닙니다. 통합 결제(Consolidated Billing)는 Organizations 전체에서 하나의 청구서로 집계되며 OU 경계와 무관합니다.",
+        "3": "OU 자체는 SSO를 제공하지 않습니다. 다계정 SSO는 IAM Identity Center와 Organizations를 함께 구성해야 합니다."
+      },
+      "sources": [
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q2",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "SCP 권한 부여 여부",
+      "difficulty": "foundational",
+      "stem": "AWS Organizations의 멤버 계정에 SCP가 `s3:*`를 Allow하도록 설정되어 있다. 그런데 그 계정의 특정 IAM 사용자에게는 S3 관련 아이덴티티 기반 정책이 전혀 없다. 이 사용자가 S3에 접근하려 하면 어떤 결과가 나오는가?",
+      "options": [
+        "SCP의 Allow는 실제 권한 부여이므로 접근이 허용된다",
+        "SCP는 권한을 부여하지 않고 상한선만 설정하므로 아이덴티티 정책에 Allow가 없으면 접근이 거부된다",
+        "멤버 계정의 루트 사용자라면 SCP와 별개로 접근할 수 있다",
+        "SCP가 Allow이면 계정 내 모든 사용자에게 자동으로 권한이 부여된다"
+      ],
+      "correct": 1,
+      "explanation": "SCP는 권한을 부여하지 않습니다. '허용 가능한 최대치'를 정의하는 상한선으로, 유효 권한은 SCP와 아이덴티티 기반 정책의 교집합입니다. SCP가 Allow여도 IAM 정책에 별도 Allow가 없으면 암묵적 Deny로 접근이 불가합니다. SCP는 멤버 계정 루트 사용자에게도 적용됩니다.",
+      "wrongExplanations": {
+        "0": "SCP의 Allow는 실제 권한 부여가 아니라 '이 계정에서 허용 가능한 범위'를 선언하는 것입니다. 실제 접근은 아이덴티티 정책의 Allow가 있어야 합니다.",
+        "2": "SCP는 멤버 계정의 루트 사용자에게도 적용됩니다. 루트라고 SCP를 우회할 수 없습니다. 단, 관리 계정의 루트는 SCP 적용 예외입니다.",
+        "3": "SCP는 자동 권한 부여 도구가 아닙니다. 계정 내 각 사용자·역할은 아이덴티티 정책을 통해 별도로 권한을 받아야 합니다."
+      },
+      "sources": [
+        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q3",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "관리 계정 SCP 적용 예외",
+      "difficulty": "foundational",
+      "stem": "한 보안 팀이 AWS Organizations의 루트(Root)에 모든 리전을 서울(`ap-northeast-2`)로 제한하는 SCP를 적용했다. 이 SCP가 적용되지 않는 대상은?",
+      "options": [
+        "모든 멤버 계정의 IAM 사용자",
+        "모든 멤버 계정의 루트 사용자",
+        "Organizations의 관리 계정(Management account)",
+        "개발 OU 하위에 있는 모든 멤버 계정"
+      ],
+      "correct": 2,
+      "explanation": "SCP는 관리 계정(Management account)에는 적용되지 않습니다. 관리 계정의 IAM 사용자·역할·루트 사용자는 SCP의 영향을 받지 않습니다. 이것이 관리 계정에 워크로드를 실행하지 않아야 하는 이유 중 하나입니다. 멤버 계정의 루트 사용자를 포함한 모든 IAM 아이덴티티는 SCP의 적용을 받습니다.",
+      "wrongExplanations": {
+        "0": "멤버 계정의 IAM 사용자는 SCP의 적용을 받습니다. 루트 SCP는 조직 전체 멤버 계정에 내려갑니다.",
+        "1": "멤버 계정의 루트 사용자도 SCP의 적용을 받습니다. SCP는 멤버 계정 내 루트를 포함한 모든 아이덴티티에 적용됩니다.",
+        "3": "개발 OU의 멤버 계정도 SCP의 적용을 받습니다. 루트에 붙은 SCP는 OU 하위 모든 계정에 상속됩니다."
+      },
+      "sources": [
+        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q4",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "SCP 계층 누적 교집합",
+      "difficulty": "applied",
+      "stem": "Organizations 루트에 SCP-A가 `ec2:*`를 Deny하고, 하위 OU에 SCP-B가 `ec2:DescribeInstances`를 Allow하도록 설정되어 있다. 이 OU의 멤버 계정 사용자가 EC2 인스턴스를 조회하려 하면?",
+      "options": [
+        "SCP-B가 더 구체적이므로 DescribeInstances는 허용된다",
+        "같은 계층에서 Allow와 Deny가 충돌하면 마지막에 평가된 SCP가 우선한다",
+        "SCP-B는 SCP-A보다 하위이므로 SCP-B가 SCP-A를 덮어쓴다",
+        "루트의 SCP-A가 ec2:* 를 Deny했으므로 DescribeInstances도 거부된다"
+      ],
+      "correct": 3,
+      "explanation": "SCP는 루트→OU→계정 순서로 누적 교집합(AND)입니다. 상위 SCP에서 Deny된 권한은 하위 SCP에서 Allow해도 복구되지 않습니다. 루트의 SCP-A가 `ec2:*`를 Deny했으므로 OU의 SCP-B가 Allow해도 최종 유효 권한에서 EC2 접근은 불가합니다.",
+      "wrongExplanations": {
+        "0": "SCP에서는 구체성이 우선 적용 기준이 아닙니다. 모든 계층의 SCP가 AND 교집합으로 평가되므로 상위 Deny는 하위 Allow로 해소되지 않습니다.",
+        "1": "SCP 평가에는 순서 우선이 없습니다. 모든 계층의 SCP를 AND로 교집합한 결과가 유효 권한 상한선이 됩니다.",
+        "2": "하위 SCP가 상위 SCP를 덮어쓰지 않습니다. 상위에서 차단된 항목은 하위에서 열 수 없는 것이 SCP의 설계 원칙입니다."
+      },
+      "sources": [
+        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q5",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "SCP vs 권한 경계 적용 범위",
+      "difficulty": "foundational",
+      "stem": "SCP(서비스 제어 정책)와 권한 경계(Permissions Boundary)에 대한 설명으로 가장 옳은 것은?",
+      "options": [
+        "SCP는 개별 IAM 사용자·역할에, 권한 경계는 계정·OU 전체에 적용된다",
+        "SCP는 직접 권한을 부여하고, 권한 경계는 권한의 상한선만 설정한다",
+        "둘 다 권한을 부여하지 않고 상한선만 설정하지만, SCP는 계정·OU에, 권한 경계는 개별 사용자·역할에 적용된다",
+        "SCP는 Organizations 전용이고 권한 경계도 Organizations 전용이다"
+      ],
+      "correct": 2,
+      "explanation": "SCP와 권한 경계 모두 권한을 부여하지 않고 허용 가능한 최대치(상한선)만 설정합니다. 차이는 적용 단위입니다. SCP는 Organizations 관리자가 계정·OU·루트 단위로 설정하고, 권한 경계는 계정 내 IAM 관리자가 개별 IAM 사용자·역할에 설정합니다.",
+      "wrongExplanations": {
+        "0": "적용 범위가 뒤바뀌었습니다. SCP가 계정·OU 전체에 적용되고, 권한 경계가 개별 사용자·역할에 적용됩니다.",
+        "1": "SCP도 권한을 직접 부여하지 않습니다. 둘 다 상한선 설정 도구이며, 실제 권한 부여는 아이덴티티 기반 정책이나 리소스 기반 정책이 담당합니다.",
+        "3": "권한 경계는 Organizations와 무관한 단일 계정 내 IAM 기능입니다. Organizations가 없는 단일 계정에서도 권한 경계를 사용할 수 있습니다."
+      },
+      "sources": [
+        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q6",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "서비스 연결 역할 SCP 예외",
+      "difficulty": "applied",
+      "stem": "한 보안 팀이 OU 전체에 강력한 SCP를 적용해 대부분의 API 호출을 Deny했다. 그런데 일부 AWS 서비스가 해당 계정 내에서 정상 작동하고 있다. 이 서비스들이 SCP 제한에도 불구하고 작동하는 이유는?",
+      "options": [
+        "관리 계정에서 실행 중인 서비스는 SCP를 우회한다",
+        "AWS 서비스가 사용하는 서비스 연결 역할(Service-linked role)에는 SCP가 적용되지 않는다",
+        "SCP는 IAM 역할에는 적용되지 않고 IAM 사용자에게만 적용된다",
+        "Deny보다 나중에 평가된 서비스가 SCP를 통과한다"
+      ],
+      "correct": 1,
+      "explanation": "서비스 연결 역할(Service-linked role)은 AWS 서비스가 해당 계정에서 작동하기 위해 위임받아 사용하는 역할로, SCP 평가에서 제외됩니다. SCP로 서비스 연결 역할을 막으면 AWS 서비스 자체가 동작하지 않는 부작용이 생기므로 Organizations가 이 역할 유형을 예외 처리합니다.",
+      "wrongExplanations": {
+        "0": "SCP는 멤버 계정에 적용되며, 서비스가 어떤 계정에서 실행되는지와 무관하게 서비스 연결 역할은 SCP 예외입니다. 관리 계정 자체가 SCP 예외이지, 관리 계정에서 실행되는 서비스가 예외인 것이 아닙니다.",
+        "2": "SCP는 IAM 사용자와 IAM 역할 모두에 적용됩니다. 멤버 계정의 루트 사용자에게도 적용됩니다. 예외는 서비스 연결 역할 유형뿐입니다.",
+        "3": "SCP 평가에는 순서 우선이 없으며 모든 계층의 SCP가 AND 교집합으로 동시에 평가됩니다."
+      },
+      "sources": [
+        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q7",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "다계정 로그 보호 아키텍처",
+      "difficulty": "applied",
+      "stem": "기업 보안 정책에 따라 CloudTrail 로그를 운영 계정의 관리자도 삭제하거나 변조할 수 없어야 한다. 이를 구현하는 가장 적합한 아키텍처는?",
+      "options": [
+        "각 운영 계정 S3 버킷에 CloudTrail 로그를 저장하고 IAM 정책으로 삭제를 금지한다",
+        "Organizations 루트에 SCP를 적용해 `cloudtrail:DeleteTrail`을 Deny하고, 별도 로그 아카이브 계정의 S3 버킷에 로그를 중앙 저장한다",
+        "CloudTrail 로그를 관리 계정 S3 버킷에 저장하면 멤버 계정 관리자가 접근할 수 없다",
+        "CloudTrail 서비스는 기본적으로 로그 삭제를 차단하므로 추가 설정이 필요 없다"
+      ],
+      "correct": 1,
+      "explanation": "두 가지를 결합합니다. 첫째, SCP로 조직 전체에 `cloudtrail:DeleteTrail`·`cloudtrail:StopLogging`·`cloudtrail:UpdateTrail`을 Deny해 멤버 계정 루트를 포함한 모든 아이덴티티가 CloudTrail을 비활성화·삭제하지 못하게 합니다. 둘째, 로그를 별도 로그 아카이브 계정에 격리하면 운영 계정이 침해되어도 로그의 계정 경계가 독립적으로 보호합니다.",
+      "wrongExplanations": {
+        "0": "로그가 운영 계정 안에 있으면 그 계정이 침해된 공격자는 로그도 삭제하거나 변조할 수 있습니다. IAM 정책은 계정 내 관리자가 수정할 수 있어 충분하지 않습니다.",
+        "2": "관리 계정에 워크로드나 로그를 보관하는 것은 모범 사례에 어긋납니다. 관리 계정은 Organizations 관리 전용으로만 사용해야 합니다.",
+        "3": "CloudTrail은 기본적으로 로그 삭제를 차단하지 않습니다. `DeleteTrail` API는 기본 허용 상태이며 SCP나 S3 Object Lock 같은 추가 보호 설정이 필요합니다."
+      },
+      "sources": [
+        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" },
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q8",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "Control Tower 용도(빠른 다계정 구축)",
+      "difficulty": "applied",
+      "stem": "스타트업이 빠르게 AWS 다계정 환경을 구축해야 한다. 보안·규정 준수 모범 사례가 사전 적용된 환경이 필요하고, 새 팀이 계정을 요청할 때마다 표준 구성으로 자동 프로비저닝되어야 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Control Tower를 사용해 Landing Zone을 설정하고 Account Factory로 계정을 프로비저닝한다",
+        "AWS Organizations를 직접 구성해 계정을 수동으로 생성한다",
+        "각 계정을 독립적으로 생성하고 IAM 정책으로 규정 준수를 적용한다",
+        "AWS Config 규칙만 사용해 규정 준수를 모니터링한다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Control Tower는 모범 사례 기반의 Landing Zone을 자동 구성하고 예방·탐지·사전예방 가드레일을 사전 탑재합니다. Account Factory는 표준 구성으로 새 계정을 자동 프로비저닝하는 템플릿입니다. '빠르게 + 모범 사례 + 표준 프로비저닝' 세 조건이 있으면 Control Tower가 정답입니다.",
+      "wrongExplanations": {
+        "1": "Organizations를 직접 구성하면 유연하지만 가드레일·계정 프로비저닝 자동화를 직접 구현해야 해 시간이 많이 걸립니다. 빠른 구축이 필요한 경우 Control Tower가 적합합니다.",
+        "2": "계정을 독립적으로 생성하고 IAM 정책만으로 규정 준수를 적용하면 중앙화된 가드레일 없이 계정마다 개별 설정이 필요해 확장성이 없습니다.",
+        "3": "AWS Config는 탐지적 가드레일 도구로 위반을 알려주지만 사전 차단하거나 계정을 자동 프로비저닝하지는 않습니다. Control Tower의 탐지적 가드레일 구현 요소 중 하나일 뿐입니다."
+      },
+      "sources": [
+        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q9",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "Control Tower 가드레일 유형(예방·탐지·사전예방)",
+      "difficulty": "foundational",
+      "stem": "AWS Control Tower에는 세 가지 가드레일 유형이 있다. '리소스 프로비저닝 전에 비준수 리소스가 생성되는 것을 IaC 배포 단계에서 차단'하는 유형과 구현 도구의 조합으로 옳은 것은?",
+      "options": [
+        "예방적(Preventive) — SCP",
+        "탐지적(Detective) — AWS Config 규칙",
+        "사전예방적(Proactive) — CloudFormation 훅",
+        "탐지적(Detective) — CloudTrail"
+      ],
+      "correct": 2,
+      "explanation": "사전예방적(Proactive) 가드레일은 CloudFormation 훅으로 구현됩니다. IaC 배포 단계에서 리소스가 생성되기 전 규정 준수 여부를 확인해 비준수 리소스를 사전에 차단합니다. 예방적 가드레일은 SCP, 탐지적 가드레일은 AWS Config 규칙으로 구현됩니다.",
+      "wrongExplanations": {
+        "0": "예방적 가드레일은 SCP로 구현해 규정 위반 IAM API 호출 자체를 차단합니다. 하지만 이미 잘못 구성된 기존 리소스나 IaC 배포 단계는 커버하지 못합니다.",
+        "1": "탐지적 가드레일은 AWS Config 규칙으로 실시간 구성 변화를 감시해 SCP가 놓친 드리프트를 발견합니다. 배포 전 차단이 아니라 배포 후 상태 감지입니다.",
+        "3": "CloudTrail은 Control Tower 가드레일의 구현 도구가 아닙니다. CloudTrail은 API 호출 감사 로그 서비스로, 탐지적 가드레일은 AWS Config 규칙이 담당합니다."
+      },
+      "sources": [
+        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q10",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "Control Tower vs Organizations 관계",
+      "difficulty": "foundational",
+      "stem": "AWS Control Tower와 AWS Organizations의 관계에 대한 설명으로 가장 옳은 것은?",
+      "options": [
+        "Control Tower는 Organizations를 대체하며 Organizations 없이 독립적으로 작동한다",
+        "Control Tower는 Organizations를 오케스트레이션하는 추상화 레이어로 내부적으로 Organizations를 사용한다",
+        "Organizations는 Control Tower의 하위 기능으로 Control Tower 없이 단독 사용이 불가하다",
+        "두 서비스는 완전히 독립적이며 서로 연동되지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "Control Tower는 Organizations를 오케스트레이션(조율)하는 추상화 레이어입니다. 내부적으로 Organizations를 사용하며 가드레일·Account Factory·대시보드를 추가하는 상위 서비스입니다. Organizations를 직접 구성할 수도 있고, Control Tower를 통해 모범 사례 환경을 빠르게 구성할 수도 있습니다.",
+      "wrongExplanations": {
+        "0": "Control Tower는 Organizations를 대체하지 않습니다. Control Tower가 배포되면 그 아래 Organizations 트리가 실제 구조를 담당하며 두 서비스는 함께 동작합니다.",
+        "2": "Organizations는 Control Tower 없이 단독으로 사용 가능한 독립 서비스입니다. 통합 결제와 SCP는 Organizations만으로도 구성할 수 있습니다.",
+        "3": "Control Tower는 Organizations와 긴밀하게 통합되어 있습니다. Control Tower를 설정하면 Organizations OU 트리, SCP, IAM Identity Center가 자동으로 구성됩니다."
+      },
+      "sources": [
+        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q11",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "다계정 계정 분리 모범 사례",
+      "difficulty": "applied",
+      "stem": "AWS Well-Architected 기반 다계정 전략에서 '감사(Audit) 계정'을 별도로 두는 주된 이유는?",
+      "options": [
+        "감사 계정에서 모든 워크로드를 실행해 비용을 절감한다",
+        "감사 계정은 보안팀이 전 계정에 읽기 전용으로 접근할 수 있어 운영 계정 침해 시에도 독립적인 조사가 가능하다",
+        "감사 계정에 SCP를 붙이면 다른 계정에도 자동으로 SCP가 전파된다",
+        "감사 계정은 관리 계정의 백업 역할을 하며 Organizations 장애 시 대체된다"
+      ],
+      "correct": 1,
+      "explanation": "감사 계정은 보안팀 전용으로 전 계정에 읽기 전용 접근 권한을 가집니다. 운영 계정이 침해되어도 감사 계정은 별도 계정 경계로 격리되어 있어 독립적인 침해 조사가 가능합니다. 이것이 계정 분리의 핵심 보안 원칙인 폭발 반경(blast radius) 제한입니다.",
+      "wrongExplanations": {
+        "0": "감사 계정에 워크로드를 실행하면 안 됩니다. 감사 계정은 전 계정 모니터링 전용이며 워크로드 실행 시 감사 기능이 오염될 수 있습니다.",
+        "2": "SCP 전파는 Organizations의 OU 계층 구조를 통해 이루어지며 특정 계정에 SCP를 붙인다고 다른 계정으로 전파되지 않습니다.",
+        "3": "감사 계정은 관리 계정의 백업이 아닙니다. 관리 계정 장애 시 대체되는 기능은 없으며, 감사 계정의 목적은 독립적인 보안 모니터링입니다."
+      },
+      "sources": [
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q12",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "Organizations 전체 기능 모드",
+      "difficulty": "foundational",
+      "stem": "한 팀이 AWS Organizations를 사용 중인데 SCP를 적용하려 했으나 SCP 기능을 찾을 수 없다. 가장 가능성 높은 원인은?",
+      "options": [
+        "SCP는 루트 계정에서만 적용 가능하고 하위 OU에는 적용 불가하다",
+        "Organizations가 통합 결제 전용 모드로 활성화되어 있어 SCP를 포함한 정책 기능이 비활성화되어 있다",
+        "SCP는 유료 기능으로 별도 구독이 필요하다",
+        "SCP는 특정 AWS 리전에서만 지원된다"
+      ],
+      "correct": 1,
+      "explanation": "Organizations는 두 가지 모드로 활성화됩니다. 통합 결제 전용 모드에서는 SCP를 비롯한 정책 기능이 비활성화됩니다. SCP를 사용하려면 전체 기능 모드(All features)를 활성화해야 합니다. 통합 결제만 필요한 경우 전용 모드로도 충분하지만 SCP를 사용하려면 전체 기능 모드가 필수입니다.",
+      "wrongExplanations": {
+        "0": "SCP는 루트뿐 아니라 OU와 개별 계정 단위로도 적용할 수 있습니다. 루트에 붙이면 전 조직에, OU에 붙이면 해당 OU 하위에 적용됩니다.",
+        "2": "SCP는 Organizations의 기본 포함 기능으로 별도 구독이나 추가 요금이 없습니다.",
+        "3": "Organizations와 SCP는 글로벌 서비스로 특정 리전에 종속되지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q13",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "IAM Identity Center 다계정 접근 흐름",
+      "difficulty": "applied",
+      "stem": "한 기업이 50개 AWS 계정과 Active Directory를 보유하고 있다. 직원이 IAM Identity Center 포털에서 특정 계정을 선택해 접근하면 어떤 방식으로 자격증명이 발급되는가?",
+      "options": [
+        "직원의 Active Directory 자격증명이 그대로 AWS 계정에 전달된다",
+        "IAM Identity Center는 장기 액세스 키를 발급해 직원이 보관한다",
+        "계정 선택 시 해당 계정의 루트 사용자로 로그인된다",
+        "IAM Identity Center가 STS를 통해 선택한 계정의 임시 자격증명을 발급하며 권한 세트로 정의된 권한을 갖는다"
+      ],
+      "correct": 3,
+      "explanation": "IAM Identity Center에서 사용자가 계정과 권한 세트를 선택하면, IAM Identity Center가 STS를 통해 해당 계정의 임시 자격증명을 발급합니다. 임시 자격증명은 권한 세트로 정의된 IAM 권한 범위를 가지며 만료 후 재발급이 필요합니다. 장기 키를 배포하지 않으므로 유출 위험이 최소화됩니다.",
+      "wrongExplanations": {
+        "0": "AD 자격증명이 AWS 계정에 직접 전달되지 않습니다. IAM Identity Center가 AD 인증을 처리하고 내부적으로 STS 임시 자격증명으로 변환합니다.",
+        "1": "IAM Identity Center는 장기 액세스 키를 발급하지 않습니다. STS 임시 자격증명을 사용해 단기 세션을 구성하는 것이 핵심 보안 설계입니다.",
+        "2": "IAM Identity Center는 루트 사용자로 로그인하지 않습니다. 루트 사용자 자격증명을 일상 작업에 사용하는 것은 보안 모범 사례에 어긋납니다."
+      },
+      "sources": [
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q14",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "IAM Identity Center 권한 세트(Permission Set)",
+      "difficulty": "applied",
+      "stem": "기업이 30개 AWS 계정에 동일한 '개발자 읽기 전용' 권한을 부여해야 한다. 나중에 이 권한을 일괄 변경할 수도 있어야 한다. IAM Identity Center를 사용할 때 가장 효율적인 방법은?",
+      "options": [
+        "30개 계정 각각에 동일한 IAM 정책을 직접 생성해 관리한다",
+        "IAM Identity Center에서 권한 세트(Permission Set) 하나를 정의하고 30개 계정에 할당한다",
+        "30개 계정에 IAM 사용자를 각각 생성하고 동일 정책을 붙인다",
+        "Organizations 루트에 SCP를 붙여 개발자에게 읽기 전용을 허용한다"
+      ],
+      "correct": 1,
+      "explanation": "권한 세트(Permission Set)는 IAM Identity Center에서 중앙 정의하는 재사용 가능한 IAM 권한 템플릿입니다. 한 번 정의하면 할당된 모든 계정에 자동 프로비저닝되고, 변경 시 한 번의 수정으로 30개 계정에 즉시 반영됩니다. 각 계정에 개별 정책을 만들면 변경 시 30개를 순회해야 하고 누락 위험이 있습니다.",
+      "wrongExplanations": {
+        "0": "계정마다 개별 IAM 정책을 만들면 권한 변경 시 30개 계정을 순회해야 하고 누락 계정이 생길 수 있습니다. 권한 세트의 중앙 관리 방식이 이 문제를 해결합니다.",
+        "2": "계정마다 IAM 사용자를 생성하는 방식은 사용자 수 관리 부담이 크고, 퇴사 처리·권한 변경 시 모든 계정을 개별 처리해야 합니다.",
+        "3": "SCP는 권한 부여가 아니라 상한선 설정입니다. 개발자에게 읽기 권한을 부여하려면 IAM 정책(권한 세트 포함)이 필요하며 SCP만으로는 권한을 줄 수 없습니다."
+      },
+      "sources": [
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-2-q15",
+      "examGuideTaskId": "saa-t1-2",
+      "skill": "폭발 반경 제한(계정 격리 원칙)",
+      "difficulty": "applied",
+      "stem": "한 회사가 단일 AWS 계정에서 개발·스테이징·운영 워크로드를 모두 실행하고 있다. 보안 아키텍트가 다계정 전략으로 전환을 권장한다. 가장 중요한 보안 이유는?",
+      "options": [
+        "다계정 환경에서는 EC2 인스턴스 성능이 향상된다",
+        "계정 분리는 폭발 반경을 제한해 한 계정 침해 시 다른 계정으로 사고가 확산되지 않는다",
+        "단일 계정에서는 IAM 사용자를 100명 이상 생성할 수 없다",
+        "다계정 환경은 AWS 비용이 항상 절감된다"
+      ],
+      "correct": 1,
+      "explanation": "다계정 전략의 핵심 보안 이점은 폭발 반경(blast radius) 제한입니다. 계정 경계가 보안 격리 단위가 되어, 운영 계정이 침해되어도 개발·스테이징 계정과 로그 아카이브 계정에 영향이 없습니다. 단일 계정에서는 한 IAM 역할 침해만으로 모든 환경의 리소스가 노출될 수 있습니다.",
+      "wrongExplanations": {
+        "0": "계정 분리는 EC2 성능과 무관합니다. 성능은 인스턴스 유형·배치 그룹·네트워크 구성 등 인프라 설정에 의존합니다.",
+        "2": "IAM 사용자 수 제한은 계정 분리의 이유가 아닙니다. IAM 사용자는 단일 계정에서도 수천 명까지 생성 가능하며, 다계정 전환의 핵심은 보안 격리입니다.",
+        "3": "다계정 환경이 항상 비용을 절감하지는 않습니다. 통합 결제로 볼륨 할인은 가능하지만 관리 오버헤드가 증가할 수 있습니다. 다계정 전환의 주요 동인은 비용이 아니라 보안·규정 준수입니다."
+      },
+      "sources": [
+        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" },
+        { "title": "SAA-C03 공식 시험 가이드 (한국어)", "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

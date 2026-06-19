@@ -1,0 +1,370 @@
+{
+  "examGuideTaskId": "saa-t3-8",
+  "taskTitle": "하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-8-q1",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "VPC 피어링 비전이 특성",
+      "difficulty": "foundational",
+      "stem": "VPC-A와 VPC-B 사이에 피어링이 있고, VPC-B와 VPC-C 사이에도 피어링이 있다. VPC-A의 인스턴스가 VPC-C의 인스턴스에 직접 통신하려 할 때 어떤 일이 발생하는가?",
+      "options": [
+        "VPC-B가 중간 라우터 역할을 해 VPC-A와 VPC-C가 통신할 수 있다",
+        "VPC 피어링은 비전이(non-transitive)이므로 VPC-A와 VPC-C는 통신할 수 없다",
+        "같은 리전이면 피어링 없이도 VPC 간 자동 통신이 된다",
+        "VPC-B에 NAT 게이트웨이를 배치하면 VPC-A에서 VPC-C로 트래픽을 전달할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "VPC 피어링은 비전이(non-transitive) 특성을 가집니다. A-B, B-C 피어링이 존재해도 A와 C는 통신할 수 없습니다. VPC-B는 A-C 사이의 트래픽을 중계하지 않습니다. A-C 통신을 원하면 별도로 A-C 피어링을 추가하거나 Transit Gateway를 사용해야 합니다.",
+      "wrongExplanations": {
+        "0": "VPC 피어링은 1:1 네트워크 약속이어서 VPC-B가 A와 C 양쪽에 피어링돼 있어도 B는 A-C 사이의 트래픽을 대신 전달하는 역할을 하지 않습니다. 전이 라우팅을 허용하면 중간 VPC가 경로를 제어하기 어려워집니다.",
+        "2": "같은 리전이어도 VPC는 기본적으로 격리된 네트워크입니다. 피어링이나 Transit Gateway 없이는 VPC 간 통신이 불가능합니다.",
+        "3": "NAT 게이트웨이는 프라이빗 서브넷의 아웃바운드 인터넷 트래픽용이며, VPC 피어링의 비전이 제약을 우회하는 수단이 아닙니다."
+      },
+      "sources": [
+        { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q2",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Transit Gateway 허브-스포크 모델",
+      "difficulty": "foundational",
+      "stem": "한 회사가 AWS에 VPC 10개를 운영하며 온프레미스 데이터센터와도 연결해야 한다. 모든 VPC와 온프레미스가 서로 통신할 수 있어야 한다. VPC 피어링만으로 구성하려면 피어링 연결이 몇 개 필요한가?",
+      "options": [
+        "10개",
+        "20개",
+        "45개",
+        "100개"
+      ],
+      "correct": 2,
+      "explanation": "VPC n개를 피어링 메시로 완전 연결하려면 n(n-1)/2개의 피어링이 필요합니다. VPC 10개의 경우 10×9/2 = 45개입니다. 여기에 온프레미스 연결까지 각 VPC마다 추가로 설정해야 하므로 관리 부담이 매우 큽니다. Transit Gateway를 사용하면 모든 VPC와 온프레미스를 단일 허브에 어태치하는 것으로 해결됩니다.",
+      "wrongExplanations": {
+        "0": "10개는 VPC 수일 뿐 피어링 수가 아닙니다. 1개 VPC가 나머지 9개와 각각 피어링해야 하므로 훨씬 많은 연결이 필요합니다.",
+        "1": "20개는 VPC 10개를 직선 체인처럼 연결할 때의 수에 가깝지만, 완전 메시에는 모든 쌍이 피어링돼야 합니다.",
+        "3": "100개는 n² 공식에 해당하며 실제 공식 n(n-1)/2보다 두 배 이상 많습니다. 방향 없는 연결이므로 A-B와 B-A는 같은 피어링입니다."
+      },
+      "sources": [
+        { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q3",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Site-to-Site VPN 구성 요소",
+      "difficulty": "foundational",
+      "stem": "온프레미스 데이터센터와 AWS VPC를 Site-to-Site VPN으로 연결할 때 온프레미스 측 라우터·방화벽 장비 정보를 AWS에 등록하는 리소스는?",
+      "options": [
+        "가상 프라이빗 게이트웨이(Virtual Private Gateway)",
+        "인터넷 게이트웨이(Internet Gateway)",
+        "NAT 게이트웨이",
+        "고객 게이트웨이(Customer Gateway)"
+      ],
+      "correct": 3,
+      "explanation": "고객 게이트웨이(CGW)는 온프레미스 측 라우터·방화벽 장비 또는 소프트웨어로, AWS에 장비 정보를 등록하는 리소스입니다. 가상 프라이빗 게이트웨이(VGW)는 AWS 측 VPN 엔드포인트로 단일 VPC에 연결됩니다. 두 게이트웨이 사이에 IPsec 터널이 형성됩니다.",
+      "wrongExplanations": {
+        "0": "가상 프라이빗 게이트웨이(VGW)는 AWS 측 VPN 엔드포인트입니다. 온프레미스 장비 정보를 등록하는 리소스가 아닙니다.",
+        "1": "인터넷 게이트웨이는 VPC와 공용 인터넷을 연결하는 컴포넌트이며 VPN 구성 요소가 아닙니다.",
+        "2": "NAT 게이트웨이는 프라이빗 서브넷의 아웃바운드 인터넷 접근을 위한 서비스이며 VPN 엔드포인트가 아닙니다."
+      },
+      "sources": [
+        { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q4",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Site-to-Site VPN 고가용성 구조",
+      "difficulty": "foundational",
+      "stem": "Site-to-Site VPN 연결 1개에는 기본적으로 몇 개의 터널이 제공되며, 그 이유는?",
+      "options": [
+        "2개 — 서로 다른 AWS 엔드포인트에 연결되어 하나 장애 시 다른 터널로 자동 우회된다",
+        "1개 — 단일 암호화 채널로 충분하다",
+        "4개 — 가용 영역 4개에 각각 대응한다",
+        "연결 시 선택한 수만큼 생성된다"
+      ],
+      "correct": 0,
+      "explanation": "Site-to-Site VPN 연결에는 항상 2개의 터널이 포함됩니다. 두 터널은 서로 다른 AWS 엔드포인트에 연결되어, 하나가 장애를 일으키면 온프레미스 장비가 자동으로 다른 터널로 트래픽을 넘길 수 있습니다. 두 터널을 동시에 활성화하면 부하 분산도 가능합니다.",
+      "wrongExplanations": {
+        "1": "단일 터널이면 해당 AWS 가용 영역 엔드포인트 장비에 문제가 생길 때 연결 전체가 끊깁니다. 2개 터널은 기본 고가용성 구조입니다.",
+        "2": "터널 수는 고정 2개입니다. 4개 AZ에 각각 대응하는 구조가 아닙니다.",
+        "3": "VPN 터널 수는 사용자가 선택하는 것이 아니라 연결당 고정 2개로 제공됩니다."
+      },
+      "sources": [
+        { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q5",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "VPN vs Direct Connect 선택 — 즉시성",
+      "difficulty": "applied",
+      "stem": "한 기업이 온프레미스 데이터센터와 AWS VPC를 연결해야 한다. 요구사항은 '오늘 안에 연결을 완료'하고 초기 트래픽은 50 Mbps 수준이다. 가장 적합한 연결 방법은?",
+      "options": [
+        "Direct Connect — 전용 물리 회선으로 안정적으로 연결할 수 있다",
+        "Direct Connect Gateway — 글로벌 리소스라 즉시 사용 가능하다",
+        "Site-to-Site VPN — 수 분 내 구축 가능하며 즉시성 요건을 충족한다",
+        "VPC 피어링 — 온프레미스와 VPC를 직접 연결한다"
+      ],
+      "correct": 2,
+      "explanation": "즉시성이 요구되는 경우 Site-to-Site VPN이 답입니다. VPN은 공용 인터넷을 이용한 소프트웨어 설정만으로 수 분 내 구축 가능합니다. Direct Connect는 물리 회선 설치가 선행되어야 하므로 구축에 수 주의 리드타임이 필요합니다.",
+      "wrongExplanations": {
+        "0": "Direct Connect 구축에는 파트너사 협의 및 물리 회선 설치로 수 주의 리드타임이 걸립니다. '오늘 안에 연결'이라는 즉시성 요건을 충족할 수 없습니다.",
+        "1": "Direct Connect Gateway는 글로벌 리소스이지만 여전히 Direct Connect 물리 회선 설치가 전제입니다. 즉시성 문제는 해결되지 않습니다.",
+        "3": "VPC 피어링은 VPC와 VPC 사이의 연결 방법이며 온프레미스 데이터센터와 VPC를 연결하는 수단이 아닙니다."
+      },
+      "sources": [
+        { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
+        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q6",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Direct Connect 기본 암호화 여부",
+      "difficulty": "foundational",
+      "stem": "Direct Connect에 대한 설명으로 옳은 것은?",
+      "options": [
+        "공용 인터넷 위에서 IPsec 암호화 터널로 동작한다",
+        "기본적으로 전송 계층 암호화가 포함되어 있다",
+        "구축에 수 분이면 충분하다",
+        "전용 물리 회선을 사용하며 기본 암호화는 없다"
+      ],
+      "correct": 3,
+      "explanation": "Direct Connect는 표준 이더넷 광섬유 케이블로 내부 네트워크를 DX 위치에 직접 연결하는 전용 물리 회선입니다. 공용 인터넷을 거치지 않아 일관된 대역폭과 저지연을 제공하지만, 기본 암호화는 없습니다. 암호화가 필요하면 DX 위에 IPsec VPN을 얹는 패턴(DX over VPN)을 사용합니다.",
+      "wrongExplanations": {
+        "0": "공용 인터넷 위 IPsec 터널로 동작하는 것은 Site-to-Site VPN입니다. Direct Connect는 ISP를 우회하는 전용 물리 회선입니다.",
+        "1": "Direct Connect는 기본 암호화를 포함하지 않습니다. 물리적 격리는 제공하지만 전송 계층 암호화와는 다른 개념입니다.",
+        "2": "Direct Connect 구축에는 파트너사 협의와 물리 회선 설치로 수 주의 리드타임이 필요합니다. 수 분 내 구축이 가능한 것은 Site-to-Site VPN입니다."
+      },
+      "sources": [
+        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q7",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "DX over VPN 암호화 패턴",
+      "difficulty": "applied",
+      "stem": "금융 기업이 Direct Connect로 AWS에 연결 중이다. 규정 감사 결과 '모든 전송 중 데이터는 암호화되어야 한다'는 요건이 확인됐다. 현재 구성에서 무엇이 누락되어 있으며 어떻게 해결해야 하는가?",
+      "options": [
+        "Direct Connect를 Site-to-Site VPN으로 교체해야만 암호화 요건을 충족할 수 있다",
+        "Direct Connect에 보안 그룹을 적용해 암호화를 활성화한다",
+        "Direct Connect는 기본 암호화가 없으므로 DX 위에 IPsec 터널을 얹는 DX over VPN 패턴을 적용해야 한다",
+        "Direct Connect는 기본 암호화를 포함하므로 추가 조치가 필요 없다"
+      ],
+      "correct": 2,
+      "explanation": "Direct Connect는 기본 암호화를 제공하지 않습니다. 전용 물리 회선이 물리적 격리를 제공하지만 이는 전송 계층 암호화와 다릅니다. 해결책은 DX over VPN 패턴으로, Direct Connect 연결 위에 IPsec VPN 터널을 구성하면 전용 회선의 일관된 대역폭·저지연을 유지하면서 전송 암호화 요건도 충족합니다.",
+      "wrongExplanations": {
+        "0": "DX를 VPN으로 완전 교체할 필요 없이, DX over VPN 패턴으로 기존 Direct Connect 위에 IPsec 터널을 얹으면 두 가지 장점을 모두 확보할 수 있습니다.",
+        "1": "보안 그룹은 VPC 내 인스턴스 레벨의 네트워크 트래픽 제어 도구이며, Direct Connect 연결의 전송 암호화를 활성화하는 기능이 없습니다.",
+        "3": "Direct Connect는 기본 암호화가 없습니다. 이는 흔한 함정으로, 전용 물리 회선의 물리적 격리와 전송 계층 암호화는 다른 개념입니다."
+      },
+      "sources": [
+        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q8",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "DX + VPN 백업 패턴",
+      "difficulty": "applied",
+      "stem": "한 기업이 온프레미스와 AWS 사이에 Direct Connect를 운영 중이다. DX 회선 장애 시 서비스 중단 없이 연결을 유지해야 하며, 비용도 최소화해야 한다. 가장 적합한 아키텍처는?",
+      "options": [
+        "DX 장애 대비 방법은 없으므로 SLA를 낮춘다",
+        "Direct Connect를 기본 경로로 두고 Site-to-Site VPN을 백업으로 구성한다",
+        "VPC 피어링으로 온프레미스와 AWS를 이중 연결한다",
+        "Direct Connect 회선을 2개 구축해 액티브-액티브로 운영한다"
+      ],
+      "correct": 1,
+      "explanation": "DX + VPN 백업 패턴이 권장됩니다. Direct Connect를 기본 경로로 두면 정상 운영 시 안정적인 대역폭과 저지연을 확보하고, DX 장애 시에는 Site-to-Site VPN이 자동으로 우회 경로를 제공합니다. VPN은 구축이 빠르고 비용이 낮으므로 백업 역할에 비용 효율적으로 적합합니다.",
+      "wrongExplanations": {
+        "0": "DX + VPN 백업 패턴이 표준 고가용성 아키텍처입니다. 연결 이중화 없이 SLA를 낮추는 것은 비즈니스 요건을 충족하지 못하는 잘못된 접근입니다.",
+        "2": "VPC 피어링은 VPC 간 연결 방법이며 온프레미스 데이터센터와 VPC를 연결하는 수단이 아닙니다.",
+        "3": "DX 회선 2개 구축도 가용성을 높이는 방법이지만, 비용이 두 배로 증가합니다. VPN 백업 패턴은 비용 효율적으로 가용성을 확보하는 방법이며 '비용 최소화' 요건에 더 부합합니다."
+      },
+      "sources": [
+        { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
+        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q9",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Direct Connect Gateway 다중 리전 접근",
+      "difficulty": "applied",
+      "stem": "한 기업이 us-east-1에 Direct Connect 연결을 하나 보유하고 있으며, ap-northeast-2(서울) 리전의 VPC에도 같은 DX 연결로 접근하고 싶다. 가장 적합한 방법은?",
+      "options": [
+        "Direct Connect Gateway를 사용해 단일 DX 연결로 여러 리전의 VPC에 접근한다",
+        "서울 리전에 별도 Direct Connect 연결을 추가로 구축해야 한다",
+        "Direct Connect는 단일 리전에서만 사용 가능하다",
+        "VPN을 서울 리전에 구축하고 DX 연결과 터널을 연결한다"
+      ],
+      "correct": 0,
+      "explanation": "Direct Connect Gateway(DXGW)는 특정 리전에 종속되지 않는 글로벌 리소스입니다. 단일 DX 연결을 DXGW에 연결하면, 서로 다른 리전의 VPC(VGW 또는 Transit Gateway)를 DXGW에 추가로 연결해 단일 물리 회선으로 여러 리전에 접근할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Direct Connect Gateway 덕분에 리전마다 별도 DX 연결을 구축하지 않아도 됩니다. 단일 DX 연결로 글로벌 멀티 리전 접근이 가능합니다.",
+        "2": "Direct Connect 자체는 특정 위치의 물리 회선이지만, Direct Connect Gateway가 글로벌 리소스이므로 여러 리전의 VPC와 연결할 수 있습니다.",
+        "3": "VPN과 DX를 조합하는 DX over VPN 패턴은 암호화 목적이며, 다중 리전 접근 문제는 Direct Connect Gateway로 해결하는 것이 적합합니다."
+      },
+      "sources": [
+        { "title": "AWS Direct Connect Gateway (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q10",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Direct Connect Gateway VPC 간 브리지 불가",
+      "difficulty": "applied",
+      "stem": "VPC-X와 VPC-Y가 모두 동일한 Direct Connect Gateway에 연결돼 있다. 온프레미스는 이 DXGW를 통해 두 VPC에 접근한다. VPC-X의 인스턴스가 VPC-Y의 인스턴스와 직접 통신하려면 어떻게 해야 하는가?",
+      "options": [
+        "DXGW가 두 VPC를 브리지하므로 추가 설정 없이 통신된다",
+        "DXGW 라우팅 테이블에 VPC-X↔VPC-Y 경로를 추가하면 된다",
+        "온프레미스를 경유하는 라우팅을 활성화하면 된다",
+        "DXGW는 VPC 간 브리지가 아니므로 Transit Gateway를 사용해야 한다"
+      ],
+      "correct": 3,
+      "explanation": "Direct Connect Gateway에 연결된 VGW 사이의 트래픽은 기본적으로 차단됩니다. DXGW는 온프레미스와 여러 리전의 VPC를 연결하는 목적이며, 같은 DXGW에 연결된 VPC 간 통신을 브리지하는 기능이 아닙니다. VPC 간 통신이 필요하다면 Transit Gateway를 사용해야 합니다.",
+      "wrongExplanations": {
+        "0": "DXGW는 온프레미스-VPC 연결 목적이며 VPC 간 브리지가 아닙니다. 같은 DXGW에 연결된 VPC 사이의 트래픽은 기본 차단됩니다.",
+        "1": "DXGW는 VPC 간 라우팅을 지원하지 않습니다. 라우팅 테이블 수정으로 해결되는 구조가 아닙니다.",
+        "2": "온프레미스를 경유하는 트래픽(hair-pinning)은 지원되지 않습니다. DXGW에 연결된 VGW 간에는 기본적으로 트래픽이 차단됩니다."
+      },
+      "sources": [
+        { "title": "AWS Direct Connect Gateway (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q11",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "게이트웨이 엔드포인트 대상 서비스",
+      "difficulty": "foundational",
+      "stem": "프라이빗 서브넷의 EC2 인스턴스가 인터넷 없이 S3와 DynamoDB에 접근해야 한다. 비용이 발생하지 않는 방법으로 구성하려면 어떤 엔드포인트 유형을 사용해야 하는가?",
+      "options": [
+        "S3와 DynamoDB 모두 게이트웨이 엔드포인트를 사용한다 — 이 둘은 무료다",
+        "S3는 인터페이스 엔드포인트, DynamoDB는 게이트웨이 엔드포인트로 각각 구성한다",
+        "S3와 DynamoDB 모두 인터페이스 엔드포인트(PrivateLink)를 사용한다",
+        "NAT 게이트웨이를 프라이빗 서브넷에 두고 S3와 DynamoDB로 라우팅한다"
+      ],
+      "correct": 0,
+      "explanation": "게이트웨이 엔드포인트는 S3와 DynamoDB 전용으로 제공되며 무료입니다. 라우트 테이블에 항목을 추가하는 방식으로 동작하며 별도 ENI가 생성되지 않습니다. S3와 DynamoDB 모두 게이트웨이 엔드포인트를 사용하면 비용 없이 인터넷을 거치지 않고 접근할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "S3도 게이트웨이 엔드포인트를 지원합니다. 인터페이스 엔드포인트는 비용이 발생하므로 무료 구성 요건에 맞지 않습니다.",
+        "2": "인터페이스 엔드포인트(PrivateLink)는 시간당 요금과 데이터 처리 비용이 발생합니다. S3·DynamoDB 접근에는 무료인 게이트웨이 엔드포인트가 적합합니다.",
+        "3": "NAT 게이트웨이는 비용이 발생하고 인터넷을 경유합니다. S3·DynamoDB에 대한 인터넷 우회 요건과 비용 최소화 요건 모두 충족하지 못합니다."
+      },
+      "sources": [
+        { "title": "AWS PrivateLink — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q12",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "PrivateLink CIDR 겹침 허용",
+      "difficulty": "applied",
+      "stem": "SaaS 공급자의 VPC CIDR이 10.0.0.0/16이다. 여러 고객 VPC도 같은 CIDR 범위를 사용하고 있다. 고객이 공급자 서비스에 프라이빗하게 접근할 수 있게 하려면 어떤 방법을 사용해야 하는가?",
+      "options": [
+        "Transit Gateway — 중앙 허브에서 CIDR 중복을 자동으로 해결한다",
+        "VPC 피어링 — 양쪽 CIDR이 같더라도 라우팅 테이블 조정으로 동작한다",
+        "Direct Connect Gateway — CIDR 겹침을 허용하는 특별 기능이 있다",
+        "AWS PrivateLink(인터페이스 엔드포인트 서비스) — CIDR이 겹쳐도 동작한다"
+      ],
+      "correct": 3,
+      "explanation": "PrivateLink는 소비자 VPC 안에 ENI를 생성하고 해당 ENI의 사설 IP로만 서비스에 접근하는 방식으로, 소비자는 제공자 VPC의 IP 공간을 전혀 볼 필요가 없습니다. 두 VPC의 IP 공간이 격리된 채 ENI라는 단일 접점만 노출되므로 CIDR 겹침이 라우팅 충돌로 이어지지 않습니다.",
+      "wrongExplanations": {
+        "0": "Transit Gateway도 CIDR 중복이 있는 VPC 간 라우팅을 지원하지 않습니다. 중복 CIDR이 있으면 해당 VPC의 경로가 TGW 라우팅 테이블에 전파되지 않습니다.",
+        "1": "VPC 피어링은 두 VPC의 CIDR이 겹치면 생성 자체가 불가능합니다. 라우팅 테이블 조정으로 해결되는 문제가 아닙니다.",
+        "2": "Direct Connect Gateway는 온프레미스와 VPC 연결 목적이며 VPC 간 CIDR 겹침을 해결하는 기능이 없습니다."
+      },
+      "sources": [
+        { "title": "AWS PrivateLink — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q13",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "PrivateLink 엔드포인트 서비스 구성",
+      "difficulty": "applied",
+      "stem": "한 회사가 자신의 내부 서비스를 협력사 AWS 계정의 VPC에 인터넷 없이 사설로 제공하려 한다. 서비스 제공자 측 구성으로 올바른 것은?",
+      "options": [
+        "제공자 VPC에 인터넷 게이트웨이를 달아 협력사가 퍼블릭 IP로 접근하게 한다",
+        "제공자 VPC에서 서비스를 NLB 뒤에 두고 VPC 엔드포인트 서비스를 생성한다",
+        "제공자 VPC와 협력사 VPC를 VPC 피어링으로 연결한다",
+        "제공자 VPC에 게이트웨이 엔드포인트를 생성해 협력사에 공유한다"
+      ],
+      "correct": 1,
+      "explanation": "PrivateLink 엔드포인트 서비스는 제공자 VPC에서 서비스를 NLB 뒤에 두고 VPC 엔드포인트 서비스를 생성하는 방식으로 구성됩니다. 협력사(소비자)는 자신의 VPC에 인터페이스 엔드포인트를 생성해 접근합니다. 인터넷을 거치지 않으며 트래픽은 AWS 백본 내부에서만 이동합니다.",
+      "wrongExplanations": {
+        "0": "인터넷 게이트웨이를 통한 퍼블릭 접근은 '인터넷 없이 사설로 제공'이라는 요건에 어긋납니다.",
+        "2": "VPC 피어링은 두 VPC가 동등하게 서로의 IP 공간에 접근하는 방식으로 서비스 노출보다 훨씬 넓은 접근 범위를 허용합니다. PrivateLink는 특정 서비스만 노출해 보안 경계를 명확히 합니다.",
+        "3": "게이트웨이 엔드포인트는 S3·DynamoDB 전용이며 사용자 정의 서비스를 노출하는 데 사용할 수 없습니다."
+      },
+      "sources": [
+        { "title": "AWS PrivateLink — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q14",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Transit Gateway vs VPC 피어링 선택",
+      "difficulty": "applied",
+      "stem": "스타트업이 AWS에 VPC 2개(개발·운영)를 운영하며 서로 통신해야 한다. 온프레미스 연결 계획은 없고 향후 VPC가 늘어날 가능성도 낮다. 가장 비용 효율적인 연결 방법은?",
+      "options": [
+        "Transit Gateway — 중앙 허브로 확장성이 높다",
+        "Direct Connect — 안정적인 전용 회선으로 연결한다",
+        "VPC 피어링 — VPC 소수의 단순 연결에는 어태치먼트 비용이 없어 더 저렴하다",
+        "Direct Connect Gateway — 글로벌 리소스라 비용이 없다"
+      ],
+      "correct": 2,
+      "explanation": "VPC 2~3개의 단순 연결에는 VPC 피어링이 더 비용 효율적입니다. VPC 피어링은 데이터 전송비만 부과되는 반면, Transit Gateway는 어태치먼트 시간당 요금과 데이터 처리 비용이 추가됩니다. 온프레미스 연결 계획이 없고 VPC 수도 소수라면 피어링이 적합합니다.",
+      "wrongExplanations": {
+        "0": "Transit Gateway는 VPC 다수, 하이브리드 연결, 전이 라우팅이 필요한 환경에 적합합니다. VPC 2개의 단순 연결에는 어태치먼트 비용이 낭비입니다.",
+        "1": "Direct Connect는 온프레미스와 AWS 연결에 사용하며 VPC 간 연결 방법이 아닙니다. 또한 비용이 높고 VPC 2개 연결 요건에 맞지 않습니다.",
+        "3": "Direct Connect Gateway는 DX 연결 기반의 다중 리전 접근 도구이며 VPC 간 직접 연결 방법이 아닙니다. DX 자체 비용도 발생합니다."
+      },
+      "sources": [
+        { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-8-q15",
+      "examGuideTaskId": "saa-t3-8",
+      "skill": "Direct Connect VIF 유형",
+      "difficulty": "foundational",
+      "stem": "온프레미스 데이터센터가 Direct Connect를 통해 특정 VPC의 프라이빗 IP 주소로 접근해야 한다. 이 용도에 맞는 가상 인터페이스(VIF) 유형은?",
+      "options": [
+        "퍼블릭 VIF — 모든 AWS 서비스에 퍼블릭 IP로 접근한다",
+        "트랜짓 VIF — Transit Gateway를 통해 여러 VPC에 연결한다",
+        "프라이빗 VIF — 프라이빗 IP로 특정 VPC에 접근한다",
+        "게이트웨이 VIF — S3·DynamoDB 전용 접근에 사용한다"
+      ],
+      "correct": 2,
+      "explanation": "프라이빗 VIF는 Direct Connect에서 프라이빗 IP를 사용해 특정 VPC에 접근하는 가상 인터페이스입니다. VPC에 연결된 가상 프라이빗 게이트웨이(VGW) 또는 Direct Connect Gateway와 연결하며, 온프레미스에서 VPC 내부 사설 IP로 통신할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "퍼블릭 VIF는 모든 AWS 퍼블릭 서비스(S3, SQS 등)에 퍼블릭 IP로 접근하는 용도입니다. 특정 VPC의 프라이빗 IP 접근 목적이 아닙니다.",
+        "1": "트랜짓 VIF는 Direct Connect Gateway를 통해 Transit Gateway에 연결하는 용도입니다. 단일 VPC의 프라이빗 IP 접근보다 복잡한 구성입니다.",
+        "3": "게이트웨이 VIF는 Direct Connect에 존재하지 않는 유형입니다. 게이트웨이 엔드포인트는 VPC 내 S3·DynamoDB 접근 방법이며 Direct Connect VIF 유형이 아닙니다."
+      },
+      "sources": [
+        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

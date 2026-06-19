@@ -1,0 +1,371 @@
+{
+  "examGuideTaskId": "saa-t1-4",
+  "taskTitle": "애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager",
+  "domain": 1,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t1-4-q1",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "WAF vs Shield 역할 구분",
+      "difficulty": "foundational",
+      "stem": "웹 애플리케이션에 SQL injection 및 XSS 공격 시도가 지속적으로 탐지되고 있다. 이 위협을 방어하기에 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Shield Standard — L3/L4 DDoS 방어 기능으로 악성 SQL 패턴을 차단한다",
+        "AWS WAF — 웹 ACL에 SQL injection·XSS 탐지 규칙 또는 관리형 규칙 그룹을 추가해 L7 요청 내용을 필터링한다",
+        "AWS Firewall Manager — 다계정 WAF 정책을 중앙 배포해 SQL injection을 자동 차단한다",
+        "Amazon Cognito User Pool — 인증 단계에서 악성 요청을 사전 차단한다"
+      ],
+      "correct": 1,
+      "explanation": "SQL injection과 XSS는 HTTP 요청 내용(페이로드·헤더)의 악성 패턴이므로 L7 필터인 AWS WAF가 담당합니다. WAF 웹 ACL에 SQL injection 탐지 규칙, XSS 탐지 규칙을 추가하거나 AWS 관리형 규칙 그룹(AWSManagedRulesCommonRuleSet)을 사용하면 오리진에 도달하기 전에 차단됩니다.",
+      "wrongExplanations": {
+        "0": "Shield는 DDoS(대용량 트래픽 공격, L3/L4/L7) 방어 전용입니다. HTTP 요청 페이로드를 파싱해 SQL 패턴을 탐지하는 기능이 없습니다.",
+        "2": "Firewall Manager는 다계정에 WAF·Shield 정책을 중앙 배포하는 관리 서비스입니다. 자체적으로 SQL injection을 탐지하거나 차단하지 않습니다 — 탐지·차단은 배포된 WAF가 담당합니다.",
+        "3": "Cognito User Pool은 앱 사용자 인증(로그인·가입) 전용입니다. HTTP 요청의 SQL injection 패턴을 분석하거나 차단하는 기능이 없습니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q2",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Shield Standard vs Shield Advanced",
+      "difficulty": "foundational",
+      "stem": "모든 AWS 고객에게 추가 설정 없이 자동으로 적용되며 무료로 제공되는 DDoS 방어 서비스는?",
+      "options": [
+        "AWS Shield Advanced — 유료 구독이지만 모든 계정에 기본 적용된다",
+        "AWS WAF — Rate-based 규칙으로 DDoS를 자동 완화하며 무료다",
+        "AWS Shield Standard — 모든 AWS 고객에게 자동 적용되며 추가 요금이 없다",
+        "Amazon GuardDuty — 위협 탐지 서비스로 DDoS를 자동 완화한다"
+      ],
+      "correct": 2,
+      "explanation": "AWS Shield Standard는 모든 AWS 고객에게 자동으로 적용되는 무료 DDoS 방어 서비스입니다. L3/L4 수준의 일반 DDoS 공격을 자동 완화하며 추가 설정이 필요 없습니다. Shield Advanced는 별도 유료 구독이 필요합니다.",
+      "wrongExplanations": {
+        "0": "Shield Advanced는 유료 구독이 필요하며 모든 계정에 자동 적용되지 않습니다 — 명시적으로 구독해야 합니다.",
+        "1": "WAF는 L7 HTTP/HTTPS 요청 내용 필터링 서비스로 유료(웹 ACL·규칙·요청 건수 기준 요금)이며 DDoS 자동 완화 서비스가 아닙니다.",
+        "3": "GuardDuty는 위협 탐지(로그 분석) 서비스이지 DDoS 완화 서비스가 아닙니다."
+      },
+      "sources": [
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q3",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Shield Response Team(SRT)",
+      "difficulty": "foundational",
+      "stem": "한 금융 서비스 기업이 대규모 DDoS 공격 발생 시 AWS 전담 대응팀의 24/7 실시간 지원과 공격으로 인한 요금 급증 보호가 필요하다. 어떤 서비스를 구독해야 하는가?",
+      "options": [
+        "AWS WAF — Rate-based 규칙을 활성화하면 24/7 자동 대응과 비용 보호가 포함된다",
+        "AWS Shield Standard — 무료 서비스에 SRT 지원이 포함돼 있다",
+        "AWS Firewall Manager — 다계정 정책 배포로 DDoS 전담 지원을 제공한다",
+        "AWS Shield Advanced — SRT 24/7 전담 지원, 상세 이벤트 가시성, DDoS 관련 요금 급증 시 크레딧을 제공한다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Shield Advanced는 Shield Response Team(SRT)의 24/7 전담 DDoS 대응 지원, 상세 이벤트 가시성과 CloudWatch 메트릭, DDoS로 인한 요금 급증 시 크레딧 보호를 제공합니다. Shield Standard는 이 기능들을 포함하지 않습니다.",
+      "wrongExplanations": {
+        "0": "WAF의 Rate-based 규칙은 L7 요청 폭주를 제한할 수 있지만 SRT 지원·비용 보호 기능이 없습니다.",
+        "1": "Shield Standard는 무료이지만 SRT 지원, 고급 가시성, 요금 보호가 없습니다 — 이 기능들은 Advanced 전용입니다.",
+        "2": "Firewall Manager는 WAF·Shield 정책을 다계정에 중앙 배포하는 서비스이며 DDoS 전담 지원 기능이 없습니다."
+      },
+      "sources": [
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q4",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "WAF 연결 가능 리소스",
+      "difficulty": "foundational",
+      "stem": "AWS WAF 웹 ACL을 직접 연결할 수 없는 리소스는?",
+      "options": [
+        "Amazon CloudFront 배포",
+        "Application Load Balancer(ALB)",
+        "Amazon RDS 데이터베이스 인스턴스",
+        "Amazon API Gateway REST API"
+      ],
+      "correct": 2,
+      "explanation": "AWS WAF는 HTTP/HTTPS 트래픽을 처리하는 리소스(CloudFront·ALB·API Gateway·AppSync·Cognito User Pool·App Runner·Verified Access)에 연결됩니다. RDS는 데이터베이스 서비스로 HTTP 요청을 처리하지 않으며 WAF 웹 ACL 연결 대상이 아닙니다.",
+      "wrongExplanations": {
+        "0": "CloudFront 배포는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다.",
+        "1": "ALB는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다.",
+        "3": "Amazon API Gateway REST API는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q5",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "WAF Rate-based 규칙",
+      "difficulty": "applied",
+      "stem": "웹 애플리케이션에 특정 IP에서 짧은 시간 안에 대량 로그인 요청이 발생하는 브루트포스 공격 징후가 탐지됐다. WAF에서 이를 방어하기 위해 사용해야 하는 규칙 유형은?",
+      "options": [
+        "IP 세트 규칙 — 공격자 IP를 수동으로 등록해 차단한다",
+        "Rate-based 규칙 — 지정 시간 내 특정 IP의 요청 수가 임계치를 초과하면 자동 차단한다",
+        "SQL Injection 탐지 규칙 — 로그인 요청의 페이로드를 분석해 자동 차단한다",
+        "지역(Geo) 규칙 — 공격이 발생하는 국가 전체를 차단한다"
+      ],
+      "correct": 1,
+      "explanation": "Rate-based 규칙은 지정 시간(5분 또는 1분) 내 특정 IP의 요청 수가 임계치를 초과하면 해당 IP를 자동으로 차단합니다. 브루트포스·자격증명 스터핑·봇 공격처럼 단시간에 대량 요청이 발생하는 패턴 방어에 적합합니다.",
+      "wrongExplanations": {
+        "0": "IP 세트 규칙은 사전에 알려진 IP를 수동으로 등록해 차단합니다. 새로운 IP에서 시작되는 브루트포스에는 반응할 수 없고 수동 업데이트가 필요합니다.",
+        "2": "SQL Injection 탐지 규칙은 요청 본문의 악성 SQL 패턴을 감지합니다. 정상 로그인 폼 요청처럼 보이는 브루트포스는 SQL 패턴이 없으면 탐지되지 않습니다.",
+        "3": "지역(Geo) 규칙은 특정 국가의 모든 트래픽을 차단하므로 정상 사용자도 피해를 받을 수 있으며, 요청 빈도 기준이 아닌 단순 출처 기준 필터입니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q6",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "WAF 웹 ACL 규칙 평가 방식",
+      "difficulty": "foundational",
+      "stem": "AWS WAF 웹 ACL에 여러 규칙이 설정돼 있을 때, 요청에 대한 최종 액션은 어떻게 결정되는가?",
+      "options": [
+        "모든 규칙을 평가한 후 Allow 수가 많으면 허용, Deny 수가 많으면 차단하는 다수결로 결정된다",
+        "모든 규칙을 평가하고 가장 엄격한(제한적인) 액션이 최종 적용된다",
+        "규칙을 순서대로 평가하고 첫 번째로 매칭된 규칙의 액션(Allow/Block/Count 등)이 즉시 실행된다",
+        "Block 규칙이 하나라도 있으면 나머지 규칙과 관계없이 모든 요청이 차단된다"
+      ],
+      "correct": 2,
+      "explanation": "WAF 웹 ACL은 규칙을 번호 순서대로 평가하고 첫 번째로 매칭된 규칙의 액션(Allow/Block/Count/CAPTCHA)을 즉시 실행합니다. 이후 규칙은 평가하지 않습니다. 이 방식으로 운영자가 규칙 우선순위를 명시적으로 제어할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "웹 ACL은 다수결로 동작하지 않습니다 — 첫 매칭 규칙의 액션이 즉시 결정됩니다.",
+        "1": "모든 규칙을 종합해 가장 엄격한 액션을 적용하는 방식이 아닙니다. 첫 매칭에서 바로 결정됩니다.",
+        "3": "Block 규칙이 있더라도 요청이 그 규칙과 매칭되어야 차단됩니다 — 단순히 Block 규칙 존재만으로 모든 요청이 차단되지 않습니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q7",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Firewall Manager 다계정 정책 중앙화",
+      "difficulty": "applied",
+      "stem": "한 기업이 AWS Organizations에서 수십 개의 계정을 운영 중이다. 모든 계정의 ALB에 동일한 WAF 웹 ACL 정책을 적용하고, 신규 계정이 추가될 때 보호 공백 없이 자동으로 정책이 배포되어야 한다. 어떤 서비스를 사용해야 하는가?",
+      "options": [
+        "각 계정 담당자가 수동으로 WAF 웹 ACL을 생성하고 ALB에 연결하는 표준 운영 절차(SOP)를 수립한다",
+        "AWS Firewall Manager로 Organizations 전체에 WAF 정책을 중앙 배포하고 신규 계정에 자동 적용한다",
+        "AWS Config 규칙으로 WAF 미적용 ALB를 탐지한 뒤 수동 교정한다",
+        "AWS Shield Advanced를 구독해 모든 계정의 ALB를 자동 보호한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Firewall Manager는 Organizations와 통합되어 WAF 웹 ACL 정책을 조직 전체에 일괄 배포합니다. 신규 계정이 추가되면 계정 생성 이벤트를 감지해 보호 공백 없이 즉시 정책을 자동 적용합니다.",
+      "wrongExplanations": {
+        "0": "수동 SOP는 신규 계정 생성 직후 정책 적용 전 공백 기간이 생깁니다. Firewall Manager의 자동 적용이 이 공백을 제거합니다.",
+        "2": "AWS Config 규칙은 탐지 목적이며 자동 배포를 제공하지 않습니다 — 탐지 후 수동 교정에도 공백이 존재합니다.",
+        "3": "Shield Advanced는 DDoS 방어 서비스이며 WAF 웹 ACL 정책의 다계정 자동 배포 기능을 제공하지 않습니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q8",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Cognito User Pool vs Identity Pool 역할",
+      "difficulty": "foundational",
+      "stem": "Amazon Cognito에서 앱 사용자 로그인 처리 및 JWT 발급을 담당하는 컴포넌트는?",
+      "options": [
+        "Identity Pool — 사용자 가입·로그인·MFA를 처리하고 JWT를 발급한다",
+        "User Pool — 사용자 가입·로그인을 처리하고 인증 성공 시 JWT(ID·액세스·리프레시 토큰)를 발급한다",
+        "User Pool — 인증된 사용자에게 AWS STS 임시 자격증명을 발급한다",
+        "Identity Pool — 로컬 계정 및 소셜 IdP 페더레이션으로 앱 사용자를 인증한다"
+      ],
+      "correct": 1,
+      "explanation": "Cognito User Pool은 인증(Authentication) 컴포넌트입니다. 사용자 가입·로그인·MFA·소셜 및 엔터프라이즈 IdP 페더레이션을 처리하고, 인증 성공 시 JWT(ID 토큰·액세스 토큰·리프레시 토큰)를 발급합니다.",
+      "wrongExplanations": {
+        "0": "Identity Pool은 JWT나 SAML 토큰을 입력으로 받아 AWS STS 임시 자격증명을 발급하는 AWS 권한부여 컴포넌트입니다. 사용자 로그인·MFA를 직접 처리하지 않습니다.",
+        "2": "User Pool의 출력은 JWT입니다. AWS STS 임시 자격증명은 Identity Pool이 발급합니다.",
+        "3": "사용자 인증(로그인·IdP 페더레이션)은 User Pool의 역할입니다. Identity Pool은 인증된 사용자의 토큰을 받아 AWS 자격증명으로 교환합니다."
+      },
+      "sources": [
+        { "title": "What is Amazon Cognito? (공식)", "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q9",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Cognito Identity Pool AWS 권한부여",
+      "difficulty": "applied",
+      "stem": "모바일 앱이 Google 계정으로 로그인한 사용자에게 특정 S3 버킷에 직접 파일을 업로드할 권한을 부여해야 한다. 서버를 중개자로 사용하지 않는 설계로 가장 적합한 방법은?",
+      "options": [
+        "Cognito User Pool만 사용해 Google 로그인을 처리하고 JWT를 앱에 전달한다. 앱은 JWT로 S3 API를 직접 호출한다",
+        "Cognito User Pool로 Google 인증 후 JWT를 발급받고, Identity Pool에 JWT를 제출해 S3 접근 IAM 역할의 AWS 임시 자격증명을 받아 S3에 직접 업로드한다",
+        "IAM 사용자를 생성하고 장기 액세스 키를 모바일 앱에 내장한다",
+        "S3 버킷을 퍼블릭으로 열어 인증 없이 업로드하게 한다"
+      ],
+      "correct": 1,
+      "explanation": "User Pool + Identity Pool 연동 흐름입니다. ① User Pool에 Google을 소셜 IdP로 연동해 JWT 발급 → ② Identity Pool에 JWT 제출 → ③ STS 임시 자격증명 수신 → ④ 임시 자격증명으로 S3 직접 업로드. 서버 중개 없이 앱이 AWS 리소스에 안전하게 직접 접근합니다.",
+      "wrongExplanations": {
+        "0": "S3 API는 IAM 자격증명(액세스 키 또는 STS 토큰)으로 호출합니다. Cognito JWT는 앱 레이어 신원 증명이며 AWS API 직접 호출 권한을 담지 않습니다.",
+        "2": "장기 액세스 키를 모바일 앱에 내장하면 앱 패키지에서 키가 추출될 위험이 있습니다. 임시 자격증명을 사용하는 Identity Pool 패턴이 모범 사례입니다.",
+        "3": "S3 퍼블릭 접근은 인증·권한부여를 우회하는 심각한 보안 위험입니다."
+      },
+      "sources": [
+        { "title": "What is Amazon Cognito? (공식)", "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q10",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Secrets Manager 자동 교체",
+      "difficulty": "applied",
+      "stem": "애플리케이션이 RDS 데이터베이스에 접속하는 비밀번호를 코드에 하드코딩해 왔다. 보안 강화를 위해 비밀번호를 코드에서 제거하고 90일마다 자동 교체하도록 설계를 변경하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Systems Manager Parameter Store(표준 티어) — 무료이며 자동 교체 기능이 내장돼 있다",
+        "AWS Secrets Manager — RDS 자격증명을 저장하고 Lambda 기반 자동 교체 일정을 90일로 설정한다",
+        "AWS KMS — 비밀번호를 KMS 키로 암호화해 코드에 저장한다",
+        "Amazon S3 — 암호화된 비밀번호 파일을 S3에 저장하고 애플리케이션이 런타임에 읽는다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Secrets Manager는 RDS 자격증명 저장과 자동 교체를 모두 지원합니다. RDS에 대한 내장 Lambda 교체 함수를 제공하며, 교체 일정을 설정하면 Secrets Manager가 자동으로 DB 비밀번호를 변경하고 최신 값을 보관합니다. 애플리케이션은 런타임에 API를 호출해 최신 자격증명을 동적으로 조회합니다.",
+      "wrongExplanations": {
+        "0": "Parameter Store 표준 티어는 기본 자동 교체 기능이 없습니다. 교체가 필요하면 직접 구현해야 합니다 — 자동 교체 요구사항에는 Secrets Manager가 적합합니다.",
+        "2": "KMS는 데이터 암호화 서비스입니다. 비밀번호를 코드에서 제거하고 자동 교체하는 수명 주기 관리 기능이 없습니다.",
+        "3": "S3에 비밀번호 파일을 저장하면 자동 교체 메커니즘이 없고 파일 관리·접근 제어가 복잡해집니다. Secrets Manager가 이 목적에 설계된 서비스입니다."
+      },
+      "sources": [
+        { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q11",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Secrets Manager vs Parameter Store 선택 기준",
+      "difficulty": "applied",
+      "stem": "솔루션스 아키텍트가 두 가지 요구사항을 검토 중이다. (A) 애플리케이션 설정값(예: 기능 플래그, 환경 이름)을 저장하고 자주 읽어야 하며 비용이 낮아야 한다. (B) RDS 데이터베이스 비밀번호를 저장하고 30일마다 자동 교체해야 한다. 각각 어떤 서비스를 선택해야 하는가?",
+      "options": [
+        "A: Secrets Manager, B: Secrets Manager — 모든 비밀과 설정값에 Secrets Manager를 쓰는 것이 모범 사례다",
+        "A: Parameter Store(표준 티어), B: Secrets Manager — 저비용 설정값은 Parameter Store, 자동 교체가 필요한 비밀은 Secrets Manager를 쓴다",
+        "A: Secrets Manager, B: Parameter Store(SecureString) — 비밀번호는 SecureString으로 충분하다",
+        "A: S3 버킷, B: Parameter Store(SecureString) — Parameter Store가 자동 교체를 기본 지원한다"
+      ],
+      "correct": 1,
+      "explanation": "선택 기준: '자동 교체가 필요한가?' — 필요하면 Secrets Manager, 단순 저장이면 Parameter Store. (A) 설정값·기능 플래그처럼 민감하지 않고 교체 불필요한 값은 Parameter Store 표준 티어(무료)가 적합합니다. (B) RDS 비밀번호 자동 교체는 Secrets Manager의 핵심 기능입니다.",
+      "wrongExplanations": {
+        "0": "모든 설정값에 Secrets Manager를 쓰면 비밀당 월 요금이 발생해 단순 설정값 저장 비용이 불필요하게 증가합니다. 비용·교체 필요 여부로 서비스를 구분하는 것이 맞습니다.",
+        "2": "Parameter Store는 기본 자동 교체 기능이 없으므로 30일 자동 교체 요구에 적합하지 않습니다. SecureString은 암호화를 제공하지만 교체 로직은 직접 구현해야 합니다.",
+        "3": "Parameter Store는 기본 자동 교체를 지원하지 않습니다. S3는 설정값 저장에 버전 관리와 접근 제어가 복잡해 Parameter Store보다 부적합합니다."
+      },
+      "sources": [
+        { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q12",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "엣지 계층 WAF 배치 이점",
+      "difficulty": "applied",
+      "stem": "글로벌 사용자를 대상으로 하는 웹 애플리케이션이 CloudFront + ALB + EC2 구성으로 배포돼 있다. WAF 웹 ACL을 어디에 연결하는 것이 오리진 리소스 보호와 비용 절감 측면에서 가장 유리한가?",
+      "options": [
+        "ALB에만 WAF를 연결한다 — ALB가 오리진에 가장 가까워 필터링 효율이 높다",
+        "EC2 인스턴스의 보안 그룹에 WAF 정책을 직접 적용한다",
+        "CloudFront 배포에 WAF를 연결한다 — 전 세계 엣지 로케이션에서 요청을 먼저 필터링해 악성 트래픽이 오리진 ALB·EC2에 도달하지 않는다",
+        "Route 53에 WAF를 연결한다 — DNS 단계에서 악성 요청을 사전 차단한다"
+      ],
+      "correct": 2,
+      "explanation": "CloudFront에 WAF를 연결하면 전 세계 엣지 로케이션에서 WAF 규칙이 평가됩니다. 악성 요청이 엣지에서 차단되면 오리진 ALB·EC2까지 트래픽이 도달하지 않아 오리진 리소스 소비와 ALB 데이터 처리 비용이 줄어듭니다. 지역(Geo) 차단도 글로벌 단계에서 적용됩니다.",
+      "wrongExplanations": {
+        "0": "ALB에만 WAF를 연결하면 악성 요청이 CloudFront 엣지를 통과해 오리진 리전까지 도달한 후 차단됩니다. 엣지 필터링보다 오리진 부하와 비용이 증가합니다.",
+        "1": "WAF는 EC2 보안 그룹에 직접 적용되지 않습니다. 보안 그룹은 네트워크 트래픽(IP·포트) 제어 도구이며 HTTP 요청 내용을 파싱하지 않습니다.",
+        "3": "Route 53에는 WAF 웹 ACL을 연결할 수 없습니다. WAF가 지원하는 리소스는 CloudFront·ALB·API Gateway·AppSync·Cognito User Pool·App Runner·Verified Access입니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q13",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Shield 보호 계층(L3/L4 vs L7)",
+      "difficulty": "foundational",
+      "stem": "Shield Standard와 Shield Advanced의 보호 계층 차이로 옳은 것은?",
+      "options": [
+        "Shield Standard는 L7(애플리케이션) DDoS만 방어하고, Shield Advanced는 L3/L4(네트워크·전송) DDoS를 추가로 방어한다",
+        "둘 다 L3/L4/L7을 동일하게 방어하며 차이는 비용뿐이다",
+        "Shield Standard는 L3/L4 DDoS를 자동 완화하고, Shield Advanced는 L3/L4에 더해 L7 애플리케이션 계층 DDoS 자동 완화를 추가 제공한다",
+        "Shield Standard는 L7만 방어하며 WAF와 함께 사용해야 L3/L4 보호가 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "Shield Standard는 L3/L4(네트워크 볼류메트릭·TCP SYN flood 등) DDoS를 자동 완화합니다. Shield Advanced는 L3/L4에 더해 L7(HTTP 요청 폭주 같은 애플리케이션 계층) DDoS 자동 완화, SRT 지원, 상세 이벤트 가시성을 추가 제공합니다.",
+      "wrongExplanations": {
+        "0": "방향이 반대입니다. Standard가 L3/L4를 담당하고, Advanced가 L7을 추가합니다.",
+        "1": "둘의 보호 계층 범위가 다릅니다 — Standard는 L3/L4, Advanced는 L3/L4+L7. 비용 외 보호 범위·기능도 다릅니다.",
+        "3": "Shield Standard는 L3/L4 방어를 포함하며 WAF 없이도 기본 DDoS 완화가 가능합니다."
+      },
+      "sources": [
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q14",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "Cognito User Pool WAF 연동",
+      "difficulty": "applied",
+      "stem": "Cognito User Pool을 통해 사용자 인증을 처리하는 앱에서 로그인 엔드포인트에 대한 브루트포스 공격과 봇 자동화 가입 시도가 증가하고 있다. WAF 웹 ACL을 어떻게 적용해야 하는가?",
+      "options": [
+        "WAF는 Cognito User Pool에 직접 연결할 수 없으므로 ALB 앞에 WAF를 배치해 간접 보호한다",
+        "WAF 웹 ACL을 Cognito User Pool에 직접 연결해 Rate-based 규칙과 관리형 규칙 그룹으로 보호한다",
+        "Cognito User Pool의 내장 MFA만으로 봇 공격을 충분히 차단할 수 있다",
+        "Shield Advanced를 구독하면 Cognito User Pool의 브루트포스 공격이 자동 완화된다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon Cognito User Pool은 AWS WAF 웹 ACL을 직접 연결할 수 있는 지원 리소스 중 하나입니다. 웹 ACL에 Rate-based 규칙을 추가해 단시간 대량 로그인 시도를 차단하고, 관리형 규칙 그룹으로 봇·자동화 공격 패턴을 방어할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Cognito User Pool은 WAF 웹 ACL을 직접 연결할 수 있는 공식 지원 리소스입니다 — ALB를 통한 간접 연결이 필수가 아닙니다.",
+        "2": "MFA는 2단계 인증으로 계정 탈취를 어렵게 하지만, 대량 로그인 시도 자체를 차단하지는 않습니다 — 브루트포스 요청량 제한은 WAF Rate-based 규칙이 담당합니다.",
+        "3": "Shield Advanced는 DDoS(대용량 트래픽) 방어 서비스입니다. HTTP 요청 패턴 기반의 브루트포스·봇 자동화 가입 공격 필터링은 WAF가 담당합니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
+        { "title": "What is Amazon Cognito? (공식)", "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t1-4-q15",
+      "examGuideTaskId": "saa-t1-4",
+      "skill": "계층별 방어 서비스 매핑",
+      "difficulty": "applied",
+      "stem": "다음 위협 유형과 방어 서비스의 매핑 중 옳지 않은 것은?",
+      "options": [
+        "L3/L4 DDoS 공격 → Shield Standard(무료 자동 완화)",
+        "SQL injection·XSS → WAF 관리형 규칙 그룹",
+        "앱 사용자 로그인·JWT 발급 → Cognito User Pool",
+        "L3/L4 DDoS 대규모 네트워크 공격 → WAF Rate-based 규칙으로 완전 차단"
+      ],
+      "correct": 3,
+      "explanation": "WAF Rate-based 규칙은 L7 HTTP 요청 폭주(브루트포스·봇)를 제한하지만 L3/L4 DDoS(대역폭 포화·SYN flood 등 네트워크 계층 공격)를 완전히 차단하지 못합니다. L3/L4 DDoS 완화는 Shield가 담당합니다. WAF는 HTTP 요청으로 표현되지 않는 L3/L4 패킷을 파싱할 수 없기 때문입니다.",
+      "wrongExplanations": {
+        "0": "L3/L4 DDoS → Shield Standard 매핑은 옳습니다. Shield Standard는 모든 고객에게 자동 적용되는 무료 L3/L4 DDoS 자동 완화 서비스입니다.",
+        "1": "SQL injection·XSS → WAF 관리형 규칙 그룹 매핑은 옳습니다. WAF의 AWSManagedRulesCommonRuleSet 등 관리형 규칙 그룹이 OWASP Top 10 패턴을 방어합니다.",
+        "2": "앱 사용자 로그인·JWT 발급 → Cognito User Pool 매핑은 옳습니다. User Pool이 인증(Authentication) 컴포넌트로 JWT를 발급합니다."
+      },
+      "sources": [
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

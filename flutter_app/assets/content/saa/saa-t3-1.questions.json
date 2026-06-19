@@ -1,0 +1,369 @@
+{
+  "examGuideTaskId": "saa-t3-1",
+  "taskTitle": "S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어",
+  "domain": 3,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t3-1-q1",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "S3 내구성과 기본 상태",
+      "difficulty": "foundational",
+      "stem": "S3 버킷을 새로 생성했을 때 기본 상태와 내구성에 대한 설명으로 옳은 것은?",
+      "options": [
+        "버킷은 기본적으로 공개(public) 상태이며 내구성은 99.9%(3 nine)이다",
+        "버킷과 객체는 기본적으로 비공개(private)이며 모든 클래스의 내구성은 99.999999999%(11 nine)이다",
+        "버킷은 기본적으로 비공개이지만 One Zone-IA 클래스의 내구성은 11 nine보다 낮다",
+        "버킷은 기본적으로 공개이며 내구성은 클래스마다 다르다"
+      ],
+      "correct": 1,
+      "explanation": "S3의 기본 상태는 비공개(private)입니다. 버킷과 객체는 명시적으로 공개를 설정하지 않는 한 외부에서 접근할 수 없습니다. 내구성은 스토리지 클래스에 관계없이 모든 클래스에서 99.999999999%(11 nine)으로 동일합니다.",
+      "wrongExplanations": {
+        "0": "버킷의 기본 상태는 공개가 아니라 비공개입니다. 또한 11 nine은 3 nine이 아닙니다.",
+        "2": "One Zone-IA를 포함한 모든 S3 스토리지 클래스의 내구성은 동일하게 11 nine입니다. One Zone-IA는 단일 AZ를 사용해 가용성(99.5%)이 낮지만 내구성은 같습니다.",
+        "3": "버킷의 기본 상태는 비공개이며 내구성은 모든 클래스에서 동일하게 11 nine입니다."
+      },
+      "sources": [
+        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" },
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q2",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "스토리지 클래스 선택(접근 패턴 불명확)",
+      "difficulty": "applied",
+      "stem": "한 팀이 데이터 분석 플랫폼용 S3 버킷을 설계 중이다. 어떤 객체가 자주 접근될지, 어떤 객체가 오래 방치될지 예측할 수 없다. 추가 검색 요금 없이 자동으로 비용을 최적화하는 스토리지 클래스는?",
+      "options": [
+        "S3 Standard — 항상 밀리초 응답을 보장하므로 예측 불가한 접근 패턴에 안전하다",
+        "S3 Standard-IA — 가끔 접근하는 데이터에 최적화되어 있어 불명확한 패턴에 적합하다",
+        "S3 Intelligent-Tiering — 접근 패턴에 따라 자동으로 계층을 이동하며 검색 요금이 없다",
+        "S3 Glacier Instant Retrieval — 저비용이면서 즉시 접근이 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "S3 Intelligent-Tiering은 접근 패턴이 불명확하거나 변동될 때 사용합니다. 30일 미접근 시 Infrequent Access, 90일 미접근 시 Archive Instant Access로 자동 이동하며 검색 요금이 없습니다(오브젝트당 모니터링 요금만 발생). 최소 보관 기간도 없습니다.",
+      "wrongExplanations": {
+        "0": "S3 Standard는 자주 접근하는 데이터에 최적화되어 있습니다. 접근 빈도가 낮아지면 Standard보다 더 비용 효율적인 클래스가 있는데도 자동 전환이 되지 않아 비용 최적화가 이루어지지 않습니다.",
+        "1": "Standard-IA는 접근 패턴이 가끔(월 1회 미만)으로 예측 가능할 때 선택합니다. 접근 패턴이 불명확할 때는 Intelligent-Tiering이 올바른 선택입니다.",
+        "3": "Glacier Instant Retrieval은 분기 1회 수준의 아카이브 데이터에 적합합니다. 접근 패턴이 불명확한 일반 데이터에는 Intelligent-Tiering이 더 적합합니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q3",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "One Zone-IA 적합 데이터 판단",
+      "difficulty": "applied",
+      "stem": "다음 중 S3 One Zone-IA에 저장하기 가장 적합한 데이터는?",
+      "options": [
+        "교체 불가능한 원본 의료 영상 파일 — 가끔 접근하며 비용을 절감하고 싶다",
+        "다른 리전에서 CRR로 복제된 백업 사본 — 가끔 접근하며 원본은 소스 리전에 보존된다",
+        "실시간 스트리밍 서비스의 라이브 영상 — 초당 수천 건의 요청이 발생한다",
+        "7년간 보관해야 하는 규정 준수용 감사 로그 — 거의 접근하지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "One Zone-IA는 재생성 가능한 데이터에만 사용해야 합니다. CRR 복제본은 소스 리전에 원본이 있으므로 단일 AZ 장애로 One Zone-IA 사본이 손실되더라도 원본으로 복구할 수 있습니다. 이 경우 Standard-IA보다 낮은 비용으로 저장할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "교체 불가능한 원본 데이터는 One Zone-IA에 저장하면 단일 AZ 장애 시 영구 유실될 위험이 있습니다. 재생성 불가 원본은 Standard-IA(다중 AZ)를 사용해야 합니다.",
+        "2": "실시간 스트리밍 라이브 데이터는 초당 대량 요청이 발생하므로 자주 접근하는 데이터에 해당합니다. S3 Standard가 적합하며 One Zone-IA는 가끔 접근 데이터용입니다.",
+        "3": "7년 장기 보관 + 거의 접근하지 않는 데이터는 S3 Glacier Deep Archive가 적합합니다. One Zone-IA는 30일 최소 보관 기간 기준의 가끔 접근용 클래스입니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q4",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "Glacier 클래스 복원 시간 비교",
+      "difficulty": "foundational",
+      "stem": "의료 기관이 환자 영상 파일을 아카이브하려 한다. 응급 상황에서 요청 후 수 분 이내에 데이터를 꺼낼 수 있어야 한다. 가장 적합한 S3 스토리지 클래스는?",
+      "options": [
+        "S3 Glacier Deep Archive — 최저 비용이며 응급 상황에도 충분히 빠르다",
+        "S3 Glacier Flexible Retrieval — 분~12시간 복원 시간으로 응급 상황에 대응 가능하다",
+        "S3 Glacier Instant Retrieval — 밀리초 복원 시간으로 즉시 접근이 가능하다",
+        "S3 Standard-IA — Glacier보다 비싸지만 복원 절차가 필요 없어 즉시 접근된다"
+      ],
+      "correct": 2,
+      "explanation": "응급 상황에서 즉시(밀리초) 접근이 필요한 아카이브 데이터에는 S3 Glacier Instant Retrieval이 적합합니다. 분기 1회 수준으로 접근하지만 꺼낼 때는 즉시 복원이 필요한 시나리오가 정확히 이 클래스의 설계 목적입니다.",
+      "wrongExplanations": {
+        "0": "Glacier Deep Archive의 복원 시간은 최대 12시간입니다. 응급 상황에서 즉시 접근이 필요한 경우에는 적합하지 않습니다.",
+        "1": "Glacier Flexible Retrieval은 분~12시간의 복원 시간이 걸립니다. '수 분 이내' 요건을 보장하지 못하므로 응급 의료 시나리오에 부적합합니다.",
+        "3": "Standard-IA는 즉시 접근이 가능하지만 아카이브 데이터에는 비용이 과도합니다. 분기 1회 수준으로 접근하면서 즉시 접근이 필요하다면 Glacier Instant Retrieval이 비용과 성능을 모두 충족합니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q5",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "최소 보관 기간 과금 규칙",
+      "difficulty": "foundational",
+      "stem": "데이터를 S3 Standard-IA에 업로드한 지 15일 만에 삭제했다. 요금 청구에 대한 설명으로 옳은 것은?",
+      "options": [
+        "15일치만 청구된다 — 실제 보관한 기간만큼만 요금이 부과된다",
+        "30일치가 청구된다 — Standard-IA의 최소 보관 기간은 30일이며 이 기간 미만 삭제 시에도 30일 요금이 부과된다",
+        "요금이 전혀 청구되지 않는다 — 최소 보관 기간 내 삭제는 무료다",
+        "90일치가 청구된다 — Glacier 클래스의 최소 보관 기간이 적용된다"
+      ],
+      "correct": 1,
+      "explanation": "S3 Standard-IA의 최소 보관 기간은 30일입니다. 15일 만에 삭제해도 30일에 해당하는 스토리지 요금이 청구됩니다. 이는 Standard-IA가 특정 보관 주기(가끔 접근)를 전제로 설계되어 있기 때문이며, 조기 삭제 시 해당 기간만큼 청구하는 요금 규칙이 적용됩니다.",
+      "wrongExplanations": {
+        "0": "실제 보관 기간만큼만 청구되는 것이 아닙니다. Standard-IA에는 최소 보관 기간 30일이 있어 그 이전에 삭제해도 30일 요금이 청구됩니다.",
+        "2": "최소 보관 기간 내 삭제가 무료가 아닙니다 — 오히려 해당 기간만큼의 요금이 청구됩니다.",
+        "3": "90일 최소 보관 기간은 Glacier Instant Retrieval 및 Glacier Flexible Retrieval에 적용됩니다. Standard-IA의 최소 보관 기간은 30일입니다."
+      },
+      "sources": [
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q6",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "수명 주기 전환 방향 제약",
+      "difficulty": "foundational",
+      "stem": "S3 수명 주기 정책의 전환(Transition) 액션에 대한 설명으로 옳은 것은?",
+      "options": [
+        "전환은 양방향이 가능하다 — Glacier에서 Standard로 자동 전환하도록 설정할 수 있다",
+        "전환은 더 저렴한 방향으로만 가능하다 — Standard에서 Glacier로는 가능하지만 역방향은 불가하다",
+        "전환 방향에 제약은 없으나 역방향 전환 시 추가 요금이 부과된다",
+        "수명 주기 전환은 Standard와 Standard-IA 사이에서만 가능하다"
+      ],
+      "correct": 1,
+      "explanation": "S3 수명 주기 전환은 더 저렴한 방향(Standard → Standard-IA → Glacier)으로만 가능합니다. 역방향 전환(Glacier → Standard)은 수명 주기로 자동 설정할 수 없으며, 이는 아카이브된 데이터를 의도적 복원 작업과 분리해 오작동을 막기 위한 설계입니다.",
+      "wrongExplanations": {
+        "0": "수명 주기 전환은 양방향이 아닙니다. Glacier에서 Standard로의 역방향 자동 전환은 수명 주기 정책으로 설정할 수 없습니다.",
+        "2": "역방향 전환은 추가 요금의 문제가 아니라 설계상 불가능합니다. 아카이브에서 꺼내는 것은 복원(Restore) 작업으로 별도 처리합니다.",
+        "3": "수명 주기 전환은 Standard-IA뿐 아니라 Glacier 클래스 전체로도 가능합니다. Standard → Standard-IA → Glacier Flexible Retrieval → Deep Archive 방향의 다단계 전환도 설정할 수 있습니다."
+      },
+      "sources": [
+        { "title": "S3 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q7",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "수명 주기 만료(Expiration) 액션",
+      "difficulty": "applied",
+      "stem": "로그 파일을 S3에 저장하는 애플리케이션이 있다. 로그는 최초 30일간 분석에 자주 사용되고, 이후 90일까지는 가끔 참조하며, 365일이 지나면 더 이상 필요하지 않다. 가장 비용 효율적인 수명 주기 정책은?",
+      "options": [
+        "업로드 즉시 Glacier Deep Archive로 전환하고 365일 후 만료한다",
+        "30일 후 Standard-IA로 전환, 90일 후 Glacier Flexible Retrieval로 전환, 365일 후 만료(삭제)한다",
+        "Standard에 영구 보관하고 365일 후 수동으로 삭제한다",
+        "30일 후 One Zone-IA로 전환하고 만료 없이 영구 보관한다"
+      ],
+      "correct": 1,
+      "explanation": "이 시나리오는 학습 문서의 수명 주기 예시와 정확히 일치합니다. 30일까지 자주 접근 → Standard, 30~90일 가끔 접근 → Standard-IA, 90~365일 장기 아카이브 → Glacier Flexible Retrieval, 365일 후 만료(자동 삭제). Expiration 액션으로 관리 부담 없이 자동 정리됩니다.",
+      "wrongExplanations": {
+        "0": "최초 30일간 자주 분석에 사용하는 로그를 즉시 Glacier Deep Archive에 저장하면 검색 요금(12시간 복원)과 최소 보관 기간(180일) 요금 문제가 발생합니다. 접근 빈도에 맞게 단계적으로 전환해야 합니다.",
+        "2": "Standard에 365일 보관 후 수동 삭제하면 30일 이후의 '가끔 접근' 구간에서도 Standard 요금이 계속 발생합니다. 수명 주기 자동화로 비용을 크게 절감할 수 있습니다.",
+        "3": "One Zone-IA는 단일 AZ로 가용성이 낮고(99.5%), 로그는 재생성이 어려울 수 있습니다. 또한 만료 없이 영구 보관하면 불필요한 스토리지 비용이 계속 발생합니다."
+      },
+      "sources": [
+        { "title": "S3 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q8",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "멀티파트 업로드 필수 조건",
+      "difficulty": "foundational",
+      "stem": "S3에 6 GB 크기의 단일 파일을 업로드하려 한다. 올바른 업로드 방식은?",
+      "options": [
+        "일반 PUT 요청으로 업로드한다 — S3는 단일 PUT으로 제한 없이 업로드를 지원한다",
+        "멀티파트 업로드를 사용해야 한다 — 5 GB를 초과하는 단일 객체는 멀티파트 업로드가 API 상 필수다",
+        "Transfer Acceleration을 사용한다 — 대용량 파일은 Transfer Acceleration으로만 업로드할 수 있다",
+        "파일을 5 GB 미만으로 압축한 뒤 일반 PUT으로 업로드한다"
+      ],
+      "correct": 1,
+      "explanation": "S3에서 단일 PUT 요청으로 업로드 가능한 최대 크기는 5 GB입니다. 5 GB를 초과하는 파일은 API 상 멀티파트 업로드가 필수입니다. 멀티파트 업로드는 CreateMultipartUpload → UploadPart × N → CompleteMultipartUpload 순서로 진행합니다.",
+      "wrongExplanations": {
+        "0": "S3의 단일 PUT 요청은 최대 5 GB까지만 지원합니다. 6 GB 파일은 일반 PUT으로 업로드할 수 없으며 멀티파트 업로드가 필수입니다.",
+        "2": "Transfer Acceleration은 지리적으로 먼 클라이언트의 업로드 속도를 높이는 기능입니다. 대용량 파일 업로드 방식을 결정하는 요소가 아니며, 6 GB 파일은 Transfer Acceleration 여부와 무관하게 멀티파트가 필수입니다.",
+        "3": "파일 크기를 줄이기 위해 압축하는 것은 데이터 변형을 초래하며 올바른 업로드 방법이 아닙니다. 멀티파트 업로드를 사용하면 원본 파일을 그대로 업로드할 수 있습니다."
+      },
+      "sources": [
+        { "title": "S3 성능 최적화 모범 사례 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q9",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "Transfer Acceleration 사용 시점",
+      "difficulty": "applied",
+      "stem": "글로벌 미디어 회사가 전 세계 지사에서 대용량 영상 파일을 ap-northeast-2(서울) 리전의 S3 버킷에 업로드한다. 미국·유럽 지사에서 업로드 속도가 느리다는 불만이 있다. 가장 효과적인 개선 방법은?",
+      "options": [
+        "S3 버킷을 버전 관리(Versioning) 활성화한다 — 버전 관리가 업로드 성능을 향상시킨다",
+        "S3 Transfer Acceleration을 활성화한다 — 업로더와 S3 리전이 지리적으로 멀 때 엣지 로케이션을 경유해 속도를 높인다",
+        "멀티파트 업로드를 사용한다 — 파일을 분할하면 지리적 거리 문제가 해결된다",
+        "S3 버킷을 us-east-1로 이전한다 — 미국 지사가 가장 많으므로 미국 리전이 유리하다"
+      ],
+      "correct": 1,
+      "explanation": "S3 Transfer Acceleration은 업로더가 S3 리전과 지리적으로 멀 때 사용합니다. 클라이언트에서 가까운 엣지 로케이션까지만 일반 인터넷으로 전송하고, 이후 엣지에서 S3까지는 AWS 내부 백본 네트워크를 경유해 장거리 업로드의 지연을 줄입니다. 활성화 후 별도 엔드포인트(s3-accelerate.amazonaws.com)를 사용합니다.",
+      "wrongExplanations": {
+        "0": "버전 관리는 데이터 보호와 복원 기능을 제공하는 기능으로 업로드 성능과 무관합니다.",
+        "2": "멀티파트 업로드는 대용량 파일의 신뢰성과 병렬 업로드 속도를 높이지만, 업로더와 S3 리전 사이의 지리적 거리 문제(인터넷 홉·지연)는 해결하지 못합니다. Transfer Acceleration이 거리 문제를 다룹니다.",
+        "3": "버킷을 us-east-1로 이전하면 미국 지사는 개선되지만 유럽·아시아 지사와 원래 서울이 필요한 사용자에게 문제가 생깁니다. 모든 지역을 균등하게 개선하는 Transfer Acceleration이 더 적합합니다."
+      },
+      "sources": [
+        { "title": "S3 성능 최적화 모범 사례 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q10",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "S3 처리량 최적화(프리픽스 병렬화)",
+      "difficulty": "applied",
+      "stem": "데이터 파이프라인이 단일 S3 프리픽스(예: logs/)에 초당 8,000개 이상의 GET 요청을 생성하고 있다. 현재 처리량 한도에 도달해 요청이 실패한다. 가장 효과적인 해결책은?",
+      "options": [
+        "버킷을 여러 개로 분리한다 — S3는 버킷당 처리량 한도를 가진다",
+        "객체 키를 여러 프리픽스로 분산한다 — 각 프리픽스가 독립적으로 프리픽스당 5,500 GET/HEAD 한도를 가진다",
+        "Glacier Instant Retrieval로 전환한다 — Glacier는 처리량 한도가 없다",
+        "모든 객체를 단일 객체로 병합한다 — 바이트 범위 요청으로 부분 접근한다"
+      ],
+      "correct": 1,
+      "explanation": "S3는 프리픽스당 초당 5,500 GET/HEAD 요청을 지원합니다. 프리픽스 수에는 제한이 없으므로, 객체 키를 여러 프리픽스(예: logs/a/, logs/b/, logs/c/)로 분산하면 각 프리픽스가 독립적인 처리량 한도를 가져 전체 처리량을 선형으로 늘릴 수 있습니다.",
+      "wrongExplanations": {
+        "0": "S3의 처리량 한도는 버킷이 아닌 프리픽스 단위입니다. 버킷을 분리하는 것은 관리 복잡도를 늘리지만 근본적인 해결책이 아닙니다. 프리픽스 분산이 올바른 접근입니다.",
+        "2": "Glacier Instant Retrieval은 아카이브 스토리지 클래스로 초당 대량 요청에 적합하지 않습니다. 처리량 최적화 문제는 스토리지 클래스 변경이 아닌 프리픽스 설계로 해결합니다.",
+        "3": "객체를 병합하고 바이트 범위 요청을 사용하면 관리가 극도로 복잡해지며 S3의 객체 스토리지 모델에 적합하지 않습니다. 프리픽스 병렬화가 표준적이고 관리가 쉬운 해결책입니다."
+      },
+      "sources": [
+        { "title": "S3 성능 최적화 모범 사례 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q11",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "Block Public Access 우선순위",
+      "difficulty": "applied",
+      "stem": "S3 버킷 정책에 모든 사용자에게 s3:GetObject를 허용하는 설정이 있다. 그런데 버킷 수준의 Block Public Access가 활성화(ON) 상태다. 외부 사용자가 이 버킷의 객체에 접근하면 어떻게 되는가?",
+      "options": [
+        "버킷 정책의 Allow가 적용되어 접근이 허용된다",
+        "Block Public Access가 버킷 정책보다 우선하므로 공개 접근이 거부된다",
+        "버킷 정책과 Block Public Access가 충돌할 때는 마지막에 설정된 것이 적용된다",
+        "Block Public Access는 IAM 정책에만 영향을 미치므로 버킷 정책의 Allow는 유효하다"
+      ],
+      "correct": 1,
+      "explanation": "Block Public Access는 접근 제어 평가의 최우선 계층입니다. 버킷 정책이나 ACL에 공개 접근을 허용하는 설정이 있더라도 Block Public Access가 ON이면 그 설정을 무시하고 공개 접근을 차단합니다. 이 설계는 하위 정책 실수로부터 계정과 버킷을 보호하는 단일 제어점 역할을 합니다.",
+      "wrongExplanations": {
+        "0": "Block Public Access가 ON인 경우 버킷 정책의 Allow보다 우선합니다. 버킷 정책에 Allow가 있어도 Block Public Access에 의해 공개 접근은 거부됩니다.",
+        "2": "S3 접근 제어는 설정 순서가 아닌 계층 순서로 평가됩니다. Block Public Access → IAM 정책 → 버킷 정책 → ACL 순서이며 Block Public Access가 항상 최우선입니다.",
+        "3": "Block Public Access는 IAM 정책뿐만 아니라 버킷 정책, ACL 등 모든 공개 접근 허용 설정을 무효화합니다. 계정 또는 버킷 수준의 최우선 안전장치입니다."
+      },
+      "sources": [
+        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q12",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "정적 웹사이트 배포 설계(CloudFront + OAC)",
+      "difficulty": "applied",
+      "stem": "글로벌 사용자에게 정적 웹사이트를 빠르게 제공하되, S3 버킷은 외부에서 직접 접근할 수 없도록 비공개로 유지해야 한다. 가장 적합한 설계는?",
+      "options": [
+        "S3 버킷을 퍼블릭으로 설정하고 정적 웹사이트 호스팅을 활성화한다",
+        "CloudFront 배포를 생성하고 S3를 오리진으로 설정한 뒤 OAC(Origin Access Control)로 S3를 비공개로 유지한다",
+        "S3 Transfer Acceleration을 활성화해 글로벌 사용자에게 빠른 접근을 제공한다",
+        "S3 프리사인 URL을 생성해 모든 사용자에게 배포한다"
+      ],
+      "correct": 1,
+      "explanation": "정적 웹사이트의 글로벌 배포 표준 패턴은 CloudFront + S3 + OAC입니다. CloudFront는 엣지 로케이션에서 콘텐츠를 캐싱해 글로벌 지연을 줄이고, OAC를 사용하면 S3는 비공개로 유지하면서 CloudFront를 통해서만 접근되도록 설정할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "S3 버킷을 퍼블릭으로 열면 의도치 않은 민감한 객체 노출 위험이 있습니다. 정적 웹사이트라도 S3를 직접 공개하는 것은 AWS가 권장하지 않는 방식입니다.",
+        "2": "Transfer Acceleration은 업로드 속도를 높이는 기능으로 정적 웹사이트 서비스용 CDN이 아닙니다. 글로벌 사용자에게 콘텐츠를 캐싱·배포하는 것은 CloudFront의 역할입니다.",
+        "3": "프리사인 URL은 특정 사용자에게 한시적 접근을 부여할 때 사용합니다. 불특정 다수의 글로벌 사용자에게 정적 웹사이트를 서비스하는 방식으로는 적합하지 않습니다."
+      },
+      "sources": [
+        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q13",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "프리사인 URL 권한 범위",
+      "difficulty": "foundational",
+      "stem": "IAM 역할 A가 S3 버킷에 대한 s3:GetObject 권한만 가지고 있다. 이 역할로 서명한 프리사인 URL을 생성했다. 이 URL을 받은 사용자가 할 수 있는 것은?",
+      "options": [
+        "버킷의 모든 객체를 읽고 쓸 수 있다 — 프리사인 URL은 버킷 전체 접근을 부여한다",
+        "서명 시 지정한 객체의 다운로드만 가능하며, URL 만료 전까지 유효하다",
+        "URL을 받은 사용자는 서명한 역할의 모든 권한을 상속받는다",
+        "프리사인 URL은 IAM 인증이 필요하므로 인증 없는 사용자는 사용할 수 없다"
+      ],
+      "correct": 1,
+      "explanation": "프리사인 URL은 서명한 IAM 주체의 권한 이하로만 작동합니다. 역할 A가 s3:GetObject만 가지므로 프리사인 URL도 해당 객체 다운로드만 가능합니다. 만료 시간이 설정되며 만료 후에는 접근이 거부됩니다. IAM 인증 없이도 URL만으로 접근할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "프리사인 URL은 버킷 전체가 아닌 서명 시 지정한 특정 객체와 작업에 대해서만 접근을 허용합니다. 서명한 역할의 권한 이하(s3:GetObject만)로 제한됩니다.",
+        "2": "URL을 받은 사용자는 서명 주체의 권한을 상속받는 것이 아닙니다. 프리사인 URL은 서명 시 지정된 단일 작업(예: 특정 객체 GET)에 대한 임시 접근만 부여합니다.",
+        "3": "프리사인 URL의 핵심 용도가 바로 인증 없는 사용자에게 일시적 접근을 부여하는 것입니다. IAM 자격증명 없이도 URL만으로 서명된 요청을 수행할 수 있습니다."
+      },
+      "sources": [
+        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q14",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "CRR 전제 조건(버전 관리)",
+      "difficulty": "foundational",
+      "stem": "한 팀이 S3 Cross-Region Replication(CRR)을 설정하려 한다. 설정 전에 반드시 충족해야 하는 전제 조건은?",
+      "options": [
+        "소스 버킷에만 버전 관리를 활성화하면 된다",
+        "소스 버킷과 대상 버킷 모두 버전 관리를 활성화해야 한다",
+        "CRR은 버전 관리와 무관하게 설정할 수 있다",
+        "대상 버킷에만 버전 관리를 활성화하면 된다"
+      ],
+      "correct": 1,
+      "explanation": "CRR(Cross-Region Replication)을 사용하려면 소스 버킷과 대상 버킷 모두에 버전 관리(Versioning)가 활성화되어 있어야 합니다. 어느 한쪽만 활성화되어 있으면 복제를 설정할 수 없습니다. SRR(Same-Region Replication)도 동일한 전제 조건이 적용됩니다.",
+      "wrongExplanations": {
+        "0": "소스 버킷만 버전 관리를 활성화하는 것으로는 불충분합니다. CRR은 소스와 대상 버킷 양쪽 모두에 버전 관리가 활성화되어야 합니다.",
+        "2": "CRR은 버전 관리와 직접 연관됩니다. 버전 관리 없이 CRR을 설정할 수 없으며, 이는 복제된 객체의 버전을 추적하고 관리하기 위한 전제 조건입니다.",
+        "3": "대상 버킷만 버전 관리를 활성화하는 것으로는 불충분합니다. 소스 버킷도 반드시 버전 관리를 활성화해야 합니다."
+      },
+      "sources": [
+        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t3-1-q15",
+      "examGuideTaskId": "saa-t3-1",
+      "skill": "복제와 기존 객체 처리",
+      "difficulty": "applied",
+      "stem": "S3 버킷에 이미 10,000개의 객체가 있다. 오늘 새로 CRR을 설정했다. 기존 10,000개 객체와 향후 신규 업로드 객체의 복제 동작으로 옳은 것은?",
+      "options": [
+        "설정 즉시 기존 객체 10,000개와 신규 객체 모두 자동으로 복제된다",
+        "신규 업로드 객체만 자동으로 복제된다. 기존 10,000개 객체는 S3 Batch Replication을 별도 실행해야 복제된다",
+        "기존 객체는 자동 복제되지만 신규 객체는 수동으로 복제해야 한다",
+        "CRR은 설정일 이전 30일간의 객체만 소급 복제하고 이후 신규 객체를 자동 복제한다"
+      ],
+      "correct": 1,
+      "explanation": "S3 복제(CRR/SRR)는 설정 이후 생성·업데이트되는 신규 객체에만 자동 적용됩니다. 설정 이전에 존재하던 기존 객체는 자동 소급 복제되지 않습니다. 기존 객체를 복제하려면 S3 Batch Replication을 별도로 실행해야 합니다.",
+      "wrongExplanations": {
+        "0": "CRR 설정이 기존 객체에 자동 소급 적용되지 않습니다. 기존 객체 10,000개는 S3 Batch Replication을 별도 실행해야 복제됩니다.",
+        "2": "기존 객체와 신규 객체의 설명이 반대입니다. 신규 객체가 자동 복제되고 기존 객체는 Batch Replication이 필요합니다.",
+        "3": "CRR에는 '이전 30일' 같은 소급 기간 개념이 없습니다. 기존 객체는 기간에 관계없이 자동 소급 복제되지 않으며 Batch Replication이 필요합니다."
+      },
+      "sources": [
+        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

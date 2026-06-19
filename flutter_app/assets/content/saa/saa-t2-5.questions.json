@@ -1,0 +1,368 @@
+{
+  "examGuideTaskId": "saa-t2-5",
+  "taskTitle": "DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active",
+  "domain": 2,
+  "certCode": "SAA-C03",
+  "questions": [
+    {
+      "id": "saa-t2-5-q1",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "RTO와 RPO 구분",
+      "difficulty": "foundational",
+      "stem": "재해 복구 계획을 수립하는 솔루션스 아키텍트가 두 가지 핵심 지표를 정의하려 한다. RTO(Recovery Time Objective)에 대한 설명으로 옳은 것은?",
+      "options": [
+        "재해 발생 시 손실을 허용할 수 있는 최대 데이터 시간 구간이다",
+        "마지막 백업 이후 축적된 데이터 양을 측정하는 지표다",
+        "재해 발생 후 서비스를 재개하기까지 허용되는 최대 다운타임이다",
+        "월별 서비스 가용성 목표를 백분율로 나타낸 값이다"
+      ],
+      "correct": 2,
+      "explanation": "RTO(Recovery Time Objective)는 재해 발생 후 서비스를 재개하기까지 허용되는 최대 다운타임을 의미합니다. 핵심 질문은 '허용 가능한 다운타임은?'입니다. RTO를 낮추려면 컴퓨팅·네트워크를 미리 준비해야 하며, 이 준비 수준이 DR 전략(Backup & Restore → Active-Active) 선택의 기준이 됩니다.",
+      "wrongExplanations": {
+        "0": "재해 발생 시 손실을 허용할 수 있는 최대 데이터 시간 구간은 RPO(Recovery Point Objective)의 정의입니다. RTO와 RPO는 독립된 지표입니다.",
+        "1": "마지막 백업 이후 데이터 양은 RPO와 관련된 개념이지만 RTO의 정의가 아닙니다. RTO는 서비스 복구 시간(다운타임)을 측정합니다.",
+        "3": "월별 서비스 가용성 목표는 SLA(Service Level Agreement) 또는 SLO(Service Level Objective)의 개념으로 RTO와 다릅니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q2",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "4가지 DR 전략 비용·복구속도 순서",
+      "difficulty": "foundational",
+      "stem": "솔루션스 아키텍트가 4가지 DR 전략을 비용이 낮은 것부터 높은 순서로 정렬하려 한다. 올바른 순서는?",
+      "options": [
+        "Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active",
+        "Pilot Light → Backup & Restore → Warm Standby → Multi-Site Active-Active",
+        "Warm Standby → Pilot Light → Backup & Restore → Multi-Site Active-Active",
+        "Multi-Site Active-Active → Warm Standby → Pilot Light → Backup & Restore"
+      ],
+      "correct": 0,
+      "explanation": "비용이 낮은 것부터 높은 순서는 Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active입니다. 각 전략의 비용 차이는 재해 발생 전에 얼마나 많은 인프라를 상시 가동 상태로 두는가에 달려 있습니다. Backup & Restore는 데이터만 보관해 가장 저렴하지만 복구가 가장 느리며, Active-Active는 전체 용량이 여러 리전에서 항상 동작해 가장 비쌉니다.",
+      "wrongExplanations": {
+        "1": "Pilot Light는 Backup & Restore보다 비용이 높습니다. Pilot Light는 핵심 DB를 상시 복제하는 비용이 발생하지만 Backup & Restore는 백업 스토리지 비용만 발생합니다.",
+        "2": "Warm Standby는 Pilot Light보다 비용이 높습니다. 축소판 전체 스택이 상시 가동되므로 DB만 복제하는 Pilot Light보다 더 많은 컴퓨팅 비용이 발생합니다.",
+        "3": "이는 내림차순 정렬입니다. 오름차순(저비용→고비용)은 Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active입니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q3",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Backup & Restore 전략 적합 조건",
+      "difficulty": "applied",
+      "stem": "한 전자상거래 회사가 재해 복구 전략을 검토하고 있다. 비즈니스 분석 결과 장애 시 최대 6시간의 다운타임과 2시간의 데이터 손실을 허용할 수 있으며, 비용을 최소화하고 싶어 한다. 가장 적합한 DR 전략은?",
+      "options": [
+        "Warm Standby — 축소판 전체 스택을 상시 가동해 빠른 복구를 보장한다",
+        "Multi-Site Active-Active — 여러 리전에서 동시 운영해 RTO와 RPO를 0에 근접시킨다",
+        "Backup & Restore — 비용이 가장 낮으며 RTO 6시간·RPO 2시간 요구를 충족할 수 있다",
+        "Pilot Light — 핵심 DB만 상시 복제해 수십 분의 RTO를 달성한다"
+      ],
+      "correct": 2,
+      "explanation": "RTO 6시간·RPO 2시간이면 Backup & Restore로 충분합니다. 이 전략은 백업 데이터만 보관하다가 재해 시 인프라·앱·데이터를 새로 배포하는 방식으로 비용이 가장 낮습니다. 2시간마다 백업을 수행하면 RPO 2시간을 달성할 수 있고, 재해 시 복원 작업 6시간도 요구 RTO 내에 있습니다. Pilot Light 이상은 상시 운영 비용이 발생해 이 요건에는 과잉 투자입니다.",
+      "wrongExplanations": {
+        "0": "Warm Standby는 축소판 전체 스택을 상시 가동해 RTO를 수 분으로 단축하지만, RTO 6시간을 허용하는 이 시나리오에서는 비용 대비 효율이 낮습니다.",
+        "1": "Multi-Site Active-Active는 비용이 가장 높은 전략으로, RTO/RPO를 0에 근접시키는 요구가 아닌 이 시나리오에서는 심각한 과잉 투자입니다.",
+        "3": "Pilot Light는 수십 분의 RTO를 달성하지만 상시 DB 복제 비용이 발생합니다. 6시간 RTO를 허용하면 그보다 저렴한 Backup & Restore로도 충분합니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q4",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Pilot Light와 Warm Standby 구분",
+      "difficulty": "foundational",
+      "stem": "공식 AWS 백서는 Pilot Light와 Warm Standby를 다음과 같이 설명한다. '(A)는 추가 조치 없이 요청을 처리할 수 없으나, (B)는 즉시(축소 용량으로) 트래픽을 처리할 수 있다.' (A)와 (B)에 들어갈 전략을 올바르게 짝지은 것은?",
+      "options": [
+        "A = Warm Standby, B = Pilot Light",
+        "A = Backup & Restore, B = Warm Standby",
+        "A = Pilot Light, B = Multi-Site Active-Active",
+        "A = Pilot Light, B = Warm Standby"
+      ],
+      "correct": 3,
+      "explanation": "공식 백서 설명: 'Pilot Light는 추가 조치 없이 요청을 처리할 수 없으나, Warm Standby는 즉시(축소 용량으로) 트래픽을 처리할 수 있다.' Pilot Light는 핵심 DB만 상시 복제하고 앱 서버는 꺼두어 재해 시 서버 기동이 필요합니다. Warm Standby는 축소판 전체 스택(앱+DB)이 상시 가동되어 재해 시 즉시 트래픽 처리가 가능합니다.",
+      "wrongExplanations": {
+        "0": "A와 B의 위치가 반대입니다. 추가 조치 없이 처리가 불가한 것이 Pilot Light이고, 즉시 처리 가능한 것이 Warm Standby입니다.",
+        "1": "Backup & Restore는 Pilot Light보다 복구 시간이 더 길고 제약이 더 많습니다. 백서의 비교 대상은 Pilot Light와 Warm Standby입니다.",
+        "2": "Warm Standby를 건너뛰고 Active-Active와 비교한 설명입니다. 백서에서 즉시 트래픽 처리 가능의 기준선은 Warm Standby입니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q5",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Pilot Light — 앱 서버를 꺼두는 이유",
+      "difficulty": "applied",
+      "stem": "한 회사가 Pilot Light DR 전략을 채택했다. 이 전략에서 앱 서버는 꺼두고 DB 레이어만 상시 복제하는 이유로 옳은 것은?",
+      "options": [
+        "앱 서버는 복제가 기술적으로 불가능해서 항상 꺼두어야 한다",
+        "앱 서버는 AMI·시작 템플릿으로 수십 분 내 기동 가능하지만 DB 데이터는 사전 복제 없이 빠른 복구가 불가능하므로, DB만 상시 복제해 비용을 절감하면서 수십 분 RTO를 달성한다",
+        "DB 레이어는 비용이 무료이므로 항상 켜두고 앱 서버는 비용 절감을 위해 완전히 삭제한다",
+        "규정상 DB는 반드시 두 리전에 상시 가동해야 하지만 앱 서버는 단일 리전으로 충분하다"
+      ],
+      "correct": 1,
+      "explanation": "Pilot Light에서 앱 서버를 꺼두는 이유는, 앱 서버는 AMI·시작 템플릿·Auto Scaling 설정이 있으면 재해 시 수십 분 안에 기동 가능하지만 DB 데이터는 사전 복제 없이 재해 시점까지 축적된 내용을 빠르게 따라잡을 수 없기 때문입니다. DB를 처음부터 전송하면 수 TB 규모에서 수 시간 이상 소요되므로, 앱은 꺼두되 DB 복제는 상시 유지해야만 RTO를 수십 분 수준으로 유지할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "앱 서버 복제는 기술적으로 가능합니다. Warm Standby가 바로 앱 서버까지 포함한 축소판 스택을 상시 가동하는 전략입니다. Pilot Light는 비용 절감을 위해 의도적으로 앱 서버를 꺼두는 것입니다.",
+        "2": "DB 레이어는 무료가 아닙니다. 상시 복제 비용이 발생하며, Pilot Light는 이 비용을 감수하되 앱 서버 비용을 절감하는 비대칭 구성입니다.",
+        "3": "규정에 의한 제약이 아니라 복구 시간 특성의 차이에 기반한 설계 선택입니다. DB 데이터 복구의 기술적 한계가 핵심 이유입니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q6",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Warm Standby 전략 적합 조건",
+      "difficulty": "applied",
+      "stem": "금융 서비스 회사가 리전 장애에 대비한 DR 전략을 수립하고 있다. RTO 10분·RPO 2분을 요구하며, Active-Active보다 비용 효율적인 옵션을 원한다. 가장 적합한 전략은?",
+      "options": [
+        "Backup & Restore — 비용이 가장 낮으며 대부분의 요건을 충족한다",
+        "Pilot Light — 핵심 DB만 복제해 비용을 최소화하면서 RTO 10분을 달성한다",
+        "Warm Standby — 축소판 전체 스택이 상시 가동되어 수 분 내 복구가 가능하고 Active-Active보다 비용이 낮다",
+        "Multi-Site Active-Active — RTO/RPO 요건이 엄격하므로 이 전략만 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "RTO 10분·RPO 2분 요건에서 Active-Active보다 비용 효율적인 전략으로는 Warm Standby가 가장 적합합니다. Warm Standby는 축소판 전체 스택이 상시 가동 중이므로 재해 시 용량만 확장하면 되어 수 분 내 복구가 가능합니다. Pilot Light는 RTO 10분 달성이 서버 기동 시간을 포함해 빠듯하며, Active-Active는 요건을 충족하지만 불필요하게 비쌉니다.",
+      "wrongExplanations": {
+        "0": "Backup & Restore는 RTO가 수 시간 수준입니다. RTO 10분 요건을 충족할 수 없습니다.",
+        "1": "Pilot Light는 재해 시 꺼진 앱 서버를 기동·확장해야 하므로 RTO 10분을 안정적으로 달성하기 어렵습니다. 서버 기동 시간이 수십 분 소요될 수 있습니다.",
+        "3": "RTO 10분·RPO 2분은 Warm Standby로 달성 가능한 범위입니다. Active-Active는 RTO/RPO 거의 0이 요구될 때 선택하며, 이 시나리오에서는 과잉 투자입니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q7",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Multi-Site Active-Active 특징",
+      "difficulty": "foundational",
+      "stem": "글로벌 결제 플랫폼이 리전 장애 시 RTO와 RPO를 모두 0에 가깝게 유지해야 한다. 이 요건에 맞는 DR 전략과 그 핵심 특징을 올바르게 설명한 것은?",
+      "options": [
+        "Warm Standby — 축소판 전체 스택이 상시 가동되어 RTO와 RPO를 0에 가깝게 유지한다",
+        "Pilot Light — 핵심 DB만 복제해 RPO를 0에 근접시킨다",
+        "Backup & Restore — 정기 백업 주기를 0으로 줄여 RPO를 0으로 만든다",
+        "Multi-Site Active-Active — 여러 리전에서 동시에 프로덕션 트래픽을 처리해 페일오버 개념 없이 트래픽이 자동 우회된다"
+      ],
+      "correct": 3,
+      "explanation": "RTO/RPO를 0에 근접시키는 전략은 Multi-Site Active-Active입니다. 여러 리전에서 동시에 프로덕션 트래픽을 처리하므로 리전 장애가 발생해도 다른 리전으로 트래픽이 자동 우회됩니다. 페일오버 개념 자체가 없으며 비용이 가장 높습니다.",
+      "wrongExplanations": {
+        "0": "Warm Standby는 RTO를 수 분으로 단축하지만 0에 가깝게 만들지는 않습니다. 재해 시 용량 확장 시간이 필요합니다.",
+        "1": "Pilot Light는 앱 서버 기동 시간이 필요해 RTO가 수십 분 수준이며 RPO도 0에 근접하지 않습니다. DB 복제 지연만큼의 손실이 발생합니다.",
+        "2": "Backup & Restore는 RPO가 마지막 백업 이후(수 시간)이며 어떤 백업 빈도로도 RPO를 0으로 만들 수 없습니다. 0에 가까운 RPO는 동기 복제 또는 Active-Active가 필요합니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q8",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Aurora Global Database와 교차 리전 RPO",
+      "difficulty": "applied",
+      "stem": "한 회사가 리전 장애 DR을 위해 Aurora 데이터베이스의 교차 리전 복제를 구성하고 있다. RPO를 최소화하기 위해 가장 적합한 Aurora 기능은?",
+      "options": [
+        "Aurora Global Database — 전용 인프라로 보조 리전 복제 지연이 1초 미만이며 장애 시 1분 내 승격이 가능하다",
+        "RDS Multi-AZ — 동기 복제로 교차 리전 RPO를 0으로 달성한다",
+        "S3 Cross-Region Replication — Aurora 데이터를 비동기로 복제해 RPO를 최소화한다",
+        "Aurora Read Replica — 같은 리전 내에서 동기 복제로 RPO를 0으로 만든다"
+      ],
+      "correct": 0,
+      "explanation": "교차 리전 RPO를 최소화하는 Aurora 기능은 Aurora Global Database입니다. 전용 복제 인프라를 사용해 보조 리전 복제 지연이 1초 미만이며, 장애 시 보조 리전을 1분 내 Primary로 승격할 수 있습니다. 일반 교차 리전 Read Replica는 비동기 복제 특성상 복제 지연이 더 길 수 있습니다.",
+      "wrongExplanations": {
+        "1": "RDS Multi-AZ는 같은 리전 내 다른 AZ로의 동기 복제 기능으로 AZ 장애 대응에 사용됩니다. 교차 리전 복제 기능이 아닙니다.",
+        "2": "S3 Cross-Region Replication은 S3 객체 복제 기능으로 Aurora 데이터베이스에 직접 적용되지 않습니다.",
+        "3": "Aurora Read Replica는 교차 리전 복제 시 비동기 방식을 사용합니다. 동기 복제를 제공하지 않으며 같은 리전 내 Read Replica도 동기 복제가 아닙니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q9",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Route 53 페일오버 라우팅",
+      "difficulty": "applied",
+      "stem": "솔루션스 아키텍트가 Warm Standby DR 전략에서 리전 장애 발생 시 트래픽을 자동으로 보조 리전으로 전환하려 한다. 어떤 서비스를 어떻게 구성해야 하는가?",
+      "options": [
+        "S3 Cross-Region Replication으로 트래픽을 자동 전환한다",
+        "Route 53 Failover 라우팅 정책을 설정하고, 기본 엔드포인트에 헬스 체크를 적용해 장애 감지 시 보조 엔드포인트로 자동 전환되도록 구성한다",
+        "CloudWatch 알람을 설정해 장애 감지 시 수동으로 DNS를 변경한다",
+        "AWS Backup으로 백업을 생성해 보조 리전에서 복원한다"
+      ],
+      "correct": 1,
+      "explanation": "Route 53 Failover 라우팅 정책을 사용하면 기본(Primary) 엔드포인트에 헬스 체크를 설정하고 장애 감지 시 보조(Secondary) 엔드포인트로 자동 전환됩니다. Route 53 헬스 체크는 데이터 플레인 동작으로 고가용성을 유지하므로 Pilot Light·Warm Standby·Active-Active 모두에서 트래픽 전환에 사용됩니다.",
+      "wrongExplanations": {
+        "0": "S3 Cross-Region Replication은 S3 객체를 리전 간 복제하는 기능으로 DNS 트래픽 전환 기능이 없습니다.",
+        "2": "수동 DNS 변경은 자동 트래픽 전환이 아닙니다. Route 53 헬스 체크 기반 Failover 라우팅이 자동화된 방법입니다.",
+        "3": "AWS Backup은 백업 및 복원 도구로 자동 트래픽 전환 기능을 제공하지 않습니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q10",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "AWS DRS 적용 대상과 특징",
+      "difficulty": "applied",
+      "stem": "한 회사가 온프레미스 Windows·Linux 서버에서 실행 중인 애플리케이션의 DR을 AWS에 구성하고 싶다. 서버 전체를 지속적으로 복제하고 장애 시 수 분 안에 AWS에서 기동할 수 있는 관리형 서비스는?",
+      "options": [
+        "AWS Backup — 온프레미스 서버를 S3로 백업하고 장애 시 EC2로 복원한다",
+        "RDS 교차 리전 Read Replica — 온프레미스 DB를 AWS 리전으로 복제한다",
+        "S3 Cross-Region Replication — 온프레미스 데이터를 교차 리전 버킷에 복제한다",
+        "AWS Elastic Disaster Recovery(DRS) — 블록 레벨로 서버를 지속 복제하고 페일오버 시 수 분 내 AWS에서 전체 용량 인스턴스를 자동 생성한다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Elastic Disaster Recovery(DRS)는 온프레미스 서버를 블록 레벨로 지속 복제해 AWS의 스테이징 영역에 유지합니다. 페일오버 이벤트 시 스테이징 리소스를 사용해 수 분 안에 전체 용량 인스턴스를 자동 생성합니다. OS 중립적인 블록 레벨 복제 덕분에 Windows·Linux 서버 모두 지원하며, 타 클라우드에서 AWS로의 DR에도 활용 가능합니다.",
+      "wrongExplanations": {
+        "0": "AWS Backup은 정책 기반 백업·복원 서비스로 온프레미스 서버의 지속적인 블록 레벨 복제와 수 분 내 자동 기동을 지원하지 않습니다.",
+        "1": "RDS 교차 리전 Read Replica는 RDS 관리형 데이터베이스에만 적용됩니다. 온프레미스 서버 전체의 DR 솔루션이 아닙니다.",
+        "2": "S3 Cross-Region Replication은 S3 객체 복제 기능으로 서버 전체의 블록 레벨 복제와 컴퓨팅 자동 기동을 지원하지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Elastic Disaster Recovery란? (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q11",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "동기 복제 vs 비동기 복제 구분",
+      "difficulty": "foundational",
+      "stem": "솔루션스 아키텍트가 RDS 복제 방식을 검토하고 있다. 같은 리전 내 Multi-AZ 복제와 교차 리전 Read Replica의 복제 방식 차이로 옳은 것은?",
+      "options": [
+        "RDS Multi-AZ는 동기 복제(AZ 장애 대응), 교차 리전 Read Replica는 비동기 복제(리전 장애 DR)를 사용한다",
+        "RDS Multi-AZ와 교차 리전 Read Replica 모두 동기 복제를 사용한다",
+        "RDS Multi-AZ는 비동기 복제, 교차 리전 Read Replica는 동기 복제를 사용한다",
+        "복제 방식은 동일하며 리전 범위만 다르다"
+      ],
+      "correct": 0,
+      "explanation": "RDS Multi-AZ는 같은 리전 내 동기 복제를 사용해 AZ 장애에 대응합니다. 같은 리전의 AZ 간 왕복 지연은 충분히 짧아 동기 복제로 인한 쓰기 지연이 애플리케이션에서 체감되지 않습니다. 반면 교차 리전 Read Replica는 리전 간 물리적 거리로 인한 큰 지연 때문에 비동기 복제를 사용하며, 페일오버 시 Primary로 승격이 필요합니다.",
+      "wrongExplanations": {
+        "1": "교차 리전 Read Replica는 비동기 복제를 사용합니다. 리전 간 왕복 지연으로 인해 동기 복제를 강제하면 DB 쓰기마다 그 지연이 추가되어 처리량이 급감합니다.",
+        "2": "RDS Multi-AZ와 교차 리전 Read Replica의 복제 방식이 반대로 서술되어 있습니다. Multi-AZ가 동기, Read Replica가 비동기입니다.",
+        "3": "복제 방식이 동일하지 않습니다. 물리적 거리(지연)가 다르므로 AZ 간에는 동기, 리전 간에는 비동기를 사용하는 이분법이 적용됩니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q12",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "DRS의 DR 전략 기반",
+      "difficulty": "foundational",
+      "stem": "AWS Elastic Disaster Recovery(DRS)가 내부적으로 사용하는 DR 전략과 스테이징 영역의 역할로 옳은 것은?",
+      "options": [
+        "DRS는 Multi-Site Active-Active 전략을 사용하며 복수 리전에서 동시에 프로덕션 트래픽을 처리한다",
+        "DRS는 Backup & Restore 전략을 기반으로 하며 스테이징 영역에 전체 인스턴스를 상시 가동한다",
+        "DRS는 Pilot Light 전략을 기반으로 하며 스테이징 영역에서 저비용 스토리지와 최소 컴퓨팅으로 블록 레벨 복제본을 상시 유지한다",
+        "DRS는 Warm Standby 전략을 기반으로 하며 스테이징 영역에서 축소판 전체 스택을 가동한다"
+      ],
+      "correct": 2,
+      "explanation": "AWS DRS는 Pilot Light 전략을 기반으로 합니다. 스테이징 영역에서 저비용 스토리지와 최소 컴퓨팅으로 블록 레벨 복제본을 상시 유지합니다. 페일오버 이벤트 시 스테이징 리소스를 사용해 AWS에서 전체 용량 인스턴스를 수 분 안에 자동 생성합니다. 이는 DB 데이터만 상시 복제하고 재해 시 서버를 기동·확장하는 Pilot Light의 구조와 일치합니다.",
+      "wrongExplanations": {
+        "0": "DRS는 Active-Active 전략을 사용하지 않습니다. 스테이징 영역에 복제본만 유지하고 페일오버 시 인스턴스를 생성하는 구조입니다.",
+        "1": "DRS는 Backup & Restore가 아닌 Pilot Light 기반입니다. 스테이징 영역은 정기 백업이 아니라 블록 레벨 지속 복제본을 유지합니다.",
+        "3": "DRS의 스테이징 영역은 최소 컴퓨팅만 사용하므로 Warm Standby처럼 축소판 전체 스택을 상시 가동하지 않습니다."
+      },
+      "sources": [
+        { "title": "AWS Elastic Disaster Recovery란? (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q13",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "AWS Backup 다중 서비스 중앙 관리",
+      "difficulty": "foundational",
+      "stem": "한 회사가 EC2, RDS, EFS, DynamoDB 등 여러 서비스의 백업을 다수 리전과 계정에 걸쳐 정책 기반으로 중앙 관리하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "각 서비스의 자체 스냅샷 기능을 별도로 설정해 관리한다",
+        "AWS Elastic Disaster Recovery — 모든 서비스를 블록 레벨로 복제해 중앙 관리한다",
+        "S3 Cross-Region Replication — 모든 서비스 데이터를 S3로 이전한 뒤 교차 리전 복제한다",
+        "AWS Backup — 다중 서비스·리전·계정에 걸쳐 정책 기반 중앙 백업 관리를 제공한다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Backup은 다중 서비스·리전·계정에 걸쳐 정책 기반 중앙 백업 관리를 제공합니다. EC2, RDS, EFS, DynamoDB 등 여러 AWS 서비스의 백업을 하나의 정책으로 통합 관리할 수 있으며 교차 리전·교차 계정 백업도 지원합니다.",
+      "wrongExplanations": {
+        "0": "각 서비스의 자체 스냅샷을 별도로 설정하면 정책 일관성 유지와 리전·계정 간 통합 관리가 어렵습니다. AWS Backup이 중앙 관리 용도로 설계되었습니다.",
+        "1": "AWS DRS는 서버 기반(EC2) 앱과 DB에만 적용됩니다. 모든 관리형 서비스의 중앙 백업 관리 도구가 아닙니다.",
+        "2": "S3 CRR은 S3 객체 복제 기능으로 다양한 서비스의 데이터를 S3로 이전해 통합하는 것은 비현실적이고 복잡합니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q14",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "Route 53 vs Global Accelerator 전환 속도",
+      "difficulty": "applied",
+      "stem": "한 회사가 Route 53 Failover 라우팅으로 DR 자동 전환을 구성했는데, 장애 발생 후 일부 클라이언트가 수 분간 이전 엔드포인트로 계속 연결되는 문제를 겪고 있다. 이 문제를 해결하기 위한 더 빠른 전환 방법으로 옳은 것은?",
+      "options": [
+        "Route 53 TTL을 무한대로 설정해 캐시를 영구화한다",
+        "AWS Global Accelerator를 사용한다 — AnyCast IP 기반으로 DNS 캐싱 문제 없이 더 빠른 전환이 가능하다",
+        "RDS Multi-AZ를 추가해 DNS 캐시 문제를 해결한다",
+        "AWS Backup으로 장애 시 즉시 복원해 전환 지연을 없앤다"
+      ],
+      "correct": 1,
+      "explanation": "Route 53 Failover는 헬스 체크 감지 자체는 빠르지만 클라이언트의 DNS 캐시가 TTL 동안 이전 IP를 유지해 전환이 지연됩니다. AWS Global Accelerator는 AnyCast IP 기반으로 DNS 캐싱 계층을 우회하므로 DNS TTL 지연 없이 더 빠른 트래픽 전환이 가능합니다.",
+      "wrongExplanations": {
+        "0": "TTL을 무한대로 설정하면 DNS 업데이트가 클라이언트에 전혀 전달되지 않아 문제가 심각해집니다. TTL을 낮게 설정해야 전파가 빨라집니다.",
+        "2": "RDS Multi-AZ는 데이터베이스 AZ 장애 대응 기능으로 클라이언트 DNS 캐시 문제와 무관합니다.",
+        "3": "AWS Backup은 백업·복원 도구로 DNS 캐싱으로 인한 트래픽 전환 지연을 해결하지 않습니다."
+      },
+      "sources": [
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+      ],
+      "verified": false
+    },
+    {
+      "id": "saa-t2-5-q15",
+      "examGuideTaskId": "saa-t2-5",
+      "skill": "DRS 적용 범위 — RDS 제외",
+      "difficulty": "applied",
+      "stem": "한 회사가 온프레미스 서버와 AWS의 RDS 데이터베이스를 모두 포함하는 DR 솔루션을 설계하고 있다. AWS DRS를 모든 대상에 적용하려 한다. 이 설계의 문제점은?",
+      "options": [
+        "DRS는 온프레미스 서버에만 적용되고 AWS 리소스에는 사용할 수 없다",
+        "DRS는 서버 기반(EC2) 앱과 DB에만 적용되며 RDS 같은 관리형 서비스에는 사용할 수 없다",
+        "DRS는 Windows 서버에만 적용되며 Linux는 지원하지 않는다",
+        "DRS는 교차 계정 복제만 지원하며 교차 리전 복제는 지원하지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "AWS DRS는 서버 기반(EC2) 앱과 DB에만 적용됩니다. DRS의 블록 레벨 복제는 OS가 직접 관리하는 디스크를 대상으로 하므로 AWS가 스토리지를 추상화한 RDS 같은 관리형 서비스에는 접근 경로가 없습니다. RDS의 DR은 교차 리전 Read Replica 또는 Aurora Global Database를 사용해야 합니다.",
+      "wrongExplanations": {
+        "0": "DRS는 온프레미스 서버뿐 아니라 EC2 기반 앱에도 적용됩니다. 타 클라우드에서 AWS로의 DR에도 활용 가능합니다.",
+        "2": "DRS는 OS 중립적인 블록 레벨 복제를 사용하므로 Windows와 Linux 서버 모두 지원합니다.",
+        "3": "DRS는 교차 리전 DR을 지원하는 서비스입니다. 온프레미스/EC2 서버를 다른 AWS 리전으로 복제해 DR을 구성합니다."
+      },
+      "sources": [
+        { "title": "AWS Elastic Disaster Recovery란? (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" }
+      ],
+      "verified": false
+    }
+  ]
+}

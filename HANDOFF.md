@@ -6,23 +6,28 @@ _갱신: 2026-06-18 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 
 ---
 
-## 0. 다음: ①develop→main 릴리스(C-중량 Phase 1 라이브) ②C-중량 Phase 2 develop 복구 ③SAA-C03 문항
+## 0. 다음: ①SAA-C03 문항 사람 검수→flip ②develop→main 릴리스 (✅C-중량 Phase 2 복구·SAA 문항 드래프트 360개 완비 2026-06-18 세션3)
 
 **브랜치 전략(2026-06-15~):** `main` 보호, `develop` 통합. 작업 브랜치 → develop PR → (릴리스 시) develop → main PR. 전역 규칙 `~/.claude/rules/git-branch-flow.md`.
 
-**⚠️ 정정(2026-06-18, 세션2):** 직전 핸드오프 §0-r은 "C-중량 Phase 1·2 모두 develop 머지·519 그린"이라 적었으나 **사실과 다름**. 스택 PR 머지 순서 경합(PR#15 `feat/concept-deeplink`→develop 05:02:36Z ▸ 13초 뒤 PR#16 `feat/concept-report`→**`feat/concept-deeplink`** 05:02:49Z)으로 **Phase 2(약점 리포트 개념 칩 + wrongSkills 비정규화)가 develop에 누락**됨. **develop 실측 = 512**(519 아님). Phase 2 커밋은 `feat/concept-deeplink`(=cfbb34f, Phase 1+2 병합본)에 온전히 있고 develop과 파일 충돌 0. 메모리 [[stacked-pr-merge-order-race]]. 라이브: https://velkaressiablutkrone.github.io/aws-docs/
+**✅ 완료(2026-06-18 세션3) ① C-중량 Phase 2 develop 복구:** 누락 복구 소스로 `feat/concept-deeplink`(cfbb34f, 머지커밋 노이즈) 대신 **`feat/concept-report`(41e81bf, 정확히 델타 5커밋)** 선택 — develop 결과물 diff 동일(`ce0a6a8`), base=develop 직접 PR이라 스택 경합 회피. **PR#21 머지(merge `6421603`)** → develop에 `wrongSkills`·`buildConceptReport` 복구 확인, develop 실측 **519 그린**. 차기 develop→main 릴리스로 라이브 예정. 메모리 [[concept-deeplink]] [[stacked-pr-merge-order-race]].
+
+**✅ 완료(2026-06-18 세션3) ② SAA-C03 문항 드래프트 전 도메인 완비:** 사용자 결정 = 작성+flip(게이트 해제 전제), 단 **verified=사람 검수만**(AI flip 금지). **24 Task 전부 각 15문항 = 총 360문항 `verified:false` 드래프트** develop 머지 완료. 도메인 4배치: D1(PR#22)·D3(PR#23)·D2(PR#24)·D4(PR#25). `saa-t1-1`=직접 작성 정본, 나머지 23개=Task별 스코프락 서브에이전트(파일 1개·git 미조작 → 컨트롤러 파일 실측). 신규 가드 `test/saa_questions_test.dart`(24 Task 전수: 파일·≥15·id유일·options 4·correct 0~3·wrongExplanations 키=비정답 인덱스 전부·sources http). 출처는 각 문서 frontmatter 범위 내(기계 대조 24/24 OK). **전부 verified:false라 verified 게이트로 비노출·`content_index` questionCount:0 불변**(사이트·카운트 변화 0). 테스트 **567 그린**(519 + SAA 가드 48)·analyze 신규 0. 메모리 [[saa-c03-study-docs-first]] [[question-bank-verified-workflow]].
+
+**⚠️ 미수행(의도적): SAA 문항 내용 정확성 딥리뷰는 안 함** — verified flip은 사람 검수 전용이라 구조·출처만 기계 검증함. 정답·해설·distractor 품질은 검수자가 확인할 몫.
 
 **다음 작업 우선순위:**
-- **① develop → main 릴리스(Phase 1)** — 현 develop(C-중량 Phase 1 딥링크 코어 + 누적분)을 main으로. 릴리스 후 라이브에서 딥링크 `?at=` 섹션 스크롤 dogfood. (사용자 결정 2026-06-18: Phase 1 먼저 릴리스, Phase 2는 후속.)
-- **② C-중량 Phase 2 develop 복구** — `feat/concept-deeplink` → develop PR(Phase 2 델타 5커밋: wrongSkills 비정규화·concept_report·report 개념 칩). 머지 후 로컬 519 그린 검증 → 차기 릴리스로 라이브.
-- **③ §2 백로그 SAA-C03 문항 착수**(현재 0) — ①CLF ≥15(§0-q)·C-중량 딥링크(§0-r) 완료. SAA-C03 학습문서 잔여 23개(§2, 정본=saa-t1-1.md).
+- **① SAA-C03 문항 사람 검수 → flip** — 도메인/Task 순서로 360개 드래프트 검수·보완/수정 후 `verified:true` flip + `content_index` 해당 Task `questionCount` 실제 수로 동기화. flip 시 동기화 함정: ②`question_model_test`는 CLF t2-1만 로드(SAA엔 영향 없음)이나 SAA 노출엔 content_index questionCount가 게이트. verified true 1개라도 생기면 모의고사·약점 루프 자동 활성(코드 변경 0). 워크플로 [[question-bank-verified-workflow]].
+- **② develop→main 릴리스** — 현재 develop은 main 대비 PR#21(C-중량 Phase 2)+PR#22~25(SAA 드래프트) 미릴리스. 릴리스 시 C-중량 Phase 2 라이브, SAA 드래프트는 verified:false라 화면 변화 없음(가드 테스트만 동반). CI는 main push 시 Pages 배포.
 - **점진:** 나머지 학습문서·문항의 `{#id}`/`section` 앵커 채움(C-중량은 t1-1만 시드, 나머지는 graceful 폴백=문서 최상단). 메모리 [[concept-deeplink]].
 - §0-b 선택 항목(2기기 pull 검증·개인정보 고지) · 잔여 존치 플래그(§0-y).
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
-## 0-r. C-중량 개념→학습문서 섹션 앵커 딥링크 — Phase 1 develop 머지·Phase 2 develop 누락(복구 대기) (2026-06-18)
+**라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
 
-**오답 복기 개념 큐 + 약점 리포트 개념 칩이 학습문서 최상단이 아니라 해당 섹션으로 딥링크.** 스펙 `docs/superpowers/specs/2026-06-18-concept-deeplink-design.md`, 플랜 `…/plans/2026-06-18-concept-deeplink-phase{1,2}.md`. 2단계 스택 PR: **PR#15 Phase 1(`feat/concept-deeplink`→develop, 머지됨)** · **PR#16 Phase 2(`feat/concept-report`→`feat/concept-deeplink`)**. ⚠️ PR#16 base가 develop이 아니라 `feat/concept-deeplink`였고 머지가 PR#15보다 13초 늦어(05:02:49 vs 05:02:36Z) **Phase 2는 develop에 미반영** — §0 ② 복구 항목 참조. Phase 2 온전한 본은 `feat/concept-deeplink`(cfbb34f).
+## 0-r. C-중량 개념→학습문서 섹션 앵커 딥링크 — Phase 1 main 릴리스 / Phase 2 develop 복구 완료(PR#21) (2026-06-18)
+
+**오답 복기 개념 큐 + 약점 리포트 개념 칩이 학습문서 최상단이 아니라 해당 섹션으로 딥링크.** 스펙 `docs/superpowers/specs/2026-06-18-concept-deeplink-design.md`, 플랜 `…/plans/2026-06-18-concept-deeplink-phase{1,2}.md`. 2단계 스택 PR: **PR#15 Phase 1(`feat/concept-deeplink`→develop, 머지됨·main 릴리스됨)** · **PR#16 Phase 2(`feat/concept-report`→`feat/concept-deeplink`)**. ⚠️ PR#16 base가 develop이 아니라 `feat/concept-deeplink`였고 머지가 PR#15보다 13초 늦어(05:02:49 vs 05:02:36Z) Phase 2가 한때 develop에 미반영됐었음 → **세션3에서 `feat/concept-report`(델타 5커밋)→develop PR#21로 복구 완료(merge `6421603`, develop 519 그린)**. 차기 develop→main 릴리스로 라이브 예정.
 
 - **흐름:** `학습문서 제목 {#id} → MdHeading.anchor` · `문항 section → ?at= → targetAnchor → 섹션 스크롤(헤더 보정)`.
 - **Phase 1(딥링크 코어):** `{#id}` 파서(`markdown_parser`·`MdHeading.anchor`, throw 없음·잘못된 형식 리터럴) · 문항 `section` 필드(+`withOptionOrder` 셔플 운반) · `anchor_scroll.dart`(`anchorScrollOffset`·`buildAnchorKeys` 순수) · `StudyDocPage(targetAnchor)` ScrollController·post-frame `getOffsetToReveal`·graceful no-op·reduced-motion jump · 라우트 `study/:taskId?at=` · 개념 큐 `onOpenStudy(taskId, section)`+`studyDeepLink()` · 정본 t1-1 시드(앵커 5·문항 6).
@@ -132,4 +137,4 @@ _갱신: 2026-06-18 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 - **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
-**진행 중(2026-06-18 세션2): C-중량 Phase 1 develop → main 릴리스.** 스택 PR 경합으로 Phase 2가 develop에 누락됐음을 확인(§0 정정 박스) → 사용자 결정으로 **Phase 1만 우선 릴리스**, Phase 2는 후속 복구 PR(`feat/concept-deeplink`→develop). 릴리스 후 라이브에서 딥링크 `?at=` 섹션 스크롤 dogfood. 그다음: **②Phase 2 복구 → ③SAA-C03 문항 착수**(현재 0) · C-중량 나머지 문서 앵커 점진 채움 · §0-b 선택 항목. 문항 생산은 §0-q 파이프라인(서브에이전트 드래프터→AI 리뷰→컨트롤러 실측→사람 검수 게이트→flip) 재사용.
+**✅ 완료(2026-06-18 세션2): C-중량 Phase 1 develop → main 릴리스·라이브 확인.** 스택 PR 경합으로 Phase 2가 develop에 누락됐음을 확인(§0 정정 박스) → 사용자 결정으로 **Phase 1만 우선 릴리스**(PR#19, main fc7b07f → Pages 배포 성공 → 라이브 dogfood 통과). **다음 세션 첫 수: ①C-중량 Phase 2 develop 복구** (`feat/concept-deeplink`→develop PR, 델타 5커밋, 머지 후 519 검증 → 차기 릴리스). 그다음 **②SAA-C03 문항 착수**(현재 0) · C-중량 나머지 문서 앵커 점진 채움 · §0-b 선택 항목. 문항 생산은 §0-q 파이프라인(서브에이전트 드래프터→AI 리뷰→컨트롤러 실측→사람 검수 게이트→flip) 재사용.
