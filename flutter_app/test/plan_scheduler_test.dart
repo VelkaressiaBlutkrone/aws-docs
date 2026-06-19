@@ -24,7 +24,7 @@ void main() {
 
   test('기본 플랜: 모든 단계 항목 + 날짜는 창 안', () {
     final r = buildPlan(
-      certCode: 'CLF-C02', content: _clf,
+      planId: 'CLF-C02', content: _clf,
       startIso: '2026-06-10', endIso: '2026-06-24', mode: PlanMode.examDate,
     );
     expect(r.items, isNotEmpty);
@@ -41,7 +41,7 @@ void main() {
 
   test('단계 순서: learn 날짜 ≤ reinforce 날짜', () {
     final r = buildPlan(
-      certCode: 'CLF-C02', content: _clf,
+      planId: 'CLF-C02', content: _clf,
       startIso: '2026-06-01', endIso: '2026-07-01', mode: PlanMode.period,
     );
     final firstDoc = r.items.firstWhere((i) => i.type == PlanItemType.doc);
@@ -52,7 +52,7 @@ void main() {
 
   test('결정성: 같은 입력 → 같은 결과', () {
     PlanBuildResult run() => buildPlan(
-        certCode: 'CLF-C02', content: _clf,
+        planId: 'CLF-C02', content: _clf,
         startIso: '2026-06-01', endIso: '2026-06-20', mode: PlanMode.period);
     final a = run().items.map((e) => '${e.id}@${e.dateIso}').toList();
     final b = run().items.map((e) => '${e.id}@${e.dateIso}').toList();
@@ -62,7 +62,7 @@ void main() {
   test('문항 0 자격증: learn(문서)만 + 경고', () {
     final docsOnly = [for (var i = 1; i <= 4; i++) _e('saa-t$i', i, q: 0)];
     final r = buildPlan(
-      certCode: 'SAA-C03', content: docsOnly,
+      planId: 'SAA-C03', content: docsOnly,
       startIso: '2026-06-01', endIso: '2026-06-20', mode: PlanMode.period,
     );
     expect(r.items.every((i) => i.type == PlanItemType.doc), isTrue);
@@ -72,7 +72,7 @@ void main() {
 
   test('빡빡한 기간 경고', () {
     final r = buildPlan(
-      certCode: 'CLF-C02', content: _clf,
+      planId: 'CLF-C02', content: _clf,
       startIso: '2026-06-10', endIso: '2026-06-12', mode: PlanMode.period,
     );
     expect(r.warnings.any((w) => w.contains('빡빡')), isTrue);
@@ -86,7 +86,7 @@ void main() {
       _e('m4', 2, q: 0),
     ];
     final r = buildPlan(
-      certCode: 'CLF-C02', content: mixed,
+      planId: 'CLF-C02', content: mixed,
       startIso: '2026-06-01', endIso: '2026-06-20', mode: PlanMode.period,
     );
     expect(r.items.where((i) => i.type == PlanItemType.doc).length, 4);
@@ -95,20 +95,20 @@ void main() {
 
   test('경계: 1일 플랜·역전·빈 콘텐츠', () {
     final one = buildPlan(
-      certCode: 'CLF-C02', content: _clf,
+      planId: 'CLF-C02', content: _clf,
       startIso: '2026-06-10', endIso: '2026-06-10', mode: PlanMode.period,
     );
     expect(one.items.every((i) => i.dateIso == '2026-06-10'), isTrue);
 
     final rev = buildPlan(
-      certCode: 'CLF-C02', content: _clf,
+      planId: 'CLF-C02', content: _clf,
       startIso: '2026-06-10', endIso: '2026-06-01', mode: PlanMode.period,
     );
     expect(rev.items, isEmpty);
     expect(rev.warnings, isNotEmpty);
 
     final empty = buildPlan(
-      certCode: 'CLF-C02', content: const [],
+      planId: 'CLF-C02', content: const [],
       startIso: '2026-06-10', endIso: '2026-06-20', mode: PlanMode.period,
     );
     expect(empty.items, isEmpty);
@@ -171,5 +171,46 @@ void main() {
     );
     final r = redistribute(plan, '2026-06-19', {}); // winStart=6/19, lastDay=6/20 → 2일, 5개
     expect(r.warnings.any((w) => w.contains('재배치')), isTrue);
+  });
+
+  test('buildManualPlanItems — 문서 유형은 taskIds를 기간에 분배', () {
+    final items = buildManualPlanItems(
+      planId: 'p1',
+      planType: PlanItemType.doc,
+      taskIds: const ['clf-t1-1', 'clf-t1-2', 'clf-t1-3'],
+      startIso: '2026-06-19',
+      endIso: '2026-06-25',
+    );
+    expect(items.length, 3);
+    expect(items.every((i) => i.type == PlanItemType.doc), isTrue);
+    expect(items.map((i) => i.refId), ['clf-t1-1', 'clf-t1-2', 'clf-t1-3']);
+    expect(items.first.id, startsWith('p1#doc:clf-t1-1:'));
+    expect(items.first.dateIso.compareTo('2026-06-19') >= 0, isTrue);
+    expect(items.last.dateIso.compareTo('2026-06-25') <= 0, isTrue);
+  });
+
+  test('buildManualPlanItems — 모의고사 유형은 refId 없는 단일 항목', () {
+    final items = buildManualPlanItems(
+      planId: 'p2',
+      planType: PlanItemType.mockExam,
+      taskIds: const [],
+      startIso: '2026-06-19',
+      endIso: '2026-06-19',
+    );
+    expect(items.length, 1);
+    expect(items.single.type, PlanItemType.mockExam);
+    expect(items.single.refId, isNull);
+  });
+
+  test('buildPlan은 planId 기반 itemId를 만든다', () {
+    final r = buildPlan(
+      planId: 'CLF-C02:2026-06-19:0',
+      content: _clf,
+      startIso: '2026-06-19',
+      endIso: '2026-06-30',
+      mode: PlanMode.period,
+    );
+    expect(r.items, isNotEmpty);
+    expect(r.items.every((i) => i.id.startsWith('CLF-C02:2026-06-19:0#')), isTrue);
   });
 }
