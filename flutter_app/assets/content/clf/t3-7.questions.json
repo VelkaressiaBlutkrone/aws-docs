@@ -425,6 +425,66 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-7-q17",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "응용 AI 서비스 식별 (문서 추출)",
+      "section": "applied-ai-services",
+      "difficulty": "applied",
+      "stem": "한 보험사가 스캔된 청구서와 PDF 문서에서 인쇄·필기 텍스트뿐 아니라 양식 필드와 표 데이터를 자동으로 추출해 업무 시스템에 넣으려 한다. 가장 적합한 AWS AI 서비스는?",
+      "options": [
+        "Amazon Textract",
+        "Amazon Rekognition",
+        "Amazon Kendra",
+        "Amazon Athena"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Textract는 문서에서 텍스트를 감지하고, 양식과 표 같은 구조화 데이터를 추출하는 서비스입니다. 스캔 문서·PDF·양식·표 추출이라는 단서가 Textract를 가리킵니다.",
+      "wrongExplanations": {
+        "1": "Rekognition은 일반 이미지·비디오 분석에 적합하지만, 문서의 양식·표 구조를 추출하는 전용 서비스는 Textract입니다.",
+        "2": "Kendra는 엔터프라이즈 문서 검색 서비스입니다. 문서 이미지에서 양식과 표 데이터를 추출하는 OCR/문서 분석 서비스가 아닙니다.",
+        "3": "Athena는 S3 데이터를 표준 SQL로 쿼리하는 분석 서비스입니다. 스캔 문서의 텍스트·양식·표 추출을 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Textract? — 문서 텍스트 감지, 양식·표 추출, PDF·이미지 분석",
+          "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-7-q19",
+      "examGuideTaskId": "clf-t3-7",
+      "skill": "응용 AI 서비스 식별 (추천·개인화)",
+      "section": "applied-ai-services",
+      "difficulty": "applied",
+      "stem": "한 전자상거래 앱이 사용자 클릭과 구매 이력 같은 item interaction 데이터를 바탕으로 '추천 상품', '함께 본 상품', 사용자 세그먼트 같은 개인화 추천을 빠르게 제공하려 한다. 직접 ML 모델을 설계·훈련하기보다 관리형 추천 서비스를 쓰려면 무엇이 가장 적합한가?",
+      "options": [
+        "Amazon Personalize",
+        "Amazon SageMaker AI",
+        "Amazon Lex",
+        "Amazon Forecast"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Personalize는 사용자의 아이템 상호작용 데이터를 바탕으로 개인화 추천과 사용자 세그먼트를 생성하는 완전관리형 ML 서비스입니다. 추천·개인화라는 특정 기능을 빠르게 붙이는 요구에는 Personalize가 SageMaker보다 직접적입니다.",
+      "wrongExplanations": {
+        "1": "SageMaker AI는 고객이 직접 ML 모델을 구축·훈련·배포하는 범용 플랫폼입니다. 추천 기능을 관리형 API로 빠르게 붙이는 요구에는 Personalize가 더 직접적입니다.",
+        "2": "Lex는 음성·텍스트 챗봇을 만드는 서비스입니다. 상품 추천·개인화 서비스가 아닙니다.",
+        "3": "Forecast는 시계열 예측 서비스이며 공식 문서상 신규 고객에게 더 이상 제공되지 않습니다. 이 시나리오의 관리형 추천 서비스는 Personalize입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Personalize? — 사용자 상호작용 데이터로 추천·개인화·사용자 세그먼트 생성",
+          "url": "https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html"
+        },
+        {
+          "title": "What Is Amazon Forecast? — 신규 고객에게 더 이상 제공되지 않음",
+          "url": "https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
