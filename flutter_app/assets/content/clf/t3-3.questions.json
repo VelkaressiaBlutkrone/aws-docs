@@ -8,6 +8,7 @@
       "id": "clf-t3-3-q1",
       "examGuideTaskId": "clf-t3-3",
       "skill": "EC2 인스턴스 유형·가상 서버",
+      "section": "ec2",
       "difficulty": "foundational",
       "stem": "한 회사가 운영체제 수준까지 제어할 수 있는, 크기 조절 가능한 가상 서버를 클라우드에서 실행하려 한다. 워크로드에 맞춰 CPU·메모리·스토리지의 조합(인스턴스 유형)을 선택하고 싶다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "clf-t3-3-q2",
       "examGuideTaskId": "clf-t3-3",
       "skill": "서버리스 컴퓨팅 (Lambda)",
+      "section": "serverless",
       "difficulty": "foundational",
       "stem": "한 개발팀이 Amazon S3에 파일이 업로드되는 이벤트에 반응해 짧은 코드를 실행하려 한다. 서버를 프로비저닝하거나 관리하지 않고, 코드가 실제로 실행된 컴퓨팅 시간만큼만 비용을 내고 싶다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "clf-t3-3-q3",
       "examGuideTaskId": "clf-t3-3",
       "skill": "컨테이너 (EKS — 관리형 Kubernetes)",
+      "section": "containers",
       "difficulty": "foundational",
       "stem": "한 팀이 표준 Kubernetes로 컨테이너 워크로드를 운영하려 하지만, Kubernetes 컨트롤 플레인을 직접 설치하고 운영하는 부담은 지고 싶지 않다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "clf-t3-3-q4",
       "examGuideTaskId": "clf-t3-3",
       "skill": "서버리스 컨테이너 (Fargate)",
+      "section": "serverless",
       "difficulty": "foundational",
       "stem": "한 회사가 컨테이너로 애플리케이션을 운영하되, 컨테이너를 실행할 Amazon EC2 인스턴스 클러스터를 프로비저닝하거나 관리하고 싶지 않다. Amazon ECS·EKS와 함께 사용하는 서버리스 컨테이너 컴퓨팅 엔진은?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "clf-t3-3-q5",
       "examGuideTaskId": "clf-t3-3",
       "skill": "탄력성 (EC2 Auto Scaling)",
+      "section": "autoscaling",
       "difficulty": "foundational",
       "stem": "한 웹 애플리케이션의 트래픽이 시간대별로 크게 변동한다. 수요가 늘면 EC2 인스턴스를 자동으로 추가하고 수요가 줄면 제거해, 적절한 용량을 유지하면서 비용을 최적화하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "clf-t3-3-q6",
       "examGuideTaskId": "clf-t3-3",
       "skill": "로드 밸런서 (ELB)",
+      "section": "elb",
       "difficulty": "foundational",
       "stem": "한 애플리케이션이 여러 가용 영역의 여러 EC2 인스턴스에서 실행된다. 들어오는 애플리케이션 트래픽을 건강한 인스턴스들에 자동으로 분산해 가용성과 내결함성을 높이려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "clf-t3-3-q7",
       "examGuideTaskId": "clf-t3-3",
       "skill": "컴퓨팅 관리 부담 (EC2 vs Lambda)",
+      "section": "spectrum",
       "difficulty": "foundational",
       "stem": "AWS Lambda와 Amazon EC2의 차이를 '서버 관리 부담' 관점에서 가장 정확하게 설명한 것은?",
       "options": [
@@ -282,6 +289,7 @@
       "id": "clf-t3-3-q11",
       "examGuideTaskId": "clf-t3-3",
       "skill": "컨테이너 오케스트레이션 (ECS)",
+      "section": "containers",
       "difficulty": "foundational",
       "stem": "한 팀이 Docker 컨테이너를 AWS에서 실행·확장·관리하려 하며, Kubernetes가 아니라 AWS 자체 오케스트레이션을 쓰는 완전관리형 컨테이너 서비스를 원한다. 가장 적합한 것은?",
       "options": [
@@ -336,6 +344,7 @@
       "id": "clf-t3-3-q13",
       "examGuideTaskId": "clf-t3-3",
       "skill": "EC2 인스턴스 유형 선택 (메모리 최적화)",
+      "section": "ec2",
       "difficulty": "applied",
       "stem": "한 팀이 대용량 데이터셋을 메모리에 통째로 올려 처리하는 인메모리 데이터베이스를 EC2에서 운영하려 한다. 이 워크로드는 CPU나 디스크보다 대용량 메모리가 성능을 좌우한다. 인스턴스 유형을 고를 때 가장 적절한 선택은?",
       "options": [
@@ -363,6 +372,7 @@
       "id": "clf-t3-3-q14",
       "examGuideTaskId": "clf-t3-3",
       "skill": "Auto Scaling vs ELB 역할 구분",
+      "section": "elb",
       "difficulty": "applied",
       "stem": "한 웹 애플리케이션이 이미 여러 가용 영역의 여러 EC2 인스턴스에서 실행되고 있고, 인스턴스 수는 충분하다. 그런데 들어오는 요청이 일부 인스턴스에만 몰리고 다른 인스턴스는 놀고 있다. 요청을 건강한 인스턴스들에 고르게 나눠 보내려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -390,6 +400,7 @@
       "id": "clf-t3-3-q15",
       "examGuideTaskId": "clf-t3-3",
       "skill": "로드 밸런서 유형 (ALB vs NLB)",
+      "section": "elb",
       "difficulty": "applied",
       "stem": "한 팀이 HTTP/HTTPS 기반 웹 애플리케이션의 들어오는 요청을 여러 대상에 분산하려 한다. 요청 경로 같은 애플리케이션 계층(L7) 정보를 기준으로 트래픽을 처리하고 싶다. 가장 적합한 Elastic Load Balancing 유형은?",
       "options": [
