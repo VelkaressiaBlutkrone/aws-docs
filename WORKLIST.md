@@ -21,11 +21,11 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 
 ## B. 다음 (우선순위순 — HANDOFF.md §0)
 
-- [ ] **① SAA-C03 문항 사람 검수 → `verified:true` flip** — 전 도메인 360개 `verified:false` 드래프트 완비(PR#29 main 릴리스). **검수 도구 `saa_review` 완성(PR#33)**: `node tool/saa_review.mjs build`로 360문항 읽기 HTML(정답 강조·기계적 플래그) 생성 → 검수 → `flip <taskId>`로 verified:true + content_index questionCount 동기화. 검수·flip은 사용자(AI flip 금지).
+- [~] **① SAA-C03 문항 사람 검수 → `verified:true` flip** — 재검토 인프라 **T1~T8 완료·PR#47 릴리스**(saa_prescreen 도구·content_index 동적 불변식·통합시험 균형 게이트·freeze 가드·문서 스캔/수정·검수 루브릭·전360 의미+출처 prescreen). **첫 flip 6/24 Task**(suspect7+t3-4 출처, PR#46): 90문항 verified. **나머지 18 draft.** 검수·flip은 사용자(AI flip 금지) — D1 포함 전 도메인 flip 시 통합 모의고사 자동 노출(T4). 도구 `saa_review.mjs flip <taskId>`, 루브릭 [review-rubric.md](docs/saa-review/review-rubric.md), prescreen [docs/saa-review/](docs/saa-review/).
   - 함정: `verified=사람 검수만`(AI flip 금지). verified true 1개라도 생기면 모의고사·약점 루프 자동 활성(코드 변경 0). 워크플로 → HANDOFF §0, 메모리 `question-bank-verified-workflow`.
   - **실행 플랜(잠금 2026-06-20, `/plan-eng-review`+codex 합의):** [2-pass 재검토 플랜](docs/superpowers/plans/2026-06-20-saa-rereview-plan.md) — 전수 360문항+24문서, AI 읽기전용 사전심사→사람 flip. 핵심 보강: 공개 게이트(`questionCount>0`→전 도메인 균형 세트), `content_index_test` 동적 불변식(첫 flip 회귀 차단), 문서 오류 스캔 문항 flip 선행. 착수=릴리스 후.
   - **검수 freeze 정책(T8 · 전체 SAA · 규약+가드):** 검수 발효~전 도메인 flip 완료까지 SAA 콘텐츠(`flutter_app/assets/content/saa/*.{md,questions.json}`) 동결. **허용**=검수 구동 변경만(수정루프·T6 문서수정·flip·읽기전용 사전심사 산출물). **금지**=신규/무관 SAA 편집·대량 리포맷. **가드**=`.githooks/pre-commit`(발효 중 `saa-review*`/`review/saa*` 밖에서 SAA 콘텐츠 커밋 차단). 설치 1회 `git config core.hooksPath .githooks`; 발효 `touch .saa-frozen` / 해제 `rm .saa-frozen`(현재 dormant). 도구·테스트·플랜은 비대상. 우회 `--no-verify`(권장 안 함).
-- [x] **② develop → main 릴리스** — **완료(최신 2026-06-20 PR#37 `a68ae14`).** 이력: C-중량 Phase2·SAA 드래프트 PR#29 · 멀티 일정 PR#31 `89e2795` · **CLF 섹션 앵커 + saa_review 도구 PR#37**(670 test·analyze 신규0·build web·배포 그린·라이브 200+로더 확인). develop=main 동기.
+- [x] **② develop → main 릴리스** — **완료(최신 2026-06-20 PR#47 `00528f9`).** 이력: 멀티 일정 PR#31 · CLF 섹션 앵커 PR#37 `a68ae14` · **SAA 재검토 인프라(T1~T8)+T6 문서 정확성 수정+첫 flip 6 Task PR#47**(679 test·analyze 신규0·build web·배포 그린·라이브 200+로더 확인; SAA 통합시험은 D1 미flip이라 게이트 숨김 유지). develop=main 동기.
 - [x] **③ 학습문서 섹션 앵커 점진 채움(CLF)** — **구현 완료·PR#34 develop 머지**(merge `58a1463`, 2026-06-20). CLF 18 Task(clf-t1-2~t4-3) 헤딩 `{#slug}` + 문항 `section` 사람 매핑 편집 + Dart **존재** 가드(`f1f3679`). spec·plan: [spec](docs/superpowers/specs/2026-06-20-section-anchors-design.md)·[plan](docs/superpowers/plans/2026-06-20-section-anchors.md). ⚠️ 가드는 *앵커 존재*만 보장 — *올바른 섹션* 의미 매핑은 사람 검토 권장. SAA 앵커는 B-① 검수·flip 후 별도. **main 릴리스 완료**(PR#37 `a68ae14`, 2026-06-20 라이브). 출처: HANDOFF §0-r.
 
 ---
