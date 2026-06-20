@@ -19,10 +19,10 @@ class ExamsSection extends StatelessWidget {
     final c = context.c;
     final history = HistoryStore().all();
     final withContent = certifications
-        .where((cert) => certHasVerifiedQuestions(cert.code))
+        .where((cert) => certExamIsBalanced(cert.code))
         .toList();
-    // 콘텐츠는 있으나 문항이 0인 cert(학습문서만)는 모의고사 섹션에서 의도적으로 제외
-    // — 학습문서 섹션에만 노출된다.
+    // 통합 모의고사는 *전 도메인*에 검증 문항이 있어야 노출(부분 verified 편향 방지, T4).
+    // 문항 0이거나 일부 도메인만 검증된 cert는 학습문서 섹션에만 노출된다.
     final pending =
         certifications.where((cert) => !certHasContent(cert.code)).toList();
     return HomeBand(

@@ -463,3 +463,18 @@ bool certHasContent(String certCode) => contentFor(certCode).isNotEmpty;
 /// "학습문서만(문항 0)" 상태를 모의고사·리포트 노출에서 가르는 정적 판정.
 bool certHasVerifiedQuestions(String certCode) =>
     certContentSummary(certCode).questions > 0;
+
+/// (순수) 주어진 엔트리 집합에서 *모든* 도메인에 검증 문항(questionCount>0)이
+/// 있는가. 통합 모의고사가 특정 도메인에 편향되지 않으려면 전 도메인이 채워져야 한다.
+bool examIsBalanced(List<ContentEntry> entries) {
+  if (entries.isEmpty) return false;
+  final allDomains = entries.map((e) => e.domain).toSet();
+  final verifiedDomains =
+      entries.where((e) => e.hasQuestions).map((e) => e.domain).toSet();
+  return verifiedDomains.length == allDomains.length;
+}
+
+/// 통합 모의고사 공개 게이트: 자격증의 *전 도메인*에 검증 문항이 있어야 노출(T4).
+/// `certHasVerifiedQuestions`(문항 1개라도)와 달리, 부분 verified 상태에서
+/// 편향된 "통합 모의고사"가 노출되는 것을 막는다(codex#1·2 — 정직함).
+bool certExamIsBalanced(String certCode) => examIsBalanced(contentFor(certCode));
