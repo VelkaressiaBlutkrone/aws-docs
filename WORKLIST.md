@@ -24,7 +24,7 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 - [ ] **① SAA-C03 문항 사람 검수 → `verified:true` flip** — 전 도메인 360개 `verified:false` 드래프트 완비(PR#29 main 릴리스). **검수 도구 `saa_review` 완성(PR#33)**: `node tool/saa_review.mjs build`로 360문항 읽기 HTML(정답 강조·기계적 플래그) 생성 → 검수 → `flip <taskId>`로 verified:true + content_index questionCount 동기화. 검수·flip은 사용자(AI flip 금지).
   - 함정: `verified=사람 검수만`(AI flip 금지). verified true 1개라도 생기면 모의고사·약점 루프 자동 활성(코드 변경 0). 워크플로 → HANDOFF §0, 메모리 `question-bank-verified-workflow`.
 - [x] **② develop → main 릴리스** — **완료.** C-중량 Phase2·SAA 드래프트는 PR#29(2026-06-19), **멀티 일정은 PR#31 `89e2795`로 main 릴리스**(2026-06-20, 라이브 dogfood 통과). develop=main 동기.
-- [~] **③ 학습문서 섹션 앵커 점진 채움** — **spec·plan 완료**(`feat/section-anchors`: [spec](docs/superpowers/specs/2026-06-20-section-anchors-design.md)·[plan](docs/superpowers/plans/2026-06-20-section-anchors.md)). CLF 18 Task 헤딩 `{#slug}` + 문항 section(사람 의미), Dart 가드(section↔앵커 존재). **구현(18 Task 편집)은 다음 세션**(같은 브랜치). SAA는 검수 후. 출처: HANDOFF §0-r.
+- [x] **③ 학습문서 섹션 앵커 점진 채움(CLF)** — **구현 완료·PR#34 develop 머지**(merge `58a1463`, 2026-06-20). CLF 18 Task(clf-t1-2~t4-3) 헤딩 `{#slug}` + 문항 `section` 사람 매핑 편집 + Dart **존재** 가드(`f1f3679`). spec·plan: [spec](docs/superpowers/specs/2026-06-20-section-anchors-design.md)·[plan](docs/superpowers/plans/2026-06-20-section-anchors.md). ⚠️ 가드는 *앵커 존재*만 보장 — *올바른 섹션* 의미 매핑은 사람 검토 권장. SAA 앵커는 B-① 검수·flip 후 별도. main 릴리스는 차기 develop→main(§B-②) 대기. 출처: HANDOFF §0-r.
 
 ---
 
