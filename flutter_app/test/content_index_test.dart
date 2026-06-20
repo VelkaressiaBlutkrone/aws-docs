@@ -86,4 +86,37 @@ void main() {
     expect(mismatches, isEmpty,
         reason: 'content_index questionCount ↔ 실제 verified 수 불일치:\n${mismatches.join('\n')}');
   });
+
+  // ── T4: 통합 모의고사 공개 게이트 (전 도메인 균형) ──────────────────
+  group('examIsBalanced (순수): 전 도메인 검증 시에만 true', () {
+    test('빈 목록 → false', () => expect(examIsBalanced(const []), isFalse));
+    test('전 도메인 검증 → true', () {
+      expect(examIsBalanced([_e(1, 15), _e(2, 15), _e(3, 15)]), isTrue);
+    });
+    test('부분 검증(일부 도메인만 verified) → false (편향 방지)', () {
+      expect(examIsBalanced([_e(1, 15), _e(2, 0), _e(3, 0)]), isFalse);
+    });
+    test('전부 0 → false', () {
+      expect(examIsBalanced([_e(1, 0), _e(2, 0)]), isFalse);
+    });
+    test('한 도메인에 여러 verified Task여도 다른 도메인 0이면 false', () {
+      expect(examIsBalanced([_e(1, 15), _e(1, 15), _e(2, 0)]), isFalse);
+    });
+  });
+
+  test('certExamIsBalanced: CLF balanced(true), SAA 현재 0(false), 미지정(false)', () {
+    expect(certExamIsBalanced('CLF-C02'), isTrue);
+    expect(certExamIsBalanced('SAA-C03'), isFalse);
+    expect(certExamIsBalanced('NOPE'), isFalse);
+  });
 }
+
+ContentEntry _e(int domain, int questionCount) => ContentEntry(
+      certCode: 'X',
+      taskId: 't$domain-$questionCount',
+      title: '',
+      domain: domain,
+      mdAsset: '',
+      questionsAsset: '',
+      questionCount: questionCount,
+    );
