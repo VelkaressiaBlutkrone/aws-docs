@@ -1,0 +1,238 @@
+{
+  "taskId": "saa-t1-1",
+  "domain": 1,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t1-1-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "IAM은 글로벌·무료 — 표시된 정답(opt1) 옳음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 introduction.html이 '무료(no additional charge)'는 명시하나 '리전 없는 글로벌'은 직접 문장이 아님(데이터 전세계 복제만 서술); 글로벌성은 정설이나 출처 보강 시 id.html 권장."
+    },
+    {
+      "id": "saa-t1-1-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "EC2→S3는 인스턴스 프로필(IAM Role)이 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles.html이 'mobile app에 키 임베드 회피', 'EC2/Lambda 같은 컴퓨트에서 역할로 임시 자격증명' 명시 — 정답 뒷받침."
+    },
+    {
+      "id": "saa-t1-1-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Lambda 실행 역할이 정답(opt1); 보안그룹은 권한 아님 오답근거 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles.html 'Lambda에서 코드 실행하는 서비스가 역할 수임' 서술과 일치; 실행 역할 전용 페이지는 Lambda DG지만 IAM 역할 개념으로 충분."
+    },
+    {
+      "id": "saa-t1-1-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "교차계정: B에 역할+신뢰정책(A), A에 sts:AssumeRole — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles.html Delegation 절(trusting/trusted account, trust policy + 상대측 AssumeRole 허용)이 정답을 정확히 뒷받침."
+    },
+    {
+      "id": "saa-t1-1-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "신뢰정책만·권한정책 빈 역할: 수임O 작업X(암묵 Deny) — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles.html이 역할엔 trust policy+permissions policy 둘 다 부착됨을 명시; 권한 없으면 암묵 Deny는 평가로직 정설."
+    },
+    {
+      "id": "saa-t1-1-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "명시적 Deny가 Allow를 이김 — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "access_policies.html 'An explicit deny in any of these policies overrides the allow' 반복 명시 — 정답 강하게 뒷받침."
+    },
+    {
+      "id": "saa-t1-1-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "OU 단위 리전 가드레일은 SCP — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "access_policies.html SCP가 OU/계정 최대권한 정의·루트 포함 적용 명시; 리전 제한 SCP는 표준 패턴. 출처가 IAM 일반 페이지라 Organizations SCP 문서 보강은 선택."
+    },
+    {
+      "id": "saa-t1-1-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "SCP는 부여 아닌 상한; 아이덴티티 Allow 없으면 불가; 멤버 루트에도 적용 — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "access_policies.html 'SCPs do not grant permissions' + '루트 포함 멤버계정 적용', 'Policies and the root user'에서 멤버 루트가 SCP 영향받음 명시 — 정답·해설 정확(관리계정 루트 예외 주석도 맞음)."
+    },
+    {
+      "id": "saa-t1-1-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "둘 다 미부여·상한; 권한경계=개별 사용자/역할, SCP=계정/OU — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "access_policies.html 권한경계=IAM 엔터티 최대권한(미부여), SCP=Org 계정/OU 최대권한(미부여) — 적용범위 대비 정확."
+    },
+    {
+      "id": "saa-t1-1-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "AD+다계정 직원 SSO는 IAM Identity Center — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles_providers.html 표: Identity Center=Organizations 다계정·workforce, AD/SAML 지원 명시; Cognito는 앱 사용자 — 정답·오답근거 정확."
+    },
+    {
+      "id": "saa-t1-1-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "GitHub Actions는 OIDC+AssumeRoleWithWebIdentity — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles_providers.html 'OIDC connects applications, like GitHub Actions' 직접 명시 — 정답 강하게 뒷받침."
+    },
+    {
+      "id": "saa-t1-1-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "모바일 앱 수백만 소비자는 Cognito User Pool+Identity Pool — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "id_roles_providers.html 'Cognito user pools 로그인 + identity pools가 IAM 자격증명 전달(AssumeRoleWithWebIdentity)' 명시 — 정답·오답근거 정확."
+    },
+    {
+      "id": "saa-t1-1-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "STS 임시자격증명 기본 1h·최대 12h 만료 — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·12h 상한은 docs 확인(DurationSeconds 최대 43200s). 단 오답근거 opt3('임시자격증명은 동일 리전에서만 유효'에 대한 반박으로 STS가 글로벌)는 미묘 — STS는 기본 글로벌 엔드포인트지만 리전별 엔드포인트도 있어 '리전 종속 아님' 표현은 사람 검수 권장. 정답 자체엔 영향 없음."
+    },
+    {
+      "id": "saa-t1-1-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "같은 계정이면 리소스기반 정책 Allow만으로 접근 가능 — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "access_policies.html 'if a resource-based policy grants access to a principal in the same account, no additional identity-based policy is required' 직접 명시 — 정답·교차계정 교집합 설명 정확."
+    },
+    {
+      "id": "saa-t1-1-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "루트: MFA·액세스키 미발급·일상 미사용 — 정답(opt1).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "introduction.html '루트를 일상 작업에 쓰지 말라' 명시; MFA·액세스키 미발급 세부는 root-user/best-practices 페이지가 정본이나 정답 방향은 정설로 뒷받침."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 4,
+    "outOfScope": 0,
+    "needsReview": 1
+  }
+}

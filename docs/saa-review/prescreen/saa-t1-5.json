@@ -1,0 +1,240 @@
+{
+  "taskId": "saa-t1-5",
+  "domain": 1,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t1-5-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "KMS = at-rest, ACM(TLS) = in-transit; classic SAA at-rest vs in-transit split.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "ACM doc: 'creating, storing, and renewing public and private SSL/TLS X.509 certificates'. KMS overview is high-level (no explicit at-rest sentence) so KMS source is partial, but mapping is unambiguous and correct."
+    },
+    {
+      "id": "saa-t1-5-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "CMK (customer managed key) = customer writes key policy for fine-grained principal control.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Correct per concepts.html: customer managed key policy 'Exclusively controlled by the customer'; AWS managed key policy 'Controlled by service; viewable by customer'. But the CITED url (overview.html) does not contain the key-type table — weak source. Reviewer should swap source to concepts.html#kms_keys. Minor: option text says AWS managed keys rotate 'annually AND let you set key policy' is the distractor — wrongExplanations correctly refute it."
+    },
+    {
+      "id": "saa-t1-5-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Direct Encrypt limited to 4KB; large data uses envelope encryption via GenerateDataKey.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer is standard AWS-documented behavior (Encrypt max 4096 bytes; envelope encryption + GenerateDataKey for large objects; RDS doc confirms 'Amazon RDS uses envelope encryption'). BUT cited url overview.html does NOT contain the 4KB limit or GenerateDataKey detail — it lives on concepts.html#enveloping and the Encrypt API reference. Source does not back the specific claim; reviewer must replace with concepts.html#enveloping + API_Encrypt.html. Content correct, citation weak."
+    },
+    {
+      "id": "saa-t1-5-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Key policy is required; IAM allow alone is insufficient unless key policy also permits the principal.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Core claim correct: KMS access requires key policy (alone or with IAM). Confirmed via key-policy-overview.html: 'If you don't explicitly allow access to a KMS key, access is implicitly denied' and account-root principal lets the account 'use IAM policies to delegate the permissions specified in the key policy'. Cited overview.html does not state this — reviewer should cite key-policy-overview.html / key-policies.html. Explanation wording 'intersection of IAM and key policy' is essentially right. Citation weak only."
+    },
+    {
+      "id": "saa-t1-5-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "CloudHSM = single-tenant dedicated HSM, AWS cannot access keys; KMS is multi-tenant.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer correct: CloudHSM doc says HSMs are 'single-tenant' and 'data plane is end-to-end (E2E) encrypted and not visible to AWS', giving 'full control of your keys'. FLAG: wrongExplanations for distractors 1 and 2 BOTH assert KMS FIPS level / multi-tenant in a way that is fine, but the distractor option text 'KMS — FIPS 140-3 Level 3' is factually TRUE of KMS (KMS overview: 'FIPS 140-3 Security Level 3 validated hardware security modules'). The option is wrong only because of the single-tenant/sole-control requirement, NOT because the FIPS claim is false. wrongExplanation '2' correctly explains this nuance, so acceptable — but reviewer should confirm the explanation doesn't imply KMS lacks FIPS 140-3 L3 (it does have it). Minor precision check."
+    },
+    {
+      "id": "saa-t1-5-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "CloudHSM lacks broad native service integration; reach AWS services via KMS custom key store.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer (KMS custom key store backed by CloudHSM gives KMS service-integration convenience + dedicated HW key storage) is correct and standard. Cited introduction.html does not mention custom key store explicitly (it only contrasts with KMS in a Note). Reviewer should add source kms custom-key-store docs (key-store-overview.html) to back the integration mechanism. Content correct, citation weak."
+    },
+    {
+      "id": "saa-t1-5-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "ACM-issued certs auto-renew only while DNS/email validation remains valid; imported certs do not auto-renew.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer correct and well-known: ACM auto-renews issued certs subject to valid DNS/email validation; imported certs are not eligible for managed renewal. Cited acm-overview.html says ACM 'handles the complexity of creating, storing, and renewing' but does NOT spell out the validation condition or the imported-cert exclusion. Reviewer should cite managed-renewal.html / managed-renewal-and-import. Content correct, citation partial."
+    },
+    {
+      "id": "saa-t1-5-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "CloudFront requires the ACM cert in us-east-1 (N. Virginia).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Directly supported by acm-overview.html: 'To use an ACM certificate with Amazon CloudFront, you must request or import the certificate in the US East (N. Virginia) region.' Also 'Certificates in ACM are regional resources.' Strong source-answer match."
+    },
+    {
+      "id": "saa-t1-5-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Macie uses ML/pattern matching to discover PII in S3 and reports public-bucket exposure.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer correct and fully supported by Macie doc (NOT the cited url): 'discovers sensitive data by using machine learning and pattern matching', detects 'personally identifiable information (PII)', and flags 'a bucket that becomes publicly accessible'. WRONG/MISMATCHED SOURCE: cited url is the KMS overview, which is unrelated to Macie. Reviewer must replace source with https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html. This is a copy-paste source error."
+    },
+    {
+      "id": "saa-t1-5-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Inspector = EC2/container/Lambda CVE scan; Macie = S3 PII discovery.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "Service mapping correct (Inspector=CVE/vuln on EC2/ECR/Lambda; Macie=S3 sensitive data). Macie role confirmed by Macie doc. WRONG/MISMATCHED SOURCE: cited url is KMS overview, irrelevant. Reviewer should cite Macie what-is + Inspector what-is (https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html). Copy-paste source error like q9."
+    },
+    {
+      "id": "saa-t1-5-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Backup Plan defines frequency, retention, and lifecycle.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Supported by whatisbackup.html: 'you can create backup policies known as backup plans. Use these backup plans to define your backup requirements'; lifecycle policies transition to cold storage; vaults are containers that 'store recovery points'. Distractors (vault, recovery point, plan assignment) correctly refuted."
+    },
+    {
+      "id": "saa-t1-5-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Backup plan copy rules enable cross-Region and cross-account (Organizations) copies.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Supported: 'copy backups to multiple different AWS Regions ... as part of a scheduled backup plan' (Cross-Region backup) and 'copy backups to multiple different AWS accounts inside your AWS Organizations management structure' (cross-account). Answer and distractor refutations correct."
+    },
+    {
+      "id": "saa-t1-5-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Backup Vault Lock (Compliance mode) = WORM; no one (incl. root) can delete or shorten retention.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer correct: whatisbackup.html says 'use AWS Backup Vault Lock to prevent anyone (including you) from deleting backups or altering their retention period' enforcing a 'write-once-read-many (WORM) model'. The Compliance-mode irreversibility and the cooldown window (explanation says 'default 3 days') are on the vault-lock.md page, not the cited overview. Reviewer: verify the 3-day cooldown figure against vault-lock docs and add that source. Content correct; one numeric detail (3-day) unconfirmed by fetched source."
+    },
+    {
+      "id": "saa-t1-5-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Unencrypted RDS cannot be encrypted in place; snapshot -> encrypted copy -> restore.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer fully correct per RDS docs (NOT cited url): 'You can only encrypt an Amazon RDS DB instance when you create it, not after the DB instance is created. However, because you can encrypt a copy of an unencrypted snapshot ... create a snapshot ... create an encrypted copy ... restore a DB instance from the encrypted snapshot.' WRONG/MISMATCHED SOURCE: cited url is KMS overview, not RDS. Reviewer must replace with https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html. Copy-paste source error."
+    },
+    {
+      "id": "saa-t1-5-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "All KMS API calls (Encrypt/Decrypt/GenerateDataKey) are auto-logged to CloudTrail.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html", "fetched": true, "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "Answer correct and strongly supported by KMS CloudTrail doc (NOT cited url): 'AWS KMS is integrated with AWS CloudTrail ... CloudTrail captures all API calls to AWS KMS as events' including 'cryptographic operations, such as GenerateDataKey and Decrypt', and 'by default, all AWS KMS actions are logged as CloudTrail events'. WRONG/MISMATCHED SOURCE: cited url is the KMS overview (no CloudTrail detail). Reviewer should cite https://docs.aws.amazon.com/kms/latest/developerguide/logging-using-cloudtrail.html. Content correct; citation does not back the specific claim."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 13,
+    "outOfScope": 0,
+    "needsReview": 11
+  }
+}

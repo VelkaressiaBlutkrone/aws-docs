@@ -1,0 +1,244 @@
+{
+  "taskId": "saa-t3-5",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-5-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션0(동기 스탠바이·다른 AZ·장애 시 자동 DNS 전환)이 공식 정의와 일치. 공식: 'A Multi-AZ DB instance deployment has one standby DB instance that provides failover support, but doesn't serve read traffic.' Multi-AZ DB instance 배포에서 스탠바이는 읽기를 제공하지 않음을 명시.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 자체는 옳음. 단, 해설의 '읽기에 사용되지 않으며 HA 전용'은 *Multi-AZ DB instance 배포* 한정 참이고 *Multi-AZ DB cluster 배포*(스탠바이 2개)는 읽기를 제공함('A Multi-AZ DB cluster deployment has standby DB instances that ... can also serve read traffic'). 문항이 'Multi-AZ DB instance'를 전제하므로 결론은 유효하나, 해설/오답2가 'Multi-AZ 스탠바이는 읽기 불가'를 무조건적으로 단정해 cluster 변형과 충돌 — 사람 검수 시 'DB instance 배포 기준' 단서 추가 권장. 페일오버 '약 1~2분' 수치는 fetch한 공식 페이지(Concepts.MultiAZ)에 명시 없음(하위 페이지 추정 필요)."
+    },
+    {
+      "id": "saa-t3-5-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션1(Read Replica 추가·읽기 트래픽을 복제본 엔드포인트로). 공식: 'A read replica is a read-only copy of a DB instance. You can reduce the load on your primary DB instance by routing queries from your applications to the read replica ... Amazon RDS copies them asynchronously.'",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·복제 비동기성 모두 공식 확인. 다만 해설의 'RDS는 최대 5개, Aurora는 최대 15개' 중 Aurora=15는 공식 확인(High availability 페이지 'you can create up to 15 read-only Aurora Replicas'), 그러나 'RDS=최대 5개'는 fetch한 USER_ReadRepl 페이지에 명시 수치가 없음 — 엔진별(MySQL/MariaDB/PostgreSQL)로 다르고 현행 일부 엔진은 5 초과(예: MySQL 15)인 케이스가 있어 '최대 5개' 일반화는 출처 미확정. 사람 검수 시 RDS 복제본 상한 수치 출처(엔진별 페이지) 보강 권장."
+    },
+    {
+      "id": "saa-t3-5-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션1(Multi-AZ=동기·자동 페일오버 HA / Read Replica=비동기·읽기 전용 엔드포인트 읽기 확장). 공식 정의와 정합. Read Replica DR은 'promote a read replica to a standalone instance ... if the primary DB instance fails'(수동 승격).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 옳음. 단 오답3 해설 'Multi-AZ는 교차 리전 복제를 지원하지 않는다'는 *Multi-AZ(HA 동기 스탠바이)* 한정으로는 참이나, 별개 기능인 교차 리전 Read Replica는 가능 — 해설 문장이 'Multi-AZ' vs 'Read Replica' 대비로 이미 구분하므로 큰 오류는 아님. ambiguity: 현행 RDS에 'Multi-AZ DB cluster'(읽기 제공) 변형이 존재해 'Multi-AZ는 읽기 불가'라는 함의가 일부 맥락에서 흔들릴 수 있음(문항은 전통적 Multi-AZ 전제). 결론 영향 없음."
+    },
+    {
+      "id": "saa-t3-5-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션2(교차 리전 Read Replica 생성·재해 시 수동 승격). 공식: 'a read replica resides in a different AWS Region from its primary DB instance' + 'Implementing disaster recovery. You can promote a read replica to a standalone instance ... if the primary DB instance fails.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "교차 리전 Read Replica + 수동 승격 DR 시나리오가 공식 use case와 정확히 일치. 오답(Multi-AZ 교차리전 불가, 스냅샷 복원 부적합, 양방향 직접 쓰기 비관리형)도 타당."
+    },
+    {
+      "id": "saa-t3-5-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션1(3 AZ·6벌 복제 자가치유 분산 스토리지). 공식: 'Aurora synchronously replicates the data across Availability Zones to six storage nodes' + 'An Aurora cluster volume can grow to a maximum size of 256 tebibytes (TiB).'",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "fix",
+      "notes": "T6 플래그 확정 — 정답(옵션1)은 옳으나 해설·오답3의 스토리지 한도 표기가 부정확. 공식 현행 문구는 단일값 '256 TiB'(CHAP_AuroraOverview: 'maximum size of 256 tebibytes (TiB)'). 해설은 '최대 128TiB, 공식 문서 기준 256TiB'로, 오답3 해설은 'Aurora 스토리지의 최대 용량은 128TiB(공식 문서 기준 256TiB)'로 병기 — 128TiB는 과거값이며 현행 공식과 불일치. '128TiB' 언급을 제거하고 256 TiB로 단일화 권장. 정답 채점에는 영향 없음(옵션3 '64TiB'는 어차피 오답)."
+    },
+    {
+      "id": "saa-t3-5-q6",
+      "scope": "in",
+      "answerVerdict": "suspect",
+      "answerConfidence": 6,
+      "answerNote": "옵션3(Aurora <30초, 일반 RDS Multi-AZ 약 1~2분)을 정답으로 함. 방향(Aurora가 더 빠름)은 옳음. 그러나 공식 Aurora HA 문구는 'service is typically restored in less than 60 seconds, and often less than 30 seconds' — 즉 일반적으로 60초 미만, 종종 30초 미만. '30초 미만'을 단정값처럼 제시한 정답 문구가 공식보다 과한 단정.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 선택지 자체는 4지선다 중 유일하게 합리적(상대비교 정답)이라 채점상 안전. 단 절대 수치 '30초 미만'은 공식상 'often less than 30s / typically less than 60s'로 완화 표현이 정확 — 해설을 '일반적으로 60초 미만, 종종 30초 미만'으로 수정 권장. 또한 일반 RDS Multi-AZ '약 1~2분' 수치는 이번 fetch 공식 페이지(Concepts.MultiAZ)에 명시 없음(통상 60~120초로 알려졌으나 출처 미확정). answerConfidence 6은 정답성(높음)이 아니라 해설 수치의 출처 불확실성을 반영."
+    },
+    {
+      "id": "saa-t3-5-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "옵션3(Aurora Global Database). 공식: 'Aurora replicates data to the secondary AWS Regions using dedicated infrastructure, with latency typically under a second' + 'low latency global reads and disaster recovery' + 'lower RTO ... lower RPO.' 시나리오(저지연 글로벌 읽기+리전 장애 DR)와 정확히 부합.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답은 명확히 옳음. 다만 stem·해설의 'RPO 약 1초·RTO 약 1분' 구체 수치는 fetch한 공식 Global Database 페이지에 명시되어 있지 않음(공식은 정성적 'lower RPO/RTO', 복제 'latency typically under a second'만 명시). 'RPO 1초/RTO <1분'은 AWS 마케팅·세미나 자료에서 흔히 쓰이나 docs 본문 미확정 — 해당 수치 출처(별도 DR 페이지) 보강 또는 '복제 지연 통상 1초 미만, RTO/RPO 낮음'으로 표현 완화 권장. 채점 영향 없음(타 옵션 모두 명백 부적합)."
+    },
+    {
+      "id": "saa-t3-5-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "옵션0(Aurora Serverless v2). 간헐적·예측불가 워크로드+운영부담 최소화 시나리오에 정합. CHAP_AuroraOverview는 'underlying storage grows automatically' 등 관리형 특성을 명시하고, Global Database 페이지가 'You can use Aurora serverless for the reader instances for ... flexible scaling'으로 서버리스의 탄력 스케일링을 언급.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·오답 논리 모두 타당(피크 프로비저닝=상시 최대비용, 수동 스케일=운영부담, Global DB=글로벌/DR 목적). 다만 'Serverless v2가 트래픽에 따라 컴퓨팅을 자동 미세조정(ACU 단위)'이라는 핵심 근거는 CHAP_AuroraOverview 본문에 직접 서술이 약함 — 전용 페이지(aurora-serverless-v2.html) 1개 추가 인용 권장. 사실 자체는 정확."
+    },
+    {
+      "id": "saa-t3-5-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션0(Lambda 동시 실행마다 새 연결→DB 최대 연결 초과, RDS Proxy 연결 풀링으로 실제 DB 연결 수 축소). 공식: 'you can allow your applications to pool and share database connections to improve their ability to scale ... RDS Proxy establishes a database connection pool and reuses connections ... To protect a database against oversubscription, you can control the number of database connections.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "RDS Proxy의 대표 use case(서버리스/Lambda 연결 폭증·oversubscription 방지)와 정확히 일치. 오답(타임아웃·수직확장·이벤트소스매핑)도 명확히 부적합. 강한 정답."
+    },
+    {
+      "id": "saa-t3-5-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션2(RDS Proxy를 앱과 Aurora 사이 배치). 공식: 'RDS Proxy makes applications more resilient to database failures by automatically connecting to a standby DB instance while preserving application connections' + Aurora HA 페이지 'bypasses DNS caches to reduce failover times by up to 66% for Aurora Multi-AZ databases.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "페일오버 시 연결 유지·중단 단축이라는 RDS Proxy 핵심 가치와 정확히 부합(공식 'up to 66%' 단축까지 뒷받침). 오답도 타당. 강한 정답."
+    },
+    {
+      "id": "saa-t3-5-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "옵션3(Provisioned IOPS SSD io1/io2 — 요청 IOPS 지속 제공). 공식: 'Provisioned IOPS (PIOPS) ... designed to meet the needs of I/O-intensive workloads, particularly database workloads, that require low I/O latency and consistent I/O throughput. ... best suited for production environments.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "I/O 집약·저지연·일관 처리량 OLTP에 PIOPS가 정답이라는 공식 서술과 정확 일치. 다만 옵션/해설의 모델명(io1/io2, gp2/gp3)과 'gp2는 버스트 크레딧' 표현은 fetch한 Welcome 페이지에 모델명·크레딧 메커니즘이 명시돼 있지 않음 — gp2는 버스트 크레딧 기반이 맞으나(gp3는 기준 성능 고정 모델로 메커니즘 상이) 출처 보강 시 storage 전용 페이지(CHAP_Storage) 권장. 채점 영향 없음."
+    },
+    {
+      "id": "saa-t3-5-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "옵션2(Aurora MySQL/PostgreSQL 호환·최대 15 복제본·<30초대 페일오버·3 AZ 6벌 복제). 공식: 'Amazon Aurora ... compatible with MySQL and PostgreSQL', 'up to 15 read-only Aurora Replicas', 'six storage nodes across Availability Zones', 'often less than 30 seconds.'",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(Aurora) 옳음. 두 군데 검토 필요: (1) 정답 해설 '30초 미만 페일오버' — 공식은 'often <30s / typically <60s'이므로 q6과 동일하게 완화 표현 권장. (2) 오답1 해설 '일반 RDS MySQL은 최대 5개 Read Replica를 지원한다. 15개는 Aurora의 한계'에서 'RDS MySQL=최대 5개'는 현행 부정확 가능성 — RDS for MySQL은 현재 최대 15개 읽기 복제본을 지원(엔진/버전별). 'Aurora=15'는 정확하나 'RDS MySQL=5'를 근거로 5 vs 15를 대비한 것은 오해 소지. 사람 검수 시 RDS MySQL 복제본 상한 재확인 권장(옵션1을 오답으로 만드는 근거는 '5개'가 아니라 'Aurora 대비 HA·스토리지 구조 미흡'으로 재구성하는 편이 안전)."
+    },
+    {
+      "id": "saa-t3-5-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션0(RDS는 완전 관리형, OS 접근·SSH·직접 패치 불가). 공식 책임 비교표가 OS installation/OS patching/Database software install/patching을 모두 'AWS'로 명시. 'Amazon RDS manages backups, software patching, automatic failure detection, and recovery.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "완전 관리형(OS/패치 AWS 책임, SSH 불가) 정답이 공식 책임표와 정확 일치. OS 접근 필요 시 EC2 자체 설치 안내도 타당. 오답도 명확. 강한 정답. (RDS Custom 같은 예외는 SAA 범위 밖이며 문항 전제와 무관.)"
+    },
+    {
+      "id": "saa-t3-5-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션2(PITR로 삭제 직전 시점에 새 인스턴스 복원). 공식: 'You can restore a DB instance to a specific point in time, creating a new DB instance without modifying the source' + 'You can restore to any point in time within your backup retention period.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIT.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "PITR가 '새 인스턴스로 복원'이라는 점, 보존 기간 내 임의 시점 복구 가능이 공식과 정확 일치. 오답(재시작·Multi-AZ 동기 스탠바이엔 삭제 즉시 반영·Read Replica에도 비동기 반영)도 정확. '보존 기간 0~35일' 수치는 이 페이지에 직접 명시는 없으나(통상 0~35일로 정확) 채점 영향 없음. 강한 정답."
+    },
+    {
+      "id": "saa-t3-5-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "옵션3(Multi-AZ로 HA + Read Replica 별도 추가로 읽기 분산). 공식이 두 기능을 독립적으로 정의하고 동시 사용을 지원('You can configure a read replica for a DB instance that also has a standby replica configured for high availability in a Multi-AZ deployment').",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Multi-AZ+Read Replica 병행이 공식 문서에 명시된 구성(USER_ReadRepl 'Read replicas in a Multi-AZ deployment')이며 HA+읽기 확장 동시 확보 베스트 프랙티스 서술 정확. 오답(스탠바이 읽기 불가·Read Replica 자동 페일오버 없음·Global DB는 글로벌 다리전용)도 모두 타당. 강한 정답."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 1,
+    "weakOrUnverifiedSources": 6,
+    "outOfScope": 0,
+    "needsReview": 7
+  }
+}

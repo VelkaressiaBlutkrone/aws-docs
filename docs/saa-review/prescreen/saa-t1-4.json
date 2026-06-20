@@ -1,0 +1,243 @@
+{
+  "taskId": "saa-t1-4",
+  "domain": 1,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t1-4-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "SQL injection·XSS는 L7 요청 페이로드 필터인 WAF가 담당 — 공식문서 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식문서 WAF benefits에 'Presence of SQL code that is likely to be malicious (SQL injection)' 및 'cross-site scripting' 명시. 정답 1(WAF) 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Shield Standard는 모든 고객에게 무료 자동 적용 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Shield Standard is provided automatically and at no extra charge when you use AWS.' 정답 2 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "SRT 24/7·상세 가시성·DDoS 요금급증 크레딧은 Shield Advanced 전용 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary-capabilities.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "capabilities 문서: SRT 'contact at any time', 'Enhanced visibility into DDoS events', 'Cost protection opportunities... in the form of Shield Advanced service credits' 명시. SRT 사용엔 Business/Enterprise Support 필요라는 세부단서는 보기 범위 밖이라 정답성에 영향 없음."
+    },
+    {
+      "id": "saa-t1-4-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RDS는 WAF 웹 ACL 연결 불가(비-HTTP) — 공식 지원 리소스 목록에 없음.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(RDS=연결불가)·오답해설 모두 정확. 단 본문 explanation의 WAF 지원 리소스 나열에 공식 목록의 'AWS Amplify'가 누락되고 그 대신 'Verified Access'만 포함(공식: CloudFront·API Gateway·ALB·AppSync·Cognito user pool·App Runner·Verified Access·Amplify). 정답 영향 없으나 리소스 목록 최신화 권장."
+    },
+    {
+      "id": "saa-t1-4-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Rate-based 규칙이 임계치 초과 IP 자동 차단 — 브루트포스 방어에 적합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: rules can 'exceed a specified number of requests in a minute or in five minutes' — 본문 '5분 또는 1분' 윈도우 일치. 정답 1 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "웹 ACL은 우선순위 순 평가, 첫 종결 액션(Allow/Block)에서 평가 종료 — 첫 매칭 방식.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "what-is 페이지는 다수결/최엄격이 아님을 배제하기에 충분하나 '첫 매칭에서 즉시 종료'의 정밀한 규칙평가 순서·종결액션 동작은 별도 문서(how-aws-waf-works/web-acl 평가)에서 더 명확. 정답 2는 4지선다 중 가장 정확. 세부 정밀성 보강 시 평가순서 공식문서 출처 추가 권장."
+    },
+    {
+      "id": "saa-t1-4-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Firewall Manager가 Organizations 전역 WAF 정책 배포·신규계정 자동 적용 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'you set up your protections just once and the service automatically applies them across your accounts and resources, even as you add new accounts and resources.' 정답 1 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "User Pool이 로그인·MFA 처리하고 JWT(ID·액세스·리프레시) 발급 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'From a user pool, you can issue authenticated JSON web tokens (JWTs) directly'; Identity Pool은 'issues AWS credentials'. 정답 2 및 오답해설(Identity Pool=STS 자격증명) 모두 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "User Pool(Google 연동)→JWT→Identity Pool→STS 임시자격증명→S3 직접 업로드 = 공식 문서화 패턴.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 'user pool and identity pool used together' 3단계 흐름(① user pool 로그인 토큰 → ② identity pool 교환 임시자격증명 → ③ S3/DynamoDB 접근)과 정확히 일치. 정답 2 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Secrets Manager가 RDS 자격증명 저장+자동 교체 일정(90일) 지원 — 공식문서 일치.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 1(Secrets Manager)은 확실. 단 explanation이 'RDS에 대한 내장 Lambda 교체 함수'라 단정하나, 현행 공식문서는 RDS 등 managed secrets에 'Managed rotation(Lambda 미사용)'을 기본 안내하고 Lambda 교체는 그 외 비밀용으로 구분함('Managed rotation doesn't use a Lambda function'). 정답성엔 영향 없으나 'Lambda 기반'을 RDS에 단정한 서술은 현행 문서와 다소 어긋남 — 표현 완화 권장."
+    },
+    {
+      "id": "saa-t1-4-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "자동교체 필요=Secrets Manager, 저비용 비민감 설정=Parameter Store 표준 — 표준 선택 기준.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "Secrets Manager의 자동 교체·per-secret 과금은 intro/pricing에서 뒷받침. Parameter Store 표준티어가 기본 자동교체 없음·무료라는 대비는 SSM 문서가 정본이라 supports=partial(직접 fetch 안함)이나 SAA 표준 선택기준으로 정답 2 타당. 정답 영향 없음."
+    },
+    {
+      "id": "saa-t1-4-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "CloudFront에 WAF 연결 시 엣지 차단으로 오리진 보호·비용 절감 — 정답 3 타당, Route 53 연결불가도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 3 및 오답(EC2 SG 직접적용 불가, Route 53 WAF 연결불가) 모두 공식 지원리소스 목록과 일치. 단 오답해설 3의 지원리소스 나열에 공식의 'Amplify'가 빠지고 'Verified Access'까지만 — q4와 동일한 목록 누락. 정답 영향 없으나 일관 보정 권장."
+    },
+    {
+      "id": "saa-t1-4-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Standard=L3/L4, Advanced=L3/L4+L7 자동완화 추가 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary-capabilities.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "what-is: 'Shield Advanced... at the network and transport layers (layer 3 and 4) and the application layer (layer 7)'; capabilities: 'Automatic application layer DDoS mitigation'은 Advanced 옵션. 정답 2 뒷받침."
+    },
+    {
+      "id": "saa-t1-4-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Cognito User Pool은 WAF 웹 ACL 직접 연결 가능 리소스 — 공식 목록에 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "WAF 공식 지원 리소스에 'Amazon Cognito user pool' 명시; Cognito 비교표에도 'AWS WAF web ACLs' 행(User Pool ✓). 정답 2(직접 연결) 뒷받침, 오답0(ALB 간접 필수) 반박 성립."
+    },
+    {
+      "id": "saa-t1-4-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "'L3/L4 DDoS를 WAF Rate-based로 완전차단'이 틀린 매핑(정답=옳지 않은 것) — WAF는 L7, L3/L4는 Shield.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "WAF는 HTTP/HTTPS(L7) 요청 필터이며 L3/L4 패킷을 파싱하지 않음; L3/L4 완화는 Shield 담당. 따라서 옵션3이 '옳지 않은 매핑'으로 정답 3 성립. 나머지 매핑(Shield Standard·WAF 관리형규칙·Cognito User Pool) 모두 공식과 일치."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 4
+  }
+}

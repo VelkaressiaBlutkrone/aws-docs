@@ -1,0 +1,241 @@
+{
+  "taskId": "saa-t2-1",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t2-1-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "SQS 큐를 생산자·소비자 사이에 두어 디커플링·부하 흡수하는 것이 교과서적 정답.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 docs: 'Amazon SQS ... lets you integrate and decouple distributed software systems and components'; 단일 구독자(single subscriber) 처리에 적합."
+    },
+    {
+      "id": "saa-t2-1-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "순서 보장+중복 제거(exactly-once)가 필요하면 FIFO. 공식문서 'exactly-once message processing' 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 docs: 'FIFO queues support exactly-once message processing'; Standard은 'at-least-once message delivery'. 정답 표현 정확."
+    },
+    {
+      "id": "saa-t2-1-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Visibility timeout 만료 시 메시지는 삭제가 아니라 큐에 재노출되어 다른 소비자가 수신 가능 — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 docs 라이프사이클: 처리 중 메시지는 'isn't returned to subsequent receive requests for the duration of the visibility timeout'; 소비자가 명시 삭제해야 제거됨. 오답해설(maxReceiveCount→DLQ)도 정확."
+    },
+    {
+      "id": "saa-t2-1-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "maxReceiveCount 초과 실패 메시지를 별도 큐로 격리하는 DLQ가 정답.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "welcome 페이지가 DLQ를 'common constructs'로 명시. maxReceiveCount 초과 격리 동작은 dead-letter-queues 페이지(별도)와 일치하는 표준 동작."
+    },
+    {
+      "id": "saa-t2-1-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "빈 응답·비용 절감엔 Long Polling(최대 20초 대기) 전환 — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "최대 20초·기본이 Short Polling은 SAA 표준 사실이나 welcome 페이지엔 직접 명시 없음(별도 sqs-short-and-long-polling 페이지). 정답 자체는 명백히 옳음. 출처를 폴링 전용 페이지로 보강 권장."
+    },
+    {
+      "id": "saa-t2-1-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "SQS는 1메시지를 1소비자만 가져가므로 1:N 동시전달 불가 — SNS 필요. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "SQS docs: 'processes messages through a single subscriber typically'; 256KB 제한 사실(오답해설0)도 정확히 '핵심 아님'으로 처리. SQS가 Lambda 이벤트소스 가능(오답해설2)도 사실."
+    },
+    {
+      "id": "saa-t2-1-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "SNS→SQS×3 팬아웃 + 큐별 소비자/DLQ 격리가 실패 격리·재시도 보장에 적합 — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "SNS docs Fanout: 메시지가 'replicated and pushed to multiple endpoints ... SQS queues ... for parallel asynchronous processing'; 'To prevent message loss when subscribers are offline, integrating SNS with SQS ... ensures consistent delivery' — 오답해설2(직접 Lambda 구독의 재시도 한계) 근거 뒷받침."
+    },
+    {
+      "id": "saa-t2-1-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RDS는 SNS 구독자 유형 아님 — SQS/Lambda/HTTP(S)/email/SMS/push/Firehose만. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "SNS docs가 지원 엔드포인트를 'Amazon SQS, Lambda, HTTP(S), Email, Mobile push, SMS, Amazon Data Firehose'로 열거. RDS 없음 — 정답(RDS 미지원) 확정."
+    },
+    {
+      "id": "saa-t2-1-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "이벤트 속성 기반 선별 라우팅(scale-out만 매칭)엔 EventBridge 이벤트 패턴 규칙 — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "EventBridge docs: 'ingest, filter, transform, and deliver events'; event bus가 'router'로 소스 이벤트를 타겟으로 라우팅. 'EC2 Instance Launch Successful' 이벤트명은 별도 ASG 페이지에 있으나 패턴 매칭 라우팅 능력은 확정."
+    },
+    {
+      "id": "saa-t2-1-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "SaaS(Salesforce) 이벤트를 폴링 없이 직접 수신 → EventBridge 파트너 이벤트 소스. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "welcome 페이지는 'third-party software' 라우팅을 명시하나 Salesforce/파트너 이벤트 소스 명칭은 별도 페이지(eb-saas)에. EventBridge SaaS 파트너 통합은 SAA 표준 사실이라 정답은 옳음. 출처를 파트너 이벤트 소스 페이지로 보강 권장."
+    },
+    {
+      "id": "saa-t2-1-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "감사 이력 콘솔 조회+장기 실행이면 Standard(최대 1년, exactly-once) — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 docs: 'Standard workflows are ideal for long-running, auditable workflows ... show execution history and visual debugging ... exactly-once ... up to one year'; 'See execution history in Step Functions' vs Express는 'Send execution history to CloudWatch'. 오답해설(Express 5분·CloudWatch) 정확."
+    },
+    {
+      "id": "saa-t2-1-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "초당 수만건·5분 이내 단기 고빈도 → Express(100,000 실행/초). 공식문서 정확 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "T6 플래그 항목이나 공식 docs 표가 정확히 뒷받침: Standard '2,000 per second execution rate', Express '100,000 per second execution rate'. 오답해설3(Standard 2,000 < Express)도 정확. 의심 해소."
+    },
+    {
+      "id": "saa-t2-1-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "(1)SNS 1:N Push (2)SQS 버퍼링 (3)EventBridge 패턴 라우팅 매핑 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "세 서비스 역할 구분이 각 공식 welcome 페이지와 일치(SNS pub/sub 1:N, SQS 단일구독자 디커플링/버퍼, EventBridge filter/route). 명확."
+    },
+    {
+      "id": "saa-t2-1-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "다단계 분기(Choice)+재시도(Retry)+오류포착(Catch) 오케스트레이션 → Step Functions. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 docs 유스케이스에 'Choice state', 'Error handling (Retry / Catch) — retry failed tasks, or catch failed tasks and automatically run alternative steps' 명시. 정답 근거 정확."
+    },
+    {
+      "id": "saa-t2-1-q15",
+      "scope": "in",
+      "answerVerdict": "suspect",
+      "answerConfidence": 5,
+      "answerNote": "정답 선택지(1)는 4지선다 중 최선이나, 해설이 '기본 FIFO=300 TPS(큐 단위)'로 단정 — 공식문서상 300/3,000은 partition당 수치(고처리량 모드).",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html", "fetched": true, "supports": "no" },
+        { "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "T6 플래그 적중. 고처리량 FIFO 공식문서: 'Each partition supports up to 3,000 messages per second with batching, or up to 300 messages per second for send, receive, and delete operations in supported regions' — 즉 300/3,000은 PARTITION당(또 고처리량 모드 문맥)이며 큐 전체·기본 모드 수치가 아님. 또 quotas-messages는 'FIFO limits are based on the number of API requests, not message limits'·리전당 한도라고 명시. 정답 옵션 문구('기본 FIFO 300 TPS 제한 → 고처리량 모드로 3,000 TPS')와 explanation('기본 FIFO 큐는 초당 300 TPS')은 per-partition/리전 수치를 큐 단위 기본 한도로 오표현. 보기 0/2/3도 같은 오개념 전제. 정답 방향(기본 설정으론 부족, 고처리량/Standard 검토)은 옳으나 수치 귀속을 'partition당' 또는 리전 한도로 정정 필요. fix까진 아니고 해설 문구 정정(review) 권장."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 1,
+    "weakOrUnverifiedSources": 2,
+    "outOfScope": 0,
+    "needsReview": 1
+  }
+}

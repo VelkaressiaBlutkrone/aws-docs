@@ -1,0 +1,238 @@
+{
+  "taskId": "saa-t3-6",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-6-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 2(DynamoDB)는 '서버리스 + 추가 인프라 관리 불필요 + 모든 규모에서 한 자릿수 밀리초' 요구와 공식 정의가 정확히 일치. Aurora/RDS(관계형)·Redshift(DW)는 명백한 오답.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 첫 문장: 'Amazon DynamoDB is a serverless, fully managed, distributed NoSQL database with single-digit millisecond performance at any scale.' Resilience 절: 'automatically replicates your data across three Availability Zones' — 설명의 '3개 AZ 자동 복제'도 정확."
+    },
+    {
+      "id": "saa-t3-6-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 0(저카디널리티 PK→핫 파티션)이 근본 원인으로 정확. PK 해시 분산 원리와 일치하는 표준 베스트프랙티스 항목.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "Introduction 페이지는 핫 파티션/카디널리티를 직접 다루지 않음(서비스 개요 페이지). 핫 파티션·고카디널리티 PK 원칙은 공식 best-practices(bp-partition-key-design) 문서 소관 — 인용 출처가 약간 빗나감(개념 자체는 정설). 출처를 best-practices로 교체 권장.",
+      "recommendation": "review"
+    },
+    {
+      "id": "saa-t3-6-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 2(GSI는 다른 PK 가능·운영 중 테이블에 언제든 추가). 공식 비교표가 명시적으로 뒷받침. LSI는 테이블 생성 시에만 추가 가능(오답 0·3 정확).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 표 Online Index Operations: 'You can also add a new global secondary index to an existing table... Local secondary indexes are created at the same time that you create a table. You cannot add a local secondary index to an existing table.' Read Consistency: 'Queries on global secondary indexes support eventual consistency only' — 설명의 'GSI 최종 일관성만'도 정확."
+    },
+    {
+      "id": "saa-t3-6-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 3(GSI=최종 일관성만, LSI=강력 일관성 가능). 공식 비교표 4개 행(일관성·생성시점·처리량·키)이 모든 선택지 진위를 정확히 결정.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 표: Read Consistency LSI='you can choose either eventual consistency or strong consistency'; Provisioned Throughput='Every global secondary index has its own provisioned throughput... local secondary index consume read capacity units from the base table' — 정답·오답 해설 모두 정확."
+    },
+    {
+      "id": "saa-t3-6-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 0(강력 일관성=최종 일관성의 2배 RCU). 공식 read-consistency 페이지가 'half the cost' 문구로 직접 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Eventually consistent reads are half the cost of strongly consistent reads.' 또 'All reads from GSIs and streams are eventually consistent' — 오답 해설 3(GSI 강력 일관성 불가)도 정확. 인용 출처는 Introduction이 아니라 HowItWorks.ReadConsistency가 정확 — 출처 URL 교체 권장(사소)."
+    },
+    {
+      "id": "saa-t3-6-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 1(온디맨드). '트래픽 예측 불가 + 스파이크 무스로틀' 요구에 온디맨드가 정답. 오답 0(Auto Scaling 즉시 대응 못함)도 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "공식 Serverless 절: 'on-demand capacity mode offers pay-as-you-go pricing... DynamoDB instantly scales up or down your tables to adjust for capacity.' 온디맨드의 사전 예열/스파이크 흡수 한계(직전 피크 2배 등 세부)는 on-demand-capacity-mode 전용 문서 소관이나, 보기 수준에서 정답 판정엔 영향 없음. 출처를 on-demand-capacity-mode로 보강하면 더 정밀.",
+      "recommendation": "review"
+    },
+    {
+      "id": "saa-t3-6-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 1(DAX). '밀리초→마이크로초 + 코드 변경 최소 + 반복 읽기'는 DAX의 교과서적 정답. 오답 0(ElastiCache는 범용·코드 변경 더 큼)도 SAA 맥락에서 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 DAX: 'reduces the response times of eventually consistent read workloads by an order of magnitude from single-digit milliseconds to microseconds' 및 'API-compatible with DynamoDB... requires only minimal functional changes.' 한 가지 미세 주의: DAX 가속은 '최종 일관성 읽기'에 한함(강력 일관성은 q8) — 본 문항은 인기 게시물 반복 읽기라 일관성 요구가 없어 정답 유지."
+    },
+    {
+      "id": "saa-t3-6-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 1(강력 일관성 읽기는 DAX 우회→DynamoDB 직접). 공식 DAX consistency 페이지가 문장 그대로 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.consistency.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'DAX passes strongly consistent read requests to DynamoDB. When it receives a response from DynamoDB, DAX returns the results to the client, but it does not cache the results. DAX can't serve strongly consistent reads by itself.' 인용 출처가 DAX.html보다 DAX.consistency.html가 정밀 — 본 보고서는 후자로 검증."
+    },
+    {
+      "id": "saa-t3-6-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 2(Global Tables, Active-Active 다중 리전 읽기/쓰기). 공식이 'multi-active replication' '99.999%'로 직접 확인. RDS Read Replica는 읽기 전용(오답 0 정확).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "공식: 'Global tables provide multi-active replication... Because global tables are multi-active, you don't need a primary table.' 정답 자체는 견고. 다만 설명의 '충돌 해결은 최후 작성자 우선(last-writer-wins)' 문구는 Introduction 페이지엔 없음 — 공식 V2 Global Tables 문서(V2globaltables_HowItWorks)에서 별도 확인 필요(개념은 통설이나 인용 출처가 이를 직접 뒷받침하지 않음). ambiguity는 정답 모호가 아니라 해설 보조 주장의 출처 공백 표시."
+    },
+    {
+      "id": "saa-t3-6-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 0(Streams + TTL). 두 요구(이벤트 기반 재고 갱신 + 90일 후 자동 삭제)를 Streams(→Lambda)와 TTL이 각각 충족. 공식 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "T6 스캔의 TTL 삭제시점 플래그 점검 결과: 본 문항은 안전. 스템은 '90일 후 자동 삭제'(만료 타임스탬프 의미)만 말하고, 설명은 'TTL은 만료 타임스탬프를 지정하면 자동 삭제하며 추가 비용이 없습니다'로 서술 — 구체적 삭제 지연(48시간/며칠)을 단정하지 않음. 공식 TTL: 'automatically deletes expired items within a few days of their expiration time, without consuming write throughput' 및 'may be deleted by the system at any time, typically within a few days' — 설명과 모순 없음. Streams 확인: Introduction 'streams records a time-ordered sequence of every item-level change... ideal for applications with event-driven architecture.'"
+    },
+    {
+      "id": "saa-t3-6-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 1(RDS). '복잡한 조인·집계 + 고정 스키마 + 금융 거래(ACID)'는 관계형 신호. DynamoDB는 JOIN 미지원(공식 명시) — 오답 0 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(복잡 조인·집계→RDS)은 견고. 공식: 'Unlike relational databases, DynamoDB doesn't support a JOIN operator.' 주의: '금융 거래 데이터'는 단독 변별 신호로 다소 약함 — 같은 Introduction 페이지가 'Financial service applications' 사례로 DynamoDB(+global tables, ACID transactions)를 명시적으로 권장함. 본 문항은 '복잡 조인·집계 + 고정 스키마'가 함께 있어 RDS가 정답으로 성립하나, 해설에서 '금융 거래라서 RDS'라는 뉘앙스는 공식과 충돌 소지 — 변별 근거를 '복잡 조인·집계·정규화'로 좁혀 재서술 권장. 사람 검수 필요."
+    },
+    {
+      "id": "saa-t3-6-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답 1(Redis: 복제·Multi-AZ 자동 Failover로 세션 HA). 공식 비교표가 Memcached HA/Failover 'No', Redis 'Yes/Optional'로 직접 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "출처 교체 검증: 인용된 WhatIs.html는 현재 Valkey/serverless 중심으로 개정돼 Memcached의 복제 부재를 직접 명시하지 않음. 변별 근거는 SelectEngine 비교표 — 'High availability (replication): Memcached No / Redis Yes', 'Automatic failover: Memcached No / Redis Optional'. 정답·오답 모두 정확. 인용 출처를 SelectEngine.html로 교체 권장."
+    },
+    {
+      "id": "saa-t3-6-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(Redis: Sorted Set으로 리더보드 + 스냅샷/RDB 영속성). 공식 표가 'Sorted sets: Memcached No / Redis Yes' 확인. 영속성도 Redis만.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "Sorted Set 변별은 공식 표로 견고('Sorted sets: No/Yes/Yes'). 미세 주의: 설명의 'AOF 로그' 표현 — 공식 SelectEngine 표는 node-based의 영속성을 'Backup and restore: Yes'(스냅샷)로 표기하고 AOF를 이 표에서 직접 명시하지 않음(durability는 Valkey 9.0/transactional log 맥락). RDB 스냅샷 영속성은 명백히 정답이나 'AOF' 단어는 인용 출처가 직접 뒷받침하지 않으므로, AOF 언급 제거 또는 Redis OSS append-only-file 전용 문서 보강 권장. 인용 출처도 WhatIs→SelectEngine 교체 권장."
+    },
+    {
+      "id": "saa-t3-6-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(Write-Through: 쓰기 시 캐시 동시 갱신→stale 없음). '항상 최신 + stale 없어야' 요구에 정확. Lazy Loading은 stale 위험(오답 0·1·3 타당).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "Write-Through vs Lazy Loading 개념·트레이드오프(쓰기 지연 증가, 미사용 데이터 적재)는 SAA 통설이며 설명이 정확. 그러나 인용된 WhatIs.html(및 SelectEngine)은 이 캐싱 전략을 직접 다루지 않음 — 정확한 1차 출처는 ElastiCache Redis User Guide 'Caching strategies'(mem-ug/Strategies 또는 redis-ug Strategies, Lazy Loading/Write-Through 절). 출처 교체 필요(supports:no는 현재 인용 URL이 전략을 뒷받침하지 못함을 의미)."
+    },
+    {
+      "id": "saa-t3-6-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(TTL 설정으로 stale 완화: 만료 후 재조회). Lazy Loading의 stale을 TTL 병행으로 줄이는 표준 패턴. 오답 3(RDS 시나리오에 DynamoDB Streams 무관)도 명확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·오답 논리 모두 견고(TTL 병행이 Write-Through 전면 교체보다 가벼운 완화책). 단 인용 WhatIs.html은 Lazy Loading/TTL 캐싱 전략을 직접 서술하지 않음 — q14와 동일하게 ElastiCache 'Caching strategies' 문서(Lazy loading + Adding TTL 절)로 출처 교체 필요. supports:no는 출처-주장 불일치 표시(주장 자체는 정확)."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 9,
+    "outOfScope": 0,
+    "needsReview": 8
+  }
+}

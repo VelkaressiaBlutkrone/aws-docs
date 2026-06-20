@@ -1,0 +1,238 @@
+{
+  "taskId": "saa-t4-2",
+  "domain": 4,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t4-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "온디맨드(option 1)가 정답으로 타당. 짧고 불규칙한 dev/test에는 약정 없는 온디맨드가 표준 권장. RI는 1~3년 약정, Spot은 중단 허용 시, 전용 호스트는 BYOL/컴플라이언스라는 오답 근거도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 자체는 명백히 타당하나 인용 URL(ec2-reserved-instances.html)이 RI 페이지라 온디맨드 적합성을 직접 다루지 않음. 약한 출처. 온디맨드/구매옵션 비교(instance-purchasing-options.html) 또는 온디맨드 페이지로 교체 권장."
+    },
+    {
+      "id": "saa-t4-2-q2",
+      "scope": "in",
+      "answerVerdict": "suspect",
+      "answerConfidence": 7,
+      "answerNote": "방향(Standard=고할인·교환불가, Convertible=저할인·교환가능)은 공식 문서와 일치하나, 정답 option 2의 'Convertible 최대 54%' 수치가 공식과 불일치. AWS 공식(sp-ris)은 Convertible RI=최대 66%로 명시(54% 아님). Standard 최대 72%는 정확.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "공식 sp-ris.html 표: 'Convertible RIs ... Savings over On-Demand: Up to 66%', 'Standard RIs ... Up to 72%'. 문항의 Convertible '최대 54%' 수치는 출처 없음(과거 마케팅 수치 추정). RI 페이지(ec2-reserved-instances.html)는 'Standard: most significant discount, can only be modified ... can't be exchanged / Convertible: lower discount ... can be exchanged'로 방향만 확인하고 54%는 명시 안 함. 정답 키는 유지될 수 있으나(가장 옳은 보기) 54%→66% 정정 또는 수치 제거 권장. recommendation=fix.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t4-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Compute Savings Plans(option 2)가 정답으로 타당. 인스턴스 패밀리·리전 변경 가능 + Lambda·Fargate 전환 계획 → Compute SP가 최적. 공식: Compute SP는 instance family/size/OS/tenancy/Region 무관 적용 + Fargate·Lambda 커버. '최대 66%'도 sp-ris.html과 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 what-is-savings-plans.html: 'Compute Savings Plans provide lower prices on Amazon EC2 instance usage regardless of instance family, instance size, OS, tenancy, or AWS Region. This also applies to AWS Fargate and AWS Lambda usage.' 66% 수치는 sp-ris.html 표에서 확인('Compute Savings Plans ... Up to 66%'). 출처 적절."
+    },
+    {
+      "id": "saa-t4-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "시간당 달러 사용량($/hr)(option 1)이 정답으로 정확. 공식 문서가 명시적으로 약정 단위를 'USD per hour'/'measured per hour'로 규정. 오답(인스턴스 구성=RI, vCPU시간, 실행횟수)도 정확히 배제.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'a commitment of using a specified amount of compute power (measured per hour)' 및 RI 페이지 'you make a commitment to a consistent usage amount, measured in USD per hour'. 출처 적절."
+    },
+    {
+      "id": "saa-t4-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Savings Plans 우선 권장(option 2)이 정답으로 타당. AWS 공식이 'We recommend Savings Plans over Reserved Instances'로 명시(RI 페이지). 유연성+동등 절감율 근거도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "명시적 'We recommend Savings Plans over Reserved Instances. ... offer lower prices (up to 72% off On-Demand pricing), just like Reserved Instances'는 인용된 sp-ris.html이 아니라 ec2-reserved-instances.html에 있음. sp-ris.html은 'just like ... RI, but with added flexibility'로 동등+유연성을 뒷받침(partial). 권장 근거 강화하려면 ec2-reserved-instances.html 추가 인용 권장. 정답은 유지.",
+      "recommendation": "review"
+    },
+    {
+      "id": "saa-t4-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "스팟에 SP 미적용(option 1)이 정답으로 정확. 공식이 명시적으로 'Savings Plans doesn't apply to spot usage' 및 'your spend on Spot Instances does not apply the commitments in your Compute Savings Plans'로 확정. 약정 소진 미포함 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "인용 URL(what-is-savings-plans.html)에는 '스팟 미적용' 명시 문구가 없음(supports=no). 실제 근거는 using-spot-instances.html('Spot Instances are not covered by Savings Plans ... your spend on Spot Instances does not apply the commitments in your Compute Savings Plans')와 sp-ris.html('Savings Plans doesn't apply to spot usage or usage covered by RIs')에 있음. 정답·해설은 정확하므로 출처만 위 두 URL로 교체 권장. recommendation=review.",
+      "recommendation": "review"
+    },
+    {
+      "id": "saa-t4-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "3년+All Upfront(option 3)가 최대 절감 조합으로 정확. 공식: 'three-year commitment offering a bigger discount' + 'you can save more money making a higher upfront payment'. 두 변수 모두 최대 → 정답.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 ec2-reserved-instances.html: 'one-year or three-year commitment, with the three-year commitment offering a bigger discount' 및 'Generally speaking, you can save more money making a higher upfront payment for Reserved Instances'. 출처 적절."
+    },
+    {
+      "id": "saa-t4-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "야간 이미지 렌더링 배치(중단 후 재시작 가능)(option 2)가 정답으로 타당. 공식: 스팟은 'flexible about when ... applications run and if ... applications can be interrupted ... batch jobs, background processing'에 적합. 결제/상태저장DB/실시간거래는 부적합 근거도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "정답·오답 모두 타당. 단 해설의 '최대 90% 절감' 수치는 인용 URL에 없음(페이지는 'steep discounts'/'less than On-Demand'만 명시). 90%는 Spot 제품/가격 페이지(aws.amazon.com/ec2/spot) 근거. 수치 출처 보강 또는 표현 완화 권장. 정답 유지.",
+      "recommendation": "review"
+    },
+    {
+      "id": "saa-t4-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "2분(option 1, correct index 1)이 정답으로 정확. 공식이 'two-minute warning before it is interrupted'로 명시. 30초/5분/15분 배제 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 using-spot-instances.html: 'a two-minute warning before it is interrupted' 및 'two-minute Spot Instance interruption notice'. 출처 적절."
+    },
+    {
+      "id": "saa-t4-2-q10",
+      "scope": "in",
+      "answerVerdict": "suspect",
+      "answerConfidence": 6,
+      "answerNote": "capacityOptimized(option 2)는 '가용 용량 최다 풀 선택 → 중단 최소화'로 방향은 옳음. 그러나 (1) AWS 현행 권장은 price-capacity-optimized이며 capacity-optimized는 '중단 최소화 우선' 전략으로 별도 존재(보기 자체는 타당). (2) 더 중요: 정답 근거가 모호 — diversified(option 1) 해설조차 '가용성 최대화에 적합'이라 자인하여 '가용성을 높이려면'이라는 stem과 충돌 소지. (3) lowestPrice/capacityOptimized/diversified는 Spot Fleet 전략 맞음.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "인용 URL(using-spot-instances.html)에 Spot Fleet 할당 전략(lowestPrice/diversified/capacityOptimized) 설명이 전혀 없음(supports=no). 올바른 근거는 ec2-fleet-allocation-strategy.html / spot-fleet-allocation-strategy.html. stem이 '특정 인스턴스 풀의 중단 가능성 최소화 + 가용성 향상'을 동시에 묻는데, capacityOptimized와 diversified가 둘 다 일부 부합해 변별이 약함(ambiguity). AWS는 capacity-optimized/price-capacity-optimized를 '중단 최소화'에 권장하므로 정답 키(capacityOptimized)는 유지 가능하나, 출처 교체 + diversified 오답 해설의 '가용성 최대화에 적합' 문구 정리 필요. recommendation=fix.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t4-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Scheduled Scaling(option 2)이 정답으로 타당. 시간/요일 기반의 예측 가능 패턴(평일 낮 高·야간/주말 低)에는 Scheduled Scaling이 표준 정답. Target/Step/Predictive 배제 근거도 합리적.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "정답·해설은 EC2 Auto Scaling 통념과 일치하나 인용 URL(ec2-reserved-instances.html)이 RI 페이지로 오토스케일링과 전혀 무관(supports=no, 잘못된 출처). EC2 Auto Scaling 사용자 가이드의 Scheduled scaling 페이지(docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html)로 교체 필요. recommendation=fix.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t4-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "option 1(기본 14일 CloudWatch 분석→rightsizing 권장)이 정답으로 정확. 공식: 'analyzing ... utilization metrics ... from Amazon CloudWatch for the last 14 days', 'enhanced infrastructure metrics (paid feature) ... 93 days'. 자동변경 아님·EC2 외 다수 지원·과/저프로비저닝 모두 감지라는 오답 배제도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 what-is-compute-optimizer.html이 14일 기본·93일 enhanced(유료)·지원 리소스(EC2/ASG/EBS/Lambda/ECS on Fargate/RDS·Aurora 등)·권장 제공(자동 미적용)·optimal 여부 판정을 모두 확인. 출처 적절. 오답0의 '자동 적용' 부정, 오답2의 'EC2만' 부정, 오답3의 '성능 미감지' 부정 모두 문서와 일치."
+    },
+    {
+      "id": "saa-t4-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "AWS Lambda(option 2)가 정답으로 타당. 간헐적·대부분 유휴 + 짧은 burst → 요청당 과금 Lambda가 비용 최소. 항상 켜둔 EC2/3년 RI/Spot(유휴시간 과금·회수) 배제 근거도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "정답·해설은 서버리스 비용 통념과 일치하나 인용 URL(what-is-savings-plans.html)이 Lambda 과금모델/유휴 무과금을 다루지 않음(supports=no, 부적절 출처). AWS Lambda 가격 페이지(aws.amazon.com/lambda/pricing) 또는 Lambda 개발자 가이드로 교체 권장. recommendation=fix.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t4-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "option 1(동일 성능 대비 온디맨드 약 20% 저렴 + SP 결합 추가 절감)이 정답으로 타당. Graviton의 약 20% 가격이점은 AWS의 일관된 공식 마케팅 수치. 동일가격/EC2전용/항상우월 배제 근거도 정확(Lambda·Fargate·RDS·ElastiCache 지원 사실).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "인용 URL(what-is-savings-plans.html)에 Graviton/약 20% 가격이점 언급 없음(supports=no, 부적절 출처). 'up to 20% lower cost'/'40% better price performance'는 AWS Graviton 제품 페이지(aws.amazon.com/ec2/graviton) 근거. 수치는 세대·비교기준(가격 vs 가성비)에 따라 달라지므로 정확한 출처로 교체 + 'Graviton3 기준'/비교기준 명확화 권장. 정답 키는 유지. recommendation=fix.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t4-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "option 1(틀렸다 — No Upfront RI도 1/3년 약정 의무, 선납만 없고 매월 할인요금 청구)이 정답으로 정확. 공식이 명시: 'No Upfront Reserved Instances are based on a contractual obligation to pay monthly for the entire term' + 'you cannot cancel your purchase'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 ec2-reserved-instances.html: 'No Upfront: You are billed a discounted hourly rate for every hour within the term, regardless of whether the Reserved Instance is being used' + Note 'based on a contractual obligation to pay monthly for the entire term of the reservation' + 'After you purchase a Reserved Instance, you cannot cancel'. 오답2('1년만 가능') 부정도 문서의 1년/3년 모두 가능과 일치. 출처 적절."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 2,
+    "weakOrUnverifiedSources": 8,
+    "outOfScope": 0,
+    "needsReview": 11
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "taskId": "saa-t3-3",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-3-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 1: m=범용, 7=7세대, g=Graviton(ARM), 2xlarge=크기. 프로세서 접미사 a=AMD / g=Graviton / i=Intel은 공식 docs(instance-types.html Processors 절, Nitro 패밀리 목록의 M6g/M7g 등)로 명확히 확인됨. m=범용(General Purpose)도 확인. g=GPU(오답0)·고대역폭 네트워크(오답2)·AMD(오답3)는 모두 틀림.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-type-names.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: '인스턴스 유형 이름은 instance family, generation, processor family, capabilities, size 기반.' 정식 접미사 표는 instance-type-names.html에 있으나 해당 페이지 표가 이미지로 렌더되어 텍스트 추출 불가 — 그래서 partial. 단 프로세서 접미사(a/g/i)와 m=범용은 instance-types.html에서 직접 확인되어 정답 신뢰 높음."
+    },
+    {
+      "id": "saa-t3-3-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "정답 2(인덱스): 기능 접미사 d=로컬 NVMe 스토리지 내장. c7id=컴퓨팅(c)/7세대/Intel(i)/로컬NVMe(d) 조합. AMD=a(오답0), 네트워크 강화=n(오답1 — ENA는 Nitro 기본 포함도 정확), 전용호스트는 명명 접미사 아님(오답3) 모두 타당. d=instance store(로컬 NVMe SSD)는 AWS 명명 관례상 정설.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-type-names.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "d='instance store volumes(로컬 NVMe SSD)' 정의의 verbatim 텍스트는 명명규칙 페이지 표(이미지)에서 추출 불가. instance-types.html Nitro 목록의 패턴(C6id, M6id 등 d 접미사 = 인스턴스 스토어)으로 강하게 뒷받침되나 명문 인용 미확보 → partial. EBS최적화=b 언급(설명문)도 명명규칙 정설과 일치. 정답은 확립된 사실로 likely-correct.",
+      "recommendation": "pass"
+    },
+    {
+      "id": "saa-t3-3-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 7,
+      "answerNote": "정답 2(인덱스): U 패밀리(High Memory). 공식 Nitro Memory-optimized 목록에 U7i-6tb/U7i-8tb/U7i-12tb/U7in-16tb/U7in-32tb 등 TB급 유형 실재 확인. 설명에 인용된 'U7i-12tb, U7in-32tb' 정확. SAP HANA 수TB 인메모리 → U 패밀리 적합. C(1:2)·M(1:4)·I(스토리지) 오답 설명 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "경미한 모호성: R 패밀리도 메모리 최적화라 'CPU보다 메모리 중요'만 보면 R도 가능해 보일 수 있음. 그러나 stem이 '수TB(multi-TB)'를 명시 → U(High Memory)가 SAP HANA TB급 전용 패밀리로 정답이 더 강함. 설명도 R 대비 U 우위를 정확히 짚음. partial 이유: instance-types.html은 U 유형의 '존재'는 확정하나 vCPU:메모리 비율(C 1:2, M 1:4)·SAP HANA 매핑은 본문에 수치로 명시되지 않음(별도 instance-types 제품페이지 영역). 사람 확인 권장."
+    },
+    {
+      "id": "saa-t3-3-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(인덱스): standard 모드에서 크레딧 소진 시 성능이 기준선(baseline)으로 제한. 공식 standard-mode 문서: 'If the instance is running low on accrued credits, CPU utilization is gradually lowered to the baseline level.' 자동종료(오답0)·응답불능 0%(오답3) 아님, surplus credit+과금은 unlimited(오답1) 동작 — 모두 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-standard-mode.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용: 'CPU utilization is gradually lowered to the baseline level, so that the instance does not experience a sharp performance drop-off.' 정답·오답 설명 모두 문서와 정합. (설명문의 'unlimited가 T3/T3a/T4g 기본값'도 how-to 페이지로 확인됨.)"
+    },
+    {
+      "id": "saa-t3-3-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "정답 2(인덱스): 지속 고부하(70% 상시)에는 T 부적합 → M 패밀리(고정 성능) 교체. unlimited 모드 surplus credit 추가과금은 공식 확인('in unlimited mode, an instance can spend surplus credits, which might incur an additional charge'). standard 전환(오답0)은 기준선 제한으로 성능저하, T 업그레이드(오답1)도 동일 과금 위험, C(1:2 CPU집약, 오답3)는 균형 웹서버에 M보다 부적합 — 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "how-to 페이지가 unlimited surplus credit 과금과 기본 크레딧 사양(T4g/T3a/T3=unlimited)을 직접 확인. 'T는 low-to-moderate CPU용'이라는 burstable 개요 본문도 지속 고부하=M 교체 권고를 뒷받침. C vs M의 1:2 vcpu:mem 비율 수치는 본문에 명시 안 됨(제품페이지 영역) → 보조출처 partial. 정답 논리 견고."
+    },
+    {
+      "id": "saa-t3-3-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "정답 2(인덱스): Graviton은 가격-성능비 우위 제공하나 ARM 호환 SW 필요. 공식: 'AWS Graviton is a family of processors designed to deliver the best price performance.' Graviton=ARM(arm64)이라 x86 바이너리 네이티브 비호환(오답0 반박), ML전용 아님(오답1 — ML전용은 Trainium, 문서 확인), 고객 직접 선택 가능(오답3) 모두 타당.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "explanationVerdict=flag(경미): 설명이 '최대 40% 가격-성능비 우위(AWS 발표 기준)'라는 구체 수치를 단정. 공식 docs.aws User Guide 본문은 'best price performance'만 명시하고 40% 수치는 없음(40%는 마케팅/Graviton 제품페이지 주장으로 출처·세대마다 다름). 수치 인용을 약화하거나 출처 명시 권장. 정답 자체(ARM 호환 필요+가격성능 우위)는 정확. arm64 명시는 efa.html OS표(AWS Graviton=arm64)로도 교차확인."
+    },
+    {
+      "id": "saa-t3-3-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(인덱스): 소켓/코어 기반 BYOL(Windows Server) + 물리 소켓 제어 → Dedicated Host. 공식 purchasing-options: 'Dedicated Hosts – Pay for a physical host that is fully dedicated to running your instances, and bring your existing per-socket, per-core, or per-VM software licenses.' 스팟·RI·온디맨드는 공유 HW라 소켓 제어 불가 — 오답 설명 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 문구가 'per-socket, per-core, or per-VM software licenses'를 직접 언급 — 정답과 정확히 일치. 'Dedicated Hosts ... can help you address compliance requirements ... using your existing server-bound software licenses'도 동일 페이지 확인. 강한 pass."
+    },
+    {
+      "id": "saa-t3-3-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "정답 1(인덱스): 스팟 중단 2분 전 경고 + 지정 중단동작(terminate/stop/hibernate). 2분 경고·중단동작은 잘 확립된 스팟 동작. 온디맨드 자동전환 아님(오답0), 즉시종료 무경고 아님(오답2), 1시간 전 이메일 아님(오답3) — 타당. 설명의 '메타데이터+EventBridge 통지'도 정설.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "purchasing-options 페이지는 'Spot Instances ... cost-effective if you can be flexible ... and if they can be interrupted'까지만 명시 — 2분 경고/중단동작/메타데이터·EventBridge의 verbatim은 하위 spot-interruptions 페이지에 있어 인용 미확보 → partial. 그러나 2분 경고는 SAA 표준 사실로 정답 신뢰 높음. (필요시 spot-interruptions.html 추가 인용 권장.)"
+    },
+    {
+      "id": "saa-t3-3-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(인덱스): 중단 가능+재시작 설계+비용 최소화 야간 배치 → 스팟. 공식: 'Spot Instances ... cost-effective choice if you can be flexible about when your applications run and if they can be interrupted.' 전용호스트(고비용·오답0), RI 3년(상시용·오답1), 용량예약(절감 아님, 용량선점·오답3) — 모두 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "스팟의 적용 시나리오(유연·중단가능 워크로드)와 용량예약이 '절감 옵션 아님(특정 AZ 용량 예약)'이라는 점이 공식 페이지에서 직접 확인. 설명의 '최대 90% 절감'은 본문 수치 미명시이나 스팟 표준 사실. 정답 견고."
+    },
+    {
+      "id": "saa-t3-3-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(인덱스): 클러스터=단일 AZ 밀집 배치로 저지연, AZ 장애 시 전체 영향. 공식: 'A cluster placement group is a logical grouping ... within a single Availability Zone' + 'can't span multiple Availability Zones' + 단일플로우 10Gbps. 다중AZ HA(오답0)·AZ당7개(오답1=분산)·랙분산(오답3=분산) 모두 타 전략과 혼동시킨 정확한 오답.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용: 'Instances within a cluster placement group can use up to 10 Gbps for single-flow traffic'(설명의 10Gbps 정확) + 'same high-bisection bandwidth segment'. wrongExpl 1의 '클러스터는 인스턴스 수 제한 없음'은 docs에 명시적 cap이 없어(용량 한도 내) 수용 가능."
+    },
+    {
+      "id": "saa-t3-3-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 1(인덱스): 150 브로커 + 랙수준 장애격리 + 토폴로지 인식 복제 → 파티션 배치 그룹. 공식: 파티션은 'each partition ... has its own set of racks. Each rack has its own network and power source' + 'visibility into the partitions ... topology-aware applications, such as HDFS, HBase, and Cassandra' + 인스턴스 수는 계정 한도까지(150 가능). 분산=AZ당7개(오답0), 클러스터=저지연·격리낮음(오답2) 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용: 'The number of instances that you can launch in a partition placement group is limited only by your account limits' + 'No two partitions ... share the same racks.' Kafka는 docs의 파티션 예시 워크로드(Hadoop/Cassandra/Kafka)에 명시 — 정답 정확. wrongExpl0의 '분산 8번째 실패'도 공식 'eighth instance ... will not launch'와 일치."
+    },
+    {
+      "id": "saa-t3-3-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 1(인덱스): 분산=인스턴스마다 별도 물리 랙 + AZ당 최대 7개. 공식: 'A spread placement group is a group of instances that are each placed on distinct hardware' + 'a maximum of seven running instances per Availability Zone.' 오답0(AZ당7파티션=파티션), 오답2(단일AZ저지연=클러스터), 오답3(전용인스턴스와 사용=불가, 'Spread placement groups are not supported for Dedicated Instances') 모두 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용 다수 일치: 'distinct hardware', 'maximum of seven running instances per Availability Zone', 'Spread placement groups are not supported for Dedicated Instances'(wrongExpl3 정확). 강한 pass."
+    },
+    {
+      "id": "saa-t3-3-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(인덱스): 클러스터 ICE 최소화 모범사례 = 단일 런칭 요청으로 동일 유형 한꺼번에 시작. 공식: 'Use a single launch request to launch the number of instances ... Use the same instance type ... If you try to add more instances ... later, or ... more than one instance type ... you increase your chances of getting an insufficient capacity error.' 분할시작(오답0)·유형혼합(오답1)·2회분할(오답3) 모두 ICE 위험↑ — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 문구가 정답·오답을 거의 그대로 뒷받침. (c7g.8xlarge는 클러스터 지원 유형: 'except burstable'만 제외이며 c7g는 가능.) 강한 pass."
+    },
+    {
+      "id": "saa-t3-3-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 2(인덱스): ENA=표준 TCP/IP 범용 고성능(SR-IOV), EFA=OS-bypass로 HPC·ML 지연 최소화. 공식 efa.html: 'The Libfabric API bypasses the operating system kernel and communicates directly with the EFA device' + 'EFA (EFA with ENA) interfaces provide both the ENA device for IP networking and the EFA device'(EFA⊃ENA, 설명의 상위집합 정확) + enhanced-networking.html: ENA는 SR-IOV 'standard'. 역할바뀜(오답0)·반대서술(오답1)·동일기술(오답3) 모두 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "출처 주의: 문항에 등록된 인용 URL은 enhanced-networking.html인데, 이 페이지는 ENA와 Intel 82599 VF만 다루고 EFA/OS-bypass/Libfabric을 전혀 언급하지 않음 → ENA 절반만 supports=partial. EFA 측 주장(OS-bypass, Libfabric, ENA 상위집합, 추가요금 없음 'at no additional cost')은 efa.html에서 직접 확인(supports=yes). 정답은 정확하나 문항 sources에 efa.html 추가 인용 권장. 추가요금 없음: enhanced-networking='no additional charge', EFA='no additional cost' 양쪽 확인 — 설명의 '둘 다 추가 요금 없음' 정확."
+    },
+    {
+      "id": "saa-t3-3-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 1(인덱스): 수백 GPU NCCL 분산학습 → EFA 활성화 + 클러스터 배치그룹 단일 AZ. 공식 efa.html: 'EFA traffic can't cross Availability Zones or VPCs' (클러스터 단일AZ 제약과 정합) + EFA가 NCCL/MPI 지원·OS-bypass로 저지연. ENA만+다중AZ(오답0), 분산BG 7개제한으로 수백노드 불가(오답2 — 공식 7개/AZ 일치), Enhanced Networking 없음(오답3) 모두 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "핵심 공식 인용: 'EFA traffic can't cross Availability Zones or VPCs' — EFA+클러스터(단일AZ)의 조합 정당성을 직접 뒷받침. EFA가 NCCL 지원('supports Nvidia Collective Communications Library (NCCL)')도 확인. 오답2의 분산BG AZ당7개 제한도 placement-strategies로 교차확인됨. 강한 pass."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 6,
+    "outOfScope": 0,
+    "needsReview": 0
+  }
+}
