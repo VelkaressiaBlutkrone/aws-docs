@@ -1,7 +1,7 @@
 # CLF-C02 학습/모의고사 표적 보충 — 설계 스펙
 
 작성일: 2026-06-20
-상태: **설계 승인 대기** (브레인스토밍 산출). 구현 플랜: 미작성(다음 단계 writing-plans).
+상태: **구현 플랜 작성·검증·정렬 완료(2026-06-20)**. 구현 플랜: `docs/superpowers/plans/2026-06-20-clf-c02-content-supplement.md`(공식 출처 seed·Phase 0~4·사람 검수 산출물). 본 스펙은 그 플랜과 문항 수·서비스 상태·README 범위를 정렬함.
 
 근거 결정 체인: 사용자가 `D:\Download\aws`(CCP 강의 HTML 학습팩)를 소재로 CLF 학습/모의고사 보충 요청(2026-06-20) → 갭 분석 우선 합의 → 소스 채굴·현행 커버리지 본문 대조로 "진짜 갭" 확정 → **기존 문서 인플레이스 보강**(새 Task 0) · **주제당 +~3 verified 문항**(총 ~25) · **핵심 4문서 + 소소 전부** 범위 확정(사용자, 2026-06-20).
 
@@ -23,7 +23,7 @@
 ## 2. 목표 / 성공 기준
 
 - 소스가 다루지만 **현재 CLF 문서 본문에 없는(또는 이름만 있는) 주제**를 기존 19 Task 문서에 보강한다(아래 §4 확정 갭).
-- 보강 주제에 **verified 문항을 추가**한다: 핵심 4주제는 각 ~3개, 소소 3주제는 합쳐 ~6개(총 약 20개, 상한 ~25).
+- 보강 주제에 **verified 문항을 추가**한다: **초안 21개** 기준(t3-1 +5·t2-3 +3·t3-7 +4·t2-2 +3·t3-3/t3-8/t3-5 각 +2), 검수 후 18~21 flip 정상, 상한 25. (Forecast는 신규 고객 제한 레거시라 문항 제외 — §4 주.)
 - 기존 구조·품질·게이트를 **깨지 않는다**: 새 Task 0, 공식 1:1 매핑 유지, 고도화 템플릿·문항 스키마·테스트 가드 준수.
 - 모든 사실은 **공식 AWS 문서로 대조**(소스 HTML은 주제 발굴·출제 소재일 뿐, 사실 근거가 아니다).
 
@@ -32,7 +32,7 @@
 | 결정 | 값 | 근거 |
 |---|---|---|
 | 보강 구조 | **인플레이스**(기존 .md에 섹션 추가, 새 Task 0) | 공식 1:1 매핑 유지 · `content_index.dart` 변경은 테스트·공개 게이트 사고가 잦음 |
-| 문항 규모 | **핵심 4주제 각 ~3 · 소소 합 ~6**(총 약 20, ≤25) | 절제·품질·공식출처 대조 부담의 균형 |
+| 문항 규모 | **초안 21**(핵심 5/3/4/3 · 소소 각 2), 검수 후 18~21 flip, ≤25 | 절제·품질·공식출처 대조 부담의 균형 |
 | 보강 범위 | **핵심 4문서 + 소소 전부** | 사용자 "기존에 없는 내용은 모두 보강" 지시 |
 | 깊이 | 핵심은 두텁게, 소소는 가볍게("위치만") | CLF 범위 집중·절제 철학 |
 
@@ -44,10 +44,10 @@
 |---|---|---|---|---|
 | 1 | **t3-1** (배포·운영 3.1) | 새 대섹션 **배포·운영 자동화 도구**: Elastic Beanstalk(완전누락)·AWS CDK·Systems Manager 본체(Session Manager·Run Command·Patch·Parameter Store)·Code\* 시리즈 역할(현 t3-8에 *이름만*) + 비교표(CloudFormation vs Beanstalk vs Code\* vs SSM) | **두텁게** | 현 t3-1은 콘솔/CLI/SDK/IaC(CloudFormation)만 |
 | 2 | **t2-3** (IAM 2.3) | **Amazon Cognito**(User/Identity Pool)·**AWS Directory Service**(Managed Microsoft AD·AD Connector·Simple AD) | 중간 | IAM·Identity Center·Secrets Manager는 이미 있음. Cognito는 현재 t2-4에 *이름만* |
-| 3 | **t3-7** (AI/ML·분석 3.7) | **Rekognition·Comprehend·Textract·Forecast·Personalize** | 중간 | SageMaker·Lex·Kendra·Translate·Transcribe·**Polly** 이미 있음 |
+| 3 | **t3-7** (AI/ML·분석 3.7) | **Rekognition·Comprehend·Textract·Personalize** (+ Forecast는 *신규 고객 제한 레거시*로 문서에만 명시·문항 제외) | 중간 | SageMaker·Lex·Kendra·Translate·Transcribe·**Polly** 이미 있음 |
 | 4 | **t2-2** (보안·거버넌스 2.2) | **ACM**(Certificate Manager)·**CloudHSM** — KMS와 구분 | 중간 | KMS·암호화(전송/저장) 이미 있음 |
 | 5a | **t3-3** (컴퓨팅 3.3) | **ECR**·**AWS Batch** | 가볍게 | AMI·Lightsail·EC2 Auto Scaling 이미 있음 |
-| 5b | **t3-8** (기타 3.8) | **AppStream 2.0**·**Amazon MQ** | 가볍게 | WorkSpaces·SNS/SQS/EventBridge 이미 있음 |
+| 5b | **t3-8** (기타 3.8) | **AppStream 2.0**(현 공식명 *Amazon WorkSpaces Applications* — 신·구 명칭 병기)·**Amazon MQ** | 가볍게 | WorkSpaces·SNS/SQS/EventBridge 이미 있음 |
 | 5c | **t3-5** (네트워크 3.5) | **VPC Flow Logs**·**PrivateLink** 명시 | 가볍게 | IGW·VPC Endpoint·NAT·Transit Gateway 이미 있음 |
 
 > 채굴 원본의 SAA급 과도 디테일(FSx 3종 심화, Kinesis Firehose 내부 등)은 CLF 범위·절제 원칙으로 **제외**한다.
@@ -101,8 +101,9 @@
 ## 10. 완료 정의 (Definition of Done)
 
 - §4의 7개 보강 주제가 해당 문서에 고도화 템플릿 준수로 반영(🧠 원리 블록·출처·함정 포함).
-- 보강 주제별 verified 문항 ~3개(총 약 25) 추가·사람 검수 flip, 해당 `questionCount` 동기화.
+- 보강 주제별 verified 문항(초안 21, 검수 후 18~21) 추가·사람 검수 flip, 해당 `questionCount` 동기화.
 - `flutter test` 전부 그린(content_index 동적 불변식·enrichment·question_model ≥15·parse·anchor·mock 포함) · `flutter analyze` 신규 0.
+- **README CLF 문항 수 갱신**(현재 stale `228/12` → 최종 verified 합계, 예상 285→306): 이번 범위에 포함.
 - `develop`로 PR(CI 그린) → 머지. 릴리스(`develop`→`main`)는 별도 시점.
 
 ## 11. 리스크 / 주의
@@ -118,4 +119,6 @@
 - 대상: `flutter_app/assets/content/clf/{t3-1,t2-3,t3-7,t2-2,t3-3,t3-8,t3-5}.md` + 각 `.questions.json` · `flutter_app/lib/data/content_index.dart`(questionCount만).
 - 게이트: `flutter_app/test/{content_index_test,content_enrichment_test,question_model_test,all_content_parse_test,section_anchor_link_test,cert_detail_sections_test,mock_exam_test}.dart`.
 - 소재 원본(레포 외부): `D:\Download\aws\_mined_1.md`·`_mined_2.md` · 강의 HTML 25개.
+- 구현 플랜: `docs/superpowers/plans/2026-06-20-clf-c02-content-supplement.md`.
+- 서비스 상태 검증(2026-06-20, 공식 문서): Forecast 신규 고객 제한(`what-is-forecast`) · AppStream 2.0→WorkSpaces Applications(`what-is-appstream`) · README 문항수 stale(`228/12`).
 - 선행 스펙: `2026-06-11-content-enrichment-design.md`(고도화 템플릿) · `2026-06-12-clf-question-density-15-design.md`(문항 워크플로우·가드). 메모리: [[question-bank-verified-workflow]]·[[subagent-scope]]·[[study-doc-parser-md-subset]].
