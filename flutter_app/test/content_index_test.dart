@@ -104,8 +104,9 @@ void main() {
     });
   });
 
-  test('certExamIsBalanced: CLF balanced(true), SAA 현재 0(false), 미지정(false)', () {
+  test('certExamIsBalanced: CLF balanced(true), SAA 부분 verified·D1 미충족(false), 미지정(false)', () {
     expect(certExamIsBalanced('CLF-C02'), isTrue);
+    // SAA는 일부 Task만 flip(D2~D4 부분)·D1 0 → 전 도메인 균형 미충족 → false(통합 모의고사 숨김).
     expect(certExamIsBalanced('SAA-C03'), isFalse);
     expect(certExamIsBalanced('NOPE'), isFalse);
   });

@@ -254,7 +254,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 2,
       mdAsset: 'assets/content/saa/saa-t2-1.md',
       questionsAsset: 'assets/content/saa/saa-t2-1.questions.json',
-      questionCount: 0,
+      questionCount: 15,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -308,7 +308,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 3,
       mdAsset: 'assets/content/saa/saa-t3-2.md',
       questionsAsset: 'assets/content/saa/saa-t3-2.questions.json',
-      questionCount: 0,
+      questionCount: 15,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -326,7 +326,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 3,
       mdAsset: 'assets/content/saa/saa-t3-4.md',
       questionsAsset: 'assets/content/saa/saa-t3-4.questions.json',
-      questionCount: 0,
+      questionCount: 15,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -335,7 +335,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 3,
       mdAsset: 'assets/content/saa/saa-t3-5.md',
       questionsAsset: 'assets/content/saa/saa-t3-5.questions.json',
-      questionCount: 0,
+      questionCount: 15,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -389,7 +389,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 4,
       mdAsset: 'assets/content/saa/saa-t4-2.md',
       questionsAsset: 'assets/content/saa/saa-t4-2.questions.json',
-      questionCount: 0,
+      questionCount: 15,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -398,7 +398,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 4,
       mdAsset: 'assets/content/saa/saa-t4-3.md',
       questionsAsset: 'assets/content/saa/saa-t4-3.questions.json',
-      questionCount: 0,
+      questionCount: 15,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
