@@ -176,4 +176,26 @@ void main() {
     expect(dist.values.every((c) => c < 130 * 0.95), isTrue);
     expect(dist.keys.length, greaterThan(1)); // 한 위치 독점 아님
   });
+
+  // ── T5: 부분 verified 상태 샘플러 동작(빈/누락 도메인) ──────────────
+  test('buildMockExam: 빈/누락 도메인(부분 verified 재현) → 크래시 없이 백필·N 유지', () {
+    // D1만 verified, D2~D4는 가중 있으나 풀 없음 = SAA 부분 flip 상태 재현.
+    final pool = {
+      1: [for (var i = 0; i < 20; i++) _q('d1q$i', 1)],
+    };
+    const w = {1: 30, 2: 26, 3: 24, 4: 20}; // SAA 도메인 비중
+    final r =
+        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 15, rng: Random(3));
+    expect(r.length, 15); // 빈 도메인을 D1에서 백필해 N 유지(크래시 없음)
+    expect(r.every((q) => q.id.startsWith('d1q')), isTrue); // 전부 D1 = 편향
+    expect(r.map((q) => q.id).toSet().length, 15); // 중복 없음
+    // ↑ 이 "편향"이 바로 T4 공개 게이트(certExamIsBalanced)가 전 도메인 균형
+    //   전까지 통합 모의고사를 숨기는 이유다.
+  });
+
+  test('buildSampledExam: 풀이 완전히 비면 빈 결과(크래시 없음)', () {
+    final r = buildSampledExam<int>(
+        poolByKey: const {}, weightByKey: const {1: 50}, n: 5, rng: Random(1));
+    expect(r, isEmpty);
+  });
 }
