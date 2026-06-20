@@ -1,0 +1,238 @@
+{
+  "taskId": "saa-t3-7",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-7-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Latency 정책이 정답(opt1). 공식 routing-policy.html: 'Latency routing policy – Use when you have resources in multiple AWS Regions and you want to route traffic to the Region that provides the best latency.' 다중 리전 동일 앱을 '가장 빠른 응답'으로 보내는 시나리오와 정확히 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Geolocation/Weighted/Geoproximity 오답 설명 모두 공식 정의와 부합. 공식 인용: 'route traffic to the Region that provides the best latency'."
+    },
+    {
+      "id": "saa-t3-7-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Alias 레코드(opt2)가 정답. Zone Apex(루트 도메인)에 CNAME 불가, Alias는 A/AAAA로 동작하며 AWS 리소스(ALB) IP 자동 추적 + 쿼리 무료 — 모두 정확한 AWS 사실. 다만 인용된 출처(Route 53 Welcome 페이지)는 alias/zone-apex/CNAME 제약을 다루지 않음(미검증).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치: Welcome.html은 DNS/도메인등록/헬스체크 개요만 다루고 Alias·Zone Apex·CNAME 제약을 substantiate하지 않음. 답·해설 내용은 정확. 출처를 choosing-alias-non-alias.html 또는 resource-record-sets-choosing-alias-non-alias.html로 교체 권장(사람 판정)."
+    },
+    {
+      "id": "saa-t3-7-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "헬스체크 연결(opt1)이 정답. 공식 routing-policy-failover.html: 'Failover routing lets you route traffic to a resource when the resource is healthy or to a different resource when the first resource is unhealthy.' active-passive failover의 healthy/unhealthy 판별은 헬스체크 기반. routing-policy.html 개요 페이지 자체엔 '헬스체크 필수' 문구가 없어 인용 페이지가 약함.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "답·해설 정확. 단 인용된 routing-policy.html(개요)은 failover의 healthy/unhealthy만 언급, '헬스체크 필수'를 직접 명시하지 않음. routing-policy-failover.html 또는 dns-failover.html로 출처 보강 권장. (별도 fetch한 failover 서브페이지가 active-passive 동작을 확인.)"
+    },
+    {
+      "id": "saa-t3-7-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Weighted 정책(opt1)이 정답. 공식 routing-policy.html: 'Weighted routing policy – Use to route traffic to multiple resources in proportions that you specify.' 90/10 비율 점진 배포와 일치. 가중치 0~255 범위는 routing-policy-weighted.html이 확인('weights of 1 and 255 ... weight ... to 0').",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Multivalue 오답 설명('최대 8개 무작위, 50:50 미보장')도 정확(routing-policy-multivalue.html 확인). 가중치 범위 0~255 해설은 weighted 서브페이지 예시와 일치."
+    },
+    {
+      "id": "saa-t3-7-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Geolocation 정책(opt1)이 정답. 공식 routing-policy.html: 'Geolocation routing policy – Use when you want to route traffic based on the location of your users.' 국가별 저작권 규제 준수(콘텐츠 현지화)와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "Geoproximity 오답 설명이 'Traffic Flow에서만 사용 가능' 명시 — routing-policy-geoproximity.html 'The maps are available only with Traffic Flow'로 정합. 답·해설 모두 정확."
+    },
+    {
+      "id": "saa-t3-7-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "opt2(리소스 위치 기준 + bias, Traffic Flow 전용)가 정답. 공식 routing-policy-geoproximity.html: 'route traffic to your resources based on the geographic location of your users and your resources ... a value, known as a bias. A bias expands or shrinks the size of the geographic region', 'The maps are available only with Traffic Flow'. 단 정답 옵션 문구는 '리소스 위치를 기준으로 하되'로 단순화 — 공식은 '사용자 위치 + 리소스 위치 둘 다' 고려한다고 명시(경미한 단순화, 정답성 영향 없음).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·오답 분류는 옳음. 미세 정확성 메모: 공식 정의는 Geoproximity가 '사용자와 리소스의 지리적 위치'를 함께 본다(routing-policy-geoproximity.html). 정답 옵션이 '리소스 위치를 기준'으로만 표현해 약간 축약됨 — 사실 왜곡은 아니나 사람이 표현 정밀화 검토 가능. Traffic Flow 전용 제약은 서브페이지에서 확인됨(개요 routing-policy.html에는 미명시)."
+    },
+    {
+      "id": "saa-t3-7-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "OAC + Block Public Access + 버킷정책에 CloudFront 서비스 주체 허용(opt1)이 정답이며 현재 AWS 권장 방식(OAC가 OAI 후속). 모두 정확한 AWS 사실. 단 인용 출처(CloudFront Introduction.html)는 OAC를 다루지 않음(개요만) — substantiate 실패.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치: Introduction.html은 CDN 개요만 다루고 OAC/OAI를 언급하지 않음. 답·해설은 정확(OAC = OAI 후속, 권장). 출처를 private-content-restricting-access-to-s3.html로 교체 권장."
+    },
+    {
+      "id": "saa-t3-7-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Signed Cookie(opt1)가 정답 — 복수 파일/세션 단위 접근 제한. Signed URL은 단일 파일용. 정확한 AWS 사실. 인용 출처(Introduction.html)는 'Serve private content with signed URLs and signed cookies' 링크만 언급하고 둘의 차이는 설명하지 않음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 약함: Introduction.html은 signed URL/cookie 존재만 링크로 언급, '단일 파일 vs 복수 파일/세션' 구분은 substantiate 안 함. 답·해설 정확. 출처를 private-content-choosing-signed-urls-cookies.html로 교체 권장."
+    },
+    {
+      "id": "saa-t3-7-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "us-east-1(opt2)이 정답 — CloudFront용 ACM 인증서는 반드시 us-east-1(N. Virginia) 발급. 정확한 AWS 사실. 인용 출처(Introduction.html)는 ACM 리전 제약을 다루지 않음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치: Introduction.html은 ACM/us-east-1 인증서 요건을 언급하지 않음. 답·해설은 정확(잘 알려진 AWS 제약). 출처를 cnames-and-https-requirements.html(또는 ACM 사용자 가이드 acm-regions)으로 교체 권장."
+    },
+    {
+      "id": "saa-t3-7-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "CloudFront(opt1)가 정답. 공식 Introduction.html: 'speeds up distribution of your static and dynamic web content ... through a worldwide network of data centers called edge locations ... copies of your files ... are now held (or cached) in multiple edge locations'. 엣지 캐싱으로 오리진 부하↓·지연↓ 요구와 일치. Global Accelerator는 캐싱 없음(대조 정확).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'cached in multiple edge locations around the world'. GA '캐싱 없이 경로만 최적화' 오답 설명도 정확(GA how-it-works: 트래픽을 엔드포인트로 forward/terminate, 캐싱 없음)."
+    },
+    {
+      "id": "saa-t3-7-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Global Accelerator(opt2)가 정답. 공식 what-is-global-accelerator.html: 'For IPv4, Global Accelerator provides two static IPv4 addresses', 'The static IP addresses are anycast from the AWS edge network'. UDP 지원은 introduction-how-it-works.html이 확인(UDP fragment forwarding). 고정 IP 2개 + TCP/UDP + 글로벌 백본 경로 최적화 = UDP 게임 시나리오와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'two static IPv4 addresses', 'anycast from the AWS edge network'. CloudFront HTTP/HTTPS 전용·ALB 고정 IP 미제공(NLB가 고정 IP) 오답 설명 모두 정확. UDP는 how-it-works 서브페이지가 확인('UDP protocol requires IP fragmentation ... Global Accelerator forwards UDP fragments')."
+    },
+    {
+      "id": "saa-t3-7-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "opt2(경로만 최적화, 캐싱 없음, 모든 요청 오리진 전달)가 정답. GA how-it-works: 'Global Accelerator terminates TCP connections from clients at AWS edge locations and ... establishes a new TCP connection with your endpoints' — 캐싱 아님, 경로 최적화/연결 중계. TCP/UDP 모두 지원, 고정 anycast IP 2개(IPv4). 오답들(엣지 캐싱=CloudFront / HTTP 전용=CloudFront / 단일 동적 IP)도 정확히 반박.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "what-is-global-accelerator.html이 '두 개 static anycast IPv4'·'AWS global network로 최적 경로'를 확인. 명시적 'no caching' 문구는 GA 페이지에 단어 그대로는 없으나, 연결 종단/포워딩 구조와 CloudFront 대비로 캐싱 부재가 명확. 답·해설 정확."
+    },
+    {
+      "id": "saa-t3-7-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "NLB(opt2)가 정답 — L4 TCP/UDP/TLS, 초고성능·초저지연·고정 IP. 수백만 RPS·고정 IP·TCP 금융 시나리오와 일치(정확한 AWS 사실). 단 인용 출처(Route 53 Welcome.html)는 NLB/로드밸런서를 전혀 다루지 않음 — 출처 완전 불일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치(심함): Route 53 Welcome.html은 DNS 서비스 개요로 ELB/NLB와 무관. 답·해설은 정확. 출처를 ELB User Guide의 network/introduction.html(또는 ELB 제품 비교 페이지)로 교체 권장."
+    },
+    {
+      "id": "saa-t3-7-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "opt2가 정답 — 최대 8개 정상 레코드 무작위 반환, 로드밸런서 아님(세션/상태 추적 없음). 공식 routing-policy-multivalue.html: 'It's not a substitute for a load balancer', 'Route 53 responds to DNS queries with up to eight healthy records', 헬스체크 연동 가능. 정답·오답 모두 공식 문구와 정확히 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용(서브페이지 routing-policy-multivalue.html): 'It's not a substitute for a load balancer', 'up to eight healthy records', 'if you associate a health check ... only when the health check is healthy'. 무작위 반환·헬스체크 연동·LB 대체 불가 모두 정확. 개요 routing-policy.html도 'up to eight healthy records selected at random' 확인. 최고 신뢰."
+    },
+    {
+      "id": "saa-t3-7-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "ALB(opt2)가 정답 — L7 URL 경로 기반 라우팅, /api/orders/* 와 /api/users/* 를 다른 대상 그룹으로 분배. ECS/EKS·Lambda 대상 지원. 정확한 AWS 사실. 단 인용 출처(Route 53 Welcome.html)는 ALB 경로 라우팅을 다루지 않음 — 출처 완전 불일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치(심함): Route 53 Welcome.html은 DNS 개요로 ALB/path-based routing과 무관. 답·해설 정확. 출처를 ELB Application Load Balancer User Guide(application/introduction.html 또는 listener-update-rules.html)로 교체 권장."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 8,
+    "outOfScope": 0,
+    "needsReview": 8
+  }
+}

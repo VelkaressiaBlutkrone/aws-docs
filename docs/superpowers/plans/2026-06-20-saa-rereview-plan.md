@@ -60,7 +60,7 @@ Phase A 문서 선행          Phase B AI 사전심사(읽기전용)        Phas
 - [ ] **T5 (P2)** — 부분-verified 앱 동작 테스트 확장(시험 길이·도메인 비율·백필·빈 도메인·라벨·재시도).
 - [ ] **T6 (P2)** — 24문서 핵심오류 스캔 패스(Exam Guide·현행 AWS 대조) — 해당 도메인 문항 flip 선행.
 - [ ] **T7 (P2)** — 사람 검수 루브릭 + 수정 루프 문서(폐기/수정/재작성/출처교체/재검수/승인=flip 커밋).
-- [ ] **T8 (P3)** — 검수기간 SAA 콘텐츠 freeze 정책 명문화(WORKLIST).
+- [x] **T8 (P3)** — 검수기간 SAA 콘텐츠 freeze 정책 **명문화 완료**(WORKLIST §B-① · 전체 SAA · 규약+가드). 가드 `.githooks/pre-commit`: 발효(`.saa-frozen`) 중 검수브랜치(`saa-review*`/`review/saa*`) 밖에서 SAA 콘텐츠 커밋 차단. 설치 `git config core.hooksPath .githooks`, 토글 `touch/rm .saa-frozen`(현재 dormant). 4 시나리오 검증.
 
 ## 6. Tests (커버리지)
 ```

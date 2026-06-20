@@ -1,0 +1,232 @@
+{
+  "taskId": "saa-t3-4",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-4-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 7,
+      "answerNote": "관용적 운영부담 스펙트럼(Lambda 최소 → EC2 최대)으로 SAA 강의에서 널리 쓰이는 framing이며 정답(옵션0)은 그 정순. 단, EKS vs ECS-EC2의 상대 순서는 공식 문서가 단정하지 않는다(둘 다 사용자가 EC2 노드를 관리). EKS는 K8s 컨트롤플레인을 AWS가 관리하지만 데이터플레인(노드) 부담은 ECS-EC2와 유사. '정답 1개' 자체는 타당하나 EKS<ECS-EC2 순서는 출처로 못박을 수 없음 — 사람 판정 권장.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "Fargate 문서: 'AWS Fargate is a technology that you can use with Amazon ECS to run containers without having to manage servers or clusters of Amazon EC2 instances' / ECS Welcome: 'Fargate is a serverless, pay-as-you-go compute engine. With Fargate you don't need to manage servers...' — Lambda<Fargate<EC2 상대 위치는 뒷받침되나, EKS와 ECS-EC2 사이 순서는 명문 근거 없음. 운영부담 전체 5단계 랭킹을 하나의 공식 문서가 제시하지 않음."
+    },
+    {
+      "id": "saa-t3-4-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Lambda 최대 실행(타임아웃) 한도는 900초=15분이며 초과 작업은 종료된다 — 사실. 정답(옵션1) 타당. 단 인용 출처가 ECS Welcome 페이지라 이 주장을 전혀 뒷받침하지 못함(출처-주장 불일치).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: 인용된 ECS Welcome 페이지에는 Lambda 타임아웃(15분/900초)·EventBridge 스케줄·메모리 관련 서술이 전혀 없음(NOT ON PAGE). 정답은 정확하나 출처를 Lambda 공식 문서(docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html, gettingstarted-limits.html)로 교체 필요.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Fargate는 독립 서비스가 아니라 ECS/EKS와 함께 쓰는 기술(시작유형/실행모드)이며 단독 사용 불가 — 공식 문구로 확인. 정답(옵션1) 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식: 'AWS Fargate is a technology that you can use with Amazon ECS to run containers without having to manage servers or clusters of Amazon EC2 instances.' 옵션1의 'ECS 또는 EKS의 시작유형' 중 EKS 호환은 이 페이지엔 없지만 Batch 문서('AWS Fargate', 'Amazon EKS' 모두 실행 엔진으로 열거)로 교차확인됨. 출처-주장 일치."
+    },
+    {
+      "id": "saa-t3-4-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "기존 K8s 매니페스트·도구 호환 + 멀티클라우드 이식성 → EKS. 공식: 'certified Kubernetes-conformant, so you can deploy Kubernetes-compatible applications without refactoring and use Kubernetes community tooling and plugins.' 정답(옵션1) 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식: EKS는 'fully managed Kubernetes service', 'AWS manages the Kubernetes control plane', 클라우드와 'your own data centers(EKS Anywhere/Hybrid Nodes)'에서 실행, 'certified Kubernetes-conformant ... without refactoring'. 멀티클라우드 이식성·매니페스트 재사용 주장 뒷받침. 출처-주장 일치."
+    },
+    {
+      "id": "saa-t3-4-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Lambda는 메모리만 설정 손잡이이며 vCPU가 메모리에 비례해 함께 증가 — 사실. 정답(옵션3) 타당. 단 인용 출처가 ECS Welcome이라 무관(출처-주장 불일치).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: ECS Welcome에는 Lambda 메모리-CPU 비례 서술 없음(NOT ON PAGE). 정확한 출처는 Lambda 공식(docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html: 메모리 1,769 MB 당 1 vCPU 상당). 출처 교체 필요.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "콜드 스타트(유휴 후 실행환경 초기화 지연)의 근본 해결책 = Provisioned Concurrency(실행환경 사전 초기화 유지) — 사실. 정답(옵션1) 타당. 인용 출처 ECS Welcome은 무관.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: ECS Welcome에 Provisioned Concurrency/콜드스타트 서술 없음(NOT ON PAGE). 정확 출처는 docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html. 출처 교체 필요.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(옵션3): Job, Job Queue, Compute Environment + Job Queue 우선순위 — 공식 components 문서로 확인. 분배자(ECS 리소스 혼동) 모두 명확히 오답. 다만 AWS Batch 핵심 구성요소엔 Job Definition도 포함돼 '3계층'은 단순화(Job Definition 누락) — 오답을 만들 정도는 아니나 ambiguity 표시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "인용된 what-is-batch 페이지는 ECS/EKS/Fargate·EC2 Spot/On-Demand 실행은 명시하나 'Job/Job Queue/Compute Environment' 정의·큐 우선순위는 하위 페이지 batch_components.html에 있음. 검증 위해 그 페이지 교차확인: Compute environment='set of managed or unmanaged compute resources... (Fargate or EC2)'; Job queue='You can also assign priority values for these compute environments and even across job queues themselves'; Job='runs as a containerized application on AWS Fargate or Amazon EC2 resources'. 또한 Job definition('blueprint for the resources')도 핵심 구성요소 — 정확성↑ 위해 출처를 batch_components.html로 교체 권장."
+    },
+    {
+      "id": "saa-t3-4-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "장시간(수 시간)·완료 후 종료·가변 수요 배치 → AWS Batch. 공식: 제출량에 따라 컴퓨팅 자동 프로비저닝, Spot 활용 비용절감. Lambda는 15분 한도로 부적합. 정답(옵션2) 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식: 'AWS Batch automatically provisions compute resources and optimizes the workload distribution based on the quantity and scale of the workloads' / 'across the full range of AWS compute offerings, such as Amazon ECS, Amazon EKS, AWS Fargate, and Spot or On-Demand Instances'. '실행 시간 제한 없음' 정확 문구는 이 페이지에 명시 없으나(대비: Lambda 15분) 사실에 부합. 출처-주장 대체로 일치."
+    },
+    {
+      "id": "saa-t3-4-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "HPC MPI 초저지연: 클러스터 배치그룹(물리 근접) + EFA(OS-bypass로 커널 오버헤드 제거) 병행 — 사실. 배치그룹만으로는 OS 스택 오버헤드 잔존. 정답(옵션3) 타당. 인용 출처 ECS Welcome은 무관.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: ECS Welcome에 배치그룹/EFA/HPC 서술 전무(NOT ON PAGE). 정확 출처는 EC2 docs(placement-groups.html 'cluster placement group', efa.html 'OS-bypass'). 출처 교체 필요. 옵션1 설명('배치그룹이 OS 네트워크 스택을 우회')은 의도된 오답으로 적절.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "HPC 다수 노드 고속 병렬 공유 + S3 연동 → FSx for Lustre. 정답(옵션2) 타당. EBS Multi-Attach 한계·S3 비-POSIX 설명도 정확. 인용 출처 ECS Welcome은 무관.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: ECS Welcome에 FSx for Lustre/HPC 스토리지 서술 없음(NOT ON PAGE). 정확 출처는 docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html(고성능 병렬 파일시스템·S3 연동). 출처 교체 필요.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Fargate 태스크별 격리 경계(커널·CPU·메모리·ENI 비공유) — 공식 문구와 정확히 일치. 정답(옵션1) 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 직접 인용: 'Each Fargate task has its own isolation boundary and does not share the underlying kernel, CPU resources, memory resources, or elastic network interface with another task.' 정답·설명·오답 모두 이 문장에 정확 부합. 출처-주장 완전 일치."
+    },
+    {
+      "id": "saa-t3-4-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "지정 수의 Task를 지속 실행하는 장기 상주 → ECS Service. Task는 실행 후 종료. 공식 문구로 확인. 정답(옵션2) 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식: Task='An application such as a batch job that performs work, and then stops.' / Service='A long running stateless application.' / Service Auto Scaling='increases or decreases the desired number of tasks in your service'. / Task definition='The blueprint for the application.' / Cluster='The infrastructure your application runs on.' 4개 보기 정의가 페이지와 정확 일치. 출처-주장 완전 일치."
+    },
+    {
+      "id": "saa-t3-4-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "간헐 HTTP·5초·스테이트리스·운영부담 최소 → Lambda. 정답(옵션2) 타당. 인용 출처 ECS Welcome은 Lambda 적합성을 직접 뒷받침하지 못함.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: ECS Welcome은 ECS만 다루며 Lambda 이벤트기반/스테이트리스/운영부담 최소 서술 없음(NOT ON PAGE). 정확 출처는 Lambda 공식(docs.aws.amazon.com/lambda/latest/dg/welcome.html). 출처 교체 필요. 정답·distractor 논리는 타당.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "최소 용량 보장 + 호출 상한 동시 = 예약 동시성(Reserved Concurrency). Provisioned Concurrency는 콜드스타트용으로 역할 구분 정확. 정답(옵션0) 타당. 인용 출처 ECS Welcome은 무관.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "notes": "약한 출처: ECS Welcome에 Reserved/Provisioned Concurrency 서술 없음(NOT ON PAGE). 정확 출처는 docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html('Reserved concurrency'가 함수 동시성 보장+상한 역할). 출처 교체 필요. 개념 구분은 정확.",
+      "recommendation": "fix"
+    },
+    {
+      "id": "saa-t3-4-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "중단·재시작 허용 배치 → AWS Batch Compute Environment에 Spot 구성으로 비용 최적화. 정답(옵션2) 타당. Lambda는 CE가 될 수 없음(옵션1 오답 정확).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식: AWS Batch는 'across the full range of AWS compute offerings, such as Amazon ECS, Amazon EKS, AWS Fargate, and Spot or On-Demand Instances'. Compute Environment의 Spot 구성·비용절감 뒷받침. (batch_components.html도 'the amount that you're willing to pay for a Spot Instance as a percentage of the On-Demand Instance price' 명시.) 출처-주장 일치. 옵션3(EKS Fargate를 CE로) 가능하나 비용 최적화엔 Spot 우위 — 설명 타당."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 8,
+    "outOfScope": 0,
+    "needsReview": 8
+  }
+}

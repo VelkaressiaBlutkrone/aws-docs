@@ -1,0 +1,241 @@
+{
+  "taskId": "saa-t3-9",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-9-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "fan-out(다중 독립 컨슈머)=Kinesis Data Streams. 공식 문서가 '두 애플리케이션이 같은 스트림을 읽어 archiving·processing을 동시·독립 수행' 시나리오를 정확히 기술. Firehose는 단일 목적지 적재라 오답.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Multiple Kinesis Data Streams applications can consume data from a stream, so that multiple actions, like archiving and processing, can take place concurrently and independently.' 정답·해설 모두 문서와 일치."
+    },
+    {
+      "id": "saa-t3-9-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "컨슈머 코드 없이 S3 자동 적재=Firehose. 공식 'fully managed... you don't need to write applications or manage resources... automatically delivers the data'. 정답 명확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Amazon Data Firehose is a fully managed service for delivering real-time streaming data to destinations such as Amazon S3... you don't need to write applications or manage resources.' 오답(DataSync 파일동기화·EMR 과도·KDS 코드필요) 설명 정확."
+    },
+    {
+      "id": "saa-t3-9-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "샤드 쓰기 한계 1 MB/s 또는 1,000 records/s는 AWS 공식 수치로 정답 옳음. 다만 인용된 introduction.html에는 이 수치가 없음(샤드 한계·ProvisionedThroughputExceededException은 별도 limits/dev-guide 페이지). 정답은 맞으나 출처가 약함.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치: introduction.html은 서비스 개요만 기술하고 샤드당 1MB/s·1,000rec/s·읽기 2MB/s 수치를 담지 않음(WebFetch 본문에 해당 수치 부재 확인). 정답 자체는 AWS 표준 수치라 likely-correct지만, 사람이 출처를 'Amazon Kinesis Data Streams Quotas/Limits'(service-sizes-and-limits) 또는 dev-guide 샤드 절로 교체 권장."
+    },
+    {
+      "id": "saa-t3-9-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "Firehose는 버퍼(size MB/interval sec)로 준실시간이라 밀리초 불가, 전달 후 보존 안 해 replay 불가 → 불가능(opt 2)이 정답. 버퍼 사실은 공식 직접 확인. '전달 후 미보존' 자체 문구는 페이지에 명시 인용 없음(준실시간·버퍼로 합리적 추론).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "공식 인용(버퍼): 'Amazon Data Firehose buffers incoming streaming data to a certain size or for a certain period of time before delivering it... Buffer Size is in MBs and Buffer Interval is in seconds.' → 밀리초 실시간 불가는 강하게 뒷받침. 단 '전달 후 데이터 미보존→replay 불가'는 이 페이지에 직접 문구 없음(추론). KDS 보존(introduction.html도 수치 미기재; '최대 365일'은 별도 페이지). 사람이 'replay 불가' 근거로 Firehose vs KDS 비교 또는 KDS retention 문서 보강 권장. 해설 본문의 '보존 기간(최대 365일)'은 출처 미첨부 수치."
+    },
+    {
+      "id": "saa-t3-9-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Firehose→Redshift는 S3 경유 후 COPY가 정답. 공식 문서가 문구 그대로 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'For Amazon Redshift destinations, streaming data is delivered to your S3 bucket first. Amazon Data Firehose then issues an Amazon Redshift COPY command to load data from your S3 bucket to your Amazon Redshift cluster.' 정답·해설·오답 모두 정확."
+    },
+    {
+      "id": "saa-t3-9-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 공유하는 중앙 메타데이터 허브=정답. 공식 문서가 세 서비스 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: '...manage your data in a centralized data catalog... you can immediately search and query cataloged data using Amazon Athena, Amazon EMR, and Amazon Redshift Spectrum.' 오답3(Lake Formation=권한 계층, 자체 저장소 아님) 설명도 공식 Related services('an authorization layer that provides fine-grained access control to resources in the AWS Glue Data Catalog')와 일치."
+    },
+    {
+      "id": "saa-t3-9-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "서버리스 S3 직접 SQL 쿼리=Athena. 컬럼형(Parquet/ORC)+파티셔닝으로 스캔량↓ 비용↓=정답. 공식이 서버리스·스캔 과금 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'analyze data directly in Amazon S3 using standard SQL... serverless, so there is no infrastructure to set up or manage, and you pay only for the queries you run.' 서버리스·즉시쿼리·과금모델은 직접 뒷받침. 단 Parquet/ORC·파티셔닝 '스캔량 감소' 구체 문구는 이 what-is 페이지에 없음(별도 performance-tuning/columnar 문서). 핵심 선택지는 옳아 pass, 비용최적화 디테일 근거는 보강 가능."
+    },
+    {
+      "id": "saa-t3-9-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "특정 Spark 버전 고정·커스텀 라이브러리·인스턴스 유형 세밀조정→EMR(클러스터 직접 제어)이 정답. Glue=서버리스라 환경 커스터마이징 제한. 방향성 표준적·옳음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "EMR 공식: 'a managed cluster platform that simplifies running big data frameworks, such as Apache Hadoop and Apache Spark.' → 클러스터·Spark 확인. 단 emr-what-is 페이지에 '인스턴스 유형 선택·버전 고정·커스텀 라이브러리 설치' 명시 문구는 없음(별도 cluster config/release 문서). Glue 공식 'serverless... no infrastructure to manage'는 대비 근거로 직접 뒷받침. 정답 방향 옳아 pass, EMR 커스터마이징 근거 보강 권장."
+    },
+    {
+      "id": "saa-t3-9-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Glue Data Catalog 위 컬럼·행·셀 수준 fine-grained 접근제어=Lake Formation이 정답. 공식이 Athena·EMR 등 전반 적용 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Lake Formation permissions are enforced using granular controls at the column, row, and cell-levels across AWS analytics and machine learning services, including Amazon Athena... Amazon Redshift Spectrum, Amazon EMR, and AWS Glue.' 정답·오답(IAM 컬럼제어 복잡·S3정책 키수준·DataBrew 사전마스킹) 모두 타당."
+    },
+    {
+      "id": "saa-t3-9-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Lake Formation은 IAM 대체 아닌 확장(augment), 둘 다 충족해야 접근 허용=정답. 공식 'provides its own permissions model that augments the IAM permissions model'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Lake Formation provides its own permissions model that augments the IAM permissions model.' '대체 아님·확장' 정확. 오답2(S3 버킷 정책만 대체) 반박도 hybrid access mode 문맥과 정합. 본문 'IAM·LF 모두 충족' 표현은 augment 모델의 표준 해석으로 적정."
+    },
+    {
+      "id": "saa-t3-9-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "저대역폭(1Gbps)·대용량(500TB) 온프렘 이전→Snow 패밀리(Snowball Edge)가 정답. DataSync/Transfer는 네트워크 의존이라 대역폭 제약, Firehose는 스트리밍 전용이라 오답. 방향 표준적·옳음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 전면 불일치(치명): 문항 주제는 데이터 이전(Snowball/DataSync)인데 첨부 URL은 Kinesis Data Streams introduction.html로 무관함(해당 페이지엔 Snowball·DataSync·온프렘 NAS 이전 언급 없음, WebFetch로 확인). 정답 자체는 AWS 표준이라 likely-correct지만, 사람이 출처를 AWS Snowball Edge(snowball/latest/developer-guide) 또는 AWS DataSync 공식으로 반드시 교체해야 함. 도메인 적합성(이 task는 데이터 수집·변환·분석)도 약간 경계상이나 in 유지."
+    },
+    {
+      "id": "saa-t3-9-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "스케줄 Glue 크롤러로 S3 자동 스캔→스키마 추론→Data Catalog 갱신→Athena 최신 쿼리=정답. 공식이 크롤러 자동 스키마 추론·스케줄 트리거 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Use AWS Glue crawlers to automatically infer schema information and integrate it into your AWS Glue Data Catalog.' + 'Invoke AWS Glue jobs on a schedule, on demand, or based on an event.' 크롤러+스케줄 모두 뒷받침. 오답(수동 ALTER·DataBrew·EMR Serverless 커스텀) 설명 타당."
+    },
+    {
+      "id": "saa-t3-9-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "①실시간 이벤트→Kinesis Data Streams, ②자정 배치 집계 적재→Glue ETL 조합이 정답. KDS 실시간(put-to-get<1s)·Glue 서버리스 배치 ETL 공식 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: KDS 'put-to-get delay is typically less than 1 second' (실시간 ①). Glue 'serverless... visually create, run... ETL pipelines' + 스케줄 잡 (배치 ②). 오답 조합(DataSync/Athena/Transfer 도입부 미스매치) 설명 정확. 합리적 단일정답."
+    },
+    {
+      "id": "saa-t3-9-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "KDS 샤드는 자동 증가 안 함→수동 추가/Shard Split(또는 UpdateShardCount)이 정답. Enhanced Fan-Out=소비측 전용 읽기 처리량이지 샤드 자동확장 아님(정답 해설 정확). 단 인용 페이지에 이 디테일 없음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 약함: introduction.html에는 샤드 자동확장 여부·Shard Split·UpdateShardCount·Enhanced Fan-Out·ProvisionedThroughputExceededException이 없음(WebFetch 확인). 정답 내용은 AWS 프로비저닝드 모드 표준이라 옳음. 주의: 문항이 프로비저닝드 모드를 전제(On-Demand 모드는 자동 스케일됨) — 사람이 출처를 resharding/UpdateShardCount 또는 On-Demand vs Provisioned 문서로 보강하고, '프로비저닝드 모드 기준' 전제를 stem에 둘지 검토 권장(현 보기들은 프로비저닝드 전제라 단일정답 성립)."
+    },
+    {
+      "id": "saa-t3-9-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "카메라·IoT 영상 수집·저장→Kinesis Video Streams가 정답, Rekognition 연동. KDS는 일반 레코드용, Firehose는 적재용이라 오답. 방향 옳음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 불일치: 정답은 Kinesis Video Streams인데 첨부는 Kinesis Data Streams introduction.html. 이 페이지는 Video Streams를 플랫폼 구성요소로 언급만 함('Kinesis Data Streams is part of the Kinesis streaming data platform, along with Firehose, Kinesis Video Streams, and Managed Service for Apache Flink') — 카메라 영상 수집·저장·Rekognition 연동 기능은 기술하지 않음. 정답 자체는 옳으나, 사람이 출처를 Kinesis Video Streams 공식(kinesisvideostreams/latest/dg/what-is-kinesis-video) 또는 Rekognition Video 연동 문서로 교체 권장."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 6,
+    "outOfScope": 0,
+    "needsReview": 6
+  }
+}

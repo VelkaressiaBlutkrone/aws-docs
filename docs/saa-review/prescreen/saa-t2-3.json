@@ -1,0 +1,247 @@
+{
+  "taskId": "saa-t2-3",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t2-3-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "ALB(L7)만 HTTP 경로 기반 라우팅을 리스너 규칙으로 지원 — 정답 1 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Support for Path conditions... forward requests based on the URL'·'functions at the application layer, the seventh layer'. NLB L4·GWLB GENEVE·CLB 레거시 설명도 정확."
+    },
+    {
+      "id": "saa-t2-3-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "NLB는 AZ당(서브넷당) Elastic IP 고정 할당 + UDP 지원 — 정답 2 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'you can optionally associate one Elastic IP address per subnet'·'TCP, UDP, TCP_UDP, TLS, QUIC' 지원. ALB 동적 IP·GWLB GENEVE 설명도 정확."
+    },
+    {
+      "id": "saa-t2-3-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "리스너 규칙이 경로·호스트·헤더 조건으로 대상 그룹 라우팅 — 정답 3 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'The rules that you define for a listener determine how the load balancer routes requests... Each rule consists of a priority, one or more actions, and one or more conditions.' 리스너→규칙→대상 그룹 3계층·헬스체크 per target group 설명 정확."
+    },
+    {
+      "id": "saa-t2-3-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "ALB는 교차영역 부하분산이 LB 레벨에서 항상 활성 → 이 설정이 불균등 원인일 수 없음. 정답 0 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "T6 NLB 플래그 무관(이 문항은 ALB 대상). how-elb-works 페이지가 동일 시나리오(AZ-a 2대·AZ-b 8대) 예시로 'With Application Load Balancers, cross-zone load balancing is always enabled at the load balancer level' 명시 — 정답 뒷받침. 단, 문항에 인용된 출처(what-is-load-balancing.html)는 교차영역 기본값을 다루지 않음(개요 페이지) → 출처를 how-elastic-load-balancing-works.html로 교체 권장."
+    },
+    {
+      "id": "saa-t2-3-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "NLB 교차영역 기본 비활성 + AZ별 균등 배치 시 노드별 50%가 각 AZ 대상에 균등 분배 → 비용효율. 정답 1 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "교차영역 기본 비활성·노드당 자기 AZ 대상에만 분배는 공식 확정('With Network Load Balancers... cross-zone load balancing is disabled by default'). 단 핵심 주장인 '활성화 시 AZ 간 데이터 전송 요금 발생'은 인용 NLB intro·how-elb-works 어디에도 명시 없음(실제로는 사실이나 근거는 ELB pricing 페이지). 출처에 pricing 페이지 보강 또는 표현 완화 권장. 추가로 옵션1이 'AZ 균등 배치 시 노드별 균형'을 전제하므로 미세한 균등 배치 가정 의존."
+    },
+    {
+      "id": "saa-t2-3-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 7,
+      "answerNote": "고정 세션 시 쿠키가 종료된 인스턴스 가리켜 세션 끊김 가능 — 정답 3 개념상 타당.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html", "fetched": true, "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "인용 출처(what-is-load-balancing.html 개요)는 sticky session·AWSALB 쿠키를 전혀 다루지 않음 → 정답 근거 부재. 핵심 주장(종료 인스턴스로 세션 단절·외부 세션스토어로 해소)은 합리적이나, 쿠키명 'AWSALB'와 'ALB가 자동 이전하지 않는다'는 인용 문서로 뒷받침 안 됨. ALB sticky-sessions 전용 문서(target-group-attributes의 application-based/duration-based cookie)로 출처 교체 필요."
+    },
+    {
+      "id": "saa-t2-3-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "최소 용량(Min)이 하한선이라 스케일 인 시에도 2 미만 불가 — 정답 2 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'You can specify the minimum number of instances... Amazon EC2 Auto Scaling ensures that your group never goes below this size.' Min=2가 하한선이라는 설명 정확."
+    },
+    {
+      "id": "saa-t2-3-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "대상 추적은 목표값(CPU 50%)만 설정, ASG가 스케일 아웃·인 자동 계산 — 가장 단순. 정답 2 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 target-tracking: 'you select a metric and a target value... scale out... when CPU exceeds 50 percent... scale in... when CPU drops below 50 percent' + thermostat 비유. 임계값 구간 수동정의 불필요(단계 정책 대비 단순) 설명 정확. 인용 출처(개요)도 적정하나 target-tracking 전용 문서가 더 강한 근거."
+    },
+    {
+      "id": "saa-t2-3-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "예측 정책: ML이 주간 패턴 학습해 부하 도달 전 선제 확장 — 워밍업 긴 반복 패턴에 적합. 정답 1 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 predictive: 'analyzing historical load data to detect daily or weekly patterns'·'Applications that take a long time to initialize'·'launching capacity in advance of forecasted load, compared to using only dynamic scaling, which is reactive' — 문항 시나리오와 거의 일치. 인용 출처(개요)는 예측 정책을 직접 다루지 않으므로 predictive-scaling 전용 문서로 보강 권장."
+    },
+    {
+      "id": "saa-t2-3-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "시작 수명주기 훅이 Pending:Wait 삽입, 초기화 후 CONTINUE까지 트래픽 차단 — 정답 0 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 lifecycle-hooks: 'newly launched instance... transitions to a wait state... runs a script to download and install... making sure that your instance is fully ready before it starts receiving traffic... sends the complete-lifecycle-action command to continue' + 'control when instances are registered with Elastic Load Balancing'. 인용 출처(개요)는 훅 상세 미포함 → lifecycle-hooks 문서 보강 권장."
+    },
+    {
+      "id": "saa-t2-3-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "종료 훅 Terminating:Wait → EventBridge로 Lambda 트리거 → 작업 후 CONTINUE. 기본 1시간·전역 최대 48시간 — 정답 1 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 lifecycle-hooks: 'a lifecycle hook pauses the instance before it is terminated and sends you a notification using Amazon EventBridge... you can invoke an AWS Lambda function'·'default timeout... is one hour'·'global timeout is 48 hours or 100 times the heartbeat timeout, whichever is smaller'. 설명의 기본 1시간·최대 48시간 수치 정확. 인용 출처(개요)는 상세 미포함 → lifecycle-hooks 문서 보강 권장."
+    },
+    {
+      "id": "saa-t2-3-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "EC2 상태 체크는 하이퍼바이저 레벨, 앱 500 오류는 ELB 헬스 체크 활성화로 감지·교체 — 정답 3 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "개요: 'monitors the health... using EC2 health checks'·'You can use Elastic Load Balancing load balancing and health checks to ensure an even distribution... to your healthy instances'. ASG 헬스 체크 유형에 ELB 추가 활성화 개념은 ec2-auto-scaling-health-checks 문서가 더 직접적이나, 정답 자체는 EC2 체크=하이퍼바이저·ELB 체크=앱레벨 구분으로 타당. NLB가 HTTP 500 미감지 설명도 맞음(L4)."
+    },
+    {
+      "id": "saa-t2-3-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Route53→ALB→ASG(멀티AZ)→RDS Multi-AZ가 고가용·탄력성 표준 조합 — 정답 2 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "표준 멀티티어 HA 패턴으로 타당. ELB 'increases the availability and fault tolerance'·ASG 'balances your instances evenly across the Availability Zones... protecting your applications from failures in a single location'이 멀티AZ 복원력 뒷받침. RDS Multi-AZ는 인용 출처 범위 밖이나 일반 상식 수준의 표준 조합."
+    },
+    {
+      "id": "saa-t2-3-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "혼합 인스턴스 정책(Spot+On-Demand)·버전 관리는 시작 템플릿 전용 — 정답 1 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/launch-templates.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 launch-templates: 'you cannot create an Auto Scaling group that launches both Spot and On-Demand Instances or that specifies multiple instance types. You must use a launch template'·'allows you to have multiple versions'. 시작 구성 레거시·신규 기능 미지원 설명 정확. 인용 출처(개요)는 'launch templates (or launch configurations)' 언급뿐 → launch-templates 문서 보강 권장."
+    },
+    {
+      "id": "saa-t2-3-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "인스턴스 수 자동 조정은 ASG의 역할(ELB는 트래픽 분산만) — 정답 1 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: ELB 'distributes your incoming traffic across multiple targets'(분산만), ASG 'automatically increase or decrease the number of instances as the demand... changes'(수 조정). 역할 구분 정확. Beanstalk가 ASG·ELB 내장 PaaS라는 오답 설명도 맞으나 질문 핵심상 ASG가 정답."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 9,
+    "outOfScope": 0,
+    "needsReview": 3
+  }
+}

@@ -132,8 +132,10 @@ function cmdFlip(taskId, force) {
   writeFileSync(path, flipVerified(text));
   writeFileSync(INDEX_PATH, setQuestionCount(readFileSync(INDEX_PATH, 'utf8'), taskId, count));
   console.log(`${taskId}: verified ${count}문항 true, content_index questionCount=${count}`);
-  execSync('flutter test test/saa_questions_test.dart', { stdio: 'inherit' });
-  console.log('saa_questions_test 통과. flip 커밋은 검수자가 직접 하세요.');
+  execSync('flutter test test/saa_questions_test.dart test/content_index_test.dart', {
+    stdio: 'inherit',
+  });
+  console.log('saa_questions_test·content_index_test 통과. flip 커밋은 검수자가 직접 하세요.');
 }
 
 export function main(argv) {

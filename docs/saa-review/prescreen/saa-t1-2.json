@@ -1,0 +1,240 @@
+{
+  "taskId": "saa-t1-2",
+  "domain": 1,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t1-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "OU는 계정 논리 그룹이고 상위 노드 SCP가 하위로 상속됨 — 공식문서 'group them into organizational units (OUs)'와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'As you create new accounts, you can group them into organizational units (OUs)' + SCP 상속은 SCP 문서가 뒷받침. 정답 0 적절."
+    },
+    {
+      "id": "saa-t1-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "SCP는 권한 부여 아님(상한선); 아이덴티티 Allow 없으면 암묵 Deny — 공식문서 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'No permissions are granted by an SCP' 및 'A user without any IAM permission policies has no access, even if the applicable SCPs allow all services'. 정답 1 정확."
+    },
+    {
+      "id": "saa-t1-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "SCP는 관리 계정에 미적용 — 'SCPs don't affect users or roles in the management account'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 2는 정확. 단 wrongExpl '1'은 '멤버 루트도 모두 SCP 적용'이라고 단정하나, 공식 'Tasks and entities not restricted by SCPs'에 멤버 루트라도 제한 불가한 예외(Enterprise support 가입 등)가 존재 — 미세 과장. 정답 선택엔 영향 없음."
+    },
+    {
+      "id": "saa-t1-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "상위 Deny는 하위 Allow로 복구 불가(누적 교집합) — 공식문서 직접 뒷받침.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Any account has only those permissions permitted by every parent above it. If a permission is blocked at any level above the account... a user or role in the affected account can't use that permission'. 정답 3 정확."
+    },
+    {
+      "id": "saa-t1-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "SCP·권한경계 둘 다 상한선; SCP=계정·OU, 권한경계=개별 사용자·역할 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'If both a permissions boundary... and an SCP are present, then the boundary, the SCP, and the identity-based policy must all allow the action.' wrongExpl '3'의 '권한경계는 단일 계정 IAM 기능' 주장도 정확. 정답 2 정확."
+    },
+    {
+      "id": "saa-t1-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "서비스 연결 역할은 SCP 미적용 — 'SCPs do not affect any service-linked role'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'SCPs do not affect any service-linked role. Service-linked roles... can't be restricted by SCPs.' 정답 1 정확."
+    },
+    {
+      "id": "saa-t1-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "SCP로 cloudtrail 변조 Deny + 별도 로그 아카이브 계정 격리 조합이 최적 — 다계정 모범사례와 정합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "정답 1 적절. Organizations 문서가 조직 CloudTrail은 'cannot be turned off or modified by member accounts'를 명시 — SCP+격리 방향과 일치. wrongExpl '3'의 'DeleteTrail 기본 허용' 주장도 타당. S3 Object Lock 대안 미언급은 단답형이라 허용 가능."
+    },
+    {
+      "id": "saa-t1-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Control Tower Landing Zone + Account Factory가 '빠르게+모범사례+표준 프로비저닝'에 적합 — 공식문서 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'set up and govern a secure, compliant, multi-account AWS environment based on best practices' + Account Factory가 'standardize the provisioning of new accounts'. 정답 0 정확."
+    },
+    {
+      "id": "saa-t1-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "사전예방(Proactive)=CloudFormation 훅(IaC 배포 전 차단) — 공식 3유형(preventive/detective/proactive) 중 매핑 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 what-is 페이지가 'Three kinds of controls exist: preventive, detective, and proactive' 확인. 예방=SCP, 탐지=Config, 사전예방=CFN 훅 매핑은 별도 controls 페이지가 정본이나 업계 표준과 일치. 정답 2 정확."
+    },
+    {
+      "id": "saa-t1-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Control Tower는 Organizations를 오케스트레이션하는 추상화 레이어 — 'orchestrates the capabilities of... AWS Organizations'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'AWS Control Tower orchestrates the capabilities of several other AWS services, including AWS Organizations' 및 'orchestration extends the capabilities of AWS Organizations'. 정답 1 정확."
+    },
+    {
+      "id": "saa-t1-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "감사 계정=보안팀 전 계정 읽기전용 격리 조사 — Organizations 문서의 'read-only security access across accounts'와 정합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'provide read-only security access across accounts' / 'Create a Security group and provide it with read-only access to all of your resources'. 전용 audit 계정 명칭은 multi-account 백서/Control Tower가 정본이나 개념 정합. 정답 1 정확."
+    },
+    {
+      "id": "saa-t1-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "통합결제 전용 모드에선 SCP 비활성; 전체기능 모드 필요 — 'SCPs are available only in an organization that has all features enabled'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'SCPs aren't available if your organization has enabled only the consolidated billing features.' 정답 1 정확."
+    },
+    {
+      "id": "saa-t1-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "IAM Identity Center가 STS 임시 자격증명 발급, 권한세트로 권한 정의 — 동작 정확. 단 출처 url이 Organizations 소개라 약함.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 3은 정확(IAM Identity Center=STS 임시 자격증명/권한세트, 장기키 미발급). 그러나 첨부 출처가 Organizations 소개 페이지뿐 — singlesignon(Identity Center) 공식문서로 교체 권장. 정답 자체는 문제 없음."
+    },
+    {
+      "id": "saa-t1-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "권한세트(Permission Set) 1개 정의 후 다계정 할당이 중앙관리에 최적 — 동작 정확. 출처 url 약함.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 1은 정확. 첨부 출처가 Organizations 소개뿐이라 권한세트 동작을 직접 뒷받침 못함 — singlesignon 권한세트 공식문서 추가 권장. 정답·해설 내용은 문제 없음."
+    },
+    {
+      "id": "saa-t1-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "다계정 핵심 보안 이유=폭발 반경 제한 — 'AWS accounts are natural boundaries for permission, security, costs, and workloads'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'AWS accounts are natural boundaries for permission, security, costs, and workloads. Using a multi-account environment is a recommended best-practice.' 시험가이드는 Domain1(보안설계 30%) 확인하나 세부 task는 하위 페이지(부분 뒷받침). 정답 1 정확."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 5,
+    "outOfScope": 0,
+    "needsReview": 3
+  }
+}

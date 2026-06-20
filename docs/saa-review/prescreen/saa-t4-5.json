@@ -1,0 +1,240 @@
+{
+  "taskId": "saa-t4-5",
+  "domain": 4,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t4-5-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Cost Explorer = 분석·시각화·예측 도구. 13개월 이력·18개월 예측 수치가 공식 문서와 정확히 일치. 오답들(Budgets/CUR/Anomaly Detection)은 시각화·예측 주 용도가 아님.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구 확인: \"You can view data for up to the last 13 months, forecast how much you're likely to spend for the next 18 months\" 및 \"You can view your costs and usage using the Cost Explorer user interface free of charge.\" 선택지 0의 13개월/18개월/인터랙티브 그래프·무료 UI 모두 정확."
+    },
+    {
+      "id": "saa-t4-5-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Budgets + Budget Actions로 임계값별 이메일 알림 + IAM Deny 정책 자동 연결이 정답. 공식 예시가 'apply a custom IAM policy that denies you the ability to provision additional resources'로 시나리오와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"you could automatically apply a custom IAM policy that denies you the ability to provision additional resources within an account.\" 설명 본문의 'Budget Actions 3가지 조치(IAM 정책 연결·SNS 알림·SSM Automation 실행)' 주장은 이 페이지엔 미기재이나 budgets-controls.md(Configuring budget actions)에서 다루는 정설로, IAM 정책/SCP 연결·SSM Automation·EC2/RDS 중지가 실제 지원 조치. 핵심 정답·시나리오는 정확하므로 pass. (세부 조치 목록은 review 시 budgets-controls 출처 보강 권장.)"
+    },
+    {
+      "id": "saa-t4-5-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "CUR(S3 CSV) → Athena(SQL) → QuickSight(시각화) 파이프라인이 정답. 공식 문서가 Athena·Redshift·QuickSight 통합을 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"You can download your report from the Amazon S3 console, query the report using Amazon Athena, or upload the report into Amazon Redshift or Quick[Sight].\" 및 \"You can choose to configure your report data for integration with Amazon Athena, Amazon Redshift, or Quick[Sight].\" 설명의 'Glue 크롤러·Athena 테이블 자동 생성'은 cur-query-athena 가이드의 정설(이 페이지엔 직접 미기재)이나 핵심 파이프라인은 정확."
+    },
+    {
+      "id": "saa-t4-5-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "예상치 못한 비용 급등 자동 감지 = Cost Anomaly Detection(ML). 비용 모니터 + 알림 구독 구조가 공식과 일치. Budgets(고정 임계값)·Trusted Advisor(스냅샷 규칙)는 시계열 이상 감지 아님.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"you can configure your cost monitors and alert subscriptions\" 및 \"the machine learning model continues to detect spend anomalies on your account.\" 비용 모니터(무엇)/알림 구독(누구·임계값) 구분이 정확."
+    },
+    {
+      "id": "saa-t4-5-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "태그를 붙여도 Billing Console에서 비용 할당 태그로 활성화하지 않으면 Cost Explorer 필터에 안 나타남 — 정답. 설명 끝의 'backfill 최대 12개월 소급'도 별도 공식 문서로 확인됨.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"For tags to appear on your billing reports, you must activate them.\" backfill 12개월은 cost-allocation-backfill 페이지 \"Management account users can request a backfill of cost allocation tags for up to twelve months\"로 확인. 정답·설명 정확."
+    },
+    {
+      "id": "saa-t4-5-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "통합 결제(Consolidated Billing)는 멤버 계정 사용량을 합산해 더 높은 볼륨 할인 티어를 적용 — 정답은 맞음. 다만 인용 출처가 Budgets 페이지라서 이 주장을 뒷받침하지 못함(출처 불일치).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(통합 결제 사용량 합산 볼륨 할인)은 AWS Organizations 공식 정설로 맞으나, 문항이 인용한 budgets-managing-costs 페이지는 통합 결제 볼륨 할인을 전혀 다루지 않음(supports:no). 올바른 출처는 AWS Organizations 통합 결제 문서(consolidated-billing.html, 'volume pricing tiers'/'combined usage' 기술). 출처 교체 필요 → review. (정답 자체는 단정 않으나 일반적으로 옳음.)"
+    },
+    {
+      "id": "saa-t4-5-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "(1) 저사용 EC2 더 작은 타입 추천=Compute Optimizer(rightsizing), (2) 미사용 EBS·유휴 ELB 탐지=Trusted Advisor. 역할 구분이 정설과 일치. 정답 선택지 3.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·역할 구분(Compute Optimizer=rightsizing, Trusted Advisor=유휴/미사용 탐지)은 정설로 맞으나, 인용 출처가 Cost Explorer 페이지라 두 서비스를 다루지 않음(supports:no). 올바른 출처는 Compute Optimizer 문서(compute-optimizer.html) + Trusted Advisor 비용 최적화 체크 문서. 출처 교체 필요 → review. 설명의 'CloudWatch 14일 지표'는 Compute Optimizer 정설."
+    },
+    {
+      "id": "saa-t4-5-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "'소비 모델 채택'을 '사용한 만큼 지불 + dev/test 업무외 중단 최대 75% 절감'으로 설명 — 공식 설계 원칙 문구와 글자 단위로 일치. 오답들도 각각 다른 원칙으로 정확히 매핑.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"Adopt a consumption model: Pay only for the computing resources you consume... development and test environments are typically only used for eight hours a day during the work week. You can stop these resources when they're not in use for a potential cost savings of 75% (40 hours versus 168 hours).\" 오답 매핑도 정확: 0='Stop spending money on undifferentiated heavy lifting', 2='Measure overall efficiency', 3=실제론 'Implement cloud financial management'(문항은 '클라우드 재무 관리 실천'으로 표기 — 공식 명칭 'Implement'와 의미 동일, 무방)."
+    },
+    {
+      "id": "saa-t4-5-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "(A) 시간 단위 Athena SQL 감사=CUR(Athena 통합), (B) 즉시 시각화=Cost Explorer. 두 도구의 본질 차이(원시 라인아이템 vs 집계 분석 레이어)가 정확. 정답 선택지 0.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "CUR 공식: \"break down your costs by the hour, day, or month\" + Athena 통합. Cost Explorer 공식: \"uses the same dataset that is used to generate the AWS Cost and Usage Reports\" — '같은 데이터셋 위 분석 레이어' 설명 정확. 두 출처 모두 supports:yes."
+    },
+    {
+      "id": "saa-t4-5-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RI 사용률이 임계값 미달 시 알림 = RI Utilization Budget. 공식 문서가 정확히 'receive alerts when usage falls below this level'로 기술. 정답 선택지 2.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"RI utilization budgets: Define a utilization threshold for your RIs and receive alerts when usage falls below this level, helping you identify unused or under-utilized RIs.\" 6개 예산 유형(Cost/Usage/RI Util/RI Cov/SP Util/SP Cov) 모두 페이지에 확인됨. 오답들(Cost/Usage/SP Coverage)도 정확히 구분됨."
+    },
+    {
+      "id": "saa-t4-5-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "새 계정·태그·서비스 자동 포함 + 유지관리 최소 = AWS 관리형 모니터(Managed by AWS). 공식 문서가 'automatically include new accounts, tag values, or categories'로 명시. 고객 관리형은 최대 10개 수동 선택. 정답 선택지 1.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"As your organization grows and changes, these monitors automatically include new accounts, tag values, or categories, maintaining comprehensive coverage without additional setup.\" 및 고객 관리형 \"Choose the specific values you want to monitor (up to 10).\" 선택지 0의 '최대 10개 수동' 묘사도 정확. AWS managed=Use when 'Minimal maintenance overhead'."
+    },
+    {
+      "id": "saa-t4-5-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "태그 키 대소문자/허용값을 조직 전체에 강제 표준화 = AWS Organizations 태그 정책(Tag Policy) — 정답 맞음. 다만 인용 출처(activating-tags)가 Tag Policy를 전혀 언급하지 않아 출처가 정답을 뒷받침 못함.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(Tag Policy로 키 대소문자 표준화 가드레일)은 AWS Organizations 정설로 맞으나, 인용한 activating-tags 페이지는 Tag Policy를 다루지 않음(supports:no — 확인 완료). 올바른 출처는 AWS Organizations Tag Policies 문서(organizations/latest/userguide/orgs_manage_policies_tag-policies.html, 'enforce standardized tags'/'capitalization' 기술). 출처 교체 필요 → review. 오답 분석(IAM Condition 수동·Config 사후탐지·CE 수동합치 근본원인 미해결)은 타당."
+    },
+    {
+      "id": "saa-t4-5-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "비용 할당 태그 backfill 최대 12개월 소급 가능, 단 해당 기간 리소스에 태그가 실제 붙어 있었던 기간에 한함 — 공식 문서와 정확히 일치. 정답 선택지 2.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·정답설명 정확. 공식 문구: \"Management account users can request a backfill of cost allocation tags for up to twelve months.\" + \"The resource tag must be historically assigned to the AWS Resource for the backfilled cost data to be available.\" + \"Backfill will update your Cost Explorer, Data Exports, and AWS Cost and Usage Report automatically.\" 단, 오답 3('backfill은 관리 계정에서만 요청 가능' → 문항은 이를 오답으로 처리하며 wrongExplanation에 '이 문서에서 언급되지 않습니다'라 함)이 실제 공식 문구 \"Management account users can request a backfill\"와 충돌. backfill은 사실상 관리 계정 전용이라, 오답 3의 진술 자체는 사실에 가깝고 '문서에 미언급'이라는 근거는 틀림. 정답(2)은 여전히 가장 정확하나 오답 3 해설은 부정확 → wrongExplanationsVerdict:flag, review 권장."
+    },
+    {
+      "id": "saa-t4-5-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "비용 최적화 기둥 정의 = '기능 요구사항 충족하며 최저 가격으로 결과 달성'. 무조건 최저 청구액·다른 기둥 희생이 아님. 정답 선택지 0. (인용 출처는 design-principles로 정확한 '정의' 문장은 아니나 같은 기둥 문서군.)",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(기능 요구사항 충족 전제 최저가)은 비용 최적화 기둥 공식 정의('The ability to run systems to deliver business value at the lowest price point')와 부합 — 정답·해설 타당. 다만 인용한 design-principles 페이지는 '설계 원칙' 목록일 뿐 기둥 정의 문장은 별도 페이지(cost-optimization-pillar/welcome.html 또는 wellarchitected/latest/framework/cost-optimization.html)에 있음 → supports:partial. 정확한 정의 출처로 교체 권장 → review. (정답 변경 불요.)"
+    },
+    {
+      "id": "saa-t4-5-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Cost Explorer 콘솔 UI 무료, 프로그래밍 API 호출은 요청(페이지네이션)당 $0.01 — 공식 문서와 정확히 일치. '월 1,000회 무료' 같은 한도는 없음. 정답 선택지 1.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 문구: \"You can view your costs and usage using the Cost Explorer user interface free of charge. You can also access your data programmatically using the Cost Explorer API. Each paginated API request incurs a charge of $0.01.\" 정답·오답 분석(무료 한도 정책 없음) 모두 정확. (엄밀히는 'paginated request'당 $0.01 — 문항의 '요청당 $0.01'과 동일 취지.)"
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 5,
+    "outOfScope": 0,
+    "needsReview": 6
+  }
+}

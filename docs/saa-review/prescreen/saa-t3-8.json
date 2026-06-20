@@ -1,0 +1,243 @@
+{
+  "taskId": "saa-t3-8",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-8-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "VPC 피어링은 비전이(non-transitive)이므로 A-B, B-C 피어링이 있어도 A-C는 통신 불가. 정답 index 1 옳음. 다만 cited source(TGW 소개)는 TGW가 메시를 대체하는 허브라는 점만 직접 뒷받침하고 '비전이'라는 문구 자체는 담고 있지 않음 — 비전이 사실은 VPC 피어링 문서(peering-configurations-partial-access)의 라우팅 예시로 입증됨(A가 B·C와 피어링돼도 B-C 간 경로 없음).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/vpc/latest/peering/peering-configurations-partial-access.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "비전이 동작은 정설. cited source가 'non-transitive' 문구를 직접 담지 않으므로 출처를 VPC 피어링 문서로 보강하면 더 정확. 피어링 문서는 '...neither a gateway nor a VPN connection...' + 허브-스포크 라우팅 예시로 비전이성을 보여줌."
+    },
+    {
+      "id": "saa-t3-8-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "완전 메시 피어링 공식 n(n-1)/2: 10×9/2=45. 정답 index 2(45개) 수학적으로 정확. TGW가 단일 허브로 대체한다는 결론도 cited source가 직접 뒷받침('network transit hub used to interconnect VPCs and on-premises networks').",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'AWS Transit Gateway is a network transit hub used to interconnect virtual private clouds (VPCs) and on-premises networks.' 메시 카운트 공식은 그래프 이론 표준."
+    },
+    {
+      "id": "saa-t3-8-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "고객 게이트웨이(CGW)가 온프레미스 장비 정보를 AWS에 등록하는 리소스. 정답 index 3 정확. 공식 정의와 정확히 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'Customer gateway: An AWS resource which provides information to AWS about your customer gateway device.' / 'Virtual private gateway is the VPN endpoint on the Amazon side... attached to a single VPC.'"
+    },
+    {
+      "id": "saa-t3-8-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Site-to-Site VPN 연결당 터널 2개 고정. 정답 index 0 정확. 공식은 'two VPN tunnels which you can simultaneously use for high availability'로 동시 사용·HA를 강조; 옵션 0의 '하나 장애 시 다른 터널로 자동 우회'는 HA의 구현 메커니즘으로 사실상 부합(터널은 서로 다른 AWS 엔드포인트에 종단).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Each VPN connection includes two VPN tunnels which you can simultaneously use for high availability.' 옵션 문구가 '자동 우회(failover)'를 강조하나 두 터널이 서로 다른 엔드포인트에 종단되어 장애 시 우회 가능하므로 정답 판정에 영향 없음."
+    },
+    {
+      "id": "saa-t3-8-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "즉시성 요건엔 Site-to-Site VPN(소프트웨어 설정으로 수 분 내). 정답 index 2 옳음. DX는 물리 회선 설치로 즉시 불가 — 방향성 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "DX의 '수 주 리드타임'·VPN의 '수 분 구축'은 SAA 정설이나 cited intro 문서에는 구체적 소요시간 수치가 명시돼 있지 않음(파트너/물리회선 요건은 명시). 정답 판정엔 영향 없음."
+    },
+    {
+      "id": "saa-t3-8-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "DX는 전용 물리(이더넷 광) 회선이며 ISP를 우회. 기본 암호화 없음. 정답 index 3 옳음. '공용 인터넷+IPsec'은 VPN, DX 아님.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Direct Connect links your internal network to a Direct Connect location over a standard Ethernet fiber-optic cable... bypassing internet service providers.' '기본 암호화 없음'은 SAA 정설이나 Welcome 페이지가 암호화 부재를 명시적으로 진술하진 않음 — supports=partial. 암호화 부재는 MACsec/DX over VPN 문서에서 보강 가능."
+    },
+    {
+      "id": "saa-t3-8-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "DX 기본 무암호 → DX 위에 IPsec(DX over VPN)로 전송 암호화 충족. 정답 index 2 옳음. 보안그룹은 암호화 기능 아님, DX 전면 교체는 불필요 — 오답 처리 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "DX over VPN(퍼블릭 VIF 위 IPsec) 패턴은 표준. cited Welcome 페이지는 DX 정의만 직접 뒷받침하고 'DX over VPN' 패턴·암호화 부재를 명시하지 않음 — supports=partial. 참고: DX 회선 자체의 L2 암호화는 MACsec(별도)이며 본 문항의 IPsec 패턴과 구분됨(정답 판정엔 영향 없음)."
+    },
+    {
+      "id": "saa-t3-8-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "DX 기본 + VPN 백업이 비용 효율적 HA 패턴. 정답 index 1 옳음. DX 2회선 액티브-액티브는 가용성↑이나 비용 2배라 '비용 최소화'에 덜 부합 — 오답 근거 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "DX+VPN 백업은 AWS 권장 HA 패턴(Direct Connect Resiliency/Hybrid 문서에서 다룸). cited intro 문서들은 각 서비스 정의만 뒷받침하고 해당 백업 아키텍처를 직접 기술하지 않음 — supports=partial. 정답·오답 판정엔 영향 없음."
+    },
+    {
+      "id": "saa-t3-8-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Direct Connect Gateway는 글로벌 리소스로 단일 DX 연결로 여러 리전 VPC 접근. 정답 index 0 정확. 공식 문구와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 인용: 'A Direct Connect gateway is a globally available resource. You can connect to any Region globally using a Direct Connect gateway.' 시나리오 예시도 us-east-1 단일 DX로 us-east-1·us-west-1 VPC 접근을 보여줌."
+    },
+    {
+      "id": "saa-t3-8-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 7,
+      "answerNote": "DXGW는 동일 DXGW에 연결된 게이트웨이 연관(VGW↔VGW) 간 트래픽을 기본 차단 → VPC 간 통신엔 TGW 필요. 정답 index 3 옳음. 단, 공식엔 2021-11 예외(supernet을 동일 VIF로 광고 시 VPC 간 통신 가능)가 있어 '항상 불가'가 아니라 '기본 차단'이라는 뉘앙스가 중요. 설명이 '기본적으로 차단'으로 표현해 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "공식: 'A Direct Connect gateway does not allow gateway associations that are on the same Direct Connect gateway to send traffic to each other.' 그러나 바로 뒤에 예외 명시: '...exception, implemented in November 2021, is when a supernet is advertised across two or more VPCs... VPCs can communicate with each other via the Direct Connect endpoint.' 오답 '2'(온프레미스 경유 hair-pinning)는 사실상 이 예외 시나리오(온프레미스 supernet 광고 경유)와 겹쳐, '지원되지 않는다'는 wrongExplanation 설명이 supernet 예외 하에서는 부정확할 수 있음 → wrongExplanationsVerdict=flag, 사람 검토 권장. 정답(TGW 사용) 자체는 일반적 권장으로 유지 가능."
+    },
+    {
+      "id": "saa-t3-8-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "게이트웨이 엔드포인트는 S3·DynamoDB 전용이며 무료(라우트 테이블 prefix list 방식, ENI 미생성). 정답 index 0 정확. 공식 문구와 정확히 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Gateway VPC endpoints provide reliable connectivity to Amazon S3 and DynamoDB...' + 'There is no additional charge for using gateway endpoints.' + 라우팅은 prefix list로 라우트 테이블에 자동 추가. cited PrivateLink 소개 페이지는 게이트웨이 엔드포인트 무료/S3·DynamoDB 전용을 직접 담지 않아 supports=partial — 출처를 gateway-endpoints 페이지로 보강 권장."
+    },
+    {
+      "id": "saa-t3-8-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "PrivateLink는 소비자 VPC 내 ENI 사설 IP로만 접근 → 제공자 IP 공간 노출 없음 → CIDR 겹쳐도 라우팅 충돌 없음. 정답 index 3 옳음. TGW·VPC 피어링은 중복 CIDR 라우팅 미지원(피어링은 생성 자체 불가)이라 오답 처리 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "PrivateLink가 ENI 기반으로 IP 공간을 격리한다는 점은 공식('privately connect your VPC to services... as if they were in your VPC', 소비자가 인터페이스 엔드포인트 ENI로 접근)으로 개념적 뒷받침. 단 '중복 CIDR에서도 동작한다'는 명시 문구는 fetched 페이지에 없음 → supports=partial. 정답 자체는 SAA 정설이며 옳음. 출처를 'overlapping CIDR'을 명시하는 PrivateLink FAQ/concepts로 보강하면 review 해소 가능."
+    },
+    {
+      "id": "saa-t3-8-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "PrivateLink 엔드포인트 서비스: 제공자가 서비스를 NLB 뒤에 두고 VPC 엔드포인트 서비스 생성, 소비자는 인터페이스 엔드포인트로 접근. 정답 index 1 정확. 공식 문구와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html", "fetched": "2026-06-20", "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/privatelink-share-your-services.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'As the service provider, you create a Network Load Balancer in your VPC as the service front end. You then select this load balancer when you create the VPC endpoint service configuration... the customer creates an interface VPC endpoint.' cited PrivateLink 소개 페이지는 NLB 요건을 직접 담지 않아 supports=partial — share-your-services 페이지로 보강. (참고: 현재 GWLB 기반 엔드포인트 서비스도 존재하나 표준 서비스 노출은 NLB이며 정답 판정엔 영향 없음.)"
+    },
+    {
+      "id": "saa-t3-8-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "VPC 2~3개 단순 연결엔 VPC 피어링이 더 저렴(생성/어태치먼트 요금 없음, 데이터 전송비만). TGW는 어태치먼트 시간당 요금+데이터 처리 비용. 정답 index 2 옳음.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식(TGW): 'You are charged hourly for each attachment on a transit gateway, and... for the amount of traffic processed.' 공식(VPC 피어링): 'There is no charge to create a VPC peering connection... data transfer within an AZ is free.' 두 출처가 비용 대비를 직접 뒷받침. cited source는 TGW만이나 피어링 비용은 VPC 피어링 문서에서 확인됨."
+    },
+    {
+      "id": "saa-t3-8-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "프라이빗 VIF가 프라이빗 IP로 특정 VPC 접근(VGW 또는 DXGW 경유). 정답 index 2 정확. 공식 VIF 3종(private/public/transit) 정의와 일치하며 '게이트웨이 VIF'는 존재하지 않는 유형 — 오답 처리 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'Private virtual interface... used to access an Amazon Virtual Private Cloud (VPC) using private IP addresses... Connect a private virtual interface to a Direct Connect gateway to access multiple virtual private gateways.' Public VIF=퍼블릭 서비스, Transit VIF=TGW(via DXGW). '게이트웨이 VIF'는 비존재 유형으로 오답 정확."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 8,
+    "outOfScope": 0,
+    "needsReview": 2
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "taskId": "saa-t2-5",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t2-5-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RTO = 재해 후 서비스 재개까지 허용 다운타임; 옵션2 정확. RPO/SLA 오답지도 정확히 구분.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "표준 RTO/RPO 정의. 백서가 RTO/RPO 프레임을 일관되게 사용; 정의 자체는 업계 표준과 일치."
+    },
+    {
+      "id": "saa-t2-5-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "비용 오름차순 Backup&Restore→Pilot Light→Warm Standby→Active-Active. 백서 그림6 순서와 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: 'ranging from the low cost and low complexity of making backups to more complex strategies using multiple active Regions.' 순서 정확."
+    },
+    {
+      "id": "saa-t2-5-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "RTO 6h·RPO 2h + 비용 최소 → Backup&Restore. 시나리오-전략 매핑 적절.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: 'you may only require a backup and restore approach' for high-availability workloads. 비용최소+여유 RTO/RPO에 정합. 설명의 '2시간마다 백업→RPO 2h'는 RPO≈백업주기 일반론으로 타당."
+    },
+    {
+      "id": "saa-t2-5-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "A=Pilot Light(추가조치 필요), B=Warm Standby(즉시 축소용량 처리). 백서 Note 직접 인용.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서 원문: 'pilot light cannot process requests without additional action taken first, whereas warm standby can handle traffic (at reduced capacity levels) immediately.' 문항이 백서 문구를 정확히 번역."
+    },
+    {
+      "id": "saa-t2-5-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "Pilot Light=DB 상시복제+앱서버 off(AMI/템플릿으로 신속 기동). 옵션1 핵심 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: app servers 'switched off', DB always-on continuous replication; '수십 분 RTO'는 백서가 명시 수치 아님(개념적). RTO 수치 단정은 약하나 설명 본문이 '데이터 복구 기술적 한계'로 근거를 정확히 제시해 정답성에 영향 없음."
+    },
+    {
+      "id": "saa-t2-5-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "RTO 10m·RPO 2m + Active-Active보다 저비용 → Warm Standby. 매핑 적절.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: warm standby 'always-on... only requires you to scale up.' Active-Active 대비 'more economical' 명시. RTO 10m/RPO 2m의 정확 수치 경계는 시험 통념(분 단위=Warm Standby)에 부합. Pilot Light 배제 근거(서버 기동 지연)도 타당."
+    },
+    {
+      "id": "saa-t2-5-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RTO/RPO≈0 + 페일오버 개념 없음 → Multi-Site Active-Active. 옵션4 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: 'because the workload is running in more than one Region, there is no such thing as failover' + 'reduce your recovery time to near zero'. '자동 우회'도 정합."
+    },
+    {
+      "id": "saa-t2-5-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Aurora Global DB: 전용 인프라·복제지연<1초·장애 시 1분 내 승격. 백서 문구 직접 일치(T6 플래그 해소).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 옵션은 백서 직접 지지: 'dedicated infrastructure... replicate... with typical latency of under a second... promote... in less than one minute even in the event of a complete regional outage.' T6의 '1분 내 승격' 우려는 공식 문구라 해소(승격 시간이지 전체 RTO 아님 — 옵션도 '승격'으로 정확히 표현). 다만 오답3 wrongExplanation의 '같은 리전 내 Read Replica도 동기 복제가 아니다'는 부정확: 동일 리전 RDS read replica도 비동기지만, Aurora 클러스터의 리더(reader) 복제본은 공유 스토리지라 사실상 동기에 가까움 — 'Read Replica' 일반화가 Aurora 맥락에서 오해 소지. wrongExplanation 문구 검토 권장(정답 자체엔 영향 없음)."
+    },
+    {
+      "id": "saa-t2-5-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Route 53 Failover + 헬스체크 → 자동 보조 리전 전환. 옵션1 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: 'Route 53 health checks... configure automatically initiated DNS failover... highly reliable operation done on the data plane.' 설명의 '헬스체크=데이터플레인 고가용'도 백서와 일치."
+    },
+    {
+      "id": "saa-t2-5-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "온프레 Win/Linux 서버 블록레벨 지속복제+수분 내 기동 → AWS DRS. 옵션4 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "DRS 가이드: 'launch recovery instances on AWS within minutes'; 백서: 'block-level replication... from any source... on-premises or on another cloud.' Win/Linux·타클라우드 지원 정합."
+    },
+    {
+      "id": "saa-t2-5-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "RDS Multi-AZ=동기(같은 리전, AZ장애), 교차리전 Read Replica=비동기(리전 DR). 옵션1 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서는 cross-region read replica를 'asynchronous'로 명시(Pilot Light 절). Multi-AZ '동기'는 이 백서엔 직접 문구 없으나 RDS 공식 통념·시험 표준과 일치. 정답 견고."
+    },
+    {
+      "id": "saa-t2-5-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "DRS는 Pilot Light 전략 기반; 스테이징=저비용 스토리지+최소 컴퓨팅. 옵션3 정확(백서 직접 일치).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서 원문: 'Elastic Disaster Recovery uses the Pilot Light strategy, maintaining a copy of data and \"switched-off\" resources in... a staging area.' DRS 가이드: 'affordable storage and minimal compute.' 옵션 문구가 양 출처와 정확히 일치."
+    },
+    {
+      "id": "saa-t2-5-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "EC2/RDS/EFS/DynamoDB 다중서비스·리전·계정 정책기반 중앙 백업 → AWS Backup. 옵션4 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: 'AWS Backup provides a centralized location to configure, schedule, and monitor' (EBS/EC2/RDS/DynamoDB/EFS 열거); 'supports copying backups across Regions' + 'across accounts.' 정확."
+    },
+    {
+      "id": "saa-t2-5-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "DNS TTL 캐시 지연 → Global Accelerator(AnyCast IP)로 캐싱 우회·빠른 전환. 옵션2 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서: 'Global Accelerator also avoids caching issues that can occur with DNS systems (like Route 53)' + AnyCast IP 사용. 정답 견고. TTL 무한대 오답지도 명백히 잘못."
+    },
+    {
+      "id": "saa-t2-5-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "DRS는 EC2 기반 앱/DB 전용, RDS 등 관리형 서비스 미적용. 옵션2 정확(백서 직접 일치).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "백서 원문: DRS 'can also be used for disaster recovery of AWS hosted workloads if they consist only of applications and databases hosted on EC2 (that is, not RDS).' RDS 제외 명시. Win/Linux·교차리전 오답지도 백서와 모순돼 정확히 오답."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 1
+  }
+}
