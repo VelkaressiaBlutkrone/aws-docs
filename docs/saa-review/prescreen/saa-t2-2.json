@@ -1,0 +1,248 @@
+{
+  "taskId": "saa-t2-2",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t2-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "S3는 Lambda를 비동기 호출하고, 비동기 실패 이벤트는 DLQ(SQS/SNS)로 보존하는 것이 표준 설계.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·해설 모두 타당. 단 출처(welcome.html)는 비동기 재시도·DLQ를 명시하지 않음 — invocation-async.html이 'Amazon S3 ... invoke functions asynchronously' 및 SQS/EventBridge로 invocation records 전송을 명시(약한 출처: 더 구체적 URL 권장). 해설의 '자동 2회 재시도'는 welcome.html에 없으나 일반적 기본값과 일치(검수 시 async invocation 문서로 출처 교체 권장)."
+    },
+    {
+      "id": "saa-t2-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Provisioned Concurrency가 콜드 스타트 제거의 정석. Reserved는 동시성 상한일 뿐.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "공식 문구 직접 일치: 'Provisioned concurrency – ... pre-initialized execution environments ... ready to respond immediately ... useful for reducing cold start latencies'. Reserved는 'maximum and minimum number of concurrent instances'. 출처 welcome.html은 이 구분을 다루지 않음 — provisioned-concurrency.html로 교체 권장(약한 출처)."
+    },
+    {
+      "id": "saa-t2-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Lambda 최대 실행 15분 — welcome.html이 'run for up to 15 minutes' 명시. 20분 작업은 부적합.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답(15분 제한)은 welcome.html이 직접 뒷받침: 'Lambda functions run for up to 15 minutes'. 다만 해설의 'Step Functions(Durable Lambda)' 표현이 부정확 — 동일 페이지는 Durable functions가 'up to one year' 실행 가능하다고 명시(Durable Lambda는 Step Functions와 별개 기능). 장기 워크로드 대안 표기를 'Fargate/AWS Batch/Step Functions/Durable functions'로 분리 정정 권장(정답 자체엔 영향 없음)."
+    },
+    {
+      "id": "saa-t2-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Lambda 스테이트리스 — 호출 간 로컬 상태 보장 안 됨, 외부 저장소 사용이 정석.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·해설 정확(해설이 '재사용될 수도 있지만 보장되지 않는다'고 정확히 서술 — 우수). 출처 welcome.html은 스테이트리스를 직접 명시하진 않고 'File systems integration that ... manage stateful operations across function invocations'로 간접 시사. 더 명확한 출처(Lambda 실행환경/concepts) 보강 권장(약한 출처)."
+    },
+    {
+      "id": "saa-t2-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Lambda 실행 역할(execution role)로 임시 자격증명 부여가 정석. 키 하드코딩 금지.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "welcome.html 직접 뒷받침: 'using execution roles to manage what AWS services your functions can interact with'. 정답·오답 해설 모두 정확."
+    },
+    {
+      "id": "saa-t2-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RDS Proxy가 커넥션 풀링으로 Lambda 동시성 시 DB 커넥션 소진을 해결 — 공식 권장.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/services-rds.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "services-rds.html 직접 일치: 'A database proxy manages a pool of shared database connections which enables your function to reach high concurrency levels without exhausting database connections.' 출처 welcome.html은 RDS Proxy를 다루지 않음 — services-rds.html로 교체 권장(약한 출처)."
+    },
+    {
+      "id": "saa-t2-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "WebSocket API = 실시간 양방향(full-duplex), 서버 Push 가능 — 채팅에 적합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "welcome.html 직접 일치: WebSocket APIs 'enables stateful, full-duplex communication between client and server'. 정답·오답 해설 정확."
+    },
+    {
+      "id": "saa-t2-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "HTTP API = REST보다 저가·저지연, 단순 Lambda 프록시에 적합 — 공식 비교 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "http-api-vs-rest.html 직접 일치: 'HTTP APIs are designed with minimal features so that they can be offered at a lower price ... Choose HTTP APIs if you don't need the features included with REST APIs.' 캐싱/WAF/Usage Plan은 표에서 REST-only로 확인. 출처 welcome.html은 비용/지연 비교를 다루지 않음 — http-api-vs-rest.html로 교체 권장(약한 출처)."
+    },
+    {
+      "id": "saa-t2-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "서드파티 JWT 커스텀 검증 = Lambda Authorizer가 정석(IAM/Cognito 아님).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html", "fetched": true, "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "welcome.html이 'Lambda authorizer functions, and Amazon Cognito user pools' 인증 메커니즘 명시. http-api-vs-rest.html 각주2 'You can use a Lambda authorizer to validate JWTs for REST APIs'로 보강. 정답·해설 정확."
+    },
+    {
+      "id": "saa-t2-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "클라이언트별 호출량 제한+속도 제한 = Usage Plan + API Key + Throttling.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "http-api-vs-rest.html 표가 'API keys', 'Per-client rate limiting', 'Per-client usage throttling'을 REST API 기능으로 명시 — 정답(Usage Plan+API Key+Throttling) 직접 뒷받침. 출처 welcome.html은 Usage Plan/Throttling 세부를 다루지 않음 — REST API usage plans 문서로 교체 권장(약한 출처)."
+    },
+    {
+      "id": "saa-t2-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "k8s API 호환+멀티클라우드 이식성 = EKS(관리형 Kubernetes). ECS는 AWS 독자.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "ECS welcome은 'fully managed container orchestration service'(AWS 독자)를 확인하나 EKS의 k8s 표준 API/이식성은 직접 다루지 않음(ECS 페이지라 당연). 정답 자체는 SAA 표준 상식과 일치하며 타당 — 검수 시 출처를 EKS welcome(docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)으로 교체/보강 권장(현 출처는 EKS 주장 미커버)."
+    },
+    {
+      "id": "saa-t2-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "GPU/특수 인스턴스 직접 선택 = EC2 시작 유형. Fargate는 GPU 미지원.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-tasks-services.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "fargate-tasks-services.html가 'gpu'를 'not valid in Fargate tasks' 파라미터 목록에 명시 — Fargate GPU 미지원 직접 확인. ECS welcome도 EC2 옵션에서 'You choose the instance type'. 출처 what-is-fargate.html 단독은 GPU 불가를 명시하지 않음 — fargate-tasks-services.html 또는 EC2 launch type 문서 보강 권장."
+    },
+    {
+      "id": "saa-t2-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Fargate는 시작 유형(인프라 레이어), 오케스트레이션은 ECS/EKS 담당 — 단독 불가.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "what-is-fargate.html 직접 일치: 'AWS Fargate is a technology that you can use with Amazon ECS to run containers'. ECS welcome도 Fargate를 capacity 옵션(serverless)으로 분류. 정답·오답 해설 정확."
+    },
+    {
+      "id": "saa-t2-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "24h 지속+EFS 상태 = Fargate, 간헐 5분 이벤트 = Lambda. 표준 분기.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-tasks-services.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답·해설 모두 타당(Lambda 15분 제한은 welcome.html, Fargate EFS 지원은 fargate-tasks-services.html 'Amazon EFS volumes for persistent storage'로 확인). 약한 점: 두 welcome 출처 모두 'Lambda vs Fargate 선택 기준'을 직접 비교하진 않음 — 컴퓨팅 선택 가이드/Fargate EFS 문서로 보강 권장."
+    },
+    {
+      "id": "saa-t2-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "VPC 연결 Lambda는 ENI로 RDS 접근, 인터넷은 NAT Gateway 필요 — 공식 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "configuration-vpc.html 뒷받침: VPC 연결 시 ENI(Hyperplane ENI)로 VPC 리소스 접근, 'When you attach your function to a VPC, it can only access resources available within that VPC. To give your function access to the internet, you also need to configure the VPC to have internet access'(NAT 필요). 오답0(퍼블릭 IP) 정확: '...doesn't give it internet access or a public IP address'. 출처 welcome.html은 ENI/NAT 미커버 — configuration-vpc.html/configuration-vpc-internet.html로 교체 권장(약한 출처)."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 11,
+    "outOfScope": 0,
+    "needsReview": 12
+  }
+}

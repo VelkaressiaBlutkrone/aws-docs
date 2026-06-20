@@ -1,0 +1,239 @@
+{
+  "taskId": "saa-t3-1",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-1-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "기본 비공개 + 모든 클래스 11 nine 내구성. 공식 비교표: 모든 스토리지 클래스(One Zone-IA 포함) Durability=99.999999999%. BPA 문서: 'By default, new buckets, access points, and objects don't allow public access.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 비교표가 모든 클래스 11 nine 동일 + One Zone-IA 가용성 99.5% 명기. 정답 옵션이 정확히 일치."
+    },
+    {
+      "id": "saa-t3-1-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Intelligent-Tiering = 불명확/변동 접근 패턴, 검색요금 없음. 공식: 'ideal storage class when you want to optimize storage costs for data that has unknown or changing access patterns. There are no retrieval fees for S3 Intelligent-Tiering.' 30일→Infrequent Access, 90일→Archive Instant Access, 최소 보관 기간 None.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "해설의 30일/90일 자동 이동, 검색요금 없음, 오브젝트당 모니터링 요금, 최소 보관 기간 없음 모두 공식 비교표·본문과 일치."
+    },
+    {
+      "id": "saa-t3-1-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "CRR 복제본은 One Zone-IA의 교과서적 use case. 공식 권장: 'S3 One Zone-IA (ONEZONE_IA) – Use if you can re-create the data if the Availability Zone fails, for object replicas when configuring S3 Cross-Region Replication (CRR).' 정답 옵션(CRR 복제본)이 문서 권장과 정확히 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "오답해설도 정확: 교체 불가 원본→Standard-IA, 장기 7년→Deep Archive. 모두 공식 권장과 부합."
+    },
+    {
+      "id": "saa-t3-1-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 키(Glacier Instant Retrieval = 밀리초 즉시 접근)는 정확. 공식: 'S3 Glacier Instant Retrieval ... Use for long-term data that's rarely accessed and requires milliseconds retrieval. Data ... available for real-time access.' 비교표 'accessed once a quarter with millisecond access'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "T6 스캔 플래그 확정. wrongExplanations[0]이 'Glacier Deep Archive의 복원 시간은 최대 12시간'이라 단정하나 공식 archive retrieval options 표는 Deep Archive Standard=Within 12 hours, Bulk=Within 48 hours. 즉 최대 복원 시간은 48시간(12시간 아님). Deep Archive를 부적합으로 판정하는 결론 자체는 옳으나(응급 '수 분' 불충족) 인용 수치가 부정확 → 사람이 '최대 48시간'으로 수정 검토 권장. wrongExplanations[1](Flexible Retrieval '분~12시간')은 공식 Bulk 5–12h 상한과 부합하여 OK. 정답 키·정답해설은 정확하므로 flip 차단은 아니고 오답해설 문구 교정 대상."
+    },
+    {
+      "id": "saa-t3-1-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Standard-IA 최소 보관 기간 30일. 공식: 'If you delete an object before the end of the 30-day minimum storage duration period, you are charged for 30 days.' 비교표 Standard-IA Min storage duration=30 days.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "오답해설[3]의 'Glacier Instant Retrieval 및 Glacier Flexible Retrieval 최소 90일'도 비교표(GLACIER_IR·GLACIER Min storage duration=90 days)와 일치. 정확."
+    },
+    {
+      "id": "saa-t3-1-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "수명주기 전환은 저렴한 방향(waterfall)만. 역방향 자동 전환 불가, 아카이브 복원은 별도 Restore 작업. 공식 본문이 Standard→IA/Intelligent-Tiering→Glacier 방향 다단계 전환을 기술하고, 아카이브 접근에는 RestoreObject가 필요함을 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "전환 waterfall(저렴한 방향 단방향)은 S3 lifecycle 표준 동작. 본문에 명시적 '역방향 불가' 한 문장 인용은 lifecycle-transition-general-considerations 하위 페이지에 있으나, 본 페이지의 전환 예시·Restore 분리 서술로 정답 키 충분히 뒷받침. 답 정확."
+    },
+    {
+      "id": "saa-t3-1-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "이 시나리오(30일 자주→90일 가끔→365일 만료)는 공식 lifecycle 예시와 일치. 공식: 'Initially ... frequently accessed for a period of 30 days. Then ... infrequently accessed for up to 90 days. After that ... archive or delete'. Expiration action: 'Amazon S3 deletes expired objects on your behalf.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "오답해설[0]의 Deep Archive 최소 보관 180일도 비교표와 일치(DEEP_ARCHIVE Min=180 days). 단계적 전환+만료가 가장 비용효율적이라는 결론 정확."
+    },
+    {
+      "id": "saa-t3-1-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "단일 PUT 최대 5GB, 초과 시 멀티파트 필수. 공식: 'With a single PUT operation, you can upload a single object up to 5 GB in size.' (멀티파트는 5MB~50TB). 6GB는 단일 PUT 불가.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "출처 url은 optimizing-performance.html이나 5GB 단일 PUT 사실은 upload-objects.html(공식)에서 명확 확인. 정답 키 정확. 출처 페이지를 upload-objects/mpuoverview로 보강하면 더 정밀(경미)."
+    },
+    {
+      "id": "saa-t3-1-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "Transfer Acceleration = 장거리 업로드 가속(엣지 로케이션 경유). 공식: 'if you want fast data transport over long distances between a client and an S3 bucket, use ... Transfer Acceleration. Transfer Acceleration uses the globally distributed edge locations in CloudFront to accelerate data transport over geographical distances.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "오답해설(버전관리 무관, 멀티파트는 거리문제 해결 못함, 리전 이전은 일부만 개선)도 정확. 정답 키 정확."
+    },
+    {
+      "id": "saa-t3-1-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "프리픽스당 5,500 GET/HEAD, 프리픽스 수 무제한, 병렬화로 선형 확장. 공식: 'at least 3,500 PUT/COPY/POST/DELETE or 5,500 GET/HEAD requests per second per partitioned Amazon S3 prefix. There are no limits to the number of prefixes in a bucket.'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "한도가 버킷이 아닌 프리픽스 단위라는 점, 10개 프리픽스 시 55,000 read/s 예시까지 공식 본문과 일치. 정답 키 정확."
+    },
+    {
+      "id": "saa-t3-1-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "BPA가 버킷 정책/ACL의 공개 허용을 무효화. 공식: 'users can modify bucket policies ... or object permissions to allow public access. S3 Block Public Access settings override these policies and permissions so that you can limit public access.' 정답 키(BPA 우선→공개 거부) 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 키는 확실히 맞음(BPA override). 다만 정답해설·wrongExplanations[2]가 'Block Public Access → IAM 정책 → 버킷 정책 → ACL' 순서의 단일 선형 평가 계층을 단정하는데, 공식 IAM/S3 권한 평가는 명시적 Deny 우선·정책 유형 평가로 BPA를 그런 식의 순번에 끼워넣는 표준 도식이 아님(BPA는 공개 허용을 무효화하는 별도 가드레일). 결론은 옳으나 '계층 순서' 문구가 부정확할 수 있어 사람이 표현 검토 권장. flip 차단 아님."
+    },
+    {
+      "id": "saa-t3-1-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정적 웹사이트 글로벌 배포 표준 = CloudFront + S3 + OAC(S3 비공개 유지). 정답 키가 AWS 권장 패턴과 일치. (BPA 문서도 S3 직접 공개 비권장·BPA 켜기 권장.)",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "OAC 자체의 정본은 CloudFront 개발자 가이드(restrict-access-to-s3.html). 본 출처(BPA)는 'S3 직접 공개 비권장'을 partial로 뒷받침. CloudFront+OAC가 정적 사이트 비공개 배포 표준이라는 점은 업계·AWS 공통 권장으로 정답 키 견고. 사람이 출처를 CloudFront OAC 문서로 보강 권장(경미)."
+    },
+    {
+      "id": "saa-t3-1-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "프리사인 URL = 서명 주체 권한 이하, 지정 객체·작업 한정, 만료 존재, 수신자 자격증명 불필요. 공식: 'The credentials used by the presigned URL are those of the IAM principal who generated the URL'; 'The capabilities of a presigned URL are limited by the permissions of the user who created it'; 업로드 시 'without requiring another party to have AWS security credentials'.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "경미한 뉘앙스: 공식은 'use the presigned URL multiple times, up to the expiration'이라 '단일 작업'은 1회용이 아니라 '지정된 한 객체+한 HTTP 메서드'에 한정이라는 의미. 정답 옵션 '서명 시 지정한 객체의 다운로드만'은 정확. wrongExplanations[2]의 '단일 작업' 표현도 객체·메서드 범위 한정 의미로 수용 가능. flag 아님."
+    },
+    {
+      "id": "saa-t3-1-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "CRR 전제: 소스+대상 버킷 모두 버전 관리 활성화. 복제 일반 요건상 양쪽 버전 관리 필수(SRR도 동일). 정답 키(양쪽 모두) 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "양쪽 버전 관리 필수의 명문 조항은 replication-requirements.html(하위)에 있음. 본 출처(replication.html)는 CRR/SRR 정의로 partial. 양쪽 버전 관리 필수는 S3 복제의 잘 알려진 핵심 전제로 정답 키 견고. 사람이 출처를 replication-requirements로 보강 권장(경미)."
+    },
+    {
+      "id": "saa-t3-1-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "복제는 설정 이후 신규/갱신 객체만 자동, 기존 객체는 Batch Replication 필요. 공식: 'Live replication doesn't replicate any objects that existed in the bucket before you set up replication. To replicate objects that existed before you set up replication, use on-demand replication [S3 Batch Replication].'",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "오답해설(자동 소급 없음, '이전 30일' 개념 없음)도 정확. 정답 키 정확. '신규만 자동 + 기존은 Batch Replication'이 공식 본문과 정확히 일치."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 2
+  }
+}

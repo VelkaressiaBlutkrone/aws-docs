@@ -1,0 +1,227 @@
+{
+  "taskId": "saa-t4-4",
+  "domain": 4,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t4-4-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt3: 인바운드 무료, 아웃바운드 과금)은 AWS 데이터 전송 비용의 핵심 방향 규칙으로 정확. 인터넷→AWS 무료, AWS→인터넷 첫 10TB 약 $0.09/GB는 EC2 데이터 전송 표준 단가와 일치. 오답 옵션도 모두 명확히 틀림(인바운드 과금 X, 같은 리전 AZ경계 무료 X, 교차리전 무료 X).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/vpc/pricing/", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "내용은 정확하나 출처 부정합. 인터넷 아웃바운드 $0.09/GB·교차AZ $0.01/GB·교차리전 $0.02/GB 같은 핵심 단가는 cite된 VPC 요금 페이지가 아니라 EC2 요금 페이지(aws.amazon.com/ec2/pricing/on-demand 'Data Transfer' 섹션)에 있음. VPC 페이지는 교차AZ $0.01/GB(피어링, 'in both In and Out direction')만 partial 확인. 출처에 EC2 데이터 전송 페이지 추가 권장."
+    },
+    {
+      "id": "saa-t4-4-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt0: 같은 AZ + 프라이빗 IP일 때 무료)은 정확. 같은 AZ라도 퍼블릭/Elastic IP 사용 시 $0.01/GB 과금되는 표준 규칙과 일치. 무료 조건이 '같은 AZ + 프라이빗 IP' 동시 충족이라는 설명도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/vpc/pricing/", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "내용 정확. 단 '같은 AZ 프라이빗 IP 무료 / 퍼블릭·Elastic IP 과금 $0.01/GB' 명문은 cite된 VPC 요금 페이지에 없고 EC2 요금 페이지의 'Data Transfer within the same AWS Region' 섹션에 있음. 출처에 EC2 데이터 전송 페이지 보강 권장.",
+      "recommendation": "review"
+    },
+    {
+      "id": "saa-t4-4-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답(opt2: 시간당 가용 요금 + 데이터 처리 요금 둘 다)은 공식 문서와 정확히 일치. NAT 게이트웨이가 목적지를 구분하지 않고 통과 트래픽 전부에 처리 요금을 부과한다는 설명도 정확($0.045/시간·$0.045/GB는 US East 표준 단가).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 문구 직접 확인: \"When you provision a NAT gateway, you are charged for each hour that your NAT gateway is available and each gigabyte of data that it processes.\" 두 요금 구조·목적지 무구분 처리 요금 모두 정확. 단가 $0.045는 docs 페이지엔 없고 VPC 요금 페이지 예시에 등장(리전별 상이 주의)."
+    },
+    {
+      "id": "saa-t4-4-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt1: S3 Gateway Endpoint 생성 + 라우팅 테이블 추가)은 정확. Gateway Endpoint는 추가 요금 없음('no additional charge' 공식 확인)이고 같은 리전 S3 트래픽이 NAT를 우회해 처리 요금이 제거됨. Interface Endpoint(opt2)는 유료라 비용 면에서 열위.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 확인: gateway endpoint \"There is no additional charge for using gateway endpoints\" + NAT 페이지가 명시적으로 'gateway endpoint 생성으로 NAT 데이터 전송 비용 절감' 권고. 설명 중 '같은 리전 S3 접근 시 데이터 전송 요금도 발생하지 않아'는 같은 리전 S3↔EC2가 일반적으로 무료라 사실상 맞으나, 엄밀히는 Gateway Endpoint 자체가 무료인 것이 핵심 근거. 미세하게 보강 가능하나 정답성엔 영향 없음."
+    },
+    {
+      "id": "saa-t4-4-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt2: AZ-B 인스턴스가 AZ-A NAT 사용 시 NAT 처리 요금 + 교차 AZ 전송 요금 $0.01/GB 추가)은 정확. 공식 NAT 문서가 '교차 AZ 트래픽이 많으면 NAT를 같은 AZ에 두거나 AZ별 NAT 생성'을 권고하는 것과 정확히 부합. AZ-B에 NAT 추가 시 절감되는 것은 교차 AZ분이며 처리 요금은 잔존(opt1 반증)이라는 설명도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 권고 문구 확인: \"ensure that the resources are in the same Availability Zone as the NAT gateway. Alternatively, create a NAT gateway in each Availability Zone\" — 교차 AZ 추가 비용 존재를 뒷받침. 교차 AZ 단가 $0.01/GB는 표준."
+    },
+    {
+      "id": "saa-t4-4-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답(opt3: Gateway Endpoint 무료, Interface Endpoint $0.01/GB + 시간당 ENI 요금)은 두 공식 페이지로 정확히 확인. Gateway 'no additional charge', PrivateLink Interface는 ENI 시간당 $0.01 + 데이터 처리 $0.01/GB(첫 1PB).",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html", "fetched": "2026-06-20", "supports": "yes" },
+        { "url": "https://aws.amazon.com/privatelink/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "PrivateLink 요금 직접 확인: \"$0.01 per hour for each endpoint ENI\" + \"First 1 PB: $0.01 [per GB]\"·\"Data processing charges apply for each Gigabyte processed through the VPC endpoint regardless of the traffic's source or destination.\" Gateway 무료 확인. 설명 중 'Gateway Endpoint(S3, DynamoDB만 지원)'·'Interface 200개 이상 서비스'는 정확."
+    },
+    {
+      "id": "saa-t4-4-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "정답(opt1: DynamoDB·S3 모두 Gateway Endpoint)은 정확. 공식 문구 'Gateway VPC endpoints provide reliable connectivity to Amazon S3 and DynamoDB' + 'no additional charge'로 '추가 비용 없이' 단서에 정확히 부합. S3도 Gateway 지원하므로 opt0 반증 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 확인: \"Gateway VPC endpoints provide reliable connectivity to Amazon S3 and DynamoDB\"·\"There is no additional charge for using gateway endpoints.\" S3·DynamoDB 둘 다 Gateway 지원이 핵심. (참고: S3·DynamoDB는 interface endpoint도 지원하나 비용 단서상 Gateway가 정답.)"
+    },
+    {
+      "id": "saa-t4-4-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt0: CloudFront를 S3 앞에 배치, 엣지 캐싱)은 정확. CloudFront↔AWS 오리진 전송 비용 면제 + 엣지 캐싱으로 오리진 요청·아웃바운드 감소 + 지연 감소를 동시 달성. 다중 리전 복제(opt1)·EC2 전환(opt2)·Transfer Acceleration(opt3, 업로드 가속용)은 모두 부적합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/cloudfront/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 확인: \"Data transfer between CloudFront and your AWS origins is automatically waived when serving traffic through CloudFront.\" 오리진 전송 면제 + 캐싱 부하 절감 설명 정확."
+    },
+    {
+      "id": "saa-t4-4-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt3: 동적 콘텐츠 비율 높아 캐시 히트율 낮음)은 정확. 오리진 전송 절감은 캐시 히트율에 비례하며 동적 콘텐츠는 매 요청 오리진 도달. wrongExpl[2]의 '오리진 전송 면제는 S3든 EC2든 동일 적용'도 공식('AWS origins' 일반)으로 확인됨.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/cloudfront/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "wrongExpl[2] 'CloudFront↔AWS 오리진 전송 비용 면제는 오리진이 S3든 EC2든 동일' 주장은 공식 'between CloudFront and your AWS origins'(AWS 오리진 일반)로 뒷받침되어 정확. 핵심 정답 논리(히트율↔절감) 타당."
+    },
+    {
+      "id": "saa-t4-4-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt1: VPC 3개·소량 트래픽엔 VPC 피어링 풀메시)은 정확. 3개 풀메시=3개 연결(N(N-1)/2), 피어링은 데이터 처리 요금 없음. TGW는 어태치먼트당 $0.05/시간 + $0.02/GB라 소규모·저트래픽에선 총비용 열위. VPN/Direct Connect는 온프레미스용이라 VPC간 연결 부적합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/transit-gateway/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "TGW 단가 직접 확인: \"$0.1 per hour ($0.05 per VPC attachment)\" + \"Transit Gateway Data Processing will result in a charge of $0.02\"/GB. 피어링 데이터 처리 무과금(교차AZ만 $0.01/GB)은 VPC 요금 페이지 partial 확인. 정답·오답 논리 타당. (TGW 단가는 VPC 요금 페이지엔 없어 cite 페이지가 부분 커버 — TGW 요금 페이지 추가 권장.)"
+    },
+    {
+      "id": "saa-t4-4-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt2: 수십 개 VPC엔 Transit Gateway 허브)은 정확. 피어링 풀메시는 N(N-1)/2로 연결 수 폭증(50개=1225개), TGW는 N개 어태치먼트로 유지. 고정·처리 요금이 있어도 대규모에선 관리 복잡도 절감이 상쇄. 계산 예시(50개=1225)도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/transit-gateway/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "TGW 요금($0.05/어태치먼트/시간·$0.02/GB) 공식 확인. 풀메시 N(N-1)/2 vs TGW N개 비교 정확. 시험 단골 패턴(대규모 다중 VPC = TGW)으로 정답 타당."
+    },
+    {
+      "id": "saa-t4-4-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "정답(opt2: 피어링 교차AZ $0.01/GB vs TGW $0.03/GB[$0.01 교차AZ + $0.02 처리])은 정확. 피어링은 데이터 처리 요금이 없고 교차 AZ $0.01/GB만, TGW는 동일 교차 AZ에 처리 $0.02/GB가 가산. 동일 조건 피어링 우위 결론 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/vpc/pricing/", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "피어링 교차AZ $0.01/GB('in both In and Out direction')는 VPC 요금 페이지 확인. TGW 처리 $0.02/GB는 TGW 요금 페이지에 있음(이 문항은 cite 안 함). 합산 $0.03/GB 정확. 단, TGW도 어태치먼트 시간당 고정요금 별도 존재 — 본 문항은 GB당 가변 단가만 비교하는 전제로 정확(고정요금 무시는 통상적 단순화). 출처에 TGW 요금 페이지 보강 권장."
+    },
+    {
+      "id": "saa-t4-4-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt3: DX 아웃바운드 약 $0.02/GB < 인터넷 약 $0.09/GB)은 공식으로 확인. DX는 포트 시간 요금 별도라 전송량 충분히 클 때만 총비용 유리하다는 설명도 정확. wrongExpl[1]의 'DX 무료 아님, 포트 시간 + 전송 요금' 반증도 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/directconnect/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 확인: 미국 내 DTO \"$0.0200\"/GB, 포트 \"1 Gbps $0.30/hour\". 인터넷 ~$0.09/GB는 EC2 페이지 참조(공식 DX 페이지가 'refer to EC2 pricing page'로 명시). DX 아웃바운드가 인터넷 약 1/4 수준이라는 비교 정확."
+    },
+    {
+      "id": "saa-t4-4-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답(opt1: 월 전송량이 포트 시간 고정비용을 상쇄할 만큼 크지 않으면 절감 안 됨)은 정확. 포트 시간 요금은 전송량과 무관한 고정비용이라 손익분기점 미만이면 인터넷보다 총비용 높을 수 있음. wrongExpl[3]의 '인바운드는 인터넷·DX 모두 무료, 절감은 아웃바운드에서' 설명도 공식(DX in $0.00/GB)과 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/directconnect/pricing/", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 확인: 포트 시간 고정요금($0.30/시간 등) + \"AWS Direct Connect data transfer in is charged at 0.00 USD per GB in all locations.\" 손익분기점 논리·인바운드 무료 설명 정확."
+    },
+    {
+      "id": "saa-t4-4-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "정답(opt1: AZ-A EC2 → AZ-B RDS 프라이머리 쿼리에 교차 AZ 전송 $0.01/GB 발생)은 정확. Multi-AZ 스탠바이는 장애조치용이며 일반 쿼리는 프라이머리로만 가므로, EC2와 프라이머리가 다른 AZ면 앱↔DB 구간에 교차 AZ 요금 부과. AWS 관리 서비스여도 면제 아님(opt0 반증). 설명이 'RDS 내부 복제 트래픽이 아닌 애플리케이션 레이어 트래픽'임을 정확히 구분.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://aws.amazon.com/vpc/pricing/", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "교차 AZ $0.01/GB 규칙은 표준이며 VPC 요금 페이지가 피어링 맥락 $0.01/GB로 partial 확인. EC2↔RDS 앱 레이어 교차 AZ 과금은 시험 단골 함정으로 정답 타당. 일반 EC2↔리소스 교차 AZ 단가의 정본은 EC2 요금 페이지 — 출처 보강 권장. (참고: RDS 동기 복제(프라이머리↔스탠바이) 트래픽 자체는 별도 과금 없음 — 본 문항은 앱↔DB 구간을 다루므로 정확.)"
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 5,
+    "outOfScope": 0,
+    "needsReview": 6
+  }
+}

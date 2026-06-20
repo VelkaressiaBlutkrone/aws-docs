@@ -1,0 +1,239 @@
+{
+  "taskId": "saa-t2-4",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t2-4-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "HA=짧은 중단 후 자동복구 / FT=무중단 / DR=리전 재해 RTO·RPO 구분이 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정답 개념 구분은 표준이나, 인용된 welcome.html은 Reliability Pillar 개요 페이지(SPOF만 introduction에서 언급)로 HA/FT/DR 정의·RTO·RPO 본문을 직접 담지 않음 — 더 구체적 하위 페이지(resiliency/availability) URL 권장."
+    },
+    {
+      "id": "saa-t2-4-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RDS Multi-AZ만 SPOF 아님(동기 스탠바이+자동 페일오버); 단일AZ EC2/단일AZ NAT GW/단일 RDS는 SPOF.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "SPOF 식별 정답 견고. RDS Multi-AZ가 다른 AZ에 동기 스탠바이 유지·자동 페일오버는 RDS 공식문서(MultiAZSingleStandby)로 뒷받침. welcome.html은 SPOF만 일반 언급(partial)."
+    },
+    {
+      "id": "saa-t2-4-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Route53=DNS+헬스체크, ALB=트래픽분산, ASG=EC2 자동교체, RDS Multi-AZ=DB 페일오버 — 레이어 역할 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "레이어 역할 매핑 표준이고 정답 명확. 단 welcome.html 개요엔 ELB/ALB·ASG·Route53 구체 동작이 없어 traceability 약함 — Reliability Pillar 하위 best-practice 페이지 인용 권장."
+    },
+    {
+      "id": "saa-t2-4-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "RDS Multi-AZ=동기 복제, 페일오버 시 데이터 유실 없음 — 공식문구로 직접 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식: 'automatically provisions and maintains a synchronous standby replica' + 동기 복제로 인한 write/commit latency 증가 명시. 정답·오답해설 모두 정확히 부합."
+    },
+    {
+      "id": "saa-t2-4-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정답 동작(자동 스탠바이 승격+동일 엔드포인트 DNS 전환)은 정확; 단 '1~2분' 타이밍 수치는 인용 페이지에 없음(T6 플래그).",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "T6 스캔 플래그 재확인: 정답·DNS 동일엔드포인트 전환은 옳으나 해설/오답2의 페일오버 '1~2분' 수치가 인용된 Concepts.MultiAZ.html(개요 페이지)에 없음. 공식 타이밍은 'typically complete within 60~120 seconds'(USER_FailoverProcess 계열)이라 1~2분과 호환되지만, 수치 인용 출처가 불일치 — 타이밍 근거 URL을 FailoverProcess 페이지로 교체 권장."
+    },
+    {
+      "id": "saa-t2-4-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "읽기 처리량 확장=Read Replica(비동기·별도 엔드포인트); Multi-AZ 스탠바이는 읽기 불가 — 공식문구 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html", "fetched": true, "supports": "yes" }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 Note: 'The high availability option isn't a scaling solution for read-only scenarios. You can't use a standby replica to serve read traffic. To serve read-only traffic, use a Multi-AZ DB cluster or a read replica instead.' 정답·오답해설과 정확히 일치."
+    },
+    {
+      "id": "saa-t2-4-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Multi-AZ=자동 페일오버 / Read Replica=수동 승격(promote) — 표준 구분 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "정답 견고(읽기복제본은 자동 페일오버 없음→수동 promote). 인용 Concepts.MultiAZ는 'standby provides failover support'를 명시하나 read replica 수동 승격 대비는 별도 페이지(USER_ReadRepl)라 보강 가능 — 정확성 자체엔 문제 없음."
+    },
+    {
+      "id": "saa-t2-4-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Active-Passive 페일오버: Primary 비정상 시 Route53이 DNS 응답을 Secondary로 자동 전환 — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "공식: '...configure DNS failover so that Route 53 will route your traffic from an unhealthy resource to a healthy resource.' 일반 개념은 뒷받침. 단 active-passive vs 가중치 라우팅 구체 메커니즘은 하위 페이지(dns-failover-configuring/routing-policy)라 traceability partial — 해설은 정확."
+    },
+    {
+      "id": "saa-t2-4-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "정적 안정성=장애 시 동적 조달 없이 사전 이중화 용량으로 계속 동작 — WAF Reliability 원칙과 일치.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "정적 안정성(static stability) 정의는 정확하나 인용 welcome.html 개요엔 해당 용어·설명이 없음 — WAF Reliability Pillar의 'Use static stability...'(REL11/use-fault-isolation 계열) 또는 Builders' Library 'static stability using AZs' 인용 권장."
+    },
+    {
+      "id": "saa-t2-4-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "ASG 환경 세션=ElastiCache Redis/DynamoDB 외부 공유 스토어가 적합(로컬·RAM은 인스턴스 교체 시 소실) — 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "스테이트리스 설계 정답은 표준이고 SAA 단골. 단 welcome.html 개요엔 세션 외부화 내용이 없음 — WAF(REL: stateless) 또는 ElastiCache/Best Practices 페이지로 출처 교체 권장. 정확성 문제 아님."
+    },
+    {
+      "id": "saa-t2-4-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "단일AZ NAT GW는 그 AZ 장애 시 타 AZ 프라이빗 서브넷의 인터넷 경로 차단 — AZ별 NAT GW 필요. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "NAT GW는 AZ 단위 리소스라 HA엔 AZ별 배치 필요(VPC NAT GW 공식문서 권장사항과 일치). 단 인용 welcome.html엔 NAT GW 내용 없음 — VPC NAT Gateway 문서 또는 WAF 하위 페이지 인용 권장."
+    },
+    {
+      "id": "saa-t2-4-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "단일 AZ ASG는 인스턴스 장애는 처리해도 AZ 장애 시 전 인스턴스 동시 영향 — 다중 AZ 분산 필요. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "AZ 공유(네트워크·전력·냉각)로 단일 AZ ASG가 AZ 장애에 취약하다는 정답 정확. welcome.html 개요는 SPOF·다중 AZ 일반론만(partial) — EC2 Auto Scaling 다중 AZ 또는 WAF fault-isolation 페이지 인용 권장."
+    },
+    {
+      "id": "saa-t2-4-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "ALB 헬스체크=대상그룹 개별 인스턴스 교체 / Route53 헬스체크=엔드포인트·리전 단위 DNS 전환 — 레이어 구분 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "두 헬스체크 레이어 분담(ALB=인스턴스, Route53=엔드포인트/리전 DNS) 정확. 인용 dns-failover.html은 Route53 헬스체크 개요만 — ALB 헬스체크 역할은 ELB 문서라 출처가 한쪽 레이어만 커버(partial). 정확성 문제 아님."
+    },
+    {
+      "id": "saa-t2-4-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "'데이터베이스 자동 페일오버' 키워드 → RDS Multi-AZ. 읽기복제본/스냅샷/수동승격은 자동 페일오버 아님. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "pass",
+      "notes": "키워드-설계 매핑 명확(automatic failover=Multi-AZ). 인용 Concepts.MultiAZ는 'standby provides failover support' 명시로 핵심 뒷받침. 정답 견고."
+    },
+    {
+      "id": "saa-t2-4-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "HA 종합: ALB+다중AZ ASG + RDS Multi-AZ + 세션 외부화(ElastiCache/DynamoDB) — 가장 완전. 정확.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html", "fetched": true, "supports": "partial" },
+        { "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html", "fetched": true, "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "종합 정답 견고하고 오답(스토리지/타입 업그레이드=성능, 단일AZ 2대=AZ장애 취약, 지연라우팅=멀티리전 성능) 변별 정확. RDS Multi-AZ 부분은 공식 뒷받침, WAF welcome.html은 개요라 세션/다중AZ 구체 내용 partial."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 13,
+    "outOfScope": 0,
+    "needsReview": 10
+  }
+}

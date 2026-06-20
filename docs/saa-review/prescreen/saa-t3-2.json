@@ -1,0 +1,231 @@
+{
+  "taskId": "saa-t3-2",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "saa-t3-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "여러 EC2가 동시에 네트워크 드라이브처럼 마운트 = 파일 스토리지(EFS/FSx, NFS/SMB). 정답 option 1. EFS는 NFSv4.1/4.0 기반으로 다수 인스턴스 동시 마운트(공식 whatisefs 확인). 블록(EBS/인스턴스 스토어)·객체(S3) 오답 처리 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "출처가 EBS what-is 페이지인데 문항 핵심(파일 스토리지=NFS/SMB 동시 마운트)은 EFS 문서가 직접 근거. EBS what-is는 블록 스토리지 측면만 부분 지원. 출처를 EFS whatisefs로 교체 권장. 정답·해설 내용 자체는 정확."
+    },
+    {
+      "id": "saa-t3-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "용량 안 늘리고 IOPS만 → gp3 전환(IOPS·처리량을 용량과 독립 설정). 정답 option 2. gp2는 IOPS가 용량에 비례(GiB당 3 IOPS, 별도 IOPS 설정 없음)·온라인 타입 변경 가능 — 공식 ebs-volume-types 부합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "gp2 GiB당 3 IOPS·최소 100/최대 16,000, gp3 IOPS·처리량 용량 독립 설정은 일반적 사실이며 ebs-volume-types 표는 gp2 max 16,000/gp3 max 80,000을 확인. '3 IOPS/GiB' 세부 수치와 온라인 변경은 general-purpose.md/elastic-volumes 페이지에 더 명확(이 URL에서는 부분 지원). 정답·논리 정확.",
+      "recommendation": "pass"
+    },
+    {
+      "id": "saa-t3-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "200,000 IOPS + 99.999% 내구성 → io2 Block Express(최대 256,000 IOPS, 99.999% 내구성). 정답 option 2. gp3 80,000·io1 64,000은 200k 미달, io1 내구성 99.8–99.9% — 모두 공식 ebs-volume-types 표와 일치. st1 max IOPS 500도 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 표 인용: io2 Block Express 'Max IOPS 256,000', '99.999% durability'; gp3 '80,000'; io1 '64,000', '99.8%-99.9%'; st1 'Max IOPS per volume (1 MiB I/O) 500'. wrongExp '3'의 'st1 max IOPS 500(1 MiB I/O 기준)' 정확. 모든 수치 일치."
+    },
+    {
+      "id": "saa-t3-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "HDD 볼륨(st1·sc1)은 부팅 볼륨 미지원. 정답 option 1(인덱스 1='st1 부팅 불가'). 공식 ebs-volume-types HDD 표 'Boot volume: Not supported' 명시.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 HDD 표: st1·sc1 모두 'Boot volume: Not supported'. SSD 표(gp3/gp2/io2/io1)는 'Boot volume: Supported'. 해설의 '부팅 볼륨은 SSD만' 정확. 랜덤 I/O 성능 부족이라는 부연은 합리적 설명(문서 직접 인용은 아님)."
+    },
+    {
+      "id": "saa-t3-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "동일 AZ Nitro 다중 EC2 동시 마운트 → Multi-Attach는 io1·io2만 지원, FS 레벨 동시성은 앱이 직접 관리. 정답 option 1. 공식 ebs-volume-types 표가 io2/io1 'Multi-attach Supported', gp3/st1/sc1 'Not supported' 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 부적합: what-is-ebs 페이지에는 Multi-Attach의 'io1/io2 한정·동일 AZ·앱이 동시성 관리·클러스터 인지 파일시스템 필요' 서술이 없음(no). 핵심 사실은 ebs-volume-types 표(Multi-attach Supported/Not supported)와 Multi-Attach 전용 페이지(ebs-volumes-multi.html)가 근거. 출처를 ebs-volumes-multi 또는 ebs-volume-types로 교체 권장. 정답·해설 내용은 정확."
+    },
+    {
+      "id": "saa-t3-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "인스턴스 스토어: 재부팅 시 데이터 유지, 중지·종료·HW 장애 시 소실. 정답 option 1(인덱스 1). 분리·재연결 불가, S3 자동백업 없음 — 일반 공식 사실과 부합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html", "fetched": "2026-06-20", "supports": "no" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 부적합: 인스턴스 스토어 생명주기는 EBS what-is 페이지가 다루지 않음(EC2 InstanceStorage.html이 정본 — 'data persists only during the lifetime of its associated instance... reboot 유지, stop/hibernate/terminate 소실'). 출처를 docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html로 교체 권장. 정답·해설 내용은 공식과 일치."
+    },
+    {
+      "id": "saa-t3-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "EBS 스냅샷: 증분(변경 블록만 S3 저장), AZ·리전 간 복사 가능, 암호화 볼륨의 스냅샷·복원 볼륨도 암호화 유지. 정답 option 1(인덱스 1). 공식 what-is-ebs가 스냅샷 cross-AZ/Region 마이그레이션·암호화 스냅샷을 직접 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "공식 인용: 'use those snapshots to ... migrate data across AWS accounts, AWS Regions, or Availability Zones'(cross-AZ/Region 복사 확인), 'encrypt your Amazon EBS volumes and Amazon EBS snapshots'(암호화 유지 확인). '증분(incremental)' 명시 문구는 이 페이지에 직접 없음(EBSSnapshots.html이 정본) — 그래서 partial. 정답·해설 정확."
+    },
+    {
+      "id": "saa-t3-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "ASG 다수 Linux EC2 공유 업로드 → EFS(NFSv4 완전관리형, 다중 AZ 동시 마운트, 자동 확장). 정답 option 1. 공식 whatisefs가 NFSv4.1/4.0·Regional(다중 AZ)·서버리스 자동 확장 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용: 'supports the Network File System version 4 (NFSv4.1 and NFSv4.0) protocol', 'serverless, fully elastic file storage ... growing and shrinking automatically', Regional FS는 다중 AZ. wrongExp '0'의 'io1/io2 Multi-Attach 동시성 앱 관리'도 정확. 정답·해설 정확."
+    },
+    {
+      "id": "saa-t3-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "Windows 파일서버 마이그레이션 + AD 인증 + SMB로 Win/Linux 접근 → FSx for Windows File Server(SMB 네이티브, AD 통합). 정답 option 1. EFS는 Windows 미지원, FSx for Lustre는 Linux 전용 — 오답 처리 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용: 'industry-standard Server Message Block (SMB) protocol', 'supporting versions 2.0 to 3.1.1', '... from current versions of Linux'(Win+Linux 접근), 'Users accessing file systems are authenticated with Microsoft Active Directory'. EFS Windows 미지원은 whatisefs Note로 확인. 해설의 SMB '2.0–3.1.1'·AD 통합 정확."
+    },
+    {
+      "id": "saa-t3-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "ML 훈련, S3 수백 TB, 서브밀리초 → FSx for Lustre(서브밀리초 지연, 수 TBps 처리량, 수백만 IOPS, S3 직접 연결로 객체를 파일처럼 투명 제공). 정답 option 2(인덱스 2). 공식 LustreGuide what-is가 모두 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 인용: 'sub-millisecond latencies, up to multiple TBps of throughput and up to millions of IOPS', 'When linked to an Amazon S3 bucket, an FSx for Lustre file system transparently presents S3 objects as files', 'workloads where speed matters, such as machine learning, high performance computing (HPC)'. 정답·해설 정확."
+    },
+    {
+      "id": "saa-t3-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "대용량 로그 순차 읽기 + 비용 효율 → st1(처리량 최적화 HDD, 최대 500 MiB/s). 정답 option 2(인덱스 2). sc1은 콜드 데이터(250 MiB/s), io2/gp3는 순차 처리에 과잉/비최적 — 공식 ebs-volume-types 표 부합.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html", "fetched": "2026-06-20", "supports": "yes" }
+      ],
+      "notes": "공식 표 인용: st1 'Max throughput per volume 500 MiB/s', sc1 '250 MiB/s'. HDD는 'large streaming workloads where the dominant performance attribute is throughput'. 해설의 st1 500/sc1 250 정확. '대용량 순차'에는 st1, '자주 접근 안하는 콜드'는 sc1 구분 타당."
+    },
+    {
+      "id": "saa-t3-2-q12",
+      "scope": "in",
+      "answerVerdict": "suspect",
+      "answerConfidence": 5,
+      "answerNote": "정답 option 1(Max I/O + Elastic). Elastic 처리량 모드(워크로드에 따라 자동 확장·축소)는 공식 whatisefs로 확인되어 타당. 그러나 'Max I/O 성능 모드' 권장은 재검토 필요 — AWS는 현재 General Purpose를 기본 권장하고 Max I/O를 레거시로 안내(신규 FS에서 비권장)하는 추세. 또한 Elastic 처리량은 General Purpose 성능 모드에서만 지원된다는 제약이 있어 'Max I/O + Elastic' 조합 자체가 부정합일 수 있음.",
+      "explanationVerdict": "flag",
+      "wrongExplanationsVerdict": "flag",
+      "ambiguityFlag": true,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "★사람 판정 필요. whatisefs는 'General Purpose performance mode'와 'Elastic throughput mode'를 기본 권장으로 명시('For most workloads, we recommend using the default modes, which are the General Purpose performance mode and the Elastic throughput modes'). Max I/O는 이 페이지에 등장하지 않음(supports=partial). 핵심 우려: (1) Max I/O는 레거시/비권장으로 안내되는 추세이고 Elastic 처리량과 호환되지 않을 가능성(Max I/O는 Elastic 미지원으로 알려짐) → 정답 option 1이 실제로는 성립 불가 조합일 수 있음. (2) 그렇다면 'Max I/O+Elastic'을 정답으로 두는 설계가 함정. 정본 features.md(performance-modes)·performance.md로 Max I/O의 Elastic 호환성·권장 상태를 반드시 교차 확인 후 정답·해설·오답 재작성 검토. 이 사전심사는 advisory이며 정답 단정 아님."
+    },
+    {
+      "id": "saa-t3-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "온프레미스 NetApp ONTAP 리프트앤시프트 + NFS/SMB/iSCSI 멀티 프로토콜(Linux/Win/macOS) → FSx for NetApp ONTAP. 정답 option 2(인덱스 2). ONTAP 멀티 프로토콜·ONTAP 호환 마이그레이션이 핵심 식별자로 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html", "fetched": "2026-06-20", "supports": "no" },
+        { "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "출처 부적합: 정답 대상이 FSx for NetApp ONTAP인데 인용 출처는 EFS(whatisefs, 오답 0의 근거만)와 FSx for Windows(what-is, 오답 3의 부분 근거)뿐. 정답 핵심(ONTAP의 NFS·SMB·iSCSI 멀티 프로토콜, ONTAP 리프트앤시프트, 자동 계층화/스냅미러)을 직접 뒷받침하는 docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html 출처 추가 필수. EFS Windows 미지원(오답 0)은 whatisefs Note로 확인됨. 정답·해설 내용 자체는 정확해 보이나 정본 출처로 검증 권장."
+    },
+    {
+      "id": "saa-t3-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "EBS는 AZ 종속(동일 AZ EC2만 연결). 다른 AZ로는 스냅샷 생성 후 대상 AZ에 새 볼륨 생성이 유일 경로. 정답 option 1(인덱스 1). 공식 what-is-ebs가 스냅샷으로 AZ 간 마이그레이션 확인.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "notes": "공식 인용: 'restore volumes or to migrate data across AWS accounts, AWS Regions, or Availability Zones'(스냅샷 경유 AZ 간 이동 확인). EBS 볼륨이 단일 AZ에 묶이고 동일 AZ EC2만 연결된다는 명시 문구는 이 페이지에 직접 없어(일반 공식 사실) partial. 정답·해설·오답 논리 정확."
+    },
+    {
+      "id": "saa-t3-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "30일 후 거의 접근 안함 + 다중 AZ 유지 + 비용 절감 → 수명 주기 정책으로 Standard-IA(다중 AZ 저비용)로 자동 전환. 정답 option 1(인덱스 1). One Zone은 단일 AZ라 가용성 요건 위반 — 오답 처리 타당.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        { "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html", "fetched": "2026-06-20", "supports": "partial" }
+      ],
+      "recommendation": "review",
+      "notes": "whatisefs는 Regional(다중 AZ)·One Zone(단일 AZ) 구분은 확인하나, 'Standard-IA(Infrequent Access)' 스토리지 클래스와 '수명 주기 정책으로 N일 후 자동 전환' 세부는 이 페이지에 직접 없음(partial). 정본 storage-classes.md/lifecycle-management-efs.md로 'Standard-IA가 다중 AZ인지·수명주기 정책 동작'을 교차 확인 권장. 정답·해설 내용은 공식과 정합. One Zone 단일 AZ는 whatisefs로 확인됨."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 1,
+    "weakOrUnverifiedSources": 11,
+    "outOfScope": 0,
+    "needsReview": 7
+  }
+}
