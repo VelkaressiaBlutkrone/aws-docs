@@ -8,6 +8,7 @@
       "id": "clf-t3-4-q1",
       "examGuideTaskId": "clf-t3-4",
       "skill": "관리형 관계형 DB (RDS)",
+      "section": "relational",
       "difficulty": "foundational",
       "stem": "한 회사가 MySQL 관계형 데이터베이스를 운영하려 하는데, 운영체제·데이터베이스 소프트웨어 패치, 백업, 고가용성 구성 같은 관리 작업을 AWS에 맡겨 운영 부담을 줄이고 싶다. 가장 적합한 서비스는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "clf-t3-4-q2",
       "examGuideTaskId": "clf-t3-4",
       "skill": "관계형 DB (Aurora)",
+      "section": "relational",
       "difficulty": "foundational",
       "stem": "한 팀이 MySQL 및 PostgreSQL과 호환되면서 표준 MySQL보다 훨씬 높은 처리량(일부 워크로드에서 최대 5배)을 제공하는, Amazon RDS의 완전관리형 관계형 데이터베이스 엔진을 원한다. 가장 적합한 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "clf-t3-4-q3",
       "examGuideTaskId": "clf-t3-4",
       "skill": "NoSQL DB (DynamoDB)",
+      "section": "dynamodb",
       "difficulty": "foundational",
       "stem": "한 모바일 게임이 수백만 사용자의 세션·점수 데이터를 키-값 형태로 저장하며, 어떤 규모에서도 일관된 한 자릿수 밀리초 응답이 필요하고 서버는 관리하고 싶지 않다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "clf-t3-4-q4",
       "examGuideTaskId": "clf-t3-4",
       "skill": "인메모리 캐싱 (ElastiCache)",
+      "section": "elasticache",
       "difficulty": "foundational",
       "stem": "한 웹 애플리케이션이 같은 데이터를 반복 조회하면서 백엔드 데이터베이스 부하가 높다. 자주 조회되는 데이터를 메모리에 캐시해 응답 속도를 높이고 데이터베이스 부하를 줄이려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "clf-t3-4-q5",
       "examGuideTaskId": "clf-t3-4",
       "skill": "DB 마이그레이션 (DMS + SCT)",
+      "section": "dms",
       "difficulty": "foundational",
       "stem": "한 회사가 온프레미스 Oracle 데이터베이스를 Amazon Aurora로 이전하려 한다. 소스 데이터베이스를 운영하면서 최소 다운타임으로 데이터를 옮기고, 엔진이 다르므로 스키마도 타겟에 맞게 변환해야 한다. 가장 적합한 서비스/도구 조합은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "clf-t3-4-q6",
       "examGuideTaskId": "clf-t3-4",
       "skill": "EC2 호스팅 vs 관리형 DB",
+      "section": "managed-vs-ec2",
       "difficulty": "foundational",
       "stem": "관계형 데이터베이스를 Amazon EC2에 직접 설치해 운영하는 것과 Amazon RDS를 사용하는 것의 차이로 가장 정확한 설명은?",
       "options": [
@@ -278,6 +284,7 @@
       "id": "clf-t3-4-q11",
       "examGuideTaskId": "clf-t3-4",
       "skill": "데이터베이스 선택 (관계형 vs NoSQL)",
+      "section": "relational",
       "difficulty": "foundational",
       "stem": "정형 스키마와 테이블 간 조인, 트랜잭션 일관성이 중요한 전통적 업무 애플리케이션의 데이터 저장소로 가장 적합한 유형은?",
       "options": [
@@ -309,6 +316,7 @@
       "id": "clf-t3-4-q12",
       "examGuideTaskId": "clf-t3-4",
       "skill": "고가용성 (RDS Multi-AZ)",
+      "section": "relational",
       "difficulty": "foundational",
       "stem": "운영 중인 Amazon RDS 데이터베이스가 한 가용 영역 장애 시에도 자동으로 장애 조치(failover)되어 가용성을 유지하게 하려 한다. 가장 적합한 구성은?",
       "options": [
@@ -336,6 +344,7 @@
       "id": "clf-t3-4-q13",
       "examGuideTaskId": "clf-t3-4",
       "skill": "NoSQL 설계 원리 (비정규화)",
+      "section": "dynamodb",
       "difficulty": "applied",
       "stem": "한 팀이 테이블 간 JOIN이 많은 기존 관계형 애플리케이션을 Amazon DynamoDB로 옮기려 한다. DynamoDB가 어떤 규모에서도 일관된 한 자릿수 밀리초 성능을 유지하려면 데이터 모델을 어떻게 설계해야 하는가?",
       "options": [
@@ -363,6 +372,7 @@
       "id": "clf-t3-4-q14",
       "examGuideTaskId": "clf-t3-4",
       "skill": "인메모리 캐시의 역할 (ElastiCache)",
+      "section": "elasticache",
       "difficulty": "applied",
       "stem": "한 팀이 \"ElastiCache가 인메모리라 매우 빠르니, 주문 데이터를 영구 보관하는 유일한 기본 데이터베이스로 ElastiCache만 사용하겠다\"고 제안한다. 이 제안의 가장 정확한 평가는?",
       "options": [
@@ -390,6 +400,7 @@
       "id": "clf-t3-4-q15",
       "examGuideTaskId": "clf-t3-4",
       "skill": "관계형 읽기 확장 (RDS 읽기 복제본)",
+      "section": "relational",
       "difficulty": "applied",
       "stem": "한 Amazon RDS 데이터베이스가 읽기 요청(조회 트래픽)이 급증해 원본 인스턴스의 부하가 높다. 쓰기는 원본에서 유지하면서 읽기 요청을 여러 인스턴스로 분산해 원본 부하를 줄이려 한다. 가장 적합한 구성은?",
       "options": [
