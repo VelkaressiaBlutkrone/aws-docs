@@ -8,6 +8,7 @@
       "id": "clf-t2-3-q1",
       "examGuideTaskId": "clf-t2-3",
       "skill": "루트 전용 작업 식별",
+      "section": "root-user",
       "difficulty": "foundational",
       "stem": "한 관리자가 IAM 관리(administrator) 권한을 가진 사용자로 로그인해 있다. 다음 중 이 IAM 사용자로는 수행할 수 없고, 반드시 AWS 계정 루트 사용자로 로그인해야만 할 수 있는 작업은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "clf-t2-3-q2",
       "examGuideTaskId": "clf-t2-3",
       "skill": "루트 보호 방법",
+      "section": "root-user",
       "difficulty": "foundational",
       "stem": "방금 새 AWS 계정을 만들었다. 공동 책임 모델과 IAM 모범 사례에 따라 루트 사용자를 보호하기 위한 조치로 가장 적절한 것은?",
       "options": [
@@ -66,6 +68,7 @@
       "id": "clf-t2-3-q3",
       "examGuideTaskId": "clf-t2-3",
       "skill": "최소 권한 원칙",
+      "section": "least-privilege",
       "difficulty": "foundational",
       "stem": "IAM 정책으로 권한을 설정할 때 따라야 하는 '최소 권한 원칙(principle of least privilege)'을 가장 정확하게 설명한 것은?",
       "options": [
@@ -93,6 +96,7 @@
       "id": "clf-t2-3-q4",
       "examGuideTaskId": "clf-t2-3",
       "skill": "인증 방법 (MFA)",
+      "section": "mfa-password",
       "difficulty": "foundational",
       "stem": "한 회사가 IAM 사용자와 루트 사용자의 콘솔 로그인 보안을 강화하려 한다. 사용자 이름·암호 외에 사용자가 가진 기기가 생성하는 추가 인증 요소를 요구하는 AWS 보안 기능은?",
       "options": [
@@ -120,6 +124,7 @@
       "id": "clf-t2-3-q5",
       "examGuideTaskId": "clf-t2-3",
       "skill": "IAM Identity Center / 페더레이션",
+      "section": "identity-center",
       "difficulty": "foundational",
       "stem": "한 조직이 다수의 AWS 계정과 여러 애플리케이션에 대한 직원(workforce)들의 접근을 한곳에서 중앙 관리하고, 단일 로그인(SSO)을 제공하며, 기존의 외부 자격증명 공급자(IdP)와 연결(페더레이션)하려 한다. 가장 적합한 AWS 서비스는? (이 서비스는 이전에 AWS Single Sign-On으로 불렸다)",
       "options": [
@@ -151,6 +156,7 @@
       "id": "clf-t2-3-q6",
       "examGuideTaskId": "clf-t2-3",
       "skill": "최소 권한에 따른 그룹·사용자·정책 정의",
+      "section": "least-privilege",
       "difficulty": "foundational",
       "stem": "동일한 권한 집합이 필요한 새 개발자 5명에게 권한을 부여하고, 이후 권한 변경 시에도 효율적으로 일괄 관리하려 한다. IAM 모범 사례에 따라 가장 권장되는 방법은?",
       "options": [
@@ -182,6 +188,7 @@
       "id": "clf-t2-3-q7",
       "examGuideTaskId": "clf-t2-3",
       "skill": "자격증명 저장 (Secrets Manager)",
+      "section": "secrets-manager",
       "difficulty": "foundational",
       "stem": "한 애플리케이션이 데이터베이스 자격증명을 사용한다. 이 자격증명을 소스 코드에 하드코딩하지 않고 안전하게 저장하면서, 정기적으로 자동 교체(rotation)까지 하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -209,6 +216,7 @@
       "id": "clf-t2-3-q8",
       "examGuideTaskId": "clf-t2-3",
       "skill": "IAM 역할 vs 사용자 (임시 자격증명)",
+      "section": "identities",
       "difficulty": "foundational",
       "stem": "Amazon EC2 인스턴스에서 실행되는 애플리케이션이 Amazon S3 버킷에 접근해야 한다. IAM 모범 사례에 따라, 장기 액세스 키를 코드나 인스턴스에 저장하지 않고 권한을 부여하는 가장 권장되는 방법은?",
       "options": [
@@ -240,6 +248,7 @@
       "id": "clf-t2-3-q9",
       "examGuideTaskId": "clf-t2-3",
       "skill": "암호 정책의 적용 범위",
+      "section": "mfa-password",
       "difficulty": "foundational",
       "stem": "한 회사가 AWS 계정에 사용자 지정 암호 정책(최소 길이, 문자 종류, 만료, 재사용 금지)을 설정했다. 이 암호 정책에 관한 설명으로 옳은 것은?",
       "options": [
@@ -267,6 +276,7 @@
       "id": "clf-t2-3-q10",
       "examGuideTaskId": "clf-t2-3",
       "skill": "MFA 유형 (피싱 저항)",
+      "section": "mfa-password",
       "difficulty": "foundational",
       "stem": "한 보안 팀이 IAM 사용자에게 MFA를 적용하면서, 피싱(phishing) 공격에 가장 강한(phishing-resistant) MFA 유형을 선택하려 한다. AWS가 가능한 경우 가장 권장하는 MFA 유형은?",
       "options": [
@@ -294,6 +304,7 @@
       "id": "clf-t2-3-q11",
       "examGuideTaskId": "clf-t2-3",
       "skill": "IAM 정책 (권한 문서)",
+      "section": "identities",
       "difficulty": "foundational",
       "stem": "IAM에서 특정 사용자·역할이 어떤 작업을 어떤 리소스에 허용(Allow)/거부(Deny)할지 정의하는, JSON 형식의 권한 문서는?",
       "options": [
@@ -321,6 +332,7 @@
       "id": "clf-t2-3-q12",
       "examGuideTaskId": "clf-t2-3",
       "skill": "IAM은 글로벌 서비스",
+      "section": "iam-global",
       "difficulty": "foundational",
       "stem": "한 관리자가 IAM 사용자·역할이 특정 리전에만 존재하는지 묻는다. AWS IAM의 범위를 가장 정확히 설명한 것은?",
       "options": [
@@ -352,6 +364,7 @@
       "id": "clf-t2-3-q13",
       "examGuideTaskId": "clf-t2-3",
       "skill": "자격증명 자동 교체의 보안 효과 (Secrets Manager)",
+      "section": "secrets-manager",
       "difficulty": "applied",
       "stem": "한 팀이 데이터베이스 자격증명을 AWS Secrets Manager에 저장해 두고 코드에서 런타임에 호출해 쓴다. 어느 날 로그에 실수로 출력된 자격증명이 외부에 노출됐을 가능성이 제기됐지만, 정확히 언제·어떻게 새어 나갔는지는 확인되지 않았다. 이 비밀에 일정 주기 자동 교체(rotation)가 설정돼 있었다면, 같은 비밀을 평문으로 한 번 저장해 두고 수동으로만 관리하던 경우와 비교해 보안 측면에서 어떤 이점이 있는가?",
       "options": [
@@ -379,6 +392,7 @@
       "id": "clf-t2-3-q14",
       "examGuideTaskId": "clf-t2-3",
       "skill": "IAM Identity Center 용도 (인력 vs 소비자 혼동)",
+      "section": "identity-center",
       "difficulty": "applied",
       "stem": "한 기업이 사내 직원 수백 명에게 여러 AWS 계정과 내부 업무 애플리케이션에 대한 접근을 한 번의 로그인으로 제공하고, 기존 회사 디렉터리(외부 IdP)의 신원을 그대로 연동하려 한다. 한 엔지니어가 'IAM Identity Center는 우리 서비스를 쓰는 일반 소비자(end-user) 회원 가입·로그인을 처리하는 용도이므로 직원 접근에는 맞지 않는다'고 주장하며 다른 방안을 제안한다. 이 상황에서 가장 적절한 판단은?",
       "options": [
@@ -410,6 +424,7 @@
       "id": "clf-t2-3-q15",
       "examGuideTaskId": "clf-t2-3",
       "skill": "크로스 계정 IAM 역할 (인증 방법)",
+      "section": "identities",
       "difficulty": "applied",
       "stem": "두 개의 AWS 계정을 운영하는 회사가 있다. 계정 A의 애플리케이션이 계정 B에 있는 리소스에 접근해야 한다. 장기 액세스 키를 계정 사이에 복사해 저장하지 않고, IAM 모범 사례에 맞게 한 계정의 신원이 다른 계정의 리소스에 접근하도록 하는 방법으로 가장 적절한 것은?",
       "options": [
