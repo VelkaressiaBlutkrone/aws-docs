@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q2",
@@ -35,22 +35,23 @@
       "difficulty": "foundational",
       "stem": "한 솔루션스 아키텍트가 Standard RI와 Convertible RI를 비교하고 있다. 두 옵션의 차이를 올바르게 설명한 것은?",
       "options": [
-        "Standard RI는 최대 54% 할인을 제공하며 인스턴스 유형을 교환할 수 있다",
+        "Standard RI는 최대 66% 할인을 제공하며 인스턴스 유형을 교환할 수 있다",
         "Convertible RI는 최대 72% 할인을 제공하지만 인스턴스 유형 변경이 불가하다",
-        "Standard RI는 최대 72% 할인을 제공하지만 인스턴스 유형 교환이 불가하고, Convertible RI는 최대 54% 할인에 교환이 가능하다",
+        "Standard RI는 최대 72% 할인을 제공하지만 인스턴스 유형 교환이 불가하고, Convertible RI는 최대 66% 할인에 교환이 가능하다",
         "Standard RI와 Convertible RI의 할인율은 동일하며 차이는 약정 기간뿐이다"
       ],
       "correct": 2,
-      "explanation": "Standard RI는 온디맨드 대비 최대 72% 할인을 제공하지만 인스턴스 유형·리전·OS 변경이 제한됩니다. Convertible RI는 인스턴스 패밀리를 교환할 수 있는 유연성을 갖는 대신 할인율이 최대 54%로 낮습니다. 인스턴스 구성을 더 구체적으로 고정할수록 절감률이 높아지는 트레이드오프가 적용됩니다.",
+      "explanation": "Standard RI는 온디맨드 대비 최대 72% 할인을 제공하지만 인스턴스 유형 교환은 불가합니다. Convertible RI는 다른 Convertible RI로 교환할 수 있는 유연성을 갖는 대신 할인율이 최대 66%로 Standard보다 낮습니다. 인스턴스 구성을 더 구체적으로 고정할수록 절감률이 높아지는 트레이드오프가 적용됩니다.",
       "wrongExplanations": {
-        "0": "Standard RI의 할인율과 Convertible RI의 특성을 반대로 서술하고 있습니다. Standard RI가 최대 72% 할인이며 유형 교환이 불가합니다.",
+        "0": "Standard RI의 할인율과 Convertible RI의 특성을 섞어 서술하고 있습니다. Standard RI는 최대 72% 할인이며 유형 교환이 불가합니다.",
         "1": "Convertible RI와 Standard RI의 할인율과 교환 가능성을 반대로 서술하고 있습니다. Convertible이 교환 가능하지만 할인율은 낮습니다.",
-        "3": "Standard RI와 Convertible RI의 할인율은 다릅니다. Standard가 최대 72%, Convertible이 최대 54%로 차이가 있으며, 유연성 차이도 핵심 구분점입니다."
+        "3": "Standard RI와 Convertible RI의 할인율은 다릅니다. Standard가 최대 72%, Convertible이 최대 66%로 차이가 있으며, 유연성 차이도 핵심 구분점입니다."
       },
       "sources": [
-        { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
+        { "title": "Amazon EC2 Reserved Instances pricing (공식)", "url": "https://aws.amazon.com/ec2/pricing/reserved-instances/" },
+        { "title": "Reserved Instances for Amazon EC2 overview (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q3",
@@ -74,7 +75,7 @@
       "sources": [
         { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q4",
@@ -98,7 +99,7 @@
       "sources": [
         { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q5",
@@ -122,7 +123,7 @@
       "sources": [
         { "title": "Compute Savings Plans and Reserved Instances (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q6",
@@ -146,7 +147,7 @@
       "sources": [
         { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q7",
@@ -170,7 +171,7 @@
       "sources": [
         { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q8",
@@ -194,7 +195,7 @@
       "sources": [
         { "title": "Amazon EC2 스팟 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q9",
@@ -218,14 +219,14 @@
       "sources": [
         { "title": "Amazon EC2 스팟 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q10",
       "examGuideTaskId": "saa-t4-2",
       "skill": "스팟 플릿 전략",
       "difficulty": "applied",
-      "stem": "스팟 플릿(Spot Fleet)을 구성할 때, 특정 인스턴스 풀의 스팟 중단 가능성을 최소화하고 가용성을 높이려면 어떤 전략을 선택해야 하는가?",
+      "stem": "스팟 플릿(Spot Fleet)을 구성할 때 비용보다 중단 최소화를 우선하여, 가용 용량이 많고 중단 가능성이 낮은 풀을 선택하려면 어떤 전략을 선택해야 하는가?",
       "options": [
         "lowestPrice — 가장 저렴한 풀을 우선 선택",
         "diversified — 여러 풀에 분산하여 요청",
@@ -233,16 +234,16 @@
         "singlePool — 단일 풀에 집중하여 관리 단순화"
       ],
       "correct": 2,
-      "explanation": "capacityOptimized 전략은 가용 용량이 가장 많은 풀을 선택하여 중단 가능성을 최소화합니다. 용량이 많은 풀은 AWS가 회수할 가능성이 낮아 스팟 안정성이 높아집니다. 중단 최소화가 우선일 때 이 전략이 적합합니다.",
+      "explanation": "capacityOptimized 전략은 가용 용량이 가장 많은 스팟 용량 풀을 우선 선택합니다. AWS는 이 풀이 가까운 시점의 중단 가능성이 낮다고 판단하므로, 비용보다 중단 최소화가 중요한 워크로드에 적합합니다.",
       "wrongExplanations": {
         "0": "lowestPrice 전략은 비용 최소화를 우선합니다. 가장 저렴한 풀은 수요가 몰려 중단 가능성이 높을 수 있어 가용성 보장에는 적합하지 않습니다.",
-        "1": "diversified 전략은 여러 풀에 분산하여 전체 가용성을 높이지만, 단일 풀의 중단 가능성을 직접 줄이는 것과는 다릅니다. 가용성 최대화에 적합한 전략이나 capacityOptimized가 중단 최소화에 더 직접적입니다.",
+        "1": "diversified 전략은 여러 풀에 분산해 한 풀의 가격 상승이나 용량 부족 영향을 줄입니다. 하지만 중단 가능성이 낮은 풀을 우선 선택하는 전략은 capacityOptimized입니다.",
         "3": "singlePool은 스팟 플릿의 공식 전략이 아닙니다. 단일 풀에 집중하면 해당 풀 소진 시 모든 용량이 회수될 위험이 있습니다."
       },
       "sources": [
-        { "title": "Amazon EC2 스팟 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html" }
+        { "title": "EC2 Fleet and Spot Fleet allocation strategies (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-allocation-strategy.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q11",
@@ -266,7 +267,7 @@
       "sources": [
         { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q12",
@@ -290,7 +291,7 @@
       "sources": [
         { "title": "AWS Compute Optimizer — 소개 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q13",
@@ -314,7 +315,7 @@
       "sources": [
         { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q14",
@@ -338,7 +339,7 @@
       "sources": [
         { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-2-q15",
@@ -362,7 +363,7 @@
       "sources": [
         { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

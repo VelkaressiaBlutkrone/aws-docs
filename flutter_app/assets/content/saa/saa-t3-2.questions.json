@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q5",
@@ -122,7 +122,7 @@
       "sources": [
         { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q6",
@@ -146,7 +146,7 @@
       "sources": [
         { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q7",
@@ -170,7 +170,7 @@
       "sources": [
         { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q8",
@@ -194,7 +194,7 @@
       "sources": [
         { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q9",
@@ -218,7 +218,7 @@
       "sources": [
         { "title": "Amazon FSx for Windows File Server — What is? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q10",
@@ -242,7 +242,7 @@
       "sources": [
         { "title": "Amazon FSx for Lustre — What is? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q11",
@@ -266,7 +266,7 @@
       "sources": [
         { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q12",
@@ -276,21 +276,21 @@
       "stem": "수천 개 EC2 인스턴스가 동시에 접근하는 빅데이터 분석 플랫폼을 EFS로 구성하려 한다. 집합 처리량과 IOPS를 최대화하고 워크로드 변화에 맞게 처리량을 자동 조정해야 한다. 가장 적합한 EFS 설정 조합은?",
       "options": [
         "성능 모드: General Purpose, 처리량 모드: Bursting",
-        "성능 모드: Max I/O, 처리량 모드: Elastic",
+        "성능 모드: General Purpose, 처리량 모드: Elastic",
         "성능 모드: General Purpose, 처리량 모드: Provisioned",
         "성능 모드: Max I/O, 처리량 모드: Provisioned"
       ],
       "correct": 1,
-      "explanation": "Max I/O 성능 모드는 더 높은 집합 처리량·IOPS를 제공하며 수천 인스턴스가 동시 접근하는 빅데이터 분석에 권장됩니다(다소 높은 지연시간 허용). Elastic 처리량 모드는 워크로드 활동에 따라 처리량을 자동 확장·축소하므로 변화하는 워크로드에 권장됩니다. General Purpose는 지연시간 민감 워크로드용이고, Bursting은 스토리지 크기 비례 처리량이며, Provisioned는 처리량을 직접 지정하는 방식입니다.",
+      "explanation": "Elastic 처리량 모드는 워크로드 활동에 따라 처리량을 자동 확장·축소하므로 변화하는 워크로드에 적합합니다. AWS는 EFS 성능 모드로 General Purpose를 기본·권장 모드로 안내하며, Max I/O는 이전 세대 성능 타입이고 Elastic 처리량을 지원하지 않습니다. 따라서 자동 처리량 조정 요구사항까지 충족하는 조합은 General Purpose + Elastic입니다.",
       "wrongExplanations": {
-        "0": "General Purpose 성능 모드는 지연시간 민감 워크로드(웹 서비스·홈 디렉터리)에 적합합니다. 수천 인스턴스가 동시 접근하는 빅데이터 분석에는 집합 처리량이 더 높은 Max I/O가 맞습니다. Bursting은 스토리지 크기에 비례한 기본 처리량과 버스트 크레딧 방식으로 자동 조정과는 다릅니다.",
-        "2": "General Purpose 성능 모드는 지연시간 민감 워크로드용입니다. Provisioned 처리량 모드는 처리량을 직접 지정해 예측 가능한 워크로드에 적합하며, 워크로드 변화에 자동 조정하는 Elastic보다 유연성이 낮습니다.",
-        "3": "Max I/O 성능 모드는 적합하지만, Provisioned 처리량 모드는 처리량을 직접 지정해야 하므로 워크로드 변화에 자동 조정이 필요한 요건에는 Elastic이 더 적합합니다."
+        "0": "General Purpose 성능 모드는 적합하지만, Bursting 처리량은 스토리지 크기와 버스트 크레딧에 의존합니다. 워크로드 변화에 따라 처리량을 자동 확장·축소하는 요구사항에는 Elastic이 더 적합합니다.",
+        "2": "General Purpose 성능 모드는 적합하지만, Provisioned 처리량 모드는 처리량을 직접 지정하는 방식입니다. 자동 조정이 필요한 변화형 워크로드에는 Elastic이 더 유연합니다.",
+        "3": "Max I/O는 이전 세대 성능 타입이며 General Purpose보다 지연시간이 높고, Elastic 처리량을 지원하지 않습니다. 또한 Provisioned는 자동 조정 방식이 아닙니다."
       },
       "sources": [
-        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
+        { "title": "Amazon EFS performance specifications (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/performance.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q13",
@@ -315,7 +315,7 @@
         { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" },
         { "title": "Amazon FSx for Windows File Server — What is? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q14",
@@ -339,7 +339,7 @@
       "sources": [
         { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-2-q15",
@@ -363,7 +363,7 @@
       "sources": [
         { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

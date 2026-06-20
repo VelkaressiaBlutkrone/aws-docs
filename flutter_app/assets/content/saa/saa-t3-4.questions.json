@@ -27,7 +27,7 @@
         { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" },
         { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q2",
@@ -49,9 +49,9 @@
         "3": "규정상 Lambda 사용 제한에 대한 내용은 이 문서에 없습니다. 문제는 15분 실행 시간 제한입니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "Configure Lambda function timeout (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q3",
@@ -75,7 +75,7 @@
       "sources": [
         { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q4",
@@ -99,7 +99,7 @@
       "sources": [
         { "title": "Amazon EKS — What is Amazon EKS (공식)", "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q5",
@@ -121,9 +121,9 @@
         "2": "타임아웃 값은 최대 실행 시간만 결정하고 CPU 할당량과 무관합니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "Configure Lambda function memory (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q6",
@@ -145,9 +145,9 @@
         "3": "타임아웃을 늘리는 것은 함수가 더 오래 실행될 수 있게 할 뿐이며 콜드 스타트 지연과 무관합니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "Configuring provisioned concurrency for a function (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q7",
@@ -171,7 +171,7 @@
       "sources": [
         { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q8",
@@ -195,7 +195,7 @@
       "sources": [
         { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q9",
@@ -217,9 +217,10 @@
         "2": "AWS Batch는 배치 작업 스케줄링 서비스로 HPC 인터노드 통신 최적화를 위한 구성이 아닙니다. 클러스터 배치 그룹+EFA가 HPC 통신 최적화 솔루션입니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "Placement groups for Amazon EC2 instances (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" },
+        { "title": "Elastic Fabric Adapter for AI/ML and HPC workloads (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q10",
@@ -241,9 +242,9 @@
         "3": "EBS는 단일 EC2 인스턴스에 마운트되는 블록 스토리지입니다(Multi-Attach 제한 있음). 수백 노드가 동시 접근하는 HPC 공유 스토리지 용도로 부적합합니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "What is Amazon FSx for Lustre? (공식)", "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q11",
@@ -267,7 +268,7 @@
       "sources": [
         { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q12",
@@ -291,7 +292,7 @@
       "sources": [
         { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q13",
@@ -313,9 +314,9 @@
         "3": "AWS Batch는 완료 후 종료되는 대규모 배치 작업 전용입니다. HTTP 요청 이벤트에 즉시 응답하는 실시간 처리에는 Lambda가 적합합니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "What is AWS Lambda? (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q14",
@@ -337,9 +338,9 @@
         "3": "여러 리전에 배포하면 각 리전에 독립적인 동시성 풀이 생기지만, 요청이 단일 리전에 집중되는 경우 문제가 해결되지 않으며 복잡성이 증가합니다."
       },
       "sources": [
-        { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" }
+        { "title": "Configuring reserved concurrency for a function (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-4-q15",
@@ -363,7 +364,7 @@
       "sources": [
         { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

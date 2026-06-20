@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q5",
@@ -122,7 +122,7 @@
       "sources": [
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q6",
@@ -146,7 +146,7 @@
       "sources": [
         { "title": "Amazon SNS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q7",
@@ -171,7 +171,7 @@
         { "title": "Amazon SNS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html" },
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q8",
@@ -195,7 +195,7 @@
       "sources": [
         { "title": "Amazon SNS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q9",
@@ -219,7 +219,7 @@
       "sources": [
         { "title": "Amazon EventBridge — 사용 설명서 (공식)", "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q10",
@@ -243,7 +243,7 @@
       "sources": [
         { "title": "Amazon EventBridge — 사용 설명서 (공식)", "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q11",
@@ -267,7 +267,7 @@
       "sources": [
         { "title": "AWS Step Functions — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q12",
@@ -291,7 +291,7 @@
       "sources": [
         { "title": "AWS Step Functions — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q13",
@@ -316,7 +316,7 @@
         { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" },
         { "title": "Amazon SNS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q14",
@@ -340,7 +340,7 @@
       "sources": [
         { "title": "AWS Step Functions — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-1-q15",
@@ -350,21 +350,22 @@
       "stem": "한 팀이 SQS FIFO 큐를 사용해 초당 500건의 메시지를 처리하려 한다. 기본 FIFO 큐 설정으로 이 처리량을 달성할 수 있는가?",
       "options": [
         "가능하다 — FIFO 큐는 처리량 제한이 없다",
-        "기본 설정으로는 불가하다 — 기본 FIFO는 300 TPS 제한이 있으나 고처리량 모드를 활성화하면 3,000 TPS(배치 시)까지 지원한다",
+        "기본 설정으로는 불가하다 — 비고처리량 FIFO는 파티션당 300 TPS(API 요청 기준) 한도가 있으며, 고처리량 모드와 충분한 메시지 그룹 분산으로 확장해야 한다",
         "가능하다 — FIFO 큐는 Standard 큐와 동일한 처리량을 지원한다",
         "불가하다 — FIFO 큐는 최대 100 TPS 제한이 있어 고처리량 모드도 없다"
       ],
       "correct": 1,
-      "explanation": "기본 FIFO 큐는 초당 300 TPS(배치 시 3,000 TPS)로 처리량이 제한됩니다. 초당 500건은 기본 설정을 초과하므로 고처리량 모드를 활성화해야 합니다. 순서·중복 보장이 반드시 필요하지 않다면 처리량 제약 없는 Standard 큐를 검토해야 합니다.",
+      "explanation": "비고처리량 FIFO 큐는 파티션당 초당 300건의 API 요청 한도가 있습니다. 배치 없이 초당 500건의 요청을 처리하려면 기본 설정을 초과하므로 고처리량 모드를 활성화하고 메시지 그룹 ID를 충분히 분산해야 합니다. 순서·중복 보장이 반드시 필요하지 않다면 처리량 제약이 훨씬 작은 Standard 큐를 검토해야 합니다.",
       "wrongExplanations": {
         "0": "FIFO 큐는 순서 보장과 중복 제거를 위한 추가 처리 비용으로 처리량 제한이 있습니다. Standard 큐처럼 무제한이 아닙니다.",
-        "2": "FIFO 큐는 Standard 큐와 처리량이 다릅니다. Standard는 거의 무제한 처리량을 지원하지만 FIFO는 기본 300 TPS 제한이 있습니다.",
-        "3": "FIFO 큐의 기본 제한은 100 TPS가 아니라 300 TPS이며, 고처리량 모드(배치 시 3,000 TPS)도 지원합니다."
+        "2": "FIFO 큐는 Standard 큐와 처리량 모델이 다릅니다. Standard는 거의 무제한에 가까운 API 호출을 지원하지만 FIFO는 파티션·메시지 그룹 분산과 처리량 모드의 영향을 받습니다.",
+        "3": "FIFO 큐의 기본 제한은 100 TPS가 아니며, 비고처리량 FIFO는 파티션당 300 TPS(API 요청 기준) 한도가 있습니다. 고처리량 모드는 리전별 더 높은 할당량까지 확장할 수 있습니다."
       },
       "sources": [
-        { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
+        { "title": "Amazon SQS message quotas (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html" },
+        { "title": "High throughput for FIFO queues in Amazon SQS (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
