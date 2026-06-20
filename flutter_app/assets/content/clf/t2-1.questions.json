@@ -8,6 +8,7 @@
       "id": "clf-t2-1-q1",
       "examGuideTaskId": "clf-t2-1",
       "skill": "서비스에 따른 책임 이동(RDS vs Lambda vs EC2)",
+      "section": "service-responsibility",
       "difficulty": "foundational",
       "stem": "한 회사가 여러 AWS 서비스를 함께 사용하고 있다. 공동 책임 모델에 따라, 게스트 운영체제(guest OS)의 보안 패치 적용을 고객이 직접 책임져야 하는 서비스는 무엇인가?",
       "options": [
@@ -47,6 +48,7 @@
       "id": "clf-t2-1-q2",
       "examGuideTaskId": "clf-t2-1",
       "skill": "AWS 책임 (클라우드 자체의 보안)",
+      "section": "of-vs-in",
       "difficulty": "foundational",
       "stem": "공동 책임 모델에서 다음 중 '클라우드 자체의 보안(security of the cloud)'으로서 항상 AWS의 책임에 해당하는 것은?",
       "options": [
@@ -82,6 +84,7 @@
       "id": "clf-t2-1-q3",
       "examGuideTaskId": "clf-t2-1",
       "skill": "서비스에 따른 책임 이동(RDS) / AWS 책임",
+      "section": "service-responsibility",
       "difficulty": "foundational",
       "stem": "Amazon RDS를 사용할 때, 공동 책임 모델에 따라 AWS가 책임지는 것은 무엇인가?",
       "options": [
@@ -113,6 +116,7 @@
       "id": "clf-t2-1-q4",
       "examGuideTaskId": "clf-t2-1",
       "skill": "공유 책임 (Shared Controls)",
+      "section": "shared-controls",
       "difficulty": "foundational",
       "stem": "패치 관리(patch management)가 공동 책임 모델에서 '공유 통제(shared control)'로 분류되는 이유를 가장 잘 설명한 것은?",
       "options": [
@@ -144,6 +148,7 @@
       "id": "clf-t2-1-q5",
       "examGuideTaskId": "clf-t2-1",
       "skill": "고객 책임 / 모델 구성요소 (서비스 불변 요소)",
+      "section": "responsibility-table",
       "difficulty": "foundational",
       "stem": "사용하는 AWS 서비스의 종류(EC2, RDS, Lambda 등)와 관계없이, 공동 책임 모델에서 '항상' 고객의 책임으로 남는 것은?",
       "options": [
@@ -175,6 +180,7 @@
       "id": "clf-t2-1-q6",
       "examGuideTaskId": "clf-t2-1",
       "skill": "고객 책임 (데이터·접근 정책) — S3",
+      "section": "responsibility-table",
       "difficulty": "foundational",
       "stem": "한 회사가 Amazon S3 버킷의 접근 정책을 잘못 구성해 민감한 데이터가 인터넷에 공개되었고, 그 결과 데이터가 유출되었다. 공동 책임 모델에 따라 이 접근 구성과 데이터 보호의 책임은 누구에게 있는가?",
       "options": [
@@ -206,6 +212,7 @@
       "id": "clf-t2-1-q7",
       "examGuideTaskId": "clf-t2-1",
       "skill": "서비스에 따른 책임 이동 (Lambda)",
+      "section": "service-responsibility",
       "difficulty": "foundational",
       "stem": "AWS Lambda(서버리스)를 사용할 때, 공동 책임 모델에 따라 '고객'이 책임지는 것은?",
       "options": [
@@ -233,6 +240,7 @@
       "id": "clf-t2-1-q8",
       "examGuideTaskId": "clf-t2-1",
       "skill": "상속 통제 (Inherited Controls)",
+      "section": "shared-controls",
       "difficulty": "foundational",
       "stem": "공동 책임 모델에서 고객이 AWS로부터 '완전히 상속(inherit)'받는 통제(Inherited Controls)에 가장 잘 해당하는 것은?",
       "options": [
@@ -264,6 +272,7 @@
       "id": "clf-t2-1-q9",
       "examGuideTaskId": "clf-t2-1",
       "skill": "암호화 책임 분담 (기능 제공 vs 적용 선택)",
+      "section": "responsibility-table",
       "difficulty": "foundational",
       "stem": "데이터 암호화와 관련해 공동 책임 모델의 경계를 가장 정확하게 설명한 것은?",
       "options": [
@@ -291,6 +300,7 @@
       "id": "clf-t2-1-q10",
       "examGuideTaskId": "clf-t2-1",
       "skill": "공유 책임 (구성 관리 Configuration Management)",
+      "section": "shared-controls",
       "difficulty": "foundational",
       "stem": "구성 관리(configuration management)는 공동 책임 모델에서 '공유 통제(shared control)'이다. 이 경우 AWS와 고객의 책임 경계를 가장 정확하게 설명한 것은?",
       "options": [
@@ -322,6 +332,7 @@
       "id": "clf-t2-1-q11",
       "examGuideTaskId": "clf-t2-1",
       "skill": "of the cloud vs in the cloud",
+      "section": "of-vs-in",
       "difficulty": "foundational",
       "stem": "공동 책임 모델에서 AWS와 고객의 책임을 한 문장으로 가장 잘 구분한 것은?",
       "options": [
@@ -349,6 +360,7 @@
       "id": "clf-t2-1-q12",
       "examGuideTaskId": "clf-t2-1",
       "skill": "EC2 게스트 OS 패치 책임",
+      "section": "service-responsibility",
       "difficulty": "foundational",
       "stem": "고객이 Amazon EC2 인스턴스를 운영한다. 공동 책임 모델에서 인스턴스의 게스트 운영체제 패치는 누구의 책임인가?",
       "options": [
@@ -376,6 +388,7 @@
       "id": "clf-t2-1-q13",
       "examGuideTaskId": "clf-t2-1",
       "skill": "서비스 추상화에 따른 운영 책임 이동(자체 관리 vs 관리형)",
+      "section": "service-responsibility",
       "difficulty": "applied",
       "stem": "한 팀이 Amazon EC2 인스턴스 위에 직접 설치해 운영하던 PostgreSQL 데이터베이스를, 운영 부담을 줄이기 위해 Amazon RDS for PostgreSQL로 이전하기로 했다. 이 이전이 완료되면, 기존에 팀이 직접 수행하던 작업 중 'AWS의 책임으로 넘어가는' 것은 무엇인가?",
       "options": [
@@ -407,6 +420,7 @@
       "id": "clf-t2-1-q14",
       "examGuideTaskId": "clf-t2-1",
       "skill": "책임은 비율이 아니라 영역(서비스별 이동) — 함정 교정",
+      "section": "service-responsibility",
       "difficulty": "applied",
       "stem": "한 관리자가 'AWS와 고객의 보안 책임은 공동 책임 모델에 따라 항상 50:50으로 나뉜다'고 팀에 설명했다. 공동 책임 모델에 비추어 이 설명을 가장 정확하게 바로잡은 것은?",
       "options": [
@@ -438,6 +452,7 @@
       "id": "clf-t2-1-q15",
       "examGuideTaskId": "clf-t2-1",
       "skill": "공유 책임 — 인식 및 교육(Awareness & Training)",
+      "section": "shared-controls",
       "difficulty": "applied",
       "stem": "보안 인식 교육(security awareness and training)은 공동 책임 모델에서 '공유 통제(shared control)'에 속한다. 한 고객사가 AWS를 사용할 때, 이 공유 통제에서 '고객'이 책임지는 부분은 무엇인가?",
       "options": [

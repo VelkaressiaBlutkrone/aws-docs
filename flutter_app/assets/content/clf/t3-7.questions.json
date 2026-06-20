@@ -8,6 +8,7 @@
       "id": "clf-t3-7-q1",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (SageMaker)",
+      "section": "ai-ml",
       "difficulty": "foundational",
       "stem": "한 데이터 과학 팀이 자체 데이터로 머신러닝 모델을 구축하고 훈련한 뒤 운영 환경에 배포하려 한다. 이를 위한 완전관리형 머신러닝 서비스는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "clf-t3-7-q2",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Lex — 챗봇)",
+      "section": "ai-ml",
       "difficulty": "foundational",
       "stem": "한 회사가 고객 문의에 음성과 텍스트로 응답하는 대화형 챗봇을 만들려 한다. 자동 음성 인식(ASR)과 자연어 이해(NLU)를 제공해 대화형 인터페이스를 구축하는 AWS 서비스는?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "clf-t3-7-q3",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Kendra — 검색)",
+      "section": "ai-ml",
       "difficulty": "foundational",
       "stem": "한 기업이 사내 여러 문서 저장소의 콘텐츠를 직원들이 자연어로 검색해 관련 답변을 빠르게 찾도록 하려 한다. 머신러닝 기반의 지능형 엔터프라이즈 검색 서비스는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "clf-t3-7-q4",
       "examGuideTaskId": "clf-t3-7",
       "skill": "분석 서비스 (Athena)",
+      "section": "analytics",
       "difficulty": "foundational",
       "stem": "한 분석가가 Amazon S3에 저장된 데이터를, 별도의 서버나 인프라를 설정·관리하지 않고 표준 SQL로 직접 쿼리해 분석하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "clf-t3-7-q5",
       "examGuideTaskId": "clf-t3-7",
       "skill": "분석 서비스 (Kinesis — 실시간 스트리밍)",
+      "section": "analytics",
       "difficulty": "foundational",
       "stem": "한 회사가 웹사이트 클릭스트림과 애플리케이션 로그를 대규모로 실시간 수집·처리해 즉시 분석하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "clf-t3-7-q6",
       "examGuideTaskId": "clf-t3-7",
       "skill": "분석 서비스 (Glue — ETL)",
+      "section": "analytics",
       "difficulty": "foundational",
       "stem": "한 데이터 팀이 여러 소스의 데이터를 추출·변환·적재(ETL)해 분석용으로 준비·통합하려 하며, 서버를 직접 관리하지 않는 서버리스 데이터 통합 서비스를 원한다. 가장 적합한 것은?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "clf-t3-7-q7",
       "examGuideTaskId": "clf-t3-7",
       "skill": "분석 서비스 (QuickSight — BI)",
+      "section": "analytics",
       "difficulty": "foundational",
       "stem": "한 회사가 분석한 데이터를 대화형 대시보드와 시각화로 만들어 비즈니스 인텔리전스(BI)를 제공하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -224,6 +231,7 @@
       "id": "clf-t3-7-q9",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Polly — 음성 합성)",
+      "section": "language-ai",
       "difficulty": "foundational",
       "stem": "한 개발자가 뉴스 리더 앱에서 기사 본문(텍스트)을 사람처럼 자연스러운 음성으로 읽어 주는 기능을 추가하려 한다. 텍스트를 생생한 음성으로 변환(text-to-speech)하는 AWS 서비스는?",
       "options": [
@@ -278,6 +286,7 @@
       "id": "clf-t3-7-q11",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Translate — 번역)",
+      "section": "language-ai",
       "difficulty": "foundational",
       "stem": "한 애플리케이션이 사용자가 입력한 텍스트를 여러 언어로 실시간 자동 번역하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -305,6 +314,7 @@
       "id": "clf-t3-7-q12",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Transcribe — 음성→텍스트)",
+      "section": "language-ai",
       "difficulty": "foundational",
       "stem": "녹음된 고객 통화 오디오를 자동으로 텍스트로 변환(음성 인식)해 검색·분석에 쓰려 한다. 가장 적합한 서비스는?",
       "options": [
@@ -332,6 +342,7 @@
       "id": "clf-t3-7-q13",
       "examGuideTaskId": "clf-t3-7",
       "skill": "분석 파이프라인 단계별 서비스 매칭",
+      "section": "analytics",
       "difficulty": "applied",
       "stem": "한 소매 기업이 매장 센서에서 발생하는 이벤트를 발생 즉시 대규모로 수집하고, 여러 시스템에서 모은 데이터의 형식을 통일해 정제한 뒤, 그 결과를 경영진이 대화형 대시보드로 살펴보게 하려 한다. 이 세 가지 요구(실시간 수집 → 정제·통합 → 대시보드 시각화)에 각각 가장 적합하게 매칭되는 서비스 조합은?",
       "options": [
@@ -363,6 +374,7 @@
       "id": "clf-t3-7-q14",
       "examGuideTaskId": "clf-t3-7",
       "skill": "Athena 인플레이스 쿼리(이전 불필요)",
+      "section": "analytics",
       "difficulty": "applied",
       "stem": "한 분석가가 Amazon S3에 이미 쌓여 있는 대량 로그를 가끔(ad-hoc) 표준 SQL로 분석하려 한다. 인프라 운영 부담과 비용을 최소화하면서 가장 빠르게 시작할 수 있는 접근은?",
       "options": [
@@ -390,6 +402,7 @@
       "id": "clf-t3-7-q15",
       "examGuideTaskId": "clf-t3-7",
       "skill": "Glue 데이터 카탈로그(메타데이터)",
+      "section": "analytics",
       "difficulty": "applied",
       "stem": "한 데이터 팀이 여러 곳에 흩어진 데이터의 위치·스키마·형식 같은 메타데이터를 한곳에 등록·검색해, 분석 도구들이 그 데이터를 일관되게 찾아 쓰게 하려 한다. ETL과 함께 이 데이터 카탈로그 기능을 제공하는 AWS 서비스는?",
       "options": [

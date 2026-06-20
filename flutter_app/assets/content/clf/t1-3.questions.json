@@ -8,6 +8,7 @@
       "id": "clf-t1-3-q1",
       "examGuideTaskId": "clf-t1-3",
       "skill": "클라우드 도입 전략 (AWS CAF)",
+      "section": "caf",
       "difficulty": "foundational",
       "stem": "한 조직이 AWS의 경험과 모범 사례를 활용해 클라우드 도입 여정을 가속하고, 전환 기회를 식별하며 전환 로드맵을 세우려 한다. 가장 적합한 것은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "clf-t1-3-q2",
       "examGuideTaskId": "clf-t1-3",
       "skill": "AWS CAF의 이점",
+      "section": "caf",
       "difficulty": "foundational",
       "stem": "AWS Cloud Adoption Framework(CAF)를 활용한 클라우드 도입에서 기대할 수 있는 비즈니스 이점으로 '가장 거리가 먼' 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "clf-t1-3-q3",
       "examGuideTaskId": "clf-t1-3",
       "skill": "마이그레이션 전략 (Snowball)",
+      "section": "migration-tools",
       "difficulty": "foundational",
       "stem": "한 회사가 수백 테라바이트의 데이터를 AWS로 옮겨야 하는데, 인터넷 대역폭이 부족해 네트워크 전송이 너무 느리고 비용이 많이 든다. 물리 디바이스를 사용해 대량 데이터를 오프라인으로 전송하는 가장 적합한 서비스는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "clf-t1-3-q4",
       "examGuideTaskId": "clf-t1-3",
       "skill": "DMS vs Snowball",
+      "section": "migration-tools",
       "difficulty": "foundational",
       "stem": "한 회사가 운영 중인 관계형 데이터베이스를 최소한의 다운타임으로 AWS로 마이그레이션하려 하며, 데이터는 네트워크를 통해 전송할 수 있다. 가장 적합한 서비스는?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "clf-t1-3-q5",
       "examGuideTaskId": "clf-t1-3",
       "skill": "CAF vs Well-Architected 구분",
+      "section": "caf",
       "difficulty": "foundational",
       "stem": "AWS Cloud Adoption Framework(CAF)와 AWS Well-Architected Framework의 관계를 가장 정확하게 설명한 것은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "clf-t1-3-q6",
       "examGuideTaskId": "clf-t1-3",
       "skill": "AWS CAF의 구성 (6대 관점)",
+      "section": "caf",
       "difficulty": "foundational",
       "stem": "AWS Cloud Adoption Framework(CAF)는 클라우드 도입에 필요한 조직의 역량을 여러 '관점(Perspective)'으로 묶어 제시한다. 다음 중 CAF의 6대 관점에 '해당하지 않는' 것은?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "clf-t1-3-q7",
       "examGuideTaskId": "clf-t1-3",
       "skill": "이기종 DB 마이그레이션 (DMS + SCT)",
+      "section": "migration-tools",
       "difficulty": "foundational",
       "stem": "한 회사가 온프레미스의 상용 데이터베이스(예: Oracle)를 엔진이 다른 오픈소스 호환 데이터베이스(예: Amazon Aurora PostgreSQL)로 마이그레이션하려 한다. 소스와 타겟 엔진이 달라 스키마와 코드를 변환해야 할 때, AWS DMS와 함께 사용하는 도구는?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "clf-t1-3-q8",
       "examGuideTaskId": "clf-t1-3",
       "skill": "Snowball 동작 방식 (오프라인)",
+      "section": "migration-tools",
       "difficulty": "foundational",
       "stem": "AWS Snowball을 사용한 데이터 전송의 동작 방식으로 가장 정확한 것은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "clf-t1-3-q9",
       "examGuideTaskId": "clf-t1-3",
       "skill": "마이그레이션 도구 조합 (DMS + Snowball)",
+      "section": "migration-tools",
       "difficulty": "foundational",
       "stem": "한 회사가 (A) 운영 중인 트랜잭션 데이터베이스를 최소 다운타임으로 옮기고, 동시에 (B) 네트워크 연결이 매우 제한된 지사에 있는 수백 TB의 과거 파일 아카이브를 옮기려 한다. 각각에 가장 적합한 서비스 조합은?",
       "options": [
@@ -255,6 +264,7 @@
       "id": "clf-t1-3-q10",
       "examGuideTaskId": "clf-t1-3",
       "skill": "마이그레이션 전략 (7 R - Rehost)",
+      "section": "datasync-7r",
       "difficulty": "foundational",
       "stem": "한 회사가 온프레미스 애플리케이션을 코드나 아키텍처를 거의 변경하지 않고 그대로 AWS의 EC2로 옮겨, 최소한의 노력으로 빠르게 마이그레이션하려 한다. AWS가 정의한 7가지 마이그레이션 전략(7 R) 중 이 '리프트 앤 시프트(lift-and-shift)' 방식에 해당하는 것은?",
       "options": [
@@ -282,6 +292,7 @@
       "id": "clf-t1-3-q11",
       "examGuideTaskId": "clf-t1-3",
       "skill": "마이그레이션 전략 (7R — Refactor)",
+      "section": "datasync-7r",
       "difficulty": "foundational",
       "stem": "한 회사가 모놀리식 온프레미스 애플리케이션을 클라우드 네이티브(서버리스·관리형) 아키텍처로 다시 설계해 옮기려 한다. 7R 중 이 전략은?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "clf-t1-3-q12",
       "examGuideTaskId": "clf-t1-3",
       "skill": "온라인 데이터 전송 (AWS DataSync)",
+      "section": "datasync-7r",
       "difficulty": "foundational",
       "stem": "온프레미스 NFS 파일 서버의 데이터를 네트워크를 통해 온라인으로, 자동화·스케줄링해 Amazon S3·EFS로 옮기려 한다. 가장 적합한 서비스는?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "clf-t1-3-q13",
       "examGuideTaskId": "clf-t1-3",
       "skill": "CAF 관점 분리의 효과 (병렬 도입)",
+      "section": "caf",
       "difficulty": "applied",
       "stem": "한 기업이 AWS CAF를 사용해 클라우드 도입을 추진하던 중, 보안 영역의 규정 준수 검토가 예상보다 오래 걸리고 있다. 경영진은 '이 검토가 끝날 때까지 플랫폼 구축, 인력 교육 등 다른 모든 준비를 멈춰야 하는 것 아니냐'고 우려한다. CAF가 도입 역량을 여러 관점으로 나누어 구성한다는 점에 비추어, 이 상황에 대한 가장 적절한 판단은?",
       "options": [
@@ -363,6 +376,7 @@
       "id": "clf-t1-3-q14",
       "examGuideTaskId": "clf-t1-3",
       "skill": "대량 데이터 전송 도구 선택 (네트워크 함정)",
+      "section": "migration-tools",
       "difficulty": "applied",
       "stem": "한 제조사가 외딴 공장에서 수집한 약 400TB의 센서 로그를 AWS로 옮겨야 한다. 공장의 인터넷 회선은 느리고 비싸며, 데이터는 한 번에 일괄로 올리면 되는 정적 파일이다. 한 엔지니어가 '데이터는 결국 클라우드로 가야 하니, 그냥 인터넷으로 S3에 업로드하면 된다'고 제안한다. 이 제안에 대한 가장 적절한 판단은?",
       "options": [
@@ -390,6 +404,7 @@
       "id": "clf-t1-3-q15",
       "examGuideTaskId": "clf-t1-3",
       "skill": "데이터베이스 복제로 최소 다운타임 (DMS)",
+      "section": "migration-tools",
       "difficulty": "applied",
       "stem": "한 회사가 24시간 가동되는 주문 처리 데이터베이스를 AWS로 옮기려 한다. 마이그레이션 도중에도 새 주문이 계속 기록되며, 서비스 중단 시간은 가능한 한 짧아야 한다. 이 요구를 충족하기 위해 AWS DMS가 사용하는 핵심 방식으로 가장 적절한 것은?",
       "options": [

@@ -8,6 +8,7 @@
       "id": "clf-t3-6-q1",
       "examGuideTaskId": "clf-t3-6",
       "skill": "객체 스토리지 용도 (S3)",
+      "section": "s3",
       "difficulty": "foundational",
       "stem": "한 회사가 웹사이트 정적 파일, 백업, 데이터 레이크 용도로 사실상 무제한의 데이터를 저장·검색하려 한다. 99.999999999%의 높은 내구성을 제공하는 객체 스토리지 서비스는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "clf-t3-6-q2",
       "examGuideTaskId": "clf-t3-6",
       "skill": "블록 스토리지 (EBS)",
+      "section": "ebs",
       "difficulty": "foundational",
       "stem": "한 EC2 인스턴스에 운영체제와 데이터베이스 파일을 두기 위해, 로컬 하드디스크처럼 인스턴스에 연결해 쓰는 영속적인 블록 스토리지 볼륨이 필요하다. 가장 적합한 서비스는?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "clf-t3-6-q3",
       "examGuideTaskId": "clf-t3-6",
       "skill": "파일 서비스 (EFS)",
+      "section": "efs",
       "difficulty": "foundational",
       "stem": "여러 Linux EC2 인스턴스가 동시에 같은 파일 시스템을 마운트해 데이터를 공유해야 하고, 용량이 파일 추가·삭제에 따라 자동으로 늘고 줄어드는 완전관리형 파일 스토리지가 필요하다. 가장 적합한 서비스는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "clf-t3-6-q4",
       "examGuideTaskId": "clf-t3-6",
       "skill": "S3 스토리지 클래스 (Intelligent-Tiering)",
+      "section": "s3-classes",
       "difficulty": "foundational",
       "stem": "Amazon S3에 저장할 데이터의 접근 패턴을 예측할 수 없고 시간이 지나며 변할 것으로 보인다. 객체를 자동으로 가장 비용 효율적인 계층으로 옮겨 비용을 최적화하되 검색 수수료는 부과되지 않기를 원한다. 가장 적합한 S3 스토리지 클래스는?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "clf-t3-6-q5",
       "examGuideTaskId": "clf-t3-6",
       "skill": "S3 스토리지 클래스 (Glacier Deep Archive)",
+      "section": "s3-classes",
       "difficulty": "foundational",
       "stem": "규제 준수를 위해 데이터를 여러 해 보관해야 하지만 거의 조회하지 않으며, 가장 낮은 비용으로 장기 보관하려 한다(드물게 조회할 때 검색에 몇 시간이 걸려도 무방). 가장 적합한 S3 스토리지 클래스는?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "clf-t3-6-q6",
       "examGuideTaskId": "clf-t3-6",
       "skill": "하이브리드 스토리지 (Storage Gateway)",
+      "section": "hybrid-backup",
       "difficulty": "foundational",
       "stem": "한 회사가 온프레미스 애플리케이션을 AWS 클라우드 스토리지와 연결해, 로컬 캐싱으로 저지연 접근을 유지하면서 데이터를 AWS에 저장하는 하이브리드 구성을 원한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "clf-t3-6-q7",
       "examGuideTaskId": "clf-t3-6",
       "skill": "중앙화 백업 (AWS Backup)",
+      "section": "hybrid-backup",
       "difficulty": "foundational",
       "stem": "한 조직이 Amazon EBS 볼륨, Amazon RDS 데이터베이스, Amazon DynamoDB 테이블의 백업을 서비스마다 따로 스크립트로 관리하는 대신, 한곳에서 백업 정책으로 중앙 집중 관리하고 자동화하려 한다. 가장 적합한 서비스는?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "clf-t3-6-q8",
       "examGuideTaskId": "clf-t3-6",
       "skill": "EBS vs 인스턴스 스토어 (영속성)",
+      "section": "ebs",
       "difficulty": "foundational",
       "stem": "한 EC2 인스턴스에 중요한 데이터를 저장하려 한다. 인스턴스를 중지(stop)하거나 종료(terminate)해도 데이터가 보존되어야 하며, 스냅샷으로 백업할 수도 있어야 한다. 인스턴스 스토어(instance store)와 비교했을 때 이 요구에 맞는 스토리지는?",
       "options": [
@@ -228,6 +236,7 @@
       "id": "clf-t3-6-q9",
       "examGuideTaskId": "clf-t3-6",
       "skill": "S3 수명 주기 정책 (Lifecycle)",
+      "section": "s3-lifecycle",
       "difficulty": "foundational",
       "stem": "한 회사가 S3 Standard에 업로드한 로그 객체를 30일 뒤에는 더 저렴한 스토리지 클래스로 자동 전환하고 365일 뒤에는 자동으로 삭제해 운영자의 수작업 없이 비용을 최적화하려 한다. 이를 가능하게 하는 Amazon S3 기능은?",
       "options": [
@@ -255,6 +264,7 @@
       "id": "clf-t3-6-q10",
       "examGuideTaskId": "clf-t3-6",
       "skill": "파일 서비스 (FSx for Windows)",
+      "section": "efs",
       "difficulty": "foundational",
       "stem": "한 회사가 Windows EC2 인스턴스들이 SMB 프로토콜로 접근하는 완전관리형 Windows 호환 공유 파일 스토리지가 필요하다. Amazon EFS는 Linux 워크로드용이라 Windows 환경에는 적합하지 않다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -282,6 +292,7 @@
       "id": "clf-t3-6-q11",
       "examGuideTaskId": "clf-t3-6",
       "skill": "객체 스토리지 내구성 (S3)",
+      "section": "s3",
       "difficulty": "foundational",
       "stem": "Amazon S3 표준 스토리지가 데이터를 여러 시설·디바이스에 중복 저장하도록 설계된 핵심 특성을 가장 잘 설명한 것은?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "clf-t3-6-q12",
       "examGuideTaskId": "clf-t3-6",
       "skill": "스토리지 유형 선택 (객체·블록·파일)",
+      "section": "storage-types",
       "difficulty": "foundational",
       "stem": "단일 EC2 인스턴스에 연결해 운영체제와 데이터베이스 파일을 두는, 저지연 블록 수준 볼륨이 필요하다. 가장 적합한 스토리지 유형은?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "clf-t3-6-q13",
       "examGuideTaskId": "clf-t3-6",
       "skill": "EBS 스냅샷 재해 복구 (다른 리전 복원)",
+      "section": "ebs",
       "difficulty": "applied",
       "stem": "한 EC2 인스턴스의 EBS 볼륨이 단일 가용 영역(AZ)에 존재한다. 재해 복구를 위해 이 볼륨의 데이터를 다른 리전에서도 복원할 수 있어야 한다. EBS 볼륨 자체는 한 AZ에 묶여 있다는 점을 고려할 때, 이 요구를 충족하는 가장 적절한 방법은?",
       "options": [
@@ -363,6 +376,7 @@
       "id": "clf-t3-6-q14",
       "examGuideTaskId": "clf-t3-6",
       "skill": "S3 Glacier는 스토리지 클래스 (별도 서비스 오해)",
+      "section": "s3-classes",
       "difficulty": "applied",
       "stem": "한 운영자가 'S3 Glacier는 S3와는 별개의 서비스이므로, 오래된 객체를 아카이브하려면 객체를 S3 버킷에서 꺼내 Glacier라는 다른 서비스로 옮겨야 한다'고 생각하고 있다. Amazon S3와 Glacier의 관계를 가장 정확하게 설명한 것은?",
       "options": [
@@ -390,6 +404,7 @@
       "id": "clf-t3-6-q15",
       "examGuideTaskId": "clf-t3-6",
       "skill": "캐시된 하이브리드 스토리지 (Tape Gateway)",
+      "section": "hybrid-backup",
       "difficulty": "applied",
       "stem": "한 회사가 온프레미스에서 물리 테이프 라이브러리로 백업을 보관해 왔는데, 물리 테이프 운영 부담을 없애고 기존 백업 애플리케이션은 그대로 둔 채 백업 데이터를 AWS 클라우드 스토리지에 가상 테이프로 저장하려 한다. 이 요구에 가장 적합한 AWS 서비스(유형)는?",
       "options": [

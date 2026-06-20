@@ -8,6 +8,7 @@
       "id": "clf-t1-4-q1",
       "examGuideTaskId": "clf-t1-4",
       "skill": "고정비 vs 변동비 / 온프레미스 비용",
+      "section": "capex-opex",
       "difficulty": "foundational",
       "stem": "온프레미스 데이터센터와 비교한 클라우드의 비용 구조를 가장 정확하게 설명한 것은?",
       "options": [
@@ -39,6 +40,7 @@
       "id": "clf-t1-4-q2",
       "examGuideTaskId": "clf-t1-4",
       "skill": "rightsizing (Compute Optimizer)",
+      "section": "rightsizing",
       "difficulty": "foundational",
       "stem": "한 회사가 EC2 인스턴스 등 리소스의 사용률 메트릭을 분석해 과대·과소 프로비저닝된 리소스를 식별하고 적정 크기(rightsizing)를 권장받아 비용을 줄이고 성능을 높이려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -66,6 +68,7 @@
       "id": "clf-t1-4-q3",
       "examGuideTaskId": "clf-t1-4",
       "skill": "라이선스 전략 (BYOL)",
+      "section": "licensing",
       "difficulty": "foundational",
       "stem": "한 기업이 이미 보유한 소프트웨어 라이선스를 AWS로 가져와 재활용함으로써 추가 라이선스 비용을 아끼려 한다(예: EC2 Dedicated Hosts에서 기존 서버 바운드 라이선스 사용). 이 라이선스 전략을 무엇이라고 하는가?",
       "options": [
@@ -97,6 +100,7 @@
       "id": "clf-t1-4-q4",
       "examGuideTaskId": "clf-t1-4",
       "skill": "자동화 이점 (CloudFormation)",
+      "section": "automation",
       "difficulty": "foundational",
       "stem": "한 팀이 동일한 인프라를 여러 환경에 반복·일관되게 프로비저닝하는 과정을 자동화해, 수동 작업에서 생기는 실수와 시간 비용을 줄이려 한다. 이런 코드형 인프라(IaC) 자동화에 가장 적합한 서비스는?",
       "options": [
@@ -124,6 +128,7 @@
       "id": "clf-t1-4-q5",
       "examGuideTaskId": "clf-t1-4",
       "skill": "관리형 서비스로 TCO 절감",
+      "section": "managed-services",
       "difficulty": "foundational",
       "stem": "한 회사가 데이터베이스를 Amazon EC2에 직접 설치·운영하는 대신, 패치·백업·확장 같은 운영을 AWS가 대신하는 관리형 서비스를 사용해 운영 인력과 총소유비용(TCO)을 줄이려 한다. 이러한 관리형 데이터베이스 서비스의 예로 가장 적합한 것은?",
       "options": [
@@ -151,6 +156,7 @@
       "id": "clf-t1-4-q6",
       "examGuideTaskId": "clf-t1-4",
       "skill": "rightsizing 개념",
+      "section": "rightsizing",
       "difficulty": "foundational",
       "stem": "클라우드 비용 최적화에서 'rightsizing(적정 크기 조정)'을 가장 정확하게 설명한 것은?",
       "options": [
@@ -178,6 +184,7 @@
       "id": "clf-t1-4-q7",
       "examGuideTaskId": "clf-t1-4",
       "skill": "규모의 경제 (economies of scale)",
+      "section": "capex-opex",
       "difficulty": "foundational",
       "stem": "AWS가 '쓴 만큼 지불(pay-as-you-go)'하면서도 가격을 지속적으로 낮출 수 있는 핵심 비용 원리는 무엇인가? 수많은 고객의 사용량이 집계되어 AWS의 단위당 비용이 낮아지고, 그 절감분이 더 낮은 종량 요금으로 고객에게 전달된다.",
       "options": [
@@ -209,6 +216,7 @@
       "id": "clf-t1-4-q8",
       "examGuideTaskId": "clf-t1-4",
       "skill": "TCO(총소유비용) 개념",
+      "section": "capex-opex",
       "difficulty": "applied",
       "stem": "한 회사가 워크로드를 온프레미스에서 운영할지 AWS로 이전할지 비교하려 한다. 단순히 서버 임대료나 인스턴스 단가만 보지 않고, 전력·냉각·데이터센터 공간·하드웨어 교체 주기·운영 인력 같은 직접·간접 비용까지 모두 포함해 비교하려고 한다. 이때 사용하는 비용 비교 개념으로 가장 적절한 것은?",
       "options": [
@@ -240,6 +248,7 @@
       "id": "clf-t1-4-q9",
       "examGuideTaskId": "clf-t1-4",
       "skill": "라이선스 포함 (License Included)",
+      "section": "licensing",
       "difficulty": "foundational",
       "stem": "한 팀이 별도로 소프트웨어 라이선스를 구매·관리하지 않고, AWS 서비스 요금에 라이선스 비용이 이미 포함된 방식으로 데이터베이스를 사용하려 한다. 이 라이선스 모델을 무엇이라고 하는가?",
       "options": [
@@ -271,6 +280,7 @@
       "id": "clf-t1-4-q10",
       "examGuideTaskId": "clf-t1-4",
       "skill": "관리형 서비스의 운영 부담 절감 원리",
+      "section": "managed-services",
       "difficulty": "foundational",
       "stem": "관리형 서비스(예: Amazon RDS, DynamoDB)가 직접 운영(예: EC2에 DB 설치) 대비 총비용을 낮추는 가장 근본적인 이유로 가장 적절한 것은?",
       "options": [
@@ -302,6 +312,7 @@
       "id": "clf-t1-4-q11",
       "examGuideTaskId": "clf-t1-4",
       "skill": "종량 과금 활용 (미사용 시 종료)",
+      "section": "capex-opex",
       "difficulty": "foundational",
       "stem": "개발·테스트용 EC2 인스턴스가 업무 시간에만 쓰인다. 종량 과금(pay-as-you-go) 특성을 활용해 비용을 낮추는 가장 적절한 방법은?",
       "options": [
@@ -329,6 +340,7 @@
       "id": "clf-t1-4-q12",
       "examGuideTaskId": "clf-t1-4",
       "skill": "탄력성으로 과대 프로비저닝 제거",
+      "section": "autoscaling",
       "difficulty": "foundational",
       "stem": "수요가 시간대별로 변하는 웹 애플리케이션에서, 과대(또는 과소) 프로비저닝 없이 수요에 맞춰 용량을 자동 조절해 비용을 최적화하려 한다. 가장 적절한 접근은?",
       "options": [
@@ -356,6 +368,7 @@
       "id": "clf-t1-4-q13",
       "examGuideTaskId": "clf-t1-4",
       "skill": "BYOL 적용 (서버 바운드 라이선스 재활용)",
+      "section": "licensing",
       "difficulty": "applied",
       "stem": "한 제조사가 코어 수에 묶여 판매되는 상용 데이터베이스 라이선스를 이미 다수 보유한 상태로 AWS 이전을 검토한다. 이 회사는 이미 지불한 라이선스 비용을 버리지도, 클라우드 요금에 포함된 라이선스를 중복으로 사지도 않으면서 기존 라이선스를 그대로 활용하고 싶다. 비용 측면에서 가장 적합한 선택은?",
       "options": [
@@ -387,6 +400,7 @@
       "id": "clf-t1-4-q14",
       "examGuideTaskId": "clf-t1-4",
       "skill": "관리형 서비스 단가 함정 (TCO로 판단)",
+      "section": "managed-services",
       "difficulty": "applied",
       "stem": "한 팀이 Amazon RDS의 시간당 단가가 EC2에 직접 데이터베이스를 설치해 운영하는 것보다 다소 높다는 것을 보고, '단가가 더 비싸니 EC2 자체 운영이 더 저렴하다'며 RDS 도입을 반대한다. 비용 관점에서 이 주장을 가장 정확하게 평가한 것은?",
       "options": [
@@ -414,6 +428,7 @@
       "id": "clf-t1-4-q15",
       "examGuideTaskId": "clf-t1-4",
       "skill": "온프레미스 숨은 비용 식별",
+      "section": "capex-opex",
       "difficulty": "foundational",
       "stem": "온프레미스 데이터센터를 운영할 때 발생하지만 클라우드로 옮기면 고객이 더 이상 직접 부담하지 않게 되는 '숨은 비용'에 해당하지 않는 것은?",
       "options": [
