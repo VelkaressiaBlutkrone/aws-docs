@@ -478,7 +478,7 @@
           "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-3-q17",
@@ -506,7 +506,7 @@
           "url": "https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-3-q18",
@@ -538,7 +538,7 @@
           "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

@@ -427,34 +427,6 @@
       "verified": true
     },
     {
-      "id": "clf-t3-7-q16",
-      "examGuideTaskId": "clf-t3-7",
-      "skill": "응용 AI 서비스 식별 (이미지·비디오 분석)",
-      "section": "applied-ai-services",
-      "difficulty": "foundational",
-      "stem": "한 미디어 서비스가 사용자가 업로드한 이미지와 동영상에서 객체, 장면, 텍스트, 부적절한 콘텐츠를 자동으로 감지하려 한다. ML 모델을 직접 훈련하기보다 관리형 API를 사용하려면 어떤 서비스가 가장 적합한가?",
-      "options": [
-        "Amazon Rekognition",
-        "Amazon Textract",
-        "Amazon Comprehend",
-        "Amazon Personalize"
-      ],
-      "correct": 0,
-      "explanation": "Amazon Rekognition은 이미지와 비디오 분석을 위한 관리형 서비스로, 객체·장면·텍스트·부적절한 콘텐츠·얼굴 등을 감지하고 분석합니다. 이미지/영상이라는 입력과 컴퓨터 비전 분석 요구가 핵심 단서입니다.",
-      "wrongExplanations": {
-        "1": "Textract는 문서 이미지나 PDF에서 텍스트, 양식, 표를 추출하는 문서 처리 서비스입니다. 일반 이미지·동영상의 객체·장면 분석에는 Rekognition이 맞습니다.",
-        "2": "Comprehend는 텍스트 문서에서 엔터티·핵심 문구·감정 같은 자연어 인사이트를 추출합니다. 이미지/비디오 분석 서비스가 아닙니다.",
-        "3": "Personalize는 사용자 행동 데이터로 추천과 개인화를 생성합니다. 이미지·비디오 콘텐츠 감지와 무관합니다."
-      },
-      "sources": [
-        {
-          "title": "What is Amazon Rekognition? — 클라우드 기반 이미지·비디오 분석, 객체·텍스트·부적절한 콘텐츠·얼굴 감지",
-          "url": "https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html"
-        }
-      ],
-      "verified": false
-    },
-    {
       "id": "clf-t3-7-q17",
       "examGuideTaskId": "clf-t3-7",
       "skill": "응용 AI 서비스 식별 (문서 추출)",
@@ -480,35 +452,7 @@
           "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
         }
       ],
-      "verified": false
-    },
-    {
-      "id": "clf-t3-7-q18",
-      "examGuideTaskId": "clf-t3-7",
-      "skill": "응용 AI 서비스 식별 (자연어 인사이트)",
-      "section": "applied-ai-services",
-      "difficulty": "foundational",
-      "stem": "한 고객 지원 팀이 이미 텍스트로 저장된 상담 기록에서 언어, 감정, 주요 문구, 엔터티를 자동으로 추출해 고객 불만 주제를 분석하려 한다. 가장 적합한 서비스는?",
-      "options": [
-        "Amazon Comprehend",
-        "Amazon Textract",
-        "Amazon Rekognition",
-        "Amazon Kinesis"
-      ],
-      "correct": 0,
-      "explanation": "Amazon Comprehend는 자연어 처리(NLP)를 사용해 텍스트 문서에서 엔터티, 핵심 문구, 언어, 감정 같은 인사이트를 추출합니다. 이미 텍스트가 있고 그 의미를 분석하려는 요구에는 Comprehend가 맞습니다.",
-      "wrongExplanations": {
-        "1": "Textract는 문서 이미지나 PDF에서 텍스트와 표·양식을 추출하는 단계에 적합합니다. 이미 텍스트가 있을 때 감정·엔터티를 분석하는 서비스는 Comprehend입니다.",
-        "2": "Rekognition은 이미지·비디오 분석 서비스입니다. 텍스트 자연어 인사이트 추출에는 맞지 않습니다.",
-        "3": "Kinesis는 실시간 스트리밍 데이터를 수집·처리합니다. 텍스트의 감정·엔터티를 분석하는 NLP 서비스가 아닙니다."
-      },
-      "sources": [
-        {
-          "title": "What is Amazon Comprehend? — NLP로 엔터티·핵심 문구·언어·감정 인사이트 추출",
-          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
-        }
-      ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-7-q19",
@@ -540,7 +484,7 @@
           "url": "https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

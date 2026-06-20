@@ -464,34 +464,6 @@
       "verified": true
     },
     {
-      "id": "clf-t3-1-q16",
-      "examGuideTaskId": "clf-t3-1",
-      "skill": "Elastic Beanstalk와 IaC 경계",
-      "section": "deployment-ops-tools",
-      "difficulty": "applied",
-      "stem": "한 개발팀이 웹 애플리케이션 소스 번들을 업로드하면 AWS가 EC2 인스턴스, 로드 밸런싱, 상태 모니터링, Auto Scaling 환경을 준비해 주기를 원한다. 세부 인프라 템플릿을 직접 관리하기보다 애플리케이션 배포 경험을 단순화하는 서비스로 가장 적합한 것은?",
-      "options": [
-        "AWS Elastic Beanstalk",
-        "AWS CloudFormation",
-        "AWS CodeCommit",
-        "AWS Direct Connect"
-      ],
-      "correct": 0,
-      "explanation": "Elastic Beanstalk는 웹 애플리케이션을 AWS 클라우드에 배포할 때 EC2, 로드 밸런싱, 상태 모니터링, 자동 확장 같은 환경 구성을 대신 처리해 애플리케이션 실행을 빠르게 시작하게 합니다. CloudFormation은 인프라를 템플릿으로 정의하는 IaC이고, 이 문제의 핵심은 세부 템플릿 작성이 아니라 앱 소스 번들 기반 배포 플랫폼입니다.",
-      "wrongExplanations": {
-        "1": "CloudFormation은 인프라 리소스를 템플릿으로 선언해 프로비저닝하는 IaC 서비스입니다. 앱 소스 번들을 올리면 환경을 대신 준비해 주는 플랫폼이라는 요구에는 Beanstalk가 더 직접적입니다.",
-        "2": "CodeCommit은 프라이빗 Git 리포지토리를 호스팅하는 소스 제어 서비스입니다. EC2·로드 밸런서·Auto Scaling 환경을 준비해 앱을 배포하는 서비스가 아닙니다.",
-        "3": "Direct Connect는 온프레미스와 AWS를 전용 회선으로 연결하는 네트워크 서비스로, 애플리케이션 배포 플랫폼이 아닙니다."
-      },
-      "sources": [
-        {
-          "title": "What is AWS Elastic Beanstalk? — 웹 애플리케이션 배포, EC2·로드 밸런싱·상태 모니터링·동적 확장 환경 구성",
-          "url": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html"
-        }
-      ],
-      "verified": false
-    },
-    {
       "id": "clf-t3-1-q17",
       "examGuideTaskId": "clf-t3-1",
       "skill": "AWS CDK와 CloudFormation 관계",
@@ -517,7 +489,7 @@
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/home.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-1-q18",
@@ -545,7 +517,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-1-q19",
@@ -581,7 +553,7 @@
           "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-1-q20",
@@ -609,7 +581,7 @@
           "url": "https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

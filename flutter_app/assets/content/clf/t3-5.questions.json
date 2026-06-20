@@ -448,7 +448,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t3-5-q17",
@@ -476,7 +476,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

@@ -466,7 +466,7 @@
           "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-2-q17",
@@ -494,7 +494,7 @@
           "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "clf-t2-2-q18",
@@ -522,7 +522,7 @@
           "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

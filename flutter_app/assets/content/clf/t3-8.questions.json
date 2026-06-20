@@ -202,17 +202,17 @@
     {
       "id": "clf-t3-8-q8",
       "examGuideTaskId": "clf-t3-8",
-      "skill": "최종 사용자 컴퓨팅 (AppStream 2.0)",
+      "skill": "최종 사용자 컴퓨팅 (WorkSpaces Applications, 구 AppStream 2.0)",
       "difficulty": "foundational",
       "stem": "한 회사가 데스크톱 애플리케이션 한두 개를 사용자에게 설치 없이 웹 브라우저로 스트리밍해 제공하려 한다(전체 데스크톱이 아닌 특정 애플리케이션만 스트리밍). 가장 적합한 완전관리형 AWS 서비스는?",
       "options": [
         "Amazon SNS",
         "AWS IoT Core",
-        "Amazon AppStream 2.0",
+        "Amazon WorkSpaces Applications(구 AppStream 2.0)",
         "Amazon SQS"
       ],
       "correct": 2,
-      "explanation": "Amazon AppStream 2.0은 완전관리형 애플리케이션 스트리밍 서비스로, 데스크톱 애플리케이션을 사용자에게 중앙에서 관리·스트리밍해 어떤 기기의 웹 브라우저에서도 설치 없이 안전하게 사용하게 합니다. (전체 가상 데스크톱은 WorkSpaces, 특정 애플리케이션 스트리밍은 AppStream 2.0.)",
+      "explanation": "Amazon WorkSpaces Applications(구 AppStream 2.0)는 완전관리형 애플리케이션 스트리밍 서비스로, 데스크톱 애플리케이션을 사용자에게 중앙에서 관리·스트리밍해 어떤 기기의 웹 브라우저에서도 설치 없이 안전하게 사용하게 합니다. (전체 가상 데스크톱은 WorkSpaces, 특정 애플리케이션 스트리밍은 WorkSpaces Applications(구 AppStream 2.0).)",
       "wrongExplanations": {
         "0": "Amazon SNS는 pub/sub 알림 메시징 서비스로, 애플리케이션 스트리밍과 무관합니다.",
         "1": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스로, 애플리케이션 스트리밍과 무관합니다.",
@@ -220,7 +220,7 @@
       },
       "sources": [
         {
-          "title": "What is Amazon AppStream 2.0? — 데스크톱 애플리케이션을 브라우저로 스트리밍하는 완전관리형 애플리케이션 스트리밍 서비스",
+          "title": "What Is Amazon WorkSpaces Applications?(구 AppStream 2.0) — 데스크톱 애플리케이션을 브라우저로 스트리밍하는 완전관리형 애플리케이션 스트리밍 서비스",
           "url": "https://docs.aws.amazon.com/appstream2/latest/developerguide/what-is-appstream.html"
         }
       ],
@@ -447,35 +447,7 @@
           "url": "https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/welcome.html"
         }
       ],
-      "verified": false
-    },
-    {
-      "id": "clf-t3-8-q17",
-      "examGuideTaskId": "clf-t3-8",
-      "skill": "AppStream 2.0 vs WorkSpaces",
-      "section": "appstream-mq",
-      "difficulty": "applied",
-      "stem": "한 조직이 사용자에게 전체 Windows/Linux 데스크톱을 제공하기보다, 특정 데스크톱 애플리케이션만 AWS에서 실행해 브라우저나 클라이언트로 스트리밍하려 한다. 기존 시험 자료에는 AppStream 2.0이라고도 나오는 이 현재 공식 문서명 서비스는?",
-      "options": [
-        "Amazon WorkSpaces Applications",
-        "Amazon WorkSpaces",
-        "AWS IoT Core",
-        "Amazon SQS"
-      ],
-      "correct": 0,
-      "explanation": "Amazon WorkSpaces Applications는 과거 AppStream 2.0으로 알려진 애플리케이션 스트리밍 서비스입니다. 기존 데스크톱 애플리케이션을 AWS에서 실행하고 사용자가 브라우저나 클라이언트로 스트리밍해 쓰게 합니다. 전체 가상 데스크톱을 제공하는 WorkSpaces와는 초점이 다릅니다.",
-      "wrongExplanations": {
-        "1": "Amazon WorkSpaces는 사용자에게 클라우드 기반 전체 가상 데스크톱(DaaS)을 제공합니다. 특정 애플리케이션만 스트리밍하는 요구에는 WorkSpaces Applications가 맞습니다.",
-        "2": "AWS IoT Core는 IoT 기기를 클라우드에 연결하는 서비스입니다. 데스크톱 앱 스트리밍과 무관합니다.",
-        "3": "Amazon SQS는 메시지 큐 서비스입니다. 사용자에게 데스크톱 애플리케이션을 스트리밍하지 않습니다."
-      },
-      "sources": [
-        {
-          "title": "What Is Amazon WorkSpaces Applications? — 완전관리형 애플리케이션 스트리밍 서비스, 기존 desktop applications를 AWS에서 스트리밍",
-          "url": "https://docs.aws.amazon.com/appstream2/latest/developerguide/what-is-appstream.html"
-        }
-      ],
-      "verified": false
+      "verified": true
     }
   ]
 }
