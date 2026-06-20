@@ -421,6 +421,62 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-5-q16",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "VPC Flow Logs 관측성",
+      "section": "flow-logs-privatelink",
+      "difficulty": "applied",
+      "stem": "한 네트워크 담당자가 특정 인스턴스의 ENI로 들어오고 나가는 IP 트래픽 정보를 기록해, 보안 그룹 규칙이 너무 엄격한지와 어떤 트래픽이 인스턴스에 도달하는지 분석하려 한다. 이 흐름 기록을 CloudWatch Logs나 S3로 게시하는 기능은?",
+      "options": [
+        "VPC Flow Logs",
+        "AWS PrivateLink",
+        "AWS Direct Connect",
+        "Amazon Route 53"
+      ],
+      "correct": 0,
+      "explanation": "VPC Flow Logs는 VPC의 네트워크 인터페이스로 들어오고 나가는 IP 트래픽 정보를 캡처해 CloudWatch Logs, S3, Data Firehose로 게시합니다. 보안 그룹 규칙 진단, 인스턴스에 도달하는 트래픽 모니터링, 트래픽 방향 분석에 쓰이는 관측성 기능입니다.",
+      "wrongExplanations": {
+        "1": "PrivateLink는 VPC에서 서비스와 리소스에 프라이빗하게 연결하는 기술입니다. 트래픽 흐름을 기록·게시하는 로그 기능이 아닙니다.",
+        "2": "Direct Connect는 온프레미스와 AWS를 전용 회선으로 연결하는 네트워크 서비스입니다. VPC ENI의 IP 트래픽 로그를 생성하지 않습니다.",
+        "3": "Route 53은 DNS 서비스입니다. 네트워크 인터페이스 트래픽 흐름을 기록하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Logging IP traffic using VPC Flow Logs — 네트워크 인터페이스 IP 트래픽 정보 캡처, CloudWatch Logs/S3/Data Firehose 게시",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t3-5-q17",
+      "examGuideTaskId": "clf-t3-5",
+      "skill": "AWS PrivateLink 사설 연결",
+      "section": "flow-logs-privatelink",
+      "difficulty": "applied",
+      "stem": "한 애플리케이션이 프라이빗 서브넷에서 특정 AWS 서비스와 파트너 SaaS 서비스에 접근해야 한다. 인터넷 게이트웨이, NAT, 공인 IP, VPN, Direct Connect 없이 VPC 안에 있는 것처럼 프라이빗하게 연결하려 한다. 가장 적합한 기술은?",
+      "options": [
+        "AWS PrivateLink",
+        "VPC Flow Logs",
+        "Amazon CloudFront",
+        "AWS Site-to-Site VPN"
+      ],
+      "correct": 0,
+      "explanation": "AWS PrivateLink는 VPC를 서비스와 리소스에 프라이빗하게 연결하는 고가용·확장성 기술입니다. 인터넷 게이트웨이, NAT 디바이스, 공인 IP, Direct Connect, Site-to-Site VPN 없이도 VPC에서 서비스에 접근할 수 있게 해 줍니다.",
+      "wrongExplanations": {
+        "1": "VPC Flow Logs는 IP 트래픽 정보를 기록하는 관측 기능입니다. 서비스에 대한 프라이빗 연결 경로를 제공하지 않습니다.",
+        "2": "CloudFront는 콘텐츠를 엣지에 캐시하는 CDN입니다. VPC 내부에서 특정 서비스로 사설 연결을 제공하는 PrivateLink와 다릅니다.",
+        "3": "Site-to-Site VPN은 온프레미스 네트워크와 VPC를 인터넷 위 IPsec 터널로 연결하는 방식입니다. 이 시나리오는 VPC에서 특정 서비스에 프라이빗하게 접근하는 PrivateLink 요구입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS PrivateLink? — 인터넷 게이트웨이·NAT·공인 IP·Direct Connect·VPN 없이 VPC를 서비스/리소스에 프라이빗 연결",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

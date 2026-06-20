@@ -439,6 +439,90 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-2-q16",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "ACM 인증서 관리",
+      "section": "certificates-hsm",
+      "difficulty": "foundational",
+      "stem": "한 회사가 Application Load Balancer와 CloudFront 배포에서 HTTPS를 제공하기 위해 SSL/TLS X.509 인증서를 요청·가져오기·저장·갱신 관리하려 한다. 이 인증서 관리에 가장 적합한 AWS 서비스는?",
+      "options": [
+        "AWS Certificate Manager(ACM)",
+        "AWS Key Management Service(KMS)",
+        "AWS CloudHSM",
+        "Amazon Macie"
+      ],
+      "correct": 0,
+      "explanation": "AWS Certificate Manager(ACM)는 AWS 웹사이트와 애플리케이션을 보호하는 퍼블릭·프라이빗 SSL/TLS X.509 인증서와 키의 생성, 저장, 갱신, 가져오기를 관리합니다. HTTPS 인증서 관리가 요구의 핵심이므로 ACM이 맞습니다.",
+      "wrongExplanations": {
+        "1": "KMS는 저장 시 암호화 등에 쓰는 암호화 키를 생성·제어하는 서비스입니다. HTTPS용 TLS 인증서 관리 서비스가 아닙니다.",
+        "2": "CloudHSM은 고객 전용 HSM 클러스터에서 키와 암호 연산을 직접 제어하는 서비스입니다. 일반적인 AWS 통합 서비스용 TLS 인증서 관리에는 ACM이 맞습니다.",
+        "3": "Macie는 S3의 민감 데이터 발견·분류 서비스입니다. TLS 인증서 관리와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Certificate Manager? — SSL/TLS X.509 인증서와 키 생성·저장·갱신 관리",
+          "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t2-2-q17",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "CloudHSM vs KMS",
+      "section": "certificates-hsm",
+      "difficulty": "applied",
+      "stem": "한 금융 워크로드가 암호화 키와 알고리즘을 고객이 직접 제어해야 하며, 단일 테넌트 전용 하드웨어 보안 모듈(HSM) 클러스터와 PKCS#11 같은 기존 암호화 애플리케이션 호환성이 필요하다. 관리형 KMS보다 이 요구에 더 직접적으로 맞는 서비스는?",
+      "options": [
+        "AWS CloudHSM",
+        "AWS Certificate Manager",
+        "Amazon GuardDuty",
+        "AWS Artifact"
+      ],
+      "correct": 0,
+      "explanation": "AWS CloudHSM은 AWS 클라우드의 하드웨어 보안 모듈 이점을 제공하면서 고객이 키, 알고리즘, 사용자 관리와 애플리케이션 통합을 더 직접 제어할 수 있게 합니다. 전용 HSM 클러스터, FIPS 검증 HSM, PKCS#11/JCE/CNG/KSP 같은 기존 암호화 워크로드 호환성이 단서입니다.",
+      "wrongExplanations": {
+        "1": "ACM은 SSL/TLS 인증서 관리 서비스입니다. 전용 HSM 클러스터에서 고객이 키와 알고리즘을 직접 제어하는 요구와 다릅니다.",
+        "2": "GuardDuty는 로그를 분석해 위협 활동을 탐지하는 서비스입니다. 암호화 키와 HSM 제어를 제공하지 않습니다.",
+        "3": "Artifact는 AWS 컴플라이언스 보고서를 다운로드하는 포털입니다. HSM 클러스터나 키 제어 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS CloudHSM? — 전용 HSM, 키·알고리즘·애플리케이션 개발에 대한 완전 제어",
+          "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "clf-t2-2-q18",
+      "examGuideTaskId": "clf-t2-2",
+      "skill": "CloudFront용 ACM 인증서 리전",
+      "section": "certificates-hsm",
+      "difficulty": "applied",
+      "stem": "한 팀이 Amazon CloudFront 배포에 사용할 ACM 인증서를 준비하고 있다. 일반 리전별 ALB 인증서와 달리, CloudFront에 연결할 ACM 인증서를 요청하거나 가져와야 하는 리전은 어디인가?",
+      "options": [
+        "미국 동부(버지니아 북부, us-east-1)",
+        "배포를 보는 사용자가 가장 많은 엣지 로케이션의 리전",
+        "CloudFront 배포를 생성한 사용자의 기본 콘솔 리전",
+        "아무 리전이나 가능하며 CloudFront가 자동으로 복사한다"
+      ],
+      "correct": 0,
+      "explanation": "ACM 인증서는 리전 리소스입니다. CloudFront 배포에 사용할 ACM 인증서는 미국 동부(버지니아 북부, us-east-1) 리전에 요청하거나 가져와야 하며, 이 리전의 인증서가 CloudFront 배포에 연결되어 전 세계 엣지 위치에서 사용됩니다.",
+      "wrongExplanations": {
+        "1": "CloudFront는 글로벌 엣지 네트워크를 쓰지만, ACM 인증서 위치를 사용자와 가까운 엣지 리전으로 고르는 방식이 아닙니다.",
+        "2": "사용자의 기본 콘솔 리전은 CloudFront용 ACM 인증서 요구와 무관합니다. 공식 요구는 us-east-1입니다.",
+        "3": "ACM 인증서는 리전 리소스이며 CloudFront용 인증서는 아무 리전이나 만들 수 없습니다. CloudFront에 사용할 인증서는 us-east-1에 있어야 합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Certificate Manager? — CloudFront용 ACM 인증서는 US East (N. Virginia)에 요청/가져오기",
+          "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }
