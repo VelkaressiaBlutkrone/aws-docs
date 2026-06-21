@@ -8,7 +8,7 @@ M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAud
 **T4 미니 플레이어 진입점**까지 TDD로 완성·커밋했다. **다음 시작점 = T6(iOS 실기기 수동 게이트 — Windows/CI 불가, 사용자만).**
 
 ## 브랜치 / 커밋
-- `2c95dff` — T4: 미니 플레이어 진입점 + 전역 런타임 배선(조건부 import) + ContentEntry.lectureAudioSrc (origin 미푸시)
+- `2c95dff` — T4: 미니 플레이어 진입점 + 전역 런타임 배선(조건부 import) + ContentEntry.lectureAudioSrc
 - `662dfd6` — T5: AudioController 상태 머신 + 단위테스트
 - `ba7cbd5` — T2: Media Session 바인딩 + AudioController ChangeNotifier
 - `6a25975` — T1: WebAudioBackend + WebMediaSessionBackend (DOM 어댑터)
@@ -75,6 +75,6 @@ M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAud
 헤드셋/블루투스/Control Center · 문서간 재생 · CI 자동 생성.
 
 ## PR
-- **T4 완료 — `feat/study-audio-m1` → `develop` PR 가능**(미니 플레이어 진입점·전역 런타임까지).
-  단 기본 빌드는 플래그 off라 사용자에게 미노출(placeholder). 실제 청취는 T6(실물 mp3 + iOS 실기기) 이후.
-- T4 커밋 `2c95dff`는 **origin 미푸시**(이번 세션 로컬). 푸시·PR은 사용자 결정.
+- **PR #53 열림 — `feat/study-audio-m1` → `develop`**(M1 전체: T1·T2·T5·T4 + 핸드오프). origin push 완료.
+  기본 빌드는 플래그 off라 사용자에게 미노출(placeholder). 실제 청취는 T6(실물 mp3 + iOS 실기기) 이후.
+- 머지는 **CI 녹색 확인 후**(브랜치 전략: feat→develop, main 직접 금지). 머지 시점에 develop 실측 권장.
