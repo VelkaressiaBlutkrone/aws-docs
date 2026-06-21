@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../content/anchor_scroll.dart';
 import '../content/markdown_parser.dart';
 import '../content/study_markdown_view.dart';
+import '../data/audio_runtime.dart';
 import '../data/content_index.dart';
 import '../data/viewed_docs_store.dart';
 import '../models/exam_session.dart';
@@ -15,6 +16,7 @@ import '../widgets/app_header.dart';
 import '../widgets/badges.dart';
 import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
+import '../widgets/study_audio_player.dart';
 
 class StudyDocPage extends StatefulWidget {
   const StudyDocPage({super.key, required this.entry, this.targetAnchor});
@@ -62,6 +64,10 @@ class _StudyDocPageState extends State<StudyDocPage> {
     if (identical(_keyedDoc, doc)) return;
     _keyedDoc = doc;
     _anchorKeys = buildAnchorKeys(doc.blocks);
+    // 오디오 강의(주머니 라디오) 잠금화면 메타 — 웹·dart-define on일 때만.
+    if (audioLectureEnabled) {
+      audioRuntime?.nowPlaying(widget.entry.title);
+    }
     final anchor = widget.targetAnchor;
     if (anchor == null || anchor.isEmpty) return;
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAnchor(anchor));
@@ -86,6 +92,20 @@ class _StudyDocPageState extends State<StudyDocPage> {
     }
   }
 
+  /// 하단 고정 미니 플레이어(오디오 강의). 노출 정책상 dart-define
+  /// `audio_lecture` on + 웹(런타임 존재) + 문서 로드 완료일 때만 보인다 —
+  /// 검수 전 생성 강의를 일반 사용자에게 노출하지 않는다(이슈 5-9).
+  Widget? _miniPlayer(StudyContent? doc) {
+    if (!audioLectureEnabled || doc == null) return null;
+    final runtime = audioRuntime;
+    if (runtime == null) return null;
+    return StudyAudioPlayer(
+      controller: runtime.controller,
+      title: widget.entry.title,
+      audioSrc: widget.entry.lectureAudioSrc,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.c;
@@ -108,6 +128,7 @@ class _StudyDocPageState extends State<StudyDocPage> {
             metaBadge: doc != null ? '✓ 검증됨' : null,
             metaDate: doc?.lastVerified,
           ),
+          bottomNavigationBar: _miniPlayer(doc),
           body: SelectionArea(
             child: Builder(
               builder: (context) {
