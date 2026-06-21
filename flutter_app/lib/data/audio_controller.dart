@@ -9,6 +9,8 @@ library;
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 /// 플레이어가 노출하는 재생 상태.
 ///
 /// ```
@@ -48,7 +50,7 @@ abstract class AudioBackend {
 ///
 /// M1에서는 전역 싱글톤(위젯 트리 밖)으로 살아 라우팅 전환·위젯 dispose에도
 /// 재생을 유지한다. 상태는 backend의 미디어 이벤트로 확정된다(브라우저 비동기 현실 반영).
-class AudioController {
+class AudioController extends ChangeNotifier {
   AudioController({required AudioBackend backend}) : _backend = backend {
     _sub = _backend.events.listen(_onEvent);
   }
@@ -62,7 +64,7 @@ class AudioController {
   /// 소스를 설정하고 로딩 상태로 전이.
   void load(String src) {
     _backend.setSrc(src);
-    _state = PlaybackState.loading;
+    _set(PlaybackState.loading);
   }
 
   /// 재생. `backend.play()`를 await 체인 없이 즉시 호출해 user-activation을 보존한다.
@@ -71,7 +73,7 @@ class AudioController {
     try {
       await _backend.play();
     } catch (_) {
-      _state = PlaybackState.error;
+      _set(PlaybackState.error);
     }
   }
 
@@ -79,15 +81,26 @@ class AudioController {
   void pause() => _backend.pause();
 
   void _onEvent(AudioEvent e) {
-    _state = switch (e) {
+    _set(switch (e) {
       AudioEvent.playing => PlaybackState.playing,
       AudioEvent.paused => PlaybackState.paused,
       AudioEvent.ended => PlaybackState.ended,
       AudioEvent.stalled => PlaybackState.loading, // 재버퍼링
       AudioEvent.error => PlaybackState.error,
-    };
+    });
+  }
+
+  /// 상태를 바꾸고, 실제로 변경됐을 때만 리스너에 알린다(불필요 리빌드 방지).
+  void _set(PlaybackState s) {
+    if (_state == s) return;
+    _state = s;
+    notifyListeners();
   }
 
   /// 이벤트 구독 해제. 백엔드 리소스 정리는 소유자(전역 싱글톤 셋업) 책임.
-  void dispose() => _sub.cancel();
+  @override
+  void dispose() {
+    _sub.cancel();
+    super.dispose();
+  }
 }

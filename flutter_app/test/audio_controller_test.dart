@@ -124,4 +124,27 @@ void main() {
     await Future<void>.delayed(Duration.zero);
     expect(c.state, PlaybackState.idle);
   });
+
+  test('상태 변화 시 리스너에게 알림(ChangeNotifier)', () async {
+    final b = FakeAudioBackend();
+    final c = AudioController(backend: b);
+    var n = 0;
+    c.addListener(() => n++);
+    c.load('x.mp3'); // idle→loading: 알림
+    b.emit(AudioEvent.playing); // →playing: 알림
+    await Future<void>.delayed(Duration.zero);
+    expect(n, greaterThanOrEqualTo(2));
+  });
+
+  test('같은 상태로의 전이는 알리지 않음(불필요 리빌드 방지)', () async {
+    final b = FakeAudioBackend();
+    final c = AudioController(backend: b);
+    b.emit(AudioEvent.playing);
+    await Future<void>.delayed(Duration.zero);
+    var n = 0;
+    c.addListener(() => n++);
+    b.emit(AudioEvent.playing); // 이미 playing → 알림 없음
+    await Future<void>.delayed(Duration.zero);
+    expect(n, 0);
+  });
 }
