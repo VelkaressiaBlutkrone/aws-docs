@@ -4,14 +4,15 @@
 브랜치: `feat/study-audio-m1` (develop에서 분기)
 
 ## 한 줄 요약
-M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAudioBackend DOM 어댑터)을
-TDD로 완성·커밋했다. **다음 시작점 = T4(미니 플레이어 진입점 연결).**
+M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAudioBackend DOM 어댑터)에
+**T4 미니 플레이어 진입점**까지 TDD로 완성·커밋했다. **다음 시작점 = T6(iOS 실기기 수동 게이트 — Windows/CI 불가, 사용자만).**
 
 ## 브랜치 / 커밋
+- `2c95dff` — T4: 미니 플레이어 진입점 + 전역 런타임 배선(조건부 import) + ContentEntry.lectureAudioSrc (origin 미푸시)
 - `662dfd6` — T5: AudioController 상태 머신 + 단위테스트
 - `ba7cbd5` — T2: Media Session 바인딩 + AudioController ChangeNotifier
 - `6a25975` — T1: WebAudioBackend + WebMediaSessionBackend (DOM 어댑터)
-- 검증: **21 단위 테스트 + 712 전체 그린, analyze 신규 0, `build web` 성공(회귀 0)**
+- 검증: **724 전체 그린(신규 위젯 9·런타임 2·경로 1), analyze 신규 0, `build web --dart-define=audio_lecture=true` 성공(회귀 0)**
 
 ## 정본 문서
 - **엔지니어링 리뷰 리포트**(결정 근거): `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-develop-design-20260620-164123.md` 의 `## GSTACK REVIEW REPORT` (로컬 — 같은 머신에서만)
@@ -35,16 +36,28 @@ TDD로 완성·커밋했다. **다음 시작점 = T4(미니 플레이어 진입�
   (package:web DOM 어댑터, 웹 전용 — VM/테스트 import 금지).
 - 테스트: `test/audio_controller_test.dart`(13), `test/media_session_binder_test.dart`(6).
 
-## 다음 시작점: T4 (미니 플레이어 진입점)
-1. **합친 오디오 샘플 1개 준비** — 한국어 TTS, 프로덕션 형태(현실 길이/비트레이트/경로/캐시).
-   대본 생성(M2 파이프라인)은 아직이라 임시 샘플 1개면 됨. **공개 재배포 허용 엔진**으로(정적 사이트=배포).
-2. `flutter_app/lib/pages/study_doc_page.dart`에 미니 플레이어 진입점 + `WebAudioBackend`/
-   `WebMediaSessionBackend` 실연결 + `MediaSessionBinder` 배선.
-   - **전역 싱글톤**으로(위젯 트리 밖, 라우팅 전환에도 재생 유지).
-   - 미니 플레이어 = DESIGN.md **신규 컴포넌트**(토큰·InkWell+FocusRing·State Views·합니다체).
-   - **여기서 web_audio_backend가 실제 빌드에 포함 → `build web`으로 웹 컴파일 검증**
-     (현재는 미연결이라 회귀만 확인됨).
-3. 이어서: **T6**(실기기 수동 게이트), **T7**(Range 실배포 게이트), **T8**(failure taxonomy), **T9**(hash 메타).
+## 완료 (M1 T4 미니 플레이어 진입점, 2c95dff)
+- `flutter_app/lib/widgets/study_audio_player.dart` — StudyAudioPlayer(상태별 렌더·재생/일시정지·
+  합니다체·context.c·InkWell+FocusRing). controller 주입형(전역 dispose 금지) — 위젯 테스트 9.
+- `flutter_app/lib/data/audio_runtime.dart`(+`_stub`/`_web`) — 조건부 import 경계.
+  web=WebAudioBackend+WebMediaSessionBackend+MediaSessionBinder 싱글톤(지연 초기화), VM/test=null.
+  `audioLectureEnabled = bool.fromEnvironment('audio_lecture')`(기본 false).
+- `flutter_app/lib/data/content_index.dart` — `ContentEntry.lectureAudioSrc`(placeholder 경로 규약
+  `assets/audio/{family}/{taskId}/lecture.mp3`; family=taskId 접두어. mdAsset 규약 cert마다 불규칙해 별도).
+- `flutter_app/lib/pages/study_doc_page.dart` — 하단 고정 진입점(`bottomNavigationBar`, dart-define 게이트
+  + doc 로드 후 표시; `_onDocReady`에서 `nowPlaying` 잠금화면 메타).
+- 테스트: `study_audio_player_test`(9)·`audio_runtime_test`(2)·`content_index_test`(+1 lectureAudioSrc).
+- **노출 정책 준수(이슈 5-9)**: 기본 빌드(플래그 off)에선 진입점 미연결 — 검수 전 강의 비공개.
+- **함정 회피 확인**: study_doc_page가 package:web을 직접 import하지 않아 app_router_test(VM) 컴파일 유지
+  (조건부 import 경계). play()는 onTap 동기 진입(await 금지) 유지.
+
+## 다음 시작점: T6 (iOS 실기기 수동 게이트) — Windows/CI 불가, 사용자만
+1. **합친 오디오 샘플(placeholder→실물) 준비** — 한국어 TTS, 프로덕션 형태(현실 길이/비트레이트/경로/캐시).
+   **공개 재배포 허용 엔진**으로(정적 사이트=배포). `assets/audio/{family}/{taskId}/lecture.mp3`에 두고
+   `pubspec.yaml`에 `assets/audio/` 등록(T4는 placeholder 경로만 배선, 실파일·등록 미완).
+2. `--dart-define=audio_lecture=true`로 빌드·배포 후 **iOS 실기기 수동 게이트**:
+   standalone 잠금 연속재생 + 일시정지/재개 + 전화·알람 인터럽션 후 재개 + Android. 기기·iOS버전 표.
+3. 이어서: **T7**(Range 실배포 게이트), **T8**(failure taxonomy 문서), **T9**({docId,sourceHash} 메타).
 
 ## 함정 (반드시 지킬 것)
 - **iOS는 Windows 개발/CI로 검증 불가** — 실기기만. (learning: `flutter-web-pagetransitions-6keys`)
@@ -62,5 +75,6 @@ TDD로 완성·커밋했다. **다음 시작점 = T4(미니 플레이어 진입�
 헤드셋/블루투스/Control Center · 문서간 재생 · CI 자동 생성.
 
 ## PR
-- **T4까지 묶어 `feat/study-audio-m1` → `develop` PR 권장**(지금은 재생 진입점이 없어 사용자가 들을 수
-  없는 상태). origin에 푸시됨.
+- **T4 완료 — `feat/study-audio-m1` → `develop` PR 가능**(미니 플레이어 진입점·전역 런타임까지).
+  단 기본 빌드는 플래그 off라 사용자에게 미노출(placeholder). 실제 청취는 T6(실물 mp3 + iOS 실기기) 이후.
+- T4 커밋 `2c95dff`는 **origin 미푸시**(이번 세션 로컬). 푸시·PR은 사용자 결정.
