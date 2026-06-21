@@ -51,6 +51,28 @@ M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAud
 - **함정 회피 확인**: study_doc_page가 package:web을 직접 import하지 않아 app_router_test(VM) 컴파일 유지
   (조건부 import 경계). play()는 onTap 동기 진입(await 금지) 유지.
 
+## TTS 오디오 생성 도구 (`flutter_app/tool/gen_lecture_audio.py`, d7aed33)
+
+학습문서 `.md` → 한국어 강의 mp3. T6 픽스처(실물 오디오) 생성용.
+- **엔진: Amazon Polly Seoyeon(neural)** 기본. AWS 자격증명 필요(`aws configure`).
+  ⚠️ MeloTTS는 **Windows 한국어 G2P(eunjeon)가 Visual C++ Build Tools를 요구**해 사실상 불가 → Polly로 확정.
+- **정제**(보정문서 P0): 출처·자가점검 헤딩 이후 skip, `<details>`(정답 보기) skip,
+  기호 변환(`→ = + ≠ ↓ § vs`), 강조 제거 시 `_` 보존(snake_case), 고아 부호 정리.
+- **품질 게이트** `quality_issues`(URL·기호·정답보기·링크·고아부호) + **ID3 1개**(첫 청크 외 ID3v2 strip).
+  검증 경로: `--self-test`(엔진 불필요)·`--dry-run`(대본 미리보기). Polly neural은 요청당 **3000자 한도**(청크 분할).
+- 실행 파이썬: `D:\workspace\MeloTTS\.venv\Scripts\python.exe`(boto3 포함) 또는 `pip install boto3` 환경.
+  Windows는 `py` 런처 사용(`python`은 Store alias로 깨짐).
+- **보정 정본**: `docs/superpowers/specs/2026-06-21-clf-t1-1-tts-audio-correction.md`.
+
+### 남은 콘텐츠 검수 게이트 (사람·M2 — mp3 공개 전 필수)
+- 표 → 음성 요약, 약어 발음사전(AWS·CapEx·AZ 등), `script.json` 문장 단위 사람 보정, 실제 청취 검수표.
+- 통과(`reviewStatus=approved`) 전엔 **mp3 공개·repo 포함·pubspec `assets/audio/` 등록 금지**.
+- 현재 `clf-t1-1` mp3 1개 생성됨(검수 전, **미커밋·미배포**). 재생 게이트엔 사용 가능, 콘텐츠 게이트는 미통과.
+
+### 임시 자원 (정리 필요)
+- `D:\workspace\MeloTTS`(clone+venv, boto3), `D:\workspace\s3_preview_*.py`, S3 버킷 `awsdocs-audio-preview-1782020416`.
+- 외부 업로드(익명 호스트·S3 presigned)는 자동 모드 분류기가 차단 → 사용자가 직접 실행해야 함(검수 전 콘텐츠 보호).
+
 ## 다음 시작점: T6 (iOS 실기기 수동 게이트) — Windows/CI 불가, 사용자만
 1. **합친 오디오 샘플(placeholder→실물) 준비** — 한국어 TTS, 프로덕션 형태(현실 길이/비트레이트/경로/캐시).
    **공개 재배포 허용 엔진**으로(정적 사이트=배포). `assets/audio/{family}/{taskId}/lecture.mp3`에 두고
