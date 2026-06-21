@@ -462,6 +462,126 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t3-1-q17",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "AWS CDK와 CloudFormation 관계",
+      "section": "deployment-ops-tools",
+      "difficulty": "foundational",
+      "stem": "한 개발자가 TypeScript나 Python 같은 익숙한 프로그래밍 언어로 인프라를 정의하고, 그 결과를 AWS CloudFormation을 통해 배포하려 한다. 이 요구에 맞는 설명은?",
+      "options": [
+        "AWS CDK는 프로그래밍 언어로 인프라를 정의하고 CloudFormation 템플릿으로 합성·배포하는 개발 프레임워크다",
+        "AWS CDK는 CloudFormation을 사용하지 않는 별도 물리 데이터센터 배포 서비스다",
+        "AWS CDK는 EC2 인스턴스 안에서 애플리케이션 코드를 컴파일하는 빌드 서비스다",
+        "AWS CDK는 온프레미스 서버에 패치를 설치하는 운영 관리 서비스다"
+      ],
+      "correct": 0,
+      "explanation": "AWS CDK는 일반 프로그래밍 언어로 클라우드 인프라를 코드로 정의하고, 이를 CloudFormation 템플릿으로 합성해 CloudFormation을 통해 프로비저닝·업데이트합니다. 따라서 CloudFormation을 대체하는 실행 엔진이 아니라 CloudFormation 위에서 개발자 경험을 높이는 IaC 프레임워크입니다.",
+      "wrongExplanations": {
+        "1": "CDK는 CloudFormation과 분리된 물리 배포 서비스가 아닙니다. 공식 문서상 CDK 앱은 CloudFormation을 통해 인프라를 배포합니다.",
+        "2": "애플리케이션 코드 컴파일과 테스트 산출물 생성을 담당하는 서비스는 CodeBuild입니다. CDK는 인프라 정의 프레임워크입니다.",
+        "3": "패치·명령 실행·세션 접속 같은 운영 관리는 Systems Manager의 영역입니다. CDK는 인프라를 코드로 정의하는 도구입니다."
+      },
+      "sources": [
+        {
+          "title": "What is the AWS CDK? — 프로그래밍 언어로 인프라를 정의하고 CloudFormation을 통해 배포",
+          "url": "https://docs.aws.amazon.com/cdk/v2/guide/home.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q18",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "Systems Manager 운영 작업",
+      "section": "deployment-ops-tools",
+      "difficulty": "applied",
+      "stem": "운영팀이 EC2와 온프레미스 노드를 중앙에서 확인하고, SSH 포트를 열지 않고 세션에 접속하거나 명령 실행·패치 적용·설정값 보관 같은 운영 작업을 수행하려 한다. 가장 적합한 서비스는?",
+      "options": [
+        "AWS Systems Manager",
+        "AWS CodePipeline",
+        "AWS CodeCommit",
+        "Amazon Route 53"
+      ],
+      "correct": 0,
+      "explanation": "AWS Systems Manager는 AWS, 온프레미스, 멀티클라우드 환경의 관리형 노드를 중앙에서 보고 운영하는 서비스입니다. Session Manager, Run Command, Patch Manager, Parameter Store 같은 도구로 노드 접속, 명령 실행, 패치, 설정값 보관을 지원합니다.",
+      "wrongExplanations": {
+        "1": "CodePipeline은 소프트웨어 릴리스 단계를 모델링하고 자동화하는 지속적 전달 서비스입니다. 노드 접속·패치·명령 실행 같은 운영 작업 자체가 중심이 아닙니다.",
+        "2": "CodeCommit은 소스 코드를 저장하는 Git 리포지토리 서비스입니다. 서버 운영 작업이나 패치 관리를 수행하지 않습니다.",
+        "3": "Route 53은 DNS 서비스로, 도메인 이름을 리소스로 라우팅합니다. 노드 운영 관리 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Systems Manager? — 노드 중앙 관리, Session Manager·Run Command·Patch·Parameter Store",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/what-is-systems-manager.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q19",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "CodePipeline·CodeBuild·CodeDeploy 역할",
+      "section": "deployment-ops-tools",
+      "difficulty": "applied",
+      "stem": "한 팀이 소스 변경이 들어오면 빌드와 테스트를 실행하고, 승인된 산출물을 운영 환경으로 배포하는 릴리스 흐름을 자동화하려 한다. 전체 흐름을 조율하고, 빌드 단계와 배포 단계에 각각 연결될 서비스 조합으로 가장 알맞은 것은?",
+      "options": [
+        "CodePipeline이 흐름을 조율하고, CodeBuild가 빌드·테스트 산출물을 만들며, CodeDeploy가 배포를 자동화한다",
+        "CodeBuild가 전체 릴리스 흐름을 조율하고, CodeCommit이 배포를 자동화하며, Systems Manager가 소스 저장소 역할을 한다",
+        "CodeDeploy가 소스 코드를 저장하고, CodeCommit이 빌드를 실행하며, CodePipeline은 DNS 라우팅을 담당한다",
+        "Elastic Beanstalk가 Git 리포지토리를 호스팅하고, Route 53이 빌드·배포 단계를 실행한다"
+      ],
+      "correct": 0,
+      "explanation": "CodePipeline은 릴리스 프로세스의 단계를 모델링하고 자동화하는 지속적 전달 서비스입니다. CodeBuild는 소스 코드를 컴파일하고 테스트를 실행해 배포 가능한 산출물을 만들며, CodeDeploy는 EC2·온프레미스·Lambda·ECS 같은 대상으로 애플리케이션 배포를 자동화합니다.",
+      "wrongExplanations": {
+        "1": "CodeBuild는 빌드 서비스이지 전체 릴리스 흐름 조율자가 아닙니다. CodeCommit은 소스 저장소이고, Systems Manager는 운영 관리 서비스입니다.",
+        "2": "CodeDeploy는 배포 자동화 서비스이지 소스 저장소가 아닙니다. CodeCommit은 Git 저장소이고, CodePipeline은 DNS가 아니라 릴리스 파이프라인입니다.",
+        "3": "Elastic Beanstalk는 앱 배포 플랫폼이고 Route 53은 DNS 서비스입니다. Git 호스팅과 빌드·배포 파이프라인 실행 역할을 하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS CodePipeline? — 소프트웨어 릴리스 단계를 모델링·자동화",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html"
+        },
+        {
+          "title": "What is AWS CodeBuild? — 소스 컴파일·테스트·배포 산출물 생성",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html"
+        },
+        {
+          "title": "What is CodeDeploy? — EC2·온프레미스·Lambda·ECS 배포 자동화",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t3-1-q20",
+      "examGuideTaskId": "clf-t3-1",
+      "skill": "CodeCommit 소스 제어 위치",
+      "section": "deployment-ops-tools",
+      "difficulty": "foundational",
+      "stem": "한 팀이 소스 코드와 문서, 바이너리 파일을 프라이빗 Git 리포지토리에 저장하고 IAM으로 접근을 제어하려 한다. AWS의 관리형 소스 제어 서비스로 알맞은 것은?",
+      "options": [
+        "AWS CodeCommit",
+        "AWS CodeBuild",
+        "AWS CodeDeploy",
+        "AWS Systems Manager"
+      ],
+      "correct": 0,
+      "explanation": "AWS CodeCommit은 AWS에서 호스팅하는 관리형 버전 관리 서비스로, 프라이빗 Git 리포지토리에 소스 코드와 파일을 저장·관리합니다. CodeBuild는 빌드, CodeDeploy는 배포, Systems Manager는 운영 관리 서비스입니다.",
+      "wrongExplanations": {
+        "1": "CodeBuild는 소스 코드를 컴파일하고 테스트를 실행해 산출물을 만드는 빌드 서비스입니다. Git 리포지토리를 호스팅하는 소스 제어 서비스가 아닙니다.",
+        "2": "CodeDeploy는 애플리케이션 배포 자동화 서비스입니다. 소스 코드 저장소가 아닙니다.",
+        "3": "Systems Manager는 노드 접속·명령 실행·패치·설정값 보관 같은 운영 관리 서비스입니다. Git 기반 소스 제어 서비스가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS CodeCommit? — AWS에서 호스팅하는 프라이빗 Git 리포지토리",
+          "url": "https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }

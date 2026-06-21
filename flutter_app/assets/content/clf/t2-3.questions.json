@@ -451,6 +451,94 @@
         }
       ],
       "verified": true
+    },
+    {
+      "id": "clf-t2-3-q16",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "Cognito User Pool vs Identity Pool",
+      "section": "app-directory-identity",
+      "difficulty": "applied",
+      "stem": "한 모바일 앱이 사용자를 가입·로그인시키고 JWT 토큰을 발급해야 한다. 또 로그인한 사용자가 앱 안에서 제한된 권한으로 S3에 직접 업로드할 수 있도록 임시 AWS 자격증명도 필요하다. 이 두 요구를 Amazon Cognito에서 나누어 맡는 구성으로 옳은 것은?",
+      "options": [
+        "User Pool이 앱 사용자 인증·토큰 발급을 맡고, Identity Pool이 그 토큰을 바탕으로 임시 AWS 자격증명을 발급한다",
+        "Identity Pool이 회원 가입과 로그인 화면을 전부 처리하고, User Pool이 EC2 인스턴스 패치를 수행한다",
+        "IAM Identity Center가 소비자 앱 회원 가입을 맡고, Directory Service가 S3 임시 자격증명을 발급한다",
+        "IAM 사용자를 앱 사용자마다 만들어 장기 액세스 키를 모바일 앱에 저장한다"
+      ],
+      "correct": 0,
+      "explanation": "Cognito User Pool은 앱 사용자의 가입·로그인·토큰 발급을 담당합니다. Cognito Identity Pool은 신뢰된 IdP 토큰을 받아 사용자가 AWS 리소스에 접근할 수 있는 임시 AWS 자격증명을 발급합니다. 인증(User Pool)과 AWS 자격증명 발급(Identity Pool)을 분리하는 것이 핵심입니다.",
+      "wrongExplanations": {
+        "1": "Identity Pool은 회원 가입·로그인 디렉터리가 아니라 임시 AWS 자격증명을 발급하는 구성요소입니다. EC2 패치 같은 운영 작업은 Systems Manager 영역입니다.",
+        "2": "IAM Identity Center는 인력 사용자의 다중 계정 접근 관리용이고, Directory Service는 AD/LDAP 연동용입니다. 소비자 앱 로그인과 S3 임시 자격증명 요구에는 Cognito가 맞습니다.",
+        "3": "앱 사용자마다 IAM 사용자를 만들고 장기 액세스 키를 모바일 앱에 저장하는 것은 키 유출 위험이 큰 안티패턴입니다. Cognito Identity Pool과 역할 기반 임시 자격증명을 써야 합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Cognito? — User pools는 앱 사용자 인증·토큰 발급, Identity pools는 임시 AWS 자격증명 발급",
+          "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q17",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "Directory Service 옵션 선택",
+      "section": "app-directory-identity",
+      "difficulty": "applied",
+      "stem": "한 회사가 이미 온프레미스 Microsoft Active Directory를 운영하고 있다. 사용자는 기존 AD 자격증명으로 Amazon WorkSpaces 같은 AWS 애플리케이션에 로그인해야 하지만, 디렉터리를 AWS로 동기화하거나 별도 AD를 새로 운영하고 싶지는 않다. 가장 적합한 AWS Directory Service 옵션은?",
+      "options": [
+        "AD Connector",
+        "AWS Managed Microsoft AD",
+        "Simple AD",
+        "Amazon Cognito Identity Pool"
+      ],
+      "correct": 0,
+      "explanation": "AD Connector는 기존 온프레미스 Microsoft Active Directory로 인증 요청을 전달하는 프록시 서비스입니다. 사용자가 기존 AD 자격증명으로 AWS 애플리케이션에 로그인하게 하면서, 디렉터리 동기화나 별도 AD 호스팅 부담을 줄이는 데 적합합니다.",
+      "wrongExplanations": {
+        "1": "AWS Managed Microsoft AD는 AWS 클라우드 안에 실제 Microsoft AD를 관리형으로 제공하는 선택지입니다. 기존 온프레미스 AD를 그대로 프록시해 쓰려는 요구에는 AD Connector가 더 직접적입니다.",
+        "2": "Simple AD는 Samba 기반의 기본 AD 호환 디렉터리입니다. 기존 온프레미스 AD 자격증명을 그대로 사용하려는 프록시 요구와 다릅니다.",
+        "3": "Cognito Identity Pool은 앱 사용자에게 임시 AWS 자격증명을 발급하는 서비스입니다. Microsoft AD 기반 AWS 애플리케이션 로그인 연동용 Directory Service 옵션이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Directory Service? — AD Connector는 온프레미스 Microsoft AD를 compatible AWS applications에 연결하는 프록시",
+          "url": "https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "id": "clf-t2-3-q18",
+      "examGuideTaskId": "clf-t2-3",
+      "skill": "Cognito vs IAM Identity Center 경계",
+      "section": "app-directory-identity",
+      "difficulty": "applied",
+      "stem": "한 SaaS 팀이 외부 고객이 웹 앱에 회원 가입하고 Google 같은 소셜 IdP로 로그인할 수 있게 하려 한다. 반면 사내 직원의 AWS 계정 접근 중앙 관리는 이미 IAM Identity Center로 처리하고 있다. 고객 앱 로그인 요구에 가장 적합한 서비스는?",
+      "options": [
+        "Amazon Cognito User Pool",
+        "AWS IAM Identity Center",
+        "AWS CloudHSM",
+        "AWS CodeCommit"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Cognito User Pool은 웹·모바일 앱의 사용자 디렉터리이자 인증 서버로, 로컬 사용자와 소셜·외부 IdP 연동을 통해 앱 사용자 로그인과 토큰 발급을 처리합니다. IAM Identity Center는 사내 직원 같은 인력 사용자의 AWS 계정·앱 접근 중앙 관리용이므로 고객 앱 회원 로그인과 대상이 다릅니다.",
+      "wrongExplanations": {
+        "1": "IAM Identity Center는 인력(workforce) 사용자의 다중 계정·앱 접근과 SSO를 중앙 관리하는 서비스입니다. 외부 고객의 SaaS 회원 가입·로그인 처리에는 Cognito가 맞습니다.",
+        "2": "CloudHSM은 전용 하드웨어 보안 모듈 클러스터 서비스로, 앱 사용자 로그인과 무관합니다.",
+        "3": "CodeCommit은 프라이빗 Git 리포지토리 서비스입니다. 인증 서버나 사용자 디렉터리가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Cognito? — 웹·모바일 앱의 사용자 디렉터리, 인증 서버, OAuth 토큰과 AWS credentials 인가 서비스",
+          "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+        },
+        {
+          "title": "What is AWS IAM Identity Center? — 인력 사용자의 AWS 계정·앱 접근 중앙 관리",
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+        }
+      ],
+      "verified": true
     }
   ]
 }
