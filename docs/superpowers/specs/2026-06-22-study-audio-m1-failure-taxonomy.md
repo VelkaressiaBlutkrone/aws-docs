@@ -9,15 +9,16 @@
 M1의 실패는 한 덩어리로 보지 않는다. 잠금화면 재생 실패, Media Session 컨트롤 실패,
 Range/캐시 실패, 오디오 콘텐츠 검수 실패는 원인과 조치가 다르다.
 
-이번 세션에서는 iOS 실기기가 없어 iOS 수동 게이트를 **통과로 판정하지 않는다**. 사용자의
-명시 지시로 iOS 검증만 스킵하고, 자동화 가능한 T7 Range 게이트 도구와 T9 메타 산출을 진행한다.
-기본 빌드는 계속 `audio_lecture=false`라 공개 UI에는 노출되지 않는다.
+이번 세션에서는 iOS 실기기가 없어 iOS 수동 게이트를 **통과로 판정하지 않는다**. 사용자 결정으로
+현 M1의 수동 게이트는 Android로 대체한다. iOS 특이 WebKit/PWA 리스크는 `deferred`로 남기고,
+자동화 가능한 T7 Range 게이트 도구와 T9 메타 산출을 진행한다. 기본 빌드는 계속
+`audio_lecture=false`라 공개 UI에는 노출되지 않는다.
 
 ## 게이트 판정 원칙
 
-- **M1 재생 엔진 통과:** iOS standalone PWA에서 단일 합친 오디오가 잠금 상태로 계속 재생되고,
-  잠금화면 일시정지/재개와 전화·알람 인터럽션 후 재개가 된다. Android도 같은 happy path를 확인한다.
-- **현재 세션 판정:** iOS 실기기가 없으므로 `not-run`이다. `passed`도 `failed`도 아니다.
+- **현 M1 재생 엔진 통과(사용자 결정):** Android Chrome 탭과 standalone PWA에서 단일 합친 오디오가
+  잠금 상태로 계속 재생되고, 잠금화면 일시정지/재개와 전화·알람 등 인터럽션 후 재개가 된다.
+- **iOS 판정:** iOS 실기기가 없으므로 `not-run/deferred`다. Android 통과가 iOS 통과 기록을 만들지는 않는다.
 - **출고 안전:** 재생 게이트가 미완이어도 코드가 `audio_lecture` 플래그 뒤에 있으면 develop 병합은 가능하다.
   공개 빌드나 `pubspec.yaml`의 `assets/audio/` 등록은 콘텐츠 검수 전까지 하지 않는다.
 - **콘텐츠 검수 분리:** MP3가 재생돼도 `reviewStatus=approved` 전에는 학습 콘텐츠로 홍보하거나 상시 노출하지 않는다.
@@ -27,7 +28,8 @@ Range/캐시 실패, 오디오 콘텐츠 검수 실패는 원인과 조치가 �
 | 증상 | 원인 후보 | 판정 | 조치 |
 |---|---|---|---|
 | iOS 탭은 실패, standalone PWA는 통과 | Safari 탭 백그라운드 제약 | 진행 가능 | 설치 필요 UX를 M2에서 추가한다. M1 방향은 유지한다. |
-| iOS standalone PWA에서 잠금 중 재생이 끊김 | WebKit/PWA 백그라운드 오디오 제약 또는 인코딩/호스팅 문제 | M1 핵심 실패 | Range·인코딩을 먼저 배제한 뒤 Android 우선 또는 네이티브/다른 접근 재검토. |
+| iOS standalone PWA에서 잠금 중 재생이 끊김 | WebKit/PWA 백그라운드 오디오 제약 또는 인코딩/호스팅 문제 | iOS deferred 리스크 | 현 M1은 Android 대체 게이트로 진행하되, iOS 지원을 다시 목표로 삼는 시점에 재평가한다. |
+| Android Chrome 탭 또는 standalone PWA에서 잠금 중 재생이 끊김 | user activation, 브라우저 백그라운드 제약, 인코딩/호스팅 문제 | 현 M1 핵심 실패 | Range·인코딩을 먼저 배제한 뒤 `AudioController`/Media Session 경로를 수정한다. |
 | 잠금화면 재생은 되지만 play/pause가 안 됨 | Media Session handler 또는 playbackState 동기화 문제 | 제품 피벗 아님 | `MediaSessionBinder`/`WebMediaSessionBackend`만 수정한다. |
 | 앱 버튼 재생이 `NotAllowedError`로 실패 | `play()` 앞에 await가 끼어 user activation 상실 | 코드 결함 | 사용자 제스처 동기 진입에서 `controller.play()`가 바로 호출되도록 되돌린다. |
 | 재생 시작이 매우 느림 | Range 미지원 또는 전체 MP3 다운로드 | 배포층 결함 | `tool/check_audio_range.py`로 HEAD/Range/Content-Type/캐시를 확인하고 호스팅을 수정한다. |
@@ -62,11 +64,13 @@ python tool\check_audio_range.py `
 
 | 날짜 | 기기/OS | 브라우저/모드 | 시나리오 | 결과 | 메모 |
 |---|---|---|---|---|---|
-|  | iPhone / iOS | Safari tab | 단일 파일 잠금 연속재생 | not-run | iOS 기기 필요 |
-|  | iPhone / iOS | standalone PWA | 잠금 일시정지/재개 | not-run | iOS 기기 필요 |
-|  | iPhone / iOS | standalone PWA | 전화·알람 인터럽션 후 재개 | not-run | iOS 기기 필요 |
-|  | Android | Chrome tab | 단일 파일 잠금 연속재생 | not-run |  |
-|  | Android | standalone PWA | 잠금 일시정지/재개 | not-run |  |
+|  | Android | Chrome tab | 단일 파일 잠금 연속재생 | not-run | 현 M1 대체 게이트 |
+|  | Android | Chrome tab | 잠금 일시정지/재개 | not-run | 현 M1 대체 게이트 |
+|  | Android | standalone PWA | 단일 파일 잠금 연속재생 | not-run | 현 M1 대체 게이트 |
+|  | Android | standalone PWA | 잠금 일시정지/재개 | not-run | 현 M1 대체 게이트 |
+|  | Android | standalone PWA | 전화·알람 인터럽션 후 재개 | not-run | 현 M1 대체 게이트 |
+|  | iPhone / iOS | Safari tab | 단일 파일 잠금 연속재생 | deferred | iOS 기기 생기면 별도 확인 |
+|  | iPhone / iOS | standalone PWA | 전화·알람 인터럽션 후 재개 | deferred | iOS 기기 생기면 별도 확인 |
 
 ## 현재 상태
 

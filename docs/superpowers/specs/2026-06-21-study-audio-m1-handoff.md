@@ -6,9 +6,9 @@
 ## 한 줄 요약
 M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAudioBackend DOM 어댑터)에
 **T4 미니 플레이어 진입점**까지 TDD로 완성·커밋했다. 2026-06-22 세션에서 iOS 실기기는
-없어 수동 게이트는 `not-run`으로 남기고, **T7 Range 게이트 도구 · T8 failure taxonomy ·
-T9 `{docId,sourceHash}` 메타 산출**을 보강했다. **다음 시작점 = 실제 배포 URL로 T7 실행 또는
-사용자 보유 기기에서 수동 게이트.**
+없어 수동 게이트는 **사용자 결정으로 Android 게이트로 대체**하고, **T7 Range 게이트 도구 ·
+T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다.
+**다음 시작점 = Android 수동 게이트 또는 실제 배포 URL로 T7 실행.**
 
 ## 브랜치 / 커밋
 - `2c95dff` — T4: 미니 플레이어 진입점 + 전역 런타임 배선(조건부 import) + ContentEntry.lectureAudioSrc
@@ -79,7 +79,7 @@ T9 `{docId,sourceHash}` 메타 산출**을 보강했다. **다음 시작점 = �
   `bytes=0-1`, `Accept-Ranges`, `Content-Type`, 캐시 validator, 선택 SHA-256을 검증한다.
   실제 T7은 MP3가 배포된 뒤에만 의미가 있다.
 - 새 문서 `docs/superpowers/specs/2026-06-22-study-audio-m1-failure-taxonomy.md` 추가.
-  iOS unavailable은 `passed`/`failed`가 아니라 `not-run`으로 기록한다.
+  iOS unavailable은 `not-run`으로 기록하되, 현재 M1 진행 게이트는 사용자 결정에 따라 Android로 대체한다.
 
 ### 남은 콘텐츠 검수 게이트 (사람·M2 — mp3 공개 전 필수)
 - 표 → 음성 요약, 약어 발음사전(AWS·CapEx·AZ 등), `script.json` 문장 단위 사람 보정, 실제 청취 검수표.
@@ -91,12 +91,13 @@ T9 `{docId,sourceHash}` 메타 산출**을 보강했다. **다음 시작점 = �
 - 외부 업로드(익명 호스트·S3 presigned)는 자동 모드 분류기가 차단 → 사용자가 직접 실행해야 함(검수 전 콘텐츠 보호).
 
 ## 다음 시작점: 실배포/실기기 게이트
-1. **실제 배포 URL이 생기면 T7 실행**:
+1. **Android 수동 게이트 실행(현재 M1 대체 게이트)** — Android Chrome 탭 + standalone PWA에서
+   잠금 연속재생, 일시정지/재개, 알람/전화 등 인터럽션 후 재개를 확인하고 기기·Android 버전·브라우저를 기록.
+2. **실제 배포 URL이 생기면 T7 실행**:
    `python tool/check_audio_range.py https://.../lecture.mp3 --expect-sha256 <audio_meta.json의 audio.sha256>`.
    네트워크가 필요한 명령이므로 Codex 샌드박스에선 승인 실행이 필요할 수 있다.
-2. **iOS 실기기 수동 게이트는 not-run 유지** — 현재 세션은 사용자가 iOS 없음으로 스킵 지시.
-   통과로 기록하지 말 것. 가능해지면 standalone 잠금 연속재생 + 일시정지/재개 + 전화·알람 인터럽션 후 재개를 표로 기록.
-3. **Android 기기가 있으면 동일 수동 게이트 실행** — iOS 대체 통과는 아니지만 회귀 정보를 준다.
+3. **iOS 실기기 수동 게이트는 현 M1 blocking path에서 제외** — 통과로 기록하지 말고 `not-run/deferred`로 남긴다.
+   iOS 특이 WebKit/PWA 리스크는 별도 보류 리스크이며, 나중에 기기가 생기면 같은 표로 추가 확인한다.
 4. **콘텐츠 공개 전 게이트 유지** — `reviewStatus=approved` 전엔 mp3 repo 포함, `pubspec.yaml`의
    `assets/audio/` 등록, 기본 빌드 `audio_lecture=true` 전환 금지.
 
