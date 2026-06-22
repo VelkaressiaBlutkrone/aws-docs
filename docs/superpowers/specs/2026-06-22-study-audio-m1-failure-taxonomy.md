@@ -16,8 +16,10 @@ Range/캐시 실패, 오디오 콘텐츠 검수 실패는 원인과 조치가 �
 
 ## 게이트 판정 원칙
 
-- **현 M1 재생 엔진 통과(사용자 결정):** Android Chrome 탭과 standalone PWA에서 단일 합친 오디오가
-  잠금 상태로 계속 재생되고, 잠금화면 일시정지/재개와 전화·알람 등 인터럽션 후 재개가 된다.
+- **현 M1 재생 엔진 통과(사용자 결정):** Android Chrome 탭에서 단일 합친 오디오가 잠금 상태로
+  계속 재생되고, 잠금화면 일시정지/재개와 전화·알람 등 인터럽션 후 재개가 된다.
+- **standalone PWA 판정:** 로컬 LAN 프리뷰는 설치 조건을 만족하지 못해 `blocked-local`이다.
+  standalone PWA 오디오 게이트는 배포 HTTPS 또는 공인 인증서가 붙은 임시 호스팅에서만 통과/실패를 판정한다.
 - **iOS 판정:** iOS 실기기가 없으므로 `not-run/deferred`다. Android 통과가 iOS 통과 기록을 만들지는 않는다.
 - **출고 안전:** 재생 게이트가 미완이어도 코드가 `audio_lecture` 플래그 뒤에 있으면 develop 병합은 가능하다.
   공개 빌드나 `pubspec.yaml`의 `assets/audio/` 등록은 콘텐츠 검수 전까지 하지 않는다.
@@ -46,9 +48,11 @@ Range/캐시 실패, 오디오 콘텐츠 검수 실패는 원인과 조치가 �
 
 ```powershell
 cd D:\workspace\awc-docs\flutter_app
-python tool\check_audio_range.py `
+$py = "C:\Users\deepe\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+$expectedSha256 = "audio_meta.json의 audio.sha256 값"
+& $py tool\check_audio_range.py `
   https://velkaressiablutkrone.github.io/aws-docs/assets/audio/clf/clf-t1-1/lecture.mp3 `
-  --expect-sha256 <audio_meta.json의 audio.sha256>
+  --expect-sha256 $expectedSha256
 ```
 
 통과 조건:
@@ -69,8 +73,8 @@ python tool\check_audio_range.py `
 | 2026-06-22 | Android / 상세 미기록 | Chrome tab | 인터럽션 후 재개 | pass | 사용자 확인: 오디오 재개. 인터럽션 종류는 상세 미기록 |
 | 2026-06-22 | Android / 상세 미기록 | standalone PWA | 설치/실행 가능성 | blocked-local | 사용자 확인: 배포 버전은 문제없으나 로컬 LAN 프리뷰는 설치 메뉴가 뜨지 않음. 앱 구조 결함보다 로컬 origin/secure context 한계로 판단 |
 |  | Android | standalone PWA | 단일 파일 잠금 연속재생 | blocked-local | 배포 또는 공인 HTTPS 프리뷰 필요 |
-|  | Android | standalone PWA | 잠금 일시정지/재개 | not-run | 현 M1 대체 게이트 |
-|  | Android | standalone PWA | 전화·알람 인터럽션 후 재개 | not-run | 현 M1 대체 게이트 |
+|  | Android | standalone PWA | 잠금 일시정지/재개 | not-run | 배포 또는 공인 HTTPS 프리뷰에서 재시도 |
+|  | Android | standalone PWA | 전화·알람 인터럽션 후 재개 | not-run | 배포 또는 공인 HTTPS 프리뷰에서 재시도 |
 |  | iPhone / iOS | Safari tab | 단일 파일 잠금 연속재생 | deferred | iOS 기기 생기면 별도 확인 |
 |  | iPhone / iOS | standalone PWA | 전화·알람 인터럽션 후 재개 | deferred | iOS 기기 생기면 별도 확인 |
 

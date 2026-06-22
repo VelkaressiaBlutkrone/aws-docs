@@ -1,26 +1,47 @@
 # 학습 문서 오디오 강의("주머니 라디오") M1 — 세션 핸드오프
 
 작성: 2026-06-21
+최종 갱신: 2026-06-22
 브랜치: `feat/study-audio-m1` (develop에서 분기)
 
 ## 한 줄 요약
 M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAudioBackend DOM 어댑터)에
 **T4 미니 플레이어 진입점**까지 TDD로 완성·커밋했다. 2026-06-22 세션에서 iOS 실기기는
 없어 수동 게이트는 **사용자 결정으로 Android 게이트로 대체**하고, **T7 Range 게이트 도구 ·
-T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다.
-**다음 시작점 = Android 수동 게이트 또는 실제 배포 URL로 T7 실행.**
+T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다. Android Chrome 탭
+수동 게이트는 통과했고, 로컬 LAN standalone PWA는 origin/secure-context 제약으로 `blocked-local`이다.
+**다음 시작점 = 배포/공인 HTTPS 환경에서 standalone PWA 오디오 게이트를 재시도하거나, 콘텐츠 사람 검수
+파이프라인(M2)로 넘어가기.**
 
 ## 브랜치 / 커밋
+- `8c3c234` — 레포 전체 트러블슈팅 문서 `docs/TROUBLESHOOTING.md` 추가 + README 링크.
+- `22cede9` — Android M1 수동 게이트 결과 기록(Chrome tab pass, local standalone PWA blocked-local).
+- `2f4c857` — iOS 미보유로 현재 M1 수동 게이트를 Android로 대체한다는 결정 문서화.
+- `1246504` — T7 Range 게이트 도구, T8 failure taxonomy, T9 audio_meta sidecar 보강.
+- `d7aed33` — TTS 대본 정제 강화 + 품질 게이트 + Polly ID3 1개.
+- `bd75b40` — 학습문서 → 한국어 mp3 생성 스크립트 초안.
 - `2c95dff` — T4: 미니 플레이어 진입점 + 전역 런타임 배선(조건부 import) + ContentEntry.lectureAudioSrc
 - `662dfd6` — T5: AudioController 상태 머신 + 단위테스트
 - `ba7cbd5` — T2: Media Session 바인딩 + AudioController ChangeNotifier
 - `6a25975` — T1: WebAudioBackend + WebMediaSessionBackend (DOM 어댑터)
-- 검증: **724 전체 그린(신규 위젯 9·런타임 2·경로 1), analyze 신규 0, `build web --dart-define=audio_lecture=true` 성공(회귀 0)**
+- 검증: **724 전체 그린(신규 위젯 9·런타임 2·경로 1), analyze 신규 0, `build web --dart-define=audio_lecture=true` 성공(회귀 0)**.
+  2026-06-22 문서 정리 커밋은 docs-only라 `git diff --check`로 확인했다.
 
 ## 정본 문서
 - **엔지니어링 리뷰 리포트**(결정 근거): `~/.gstack/projects/VelkaressiaBlutkrone-aws-docs/deepe-develop-design-20260620-164123.md` 의 `## GSTACK REVIEW REPORT` (로컬 — 같은 머신에서만)
 - **구현 보정 spec**(repo 실측): `docs/superpowers/specs/2026-06-20-study-audio-lecture-review.md`
+- **TTS 보정 정본**: `docs/superpowers/specs/2026-06-21-clf-t1-1-tts-audio-correction.md`
+- **실패 분류·수동 게이트 기록**: `docs/superpowers/specs/2026-06-22-study-audio-m1-failure-taxonomy.md`
+- **레포 전체 트러블슈팅**: `docs/TROUBLESHOOTING.md`
 - **Tasks T1~T9**: `~/.gstack/projects/.../tasks-eng-review-*.jsonl` (로컬)
+
+## 작업문서 정리 상태 (2026-06-22)
+- 이 파일은 다음 세션의 시작점과 남은 결정만 담는 핸드오프다.
+- `2026-06-20-study-audio-lecture-review.md`는 구현 방향과 리뷰 이슈 정본이다.
+- `2026-06-21-clf-t1-1-tts-audio-correction.md`는 CLF T1-1 TTS 정제와 품질 게이트 정본이다.
+- `2026-06-22-study-audio-m1-failure-taxonomy.md`는 Android/iOS/PWA/Range/콘텐츠 검수 실패를 분류한다.
+- `docs/TROUBLESHOOTING.md`는 이번 레포 작업에서 반복된 Git, Flutter, Python, 로컬 모바일, 방화벽, PWA 설치 문제 해결책을 모은다.
+- README의 `docs/` 설명에도 트러블슈팅 문서 링크를 연결했다.
 
 ## 확정 결정 (바꾸지 말 것 — 근거는 리뷰 리포트)
 - **1A**: 문서당 **1개 합친 오디오**. iOS 잠금 시 `ended`→다음트랙 자동전환이 막히는 함정 회피.
@@ -64,7 +85,8 @@ T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다.
 - **품질 게이트** `quality_issues`(URL·기호·정답보기·링크·고아부호) + **ID3 1개**(첫 청크 외 ID3v2 strip).
   검증 경로: `--self-test`(엔진 불필요)·`--dry-run`(대본 미리보기). Polly neural은 요청당 **3000자 한도**(청크 분할).
 - 실행 파이썬: `D:\workspace\MeloTTS\.venv\Scripts\python.exe`(boto3 포함) 또는 `pip install boto3` 환경.
-  Windows는 `py` 런처 사용(`python`은 Store alias로 깨짐).
+  이 Codex 환경은 `python`/`py`가 PATH에 없을 수 있으므로, 합성 없는 self-test/meta-only는
+  `C:\Users\deepe\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe`도 사용 가능하다.
 - **보정 정본**: `docs/superpowers/specs/2026-06-21-clf-t1-1-tts-audio-correction.md`.
 
 ### 추가 진행 (2026-06-22, iOS 스킵)
@@ -80,26 +102,53 @@ T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다.
   실제 T7은 MP3가 배포된 뒤에만 의미가 있다.
 - 새 문서 `docs/superpowers/specs/2026-06-22-study-audio-m1-failure-taxonomy.md` 추가.
   iOS unavailable은 `not-run`으로 기록하되, 현재 M1 진행 게이트는 사용자 결정에 따라 Android로 대체한다.
+- Android Chrome 탭 수동 게이트:
+  - 화면 꺼진 상태 연속재생: pass.
+  - 잠금화면 pause/resume: pass-with-concern. 터치 판정은 불안정했으나 재생 위치는 이어짐.
+  - 인터럽션 후 재개: pass.
+- 로컬 LAN standalone PWA:
+  - `http://192.168.0.5:8125` 탭 프리뷰는 방화벽 임시 허용 후 동작.
+  - HTTPS 자체서명은 Android에서 안전하지 않음 경고/신뢰 문제로 실사용 게이트로 부적합.
+  - 로컬 LAN에서는 "앱 설치"/"홈 화면에 추가" 메뉴가 뜨지 않아 standalone 오디오 게이트는 `blocked-local`.
+  - 사용자가 배포 버전 PWA 자체는 문제없다고 확인했지만, 오디오가 연결된 standalone PWA 게이트는 공인 HTTPS/배포 환경에서 다시 확인해야 한다.
+- 정리 확인:
+  - 로컬 8125 서버는 중지됨.
+  - `AWC Docs Android Audio Preview 8125 TEMP` 방화벽 규칙은 현재 조회되지 않음.
+  - 포트 `8125` 리스너도 현재 없음.
 
 ### 남은 콘텐츠 검수 게이트 (사람·M2 — mp3 공개 전 필수)
 - 표 → 음성 요약, 약어 발음사전(AWS·CapEx·AZ 등), `script.json` 문장 단위 사람 보정, 실제 청취 검수표.
 - 통과(`reviewStatus=approved`) 전엔 **mp3 공개·repo 포함·pubspec `assets/audio/` 등록 금지**.
 - 현재 `clf-t1-1` mp3 1개 생성됨(검수 전, **미커밋·미배포**). 재생 게이트엔 사용 가능, 콘텐츠 게이트는 미통과.
 
-### 임시 자원 (정리 필요)
+### 임시 자원 / 로컬 잔여물
 - `D:\workspace\MeloTTS`(clone+venv, boto3), `D:\workspace\s3_preview_*.py`, S3 버킷 `awsdocs-audio-preview-1782020416`.
+- `C:\tmp\awc_audio_preview_server.py`는 로컬 Range 프리뷰용 임시 서버 스크립트였다(레포 밖).
+- 레포 안 untracked 잔여물:
+  - `.claude/settings.local.json` — 개인 로컬 설정, 커밋 금지.
+  - `flutter_app/assets/audio/clf/clf-t1-1/lecture.mp3` — 검수 전 픽스처, 커밋 금지.
+  - `flutter_app/assets/audio/clf/clf-t1-1/audio_meta.json` — 검수 전 sidecar, 커밋 금지.
 - 외부 업로드(익명 호스트·S3 presigned)는 자동 모드 분류기가 차단 → 사용자가 직접 실행해야 함(검수 전 콘텐츠 보호).
 
-## 다음 시작점: 실배포/실기기 게이트
-1. **Android 수동 게이트 실행(현재 M1 대체 게이트)** — Android Chrome 탭 + standalone PWA에서
-   잠금 연속재생, 일시정지/재개, 알람/전화 등 인터럽션 후 재개를 확인하고 기기·Android 버전·브라우저를 기록.
-2. **실제 배포 URL이 생기면 T7 실행**:
-   `python tool/check_audio_range.py https://.../lecture.mp3 --expect-sha256 <audio_meta.json의 audio.sha256>`.
+## 다음 시작점: 다음 세션 이관
+1. **작업 선택** — 다음 세션은 먼저 방향을 고른다.
+   - PR #53을 계속 출고할지: 최신 PR/CI 상태를 GitHub에서 확인하고, 기능이 `audio_lecture=false` 기본값 뒤에 있어 사용자 노출이 없는 점을 근거로 판단한다.
+   - 오디오 M1 게이트를 계속할지: 검수 전 MP3를 공개 Pages에 올리지 말고, 공인 HTTPS 임시 호스팅 또는 검수 승인 후 배포 URL로 standalone PWA 오디오를 재시도한다.
+   - 콘텐츠 품질로 넘어갈지: `reviewStatus=approved`를 목표로 사람 청취 검수표, 약어 발음사전, `script.json` 보정 설계를 시작한다.
+2. **T7 Range 게이트** — 실제 MP3가 HTTPS로 호스팅된 뒤 실행한다.
+   ```powershell
+   cd D:\workspace\awc-docs\flutter_app
+   $py = "C:\Users\deepe\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+   $expectedSha256 = "audio_meta.json의 audio.sha256 값"
+   & $py tool\check_audio_range.py https://.../lecture.mp3 --expect-sha256 $expectedSha256
+   ```
    네트워크가 필요한 명령이므로 Codex 샌드박스에선 승인 실행이 필요할 수 있다.
 3. **iOS 실기기 수동 게이트는 현 M1 blocking path에서 제외** — 통과로 기록하지 말고 `not-run/deferred`로 남긴다.
    iOS 특이 WebKit/PWA 리스크는 별도 보류 리스크이며, 나중에 기기가 생기면 같은 표로 추가 확인한다.
-4. **콘텐츠 공개 전 게이트 유지** — `reviewStatus=approved` 전엔 mp3 repo 포함, `pubspec.yaml`의
+4. **콘텐츠 공개 전 게이트 유지** — `reviewStatus=approved` 전엔 MP3 repo 포함, `pubspec.yaml`의
    `assets/audio/` 등록, 기본 빌드 `audio_lecture=true` 전환 금지.
+5. **문서 유지** — 문제가 재발하면 먼저 `docs/TROUBLESHOOTING.md`에 추가하고, 게이트 판정은
+   `2026-06-22-study-audio-m1-failure-taxonomy.md`의 표에 기록한다.
 
 ## 함정 (반드시 지킬 것)
 - **iOS는 Windows 개발/CI로 검증 불가** — 실기기만. (learning: `flutter-web-pagetransitions-6keys`)
@@ -110,6 +159,8 @@ T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다.
   클래스가 package:web에 없음. (learning: `package-web-mediasession-actionhandler`)
 - **커밋 직전 `git branch --show-current` 검증** — 공유 워킹트리에서 HEAD가 움직임(§5).
   이번 세션에도 develop↔docs/worklist-release-pr47로 두 번 움직였음.
+- **휴대폰의 `127.0.0.1`은 PC가 아니라 휴대폰 자신** — Android에서 PC localhost를 쓰려면 `adb reverse`가 필요하다.
+- **로컬 자체서명 HTTPS는 PWA 설치 게이트로 신뢰하지 말 것** — 배포 HTTPS 또는 공인 인증서가 붙은 임시 호스팅에서 확인한다.
 
 ## M2 (M1 게이트 통과 후 별도 리뷰)
 대본 생성 파이프라인 · Script Schema 파서 + 환각 가드(고유명사·서비스명·수치 토큰 보존 검사) ·
@@ -117,6 +168,9 @@ T8 failure taxonomy · T9 `{docId,sourceHash}` 메타 산출**을 보강했다.
 헤드셋/블루투스/Control Center · 문서간 재생 · CI 자동 생성.
 
 ## PR
-- **PR #53 열림 — `feat/study-audio-m1` → `develop`**(M1 전체: T1·T2·T5·T4 + 핸드오프). origin push 완료.
-  기본 빌드는 플래그 off라 사용자에게 미노출(placeholder). 실제 청취는 T6(실물 mp3 + iOS 실기기) 이후.
-- 머지는 **CI 녹색 확인 후**(브랜치 전략: feat→develop, main 직접 금지). 머지 시점에 develop 실측 권장.
+- **PR #53 열림 — `feat/study-audio-m1` → `develop`**. origin push 완료.
+- 브랜치에는 T1·T2·T4·T5 엔진, T6 TTS 도구, T7 Range 도구, T8 failure taxonomy, T9 메타 sidecar,
+  Android 수동 게이트 결과, 레포 트러블슈팅 문서가 포함되어 있다.
+- 기본 빌드는 `audio_lecture=false`라 사용자에게 미노출(placeholder). 검수 전 MP3는 커밋·배포하지 않는다.
+- 머지는 **GitHub에서 최신 CI 녹색 확인 후** 진행한다(브랜치 전략: feat→develop, main 직접 금지).
+  머지 시점에 develop 실측 권장.
