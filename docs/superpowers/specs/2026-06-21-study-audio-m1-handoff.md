@@ -5,7 +5,10 @@
 
 ## 한 줄 요약
 M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAudioBackend DOM 어댑터)에
-**T4 미니 플레이어 진입점**까지 TDD로 완성·커밋했다. **다음 시작점 = T6(iOS 실기기 수동 게이트 — Windows/CI 불가, 사용자만).**
+**T4 미니 플레이어 진입점**까지 TDD로 완성·커밋했다. 2026-06-22 세션에서 iOS 실기기는
+없어 수동 게이트는 `not-run`으로 남기고, **T7 Range 게이트 도구 · T8 failure taxonomy ·
+T9 `{docId,sourceHash}` 메타 산출**을 보강했다. **다음 시작점 = 실제 배포 URL로 T7 실행 또는
+사용자 보유 기기에서 수동 게이트.**
 
 ## 브랜치 / 커밋
 - `2c95dff` — T4: 미니 플레이어 진입점 + 전역 런타임 배선(조건부 import) + ContentEntry.lectureAudioSrc
@@ -64,6 +67,20 @@ M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAud
   Windows는 `py` 런처 사용(`python`은 Store alias로 깨짐).
 - **보정 정본**: `docs/superpowers/specs/2026-06-21-clf-t1-1-tts-audio-correction.md`.
 
+### 추가 진행 (2026-06-22, iOS 스킵)
+- `gen_lecture_audio.py`가 합성 후 자동으로, 또는 `--meta-only`로 기존 MP3에서
+  `audio_meta.json`을 생성한다. 메타에는 `docId`, 원문 `source.sha256`, 오디오 `sha256`,
+  `Content-Type`, ID3 개수, 정제 대본 품질 이슈, `reviewStatus=needs_human_review`가 들어간다.
+- 현재 untracked 픽스처 기준 `flutter_app/assets/audio/clf/clf-t1-1/audio_meta.json` 생성됨:
+  `source.sha256=ef8859b790335c06a9b52f900e1881c524b494623eab0bd72a60e224c0e522ee`,
+  `audio.sha256=27076bb13457eadb1b75f7efebedc694902eb9299653d30a83afef3bd91217df`,
+  `id3Count=1`, `containerChecks.ok=true`. **MP3와 메타는 검수 전 픽스처라 미커밋·미배포 유지.**
+- 새 도구 `flutter_app/tool/check_audio_range.py` 추가. 배포 URL에 대해 HEAD, Range
+  `bytes=0-1`, `Accept-Ranges`, `Content-Type`, 캐시 validator, 선택 SHA-256을 검증한다.
+  실제 T7은 MP3가 배포된 뒤에만 의미가 있다.
+- 새 문서 `docs/superpowers/specs/2026-06-22-study-audio-m1-failure-taxonomy.md` 추가.
+  iOS unavailable은 `passed`/`failed`가 아니라 `not-run`으로 기록한다.
+
 ### 남은 콘텐츠 검수 게이트 (사람·M2 — mp3 공개 전 필수)
 - 표 → 음성 요약, 약어 발음사전(AWS·CapEx·AZ 등), `script.json` 문장 단위 사람 보정, 실제 청취 검수표.
 - 통과(`reviewStatus=approved`) 전엔 **mp3 공개·repo 포함·pubspec `assets/audio/` 등록 금지**.
@@ -73,13 +90,15 @@ M1 재생 엔진(AudioController 상태머신 + Media Session 바인딩 + WebAud
 - `D:\workspace\MeloTTS`(clone+venv, boto3), `D:\workspace\s3_preview_*.py`, S3 버킷 `awsdocs-audio-preview-1782020416`.
 - 외부 업로드(익명 호스트·S3 presigned)는 자동 모드 분류기가 차단 → 사용자가 직접 실행해야 함(검수 전 콘텐츠 보호).
 
-## 다음 시작점: T6 (iOS 실기기 수동 게이트) — Windows/CI 불가, 사용자만
-1. **합친 오디오 샘플(placeholder→실물) 준비** — 한국어 TTS, 프로덕션 형태(현실 길이/비트레이트/경로/캐시).
-   **공개 재배포 허용 엔진**으로(정적 사이트=배포). `assets/audio/{family}/{taskId}/lecture.mp3`에 두고
-   `pubspec.yaml`에 `assets/audio/` 등록(T4는 placeholder 경로만 배선, 실파일·등록 미완).
-2. `--dart-define=audio_lecture=true`로 빌드·배포 후 **iOS 실기기 수동 게이트**:
-   standalone 잠금 연속재생 + 일시정지/재개 + 전화·알람 인터럽션 후 재개 + Android. 기기·iOS버전 표.
-3. 이어서: **T7**(Range 실배포 게이트), **T8**(failure taxonomy 문서), **T9**({docId,sourceHash} 메타).
+## 다음 시작점: 실배포/실기기 게이트
+1. **실제 배포 URL이 생기면 T7 실행**:
+   `python tool/check_audio_range.py https://.../lecture.mp3 --expect-sha256 <audio_meta.json의 audio.sha256>`.
+   네트워크가 필요한 명령이므로 Codex 샌드박스에선 승인 실행이 필요할 수 있다.
+2. **iOS 실기기 수동 게이트는 not-run 유지** — 현재 세션은 사용자가 iOS 없음으로 스킵 지시.
+   통과로 기록하지 말 것. 가능해지면 standalone 잠금 연속재생 + 일시정지/재개 + 전화·알람 인터럽션 후 재개를 표로 기록.
+3. **Android 기기가 있으면 동일 수동 게이트 실행** — iOS 대체 통과는 아니지만 회귀 정보를 준다.
+4. **콘텐츠 공개 전 게이트 유지** — `reviewStatus=approved` 전엔 mp3 repo 포함, `pubspec.yaml`의
+   `assets/audio/` 등록, 기본 빌드 `audio_lecture=true` 전환 금지.
 
 ## 함정 (반드시 지킬 것)
 - **iOS는 Windows 개발/CI로 검증 불가** — 실기기만. (learning: `flutter-web-pagetransitions-6keys`)

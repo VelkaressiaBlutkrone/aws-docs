@@ -22,12 +22,17 @@ docs/superpowers/specs/2026-06-21-clf-t1-1-tts-audio-correction.md 를 따른다
 사용:
   py tool/gen_lecture_audio.py --self-test
   py tool/gen_lecture_audio.py --md <문서> --out <mp3> --dry-run
+  py tool/gen_lecture_audio.py --md <문서> --out <mp3> --meta-only
   py tool/gen_lecture_audio.py --md assets/content/clf/t1-1.md \
      --out assets/audio/clf/clf-t1-1/lecture.mp3
 """
 import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 # Windows 콘솔(cp949) 등 비-UTF-8 stdout에서도 한글·기호를 깨짐 없이 출력.
@@ -168,6 +173,101 @@ def chunk_text(text: str, max_chars: int) -> list[str]:
     return chunks
 
 
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace(
+        "+00:00", "Z")
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _asset_path(path: Path) -> str:
+    """앱 asset 경로처럼 보이면 assets/... 형태로 축약한다."""
+    parts = path.as_posix().split("/")
+    if "assets" in parts:
+        return "/".join(parts[parts.index("assets"):])
+    return path.as_posix()
+
+
+def _id3_count(path: Path) -> int:
+    if path.suffix.lower() != ".mp3":
+        return 0
+    return path.read_bytes().count(b"ID3")
+
+
+def _content_type(path: Path) -> str:
+    return {
+        ".mp3": "audio/mpeg",
+        ".wav": "audio/wav",
+    }.get(path.suffix.lower(), "application/octet-stream")
+
+
+def build_audio_meta(
+    *,
+    md_path: Path,
+    audio_path: Path,
+    doc_id: str,
+    speech: str,
+    chunks: list[str],
+    issues: list[str],
+    args: argparse.Namespace,
+    mode: str,
+) -> dict:
+    """M1 T9: 오디오 옆에 남기는 최소 {docId, sourceHash} 메타."""
+    id3_count = _id3_count(audio_path)
+    unique_issues = list(dict.fromkeys(issues))
+    return {
+        "schemaVersion": 1,
+        "docId": doc_id,
+        "generatedAt": _utc_now(),
+        "mode": mode,
+        "reviewStatus": "needs_human_review",
+        "source": {
+            "asset": _asset_path(md_path),
+            "sha256": _sha256_file(md_path),
+        },
+        "audio": {
+            "src": _asset_path(audio_path),
+            "file": audio_path.name,
+            "sizeBytes": audio_path.stat().st_size,
+            "sha256": _sha256_file(audio_path),
+            "contentType": _content_type(audio_path),
+            "containerChecks": {
+                "id3Count": id3_count,
+                "midFileId3Allowed": False,
+                "ok": audio_path.suffix.lower() != ".mp3" or id3_count <= 1,
+            },
+        },
+        "script": {
+            "speechChars": len(speech),
+            "chunkCount": len(chunks),
+            "qualityIssues": unique_issues,
+            "reviewStatus": "needs_human_review",
+        },
+        "generator": {
+            "tool": "flutter_app/tool/gen_lecture_audio.py",
+            "engine": args.engine,
+            "voice": args.voice if args.engine == "polly" else None,
+            "pollyEngine": args.polly_engine if args.engine == "polly" else None,
+            "region": args.region if args.engine == "polly" else None,
+            "maxChars": args.max_chars,
+        },
+    }
+
+
+def write_json(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def _strip_id3v2(data: bytes) -> bytes:
     """선행 ID3v2 태그 제거(없으면 그대로). size는 synchsafe(7비트×4).
     청크 mp3 연결 시 첫 청크 외 ID3를 떼어 파일에 ID3 1개만 남긴다(P0-1)."""
@@ -288,6 +388,39 @@ def _self_test() -> None:
     tagged = b"ID3" + bytes([3, 0, 0, 0, 0, 0, 5]) + b"XXXXX" + framed
     assert _strip_id3v2(tagged) == framed, "ID3 제거 실패"
     assert _strip_id3v2(framed) == framed, "ID3 없을 때 보존 실패"
+    # T9 메타 sidecar
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        md_path = root / "assets" / "content" / "clf" / "t1-1.md"
+        audio_path = root / "assets" / "audio" / "clf" / "clf-t1-1" / "lecture.mp3"
+        md_path.parent.mkdir(parents=True)
+        audio_path.parent.mkdir(parents=True)
+        md_path.write_text("# 테스트\n\n본문입니다.\n", encoding="utf-8")
+        audio_path.write_bytes(b"ID3" + b"\x00" * 10 + framed)
+        fake_args = argparse.Namespace(
+            engine="polly",
+            voice="Seoyeon",
+            polly_engine="neural",
+            region="ap-northeast-2",
+            max_chars=0,
+        )
+        meta = build_audio_meta(
+            md_path=md_path,
+            audio_path=audio_path,
+            doc_id="clf-t1-1",
+            speech="테스트",
+            chunks=["테스트"],
+            issues=["URL 잔존", "URL 잔존"],
+            args=fake_args,
+            mode="self-test",
+        )
+        assert meta["docId"] == "clf-t1-1", meta
+        assert meta["source"]["asset"] == "assets/content/clf/t1-1.md", meta
+        assert len(meta["source"]["sha256"]) == 64, meta
+        assert meta["audio"]["src"] == "assets/audio/clf/clf-t1-1/lecture.mp3", meta
+        assert meta["audio"]["containerChecks"]["id3Count"] == 1, meta
+        assert meta["audio"]["containerChecks"]["ok"] is True, meta
+        assert meta["script"]["qualityIssues"] == ["URL 잔존"], meta
     print("self-test OK")
 
 
@@ -296,6 +429,11 @@ def main() -> None:
         description="학습문서 .md → 한국어 강의 mp3 (주머니 라디오 M1 T6 임시)")
     ap.add_argument("--md", type=Path, help="입력 학습문서 .md")
     ap.add_argument("--out", type=Path, help="출력 경로(.mp3 또는 .wav)")
+    ap.add_argument("--doc-id", help="오디오 문서 ID(기본: 출력 폴더명)")
+    ap.add_argument("--meta-out", type=Path,
+                    help="audio_meta.json 출력 경로(기본: out 옆 audio_meta.json)")
+    ap.add_argument("--meta-only", action="store_true",
+                    help="합성 없이 기존 --out 파일에서 audio_meta.json만 생성")
     ap.add_argument("--engine", choices=["polly", "melotts"], default="polly")
     ap.add_argument("--voice", default="Seoyeon", help="Polly 음성(Seoyeon/Jihye)")
     ap.add_argument("--polly-engine", default="neural",
@@ -317,8 +455,10 @@ def main() -> None:
         ap.error("--md 와 --out 은 필수입니다(또는 --self-test).")
     if not args.md.exists():
         sys.exit(f"입력 파일 없음: {args.md}")
+    if args.meta_only and not args.out.exists():
+        sys.exit(f"--meta-only 에 필요한 기존 오디오 파일 없음: {args.out}")
 
-    # Polly는 요청당 6000자(text) 한도 → 5500 이내면 단일 요청(ID3 1개).
+    # Polly neural은 요청당 3000자 한도 → 여유를 둬 2900자로 분할.
     max_chars = args.max_chars or (2900 if args.engine == "polly" else 300)
 
     md = args.md.read_text(encoding="utf-8")
@@ -343,6 +483,23 @@ def main() -> None:
         print("\n[dry-run] 합성 생략.", file=sys.stderr)
         return
 
+    doc_id = args.doc_id or args.out.parent.name
+    meta_out = args.meta_out or args.out.with_name("audio_meta.json")
+
+    if args.meta_only:
+        write_json(meta_out, build_audio_meta(
+            md_path=args.md,
+            audio_path=args.out,
+            doc_id=doc_id,
+            speech=speech,
+            chunks=chunks,
+            issues=issues,
+            args=args,
+            mode="meta-only",
+        ))
+        print(f"[메타] {meta_out}", file=sys.stderr)
+        return
+
     if args.engine == "polly":
         synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
     else:
@@ -350,9 +507,20 @@ def main() -> None:
 
     # P0-1 게이트: 최종 mp3의 ID3는 1개만 허용(청크 단순 연결 탐지).
     if args.out.suffix.lower() == ".mp3":
-        id3 = args.out.read_bytes().count(b"ID3")
+        id3 = _id3_count(args.out)
         flag = "OK" if id3 <= 1 else "다중 — 청크 연결됨(단일 요청 권장)"
         print(f"[ID3] {id3}개 — {flag}", file=sys.stderr)
+    write_json(meta_out, build_audio_meta(
+        md_path=args.md,
+        audio_path=args.out,
+        doc_id=doc_id,
+        speech=speech,
+        chunks=chunks,
+        issues=issues,
+        args=args,
+        mode="synthesized",
+    ))
+    print(f"[메타] {meta_out}", file=sys.stderr)
     print(f"[완료] {args.out}", file=sys.stderr)
 
 
