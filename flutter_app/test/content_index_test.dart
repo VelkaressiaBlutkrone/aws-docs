@@ -110,6 +110,17 @@ void main() {
     expect(certExamIsBalanced('SAA-C03'), isFalse);
     expect(certExamIsBalanced('NOPE'), isFalse);
   });
+
+  // ── M1 T4: 오디오 강의("주머니 라디오") placeholder 경로 ──────────────
+  // 규약 assets/audio/{family}/{taskId}/lecture.mp3 (family = taskId 접두어).
+  // mdAsset은 cert마다 불규칙(clf/t1-1.md vs saa/saa-t1-1.md)이라 유도하지 않고
+  // 별도 일관 규약을 둔다. 1A = 문서당 1개 합친 파일(섹션 트랙 분리 금지).
+  test('ContentEntry.lectureAudioSrc: family/taskId 규약', () {
+    expect(contentFor('CLF-C02').first.lectureAudioSrc,
+        'assets/audio/clf/clf-t1-1/lecture.mp3');
+    expect(contentFor('SAA-C03').first.lectureAudioSrc,
+        'assets/audio/saa/saa-t1-1/lecture.mp3');
+  });
 }
 
 ContentEntry _e(int domain, int questionCount) => ContentEntry(
