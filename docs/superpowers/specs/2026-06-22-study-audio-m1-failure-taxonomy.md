@@ -64,9 +64,11 @@ python tool\check_audio_range.py `
 
 | 날짜 | 기기/OS | 브라우저/모드 | 시나리오 | 결과 | 메모 |
 |---|---|---|---|---|---|
-|  | Android | Chrome tab | 단일 파일 잠금 연속재생 | not-run | 현 M1 대체 게이트 |
-|  | Android | Chrome tab | 잠금 일시정지/재개 | not-run | 현 M1 대체 게이트 |
-|  | Android | standalone PWA | 단일 파일 잠금 연속재생 | not-run | 현 M1 대체 게이트 |
+| 2026-06-22 | Android / 상세 미기록 | Chrome tab | 단일 파일 잠금 연속재생 | pass | 사용자 확인: 휴대폰 화면 꺼진 상태에서도 재생 진행 |
+| 2026-06-22 | Android / 상세 미기록 | Chrome tab | 잠금 일시정지/재개 | pass-with-concern | 사용자 확인: 재생 위치는 이어짐. 잠금화면 미디어 컨트롤 터치 판정이 불안정해 기기/OS UI 이슈 가능성 기록 |
+| 2026-06-22 | Android / 상세 미기록 | Chrome tab | 인터럽션 후 재개 | pass | 사용자 확인: 오디오 재개. 인터럽션 종류는 상세 미기록 |
+| 2026-06-22 | Android / 상세 미기록 | standalone PWA | 설치/실행 가능성 | blocked-local | 사용자 확인: 배포 버전은 문제없으나 로컬 LAN 프리뷰는 설치 메뉴가 뜨지 않음. 앱 구조 결함보다 로컬 origin/secure context 한계로 판단 |
+|  | Android | standalone PWA | 단일 파일 잠금 연속재생 | blocked-local | 배포 또는 공인 HTTPS 프리뷰 필요 |
 |  | Android | standalone PWA | 잠금 일시정지/재개 | not-run | 현 M1 대체 게이트 |
 |  | Android | standalone PWA | 전화·알람 인터럽션 후 재개 | not-run | 현 M1 대체 게이트 |
 |  | iPhone / iOS | Safari tab | 단일 파일 잠금 연속재생 | deferred | iOS 기기 생기면 별도 확인 |
@@ -77,3 +79,5 @@ python tool\check_audio_range.py `
 - `flutter_app/tool/gen_lecture_audio.py --meta-only`로 기존 MP3의 `audio_meta.json`을 생성할 수 있다.
 - `flutter_app/tool/check_audio_range.py --self-test`는 네트워크 없이 Range 판정 로직을 검증한다.
 - 실제 T7은 MP3가 배포된 뒤에만 의미가 있다. 현재 MP3는 검수 전 미커밋·미배포 픽스처다.
+- Android Chrome 탭 M1 대체 게이트는 통과했다. standalone PWA 오디오 게이트는 로컬 LAN 프리뷰가 설치
+  조건을 만족하지 못해 막혔고, 배포/공인 HTTPS 프리뷰에서만 의미 있게 재시도한다.
