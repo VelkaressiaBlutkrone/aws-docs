@@ -59,7 +59,7 @@ flutter_app/
     fonts/                 # Pretendard, JetBrains Mono
   test/                    # 25개 테스트 파일
 DESIGN.md                  # 디자인 시스템 (시각 결정 전 필독)
-docs/                      # 설계 스펙·플랜·핸드오프
+docs/                      # 설계 스펙·플랜·핸드오프·트러블슈팅
 ```
 
 ## 개발
@@ -77,6 +77,10 @@ cd flutter_app
 flutter analyze
 flutter test
 ```
+
+문제 해결:
+
+- 레포 전체 작업 중 반복되는 빌드, 배포, 로컬 모바일 확인, 오디오 게이트 이슈는 `docs/TROUBLESHOOTING.md`를 참고하세요.
 
 ## 빌드
 
