@@ -25,6 +25,14 @@ class ContentEntry {
   /// 노출 가능한 검증 문항이 있는가(questions.json 존재 여부와 1:1).
   /// 학습문서만 있는(문항 0) Task의 불필요한 에셋 로드/404를 막는 가드.
   bool get hasQuestions => questionCount > 0;
+
+  /// 합친 오디오 강의("주머니 라디오") placeholder 경로.
+  /// 규약: assets/audio/{family}/{taskId}/lecture.mp3 (family = taskId 접두어).
+  /// mdAsset 규약이 cert마다 불규칙해 유도하지 않고 별도 일관 경로를 둔다.
+  /// 1A = 문서당 1개 합친 파일(iOS 잠금 중 트랙 자동전환 함정 회피). M1은
+  /// placeholder(실제 mp3·메타는 T6·T9). 출처: 2026-06-20-study-audio-lecture-review.md.
+  String get lectureAudioSrc =>
+      'assets/audio/${taskId.split('-').first}/$taskId/lecture.mp3';
 }
 
 const Map<String, List<ContentEntry>> kContentIndex = {
