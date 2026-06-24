@@ -316,6 +316,64 @@ def table_to_summary(table_lines: list[str]) -> tuple:
     return " ".join(parts), ["table-summary-draft"]
 
 
+def build_script_json(md: str, *, doc_id: str, source_asset: str,
+                      lexicon: dict) -> dict:
+    """parse_segments + 발음사전 치환 + (표는 audioSummary 치환) → schemaVersion 2 dict."""
+    segs = parse_segments(md)
+    seen: set = set()
+    for seg in segs:
+        if seg["scriptText"]:
+            seg["scriptText"], li = apply_lexicon(seg["scriptText"], lexicon, seen)
+            seg["issues"] = list(dict.fromkeys(seg["issues"] + li))
+        if seg.get("audioSummary"):
+            seg["audioSummary"], li = apply_lexicon(seg["audioSummary"], lexicon, seen)
+            seg["issues"] = list(dict.fromkeys(seg["issues"] + li))
+    lex_hash = hashlib.sha256(
+        json.dumps(lexicon, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:12]
+    return {
+        "schemaVersion": 2,
+        "docId": doc_id,
+        "sourceAsset": source_asset,
+        "sourceHash": hashlib.sha256(md.encode("utf-8")).hexdigest(),
+        "lexiconVersion": lex_hash,
+        "generatedAt": _utc_now(),
+        "reviewStatus": "needs_human_review",
+        "segments": segs,
+    }
+
+
+def review_checklist_md(doc_id: str) -> str:
+    """청취 검수표 템플릿(사람이 작성)."""
+    return (
+        f"# 청취 검수표 — {doc_id}\n\n"
+        "- [ ] 표 핵심 정보가 음성에 포함됐다.\n"
+        "- [ ] 약어 발음이 자연스럽다.\n"
+        "- [ ] 출처 URL을 읽지 않는다.\n"
+        "- [ ] 자가 점검 음성 흐름이 자연스럽다.\n"
+        "- [ ] 첫 20초가 헤더 낭독이 아니다.\n"
+        "- [ ] 청크 경계 끊김·메타 재해석이 없다.\n"
+        "- [ ] 사실 정확성: 고유명사·서비스명·수치가 원문과 일치한다.\n\n"
+        "reviewer: ____________   날짜: ____________\n\n"
+        "승인 시 script.json·audio_meta.json의 reviewStatus를 approved로 수동 변경한다.\n"
+    )
+
+
+def run_generate(args) -> None:
+    md = args.md.read_text(encoding="utf-8")
+    doc_id = args.doc_id or args.out_dir.name
+    script = build_script_json(
+        md, doc_id=doc_id, source_asset=_asset_path(args.md),
+        lexicon=load_lexicon(args.lexicon))
+    write_json(args.out_dir / "script.json", script)
+    (args.out_dir).mkdir(parents=True, exist_ok=True)
+    (args.out_dir / "review_checklist.md").write_text(
+        review_checklist_md(doc_id), encoding="utf-8")
+    n_issues = sum(len(s["issues"]) for s in script["segments"])
+    print(f"[generate] {len(script['segments'])} segments, "
+          f"{n_issues} issues → {args.out_dir / 'script.json'}", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -656,6 +714,29 @@ def _self_test() -> None:
     segs2 = parse_segments("| 용어 | 설명 |\n| --- | --- |\n| 가 | 나 |\n")
     t = [g for g in segs2 if g["kind"] == "table"][0]
     assert t["audioSummary"] == "가은 나입니다." and t["issues"] == ["table-summary-draft"], t
+
+    # Task 4: build_script_json
+    sj = build_script_json("# 제목\n\n본문입니다.\n", doc_id="clf-t1-1",
+                           source_asset="assets/content/clf/t1-1.md", lexicon={})
+    assert sj["schemaVersion"] == 2 and sj["docId"] == "clf-t1-1", sj
+    assert sj["reviewStatus"] == "needs_human_review", sj
+    assert len(sj["sourceHash"]) == 64 and len(sj["segments"]) >= 2, sj
+    assert sj["segments"][0]["kind"] == "heading", sj["segments"][0]
+    # 발음사전 적용이 scriptText에 반영
+    sj2 = build_script_json("본문 AWS 설명.\n", doc_id="d",
+                            source_asset="a", lexicon={"AWS": {"say": "에이더블유에스"}})
+    assert any("에이더블유에스" in s["scriptText"] for s in sj2["segments"]), sj2
+    # run_generate가 파일 2개 생성
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        md_p = root / "t1-1.md"; md_p.write_text("# 제목\n\n본문.\n", encoding="utf-8")
+        out_d = root / "clf-t1-1"
+        gen_args = argparse.Namespace(md=md_p, out_dir=out_d, doc_id="clf-t1-1", lexicon=None)
+        run_generate(gen_args)
+        assert (out_d / "script.json").exists(), "script.json 미생성"
+        assert (out_d / "review_checklist.md").exists(), "검수표 미생성"
+        loaded = json.loads((out_d / "script.json").read_text(encoding="utf-8"))
+        assert loaded["reviewStatus"] == "needs_human_review", loaded
     print("self-test OK")
 
 
