@@ -869,102 +869,43 @@ def _self_test() -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(
-        description="학습문서 .md → 한국어 강의 mp3 (주머니 라디오 M1 T6 임시)")
-    ap.add_argument("--md", type=Path, help="입력 학습문서 .md")
-    ap.add_argument("--out", type=Path, help="출력 경로(.mp3 또는 .wav)")
-    ap.add_argument("--doc-id", help="오디오 문서 ID(기본: 출력 폴더명)")
-    ap.add_argument("--meta-out", type=Path,
-                    help="audio_meta.json 출력 경로(기본: out 옆 audio_meta.json)")
-    ap.add_argument("--meta-only", action="store_true",
-                    help="합성 없이 기존 --out 파일에서 audio_meta.json만 생성")
-    ap.add_argument("--engine", choices=["polly", "melotts"], default="polly")
-    ap.add_argument("--voice", default="Seoyeon", help="Polly 음성(Seoyeon/Jihye)")
-    ap.add_argument("--polly-engine", default="neural",
-                    choices=["standard", "neural", "generative"])
-    ap.add_argument("--region", default="ap-northeast-2", help="Polly 리전")
-    ap.add_argument("--speed", type=float, default=1.0, help="MeloTTS 속도")
-    ap.add_argument("--device", default="cpu", help="MeloTTS cpu 또는 cuda:0")
-    ap.add_argument("--max-chars", type=int, default=0,
-                    help="청크 최대 길이(0=엔진 기본: polly 5500 / melotts 300)")
-    ap.add_argument("--dry-run", action="store_true",
-                    help="합성 없이 정제 대본 + 품질 게이트만 출력(엔진 불필요)")
+        description="학습문서 오디오 검수 파이프라인 (generate/synthesize/gate)")
     ap.add_argument("--self-test", action="store_true")
-    args = ap.parse_args()
+    sub = ap.add_subparsers(dest="cmd")
 
+    g = sub.add_parser("generate", help="md → script.json + review_checklist.md")
+    g.add_argument("--md", type=Path, required=True)
+    g.add_argument("--out-dir", type=Path, required=True)
+    g.add_argument("--doc-id")
+    g.add_argument("--lexicon", type=Path)
+
+    sy = sub.add_parser("synthesize", help="script.json → mp3 + audio_meta.json")
+    sy.add_argument("--script", type=Path, required=True)
+    sy.add_argument("--out", type=Path, required=True)
+    sy.add_argument("--engine", default="polly")
+    sy.add_argument("--voice", default="Seoyeon")
+    sy.add_argument("--polly-engine", default="neural",
+                    choices=["standard", "neural", "generative"])
+    sy.add_argument("--region", default="ap-northeast-2")
+    sy.add_argument("--max-chars", type=int, default=0)
+
+    ga = sub.add_parser("gate", help="script.json/audio_meta 정적 검증")
+    ga.add_argument("--script", type=Path, required=True)
+    ga.add_argument("--md", type=Path)
+    ga.add_argument("--audio-meta", type=Path)
+
+    args = ap.parse_args()
     if args.self_test:
         _self_test()
         return
-    if not args.md or not args.out:
-        ap.error("--md 와 --out 은 필수입니다(또는 --self-test).")
-    if not args.md.exists():
-        sys.exit(f"입력 파일 없음: {args.md}")
-    if args.meta_only and not args.out.exists():
-        sys.exit(f"--meta-only 에 필요한 기존 오디오 파일 없음: {args.out}")
-
-    # Polly neural은 요청당 3000자 한도 → 여유를 둬 2900자로 분할.
-    max_chars = args.max_chars or (2900 if args.engine == "polly" else 300)
-
-    md = args.md.read_text(encoding="utf-8")
-    speech = markdown_to_speech_text(md)
-    chunks = chunk_text(speech, max_chars)
-    print(f"[정제] {len(speech)}자 → {len(chunks)}개 청크 (engine={args.engine})",
-          file=sys.stderr)
-
-    # 품질 게이트 — M1 픽스처는 경고만(재생 게이트 ≠ 콘텐츠 검수 게이트).
-    issues = quality_issues(speech)
-    if issues:
-        print(f"[품질 게이트] {len(issues)}개 이슈 — 검수 전 픽스처(공개 전 사람 검수 필요):",
-              file=sys.stderr)
-        for it in dict.fromkeys(issues):  # 중복 제거, 순서 유지
-            print(f"  - {it}", file=sys.stderr)
+    if args.cmd == "generate":
+        run_generate(args)
+    elif args.cmd == "synthesize":
+        run_synthesize(args)
+    elif args.cmd == "gate":
+        run_gate(args)
     else:
-        print("[품질 게이트] 통과(이슈 0)", file=sys.stderr)
-
-    if args.dry_run:
-        for i, c in enumerate(chunks):
-            print(f"\n--- 청크 {i} ({len(c)}자) ---\n{c}")
-        print("\n[dry-run] 합성 생략.", file=sys.stderr)
-        return
-
-    doc_id = args.doc_id or args.out.parent.name
-    meta_out = args.meta_out or args.out.with_name("audio_meta.json")
-
-    if args.meta_only:
-        write_json(meta_out, build_audio_meta(
-            md_path=args.md,
-            audio_path=args.out,
-            doc_id=doc_id,
-            speech=speech,
-            chunks=chunks,
-            issues=issues,
-            args=args,
-            mode="meta-only",
-        ))
-        print(f"[메타] {meta_out}", file=sys.stderr)
-        return
-
-    if args.engine == "polly":
-        synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
-    else:
-        synthesize_melotts(chunks, args.out, args.speed, args.device)
-
-    # P0-1 게이트: 최종 mp3의 ID3는 1개만 허용(청크 단순 연결 탐지).
-    if args.out.suffix.lower() == ".mp3":
-        id3 = _id3_count(args.out)
-        flag = "OK" if id3 <= 1 else "다중 — 청크 연결됨(단일 요청 권장)"
-        print(f"[ID3] {id3}개 — {flag}", file=sys.stderr)
-    write_json(meta_out, build_audio_meta(
-        md_path=args.md,
-        audio_path=args.out,
-        doc_id=doc_id,
-        speech=speech,
-        chunks=chunks,
-        issues=issues,
-        args=args,
-        mode="synthesized",
-    ))
-    print(f"[메타] {meta_out}", file=sys.stderr)
-    print(f"[완료] {args.out}", file=sys.stderr)
+        ap.error("서브커맨드(generate/synthesize/gate) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
