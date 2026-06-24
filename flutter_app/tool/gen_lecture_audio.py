@@ -235,8 +235,9 @@ def parse_segments(md: str) -> list[dict]:
             while i < n and lines[i].strip().startswith("|"):
                 tbl.append(lines[i].strip())
                 i += 1
+            summary, tissues = table_to_summary(tbl)
             _add("table", "\n".join(tbl), "",
-                 audio_summary=None, issues=["table-needs-summary"])
+                 audio_summary=summary, issues=tissues)
             continue
         # 문단(연속 비빈 줄). 자가점검 구간이면 skip 본문.
         para = []
@@ -292,6 +293,27 @@ def apply_lexicon(text: str, lexicon: dict, seen: set) -> tuple[str, list[str]]:
     for tok in sorted(set(re.findall(r"(?<![0-9A-Za-z])[A-Z][A-Z0-9]{1,}(?![0-9A-Za-z])", text))):
         issues.append(f"unmapped-token: {tok}")
     return text, issues
+
+
+def table_to_summary(table_lines: list[str]) -> tuple:
+    """마크다운 표 → (audioSummary, issues). 2열만 초벌 생성, 그 외 None."""
+    rows = []
+    for ln in table_lines:
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if cells and all(re.fullmatch(r":?-{3,}:?", c or "x") for c in cells):
+            continue  # 구분행(|---|---|)
+        rows.append(cells)
+    if len(rows) < 2:
+        return None, ["table-needs-summary"]
+    if len(rows[0]) != 2:                       # 헤더 폭으로 열 수 판정
+        return None, ["table-needs-summary"]
+    parts = []
+    for r in rows[1:]:                          # 헤더 제외 본문
+        if len(r) >= 2 and r[0] and r[1]:
+            parts.append(f"{_clean_inline(r[0])}은 {_clean_inline(r[1])}입니다.")
+    if not parts:
+        return None, ["table-needs-summary"]
+    return " ".join(parts), ["table-summary-draft"]
 
 
 def quality_issues(text: str) -> list[str]:
@@ -599,7 +621,7 @@ def _self_test() -> None:
     assert any(g["kind"] == "paragraph" and "첫 문단입니다" in g["scriptText"] for g in segs), segs
     assert any(g["kind"] == "paragraph" and "목록 링크 항목" in g["scriptText"] for g in segs), segs
     tbl = [g for g in segs if g["kind"] == "table"]
-    assert len(tbl) == 1 and tbl[0]["skip"] is False and tbl[0]["audioSummary"] is None, tbl
+    assert len(tbl) == 1 and tbl[0]["skip"] is False and tbl[0]["audioSummary"] == "가은 나입니다.", tbl
     assert "| 열A" in tbl[0]["sourceExcerpt"], tbl[0]
     sc = [g for g in segs if g["kind"] == "selfcheck"]
     assert sc and all(g["skip"] for g in sc), sc
@@ -625,6 +647,15 @@ def _self_test() -> None:
     assert t4 == "AWSomeness", t4                            # 단어 경계(부분 매칭 금지)
     loaded = load_lexicon(None)
     assert "AWS" in loaded and loaded["AWS"]["say"], loaded   # 시드 로드
+
+    # Task 3: 표 audioSummary
+    s2, is2 = table_to_summary(["| 용어 | 설명 |", "| --- | --- |", "| 온프레미스 | 직접 운영 |"])
+    assert s2 == "온프레미스은 직접 운영입니다." and is2 == ["table-summary-draft"], (s2, is2)
+    s3, is3 = table_to_summary(["| A | B | C |", "| - | - | - |", "| 1 | 2 | 3 |"])
+    assert s3 is None and is3 == ["table-needs-summary"], (s3, is3)
+    segs2 = parse_segments("| 용어 | 설명 |\n| --- | --- |\n| 가 | 나 |\n")
+    t = [g for g in segs2 if g["kind"] == "table"][0]
+    assert t["audioSummary"] == "가은 나입니다." and t["issues"] == ["table-summary-draft"], t
     print("self-test OK")
 
 
