@@ -374,6 +374,41 @@ def run_generate(args) -> None:
           f"{n_issues} issues → {args.out_dir / 'script.json'}", file=sys.stderr)
 
 
+def script_to_speech(script: dict) -> str:
+    """script.json → 합성용 평문. skip 제외, table은 audioSummary, 그 외 scriptText."""
+    parts: list[str] = []
+    for s in script["segments"]:
+        if s.get("skip"):
+            continue
+        if s["kind"] == "table":
+            if s.get("audioSummary"):
+                parts.append(s["audioSummary"])
+        elif s.get("scriptText"):
+            parts.append(s["scriptText"])
+    return "\n".join(parts)
+
+
+def run_synthesize(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    speech = script_to_speech(script)
+    if not speech.strip():
+        sys.exit("script.json에 합성할 scriptText가 없습니다.")
+    max_chars = args.max_chars or 2900
+    chunks = chunk_text(speech, max_chars)
+    print(f"[synthesize] {len(speech)}자 → {len(chunks)}청크", file=sys.stderr)
+    synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
+    id3 = _id3_count(args.out)
+    print(f"[ID3] {id3}개 — {'OK' if id3 <= 1 else '다중(단일 요청 권장)'}", file=sys.stderr)
+    meta = build_audio_meta(
+        md_path=args.script, audio_path=args.out, doc_id=script["docId"],
+        speech=speech, chunks=chunks, issues=[], args=args, mode="synthesized")
+    # SSOT: md를 재파싱하지 않으므로 source는 script.json 기록을 그대로 옮긴다.
+    meta["source"] = {"asset": script.get("sourceAsset"), "sha256": script.get("sourceHash")}
+    meta["script"]["reviewStatus"] = script.get("reviewStatus", "needs_human_review")
+    write_json(args.out.with_name("audio_meta.json"), meta)
+    print(f"[완료] {args.out}", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -737,6 +772,17 @@ def _self_test() -> None:
         assert (out_d / "review_checklist.md").exists(), "검수표 미생성"
         loaded = json.loads((out_d / "script.json").read_text(encoding="utf-8"))
         assert loaded["reviewStatus"] == "needs_human_review", loaded
+
+    # Task 5: script_to_speech (skip 제외, table=audioSummary, md 무시)
+    sp = script_to_speech({"segments": [
+        {"kind": "heading", "scriptText": "제목", "skip": False, "audioSummary": None},
+        {"kind": "selfcheck", "scriptText": "비밀", "skip": True, "audioSummary": None},
+        {"kind": "table", "scriptText": "", "audioSummary": "요약입니다.", "skip": False},
+        {"kind": "source", "scriptText": "url", "skip": True, "audioSummary": None},
+    ]})
+    assert "제목" in sp and "요약입니다." in sp, sp
+    assert "비밀" not in sp and "url" not in sp, sp
+    assert sp.count("\n") == 1, sp
     print("self-test OK")
 
 
