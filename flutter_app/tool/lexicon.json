@@ -8,6 +8,7 @@
     "IT": { "say": "아이티" },
     "on-demand": { "say": "온디맨드" },
     "pay-as-you-go": { "say": "종량 과금" },
-    "AZ": { "firstSay": "가용 영역", "thenSay": "에이제트" }
+    "AZ": { "firstSay": "가용 영역", "thenSay": "에이제트" },
+    "ERP": { "say": "이아르피" }
   }
 }
