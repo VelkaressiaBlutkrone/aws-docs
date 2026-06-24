@@ -135,6 +135,341 @@ def markdown_to_speech_text(md: str) -> str:
     return "\n".join(out)
 
 
+def _clean_inline(s: str) -> str:
+    """한 줄/문단 텍스트의 인라인 마크다운·기호를 음성 평문으로 정리(scriptText용)."""
+    s = re.sub(r"\s*\{#[^}]*\}\s*$", "", s)
+    s = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", s)
+    s = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", s)
+    s = re.sub(r"<[^>]+>", "", s)
+    s = re.sub(r"[*`]+", "", s)
+    s = _EMOJI.sub("", s)
+    s = _convert_symbols(s)
+    s = re.sub(r"\s{2,}", " ", s)
+    s = re.sub(r"\s+([.,)\]])", r"\1", s)
+    s = re.sub(r"([(\[])\s+", r"\1", s)
+    s = re.sub(r",\s*\.", ".", s)
+    s = re.sub(r"([.,])\1+", r"\1", s)
+    return s.strip().strip(",")
+
+
+def _strip_list_markers(s: str) -> str:
+    """리스트·인용·체크박스 줄머리 마커 제거."""
+    s = re.sub(r"^[-*+]\s+", "", s)
+    s = re.sub(r"^\d+\.\s+", "", s)
+    s = re.sub(r"^>\s*", "", s)
+    s = re.sub(r"^\[[ xX]\]\s*", "", s)
+    return s
+
+
+def parse_segments(md: str) -> list[dict]:
+    """md를 segment dict 리스트로 분해. kind 분류 + scriptText 정제(발음사전·표요약 제외)."""
+    segs: list[dict] = []
+
+    def _add(kind, excerpt, script, *, skip=False, audio_summary=None, issues=None):
+        segs.append({
+            "id": f"seg{len(segs):03d}",
+            "kind": kind,
+            "sourceExcerpt": excerpt.strip(),
+            "scriptText": script,
+            "audioSummary": audio_summary,
+            "skip": skip,
+            "issues": list(issues or []),
+        })
+
+    lines = md.splitlines()
+    n = len(lines)
+    i = 0
+    if i < n and lines[i].strip() == "---":            # frontmatter
+        i += 1
+        while i < n and lines[i].strip() != "---":
+            i += 1
+        i += 1
+    in_selfcheck = False
+    while i < n:
+        s = lines[i].strip()
+        if not s:
+            i += 1
+            continue
+        if s.startswith("```"):                          # 코드펜스 제외
+            i += 1
+            while i < n and not lines[i].strip().startswith("```"):
+                i += 1
+            i += 1
+            continue
+        if (re.fullmatch(r"([-*_])\1{2,}", s) or s.startswith("<!--")
+                or s.startswith("![")):                  # 수평선·주석·이미지
+            i += 1
+            continue
+        if "<details" in s:                              # 정답 보기 블록
+            block = [lines[i]]
+            i += 1
+            while i < n and "</details>" not in lines[i]:
+                block.append(lines[i])
+                i += 1
+            if i < n:
+                block.append(lines[i])
+                i += 1
+            _add("selfcheck", "\n".join(block), "", skip=True)
+            continue
+        if s.startswith("#"):                            # 헤딩
+            htext = re.sub(r"^#{1,6}\s*", "", s)
+            htext = re.sub(r"\s*\{#[^}]*\}\s*$", "", htext)
+            htext = _EMOJI.sub("", htext).strip()
+            if "출처" in htext:                           # 출처 헤딩 → 이후 전부 source/skip
+                _add("source", "\n".join(lines[i:]), "", skip=True)
+                break
+            if "자가 점검" in htext or "자가점검" in htext:
+                _add("selfcheck", s, "", skip=True)
+                in_selfcheck = True
+                i += 1
+                continue
+            if in_selfcheck:
+                _add("selfcheck", s, "", skip=True)
+                i += 1
+                continue
+            _add("heading", s, _clean_inline(htext))
+            i += 1
+            continue
+        if s.startswith("|"):                            # 표 블록
+            tbl = []
+            while i < n and lines[i].strip().startswith("|"):
+                tbl.append(lines[i].strip())
+                i += 1
+            summary, tissues = table_to_summary(tbl)
+            _add("table", "\n".join(tbl), "",
+                 audio_summary=summary, issues=tissues)
+            continue
+        # 문단(연속 비빈 줄). 자가점검 구간이면 skip 본문.
+        para = []
+        while (i < n and lines[i].strip()
+               and not lines[i].strip().startswith(("#", "|", "```", "<details"))):
+            para.append(_strip_list_markers(lines[i].strip()))
+            i += 1
+        excerpt = " ".join(para)
+        if in_selfcheck:
+            _add("selfcheck", excerpt, "", skip=True)
+            continue
+        script = _clean_inline(excerpt)
+        if script:
+            _add("paragraph", excerpt, script)
+    return segs
+
+
+def load_lexicon(path) -> dict:
+    """발음사전 entries dict 로드. path=None이면 도구 옆 lexicon.json."""
+    if path is None:
+        path = Path(__file__).with_name("lexicon.json")
+    else:
+        path = Path(path)
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data.get("entries", {})
+
+
+def apply_lexicon(text: str, lexicon: dict, seen: set) -> tuple[str, list[str]]:
+    """사전 치환(첫 등장/이후, 단어 경계). 반환: (치환 text, 미등록 토큰 issues)."""
+    issues: list[str] = []
+    # 긴 키부터 치환(예: 'CLF-C02'가 'C'보다 먼저).
+    for key in sorted(lexicon, key=len, reverse=True):
+        entry = lexicon[key]
+        pattern = r"(?<![0-9A-Za-z])" + re.escape(key) + r"(?![0-9A-Za-z])"
+        if not re.search(pattern, text):
+            continue
+        if "firstSay" in entry or "thenSay" in entry:
+            first = entry.get("firstSay", entry.get("say", key))
+            later = entry.get("thenSay", entry.get("say", key))
+
+            def _repl(_m, _k=key, _first=first, _later=later):
+                if _k in seen:
+                    return _later
+                seen.add(_k)
+                return _first
+            text = re.sub(pattern, _repl, text)
+        else:
+            text = re.sub(pattern, entry.get("say", key), text)
+            seen.add(key)
+    # 남은 영문 대문자 토큰(2자 이상) → 미등록 경고.
+    for tok in sorted(set(re.findall(r"(?<![0-9A-Za-z])[A-Z][A-Z0-9]{1,}(?![0-9A-Za-z])", text))):
+        issues.append(f"unmapped-token: {tok}")
+    return text, issues
+
+
+def table_to_summary(table_lines: list[str]) -> tuple:
+    """마크다운 표 → (audioSummary, issues). 2열만 초벌 생성, 그 외 None."""
+    rows = []
+    for ln in table_lines:
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")]
+        if cells and all(re.fullmatch(r":?-{3,}:?", c or "x") for c in cells):
+            continue  # 구분행(|---|---|)
+        rows.append(cells)
+    if len(rows) < 2:
+        return None, ["table-needs-summary"]
+    if len(rows[0]) != 2:                       # 헤더 폭으로 열 수 판정
+        return None, ["table-needs-summary"]
+    parts = []
+    for r in rows[1:]:                          # 헤더 제외 본문
+        if len(r) >= 2 and r[0] and r[1]:
+            parts.append(f"{_clean_inline(r[0])}은 {_clean_inline(r[1])}입니다.")
+    if not parts:
+        return None, ["table-needs-summary"]
+    return " ".join(parts), ["table-summary-draft"]
+
+
+def build_script_json(md: str, *, doc_id: str, source_asset: str,
+                      lexicon: dict) -> dict:
+    """parse_segments + 발음사전 치환 + (표는 audioSummary 치환) → schemaVersion 2 dict."""
+    segs = parse_segments(md)
+    seen: set = set()
+    for seg in segs:
+        if seg["scriptText"]:
+            seg["scriptText"], li = apply_lexicon(seg["scriptText"], lexicon, seen)
+            seg["issues"] = list(dict.fromkeys(seg["issues"] + li))
+        if seg.get("audioSummary"):
+            seg["audioSummary"], li = apply_lexicon(seg["audioSummary"], lexicon, seen)
+            seg["issues"] = list(dict.fromkeys(seg["issues"] + li))
+    lex_hash = hashlib.sha256(
+        json.dumps(lexicon, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:12]
+    return {
+        "schemaVersion": 2,
+        "docId": doc_id,
+        "sourceAsset": source_asset,
+        "sourceHash": hashlib.sha256(md.encode("utf-8")).hexdigest(),
+        "lexiconVersion": lex_hash,
+        "generatedAt": _utc_now(),
+        "reviewStatus": "needs_human_review",
+        "segments": segs,
+    }
+
+
+def review_checklist_md(doc_id: str) -> str:
+    """청취 검수표 템플릿(사람이 작성)."""
+    return (
+        f"# 청취 검수표 — {doc_id}\n\n"
+        "- [ ] 표 핵심 정보가 음성에 포함됐다.\n"
+        "- [ ] 약어 발음이 자연스럽다.\n"
+        "- [ ] 출처 URL을 읽지 않는다.\n"
+        "- [ ] 자가 점검 음성 흐름이 자연스럽다.\n"
+        "- [ ] 첫 20초가 헤더 낭독이 아니다.\n"
+        "- [ ] 청크 경계 끊김·메타 재해석이 없다.\n"
+        "- [ ] 사실 정확성: 고유명사·서비스명·수치가 원문과 일치한다.\n\n"
+        "reviewer: ____________   날짜: ____________\n\n"
+        "승인 시 script.json·audio_meta.json의 reviewStatus를 approved로 수동 변경한다.\n"
+    )
+
+
+def run_generate(args) -> None:
+    md = args.md.read_text(encoding="utf-8")
+    doc_id = args.doc_id or args.out_dir.name
+    script = build_script_json(
+        md, doc_id=doc_id, source_asset=_asset_path(args.md),
+        lexicon=load_lexicon(args.lexicon))
+    write_json(args.out_dir / "script.json", script)
+    (args.out_dir).mkdir(parents=True, exist_ok=True)
+    (args.out_dir / "review_checklist.md").write_text(
+        review_checklist_md(doc_id), encoding="utf-8")
+    n_issues = sum(len(s["issues"]) for s in script["segments"])
+    print(f"[generate] {len(script['segments'])} segments, "
+          f"{n_issues} issues → {args.out_dir / 'script.json'}", file=sys.stderr)
+
+
+def script_to_speech(script: dict) -> str:
+    """script.json → 합성용 평문. skip 제외, table은 audioSummary, 그 외 scriptText."""
+    parts: list[str] = []
+    for s in script["segments"]:
+        if s.get("skip"):
+            continue
+        if s["kind"] == "table":
+            if s.get("audioSummary"):
+                parts.append(s["audioSummary"])
+        elif s.get("scriptText"):
+            parts.append(s["scriptText"])
+    return "\n".join(parts)
+
+
+def run_synthesize(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    speech = script_to_speech(script)
+    if not speech.strip():
+        sys.exit("script.json에 합성할 scriptText가 없습니다.")
+    max_chars = args.max_chars or 2900
+    chunks = chunk_text(speech, max_chars)
+    print(f"[synthesize] {len(speech)}자 → {len(chunks)}청크", file=sys.stderr)
+    synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
+    id3 = _id3_count(args.out)
+    print(f"[ID3] {id3}개 — {'OK' if id3 <= 1 else '다중(단일 요청 권장)'}", file=sys.stderr)
+    meta = build_audio_meta(
+        md_path=args.script, audio_path=args.out, doc_id=script["docId"],
+        speech=speech, chunks=chunks, issues=[], args=args, mode="synthesized")
+    # SSOT: md를 재파싱하지 않으므로 source는 script.json 기록을 그대로 옮긴다.
+    meta["source"] = {"asset": script.get("sourceAsset"), "sha256": script.get("sourceHash")}
+    meta["script"]["reviewStatus"] = script.get("reviewStatus", "needs_human_review")
+    write_json(args.out.with_name("audio_meta.json"), meta)
+    print(f"[완료] {args.out}", file=sys.stderr)
+
+
+def gate_script(script: dict) -> tuple:
+    """script.json 정적 검사. 반환 (hard, soft) 메시지 목록."""
+    hard: list[str] = []
+    soft: list[str] = []
+    for seg in script["segments"]:
+        sid = seg.get("id", "?")
+        txt = (seg.get("scriptText") or "") + " " + (seg.get("audioSummary") or "")
+        if re.search(r"https?://", txt):
+            hard.append(f"{sid}: URL 잔존")
+        for sym in ("→", "≠", "↓", "§", "|"):
+            if sym in txt:
+                hard.append(f"{sid}: 기호 {sym}")
+        if "정답 보기" in txt:
+            hard.append(f"{sid}: 정답 보기 잔존")
+        if re.search(r"\]\(", txt):
+            hard.append(f"{sid}: 마크다운 링크 잔존")
+        if seg.get("kind") == "table" and not seg.get("skip") and not seg.get("audioSummary"):
+            hard.append(f"{sid}: table에 audioSummary 또는 skip 필요")
+        if seg.get("kind") == "source" and not seg.get("skip"):
+            hard.append(f"{sid}: source는 skip=true 필요")
+        for iss in seg.get("issues", []):
+            if str(iss).startswith("unmapped-token"):
+                soft.append(f"{sid}: {iss}")
+    return hard, soft
+
+
+def gate_audio_meta(meta: dict, current_md_sha) -> list:
+    """audio_meta.json 검사(hard만)."""
+    hard: list[str] = []
+    audio = meta.get("audio", {})
+    checks = audio.get("containerChecks", {})
+    if audio.get("contentType") != "audio/mpeg":
+        hard.append(f"contentType={audio.get('contentType')} (audio/mpeg 필요)")
+    if checks.get("id3Count") != 1:
+        hard.append(f"id3Count={checks.get('id3Count')} (1 필요)")
+    if current_md_sha and meta.get("source", {}).get("sha256") != current_md_sha:
+        hard.append("stale: source.sha256 != 현재 md")
+    return hard
+
+
+def run_gate(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    hard, soft = gate_script(script)
+    cur_sha = None
+    if args.md and args.md.exists():
+        cur_sha = hashlib.sha256(
+            args.md.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+        if script.get("sourceHash") != cur_sha:
+            hard.append("stale: script.sourceHash != 현재 md")
+    if args.audio_meta and args.audio_meta.exists():
+        meta = json.loads(args.audio_meta.read_text(encoding="utf-8"))
+        hard += gate_audio_meta(meta, cur_sha)
+    for h in hard:
+        print(f"  HARD {h}", file=sys.stderr)
+    for s in soft:
+        print(f"  soft {s}", file=sys.stderr)
+    if hard:
+        sys.exit(f"[gate] FAIL — hard {len(hard)}개")
+    print(f"[gate] PASS (soft {len(soft)}개)", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -421,107 +756,156 @@ def _self_test() -> None:
         assert meta["audio"]["containerChecks"]["id3Count"] == 1, meta
         assert meta["audio"]["containerChecks"]["ok"] is True, meta
         assert meta["script"]["qualityIssues"] == ["URL 잔존"], meta
+
+    # Task 1: segment 파서
+    seg_md = (
+        "---\nname: x\n---\n"
+        "# 제목입니다 {#intro}\n\n"
+        "첫 문단입니다. 둘째 문장.\n\n"
+        "- 목록 [링크](https://x) 항목\n\n"
+        "| 열A | 열B |\n| --- | --- |\n| 가 | 나 |\n\n"
+        "## 🧪 자가 점검\n\n"
+        "**Q1.** 질문입니까?\n\n"
+        "<details><summary>정답 보기</summary>\n비밀.\n</details>\n\n"
+        "### 📌 출처\n\n1. 자료 https://aws.amazon.com/x/\n"
+    )
+    segs = parse_segments(seg_md)
+    kinds = [g["kind"] for g in segs]
+    assert kinds[0] == "heading" and segs[0]["scriptText"] == "제목입니다", segs[0]
+    assert any(g["kind"] == "paragraph" and "첫 문단입니다" in g["scriptText"] for g in segs), segs
+    assert any(g["kind"] == "paragraph" and "목록 링크 항목" in g["scriptText"] for g in segs), segs
+    tbl = [g for g in segs if g["kind"] == "table"]
+    assert len(tbl) == 1 and tbl[0]["skip"] is False and tbl[0]["audioSummary"] == "가은 나입니다.", tbl
+    assert "| 열A" in tbl[0]["sourceExcerpt"], tbl[0]
+    sc = [g for g in segs if g["kind"] == "selfcheck"]
+    assert sc and all(g["skip"] for g in sc), sc
+    assert all("질문입니까" not in g["scriptText"] for g in segs), "selfcheck 본문 누출"
+    src = [g for g in segs if g["kind"] == "source"]
+    assert src and all(g["skip"] for g in src), src
+    assert all("aws.amazon" not in g["scriptText"] for g in segs), "URL 누출"
+    assert all(g["id"] == f"seg{n:03d}" for n, g in enumerate(segs)), [g["id"] for g in segs]
+
+    # Task 2: 발음사전
+    lex = {
+        "AWS": {"say": "에이더블유에스"},
+        "AZ": {"firstSay": "가용 영역", "thenSay": "에이제트"},
+    }
+    seen: set[str] = set()
+    t1, i1 = apply_lexicon("AWS는 좋다", lex, seen)
+    assert t1 == "에이더블유에스는 좋다", t1
+    t2, _ = apply_lexicon("AZ 하나, AZ 둘", lex, seen)
+    assert t2 == "가용 영역 하나, 에이제트 둘", t2          # 첫 등장/이후
+    _, i3 = apply_lexicon("EC2 인스턴스", lex, seen)
+    assert any("EC2" in x for x in i3), i3                   # 미등록 토큰 경고
+    t4, _ = apply_lexicon("AWSomeness", lex, set())
+    assert t4 == "AWSomeness", t4                            # 단어 경계(부분 매칭 금지)
+    loaded = load_lexicon(None)
+    assert "AWS" in loaded and loaded["AWS"]["say"], loaded   # 시드 로드
+
+    # Task 3: 표 audioSummary
+    s2, is2 = table_to_summary(["| 용어 | 설명 |", "| --- | --- |", "| 온프레미스 | 직접 운영 |"])
+    assert s2 == "온프레미스은 직접 운영입니다." and is2 == ["table-summary-draft"], (s2, is2)
+    s3, is3 = table_to_summary(["| A | B | C |", "| - | - | - |", "| 1 | 2 | 3 |"])
+    assert s3 is None and is3 == ["table-needs-summary"], (s3, is3)
+    segs2 = parse_segments("| 용어 | 설명 |\n| --- | --- |\n| 가 | 나 |\n")
+    t = [g for g in segs2 if g["kind"] == "table"][0]
+    assert t["audioSummary"] == "가은 나입니다." and t["issues"] == ["table-summary-draft"], t
+
+    # Task 4: build_script_json
+    sj = build_script_json("# 제목\n\n본문입니다.\n", doc_id="clf-t1-1",
+                           source_asset="assets/content/clf/t1-1.md", lexicon={})
+    assert sj["schemaVersion"] == 2 and sj["docId"] == "clf-t1-1", sj
+    assert sj["reviewStatus"] == "needs_human_review", sj
+    assert len(sj["sourceHash"]) == 64 and len(sj["segments"]) >= 2, sj
+    assert sj["segments"][0]["kind"] == "heading", sj["segments"][0]
+    # 발음사전 적용이 scriptText에 반영
+    sj2 = build_script_json("본문 AWS 설명.\n", doc_id="d",
+                            source_asset="a", lexicon={"AWS": {"say": "에이더블유에스"}})
+    assert any("에이더블유에스" in s["scriptText"] for s in sj2["segments"]), sj2
+    # run_generate가 파일 2개 생성
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        md_p = root / "t1-1.md"; md_p.write_text("# 제목\n\n본문.\n", encoding="utf-8")
+        out_d = root / "clf-t1-1"
+        gen_args = argparse.Namespace(md=md_p, out_dir=out_d, doc_id="clf-t1-1", lexicon=None)
+        run_generate(gen_args)
+        assert (out_d / "script.json").exists(), "script.json 미생성"
+        assert (out_d / "review_checklist.md").exists(), "검수표 미생성"
+        loaded = json.loads((out_d / "script.json").read_text(encoding="utf-8"))
+        assert loaded["reviewStatus"] == "needs_human_review", loaded
+
+    # Task 5: script_to_speech (skip 제외, table=audioSummary, md 무시)
+    sp = script_to_speech({"segments": [
+        {"kind": "heading", "scriptText": "제목", "skip": False, "audioSummary": None},
+        {"kind": "selfcheck", "scriptText": "비밀", "skip": True, "audioSummary": None},
+        {"kind": "table", "scriptText": "", "audioSummary": "요약입니다.", "skip": False},
+        {"kind": "source", "scriptText": "url", "skip": True, "audioSummary": None},
+    ]})
+    assert "제목" in sp and "요약입니다." in sp, sp
+    assert "비밀" not in sp and "url" not in sp, sp
+    assert sp.count("\n") == 1, sp
+
+    # Task 6: 정적 게이트
+    hard, soft = gate_script({"segments": [
+        {"id": "s0", "kind": "paragraph", "scriptText": "정상 문장.", "skip": False, "issues": []},
+        {"id": "s1", "kind": "paragraph", "scriptText": "보기 https://x", "skip": False, "issues": []},
+        {"id": "s2", "kind": "table", "scriptText": "", "audioSummary": None, "skip": False, "issues": []},
+        {"id": "s3", "kind": "source", "scriptText": "x", "skip": False, "issues": []},
+        {"id": "s4", "kind": "paragraph", "scriptText": "토큰", "skip": False,
+         "issues": ["unmapped-token: EC2"]},
+    ]})
+    assert any("URL" in x for x in hard) and any("table" in x for x in hard), hard
+    assert any("source" in x for x in hard), hard
+    assert any("EC2" in x for x in soft) and not any("EC2" in x for x in hard), (hard, soft)
+    ok_meta = {"audio": {"contentType": "audio/mpeg",
+                         "containerChecks": {"id3Count": 1}}, "source": {"sha256": "abc"}}
+    assert gate_audio_meta(ok_meta, "abc") == [], gate_audio_meta(ok_meta, "abc")
+    assert any("stale" in x for x in gate_audio_meta(ok_meta, "zzz")), "stale 미검출"
+    bad_meta = {"audio": {"contentType": "text/plain",
+                          "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
+    assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
     print("self-test OK")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(
-        description="학습문서 .md → 한국어 강의 mp3 (주머니 라디오 M1 T6 임시)")
-    ap.add_argument("--md", type=Path, help="입력 학습문서 .md")
-    ap.add_argument("--out", type=Path, help="출력 경로(.mp3 또는 .wav)")
-    ap.add_argument("--doc-id", help="오디오 문서 ID(기본: 출력 폴더명)")
-    ap.add_argument("--meta-out", type=Path,
-                    help="audio_meta.json 출력 경로(기본: out 옆 audio_meta.json)")
-    ap.add_argument("--meta-only", action="store_true",
-                    help="합성 없이 기존 --out 파일에서 audio_meta.json만 생성")
-    ap.add_argument("--engine", choices=["polly", "melotts"], default="polly")
-    ap.add_argument("--voice", default="Seoyeon", help="Polly 음성(Seoyeon/Jihye)")
-    ap.add_argument("--polly-engine", default="neural",
-                    choices=["standard", "neural", "generative"])
-    ap.add_argument("--region", default="ap-northeast-2", help="Polly 리전")
-    ap.add_argument("--speed", type=float, default=1.0, help="MeloTTS 속도")
-    ap.add_argument("--device", default="cpu", help="MeloTTS cpu 또는 cuda:0")
-    ap.add_argument("--max-chars", type=int, default=0,
-                    help="청크 최대 길이(0=엔진 기본: polly 5500 / melotts 300)")
-    ap.add_argument("--dry-run", action="store_true",
-                    help="합성 없이 정제 대본 + 품질 게이트만 출력(엔진 불필요)")
+        description="학습문서 오디오 검수 파이프라인 (generate/synthesize/gate)")
     ap.add_argument("--self-test", action="store_true")
-    args = ap.parse_args()
+    sub = ap.add_subparsers(dest="cmd")
 
+    g = sub.add_parser("generate", help="md → script.json + review_checklist.md")
+    g.add_argument("--md", type=Path, required=True)
+    g.add_argument("--out-dir", type=Path, required=True)
+    g.add_argument("--doc-id")
+    g.add_argument("--lexicon", type=Path)
+
+    sy = sub.add_parser("synthesize", help="script.json → mp3 + audio_meta.json")
+    sy.add_argument("--script", type=Path, required=True)
+    sy.add_argument("--out", type=Path, required=True)
+    sy.add_argument("--engine", default="polly")
+    sy.add_argument("--voice", default="Seoyeon")
+    sy.add_argument("--polly-engine", default="neural",
+                    choices=["standard", "neural", "generative"])
+    sy.add_argument("--region", default="ap-northeast-2")
+    sy.add_argument("--max-chars", type=int, default=0)
+
+    ga = sub.add_parser("gate", help="script.json/audio_meta 정적 검증")
+    ga.add_argument("--script", type=Path, required=True)
+    ga.add_argument("--md", type=Path)
+    ga.add_argument("--audio-meta", type=Path)
+
+    args = ap.parse_args()
     if args.self_test:
         _self_test()
         return
-    if not args.md or not args.out:
-        ap.error("--md 와 --out 은 필수입니다(또는 --self-test).")
-    if not args.md.exists():
-        sys.exit(f"입력 파일 없음: {args.md}")
-    if args.meta_only and not args.out.exists():
-        sys.exit(f"--meta-only 에 필요한 기존 오디오 파일 없음: {args.out}")
-
-    # Polly neural은 요청당 3000자 한도 → 여유를 둬 2900자로 분할.
-    max_chars = args.max_chars or (2900 if args.engine == "polly" else 300)
-
-    md = args.md.read_text(encoding="utf-8")
-    speech = markdown_to_speech_text(md)
-    chunks = chunk_text(speech, max_chars)
-    print(f"[정제] {len(speech)}자 → {len(chunks)}개 청크 (engine={args.engine})",
-          file=sys.stderr)
-
-    # 품질 게이트 — M1 픽스처는 경고만(재생 게이트 ≠ 콘텐츠 검수 게이트).
-    issues = quality_issues(speech)
-    if issues:
-        print(f"[품질 게이트] {len(issues)}개 이슈 — 검수 전 픽스처(공개 전 사람 검수 필요):",
-              file=sys.stderr)
-        for it in dict.fromkeys(issues):  # 중복 제거, 순서 유지
-            print(f"  - {it}", file=sys.stderr)
+    if args.cmd == "generate":
+        run_generate(args)
+    elif args.cmd == "synthesize":
+        run_synthesize(args)
+    elif args.cmd == "gate":
+        run_gate(args)
     else:
-        print("[품질 게이트] 통과(이슈 0)", file=sys.stderr)
-
-    if args.dry_run:
-        for i, c in enumerate(chunks):
-            print(f"\n--- 청크 {i} ({len(c)}자) ---\n{c}")
-        print("\n[dry-run] 합성 생략.", file=sys.stderr)
-        return
-
-    doc_id = args.doc_id or args.out.parent.name
-    meta_out = args.meta_out or args.out.with_name("audio_meta.json")
-
-    if args.meta_only:
-        write_json(meta_out, build_audio_meta(
-            md_path=args.md,
-            audio_path=args.out,
-            doc_id=doc_id,
-            speech=speech,
-            chunks=chunks,
-            issues=issues,
-            args=args,
-            mode="meta-only",
-        ))
-        print(f"[메타] {meta_out}", file=sys.stderr)
-        return
-
-    if args.engine == "polly":
-        synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
-    else:
-        synthesize_melotts(chunks, args.out, args.speed, args.device)
-
-    # P0-1 게이트: 최종 mp3의 ID3는 1개만 허용(청크 단순 연결 탐지).
-    if args.out.suffix.lower() == ".mp3":
-        id3 = _id3_count(args.out)
-        flag = "OK" if id3 <= 1 else "다중 — 청크 연결됨(단일 요청 권장)"
-        print(f"[ID3] {id3}개 — {flag}", file=sys.stderr)
-    write_json(meta_out, build_audio_meta(
-        md_path=args.md,
-        audio_path=args.out,
-        doc_id=doc_id,
-        speech=speech,
-        chunks=chunks,
-        issues=issues,
-        args=args,
-        mode="synthesized",
-    ))
-    print(f"[메타] {meta_out}", file=sys.stderr)
-    print(f"[완료] {args.out}", file=sys.stderr)
+        ap.error("서브커맨드(generate/synthesize/gate) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
