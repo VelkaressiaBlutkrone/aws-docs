@@ -135,6 +135,125 @@ def markdown_to_speech_text(md: str) -> str:
     return "\n".join(out)
 
 
+def _clean_inline(s: str) -> str:
+    """한 줄/문단 텍스트의 인라인 마크다운·기호를 음성 평문으로 정리(scriptText용)."""
+    s = re.sub(r"\s*\{#[^}]*\}\s*$", "", s)
+    s = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", s)
+    s = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", s)
+    s = re.sub(r"<[^>]+>", "", s)
+    s = re.sub(r"[*`]+", "", s)
+    s = _EMOJI.sub("", s)
+    s = _convert_symbols(s)
+    s = re.sub(r"\s{2,}", " ", s)
+    s = re.sub(r"\s+([.,)\]])", r"\1", s)
+    s = re.sub(r"([(\[])\s+", r"\1", s)
+    s = re.sub(r",\s*\.", ".", s)
+    s = re.sub(r"([.,])\1+", r"\1", s)
+    return s.strip().strip(",")
+
+
+def _strip_list_markers(s: str) -> str:
+    """리스트·인용·체크박스 줄머리 마커 제거."""
+    s = re.sub(r"^[-*+]\s+", "", s)
+    s = re.sub(r"^\d+\.\s+", "", s)
+    s = re.sub(r"^>\s*", "", s)
+    s = re.sub(r"^\[[ xX]\]\s*", "", s)
+    return s
+
+
+def parse_segments(md: str) -> list[dict]:
+    """md를 segment dict 리스트로 분해. kind 분류 + scriptText 정제(발음사전·표요약 제외)."""
+    segs: list[dict] = []
+
+    def _add(kind, excerpt, script, *, skip=False, audio_summary=None, issues=None):
+        segs.append({
+            "id": f"seg{len(segs):03d}",
+            "kind": kind,
+            "sourceExcerpt": excerpt.strip(),
+            "scriptText": script,
+            "audioSummary": audio_summary,
+            "skip": skip,
+            "issues": list(issues or []),
+        })
+
+    lines = md.splitlines()
+    n = len(lines)
+    i = 0
+    if i < n and lines[i].strip() == "---":            # frontmatter
+        i += 1
+        while i < n and lines[i].strip() != "---":
+            i += 1
+        i += 1
+    in_selfcheck = False
+    while i < n:
+        s = lines[i].strip()
+        if not s:
+            i += 1
+            continue
+        if s.startswith("```"):                          # 코드펜스 제외
+            i += 1
+            while i < n and not lines[i].strip().startswith("```"):
+                i += 1
+            i += 1
+            continue
+        if (re.fullmatch(r"([-*_])\1{2,}", s) or s.startswith("<!--")
+                or s.startswith("![")):                  # 수평선·주석·이미지
+            i += 1
+            continue
+        if "<details" in s:                              # 정답 보기 블록
+            block = [lines[i]]
+            i += 1
+            while i < n and "</details>" not in lines[i]:
+                block.append(lines[i])
+                i += 1
+            if i < n:
+                block.append(lines[i])
+                i += 1
+            _add("selfcheck", "\n".join(block), "", skip=True)
+            continue
+        if s.startswith("#"):                            # 헤딩
+            htext = re.sub(r"^#{1,6}\s*", "", s)
+            htext = re.sub(r"\s*\{#[^}]*\}\s*$", "", htext)
+            htext = _EMOJI.sub("", htext).strip()
+            if "출처" in htext:                           # 출처 헤딩 → 이후 전부 source/skip
+                _add("source", "\n".join(lines[i:]), "", skip=True)
+                break
+            if "자가 점검" in htext or "자가점검" in htext:
+                _add("selfcheck", s, "", skip=True)
+                in_selfcheck = True
+                i += 1
+                continue
+            if in_selfcheck:
+                _add("selfcheck", s, "", skip=True)
+                i += 1
+                continue
+            _add("heading", s, _clean_inline(htext))
+            i += 1
+            continue
+        if s.startswith("|"):                            # 표 블록
+            tbl = []
+            while i < n and lines[i].strip().startswith("|"):
+                tbl.append(lines[i].strip())
+                i += 1
+            _add("table", "\n".join(tbl), "",
+                 audio_summary=None, issues=["table-needs-summary"])
+            continue
+        # 문단(연속 비빈 줄). 자가점검 구간이면 skip 본문.
+        para = []
+        while (i < n and lines[i].strip()
+               and not lines[i].strip().startswith(("#", "|", "```", "<details"))):
+            para.append(_strip_list_markers(lines[i].strip()))
+            i += 1
+        excerpt = " ".join(para)
+        if in_selfcheck:
+            _add("selfcheck", excerpt, "", skip=True)
+            continue
+        script = _clean_inline(excerpt)
+        if script:
+            _add("paragraph", excerpt, script)
+    return segs
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -421,6 +540,34 @@ def _self_test() -> None:
         assert meta["audio"]["containerChecks"]["id3Count"] == 1, meta
         assert meta["audio"]["containerChecks"]["ok"] is True, meta
         assert meta["script"]["qualityIssues"] == ["URL 잔존"], meta
+
+    # Task 1: segment 파서
+    seg_md = (
+        "---\nname: x\n---\n"
+        "# 제목입니다 {#intro}\n\n"
+        "첫 문단입니다. 둘째 문장.\n\n"
+        "- 목록 [링크](https://x) 항목\n\n"
+        "| 열A | 열B |\n| --- | --- |\n| 가 | 나 |\n\n"
+        "## 🧪 자가 점검\n\n"
+        "**Q1.** 질문입니까?\n\n"
+        "<details><summary>정답 보기</summary>\n비밀.\n</details>\n\n"
+        "### 📌 출처\n\n1. 자료 https://aws.amazon.com/x/\n"
+    )
+    segs = parse_segments(seg_md)
+    kinds = [g["kind"] for g in segs]
+    assert kinds[0] == "heading" and segs[0]["scriptText"] == "제목입니다", segs[0]
+    assert any(g["kind"] == "paragraph" and "첫 문단입니다" in g["scriptText"] for g in segs), segs
+    assert any(g["kind"] == "paragraph" and "목록 링크 항목" in g["scriptText"] for g in segs), segs
+    tbl = [g for g in segs if g["kind"] == "table"]
+    assert len(tbl) == 1 and tbl[0]["skip"] is False and tbl[0]["audioSummary"] is None, tbl
+    assert "| 열A" in tbl[0]["sourceExcerpt"], tbl[0]
+    sc = [g for g in segs if g["kind"] == "selfcheck"]
+    assert sc and all(g["skip"] for g in sc), sc
+    assert all("질문입니까" not in g["scriptText"] for g in segs), "selfcheck 본문 누출"
+    src = [g for g in segs if g["kind"] == "source"]
+    assert src and all(g["skip"] for g in src), src
+    assert all("aws.amazon" not in g["scriptText"] for g in segs), "URL 누출"
+    assert all(g["id"] == f"seg{n:03d}" for n, g in enumerate(segs)), [g["id"] for g in segs]
     print("self-test OK")
 
 
