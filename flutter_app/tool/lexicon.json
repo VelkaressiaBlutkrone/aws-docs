@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "entries": {
+    "AWS": { "say": "에이더블유에스" },
+    "CapEx": { "say": "자본 지출" },
+    "OpEx": { "say": "운영 지출" },
+    "CLF-C02": { "say": "씨엘에프 씨 공이" },
+    "IT": { "say": "아이티" },
+    "on-demand": { "say": "온디맨드" },
+    "pay-as-you-go": { "say": "종량 과금" },
+    "AZ": { "firstSay": "가용 영역", "thenSay": "에이제트" }
+  }
+}

@@ -254,6 +254,46 @@ def parse_segments(md: str) -> list[dict]:
     return segs
 
 
+def load_lexicon(path) -> dict:
+    """발음사전 entries dict 로드. path=None이면 도구 옆 lexicon.json."""
+    if path is None:
+        path = Path(__file__).with_name("lexicon.json")
+    else:
+        path = Path(path)
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data.get("entries", {})
+
+
+def apply_lexicon(text: str, lexicon: dict, seen: set) -> tuple[str, list[str]]:
+    """사전 치환(첫 등장/이후, 단어 경계). 반환: (치환 text, 미등록 토큰 issues)."""
+    issues: list[str] = []
+    # 긴 키부터 치환(예: 'CLF-C02'가 'C'보다 먼저).
+    for key in sorted(lexicon, key=len, reverse=True):
+        entry = lexicon[key]
+        pattern = r"(?<![0-9A-Za-z])" + re.escape(key) + r"(?![0-9A-Za-z])"
+        if not re.search(pattern, text):
+            continue
+        if "firstSay" in entry or "thenSay" in entry:
+            first = entry.get("firstSay", entry.get("say", key))
+            later = entry.get("thenSay", entry.get("say", key))
+
+            def _repl(_m, _k=key, _first=first, _later=later):
+                if _k in seen:
+                    return _later
+                seen.add(_k)
+                return _first
+            text = re.sub(pattern, _repl, text)
+        else:
+            text = re.sub(pattern, entry.get("say", key), text)
+            seen.add(key)
+    # 남은 영문 대문자 토큰(2자 이상) → 미등록 경고.
+    for tok in sorted(set(re.findall(r"(?<![0-9A-Za-z])[A-Z][A-Z0-9]{1,}(?![0-9A-Za-z])", text))):
+        issues.append(f"unmapped-token: {tok}")
+    return text, issues
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -568,6 +608,23 @@ def _self_test() -> None:
     assert src and all(g["skip"] for g in src), src
     assert all("aws.amazon" not in g["scriptText"] for g in segs), "URL 누출"
     assert all(g["id"] == f"seg{n:03d}" for n, g in enumerate(segs)), [g["id"] for g in segs]
+
+    # Task 2: 발음사전
+    lex = {
+        "AWS": {"say": "에이더블유에스"},
+        "AZ": {"firstSay": "가용 영역", "thenSay": "에이제트"},
+    }
+    seen: set[str] = set()
+    t1, i1 = apply_lexicon("AWS는 좋다", lex, seen)
+    assert t1 == "에이더블유에스는 좋다", t1
+    t2, _ = apply_lexicon("AZ 하나, AZ 둘", lex, seen)
+    assert t2 == "가용 영역 하나, 에이제트 둘", t2          # 첫 등장/이후
+    _, i3 = apply_lexicon("EC2 인스턴스", lex, seen)
+    assert any("EC2" in x for x in i3), i3                   # 미등록 토큰 경고
+    t4, _ = apply_lexicon("AWSomeness", lex, set())
+    assert t4 == "AWSomeness", t4                            # 단어 경계(부분 매칭 금지)
+    loaded = load_lexicon(None)
+    assert "AWS" in loaded and loaded["AWS"]["say"], loaded   # 시드 로드
     print("self-test OK")
 
 
