@@ -409,6 +409,67 @@ def run_synthesize(args) -> None:
     print(f"[완료] {args.out}", file=sys.stderr)
 
 
+def gate_script(script: dict) -> tuple:
+    """script.json 정적 검사. 반환 (hard, soft) 메시지 목록."""
+    hard: list[str] = []
+    soft: list[str] = []
+    for seg in script["segments"]:
+        sid = seg.get("id", "?")
+        txt = (seg.get("scriptText") or "") + " " + (seg.get("audioSummary") or "")
+        if re.search(r"https?://", txt):
+            hard.append(f"{sid}: URL 잔존")
+        for sym in ("→", "≠", "↓", "§", "|"):
+            if sym in txt:
+                hard.append(f"{sid}: 기호 {sym}")
+        if "정답 보기" in txt:
+            hard.append(f"{sid}: 정답 보기 잔존")
+        if re.search(r"\]\(", txt):
+            hard.append(f"{sid}: 마크다운 링크 잔존")
+        if seg.get("kind") == "table" and not seg.get("skip") and not seg.get("audioSummary"):
+            hard.append(f"{sid}: table에 audioSummary 또는 skip 필요")
+        if seg.get("kind") == "source" and not seg.get("skip"):
+            hard.append(f"{sid}: source는 skip=true 필요")
+        for iss in seg.get("issues", []):
+            if str(iss).startswith("unmapped-token"):
+                soft.append(f"{sid}: {iss}")
+    return hard, soft
+
+
+def gate_audio_meta(meta: dict, current_md_sha) -> list:
+    """audio_meta.json 검사(hard만)."""
+    hard: list[str] = []
+    audio = meta.get("audio", {})
+    checks = audio.get("containerChecks", {})
+    if audio.get("contentType") != "audio/mpeg":
+        hard.append(f"contentType={audio.get('contentType')} (audio/mpeg 필요)")
+    if checks.get("id3Count") != 1:
+        hard.append(f"id3Count={checks.get('id3Count')} (1 필요)")
+    if current_md_sha and meta.get("source", {}).get("sha256") != current_md_sha:
+        hard.append("stale: source.sha256 != 현재 md")
+    return hard
+
+
+def run_gate(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    hard, soft = gate_script(script)
+    cur_sha = None
+    if args.md and args.md.exists():
+        cur_sha = hashlib.sha256(
+            args.md.read_text(encoding="utf-8").encode("utf-8")).hexdigest()
+        if script.get("sourceHash") != cur_sha:
+            hard.append("stale: script.sourceHash != 현재 md")
+    if args.audio_meta and args.audio_meta.exists():
+        meta = json.loads(args.audio_meta.read_text(encoding="utf-8"))
+        hard += gate_audio_meta(meta, cur_sha)
+    for h in hard:
+        print(f"  HARD {h}", file=sys.stderr)
+    for s in soft:
+        print(f"  soft {s}", file=sys.stderr)
+    if hard:
+        sys.exit(f"[gate] FAIL — hard {len(hard)}개")
+    print(f"[gate] PASS (soft {len(soft)}개)", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -783,6 +844,26 @@ def _self_test() -> None:
     assert "제목" in sp and "요약입니다." in sp, sp
     assert "비밀" not in sp and "url" not in sp, sp
     assert sp.count("\n") == 1, sp
+
+    # Task 6: 정적 게이트
+    hard, soft = gate_script({"segments": [
+        {"id": "s0", "kind": "paragraph", "scriptText": "정상 문장.", "skip": False, "issues": []},
+        {"id": "s1", "kind": "paragraph", "scriptText": "보기 https://x", "skip": False, "issues": []},
+        {"id": "s2", "kind": "table", "scriptText": "", "audioSummary": None, "skip": False, "issues": []},
+        {"id": "s3", "kind": "source", "scriptText": "x", "skip": False, "issues": []},
+        {"id": "s4", "kind": "paragraph", "scriptText": "토큰", "skip": False,
+         "issues": ["unmapped-token: EC2"]},
+    ]})
+    assert any("URL" in x for x in hard) and any("table" in x for x in hard), hard
+    assert any("source" in x for x in hard), hard
+    assert any("EC2" in x for x in soft) and not any("EC2" in x for x in hard), (hard, soft)
+    ok_meta = {"audio": {"contentType": "audio/mpeg",
+                         "containerChecks": {"id3Count": 1}}, "source": {"sha256": "abc"}}
+    assert gate_audio_meta(ok_meta, "abc") == [], gate_audio_meta(ok_meta, "abc")
+    assert any("stale" in x for x in gate_audio_meta(ok_meta, "zzz")), "stale 미검출"
+    bad_meta = {"audio": {"contentType": "text/plain",
+                          "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
+    assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
     print("self-test OK")
 
 
