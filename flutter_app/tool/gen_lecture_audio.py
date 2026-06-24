@@ -801,6 +801,7 @@ def _self_test() -> None:
     assert t4 == "AWSomeness", t4                            # 단어 경계(부분 매칭 금지)
     loaded = load_lexicon(None)
     assert "AWS" in loaded and loaded["AWS"]["say"], loaded   # 시드 로드
+    assert "ERP" in loaded and loaded["ERP"]["say"] == "이아르피", loaded  # ERP 영구 추가
 
     # Task 3: 표 audioSummary
     s2, is2 = table_to_summary(["| 용어 | 설명 |", "| --- | --- |", "| 온프레미스 | 직접 운영 |"])
