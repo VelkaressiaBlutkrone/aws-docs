@@ -289,6 +289,8 @@ def apply_lexicon(text: str, lexicon: dict, seen: set) -> tuple[str, list[str]]:
         else:
             text = re.sub(pattern, entry.get("say", key), text)
             seen.add(key)
+    # 발음 치환으로 생긴 "X(X)" 중복 괄호 제거(예: 온디맨드(on-demand)→온디맨드(온디맨드)→온디맨드).
+    text = re.sub(r"([^\s()]+(?:\s[^\s()]+)*)\(\1\)", r"\1", text)
     # 남은 영문 대문자 토큰(2자 이상) → 미등록 경고.
     for tok in sorted(set(re.findall(r"(?<![0-9A-Za-z])[A-Z][A-Z0-9]{1,}(?![0-9A-Za-z])", text))):
         issues.append(f"unmapped-token: {tok}")
@@ -799,6 +801,10 @@ def _self_test() -> None:
     assert any("EC2" in x for x in i3), i3                   # 미등록 토큰 경고
     t4, _ = apply_lexicon("AWSomeness", lex, set())
     assert t4 == "AWSomeness", t4                            # 단어 경계(부분 매칭 금지)
+    t5, _ = apply_lexicon("온디맨드(on-demand) 방식", {"on-demand": {"say": "온디맨드"}}, set())
+    assert t5 == "온디맨드 방식", t5  # 발음 치환 중복 괄호 제거
+    t6, _ = apply_lexicon("가용 영역(AZ)", {"AZ": {"firstSay": "가용 영역", "thenSay": "에이제트"}}, set())
+    assert t6 == "가용 영역", t6  # 공백 포함 중복 괄호 제거
     loaded = load_lexicon(None)
     assert "AWS" in loaded and loaded["AWS"]["say"], loaded   # 시드 로드
     assert "ERP" in loaded and loaded["ERP"]["say"] == "이아르피", loaded  # ERP 영구 추가
