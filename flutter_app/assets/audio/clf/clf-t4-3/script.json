@@ -1,0 +1,440 @@
+{
+  "schemaVersion": 2,
+  "docId": "clf-t4-3",
+  "sourceAsset": "assets/content/clf/t4-3.md",
+  "sourceHash": "d3347aa5c14a34eda0943c852cf775d1b16256e764025726c599f8fe62845dc7",
+  "lexiconVersion": "99e4378737f2",
+  "generatedAt": "2026-06-25T10:16:30Z",
+  "reviewStatus": "approved",
+  "segments": [
+    {
+      "id": "seg000",
+      "kind": "heading",
+      "sourceExcerpt": "# 기술 리소스와 Support 플랜",
+      "scriptText": "기술 리소스와 Support 플랜",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg001",
+      "kind": "paragraph",
+      "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 4 「결제, 요금 및 지원」(12%) · **Task 4.3 기술 리소스·Support 옵션 식별** (`clf-t4-3`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"막혔을 때 *어디서* 도움을 받는가\" — 자료 위치와 Support 플랜입니다.",
+      "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 4 「결제, 요금 및 지원」(12%) · Task 4.3 기술 리소스·Support 옵션 식별 (clf-t4-3) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"막혔을 때 어디서 도움을 받는가\" — 자료 위치와 Support 플랜입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg002",
+      "kind": "heading",
+      "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+      "scriptText": "학습 목표 체크리스트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg003",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.3의 Skill 항목)",
+      "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.3의 Skill 항목)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg004",
+      "kind": "paragraph",
+      "sourceExcerpt": "**Support 플랜**(Basic·Developer·Business·Enterprise)의 차이를 안다 **24x7 기술 지원·전체 Trusted Advisor = Business 이상**, **TAM = Enterprise**임을 안다 **기술 리소스 위치**(re:Post·Knowledge Center·Prescriptive Guidance·백서·블로그)를 안다 **APN(AWS Partner Network)**의 역할(ISV·SI)을 안다",
+      "scriptText": "Support 플랜(Basic·Developer·Business·Enterprise)의 차이를 안다 24x7 기술 지원·전체 Trusted Advisor, 즉 Business 이상, 티에이엠, 즉 Enterprise임을 안다 기술 리소스 위치(re:Post·Knowledge Center·Prescriptive Guidance·백서·블로그)를 안다 에이피엔(에이더블유에스 Partner Network)의 역할(아이에스브이·에스아이)을 안다",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg005",
+      "kind": "heading",
+      "sourceExcerpt": "## 🎯 왜 중요한가",
+      "scriptText": "왜 중요한가",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg006",
+      "kind": "paragraph",
+      "sourceExcerpt": "도메인 4(12%)의 이 Task는 **\"도움을 어디서 받는가\"**입니다. 시험은 *상황 → 적합한 Support 플랜/리소스*를 고르게 합니다. 핵심은 **Support 플랜의 사다리**(Basic 무료 → Enterprise TAM)와 **무료 기술 리소스의 위치**입니다.",
+      "scriptText": "도메인 4(12%)의 이 Task는 \"도움을 어디서 받는가\"입니다. 시험은 상황, 적합한 Support 플랜/리소스를 고르게 합니다. 핵심은 Support 플랜의 사다리(Basic 무료, Enterprise 티에이엠)와 무료 기술 리소스의 위치입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg007",
+      "kind": "heading",
+      "sourceExcerpt": "## 🔤 먼저 알아야 할 용어",
+      "scriptText": "먼저 알아야 할 용어",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg008",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "scriptText": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg009",
+      "kind": "table",
+      "sourceExcerpt": "| 용어 | 영문 | 한 줄 풀이 |\n|---|---|---|\n| **티어(계층)** | Tier | *기능·가격·접근 범위 등을 기준으로 서비스를 낮은 단계에서 높은 단계로 나눈 등급 구조* — Support 플랜이 Basic→Developer→Business→Enterprise 순으로 제공 범위가 커지는 것이 이 구조에 해당합니다 |\n| **SLA** | Service Level Agreement | *서비스 제공자와 고객 사이에 응답 시간·가용성 등의 최소 수준을 명시한 약속* — Support 플랜별 케이스 응답 목표(플랜이 높을수록 더 짧은 응답 목표)가 이 개념에 해당합니다 |\n| **미션 크리티컬** | Mission-Critical | *중단이 곧 사업 손실·안전 위협으로 직결되어 가장 높은 수준의 가용성과 지원이 요구되는 워크로드* — Enterprise Support 플랜이 이러한 워크로드를 위해 더 짧은 응답 목표와 전담 지원을 제공합니다 |\n| **컴플라이언스** | Compliance | *법령·규정·내부 정책 등 외부 요건을 준수하고 있음을 증명하거나 유지하는 것* — Support·파트너 선택 시 산업별 컴플라이언스 요건이 플랜·파트너 선택에 영향을 줍니다 |\n| **처방적 가이던스** | Prescriptive Guidance | *\"무엇을 해야 하는지\"뿐 아니라 \"어떻게(구체적 방법·패턴)\"까지 제시하는 공식 권장 사항* — AWS Prescriptive Guidance가 마이그레이션·아키텍처 패턴을 단계별로 안내하는 방식이 이에 해당합니다 |\n| **개인화 이벤트** | Personalized Event | *AWS 전체 상태 정보 중 특정 계정·리소스에 실제 영향을 주는 이벤트만 걸러 보여 주는 것* — AWS Health Dashboard가 계정별로 관련 이벤트와 예정 변경만 표시하는 기능이 이에 해당합니다 |\n| **파트너 생태계** | Partner Ecosystem | *벤더(AWS)와 협력해 솔루션·서비스를 제공하는 외부 기업들의 네트워크* — APN이 ISV·SI 등 파트너를 인증·지원하는 체계가 이 개념에 해당합니다 |",
+      "scriptText": "",
+      "audioSummary": "먼저 기초 용어입니다. 티어, 즉 계층은 기능과 가격, 접근 범위 등을 기준으로 서비스를 낮은 단계에서 높은 단계로 나눈 등급 구조로, 서포트 플랜이 베이식, 디벨로퍼, 비즈니스, 엔터프라이즈 순으로 제공 범위가 커지는 것이 이 구조에 해당합니다. 에스엘에이는 서비스 제공자와 고객 사이에 응답 시간이나 가용성 등의 최소 수준을 명시한 약속으로, 서포트 플랜별 케이스 응답 목표가 이 개념에 해당하며 플랜이 높을수록 더 짧은 응답 목표를 줍니다. 미션 크리티컬은 중단이 곧 사업 손실이나 안전 위협으로 직결되어 가장 높은 수준의 가용성과 지원이 요구되는 워크로드로, 엔터프라이즈 서포트 플랜이 이러한 워크로드를 위해 더 짧은 응답 목표와 전담 지원을 제공합니다. 컴플라이언스는 법령과 규정, 내부 정책 등 외부 요건을 준수하고 있음을 증명하거나 유지하는 것으로, 서포트나 파트너 선택 시 산업별 컴플라이언스 요건이 영향을 줍니다. 처방적 가이던스는 무엇을 해야 하는지뿐 아니라 어떻게, 즉 구체적 방법과 패턴까지 제시하는 공식 권장 사항으로, 에이더블유에스 프리스크립티브 가이던스가 마이그레이션과 아키텍처 패턴을 단계별로 안내하는 방식이 이에 해당합니다. 개인화 이벤트는 에이더블유에스 전체 상태 정보 중 특정 계정이나 리소스에 실제 영향을 주는 이벤트만 걸러 보여 주는 것으로, 에이더블유에스 헬스 대시보드가 계정별로 관련 이벤트와 예정 변경만 표시하는 기능이 이에 해당합니다. 파트너 생태계는 벤더인 에이더블유에스와 협력해 솔루션과 서비스를 제공하는 외부 기업들의 네트워크로, 에이피엔이 아이에스브이나 에스아이 등 파트너를 인증하고 지원하는 체계가 이 개념에 해당합니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg010",
+      "kind": "heading",
+      "sourceExcerpt": "## 📖 핵심 개념",
+      "scriptText": "핵심 개념",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg011",
+      "kind": "heading",
+      "sourceExcerpt": "### 1) AWS Support 플랜 (★ 시험 핵심) {#support-plans}",
+      "scriptText": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg012",
+      "kind": "table",
+      "sourceExcerpt": "| 플랜 | 비용 | 핵심 제공 |\n|---|---|---|\n| **Basic** | **무료**(모든 고객) | 계정·결제 질문, **문서·백서·포럼**, 서비스 상태 점검, **Trusted Advisor 핵심 점검** |\n| **Developer** | 유료 | 업무 시간 **기술 지원(이메일/웹)** — 개발·테스트용 |\n| **Business** (현 공식: Business Support+) | 유료 | **24x7 기술 지원(전화·웹·채팅)**, **전체 Trusted Advisor** — 프로덕션 |\n| **Enterprise** | 유료 | Business + **전담 TAM(Technical Account Manager)**, 프로덕션 중요 케이스 **15분 응답**, 전략 검토 — 대규모·미션 크리티컬 |",
+      "scriptText": "",
+      "audioSummary": "에이더블유에스 서포트 플랜 네 가지입니다. 베이식은 모든 고객에게 무료로, 계정과 결제 질문, 문서와 백서, 포럼, 서비스 상태 점검, 트러스티드 어드바이저 핵심 점검을 제공합니다. 디벨로퍼는 유료로 업무 시간 기술 지원을 이메일이나 웹으로 제공하며 개발과 테스트용입니다. 비즈니스는 유료로 연중무휴 기술 지원을 전화와 웹, 채팅으로 제공하고 전체 트러스티드 어드바이저를 주며 프로덕션용입니다. 엔터프라이즈는 비즈니스에 더해 전담 티에이엠, 즉 테크니컬 어카운트 매니저와 프로덕션 중요 케이스 15분 응답, 전략 검토를 제공하며 대규모 미션 크리티컬용입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg013",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: - \"비용 없이 기본 지원·문서·포럼·Trusted Advisor 핵심\" → **Basic**(무료). - \"**24x7** 기술 지원 + 전체 Trusted Advisor\" → **Business** 이상. - \"전담 **TAM** + 15분 응답\" → **Enterprise**.",
+      "scriptText": "시험 신호: - \"비용 없이 기본 지원·문서·포럼·Trusted Advisor 핵심\", Basic(무료). - \"24x7 기술 지원 그리고 전체 Trusted Advisor\", Business 이상. - \"전담 티에이엠 그리고 15분 응답\", Enterprise.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg014",
+      "kind": "paragraph",
+      "sourceExcerpt": "ℹ️ 정직성 메모: AWS는 Support 플랜을 **재편 중**입니다(공식 문서 기준, 2026): **Developer·Business·Enterprise On-Ramp**는 **2027-01-01 단종** 예정이고, **Business Support+**·**Unified Operations**가 도입됐습니다(Enterprise는 TAM·15분 응답 유지). 다만 **CLF-C02 공식 시험 가이드는 전통적 분류(Basic·Developer·Business·Enterprise)**를 명시하므로, 시험 대비로는 위 4단계로 기억하면 됩니다.",
+      "scriptText": "ℹ 정직성 메모: 에이더블유에스는 Support 플랜을 재편 중입니다(공식 문서 기준, 2026): Developer·Business·Enterprise On-Ramp는 2027-01-01 단종 예정이고, Business Support 그리고 ·Unified Operations가 도입됐습니다(Enterprise는 티에이엠·15분 응답 유지). 다만 씨엘에프 씨 공이 공식 시험 가이드는 전통적 분류(Basic·Developer·Business·Enterprise)를 명시하므로, 시험 대비로는 위 4단계로 기억하면 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg015",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 AWS Support 플랜은 하나의 단일 요금이 아니라 Basic부터 Enterprise까지 계층 구조로 나뉘어 있을까요? 고객의 워크로드는 개인 학습·개발 테스트·프로덕션·미션 크리티컬로 중단 비용과 응답 속도 요구가 크게 다릅니다. AWS가 동일한 24x7 전담 지원을 모든 계정에 제공하면 대부분의 고객이 실제로 필요하지 않는 지원 비용까지 지불하게 되어 비효율적이고, 반대로 무료 단일 플랜만 있으면 프로덕션 장애 시 필요한 빠른 응답을 보장하기 어렵습니다. 계층 구조는 각 고객이 워크로드 중요도와 예산에 맞는 지원 수준을 선택하게 해, 경량 사용자는 무료 Basic으로도 운영하고 미션 크리티컬 환경은 Enterprise의 전담 TAM과 짧은 응답 목표를 얻는 것이 가능합니다.",
+      "scriptText": "원리: 왜 에이더블유에스 Support 플랜은 하나의 단일 요금이 아니라 Basic부터 Enterprise까지 계층 구조로 나뉘어 있을까요? 고객의 워크로드는 개인 학습·개발 테스트·프로덕션·미션 크리티컬로 중단 비용과 응답 속도 요구가 크게 다릅니다. 에이더블유에스가 동일한 24x7 전담 지원을 모든 계정에 제공하면 대부분의 고객이 실제로 필요하지 않는 지원 비용까지 지불하게 되어 비효율적이고, 반대로 무료 단일 플랜만 있으면 프로덕션 장애 시 필요한 빠른 응답을 보장하기 어렵습니다. 계층 구조는 각 고객이 워크로드 중요도와 예산에 맞는 지원 수준을 선택하게 해, 경량 사용자는 무료 Basic으로도 운영하고 미션 크리티컬 환경은 Enterprise의 전담 티에이엠과 짧은 응답 목표를 얻는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg016",
+      "kind": "heading",
+      "sourceExcerpt": "### 2) 무료 기술 리소스 — 어디서 찾나 {#tech-resources}",
+      "scriptText": "2) 무료 기술 리소스 — 어디서 찾나",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg017",
+      "kind": "paragraph",
+      "sourceExcerpt": "막혔을 때 *Support 케이스를 열기 전에* 활용하는 무료 자료들:",
+      "scriptText": "막혔을 때 Support 케이스를 열기 전에 활용하는 무료 자료들:",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg018",
+      "kind": "table",
+      "sourceExcerpt": "| 찾는 것 | 위치 |\n|---|---|\n| **커뮤니티 질문·답변** | **AWS re:Post** (이전 AWS 포럼) |\n| 자주 묻는 질문의 **how-to·문제 해결 답변** | **AWS Knowledge Center** |\n| **처방적(prescriptive) 모범 사례·패턴·마이그레이션 가이드** | **AWS Prescriptive Guidance** |\n| 심층 **기술 백서** | **AWS 백서(Whitepapers)** |\n| 최신 발표·심층 글 | **AWS 블로그** |\n| 지원 케이스 관리 | **AWS Support Center** |",
+      "scriptText": "",
+      "audioSummary": "커뮤니티 질문·답변은 에이더블유에스 re:Post (이전 에이더블유에스 포럼)입니다. 자주 묻는 질문의 how-to·문제 해결 답변은 에이더블유에스 Knowledge Center입니다. 처방적(prescriptive) 모범 사례·패턴·마이그레이션 가이드은 에이더블유에스 Prescriptive Guidance입니다. 심층 기술 백서은 에이더블유에스 백서(Whitepapers)입니다. 최신 발표·심층 글은 에이더블유에스 블로그입니다. 지원 케이스 관리은 에이더블유에스 Support Center입니다.",
+      "skip": false,
+      "issues": [
+        "table-summary-draft"
+      ]
+    },
+    {
+      "id": "seg019",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 AWS는 Support 케이스(유료 플랜)와 별도로 re:Post·Knowledge Center 같은 무료 기술 리소스를 제공할까요? 기술 질문의 상당 부분은 이미 다른 사용자가 겪었거나 공식 문서로 해결 가능한 반복성 문제이므로, 이를 커뮤니티와 자료로 해결하면 Support 엔지니어 자원을 진짜 복잡한 케이스에 집중하는 것이 가능합니다. re:Post와 Knowledge Center가 이런 반복 질문을 자기 해결(self-service)로 처리함으로써, 유료 Support 케이스는 자료로 해결되지 않는 환경별 복잡한 문제에 쓰이게 되고 전체적인 지원 품질도 유지됩니다. 고객 입장에서는 Support 플랜 요금 없이도 넓은 기술 지식에 접근할 수 있어, AWS 서비스 진입 장벽을 낮추고 자기 주도적 학습과 문제 해결을 지원하는 구조가 됩니다.",
+      "scriptText": "원리: 왜 에이더블유에스는 Support 케이스(유료 플랜)와 별도로 re:Post·Knowledge Center 같은 무료 기술 리소스를 제공할까요? 기술 질문의 상당 부분은 이미 다른 사용자가 겪었거나 공식 문서로 해결 가능한 반복성 문제이므로, 이를 커뮤니티와 자료로 해결하면 Support 엔지니어 자원을 진짜 복잡한 케이스에 집중하는 것이 가능합니다. re:Post와 Knowledge Center가 이런 반복 질문을 자기 해결(self-service)로 처리함으로써, 유료 Support 케이스는 자료로 해결되지 않는 환경별 복잡한 문제에 쓰이게 되고 전체적인 지원 품질도 유지됩니다. 고객 입장에서는 Support 플랜 요금 없이도 넓은 기술 지식에 접근할 수 있어, 에이더블유에스 서비스 진입 장벽을 낮추고 자기 주도적 학습과 문제 해결을 지원하는 구조가 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg020",
+      "kind": "heading",
+      "sourceExcerpt": "### 3) APN — AWS Partner Network {#apn}",
+      "scriptText": "3) 에이피엔 — 에이더블유에스 Partner Network",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg021",
+      "kind": "paragraph",
+      "sourceExcerpt": "**APN(AWS Partner Network)**은 AWS 솔루션을 구축·이전·운영하도록 돕는 **파트너 생태계**입니다.",
+      "scriptText": "에이피엔(에이더블유에스 Partner Network)은 에이더블유에스 솔루션을 구축·이전·운영하도록 돕는 파트너 생태계입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg022",
+      "kind": "paragraph",
+      "sourceExcerpt": "**ISV(독립 소프트웨어 공급자):** AWS에서 동작하는 소프트웨어 제품을 만드는 파트너. **SI(시스템 통합업체):** 고객의 AWS 도입·마이그레이션·통합을 설계·구현하는 파트너.",
+      "scriptText": "아이에스브이(독립 소프트웨어 공급자): 에이더블유에스에서 동작하는 소프트웨어 제품을 만드는 파트너. 에스아이(시스템 통합업체): 고객의 에이더블유에스 도입·마이그레이션·통합을 설계·구현하는 파트너.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg023",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: **\"AWS 전문 파트너(ISV·SI)의 도움이 필요\"** → APN.",
+      "scriptText": "시험 신호: \"에이더블유에스 전문 파트너(아이에스브이·에스아이)의 도움이 필요\", 에이피엔.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg024",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 AWS는 고객 지원을 직접 제공하는 것에만 의존하지 않고 APN이라는 외부 파트너 생태계를 별도로 운영할까요? 고객의 AWS 도입 방식은 단순 서비스 사용부터 복잡한 엔터프라이즈 마이그레이션·커스텀 소프트웨어 개발까지 다양해, AWS 내부 팀만으로 모든 산업·규모·기술 조합의 전문성을 갖추기 어렵습니다. ISV 파트너는 AWS 위에서 동작하는 특화 소프트웨어를 개발해 고객이 AWS 서비스와 함께 사용할 수 있게 하고, SI 파트너는 도입·통합 전문성으로 고객이 AWS를 빠르게 활용하도록 돕습니다. 이 구조에서 AWS는 파트너를 인증·지원하고 파트너는 시장을 확장해, 고객은 자신의 상황에 맞는 전문 도움을 찾을 수 있는 광범위한 생태계가 형성됩니다.",
+      "scriptText": "원리: 왜 에이더블유에스는 고객 지원을 직접 제공하는 것에만 의존하지 않고 에이피엔이라는 외부 파트너 생태계를 별도로 운영할까요? 고객의 에이더블유에스 도입 방식은 단순 서비스 사용부터 복잡한 엔터프라이즈 마이그레이션·커스텀 소프트웨어 개발까지 다양해, 에이더블유에스 내부 팀만으로 모든 산업·규모·기술 조합의 전문성을 갖추기 어렵습니다. 아이에스브이 파트너는 에이더블유에스 위에서 동작하는 특화 소프트웨어를 개발해 고객이 에이더블유에스 서비스와 함께 사용할 수 있게 하고, 에스아이 파트너는 도입·통합 전문성으로 고객이 에이더블유에스를 빠르게 활용하도록 돕습니다. 이 구조에서 에이더블유에스는 파트너를 인증·지원하고 파트너는 시장을 확장해, 고객은 자신의 상황에 맞는 전문 도움을 찾을 수 있는 광범위한 생태계가 형성됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg025",
+      "kind": "heading",
+      "sourceExcerpt": "### 서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강) {#health-dashboard}",
+      "scriptText": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg026",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS Health Dashboard**: AWS 서비스 상태와, **내 계정·리소스에 영향을 주는 이벤트·예정 변경**을 개인화해 보여 줍니다. **Support 플랜별 응답·채널**: 시험 대비로는 전통 분류인 **Business**를 최소 24x7 프로덕션 기술 지원 플랜으로 기억합니다. 현재 AWS Support 플랜 비교에서는 이에 해당하는 프로덕션 워크로드 최소 권장 플랜이 **Business Support+**로 표시되며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 1시간 이내 응답 목표를 제공합니다. **Enterprise Support**는 비즈니스 크리티컬 워크로드에 권장되며 더 짧은 응답 목표와 지정 전문가 지원을 제공합니다.",
+      "scriptText": "에이더블유에스 Health Dashboard: 에이더블유에스 서비스 상태와, 내 계정·리소스에 영향을 주는 이벤트·예정 변경을 개인화해 보여 줍니다. Support 플랜별 응답·채널: 시험 대비로는 전통 분류인 Business를 최소 24x7 프로덕션 기술 지원 플랜으로 기억합니다. 현재 에이더블유에스 Support 플랜 비교에서는 이에 해당하는 프로덕션 워크로드 최소 권장 플랜이 Business Support 그리고 로 표시되며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 1시간 이내 응답 목표를 제공합니다. Enterprise Support는 비즈니스 크리티컬 워크로드에 권장되며 더 짧은 응답 목표와 지정 전문가 지원을 제공합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg027",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: \"내 계정에 영향 주는 서비스 이벤트\" → **Health Dashboard**, \"24x7 프로덕션 장애 지원 최소 플랜\" → **Business(현 Business Support+)**. 출처: [AWS Health](https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html), [AWS Support 플랜](https://aws.amazon.com/premiumsupport/plans/)",
+      "scriptText": "시험 신호: \"내 계정에 영향 주는 서비스 이벤트\", Health Dashboard, \"24x7 프로덕션 장애 지원 최소 플랜\", Business(현 Business Support 그리고). 출처: 에이더블유에스 Health, 에이더블유에스 Support 플랜",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg028",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 AWS Health Dashboard는 AWS 서비스 전체 상태 페이지와 별도로 계정별 개인화 이벤트를 제공할까요? AWS는 수백 개 서비스와 수십 개 리전에서 이벤트가 수시로 발생하지만, 대부분의 이벤트는 특정 계정·리전·서비스 조합에만 영향을 주므로 전체 상태 페이지만으로는 내 워크로드에 실제 영향이 있는지 판단하기 어렵습니다. Health Dashboard는 계정에서 실제 사용 중인 서비스와 리전에 해당하는 이벤트·예정 변경만 필터링해 보여 주어, 담당자가 관련 없는 노이즈를 걸러내고 실제 영향 있는 이벤트에 빠르게 대응하는 것이 가능합니다. 이벤트를 계정 컨텍스트와 연결해 개인화함으로써, 운영 팀이 사전에 대응 계획을 세우고 예정된 유지 관리 변경에도 준비할 수 있는 구조가 됩니다.",
+      "scriptText": "원리: 왜 에이더블유에스 Health Dashboard는 에이더블유에스 서비스 전체 상태 페이지와 별도로 계정별 개인화 이벤트를 제공할까요? 에이더블유에스는 수백 개 서비스와 수십 개 리전에서 이벤트가 수시로 발생하지만, 대부분의 이벤트는 특정 계정·리전·서비스 조합에만 영향을 주므로 전체 상태 페이지만으로는 내 워크로드에 실제 영향이 있는지 판단하기 어렵습니다. Health Dashboard는 계정에서 실제 사용 중인 서비스와 리전에 해당하는 이벤트·예정 변경만 필터링해 보여 주어, 담당자가 관련 없는 노이즈를 걸러내고 실제 영향 있는 이벤트에 빠르게 대응하는 것이 가능합니다. 이벤트를 계정 컨텍스트와 연결해 개인화함으로써, 운영 팀이 사전에 대응 계획을 세우고 예정된 유지 관리 변경에도 준비할 수 있는 구조가 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg029",
+      "kind": "heading",
+      "sourceExcerpt": "## ✍️ 시험 포인트",
+      "scriptText": "시험 포인트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg030",
+      "kind": "paragraph",
+      "sourceExcerpt": "**Basic = 무료**(문서·백서·포럼·서비스 상태·Trusted Advisor 핵심 점검). 기술 케이스 지원은 유료 플랜부터. **24x7 기술 지원 + 전체 Trusted Advisor = Business 이상**(현 공식 명칭 Business Support+, 전통 Business/Developer는 2027-01-01 단종 예정). **전담 TAM + 15분 응답 = Enterprise.** 무료 리소스: **re:Post**(커뮤니티 Q&A) · **Knowledge Center**(how-to) · **Prescriptive Guidance**(모범 사례) · **백서/블로그**. **APN = AWS 파트너(ISV·SI)** 생태계.",
+      "scriptText": "Basic, 즉 무료(문서·백서·포럼·서비스 상태·Trusted Advisor 핵심 점검). 기술 케이스 지원은 유료 플랜부터. 24x7 기술 지원 그리고 전체 Trusted Advisor, 즉 Business 이상(현 공식 명칭 Business Support 그리고, 전통 Business/Developer는 2027-01-01 단종 예정). 전담 티에이엠 그리고 15분 응답, 즉 Enterprise. 무료 리소스: re:Post(커뮤니티 Q&A) · Knowledge Center(how-to) · Prescriptive Guidance(모범 사례) · 백서/블로그. 에이피엔, 즉 에이더블유에스 파트너(아이에스브이·에스아이) 생태계.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg031",
+      "kind": "paragraph",
+      "sourceExcerpt": "참고(최신성): Support 플랜 구성은 변동 중입니다 — 공식 문서에 Developer·Business·Enterprise On-Ramp의 신규 가입 종료 공지와 Business Support+ 등 새 구성이 안내되고 있습니다. 시험 대비는 위 구분으로 하되, 실제 가입 시 공식 페이지의 최신 플랜을 확인하세요.",
+      "scriptText": "참고(최신성): Support 플랜 구성은 변동 중입니다 — 공식 문서에 Developer·Business·Enterprise On-Ramp의 신규 가입 종료 공지와 Business Support 그리고 등 새 구성이 안내되고 있습니다. 시험 대비는 위 구분으로 하되, 실제 가입 시 공식 페이지의 최신 플랜을 확인하세요.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg032",
+      "kind": "heading",
+      "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
+      "scriptText": "흔한 함정",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg033",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"Basic 플랜에서도 24x7 기술 지원을 받는다.\"** → ❌. **24x7 기술 케이스 지원은 Business 이상.** Basic은 계정·결제 질문과 문서·포럼·Trusted Advisor 핵심 점검(무료). *(원리: §1 — Support 플랜은 워크로드 중요도에 따라 계층적으로 구성되어 있어, Basic은 기술 케이스 응답 없이 자기 해결 리소스만 제공하고 24x7 기술 지원은 프로덕션 수준의 Business 이상에서 제공된다.)* **\"TAM은 Business 플랜부터 제공된다.\"** → ❌. **전담 TAM(Technical Account Manager)은 Enterprise** 플랜. *(원리: §1 — TAM은 계정 전략 검토와 상시 전담 관계를 제공하는 고비용 자원이므로, 가장 높은 미션 크리티컬 요구를 가진 Enterprise 플랜에서만 포함된다.)* **\"기술 질문은 무조건 Support 케이스(유료)부터 연다.\"** → ⚠️ 먼저 **re:Post·Knowledge Center·문서** 같은 무료 리소스로 해결되는 경우가 많습니다. *(원리: §2 — 반복성 기술 질문은 커뮤니티·자료로 자기 해결이 가능하도록 AWS가 무료 리소스를 제공하므로, Support 케이스는 자료로 해결되지 않는 복잡한 환경별 문제에 집중하는 구조다.)* **\"전체 Trusted Advisor 점검은 모든 플랜에서 제공된다.\"** → ❌. **전체 점검은 Business/Enterprise 급 이상**(Basic·Developer는 일부). *(원리: §1 — Trusted Advisor 전체 점검은 비용 최적화·성능·보안 등 폭넓은 권장 사항을 제공하는 고도 기능이라 유료 프로덕션 플랜 이상에서만 접근이 가능하고, Basic·Developer는 핵심 항목만 제공한다.)* **\"APN은 AWS의 내부 지원팀이다.\"** → ❌. APN은 *외부 파트너*(ISV·SI) 네트워크입니다. *(원리: §3 — APN은 AWS가 직접 고용한 팀이 아니라 인증된 외부 기업들의 파트너 생태계로, AWS가 제공하기 어려운 산업별·기술별 전문성을 파트너가 분담하는 구조다.)*",
+      "scriptText": "\"Basic 플랜에서도 24x7 기술 지원을 받는다.\". 24x7 기술 케이스 지원은 Business 이상. Basic은 계정·결제 질문과 문서·포럼·Trusted Advisor 핵심 점검(무료). (원리: 1번 — Support 플랜은 워크로드 중요도에 따라 계층적으로 구성되어 있어, Basic은 기술 케이스 응답 없이 자기 해결 리소스만 제공하고 24x7 기술 지원은 프로덕션 수준의 Business 이상에서 제공된다.) \"티에이엠은 Business 플랜부터 제공된다.\". 전담 티에이엠(Technical Account Manager)은 Enterprise 플랜. (원리: 1번 — 티에이엠은 계정 전략 검토와 상시 전담 관계를 제공하는 고비용 자원이므로, 가장 높은 미션 크리티컬 요구를 가진 Enterprise 플랜에서만 포함된다.) \"기술 질문은 무조건 Support 케이스(유료)부터 연다.\", 먼저 re:Post·Knowledge Center·문서 같은 무료 리소스로 해결되는 경우가 많습니다. (원리: 2번 — 반복성 기술 질문은 커뮤니티·자료로 자기 해결이 가능하도록 에이더블유에스가 무료 리소스를 제공하므로, Support 케이스는 자료로 해결되지 않는 복잡한 환경별 문제에 집중하는 구조다.) \"전체 Trusted Advisor 점검은 모든 플랜에서 제공된다.\". 전체 점검은 Business/Enterprise 급 이상(Basic·Developer는 일부). (원리: 1번 — Trusted Advisor 전체 점검은 비용 최적화·성능·보안 등 폭넓은 권장 사항을 제공하는 고도 기능이라 유료 프로덕션 플랜 이상에서만 접근이 가능하고, Basic·Developer는 핵심 항목만 제공한다.) \"에이피엔은 에이더블유에스의 내부 지원팀이다.\". 에이피엔은 외부 파트너(아이에스브이·에스아이) 네트워크입니다. (원리: 3번 — 에이피엔은 에이더블유에스가 직접 고용한 팀이 아니라 인증된 외부 기업들의 파트너 생태계로, 에이더블유에스가 제공하기 어려운 산업별·기술별 전문성을 파트너가 분담하는 구조다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg034",
+      "kind": "selfcheck",
+      "sourceExcerpt": "## 🧪 자가 점검",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg035",
+      "kind": "selfcheck",
+      "sourceExcerpt": "아래는 학습용 자가 점검입니다. (정식 검증 문항은 `t4-3.questions.json` 참조)",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg036",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q1.** 비용을 들이지 않고 계정·결제 질문 지원, 문서·포럼, Trusted Advisor 핵심 점검을 받을 수 있는 Support 플랜은?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg037",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**Basic Support**(무료). 모든 AWS 고객이 자동으로 사용하며, 계정·결제 질문 응답, 문서·백서·포럼, 서비스 상태 점검, Trusted Advisor 핵심 점검을 제공합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg038",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q2.** 프로덕션 워크로드를 위해 24x7 기술 지원(전화·웹·채팅)과 전체 Trusted Advisor가 필요하면 어떤 플랜 이상이어야 하나요? 그리고 전담 TAM이 필요하면?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg039",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n24x7 기술 지원과 전체 Trusted Advisor는 **Business** 플랜 이상, 전담 **TAM(Technical Account Manager)**은 **Enterprise** 플랜입니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg040",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q3.** Support 케이스를 열기 전에, 커뮤니티의 질문·답변이나 자주 묻는 질문의 how-to를 무료로 찾으려면 각각 어디를 보나요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg041",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n커뮤니티 질문·답변은 **AWS re:Post**(이전 AWS 포럼), 자주 묻는 질문의 how-to·문제 해결은 **AWS Knowledge Center**입니다. 모범 사례·패턴은 **AWS Prescriptive Guidance**입니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg042",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q4.** AWS에서 동작하는 소프트웨어를 만드는 회사(ISV)나 도입을 도와주는 시스템 통합업체(SI) 같은 전문 파트너의 도움이 필요할 때 찾는 것은?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg043",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**APN(AWS Partner Network)**. ISV(독립 소프트웨어 공급자)·SI(시스템 통합업체) 등 파트너가 AWS 솔루션 구축·마이그레이션·운영을 돕습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg044",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q5 (원리).** 왜 AWS는 Trusted Advisor의 전체 점검 기능을 모든 Support 플랜에 기본 제공하지 않고 Business 이상에서만 제공할까요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg045",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\nTrusted Advisor의 전체 점검은 비용 최적화·성능·보안·내결함성·서비스 한도 등 수백 개 항목을 지속적으로 분석하고 권장 사항을 제공하는 기능으로, 실시간 점검 실행과 결과 생성에 상당한 인프라 자원이 소요됩니다. AWS는 이 비용을 유료 프로덕션 Support 플랜(Business 이상)의 요금에 포함시켜, 실제로 최적화 가치가 크고 지속적 점검이 필요한 프로덕션 환경에서만 전체 기능을 제공하는 방식을 선택했습니다. Basic·Developer 플랜은 보안·한도 관련 핵심 항목만 제공해 자기 해결의 최소 수준을 유지하고, 전체 권장 사항은 더 높은 지원 수준이 필요한 환경에서 활용하는 구조입니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg046",
+      "kind": "source",
+      "sourceExcerpt": "### 📌 출처 (verified)\n\n이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-06 · 고도화 검수: 2026-06-11)\n\n1. AWS Support 플랜 — https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html\n2. AWS Trusted Advisor (Support 플랜별 점검 범위) — https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html\n3. CLF-C02 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    }
+  ]
+}

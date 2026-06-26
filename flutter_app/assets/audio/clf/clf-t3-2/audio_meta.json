@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "docId": "clf-t3-2",
+  "generatedAt": "2026-06-26T00:53:32Z",
+  "mode": "synthesized",
+  "reviewStatus": "approved",
+  "source": {
+    "asset": "assets/content/clf/t3-2.md",
+    "sha256": "f6e61b559886b635cf00d93fe915d6905cb8e520abccb9417b028531b82b215a"
+  },
+  "audio": {
+    "src": "assets/audio/clf/clf-t3-2/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 5984684,
+    "sha256": "e5a7a7c652d39b9295eecda76703944f9bdd0b585a00035fbad7222dfda11fd5",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "script": {
+    "speechChars": 7456,
+    "chunkCount": 3,
+    "qualityIssues": [],
+    "reviewStatus": "approved"
+  },
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

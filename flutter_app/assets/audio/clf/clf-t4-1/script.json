@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 2,
+  "docId": "clf-t4-1",
+  "sourceAsset": "assets/content/clf/t4-1.md",
+  "sourceHash": "57334a497daf78ac8aa8afcfeb9e1bf68bc2a61f4801a0fd5043786d1ff6c0fa",
+  "lexiconVersion": "99e4378737f2",
+  "generatedAt": "2026-06-25T10:16:29Z",
+  "reviewStatus": "approved",
+  "segments": [
+    {
+      "id": "seg000",
+      "kind": "heading",
+      "sourceExcerpt": "# 요금 모델 (구매 옵션·데이터 전송·스토리지)",
+      "scriptText": "요금 모델 (구매 옵션·데이터 전송·스토리지)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg001",
+      "kind": "paragraph",
+      "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 4 「결제, 요금 및 지원」(12%) · **Task 4.1 요금 모델 비교** (`clf-t4-1`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"같은 리소스를 *어떻게 사면* 더 싼가\" — 컴퓨팅 구매 옵션이 핵심입니다.",
+      "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 4 「결제, 요금 및 지원」(12%) · Task 4.1 요금 모델 비교 (clf-t4-1) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"같은 리소스를 어떻게 사면 더 싼가\" — 컴퓨팅 구매 옵션이 핵심입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg002",
+      "kind": "heading",
+      "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+      "scriptText": "학습 목표 체크리스트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg003",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.1의 Skill 항목)",
+      "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.1의 Skill 항목)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg004",
+      "kind": "paragraph",
+      "sourceExcerpt": "**EC2 구매 옵션 6종**(On-Demand·Savings Plans·Reserved·Spot·Dedicated Hosts·Capacity Reservations)을 구분한다 **각 옵션을 언제 쓰는지**(예측 불가→On-Demand, 꾸준→Savings Plans/RI, 중단 가능→Spot) 안다 **데이터 전송 요금**(수신 보통 무료, 발신·리전 간 과금)을 안다 **스토리지 계층별 요금**(접근 빈도↔비용)을 안다",
+      "scriptText": "이씨투 구매 옵션 6종(On-Demand·Savings Plans·Reserved·Spot·Dedicated Hosts·Capacity Reservations)을 구분한다 각 옵션을 언제 쓰는지(예측 불가, On-Demand, 꾸준, Savings Plans/알아이, 중단 가능, Spot) 안다 데이터 전송 요금(수신 보통 무료, 발신·리전 간 과금)을 안다 스토리지 계층별 요금(접근 빈도↔비용)을 안다",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg005",
+      "kind": "heading",
+      "sourceExcerpt": "## 🎯 왜 중요한가",
+      "scriptText": "왜 중요한가",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg006",
+      "kind": "paragraph",
+      "sourceExcerpt": "도메인 4(12%)에서 이 Task는 **\"비용을 어떻게 낮추는가\"**의 컴퓨팅 편입니다. 시험은 *워크로드 특성 → 적합한 구매 옵션*을 고르게 합니다. 핵심 4가지만 확실하면 됩니다: **On-Demand(자유·정가)**, **Savings Plans/Reserved(약정·할인)**, **Spot(미사용·최대 할인·중단)**, **Dedicated Hosts(전용·BYOL)**.",
+      "scriptText": "도메인 4(12%)에서 이 Task는 \"비용을 어떻게 낮추는가\"의 컴퓨팅 편입니다. 시험은 워크로드 특성, 적합한 구매 옵션을 고르게 합니다. 핵심 4가지만 확실하면 됩니다: On-Demand(자유·정가), Savings Plans/Reserved(약정·할인), Spot(미사용·최대 할인·중단), Dedicated Hosts(전용·비와이오엘).",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg007",
+      "kind": "heading",
+      "sourceExcerpt": "## 🔤 먼저 알아야 할 용어",
+      "scriptText": "먼저 알아야 할 용어",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg008",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "scriptText": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg009",
+      "kind": "table",
+      "sourceExcerpt": "| 용어 | 영문 | 한 줄 풀이 |\n|---|---|---|\n| **약정** | Commitment | 일정 기간(1년 또는 3년) 동안 *특정 사용량이나 구성을 유지하겠다고 사전에 선언*하는 것 — Savings Plans·RI가 이 방식으로 할인을 제공합니다 |\n| **BYOL** | Bring Your Own License | 온프레미스 서버에서 사용하던 *기존 소프트웨어 라이선스를 AWS로 가져와 재활용*하는 방식 — Dedicated Hosts가 이를 허용합니다 |\n| **인스턴스 패밀리** | Instance Family | EC2 인스턴스를 *용도(범용·컴퓨팅·메모리 최적화 등)별로 묶은 그룹* — Savings Plans는 패밀리가 바뀌어도 할인이 유지됩니다 |\n| **스테이트리스** | Stateless | 작업의 *진행 상태를 저장하지 않아 중단 후 재시작해도 결과가 달라지지 않는* 처리 방식 — Spot 중단 후 재실행이 가능한 배치 작업이 이에 해당합니다 |\n| **인바운드 / 아웃바운드** | Inbound / Outbound | 데이터가 *AWS 로 들어오는 방향*이 인바운드, *AWS에서 인터넷으로 나가는 방향*이 아웃바운드 — 인바운드는 보통 무료, 아웃바운드는 과금됩니다 |\n| **S3 IA** | S3 Infrequent Access | 접근 빈도가 낮은 데이터를 위한 *S3 스토리지 클래스*로, 보관 단가는 Standard보다 낮고 데이터 검색 시 수수료가 부과됩니다 |\n| **S3 수명 주기** | S3 Lifecycle | S3 객체를 *경과 기간이나 조건에 따라 자동으로 다른 스토리지 클래스로 전환하거나 삭제*하는 정책 — 오래된 데이터를 Glacier 등 저렴한 계층으로 자동 이동해 비용을 최적화합니다 |\n| **Glacier** | Amazon S3 Glacier | 거의 접근하지 않는 *아카이브 데이터를 위한 저비용 S3 스토리지 클래스* — 보관 단가가 S3 Standard의 일부 수준이지만, 데이터 복원에 수 분~수 시간이 걸립니다 |",
+      "scriptText": "",
+      "audioSummary": "먼저 기초 용어입니다. 약정은 일정 기간, 1년 또는 3년 동안 특정 사용량이나 구성을 유지하겠다고 사전에 선언하는 것으로, 세이빙스 플랜과 알아이가 이 방식으로 할인을 제공합니다. 비와이오엘은 온프레미스 서버에서 사용하던 기존 소프트웨어 라이선스를 에이더블유에스로 가져와 재활용하는 방식으로, 디디케이티드 호스트가 이를 허용합니다. 인스턴스 패밀리는 이씨투 인스턴스를 용도별로, 예를 들어 범용이나 컴퓨팅, 메모리 최적화 등으로 묶은 그룹으로, 세이빙스 플랜은 패밀리가 바뀌어도 할인이 유지됩니다. 스테이트리스는 작업의 진행 상태를 저장하지 않아 중단 후 재시작해도 결과가 달라지지 않는 처리 방식으로, 스팟 중단 후 재실행이 가능한 배치 작업이 이에 해당합니다. 인바운드는 데이터가 에이더블유에스로 들어오는 방향이고 아웃바운드는 에이더블유에스에서 인터넷으로 나가는 방향으로, 인바운드는 보통 무료이고 아웃바운드는 과금됩니다. 에스쓰리 아이에이는 접근 빈도가 낮은 데이터를 위한 에스쓰리 스토리지 클래스로, 보관 단가는 스탠다드보다 낮지만 데이터 검색 시 수수료가 부과됩니다. 에스쓰리 수명 주기는 에스쓰리 객체를 경과 기간이나 조건에 따라 자동으로 다른 스토리지 클래스로 전환하거나 삭제하는 정책으로, 오래된 데이터를 글레이셔 등 저렴한 계층으로 자동 이동해 비용을 최적화합니다. 글레이셔는 거의 접근하지 않는 아카이브 데이터를 위한 저비용 에스쓰리 스토리지 클래스로, 보관 단가가 에스쓰리 스탠다드의 일부 수준이지만 데이터 복원에 수 분에서 수 시간이 걸립니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg010",
+      "kind": "heading",
+      "sourceExcerpt": "## 📖 핵심 개념",
+      "scriptText": "핵심 개념",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg011",
+      "kind": "heading",
+      "sourceExcerpt": "### 1) EC2 컴퓨팅 구매 옵션 (★ 시험 핵심) {#purchase-options}",
+      "scriptText": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg012",
+      "kind": "table",
+      "sourceExcerpt": "| 옵션 | 약정 | 할인 | 언제 쓰나 |\n|---|---|---|---|\n| **On-Demand** | 없음 | 없음(정가) | 단기·예측 불가, 테스트/개발, 처음 시작 |\n| **Savings Plans** | 1년 또는 3년, **시간당 일정 사용량($/h)** 약정 | **최대 72%** | 꾸준한 사용량. **EC2·Fargate·Lambda에 유연**(인스턴스 패밀리·크기·OS·리전 무관) |\n| **Reserved Instances(RI)** | 1년 또는 3년, **특정 인스턴스 구성** 약정 | 큼 | 안정적·예측 가능한 정상 상태 워크로드 |\n| **Spot Instances** | 없음(AWS **미사용 용량**) | **최대 90%** | **중단을 견디는** 워크로드(배치·내결함성·스테이트리스) |\n| **Dedicated Hosts** | - | - | **전용 물리 서버** 필요(컴플라이언스, **기존 라이선스 BYOL**) |\n| **Capacity Reservations** | - | - | 특정 AZ에 **용량을 미리 예약**(필요 시점 확보) |",
+      "scriptText": "",
+      "audioSummary": "이씨투 요금 옵션 여섯 가지입니다. 온디맨드는 약정과 할인이 없는 정가로, 단기나 예측 불가, 테스트와 개발, 처음 시작할 때 씁니다. 세이빙스 플랜은 1년 또는 3년간 시간당 일정 사용량을 약정해 최대 72퍼센트 할인하며, 꾸준한 사용량에 적합하고 이씨투와 파게이트, 람다에 유연하게 적용되어 인스턴스 패밀리나 크기, 오에스, 리전과 무관합니다. 예약 인스턴스, 알아이는 1년 또는 3년간 특정 인스턴스 구성을 약정해 큰 할인을 주며, 안정적이고 예측 가능한 정상 상태 워크로드에 적합합니다. 스팟 인스턴스는 에이더블유에스 미사용 용량을 쓰는 것으로 최대 90퍼센트 할인하며, 중단을 견디는 배치나 내결함성, 스테이트리스 워크로드에 적합합니다. 디디케이티드 호스트는 전용 물리 서버가 필요할 때, 예를 들어 컴플라이언스나 기존 라이선스 비와이오엘에 씁니다. 캐파시티 리저베이션은 특정 가용 영역에 용량을 미리 예약해 필요 시점에 확보합니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg013",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: - \"예측 불가·단기·테스트\" → **On-Demand** - \"1~3년 꾸준히 쓸 것, 유연하게 할인\" → **Savings Plans** (특정 구성 고정이면 **RI**) - \"중단돼도 괜찮은 대량 배치, 가장 싸게\" → **Spot** - \"물리적으로 전용 서버 + 기존 라이선스\" → **Dedicated Hosts**",
+      "scriptText": "시험 신호: - \"예측 불가·단기·테스트\", On-Demand - \"1~3년 꾸준히 쓸 것, 유연하게 할인\", Savings Plans (특정 구성 고정이면 알아이) - \"중단돼도 괜찮은 대량 배치, 가장 싸게\", Spot - \"물리적으로 전용 서버 그리고 기존 라이선스\", Dedicated Hosts",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg014",
+      "kind": "paragraph",
+      "sourceExcerpt": "**Savings Plans vs RI:** 둘 다 1/3년 약정 할인. **Savings Plans는 더 유연**(사용량 기반, 인스턴스 패밀리·리전 바꿔도 적용, Fargate·Lambda 포함). **RI는 특정 구성**에 묶이지만 용량 예약 옵션 등 특성이 있음.",
+      "scriptText": "Savings Plans 대 알아이: 둘 다 1/3년 약정 할인. Savings Plans는 더 유연(사용량 기반, 인스턴스 패밀리·리전 바꿔도 적용, Fargate·Lambda 포함). 알아이는 특정 구성에 묶이지만 용량 예약 옵션 등 특성이 있음.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg015",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 AWS는 하나의 고정 요금 대신 On-Demand부터 Spot까지 구매 옵션을 여러 단계로 나눠 제공할까요? AWS 입장에서는 미리 수요를 확정(약정)받으면 데이터센터 용량을 더 예측 가능하게 운영할 수 있어, 약정량만큼 할인을 제공할 여지가 생깁니다. Spot 인스턴스의 경우 다른 고객이 쓰지 않는 미사용 용량을 시장 가격처럼 유동적으로 공급함으로써, AWS는 유휴 자원을 수익화하고 고객은 On-Demand 대비 큰 폭의 할인을 받는 구조가 됩니다. 고객 입장에서는 워크로드마다 예측 가능성·중단 허용 여부·필요한 구성의 유연성이 달라, 하나의 고정 요금으로는 안정적 워크로드에 과금이 높아지거나 실험적 작업에 불필요한 약정 비용이 붙는 문제가 생깁니다. 구매 옵션을 세분화함으로써 고객은 워크로드 특성(예측 가능성·중단 허용도·구성 유연성)에 맞는 가격 구조를 선택할 수 있고, 같은 조건이면 약정을 제공할수록 더 큰 할인이 적용되는 구조가 됩니다.",
+      "scriptText": "원리: 왜 에이더블유에스는 하나의 고정 요금 대신 On-Demand부터 Spot까지 구매 옵션을 여러 단계로 나눠 제공할까요? 에이더블유에스 입장에서는 미리 수요를 확정(약정)받으면 데이터센터 용량을 더 예측 가능하게 운영할 수 있어, 약정량만큼 할인을 제공할 여지가 생깁니다. Spot 인스턴스의 경우 다른 고객이 쓰지 않는 미사용 용량을 시장 가격처럼 유동적으로 공급함으로써, 에이더블유에스는 유휴 자원을 수익화하고 고객은 On-Demand 대비 큰 폭의 할인을 받는 구조가 됩니다. 고객 입장에서는 워크로드마다 예측 가능성·중단 허용 여부·필요한 구성의 유연성이 달라, 하나의 고정 요금으로는 안정적 워크로드에 과금이 높아지거나 실험적 작업에 불필요한 약정 비용이 붙는 문제가 생깁니다. 구매 옵션을 세분화함으로써 고객은 워크로드 특성(예측 가능성·중단 허용도·구성 유연성)에 맞는 가격 구조를 선택할 수 있고, 같은 조건이면 약정을 제공할수록 더 큰 할인이 적용되는 구조가 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg016",
+      "kind": "heading",
+      "sourceExcerpt": "### 2) 데이터 전송 요금 {#data-transfer}",
+      "scriptText": "2) 데이터 전송 요금",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg017",
+      "kind": "paragraph",
+      "sourceExcerpt": "**수신(인바운드, AWS로 들어오는) 데이터**: 일반적으로 **무료**. **발신(아웃바운드, 인터넷으로 나가는) 데이터**: **과금**. **리전 간(Region 간) 전송**: 과금. 같은 AZ 내 전송은 보통 무료/저렴.",
+      "scriptText": "수신(인바운드, 에이더블유에스로 들어오는) 데이터: 일반적으로 무료. 발신(아웃바운드, 인터넷으로 나가는) 데이터: 과금. 리전 간(Region 간) 전송: 과금. 같은 가용 영역 내 전송은 보통 무료/저렴.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg018",
+      "kind": "paragraph",
+      "sourceExcerpt": "기억: **들어오는 건 보통 공짜, 나가는 것·리전을 넘는 것은 돈.** 아키텍처를 *데이터가 적게 나가도록* 설계하면 비용↓.",
+      "scriptText": "기억: 들어오는 건 보통 공짜, 나가는 것·리전을 넘는 것은 돈. 아키텍처를 데이터가 적게 나가도록 설계하면 비용 감소.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg019",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 데이터를 AWS로 올리는 인바운드는 무료이고, 인터넷으로 내보내는 아웃바운드에는 요금이 부과될까요? 인바운드 데이터는 고객이 AWS 서비스를 계속 사용하도록 유도하는 진입 경로이므로, 마찰을 낮춰 데이터 유입을 촉진하는 방향이 AWS에 유리합니다. 아웃바운드 데이터는 AWS 데이터센터와 인터넷 망 사이의 실제 대역폭 비용이 발생하므로, 이 비용을 발신자에게 반영하는 구조가 됩니다. 리전 간 전송도 두 데이터센터를 연결하는 내부 네트워크 비용이 추가로 발생해 과금 대상이 됩니다. 이 비대칭 요금 구조는 아웃바운드 비용을 의식하고 아키텍처를 데이터가 AWS 내부에서 처리되도록 설계할 유인을 만들어, 데이터 위치를 소비 서비스와 가깝게 두는 것이 비용 절감으로 이어집니다.",
+      "scriptText": "원리: 왜 데이터를 에이더블유에스로 올리는 인바운드는 무료이고, 인터넷으로 내보내는 아웃바운드에는 요금이 부과될까요? 인바운드 데이터는 고객이 에이더블유에스 서비스를 계속 사용하도록 유도하는 진입 경로이므로, 마찰을 낮춰 데이터 유입을 촉진하는 방향이 에이더블유에스에 유리합니다. 아웃바운드 데이터는 에이더블유에스 데이터센터와 인터넷 망 사이의 실제 대역폭 비용이 발생하므로, 이 비용을 발신자에게 반영하는 구조가 됩니다. 리전 간 전송도 두 데이터센터를 연결하는 내부 네트워크 비용이 추가로 발생해 과금 대상이 됩니다. 이 비대칭 요금 구조는 아웃바운드 비용을 의식하고 아키텍처를 데이터가 에이더블유에스 내부에서 처리되도록 설계할 유인을 만들어, 데이터 위치를 소비 서비스와 가깝게 두는 것이 비용 절감으로 이어집니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg020",
+      "kind": "heading",
+      "sourceExcerpt": "### 3) 스토리지 계층별 요금 (4.x 스토리지와 연계) {#storage-pricing}",
+      "scriptText": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg021",
+      "kind": "paragraph",
+      "sourceExcerpt": "스토리지는 **접근 빈도와 비용의 트레이드오프**로 계층이 나뉩니다(자세한 건 [스토리지 3.6](#)).",
+      "scriptText": "스토리지는 접근 빈도와 비용의 트레이드오프로 계층이 나뉩니다(자세한 건 스토리지 3.6).",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg022",
+      "kind": "paragraph",
+      "sourceExcerpt": "**자주 접근** → 보관 단가↑·검색 빠름·검색 수수료 없음(예: S3 Standard). **가끔/거의 안 접근** → 보관 단가↓·검색 수수료/시간↑(예: S3 IA, Glacier). **S3 수명 주기**로 시간이 지나며 더 싼 계층으로 자동 전환해 비용 최적화.",
+      "scriptText": "자주 접근, 보관 단가 증가·검색 빠름·검색 수수료 없음(예: 에스쓰리 Standard). 가끔/거의 안 접근, 보관 단가 감소·검색 수수료/시간 증가(예: 에스쓰리 아이에이, Glacier). 에스쓰리 수명 주기로 시간이 지나며 더 싼 계층으로 자동 전환해 비용 최적화.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg023",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 S3는 하나의 단일 요금 대신 접근 빈도에 따라 여러 스토리지 계층으로 나눠 서로 다른 보관 단가와 검색 수수료를 부과할까요? 자주 접근하는 데이터는 즉시 제공할 수 있는 고가용성 인프라에 두어야 해 인프라 운영 비용이 높고, 거의 접근하지 않는 데이터를 같은 계층에 두면 실제 사용 가치 대비 비용이 높아집니다. Glacier처럼 복원에 시간이 걸리는 계층은 인프라를 상시 가동할 필요가 없어 보관 단가를 크게 낮출 수 있고, 대신 복원 요청 시 처리 비용을 수수료로 부과하는 방식으로 총 비용을 분리합니다. 접근 빈도가 낮을수록 보관 단가를 낮추고 검색 수수료를 부과하는 구조는, 실제로 검색이 필요할 때만 비용이 발생하게 해 보관 비용과 접근 비용을 분리합니다. S3 수명 주기 정책을 함께 사용하면 데이터가 오래될수록 자동으로 더 저렴한 계층으로 이동해, 수동 개입 없이 접근 패턴에 맞는 비용 구조를 유지하는 것이 가능합니다.",
+      "scriptText": "원리: 왜 에스쓰리는 하나의 단일 요금 대신 접근 빈도에 따라 여러 스토리지 계층으로 나눠 서로 다른 보관 단가와 검색 수수료를 부과할까요? 자주 접근하는 데이터는 즉시 제공할 수 있는 고가용성 인프라에 두어야 해 인프라 운영 비용이 높고, 거의 접근하지 않는 데이터를 같은 계층에 두면 실제 사용 가치 대비 비용이 높아집니다. Glacier처럼 복원에 시간이 걸리는 계층은 인프라를 상시 가동할 필요가 없어 보관 단가를 크게 낮출 수 있고, 대신 복원 요청 시 처리 비용을 수수료로 부과하는 방식으로 총 비용을 분리합니다. 접근 빈도가 낮을수록 보관 단가를 낮추고 검색 수수료를 부과하는 구조는, 실제로 검색이 필요할 때만 비용이 발생하게 해 보관 비용과 접근 비용을 분리합니다. 에스쓰리 수명 주기 정책을 함께 사용하면 데이터가 오래될수록 자동으로 더 저렴한 계층으로 이동해, 수동 개입 없이 접근 패턴에 맞는 비용 구조를 유지하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg024",
+      "kind": "heading",
+      "sourceExcerpt": "## ✍️ 시험 포인트",
+      "scriptText": "시험 포인트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg025",
+      "kind": "paragraph",
+      "sourceExcerpt": "**On-Demand**: 약정·선투자 없음, 정가, 자유. 예측 불가·단기. **Savings Plans**: 1/3년 사용량 약정, 최대 72%, **EC2·Fargate·Lambda 유연**. **Reserved Instances**: 1/3년 특정 구성 약정, 할인. **Spot**: 미사용 용량, 최대 90% 할인, **중단 가능**(견디는 워크로드). **Dedicated Hosts**: 전용 물리 서버, **BYOL**·컴플라이언스. **데이터 전송**: 수신 보통 무료, **발신·리전 간 과금**. **스토리지**: 접근 빈도↔비용 계층(Standard↔IA↔Glacier), Lifecycle로 자동 전환.",
+      "scriptText": "On-Demand: 약정·선투자 없음, 정가, 자유. 예측 불가·단기. Savings Plans: 1/3년 사용량 약정, 최대 72%, 이씨투·Fargate·Lambda 유연. Reserved Instances: 1/3년 특정 구성 약정, 할인. Spot: 미사용 용량, 최대 90% 할인, 중단 가능(견디는 워크로드). Dedicated Hosts: 전용 물리 서버, 비와이오엘·컴플라이언스. 데이터 전송: 수신 보통 무료, 발신·리전 간 과금. 스토리지: 접근 빈도↔비용 계층(Standard↔아이에이↔Glacier), Lifecycle로 자동 전환.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg026",
+      "kind": "heading",
+      "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
+      "scriptText": "흔한 함정",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg027",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"Spot은 항상 써도 되는 가장 싼 옵션이다.\"** → ⚠️ Spot은 **AWS가 용량을 회수하면 중단**될 수 있습니다. *중단을 견디는* 워크로드에만. *(원리: §1 — Spot은 AWS가 다른 고객에게 해당 용량이 필요할 때 인스턴스를 회수하는 구조이므로, 중단 없이 계속 실행되어야 하는 워크로드에는 적합하지 않다.)* **\"Savings Plans와 Reserved Instances는 똑같다.\"** → ⚠️ 둘 다 약정 할인이지만, 일반적으로 **Savings Plans가 사용량(시간당 지출) 약정 기반이라 더 유연**합니다(Fargate·Lambda 포함). RI에도 Convertible RI 등 유형별 유연성이 있어 상황에 따라 적합한 옵션이 다를 수 있습니다. *(원리: §1 — Savings Plans는 시간당 사용량 금액을 약정하는 방식이라 인스턴스 패밀리·리전·서비스가 바뀌어도 할인이 적용되지만, RI는 특정 인스턴스 구성(유형·크기·OS·리전)을 고정해 약정하므로 구성이 달라지면 할인이 적용되지 않는다. Convertible RI는 유형 변경이 가능해 RI 내에서도 유연성 차이가 있다.)* **\"AWS로 데이터를 올리는 것도 비싸다.\"** → ❌. **수신(인바운드)은 보통 무료.** *발신·리전 간*이 과금 대상. *(원리: §2 — 인바운드 데이터는 AWS 서비스 사용을 유도하는 진입 경로로 마찰 없이 허용되고, 아웃바운드는 데이터센터와 인터넷 망 사이의 실제 대역폭 비용이 발생하는 방향이라 요금이 부과된다.)* **\"꾸준히 1년 넘게 쓸 워크로드도 On-Demand가 가장 싸다.\"** → ❌. 꾸준하면 **Savings Plans/RI**로 약정해 크게 절감. *(원리: §1 — On-Demand는 약정 없이 시간당 정가를 내는 구조이므로, 꾸준한 사용량에 적용하면 약정 기반 할인을 전혀 받지 못해 장기적으로 가장 비싼 선택이 된다.)* **\"Dedicated Hosts는 그냥 더 큰 인스턴스다.\"** → ❌. *전용 물리 서버*로, 컴플라이언스·**기존 라이선스(BYOL)** 활용이 목적. *(원리: §1 — 일반 EC2 인스턴스는 물리 서버를 다른 고객과 공유하는 멀티테넌트 구조이고, Dedicated Hosts는 물리 서버 전체를 단일 고객에게 배정해 다른 고객과 하드웨어를 공유하지 않으므로 컴플라이언스 요건 충족과 소켓·코어 단위로 부과되는 기존 라이선스 재활용이 가능하다.)*",
+      "scriptText": "\"Spot은 항상 써도 되는 가장 싼 옵션이다.\", Spot은 에이더블유에스가 용량을 회수하면 중단될 수 있습니다. 중단을 견디는 워크로드에만. (원리: 1번 — Spot은 에이더블유에스가 다른 고객에게 해당 용량이 필요할 때 인스턴스를 회수하는 구조이므로, 중단 없이 계속 실행되어야 하는 워크로드에는 적합하지 않다.) \"Savings Plans와 Reserved Instances는 똑같다.\", 둘 다 약정 할인이지만, 일반적으로 Savings Plans가 사용량(시간당 지출) 약정 기반이라 더 유연합니다(Fargate·Lambda 포함). 알아이에도 Convertible 알아이 등 유형별 유연성이 있어 상황에 따라 적합한 옵션이 다를 수 있습니다. (원리: 1번 — Savings Plans는 시간당 사용량 금액을 약정하는 방식이라 인스턴스 패밀리·리전·서비스가 바뀌어도 할인이 적용되지만, 알아이는 특정 인스턴스 구성(유형·크기·오에스·리전)을 고정해 약정하므로 구성이 달라지면 할인이 적용되지 않는다. Convertible 알아이는 유형 변경이 가능해 알아이 내에서도 유연성 차이가 있다.) \"에이더블유에스로 데이터를 올리는 것도 비싸다.\". 수신(인바운드)은 보통 무료. 발신·리전 간이 과금 대상. (원리: 2번 — 인바운드 데이터는 에이더블유에스 서비스 사용을 유도하는 진입 경로로 마찰 없이 허용되고, 아웃바운드는 데이터센터와 인터넷 망 사이의 실제 대역폭 비용이 발생하는 방향이라 요금이 부과된다.) \"꾸준히 1년 넘게 쓸 워크로드도 On-Demand가 가장 싸다.\". 꾸준하면 Savings Plans/알아이로 약정해 크게 절감. (원리: 1번 — On-Demand는 약정 없이 시간당 정가를 내는 구조이므로, 꾸준한 사용량에 적용하면 약정 기반 할인을 전혀 받지 못해 장기적으로 가장 비싼 선택이 된다.) \"Dedicated Hosts는 그냥 더 큰 인스턴스다.\". 전용 물리 서버로, 컴플라이언스·기존 라이선스(비와이오엘) 활용이 목적. (원리: 1번 — 일반 이씨투 인스턴스는 물리 서버를 다른 고객과 공유하는 멀티테넌트 구조이고, Dedicated Hosts는 물리 서버 전체를 단일 고객에게 배정해 다른 고객과 하드웨어를 공유하지 않으므로 컴플라이언스 요건 충족과 소켓·코어 단위로 부과되는 기존 라이선스 재활용이 가능하다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg028",
+      "kind": "selfcheck",
+      "sourceExcerpt": "## 🧪 자가 점검",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg029",
+      "kind": "selfcheck",
+      "sourceExcerpt": "아래는 학습용 자가 점검입니다. (정식 검증 문항은 `t4-1.questions.json` 참조)",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg030",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q1.** 예측이 어려운 단기 테스트 워크로드에는 어떤 구매 옵션이 적합한가요? 그리고 1~3년 꾸준히 쓸 워크로드를 유연하게 할인받으려면?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg031",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n예측 불가·단기는 **On-Demand**(약정 없음, 정가). 1~3년 꾸준한 사용량을 유연하게 할인받으려면 **Savings Plans**(시간당 사용량 약정, EC2·Fargate·Lambda에 유연 적용).\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg032",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q2.** 중단되어도 재시작하면 되는 대량 배치 작업을 가장 저렴하게 처리하려면?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg033",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**Spot Instances**(AWS 미사용 용량, 최대 90% 할인). 단 AWS가 용량을 회수하면 중단될 수 있어 *중단을 견디는* 워크로드에 적합합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg034",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q3.** AWS로 데이터를 올릴 때(수신)와 인터넷으로 내보낼 때(발신), 데이터 전송 요금은 어떻게 다른가요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg035",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**수신(인바운드)은 일반적으로 무료**이고, **발신(아웃바운드)·리전 간 전송은 과금**됩니다. 데이터가 적게 나가도록 설계하면 비용을 줄일 수 있습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg036",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q4.** 컴플라이언스 때문에 전용 물리 서버가 필요하고 기존 소프트웨어 라이선스를 재활용(BYOL)하려면 어떤 구매 옵션인가요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg037",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**Dedicated Hosts**(전용 물리 EC2 서버). 기존 서버 바운드 라이선스를 사용(BYOL)하고 컴플라이언스 요건을 충족할 수 있습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg038",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q5 (원리).** 왜 S3 Standard에 비해 S3 IA나 Glacier는 보관 단가가 낮은데도 검색 수수료가 별도로 부과될까요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg039",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\nS3 Standard는 언제든 즉시 접근할 수 있도록 고가용성 인프라를 상시 유지하는 비용이 보관 단가에 포함되어 있습니다. 반면 S3 IA와 Glacier는 자주 접근하지 않는다는 전제 아래 인프라 비용을 낮춰 보관 단가를 줄인 대신, 실제로 데이터를 꺼낼 때 발생하는 검색·복원 처리 비용을 수수료로 별도 부과합니다. 이 구조는 보관 비용과 접근 비용을 분리해 접근이 드문 데이터는 저렴하게 보관하고 꼭 필요할 때만 검색 비용을 지불하는 것이 가능하게 합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg040",
+      "kind": "source",
+      "sourceExcerpt": "### 📌 출처 (verified)\n\n이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-06 · 고도화 검수: 2026-06-11)\n\n1. Amazon EC2 — 구매 옵션(On-Demand·Savings Plans·RI·Spot·Dedicated Hosts·Capacity Reservations) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html\n2. AWS Savings Plans란? (약정 기반 할인, 최대 72%, EC2·Fargate·Lambda) — https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html\n3. Amazon S3 스토리지 클래스 (접근 빈도별 요금 계층) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html\n4. CLF-C02 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    }
+  ]
+}
