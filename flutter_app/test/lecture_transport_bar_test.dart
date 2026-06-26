@@ -59,4 +59,21 @@ void main() {
     await tester.pump();
     expect(pl.index, 0);
   });
+
+  testWidgets('처음 트랙에선 처음 탭이 no-op', (tester) async {
+    final pl = await _pump(tester, start: 0);
+    await tester.tap(find.bySemanticsLabel('처음 강의'));
+    await tester.pump();
+    expect(pl.index, 0);
+  });
+
+  testWidgets('마지막 트랙에선 다음·마지막 탭이 no-op', (tester) async {
+    final pl = await _pump(tester, start: 2);
+    await tester.tap(find.bySemanticsLabel('다음 강의'));
+    await tester.pump();
+    expect(pl.index, 2);
+    await tester.tap(find.bySemanticsLabel('마지막 강의'));
+    await tester.pump();
+    expect(pl.index, 2);
+  });
 }
