@@ -1,0 +1,561 @@
+{
+  "schemaVersion": 2,
+  "docId": "clf-t3-8",
+  "sourceAsset": "assets/content/clf/t3-8.md",
+  "sourceHash": "a6274fb363ab85d8b18dd16c315b4fea1a6f6b915825eab758229a2d5a37a213",
+  "lexiconVersion": "99e4378737f2",
+  "generatedAt": "2026-06-25T10:16:29Z",
+  "reviewStatus": "approved",
+  "segments": [
+    {
+      "id": "seg000",
+      "kind": "heading",
+      "sourceExcerpt": "# 기타 범위 내 서비스 (메시징·EUC·IoT)",
+      "scriptText": "기타 범위 내 서비스 (메시징·이유씨·IoT)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg001",
+      "kind": "paragraph",
+      "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 3 「클라우드 기술 및 서비스」(34%) · **Task 3.8 기타 범위 내 서비스 식별** (`clf-t3-8`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 도메인 3의 *나머지 서비스 묶음* — 핵심은 **앱 통합 메시징(SNS·SQS·EventBridge)**과 **가상 데스크톱·IoT**입니다.",
+      "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 3 「클라우드 기술 및 서비스」(34%) · Task 3.8 기타 범위 내 서비스 식별 (clf-t3-8) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 도메인 3의 나머지 서비스 묶음 — 핵심은 앱 통합 메시징(에스엔에스·에스큐에스·EventBridge)과 가상 데스크톱·IoT입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg002",
+      "kind": "heading",
+      "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+      "scriptText": "학습 목표 체크리스트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg003",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.8의 Skill 항목)",
+      "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.8의 Skill 항목)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg004",
+      "kind": "paragraph",
+      "sourceExcerpt": "**앱 통합 메시징 — SNS(알림) · SQS(큐) · EventBridge(이벤트 버스)**를 구분할 수 있다 **SNS(pub/sub 푸시)와 SQS(큐 폴링)**의 차이를 말할 수 있다 **WorkSpaces**가 관리형 가상 데스크톱(DaaS)임을 안다 **AppStream 2.0(현재 Amazon WorkSpaces Applications)**과 WorkSpaces의 차이를 말할 수 있다 **Amazon MQ**가 SQS/SNS/EventBridge와 다른 관리형 메시지 브로커임을 안다 **IoT Core**가 IoT 기기를 클라우드에 연결함을 안다 그 외 범위 내 서비스 묶음(비즈니스 앱·개발자 도구 등)의 *위치*를 안다",
+      "scriptText": "앱 통합 메시징 — 에스엔에스(알림) · 에스큐에스(큐) · EventBridge(이벤트 버스)를 구분할 수 있다 에스엔에스(pub/sub 푸시)와 에스큐에스(큐 폴링)의 차이를 말할 수 있다 WorkSpaces가 관리형 가상 데스크톱(DaaS)임을 안다 AppStream 2.0(현재 Amazon WorkSpaces Applications)과 WorkSpaces의 차이를 말할 수 있다 Amazon 엠큐가 에스큐에스/에스엔에스/EventBridge와 다른 관리형 메시지 브로커임을 안다 IoT Core가 IoT 기기를 클라우드에 연결함을 안다 그 외 범위 내 서비스 묶음(비즈니스 앱·개발자 도구 등)의 위치를 안다",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg005",
+      "kind": "heading",
+      "sourceExcerpt": "## 🎯 왜 중요한가",
+      "scriptText": "왜 중요한가",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg006",
+      "kind": "paragraph",
+      "sourceExcerpt": "도메인 3(34%)의 이 Task는 **폭넓은 \"기타 서비스\" 식별**입니다. 시험은 *한 줄 역할*로 매칭하는 문제를 냅니다. 가장 자주 나오는 건 **메시징 3종(SNS·SQS·EventBridge)**, 특히 **SNS vs SQS** 구분입니다. **WorkSpaces(가상 데스크톱)**, **IoT Core(기기 연결)** 같은 단발 키워드도 단골입니다.",
+      "scriptText": "도메인 3(34%)의 이 Task는 폭넓은 \"기타 서비스\" 식별입니다. 시험은 한 줄 역할로 매칭하는 문제를 냅니다. 가장 자주 나오는 건 메시징 3종(에스엔에스·에스큐에스·EventBridge), 특히 에스엔에스 대 에스큐에스 구분입니다. WorkSpaces(가상 데스크톱), IoT Core(기기 연결) 같은 단발 키워드도 단골입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg007",
+      "kind": "heading",
+      "sourceExcerpt": "## 🔤 먼저 알아야 할 용어",
+      "scriptText": "먼저 알아야 할 용어",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg008",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "scriptText": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg009",
+      "kind": "table",
+      "sourceExcerpt": "| 용어 | 영문 | 한 줄 풀이 |\n|---|---|---|\n| **pub/sub** | Publish/Subscribe | 발행자가 *주제(topic)*에 메시지를 보내면 그 주제를 구독한 모든 수신자에게 전달되는 메시징 패턴 — SNS가 이 방식으로 한 메시지를 여러 구독자에게 동시에 푸시합니다 |\n| **팬아웃** | Fan-out | 하나의 메시지를 *여러 수신 대상에 복제해 동시에 전달*하는 전달 방식 — SNS 주제에서 여러 SQS 큐·Lambda 등으로 메시지를 뿌릴 때 이 패턴이 사용됩니다 |\n| **폴링** | Polling | 소비자가 *주기적으로 요청을 보내 새 메시지가 있는지 확인하고 가져오는* 방식 — SQS 소비자는 서버가 푸시하는 대신 큐에 직접 폴링해 메시지를 처리합니다 |\n| **디커플링** | Decoupling | 시스템 컴포넌트 간 *직접 의존 없이 독립적으로 동작하도록 분리*하는 아키텍처 원칙 — SQS 큐를 사이에 두면 생산자·소비자가 서로의 처리 속도와 무관하게 작동합니다 |\n| **이벤트 버스** | Event Bus | *여러 소스에서 발생하는 이벤트를 받아 규칙에 따라 적절한 타겟으로 라우팅*하는 중앙 메시지 전달 채널 — EventBridge가 AWS 서비스·앱·서드파티 이벤트를 이 방식으로 연결합니다 |\n| **MQTT** | Message Queuing Telemetry Transport | *제한된 대역폭·배터리 환경에서 기기와 클라우드 간 경량 메시지를 주고받도록 설계된* IoT 표준 프로토콜 — AWS IoT Core가 이 프로토콜로 기기와 통신합니다 |\n| **DaaS** | Desktop as a Service | 데스크톱 환경을 *클라우드에서 가상으로 제공해 사용자가 기기·장소에 무관하게 접근*할 수 있도록 하는 서비스 모델 — WorkSpaces가 이 방식으로 Windows·Linux 데스크톱을 제공합니다 |",
+      "scriptText": "",
+      "audioSummary": "먼저 기초 용어입니다. 펍섭은 발행자가 주제에 메시지를 보내면 그 주제를 구독한 모든 수신자에게 전달되는 메시징 패턴으로, 에스엔에스가 이 방식으로 한 메시지를 여러 구독자에게 동시에 푸시합니다. 팬아웃은 하나의 메시지를 여러 수신 대상에 복제해 동시에 전달하는 방식으로, 에스엔에스 주제에서 여러 에스큐에스 큐나 람다로 메시지를 뿌릴 때 씁니다. 폴링은 소비자가 주기적으로 요청을 보내 새 메시지가 있는지 확인하고 가져오는 방식으로, 에스큐에스 소비자는 서버가 푸시하는 대신 큐에 직접 폴링해 메시지를 처리합니다. 디커플링은 시스템 컴포넌트 간 직접 의존 없이 독립적으로 동작하도록 분리하는 아키텍처 원칙으로, 에스큐에스 큐를 사이에 두면 생산자와 소비자가 서로의 처리 속도와 무관하게 작동합니다. 이벤트 버스는 여러 소스에서 발생하는 이벤트를 받아 규칙에 따라 적절한 타겟으로 라우팅하는 중앙 메시지 전달 채널로, 이벤트브리지가 에이더블유에스 서비스와 앱, 서드파티 이벤트를 이 방식으로 연결합니다. 엠큐티티는 제한된 대역폭과 배터리 환경에서 기기와 클라우드 간 경량 메시지를 주고받도록 설계된 아이오티 표준 프로토콜로, 에이더블유에스 아이오티 코어가 이 프로토콜로 기기와 통신합니다. 다스는 데스크톱 환경을 클라우드에서 가상으로 제공해 사용자가 기기나 장소에 무관하게 접근할 수 있도록 하는 서비스 모델로, 워크스페이스가 이 방식으로 윈도우나 리눅스 데스크톱을 제공합니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg010",
+      "kind": "heading",
+      "sourceExcerpt": "## 📖 핵심 개념",
+      "scriptText": "핵심 개념",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg011",
+      "kind": "heading",
+      "sourceExcerpt": "### 1) 앱 통합 메시징 — SNS · SQS · EventBridge (★ 시험 핵심) {#messaging}",
+      "scriptText": "1) 앱 통합 메시징 — 에스엔에스 · 에스큐에스 · EventBridge (시험 핵심)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg012",
+      "kind": "paragraph",
+      "sourceExcerpt": "느슨하게 결합된(decoupled) 시스템을 잇는 세 가지 메시징/이벤트 서비스입니다.",
+      "scriptText": "느슨하게 결합된(decoupled) 시스템을 잇는 세 가지 메시징/이벤트 서비스입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg013",
+      "kind": "table",
+      "sourceExcerpt": "| 서비스 | 한 줄 역할 | 전달 방식 | 떠올릴 키워드 |\n|---|---|---|---|\n| **Amazon SNS** | **pub/sub 알림** — 발행자가 *주제(topic)*에 보내면 여러 구독자에게 **푸시** | 하나 발행 → **여러 구독자에 복제 푸시(팬아웃)** | \"*알림*\", \"SMS/이메일 발송\", \"여러 대상에 동시 전달\" |\n| **Amazon SQS** | **메시지 큐** — 컴포넌트를 디커플링하고 메시지를 큐에 보관 | 큐에 저장 → 소비자가 **폴링(pull)해 처리** | \"*큐*\", \"컴포넌트 *디커플링*\", \"비동기 작업 버퍼\" |\n| **Amazon EventBridge** | **서버리스 이벤트 버스** — 이벤트를 *규칙*으로 소스→타겟 라우팅 | 이벤트 소스 → 규칙 → 타겟 | \"*이벤트 버스*\", \"이벤트 기반\", \"여러 소스의 이벤트 라우팅\" |",
+      "scriptText": "",
+      "audioSummary": "메시징 서비스 세 가지입니다. 아마존 에스엔에스는 펍섭 알림 서비스로, 발행자가 주제에 보내면 여러 구독자에게 푸시하며 하나를 발행하면 여러 구독자에 복제 푸시하는 팬아웃 방식입니다. 알림과 에스엠에스나 이메일 발송, 여러 대상에 동시 전달이 키워드입니다. 아마존 에스큐에스는 메시지 큐로, 컴포넌트를 디커플링하고 메시지를 큐에 보관하며 소비자가 폴링해 처리합니다. 큐와 컴포넌트 디커플링, 비동기 작업 버퍼가 키워드입니다. 아마존 이벤트브리지는 서버리스 이벤트 버스로, 이벤트를 규칙으로 소스에서 타겟으로 라우팅하며 이벤트 기반과 여러 소스의 이벤트 라우팅이 키워드입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg014",
+      "kind": "paragraph",
+      "sourceExcerpt": "**SNS vs SQS** (단골 비교): - **SNS = 발행/구독(pub/sub), 푸시.** 한 메시지를 *여러 구독자*에게 동시에 보냄(알림·팬아웃). - **SQS = 큐, 풀.** 메시지를 큐에 쌓아 두고 *소비자가 가져가* 처리(보통 한 소비자가 한 메시지 처리). 컴포넌트 디커플링·부하 평준화. - 자주 **함께** 씀: SNS 주제 → 여러 SQS 큐로 팬아웃(SNS가 뿌리고 각 SQS가 안전하게 버퍼링).",
+      "scriptText": "에스엔에스 대 에스큐에스 (단골 비교): - 에스엔에스, 즉 발행/구독(pub/sub), 푸시. 한 메시지를 여러 구독자에게 동시에 보냄(알림·팬아웃). - 에스큐에스, 즉 큐, 풀. 메시지를 큐에 쌓아 두고 소비자가 가져가 처리(보통 한 소비자가 한 메시지 처리). 컴포넌트 디커플링·부하 평준화. - 자주 함께 씀: 에스엔에스 주제, 여러 에스큐에스 큐로 팬아웃(에스엔에스가 뿌리고 각 에스큐에스가 안전하게 버퍼링).",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg015",
+      "kind": "paragraph",
+      "sourceExcerpt": "**EventBridge**는 *이벤트 기반* 아키텍처용 — AWS 서비스·자체 앱·서드파티의 이벤트를 받아 규칙으로 여러 타겟에 라우팅합니다(\"이벤트 버스\").",
+      "scriptText": "EventBridge는 이벤트 기반 아키텍처용 — 에이더블유에스 서비스·자체 앱·서드파티의 이벤트를 받아 규칙으로 여러 타겟에 라우팅합니다(\"이벤트 버스\").",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg016",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 AWS는 알림(SNS)과 큐(SQS)를 하나의 메시징 서비스로 통합하지 않고 별도 서비스로 유지할까요? SNS의 pub/sub 모델은 발행 즉시 모든 구독자에게 메시지를 복제해 푸시하므로, 메시지를 저장하거나 재시도하는 메커니즘 없이 전달하는 데 최적화돼 있습니다. SQS의 큐 모델은 메시지를 내구성 있게 보관하고 소비자가 자신의 속도로 폴링해 처리하도록 설계돼, 생산자와 소비자의 처리 속도 차이를 흡수하는 버퍼 역할이 핵심입니다. 두 모델을 단일 서비스로 통합하면 어느 쪽 패턴도 최적화하기 어렵고, SNS 주제에서 여러 SQS 큐로 팬아웃하는 조합처럼 두 서비스를 연계해 각자의 강점을 활용하는 아키텍처를 구성하는 것이 가능합니다.",
+      "scriptText": "원리: 왜 에이더블유에스는 알림(에스엔에스)과 큐(에스큐에스)를 하나의 메시징 서비스로 통합하지 않고 별도 서비스로 유지할까요? 에스엔에스의 pub/sub 모델은 발행 즉시 모든 구독자에게 메시지를 복제해 푸시하므로, 메시지를 저장하거나 재시도하는 메커니즘 없이 전달하는 데 최적화돼 있습니다. 에스큐에스의 큐 모델은 메시지를 내구성 있게 보관하고 소비자가 자신의 속도로 폴링해 처리하도록 설계돼, 생산자와 소비자의 처리 속도 차이를 흡수하는 버퍼 역할이 핵심입니다. 두 모델을 단일 서비스로 통합하면 어느 쪽 패턴도 최적화하기 어렵고, 에스엔에스 주제에서 여러 에스큐에스 큐로 팬아웃하는 조합처럼 두 서비스를 연계해 각자의 강점을 활용하는 아키텍처를 구성하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg017",
+      "kind": "heading",
+      "sourceExcerpt": "### 2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces {#euc}",
+      "scriptText": "2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg018",
+      "kind": "paragraph",
+      "sourceExcerpt": "**Amazon WorkSpaces**는 사용자에게 **가상의 클라우드 기반 데스크톱(DaaS, Desktop as a Service)**을 프로비저닝합니다.",
+      "scriptText": "Amazon WorkSpaces는 사용자에게 가상의 클라우드 기반 데스크톱(DaaS, Desktop as a Service)을 프로비저닝합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg019",
+      "kind": "paragraph",
+      "sourceExcerpt": "Windows·Linux 데스크톱을 클라우드에서 제공 — **하드웨어 조달·복잡한 SW 설치 불필요.** 사용자는 **여러 기기·웹 브라우저에서 어디서나** 자기 데스크톱에 접근. 사용자 추가·제거가 빠름.",
+      "scriptText": "Windows·Linux 데스크톱을 클라우드에서 제공 — 하드웨어 조달·복잡한 소프트웨어 설치 불필요. 사용자는 여러 기기·웹 브라우저에서 어디서나 자기 데스크톱에 접근. 사용자 추가·제거가 빠름.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg020",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: **\"관리형 가상 데스크톱 / 클라우드 데스크톱 / 어디서나 접근하는 사내 PC 환경\"** → WorkSpaces.",
+      "scriptText": "시험 신호: \"관리형 가상 데스크톱 / 클라우드 데스크톱 / 어디서나 접근하는 사내 피씨 환경\", WorkSpaces.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg021",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 WorkSpaces는 물리적 PC를 각 사용자에게 배포하는 대신 클라우드 가상 데스크톱을 제공하는 모델을 선택했을까요? 물리적 PC는 구매·배송·OS 설치·보안 패치·기기 분실 관리까지 IT 팀이 각 단말을 개별적으로 다뤄야 하고, 사용자 수가 늘거나 줄 때 하드웨어 조달과 반납 시간이 따라옵니다. 클라우드 가상 데스크톱은 데이터와 환경이 클라우드에 있으므로 기기를 분실해도 데이터 유출 위험이 낮고, 사용자 추가·제거를 관리 콘솔에서 처리할 수 있어 물리 기기 없이 인원 변화에 빠르게 대응하는 것이 가능합니다. 사용자는 어떤 기기에서든 같은 데스크톱 환경에 접근할 수 있으므로, 원격 근무나 다기기 환경에서도 일관된 작업 환경을 유지하는 것이 가능합니다.",
+      "scriptText": "원리: 왜 WorkSpaces는 물리적 피씨를 각 사용자에게 배포하는 대신 클라우드 가상 데스크톱을 제공하는 모델을 선택했을까요? 물리적 피씨는 구매·배송·오에스 설치·보안 패치·기기 분실 관리까지 아이티 팀이 각 단말을 개별적으로 다뤄야 하고, 사용자 수가 늘거나 줄 때 하드웨어 조달과 반납 시간이 따라옵니다. 클라우드 가상 데스크톱은 데이터와 환경이 클라우드에 있으므로 기기를 분실해도 데이터 유출 위험이 낮고, 사용자 추가·제거를 관리 콘솔에서 처리할 수 있어 물리 기기 없이 인원 변화에 빠르게 대응하는 것이 가능합니다. 사용자는 어떤 기기에서든 같은 데스크톱 환경에 접근할 수 있으므로, 원격 근무나 다기기 환경에서도 일관된 작업 환경을 유지하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg022",
+      "kind": "heading",
+      "sourceExcerpt": "### 애플리케이션 스트리밍과 메시지 브로커 — AppStream 2.0 · Amazon MQ {#appstream-mq}",
+      "scriptText": "애플리케이션 스트리밍과 메시지 브로커 — AppStream 2.0 · Amazon 엠큐",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg023",
+      "kind": "paragraph",
+      "sourceExcerpt": "CLF에서는 기존 강의나 시험 자료에 **Amazon AppStream 2.0**이라는 이름이 나올 수 있습니다. 현재 공식 문서 제목은 **Amazon WorkSpaces Applications**이며, 역할은 **데스크톱 애플리케이션 스트리밍**입니다. 같은 기타 서비스 묶음 안에서 **Amazon MQ**는 기존 메시지 브로커 호환성이 필요한 통합 시나리오에 등장합니다.",
+      "scriptText": "씨엘에프에서는 기존 강의나 시험 자료에 Amazon AppStream 2.0이라는 이름이 나올 수 있습니다. 현재 공식 문서 제목은 Amazon WorkSpaces Applications이며, 역할은 데스크톱 애플리케이션 스트리밍입니다. 같은 기타 서비스 묶음 안에서 Amazon 엠큐는 기존 메시지 브로커 호환성이 필요한 통합 시나리오에 등장합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg024",
+      "kind": "table",
+      "sourceExcerpt": "| 서비스 | 한 줄 역할 | 헷갈리지 말 것 |\n|---|---|---|\n| **AppStream 2.0 / Amazon WorkSpaces Applications** | 기존 데스크톱 애플리케이션을 AWS에서 실행하고 사용자 기기로 스트리밍 | 전체 가상 데스크톱을 제공하는 WorkSpaces와 달리, 애플리케이션 스트리밍에 초점 |\n| **Amazon MQ** | Apache ActiveMQ Classic·RabbitMQ용 관리형 메시지 브로커 | SQS/SNS/EventBridge 같은 AWS 네이티브 메시징보다, 기존 브로커 프로토콜·코드를 유지해야 할 때 |",
+      "scriptText": "",
+      "audioSummary": "두 서비스를 구분합니다. 앱스트림 이점영 또는 아마존 워크스페이스 애플리케이션은 기존 데스크톱 애플리케이션을 에이더블유에스에서 실행하고 사용자 기기로 스트리밍하며, 전체 가상 데스크톱을 제공하는 워크스페이스와 달리 애플리케이션 스트리밍에 초점을 둡니다. 아마존 엠큐는 아파치 액티브엠큐 클래식과 래빗엠큐용 관리형 메시지 브로커로, 에스큐에스나 에스엔에스, 이벤트브리지 같은 에이더블유에스 네이티브 메시징보다 기존 브로커 프로토콜과 코드를 유지해야 할 때 씁니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg025",
+      "kind": "table",
+      "sourceExcerpt": "| 시나리오 | 정답 신호 |\n|---|---|\n| \"사용자 PC에 설치하지 않고 특정 Windows 데스크톱 앱을 브라우저/클라이언트로 스트리밍한다\" | **AppStream 2.0 / WorkSpaces Applications** |\n| \"회사 전체 데스크톱 환경을 클라우드에서 제공한다\" | **WorkSpaces** |\n| \"기존 ActiveMQ/RabbitMQ 애플리케이션을 크게 고치지 않고 관리형 브로커로 이전한다\" | **Amazon MQ** |\n| \"단순 큐·pub/sub·이벤트 라우팅으로 신규 서버리스 통합을 만든다\" | **SQS/SNS/EventBridge** |",
+      "scriptText": "",
+      "audioSummary": "\"사용자 피씨에 설치하지 않고 특정 Windows 데스크톱 앱을 브라우저/클라이언트로 스트리밍한다\"은 AppStream 2.0 / WorkSpaces Applications입니다. \"회사 전체 데스크톱 환경을 클라우드에서 제공한다\"은 WorkSpaces입니다. \"기존 ActiveMQ/RabbitMQ 애플리케이션을 크게 고치지 않고 관리형 브로커로 이전한다\"은 Amazon 엠큐입니다. \"단순 큐·pub/sub·이벤트 라우팅으로 신규 서버리스 통합을 만든다\"은 에스큐에스/에스엔에스/EventBridge입니다.",
+      "skip": false,
+      "issues": [
+        "table-summary-draft"
+      ]
+    },
+    {
+      "id": "seg026",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 Amazon MQ는 SQS/SNS/EventBridge와 별도로 존재할까요? SQS, SNS, EventBridge는 AWS 네이티브 메시징 패턴에 맞춘 관리형 서비스라 새 애플리케이션을 단순하게 만들기 좋습니다. 하지만 이미 ActiveMQ나 RabbitMQ 프로토콜과 클라이언트 라이브러리에 맞춰 작성된 애플리케이션은 메시징 계층을 바꾸면 코드와 운영 절차를 크게 수정해야 할 수 있습니다. Amazon MQ는 브로커 엔진 호환성을 유지하면서 설치·운영·패치·모니터링 부담을 줄이는 선택지입니다. 그래서 시험에서는 \"기존 메시지 브로커를 마이그레이션\"이면 Amazon MQ, \"AWS 네이티브 큐·알림·이벤트 라우팅\"이면 SQS/SNS/EventBridge로 가릅니다.",
+      "scriptText": "원리: 왜 Amazon 엠큐는 에스큐에스/에스엔에스/EventBridge와 별도로 존재할까요? 에스큐에스, 에스엔에스, EventBridge는 에이더블유에스 네이티브 메시징 패턴에 맞춘 관리형 서비스라 새 애플리케이션을 단순하게 만들기 좋습니다. 하지만 이미 ActiveMQ나 RabbitMQ 프로토콜과 클라이언트 라이브러리에 맞춰 작성된 애플리케이션은 메시징 계층을 바꾸면 코드와 운영 절차를 크게 수정해야 할 수 있습니다. Amazon 엠큐는 브로커 엔진 호환성을 유지하면서 설치·운영·패치·모니터링 부담을 줄이는 선택지입니다. 그래서 시험에서는 \"기존 메시지 브로커를 마이그레이션\"이면 Amazon 엠큐, \"에이더블유에스 네이티브 큐·알림·이벤트 라우팅\"이면 에스큐에스/에스엔에스/EventBridge로 가릅니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg027",
+      "kind": "heading",
+      "sourceExcerpt": "### 3) IoT — AWS IoT Core {#iot}",
+      "scriptText": "3) IoT — 에이더블유에스 IoT Core",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg028",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS IoT Core**는 **IoT 기기를 AWS 클라우드 서비스 및 다른 기기에 연결**하는 관리형 서비스입니다.",
+      "scriptText": "에이더블유에스 IoT Core는 IoT 기기를 에이더블유에스 클라우드 서비스 및 다른 기기에 연결하는 관리형 서비스입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg029",
+      "kind": "paragraph",
+      "sourceExcerpt": "기기가 안전하게 클라우드와 **메시지를 주고받음**(MQTT·HTTPS 등 프로토콜, 메시지 브로커 pub/sub). 센서·스마트 기기 등 대규모 IoT 기기를 연결·관리.",
+      "scriptText": "기기가 안전하게 클라우드와 메시지를 주고받음(엠큐티티·에이치티티피에스 등 프로토콜, 메시지 브로커 pub/sub). 센서·스마트 기기 등 대규모 IoT 기기를 연결·관리.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg030",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: **\"IoT 기기를 클라우드에 연결 / 기기 메시징\"** → IoT Core.",
+      "scriptText": "시험 신호: \"IoT 기기를 클라우드에 연결 / 기기 메시징\", IoT Core.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg031",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 IoT 기기를 클라우드에 연결할 때 일반 HTTP API 대신 MQTT 같은 경량 프로토콜을 쓰는 전용 서비스가 필요할까요? IoT 기기는 메모리·전력·네트워크 대역폭이 제한된 환경에서 동작하는 경우가 많아, HTTP의 헤더·연결 오버헤드가 기기 자원 대비 크게 작용할 수 있습니다. MQTT는 작은 페이로드와 지속적 연결을 유지하면서 수백만 기기가 동시에 낮은 지연시간으로 메시지를 주고받는 데 적합하도록 설계돼, 배터리 소모와 대역폭을 줄이는 것이 가능합니다. IoT Core는 이 프로토콜을 지원하는 관리형 메시지 브로커를 제공해, 대규모 기기 연결·인증·라우팅을 직접 구현하지 않고도 클라우드 서비스와 연계하는 것이 가능합니다.",
+      "scriptText": "원리: 왜 IoT 기기를 클라우드에 연결할 때 일반 에이치티티피 에이피아이 대신 엠큐티티 같은 경량 프로토콜을 쓰는 전용 서비스가 필요할까요? IoT 기기는 메모리·전력·네트워크 대역폭이 제한된 환경에서 동작하는 경우가 많아, 에이치티티피의 헤더·연결 오버헤드가 기기 자원 대비 크게 작용할 수 있습니다. 엠큐티티는 작은 페이로드와 지속적 연결을 유지하면서 수백만 기기가 동시에 낮은 지연시간으로 메시지를 주고받는 데 적합하도록 설계돼, 배터리 소모와 대역폭을 줄이는 것이 가능합니다. IoT Core는 이 프로토콜을 지원하는 관리형 메시지 브로커를 제공해, 대규모 기기 연결·인증·라우팅을 직접 구현하지 않고도 클라우드 서비스와 연계하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg032",
+      "kind": "heading",
+      "sourceExcerpt": "### 4) 그 외 범위 내 서비스 — 위치만 알아 두기 {#other-services}",
+      "scriptText": "4) 그 외 범위 내 서비스 — 위치만 알아 두기",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg033",
+      "kind": "paragraph",
+      "sourceExcerpt": "CLF는 아래 묶음도 *대략 어디에 속하는지*를 묻습니다(깊은 지식 불필요).",
+      "scriptText": "씨엘에프는 아래 묶음도 대략 어디에 속하는지를 묻습니다(깊은 지식 불필요).",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg034",
+      "kind": "table",
+      "sourceExcerpt": "| 묶음 | 대표 서비스(예) |\n|---|---|\n| **비즈니스 앱** | Amazon Connect(콜센터), Amazon SES(이메일 발송) |\n| **개발자 도구** | CloudShell(브라우저 셸), Cloud9(IDE), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적) |\n| **프런트엔드·모바일** | AWS Amplify, AWS AppSync |\n| **고객 지원** | AWS Support, AWS IQ, AWS Managed Services(AMS) |",
+      "scriptText": "",
+      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구은 CloudShell(브라우저 셸), Cloud9(아이디이), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify, 에이더블유에스 AppSync입니다. 고객 지원은 에이더블유에스 Support, 에이더블유에스 아이큐, 에이더블유에스 Managed Services(에이엠에스)입니다.",
+      "skip": false,
+      "issues": [
+        "table-summary-draft"
+      ]
+    },
+    {
+      "id": "seg035",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 표는 *식별용 참고*입니다 — 시험은 \"이 서비스가 어느 범주인가\" 정도를 묻습니다.",
+      "scriptText": "이 표는 식별용 참고입니다 — 시험은 \"이 서비스가 어느 범주인가\" 정도를 묻습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg036",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 CLF는 이 묶음의 서비스들에 대해 깊은 지식 대신 범주 식별 수준만 요구할까요? CLF는 클라우드 실무자 수준의 폭넓은 식별 능력을 평가하는 시험으로, 특정 서비스의 내부 동작보다 어떤 시나리오에 어떤 범주의 서비스를 선택하는지를 판단하는 능력을 측정합니다. Connect·Amplify·X-Ray 같은 서비스들은 특정 역할(콜센터·모바일 백엔드·추적)에 특화돼 있어, 시험에서는 시나리오 키워드를 보고 해당 범주임을 인식하면 충분합니다. 깊은 구현 지식은 전문 자격증(Developer·SysOps 등) 수준의 시험에서 다루므로, CLF에서는 서비스 이름과 범주 간 매칭 능력이 평가 범위가 됩니다.",
+      "scriptText": "원리: 왜 씨엘에프는 이 묶음의 서비스들에 대해 깊은 지식 대신 범주 식별 수준만 요구할까요? 씨엘에프는 클라우드 실무자 수준의 폭넓은 식별 능력을 평가하는 시험으로, 특정 서비스의 내부 동작보다 어떤 시나리오에 어떤 범주의 서비스를 선택하는지를 판단하는 능력을 측정합니다. Connect·Amplify·X-Ray 같은 서비스들은 특정 역할(콜센터·모바일 백엔드·추적)에 특화돼 있어, 시험에서는 시나리오 키워드를 보고 해당 범주임을 인식하면 충분합니다. 깊은 구현 지식은 전문 자격증(Developer·SysOps 등) 수준의 시험에서 다루므로, 씨엘에프에서는 서비스 이름과 범주 간 매칭 능력이 평가 범위가 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg037",
+      "kind": "heading",
+      "sourceExcerpt": "### SQS 큐 유형 — 표준 vs FIFO (보강) {#sqs-types}",
+      "scriptText": "에스큐에스 큐 유형 — 표준 대 피포 (보강)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg038",
+      "kind": "paragraph",
+      "sourceExcerpt": "**표준 큐(Standard)**: 거의 무제한 처리량, **최선 순서(best-effort ordering)**, **최소 한 번(at-least-once) 전달** — 메시지가 가끔 중복되거나 순서가 뒤바뀔 수 있습니다. **FIFO 큐**: **순서 보장(First-In-First-Out)** + **정확히 한 번(exactly-once) 처리**. 주문 처리처럼 순서와 중복 제거가 중요한 워크로드에 적합합니다.",
+      "scriptText": "표준 큐(Standard): 거의 무제한 처리량, 최선 순서(best-effort ordering), 최소 한 번(at-least-once) 전달 — 메시지가 가끔 중복되거나 순서가 뒤바뀔 수 있습니다. 피포 큐: 순서 보장(First-In-First-Out) 그리고 정확히 한 번(exactly-once) 처리. 주문 처리처럼 순서와 중복 제거가 중요한 워크로드에 적합합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg039",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: \"순서·정확히 한 번\" → **FIFO**, \"최대 처리량·순서 무관\" → **표준**. 출처: [Amazon SQS](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)",
+      "scriptText": "시험 신호: \"순서·정확히 한 번\", 피포, \"최대 처리량·순서 무관\", 표준. 출처: Amazon 에스큐에스",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg040",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 SQS는 모든 큐를 FIFO로 만들지 않고 순서를 보장하지 않는 표준 큐도 제공할까요? FIFO 순서와 정확히 한 번 처리를 보장하려면 메시지 순서를 추적하고 중복을 검사하는 추가 조율이 필요해, 표준 큐보다 처리량에 제약이 생깁니다. 많은 워크로드에서 메시지 처리 순서는 중요하지 않고 최대한 빠른 처리량이 필요한 경우가 있어, 이런 상황에서 FIFO의 조율 비용을 부담하면 성능이 낭비됩니다. 두 유형을 제공함으로써 순서와 중복 제거가 필요한 워크로드는 FIFO를, 처리량이 우선인 워크로드는 표준 큐를 선택해 각자의 요구에 맞게 최적화하는 것이 가능합니다.",
+      "scriptText": "원리: 왜 에스큐에스는 모든 큐를 피포로 만들지 않고 순서를 보장하지 않는 표준 큐도 제공할까요? 피포 순서와 정확히 한 번 처리를 보장하려면 메시지 순서를 추적하고 중복을 검사하는 추가 조율이 필요해, 표준 큐보다 처리량에 제약이 생깁니다. 많은 워크로드에서 메시지 처리 순서는 중요하지 않고 최대한 빠른 처리량이 필요한 경우가 있어, 이런 상황에서 피포의 조율 비용을 부담하면 성능이 낭비됩니다. 두 유형을 제공함으로써 순서와 중복 제거가 필요한 워크로드는 피포를, 처리량이 우선인 워크로드는 표준 큐를 선택해 각자의 요구에 맞게 최적화하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg041",
+      "kind": "heading",
+      "sourceExcerpt": "## ✍️ 시험 포인트",
+      "scriptText": "시험 포인트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg042",
+      "kind": "paragraph",
+      "sourceExcerpt": "**SNS = 알림(pub/sub, 여러 구독자에 푸시, SMS·이메일).** **SQS = 메시지 큐(디커플링, 소비자가 폴링).** **EventBridge = 서버리스 이벤트 버스(이벤트 라우팅).** **SNS vs SQS**: 한 메시지를 *여러 곳에 동시에* = SNS. *큐에 쌓아 두고 처리* = SQS. **WorkSpaces = 관리형 가상 데스크톱(DaaS).** **AppStream 2.0(현재 WorkSpaces Applications) = 애플리케이션 스트리밍**, **WorkSpaces = 가상 데스크톱 전체**. **Amazon MQ = ActiveMQ/RabbitMQ용 관리형 메시지 브로커**. 새 AWS 네이티브 통합의 큐·알림·이벤트는 SQS/SNS/EventBridge가 기본 후보. **IoT Core = IoT 기기를 클라우드에 연결·메시징.** 비즈니스 앱 Connect(콜센터)·SES(이메일), 개발 도구 X-Ray(추적)·CloudShell 등은 *범주만* 매칭.",
+      "scriptText": "에스엔에스, 즉 알림(pub/sub, 여러 구독자에 푸시, 에스엠에스·이메일). 에스큐에스, 즉 메시지 큐(디커플링, 소비자가 폴링). EventBridge, 즉 서버리스 이벤트 버스(이벤트 라우팅). 에스엔에스 대 에스큐에스: 한 메시지를 여러 곳에 동시에, 즉 에스엔에스. 큐에 쌓아 두고 처리, 즉 에스큐에스. WorkSpaces, 즉 관리형 가상 데스크톱(DaaS). AppStream 2.0(현재 WorkSpaces Applications), 즉 애플리케이션 스트리밍, WorkSpaces, 즉 가상 데스크톱 전체. Amazon 엠큐, 즉 ActiveMQ/RabbitMQ용 관리형 메시지 브로커. 새 에이더블유에스 네이티브 통합의 큐·알림·이벤트는 에스큐에스/에스엔에스/EventBridge가 기본 후보. IoT Core, 즉 IoT 기기를 클라우드에 연결·메시징. 비즈니스 앱 Connect(콜센터)·에스이에스(이메일), 개발 도구 X-Ray(추적)·CloudShell 등은 범주만 매칭.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg043",
+      "kind": "heading",
+      "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
+      "scriptText": "흔한 함정",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg044",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"SNS와 SQS는 같은 것이다.\"** → ❌. **SNS = pub/sub 푸시(여러 구독자 동시)**, **SQS = 큐(소비자가 폴링)**. 모델이 다릅니다. *(원리: §1 — SNS는 발행 즉시 모든 구독자에게 메시지를 복제해 푸시하는 팬아웃 모델이고, SQS는 메시지를 큐에 내구성 있게 보관하고 소비자가 폴링해 처리하는 큐 모델로, 전달 방향과 저장 방식이 근본적으로 다르다.)* **\"이메일·SMS 알림을 SQS로 보낸다.\"** → ❌. 다중 대상 *알림*은 **SNS**(SMS·이메일 등 엔드포인트). SQS는 *큐*. *(원리: §1 — SNS는 이메일·SMS·HTTP 등 다양한 엔드포인트를 구독자로 등록해 알림을 푸시할 수 있는 pub/sub 서비스이고, SQS는 엔드포인트에 알림을 보내는 것이 아니라 소비자 애플리케이션이 폴링해 처리하는 큐 서비스다.)* **\"컴포넌트를 느슨하게 결합(디커플링)하려면 SNS만 쓴다.\"** → ⚠️ 보통 **SQS**(큐로 버퍼링)나 SNS+SQS 조합. SQS가 디커플링의 대표. *(원리: §1 — SQS 큐는 생산자와 소비자 사이에 메시지를 내구성 있게 보관해 각자의 처리 속도 차이를 흡수하는 버퍼 역할을 하므로, 컴포넌트 디커플링의 핵심 수단이 된다.)* **\"WorkSpaces는 서버용 가상 머신(EC2)이다.\"** → ❌. WorkSpaces는 *최종 사용자용 가상 **데스크톱***(DaaS). 서버 컴퓨팅은 EC2. *(원리: §2 — WorkSpaces는 최종 사용자에게 Windows·Linux 데스크톱 환경을 클라우드에서 제공하는 DaaS 서비스이고, EC2는 애플리케이션 실행·서버 역할을 위한 가상 머신으로 대상 사용자와 제공하는 환경이 다르다.)* **\"IoT 기기 연결도 그냥 EC2로 한다.\"** → ⚠️ IoT 기기의 안전한 연결·메시징 관리는 **IoT Core**가 전용으로 제공. *(원리: §3 — IoT Core는 MQTT 등 경량 프로토콜 지원, 기기 인증, 대규모 동시 연결 관리를 관리형으로 제공하는 전용 서비스이고, EC2로 직접 구현하면 이 모든 기능을 자체 구축해야 한다.)* **\"X-Ray는 보안 서비스다.\"** → ❌. **X-Ray는 분산 애플리케이션 추적(디버깅)** 개발자 도구입니다. *(원리: §4 — X-Ray는 마이크로서비스 간 요청 흐름을 추적해 병목·오류를 시각화하는 분산 추적 도구로 개발자 도구 범주에 속하며, 보안 서비스는 IAM·GuardDuty·Shield 등 별도 범주가 담당한다.)*",
+      "scriptText": "\"에스엔에스와 에스큐에스는 같은 것이다.\". 에스엔에스, 즉 pub/sub 푸시(여러 구독자 동시), 에스큐에스, 즉 큐(소비자가 폴링). 모델이 다릅니다. (원리: 1번 — 에스엔에스는 발행 즉시 모든 구독자에게 메시지를 복제해 푸시하는 팬아웃 모델이고, 에스큐에스는 메시지를 큐에 내구성 있게 보관하고 소비자가 폴링해 처리하는 큐 모델로, 전달 방향과 저장 방식이 근본적으로 다르다.) \"이메일·에스엠에스 알림을 에스큐에스로 보낸다.\". 다중 대상 알림은 에스엔에스(에스엠에스·이메일 등 엔드포인트). 에스큐에스는 큐. (원리: 1번 — 에스엔에스는 이메일·에스엠에스·에이치티티피 등 다양한 엔드포인트를 구독자로 등록해 알림을 푸시할 수 있는 pub/sub 서비스이고, 에스큐에스는 엔드포인트에 알림을 보내는 것이 아니라 소비자 애플리케이션이 폴링해 처리하는 큐 서비스다.) \"컴포넌트를 느슨하게 결합(디커플링)하려면 에스엔에스만 쓴다.\", 보통 에스큐에스(큐로 버퍼링)나 에스엔에스 그리고 에스큐에스 조합. 에스큐에스가 디커플링의 대표. (원리: 1번 — 에스큐에스 큐는 생산자와 소비자 사이에 메시지를 내구성 있게 보관해 각자의 처리 속도 차이를 흡수하는 버퍼 역할을 하므로, 컴포넌트 디커플링의 핵심 수단이 된다.) \"WorkSpaces는 서버용 가상 머신(이씨투)이다.\". WorkSpaces는 최종 사용자용 가상 데스크톱(DaaS). 서버 컴퓨팅은 이씨투. (원리: 2번 — WorkSpaces는 최종 사용자에게 Windows·Linux 데스크톱 환경을 클라우드에서 제공하는 DaaS 서비스이고, 이씨투는 애플리케이션 실행·서버 역할을 위한 가상 머신으로 대상 사용자와 제공하는 환경이 다르다.) \"IoT 기기 연결도 그냥 이씨투로 한다.\", IoT 기기의 안전한 연결·메시징 관리는 IoT Core가 전용으로 제공. (원리: 3번 — IoT Core는 엠큐티티 등 경량 프로토콜 지원, 기기 인증, 대규모 동시 연결 관리를 관리형으로 제공하는 전용 서비스이고, 이씨투로 직접 구현하면 이 모든 기능을 자체 구축해야 한다.) \"X-Ray는 보안 서비스다.\". X-Ray는 분산 애플리케이션 추적(디버깅) 개발자 도구입니다. (원리: 4번 — X-Ray는 마이크로서비스 간 요청 흐름을 추적해 병목·오류를 시각화하는 분산 추적 도구로 개발자 도구 범주에 속하며, 보안 서비스는 아이엠·GuardDuty·Shield 등 별도 범주가 담당한다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg045",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"AppStream 2.0은 WorkSpaces와 완전히 같은 가상 데스크톱 서비스다.\"** → ❌. AppStream 2.0(현재 WorkSpaces Applications)은 **애플리케이션 스트리밍**, WorkSpaces는 **전체 가상 데스크톱(DaaS)**입니다. *(원리: §3 — 특정 앱을 스트리밍할지, 사용자에게 전체 데스크톱 환경을 제공할지에 따라 운영 단위가 달라진다.)*",
+      "scriptText": "\"AppStream 2.0은 WorkSpaces와 완전히 같은 가상 데스크톱 서비스다.\". AppStream 2.0(현재 WorkSpaces Applications)은 애플리케이션 스트리밍, WorkSpaces는 전체 가상 데스크톱(DaaS)입니다. (원리: 3번 — 특정 앱을 스트리밍할지, 사용자에게 전체 데스크톱 환경을 제공할지에 따라 운영 단위가 달라진다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg046",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"기존 RabbitMQ 애플리케이션은 무조건 SQS로 다시 작성해야 한다.\"** → ⚠️ 기존 브로커 프로토콜과 코드를 유지해야 한다면 **Amazon MQ**가 맞을 수 있습니다. SQS는 AWS 네이티브 큐 서비스입니다. *(원리: §3 — Amazon MQ는 ActiveMQ/RabbitMQ 호환 브로커 운영 부담을 줄이는 서비스이고, SQS는 AWS가 제공하는 관리형 큐 API로 프로토콜 모델이 다르다.)*",
+      "scriptText": "\"기존 RabbitMQ 애플리케이션은 무조건 에스큐에스로 다시 작성해야 한다.\", 기존 브로커 프로토콜과 코드를 유지해야 한다면 Amazon 엠큐가 맞을 수 있습니다. 에스큐에스는 에이더블유에스 네이티브 큐 서비스입니다. (원리: 3번 — Amazon 엠큐는 ActiveMQ/RabbitMQ 호환 브로커 운영 부담을 줄이는 서비스이고, 에스큐에스는 에이더블유에스가 제공하는 관리형 큐 에이피아이로 프로토콜 모델이 다르다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg047",
+      "kind": "selfcheck",
+      "sourceExcerpt": "## 🧪 자가 점검",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg048",
+      "kind": "selfcheck",
+      "sourceExcerpt": "아래는 학습용 자가 점검입니다. (정식 검증 문항은 `t3-8.questions.json` 참조)",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg049",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q1.** 하나의 이벤트(예: 주문 생성)를 여러 구독자(이메일·여러 SQS 큐·Lambda)에게 동시에 푸시 알림으로 보내려면 어떤 서비스인가요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg050",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**Amazon SNS**(pub/sub 메시징). 주제(topic)에 발행하면 여러 구독자 엔드포인트(SQS·Lambda·이메일·SMS 등)로 메시지를 복제해 푸시합니다(팬아웃).\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg051",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q2.** 마이크로서비스 컴포넌트들을 느슨하게 결합(디커플링)하기 위해, 메시지를 큐에 보관하고 소비자가 가져가 처리하게 하려면?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg052",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**Amazon SQS**(메시지 큐). 메시지를 큐에 안전하게 저장하고 소비자가 폴링해 처리하므로, 생산자·소비자를 분리(디커플링)하고 부하를 평준화합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg053",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q3.** 사용자에게 클라우드 기반 가상 데스크톱(Windows/Linux)을 제공해 어디서나 접근하게 하려면? 그리고 IoT 기기를 안전하게 클라우드에 연결하려면?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg054",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n가상 데스크톱은 **Amazon WorkSpaces**(DaaS), IoT 기기 연결은 **AWS IoT Core**입니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg055",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q4.** SNS와 SQS의 핵심 차이를 한 문장으로?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg056",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**SNS**는 발행/구독(pub/sub)으로 한 메시지를 *여러 구독자에게 동시에 푸시*하고, **SQS**는 메시지를 *큐에 쌓아 두고 소비자가 폴링해 처리*합니다(컴포넌트 디커플링).\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg057",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q5 (원리).** 왜 SNS와 SQS는 자주 함께(SNS 주제 → 여러 SQS 큐) 쓰이는 구조가 되었을까요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg058",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\nSNS 주제에 여러 SQS 큐를 구독자로 등록하면, 하나의 이벤트(예: 주문 생성)를 여러 다운스트림 컴포넌트(결제·재고·알림)에 동시에 전달하면서도 각 컴포넌트가 자신의 SQS 큐에서 독립적인 속도로 메시지를 소비할 수 있습니다. SNS 단독으로는 소비자가 일시 다운됐을 때 메시지를 재전달할 보관 장소가 없고, SQS 단독으로는 하나의 이벤트를 여러 큐에 동시에 복제하는 브로드캐스트가 없으므로, 두 서비스를 조합해야 넓은 팬아웃과 각 소비자별 독립적인 내구성 처리를 동시에 달성하는 것이 가능합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg059",
+      "kind": "source",
+      "sourceExcerpt": "### 📌 출처 (verified)\n\n이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-06 · 고도화 검수: 2026-06-11 · 보강 초안 대조: 2026-06-21, 사람 검수 전 lastVerified 유지)\n\n1. Amazon SNS란? (pub/sub 알림) — https://docs.aws.amazon.com/sns/latest/dg/welcome.html\n2. Amazon SQS란? (메시지 큐) — https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html\n3. Amazon EventBridge란? (서버리스 이벤트 버스) — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html\n4. Amazon WorkSpaces란? (가상 데스크톱 DaaS) — https://docs.aws.amazon.com/workspaces/latest/adminguide/amazon-workspaces.html\n5. AWS IoT Core란? (IoT 기기 연결) — https://docs.aws.amazon.com/iot/latest/developerguide/what-is-aws-iot.html\n6. Amazon WorkSpaces Applications란? (AppStream 2.0 현재 문서명) — https://docs.aws.amazon.com/appstream2/latest/developerguide/what-is-appstream.html\n7. Amazon MQ란? — https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/welcome.html\n8. CLF-C02 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    }
+  ]
+}
