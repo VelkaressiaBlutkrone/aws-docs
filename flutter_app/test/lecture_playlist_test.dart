@@ -111,6 +111,19 @@ void main() {
     expect(fake.src, srcBefore); // 재로드 없음(연속성)
   });
 
+  test('openDoc 비중단: 일시정지 중이면 컨트롤러·트랙 미변경', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.select(2); // t1-3 재생
+    fake.emit(AudioEvent.playing);
+    await Future<void>.delayed(Duration.zero);
+    fake.emit(AudioEvent.paused); // 일시정지 상태로
+    await Future<void>.delayed(Duration.zero);
+    final srcBefore = fake.src;
+    pl.openDoc('CLF-C02', 'clf-t1-1'); // 다른 문서로 진입
+    expect(pl.index, 2); // 트랙 안 바뀜(비중단)
+    expect(fake.src, srcBefore); // 재로드 없음
+  });
+
   test('playPause: playing이면 pause, 아니면 play', () async {
     pl.setQueue('CLF-C02', tracks);
     pl.playPause();
