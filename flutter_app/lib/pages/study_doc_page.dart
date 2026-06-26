@@ -65,7 +65,7 @@ class _StudyDocPageState extends State<StudyDocPage> {
     _keyedDoc = doc;
     _anchorKeys = buildAnchorKeys(doc.blocks);
     // 오디오 강의(주머니 라디오) 잠금화면 메타 — 웹·dart-define on일 때만.
-    if (audioLectureEnabled) {
+    if (audioLectureEnabled && widget.entry.audioApproved) {
       audioRuntime?.nowPlaying(widget.entry.title);
     }
     final anchor = widget.targetAnchor;
@@ -96,11 +96,17 @@ class _StudyDocPageState extends State<StudyDocPage> {
   /// `audio_lecture` on + 웹(런타임 존재) + 문서 로드 완료일 때만 보인다 —
   /// 검수 전 생성 강의를 일반 사용자에게 노출하지 않는다(이슈 5-9).
   Widget? _miniPlayer(StudyContent? doc) {
-    if (!audioLectureEnabled || doc == null) return null;
     final runtime = audioRuntime;
-    if (runtime == null) return null;
+    if (!shouldShowLecturePlayer(
+      enabled: audioLectureEnabled,
+      approved: widget.entry.audioApproved,
+      hasDoc: doc != null,
+      hasRuntime: runtime != null,
+    )) {
+      return null;
+    }
     return StudyAudioPlayer(
-      controller: runtime.controller,
+      controller: runtime!.controller,
       title: widget.entry.title,
       audioSrc: widget.entry.lectureAudioSrc,
     );
