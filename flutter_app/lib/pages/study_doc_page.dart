@@ -106,11 +106,9 @@ class _StudyDocPageState extends State<StudyDocPage> {
     )) {
       return null;
     }
-    return StudyAudioPlayer(
-      controller: runtime!.controller,
-      title: widget.entry.title,
-      audioSrc: widget.entry.lectureAudioSrc,
-    );
+    final pl = lecturePlaylist;
+    if (pl == null) return null;
+    return StudyAudioPlayer(playlist: pl);
   }
 
   @override

@@ -71,4 +71,12 @@ void main() {
     await tester.pump();
     expect(find.text('페이지를 찾을 수 없습니다.'), findsOneWidget);
   });
+
+  testWidgets('게이트 off에서 "/cert/CLF-C02/audio" → "/"로 redirect(HomePage)',
+      (tester) async {
+    // audioLectureEnabled는 dart-define 미지정 시 false → 안전 페이지로.
+    await tester.pumpWidget(_app('/cert/CLF-C02/audio'));
+    await tester.pumpAndSettle();
+    expect(find.byType(HomePage), findsOneWidget);
+  });
 }
