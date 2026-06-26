@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-1",
-  "generatedAt": "2026-06-26T12:39:44Z",
+  "generatedAt": "2026-06-26T13:41:31Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 3779324,
-    "sha256": "3a62f067243520b3f9b477129fd615dda8b42fda33e3786b461341a263e68312",
+    "sizeBytes": 5039469,
+    "sha256": "fc974b270c99be27f15b6f0adfd4db922885cce277963355ae1d306061abc503",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -22,7 +22,7 @@
   },
   "loudness": {
     "targetLufs": -16,
-    "normalized": false
+    "normalized": true
   },
   "script": {
     "speechChars": 4578,
