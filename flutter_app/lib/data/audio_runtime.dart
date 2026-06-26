@@ -17,6 +17,17 @@ import 'audio_runtime_stub.dart'
 /// 검수 전 생성 강의를 진짜 학습 콘텐츠로 노출하지 않기 위한 안전장치(이슈 5-9).
 const bool audioLectureEnabled = bool.fromEnvironment('audio_lecture');
 
+/// 미니 플레이어 노출 게이트(순수 함수 — 위젯 밖에서 단위 테스트 가능하게 분리).
+/// study_doc_page가 마스터 플래그·문서별 approved·문서 로드·런타임 존재를
+/// 묶어 호출한다. 어느 하나라도 false면 미노출.
+bool shouldShowLecturePlayer({
+  required bool enabled,
+  required bool approved,
+  required bool hasDoc,
+  required bool hasRuntime,
+}) =>
+    enabled && approved && hasDoc && hasRuntime;
+
 /// 전역 오디오 런타임(웹 전용). VM/test에선 null.
 /// 위젯 트리 밖 싱글톤이라 라우팅 전환·위젯 dispose에도 재생이 유지된다.
 AudioRuntime? get audioRuntime => platform.audioRuntime;
