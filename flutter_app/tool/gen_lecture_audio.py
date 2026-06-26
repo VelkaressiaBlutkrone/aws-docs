@@ -297,6 +297,38 @@ def apply_lexicon(text: str, lexicon: dict, seen: set) -> tuple[str, list[str]]:
     return text, issues
 
 
+# 수치 토큰: 앞에 영문/숫자가 붙지 않은 독립 숫자만(약어 내부 숫자 'CLF-C02'의 02 제외).
+_NUM_RE = re.compile(r"(?<![A-Za-z0-9])\d+(?:[.,]\d+)?%?")
+
+
+def _lexicon_say_forms(entry: dict, key: str) -> list[str]:
+    """검출용 발음 후보(say 또는 firstSay/thenSay). 빈 값 제거."""
+    if "firstSay" in entry or "thenSay" in entry:
+        forms = [entry.get("firstSay"), entry.get("thenSay"), entry.get("say")]
+    else:
+        forms = [entry.get("say", key)]
+    return [f for f in forms if f]
+
+
+def check_token_preservation(source: str, target: str,
+                             lexicon: dict) -> tuple[list[str], list[str]]:
+    """source 원문의 핵심 토큰이 target 대본에 보존됐는지 검사.
+    약어(lexicon 등록) 누락=hard, 수치 누락=soft. 반환 (hard, soft)."""
+    hard: list[str] = []
+    soft: list[str] = []
+    for key in sorted(lexicon, key=len, reverse=True):       # 긴 키 우선(apply_lexicon과 동일)
+        pattern = r"(?<![0-9A-Za-z])" + re.escape(key) + r"(?![0-9A-Za-z])"
+        if not re.search(pattern, source):
+            continue
+        says = _lexicon_say_forms(lexicon[key], key)
+        if says and not any(say in target for say in says):
+            hard.append(f"약어 누락: {key}({says[0]})")
+    for num in dict.fromkeys(_NUM_RE.findall(source)):        # 순서 보존 dedupe
+        if num not in target:
+            soft.append(f"수치 누락: {num}")
+    return hard, soft
+
+
 def table_to_summary(table_lines: list[str]) -> tuple:
     """마크다운 표 → (audioSummary, issues). 2열만 초벌 생성, 그 외 None."""
     rows = []
@@ -420,7 +452,7 @@ def run_synthesize(args) -> None:
     print(f"[완료] {args.out}", file=sys.stderr)
 
 
-def gate_script(script: dict) -> tuple:
+def gate_script(script: dict, lexicon: dict | None = None) -> tuple:
     """script.json 정적 검사. 반환 (hard, soft) 메시지 목록."""
     hard: list[str] = []
     soft: list[str] = []
@@ -443,6 +475,14 @@ def gate_script(script: dict) -> tuple:
         for iss in seg.get("issues", []):
             if str(iss).startswith("unmapped-token"):
                 soft.append(f"{sid}: {iss}")
+        if lexicon and not seg.get("skip"):                  # ④ 원문 토큰 보존
+            target = (seg.get("audioSummary") if seg.get("kind") == "table"
+                      else seg.get("scriptText")) or ""
+            source = seg.get("sourceExcerpt") or ""
+            if source and target:
+                th, ts = check_token_preservation(source, target, lexicon)
+                hard += [f"{sid}: {m}" for m in th]
+                soft += [f"{sid}: {m}" for m in ts]
     return hard, soft
 
 
@@ -462,7 +502,10 @@ def gate_audio_meta(meta: dict, current_md_sha) -> list:
 
 def run_gate(args) -> None:
     script = json.loads(args.script.read_text(encoding="utf-8"))
-    hard, soft = gate_script(script)
+    lex = load_lexicon(args.lexicon)
+    if not lex:
+        print("  (lexicon 없음 — 토큰 보존 검사 skip)", file=sys.stderr)
+    hard, soft = gate_script(script, lex)
     cur_sha = None
     if args.md and args.md.exists():
         cur_sha = hashlib.sha256(
@@ -950,6 +993,49 @@ def _self_test() -> None:
                           "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
     assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
 
+    # ④ gate 통합: lexicon 전달 시 seg별 토큰 보존 검사
+    g_lex = {"EC2": {"say": "이씨투"}}
+    hard_g, _soft_g = gate_script({"segments": [
+        {"id": "s0", "kind": "paragraph", "sourceExcerpt": "EC2 설명",
+         "scriptText": "설명만 있다", "audioSummary": None, "skip": False, "issues": []},
+    ]}, g_lex)
+    assert any("s0" in x and "EC2" in x for x in hard_g), hard_g     # 약어 누락 hard
+    # table seg는 audioSummary를 대본으로 검사
+    hard_t, _ = gate_script({"segments": [
+        {"id": "s1", "kind": "table", "sourceExcerpt": "EC2 표",
+         "scriptText": "", "audioSummary": "이씨투 표입니다.", "skip": False, "issues": []},
+    ]}, g_lex)
+    assert not any("EC2" in x for x in hard_t), hard_t               # audioSummary에 보존 → 통과
+    # lexicon 없으면(None) 토큰 검사 skip(기존 호출 호환)
+    hard_n, _ = gate_script({"segments": [
+        {"id": "s0", "kind": "paragraph", "sourceExcerpt": "EC2 설명",
+         "scriptText": "설명만 있다", "audioSummary": None, "skip": False, "issues": []},
+    ]})
+    assert not any("EC2" in x for x in hard_n), hard_n
+    # skip seg는 토큰 검사 제외
+    hard_s, _ = gate_script({"segments": [
+        {"id": "s9", "kind": "source", "sourceExcerpt": "EC2", "scriptText": "x",
+         "audioSummary": None, "skip": True, "issues": []},
+    ]}, g_lex)
+    assert not any("EC2" in x for x in hard_s), hard_s
+    print("[self-test] gate 토큰 통합 OK", file=sys.stderr)
+
+    # ④ 환각 가드: check_token_preservation(순수)
+    lex_g = {"EC2": {"say": "이씨투"},
+             "AZ": {"firstSay": "가용 영역", "thenSay": "에이제트"}}
+    h, s = check_token_preservation("EC2는 11% 빠르다", "이씨투는 11% 빠르다", lex_g)
+    assert h == [] and s == [], (h, s)                       # 약어·수치 보존
+    h, s = check_token_preservation("EC2 인스턴스", "인스턴스만 있다", lex_g)
+    assert any("EC2" in x for x in h) and s == [], (h, s)    # 약어 누락=hard
+    h, s = check_token_preservation("가용량 99% 보장", "가용량 보장", lex_g)
+    assert h == [] and any("99%" in x for x in s), (h, s)    # 수치 누락=soft
+    h, s = check_token_preservation("AZ 배치", "에이제트 배치", lex_g)
+    assert h == [] and s == [], (h, s)                       # firstSay/thenSay 후보 매칭
+    h, s = check_token_preservation("CLF-C02 시험", "씨엘에프 씨 공이 시험",
+                                    {"CLF-C02": {"say": "씨엘에프 씨 공이"}})
+    assert h == [] and s == [], (h, s)                       # 약어 내부 숫자(02)는 수치 오탐 아님
+    print("[self-test] check_token_preservation OK", file=sys.stderr)
+
     # loudnorm pass1 JSON 파싱(순수)
     _ln = _parse_loudnorm_json(
         'ffmpeg noise\n[Parsed_loudnorm_0 @ 0x1] \n'
@@ -1007,6 +1093,7 @@ def main() -> None:
     ga.add_argument("--script", type=Path, required=True)
     ga.add_argument("--md", type=Path)
     ga.add_argument("--audio-meta", type=Path)
+    ga.add_argument("--lexicon", type=Path)
 
     args = ap.parse_args()
     if args.self_test:
