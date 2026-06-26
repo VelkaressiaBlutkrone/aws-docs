@@ -17,4 +17,42 @@ void main() {
     // 이 런타임 경계를 거치므로 app_router_test(VM)가 컴파일된다.
     expect(audioRuntime, isNull);
   });
+
+  group('shouldShowLecturePlayer (순수 게이트)', () {
+    test('4조건 모두 true → 노출', () {
+      expect(
+        shouldShowLecturePlayer(
+            enabled: true, approved: true, hasDoc: true, hasRuntime: true),
+        isTrue,
+      );
+    });
+    test('approved=false → 미노출 (검수 안 된 문서)', () {
+      expect(
+        shouldShowLecturePlayer(
+            enabled: true, approved: false, hasDoc: true, hasRuntime: true),
+        isFalse,
+      );
+    });
+    test('enabled=false → 미노출 (마스터 off)', () {
+      expect(
+        shouldShowLecturePlayer(
+            enabled: false, approved: true, hasDoc: true, hasRuntime: true),
+        isFalse,
+      );
+    });
+    test('hasRuntime=false → 미노출 (VM/test)', () {
+      expect(
+        shouldShowLecturePlayer(
+            enabled: true, approved: true, hasDoc: true, hasRuntime: false),
+        isFalse,
+      );
+    });
+    test('hasDoc=false → 미노출 (문서 로드 전)', () {
+      expect(
+        shouldShowLecturePlayer(
+            enabled: true, approved: true, hasDoc: false, hasRuntime: true),
+        isFalse,
+      );
+    });
+  });
 }
