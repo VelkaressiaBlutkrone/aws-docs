@@ -1,0 +1,420 @@
+{
+  "schemaVersion": 2,
+  "docId": "clf-t1-3",
+  "sourceAsset": "assets/content/clf/t1-3.md",
+  "sourceHash": "33d2dcd52e352616bd3a3a2caa3ec9759ab709f8ed978da463647cf2bd400d9a",
+  "lexiconVersion": "99e4378737f2",
+  "generatedAt": "2026-06-25T10:16:24Z",
+  "reviewStatus": "approved",
+  "segments": [
+    {
+      "id": "seg000",
+      "kind": "heading",
+      "sourceExcerpt": "# 클라우드 마이그레이션과 AWS CAF",
+      "scriptText": "클라우드 마이그레이션과 에이더블유에스 씨에이에프",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg001",
+      "kind": "paragraph",
+      "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 1 「클라우드 개념」(24%) · **Task 1.3 클라우드 마이그레이션의 이점과 전략** (`clf-t1-3`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"어떻게 클라우드로 옮기는가\" — 전략(AWS CAF)과 도구(DMS·Snowball)입니다.",
+      "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 1 「클라우드 개념」(24%) · Task 1.3 클라우드 마이그레이션의 이점과 전략 (clf-t1-3) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"어떻게 클라우드로 옮기는가\" — 전략(에이더블유에스 씨에이에프)과 도구(디엠에스·Snowball)입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg002",
+      "kind": "heading",
+      "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+      "scriptText": "학습 목표 체크리스트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg003",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 1.3의 Skill 항목)",
+      "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 1.3의 Skill 항목)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg004",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS CAF(Cloud Adoption Framework)**가 무엇이고 어떤 이점이 있는지 안다 CAF의 이점(비즈니스 위험 감소·운영 효율·매출 증가 등)을 말할 수 있다 **AWS Snowball**이 대량 데이터를 물리 디바이스로 전송함을 안다 **DMS(온라인 DB 마이그레이션) vs Snowball(오프라인 대량 전송)**을 구분할 수 있다",
+      "scriptText": "에이더블유에스 씨에이에프(Cloud Adoption 프레임워크)가 무엇이고 어떤 이점이 있는지 안다 씨에이에프의 이점(비즈니스 위험 감소·운영 효율·매출 증가 등)을 말할 수 있다 에이더블유에스 Snowball이 대량 데이터를 물리 디바이스로 전송함을 안다 디엠에스(온라인 디비 마이그레이션) 대 Snowball(오프라인 대량 전송)을 구분할 수 있다",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg005",
+      "kind": "heading",
+      "sourceExcerpt": "## 🎯 왜 중요한가",
+      "scriptText": "왜 중요한가",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg006",
+      "kind": "paragraph",
+      "sourceExcerpt": "도메인 1(24%)에서 이 Task는 **\"클라우드로 *어떻게* 옮기고, 그 *전략*은 무엇인가\"**입니다. 시험은 두 가지를 묻습니다: **전략 프레임워크(AWS CAF)**와 **데이터 이전 도구 선택**(네트워크가 안 되면 *Snowball*, DB는 *DMS*). \"대용량 데이터를 인터넷으로 옮기기엔 너무 느리다\" → **Snowball**, \"운영 중인 DB를 최소 다운타임으로\" → **DMS**가 단골입니다.",
+      "scriptText": "도메인 1(24%)에서 이 Task는 \"클라우드로 어떻게 옮기고, 그 전략은 무엇인가\"입니다. 시험은 두 가지를 묻습니다: 전략 프레임워크(에이더블유에스 씨에이에프)와 데이터 이전 도구 선택(네트워크가 안 되면 Snowball, 디비는 디엠에스). \"대용량 데이터를 인터넷으로 옮기기엔 너무 느리다\", Snowball, \"운영 중인 디비를 최소 다운타임으로\", 디엠에스가 단골입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg007",
+      "kind": "heading",
+      "sourceExcerpt": "## 🔤 먼저 알아야 할 용어",
+      "scriptText": "먼저 알아야 할 용어",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg008",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "scriptText": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg009",
+      "kind": "table",
+      "sourceExcerpt": "| 용어 | 영문 | 한 줄 풀이 |\n|---|---|---|\n| **마이그레이션** | migration | 데이터·애플리케이션·시스템을 한 환경에서 다른 환경으로 *옮기는 작업* |\n| **다운타임** | downtime | 서비스가 *멈춰 있어 사용자가 접근할 수 없는 시간* — 짧을수록 좋음 |\n| **이기종** | heterogeneous | 출발지와 목적지의 DB 엔진이 *서로 다른 경우*(예: Oracle → Aurora) |\n| **SCT** | Schema Conversion Tool | 소스 스키마(테이블 구조·데이터 타입 등 DB 설계도)를 대상 엔진 형식으로 변환하는 AWS 도구 |\n| **대역폭** | bandwidth | 네트워크가 단위 시간당 *전송할 수 있는 데이터의 최대량* |\n| **리프트 앤 시프트** | lift-and-shift | 애플리케이션을 *변경 없이* 그대로 클라우드로 옮기는 방식(7R의 Rehost) |\n| **클라우드 준비도** | cloud readiness | 조직이 클라우드로 전환했을 때 실패하지 않을 만큼 *기술·인력·프로세스가 갖춰진 정도* |",
+      "scriptText": "",
+      "audioSummary": "먼저 기초 용어입니다. 마이그레이션은 데이터나 애플리케이션, 시스템을 한 환경에서 다른 환경으로 옮기는 작업입니다. 다운타임은 서비스가 멈춰 있어 사용자가 접근할 수 없는 시간으로, 짧을수록 좋습니다. 이기종은 출발지와 목적지의 디비 엔진이 서로 다른 경우로, 예를 들어 오라클에서 오로라로 옮기는 경우입니다. 에스씨티는 스키마 컨버전 툴로, 소스 스키마, 즉 테이블 구조나 데이터 타입 같은 디비 설계도를 대상 엔진 형식으로 변환하는 에이더블유에스 도구입니다. 대역폭은 네트워크가 단위 시간당 전송할 수 있는 데이터의 최대량입니다. 리프트 앤 시프트는 애플리케이션을 변경 없이 그대로 클라우드로 옮기는 방식입니다. 클라우드 준비도는 조직이 클라우드로 전환했을 때 실패하지 않을 만큼 기술과 인력, 프로세스가 갖춰진 정도입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg010",
+      "kind": "heading",
+      "sourceExcerpt": "## 📖 핵심 개념",
+      "scriptText": "핵심 개념",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg011",
+      "kind": "heading",
+      "sourceExcerpt": "### 1) 클라우드 도입 전략 — AWS CAF {#caf}",
+      "scriptText": "1) 클라우드 도입 전략 — 에이더블유에스 씨에이에프",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg012",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS CAF(Cloud Adoption Framework)**는 **AWS의 경험과 모범 사례를 활용해 조직의 디지털 전환과 클라우드 도입을 가속**하는 프레임워크입니다.",
+      "scriptText": "에이더블유에스 씨에이에프(Cloud Adoption 프레임워크)는 에이더블유에스의 경험과 모범 사례를 활용해 조직의 디지털 전환과 클라우드 도입을 가속하는 프레임워크입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg013",
+      "kind": "paragraph",
+      "sourceExcerpt": "하는 일: **전환 기회를 식별·우선순위화**하고, **클라우드 준비도를 평가·개선**하며, **전환 로드맵을 반복적으로 발전**시킵니다. **이점(비즈니스 성과):** 비용 절감, **비즈니스 위험 감소**, **운영 효율 개선**, 민첩성, 빠른 혁신, **새로운 매출원 창출**, 고객·직원 경험 재창조.",
+      "scriptText": "하는 일: 전환 기회를 식별·우선순위화하고, 클라우드 준비도를 평가·개선하며, 전환 로드맵을 반복적으로 발전시킵니다. 이점(비즈니스 성과): 비용 절감, 비즈니스 위험 감소, 운영 효율 개선, 민첩성, 빠른 혁신, 새로운 매출원 창출, 고객·직원 경험 재창조.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg014",
+      "kind": "paragraph",
+      "sourceExcerpt": "ℹ️ 참고: CAF는 역량을 **6개 관점**(비즈니스·인력·거버넌스·플랫폼·보안·운영)으로 구성합니다. 또한 CLF 공식 시험 가이드는 CAF 이점으로 **ESG(환경·사회·거버넌스) 개선**도 명시합니다. (CLF에선 \"CAF = 도입을 가속하는 모범 사례 프레임워크 + 그 비즈니스 이점\"으로 기억하면 충분.)",
+      "scriptText": "ℹ 참고: 씨에이에프는 역량을 6개 관점(비즈니스·인력·거버넌스·플랫폼·보안·운영)으로 구성합니다. 또한 씨엘에프 공식 시험 가이드는 씨에이에프 이점으로 이에스지(환경·사회·거버넌스) 개선도 명시합니다. (씨엘에프에선 \"씨에이에프, 즉 도입을 가속하는 모범 사례 프레임워크 그리고 그 비즈니스 이점\"으로 기억하면 충분.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg015",
+      "kind": "paragraph",
+      "sourceExcerpt": "**Well-Architected vs CAF** (헷갈림 주의): **Well-Architected**([1.2](#))는 *기술 아키텍처*의 모범 사례(6대 기둥), **CAF**는 *조직 차원의 클라우드 도입 여정*을 다룹니다.",
+      "scriptText": "웰 아키텍티드 대 씨에이에프 (헷갈림 주의): 웰 아키텍티드(1.2)는 기술 아키텍처의 모범 사례(6대 기둥), 씨에이에프는 조직 차원의 클라우드 도입 여정을 다룹니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg016",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: CAF가 클라우드 도입을 어떻게 가속할 수 있을까요? 조직이 클라우드를 도입할 때 실패하는 이유는 기술만이 아니라 *인력·거버넌스·비즈니스 정렬* 같은 비기술 영역이 준비되지 않아서인 경우가 많습니다. CAF는 도입 역량을 비즈니스·인력·거버넌스·플랫폼·보안·운영이라는 6개 관점으로 분리해, 각 영역의 *현재 수준과 목표 수준 사이의 격차*를 독립적으로 진단할 수 있게 합니다. 격차가 어디에 있는지 관점별로 드러나면, 조직은 모든 것을 한꺼번에 개선하려는 대신 *위험이 높거나 영향이 큰 영역부터 우선순위를 정해* 전환 로드맵을 세울 수 있습니다. 관점이 분리되어 있으면 기술 팀이 플랫폼을 준비하는 동안 인사 팀이 역량을 병렬로 보강할 수 있어, 한 영역의 지연이 전체 전환을 멈추지 않습니다.",
+      "scriptText": "원리: 씨에이에프가 클라우드 도입을 어떻게 가속할 수 있을까요? 조직이 클라우드를 도입할 때 실패하는 이유는 기술만이 아니라 인력·거버넌스·비즈니스 정렬 같은 비기술 영역이 준비되지 않아서인 경우가 많습니다. 씨에이에프는 도입 역량을 비즈니스·인력·거버넌스·플랫폼·보안·운영이라는 6개 관점으로 분리해, 각 영역의 현재 수준과 목표 수준 사이의 격차를 독립적으로 진단할 수 있게 합니다. 격차가 어디에 있는지 관점별로 드러나면, 조직은 모든 것을 한꺼번에 개선하려는 대신 위험이 높거나 영향이 큰 영역부터 우선순위를 정해 전환 로드맵을 세울 수 있습니다. 관점이 분리되어 있으면 기술 팀이 플랫폼을 준비하는 동안 인사 팀이 역량을 병렬로 보강할 수 있어, 한 영역의 지연이 전체 전환을 멈추지 않습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg017",
+      "kind": "heading",
+      "sourceExcerpt": "### 2) 마이그레이션 도구 — DMS와 Snowball (★ 시험 핵심) {#migration-tools}",
+      "scriptText": "2) 마이그레이션 도구 — 디엠에스와 Snowball (시험 핵심)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg018",
+      "kind": "paragraph",
+      "sourceExcerpt": "데이터를 AWS로 옮기는 두 대표 방법:",
+      "scriptText": "데이터를 에이더블유에스로 옮기는 두 대표 방법:",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg019",
+      "kind": "table",
+      "sourceExcerpt": "| 도구 | 한 줄 | 언제 |\n|---|---|---|\n| **AWS DMS** (Database Migration Service) | **데이터베이스를 AWS로 마이그레이션** — 진행 중 변경을 복제해 **최소 다운타임** | 운영 중인 *DB*를 네트워크로 옮길 때(동종·이기종, 이기종은 SCT) |\n| **AWS Snowball** (Snow Family) | **대량 데이터(테라바이트급 이상)를 물리 디바이스로** AWS에 전송 | *네트워크 전송이 너무 느리거나 비싸거나 비현실적*일 때(오프라인) |",
+      "scriptText": "",
+      "audioSummary": "마이그레이션 도구 두 가지입니다. 에이더블유에스 디엠에스는 데이터베이스 마이그레이션 서비스로, 데이터베이스를 에이더블유에스로 옮기며 진행 중 변경을 복제해 다운타임을 최소화합니다. 운영 중인 디비를 네트워크로 옮길 때 쓰며, 동종과 이기종을 모두 지원하고 이기종일 때는 에스씨티를 함께 씁니다. 에이더블유에스 스노우볼은 스노우 패밀리의 하나로, 테라바이트급 이상의 대량 데이터를 물리 디바이스에 담아 에이더블유에스로 전송합니다. 네트워크 전송이 너무 느리거나 비싸거나 비현실적일 때 오프라인으로 사용합니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg020",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS Snowball 동작:** 디바이스를 *배송*받아 → 사내에서 *오프라인으로 데이터 적재* → AWS로 *반송*하면 업로드. 인터넷 대역폭에 의존하지 않습니다.",
+      "scriptText": "에이더블유에스 Snowball 동작: 디바이스를 배송받아, 사내에서 오프라인으로 데이터 적재, 에이더블유에스로 반송하면 업로드. 인터넷 대역폭에 의존하지 않습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg021",
+      "kind": "paragraph",
+      "sourceExcerpt": "ℹ️ 정직성 메모: AWS **Snow Family**의 일부 디바이스(예: Snowball Edge)는 공식 문서 기준 **신규 고객 등록이 제한**될 수 있습니다. CLF에선 **\"Snowball = 대량 데이터의 오프라인 물리 전송\"** 개념으로 유효합니다.",
+      "scriptText": "ℹ 정직성 메모: 에이더블유에스 Snow Family의 일부 디바이스(예: Snowball Edge)는 공식 문서 기준 신규 고객 등록이 제한될 수 있습니다. 씨엘에프에선 \"Snowball, 즉 대량 데이터의 오프라인 물리 전송\" 개념으로 유효합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg022",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: - **\"운영 중인 데이터베이스를 최소 다운타임으로 AWS에\"** → **DMS** ([3.4](#)). - **\"수십 TB~PB 데이터를 옮겨야 하는데 네트워크가 느리다/제한적이다\"** → **Snowball**(물리 전송).",
+      "scriptText": "시험 신호: - \"운영 중인 데이터베이스를 최소 다운타임으로 에이더블유에스에\", 디엠에스 (3.4). - \"수십 티비~피비 데이터를 옮겨야 하는데 네트워크가 느리다/제한적이다\", Snowball(물리 전송).",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg023",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: DMS는 어떻게 서비스를 멈추지 않고 DB를 옮길 수 있을까요? DMS는 초기에 소스 DB의 전체 데이터를 대상에 복사한 뒤, 복사가 진행되는 동안에도 소스에서 계속 발생하는 변경을 *CDC(Change Data Capture)* 방식으로 실시간 포착해 대상에 반영합니다. 덕분에 전체 복사가 끝나는 시점에는 소스와 대상의 차이가 거의 없는 상태가 되고, 짧은 순간만 전환하면 서비스 재개가 가능합니다. Snowball은 데이터를 통째로 물리 디바이스에 적재해 배송하는 방식이므로, 적재하는 동안 소스에서 생기는 변경을 추적하지 않습니다 — 이것이 운영 중 DB 마이그레이션에 Snowball이 아닌 DMS를 쓰는 이유입니다.",
+      "scriptText": "원리: 디엠에스는 어떻게 서비스를 멈추지 않고 디비를 옮길 수 있을까요? 디엠에스는 초기에 소스 디비의 전체 데이터를 대상에 복사한 뒤, 복사가 진행되는 동안에도 소스에서 계속 발생하는 변경을 씨디씨(Change Data Capture) 방식으로 실시간 포착해 대상에 반영합니다. 덕분에 전체 복사가 끝나는 시점에는 소스와 대상의 차이가 거의 없는 상태가 되고, 짧은 순간만 전환하면 서비스 재개가 가능합니다. Snowball은 데이터를 통째로 물리 디바이스에 적재해 배송하는 방식이므로, 적재하는 동안 소스에서 생기는 변경을 추적하지 않습니다 — 이것이 운영 중 디비 마이그레이션에 Snowball이 아닌 디엠에스를 쓰는 이유입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg024",
+      "kind": "heading",
+      "sourceExcerpt": "### 3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강) {#datasync-7r}",
+      "scriptText": "3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg025",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS DataSync**: 온프레미스 스토리지(NFS·SMB 등)와 AWS 스토리지(S3·EFS·FSx) 사이의 데이터 전송을 **네트워크로 온라인 자동화·가속**하는 서비스입니다. *예약·반복 동기화*에 적합 — Snowball(오프라인 물리 전송)과 달리 네트워크가 충분할 때의 **온라인** 대안입니다. **7R 마이그레이션 전략**: 애플리케이션을 옮기는 7가지 접근. CLF은 특히 **Rehost**(변경 없이 그대로, 리프트 앤 시프트), **Replatform**(약간만 최적화, 리프트 팅커 시프트), **Refactor/Re-architect**(클라우드 네이티브로 재설계), **Retire**(폐기), **Retain**(온프레미스 유지)을 구분합니다.",
+      "scriptText": "에이더블유에스 DataSync: 온프레미스 스토리지(엔에프에스·에스엠비 등)와 에이더블유에스 스토리지(에스쓰리·이에프에스·FSx) 사이의 데이터 전송을 네트워크로 온라인 자동화·가속하는 서비스입니다. 예약·반복 동기화에 적합 — Snowball(오프라인 물리 전송)과 달리 네트워크가 충분할 때의 온라인 대안입니다. 7R 마이그레이션 전략: 애플리케이션을 옮기는 7가지 접근. 씨엘에프은 특히 Rehost(변경 없이 그대로, 리프트 앤 시프트), Replatform(약간만 최적화, 리프트 팅커 시프트), Refactor/Re-architect(클라우드 네이티브로 재설계), Retire(폐기), Retain(온프레미스 유지)을 구분합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg026",
+      "kind": "paragraph",
+      "sourceExcerpt": "시험 신호: \"온라인으로 자동·반복 전송\" → **DataSync**(vs 오프라인 **Snowball**). \"재설계해 클라우드 네이티브로\" → **Refactor**, \"그대로 옮김\" → **Rehost**. 출처: [What is AWS DataSync?](https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html), [7 Rs (마이그레이션 전략)](https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-7-rs.html)",
+      "scriptText": "시험 신호: \"온라인으로 자동·반복 전송\", DataSync(대 오프라인 Snowball). \"재설계해 클라우드 네이티브로\", Refactor, \"그대로 옮김\", Rehost. 출처: What is 에이더블유에스 DataSync?, 7 Rs (마이그레이션 전략)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg027",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 마이그레이션 전략을 7가지로 나눌까요? 애플리케이션마다 *비즈니스 가치*와 *변경에 드는 비용·위험*의 비율이 다르기 때문입니다. 이미 노후화되어 쓸모없는 앱은 Retire(폐기)로 비용을 즉시 줄일 수 있고, 변경 없이 옮겨도 충분한 앱은 Rehost(리프트 앤 시프트)로 빠르게 이전합니다. 반면 클라우드 고유 기능을 충분히 활용해야 장기 경쟁력이 생기는 핵심 앱은 Refactor로 재설계할 가치가 있습니다. 모든 앱에 동일한 전략을 강제하면 중요하지 않은 앱에 과도한 투자가 생기거나, 핵심 앱을 변경 없이 옮겨 클라우드 이점을 얻지 못하게 됩니다. 7R은 이 스펙트럼을 단계별로 명시해 조직이 앱별 우선순위를 결정하도록 돕는 구조입니다.",
+      "scriptText": "원리: 왜 마이그레이션 전략을 7가지로 나눌까요? 애플리케이션마다 비즈니스 가치와 변경에 드는 비용·위험의 비율이 다르기 때문입니다. 이미 노후화되어 쓸모없는 앱은 Retire(폐기)로 비용을 즉시 줄일 수 있고, 변경 없이 옮겨도 충분한 앱은 Rehost(리프트 앤 시프트)로 빠르게 이전합니다. 반면 클라우드 고유 기능을 충분히 활용해야 장기 경쟁력이 생기는 핵심 앱은 Refactor로 재설계할 가치가 있습니다. 모든 앱에 동일한 전략을 강제하면 중요하지 않은 앱에 과도한 투자가 생기거나, 핵심 앱을 변경 없이 옮겨 클라우드 이점을 얻지 못하게 됩니다. 7R은 이 스펙트럼을 단계별로 명시해 조직이 앱별 우선순위를 결정하도록 돕는 구조입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg028",
+      "kind": "heading",
+      "sourceExcerpt": "## ✍️ 시험 포인트",
+      "scriptText": "시험 포인트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg029",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AWS CAF** = 클라우드 *도입 여정*을 가속하는 모범 사례 프레임워크. 이점: 비즈니스 위험 감소·운영 효율·매출 증가·민첩성 등(가이드는 ESG도). **CAF(조직 도입) vs Well-Architected(기술 아키텍처 6기둥)** 구분. **Snowball** = 대량 데이터를 **물리 디바이스로 오프라인** 전송(네트워크가 비현실적일 때). **DMS** = **DB**를 네트워크로 마이그레이션(최소 다운타임). 이기종 엔진은 **SCT**로 스키마 변환. \"네트워크로 못 옮길 대용량\" → Snowball, \"DB 최소 다운타임\" → DMS.",
+      "scriptText": "에이더블유에스 씨에이에프, 즉 클라우드 도입 여정을 가속하는 모범 사례 프레임워크. 이점: 비즈니스 위험 감소·운영 효율·매출 증가·민첩성 등(가이드는 이에스지도). 씨에이에프(조직 도입) 대 웰 아키텍티드(기술 아키텍처 6기둥) 구분. Snowball, 즉 대량 데이터를 물리 디바이스로 오프라인 전송(네트워크가 비현실적일 때). 디엠에스, 즉 디비를 네트워크로 마이그레이션(최소 다운타임). 이기종 엔진은 에스씨티로 스키마 변환. \"네트워크로 못 옮길 대용량\", Snowball, \"디비 최소 다운타임\", 디엠에스.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg030",
+      "kind": "heading",
+      "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
+      "scriptText": "흔한 함정",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg031",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"AWS CAF와 Well-Architected는 같은 것이다.\"** → ❌. **CAF = 조직의 클라우드 *도입* 여정**, **Well-Architected = 기술 *아키텍처* 모범 사례(6기둥)**. *(원리: §1 — CAF는 6개 관점으로 조직 준비도 격차를 진단하고, Well-Architected는 기술 아키텍처 품질 차원을 점검한다.)* **\"대용량 데이터도 무조건 인터넷으로 옮긴다.\"** → ⚠️ 네트워크가 느리거나 비싸면 **Snowball**(물리 전송)이 더 빠르고 저렴할 수 있습니다. *(원리: §2 — 대역폭이 제한적이면 물리 전송이 온라인보다 실용적이며, Snowball은 네트워크 대역폭에 의존하지 않는다.)* **\"Snowball로 운영 중인 데이터베이스를 실시간 마이그레이션한다.\"** → ❌. 운영 중 DB의 최소 다운타임 마이그레이션은 **DMS**. Snowball은 *대량 데이터의 오프라인 일괄 전송*. *(원리: §2 — DMS는 CDC로 변경을 실시간 추적하지만 Snowball은 일괄 적재 방식이어서 운영 중 변경을 반영하지 못한다.)* **\"마이그레이션 전략은 도구 하나면 된다.\"** → ⚠️ 상황에 맞게: DB는 DMS(+SCT), 대량 파일은 Snowball, 온라인 동기화 등 조합. *(원리: §3 — 앱마다 최적 전략이 다르고, 전략에 따라 DMS·Snowball·DataSync 등 도구 조합도 달라진다.)*",
+      "scriptText": "\"에이더블유에스 씨에이에프와 웰 아키텍티드는 같은 것이다.\". 씨에이에프, 즉 조직의 클라우드 도입 여정, 웰 아키텍티드, 즉 기술 아키텍처 모범 사례(6기둥). (원리: 1번 — 씨에이에프는 6개 관점으로 조직 준비도 격차를 진단하고, 웰 아키텍티드는 기술 아키텍처 품질 차원을 점검한다.) \"대용량 데이터도 무조건 인터넷으로 옮긴다.\", 네트워크가 느리거나 비싸면 Snowball(물리 전송)이 더 빠르고 저렴할 수 있습니다. (원리: 2번 — 대역폭이 제한적이면 물리 전송이 온라인보다 실용적이며, Snowball은 네트워크 대역폭에 의존하지 않는다.) \"Snowball로 운영 중인 데이터베이스를 실시간 마이그레이션한다.\". 운영 중 디비의 최소 다운타임 마이그레이션은 디엠에스. Snowball은 대량 데이터의 오프라인 일괄 전송. (원리: 2번 — 디엠에스는 씨디씨로 변경을 실시간 추적하지만 Snowball은 일괄 적재 방식이어서 운영 중 변경을 반영하지 못한다.) \"마이그레이션 전략은 도구 하나면 된다.\", 상황에 맞게: 디비는 디엠에스(그리고 에스씨티), 대량 파일은 Snowball, 온라인 동기화 등 조합. (원리: 3번 — 앱마다 최적 전략이 다르고, 전략에 따라 디엠에스·Snowball·DataSync 등 도구 조합도 달라진다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg032",
+      "kind": "selfcheck",
+      "sourceExcerpt": "## 🧪 자가 점검",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg033",
+      "kind": "selfcheck",
+      "sourceExcerpt": "아래는 학습용 자가 점검입니다. (정식 검증 문항은 `t1-3.questions.json` 참조)",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg034",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q1.** 조직의 클라우드 도입 여정을 AWS의 모범 사례로 가속하고 전환 로드맵을 세우도록 돕는 프레임워크는?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg035",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**AWS CAF(Cloud Adoption Framework)**. 전환 기회 식별·우선순위, 클라우드 준비도 평가·개선, 로드맵 반복 발전을 돕고, 비즈니스 위험 감소·운영 효율·매출 증가 같은 이점을 제공합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg036",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q2.** 수백 TB의 데이터를 AWS로 옮겨야 하는데 인터넷 대역폭이 부족해 네트워크 전송이 너무 느리고 비싸다. 어떤 서비스가 적합한가요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg037",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**AWS Snowball**. 물리 디바이스를 배송받아 오프라인으로 대량 데이터를 적재한 뒤 AWS로 반송해 업로드합니다. 네트워크 대역폭에 의존하지 않습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg038",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q3.** 운영 중인 데이터베이스를 최소 다운타임으로 AWS로 옮기려면? Snowball과 무엇이 다른가요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg039",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**AWS DMS**(Database Migration Service)로 진행 중 변경을 복제해 최소 다운타임으로 마이그레이션합니다. Snowball은 *대량 데이터의 오프라인 물리 전송*이고, DMS는 *DB의 온라인 마이그레이션*입니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg040",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q4.** AWS CAF와 AWS Well-Architected Framework의 차이는?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg041",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**CAF**는 조직 차원의 *클라우드 도입 여정*(전환 전략·준비도·로드맵)을 다루고, **Well-Architected**는 *기술 아키텍처*의 모범 사례(6대 기둥)를 다룹니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg042",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q5 (원리).** 왜 DMS는 운영 중인 데이터베이스를 서비스 중단 없이 옮길 수 있고, Snowball은 그렇게 할 수 없나요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg043",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**DMS는 가동 중 변경분을 계속 따라잡는 방식**(전체 복사 후 변경 캡처)이라 전환 직전까지 원본과 대상이 동기 상태를 유지합니다. **Snowball은 한 시점의 데이터를 물리로 옮기는 일괄 방식**이라 운송 중 변경이 반영되지 않습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg044",
+      "kind": "source",
+      "sourceExcerpt": "### 📌 출처 (verified)\n\n이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-06 · 고도화 검수: 2026-06-11)\n\n1. AWS Cloud Adoption Framework 개요 (백서) — https://docs.aws.amazon.com/whitepapers/latest/overview-aws-cloud-adoption-framework/welcome.html\n2. AWS Snowball이란? (대량 데이터 물리 전송) — https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html\n3. AWS Database Migration Service란? — https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html\n4. CLF-C02 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    }
+  ]
+}
