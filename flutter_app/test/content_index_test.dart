@@ -121,6 +121,33 @@ void main() {
     expect(contentFor('SAA-C03').first.lectureAudioSrc,
         'assets/audio/saa/saa-t1-1/lecture.mp3');
   });
+
+  // ── 오디오 노출 동기화 (M2 런타임 게이트) ───────────────────────────
+  // audioApproved=true ↔ audio_meta.json reviewStatus=approved + mp3 존재.
+  // SSOT는 audio_meta.json(사람이 청취 후 approved 전환). 불일치 시 잘못된
+  // 노출/404를 빌드 전에 차단(verified 문항 동적 불변식과 동일 패턴).
+  test('동기화: audioApproved ↔ audio_meta.json reviewStatus + mp3 존재', () {
+    final issues = <String>[];
+    for (final entry in kContentIndex.entries) {
+      for (final e in entry.value) {
+        final meta = File(e.lectureAudioMetaSrc);
+        final mp3 = File(e.lectureAudioSrc);
+        String? status;
+        if (meta.existsSync()) {
+          final m =
+              json.decode(meta.readAsStringSync()) as Map<String, dynamic>;
+          status = m['reviewStatus'] as String?;
+        }
+        final metaApproved = status == 'approved' && mp3.existsSync();
+        if (e.audioApproved != metaApproved) {
+          issues.add(
+              '${e.certCode}/${e.taskId}: audioApproved=${e.audioApproved} != meta(approved&&mp3)=$metaApproved (status=$status, mp3=${mp3.existsSync()})');
+        }
+      }
+    }
+    expect(issues, isEmpty,
+        reason: 'audioApproved ↔ audio_meta 동기화 불일치:\n${issues.join('\n')}');
+  });
 }
 
 ContentEntry _e(int domain, int questionCount) => ContentEntry(

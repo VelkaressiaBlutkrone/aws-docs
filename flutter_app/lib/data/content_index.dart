@@ -9,6 +9,7 @@ class ContentEntry {
     required this.mdAsset,
     required this.questionsAsset,
     required this.questionCount,
+    this.audioApproved = false,
   });
 
   final String certCode;
@@ -18,6 +19,11 @@ class ContentEntry {
   final String mdAsset;
   final String questionsAsset;
   final int questionCount;
+
+  /// 청취 검수 완료(audio_meta.json reviewStatus=approved)된 오디오 강의 보유 여부.
+  /// SSOT는 audio_meta.json — content_index_test의 동기화 테스트가 일치를 강제한다.
+  /// study_doc_page가 노출 전 게이트로 검사(approved만 미니플레이어 표시).
+  final bool audioApproved;
 
   /// 이력 기록용 자격증 ID(현재는 certCode와 동일).
   String get certForHistory => certCode;
@@ -29,10 +35,14 @@ class ContentEntry {
   /// 합친 오디오 강의("주머니 라디오") placeholder 경로.
   /// 규약: assets/audio/{family}/{taskId}/lecture.mp3 (family = taskId 접두어).
   /// mdAsset 규약이 cert마다 불규칙해 유도하지 않고 별도 일관 경로를 둔다.
-  /// 1A = 문서당 1개 합친 파일(iOS 잠금 중 트랙 자동전환 함정 회피). M1은
-  /// placeholder(실제 mp3·메타는 T6·T9). 출처: 2026-06-20-study-audio-lecture-review.md.
+  /// 1A = 문서당 1개 합친 파일(iOS 잠금 중 트랙 자동전환 함정 회피).
+  /// 실제 mp3·메타 등록됨(PR #62, approved CLF 19문서).
   String get lectureAudioSrc =>
       'assets/audio/${taskId.split('-').first}/$taskId/lecture.mp3';
+
+  /// 오디오 메타(reviewStatus·체크섬) 경로. lectureAudioSrc와 같은 폴더.
+  String get lectureAudioMetaSrc =>
+      'assets/audio/${taskId.split('-').first}/$taskId/audio_meta.json';
 }
 
 const Map<String, List<ContentEntry>> kContentIndex = {
@@ -45,6 +55,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t1-1.md',
       questionsAsset: 'assets/content/clf/t1-1.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -54,6 +65,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t1-2.md',
       questionsAsset: 'assets/content/clf/t1-2.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -63,6 +75,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t1-3.md',
       questionsAsset: 'assets/content/clf/t1-3.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -72,6 +85,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t1-4.md',
       questionsAsset: 'assets/content/clf/t1-4.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -81,6 +95,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-1.md',
       questionsAsset: 'assets/content/clf/t2-1.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -90,6 +105,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-2.md',
       questionsAsset: 'assets/content/clf/t2-2.questions.json',
       questionCount: 18,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -99,6 +115,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-3.md',
       questionsAsset: 'assets/content/clf/t2-3.questions.json',
       questionCount: 18,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -108,6 +125,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-4.md',
       questionsAsset: 'assets/content/clf/t2-4.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -117,6 +135,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-1.md',
       questionsAsset: 'assets/content/clf/t3-1.questions.json',
       questionCount: 19,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -126,6 +145,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-2.md',
       questionsAsset: 'assets/content/clf/t3-2.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -135,6 +155,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-3.md',
       questionsAsset: 'assets/content/clf/t3-3.questions.json',
       questionCount: 16,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -144,6 +165,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-4.md',
       questionsAsset: 'assets/content/clf/t3-4.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -153,6 +175,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-5.md',
       questionsAsset: 'assets/content/clf/t3-5.questions.json',
       questionCount: 17,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -162,6 +185,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-6.md',
       questionsAsset: 'assets/content/clf/t3-6.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -171,6 +195,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-7.md',
       questionsAsset: 'assets/content/clf/t3-7.questions.json',
       questionCount: 17,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -180,6 +205,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-8.md',
       questionsAsset: 'assets/content/clf/t3-8.questions.json',
       questionCount: 16,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -189,6 +215,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t4-1.md',
       questionsAsset: 'assets/content/clf/t4-1.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -198,6 +225,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t4-2.md',
       questionsAsset: 'assets/content/clf/t4-2.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -207,6 +235,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t4-3.md',
       questionsAsset: 'assets/content/clf/t4-3.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
   ],
   'SAA-C03': [
