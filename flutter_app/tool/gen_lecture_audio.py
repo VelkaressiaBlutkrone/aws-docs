@@ -399,6 +399,15 @@ def run_synthesize(args) -> None:
     chunks = chunk_text(speech, max_chars)
     print(f"[synthesize] {len(speech)}자 → {len(chunks)}청크", file=sys.stderr)
     synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
+    if not args.skip_loudnorm:
+        import shutil
+        if shutil.which("ffmpeg") is None:
+            sys.exit("ffmpeg가 필요합니다(loudness 정규화). 설치하거나 "
+                     "--skip-loudnorm을 쓰세요.")
+        _loudnorm_2pass(args.out)
+        print("[loudnorm] -16 LUFS 정규화 완료", file=sys.stderr)
+    else:
+        print("[loudnorm] --skip-loudnorm: 정규화 건너뜀", file=sys.stderr)
     id3 = _id3_count(args.out)
     print(f"[ID3] {id3}개 — {'OK' if id3 <= 1 else '다중(단일 요청 권장)'}", file=sys.stderr)
     meta = build_audio_meta(
@@ -558,6 +567,49 @@ def _is_id3v2_header(header: bytes) -> bool:
     return all(byte < 0x80 for byte in header[6:10])
 
 
+def _parse_loudnorm_json(stderr_text: str) -> dict:
+    """ffmpeg loudnorm pass1 stderr에서 측정 JSON 블록을 파싱한다.
+
+    ffmpeg는 `-af loudnorm=...:print_format=json`을 쓰면 stderr 끝에
+    {"input_i": "...", "input_tp": "...", "input_lra": "...",
+     "input_thresh": "...", "target_offset": "..."} 블록을 출력한다.
+    로그가 앞뒤로 섞이므로 마지막 중괄호 쌍을 잘라 json.loads 한다.
+    """
+    start = stderr_text.rfind("{")
+    end = stderr_text.rfind("}")
+    if start < 0 or end < 0 or end < start:
+        raise ValueError("loudnorm JSON 블록을 찾지 못했습니다")
+    return json.loads(stderr_text[start:end + 1])
+
+
+def _loudnorm_2pass(path: Path, target_i: float = -16.0,
+                    tp: float = -1.5, lra: float = 11.0) -> None:
+    """ffmpeg loudnorm 2-pass로 mp3를 in-place 정규화(EBU R128)."""
+    import shutil
+    import subprocess
+
+    if shutil.which("ffmpeg") is None:
+        raise RuntimeError("ffmpeg를 찾을 수 없습니다(loudnorm 필요).")
+    base = f"loudnorm=I={target_i}:TP={tp}:LRA={lra}"
+    p1 = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-i", str(path),
+         "-af", base + ":print_format=json", "-f", "null", "-"],
+        capture_output=True, text=True)
+    if p1.returncode != 0:
+        raise RuntimeError(
+            f"ffmpeg loudnorm pass1 실패(rc={p1.returncode}):\n{p1.stderr[-1000:]}")
+    m = _parse_loudnorm_json(p1.stderr)
+    af2 = (base
+           + f":measured_I={m['input_i']}:measured_TP={m['input_tp']}"
+           + f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}"
+           + f":offset={m['target_offset']}:linear=true:print_format=summary")
+    tmp = path.with_name(path.stem + ".norm" + path.suffix)
+    subprocess.run(
+        ["ffmpeg", "-hide_banner", "-y", "-i", str(path), "-af", af2, str(tmp)],
+        capture_output=True, text=True, check=True)
+    tmp.replace(path)
+
+
 def _content_type(path: Path) -> str:
     return {
         ".mp3": "audio/mpeg",
@@ -600,6 +652,10 @@ def build_audio_meta(
                 "midFileId3Allowed": False,
                 "ok": audio_path.suffix.lower() != ".mp3" or id3_count <= 1,
             },
+        },
+        "loudness": {
+            "targetLufs": -16,
+            "normalized": not getattr(args, "skip_loudnorm", False),
         },
         "script": {
             "speechChars": len(speech),
@@ -893,6 +949,33 @@ def _self_test() -> None:
     bad_meta = {"audio": {"contentType": "text/plain",
                           "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
     assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
+
+    # loudnorm pass1 JSON 파싱(순수)
+    _ln = _parse_loudnorm_json(
+        'ffmpeg noise\n[Parsed_loudnorm_0 @ 0x1] \n'
+        '{\n  "input_i" : "-19.43",\n  "input_tp" : "-3.21",\n'
+        '  "input_lra" : "7.40",\n  "input_thresh" : "-29.83",\n'
+        '  "target_offset" : "0.50"\n}\ntrailing log\n')
+    assert _ln["input_i"] == "-19.43", _ln
+    assert _ln["target_offset"] == "0.50", _ln
+
+    # loudnorm 실행 경로: ffmpeg 가용 시 짧은 톤 mp3를 정규화해 출력/ID3 확인.
+    import shutil as _sh
+    if _sh.which("ffmpeg"):
+        import subprocess as _sp
+        import tempfile as _tf
+        with _tf.TemporaryDirectory() as _td:
+            _tone = Path(_td) / "tone.mp3"
+            _sp.run(["ffmpeg", "-hide_banner", "-y", "-f", "lavfi",
+                     "-i", "sine=frequency=440:duration=1", str(_tone)],
+                    capture_output=True, text=True, check=True)
+            _loudnorm_2pass(_tone)
+            assert _tone.exists() and _tone.stat().st_size > 0, "loudnorm 출력 없음"
+            assert _id3_count(_tone) <= 1, "loudnorm 출력 ID3 다중"
+        print("[self-test] loudnorm 실행 경로 OK", file=sys.stderr)
+    else:
+        print("[self-test] ffmpeg 없음 — loudnorm 실행 경로 skip", file=sys.stderr)
+
     print("self-test OK")
 
 
@@ -917,6 +1000,8 @@ def main() -> None:
                     choices=["standard", "neural", "generative"])
     sy.add_argument("--region", default="ap-northeast-2")
     sy.add_argument("--max-chars", type=int, default=0)
+    sy.add_argument("--skip-loudnorm", action="store_true",
+                    help="loudness 정규화를 건너뜀(ffmpeg 불필요, 품질 저하 경고)")
 
     ga = sub.add_parser("gate", help="script.json/audio_meta 정적 검증")
     ga.add_argument("--script", type=Path, required=True)
