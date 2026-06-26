@@ -133,15 +133,21 @@ void main() {
         final meta = File(e.lectureAudioMetaSrc);
         final mp3 = File(e.lectureAudioSrc);
         String? status;
+        String? scriptStatus;
         if (meta.existsSync()) {
           final m =
               json.decode(meta.readAsStringSync()) as Map<String, dynamic>;
           status = m['reviewStatus'] as String?;
+          scriptStatus =
+              (m['script'] as Map<String, dynamic>?)?['reviewStatus'] as String?;
         }
-        final metaApproved = status == 'approved' && mp3.existsSync();
+        // spec: top-level + script.reviewStatus 둘 다 approved를 SSOT로 본다.
+        final metaApproved = status == 'approved' &&
+            scriptStatus == 'approved' &&
+            mp3.existsSync();
         if (e.audioApproved != metaApproved) {
           issues.add(
-              '${e.certCode}/${e.taskId}: audioApproved=${e.audioApproved} != meta(approved&&mp3)=$metaApproved (status=$status, mp3=${mp3.existsSync()})');
+              '${e.certCode}/${e.taskId}: audioApproved=${e.audioApproved} != meta(approved&&mp3)=$metaApproved (top=$status, script=$scriptStatus, mp3=${mp3.existsSync()})');
         }
       }
     }

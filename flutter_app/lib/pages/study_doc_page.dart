@@ -93,8 +93,9 @@ class _StudyDocPageState extends State<StudyDocPage> {
   }
 
   /// 하단 고정 미니 플레이어(오디오 강의). 노출 정책상 dart-define
-  /// `audio_lecture` on + 웹(런타임 존재) + 문서 로드 완료일 때만 보인다 —
-  /// 검수 전 생성 강의를 일반 사용자에게 노출하지 않는다(이슈 5-9).
+  /// `audio_lecture` on + 웹(런타임 존재) + 문서 로드 완료 + 검수 승인
+  /// (entry.audioApproved)일 때만 보인다 — 검수 전 생성 강의를 일반
+  /// 사용자에게 노출하지 않는다(이슈 5-9).
   Widget? _miniPlayer(StudyContent? doc) {
     final runtime = audioRuntime;
     if (!shouldShowLecturePlayer(
