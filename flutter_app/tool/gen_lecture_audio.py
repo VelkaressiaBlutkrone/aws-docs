@@ -452,7 +452,7 @@ def run_synthesize(args) -> None:
     print(f"[완료] {args.out}", file=sys.stderr)
 
 
-def gate_script(script: dict) -> tuple:
+def gate_script(script: dict, lexicon: dict | None = None) -> tuple:
     """script.json 정적 검사. 반환 (hard, soft) 메시지 목록."""
     hard: list[str] = []
     soft: list[str] = []
@@ -475,6 +475,14 @@ def gate_script(script: dict) -> tuple:
         for iss in seg.get("issues", []):
             if str(iss).startswith("unmapped-token"):
                 soft.append(f"{sid}: {iss}")
+        if lexicon and not seg.get("skip"):                  # ④ 원문 토큰 보존
+            target = (seg.get("audioSummary") if seg.get("kind") == "table"
+                      else seg.get("scriptText")) or ""
+            source = seg.get("sourceExcerpt") or ""
+            if source and target:
+                th, ts = check_token_preservation(source, target, lexicon)
+                hard += [f"{sid}: {m}" for m in th]
+                soft += [f"{sid}: {m}" for m in ts]
     return hard, soft
 
 
@@ -494,7 +502,10 @@ def gate_audio_meta(meta: dict, current_md_sha) -> list:
 
 def run_gate(args) -> None:
     script = json.loads(args.script.read_text(encoding="utf-8"))
-    hard, soft = gate_script(script)
+    lex = load_lexicon(args.lexicon)
+    if not lex:
+        print("  (lexicon 없음 — 토큰 보존 검사 skip)", file=sys.stderr)
+    hard, soft = gate_script(script, lex)
     cur_sha = None
     if args.md and args.md.exists():
         cur_sha = hashlib.sha256(
@@ -981,6 +992,33 @@ def _self_test() -> None:
     bad_meta = {"audio": {"contentType": "text/plain",
                           "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
     assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
+
+    # ④ gate 통합: lexicon 전달 시 seg별 토큰 보존 검사
+    g_lex = {"EC2": {"say": "이씨투"}}
+    hard_g, _soft_g = gate_script({"segments": [
+        {"id": "s0", "kind": "paragraph", "sourceExcerpt": "EC2 설명",
+         "scriptText": "설명만 있다", "audioSummary": None, "skip": False, "issues": []},
+    ]}, g_lex)
+    assert any("s0" in x and "EC2" in x for x in hard_g), hard_g     # 약어 누락 hard
+    # table seg는 audioSummary를 대본으로 검사
+    hard_t, _ = gate_script({"segments": [
+        {"id": "s1", "kind": "table", "sourceExcerpt": "EC2 표",
+         "scriptText": "", "audioSummary": "이씨투 표입니다.", "skip": False, "issues": []},
+    ]}, g_lex)
+    assert not any("EC2" in x for x in hard_t), hard_t               # audioSummary에 보존 → 통과
+    # lexicon 없으면(None) 토큰 검사 skip(기존 호출 호환)
+    hard_n, _ = gate_script({"segments": [
+        {"id": "s0", "kind": "paragraph", "sourceExcerpt": "EC2 설명",
+         "scriptText": "설명만 있다", "audioSummary": None, "skip": False, "issues": []},
+    ]})
+    assert not any("EC2" in x for x in hard_n), hard_n
+    # skip seg는 토큰 검사 제외
+    hard_s, _ = gate_script({"segments": [
+        {"id": "s9", "kind": "source", "sourceExcerpt": "EC2", "scriptText": "x",
+         "audioSummary": None, "skip": True, "issues": []},
+    ]}, g_lex)
+    assert not any("EC2" in x for x in hard_s), hard_s
+    print("[self-test] gate 토큰 통합 OK", file=sys.stderr)
 
     # ④ 환각 가드: check_token_preservation(순수)
     lex_g = {"EC2": {"say": "이씨투"},
