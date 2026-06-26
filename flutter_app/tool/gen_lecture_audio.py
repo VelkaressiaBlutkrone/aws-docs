@@ -534,7 +534,28 @@ def _asset_path(path: Path) -> str:
 def _id3_count(path: Path) -> int:
     if path.suffix.lower() != ".mp3":
         return 0
-    return path.read_bytes().count(b"ID3")
+    data = path.read_bytes()
+    count = 0
+    start = 0
+    while True:
+        idx = data.find(b"ID3", start)
+        if idx < 0:
+            return count
+        if _is_id3v2_header(data[idx:idx + 10]):
+            count += 1
+        start = idx + 1
+
+
+def _is_id3v2_header(header: bytes) -> bool:
+    """Return true for real ID3v2 headers, not incidental audio bytes."""
+    if len(header) < 10 or header[:3] != b"ID3":
+        return False
+    major, revision, flags = header[3], header[4], header[5]
+    if major not in (2, 3, 4) or revision == 0xFF:
+        return False
+    if flags & 0x0F:
+        return False
+    return all(byte < 0x80 for byte in header[6:10])
 
 
 def _content_type(path: Path) -> str:
@@ -733,7 +754,8 @@ def _self_test() -> None:
         md_path.parent.mkdir(parents=True)
         audio_path.parent.mkdir(parents=True)
         md_path.write_text("# 테스트\n\n본문입니다.\n", encoding="utf-8")
-        audio_path.write_bytes(b"ID3" + b"\x00" * 10 + framed)
+        audio_path.write_bytes(tagged + b"\xff\xfbID3")
+        assert _id3_count(audio_path) == 1, "가짜 ID3 바이트 오검출"
         fake_args = argparse.Namespace(
             engine="polly",
             voice="Seoyeon",
