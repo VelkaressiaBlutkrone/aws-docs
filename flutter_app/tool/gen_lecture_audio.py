@@ -626,8 +626,11 @@ def _parse_loudnorm_json(stderr_text: str) -> dict:
 
 
 def _loudnorm_2pass(path: Path, target_i: float = -16.0,
-                    tp: float = -1.5, lra: float = 11.0) -> None:
-    """ffmpeg loudnorm 2-pass로 mp3를 in-place 정규화(EBU R128)."""
+                    tp: float = -1.5, lra: float = 11.0,
+                    ar: int = 24000, br: str = "48k") -> None:
+    """ffmpeg loudnorm 2-pass로 mp3를 in-place 정규화(EBU R128).
+    ar/br로 출력 샘플레이트·비트레이트를 원본(Polly neural 24kHz/48k)에 맞춘다
+    — loudnorm 필터는 기본 48kHz로 업샘플해 음성 mp3를 불필요하게 키운다."""
     import shutil
     import subprocess
 
@@ -648,7 +651,8 @@ def _loudnorm_2pass(path: Path, target_i: float = -16.0,
            + f":offset={m['target_offset']}:linear=true:print_format=summary")
     tmp = path.with_name(path.stem + ".norm" + path.suffix)
     subprocess.run(
-        ["ffmpeg", "-hide_banner", "-y", "-i", str(path), "-af", af2, str(tmp)],
+        ["ffmpeg", "-hide_banner", "-y", "-i", str(path), "-af", af2,
+         "-ar", str(ar), "-b:a", br, str(tmp)],
         capture_output=True, text=True, check=True)
     tmp.replace(path)
 
@@ -1058,6 +1062,12 @@ def _self_test() -> None:
             _loudnorm_2pass(_tone)
             assert _tone.exists() and _tone.stat().st_size > 0, "loudnorm 출력 없음"
             assert _id3_count(_tone) <= 1, "loudnorm 출력 ID3 다중"
+            _sr = _sp.run(
+                ["ffprobe", "-v", "error", "-select_streams", "a:0",
+                 "-show_entries", "stream=sample_rate", "-of",
+                 "default=noprint_wrappers=1:nokey=1", str(_tone)],
+                capture_output=True, text=True).stdout.strip()
+            assert _sr == "24000", f"loudnorm 출력 samplerate={_sr} (24000 기대)"
         print("[self-test] loudnorm 실행 경로 OK", file=sys.stderr)
     else:
         print("[self-test] ffmpeg 없음 — loudnorm 실행 경로 skip", file=sys.stderr)

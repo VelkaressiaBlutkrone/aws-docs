@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-7/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 9074925,
-    "sha256": "3ca5edb1b270b2c9dcaa64a158a0533d2521c7b30fe69293754beb9a40ffb49d",
+    "sizeBytes": 6806397,
+    "sha256": "c2eedc6528d4934f12d7fb93064a683393468580055bd74a510c4f086bed304e",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
