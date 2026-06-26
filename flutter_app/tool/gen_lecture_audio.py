@@ -1093,6 +1093,7 @@ def main() -> None:
     ga.add_argument("--script", type=Path, required=True)
     ga.add_argument("--md", type=Path)
     ga.add_argument("--audio-meta", type=Path)
+    ga.add_argument("--lexicon", type=Path)
 
     args = ap.parse_args()
     if args.self_test:
