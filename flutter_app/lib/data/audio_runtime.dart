@@ -9,6 +9,7 @@
 library;
 
 import 'audio_controller.dart';
+import 'lecture_playlist.dart';
 import 'audio_runtime_stub.dart'
     if (dart.library.js_interop) 'audio_runtime_web.dart' as platform;
 
@@ -40,4 +41,13 @@ abstract class AudioRuntime {
 
   /// 잠금화면에 표시할 메타데이터(문서 제목)를 설정한다.
   void nowPlaying(String title);
+}
+
+/// 전역 플레이리스트(웹 전용, 지연 초기화). 전역 [AudioController]를 감싼다.
+/// VM/test에선 audioRuntime이 null이라 함께 null이다(웹에서만 동작).
+LecturePlaylist? _lecturePlaylist;
+LecturePlaylist? get lecturePlaylist {
+  final rt = audioRuntime;
+  if (rt == null) return null;
+  return _lecturePlaylist ??= LecturePlaylist(controller: rt.controller);
 }
