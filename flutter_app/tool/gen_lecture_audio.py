@@ -297,6 +297,38 @@ def apply_lexicon(text: str, lexicon: dict, seen: set) -> tuple[str, list[str]]:
     return text, issues
 
 
+# 수치 토큰: 앞에 영문/숫자가 붙지 않은 독립 숫자만(약어 내부 숫자 'CLF-C02'의 02 제외).
+_NUM_RE = re.compile(r"(?<![A-Za-z0-9])\d+(?:[.,]\d+)?%?")
+
+
+def _lexicon_say_forms(entry: dict, key: str) -> list[str]:
+    """검출용 발음 후보(say 또는 firstSay/thenSay). 빈 값 제거."""
+    if "firstSay" in entry or "thenSay" in entry:
+        forms = [entry.get("firstSay"), entry.get("thenSay"), entry.get("say")]
+    else:
+        forms = [entry.get("say", key)]
+    return [f for f in forms if f]
+
+
+def check_token_preservation(source: str, target: str,
+                             lexicon: dict) -> tuple[list[str], list[str]]:
+    """source 원문의 핵심 토큰이 target 대본에 보존됐는지 검사.
+    약어(lexicon 등록) 누락=hard, 수치 누락=soft. 반환 (hard, soft)."""
+    hard: list[str] = []
+    soft: list[str] = []
+    for key in sorted(lexicon, key=len, reverse=True):       # 긴 키 우선(apply_lexicon과 동일)
+        pattern = r"(?<![0-9A-Za-z])" + re.escape(key) + r"(?![0-9A-Za-z])"
+        if not re.search(pattern, source):
+            continue
+        says = _lexicon_say_forms(lexicon[key], key)
+        if says and not any(say in target for say in says):
+            hard.append(f"약어 누락: {key}({says[0]})")
+    for num in dict.fromkeys(_NUM_RE.findall(source)):        # 순서 보존 dedupe
+        if num not in target:
+            soft.append(f"수치 누락: {num}")
+    return hard, soft
+
+
 def table_to_summary(table_lines: list[str]) -> tuple:
     """마크다운 표 → (audioSummary, issues). 2열만 초벌 생성, 그 외 None."""
     rows = []
@@ -949,6 +981,22 @@ def _self_test() -> None:
     bad_meta = {"audio": {"contentType": "text/plain",
                           "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
     assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
+
+    # ④ 환각 가드: check_token_preservation(순수)
+    lex_g = {"EC2": {"say": "이씨투"},
+             "AZ": {"firstSay": "가용 영역", "thenSay": "에이제트"}}
+    h, s = check_token_preservation("EC2는 11% 빠르다", "이씨투는 11% 빠르다", lex_g)
+    assert h == [] and s == [], (h, s)                       # 약어·수치 보존
+    h, s = check_token_preservation("EC2 인스턴스", "인스턴스만 있다", lex_g)
+    assert any("EC2" in x for x in h) and s == [], (h, s)    # 약어 누락=hard
+    h, s = check_token_preservation("가용량 99% 보장", "가용량 보장", lex_g)
+    assert h == [] and any("99%" in x for x in s), (h, s)    # 수치 누락=soft
+    h, s = check_token_preservation("AZ 배치", "에이제트 배치", lex_g)
+    assert h == [] and s == [], (h, s)                       # firstSay/thenSay 후보 매칭
+    h, s = check_token_preservation("CLF-C02 시험", "씨엘에프 씨 공이 시험",
+                                    {"CLF-C02": {"say": "씨엘에프 씨 공이"}})
+    assert h == [] and s == [], (h, s)                       # 약어 내부 숫자(02)는 수치 오탐 아님
+    print("[self-test] check_token_preservation OK", file=sys.stderr)
 
     # loudnorm pass1 JSON 파싱(순수)
     _ln = _parse_loudnorm_json(
