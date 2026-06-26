@@ -558,6 +558,21 @@ def _is_id3v2_header(header: bytes) -> bool:
     return all(byte < 0x80 for byte in header[6:10])
 
 
+def _parse_loudnorm_json(stderr_text: str) -> dict:
+    """ffmpeg loudnorm pass1 stderr에서 측정 JSON 블록을 파싱한다.
+
+    ffmpeg는 `-af loudnorm=...:print_format=json`을 쓰면 stderr 끝에
+    {"input_i": "...", "input_tp": "...", "input_lra": "...",
+     "input_thresh": "...", "target_offset": "..."} 블록을 출력한다.
+    로그가 앞뒤로 섞이므로 마지막 중괄호 쌍을 잘라 json.loads 한다.
+    """
+    start = stderr_text.rfind("{")
+    end = stderr_text.rfind("}")
+    if start < 0 or end < 0 or end < start:
+        raise ValueError("loudnorm JSON 블록을 찾지 못했습니다")
+    return json.loads(stderr_text[start:end + 1])
+
+
 def _content_type(path: Path) -> str:
     return {
         ".mp3": "audio/mpeg",
@@ -893,6 +908,16 @@ def _self_test() -> None:
     bad_meta = {"audio": {"contentType": "text/plain",
                           "containerChecks": {"id3Count": 3}}, "source": {"sha256": "abc"}}
     assert len(gate_audio_meta(bad_meta, None)) == 2, gate_audio_meta(bad_meta, None)
+
+    # loudnorm pass1 JSON 파싱(순수)
+    _ln = _parse_loudnorm_json(
+        'ffmpeg noise\n[Parsed_loudnorm_0 @ 0x1] \n'
+        '{\n  "input_i" : "-19.43",\n  "input_tp" : "-3.21",\n'
+        '  "input_lra" : "7.40",\n  "input_thresh" : "-29.83",\n'
+        '  "target_offset" : "0.50"\n}\ntrailing log\n')
+    assert _ln["input_i"] == "-19.43", _ln
+    assert _ln["target_offset"] == "0.50", _ln
+
     print("self-test OK")
 
 
