@@ -14,6 +14,7 @@ import 'dart:js_interop';
 
 import 'package:web/web.dart' as web;
 
+import 'audio_asset_url.dart';
 import 'audio_controller.dart';
 import 'media_session_binder.dart';
 
@@ -55,7 +56,8 @@ class WebAudioBackend implements AudioBackend {
   Stream<AudioEvent> get events => _events.stream;
 
   @override
-  void setSrc(String src) => _audio.src = src;
+  // asset 키를 flutter web HTTP URL로 변환해 지정(미변환 시 404 — audio_asset_url.dart).
+  void setSrc(String src) => _audio.src = webAudioAssetUrl(src);
 
   @override
   Future<void> play() async {
