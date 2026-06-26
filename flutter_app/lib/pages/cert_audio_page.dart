@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/audio_runtime.dart';
 import '../data/content_index.dart';
+import '../data/lecture_playlist.dart';
 import '../models/certification.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
@@ -22,10 +23,13 @@ class CertAudioPage extends StatefulWidget {
 }
 
 class _CertAudioPageState extends State<CertAudioPage> {
+  late final LecturePlaylist? _pl;
+
   @override
   void initState() {
     super.initState();
-    final pl = lecturePlaylist;
+    _pl = lecturePlaylist;
+    final pl = _pl;
     if (pl != null && pl.certCode != widget.cert.code) {
       pl.setQueue(widget.cert.code, approvedAudioEntries(widget.cert.code));
     }
@@ -34,7 +38,7 @@ class _CertAudioPageState extends State<CertAudioPage> {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    final pl = lecturePlaylist;
+    final pl = _pl;
     final tracks = approvedAudioEntries(widget.cert.code);
     return Scaffold(
       backgroundColor: c.bg,
@@ -106,8 +110,7 @@ class _TrackRow extends StatelessWidget {
                         child: Text('${index + 1}',
                             style: TextStyle(
                                 fontSize: 13,
-                                color: c.textMuted,
-                                fontFeatures: const []),
+                                color: c.textMuted),
                             textAlign: TextAlign.right),
                       ),
                       const SizedBox(width: Gap.md),
