@@ -79,4 +79,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(HomePage), findsOneWidget);
   });
+
+  testWidgets('게이트 off에서 "/audio" → "/"로 redirect(HomePage)', (tester) async {
+    // audioLectureEnabled=false → audioHubRedirect → "/" → HomePage.
+    await tester.pumpWidget(_app('/audio'));
+    await tester.pumpAndSettle();
+    expect(find.byType(HomePage), findsOneWidget);
+  });
 }
