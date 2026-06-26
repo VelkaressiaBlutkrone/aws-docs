@@ -595,6 +595,9 @@ def _loudnorm_2pass(path: Path, target_i: float = -16.0,
         ["ffmpeg", "-hide_banner", "-i", str(path),
          "-af", base + ":print_format=json", "-f", "null", "-"],
         capture_output=True, text=True)
+    if p1.returncode != 0:
+        raise RuntimeError(
+            f"ffmpeg loudnorm pass1 실패(rc={p1.returncode}):\n{p1.stderr[-1000:]}")
     m = _parse_loudnorm_json(p1.stderr)
     af2 = (base
            + f":measured_I={m['input_i']}:measured_TP={m['input_tp']}"
