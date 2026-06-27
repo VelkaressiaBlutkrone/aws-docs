@@ -4,6 +4,10 @@ import 'package:aws_docs/data/cert_lookup.dart';
 void main() {
   test('certByCode: 알려진 코드 해석, 미지정 null', () {
     expect(certByCode('CLF-C02')?.code, 'CLF-C02');
+    expect(
+      certByCode('CLF-C02')?.title,
+      'AWS Certified Cloud Practitioner',
+    );
     expect(certByCode('NOPE'), isNull);
   });
 
