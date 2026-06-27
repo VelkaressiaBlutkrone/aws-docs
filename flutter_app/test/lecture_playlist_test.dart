@@ -9,10 +9,14 @@ class _Fake implements AudioBackend {
   String? src;
   int playCalls = 0;
   int pauseCalls = 0;
+  int loads = 0;
   @override
   Stream<AudioEvent> get events => _ev.stream;
   @override
-  void setSrc(String s) => src = s;
+  void setSrc(String s) {
+    src = s;
+    loads++;
+  }
   @override
   Future<void> play() async => playCalls++;
   @override
@@ -60,6 +64,32 @@ void main() {
     expect(fake.src, 'assets/audio/clf/clf-t1-2/lecture.mp3');
     expect(fake.playCalls, 1);
     expect(pl.currentTitle, 'T clf-t1-2');
+  });
+
+  test('select 같은 트랙 재선택(재생 중): 재시작 안 함(reload·play 추가 없음)', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.select(1);
+    fake.emit(AudioEvent.playing);
+    await Future<void>.delayed(Duration.zero);
+    final loads = fake.loads;
+    final plays = fake.playCalls;
+    pl.select(1); // 현재 트랙 재선택
+    expect(pl.index, 1);
+    expect(fake.loads, loads); // 재로드 없음(처음부터 재시작 안 함)
+    expect(fake.playCalls, plays); // 추가 play 없음
+  });
+
+  test('select 같은 트랙 재선택(일시정지): 재로드 없이 이어재생', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.select(1);
+    fake.emit(AudioEvent.paused);
+    await Future<void>.delayed(Duration.zero);
+    final loads = fake.loads;
+    final plays = fake.playCalls;
+    pl.select(1); // 현재 트랙 재선택
+    expect(pl.index, 1);
+    expect(fake.loads, loads); // 재로드 없음
+    expect(fake.playCalls, plays + 1); // 이어재생(play 1회)
   });
 
   test('next/prev 경계 no-op(끝에서 next, 처음에서 prev는 멈춤)', () {

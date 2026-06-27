@@ -60,9 +60,19 @@ class LecturePlaylist extends ChangeNotifier {
   }
 
   /// 명시적 트랙 변경 — 그 트랙 load 후 play(사용자 제스처 동기 진입).
+  /// 같은 트랙 재선택은 처음부터 재시작하지 않는다: 일시정지면 이어재생,
+  /// 재생/로딩 중이면 no-op. (idle/ended/error는 재로드 = 정상 재생/재시작.)
   void select(int i) {
     if (_queue.isEmpty) return;
-    _index = i.clamp(0, _queue.length - 1);
+    final target = i.clamp(0, _queue.length - 1);
+    if (target == _index &&
+        _controller.state != PlaybackState.idle &&
+        _controller.state != PlaybackState.ended &&
+        _controller.state != PlaybackState.error) {
+      if (_controller.state == PlaybackState.paused) _controller.play();
+      return;
+    }
+    _index = target;
     _controller.load(current!.lectureAudioSrc);
     _controller.play();
     notifyListeners();
