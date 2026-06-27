@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'data/audio_nav.dart';
+import 'data/audio_runtime.dart' show audioLectureEnabled;
 import 'data/cert_lookup.dart';
+import 'data/content_index.dart' show approvedAudioEntries, certsWithApprovedAudio;
+import 'pages/audio_hub_page.dart';
+import 'pages/cert_audio_page.dart';
 import 'pages/cert_detail_page.dart';
 import 'pages/cert_exam_page.dart';
 import 'pages/exam_page.dart';
@@ -57,6 +62,20 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                       PlanPage(cert: certByCode(state.pathParameters['code']!)!),
                 ),
                 GoRoute(
+                  path: 'audio',
+                  redirect: (context, state) {
+                    final code = state.pathParameters['code']!;
+                    return certAudioRedirect(
+                      certExists: certByCode(code) != null,
+                      enabled: audioLectureEnabled,
+                      hasAudio: approvedAudioEntries(code).isNotEmpty,
+                      code: code,
+                    );
+                  },
+                  builder: (context, state) => CertAudioPage(
+                      cert: certByCode(state.pathParameters['code']!)!),
+                ),
+                GoRoute(
                   path: 'study/:taskId',
                   redirect: (context, state) => entryByTask(
                             state.pathParameters['code']!,
@@ -101,6 +120,14 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
               ],
             ),
           ],
+        ),
+        GoRoute(
+          path: '/audio',
+          redirect: (context, state) => audioHubRedirect(
+            enabled: audioLectureEnabled,
+            hasAudio: certsWithApprovedAudio().isNotEmpty,
+          ),
+          builder: (context, state) => const AudioHubPage(),
         ),
       ],
       errorBuilder: (context, state) => _RouteErrorPage(),

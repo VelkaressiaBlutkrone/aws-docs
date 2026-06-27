@@ -64,9 +64,11 @@ class _StudyDocPageState extends State<StudyDocPage> {
     if (identical(_keyedDoc, doc)) return;
     _keyedDoc = doc;
     _anchorKeys = buildAnchorKeys(doc.blocks);
-    // 오디오 강의(주머니 라디오) 잠금화면 메타 — 웹·dart-define on일 때만.
+    // 오디오 강의(주머니 라디오): 잠금화면 메타 + 플레이리스트 비중단 정합 —
+    // 웹·dart-define on·검수 승인일 때만.
     if (audioLectureEnabled && widget.entry.audioApproved) {
       audioRuntime?.nowPlaying(widget.entry.title);
+      lecturePlaylist?.openDoc(widget.entry.certCode, widget.entry.taskId);
     }
     final anchor = widget.targetAnchor;
     if (anchor == null || anchor.isEmpty) return;
@@ -106,11 +108,9 @@ class _StudyDocPageState extends State<StudyDocPage> {
     )) {
       return null;
     }
-    return StudyAudioPlayer(
-      controller: runtime!.controller,
-      title: widget.entry.title,
-      audioSrc: widget.entry.lectureAudioSrc,
-    );
+    final pl = lecturePlaylist;
+    if (pl == null) return null;
+    return StudyAudioPlayer(playlist: pl);
   }
 
   @override

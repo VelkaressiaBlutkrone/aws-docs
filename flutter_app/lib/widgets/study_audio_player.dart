@@ -1,67 +1,24 @@
 import 'package:flutter/material.dart';
 
 import '../data/audio_controller.dart';
+import '../data/lecture_playlist.dart';
 import '../theme/app_theme.dart';
 import 'focus_ring.dart';
 
-/// 학습 문서 오디오 강의("주머니 라디오") M1 — 하단 고정 미니 플레이어(UI).
+/// 학습 문서 오디오 강의("주머니 라디오") — 하단 고정 미니 플레이어(UI).
 ///
-/// 주입된 [AudioController](전역 싱글톤)의 재생 상태를 구독해 재생/일시정지와
-/// 상태 안내를 그린다. DOM `<audio>`/Media Session 부수효과는 controller 뒤에
-/// 격리돼 이 위젯은 위젯 테스트로 검증된다(상태별 렌더·버튼 동작).
+/// 전역 [LecturePlaylist]의 현재 트랙 제목·재생 상태를 구독해 재생/일시정지와
+/// 상태 안내를 그린다. 로딩(트랙 load)은 호출부(study_doc_page의 openDoc /
+/// CertAudioPage의 select) 책임 — 이 위젯은 표시·토글만 한다.
 ///
 /// DESIGN.md: context.c 토큰만 · InkWell+FocusRing · State Views 보이스 ·
-/// 합니다체. 오디오 재생 실패는 페이지 부분 degrade라 wrong 색을 쓰지 않는다
-/// (wrong 색은 fatal에만 — DESIGN.md). 검증 메타("✓ 검증됨")와 오디오 메타는
-/// 섞지 않는다.
-///
-/// 노출 정책(M1): 검수 전 생성 강의라 dart-define `audio_lecture` 뒤에서만
-/// 진입점이 연결된다(study_doc_page). 출처:
-/// docs/superpowers/specs/2026-06-20-study-audio-lecture-review.md (이슈 5-9·8).
-class StudyAudioPlayer extends StatefulWidget {
-  const StudyAudioPlayer({
-    super.key,
-    required this.controller,
-    required this.title,
-    required this.audioSrc,
-  });
+/// 합니다체. 오디오 실패는 부분 degrade라 wrong 색을 쓰지 않는다.
+class StudyAudioPlayer extends StatelessWidget {
+  const StudyAudioPlayer({super.key, required this.playlist});
 
-  /// 전역 오디오 컨트롤러. 이 위젯이 소유하지 않는다 — dispose에서 정리 금지.
-  final AudioController controller;
+  /// 전역 플레이리스트(소유하지 않음 — dispose에서 정리 금지).
+  final LecturePlaylist playlist;
 
-  /// 표시용(그리고 잠금화면 메타용) 문서 식별 제목.
-  final String title;
-
-  /// 재생할 합친 오디오 URL(M1은 placeholder 경로, 실제 mp3는 T6).
-  final String audioSrc;
-
-  @override
-  State<StudyAudioPlayer> createState() => _StudyAudioPlayerState();
-}
-
-class _StudyAudioPlayerState extends State<StudyAudioPlayer> {
-  @override
-  void initState() {
-    super.initState();
-    // 진입 시 소스만 설정(아직 재생하지 않음). 재생은 사용자가 버튼을 눌러야 —
-    // 자동 재생하지 않아 iOS user-activation 진입점을 사용자 제스처로 남긴다.
-    widget.controller.load(widget.audioSrc);
-  }
-
-  // controller는 전역 싱글톤이라 위젯 dispose에서 정리하지 않는다(재생 유지).
-
-  void _toggle() {
-    final controller = widget.controller;
-    if (controller.state == PlaybackState.playing) {
-      controller.pause();
-    } else {
-      // await 금지 — backend.play()가 이 동기 진입에서 즉시 호출돼야 iOS
-      // user-activation이 보존된다(AudioController.play가 보장).
-      controller.play();
-    }
-  }
-
-  /// 상태별 보조 안내(합니다체 · State Views 보이스). idle은 제목만 보인다.
   String? _statusLine(PlaybackState s) => switch (s) {
         PlaybackState.loading => '오디오를 준비하고 있습니다…',
         PlaybackState.error => '오디오를 재생하지 못했습니다.',
@@ -85,14 +42,15 @@ class _StudyAudioPlayerState extends State<StudyAudioPlayer> {
           padding:
               const EdgeInsets.symmetric(horizontal: Gap.lg, vertical: Gap.md),
           child: ListenableBuilder(
-            listenable: widget.controller,
+            listenable: playlist,
             builder: (context, _) {
-              final state = widget.controller.state;
+              final state = playlist.state;
               final isPlaying = state == PlaybackState.playing;
               final status = _statusLine(state);
               return Row(
                 children: [
-                  _PlayButton(isPlaying: isPlaying, onTap: _toggle),
+                  PlayPauseButton(
+                      isPlaying: isPlaying, onTap: playlist.playPause),
                   const SizedBox(width: Gap.md),
                   Expanded(
                     child: Column(
@@ -100,7 +58,7 @@ class _StudyAudioPlayerState extends State<StudyAudioPlayer> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.title,
+                          playlist.currentTitle ?? '오디오 강의',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -138,8 +96,9 @@ class _StudyAudioPlayerState extends State<StudyAudioPlayer> {
 }
 
 /// 재생/일시정지 토글 — 액센트 원형 아이콘 버튼(InkWell+FocusRing, DESIGN.md).
-class _PlayButton extends StatelessWidget {
-  const _PlayButton({required this.isPlaying, required this.onTap});
+/// 트랜스포트 바와 공유한다.
+class PlayPauseButton extends StatelessWidget {
+  const PlayPauseButton({super.key, required this.isPlaying, required this.onTap});
 
   final bool isPlaying;
   final VoidCallback onTap;
