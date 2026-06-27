@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../content/reset_dialog.dart';
-import '../data/content_index.dart';
+import '../data/audio_nav.dart';
+import '../data/audio_runtime.dart' show audioLectureEnabled;
+import '../data/content_index.dart' show certsWithApprovedAudio, certHasContent;
 import '../data/history_store.dart';
 import '../data/plan_progress.dart';
 import '../data/plan_progress_store.dart';
@@ -160,6 +162,10 @@ class _HomePageState extends State<HomePage> {
           '학습 문서': () => _goto(_docs),
           '모의고사': () => _goto(_exams),
           '일정': () => _goto(_schedule),
+          if (shouldShowAudioMenu(
+              enabled: audioLectureEnabled,
+              hasAudio: certsWithApprovedAudio().isNotEmpty))
+            '오디오': () => context.go('/audio'),
         },
       ),
       // Builder: body MediaQuery(padding.top = 헤더 높이)를 읽으려면

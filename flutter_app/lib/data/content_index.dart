@@ -486,6 +486,15 @@ List<ContentEntry> contentFor(String certCode) =>
 /// 해당 자격증에 검증 콘텐츠(학습문서)가 존재하는가.
 bool certHasContent(String certCode) => contentFor(certCode).isNotEmpty;
 
+/// 청취 검수 승인(audioApproved) 오디오 강의가 있는 엔트리만 선언 순서로.
+List<ContentEntry> approvedAudioEntries(String certCode) =>
+    contentFor(certCode).where((e) => e.audioApproved).toList(growable: false);
+
+/// 승인 오디오 강의를 1개 이상 가진 자격증 코드(kContentIndex 키 순서).
+List<String> certsWithApprovedAudio() => kContentIndex.keys
+    .where((code) => approvedAudioEntries(code).isNotEmpty)
+    .toList(growable: false);
+
 /// 랜딩 요약용: 학습문서 수 + 총 검증 문항 수.
 ({int docs, int questions}) certContentSummary(String certCode) {
   final entries = contentFor(certCode);
