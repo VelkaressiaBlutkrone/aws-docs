@@ -22,7 +22,8 @@ class AudioHubPage extends StatelessWidget {
         padding: const EdgeInsets.all(Gap.lg),
         children: [
           for (final code in codes)
-            _CertCard(
+            AudioCertCard(
+              title: certByCode(code)?.title ?? code,
               code: code,
               count: approvedAudioEntries(code).length,
               onTap: () => context.go('/cert/$code/audio'),
@@ -33,10 +34,18 @@ class AudioHubPage extends StatelessWidget {
   }
 }
 
-class _CertCard extends StatelessWidget {
-  const _CertCard(
-      {required this.code, required this.count, required this.onTap});
+/// 오디오 허브 카드 — 자격증 표시명(title) + 코드·강의 개수. 페이지가 lookup해
+/// 평문 문자열을 주입하므로 페이지 렌더 없이 단위 테스트할 수 있다.
+class AudioCertCard extends StatelessWidget {
+  const AudioCertCard({
+    super.key,
+    required this.title,
+    required this.code,
+    required this.count,
+    required this.onTap,
+  });
 
+  final String title;
   final String code;
   final int count;
   final VoidCallback onTap;
@@ -44,7 +53,6 @@ class _CertCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    final cert = certByCode(code);
     return Padding(
       padding: const EdgeInsets.only(bottom: Gap.md),
       child: FocusRing(
@@ -67,14 +75,16 @@ class _CertCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(cert?.code ?? code,
+                      Text(title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               fontVariations: Wght.w700,
                               color: c.text)),
                       const SizedBox(height: 2),
-                      Text('강의 $count개',
+                      Text('$code · 강의 $count개',
                           style:
                               TextStyle(fontSize: 13, color: c.textMuted)),
                     ],
