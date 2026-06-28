@@ -37,5 +37,55 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "ec2",
+      "title": "1) Amazon 이씨투 — 클라우드의 가상 서버 (IaaS)",
+      "level": 3,
+      "fraction": 0.16555023923444975
+    },
+    {
+      "anchor": "containers",
+      "title": "2) 컨테이너 — Amazon 이씨에스 대 Amazon 이케이에스",
+      "level": 3,
+      "fraction": 0.2701298701298701
+    },
+    {
+      "anchor": "registry-batch",
+      "title": "컨테이너 이미지와 배치 작업 — Amazon 이씨알 · 에이더블유에스 Batch",
+      "level": 3,
+      "fraction": 0.3568010936431989
+    },
+    {
+      "anchor": "serverless",
+      "title": "3) 서버리스 — 에이더블유에스 Lambda(함수)와 에이더블유에스 Fargate(컨테이너)",
+      "level": 3,
+      "fraction": 0.46192754613807246
+    },
+    {
+      "anchor": "autoscaling",
+      "title": "4) 탄력성 — Amazon 이씨투 Auto Scaling",
+      "level": 3,
+      "fraction": 0.5655502392344498
+    },
+    {
+      "anchor": "elb",
+      "title": "5) 트래픽 분산 — Elastic Load Balancing(이엘비)",
+      "level": 3,
+      "fraction": 0.6447026657552973
+    },
+    {
+      "anchor": "spectrum",
+      "title": "6) 한눈에 — 관리 부담 스펙트럼",
+      "level": 3,
+      "fraction": 0.7376623376623377
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8425153793574847
+    }
+  ]
 }

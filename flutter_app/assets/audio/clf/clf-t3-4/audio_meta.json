@@ -37,5 +37,43 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "managed-vs-ec2",
+      "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나 ()",
+      "level": 3,
+      "fraction": 0.19745014710689768
+    },
+    {
+      "anchor": "relational",
+      "title": "2) 관계형 데이터베이스 — Amazon 알디에스와 Amazon Aurora",
+      "level": 3,
+      "fraction": 0.3036940176528277
+    },
+    {
+      "anchor": "dynamodb",
+      "title": "3) NoSQL — Amazon DynamoDB",
+      "level": 3,
+      "fraction": 0.44687806472703495
+    },
+    {
+      "anchor": "elasticache",
+      "title": "4) 인메모리 — Amazon ElastiCache",
+      "level": 3,
+      "fraction": 0.5415168355671788
+    },
+    {
+      "anchor": "dms",
+      "title": "5) 데이터베이스 마이그레이션 — 에이더블유에스 디엠에스 (그리고 에스씨티)",
+      "level": 3,
+      "fraction": 0.6180124223602484
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8492971559333116
+    }
+  ]
 }

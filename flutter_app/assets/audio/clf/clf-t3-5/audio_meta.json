@@ -37,5 +37,49 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "vpc",
+      "title": "1) Amazon 브이피씨 — 나만의 격리된 가상 네트워크",
+      "level": 3,
+      "fraction": 0.16570522065186039
+    },
+    {
+      "anchor": "vpc-security",
+      "title": "2) 브이피씨 보안 2층 — 보안 그룹 대 네트워크 에이씨엘 (2.4 복습)",
+      "level": 3,
+      "fraction": 0.2805018748197289
+    },
+    {
+      "anchor": "flow-logs-privatelink",
+      "title": "네트워크 관측과 사설 연결 — 브이피씨 Flow Logs · 에이더블유에스 PrivateLink",
+      "level": 3,
+      "fraction": 0.34121719065474476
+    },
+    {
+      "anchor": "route53",
+      "title": "3) Amazon Route 53 — 디엔에스 웹 서비스",
+      "level": 3,
+      "fraction": 0.48053071820017307
+    },
+    {
+      "anchor": "onprem-connect",
+      "title": "4) 온프레미스 연결 — Direct Connect 대 Site-to-Site 브이피엔 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.5672050764349582
+    },
+    {
+      "anchor": "edge",
+      "title": "5) 엣지 서비스 — CloudFront · Global Accelerator (3.2 복습)",
+      "level": 3,
+      "fraction": 0.6866166714738967
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8148254975483127
+    }
+  ]
 }

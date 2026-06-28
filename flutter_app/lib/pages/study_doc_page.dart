@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderAbstractViewport, RenderBox;
 import 'package:flutter/services.dart' show rootBundle;
@@ -6,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import '../content/anchor_scroll.dart';
 import '../content/markdown_parser.dart';
 import '../content/study_markdown_view.dart';
+import '../data/audio_chapters.dart';
+import '../data/audio_controller.dart' show PlaybackState;
 import '../data/audio_runtime.dart';
 import '../data/content_index.dart';
 import '../data/viewed_docs_store.dart';
@@ -32,13 +36,30 @@ class _StudyDocPageState extends State<StudyDocPage> {
   final _scroll = ScrollController();
   Map<String, GlobalKey> _anchorKeys = const {};
   StudyContent? _keyedDoc; // 키 빌드·스크롤 1회 트리거 기준
+  Map<String, double> _chapterFractions = const {};
 
   @override
   void initState() {
     super.initState();
     _future = _load();
+    _loadChapters();
     // 방문 = 열람. 부수효과만, 렌더와 분리.
     ViewedDocsStore().markViewed(widget.entry.certCode, widget.entry.taskId);
+  }
+
+  Future<void> _loadChapters() async {
+    if (!audioLectureEnabled || !widget.entry.audioApproved) return;
+    try {
+      final raw = await rootBundle.loadString(widget.entry.lectureAudioMetaSrc);
+      final meta = jsonDecode(raw) as Map<String, dynamic>;
+      final map = <String, double>{};
+      for (final ch in parseChapters(meta)) {
+        map[ch.anchor] = ch.fraction;
+      }
+      if (mounted) setState(() => _chapterFractions = map);
+    } catch (_) {
+      // 없거나 실패 → 시크포인트 미표시(graceful)
+    }
   }
 
   @override
@@ -113,6 +134,27 @@ class _StudyDocPageState extends State<StudyDocPage> {
     return StudyAudioPlayer(playlist: pl);
   }
 
+  Widget? _headingSeek(String anchor) {
+    final pl = lecturePlaylist;
+    final fraction = _chapterFractions[anchor];
+    final dur = pl?.duration.value;
+    final isCurrent = pl?.current?.taskId == widget.entry.taskId;
+    if (pl == null ||
+        !shouldShowHeadingSeek(
+          enabled: audioLectureEnabled,
+          approved: widget.entry.audioApproved,
+          isCurrentTrack: isCurrent,
+          hasDuration: dur != null && dur.inMilliseconds > 0,
+          hasFraction: fraction != null,
+        )) {
+      return null;
+    }
+    return _HeadingSeekButton(onTap: () {
+      pl.seek(Duration(milliseconds: chapterSeekMs(fraction!, dur!)));
+      if (pl.state != PlaybackState.playing) pl.playPause();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.c;
@@ -170,8 +212,24 @@ class _StudyDocPageState extends State<StudyDocPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _DocHeader(doc: doc),
-                              StudyMarkdownView(
-                                  blocks: doc.blocks, anchorKeys: _anchorKeys),
+                              if (lecturePlaylist case final pl?)
+                                ListenableBuilder(
+                                  listenable: pl,
+                                  builder: (context, _) =>
+                                      ValueListenableBuilder(
+                                    valueListenable: pl.duration,
+                                    builder: (context, _, child) =>
+                                        StudyMarkdownView(
+                                      blocks: doc.blocks,
+                                      anchorKeys: _anchorKeys,
+                                      headingTrailing: _headingSeek,
+                                    ),
+                                  ),
+                                )
+                              else
+                                StudyMarkdownView(
+                                    blocks: doc.blocks,
+                                    anchorKeys: _anchorKeys),
                               const SizedBox(height: Gap.xl2),
                               _StartQuizButton(entry: widget.entry),
                             ],
@@ -238,6 +296,32 @@ class _DocHeader extends StatelessWidget {
     final c = context.c;
     return AppBadge(
         label: text, bg: c.surface2, fg: c.textMuted, strong: false);
+  }
+}
+
+class _HeadingSeekButton extends StatelessWidget {
+  const _HeadingSeekButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return FocusRing(
+      borderRadius: BorderRadius.circular(Radii.full),
+      child: Tooltip(
+        message: '이 위치부터 듣기',
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.full),
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Icon(Icons.play_circle_outline,
+                size: 20, color: c.accent, semanticLabel: '이 위치부터 듣기'),
+          ),
+        ),
+      ),
+    );
   }
 }
 
