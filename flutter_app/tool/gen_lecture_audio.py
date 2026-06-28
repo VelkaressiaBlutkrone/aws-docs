@@ -729,6 +729,25 @@ def split_sections(segments: list[dict]) -> list[dict]:
     return sections
 
 
+def chapters_from_section_durations(sections: list[dict],
+                                    durations_ms: list[int]) -> list[dict]:
+    """섹션별 실측 길이 → 앵커 있는 섹션마다 {anchor,title,level,fraction}.
+    fraction = 누적 시작 ms ÷ Σ길이(total 0이면 0.0)."""
+    total = sum(durations_ms)
+    chapters: list[dict] = []
+    acc = 0
+    for sec, dur in zip(sections, durations_ms):
+        if sec.get("anchor"):
+            chapters.append({
+                "anchor": sec["anchor"],
+                "title": sec["title"],
+                "level": sec["level"],
+                "fraction": (acc / total) if total else 0.0,
+            })
+        acc += dur
+    return chapters
+
+
 def _content_type(path: Path) -> str:
     return {
         ".mp3": "audio/mpeg",
@@ -1212,6 +1231,20 @@ def _self_test() -> None:
                                             "level": 1, "fraction": 0.0}])
         assert _meta["chapters"][0]["anchor"] == "x", _meta
     print("[self-test] build_audio_meta chapters OK", file=sys.stderr)
+
+    # chapters_from_section_durations: 누적 시작/총합
+    _secs3 = [
+        {"anchor": None, "title": None, "level": None, "speech": "intro"},
+        {"anchor": "a", "title": "A", "level": 2, "speech": "x"},
+        {"anchor": "b", "title": "B", "level": 2, "speech": "y"},
+    ]
+    _durs = [1000, 3000, 6000]  # total 10000; a 시작=1000→0.1; b 시작=4000→0.4
+    _ch2 = chapters_from_section_durations(_secs3, _durs)
+    assert [c["anchor"] for c in _ch2] == ["a", "b"], _ch2  # intro 제외
+    assert abs(_ch2[0]["fraction"] - 0.1) < 1e-9, _ch2
+    assert abs(_ch2[1]["fraction"] - 0.4) < 1e-9, _ch2
+    assert chapters_from_section_durations(_secs3, [0, 0, 0])[0]["fraction"] == 0.0
+    print("[self-test] chapters_from_section_durations OK", file=sys.stderr)
 
     print("self-test OK")
 
