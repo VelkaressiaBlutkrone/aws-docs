@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-3",
-  "generatedAt": "2026-06-26T14:02:13Z",
+  "generatedAt": "2026-06-28T09:35:06Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t4-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 5293101,
-    "sha256": "aaf6e9cf9a47590d66aecce4b631b7c37b86610945893cb13c6e00802636c034",
+    "sizeBytes": 5292093,
+    "sha256": "11de52bc01cd506ef813177d741f36d01826f82139a5f05843029413e4eb5655",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,42 @@
   },
   "script": {
     "speechChars": 6730,
-    "chunkCount": 3,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "support-plans",
+      "title": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.2322094320624813
+    },
+    {
+      "anchor": "tech-resources",
+      "title": "2) 무료 기술 리소스 — 어디서 찾나",
+      "level": 3,
+      "fraction": 0.4095572427681171
+    },
+    {
+      "anchor": "apn",
+      "title": "3) 에이피엔 — 에이더블유에스 Partner Network",
+      "level": 3,
+      "fraction": 0.5199336000217705
+    },
+    {
+      "anchor": "health-dashboard",
+      "title": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
+      "level": 3,
+      "fraction": 0.6296568427354614
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8484774267287125
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,37 +69,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "support-plans",
-      "title": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
-      "level": 3,
-      "fraction": 0.22388059701492538
-    },
-    {
-      "anchor": "tech-resources",
-      "title": "2) 무료 기술 리소스 — 어디서 찾나",
-      "level": 3,
-      "fraction": 0.4000368527731712
-    },
-    {
-      "anchor": "apn",
-      "title": "3) 에이피엔 — 에이더블유에스 Partner Network",
-      "level": 3,
-      "fraction": 0.5164916159941035
-    },
-    {
-      "anchor": "health-dashboard",
-      "title": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
-      "level": 3,
-      "fraction": 0.6183895338124193
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8459554081444629
-    }
-  ]
+  }
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-2",
-  "generatedAt": "2026-06-26T13:51:32Z",
+  "generatedAt": "2026-06-28T09:23:37Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 5985165,
-    "sha256": "cdfb336472d5fdc0cf7b69095b38b8568ed5db07918df97205533f92ffb87fdd",
+    "sizeBytes": 5980557,
+    "sha256": "a6a40c16c8107b27e50e38b46759a67668078f5ab3b09250a62a07607651ad25",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,48 @@
   },
   "script": {
     "speechChars": 7456,
-    "chunkCount": 3,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "regions-az",
+      "title": "1) 3층 구조 — 리전 ⊃ 가용 영역(에이제트) ⊃ (엣지는 별도 망)",
+      "level": 3,
+      "fraction": 0.19702369485648238
+    },
+    {
+      "anchor": "multi-az",
+      "title": "2) 고가용성의 핵심 — 여러 에이제트에 분산",
+      "level": 3,
+      "fraction": 0.3106097091119245
+    },
+    {
+      "anchor": "multi-region",
+      "title": "3) 여러 \"리전\"을 쓰는 시점 — 에이제트로는 안 되는 이유들",
+      "level": 3,
+      "fraction": 0.41420246580620307
+    },
+    {
+      "anchor": "cloudfront-ga",
+      "title": "4) 엣지 — 사용자 가까이서 빠르게: CloudFront 대 Global Accelerator (시험 단골)",
+      "level": 3,
+      "fraction": 0.512666152957041
+    },
+    {
+      "anchor": "proximity",
+      "title": "5) 근접·확장 인프라 — Local Zones · Wavelength · Outposts",
+      "level": 3,
+      "fraction": 0.6802639183201695
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8568194952802928
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,43 +75,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "regions-az",
-      "title": "1) 3층 구조 — 리전 ⊃ 가용 영역(에이제트) ⊃ (엣지는 별도 망)",
-      "level": 3,
-      "fraction": 0.1912166780587833
-    },
-    {
-      "anchor": "multi-az",
-      "title": "2) 고가용성의 핵심 — 여러 에이제트에 분산",
-      "level": 3,
-      "fraction": 0.31220095693779903
-    },
-    {
-      "anchor": "multi-region",
-      "title": "3) 여러 \"리전\"을 쓰는 시점 — 에이제트로는 안 되는 이유들",
-      "level": 3,
-      "fraction": 0.4201982228298018
-    },
-    {
-      "anchor": "cloudfront-ga",
-      "title": "4) 엣지 — 사용자 가까이서 빠르게: CloudFront 대 Global Accelerator (시험 단골)",
-      "level": 3,
-      "fraction": 0.5124743677375256
-    },
-    {
-      "anchor": "proximity",
-      "title": "5) 근접·확장 인프라 — Local Zones · Wavelength · Outposts",
-      "level": 3,
-      "fraction": 0.6809637730690362
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8571428571428571
-    }
-  ]
+  }
 }
