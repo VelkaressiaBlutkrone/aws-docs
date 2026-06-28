@@ -37,5 +37,49 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "access-methods",
+      "title": "1) 에이더블유에스를 다루는 네 가지 방법 — 콘솔 · 씨엘아이 · 에스디케이 · IaC",
+      "level": 3,
+      "fraction": 0.15642542861477773
+    },
+    {
+      "anchor": "iac-cloudformation",
+      "title": "2) IaC와 에이더블유에스 CloudFormation — 인프라를 코드로",
+      "level": 3,
+      "fraction": 0.25337581550599303
+    },
+    {
+      "anchor": "oneoff-vs-repeat",
+      "title": "3) 일회성 대 반복 프로세스",
+      "level": 3,
+      "fraction": 0.3478986496737976
+    },
+    {
+      "anchor": "deployment-models",
+      "title": "4) 배포 모델 — 클라우드 · 하이브리드 · 온프레미스",
+      "level": 3,
+      "fraction": 0.40418752844788347
+    },
+    {
+      "anchor": "connectivity",
+      "title": "5) 연결 옵션 — 공용 인터넷 · 브이피엔 · Direct Connect (3.5 연계)",
+      "level": 3,
+      "fraction": 0.47489000151722044
+    },
+    {
+      "anchor": "deployment-ops-tools",
+      "title": "6) 배포·운영 자동화 도구 — Beanstalk · 씨디케이 · Systems Manager · Code",
+      "level": 3,
+      "fraction": 0.5657715065999089
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8139887725686542
+    }
+  ]
 }

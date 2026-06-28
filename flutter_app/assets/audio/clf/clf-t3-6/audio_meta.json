@@ -37,5 +37,55 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "storage-types",
+      "title": "1) 세 가지 스토리지 유형 — 객체 대 블록 대 파일 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.16878245816503173
+    },
+    {
+      "anchor": "s3",
+      "title": "2) Amazon 에스쓰리 — 객체 스토리지의 표준",
+      "level": 3,
+      "fraction": 0.2629832660126947
+    },
+    {
+      "anchor": "s3-classes",
+      "title": "에스쓰리 스토리지 클래스 — 접근 빈도 ↔ 비용 트레이드오프",
+      "level": 4,
+      "fraction": 0.30568378534333523
+    },
+    {
+      "anchor": "s3-lifecycle",
+      "title": "에스쓰리 수명 주기(Lifecycle)",
+      "level": 4,
+      "fraction": 0.45614541257934216
+    },
+    {
+      "anchor": "ebs",
+      "title": "3) Amazon 이비에스 — 이씨투에 붙는 블록 디스크",
+      "level": 3,
+      "fraction": 0.5106751298326602
+    },
+    {
+      "anchor": "efs",
+      "title": "4) Amazon 이에프에스 / FSx — 여러 서버가 공유하는 파일 시스템",
+      "level": 3,
+      "fraction": 0.6070398153491056
+    },
+    {
+      "anchor": "hybrid-backup",
+      "title": "5) 하이브리드와 백업 — Storage Gateway · 에이더블유에스 Backup",
+      "level": 3,
+      "fraction": 0.6928736295441431
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8577611079053664
+    }
+  ]
 }

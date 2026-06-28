@@ -444,7 +444,8 @@ def run_synthesize(args) -> None:
     print(f"[ID3] {id3}개 — {'OK' if id3 <= 1 else '다중(단일 요청 권장)'}", file=sys.stderr)
     meta = build_audio_meta(
         md_path=args.script, audio_path=args.out, doc_id=script["docId"],
-        speech=speech, chunks=chunks, issues=[], args=args, mode="synthesized")
+        speech=speech, chunks=chunks, issues=[], args=args, mode="synthesized",
+        chapters=chapters_from_segments(script["segments"]))
     # SSOT: md를 재파싱하지 않으므로 source는 script.json 기록을 그대로 옮긴다.
     meta["source"] = {"asset": script.get("sourceAsset"), "sha256": script.get("sourceHash")}
     meta["script"]["reviewStatus"] = script.get("reviewStatus", "needs_human_review")
@@ -522,6 +523,15 @@ def run_gate(args) -> None:
     if hard:
         sys.exit(f"[gate] FAIL — hard {len(hard)}개")
     print(f"[gate] PASS (soft {len(soft)}개)", file=sys.stderr)
+
+
+def run_chapters(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    meta = json.loads(args.audio_meta.read_text(encoding="utf-8"))
+    meta["chapters"] = chapters_from_segments(script["segments"])
+    write_json(args.audio_meta, meta)
+    print(f"[chapters] {len(meta['chapters'])}개 → {args.audio_meta}",
+          file=sys.stderr)
 
 
 def quality_issues(text: str) -> list[str]:
@@ -710,6 +720,7 @@ def build_audio_meta(
     issues: list[str],
     args: argparse.Namespace,
     mode: str,
+    chapters: list | None = None,
 ) -> dict:
     """M1 T9: 오디오 옆에 남기는 최소 {docId, sourceHash} 메타."""
     id3_count = _id3_count(audio_path)
@@ -746,6 +757,7 @@ def build_audio_meta(
             "qualityIssues": unique_issues,
             "reviewStatus": "needs_human_review",
         },
+        "chapters": chapters or [],
         "generator": {
             "tool": "flutter_app/tool/gen_lecture_audio.py",
             "engine": args.engine,
@@ -1134,6 +1146,22 @@ def _self_test() -> None:
     else:
         print("[self-test] ffmpeg 없음 — loudnorm 실행 경로 skip", file=sys.stderr)
 
+    # build_audio_meta가 chapters를 싣는다
+    import tempfile as _tf2
+    with _tf2.TemporaryDirectory() as _td2:
+        _md = Path(_td2) / "m.md"; _md.write_text("# 제목 {#x}\n본문", encoding="utf-8")
+        _mp = Path(_td2) / "a.mp3"; _mp.write_bytes(b"\xff\xfb\x00")
+        _args = argparse.Namespace(engine="polly", voice="Seoyeon",
+                                   polly_engine="neural", skip_loudnorm=True,
+                                   region="ap-northeast-2", max_chars=0)
+        _meta = build_audio_meta(md_path=_md, audio_path=_mp, doc_id="d",
+                                 speech="x", chunks=["x"], issues=[], args=_args,
+                                 mode="test",
+                                 chapters=[{"anchor": "x", "title": "제목",
+                                            "level": 1, "fraction": 0.0}])
+        assert _meta["chapters"][0]["anchor"] == "x", _meta
+    print("[self-test] build_audio_meta chapters OK", file=sys.stderr)
+
     print("self-test OK")
 
 
@@ -1167,6 +1195,11 @@ def main() -> None:
     ga.add_argument("--audio-meta", type=Path)
     ga.add_argument("--lexicon", type=Path)
 
+    ch = sub.add_parser("chapters",
+                        help="script.json → audio_meta.json chapters 갱신(재합성 없음)")
+    ch.add_argument("--script", type=Path, required=True)
+    ch.add_argument("--audio-meta", type=Path, required=True)
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1177,8 +1210,10 @@ def main() -> None:
         run_synthesize(args)
     elif args.cmd == "gate":
         run_gate(args)
+    elif args.cmd == "chapters":
+        run_chapters(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":

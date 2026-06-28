@@ -37,5 +37,49 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "sg-vs-nacl",
+      "title": "1) 브이피씨 네트워크 방화벽 2개 층 — 보안 그룹 대 네트워크 에이씨엘 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.17237491190979562
+    },
+    {
+      "anchor": "waf",
+      "title": "2) 에이더블유에스 와프 — 웹 애플리케이션 방화벽 (애플리케이션 계층)",
+      "level": 3,
+      "fraction": 0.31853417899929526
+    },
+    {
+      "anchor": "trusted-advisor",
+      "title": "3) 보안 이슈를 찾아 주는 점검 도구 — 에이더블유에스 Trusted Advisor",
+      "level": 3,
+      "fraction": 0.44467935165609584
+    },
+    {
+      "anchor": "marketplace",
+      "title": "4) 서드파티 보안 제품을 구하는 곳 — 에이더블유에스 Marketplace",
+      "level": 3,
+      "fraction": 0.5589852008456659
+    },
+    {
+      "anchor": "info-locations",
+      "title": "5) 보안 정보·문서는 어디서 찾나",
+      "level": 3,
+      "fraction": 0.6593375616631431
+    },
+    {
+      "anchor": "sg-default",
+      "title": "보안 그룹 기본 동작 (보강)",
+      "level": 3,
+      "fraction": 0.7409443269908386
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8641296687808315
+    }
+  ]
 }

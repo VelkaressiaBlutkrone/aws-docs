@@ -37,5 +37,31 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "caf",
+      "title": "1) 클라우드 도입 전략 — 에이더블유에스 씨에이에프",
+      "level": 3,
+      "fraction": 0.22950411163717918
+    },
+    {
+      "anchor": "migration-tools",
+      "title": "2) 마이그레이션 도구 — 디엠에스와 Snowball (시험 핵심)",
+      "level": 3,
+      "fraction": 0.4156491402940444
+    },
+    {
+      "anchor": "datasync-7r",
+      "title": "3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강)",
+      "level": 3,
+      "fraction": 0.6249688512334911
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8704211313231996
+    }
+  ]
 }

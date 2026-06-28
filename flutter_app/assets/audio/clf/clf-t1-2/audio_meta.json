@@ -37,5 +37,25 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "well-architected",
+      "title": "1) 에이더블유에스 웰 아키텍티드 프레임워크란",
+      "level": 3,
+      "fraction": 0.26270897304674173
+    },
+    {
+      "anchor": "six-pillars",
+      "title": "2) 6대 기둥 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.415899010576595
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8307744796997611
+    }
+  ]
 }
