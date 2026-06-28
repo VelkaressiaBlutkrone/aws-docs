@@ -21,6 +21,12 @@ class _Fake implements AudioBackend {
   void pause() {}
   @override
   void dispose() => _ev.close();
+  @override
+  void seek(double seconds) {}
+  @override
+  Stream<Duration> get positionStream => const Stream<Duration>.empty();
+  @override
+  Duration? get duration => null;
 }
 
 ContentEntry _e(String t) => ContentEntry(
