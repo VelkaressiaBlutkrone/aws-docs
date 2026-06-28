@@ -5,6 +5,7 @@ import 'package:aws_docs/data/audio_controller.dart';
 import 'package:aws_docs/data/content_index.dart';
 import 'package:aws_docs/data/lecture_playlist.dart';
 import 'package:aws_docs/theme/app_theme.dart';
+import 'package:aws_docs/widgets/audio_progress_bar.dart';
 import 'package:aws_docs/widgets/study_audio_player.dart';
 
 class _Fake implements AudioBackend {
@@ -21,6 +22,12 @@ class _Fake implements AudioBackend {
   void pause() => pauseCalls++;
   @override
   void dispose() => _ev.close();
+  @override
+  void seek(double seconds) {}
+  @override
+  Stream<Duration> get positionStream => const Stream<Duration>.empty();
+  @override
+  Duration? get duration => null;
   void emit(AudioEvent e) => _ev.add(e);
 }
 
@@ -63,5 +70,11 @@ void main() {
     await tester.tap(find.bySemanticsLabel('일시정지'));
     await tester.pump();
     expect(fake.pauseCalls, 1);
+  });
+
+  testWidgets('미니플레이어에 타임바(AudioProgressBar)가 있다', (tester) async {
+    final fake = _Fake();
+    await _pump(tester, fake);
+    expect(find.byType(AudioProgressBar), findsOneWidget);
   });
 }
