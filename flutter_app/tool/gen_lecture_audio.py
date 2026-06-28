@@ -682,11 +682,11 @@ def chapters_from_segments(segments: list[dict]) -> list[dict]:
             src = seg.get("sourceExcerpt") or ""
             m = re.search(r"\{#([^}]+)\}", src)
             hm = re.match(r"\s*(#{1,6})", src)
-            if m:
+            if m and hm:
                 chapters.append({
                     "anchor": m.group(1),
                     "title": speech,
-                    "level": len(hm.group(1)) if hm else 2,
+                    "level": len(hm.group(1)),
                     "fraction": (acc / total) if total else 0.0,
                 })
         acc += _char_count(speech)
