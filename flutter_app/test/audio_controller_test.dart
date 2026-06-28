@@ -29,7 +29,10 @@ class FakeAudioBackend implements AudioBackend {
   void pause() => pauseCalls++;
 
   @override
-  void dispose() => _events.close();
+  void dispose() {
+    _events.close();
+    _pos.close();
+  }
 
   final _pos = StreamController<Duration>.broadcast();
   double? seekedTo;
