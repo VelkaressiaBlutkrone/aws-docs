@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-1",
-  "generatedAt": "2026-06-26T13:41:31Z",
+  "generatedAt": "2026-06-28T08:52:35Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 3779805,
-    "sha256": "b8d9562373cd1c7d93636608ade106f9504c1512a1a9f6e9c40702fc68a15d42",
+    "sizeBytes": 3772173,
+    "sha256": "18cb37b2de3d89903689e2b43d94b82d0f7b8744897ca8edfcae99582fbab085",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,42 @@
   },
   "script": {
     "speechChars": 4578,
-    "chunkCount": 2,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.2125076359193647
+    },
+    {
+      "anchor": "core-benefits",
+      "title": "2) 클라우드의 핵심 이점 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.3255574221136225
+    },
+    {
+      "anchor": "ha-elasticity",
+      "title": "3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기",
+      "level": 3,
+      "fraction": 0.49591478313989007
+    },
+    {
+      "anchor": "global-infra",
+      "title": "4) 글로벌 인프라의 이점",
+      "level": 3,
+      "fraction": 0.6405390959071472
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8668677458766035
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,37 +69,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "core-concepts",
-      "title": "핵심 개념",
-      "level": 2,
-      "fraction": 0.2103762827822121
-    },
-    {
-      "anchor": "core-benefits",
-      "title": "2) 클라우드의 핵심 이점 (시험 핵심)",
-      "level": 3,
-      "fraction": 0.3292474344355758
-    },
-    {
-      "anchor": "ha-elasticity",
-      "title": "3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기",
-      "level": 3,
-      "fraction": 0.4991448118586089
-    },
-    {
-      "anchor": "global-infra",
-      "title": "4) 글로벌 인프라의 이점",
-      "level": 3,
-      "fraction": 0.6431014823261118
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8677309007981756
-    }
-  ]
+  }
 }

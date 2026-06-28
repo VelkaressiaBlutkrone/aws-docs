@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-1",
-  "generatedAt": "2026-06-26T14:00:19Z",
+  "generatedAt": "2026-06-28T09:33:06Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t4-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 4545885,
-    "sha256": "c9b013141e6ebf941996c51527327ffa26c94f4a582bc2e07779ece39dae6249",
+    "sizeBytes": 4546173,
+    "sha256": "80a541ffb98cb386040b8029dd0c74c4a193d9052a247d01b44055357a605330",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,36 @@
   },
   "script": {
     "speechChars": 5602,
-    "chunkCount": 2,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "purchase-options",
+      "title": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.26774796464662465
+    },
+    {
+      "anchor": "data-transfer",
+      "title": "2) 데이터 전송 요금",
+      "level": 3,
+      "fraction": 0.5016948078689771
+    },
+    {
+      "anchor": "storage-pricing",
+      "title": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
+      "level": 3,
+      "fraction": 0.6107644058668863
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.7999809928089461
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,31 +63,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "purchase-options",
-      "title": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
-      "level": 3,
-      "fraction": 0.27114033099070506
-    },
-    {
-      "anchor": "data-transfer",
-      "title": "2) 데이터 전송 요금",
-      "level": 3,
-      "fraction": 0.5017002947177511
-    },
-    {
-      "anchor": "storage-pricing",
-      "title": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
-      "level": 3,
-      "fraction": 0.6087055089548855
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.7905236907730673
-    }
-  ]
+  }
 }

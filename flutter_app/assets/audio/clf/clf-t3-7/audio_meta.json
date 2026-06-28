@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-7",
-  "generatedAt": "2026-06-26T13:58:09Z",
+  "generatedAt": "2026-06-28T09:30:45Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-7/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6806397,
-    "sha256": "c2eedc6528d4934f12d7fb93064a683393468580055bd74a510c4f086bed304e",
+    "sizeBytes": 6799773,
+    "sha256": "a473c2e026e5b1178a0627471eb28cc7a8ab754a16a6cae9b3093099fb93c5a2",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,48 @@
   },
   "script": {
     "speechChars": 8656,
-    "chunkCount": 4,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "ai-ml",
+      "title": "1) 에이아이/엠엘 서비스 3종 — SageMaker · Lex · Kendra",
+      "level": 3,
+      "fraction": 0.17633479467141072
+    },
+    {
+      "anchor": "analytics",
+      "title": "2) 분석 서비스 4종 — Athena · Kinesis · Glue · QuickSight",
+      "level": 3,
+      "fraction": 0.30012495499502295
+    },
+    {
+      "anchor": "scenario",
+      "title": "3) 한눈에 — 시나리오, 서비스",
+      "level": 3,
+      "fraction": 0.42563059914861173
+    },
+    {
+      "anchor": "language-ai",
+      "title": "언어 에이아이 — Amazon Translate · Amazon Transcribe (보강)",
+      "level": 3,
+      "fraction": 0.5064489484719487
+    },
+    {
+      "anchor": "applied-ai-services",
+      "title": "응용 에이아이 서비스 — Rekognition · Comprehend · Textract · Personalize",
+      "level": 3,
+      "fraction": 0.5856365292161722
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8041806976300908
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,43 +75,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "ai-ml",
-      "title": "1) 에이아이/엠엘 서비스 3종 — SageMaker · Lex · Kendra",
-      "level": 3,
-      "fraction": 0.17095985033817815
-    },
-    {
-      "anchor": "analytics",
-      "title": "2) 분석 서비스 4종 — Athena · Kinesis · Glue · QuickSight",
-      "level": 3,
-      "fraction": 0.29184055259749603
-    },
-    {
-      "anchor": "scenario",
-      "title": "3) 한눈에 — 시나리오, 서비스",
-      "level": 3,
-      "fraction": 0.42092387393869624
-    },
-    {
-      "anchor": "language-ai",
-      "title": "언어 에이아이 — Amazon Translate · Amazon Transcribe (보강)",
-      "level": 3,
-      "fraction": 0.5007914807886027
-    },
-    {
-      "anchor": "applied-ai-services",
-      "title": "응용 에이아이 서비스 — Rekognition · Comprehend · Textract · Personalize",
-      "level": 3,
-      "fraction": 0.5838250107929198
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8016980860555476
-    }
-  ]
+  }
 }
