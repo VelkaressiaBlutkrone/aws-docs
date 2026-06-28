@@ -37,5 +37,37 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "of-vs-in",
+      "title": "1) 한 줄 정의 — 경계선은 \"of 대 in\"",
+      "level": 3,
+      "fraction": 0.20675675675675675
+    },
+    {
+      "anchor": "responsibility-table",
+      "title": "2) 책임 분담표",
+      "level": 3,
+      "fraction": 0.31003861003861005
+    },
+    {
+      "anchor": "shared-controls",
+      "title": "3) 공유 책임 (Shared Controls) — 같은 주제를 양쪽이 나눠 가진다",
+      "level": 3,
+      "fraction": 0.45154440154440156
+    },
+    {
+      "anchor": "service-responsibility",
+      "title": "4) 핵심 중의 핵심 — 서비스에 따른 책임 이동",
+      "level": 3,
+      "fraction": 0.555019305019305
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8471042471042471
+    }
+  ]
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/audio_controller.dart';
 import '../data/lecture_playlist.dart';
 import '../theme/app_theme.dart';
+import 'audio_progress_bar.dart';
 import 'focus_ring.dart';
 
 /// 학습 문서 오디오 강의("주머니 라디오") — 하단 고정 미니 플레이어(UI).
@@ -47,43 +48,54 @@ class StudyAudioPlayer extends StatelessWidget {
               final state = playlist.state;
               final isPlaying = state == PlaybackState.playing;
               final status = _statusLine(state);
-              return Row(
+              return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  PlayPauseButton(
-                      isPlaying: isPlaying, onTap: playlist.playPause),
-                  const SizedBox(width: Gap.md),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          playlist.currentTitle ?? '오디오 강의',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            fontVariations: Wght.w700,
-                            color: c.text,
-                          ),
-                        ),
-                        if (status != null) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            status,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              fontVariations: Wght.w400,
-                              color: c.textMuted,
+                  AudioProgressBar(
+                    position: playlist.position,
+                    duration: playlist.duration,
+                    onSeek: playlist.seek,
+                  ),
+                  const SizedBox(height: Gap.sm),
+                  Row(
+                    children: [
+                      PlayPauseButton(
+                          isPlaying: isPlaying, onTap: playlist.playPause),
+                      const SizedBox(width: Gap.md),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              playlist.currentTitle ?? '오디오 강의',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                fontVariations: Wght.w700,
+                                color: c.text,
+                              ),
                             ),
-                          ),
-                        ],
-                      ],
-                    ),
+                            if (status != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                status,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  fontVariations: Wght.w400,
+                                  color: c.textMuted,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               );

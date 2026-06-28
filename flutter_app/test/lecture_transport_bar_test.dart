@@ -5,6 +5,7 @@ import 'package:aws_docs/data/audio_controller.dart';
 import 'package:aws_docs/data/content_index.dart';
 import 'package:aws_docs/data/lecture_playlist.dart';
 import 'package:aws_docs/theme/app_theme.dart';
+import 'package:aws_docs/widgets/audio_progress_bar.dart';
 import 'package:aws_docs/widgets/lecture_transport_bar.dart';
 
 class _Fake implements AudioBackend {
@@ -21,6 +22,12 @@ class _Fake implements AudioBackend {
   void pause() {}
   @override
   void dispose() => _ev.close();
+  @override
+  void seek(double seconds) {}
+  @override
+  Stream<Duration> get positionStream => const Stream<Duration>.empty();
+  @override
+  Duration? get duration => null;
 }
 
 ContentEntry _e(String t) => ContentEntry(
@@ -75,5 +82,18 @@ void main() {
     await tester.tap(find.bySemanticsLabel('마지막 강의'));
     await tester.pump();
     expect(pl.index, 2);
+  });
+
+  testWidgets('모드 토글 탭이 cycleMode 호출(autoAll→repeatOne)', (tester) async {
+    final pl = await _pump(tester);
+    expect(pl.mode, PlayMode.autoAll);
+    await tester.tap(find.bySemanticsLabel('전체 자동 재생'));
+    await tester.pump();
+    expect(pl.mode, PlayMode.repeatOne);
+  });
+
+  testWidgets('타임바(AudioProgressBar)가 있다', (tester) async {
+    await _pump(tester);
+    expect(find.byType(AudioProgressBar), findsOneWidget);
   });
 }

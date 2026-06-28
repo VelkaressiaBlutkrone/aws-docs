@@ -37,5 +37,31 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "purchase-options",
+      "title": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.27114033099070506
+    },
+    {
+      "anchor": "data-transfer",
+      "title": "2) 데이터 전송 요금",
+      "level": 3,
+      "fraction": 0.5017002947177511
+    },
+    {
+      "anchor": "storage-pricing",
+      "title": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
+      "level": 3,
+      "fraction": 0.6087055089548855
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.7905236907730673
+    }
+  ]
 }

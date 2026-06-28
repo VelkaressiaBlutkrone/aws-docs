@@ -37,5 +37,49 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "messaging",
+      "title": "1) 앱 통합 메시징 — 에스엔에스 · 에스큐에스 · EventBridge (시험 핵심)",
+      "level": 3,
+      "fraction": 0.18162332094884254
+    },
+    {
+      "anchor": "euc",
+      "title": "2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces",
+      "level": 3,
+      "fraction": 0.3089454129751358
+    },
+    {
+      "anchor": "appstream-mq",
+      "title": "애플리케이션 스트리밍과 메시지 브로커 — AppStream 2.0 · Amazon 엠큐",
+      "level": 3,
+      "fraction": 0.38453843955415834
+    },
+    {
+      "anchor": "iot",
+      "title": "3) IoT — 에이더블유에스 IoT Core",
+      "level": 3,
+      "fraction": 0.5255787367819377
+    },
+    {
+      "anchor": "other-services",
+      "title": "4) 그 외 범위 내 서비스 — 위치만 알아 두기",
+      "level": 3,
+      "fraction": 0.593741068876822
+    },
+    {
+      "anchor": "sqs-types",
+      "title": "에스큐에스 큐 유형 — 표준 대 피포 (보강)",
+      "level": 3,
+      "fraction": 0.6799085452986567
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8095170048585311
+    }
+  ]
 }

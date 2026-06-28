@@ -19,6 +19,12 @@ class _FakeAudioBackend implements AudioBackend {
   void pause() => pauseCalls++;
   @override
   void dispose() => _events.close();
+  @override
+  void seek(double seconds) {}
+  @override
+  Stream<Duration> get positionStream => const Stream<Duration>.empty();
+  @override
+  Duration? get duration => null;
 
   void emit(AudioEvent e) => _events.add(e);
 }

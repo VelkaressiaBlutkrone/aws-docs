@@ -29,7 +29,21 @@ class FakeAudioBackend implements AudioBackend {
   void pause() => pauseCalls++;
 
   @override
-  void dispose() => _events.close();
+  void dispose() {
+    _events.close();
+    _pos.close();
+  }
+
+  final _pos = StreamController<Duration>.broadcast();
+  double? seekedTo;
+  Duration? dur;
+  @override
+  void seek(double seconds) => seekedTo = seconds;
+  @override
+  Stream<Duration> get positionStream => _pos.stream;
+  @override
+  Duration? get duration => dur;
+  void emitPos(Duration d) => _pos.add(d);
 
   /// 테스트가 브라우저 미디어 이벤트를 발화.
   void emit(AudioEvent e) => _events.add(e);
@@ -146,5 +160,30 @@ void main() {
     b.emit(AudioEvent.playing); // 이미 playing → 알림 없음
     await Future<void>.delayed(Duration.zero);
     expect(n, 0);
+  });
+
+  test('seek는 backend.seek(초) 호출 + position 낙관적 갱신', () {
+    final b = FakeAudioBackend();
+    final c = AudioController(backend: b);
+    c.seek(const Duration(seconds: 30));
+    expect(b.seekedTo, 30.0);
+    expect(c.position.value, const Duration(seconds: 30));
+  });
+
+  test('positionStream 방출 → position·duration 갱신', () async {
+    final b = FakeAudioBackend()..dur = const Duration(seconds: 120);
+    final c = AudioController(backend: b);
+    b.emitPos(const Duration(seconds: 5));
+    await Future<void>.delayed(Duration.zero);
+    expect(c.position.value, const Duration(seconds: 5));
+    expect(c.duration.value, const Duration(seconds: 120));
+  });
+
+  test('load는 position 0·duration null 리셋', () {
+    final b = FakeAudioBackend()..dur = const Duration(seconds: 120);
+    final c = AudioController(backend: b);
+    c.load('x.mp3');
+    expect(c.position.value, Duration.zero);
+    expect(c.duration.value, isNull);
   });
 }

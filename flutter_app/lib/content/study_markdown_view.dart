@@ -14,9 +14,18 @@ _Kind _kindOf(String h) {
 /// MdBlock 목록을 DESIGN.md 토큰으로 렌더. H2 섹션 단위로 묶어
 /// 🎯=액센트 콜아웃 / ⚠️=warning 블록으로 스타일링.
 class StudyMarkdownView extends StatelessWidget {
-  const StudyMarkdownView({super.key, required this.blocks, this.anchorKeys});
+  const StudyMarkdownView({
+    super.key,
+    required this.blocks,
+    this.anchorKeys,
+    this.headingTrailing,
+  });
+
   final List<MdBlock> blocks;
   final Map<String, GlobalKey>? anchorKeys;
+
+  /// 앵커 있는 헤딩의 오른쪽 슬롯(예: 오디오 시크 아이콘). null 반환이면 미표시.
+  final Widget? Function(String anchor)? headingTrailing;
 
   Key? _anchorKey(MdHeading? h) {
     final id = h?.anchor;
@@ -55,8 +64,22 @@ class StudyMarkdownView extends StatelessWidget {
         Padding(
           key: _anchorKey(head),
           padding: const EdgeInsets.only(top: Gap.xl, bottom: Gap.sm),
-          child: Text(head.text,
-              style: Theme.of(context).textTheme.headlineSmall),
+          child: () {
+            final trailing =
+                (head.anchor != null) ? headingTrailing?.call(head.anchor!) : null;
+            final title = Text(head.text,
+                style: Theme.of(context).textTheme.headlineSmall);
+            return trailing == null
+                ? title
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(child: title),
+                      const SizedBox(width: Gap.sm),
+                      trailing,
+                    ],
+                  );
+          }(),
         ),
       for (final b in body) _block(context, b),
     ];
@@ -94,10 +117,25 @@ class StudyMarkdownView extends StatelessWidget {
       case MdHeading(:final level, :final text, :final anchor):
         Key? headingKey;
         if (anchor != null) headingKey = anchorKeys?[anchor];
+        final trailing =
+            (anchor != null) ? headingTrailing?.call(anchor) : null;
         return Padding(
           key: headingKey,
-          padding: EdgeInsets.only(top: level <= 2 ? Gap.lg : Gap.md, bottom: Gap.xs),
-          child: Text(text, style: level >= 3 ? t.titleMedium : t.titleLarge),
+          padding: EdgeInsets.only(
+              top: level <= 2 ? Gap.lg : Gap.md, bottom: Gap.xs),
+          child: trailing == null
+              ? Text(text, style: level >= 3 ? t.titleMedium : t.titleLarge)
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(text,
+                          style: level >= 3 ? t.titleMedium : t.titleLarge),
+                    ),
+                    const SizedBox(width: Gap.sm),
+                    trailing,
+                  ],
+                ),
         );
       case MdParagraph(:final spans):
         return Padding(

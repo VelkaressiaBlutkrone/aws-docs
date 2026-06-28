@@ -40,10 +40,15 @@ class WebAudioBackend implements AudioBackend {
     _wire('ended', AudioEvent.ended);
     _wire('stalled', AudioEvent.stalled);
     _wire('error', AudioEvent.error);
+    final posListener = ((web.Event _) => _position.add(
+        Duration(milliseconds: (_audio.currentTime * 1000).round()))).toJS;
+    _audio.addEventListener('timeupdate', posListener);
+    _wired.add(('timeupdate', posListener));
   }
 
   late final web.HTMLAudioElement _audio;
   final _events = StreamController<AudioEvent>.broadcast();
+  final _position = StreamController<Duration>.broadcast();
   final _wired = <(String, web.EventListener)>[];
 
   void _wire(String type, AudioEvent ev) {
@@ -70,12 +75,26 @@ class WebAudioBackend implements AudioBackend {
   void pause() => _audio.pause();
 
   @override
+  void seek(double seconds) => _audio.currentTime = seconds;
+
+  @override
+  Stream<Duration> get positionStream => _position.stream;
+
+  @override
+  Duration? get duration {
+    final d = _audio.duration;
+    if (d.isNaN || d.isInfinite) return null;
+    return Duration(milliseconds: (d * 1000).round());
+  }
+
+  @override
   void dispose() {
     for (final (type, listener) in _wired) {
       _audio.removeEventListener(type, listener);
     }
     _wired.clear();
     _events.close();
+    _position.close();
   }
 }
 

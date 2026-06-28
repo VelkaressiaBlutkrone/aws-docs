@@ -44,6 +44,15 @@ abstract class AudioBackend {
 
   /// 리소스 정리.
   void dispose();
+
+  /// 지정 초로 탐색.
+  void seek(double seconds);
+
+  /// 재생 위치 갱신 스트림(브라우저 timeupdate, ~4Hz).
+  Stream<Duration> get positionStream;
+
+  /// 총 길이(메타데이터 로드 전 null).
+  Duration? get duration;
 }
 
 /// 주입된 [AudioBackend] 위에서 재생 상태를 관리하는 컨트롤러.
@@ -53,10 +62,16 @@ abstract class AudioBackend {
 class AudioController extends ChangeNotifier {
   AudioController({required AudioBackend backend}) : _backend = backend {
     _sub = _backend.events.listen(_onEvent);
+    _posSub = _backend.positionStream.listen(_onPosition);
   }
 
   final AudioBackend _backend;
   late final StreamSubscription<AudioEvent> _sub;
+  late final StreamSubscription<Duration> _posSub;
+
+  /// 재생 위치·총 길이(상태 ChangeNotifier와 분리 — 타임바만 구독해 과리빌드 방지).
+  final ValueNotifier<Duration> position = ValueNotifier<Duration>(Duration.zero);
+  final ValueNotifier<Duration?> duration = ValueNotifier<Duration?>(null);
 
   PlaybackState _state = PlaybackState.idle;
   PlaybackState get state => _state;
@@ -64,6 +79,8 @@ class AudioController extends ChangeNotifier {
   /// 소스를 설정하고 로딩 상태로 전이.
   void load(String src) {
     _backend.setSrc(src);
+    position.value = Duration.zero;
+    duration.value = null;
     _set(PlaybackState.loading);
   }
 
@@ -79,6 +96,17 @@ class AudioController extends ChangeNotifier {
 
   /// 일시정지(상태는 backend의 paused 이벤트로 확정).
   void pause() => _backend.pause();
+
+  /// 지정 위치로 탐색(곧 timeupdate가 확정하나 즉시 반영해 UI 끊김 방지).
+  void seek(Duration to) {
+    _backend.seek(to.inMilliseconds / 1000.0);
+    position.value = to;
+  }
+
+  void _onPosition(Duration p) {
+    position.value = p;
+    duration.value = _backend.duration;
+  }
 
   void _onEvent(AudioEvent e) {
     _set(switch (e) {
@@ -101,6 +129,9 @@ class AudioController extends ChangeNotifier {
   @override
   void dispose() {
     _sub.cancel();
+    _posSub.cancel();
+    position.dispose();
+    duration.dispose();
     super.dispose();
   }
 }

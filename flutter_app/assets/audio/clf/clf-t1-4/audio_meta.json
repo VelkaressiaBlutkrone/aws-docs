@@ -37,5 +37,49 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "capex-opex",
+      "title": "1) 클라우드 경제학의 출발 — 고정비 대 변동비",
+      "level": 3,
+      "fraction": 0.1913963653094088
+    },
+    {
+      "anchor": "rightsizing",
+      "title": "2) 적정 크기 조정(rightsizing) — Compute Optimizer",
+      "level": 3,
+      "fraction": 0.28226363008971705
+    },
+    {
+      "anchor": "licensing",
+      "title": "3) 라이선스 — 비와이오엘 대 라이선스 포함",
+      "level": 3,
+      "fraction": 0.4074074074074074
+    },
+    {
+      "anchor": "automation",
+      "title": "4) 자동화의 비용 이점 — CloudFormation",
+      "level": 3,
+      "fraction": 0.4973544973544973
+    },
+    {
+      "anchor": "managed-services",
+      "title": "5) 관리형 서비스로 총비용(티씨오) 절감",
+      "level": 3,
+      "fraction": 0.596733379342075
+    },
+    {
+      "anchor": "autoscaling",
+      "title": "탄력성으로 비용 최적화 — Auto Scaling (보강)",
+      "level": 3,
+      "fraction": 0.6947319990798252
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8596733379342075
+    }
+  ]
 }

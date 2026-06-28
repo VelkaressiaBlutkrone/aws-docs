@@ -37,5 +37,55 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "governance-compliance",
+      "title": "1) 거버넌스 대 컴플라이언스 — 두 단어를 먼저 가른다",
+      "level": 3,
+      "fraction": 0.1330237358101135
+    },
+    {
+      "anchor": "artifact",
+      "title": "2) 컴플라이언스 증거는 어디서 받나 — 에이더블유에스 Artifact",
+      "level": 3,
+      "fraction": 0.19453044375644996
+    },
+    {
+      "anchor": "detection-trio",
+      "title": "3) 탐지 3종 — GuardDuty · Inspector · Macie (시험 핵심 구분)",
+      "level": 3,
+      "fraction": 0.2834881320949432
+    },
+    {
+      "anchor": "securityhub-shield",
+      "title": "4) 종합과 보호 — Security Hub(씨에스피엠)와 Shield",
+      "level": 3,
+      "fraction": 0.36666666666666664
+    },
+    {
+      "anchor": "encryption",
+      "title": "5) 암호화 — 전송 중 대 저장 시, 그리고 케이엠에스",
+      "level": 3,
+      "fraction": 0.4652218782249742
+    },
+    {
+      "anchor": "certificates-hsm",
+      "title": "인증서·키·전용 에이치에스엠 — 에이씨엠 · 케이엠에스 · CloudHSM",
+      "level": 3,
+      "fraction": 0.5407636738906089
+    },
+    {
+      "anchor": "audit-trio",
+      "title": "6) 거버넌스·감사·모니터링 3종 — CloudTrail · Config · CloudWatch (시험 핵심 구분)",
+      "level": 3,
+      "fraction": 0.6392156862745098
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8230134158926729
+    }
+  ]
 }

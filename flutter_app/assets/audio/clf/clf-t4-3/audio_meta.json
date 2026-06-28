@@ -37,5 +37,37 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  }
+  },
+  "chapters": [
+    {
+      "anchor": "support-plans",
+      "title": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.22388059701492538
+    },
+    {
+      "anchor": "tech-resources",
+      "title": "2) 무료 기술 리소스 — 어디서 찾나",
+      "level": 3,
+      "fraction": 0.4000368527731712
+    },
+    {
+      "anchor": "apn",
+      "title": "3) 에이피엔 — 에이더블유에스 Partner Network",
+      "level": 3,
+      "fraction": 0.5164916159941035
+    },
+    {
+      "anchor": "health-dashboard",
+      "title": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
+      "level": 3,
+      "fraction": 0.6183895338124193
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8459554081444629
+    }
+  ]
 }
