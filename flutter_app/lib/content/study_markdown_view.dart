@@ -65,20 +65,20 @@ class StudyMarkdownView extends StatelessWidget {
           key: _anchorKey(head),
           padding: const EdgeInsets.only(top: Gap.xl, bottom: Gap.sm),
           child: () {
-            final trailing = (head.anchor != null)
-                ? headingTrailing?.call(head.anchor!)
-                : null;
+            final trailing =
+                (head.anchor != null) ? headingTrailing?.call(head.anchor!) : null;
             final title = Text(head.text,
                 style: Theme.of(context).textTheme.headlineSmall);
-            if (trailing == null) return title;
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(child: title),
-                const SizedBox(width: Gap.sm),
-                trailing,
-              ],
-            );
+            return trailing == null
+                ? title
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(child: title),
+                      const SizedBox(width: Gap.sm),
+                      trailing,
+                    ],
+                  );
           }(),
         ),
       for (final b in body) _block(context, b),

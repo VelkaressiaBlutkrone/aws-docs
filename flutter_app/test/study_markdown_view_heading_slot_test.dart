@@ -28,4 +28,16 @@ void main() {
     ));
     expect(find.byIcon(Icons.play_arrow), findsNothing);
   });
+
+  testWidgets('headingTrailing이 null 반환하면 슬롯 미표시', (tester) async {
+    final blocks = parseStudyDoc('## 제목 {#sec}\n\n본문.').blocks;
+    await tester.pumpWidget(MaterialApp(
+      theme: AppTheme.light,
+      home: Scaffold(body: StudyMarkdownView(
+        blocks: blocks,
+        headingTrailing: (anchor) => null,
+      )),
+    ));
+    expect(find.byIcon(Icons.play_arrow), findsNothing);
+  });
 }
