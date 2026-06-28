@@ -703,6 +703,32 @@ def chapters_from_segments(segments: list[dict]) -> list[dict]:
     return chapters
 
 
+def split_sections(segments: list[dict]) -> list[dict]:
+    """비-skip 세그먼트를 앵커 있는 heading 경계로 섹션 분할.
+    section = {anchor, title, level, speech}. intro(첫 앵커 헤딩 전)는 anchor=None.
+    앵커 없는 헤딩은 경계가 아니라 현재 섹션 본문에 포함.
+    불변식: '\\n'.join(빈 아닌 섹션 speech) == script_to_speech."""
+    sections: list[dict] = []
+    cur = {"anchor": None, "title": None, "level": None, "parts": []}
+    for seg in segments:
+        speech = _segment_speech(seg)
+        if seg.get("kind") == "heading" and speech:
+            src = seg.get("sourceExcerpt") or ""
+            m = re.search(r"\{#([^}]+)\}", src)
+            hm = re.match(r"\s*(#{1,6})", src)
+            if m and hm:
+                sections.append(cur)
+                cur = {"anchor": m.group(1), "title": speech,
+                       "level": len(hm.group(1)), "parts": [speech]}
+                continue
+        if speech:
+            cur["parts"].append(speech)
+    sections.append(cur)
+    for sec in sections:
+        sec["speech"] = "\n".join(sec.pop("parts"))
+    return sections
+
+
 def _content_type(path: Path) -> str:
     return {
         ".mp3": "audio/mpeg",
@@ -1113,6 +1139,31 @@ def _self_test() -> None:
     assert abs(_ch[1]["fraction"] - 0.625) < 1e-9, _ch
     assert chapters_from_segments([]) == [], "빈 입력"
     print("[self-test] chapters_from_segments OK", file=sys.stderr)
+
+    # split_sections: 앵커 헤딩 경계 + intro + 불변식
+    _segs2 = [
+        {"id": "s0", "kind": "paragraph", "scriptText": "인트로 본문", "skip": False,
+         "sourceExcerpt": "인트로 본문"},
+        {"id": "s1", "kind": "heading", "scriptText": "첫 장", "skip": False,
+         "sourceExcerpt": "## 첫 장 {#a}"},
+        {"id": "s2", "kind": "paragraph", "scriptText": "에이 본문", "skip": False,
+         "sourceExcerpt": "에이 본문"},
+        {"id": "s3", "kind": "heading", "scriptText": "소제목", "skip": False,
+         "sourceExcerpt": "### 소제목"},  # 앵커 없음 → 경계 아님
+        {"id": "s4", "kind": "heading", "scriptText": "둘째 장", "skip": False,
+         "sourceExcerpt": "## 둘째 장 {#b}"},
+        {"id": "s5", "kind": "source", "scriptText": "", "skip": True,
+         "sourceExcerpt": "출처"},
+    ]
+    _secs = split_sections(_segs2)
+    assert [s["anchor"] for s in _secs] == [None, "a", "b"], _secs  # intro + 앵커 2
+    assert _secs[1]["title"] == "첫 장" and _secs[1]["level"] == 2, _secs
+    # 앵커 없는 "소제목"은 섹션 a에 포함(경계 아님)
+    assert "소제목" in _secs[1]["speech"], _secs[1]
+    # 불변식: 빈 아닌 섹션 speech 이으면 script_to_speech와 동일
+    _joined = "\n".join(s["speech"] for s in _secs if s["speech"])
+    assert _joined == script_to_speech({"segments": _segs2}), (_joined,)
+    print("[self-test] split_sections OK", file=sys.stderr)
 
     # loudnorm pass1 JSON 파싱(순수)
     _ln = _parse_loudnorm_json(
