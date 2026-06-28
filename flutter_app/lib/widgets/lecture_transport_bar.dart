@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/audio_controller.dart';
 import '../data/lecture_playlist.dart';
 import '../theme/app_theme.dart';
+import 'audio_progress_bar.dart';
 import 'focus_ring.dart';
 import 'study_audio_player.dart' show PlayPauseButton;
 
@@ -44,6 +45,12 @@ class LectureTransportBar extends StatelessWidget {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  AudioProgressBar(
+                    position: playlist.position,
+                    duration: playlist.duration,
+                    onSeek: playlist.seek,
+                  ),
+                  const SizedBox(height: Gap.sm),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -80,34 +87,86 @@ class LectureTransportBar extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: Gap.sm),
-                  Text(
-                    playlist.currentTitle ?? '오디오 강의',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      fontVariations: Wght.w700,
-                      color: c.text,
-                    ),
-                  ),
-                  if (status != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      status,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        fontVariations: Wght.w400,
-                        color: c.textMuted,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              playlist.currentTitle ?? '오디오 강의',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                fontVariations: Wght.w700,
+                                color: c.text,
+                              ),
+                            ),
+                            if (status != null) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                status,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  fontVariations: Wght.w400,
+                                  color: c.textMuted,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: Gap.sm),
+                      _ModeToggle(
+                          mode: playlist.mode, onTap: playlist.cycleMode),
+                    ],
+                  ),
                 ],
               );
             },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 재생 모드 토글 — 탭마다 cycleMode. 아이콘·툴팁이 현재 모드를 나타낸다.
+class _ModeToggle extends StatelessWidget {
+  const _ModeToggle({required this.mode, required this.onTap});
+
+  final PlayMode mode;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final (IconData icon, String label) = switch (mode) {
+      PlayMode.autoAll => (Icons.playlist_play, '전체 자동 재생'),
+      PlayMode.repeatOne => (Icons.repeat_one, '한 개 반복'),
+      PlayMode.single => (Icons.looks_one_outlined, '한 개만 재생'),
+    };
+    return FocusRing(
+      borderRadius: BorderRadius.circular(Radii.full),
+      child: Tooltip(
+        message: label,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.full),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: c.surface2,
+              borderRadius: BorderRadius.circular(Radii.full),
+              border: Border.all(color: c.border),
+            ),
+            child: Icon(icon, size: 20, color: c.accent, semanticLabel: label),
           ),
         ),
       ),
