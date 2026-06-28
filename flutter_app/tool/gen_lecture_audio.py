@@ -657,6 +657,42 @@ def _loudnorm_2pass(path: Path, target_i: float = -16.0,
     tmp.replace(path)
 
 
+def _segment_speech(seg: dict) -> str:
+    """세그먼트의 발음 텍스트(table=audioSummary, 그 외 scriptText)."""
+    if seg.get("skip"):
+        return ""
+    text = (seg.get("audioSummary") if seg.get("kind") == "table"
+            else seg.get("scriptText")) or ""
+    return text.strip()
+
+
+def chapters_from_segments(segments: list[dict]) -> list[dict]:
+    """헤딩별 오디오 위치 추정 — 직전까지 누적 발음 글자수 ÷ 총 발음 글자수(fraction).
+    글자수는 공백 제외(len(speech.replace(' ', ''))). 앵커 없는 헤딩은 제외.
+    반환 [{anchor,title,level,fraction}](선언 순서)."""
+    def _char_count(speech: str) -> int:
+        return len(speech.replace(" ", ""))
+
+    total = sum(_char_count(_segment_speech(s)) for s in segments)
+    chapters: list[dict] = []
+    acc = 0
+    for seg in segments:
+        speech = _segment_speech(seg)
+        if seg.get("kind") == "heading" and speech:
+            src = seg.get("sourceExcerpt") or ""
+            m = re.search(r"\{#([^}]+)\}", src)
+            hm = re.match(r"\s*(#{1,6})", src)
+            if m:
+                chapters.append({
+                    "anchor": m.group(1),
+                    "title": speech,
+                    "level": len(hm.group(1)) if hm else 2,
+                    "fraction": (acc / total) if total else 0.0,
+                })
+        acc += _char_count(speech)
+    return chapters
+
+
 def _content_type(path: Path) -> str:
     return {
         ".mp3": "audio/mpeg",
@@ -1039,6 +1075,32 @@ def _self_test() -> None:
                                     {"CLF-C02": {"say": "씨엘에프 씨 공이"}})
     assert h == [] and s == [], (h, s)                       # 약어 내부 숫자(02)는 수치 오탐 아님
     print("[self-test] check_token_preservation OK", file=sys.stderr)
+
+    # 제목 타임스탬프 fraction 계산
+    _segs = [
+        {"id": "s0", "kind": "paragraph", "scriptText": "가나다라", "skip": False,
+         "sourceExcerpt": "가나다라"},
+        {"id": "s1", "kind": "heading", "scriptText": "첫 제목", "skip": False,
+         "sourceExcerpt": "## 첫 제목 {#first}"},
+        {"id": "s2", "kind": "paragraph", "scriptText": "마바사", "skip": False,
+         "sourceExcerpt": "마바사"},
+        {"id": "s3", "kind": "heading", "scriptText": "둘째", "skip": False,
+         "sourceExcerpt": "### 둘째 {#second}"},
+        {"id": "s4", "kind": "source", "scriptText": "", "skip": True,
+         "sourceExcerpt": "출처"},
+        {"id": "s5", "kind": "heading", "scriptText": "앵커없음", "skip": False,
+         "sourceExcerpt": "## 앵커없음"},
+    ]
+    _ch = chapters_from_segments(_segs)
+    assert [c["anchor"] for c in _ch] == ["first", "second"], _ch  # 앵커없음 제외
+    assert _ch[0]["level"] == 2 and _ch[1]["level"] == 3, _ch
+    assert _ch[0]["title"] == "첫 제목", _ch
+    # 총 발음 글자수 = 4(가나다라)+3(첫제목)+3(마바사)+2(둘째)+4(앵커없음)=16
+    # first 직전 누적=4 → 4/16=0.25; second 직전 누적=4+3+3=10 → 10/16=0.625
+    assert abs(_ch[0]["fraction"] - 0.25) < 1e-9, _ch
+    assert abs(_ch[1]["fraction"] - 0.625) < 1e-9, _ch
+    assert chapters_from_segments([]) == [], "빈 입력"
+    print("[self-test] chapters_from_segments OK", file=sys.stderr)
 
     # loudnorm pass1 JSON 파싱(순수)
     _ln = _parse_loudnorm_json(
