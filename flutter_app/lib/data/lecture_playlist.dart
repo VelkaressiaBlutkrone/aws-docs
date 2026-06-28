@@ -2,8 +2,8 @@
 ///
 /// 오디오 페이지(CertAudioPage)와 학습문서 미니플레이어가 같은 인스턴스를 구독해
 /// 화면 전환에도 재생이 끊기지 않는다(주머니 라디오). 트랙 변경은
-/// select/next/prev/first/last로만 일어나고, 트랙 종료(ended)는 자동 전환하지
-/// 않는다(수동 전환 — iOS 잠금 자동전환 함정 회피).
+/// select/next/prev/first/last로만 일어나고, 재생 모드([PlayMode])에 따라
+/// 트랙 종료(ended) 시 자동 전환 여부가 결정된다.
 ///
 /// 설계: docs/superpowers/specs/2026-06-27-cert-audio-page-design.md
 library;
@@ -13,16 +13,25 @@ import 'package:flutter/foundation.dart';
 import 'audio_controller.dart';
 import 'content_index.dart';
 
+/// 재생 모드 — single: 트랙 끝나면 정지 / autoAll: 다음 트랙 자동 / repeatOne: 현재 반복.
+enum PlayMode { single, autoAll, repeatOne }
+
 class LecturePlaylist extends ChangeNotifier {
   LecturePlaylist({required AudioController controller})
       : _controller = controller {
-    _controller.addListener(notifyListeners); // 재생 상태 변화 재방출
+    _controller.addListener(_onControllerChange);
   }
 
   final AudioController _controller;
   List<ContentEntry> _queue = const <ContentEntry>[];
   int _index = 0;
   String _certCode = '';
+  PlayMode _mode = PlayMode.autoAll;
+  PlaybackState _lastState = PlaybackState.idle;
+
+  PlayMode get mode => _mode;
+  ValueListenable<Duration> get position => _controller.position;
+  ValueListenable<Duration?> get duration => _controller.duration;
 
   List<ContentEntry> get queue => _queue;
   int get index => _index;
@@ -102,9 +111,50 @@ class LecturePlaylist extends ChangeNotifier {
     }
   }
 
+  void seek(Duration to) => _controller.seek(to);
+
+  /// 모드 순환: autoAll → repeatOne → single → autoAll.
+  void cycleMode() {
+    _mode = switch (_mode) {
+      PlayMode.autoAll => PlayMode.repeatOne,
+      PlayMode.repeatOne => PlayMode.single,
+      PlayMode.single => PlayMode.autoAll,
+    };
+    notifyListeners();
+  }
+
+  void _onControllerChange() {
+    notifyListeners(); // 재생 상태 변화 재방출
+    final s = _controller.state;
+    final wasEnded = _lastState == PlaybackState.ended;
+    _lastState = s;
+    if (s == PlaybackState.ended && !wasEnded) _handleEnded();
+  }
+
+  void _handleEnded() {
+    switch (_mode) {
+      case PlayMode.single:
+        break;
+      case PlayMode.autoAll:
+        if (hasNext) next();
+        break;
+      case PlayMode.repeatOne:
+        _restartCurrent();
+        break;
+    }
+  }
+
+  /// 반복 — select(i)는 같은 트랙 재선택 시 재시작하지 않으므로 직접 load+play.
+  void _restartCurrent() {
+    final c = current;
+    if (c == null) return;
+    _controller.load(c.lectureAudioSrc);
+    _controller.play();
+  }
+
   @override
   void dispose() {
-    _controller.removeListener(notifyListeners);
+    _controller.removeListener(_onControllerChange);
     super.dispose();
   }
 }

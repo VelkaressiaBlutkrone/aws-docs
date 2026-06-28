@@ -6,10 +6,13 @@ import 'package:aws_docs/data/lecture_playlist.dart';
 
 class _Fake implements AudioBackend {
   final _ev = StreamController<AudioEvent>.broadcast();
+  final _pos = StreamController<Duration>.broadcast();
   String? src;
   int playCalls = 0;
   int pauseCalls = 0;
   int loads = 0;
+  double? seekedTo;
+  Duration? dur;
   @override
   Stream<AudioEvent> get events => _ev.stream;
   @override
@@ -22,13 +25,16 @@ class _Fake implements AudioBackend {
   @override
   void pause() => pauseCalls++;
   @override
-  void dispose() => _ev.close();
+  void dispose() {
+    _ev.close();
+    _pos.close();
+  }
   @override
-  void seek(double seconds) {}
+  void seek(double seconds) => seekedTo = seconds;
   @override
-  Stream<Duration> get positionStream => const Stream<Duration>.empty();
+  Stream<Duration> get positionStream => _pos.stream;
   @override
-  Duration? get duration => null;
+  Duration? get duration => dur;
   void emit(AudioEvent e) => _ev.add(e);
 }
 
@@ -121,12 +127,67 @@ void main() {
     expect(pl.index, 0);
   });
 
-  test('ended 이벤트는 인덱스 불변(수동 전환 — 자동전환 없음)', () async {
+  test('기본 모드는 autoAll', () {
+    expect(pl.mode, PlayMode.autoAll);
+  });
+
+  test('cycleMode: autoAll→repeatOne→single→autoAll', () {
+    pl.cycleMode();
+    expect(pl.mode, PlayMode.repeatOne);
+    pl.cycleMode();
+    expect(pl.mode, PlayMode.single);
+    pl.cycleMode();
+    expect(pl.mode, PlayMode.autoAll);
+  });
+
+  test('autoAll: ended 시 다음 트랙 재생', () async {
     pl.setQueue('CLF-C02', tracks);
     pl.select(0);
+    final loads0 = fake.loads;
     fake.emit(AudioEvent.ended);
     await Future<void>.delayed(Duration.zero);
-    expect(pl.index, 0); // 다음으로 넘어가지 않음
+    expect(pl.index, 1);
+    expect(fake.loads, loads0 + 1);
+  });
+
+  test('autoAll: 마지막 트랙 ended 시 정지(인덱스 불변·추가 로드 없음)', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.select(2);
+    final loads0 = fake.loads;
+    fake.emit(AudioEvent.ended);
+    await Future<void>.delayed(Duration.zero);
+    expect(pl.index, 2);
+    expect(fake.loads, loads0);
+  });
+
+  test('single: ended 시 정지(인덱스 불변·추가 로드 없음)', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.cycleMode(); // repeatOne
+    pl.cycleMode(); // single
+    pl.select(0);
+    final loads0 = fake.loads;
+    fake.emit(AudioEvent.ended);
+    await Future<void>.delayed(Duration.zero);
+    expect(pl.index, 0);
+    expect(fake.loads, loads0);
+  });
+
+  test('repeatOne: ended 시 현재 트랙 재로드(인덱스 불변)', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.cycleMode(); // repeatOne
+    pl.select(1);
+    final loads0 = fake.loads;
+    fake.emit(AudioEvent.ended);
+    await Future<void>.delayed(Duration.zero);
+    expect(pl.index, 1);
+    expect(fake.loads, loads0 + 1);
+  });
+
+  test('seek/position 통과', () {
+    pl.setQueue('CLF-C02', tracks);
+    pl.seek(const Duration(seconds: 10));
+    expect(fake.seekedTo, 10.0);
+    expect(pl.position.value, const Duration(seconds: 10));
   });
 
   test('openDoc: idle이면 해당 트랙 load(준비), 재생 안 함', () {
