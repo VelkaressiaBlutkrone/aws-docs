@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-2",
-  "generatedAt": "2026-06-26T13:40:27Z",
+  "generatedAt": "2026-06-28T09:12:46Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 3132093,
-    "sha256": "5aa13a33e85550aa12f3c1557cc0df13fab0e9fd38095b35e34466af3620680f",
+    "sizeBytes": 3129357,
+    "sha256": "d2cef3ca6d2fd148bd6b9f750d30fd65bad675049f12dd51681dfe8dd9278493",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,30 @@
   },
   "script": {
     "speechChars": 3763,
-    "chunkCount": 2,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "well-architected",
+      "title": "1) 에이더블유에스 웰 아키텍티드 프레임워크란",
+      "level": 3,
+      "fraction": 0.26435935198821797
+    },
+    {
+      "anchor": "six-pillars",
+      "title": "2) 6대 기둥 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.4163291605301915
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8263530927835051
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,25 +57,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "well-architected",
-      "title": "1) 에이더블유에스 웰 아키텍티드 프레임워크란",
-      "level": 3,
-      "fraction": 0.26270897304674173
-    },
-    {
-      "anchor": "six-pillars",
-      "title": "2) 6대 기둥 (시험 핵심)",
-      "level": 3,
-      "fraction": 0.415899010576595
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8307744796997611
-    }
-  ]
+  }
 }

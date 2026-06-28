@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-4",
-  "generatedAt": "2026-06-26T13:54:11Z",
+  "generatedAt": "2026-06-28T09:26:26Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6152061,
-    "sha256": "428c8fec8e07c09c2bbd43f6d67d0f07409648a7d1857cec5103a6da1f8e1223",
+    "sizeBytes": 6149613,
+    "sha256": "3eff06190c7db56fe5044b21609d50315f0880d137b41395bb035ce6319f3264",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,48 @@
   },
   "script": {
     "speechChars": 7600,
-    "chunkCount": 3,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "managed-vs-ec2",
+      "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나 ()",
+      "level": 3,
+      "fraction": 0.20355018500304436
+    },
+    {
+      "anchor": "relational",
+      "title": "2) 관계형 데이터베이스 — Amazon 알디에스와 Amazon Aurora",
+      "level": 3,
+      "fraction": 0.31349819680577024
+    },
+    {
+      "anchor": "dynamodb",
+      "title": "3) NoSQL — Amazon DynamoDB",
+      "level": 3,
+      "fraction": 0.4493466348180413
+    },
+    {
+      "anchor": "elasticache",
+      "title": "4) 인메모리 — Amazon ElastiCache",
+      "level": 3,
+      "fraction": 0.5477261018219287
+    },
+    {
+      "anchor": "dms",
+      "title": "5) 데이터베이스 마이그레이션 — 에이더블유에스 디엠에스 (그리고 에스씨티)",
+      "level": 3,
+      "fraction": 0.6243267294271931
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8554868624420402
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,43 +75,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "managed-vs-ec2",
-      "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나 ()",
-      "level": 3,
-      "fraction": 0.19745014710689768
-    },
-    {
-      "anchor": "relational",
-      "title": "2) 관계형 데이터베이스 — Amazon 알디에스와 Amazon Aurora",
-      "level": 3,
-      "fraction": 0.3036940176528277
-    },
-    {
-      "anchor": "dynamodb",
-      "title": "3) NoSQL — Amazon DynamoDB",
-      "level": 3,
-      "fraction": 0.44687806472703495
-    },
-    {
-      "anchor": "elasticache",
-      "title": "4) 인메모리 — Amazon ElastiCache",
-      "level": 3,
-      "fraction": 0.5415168355671788
-    },
-    {
-      "anchor": "dms",
-      "title": "5) 데이터베이스 마이그레이션 — 에이더블유에스 디엠에스 (그리고 에스씨티)",
-      "level": 3,
-      "fraction": 0.6180124223602484
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8492971559333116
-    }
-  ]
+  }
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-3",
-  "generatedAt": "2026-06-26T13:42:18Z",
+  "generatedAt": "2026-06-28T09:13:37Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 4092861,
-    "sha256": "e695d941f0419780d7e495a28abf35cbec4a7aa3b84a009144941cd801065d8e",
+    "sizeBytes": 4093005,
+    "sha256": "2cf27e781e3577dca2d5d9c64e9a44a321dfd513ed3ee7ef787d0c66fd4339e8",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -26,10 +26,36 @@
   },
   "script": {
     "speechChars": 5025,
-    "chunkCount": 2,
+    "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
   },
+  "chapters": [
+    {
+      "anchor": "caf",
+      "title": "1) 클라우드 도입 전략 — 에이더블유에스 씨에이에프",
+      "level": 3,
+      "fraction": 0.23413089373680507
+    },
+    {
+      "anchor": "migration-tools",
+      "title": "2) 마이그레이션 도구 — 디엠에스와 Snowball (시험 핵심)",
+      "level": 3,
+      "fraction": 0.4307881773399015
+    },
+    {
+      "anchor": "datasync-7r",
+      "title": "3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강)",
+      "level": 3,
+      "fraction": 0.6301196340605207
+    },
+    {
+      "anchor": "pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8744194229415905
+    }
+  ],
   "generator": {
     "tool": "flutter_app/tool/gen_lecture_audio.py",
     "engine": "polly",
@@ -37,31 +63,5 @@
     "pollyEngine": "neural",
     "region": "ap-northeast-2",
     "maxChars": 0
-  },
-  "chapters": [
-    {
-      "anchor": "caf",
-      "title": "1) 클라우드 도입 전략 — 에이더블유에스 씨에이에프",
-      "level": 3,
-      "fraction": 0.22950411163717918
-    },
-    {
-      "anchor": "migration-tools",
-      "title": "2) 마이그레이션 도구 — 디엠에스와 Snowball (시험 핵심)",
-      "level": 3,
-      "fraction": 0.4156491402940444
-    },
-    {
-      "anchor": "datasync-7r",
-      "title": "3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강)",
-      "level": 3,
-      "fraction": 0.6249688512334911
-    },
-    {
-      "anchor": "pitfalls",
-      "title": "흔한 함정",
-      "level": 2,
-      "fraction": 0.8704211313231996
-    }
-  ]
+  }
 }

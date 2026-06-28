@@ -423,14 +423,30 @@ def script_to_speech(script: dict) -> str:
 
 
 def run_synthesize(args) -> None:
+    import tempfile
     script = json.loads(args.script.read_text(encoding="utf-8"))
-    speech = script_to_speech(script)
-    if not speech.strip():
+    sections = split_sections(script["segments"])
+    if not any(s["speech"].strip() for s in sections):
         sys.exit("script.json에 합성할 scriptText가 없습니다.")
     max_chars = args.max_chars or 2900
-    chunks = chunk_text(speech, max_chars)
-    print(f"[synthesize] {len(speech)}자 → {len(chunks)}청크", file=sys.stderr)
-    synthesize_polly(chunks, args.out, args.voice, args.polly_engine, args.region)
+    final = bytearray()
+    durations_ms: list[int] = []
+    with tempfile.TemporaryDirectory() as td:
+        for i, sec in enumerate(sections):
+            sp = sec["speech"]
+            if not sp.strip():
+                durations_ms.append(0)
+                continue
+            chunks = chunk_text(sp, max_chars)
+            data = _synthesize_chunks_to_bytes(
+                chunks, args.voice, args.polly_engine, args.region)
+            tmp = Path(td) / f"sec{i}.mp3"
+            tmp.write_bytes(data)
+            durations_ms.append(_audio_duration_ms(tmp))
+            final += data if not final else _strip_id3v2(data)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_bytes(bytes(final))
+    print(f"[synthesize] {len(sections)}섹션 → {args.out}", file=sys.stderr)
     if not args.skip_loudnorm:
         import shutil
         if shutil.which("ffmpeg") is None:
@@ -441,13 +457,14 @@ def run_synthesize(args) -> None:
     else:
         print("[loudnorm] --skip-loudnorm: 정규화 건너뜀", file=sys.stderr)
     id3 = _id3_count(args.out)
-    print(f"[ID3] {id3}개 — {'OK' if id3 <= 1 else '다중(단일 요청 권장)'}", file=sys.stderr)
+    print(f"[ID3] {id3}개 — {'OK' if id3 <= 1 else '다중'}", file=sys.stderr)
+    speech_all = "\n".join(s["speech"] for s in sections if s["speech"])
     meta = build_audio_meta(
         md_path=args.script, audio_path=args.out, doc_id=script["docId"],
-        speech=speech, chunks=chunks, issues=[], args=args, mode="synthesized",
-        chapters=chapters_from_segments(script["segments"]))
-    # SSOT: md를 재파싱하지 않으므로 source는 script.json 기록을 그대로 옮긴다.
-    meta["source"] = {"asset": script.get("sourceAsset"), "sha256": script.get("sourceHash")}
+        speech=speech_all, chunks=[], issues=[], args=args, mode="synthesized",
+        chapters=chapters_from_section_durations(sections, durations_ms))
+    meta["source"] = {"asset": script.get("sourceAsset"),
+                      "sha256": script.get("sourceHash")}
     meta["script"]["reviewStatus"] = script.get("reviewStatus", "needs_human_review")
     write_json(args.out.with_name("audio_meta.json"), meta)
     print(f"[완료] {args.out}", file=sys.stderr)
@@ -635,6 +652,19 @@ def _parse_loudnorm_json(stderr_text: str) -> dict:
     return json.loads(stderr_text[start:end + 1])
 
 
+def _audio_duration_ms(path: Path) -> int:
+    """ffprobe로 오디오 길이(ms). ffprobe 없으면 종료."""
+    import shutil
+    import subprocess
+    if shutil.which("ffprobe") is None:
+        raise RuntimeError("ffprobe를 찾을 수 없습니다(섹션 길이 측정 필요).")
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+         "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
+        capture_output=True, text=True, check=True).stdout.strip()
+    return round(float(out) * 1000)
+
+
 def _loudnorm_2pass(path: Path, target_i: float = -16.0,
                     tp: float = -1.5, lra: float = 11.0,
                     ar: int = 24000, br: str = "48k") -> None:
@@ -700,6 +730,51 @@ def chapters_from_segments(segments: list[dict]) -> list[dict]:
                     "fraction": (acc / total) if total else 0.0,
                 })
         acc += _char_count(speech)
+    return chapters
+
+
+def split_sections(segments: list[dict]) -> list[dict]:
+    """비-skip 세그먼트를 앵커 있는 heading 경계로 섹션 분할.
+    section = {anchor, title, level, speech}. intro(첫 앵커 헤딩 전)는 anchor=None.
+    앵커 없는 헤딩은 경계가 아니라 현재 섹션 본문에 포함.
+    불변식: '\\n'.join(빈 아닌 섹션 speech) == script_to_speech."""
+    sections: list[dict] = []
+    cur = {"anchor": None, "title": None, "level": None, "parts": []}
+    for seg in segments:
+        speech = _segment_speech(seg)
+        if seg.get("kind") == "heading" and speech:
+            src = seg.get("sourceExcerpt") or ""
+            m = re.search(r"\{#([^}]+)\}", src)
+            hm = re.match(r"\s*(#{1,6})", src)
+            if m and hm:
+                sections.append(cur)
+                cur = {"anchor": m.group(1), "title": speech,
+                       "level": len(hm.group(1)), "parts": [speech]}
+                continue
+        if speech:
+            cur["parts"].append(speech)
+    sections.append(cur)
+    for sec in sections:
+        sec["speech"] = "\n".join(sec.pop("parts"))
+    return sections
+
+
+def chapters_from_section_durations(sections: list[dict],
+                                    durations_ms: list[int]) -> list[dict]:
+    """섹션별 실측 길이 → 앵커 있는 섹션마다 {anchor,title,level,fraction}.
+    fraction = 누적 시작 ms ÷ Σ길이(total 0이면 0.0)."""
+    total = sum(durations_ms)
+    chapters: list[dict] = []
+    acc = 0
+    for sec, dur in zip(sections, durations_ms):
+        if sec.get("anchor"):
+            chapters.append({
+                "anchor": sec["anchor"],
+                "title": sec["title"],
+                "level": sec["level"],
+                "fraction": (acc / total) if total else 0.0,
+            })
+        acc += dur
     return chapters
 
 
@@ -786,14 +861,11 @@ def _strip_id3v2(data: bytes) -> bytes:
     return data
 
 
-def synthesize_polly(chunks, out_path: Path, voice: str, engine: str,
-                     region: str) -> None:
-    """Amazon Polly로 청크별 mp3 합성 → 1개 파일(ffmpeg 불필요). neural은 요청당
-    3000자 한도라 여러 청크가 될 수 있어, 첫 청크 외 ID3v2를 떼어 ID3를 1개로 유지(P0-1)."""
+def _synthesize_chunks_to_bytes(chunks, voice: str, engine: str,
+                                region: str) -> bytes:
+    """청크별 Polly mp3 → 1개 bytes(첫 청크 외 ID3v2 strip)."""
     import boto3
-
     polly = boto3.client("polly", region_name=region)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
     buf = bytearray()
     for i, chunk in enumerate(chunks):
         resp = polly.synthesize_speech(
@@ -803,7 +875,15 @@ def synthesize_polly(chunks, out_path: Path, voice: str, engine: str,
         data = resp["AudioStream"].read()
         buf += data if i == 0 else _strip_id3v2(data)
         print(f"  Polly {i + 1}/{len(chunks)}", file=sys.stderr)
-    out_path.write_bytes(bytes(buf))
+    return bytes(buf)
+
+
+def synthesize_polly(chunks, out_path: Path, voice: str, engine: str,
+                     region: str) -> None:
+    """Amazon Polly로 청크별 mp3 합성 → 1개 파일(ffmpeg 불필요). neural은 요청당
+    3000자 한도라 여러 청크가 될 수 있어, 첫 청크 외 ID3v2를 떼어 ID3를 1개로 유지(P0-1)."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_bytes(_synthesize_chunks_to_bytes(chunks, voice, engine, region))
 
 
 def synthesize_melotts(chunks, out_path: Path, speed: float, device: str) -> None:
@@ -1114,6 +1194,31 @@ def _self_test() -> None:
     assert chapters_from_segments([]) == [], "빈 입력"
     print("[self-test] chapters_from_segments OK", file=sys.stderr)
 
+    # split_sections: 앵커 헤딩 경계 + intro + 불변식
+    _segs2 = [
+        {"id": "s0", "kind": "paragraph", "scriptText": "인트로 본문", "skip": False,
+         "sourceExcerpt": "인트로 본문"},
+        {"id": "s1", "kind": "heading", "scriptText": "첫 장", "skip": False,
+         "sourceExcerpt": "## 첫 장 {#a}"},
+        {"id": "s2", "kind": "paragraph", "scriptText": "에이 본문", "skip": False,
+         "sourceExcerpt": "에이 본문"},
+        {"id": "s3", "kind": "heading", "scriptText": "소제목", "skip": False,
+         "sourceExcerpt": "### 소제목"},  # 앵커 없음 → 경계 아님
+        {"id": "s4", "kind": "heading", "scriptText": "둘째 장", "skip": False,
+         "sourceExcerpt": "## 둘째 장 {#b}"},
+        {"id": "s5", "kind": "source", "scriptText": "", "skip": True,
+         "sourceExcerpt": "출처"},
+    ]
+    _secs = split_sections(_segs2)
+    assert [s["anchor"] for s in _secs] == [None, "a", "b"], _secs  # intro + 앵커 2
+    assert _secs[1]["title"] == "첫 장" and _secs[1]["level"] == 2, _secs
+    # 앵커 없는 "소제목"은 섹션 a에 포함(경계 아님)
+    assert "소제목" in _secs[1]["speech"], _secs[1]
+    # 불변식: 빈 아닌 섹션 speech 이으면 script_to_speech와 동일
+    _joined = "\n".join(s["speech"] for s in _secs if s["speech"])
+    assert _joined == script_to_speech({"segments": _segs2}), (_joined,)
+    print("[self-test] split_sections OK", file=sys.stderr)
+
     # loudnorm pass1 JSON 파싱(순수)
     _ln = _parse_loudnorm_json(
         'ffmpeg noise\n[Parsed_loudnorm_0 @ 0x1] \n'
@@ -1133,6 +1238,7 @@ def _self_test() -> None:
             _sp.run(["ffmpeg", "-hide_banner", "-y", "-f", "lavfi",
                      "-i", "sine=frequency=440:duration=1", str(_tone)],
                     capture_output=True, text=True, check=True)
+            assert _audio_duration_ms(_tone) >= 900, _audio_duration_ms(_tone)  # ~1s 톤
             _loudnorm_2pass(_tone)
             assert _tone.exists() and _tone.stat().st_size > 0, "loudnorm 출력 없음"
             assert _id3_count(_tone) <= 1, "loudnorm 출력 ID3 다중"
@@ -1161,6 +1267,20 @@ def _self_test() -> None:
                                             "level": 1, "fraction": 0.0}])
         assert _meta["chapters"][0]["anchor"] == "x", _meta
     print("[self-test] build_audio_meta chapters OK", file=sys.stderr)
+
+    # chapters_from_section_durations: 누적 시작/총합
+    _secs3 = [
+        {"anchor": None, "title": None, "level": None, "speech": "intro"},
+        {"anchor": "a", "title": "A", "level": 2, "speech": "x"},
+        {"anchor": "b", "title": "B", "level": 2, "speech": "y"},
+    ]
+    _durs = [1000, 3000, 6000]  # total 10000; a 시작=1000→0.1; b 시작=4000→0.4
+    _ch2 = chapters_from_section_durations(_secs3, _durs)
+    assert [c["anchor"] for c in _ch2] == ["a", "b"], _ch2  # intro 제외
+    assert abs(_ch2[0]["fraction"] - 0.1) < 1e-9, _ch2
+    assert abs(_ch2[1]["fraction"] - 0.4) < 1e-9, _ch2
+    assert chapters_from_section_durations(_secs3, [0, 0, 0])[0]["fraction"] == 0.0
+    print("[self-test] chapters_from_section_durations OK", file=sys.stderr)
 
     print("self-test OK")
 
