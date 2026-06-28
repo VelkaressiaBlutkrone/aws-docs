@@ -150,6 +150,17 @@ void main() {
     expect(fake.loads, loads0 + 1);
   });
 
+  test('ended 재진입 가드: 연속 ended emit 시 next()는 1회만', () async {
+    pl.setQueue('CLF-C02', tracks);
+    pl.select(0);
+    final loads0 = fake.loads;
+    fake.emit(AudioEvent.ended); // 첫 번째
+    fake.emit(AudioEvent.ended); // 두 번째 — state 여전히 ended
+    await Future<void>.delayed(Duration.zero);
+    expect(pl.index, 1);
+    expect(fake.loads, loads0 + 1); // next() 1회만(이중 전진 없음)
+  });
+
   test('autoAll: 마지막 트랙 ended 시 정지(인덱스 불변·추가 로드 없음)', () async {
     pl.setQueue('CLF-C02', tracks);
     pl.select(2);

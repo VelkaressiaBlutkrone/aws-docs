@@ -127,8 +127,8 @@ class LecturePlaylist extends ChangeNotifier {
     notifyListeners(); // 재생 상태 변화 재방출
     final s = _controller.state;
     final wasEnded = _lastState == PlaybackState.ended;
-    _lastState = s;
     if (s == PlaybackState.ended && !wasEnded) _handleEnded();
+    _lastState = s; // _handleEnded() 후 갱신 — ended 재진입 가드가 동기 연속 emit에도 작동하도록
   }
 
   void _handleEnded() {
