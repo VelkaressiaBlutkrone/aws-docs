@@ -811,6 +811,77 @@ def _josa_ro(word: str) -> str:
     return "로" if jong in (0, 8) else "으로"
 
 
+_ANCHOR_RE = re.compile(r"\{#[^}]+\}")
+
+
+def _intro_text(title: str, idx: int) -> str:
+    eul = _josa_eul(title)
+    return [
+        f"이번 강의에서는 {title}{eul} 다룹니다.",
+        f"{title}, 지금부터 함께 살펴보겠습니다.",
+        f"이번 시간에는 {title}{eul} 짚어 보겠습니다.",
+    ][idx % 3]
+
+
+def _transition_text(sec: str, idx: int) -> str:
+    eul = _josa_eul(sec)
+    ro = _josa_ro(sec)
+    return [
+        f"다음으로 {sec}{eul} 살펴보겠습니다.",
+        f"이어서 {sec}{ro} 넘어가겠습니다.",
+        f"이번에는 {sec}입니다.",
+        f"계속해서 {sec}{eul} 보겠습니다.",
+    ][idx % 4]
+
+
+def _outro_text(idx: int) -> str:
+    return [
+        "여기까지가 이 주제의 핵심입니다.",
+        "이상으로 이번 강의를 마칩니다.",
+        "핵심은 여기까지입니다. 수고하셨습니다.",
+    ][idx % 3]
+
+
+def _mk_connector(n: int, text: str) -> dict:
+    return {"id": f"con{n:03d}", "kind": "connector", "sourceExcerpt": "",
+            "scriptText": text, "audioSummary": None, "skip": False, "issues": []}
+
+
+def insert_connectors(segments: list[dict], title: str) -> int:
+    """강의 연결 멘트(도입1 + 앵커 섹션 전환N + 마무리1)를 결정적 회전 템플릿으로
+    삽입한다. 삽입 세그먼트는 kind='connector', sourceExcerpt='' (gate 토큰검사 스킵),
+    순수 네비게이션 평문. 반환: 삽입 수. 멱등(이미 connector 있으면 0)."""
+    if any(s.get("kind") == "connector" for s in segments):
+        return 0
+
+    def _speaks(s: dict) -> bool:
+        return (not s.get("skip")) and bool(s.get("scriptText") or s.get("audioSummary"))
+
+    speak_idx = [i for i, s in enumerate(segments) if _speaks(s)]
+    if not speak_idx:
+        return 0
+    first_i, last_i = speak_idx[0], speak_idx[-1]
+    rot = len(title)  # 도입·마무리 회전 키(문서별 결정적)
+    out: list[dict] = []
+    cnt = 0
+    anchor_n = 0
+    for i, s in enumerate(segments):
+        if (s.get("kind") == "heading" and not s.get("skip")
+                and _ANCHOR_RE.search(s.get("sourceExcerpt") or "")):
+            out.append(_mk_connector(cnt, _transition_text(s.get("scriptText") or "", anchor_n)))
+            cnt += 1
+            anchor_n += 1
+        out.append(s)
+        if i == first_i:
+            out.append(_mk_connector(cnt, _intro_text(title, rot)))
+            cnt += 1
+        if i == last_i:
+            out.append(_mk_connector(cnt, _outro_text(rot)))
+            cnt += 1
+    segments[:] = out
+    return cnt
+
+
 def split_sections(segments: list[dict]) -> list[dict]:
     """비-skip 세그먼트를 앵커 있는 heading 경계로 섹션 분할.
     section = {anchor, title, level, speech}. intro(첫 앵커 헤딩 전)는 anchor=None.
@@ -1420,6 +1491,44 @@ def _self_test() -> None:
     assert _josa_ro("이점") == "으로"                        # 받침 ㅁ(≠0,≠8)
     assert _josa_ro("인프라") == "로"                        # 받침 없음
     assert _josa_ro("서울") == "로"                          # 받침 ㄹ(=8)
+
+    # Stage A2: insert_connectors(도입1+앵커전환N+마무리1)
+    _csegs = [
+        {"id": "seg000", "kind": "heading", "sourceExcerpt": "# 클라우드의 이점",
+         "scriptText": "클라우드의 이점", "skip": False},
+        {"id": "seg001", "kind": "paragraph", "sourceExcerpt": "커버하는…",
+         "scriptText": "메타", "skip": True},
+        {"id": "seg002", "kind": "heading", "sourceExcerpt": "## 왜 중요한가",
+         "scriptText": "왜 중요한가", "skip": False},
+        {"id": "seg003", "kind": "paragraph", "sourceExcerpt": "본문",
+         "scriptText": "본문1", "skip": False},
+        {"id": "seg004", "kind": "heading", "sourceExcerpt": "## 핵심 개념 {#core}",
+         "scriptText": "핵심 개념", "skip": False},
+        {"id": "seg005", "kind": "paragraph", "sourceExcerpt": "본문",
+         "scriptText": "본문2", "skip": False},
+        {"id": "seg006", "kind": "heading", "sourceExcerpt": "## 글로벌 인프라 {#infra}",
+         "scriptText": "글로벌 인프라", "skip": False},
+        {"id": "seg007", "kind": "paragraph", "sourceExcerpt": "본문",
+         "scriptText": "본문3", "skip": False},
+    ]
+    _added = insert_connectors(_csegs, "클라우드의 이점")
+    assert _added == 4, _added                               # 도입1+전환2(core·infra)+마무리1
+    _conn = [s for s in _csegs if s["kind"] == "connector"]
+    assert len(_conn) == 4
+    assert all(s["sourceExcerpt"] == "" and s["skip"] is False for s in _conn), _conn
+    _ctexts = [s["scriptText"] for s in _conn]
+    # 도입: len("클라우드의 이점")=8 %3=2 → "짚어 보겠습니다"
+    assert any("짚어 보겠습니다" in t for t in _ctexts), _ctexts
+    # 전환: core(0%4=0) "다음으로 핵심 개념을 살펴보겠습니다", infra(1%4=1) "이어서 글로벌 인프라로 넘어가겠습니다"
+    assert "다음으로 핵심 개념을 살펴보겠습니다." in _ctexts, _ctexts
+    assert "이어서 글로벌 인프라로 넘어가겠습니다." in _ctexts, _ctexts
+    # 마무리: 8%3=2 → "수고하셨습니다"
+    assert any("수고하셨습니다" in t for t in _ctexts), _ctexts
+    # 전환은 앵커 heading 직전
+    _ic = next(i for i, s in enumerate(_csegs) if s.get("scriptText") == "핵심 개념")
+    assert _csegs[_ic - 1]["kind"] == "connector" and "핵심 개념" in _csegs[_ic - 1]["scriptText"]
+    # 멱등
+    assert insert_connectors(_csegs, "클라우드의 이점") == 0, "멱등 위반"
 
     print("self-test OK")
 
