@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-1",
-  "generatedAt": "2026-06-29T01:34:14Z",
+  "generatedAt": "2026-06-29T03:13:44Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 3433773,
-    "sha256": "4f18325a4fbdd38e864f8401b89c869a4f955bfbd80740c8d45ecf75b1815c2c",
+    "sizeBytes": 3582237,
+    "sha256": "3b97df993837c7d9b8f5c605c587dd0d8ddb4a787bf9fdb0728d845685ec0ecc",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 4178,
+    "speechChars": 4349,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,31 +35,31 @@
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.13488801275060816
+      "fraction": 0.14377035339524785
     },
     {
       "anchor": "core-benefits",
       "title": "2) 클라우드의 핵심 이점 (시험 핵심)",
       "level": 3,
-      "fraction": 0.2590806140424461
+      "fraction": 0.2688859405781369
     },
     {
       "anchor": "ha-elasticity",
       "title": "3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기",
       "level": 3,
-      "fraction": 0.44622934317590807
+      "fraction": 0.45414706710087244
     },
     {
       "anchor": "global-infra",
       "title": "4) 글로벌 인프라의 이점",
       "level": 3,
-      "fraction": 0.6051086318261891
+      "fraction": 0.6121095163430226
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8537454911500713
+      "fraction": 0.8554255618542195
     }
   ],
   "generator": {

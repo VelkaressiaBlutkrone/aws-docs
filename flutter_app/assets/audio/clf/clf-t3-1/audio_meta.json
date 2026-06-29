@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-1",
-  "generatedAt": "2026-06-29T01:43:32Z",
+  "generatedAt": "2026-06-29T03:22:55Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6095181,
-    "sha256": "f7f77a42f5779d3c2abef48e2d0db0b14eee7e25d5b3374c4fcd0e375e2ad579",
+    "sizeBytes": 6278349,
+    "sha256": "b345a30110277b84596dba368bf61887ba82bcbfb4efb784febff3f08229d4ab",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 7516,
+    "speechChars": 7745,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,43 +35,43 @@
       "anchor": "access-methods",
       "title": "1) 에이더블유에스를 다루는 네 가지 방법 — 콘솔 · 씨엘아이 · 에스디케이 · IaC",
       "level": 3,
-      "fraction": 0.09398922597108024
+      "fraction": 0.09815120653270942
     },
     {
       "anchor": "iac-cloudformation",
       "title": "2) IaC와 에이더블유에스 CloudFormation — 인프라를 코드로",
       "level": 3,
-      "fraction": 0.2040213590397883
+      "fraction": 0.2109138453069089
     },
     {
       "anchor": "oneoff-vs-repeat",
       "title": "3) 일회성 대 반복 프로세스",
       "level": 3,
-      "fraction": 0.3063510065211228
+      "fraction": 0.3135379392604826
     },
     {
       "anchor": "deployment-models",
       "title": "4) 배포 모델 — 클라우드 · 하이브리드 · 온프레미스",
       "level": 3,
-      "fraction": 0.37023910783479824
+      "fraction": 0.3782227727314432
     },
     {
       "anchor": "connectivity",
       "title": "5) 연결 옵션 — 공용 인터넷 · 브이피엔 · Direct Connect (3.5 연계)",
       "level": 3,
-      "fraction": 0.45151686986107176
+      "fraction": 0.45949169648591615
     },
     {
       "anchor": "deployment-ops-tools",
       "title": "6) 배포·운영 자동화 도구 — Beanstalk · 씨디케이 · Systems Manager · Code",
       "level": 3,
-      "fraction": 0.5505859559587941
+      "fraction": 0.5591797412606662
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8125413476987052
+      "fraction": 0.8157170382603909
     }
   ],
   "generator": {

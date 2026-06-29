@@ -561,6 +561,18 @@ def run_descaffold(args) -> None:
           file=sys.stderr)
 
 
+def run_connectors(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    segs = script["segments"]
+    title = next((s.get("scriptText", "") for s in segs
+                  if s.get("kind") == "heading"), "")
+    added = insert_connectors(segs, title)
+    if added:
+        script["reviewStatus"] = "needs_human_review"
+    write_json(args.script, script)
+    print(f"[connectors] {added}개 연결문 삽입 → {args.script}", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -783,6 +795,115 @@ def mark_scaffolding(segments: list[dict]) -> int:
             continue
         i += 1
     return marked
+
+
+def _has_batchim(word: str) -> bool:
+    """마지막 글자가 Hangul 음절이고 받침이 있으면 True. 비-Hangul/빈 문자열은 False."""
+    if not word:
+        return False
+    ch = word[-1]
+    if not ("가" <= ch <= "힣"):
+        return False
+    return (ord(ch) - 0xAC00) % 28 != 0
+
+
+def _josa_eul(word: str) -> str:
+    """목적격 조사 을/를."""
+    return "을" if _has_batchim(word) else "를"
+
+
+def _josa_ro(word: str) -> str:
+    """부사격 조사 으로/로(받침 없거나 ㄹ받침이면 '로')."""
+    if not word:
+        return "로"
+    ch = word[-1]
+    if not ("가" <= ch <= "힣"):
+        return "로"
+    jong = (ord(ch) - 0xAC00) % 28
+    return "로" if jong in (0, 8) else "으로"
+
+
+_ANCHOR_RE = re.compile(r"\{#[^}]+\}")
+
+
+def _intro_text(title: str, idx: int) -> str:
+    eul = _josa_eul(title)
+    return [
+        f"이번 강의에서는 {title}{eul} 다룹니다.",
+        f"{title}, 지금부터 함께 살펴보겠습니다.",
+        f"이번 시간에는 {title}{eul} 짚어 보겠습니다.",
+    ][idx % 3]
+
+
+def _transition_text(sec: str, idx: int) -> str:
+    eul = _josa_eul(sec)
+    ro = _josa_ro(sec)
+    return [
+        f"다음으로 {sec}{eul} 살펴보겠습니다.",
+        f"이어서 {sec}{ro} 넘어가겠습니다.",
+        f"이번에는 {sec}입니다.",
+        f"계속해서 {sec}{eul} 보겠습니다.",
+    ][idx % 4]
+
+
+def _outro_text(idx: int) -> str:
+    return [
+        "여기까지가 이 주제의 핵심입니다.",
+        "이상으로 이번 강의를 마칩니다.",
+        "핵심은 여기까지입니다. 수고하셨습니다.",
+    ][idx % 3]
+
+
+def _clean_section_title(title: str) -> str:
+    """헤딩 원문에서 음성용 섹션 제목 추출: 선행 번호(N)) 제거,
+    첫 em-dash(—) 앞까지, 괄호 부연 제거, 중점(·)→쉼표."""
+    t = re.sub(r"^\s*\d+\)\s*", "", title)
+    t = re.split(r"\s*—\s*", t, maxsplit=1)[0]
+    t = re.sub(r"\s*\([^)]*\)", "", t)
+    t = re.sub(r"\s*·\s*", ", ", t)
+    t = t.strip().strip(",").strip()
+    return t or re.sub(r"^\s*\d+\)\s*", "", title).strip()
+
+
+def _mk_connector(n: int, text: str) -> dict:
+    return {"id": f"con{n:03d}", "kind": "connector", "sourceExcerpt": "",
+            "scriptText": text, "audioSummary": None, "skip": False, "issues": []}
+
+
+def insert_connectors(segments: list[dict], title: str) -> int:
+    """강의 연결 멘트(도입1 + 앵커 섹션 전환N + 마무리1)를 결정적 회전 템플릿으로
+    삽입한다. 삽입 세그먼트는 kind='connector', sourceExcerpt='' (gate 토큰검사 스킵),
+    순수 네비게이션 평문. 반환: 삽입 수. 멱등(이미 connector 있으면 0)."""
+    if any(s.get("kind") == "connector" for s in segments):
+        return 0
+    title = _clean_section_title(title)  # 도입구도 H1 장식(번호·괄호·중점) 정제
+
+    def _speaks(s: dict) -> bool:
+        return (not s.get("skip")) and bool(s.get("scriptText") or s.get("audioSummary"))
+
+    speak_idx = [i for i, s in enumerate(segments) if _speaks(s)]
+    if not speak_idx:
+        return 0
+    first_i, last_i = speak_idx[0], speak_idx[-1]
+    rot = len(title)  # 도입·마무리 회전 키(문서별 결정적)
+    out: list[dict] = []
+    cnt = 0
+    anchor_n = 0
+    for i, s in enumerate(segments):
+        if (s.get("kind") == "heading" and not s.get("skip")
+                and _ANCHOR_RE.search(s.get("sourceExcerpt") or "")):
+            out.append(_mk_connector(cnt, _transition_text(_clean_section_title(s.get("scriptText") or ""), anchor_n)))
+            cnt += 1
+            anchor_n += 1
+        out.append(s)
+        if i == first_i:
+            out.append(_mk_connector(cnt, _intro_text(title, rot)))
+            cnt += 1
+        if i == last_i:
+            out.append(_mk_connector(cnt, _outro_text(rot)))
+            cnt += 1
+    segments[:] = out
+    return cnt
 
 
 def split_sections(segments: list[dict]) -> list[dict]:
@@ -1386,6 +1507,76 @@ def _self_test() -> None:
     assert _r["reviewStatus"] == "needs_human_review", _r
     print("[self-test] descaffold I/O OK", file=sys.stderr)
 
+    # Stage A2: josa 헬퍼(순수)
+    assert _josa_eul("이점") == "을", _josa_eul("이점")      # 점 받침 ㅁ
+    assert _josa_eul("핵심 개념") == "을"                    # 념 받침 ㅁ
+    assert _josa_eul("인프라") == "를"                       # 라 받침 없음
+    assert _josa_eul("AWS") == "를"                          # 비-Hangul 끝
+    assert _josa_ro("이점") == "으로"                        # 받침 ㅁ(≠0,≠8)
+    assert _josa_ro("인프라") == "로"                        # 받침 없음
+    assert _josa_ro("서울") == "로"                          # 받침 ㄹ(=8)
+
+    # Stage A2: 섹션 제목 정제
+    assert _clean_section_title("2) 클라우드의 핵심 이점 (시험 핵심)") == "클라우드의 핵심 이점"
+    assert _clean_section_title("3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기") == "고가용성, 탄력성, 민첩성"
+    assert _clean_section_title("핵심 개념") == "핵심 개념"
+    assert _clean_section_title("탄력성으로 비용 최적화 — Auto Scaling (보강)") == "탄력성으로 비용 최적화"
+
+    # Stage A2: insert_connectors(도입1+앵커전환N+마무리1)
+    _csegs = [
+        {"id": "seg000", "kind": "heading", "sourceExcerpt": "# 클라우드의 이점",
+         "scriptText": "클라우드의 이점", "skip": False},
+        {"id": "seg001", "kind": "paragraph", "sourceExcerpt": "커버하는…",
+         "scriptText": "메타", "skip": True},
+        {"id": "seg002", "kind": "heading", "sourceExcerpt": "## 왜 중요한가",
+         "scriptText": "왜 중요한가", "skip": False},
+        {"id": "seg003", "kind": "paragraph", "sourceExcerpt": "본문",
+         "scriptText": "본문1", "skip": False},
+        {"id": "seg004", "kind": "heading", "sourceExcerpt": "## 핵심 개념 {#core}",
+         "scriptText": "핵심 개념", "skip": False},
+        {"id": "seg005", "kind": "paragraph", "sourceExcerpt": "본문",
+         "scriptText": "본문2", "skip": False},
+        {"id": "seg006", "kind": "heading", "sourceExcerpt": "## 글로벌 인프라 {#infra}",
+         "scriptText": "글로벌 인프라", "skip": False},
+        {"id": "seg007", "kind": "paragraph", "sourceExcerpt": "본문",
+         "scriptText": "본문3", "skip": False},
+    ]
+    _added = insert_connectors(_csegs, "클라우드의 이점")
+    assert _added == 4, _added                               # 도입1+전환2(core·infra)+마무리1
+    _conn = [s for s in _csegs if s["kind"] == "connector"]
+    assert len(_conn) == 4
+    assert all(s["sourceExcerpt"] == "" and s["skip"] is False for s in _conn), _conn
+    _ctexts = [s["scriptText"] for s in _conn]
+    # 도입: len("클라우드의 이점")=8 %3=2 → "짚어 보겠습니다"
+    assert any("짚어 보겠습니다" in t for t in _ctexts), _ctexts
+    # 전환: core(0%4=0) "다음으로 핵심 개념을 살펴보겠습니다", infra(1%4=1) "이어서 글로벌 인프라로 넘어가겠습니다"
+    assert "다음으로 핵심 개념을 살펴보겠습니다." in _ctexts, _ctexts
+    assert "이어서 글로벌 인프라로 넘어가겠습니다." in _ctexts, _ctexts
+    # 마무리: 8%3=2 → "수고하셨습니다"
+    assert any("수고하셨습니다" in t for t in _ctexts), _ctexts
+    # 전환은 앵커 heading 직전
+    _ic = next(i for i, s in enumerate(_csegs) if s.get("scriptText") == "핵심 개념")
+    assert _csegs[_ic - 1]["kind"] == "connector" and "핵심 개념" in _csegs[_ic - 1]["scriptText"]
+    # 멱등
+    assert insert_connectors(_csegs, "클라우드의 이점") == 0, "멱등 위반"
+
+    # Stage A2: connectors 서브커맨드 I/O
+    import tempfile as _tf2
+    from types import SimpleNamespace as _NS2
+    _cdoc = {"schemaVersion": 2, "docId": "x", "reviewStatus": "approved", "segments": [
+        {"id": "seg000", "kind": "heading", "sourceExcerpt": "# 제목",
+         "scriptText": "제목", "skip": False},
+        {"id": "seg001", "kind": "heading", "sourceExcerpt": "## 본문 {#a}",
+         "scriptText": "본문", "skip": False},
+    ]}
+    with _tf2.TemporaryDirectory() as _d2:
+        _p2 = Path(_d2) / "script.json"
+        write_json(_p2, _cdoc)
+        run_connectors(_NS2(script=_p2))
+        _r2 = json.loads(_p2.read_text(encoding="utf-8"))
+    assert any(s["kind"] == "connector" for s in _r2["segments"]), _r2
+    assert _r2["reviewStatus"] == "needs_human_review", _r2
+
     print("self-test OK")
 
 
@@ -1428,6 +1619,10 @@ def main() -> None:
                         help="스캐폴딩(메타·체크리스트) 세그먼트 skip 표시")
     de.add_argument("--script", type=Path, required=True)
 
+    co = sub.add_parser("connectors",
+                        help="강의 연결문(도입·전환·마무리) 삽입")
+    co.add_argument("--script", type=Path, required=True)
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1442,8 +1637,10 @@ def main() -> None:
         run_chapters(args)
     elif args.cmd == "descaffold":
         run_descaffold(args)
+    elif args.cmd == "connectors":
+        run_connectors(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":

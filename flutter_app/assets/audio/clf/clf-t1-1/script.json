@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "에이더블유에스 클라우드의 이점, 지금부터 함께 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 1 「클라우드 개념」(24%) · **Task 1.1 AWS 클라우드의 이점 정의** (`clf-t1-1`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 도메인 1은 시험의 *개념적 토대* — \"왜 클라우드인가\"에 답합니다.",
@@ -98,6 +107,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 핵심 개념을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg010",
       "kind": "heading",
       "sourceExcerpt": "## 📖 핵심 개념 {#core-concepts}",
@@ -143,6 +161,15 @@
       "issues": []
     },
     {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 클라우드의 핵심 이점으로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg015",
       "kind": "heading",
       "sourceExcerpt": "### 2) 클라우드의 핵심 이점 (★ 시험 핵심) {#core-benefits}",
@@ -179,6 +206,15 @@
       "issues": []
     },
     {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 고가용성, 탄력성, 민첩성입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg019",
       "kind": "heading",
       "sourceExcerpt": "### 3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기 {#ha-elasticity}",
@@ -210,6 +246,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 이 세 개념이 자주 혼동되는 이유는 모두 \"서비스가 좋아진다\"는 결과를 말하기 때문입니다. 그러나 각각이 다루는 **작동 축(axis)**이 완전히 다릅니다. **탄력성**은 *용량 축* — 수요가 올라갈 때 자원을 늘리고, 줄어들 때 반납합니다. 서비스가 죽지 않더라도 느려지거나 비용이 낭비된다면 탄력성으로 해결하는 문제입니다. **고가용성**은 *장애 축* — 한 곳이 죽어도 다른 곳이 살아 있어 서비스가 이어집니다. 용량이 충분해도 단일 위치에만 의존한다면 고가용성이 없는 것입니다. **민첩성**은 *시간 축* — 새로운 기술을 시험하거나 제품을 출시하는 데 걸리는 시간이 줄어듭니다. 시험 문제에서 시나리오가 주어지면 \"이 시나리오가 어떤 축을 강조하는가\"를 먼저 따지면 답이 보입니다.",
       "scriptText": "원리: 이 세 개념이 자주 혼동되는 이유는 모두 \"서비스가 좋아진다\"는 결과를 말하기 때문입니다. 그러나 각각이 다루는 작동 축(axis)이 완전히 다릅니다. 탄력성은 용량 축 — 수요가 올라갈 때 자원을 늘리고, 줄어들 때 반납합니다. 서비스가 죽지 않더라도 느려지거나 비용이 낭비된다면 탄력성으로 해결하는 문제입니다. 고가용성은 장애 축 — 한 곳이 죽어도 다른 곳이 살아 있어 서비스가 이어집니다. 용량이 충분해도 단일 위치에만 의존한다면 고가용성이 없는 것입니다. 민첩성은 시간 축 — 새로운 기술을 시험하거나 제품을 출시하는 데 걸리는 시간이 줄어듭니다. 시험 문제에서 시나리오가 주어지면 \"이 시나리오가 어떤 축을 강조하는가\"를 먼저 따지면 답이 보입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 글로벌 인프라의 이점을 보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -278,6 +323,15 @@
       "issues": []
     },
     {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 흔한 함정을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg030",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -327,6 +381,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"용량을 넉넉히 미리 사 두는 게 클라우드 방식이다.\"** → ❌. 그건 온프레미스식 과대 프로비저닝. 클라우드는 **필요한 만큼, 탄력적으로.** *(원리: §1 — 가상화·자원 풀 덕분에 미리 구매하지 않아도 즉시 용량을 확보할 수 있다.)*",
       "scriptText": "\"용량을 넉넉히 미리 사 두는 게 클라우드 방식이다.\". 그건 온프레미스식 과대 프로비저닝. 클라우드는 필요한 만큼, 탄력적으로. (원리: 1번 — 가상화·자원 풀 덕분에 미리 구매하지 않아도 즉시 용량을 확보할 수 있다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이상으로 이번 강의를 마칩니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []

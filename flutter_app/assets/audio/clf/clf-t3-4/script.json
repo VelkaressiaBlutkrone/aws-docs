@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "데이터베이스 서비스, 지금부터 함께 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 3 「클라우드 기술 및 서비스」(34%) · **Task 3.4 데이터베이스 서비스 식별** (`clf-t3-4`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. [스토리지](#)(3.6)가 *파일·객체*를 담는다면, 이 Task는 *구조화된 데이터*를 담는 데이터베이스를 다룹니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 이씨투에 직접 설치 대 관리형 디비를 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) EC2에 직접 설치 vs 관리형 DB(RDS) — 누가 관리하나 (★) {#managed-vs-ec2}",
@@ -151,6 +169,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 AWS는 EC2에 DB를 직접 설치하는 방식을 없애지 않고, 관리형 RDS를 별도로 제공할까요? EC2에 직접 설치하면 OS·DB 엔진·백업·HA 설정 등 모든 운영 작업을 고객이 제어할 수 있어, 특수한 설정이나 검증되지 않은 DB 엔진이 필요한 경우에 적합합니다. 하지만 대다수 워크로드는 DB 운영 자체가 목적이 아니라 쿼리와 애플리케이션 로직에 집중해야 하는데, OS·패치·백업·페일오버를 직접 관리하면 그 시간이 \"차별화되지 않는 무거운 작업(undifferentiated heavy lifting)\"에 소비됩니다. 관리형 RDS를 별도로 두면, 제어가 필요한 팀은 EC2를 쓰고 운영 부담을 줄이고 싶은 팀은 RDS를 선택해 같은 인프라 위에서 각자 필요한 트레이드오프를 고를 수 있습니다.",
       "scriptText": "원리: 왜 에이더블유에스는 이씨투에 디비를 직접 설치하는 방식을 없애지 않고, 관리형 알디에스를 별도로 제공할까요? 이씨투에 직접 설치하면 오에스·디비 엔진·백업·에이치에이 설정 등 모든 운영 작업을 고객이 제어할 수 있어, 특수한 설정이나 검증되지 않은 디비 엔진이 필요한 경우에 적합합니다. 하지만 대다수 워크로드는 디비 운영 자체가 목적이 아니라 쿼리와 애플리케이션 로직에 집중해야 하는데, 오에스·패치·백업·페일오버를 직접 관리하면 그 시간이 \"차별화되지 않는 무거운 작업(undifferentiated heavy lifting)\"에 소비됩니다. 관리형 알디에스를 별도로 두면, 제어가 필요한 팀은 이씨투를 쓰고 운영 부담을 줄이고 싶은 팀은 알디에스를 선택해 같은 인프라 위에서 각자 필요한 트레이드오프를 고를 수 있습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 관계형 데이터베이스로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -219,6 +246,15 @@
       "issues": []
     },
     {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 NoSQL입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg023",
       "kind": "heading",
       "sourceExcerpt": "### 3) NoSQL — Amazon DynamoDB {#dynamodb}",
@@ -264,6 +300,15 @@
       "issues": []
     },
     {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 인메모리를 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg028",
       "kind": "heading",
       "sourceExcerpt": "### 4) 인메모리 — Amazon ElastiCache {#elasticache}",
@@ -304,6 +349,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 DB를 더 빠르게 만드는 대신 앞에 캐시 계층을 별도로 두는 방식을 선택할까요? DB는 내구성·일관성을 위해 디스크에 데이터를 기록하는 구조로 최적화돼 있어, 디스크 I/O 자체가 메모리보다 느린 한계가 있습니다. 반복 조회되는 데이터를 메모리에 캐시해 두면, 같은 요청이 올 때 DB까지 가지 않고 메모리에서 바로 응답해 지연시간이 크게 줄고 DB로 가는 요청 수도 줄어 DB가 쓰기·복잡한 쿼리에 집중할 수 있습니다. DB와 캐시를 분리하면 각각을 독립적으로 확장·교체할 수 있어, 캐시 히트율이 높은 워크로드에서는 DB 비용을 늘리지 않고 읽기 처리량을 높이는 것이 가능합니다.",
       "scriptText": "원리: 왜 디비를 더 빠르게 만드는 대신 앞에 캐시 계층을 별도로 두는 방식을 선택할까요? 디비는 내구성·일관성을 위해 디스크에 데이터를 기록하는 구조로 최적화돼 있어, 디스크 I/O 자체가 메모리보다 느린 한계가 있습니다. 반복 조회되는 데이터를 메모리에 캐시해 두면, 같은 요청이 올 때 디비까지 가지 않고 메모리에서 바로 응답해 지연시간이 크게 줄고 디비로 가는 요청 수도 줄어 디비가 쓰기·복잡한 쿼리에 집중할 수 있습니다. 디비와 캐시를 분리하면 각각을 독립적으로 확장·교체할 수 있어, 캐시 히트율이 높은 워크로드에서는 디비 비용을 늘리지 않고 읽기 처리량을 높이는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 데이터베이스 마이그레이션을 살펴보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -401,6 +455,15 @@
       "issues": []
     },
     {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 흔한 함정으로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg043",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -414,6 +477,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"DynamoDB는 관계형 데이터베이스다.\"** → ❌. DynamoDB는 **NoSQL**(키-값/문서). 관계형(SQL·조인)은 RDS·Aurora. *(원리: §3 — DynamoDB는 JOIN 없이 키 기반 파티션에 데이터를 분산해 어떤 규모에서도 일관된 지연시간을 유지하는 NoSQL 모델로, 관계형과 구조적으로 다른 설계다.)* **\"Aurora는 RDS와 완전히 별개 서비스다.\"** → ❌. **Aurora는 Amazon RDS의 일부**이며 MySQL·PostgreSQL 호환. *(원리: §2 — Aurora는 MySQL·PostgreSQL 호환성을 유지하면서 스토리지 계층을 재설계해 성능을 높인 RDS 엔진으로, RDS의 관리·운영 기능을 그대로 사용한다.)* **\"운영 부담을 줄이려는데 EC2에 직접 DB를 설치한다.\"** → ⚠️ 반대. 패치·백업·HA를 AWS가 맡는 **RDS**가 운영 부담이 적습니다. *(원리: §1 — EC2 직접 설치는 OS·패치·백업·HA 같은 \"차별화되지 않는 무거운 작업\"을 고객이 담당하는 구조이며, 관리형 RDS는 이를 AWS가 처리해 운영 부담이 줄어든다.)* **\"ElastiCache는 영구 데이터베이스로 쓴다.\"** → ⚠️ 주의. ElastiCache는 *인메모리 캐시*로 성능 가속·DB 부하 경감이 목적입니다(주 데이터 저장소는 RDS/DynamoDB 등). *(원리: §4 — ElastiCache는 반복 조회 데이터를 메모리에 두어 DB I/O를 줄이는 캐시 계층으로, 내구성 있는 주 저장소가 아니라 읽기 성능 가속이 목적이다.)* **\"엔진을 Oracle에서 Aurora로 바꿔 옮기는데 스키마는 그냥 복사하면 된다.\"** → ❌. 이기종 마이그레이션은 **SCT**(또는 DMS Schema Conversion)로 스키마를 타겟 엔진에 맞게 변환해야 합니다. *(원리: §5 — 엔진마다 스키마 문법·데이터 타입이 달라, 이기종 이전 시 소스 스키마를 타겟 엔진에 맞게 변환하는 도구(SCT)가 필요하다.)* **\"DynamoDB는 서버를 직접 프로비저닝해야 한다.\"** → ❌. DynamoDB는 **서버리스** — 서버 관리 없이 자동 확장. *(원리: §3 — DynamoDB는 서버 프로비저닝·패치·관리를 AWS가 처리하고 트래픽에 따라 자동 확장되는 서버리스 모델로, 고객은 데이터와 쿼리에만 집중한다.)*",
       "scriptText": "\"DynamoDB는 관계형 데이터베이스다.\". DynamoDB는 NoSQL(키-값/문서). 관계형(에스큐엘·조인)은 알디에스·Aurora. (원리: 3번 — DynamoDB는 조인 없이 키 기반 파티션에 데이터를 분산해 어떤 규모에서도 일관된 지연시간을 유지하는 NoSQL 모델로, 관계형과 구조적으로 다른 설계다.) \"Aurora는 알디에스와 완전히 별개 서비스다.\". Aurora는 Amazon 알디에스의 일부이며 MySQL·PostgreSQL 호환. (원리: 2번 — Aurora는 MySQL·PostgreSQL 호환성을 유지하면서 스토리지 계층을 재설계해 성능을 높인 알디에스 엔진으로, 알디에스의 관리·운영 기능을 그대로 사용한다.) \"운영 부담을 줄이려는데 이씨투에 직접 디비를 설치한다.\", 반대. 패치·백업·에이치에이를 에이더블유에스가 맡는 알디에스가 운영 부담이 적습니다. (원리: 1번 — 이씨투 직접 설치는 오에스·패치·백업·에이치에이 같은 \"차별화되지 않는 무거운 작업\"을 고객이 담당하는 구조이며, 관리형 알디에스는 이를 에이더블유에스가 처리해 운영 부담이 줄어든다.) \"ElastiCache는 영구 데이터베이스로 쓴다.\", 주의. ElastiCache는 인메모리 캐시로 성능 가속·디비 부하 경감이 목적입니다(주 데이터 저장소는 알디에스/DynamoDB 등). (원리: 4번 — ElastiCache는 반복 조회 데이터를 메모리에 두어 디비 I/O를 줄이는 캐시 계층으로, 내구성 있는 주 저장소가 아니라 읽기 성능 가속이 목적이다.) \"엔진을 Oracle에서 Aurora로 바꿔 옮기는데 스키마는 그냥 복사하면 된다.\". 이기종 마이그레이션은 에스씨티(또는 디엠에스 Schema Conversion)로 스키마를 타겟 엔진에 맞게 변환해야 합니다. (원리: 5번 — 엔진마다 스키마 문법·데이터 타입이 달라, 이기종 이전 시 소스 스키마를 타겟 엔진에 맞게 변환하는 도구(에스씨티)가 필요하다.) \"DynamoDB는 서버를 직접 프로비저닝해야 한다.\". DynamoDB는 서버리스 — 서버 관리 없이 자동 확장. (원리: 3번 — DynamoDB는 서버 프로비저닝·패치·관리를 에이더블유에스가 처리하고 트래픽에 따라 자동 확장되는 서버리스 모델로, 고객은 데이터와 쿼리에만 집중한다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이상으로 이번 강의를 마칩니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-4",
-  "generatedAt": "2026-06-29T01:47:15Z",
+  "generatedAt": "2026-06-29T03:26:32Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 5714301,
-    "sha256": "a5ff4a01e0ea2cf6aa775438725ed550afb053cde6794bdc3d59d8c0d1b940be",
+    "sizeBytes": 5866221,
+    "sha256": "8b934dadc6fd6546d12ffd1cf6d33724f4c68d0b22cb0396224d41dfec568b2e",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 7063,
+    "speechChars": 7253,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,37 +35,37 @@
       "anchor": "managed-vs-ec2",
       "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나 ()",
       "level": 3,
-      "fraction": 0.14287154414173744
+      "fraction": 0.14710070211616832
     },
     {
       "anchor": "relational",
       "title": "2) 관계형 데이터베이스 — Amazon 알디에스와 Amazon Aurora",
       "level": 3,
-      "fraction": 0.26119609869200333
+      "fraction": 0.26594491088525557
     },
     {
       "anchor": "dynamodb",
       "title": "3) NoSQL — Amazon DynamoDB",
       "level": 3,
-      "fraction": 0.4073943395750901
+      "fraction": 0.41051701281484754
     },
     {
       "anchor": "elasticache",
       "title": "4) 인메모리 — Amazon ElastiCache",
       "level": 3,
-      "fraction": 0.5132689835933365
+      "fraction": 0.5164727254873079
     },
     {
       "anchor": "dms",
       "title": "5) 데이터베이스 마이그레이션 — 에이더블유에스 디엠에스 (그리고 에스씨티)",
       "level": 3,
-      "fraction": 0.5957055369338945
+      "fraction": 0.6008248637501841
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8444769273419189
+      "fraction": 0.8461727303972112
     }
   ],
   "generator": {
