@@ -36,7 +36,7 @@ A1([[audio-instructor-script-planned]], PR#89→#90 라이브)이 메타·체크
 순수 함수 `insert_connectors(segments: list[dict], title: str) -> int`(새 세그먼트 삽입, 삽입 수 반환). `title`=문서 H1 제목(첫 heading 세그먼트 scriptText).
 
 - **도입 1개**: 첫 비-skip 발화 세그먼트(통상 H1 제목 seg000) **직후**에 삽입. 문서 index(또는 docId 해시 불가 → 호출자가 doc 순번 전달)로 회전. 실무: 호출자가 doc 순번을 못 주므로 **title 길이 기반 결정적 인덱스**(`len(title) % N`)로 회전(결정적·문서마다 다양).
-- **전환 N개**: 각 **앵커 있는 heading** 세그먼트 **직전**에 삽입(직전 섹션 오디오 끝에 붙음 → 앵커 경계 불변). 앵커 순번(0,1,2…)으로 틀 회전 + 그 heading scriptText를 `{S}`로 채움.
+- **전환 N개**: 각 **앵커 있는 heading** 세그먼트 **직전**에 삽입(직전 섹션 오디오 끝에 붙음 → 앵커 경계 불변). 앵커 순번(0,1,2…)으로 틀 회전 + 그 heading **정제 제목**을 `{S}`로 채움. 정제(`_clean_section_title`, 117개 헤딩 실측 근거): 선행 번호 `N)` 제거 · 첫 em-dash `—` 앞까지(부연 컷) · 괄호 부연 `(…)` 제거 · 중점 `·`→쉼표. (원문 `"3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기"` → `"고가용성, 탄력성, 민첩성"`.)
 - **마무리 1개**: 마지막 비-skip 세그먼트 **직후**(문서 끝)에 삽입. `len(title)` 기반 회전.
 - 삽입 세그먼트: `{id: "conN", kind: "connector", sourceExcerpt: "", scriptText: <문구>, audioSummary: None, skip: False, issues: []}`. (`kind:"connector"`는 신규 — gate/script_to_speech는 kind 무관하게 비-table·비-skip·scriptText면 발화하므로 동작.)
 - 멱등: 이미 `kind=="connector"` 세그먼트가 있으면 재삽입 안 함(재적용 0).
