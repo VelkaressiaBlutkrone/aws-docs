@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-2",
-  "generatedAt": "2026-06-29T01:39:14Z",
+  "generatedAt": "2026-06-29T03:18:40Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t2-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 8995629,
-    "sha256": "f5ef26a02c81a9a87c0525f663cd81a6fab6d8e3eb809d79b33ab9fafaa6bfa0",
+    "sizeBytes": 9207165,
+    "sha256": "faed1e6b212df90f2d40697ca0e7e47c39f7a0f986543b5d4d5a8830519d3dee",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 11313,
+    "speechChars": 11563,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,49 +35,49 @@
       "anchor": "governance-compliance",
       "title": "1) 거버넌스 대 컴플라이언스 — 두 단어를 먼저 가른다",
       "level": 3,
-      "fraction": 0.08318125060032658
+      "fraction": 0.08686947681238757
     },
     {
       "anchor": "artifact",
       "title": "2) 컴플라이언스 증거는 어디서 받나 — 에이더블유에스 Artifact",
       "level": 3,
-      "fraction": 0.14982550507476067
+      "fraction": 0.15470399624618753
     },
     {
       "anchor": "detection-trio",
       "title": "3) 탐지 3종 — GuardDuty · Inspector · Macie (시험 핵심 구분)",
       "level": 3,
-      "fraction": 0.23790542054877853
+      "fraction": 0.24235551732228044
     },
     {
       "anchor": "securityhub-shield",
       "title": "4) 종합과 보호 — Security Hub(씨에스피엠)와 Shield",
       "level": 3,
-      "fraction": 0.32577722280920823
+      "fraction": 0.3301634472511144
     },
     {
       "anchor": "encryption",
       "title": "5) 암호화 — 전송 중 대 저장 시, 그리고 케이엠에스",
       "level": 3,
-      "fraction": 0.4250152082733007
+      "fraction": 0.42895127864237115
     },
     {
       "anchor": "certificates-hsm",
       "title": "인증서·키·전용 에이치에스엠 — 에이씨엠 · 케이엠에스 · CloudHSM",
       "level": 3,
-      "fraction": 0.5101175039221336
+      "fraction": 0.5153828106670838
     },
     {
       "anchor": "audit-trio",
       "title": "6) 거버넌스·감사·모니터링 3종 — CloudTrail · Config · CloudWatch (시험 핵심 구분)",
       "level": 3,
-      "fraction": 0.621506099318029
+      "fraction": 0.6269336044420114
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8181090513239202
+      "fraction": 0.8208336591851099
     }
   ],
   "generator": {

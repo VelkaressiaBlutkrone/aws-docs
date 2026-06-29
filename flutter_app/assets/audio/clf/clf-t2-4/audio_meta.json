@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-4",
-  "generatedAt": "2026-06-29T01:42:17Z",
+  "generatedAt": "2026-06-29T03:21:42Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t2-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6659949,
-    "sha256": "82b213c3252fc1e38ceece0212a2503b24b67dbcee886b4be478ad27af6fb99f",
+    "sizeBytes": 6851181,
+    "sha256": "9925caa2b8aff9e0c93a15af65e00dcd6a8688b34ccbaad0f2879ec73e3a4b77",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8319,
+    "speechChars": 8563,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,43 +35,43 @@
       "anchor": "sg-vs-nacl",
       "title": "1) 브이피씨 네트워크 방화벽 2개 층 — 보안 그룹 대 네트워크 에이씨엘 (시험 핵심)",
       "level": 3,
-      "fraction": 0.1224538338450893
+      "fraction": 0.1264346071383529
     },
     {
       "anchor": "waf",
       "title": "2) 에이더블유에스 와프 — 웹 애플리케이션 방화벽 (애플리케이션 계층)",
       "level": 3,
-      "fraction": 0.27286684253773297
+      "fraction": 0.2757808887207298
     },
     {
       "anchor": "trusted-advisor",
       "title": "3) 보안 이슈를 찾아 주는 점검 도구 — 에이더블유에스 Trusted Advisor",
       "level": 3,
-      "fraction": 0.40840288889849935
+      "fraction": 0.4106444696683062
     },
     {
       "anchor": "marketplace",
       "title": "4) 서드파티 보안 제품을 구하는 곳 — 에이더블유에스 Marketplace",
       "level": 3,
-      "fraction": 0.5252994853608961
+      "fraction": 0.5277042081809392
     },
     {
       "anchor": "info-locations",
       "title": "5) 보안 정보·문서는 어디서 찾나",
       "level": 3,
-      "fraction": 0.6341737663797951
+      "fraction": 0.637280867700845
     },
     {
       "anchor": "sg-default",
       "title": "보안 그룹 기본 동작 (보강)",
       "level": 3,
-      "fraction": 0.7210569562772997
+      "fraction": 0.7249337873628453
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.857890412143753
+      "fraction": 0.8596502291167445
     }
   ],
   "generator": {

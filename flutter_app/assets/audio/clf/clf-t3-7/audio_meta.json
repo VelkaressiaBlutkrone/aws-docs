@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-7",
-  "generatedAt": "2026-06-29T01:51:14Z",
+  "generatedAt": "2026-06-29T03:30:21Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-7/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6350493,
-    "sha256": "cb5b097d2be0bc7dcf464bf0d9fd3474a403a8ca9404f93f85afe71b7b47cc22",
+    "sizeBytes": 6506733,
+    "sha256": "31901c560a4f7d159bd598150499e8c58e87843af523b55a3bfcc04f62f947c3",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8053,
+    "speechChars": 8241,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,37 +35,37 @@
       "anchor": "ai-ml",
       "title": "1) 에이아이/엠엘 서비스 3종 — SageMaker · Lex · Kendra",
       "level": 3,
-      "fraction": 0.11805791777218405
+      "fraction": 0.12234960825107344
     },
     {
       "anchor": "analytics",
       "title": "2) 분석 서비스 4종 — Athena · Kinesis · Glue · QuickSight",
       "level": 3,
-      "fraction": 0.25060661723019706
+      "fraction": 0.2558541011907397
     },
     {
       "anchor": "scenario",
       "title": "3) 한눈에 — 시나리오, 서비스",
       "level": 3,
-      "fraction": 0.38499217633852645
+      "fraction": 0.3889602053915276
     },
     {
       "anchor": "language-ai",
       "title": "언어 에이아이 — Amazon Translate · Amazon Transcribe (보강)",
       "level": 3,
-      "fraction": 0.47152867542009663
+      "fraction": 0.47616307379044753
     },
     {
       "anchor": "applied-ai-services",
       "title": "응용 에이아이 서비스 — Rekognition · Comprehend · Textract · Personalize",
       "level": 3,
-      "fraction": 0.5563190239698845
+      "fraction": 0.5623035722190253
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7903258725083339
+      "fraction": 0.7934133061838785
     }
   ],
   "generator": {

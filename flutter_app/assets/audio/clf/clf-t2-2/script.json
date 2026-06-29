@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "보안, 거버넌스, 컴플라이언스 개념, 지금부터 함께 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 2 「보안 및 규정 준수」(30%) · **Task 2.2 보안·거버넌스·컴플라이언스 개념** (`clf-t2-2`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 추천 학습 순서상 [공동 책임 모델](#)(2.1)·[접근 관리/IAM](#)(2.3) 다음에 오는 \"그래서 *무엇으로* 지키고, *어떻게* 증명하는가\"입니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 거버넌스 대 컴플라이언스를 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) 거버넌스 vs 컴플라이언스 — 두 단어를 먼저 가른다 {#governance-compliance}",
@@ -140,6 +158,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 거버넌스와 컴플라이언스는 별개 개념이고, 서로 다른 도구를 필요로 할까요? 거버넌스는 *내부 가시성* 확보가 목적입니다 — 지금 리소스가 어떻게 구성돼 있고 누가 무엇을 했는지 알아야 규칙을 집행할 수 있기 때문에, CloudTrail·Config·CloudWatch 같은 관찰 도구가 쓰입니다. 컴플라이언스는 *외부 규제 기관 또는 감사자에게 증명*하는 활동이어서, 내부 로그만으로는 부족하고 제3자가 서명한 보고서(Artifact가 제공)나 규정 프레임워크에 매핑된 증거(Audit Manager)가 필요합니다. 두 활동은 목적(내부 통제 vs 외부 증명)과 수신자(운영팀 vs 감사자)가 달라서 도구도 분리됩니다.",
       "scriptText": "원리: 왜 거버넌스와 컴플라이언스는 별개 개념이고, 서로 다른 도구를 필요로 할까요? 거버넌스는 내부 가시성 확보가 목적입니다 — 지금 리소스가 어떻게 구성돼 있고 누가 무엇을 했는지 알아야 규칙을 집행할 수 있기 때문에, CloudTrail·Config·CloudWatch 같은 관찰 도구가 쓰입니다. 컴플라이언스는 외부 규제 기관 또는 감사자에게 증명하는 활동이어서, 내부 로그만으로는 부족하고 제3자가 서명한 보고서(Artifact가 제공)나 규정 프레임워크에 매핑된 증거(Audit Manager)가 필요합니다. 두 활동은 목적(내부 통제 대 외부 증명)과 수신자(운영팀 대 감사자)가 달라서 도구도 분리됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 컴플라이언스 증거는 어디서 받나로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -199,6 +226,15 @@
       "issues": []
     },
     {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 탐지 3종입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg021",
       "kind": "heading",
       "sourceExcerpt": "### 3) 탐지 3종 — GuardDuty · Inspector · Macie (★ 시험 핵심 구분) {#detection-trio}",
@@ -241,6 +277,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 탐지 3종은 하나로 합쳐지지 않고 입력 신호별로 별도 서비스로 나뉘었을까요? GuardDuty는 CloudTrail·VPC 흐름 로그·DNS 로그라는 *행동 기록*을 ML과 위협 인텔리전스로 분석하고, Inspector는 EC2·ECR·Lambda의 *소프트웨어 패키지 목록과 네트워크 구성*을 취약점 데이터베이스와 대조하며, Macie는 S3 객체 *내용물*을 패턴 매칭으로 분류합니다. 세 서비스는 분석하는 데이터의 형식·출처·판단 기준이 달라, 같은 엔진으로 처리할 수 없는 서로 다른 탐지 문제를 각각 풀고 있습니다. 세 신호를 하나의 엔진에 합치면 서로 다른 형식의 데이터를 단일 파이프라인으로 처리해야 해, 각 영역의 탐지 기준을 독립적으로 조정하기 어려워집니다.",
       "scriptText": "원리: 왜 탐지 3종은 하나로 합쳐지지 않고 입력 신호별로 별도 서비스로 나뉘었을까요? GuardDuty는 CloudTrail·브이피씨 흐름 로그·디엔에스 로그라는 행동 기록을 엠엘과 위협 인텔리전스로 분석하고, Inspector는 이씨투·이씨알·Lambda의 소프트웨어 패키지 목록과 네트워크 구성을 취약점 데이터베이스와 대조하며, Macie는 에스쓰리 객체 내용물을 패턴 매칭으로 분류합니다. 세 서비스는 분석하는 데이터의 형식·출처·판단 기준이 달라, 같은 엔진으로 처리할 수 없는 서로 다른 탐지 문제를 각각 풀고 있습니다. 세 신호를 하나의 엔진에 합치면 서로 다른 형식의 데이터를 단일 파이프라인으로 처리해야 해, 각 영역의 탐지 기준을 독립적으로 조정하기 어려워집니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 종합과 보호를 보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -320,6 +365,15 @@
       "issues": []
     },
     {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 암호화를 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg034",
       "kind": "heading",
       "sourceExcerpt": "### 5) 암호화 — 전송 중 vs 저장 시, 그리고 KMS {#encryption}",
@@ -385,6 +439,15 @@
       "issues": []
     },
     {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 인증서, 키, 전용 에이치에스엠으로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg041",
       "kind": "heading",
       "sourceExcerpt": "### 인증서·키·전용 HSM — ACM · KMS · CloudHSM {#certificates-hsm}",
@@ -429,6 +492,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 인증서 관리와 키 관리, 전용 HSM은 서로 다른 서비스로 나뉘어 있을까요? TLS 인증서는 \"이 도메인이 신뢰할 수 있는 주체인가\"를 브라우저와 클라이언트에게 증명하는 공개키 기반 신원 문서입니다. 반대로 KMS 키는 S3·EBS·RDS 같은 서비스가 저장 데이터를 암호화할 때 사용하는 비밀 키 재료와 권한 정책을 관리하는 대상입니다. CloudHSM은 규제나 기존 암호화 애플리케이션 요구 때문에 고객이 HSM 사용자·키·알고리즘을 더 직접 통제해야 할 때 쓰는 전용 하드웨어 경계입니다. 따라서 시험에서는 \"HTTPS 인증서인가, 저장 데이터 암호화 키인가, 고객 전용 HSM 제어인가\"를 먼저 구분하면 ACM·KMS·CloudHSM 선택이 갈립니다.",
       "scriptText": "원리: 왜 인증서 관리와 키 관리, 전용 에이치에스엠은 서로 다른 서비스로 나뉘어 있을까요? 티엘에스 인증서는 \"이 도메인이 신뢰할 수 있는 주체인가\"를 브라우저와 클라이언트에게 증명하는 공개키 기반 신원 문서입니다. 반대로 케이엠에스 키는 에스쓰리·이비에스·알디에스 같은 서비스가 저장 데이터를 암호화할 때 사용하는 비밀 키 재료와 권한 정책을 관리하는 대상입니다. CloudHSM은 규제나 기존 암호화 애플리케이션 요구 때문에 고객이 에이치에스엠 사용자·키·알고리즘을 더 직접 통제해야 할 때 쓰는 전용 하드웨어 경계입니다. 따라서 시험에서는 \"에이치티티피에스 인증서인가, 저장 데이터 암호화 키인가, 고객 전용 에이치에스엠 제어인가\"를 먼저 구분하면 에이씨엠·케이엠에스·CloudHSM 선택이 갈립니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 거버넌스, 감사, 모니터링 3종입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -517,6 +589,15 @@
       "issues": []
     },
     {
+      "id": "con008",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 흔한 함정을 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg055",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -557,6 +638,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"CloudFront에 쓸 ACM 인증서는 아무 리전에서나 만들면 된다.\"** → ❌. CloudFront 배포에 연결할 ACM 인증서는 **미국 동부(버지니아 북부, us-east-1)** 리전에 있어야 합니다. *(원리: §6 — ACM 인증서는 리전 리소스이고, CloudFront는 글로벌 엣지 배포에 사용할 인증서를 us-east-1에서 참조하는 구조다.)*",
       "scriptText": "\"CloudFront에 쓸 에이씨엠 인증서는 아무 리전에서나 만들면 된다.\". CloudFront 배포에 연결할 에이씨엠 인증서는 미국 동부(버지니아 북부, us-east-1) 리전에 있어야 합니다. (원리: 6번 — 에이씨엠 인증서는 리전 리소스이고, CloudFront는 글로벌 엣지 배포에 사용할 인증서를 us-east-1에서 참조하는 구조다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con009",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이상으로 이번 강의를 마칩니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []

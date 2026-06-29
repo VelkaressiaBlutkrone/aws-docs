@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번 강의에서는 보안 구성요소, 리소스 식별을 다룹니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 2 「보안 및 규정 준수」(30%) · **Task 2.4 보안 구성요소·리소스 식별** (`clf-t2-4`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 추천 학습 순서상 도메인 2의 *마지막* 조각으로, [공동 책임 모델](#)·[IAM](#)·[거버넌스/컴플라이언스](#)에서 다룬 원칙을 *실제 방어 도구*와 *정보를 찾는 곳*으로 연결합니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 브이피씨 네트워크 방화벽 2개 층을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) VPC 네트워크 방화벽 2개 층 — 보안 그룹 vs 네트워크 ACL (★ 시험 핵심) {#sg-vs-nacl}",
@@ -174,6 +192,15 @@
       "issues": []
     },
     {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 에이더블유에스 와프로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg018",
       "kind": "heading",
       "sourceExcerpt": "### 2) AWS WAF — 웹 애플리케이션 방화벽 (애플리케이션 계층) {#waf}",
@@ -214,6 +241,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 WAF는 보안 그룹·NACL과 달리 SQL 인젝션·XSS 같은 공격을 막을 수 있을까요? 보안 그룹과 NACL은 IP 주소·포트·프로토콜이라는 *네트워크 계층 정보*만 보고 허용·차단을 결정합니다. WAF는 HTTP/HTTPS 요청의 *내용(헤더·URL·본문)*까지 파싱해 악성 패턴(SQL 구문, 스크립트 태그 등)을 규칙으로 매칭할 수 있어, 같은 IP·포트라도 요청 내용에 따라 차단이 가능합니다. SQL 인젝션 공격은 정상 포트(443)를 통해 오기 때문에 포트·IP만 보는 네트워크 계층 필터를 통과합니다 — WAF가 HTTP 본문까지 파싱하는 이유가 바로 이 경로를 막기 위해서입니다.",
       "scriptText": "원리: 왜 와프는 보안 그룹·나클과 달리 에스큐엘 인젝션·엑스에스에스 같은 공격을 막을 수 있을까요? 보안 그룹과 나클은 아이피 주소·포트·프로토콜이라는 네트워크 계층 정보만 보고 허용·차단을 결정합니다. 와프는 에이치티티피/에이치티티피에스 요청의 내용(헤더·유알엘·본문)까지 파싱해 악성 패턴(에스큐엘 구문, 스크립트 태그 등)을 규칙으로 매칭할 수 있어, 같은 아이피·포트라도 요청 내용에 따라 차단이 가능합니다. 에스큐엘 인젝션 공격은 정상 포트(443)를 통해 오기 때문에 포트·아이피만 보는 네트워크 계층 필터를 통과합니다 — 와프가 에이치티티피 본문까지 파싱하는 이유가 바로 이 경로를 막기 위해서입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 보안 이슈를 찾아 주는 점검 도구입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -273,6 +309,15 @@
       "issues": []
     },
     {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 서드파티 보안 제품을 구하는 곳을 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg029",
       "kind": "heading",
       "sourceExcerpt": "### 4) 서드파티 보안 제품을 구하는 곳 — AWS Marketplace {#marketplace}",
@@ -318,6 +363,15 @@
       "issues": []
     },
     {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 보안 정보, 문서는 어디서 찾나를 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg034",
       "kind": "heading",
       "sourceExcerpt": "### 5) 보안 정보·문서는 어디서 찾나 {#info-locations}",
@@ -351,6 +405,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 AWS는 보안 정보를 단일 포털이 아닌 Knowledge Center·Security Blog·re:Post 같은 여러 채널로 나눠 제공할까요? 각 채널은 서로 다른 독자와 목적을 가집니다 — Knowledge Center는 구체적 how-to·문제 해결 답변, Security Blog는 심층 기술 분석·보안 발표, re:Post는 커뮤니티 기반 질문·답변입니다. 단일 포털에 모으면 깊이·형식·업데이트 주기가 다른 콘텐츠를 한 구조로 관리해야 해 각 유형의 품질 유지가 어려워집니다. 채널을 분리하면 각 채널이 자신의 독자 수준과 업데이트 주기에 맞는 편집 기준을 독립적으로 유지할 수 있어, 단일 포털보다 각 유형의 콘텐츠 품질이 높아집니다.",
       "scriptText": "원리: 왜 에이더블유에스는 보안 정보를 단일 포털이 아닌 Knowledge Center·Security Blog·re:Post 같은 여러 채널로 나눠 제공할까요? 각 채널은 서로 다른 독자와 목적을 가집니다 — Knowledge Center는 구체적 how-to·문제 해결 답변, Security Blog는 심층 기술 분석·보안 발표, re:Post는 커뮤니티 기반 질문·답변입니다. 단일 포털에 모으면 깊이·형식·업데이트 주기가 다른 콘텐츠를 한 구조로 관리해야 해 각 유형의 품질 유지가 어려워집니다. 채널을 분리하면 각 채널이 자신의 독자 수준과 업데이트 주기에 맞는 편집 기준을 독립적으로 유지할 수 있어, 단일 포털보다 각 유형의 콘텐츠 품질이 높아집니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 보안 그룹 기본 동작으로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -410,6 +473,15 @@
       "issues": []
     },
     {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 흔한 함정입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg044",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -423,6 +495,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"보안 그룹으로 특정 악성 IP를 차단한다.\"** → ❌. 보안 그룹은 **허용(Allow) 규칙만** 가능. *차단(Deny)*은 **네트워크 ACL**로. *(원리: §1 — 보안 그룹은 Stateful 구조상 허용 목록만으로 작동하고, 명시적 차단은 Stateless인 NACL이 허용·거부 규칙을 모두 지원하기 때문에 가능하다.)* **\"네트워크 ACL은 Stateful이라 응답이 자동 허용된다.\"** → ❌. NACL은 **Stateless** — 인바운드를 허용해도 *아웃바운드(응답) 규칙을 따로* 둬야 합니다. *Stateful은 보안 그룹.* *(원리: §1 — NACL은 서브넷을 통과하는 모든 패킷을 독립적으로 평가해 연결 상태를 추적하지 않으므로, 요청·응답 방향 각각에 규칙이 필요하다.)* **\"WAF가 DDoS를 막는다.\"** → ⚠️ 부분적. WAF는 *웹 애플리케이션 공격(SQLi·XSS)* 필터입니다. *대량 트래픽 DDoS*의 1차 방어는 **Shield**(WAF web ACL이 보조 역할은 가능). *(원리: §2 — WAF는 HTTP/HTTPS 요청 내용을 파싱해 악성 패턴을 차단하는 도구로, 네트워크 계층 대량 트래픽 공격을 흡수하는 Shield와는 분석 계층이 다르다.)* **\"Trusted Advisor가 리소스 구성 변경 이력을 보여 준다.\"** → ❌. 그건 **AWS Config**. Trusted Advisor는 *모범 사례 점검·권고*. *(원리: §3 — Trusted Advisor는 모범 사례 패턴을 규칙으로 매칭해 개선 기회를 제안하는 역할에 집중하며, 구성 상태 추적은 Config가 담당하는 별도 입력 신호 영역이다.)* **\"보안 소프트웨어는 전부 AWS 콘솔에서 기본 제공된다.\"** → ❌. *타사 보안 제품*은 **AWS Marketplace**에서 구독해 배포합니다. *(원리: §4 — 기업별 특수 보안 요구를 AWS 기본 서비스로 모두 충족하기 어려워, Marketplace가 ISV 제품을 AWS 청구서에 통합해 생태계를 확장하는 구조로 설계됐다.)* **\"보안 그룹과 NACL은 같은 것이다.\"** → ❌. **수준(인스턴스 vs 서브넷)·상태(stateful vs stateless)·규칙(allow만 vs allow+deny)**이 다릅니다. 둘은 *함께* 다층 방어를 이룹니다. *(원리: §1 — 보안 그룹은 개별 연결을 추적하는 인스턴스 수준 허용 목록이고, NACL은 서브넷 경계에서 패킷을 독립 평가하는 상태 비저장 규칙 집합으로, 분석 단위와 상태 관리 방식이 다른 두 층이다.)*",
       "scriptText": "\"보안 그룹으로 특정 악성 아이피를 차단한다.\". 보안 그룹은 허용(Allow) 규칙만 가능. 차단(Deny)은 네트워크 에이씨엘로. (원리: 1번 — 보안 그룹은 Stateful 구조상 허용 목록만으로 작동하고, 명시적 차단은 Stateless인 나클이 허용·거부 규칙을 모두 지원하기 때문에 가능하다.) \"네트워크 에이씨엘은 Stateful이라 응답이 자동 허용된다.\". 나클은 Stateless — 인바운드를 허용해도 아웃바운드(응답) 규칙을 따로 둬야 합니다. Stateful은 보안 그룹. (원리: 1번 — 나클은 서브넷을 통과하는 모든 패킷을 독립적으로 평가해 연결 상태를 추적하지 않으므로, 요청·응답 방향 각각에 규칙이 필요하다.) \"와프가 DDoS를 막는다.\", 부분적. 와프는 웹 애플리케이션 공격(SQLi·엑스에스에스) 필터입니다. 대량 트래픽 DDoS의 1차 방어는 Shield(와프 web 에이씨엘이 보조 역할은 가능). (원리: 2번 — 와프는 에이치티티피/에이치티티피에스 요청 내용을 파싱해 악성 패턴을 차단하는 도구로, 네트워크 계층 대량 트래픽 공격을 흡수하는 Shield와는 분석 계층이 다르다.) \"Trusted Advisor가 리소스 구성 변경 이력을 보여 준다.\". 그건 에이더블유에스 Config. Trusted Advisor는 모범 사례 점검·권고. (원리: 3번 — Trusted Advisor는 모범 사례 패턴을 규칙으로 매칭해 개선 기회를 제안하는 역할에 집중하며, 구성 상태 추적은 Config가 담당하는 별도 입력 신호 영역이다.) \"보안 소프트웨어는 전부 에이더블유에스 콘솔에서 기본 제공된다.\". 타사 보안 제품은 에이더블유에스 Marketplace에서 구독해 배포합니다. (원리: 4번 — 기업별 특수 보안 요구를 에이더블유에스 기본 서비스로 모두 충족하기 어려워, Marketplace가 아이에스브이 제품을 에이더블유에스 청구서에 통합해 생태계를 확장하는 구조로 설계됐다.) \"보안 그룹과 나클은 같은 것이다.\". 수준(인스턴스 대 서브넷)·상태(stateful 대 stateless)·규칙(allow만 대 allow 그리고 deny)이 다릅니다. 둘은 함께 다층 방어를 이룹니다. (원리: 1번 — 보안 그룹은 개별 연결을 추적하는 인스턴스 수준 허용 목록이고, 나클은 서브넷 경계에서 패킷을 독립 평가하는 상태 비저장 규칙 집합으로, 분석 단위와 상태 관리 방식이 다른 두 층이다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con008",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "여기까지가 이 주제의 핵심입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
