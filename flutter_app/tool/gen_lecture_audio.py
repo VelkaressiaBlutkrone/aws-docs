@@ -417,8 +417,10 @@ def script_to_speech(script: dict) -> str:
         if s["kind"] == "table":
             if s.get("audioSummary"):
                 parts.append(s["audioSummary"])
-        elif s.get("scriptText"):
-            parts.append(s["scriptText"])
+        else:
+            body = _spoken_body(s)
+            if body:
+                parts.append(body)
     return "\n".join(parts)
 
 
@@ -476,7 +478,8 @@ def gate_script(script: dict, lexicon: dict | None = None) -> tuple:
     soft: list[str] = []
     for seg in script["segments"]:
         sid = seg.get("id", "?")
-        txt = (seg.get("scriptText") or "") + " " + (seg.get("audioSummary") or "")
+        body = _spoken_body(seg)
+        txt = body + " " + (seg.get("audioSummary") or "")
         if re.search(r"https?://", txt):
             hard.append(f"{sid}: URL 잔존")
         for sym in ("→", "≠", "↓", "§", "|"):
@@ -495,7 +498,7 @@ def gate_script(script: dict, lexicon: dict | None = None) -> tuple:
                 soft.append(f"{sid}: {iss}")
         if lexicon and not seg.get("skip"):                  # ④ 원문 토큰 보존
             target = (seg.get("audioSummary") if seg.get("kind") == "table"
-                      else seg.get("scriptText")) or ""
+                      else body) or ""
             source = seg.get("sourceExcerpt") or ""
             if source and target:
                 th, ts = check_token_preservation(source, target, lexicon)
@@ -719,12 +722,17 @@ def _loudnorm_2pass(path: Path, target_i: float = -16.0,
     tmp.replace(path)
 
 
+def _spoken_body(seg: dict) -> str:
+    """table 외 세그먼트의 발화 본문: enrichedScriptText 우선, 없으면 scriptText."""
+    return seg.get("enrichedScriptText") or seg.get("scriptText") or ""
+
+
 def _segment_speech(seg: dict) -> str:
-    """세그먼트의 발음 텍스트(table=audioSummary, 그 외 scriptText)."""
+    """세그먼트의 발음 텍스트(table=audioSummary, 그 외 enriched|scriptText)."""
     if seg.get("skip"):
         return ""
     text = (seg.get("audioSummary") if seg.get("kind") == "table"
-            else seg.get("scriptText")) or ""
+            else _spoken_body(seg)) or ""
     return text.strip()
 
 
@@ -1142,6 +1150,30 @@ def _self_test() -> None:
     assert any("→" in i for i in quality_issues("A → B")), "화살표 미검출"
     assert any("정답 보기" in i for i in quality_issues("정답 보기 여기")), "정답보기 미검출"
     assert any("|" in i for i in quality_issues("| 표 행 |")), "표 미검출"
+    # --- Stage B: enrichedScriptText 발화 우선순위 ---
+    assert _spoken_body({"scriptText": "원문", "enrichedScriptText": "강의본"}) == "강의본"
+    assert _spoken_body({"scriptText": "원문"}) == "원문"
+    assert _spoken_body({}) == ""
+    assert _segment_speech({"kind": "paragraph", "scriptText": "원문",
+                            "enrichedScriptText": "강의본"}) == "강의본"
+    assert _segment_speech({"kind": "paragraph", "scriptText": "원문"}) == "원문"
+    assert _segment_speech({"kind": "table", "audioSummary": "요약",
+                            "enrichedScriptText": "무시"}) == "요약"
+    assert _segment_speech({"kind": "paragraph", "scriptText": "원문",
+                            "enrichedScriptText": "강의본", "skip": True}) == ""
+    _sts = script_to_speech({"segments": [
+        {"kind": "paragraph", "scriptText": "원문", "enrichedScriptText": "강의본"},
+        {"kind": "table", "audioSummary": "표요약"},
+    ]})
+    assert _sts == "강의본\n표요약", _sts
+    # gate: enriched 기준 토큰보존(원문 약어가 enriched에 없으면 hard)
+    _gh, _gs = gate_script(
+        {"segments": [{"id": "s1", "kind": "paragraph",
+                       "sourceExcerpt": "EC2를 제공합니다",
+                       "scriptText": "이씨투를 제공합니다",
+                       "enrichedScriptText": "이것을 제공합니다"}]},
+        {"EC2": {"say": "이씨투"}})
+    assert any("EC2" in h for h in _gh), _gh
     # 청크
     chunks = chunk_text("가나다라. 마바사아. 자차카타.", max_chars=10)
     assert len(chunks) >= 2, f"청크: {chunks}"
