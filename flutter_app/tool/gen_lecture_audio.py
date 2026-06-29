@@ -733,6 +733,48 @@ def chapters_from_segments(segments: list[dict]) -> list[dict]:
     return chapters
 
 
+_SCAFFOLD_META_PREFIX = "커버하는 공식 Task"
+_SCAFFOLD_CHECKLIST = "학습 목표 체크리스트"
+
+
+def mark_scaffolding(segments: list[dict]) -> int:
+    """오디오 스캐폴딩 세그먼트에 skip=True 표시(낭독 제외). 반환: 새로 표시한 수.
+
+    규칙(CLF 학습문서 템플릿, 19문서 실스캔 근거):
+      1) 문서-상단 메타 문단: kind=='paragraph' 이고 scriptText가
+         '커버하는 공식 Task'로 시작(도메인·퍼센트·문서ID·1:1 매핑 포함).
+      2) 학습목표 체크리스트 블록: sourceExcerpt에 '학습 목표 체크리스트'를 가진
+         heading + 그 다음 heading 전까지의 모든 세그먼트.
+    이미 skip=True면 건너뜀(멱등)."""
+    marked = 0
+    i = 0
+    n = len(segments)
+    while i < n:
+        s = segments[i]
+        if (s.get("kind") == "paragraph"
+                and (s.get("scriptText") or "").startswith(_SCAFFOLD_META_PREFIX)):
+            if not s.get("skip"):
+                s["skip"] = True
+                marked += 1
+            i += 1
+            continue
+        if (s.get("kind") == "heading"
+                and _SCAFFOLD_CHECKLIST in (s.get("sourceExcerpt") or "")):
+            if not s.get("skip"):
+                s["skip"] = True
+                marked += 1
+            j = i + 1
+            while j < n and segments[j].get("kind") != "heading":
+                if not segments[j].get("skip"):
+                    segments[j]["skip"] = True
+                    marked += 1
+                j += 1
+            i = j
+            continue
+        i += 1
+    return marked
+
+
 def split_sections(segments: list[dict]) -> list[dict]:
     """비-skip 세그먼트를 앵커 있는 heading 경계로 섹션 분할.
     section = {anchor, title, level, speech}. intro(첫 앵커 헤딩 전)는 anchor=None.
@@ -1281,6 +1323,37 @@ def _self_test() -> None:
     assert abs(_ch2[1]["fraction"] - 0.4) < 1e-9, _ch2
     assert chapters_from_section_durations(_secs3, [0, 0, 0])[0]["fraction"] == 0.0
     print("[self-test] chapters_from_section_durations OK", file=sys.stderr)
+
+    # Stage A1: 스캐폴딩 skip 표시(순수)
+    _scaf = [
+        {"id": "seg000", "kind": "heading",
+         "sourceExcerpt": "# 제목", "scriptText": "제목", "skip": False},
+        {"id": "seg001", "kind": "paragraph",
+         "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 …",
+         "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 1", "skip": False},
+        {"id": "seg002", "kind": "heading",
+         "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+         "scriptText": "학습 목표 체크리스트", "skip": False},
+        {"id": "seg003", "kind": "paragraph",
+         "sourceExcerpt": "이 문서를 끝내면 …",
+         "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다.", "skip": False},
+        {"id": "seg004", "kind": "paragraph",
+         "sourceExcerpt": "… 할 수 있다 …",
+         "scriptText": "클라우드 컴퓨팅의 정의를 말할 수 있다", "skip": False},
+        {"id": "seg005", "kind": "heading",
+         "sourceExcerpt": "## 왜 중요한가", "scriptText": "왜 중요한가", "skip": False},
+        {"id": "seg006", "kind": "paragraph",
+         "sourceExcerpt": "본문에서 설명할 수 있다는 표현",
+         "scriptText": "이 개념은 실무에서 바로 적용할 수 있다", "skip": False},
+    ]
+    _n = mark_scaffolding(_scaf)
+    assert _n == 4, _n                                   # seg001 + seg002·003·004
+    assert _scaf[1]["skip"] and _scaf[2]["skip"], _scaf  # 메타·체크리스트헤딩
+    assert _scaf[3]["skip"] and _scaf[4]["skip"], _scaf  # 체크리스트 블록
+    assert not _scaf[0]["skip"], _scaf                   # 일반 제목 유지
+    assert not _scaf[5]["skip"], _scaf                   # 다음 헤딩에서 블록 종료
+    assert not _scaf[6]["skip"], _scaf                   # '할 수 있다' 본문 오탐 안 함
+    assert mark_scaffolding(_scaf) == 0, "멱등 위반"     # 재적용 0
 
     print("self-test OK")
 
