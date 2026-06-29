@@ -551,6 +551,16 @@ def run_chapters(args) -> None:
           file=sys.stderr)
 
 
+def run_descaffold(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    marked = mark_scaffolding(script["segments"])
+    if marked:
+        script["reviewStatus"] = "needs_human_review"  # 내용 변경 → 재검수 필요
+    write_json(args.script, script)
+    print(f"[descaffold] {marked}개 세그먼트 skip 표시 → {args.script}",
+          file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -1355,6 +1365,27 @@ def _self_test() -> None:
     assert not _scaf[6]["skip"], _scaf                   # '할 수 있다' 본문 오탐 안 함
     assert mark_scaffolding(_scaf) == 0, "멱등 위반"     # 재적용 0
 
+    # Stage A1: descaffold 서브커맨드 I/O(임시 파일)
+    import tempfile as _tf
+    from types import SimpleNamespace as _NS
+    _doc = {"schemaVersion": 2, "docId": "x", "reviewStatus": "approved",
+            "segments": [
+                {"id": "seg000", "kind": "paragraph",
+                 "sourceExcerpt": "**커버하는 공식 Task** — …",
+                 "scriptText": "커버하는 공식 Task — 도메인 1", "skip": False},
+                {"id": "seg001", "kind": "heading",
+                 "sourceExcerpt": "## 본문", "scriptText": "본문", "skip": False},
+            ]}
+    with _tf.TemporaryDirectory() as _d:
+        _p = Path(_d) / "script.json"
+        write_json(_p, _doc)
+        run_descaffold(_NS(script=_p))
+        _r = json.loads(_p.read_text(encoding="utf-8"))
+    assert _r["segments"][0]["skip"] is True, _r
+    assert _r["segments"][1]["skip"] is False, _r
+    assert _r["reviewStatus"] == "needs_human_review", _r
+    print("[self-test] descaffold I/O OK", file=sys.stderr)
+
     print("self-test OK")
 
 
@@ -1393,6 +1424,10 @@ def main() -> None:
     ch.add_argument("--script", type=Path, required=True)
     ch.add_argument("--audio-meta", type=Path, required=True)
 
+    de = sub.add_parser("descaffold",
+                        help="스캐폴딩(메타·체크리스트) 세그먼트 skip 표시")
+    de.add_argument("--script", type=Path, required=True)
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1405,8 +1440,10 @@ def main() -> None:
         run_gate(args)
     elif args.cmd == "chapters":
         run_chapters(args)
+    elif args.cmd == "descaffold":
+        run_descaffold(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
