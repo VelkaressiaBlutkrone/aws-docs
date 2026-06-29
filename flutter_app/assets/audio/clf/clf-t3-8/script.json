@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번 시간에는 기타 범위 내 서비스를 짚어 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 3 「클라우드 기술 및 서비스」(34%) · **Task 3.8 기타 범위 내 서비스 식별** (`clf-t3-8`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 도메인 3의 *나머지 서비스 묶음* — 핵심은 **앱 통합 메시징(SNS·SQS·EventBridge)**과 **가상 데스크톱·IoT**입니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 앱 통합 메시징을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) 앱 통합 메시징 — SNS · SQS · EventBridge (★ 시험 핵심) {#messaging}",
@@ -165,6 +183,15 @@
       "issues": []
     },
     {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 최종 사용자 컴퓨팅으로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg017",
       "kind": "heading",
       "sourceExcerpt": "### 2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces {#euc}",
@@ -205,6 +232,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 WorkSpaces는 물리적 PC를 각 사용자에게 배포하는 대신 클라우드 가상 데스크톱을 제공하는 모델을 선택했을까요? 물리적 PC는 구매·배송·OS 설치·보안 패치·기기 분실 관리까지 IT 팀이 각 단말을 개별적으로 다뤄야 하고, 사용자 수가 늘거나 줄 때 하드웨어 조달과 반납 시간이 따라옵니다. 클라우드 가상 데스크톱은 데이터와 환경이 클라우드에 있으므로 기기를 분실해도 데이터 유출 위험이 낮고, 사용자 추가·제거를 관리 콘솔에서 처리할 수 있어 물리 기기 없이 인원 변화에 빠르게 대응하는 것이 가능합니다. 사용자는 어떤 기기에서든 같은 데스크톱 환경에 접근할 수 있으므로, 원격 근무나 다기기 환경에서도 일관된 작업 환경을 유지하는 것이 가능합니다.",
       "scriptText": "원리: 왜 WorkSpaces는 물리적 피씨를 각 사용자에게 배포하는 대신 클라우드 가상 데스크톱을 제공하는 모델을 선택했을까요? 물리적 피씨는 구매·배송·오에스 설치·보안 패치·기기 분실 관리까지 아이티 팀이 각 단말을 개별적으로 다뤄야 하고, 사용자 수가 늘거나 줄 때 하드웨어 조달과 반납 시간이 따라옵니다. 클라우드 가상 데스크톱은 데이터와 환경이 클라우드에 있으므로 기기를 분실해도 데이터 유출 위험이 낮고, 사용자 추가·제거를 관리 콘솔에서 처리할 수 있어 물리 기기 없이 인원 변화에 빠르게 대응하는 것이 가능합니다. 사용자는 어떤 기기에서든 같은 데스크톱 환경에 접근할 수 있으므로, 원격 근무나 다기기 환경에서도 일관된 작업 환경을 유지하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 애플리케이션 스트리밍과 메시지 브로커입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -259,6 +295,15 @@
       "issues": []
     },
     {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 IoT를 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg027",
       "kind": "heading",
       "sourceExcerpt": "### 3) IoT — AWS IoT Core {#iot}",
@@ -299,6 +344,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 IoT 기기를 클라우드에 연결할 때 일반 HTTP API 대신 MQTT 같은 경량 프로토콜을 쓰는 전용 서비스가 필요할까요? IoT 기기는 메모리·전력·네트워크 대역폭이 제한된 환경에서 동작하는 경우가 많아, HTTP의 헤더·연결 오버헤드가 기기 자원 대비 크게 작용할 수 있습니다. MQTT는 작은 페이로드와 지속적 연결을 유지하면서 수백만 기기가 동시에 낮은 지연시간으로 메시지를 주고받는 데 적합하도록 설계돼, 배터리 소모와 대역폭을 줄이는 것이 가능합니다. IoT Core는 이 프로토콜을 지원하는 관리형 메시지 브로커를 제공해, 대규모 기기 연결·인증·라우팅을 직접 구현하지 않고도 클라우드 서비스와 연계하는 것이 가능합니다.",
       "scriptText": "원리: 왜 IoT 기기를 클라우드에 연결할 때 일반 에이치티티피 에이피아이 대신 엠큐티티 같은 경량 프로토콜을 쓰는 전용 서비스가 필요할까요? IoT 기기는 메모리·전력·네트워크 대역폭이 제한된 환경에서 동작하는 경우가 많아, 에이치티티피의 헤더·연결 오버헤드가 기기 자원 대비 크게 작용할 수 있습니다. 엠큐티티는 작은 페이로드와 지속적 연결을 유지하면서 수백만 기기가 동시에 낮은 지연시간으로 메시지를 주고받는 데 적합하도록 설계돼, 배터리 소모와 대역폭을 줄이는 것이 가능합니다. IoT Core는 이 프로토콜을 지원하는 관리형 메시지 브로커를 제공해, 대규모 기기 연결·인증·라우팅을 직접 구현하지 않고도 클라우드 서비스와 연계하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 그 외 범위 내 서비스를 살펴보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -346,6 +400,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 CLF는 이 묶음의 서비스들에 대해 깊은 지식 대신 범주 식별 수준만 요구할까요? CLF는 클라우드 실무자 수준의 폭넓은 식별 능력을 평가하는 시험으로, 특정 서비스의 내부 동작보다 어떤 시나리오에 어떤 범주의 서비스를 선택하는지를 판단하는 능력을 측정합니다. Connect·Amplify·X-Ray 같은 서비스들은 특정 역할(콜센터·모바일 백엔드·추적)에 특화돼 있어, 시험에서는 시나리오 키워드를 보고 해당 범주임을 인식하면 충분합니다. 깊은 구현 지식은 전문 자격증(Developer·SysOps 등) 수준의 시험에서 다루므로, CLF에서는 서비스 이름과 범주 간 매칭 능력이 평가 범위가 됩니다.",
       "scriptText": "원리: 왜 씨엘에프는 이 묶음의 서비스들에 대해 깊은 지식 대신 범주 식별 수준만 요구할까요? 씨엘에프는 클라우드 실무자 수준의 폭넓은 식별 능력을 평가하는 시험으로, 특정 서비스의 내부 동작보다 어떤 시나리오에 어떤 범주의 서비스를 선택하는지를 판단하는 능력을 측정합니다. Connect·Amplify·X-Ray 같은 서비스들은 특정 역할(콜센터·모바일 백엔드·추적)에 특화돼 있어, 시험에서는 시나리오 키워드를 보고 해당 범주임을 인식하면 충분합니다. 깊은 구현 지식은 전문 자격증(Developer·SysOps 등) 수준의 시험에서 다루므로, 씨엘에프에서는 서비스 이름과 범주 간 매칭 능력이 평가 범위가 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 에스큐에스 큐 유형으로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -405,6 +468,15 @@
       "issues": []
     },
     {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 흔한 함정입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg043",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -436,6 +508,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"기존 RabbitMQ 애플리케이션은 무조건 SQS로 다시 작성해야 한다.\"** → ⚠️ 기존 브로커 프로토콜과 코드를 유지해야 한다면 **Amazon MQ**가 맞을 수 있습니다. SQS는 AWS 네이티브 큐 서비스입니다. *(원리: §3 — Amazon MQ는 ActiveMQ/RabbitMQ 호환 브로커 운영 부담을 줄이는 서비스이고, SQS는 AWS가 제공하는 관리형 큐 API로 프로토콜 모델이 다르다.)*",
       "scriptText": "\"기존 RabbitMQ 애플리케이션은 무조건 에스큐에스로 다시 작성해야 한다.\", 기존 브로커 프로토콜과 코드를 유지해야 한다면 Amazon 엠큐가 맞을 수 있습니다. 에스큐에스는 에이더블유에스 네이티브 큐 서비스입니다. (원리: 3번 — Amazon 엠큐는 ActiveMQ/RabbitMQ 호환 브로커 운영 부담을 줄이는 서비스이고, 에스큐에스는 에이더블유에스가 제공하는 관리형 큐 에이피아이로 프로토콜 모델이 다르다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con008",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "핵심은 여기까지입니다. 수고하셨습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []

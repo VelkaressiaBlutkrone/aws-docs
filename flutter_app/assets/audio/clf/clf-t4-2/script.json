@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "결제, 예산, 비용 관리 도구, 지금부터 함께 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 4 「결제, 요금 및 지원」(12%) · **Task 4.2 결제·예산·비용 관리 리소스** (`clf-t4-2`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"비용을 *추정·추적·관리*하는 도구들\"을 구분하는 게 핵심입니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 비용을 다루는 도구를 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) 비용을 다루는 도구 — 시점으로 구분 (★ 시험 핵심) {#cost-tools}",
@@ -142,6 +160,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 AWS는 비용 추정(Pricing Calculator)과 발생 비용 분석(Cost Explorer)을 같은 도구로 통합하지 않고 별개 서비스로 유지할까요? Pricing Calculator는 리소스를 구성하기 *전* 단계에서 서비스 구성·수량·리전 조합을 입력해 예상 비용을 시뮬레이션하므로, 실제 계정 사용 데이터 없이 공개 요금표만으로 동작합니다. Cost Explorer는 계정에서 *이미 발생한* 비용과 사용량 이력을 집계·시각화하고 추세를 분석하므로, 실제 과금 데이터를 필요로 하며 구축 전 시뮬레이션 도구와 입력 데이터 자체가 다릅니다. 두 도구가 다루는 데이터(공개 요금표 vs 계정 이력)와 목적(사전 계획 vs 사후 분석)이 달라 하나로 통합하면 어느 쪽 용도에도 최적화하기 어렵고, 각자의 목적에 맞는 인터페이스를 제공하는 것이 가능합니다.",
       "scriptText": "원리: 왜 에이더블유에스는 비용 추정(Pricing Calculator)과 발생 비용 분석(Cost Explorer)을 같은 도구로 통합하지 않고 별개 서비스로 유지할까요? Pricing Calculator는 리소스를 구성하기 전 단계에서 서비스 구성·수량·리전 조합을 입력해 예상 비용을 시뮬레이션하므로, 실제 계정 사용 데이터 없이 공개 요금표만으로 동작합니다. Cost Explorer는 계정에서 이미 발생한 비용과 사용량 이력을 집계·시각화하고 추세를 분석하므로, 실제 과금 데이터를 필요로 하며 구축 전 시뮬레이션 도구와 입력 데이터 자체가 다릅니다. 두 도구가 다루는 데이터(공개 요금표 대 계정 이력)와 목적(사전 계획 대 사후 분석)이 달라 하나로 통합하면 어느 쪽 용도에도 최적화하기 어렵고, 각자의 목적에 맞는 인터페이스를 제공하는 것이 가능합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 에이더블유에스 Organizations로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -192,6 +219,15 @@
       "issues": []
     },
     {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 비용 추적입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg020",
       "kind": "heading",
       "sourceExcerpt": "### 3) 비용 추적 — 비용 할당 태그와 CUR {#cost-tracking}",
@@ -223,6 +259,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 AWS는 기본 결제 데이터만으로는 비용을 프로젝트·팀별로 분류하기 어렵고, 비용 할당 태그가 필요할까요? AWS 청구서는 기본적으로 서비스와 리전 단위로 비용을 집계하므로, 같은 서비스 안에서 여러 프로젝트가 리소스를 함께 사용하면 프로젝트별 비용을 청구 데이터만으로 구분하는 것이 어렵습니다. 비용 할당 태그는 개별 리소스에 `팀=마케팅`, `프로젝트=A` 같은 메타데이터를 붙이는 방식으로, Cost Explorer와 CUR에서 이 태그를 기준으로 비용을 필터링·그룹화해 팀·프로젝트 단위 비용 가시성을 확보하는 것이 가능합니다. 태그 없이는 리소스가 어느 사업 단위에 속하는지 추적할 수단이 없어, 조직이 커질수록 비용 책임(cost accountability)을 할당하기 어려워집니다.",
       "scriptText": "원리: 왜 에이더블유에스는 기본 결제 데이터만으로는 비용을 프로젝트·팀별로 분류하기 어렵고, 비용 할당 태그가 필요할까요? 에이더블유에스 청구서는 기본적으로 서비스와 리전 단위로 비용을 집계하므로, 같은 서비스 안에서 여러 프로젝트가 리소스를 함께 사용하면 프로젝트별 비용을 청구 데이터만으로 구분하는 것이 어렵습니다. 비용 할당 태그는 개별 리소스에 팀, 즉 마케팅, 프로젝트, 즉 A 같은 메타데이터를 붙이는 방식으로, Cost Explorer와 씨유알에서 이 태그를 기준으로 비용을 필터링·그룹화해 팀·프로젝트 단위 비용 가시성을 확보하는 것이 가능합니다. 태그 없이는 리소스가 어느 사업 단위에 속하는지 추적할 수단이 없어, 조직이 커질수록 비용 책임(cost accountability)을 할당하기 어려워집니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 이상 탐지와 비용 예측을 보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -282,6 +327,15 @@
       "issues": []
     },
     {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 흔한 함정을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg030",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -295,6 +349,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"Cost Explorer로 구축 전 비용을 추정한다.\"** → ❌. 구축 *전* 추정은 **Pricing Calculator**. Cost Explorer는 *이미 발생한* 비용 분석. *(원리: §1 — Pricing Calculator는 공개 요금표를 기반으로 구성 전 예상 비용을 시뮬레이션하고, Cost Explorer는 계정에 이미 발생한 비용 이력 데이터를 시각화·분석하므로 입력 데이터와 목적이 다르다.)* **\"Budgets로 과거 비용을 자세히 분석한다.\"** → ⚠️ Budgets는 *예산·알림*이 주목적. 과거 분석·시각화는 **Cost Explorer**. *(원리: §1 — Budgets는 사용자가 정한 임계값을 초과하면 경보를 보내는 통제 도구이고, Cost Explorer는 과거 비용·사용량 이력을 그래프·필터로 탐색·분석하는 도구로 역할이 다르다.)* **\"통합 결제는 Cost Explorer 기능이다.\"** → ❌. 다계정 **통합 결제(consolidated billing)**는 **AWS Organizations**. *(원리: §2 — AWS Organizations가 여러 계정을 하나의 관리 계정 아래 묶고 단일 청구서로 합산 결제하는 구조를 제공하며, Cost Explorer는 이렇게 집계된 비용 데이터를 분석하는 별개 도구다.)* **\"SCP는 비용 절감 도구다.\"** → ❌. SCP는 *거버넌스*(허용 작업 통제)입니다. 비용 분석은 Cost Explorer, 예산은 Budgets. *(원리: §2 — SCP는 계정·OU에서 허용하거나 금지할 서비스·리전·작업을 중앙에서 정의하는 정책 거버넌스 메커니즘이고, 비용 자체를 측정·제한하는 기능은 Budgets와 Cost Explorer가 담당한다.)* **\"태그는 비용과 무관하다.\"** → ❌. **비용 할당 태그**로 프로젝트·팀별 비용을 분류·추적합니다. *(원리: §3 — AWS 청구는 기본적으로 서비스·리전 단위로 집계되므로, 리소스에 비용 할당 태그를 붙여야 프로젝트·팀 등 조직 기준으로 비용을 필터링·그룹화하는 것이 가능하다.)*",
       "scriptText": "\"Cost Explorer로 구축 전 비용을 추정한다.\". 구축 전 추정은 Pricing Calculator. Cost Explorer는 이미 발생한 비용 분석. (원리: 1번 — Pricing Calculator는 공개 요금표를 기반으로 구성 전 예상 비용을 시뮬레이션하고, Cost Explorer는 계정에 이미 발생한 비용 이력 데이터를 시각화·분석하므로 입력 데이터와 목적이 다르다.) \"Budgets로 과거 비용을 자세히 분석한다.\", Budgets는 예산·알림이 주목적. 과거 분석·시각화는 Cost Explorer. (원리: 1번 — Budgets는 사용자가 정한 임계값을 초과하면 경보를 보내는 통제 도구이고, Cost Explorer는 과거 비용·사용량 이력을 그래프·필터로 탐색·분석하는 도구로 역할이 다르다.) \"통합 결제는 Cost Explorer 기능이다.\". 다계정 통합 결제(consolidated billing)는 에이더블유에스 Organizations. (원리: 2번 — 에이더블유에스 Organizations가 여러 계정을 하나의 관리 계정 아래 묶고 단일 청구서로 합산 결제하는 구조를 제공하며, Cost Explorer는 이렇게 집계된 비용 데이터를 분석하는 별개 도구다.) \"에스씨피는 비용 절감 도구다.\". 에스씨피는 거버넌스(허용 작업 통제)입니다. 비용 분석은 Cost Explorer, 예산은 Budgets. (원리: 2번 — 에스씨피는 계정·오유에서 허용하거나 금지할 서비스·리전·작업을 중앙에서 정의하는 정책 거버넌스 메커니즘이고, 비용 자체를 측정·제한하는 기능은 Budgets와 Cost Explorer가 담당한다.) \"태그는 비용과 무관하다.\". 비용 할당 태그로 프로젝트·팀별 비용을 분류·추적합니다. (원리: 3번 — 에이더블유에스 청구는 기본적으로 서비스·리전 단위로 집계되므로, 리소스에 비용 할당 태그를 붙여야 프로젝트·팀 등 조직 기준으로 비용을 필터링·그룹화하는 것이 가능하다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이상으로 이번 강의를 마칩니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []

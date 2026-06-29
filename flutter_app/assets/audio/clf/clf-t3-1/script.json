@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번 강의에서는 배포, 운영 방법을 다룹니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 3 「클라우드 기술 및 서비스」(34%) · **Task 3.1 배포·운영 방법 정의** (`clf-t3-1`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. *무슨* 서비스를 쓰는지가 아니라, 그것들을 *어떻게 프로비저닝·운영*하고 *어디에·어떻게 연결*하는지를 다룹니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 에이더블유에스를 다루는 네 가지 방법을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) AWS를 다루는 네 가지 방법 — 콘솔 · CLI · SDK · IaC {#access-methods}",
@@ -142,6 +160,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 콘솔·CLI·SDK·직접 API 호출은 어떻게 모두 \"동등한 기능\"을 제공할 수 있을까요? 이 네 방법은 내부적으로 모두 동일한 AWS 서비스 API를 호출하는 서로 다른 껍데기(인터페이스)이기 때문입니다. 콘솔에서 버튼을 클릭하면 브라우저가 그에 대응하는 API를 호출하고, CLI 명령도, SDK 메서드도 결국 같은 AWS API 서버에 요청을 보냅니다. 어떤 방법을 쓰든 AWS 서비스는 동일한 요청을 처리하며, 방법의 차이는 누가(사람/코드/앱) 어떤 상황에서 편리한가의 차이입니다.",
       "scriptText": "원리: 콘솔·씨엘아이·에스디케이·직접 에이피아이 호출은 어떻게 모두 \"동등한 기능\"을 제공할 수 있을까요? 이 네 방법은 내부적으로 모두 동일한 에이더블유에스 서비스 에이피아이를 호출하는 서로 다른 껍데기(인터페이스)이기 때문입니다. 콘솔에서 버튼을 클릭하면 브라우저가 그에 대응하는 에이피아이를 호출하고, 씨엘아이 명령도, 에스디케이 메서드도 결국 같은 에이더블유에스 에이피아이 서버에 요청을 보냅니다. 어떤 방법을 쓰든 에이더블유에스 서비스는 동일한 요청을 처리하며, 방법의 차이는 누가(사람/코드/앱) 어떤 상황에서 편리한가의 차이입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 IaC와 에이더블유에스 CloudFormation로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -201,6 +228,15 @@
       "issues": []
     },
     {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 일회성 대 반복 프로세스입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg021",
       "kind": "heading",
       "sourceExcerpt": "### 3) 일회성 vs 반복 프로세스 {#oneoff-vs-repeat}",
@@ -232,6 +268,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 수작업 반복이 왜 결국 환경 불일치를 낳을까요? 사람이 매번 콘솔에서 클릭해 환경을 만들면, 클릭 순서·실수·누락이 기록되지 않습니다. 설정 방법을 기억하는 사람이 바뀌거나, 시간이 지나 세부 절차를 잊으면 두 번째 환경은 첫 번째와 미묘하게 달라집니다. 이처럼 환경마다 조금씩 달라지는 현상을 구성 표류(configuration drift)라고 합니다. 코드(IaC 템플릿 또는 CLI 스크립트)는 명세 자체가 기록이므로, 리뷰·비교·재현이 가능하고 표류를 방지합니다. 그래서 반복 작업에서 코드/자동화가 기본값이 됩니다.",
       "scriptText": "원리: 수작업 반복이 왜 결국 환경 불일치를 낳을까요? 사람이 매번 콘솔에서 클릭해 환경을 만들면, 클릭 순서·실수·누락이 기록되지 않습니다. 설정 방법을 기억하는 사람이 바뀌거나, 시간이 지나 세부 절차를 잊으면 두 번째 환경은 첫 번째와 미묘하게 달라집니다. 이처럼 환경마다 조금씩 달라지는 현상을 구성 표류(configuration drift)라고 합니다. 코드(IaC 템플릿 또는 씨엘아이 스크립트)는 명세 자체가 기록이므로, 리뷰·비교·재현이 가능하고 표류를 방지합니다. 그래서 반복 작업에서 코드/자동화가 기본값이 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 배포 모델을 보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -275,6 +320,15 @@
       "issues": []
     },
     {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 연결 옵션을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg029",
       "kind": "heading",
       "sourceExcerpt": "### 5) 연결 옵션 — 공용 인터넷 · VPN · Direct Connect (3.5 연계) {#connectivity}",
@@ -308,6 +362,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: VPN과 Direct Connect는 왜 성능과 비용 특성이 반대인가요? 두 옵션의 차이는 패킷이 지나가는 경로의 성격에서 비롯됩니다. VPN은 공용 인터넷 위에 IPsec 암호화 터널을 얹습니다. 경로 자체는 공용이므로 혼잡에 따라 지연이 변동될 수 있고, 기존 인터넷 회선을 그대로 활용하므로 상대적으로 빠르고 간단하게 시작할 수 있습니다. Direct Connect는 온프레미스부터 AWS 네트워크까지 물리적으로 전용 회선을 설치합니다. 경로가 공용 인터넷과 분리되어 있어 혼잡의 영향을 받지 않으므로 대역폭과 지연이 일관됩니다. 그 대신 물리 회선 구축에는 시간과 비용이 필요합니다. \"빠르게 시작 = VPN, 일관·안정 = Direct Connect\"는 이 경로 구조의 직접적인 귀결입니다.",
       "scriptText": "원리: 브이피엔과 Direct Connect는 왜 성능과 비용 특성이 반대인가요? 두 옵션의 차이는 패킷이 지나가는 경로의 성격에서 비롯됩니다. 브이피엔은 공용 인터넷 위에 IPsec 암호화 터널을 얹습니다. 경로 자체는 공용이므로 혼잡에 따라 지연이 변동될 수 있고, 기존 인터넷 회선을 그대로 활용하므로 상대적으로 빠르고 간단하게 시작할 수 있습니다. Direct Connect는 온프레미스부터 에이더블유에스 네트워크까지 물리적으로 전용 회선을 설치합니다. 경로가 공용 인터넷과 분리되어 있어 혼잡의 영향을 받지 않으므로 대역폭과 지연이 일관됩니다. 그 대신 물리 회선 구축에는 시간과 비용이 필요합니다. \"빠르게 시작, 즉 브이피엔, 일관·안정, 즉 Direct Connect\"는 이 경로 구조의 직접적인 귀결입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 배포, 운영 자동화 도구로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -375,6 +438,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**콘솔 = GUI(손)** · **CLI = 명령줄(스크립트)** · **SDK = 앱 코드(언어별 API)** · **IaC = 템플릿(인프라를 코드로)**. **CloudFormation = IaC.** \"인프라를 코드로 / 반복·일관 / 여러 리전 동일 / 버전 관리·롤백\" → CloudFormation. **반복·재현**은 손(콘솔)이 아니라 **자동화(CLI)·IaC**로. **Elastic Beanstalk = 앱 배포 플랫폼**, **CDK = 프로그래밍 언어로 쓰는 IaC(CloudFormation으로 합성)**, **Systems Manager = 노드 운영 작업**, **CodePipeline/Build/Deploy/Commit = 릴리스 파이프라인 구성 요소**. **배포 모델**: 전부 클라우드 = 클라우드, *온프레+클라우드 혼합* = **하이브리드**, 자체 DC = 온프레미스. **연결**: 인터넷(간단) · **VPN(인터넷 위 IPsec, 빠르고 저렴)** · **Direct Connect(전용 회선, 일관)**.",
       "scriptText": "콘솔, 즉 지유아이(손) · 씨엘아이, 즉 명령줄(스크립트) · 에스디케이, 즉 앱 코드(언어별 에이피아이) · IaC, 즉 템플릿(인프라를 코드로). CloudFormation, 즉 IaC. \"인프라를 코드로 / 반복·일관 / 여러 리전 동일 / 버전 관리·롤백\", CloudFormation. 반복·재현은 손(콘솔)이 아니라 자동화(씨엘아이)·IaC로. Elastic Beanstalk, 즉 앱 배포 플랫폼, 씨디케이, 즉 프로그래밍 언어로 쓰는 IaC(CloudFormation으로 합성), Systems Manager, 즉 노드 운영 작업, CodePipeline/Build/Deploy/Commit, 즉 릴리스 파이프라인 구성 요소. 배포 모델: 전부 클라우드, 즉 클라우드, 온프레 그리고 클라우드 혼합, 즉 하이브리드, 자체 디씨, 즉 온프레미스. 연결: 인터넷(간단) · 브이피엔(인터넷 위 IPsec, 빠르고 저렴) · Direct Connect(전용 회선, 일관).",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 흔한 함정입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -456,6 +528,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"CodeBuild가 운영 환경으로 배포까지 담당한다.\"** → ⚠️ 구분. CodeBuild는 빌드·테스트·산출물 생성, CodeDeploy는 배포, CodePipeline은 전체 흐름 조율입니다. *(원리: §6 — 파이프라인은 소스·빌드·배포 단계를 나누어 각 단계 실패를 독립적으로 확인하고 재시도할 수 있도록 설계된다.)*",
       "scriptText": "\"CodeBuild가 운영 환경으로 배포까지 담당한다.\", 구분. CodeBuild는 빌드·테스트·산출물 생성, CodeDeploy는 배포, CodePipeline은 전체 흐름 조율입니다. (원리: 6번 — 파이프라인은 소스·빌드·배포 단계를 나누어 각 단계 실패를 독립적으로 확인하고 재시도할 수 있도록 설계된다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con008",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "여기까지가 이 주제의 핵심입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []

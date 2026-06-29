@@ -17,6 +17,15 @@
       "issues": []
     },
     {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "컴퓨팅 서비스, 지금부터 함께 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg001",
       "kind": "paragraph",
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 3 「클라우드 기술 및 서비스」(34%) · **Task 3.3 컴퓨팅 서비스 식별** (`clf-t3-3`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. [글로벌 인프라](#)(3.2)가 *어디서* 돈다면, 이 Task는 *무엇으로* 코드를 실행하는가입니다.",
@@ -109,6 +118,15 @@
       "issues": []
     },
     {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 Amazon 이씨투를 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg011",
       "kind": "heading",
       "sourceExcerpt": "### 1) Amazon EC2 — 클라우드의 가상 서버 (IaaS) {#ec2}",
@@ -163,6 +181,15 @@
       "issues": []
     },
     {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 컨테이너로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg017",
       "kind": "heading",
       "sourceExcerpt": "### 2) 컨테이너 — Amazon ECS vs Amazon EKS {#containers}",
@@ -205,6 +232,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 AWS는 ECS와 EKS를 하나로 합치지 않고 별도 서비스로 제공할까요? ECS는 AWS가 자체 설계한 오케스트레이션 방식으로, AWS 네이티브 서비스와 통합이 간단하고 Kubernetes 학습 없이 빠르게 컨테이너를 운영할 수 있습니다. EKS는 업계 표준 Kubernetes 컨트롤 플레인을 AWS가 관리해 주는 서비스로, 이미 Kubernetes를 쓰거나 멀티클라우드·온프레미스 Kubernetes 환경과 연속성이 필요한 팀에 학습·이식 비용 없이 이전할 수 있게 합니다. 두 오케스트레이션 방식이 담당하는 사용자 기반과 이식성 요구가 달라 별도 서비스로 나뉘어 있으며, 기저 컴퓨팅(EC2 또는 Fargate)은 두 서비스가 공유합니다.",
       "scriptText": "원리: 왜 에이더블유에스는 이씨에스와 이케이에스를 하나로 합치지 않고 별도 서비스로 제공할까요? 이씨에스는 에이더블유에스가 자체 설계한 오케스트레이션 방식으로, 에이더블유에스 네이티브 서비스와 통합이 간단하고 Kubernetes 학습 없이 빠르게 컨테이너를 운영할 수 있습니다. 이케이에스는 업계 표준 Kubernetes 컨트롤 플레인을 에이더블유에스가 관리해 주는 서비스로, 이미 Kubernetes를 쓰거나 멀티클라우드·온프레미스 Kubernetes 환경과 연속성이 필요한 팀에 학습·이식 비용 없이 이전할 수 있게 합니다. 두 오케스트레이션 방식이 담당하는 사용자 기반과 이식성 요구가 달라 별도 서비스로 나뉘어 있으며, 기저 컴퓨팅(이씨투 또는 Fargate)은 두 서비스가 공유합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 컨테이너 이미지와 배치 작업입니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -254,6 +290,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 ECR과 Batch는 ECS/EKS/Lambda 같은 실행 서비스와 분리되어 있을까요? 컨테이너 이미지는 실행되기 전의 불변 패키지이고, 이를 안전하게 저장·권한 제어·복제·스캔하는 문제는 컨테이너를 실제로 스케줄링해 실행하는 문제와 다릅니다. ECR은 이미지 저장소 역할에 집중하고, ECS/EKS/Lambda/Fargate 같은 실행 환경은 필요한 시점에 이미지를 가져와 실행합니다. Batch는 웹 요청을 즉시 처리하는 서비스가 아니라 큐에 쌓인 작업을 적절한 컴퓨팅 자원에 배치해 처리량과 비용을 맞추는 오케스트레이션 서비스입니다. 그래서 \"이미지를 보관할 곳\"이면 ECR, \"작업을 대량 실행할 스케줄러\"이면 Batch, \"서비스를 계속 실행할 런타임\"이면 ECS/EKS/Lambda/Fargate로 나뉩니다.",
       "scriptText": "원리: 왜 이씨알과 Batch는 이씨에스/이케이에스/Lambda 같은 실행 서비스와 분리되어 있을까요? 컨테이너 이미지는 실행되기 전의 불변 패키지이고, 이를 안전하게 저장·권한 제어·복제·스캔하는 문제는 컨테이너를 실제로 스케줄링해 실행하는 문제와 다릅니다. 이씨알은 이미지 저장소 역할에 집중하고, 이씨에스/이케이에스/Lambda/Fargate 같은 실행 환경은 필요한 시점에 이미지를 가져와 실행합니다. Batch는 웹 요청을 즉시 처리하는 서비스가 아니라 큐에 쌓인 작업을 적절한 컴퓨팅 자원에 배치해 처리량과 비용을 맞추는 오케스트레이션 서비스입니다. 그래서 \"이미지를 보관할 곳\"이면 이씨알, \"작업을 대량 실행할 스케줄러\"이면 Batch, \"서비스를 계속 실행할 런타임\"이면 이씨에스/이케이에스/Lambda/Fargate로 나뉩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 서버리스를 보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -313,6 +358,15 @@
       "issues": []
     },
     {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 탄력성을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg033",
       "kind": "heading",
       "sourceExcerpt": "### 4) 탄력성 — Amazon EC2 Auto Scaling {#autoscaling}",
@@ -353,6 +407,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "🧠 원리: 왜 EC2 Auto Scaling은 인스턴스를 미리 충분히 준비해 두지 않고, 조건에 따라 늘리고 줄이는 방식을 택할까요? 트래픽은 시간대·이벤트에 따라 변하는데, 최대 수요에 맞춰 항상 인스턴스를 유지하면 수요가 낮은 시간대에 비용이 낭비됩니다. Auto Scaling은 정의된 조건(CPU 사용률 등 스케일링 정책)을 실시간으로 감시해 필요한 만큼만 인스턴스를 추가·제거하므로, 가용성을 유지하면서 유휴 자원에 대한 비용을 줄일 수 있습니다. 이 동적 조정 방식이 클라우드의 탄력성(elasticity)을 실현하는 메커니즘으로, 온프레미스에서 피크 대비 과잉 프로비저닝하던 방식과 근본적으로 다릅니다.",
       "scriptText": "원리: 왜 이씨투 Auto Scaling은 인스턴스를 미리 충분히 준비해 두지 않고, 조건에 따라 늘리고 줄이는 방식을 택할까요? 트래픽은 시간대·이벤트에 따라 변하는데, 최대 수요에 맞춰 항상 인스턴스를 유지하면 수요가 낮은 시간대에 비용이 낭비됩니다. Auto Scaling은 정의된 조건(씨피유 사용률 등 스케일링 정책)을 실시간으로 감시해 필요한 만큼만 인스턴스를 추가·제거하므로, 가용성을 유지하면서 유휴 자원에 대한 비용을 줄일 수 있습니다. 이 동적 조정 방식이 클라우드의 탄력성(elasticity)을 실현하는 메커니즘으로, 온프레미스에서 피크 대비 과잉 프로비저닝하던 방식과 근본적으로 다릅니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 트래픽 분산으로 넘어가겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -405,6 +468,15 @@
       "issues": []
     },
     {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 한눈에입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg043",
       "kind": "heading",
       "sourceExcerpt": "### 6) 한눈에 — 관리 부담 스펙트럼 {#spectrum}",
@@ -450,6 +522,15 @@
       "issues": []
     },
     {
+      "id": "con008",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 흔한 함정을 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
       "id": "seg048",
       "kind": "heading",
       "sourceExcerpt": "## ⚠️ 흔한 함정 {#pitfalls}",
@@ -481,6 +562,15 @@
       "kind": "paragraph",
       "sourceExcerpt": "**\"Batch는 사용자가 접속하는 웹 애플리케이션 서버다.\"** → ❌. AWS Batch는 큐에 제출한 배치 작업을 계획·스케줄·실행하는 서비스입니다. 상시 요청 처리 웹 서버는 EC2·컨테이너·Lambda 쪽을 봅니다. *(원리: §3 — Batch는 작업 단위의 처리량과 컴퓨팅 용량을 맞추는 오케스트레이션이고, 지속적으로 사용자 요청을 받는 런타임과 실행 패턴이 다르다.)*",
       "scriptText": "\"Batch는 사용자가 접속하는 웹 애플리케이션 서버다.\". 에이더블유에스 Batch는 큐에 제출한 배치 작업을 계획·스케줄·실행하는 서비스입니다. 상시 요청 처리 웹 서버는 이씨투·컨테이너·Lambda 쪽을 봅니다. (원리: 3번 — Batch는 작업 단위의 처리량과 컴퓨팅 용량을 맞추는 오케스트레이션이고, 지속적으로 사용자 요청을 받는 런타임과 실행 패턴이 다르다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con009",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이상으로 이번 강의를 마칩니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
