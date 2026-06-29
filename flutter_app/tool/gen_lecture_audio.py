@@ -678,6 +678,57 @@ def run_enrich(args) -> None:
     print(f"[enrich] {n}개 머지 → {args.script} · 리포트 {report}", file=sys.stderr)
 
 
+VERIFY_SYSTEM = (
+    "당신은 AWS 자격증 콘텐츠 사실검증자입니다. 풍부화된 강의 대본이 검증된 원문에 "
+    "충실한지 세그먼트별로 점검합니다. 다음을 플래그하십시오: 원문이 뒷받침하지 않는 "
+    "사실 단정(없던 수치·서비스명·인과·'항상/모두' 과일반화), 개념을 오도하는 틀린 비유, "
+    "원문 수치·약어의 변경/누락.\n"
+    "문제가 있으면 각 줄을 정확히 '세그먼트id | 유형 | 원문 근거 | 제안' 형식으로 "
+    "출력하십시오(세그먼트id는 seg로 시작). 문제가 없으면 'PASS'만 출력하십시오."
+)
+
+_VERIFY_FLAG_RE = re.compile(r"^\s*(seg\w+)\s*\|")
+
+
+def build_verify_user(seg: dict) -> str:
+    return (f"세그먼트 {seg['id']}\n[검증된 원문 sourceExcerpt]\n"
+            f"{seg.get('sourceExcerpt', '')}\n\n[풍부화 대본]\n{_spoken_body(seg)}\n")
+
+
+def parse_verify_response(text: str) -> list:
+    flags = []
+    for ln in text.splitlines():
+        if _VERIFY_FLAG_RE.match(ln):
+            cells = [c.strip() for c in ln.split("|")]
+            flags.append({"seg": cells[0],
+                          "type": cells[1] if len(cells) > 1 else "",
+                          "basis": cells[2] if len(cells) > 2 else "",
+                          "fix": cells[3] if len(cells) > 3 else ""})
+    return flags
+
+
+def run_verify(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    targets = [s for s in script["segments"]
+               if s.get("enrichedScriptText") and not s.get("skip")]
+    print(f"[verify] 대상 {len(targets)}개", file=sys.stderr)
+    all_flags = []
+    for s in targets:
+        resp = call_claude_text(VERIFY_SYSTEM, build_verify_user(s), args.model)
+        all_flags += parse_verify_response(resp)
+    out = args.script.parent / "enrich_verify.md"
+    if all_flags:
+        body = "\n".join(f"- {f['seg']} | {f['type']} | {f['basis']} | {f['fix']}"
+                         for f in all_flags)
+        out.write_text(f"# verify FAIL — {len(all_flags)} flags\n\n{body}\n",
+                       encoding="utf-8")
+        for f in all_flags:
+            print(f"  FLAG {f['seg']} | {f['type']}", file=sys.stderr)
+        sys.exit(f"[verify] FAIL — {len(all_flags)} flags → {out}")
+    out.write_text("# verify PASS\n\n플래그 없음.\n", encoding="utf-8")
+    print(f"[verify] PASS → {out}", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -1727,6 +1778,13 @@ def _self_test() -> None:
     assert _mn == 1 and _p1["enrichedScriptText"] == "에이더블유에스 강의입니다", _p1
     assert "에이더블유에스 강의입니다" in enrich_report(_escript, {"p1": "에이더블유에스 강의입니다"})
 
+    # --- Stage B: verify 응답 파싱 ---
+    assert parse_verify_response("VERDICT: PASS\n근거 없음, 모두 일치") == []
+    _vf = parse_verify_response(
+        "seg005 | 사실단정 | 원문 미뒷받침 | 삭제 권장\n무관한 줄")
+    assert len(_vf) == 1 and _vf[0]["seg"] == "seg005" \
+        and _vf[0]["type"] == "사실단정", _vf
+
     print("self-test OK")
 
 
@@ -1780,6 +1838,10 @@ def main() -> None:
     en.add_argument("--dry-run", action="store_true", help="API 호출 없이 대상만 출력")
     en.add_argument("--lexicon", type=Path)
 
+    ve = sub.add_parser("verify", help="풍부화본 사실검증(원문 대조 플래그)")
+    ve.add_argument("--script", type=Path, required=True)
+    ve.add_argument("--model", default="claude-opus-4-8")
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1798,8 +1860,10 @@ def main() -> None:
         run_connectors(args)
     elif args.cmd == "enrich":
         run_enrich(args)
+    elif args.cmd == "verify":
+        run_verify(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors/enrich) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors/enrich/verify) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
