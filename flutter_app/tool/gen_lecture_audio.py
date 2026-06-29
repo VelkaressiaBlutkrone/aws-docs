@@ -576,6 +576,108 @@ def run_connectors(args) -> None:
     print(f"[connectors] {added}개 연결문 삽입 → {args.script}", file=sys.stderr)
 
 
+ENRICH_SYSTEM = (
+    "당신은 AWS 자격증 강의 대본을 다듬는 한국어 강사입니다. 주어진 세그먼트의 "
+    "현재 대본을 더 '강의처럼' 풀어 씁니다. 규칙:\n"
+    "(a) 합니다체 대화체로 자연스럽게.\n"
+    "(b) 이해를 돕는 짧은 비유나 예시를 1개만, 자연스러운 곳에만 넣습니다. "
+    "억지로 모든 세그먼트에 넣지 마십시오.\n"
+    "(c) 원문(sourceExcerpt)의 약어·수치·핵심 주장을 반드시 보존합니다.\n"
+    "(d) 원문에 없는 새로운 시험 사실을 단정하지 마십시오. 비유는 설명용 예시일 "
+    "뿐이며 새 사실을 만들지 않습니다.\n"
+    "(e) 평문만 씁니다. 기호(→ ≠ ↓ § |)·URL·마크다운·괄호 부연 남발 금지. "
+    "원문 길이의 약 2배 이내.\n"
+    "(f) 영문 약어는 한글 발음으로 적습니다(예: AWS→에이더블유에스, EC2→이씨투).\n"
+    "출력은 풍부화된 대본 텍스트만. 설명·머리말·따옴표 없이 본문만 반환합니다."
+)
+
+
+def build_enrich_user(seg: dict) -> str:
+    return (f"[원문 sourceExcerpt]\n{seg.get('sourceExcerpt', '')}\n\n"
+            f"[현재 대본 scriptText]\n{seg.get('scriptText', '')}\n\n"
+            f"위 세그먼트를 규칙대로 풍부화한 대본만 반환하세요.")
+
+
+def enrich_targets(script: dict) -> list:
+    return [s for s in script["segments"]
+            if not s.get("skip")
+            and s.get("kind") not in ("heading", "connector", "table")
+            and s.get("scriptText")]
+
+
+def merge_enriched(script: dict, results: dict, lexicon: dict) -> int:
+    seen: set = set()
+    n = 0
+    for s in script["segments"]:
+        if s["id"] in results and results[s["id"]].strip():
+            text, li = apply_lexicon(results[s["id"]].strip(), lexicon, seen)
+            s["enrichedScriptText"] = text
+            s["issues"] = list(dict.fromkeys(s.get("issues", []) + li))
+            n += 1
+    return n
+
+
+def enrich_report(script: dict, results: dict) -> str:
+    lines = [f"# enrich 리포트 — {script.get('docId', '?')}", "",
+             f"풍부화 세그먼트: {len(results)}개", "",
+             "## 사람 청취 권장 대상(비유/예시·신규 영문 의심)", ""]
+    for s in script["segments"]:
+        if s["id"] not in results:
+            continue
+        body = results[s["id"]]
+        toks = sorted(set(re.findall(r"(?<![0-9A-Za-z])[A-Z][A-Z0-9]{1,}(?![0-9A-Za-z])", body)))
+        hint = []
+        if any(w in body for w in ("마치", "처럼", "비유하자면", "예를 들")):
+            hint.append("비유/예시")
+        if toks:
+            hint.append("영문잔재:" + ",".join(toks))
+        if hint:
+            lines.append(f"- {s['id']}: {' · '.join(hint)}")
+    lines.append("")
+    lines.append("## Before/After")
+    for s in script["segments"]:
+        if s["id"] in results:
+            lines += [f"### {s['id']}", f"- before: {s.get('scriptText','')}",
+                      f"- after: {results[s['id']]}", ""]
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def call_claude_text(system: str, user: str, model: str) -> str:
+    import anthropic  # 지연 import(네트워크 — self-test 미호출)
+    client = anthropic.Anthropic()  # ANTHROPIC_API_KEY env
+    resp = client.messages.create(
+        model=model, max_tokens=2000, system=system,
+        messages=[{"role": "user", "content": user}])
+    return "".join(b.text for b in resp.content if b.type == "text").strip()
+
+
+def run_enrich(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    lex = load_lexicon(args.lexicon)
+    targets = enrich_targets(script)
+    only = set(args.only.split(",")) if args.only else None
+    if only:
+        targets = [s for s in targets if s["id"] in only]
+    print(f"[enrich] 대상 {len(targets)}개"
+          + (f" (--only {sorted(only)})" if only else ""), file=sys.stderr)
+    if args.dry_run:
+        for s in targets:
+            print(f"  - {s['id']} ({s['kind']})", file=sys.stderr)
+        print("[enrich] --dry-run: API 호출 없음", file=sys.stderr)
+        return
+    results: dict = {}
+    for s in targets:
+        txt = call_claude_text(ENRICH_SYSTEM, build_enrich_user(s), args.model)
+        results[s["id"]] = txt
+        print(f"  enriched {s['id']} ({len(txt)}자)", file=sys.stderr)
+    n = merge_enriched(script, results, lex)
+    script["reviewStatus"] = "needs_human_review"
+    write_json(args.script, script)
+    report = args.script.parent / "enrich_report.md"
+    report.write_text(enrich_report(script, results), encoding="utf-8")
+    print(f"[enrich] {n}개 머지 → {args.script} · 리포트 {report}", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -1609,6 +1711,22 @@ def _self_test() -> None:
     assert any(s["kind"] == "connector" for s in _r2["segments"]), _r2
     assert _r2["reviewStatus"] == "needs_human_review", _r2
 
+    # --- Stage B: enrich 순수 함수 ---
+    _escript = {"segments": [
+        {"id": "h", "kind": "heading", "scriptText": "제목"},
+        {"id": "p1", "kind": "paragraph", "scriptText": "본문1", "sourceExcerpt": "x"},
+        {"id": "c", "kind": "connector", "scriptText": "전환"},
+        {"id": "t", "kind": "table", "scriptText": "", "audioSummary": "요약"},
+        {"id": "s", "kind": "paragraph", "scriptText": "스킵", "skip": True},
+        {"id": "p2", "kind": "list", "scriptText": "본문2", "sourceExcerpt": "y"},
+    ]}
+    assert [s["id"] for s in enrich_targets(_escript)] == ["p1", "p2"], \
+        [s["id"] for s in enrich_targets(_escript)]
+    _mn = merge_enriched(_escript, {"p1": "AWS 강의입니다"}, {"AWS": {"say": "에이더블유에스"}})
+    _p1 = next(s for s in _escript["segments"] if s["id"] == "p1")
+    assert _mn == 1 and _p1["enrichedScriptText"] == "에이더블유에스 강의입니다", _p1
+    assert "에이더블유에스 강의입니다" in enrich_report(_escript, {"p1": "에이더블유에스 강의입니다"})
+
     print("self-test OK")
 
 
@@ -1655,6 +1773,13 @@ def main() -> None:
                         help="강의 연결문(도입·전환·마무리) 삽입")
     co.add_argument("--script", type=Path, required=True)
 
+    en = sub.add_parser("enrich", help="대상 세그먼트를 Claude API로 풍부화(enrichedScriptText)")
+    en.add_argument("--script", type=Path, required=True)
+    en.add_argument("--model", default="claude-opus-4-8")
+    en.add_argument("--only", help="쉼표구분 seg id만 풍부화(재작업용)")
+    en.add_argument("--dry-run", action="store_true", help="API 호출 없이 대상만 출력")
+    en.add_argument("--lexicon", type=Path)
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1671,8 +1796,10 @@ def main() -> None:
         run_descaffold(args)
     elif args.cmd == "connectors":
         run_connectors(args)
+    elif args.cmd == "enrich":
+        run_enrich(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors/enrich) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
