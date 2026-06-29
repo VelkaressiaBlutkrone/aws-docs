@@ -30,6 +30,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import re
 import sys
 import tempfile
@@ -642,9 +643,42 @@ def enrich_report(script: dict, results: dict) -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+def _parse_env_file(text: str) -> dict:
+    """간단한 .env 파서: KEY=VALUE 줄만, 주석(#)·빈줄·등호없는 줄 무시, 양끝 따옴표 제거."""
+    out: dict = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key:
+            out[key] = val
+    return out
+
+
+def _load_anthropic_key(env_path: Path | None = None) -> str:
+    """ANTHROPIC_API_KEY 로드: 환경변수 우선 → tool/.env → 없으면 SystemExit.
+    키 값은 로그·에러 메시지에 절대 출력하지 않는다(.env는 .gitignore로 비추적)."""
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if key:
+        return key
+    if env_path is None:
+        env_path = Path(__file__).with_name(".env")
+    if env_path.exists():
+        key = _parse_env_file(env_path.read_text(encoding="utf-8")).get("ANTHROPIC_API_KEY")
+        if key:
+            return key
+    raise SystemExit(
+        "ANTHROPIC_API_KEY가 없습니다. 환경변수로 설정하거나 "
+        f"{env_path}에 'ANTHROPIC_API_KEY=sk-...' 한 줄을 넣으세요"
+        "(.env는 .gitignore로 커밋되지 않습니다).")
+
+
 def call_claude_text(system: str, user: str, model: str) -> str:
     import anthropic  # 지연 import(네트워크 — self-test 미호출)
-    client = anthropic.Anthropic()  # ANTHROPIC_API_KEY env
+    client = anthropic.Anthropic(api_key=_load_anthropic_key())
     resp = client.messages.create(
         model=model, max_tokens=2000, system=system,
         messages=[{"role": "user", "content": user}])
@@ -1784,6 +1818,31 @@ def _self_test() -> None:
         "seg005 | 사실단정 | 원문 미뒷받침 | 삭제 권장\n무관한 줄")
     assert len(_vf) == 1 and _vf[0]["seg"] == "seg005" \
         and _vf[0]["type"] == "사실단정", _vf
+
+    # --- Stage B: API 키 로딩(.env 파서·우선순위·키 비노출) ---
+    assert _parse_env_file("# c\nANTHROPIC_API_KEY=sk-test\nX=1\n")["ANTHROPIC_API_KEY"] == "sk-test"
+    assert _parse_env_file('ANTHROPIC_API_KEY = "sk-q"  ')["ANTHROPIC_API_KEY"] == "sk-q"
+    assert _parse_env_file("\n  \n# only comment\nNOEQ\n") == {}
+    _saved_key = os.environ.get("ANTHROPIC_API_KEY")
+    try:
+        os.environ["ANTHROPIC_API_KEY"] = "env-wins"
+        with tempfile.TemporaryDirectory() as _kd:
+            _ep = Path(_kd) / ".env"
+            _ep.write_text("ANTHROPIC_API_KEY=file-key\n", encoding="utf-8")
+            assert _load_anthropic_key(_ep) == "env-wins", "env var 우선"
+            del os.environ["ANTHROPIC_API_KEY"]
+            assert _load_anthropic_key(_ep) == "file-key", "파일 폴백"
+            try:
+                _load_anthropic_key(Path(_kd) / "none.env")
+                assert False, "키 없으면 SystemExit"
+            except SystemExit as _e:
+                assert "ANTHROPIC_API_KEY" in str(_e) and "file-key" not in str(_e), \
+                    "에러에 키값 노출 금지"
+    finally:
+        if _saved_key is None:
+            os.environ.pop("ANTHROPIC_API_KEY", None)
+        else:
+            os.environ["ANTHROPIC_API_KEY"] = _saved_key
 
     print("self-test OK")
 
