@@ -561,6 +561,18 @@ def run_descaffold(args) -> None:
           file=sys.stderr)
 
 
+def run_connectors(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    segs = script["segments"]
+    title = next((s.get("scriptText", "") for s in segs
+                  if s.get("kind") == "heading"), "")
+    added = insert_connectors(segs, title)
+    if added:
+        script["reviewStatus"] = "needs_human_review"
+    write_json(args.script, script)
+    print(f"[connectors] {added}개 연결문 삽입 → {args.script}", file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -1547,6 +1559,23 @@ def _self_test() -> None:
     # 멱등
     assert insert_connectors(_csegs, "클라우드의 이점") == 0, "멱등 위반"
 
+    # Stage A2: connectors 서브커맨드 I/O
+    import tempfile as _tf2
+    from types import SimpleNamespace as _NS2
+    _cdoc = {"schemaVersion": 2, "docId": "x", "reviewStatus": "approved", "segments": [
+        {"id": "seg000", "kind": "heading", "sourceExcerpt": "# 제목",
+         "scriptText": "제목", "skip": False},
+        {"id": "seg001", "kind": "heading", "sourceExcerpt": "## 본문 {#a}",
+         "scriptText": "본문", "skip": False},
+    ]}
+    with _tf2.TemporaryDirectory() as _d2:
+        _p2 = Path(_d2) / "script.json"
+        write_json(_p2, _cdoc)
+        run_connectors(_NS2(script=_p2))
+        _r2 = json.loads(_p2.read_text(encoding="utf-8"))
+    assert any(s["kind"] == "connector" for s in _r2["segments"]), _r2
+    assert _r2["reviewStatus"] == "needs_human_review", _r2
+
     print("self-test OK")
 
 
@@ -1589,6 +1618,10 @@ def main() -> None:
                         help="스캐폴딩(메타·체크리스트) 세그먼트 skip 표시")
     de.add_argument("--script", type=Path, required=True)
 
+    co = sub.add_parser("connectors",
+                        help="강의 연결문(도입·전환·마무리) 삽입")
+    co.add_argument("--script", type=Path, required=True)
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1603,8 +1636,10 @@ def main() -> None:
         run_chapters(args)
     elif args.cmd == "descaffold":
         run_descaffold(args)
+    elif args.cmd == "connectors":
+        run_connectors(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
