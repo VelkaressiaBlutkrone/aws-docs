@@ -842,6 +842,17 @@ def _outro_text(idx: int) -> str:
     ][idx % 3]
 
 
+def _clean_section_title(title: str) -> str:
+    """헤딩 원문에서 음성용 섹션 제목 추출: 선행 번호(N)) 제거,
+    첫 em-dash(—) 앞까지, 괄호 부연 제거, 중점(·)→쉼표."""
+    t = re.sub(r"^\s*\d+\)\s*", "", title)
+    t = re.split(r"\s*—\s*", t, maxsplit=1)[0]
+    t = re.sub(r"\s*\([^)]*\)", "", t)
+    t = re.sub(r"\s*·\s*", ", ", t)
+    t = t.strip().strip(",").strip()
+    return t or re.sub(r"^\s*\d+\)\s*", "", title).strip()
+
+
 def _mk_connector(n: int, text: str) -> dict:
     return {"id": f"con{n:03d}", "kind": "connector", "sourceExcerpt": "",
             "scriptText": text, "audioSummary": None, "skip": False, "issues": []}
@@ -868,7 +879,7 @@ def insert_connectors(segments: list[dict], title: str) -> int:
     for i, s in enumerate(segments):
         if (s.get("kind") == "heading" and not s.get("skip")
                 and _ANCHOR_RE.search(s.get("sourceExcerpt") or "")):
-            out.append(_mk_connector(cnt, _transition_text(s.get("scriptText") or "", anchor_n)))
+            out.append(_mk_connector(cnt, _transition_text(_clean_section_title(s.get("scriptText") or ""), anchor_n)))
             cnt += 1
             anchor_n += 1
         out.append(s)
@@ -1491,6 +1502,12 @@ def _self_test() -> None:
     assert _josa_ro("이점") == "으로"                        # 받침 ㅁ(≠0,≠8)
     assert _josa_ro("인프라") == "로"                        # 받침 없음
     assert _josa_ro("서울") == "로"                          # 받침 ㄹ(=8)
+
+    # Stage A2: 섹션 제목 정제
+    assert _clean_section_title("2) 클라우드의 핵심 이점 (시험 핵심)") == "클라우드의 핵심 이점"
+    assert _clean_section_title("3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기") == "고가용성, 탄력성, 민첩성"
+    assert _clean_section_title("핵심 개념") == "핵심 개념"
+    assert _clean_section_title("탄력성으로 비용 최적화 — Auto Scaling (보강)") == "탄력성으로 비용 최적화"
 
     # Stage A2: insert_connectors(도입1+앵커전환N+마무리1)
     _csegs = [
