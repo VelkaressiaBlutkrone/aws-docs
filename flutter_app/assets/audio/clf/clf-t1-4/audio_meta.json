@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-4",
-  "generatedAt": "2026-06-28T09:14:34Z",
+  "generatedAt": "2026-06-29T01:36:27Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 4436733,
-    "sha256": "f9fb8741926a581e0dbfcad2aaac5fc1feb200ea3af9d014e09fafeaa27cbf30",
+    "sizeBytes": 4100925,
+    "sha256": "b4d0cfc86356b1aea8f2703dc929951d03fce63b27c809e1a33b6f0c775ccb4b",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 5461,
+    "speechChars": 5045,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,43 +35,43 @@
       "anchor": "capex-opex",
       "title": "1) 클라우드 경제학의 출발 — 고정비 대 변동비",
       "level": 3,
-      "fraction": 0.1964163988703866
+      "fraction": 0.13060579455662863
     },
     {
       "anchor": "rightsizing",
       "title": "2) 적정 크기 조정(rightsizing) — Compute Optimizer",
       "level": 3,
-      "fraction": 0.2960690752101795
+      "fraction": 0.2384196663740123
     },
     {
       "anchor": "licensing",
       "title": "3) 라이선스 — 비와이오엘 대 라이선스 포함",
       "level": 3,
-      "fraction": 0.41055604245788296
+      "fraction": 0.3622827041264267
     },
     {
       "anchor": "automation",
       "title": "4) 자동화의 비용 이점 — CloudFormation",
       "level": 3,
-      "fraction": 0.49819846138864543
+      "fraction": 0.4571027216856892
     },
     {
       "anchor": "managed-services",
       "title": "5) 관리형 서비스로 총비용(티씨오) 절감",
       "level": 3,
-      "fraction": 0.6001233485896063
+      "fraction": 0.5673748902546093
     },
     {
       "anchor": "autoscaling",
       "title": "탄력성으로 비용 최적화 — Auto Scaling (보강)",
       "level": 3,
-      "fraction": 0.7055863927029571
+      "fraction": 0.6814749780509218
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8624338624338624
+      "fraction": 0.8511676909569799
     }
   ],
   "generator": {

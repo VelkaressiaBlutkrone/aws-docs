@@ -22,7 +22,7 @@
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 4 「결제, 요금 및 지원」(12%) · **Task 4.3 기술 리소스·Support 옵션 식별** (`clf-t4-3`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"막혔을 때 *어디서* 도움을 받는가\" — 자료 위치와 Support 플랜입니다.",
       "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 4 「결제, 요금 및 지원」(12%) · Task 4.3 기술 리소스·Support 옵션 식별 (clf-t4-3) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"막혔을 때 어디서 도움을 받는가\" — 자료 위치와 Support 플랜입니다.",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -31,7 +31,7 @@
       "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
       "scriptText": "학습 목표 체크리스트",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -40,7 +40,7 @@
       "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.3의 Skill 항목)",
       "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.3의 Skill 항목)",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -49,7 +49,7 @@
       "sourceExcerpt": "**Support 플랜**(Basic·Developer·Business·Enterprise)의 차이를 안다 **24x7 기술 지원·전체 Trusted Advisor = Business 이상**, **TAM = Enterprise**임을 안다 **기술 리소스 위치**(re:Post·Knowledge Center·Prescriptive Guidance·백서·블로그)를 안다 **APN(AWS Partner Network)**의 역할(ISV·SI)을 안다",
       "scriptText": "Support 플랜(Basic·Developer·Business·Enterprise)의 차이를 안다 24x7 기술 지원·전체 Trusted Advisor, 즉 Business 이상, 티에이엠, 즉 Enterprise임을 안다 기술 리소스 위치(re:Post·Knowledge Center·Prescriptive Guidance·백서·블로그)를 안다 에이피엔(에이더블유에스 Partner Network)의 역할(아이에스브이·에스아이)을 안다",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
