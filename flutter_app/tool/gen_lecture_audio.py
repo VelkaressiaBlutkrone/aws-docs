@@ -785,6 +785,32 @@ def mark_scaffolding(segments: list[dict]) -> int:
     return marked
 
 
+def _has_batchim(word: str) -> bool:
+    """마지막 글자가 Hangul 음절이고 받침이 있으면 True. 비-Hangul/빈 문자열은 False."""
+    if not word:
+        return False
+    ch = word[-1]
+    if not ("가" <= ch <= "힣"):
+        return False
+    return (ord(ch) - 0xAC00) % 28 != 0
+
+
+def _josa_eul(word: str) -> str:
+    """목적격 조사 을/를."""
+    return "을" if _has_batchim(word) else "를"
+
+
+def _josa_ro(word: str) -> str:
+    """부사격 조사 으로/로(받침 없거나 ㄹ받침이면 '로')."""
+    if not word:
+        return "로"
+    ch = word[-1]
+    if not ("가" <= ch <= "힣"):
+        return "로"
+    jong = (ord(ch) - 0xAC00) % 28
+    return "로" if jong in (0, 8) else "으로"
+
+
 def split_sections(segments: list[dict]) -> list[dict]:
     """비-skip 세그먼트를 앵커 있는 heading 경계로 섹션 분할.
     section = {anchor, title, level, speech}. intro(첫 앵커 헤딩 전)는 anchor=None.
@@ -1385,6 +1411,15 @@ def _self_test() -> None:
     assert _r["segments"][1]["skip"] is False, _r
     assert _r["reviewStatus"] == "needs_human_review", _r
     print("[self-test] descaffold I/O OK", file=sys.stderr)
+
+    # Stage A2: josa 헬퍼(순수)
+    assert _josa_eul("이점") == "을", _josa_eul("이점")      # 점 받침 ㅁ
+    assert _josa_eul("핵심 개념") == "을"                    # 념 받침 ㅁ
+    assert _josa_eul("인프라") == "를"                       # 라 받침 없음
+    assert _josa_eul("AWS") == "를"                          # 비-Hangul 끝
+    assert _josa_ro("이점") == "으로"                        # 받침 ㅁ(≠0,≠8)
+    assert _josa_ro("인프라") == "로"                        # 받침 없음
+    assert _josa_ro("서울") == "로"                          # 받침 ㄹ(=8)
 
     print("self-test OK")
 
