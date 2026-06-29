@@ -20,3 +20,9 @@ build/
 .gstack/
 .omc/
 .superpowers/
+
+# Secrets — NEVER commit API keys / credentials
+.env
+**/.env
+!**/.env.example
+*.key
