@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-1",
-  "generatedAt": "2026-06-28T09:33:06Z",
+  "generatedAt": "2026-06-29T01:53:27Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t4-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 4546173,
-    "sha256": "80a541ffb98cb386040b8029dd0c74c4a193d9052a247d01b44055357a605330",
+    "sizeBytes": 4184157,
+    "sha256": "df42c5d9f00cda49c37315759127feb3f55cf7c259cdc45f6ea8e600553929cb",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 5602,
+    "speechChars": 5145,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,25 +35,25 @@
       "anchor": "purchase-options",
       "title": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
       "level": 3,
-      "fraction": 0.26774796464662465
+      "fraction": 0.2043850893195195
     },
     {
       "anchor": "data-transfer",
       "title": "2) 데이터 전송 요금",
       "level": 3,
-      "fraction": 0.5016948078689771
+      "fraction": 0.45857570646749046
     },
     {
       "anchor": "storage-pricing",
       "title": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
       "level": 3,
-      "fraction": 0.6107644058668863
+      "fraction": 0.5770832616253054
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7999809928089461
+      "fraction": 0.7826730458128248
     }
   ],
   "generator": {

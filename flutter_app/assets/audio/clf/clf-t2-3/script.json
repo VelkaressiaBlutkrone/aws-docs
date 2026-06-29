@@ -22,7 +22,7 @@
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 2 「보안 및 규정 준수」(30%) · **Task 2.3 접근 관리 기능 식별** (`clf-t2-3`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 추천 학습 순서상 [공동 책임 모델](#)(2.1) 다음에 오는 \"그래서 *누가* 접근하는가\"의 답입니다.",
       "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 2 「보안 및 규정 준수」(30%) · Task 2.3 접근 관리 기능 식별 (clf-t2-3) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 추천 학습 순서상 공동 책임 모델(2.1) 다음에 오는 \"그래서 누가 접근하는가\"의 답입니다.",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -31,7 +31,7 @@
       "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
       "scriptText": "학습 목표 체크리스트",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -40,7 +40,7 @@
       "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 2.3의 Skill 항목)",
       "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 2.3의 Skill 항목)",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -49,7 +49,7 @@
       "sourceExcerpt": "IAM이 하는 일을 **인증(authentication)**과 **인가(authorization)**로 나눠 설명할 수 있다 **루트 사용자**가 무엇이고 왜 보호해야 하는지, **루트 전용 작업**의 예를 들 수 있다 **IAM 사용자·그룹·역할·정책**의 차이를 말할 수 있다 **최소 권한 원칙(least privilege)**을 정의하고 그룹·정책으로 어떻게 적용하는지 설명할 수 있다 **MFA**의 역할과 유형, **암호 정책**으로 로그인 보안을 강화하는 법을 안다 **IAM Identity Center**(이전 AWS SSO)와 **페더레이션**, 자격증명 저장(**Secrets Manager**)의 용도를 구분할 수 있다 **Amazon Cognito**와 **AWS Directory Service**가 IAM·Identity Center와 어디서 다른지 설명할 수 있다",
       "scriptText": "아이엠이 하는 일을 인증(authentication)과 인가(authorization)로 나눠 설명할 수 있다 루트 사용자가 무엇이고 왜 보호해야 하는지, 루트 전용 작업의 예를 들 수 있다 아이엠 사용자·그룹·역할·정책의 차이를 말할 수 있다 최소 권한 원칙(least privilege)을 정의하고 그룹·정책으로 어떻게 적용하는지 설명할 수 있다 엠에프에이의 역할과 유형, 암호 정책으로 로그인 보안을 강화하는 법을 안다 아이엠 Identity Center(이전 에이더블유에스 에스에스오)와 페더레이션, 자격증명 저장(Secrets Manager)의 용도를 구분할 수 있다 Amazon Cognito와 에이더블유에스 Directory Service가 아이엠·Identity Center와 어디서 다른지 설명할 수 있다",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {

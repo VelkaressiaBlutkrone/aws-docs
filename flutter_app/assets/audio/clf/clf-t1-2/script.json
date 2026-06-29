@@ -22,7 +22,7 @@
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 1 「클라우드 개념」(24%) · **Task 1.2 AWS 클라우드 설계 원칙 식별** (`clf-t1-2`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"좋은 아키텍처란 무엇인가\"를 AWS가 정리한 **6대 기둥**이 핵심입니다.",
       "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 1 「클라우드 개념」(24%) · Task 1.2 에이더블유에스 클라우드 설계 원칙 식별 (clf-t1-2) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"좋은 아키텍처란 무엇인가\"를 에이더블유에스가 정리한 6대 기둥이 핵심입니다.",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -31,7 +31,7 @@
       "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
       "scriptText": "학습 목표 체크리스트",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -40,7 +40,7 @@
       "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 1.2의 Skill 항목)",
       "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 1.2의 Skill 항목)",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -49,7 +49,7 @@
       "sourceExcerpt": "**AWS Well-Architected Framework**가 무엇인지(아키텍처 모범 사례) 말할 수 있다 **6대 기둥**의 이름을 모두 댈 수 있다 각 기둥이 *무엇을 다루는지* 한 줄로 구분할 수 있다 시나리오에서 *어느 기둥*에 해당하는지 고를 수 있다",
       "scriptText": "에이더블유에스 웰 아키텍티드 프레임워크가 무엇인지(아키텍처 모범 사례) 말할 수 있다 6대 기둥의 이름을 모두 댈 수 있다 각 기둥이 무엇을 다루는지 한 줄로 구분할 수 있다 시나리오에서 어느 기둥에 해당하는지 고를 수 있다",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {

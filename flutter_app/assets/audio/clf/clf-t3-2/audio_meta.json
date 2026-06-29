@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-2",
-  "generatedAt": "2026-06-28T09:23:37Z",
+  "generatedAt": "2026-06-29T01:44:41Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 5980557,
-    "sha256": "a6a40c16c8107b27e50e38b46759a67668078f5ab3b09250a62a07607651ad25",
+    "sizeBytes": 5549133,
+    "sha256": "443a950c13c0330b3e251b90830103761a9807c6293c6d1ea4fab664324ff505",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 7456,
+    "speechChars": 6919,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,37 +35,37 @@
       "anchor": "regions-az",
       "title": "1) 3층 구조 — 리전 ⊃ 가용 영역(에이제트) ⊃ (엣지는 별도 망)",
       "level": 3,
-      "fraction": 0.19702369485648238
+      "fraction": 0.13458943216028235
     },
     {
       "anchor": "multi-az",
       "title": "2) 고가용성의 핵심 — 여러 에이제트에 분산",
       "level": 3,
-      "fraction": 0.3106097091119245
+      "fraction": 0.2570071628776082
     },
     {
       "anchor": "multi-region",
       "title": "3) 여러 \"리전\"을 쓰는 시점 — 에이제트로는 안 되는 이유들",
       "level": 3,
-      "fraction": 0.41420246580620307
+      "fraction": 0.3686546247274992
     },
     {
       "anchor": "cloudfront-ga",
       "title": "4) 엣지 — 사용자 가까이서 빠르게: CloudFront 대 Global Accelerator (시험 단골)",
       "level": 3,
-      "fraction": 0.512666152957041
+      "fraction": 0.4747742136406104
     },
     {
       "anchor": "proximity",
       "title": "5) 근접·확장 인프라 — Local Zones · Wavelength · Outposts",
       "level": 3,
-      "fraction": 0.6802639183201695
+      "fraction": 0.655403301152289
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8568194952802928
+      "fraction": 0.8456867019620056
     }
   ],
   "generator": {

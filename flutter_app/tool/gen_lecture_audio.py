@@ -551,6 +551,16 @@ def run_chapters(args) -> None:
           file=sys.stderr)
 
 
+def run_descaffold(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    marked = mark_scaffolding(script["segments"])
+    if marked:
+        script["reviewStatus"] = "needs_human_review"  # 내용 변경 → 재검수 필요
+    write_json(args.script, script)
+    print(f"[descaffold] {marked}개 세그먼트 skip 표시 → {args.script}",
+          file=sys.stderr)
+
+
 def quality_issues(text: str) -> list[str]:
     """정제 후에도 남은 음성 부적합 요소 검출(dry-run 품질 게이트). 빈 리스트면 통과."""
     issues: list[str] = []
@@ -731,6 +741,48 @@ def chapters_from_segments(segments: list[dict]) -> list[dict]:
                 })
         acc += _char_count(speech)
     return chapters
+
+
+_SCAFFOLD_META_PREFIX = "커버하는 공식 Task"
+_SCAFFOLD_CHECKLIST = "학습 목표 체크리스트"
+
+
+def mark_scaffolding(segments: list[dict]) -> int:
+    """오디오 스캐폴딩 세그먼트에 skip=True 표시(낭독 제외). 반환: 새로 표시한 수.
+
+    규칙(CLF 학습문서 템플릿, 19문서 실스캔 근거):
+      1) 문서-상단 메타 문단: kind=='paragraph' 이고 scriptText가
+         '커버하는 공식 Task'로 시작(도메인·퍼센트·문서ID·1:1 매핑 포함).
+      2) 학습목표 체크리스트 블록: sourceExcerpt에 '학습 목표 체크리스트'를 가진
+         heading + 그 다음 heading 전까지의 모든 세그먼트.
+    이미 skip=True면 건너뜀(멱등)."""
+    marked = 0
+    i = 0
+    n = len(segments)
+    while i < n:
+        s = segments[i]
+        if (s.get("kind") == "paragraph"
+                and (s.get("scriptText") or "").startswith(_SCAFFOLD_META_PREFIX)):
+            if not s.get("skip"):
+                s["skip"] = True
+                marked += 1
+            i += 1
+            continue
+        if (s.get("kind") == "heading"
+                and _SCAFFOLD_CHECKLIST in (s.get("sourceExcerpt") or "")):
+            if not s.get("skip"):
+                s["skip"] = True
+                marked += 1
+            j = i + 1
+            while j < n and segments[j].get("kind") != "heading":
+                if not segments[j].get("skip"):
+                    segments[j]["skip"] = True
+                    marked += 1
+                j += 1
+            i = j
+            continue
+        i += 1
+    return marked
 
 
 def split_sections(segments: list[dict]) -> list[dict]:
@@ -1282,6 +1334,58 @@ def _self_test() -> None:
     assert chapters_from_section_durations(_secs3, [0, 0, 0])[0]["fraction"] == 0.0
     print("[self-test] chapters_from_section_durations OK", file=sys.stderr)
 
+    # Stage A1: 스캐폴딩 skip 표시(순수)
+    _scaf = [
+        {"id": "seg000", "kind": "heading",
+         "sourceExcerpt": "# 제목", "scriptText": "제목", "skip": False},
+        {"id": "seg001", "kind": "paragraph",
+         "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 …",
+         "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 1", "skip": False},
+        {"id": "seg002", "kind": "heading",
+         "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+         "scriptText": "학습 목표 체크리스트", "skip": False},
+        {"id": "seg003", "kind": "paragraph",
+         "sourceExcerpt": "이 문서를 끝내면 …",
+         "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다.", "skip": False},
+        {"id": "seg004", "kind": "paragraph",
+         "sourceExcerpt": "… 할 수 있다 …",
+         "scriptText": "클라우드 컴퓨팅의 정의를 말할 수 있다", "skip": False},
+        {"id": "seg005", "kind": "heading",
+         "sourceExcerpt": "## 왜 중요한가", "scriptText": "왜 중요한가", "skip": False},
+        {"id": "seg006", "kind": "paragraph",
+         "sourceExcerpt": "본문에서 설명할 수 있다는 표현",
+         "scriptText": "이 개념은 실무에서 바로 적용할 수 있다", "skip": False},
+    ]
+    _n = mark_scaffolding(_scaf)
+    assert _n == 4, _n                                   # seg001 + seg002·003·004
+    assert _scaf[1]["skip"] and _scaf[2]["skip"], _scaf  # 메타·체크리스트헤딩
+    assert _scaf[3]["skip"] and _scaf[4]["skip"], _scaf  # 체크리스트 블록
+    assert not _scaf[0]["skip"], _scaf                   # 일반 제목 유지
+    assert not _scaf[5]["skip"], _scaf                   # 다음 헤딩에서 블록 종료
+    assert not _scaf[6]["skip"], _scaf                   # '할 수 있다' 본문 오탐 안 함
+    assert mark_scaffolding(_scaf) == 0, "멱등 위반"     # 재적용 0
+
+    # Stage A1: descaffold 서브커맨드 I/O(임시 파일)
+    import tempfile as _tf
+    from types import SimpleNamespace as _NS
+    _doc = {"schemaVersion": 2, "docId": "x", "reviewStatus": "approved",
+            "segments": [
+                {"id": "seg000", "kind": "paragraph",
+                 "sourceExcerpt": "**커버하는 공식 Task** — …",
+                 "scriptText": "커버하는 공식 Task — 도메인 1", "skip": False},
+                {"id": "seg001", "kind": "heading",
+                 "sourceExcerpt": "## 본문", "scriptText": "본문", "skip": False},
+            ]}
+    with _tf.TemporaryDirectory() as _d:
+        _p = Path(_d) / "script.json"
+        write_json(_p, _doc)
+        run_descaffold(_NS(script=_p))
+        _r = json.loads(_p.read_text(encoding="utf-8"))
+    assert _r["segments"][0]["skip"] is True, _r
+    assert _r["segments"][1]["skip"] is False, _r
+    assert _r["reviewStatus"] == "needs_human_review", _r
+    print("[self-test] descaffold I/O OK", file=sys.stderr)
+
     print("self-test OK")
 
 
@@ -1320,6 +1424,10 @@ def main() -> None:
     ch.add_argument("--script", type=Path, required=True)
     ch.add_argument("--audio-meta", type=Path, required=True)
 
+    de = sub.add_parser("descaffold",
+                        help="스캐폴딩(메타·체크리스트) 세그먼트 skip 표시")
+    de.add_argument("--script", type=Path, required=True)
+
     args = ap.parse_args()
     if args.self_test:
         _self_test()
@@ -1332,8 +1440,10 @@ def main() -> None:
         run_gate(args)
     elif args.cmd == "chapters":
         run_chapters(args)
+    elif args.cmd == "descaffold":
+        run_descaffold(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":

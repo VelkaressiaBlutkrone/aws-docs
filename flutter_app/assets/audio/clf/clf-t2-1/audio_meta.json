@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-1",
-  "generatedAt": "2026-06-28T09:15:41Z",
+  "generatedAt": "2026-06-29T01:37:29Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t2-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 5462445,
-    "sha256": "7eb692605466df6870bab7d3db1c52e7816874b75cbff2d5bac933a1761d9785",
+    "sizeBytes": 5091357,
+    "sha256": "016e3b06e5c523be5a162dc8c3b8d4f547c6346f07c1724d145c41919d632860",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 6605,
+    "speechChars": 6136,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,31 +35,31 @@
       "anchor": "of-vs-in",
       "title": "1) 한 줄 정의 — 경계선은 \"of 대 in\"",
       "level": 3,
-      "fraction": 0.20672291062483522
+      "fraction": 0.14912454388595028
     },
     {
       "anchor": "responsibility-table",
       "title": "2) 책임 분담표",
       "level": 3,
-      "fraction": 0.30661745320326916
+      "fraction": 0.25618759369784744
     },
     {
       "anchor": "shared-controls",
       "title": "3) 공유 책임 (Shared Controls) — 같은 주제를 양쪽이 나눠 가진다",
       "level": 3,
-      "fraction": 0.44930134458212495
+      "fraction": 0.40927219755042005
     },
     {
       "anchor": "service-responsibility",
       "title": "4) 핵심 중의 핵심 — 서비스에 따른 책임 이동",
       "level": 3,
-      "fraction": 0.551937780121276
+      "fraction": 0.5192770061946652
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8406011073029265
+      "fraction": 0.8289819817271519
     }
   ],
   "generator": {

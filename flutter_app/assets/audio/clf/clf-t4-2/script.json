@@ -22,7 +22,7 @@
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 4 「결제, 요금 및 지원」(12%) · **Task 4.2 결제·예산·비용 관리 리소스** (`clf-t4-2`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"비용을 *추정·추적·관리*하는 도구들\"을 구분하는 게 핵심입니다.",
       "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 4 「결제, 요금 및 지원」(12%) · Task 4.2 결제·예산·비용 관리 리소스 (clf-t4-2) 이 문서는 위 한 Task에 1:1로 매핑됩니다. \"비용을 추정·추적·관리하는 도구들\"을 구분하는 게 핵심입니다.",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -31,7 +31,7 @@
       "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
       "scriptText": "학습 목표 체크리스트",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -40,7 +40,7 @@
       "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.2의 Skill 항목)",
       "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 4.2의 Skill 항목)",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -49,7 +49,7 @@
       "sourceExcerpt": "**Pricing Calculator**(구축 전 추정)와 **Cost Explorer**(발생한 비용 분석)를 구분한다 **AWS Budgets**(예산·알림)의 용도를 안다 **AWS Organizations**의 **통합 결제(consolidated billing)**와 거버넌스(SCP·OU)를 안다 **비용 할당 태그**와 **Cost and Usage Report(CUR)**로 비용을 추적·보고함을 안다",
       "scriptText": "Pricing Calculator(구축 전 추정)와 Cost Explorer(발생한 비용 분석)를 구분한다 에이더블유에스 Budgets(예산·알림)의 용도를 안다 에이더블유에스 Organizations의 통합 결제(consolidated billing)와 거버넌스(에스씨피·오유)를 안다 비용 할당 태그와 Cost and Usage Report(씨유알)로 비용을 추적·보고함을 안다",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
