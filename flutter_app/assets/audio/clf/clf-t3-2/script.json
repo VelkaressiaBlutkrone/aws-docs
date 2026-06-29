@@ -22,7 +22,7 @@
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 3 「클라우드 기술 및 서비스」(34%) · **Task 3.2 글로벌 인프라 정의** (`clf-t3-2`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 도메인 3(가장 큰 비중)의 *지리적 토대* — 뒤에 나오는 컴퓨팅·스토리지·네트워킹이 전부 이 위에서 돌아갑니다.",
       "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 3 「클라우드 기술 및 서비스」(34%) · Task 3.2 글로벌 인프라 정의 (clf-t3-2) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 도메인 3(가장 큰 비중)의 지리적 토대 — 뒤에 나오는 컴퓨팅·스토리지·네트워킹이 전부 이 위에서 돌아갑니다.",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -31,7 +31,7 @@
       "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
       "scriptText": "학습 목표 체크리스트",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -40,7 +40,7 @@
       "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.2의 Skill 항목)",
       "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.2의 Skill 항목)",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -49,7 +49,7 @@
       "sourceExcerpt": "**리전 · 가용 영역(AZ) · 엣지 로케이션**의 관계를 그림처럼 설명할 수 있다 **여러 AZ에 분산**하면 왜 고가용성이 되는지(단일 위치 장애 방어) 말할 수 있다 **AZ는 단일 장애점을 공유하지 않도록** 격리돼 있음을 안다 **여러 리전을 쓰는 시점**(재해 복구·비즈니스 연속성·지연시간·데이터 주권)을 구분할 수 있다 **엣지의 이점**과 **CloudFront vs Global Accelerator**를 구분할 수 있다 **Local Zones · Wavelength · Outposts**가 각각 어떤 근접/확장 요구에 답하는지 안다",
       "scriptText": "리전 · 가용 영역 · 엣지 로케이션의 관계를 그림처럼 설명할 수 있다 여러 에이제트에 분산하면 왜 고가용성이 되는지(단일 위치 장애 방어) 말할 수 있다 에이제트는 단일 장애점을 공유하지 않도록 격리돼 있음을 안다 여러 리전을 쓰는 시점(재해 복구·비즈니스 연속성·지연시간·데이터 주권)을 구분할 수 있다 엣지의 이점과 CloudFront 대 Global Accelerator를 구분할 수 있다 Local Zones · Wavelength · Outposts가 각각 어떤 근접/확장 요구에 답하는지 안다",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {

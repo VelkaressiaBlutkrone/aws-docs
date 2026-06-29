@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-2",
-  "generatedAt": "2026-06-28T09:34:02Z",
+  "generatedAt": "2026-06-29T01:54:19Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t4-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 4500669,
-    "sha256": "a9da069d89fcc7056e07c4f6cc5998f428ed6f536e6509d1b46eac17363b7e53",
+    "sizeBytes": 4141245,
+    "sha256": "c27e6c26a7eaf3ab14c375aeca49540ee2c39bc5637daa3fa5e09e6029e94729",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 5719,
+    "speechChars": 5275,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,31 +35,31 @@
       "anchor": "cost-tools",
       "title": "1) 비용을 다루는 도구 — 시점으로 구분 (시험 핵심)",
       "level": 3,
-      "fraction": 0.25743176218361014
+      "fraction": 0.19297513475917233
     },
     {
       "anchor": "organizations",
       "title": "2) 에이더블유에스 Organizations — 다계정 중앙 관리 그리고 통합 결제",
       "level": 3,
-      "fraction": 0.4088509167706633
+      "fraction": 0.3575378195096505
     },
     {
       "anchor": "cost-tracking",
       "title": "3) 비용 추적 — 비용 할당 태그와 씨유알",
       "level": 3,
-      "fraction": 0.5417746632107773
+      "fraction": 0.501999652234394
     },
     {
       "anchor": "anomaly-forecast",
       "title": "이상 탐지와 비용 예측 — Cost Anomaly Detection · Cost Explorer forecast (보강)",
       "level": 3,
-      "fraction": 0.6599468816997857
+      "fraction": 0.6304294905233873
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8351092765031519
+      "fraction": 0.8207963832376978
     }
   ],
   "generator": {

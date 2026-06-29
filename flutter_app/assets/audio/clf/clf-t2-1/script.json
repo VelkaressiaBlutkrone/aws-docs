@@ -22,7 +22,7 @@
       "sourceExcerpt": "**커버하는 공식 Task** — CLF-C02 · 도메인 2 「보안 및 규정 준수」(30%) · **Task 2.1 공동 책임 모델** (`clf-t2-1`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 추천 학습 순서상 보안 도메인의 출발점입니다.",
       "scriptText": "커버하는 공식 Task — 씨엘에프 씨 공이 · 도메인 2 「보안 및 규정 준수」(30%) · Task 2.1 공동 책임 모델 (clf-t2-1) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 추천 학습 순서상 보안 도메인의 출발점입니다.",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -31,7 +31,7 @@
       "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
       "scriptText": "학습 목표 체크리스트",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -40,7 +40,7 @@
       "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 2.1의 Skill 항목)",
       "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 2.1의 Skill 항목)",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {
@@ -49,7 +49,7 @@
       "sourceExcerpt": "공동 책임 모델의 **구성요소**와 경계선(\"of the cloud\" vs \"in the cloud\")을 말할 수 있다 **AWS의 책임**(클라우드 자체의 보안)에 무엇이 들어가는지 나열할 수 있다 **고객의 책임**(클라우드 내부의 보안)에 무엇이 들어가는지 나열할 수 있다 **공유 책임(Shared Controls)** 3종(패치·구성·교육)이 왜 \"공유\"인지 설명할 수 있다 **서비스에 따라 책임이 이동**한다는 것을 EC2 · RDS · Lambda로 구분해 설명할 수 있다",
       "scriptText": "공동 책임 모델의 구성요소와 경계선(\"of the cloud\" 대 \"in the cloud\")을 말할 수 있다 에이더블유에스의 책임(클라우드 자체의 보안)에 무엇이 들어가는지 나열할 수 있다 고객의 책임(클라우드 내부의 보안)에 무엇이 들어가는지 나열할 수 있다 공유 책임(Shared Controls) 3종(패치·구성·교육)이 왜 \"공유\"인지 설명할 수 있다 서비스에 따라 책임이 이동한다는 것을 이씨투 · 알디에스 · Lambda로 구분해 설명할 수 있다",
       "audioSummary": null,
-      "skip": false,
+      "skip": true,
       "issues": []
     },
     {

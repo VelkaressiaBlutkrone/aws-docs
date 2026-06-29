@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-3",
-  "generatedAt": "2026-06-28T09:25:11Z",
+  "generatedAt": "2026-06-29T01:46:05Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 7412349,
-    "sha256": "ed828a04ea456426a4550a1b71e43c273a37a30bbecee8fdb028a406033e4c01",
+    "sizeBytes": 6912381,
+    "sha256": "87c61d61e206268174226a1b39300f6f1de95e1ebd2e55888dae232ea2e8d34c",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 9146,
+    "speechChars": 8523,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,49 +35,49 @@
       "anchor": "ec2",
       "title": "1) Amazon 이씨투 — 클라우드의 가상 서버 (IaaS)",
       "level": 3,
-      "fraction": 0.16949350119484757
+      "fraction": 0.10912727348486427
     },
     {
       "anchor": "containers",
       "title": "2) 컨테이너 — Amazon 이씨에스 대 Amazon 이케이에스",
       "level": 3,
-      "fraction": 0.27718521108973987
+      "fraction": 0.22460884601762537
     },
     {
       "anchor": "registry-batch",
       "title": "컨테이너 이미지와 배치 작업 — Amazon 이씨알 · 에이더블유에스 Batch",
       "level": 3,
-      "fraction": 0.36459365467933397
+      "fraction": 0.3188191420654597
     },
     {
       "anchor": "serverless",
       "title": "3) 서버리스 — 에이더블유에스 Lambda(함수)와 에이더블유에스 Fargate(컨테이너)",
       "level": 3,
-      "fraction": 0.4644168560937227
+      "fraction": 0.4258630388133086
     },
     {
       "anchor": "autoscaling",
       "title": "4) 탄력성 — Amazon 이씨투 Auto Scaling",
       "level": 3,
-      "fraction": 0.5705348642925142
+      "fraction": 0.5396570761890873
     },
     {
       "anchor": "elb",
       "title": "5) 트래픽 분산 — Elastic Load Balancing(이엘비)",
       "level": 3,
-      "fraction": 0.6477239610654544
+      "fraction": 0.6224296339507073
     },
     {
       "anchor": "spectrum",
       "title": "6) 한눈에 — 관리 부담 스펙트럼",
       "level": 3,
-      "fraction": 0.7414077830234501
+      "fraction": 0.7228900602095877
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8504983388704319
+      "fraction": 0.8396841600866685
     }
   ],
   "generator": {
