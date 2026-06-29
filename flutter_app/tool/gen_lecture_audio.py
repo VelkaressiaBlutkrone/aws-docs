@@ -876,6 +876,7 @@ def insert_connectors(segments: list[dict], title: str) -> int:
     순수 네비게이션 평문. 반환: 삽입 수. 멱등(이미 connector 있으면 0)."""
     if any(s.get("kind") == "connector" for s in segments):
         return 0
+    title = _clean_section_title(title)  # 도입구도 H1 장식(번호·괄호·중점) 정제
 
     def _speaks(s: dict) -> bool:
         return (not s.get("skip")) and bool(s.get("scriptText") or s.get("audioSummary"))
