@@ -20,3 +20,13 @@ build/
 .gstack/
 .omc/
 .superpowers/
+
+# Secrets — NEVER commit API keys / credentials
+.env
+**/.env
+!**/.env.example
+*.key
+
+# Audio enrich 검수 산출물(재생성 가능 — repo 미포함)
+flutter_app/assets/audio/clf/*/enrich_report.md
+flutter_app/assets/audio/clf/*/enrich_verify.md

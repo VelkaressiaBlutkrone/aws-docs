@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-3",
-  "generatedAt": "2026-06-29T03:15:04Z",
+  "generatedAt": "2026-06-30T01:20:23Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t1-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 3870093,
-    "sha256": "b5f67ca627480510213ea71c6c45c4703d973489e4de8bf47b6bfb48e817c55a",
+    "sizeBytes": 6934845,
+    "sha256": "6a26ccb0babf82bb50c3e1181ee366a596e5dbab868e54511bfc9eb4ed18f07c",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 4745,
+    "speechChars": 8698,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,25 +35,25 @@
       "anchor": "caf",
       "title": "1) 클라우드 도입 전략 — 에이더블유에스 씨에이에프",
       "level": 3,
-      "fraction": 0.1670512057159869
+      "fraction": 0.13257190322915585
     },
     {
       "anchor": "migration-tools",
       "title": "2) 마이그레이션 도구 — 디엠에스와 Snowball (시험 핵심)",
       "level": 3,
-      "fraction": 0.38028431080678776
+      "fraction": 0.36774997404215554
     },
     {
       "anchor": "datasync-7r",
       "title": "3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강)",
       "level": 3,
-      "fraction": 0.5985784459660614
+      "fraction": 0.6064375454262279
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8612310211372433
+      "fraction": 0.8880697746859101
     }
   ],
   "generator": {
