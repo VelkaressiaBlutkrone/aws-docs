@@ -25,6 +25,10 @@ import 'home/roadmap_section.dart';
 import 'home/schedule_section.dart';
 import 'home/study_docs_section.dart';
 
+/// due 배너 아이콘 — 지난 일정(overdue)이 있으면 주의(busy), 없으면 예정(upcoming).
+IconData dueIcon(int overdue) =>
+    overdue > 0 ? Icons.event_busy_outlined : Icons.event_outlined;
+
 /// 홈 — 섹션 위젯들은 `pages/home/`(PR4 분해), 이 파일은 골격(스크롤·앵커·
 /// 헤더 배선·오늘-할-일 배너)만 가진다.
 class HomePage extends StatefulWidget {
@@ -106,10 +110,8 @@ class _HomePageState extends State<HomePage> {
       }
     }
     if (today == 0 && overdue == 0) return null;
-    final parts = <String>[
-      if (today > 0) '오늘 학습할 항목 $today개',
-      if (overdue > 0) '지난 일정 $overdue개',
-    ];
+    final hasToday = today > 0;
+    final hasOverdue = overdue > 0;
     return Padding(
       padding: const EdgeInsets.only(top: Gap.lg),
       child: FocusTap(
@@ -126,12 +128,32 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Row(
             children: [
-              Icon(Icons.event_available_outlined, size: 18, color: c.accent),
+              Icon(dueIcon(overdue),
+                  size: 18, color: overdue > 0 ? c.warning : c.accent),
               const SizedBox(width: Gap.sm),
               Expanded(
-                child: Text(parts.join(' · '),
-                    style:
-                        TextStyle(fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.text)),
+                child: Text.rich(
+                  TextSpan(children: [
+                    if (hasToday)
+                      TextSpan(
+                          text: '오늘 학습할 항목 $today개',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontVariations: Wght.w700,
+                              color: c.accent)),
+                    if (hasToday && hasOverdue)
+                      TextSpan(
+                          text: ' · ',
+                          style: TextStyle(color: c.textFaint)),
+                    if (hasOverdue)
+                      TextSpan(
+                          text: '지난 일정 $overdue개',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontVariations: Wght.w700,
+                              color: c.warning)),
+                  ]),
+                ),
               ),
               Text('일정 보기 →',
                   style: TextStyle(
