@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-8",
-  "generatedAt": "2026-06-29T03:31:38Z",
+  "generatedAt": "2026-06-30T02:08:00Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-8/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6673773,
-    "sha256": "503a2d6fbc0d3addb08e67f1085fe2f1e6b44b6f13d47b55f63312beca21947f",
+    "sizeBytes": 10842861,
+    "sha256": "c8bc486f6aeae20a0cedfd18305017ce8d008f404dcd569c31bddb815c97c9bd",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8323,
+    "speechChars": 13658,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,43 +35,43 @@
       "anchor": "messaging",
       "title": "1) 앱 통합 메시징 — 에스엔에스 · 에스큐에스 · EventBridge (시험 핵심)",
       "level": 3,
-      "fraction": 0.1275301022830262
+      "fraction": 0.10346109915796743
     },
     {
       "anchor": "euc",
       "title": "2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces",
       "level": 3,
-      "fraction": 0.2710715981183376
+      "fraction": 0.2649082264191038
     },
     {
       "anchor": "appstream-mq",
       "title": "애플리케이션 스트리밍과 메시지 브로커 — AppStream 2.0 · Amazon 엠큐",
       "level": 3,
-      "fraction": 0.3537180095809417
+      "fraction": 0.3682099503280474
     },
     {
       "anchor": "iot",
       "title": "3) IoT — 에이더블유에스 IoT Core",
       "level": 3,
-      "fraction": 0.4891674938500712
+      "fraction": 0.4794007490636704
     },
     {
       "anchor": "other-services",
       "title": "4) 그 외 범위 내 서비스 — 위치만 알아 두기",
       "level": 3,
-      "fraction": 0.565793448707436
+      "fraction": 0.5695407336573963
     },
     {
       "anchor": "sqs-types",
       "title": "에스큐에스 큐 유형 — 표준 대 피포 (보강)",
       "level": 3,
-      "fraction": 0.6570281817789478
+      "fraction": 0.651645549446171
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7961892020197661
+      "fraction": 0.8201715940181157
     }
   ],
   "generator": {

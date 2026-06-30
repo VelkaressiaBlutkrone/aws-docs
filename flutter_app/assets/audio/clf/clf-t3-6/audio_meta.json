@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-6",
-  "generatedAt": "2026-06-29T03:29:07Z",
+  "generatedAt": "2026-06-30T02:04:07Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-6/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6730221,
-    "sha256": "fc548085f777b015673105f1481208e81e1ea1ae2477f479385a24a6b3fb406d",
+    "sizeBytes": 11054685,
+    "sha256": "2157f313796eb0165780bd0278404aef912f6077c0481b285eb79ba7bf6bda1a",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8428,
+    "speechChars": 13951,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,49 +35,49 @@
       "anchor": "storage-types",
       "title": "1) 세 가지 스토리지 유형 — 객체 대 블록 대 파일 (시험 핵심)",
       "level": 3,
-      "fraction": 0.1202336628578765
+      "fraction": 0.10090536051586009
     },
     {
       "anchor": "s3",
       "title": "2) Amazon 에스쓰리 — 객체 스토리지의 표준",
       "level": 3,
-      "fraction": 0.2297684769118843
+      "fraction": 0.19747280661759917
     },
     {
       "anchor": "s3-classes",
       "title": "에스쓰리 스토리지 클래스 — 접근 빈도 ↔ 비용 트레이드오프",
       "level": 4,
-      "fraction": 0.2793041468737964
+      "fraction": 0.2708786556373347
     },
     {
       "anchor": "s3-lifecycle",
       "title": "에스쓰리 수명 주기(Lifecycle)",
       "level": 4,
-      "fraction": 0.4286814738734112
+      "fraction": 0.4304175079788966
     },
     {
       "anchor": "ebs",
       "title": "3) Amazon 이비에스 — 이씨투에 붙는 블록 디스크",
       "level": 3,
-      "fraction": 0.48818847092052897
+      "fraction": 0.4931153520484596
     },
     {
       "anchor": "efs",
       "title": "4) Amazon 이에프에스 / FSx — 여러 서버가 공유하는 파일 시스템",
       "level": 3,
-      "fraction": 0.595262549749647
+      "fraction": 0.6020582296619553
     },
     {
       "anchor": "hybrid-backup",
       "title": "5) 하이브리드와 백업 — Storage Gateway · 에이더블유에스 Backup",
       "level": 3,
-      "fraction": 0.6859673899088458
+      "fraction": 0.7196899628737055
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8552231779860487
+      "fraction": 0.9030417507978896
     }
   ],
   "generator": {

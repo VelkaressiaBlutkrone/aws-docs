@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-3",
-  "generatedAt": "2026-06-29T03:20:24Z",
+  "generatedAt": "2026-06-30T01:29:32Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t2-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 8979357,
-    "sha256": "a29dd4d3ca19f8a767e2e37e0bf6f06d8aedf88e6d5c7a2f58808189fbe99803",
+    "sizeBytes": 15383469,
+    "sha256": "4846f89b294427380b608f37e226a2b2385376ad672bb5305be1659a894ec7ec",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 11341,
+    "speechChars": 19411,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,55 +35,55 @@
       "anchor": "identities",
       "title": "2) 자격증명(Identities) — 누가 접근하는가",
       "level": 3,
-      "fraction": 0.15003287732747422
+      "fraction": 0.14637822253009566
     },
     {
       "anchor": "root-user",
       "title": "3) 루트 사용자 — 가장 강력하니 가장 조심해서",
       "level": 3,
-      "fraction": 0.22574695684249355
+      "fraction": 0.21231722614344822
     },
     {
       "anchor": "least-privilege",
       "title": "4) 최소 권한 원칙 그리고 그룹·정책으로 권한 관리",
       "level": 3,
-      "fraction": 0.31972800025660353
+      "fraction": 0.31055173834085337
     },
     {
       "anchor": "mfa-password",
       "title": "5) 로그인 보안 강화 — 엠에프에이와 암호 정책",
       "level": 3,
-      "fraction": 0.37874681250300707
+      "fraction": 0.3817797165484058
     },
     {
       "anchor": "identity-center",
       "title": "6) 중앙 집중식 접근 — 아이엠 Identity Center (이전 에이더블유에스 에스에스오)",
       "level": 3,
-      "fraction": 0.46454861835036004
+      "fraction": 0.4930354033662217
     },
     {
       "anchor": "secrets-manager",
       "title": "7) 자격증명 저장 — Secrets Manager",
       "level": 3,
-      "fraction": 0.5344249675236156
+      "fraction": 0.5802800816280681
     },
     {
       "anchor": "iam-global",
       "title": "아이엠은 글로벌 서비스 (보강)",
       "level": 3,
-      "fraction": 0.593668307860087
+      "fraction": 0.6462190852414206
     },
     {
       "anchor": "app-directory-identity",
       "title": "애플리케이션·디렉터리 아이덴티티 — Cognito와 Directory Service",
       "level": 3,
-      "fraction": 0.6553814571873046
+      "fraction": 0.7074775803643307
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8417397719436114
+      "fraction": 0.8617939452942167
     }
   ],
   "generator": {
