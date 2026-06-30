@@ -168,3 +168,4 @@
 | 2026-06-13 | Pretendard Variable(woff2) 전환 + Wght 토큰 (PR3) | 시각 리펙토링 B안 WS5. 폰트 6.9→2.75MB(임계 경로 단축), 모든 weight 정확 렌더(디퍼럴 스와프 문제 없음), fontWeight↔fontVariations 1:1 게이트 |
 | 2026-06-13 | AppHeader 2변형 롤아웃(9페이지) + collapse 규약 + 글래스(extend) + focus 인셋 변형 + 키보드 감사 (PR4) | 시각 리펙토링 B안 WS6·7·8 + DT4. 헤더 셸 56px 통일(홈 60→56), 브레드크럼 분해(정보 손실 0 — 인벤토리 대조), 세션 액션은 본문 유지(OQ2), plan만 비확장(NestedScrollView 충돌), GestureDetector 인터랙티브 0건화 |
 | 2026-06-18 | 학습 문서 독서 측정 폭 720→1080px (`Layout.measure`) | 웹에서 본문 좌우 여백 과다(본문 720 / 콘텐츠 1180 → 여백 각 ~230px). 표·코드 혼재 학습문서 가독 위해 1.5배 확대. 모바일은 화면폭이 상한이라 영향 없음. 사용자 승인하 measure 원칙 완화 |
+| 2026-06-30 | 홈 상단 due 배너 색 시맨틱(today=accent·overdue=warning)·상태 아이콘 + 출처 칩 full radius·외부 ↗·w500 | 밀린 일정을 긍정 신호(accent+완료 아이콘)로 가리던 것을 정직하게 분리(warning; 빨강은 압박이라 배제). 출처 칩을 L97 "칩=full" 정책에 정합 + 외부 새 탭 단서(↗) 명시 |

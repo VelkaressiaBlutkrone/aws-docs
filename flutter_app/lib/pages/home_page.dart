@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
     final hasToday = today > 0;
     final hasOverdue = overdue > 0;
     return Padding(
-      padding: const EdgeInsets.only(top: Gap.lg),
+      padding: const EdgeInsets.only(top: Gap.lg, bottom: Gap.xl),
       child: FocusTap(
         onTap: active == 1
             ? () => context.push('/cert/$oneCert/plan')
