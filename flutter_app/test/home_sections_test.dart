@@ -87,6 +87,13 @@ void main() {
     expect(find.text('통합 모의고사'), findsWidgets); // 헤더(+시작 화면)
   });
 
+  testWidgets('출처 칩: 외부 링크 ↗ 아이콘 표시', (tester) async {
+    await tester.pumpWidget(_home());
+    await tester.pump();
+    // officialSources 각 칩에 외부 단서 아이콘(north_east).
+    expect(find.byIcon(Icons.north_east), findsWidgets);
+  });
+
   testWidgets('플랜 없으면 오늘-할-일 배너 미표시', (tester) async {
     await tester.pumpWidget(_home());
     await tester.pump();

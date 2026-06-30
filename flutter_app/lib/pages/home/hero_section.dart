@@ -102,23 +102,34 @@ class _SourcePillState extends State<_SourcePill> {
         link: true,
         label: '${widget.label} (공식 자료, 새 탭으로 열기)',
         child: InsetFocusRing(
-          borderRadius: BorderRadius.circular(Radii.sm),
+          borderRadius: BorderRadius.circular(Radii.full),
           child: InkWell(
             onTap: () => openLink(widget.href),
-            borderRadius: BorderRadius.circular(Radii.sm),
+            borderRadius: BorderRadius.circular(Radii.full),
             child: Container(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 color: c.surface,
-                borderRadius: BorderRadius.circular(Radii.sm),
+                borderRadius: BorderRadius.circular(Radii.full),
                 border: Border.all(color: active ? c.accent : c.border),
               ),
-              child: Text(widget.label,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: active ? c.accent : c.textMuted)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(widget.label,
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            fontVariations: Wght.w500,
+                            color: active ? c.accent : c.textMuted)),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(Icons.north_east,
+                      size: 14, color: active ? c.accent : c.textMuted),
+                ],
+              ),
             ),
           ),
         ),
