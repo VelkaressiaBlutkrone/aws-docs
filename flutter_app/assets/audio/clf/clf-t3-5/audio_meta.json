@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-5",
-  "generatedAt": "2026-06-29T03:27:48Z",
+  "generatedAt": "2026-06-30T02:02:00Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-5/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6612429,
-    "sha256": "479a32a3868a0c76908243ef58a666ebdd5f662c3646758bfd428f68c76b5aa7",
+    "sizeBytes": 10199037,
+    "sha256": "39e8e08bb2f5bee8537de324b8a99edd8f8089bce32b5a3d96b37607cac9bfc3",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8338,
+    "speechChars": 12865,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,43 +35,43 @@
       "anchor": "vpc",
       "title": "1) Amazon 브이피씨 — 나만의 격리된 가상 네트워크",
       "level": 3,
-      "fraction": 0.11155152887882219
+      "fraction": 0.09046496194738997
     },
     {
       "anchor": "vpc-security",
       "title": "2) 브이피씨 보안 2층 — 보안 그룹 대 네트워크 에이씨엘 (2.4 복습)",
       "level": 3,
-      "fraction": 0.2398074745186863
+      "fraction": 0.2400350168730497
     },
     {
       "anchor": "flow-logs-privatelink",
       "title": "네트워크 관측과 사설 연결 — 브이피씨 Flow Logs · 에이더블유에스 PrivateLink",
       "level": 3,
-      "fraction": 0.3100444289572262
+      "fraction": 0.34557982576281715
     },
     {
       "anchor": "route53",
       "title": "3) Amazon Route 53 — 디엔에스 웹 서비스",
       "level": 3,
-      "fraction": 0.45311002700583675
+      "fraction": 0.4619544498256216
     },
     {
       "anchor": "onprem-connect",
       "title": "4) 온프레미스 연결 — Direct Connect 대 Site-to-Site 브이피엔 (시험 핵심)",
       "level": 3,
-      "fraction": 0.5476740134158028
+      "fraction": 0.5538878612879997
     },
     {
       "anchor": "edge",
       "title": "5) 엣지 서비스 — CloudFront · Global Accelerator (3.2 복습)",
       "level": 3,
-      "fraction": 0.6725977872636989
+      "fraction": 0.6752749812913884
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8076705287917066
+      "fraction": 0.8400519605212996
     }
   ],
   "generator": {
