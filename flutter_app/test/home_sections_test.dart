@@ -100,4 +100,14 @@ void main() {
     expect(find.textContaining('오늘 학습할 항목'), findsNothing);
     expect(find.textContaining('지난 일정'), findsNothing);
   });
+
+  testWidgets('통합 모의고사 카드: 라이브 cert는 "준비 중"이 아닌 검증 문항 수 라벨(CODE-P-002)',
+      (tester) async {
+    await tester.pumpWidget(_home());
+    await tester.pump();
+    // certExamIsBalanced 통과 cert(예: CLF-C02)의 통합 모의고사 카드는 CTA가
+    // 실제 동작하므로 '준비 중' 라벨이 항상 거짓 — 검증 문항 수를 표기해야 한다.
+    expect(find.text('통합 모의고사 · 준비 중'), findsNothing);
+    expect(find.textContaining('통합 모의고사 · 검증'), findsWidgets);
+  });
 }

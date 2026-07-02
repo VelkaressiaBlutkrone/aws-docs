@@ -124,4 +124,15 @@ title: X
       expect(doc.blocks.whereType<MdBullets>().isNotEmpty, isTrue);
     }, timeout: const Timeout(Duration(seconds: 10)));
   });
+
+  test('빈/공백 누락 체크박스는 무한루프 없이 파싱된다 (CODE-C-001)', () {
+    // 과거: 체크리스트 진입 정규식이 ']' 뒤 공백(\s)을 요구해, - [ ](빈 항목)와
+    // - [x]붙음(공백 누락)이 불릿 0-소비 분기로 빠져 무한루프(페이지 멈춤)였다.
+    // 정규식을 (\s|$)로 통일 + 불릿 0-소비 시 문단 degrade로 봉인.
+    final doc =
+        parseStudyDoc('# H\n\n- [ ]\n- [x] 완료\n- [x]붙음\n\n다음 문단\n');
+    expect(doc.blocks, isNotEmpty, reason: '무한루프면 timeout으로 실패');
+    expect(doc.blocks.whereType<MdChecklist>().isNotEmpty, isTrue,
+        reason: '- [ ] 빈 항목·- [x] 완료가 체크리스트로 수용돼야 한다');
+  }, timeout: const Timeout(Duration(seconds: 5)));
 }

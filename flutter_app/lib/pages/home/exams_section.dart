@@ -38,7 +38,8 @@ class ExamsSection extends StatelessWidget {
               for (final cert in withContent)
                 ContentCertCard(
                   cert: cert,
-                  summaryLabel: '통합 모의고사 · 준비 중',
+                  summaryLabel:
+                      '통합 모의고사 · 검증 ${certContentSummary(cert.code).questions}문항',
                   cta: '모의고사 →',
                   onTap: () => context.push('/cert/${cert.code}/exam'),
                 ),
