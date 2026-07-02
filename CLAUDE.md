@@ -47,12 +47,12 @@ Flutter Web (Dart) + go_router(해시 라우팅), GitHub Pages 배포. 한국어
 ```sh
 cd flutter_app
 flutter pub get                 # 의존성 설치(최초·pubspec 변경 시)
-flutter test                    # 전체 테스트 — 통과를 눈으로 확인(현재 기준선 499 그린)
-flutter analyze                 # 정적 분석 — 신규 0건이 게이트(기존 잔존 3건: plan_agenda cacheExtent·sync_controller_test 2건)
+flutter test                    # 전체 테스트 — 통과를 눈으로 확인(현재 기준선 778 그린)
+flutter analyze                 # 정적 분석 — 0건이 게이트(2026-07-02 잔존 3건 해소 완료)
 ```
 
 - **테스트 게이트:** 변경 후 `flutter test`가 전부 통과해야 한다. 단일 파일은 `flutter test test/<파일>.dart`. 새 기능·수정은 실패 테스트 선작성(절대 조건 2).
-- **분석 게이트:** `flutter analyze`에서 **신규 경고·에러 0건**. 기존 잔존 3건 외 새 항목이 보이면 머지 금지.
+- **분석 게이트:** `flutter analyze` **경고·에러 0건**. 새 항목이 보이면 머지 금지.
 - **웹 빌드(배포 산출물 검증):** `flutter build web --release --base-href /aws-docs/` — base-href는 GitHub Pages 경로라서 필수. **Git Bash에서 실행 금지**(MSYS가 `/aws-docs/`를 경로로 변형) — PowerShell로 실행한다([[flutter-build-web-powershell]]).
 - **스플래시 검증(선택):** `node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark]` — 보고서·스크린샷은 `build/verify_splash/`. gstack browse 데몬 필요. Flutter 마이너 업그레이드 시 1회 실행 권장.
 - **CI·배포:** `main` 푸시 시 `.github/workflows/pages.yml`이 `pub get → build web → GitHub Pages 배포`를 자동 수행한다. 브랜치 전략상 `main`에는 PR 머지로만 들어간다. 머지 전 CI 녹색을 확인한다.
