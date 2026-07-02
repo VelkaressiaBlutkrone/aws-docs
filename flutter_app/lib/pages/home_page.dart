@@ -211,7 +211,10 @@ class _HomePageState extends State<HomePage> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const HeroSection(),
+                            HeroSection(
+                              onGotoPaths: () => _goto(_paths),
+                              onGotoExams: () => _goto(_exams),
+                            ),
                             ?dueBanner,
                             const SourcesRow(),
                             LevelsSection(key: _levels),

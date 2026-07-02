@@ -9,7 +9,11 @@ import 'home_bits.dart';
 /// 히어로 + 공식 출처 스트립(PR4 분해 — home_page.dart에서 이동).
 
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  const HeroSection({super.key, this.onGotoPaths, this.onGotoExams});
+
+  /// 히어로 CTA 배선 — home_page의 섹션 앵커로 스크롤(_goto). null이면 무동작.
+  final VoidCallback? onGotoPaths;
+  final VoidCallback? onGotoExams;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +50,11 @@ class HeroSection extends StatelessWidget {
           Wrap(
             spacing: Gap.md,
             runSpacing: Gap.md,
-            children: const [
-              HomeButton(label: '추천 순서 보기', primary: true),
-              HomeButton(label: '모의고사 구성', primary: false),
+            children: [
+              HomeButton(
+                  label: '추천 순서 보기', primary: true, onTap: onGotoPaths),
+              HomeButton(
+                  label: '모의고사 구성', primary: false, onTap: onGotoExams),
             ],
           ),
         ],
