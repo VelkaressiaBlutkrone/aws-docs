@@ -1,0 +1,32 @@
+# ① 코드 품질 감사 샤드 — 01-code-c (lib/content·models·theme·util) — 2026-07
+
+## 요약 (3~5줄)
+
+대상 19파일·총 2,100줄(content 7 / models 7 / theme 2 / util 3). 250줄 초과는 3파일(app_theme 350 / study_markdown_view 333 / quiz_widgets 319), markdown_parser는 243줄로 기준 이하.
+최중요 발견: **markdown_parser.dart 불릿 분기에 0-소비 무한루프가 잔존**(CODE-C-001) — `- [ ]`(빈 체크박스)·`- [x]텍스트`(공백 누락) 입력에서 페이지 멈춤. PR#27이 고친 H4 사고와 동일 클래스(진전 보장이 문단 폴백에만 있고 불릿 분기는 `continue`로 우회)이며, 실콘텐츠에 체크리스트가 203회 존재해 오탈자 1건이면 발화한다. 현재 자산은 전부 정상형이라 라이브 미발화(잠복).
+그 외: 표 분기의 조용한 콘텐츠 소실/빈 셀 열-시프트(CODE-C-002), 렌더러·테마의 중복 패턴과 분해 축(B), dead code 없음, 대상 디렉터리 TODO/FIXME/HACK 0건.
+모델 계층(models/*)은 방어적 fromJson 관용구가 일관 적용되어 전반적으로 견고(무한루프·크래시 소지 없음). 빈 문서·프런트매터 미종결 입력도 크래시 없이 degrade됨을 코드 추적으로 확인.
+
+## 발견 항목
+
+| ID | 위치 | 발견 내용 | 심각도(H/M/L) | 확신도(높/중/낮) | 권장 조치 | Phase(A/B) | 사실의심(Y/N) |
+|---|---|---|---|---|---|---|---|
+| CODE-C-001 | `flutter_app/lib/content/markdown_parser.dart:179-189` | **불릿 분기 0-소비 무한루프(잠복, H4 사고와 동일 클래스)**. 체크리스트 진입 정규식(`166: ^- \[[ xX]\]\s`)은 `]` 뒤 공백을 요구하는데, 불릿 분기의 제외 정규식(`183: ^- \[[ xX]\]`)은 공백을 요구하지 않음. 그 결과 `- [ ]`·`- [x]`(빈 항목)나 `- [x]텍스트`(공백 누락) 줄은 ①체크리스트 분기 불일치 → ②불릿 분기 진입(`- ` 접두) → ③while 제외 조건에 걸려 0회 순회 → `MdBullets([])`만 무한 추가 + `continue`로 i 미전진 → **무한루프+메모리 폭증=페이지 멈춤**. PR#27의 진전 보장은 문단 폴백(222-228)에만 있어 이 분기엔 미적용. 실콘텐츠에 `- [x] ` 체크리스트 203회(30+파일) 존재 — 오탈자 1건으로 발화 가능. 현 자산은 전부 정상형(정규식 검증: `- \[[ xX]\]$`·`]`뒤 비공백 0건)이라 아직 미발화. | H | 높 | 실패 테스트 선작성(`- [ ]`·`- [x]텍스트` 입력 + timeout) 후: (1) 두 정규식을 단일 상수(`^- \[[ xX]\](\s|$)`)로 통일해 빈 체크박스를 체크리스트로 수용, (2) 방어선으로 루프 최상위에 공통 진전 보장(반복 시작 i 대비 미전진이면 문단 degrade+i++) 승격 | A | N |
+| CODE-C-002 | `flutter_app/lib/content/markdown_parser.dart:133-154` | 표 분기 3중 degrade 결함(크래시는 아님, 조용한 콘텐츠 소실): (a) 파이프 줄이 1줄뿐이면(`tbl.length < 2`) 줄을 소비만 하고 아무 블록도 emit하지 않음 — 파일 상단 계약("인식 못 한 줄은 문단으로 degrade") 위반; (b) `tbl[1]`을 구분행으로 무검증 가정 — 구분행 없이 헤더+데이터 2줄이면 데이터 행이 조용히 삼켜짐; (c) `cells()`의 `where(isNotEmpty)`가 행 중간의 의도적 빈 셀도 제거 → 이후 셀이 왼쪽으로 시프트(데이터가 다른 열에 표시) | M | 높 | (a) `tbl.length < 2`면 MdParagraph로 emit; (b) `tbl[1]`이 `\|[-: ]+` 패턴인지 검증, 아니면 데이터 행으로 취급; (c) 선두/말미 빈 조각만 버리고 중간 빈 셀은 `MdSpan('')`으로 보존. 각각 실패 테스트 선작성 | A | N |
+| CODE-C-003 | `flutter_app/lib/content/study_markdown_view.dart:296-346` (+ parser 146) | 헤더 셀이 전부 빈 표(예: `\|`·`\| \|` 줄 2개)는 파서가 `MdTable([], [])`을 만들고, `_table`의 `buildRow`가 `TableRow(children: [])`를 생성 → Flutter `Table`의 debug assert("TableRow have no children") 크래시. 릴리스 빌드에선 assert 제거로 빈 렌더(무해) | L | 중 | 파서에서 `headers.isEmpty`면 MdTable 미생성(문단 degrade), 또는 렌더러에서 headers 비면 SizedBox.shrink 반환 | A | N |
+| CODE-C-004 | `flutter_app/lib/content/study_markdown_view.dart` (333줄) | 250줄 초과 + 내부 중복: H2 섹션 헤딩의 trailing 슬롯 Row 조립(67-82)과 `_block`의 MdHeading trailing Row 조립(120-139)이 사실상 동일 패턴 2벌. 책임도 3축 혼재 — ①섹션 그룹핑/콜아웃(`build`/`_section`/`_callout`) ②블록 렌더러(`_block`/`_row`/`_spans`) ③표 렌더러(`_table`, 52줄) | M | 높 | `_HeadingWithTrailing` 위젯 추출로 중복 제거 → `md_block_view.dart`(블록·스팬)와 `md_table_view.dart`(표) 분리. 기존 `study_markdown_view_heading_slot_test` 등 그린 유지 | B | N |
+| CODE-C-005 | `flutter_app/lib/content/quiz_widgets.dart` (319줄) | 250줄 초과, 위젯 6개 혼재(OptionTile·ExplainBox·PrimaryButton·ResultsView·ResultCard·_ConceptCue). 특히 범용 버튼 `PrimaryButton`이 퀴즈 파일에 있어 `prescription_hub.dart:5`가 `show PrimaryButton`으로 역-의존 — 배치가 이름과 어긋남 | M | 높 | 축 분해: 입력 위젯(OptionTile/ExplainBox, ~100줄) vs 결과 복기(ResultsView/ResultCard/_ConceptCue, ~200줄 → `results_widgets.dart`), `PrimaryButton`은 `lib/widgets/`로 이동 | B | N |
+| CODE-C-006 | `flutter_app/lib/theme/app_theme.dart` (350줄) | 250줄 초과이나 대부분 선언적 토큰. `AppColors`의 ThemeExtension 보일러플레이트(copyWith/lerp)만 ~80줄 | L | 높 | 분해한다면 축: `app_colors.dart`(AppColors, ~185줄) / `tokens.dart`(Gap·Radii·Layout·Wght) / 전환·빌드는 잔류. 응집도 높아 긴급도 낮음 — 선택적 | B | N |
+| CODE-C-007 | `flutter_app/lib/content/markdown_parser.dart:201-214` | 문단 종결 조건 리스트가 각 블록 분기의 시작 판정을 수동 복제(이중 유지보수 지점 — 새 블록 타입 추가 시 두 곳 동기화 필요; CODE-C-001의 정규식 비대칭도 이런 복제에서 발생). 추가로 루프 내부 인라인 `RegExp(...)` 재생성 다수(`^- \[[ xX]\]` 2벌, `^\d+\.\s` 3회 등) — `_anchorRe`/`_inlineRe`처럼 top-level final로 호이스팅된 기존 관례와 불일치 | L | 높 | 블록 시작 판정을 단일 함수/정규식 상수 집합으로 통합하고 문단 종결도 그것을 재사용. 정규식 전부 top-level final 호이스팅(가독+미세 성능) | B | N |
+| CODE-C-008 | `flutter_app/lib/content/study_markdown_view.dart:273-294` | `MdSpan.url` 스팬이 accent 색만 입혀지고 탭 핸들러(recognizer) 없음 — 본문 내 URL이 링크처럼 보이지만 클릭 불가. `util/open_link.dart`(openLink)는 현재 `pages/home/hero_section.dart` 1곳에서만 사용. 의도적 단순화(SelectionArea 복사 유도)인지 미확정 | L | 중 | 의도 확인 후: 링크화가 의도면 TapGestureRecognizer+openLink 연결, 비의도면 링크색 제거(가짜 어포던스 해소). 어느 쪽이든 소규모 | A | N |
+| CODE-C-009 | `flutter_app/lib/content/quiz_widgets.dart:243` (+ `models/question.dart:51`) | `q.options[q.correct]` — `Question.fromJson`의 `correct` 폴백이 `-1`이라, 불량 데이터가 verified 게이트를 통과하면 ResultCard에서 RangeError 크래시 경로. 실위험은 낮음(문항 불변식 테스트가 데이터를 게이트) | L | 중 | 문항 동적 불변식 테스트에 `0 <= correct < options.length` 포함 여부 확인·보강(데이터 게이트가 정본), 렌더러는 현행 유지 | A | N |
+| CODE-C-010 | `flutter_app/lib/theme/app_theme.dart:275-277` | `ColorScheme.onError`가 리터럴(`0xFFFFFFFF`/`0xFF14181F`)로 하드코딩 — 각각 `c.onAccent`(light/dark)와 동일값의 중복. 토큰 우회라 다크 팔레트 변경 시 불일치 위험 | L | 높 | `c.onAccent`로 치환해 토큰 일원화 | B | N |
+| CODE-C-011 | 대상 4개 디렉터리 전체 | **TODO/FIXME/HACK/XXX 인벤토리: 0건** (참고: lib 전체로는 `pages/home_page.dart:93` TODO 1건 — 본 샤드 범위 밖) | L | 높 | 조치 불요 | — | N |
+| CODE-C-012 | 대상 4개 디렉터리 전체 | **명확한 dead code: 발견 없음.** public 심볼 전수 참조 확인 — RecommendedPath·OfficialSource(site_data), ExamSummary.howToUse·taskCount(cert_detail), anchorScrollOffset·buildAnchorKeys(study_doc_page), studyDeepLink·PrescriptionHub(exam/cert_exam/report), confirmReset(home/review/report), AppFadePageTransitionsBuilder(테마+테스트), Wght·Gap·Radii·Layout 토큰 전부, planIdOf·planItemId·bankFingerprint·examDurationSec·withOptionOrder·ThemeScope.of, Level.short·heading — 모두 사용처 존재. AppColors.copyWith는 ThemeExtension 필수 구현 | L | 높 | 조치 불요 | — | N |
+
+### 파서 견고성 보충(점검 항목 5 확인 결과)
+
+- **경계 입력 크래시/루프 추적**: 빈 문서(`''`) → 빈 blocks로 정상 종료. 닫는 `---` 없는 프런트매터 → 본문 전체가 메타로 소비되나 종료 보장(루프·크래시 없음, 조용한 degrade). 미종결 코드펜스·미종결 `<details>` → EOF까지 소비 후 종료. H1~H7·`#######`·공백 없는 `#제목` → PR#27 진전 보장으로 안전(테스트 존재).
+- **잔존 취약점은 CODE-C-001(불릿 0-소비 루프)·CODE-C-002(표 소실)·CODE-C-003(빈 헤더 표 assert)** — 셋 다 분기별 "최소 1줄 소비" 불변식이 강제되지 않는 데서 기인. 진전 보장을 문단 폴백에서 루프 최상위 공통 방어선으로 승격하면 클래스 전체가 봉인된다.
+- **테스트 커버리지 공백**: `test/markdown_parser_test.dart`는 헤딩·앵커·표 인라인·미지 줄 degrade를 커버하나 **체크리스트(`- [ ]`) 케이스가 테스트 전무**(test/ 전체에 `- [` 패턴 0건) — 실콘텐츠 최다 사용 블록 중 하나(203회)인데 회귀 가드가 없음. CODE-C-001 수정 시 함께 보강.
+- `_inlineRe`·`_anchorRe`는 백트래킹 폭주 패턴 아님(선형). 인라인 파서는 spans 빈 결과까지 방어(261).
