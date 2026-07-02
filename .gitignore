@@ -30,3 +30,9 @@ build/
 # Audio enrich 검수 산출물(재생성 가능 — repo 미포함)
 flutter_app/assets/audio/clf/*/enrich_report.md
 flutter_app/assets/audio/clf/*/enrich_verify.md
+
+# CLF 오디오 검수 일회성 스크래치(파일 자체가 'repo 등록 금지' 명시 — 재생성 가능)
+flutter_app/assets/audio/clf/_*.py
+flutter_app/assets/audio/clf/_*.md
+flutter_app/assets/audio/clf/*/review_notes.py
+flutter_app/assets/audio/clf/*/review_notes.md
