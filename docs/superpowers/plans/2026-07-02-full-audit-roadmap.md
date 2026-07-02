@@ -120,8 +120,15 @@ Expected: `3 issues found` (cacheExtent deprecated / fake_async depend_on_refere
 // 변경 후:
               // (scrollCacheExtent: 9999 핵 대신) 수 개월 플랜에서도 _runScrollToDate의
               // 스텝 횟수를 줄여 주는 정도의 보수적인 값.
-              scrollCacheExtent: 1200,
+              scrollCacheExtent: const ScrollCacheExtent.pixels(1200),
 ```
+
+> **정정(실행 중 확인, 2026-07-02):** 단순 리네임이 아니었다. Flutter 3.44의 `scrollCacheExtent`는 `double`이 아니라 `ScrollCacheExtent?` 타입을 받는다(SDK 호환 심: `cacheExtent != null ? ScrollCacheExtent.pixels(cacheExtent!) : null`, `rendering/viewport.dart`). 또 이 파일은 `package:flutter/rendering.dart`를 `show RenderAbstractViewport`로 제한 임포트해 타입이 가려지므로 show 목록 확장이 필요했다:
+> ```dart
+> import 'package:flutter/rendering.dart'
+>     show RenderAbstractViewport, ScrollCacheExtent;
+> ```
+> 실제 적용·게이트 통과 커밋 = chore 브랜치 `13f3ce3`(analyze 0·테스트 778).
 
 - [ ] **Step 4: pubspec.yaml 수정** — dev_dependencies에 fake_async 추가(lock 파일 기존 해석 1.3.3):
 
