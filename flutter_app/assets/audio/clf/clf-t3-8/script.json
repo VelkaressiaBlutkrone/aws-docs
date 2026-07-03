@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "docId": "clf-t3-8",
   "sourceAsset": "assets/content/clf/t3-8.md",
-  "sourceHash": "a6274fb363ab85d8b18dd16c315b4fea1a6f6b915825eab758229a2d5a37a213",
+  "sourceHash": "8f26bb13153c0a6d76ff3f256146e87c7d0e990eb0ec7d9d62cedf4a9fcd330a",
   "lexiconVersion": "99e4378737f2",
   "generatedAt": "2026-06-25T10:16:29Z",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "segments": [
     {
       "id": "seg000",
@@ -182,7 +182,7 @@
       "audioSummary": null,
       "skip": false,
       "issues": [],
-      "enrichedScriptText": "자, 이번에는 조금 근본적인 질문을 하나 던져 보겠습니다. 왜 에이더블유에스는 알림 서비스인 에스엔에스와 큐 서비스인 에스큐에스를 하나의 메시징 서비스로 합치지 않고, 굳이 별도의 서비스로 유지하고 있을까요?\n\n먼저 에스엔에스부터 보겠습니다. 에스엔에스의 pub/sub 모델은 메시지를 발행하는 즉시 모든 구독자에게 그 메시지를 복제해서 푸시합니다. 그러니까 메시지를 따로 저장하거나 재시도하는 메커니즘 없이, 발행되는 순간 바로 전달하는 데 최적화되어 있는 겁니다.\n\n반면에 에스큐에스의 큐 모델은 성격이 완전히 다릅니다. 메시지를 내구성 있게 보관해 두고, 소비자가 자기 속도에 맞춰 폴링해서 처리하도록 설계돼 있습니다. 핵심은 생산자와 소비자의 처리 속도 차이를 흡수하는 버퍼 역할을 한다는 점입니다.\n\n이렇게 두 모델의 목적이 다르기 때문에, 이걸 하나의 서비스로 통합해 버리면 어느 쪽 패턴도 제대로 최적화하기가 어려워집니다. 오히려 둘을 따로 두면, 에스엔에스 주제에서 여러 에스큐에스 큐로 팬아웃하는 조합처럼 두 서비스를 연계해서 각자의 강점을 살리는 아키텍처를 자유롭게 구성할 수 있습니다."
+      "enrichedScriptText": "자, 이번에는 조금 근본적인 질문을 하나 던져 보겠습니다. 왜 에이더블유에스는 알림 서비스인 에스엔에스와 큐 서비스인 에스큐에스를 하나의 메시징 서비스로 합치지 않고, 굳이 별도의 서비스로 유지하고 있을까요?\n\n먼저 에스엔에스부터 보겠습니다. 에스엔에스의 pub/sub 모델은 메시지를 발행하는 즉시 모든 구독자에게 그 메시지를 복제해서 푸시합니다. 그러니까 소비자가 나중에 폴링해서 가져가도록 메시지를 큐에 보관해 두는 에스큐에스 방식이 아니라, 발행되는 순간 바로 전달하는 데 최적화되어 있다는 뜻입니다. 참고로 에스엔에스 자체도 프로토콜별 전달 재시도 정책과 디엘큐를 제공한다는 점은 알아 두시면 좋습니다.\n\n반면에 에스큐에스의 큐 모델은 성격이 완전히 다릅니다. 메시지를 내구성 있게 보관해 두고, 소비자가 자기 속도에 맞춰 폴링해서 처리하도록 설계돼 있습니다. 핵심은 생산자와 소비자의 처리 속도 차이를 흡수하는 버퍼 역할을 한다는 점입니다.\n\n이렇게 두 모델의 목적이 다르기 때문에, 이걸 하나의 서비스로 통합해 버리면 어느 쪽 패턴도 제대로 최적화하기가 어려워집니다. 오히려 둘을 따로 두면, 에스엔에스 주제에서 여러 에스큐에스 큐로 팬아웃하는 조합처럼 두 서비스를 연계해서 각자의 강점을 살리는 아키텍처를 자유롭게 구성할 수 있습니다."
     },
     {
       "id": "con002",
@@ -389,7 +389,7 @@
       "kind": "table",
       "sourceExcerpt": "| 묶음 | 대표 서비스(예) |\n|---|---|\n| **비즈니스 앱** | Amazon Connect(콜센터), Amazon SES(이메일 발송) |\n| **개발자 도구** | CloudShell(브라우저 셸), Cloud9(IDE), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적) |\n| **프런트엔드·모바일** | AWS Amplify, AWS AppSync |\n| **고객 지원** | AWS Support, AWS IQ, AWS Managed Services(AMS) |",
       "scriptText": "",
-      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구는 CloudShell(브라우저 셸), Cloud9(아이디이), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify, 에이더블유에스 AppSync입니다. 고객 지원은 에이더블유에스 Support, 에이더블유에스 아이큐, 에이더블유에스 Managed Services(에이엠에스)입니다.",
+      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구는 CloudShell(브라우저 셸), Cloud9(아이디이), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify, 에이더블유에스 AppSync입니다. 고객 지원(Customer Enablement)은 에이더블유에스 Support, 에이더블유에스 아이큐, 에이더블유에스 Managed Services(에이엠에스), 그리고 에이더블유에스 Activate입니다.",
       "skip": false,
       "issues": []
     },

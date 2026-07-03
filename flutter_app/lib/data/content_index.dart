@@ -95,7 +95,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-1.md',
       questionsAsset: 'assets/content/clf/t2-1.questions.json',
       questionCount: 15,
-      audioApproved: true,
+      audioApproved: false, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -115,7 +115,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-3.md',
       questionsAsset: 'assets/content/clf/t2-3.questions.json',
       questionCount: 18,
-      audioApproved: true,
+      audioApproved: false, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -165,7 +165,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-4.md',
       questionsAsset: 'assets/content/clf/t3-4.questions.json',
       questionCount: 15,
-      audioApproved: true,
+      audioApproved: false, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -185,7 +185,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-6.md',
       questionsAsset: 'assets/content/clf/t3-6.questions.json',
       questionCount: 15,
-      audioApproved: true,
+      audioApproved: false, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -205,7 +205,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-8.md',
       questionsAsset: 'assets/content/clf/t3-8.questions.json',
       questionCount: 16,
-      audioApproved: true,
+      audioApproved: false, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -215,7 +215,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t4-1.md',
       questionsAsset: 'assets/content/clf/t4-1.questions.json',
       questionCount: 15,
-      audioApproved: true,
+      audioApproved: false, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
     ),
     ContentEntry(
       certCode: 'CLF-C02',

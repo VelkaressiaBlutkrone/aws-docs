@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-3",
-  "generatedAt": "2026-06-30T01:29:32Z",
+  "generatedAt": "2026-07-03T05:13:44Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t2-3.md",
-    "sha256": "77279eba8d597c54367a0adad92f65bf93cbaea25518c14033eb78da703660a9"
+    "sha256": "aa9e934f4b01ba852ff0490dc390d9e4466f4801a77e1b67ef3e9dbbcdda63d1"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t2-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 15383469,
-    "sha256": "4846f89b294427380b608f37e226a2b2385376ad672bb5305be1659a894ec7ec",
+    "sizeBytes": 15556125,
+    "sha256": "d0945e0ce3eb0b9a5f70673a20204f6f45748f3fa3a539cc94dd8a955047033a",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,65 +25,65 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 19411,
+    "speechChars": 19630,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "identities",
       "title": "2) 자격증명(Identities) — 누가 접근하는가",
       "level": 3,
-      "fraction": 0.14637822253009566
+      "fraction": 0.14349864623918643
     },
     {
       "anchor": "root-user",
       "title": "3) 루트 사용자 — 가장 강력하니 가장 조심해서",
       "level": 3,
-      "fraction": 0.21231722614344822
+      "fraction": 0.2072904972594598
     },
     {
       "anchor": "least-privilege",
       "title": "4) 최소 권한 원칙 그리고 그룹·정책으로 권한 관리",
       "level": 3,
-      "fraction": 0.31055173834085337
+      "fraction": 0.3089216139470382
     },
     {
       "anchor": "mfa-password",
       "title": "5) 로그인 보안 강화 — 엠에프에이와 암호 정책",
       "level": 3,
-      "fraction": 0.3817797165484058
+      "fraction": 0.3810341411873473
     },
     {
       "anchor": "identity-center",
       "title": "6) 중앙 집중식 접근 — 아이엠 Identity Center (이전 에이더블유에스 에스에스오)",
       "level": 3,
-      "fraction": 0.4930354033662217
+      "fraction": 0.4912500825463911
     },
     {
       "anchor": "secrets-manager",
       "title": "7) 자격증명 저장 — Secrets Manager",
       "level": 3,
-      "fraction": 0.5802800816280681
+      "fraction": 0.5775605890510467
     },
     {
       "anchor": "iam-global",
       "title": "아이엠은 글로벌 서비스 (보강)",
       "level": 3,
-      "fraction": 0.6462190852414206
+      "fraction": 0.64366373902133
     },
     {
       "anchor": "app-directory-identity",
       "title": "애플리케이션·디렉터리 아이덴티티 — Cognito와 Directory Service",
       "level": 3,
-      "fraction": 0.7074775803643307
+      "fraction": 0.7040876972858746
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8617939452942167
+      "fraction": 0.8620484712408374
     }
   ],
   "generator": {

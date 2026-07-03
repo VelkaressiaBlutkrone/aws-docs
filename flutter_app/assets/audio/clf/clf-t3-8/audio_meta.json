@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-8",
-  "generatedAt": "2026-06-30T02:08:00Z",
+  "generatedAt": "2026-07-03T05:19:53Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-8.md",
-    "sha256": "a6274fb363ab85d8b18dd16c315b4fea1a6f6b915825eab758229a2d5a37a213"
+    "sha256": "8f26bb13153c0a6d76ff3f256146e87c7d0e990eb0ec7d9d62cedf4a9fcd330a"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-8/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 10842861,
-    "sha256": "c8bc486f6aeae20a0cedfd18305017ce8d008f404dcd569c31bddb815c97c9bd",
+    "sizeBytes": 10940781,
+    "sha256": "dc43492da5c0e782ec51c4e4dc4f590e2bb3a7567ac28a82b06b0614511a4232",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,53 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 13658,
+    "speechChars": 13782,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "messaging",
       "title": "1) 앱 통합 메시징 — 에스엔에스 · 에스큐에스 · EventBridge (시험 핵심)",
       "level": 3,
-      "fraction": 0.10346109915796743
+      "fraction": 0.1
     },
     {
       "anchor": "euc",
       "title": "2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces",
       "level": 3,
-      "fraction": 0.2649082264191038
+      "fraction": 0.26497227356746766
     },
     {
       "anchor": "appstream-mq",
       "title": "애플리케이션 스트리밍과 메시지 브로커 — AppStream 2.0 · Amazon 엠큐",
       "level": 3,
-      "fraction": 0.3682099503280474
+      "fraction": 0.36820702402957484
     },
     {
       "anchor": "iot",
       "title": "3) IoT — 에이더블유에스 IoT Core",
       "level": 3,
-      "fraction": 0.4794007490636704
+      "fraction": 0.48345656192236597
     },
     {
       "anchor": "other-services",
       "title": "4) 그 외 범위 내 서비스 — 위치만 알아 두기",
       "level": 3,
-      "fraction": 0.5695407336573963
+      "fraction": 0.5741219963031423
     },
     {
       "anchor": "sqs-types",
       "title": "에스큐에스 큐 유형 — 표준 대 피포 (보강)",
       "level": 3,
-      "fraction": 0.651645549446171
+      "fraction": 0.66090573012939
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8201715940181157
+      "fraction": 0.8254158964879852
     }
   ],
   "generator": {
