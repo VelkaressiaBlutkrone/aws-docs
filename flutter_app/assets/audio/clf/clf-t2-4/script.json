@@ -415,7 +415,7 @@
       "kind": "table",
       "sourceExcerpt": "| 찾는 것 | 위치 |\n|---|---|\n| 자주 묻는 질문에 대한 **how-to·문제 해결 답변** | **AWS Knowledge Center**(re:Post 내) |\n| 최신 **보안 발표·심층 모범 사례·사고 대응 가이드** | **AWS Security Blog** |\n| 커뮤니티 **질문·답변**(전 AWS 포럼) | **AWS re:Post** |\n| AWS의 **컴플라이언스 보고서**(SOC·PCI·ISO) | **AWS Artifact** (2.2 참고) |\n| 심층 기술 백서·**보안 모범 사례 백서** | AWS 백서 페이지 |",
       "scriptText": "",
-      "audioSummary": "자주 묻는 질문에 대한 how-to·문제 해결 답변은 에이더블유에스 Knowledge Center(re:Post 내)입니다. 최신 보안 발표·심층 모범 사례·사고 대응 가이드은 에이더블유에스 Security Blog입니다. 커뮤니티 질문·답변(전 에이더블유에스 포럼)은 에이더블유에스 re:Post입니다. 에이더블유에스의 컴플라이언스 보고서(에스오씨·피씨아이·아이에스오)은 에이더블유에스 Artifact (2.2 참고)입니다. 심층 기술 백서·보안 모범 사례 백서은 에이더블유에스 백서 페이지입니다.",
+      "audioSummary": "자주 묻는 질문에 대한 how-to·문제 해결 답변은 에이더블유에스 Knowledge Center(re:Post 내)입니다. 최신 보안 발표·심층 모범 사례·사고 대응 가이드는 에이더블유에스 Security Blog입니다. 커뮤니티 질문·답변(전 에이더블유에스 포럼)은 에이더블유에스 re:Post입니다. 에이더블유에스의 컴플라이언스 보고서(에스오씨·피씨아이·아이에스오)는 에이더블유에스 Artifact (2.2 참고)입니다. 심층 기술 백서·보안 모범 사례 백서는 에이더블유에스 백서 페이지입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"

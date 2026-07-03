@@ -290,7 +290,7 @@
       "kind": "table",
       "sourceExcerpt": "| 시나리오 | 정답 신호 |\n|---|---|\n| \"사용자 PC에 설치하지 않고 특정 Windows 데스크톱 앱을 브라우저/클라이언트로 스트리밍한다\" | **AppStream 2.0 / WorkSpaces Applications** |\n| \"회사 전체 데스크톱 환경을 클라우드에서 제공한다\" | **WorkSpaces** |\n| \"기존 ActiveMQ/RabbitMQ 애플리케이션을 크게 고치지 않고 관리형 브로커로 이전한다\" | **Amazon MQ** |\n| \"단순 큐·pub/sub·이벤트 라우팅으로 신규 서버리스 통합을 만든다\" | **SQS/SNS/EventBridge** |",
       "scriptText": "",
-      "audioSummary": "\"사용자 피씨에 설치하지 않고 특정 Windows 데스크톱 앱을 브라우저/클라이언트로 스트리밍한다\"은 AppStream 2.0 / WorkSpaces Applications입니다. \"회사 전체 데스크톱 환경을 클라우드에서 제공한다\"은 WorkSpaces입니다. \"기존 ActiveMQ/RabbitMQ 애플리케이션을 크게 고치지 않고 관리형 브로커로 이전한다\"은 Amazon 엠큐입니다. \"단순 큐·pub/sub·이벤트 라우팅으로 신규 서버리스 통합을 만든다\"은 에스큐에스/에스엔에스/EventBridge입니다.",
+      "audioSummary": "\"사용자 피씨에 설치하지 않고 특정 Windows 데스크톱 앱을 브라우저/클라이언트로 스트리밍한다\"는 AppStream 2.0 / WorkSpaces Applications입니다. \"회사 전체 데스크톱 환경을 클라우드에서 제공한다\"는 WorkSpaces입니다. \"기존 ActiveMQ/RabbitMQ 애플리케이션을 크게 고치지 않고 관리형 브로커로 이전한다\"는 Amazon 엠큐입니다. \"단순 큐·pub/sub·이벤트 라우팅으로 신규 서버리스 통합을 만든다\"는 에스큐에스/에스엔에스/EventBridge입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"
@@ -397,7 +397,7 @@
       "kind": "table",
       "sourceExcerpt": "| 묶음 | 대표 서비스(예) |\n|---|---|\n| **비즈니스 앱** | Amazon Connect(콜센터), Amazon SES(이메일 발송) |\n| **개발자 도구** | CloudShell(브라우저 셸), Cloud9(IDE), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적) |\n| **프런트엔드·모바일** | AWS Amplify, AWS AppSync |\n| **고객 지원** | AWS Support, AWS IQ, AWS Managed Services(AMS) |",
       "scriptText": "",
-      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구은 CloudShell(브라우저 셸), Cloud9(아이디이), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify, 에이더블유에스 AppSync입니다. 고객 지원은 에이더블유에스 Support, 에이더블유에스 아이큐, 에이더블유에스 Managed Services(에이엠에스)입니다.",
+      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구는 CloudShell(브라우저 셸), Cloud9(아이디이), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify, 에이더블유에스 AppSync입니다. 고객 지원은 에이더블유에스 Support, 에이더블유에스 아이큐, 에이더블유에스 Managed Services(에이엠에스)입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"
