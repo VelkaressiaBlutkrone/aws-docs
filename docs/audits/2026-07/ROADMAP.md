@@ -4,6 +4,12 @@
 > **정본 상세**: 콘텐츠 사실 항목은 [`human-review-list.md`](human-review-list.md)(105건, 시험영향순 + 정정금지 11계열), 차원별 원자료는 `raw/`·`03-docs-facts.md`.
 > **편입 기준**: Phase A = 학습을 직접 방해하는 결함(콘텐츠 사실 오류·플로우/재생 버그)이면서 리스크 낮음. 그 외 전부 Phase B. 시험은 2~4주 내 **CLF-C02** — CLF 항목이 최우선.
 
+## ✅ 진행 상태 (2026-07-03 갱신)
+
+- **Phase A 전부 main 릴리스·배포 완료**: 콘텐츠·코드 정정(PR#105·106·107) + 대본 텍스트 검토(PR#108) + **오디오 재합성 8문서**(PR#109) → develop→main(PR#110, `f7ca98c`, Deploy GitHub Pages success).
+- **A-1 오디오**: 표의 정정 항목(SNS DLQ·SP 66~72%·11 9s 1만년·DynamoDB 스토리지비용·EBS 종료·Glacier 클래스별·서버리스 정의·Customer Enablement·Support 루트전용)을 강의 음성에 반영·라이브. scale out/in(t3-3)은 낭독 부재로 음성 무변경. **청취 게이트는 사용자 면제 승인**. 완료 기록 = [`AR-audio-resynth-handoff.md`](AR-audio-resynth-handoff.md).
+- **Phase B는 미착수**(시험 후). 이하 표는 원 편성 기록으로 보존한다.
+
 ## 감사 총괄 (규모·신뢰도)
 
 - **1단 발견 ~300건**(①코드 61 · ②테스트 18 · ③문서 134 · ④문항 다수 · ⑤오디오 · ⑥재생 17 · ⑦의존성 5 · ⑧위생 12).
