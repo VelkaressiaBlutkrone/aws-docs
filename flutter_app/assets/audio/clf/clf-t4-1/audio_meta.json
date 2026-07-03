@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-1",
-  "generatedAt": "2026-06-30T02:09:15Z",
+  "generatedAt": "2026-07-03T05:21:13Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/clf/t4-1.md",
-    "sha256": "57334a497daf78ac8aa8afcfeb9e1bf68bc2a61f4801a0fd5043786d1ff6c0fa"
+    "sha256": "f08f18628f4f3ace2dbb0d21b177cb9cda49d47ceb372edd3fe11dc91e781373"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t4-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6706317,
-    "sha256": "1bdfc957919d1d1c16d9ed30eb8c86a011c99d2bdbd8b09e6fb459d88411f603",
+    "sizeBytes": 6941037,
+    "sha256": "4855ab76d6fdb387b7992823c928c3e9a6140829e1c6f0bbe5382f9305543167",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8332,
+    "speechChars": 8603,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,25 +35,25 @@
       "anchor": "purchase-options",
       "title": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
       "level": 3,
-      "fraction": 0.19545610719807593
+      "fraction": 0.18963963963963965
     },
     {
       "anchor": "data-transfer",
       "title": "2) 데이터 전송 요금",
       "level": 3,
-      "fraction": 0.44945026627727197
+      "fraction": 0.44534534534534537
     },
     {
       "anchor": "storage-pricing",
       "title": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
       "level": 3,
-      "fraction": 0.594421061673252
+      "fraction": 0.5872372372372372
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8524738017522763
+      "fraction": 0.8585585585585586
     }
   ],
   "generator": {

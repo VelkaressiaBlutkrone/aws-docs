@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-1",
-  "generatedAt": "2026-06-30T01:23:43Z",
+  "generatedAt": "2026-07-03T05:10:46Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/clf/t2-1.md",
-    "sha256": "b6f5b470dfffb023f28cb14aa43229cbd737c4536ac2d0d280329d06b6a0b091"
+    "sha256": "daf7cd70ed4a543b1d56b66f3719e0ea9e61b5f12bc9b389f71f75e81cdf2192"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t2-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 8629293,
-    "sha256": "08682cde5560a0e256cb5ccab4e8238a648ffe1c8ecf20a5ef2d1b3005005945",
+    "sizeBytes": 8672925,
+    "sha256": "2f9c997f5292fc81e2a2d5f519e2275a8f231036b3a1f4388091b944eab9f6c6",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 10759,
+    "speechChars": 10810,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,31 +35,31 @@
       "anchor": "of-vs-in",
       "title": "1) 한 줄 정의 — 경계선은 \"of 대 in\"",
       "level": 3,
-      "fraction": 0.12798304462467874
+      "fraction": 0.131763586633369
     },
     {
       "anchor": "responsibility-table",
       "title": "2) 책임 분담표",
       "level": 3,
-      "fraction": 0.2786956376622943
+      "fraction": 0.2852895706980616
     },
     {
       "anchor": "shared-controls",
       "title": "3) 공유 책임 (Shared Controls) — 같은 주제를 양쪽이 나눠 가진다",
       "level": 3,
-      "fraction": 0.4010380160875805
+      "fraction": 0.4057557378998692
     },
     {
       "anchor": "service-responsibility",
       "title": "4) 핵심 중의 핵심 — 서비스에 따른 책임 이동",
       "level": 3,
-      "fraction": 0.5241814358666266
+      "fraction": 0.5281246283743608
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.88102867060512
+      "fraction": 0.8829825187299322
     }
   ],
   "generator": {
