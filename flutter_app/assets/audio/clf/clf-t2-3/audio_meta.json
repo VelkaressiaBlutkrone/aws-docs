@@ -3,7 +3,7 @@
   "docId": "clf-t2-3",
   "generatedAt": "2026-07-03T05:13:44Z",
   "mode": "synthesized",
-  "reviewStatus": "needs_human_review",
+  "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/clf/t2-3.md",
     "sha256": "aa9e934f4b01ba852ff0490dc390d9e4466f4801a77e1b67ef3e9dbbcdda63d1"
@@ -28,7 +28,7 @@
     "speechChars": 19630,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "needs_human_review"
+    "reviewStatus": "approved"
   },
   "chapters": [
     {
