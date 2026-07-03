@@ -163,9 +163,9 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
       continue;
     }
 
-    if (RegExp(r'^- \[[ xX]\]\s').hasMatch(s)) {
+    if (RegExp(r'^- \[[ xX]\](\s|$)').hasMatch(s)) {
       final items = <MdChecklistItem>[];
-      while (i < end && RegExp(r'^- \[[ xX]\]\s').hasMatch(lines[i].trim())) {
+      while (i < end && RegExp(r'^- \[[ xX]\](\s|$)').hasMatch(lines[i].trim())) {
         final t = lines[i].trim();
         final checked = t.startsWith('- [x]') || t.startsWith('- [X]');
         items.add(MdChecklistItem(
@@ -180,9 +180,16 @@ List<MdBlock> _parseBlocks(List<String> lines, int start, int end) {
       final items = <List<MdSpan>>[];
       while (i < end &&
           lines[i].trim().startsWith('- ') &&
-          !RegExp(r'^- \[[ xX]\]').hasMatch(lines[i].trim())) {
+          !RegExp(r'^- \[[ xX]\](\s|$)').hasMatch(lines[i].trim())) {
         items.add(_inline(lines[i].trim().substring(2).trim()));
         i++;
+      }
+      // 진전 보장: 불릿이 한 줄도 소비하지 못하면(0-소비) 문단으로 degrade하고
+      // i를 전진시켜 무한루프를 봉인한다(CODE-C-001 방어선).
+      if (items.isEmpty) {
+        blocks.add(MdParagraph(_inline(s)));
+        i++;
+        continue;
       }
       blocks.add(MdBullets(items));
       continue;

@@ -1,7 +1,15 @@
 # TODOS
 
+## 2026-07 전면 감사 로드맵 (정본: docs/audits/2026-07/ROADMAP.md)
+
+전체 확인(8차원: 코드·테스트·학습문서·문항·오디오대본·재생·의존성·위생) + 2단 반박검증 완료. 사실의심 82계열 → **CONFIRMED 71 · REFUTED 11**(정정 금지 — 문서가 옳음). 사람 확인 목록 105건은 [`docs/audits/2026-07/human-review-list.md`](docs/audits/2026-07/human-review-list.md).
+
+- **Phase A(시험 전, CLF 최우선)**: CLF 콘텐츠 사실 정정 16건(Support 15분·루트전용·SNS·SP·내구성 등, 전건 사람 검수·오디오는 재합성/재승인) + 사용자 가시 플로우 결함(히어로 CTA 무동작·통합모의고사 "준비 중" 상시라벨·SAA Task라벨/시험시간 하드코딩) + markdown_parser 잠복 무한루프 가드 + 위생 PR#103 머지.
+- **Phase B(시험 후)**: SAA/SOA 콘텐츠 사실 정정(교차계열 P3~P9·Route53 8종) · 코드 리팩토링(exam_page 분할·CertExamPage 세션복원 테스트) · 클라우드 동기화 정합(플랜 v1/v2 키) · 의존성(go_router 16→17) · 174MB 오디오 자산 전략 · SAA 드래프트 270문항 flip · 외부 검증자·유입 채널.
+- **최대 교훈**: 가장 의심했던 교차환각(Aurora 256TiB·Cost Explorer 18개월)이 2단 검증서 REFUTED — 2025 하반기 AWS 변경을 문서가 정확 반영. 검증 없이 고쳤으면 라이브 구식화.
+
 ## 자격증별 문항 데이터 코드 스플리팅 (P3)
-- **What:** 콘텐츠 레지스트리(`src/content/index.ts`)를 자격증 상세 진입 시 dynamic import로 전환
+- **What:** 콘텐츠 인덱스(`flutter_app/lib/data/content_index.dart`)와 문항 에셋 로드를 자격증 상세 진입 시 지연 로드(deferred)로 전환
 - **Why:** 문항 데이터(~100KB/자격증)가 전부 메인 번들에 포함됨. 12개면 홈 방문자도 ~1.2MB 다운로드
 - **Trigger:** **3번째 자격증 콘텐츠 추가 시점** (2개까지는 premature optimization)
 - **Context:** 2026-06-05 /plan-eng-review D8 결정. 레지스트리(3A)가 자연스러운 분할 지점이라 전환 비용 낮음. 렌더 흐름이 async로 바뀌는 것이 주된 작업
@@ -20,19 +28,5 @@
 - **Context:** 2026-06-05 Codex outside-voice 지적, D18 수용
 - **Depends on:** CLF 완성, 외부 검증자 테스트와 연계 가능
 
-## C-중량: 개념→학습문서 섹션 앵커 딥링크 (P3)
-- **What:** report_page를 Task→개념 중첩 구조로 개조 + `study_doc_page.dart`에 마크다운 섹션 앵커/스크롤 인프라 + `concept_step_map.dart`(개념→stepId 매핑)
-- **Why:** 현재 개념 라벨은 Task 문서로만 보낸다(스크롤은 사용자 몫). 앵커가 있으면 "이 개념 → 바로 그 문단"으로 정밀 처방. Codex outside-voice도 "앵커 없으면 skill은 라벨/필터 단서지 정밀 내비 타깃이 아니다"라고 지적
-- **Cons:** 마크다운 파서·라우트 파싱·스크롤 타이밍·콘텐츠 매핑까지 PR이 7~8파일로 번짐. 가치 증명 전 인프라 선건축 위험
-- **Context:** 2026-06-09 /plan-eng-review D5. A+C-경량(이번 PR)이 동선·개념 라벨을 깐 뒤, 라벨 클릭/스크롤 마찰이 실제 문제로 드러나면 착수. 개념 태그(`Question.skill`)는 이미 채워져 데이터는 준비됨
-- **Depends on:** A+C-경량 출고 + 개념 라벨 사용 관찰
-
-## AttemptRecord.wrongSkills[] 비정규화 (P3)
-- **What:** 응시 레코드에 오답 개념(skill) 목록을 저장해 report/review에서 다회차 누적 "약점 개념" 추세를 파생
-- **Why:** 현재 개념 진단은 단일 응시(결과 화면)뿐. 다회차 누적은 wrongQuestionIds→뱅크 조인으로만 가능한데, 개정으로 사라진 문항은 개념이 유실됨. 비정규화하면 stale 문항에도 개념 보존
-- **Cons:** 스키마 확장 + 마이그레이션(레거시 레코드는 빈 배열). C-중량과 함께여야 의미
-- **Context:** 2026-06-09 /plan-eng-review D6. C-중량(위 TODO)과 짝
-- **Depends on:** C-중량 방향 확정
-
-<!-- 참고(stale flag, 2026-06-09): 상단 "코드 스플리팅" TODO의 `src/content/index.ts`는
-     Flutter 마이그레이션 이전 Vite/TS 경로. 현재는 lib/data/content_index.dart. 경로 갱신 필요(미수정 — 별도 결정). -->>
+<!-- 완료 이력(2026-07-02 정리): "C-중량 개념→섹션 앵커 딥링크"와 "AttemptRecord.wrongSkills[] 비정규화"는
+     Phase 1(main 릴리스) + Phase 2(PR#21, develop 복구 후 릴리스)로 전부 출고되어 목록에서 제거. -->>

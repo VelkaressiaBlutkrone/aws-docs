@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show RenderAbstractViewport;
+import 'package:flutter/rendering.dart'
+    show RenderAbstractViewport, ScrollCacheExtent;
 import 'package:go_router/go_router.dart';
 
 import '../../data/cert_lookup.dart';
@@ -221,9 +222,9 @@ class _PlanAgendaState extends State<PlanAgenda> {
             builder: (context) => CustomScrollView(
               key: const Key('plan-agenda-scroll'),
               // 만료 배너/날짜 헤더가 적당히 선마운트되도록 절제된 오버스캔.
-              // (cacheExtent: 9999 핵 대신) 수 개월 플랜에서도 _runScrollToDate의
+              // (scrollCacheExtent: 9999 핵 대신) 수 개월 플랜에서도 _runScrollToDate의
               // 스텝 횟수를 줄여 주는 정도의 보수적인 값.
-              cacheExtent: 1200,
+              scrollCacheExtent: const ScrollCacheExtent.pixels(1200),
               slivers: [
                 SliverOverlapInjector(
                   handle:

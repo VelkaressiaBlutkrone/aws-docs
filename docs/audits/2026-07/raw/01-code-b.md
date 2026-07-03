@@ -1,0 +1,30 @@
+# ① 코드 품질 감사 샤드 — 01-code-b (lib/data) — 2026-07
+
+## 요약 (3~5줄)
+- 대상 48개 .dart 파일(`flutter_app/lib/data/` + `cloud/`) 전수 정독. TODO/FIXME/HACK/XXX 주석은 **0건**(인벤토리 해당 없음).
+- 250줄 초과는 `content_index.dart`(511줄) **1건뿐** — 실체는 정적 데이터 테이블+모델+질의 헬퍼 혼재로, cert별 데이터 분리가 자연스러운 분해 축.
+- 최대 리스크는 클라우드 동기화 계층에 집중: 플랜 저장 키 v1/v2 불일치(H — 현행 플랜이 클라우드에 백업되지 않음), 로컬 초기화가 reconcile로 부활, reconcile read-modify-write 레이스 등 M급 3건.
+- 리스너/타이머 해제는 전반적으로 모범적(sync_controller의 세대(_gen) 가드·동기 teardown, playlist/binder의 addListener·removeListener 짝, app_resume의 onCancel 해제) — 미해제 리스너/타이머 결함은 발견되지 않음.
+- 그 외는 KV store 보일러플레이트 중복, 날짜 헬퍼 중복 등 저위험 구조 개선(Phase B) 항목.
+
+## 발견 항목
+| ID | 위치 | 발견 내용 | 심각도(H/M/L) | 확신도(높/중/낮) | 권장 조치 | Phase(A/B) | 사실의심(Y/N) |
+|---|---|---|---|---|---|---|---|
+| CODE-D-001 | `flutter_app/lib/data/cloud/sync_service.dart:24` (대조: `flutter_app/lib/data/study_plan_store.dart:16-17`) | 저장소 키 버전 불일치: SyncService는 `_kPlans='awsdocs.plan.v1'`을 클라우드와 화해하지만 StudyPlanStore는 v1→v2 1회 이관 후 `awsdocs.plan.v2`에만 기록 → **현행 플랜(v2)은 클라우드에 백업되지 않고** 동기화는 v1 잔재만 왕복. Firebase 실설정 확인(`firebase_options.dart` projectId `awc-docs-cf67d`, main.dart:36-51에서 SyncController 라이브 와이어링) → 프로덕션 경로. 동기화 테스트(test/cloud/sync_service_test.dart 등)도 v1만 검증해 이 gap을 잡지 못함 | H | 높 | SyncService plans 키를 v2로 갱신하고 v2 포맷(cert→플랜 리스트)용 병합 규칙·테스트 추가. 클라우드/로컬 v1 잔재 정리 경로(1회 이관) 정의 | B | N |
+| CODE-D-002 | `flutter_app/lib/data/cloud/sync_service.dart:66-71` · `flutter_app/lib/data/plan_progress_store.dart:13` | 일정 진행(`awsdocs.plan.progress.v1`)이 동기화 4종(attempts/viewed/plans/checks)에서 제외 — plans·checks는 동기화 대상인데 그 완료 체크(진행)는 로컬 전용 → 플랜 동기화가 살아나도 기기 간 완료 표시가 갈라짐 | M | 중 | 설계 의도 확인 후 progress 컬렉션 추가(CODE-D-001 수정과 함께) 또는 제외 사유를 코드 주석으로 명문화 | B | N |
+| CODE-D-003 | `flutter_app/lib/data/study_reset.dart:26-52` + `flutter_app/lib/data/cloud/sync_merge.dart:12-28,59-82` | 로컬 초기화 vs 클라우드 화해 충돌: resetCert/resetAll은 로컬만 지우고 클라우드 문서·삭제 표식(tombstone)을 다루지 않음 — 로그인 상태면 attempts·viewed(union 병합)와 plans·checks(로컬 부재 시 클라우드 우선 LWW)가 다음 reconcile(주기 30초·앱 복귀·watch)에서 **부활** → "기록 초기화"가 사실상 무효 | M | 중 | reset 시 클라우드 문서 삭제 또는 tombstone 도입; 단기 완화로 로그인 중 리셋 시 UI 경고 | B | N |
+| CODE-D-004 | `flutter_app/lib/data/cloud/sync_service.dart:73-84, 86-101, 103-123` | read-modify-write 레이스: 로컬 읽기 → `await _cloud.loadCollection`(네트워크) → 병합 결과로 로컬 키 **전체 덮어쓰기** 구조라, await 중 끼어든 사용자 쓰기(HistoryStore.add·markViewed·플랜 체크)가 stale 스냅샷에 덮여 유실될 수 있음. 주기 30초+watch 트리거로 창(네트워크 RTT 폭)이 반복 노출 | M | 중 | 쓰기 직전 로컬 재읽기 후 병합(read창 최소화), 또는 컬렉션별 델타 append 방식으로 전환 | B | N |
+| CODE-D-005 | `flutter_app/lib/data/content_index.dart:1-527` (511줄) | 250줄 초과 유일 파일. ContentEntry 모델(1-46) + 정적 테이블 kContentIndex 3개 cert 48+엔트리(48-481) + 질의 헬퍼 10개(483-527) 혼재. 데이터 추가마다 무한 성장 구조이고, SOA 블록만 한 줄 압축 포맷(460-479)으로 CLF/SAA(멀티라인)와 서식 비일관 | M | 높 | 분해 축: ① cert별 데이터 파일 분리(예: `content/clf_entries.dart`·`saa`·`soa`) ② 모델+질의 헬퍼는 `content_index.dart`에 유지(공개 API 불변). 서식 통일. content_index_test(오디오 meta 동기화) 경로 유지 확인 | B | N |
+| CODE-D-006 | `flutter_app/lib/data/study_plan_store.dart:19-29` · `plan_check_store.dart:14-22` · `plan_progress_store.dart:15-23` · `viewed_docs_store.dart:16-28` · `cloud/sync_service.dart:28-46` (+ `history_store.dart:16-27`·`exam_session_store.dart:13-21` 변형) | KV store 보일러플레이트 복붙: `_read()`(jsonDecode Map + try/catch 빈값 폴백)·`_b.write(key, jsonEncode(m))`·`clearAll() => write('')` 패턴이 6~7파일에서 반복(각 파일 약 10~15줄) | M | 높 | 공용 헬퍼(예: `readJsonMap(KvBackend,String)`/`readJsonList`)로 추출하는 동작 동일 리팩토링 + 기존 store 테스트로 회귀 확인 | B | N |
+| CODE-D-007 | `flutter_app/lib/data/plan_scheduler.dart:5-13` = `flutter_app/lib/data/plan_month.dart:21-24,41-42` | 날짜 헬퍼 중복: `_d(String iso)`가 두 파일에 동일 구현으로 존재, ISO 포맷터도 중복(`_isoOf` vs planMonthBlocks 내부 지역함수 `isoStr`). plan_month는 이미 plan_scheduler에서 addDays/daysBetween을 import 중이라 공용화 장벽 없음 | L | 높 | plan_scheduler의 날짜 헬퍼를 공용으로 승격(export)하고 plan_month 중복 제거 | B | N |
+| CODE-D-008 | `flutter_app/lib/data/local_kv.dart:8-14` · `exam_session_store.dart:26-35` | KvBackend에 remove API 부재 → 모든 clear가 빈 문자열 기록(코드 주석으로도 인지됨). 특히 examSession은 examId별 키(`awsdocs.examSession.v1:*`)라 시작한 세션 수만큼 빈 키가 localStorage에 영구 잔존 | L | 높 | `KvBackend.remove(key)` 추가(웹=removeItem, 메모리=Map.remove) 후 clear 계열 치환 | B | N |
+| CODE-D-009 | `flutter_app/lib/data/cloud/auth_service.dart:13-32` · `flutter_app/lib/data/cloud/cloud_store.dart:15-56` | 테스트 더블(FakeAuthService·FakeCloudStore)이 lib/에 상주 — lib 내 참조 0, test/cloud 5개 파일만 사용(릴리스 빌드는 tree-shake로 실질 무해). MemoryBackend는 `defaultBackend()`가 참조하므로 해당 없음 | L | 높 | test/ 하위 공용 헬퍼로 이동 또는 현행 배치 유지 결정을 주석으로 명문화(낮은 우선) | B | N |
+| CODE-D-010 | `flutter_app/lib/data/audio_chapters.dart:8-19,33-35` | `Chapter.title`·`level` 필드가 유일 프로덕션 소비처(study_doc_page._loadChapters:56-58)에서 미사용(anchor·fraction만 소비) — audio_meta.json 계약을 반영한 것이나 현재는 데드 필드 | L | 중 | 챕터 목록 UI 계획이 없으면 파싱 축소, 있으면 유지하되 "향후 UI용" 주석 보강 | B | N |
+| CODE-D-011 | `flutter_app/lib/data/web_audio_backend.dart:27-47` | 핫리스타트 시 DOM `<audio>` element는 idempotent 재사용하지만 이전 isolate가 부착한 JS 이벤트 리스너는 제거 수단이 없어 리스타트마다 누적(죽은 StreamController로 emit). dev 전용 누수 — 프로덕션 영향 없음 | L | 중 | (선택) 재사용 시 element를 cloneNode로 교체해 리스너 일괄 소거 등 dev 편의 개선 | B | N |
+| CODE-D-012 | `flutter_app/lib/data/cloud/sync_controller.dart:52-53,64-66,71-89` | signIn/signOut의 auth 스트림 에코 가드(`_explicitTransition`)는 전환 await 동안의 에코만 차단 — finally 이후 늦게 도착하는 에코는 `_onUser` 재실행(teardown+재reconcile+watch 재부착). `_gen` 가드 덕에 고아 구독은 없고 무해한 중복 작업에 그침 | L | 중 | 현행 유지 가능. 제거하려면 마지막 처리 uid 비교로 동일 사용자 전환 dedup | B | N |
+
+### 비고
+- 점검 항목 4(TODO/FIXME/HACK 인벤토리): **발견 없음**(0건).
+- 점검 항목 5(미해제 리스너/타이머): 미해제 결함 없음 — sync_controller(dispose에서 authSub/resumeSub/timer/watchSubs 전부 해제 + `_disposed`·`_gen` 가드), lecture_playlist·media_session_binder(add/remove 짝), audio_controller(dispose에서 구독 2건+ValueNotifier 해제), app_resume_web(onCancel에서 DOM 리스너 제거) 모두 정상. 전역 오디오 런타임·SyncController는 앱 수명 싱글톤으로 미해제가 의도임.
+- fire-and-forget Future는 `sync()`(내부 busy/pending 가드·전 예외 흡수)와 `AudioController.play()`(내부 catch→error 상태 전이)로 수렴하며 별도 결함으로 보지 않음. main.dart의 `unawaited(initCloudSync())`도 문서화된 의도.
+- 제외 준수: flutter analyze 잔존 3건(plan_agenda cacheExtent·sync_controller_test 2건)은 본 리포트에 포함하지 않음(PR#103 처리 중).

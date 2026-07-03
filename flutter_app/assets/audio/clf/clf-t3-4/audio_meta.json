@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-4",
-  "generatedAt": "2026-06-30T02:00:03Z",
+  "generatedAt": "2026-07-03T05:15:43Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/clf/t3-4.md",
-    "sha256": "ea1bb72c6a907e48a0ca2ae0bc4edffb16f27337caefb4e7db65629bda97ebf6"
+    "sha256": "7e12c0c1200e71d23de0c03f8df9504135d7e52034c373513877b70da6b47d10"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 10798653,
-    "sha256": "14094f263b86613718ffa2f1eb01af0ea162105cb058bb9713b7f042ff2d726f",
+    "sizeBytes": 10851933,
+    "sha256": "2782b2a737a6a8a9ef5d611145fe9d321da93725ea385861d773b791e695095c",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 13595,
+    "speechChars": 13666,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -33,39 +33,39 @@
   "chapters": [
     {
       "anchor": "managed-vs-ec2",
-      "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나 ()",
+      "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나",
       "level": 3,
-      "fraction": 0.10709856375105019
+      "fraction": 0.10418024392514663
     },
     {
       "anchor": "relational",
       "title": "2) 관계형 데이터베이스 — Amazon 알디에스와 Amazon Aurora",
       "level": 3,
-      "fraction": 0.21810447144171657
+      "fraction": 0.21431896471464482
     },
     {
       "anchor": "dynamodb",
       "title": "3) NoSQL — Amazon DynamoDB",
       "level": 3,
-      "fraction": 0.385600170696254
+      "fraction": 0.3818080253235267
     },
     {
       "anchor": "elasticache",
       "title": "4) 인메모리 — Amazon ElastiCache",
       "level": 3,
-      "fraction": 0.5390401002840493
+      "fraction": 0.5383111442137604
     },
     {
       "anchor": "dms",
       "title": "5) 데이터베이스 마이그레이션 — 에이더블유에스 디엠에스 (그리고 에스씨티)",
       "level": 3,
-      "fraction": 0.6505527624788296
+      "fraction": 0.6525463178475003
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.907197247522904
+      "fraction": 0.9093194302206499
     }
   ],
   "generator": {

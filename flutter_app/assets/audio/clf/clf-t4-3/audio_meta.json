@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-3",
-  "generatedAt": "2026-06-30T02:12:11Z",
+  "generatedAt": "2026-07-03T04:25:45Z",
   "mode": "synthesized",
   "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/clf/t4-3.md",
-    "sha256": "d3347aa5c14a34eda0943c852cf775d1b16256e764025726c599f8fe62845dc7"
+    "sha256": "8e5e05f9718db13601e291c76b486196c80ff8f02e4d43bfb2b110332773e9eb"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t4-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 7654557,
-    "sha256": "ddd03eca4ce109d654faa67d5b5e78a56802973d4a84739ea0da223bc5e0ab55",
+    "sizeBytes": 7670973,
+    "sha256": "9aa15b471062ac975c1bd7608f8951e882f53da2bc9fcdcbb555953a2ec462a7",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,7 +25,7 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 9578,
+    "speechChars": 9600,
     "chunkCount": 0,
     "qualityIssues": [],
     "reviewStatus": "approved"
@@ -35,31 +35,31 @@
       "anchor": "support-plans",
       "title": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
       "level": 3,
-      "fraction": 0.14659567663161063
+      "fraction": 0.14432576769025368
     },
     {
       "anchor": "tech-resources",
       "title": "2) 무료 기술 리소스 — 어디서 찾나",
       "level": 3,
-      "fraction": 0.3328692641995748
+      "fraction": 0.32910547396528705
     },
     {
       "anchor": "apn",
       "title": "3) 에이피엔 — 에이더블유에스 Partner Network",
       "level": 3,
-      "fraction": 0.4333904012943766
+      "fraction": 0.432977303070761
     },
     {
       "anchor": "health-dashboard",
       "title": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
       "level": 3,
-      "fraction": 0.6098997234398811
+      "fraction": 0.6126835781041389
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.885142889394766
+      "fraction": 0.8861148197596795
     }
   ],
   "generator": {

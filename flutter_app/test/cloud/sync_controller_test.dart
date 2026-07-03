@@ -48,7 +48,6 @@ class _ProbeController extends SyncController {
     required super.local,
     super.nowMs,
     super.syncInterval,
-    super.onAppResume,
   });
   int syncCalls = 0;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
+import '../../widgets/focus_ring.dart';
 
 /// 홈 섹션들이 공유하는 빌딩블록(PR4 분해 — home_page.dart에서 이동).
 /// 홈 전용이라 lib/widgets/ 승격 대상이 아니다(승격 규칙: 2+ 페이지).
@@ -139,14 +140,19 @@ class HomeLinkText extends StatelessWidget {
 }
 
 class HomeButton extends StatelessWidget {
-  const HomeButton({super.key, required this.label, required this.primary});
+  const HomeButton(
+      {super.key, required this.label, required this.primary, this.onTap});
   final String label;
   final bool primary;
+
+  /// 탭·Enter·Space 동작. null이면 장식(과거 무동작 상태) — CODE-P-001로
+  /// 히어로 CTA에 실제 배선을 붙였다(home_hero_cta_test 회귀 가드).
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return Container(
+    final body = Container(
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
       decoration: BoxDecoration(
@@ -161,5 +167,7 @@ class HomeButton extends StatelessWidget {
               fontWeight: FontWeight.w700, fontVariations: Wght.w700,
               color: primary ? c.onAccent : c.text)),
     );
+    if (onTap == null) return body;
+    return FocusTap(onTap: onTap, radius: Radii.sm, child: body);
   }
 }
