@@ -235,7 +235,9 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t4-3.md',
       questionsAsset: 'assets/content/clf/t4-3.questions.json',
       questionCount: 15,
-      audioApproved: true,
+      // 2026-07 사실 정정 후 재합성 — 청취 재승인 전까지 비노출
+      // (audio_meta.reviewStatus=needs_human_review와 동기화).
+      audioApproved: false,
     ),
   ],
   'SAA-C03': [

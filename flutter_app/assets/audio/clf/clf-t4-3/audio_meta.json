@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-3",
-  "generatedAt": "2026-06-30T02:12:11Z",
+  "generatedAt": "2026-07-03T00:29:40Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t4-3.md",
-    "sha256": "d3347aa5c14a34eda0943c852cf775d1b16256e764025726c599f8fe62845dc7"
+    "sha256": "c2e663083109585c9d788c507fffd969078a137b292dd25696009ad7a179a7a2"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t4-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 7654557,
-    "sha256": "ddd03eca4ce109d654faa67d5b5e78a56802973d4a84739ea0da223bc5e0ab55",
+    "sizeBytes": 7673277,
+    "sha256": "3633ef9931f7b124037b9da98b7e11371de50c6085d2b3fc94803d6ac888406f",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,41 +25,41 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 9578,
+    "speechChars": 9603,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "support-plans",
       "title": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
       "level": 3,
-      "fraction": 0.14659567663161063
+      "fraction": 0.1444207154297918
     },
     {
       "anchor": "tech-resources",
       "title": "2) 무료 기술 리소스 — 어디서 찾나",
       "level": 3,
-      "fraction": 0.3328692641995748
+      "fraction": 0.3291510945008009
     },
     {
       "anchor": "apn",
       "title": "3) 에이피엔 — 에이더블유에스 Partner Network",
       "level": 3,
-      "fraction": 0.4333904012943766
+      "fraction": 0.43299519487453286
     },
     {
       "anchor": "health-dashboard",
       "title": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
       "level": 3,
-      "fraction": 0.6098997234398811
+      "fraction": 0.6126534970635344
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.885142889394766
+      "fraction": 0.8860117458622531
     }
   ],
   "generator": {
