@@ -162,7 +162,7 @@
       "kind": "table",
       "sourceExcerpt": "| 구성요소 | 역할 |\n|---|---|\n| **서브넷(Subnet)** | VPC 안의 **IP 주소 범위**. **하나의 AZ**에 속함. 리소스를 여기에 배치 |\n| **라우트 테이블(Route Table)** | 서브넷·게이트웨이의 **트래픽이 어디로 갈지** 결정 |\n| **인터넷 게이트웨이(Internet Gateway)** | VPC를 **인터넷에 연결** |\n| **VPC 엔드포인트(Endpoint)** | 인터넷 게이트웨이 없이 **AWS 서비스에 프라이빗하게** 연결 |\n| **NAT 게이트웨이** | *프라이빗* 서브넷의 리소스가 인터넷으로 *나가는* 것만 허용(인바운드는 차단) |",
       "scriptText": "",
-      "audioSummary": "서브넷(Subnet)은 브이피씨 안의 아이피 주소 범위. 하나의 가용 영역에 속함. 리소스를 여기에 배치입니다. 라우트 테이블(Route Table)은 서브넷·게이트웨이의 트래픽이 어디로 갈지 결정입니다. 인터넷 게이트웨이(Internet Gateway)은 브이피씨를 인터넷에 연결입니다. 브이피씨 엔드포인트(Endpoint)은 인터넷 게이트웨이 없이 에이더블유에스 서비스에 프라이빗하게 연결입니다. 냇 게이트웨이은 프라이빗 서브넷의 리소스가 인터넷으로 나가는 것만 허용(인바운드는 차단)입니다.",
+      "audioSummary": "서브넷(Subnet)은 브이피씨 안의 아이피 주소 범위. 하나의 가용 영역에 속함. 리소스를 여기에 배치입니다. 라우트 테이블(Route Table)은 서브넷·게이트웨이의 트래픽이 어디로 갈지 결정입니다. 인터넷 게이트웨이(Internet Gateway)는 브이피씨를 인터넷에 연결입니다. 브이피씨 엔드포인트(Endpoint)는 인터넷 게이트웨이 없이 에이더블유에스 서비스에 프라이빗하게 연결입니다. 냇 게이트웨이는 프라이빗 서브넷의 리소스가 인터넷으로 나가는 것만 허용(인바운드는 차단)입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"
@@ -280,7 +280,7 @@
       "kind": "table",
       "sourceExcerpt": "| 헷갈리는 선택지 | 구분 |\n|---|---|\n| **Flow Logs vs CloudTrail** | Flow Logs는 IP 트래픽 흐름 기록, CloudTrail은 API 호출·계정 활동 감사 기록 |\n| **PrivateLink vs Site-to-Site VPN** | PrivateLink는 VPC에서 특정 서비스/리소스에 사설 엔드포인트로 연결, VPN은 온프레미스 네트워크와 VPC를 IPsec 터널로 연결 |\n| **PrivateLink vs NAT Gateway** | PrivateLink는 사설 엔드포인트로 특정 서비스에 접근, NAT Gateway는 프라이빗 서브넷에서 인터넷 방향 아웃바운드를 허용 |",
       "scriptText": "",
-      "audioSummary": "Flow Logs 대 CloudTrail은 Flow Logs는 아이피 트래픽 흐름 기록, CloudTrail은 에이피아이 호출·계정 활동 감사 기록입니다. PrivateLink 대 Site-to-Site 브이피엔은 PrivateLink는 브이피씨에서 특정 서비스/리소스에 사설 엔드포인트로 연결, 브이피엔은 온프레미스 네트워크와 브이피씨를 IPsec 터널로 연결입니다. PrivateLink 대 냇 Gateway은 PrivateLink는 사설 엔드포인트로 특정 서비스에 접근, 냇 Gateway는 프라이빗 서브넷에서 인터넷 방향 아웃바운드를 허용입니다.",
+      "audioSummary": "Flow Logs 대 CloudTrail은 Flow Logs는 아이피 트래픽 흐름 기록, CloudTrail은 에이피아이 호출·계정 활동 감사 기록입니다. PrivateLink 대 Site-to-Site 브이피엔은 PrivateLink는 브이피씨에서 특정 서비스/리소스에 사설 엔드포인트로 연결, 브이피엔은 온프레미스 네트워크와 브이피씨를 IPsec 터널로 연결입니다. PrivateLink 대 냇 Gateway는 PrivateLink는 사설 엔드포인트로 특정 서비스에 접근, 냇 Gateway는 프라이빗 서브넷에서 인터넷 방향 아웃바운드를 허용입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"

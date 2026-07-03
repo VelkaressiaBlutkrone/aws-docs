@@ -219,7 +219,7 @@
       "id": "seg018",
       "kind": "heading",
       "sourceExcerpt": "#### S3 스토리지 클래스 — 접근 빈도 ↔ 비용 트레이드오프 {#s3-classes}",
-      "scriptText": "에스쓰리 스토리지 클래스 — 접근 빈도 ↔ 비용 트레이드오프",
+      "scriptText": "에스쓰리 스토리지 클래스 — 접근 빈도 대 비용 트레이드오프",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -239,7 +239,7 @@
       "kind": "table",
       "sourceExcerpt": "| 클래스 | 언제 |\n|---|---|\n| **S3 Standard** | 자주 접근하는 데이터(기본값) |\n| **S3 Intelligent-Tiering** | **접근 패턴을 모르거나 변동**할 때 — 자동으로 계층 이동(검색 수수료 없음) |\n| **S3 Standard-IA / One Zone-IA** | 가끔 접근(밀리초 접근, 검색 수수료). One Zone-IA는 *단일 AZ*라 더 싸지만 AZ 손실에 취약 |\n| **S3 Glacier Instant Retrieval** | 분기 1회 수준, 즉시(밀리초) 검색 필요한 아카이브 |\n| **S3 Glacier Flexible Retrieval** | 연 1회 수준, 분~시간 검색 허용 아카이브 |\n| **S3 Glacier Deep Archive** | 연 1회 미만, **최저 비용**, 시간 단위 검색 — 장기 보관 |",
       "scriptText": "",
-      "audioSummary": "에스쓰리 Standard은 자주 접근하는 데이터(기본값)입니다. 에스쓰리 Intelligent-Tiering은 접근 패턴을 모르거나 변동할 때 — 자동으로 계층 이동(검색 수수료 없음)입니다. 에스쓰리 Standard-아이에이 / One Zone-아이에이은 가끔 접근(밀리초 접근, 검색 수수료). One Zone-아이에이는 단일 가용 영역라 더 싸지만 에이제트 손실에 취약입니다. 에스쓰리 Glacier Instant Retrieval은 분기 1회 수준, 즉시(밀리초) 검색 필요한 아카이브입니다. 에스쓰리 Glacier Flexible Retrieval은 연 1회 수준, 분~시간 검색 허용 아카이브입니다. 에스쓰리 Glacier Deep Archive은 연 1회 미만, 최저 비용, 시간 단위 검색 — 장기 보관입니다.",
+      "audioSummary": "에스쓰리 Standard는 자주 접근하는 데이터(기본값)입니다. 에스쓰리 Intelligent-Tiering은 접근 패턴을 모르거나 변동할 때 — 자동으로 계층 이동(검색 수수료 없음)입니다. 에스쓰리 Standard-아이에이 / One Zone-아이에이는 가끔 접근(밀리초 접근, 검색 수수료). One Zone-아이에이는 단일 가용 영역이라 더 싸지만 에이제트 손실에 취약입니다. 에스쓰리 Glacier Instant Retrieval은 분기 1회 수준, 즉시(밀리초) 검색 필요한 아카이브입니다. 에스쓰리 Glacier Flexible Retrieval은 연 1회 수준, 분~시간 검색 허용 아카이브입니다. 에스쓰리 Glacier Deep Archive는 연 1회 미만, 최저 비용, 시간 단위 검색 — 장기 보관입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"

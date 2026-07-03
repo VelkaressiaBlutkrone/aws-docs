@@ -231,7 +231,7 @@
       "id": "con003",
       "kind": "connector",
       "sourceExcerpt": "",
-      "scriptText": "이번에는 한눈에입니다.",
+      "scriptText": "이번에는 한눈에 정리해 보겠습니다.",
       "audioSummary": null,
       "skip": false,
       "issues": []
@@ -250,7 +250,7 @@
       "kind": "table",
       "sourceExcerpt": "| 시나리오 | 서비스 |\n|---|---|\n| 고객 문의에 답하는 음성/문자 **챗봇** | **Lex** |\n| 회사 문서를 자연어로 **검색** | **Kendra** |\n| 데이터로 **커스텀 ML 모델**을 훈련·배포 | **SageMaker (AI)** |\n| **S3에 쌓인 로그**를 SQL로 즉석 분석 | **Athena** |\n| 클릭스트림·로그를 **실시간**으로 수집·처리 | **Kinesis** |\n| 여러 소스 데이터를 **정제·변환(ETL)** | **Glue** |\n| 분석 결과를 **대시보드로 시각화** | **QuickSight** |",
       "scriptText": "",
-      "audioSummary": "고객 문의에 답하는 음성/문자 챗봇은 Lex입니다. 회사 문서를 자연어로 검색은 Kendra입니다. 데이터로 커스텀 엠엘 모델을 훈련·배포은 SageMaker (에이아이)입니다. 에스쓰리에 쌓인 로그를 에스큐엘로 즉석 분석은 Athena입니다. 클릭스트림·로그를 실시간으로 수집·처리은 Kinesis입니다. 여러 소스 데이터를 정제·변환(이티엘)은 Glue입니다. 분석 결과를 대시보드로 시각화은 QuickSight입니다.",
+      "audioSummary": "고객 문의에 답하는 음성/문자 챗봇은 Lex입니다. 회사 문서를 자연어로 검색은 Kendra입니다. 데이터로 커스텀 엠엘 모델을 훈련·배포는 SageMaker (에이아이)입니다. 에스쓰리에 쌓인 로그를 에스큐엘로 즉석 분석은 Athena입니다. 클릭스트림·로그를 실시간으로 수집·처리는 Kinesis입니다. 여러 소스 데이터를 정제·변환(이티엘)은 Glue입니다. 분석 결과를 대시보드로 시각화는 QuickSight입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"
@@ -358,7 +358,7 @@
       "kind": "table",
       "sourceExcerpt": "| 헷갈리는 페어 | 구분 기준 |\n|---|---|\n| **Rekognition vs Textract** | 사진·영상의 시각 요소 분석이면 Rekognition, 문서의 텍스트·양식·표 추출이면 Textract |\n| **Comprehend vs Textract** | 텍스트의 의미·감정·엔터티 분석이면 Comprehend, 문서에서 텍스트를 뽑아내는 단계면 Textract |\n| **Personalize vs SageMaker** | 추천 기능을 빠르게 붙이면 Personalize, 직접 모델을 설계·훈련·배포하면 SageMaker(AI) |",
       "scriptText": "",
-      "audioSummary": "Rekognition 대 Textract은 사진·영상의 시각 요소 분석이면 Rekognition, 문서의 텍스트·양식·표 추출이면 Textract입니다. Comprehend 대 Textract은 텍스트의 의미·감정·엔터티 분석이면 Comprehend, 문서에서 텍스트를 뽑아내는 단계면 Textract입니다. Personalize 대 SageMaker은 추천 기능을 빠르게 붙이면 Personalize, 직접 모델을 설계·훈련·배포하면 SageMaker(에이아이)입니다.",
+      "audioSummary": "Rekognition 대 Textract는 사진·영상의 시각 요소 분석이면 Rekognition, 문서의 텍스트·양식·표 추출이면 Textract입니다. Comprehend 대 Textract는 텍스트의 의미·감정·엔터티 분석이면 Comprehend, 문서에서 텍스트를 뽑아내는 단계면 Textract입니다. Personalize 대 SageMaker는 추천 기능을 빠르게 붙이면 Personalize, 직접 모델을 설계·훈련·배포하면 SageMaker(에이아이)입니다.",
       "skip": false,
       "issues": [
         "table-summary-draft"

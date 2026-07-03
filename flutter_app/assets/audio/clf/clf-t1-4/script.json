@@ -258,7 +258,7 @@
       "kind": "table",
       "sourceExcerpt": "| 방식 | 의미 |\n|---|---|\n| **BYOL(Bring Your Own License)** | **이미 보유한 소프트웨어 라이선스를 가져와** 클라우드에서 사용(예: EC2 **Dedicated Hosts**로 기존 서버 바운드 라이선스 활용) |\n| **라이선스 포함(License Included)** | 서비스 요금에 **라이선스 비용이 포함**(별도 라이선스 구매 불필요) |",
       "scriptText": "",
-      "audioSummary": "비와이오엘(Bring Your Own License)은 이미 보유한 소프트웨어 라이선스를 가져와 클라우드에서 사용(예: 이씨투 Dedicated Hosts로 기존 서버 바운드 라이선스 활용)입니다. 라이선스 포함(License Included)은 서비스 요금에 라이선스 비용이 포함(별도 라이선스 구매 불필요)입니다.",
+      "audioSummary": "비와이오엘(Bring Your Own License)은 이미 보유한 소프트웨어 라이선스를 가져와 클라우드에서 사용하는 방식입니다(예: 이씨투 Dedicated Hosts로 기존 서버 바운드 라이선스 활용). 라이선스 포함(License Included)은 서비스 요금에 라이선스 비용이 포함된 방식입니다(별도 라이선스 구매 불필요).",
       "skip": false,
       "issues": [
         "table-summary-draft"
