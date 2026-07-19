@@ -161,6 +161,17 @@
     "IDS": { "say": "아이디에스" },
     "DNAT": { "say": "디냇" },
     "SNAT": { "say": "에스냇" },
-    "SG": { "firstSay": "보안 그룹", "thenSay": "에스지" }
+    "SG": { "firstSay": "보안 그룹", "thenSay": "에스지" },
+    "JWT": { "say": "제이더블유티" },
+    "OWASP": { "say": "오와스프" },
+    "RBAC": { "say": "알비에이씨" },
+    "ABAC": { "say": "에이비에이씨" },
+    "SRT": { "say": "에스알티" },
+    "SYN": { "say": "신" },
+    "L3": { "say": "엘쓰리" },
+    "L4": { "say": "엘포" },
+    "L7": { "say": "엘세븐" },
+    "AWSCURRENT": { "say": "에이더블유에스 커런트" },
+    "AWSPENDING": { "say": "에이더블유에스 펜딩" }
   }
 }
