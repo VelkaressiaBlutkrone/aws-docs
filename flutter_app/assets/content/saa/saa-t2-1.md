@@ -67,9 +67,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 느슨한 결합(Decoupling)이란
+### 1) 느슨한 결합(Decoupling)이란 {#decoupling}
 
 > 공식 정의(SQS): **"분산 소프트웨어 시스템과 컴포넌트를 통합하고 분리(decouple)할 수 있는 보안·내구성 있는 호스팅 큐 서비스."**
 
@@ -82,7 +82,7 @@ lastVerified: 2026-06-12
 
 ---
 
-### 2) Amazon SQS — 메시지 큐 (Pull 모델)
+### 2) Amazon SQS — 메시지 큐 (Pull 모델) {#sqs}
 
 생산자(Producer)가 큐에 메시지를 넣으면, 소비자(Consumer)가 **직접 폴링해서** 가져갑니다. 소비자가 처리하는 동안 메시지는 큐에서 숨겨지고(Visibility Timeout), 성공하면 삭제, 실패하면 재노출됩니다.
 
@@ -112,7 +112,7 @@ lastVerified: 2026-06-12
 
 ---
 
-### 3) Amazon SNS — Pub/Sub (Push 모델)
+### 3) Amazon SNS — Pub/Sub (Push 모델) {#sns}
 
 SNS는 **토픽(Topic)** 기반 발행-구독 서비스입니다. 발행자(Publisher)가 토픽에 메시지를 보내면, 토픽에 구독(Subscribe)된 모든 엔드포인트에 **동시에 Push**됩니다.
 
@@ -135,7 +135,7 @@ SNS는 **Application-to-Application(A2A)** 와 **Application-to-Person(A2P)** �
 
 ---
 
-### 4) 팬아웃 패턴 (SNS + SQS) — ★ 단골 출제
+### 4) 팬아웃 패턴 (SNS + SQS) — ★ 단골 출제 {#fanout}
 
 "하나의 이벤트를 여러 소비자가 독립적으로 처리"할 때 사용합니다.
 
@@ -158,7 +158,7 @@ SNS만으로 Lambda·HTTP를 직접 구독하면 재시도·처리 보장이 약
 
 ---
 
-### 5) Amazon EventBridge — 이벤트 버스
+### 5) Amazon EventBridge — 이벤트 버스 {#eventbridge}
 
 EventBridge는 **이벤트 패턴 기반 라우팅** 서비스입니다. AWS 서비스 이벤트, 커스텀 애플리케이션 이벤트, 서드파티 SaaS 이벤트를 수집해 규칙(Rule)에 따라 여러 대상에 라우팅합니다.
 
@@ -181,7 +181,7 @@ EventBridge는 **이벤트 패턴 기반 라우팅** 서비스입니다. AWS 서
 
 ---
 
-### 6) AWS Step Functions — 워크플로우 오케스트레이션
+### 6) AWS Step Functions — 워크플로우 오케스트레이션 {#step-functions}
 
 Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)** 으로 조율합니다. 분기(Choice)·병렬(Parallel)·반복(Map)·재시도(Retry)·오류 처리(Catch)·사람 승인(WaitForTaskToken) 등을 코드 없이 시각적으로 정의합니다.
 
@@ -203,7 +203,7 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 
 ---
 
-### 7) SQS vs SNS vs EventBridge 선택 비교표 (★ 시험 핵심)
+### 7) SQS vs SNS vs EventBridge 선택 비교표 (★ 시험 핵심) {#messaging-comparison}
 
 | 요구사항 | 최적 선택 | 이유 |
 |---|---|---|
@@ -238,7 +238,7 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"SQS로 여러 구독자에게 동시 알림"** → 불가. SQS는 1개 메시지를 **1개 소비자만** 가져갑니다. 여러 구독자에게 동시 전달하려면 SNS(또는 SNS+SQS 팬아웃)가 필요합니다.
    *(원리: §1 — SQS Pull 모델은 메시지를 먼저 수신한 소비자가 잠그므로 동일 메시지의 동시 복수 전달 구조가 아니다.)*
