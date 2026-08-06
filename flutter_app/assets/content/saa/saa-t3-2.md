@@ -14,10 +14,16 @@ sources:
     url: https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
   - title: Amazon EFS — What is Amazon Elastic File System? (공식)
     url: https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html
+  - title: Amazon EFS 수명 주기 관리 (공식)
+    url: https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html
   - title: Amazon FSx for Windows File Server — What is? (공식)
     url: https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html
   - title: Amazon FSx for Lustre — What is? (공식)
     url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
+  - title: Amazon FSx for NetApp ONTAP — What is? (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html
+  - title: Amazon FSx for OpenZFS — What is? (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 lastVerified: 2026-06-12
@@ -68,9 +74,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 스토리지 3대 유형
+### 1) 스토리지 3대 유형 {#storage-types}
 
 | 유형 | 대표 서비스 | 접근 방식 | 대표 사용 사례 |
 |---|---|---|---|
@@ -85,7 +91,7 @@ lastVerified: 2026-06-12
 > 세 계층이 각각 다른 접근 인터페이스를 노출하기 때문에, 애플리케이션이 요구하는 접근 방식을 먼저 파악하면 서비스 선택이 자연스럽게 좁혀집니다.
 > 예를 들어 데이터베이스 엔진은 블록 수준 직접 접근이 필요하고, 웹 서버 공유 설정 파일은 여러 프로세스가 파일 단위로 읽어야 하며, 정적 미디어는 HTTP로 꺼내면 충분하므로 각각 블록·파일·객체 유형이 선택됩니다.
 
-### 2) EBS(Amazon Elastic Block Store)란
+### 2) EBS(Amazon Elastic Block Store)란 {#ebs-basics}
 
 공식 정의: **"Amazon EC2 인스턴스에 연결해 사용하는 확장 가능한 고성능 블록 스토리지."** EC2에 연결하면 로컬 하드 드라이브처럼 파일 저장·애플리케이션 설치에 사용할 수 있습니다.
 
@@ -100,7 +106,7 @@ lastVerified: 2026-06-12
 > AZ를 넘어 연결하려면 이 내부 경로 대신 리전 간 네트워크를 거쳐야 해 지연시간이 크게 늘어나므로, AWS는 동일 AZ 내 연결만 허용해 일관된 저지연 성능을 유지합니다.
 > 이 설계 덕분에 EBS는 블록 스토리지 성능을 예측 가능하게 제공하지만, AZ 간 이동이 필요할 때는 스냅샷을 통한 복사가 유일한 경로가 됩니다.
 
-### 3) EBS 볼륨 타입 비교 (★ 시험 핵심)
+### 3) EBS 볼륨 타입 비교 (★ 시험 핵심) {#ebs-volume-types}
 
 #### SSD 볼륨
 
@@ -135,7 +141,7 @@ lastVerified: 2026-06-12
 > SSD는 전기 신호로 셀에 직접 접근하므로 이 대기가 없고, 작은 요청을 빠르게 반복할수록(랜덤 I/O) 차이가 극대화됩니다.
 > 반면 HDD는 헤드를 한 번 위치시킨 후 연속 구간을 쭉 읽는 순차 처리(처리량 중심)에서는 비용 대비 효율이 높아, st1·sc1 같은 스트리밍 전용 볼륨으로 포지셔닝됩니다.
 
-### 4) EBS 스냅샷·암호화·Multi-Attach
+### 4) EBS 스냅샷·암호화·Multi-Attach {#ebs-features}
 
 **스냅샷(Snapshot):**
 - EBS 볼륨의 **특정 시점(point-in-time) 백업** — S3에 저장(사용자가 직접 S3를 관리하지 않음)
@@ -157,7 +163,7 @@ lastVerified: 2026-06-12
 > Nitro 기반 호스트는 전용 하드웨어 오프로드 칩을 통해 데이터가 네트워크를 떠나기 전(호스트 → EBS 스토리지 서버 전송 중)에 투명하게 암호화하므로, 인스턴스에서 실행되는 애플리케이션 코드 경로가 암호화 처리에 관여하지 않습니다.
 > 이 구조가 "암호화된 볼륨에서 만든 스냅샷도 자동으로 암호화"되는 일관성의 기반이 됩니다.
 
-### 5) 인스턴스 스토어(임시 블록 스토리지)
+### 5) 인스턴스 스토어(임시 블록 스토리지) {#instance-store}
 
 인스턴스 스토어는 EC2 인스턴스에 **물리적으로 부착된** 임시 블록 스토리지입니다.
 
@@ -175,7 +181,7 @@ lastVerified: 2026-06-12
 > 재부팅은 같은 물리 호스트에서 OS만 재시작하므로 로컬 디스크 연결이 유지되지만, 중지·종료는 호스트 배치가 고정되지 않아 데이터 접근이 보장되지 않습니다.
 > EBS가 네트워크를 통해 독립된 스토리지 서버에 데이터를 저장하는 방식과 달리, 인스턴스 스토어는 호스트 물리 장치에 묶여 있다는 점이 이 차이의 근본 원인입니다.
 
-### 6) Amazon EFS(Elastic File System)
+### 6) Amazon EFS(Elastic File System) {#efs}
 
 공식 정의: **"서버리스·완전 관리형 NFS 파일 스토리지 — 프로비저닝 없이 페타바이트까지 자동 확장."**
 
@@ -205,6 +211,7 @@ lastVerified: 2026-06-12
 |---|---|
 | **Standard** | 자주 접근하는 데이터, 다중 AZ |
 | **Standard-IA** | 자주 접근하지 않는 데이터, 다중 AZ, 저비용 |
+| **Archive** | 1년에 몇 번 이하로 접근하는 장기 보관 파일, 다중 AZ, 최저 비용 계층 |
 | **One Zone** | 단일 AZ, 더 저렴 |
 | **One Zone-IA** | 단일 AZ + IA |
 
@@ -213,7 +220,7 @@ lastVerified: 2026-06-12
 > EBS처럼 볼륨 크기를 미리 예약하지 않아도 되는 이유는, 파일이 추가될 때마다 AWS가 스토리지를 자동으로 확보하는 서버리스 모델이기 때문입니다.
 > 이 구조는 편리하지만 스토리지 비용이 사용량에 비례해 증가하므로, 접근 빈도가 낮은 파일을 IA 클래스로 자동 전환하는 수명 주기 정책이 비용 관리 수단이 됩니다.
 
-### 7) Amazon FSx 패밀리
+### 7) Amazon FSx 패밀리 {#fsx-family}
 
 FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 파일 시스템입니다.
 
@@ -249,8 +256,8 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 #### FSx for OpenZFS
 
 - OpenZFS 파일 시스템을 AWS에서 완전 관리형으로 제공
-- **NFS** 프로토콜, Linux·macOS 클라이언트
-- 최대 1,000,000 IOPS, 서브밀리초 지연시간
+- **NFS** 프로토콜, Linux·Windows·macOS 클라이언트
+- 최대 2,000,000 IOPS, 수백 마이크로초 지연시간
 - ZFS 스냅샷·복제 기능, 온프레미스 ZFS 워크로드 마이그레이션에 적합
 
 > 🧠 원리: 왜 FSx는 단일 서비스가 아니라 여러 파일 시스템 엔진을 별도 제품으로 제공할까요?
@@ -258,7 +265,7 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 > 하나의 범용 파일시스템으로 통합하면 어느 한쪽의 동작이 달라져 마이그레이션 시 애플리케이션 수정이 불가피해집니다. FSx가 각 엔진을 그대로 관리형으로 제공하는 이유는 "리프트앤시프트" — 코드 변경 없이 온프레미스 파일시스템을 AWS로 옮기는 것 — 을 가능하게 하기 위함입니다.
 > 결과적으로 FSx 제품 선택은 "어떤 파일시스템을 현재 쓰고 있는가"에서 시작하며, 프로토콜·OS·워크로드 특성이 제품을 결정합니다.
 
-### 8) EFS vs FSx 선택 기준 비교
+### 8) EFS vs FSx 선택 기준 비교 {#efs-vs-fsx}
 
 | 요구사항 | 선택 | 이유 |
 |---|---|---|
@@ -266,7 +273,7 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 | Windows 파일 공유 (SMB·AD 인증) | **FSx for Windows** | SMB 네이티브·AD 통합 |
 | HPC·ML 초고성능 파일시스템 | **FSx for Lustre** | 수 TBps·수백만 IOPS·S3 통합 |
 | NFS·SMB·iSCSI 멀티 프로토콜 통합 | **FSx for NetApp ONTAP** | 멀티 프로토콜·온프레미스 ONTAP 마이그레이션 |
-| ZFS 기반 고성능 NFS | **FSx for OpenZFS** | ZFS 기능·리눅스·macOS·최대 100만 IOPS |
+| ZFS 기반 고성능 NFS | **FSx for OpenZFS** | ZFS 기능·Linux·Windows·macOS·최대 200만 IOPS |
 
 > 🧠 원리: 왜 동일한 "리눅스 파일 공유" 요건에서도 EFS와 FSx for Lustre가 나뉠까요?
 > EFS는 범용 NFS로, 다수 클라이언트가 동시에 파일을 읽고 쓰는 공유 홈 디렉터리·콘텐츠 저장소처럼 접근 패턴이 고르게 분산된 워크로드에 설계됩니다.
@@ -290,7 +297,7 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"여러 EC2가 EBS를 공유하면 된다."** → EBS는 기본적으로 단일 인스턴스 연결입니다. 여러 인스턴스가 동시에 같은 파일에 접근해야 하면 EFS(Linux) 또는 FSx for Windows(Windows)를 사용합니다. io1·io2의 Multi-Attach는 존재하지만, 클러스터 파일시스템이 없으면 데이터 충돌이 발생할 수 있습니다.
    *(원리: §2 본문 — EBS는 기본적으로 단일 인스턴스 연결이며, §4 본문 — 파일 시스템 수준 동시성 제어는 애플리케이션이 직접 담당해야 한다.)*
@@ -312,6 +319,9 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 
 7. **"FSx for Lustre는 Windows에서도 마운트 가능하다."** → FSx for Lustre는 POSIX 호환 Linux 전용입니다. Windows 고성능 파일시스템이 필요하면 FSx for Windows File Server를 사용합니다.
    *(원리: §7 — FSx 각 엔진은 특정 OS 프로토콜 스택을 전제로 설계되어 있어, Lustre의 POSIX 인터페이스는 Windows 클라이언트가 사용하는 SMB와 호환되지 않는다.)*
+
+8. **"FSx for OpenZFS도 Linux·macOS만 접근한다."** → FSx for OpenZFS는 NFS 프로토콜로 Linux·Windows·macOS 클라이언트에서 접근할 수 있습니다.
+   *(원리: §7 — OpenZFS는 파일시스템 엔진이고, 클라이언트 접근은 업계 표준 NFS 프로토콜로 제공되므로 Windows에서도 NFS 클라이언트 경로를 사용할 수 있다.)*
 
 ---
 
@@ -363,6 +373,9 @@ EBS Multi-Attach는 동일 볼륨을 여러 Nitro 인스턴스에 동시 연결�
 1. Amazon EBS — What is Amazon Elastic Block Store? — https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html
 2. Amazon EBS 볼륨 타입 — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
 3. Amazon EFS — What is Amazon Elastic File System? — https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html
-4. Amazon FSx for Windows File Server — What is? — https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html
-5. Amazon FSx for Lustre — What is? — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
-6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+4. Amazon EFS 수명 주기 관리 — https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html
+5. Amazon FSx for Windows File Server — What is? — https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html
+6. Amazon FSx for Lustre — What is? — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
+7. Amazon FSx for NetApp ONTAP — What is? — https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html
+8. Amazon FSx for OpenZFS — What is? — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html
+9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

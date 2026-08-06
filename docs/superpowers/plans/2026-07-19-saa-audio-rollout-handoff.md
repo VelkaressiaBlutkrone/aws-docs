@@ -15,11 +15,12 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | **saa-t2-2** | ⚠️ **pre-enrich 스캐폴드 커밋** | 앵커·표요약·lexicon·script gate PASS. **enrich 미실행**(크레딧). 크레딧 충전 후 enrich부터 재개 |
 | saa-t2-3 ~ t2-5 | ✅ pre-enrich 스캐폴드 커밋 | 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
 | saa-t3-1 | ✅ pre-enrich 스캐폴드 커밋 | S3 Express One Zone 반영, 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
-| saa-t3-2 ~ t3-9 | ⬜ 대기 | 다음 스캐폴드 대상 |
+| saa-t3-2 | ✅ pre-enrich 스캐폴드 커밋 | EFS Archive·FSx OpenZFS 현행화, 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
+| saa-t3-3 ~ t3-9 | ⬜ 대기 | 다음 스캐폴드 대상 |
 | saa-t4-1 ~ t4-5 | ⬜ 대기 | |
 
-**남은 완성 작업: 18개** (t2-2~t2-5·t3-1 enrich/synth 재개 + t3-2~t3-9·t4-1~t4-5 스캐폴드부터).
-**크레딧 충전 전 가능한 작업:** `saa-t3-2`부터 같은 방식으로 앵커·lexicon·표요약·script gate PASS까지 선행.
+**남은 완성 작업: 17개** (t2-2~t2-5·t3-1~t3-2 enrich/synth 재개 + t3-3~t3-9·t4-1~t4-5 스캐폴드부터).
+**크레딧 충전 전 가능한 작업:** `saa-t3-3`부터 같은 방식으로 앵커·lexicon·표요약·script gate PASS까지 선행.
 
 모든 완료분은 `reviewStatus=needs_human_review`, content_index/pubspec 미등록 → **라이브 미노출**(번들 무영향).
 
@@ -42,7 +43,7 @@ py tool/gen_lecture_audio.py gate --script $S --md assets/content/saa/saa-t2-2.m
 # 커밋: md+apply_audio_summary+lexicon(변경시)+assets/audio/saa/saa-t2-2/  (enrich_report/verify는 .gitignore)
 ```
 
-## 문서당 레시피 (t3-2부터 반복)
+## 문서당 레시피 (t3-3부터 반복)
 
 1. **열거:** 헤딩(`grep '^#'`) + `generate`로 표·미등록토큰(unmapped) 확인
 2. **lexicon 갭 추가** (`tool/lexicon.json`) — **약어만, 서비스명 추가 금지**(영문 정책). SG류 다발 약어는 `{firstSay,thenSay}`(enrich가 풀어써도 토큰보존 통과, 예: SG=보안그룹/에스지)
