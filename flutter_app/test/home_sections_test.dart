@@ -74,14 +74,16 @@ void main() {
     // PR4: 단일 타이틀 'CLF-C02 · 통합 모의고사' → AppHeader 브레드크럼
     // (sectionLabel 'CLF-C02' / title '통합 모의고사')로 분해 — 정보 손실 0.
     final cert = certByCode('CLF-C02')!;
-    await tester.pumpWidget(ThemeScope(
-      isDark: false,
-      toggle: () {},
-      child: MaterialApp(
-        theme: AppTheme.light,
-        home: CertExamPage(cert: cert),
+    await tester.pumpWidget(
+      ThemeScope(
+        isDark: false,
+        toggle: () {},
+        child: MaterialApp(
+          theme: AppTheme.light,
+          home: CertExamPage(cert: cert),
+        ),
       ),
-    ));
+    );
     await tester.pump();
     expect(find.text('CLF-C02'), findsOneWidget);
     expect(find.text('통합 모의고사'), findsWidgets); // 헤더(+시작 화면)
@@ -101,13 +103,34 @@ void main() {
     expect(find.textContaining('지난 일정'), findsNothing);
   });
 
-  testWidgets('통합 모의고사 카드: 라이브 cert는 "준비 중"이 아닌 검증 문항 수 라벨(CODE-P-002)',
-      (tester) async {
+  testWidgets('통합 모의고사 카드: 라이브 cert는 검증 문항 수, SAA는 준비 중 라벨', (tester) async {
     await tester.pumpWidget(_home());
     await tester.pump();
-    // certExamIsBalanced 통과 cert(예: CLF-C02)의 통합 모의고사 카드는 CTA가
-    // 실제 동작하므로 '준비 중' 라벨이 항상 거짓 — 검증 문항 수를 표기해야 한다.
-    expect(find.text('통합 모의고사 · 준비 중'), findsNothing);
+    // CLF-C02는 CTA가 실제 동작하므로 검증 문항 수를 표기한다.
     expect(find.textContaining('통합 모의고사 · 검증'), findsWidgets);
+    // SAA-C03은 학습 콘텐츠는 있지만 weighted capacity가 부족해 준비 중으로 남는다.
+    expect(find.text('통합 모의고사 · 준비 중'), findsWidgets);
+    expect(find.text('SAA-C03'), findsWidgets);
+  });
+
+  testWidgets('SAA 통합 모의고사 직접 진입은 weighted capacity 부족 시 잠김', (tester) async {
+    final cert = certByCode('SAA-C03')!;
+    await tester.pumpWidget(
+      ThemeScope(
+        isDark: false,
+        toggle: () {},
+        child: MaterialApp(
+          theme: AppTheme.light,
+          home: CertExamPage(cert: cert),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 250));
+    await tester.pump();
+
+    expect(find.text('SAA-C03 통합 모의고사는 아직 준비 중입니다.'), findsOneWidget);
+    expect(find.textContaining('D1 0/19'), findsOneWidget);
+    expect(find.text('시작'), findsNothing);
   });
 }

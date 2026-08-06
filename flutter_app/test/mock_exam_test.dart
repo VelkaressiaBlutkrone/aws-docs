@@ -1,34 +1,46 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:aws_docs/data/exam_allocation.dart';
 import 'package:aws_docs/data/mock_exam.dart';
 import 'package:aws_docs/models/question.dart';
 
 Question _q(String id, int domain) => Question(
-      id: id,
-      examGuideTaskId: 'clf-t$domain',
-      stem: 's',
-      options: const ['a', 'b', 'c', 'd'],
-      correct: 0,
-      explanation: 'e',
-      wrongExplanations: const {},
-      sources: const [],
-      verified: true,
-    );
+  id: id,
+  examGuideTaskId: 'clf-t$domain',
+  stem: 's',
+  options: const ['a', 'b', 'c', 'd'],
+  correct: 0,
+  explanation: 'e',
+  wrongExplanations: const {},
+  sources: const [],
+  verified: true,
+);
 
 QuestionBank _bank(int domain, List<String> ids) => QuestionBank(
-      examGuideTaskId: 'clf-t$domain-x',
-      taskTitle: 't',
-      certCode: 'CLF-C02',
-      domain: domain,
-      questions: [for (final id in ids) _q(id, domain)],
-    );
+  examGuideTaskId: 'clf-t$domain-x',
+  taskTitle: 't',
+  certCode: 'CLF-C02',
+  domain: domain,
+  questions: [for (final id in ids) _q(id, domain)],
+);
 
 void main() {
   test('allocateByWeight: 합이 N, CLF 가중 65 → 16/19/22/8', () {
     final a = allocateByWeight({1: 24, 2: 30, 3: 34, 4: 12}, 65);
     expect(a.values.fold(0, (s, v) => s + v), 65);
     expect(a, {1: 16, 2: 19, 3: 22, 4: 8});
+  });
+
+  test('allocateByWeight: SAA 공식 비중을 65문항 연습 세트에 적용하면 19/17/16/13', () {
+    final a = allocateByWeight({1: 30, 2: 26, 3: 24, 4: 20}, 65);
+    expect(a.values.fold(0, (s, v) => s + v), 65);
+    expect(a, {1: 19, 2: 17, 3: 16, 4: 13});
+  });
+
+  test('allocateByWeight: 동률 remainder는 선언 순서로 결정된다', () {
+    final a = allocateByWeight({'a': 1, 'b': 1, 'c': 1}, 2);
+    expect(a, {'a': 1, 'b': 1, 'c': 0});
   });
 
   test('allocateByWeight: 비중 합 0이면 균등 배분, 합=N', () {
@@ -41,7 +53,10 @@ void main() {
   });
 
   test('groupByDomain / indexById', () {
-    final banks = [_bank(1, ['a', 'b']), _bank(2, ['c'])];
+    final banks = [
+      _bank(1, ['a', 'b']),
+      _bank(2, ['c']),
+    ];
     final pool = groupByDomain(banks);
     expect(pool[1]!.length, 2);
     expect(pool[2]!.length, 1);
@@ -55,13 +70,24 @@ void main() {
       2: [for (var i = 0; i < 10; i++) _q('d2q$i', 2)],
     };
     const w = {1: 50, 2: 50};
-    final a =
-        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 8, rng: Random(42));
-    final b =
-        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 8, rng: Random(42));
+    final a = buildMockExam(
+      poolByDomain: pool,
+      weightByDomain: w,
+      n: 8,
+      rng: Random(42),
+    );
+    final b = buildMockExam(
+      poolByDomain: pool,
+      weightByDomain: w,
+      n: 8,
+      rng: Random(42),
+    );
     expect(a.map((q) => q.id).toList(), b.map((q) => q.id).toList());
     expect(a.length, 8);
-    final allIds = {for (final d in pool.values) for (final q in d) q.id};
+    final allIds = {
+      for (final d in pool.values)
+        for (final q in d) q.id,
+    };
     expect(a.every((q) => allIds.contains(q.id)), isTrue);
     expect(a.map((q) => q.id).toSet().length, 8);
   });
@@ -72,25 +98,35 @@ void main() {
       2: [for (var i = 0; i < 10; i++) _q('d2q$i', 2)],
     };
     const w = {1: 50, 2: 50};
-    final r =
-        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 8, rng: Random(1));
+    final r = buildMockExam(
+      poolByDomain: pool,
+      weightByDomain: w,
+      n: 8,
+      rng: Random(1),
+    );
     expect(r.length, 8);
     expect(r.where((q) => q.id == 'd1q0').length, 1);
   });
 
   test('buildMockExam: 풀 총량 < N이면 가능한 최대', () {
     final pool = {
-      1: [_q('a', 1), _q('b', 1)]
+      1: [_q('a', 1), _q('b', 1)],
     };
-    final r =
-        buildMockExam(poolByDomain: pool, weightByDomain: {1: 100}, n: 8, rng: Random(1));
+    final r = buildMockExam(
+      poolByDomain: pool,
+      weightByDomain: {1: 100},
+      n: 8,
+      rng: Random(1),
+    );
     expect(r.length, 2);
   });
 
   test('restoreOrdered: 모든 ID 존재 시 순서대로, 누락/빈목록 시 null', () {
     final byId = indexById([_q('a', 1), _q('b', 1), _q('c', 1)]);
-    expect(restoreOrdered(['c', 'a'], byId)!.map((q) => q.id).toList(),
-        ['c', 'a']);
+    expect(restoreOrdered(['c', 'a'], byId)!.map((q) => q.id).toList(), [
+      'c',
+      'a',
+    ]);
     expect(restoreOrdered(['a', 'z'], byId), isNull);
     expect(restoreOrdered(const [], byId), isNull);
   });
@@ -102,12 +138,23 @@ void main() {
     };
     const w = {'clf-t2-1': 70, 'clf-t3-1': 30};
     final a = buildSampledExam<String>(
-        poolByKey: pool, weightByKey: w, n: 10, rng: Random(7));
+      poolByKey: pool,
+      weightByKey: w,
+      n: 10,
+      rng: Random(7),
+    );
     final b = buildSampledExam<String>(
-        poolByKey: pool, weightByKey: w, n: 10, rng: Random(7));
+      poolByKey: pool,
+      weightByKey: w,
+      n: 10,
+      rng: Random(7),
+    );
     expect(a.map((q) => q.id).toList(), b.map((q) => q.id).toList());
     expect(a.length, 10);
-    final allIds = {for (final t in pool.values) for (final q in t) q.id};
+    final allIds = {
+      for (final t in pool.values)
+        for (final q in t) q.id,
+    };
     expect(a.every((q) => allIds.contains(q.id)), isTrue);
     expect(a.map((q) => q.id).toSet().length, 10);
   });
@@ -159,16 +206,22 @@ void main() {
     expect(ordersCoverQuestions(pool, ok), isTrue);
     expect(ordersCoverQuestions(pool, {'a': ok['a']!}), isFalse); // b 누락
     expect(
-        ordersCoverQuestions(pool, {'a': ok['a']!, 'b': const [0, 1]}),
-        isFalse); // 길이 불일치
+      ordersCoverQuestions(pool, {
+        'a': ok['a']!,
+        'b': const [0, 1],
+      }),
+      isFalse,
+    ); // 길이 불일치
     expect(ordersCoverQuestions(pool, const {}), isFalse); // 구버전 세션
   });
 
   test('분포 스모크: 셔플 후 정답 위치가 단일 인덱스에 95% 이상 몰리지 않는다', () {
     // 현재 데이터의 A-쏠림 재현: 전부 correct=0인 130문항
     final pool = [for (var i = 0; i < 130; i++) _q('q$i', 1)];
-    final shuffled =
-        applyOptionOrders(pool, randomOptionOrders(pool, Random(5)));
+    final shuffled = applyOptionOrders(
+      pool,
+      randomOptionOrders(pool, Random(5)),
+    );
     final dist = <int, int>{};
     for (final q in shuffled) {
       dist[q.correct] = (dist[q.correct] ?? 0) + 1;
@@ -184,8 +237,12 @@ void main() {
       1: [for (var i = 0; i < 20; i++) _q('d1q$i', 1)],
     };
     const w = {1: 30, 2: 26, 3: 24, 4: 20}; // SAA 도메인 비중
-    final r =
-        buildMockExam(poolByDomain: pool, weightByDomain: w, n: 15, rng: Random(3));
+    final r = buildMockExam(
+      poolByDomain: pool,
+      weightByDomain: w,
+      n: 15,
+      rng: Random(3),
+    );
     expect(r.length, 15); // 빈 도메인을 D1에서 백필해 N 유지(크래시 없음)
     expect(r.every((q) => q.id.startsWith('d1q')), isTrue); // 전부 D1 = 편향
     expect(r.map((q) => q.id).toSet().length, 15); // 중복 없음
@@ -195,7 +252,11 @@ void main() {
 
   test('buildSampledExam: 풀이 완전히 비면 빈 결과(크래시 없음)', () {
     final r = buildSampledExam<int>(
-        poolByKey: const {}, weightByKey: const {1: 50}, n: 5, rng: Random(1));
+      poolByKey: const {},
+      weightByKey: const {1: 50},
+      n: 5,
+      rng: Random(1),
+    );
     expect(r, isEmpty);
   });
 }

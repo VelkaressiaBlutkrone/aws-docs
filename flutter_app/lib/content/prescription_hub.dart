@@ -28,6 +28,7 @@ class PrescriptionHub extends StatelessWidget {
     required this.onReport,
     this.onWeightedExam,
     this.weightedAttemptCount = 0,
+    this.weightedLockedNote,
     this.allCorrect = false,
   });
 
@@ -43,6 +44,9 @@ class PrescriptionHub extends StatelessWidget {
   /// 잠김 표시용 비-review 응시 횟수(현재 응시 포함). 표시는 min(n,3)/3로 clamp.
   final int weightedAttemptCount;
 
+  /// capacity 부족처럼 응시 횟수보다 우선해야 하는 잠금 사유.
+  final String? weightedLockedNote;
+
   /// 이번 회차 오답 0(만점)이면 차분한 한 줄을 덧붙인다.
   final bool allCorrect;
 
@@ -51,13 +55,16 @@ class PrescriptionHub extends StatelessWidget {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final lockedLabel =
+        weightedLockedNote ??
         '응시 ${weightedAttemptCount.clamp(0, kWeightedExamMinAttempts)}/$kWeightedExamMinAttempts';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (allCorrect) ...[
-          Text('이번 회차 오답 없음 — 좋아요.',
-              style: t.labelLarge?.copyWith(color: c.textMuted)),
+          Text(
+            '이번 회차 오답 없음 — 좋아요.',
+            style: t.labelLarge?.copyWith(color: c.textMuted),
+          ),
           const SizedBox(height: Gap.md),
         ],
         SizedBox(
@@ -96,7 +103,8 @@ class _HubLink extends StatelessWidget {
         enabled ? '$label →' : '$label · ${lockedNote ?? '준비 중'}',
         style: TextStyle(
           fontSize: 15,
-          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+          fontWeight: FontWeight.w700,
+          fontVariations: Wght.w700,
           color: enabled ? c.accent : c.textMuted,
         ),
       ),
