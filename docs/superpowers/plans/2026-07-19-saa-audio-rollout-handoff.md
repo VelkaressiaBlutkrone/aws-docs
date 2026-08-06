@@ -2,22 +2,24 @@
 
 CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 작업의 세션 이관 문서.
 
-- **브랜치:** `feat/2026-07-saa-audio-pilot` (develop에서 분기, 미푸시)
+- **브랜치:** `feat/2026-07-saa-audio-pilot` (develop에서 분기, 원격 푸시됨)
 - **⛔ 현재 블로커:** **Anthropic API 크레딧 소진.** `enrich`(강사체 변환) 호출이 400 `credit balance too low`로 실패. `flutter_app/tool/.env`의 `ANTHROPIC_API_KEY` 계정 충전 전에는 재개 불가.
 - **사용자 결정(고정):** enrich 모델=**Opus 유지**, 영문 서비스명(Shield·Cognito 등)=**영문 그대로**(Polly 발음 수용), 청취 게이트=사람. `audioApproved` flip은 사용자 청취 후(미완).
 
-## 진행 상태 (7 커밋)
+## 진행 상태 (2026-08-06)
 
 | 문서 | 상태 | 비고 |
 |------|------|------|
 | saa-t1-1 ~ t1-5 | ✅ 완료 커밋 | 도메인1 전체. enrich·synth·gate·verify 통과 |
 | saa-t2-1 | ✅ 완료 커밋 | 느슨한 결합(SQS·SNS·EventBridge·Step Functions) |
-| **saa-t2-2** | ⚠️ **WIP 커밋(`651898a`)** | 앵커·표요약11·lexicon(MB)만. **enrich 미실행**(크레딧). 재생성→enrich부터 재개 |
-| saa-t2-3, t2-4, t2-5 | ⬜ 대기 | |
-| saa-t3-1 ~ t3-9 | ⬜ 대기 | |
+| **saa-t2-2** | ⚠️ **pre-enrich 스캐폴드 커밋** | 앵커·표요약·lexicon·script gate PASS. **enrich 미실행**(크레딧). 크레딧 충전 후 enrich부터 재개 |
+| saa-t2-3 ~ t2-5 | ✅ pre-enrich 스캐폴드 커밋 | 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
+| saa-t3-1 | ✅ pre-enrich 스캐폴드 커밋 | S3 Express One Zone 반영, 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
+| saa-t3-2 ~ t3-9 | ⬜ 대기 | 다음 스캐폴드 대상 |
 | saa-t4-1 ~ t4-5 | ⬜ 대기 | |
 
-**남은 문서: 18개** (t2-2 enrich 재개 + t2-3~5, t3-*, t4-*). 전부 `flutter_app/assets/content/saa/saa-tN-M.md`.
+**남은 완성 작업: 18개** (t2-2~t2-5·t3-1 enrich/synth 재개 + t3-2~t3-9·t4-1~t4-5 스캐폴드부터).
+**크레딧 충전 전 가능한 작업:** `saa-t3-2`부터 같은 방식으로 앵커·lexicon·표요약·script gate PASS까지 선행.
 
 모든 완료분은 `reviewStatus=needs_human_review`, content_index/pubspec 미등록 → **라이브 미노출**(번들 무영향).
 
@@ -40,7 +42,7 @@ py tool/gen_lecture_audio.py gate --script $S --md assets/content/saa/saa-t2-2.m
 # 커밋: md+apply_audio_summary+lexicon(변경시)+assets/audio/saa/saa-t2-2/  (enrich_report/verify는 .gitignore)
 ```
 
-## 문서당 레시피 (t2-3부터 반복)
+## 문서당 레시피 (t3-2부터 반복)
 
 1. **열거:** 헤딩(`grep '^#'`) + `generate`로 표·미등록토큰(unmapped) 확인
 2. **lexicon 갭 추가** (`tool/lexicon.json`) — **약어만, 서비스명 추가 금지**(영문 정책). SG류 다발 약어는 `{firstSay,thenSay}`(enrich가 풀어써도 토큰보존 통과, 예: SG=보안그룹/에스지)
@@ -63,6 +65,6 @@ py tool/gen_lecture_audio.py gate --script $S --md assets/content/saa/saa-t2-2.m
 
 - `apply_audio_summary.py`: CLF 하드코딩(`CLF=.../clf` 경로+SUMMARIES) → `_cert_dir(doc_id)` 접두어 파생 일반화 + `--self-test` 추가.
 - `.gitignore`: enrich 스크래치 무시 규칙 clf 전용 → 전 자격증(`flutter_app/assets/audio/*/*/enrich_report.md` 등).
-- `lexicon.json`: SAA 약어 다수 추가(도메인1·2). 린터가 multi-line(indent 2) 포맷 적용.
+- `lexicon.json`: SAA 약어 다수 추가(도메인1~3). 린터가 multi-line(indent 2) 포맷 적용.
 
 관련 메모리: `saa-audio-rollout`, [[content-review-pipeline-planned]], [[audio-instructor-script-planned]], [[audio-runtime-gate-shipped]].
