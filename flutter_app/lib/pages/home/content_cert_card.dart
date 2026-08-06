@@ -20,7 +20,7 @@ class ContentCertCard extends StatelessWidget {
   final Certification cert;
   final String summaryLabel;
   final String cta;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String? viewedBadge; // 예: '열람 5/19' — null이면 미표시
 
   @override
@@ -43,23 +43,29 @@ class ContentCertCard extends StatelessWidget {
             Text(cert.title, style: t.titleMedium),
             const SizedBox(height: Gap.sm),
             AppBadge(
-                label: summaryLabel,
-                bg: c.surface2,
-                fg: c.textMuted,
-                strong: false),
+              label: summaryLabel,
+              bg: c.surface2,
+              fg: c.textMuted,
+              strong: false,
+            ),
             if (viewedBadge != null) ...[
               const SizedBox(height: Gap.xs),
               AppBadge(
-                  label: viewedBadge!,
-                  bg: c.accentWeak,
-                  fg: c.accentStrong),
+                label: viewedBadge!,
+                bg: c.accentWeak,
+                fg: c.accentStrong,
+              ),
             ],
             const SizedBox(height: Gap.md),
-            Text(cta,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                    color: c.accent)),
+            Text(
+              cta,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                fontVariations: Wght.w700,
+                color: onTap == null ? c.textMuted : c.accent,
+              ),
+            ),
           ],
         ),
       ),
@@ -85,11 +91,15 @@ class PendingGroup extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('준비 중',
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800, fontVariations: Wght.w800,
-                  color: c.textMuted)),
+          Text(
+            '준비 중',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              fontVariations: Wght.w800,
+              color: c.textMuted,
+            ),
+          ),
           const SizedBox(height: Gap.sm),
           Wrap(
             spacing: 6,

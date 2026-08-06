@@ -99,7 +99,8 @@ class LearningContentSection extends StatelessWidget {
                         '학습문서 →',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                          fontWeight: FontWeight.w700,
+                          fontVariations: Wght.w700,
                           color: c.accent,
                         ),
                       ),
@@ -121,18 +122,27 @@ class LearningContentSection extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.event_note_outlined,
-                        size: 18, color: c.textMuted),
+                    Icon(
+                      Icons.event_note_outlined,
+                      size: 18,
+                      color: c.textMuted,
+                    ),
                     const SizedBox(width: Gap.sm),
                     Expanded(
-                      child: Text('학습 일정 · 시험일까지 무엇을 언제 공부할지',
-                          style: t.titleMedium?.copyWith(color: c.text)),
+                      child: Text(
+                        '학습 일정 · 시험일까지 무엇을 언제 공부할지',
+                        style: t.titleMedium?.copyWith(color: c.text),
+                      ),
                     ),
-                    Text('일정 →',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                            color: c.accent)),
+                    Text(
+                      '일정 →',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontVariations: Wght.w700,
+                        color: c.accent,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -165,7 +175,8 @@ class LearningContentSection extends StatelessWidget {
                         '리포트 →',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                          fontWeight: FontWeight.w700,
+                          fontVariations: Wght.w700,
                           color: c.accent,
                         ),
                       ),
@@ -178,8 +189,13 @@ class LearningContentSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
               child: () {
-                final unlocked = attemptCount >= kWeightedExamMinAttempts;
                 final certCode = entries.first.certCode;
+                final hasCapacity = certExamHasWeightedCapacity(certCode);
+                final hasAttempts = attemptCount >= kWeightedExamMinAttempts;
+                final unlocked = hasCapacity && hasAttempts;
+                final lockedLabel = hasCapacity
+                    ? '약점 집중 모의고사 · 응시 기록이 3회 쌓이면 열립니다 ($attemptCount/$kWeightedExamMinAttempts)'
+                    : '약점 집중 모의고사 · 공식 도메인 비중을 적용할 검증 문항이 더 필요합니다';
                 return FocusTap(
                   onTap: unlocked
                       ? () => context.push('/cert/$certCode/exam/weak')
@@ -203,7 +219,7 @@ class LearningContentSection extends StatelessWidget {
                           child: Text(
                             unlocked
                                 ? '약점 집중 모의고사 · 자주 틀린 Task 가중 출제'
-                                : '약점 집중 모의고사 · 응시 기록이 3회 쌓이면 열립니다 ($attemptCount/$kWeightedExamMinAttempts)',
+                                : lockedLabel,
                             style: t.titleMedium?.copyWith(
                               color: unlocked ? c.text : c.textMuted,
                             ),
@@ -214,7 +230,8 @@ class LearningContentSection extends StatelessWidget {
                             '시작 →',
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                              fontWeight: FontWeight.w700,
+                              fontVariations: Wght.w700,
                               color: c.accent,
                             ),
                           ),
@@ -251,7 +268,8 @@ class LearningContentSection extends StatelessWidget {
                         '복습 →',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                          fontWeight: FontWeight.w700,
+                          fontVariations: Wght.w700,
                           color: c.wrong,
                         ),
                       ),
@@ -302,18 +320,18 @@ class _ProgressBanner extends StatelessWidget {
   }
 
   Widget _stat(AppColors c, TextTheme t, String label, String value) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: t.labelSmall?.copyWith(color: c.textFaint)),
-          const SizedBox(height: 2),
-          Text(
-            value,
-            style: t.titleMedium?.copyWith(
-              color: c.accent,
-              fontFamily: AppTheme.monoFamily,
-            ),
-          ),
-        ],
-      );
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(label, style: t.labelSmall?.copyWith(color: c.textFaint)),
+      const SizedBox(height: 2),
+      Text(
+        value,
+        style: t.titleMedium?.copyWith(
+          color: c.accent,
+          fontFamily: AppTheme.monoFamily,
+        ),
+      ),
+    ],
+  );
 }
