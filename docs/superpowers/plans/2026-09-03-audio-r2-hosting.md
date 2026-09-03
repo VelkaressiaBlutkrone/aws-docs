@@ -418,16 +418,21 @@ if __name__ == "__main__":
 - [ ] **Step 2: CORS 정책 파일** — `flutter_app/tool/r2_cors.json`:
 
 ```json
-[
-  {
-    "AllowedOrigins": ["https://velkaressiablutkrone.github.io", "http://localhost:8124"],
-    "AllowedMethods": ["GET", "HEAD"],
-    "AllowedHeaders": ["Range"],
-    "ExposeHeaders": ["Content-Length", "Content-Range", "Accept-Ranges", "ETag"],
-    "MaxAgeSeconds": 86400
-  }
-]
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": ["https://velkaressiablutkrone.github.io", "http://localhost:8124"],
+        "methods": ["GET", "HEAD"],
+        "headers": ["Range"]
+      },
+      "exposeHeaders": ["Content-Length", "Content-Range", "Accept-Ranges", "ETag"],
+      "maxAgeSeconds": 86400
+    }
+  ]
+}
 ```
+(주의: 대시보드용 S3식 `AllowedOrigins` 배열 형식은 `wrangler r2 bucket cors set`이 거부한다 — "must contain a 'rules' array". 2026-09-03 실측.)
 
 - [ ] **Step 3: self-test·dry-run 확인** — `flutter_app/`에서:
 

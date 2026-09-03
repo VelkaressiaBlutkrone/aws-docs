@@ -28,9 +28,15 @@ from email.message import Message
 from typing import Any
 
 
+# Cloudflare 브라우저 무결성 검사가 Python-urllib 기본 UA를 403(error code 1010)으로
+# 차단한다(2026-09-03 aws-audio.leva.ai.kr 실측). 명시적 UA로 게이트 요청을 식별한다.
+USER_AGENT = "aws-docs-audio-gate/1 (+https://velkaressiablutkrone.github.io/aws-docs/)"
+
+
 def _request(url: str, *, method: str, headers: dict[str, str] | None = None,
              timeout: float = 15.0) -> tuple[int, Message, bytes]:
-    req = urllib.request.Request(url, method=method, headers=headers or {})
+    hdrs = {"User-Agent": USER_AGENT, **(headers or {})}
+    req = urllib.request.Request(url, method=method, headers=hdrs)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return resp.status, resp.headers, resp.read()

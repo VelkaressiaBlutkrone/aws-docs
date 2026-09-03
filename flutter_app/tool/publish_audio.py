@@ -26,7 +26,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from check_audio_range import print_report, run_gate  # noqa: E402
+from check_audio_range import USER_AGENT, print_report, run_gate  # noqa: E402
 
 BUCKET = "aws-docs-audio"
 BASE_URL = "https://aws-audio.leva.ai.kr"
@@ -72,7 +72,7 @@ def local_sha256(path: Path) -> str:
 
 
 def head_status(url: str, timeout: float = 15.0) -> int:
-    req = urllib.request.Request(url, method="HEAD")
+    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.status

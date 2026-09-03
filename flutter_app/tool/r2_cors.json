@@ -1,9 +1,13 @@
-[
-  {
-    "AllowedOrigins": ["https://velkaressiablutkrone.github.io", "http://localhost:8124"],
-    "AllowedMethods": ["GET", "HEAD"],
-    "AllowedHeaders": ["Range"],
-    "ExposeHeaders": ["Content-Length", "Content-Range", "Accept-Ranges", "ETag"],
-    "MaxAgeSeconds": 86400
-  }
-]
+{
+  "rules": [
+    {
+      "allowed": {
+        "origins": ["https://velkaressiablutkrone.github.io", "http://localhost:8124"],
+        "methods": ["GET", "HEAD"],
+        "headers": ["Range"]
+      },
+      "exposeHeaders": ["Content-Length", "Content-Range", "Accept-Ranges", "ETag"],
+      "maxAgeSeconds": 86400
+    }
+  ]
+}
