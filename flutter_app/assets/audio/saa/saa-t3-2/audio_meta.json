@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t3-2",
+  "generatedAt": "2026-09-03T01:39:51Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t3-2.md",
+    "sha256": "996b4f2caaef1dd504eeb37d9a9bcd341972d08e1261287321c5f1ef9e062b81"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t3-2/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 15731661,
+    "sha256": "82066b459fb1d65c5e97750f8d4fed3d6bb7d2b9e43c494584199c1ade3f9467",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 19456,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.055865768371718354
+    },
+    {
+      "anchor": "storage-types",
+      "title": "1) 스토리지 3대 유형",
+      "level": 3,
+      "fraction": 0.0573669949837062
+    },
+    {
+      "anchor": "ebs-basics",
+      "title": "2) 이비에스(Amazon Elastic Block Store)란",
+      "level": 3,
+      "fraction": 0.1259199589908828
+    },
+    {
+      "anchor": "ebs-volume-types",
+      "title": "3) 이비에스 볼륨 타입 비교 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.19153454651971732
+    },
+    {
+      "anchor": "ebs-features",
+      "title": "4) 이비에스 스냅샷·암호화·Multi-Attach",
+      "level": 3,
+      "fraction": 0.29638241001794147
+    },
+    {
+      "anchor": "instance-store",
+      "title": "5) 인스턴스 스토어(임시 블록 스토리지)",
+      "level": 3,
+      "fraction": 0.39148145435904946
+    },
+    {
+      "anchor": "efs",
+      "title": "6) Amazon 이에프에스(Elastic File System)",
+      "level": 3,
+      "fraction": 0.4577185017026107
+    },
+    {
+      "anchor": "fsx-family",
+      "title": "7) Amazon FSx 패밀리",
+      "level": 3,
+      "fraction": 0.586412068397349
+    },
+    {
+      "anchor": "efs-vs-fsx",
+      "title": "8) 이에프에스 대 FSx 선택 기준 비교",
+      "level": 3,
+      "fraction": 0.7056863534839442
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8098751418842225
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

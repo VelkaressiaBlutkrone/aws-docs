@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t2-5",
+  "generatedAt": "2026-09-03T01:21:03Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t2-5.md",
+    "sha256": "a44b13dca4e88d7bb9421ef3e585fecfe9108600995d0eba8805e9e70fb661a5"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t2-5/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 10700013,
+    "sha256": "51430c09d12dce2260bfbc16a9abb5f8f67039568e4ba54f31ff08cc9498f721",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 13406,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.09361793760598638
+    },
+    {
+      "anchor": "rto-rpo",
+      "title": "1) 알티오와 알피오 정의",
+      "level": 3,
+      "fraction": 0.09586552178945384
+    },
+    {
+      "anchor": "dr-strategies",
+      "title": "2) 4가지 디알 전략 비교 (단골 출제)",
+      "level": 3,
+      "fraction": 0.17132782428467605
+    },
+    {
+      "anchor": "pilot-light-vs-warm-standby",
+      "title": "3) Pilot Light 대 Warm Standby — 핵심 구분 (혼동 주의)",
+      "level": 3,
+      "fraction": 0.27088099916556757
+    },
+    {
+      "anchor": "cross-region-replication",
+      "title": "4) 리전 간 데이터 복제 수단",
+      "level": 3,
+      "fraction": 0.3647142741783532
+    },
+    {
+      "anchor": "route53-failover",
+      "title": "5) 페일오버 자동화 — Route 53",
+      "level": 3,
+      "fraction": 0.4508088611342898
+    },
+    {
+      "anchor": "sync-vs-async-replication",
+      "title": "6) 동기 복제 대 비동기 복제",
+      "level": 3,
+      "fraction": 0.5601329708486985
+    },
+    {
+      "anchor": "aws-drs",
+      "title": "7) 에이더블유에스 Elastic Disaster Recovery (디알에스)",
+      "level": 3,
+      "fraction": 0.6494307017307744
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8002610966057441
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

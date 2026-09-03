@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t1-3",
+  "generatedAt": "2026-07-19T07:43:19Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t1-3.md",
+    "sha256": "77265fe424800c86095c9fe5b3fa6a32787c7f481d28a73ae0ee592b4aef4edf"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t1-3/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 16341789,
+    "sha256": "299aaa9cefef18b44e61e33160b46acf3280aefc65d523e164c99c8fe5a77bbf",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 20529,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.05370061948696257
+    },
+    {
+      "anchor": "vpc-subnet",
+      "title": "1) 브이피씨와 서브넷 — 격리된 가상 네트워크",
+      "level": 3,
+      "fraction": 0.05517223147487245
+    },
+    {
+      "anchor": "network-components",
+      "title": "2) 핵심 네트워크 컴포넌트",
+      "level": 3,
+      "fraction": 0.19571558234418096
+    },
+    {
+      "anchor": "sg-vs-nacl",
+      "title": "3) 보안 그룹(Security Group) 대 네트워크 에이씨엘(나클) 단골 출제",
+      "level": 3,
+      "fraction": 0.287167014742556
+    },
+    {
+      "anchor": "vpc-endpoints",
+      "title": "4) 브이피씨 엔드포인트 — 인터넷 없이 에이더블유에스 서비스 접근",
+      "level": 3,
+      "fraction": 0.44076982049858565
+    },
+    {
+      "anchor": "peering-tgw",
+      "title": "5) 브이피씨 피어링 대 Transit Gateway — 연결 아키텍처 보안 관점",
+      "level": 3,
+      "fraction": 0.5679805429983874
+    },
+    {
+      "anchor": "flow-logs",
+      "title": "6) 브이피씨 Flow Logs — 트래픽 가시성",
+      "level": 3,
+      "fraction": 0.715635216467955
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8502833073377922
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

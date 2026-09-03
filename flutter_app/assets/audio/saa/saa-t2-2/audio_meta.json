@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t2-2",
+  "generatedAt": "2026-09-03T00:52:43Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t2-2.md",
+    "sha256": "71ef3ade16a645cbec19fda390b2ecbbce196769753804f1a840a360ffd3d699"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t2-2/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 13766205,
+    "sha256": "81c561a03768141dd4bdc3b97838cf245204108e3f761f49884256601d009317",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 17159,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.1186149903237617
+    },
+    {
+      "anchor": "lambda",
+      "title": "1) 에이더블유에스 Lambda",
+      "level": 3,
+      "fraction": 0.12036194361629793
+    },
+    {
+      "anchor": "api-gateway",
+      "title": "2) Amazon 에이피아이 Gateway",
+      "level": 3,
+      "fraction": 0.33516397301114076
+    },
+    {
+      "anchor": "containers",
+      "title": "3) 컨테이너 — 이씨에스 대 이케이에스, 이씨투 대 Fargate",
+      "level": 3,
+      "fraction": 0.477357602385062
+    },
+    {
+      "anchor": "compute-selection",
+      "title": "4) 컴퓨팅 선택 기준 — Lambda 대 Fargate 대 이씨에스/이케이에스 이씨투 대 이씨투",
+      "level": 3,
+      "fraction": 0.6698153669124954
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8203567132172185
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

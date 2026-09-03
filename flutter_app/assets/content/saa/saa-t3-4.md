@@ -11,11 +11,25 @@ sources:
   - title: Amazon ECS — What is Amazon Elastic Container Service (공식)
     url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
   - title: AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)
-    url: https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
+    url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
+  - title: Amazon EKS — Simplify compute management with AWS Fargate (공식)
+    url: https://docs.aws.amazon.com/eks/latest/userguide/fargate.html
   - title: Amazon EKS — What is Amazon EKS (공식)
     url: https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
   - title: AWS Batch — What is AWS Batch (공식)
     url: https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html
+  - title: AWS Lambda — Lambda quotas (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+  - title: AWS Lambda — Configure function memory (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html
+  - title: AWS Lambda — Provisioned concurrency (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html
+  - title: Amazon EC2 — Placement strategies (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html
+  - title: Amazon EC2 — Elastic Fabric Adapter (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
+  - title: Amazon FSx for Lustre — What is FSx for Lustre (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 lastVerified: 2026-06-12
@@ -65,9 +79,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 컴퓨팅 선택 결정 트리
+### 1) 컴퓨팅 선택 결정 트리 {#compute-decision-tree}
 
 워크로드 선택의 첫 질문은 세 가지입니다: **상태를 유지하는가(Stateful)**, **얼마나 오래 실행되는가(Duration)**, **어떤 확장 패턴인가(Scale pattern)**.
 
@@ -94,7 +108,7 @@ lastVerified: 2026-06-12
 > 반대로 EC2처럼 인프라를 직접 제어하면 패치·스케일링·복구 모두 사용자가 책임지므로 운영 부담이 커집니다.
 > 이 트레이드오프는 서비스가 아니라 "어느 계층까지 AWS가 추상화하느냐"의 차이이며, 워크로드의 특수 요구사항이 없을수록 스펙트럼 오른쪽이 유리할 수 있습니다.
 
-### 2) 컴퓨팅 옵션 비교표 (★ 시험 핵심)
+### 2) 컴퓨팅 옵션 비교표 (★ 시험 핵심) {#compute-options}
 
 | 옵션 | 상태 유지 | 최대 실행 시간 | 확장 방식 | 운영 부담 | 대표 시나리오 |
 |---|---|---|---|---|---|
@@ -110,7 +124,7 @@ lastVerified: 2026-06-12
 > 반면 EC2·ECS·EKS는 프로세스가 지속 실행 중인 서버 위에서 동작하므로 메모리·디스크·연결 상태를 유지할 수 있습니다.
 > 실행 환경이 재생성되면 이전 인스턴스에 기록된 인메모리 상태는 사라지고, 다음 요청이 해당 상태를 가정하고 동작하면 데이터 불일치가 발생합니다.
 
-### 3) 컨테이너: ECS vs EKS vs Fargate
+### 3) 컨테이너: ECS vs EKS vs Fargate {#containers-ecs-eks-fargate}
 
 **Amazon ECS(Elastic Container Service)**
 
@@ -120,7 +134,7 @@ ECS는 세 계층으로 구성됩니다.
 
 | 계층 | 역할 |
 |---|---|
-| **Capacity** | 컨테이너가 실행되는 인프라 (EC2 인스턴스 또는 Fargate) |
+| **Capacity** | 컨테이너가 실행되는 인프라 (ECS Managed Instances, EC2 인스턴스, Fargate, ECS Anywhere 등) |
 | **Controller** | 스케줄러 — 태스크·서비스를 배포·관리 |
 | **Provisioning** | AWS 콘솔·CLI·SDK·CDK — 스케줄러와 인터페이스 |
 
@@ -137,7 +151,7 @@ ECS의 핵심 리소스:
 
 > 공식 정의: "Kubernetes 클러스터 운영의 복잡성을 제거하는 완전 관리형 Kubernetes 서비스."
 
-EKS는 Kubernetes 컨트롤 플레인을 AWS가 관리합니다. ECS와의 핵심 차이는 **표준성**입니다.
+EKS는 표준 모드에서 Kubernetes 컨트롤 플레인을 AWS가 관리합니다. 현행 문서에는 노드 데이터 플레인까지 자동화하는 **EKS Auto Mode**도 별도 접근으로 소개됩니다. ECS와의 핵심 차이는 여전히 **표준성**입니다.
 
 | 비교 항목 | ECS | EKS |
 |---|---|---|
@@ -169,7 +183,7 @@ Fargate는 독립 서비스가 아니라 **ECS 또는 EKS의 실행 모드(시�
 > ECS와 EKS는 스케줄링 계층을 담당하고, Fargate는 그 아래 인프라 계층을 대체하는 역할이므로 오케스트레이터 없이 단독으로 존재할 수 없는 구조입니다.
 > 이 분리 덕분에 사용자는 ECS를 유지하면서 인프라 관리 부담만 Fargate로 위임하거나, EKS와 Fargate를 조합해 Kubernetes 호환성과 노드 무관리를 동시에 얻을 수 있습니다.
 
-### 4) Lambda 성능 튜닝
+### 4) Lambda 성능 튜닝 {#lambda-performance}
 
 Lambda는 saa-t2-2에서 이벤트 기반 패턴으로 다뤘습니다. 여기서는 **성능·동시성·제약** 관점만 정리합니다.
 
@@ -189,7 +203,7 @@ Lambda는 saa-t2-2에서 이벤트 기반 패턴으로 다뤘습니다. 여기�
 > 이 구조는 성능·비용 튜닝을 1차원 탐색으로 단순화합니다 — 메모리를 올리면 처리 속도가 빨라져 실행 시간이 줄고, 메모리 단가 상승과 실행 시간 단축이 상쇄되는 최적점을 단일 파라미터 조정으로 찾을 수 있습니다.
 > 사용자 관점에서는 "메모리 하나만 조정하면 연산 자원이 함께 따라온다"는 예측 가능성이 운영 단순성으로 이어집니다.
 
-### 5) AWS Batch — 배치 워크로드 전용 오케스트레이터
+### 5) AWS Batch — 배치 워크로드 전용 오케스트레이터 {#aws-batch}
 
 > 공식 정의: "AWS Batch는 완전 관리형 서비스로, 배치 컴퓨팅 워크로드를 효율적으로 실행·스케줄링합니다. 인프라 프로비저닝을 자동화해 용량 제약 없이 결과를 빠르게 도출합니다."
 
@@ -219,7 +233,7 @@ AWS Batch는 제출된 Job 수·규모에 따라 컴퓨팅 리소스를 자동 �
 > Job Queue가 작업을 버퍼링하는 동안 Compute Environment가 실제 대기 중인 Job 수에 맞춰 인스턴스를 프로비저닝하고, 작업 완료 후 다시 축소하는 방식으로 이 낭비를 줄입니다.
 > 이 탄력적 프로비저닝 구조가 Spot 인스턴스와 결합될 때 비용 효과가 커지는 이유이기도 합니다.
 
-### 6) HPC — 고성능 컴퓨팅 아키텍처
+### 6) HPC — 고성능 컴퓨팅 아키텍처 {#hpc-architecture}
 
 HPC(High Performance Computing)는 노드 간 초저지연 통신이 필요한 과학연산·ML 분산 학습에 사용됩니다.
 
@@ -259,7 +273,7 @@ HPC(High Performance Computing)는 노드 간 초저지연 통신이 필요한 �
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Lambda로 15분 이상 작업을 처리한다."** → Lambda의 최대 실행 시간은 15분입니다. 초과 시 강제 종료됩니다. 장시간 배치 작업은 AWS Batch, 장기 실행 컨테이너는 ECS/Fargate를 사용합니다.
    *(원리: §4 본문 — Lambda의 최대 실행 시간은 15분으로 고정되어 있어, 이를 초과하는 작업은 강제 종료된다.)*
@@ -327,10 +341,17 @@ Lambda의 실행 환경은 요청 처리 후 언제든 종료·재생성될 수 
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12 · 출처 보강: 2026-08-06)
 
 1. Amazon ECS — What is Amazon Elastic Container Service — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
-2. AWS Fargate — Architect for AWS Fargate for Amazon ECS — https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
-3. Amazon EKS — What is Amazon EKS — https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
-4. AWS Batch — What is AWS Batch — https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+2. AWS Fargate — Architect for AWS Fargate for Amazon ECS — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
+3. Amazon EKS — Simplify compute management with AWS Fargate — https://docs.aws.amazon.com/eks/latest/userguide/fargate.html
+4. Amazon EKS — What is Amazon EKS — https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
+5. AWS Batch — What is AWS Batch — https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html
+6. AWS Lambda — Lambda quotas — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+7. AWS Lambda — Configure function memory — https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html
+8. AWS Lambda — Provisioned concurrency — https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html
+9. EC2 배치 전략 상세 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html
+10. Elastic Fabric Adapter — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
+11. Amazon FSx for Lustre — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
+12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

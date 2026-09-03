@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t3-4",
+  "generatedAt": "2026-09-03T01:56:58Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t3-4.md",
+    "sha256": "55adf46f7b60d2e6e09c68b6ae5ac081981a04bd41ea7059bb1208bbf06badbd"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t3-4/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 14002653,
+    "sha256": "fb29bb916ce3dd2c61a68335e98ad4fe5f54b35f5bcb10353bfc32f46de238e2",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 17635,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.07271923239096229
+    },
+    {
+      "anchor": "compute-decision-tree",
+      "title": "1) 컴퓨팅 선택 결정 트리",
+      "level": 3,
+      "fraction": 0.07448810637925893
+    },
+    {
+      "anchor": "compute-options",
+      "title": "2) 컴퓨팅 옵션 비교표 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.15286362187233254
+    },
+    {
+      "anchor": "containers-ecs-eks-fargate",
+      "title": "3) 컨테이너: 이씨에스 대 이케이에스 대 Fargate",
+      "level": 3,
+      "fraction": 0.20575501095262091
+    },
+    {
+      "anchor": "lambda-performance",
+      "title": "4) Lambda 성능 튜닝",
+      "level": 3,
+      "fraction": 0.4877567181217026
+    },
+    {
+      "anchor": "aws-batch",
+      "title": "5) 에이더블유에스 Batch — 배치 워크로드 전용 오케스트레이터",
+      "level": 3,
+      "fraction": 0.5666258728673241
+    },
+    {
+      "anchor": "hpc-architecture",
+      "title": "6) 에이치피씨 — 고성능 컴퓨팅 아키텍처",
+      "level": 3,
+      "fraction": 0.6844719602620402
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8101545707909541
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

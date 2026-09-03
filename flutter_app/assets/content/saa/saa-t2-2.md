@@ -73,9 +73,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) AWS Lambda
+### 1) AWS Lambda {#lambda}
 
 > 공식 정의: "서버를 관리하지 않고 코드를 실행하는 컴퓨팅 서비스. 수요에 따라 자동 확장되며 사용한 만큼만 과금합니다."
 
@@ -129,7 +129,7 @@ S3 업로드 → (비동기) Lambda(이미지 리사이즈) → 결과 S3 저장
 
 ---
 
-### 2) Amazon API Gateway
+### 2) Amazon API Gateway {#api-gateway}
 
 > 공식 정의: "어떤 규모에서든 REST, HTTP, WebSocket API를 생성·게시·유지·모니터링·보안 처리하는 AWS 서비스."
 
@@ -172,7 +172,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 ---
 
-### 3) 컨테이너 — ECS vs EKS, EC2 vs Fargate
+### 3) 컨테이너 — ECS vs EKS, EC2 vs Fargate {#containers}
 
 컨테이너를 AWS에서 실행할 때 두 가지 축을 결정합니다.
 
@@ -208,7 +208,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 ---
 
-### 4) 컴퓨팅 선택 기준 — Lambda vs Fargate vs ECS/EKS EC2 vs EC2
+### 4) 컴퓨팅 선택 기준 — Lambda vs Fargate vs ECS/EKS EC2 vs EC2 {#compute-selection}
 
 | 요구사항 | 권장 컴퓨팅 | 이유 |
 |---|---|---|
@@ -253,7 +253,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Lambda는 15분 이상도 실행할 수 있다."** → 일반 Lambda 함수의 최대 실행 시간은 15분입니다. 이를 초과하는 워크로드는 Fargate, AWS Batch, Step Functions(Durable Lambda) 등을 사용해야 합니다.
    *(원리: §4 — Lambda는 단발 이벤트 처리에 최적화된 실행 모델이라 장시간 유지 프로세스는 Fargate·Batch 같은 다른 계층이 담당한다.)*

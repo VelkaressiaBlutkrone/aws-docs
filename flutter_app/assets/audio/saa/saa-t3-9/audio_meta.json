@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t3-9",
+  "generatedAt": "2026-09-03T03:15:11Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t3-9.md",
+    "sha256": "f09d2b26e91e3d3cd0587f9e80195ff99ff4afb5c5f1ba94127cdb876c1620bf"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t3-9/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 16561821,
+    "sha256": "0374ca208ad44c20a36cb1a878b895e2cae36664ff37f76951c806475f2b9f8f",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 21161,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.06277769565860063
+    },
+    {
+      "anchor": "pipeline-overview",
+      "title": "1) 데이터 파이프라인 전체 구조",
+      "level": 3,
+      "fraction": 0.06441235033779966
+    },
+    {
+      "anchor": "kinesis-family",
+      "title": "2) Kinesis 패밀리 4종",
+      "level": 3,
+      "fraction": 0.08354128807310732
+    },
+    {
+      "anchor": "kinesis-comparison",
+      "title": "3) Kinesis 4종 비교표 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.2497978419080246
+    },
+    {
+      "anchor": "glue",
+      "title": "4) 에이더블유에스 Glue (서버리스 이티엘)",
+      "level": 3,
+      "fraction": 0.3126624872836039
+    },
+    {
+      "anchor": "athena",
+      "title": "5) Amazon Athena (서버리스 에스쓰리 쿼리)",
+      "level": 3,
+      "fraction": 0.40157726786599307
+    },
+    {
+      "anchor": "emr",
+      "title": "6) Amazon 이엠알 (관리형 빅데이터 클러스터)",
+      "level": 3,
+      "fraction": 0.48144058291090264
+    },
+    {
+      "anchor": "lake-formation",
+      "title": "7) 에이더블유에스 Lake Formation (데이터 레이크 거버넌스)",
+      "level": 3,
+      "fraction": 0.5564781886634959
+    },
+    {
+      "anchor": "quicksight",
+      "title": "8) Amazon QuickSight (비아이 시각화)",
+      "level": 3,
+      "fraction": 0.6385326365762679
+    },
+    {
+      "anchor": "batch-vs-streaming",
+      "title": "9) 배치 대 스트리밍 수집 비교",
+      "level": 3,
+      "fraction": 0.6647479762453373
+    },
+    {
+      "anchor": "data-transfer",
+      "title": "10) 데이터 전송 서비스",
+      "level": 3,
+      "fraction": 0.7104661374327227
+    },
+    {
+      "anchor": "analytics-selection",
+      "title": "11) 분석 서비스 선택 비교표 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.773791616308289
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8558199793059673
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}
