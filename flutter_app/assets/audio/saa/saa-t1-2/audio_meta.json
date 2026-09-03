@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "docId": "saa-t1-2",
-  "generatedAt": "2026-07-19T07:03:34Z",
+  "generatedAt": "2026-09-03T04:09:59Z",
   "mode": "synthesized",
-  "reviewStatus": "needs_human_review",
+  "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/saa/saa-t1-2.md",
     "sha256": "2079ba0615c46e5ba25bacc98bdd8b8cdfcdcb949987c22e8fa27a4b6b605a1f"
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/saa/saa-t1-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 12364797,
-    "sha256": "de6bf6366636f75601ebbfaaefde7dad4484a4019a6e5238f3d38831e61e2dfd",
+    "sizeBytes": 12359469,
+    "sha256": "39fc6341079c7328243ee225a8ae446d20261f45582017a8a0ecffae6212ee49",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,53 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 15547,
+    "speechChars": 15543,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "needs_human_review"
+    "reviewStatus": "approved"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.08109430138709339
+      "fraction": 0.08112926152914035
     },
     {
       "anchor": "organizations",
       "title": "1) 에이더블유에스 Organizations",
       "level": 3,
-      "fraction": 0.08336536109849411
+      "fraction": 0.0834013003052688
     },
     {
       "anchor": "multi-account-strategy",
       "title": "2) 다계정 전략 — 계정 분리 모범 사례",
       "level": 3,
-      "fraction": 0.22268031631785518
+      "fraction": 0.22277631486961993
     },
     {
       "anchor": "scp",
       "title": "3) 에스씨피(서비스 제어 정책)",
       "level": 3,
-      "fraction": 0.3226185900795453
+      "fraction": 0.3227576725001748
     },
     {
       "anchor": "control-tower",
       "title": "4) 에이더블유에스 Control Tower",
       "level": 3,
-      "fraction": 0.5382062122217952
+      "fraction": 0.5380653881108289
     },
     {
       "anchor": "identity-center",
       "title": "5) 아이엠 Identity Center — 다계정 거버넌스 관점",
       "level": 3,
-      "fraction": 0.6877584058325472
+      "fraction": 0.6876820543891129
     },
     {
       "anchor": "common-pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8295074712041275
+      "fraction": 0.8294922284622376
     }
   ],
   "generator": {

@@ -3,7 +3,7 @@
   "docId": "saa-t2-4",
   "generatedAt": "2026-09-03T01:13:41Z",
   "mode": "synthesized",
-  "reviewStatus": "needs_human_review",
+  "reviewStatus": "approved",
   "source": {
     "asset": "assets/content/saa/saa-t2-4.md",
     "sha256": "53517e038edd7f760534b8b45af4de6173682cc3e61a2ce8040eee2d7f3868a6"
@@ -28,7 +28,7 @@
     "speechChars": 18566,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "needs_human_review"
+    "reviewStatus": "approved"
   },
   "chapters": [
     {
