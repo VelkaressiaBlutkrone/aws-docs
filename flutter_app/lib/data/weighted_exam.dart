@@ -1,4 +1,5 @@
 import '../models/attempt_record.dart';
+import 'content_index.dart';
 import 'task_score_report.dart';
 
 /// 약점 집중 모의고사 활성 게이트: 비-review 응시 최소 횟수.
@@ -32,6 +33,11 @@ Map<String, int> weightByTaskFromReport(
 int nonReviewAttemptCount(String certId, List<AttemptRecord> history) =>
     history.where((r) => r.certId == certId && r.mode != 'review').length;
 
-/// 약점 집중 모의고사 활성 여부(응시 3회+).
-bool weightedExamUnlocked(String certId, List<AttemptRecord> history) =>
+/// 약점 집중 모의고사 응시 이력 게이트(응시 3회+).
+bool weightedExamAttemptUnlocked(String certId, List<AttemptRecord> history) =>
     nonReviewAttemptCount(certId, history) >= kWeightedExamMinAttempts;
+
+/// 약점 집중 모의고사 최종 활성 여부: 응시 이력 + 도메인별 weighted capacity.
+bool certWeightedExamUnlocked(String certId, List<AttemptRecord> history) =>
+    certExamHasWeightedCapacity(certId) &&
+    weightedExamAttemptUnlocked(certId, history);

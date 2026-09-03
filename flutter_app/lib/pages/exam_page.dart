@@ -73,7 +73,7 @@ class ExamView extends StatefulWidget {
   /// 방금 끝난 응시(justFinished)를 반영 → 약점 모의고사 잠금해제 stale 방지.
   /// null이면 기존 동작(onExit "학습문서로" 버튼)을 유지(하위호환).
   final Widget Function(BuildContext context, AttemptRecord? justFinished)?
-      resultsActionsBuilder;
+  resultsActionsBuilder;
 
   /// 오답 복기 카드의 개념 라벨 → 해당 Task 학습문서 이동. null이면 링크 숨김.
   final void Function(String taskId, String section)? onOpenStudy;
@@ -105,8 +105,10 @@ class _ExamViewState extends State<ExamView> {
   @override
   void initState() {
     super.initState();
-    assert(widget.bank.questions.isNotEmpty,
-        'ExamView requires a non-empty question bank');
+    assert(
+      widget.bank.questions.isNotEmpty,
+      'ExamView requires a non-empty question bank',
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (_remainingSec <= 0) {
@@ -131,20 +133,19 @@ class _ExamViewState extends State<ExamView> {
   }
 
   ExamSession _session() => ExamSession(
-        examId: 'exam:${widget.taskId}',
-        certId: widget.certId,
-        taskId: widget.taskId,
-        startedAtIso: widget.startedAt.toIso8601String(),
-        durationSec: widget.durationSec,
-        index: _index,
-        picked: _picked,
-        flagged: _flagged.toList()..sort(),
-        bankFingerprint:
-            widget.sessionFingerprint ?? bankFingerprint(widget.bank),
-        questionIds: _qs.map((q) => q.id).toList(),
-        optionOrders: widget.optionOrders,
-        submitted: _submitted,
-      );
+    examId: 'exam:${widget.taskId}',
+    certId: widget.certId,
+    taskId: widget.taskId,
+    startedAtIso: widget.startedAt.toIso8601String(),
+    durationSec: widget.durationSec,
+    index: _index,
+    picked: _picked,
+    flagged: _flagged.toList()..sort(),
+    bankFingerprint: widget.sessionFingerprint ?? bankFingerprint(widget.bank),
+    questionIds: _qs.map((q) => q.id).toList(),
+    optionOrders: widget.optionOrders,
+    submitted: _submitted,
+  );
 
   void _persist() => widget.onChanged?.call(_session());
 
@@ -223,11 +224,13 @@ class _ExamViewState extends State<ExamView> {
         content: Text('플래그한 문항 ${_flagged.length}개가 남아 있습니다. 그래도 제출할까요?'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('계속 풀기')),
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('계속 풀기'),
+          ),
           TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('제출하기')),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('제출하기'),
+          ),
         ],
       ),
     );
@@ -252,22 +255,28 @@ class _ExamViewState extends State<ExamView> {
     final low = remaining <= (widget.durationSec * 0.1).ceil();
 
     return SingleChildScrollView(
-      padding:
-          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
+      padding: EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.timer_outlined,
-                  size: 18, color: low ? c.warning : c.textMuted),
+              Icon(
+                Icons.timer_outlined,
+                size: 18,
+                color: low ? c.warning : c.textMuted,
+              ),
               const SizedBox(width: Gap.xs),
-              Text(_mmss(remaining),
-                  style: TextStyle(
-                      fontFamily: AppTheme.monoFamily,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: low ? c.warning : c.text)),
+              Text(
+                _mmss(remaining),
+                style: TextStyle(
+                  fontFamily: AppTheme.monoFamily,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  fontVariations: Wght.w700,
+                  color: low ? c.warning : c.text,
+                ),
+              ),
               const Spacer(),
               Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
             ],
@@ -275,8 +284,10 @@ class _ExamViewState extends State<ExamView> {
           if (widget.restored)
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
-              child: Text('이전 진행을 복원했습니다.',
-                  style: t.labelSmall?.copyWith(color: c.textMuted)),
+              child: Text(
+                '이전 진행을 복원했습니다.',
+                style: t.labelSmall?.copyWith(color: c.textMuted),
+              ),
             ),
           const SizedBox(height: Gap.md),
           Wrap(
@@ -308,9 +319,10 @@ class _ExamViewState extends State<ExamView> {
             children: [
               if (_index > 0)
                 _SecondaryButton(
-                    icon: Icons.chevron_left,
-                    label: '이전',
-                    onTap: () => _go(_index - 1)),
+                  icon: Icons.chevron_left,
+                  label: '이전',
+                  onTap: () => _go(_index - 1),
+                ),
               const SizedBox(width: Gap.sm),
               _SecondaryButton(
                 icon: _flagged.contains(_index)
@@ -339,8 +351,7 @@ class _ExamViewState extends State<ExamView> {
 
   Widget _results(BuildContext context) {
     return SingleChildScrollView(
-      padding:
-          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
+      padding: EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -405,12 +416,16 @@ class _GridChip extends StatelessWidget {
             clipBehavior: Clip.none,
             alignment: Alignment.center,
             children: [
-              Text(label,
-                  style: TextStyle(
-                      fontFamily: AppTheme.monoFamily,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: answered ? c.accentStrong : c.textMuted)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontFamily: AppTheme.monoFamily,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  fontVariations: Wght.w700,
+                  color: answered ? c.accentStrong : c.textMuted,
+                ),
+              ),
               if (flagged)
                 Positioned(
                   top: -2,
@@ -459,11 +474,15 @@ class _SecondaryButton extends StatelessWidget {
             children: [
               Icon(icon, size: 16, color: active ? c.warning : c.textMuted),
               const SizedBox(width: Gap.xs),
-              Text(label,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: active ? c.warning : c.textMuted)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  fontVariations: Wght.w700,
+                  color: active ? c.warning : c.textMuted,
+                ),
+              ),
             ],
           ),
         ),
@@ -490,15 +509,18 @@ class _ExamPageState extends State<ExamPage> {
 
   Future<_ExamLoad> _load() async {
     final qRaw = await rootBundle.loadString(widget.entry.questionsAsset);
-    final fullBank =
-        QuestionBank.fromJson(json.decode(qRaw) as Map<String, dynamic>);
+    final fullBank = QuestionBank.fromJson(
+      json.decode(qRaw) as Map<String, dynamic>,
+    );
 
     ExamOverview? overview;
     try {
-      final gRaw = await rootBundle
-          .loadString('assets/exam_guides/${widget.entry.certCode}.json');
-      overview =
-          ExamGuide.fromJson(json.decode(gRaw) as Map<String, dynamic>).overview;
+      final gRaw = await rootBundle.loadString(
+        'assets/exam_guides/${widget.entry.certCode}.json',
+      );
+      overview = ExamGuide.fromJson(
+        json.decode(gRaw) as Map<String, dynamic>,
+      ).overview;
     } catch (_) {
       overview = null; // 메타 없으면 폴백 페이스(examDurationSec)
     }
@@ -513,8 +535,10 @@ class _ExamPageState extends State<ExamPage> {
     if (existing != null &&
         !existing.submitted &&
         existing.bankFingerprint == fp) {
-      final ordered =
-          restoreOrdered(existing.questionIds, indexById(fullBank.questions));
+      final ordered = restoreOrdered(
+        existing.questionIds,
+        indexById(fullBank.questions),
+      );
       if (ordered != null &&
           ordersCoverQuestions(ordered, existing.optionOrders)) {
         restoredQs = applyOptionOrders(ordered, existing.optionOrders);
@@ -588,8 +612,7 @@ class _ExamPageState extends State<ExamPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(
-                child: LoadingView(label: '시험을 준비하고 있습니다…'));
+            return const Center(child: LoadingView(label: '시험을 준비하고 있습니다…'));
           }
           if (snap.hasError) {
             return Center(
@@ -634,9 +657,11 @@ class _ExamPageState extends State<ExamPage> {
                   // history는 onFinished의 add 직후라 현재 응시를 포함한다.
                   final history = _history.all();
                   final code = widget.entry.certCode;
-                  final unlocked = weightedExamUnlocked(code, history);
+                  final hasCapacity = certExamHasWeightedCapacity(code);
+                  final unlocked = certWeightedExamUnlocked(code, history);
                   return PrescriptionHub(
-                    allCorrect: justFinished != null &&
+                    allCorrect:
+                        justFinished != null &&
                         justFinished.wrongQuestionIds.isEmpty,
                     onReview: () => ctx.push('/cert/$code/review'),
                     onReport: () => ctx.push('/cert/$code/report'),
@@ -644,10 +669,12 @@ class _ExamPageState extends State<ExamPage> {
                         ? () => ctx.push('/cert/$code/exam/weak')
                         : null,
                     weightedAttemptCount: nonReviewAttemptCount(code, history),
+                    weightedLockedNote: hasCapacity ? null : '검증 문항 준비 중',
                   );
                 },
                 onOpenStudy: (taskId, section) => context.push(
-                    studyDeepLink(widget.entry.certCode, taskId, section)),
+                  studyDeepLink(widget.entry.certCode, taskId, section),
+                ),
                 onExit: () => context.pop(),
               ),
             ),
