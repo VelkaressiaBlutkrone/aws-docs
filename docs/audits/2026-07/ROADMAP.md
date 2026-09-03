@@ -104,7 +104,7 @@
 |---|---|---|
 | **의존성 업그레이드** go_router 16→17(ShellRoute 미사용→영향0)·Firebase 트리오 마이너 | DEP-001~004 | S |
 | Flutter SDK: 업그레이드 불요(현 SDK가 최신 요구 충족) | DEP (07-deps) | — |
-| **174MB 오디오 자산 전략**: mp3 별도 호스팅/CDN·SW 캐시(반복방문 재다운로드) — 현재 preload=metadata라 초기로드 무영향 | PLAY-105 | L |
+| **174MB 오디오 자산 전략**: mp3 별도 호스팅/CDN·SW 캐시(반복방문 재다운로드) — 현재 preload=metadata라 초기로드 무영향. **→ 2026-09-03 완료: Cloudflare R2 분리 호스팅**(`aws-audio.leva.ai.kr`, 불변 키, spec `2026-09-03-audio-r2-hosting-design`) | PLAY-105 | L |
 | **기계 게이트 스크립트화**: fontWeight↔fontVariations Wght 1:1 게이트 테스트, 문항 correct 범위 불변식 | CODE-W-002, CODE-C-009 | S |
 | 테스트 갭 보강: watch 트리거·mergeLww 결손·resolvePresented 3분기·reset_dialog | TEST-006·007·009·013 | M |
 | 문서 아카이브: docs/superpowers 완료 스펙/플랜 29건 이동 | HYG-012 | S |

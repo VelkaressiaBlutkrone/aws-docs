@@ -19,5 +19,22 @@ void main() {
         'assets/assets/audio/clf/clf-t4-3/lecture.mp3',
       );
     });
+    test('절대 URL(http/https)은 assets/ 접두어 없이 그대로 통과한다', () {
+      expect(
+        webAudioAssetUrl(
+          'https://aws-audio.leva.ai.kr/clf/clf-t1-1/1a2b3c4d/lecture.mp3',
+        ),
+        'https://aws-audio.leva.ai.kr/clf/clf-t1-1/1a2b3c4d/lecture.mp3',
+      );
+      expect(
+        webAudioAssetUrl('http://localhost:8080/x.mp3'),
+        'http://localhost:8080/x.mp3',
+      );
+    });
+
+    test('kAudioBaseUrl 기본값은 R2 커스텀 도메인이며 끝에 슬래시가 없다', () {
+      expect(kAudioBaseUrl, 'https://aws-audio.leva.ai.kr');
+      expect(kAudioBaseUrl.endsWith('/'), isFalse);
+    });
   });
 }
