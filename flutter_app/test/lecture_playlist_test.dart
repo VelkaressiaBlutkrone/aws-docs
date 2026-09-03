@@ -204,7 +204,9 @@ void main() {
   test('openDoc: idle이면 해당 트랙 load(준비), 재생 안 함', () {
     pl.openDoc('CLF-C02', 'clf-t1-2');
     expect(pl.current?.taskId, 'clf-t1-2');
-    expect(fake.src, 'assets/audio/clf/clf-t1-2/lecture.mp3');
+    // 승인 문서는 R2 불변 키 URL(kAudioBaseUrl/{family}/{taskId}/{sha8}/lecture.mp3).
+    expect(fake.src, startsWith('https://aws-audio.leva.ai.kr/clf/clf-t1-2/'));
+    expect(fake.src, endsWith('/lecture.mp3'));
     expect(fake.playCalls, 0);
   });
 

@@ -55,6 +55,7 @@ flutter analyze                 # 정적 분석 — 0건이 게이트(2026-07-02
 - **분석 게이트:** `flutter analyze` **경고·에러 0건**. 새 항목이 보이면 머지 금지.
 - **웹 빌드(배포 산출물 검증):** `flutter build web --release --base-href /aws-docs/` — base-href는 GitHub Pages 경로라서 필수. **Git Bash에서 실행 금지**(MSYS가 `/aws-docs/`를 경로로 변형) — PowerShell로 실행한다([[flutter-build-web-powershell]]).
 - **스플래시 검증(선택):** `node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark]` — 보고서·스크린샷은 `build/verify_splash/`. gstack browse 데몬 필요. Flutter 마이너 업그레이드 시 1회 실행 권장.
+- **오디오 발행 게이트:** 강의 mp3는 번들이 아니라 R2(`https://aws-audio.leva.ai.kr`, 불변 키 `{family}/{taskId}/{sha8}/lecture.mp3`)에서 서빙된다. 승인 문서 추가·재합성 후 `py tool/publish_audio.py <docId> --verify`, 릴리스 전 `py tool/publish_audio.py --verify-all`이 전수 PASS여야 한다(wrangler 로그인 필요). 설계: `docs/superpowers/specs/2026-09-03-audio-r2-hosting-design.md`.
 - **CI·배포:** `main` 푸시 시 `.github/workflows/pages.yml`이 `pub get → build web → GitHub Pages 배포`를 자동 수행한다. 브랜치 전략상 `main`에는 PR 머지로만 들어간다. 머지 전 CI 녹색을 확인한다.
 
 ## Design System

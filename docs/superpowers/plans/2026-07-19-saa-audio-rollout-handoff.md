@@ -52,7 +52,12 @@ py tool/gen_lecture_audio.py gate --script $S --md assets/content/saa/saa-t2-2.m
 py tool/gen_lecture_audio.py verify --script $S    # ★합성 전 검사★ 음차/약어변경=실결함 수정, 사실단정=대개 양성
 py tool/gen_lecture_audio.py synthesize --script $S --out assets/audio/saa/saa-t2-2/lecture.mp3
 py tool/gen_lecture_audio.py gate --script $S --md assets/content/saa/saa-t2-2.md --audio-meta assets/audio/saa/saa-t2-2/audio_meta.json --lexicon tool/lexicon.json
-# 커밋: md+apply_audio_summary+lexicon(변경시)+assets/audio/saa/saa-t2-2/  (enrich_report/verify는 .gitignore)
+# 커밋: md+apply_audio_summary+lexicon(변경시)+assets/audio/saa/saa-t2-2/{script.json,audio_meta.json,review_checklist.md}
+#   (lecture.mp3는 git 미추적 — R2 정본. enrich_report/verify는 .gitignore)
+# 승인(청취 또는 면제) 후:
+#   audio_meta/script reviewStatus=approved, content_index audioApproved:true + audioSha8:'<audio.sha256[:8]>'
+#   py tool/publish_audio.py saa-t2-2 --verify        # R2 불변 키 발행 + 공개 URL Range 검증
+#   릴리스 전: py tool/publish_audio.py --verify-all   # approved 전수 PASS 필수
 ```
 
 ## 문서당 레시피 (t3-6부터 반복)
@@ -66,6 +71,8 @@ py tool/gen_lecture_audio.py gate --script $S --md assets/content/saa/saa-t2-2.m
 7. **커밋**(문서 단위, §5 브랜치 검증 후)
 
 ## 비자명 교훈 (겪은 함정)
+
+- **mp3는 R2에 있다(2026-09-03, 스펙 `2026-09-03-audio-r2-hosting-design.md`).** `synthesize`는 sha256을 바꾸므로 재합성 문서는 `audioSha8` 갱신 + `publish_audio.py` 재발행이 필수(동기화 테스트가 sha8 불일치를 잡음). 키는 불변이라 옛 키를 지우지 않는다. 같은 키를 지웠다 다시 올리면 엣지의 404 캐시(4h)가 남는다.
 
 - **enrich 툴체인은 소실 아님** — `gen_lecture_audio.py`(1931줄)에 서브커맨드 전부 내장·추적(generate/descaffold/connectors/enrich/verify/gate/synthesize/chapters). gitignore된 `_*.py`는 일회성 헬퍼.
 - **SAA 학습문서엔 `{#slug}` 앵커 없음**(유예됨) → 챕터 0. 앵커 추가가 필수. 앵커는 스피치 무영향(scriptText서 스트립)이나 script.json 헤딩 sourceExcerpt에서 챕터 파생(`chapters_from_segments` L941). 앵커 추가로 connectors 수 늘어 스피치 변함 → 재합성 필요.

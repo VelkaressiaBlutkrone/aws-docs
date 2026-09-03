@@ -38,3 +38,8 @@ flutter_app/assets/audio/*/*/review_notes.py
 flutter_app/assets/audio/*/*/review_notes.md
 # semgrep 플러그인 로컬 인증 캐시
 .semgrep/
+# 강의 mp3 정본은 R2(aws-audio.leva.ai.kr) + audio_meta sha256 — 로컬 사본은 발행 원본으로만 보관
+flutter_app/assets/audio/*/*/lecture.mp3
+# wrangler 로컬 상태·로그(계정별 캐시)
+.wrangler/
+flutter_app/.wrangler/
