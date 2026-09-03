@@ -3,7 +3,7 @@
 CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 작업의 세션 이관 문서.
 
 - **브랜치:** `feat/2026-07-saa-audio-pilot` (develop에서 분기, 원격 푸시됨)
-- **✅ 블로커 해소(2026-09-03):** Anthropic API 크레딧 복구 실측(HTTP 200). 이전 블로커 기록: **Anthropic API 크레딧 소진.** `enrich`(강사체 변환) 호출이 400 `credit balance too low`로 실패. `flutter_app/tool/.env`의 `ANTHROPIC_API_KEY` 계정 충전 전에는 재개 불가.
+- **⛔ 블로커 재발(2026-09-03 t4-2 enrich 중):** Anthropic API 크레딧 재소진(400 `credit balance too low`). 같은 날 앞서 복구 후 t2-2~t4-1 14문서를 소화한 뒤 다시 소진됨. 충전 후 t4-2 enrich부터 재개. `enrich`(강사체 변환) 호출이 400 `credit balance too low`로 실패. `flutter_app/tool/.env`의 `ANTHROPIC_API_KEY` 계정 충전 전에는 재개 불가.
 - **사용자 결정(고정):** enrich 모델=**Opus 유지**, 영문 서비스명(Shield·Cognito 등)=**영문 그대로**(Polly 발음 수용), 청취 게이트=사람. `audioApproved` flip은 사용자 청취 후(미완).
 
 ## 진행 상태 (2026-09-03)
@@ -26,7 +26,8 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | saa-t3-8 | ✅ 완료 커밋 | 2026-09-03. 앵커 9·lexicon +8(IPsec·VGW·CGW·DX·DXGW·VIF·Gbps·ISP)·표요약 8·enrich 44세그·HARD 0·verify 3(seg017 브이씨 오타 정정·seg051 무근거 자동확장/시험빈도 삭제·seg052 양성)·synth·gate PASS. test 794·analyze 0 |
 | saa-t3-9 | ✅ 완료 커밋 | 2026-09-03. 앵커 13·lexicon +12(EMR·EMRFS·CSV·DPU·KCL·MSK·ORC·SFTP·SPICE·TBAC·LF·USD)·표요약 6·enrich 36세그·HARD 0·verify PASS·synth·gate PASS. test 794·analyze 0 |
 | saa-t4-1 | ✅ 완료 커밋 | 2026-09-03. 앵커 9·lexicon +2(CF·DLM)·표요약 8·enrich 37세그·HARD 1(seg059 NAT 냇)·verify(seg012 3축 "전송"→"검색" 사실정정·seg018 무근거 이동요금 문장/시험빈도 삭제·seg059 "낫"→"냇" 오음차)·synth·gate PASS. test 794·analyze 0 |
-| saa-t4-2 ~ t4-5 | ⬜ 대기 | |
+| saa-t4-2 | ⚠️ pre-enrich 스캐폴드 커밋 | 2026-09-03. 앵커 10·표요약 7·script gate PASS(hard 0). **enrich 미실행(크레딧 재소진 400)** |
+| saa-t4-3 ~ t4-5 | ⬜ 대기 | |
 
 **남은 완성 작업: 4개** (t4-2~t4-5 — 스캐폴드부터 전 과정).
 **다음:** `saa-t3-6`부터 문서당 레시피 전 과정(앵커→표요약→lexicon→gate→enrich→verify→synth). 20/24 완료(전부 needs_human_review, 청취 대기).
