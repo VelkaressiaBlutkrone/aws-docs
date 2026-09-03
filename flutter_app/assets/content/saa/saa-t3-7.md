@@ -68,9 +68,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) Amazon Route 53 — 관리형 DNS
+### 1) Amazon Route 53 — 관리형 DNS {#route53}
 
 > 공식 정의: **"고가용성·확장성 DNS 웹 서비스."** 도메인 등록, DNS 라우팅, 헬스 체크 세 가지 기능을 조합해 제공합니다.
 
@@ -81,7 +81,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 > Route 53은 전 세계 여러 위치의 DNS 서버 네트워크를 통해 사용자와 가까운 지점에서 이름 해석을 처리해, 리전 구분 없이 일관된 응답 속도를 제공합니다.
 > 리전 장애와도 무관하게 동작해야 DNS 자체가 가용성 병목이 되지 않으므로, 글로벌 분산 구조가 서비스의 전제 조건이 됩니다.
 
-### 2) Alias vs CNAME (★ 단골 출제)
+### 2) Alias vs CNAME (★ 단골 출제) {#alias-vs-cname}
 
 | 항목 | Alias 레코드 | CNAME 레코드 |
 |---|---|---|
@@ -98,7 +98,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 > Alias는 Route 53 전용 확장으로, 실제로 레코드 유형이 A 또는 AAAA로 동작하면서 AWS 리소스의 현재 IP를 자동으로 따라가 Zone Apex 제약을 우회합니다.
 > 이 메커니즘 덕분에 루트 도메인을 ALB·CloudFront 같은 가변 IP 리소스로 안전하게 연결할 수 있습니다.
 
-### 3) Route 53 라우팅 정책 7종 (★ 핵심 비교)
+### 3) Route 53 라우팅 정책 7종 (★ 핵심 비교) {#routing-policies}
 
 | 정책 | 동작 원리 | 대표 용도 |
 |---|---|---|
@@ -119,7 +119,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 > Route 53은 리전별로 누적된 네트워크 지연 측정 데이터를 기반으로 각 사용자 요청에 가장 낮은 지연 리전을 선택하므로, 실제 응답 속도 최적화가 목표일 때 Latency 정책이 Geolocation보다 정확합니다.
 > 반면 Geolocation은 "어떤 리소스를 사용할 수 있는가"를 지리 규칙으로 제어하는 것이 목적이므로, 두 정책은 최적화 목표 자체가 다릅니다.
 
-### 4) Route 53 헬스 체크
+### 4) Route 53 헬스 체크 {#route53-health-checks}
 
 - **엔드포인트 헬스 체크**: HTTP·HTTPS·TCP로 엔드포인트 상태를 주기적으로 점검합니다.
 - **계산형(Calculated) 헬스 체크**: 여러 하위 헬스 체크를 AND/OR 조합해 복합 상태 판별.
@@ -135,7 +135,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 > 헬스 체크가 없으면 Route 53은 Primary의 상태를 알 방법이 없어 장애가 발생해도 계속 Primary 주소를 반환하므로, 페일오버 자체가 동작하지 않습니다.
 > 반면 Weighted·Latency·Geolocation 정책은 헬스 체크 없이도 라우팅이 동작하되, 연동 시 비정상 레코드를 응답에서 자동 제외하는 부가 가용성을 얻습니다.
 
-### 5) Amazon CloudFront — 글로벌 CDN
+### 5) Amazon CloudFront — 글로벌 CDN {#cloudfront}
 
 > 공식 정의: **"정적·동적 웹 콘텐츠를 전 세계 사용자에게 빠르게 배포하는 웹 서비스."** 전 세계의 엣지 로케이션에 콘텐츠를 캐싱해 지연을 줄이고 오리진 부하를 경감합니다.
 
@@ -177,7 +177,7 @@ OAC를 사용하면 S3 버킷 정책에 CloudFront 서비스 주체(Service Prin
 > 엣지 → 오리진 구간은 AWS 내부 네트워크를 통해 전달되므로, 사용자가 오리진에 직접 연결하는 것보다 경로가 안정적일 수 있습니다.
 > 이 구조 덕분에 CloudFront는 정적 콘텐츠의 캐시 히트 성능뿐 아니라, 동적 콘텐츠 전달의 경로 안정성도 함께 높이는 역할을 합니다.
 
-### 6) AWS Global Accelerator — 네트워크 경로 최적화
+### 6) AWS Global Accelerator — 네트워크 경로 최적화 {#global-accelerator}
 
 > 공식 정의: **"가속기를 생성해 글로벌 및 로컬 사용자의 애플리케이션 성능을 개선하는 서비스."** AWS 글로벌 네트워크를 통해 트래픽을 사용자와 가장 가까운 리전 엔드포인트로 라우팅합니다.
 
@@ -194,7 +194,7 @@ OAC를 사용하면 S3 버킷 정책에 CloudFront 서비스 주체(Service Prin
 > 두 개의 Anycast IP가 변하지 않으므로 클라이언트 방화벽·화이트리스트를 한 번만 설정하면 되고, 엔드포인트나 리전이 바뀌어도 IP를 재등록할 필요가 없습니다.
 > Global Accelerator는 이 Anycast 특성을 활용해 진입 IP 고정과 가장 가까운 엣지 진입이라는 두 목표를 동시에 달성합니다.
 
-### 7) CloudFront vs Global Accelerator 비교 (★ 단골 출제)
+### 7) CloudFront vs Global Accelerator 비교 (★ 단골 출제) {#cloudfront-vs-global-accelerator}
 
 | 항목 | Amazon CloudFront | AWS Global Accelerator |
 |---|---|---|
@@ -213,7 +213,7 @@ OAC를 사용하면 S3 버킷 정책에 CloudFront 서비스 주체(Service Prin
 > Global Accelerator는 데이터를 저장하지 않고 패킷을 최적 경로로 오리진까지 전달만 하므로, 캐시 불가 콘텐츠나 상태 기반 프로토콜(TCP 게임·VoIP)에도 적용할 수 있습니다.
 > 결국 "콘텐츠를 엣지에서 끊을 수 있는가"가 두 서비스의 역할 분기점이며, HTTP가 아닌 프로토콜과 고정 IP 요구는 자동으로 Global Accelerator 쪽을 가리킵니다.
 
-### 8) 로드 밸런서 성능 관점
+### 8) 로드 밸런서 성능 관점 {#load-balancer-performance}
 
 AWS ELB(Elastic Load Balancing)는 세 가지 유형이 있으며, 시험에서는 성능·프로토콜 기준으로 선택 문제가 출제됩니다.
 
@@ -261,7 +261,7 @@ AWS ELB(Elastic Load Balancing)는 세 가지 유형이 있으며, 시험에서�
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Geolocation은 가장 가까운 리전으로 보낸다."** — 아닙니다. Geolocation은 사용자 IP의 **지리적 위치(국가·대륙)** 로만 결정하며, 가장 빠른 경로를 보장하지 않습니다. 네트워크 지연 기준으로 라우팅하려면 **Latency 정책**을 사용해야 합니다.
    *(원리: §3 — Latency는 실측 지연으로 라우팅하고 Geolocation은 지리 규칙으로 접근 가능 리소스를 제어하므로 최적화 목표 자체가 다르다.)*

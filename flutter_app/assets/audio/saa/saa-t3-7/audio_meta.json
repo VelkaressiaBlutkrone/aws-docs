@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t3-7",
+  "generatedAt": "2026-09-03T02:50:01Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t3-7.md",
+    "sha256": "0be2750afa203981f68f13cc15e69a3ed7b1dafdb44e1b30bcbc9b7cb5b8d465"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t3-7/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 14720205,
+    "sha256": "64aca139fd22341af3cdf4dfa2dc1f78ed6da7c833c16a6607aa1d15d82bcbb5",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 18603,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.07242222657014283
+    },
+    {
+      "anchor": "route53",
+      "title": "1) Amazon Route 53 — 관리형 디엔에스",
+      "level": 3,
+      "fraction": 0.07407552338094306
+    },
+    {
+      "anchor": "alias-vs-cname",
+      "title": "2) Alias 대 씨네임 (단골 출제)",
+      "level": 3,
+      "fraction": 0.14074545098806496
+    },
+    {
+      "anchor": "routing-policies",
+      "title": "3) Route 53 라우팅 정책 7종 (핵심 비교)",
+      "level": 3,
+      "fraction": 0.20215222070045
+    },
+    {
+      "anchor": "route53-health-checks",
+      "title": "4) Route 53 헬스 체크",
+      "level": 3,
+      "fraction": 0.30509684993152025
+    },
+    {
+      "anchor": "cloudfront",
+      "title": "5) Amazon CloudFront — 글로벌 씨디엔",
+      "level": 3,
+      "fraction": 0.3829583251809822
+    },
+    {
+      "anchor": "global-accelerator",
+      "title": "6) 에이더블유에스 Global Accelerator — 네트워크 경로 최적화",
+      "level": 3,
+      "fraction": 0.4972510271962434
+    },
+    {
+      "anchor": "cloudfront-vs-global-accelerator",
+      "title": "7) CloudFront 대 Global Accelerator 비교 (단골 출제)",
+      "level": 3,
+      "fraction": 0.5759146937976912
+    },
+    {
+      "anchor": "load-balancer-performance",
+      "title": "8) 로드 밸런서 성능 관점",
+      "level": 3,
+      "fraction": 0.6518978673449423
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8129720211308942
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}
