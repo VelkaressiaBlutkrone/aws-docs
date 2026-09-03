@@ -69,9 +69,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) VPC 피어링 — 1:1 직접 연결, 전이 불가
+### 1) VPC 피어링 — 1:1 직접 연결, 전이 불가 {#vpc-peering}
 
 > 공식 정의: 두 VPC 사이의 네트워킹 연결로, 프라이빗 IPv4 또는 IPv6 주소를 사용해 인스턴스 간 트래픽을 라우팅합니다.
 
@@ -98,7 +98,7 @@ VPC 수가 늘어날수록 필요한 피어링 쌍은 n(n-1)/2로 증가합니�
 > 전이 라우팅을 허용하면 중간 VPC가 경로를 제어하기 어려워지고, 네트워크 관리자가 의도하지 않은 경로로 트래픽이 흐를 수 있기 때문에 각 연결은 명시적으로 쌍마다 설정해야 합니다.
 > 이 비전이 특성이 VPC 수가 많아질수록 피어링 관리 부담이 급격히 증가하는 근본 이유이며, 그래서 Transit Gateway가 등장했습니다.
 
-### 2) Transit Gateway — 허브-스포크, 전이 라우팅
+### 2) Transit Gateway — 허브-스포크, 전이 라우팅 {#transit-gateway}
 
 > 공식 정의: VPC와 온프레미스 네트워크를 상호 연결하는 네트워크 전송 허브.
 
@@ -127,7 +127,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 > 이는 TGW가 허브-스포크 전이 라우팅을 위해 각 어태치먼트의 CIDR을 고유한 경로로 등록해야 하는 구조이기 때문입니다. CIDR이 겹치면 어느 어태치먼트로 트래픽을 보내야 하는지 결정할 수 없으므로 중복 경로 자체가 허용되지 않습니다.
 > 따라서 TGW 기반 허브 설계에서는 모든 연결 VPC의 CIDR이 겹치지 않도록 사전에 주소 계획을 수립하는 것이 전제입니다. CIDR이 겹치는 환경에서 서비스를 노출해야 한다면 PrivateLink(§7)처럼 IP 공간을 격리하는 별도 패턴이 필요합니다.
 
-### 3) Site-to-Site VPN — 인터넷 위 IPsec 터널
+### 3) Site-to-Site VPN — 인터넷 위 IPsec 터널 {#site-to-site-vpn}
 
 > 공식 정의: 온프레미스 장비와 VPC 사이의 보안 연결. IPsec VPN 연결을 지원합니다.
 
@@ -154,7 +154,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 > 2개의 터널은 서로 다른 AWS 엔드포인트로 각각 연결되어 있어, 하나가 장애를 일으키면 온프레미스 장비가 자동으로 다른 터널로 트래픽을 넘길 수 있습니다.
 > 이 중복 구조가 VPN 연결의 기본 가용성을 높이는 메커니즘이며, 두 터널을 동시에 활성화하면 부하 분산도 가능합니다.
 
-### 4) Direct Connect (DX) — 전용 물리 회선
+### 4) Direct Connect (DX) — 전용 물리 회선 {#direct-connect}
 
 > 공식 정의: 표준 이더넷 광섬유 케이블로 내부 네트워크를 Direct Connect 위치에 직접 연결. 인터넷 서비스 공급자를 우회합니다.
 
@@ -178,7 +178,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 > 그러나 물리적 격리는 전송 계층 암호화와 다르며, 내부 위협이나 DX 위치(교환 시설)에서의 트래픽 접근 가능성을 배제하지 않습니다.
 > 암호화가 필요한 규정 환경에서는 DX 위에 IPsec VPN 터널을 얹는 패턴으로 물리 회선의 낮은 지연과 전송 암호화를 함께 확보할 수 있습니다.
 
-### 5) Direct Connect Gateway — 단일 DX로 다중 리전 접근
+### 5) Direct Connect Gateway — 단일 DX로 다중 리전 접근 {#direct-connect-gateway}
 
 > 공식 정의: Direct Connect 연결을 사용해 VPC를 연결하는 전 세계적으로 사용 가능한 리소스.
 
@@ -203,7 +203,7 @@ Direct Connect Gateway (글로벌)
 > DXGW가 글로벌 리소스이기 때문에 물리 회선 위치와 무관하게 여러 리전의 VPC를 단일 논리 엔티티에 연결할 수 있으며, 리전별로 각각 DX 연결을 구축하지 않아도 됩니다.
 > 이 설계 덕분에 온프레미스 네트워크가 단일 DX 위치에서 글로벌 멀티 리전 아키텍처에 접근하는 구성을 비교적 간단하게 만들 수 있습니다.
 
-### 6) VPN vs Direct Connect 비교 (★ 단골)
+### 6) VPN vs Direct Connect 비교 (★ 단골) {#vpn-vs-direct-connect}
 
 | 항목 | Site-to-Site VPN | Direct Connect |
 |---|---|---|
@@ -225,7 +225,7 @@ Direct Connect Gateway (글로벌)
 > DX를 기본 경로로 두고 VPN을 백업으로 구성하면, 정상 운영 시에는 DX의 안정적인 대역폭을 쓰면서 DX 장애 시에는 VPN이 자동으로 우회 경로를 제공합니다.
 > 이 조합은 두 서비스 중 어느 하나만 쓸 때보다 연결 가용성이 높아지며, 각각의 구축 시간·비용 특성도 단계적으로 활용할 수 있습니다.
 
-### 7) PrivateLink와 인터페이스 엔드포인트
+### 7) PrivateLink와 인터페이스 엔드포인트 {#privatelink}
 
 > 공식 정의: 인터넷 게이트웨이, NAT 장치, 퍼블릭 IP, Direct Connect, VPN 없이 VPC를 서비스 및 리소스에 비공개로 연결하는 고가용성·확장 가능한 기술.
 
@@ -282,7 +282,7 @@ Direct Connect Gateway (글로벌)
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"지금 당장 연결이 필요하다" → Direct Connect 선택.** Direct Connect 구축에는 수 주의 리드타임이 걸립니다. 즉시성이 요구되면 **Site-to-Site VPN**이 답입니다.
    *(원리: §3 본문 — VPN은 공용 인터넷을 이용한 소프트웨어 설정만으로 즉시 연결이 가능하고, DX는 물리 회선 설치가 선행되어야 한다.)*
