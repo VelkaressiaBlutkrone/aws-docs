@@ -2,7 +2,7 @@
 
 CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 작업의 세션 이관 문서.
 
-- **브랜치:** `feat/2026-07-saa-audio-pilot` (develop에서 분기, 원격 푸시됨)
+- **브랜치:** `feat/2026-07-saa-audio-pilot` — **PR#115로 develop 머지 완료(2026-09-03)**. 이후 재개 작업은 develop에서 새 `feat/*` 브랜치로.
 - **⛔ 블로커 재발(2026-09-03 t4-2 enrich 중):** Anthropic API 크레딧 재소진(400 `credit balance too low`). 같은 날 앞서 복구 후 t2-2~t4-1 14문서를 소화한 뒤 다시 소진됨. 충전 후 t4-2 enrich부터 재개. `enrich`(강사체 변환) 호출이 400 `credit balance too low`로 실패. `flutter_app/tool/.env`의 `ANTHROPIC_API_KEY` 계정 충전 전에는 재개 불가.
 - **사용자 결정(고정):** enrich 모델=**Opus 유지**, 영문 서비스명(Shield·Cognito 등)=**영문 그대로**(Polly 발음 수용), 청취 게이트=사람. `audioApproved` flip은 사용자 청취 후(미완).
 
@@ -32,9 +32,9 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | saa-t4-5 | ⚠️ pre-enrich 스캐폴드 커밋 | 2026-09-03. 앵커 11·lexicon +3(ROI·SSM·ENV)·표요약 9·gate PASS. enrich·synth 미실행(크레딧) |
 
 **남은 완성 작업: 4개** (t4-2~t4-5 — 스캐폴드 완료, **enrich→gate→verify→synth→gate→커밋만 남음**). 24/24 스캐폴드 완료.
-**다음(크레딧 충전 후):** t4-2~t4-5 각각 `chain.sh`(gate→enrich→gate→verify) → 손보정 → synthesize → 최종 gate → 커밋. 20/24 완료(전부 needs_human_review, 청취 대기) + 4 스캐폴드.
+**다음(크레딧 충전 후):** t4-2~t4-5 각각 gate→enrich→gate→verify → 손보정 → synthesize → 최종 gate → 커밋 → (청취 또는 면제) flip. **20/24는 사용자 청취 면제 결정으로 승인 완료**(PR#116: approved+audioApproved:true+pubspec 등록, 2026-09-03) + 4 스캐폴드.
 
-모든 완료분은 `reviewStatus=needs_human_review`, content_index/pubspec 미등록 → **라이브 미노출**(번들 무영향).
+**20문서는 PR#116으로 `reviewStatus=approved`·`audioApproved:true`·pubspec 등록 → develop→main 릴리스 시 라이브 노출**(build/web 493MB, mp3는 재생 시 다운로드). t4-2~t4-5 스캐폴드는 미등록·미노출. ⚠️ 함정: 합성 이후 lexicon에 약어가 추가되면 완료 문서 gate가 HARD로 회귀(t1-2 AND→앤드 사례, 재합성으로 해소) → flip 전 전수 `gate --audio-meta` 재실행. synthesize는 meta top reviewStatus를 needs_human_review로 리셋.
 
 ## 재개 절차 (크레딧 충전 후)
 
