@@ -1,3 +1,4 @@
+import 'audio_asset_url.dart';
 import 'exam_allocation.dart';
 
 /// 어떤 (자격증 → Task)에 검증 콘텐츠가 있는지 정적 인덱스.
@@ -12,6 +13,7 @@ class ContentEntry {
     required this.questionsAsset,
     required this.questionCount,
     this.audioApproved = false,
+    this.audioSha8,
   });
 
   final String certCode;
@@ -27,6 +29,11 @@ class ContentEntry {
   /// study_doc_page가 노출 전 게이트로 검사(approved만 미니플레이어 표시).
   final bool audioApproved;
 
+  /// 승인 오디오의 audio_meta.json `audio.sha256` 앞 8자리. R2 불변 키의 버전 세그먼트.
+  /// SSOT는 audio_meta.json — content_index_test 동기화 테스트가 일치를 강제한다.
+  /// 재합성(sha 변경) 시 이 값을 갱신하고 publish_audio.py로 새 키를 발행한다.
+  final String? audioSha8;
+
   /// 이력 기록용 자격증 ID(현재는 certCode와 동일).
   String get certForHistory => certCode;
 
@@ -34,13 +41,17 @@ class ContentEntry {
   /// 학습문서만 있는(문항 0) Task의 불필요한 에셋 로드/404를 막는 가드.
   bool get hasQuestions => questionCount > 0;
 
-  /// 합친 오디오 강의("주머니 라디오") placeholder 경로.
-  /// 규약: assets/audio/{family}/{taskId}/lecture.mp3 (family = taskId 접두어).
-  /// mdAsset 규약이 cert마다 불규칙해 유도하지 않고 별도 일관 경로를 둔다.
-  /// 1A = 문서당 1개 합친 파일(iOS 잠금 중 트랙 자동전환 함정 회피).
-  /// 실제 mp3·메타 등록됨(PR #62, approved CLF 19문서).
-  String get lectureAudioSrc =>
-      'assets/audio/${taskId.split('-').first}/$taskId/lecture.mp3';
+  /// 합친 강의 mp3 위치.
+  /// - 승인(audioSha8 있음): R2 불변 키 `{base}/{family}/{taskId}/{sha8}/lecture.mp3`
+  ///   (설계: docs/superpowers/specs/2026-09-03-audio-r2-hosting-design.md).
+  /// - 미승인: 기존 번들 규약 `assets/audio/{family}/{taskId}/lecture.mp3`(노출 게이트가
+  ///   막고 있어 실제 로드되지 않는 placeholder). family = taskId 접두어.
+  String get lectureAudioSrc {
+    final family = taskId.split('-').first;
+    final sha = audioSha8;
+    if (sha != null) return '$kAudioBaseUrl/$family/$taskId/$sha/lecture.mp3';
+    return 'assets/audio/$family/$taskId/lecture.mp3';
+  }
 
   /// 오디오 메타(reviewStatus·체크섬) 경로. lectureAudioSrc와 같은 폴더.
   String get lectureAudioMetaSrc =>
@@ -113,6 +124,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t1-1.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'f2433088',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -123,6 +135,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t1-2.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: '52b97a4d',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -133,6 +146,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t1-3.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: '6a26ccb0',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -143,6 +157,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t1-4.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'b8be2740',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -153,6 +168,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t2-1.questions.json',
       questionCount: 15,
       audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
+      audioSha8: '2f9c997f',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -163,6 +179,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t2-2.questions.json',
       questionCount: 18,
       audioApproved: true,
+      audioSha8: 'abf58061',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -173,6 +190,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t2-3.questions.json',
       questionCount: 18,
       audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
+      audioSha8: 'd0945e0c',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -183,6 +201,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t2-4.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'd36f5aec',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -193,6 +212,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-1.questions.json',
       questionCount: 19,
       audioApproved: true,
+      audioSha8: '8a553ecc',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -203,6 +223,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-2.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: '987f9f07',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -213,6 +234,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-3.questions.json',
       questionCount: 16,
       audioApproved: true,
+      audioSha8: '5ec02d34',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -223,6 +245,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-4.questions.json',
       questionCount: 15,
       audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
+      audioSha8: '2782b2a7',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -233,6 +256,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-5.questions.json',
       questionCount: 17,
       audioApproved: true,
+      audioSha8: '39e8e08b',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -243,6 +267,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-6.questions.json',
       questionCount: 15,
       audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
+      audioSha8: '3429c791',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -253,6 +278,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-7.questions.json',
       questionCount: 17,
       audioApproved: true,
+      audioSha8: 'a1f7b60c',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -263,6 +289,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-8.questions.json',
       questionCount: 16,
       audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
+      audioSha8: 'dc43492d',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -273,6 +300,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t4-1.questions.json',
       questionCount: 15,
       audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
+      audioSha8: '4855ab76',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -283,6 +311,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t4-2.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'd10423fd',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -295,6 +324,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       // 2026-07 사실 정정 후 재합성 — 청취 재승인 전까지 비노출
       // (audio_meta.reviewStatus=needs_human_review와 동기화).
       audioApproved: true,
+      audioSha8: '9aa15b47',
     ),
   ],
   'SAA-C03': [
@@ -307,6 +337,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t1-1.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '1e6f1170',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -317,6 +348,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t1-2.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '39fc6341',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -327,6 +359,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t1-3.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '299aaa9c',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -337,6 +370,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t1-4.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '2a87352e',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -347,6 +381,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t1-5.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: 'fc4cae46',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -357,6 +392,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t2-1.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'e85822df',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -367,6 +403,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t2-2.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '81c561a0',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -377,6 +414,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t2-3.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '4e6410b1',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -387,6 +425,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t2-4.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '5dad5838',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -397,6 +436,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t2-5.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '51430c09',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -407,6 +447,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-1.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: 'e4735d54',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -417,6 +458,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-2.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: '82066b45',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -427,6 +469,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-3.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: 'e8787eae',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -437,6 +480,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-4.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'fb29bb91',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -447,6 +491,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-5.questions.json',
       questionCount: 15,
       audioApproved: true,
+      audioSha8: 'b0a8e6a1',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -457,6 +502,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-6.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '6b66bc50',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -467,6 +513,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-7.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '64aca139',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -477,6 +524,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-8.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '19402f50',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -487,6 +535,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-9.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '0374ca20',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -497,6 +546,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t4-1.questions.json',
       questionCount: 0,
       audioApproved: true,
+      audioSha8: '3c55e2fd',
     ),
     ContentEntry(
       certCode: 'SAA-C03',

@@ -183,29 +183,34 @@ void main() {
   // 규약 assets/audio/{family}/{taskId}/lecture.mp3 (family = taskId 접두어).
   // mdAsset은 cert마다 불규칙(clf/t1-1.md vs saa/saa-t1-1.md)이라 유도하지 않고
   // 별도 일관 규약을 둔다. 1A = 문서당 1개 합친 파일(섹션 트랙 분리 금지).
-  test('ContentEntry.lectureAudioSrc: family/taskId 규약', () {
+  test('ContentEntry.lectureAudioSrc: 승인 엔트리는 R2 불변 키, 미승인은 assets 규약', () {
+    final clf = contentFor('CLF-C02').first; // clf-t1-1, 승인
+    expect(clf.audioApproved, isTrue);
+    expect(clf.audioSha8, isNotNull);
     expect(
-      contentFor('CLF-C02').first.lectureAudioSrc,
-      'assets/audio/clf/clf-t1-1/lecture.mp3',
+      clf.lectureAudioSrc,
+      'https://aws-audio.leva.ai.kr/clf/clf-t1-1/${clf.audioSha8}/lecture.mp3',
     );
-    expect(
-      contentFor('SAA-C03').first.lectureAudioSrc,
-      'assets/audio/saa/saa-t1-1/lecture.mp3',
-    );
+    final saaPending = contentFor(
+      'SAA-C03',
+    ).firstWhere((e) => e.taskId == 'saa-t4-2');
+    expect(saaPending.audioApproved, isFalse);
+    expect(saaPending.audioSha8, isNull);
+    expect(saaPending.lectureAudioSrc, 'assets/audio/saa/saa-t4-2/lecture.mp3');
   });
 
   // ── 오디오 노출 동기화 (M2 런타임 게이트) ───────────────────────────
-  // audioApproved=true ↔ audio_meta.json reviewStatus=approved + mp3 존재.
-  // SSOT는 audio_meta.json(사람이 청취 후 approved 전환). 불일치 시 잘못된
-  // 노출/404를 빌드 전에 차단(verified 문항 동적 불변식과 동일 패턴).
-  test('동기화: audioApproved ↔ audio_meta.json reviewStatus + mp3 존재', () {
+  // audioApproved=true ↔ audio_meta.json(top+script) approved && audioSha8 == sha256[:8].
+  // SSOT는 audio_meta.json. mp3 본체는 R2에 있으므로 로컬 파일 존재는 검사하지 않는다
+  // (릴리스 전 publish_audio.py --verify-all이 공개 URL을 실측).
+  test('동기화: audioApproved ↔ audio_meta reviewStatus + audioSha8', () {
     final issues = <String>[];
     for (final entry in kContentIndex.entries) {
       for (final e in entry.value) {
         final meta = File(e.lectureAudioMetaSrc);
-        final mp3 = File(e.lectureAudioSrc);
         String? status;
         String? scriptStatus;
+        String? sha8;
         if (meta.existsSync()) {
           final m =
               json.decode(meta.readAsStringSync()) as Map<String, dynamic>;
@@ -213,23 +218,30 @@ void main() {
           scriptStatus =
               (m['script'] as Map<String, dynamic>?)?['reviewStatus']
                   as String?;
+          final sha =
+              (m['audio'] as Map<String, dynamic>?)?['sha256'] as String?;
+          sha8 = sha?.substring(0, 8);
         }
-        // spec: top-level + script.reviewStatus 둘 다 approved를 SSOT로 본다.
-        final metaApproved =
-            status == 'approved' &&
-            scriptStatus == 'approved' &&
-            mp3.existsSync();
+        final metaApproved = status == 'approved' && scriptStatus == 'approved';
         if (e.audioApproved != metaApproved) {
           issues.add(
-            '${e.certCode}/${e.taskId}: audioApproved=${e.audioApproved} != meta(approved&&mp3)=$metaApproved (top=$status, script=$scriptStatus, mp3=${mp3.existsSync()})',
+            '${e.taskId}: audioApproved=${e.audioApproved} != meta=$metaApproved (top=$status, script=$scriptStatus)',
           );
+        }
+        if (e.audioApproved && e.audioSha8 != sha8) {
+          issues.add(
+            '${e.taskId}: audioSha8=${e.audioSha8} != meta sha256[:8]=$sha8',
+          );
+        }
+        if (!e.audioApproved && e.audioSha8 != null) {
+          issues.add('${e.taskId}: 미승인 엔트리에 audioSha8 존재');
         }
       }
     }
     expect(
       issues,
       isEmpty,
-      reason: 'audioApproved ↔ audio_meta 동기화 불일치:\n${issues.join('\n')}',
+      reason: 'audioApproved/audioSha8 ↔ audio_meta 불일치:\n${issues.join('\n')}',
     );
   });
 }
