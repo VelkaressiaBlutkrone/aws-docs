@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t2-3",
+  "generatedAt": "2026-09-03T01:02:07Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t2-3.md",
+    "sha256": "c145b6a892d3a5e046d8a45a56f75c363ddcf0c530e32d559493f94d63dc70d2"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t2-3/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 13250685,
+    "sha256": "4e6410b1270058dd10cdaf85f81f66e4055b2b0b693d86410c892ace4e60ecba",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 16521,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.07193392381676901
+    },
+    {
+      "anchor": "elb-types",
+      "title": "1) Elastic Load Balancing — 종류와 선택",
+      "level": 3,
+      "fraction": 0.0738792588164973
+    },
+    {
+      "anchor": "alb-components",
+      "title": "2) 에이엘비 핵심 구성 요소",
+      "level": 3,
+      "fraction": 0.19844590555887626
+    },
+    {
+      "anchor": "nlb-features",
+      "title": "3) 엔엘비 핵심 특성",
+      "level": 3,
+      "fraction": 0.2813236972232788
+    },
+    {
+      "anchor": "cross-zone",
+      "title": "4) 교차 영역 부하 분산 (Cross-Zone Load Balancing)",
+      "level": 3,
+      "fraction": 0.339835896321252
+    },
+    {
+      "anchor": "sticky-sessions",
+      "title": "5) 고정 세션 (Sticky Session)",
+      "level": 3,
+      "fraction": 0.4275281204151497
+    },
+    {
+      "anchor": "asg-components",
+      "title": "6) Auto Scaling Group (에이에스지) — 구성 요소",
+      "level": 3,
+      "fraction": 0.49650600445579524
+    },
+    {
+      "anchor": "asg-scaling-policies",
+      "title": "7) 에이에스지 조정 정책 4종",
+      "level": 3,
+      "fraction": 0.6048253002227898
+    },
+    {
+      "anchor": "lifecycle-hooks",
+      "title": "8) 수명 주기 훅 (Lifecycle Hooks)",
+      "level": 3,
+      "fraction": 0.6740966146823888
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8176710318969733
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}
