@@ -36,3 +36,5 @@ flutter_app/assets/audio/clf/_*.py
 flutter_app/assets/audio/clf/_*.md
 flutter_app/assets/audio/clf/*/review_notes.py
 flutter_app/assets/audio/clf/*/review_notes.md
+# semgrep 플러그인 로컬 인증 캐시
+.semgrep/
