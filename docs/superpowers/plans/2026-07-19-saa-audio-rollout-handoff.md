@@ -16,7 +16,7 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | saa-t2-3 | ✅ 완료 커밋 | 2026-09-03. enrich 32세그·HARD 1(seg034 ASG 발음형 병기 손보정)·verify 1(seg038 "거의 항상"→"흔히" 완화)·synth 10챕터·gate PASS |
 | saa-t2-4 | ✅ 완료 커밋 | 2026-09-03. enrich 44세그·HARD 4(HA·AWS·AZ 발음형 병기 손보정)·verify: AZ "에이지" 오음차→"에이제트" 정정·seg037 시험빈도 단정 삭제·synth 10챕터·gate PASS |
 | saa-t2-5 | ✅ 완료 커밋 | 2026-09-03. enrich 24세그·HARD 2(TB 티비·DB 디비 발음형 병기)·verify PASS·synth·gate PASS |
-| saa-t3-1 | ✅ pre-enrich 스캐폴드 커밋 | S3 Express One Zone 반영, 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
+| saa-t3-1 | ✅ 완료 커밋 | 2026-09-03. enrich 37세그·HARD 1(seg051 ON 온 병기)·verify 2(seg020 무근거 인과문 삭제·seg026 시험빈도 단정 삭제)·synth·gate PASS |
 | saa-t3-2 | ✅ pre-enrich 스캐폴드 커밋 | EFS Archive·FSx OpenZFS 현행화, 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
 | saa-t3-3 | ✅ pre-enrich 스캐폴드 커밋 | Precision time 배치 전략 현행화, 앵커·표요약·lexicon·script gate PASS. enrich·synth 미실행(크레딧) |
 | saa-t3-4 | ✅ pre-enrich 스캐폴드 커밋 | ECS Managed Instances·EKS Auto Mode 출처 보강, 앵커·표요약·script gate PASS. enrich·synth 미실행(크레딧) |
@@ -24,7 +24,7 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | saa-t3-6 ~ t3-9 | ⬜ 대기 | 다음 스캐폴드 대상 |
 | saa-t4-1 ~ t4-5 | ⬜ 대기 | |
 
-**남은 완성 작업: 10개** (t3-1~t3-5 enrich/synth 재개 + t3-6~t3-9·t4-1~t4-5 스캐폴드부터).
+**남은 완성 작업: 9개** (t3-2~t3-5 enrich/synth 재개 + t3-6~t3-9·t4-1~t4-5 스캐폴드부터).
 **크레딧 충전 전 가능한 작업:** `saa-t3-6`부터 같은 방식으로 앵커·lexicon·표요약·script gate PASS까지 선행.
 
 모든 완료분은 `reviewStatus=needs_human_review`, content_index/pubspec 미등록 → **라이브 미노출**(번들 무영향).
