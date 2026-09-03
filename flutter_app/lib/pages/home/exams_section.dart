@@ -18,13 +18,15 @@ class ExamsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     final history = HistoryStore().all();
-    final withContent = certifications
-        .where((cert) => certExamIsBalanced(cert.code))
+    final examCerts = certifications
+        .where((cert) => certHasContent(cert.code))
         .toList();
-    // 통합 모의고사는 *전 도메인*에 검증 문항이 있어야 노출(부분 verified 편향 방지, T4).
-    // 문항 0이거나 일부 도메인만 검증된 cert는 학습문서 섹션에만 노출된다.
-    final pending =
-        certifications.where((cert) => !certHasContent(cert.code)).toList();
+    final weakCerts = examCerts
+        .where((cert) => certHasVerifiedQuestions(cert.code))
+        .toList();
+    final pending = certifications
+        .where((cert) => !certHasContent(cert.code))
+        .toList();
     return HomeBand(
       title: '학습 문서 기반 모의고사',
       meta: '검증 문항 기반',
@@ -35,22 +37,32 @@ class ExamsSection extends StatelessWidget {
             spacing: Gap.lg,
             runSpacing: Gap.lg,
             children: [
-              for (final cert in withContent)
-                ContentCertCard(
-                  cert: cert,
-                  summaryLabel:
-                      '통합 모의고사 · 검증 ${certContentSummary(cert.code).questions}문항',
-                  cta: '모의고사 →',
-                  onTap: () => context.push('/cert/${cert.code}/exam'),
-                ),
+              for (final cert in examCerts)
+                () {
+                  final ready = certExamHasWeightedCapacity(cert.code);
+                  return ContentCertCard(
+                    cert: cert,
+                    summaryLabel: ready
+                        ? '통합 모의고사 · 검증 ${certContentSummary(cert.code).questions}문항'
+                        : '통합 모의고사 · 준비 중',
+                    cta: ready ? '모의고사 →' : '검증 문항 보강 중',
+                    onTap: ready
+                        ? () => context.push('/cert/${cert.code}/exam')
+                        : null,
+                  );
+                }(),
             ],
           ),
-          if (withContent.isNotEmpty) ...[
+          if (weakCerts.isNotEmpty) ...[
             const SizedBox(height: Gap.lg),
-            for (final cert in withContent)
+            for (final cert in weakCerts)
               () {
-                final unlocked = weightedExamUnlocked(cert.code, history);
+                final hasCapacity = certExamHasWeightedCapacity(cert.code);
+                final unlocked = certWeightedExamUnlocked(cert.code, history);
                 final attempts = nonReviewAttemptCount(cert.code, history);
+                final lockedLabel = hasCapacity
+                    ? '${cert.title} · 약점 집중 모의고사 (응시 기록 $attempts/$kWeightedExamMinAttempts)'
+                    : '${cert.title} · 약점 집중 모의고사 (검증 문항 준비 중)';
                 return Padding(
                   padding: const EdgeInsets.only(bottom: Gap.sm),
                   child: FocusTap(
@@ -68,28 +80,34 @@ class ExamsSection extends StatelessWidget {
                       child: Row(
                         children: [
                           Icon(
-                              unlocked
-                                  ? Icons.bolt_outlined
-                                  : Icons.lock_outline,
-                              size: 18,
-                              color: unlocked ? c.accent : c.textFaint),
+                            unlocked ? Icons.bolt_outlined : Icons.lock_outline,
+                            size: 18,
+                            color: unlocked ? c.accent : c.textFaint,
+                          ),
                           const SizedBox(width: Gap.sm),
                           Expanded(
                             child: Text(
-                                unlocked
-                                    ? '${cert.title} · 약점 집중 모의고사'
-                                    : '${cert.title} · 약점 집중 모의고사 (응시 기록 $attempts/$kWeightedExamMinAttempts)',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                                    color: unlocked ? c.text : c.textMuted)),
+                              unlocked
+                                  ? '${cert.title} · 약점 집중 모의고사'
+                                  : lockedLabel,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                fontVariations: Wght.w700,
+                                color: unlocked ? c.text : c.textMuted,
+                              ),
+                            ),
                           ),
                           if (unlocked)
-                            Text('약점 모의고사 →',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                                    color: c.accent)),
+                            Text(
+                              '약점 모의고사 →',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                fontVariations: Wght.w700,
+                                color: c.accent,
+                              ),
+                            ),
                         ],
                       ),
                     ),

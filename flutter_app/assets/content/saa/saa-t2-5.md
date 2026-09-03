@@ -64,9 +64,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) RTO와 RPO 정의
+### 1) RTO와 RPO 정의 {#rto-rpo}
 
 | 지표 | 전체 이름 | 의미 | 핵심 질문 |
 |---|---|---|---|
@@ -80,7 +80,7 @@ lastVerified: 2026-06-12
 > RTO를 낮추려면 컴퓨팅·네트워크를 미리 준비해야 하고, RPO를 낮추려면 복제 빈도·일관성을 높여야 하므로 두 목표는 독립된 기술 투자를 요구합니다.
 > 지표를 분리해야 "앱 서버는 1시간 후 복구해도 되지만 결제 DB는 1분 데이터도 잃으면 안 된다" 같은 서비스별 비대칭 DR 설계가 가능합니다.
 
-### 2) 4가지 DR 전략 비교 (★ 단골 출제)
+### 2) 4가지 DR 전략 비교 (★ 단골 출제) {#dr-strategies}
 
 | 전략 | 상시 운영 구성 | RTO | RPO | 상대 비용 | 핵심 특징 |
 |---|---|---|---|---|---|
@@ -101,7 +101,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > Backup & Restore는 데이터만 보관하므로 재해 시 인프라 전체를 새로 만들어야 해 복구가 가장 느리고, Active-Active는 이미 전체 용량이 여러 리전에서 동작 중이라 전환 자체가 불필요합니다.
 > 이 연속성 덕분에 RTO/RPO 수치와 예산을 대입하면 과잉 투자 없이 가장 경제적인 전략을 선택할 수 있습니다.
 
-### 3) Pilot Light vs Warm Standby — 핵심 구분 (★ 혼동 주의)
+### 3) Pilot Light vs Warm Standby — 핵심 구분 (★ 혼동 주의) {#pilot-light-vs-warm-standby}
 
 공식 백서 설명: "Pilot Light는 추가 조치 없이 요청을 처리할 수 없으나, Warm Standby는 즉시(축소 용량으로) 트래픽을 처리할 수 있다."
 
@@ -118,11 +118,11 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > DB 데이터를 처음부터 전송하면 수십 GB~수 TB 규모에서 시간이 수 시간 이상 걸리므로, 앱은 꺼두되 DB 복제는 상시 유지해야만 RTO를 수십 분 수준으로 유지할 수 있습니다.
 > 이 비대칭 구성이 Pilot Light의 핵심 비용 절감 논리이며, Warm Standby처럼 앱 서버까지 상시 가동하지 않아도 되는 이유입니다.
 
-### 4) 리전 간 데이터 복제 수단
+### 4) 리전 간 데이터 복제 수단 {#cross-region-replication}
 
 | 대상 | 수단 | 특징 |
 |---|---|---|
-| S3 | Cross-Region Replication (CRR) | 비동기 연속 복제, 버전 관리 지원 |
+| S3 | Cross-Region Replication (CRR) | 비동기 연속 복제, 원본·대상 버킷 버전 관리 필수 |
 | RDS | 교차 리전 Read Replica | 비동기, 페일오버 시 Primary로 승격 필요 |
 | Aurora | **Global Database** | 전용 인프라, 보조 리전 복제 지연 **1초 미만**, 장애 시 1분 내 승격 |
 | DynamoDB | Global Tables | 멀티 리전 읽기·쓰기, 최종 일관성 |
@@ -135,7 +135,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > 이 지연이 데이터베이스 트랜잭션에 누적되면 애플리케이션 응답시간이 허용 수준을 넘어 사실상 프로덕션 사용이 어려워집니다.
 > 따라서 리전 간 복제는 비동기를 기본으로 하고, Aurora Global Database처럼 전용 복제 인프라로 지연을 최소화하는 방식이 RPO 최소화의 현실적 상한선이 됩니다.
 
-### 5) 페일오버 자동화 — Route 53
+### 5) 페일오버 자동화 — Route 53 {#route53-failover}
 
 Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 전환에 사용됩니다.
 
@@ -149,7 +149,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 > Route 53 헬스 체크는 분산된 글로벌 체커 네트워크가 엔드포인트에 직접 HTTP/TCP 요청을 보내는 데이터 플레인 동작이므로, 제어 플레인 장애와 독립적으로 동작합니다.
 > 이 설계 덕분에 가장 장애가 심각한 상황에서도 DNS 페일오버 전환이 제어 플레인 가용성에 영향받지 않습니다.
 
-### 6) 동기 복제 vs 비동기 복제
+### 6) 동기 복제 vs 비동기 복제 {#sync-vs-async-replication}
 
 | 복제 방식 | RPO | 성능 영향 | 사용 예 |
 |---|---|---|---|
@@ -163,7 +163,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 > 반면 리전 간 왕복 지연은 물리적 거리로 인해 상당히 크며, 동기 복제를 강제하면 모든 DB 쓰기가 그 지연을 기다려야 해 초당 처리량이 급감합니다.
 > 이 물리적 한계가 "같은 리전 = 동기(RDS Multi-AZ), 리전 간 = 비동기(Read Replica/Aurora Global DB)"라는 복제 방식 이분법의 근거입니다.
 
-### 7) AWS Elastic Disaster Recovery (DRS)
+### 7) AWS Elastic Disaster Recovery (DRS) {#aws-drs}
 
 > 공식 정의: "저렴한 스토리지와 최소한의 컴퓨팅으로 온프레미스 및 클라우드 기반 애플리케이션의 다운타임과 데이터 손실을 최소화하는 서비스."
 
@@ -196,7 +196,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"RTO/RPO가 엄격하면 무조건 Active-Active."** → Active-Active는 가장 비쌉니다. RTO 수 분 허용 + 비용 제약이 있으면 Warm Standby가 더 적합합니다.
    *(원리: §2 — 각 전략은 미리 가동 중인 용량 범위로 비용과 복구속도가 결정되므로, 요구 RTO/RPO를 충족하는 최소 비용 전략을 선택해야 한다.)*

@@ -44,6 +44,25 @@ class _CertExamPageState extends State<CertExamPage> {
       'exam:${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}';
 
   Future<_MockLoad> _load() async {
+    final readiness = examWeightedCapacityStatus(widget.cert.code);
+    final history = _history.all();
+    final attemptCount = nonReviewAttemptCount(widget.cert.code, history);
+    if (!readiness.ready) {
+      _store.clearCertExamSessions(widget.cert.code);
+      return _MockLoad.capacityLocked(
+        readiness: readiness,
+        weightedAttemptCount: attemptCount,
+      );
+    }
+    if (widget.weighted &&
+        !weightedExamAttemptUnlocked(widget.cert.code, history)) {
+      _store.clear(_examId);
+      return _MockLoad.attemptLocked(
+        readiness: readiness,
+        weightedAttemptCount: attemptCount,
+      );
+    }
+
     final entries = contentFor(widget.cert.code);
     final banks = <QuestionBank>[];
     final taskByQuestionId = <String, String>{};
@@ -54,8 +73,9 @@ class _CertExamPageState extends State<CertExamPage> {
       if (!e.hasQuestions) continue;
       try {
         final raw = await rootBundle.loadString(e.questionsAsset);
-        final bank =
-            QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
+        final bank = QuestionBank.fromJson(
+          json.decode(raw) as Map<String, dynamic>,
+        );
         banks.add(bank);
         taskOrder.add(e.taskId);
         taskPool[e.taskId] = bank.questions;
@@ -73,10 +93,12 @@ class _CertExamPageState extends State<CertExamPage> {
     var weights = <int, int>{};
     ExamOverview? overview;
     try {
-      final gRaw = await rootBundle
-          .loadString('assets/exam_guides/${widget.cert.code}.json');
-      final guide =
-          ExamGuide.fromJson(json.decode(gRaw) as Map<String, dynamic>);
+      final gRaw = await rootBundle.loadString(
+        'assets/exam_guides/${widget.cert.code}.json',
+      );
+      final guide = ExamGuide.fromJson(
+        json.decode(gRaw) as Map<String, dynamic>,
+      );
       overview = guide.overview;
       weights = {for (final d in guide.domains) d.no: d.weightPct};
     } catch (_) {
@@ -91,7 +113,7 @@ class _CertExamPageState extends State<CertExamPage> {
     if (widget.weighted) {
       final report = TaskScoreReport.build(
         certId: widget.cert.code,
-        history: _history.all(),
+        history: history,
         taskByQuestionId: taskByQuestionId,
         taskOrder: taskOrder,
       );
@@ -108,7 +130,9 @@ class _CertExamPageState extends State<CertExamPage> {
         _store.clear(_examId); // 개정/불일치/구버전 폐기
       } else {
         restorable = _Restorable(
-            existing, applyOptionOrders(restored, existing.optionOrders));
+          existing,
+          applyOptionOrders(restored, existing.optionOrders),
+        );
       }
     }
 
@@ -151,8 +175,14 @@ class _CertExamPageState extends State<CertExamPage> {
       unscored: d.overview?.unscoredQuestions,
       count: questions.length,
     );
-    setState(() =>
-        _running = _RunParams.fresh(questions, orders, startedAt, durationSec));
+    setState(
+      () => _running = _RunParams.fresh(
+        questions,
+        orders,
+        startedAt,
+        durationSec,
+      ),
+    );
   }
 
   void _resume(_Restorable r) {
@@ -173,8 +203,7 @@ class _CertExamPageState extends State<CertExamPage> {
         future: _future,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) {
-            return const Center(
-                child: LoadingView(label: '모의고사를 준비하고 있습니다…'));
+            return const Center(child: LoadingView(label: '모의고사를 준비하고 있습니다…'));
           }
           final data = snap.data;
           // 에러와 빈 풀을 분리 — 로드 실패를 "문항 없음"으로 가장하지 않는다(fatal 분류).
@@ -186,6 +215,12 @@ class _CertExamPageState extends State<CertExamPage> {
                 onHome: () => context.go('/'),
               ),
             );
+          }
+          if (data.capacityLocked) {
+            return Center(child: _capacityLockedView(data.readiness!));
+          }
+          if (data.attemptLocked) {
+            return Center(child: _attemptLockedView(data.weightedAttemptCount));
           }
           if (data.total == 0) {
             return const Center(
@@ -233,24 +268,44 @@ class _CertExamPageState extends State<CertExamPage> {
             // history는 onFinished의 add 직후라 현재 응시를 포함한다(잠금해제 stale 방지).
             final history = _history.all();
             final code = widget.cert.code;
-            final unlocked = weightedExamUnlocked(code, history);
+            final hasCapacity = certExamHasWeightedCapacity(code);
+            final unlocked = certWeightedExamUnlocked(code, history);
             return PrescriptionHub(
               allCorrect:
                   justFinished != null && justFinished.wrongQuestionIds.isEmpty,
               onReview: () => ctx.push('/cert/$code/review'),
               onReport: () => ctx.push('/cert/$code/report'),
-              onWeightedExam:
-                  unlocked ? () => ctx.push('/cert/$code/exam/weak') : null,
+              onWeightedExam: unlocked
+                  ? () => ctx.push('/cert/$code/exam/weak')
+                  : null,
               weightedAttemptCount: nonReviewAttemptCount(code, history),
+              weightedLockedNote: hasCapacity ? null : '검증 문항 준비 중',
             );
           },
-          onOpenStudy: (taskId, section) => context.push(
-              studyDeepLink(widget.cert.code, taskId, section)),
+          onOpenStudy: (taskId, section) =>
+              context.push(studyDeepLink(widget.cert.code, taskId, section)),
           onExit: () => context.pop(),
         ),
       ),
     );
   }
+
+  Widget _capacityLockedView(ExamReadinessStatus readiness) {
+    final mode = widget.weighted ? '약점 집중 모의고사' : '통합 모의고사';
+    final description = readiness.hasPolicy
+        ? '공식 도메인 비중을 앱의 ${readiness.practiceQuestionCount}문항 연습 세트에 적용하려면 도메인별 검증 문항이 더 필요합니다.\n${readiness.domainProgressLabel}'
+        : '이 자격증은 아직 앱의 모의고사 구성 정책이 등록되지 않았습니다.';
+    return EmptyView(
+      title: '${widget.cert.code} $mode는 아직 준비 중입니다.',
+      description: description,
+    );
+  }
+
+  Widget _attemptLockedView(int attemptCount) => EmptyView(
+    title: '${widget.cert.code} 약점 집중 모의고사는 아직 잠겨 있습니다.',
+    description:
+        '오답 복습을 제외한 응시 기록이 $kWeightedExamMinAttempts회 쌓이면 열립니다. 현재 $attemptCount/$kWeightedExamMinAttempts회입니다.',
+  );
 
   Widget _startScreen(_MockLoad d) {
     final c = context.c;
@@ -258,14 +313,15 @@ class _CertExamPageState extends State<CertExamPage> {
     final target = _targetN(d.overview);
     final cap = target < d.total ? target : d.total;
     // 실제 타이머(examDurationSec, count=cap)와 동일 기준으로 표시 — 풀 부족 시 오도 방지.
-    final mins = (examDurationSec(
-              durationMinutes: d.overview?.durationMinutes,
-              scored: d.overview?.scoredQuestions,
-              unscored: d.overview?.unscoredQuestions,
-              count: cap,
-            ) /
-            60)
-        .round();
+    final mins =
+        (examDurationSec(
+                  durationMinutes: d.overview?.durationMinutes,
+                  scored: d.overview?.scoredQuestions,
+                  unscored: d.overview?.unscoredQuestions,
+                  count: cap,
+                ) /
+                60)
+            .round();
     final pass = d.overview?.passingScore;
     final restorable = d.restorable;
     return Center(
@@ -277,44 +333,65 @@ class _CertExamPageState extends State<CertExamPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.weighted ? '약점 집중 모의고사' : '통합 모의고사',
-                  style: t.headlineSmall),
+              Text(
+                widget.weighted ? '약점 집중 모의고사' : '통합 모의고사',
+                style: t.headlineSmall,
+              ),
               const SizedBox(height: Gap.sm),
               Text(
-                  widget.weighted
-                      ? '지금까지 자주 틀린 Task가 더 자주 출제됩니다. 전체 검증 문항 풀(${d.total}개) 기반.'
-                      : '자격증 전체 검증 문항 풀(${d.total}개)에서 도메인 비중에 맞춰 출제합니다.',
-                  style: t.bodyMedium),
+                widget.weighted
+                    ? '지금까지 자주 틀린 Task가 더 자주 출제됩니다. 전체 검증 문항 풀(${d.total}개) 기반.'
+                    : '자격증 전체 검증 문항 풀(${d.total}개)에서 공식 도메인 비중을 앱의 ${_targetN(d.overview)}문항 연습 세트에 적용해 출제합니다.',
+                style: t.bodyMedium,
+              ),
               const SizedBox(height: Gap.lg),
               _infoRow(c, t, '문항 수', '$cap문항'),
               _infoRow(c, t, '제한 시간', '$mins분'),
-              if (pass != null)
-                _infoRow(c, t, '합격선', '$pass / 1000 (정답률과 다름)'),
-              _infoRow(c, t, '출제 방식',
-                  widget.weighted ? '약점 Task 가중(자주 틀린 Task 우선)' : _weightLabel(d.weights)),
+              if (pass != null) _infoRow(c, t, '합격선', '$pass / 1000 (정답률과 다름)'),
+              _infoRow(
+                c,
+                t,
+                '출제 방식',
+                widget.weighted
+                    ? '약점 Task 가중(자주 틀린 Task 우선)'
+                    : _weightLabel(d.weights),
+              ),
               const SizedBox(height: Gap.xl),
               if (restorable != null) ...[
                 SizedBox(
-                    width: 220,
-                    child: PrimaryButton(
-                        label: '이어서 풀기', onTap: () => _resume(restorable))),
+                  width: 220,
+                  child: PrimaryButton(
+                    label: '이어서 풀기',
+                    onTap: () => _resume(restorable),
+                  ),
+                ),
                 const SizedBox(height: Gap.sm),
                 InkWell(
                   onTap: () => _startFresh(d),
                   borderRadius: BorderRadius.circular(Radii.sm),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: Gap.sm, horizontal: Gap.xs),
-                    child: Text('새로 시작',
-                        style: TextStyle(
-                            color: c.textMuted, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+                      vertical: Gap.sm,
+                      horizontal: Gap.xs,
+                    ),
+                    child: Text(
+                      '새로 시작',
+                      style: TextStyle(
+                        color: c.textMuted,
+                        fontWeight: FontWeight.w700,
+                        fontVariations: Wght.w700,
+                      ),
+                    ),
                   ),
                 ),
               ] else
                 SizedBox(
-                    width: 220,
-                    child:
-                        PrimaryButton(label: '시작', onTap: () => _startFresh(d))),
+                  width: 220,
+                  child: PrimaryButton(
+                    label: '시작',
+                    onTap: () => _startFresh(d),
+                  ),
+                ),
             ],
           ),
         ),
@@ -329,9 +406,12 @@ class _CertExamPageState extends State<CertExamPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-                width: 96,
-                child: Text(label,
-                    style: t.labelLarge?.copyWith(color: c.textMuted))),
+              width: 96,
+              child: Text(
+                label,
+                style: t.labelLarge?.copyWith(color: c.textMuted),
+              ),
+            ),
             Expanded(child: Text(value, style: t.labelLarge)),
           ],
         ),
@@ -361,7 +441,37 @@ class _MockLoad {
     required this.overview,
     required this.total,
     required this.restorable,
-  });
+  }) : readiness = null,
+       capacityLocked = false,
+       attemptLocked = false,
+       weightedAttemptCount = 0;
+
+  const _MockLoad.capacityLocked({
+    required this.readiness,
+    required this.weightedAttemptCount,
+  }) : pool = const <int, List<Question>>{},
+       weights = const <int, int>{},
+       taskPool = const <String, List<Question>>{},
+       taskWeights = const <String, int>{},
+       overview = null,
+       total = 0,
+       restorable = null,
+       capacityLocked = true,
+       attemptLocked = false;
+
+  const _MockLoad.attemptLocked({
+    required this.readiness,
+    required this.weightedAttemptCount,
+  }) : pool = const <int, List<Question>>{},
+       weights = const <int, int>{},
+       taskPool = const <String, List<Question>>{},
+       taskWeights = const <String, int>{},
+       overview = null,
+       total = 0,
+       restorable = null,
+       capacityLocked = false,
+       attemptLocked = true;
+
   final Map<int, List<Question>> pool; // 도메인 모드
   final Map<int, int> weights; // 도메인 모드
   final Map<String, List<Question>> taskPool; // 약점 모드
@@ -369,6 +479,10 @@ class _MockLoad {
   final ExamOverview? overview;
   final int total;
   final _Restorable? restorable;
+  final ExamReadinessStatus? readiness;
+  final bool capacityLocked;
+  final bool attemptLocked;
+  final int weightedAttemptCount;
 }
 
 /// ExamView에 주입할 실행 파라미터(새 시험 / 복원).
@@ -383,18 +497,21 @@ class _RunParams {
   final bool restored;
 
   _RunParams.fresh(
-      this.questions, this.optionOrders, this.startedAt, this.durationSec)
-      : index = 0,
-        picked = const <int, int>{},
-        flagged = const <int>{},
-        restored = false;
+    this.questions,
+    this.optionOrders,
+    this.startedAt,
+    this.durationSec,
+  ) : index = 0,
+      picked = const <int, int>{},
+      flagged = const <int>{},
+      restored = false;
 
   _RunParams.restored(ExamSession s, this.questions)
-      : optionOrders = s.optionOrders,
-        startedAt = DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
-        durationSec = s.durationSec,
-        index = s.index,
-        picked = s.picked,
-        flagged = s.flagged.toSet(),
-        restored = true;
+    : optionOrders = s.optionOrders,
+      startedAt = DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
+      durationSec = s.durationSec,
+      index = s.index,
+      picked = s.picked,
+      flagged = s.flagged.toSet(),
+      restored = true;
 }

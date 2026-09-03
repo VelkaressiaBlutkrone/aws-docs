@@ -12,10 +12,24 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html
   - title: RDS 읽기 복제본 (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
+  - title: Amazon RDS — Multi-AZ deployments (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
+  - title: Amazon RDS — Multi-AZ DB instance failover (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.Failover.html
+  - title: AWS CLI — create-db-instance-read-replica (공식)
+    url: https://docs.aws.amazon.com/cli/latest/reference/rds/create-db-instance-read-replica.html
   - title: Amazon Aurora 개요 (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html
+  - title: Amazon Aurora — High availability (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html
+  - title: Amazon Aurora — Global Database (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html
+  - title: Amazon Aurora — Serverless v2 (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
   - title: Amazon RDS Proxy (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
+  - title: Amazon RDS — DB instance storage (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 lastVerified: 2026-06-12
@@ -34,7 +48,7 @@ lastVerified: 2026-06-12
 
 - [ ] **RDS 지원 엔진** — MySQL·PostgreSQL·MariaDB·Oracle·SQL Server 각각의 위치를 안다
 - [ ] **Multi-AZ 목적** — 동기 복제·자동 페일오버·가용성(HA)의 의미를 설명할 수 있다
-- [ ] **Read Replica 목적** — 비동기 복제·읽기 확장·교차 리전·최대 개수를 설명할 수 있다
+- [ ] **Read Replica 목적** — 비동기 복제·읽기 확장·교차 리전·엔진별 최대 개수를 설명할 수 있다
 - [ ] **Multi-AZ vs Read Replica 구분** — 목적·복제 방식·읽기 가능 여부를 비교 설명할 수 있다
 - [ ] **Aurora 차별점** — 클라우드 네이티브 스토리지(3 AZ·6벌 복제)·15개 복제본·글로벌 DB·Serverless v2를 설명할 수 있다
 - [ ] **RDS Proxy 필요 상황** — Lambda 연결 풀링·페일오버 단축 시나리오를 안다
@@ -65,9 +79,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) Amazon RDS 기본
+### 1) Amazon RDS 기본 {#rds-basics}
 
 > 공식 정의: **"AWS 클라우드에서 관계형 데이터베이스를 더 쉽게 설정·운영·확장할 수 있는 웹 서비스."** 프로비저닝·패치·백업·복구·Multi-AZ를 AWS가 관리합니다.
 
@@ -91,12 +105,12 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 > 사용자가 OS를 임의로 변경하면 AWS가 그 상태를 전제로 동작하는 Multi-AZ 복제·자동 백업·페일오버 기능이 예기치 않게 깨질 수 있습니다.
 > 이 제약이 관리 부담을 AWS에 넘기는 완전 관리형 계약의 기술적 근거이며, 이를 수용하지 못하는 경우에는 EC2에 직접 DB를 설치하는 방식을 선택하게 됩니다.
 
-### 2) Multi-AZ — 고가용성(HA) 전용
+### 2) Multi-AZ — 고가용성(HA) 전용 {#multi-az}
 
 - 다른 AZ에 **동기 복제(synchronous)** 스탠바이 인스턴스를 유지합니다.
-- 주 인스턴스 장애 시 AWS가 **자동 페일오버** — DNS 엔드포인트가 스탠바이로 전환됩니다(약 1~2분).
-- 스탠바이 인스턴스는 **읽기에 사용 불가**입니다(고가용성 전용).
-- Multi-AZ DB 클러스터(신형) 구성에서는 리더 인스턴스가 읽기를 처리할 수 있으나, 기본 인스턴스 배포에서는 스탠바이가 읽기를 제공하지 않습니다.
+- Multi-AZ DB 인스턴스 배포는 스탠바이 1개를 두며, 주 인스턴스 장애 시 AWS가 **자동 페일오버**합니다. 일반적으로 60~120초가 걸릴 수 있습니다.
+- 이 스탠바이 인스턴스는 **읽기에 사용 불가**입니다(고가용성 전용).
+- Multi-AZ DB 클러스터 배포는 스탠바이 2개를 두며, 리더 인스턴스가 읽기를 처리할 수 있고 페일오버 시간도 일반적으로 더 짧습니다.
 
 > 🧠 원리: 왜 Multi-AZ 스탠바이는 읽기를 허용하지 않을까요?
 > 동기 복제는 주 인스턴스의 모든 쓰기가 스탠바이에도 완료돼야 확인을 반환하므로, 스탠바이가 읽기 요청까지 처리하면 쓰기 확인 경로와 읽기 처리가 같은 자원을 경쟁합니다.
@@ -104,10 +118,11 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 > 이 설계는 HA 전용이라는 단일 목적에 집중해 복잡성을 낮추는 방향으로 이어집니다.
 > 읽기 확장이 필요하면 Read Replica를 별도로 추가하는 구성이 권장되는 이유입니다.
 
-### 3) Read Replica — 읽기 확장 전용
+### 3) Read Replica — 읽기 확장 전용 {#read-replica}
 
 - **비동기 복제(asynchronous)**로 주 인스턴스의 변경사항을 복제합니다.
-- RDS 최대 **5개**, Aurora 최대 **15개** Read Replica를 지원합니다.
+- RDS DB 인스턴스는 일반적으로 최대 **15개** Read Replica를 지원합니다. 단, Db2는 3개, Oracle·SQL Server는 5개처럼 엔진별 예외가 있습니다.
+- Aurora 일반 클러스터는 최대 **15개** Aurora Replica를, Aurora Global Database의 보조 클러스터는 최대 **16개** 읽기 전용 DB 인스턴스를 지원할 수 있습니다.
 - 읽기 전용 독립 엔드포인트를 가집니다. 읽기 트래픽을 분산해 주 인스턴스 부하를 낮춥니다.
 - **교차 리전(Cross-Region)** Read Replica 지원 — 글로벌 읽기 분산 및 재해 복구(DR) 활용.
 - 필요 시 독립 DB 인스턴스로 **수동 승격(promote)** 가능합니다.
@@ -118,16 +133,16 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 > 비동기 복제는 주 인스턴스가 쓰기를 완료한 직후 응답을 반환하고 복제는 이후에 전달되므로, 복제본을 여러 개 추가해도 주 인스턴스 쓰기 성능에 미치는 영향이 작습니다.
 > 다만 이 구조는 복제 지연 동안 복제본이 최신 데이터를 반영하지 못할 수 있어, 읽기 일관성이 중요한 워크로드에서는 복제 지연을 모니터링해야 합니다.
 
-### 4) Multi-AZ vs Read Replica 비교 (★ 단골 출제)
+### 4) Multi-AZ vs Read Replica 비교 (★ 단골 출제) {#multi-az-vs-read-replica}
 
 | 항목 | Multi-AZ | Read Replica |
 |---|---|---|
 | **목적** | 고가용성(HA) | 읽기 확장(Scale-out) |
 | **복제 방식** | 동기(synchronous) | 비동기(asynchronous) |
 | **스탠바이/복제본 읽기** | 불가(HA 전용) | 가능(읽기 전용) |
-| **페일오버** | 자동(약 1~2분) | 수동 승격 필요 |
+| **페일오버** | 자동(DB 인스턴스는 보통 60~120초, DB 클러스터는 더 짧음) | 수동 승격 필요 |
 | **교차 리전** | 불가 | 가능 |
-| **최대 수량** | 1개(스탠바이) | RDS 5개, Aurora 15개 |
+| **최대 수량** | DB 인스턴스 1개 스탠바이, DB 클러스터 2개 스탠바이 | RDS 일반 15개(엔진별 예외), Aurora 15개 |
 | **주요 활용** | 장애 내구성 | 읽기 트래픽 분산, 보고/분석 |
 
 > 둘은 함께 사용할 수 있습니다. Multi-AZ로 가용성을 확보하고, Read Replica로 읽기를 분산하는 구성이 프로덕션 모범 사례입니다.
@@ -137,27 +152,27 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 > Read Replica는 읽기 트래픽을 여러 인스턴스에 분산하는 것이 목표이므로, 주 인스턴스 쓰기 성능을 보호하는 비동기 복제가 적합합니다.
 > 동기와 비동기를 하나의 인스턴스로 혼용하면 각각의 보장 수준을 유지하기 어렵고, 목적별로 독립 운영해야 운용 규모와 비용을 워크로드에 맞게 조정할 수 있습니다.
 
-### 5) RDS 백업
+### 5) RDS 백업 {#rds-backup}
 
 | 종류 | 특징 |
 |---|---|
-| **자동 백업** | 보존 기간 0~35일. **특정 시점 복구(PITR)** 가능. 삭제 시 함께 삭제 |
-| **수냔샷(수동)** | 삭제 전까지 무기한 보존. **교차 리전 복사** 가능 |
+| **자동 백업** | 보존 기간 내 **특정 시점 복구(PITR)** 가능. DB 삭제 시 자동 백업 보존 여부를 선택할 수 있음 |
+| **스냅샷(수동)** | 삭제 전까지 무기한 보존. **교차 리전 복사** 가능 |
 
-### 6) RDS 스토리지 타입
+### 6) RDS 스토리지 타입 {#rds-storage}
 
 | 타입 | 적합 워크로드 |
 |---|---|
 | **범용 SSD(gp2/gp3)** | 중간 규모, 개발·테스트, 비용 효율 중시 |
 | **Provisioned IOPS SSD(io1/io2)** | I/O 집약·저지연·일관된 처리량이 필요한 프로덕션 |
-| **Magnetic** | 하위 호환 전용. 신규 사용 비권장 |
+| **Magnetic** | 사용 중단됨. 새 DB 인스턴스 생성에는 제공되지 않으며 gp3 또는 io2 사용 권장 |
 
 > 🧠 원리: 왜 I/O 집약 워크로드에서는 범용 SSD보다 Provisioned IOPS가 필요할까요?
 > 범용 SSD(gp2/gp3)는 버스트 크레딧 방식으로 순간적인 높은 처리량을 허용하지만, 크레딧이 소진되면 기준 처리량으로 되돌아가 성능이 불규칙해집니다.
 > Provisioned IOPS는 요청한 IOPS를 지속적으로 제공하도록 설계되어, 트랜잭션이 밀집된 OLTP 워크로드에서 예측 가능한 낮은 지연을 유지할 수 있습니다.
 > 따라서 피크 I/O가 간헐적이면 범용 SSD로 충분하지만, 높은 I/O가 지속된다면 Provisioned IOPS를 선택해야 성능 저하 없이 서비스가 가능합니다.
 
-### 7) Amazon Aurora — 클라우드 네이티브 관계형 DB
+### 7) Amazon Aurora — 클라우드 네이티브 관계형 DB {#aurora}
 
 Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으로 다릅니다.
 
@@ -169,7 +184,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 
 **복제 및 가용성:**
 
-- 최대 **15개** Aurora Replica — 빠른 페일오버(30초 미만), Reader/Writer 엔드포인트 분리.
+- 최대 **15개** Aurora Replica — 서비스 복구는 일반적으로 60초 미만, 자주 30초 미만이며 Reader/Writer 엔드포인트가 분리됩니다.
 - 일반 RDS Multi-AZ보다 페일오버 속도가 빠릅니다.
 
 **Aurora 고급 기능:**
@@ -177,7 +192,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 | 기능 | 설명 |
 |---|---|
 | **Aurora Serverless v2** | 트래픽에 따라 자동 미세 스케일. 간헐적·불규칙 워크로드, 운영 부담 최소화 |
-| **Aurora Global Database** | 리전 간 복제 **1초 미만**. 글로벌 저지연 읽기 및 재해 복구(RPO~1초, RTO~1분) |
+| **Aurora Global Database** | 리전 간 복제 지연이 일반적으로 **1초 미만**. 글로벌 저지연 읽기 및 재해 복구(RPO는 보통 초 단위, RTO는 분 단위) |
 | **자동 백업 + 역추적(Backtrack)** | PITR 외에도 특정 시점으로 DB를 되감기 가능(MySQL 호환만) |
 
 > 🧠 원리: 왜 Aurora는 스토리지 레이어를 컴퓨팅과 분리했을까요?
@@ -185,16 +200,16 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 > Aurora는 공유 분산 스토리지 레이어가 모든 컴퓨팅 노드에 동일하게 연결되어 있어, 복제본을 추가해도 스토리지 계층에 추가 부담이 생기지 않는 구조로 이어집니다.
 > 이 분리 덕분에 복제본을 최대 15개까지 추가하면서도 쓰기 인스턴스의 I/O 성능에 영향을 주지 않을 수 있습니다.
 
-### 8) Aurora vs RDS 비교
+### 8) Aurora vs RDS 비교 {#aurora-vs-rds}
 
 | 항목 | Amazon RDS(일반) | Amazon Aurora |
 |---|---|---|
 | **호환 엔진** | MySQL·PostgreSQL·MariaDB·Oracle·SQL Server·Db2 | MySQL·PostgreSQL |
 | **스토리지 복제** | 단일 AZ(기본), Multi-AZ는 스탠바이 1개 | 3개 AZ에 6벌 자동 복제 |
-| **최대 Read Replica** | 5개 | 15개 |
-| **페일오버 시간** | 약 1~2분 | 30초 미만 |
-| **스토리지 최대** | 64TiB | **256TiB**(구버전 128TiB) |
-| **글로벌 읽기** | 교차 리전 Read Replica | Aurora Global Database(1초 미만 복제) |
+| **최대 Read Replica** | 일반 15개(엔진별 예외) | 15개 |
+| **페일오버 시간** | DB 인스턴스 보통 60~120초, DB 클러스터는 더 짧음 | 보통 60초 미만, 자주 30초 미만 |
+| **스토리지 최대** | 일반 64TiB(Oracle·SQL Server는 추가 볼륨으로 256TiB 가능) | **256TiB** |
+| **글로벌 읽기** | 교차 리전 Read Replica | Aurora Global Database(일반적으로 1초 미만 복제) |
 | **Serverless** | 없음 | Aurora Serverless v2 |
 | **비용** | 상대적으로 낮음 | 상대적으로 높음(가용성 대비) |
 
@@ -204,7 +219,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 > 반대로 부하가 지속적으로 높고 예측 가능한 경우에는 프로비저닝 인스턴스가 더 안정적인 성능을 제공할 수 있습니다.
 > 따라서 Serverless v2는 부하가 드문드문 있거나 예측 불가한 워크로드에 더 유리한 선택이 됩니다.
 
-### 9) RDS Proxy
+### 9) RDS Proxy {#rds-proxy}
 
 > 공식 정의: **"애플리케이션이 데이터베이스 연결을 풀링·공유하여 확장 능력을 향상시킬 수 있도록 하는 완전 관리형 프록시."**
 
@@ -248,7 +263,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Multi-AZ로 읽기 부하를 분산할 수 있다."** → 불가. 기본 Multi-AZ 인스턴스 배포에서 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장은 Read Replica의 역할입니다.
    *(원리: §2 — 스탠바이를 읽기에서 격리해야 페일오버 시 완전 동기화 상태를 보장할 수 있고, 읽기 확장은 별도 Read Replica로 처리해야 한다.)*
@@ -256,7 +271,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 2. **"Read Replica는 자동 페일오버를 제공한다."** → 아닙니다. Read Replica는 비동기 복제이며, 주 인스턴스 장애 시 자동으로 승격되지 않습니다. 수동으로 승격해야 독립 인스턴스가 됩니다.
    *(원리: §3 본문 — 비동기 복제는 쓰기 성능을 위해 복제 지연을 허용하므로, 장애 시점에 복제본이 주 인스턴스와 완전히 동기화되지 않을 수 있어 자동 승격이 아닌 수동 승격이 필요하다.)*
 
-3. **"Aurora는 일반 RDS에 비해 비용만 높다."** → Aurora는 3 AZ 6벌 복제·30초 미만 페일오버·15개 복제본이라는 가용성을 제공합니다. 고가용성 요구사항을 계산하면 비용 대비 이점이 있습니다.
+3. **"Aurora는 일반 RDS에 비해 비용만 높다."** → Aurora는 3 AZ 6벌 복제·빠른 페일오버·15개 복제본이라는 가용성을 제공합니다. 고가용성 요구사항을 계산하면 비용 대비 이점이 있습니다.
    *(원리: §7 — 스토리지를 컴퓨팅과 분리한 공유 분산 구조 덕분에 복제본을 늘려도 쓰기 성능에 영향이 작고, 이 아키텍처가 15개 복제본·빠른 페일오버를 가능하게 한다.)*
 
 4. **"Aurora Serverless는 아무 때나 쓰면 된다."** → Serverless v2는 간헐적·예측 불가 워크로드에 최적입니다. 일정한 높은 트래픽에는 프로비저닝 Aurora가 더 저렴하고 안정적입니다.
@@ -278,14 +293,14 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 
 <details><summary>정답 보기</summary>
 
-**Read Replica를 추가**하고, 읽기 트래픽을 복제본 엔드포인트로 라우팅합니다. Multi-AZ는 고가용성 목적이며 스탠바이 인스턴스가 읽기를 처리하지 않으므로 읽기 확장에 사용할 수 없습니다. Read Replica는 RDS 최대 5개, Aurora 최대 15개까지 추가할 수 있습니다.
+**Read Replica를 추가**하고, 읽기 트래픽을 복제본 엔드포인트로 라우팅합니다. Multi-AZ DB 인스턴스 배포는 고가용성 목적이며 스탠바이 인스턴스가 읽기를 처리하지 않으므로 읽기 확장에 사용할 수 없습니다. Read Replica는 RDS 일반 15개(엔진별 예외), Aurora 일반 클러스터 15개까지 추가할 수 있습니다.
 </details>
 
 **Q2.** 글로벌 서비스에서 아시아 사용자의 DB 읽기 지연이 높습니다. 데이터는 미국 리전에 있습니다. 가장 적합한 AWS 솔루션은?
 
 <details><summary>정답 보기</summary>
 
-**Aurora Global Database**를 사용합니다. 리전 간 복제를 1초 미만으로 처리하며, 아시아 리전에 읽기 전용 클러스터를 배치해 로컬 읽기 지연을 크게 줄일 수 있습니다. 일반 RDS 교차 리전 Read Replica도 가능하지만, 복제 속도와 페일오버 복잡도 면에서 Aurora Global Database가 우수합니다.
+**Aurora Global Database**를 사용합니다. 리전 간 복제 지연이 일반적으로 1초 미만이며, 아시아 리전에 읽기 전용 클러스터를 배치해 로컬 읽기 지연을 크게 줄일 수 있습니다. 일반 RDS 교차 리전 Read Replica도 가능하지만, 복제 속도와 재해 복구 운영 면에서 Aurora Global Database가 우수합니다.
 </details>
 
 **Q3.** Lambda 함수가 RDS MySQL에 연결해 데이터를 조회합니다. 동시 Lambda 실행이 수백 개에 달하면 DB 연결 오류가 발생합니다. 해결 방법은?
@@ -299,7 +314,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 
 <details><summary>정답 보기</summary>
 
-**Multi-AZ 배포**를 활성화합니다. 다른 AZ에 동기 복제된 스탠바이 인스턴스를 유지하며, 주 인스턴스 장애 시 AWS가 자동으로 DNS 엔드포인트를 스탠바이로 전환합니다. 애플리케이션 연결 문자열(엔드포인트)을 변경할 필요 없이 약 1~2분 내에 전환이 완료됩니다.
+**Multi-AZ 배포**를 활성화합니다. Multi-AZ DB 인스턴스 배포는 다른 AZ에 동기 복제된 스탠바이 인스턴스를 유지하며, 주 인스턴스 장애 시 AWS가 자동으로 DNS 엔드포인트를 스탠바이로 전환합니다. 애플리케이션 연결 문자열(엔드포인트)을 변경할 필요 없이 일반적으로 60~120초 안에 전환됩니다.
 </details>
 
 **Q5 (원리).** 왜 Lambda 함수에서 RDS로 직접 연결할 때 동시 실행이 증가하면 DB 연결 오류가 발생하고, RDS Proxy는 이 문제를 어떻게 구조적으로 해결하나요?
@@ -313,10 +328,17 @@ Lambda는 동시 실행마다 별도 컨테이너에서 새 DB 연결을 생성�
 
 ### 📌 출처 (verified)
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12 · 출처 보강: 2026-08-06)
 
 1. Amazon RDS — 소개 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html
 2. RDS 읽기 복제본 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
-3. Amazon Aurora 개요 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html
-4. Amazon RDS Proxy — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+3. Amazon RDS — Multi-AZ deployments — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
+4. Amazon RDS — Multi-AZ DB instance failover — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.Failover.html
+5. AWS CLI — create-db-instance-read-replica — https://docs.aws.amazon.com/cli/latest/reference/rds/create-db-instance-read-replica.html
+6. Amazon Aurora 개요 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html
+7. Amazon Aurora — High availability — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html
+8. Amazon Aurora — Global Database — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html
+9. Amazon Aurora — Serverless v2 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
+10. Amazon RDS Proxy — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
+11. Amazon RDS — DB instance storage — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
+12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

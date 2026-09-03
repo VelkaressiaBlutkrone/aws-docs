@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t3-1",
+  "generatedAt": "2026-09-03T01:29:56Z",
+  "mode": "synthesized",
+  "reviewStatus": "approved",
+  "source": {
+    "asset": "assets/content/saa/saa-t3-1.md",
+    "sha256": "7daf76126d63fb8d3c2e022084b499a817fa926bc332c250f5d412646ad276de"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t3-1/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 12434493,
+    "sha256": "e4735d54e6f30cd33bf2dc643adb2ac4cac3e5fc30f0178b02b587df1922868d",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 15594,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "approved"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.06538733250720928
+    },
+    {
+      "anchor": "s3-basics",
+      "title": "1) 에스쓰리 기본 구조",
+      "level": 3,
+      "fraction": 0.06727506456506885
+    },
+    {
+      "anchor": "storage-classes",
+      "title": "2) 스토리지 클래스 — 접근 빈도 × 복원 시간 × 비용",
+      "level": 3,
+      "fraction": 0.1670121718183608
+    },
+    {
+      "anchor": "s3-lifecycle",
+      "title": "3) 수명 주기 정책 (에스쓰리 Lifecycle)",
+      "level": 3,
+      "fraction": 0.3161198420327284
+    },
+    {
+      "anchor": "s3-performance",
+      "title": "4) 성능 최적화",
+      "level": 3,
+      "fraction": 0.4260368049845391
+    },
+    {
+      "anchor": "s3-access-control",
+      "title": "5) 접근 제어",
+      "level": 3,
+      "fraction": 0.5248126744414977
+    },
+    {
+      "anchor": "versioning-replication",
+      "title": "6) 버전 관리와 복제",
+      "level": 3,
+      "fraction": 0.6369532236209712
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8244756621538676
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t1-5",
+  "generatedAt": "2026-07-19T10:37:15Z",
+  "mode": "synthesized",
+  "reviewStatus": "approved",
+  "source": {
+    "asset": "assets/content/saa/saa-t1-5.md",
+    "sha256": "6c521ff6a582c769132418d0e093e2c5ff0b1c4a445c826b2764a3dd7b7c78f4"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t1-5/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 14219229,
+    "sha256": "fc4cae460c50abbfedda400e7481d379bf21a1752390ad2af0f46386f80fb414",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 17650,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "approved"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.06527177160450066
+    },
+    {
+      "anchor": "encryption-states",
+      "title": "1) 두 암호화 구간",
+      "level": 3,
+      "fraction": 0.06687191744057687
+    },
+    {
+      "anchor": "kms",
+      "title": "2) 에이더블유에스 케이엠에스 (Key Management Service)",
+      "level": 3,
+      "fraction": 0.1316170587699132
+    },
+    {
+      "anchor": "cloudhsm",
+      "title": "3) 에이더블유에스 CloudHSM",
+      "level": 3,
+      "fraction": 0.29200636007332315
+    },
+    {
+      "anchor": "kms-vs-cloudhsm",
+      "title": "4) 케이엠에스 대 CloudHSM 비교 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.3854427238938232
+    },
+    {
+      "anchor": "acm",
+      "title": "5) 에이더블유에스 Certificate Manager (에이씨엠) — 전송 중 암호화",
+      "level": 3,
+      "fraction": 0.47901074528311444
+    },
+    {
+      "anchor": "macie",
+      "title": "6) Amazon Macie — 데이터 분류·거버넌스",
+      "level": 3,
+      "fraction": 0.5890967278030402
+    },
+    {
+      "anchor": "aws-backup",
+      "title": "7) 에이더블유에스 Backup — 백업·복구·규정 준수",
+      "level": 3,
+      "fraction": 0.6861486110126492
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8552982043933118
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

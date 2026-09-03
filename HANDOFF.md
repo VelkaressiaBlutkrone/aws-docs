@@ -1,14 +1,16 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-06-18 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-08-06 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
 ---
 
-## 0. 다음: ①SAA-C03 문항 사람 검수→flip ②develop→main 릴리스 (✅C-중량 Phase 2 복구·SAA 문항 드래프트 360개 완비 2026-06-18 세션3)
+## 0. 다음: SAA-C03 weighted-ready 사람 검수 batch → flip (통합/약점 모의고사 게이트)
 
 **브랜치 전략(2026-06-15~):** `main` 보호, `develop` 통합. 작업 브랜치 → develop PR → (릴리스 시) develop → main PR. 전역 규칙 `~/.claude/rules/git-branch-flow.md`.
+
+**✅ 최신 반영(2026-08-06): SAA-C03 통합/약점 모의고사 공개 조건은 이제 `verified:true` 1개가 아니라 공식 도메인 비중 기반 weighted capacity다.** 앱의 65문항 연습 세트 기준 SAA 필요/현재 = **D1 19/0 · D2 17/15 · D3 16/45 · D4 13/30** → 현재 잠김. 부족분은 D1 최소 19문항 + D2 최소 2문항이며, 추천 batch는 [2026-08-06-weighted-ready-batch.md](docs/saa-review/2026-08-06-weighted-ready-batch.md), 검수지는 [2026-08-06-weighted-ready-review-sheet.md](docs/saa-review/2026-08-06-weighted-ready-review-sheet.md). 단, `verified:true` flip은 계속 사람만 수행한다.
 
 **✅ 완료(2026-06-18 세션3) ① C-중량 Phase 2 develop 복구:** 누락 복구 소스로 `feat/concept-deeplink`(cfbb34f, 머지커밋 노이즈) 대신 **`feat/concept-report`(41e81bf, 정확히 델타 5커밋)** 선택 — develop 결과물 diff 동일(`ce0a6a8`), base=develop 직접 PR이라 스택 경합 회피. **PR#21 머지(merge `6421603`)** → develop에 `wrongSkills`·`buildConceptReport` 복구 확인, develop 실측 **519 그린**. 차기 develop→main 릴리스로 라이브 예정. 메모리 [[concept-deeplink]] [[stacked-pr-merge-order-race]].
 
@@ -17,8 +19,8 @@ _갱신: 2026-06-18 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 **⚠️ 미수행(의도적): SAA 문항 내용 정확성 딥리뷰는 안 함** — verified flip은 사람 검수 전용이라 구조·출처만 기계 검증함. 정답·해설·distractor 품질은 검수자가 확인할 몫.
 
 **다음 작업 우선순위:**
-- **① SAA-C03 문항 사람 검수 → flip** — 도메인/Task 순서로 360개 드래프트 검수·보완/수정 후 `verified:true` flip + `content_index` 해당 Task `questionCount` 실제 수로 동기화. flip 시 동기화 함정: ②`question_model_test`는 CLF t2-1만 로드(SAA엔 영향 없음)이나 SAA 노출엔 content_index questionCount가 게이트. verified true 1개라도 생기면 모의고사·약점 루프 자동 활성(코드 변경 0). 워크플로 [[question-bank-verified-workflow]].
-- **② develop→main 릴리스** — 현재 develop은 main 대비 PR#21(C-중량 Phase 2)+PR#22~25(SAA 드래프트) 미릴리스. 릴리스 시 C-중량 Phase 2 라이브, SAA 드래프트는 verified:false라 화면 변화 없음(가드 테스트만 동반). CI는 main push 시 Pages 배포.
+- **① SAA-C03 weighted-ready 사람 검수 → flip** — 공개 게이트 관점에서는 부족 도메인만 우선한다. 현재 목표는 D1 19문항 이상 + D2 2문항 이상 추가 verified 확보. flip 후 `content_index` 해당 Task `questionCount` 실제 수로 동기화한다. `verified:true` flip은 사람 전용이며, 통합/약점 모의고사는 도메인별 weighted capacity 충족 전까지 계속 잠긴다. 워크플로 [[question-bank-verified-workflow]].
+- **② 릴리스/PR 정리** — develop→main 릴리스 최신 상태는 [WORKLIST.md](WORKLIST.md) §B를 우선 기준으로 본다. CI는 main push 시 Pages 배포.
 - **점진:** 나머지 학습문서·문항의 `{#id}`/`section` 앵커 채움(C-중량은 t1-1만 시드, 나머지는 graceful 폴백=문서 최상단). 메모리 [[concept-deeplink]].
 - §0-b 선택 항목(2기기 pull 검증·개인정보 고지) · 잔여 존치 플래그(§0-y).
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).

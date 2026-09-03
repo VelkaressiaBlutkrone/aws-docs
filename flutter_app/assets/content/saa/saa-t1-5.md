@@ -67,9 +67,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 두 암호화 구간
+### 1) 두 암호화 구간 {#encryption-states}
 
 > 암호화는 **언제(at rest / in transit)** 데이터를 보호하느냐로 먼저 구분합니다.
 
@@ -87,7 +87,7 @@ lastVerified: 2026-06-12
 
 ---
 
-### 2) AWS KMS (Key Management Service)
+### 2) AWS KMS (Key Management Service) {#kms}
 
 > 공식 정의: **"데이터를 암호화·서명하는 데 사용하는 키를 생성하고 제어하기 쉽게 하는 AWS 관리형 서비스."** KMS 키는 암호화된 상태로 KMS를 절대 벗어나지 않습니다.
 
@@ -138,7 +138,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 
 ---
 
-### 3) AWS CloudHSM
+### 3) AWS CloudHSM {#cloudhsm}
 
 > 공식 정의: **"AWS 클라우드 내에서 고객이 완전히 제어하는 고가용성 전용 하드웨어 보안 모듈(HSM)."** AWS는 하드웨어를 제공하지만 키에는 접근할 수 없습니다.
 
@@ -155,7 +155,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 
 ---
 
-### 4) KMS vs CloudHSM 비교 (★ 시험 핵심)
+### 4) KMS vs CloudHSM 비교 (★ 시험 핵심) {#kms-vs-cloudhsm}
 
 | 항목 | AWS KMS | AWS CloudHSM |
 |---|---|---|
@@ -176,7 +176,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 
 ---
 
-### 5) AWS Certificate Manager (ACM) — 전송 중 암호화
+### 5) AWS Certificate Manager (ACM) — 전송 중 암호화 {#acm}
 
 > 공식 정의: **"공인·사설 SSL/TLS X.509 인증서와 키를 생성·저장·갱신하는 복잡함을 처리하는 서비스."**
 
@@ -201,7 +201,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 
 ---
 
-### 6) Amazon Macie — 데이터 분류·거버넌스
+### 6) Amazon Macie — 데이터 분류·거버넌스 {#macie}
 
 > S3에 저장된 데이터에서 **민감정보(PII — 주민번호·신용카드·여권번호 등)를 머신러닝으로 자동 탐지**하는 완전 관리형 서비스.
 
@@ -218,7 +218,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 
 ---
 
-### 7) AWS Backup — 백업·복구·규정 준수
+### 7) AWS Backup — 백업·복구·규정 준수 {#aws-backup}
 
 > 공식 정의: **"AWS 서비스 전반에 걸쳐 데이터 보호를 중앙 집중화하고 자동화하기 쉽게 하는 완전 관리형 서비스."**
 
@@ -275,7 +275,7 @@ EC2·EBS·S3·RDS·Aurora·DynamoDB·EFS·FSx·EKS·DocumentDB·Neptune·Redshif
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"CloudFront 인증서를 서울(ap-northeast-2)에서 발급했다."** → 연결 불가. CloudFront 인증서는 반드시 **us-east-1**에서 발급해야 합니다. ACM 인증서는 리전 리소스이며 CloudFront만 us-east-1을 요구하는 특수 케이스입니다.
    *(원리: §5 — CloudFront 컨트롤 플레인이 us-east-1 기점이라 다른 리전 ARN을 참조할 수 없다.)*

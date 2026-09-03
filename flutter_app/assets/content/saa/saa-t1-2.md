@@ -65,9 +65,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) AWS Organizations
+### 1) AWS Organizations {#organizations}
 
 > 공식 정의: **"AWS 계정을 중앙에서 관리하고 거버넌스하는 서비스."** 계정 생성·그룹화·정책 적용·통합 결제를 하나의 서비스로 처리합니다.
 
@@ -94,7 +94,7 @@ lastVerified: 2026-06-12
 > OU 트리 모델에서는 상위 노드(루트·OU)에 SCP 한 번만 설정하면 하위 계정 전체로 자동 상속되어 새 계정을 OU에 추가하는 순간 가드레일이 즉시 적용됩니다.
 > 또한 환경(개발·운영)·사업부·규정 요건이 다른 그룹을 별도 OU로 분리해 각각 다른 SCP를 중첩 없이 독립적으로 관리할 수 있습니다.
 
-### 2) 다계정 전략 — 계정 분리 모범 사례
+### 2) 다계정 전략 — 계정 분리 모범 사례 {#multi-account-strategy}
 
 AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입니다.
 
@@ -112,7 +112,7 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 > 로그를 별도 계정에 격리하면 워크로드 계정의 IAM 권한·SCP와 무관하게 로그 계정 자체의 접근 제어가 독립적으로 작동합니다.
 > 이 계정 경계가 로그의 무결성을 보장하는 물리적 분리선이 되며, SCP + S3 Object Lock으로 로그 계정 내부에서도 삭제를 이중으로 차단할 수 있습니다.
 
-### 3) SCP(서비스 제어 정책)
+### 3) SCP(서비스 제어 정책) {#scp}
 
 > 공식 정의: **"조직의 IAM 사용자와 역할이 수행할 수 있는 최대 권한을 중앙에서 제어하는 정책."** 권한 부여가 아닌 **상한선 설정**입니다.
 
@@ -171,7 +171,7 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 | **목적** | 조직 전체 가드레일 | 위임 시 과도 권한 방지 |
 | **권한 부여** | 불가(상한선만) | 불가(상한선만) |
 
-### 4) AWS Control Tower
+### 4) AWS Control Tower {#control-tower}
 
 > 공식 정의: **"규범적 모범 사례를 따르는 AWS 다계정 환경을 간편하게 설정하고 거버넌스하는 서비스."** AWS Organizations·Service Catalog·IAM Identity Center를 오케스트레이션합니다.
 
@@ -207,7 +207,7 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 > 탐지적 가드레일(AWS Config)은 실시간 구성 변화를 감시해 SCP가 놓친 드리프트를 발견하고, 사전예방적 가드레일(CloudFormation 훅)은 IaC 배포 단계에서 비준수 리소스가 생성되기 전에 차단합니다.
 > 세 유형이 계층을 이루면 배포 전·배포 중·배포 후 세 시점을 모두 커버해 가드레일 사각지대를 줄입니다.
 
-### 5) IAM Identity Center — 다계정 거버넌스 관점
+### 5) IAM Identity Center — 다계정 거버넌스 관점 {#identity-center}
 
 IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다계정 거버넌스 관점에 집중합니다.
 
@@ -246,7 +246,7 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"SCP에 Allow를 추가하면 그 계정의 사용자가 자동으로 접근 가능해진다."** → 그렇지 않습니다. SCP의 Allow는 최대치를 허용하는 것이고, 실제 접근은 IAM 정책의 Allow가 별도로 필요합니다.
    *(원리: §3 — SCP는 Organizations 레이어 상한선이고 IAM 정책은 계정 레이어 허용이므로 두 레이어의 교집합이 유효 권한이다.)*

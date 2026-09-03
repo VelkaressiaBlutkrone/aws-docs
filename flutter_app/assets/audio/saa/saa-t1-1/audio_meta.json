@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t1-1",
+  "generatedAt": "2026-07-19T06:22:43Z",
+  "mode": "synthesized",
+  "reviewStatus": "approved",
+  "source": {
+    "asset": "assets/content/saa/saa-t1-1.md",
+    "sha256": "494f13359ef9dfc95ce326b78ffd4edf44a141378430ea6b41c2b4e51000c543"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t1-1/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 11171181,
+    "sha256": "1e6f1170be51d5b04150f70f3a6118e75ac7799b07d6307ca1df8fa1a66af14b",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 13984,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "approved"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.08642070796916493
+    },
+    {
+      "anchor": "what-is-iam",
+      "title": "1) 아이엠이란",
+      "level": 3,
+      "fraction": 0.08825121819166215
+    },
+    {
+      "anchor": "iam-components",
+      "title": "2) 아이엠 구성요소",
+      "level": 3,
+      "fraction": 0.17132028772526878
+    },
+    {
+      "anchor": "policy-types",
+      "title": "3) 정책 유형 비교 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.2557557944672184
+    },
+    {
+      "anchor": "policy-evaluation",
+      "title": "4) 권한 평가 로직 (단골 출제)",
+      "level": 3,
+      "fraction": 0.3442777219171372
+    },
+    {
+      "anchor": "iam-roles-sts",
+      "title": "5) 아이엠 역할과 에스티에스 (에이더블유에스 Security Token Service)",
+      "level": 3,
+      "fraction": 0.458684610823214
+    },
+    {
+      "anchor": "federation",
+      "title": "6) 페더레이션 (Federation)",
+      "level": 3,
+      "fraction": 0.5636940211926676
+    },
+    {
+      "anchor": "multi-account-security",
+      "title": "7) 다계정 보안 (에이더블유에스 Organizations 그리고 에스씨피)",
+      "level": 3,
+      "fraction": 0.6720163972465001
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8307809317554851
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

@@ -70,9 +70,9 @@ lastVerified: 2026-06-12
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 데이터 파이프라인 전체 구조
+### 1) 데이터 파이프라인 전체 구조 {#pipeline-overview}
 
 ```
 [수집 계층]           [저장·처리 계층]          [분석·시각화 계층]
@@ -86,7 +86,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 2) Kinesis 패밀리 4종
+### 2) Kinesis 패밀리 4종 {#kinesis-family}
 
 #### Kinesis Data Streams (실시간 수집·처리)
 
@@ -130,7 +130,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 3) Kinesis 4종 비교표 (★ 시험 핵심)
+### 3) Kinesis 4종 비교표 (★ 시험 핵심) {#kinesis-comparison}
 
 | 서비스 | 핵심 역할 | 직접 코드 작성 | 보존·재처리 | 주요 목적지/소비 방식 |
 |---|---|---|---|---|
@@ -148,7 +148,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 4) AWS Glue (서버리스 ETL)
+### 4) AWS Glue (서버리스 ETL) {#glue}
 
 > 공식 정의: "데이터 통합을 쉽게 만드는 서버리스 데이터 통합 서비스. 데이터 발견·준비·이동·통합을 지원."
 
@@ -174,7 +174,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 5) Amazon Athena (서버리스 S3 쿼리)
+### 5) Amazon Athena (서버리스 S3 쿼리) {#athena}
 
 > 공식 정의: "표준 SQL로 S3에 저장된 데이터를 직접 분석하는 대화형 쿼리 서비스."
 
@@ -193,7 +193,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 6) Amazon EMR (관리형 빅데이터 클러스터)
+### 6) Amazon EMR (관리형 빅데이터 클러스터) {#emr}
 
 > 공식 정의: "Apache Hadoop·Spark 같은 빅데이터 프레임워크를 실행하는 관리형 클러스터 플랫폼."
 
@@ -213,7 +213,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 7) AWS Lake Formation (데이터 레이크 거버넌스)
+### 7) AWS Lake Formation (데이터 레이크 거버넌스) {#lake-formation}
 
 > 공식 정의: "분석·머신러닝을 위해 데이터 레이크를 중앙에서 거버넌스·보안·공유하는 서비스."
 
@@ -232,7 +232,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 8) Amazon QuickSight (BI 시각화)
+### 8) Amazon QuickSight (BI 시각화) {#quicksight}
 
 - 완전 관리형 **비즈니스 인텔리전스(BI)** 서비스. 대화형 대시보드·차트 생성
 - 소스: Athena, S3, Redshift, RDS, Aurora, 온프레미스 DB 등
@@ -242,7 +242,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 9) 배치 vs 스트리밍 수집 비교
+### 9) 배치 vs 스트리밍 수집 비교 {#batch-vs-streaming}
 
 | 특성 | 배치 수집 | 스트리밍 수집 |
 |---|---|---|
@@ -259,7 +259,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 10) 데이터 전송 서비스
+### 10) 데이터 전송 서비스 {#data-transfer}
 
 | 서비스 | 용도 | 핵심 특성 |
 |---|---|---|
@@ -277,7 +277,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 11) 분석 서비스 선택 비교표 (★ 시험 핵심)
+### 11) 분석 서비스 선택 비교표 (★ 시험 핵심) {#analytics-selection}
 
 | 시나리오 | 권장 서비스 | 이유 |
 |---|---|---|
@@ -304,7 +304,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Firehose는 실시간이다."** → near real-time(준실시간)입니다. 버퍼 설정(크기·시간)에 따라 수 초~수 분 지연이 발생합니다. 밀리초 단위 실시간 처리가 필요하면 Data Streams + 컨슈머를 사용합니다.
    *(원리: §2 본문 — Firehose는 버퍼 크기·시간 조건이 충족될 때 전달하는 구조로, 이 버퍼링이 밀리초 실시간이 아닌 near real-time 지연의 원인이다.)*

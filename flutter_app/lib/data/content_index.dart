@@ -1,3 +1,5 @@
+import 'exam_allocation.dart';
+
 /// 어떤 (자격증 → Task)에 검증 콘텐츠가 있는지 정적 인덱스.
 /// 새 Task를 추가하면 여기에 한 줄 등록한다(스펙 §14 작성 컨벤션).
 class ContentEntry {
@@ -43,6 +45,61 @@ class ContentEntry {
   /// 오디오 메타(reviewStatus·체크섬) 경로. lectureAudioSrc와 같은 폴더.
   String get lectureAudioMetaSrc =>
       'assets/audio/${taskId.split('-').first}/$taskId/audio_meta.json';
+}
+
+/// 통합/약점 모의고사를 열기 위한 정적 readiness 정책.
+///
+/// [practiceQuestionCount]는 실제 AWS 시험 문항 수를 가장하지 않고, 앱의 65문항
+/// 연습 세트에 공식 도메인 비중을 적용하는 기준이다.
+class ExamReadinessRequirement {
+  const ExamReadinessRequirement({
+    required this.practiceQuestionCount,
+    required this.weightByDomain,
+  });
+
+  final int practiceQuestionCount;
+  final Map<int, int> weightByDomain;
+}
+
+const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
+  'CLF-C02': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 24, 2: 30, 3: 34, 4: 12},
+  ),
+  'SAA-C03': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 30, 2: 26, 3: 24, 4: 20},
+  ),
+};
+
+class ExamReadinessStatus {
+  const ExamReadinessStatus({
+    required this.certCode,
+    required this.hasPolicy,
+    required this.practiceQuestionCount,
+    required this.requiredByDomain,
+    required this.availableByDomain,
+    required this.deficitByDomain,
+  });
+
+  final String certCode;
+  final bool hasPolicy;
+  final int practiceQuestionCount;
+  final Map<int, int> requiredByDomain;
+  final Map<int, int> availableByDomain;
+  final Map<int, int> deficitByDomain;
+
+  bool get ready => hasPolicy && deficitByDomain.isEmpty;
+
+  String get domainProgressLabel {
+    if (requiredByDomain.isEmpty) return '';
+    final keys = requiredByDomain.keys.toList()..sort();
+    return keys
+        .map(
+          (d) => 'D$d ${availableByDomain[d] ?? 0}/${requiredByDomain[d] ?? 0}',
+        )
+        .join(' · ');
+  }
 }
 
 const Map<String, List<ContentEntry>> kContentIndex = {
@@ -249,6 +306,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-1.md',
       questionsAsset: 'assets/content/saa/saa-t1-1.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -258,6 +316,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-2.md',
       questionsAsset: 'assets/content/saa/saa-t1-2.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -267,6 +326,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-3.md',
       questionsAsset: 'assets/content/saa/saa-t1-3.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -276,6 +336,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-4.md',
       questionsAsset: 'assets/content/saa/saa-t1-4.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -285,6 +346,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-5.md',
       questionsAsset: 'assets/content/saa/saa-t1-5.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -294,6 +356,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-1.md',
       questionsAsset: 'assets/content/saa/saa-t2-1.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -303,6 +366,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-2.md',
       questionsAsset: 'assets/content/saa/saa-t2-2.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -312,6 +376,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-3.md',
       questionsAsset: 'assets/content/saa/saa-t2-3.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -321,6 +386,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-4.md',
       questionsAsset: 'assets/content/saa/saa-t2-4.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -330,6 +396,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-5.md',
       questionsAsset: 'assets/content/saa/saa-t2-5.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -339,6 +406,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-1.md',
       questionsAsset: 'assets/content/saa/saa-t3-1.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -348,6 +416,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-2.md',
       questionsAsset: 'assets/content/saa/saa-t3-2.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -357,6 +426,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-3.md',
       questionsAsset: 'assets/content/saa/saa-t3-3.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -366,6 +436,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-4.md',
       questionsAsset: 'assets/content/saa/saa-t3-4.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -375,6 +446,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-5.md',
       questionsAsset: 'assets/content/saa/saa-t3-5.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -384,6 +456,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-6.md',
       questionsAsset: 'assets/content/saa/saa-t3-6.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -393,6 +466,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-7.md',
       questionsAsset: 'assets/content/saa/saa-t3-7.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -402,6 +476,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-8.md',
       questionsAsset: 'assets/content/saa/saa-t3-8.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -411,6 +486,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-9.md',
       questionsAsset: 'assets/content/saa/saa-t3-9.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -420,6 +496,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t4-1.md',
       questionsAsset: 'assets/content/saa/saa-t4-1.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -512,17 +589,73 @@ List<String> certsWithApprovedAudio() => kContentIndex.keys
 bool certHasVerifiedQuestions(String certCode) =>
     certContentSummary(certCode).questions > 0;
 
+ExamReadinessStatus examWeightedCapacityStatus(
+  String certCode, {
+  List<ContentEntry>? entries,
+}) {
+  final requirement = kExamReadinessRequirements[certCode];
+  if (requirement == null) {
+    return ExamReadinessStatus(
+      certCode: certCode,
+      hasPolicy: false,
+      practiceQuestionCount: 0,
+      requiredByDomain: const {},
+      availableByDomain: const {},
+      deficitByDomain: const {},
+    );
+  }
+
+  final requiredByDomain = allocateByWeight(
+    requirement.weightByDomain,
+    requirement.practiceQuestionCount,
+  );
+  final availableByDomain = {
+    for (final domain in requiredByDomain.keys) domain: 0,
+  };
+  for (final entry in entries ?? contentFor(certCode)) {
+    if (availableByDomain.containsKey(entry.domain)) {
+      availableByDomain[entry.domain] =
+          availableByDomain[entry.domain]! + entry.questionCount;
+    }
+  }
+
+  final deficitByDomain = <int, int>{};
+  for (final entry in requiredByDomain.entries) {
+    final available = availableByDomain[entry.key] ?? 0;
+    if (available < entry.value) {
+      deficitByDomain[entry.key] = entry.value - available;
+    }
+  }
+
+  return ExamReadinessStatus(
+    certCode: certCode,
+    hasPolicy: true,
+    practiceQuestionCount: requirement.practiceQuestionCount,
+    requiredByDomain: Map.unmodifiable(requiredByDomain),
+    availableByDomain: Map.unmodifiable(availableByDomain),
+    deficitByDomain: Map.unmodifiable(deficitByDomain),
+  );
+}
+
+/// 통합/약점 모의고사 공개 게이트: 공식 도메인 비중을 앱의 연습 세트에
+/// 적용할 만큼 도메인별 검증 문항이 있어야 한다. 정책 없는 cert는 fail closed.
+bool certExamHasWeightedCapacity(String certCode) =>
+    examWeightedCapacityStatus(certCode).ready;
+
 /// (순수) 주어진 엔트리 집합에서 *모든* 도메인에 검증 문항(questionCount>0)이
 /// 있는가. 통합 모의고사가 특정 도메인에 편향되지 않으려면 전 도메인이 채워져야 한다.
 bool examIsBalanced(List<ContentEntry> entries) {
   if (entries.isEmpty) return false;
   final allDomains = entries.map((e) => e.domain).toSet();
-  final verifiedDomains =
-      entries.where((e) => e.hasQuestions).map((e) => e.domain).toSet();
+  final verifiedDomains = entries
+      .where((e) => e.hasQuestions)
+      .map((e) => e.domain)
+      .toSet();
   return verifiedDomains.length == allDomains.length;
 }
 
 /// 통합 모의고사 공개 게이트: 자격증의 *전 도메인*에 검증 문항이 있어야 노출(T4).
 /// `certHasVerifiedQuestions`(문항 1개라도)와 달리, 부분 verified 상태에서
 /// 편향된 "통합 모의고사"가 노출되는 것을 막는다(codex#1·2 — 정직함).
-bool certExamIsBalanced(String certCode) => examIsBalanced(contentFor(certCode));
+bool certExamIsBalanced(String certCode) =>
+    examIsBalanced(contentFor(certCode));
