@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t3-6",
+  "generatedAt": "2026-09-03T02:39:03Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t3-6.md",
+    "sha256": "f128aa2c846e1e27cd1c09efbf8bbbd81effd9976efa35903febab851c275b21"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t3-6/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 13913085,
+    "sha256": "6b66bc50a2f1be1c98080951ea4184c19c94642143b5ae296e9ef30a9f3cfd34",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 17605,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.056585416343217926
+    },
+    {
+      "anchor": "dynamodb-basics",
+      "title": "1) DynamoDB 기본 구조",
+      "level": 3,
+      "fraction": 0.05830357604926771
+    },
+    {
+      "anchor": "primary-key-design",
+      "title": "2) 기본 키(Primary Key) 설계",
+      "level": 3,
+      "fraction": 0.12038503337990995
+    },
+    {
+      "anchor": "gsi-vs-lsi",
+      "title": "3) 보조 인덱스 — 지에스아이 대 엘에스아이 (단골 출제)",
+      "level": 3,
+      "fraction": 0.18539564249857682
+    },
+    {
+      "anchor": "read-consistency",
+      "title": "4) 읽기 일관성",
+      "level": 3,
+      "fraction": 0.25174144801531856
+    },
+    {
+      "anchor": "capacity-modes",
+      "title": "5) 용량 모드",
+      "level": 3,
+      "fraction": 0.30191999171971223
+    },
+    {
+      "anchor": "dax",
+      "title": "6) 댁스 (DynamoDB Accelerator)",
+      "level": 3,
+      "fraction": 0.36845210371060394
+    },
+    {
+      "anchor": "global-tables",
+      "title": "7) Global Tables",
+      "level": 3,
+      "fraction": 0.4302955027687212
+    },
+    {
+      "anchor": "dynamodb-streams",
+      "title": "8) DynamoDB Streams",
+      "level": 3,
+      "fraction": 0.4830202349531646
+    },
+    {
+      "anchor": "ttl",
+      "title": "9) 티티엘 (Time To Live)",
+      "level": 3,
+      "fraction": 0.5076333902603115
+    },
+    {
+      "anchor": "dynamodb-vs-rds",
+      "title": "10) DynamoDB 대 알디에스 선택 기준",
+      "level": 3,
+      "fraction": 0.5337473477203333
+    },
+    {
+      "anchor": "elasticache",
+      "title": "11) ElastiCache — 완전 관리형 인메모리 캐시",
+      "level": 3,
+      "fraction": 0.5587227656161051
+    },
+    {
+      "anchor": "redis-vs-memcached",
+      "title": "12) Redis 대 Memcached 비교 (단골 출제)",
+      "level": 3,
+      "fraction": 0.599989649640325
+    },
+    {
+      "anchor": "caching-strategies",
+      "title": "13) 캐싱 전략",
+      "level": 3,
+      "fraction": 0.6808777105004399
+    },
+    {
+      "anchor": "elasticache-use-cases",
+      "title": "14) ElastiCache 대표 사용 사례",
+      "level": 3,
+      "fraction": 0.7494798944263313
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8193862236712726
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}
