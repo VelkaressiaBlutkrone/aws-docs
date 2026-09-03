@@ -306,6 +306,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-1.md',
       questionsAsset: 'assets/content/saa/saa-t1-1.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -315,6 +316,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-2.md',
       questionsAsset: 'assets/content/saa/saa-t1-2.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -324,6 +326,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-3.md',
       questionsAsset: 'assets/content/saa/saa-t1-3.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -333,6 +336,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-4.md',
       questionsAsset: 'assets/content/saa/saa-t1-4.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -342,6 +346,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t1-5.md',
       questionsAsset: 'assets/content/saa/saa-t1-5.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -351,6 +356,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-1.md',
       questionsAsset: 'assets/content/saa/saa-t2-1.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -360,6 +366,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-2.md',
       questionsAsset: 'assets/content/saa/saa-t2-2.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -369,6 +376,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-3.md',
       questionsAsset: 'assets/content/saa/saa-t2-3.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -378,6 +386,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-4.md',
       questionsAsset: 'assets/content/saa/saa-t2-4.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -387,6 +396,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t2-5.md',
       questionsAsset: 'assets/content/saa/saa-t2-5.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -396,6 +406,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-1.md',
       questionsAsset: 'assets/content/saa/saa-t3-1.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -405,6 +416,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-2.md',
       questionsAsset: 'assets/content/saa/saa-t3-2.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -414,6 +426,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-3.md',
       questionsAsset: 'assets/content/saa/saa-t3-3.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -423,6 +436,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-4.md',
       questionsAsset: 'assets/content/saa/saa-t3-4.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -432,6 +446,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-5.md',
       questionsAsset: 'assets/content/saa/saa-t3-5.questions.json',
       questionCount: 15,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -441,6 +456,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-6.md',
       questionsAsset: 'assets/content/saa/saa-t3-6.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -450,6 +466,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-7.md',
       questionsAsset: 'assets/content/saa/saa-t3-7.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -459,6 +476,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-8.md',
       questionsAsset: 'assets/content/saa/saa-t3-8.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -468,6 +486,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-9.md',
       questionsAsset: 'assets/content/saa/saa-t3-9.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -477,6 +496,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t4-1.md',
       questionsAsset: 'assets/content/saa/saa-t4-1.questions.json',
       questionCount: 0,
+      audioApproved: true,
     ),
     ContentEntry(
       certCode: 'SAA-C03',
