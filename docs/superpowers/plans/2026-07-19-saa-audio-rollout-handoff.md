@@ -25,10 +25,11 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | saa-t3-7 | ✅ 완료 커밋 | 2026-09-03. 앵커 10·lexicon +7(CNAME·AAAA·NS·SOA·OAI·GLB·RPS)·표요약 8·enrich 36세그·HARD 0·verify 1(seg041 시험빈도 삭제)·synth·gate PASS. test 794·analyze 0 |
 | saa-t3-8 | ✅ 완료 커밋 | 2026-09-03. 앵커 9·lexicon +8(IPsec·VGW·CGW·DX·DXGW·VIF·Gbps·ISP)·표요약 8·enrich 44세그·HARD 0·verify 3(seg017 브이씨 오타 정정·seg051 무근거 자동확장/시험빈도 삭제·seg052 양성)·synth·gate PASS. test 794·analyze 0 |
 | saa-t3-9 | ✅ 완료 커밋 | 2026-09-03. 앵커 13·lexicon +12(EMR·EMRFS·CSV·DPU·KCL·MSK·ORC·SFTP·SPICE·TBAC·LF·USD)·표요약 6·enrich 36세그·HARD 0·verify PASS·synth·gate PASS. test 794·analyze 0 |
-| saa-t4-1 ~ t4-5 | ⬜ 대기 | |
+| saa-t4-1 | ✅ 완료 커밋 | 2026-09-03. 앵커 9·lexicon +2(CF·DLM)·표요약 8·enrich 37세그·HARD 1(seg059 NAT 냇)·verify(seg012 3축 "전송"→"검색" 사실정정·seg018 무근거 이동요금 문장/시험빈도 삭제·seg059 "낫"→"냇" 오음차)·synth·gate PASS. test 794·analyze 0 |
+| saa-t4-2 ~ t4-5 | ⬜ 대기 | |
 
-**남은 완성 작업: 5개** (t4-1~t4-5 — 스캐폴드부터 전 과정).
-**다음:** `saa-t3-6`부터 문서당 레시피 전 과정(앵커→표요약→lexicon→gate→enrich→verify→synth). 19/24 완료(전부 needs_human_review, 청취 대기).
+**남은 완성 작업: 4개** (t4-2~t4-5 — 스캐폴드부터 전 과정).
+**다음:** `saa-t3-6`부터 문서당 레시피 전 과정(앵커→표요약→lexicon→gate→enrich→verify→synth). 20/24 완료(전부 needs_human_review, 청취 대기).
 
 모든 완료분은 `reviewStatus=needs_human_review`, content_index/pubspec 미등록 → **라이브 미노출**(번들 무영향).
 
