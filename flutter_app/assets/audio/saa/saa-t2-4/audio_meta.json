@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t2-4",
+  "generatedAt": "2026-09-03T01:13:41Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t2-4.md",
+    "sha256": "53517e038edd7f760534b8b45af4de6173682cc3e61a2ce8040eee2d7f3868a6"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t2-4/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 14842605,
+    "sha256": "5dad58387e7b0a1285fde03676667673e93e08305e38294c8cb062bb83643905",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 18566,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.08434073930338605
+    },
+    {
+      "anchor": "ha-ft-dr",
+      "title": "1) 에이치에이·내결함성·디알 — 세 개념 구분 (시험 단골)",
+      "level": 3,
+      "fraction": 0.08631027457068012
+    },
+    {
+      "anchor": "single-point-of-failure",
+      "title": "2) 단일 실패점(에스피오에프)이란",
+      "level": 3,
+      "fraction": 0.15552537110701464
+    },
+    {
+      "anchor": "standard-ha-architecture",
+      "title": "3) 표준 에이치에이 아키텍처",
+      "level": 3,
+      "fraction": 0.25260502571068205
+    },
+    {
+      "anchor": "rds-multi-az",
+      "title": "4) 알디에스 Multi-에이제트 디비 인스턴스 배포 동작 원리 (시험 핵심)",
+      "level": 3,
+      "fraction": 0.3212671000291064
+    },
+    {
+      "anchor": "multi-az-vs-read-replica",
+      "title": "5) Multi-에이제트 대 읽기 복제본 비교 (시험 필출)",
+      "level": 3,
+      "fraction": 0.4396429610944019
+    },
+    {
+      "anchor": "route53-failover",
+      "title": "6) Route 53 헬스 체크·페일오버 라우팅",
+      "level": 3,
+      "fraction": 0.5445134374696808
+    },
+    {
+      "anchor": "static-stability",
+      "title": "7) 정적 안정성(Static Stability)",
+      "level": 3,
+      "fraction": 0.6570777141748326
+    },
+    {
+      "anchor": "stateless-asg",
+      "title": "8) 스테이트리스 설계 — 에이에스지의 전제",
+      "level": 3,
+      "fraction": 0.7442223731444649
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8559619675948384
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}
