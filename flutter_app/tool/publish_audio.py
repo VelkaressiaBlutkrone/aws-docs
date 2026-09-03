@@ -21,6 +21,7 @@ import hashlib
 import json
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -72,7 +73,11 @@ def local_sha256(path: Path) -> str:
 
 
 def head_status(url: str, timeout: float = 15.0) -> int:
-    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": USER_AGENT})
+    """존재 확인. 정식 URL을 업로드 전에 요청하면 엣지에 404 부정 캐시가 남아(수 분)
+    업로드 직후 검증이 404를 받는다(2026-09-03 실측: 39/39 verify 실패). R2는 쿼리를
+    무시하고 Cloudflare 캐시 키는 쿼리를 포함하므로 캐시버스터 쿼리로 정식 URL을 보호한다."""
+    probe = f"{url}?exists={int(time.time())}"
+    req = urllib.request.Request(probe, method="HEAD", headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.status
@@ -118,10 +123,22 @@ def publish(task_id: str, *, dry_run: bool, verify: bool,
         print(f"[put] {task_id}: {key} ({mp3.stat().st_size:,}B)")
         wrangler_put(key, mp3, dry_run=dry_run)
     if verify and not dry_run:
-        report = run_gate(url, timeout=20.0, expected_sha256=None)
-        print_report(report)
-        return bool(report["ok"])
+        return gate_with_retry(url)
     return True
+
+
+def gate_with_retry(url: str, *, tries: int = 4, wait_s: float = 30.0) -> bool:
+    """공개 URL Range 검사. 엣지 부정 캐시(404)가 남아 있을 수 있어 실패 시 대기 후 재시도."""
+    for i in range(1, tries + 1):
+        report = run_gate(url, timeout=20.0, expected_sha256=None)
+        if report["ok"]:
+            print(f"[PASS] {url}" + (f" (retry {i - 1})" if i > 1 else ""))
+            return True
+        if i < tries:
+            print(f"[retry {i}/{tries - 1}] {url} — {wait_s:.0f}s 대기(엣지 부정 캐시 만료 대기)")
+            time.sleep(wait_s)
+    print_report(report)
+    return False
 
 
 def verify_all(audio_root: Path = AUDIO_ROOT) -> bool:
@@ -129,9 +146,7 @@ def verify_all(audio_root: Path = AUDIO_ROOT) -> bool:
     for task_id in find_approved(audio_root):
         meta = read_meta(task_id, audio_root)
         url = public_url(task_id, meta["audio"]["sha256"])
-        report = run_gate(url, timeout=20.0, expected_sha256=None)
-        print(("PASS " if report["ok"] else "FAIL ") + url)
-        ok = ok and bool(report["ok"])
+        ok = gate_with_retry(url) and ok
     return ok
 
 
@@ -156,6 +171,7 @@ def _self_test() -> None:
                 "reviewStatus": st, "script": {"reviewStatus": st},
                 "audio": {"sha256": "ab" * 32}}), encoding="utf-8")
         assert find_approved(root) == ["clf-t1-1"], find_approved(root)
+    assert "?exists=" not in public_url("clf-t1-1", "0" * 64)  # 정식 URL은 쿼리 없음
     print("publish_audio self-test OK")
 
 
