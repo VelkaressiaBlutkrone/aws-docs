@@ -8,7 +8,7 @@
 
 - **Phase A 전부 main 릴리스·배포 완료**: 콘텐츠·코드 정정(PR#105·106·107) + 대본 텍스트 검토(PR#108) + **오디오 재합성 8문서**(PR#109) → develop→main(PR#110, `f7ca98c`, Deploy GitHub Pages success).
 - **A-1 오디오**: 표의 정정 항목(SNS DLQ·SP 66~72%·11 9s 1만년·DynamoDB 스토리지비용·EBS 종료·Glacier 클래스별·서버리스 정의·Customer Enablement·Support 루트전용)을 강의 음성에 반영·라이브. scale out/in(t3-3)은 낭독 부재로 음성 무변경. **청취 게이트는 사용자 면제 승인**. 완료 기록 = [`AR-audio-resynth-handoff.md`](AR-audio-resynth-handoff.md).
-- **Phase B는 미착수**(시험 후). 이하 표는 원 편성 기록으로 보존한다.
+- **Phase B는 미착수**. 원 게이트는 "시험 후"였으나 **2026-09-03 해제**(사용자 결정: CLF 시험은 다른 일정으로 미응시, 결과 무관 진행). 이하 표는 원 편성 기록으로 보존한다.
 
 ## 감사 총괄 (규모·신뢰도)
 
