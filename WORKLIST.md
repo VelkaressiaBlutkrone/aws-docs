@@ -12,7 +12,7 @@ _생성: 2026-06-19 · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로�
 
 ## A. 진행 중 (즉시)
 
-- [~] **SAA-C03 오디오 강사체 롤아웃** — 24문서 스캐폴드 완료·20문서 합성·**20문서 청취면제 승인(PR#116)** develop 머지. 남은 4문서(t4-2~t4-5) enrich·합성은 Anthropic 크레딧 충전 후. 정본: [saa-audio-rollout-handoff.md](docs/superpowers/plans/2026-07-19-saa-audio-rollout-handoff.md). ⚠️ 번들 493MB — SOA 오디오 전에 오디오 자산 호스팅 전략(감사 ROADMAP B-4) 선결.
+- [~] **SAA-C03 오디오 강사체 롤아웃** — 24문서 스캐폴드 완료·20문서 합성·**20문서 청취면제 승인(PR#116)** develop 머지. 남은 4문서(t4-2~t4-5) enrich·합성은 Anthropic 크레딧 충전 후. 정본: [saa-audio-rollout-handoff.md](docs/superpowers/plans/2026-07-19-saa-audio-rollout-handoff.md). ✅ 번들 493MB 문제는 R2 분리 호스팅(감사 B-4, [spec](docs/superpowers/specs/2026-09-03-audio-r2-hosting-design.md))으로 해소 — mp3는 `aws-audio.leva.ai.kr` 서빙, 번들 약 60MB.
 
 - [x] **멀티 일정 학습 스케줄** — 자격증당 여러 독립 일정(자동/수동·목록·선택·삭제) + 일정별 진행
   - **상태(2026-06-20 완료): main 릴리스됨(PR#31 `89e2795`), 라이브 dogfood 통과.** develop test 651 그린·analyze 신규 0 → develop→main(PR#31) → Pages 배포 → 라이브 4페이지 콘솔 에러 0(plan "학습 일정" 빈 상태 정상 렌더).
