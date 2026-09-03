@@ -27,10 +27,12 @@ CLF 강사체 오디오 파이프라인을 **SAA-C03 24문서**로 확장하는 
 | saa-t3-9 | ✅ 완료 커밋 | 2026-09-03. 앵커 13·lexicon +12(EMR·EMRFS·CSV·DPU·KCL·MSK·ORC·SFTP·SPICE·TBAC·LF·USD)·표요약 6·enrich 36세그·HARD 0·verify PASS·synth·gate PASS. test 794·analyze 0 |
 | saa-t4-1 | ✅ 완료 커밋 | 2026-09-03. 앵커 9·lexicon +2(CF·DLM)·표요약 8·enrich 37세그·HARD 1(seg059 NAT 냇)·verify(seg012 3축 "전송"→"검색" 사실정정·seg018 무근거 이동요금 문장/시험빈도 삭제·seg059 "낫"→"냇" 오음차)·synth·gate PASS. test 794·analyze 0 |
 | saa-t4-2 | ⚠️ pre-enrich 스캐폴드 커밋 | 2026-09-03. 앵커 10·표요약 7·script gate PASS(hard 0). **enrich 미실행(크레딧 재소진 400)** |
-| saa-t4-3 ~ t4-5 | ⬜ 대기 | |
+| saa-t4-3 | ⚠️ pre-enrich 스캐폴드 커밋 | 2026-09-03. 앵커 7·lexicon +3(ACU·RRU·WRU)·표요약 9·gate PASS. enrich·synth 미실행(크레딧) |
+| saa-t4-4 | ⚠️ pre-enrich 스캐폴드 커밋 | 2026-09-03. 앵커 9·lexicon +2(CSS·JS)·표요약 8·gate PASS. enrich·synth 미실행(크레딧) |
+| saa-t4-5 | ⚠️ pre-enrich 스캐폴드 커밋 | 2026-09-03. 앵커 11·lexicon +3(ROI·SSM·ENV)·표요약 9·gate PASS. enrich·synth 미실행(크레딧) |
 
-**남은 완성 작업: 4개** (t4-2~t4-5 — 스캐폴드부터 전 과정).
-**다음:** `saa-t3-6`부터 문서당 레시피 전 과정(앵커→표요약→lexicon→gate→enrich→verify→synth). 20/24 완료(전부 needs_human_review, 청취 대기).
+**남은 완성 작업: 4개** (t4-2~t4-5 — 스캐폴드 완료, **enrich→gate→verify→synth→gate→커밋만 남음**). 24/24 스캐폴드 완료.
+**다음(크레딧 충전 후):** t4-2~t4-5 각각 `chain.sh`(gate→enrich→gate→verify) → 손보정 → synthesize → 최종 gate → 커밋. 20/24 완료(전부 needs_human_review, 청취 대기) + 4 스캐폴드.
 
 모든 완료분은 `reviewStatus=needs_human_review`, content_index/pubspec 미등록 → **라이브 미노출**(번들 무영향).
 

@@ -1,0 +1,785 @@
+{
+  "schemaVersion": 2,
+  "docId": "saa-t4-4",
+  "sourceAsset": "assets/content/saa/saa-t4-4.md",
+  "sourceHash": "4a7171d9a92bfc930c6859b14be3945c057d71a830c2af5b05b730bcfa38304e",
+  "lexiconVersion": "0ada7c39c388",
+  "generatedAt": "2026-09-03T03:32:16Z",
+  "reviewStatus": "needs_human_review",
+  "segments": [
+    {
+      "id": "seg000",
+      "kind": "heading",
+      "sourceExcerpt": "# 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink",
+      "scriptText": "비용 최적화 네트워크 — 냇 전략·전송 비용·씨디엔·피어링·PrivateLink",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con000",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번 시간에는 비용 최적화 네트워크를 짚어 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg001",
+      "kind": "paragraph",
+      "sourceExcerpt": "**커버하는 공식 Task** — SAA-C03 · 도메인 4 「비용에 최적화된 아키텍처 설계」(20%) · **Task 4.4 네트워크 아키텍처의 비용 최적화**(`saa-t4-4`) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 네트워크 서비스·토폴로지 자체는 saa-t3-7·t3-8에서 다루며, 여기서는 **비용** 관점에 집중합니다.",
+      "scriptText": "커버하는 공식 Task — 에스에이에이-C03 · 도메인 4 「비용에 최적화된 아키텍처 설계」(20%) · Task 4.4 네트워크 아키텍처의 비용 최적화(saa-t4-4) 이 문서는 위 한 Task에 1:1로 매핑됩니다. 네트워크 서비스·토폴로지 자체는 saa-t3-7·t3-8에서 다루며, 여기서는 비용 관점에 집중합니다.",
+      "audioSummary": null,
+      "skip": true,
+      "issues": [
+        "unmapped-token: C03"
+      ]
+    },
+    {
+      "id": "seg002",
+      "kind": "heading",
+      "sourceExcerpt": "## ✅ 학습 목표 체크리스트",
+      "scriptText": "학습 목표 체크리스트",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg003",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다.",
+      "scriptText": "이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다.",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg004",
+      "kind": "paragraph",
+      "sourceExcerpt": "**데이터 전송 비용 구조** — 인바운드·아웃바운드·같은 AZ·교차 AZ·교차 리전·인터넷 전송의 과금 규칙을 말할 수 있다 **NAT Gateway 절감** — S3·DynamoDB 트래픽을 Gateway Endpoint로 우회해 NAT 처리 요금을 없애는 이유를 설명할 수 있다 **AZ 배치 전략** — NAT Gateway와 리소스를 같은 AZ에 두는 것이 왜 비용에 영향을 미치는지 안다 **CloudFront 절감 원리** — 오리진 아웃바운드 비용이 어떻게 줄어드는지 설명할 수 있다 **VPC 엔드포인트 유형별 비용** — Gateway(무료) vs Interface(유료)를 구별하고, 선택 기준을 안다 **VPC 피어링 vs Transit Gateway** — 연결 수와 비용 트레이드오프를 시나리오로 설명할 수 있다 **Direct Connect 단가 위치** — 인터넷 대비 Direct Connect 전송 단가를 알고, 언제 비용 절감이 되는지 안다",
+      "scriptText": "데이터 전송 비용 구조 — 인바운드·아웃바운드·같은 가용 영역·교차 에이제트·교차 리전·인터넷 전송의 과금 규칙을 말할 수 있다 냇 Gateway 절감 — 에스쓰리·DynamoDB 트래픽을 Gateway Endpoint로 우회해 냇 처리 요금을 없애는 이유를 설명할 수 있다 에이제트 배치 전략 — 냇 Gateway와 리소스를 같은 에이제트에 두는 것이 왜 비용에 영향을 미치는지 안다 CloudFront 절감 원리 — 오리진 아웃바운드 비용이 어떻게 줄어드는지 설명할 수 있다 브이피씨 엔드포인트 유형별 비용 — Gateway(무료) 대 Interface(유료)를 구별하고, 선택 기준을 안다 브이피씨 피어링 대 Transit Gateway — 연결 수와 비용 트레이드오프를 시나리오로 설명할 수 있다 Direct Connect 단가 위치 — 인터넷 대비 Direct Connect 전송 단가를 알고, 언제 비용 절감이 되는지 안다",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg005",
+      "kind": "heading",
+      "sourceExcerpt": "## 🎯 왜 중요한가",
+      "scriptText": "왜 중요한가",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg006",
+      "kind": "paragraph",
+      "sourceExcerpt": "도메인 4(20%)에서 네트워크 비용 최적화는 스토리지·컴퓨팅 절감과 함께 출제 비중이 높습니다. 시험은 아키텍처 다이어그램 시나리오를 주고 \"어느 변경이 전송 비용을 가장 줄이는가\"를 묻습니다. 데이터 전송 요금은 겉으로 드러나지 않다가 규모가 커지면 청구서에 큰 비중을 차지합니다. AWS는 이를 **숨겨진 세금(hidden tax)**이라고 부르기도 합니다. 핵심 패턴은 두 가지입니다. 첫째, 불필요한 경로(NAT 경유, 인터넷 경유)를 없애는 것. 둘째, 캐싱(CloudFront)으로 오리진 전송 횟수 자체를 줄이는 것.",
+      "scriptText": "도메인 4(20%)에서 네트워크 비용 최적화는 스토리지·컴퓨팅 절감과 함께 출제 비중이 높습니다. 시험은 아키텍처 다이어그램 시나리오를 주고 \"어느 변경이 전송 비용을 가장 줄이는가\"를 묻습니다. 데이터 전송 요금은 겉으로 드러나지 않다가 규모가 커지면 청구서에 큰 비중을 차지합니다. 에이더블유에스는 이를 숨겨진 세금(hidden tax)이라고 부르기도 합니다. 핵심 패턴은 두 가지입니다. 첫째, 불필요한 경로(냇 경유, 인터넷 경유)를 없애는 것. 둘째, 캐싱(CloudFront)으로 오리진 전송 횟수 자체를 줄이는 것.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg007",
+      "kind": "heading",
+      "sourceExcerpt": "## 🔤 먼저 알아야 할 용어",
+      "scriptText": "먼저 알아야 할 용어",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg008",
+      "kind": "paragraph",
+      "sourceExcerpt": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "scriptText": "이 문서를 읽는 데 필요한 기초 용어입니다. 이미 알면 건너뛰세요.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg009",
+      "kind": "table",
+      "sourceExcerpt": "| 용어 | 영문 | 한 줄 풀이 |\n|---|---|---|\n| **프라이빗 서브넷** | Private Subnet | 인터넷 게이트웨이 경로가 없어 외부에서 직접 접근 불가한 서브넷 — 내부 DB·앱 서버 배치에 사용 |\n| **온프레미스** | On-Premises | 기업이 자체 데이터센터에 서버·네트워크 장비를 직접 운영하는 환경 |\n| **고가용성** | High Availability (HA) | 장애 시에도 서비스가 계속 운영되도록 여러 AZ에 리소스를 분산하는 설계 원칙 |\n| **캐시 히트율** | Cache Hit Ratio | 캐시에서 응답한 요청 비율 — 높을수록 오리진 접근이 줄어 전송 비용이 낮아짐 |\n| **Multi-AZ** | Multi-AZ Deployment | 동일 리전 내 두 개 이상의 가용 영역에 걸쳐 리소스를 배치해 AZ 장애를 대비하는 구성 |",
+      "scriptText": "",
+      "audioSummary": "먼저 핵심 용어입니다. 프라이빗 서브넷, Private Subnet은 인터넷 게이트웨이 경로가 없어 외부에서 직접 접근할 수 없는 서브넷으로, 내부 디비와 앱 서버 배치에 씁니다. 온프레미스, On-Premises는 기업이 자체 데이터센터에 서버와 네트워크 장비를 직접 운영하는 환경입니다. 고가용성, 에이치에이는 장애 시에도 서비스가 계속 운영되도록 여러 가용 영역에 리소스를 분산하는 설계 원칙입니다. 캐시 히트율, Cache Hit Ratio는 캐시에서 응답한 요청 비율로, 높을수록 오리진 접근이 줄어 전송 비용이 낮아집니다. Multi 에이제트 배포는 동일 리전 내 두 개 이상의 가용 영역에 걸쳐 리소스를 배치해 가용 영역 장애를 대비하는 구성입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "con001",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 핵심 개념을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg010",
+      "kind": "heading",
+      "sourceExcerpt": "## 📖 핵심 개념 {#core-concepts}",
+      "scriptText": "핵심 개념",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con002",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 데이터 전송 비용 구조로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg011",
+      "kind": "heading",
+      "sourceExcerpt": "### 1) 데이터 전송 비용 구조 {#data-transfer-cost-structure}",
+      "scriptText": "1) 데이터 전송 비용 구조",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg012",
+      "kind": "paragraph",
+      "sourceExcerpt": "AWS 데이터 전송 비용은 **방향과 경계**에 따라 결정됩니다.",
+      "scriptText": "에이더블유에스 데이터 전송 비용은 방향과 경계에 따라 결정됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg013",
+      "kind": "table",
+      "sourceExcerpt": "| 전송 유형 | 비용 | 비고 |\n|---|---|---|\n| 인터넷 → AWS (인바운드) | 무료 | 방향 무관, 항상 무료 |\n| 같은 AZ 내 인스턴스 간 (프라이빗 IP) | 무료 | 퍼블릭 IP 사용 시 과금 주의 |\n| 교차 AZ (같은 리전, 프라이빗 IP) | $0.01/GB (양방향) | 가용성 ↑ → 비용 ↑ |\n| 교차 리전 | $0.02/GB 수준 (리전별 상이) | 리전마다 단가 다름 |\n| AWS → 인터넷 (아웃바운드) | $0.09/GB 수준 (첫 10TB) | 월 100GB 무료 포함 |",
+      "scriptText": "",
+      "audioSummary": "데이터 전송 비용 구조입니다. 인터넷에서 에이더블유에스로 들어오는 인바운드는 방향과 무관하게 항상 무료입니다. 같은 가용 영역 내 인스턴스 간 프라이빗 아이피 전송은 무료이며, 퍼블릭 아이피를 쓰면 과금되니 주의합니다. 같은 리전의 교차 가용 영역 프라이빗 아이피 전송은 기가바이트당 0.01달러가 양방향으로 붙으며, 가용성을 높이면 비용도 올라갑니다. 교차 리전은 기가바이트당 0.02달러 수준이며 리전마다 단가가 다릅니다. 에이더블유에스에서 인터넷으로 나가는 아웃바운드는 첫 10 티비 기준 기가바이트당 0.09달러 수준이며 월 100 기가바이트 무료가 포함됩니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg014",
+      "kind": "paragraph",
+      "sourceExcerpt": "**시험 핵심**: 인바운드는 무료, 아웃바운드는 과금. 같은 AZ 프라이빗 IP는 무료, 교차 AZ는 유료. 이 두 규칙이 설계 결정의 근거입니다.",
+      "scriptText": "시험 핵심: 인바운드는 무료, 아웃바운드는 과금. 같은 에이제트 프라이빗 아이피는 무료, 교차 에이제트는 유료. 이 두 규칙이 설계 결정의 근거입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg015",
+      "kind": "paragraph",
+      "sourceExcerpt": "**교차 AZ 비용이 생기는 이유**",
+      "scriptText": "교차 에이제트 비용이 생기는 이유",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg016",
+      "kind": "paragraph",
+      "sourceExcerpt": "고가용성을 위해 Multi-AZ로 리소스를 분산하면, AZ 간 트래픽이 발생합니다. 예를 들어 AZ-A의 EC2가 AZ-B의 RDS에 접근하거나, 로드 밸런서가 여러 AZ에 걸쳐 요청을 분산하면 교차 AZ 전송 요금이 누적됩니다.",
+      "scriptText": "고가용성을 위해 Multi-에이제트로 리소스를 분산하면, 에이제트 간 트래픽이 발생합니다. 예를 들어 에이제트-A의 이씨투가 에이제트-B의 알디에스에 접근하거나, 로드 밸런서가 여러 에이제트에 걸쳐 요청을 분산하면 교차 에이제트 전송 요금이 누적됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg017",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 Multi-AZ 배치는 가용성을 높이는 동시에 전송 비용도 높일까요? AZ는 물리적으로 분리된 데이터센터이므로, AZ 경계를 넘는 데이터는 AZ 간 네트워크 인프라를 경유합니다. AWS는 이 교차 AZ 구간 사용을 별도로 과금합니다. 결과적으로 \"장애 격리 범위를 넓힌다\"는 설계 결정이 \"경계를 넘는 트래픽 비용\"으로 이어지며, 두 목표는 항상 상충합니다. 이 구조 때문에 AZ 배치는 가용성 요구와 트래픽 패턴을 함께 고려해야 비용을 예측할 수 있습니다.",
+      "scriptText": "원리: 왜 Multi-에이제트 배치는 가용성을 높이는 동시에 전송 비용도 높일까요? 에이제트는 물리적으로 분리된 데이터센터이므로, 에이제트 경계를 넘는 데이터는 에이제트 간 네트워크 인프라를 경유합니다. 에이더블유에스는 이 교차 에이제트 구간 사용을 별도로 과금합니다. 결과적으로 \"장애 격리 범위를 넓힌다\"는 설계 결정이 \"경계를 넘는 트래픽 비용\"으로 이어지며, 두 목표는 항상 상충합니다. 이 구조 때문에 에이제트 배치는 가용성 요구와 트래픽 패턴을 함께 고려해야 비용을 예측할 수 있습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con003",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 냇 Gateway 비용 구조와 절감입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg018",
+      "kind": "heading",
+      "sourceExcerpt": "### 2) NAT Gateway 비용 구조와 절감 {#nat-gateway-cost}",
+      "scriptText": "2) 냇 Gateway 비용 구조와 절감",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg019",
+      "kind": "paragraph",
+      "sourceExcerpt": "NAT Gateway는 프라이빗 서브넷 인스턴스가 인터넷에 나가는 관문입니다. 두 가지 요금이 붙습니다.",
+      "scriptText": "냇 Gateway는 프라이빗 서브넷 인스턴스가 인터넷에 나가는 관문입니다. 두 가지 요금이 붙습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg020",
+      "kind": "table",
+      "sourceExcerpt": "| 항목 | 요금 |\n|---|---|\n| 시간당 가용 요금 | $0.045/시간/AZ |\n| 데이터 처리 요금 | $0.045/GB (NAT를 통과한 모든 트래픽) |",
+      "scriptText": "",
+      "audioSummary": "냇 Gateway 요금입니다. 시간당 가용 요금은 가용 영역당 시간당 0.045달러입니다. 데이터 처리 요금은 냇을 통과한 모든 트래픽에 기가바이트당 0.045달러입니다.",
+      "skip": false,
+      "issues": [
+        "table-summary-draft"
+      ]
+    },
+    {
+      "id": "seg021",
+      "kind": "paragraph",
+      "sourceExcerpt": "**AZ 배치와 비용의 관계**",
+      "scriptText": "에이제트 배치와 비용의 관계",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg022",
+      "kind": "paragraph",
+      "sourceExcerpt": "NAT Gateway는 특정 AZ에 생성됩니다. 다른 AZ의 인스턴스가 이 NAT Gateway를 사용하면 교차 AZ 전송 요금($0.01/GB)이 데이터 처리 요금($0.045/GB)에 추가로 붙습니다. 따라서 각 AZ에 NAT Gateway를 따로 두거나, 리소스를 NAT Gateway와 같은 AZ에 배치하는 것이 비용을 낮춥니다.",
+      "scriptText": "냇 Gateway는 특정 에이제트에 생성됩니다. 다른 에이제트의 인스턴스가 이 냇 Gateway를 사용하면 교차 에이제트 전송 요금($0.01/기가바이트)이 데이터 처리 요금($0.045/기가바이트)에 추가로 붙습니다. 따라서 각 에이제트에 냇 Gateway를 따로 두거나, 리소스를 냇 Gateway와 같은 에이제트에 배치하는 것이 비용을 낮춥니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg023",
+      "kind": "paragraph",
+      "sourceExcerpt": "**S3·DynamoDB 트래픽을 Gateway Endpoint로 우회**",
+      "scriptText": "에스쓰리·DynamoDB 트래픽을 Gateway Endpoint로 우회",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg024",
+      "kind": "paragraph",
+      "sourceExcerpt": "프라이빗 서브넷의 EC2가 S3나 DynamoDB에 접근할 때, NAT Gateway를 경유하면 처리 요금이 발생합니다. Gateway Endpoint를 사용하면 트래픽이 AWS 내부 경로로 직접 전달되어 NAT를 우회합니다.",
+      "scriptText": "프라이빗 서브넷의 이씨투가 에스쓰리나 DynamoDB에 접근할 때, 냇 Gateway를 경유하면 처리 요금이 발생합니다. Gateway Endpoint를 사용하면 트래픽이 에이더블유에스 내부 경로로 직접 전달되어 냇를 우회합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg025",
+      "kind": "table",
+      "sourceExcerpt": "| 구분 | NAT Gateway 경유 | Gateway Endpoint 사용 |\n|---|---|---|\n| NAT 처리 요금 | $0.045/GB | 없음 |\n| 엔드포인트 요금 | 없음 | 없음 (Gateway Endpoint는 무료) |\n| 데이터 전송 요금 | 인터넷 아웃바운드 단가 적용 | S3·DynamoDB는 같은 리전 무료 |\n| 지원 서비스 | 모든 인터넷 목적지 | S3, DynamoDB만 |",
+      "scriptText": "",
+      "audioSummary": "냇 Gateway 경유와 Gateway Endpoint 사용 비교입니다. 냇 처리 요금은 냇 경유가 기가바이트당 0.045달러이고, Gateway Endpoint는 없습니다. 엔드포인트 요금은 둘 다 없으며 Gateway Endpoint는 무료입니다. 데이터 전송 요금은 냇 경유가 인터넷 아웃바운드 단가를 적용받고, Gateway Endpoint는 에스쓰리와 DynamoDB가 같은 리전에서 무료입니다. 지원 서비스는 냇 경유가 모든 인터넷 목적지이고, Gateway Endpoint는 에스쓰리와 DynamoDB만입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg026",
+      "kind": "paragraph",
+      "sourceExcerpt": "S3·DynamoDB 트래픽이 많은 프라이빗 서브넷 워크로드라면 Gateway Endpoint 추가가 비용 절감의 첫 번째 조치입니다.",
+      "scriptText": "에스쓰리·DynamoDB 트래픽이 많은 프라이빗 서브넷 워크로드라면 Gateway Endpoint 추가가 비용 절감의 첫 번째 조치입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg027",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 NAT Gateway는 S3로 향하는 트래픽에도 처리 요금을 부과할까요? NAT Gateway는 트래픽의 목적지가 S3인지 다른 인터넷 주소인지 구분하지 않고, 자신을 통과한 모든 바이트에 처리 요금을 적용합니다. S3 Gateway Endpoint를 추가하면 해당 트래픽은 라우팅 테이블에서 NAT가 아닌 엔드포인트로 먼저 분기되어 NAT를 거치지 않습니다. 결과적으로 NAT Gateway의 처리 요금 부과 대상 트래픽 자체가 줄어들어 비용이 낮아집니다.",
+      "scriptText": "원리: 왜 냇 Gateway는 에스쓰리로 향하는 트래픽에도 처리 요금을 부과할까요? 냇 Gateway는 트래픽의 목적지가 에스쓰리인지 다른 인터넷 주소인지 구분하지 않고, 자신을 통과한 모든 바이트에 처리 요금을 적용합니다. 에스쓰리 Gateway Endpoint를 추가하면 해당 트래픽은 라우팅 테이블에서 냇가 아닌 엔드포인트로 먼저 분기되어 냇를 거치지 않습니다. 결과적으로 냇 Gateway의 처리 요금 부과 대상 트래픽 자체가 줄어들어 비용이 낮아집니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con004",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 브이피씨 엔드포인트 유형별 비용을 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg028",
+      "kind": "heading",
+      "sourceExcerpt": "### 3) VPC 엔드포인트 유형별 비용 {#vpc-endpoint-cost}",
+      "scriptText": "3) 브이피씨 엔드포인트 유형별 비용",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg029",
+      "kind": "table",
+      "sourceExcerpt": "| 유형 | 지원 서비스 | 요금 | 용도 |\n|---|---|---|---|\n| **Gateway Endpoint** | S3, DynamoDB만 | **무료** | 프라이빗 서브넷 → S3/DynamoDB, NAT 우회 |\n| **Interface Endpoint (PrivateLink)** | 200+ AWS 서비스 | $0.01/GB + 시간당 ENI 요금 | 그 외 AWS 서비스, SaaS, 교차 계정 서비스 |",
+      "scriptText": "",
+      "audioSummary": "브이피씨 엔드포인트 유형별 비용입니다. Gateway Endpoint는 에스쓰리와 DynamoDB만 지원하고 무료이며, 프라이빗 서브넷에서 에스쓰리나 DynamoDB로 냇을 우회할 때 씁니다. Interface Endpoint, PrivateLink는 200개 이상의 에이더블유에스 서비스를 지원하고 기가바이트당 0.01달러에 시간당 이엔아이 요금이 붙으며, 그 외 에이더블유에스 서비스, 사스, 교차 계정 서비스에 씁니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg030",
+      "kind": "paragraph",
+      "sourceExcerpt": "Interface Endpoint의 데이터 처리 요금은 월간 누적 사용량에 따라 단계적으로 할인됩니다(1PB까지 $0.01/GB, 이후 구간별 인하). 단, Gateway Endpoint로 커버 가능한 S3·DynamoDB는 Interface Endpoint를 쓸 이유가 없습니다.",
+      "scriptText": "Interface Endpoint의 데이터 처리 요금은 월간 누적 사용량에 따라 단계적으로 할인됩니다(1PB까지 $0.01/기가바이트, 이후 구간별 인하). 단, Gateway Endpoint로 커버 가능한 에스쓰리·DynamoDB는 Interface Endpoint를 쓸 이유가 없습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg031",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 Gateway Endpoint와 Interface Endpoint는 지원 서비스 범위가 다를까요? Gateway Endpoint는 VPC 라우팅 테이블에 경로를 추가해 트래픽을 AWS 내부 경로로 분기하는 방식으로 동작합니다. 이 구조는 S3·DynamoDB처럼 리전 단위로 단일 엔드포인트를 제공하는 서비스에만 적용할 수 있습니다. Interface Endpoint(PrivateLink)는 VPC 내부에 ENI를 생성해 서비스마다 프라이빗 IP를 부여하는 방식으로, 200개 이상의 다양한 서비스에 적용 가능합니다. 대신 ENI 유지 비용과 데이터 처리 요금이 발생합니다. S3·DynamoDB는 두 방식 모두 적용 가능하지만 Gateway 방식이 무료이므로, 추가 비용 없이 NAT를 우회할 수 있는 첫 번째 선택지가 됩니다.",
+      "scriptText": "원리: 왜 Gateway Endpoint와 Interface Endpoint는 지원 서비스 범위가 다를까요? Gateway Endpoint는 브이피씨 라우팅 테이블에 경로를 추가해 트래픽을 에이더블유에스 내부 경로로 분기하는 방식으로 동작합니다. 이 구조는 에스쓰리·DynamoDB처럼 리전 단위로 단일 엔드포인트를 제공하는 서비스에만 적용할 수 있습니다. Interface Endpoint(PrivateLink)는 브이피씨 내부에 이엔아이를 생성해 서비스마다 프라이빗 아이피를 부여하는 방식으로, 200개 이상의 다양한 서비스에 적용 가능합니다. 대신 이엔아이 유지 비용과 데이터 처리 요금이 발생합니다. 에스쓰리·DynamoDB는 두 방식 모두 적용 가능하지만 Gateway 방식이 무료이므로, 추가 비용 없이 냇를 우회할 수 있는 첫 번째 선택지가 됩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con005",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 CloudFront로 오리진 전송 비용 절감을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg032",
+      "kind": "heading",
+      "sourceExcerpt": "### 4) CloudFront로 오리진 전송 비용 절감 {#cloudfront-origin-cost}",
+      "scriptText": "4) CloudFront로 오리진 전송 비용 절감",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg033",
+      "kind": "paragraph",
+      "sourceExcerpt": "CloudFront는 엣지 로케이션에 콘텐츠를 캐싱합니다. 이것이 비용에 미치는 영향은 두 가지입니다.",
+      "scriptText": "CloudFront는 엣지 로케이션에 콘텐츠를 캐싱합니다. 이것이 비용에 미치는 영향은 두 가지입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg034",
+      "kind": "paragraph",
+      "sourceExcerpt": "**오리진 아웃바운드 전송 절감**",
+      "scriptText": "오리진 아웃바운드 전송 절감",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg035",
+      "kind": "paragraph",
+      "sourceExcerpt": "CloudFront가 콘텐츠를 캐싱하면 오리진(EC2, S3, ALB)까지 요청이 도달하지 않습니다. CloudFront ↔ AWS 오리진 간 전송 비용은 면제됩니다. 오리진이 S3이든 EC2이든 CloudFront를 경유한 전송에는 데이터 전송 요금이 부과되지 않습니다. 사용자에게 나가는 엣지 → 인터넷 전송 비용은 발생하지만, 동일한 트래픽을 EC2에서 직접 서빙할 때의 아웃바운드 단가보다 CloudFront 단가가 낮습니다.",
+      "scriptText": "CloudFront가 콘텐츠를 캐싱하면 오리진(이씨투, 에스쓰리, 에이엘비)까지 요청이 도달하지 않습니다. CloudFront ↔ 에이더블유에스 오리진 간 전송 비용은 면제됩니다. 오리진이 에스쓰리이든 이씨투이든 CloudFront를 경유한 전송에는 데이터 전송 요금이 부과되지 않습니다. 사용자에게 나가는 엣지, 인터넷 전송 비용은 발생하지만, 동일한 트래픽을 이씨투에서 직접 서빙할 때의 아웃바운드 단가보다 CloudFront 단가가 낮습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg036",
+      "kind": "paragraph",
+      "sourceExcerpt": "**캐시 히트율(Cache Hit Ratio)이 핵심**",
+      "scriptText": "캐시 히트율(Cache Hit Ratio)이 핵심",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg037",
+      "kind": "paragraph",
+      "sourceExcerpt": "캐시 히트율이 높을수록 오리진 요청이 줄고, 오리진 서버 부하와 그에 따른 비용이 낮아집니다. 정적 콘텐츠(이미지, JS, CSS), 변경 빈도가 낮은 API 응답, S3 버킷 파일이 CloudFront 비용 절감에 가장 효과적입니다.",
+      "scriptText": "캐시 히트율이 높을수록 오리진 요청이 줄고, 오리진 서버 부하와 그에 따른 비용이 낮아집니다. 정적 콘텐츠(이미지, 제이에스, 씨에스에스), 변경 빈도가 낮은 에이피아이 응답, 에스쓰리 버킷 파일이 CloudFront 비용 절감에 가장 효과적입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg038",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 CloudFront의 비용 절감 효과는 콘텐츠 유형에 따라 크게 달라질까요? 캐시에 저장된 콘텐츠는 동일한 요청이 들어올 때 오리진까지 트래픽이 전달되지 않습니다. 오리진 전송이 발생하지 않으면 오리진 아웃바운드 비용도 발생하지 않습니다. 정적 콘텐츠는 변경 빈도가 낮아 한 번 캐싱되면 다수의 요청을 오리진 접근 없이 처리할 수 있으므로 히트율이 높습니다. 반면 요청마다 결과가 달라지는 동적 콘텐츠는 캐시에 저장할 수 없어 매 요청이 오리진에 도달합니다. 이 차이가 \"CloudFront는 정적 워크로드에서 비용 절감 효과가 크고 동적 워크로드에서는 제한적\"이라는 결론의 근거입니다.",
+      "scriptText": "원리: 왜 CloudFront의 비용 절감 효과는 콘텐츠 유형에 따라 크게 달라질까요? 캐시에 저장된 콘텐츠는 동일한 요청이 들어올 때 오리진까지 트래픽이 전달되지 않습니다. 오리진 전송이 발생하지 않으면 오리진 아웃바운드 비용도 발생하지 않습니다. 정적 콘텐츠는 변경 빈도가 낮아 한 번 캐싱되면 다수의 요청을 오리진 접근 없이 처리할 수 있으므로 히트율이 높습니다. 반면 요청마다 결과가 달라지는 동적 콘텐츠는 캐시에 저장할 수 없어 매 요청이 오리진에 도달합니다. 이 차이가 \"CloudFront는 정적 워크로드에서 비용 절감 효과가 크고 동적 워크로드에서는 제한적\"이라는 결론의 근거입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con006",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이어서 브이피씨 피어링 대 Transit Gateway로 넘어가겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg039",
+      "kind": "heading",
+      "sourceExcerpt": "### 5) VPC 피어링 vs Transit Gateway — 비용 트레이드오프 {#peering-vs-tgw-cost}",
+      "scriptText": "5) 브이피씨 피어링 대 Transit Gateway — 비용 트레이드오프",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg040",
+      "kind": "paragraph",
+      "sourceExcerpt": "두 방식 모두 VPC 간 프라이빗 연결을 제공합니다. 비용 구조가 다릅니다.",
+      "scriptText": "두 방식 모두 브이피씨 간 프라이빗 연결을 제공합니다. 비용 구조가 다릅니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg041",
+      "kind": "table",
+      "sourceExcerpt": "| 항목 | VPC 피어링 | Transit Gateway |\n|---|---|---|\n| 연결 고정 요금 | 없음 | $0.05/시간 (어태치먼트당) |\n| 데이터 처리 요금 | 없음 (전송 비용만 적용) | $0.02/GB |\n| 교차 AZ 전송 | $0.01/GB | $0.01/GB + $0.02/GB |\n| 관리 방식 | VPC 쌍마다 개별 설정(풀메시) | 중앙 라우터 허브 |\n| 최적 규모 | VPC 수 적음 (2~5개) | VPC 수 많음 (수십 개 이상) |",
+      "scriptText": "",
+      "audioSummary": "브이피씨 피어링과 Transit Gateway 비용 비교입니다. 연결 고정 요금은 피어링이 없고, Transit Gateway는 어태치먼트당 시간당 0.05달러입니다. 데이터 처리 요금은 피어링이 없어 전송 비용만 적용되고, Transit Gateway는 기가바이트당 0.02달러입니다. 교차 가용 영역 전송은 피어링이 기가바이트당 0.01달러이고, Transit Gateway는 기가바이트당 0.01달러에 0.02달러가 더해집니다. 관리 방식은 피어링이 브이피씨 쌍마다 개별 설정하는 풀메시이고, Transit Gateway는 중앙 라우터 허브입니다. 최적 규모는 피어링이 브이피씨 2개에서 5개로 적을 때이고, Transit Gateway는 수십 개 이상으로 많을 때입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg042",
+      "kind": "paragraph",
+      "sourceExcerpt": "**비용 관점 결론**: VPC 수가 적고 트래픽이 적다면 VPC 피어링이 무조건 저렴합니다. VPC가 수십 개 이상이면 피어링 연결 수가 N(N-1)/2로 폭발하고 관리 비용이 뛰어 Transit Gateway의 고정 비용이 오히려 합리적입니다.",
+      "scriptText": "비용 관점 결론: 브이피씨 수가 적고 트래픽이 적다면 브이피씨 피어링이 무조건 저렴합니다. 브이피씨가 수십 개 이상이면 피어링 연결 수가 N(N-1)/2로 폭발하고 관리 비용이 뛰어 Transit Gateway의 고정 비용이 오히려 합리적입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg043",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 VPC 수가 늘어날수록 피어링 연결 수는 VPC 수보다 훨씬 빠르게 증가할까요? 각 VPC 쌍은 별도의 피어링 연결이 필요합니다. VPC가 N개이면 가능한 쌍의 수는 제곱 규모로 증가하며, N이 커질수록 증가폭도 함께 커집니다. 연결이 늘어날수록 연결마다 양쪽 라우팅 테이블을 관리해야 하므로 운영 부담도 함께 폭증합니다. Transit Gateway는 각 VPC가 허브 하나와만 연결하면 되므로 N개 VPC에 연결이 N개로 유지되고, 관리 지점도 중앙 하나입니다.",
+      "scriptText": "원리: 왜 브이피씨 수가 늘어날수록 피어링 연결 수는 브이피씨 수보다 훨씬 빠르게 증가할까요? 각 브이피씨 쌍은 별도의 피어링 연결이 필요합니다. 브이피씨가 N개이면 가능한 쌍의 수는 제곱 규모로 증가하며, N이 커질수록 증가폭도 함께 커집니다. 연결이 늘어날수록 연결마다 양쪽 라우팅 테이블을 관리해야 하므로 운영 부담도 함께 폭증합니다. Transit Gateway는 각 브이피씨가 허브 하나와만 연결하면 되므로 N개 브이피씨에 연결이 N개로 유지되고, 관리 지점도 중앙 하나입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con007",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "이번에는 Direct Connect 데이터 전송 단가입니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg044",
+      "kind": "heading",
+      "sourceExcerpt": "### 6) Direct Connect 데이터 전송 단가 {#direct-connect-cost}",
+      "scriptText": "6) Direct Connect 데이터 전송 단가",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg045",
+      "kind": "paragraph",
+      "sourceExcerpt": "Direct Connect는 온프레미스 ↔ AWS 전용 회선입니다. 비용 구조는 포트 시간 요금과 데이터 전송 요금으로 나뉩니다.",
+      "scriptText": "Direct Connect는 온프레미스 ↔ 에이더블유에스 전용 회선입니다. 비용 구조는 포트 시간 요금과 데이터 전송 요금으로 나뉩니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg046",
+      "kind": "table",
+      "sourceExcerpt": "| 항목 | Direct Connect | 인터넷 (아웃바운드) |\n|---|---|---|\n| 인바운드 | 무료 | 무료 |\n| 아웃바운드 (AWS → 온프레미스) | $0.02/GB 수준 (US 기준) | $0.09/GB 수준 |\n| 포트 시간 요금 | $0.30/시간 (1Gbps 전용) 등 | 없음 |",
+      "scriptText": "",
+      "audioSummary": "Direct Connect와 인터넷 아웃바운드 단가 비교입니다. 인바운드는 둘 다 무료입니다. 에이더블유에스에서 온프레미스로 가는 아웃바운드는 Direct Connect가 미국 기준 기가바이트당 0.02달러 수준이고, 인터넷은 기가바이트당 0.09달러 수준입니다. 포트 시간 요금은 Direct Connect가 1 기가비피에스 전용 기준 시간당 0.30달러 등이고, 인터넷은 없습니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg047",
+      "kind": "paragraph",
+      "sourceExcerpt": "Direct Connect 아웃바운드 단가는 인터넷 아웃바운드 단가의 약 1/4 수준입니다. 대규모 데이터를 온프레미스로 지속적으로 전송하는 경우, 포트 시간 요금을 합산하더라도 장기적으로 비용이 낮아질 수 있습니다. 단, 초기 회선 설치 비용과 커밋 기간을 고려해야 합니다.",
+      "scriptText": "Direct Connect 아웃바운드 단가는 인터넷 아웃바운드 단가의 약 1/4 수준입니다. 대규모 데이터를 온프레미스로 지속적으로 전송하는 경우, 포트 시간 요금을 합산하더라도 장기적으로 비용이 낮아질 수 있습니다. 단, 초기 회선 설치 비용과 커밋 기간을 고려해야 합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg048",
+      "kind": "paragraph",
+      "sourceExcerpt": "🧠 원리: 왜 Direct Connect 도입이 항상 비용 절감으로 이어지지는 않을까요? Direct Connect는 포트 시간 요금이라는 고정 비용이 데이터 전송 여부와 무관하게 매시간 발생합니다. 전송량이 적으면 이 고정 비용이 단가 절감분을 초과해 인터넷보다 총비용이 높아질 수 있습니다. 전송량이 충분히 클 때만 단가 차이로 인한 절감액이 포트 시간 요금을 상쇄하고 순 절감이 발생합니다. 따라서 도입 전 현재 아웃바운드 전송량과 포트 시간 요금을 함께 분석해 손익분기 전송량을 초과하는지 확인해야 합니다.",
+      "scriptText": "원리: 왜 Direct Connect 도입이 항상 비용 절감으로 이어지지는 않을까요? Direct Connect는 포트 시간 요금이라는 고정 비용이 데이터 전송 여부와 무관하게 매시간 발생합니다. 전송량이 적으면 이 고정 비용이 단가 절감분을 초과해 인터넷보다 총비용이 높아질 수 있습니다. 전송량이 충분히 클 때만 단가 차이로 인한 절감액이 포트 시간 요금을 상쇄하고 순 절감이 발생합니다. 따라서 도입 전 현재 아웃바운드 전송량과 포트 시간 요금을 함께 분석해 손익분기 전송량을 초과하는지 확인해야 합니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con008",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "계속해서 데이터 전송 비용 시나리오 비교를 보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg049",
+      "kind": "heading",
+      "sourceExcerpt": "## 📊 데이터 전송 비용 시나리오 비교 {#cost-scenarios}",
+      "scriptText": "데이터 전송 비용 시나리오 비교",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg050",
+      "kind": "table",
+      "sourceExcerpt": "| 시나리오 | 경로 | 예상 비용 |\n|---|---|---|\n| EC2(프라이빗) → S3 (NAT 경유) | EC2 → NAT GW → 인터넷 → S3 | NAT $0.045/GB + 아웃바운드 요금 |\n| EC2(프라이빗) → S3 (Gateway Endpoint) | EC2 → Gateway Endpoint → S3 | $0 (같은 리전 무료) |\n| EC2(AZ-A) → EC2(AZ-B) 프라이빗 IP | 교차 AZ | $0.01/GB (양방향) |\n| EC2 → 인터넷 직접 아웃바운드 | EC2 → IGW → 인터넷 | $0.09/GB 수준 |\n| EC2 → 인터넷 (CloudFront 캐싱 후) | 오리진 미도달(캐시 히트) | $0 (오리진 전송 없음) |\n| VPC-A → VPC-B 교차 AZ (피어링) | VPC 피어링 | $0.01/GB |\n| VPC-A → VPC-B 교차 AZ (TGW) | Transit Gateway | $0.01/GB + $0.02/GB = $0.03/GB |",
+      "scriptText": "",
+      "audioSummary": "데이터 전송 비용 시나리오 비교입니다. 프라이빗 이씨투에서 냇을 경유해 에스쓰리로 가면 경로가 이씨투, 냇 게이트웨이, 인터넷, 에스쓰리이고, 비용은 냇 기가바이트당 0.045달러에 아웃바운드 요금이 더해집니다. 프라이빗 이씨투에서 Gateway Endpoint로 에스쓰리에 가면 경로가 이씨투, Gateway Endpoint, 에스쓰리이고, 같은 리전이라 비용은 0달러입니다. 가용 영역 에이의 이씨투에서 가용 영역 비의 이씨투로 프라이빗 아이피 전송은 교차 가용 영역이라 기가바이트당 0.01달러가 양방향입니다. 이씨투에서 인터넷으로 직접 아웃바운드는 경로가 이씨투, 아이지더블유, 인터넷이고 기가바이트당 0.09달러 수준입니다. 이씨투에서 인터넷으로 가되 CloudFront 캐싱 후라면 캐시 히트로 오리진에 도달하지 않아 오리진 전송 비용이 0달러입니다. 브이피씨 에이에서 브이피씨 비로 교차 가용 영역 피어링은 기가바이트당 0.01달러입니다. 브이피씨 에이에서 브이피씨 비로 교차 가용 영역 Transit Gateway, 티지더블유는 기가바이트당 0.01달러에 0.02달러를 더한 0.03달러입니다.",
+      "skip": false,
+      "issues": [
+        "table-needs-summary"
+      ]
+    },
+    {
+      "id": "seg051",
+      "kind": "heading",
+      "sourceExcerpt": "## ✍️ 시험 포인트",
+      "scriptText": "시험 포인트",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg052",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"reduce data transfer cost\" + 프라이빗 서브넷 + S3/DynamoDB** → S3 Gateway Endpoint. 무료이고 NAT 처리 요금을 완전히 없앱니다. **NAT Gateway 비용 최적화 두 축**: (1) AZ 배치 — NAT와 리소스를 같은 AZ에. (2) 서비스 우회 — S3·DynamoDB는 Gateway Endpoint로. **VPC 피어링 vs TGW 비용 선택 기준**: VPC 수가 적으면 피어링(데이터 처리 요금 없음), 많으면 TGW(관리 복잡도 상쇄). **CloudFront ↔ AWS 오리진 간 전송은 무료**: CloudFront 뒤에 EC2나 S3를 두면 오리진 아웃바운드 요금이 면제됩니다. **인바운드는 항상 무료**: 외부 → AWS 방향 전송에는 요금이 없습니다. 비용은 항상 아웃바운드·처리·교차 경계에서 발생합니다. **Direct Connect 아웃바운드 단가 < 인터넷 아웃바운드 단가**: 대용량 온프레미스 전송 시나리오에서는 Direct Connect가 장기적으로 저렴합니다. **Interface Endpoint vs Gateway Endpoint**: S3·DynamoDB는 Gateway(무료), 나머지 서비스는 Interface(유료). 시험에서 \"추가 비용 없이(no additional charge)\"라는 단서가 나오면 Gateway Endpoint를 고릅니다.",
+      "scriptText": "\"reduce data transfer cost\" 그리고 프라이빗 서브넷 그리고 에스쓰리/DynamoDB, 에스쓰리 Gateway Endpoint. 무료이고 냇 처리 요금을 완전히 없앱니다. 냇 Gateway 비용 최적화 두 축: (1) 에이제트 배치 — 냇와 리소스를 같은 에이제트에. (2) 서비스 우회 — 에스쓰리·DynamoDB는 Gateway Endpoint로. 브이피씨 피어링 대 티지더블유 비용 선택 기준: 브이피씨 수가 적으면 피어링(데이터 처리 요금 없음), 많으면 티지더블유(관리 복잡도 상쇄). CloudFront ↔ 에이더블유에스 오리진 간 전송은 무료: CloudFront 뒤에 이씨투나 에스쓰리를 두면 오리진 아웃바운드 요금이 면제됩니다. 인바운드는 항상 무료: 외부, 에이더블유에스 방향 전송에는 요금이 없습니다. 비용은 항상 아웃바운드·처리·교차 경계에서 발생합니다. Direct Connect 아웃바운드 단가 < 인터넷 아웃바운드 단가: 대용량 온프레미스 전송 시나리오에서는 Direct Connect가 장기적으로 저렴합니다. Interface Endpoint 대 Gateway Endpoint: 에스쓰리·DynamoDB는 Gateway(무료), 나머지 서비스는 Interface(유료). 시험에서 \"추가 비용 없이(no additional charge)\"라는 단서가 나오면 Gateway Endpoint를 고릅니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con009",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "다음으로 흔한 함정을 살펴보겠습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg053",
+      "kind": "heading",
+      "sourceExcerpt": "## ⚠️ 흔한 함정 {#common-pitfalls}",
+      "scriptText": "흔한 함정",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg054",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"프라이빗 서브넷이니까 NAT Gateway를 반드시 써야 한다.\"** → S3·DynamoDB는 Gateway Endpoint가 있으면 NAT 없이도 접근 가능합니다. NAT는 인터넷 트래픽 전용이고, AWS 서비스 접근에 NAT를 쓰는 것은 불필요한 비용입니다. *(원리: §2 — NAT는 목적지를 구분하지 않고 통과하는 모든 트래픽에 처리 요금을 부과하므로, 라우팅 테이블에서 Gateway Endpoint로 먼저 분기하면 NAT 처리 대상에서 제외된다.)*",
+      "scriptText": "\"프라이빗 서브넷이니까 냇 Gateway를 반드시 써야 한다.\", 에스쓰리·DynamoDB는 Gateway Endpoint가 있으면 냇 없이도 접근 가능합니다. 냇는 인터넷 트래픽 전용이고, 에이더블유에스 서비스 접근에 냇를 쓰는 것은 불필요한 비용입니다. (원리: 2번 — 냇는 목적지를 구분하지 않고 통과하는 모든 트래픽에 처리 요금을 부과하므로, 라우팅 테이블에서 Gateway Endpoint로 먼저 분기하면 냇 처리 대상에서 제외된다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg055",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"Multi-AZ RDS를 쓰면 교차 AZ 전송 비용이 없다.\"** → Multi-AZ RDS의 스탠바이는 장애조치용이고 일반 쿼리는 프라이머리에만 갑니다. 그러나 애플리케이션 레이어(EC2, Lambda)가 다른 AZ에 있다면 교차 AZ 트래픽이 발생하고 $0.01/GB가 청구됩니다. *(원리: §1 — 장애 격리를 위해 AZ를 분리하면 AZ 경계를 넘는 트래픽 비용이 발생하며, 이는 RDS 내부 복제가 아닌 앱↔DB 구간에서도 동일하게 적용된다.)*",
+      "scriptText": "\"Multi-에이제트 알디에스를 쓰면 교차 에이제트 전송 비용이 없다.\", Multi-에이제트 알디에스의 스탠바이는 장애조치용이고 일반 쿼리는 프라이머리에만 갑니다. 그러나 애플리케이션 레이어(이씨투, Lambda)가 다른 에이제트에 있다면 교차 에이제트 트래픽이 발생하고 $0.01/기가바이트가 청구됩니다. (원리: 1번 — 장애 격리를 위해 에이제트를 분리하면 에이제트 경계를 넘는 트래픽 비용이 발생하며, 이는 알디에스 내부 복제가 아닌 앱↔디비 구간에서도 동일하게 적용된다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg056",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"VPC 피어링이 Transit Gateway보다 항상 싸다.\"** → VPC 수가 많아지면 피어링은 N(N-1)/2개의 연결이 필요하고 운영 복잡도가 폭발합니다. 데이터 전송량이 많고 VPC가 수십 개면 Transit Gateway의 $0.02/GB 처리 요금을 내더라도 총비용이 낮아질 수 있습니다. *(원리: §5 — VPC 수가 증가할수록 피어링 연결 수가 제곱에 가깝게 폭증하고 관리 부담도 함께 커져 Transit Gateway 허브 방식의 고정 비용이 상대적으로 합리적이 된다.)*",
+      "scriptText": "\"브이피씨 피어링이 Transit Gateway보다 항상 싸다.\", 브이피씨 수가 많아지면 피어링은 N(N-1)/2개의 연결이 필요하고 운영 복잡도가 폭발합니다. 데이터 전송량이 많고 브이피씨가 수십 개면 Transit Gateway의 $0.02/기가바이트 처리 요금을 내더라도 총비용이 낮아질 수 있습니다. (원리: 5번 — 브이피씨 수가 증가할수록 피어링 연결 수가 제곱에 가깝게 폭증하고 관리 부담도 함께 커져 Transit Gateway 허브 방식의 고정 비용이 상대적으로 합리적이 된다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg057",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"CloudFront를 쓰면 오리진 서버 비용이 사라진다.\"** → 캐시 미스(Cache Miss) 시에는 오리진까지 요청이 전달됩니다. 비용이 줄어드는 것은 캐시 히트 비율만큼이고, 동적 콘텐츠 비율이 높으면 절감 효과가 작습니다. *(원리: §4 — 동적 콘텐츠는 캐시에 저장할 수 없어 매 요청이 오리진에 도달하므로, 오리진 전송 비용 절감은 정적 콘텐츠 비율에 비례한다.)*",
+      "scriptText": "\"CloudFront를 쓰면 오리진 서버 비용이 사라진다.\", 캐시 미스(Cache Miss) 시에는 오리진까지 요청이 전달됩니다. 비용이 줄어드는 것은 캐시 히트 비율만큼이고, 동적 콘텐츠 비율이 높으면 절감 효과가 작습니다. (원리: 4번 — 동적 콘텐츠는 캐시에 저장할 수 없어 매 요청이 오리진에 도달하므로, 오리진 전송 비용 절감은 정적 콘텐츠 비율에 비례한다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg058",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"같은 리전 트래픽은 항상 무료다.\"** → 같은 리전이어도 AZ가 다르고 프라이빗 IP가 아니거나, Transit Gateway를 경유하면 처리 요금이 붙습니다. \"같은 AZ + 프라이빗 IP\"일 때만 무료입니다. *(원리: §1 본문 — 비용 무료 조건은 \"AZ 경계 비교차 + 프라이빗 IP\" 두 조건을 동시에 충족해야 하며, 어느 하나라도 벗어나면 과금 대상이 된다.)*",
+      "scriptText": "\"같은 리전 트래픽은 항상 무료다.\", 같은 리전이어도 에이제트가 다르고 프라이빗 아이피가 아니거나, Transit Gateway를 경유하면 처리 요금이 붙습니다. \"같은 에이제트 그리고 프라이빗 아이피\"일 때만 무료입니다. (원리: 1번 본문 — 비용 무료 조건은 \"에이제트 경계 비교차 그리고 프라이빗 아이피\" 두 조건을 동시에 충족해야 하며, 어느 하나라도 벗어나면 과금 대상이 된다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg059",
+      "kind": "paragraph",
+      "sourceExcerpt": "**\"Direct Connect 포트를 사면 데이터 전송이 무료다.\"** → Direct Connect는 포트 시간 요금과 별도로 아웃바운드 데이터 전송 요금($0.02/GB 수준)이 따로 청구됩니다. 인터넷보다 단가가 낮지만 무료는 아닙니다. *(원리: §6 — 포트 시간 요금은 전송량과 무관한 고정 비용이므로, 전송량이 손익분기점에 못 미치면 총비용이 인터넷보다 높아질 수 있다.)*",
+      "scriptText": "\"Direct Connect 포트를 사면 데이터 전송이 무료다.\", Direct Connect는 포트 시간 요금과 별도로 아웃바운드 데이터 전송 요금($0.02/기가바이트 수준)이 따로 청구됩니다. 인터넷보다 단가가 낮지만 무료는 아닙니다. (원리: 6번 — 포트 시간 요금은 전송량과 무관한 고정 비용이므로, 전송량이 손익분기점에 못 미치면 총비용이 인터넷보다 높아질 수 있다.)",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "con010",
+      "kind": "connector",
+      "sourceExcerpt": "",
+      "scriptText": "핵심은 여기까지입니다. 수고하셨습니다.",
+      "audioSummary": null,
+      "skip": false,
+      "issues": []
+    },
+    {
+      "id": "seg060",
+      "kind": "selfcheck",
+      "sourceExcerpt": "## 🧪 자가 점검",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg061",
+      "kind": "selfcheck",
+      "sourceExcerpt": "아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg062",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q1.** 프라이빗 서브넷의 EC2 인스턴스들이 매일 수백 GB를 S3에 업로드합니다. 현재 NAT Gateway를 경유하고 있습니다. 데이터 전송 비용을 가장 효과적으로 줄이는 방법은?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg063",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**S3 Gateway Endpoint를 생성하고 해당 서브넷의 라우팅 테이블에 추가**합니다. Gateway Endpoint는 추가 요금이 없으며, S3 트래픽이 AWS 내부 경로로 직접 전달되어 NAT Gateway 처리 요금($0.045/GB)이 완전히 사라집니다. 같은 리전의 S3는 Gateway Endpoint 경유 시 데이터 전송 요금도 부과되지 않습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg064",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q2.** 한 리전에서 VPC 10개가 서로 완전히 통신해야 합니다. 비용 트레이드오프를 어떻게 분석하나요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg065",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\nVPC 피어링으로 풀메시를 구성하면 10×9/2 = 45개 연결이 필요합니다. 피어링은 데이터 처리 요금이 없지만 연결 수 관리가 복잡합니다. Transit Gateway는 어태치먼트당 $0.05/시간 + $0.02/GB 처리 요금이 붙지만 연결은 10개면 됩니다. 데이터 전송량이 크고 VPC 수가 많아질수록 Transit Gateway가 운영 및 총비용 면에서 유리합니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg066",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q3.** 글로벌 사용자에게 정적 웹사이트(이미지, CSS, JS)를 S3에서 직접 서빙 중입니다. 전송 비용과 지연을 동시에 낮추려면?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg067",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\n**CloudFront를 S3 앞에 배치**합니다. 엣지 로케이션에서 캐싱하면 S3 오리진까지 도달하는 요청이 대폭 줄고, CloudFront ↔ S3 오리진 간 전송 비용은 면제됩니다. 사용자 ↔ 엣지 간 전송 비용은 발생하지만, S3 직접 아웃바운드 단가보다 CloudFront 단가가 낮고 엣지 근접으로 지연도 줄어듭니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg068",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q4.** NAT Gateway가 있는 AZ-A에서 NAT Gateway를 사용 중인데, 인스턴스 대부분이 AZ-B에 있습니다. 비용 문제는 무엇이고 해결 방법은?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg069",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\nAZ-B 인스턴스 → AZ-A NAT Gateway 경로에 **교차 AZ 전송 요금($0.01/GB)**이 NAT 처리 요금($0.045/GB)에 추가로 붙습니다. 해결 방법은 두 가지입니다. 첫째, AZ-B에 NAT Gateway를 별도로 만들어 AZ-B 인스턴스가 같은 AZ의 NAT를 쓰게 합니다. 둘째, S3·DynamoDB 트래픽이라면 Gateway Endpoint로 우회해 NAT 경유 자체를 없앱니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg070",
+      "kind": "selfcheck",
+      "sourceExcerpt": "**Q5 (원리).** 왜 VPC 피어링은 VPC 수가 적을 때 유리하고, VPC 수가 많아질수록 Transit Gateway가 관리 및 비용 면에서 합리적인 선택이 될 수 있을까요?",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg071",
+      "kind": "selfcheck",
+      "sourceExcerpt": "<details><summary>정답 보기</summary>\n\nVPC 피어링은 완전한 연결을 위해 VPC 쌍마다 개별 연결이 필요하므로, VPC 수가 늘수록 연결 수가 제곱 규모로 증가하고 각 연결의 관리 부담도 함께 폭증합니다. Transit Gateway는 각 VPC가 허브에 연결하는 구조여서 연결 수가 VPC 수와 같게 유지되고 라우팅도 중앙에서 관리됩니다. 데이터 처리 요금이 추가되지만 대규모 환경에서는 운영 복잡도 절감이 이 비용을 상쇄할 수 있습니다.\n</details>",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    },
+    {
+      "id": "seg072",
+      "kind": "source",
+      "sourceExcerpt": "### 📌 출처 (verified)\n\n이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)\n\n1. VPC 게이트웨이 엔드포인트 — https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html\n2. NAT 게이트웨이 요금 — https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html\n3. Amazon VPC 요금 — https://aws.amazon.com/vpc/pricing/\n4. AWS PrivateLink 요금 — https://aws.amazon.com/privatelink/pricing/\n5. Amazon CloudFront 요금 — https://aws.amazon.com/cloudfront/pricing/\n6. AWS Direct Connect 요금 — https://aws.amazon.com/directconnect/pricing/\n7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html",
+      "scriptText": "",
+      "audioSummary": null,
+      "skip": true,
+      "issues": []
+    }
+  ]
+}
