@@ -8,6 +8,7 @@ import 'package:aws_docs/data/cloud/auth_service.dart';
 import 'package:aws_docs/data/cloud/auth_user.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
 import 'package:aws_docs/data/cloud/sync_controller.dart';
+import 'package:aws_docs/data/cloud/sync_meta.dart';
 
 /// loadCollection 호출 수 카운트 + 선택적 throw/지연으로 reconcile 횟수·에러·인터리브 검증.
 class _SpyCloud implements CloudStore {
@@ -80,6 +81,22 @@ void main() {
     expect(plans.containsKey('CLF-C02'), isTrue);
     expect(ctrl.user?.email, 'test@example.com');
     expect(ctrl.status, SyncStatus.idle);
+  });
+
+  test('meta 변경(다른 기기의 초기화)도 reconcile을 트리거한다', () async {
+    final cloud = FakeCloudStore();
+    final local = MemoryBackend();
+    final ctrl = SyncController(
+        auth: FakeAuthService(), cloud: cloud, local: local, nowMs: () => 1000);
+    ctrl.start();
+    await ctrl.signIn();
+
+    await cloud.setDoc('u-test', 'meta', 'deletions', {
+      'resetAt': {'CLF-C02': 3000}
+    });
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(SyncMeta(local).resetAt['CLF-C02'], 3000);
   });
 
   test('signOut: status off·user null', () async {
