@@ -114,4 +114,42 @@ void main() {
       expect(b.read('awsdocs.plan.v1'), isEmpty);
     });
   });
+
+  group('동기용 접근자', () {
+    test('byId: 모든 자격증의 일정을 planId로 색인한다', () {
+      final b = MemoryBackend();
+      StudyPlanStore(backend: b)
+        ..add(_plan('', 'CLF-C02', label: 'A'))
+        ..add(_plan('', 'SAA-C03', label: 'B'));
+      final byId = StudyPlanStore(backend: b).byId();
+      expect(byId.length, 2);
+      expect(byId.values.map((p) => p.label).toSet(), {'A', 'B'});
+      expect(byId.keys.every((id) => id.isNotEmpty), isTrue);
+    });
+
+    test('upsert: 같은 id는 교체, 없으면 추가', () {
+      final b = MemoryBackend();
+      final s = StudyPlanStore(backend: b);
+      s.add(_plan('', 'CLF-C02', label: 'A'));
+      final id = s.plansFor('CLF-C02').single.id;
+
+      s.upsert(_plan(id, 'CLF-C02', label: 'A2'));
+      expect(s.plansFor('CLF-C02').single.label, 'A2');
+
+      s.upsert(_plan('other', 'CLF-C02', label: 'B'));
+      expect(s.plansFor('CLF-C02').length, 2);
+    });
+
+    test('removeById: 자격증을 몰라도 지운다', () {
+      final b = MemoryBackend();
+      final s = StudyPlanStore(backend: b);
+      s.add(_plan('', 'SAA-C03', label: 'B'));
+      final id = s.plansFor('SAA-C03').single.id;
+
+      s.removeById(id);
+
+      expect(s.plansFor('SAA-C03'), isEmpty);
+      expect(s.byId(), isEmpty);
+    });
+  });
 }
