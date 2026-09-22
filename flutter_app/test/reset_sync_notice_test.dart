@@ -69,33 +69,33 @@ Future<void> _openCertReset(WidgetTester tester, Widget page) async {
 }
 
 void main() {
-  group('로그인 중 초기화 확인창은 클라우드 백업이 남는다고 알린다', () {
-    testWidgets('홈 — 모든 학습 기록 초기화', (tester) async {
+  group('초기화 확인창은 로그인 여부와 무관하게 되돌릴 수 없다고 알린다', () {
+    testWidgets('홈 — 모든 학습 기록 초기화(로그인)', (tester) async {
       await _signIn(tester);
       await _openHomeReset(tester);
-      expect(find.textContaining('클라우드 백업'), findsOneWidget);
-      expect(find.textContaining('되돌릴 수 없'), findsNothing);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
     });
 
-    testWidgets('약점 리포트 — 자격증 초기화', (tester) async {
+    testWidgets('약점 리포트 — 자격증 초기화(로그인)', (tester) async {
       await _signIn(tester);
       await _openCertReset(tester, ReportPage(cert: certByCode('CLF-C02')!));
-      expect(find.textContaining('클라우드 백업'), findsOneWidget);
-      expect(find.textContaining('되돌릴 수 없'), findsNothing);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
     });
 
-    testWidgets('오답노트 — 자격증 초기화', (tester) async {
+    testWidgets('오답노트 — 자격증 초기화(로그인)', (tester) async {
       await _signIn(tester);
       await _openCertReset(
           tester, ReviewListPage(cert: certByCode('CLF-C02')!));
-      expect(find.textContaining('클라우드 백업'), findsOneWidget);
-      expect(find.textContaining('되돌릴 수 없'), findsNothing);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
     });
-  });
 
-  testWidgets('비로그인이면 되돌릴 수 없다고 알린다(동기 경고 없음)', (tester) async {
-    await _openHomeReset(tester);
-    expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
-    expect(find.textContaining('클라우드 백업'), findsNothing);
+    testWidgets('비로그인 — 모든 학습 기록 초기화', (tester) async {
+      await _openHomeReset(tester);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
+    });
   });
 }
