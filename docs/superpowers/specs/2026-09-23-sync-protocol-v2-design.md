@@ -226,9 +226,9 @@ service cloud.firestore {
 
 | PR | 범위 | 주요 파일 |
 |---|---|---|
-| **PR1 — 삭제 표식 기반** | 사이드카 v2, 표식 필터·유효 시각, `CloudStore.deleteDoc`, 응시·열람에 적용, 초기화 흐름 연결, `AttemptRecord.createdAtMs`, 열람 형태 이관 | `cloud_store.dart`, `firestore_cloud_store.dart`, `sync_merge.dart`, `sync_service.dart`, `study_reset.dart`, `viewed_docs_store.dart`, `models/attempt_record.dart` |
+| **PR1 — 삭제 표식 기반** | 사이드카 v2, 표식 필터·유효 시각, `CloudStore.deleteDoc`, 응시·열람에 적용, 초기화 흐름 연결, `AttemptRecord.createdAtMs`, 열람 형태 이관, 표식 문서 수신, **확인창 문구 복귀**(PR1이 끝나면 삭제가 실제로 전파되므로 그 시점에 되돌리지 않으면 거짓 안내가 된다) | `cloud_store.dart`, `firestore_cloud_store.dart`, `sync_merge.dart`, `sync_service.dart`, `sync_controller.dart`, `study_reset.dart`, `viewed_docs_store.dart`, `models/attempt_record.dart`, `content/reset_dialog.dart` |
 | **PR2 — 일정·진행 동기** | `plans/{planId}`·`progress/{planId}`, 3-way 판정과 집합 병합, 레거시 클라우드 문서 변환, 개별 삭제 전파, watch 대상 추가 | `sync_merge.dart`, `sync_service.dart`, `sync_controller.dart` |
-| **PR3 — 정리** | checks 동기 제외·클라우드 1회 정리, 동기 경로 관용 파싱, 확인창 문구 복귀와 비로그인 안내, `firestore.rules`·에뮬레이터 테스트 | `sync_service.dart`, `history_store.dart`(파서 공유), `content/reset_dialog.dart`, `firestore.rules`, `firebase.json` |
+| **PR3 — 정리** | checks 동기 제외·클라우드 1회 정리, 레거시 LWW 경로와 옛 사이드카(`awsdocs.sync.v1`) 제거, 동기 경로 관용 파싱, 비로그인 과거 동기 안내 문구, `firestore.rules`·에뮬레이터 테스트 | `sync_service.dart`, `history_store.dart`(파서 공유), `content/reset_dialog.dart`, `firestore.rules`, `firebase.json` |
 
 ---
 
