@@ -263,10 +263,8 @@ class _CertExamPageState extends State<CertExamPage> {
           optionOrders: r.optionOrders,
           passingScore: passingScore,
           onChanged: _store.save,
-          onFinished: (rec) {
-            _history.add(rec);
-            _store.clear(_examId);
-          },
+          onFinished: (rec) => recordFinishedAttempt(rec,
+              history: _history, sessions: _store, examId: _examId),
           resultsActionsBuilder: (ctx, justFinished) {
             // history는 onFinished의 add 직후라 현재 응시를 포함한다(잠금해제 stale 방지).
             final history = _history.all();
