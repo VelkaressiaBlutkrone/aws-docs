@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import '../viewed_docs_store.dart'; // KvBackend도 함께 re-export 한다
 import '../../models/attempt_record.dart';
+import '../../models/study_plan.dart';
+import '../study_plan_store.dart';
 import 'cloud_store.dart';
 import 'sync_merge.dart';
 import 'sync_meta.dart';
+import 'sync_three_way.dart';
 
 /// 로컬 KvBackend 블롭 ↔ CloudStore 엔티티 화해. 시각은 주입(테스트 결정적).
 class SyncService {
@@ -22,7 +25,6 @@ class SyncService {
 
   static const _kHistory = 'awsdocs.history.v1';
   static const _kViewed = 'awsdocs.viewed.v1';
-  static const _kPlans = 'awsdocs.plan.v1';
   static const _kChecks = 'awsdocs.plan.checks.v1';
   static const _kMeta = 'awsdocs.sync.v1';
 
@@ -76,8 +78,8 @@ class SyncService {
     final marks = await _reconcileDeletions(uid);
     await _reconcileAttempts(uid, marks);
     await _reconcileViewed(uid, marks);
-    await _reconcileLww(uid, _kPlans, 'plans', 'plans'); // 레거시(PR2에서 교체)
-    await _reconcileLww(uid, _kChecks, 'checks', 'checks');
+    await _reconcilePlans(uid, marks);
+    await _reconcileLww(uid, _kChecks, 'checks', 'checks'); // 레거시(PR3에서 제거)
   }
 
   /// meta/deletions 화해: 로컬·클라우드 표식을 필드별 늦은 시각으로 합쳐 양쪽에
@@ -138,6 +140,100 @@ class SyncService {
       await _cloud.setDoc(uid, 'viewed', e.key, e.value);
     }
     await _deleteUpTo(uid, 'viewed', r.toDelete);
+  }
+
+  /// 일정(v2) 화해. 문서마다 base(마지막 동기 내용)와 비교해 3-way로 판정한다.
+  /// 클라우드 쓰기는 로컬 쓰기를 모두 끝낸 뒤에 모아서 한다(위 CODE-D-004 규칙).
+  Future<void> _reconcilePlans(String uid, Map<String, int> marks) async {
+    final cloud = {...await _cloud.loadCollection(uid, 'plans')};
+    final store = StudyPlanStore(backend: _local);
+    final meta = SyncMeta(_local);
+    final em = meta.entity('plans');
+    final local = store.byId();
+
+    final base = {...em.base};
+    final updatedAt = {...em.updatedAt};
+    final dirtyAt = {...em.dirtyAt};
+    final toPush = <String, Map<String, dynamic>>{};
+    final toDelete = <String>[];
+    final now = _now();
+
+    for (final id in {...local.keys, ...cloud.keys}) {
+      final localDoc = local[id]?.toJson();
+      final cloudRaw = cloud[id];
+      final cloudDoc = cloudRaw == null
+          ? null
+          : (Map<String, dynamic>.from(cloudRaw)..remove('updatedAtMs'));
+      final cloudMs = (cloudRaw?['updatedAtMs'] as num?)?.toInt() ?? 0;
+      final cert = (localDoc ?? cloudDoc)?['certCode']?.toString() ?? '';
+      final cut = mergedEffectiveResetAt(marks, cert);
+      // 마지막으로 아는 로컬 시각. 한 번도 동기된 적 없는 일정(base에 없음)은
+      // 시각을 알 수 없어 표식으로 지우지 않는다 — 미동기 로컬 작업을 잃지 않는 쪽.
+      final localTime = dirtyAt[id] ?? updatedAt[id] ?? 0;
+      final localStale =
+          localDoc != null && base.containsKey(id) && localTime < cut;
+
+      if ((cloudRaw != null && cloudMs < cut) || localStale) {
+        if (cloudRaw != null) toDelete.add(id);
+        if (localStale) store.removeById(id);
+        base.remove(id);
+        updatedAt.remove(id);
+        dirtyAt.remove(id);
+        continue;
+      }
+
+      // 로컬 변경을 처음 본 시각을 기록한다(둘 다 바뀐 경우의 비교 기준).
+      if (localDoc != null &&
+          base.containsKey(id) &&
+          jsonEncode(localDoc) != jsonEncode(base[id]) &&
+          dirtyAt[id] == null) {
+        dirtyAt[id] = now;
+      }
+
+      switch (decideDoc(
+        base: base[id],
+        local: localDoc,
+        cloud: cloudDoc,
+        cloudUpdatedAtMs: cloudMs,
+        localDirtyAtMs: dirtyAt[id] ?? 0,
+      )) {
+        case DocAction.none:
+          break;
+        case DocAction.adoptCloud:
+          store.upsert(StudyPlan.fromJson(cloudDoc!));
+          base[id] = cloudDoc;
+          updatedAt[id] = cloudMs;
+          dirtyAt.remove(id);
+          break;
+        case DocAction.pushLocal:
+          toPush[id] = {...localDoc!, 'updatedAtMs': now};
+          base[id] = localDoc;
+          updatedAt[id] = now;
+          dirtyAt.remove(id);
+          break;
+        case DocAction.deleteLocal:
+          store.removeById(id);
+          base.remove(id);
+          updatedAt.remove(id);
+          dirtyAt.remove(id);
+          break;
+        case DocAction.deleteCloud:
+          toDelete.add(id);
+          base.remove(id);
+          updatedAt.remove(id);
+          dirtyAt.remove(id);
+          break;
+      }
+    }
+
+    meta.setEntity('plans',
+        EntityMeta(base: base, updatedAt: updatedAt, dirtyAt: dirtyAt));
+
+    // 로컬 쓰기를 모두 끝낸 뒤 클라우드에 쓴다.
+    for (final e in toPush.entries) {
+      await _cloud.setDoc(uid, 'plans', e.key, e.value);
+    }
+    await _deleteUpTo(uid, 'plans', toDelete);
   }
 
   Future<void> _reconcileLww(
