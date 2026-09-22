@@ -239,4 +239,31 @@ void main() {
     expect(seen, isNotNull);
     expect(seen!.correct, 2); // 방금 끝난 응시 전달
   });
+
+  group('결과 부제의 합격선은 시험 메타를 따른다', () {
+    // 이미 만료된 시계로 띄워 첫 프레임 뒤 자동 제출 → 결과 화면.
+    Future<void> pumpFinished(WidgetTester tester, {int? passingScore}) async {
+      final started = DateTime(2026, 6, 6);
+      await tester.pumpWidget(_host(ExamView(
+        bank: _bank(), certId: 'SAA-C03', taskId: 'saa-t2-1',
+        startedAt: started, durationSec: 5,
+        now: () => started.add(const Duration(seconds: 10)),
+        passingScore: passingScore,
+      )));
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('결과'), findsOneWidget);
+    }
+
+    testWidgets('주입된 공식 합격선(720)을 표시한다', (tester) async {
+      await pumpFinished(tester, passingScore: 720);
+      expect(find.textContaining('720점'), findsOneWidget);
+      expect(find.textContaining('700점'), findsNothing);
+    });
+
+    testWidgets('합격선 메타가 없으면 점수를 지어내지 않는다', (tester) async {
+      await pumpFinished(tester);
+      expect(find.textContaining('합격선'), findsNothing);
+    });
+  });
 }

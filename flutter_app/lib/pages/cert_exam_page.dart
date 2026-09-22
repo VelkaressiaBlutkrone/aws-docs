@@ -230,14 +230,16 @@ class _CertExamPageState extends State<CertExamPage> {
               ),
             );
           }
-          if (_running != null) return _examView(_running!);
+          if (_running != null) {
+            return _examView(_running!, data.overview?.passingScore);
+          }
           return _startScreen(data);
         },
       ),
     );
   }
 
-  Widget _examView(_RunParams r) {
+  Widget _examView(_RunParams r, int? passingScore) {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: Layout.exam),
@@ -259,6 +261,7 @@ class _CertExamPageState extends State<CertExamPage> {
           initialFlagged: r.flagged,
           restored: r.restored,
           optionOrders: r.optionOrders,
+          passingScore: passingScore,
           onChanged: _store.save,
           onFinished: (rec) {
             _history.add(rec);
