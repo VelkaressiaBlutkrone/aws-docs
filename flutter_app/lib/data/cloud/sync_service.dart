@@ -146,6 +146,29 @@ class SyncService {
   /// 클라우드 쓰기는 로컬 쓰기를 모두 끝낸 뒤에 모아서 한다(위 CODE-D-004 규칙).
   Future<void> _reconcilePlans(String uid, Map<String, int> marks) async {
     final cloud = {...await _cloud.loadCollection(uid, 'plans')};
+
+    // 레거시 문서(id 없음, 문서 id가 자격증 코드 — 옛 LWW 경로가 올린 것)를
+    // planId 문서로 옮긴다. 클라우드만 건드리므로 로컬 구간보다 앞이다.
+    for (final e in cloud.entries.toList()) {
+      if (e.value['id'] != null) continue;
+      final cert = (e.value['certCode'] ?? e.key).toString();
+      final created = (e.value['createdIso'] ?? '').toString();
+      final id = planIdOf(cert, created, 0);
+      final moved = {
+        ...e.value,
+        'id': id,
+        'label': '기존 일정',
+        'source': PlanSource.auto.name,
+        'updatedAtMs': (e.value['updatedAtMs'] as num?)?.toInt() ??
+            (e.value['updatedAt'] as num?)?.toInt() ??
+            0,
+      }..remove('updatedAt');
+      await _cloud.setDoc(uid, 'plans', id, moved);
+      await _cloud.deleteDoc(uid, 'plans', e.key);
+      cloud.remove(e.key);
+      cloud[id] = moved;
+    }
+
     final store = StudyPlanStore(backend: _local);
     final meta = SyncMeta(_local);
     final em = meta.entity('plans');

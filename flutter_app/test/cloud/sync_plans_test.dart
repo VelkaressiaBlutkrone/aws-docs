@@ -73,4 +73,47 @@ void main() {
     expect(await cloud.loadCollection('u1', 'plans'), isEmpty);
     expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), isEmpty);
   });
+
+  test('레거시 클라우드 일정 문서를 planId 문서로 옮긴다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    await cloud.setDoc('u1', 'plans', 'CLF-C02', {
+      'certCode': 'CLF-C02',
+      'startIso': '2026-06-10',
+      'endIso': '2026-06-24',
+      'mode': 'period',
+      'createdIso': '2026-06-10',
+      'items': <dynamic>[],
+      'updatedAt': 9000,
+    });
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    final docs = await cloud.loadCollection('u1', 'plans');
+    expect(docs.containsKey('CLF-C02'), isFalse); // 레거시 문서 제거
+    expect(docs.containsKey('CLF-C02:2026-06-10:0'), isTrue);
+    final plan = StudyPlanStore(backend: local).plansFor('CLF-C02').single;
+    expect(plan.id, 'CLF-C02:2026-06-10:0');
+    expect(plan.label, '기존 일정');
+  });
+
+  test('변환은 결정적이다 — 두 번 돌려도 문서가 늘지 않는다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    await cloud.setDoc('u1', 'plans', 'CLF-C02', {
+      'certCode': 'CLF-C02',
+      'startIso': '2026-06-10',
+      'endIso': '2026-06-24',
+      'mode': 'period',
+      'createdIso': '2026-06-10',
+      'items': <dynamic>[],
+    });
+    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
+
+    await svc.reconcileAll('u1');
+    await svc.reconcileAll('u1');
+
+    expect((await cloud.loadCollection('u1', 'plans')).length, 1);
+  });
 }
