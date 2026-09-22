@@ -46,11 +46,16 @@ class HistoryStore {
   List<AttemptRecord> all() => _parse(_b.read(_key)).records;
 
   /// 다시 쓰기용 로드. 해석에서 버려진 부분이 있으면 원문을 보존 키에 남긴다 —
-  /// 손상 레코드 하나 때문에 나머지 이력이 영구히 덮어써지지 않게.
+  /// 손상 레코드 하나 때문에 나머지 이력이 영구히 덮어써지지 않게. 보존은
+  /// best-effort: 보존본 쓰기가 실패해도(쿼터 근접) 이후 본 쓰기는 막지 않는다.
   List<AttemptRecord> _loadForRewrite() {
     final raw = _b.read(_key);
     final p = _parse(raw);
-    if (!p.lossless) _b.write(_corruptKey, raw!);
+    if (!p.lossless) {
+      try {
+        _b.write(_corruptKey, raw!);
+      } catch (_) {/* 보존 실패는 무시 — 새 응시 저장이 우선 */}
+    }
     return p.records;
   }
 

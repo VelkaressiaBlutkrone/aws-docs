@@ -4,6 +4,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/models/attempt_record.dart';
 import 'package:aws_docs/data/history_store.dart';
 
+/// 손상 보존본 키 쓰기만 실패시키는 백엔드(localStorage 쿼터 근접 모사).
+class _QuotaOnBackup extends MemoryBackend {
+  @override
+  void write(String key, String value) {
+    if (key == 'awsdocs.history.v1.corrupt') {
+      throw StateError('QuotaExceededError');
+    }
+    super.write(key, value);
+  }
+}
+
 void main() {
   test('AttemptRecord JSON 왕복', () {
     const r = AttemptRecord(
@@ -114,6 +125,17 @@ void main() {
       expect(HistoryStore(backend: b).all().single.date,
           '2026-09-22T00:00:00.000');
       expect(b.read('awsdocs.history.v1.corrupt'), raw);
+    });
+
+    test('add: 보존본 쓰기가 실패해도(쿼터 근접) 새 응시는 저장한다', () {
+      final b = _QuotaOnBackup()
+        ..write('awsdocs.history.v1',
+            jsonEncode([rec('2026-09-01T00:00:00.000'), 42]));
+
+      HistoryStore(backend: b).add(newer);
+
+      expect(HistoryStore(backend: b).all().map((r) => r.date),
+          ['2026-09-01T00:00:00.000', '2026-09-22T00:00:00.000']);
     });
 
     test('add: 정상 원문이면 보존본을 만들지 않는다', () {
