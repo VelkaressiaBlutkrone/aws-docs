@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:aws_docs/data/cloud/sync_meta.dart';
 import 'package:aws_docs/data/history_store.dart';
 import 'package:aws_docs/data/viewed_docs_store.dart';
 import 'package:aws_docs/data/exam_session_store.dart';
@@ -158,6 +159,18 @@ void main() {
       expect(planStore.plansFor('CLF-C02'), isEmpty);
       expect(PlanCheckStore(backend: b).overrides('CLF-C02'), isEmpty);
       expect(PlanProgressStore(backend: b).donePlan(planId), isEmpty);
+    });
+
+    test('resetCert: 자격증 삭제 표식을 남긴다', () {
+      final b = MemoryBackend();
+      resetCert('CLF-C02', backend: b, nowMs: () => 4242);
+      expect(SyncMeta(b).resetAt, {'CLF-C02': 4242});
+    });
+
+    test('resetAll: 전체 삭제 표식을 남긴다(표식은 초기화로 지워지지 않는다)', () {
+      final b = MemoryBackend();
+      resetAll(backend: b, nowMs: () => 777);
+      expect(SyncMeta(b).resetAt, {'*': 777});
     });
 
     test('resetAll: 레거시 v1 플랜이 다음 로드에서 되살아나지 않는다', () {

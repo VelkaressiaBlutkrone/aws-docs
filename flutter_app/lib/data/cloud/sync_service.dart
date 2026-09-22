@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import '../local_kv.dart';
+import '../viewed_docs_store.dart'; // KvBackend도 함께 re-export 한다
 import '../../models/attempt_record.dart';
 import 'cloud_store.dart';
 import 'sync_merge.dart';
+import 'sync_meta.dart';
 
 /// 로컬 KvBackend 블롭 ↔ CloudStore 엔티티 화해. 시각은 주입(테스트 결정적).
 class SyncService {
@@ -67,12 +68,44 @@ class SyncService {
     _writeIfChanged(_kMeta, jsonEncode(all));
   }
 
-  /// 로그인 직후 4종 양방향 화해.
+  /// 한 회차에서 지우는 클라우드 문서 수 상한(초기화 직후 동기가 길어지지 않게).
+  static const maxDeletesPerRound = 50;
+
+  /// 로그인 직후·트리거 시 양방향 화해. 삭제 표식을 먼저 화해해 이번 회차 기준으로 쓴다.
   Future<void> reconcileAll(String uid) async {
-    await _reconcileAttempts(uid);
-    await _reconcileViewed(uid);
-    await _reconcileLww(uid, _kPlans, 'plans', 'plans');
+    final marks = await _reconcileDeletions(uid);
+    await _reconcileAttempts(uid, marks);
+    await _reconcileViewed(uid, marks);
+    await _reconcileLww(uid, _kPlans, 'plans', 'plans'); // 레거시(PR2에서 교체)
     await _reconcileLww(uid, _kChecks, 'checks', 'checks');
+  }
+
+  /// meta/deletions 화해: 로컬·클라우드 표식을 필드별 늦은 시각으로 합쳐 양쪽에
+  /// 반영하고, 이번 회차에 적용할 표식을 돌려준다.
+  Future<Map<String, int>> _reconcileDeletions(String uid) async {
+    final doc = (await _cloud.loadCollection(uid, 'meta'))['deletions'] ??
+        const <String, dynamic>{};
+    final cloudMarks = <String, int>{
+      for (final e in ((doc['resetAt'] as Map?) ?? const {}).entries)
+        if (e.value is num) e.key.toString(): (e.value as num).toInt(),
+    };
+    final meta = SyncMeta(_local);
+    final merged = mergeResetMarks(meta.resetAt, cloudMarks);
+    if (!_sameMarks(merged, meta.resetAt)) meta.resetAt = merged;
+    if (!_sameMarks(merged, cloudMarks)) {
+      await _cloud.setDoc(uid, 'meta', 'deletions', {...doc, 'resetAt': merged});
+    }
+    return merged;
+  }
+
+  bool _sameMarks(Map<String, int> a, Map<String, int> b) =>
+      a.length == b.length && a.entries.every((e) => b[e.key] == e.value);
+
+  Future<void> _deleteUpTo(
+      String uid, String collection, List<String> ids) async {
+    for (final id in ids.take(maxDeletesPerRound)) {
+      await _cloud.deleteDoc(uid, collection, id);
+    }
   }
 
   // 각 화해는 클라우드 로드(await)를 먼저 끝낸 뒤 로컬을 읽고, 병합·로컬 쓰기까지
@@ -80,35 +113,31 @@ class SyncService {
   // (응시 제출·열람·수동 체크)를 stale 스냅샷이 덮어 유실된다(CODE-D-004).
   // 로컬 쓰기 뒤의 setDoc await는 무해하다 — 이후 로컬을 다시 쓰지 않는다.
 
-  Future<void> _reconcileAttempts(String uid) async {
+  Future<void> _reconcileAttempts(String uid, Map<String, int> marks) async {
     final cloud = await _cloud.loadCollection(uid, 'attempts');
     final local = _readJsonList(_kHistory)
         .whereType<Map<String, dynamic>>()
         .map(AttemptRecord.fromJson)
         .toList();
-    final r = mergeAttempts(local, cloud);
+    final r = mergeAttempts(local, cloud, resetAt: marks);
     _writeIfChanged(
         _kHistory, jsonEncode(r.merged.map((e) => e.toJson()).toList()));
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'attempts', e.key, e.value);
     }
+    await _deleteUpTo(uid, 'attempts', r.toDelete);
   }
 
-  Future<void> _reconcileViewed(String uid) async {
+  Future<void> _reconcileViewed(String uid, Map<String, int> marks) async {
     final cloud = await _cloud.loadCollection(uid, 'viewed');
-    final raw = _readJsonMap(_kViewed);
-    final local = <String, Set<String>>{
-      for (final e in raw.entries)
-        e.key: (e.value is List ? (e.value as List) : const [])
-            .map((x) => x.toString())
-            .toSet(),
-    };
-    final r = mergeViewed(local, cloud);
-    _writeIfChanged(_kViewed,
-        jsonEncode({for (final e in r.merged.entries) e.key: e.value.toList()}));
+    // 스토어를 통해 읽는다 — 값 형태(맵/레거시 배열) 해석을 한 곳에 둔다.
+    final local = ViewedDocsStore(backend: _local).readAll();
+    final r = mergeViewed(local, cloud, resetAt: marks);
+    _writeIfChanged(_kViewed, jsonEncode(r.merged));
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'viewed', e.key, e.value);
     }
+    await _deleteUpTo(uid, 'viewed', r.toDelete);
   }
 
   Future<void> _reconcileLww(
