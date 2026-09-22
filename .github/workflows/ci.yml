@@ -1,0 +1,40 @@
+name: CI
+
+# PR 게이트: develop·main 대상 PR마다 정적 분석(0건)과 전체 테스트를 돌린다.
+# 로컬 규율(CLAUDE.md 빌드·테스트 절)을 머지 전 기계 게이트로 옮긴 것.
+on:
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: flutter_app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2 # pages.yml과 같은 값 — 올릴 땐 두 파일을 한 PR에서
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
