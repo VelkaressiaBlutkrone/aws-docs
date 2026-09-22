@@ -125,32 +125,6 @@ void main() {
     expect(cv.keys.toSet(), {'t1', 't2', 't3'}); // 클라우드 합집합
   });
 
-  test('reconcileAll: plan LWW — 클라우드가 최신이면 로컬을 덮음(push 없음)', () async {
-    final local = MemoryBackend();
-    local.write('awsdocs.plan.v1', jsonEncode({
-      'CLF-C02': {
-        'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-06-24',
-        'mode': 'period', 'createdIso': '2026-06-10', 'items': []
-      }
-    }));
-    local.write('awsdocs.sync.v1', jsonEncode({
-      'plans': {'CLF-C02': 100} // 로컬은 오래됨
-    }));
-    final cloud = FakeCloudStore();
-    await cloud.setDoc('u1', 'plans', 'CLF-C02', {
-      'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-07-01',
-      'mode': 'period', 'createdIso': '2026-06-10', 'items': [], 'updatedAt': 9000,
-    });
-    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
-    await svc.reconcileAll('u1');
-    final lp =
-        (jsonDecode(local.read('awsdocs.plan.v1')!) as Map)['CLF-C02'] as Map;
-    expect(lp['endIso'], '2026-07-01'); // 클라우드 값으로 덮임
-    expect(lp.containsKey('updatedAt'), isFalse); // 로컬 doc은 updatedAt 제거
-    final meta = jsonDecode(local.read('awsdocs.sync.v1')!) as Map;
-    expect((meta['plans'] as Map)['CLF-C02'], 9000); // 사이드카 갱신
-  });
-
   test('reconcileAll: 두 번 호출해도 멱등(중복·재push 없음)', () async {
     final local = MemoryBackend();
     local.write('awsdocs.history.v1', jsonEncode([
@@ -166,42 +140,39 @@ void main() {
     expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
   });
 
+  // 일정(plans)은 PR2에서 3-way 경로로 옮겨갔다(test/cloud/sync_plans_test.dart).
+  // 레거시 LWW 경로는 checks만 쓰므로 아래 회귀는 checks로 지킨다.
   test('reconcileAll: 손상 사이드카 stamp가 reconcile를 중단시키지 않음', () async {
     final local = MemoryBackend();
-    local.write('awsdocs.plan.v1', jsonEncode({
-      'CLF-C02': {
-        'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-06-24',
-        'mode': 'period', 'createdIso': '2026-06-10', 'items': []
-      }
+    local.write('awsdocs.plan.checks.v1', jsonEncode({
+      'CLF-C02': {'x': true}
     }));
     local.write('awsdocs.sync.v1', jsonEncode({
-      'plans': {'CLF-C02': 'oops'} // 손상 stamp(숫자 아님)
+      'checks': {'CLF-C02': 'oops'} // 손상 stamp(숫자 아님)
     }));
     final cloud = FakeCloudStore();
     final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
     await svc.reconcileAll('u1'); // 예외 없이 완료(손상 stamp는 미스탬프로 강등)
     // now(5000)로 스탬프 후 push
-    final cp = await cloud.loadCollection('u1', 'plans');
-    expect(cp.containsKey('CLF-C02'), isTrue);
-    expect(cp['CLF-C02']!['updatedAt'], 5000);
+    final cc = await cloud.loadCollection('u1', 'checks');
+    expect(cc.containsKey('CLF-C02'), isTrue);
+    expect(cc['CLF-C02']!['updatedAt'], 5000);
   });
 
-  test('reconcileAll: plan LWW — 로컬이 최신이면 클라우드로 push', () async {
+  test('reconcileAll: checks LWW — 사이드카 없던 로컬은 now로 스탬프 후 push', () async {
     final local = MemoryBackend();
-    local.write('awsdocs.plan.v1', jsonEncode({
-      'CLF-C02': {'certCode': 'CLF-C02', 'startIso': '2026-06-10',
-        'endIso': '2026-06-24', 'mode': 'period', 'createdIso': '2026-06-10', 'items': []}
+    local.write('awsdocs.plan.checks.v1', jsonEncode({
+      'CLF-C02': {'x': true}
     }));
     final cloud = FakeCloudStore();
     final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
     await svc.reconcileAll('u1');
-    // 사이드카가 없던 로컬 plan은 nowMs로 스탬프 후 클라우드에 push
-    final cp = await cloud.loadCollection('u1', 'plans');
-    expect(cp.containsKey('CLF-C02'), isTrue);
-    expect(cp['CLF-C02']!['updatedAt'], 5000);
+    final cc = await cloud.loadCollection('u1', 'checks');
+    expect(cc.containsKey('CLF-C02'), isTrue);
+    expect(cc['CLF-C02']!['updatedAt'], 5000);
     // 사이드카 기록됨
     final meta = jsonDecode(local.read('awsdocs.sync.v1')!) as Map;
-    expect((meta['plans'] as Map)['CLF-C02'], 5000);
+    expect((meta['checks'] as Map)['CLF-C02'], 5000);
   });
 
   group('reconcile 경합 — 클라우드 로드 대기 중 사용자 쓰기 보존(CODE-D-004)', () {

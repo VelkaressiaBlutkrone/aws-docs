@@ -1,0 +1,160 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:aws_docs/data/cloud/cloud_store.dart';
+import 'package:aws_docs/data/cloud/sync_meta.dart';
+import 'package:aws_docs/data/cloud/sync_service.dart';
+import 'package:aws_docs/data/study_plan_store.dart';
+import 'package:aws_docs/models/study_plan.dart';
+
+StudyPlan _plan(String id, String cert, String label) => StudyPlan(
+      id: id,
+      label: label,
+      certCode: cert,
+      startIso: '2026-09-01',
+      endIso: '2026-10-01',
+      mode: PlanMode.period,
+      createdIso: '2026-09-01',
+      items: const [],
+    );
+
+void main() {
+  test('로컬 일정이 클라우드로 올라간다(updatedAtMs 포함)', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    StudyPlanStore(backend: local).add(_plan('', 'CLF-C02', 'A'));
+    final id = StudyPlanStore(backend: local).plansFor('CLF-C02').single.id;
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    final doc = (await cloud.loadCollection('u1', 'plans'))[id]!;
+    expect(doc['label'], 'A');
+    expect(doc['updatedAtMs'], 5000);
+    expect(SyncMeta(local).entity('plans').base[id]!['label'], 'A');
+  });
+
+  test('클라우드 일정이 로컬로 내려온다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    final p = _plan('CLF-C02:2026-09-01:0', 'CLF-C02', 'B');
+    await cloud.setDoc('u1', 'plans', p.id, {...p.toJson(), 'updatedAtMs': 100});
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    expect(StudyPlanStore(backend: local).plansFor('CLF-C02').single.label, 'B');
+  });
+
+  test('로컬에서 고친 일정이 다음 동기에 되돌아가지 않는다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    StudyPlanStore(backend: local).add(_plan('', 'CLF-C02', 'A'));
+    final id = StudyPlanStore(backend: local).plansFor('CLF-C02').single.id;
+    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
+    await svc.reconcileAll('u1'); // 1회차: push
+
+    StudyPlanStore(backend: local).upsert(_plan(id, 'CLF-C02', 'A2'));
+    await svc.reconcileAll('u1'); // 2회차: 로컬 변경 감지 → push
+
+    expect(
+        StudyPlanStore(backend: local).plansFor('CLF-C02').single.label, 'A2');
+    expect((await cloud.loadCollection('u1', 'plans'))[id]!['label'], 'A2');
+  });
+
+  test('자격증 초기화 표식보다 오래된 클라우드 일정은 지운다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    final p = _plan('CLF-C02:2026-09-01:0', 'CLF-C02', 'old');
+    await cloud.setDoc('u1', 'plans', p.id, {...p.toJson(), 'updatedAtMs': 100});
+    SyncMeta(local).markReset('CLF-C02', 3000);
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    expect(await cloud.loadCollection('u1', 'plans'), isEmpty);
+    expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), isEmpty);
+  });
+
+  test('레거시 클라우드 일정 문서를 planId 문서로 옮긴다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    await cloud.setDoc('u1', 'plans', 'CLF-C02', {
+      'certCode': 'CLF-C02',
+      'startIso': '2026-06-10',
+      'endIso': '2026-06-24',
+      'mode': 'period',
+      'createdIso': '2026-06-10',
+      'items': <dynamic>[],
+      'updatedAt': 9000,
+    });
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    final docs = await cloud.loadCollection('u1', 'plans');
+    expect(docs.containsKey('CLF-C02'), isFalse); // 레거시 문서 제거
+    expect(docs.containsKey('CLF-C02:2026-06-10:0'), isTrue);
+    final plan = StudyPlanStore(backend: local).plansFor('CLF-C02').single;
+    expect(plan.id, 'CLF-C02:2026-06-10:0');
+    expect(plan.label, '기존 일정');
+  });
+
+  test('변환은 결정적이다 — 두 번 돌려도 문서가 늘지 않는다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    await cloud.setDoc('u1', 'plans', 'CLF-C02', {
+      'certCode': 'CLF-C02',
+      'startIso': '2026-06-10',
+      'endIso': '2026-06-24',
+      'mode': 'period',
+      'createdIso': '2026-06-10',
+      'items': <dynamic>[],
+    });
+    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
+
+    await svc.reconcileAll('u1');
+    await svc.reconcileAll('u1');
+
+    expect((await cloud.loadCollection('u1', 'plans')).length, 1);
+  });
+
+  test('로컬에서 지운 일정이 클라우드와 다른 기기에서도 사라진다', () async {
+    final a = MemoryBackend(); // 기기 A
+    final b = MemoryBackend(); // 기기 B
+    final cloud = FakeCloudStore();
+    StudyPlanStore(backend: a).add(_plan('', 'CLF-C02', 'A'));
+    final id = StudyPlanStore(backend: a).plansFor('CLF-C02').single.id;
+    await SyncService(local: a, cloud: cloud, nowMs: () => 1000)
+        .reconcileAll('u1');
+    await SyncService(local: b, cloud: cloud, nowMs: () => 1100)
+        .reconcileAll('u1'); // B도 같은 일정을 받음
+    expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isNotEmpty);
+
+    StudyPlanStore(backend: a).removeById(id); // A에서 삭제
+    await SyncService(local: a, cloud: cloud, nowMs: () => 2000)
+        .reconcileAll('u1');
+    await SyncService(local: b, cloud: cloud, nowMs: () => 2100)
+        .reconcileAll('u1');
+
+    expect(await cloud.loadCollection('u1', 'plans'), isEmpty);
+    expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isEmpty);
+    final marks =
+        (await cloud.loadCollection('u1', 'meta'))['deletions']!['plans'];
+    expect((marks as Map)[id], 2000);
+  });
+
+  test('삭제 표식이 있는 일정은 다시 올라가지 않는다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    final p = _plan('CLF-C02:2026-09-01:0', 'CLF-C02', 'A');
+    StudyPlanStore(backend: local).upsert(p);
+    await cloud.setDoc('u1', 'meta', 'deletions', {
+      'plans': {p.id: 4000}
+    });
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    expect(await cloud.loadCollection('u1', 'plans'), isEmpty);
+    expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), isEmpty);
+  });
+}

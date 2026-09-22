@@ -46,6 +46,15 @@ class SyncMeta {
     _write(m);
   }
 
+  /// 일정별 삭제 표식(planId → UTC ms). 지운 일정이 다른 기기에서 되살아나지 않게.
+  Map<String, int> get deletedPlans => _intMap(_read()['deletedPlans']);
+
+  set deletedPlans(Map<String, int> v) {
+    final m = _read();
+    m['deletedPlans'] = v;
+    _write(m);
+  }
+
   /// 표식 기록. 같은 키는 늦은 시각을 남긴다.
   void markReset(String certOrAll, int ms) {
     final next = {...resetAt};
@@ -56,6 +65,53 @@ class SyncMeta {
   /// 이 자격증에 적용되는 유효 삭제 시각.
   int effectiveResetAt(String certCode) =>
       mergedEffectiveResetAt(resetAt, certCode);
+
+  /// 엔티티 종류(`plans`·`progress`)별 동기 부기.
+  EntityMeta entity(String kind) {
+    final m = _read()[kind];
+    if (m is! Map) return const EntityMeta(base: {}, updatedAt: {}, dirtyAt: {});
+    return EntityMeta(
+      base: {
+        for (final e in ((m['base'] as Map?) ?? const {}).entries)
+          if (e.value is Map<String, dynamic>)
+            e.key.toString(): e.value as Map<String, dynamic>,
+      },
+      updatedAt: _intMap(m['updatedAt']),
+      dirtyAt: _intMap(m['dirtyAt']),
+    );
+  }
+
+  void setEntity(String kind, EntityMeta m) {
+    final all = _read();
+    all[kind] = {
+      'base': m.base,
+      'updatedAt': m.updatedAt,
+      'dirtyAt': m.dirtyAt,
+    };
+    _write(all);
+  }
+
+  static Map<String, int> _intMap(Object? v) {
+    if (v is! Map) return {};
+    return {
+      for (final e in v.entries)
+        if (e.value is num) e.key.toString(): (e.value as num).toInt(),
+    };
+  }
+}
+
+/// 한 엔티티 종류의 동기 부기. [base]는 마지막 동기 시점의 문서 내용,
+/// [updatedAt]은 그때의 클라우드 `updatedAtMs`, [dirtyAt]은 로컬 변경을 처음 감지한 시각.
+class EntityMeta {
+  const EntityMeta({
+    required this.base,
+    required this.updatedAt,
+    required this.dirtyAt,
+  });
+
+  final Map<String, Map<String, dynamic>> base;
+  final Map<String, int> updatedAt;
+  final Map<String, int> dirtyAt;
 }
 
 /// 자격증 표식과 전체 표식 중 늦은 쪽.

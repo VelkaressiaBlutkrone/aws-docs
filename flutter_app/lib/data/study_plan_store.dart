@@ -137,6 +137,52 @@ class StudyPlanStore {
     _write(m);
   }
 
+  /// 모든 자격증의 일정을 planId로 색인한다(동기용).
+  Map<String, StudyPlan> byId() {
+    final out = <String, StudyPlan>{};
+    for (final cert in _read().keys) {
+      for (final p in plansFor(cert)) {
+        out[p.id] = p;
+      }
+    }
+    return out;
+  }
+
+  /// planId 기준 추가·갱신(동기 병합 결과 반영). id가 이미 있으면 교체한다.
+  /// [add]와 달리 items를 재매핑하지 않는다 — 동기는 내용을 그대로 옮긴다.
+  void upsert(StudyPlan plan) {
+    final m = _read();
+    final list = (m[plan.certCode] is List)
+        ? List<dynamic>.from(m[plan.certCode] as List)
+        : <dynamic>[];
+    final i = list.indexWhere((j) => j is Map && j['id'] == plan.id);
+    if (i >= 0) {
+      list[i] = plan.toJson();
+    } else {
+      list.add(plan.toJson());
+    }
+    m[plan.certCode] = list;
+    _write(m);
+  }
+
+  /// planId로 삭제한다(자격증 자동 판별).
+  void removeById(String planId) {
+    final m = _read();
+    for (final cert in m.keys.toList()) {
+      final list =
+          (m[cert] is List) ? List<dynamic>.from(m[cert] as List) : <dynamic>[];
+      final before = list.length;
+      list.removeWhere((j) => j is Map && j['id'] == planId);
+      if (list.length == before) continue;
+      if (list.isEmpty) {
+        m.remove(cert);
+      } else {
+        m[cert] = list;
+      }
+    }
+    _write(m);
+  }
+
   /// 전부 삭제. v2는 ''가 아니라 빈 맵으로 남긴다 — v2가 비면 다음 생성 때
   /// [_migrateV1IfNeeded]가 v1(로컬 잔존분 또는 클라우드 plans 동기가 되돌려 놓은 것)을
   /// 다시 이관해 레거시 플랜이 되살아난다. 레거시 v1 원본도 함께 지운다.
