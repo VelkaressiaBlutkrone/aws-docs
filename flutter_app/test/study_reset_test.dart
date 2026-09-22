@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/history_store.dart';
 import 'package:aws_docs/data/viewed_docs_store.dart';
@@ -156,6 +158,27 @@ void main() {
       expect(planStore.plansFor('CLF-C02'), isEmpty);
       expect(PlanCheckStore(backend: b).overrides('CLF-C02'), isEmpty);
       expect(PlanProgressStore(backend: b).donePlan(planId), isEmpty);
+    });
+
+    test('resetAll: 레거시 v1 플랜이 다음 로드에서 되살아나지 않는다', () {
+      final b = MemoryBackend()
+        ..write(
+            'awsdocs.plan.v1',
+            jsonEncode({
+              'CLF-C02': {
+                'certCode': 'CLF-C02',
+                'startIso': '2026-06-01',
+                'endIso': '2026-06-15',
+                'mode': 'period',
+                'createdIso': '2026-06-01',
+                'items': [],
+              }
+            }));
+      expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), hasLength(1));
+
+      resetAll(backend: b);
+
+      expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isEmpty);
     });
   });
 }

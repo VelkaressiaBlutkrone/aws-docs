@@ -230,14 +230,16 @@ class _CertExamPageState extends State<CertExamPage> {
               ),
             );
           }
-          if (_running != null) return _examView(_running!);
+          if (_running != null) {
+            return _examView(_running!, data.overview?.passingScore);
+          }
           return _startScreen(data);
         },
       ),
     );
   }
 
-  Widget _examView(_RunParams r) {
+  Widget _examView(_RunParams r, int? passingScore) {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: Layout.exam),
@@ -259,11 +261,10 @@ class _CertExamPageState extends State<CertExamPage> {
           initialFlagged: r.flagged,
           restored: r.restored,
           optionOrders: r.optionOrders,
+          passingScore: passingScore,
           onChanged: _store.save,
-          onFinished: (rec) {
-            _history.add(rec);
-            _store.clear(_examId);
-          },
+          onFinished: (rec) => recordFinishedAttempt(rec,
+              history: _history, sessions: _store, examId: _examId),
           resultsActionsBuilder: (ctx, justFinished) {
             // history는 onFinished의 add 직후라 현재 응시를 포함한다(잠금해제 stale 방지).
             final history = _history.all();

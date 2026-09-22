@@ -97,7 +97,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
       context,
       title: '${widget.cert.code} 학습 기록 초기화',
       message: '이 자격증의 응시 기록 $attempts회와 오답노트·약점 리포트·진행률·약점 모의고사 '
-          '잠금 해제 상태가 모두 삭제됩니다. 다른 자격증은 그대로입니다.\n\n이 작업은 되돌릴 수 없습니다.',
+          '잠금 해제 상태가 모두 삭제됩니다. 다른 자격증은 그대로입니다.',
     );
     if (!ok || !mounted) return;
     resetCert(widget.cert.code);

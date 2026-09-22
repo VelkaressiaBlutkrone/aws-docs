@@ -45,6 +45,7 @@ class ExamView extends StatefulWidget {
     this.now,
     this.resultsActionsBuilder,
     this.onOpenStudy,
+    this.passingScore,
   });
 
   final QuestionBank bank;
@@ -77,6 +78,9 @@ class ExamView extends StatefulWidget {
 
   /// 오답 복기 카드의 개념 라벨 → 해당 Task 학습문서 이동. null이면 링크 숨김.
   final void Function(String taskId, String section)? onOpenStudy;
+
+  /// 공식 합격선(1000점 만점 환산, 시험 가이드 메타). null이면 결과 부제에서 생략.
+  final int? passingScore;
 
   @override
   State<ExamView> createState() => _ExamViewState();
@@ -207,8 +211,12 @@ class _ExamViewState extends State<ExamView> {
       durationSpentSec: spent > widget.durationSec ? widget.durationSec : spent,
     );
     _justFinished = rec;
-    widget.onFinished?.call(rec);
-    setState(() {});
+    try {
+      widget.onFinished?.call(rec);
+    } finally {
+      // 기록 저장(onFinished)이 실패해도 결과 화면은 연다 — 예외는 그대로 전파.
+      if (mounted) setState(() {});
+    }
   }
 
   Future<void> _onSubmitPressed() async {
@@ -350,6 +358,7 @@ class _ExamViewState extends State<ExamView> {
   }
 
   Widget _results(BuildContext context) {
+    final pass = widget.passingScore;
     return SingleChildScrollView(
       padding: EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
       child: Column(
@@ -360,8 +369,10 @@ class _ExamViewState extends State<ExamView> {
             picked: _picked,
             flagged: _flagged,
             onOpenStudy: widget.onOpenStudy,
-            subtitle:
-                '플래그 ${_flagged.length}개 · 실제 합격선은 1000점 만점 환산 700점(정답률과 다름)',
+            // 합격선은 자격증마다 다르다(700/720/750) — 메타가 없으면 지어내지 않는다.
+            subtitle: pass == null
+                ? '플래그 ${_flagged.length}개'
+                : '플래그 ${_flagged.length}개 · 실제 합격선은 1000점 만점 환산 $pass점(정답률과 다름)',
           ),
           const SizedBox(height: Gap.lg),
           if (widget.resultsActionsBuilder != null)
@@ -491,6 +502,22 @@ class _SecondaryButton extends StatelessWidget {
   }
 }
 
+/// 제출된 응시를 이력에 기록하고 진행 세션을 정리한다(ExamPage·CertExamPage 공용).
+/// 기록 저장이 실패해도(localStorage 쿼터 초과 등) 제출된 세션은 정리하고,
+/// 예외는 호출자로 전파한다(전역 핸들러가 로그).
+void recordFinishedAttempt(
+  AttemptRecord r, {
+  required HistoryStore history,
+  required ExamSessionStore sessions,
+  required String examId,
+}) {
+  try {
+    history.add(r);
+  } finally {
+    sessions.clear(examId);
+  }
+}
+
 /// 얇은 로더: 문제은행 + 공식 시험 메타를 읽고 세션을 복원해 ExamView에 주입.
 class ExamPage extends StatefulWidget {
   const ExamPage({super.key, required this.entry});
@@ -595,6 +622,7 @@ class _ExamPageState extends State<ExamPage> {
       initialPicked: initialPicked,
       initialFlagged: initialFlagged,
       restored: restoredQs != null,
+      passingScore: overview?.passingScore,
     );
   }
 
@@ -648,11 +676,10 @@ class _ExamPageState extends State<ExamPage> {
                 restored: data.restored,
                 optionOrders: data.optionOrders,
                 sessionFingerprint: data.fullBankFingerprint,
+                passingScore: data.passingScore,
                 onChanged: _store.save,
-                onFinished: (r) {
-                  _history.add(r);
-                  _store.clear(examId);
-                },
+                onFinished: (r) => recordFinishedAttempt(r,
+                    history: _history, sessions: _store, examId: examId),
                 resultsActionsBuilder: (ctx, justFinished) {
                   // history는 onFinished의 add 직후라 현재 응시를 포함한다.
                   final history = _history.all();
@@ -697,6 +724,7 @@ class _ExamLoad {
     required this.initialPicked,
     required this.initialFlagged,
     required this.restored,
+    required this.passingScore,
   });
   final QuestionBank bank;
   final String fullBankFingerprint;
@@ -707,4 +735,5 @@ class _ExamLoad {
   final Map<int, int> initialPicked;
   final Set<int> initialFlagged;
   final bool restored;
+  final int? passingScore; // 시험 가이드 메타(없으면 null)
 }

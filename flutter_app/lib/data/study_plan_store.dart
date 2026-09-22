@@ -137,5 +137,11 @@ class StudyPlanStore {
     _write(m);
   }
 
-  void clearAll() => _b.write(_key, '');
+  /// 전부 삭제. v2는 ''가 아니라 빈 맵으로 남긴다 — v2가 비면 다음 생성 때
+  /// [_migrateV1IfNeeded]가 v1(로컬 잔존분 또는 클라우드 plans 동기가 되돌려 놓은 것)을
+  /// 다시 이관해 레거시 플랜이 되살아난다. 레거시 v1 원본도 함께 지운다.
+  void clearAll() {
+    _write(<String, dynamic>{});
+    _b.write(_keyV1, '');
+  }
 }

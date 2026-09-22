@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
       context,
       title: '모든 학습 기록 초기화',
       message: '모든 자격증의 응시 이력·오답노트·약점 리포트·진행률·열람 기록이 '
-          '전부 삭제됩니다. 진행 중인 시험 세션도 사라집니다.\n\n이 작업은 되돌릴 수 없습니다.',
+          '전부 삭제됩니다. 진행 중인 시험 세션도 사라집니다.',
       confirmLabel: '모두 초기화',
     );
     if (!ok || !mounted) return;

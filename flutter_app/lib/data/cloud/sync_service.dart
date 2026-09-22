@@ -56,10 +56,15 @@ class SyncService {
     return out;
   }
 
+  /// 값이 달라졌을 때만 쓴다 — 무변경 reconcile(주기 틱)이 로컬을 매번 재기록하지 않게.
+  void _writeIfChanged(String key, String value) {
+    if (_local.read(key) != value) _local.write(key, value);
+  }
+
   void _writeMeta(String section, Map<String, int> data) {
     final all = _readJsonMap(_kMeta);
     all[section] = data;
-    _local.write(_kMeta, jsonEncode(all));
+    _writeIfChanged(_kMeta, jsonEncode(all));
   }
 
   /// 로그인 직후 4종 양방향 화해.
@@ -70,20 +75,27 @@ class SyncService {
     await _reconcileLww(uid, _kChecks, 'checks', 'checks');
   }
 
+  // 각 화해는 클라우드 로드(await)를 먼저 끝낸 뒤 로컬을 읽고, 병합·로컬 쓰기까지
+  // await 없이 잇는다. 로컬 읽기와 쓰기 사이에 await가 끼면 그 사이의 사용자 쓰기
+  // (응시 제출·열람·수동 체크)를 stale 스냅샷이 덮어 유실된다(CODE-D-004).
+  // 로컬 쓰기 뒤의 setDoc await는 무해하다 — 이후 로컬을 다시 쓰지 않는다.
+
   Future<void> _reconcileAttempts(String uid) async {
+    final cloud = await _cloud.loadCollection(uid, 'attempts');
     final local = _readJsonList(_kHistory)
         .whereType<Map<String, dynamic>>()
         .map(AttemptRecord.fromJson)
         .toList();
-    final cloud = await _cloud.loadCollection(uid, 'attempts');
     final r = mergeAttempts(local, cloud);
-    _local.write(_kHistory, jsonEncode(r.merged.map((e) => e.toJson()).toList()));
+    _writeIfChanged(
+        _kHistory, jsonEncode(r.merged.map((e) => e.toJson()).toList()));
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'attempts', e.key, e.value);
     }
   }
 
   Future<void> _reconcileViewed(String uid) async {
+    final cloud = await _cloud.loadCollection(uid, 'viewed');
     final raw = _readJsonMap(_kViewed);
     final local = <String, Set<String>>{
       for (final e in raw.entries)
@@ -91,9 +103,8 @@ class SyncService {
             .map((x) => x.toString())
             .toSet(),
     };
-    final cloud = await _cloud.loadCollection(uid, 'viewed');
     final r = mergeViewed(local, cloud);
-    _local.write(_kViewed,
+    _writeIfChanged(_kViewed,
         jsonEncode({for (final e in r.merged.entries) e.key: e.value.toList()}));
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'viewed', e.key, e.value);
@@ -102,6 +113,7 @@ class SyncService {
 
   Future<void> _reconcileLww(
       String uid, String localKey, String collection, String metaSection) async {
+    final cloud = await _cloud.loadCollection(uid, collection);
     final rawLocal = _readJsonMap(localKey);
     final local = <String, Map<String, dynamic>>{
       for (final e in rawLocal.entries)
@@ -113,9 +125,8 @@ class SyncService {
     for (final cert in local.keys) {
       meta.putIfAbsent(cert, () => now);
     }
-    final cloud = await _cloud.loadCollection(uid, collection);
     final r = mergeLww(local, meta, cloud);
-    _local.write(localKey, jsonEncode(r.merged));
+    _writeIfChanged(localKey, jsonEncode(r.merged));
     _writeMeta(metaSection, r.mergedMeta);
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, collection, e.key, e.value);

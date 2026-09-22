@@ -1,0 +1,42 @@
+name: CI
+
+# PR 게이트: develop·main 대상 PR마다 정적 분석(0건)과 전체 테스트를 돌린다.
+# 로컬 규율(CLAUDE.md 빌드·테스트 절)을 머지 전 기계 게이트로 옮긴 것.
+on:
+  pull_request:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20 # hang(예: 파서 무한루프)이 러너를 기본 6시간 붙잡지 않게
+    defaults:
+      run:
+        working-directory: flutter_app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.2' # pages.yml과 같은 값 — 올릴 땐 두 파일을 한 PR에서
+          cache: true
+
+      # 커밋된 lock이 고정 SDK로 그대로 풀리지 않으면(툴체인 드리프트) 조용히 재해석하지 않고 실패.
+      - name: Install dependencies
+        run: flutter pub get --enforce-lockfile
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
