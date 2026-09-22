@@ -207,8 +207,12 @@ class _ExamViewState extends State<ExamView> {
       durationSpentSec: spent > widget.durationSec ? widget.durationSec : spent,
     );
     _justFinished = rec;
-    widget.onFinished?.call(rec);
-    setState(() {});
+    try {
+      widget.onFinished?.call(rec);
+    } finally {
+      // 기록 저장(onFinished)이 실패해도 결과 화면은 연다 — 예외는 그대로 전파.
+      if (mounted) setState(() {});
+    }
   }
 
   Future<void> _onSubmitPressed() async {
@@ -491,6 +495,22 @@ class _SecondaryButton extends StatelessWidget {
   }
 }
 
+/// 제출된 응시를 이력에 기록하고 진행 세션을 정리한다(ExamPage·CertExamPage 공용).
+/// 기록 저장이 실패해도(localStorage 쿼터 초과 등) 제출된 세션은 정리하고,
+/// 예외는 호출자로 전파한다(전역 핸들러가 로그).
+void recordFinishedAttempt(
+  AttemptRecord r, {
+  required HistoryStore history,
+  required ExamSessionStore sessions,
+  required String examId,
+}) {
+  try {
+    history.add(r);
+  } finally {
+    sessions.clear(examId);
+  }
+}
+
 /// 얇은 로더: 문제은행 + 공식 시험 메타를 읽고 세션을 복원해 ExamView에 주입.
 class ExamPage extends StatefulWidget {
   const ExamPage({super.key, required this.entry});
@@ -649,10 +669,8 @@ class _ExamPageState extends State<ExamPage> {
                 optionOrders: data.optionOrders,
                 sessionFingerprint: data.fullBankFingerprint,
                 onChanged: _store.save,
-                onFinished: (r) {
-                  _history.add(r);
-                  _store.clear(examId);
-                },
+                onFinished: (r) => recordFinishedAttempt(r,
+                    history: _history, sessions: _store, examId: examId),
                 resultsActionsBuilder: (ctx, justFinished) {
                   // history는 onFinished의 add 직후라 현재 응시를 포함한다.
                   final history = _history.all();
