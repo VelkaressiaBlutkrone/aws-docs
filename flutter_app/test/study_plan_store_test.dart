@@ -85,4 +85,33 @@ void main() {
     final b = MemoryBackend()..write('awsdocs.plan.v2', '{bad');
     expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isEmpty);
   });
+
+  group('clearAll과 레거시 v1', () {
+    const v1 = {
+      'CLF-C02': {
+        'certCode': 'CLF-C02',
+        'startIso': '2026-06-01',
+        'endIso': '2026-06-15',
+        'mode': 'period',
+        'createdIso': '2026-06-01',
+        'items': [],
+      }
+    };
+
+    test('clearAll 뒤 v1이 다시 채워져도(동기 복원) 재이관하지 않는다', () {
+      final b = MemoryBackend()..write('awsdocs.plan.v1', jsonEncode(v1));
+      expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), hasLength(1));
+
+      StudyPlanStore(backend: b).clearAll();
+      b.write('awsdocs.plan.v1', jsonEncode(v1)); // 클라우드 plans 동기가 v1을 되돌려 놓음
+
+      expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isEmpty);
+    });
+
+    test('clearAll은 레거시 v1 원본도 지운다', () {
+      final b = MemoryBackend()..write('awsdocs.plan.v1', jsonEncode(v1));
+      StudyPlanStore(backend: b).clearAll();
+      expect(b.read('awsdocs.plan.v1'), isEmpty);
+    });
+  });
 }
