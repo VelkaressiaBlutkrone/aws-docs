@@ -5,6 +5,9 @@ import 'dart:convert';
 abstract interface class CloudStore {
   Future<void> setDoc(
       String uid, String collection, String docId, Map<String, dynamic> data);
+
+  /// 문서 삭제. 없는 문서는 조용히 넘어간다(삭제 표식 정리에서 멱등 재시도).
+  Future<void> deleteDoc(String uid, String collection, String docId);
   Future<Map<String, Map<String, dynamic>>> loadCollection(
       String uid, String collection);
   Stream<Map<String, Map<String, dynamic>>> watchCollection(
@@ -22,6 +25,12 @@ class FakeCloudStore implements CloudStore {
       Map<String, dynamic> data) async {
     final coll = ((_d[uid] ??= {})[collection] ??= {});
     coll[docId] = _deepCopy(data);
+    _emit(uid, collection);
+  }
+
+  @override
+  Future<void> deleteDoc(String uid, String collection, String docId) async {
+    _d[uid]?[collection]?.remove(docId);
     _emit(uid, collection);
   }
 

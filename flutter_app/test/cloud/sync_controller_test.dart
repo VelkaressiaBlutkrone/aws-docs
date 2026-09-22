@@ -25,6 +25,10 @@ class _SpyCloud implements CloudStore {
       _inner.setDoc(uid, collection, docId, data);
 
   @override
+  Future<void> deleteDoc(String uid, String collection, String docId) =>
+      _inner.deleteDoc(uid, collection, docId);
+
+  @override
   Future<Map<String, Map<String, dynamic>>> loadCollection(
       String uid, String collection) async {
     loads++;

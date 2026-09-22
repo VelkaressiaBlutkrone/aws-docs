@@ -42,6 +42,10 @@ class _GatedCloud implements CloudStore {
       inner.setDoc(uid, collection, docId, data);
 
   @override
+  Future<void> deleteDoc(String uid, String collection, String docId) =>
+      inner.deleteDoc(uid, collection, docId);
+
+  @override
   Stream<Map<String, Map<String, dynamic>>> watchCollection(
           String uid, String collection) =>
       inner.watchCollection(uid, collection);
