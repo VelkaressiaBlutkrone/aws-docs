@@ -1,3 +1,4 @@
+import 'cloud/sync_meta.dart';
 import 'content_index.dart';
 import 'exam_session_store.dart';
 import 'history_store.dart';
@@ -22,8 +23,11 @@ Iterable<String> examIdsForCert(String certCode) sync* {
   }
 }
 
+int _utcNowMs() => DateTime.now().toUtc().millisecondsSinceEpoch;
+
 /// 한 자격증의 모든 학습 기록을 삭제한다(다른 자격증은 보존).
-void resetCert(String certCode, {KvBackend? backend}) {
+/// 로그인 상태면 다음 동기가 이 표식으로 클라우드·다른 기기까지 정리한다.
+void resetCert(String certCode, {KvBackend? backend, int Function()? nowMs}) {
   final b = backend ?? defaultBackend();
   HistoryStore(backend: b).clearCert(certCode);
   ViewedDocsStore(backend: b).clearCert(certCode);
@@ -38,10 +42,12 @@ void resetCert(String certCode, {KvBackend? backend}) {
   for (final id in examIdsForCert(certCode)) {
     sessions.clear(id);
   }
+  SyncMeta(b).markReset(certCode, (nowMs ?? _utcNowMs)());
 }
 
 /// 모든 자격증의 모든 학습 기록을 삭제한다(공장 초기화).
-void resetAll({KvBackend? backend}) {
+/// 사이드카는 지우지 않는다 — 삭제 표식을 보존해야 부활을 막는다.
+void resetAll({KvBackend? backend, int Function()? nowMs}) {
   final b = backend ?? defaultBackend();
   HistoryStore(backend: b).clearAll();
   ViewedDocsStore(backend: b).clearAll();
@@ -49,4 +55,5 @@ void resetAll({KvBackend? backend}) {
   PlanCheckStore(backend: b).clearAll();
   PlanProgressStore(backend: b).clearAll();
   ExamSessionStore(backend: b).clearAll();
+  SyncMeta(b).markReset(SyncMeta.allCerts, (nowMs ?? _utcNowMs)());
 }
