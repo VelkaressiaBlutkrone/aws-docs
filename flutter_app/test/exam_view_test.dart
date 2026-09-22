@@ -113,6 +113,58 @@ void main() {
     expect(find.text('결과'), findsOneWidget); // 결과 진입
   });
 
+  testWidgets('기록 저장(onFinished)이 실패해도 결과 화면으로 넘어간다', (tester) async {
+    final started = DateTime(2026, 6, 6);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
+      startedAt: started, durationSec: 5,
+      now: () => started.add(const Duration(seconds: 10)), // 만료 → 첫 프레임 뒤 자동 제출
+      onFinished: (_) => throw StateError('QuotaExceededError'),
+    )));
+    expect(tester.takeException(), isStateError); // 삼키지 않고 전파(전역 핸들러가 로그)
+    await tester.pump();
+    expect(find.text('결과'), findsOneWidget);
+  });
+
+  group('recordFinishedAttempt', () {
+    ExamSession sess() => ExamSession(
+          examId: 'exam:clf-t2-3', certId: 'CLF-C02', taskId: 'clf-t2-3',
+          startedAtIso: '2026-06-06T00:00:00.000', durationSec: 600, index: 0,
+          picked: const {}, flagged: const [], bankFingerprint: 'fp',
+          questionIds: const ['q1', 'q2'], optionOrders: const {},
+          submitted: false,
+        );
+    const rec = AttemptRecord(
+      certId: 'CLF-C02', examId: 'exam:clf-t2-3', mode: 'exam',
+      date: '2026-06-06T00:01:00.000', correct: 1, total: 2,
+      wrongQuestionIds: ['q2'], flaggedQuestionIds: [], durationSpentSec: 60,
+    );
+
+    test('응시를 기록하고 진행 세션을 정리한다', () {
+      final b = MemoryBackend();
+      final sessions = ExamSessionStore(backend: b)..save(sess());
+      recordFinishedAttempt(rec,
+          history: HistoryStore(backend: b),
+          sessions: sessions,
+          examId: 'exam:clf-t2-3');
+      expect(HistoryStore(backend: b).all().single.date,
+          '2026-06-06T00:01:00.000');
+      expect(sessions.load('exam:clf-t2-3'), isNull);
+    });
+
+    test('기록 저장이 실패해도 세션은 정리하고 예외를 전파한다', () {
+      final b = _QuotaOnHistory();
+      final sessions = ExamSessionStore(backend: b)..save(sess());
+      expect(
+          () => recordFinishedAttempt(rec,
+              history: HistoryStore(backend: b),
+              sessions: sessions,
+              examId: 'exam:clf-t2-3'),
+          throwsStateError);
+      expect(sessions.load('exam:clf-t2-3'), isNull);
+    });
+  });
+
   testWidgets('다이얼로그 중 시간 만료 → 단일 제출, 고립 다이얼로그 없음', (tester) async {
     var calls = 0;
     final started = DateTime(2026, 6, 6, 0, 0, 0);
@@ -249,57 +301,5 @@ void main() {
     expect(find.text('학습문서로'), findsNothing); // 빌더가 대체
     expect(seen, isNotNull);
     expect(seen!.correct, 2); // 방금 끝난 응시 전달
-  });
-
-  testWidgets('기록 저장(onFinished)이 실패해도 결과 화면으로 넘어간다', (tester) async {
-    final started = DateTime(2026, 6, 6);
-    await tester.pumpWidget(_host(ExamView(
-      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
-      startedAt: started, durationSec: 5,
-      now: () => started.add(const Duration(seconds: 10)), // 만료 → 첫 프레임 뒤 자동 제출
-      onFinished: (_) => throw StateError('QuotaExceededError'),
-    )));
-    expect(tester.takeException(), isStateError); // 삼키지 않고 전파(전역 핸들러가 로그)
-    await tester.pump();
-    expect(find.text('결과'), findsOneWidget);
-  });
-
-  group('recordFinishedAttempt', () {
-    ExamSession sess() => ExamSession(
-          examId: 'exam:clf-t2-3', certId: 'CLF-C02', taskId: 'clf-t2-3',
-          startedAtIso: '2026-06-06T00:00:00.000', durationSec: 600, index: 0,
-          picked: const {}, flagged: const [], bankFingerprint: 'fp',
-          questionIds: const ['q1', 'q2'], optionOrders: const {},
-          submitted: false,
-        );
-    const rec = AttemptRecord(
-      certId: 'CLF-C02', examId: 'exam:clf-t2-3', mode: 'exam',
-      date: '2026-06-06T00:01:00.000', correct: 1, total: 2,
-      wrongQuestionIds: ['q2'], flaggedQuestionIds: [], durationSpentSec: 60,
-    );
-
-    test('응시를 기록하고 진행 세션을 정리한다', () {
-      final b = MemoryBackend();
-      final sessions = ExamSessionStore(backend: b)..save(sess());
-      recordFinishedAttempt(rec,
-          history: HistoryStore(backend: b),
-          sessions: sessions,
-          examId: 'exam:clf-t2-3');
-      expect(HistoryStore(backend: b).all().single.date,
-          '2026-06-06T00:01:00.000');
-      expect(sessions.load('exam:clf-t2-3'), isNull);
-    });
-
-    test('기록 저장이 실패해도 세션은 정리하고 예외를 전파한다', () {
-      final b = _QuotaOnHistory();
-      final sessions = ExamSessionStore(backend: b)..save(sess());
-      expect(
-          () => recordFinishedAttempt(rec,
-              history: HistoryStore(backend: b),
-              sessions: sessions,
-              examId: 'exam:clf-t2-3'),
-          throwsStateError);
-      expect(sessions.load('exam:clf-t2-3'), isNull);
-    });
   });
 }
