@@ -113,8 +113,9 @@ void main() {
     ctrl.start();
     await ctrl.signIn();
     // 빈 로컬·클라우드 → push 없음 → watch 재발화 없음 →
-    // reconcile 1회 = loadCollection 4회(컬렉션당 1). 이중 호출이면 8.
-    expect(spy.loads, 4);
+    // reconcile 1회 = loadCollection 5회(meta·attempts·viewed·plans·checks).
+    // 이중 호출이면 10.
+    expect(spy.loads, 5);
   });
 
   test('외부 인증 변경(스트림)도 reconcile 트리거(영구 deaf 아님)', () async {

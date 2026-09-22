@@ -8,24 +8,40 @@ String _sanitize(String s) => s.replaceAll(RegExp(r'[/.#\$\[\]]'), '_');
 String attemptKey(AttemptRecord r) =>
     _sanitize('${r.certId}|${r.examId}|${r.date}');
 
-/// attempts union(무손실): 로컬 리스트 + 클라우드(키→json)
-/// → 병합 리스트 + 클라우드에 없던 로컬만 toCloud(키→json).
-({List<AttemptRecord> merged, Map<String, Map<String, dynamic>> toCloud})
-    mergeAttempts(
-        List<AttemptRecord> local, Map<String, Map<String, dynamic>> cloud) {
+/// attempts union(무손실) + 삭제 표식 적용: 로컬 리스트 + 클라우드(키→json)
+/// → 병합 리스트 + 클라우드에 없던 로컬만 toCloud + 표식보다 오래된 클라우드 키는 toDelete.
+({
+  List<AttemptRecord> merged,
+  Map<String, Map<String, dynamic>> toCloud,
+  List<String> toDelete,
+}) mergeAttempts(
+  List<AttemptRecord> local,
+  Map<String, Map<String, dynamic>> cloud, {
+  Map<String, int> resetAt = const {},
+}) {
+  bool kept(AttemptRecord r) =>
+      r.createdAtMsEffective >= mergedEffectiveResetAt(resetAt, r.certId);
+
   final byKey = <String, AttemptRecord>{};
   for (final r in local) {
-    byKey[attemptKey(r)] = r;
+    if (kept(r)) byKey[attemptKey(r)] = r;
   }
+  final toDelete = <String>[];
   for (final e in cloud.entries) {
-    byKey.putIfAbsent(e.key, () => AttemptRecord.fromJson(e.value));
+    final r = AttemptRecord.fromJson(e.value);
+    if (!kept(r)) {
+      toDelete.add(e.key);
+      continue;
+    }
+    byKey.putIfAbsent(e.key, () => r);
   }
   final toCloud = <String, Map<String, dynamic>>{};
   for (final r in local) {
+    if (!kept(r)) continue;
     final k = attemptKey(r);
     if (!cloud.containsKey(k)) toCloud[k] = r.toJson();
   }
-  return (merged: byKey.values.toList(), toCloud: toCloud);
+  return (merged: byKey.values.toList(), toCloud: toCloud, toDelete: toDelete);
 }
 
 /// 클라우드 열람 문서에서 {taskId: 시각}을 읽는다. 레거시 `taskIds` 배열은 시각 0.
