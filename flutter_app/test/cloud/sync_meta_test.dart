@@ -37,4 +37,51 @@ void main() {
     SyncMeta(b).markReset('CLF-C02', 1000);
     expect(b.read('awsdocs.sync.v1'), '{"plans":{}}');
   });
+
+  group('엔티티 부기(base·updatedAt·dirtyAt)', () {
+    test('없으면 빈 부기를 돌려준다', () {
+      final m = SyncMeta(MemoryBackend()).entity('plans');
+      expect(m.base, isEmpty);
+      expect(m.updatedAt, isEmpty);
+      expect(m.dirtyAt, isEmpty);
+    });
+
+    test('저장한 부기를 그대로 읽는다', () {
+      final b = MemoryBackend();
+      SyncMeta(b).setEntity(
+          'plans',
+          const EntityMeta(
+            base: {
+              'p1': {'id': 'p1', 'label': 'A'}
+            },
+            updatedAt: {'p1': 100},
+            dirtyAt: {'p1': 200},
+          ));
+      final m = SyncMeta(b).entity('plans');
+      expect(m.base['p1'], {'id': 'p1', 'label': 'A'});
+      expect(m.updatedAt, {'p1': 100});
+      expect(m.dirtyAt, {'p1': 200});
+    });
+
+    test('종류가 다르면 서로 간섭하지 않고, 표식도 보존된다', () {
+      final b = MemoryBackend();
+      SyncMeta(b).markReset('CLF-C02', 50);
+      SyncMeta(b).setEntity('plans',
+          const EntityMeta(base: {}, updatedAt: {'p1': 1}, dirtyAt: {}));
+      SyncMeta(b).setEntity('progress',
+          const EntityMeta(base: {}, updatedAt: {'p2': 2}, dirtyAt: {}));
+      expect(SyncMeta(b).entity('plans').updatedAt, {'p1': 1});
+      expect(SyncMeta(b).entity('progress').updatedAt, {'p2': 2});
+      expect(SyncMeta(b).resetAt, {'CLF-C02': 50});
+    });
+
+    test('손상된 항목은 건너뛴다', () {
+      final b = MemoryBackend()
+        ..write('awsdocs.sync.v2',
+            '{"plans":{"base":{"p1":"oops"},"updatedAt":{"p1":"x","p2":3}}}');
+      final m = SyncMeta(b).entity('plans');
+      expect(m.base, isEmpty);
+      expect(m.updatedAt, {'p2': 3});
+    });
+  });
 }
