@@ -8,9 +8,12 @@ import 'local_kv.dart';
 export 'local_kv.dart' show KvBackend, MemoryBackend, defaultBackend;
 
 class HistoryStore {
-  HistoryStore({KvBackend? backend}) : _b = backend ?? defaultBackend();
+  HistoryStore({KvBackend? backend, int Function()? nowMs})
+      : _b = backend ?? defaultBackend(),
+        _now = nowMs ?? (() => DateTime.now().toUtc().millisecondsSinceEpoch);
 
   final KvBackend _b;
+  final int Function() _now;
   static const _key = 'awsdocs.history.v1';
 
   /// 손상 원문 보존 키 — 다시 쓰기 전 해석에서 버려진 부분이 있으면 원문을 여기 남긴다.
@@ -60,7 +63,9 @@ class HistoryStore {
   }
 
   void add(AttemptRecord r) {
-    final list = _loadForRewrite()..add(r);
+    // 모든 응시가 이 관문을 지나므로 생성 시각은 여기서만 찍는다(삭제 표식 비교용).
+    final stamped = r.createdAtMs == null ? r.withCreatedAtMs(_now()) : r;
+    final list = _loadForRewrite()..add(stamped);
     _b.write(_key, jsonEncode(list.map((e) => e.toJson()).toList()));
   }
 

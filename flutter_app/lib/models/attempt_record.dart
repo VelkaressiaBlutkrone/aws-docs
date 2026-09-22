@@ -30,6 +30,7 @@ class AttemptRecord {
     this.presentedQuestionIds = const [],
     this.wrongSkills = const [],
     required this.durationSpentSec,
+    this.createdAtMs,
   });
 
   final String certId;
@@ -48,6 +49,28 @@ class AttemptRecord {
   final List<WrongSkill> wrongSkills;
   final int durationSpentSec;
 
+  /// 생성 시각(UTC epoch ms). 레거시 레코드엔 없으며 [createdAtMsEffective]가 date로 폴백한다.
+  final int? createdAtMs;
+
+  /// 삭제 표식 비교에 쓰는 유효 생성 시각. 레거시는 시간대 없는 date를 로컬로 해석한다.
+  int get createdAtMsEffective =>
+      createdAtMs ?? (DateTime.tryParse(date)?.millisecondsSinceEpoch ?? 0);
+
+  AttemptRecord withCreatedAtMs(int ms) => AttemptRecord(
+        certId: certId,
+        examId: examId,
+        mode: mode,
+        date: date,
+        correct: correct,
+        total: total,
+        wrongQuestionIds: wrongQuestionIds,
+        flaggedQuestionIds: flaggedQuestionIds,
+        presentedQuestionIds: presentedQuestionIds,
+        wrongSkills: wrongSkills,
+        durationSpentSec: durationSpentSec,
+        createdAtMs: ms,
+      );
+
   Map<String, dynamic> toJson() => {
         'certId': certId,
         'examId': examId,
@@ -60,6 +83,7 @@ class AttemptRecord {
         'presentedQuestionIds': presentedQuestionIds,
         'wrongSkills': [for (final w in wrongSkills) w.toJson()],
         'durationSpentSec': durationSpentSec,
+        if (createdAtMs != null) 'createdAtMs': createdAtMs,
       };
 
   factory AttemptRecord.fromJson(Map<String, dynamic> j) => AttemptRecord(
@@ -82,5 +106,6 @@ class AttemptRecord {
             .map((e) => WrongSkill.fromJson(e as Map<String, dynamic>))
             .toList(),
         durationSpentSec: (j['durationSpentSec'] as num?)?.toInt() ?? 0,
+        createdAtMs: (j['createdAtMs'] as num?)?.toInt(),
       );
 }
