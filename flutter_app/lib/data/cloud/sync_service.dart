@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../local_kv.dart';
+import '../viewed_docs_store.dart'; // KvBackend도 함께 re-export 한다
 import '../../models/attempt_record.dart';
 import 'cloud_store.dart';
 import 'sync_merge.dart';
@@ -96,16 +96,10 @@ class SyncService {
 
   Future<void> _reconcileViewed(String uid) async {
     final cloud = await _cloud.loadCollection(uid, 'viewed');
-    final raw = _readJsonMap(_kViewed);
-    final local = <String, Set<String>>{
-      for (final e in raw.entries)
-        e.key: (e.value is List ? (e.value as List) : const [])
-            .map((x) => x.toString())
-            .toSet(),
-    };
+    // 스토어를 통해 읽는다 — 값 형태(맵/레거시 배열) 해석을 한 곳에 둔다.
+    final local = ViewedDocsStore(backend: _local).readAll();
     final r = mergeViewed(local, cloud);
-    _writeIfChanged(_kViewed,
-        jsonEncode({for (final e in r.merged.entries) e.key: e.value.toList()}));
+    _writeIfChanged(_kViewed, jsonEncode(r.merged));
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'viewed', e.key, e.value);
     }

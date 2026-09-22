@@ -103,20 +103,20 @@ void main() {
   test('reconcileAll: viewed set union이 로컬·클라우드 양쪽에 반영', () async {
     final local = MemoryBackend();
     local.write('awsdocs.viewed.v1', jsonEncode({
-      'CLF-C02': ['t1', 't2']
+      'CLF-C02': {'t1': 10, 't2': 20}
     }));
     final cloud = FakeCloudStore();
     await cloud.setDoc('u1', 'viewed', 'CLF-C02', {
-      'taskIds': ['t2', 't3']
+      'items': {'t2': 20, 't3': 30}
     });
     final svc = SyncService(local: local, cloud: cloud, nowMs: () => 1000);
     await svc.reconcileAll('u1');
     final lv =
-        (jsonDecode(local.read('awsdocs.viewed.v1')!) as Map)['CLF-C02'] as List;
-    expect(lv.toSet(), {'t1', 't2', 't3'}); // 로컬 합집합
-    final cv = (await cloud.loadCollection('u1', 'viewed'))['CLF-C02']!['taskIds']
-        as List;
-    expect(cv.toSet(), {'t1', 't2', 't3'}); // 클라우드 합집합
+        (jsonDecode(local.read('awsdocs.viewed.v1')!) as Map)['CLF-C02'] as Map;
+    expect(lv.keys.toSet(), {'t1', 't2', 't3'}); // 로컬 합집합
+    final cv = (await cloud.loadCollection('u1', 'viewed'))['CLF-C02']!['items']
+        as Map;
+    expect(cv.keys.toSet(), {'t1', 't2', 't3'}); // 클라우드 합집합
   });
 
   test('reconcileAll: plan LWW — 클라우드가 최신이면 로컬을 덮음(push 없음)', () async {
@@ -232,8 +232,8 @@ void main() {
 
       expect(ViewedDocsStore(backend: local).viewed('CLF-C02'), {'t1', 't2'});
       final cv = (await cloud.inner.loadCollection('u1', 'viewed'))['CLF-C02']![
-          'taskIds'] as List;
-      expect(cv.toSet(), {'t1', 't2'});
+          'items'] as Map;
+      expect(cv.keys.toSet(), {'t1', 't2'});
     });
 
     test('checks(LWW): 대기 중 수동 체크가 로컬·클라우드에 남는다', () async {

@@ -1,4 +1,5 @@
 import '../../models/attempt_record.dart';
+import 'sync_meta.dart';
 
 /// Firestore 문서 ID 금지문자 치환.
 String _sanitize(String s) => s.replaceAll(RegExp(r'[/.#\$\[\]]'), '_');
@@ -27,26 +28,56 @@ String attemptKey(AttemptRecord r) =>
   return (merged: byKey.values.toList(), toCloud: toCloud);
 }
 
-/// viewed set union: 로컬 {cert:set} + 클라우드 {cert:{taskIds:[]}}
-/// → 병합 {cert:set} + 클라우드와 달라진 cert만 toCloud {cert:{taskIds:[]}}.
-({Map<String, Set<String>> merged, Map<String, Map<String, dynamic>> toCloud})
-    mergeViewed(Map<String, Set<String>> local,
-        Map<String, Map<String, dynamic>> cloud) {
-  final merged = <String, Set<String>>{};
+/// 클라우드 열람 문서에서 {taskId: 시각}을 읽는다. 레거시 `taskIds` 배열은 시각 0.
+Map<String, int> viewedItemsOf(Map<String, dynamic> doc) {
+  final items = doc['items'];
+  if (items is Map) {
+    return {
+      for (final e in items.entries)
+        if (e.value is num) e.key.toString(): (e.value as num).toInt(),
+    };
+  }
+  final legacy = doc['taskIds'];
+  if (legacy is List) return {for (final x in legacy) x.toString(): 0};
+  return {};
+}
+
+/// viewed 합집합 + 삭제 표식 적용. 같은 taskId가 양쪽에 있으면 늦은 시각을 남긴다.
+/// 표식보다 이른 열람은 양쪽에서 버리고, 비게 된 자격증 문서는 toDelete로 알린다.
+({
+  Map<String, Map<String, int>> merged,
+  Map<String, Map<String, dynamic>> toCloud,
+  List<String> toDelete,
+}) mergeViewed(
+  Map<String, Map<String, int>> local,
+  Map<String, Map<String, dynamic>> cloud, {
+  Map<String, int> resetAt = const {},
+}) {
+  final merged = <String, Map<String, int>>{};
   final toCloud = <String, Map<String, dynamic>>{};
+  final toDelete = <String>[];
   final certs = {...local.keys, ...cloud.keys};
   for (final cert in certs) {
-    final l = local[cert] ?? const <String>{};
-    final cRaw = (cloud[cert]?['taskIds'] as List?)?.cast<String>() ?? const [];
-    final c = cRaw.toSet();
-    final union = {...l, ...c};
-    merged[cert] = union;
-    // 클라우드 집합과 다르면(로컬이 더한 게 있으면) push
-    if (union.length != c.length) {
-      toCloud[cert] = {'taskIds': union.toList()};
+    final cut = mergedEffectiveResetAt(resetAt, cert);
+    final l = local[cert] ?? const <String, int>{};
+    final c = cloud[cert] == null
+        ? const <String, int>{}
+        : viewedItemsOf(cloud[cert]!);
+    final union = <String, int>{};
+    for (final e in [...l.entries, ...c.entries]) {
+      if (e.value >= (union[e.key] ?? 0)) union[e.key] = e.value;
     }
+    union.removeWhere((_, ms) => ms < cut);
+    merged[cert] = union;
+    if (union.isEmpty) {
+      if (cloud.containsKey(cert)) toDelete.add(cert);
+      continue;
+    }
+    final sameAsCloud = union.length == c.length &&
+        union.entries.every((e) => c[e.key] == e.value);
+    if (!sameAsCloud) toCloud[cert] = {'items': union};
   }
-  return (merged: merged, toCloud: toCloud);
+  return (merged: merged, toCloud: toCloud, toDelete: toDelete);
 }
 
 /// plan·checks LWW: 로컬 {cert:json} + 사이드카 localMeta{cert:ms}

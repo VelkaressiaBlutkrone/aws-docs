@@ -5,19 +5,48 @@ import 'package:aws_docs/data/cloud/sync_merge.dart';
 void main() {
   test('mergeViewed: cert별 taskId 합집합 + 변경 cert만 toCloud', () {
     final local = {
-      'CLF-C02': {'t1', 't2'},
-      'SAA-C03': {'s1'},
+      'CLF-C02': {'t1': 10, 't2': 20},
+      'SAA-C03': {'s1': 30},
     };
     final cloud = {
-      'CLF-C02': {'taskIds': ['t2', 't3']},   // 합 → t1,t2,t3
-      'SOA-C03': {'taskIds': ['o1']},          // 로컬에 없음 → 추가
+      'CLF-C02': {
+        'items': {'t2': 20, 't3': 40}
+      }, // 합 → t1,t2,t3
+      'SOA-C03': {
+        'items': {'o1': 50}
+      }, // 로컬에 없음 → 추가
     };
     final r = mergeViewed(local, cloud);
-    expect(r.merged['CLF-C02'], {'t1', 't2', 't3'});
-    expect(r.merged['SAA-C03'], {'s1'});       // 클라우드에 없던 로컬 유지
-    expect(r.merged['SOA-C03'], {'o1'});       // 클라우드 전용 흡수
+    expect(r.merged['CLF-C02']!.keys.toSet(), {'t1', 't2', 't3'});
+    expect(r.merged['SAA-C03']!.keys.toSet(), {'s1'}); // 클라우드에 없던 로컬 유지
+    expect(r.merged['SOA-C03']!.keys.toSet(), {'o1'}); // 클라우드 전용 흡수
     // 클라우드와 달라진 cert만 push: CLF(t1 추가)·SAA(신규)
     expect(r.toCloud.keys.toSet(), {'CLF-C02', 'SAA-C03'});
-    expect((r.toCloud['CLF-C02']!['taskIds'] as List).toSet(), {'t1', 't2', 't3'});
+    expect((r.toCloud['CLF-C02']!['items'] as Map).keys.toSet(),
+        {'t1', 't2', 't3'});
+  });
+
+  test('mergeViewed: 레거시 taskIds 배열 문서도 읽는다(시각 0)', () {
+    final r = mergeViewed({
+      'CLF-C02': {'t1': 10}
+    }, {
+      'CLF-C02': {
+        'taskIds': ['t2']
+      }
+    });
+    expect(r.merged['CLF-C02'], {'t1': 10, 't2': 0});
+  });
+
+  test('viewedItemsOf: items 맵과 레거시 배열을 모두 해석한다', () {
+    expect(
+        viewedItemsOf({
+          'taskIds': ['a', 'b']
+        }),
+        {'a': 0, 'b': 0});
+    expect(
+        viewedItemsOf({
+          'items': {'a': 7}
+        }),
+        {'a': 7});
   });
 }
