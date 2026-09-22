@@ -138,6 +138,39 @@ void main() {
           ['2026-09-01T00:00:00.000', '2026-09-22T00:00:00.000']);
     });
 
+    test('clearCert: 깨진 레코드가 섞여 있으면 다시 쓰기 전에 원문을 보존한다', () {
+      final raw = jsonEncode([rec('2026-09-01T00:00:00.000'), 42]);
+      final b = MemoryBackend()..write('awsdocs.history.v1', raw);
+
+      HistoryStore(backend: b).clearCert('SAA-C03');
+
+      expect(b.read('awsdocs.history.v1.corrupt'), raw);
+      expect(HistoryStore(backend: b).all().single.date,
+          '2026-09-01T00:00:00.000');
+    });
+
+    test('fromJson이 던지는 레코드도 건너뛰고, 다시 쓰기 전에 원문을 보존한다', () {
+      final raw = jsonEncode([
+        rec('2026-09-01T00:00:00.000'),
+        {...rec('2026-09-02T00:00:00.000'), 'correct': 'x'}, // 캐스트 실패
+      ]);
+      final b = MemoryBackend()..write('awsdocs.history.v1', raw);
+      expect(HistoryStore(backend: b).all().single.date,
+          '2026-09-01T00:00:00.000');
+
+      HistoryStore(backend: b).add(newer);
+
+      expect(b.read('awsdocs.history.v1.corrupt'), raw);
+    });
+
+    test('add: 최상위가 배열이 아니면 원문을 보존한다', () {
+      final b = MemoryBackend()..write('awsdocs.history.v1', '{}');
+      HistoryStore(backend: b).add(newer);
+      expect(b.read('awsdocs.history.v1.corrupt'), '{}');
+      expect(HistoryStore(backend: b).all().single.date,
+          '2026-09-22T00:00:00.000');
+    });
+
     test('add: 정상 원문이면 보존본을 만들지 않는다', () {
       final b = MemoryBackend()
         ..write('awsdocs.history.v1', jsonEncode([rec('2026-09-01T00:00:00.000')]));
