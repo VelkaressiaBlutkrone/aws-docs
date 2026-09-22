@@ -16,6 +16,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20 # hang(예: 파서 무한루프)이 러너를 기본 6시간 붙잡지 않게
     defaults:
       run:
         working-directory: flutter_app
@@ -27,11 +28,12 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.47.2 # pages.yml과 같은 값 — 올릴 땐 두 파일을 한 PR에서
+          flutter-version: '3.47.2' # pages.yml과 같은 값 — 올릴 땐 두 파일을 한 PR에서
           cache: true
 
+      # 커밋된 lock이 고정 SDK로 그대로 풀리지 않으면(툴체인 드리프트) 조용히 재해석하지 않고 실패.
       - name: Install dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Analyze
         run: flutter analyze

@@ -30,7 +30,7 @@ jobs:
           channel: stable
           # 버전 고정 — 채널 최신을 따라가면 index.html 토큰 계약·woff2 디코드 전제가
           # 예고 없이 깨질 수 있다. ci.yml과 같은 값, 올릴 땐 두 파일을 한 PR에서.
-          flutter-version: 3.47.2
+          flutter-version: '3.47.2' # 문자열로 인용 — 3.50 같은 값이 float 3.5로 읽히지 않게
           cache: true
 
       - name: Install dependencies
