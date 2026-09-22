@@ -46,6 +46,15 @@ class SyncMeta {
     _write(m);
   }
 
+  /// 일정별 삭제 표식(planId → UTC ms). 지운 일정이 다른 기기에서 되살아나지 않게.
+  Map<String, int> get deletedPlans => _intMap(_read()['deletedPlans']);
+
+  set deletedPlans(Map<String, int> v) {
+    final m = _read();
+    m['deletedPlans'] = v;
+    _write(m);
+  }
+
   /// 표식 기록. 같은 키는 늦은 시각을 남긴다.
   void markReset(String certOrAll, int ms) {
     final next = {...resetAt};

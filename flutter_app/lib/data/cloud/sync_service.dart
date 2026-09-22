@@ -75,29 +75,54 @@ class SyncService {
 
   /// 로그인 직후·트리거 시 양방향 화해. 삭제 표식을 먼저 화해해 이번 회차 기준으로 쓴다.
   Future<void> reconcileAll(String uid) async {
-    final marks = await _reconcileDeletions(uid);
-    await _reconcileAttempts(uid, marks);
-    await _reconcileViewed(uid, marks);
-    await _reconcilePlans(uid, marks);
+    var marks = await _reconcileDeletions(uid);
+    await _reconcileAttempts(uid, marks.resetAt);
+    await _reconcileViewed(uid, marks.resetAt);
+    final newlyDeleted = await _reconcilePlans(uid, marks);
+    if (newlyDeleted.isNotEmpty) {
+      // 이번 회차에 생긴 삭제를 표식으로 올리고, 뒤따르는 화해가 그 표식을 보게 한다.
+      marks = await _reconcileDeletions(uid, newPlanMarks: newlyDeleted);
+    }
     await _reconcileLww(uid, _kChecks, 'checks', 'checks'); // 레거시(PR3에서 제거)
   }
 
-  /// meta/deletions 화해: 로컬·클라우드 표식을 필드별 늦은 시각으로 합쳐 양쪽에
-  /// 반영하고, 이번 회차에 적용할 표식을 돌려준다.
-  Future<Map<String, int>> _reconcileDeletions(String uid) async {
+  /// meta/deletions 화해: 자격증 초기화 표식과 일정 삭제 표식을 필드별 늦은 시각으로
+  /// 합쳐 양쪽에 반영하고, 이번 회차에 적용할 표식을 돌려준다.
+  /// [newPlanMarks]는 이번 회차에 로컬에서 새로 지운 일정.
+  Future<({Map<String, int> resetAt, Map<String, int> plans})>
+      _reconcileDeletions(String uid,
+          {Map<String, int> newPlanMarks = const {}}) async {
     final doc = (await _cloud.loadCollection(uid, 'meta'))['deletions'] ??
         const <String, dynamic>{};
-    final cloudMarks = <String, int>{
-      for (final e in ((doc['resetAt'] as Map?) ?? const {}).entries)
+    final cloudReset = _intMapOf(doc['resetAt']);
+    final cloudPlans = _intMapOf(doc['plans']);
+    final meta = SyncMeta(_local);
+
+    final mergedReset = mergeResetMarks(meta.resetAt, cloudReset);
+    final mergedPlans = mergeResetMarks(
+        mergeResetMarks(meta.deletedPlans, cloudPlans), newPlanMarks);
+
+    if (!_sameMarks(mergedReset, meta.resetAt)) meta.resetAt = mergedReset;
+    if (!_sameMarks(mergedPlans, meta.deletedPlans)) {
+      meta.deletedPlans = mergedPlans;
+    }
+    if (!_sameMarks(mergedReset, cloudReset) ||
+        !_sameMarks(mergedPlans, cloudPlans)) {
+      await _cloud.setDoc(uid, 'meta', 'deletions', {
+        ...doc,
+        'resetAt': mergedReset,
+        'plans': mergedPlans,
+      });
+    }
+    return (resetAt: mergedReset, plans: mergedPlans);
+  }
+
+  static Map<String, int> _intMapOf(Object? v) {
+    if (v is! Map) return {};
+    return {
+      for (final e in v.entries)
         if (e.value is num) e.key.toString(): (e.value as num).toInt(),
     };
-    final meta = SyncMeta(_local);
-    final merged = mergeResetMarks(meta.resetAt, cloudMarks);
-    if (!_sameMarks(merged, meta.resetAt)) meta.resetAt = merged;
-    if (!_sameMarks(merged, cloudMarks)) {
-      await _cloud.setDoc(uid, 'meta', 'deletions', {...doc, 'resetAt': merged});
-    }
-    return merged;
   }
 
   bool _sameMarks(Map<String, int> a, Map<String, int> b) =>
@@ -144,7 +169,9 @@ class SyncService {
 
   /// 일정(v2) 화해. 문서마다 base(마지막 동기 내용)와 비교해 3-way로 판정한다.
   /// 클라우드 쓰기는 로컬 쓰기를 모두 끝낸 뒤에 모아서 한다(위 CODE-D-004 규칙).
-  Future<void> _reconcilePlans(String uid, Map<String, int> marks) async {
+  /// 이번 회차에 로컬에서 새로 지운 일정(planId → 시각)을 돌려준다.
+  Future<Map<String, int>> _reconcilePlans(String uid,
+      ({Map<String, int> resetAt, Map<String, int> plans}) marks) async {
     final cloud = {...await _cloud.loadCollection(uid, 'plans')};
 
     // 레거시 문서(id 없음, 문서 id가 자격증 코드 — 옛 LWW 경로가 올린 것)를
@@ -179,6 +206,7 @@ class SyncService {
     final dirtyAt = {...em.dirtyAt};
     final toPush = <String, Map<String, dynamic>>{};
     final toDelete = <String>[];
+    final newlyDeleted = <String, int>{};
     final now = _now();
 
     for (final id in {...local.keys, ...cloud.keys}) {
@@ -189,7 +217,7 @@ class SyncService {
           : (Map<String, dynamic>.from(cloudRaw)..remove('updatedAtMs'));
       final cloudMs = (cloudRaw?['updatedAtMs'] as num?)?.toInt() ?? 0;
       final cert = (localDoc ?? cloudDoc)?['certCode']?.toString() ?? '';
-      final cut = mergedEffectiveResetAt(marks, cert);
+      final cut = mergedEffectiveResetAt(marks.resetAt, cert);
       // 마지막으로 아는 로컬 시각. 한 번도 동기된 적 없는 일정(base에 없음)은
       // 시각을 알 수 없어 표식으로 지우지 않는다 — 미동기 로컬 작업을 잃지 않는 쪽.
       final localTime = dirtyAt[id] ?? updatedAt[id] ?? 0;
@@ -205,6 +233,9 @@ class SyncService {
         continue;
       }
 
+      // 일정 삭제 표식: 클라우드 문서도 함께 정리한다(로컬은 판정이 지운다).
+      if (marks.plans.containsKey(id) && cloudRaw != null) toDelete.add(id);
+
       // 로컬 변경을 처음 본 시각을 기록한다(둘 다 바뀐 경우의 비교 기준).
       if (localDoc != null &&
           base.containsKey(id) &&
@@ -219,6 +250,7 @@ class SyncService {
         cloud: cloudDoc,
         cloudUpdatedAtMs: cloudMs,
         localDirtyAtMs: dirtyAt[id] ?? 0,
+        cloudDeleted: marks.plans.containsKey(id),
       )) {
         case DocAction.none:
           break;
@@ -242,6 +274,7 @@ class SyncService {
           break;
         case DocAction.deleteCloud:
           toDelete.add(id);
+          newlyDeleted[id] = now;
           base.remove(id);
           updatedAt.remove(id);
           dirtyAt.remove(id);
@@ -257,6 +290,7 @@ class SyncService {
       await _cloud.setDoc(uid, 'plans', e.key, e.value);
     }
     await _deleteUpTo(uid, 'plans', toDelete);
+    return newlyDeleted;
   }
 
   Future<void> _reconcileLww(

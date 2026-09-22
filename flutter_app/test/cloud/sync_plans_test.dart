@@ -116,4 +116,45 @@ void main() {
 
     expect((await cloud.loadCollection('u1', 'plans')).length, 1);
   });
+
+  test('로컬에서 지운 일정이 클라우드와 다른 기기에서도 사라진다', () async {
+    final a = MemoryBackend(); // 기기 A
+    final b = MemoryBackend(); // 기기 B
+    final cloud = FakeCloudStore();
+    StudyPlanStore(backend: a).add(_plan('', 'CLF-C02', 'A'));
+    final id = StudyPlanStore(backend: a).plansFor('CLF-C02').single.id;
+    await SyncService(local: a, cloud: cloud, nowMs: () => 1000)
+        .reconcileAll('u1');
+    await SyncService(local: b, cloud: cloud, nowMs: () => 1100)
+        .reconcileAll('u1'); // B도 같은 일정을 받음
+    expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isNotEmpty);
+
+    StudyPlanStore(backend: a).removeById(id); // A에서 삭제
+    await SyncService(local: a, cloud: cloud, nowMs: () => 2000)
+        .reconcileAll('u1');
+    await SyncService(local: b, cloud: cloud, nowMs: () => 2100)
+        .reconcileAll('u1');
+
+    expect(await cloud.loadCollection('u1', 'plans'), isEmpty);
+    expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isEmpty);
+    final marks =
+        (await cloud.loadCollection('u1', 'meta'))['deletions']!['plans'];
+    expect((marks as Map)[id], 2000);
+  });
+
+  test('삭제 표식이 있는 일정은 다시 올라가지 않는다', () async {
+    final local = MemoryBackend();
+    final cloud = FakeCloudStore();
+    final p = _plan('CLF-C02:2026-09-01:0', 'CLF-C02', 'A');
+    StudyPlanStore(backend: local).upsert(p);
+    await cloud.setDoc('u1', 'meta', 'deletions', {
+      'plans': {p.id: 4000}
+    });
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1');
+
+    expect(await cloud.loadCollection('u1', 'plans'), isEmpty);
+    expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), isEmpty);
+  });
 }
