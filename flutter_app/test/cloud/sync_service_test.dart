@@ -321,4 +321,21 @@ void main() {
 
     expect(local.writes, isEmpty);
   });
+
+  test('reconcileAll: 깨진 응시 레코드가 섞여 있어도 화해가 끝난다', () async {
+    final local = MemoryBackend();
+    local.write('awsdocs.history.v1', jsonEncode([
+      {'certId': 'CLF-C02', 'examId': 'exam:clf-t1-1', 'mode': 'exam',
+       'date': '2026-09-01T00:00:00.000', 'correct': 1, 'total': 1,
+       'wrongQuestionIds': [], 'flaggedQuestionIds': [], 'durationSpentSec': 1},
+      42, // 깨진 레코드
+    ]));
+    final cloud = FakeCloudStore();
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1'); // 예외 없이 완료
+
+    expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
+    expect(local.read('awsdocs.history.v1.corrupt'), isNotNull); // 원문 보존
+  });
 }

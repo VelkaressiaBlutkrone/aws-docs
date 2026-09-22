@@ -228,4 +228,33 @@ void main() {
       expect(b.read('awsdocs.history.v1.corrupt'), isEmpty);
     });
   });
+
+  group('replaceAll — 동기 병합 결과 반영', () {
+    const a = AttemptRecord(
+      certId: 'CLF-C02', examId: 'exam:clf-t1-1', mode: 'exam',
+      date: '2026-09-01T00:00:00.000', correct: 1, total: 1,
+      wrongQuestionIds: [], flaggedQuestionIds: [], durationSpentSec: 10,
+    );
+
+    test('레코드를 통째로 바꾼다', () {
+      final b = MemoryBackend();
+      HistoryStore(backend: b).replaceAll([a]);
+      expect(HistoryStore(backend: b).all().single.examId, 'exam:clf-t1-1');
+    });
+
+    test('깨진 원문은 덮어쓰기 전에 보존한다', () {
+      const raw = '[{"certId":"CLF-C02"'; // 잘린 JSON
+      final b = MemoryBackend()..write('awsdocs.history.v1', raw);
+      HistoryStore(backend: b).replaceAll([a]);
+      expect(b.read('awsdocs.history.v1.corrupt'), raw);
+    });
+
+    test('값이 같으면 다시 쓰지 않는다', () {
+      final b = MemoryBackend();
+      HistoryStore(backend: b).replaceAll([a]);
+      final before = b.read('awsdocs.history.v1');
+      HistoryStore(backend: b).replaceAll([a]);
+      expect(identical(b.read('awsdocs.history.v1'), before), isTrue);
+    });
+  });
 }

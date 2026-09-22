@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../viewed_docs_store.dart'; // KvBackend도 함께 re-export 한다
-import '../../models/attempt_record.dart';
+import '../history_store.dart';
 import '../../models/study_plan.dart';
 import '../plan_progress_store.dart';
 import '../study_plan_store.dart';
@@ -24,7 +24,6 @@ class SyncService {
   final CloudStore _cloud;
   final int Function() _now;
 
-  static const _kHistory = 'awsdocs.history.v1';
   static const _kViewed = 'awsdocs.viewed.v1';
   static const _kChecks = 'awsdocs.plan.checks.v1';
   static const _kMeta = 'awsdocs.sync.v1';
@@ -36,16 +35,6 @@ class SyncService {
       return jsonDecode(raw) as Map<String, dynamic>;
     } catch (_) {
       return {};
-    }
-  }
-
-  List<dynamic> _readJsonList(String key) {
-    final raw = _local.read(key);
-    if (raw == null || raw.isEmpty) return [];
-    try {
-      return jsonDecode(raw) as List;
-    } catch (_) {
-      return [];
     }
   }
 
@@ -144,13 +133,11 @@ class SyncService {
 
   Future<void> _reconcileAttempts(String uid, Map<String, int> marks) async {
     final cloud = await _cloud.loadCollection(uid, 'attempts');
-    final local = _readJsonList(_kHistory)
-        .whereType<Map<String, dynamic>>()
-        .map(AttemptRecord.fromJson)
-        .toList();
+    // 스토어를 통해 읽는다 — 관용 파싱·손상 보존을 한 곳에 둔다(열람·일정과 동일).
+    final store = HistoryStore(backend: _local);
+    final local = store.all();
     final r = mergeAttempts(local, cloud, resetAt: marks);
-    _writeIfChanged(
-        _kHistory, jsonEncode(r.merged.map((e) => e.toJson()).toList()));
+    store.replaceAll(r.merged);
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'attempts', e.key, e.value);
     }

@@ -69,6 +69,14 @@ class HistoryStore {
     _b.write(_key, jsonEncode(list.map((e) => e.toJson()).toList()));
   }
 
+  /// 동기 병합 결과를 통째로 반영한다. 다시 쓰기이므로 손상 원문을 먼저 보존하고,
+  /// 값이 같으면 쓰지 않는다(무변경 reconcile이 매번 재기록하지 않게).
+  void replaceAll(List<AttemptRecord> records) {
+    _loadForRewrite(); // 버려진 부분이 있을 때만 원문 보존
+    final next = jsonEncode(records.map((e) => e.toJson()).toList());
+    if (_b.read(_key) != next) _b.write(_key, next);
+  }
+
   /// 해당 자격증 레코드만 제거하고 나머지는 보존(전 자격증 통합 단일 키).
   void clearCert(String certId) {
     final kept = _loadForRewrite().where((r) => r.certId != certId).toList();
