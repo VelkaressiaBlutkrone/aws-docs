@@ -47,7 +47,7 @@ Flutter Web (Dart) + go_router(해시 라우팅), GitHub Pages 배포. 한국어
 ```sh
 cd flutter_app
 flutter pub get                 # 의존성 설치(최초·pubspec 변경 시)
-flutter test                    # 전체 테스트 — 통과를 눈으로 확인(기준선 819 그린 — 2026-09-22 #122~#125 반영)
+flutter test                    # 전체 테스트 — 통과를 눈으로 확인(기준선 823 그린 — 2026-09-22 #122~#125 반영)
 flutter analyze                 # 정적 분석 — 0건이 게이트(2026-07-02 잔존 3건 해소 완료)
 ```
 

@@ -623,16 +623,34 @@ void _startPeriodic() {
 **반영 PR** (모두 `develop` 대상)
 - #122: C-1, N-1, C-2 임시 조치
 - #123: M-1
-- #124: M-5, 로컬 SDK 3.47.2 전환 후 `verify_splash` PASS
+- #124: M-5, 로컬 SDK 3.47.2 전환 후 `verify_splash` PASS, 새 CI 녹색
 - #125: M-3, M-2 축소판
-- 네 PR을 순서대로 합친 상태를 로컬에서 시뮬레이션: 충돌 없음, `flutter test` 819개 통과, analyze 0건
+- 네 PR과 이 문서 PR을 순서대로 합친 상태를 로컬에서 시뮬레이션: 충돌 없음, `flutter test` 823개 통과, analyze 0건
+
+**PR 독립 리뷰 결과** (읽기 전용 리뷰어 1명, 네 PR 모두 "Ready to merge: Yes", Critical·Important 0건. 번호는 PR 리뷰 자체의 번호라 `PR-` 접두어로 원문의 m-1~m-6과 구분한다)
+- 반영한 것
+  - #125 PR-m9: 원문 보존을 best-effort로 변경. 보존본 쓰기 실패가 새 응시 저장을 막던 새 실패 모드를 제거했다.
+  - #125 PR-m12: 테스트 공백 3건 보강(`clearCert` 경로, `fromJson` 캐스트 실패, 최상위가 배열이 아닌 경우). 변이 검사로 민감도를 확인했다.
+  - #124 PR-m6·m7·m8: job timeout 20분, `pub get --enforce-lockfile`, 버전 값 인용.
+    - 확인: 현 lock은 통과하고, 3.44.1 시절 lock은 3.47.2에서 exit 65로 실패한다.
+  - #122 PR-m3: PR 설명 보정. `checks`·`plans(v1)` 동기 키는 운영 코드에 쓰는 곳이 없는 레거시다. 운영에서 실제로 보호되는 데이터는 응시·열람 기록이다.
+- 후속으로 넘긴 것 (아래 "남은 일"에 편입)
+  - PR-m1·m2: 비로그인 문구와 완료 스낵바의 정직성
+  - PR-m3: LWW 사이드카 stamp 잠복 결함
+  - PR-m10: 동기 경로의 관용 파싱과 원문 보존
+  - PR-m11: QuizView 저장 실패 멈춤
+  - PR-m4·m5: 구조와 배선 테스트 nit
 
 **남은 일**
 - **동기 프로토콜 스펙(설계 먼저):**
   - C-2 근본 해결: reset 마커(tombstone)와 `CloudStore.deleteDoc`
   - M-9: N-2 함정 반영
+  - LWW 로컬 쓰기 때 사이드카 stamp 갱신(PR-m3)
+  - 동기 경로도 공용 관용 파서 사용과 손실 시 원문 보존(PR-m10)
   - `firestore.rules` 버전 관리
+  - 과거 동기 흔적이 있는 비로그인 사용자와 완료 스낵바의 문구(PR-m1·m2)
+- **바로 할 수 있는 작은 수정:** QuizView `_finish`와 오답노트 `_onFinished`에 같은 try/finally 적용(PR-m11), 저장 실패 시 사용자 알림
 - **디자인 결정 필요:** M-6(DESIGN.md 토큰), UX-1·2·4, M-10/UX-5
-- **후순위 정리:** m-1~m-5, M-4(공용 로더 + 병렬 + 가드), M-7
-- **보류:** M-8, m-6
+- **후순위 정리:** m-1~m-5(리뷰 원문 Minor), M-4(공용 로더 + 병렬 + 가드), M-7
+- **보류:** M-8, m-6(리뷰 원문 Minor)
 - **#124 머지 후:** 브랜치 보호에 `CI / test`를 required check로 등록(GitHub 설정)
