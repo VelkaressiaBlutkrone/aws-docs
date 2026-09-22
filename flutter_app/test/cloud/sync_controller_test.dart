@@ -128,9 +128,9 @@ void main() {
     ctrl.start();
     await ctrl.signIn();
     // 빈 로컬·클라우드 → push 없음 → watch 재발화 없음 →
-    // reconcile 1회 = loadCollection 5회(meta·attempts·viewed·plans·checks).
-    // 이중 호출이면 10.
-    expect(spy.loads, 5);
+    // reconcile 1회 = loadCollection 6회(meta·attempts·viewed·plans·progress·checks).
+    // 이중 호출이면 12.
+    expect(spy.loads, 6);
   });
 
   test('외부 인증 변경(스트림)도 reconcile 트리거(영구 deaf 아님)', () async {
@@ -139,7 +139,7 @@ void main() {
     final ctrl = SyncController(
         auth: auth, cloud: spy, local: MemoryBackend(), nowMs: () => 1000);
     ctrl.start();
-    await ctrl.signIn(); // 명시 전환(loads=4)
+    await ctrl.signIn(); // 명시 전환(loads=6)
     final before = spy.loads;
     // 토큰 갱신처럼 스트림으로 직접 사용자 변경(signIn 경유 아님)
     auth.emit(const AuthUser(uid: 'u-ext', email: 'ext@example.com'));

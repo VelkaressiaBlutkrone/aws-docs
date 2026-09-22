@@ -153,6 +153,7 @@ class SyncController extends ChangeNotifier {
       'attempts',
       'viewed',
       'plans',
+      'progress',
       'checks'
     ]) {
       _watchSubs.add(

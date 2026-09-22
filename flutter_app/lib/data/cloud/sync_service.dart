@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../viewed_docs_store.dart'; // KvBackend도 함께 re-export 한다
 import '../../models/attempt_record.dart';
 import '../../models/study_plan.dart';
+import '../plan_progress_store.dart';
 import '../study_plan_store.dart';
 import 'cloud_store.dart';
 import 'sync_merge.dart';
@@ -83,6 +84,7 @@ class SyncService {
       // 이번 회차에 생긴 삭제를 표식으로 올리고, 뒤따르는 화해가 그 표식을 보게 한다.
       marks = await _reconcileDeletions(uid, newPlanMarks: newlyDeleted);
     }
+    await _reconcileProgress(uid, marks);
     await _reconcileLww(uid, _kChecks, 'checks', 'checks'); // 레거시(PR3에서 제거)
   }
 
@@ -292,6 +294,82 @@ class SyncService {
     await _deleteUpTo(uid, 'plans', toDelete);
     return newlyDeleted;
   }
+
+  /// 진행(완료 체크) 화해. 집합 3-way라 양쪽의 체크·해제를 모두 살린다.
+  /// 일정이 지워진 진행 문서는 함께 정리한다.
+  Future<void> _reconcileProgress(String uid,
+      ({Map<String, int> resetAt, Map<String, int> plans}) marks) async {
+    final cloud = await _cloud.loadCollection(uid, 'progress');
+    final store = PlanProgressStore(backend: _local);
+    final plans = StudyPlanStore(backend: _local).byId();
+    final meta = SyncMeta(_local);
+    final em = meta.entity('progress');
+    final local = store.readAll();
+
+    final base = {...em.base};
+    final updatedAt = {...em.updatedAt};
+    final toPush = <String, Map<String, dynamic>>{};
+    final toDelete = <String>[];
+    final now = _now();
+
+    for (final id in {...local.keys, ...cloud.keys}) {
+      final cloudRaw = cloud[id];
+      final cert =
+          plans[id]?.certCode ?? cloudRaw?['certCode']?.toString() ?? '';
+      final cut = mergedEffectiveResetAt(marks.resetAt, cert);
+      final cloudMs = (cloudRaw?['updatedAtMs'] as num?)?.toInt() ?? 0;
+
+      // 일정이 지워졌거나(표식) 초기화 표식보다 오래된 진행은 버린다.
+      if (marks.plans.containsKey(id) || (cloudRaw != null && cloudMs < cut)) {
+        if (cloudRaw != null) toDelete.add(id);
+        if (local.containsKey(id)) store.setPlan(id, {});
+        base.remove(id);
+        updatedAt.remove(id);
+        continue;
+      }
+
+      final baseSet = {
+        for (final x in (base[id]?['itemIds'] as List?) ?? const [])
+          x.toString()
+      };
+      final localSet = local[id] ?? <String>{};
+      final cloudSet = {
+        for (final x in (cloudRaw?['itemIds'] as List?) ?? const [])
+          x.toString()
+      };
+      final merged = mergeSets(base: baseSet, local: localSet, cloud: cloudSet);
+
+      if (!_sameSet(merged, localSet)) store.setPlan(id, merged);
+      if (merged.isEmpty) {
+        if (cloudRaw != null) toDelete.add(id);
+        base.remove(id);
+        updatedAt.remove(id);
+        continue;
+      }
+      if (!_sameSet(merged, cloudSet)) {
+        toPush[id] = {
+          'certCode': cert,
+          'itemIds': merged.toList(),
+          'updatedAtMs': now,
+        };
+        updatedAt[id] = now;
+      } else {
+        updatedAt[id] = cloudMs;
+      }
+      base[id] = {'itemIds': merged.toList()};
+    }
+
+    meta.setEntity('progress',
+        EntityMeta(base: base, updatedAt: updatedAt, dirtyAt: const {}));
+
+    for (final e in toPush.entries) {
+      await _cloud.setDoc(uid, 'progress', e.key, e.value);
+    }
+    await _deleteUpTo(uid, 'progress', toDelete);
+  }
+
+  bool _sameSet(Set<String> a, Set<String> b) =>
+      a.length == b.length && a.containsAll(b);
 
   Future<void> _reconcileLww(
       String uid, String localKey, String collection, String metaSection) async {
