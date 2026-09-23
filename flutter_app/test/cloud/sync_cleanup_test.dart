@@ -55,6 +55,19 @@ void main() {
       expect(SyncMeta(local).deletedPlans, isEmpty);
     });
 
+    test('첫 화해에서 동기 흔적 시각을 남기고, 이후 회차엔 바꾸지 않는다', () async {
+      final local = MemoryBackend();
+      final cloud = FakeCloudStore();
+
+      await SyncService(local: local, cloud: cloud, nowMs: () => 7777)
+          .reconcileAll('u1');
+      expect(SyncMeta(local).syncedAtMs, 7777);
+
+      await SyncService(local: local, cloud: cloud, nowMs: () => 9999)
+          .reconcileAll('u1');
+      expect(SyncMeta(local).syncedAtMs, 7777); // 첫 시각 유지(무변경 회차는 쓰지 않는다)
+    });
+
     test('옛 사이드카(awsdocs.sync.v1)를 비운다', () async {
       final local = MemoryBackend()
         ..write('awsdocs.sync.v1', '{"plans":{"CLF-C02":100}}');

@@ -46,6 +46,9 @@ class SyncService {
     }
     await _reconcileProgress(uid, marks);
     await _purgeChecksOnce(uid);
+    // 이 기기에 "동기한 적 있음" 흔적을 한 번만 남긴다(비로그인 초기화 안내 근거).
+    final meta = SyncMeta(_local);
+    if (meta.syncedAtMs == 0) meta.syncedAtMs = _now();
   }
 
   /// 수동 체크 오버라이드(`checks`)는 앱에서 읽는 화면이 없어 동기 대상에서 뺀다.

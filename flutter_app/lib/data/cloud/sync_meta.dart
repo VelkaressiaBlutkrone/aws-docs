@@ -55,6 +55,17 @@ class SyncMeta {
     _write(m);
   }
 
+  /// 이 기기가 **처음** 화해를 끝낸 시각(0이면 한 번도 동기한 적 없음).
+  /// 비로그인 초기화 안내가 "클라우드에 사본이 있을 수 있다"를 판정하는 근거다.
+  /// 매 회차 갱신하지 않는다 — 무변경 회차가 로컬을 다시 쓰지 않아야 한다.
+  int get syncedAtMs => (_read()['syncedAtMs'] as num?)?.toInt() ?? 0;
+
+  set syncedAtMs(int v) {
+    final m = _read();
+    m['syncedAtMs'] = v;
+    _write(m);
+  }
+
   /// 레거시 `checks` 컬렉션 정리 완료 여부(1회성).
   bool get checksPurged => _read()['checksPurged'] == true;
 
