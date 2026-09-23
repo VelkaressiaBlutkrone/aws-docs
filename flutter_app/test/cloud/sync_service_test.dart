@@ -4,8 +4,12 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/history_store.dart';
 import 'package:aws_docs/data/plan_check_store.dart';
+import 'package:aws_docs/data/study_plan_store.dart';
 import 'package:aws_docs/data/viewed_docs_store.dart';
+import 'package:aws_docs/models/study_plan.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
+import 'package:aws_docs/data/cloud/sync_merge.dart';
+import 'package:aws_docs/data/cloud/sync_meta.dart';
 import 'package:aws_docs/data/cloud/sync_service.dart';
 import 'package:aws_docs/models/attempt_record.dart';
 
@@ -40,6 +44,10 @@ class _GatedCloud implements CloudStore {
   Future<void> setDoc(String uid, String collection, String docId,
           Map<String, dynamic> data) =>
       inner.setDoc(uid, collection, docId, data);
+
+  @override
+  Future<void> deleteDoc(String uid, String collection, String docId) =>
+      inner.deleteDoc(uid, collection, docId);
 
   @override
   Stream<Map<String, Map<String, dynamic>>> watchCollection(
@@ -103,46 +111,20 @@ void main() {
   test('reconcileAll: viewed set union이 로컬·클라우드 양쪽에 반영', () async {
     final local = MemoryBackend();
     local.write('awsdocs.viewed.v1', jsonEncode({
-      'CLF-C02': ['t1', 't2']
+      'CLF-C02': {'t1': 10, 't2': 20}
     }));
     final cloud = FakeCloudStore();
     await cloud.setDoc('u1', 'viewed', 'CLF-C02', {
-      'taskIds': ['t2', 't3']
+      'items': {'t2': 20, 't3': 30}
     });
     final svc = SyncService(local: local, cloud: cloud, nowMs: () => 1000);
     await svc.reconcileAll('u1');
     final lv =
-        (jsonDecode(local.read('awsdocs.viewed.v1')!) as Map)['CLF-C02'] as List;
-    expect(lv.toSet(), {'t1', 't2', 't3'}); // 로컬 합집합
-    final cv = (await cloud.loadCollection('u1', 'viewed'))['CLF-C02']!['taskIds']
-        as List;
-    expect(cv.toSet(), {'t1', 't2', 't3'}); // 클라우드 합집합
-  });
-
-  test('reconcileAll: plan LWW — 클라우드가 최신이면 로컬을 덮음(push 없음)', () async {
-    final local = MemoryBackend();
-    local.write('awsdocs.plan.v1', jsonEncode({
-      'CLF-C02': {
-        'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-06-24',
-        'mode': 'period', 'createdIso': '2026-06-10', 'items': []
-      }
-    }));
-    local.write('awsdocs.sync.v1', jsonEncode({
-      'plans': {'CLF-C02': 100} // 로컬은 오래됨
-    }));
-    final cloud = FakeCloudStore();
-    await cloud.setDoc('u1', 'plans', 'CLF-C02', {
-      'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-07-01',
-      'mode': 'period', 'createdIso': '2026-06-10', 'items': [], 'updatedAt': 9000,
-    });
-    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
-    await svc.reconcileAll('u1');
-    final lp =
-        (jsonDecode(local.read('awsdocs.plan.v1')!) as Map)['CLF-C02'] as Map;
-    expect(lp['endIso'], '2026-07-01'); // 클라우드 값으로 덮임
-    expect(lp.containsKey('updatedAt'), isFalse); // 로컬 doc은 updatedAt 제거
-    final meta = jsonDecode(local.read('awsdocs.sync.v1')!) as Map;
-    expect((meta['plans'] as Map)['CLF-C02'], 9000); // 사이드카 갱신
+        (jsonDecode(local.read('awsdocs.viewed.v1')!) as Map)['CLF-C02'] as Map;
+    expect(lv.keys.toSet(), {'t1', 't2', 't3'}); // 로컬 합집합
+    final cv = (await cloud.loadCollection('u1', 'viewed'))['CLF-C02']!['items']
+        as Map;
+    expect(cv.keys.toSet(), {'t1', 't2', 't3'}); // 클라우드 합집합
   });
 
   test('reconcileAll: 두 번 호출해도 멱등(중복·재push 없음)', () async {
@@ -160,43 +142,8 @@ void main() {
     expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
   });
 
-  test('reconcileAll: 손상 사이드카 stamp가 reconcile를 중단시키지 않음', () async {
-    final local = MemoryBackend();
-    local.write('awsdocs.plan.v1', jsonEncode({
-      'CLF-C02': {
-        'certCode': 'CLF-C02', 'startIso': '2026-06-10', 'endIso': '2026-06-24',
-        'mode': 'period', 'createdIso': '2026-06-10', 'items': []
-      }
-    }));
-    local.write('awsdocs.sync.v1', jsonEncode({
-      'plans': {'CLF-C02': 'oops'} // 손상 stamp(숫자 아님)
-    }));
-    final cloud = FakeCloudStore();
-    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
-    await svc.reconcileAll('u1'); // 예외 없이 완료(손상 stamp는 미스탬프로 강등)
-    // now(5000)로 스탬프 후 push
-    final cp = await cloud.loadCollection('u1', 'plans');
-    expect(cp.containsKey('CLF-C02'), isTrue);
-    expect(cp['CLF-C02']!['updatedAt'], 5000);
-  });
-
-  test('reconcileAll: plan LWW — 로컬이 최신이면 클라우드로 push', () async {
-    final local = MemoryBackend();
-    local.write('awsdocs.plan.v1', jsonEncode({
-      'CLF-C02': {'certCode': 'CLF-C02', 'startIso': '2026-06-10',
-        'endIso': '2026-06-24', 'mode': 'period', 'createdIso': '2026-06-10', 'items': []}
-    }));
-    final cloud = FakeCloudStore();
-    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
-    await svc.reconcileAll('u1');
-    // 사이드카가 없던 로컬 plan은 nowMs로 스탬프 후 클라우드에 push
-    final cp = await cloud.loadCollection('u1', 'plans');
-    expect(cp.containsKey('CLF-C02'), isTrue);
-    expect(cp['CLF-C02']!['updatedAt'], 5000);
-    // 사이드카 기록됨
-    final meta = jsonDecode(local.read('awsdocs.sync.v1')!) as Map;
-    expect((meta['plans'] as Map)['CLF-C02'], 5000);
-  });
+  // 레거시 LWW 경로(plan·checks)는 PR3에서 사라졌다. 일정은 3-way(sync_plans_test),
+  // checks는 동기 대상에서 제외·클라우드 1회 정리(sync_cleanup_test)로 옮겨갔다.
 
   group('reconcile 경합 — 클라우드 로드 대기 중 사용자 쓰기 보존(CODE-D-004)', () {
     test('attempts: 대기 중 제출된 응시가 로컬에 남고 같은 회차에 push된다', () async {
@@ -232,26 +179,106 @@ void main() {
 
       expect(ViewedDocsStore(backend: local).viewed('CLF-C02'), {'t1', 't2'});
       final cv = (await cloud.inner.loadCollection('u1', 'viewed'))['CLF-C02']![
-          'taskIds'] as List;
-      expect(cv.toSet(), {'t1', 't2'});
+          'items'] as Map;
+      expect(cv.keys.toSet(), {'t1', 't2'});
     });
 
-    test('checks(LWW): 대기 중 수동 체크가 로컬·클라우드에 남는다', () async {
+    test('plans: 대기 중 만든 일정이 로컬에 남고 같은 회차에 push된다', () async {
       final local = MemoryBackend();
       final cloud = _GatedCloud(FakeCloudStore());
       final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
 
-      final g = cloud.arm('checks');
+      final g = cloud.arm('plans');
       final run = svc.reconcileAll('u1');
       await g.reached;
-      PlanCheckStore(backend: local).set('CLF-C02', 'item-1', true);
+      StudyPlanStore(backend: local).add(const StudyPlan(
+        certCode: 'CLF-C02',
+        startIso: '2026-09-01',
+        endIso: '2026-10-01',
+        mode: PlanMode.period,
+        createdIso: '2026-09-01',
+        items: [],
+      ));
       g.gate.complete();
       await run;
 
-      expect(PlanCheckStore(backend: local).overrides('CLF-C02'),
-          {'item-1': true});
-      final cc = await cloud.inner.loadCollection('u1', 'checks');
-      expect(cc['CLF-C02'], {'item-1': true, 'updatedAt': 5000});
+      expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), hasLength(1));
+      expect((await cloud.inner.loadCollection('u1', 'plans')).length, 1);
+    });
+  });
+
+  group('삭제 표식(meta/deletions)', () {
+    test('로컬 표식이 클라우드에 올라가고 옛 응시·열람이 양쪽에서 지워진다', () async {
+      final local = MemoryBackend();
+      final cloud = FakeCloudStore();
+      HistoryStore(backend: local, nowMs: () => 1000)
+          .add(_attempt('2026-09-01T00:00:00.000'));
+      ViewedDocsStore(backend: local, nowMs: () => 1000)
+          .markViewed('CLF-C02', 'clf-t1-1');
+      final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
+      await svc.reconcileAll('u1'); // 1회차: 클라우드로 push
+
+      SyncMeta(local).markReset('CLF-C02', 3000); // 초기화 표식
+      HistoryStore(backend: local).clearCert('CLF-C02');
+      ViewedDocsStore(backend: local).clearCert('CLF-C02');
+
+      await svc.reconcileAll('u1');
+
+      expect(HistoryStore(backend: local).all(), isEmpty);
+      expect(await cloud.loadCollection('u1', 'attempts'), isEmpty);
+      expect(await cloud.loadCollection('u1', 'viewed'), isEmpty);
+      final marks =
+          (await cloud.loadCollection('u1', 'meta'))['deletions']!['resetAt'];
+      expect((marks as Map)['CLF-C02'], 3000);
+    });
+
+    test('다른 기기의 표식을 받아 로컬을 정리한다', () async {
+      final local = MemoryBackend();
+      final cloud = FakeCloudStore();
+      HistoryStore(backend: local, nowMs: () => 1000)
+          .add(_attempt('2026-09-01T00:00:00.000'));
+      await cloud.setDoc('u1', 'meta', 'deletions', {
+        'resetAt': {'CLF-C02': 3000}
+      });
+
+      await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+          .reconcileAll('u1');
+
+      expect(HistoryStore(backend: local).all(), isEmpty);
+      expect(SyncMeta(local).resetAt['CLF-C02'], 3000);
+    });
+
+    test('표식 이후에 만든 기록은 살아남는다', () async {
+      final local = MemoryBackend();
+      final cloud = FakeCloudStore();
+      HistoryStore(backend: local, nowMs: () => 9000)
+          .add(_attempt('2026-09-23T00:00:00.000'));
+      await cloud.setDoc('u1', 'meta', 'deletions', {
+        'resetAt': {'CLF-C02': 3000}
+      });
+
+      await SyncService(local: local, cloud: cloud, nowMs: () => 9500)
+          .reconcileAll('u1');
+
+      expect(HistoryStore(backend: local).all().single.createdAtMs, 9000);
+      expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
+    });
+
+    test('정리 삭제는 한 회차 50건까지만 한다', () async {
+      final local = MemoryBackend();
+      final cloud = FakeCloudStore();
+      for (var i = 0; i < 60; i++) {
+        final r = _attempt(
+                '2026-09-01T00:00:${i.toString().padLeft(2, '0')}.000')
+            .withCreatedAtMs(1000);
+        await cloud.setDoc('u1', 'attempts', attemptKey(r), r.toJson());
+      }
+      SyncMeta(local).markReset('CLF-C02', 3000);
+
+      await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+          .reconcileAll('u1');
+
+      expect((await cloud.loadCollection('u1', 'attempts')).length, 10);
     });
   });
 
@@ -268,5 +295,22 @@ void main() {
     await svc.reconcileAll('u1'); // 2회차: 변경 없음
 
     expect(local.writes, isEmpty);
+  });
+
+  test('reconcileAll: 깨진 응시 레코드가 섞여 있어도 화해가 끝난다', () async {
+    final local = MemoryBackend();
+    local.write('awsdocs.history.v1', jsonEncode([
+      {'certId': 'CLF-C02', 'examId': 'exam:clf-t1-1', 'mode': 'exam',
+       'date': '2026-09-01T00:00:00.000', 'correct': 1, 'total': 1,
+       'wrongQuestionIds': [], 'flaggedQuestionIds': [], 'durationSpentSec': 1},
+      42, // 깨진 레코드
+    ]));
+    final cloud = FakeCloudStore();
+
+    await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
+        .reconcileAll('u1'); // 예외 없이 완료
+
+    expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
+    expect(local.read('awsdocs.history.v1.corrupt'), isNotNull); // 원문 보존
   });
 }

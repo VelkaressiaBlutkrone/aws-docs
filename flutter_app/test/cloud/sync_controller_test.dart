@@ -1,13 +1,13 @@
 // flutter_app/test/cloud/sync_controller_test.dart
 import 'dart:async';
-import 'dart:convert';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:aws_docs/data/local_kv.dart';
+import 'package:aws_docs/data/study_plan_store.dart'; // KvBackend도 re-export
 import 'package:aws_docs/data/cloud/auth_service.dart';
 import 'package:aws_docs/data/cloud/auth_user.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
 import 'package:aws_docs/data/cloud/sync_controller.dart';
+import 'package:aws_docs/data/cloud/sync_meta.dart';
 
 /// loadCollection 호출 수 카운트 + 선택적 throw/지연으로 reconcile 횟수·에러·인터리브 검증.
 class _SpyCloud implements CloudStore {
@@ -23,6 +23,10 @@ class _SpyCloud implements CloudStore {
   Future<void> setDoc(
           String uid, String collection, String docId, Map<String, dynamic> data) =>
       _inner.setDoc(uid, collection, docId, data);
+
+  @override
+  Future<void> deleteDoc(String uid, String collection, String docId) =>
+      _inner.deleteDoc(uid, collection, docId);
 
   @override
   Future<Map<String, Map<String, dynamic>>> loadCollection(
@@ -71,11 +75,26 @@ void main() {
         auth: auth, cloud: cloud, local: local, nowMs: () => 1000);
     ctrl.start();
     await ctrl.signIn();
-    // 클라우드 plan이 로컬 블롭에 반영
-    final plans = jsonDecode(local.read('awsdocs.plan.v1')!) as Map;
-    expect(plans.containsKey('CLF-C02'), isTrue);
+    // 클라우드 일정이 로컬 스토어(v2)에 반영
+    expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), isNotEmpty);
     expect(ctrl.user?.email, 'test@example.com');
     expect(ctrl.status, SyncStatus.idle);
+  });
+
+  test('meta 변경(다른 기기의 초기화)도 reconcile을 트리거한다', () async {
+    final cloud = FakeCloudStore();
+    final local = MemoryBackend();
+    final ctrl = SyncController(
+        auth: FakeAuthService(), cloud: cloud, local: local, nowMs: () => 1000);
+    ctrl.start();
+    await ctrl.signIn();
+
+    await cloud.setDoc('u-test', 'meta', 'deletions', {
+      'resetAt': {'CLF-C02': 3000}
+    });
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(SyncMeta(local).resetAt['CLF-C02'], 3000);
   });
 
   test('signOut: status off·user null', () async {
@@ -109,8 +128,9 @@ void main() {
     ctrl.start();
     await ctrl.signIn();
     // 빈 로컬·클라우드 → push 없음 → watch 재발화 없음 →
-    // reconcile 1회 = loadCollection 4회(컬렉션당 1). 이중 호출이면 8.
-    expect(spy.loads, 4);
+    // reconcile 1회 = loadCollection 6회(meta·attempts·viewed·plans·progress·checks).
+    // 이중 호출이면 12.
+    expect(spy.loads, 6);
   });
 
   test('외부 인증 변경(스트림)도 reconcile 트리거(영구 deaf 아님)', () async {
@@ -119,7 +139,7 @@ void main() {
     final ctrl = SyncController(
         auth: auth, cloud: spy, local: MemoryBackend(), nowMs: () => 1000);
     ctrl.start();
-    await ctrl.signIn(); // 명시 전환(loads=4)
+    await ctrl.signIn(); // 명시 전환(loads=6)
     final before = spy.loads;
     // 토큰 갱신처럼 스트림으로 직접 사용자 변경(signIn 경유 아님)
     auth.emit(const AuthUser(uid: 'u-ext', email: 'ext@example.com'));

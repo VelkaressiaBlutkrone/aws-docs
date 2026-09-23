@@ -147,7 +147,14 @@ class SyncController extends ChangeNotifier {
   }
 
   void _startWatches(String uid) {
-    for (final coll in const ['attempts', 'viewed', 'plans', 'checks']) {
+    // meta = 삭제 표식. 다른 기기의 초기화를 즉시 받아 로컬을 정리한다.
+    for (final coll in const [
+      'meta',
+      'attempts',
+      'viewed',
+      'plans',
+      'progress'
+    ]) {
       _watchSubs.add(
           _cloud.watchCollection(uid, coll).listen((_) => sync()));
     }

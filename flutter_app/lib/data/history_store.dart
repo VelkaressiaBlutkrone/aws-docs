@@ -8,9 +8,12 @@ import 'local_kv.dart';
 export 'local_kv.dart' show KvBackend, MemoryBackend, defaultBackend;
 
 class HistoryStore {
-  HistoryStore({KvBackend? backend}) : _b = backend ?? defaultBackend();
+  HistoryStore({KvBackend? backend, int Function()? nowMs})
+      : _b = backend ?? defaultBackend(),
+        _now = nowMs ?? (() => DateTime.now().toUtc().millisecondsSinceEpoch);
 
   final KvBackend _b;
+  final int Function() _now;
   static const _key = 'awsdocs.history.v1';
 
   /// 손상 원문 보존 키 — 다시 쓰기 전 해석에서 버려진 부분이 있으면 원문을 여기 남긴다.
@@ -60,8 +63,18 @@ class HistoryStore {
   }
 
   void add(AttemptRecord r) {
-    final list = _loadForRewrite()..add(r);
+    // 모든 응시가 이 관문을 지나므로 생성 시각은 여기서만 찍는다(삭제 표식 비교용).
+    final stamped = r.createdAtMs == null ? r.withCreatedAtMs(_now()) : r;
+    final list = _loadForRewrite()..add(stamped);
     _b.write(_key, jsonEncode(list.map((e) => e.toJson()).toList()));
+  }
+
+  /// 동기 병합 결과를 통째로 반영한다. 다시 쓰기이므로 손상 원문을 먼저 보존하고,
+  /// 값이 같으면 쓰지 않는다(무변경 reconcile이 매번 재기록하지 않게).
+  void replaceAll(List<AttemptRecord> records) {
+    _loadForRewrite(); // 버려진 부분이 있을 때만 원문 보존
+    final next = jsonEncode(records.map((e) => e.toJson()).toList());
+    if (_b.read(_key) != next) _b.write(_key, next);
   }
 
   /// 해당 자격증 레코드만 제거하고 나머지는 보존(전 자격증 통합 단일 키).

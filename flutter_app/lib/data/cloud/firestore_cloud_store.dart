@@ -18,6 +18,10 @@ class FirestoreCloudStore implements CloudStore {
       _col(uid, collection).doc(docId).set(data);
 
   @override
+  Future<void> deleteDoc(String uid, String collection, String docId) =>
+      _col(uid, collection).doc(docId).delete();
+
+  @override
   Future<Map<String, Map<String, dynamic>>> loadCollection(
       String uid, String collection) async {
     final snap = await _col(uid, collection).get();

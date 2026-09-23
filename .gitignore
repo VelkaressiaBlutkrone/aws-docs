@@ -43,3 +43,8 @@ flutter_app/assets/audio/*/*/lecture.mp3
 # wrangler 로컬 상태·로그(계정별 캐시)
 .wrangler/
 flutter_app/.wrangler/
+# Firestore 규칙 테스트(Node) — 설치물·에뮬레이터 로그
+node_modules/
+**/firebase-debug.log
+**/firestore-debug.log
+**/ui-debug.log

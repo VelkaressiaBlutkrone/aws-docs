@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/app_router.dart';
+import 'package:aws_docs/content/reset_dialog.dart';
 import 'package:aws_docs/data/cert_lookup.dart';
 import 'package:aws_docs/data/cloud/auth_service.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
@@ -69,33 +70,67 @@ Future<void> _openCertReset(WidgetTester tester, Widget page) async {
 }
 
 void main() {
-  group('로그인 중 초기화 확인창은 클라우드 백업이 남는다고 알린다', () {
-    testWidgets('홈 — 모든 학습 기록 초기화', (tester) async {
+  group('초기화 확인창은 로그인 여부와 무관하게 되돌릴 수 없다고 알린다', () {
+    testWidgets('홈 — 모든 학습 기록 초기화(로그인)', (tester) async {
       await _signIn(tester);
       await _openHomeReset(tester);
-      expect(find.textContaining('클라우드 백업'), findsOneWidget);
-      expect(find.textContaining('되돌릴 수 없'), findsNothing);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
     });
 
-    testWidgets('약점 리포트 — 자격증 초기화', (tester) async {
+    testWidgets('약점 리포트 — 자격증 초기화(로그인)', (tester) async {
       await _signIn(tester);
       await _openCertReset(tester, ReportPage(cert: certByCode('CLF-C02')!));
-      expect(find.textContaining('클라우드 백업'), findsOneWidget);
-      expect(find.textContaining('되돌릴 수 없'), findsNothing);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
     });
 
-    testWidgets('오답노트 — 자격증 초기화', (tester) async {
+    testWidgets('오답노트 — 자격증 초기화(로그인)', (tester) async {
       await _signIn(tester);
       await _openCertReset(
           tester, ReviewListPage(cert: certByCode('CLF-C02')!));
-      expect(find.textContaining('클라우드 백업'), findsOneWidget);
-      expect(find.textContaining('되돌릴 수 없'), findsNothing);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
+    });
+
+    testWidgets('비로그인 — 모든 학습 기록 초기화', (tester) async {
+      await _openHomeReset(tester);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+      expect(find.textContaining('클라우드 백업'), findsNothing);
     });
   });
 
-  testWidgets('비로그인이면 되돌릴 수 없다고 알린다(동기 경고 없음)', (tester) async {
-    await _openHomeReset(tester);
-    expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
-    expect(find.textContaining('클라우드 백업'), findsNothing);
+  group('비로그인 + 과거 동기 흔적이면 확인창이 그 사실을 알린다', () {
+    Future<void> open(WidgetTester tester,
+        {required bool signedIn, required bool syncedBefore}) async {
+      await tester.pumpWidget(_page(Builder(
+        builder: (ctx) => TextButton(
+          onPressed: () => confirmReset(ctx,
+              title: '초기화',
+              message: '모든 기록을 지웁니다.',
+              signedIn: signedIn,
+              syncedBefore: syncedBefore),
+          child: const Text('열기'),
+        ),
+      )));
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('비로그인 + 동기 흔적 → 안내', (tester) async {
+      await open(tester, signedIn: false, syncedBefore: true);
+      expect(find.textContaining('다음 로그인'), findsOneWidget);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+    });
+
+    testWidgets('로그인 상태면 안내하지 않는다', (tester) async {
+      await open(tester, signedIn: true, syncedBefore: true);
+      expect(find.textContaining('다음 로그인'), findsNothing);
+    });
+
+    testWidgets('동기한 적 없으면 안내하지 않는다', (tester) async {
+      await open(tester, signedIn: false, syncedBefore: false);
+      expect(find.textContaining('다음 로그인'), findsNothing);
+    });
   });
 }

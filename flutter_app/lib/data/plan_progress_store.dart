@@ -46,6 +46,24 @@ class PlanProgressStore {
     _b.write(_key, jsonEncode(m));
   }
 
+  /// 모든 일정의 완료 집합(동기용).
+  Map<String, Set<String>> readAll() => {
+        for (final e in _read().entries)
+          if (e.value is List)
+            e.key: {for (final x in e.value as List) x.toString()},
+      };
+
+  /// 한 일정의 완료 집합을 통째로 설정한다(동기 병합 결과 반영). 비면 항목을 지운다.
+  void setPlan(String planId, Set<String> itemIds) {
+    final m = _read();
+    if (itemIds.isEmpty) {
+      m.remove(planId);
+    } else {
+      m[planId] = itemIds.toList();
+    }
+    _b.write(_key, jsonEncode(m));
+  }
+
   /// 한 일정의 진행만 초기화(다른 일정 보존).
   void clearPlan(String planId) {
     final m = _read()..remove(planId);

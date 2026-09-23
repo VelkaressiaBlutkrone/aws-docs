@@ -25,4 +25,29 @@ void main() {
     final s = PlanProgressStore(backend: MemoryBackend());
     expect(s.donePlan('nope'), isEmpty);
   });
+
+  group('동기용 접근자', () {
+    test('readAll: 일정별 완료 집합을 돌려준다', () {
+      final b = MemoryBackend();
+      PlanProgressStore(backend: b)
+        ..setDone('p1', 'i1', true)
+        ..setDone('p1', 'i2', true)
+        ..setDone('p2', 'i3', true);
+      expect(PlanProgressStore(backend: b).readAll(), {
+        'p1': {'i1', 'i2'},
+        'p2': {'i3'}
+      });
+    });
+
+    test('setPlan: 집합을 통째로 바꾸고, 비면 항목을 지운다', () {
+      final b = MemoryBackend();
+      PlanProgressStore(backend: b).setDone('p1', 'i1', true);
+
+      PlanProgressStore(backend: b).setPlan('p1', {'i2', 'i3'});
+      expect(PlanProgressStore(backend: b).donePlan('p1'), {'i2', 'i3'});
+
+      PlanProgressStore(backend: b).setPlan('p1', {});
+      expect(PlanProgressStore(backend: b).readAll(), isEmpty);
+    });
+  });
 }

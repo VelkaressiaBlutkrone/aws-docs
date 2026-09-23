@@ -16,6 +16,48 @@ class _QuotaOnBackup extends MemoryBackend {
 }
 
 void main() {
+  group('createdAtMs — UTC 생성 시각', () {
+    test('JSON 왕복 + 없으면 date에서 폴백', () {
+      const r = AttemptRecord(
+        certId: 'CLF-C02', examId: 'exam:clf-t1-1', mode: 'exam',
+        date: '2026-09-22T10:00:00.000', correct: 1, total: 1,
+        wrongQuestionIds: [], flaggedQuestionIds: [], durationSpentSec: 10,
+        createdAtMs: 1758535200000,
+      );
+      expect(AttemptRecord.fromJson(r.toJson()).createdAtMs, 1758535200000);
+
+      const legacy = AttemptRecord(
+        certId: 'CLF-C02', examId: 'exam:clf-t1-1', mode: 'exam',
+        date: '2026-09-22T10:00:00.000', correct: 1, total: 1,
+        wrongQuestionIds: [], flaggedQuestionIds: [], durationSpentSec: 10,
+      );
+      expect(legacy.toJson().containsKey('createdAtMs'), isFalse);
+      expect(legacy.createdAtMsEffective,
+          DateTime.parse('2026-09-22T10:00:00.000').millisecondsSinceEpoch);
+    });
+
+    test('HistoryStore.add: 값이 없으면 저장 시각을 찍는다', () {
+      final b = MemoryBackend();
+      HistoryStore(backend: b, nowMs: () => 4242).add(const AttemptRecord(
+        certId: 'CLF-C02', examId: 'exam:clf-t1-1', mode: 'exam',
+        date: '2026-09-22T10:00:00.000', correct: 1, total: 1,
+        wrongQuestionIds: [], flaggedQuestionIds: [], durationSpentSec: 10,
+      ));
+      expect(HistoryStore(backend: b).all().single.createdAtMs, 4242);
+    });
+
+    test('HistoryStore.add: 이미 있는 값은 덮지 않는다', () {
+      final b = MemoryBackend();
+      HistoryStore(backend: b, nowMs: () => 4242).add(const AttemptRecord(
+        certId: 'CLF-C02', examId: 'exam:clf-t1-1', mode: 'exam',
+        date: '2026-09-22T10:00:00.000', correct: 1, total: 1,
+        wrongQuestionIds: [], flaggedQuestionIds: [], durationSpentSec: 10,
+        createdAtMs: 111,
+      ));
+      expect(HistoryStore(backend: b).all().single.createdAtMs, 111);
+    });
+  });
+
   test('AttemptRecord JSON 왕복', () {
     const r = AttemptRecord(
       certId: 'CLF-C02',
@@ -184,6 +226,35 @@ void main() {
         ..write('awsdocs.history.v1.corrupt', '{not json');
       HistoryStore(backend: b).clearAll();
       expect(b.read('awsdocs.history.v1.corrupt'), isEmpty);
+    });
+  });
+
+  group('replaceAll — 동기 병합 결과 반영', () {
+    const a = AttemptRecord(
+      certId: 'CLF-C02', examId: 'exam:clf-t1-1', mode: 'exam',
+      date: '2026-09-01T00:00:00.000', correct: 1, total: 1,
+      wrongQuestionIds: [], flaggedQuestionIds: [], durationSpentSec: 10,
+    );
+
+    test('레코드를 통째로 바꾼다', () {
+      final b = MemoryBackend();
+      HistoryStore(backend: b).replaceAll([a]);
+      expect(HistoryStore(backend: b).all().single.examId, 'exam:clf-t1-1');
+    });
+
+    test('깨진 원문은 덮어쓰기 전에 보존한다', () {
+      const raw = '[{"certId":"CLF-C02"'; // 잘린 JSON
+      final b = MemoryBackend()..write('awsdocs.history.v1', raw);
+      HistoryStore(backend: b).replaceAll([a]);
+      expect(b.read('awsdocs.history.v1.corrupt'), raw);
+    });
+
+    test('값이 같으면 다시 쓰지 않는다', () {
+      final b = MemoryBackend();
+      HistoryStore(backend: b).replaceAll([a]);
+      final before = b.read('awsdocs.history.v1');
+      HistoryStore(backend: b).replaceAll([a]);
+      expect(identical(b.read('awsdocs.history.v1'), before), isTrue);
     });
   });
 }

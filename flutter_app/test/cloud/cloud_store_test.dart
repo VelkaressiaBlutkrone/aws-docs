@@ -24,4 +24,25 @@ void main() {
     expect(snaps.last['CLF-C02'], {'taskIds': ['t1']});
     await sub.cancel();
   });
+
+  test('FakeCloudStore.deleteDoc: 문서를 지우고 watch에 알린다', () async {
+    final cs = FakeCloudStore();
+    await cs.setDoc('u1', 'attempts', 'k1', {'a': 1});
+    final seen = <int>[];
+    final sub =
+        cs.watchCollection('u1', 'attempts').listen((m) => seen.add(m.length));
+
+    await cs.deleteDoc('u1', 'attempts', 'k1');
+    await Future<void>.delayed(Duration.zero);
+
+    expect(await cs.loadCollection('u1', 'attempts'), isEmpty);
+    expect(seen.last, 0);
+    await sub.cancel();
+  });
+
+  test('FakeCloudStore.deleteDoc: 없는 문서 삭제는 조용히 넘어간다', () async {
+    final cs = FakeCloudStore();
+    await cs.deleteDoc('u1', 'attempts', 'missing');
+    expect(await cs.loadCollection('u1', 'attempts'), isEmpty);
+  });
 }
