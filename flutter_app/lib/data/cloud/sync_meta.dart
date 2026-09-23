@@ -55,6 +55,15 @@ class SyncMeta {
     _write(m);
   }
 
+  /// 레거시 `checks` 컬렉션 정리 완료 여부(1회성).
+  bool get checksPurged => _read()['checksPurged'] == true;
+
+  set checksPurged(bool v) {
+    final m = _read();
+    m['checksPurged'] = v;
+    _write(m);
+  }
+
   /// 표식 기록. 같은 키는 늦은 시각을 남긴다.
   void markReset(String certOrAll, int ms) {
     final next = {...resetAt};

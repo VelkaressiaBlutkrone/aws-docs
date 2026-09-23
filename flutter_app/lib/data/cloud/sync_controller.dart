@@ -153,8 +153,7 @@ class SyncController extends ChangeNotifier {
       'attempts',
       'viewed',
       'plans',
-      'progress',
-      'checks'
+      'progress'
     ]) {
       _watchSubs.add(
           _cloud.watchCollection(uid, coll).listen((_) => sync()));

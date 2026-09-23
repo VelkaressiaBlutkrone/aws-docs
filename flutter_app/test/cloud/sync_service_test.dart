@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/history_store.dart';
 import 'package:aws_docs/data/plan_check_store.dart';
+import 'package:aws_docs/data/study_plan_store.dart';
 import 'package:aws_docs/data/viewed_docs_store.dart';
+import 'package:aws_docs/models/study_plan.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
 import 'package:aws_docs/data/cloud/sync_merge.dart';
 import 'package:aws_docs/data/cloud/sync_meta.dart';
@@ -140,40 +142,8 @@ void main() {
     expect((await cloud.loadCollection('u1', 'attempts')).length, 1);
   });
 
-  // 일정(plans)은 PR2에서 3-way 경로로 옮겨갔다(test/cloud/sync_plans_test.dart).
-  // 레거시 LWW 경로는 checks만 쓰므로 아래 회귀는 checks로 지킨다.
-  test('reconcileAll: 손상 사이드카 stamp가 reconcile를 중단시키지 않음', () async {
-    final local = MemoryBackend();
-    local.write('awsdocs.plan.checks.v1', jsonEncode({
-      'CLF-C02': {'x': true}
-    }));
-    local.write('awsdocs.sync.v1', jsonEncode({
-      'checks': {'CLF-C02': 'oops'} // 손상 stamp(숫자 아님)
-    }));
-    final cloud = FakeCloudStore();
-    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
-    await svc.reconcileAll('u1'); // 예외 없이 완료(손상 stamp는 미스탬프로 강등)
-    // now(5000)로 스탬프 후 push
-    final cc = await cloud.loadCollection('u1', 'checks');
-    expect(cc.containsKey('CLF-C02'), isTrue);
-    expect(cc['CLF-C02']!['updatedAt'], 5000);
-  });
-
-  test('reconcileAll: checks LWW — 사이드카 없던 로컬은 now로 스탬프 후 push', () async {
-    final local = MemoryBackend();
-    local.write('awsdocs.plan.checks.v1', jsonEncode({
-      'CLF-C02': {'x': true}
-    }));
-    final cloud = FakeCloudStore();
-    final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
-    await svc.reconcileAll('u1');
-    final cc = await cloud.loadCollection('u1', 'checks');
-    expect(cc.containsKey('CLF-C02'), isTrue);
-    expect(cc['CLF-C02']!['updatedAt'], 5000);
-    // 사이드카 기록됨
-    final meta = jsonDecode(local.read('awsdocs.sync.v1')!) as Map;
-    expect((meta['checks'] as Map)['CLF-C02'], 5000);
-  });
+  // 레거시 LWW 경로(plan·checks)는 PR3에서 사라졌다. 일정은 3-way(sync_plans_test),
+  // checks는 동기 대상에서 제외·클라우드 1회 정리(sync_cleanup_test)로 옮겨갔다.
 
   group('reconcile 경합 — 클라우드 로드 대기 중 사용자 쓰기 보존(CODE-D-004)', () {
     test('attempts: 대기 중 제출된 응시가 로컬에 남고 같은 회차에 push된다', () async {
@@ -213,22 +183,27 @@ void main() {
       expect(cv.keys.toSet(), {'t1', 't2'});
     });
 
-    test('checks(LWW): 대기 중 수동 체크가 로컬·클라우드에 남는다', () async {
+    test('plans: 대기 중 만든 일정이 로컬에 남고 같은 회차에 push된다', () async {
       final local = MemoryBackend();
       final cloud = _GatedCloud(FakeCloudStore());
       final svc = SyncService(local: local, cloud: cloud, nowMs: () => 5000);
 
-      final g = cloud.arm('checks');
+      final g = cloud.arm('plans');
       final run = svc.reconcileAll('u1');
       await g.reached;
-      PlanCheckStore(backend: local).set('CLF-C02', 'item-1', true);
+      StudyPlanStore(backend: local).add(const StudyPlan(
+        certCode: 'CLF-C02',
+        startIso: '2026-09-01',
+        endIso: '2026-10-01',
+        mode: PlanMode.period,
+        createdIso: '2026-09-01',
+        items: [],
+      ));
       g.gate.complete();
       await run;
 
-      expect(PlanCheckStore(backend: local).overrides('CLF-C02'),
-          {'item-1': true});
-      final cc = await cloud.inner.loadCollection('u1', 'checks');
-      expect(cc['CLF-C02'], {'item-1': true, 'updatedAt': 5000});
+      expect(StudyPlanStore(backend: local).plansFor('CLF-C02'), hasLength(1));
+      expect((await cloud.inner.loadCollection('u1', 'plans')).length, 1);
     });
   });
 
