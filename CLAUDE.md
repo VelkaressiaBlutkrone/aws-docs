@@ -56,6 +56,7 @@ flutter analyze                 # 정적 분석 — 0건이 게이트(2026-07-02
 - **웹 빌드(배포 산출물 검증):** `flutter build web --release --base-href /aws-docs/` — base-href는 GitHub Pages 경로라서 필수. **Git Bash에서 실행 금지**(MSYS가 `/aws-docs/`를 경로로 변형) — PowerShell로 실행한다([[flutter-build-web-powershell]]).
 - **스플래시 검증(선택):** `node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark]` — 보고서·스크린샷은 `build/verify_splash/`. gstack browse 데몬 필요. Flutter 마이너 업그레이드 시 1회 실행 권장.
 - **오디오 발행 게이트:** 강의 mp3는 번들이 아니라 R2(`https://aws-audio.leva.ai.kr`, 불변 키 `{family}/{taskId}/{sha8}/lecture.mp3`)에서 서빙된다. 승인 문서 추가·재합성 후 `py tool/publish_audio.py <docId> --verify`, 릴리스 전 `py tool/publish_audio.py --verify-all`이 전수 PASS여야 한다(wrangler 로그인 필요). 설계: `docs/superpowers/specs/2026-09-03-audio-r2-hosting-design.md`.
+- **보안 규칙 테스트(선택):** `cd tool/firestore_rules_test && npm ci && npm test` — Firestore 에뮬레이터(Java 필요)로 레포 루트 `firestore.rules`를 검증한다. 규칙·테스트가 바뀌는 PR에서는 `firestore-rules` 워크플로가 자동으로 돈다(필수 체크 아님). **콘솔에 배포된 실제 규칙과 맞추는 것은 사용자 작업이다.** 참고: Flutter 전용 툴링은 `flutter_app/tool/`, 레포 수준 툴링은 루트 `tool/`이다.
 - **CI·배포:** `develop`·`main` 대상 PR마다 `.github/workflows/ci.yml`이 `pub get → analyze → test`를 돌린다 — 머지 전 녹색 필수. `main` 푸시 시 `pages.yml`이 `pub get → build web → GitHub Pages 배포`를 자동 수행한다. 브랜치 전략상 `main`에는 PR 머지로만 들어간다.
 - **Flutter 버전 고정:** 두 워크플로 모두 `flutter-version: 3.47.2`. 로컬도 같은 버전을 쓴다(SDK 디렉터리에서 `git checkout <버전>`). 올릴 땐 두 파일을 한 PR에서 바꾸고 같은 PR에서 `verify_splash`·전체 테스트를 돌린다.
 

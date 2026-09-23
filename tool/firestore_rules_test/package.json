@@ -1,0 +1,14 @@
+{
+  "name": "awc-docs-firestore-rules-test",
+  "private": true,
+  "type": "module",
+  "description": "firestore.rules 검증(에뮬레이터). 앱 빌드와 무관 — Flutter 쪽 의존성이 아니다.",
+  "scripts": {
+    "test": "firebase emulators:exec --config ../../firebase.json --only firestore --project awc-docs-cf67d \"node --test rules.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "firebase": "^10.12.0",
+    "firebase-tools": "^13.11.0"
+  }
+}
