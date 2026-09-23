@@ -55,6 +55,26 @@ class SyncMeta {
     _write(m);
   }
 
+  /// 이 기기가 **처음** 화해를 끝낸 시각(0이면 한 번도 동기한 적 없음).
+  /// 비로그인 초기화 안내가 "클라우드에 사본이 있을 수 있다"를 판정하는 근거다.
+  /// 매 회차 갱신하지 않는다 — 무변경 회차가 로컬을 다시 쓰지 않아야 한다.
+  int get syncedAtMs => (_read()['syncedAtMs'] as num?)?.toInt() ?? 0;
+
+  set syncedAtMs(int v) {
+    final m = _read();
+    m['syncedAtMs'] = v;
+    _write(m);
+  }
+
+  /// 레거시 `checks` 컬렉션 정리 완료 여부(1회성).
+  bool get checksPurged => _read()['checksPurged'] == true;
+
+  set checksPurged(bool v) {
+    final m = _read();
+    m['checksPurged'] = v;
+    _write(m);
+  }
+
   /// 표식 기록. 같은 키는 늦은 시각을 남긴다.
   void markReset(String certOrAll, int ms) {
     final next = {...resetAt};
@@ -120,6 +140,19 @@ int mergedEffectiveResetAt(Map<String, int> resetAt, String certCode) {
   final all = resetAt[SyncMeta.allCerts] ?? 0;
   return own > all ? own : all;
 }
+
+/// 초기화 표식이 이미 덮는 일정 표식은 버린다 — 표식이 무한히 쌓이지 않게.
+/// planId는 `{certCode}:{createdIso}:{seq}`라 접두사에서 자격증을 얻는다.
+/// 버려도 되살아나지 않는다: 그 일정은 초기화 시각보다 오래돼 초기화가 지운다.
+Map<String, int> prunedPlanMarks(
+  Map<String, int> plans,
+  Map<String, int> resetAt,
+) =>
+    {
+      for (final e in plans.entries)
+        if (e.value > mergedEffectiveResetAt(resetAt, e.key.split(':').first))
+          e.key: e.value,
+    };
 
 /// 두 표식 맵을 필드별 늦은 시각으로 병합한다(기기 간 동시 초기화 안전).
 Map<String, int> mergeResetMarks(Map<String, int> a, Map<String, int> b) {

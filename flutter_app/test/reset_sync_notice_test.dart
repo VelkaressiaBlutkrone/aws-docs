@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/app_router.dart';
+import 'package:aws_docs/content/reset_dialog.dart';
 import 'package:aws_docs/data/cert_lookup.dart';
 import 'package:aws_docs/data/cloud/auth_service.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
@@ -96,6 +97,40 @@ void main() {
       await _openHomeReset(tester);
       expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
       expect(find.textContaining('클라우드 백업'), findsNothing);
+    });
+  });
+
+  group('비로그인 + 과거 동기 흔적이면 확인창이 그 사실을 알린다', () {
+    Future<void> open(WidgetTester tester,
+        {required bool signedIn, required bool syncedBefore}) async {
+      await tester.pumpWidget(_page(Builder(
+        builder: (ctx) => TextButton(
+          onPressed: () => confirmReset(ctx,
+              title: '초기화',
+              message: '모든 기록을 지웁니다.',
+              signedIn: signedIn,
+              syncedBefore: syncedBefore),
+          child: const Text('열기'),
+        ),
+      )));
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('비로그인 + 동기 흔적 → 안내', (tester) async {
+      await open(tester, signedIn: false, syncedBefore: true);
+      expect(find.textContaining('다음 로그인'), findsOneWidget);
+      expect(find.textContaining('되돌릴 수 없'), findsOneWidget);
+    });
+
+    testWidgets('로그인 상태면 안내하지 않는다', (tester) async {
+      await open(tester, signedIn: true, syncedBefore: true);
+      expect(find.textContaining('다음 로그인'), findsNothing);
+    });
+
+    testWidgets('동기한 적 없으면 안내하지 않는다', (tester) async {
+      await open(tester, signedIn: false, syncedBefore: false);
+      expect(find.textContaining('다음 로그인'), findsNothing);
     });
   });
 }

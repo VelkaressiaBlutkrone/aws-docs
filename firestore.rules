@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    // 동기 데이터는 전부 users/{uid} 아래에 있다(users/{uid}/{collection}/{docId}).
+    // 본인만 읽고 쓴다 — 다른 사용자나 비로그인 접근은 거부.
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

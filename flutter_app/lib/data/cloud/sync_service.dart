@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../viewed_docs_store.dart'; // KvBackend도 함께 re-export 한다
-import '../../models/attempt_record.dart';
+import '../history_store.dart';
 import '../../models/study_plan.dart';
 import '../plan_progress_store.dart';
 import '../study_plan_store.dart';
@@ -24,51 +24,11 @@ class SyncService {
   final CloudStore _cloud;
   final int Function() _now;
 
-  static const _kHistory = 'awsdocs.history.v1';
   static const _kViewed = 'awsdocs.viewed.v1';
-  static const _kChecks = 'awsdocs.plan.checks.v1';
-  static const _kMeta = 'awsdocs.sync.v1';
-
-  Map<String, dynamic> _readJsonMap(String key) {
-    final raw = _local.read(key);
-    if (raw == null || raw.isEmpty) return {};
-    try {
-      return jsonDecode(raw) as Map<String, dynamic>;
-    } catch (_) {
-      return {};
-    }
-  }
-
-  List<dynamic> _readJsonList(String key) {
-    final raw = _local.read(key);
-    if (raw == null || raw.isEmpty) return [];
-    try {
-      return jsonDecode(raw) as List;
-    } catch (_) {
-      return [];
-    }
-  }
-
-  Map<String, int> _meta(String section) {
-    final m = _readJsonMap(_kMeta)[section];
-    if (m is! Map) return {};
-    final out = <String, int>{};
-    for (final e in m.entries) {
-      final v = e.value;
-      if (v is num) out[e.key.toString()] = v.toInt(); // 손상 stamp는 무시(미스탬프로 강등)
-    }
-    return out;
-  }
 
   /// 값이 달라졌을 때만 쓴다 — 무변경 reconcile(주기 틱)이 로컬을 매번 재기록하지 않게.
   void _writeIfChanged(String key, String value) {
     if (_local.read(key) != value) _local.write(key, value);
-  }
-
-  void _writeMeta(String section, Map<String, int> data) {
-    final all = _readJsonMap(_kMeta);
-    all[section] = data;
-    _writeIfChanged(_kMeta, jsonEncode(all));
   }
 
   /// 한 회차에서 지우는 클라우드 문서 수 상한(초기화 직후 동기가 길어지지 않게).
@@ -85,7 +45,25 @@ class SyncService {
       marks = await _reconcileDeletions(uid, newPlanMarks: newlyDeleted);
     }
     await _reconcileProgress(uid, marks);
-    await _reconcileLww(uid, _kChecks, 'checks', 'checks'); // 레거시(PR3에서 제거)
+    await _purgeChecksOnce(uid);
+    // 이 기기에 "동기한 적 있음" 흔적을 한 번만 남긴다(비로그인 초기화 안내 근거).
+    final meta = SyncMeta(_local);
+    if (meta.syncedAtMs == 0) meta.syncedAtMs = _now();
+  }
+
+  /// 수동 체크 오버라이드(`checks`)는 앱에서 읽는 화면이 없어 동기 대상에서 뺀다.
+  /// 이미 올라간 클라우드 사본만 한 번 지운다(로컬 값은 그대로 둔다 — 초기화가 지운다).
+  Future<void> _purgeChecksOnce(String uid) async {
+    // 레거시 LWW가 쓰던 사이드카. 이제 읽는 곳이 없다(파생 부기라 복구 불필요).
+    if ((_local.read('awsdocs.sync.v1') ?? '').isNotEmpty) {
+      _local.write('awsdocs.sync.v1', '');
+    }
+    final meta = SyncMeta(_local);
+    if (meta.checksPurged) return;
+    final cloud = await _cloud.loadCollection(uid, 'checks');
+    await _deleteUpTo(uid, 'checks', cloud.keys.toList());
+    // 상한에 걸려 남은 게 있으면 다음 회차에 마저 지운다.
+    if (cloud.length <= maxDeletesPerRound) meta.checksPurged = true;
   }
 
   /// meta/deletions 화해: 자격증 초기화 표식과 일정 삭제 표식을 필드별 늦은 시각으로
@@ -101,8 +79,10 @@ class SyncService {
     final meta = SyncMeta(_local);
 
     final mergedReset = mergeResetMarks(meta.resetAt, cloudReset);
-    final mergedPlans = mergeResetMarks(
-        mergeResetMarks(meta.deletedPlans, cloudPlans), newPlanMarks);
+    final mergedPlans = prunedPlanMarks(
+        mergeResetMarks(
+            mergeResetMarks(meta.deletedPlans, cloudPlans), newPlanMarks),
+        mergedReset);
 
     if (!_sameMarks(mergedReset, meta.resetAt)) meta.resetAt = mergedReset;
     if (!_sameMarks(mergedPlans, meta.deletedPlans)) {
@@ -144,13 +124,11 @@ class SyncService {
 
   Future<void> _reconcileAttempts(String uid, Map<String, int> marks) async {
     final cloud = await _cloud.loadCollection(uid, 'attempts');
-    final local = _readJsonList(_kHistory)
-        .whereType<Map<String, dynamic>>()
-        .map(AttemptRecord.fromJson)
-        .toList();
+    // 스토어를 통해 읽는다 — 관용 파싱·손상 보존을 한 곳에 둔다(열람·일정과 동일).
+    final store = HistoryStore(backend: _local);
+    final local = store.all();
     final r = mergeAttempts(local, cloud, resetAt: marks);
-    _writeIfChanged(
-        _kHistory, jsonEncode(r.merged.map((e) => e.toJson()).toList()));
+    store.replaceAll(r.merged);
     for (final e in r.toCloud.entries) {
       await _cloud.setDoc(uid, 'attempts', e.key, e.value);
     }
@@ -371,25 +349,4 @@ class SyncService {
   bool _sameSet(Set<String> a, Set<String> b) =>
       a.length == b.length && a.containsAll(b);
 
-  Future<void> _reconcileLww(
-      String uid, String localKey, String collection, String metaSection) async {
-    final cloud = await _cloud.loadCollection(uid, collection);
-    final rawLocal = _readJsonMap(localKey);
-    final local = <String, Map<String, dynamic>>{
-      for (final e in rawLocal.entries)
-        if (e.value is Map) e.key: Map<String, dynamic>.from(e.value as Map),
-    };
-    var meta = _meta(metaSection);
-    // 사이드카 없는 기존 로컬 엔티티는 now로 스탬프(클라우드 stale가 덮지 않게).
-    final now = _now();
-    for (final cert in local.keys) {
-      meta.putIfAbsent(cert, () => now);
-    }
-    final r = mergeLww(local, meta, cloud);
-    _writeIfChanged(localKey, jsonEncode(r.merged));
-    _writeMeta(metaSection, r.mergedMeta);
-    for (final e in r.toCloud.entries) {
-      await _cloud.setDoc(uid, collection, e.key, e.value);
-    }
-  }
 }

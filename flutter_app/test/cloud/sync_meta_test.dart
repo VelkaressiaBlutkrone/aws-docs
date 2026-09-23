@@ -84,4 +84,26 @@ void main() {
       expect(m.updatedAt, {'p2': 3});
     });
   });
+
+  group('prunedPlanMarks', () {
+    test('초기화 표식이 덮는 일정 표식은 버린다', () {
+      final out = prunedPlanMarks(
+        {'CLF-C02:2026-09-01:0': 1000, 'CLF-C02:2026-09-02:0': 4000},
+        {'CLF-C02': 3000},
+      );
+      expect(out.keys, ['CLF-C02:2026-09-02:0']);
+    });
+
+    test('전체 초기화(*)도 반영한다', () {
+      expect(
+        prunedPlanMarks({'SAA-C03:2026-09-01:0': 1000}, {'*': 2000}),
+        isEmpty,
+      );
+    });
+
+    test('표식이 없으면 그대로 둔다', () {
+      final m = {'CLF-C02:2026-09-01:0': 1000};
+      expect(prunedPlanMarks(m, const {}), m);
+    });
+  });
 }
