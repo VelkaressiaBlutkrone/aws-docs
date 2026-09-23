@@ -76,8 +76,10 @@ class SyncService {
     final meta = SyncMeta(_local);
 
     final mergedReset = mergeResetMarks(meta.resetAt, cloudReset);
-    final mergedPlans = mergeResetMarks(
-        mergeResetMarks(meta.deletedPlans, cloudPlans), newPlanMarks);
+    final mergedPlans = prunedPlanMarks(
+        mergeResetMarks(
+            mergeResetMarks(meta.deletedPlans, cloudPlans), newPlanMarks),
+        mergedReset);
 
     if (!_sameMarks(mergedReset, meta.resetAt)) meta.resetAt = mergedReset;
     if (!_sameMarks(mergedPlans, meta.deletedPlans)) {

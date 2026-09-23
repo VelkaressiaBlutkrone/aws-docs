@@ -43,6 +43,18 @@ void main() {
       expect(await cloud.loadCollection('u1', 'checks'), isEmpty);
     });
 
+    test('초기화 뒤에는 그 자격증의 일정 표식이 사라진다', () async {
+      final local = MemoryBackend();
+      SyncMeta(local)
+        ..deletedPlans = {'CLF-C02:2026-09-01:0': 1000}
+        ..markReset('CLF-C02', 3000);
+
+      await SyncService(local: local, cloud: FakeCloudStore(), nowMs: () => 5000)
+          .reconcileAll('u1');
+
+      expect(SyncMeta(local).deletedPlans, isEmpty);
+    });
+
     test('옛 사이드카(awsdocs.sync.v1)를 비운다', () async {
       final local = MemoryBackend()
         ..write('awsdocs.sync.v1', '{"plans":{"CLF-C02":100}}');

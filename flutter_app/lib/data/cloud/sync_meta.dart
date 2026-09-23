@@ -130,6 +130,19 @@ int mergedEffectiveResetAt(Map<String, int> resetAt, String certCode) {
   return own > all ? own : all;
 }
 
+/// 초기화 표식이 이미 덮는 일정 표식은 버린다 — 표식이 무한히 쌓이지 않게.
+/// planId는 `{certCode}:{createdIso}:{seq}`라 접두사에서 자격증을 얻는다.
+/// 버려도 되살아나지 않는다: 그 일정은 초기화 시각보다 오래돼 초기화가 지운다.
+Map<String, int> prunedPlanMarks(
+  Map<String, int> plans,
+  Map<String, int> resetAt,
+) =>
+    {
+      for (final e in plans.entries)
+        if (e.value > mergedEffectiveResetAt(resetAt, e.key.split(':').first))
+          e.key: e.value,
+    };
+
 /// 두 표식 맵을 필드별 늦은 시각으로 병합한다(기기 간 동시 초기화 안전).
 Map<String, int> mergeResetMarks(Map<String, int> a, Map<String, int> b) {
   final out = {...a};
