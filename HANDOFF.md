@@ -1,6 +1,6 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-08-06 · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-10-17(#122~#132 반영) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -9,6 +9,10 @@ _갱신: 2026-08-06 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 ## 0. 다음: SAA-C03 weighted-ready 사람 검수 batch → flip (통합/약점 모의고사 게이트)
 
 **브랜치 전략(2026-06-15~):** `main` 보호, `develop` 통합. 작업 브랜치 → develop PR → (릴리스 시) develop → main PR. 전역 규칙 `~/.claude/rules/git-branch-flow.md`.
+
+**✅ 최신 상태(2026-10-17 실측):** develop == `origin/main` == `58154b7`(PR#132) — **미릴리스 커밋 0 · 열린 PR 0**. `flutter test` **892 그린** · `flutter analyze` **0건** · 라이브 200 · R2 강의 mp3 206. 마지막 출고 두 건은 **동기 프로토콜 v2**(§0-t, PR#128~#132)와 **2026-09-22 앱 코드·UX 리뷰 반영**(§0-s, PR#122~#127)이다.
+
+**⚠️ 이 문서의 공백:** 아래 완료 항목(§0-r 이하)은 2026-06 트랙까지만 기록돼 있다. 2026-07 전면 감사 → 오디오 R2 분리 호스팅 → SAA 오디오 롤아웃(2026-07-02~09-03) 이력의 정본은 [WORKLIST.md](WORKLIST.md) §A·§B와 [docs/audits/2026-07/ROADMAP.md](docs/audits/2026-07/ROADMAP.md)다.
 
 **✅ 최신 반영(2026-08-06): SAA-C03 통합/약점 모의고사 공개 조건은 이제 `verified:true` 1개가 아니라 공식 도메인 비중 기반 weighted capacity다.** 앱의 65문항 연습 세트 기준 SAA 필요/현재 = **D1 19/0 · D2 17/15 · D3 16/45 · D4 13/30** → 현재 잠김. 부족분은 D1 최소 19문항 + D2 최소 2문항이며, 추천 batch는 [2026-08-06-weighted-ready-batch.md](docs/saa-review/2026-08-06-weighted-ready-batch.md), 검수지는 [2026-08-06-weighted-ready-review-sheet.md](docs/saa-review/2026-08-06-weighted-ready-review-sheet.md). 단, `verified:true` flip은 계속 사람만 수행한다.
 
@@ -21,11 +25,28 @@ _갱신: 2026-08-06 · 다음 작업자(사람 또는 새 세션)가 이 문서�
 **다음 작업 우선순위:**
 - **① SAA-C03 weighted-ready 사람 검수 → flip** — 공개 게이트 관점에서는 부족 도메인만 우선한다. 현재 목표는 D1 19문항 이상 + D2 2문항 이상 추가 verified 확보. flip 후 `content_index` 해당 Task `questionCount` 실제 수로 동기화한다. `verified:true` flip은 사람 전용이며, 통합/약점 모의고사는 도메인별 weighted capacity 충족 전까지 계속 잠긴다. 워크플로 [[question-bank-verified-workflow]].
 - **② 릴리스/PR 정리** — develop→main 릴리스 최신 상태는 [WORKLIST.md](WORKLIST.md) §B를 우선 기준으로 본다. CI는 main push 시 Pages 배포.
+- **③ 2026-09-22 리뷰 후속 잔여** — 바로 할 수 있는 것은 QuizView `_finish`·오답노트 `_onFinished`에 try/finally + 저장 실패 알림(PR-m11). 디자인 결정이 필요한 것(M-6 대비 토큰 · UX-1·2 시험 러너 모바일 · UX-4 "이어서 풀기" 진입점 · M-10/UX-5)은 DESIGN.md 정렬 후. 목록은 [WORKLIST.md](WORKLIST.md) §B⑥ · [TODOS.md](TODOS.md), 정본은 [리뷰 §V-4](docs/audits/2026-09-22-app-code-ux-review.md). **사용자 몫:** 콘솔 Firestore 규칙을 레포 `firestore.rules`와 대조.
 - **점진:** 나머지 학습문서·문항의 `{#id}`/`section` 앵커 채움(C-중량은 t1-1만 시드, 나머지는 graceful 폴백=문서 최상단). 메모리 [[concept-deeplink]].
 - §0-b 선택 항목(2기기 pull 검증·개인정보 고지) · 잔여 존치 플래그(§0-y).
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
+
+## 0-t. 완료: 동기 프로토콜 v2 — 삭제 표식·일정/진행 3-way 동기·보안 규칙 레포 관리, main 릴리스 (2026-09-23)
+
+- **왜:** 2026-09-22 리뷰의 C-2(초기화가 다른 기기·클라우드에서 부활)와 M-9가 설계 선행을 요구했다. LWW 한 겹으로는 "지움"을 전파할 수 없어, 삭제를 **표식(tombstone)**으로 올리고 일정·일정 진행은 집합 3-way로 병합하는 v2를 설계했다. 설계 [2026-09-23-sync-protocol-v2-design.md](docs/superpowers/specs/2026-09-23-sync-protocol-v2-design.md), 구현 플랜 PR1~PR3.
+- **출고:** PR#128(설계) · PR#129(PR1 삭제 표식 기반 — 초기화가 모든 기기·클라우드에서 실제로 지워짐) · PR#130(PR2 일정·진행 3-way 동기, 일정 개별 삭제 전파, 레거시 클라우드 일정 문서를 planId 문서로 결정적 변환) · PR#131(PR3 레거시 LWW 경로·옛 사이드카 제거, 관용 파싱, `firestore.rules`) → develop → **PR#132 `58154b7` main 릴리스, Deploy GitHub Pages success**.
+- **동기 대상:** 응시 기록·열람 기록 + 일정(v2)·일정 진행. 진행 중 시험 세션은 로컬 전용(비범위). `checks`는 동기에서 제외했다(읽는 화면 없는 레거시) — `PlanCheckStore` 자체 제거는 별도 정리 PR 후보.
+- **보안 규칙:** `firestore.rules` + `firebase.json`을 레포가 관리하고, 에뮬레이터 테스트(`tool/firestore_rules_test`, Java 필요)와 `firestore-rules` 워크플로가 검증한다(필수 체크는 아님). **콘솔에 배포된 실제 규칙과 맞추는 것은 사용자 작업**(WORKLIST §D).
+- **기준선:** 테스트 **892 그린** · analyze **0건**(2026-10-17 실측). 메모리 [[sync-protocol-v2]].
+
+## 0-s. 완료: 2026-09-22 앱 코드·UX 리뷰 반영 — 동기 유실·초기화 부활·합격선·CI 게이트, main 릴리스 (2026-09-22)
+
+- **입력:** 외부 리뷰 원문(🔴2 · 🟡10 · 🟢6 · 🎨5), 대상 `main@acfbeac`. 리뷰 환경에 Flutter SDK가 없어 analyze/test 미실행이었으므로, 코드 대조·재현 프로브·공식 문서로 전건 검증해 부록 V에 기록했다: [2026-09-22-app-code-ux-review.md](docs/audits/2026-09-22-app-code-ux-review.md).
+- **출고:** PR#122(C-1 reconcile lost-update 경합 = `CODE-D-004` 상향, C-2 임시 조치, 레거시 v1) · PR#123(M-1 합격선 700 하드코딩 제거 → 시험 가이드 메타 사용) · PR#124(M-5 PR 게이트 CI 신설 + Flutter 3.47.2 고정) · PR#125(M-3 손상 이력 덮어쓰기 방지, M-2 축소판) · PR#126(리뷰 원문) → develop → **PR#127 `34b1cde` main 릴리스, Pages success**. 당시 기준선 823 그린.
+- **반려 1건:** ANS-C01 `passingScore` 750 정정 — 공식 ANS-C01 시험 가이드가 700이므로 **앱 데이터가 옳다**. "Pro/Specialty는 750" 일반화는 이 시험에 맞지 않는다(검증 없이 고쳤으면 라이브가 틀어졌다).
+- **설정 변경:** develop·main 브랜치 보호에 `CI / test` 필수 체크 등록(#124 머지 후, GitHub 설정 — 사용자 작업).
+- **잔여:** 리뷰 §V-4 "남은 일" → WORKLIST §B⑥ · [TODOS.md](TODOS.md). 설계 선행이 필요했던 동기 항목은 §0-t로 종료. 메모리 [[app-review-2026-09-22]].
 
 ## 0-r. C-중량 개념→학습문서 섹션 앵커 딥링크 — Phase 1 main 릴리스 / Phase 2 develop 복구 완료(PR#21) (2026-06-18)
 
