@@ -89,13 +89,33 @@ class _QuizPageState extends State<QuizPage> {
               child: QuizView(
                 bank: bank,
                 certId: widget.entry.certForHistory,
-                onFinished: _store.add,
+                onFinished: (rec) => recordPracticeAttempt(
+                  rec,
+                  history: _store,
+                  onSaveFailure: (_) => notifyAttemptSaveFailure(context),
+                ),
               ),
             ),
           );
         },
       ),
     );
+  }
+}
+
+/// 연습·복습 응시를 이력에 기록한다(QuizPage·ReviewPage 공용).
+/// 저장이 실패하면(localStorage 쿼터 초과 등) [onSaveFailure]로 사용자에게 알린
+/// 뒤 예외를 전파한다 — 호출자의 finally가 화면을 정리하고 전역 핸들러가 로그한다.
+void recordPracticeAttempt(
+  AttemptRecord r, {
+  required HistoryStore history,
+  required void Function(Object error) onSaveFailure,
+}) {
+  try {
+    history.add(r);
+  } catch (e) {
+    onSaveFailure(e);
+    rethrow;
   }
 }
 
@@ -143,7 +163,7 @@ class _QuizViewState extends State<QuizView> {
         wrong.add(_qs[k].id);
       }
     }
-    widget.onFinished?.call(AttemptRecord(
+    final rec = AttemptRecord(
       certId: widget.certId,
       examId: widget.examId ?? 'practice:${widget.bank.examGuideTaskId}',
       mode: widget.mode,
@@ -155,8 +175,15 @@ class _QuizViewState extends State<QuizView> {
       presentedQuestionIds: [for (final q in _qs) q.id],
       wrongSkills: buildWrongSkills(_qs, _picked),
       durationSpentSec: DateTime.now().difference(_startedAt).inSeconds,
-    ));
-    setState(() => _finished = true);
+    );
+    _finished = true;
+    try {
+      widget.onFinished?.call(rec);
+    } finally {
+      // 기록 저장(onFinished)이 실패해도 결과 화면은 연다 — 예외는 그대로
+      // 전파한다(ExamView와 같은 계약). 저장 실패 알림은 소유자가 띄운다.
+      if (mounted) setState(() {});
+    }
   }
 
   @override

@@ -334,3 +334,14 @@ class _ConceptCue extends StatelessWidget {
     );
   }
 }
+
+/// 응시 기록 저장이 실패했을 때(localStorage 쿼터 초과·브라우저 저장 차단 등)
+/// 사용자에게 알린다. 결과 화면 자체는 러너의 try/finally가 열어 주므로,
+/// 여기서는 "기록이 남지 않았다"는 사실만 알린다.
+void notifyAttemptSaveFailure(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('기록을 저장하지 못했습니다. 저장 공간이 부족하거나 브라우저가 저장을 막았을 수 있습니다.'),
+    ),
+  );
+}
