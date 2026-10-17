@@ -83,11 +83,19 @@ class _ReviewListPageState extends State<ReviewListPage> {
   }
 
   void _onFinished(AttemptRecord rec) {
-    _history.add(rec);
-    setState(() {
-      _running = null;
-      _future = _load(); // 졸업 문항 반영해 목록 재계산
-    });
+    try {
+      recordPracticeAttempt(rec,
+          history: _history,
+          onSaveFailure: (_) => notifyAttemptSaveFailure(context));
+    } finally {
+      // 저장이 실패해도 복습 런은 닫고 목록을 재계산한다 — 예외는 전파.
+      if (mounted) {
+        setState(() {
+          _running = null;
+          _future = _load(); // 졸업 문항 반영해 목록 재계산
+        });
+      }
+    }
   }
 
   Future<void> _resetCert() async {
