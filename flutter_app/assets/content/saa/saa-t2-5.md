@@ -10,13 +10,15 @@ coversTasks:
 sources:
   - title: 클라우드의 재해 복구 옵션 — AWS 백서 (공식)
     url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
+  - title: DynamoDB 글로벌 테이블(MREC·MRSC 일관성 모드) (공식)
+    url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
   - title: AWS Elastic Disaster Recovery란? (공식)
     url: https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html
   - title: 신뢰성 기둥 — AWS Well-Architected Framework (공식)
     url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active
@@ -125,7 +127,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 | S3 | Cross-Region Replication (CRR) | 비동기 연속 복제, 원본·대상 버킷 버전 관리 필수 |
 | RDS | 교차 리전 Read Replica | 비동기, 페일오버 시 Primary로 승격 필요 |
 | Aurora | **Global Database** | 전용 인프라, 보조 리전 복제 지연 **1초 미만**, 장애 시 1분 내 승격 |
-| DynamoDB | Global Tables | 멀티 리전 읽기·쓰기, 최종 일관성 |
+| DynamoDB | Global Tables | 멀티 리전 읽기·쓰기. 생성 시 일관성 모드 선택 — **MREC**(멀티 리전 최종 일관성, 기본) 또는 **MRSC**(멀티 리전 강한 일관성, 동일 계정 구성만). 생성 후 변경 불가 |
 | 통합 백업 | **AWS Backup** | 다중 서비스·리전·계정, 정책 기반 중앙 관리 |
 
 > Aurora Global Database는 RPO를 가장 낮추고 싶을 때 최선택입니다. "리전 간 1초 미만 복제"가 시험 문구로 자주 등장합니다.
@@ -266,4 +268,7 @@ Aurora Global Database는 전용 복제 인프라를 사용해 보조 리전 복
 1. 클라우드의 재해 복구 옵션 — AWS 백서 — https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
 2. AWS Elastic Disaster Recovery란? — https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html
 3. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
-4. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+4. DynamoDB 글로벌 테이블("Global tables support two consistency modes: multi-Region eventual consistency (MREC) and multi-Region strong consistency (MRSC)") — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
+5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: DynamoDB 글로벌 테이블을 "최종 일관성"만으로 서술했던 칸을 정정했습니다 — 생성 시 **MREC(기본)와 MRSC(강한 일관성)** 중 하나를 고르고, 생성 후에는 바꿀 수 없으며 MRSC는 동일 계정 구성만 지원합니다(근거 4번).
