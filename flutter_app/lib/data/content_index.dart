@@ -614,6 +614,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-2', title: '데이터 변환 및 처리 (엔진 선택·비용·형식)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-2.md', questionsAsset: 'assets/content/dea/dea-t1-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-3', title: '데이터 파이프라인 오케스트레이션 (워크플로·복원력·알림)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-3.md', questionsAsset: 'assets/content/dea/dea-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-4', title: '프로그래밍 개념 (코드 최적화·Lambda·IaC·CI/CD)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-4.md', questionsAsset: 'assets/content/dea/dea-t1-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-1', title: '데이터 처리 자동화 (MWAA·Step Functions·SDK·Lambda·EventBridge)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-1.md', questionsAsset: 'assets/content/dea/dea-t3-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-2', title: '데이터 분석 (시각화·정리·뷰·Spark 노트북·SQL 집계)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-2.md', questionsAsset: 'assets/content/dea/dea-t3-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-3', title: '파이프라인 유지 관리·모니터링 (로그·알림·성능·CloudTrail)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-3.md', questionsAsset: 'assets/content/dea/dea-t3-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-4', title: '데이터 품질 보장 (Glue DQ·DataBrew 규칙·샘플링·스큐)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-4.md', questionsAsset: 'assets/content/dea/dea-t3-4.questions.json', questionCount: 0),
   ],
 };
 

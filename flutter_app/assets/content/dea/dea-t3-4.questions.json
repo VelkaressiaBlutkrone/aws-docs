@@ -1,0 +1,460 @@
+{
+  "examGuideTaskId": "dea-t3-4",
+  "taskTitle": "데이터 품질 보장",
+  "domain": 3,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t3-4-q1",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터를 처리하는 동안 데이터 품질 검사 실행(예: 빈 필드 확인)(3.4.1)",
+      "section": "glue-dq",
+      "difficulty": "applied",
+      "stem": "AWS Glue ETL 잡이 Amazon S3로 적재하기 전에 필수 컬럼에 빈 값이 있는지 검사해야 한다. 규칙을 어기는 데이터가 있으면 어떤 타깃에도 쓰지 않은 채 잡을 즉시 실패시켜야 한다. 가장 적합한 구성은?",
+      "options": [
+        "Evaluate Data Quality 변환에 IsComplete 규칙을 넣고, 규칙 실패 시 동작으로 \"Fail job without loading to target data\"를 선택한다",
+        "Evaluate Data Quality 변환을 추가하고 규칙 실패 시 동작은 기본값을 그대로 둔다",
+        "DataBrew ruleset을 만들어 프로파일 잡에 붙이고 보고서를 확인한다",
+        "Data Catalog 테이블에 ruleset을 연결하고 EventBridge 스케줄로 정기 평가한다"
+      ],
+      "correct": 0,
+      "explanation": "Glue Studio의 Evaluate Data Quality 변환은 ETL 잡 안에서 DQDL 규칙을 평가합니다. IsComplete는 컬럼의 모든 값이 비어 있지 않은지(null 아님) 검사하며, \"Fail job without loading to target data\" 옵션은 데이터 품질 오류가 나는 즉시 잡을 실패시키고 어떤 타깃에도 쓰지 않습니다.",
+      "wrongExplanations": {
+        "1": "규칙 실패 시 동작의 기본값(None)은 규칙이 실패해도 잡이 계속 실행되는 것입니다. 불량 데이터가 그대로 적재됩니다.",
+        "2": "DataBrew ruleset은 프로파일 잡에 붙여 검증하는 방식으로, 검증 보고서를 만들 뿐 Glue ETL 잡의 적재를 중단시키지 않습니다.",
+        "3": "Data Catalog 진입점은 이미 카탈로그에 등록된 테이블을 코드 없이 평가하는 용도입니다. 파이프라인 도중 적재를 제어하는 것은 ETL 진입점의 변환이 맡습니다."
+      },
+      "sources": [
+        {
+          "title": "Evaluating data quality for ETL jobs in AWS Glue Studio — 기본 None은 계속 실행, 즉시 실패 옵션은 타깃에 쓰지 않음",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/tutorial-data-quality.html"
+        },
+        {
+          "title": "IsComplete (DQDL rule type reference) — 컬럼의 모든 값이 null이 아닌지 검사",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/dqdl-rule-types-IsComplete.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q2",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터를 처리하는 동안 데이터 품질 검사 실행(예: 빈 필드 확인)(3.4.1)",
+      "section": "glue-dq",
+      "difficulty": "applied",
+      "stem": "AWS Glue Studio의 Evaluate Data Quality 변환으로 검사한 결과 전체 결과가 FAIL로 나왔다. 팀은 잡을 중단하는 대신 규칙을 통과하지 못한 레코드만 격리 버킷으로 보내려 한다. 무엇을 사용해야 하는가?",
+      "options": [
+        "CloudWatch의 Glue Data Quality 네임스페이스 지표를 조회해 실패한 레코드를 추출한다",
+        "원본 데이터에 오류 표시 컬럼을 붙여 내보내는 행 수준 출력(rowLevelOutcomes)을 사용한다",
+        "규칙별 통과·실패 결과 출력을 격리 버킷에 쓴다",
+        "데이터 품질 점수가 임계값 미만인 실행을 EventBridge로 받아 전체 데이터를 재처리한다"
+      ],
+      "correct": 1,
+      "explanation": "Evaluate Data Quality 변환은 원본 데이터를 그대로 내보내며 오류 표시 컬럼을 붙이는 rowLevelOutcomes 출력을 제공해 규칙을 통과하지 못한 레코드를 식별하게 해 줍니다. 전체 결과가 FAIL이어도 개별 레코드는 통과일 수 있으므로 행 수준 출력이 필요합니다.",
+      "wrongExplanations": {
+        "0": "CloudWatch 지표는 집계값이며 개별 레코드를 담지 않습니다. 레코드 격리에 쓸 수 없습니다.",
+        "2": "규칙별 결과 출력은 각 규칙의 통과·실패를 담습니다. 어떤 레코드가 불량인지는 알려 주지 않습니다.",
+        "3": "EventBridge 이벤트는 평가 완료를 알릴 뿐이며, 전체 재처리는 '불량 레코드만 격리'라는 요구와 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Evaluating data quality for ETL jobs in AWS Glue Studio — 여러 부모 지원, 실패 레코드 식별, 전체 FAIL이어도 개별 레코드 통과 가능",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/tutorial-data-quality.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q3",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터를 처리하는 동안 데이터 품질 검사 실행(예: 빈 필드 확인)(3.4.1)",
+      "section": "glue-dq",
+      "difficulty": "applied",
+      "stem": "AWS Glue Data Quality 평가가 끝날 때마다 데이터 팀에 알림을 보내려 한다. AWS가 권장하는 방식과 대안으로 올바른 것은?",
+      "options": [
+        "AWS Config 규칙으로 평가 결과를 감시하고 위반 시 알림을 보낸다",
+        "CloudTrail trail을 만들어 Glue API 호출을 추적하고 Insights로 이상을 탐지한다",
+        "EventBridge 이벤트로 알림을 구성하는 것이 권장 방식이며, CloudWatch의 사용자 지정 네임스페이스 Glue Data Quality 지표로 알람을 만들 수도 있다",
+        "Glue 잡 스크립트에서 평가 결과를 읽어 SNS를 직접 호출한다"
+      ],
+      "correct": 2,
+      "explanation": "AWS Glue Data Quality는 평가가 끝나면 EventBridge 이벤트를 게시하며, 공식 문서의 권장 방식은 Amazon EventBridge로 데이터 품질 알림을 구성하는 것입니다. 대안으로 CloudWatch의 사용자 지정 네임스페이스 Glue Data Quality 지표에 알람을 만들어 품질 실행 결과가 임계값 아래로 떨어질 때 알릴 수 있습니다.",
+      "wrongExplanations": {
+        "0": "AWS Config는 리소스 구성 변화를 기록·평가하는 서비스입니다. 데이터 품질 평가 결과를 받는 경로가 아닙니다.",
+        "1": "CloudTrail은 API 호출 기록이고 Insights는 호출량·오류율의 기준선 이탈 탐지입니다. 품질 평가 결과 알림과는 다른 용도입니다.",
+        "3": "스크립트에서 직접 호출하면 코드 유지 부담이 생기고, Data Catalog 진입점 평가에는 적용되지 않습니다. 서비스가 이미 이벤트를 게시합니다."
+      },
+      "sources": [
+        {
+          "title": "Setting up alerts, deployments, and scheduling (AWS Glue Data Quality) — EventBridge 권장, Glue Data Quality 사용자 지정 네임스페이스 알람",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/data-quality-alerts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q4",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터를 처리하는 동안 데이터 품질 검사 실행(예: 빈 필드 확인)(3.4.1)",
+      "section": "glue-dq",
+      "difficulty": "foundational",
+      "stem": "거버넌스 팀이 AWS Glue Data Catalog에 이미 등록된 테이블들의 품질을 코드 작성 없이 정기적으로 평가하려 한다. 어떤 진입점과 기능을 쓰는 것이 맞는가?",
+      "options": [
+        "Glue ETL 잡에 Evaluate Data Quality 변환을 넣어 매일 실행한다",
+        "DataBrew 프로젝트를 만들어 샘플을 탐색하며 수동으로 확인한다",
+        "Amazon Athena에서 TABLESAMPLE로 일부 행을 뽑아 수동 점검한다",
+        "Data Catalog 진입점에서 테이블에 ruleset을 연결하고, 규칙 추천으로 시작한 뒤 스케줄을 건다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Glue Data Quality의 진입점은 두 가지이며, Data Catalog 진입점은 카탈로그 테이블을 코드 없이 평가합니다. ruleset은 Data Catalog의 테이블에 연결되고, 규칙 추천 기능이 컬럼 데이터를 분석해 IsComplete·Uniqueness 같은 규칙을 제안하므로 코드 없이 시작할 수 있습니다. 카탈로그에서 정한 스케줄은 EventBridge에 만들어집니다.",
+      "wrongExplanations": {
+        "0": "ETL 진입점은 파이프라인 도중에 검사하고 잡 흐름을 제어하는 용도입니다. 이미 등록된 테이블의 정기 평가에는 Data Catalog 진입점이 맞습니다.",
+        "1": "DataBrew 프로젝트는 대화형 편집용 샘플 작업 공간입니다. 카탈로그 테이블의 정기 자동 평가 수단이 아닙니다.",
+        "2": "TABLESAMPLE은 질의에서 일부 행을 확률로 뽑는 SQL 기능입니다. 규칙 기반 품질 평가와 보고 체계를 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue Data Quality — 두 진입점, ruleset은 Data Catalog 테이블에 연결",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html"
+        },
+        {
+          "title": "Getting started with AWS Glue Data Quality for the Data Catalog — 규칙 추천으로 코드 없이 시작",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/data-quality-getting-started.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q5",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터를 처리하는 동안 데이터 품질 검사 실행(예: 빈 필드 확인)(3.4.1)",
+      "section": "glue-dq",
+      "difficulty": "foundational",
+      "stem": "AWS Glue Data Quality가 보고하는 데이터 품질 점수는 무엇을 나타내는가?",
+      "options": [
+        "입력에 대해 통과한 데이터 품질 규칙의 비율",
+        "규칙을 통과한 레코드의 비율",
+        "null이 아닌 값의 비율",
+        "이상 탐지가 발견한 이상 관측의 역수"
+      ],
+      "correct": 0,
+      "explanation": "데이터 품질 점수는 입력에 대해 통과한 데이터 품질 규칙의 비율을 나타냅니다. 레코드 단위 비율이 아니며, 이상 탐지로 이상이 생겨도 데이터 품질 점수에는 영향이 없습니다.",
+      "wrongExplanations": {
+        "1": "레코드 단위 결과는 ETL 진입점의 행 수준 출력으로 확인합니다. 점수는 규칙 단위입니다.",
+        "2": "null이 아닌 값의 비율은 IsComplete·Completeness 같은 개별 규칙이 보는 지표입니다. 전체 점수의 정의가 아닙니다.",
+        "3": "이상 탐지는 통계의 시간 추이를 보는 별개 기능이며, 이상이 생겨도 데이터 품질 점수에 영향을 주지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Getting started with AWS Glue Data Quality for the Data Catalog — 점수는 통과한 규칙의 비율",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/data-quality-getting-started.html"
+        },
+        {
+          "title": "Anomaly detection in AWS Glue Data Quality — 이상은 점수에 영향 없음",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/data-quality-anomaly-detection.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q6",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 품질 규칙 정의(예: DataBrew)(3.4.2)",
+      "section": "databrew-rules",
+      "difficulty": "applied",
+      "stem": "AWS Glue DataBrew에서 데이터 품질 ruleset을 정의했다. 이 규칙으로 데이터셋을 실제로 검증하고 보고서를 받으려면 무엇을 해야 하는가?",
+      "options": [
+        "ruleset을 레시피 잡에 추가해 실행한다",
+        "ruleset을 프로파일 잡에 추가해 실행한다. 잡이 프로파일과 함께 검증 보고서를 만들며 보고서는 프로파일 데이터와 같은 위치에 저장된다",
+        "ruleset을 Glue Data Catalog 테이블에 연결하고 평가를 예약한다",
+        "ruleset을 프로젝트에 연결하면 콘솔 샘플에 대해 자동으로 검증된다"
+      ],
+      "correct": 1,
+      "explanation": "DataBrew에서 ruleset을 정의한 뒤에는 프로파일 잡에 추가해 검증합니다. 프로파일 잡은 데이터 프로파일과 함께 검증 보고서를 만들고, 보고서는 프로파일 데이터와 같은 위치에서 볼 수 있습니다. 한 데이터셋에 ruleset을 여러 개 둘 수도 있습니다.",
+      "wrongExplanations": {
+        "0": "레시피 잡은 저장한 변환 단계를 전체 데이터셋에 적용하는 작업입니다. 품질 ruleset 검증은 프로파일 잡의 역할입니다.",
+        "2": "Data Catalog 테이블에 ruleset을 연결하는 것은 AWS Glue Data Quality의 방식입니다. DataBrew ruleset과는 다른 서비스의 기능입니다.",
+        "3": "프로젝트는 대화형 편집을 위한 샘플 작업 공간입니다. ruleset 검증을 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Validating data quality in AWS Glue DataBrew — ruleset을 프로파일 잡에 추가해 검증, 보고서는 프로파일 데이터와 같은 위치",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/profile.data-quality-rules.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q7",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 품질 규칙 정의(예: DataBrew)(3.4.2)",
+      "section": "databrew-rules",
+      "difficulty": "foundational",
+      "stem": "AWS Glue DataBrew의 ruleset에 규칙 다섯 개를 넣고 검증했는데 그중 하나가 기준을 충족하지 못했다. 검증 결과는 어떻게 되는가?",
+      "options": [
+        "충족하지 못한 규칙만 실패로 기록되고 ruleset은 통과로 표시된다",
+        "통과율 80%로 부분 통과 처리된다",
+        "규칙의 기준을 하나라도 충족하지 못하면 ruleset 전체가 검증에 실패한다",
+        "검증은 보류되고 프로파일 잡이 자동으로 재실행된다"
+      ],
+      "correct": 2,
+      "explanation": "DataBrew의 ruleset은 데이터 지표를 기대값과 비교하는 규칙의 집합이며, 규칙의 기준을 하나라도 충족하지 못하면 ruleset 전체가 검증에 실패합니다. 기준의 엄격함을 나누고 싶다면 한 데이터셋에 ruleset을 여러 개 정의하는 방법이 있습니다.",
+      "wrongExplanations": {
+        "0": "개별 규칙 실패가 ruleset 통과로 이어지지 않습니다. ruleset은 전부 충족해야 통과입니다.",
+        "1": "DataBrew ruleset 검증에는 부분 통과라는 개념이 없습니다. 통과 규칙의 비율로 점수를 매기는 쪽은 AWS Glue Data Quality입니다.",
+        "3": "검증 실패 시 자동 재실행은 일어나지 않습니다. 프로파일 잡이 끝나면 검증한 ruleset마다 이벤트가 발행되므로 이를 받아 후속 조치를 겁니다."
+      },
+      "sources": [
+        {
+          "title": "Validating data quality in AWS Glue DataBrew — 하나라도 미충족이면 ruleset 전체 실패, 데이터셋당 여러 ruleset, ruleset별 이벤트",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/profile.data-quality-rules.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q8",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 품질 규칙 정의(예: DataBrew)(3.4.2)",
+      "section": "databrew-rules",
+      "difficulty": "applied",
+      "stem": "AWS Glue DataBrew에서 중첩 구조체 컬럼에 컬럼 단위 데이터 품질 규칙을 정의하려 하는데 해당 컬럼을 선택할 수 없다. 가장 정확한 설명은?",
+      "options": [
+        "프로파일 잡을 먼저 한 번 실행해야 구조체 컬럼이 규칙 대상으로 나타난다",
+        "구조체 컬럼은 ruleset 하나에 규칙을 하나만 정의할 수 있다",
+        "데이터셋을 Parquet으로 다시 저장하면 구조체 컬럼에도 규칙을 정의할 수 있다",
+        "컬럼 단위 규칙은 문자열·숫자 같은 단순 타입에만 정의할 수 있고 배열·구조체 같은 복합 타입에는 정의할 수 없다"
+      ],
+      "correct": 3,
+      "explanation": "DataBrew의 컬럼 단위 데이터 품질 규칙은 문자열·숫자 같은 단순 타입 컬럼에만 정의할 수 있으며 배열·구조체 같은 복합 타입에는 정의할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "프로파일 잡 실행 여부와 무관한 타입 제약입니다. 잡을 돌려도 복합 타입 컬럼은 규칙 대상이 되지 않습니다.",
+        "1": "규칙 개수의 문제가 아니라 컬럼 타입의 제약입니다. 한 규칙은 여러 단순 체크로 구성할 수도 있습니다.",
+        "2": "파일 형식을 바꾸는 것과 컬럼의 논리 타입이 복합 타입이라는 사실은 별개입니다. 제약은 그대로 남습니다."
+      },
+      "sources": [
+        {
+          "title": "Validating data quality in AWS Glue DataBrew — 컬럼 단위 규칙은 단순 타입만",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/profile.data-quality-rules.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q9",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 일관성 조사(예: DataBrew)(3.4.3)",
+      "section": "consistency",
+      "difficulty": "applied",
+      "stem": "데이터 엔지니어가 임계값 규칙을 일일이 작성하지 않고, 테이블 통계가 평소 범위를 벗어나는 시점을 자동으로 찾고 싶어 한다. AWS Glue Data Quality에서 쓸 수 있는 기능과 유의 사항은?",
+      "options": [
+        "analyzer로 규칙 없이 통계를 수집하고 이상 탐지를 사용한다. 최소 세 개의 데이터 포인트가 필요하며 이상이 생겨도 데이터 품질 점수에는 영향이 없다",
+        "DQDL의 DetectAnomalies 규칙만으로 즉시 탐지되며 첫 실행부터 동작한다",
+        "이상 탐지는 Glue ETL에서만 지원되므로 Data Catalog 테이블에는 쓸 수 없다",
+        "이상이 발견되면 데이터 품질 점수가 0으로 떨어져 잡이 자동 실패한다"
+      ],
+      "correct": 0,
+      "explanation": "analyzer는 명시적 규칙을 정의하지 않고 데이터 통계를 수집하는 방법입니다. Glue Data Quality는 규칙과 analyzer가 시간에 따라 쌓은 통계를 ML로 분석해 예측 범위를 벗어난 값을 이상 관측으로 만듭니다. 이상 탐지에는 최소 세 개의 데이터 포인트가 필요하고, 이상이 생겨도 데이터 품질 점수에는 영향이 없으며, ETL과 Data Catalog 모두에서 지원됩니다.",
+      "wrongExplanations": {
+        "1": "이상 탐지에는 최소 세 개의 데이터 포인트가 필요하므로 첫 실행부터 동작하지 않습니다.",
+        "2": "이상 탐지는 AWS Glue ETL과 AWS Glue Data Catalog 모두에서 지원됩니다.",
+        "3": "이상이 생겨도 데이터 품질 점수는 영향을 받지 않으며, 점수가 0이 되거나 잡이 자동 실패하지도 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Anomaly detection in AWS Glue Data Quality — analyzer, 최소 3개 데이터 포인트, 점수 무영향, ETL·Data Catalog 지원",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/data-quality-anomaly-detection.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q10",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 일관성 조사(예: DataBrew)(3.4.3)",
+      "section": "consistency",
+      "difficulty": "applied",
+      "stem": "주문 테이블의 고객 ID가 고객 마스터 테이블에 모두 존재하는지 확인하는 품질 규칙을 만들려 한다. AWS Glue Data Quality에서 어떤 규칙을 써야 하는가?",
+      "options": [
+        "IsComplete 규칙으로 고객 ID 컬럼에 null이 없는지 검사한다",
+        "ReferentialIntegrity 또는 DatasetMatch ruleset으로 여러 데이터셋에 걸친 규칙을 설정한다",
+        "DataBrew 프로파일 잡의 중복 행 탐지를 켜서 교차 확인한다",
+        "analyzer로 고객 ID의 고유값 수를 수집하고 이상 탐지로 비교한다"
+      ],
+      "correct": 1,
+      "explanation": "여러 데이터셋에 걸친 데이터 품질 규칙은 ReferentialIntegrity와 DatasetMatch ruleset으로 설정합니다. Glue Studio의 Evaluate Data Quality 변환도 여러 부모(입력)를 지원해 여러 데이터셋에 걸친 규칙을 검증할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "IsComplete는 한 컬럼의 값이 null이 아닌지만 봅니다. 다른 테이블에 존재하는지는 검사하지 않습니다.",
+        "2": "중복 행 탐지는 한 데이터셋 안의 중복을 세는 프로파일 기능입니다. 두 데이터셋 간의 참조 관계를 보지 않습니다.",
+        "3": "이상 탐지는 통계의 시간 추이에서 평소 범위를 벗어난 값을 찾는 기능입니다. 참조 무결성 검사 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Getting started with AWS Glue Data Quality for the Data Catalog — ReferentialIntegrity·DatasetMatch로 데이터셋 간 규칙",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/data-quality-getting-started.html"
+        },
+        {
+          "title": "Evaluating data quality for ETL jobs in AWS Glue Studio — 여러 부모(입력) 지원",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/tutorial-data-quality.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q11",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 샘플링 기법 설명(3.4.4)",
+      "section": "sampling",
+      "difficulty": "applied",
+      "stem": "Amazon S3 경로의 리프 폴더마다 파일이 수만 개씩 있어 AWS Glue 크롤러 실행이 너무 오래 걸린다. 폴더 안 파일들의 스키마는 동일하다. 크롤러 실행 시간을 줄이는 가장 적절한 설정은?",
+      "options": [
+        "Athena TABLESAMPLE BERNOULLI로 일부 행만 읽게 한다",
+        "DataBrew 프로파일 잡의 JobSample 크기를 줄인다",
+        "S3 대상의 SampleSize를 지정해 리프 폴더당 크롤링할 파일 수를 제한한다",
+        "크롤러의 스케줄 주기를 늘려 실행 횟수를 줄인다"
+      ],
+      "correct": 2,
+      "explanation": "Glue 크롤러의 S3 대상에는 리프 폴더당 크롤링할 파일 수를 정하는 SampleSize가 있습니다. 유효 값은 1에서 249 사이의 정수이며, 설정하지 않으면 모든 파일을 크롤링합니다. 폴더 안 스키마가 동일하다면 일부 파일만 읽어도 스키마를 추론할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "TABLESAMPLE은 Athena 질의에서 결과 행을 확률로 고르는 SQL 기능입니다. 크롤러의 스키마 추론 동작과 무관합니다.",
+        "1": "JobSample은 DataBrew 프로파일 잡이 통계를 계산할 행 수를 정합니다. Glue 크롤러의 실행 시간과 관계가 없습니다.",
+        "3": "주기를 늘리면 실행 횟수만 줄 뿐 한 번의 실행 시간은 그대로이고, 새 파티션·스키마 반영이 늦어집니다."
+      },
+      "sources": [
+        {
+          "title": "AWS::Glue::Crawler S3Target — SampleSize는 리프 폴더당 파일 수(1–249), 미설정 시 전체 크롤링",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-glue-crawler-s3target.html"
+        },
+        {
+          "title": "JobSample (AWS Glue DataBrew API Reference) — 프로파일 잡 대상 행 수",
+          "url": "https://docs.aws.amazon.com/databrew/latest/APIReference/API_JobSample.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q12",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 샘플링 기법 설명(3.4.4)",
+      "section": "sampling",
+      "difficulty": "applied",
+      "stem": "Amazon Athena에서 대형 테이블의 일부 행만 뽑아 탐색하려 한다. 각 행이 서로 독립적인 확률로 선택되기를 원한다면 어떤 샘플링 방법을 써야 하며 그 특성은?",
+      "options": [
+        "TABLESAMPLE SYSTEM — 논리 세그먼트 단위로 선택하므로 더 균등하다",
+        "LIMIT 절 — 지정한 개수만큼 무작위로 반환한다",
+        "TABLESAMPLE SYSTEM — 물리 블록을 모두 스캔하므로 독립 확률이 보장된다",
+        "TABLESAMPLE BERNOULLI — 테이블의 모든 물리 블록을 스캔하며 행 단위 확률로 선택한다"
+      ],
+      "correct": 3,
+      "explanation": "Athena의 TABLESAMPLE은 샘플링 방법에 따라 행을 선택하는 선택적 연산자입니다. BERNOULLI는 테이블의 모든 물리 블록을 스캔하면서 행 단위 확률로 특정 행을 건너뛰는 방식입니다. 반면 SYSTEM은 테이블을 논리 세그먼트로 나누어 샘플링하며 독립 샘플링 확률을 보장하지 않습니다.",
+      "wrongExplanations": {
+        "0": "SYSTEM은 논리 세그먼트 단위로 샘플링하며 독립 샘플링 확률을 보장하지 않습니다. 균등함을 보장하지 않습니다.",
+        "1": "LIMIT은 반환 행 수를 제한할 뿐 무작위 표본을 만들지 않습니다.",
+        "2": "모든 물리 블록을 스캔하는 쪽은 BERNOULLI입니다. SYSTEM은 세그먼트 단위이며 독립 확률을 보장하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "SELECT (Amazon Athena SQL reference) — TABLESAMPLE BERNOULLI는 모든 물리 블록 스캔, SYSTEM은 논리 세그먼트·독립 확률 미보장",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/select.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q13",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 스큐 메커니즘 구현(3.4.5)",
+      "section": "skew",
+      "difficulty": "applied",
+      "stem": "AWS Glue의 Apache Spark 작업에서 조인 단계의 태스크 대부분은 수초 안에 끝나는데 소수의 태스크만 수십 분씩 걸린다. 특정 조인 키 값에 레코드가 몰려 있는 것이 원인이다. 가장 적절한 완화 메커니즘은?",
+      "options": [
+        "스큐된 키에 임의 접두어를 붙여 파티션에 고르게 분산한 뒤 처리 후 접두어를 제거하는 솔팅을 적용한다",
+        "DynamoDB write sharding을 적용해 쓰기를 분산한다",
+        "Redshift 분산 스타일을 ALL로 바꾼다",
+        "Kinesis hot 샤드를 split해 해시 키 범위의 용량을 늘린다"
+      ],
+      "correct": 0,
+      "explanation": "데이터 스큐는 Spark 잡의 가장 흔한 병목 원인 중 하나이며, 스큐된 파티션의 태스크가 오래 걸려 전체 처리 시간을 늦춥니다. 솔팅은 스큐된 키에 임의 접두어를 붙여 데이터를 파티션에 더 고르게 분산하는 기법입니다. 함께 쓰는 수단으로 AQE(Adaptive Query Execution)의 스큐 조인 최적화가 있으며 AWS Glue 4.0부터 기본 활성입니다.",
+      "wrongExplanations": {
+        "1": "write sharding은 Amazon DynamoDB의 파티션 키 설계 기법입니다. Spark 조인 태스크의 스큐와는 다른 영역입니다.",
+        "2": "ALL 분산은 Amazon Redshift의 테이블 분산 스타일입니다. Glue Spark 잡의 조인 스큐를 해결하지 못합니다.",
+        "3": "샤드 split은 Kinesis Data Streams의 hot 샤드 대응책입니다. Spark 파티션 스큐와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Optimize shuffles (AWS Prescriptive Guidance) — 스큐는 Spark 병목의 흔한 원인, AQE는 Glue 4.0 기본 활성",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/tuning-aws-glue-for-apache-spark/optimize-shuffles.html"
+        },
+        {
+          "title": "Detect and handle data skew on AWS Glue (AWS Big Data Blog) — 솔팅은 임의 접두어로 파티션 분산",
+          "url": "https://aws.amazon.com/blogs/big-data/detect-and-handle-data-skew-on-aws-glue/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q14",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 스큐 메커니즘 구현(3.4.5)",
+      "section": "skew",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 팩트 테이블의 분산 키가 날짜 컬럼이다. 분석가들이 주로 좁은 날짜 범위로 필터하는데 일부 쿼리가 유독 느리다. 이 상황에 대한 설명으로 가장 정확한 것은?",
+      "options": [
+        "날짜 분산 키는 압축률을 떨어뜨려 I/O가 늘어난다",
+        "필터된 행 대부분이 제한된 슬라이스 집합에 몰려 쿼리 워크로드가 스큐된다. 분산 키를 다시 고르고 SVV_TABLE_INFO로 분포를 진단한다",
+        "팩트 테이블에 분산 키를 여러 개 지정하면 해결된다",
+        "정렬 키를 날짜로 바꾸면 분산 스큐가 사라진다"
+      ],
+      "correct": 1,
+      "explanation": "날짜 컬럼을 분산 키로 하고 좁은 날짜 범위로 자주 필터하면 필터된 행 대부분이 제한된 슬라이스 집합에서 발생해 쿼리 워크로드가 스큐됩니다. 분산 키를 다시 고르는 것이 해법이며, 분포 스큐는 SVV_TABLE_INFO 시스템 뷰로 진단합니다.",
+      "wrongExplanations": {
+        "0": "문제의 원인은 압축률이 아니라 필터된 행이 일부 슬라이스에 몰리는 분포입니다.",
+        "2": "팩트 테이블은 분산 키를 하나만 가질 수 있습니다. 여러 개를 지정하는 선택지는 성립하지 않습니다.",
+        "3": "정렬 키는 블록 내 데이터 정렬과 스캔 범위를 줄이는 설정입니다. 슬라이스 간 데이터·작업 분포를 바꾸지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Choose the best distribution style (Amazon Redshift) — 좁은 날짜 필터 + 날짜 분산 키는 슬라이스 편중, 팩트 테이블 분산 키는 하나",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-best-dist-key.html"
+        },
+        {
+          "title": "SVV_TABLE_INFO (Amazon Redshift) — 분포 스큐 진단",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_SVV_TABLE_INFO.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-4-q15",
+      "examGuideTaskId": "dea-t3-4",
+      "skill": "데이터 스큐 메커니즘 구현(3.4.5)",
+      "section": "skew",
+      "difficulty": "applied",
+      "stem": "Amazon DynamoDB 테이블에서 특정 파티션 키 값 하나에 쓰기가 집중되어 쓰로틀이 발생한다. 파티션 키 값에 임의 숫자를 붙이는 write sharding을 검토 중이다. 설계에서 반드시 함께 고려해야 할 점은?",
+      "options": [
+        "write sharding을 적용하면 해당 테이블의 읽기 일관성이 최종 일관성으로 강제된다",
+        "접미사를 붙이면 항목 크기가 커져 저장 비용이 두 배가 된다",
+        "쓰기는 여러 파티션으로 분산되지만, 읽을 때는 모든 접미사에 대해 조회하고 결과를 병합해야 한다",
+        "샤딩한 파티션 키는 보조 인덱스에서 사용할 수 없다"
+      ],
+      "correct": 2,
+      "explanation": "write sharding은 파티션 키 값에 임의 숫자를 붙여 항목을 여러 파티션에 분산하는 기법입니다. 쓰기는 고르게 퍼지지만 읽을 때는 모든 접미사에 대해 조회하고 결과를 병합해야 합니다. 근본 원칙은 모든 파티션 키에 걸쳐 균일한 활동이 되도록 애플리케이션을 설계하는 것입니다.",
+      "wrongExplanations": {
+        "0": "write sharding은 키 설계 기법이며 읽기 일관성 모델을 바꾸지 않습니다.",
+        "1": "접미사 하나가 항목 크기를 두 배로 만들지 않습니다. 설계에서 고려할 실제 비용은 읽기 측의 조회·병합입니다.",
+        "3": "샤딩한 파티션 키를 보조 인덱스에서 쓸 수 없다는 제약은 없습니다. 고려할 점은 읽기 패턴의 복잡도입니다."
+      },
+      "sources": [
+        {
+          "title": "Using write sharding to distribute workloads evenly in your DynamoDB table — 랜덤 접미사 분산, 읽기는 모든 접미사 조회",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-sharding.html"
+        },
+        {
+          "title": "Best practices for designing and using partition keys effectively in DynamoDB — 모든 파티션 키에 균일한 활동 설계",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

@@ -1,0 +1,460 @@
+{
+  "examGuideTaskId": "dea-t3-2",
+  "taskTitle": "AWS 서비스를 사용하여 데이터 분석",
+  "domain": 3,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t3-2-q1",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "AWS 서비스와 도구를 사용하여 데이터 시각화(예: DataBrew, Amazon QuickSight)(3.2.1)",
+      "section": "visualize",
+      "difficulty": "applied",
+      "stem": "수백 명의 사용자가 같은 Amazon Quick Sight 대시보드를 하루 종일 반복해서 연다. 데이터 소스는 쿼리당 과금되는 Amazon Athena이며, 대시보드 응답이 느리고 쿼리 비용이 계속 늘고 있다. 가장 적절한 조치는 무엇인가?",
+      "options": [
+        "데이터셋을 직접 쿼리 모드로 유지하고 Athena 워크그룹을 대시보드별로 분리한다",
+        "데이터셋을 SPICE로 가져오고(ingest) 필요한 주기로 새로 고친다",
+        "대시보드를 열 때마다 DataBrew 프로파일을 실행해 데이터를 요약한다",
+        "Athena 테이블을 구체화된 뷰로 바꾸어 Quick Sight가 참조하게 한다"
+      ],
+      "correct": 1,
+      "explanation": "SPICE로 데이터를 가져오면 분석 쿼리가 더 빨리 처리되고 직접 쿼리를 기다릴 필요가 없습니다. 쿼리당 과금되는 데이터 소스라도 SPICE에서는 데이터셋을 처음 만들 때와 새로 고칠 때만 쿼리 비용이 듭니다. SPICE 용량은 리전별로 할당되며 관리자가 추가 구매하거나 미사용분을 반납할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "직접 쿼리는 조회할 때마다 원본에 질의하는 방식이라 반복 열람의 응답·비용 문제가 그대로 남습니다. 워크그룹 분리는 비용을 나누어 보여 줄 뿐 쿼리 수를 줄이지 않습니다.",
+        "2": "DataBrew는 코드 없이 데이터를 정리·정규화하는 시각적 데이터 준비 도구입니다. BI 대시보드의 조회 응답을 가속하는 수단이 아닙니다.",
+        "3": "구체화된 뷰는 Amazon Redshift의 객체입니다. Athena 테이블을 구체화된 뷰로 바꾸는 선택지는 성립하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Importing data into SPICE — SPICE는 생성·새로 고침 때만 소스 쿼리 비용 발생, 리전별 용량",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/spice.html"
+        },
+        {
+          "title": "What is AWS Glue DataBrew? — 시각적 데이터 준비 도구",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q2",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "AWS 서비스와 도구를 사용하여 데이터 시각화(예: DataBrew, Amazon QuickSight)(3.2.1)",
+      "section": "visualize",
+      "difficulty": "applied",
+      "stem": "운영 데이터베이스에 열을 추가한 뒤부터 SPICE 데이터셋의 예약 새로 고침이 실패한다. 데이터베이스와 네트워크는 정상이고 자격 증명도 유효하다. 가장 가능성이 높은 원인과 조치는?",
+      "options": [
+        "SPICE 용량이 부족하므로 용량을 추가 구매한다",
+        "증분 새로 고침의 look-back 윈도우가 너무 짧으므로 윈도우를 늘린다",
+        "스키마 변경은 자동 감지되지 않으므로 데이터셋을 편집·저장해 스키마를 갱신한다",
+        "데이터셋을 직접 쿼리 모드로 전환해야 스키마 변경이 반영된다"
+      ],
+      "correct": 2,
+      "explanation": "데이터베이스 스키마가 바뀌면 Quick Sight가 이를 자동으로 감지하지 못해 ingestion이 실패합니다. 데이터셋을 편집·저장해 스키마를 갱신해야 합니다.",
+      "wrongExplanations": {
+        "0": "용량 부족은 별개의 문제이며, 스키마 변경 직후부터 실패했다는 단서와 맞지 않습니다. SPICE 용량은 리전별로 할당되고 관리자가 조정합니다.",
+        "1": "look-back 윈도우는 SQL 기반 소스의 증분 새로 고침 범위를 정하는 설정입니다. 스키마 변경으로 인한 ingestion 실패의 원인이 아닙니다.",
+        "3": "직접 쿼리로 바꾸면 성능·비용 이점을 잃습니다. 또한 문제의 원인은 가져오기 방식이 아니라 데이터셋의 스키마 정보가 낡은 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Refreshing imported data (Amazon Quick) — 스키마 변경 자동 감지 불가로 ingestion 실패, 증분은 SQL 기반 소스의 look-back 윈도우 내",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/refreshing-imported-data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q3",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "AWS 서비스와 도구를 사용하여 데이터 시각화(예: DataBrew, Amazon QuickSight)(3.2.1)",
+      "section": "visualize",
+      "difficulty": "foundational",
+      "stem": "AWS Glue DataBrew에 대한 설명으로 가장 정확한 것은 무엇인가?",
+      "options": [
+        "코드 없이 데이터를 정리·정규화하는 서버리스 시각적 데이터 준비 도구로, 사전 제작 변환을 레시피로 저장해 재사용한다",
+        "Apache Spark 클러스터를 프로비저닝해 대규모 ETL을 실행하는 서비스다",
+        "대시보드와 분석을 임베드하는 비즈니스 인텔리전스 서비스다",
+        "머신 러닝 모델 학습용 피처를 생성하고 모델을 배포하는 서비스다"
+      ],
+      "correct": 0,
+      "explanation": "DataBrew는 코드 없이 데이터를 정리·정규화하는 시각적 데이터 준비 도구입니다. 프로젝트 워크스페이스에서 값 분포와 차트로 프로파일을 파악하고 250개가 넘는 사전 제작 변환을 적용하며, 변환 단계를 레시피로 저장해 재사용합니다. DataBrew는 서버리스라 클러스터를 만들거나 인프라를 관리하지 않습니다.",
+      "wrongExplanations": {
+        "1": "DataBrew는 서버리스이며 클러스터를 만들지 않습니다. 클러스터를 프로비저닝해 Spark를 돌리는 쪽은 Amazon EMR입니다.",
+        "2": "대시보드·분석 임베드는 Amazon Quick 안의 Quick Sight 기능(이전 Amazon QuickSight)의 설명입니다.",
+        "3": "ML 피처 생성·모델 배포는 Amazon SageMaker AI 영역입니다. DataBrew의 목적은 분석용 데이터 준비입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Glue DataBrew? — 시각적 데이터 준비, 250개 넘는 변환, 서버리스",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
+        },
+        {
+          "title": "What is Amazon Quick? — Quick Sight가 BI·시각화 담당",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q4",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "데이터 확인 및 정리(예: Lambda, Athena, QuickSight, Jupyter Notebooks, Amazon SageMaker Data Wrangler)(3.2.2)",
+      "section": "verify-clean",
+      "difficulty": "applied",
+      "stem": "Amazon S3 버킷에 파일이 업로드되면 AWS Lambda 함수가 호출되어 레코드를 검증하고 정제된 결과를 쓴다. 배포 후 함수 호출 수가 폭증하고 비용이 급증했다. 가장 가능성이 높은 원인과 해결책은?",
+      "options": [
+        "Lambda 예약 동시성이 설정되지 않았으므로 예약 동시성을 지정한다",
+        "S3 이벤트 알림이 중복 등록되었으므로 알림을 하나만 남긴다",
+        "함수 타임아웃이 짧아 재시도가 반복되므로 타임아웃을 늘린다",
+        "정제 결과를 트리거한 버킷에 다시 쓰고 있어 재귀 호출 루프가 생겼다. 출력 버킷을 분리하거나 수신 객체 프리픽스에만 트리거를 건다"
+      ],
+      "correct": 3,
+      "explanation": "S3는 객체가 생성·삭제될 때 Lambda 이벤트 함수로 이벤트를 보낼 수 있습니다. 트리거한 버킷과 같은 버킷에 함수가 다시 객체를 쓰면 함수가 스스로를 재호출하는 루프가 생깁니다. 버킷을 둘로 나누거나 수신 객체용 프리픽스에만 트리거를 걸어야 합니다.",
+      "wrongExplanations": {
+        "0": "예약 동시성은 호출 폭증의 피해를 제한하는 완충 장치일 뿐 재귀가 생기는 원인을 없애지 못합니다. 루프 자체를 끊어야 합니다.",
+        "1": "알림이 중복 등록되면 호출이 배수로 늘 수는 있지만 폭증(급격한 증가)의 전형적 원인은 재귀 호출입니다. 같은 버킷에 결과를 쓰는 구성이 단서입니다.",
+        "2": "타임아웃으로 인한 재시도는 호출 수를 몇 배 늘릴 뿐 폭증을 설명하지 못하며, 문제 설명에 실패나 타임아웃 단서가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Using Lambda with Amazon S3 — 같은 버킷에 쓰면 루프 발생, 버킷 분리·프리픽스 제한",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q5",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "데이터 확인 및 정리(예: Lambda, Athena, QuickSight, Jupyter Notebooks, Amazon SageMaker Data Wrangler)(3.2.2)",
+      "section": "verify-clean",
+      "difficulty": "applied",
+      "stem": "Amazon S3의 원시 CSV 데이터를 Amazon Athena로 조회하는데 매번 전체 파일을 스캔해 느리고 비싸다. 필요한 열만 골라 Parquet 형식으로 한 번 변환해 두고, 이후에는 그 결과를 조회하려 한다. 가장 적절한 Athena 기능은?",
+      "options": [
+        "표준 Athena 뷰를 만들어 필요한 열만 노출한다",
+        "CREATE TABLE AS SELECT(CTAS)로 쿼리 결과를 Parquet 테이블로 저장한다",
+        "파티션 프로젝션을 구성해 스캔 범위를 줄인다",
+        "AWS Glue Data Catalog 뷰를 만들어 Redshift와 공유한다"
+      ],
+      "correct": 1,
+      "explanation": "CTAS는 다른 쿼리의 SELECT 결과로 새 테이블을 만들고 데이터 파일을 S3의 지정 위치에 저장합니다. 원본을 반복 조회하지 않고 한 번에 테이블을 만들며, 결과를 Parquet·ORC 같은 저장 형식(또는 Iceberg)으로 변환하고 필요한 데이터만 담은 테이블 사본을 만드는 데 씁니다.",
+      "wrongExplanations": {
+        "0": "뷰는 논리 테이블이라 정의 쿼리가 참조될 때마다 다시 실행됩니다. 데이터를 저장하지 않으므로 매번 원시 CSV를 스캔하는 문제가 그대로 남습니다.",
+        "2": "파티션 프로젝션은 파티션 메타데이터 관리 부담을 없애고 파티션 정리를 돕는 기능입니다. 파일 형식을 Parquet으로 바꾸거나 열을 추려 저장하지 않습니다.",
+        "3": "Glue Data Catalog 뷰는 Athena·Redshift에 걸친 공통 뷰로 권한 관리를 위한 것입니다. 역시 데이터를 저장하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Creating a table from query results (CTAS) — 한 번에 테이블 생성, Parquet·ORC 변환",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/ctas.html"
+        },
+        {
+          "title": "Views (Amazon Athena) — 뷰는 논리 테이블, 참조할 때마다 정의 쿼리 실행",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/views.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q6",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "데이터 확인 및 정리(예: Lambda, Athena, QuickSight, Jupyter Notebooks, Amazon SageMaker Data Wrangler)(3.2.2)",
+      "section": "verify-clean",
+      "difficulty": "foundational",
+      "stem": "한 팀이 Amazon SageMaker Data Wrangler로 머신 러닝용 데이터를 import·변환·featurize하려 한다. 현재 Data Wrangler를 쓰려면 어디로 가야 하는가?",
+      "options": [
+        "AWS Glue Studio의 Visual ETL 편집기",
+        "Amazon Athena의 노트북 에디터",
+        "Amazon SageMaker Canvas",
+        "AWS Glue DataBrew 프로젝트"
+      ],
+      "correct": 2,
+      "explanation": "SageMaker Data Wrangler는 데이터 import·준비·변환·featurize·분석을 하는 도구로, 원래 SageMaker Studio Classic의 기능이었으나 Amazon SageMaker Canvas로 통합되었습니다. Canvas 안의 새 Data Wrangler에서는 시각적 인터페이스에 더해 자연어 인터페이스로 데이터를 탐색·변환할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Glue Studio의 Visual ETL은 드래그 앤 드롭 ETL 편집기이며 Data Wrangler와 다른 도구입니다.",
+        "1": "Athena 노트북 에디터는 Apache Spark 기반 대화형 분석을 위한 것으로 Data Wrangler를 제공하지 않습니다.",
+        "3": "DataBrew는 코드 없는 분석용 데이터 준비 도구입니다. 비슷한 목적의 도구지만 Data Wrangler가 통합된 곳은 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Data Wrangler — SageMaker Canvas로 통합",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q7",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "Amazon Redshift와 Athena의 SQL을 사용하여 데이터 쿼리 또는 뷰 만들기(3.2.3)",
+      "section": "views",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift에서 수십억 행 테이블을 조인·집계하는 동일한 쿼리를 BI 대시보드가 하루 종일 반복 실행해 응답이 느리다. 기반 테이블 변경도 가능한 한 빨리 반영되기를 원한다. 가장 적합한 것은?",
+      "options": [
+        "구체화된 뷰를 만들고 autorefresh를 켠다",
+        "일반 뷰(CREATE VIEW)를 만들어 쿼리를 단순화한다",
+        "WITH NO SCHEMA BINDING 뷰를 만든다",
+        "Athena CTAS로 결과를 S3에 저장하고 대시보드가 그 테이블을 조회하게 한다"
+      ],
+      "correct": 0,
+      "explanation": "구체화된 뷰는 쿼리 결과를 저장하는 객체로 사전 계산된 결과 집합을 돌려주므로 기반 테이블에 접근하지 않아 훨씬 빠르고, 예측 가능하고 반복되는 쿼리에 특히 유용합니다. autorefresh를 켜면 기반 테이블 변경 후 가능한 한 빨리 반영됩니다(다만 사용자 워크로드를 우선해 지연·중단될 수 있습니다).",
+      "wrongExplanations": {
+        "1": "일반 뷰는 물리적으로 구체화되지 않으며 정의 쿼리가 참조될 때마다 실행됩니다. 반복 쿼리 가속 효과가 없습니다.",
+        "2": "late-binding 뷰도 뷰이므로 참조할 때마다 실행됩니다. 이 옵션의 목적은 기반 객체와의 의존성을 끊는 것이지 성능이 아닙니다.",
+        "3": "CTAS는 Athena의 기능이며 실행 시점의 결과를 S3에 저장할 뿐 자동으로 갱신되지 않습니다. Redshift 대시보드 쿼리 가속의 정석 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Materialized views in Amazon Redshift — 결과 저장, 예측 가능·반복 쿼리 가속",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-overview.html"
+        },
+        {
+          "title": "Refreshing a materialized view (Amazon Redshift) — autorefresh는 워크로드 우선",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q8",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "Amazon Redshift와 Athena의 SQL을 사용하여 데이터 쿼리 또는 뷰 만들기(3.2.3)",
+      "section": "views",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift에서 외부 테이블을 참조하는 뷰를 만들려는데 생성이 실패한다. 또한 운영상 기반 외부 테이블을 주기적으로 삭제하고 다시 만드는데, 그때마다 뷰가 깨지지 않아야 한다. 어떻게 해야 하는가?",
+      "options": [
+        "구체화된 뷰로 만들어 결과를 저장한다",
+        "뷰 대신 CTAS로 테이블을 만든다",
+        "뷰를 만들기 전에 외부 테이블에 대한 통계를 수집한다",
+        "WITH NO SCHEMA BINDING 옵션을 사용해 late-binding 뷰로 만든다"
+      ],
+      "correct": 3,
+      "explanation": "외부 테이블로 뷰를 만들려면 WITH NO SCHEMA BINDING(late-binding 뷰)을 써야 합니다. late-binding 뷰는 기반 객체와 의존성이 없어 참조 객체가 없어도 뷰를 만들 수 있고, 참조 객체를 삭제·변경해도 뷰에 영향이 없으며, Redshift는 뷰를 쿼리할 때까지 의존성을 확인하지 않습니다.",
+      "wrongExplanations": {
+        "0": "구체화된 뷰는 결과를 저장해 반복 쿼리를 가속하는 객체입니다. 외부 테이블 참조 뷰를 만들지 못하는 문제의 해법이 아닙니다.",
+        "1": "CTAS는 결과를 담은 새 테이블을 만드는 문장이라 기반 테이블이 바뀌어도 자동으로 따라가지 않습니다. 요구는 뷰를 유지하는 것입니다.",
+        "2": "통계 수집은 쿼리 플래너의 선택을 돕는 작업입니다. 뷰 생성 실패나 의존성 문제와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "CREATE VIEW (Amazon Redshift) — WITH NO SCHEMA BINDING, 의존성 없음",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_VIEW.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q9",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "Amazon Redshift와 Athena의 SQL을 사용하여 데이터 쿼리 또는 뷰 만들기(3.2.3)",
+      "section": "views",
+      "difficulty": "applied",
+      "stem": "한 조직이 Amazon Athena와 Amazon Redshift 양쪽에서 동일한 뷰 정의를 사용하려 한다. 뷰를 조회하는 분석가에게 기반 테이블 권한은 주지 않고 AWS Lake Formation으로 권한을 관리해야 한다. 무엇을 만들어야 하는가?",
+      "options": [
+        "Athena 뷰를 만들고 Redshift에서 같은 SQL로 뷰를 한 번 더 만든다",
+        "AWS Glue Data Catalog 뷰를 만든다",
+        "Redshift 구체화된 뷰를 만들고 데이터 공유로 Athena에 제공한다",
+        "Athena CTAS로 결과 테이블을 만들고 양쪽에서 그 테이블을 조회한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue Data Catalog 뷰는 Athena와 Redshift 같은 여러 AWS 서비스에 걸친 하나의 공통 뷰입니다. 접근 권한이 뷰를 조회하는 사용자가 아니라 만든 사용자 기준(definer semantics)으로 정해지고, 정의가 AWS Glue Data Catalog에 저장되므로 Lake Formation의 리소스·열 grant나 태그 기반 접근 제어로 권한을 줄 수 있습니다.",
+      "wrongExplanations": {
+        "0": "뷰를 두 벌 만들면 정의가 갈라져 유지 관리 부담이 생기고, Athena 뷰는 Athena 안에서 동작하므로 '하나의 공통 뷰'라는 요구를 만족하지 못합니다.",
+        "2": "구체화된 뷰는 결과를 저장하는 Redshift 객체이며, 요구는 공통 뷰 정의와 Lake Formation 기반 권한 관리입니다. 저장된 사본이 생기는 점도 요구와 다릅니다.",
+        "3": "CTAS 결과 테이블은 실행 시점 스냅샷입니다. 뷰가 아니므로 정의가 갱신되지 않고, definer semantics 기반 권한 모델도 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Views (Amazon Athena) — Athena 뷰와 Glue Data Catalog 뷰, definer semantics, Lake Formation 권한",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/views.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q10",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "Amazon Redshift와 Athena의 SQL을 사용하여 데이터 쿼리 또는 뷰 만들기(3.2.3)",
+      "section": "views",
+      "difficulty": "foundational",
+      "stem": "Amazon Redshift 구체화된 뷰의 새로 고침에 대한 설명으로 가장 정확한 것은?",
+      "options": [
+        "새로 고침 방식(증분 또는 전체)을 사용자가 REFRESH 문에서 지정한다",
+        "구체화된 뷰는 기반 테이블이 변경되면 즉시 자동으로 갱신된다",
+        "가능하면 증분 새로 고침을 하며, 증분과 전체 중 어느 쪽을 쓸지는 Redshift가 뷰 정의에 따라 자동 선택한다",
+        "구체화된 뷰는 새로 고침할 수 없고 다시 만들어야 데이터가 갱신된다"
+      ],
+      "correct": 2,
+      "explanation": "구체화된 뷰의 데이터는 새로 고침 전까지 그대로이며, Redshift는 많은 경우 증분 새로 고침을 수행할 수 있습니다. 증분이 불가능하면 쿼리를 다시 실행해 모든 데이터를 교체하는 전체 새로 고침을 하며, 어느 쪽을 쓸지는 뷰 정의 SELECT에 따라 Redshift가 자동으로 선택합니다.",
+      "wrongExplanations": {
+        "0": "사용자가 REFRESH 문에서 증분·전체를 고르는 구조가 아닙니다. Redshift가 뷰 정의를 보고 자동으로 판단합니다.",
+        "1": "즉시 자동 갱신되지 않습니다. 수동 REFRESH를 하거나 autorefresh를 켜야 하며, autorefresh도 사용자 워크로드를 우선해 지연·중단될 수 있습니다.",
+        "3": "REFRESH MATERIALIZED VIEW로 새로 고칠 수 있습니다. 다시 만들 필요가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Refreshing a materialized view (Amazon Redshift) — 새로 고침 전까지 불변, 증분/전체 자동 선택, autorefresh 우선순위",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q11",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "Apache Spark를 사용하여 데이터를 탐색하는 Athena 노트북 사용(3.2.4)",
+      "section": "athena-spark",
+      "difficulty": "applied",
+      "stem": "데이터 엔지니어가 Amazon Athena 콘솔에서 PySpark 노트북으로 Amazon S3 데이터를 탐색하려 한다(PySpark engine version 3). 가장 먼저 해야 하는 일은 무엇인가?",
+      "options": [
+        "Spark 엔진을 사용하는 Spark 활성 워크그룹을 만든다",
+        "노트북을 먼저 만든 다음 실행할 워크그룹을 선택한다",
+        "기존 Athena SQL 워크그룹의 쿼리 에디터에서 Spark 세션을 시작한다",
+        "Amazon EMR Serverless 애플리케이션을 만들어 Athena에 연결한다"
+      ],
+      "correct": 0,
+      "explanation": "Athena에서 Spark 노트북을 쓰려면 먼저 Spark 엔진을 사용하는 Spark 활성 워크그룹을 만들어야 합니다. 노트북을 열면 새 세션이 자동으로 시작됩니다. Spark 활성 워크그룹은 노트북 에디터를 쓸 수 있지만 쿼리 에디터는 쓸 수 없습니다.",
+      "wrongExplanations": {
+        "1": "순서가 반대입니다. 노트북을 만들기 전에 Spark 활성 워크그룹부터 만들어야 합니다.",
+        "2": "쿼리 에디터는 Athena SQL 워크그룹만 사용할 수 있습니다. SQL 워크그룹에서 Spark 세션을 시작할 수 없습니다.",
+        "3": "Athena for Apache Spark는 Athena 자체의 서버리스 Spark 기능입니다. EMR Serverless 애플리케이션을 만들어 연결하는 구성이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Getting started with Apache Spark on Amazon Athena — Spark 활성 워크그룹 선행, 쿼리 에디터는 SQL 워크그룹 전용",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/notebooks-spark-getting-started.html"
+        },
+        {
+          "title": "Using Apache Spark in Amazon Athena — 서버리스, 자동 on-demand 스케일링",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/notebooks-spark.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q12",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "Apache Spark를 사용하여 데이터를 탐색하는 Athena 노트북 사용(3.2.4)",
+      "section": "athena-spark",
+      "difficulty": "applied",
+      "stem": "한 팀이 Athena for Apache Spark를 Apache Spark version 3.5로 사용하려 한다. 이 버전에 대한 설명으로 올바른 것은?",
+      "options": [
+        "PySpark engine version 3 워크그룹을 Apache Spark version 3.5로 직접 업그레이드할 수 있다",
+        "Athena 콘솔 노트북과 노트북 API를 모두 지원한다",
+        "Spark 코드 실행에 전용 EMR 클러스터를 프로비저닝해야 한다",
+        "Athena 콘솔 노트북과 노트북 API를 지원하지 않으며, SageMaker Unified Studio 노트북이나 Spark Connect 호환 클라이언트에서 Spark 코드를 실행한다"
+      ],
+      "correct": 3,
+      "explanation": "Apache Spark version 3.5는 Athena 콘솔 노트북과 노트북 API를 지원하지 않으며, SageMaker Unified Studio 노트북 또는 Spark Connect 호환 클라이언트에서 Spark 코드를 실행합니다. 또한 PySpark engine version 3 워크그룹은 Apache Spark version 3.5로 업그레이드할 수 없습니다(PySpark engine version 3은 2027년 4월 1일에 수명이 끝납니다).",
+      "wrongExplanations": {
+        "0": "PySpark engine version 3 워크그룹은 Apache Spark version 3.5로 업그레이드할 수 없습니다. 새 워크그룹을 만들어야 합니다.",
+        "1": "콘솔 노트북과 노트북 API를 지원하는 쪽은 PySpark engine version 3입니다. 3.5는 두 가지 모두 지원하지 않습니다.",
+        "2": "Athena 위의 Spark는 서버리스이며 자동 on-demand 스케일링을 제공합니다. 클러스터를 프로비저닝하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Considerations and limitations for Apache Spark on Amazon Athena — 콘솔 노트북·API 미지원, 업그레이드 불가",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/notebooks-spark-considerations-and-limitations.html"
+        },
+        {
+          "title": "Migrating from PySpark engine version 3 to Apache Spark version 3.5 — 두 릴리스 버전과 수명",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/notebooks-spark-migration-v3-to-v35.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q13",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "프로비저닝된 서비스와 서버리스 서비스 간의 절충점 설명(3.2.5)",
+      "section": "serverless-tradeoff",
+      "difficulty": "applied",
+      "stem": "한 Amazon Kinesis Data Streams 워크로드는 파티션 키 분포가 매우 불균등해 특정 샤드에 트래픽이 몰린다. 팀은 샤드 분산을 세밀하게 제어해 이 문제를 다루고 싶어 한다. 어떤 용량 모드가 권장되며 그 이유는?",
+      "options": [
+        "On-demand 모드 — 용량 계획이 필요 없고 자동으로 확장되므로 불균등 분포도 흡수한다",
+        "Provisioned 모드 — 샤드 수를 직접 지정하고 granular shard split으로 세밀한 샤드 제어를 할 수 있다",
+        "On-demand Advantage — 계정 수준 설정이므로 모든 스트림의 핫 샤드를 자동 분산한다",
+        "용량 모드와 무관하며 소비자 애플리케이션에서 재시도를 늘려야 한다"
+      ],
+      "correct": 1,
+      "explanation": "Provisioned 모드는 스트림의 샤드 수를 직접 지정하며, 예측 가능한 트래픽·쉬운 용량 예측·샤드 분산의 세밀한 제어가 필요할 때 적합합니다. 공식 문서는 파티션 키가 매우 불균등하면 granular shard split을 지원하는 provisioned 모드를 권장합니다.",
+      "wrongExplanations": {
+        "0": "On-demand는 용량 계획이 필요 없고 예측 불가·변동이 큰 트래픽에 적합하지만, 파티션 키가 매우 불균등한 경우에는 provisioned가 권장됩니다. '예측 불가 = 무조건 on-demand'가 아닙니다.",
+        "2": "On-demand Advantage는 더 많은 기능과 다른 요금 구조를 제공하는 계정 수준 설정입니다. 불균등 파티션 키 문제의 공식 권고는 granular shard split이 되는 provisioned입니다.",
+        "3": "재시도를 늘리는 것은 증상 완화일 뿐 핫 샤드 분산 문제를 해결하지 못합니다. 용량 모드 선택이 핵심입니다."
+      },
+      "sources": [
+        {
+          "title": "Choosing the data stream capacity mode (Kinesis Data Streams) — provisioned의 샤드 지정·세밀한 제어, 불균등 파티션 키 권고",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q14",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "프로비저닝된 서비스와 서버리스 서비스 간의 절충점 설명(3.2.5)",
+      "section": "serverless-tradeoff",
+      "difficulty": "applied",
+      "stem": "중요한 보고용 Amazon Athena 쿼리가 다른 팀의 임시 쿼리와 경쟁해 실행 시간이 들쭉날쭉하다. 이 워크로드를 격리하고 예측 가능한 성능과 비용을 확보하려면 무엇을 해야 하는가?",
+      "options": [
+        "쿼리당 데이터 사용량 제어를 설정해 임시 쿼리의 스캔량을 제한한다",
+        "모든 쿼리를 Athena for Apache Spark 노트북으로 옮긴다",
+        "Athena 용량 예약으로 전용 서버리스 처리 용량(DPU)을 확보해 해당 워크그룹에 할당한다",
+        "Amazon Redshift Serverless로 워크로드를 옮기고 reservation을 구매한다"
+      ],
+      "correct": 2,
+      "explanation": "Athena 용량 예약은 Athena에서 실행하는 쿼리를 위한 전용 서버리스 처리 용량(DPU)을 제공합니다. DPU 하나는 보통 4 vCPU와 16 GB 메모리입니다. 중요한 워크로드를 격리해 예측 가능한 실행과 비용을 주며, 예약 용량에서 도는 쿼리는 DDL·DML 쿼리 할당량에 포함되지 않습니다.",
+      "wrongExplanations": {
+        "0": "데이터 사용량 제어는 스캔량 상한을 거는 비용 통제 장치입니다. 중요한 쿼리를 위한 전용 용량을 확보해 주지는 않습니다.",
+        "1": "Athena for Apache Spark는 대화형 데이터 탐색·분석용입니다. SQL 보고 쿼리를 Spark 노트북으로 옮기는 것은 과도한 변경이며 격리 수단도 아닙니다.",
+        "3": "다른 서비스로 워크로드를 옮기는 것은 이 문제를 풀기 위한 최소 변경이 아닙니다. Athena 안에 격리 수단이 이미 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Managing query processing capacity (Amazon Athena) — 용량 예약, DPU = 4 vCPU/16 GB, DML 할당량 제외",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/capacity-management.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-2-q15",
+      "examGuideTaskId": "dea-t3-2",
+      "skill": "데이터 집계, 롤링 평균, 그룹화 및 피벗 정의(3.2.6)",
+      "section": "sql-concepts",
+      "difficulty": "applied",
+      "stem": "일별 매출 테이블을 조회하면서 각 날짜 행마다 최근 7일 이동 평균을 함께 표시해야 한다. 원본 행 수는 그대로 유지되어야 한다. 어떤 SQL 구성이 적절한가?",
+      "options": [
+        "AVG 집계 함수를 OVER 절과 함께 쓰되 ORDER BY와 ROWS 프레임을 지정한다",
+        "날짜로 GROUP BY 하고 AVG 집계 함수를 사용한다",
+        "ROLLUP으로 날짜별 소계를 만든 뒤 소계 행을 평균한다",
+        "PIVOT으로 날짜를 열로 돌린 뒤 열 단위 평균을 계산한다"
+      ],
+      "correct": 0,
+      "explanation": "윈도 함수는 결과 집합의 모든 행을 유지하면서 각 행에 값을 돌려줍니다. OVER 절은 필수이며 PARTITION BY·ORDER BY·윈도 프레임(ROWS 명세)으로 구성됩니다. 집계 함수에 ORDER BY를 쓰는 경우 명시적 프레임 절이 필요하며, Redshift 문서는 날짜별 판매 수량의 rolling average 예제를 제공합니다.",
+      "wrongExplanations": {
+        "1": "GROUP BY와 집계 함수는 결과 행을 그룹당 한 행으로 줄입니다. 원본 행 수를 유지하라는 요구와 어긋납니다.",
+        "2": "ROLLUP은 주어진 열 집합에 대한 가능한 모든 소계를 만드는 집계 확장입니다. 각 행에 이동 평균을 붙이는 용도가 아닙니다.",
+        "3": "PIVOT은 행 값을 열로 회전해 long 형식을 wide 형식으로 바꾸는 기능입니다. 행별 이동 평균 계산과는 다른 변환입니다."
+      },
+      "sources": [
+        {
+          "title": "Window functions (Amazon Redshift) — 모든 행 유지, OVER 절 필수, 쿼리의 마지막 연산",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_Window_functions.html"
+        },
+        {
+          "title": "AVG window function (Amazon Redshift) — rolling average 예제, ORDER BY 사용 시 명시적 프레임 절 필요",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_WF_AVG.html"
+        },
+        {
+          "title": "SELECT (Amazon Athena) — GROUPING SETS·CUBE·ROLLUP의 역할",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/select.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

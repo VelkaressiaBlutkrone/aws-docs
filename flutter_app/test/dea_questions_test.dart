@@ -14,6 +14,8 @@ void main() {
   const deaTaskIds = [
     // D1 데이터 수집 및 변환 (34%) — 작성 완료분만 올린다(도메인 1 완료)
     'dea-t1-1', 'dea-t1-2', 'dea-t1-3', 'dea-t1-4',
+    // D3 데이터 운영 및 지원 (22%) — 도메인 3 완료
+    'dea-t3-1', 'dea-t3-2', 'dea-t3-3', 'dea-t3-4',
   ];
   const minPerTask = 15; // CLF 기준선과 동일한 Task당 밀도 목표
 
