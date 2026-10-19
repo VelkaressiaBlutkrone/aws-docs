@@ -611,6 +611,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   // 문항은 사람 검수 전 드래프트(verified:false)라 questionCount는 0이다.
   'DEA-C01': [
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-1', title: '데이터 수집 수행 (스트리밍·배치·트리거)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-1.md', questionsAsset: 'assets/content/dea/dea-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-2', title: '데이터 변환 및 처리 (엔진 선택·비용·형식)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-2.md', questionsAsset: 'assets/content/dea/dea-t1-2.questions.json', questionCount: 0),
   ],
 };
 

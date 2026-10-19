@@ -12,8 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   // 문항 작성을 완료한(드래프트 포함) Task — 도메인 배치별로 누적 추가한다.
   const deaTaskIds = [
-    // D1 데이터 수집 및 변환 (34%) — 작성 완료분만 올린다(남은 Task: 1.2·1.3·1.4)
-    'dea-t1-1',
+    // D1 데이터 수집 및 변환 (34%) — 작성 완료분만 올린다(남은 Task: 1.3·1.4)
+    'dea-t1-1', 'dea-t1-2',
   ];
   const minPerTask = 15; // CLF 기준선과 동일한 Task당 밀도 목표
 
