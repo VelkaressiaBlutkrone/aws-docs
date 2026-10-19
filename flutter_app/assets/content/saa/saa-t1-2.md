@@ -14,9 +14,13 @@ sources:
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
   - title: AWS Control Tower란 무엇인가 (공식)
     url: https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html
+  - title: 리전 기반 액세스 거부 통제 (Control Tower, 공식)
+    url: https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html
+  - title: AWS 계정 루트 사용자 — 중앙 루트 접근 관리 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 다중 계정 보안 — Organizations·Control Tower·SCP
@@ -105,6 +109,8 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 | **감사(Audit) 계정** | 보안팀 전용. 전 계정 읽기 전용 접근 | 침해 시 독립 조사 가능 |
 | **개발·스테이징·운영 계정** | 워크로드 실행 환경 분리 | 각 환경 SCP로 가드레일 적용 |
 
+> 🔐 **멤버 계정 루트는 없애는 것이 현행 모범 사례입니다(중앙 루트 접근 관리).** Organizations에서 이 기능을 켜면 멤버 계정의 루트 비밀번호·액세스 키·서명 인증서·MFA를 제거할 수 있고, 제거된 계정은 **루트 로그인도 비밀번호 복구도 불가**합니다. **새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다.** 루트만 할 수 있는 일(잘못 설정된 S3 버킷 정책·SQS 정책 복구 등)은 관리 계정이나 위임 관리자가 **권한 작업(`sts:AssumeRoot`)** 으로 수행하고, 필요할 때만 **비밀번호 복구 허용**을 켭니다. 관리 계정 루트는 제거할 수 없으므로 **MFA가 요구**되며(첫 로그인 후 35일 유예) 다중 승인 보관을 권장합니다.
+
 > 폭발 반경 원칙: 운영 계정이 침해되어도 로그 계정의 감사 기록은 변조할 수 없습니다. 계정 분리 = 보안 격리입니다.
 
 > 🧠 원리: 왜 CloudTrail 로그를 워크로드 계정과 별개의 로그 아카이브 계정에 보관할까요?
@@ -135,14 +141,31 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 
 상위 계층에서 차단된 권한은 하위에서 아무리 Allow해도 복구되지 않습니다.
 
-**SCP 예시 — 특정 리전 외 사용 금지:**
+**SCP 예시 — 특정 리전 외 사용 금지(글로벌 서비스 예외 포함):**
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [{
+    "Sid": "DenyNonSeoulExceptGlobal",
     "Effect": "Deny",
-    "Action": "*",
+    "NotAction": [
+      "iam:*",
+      "organizations:*",
+      "sts:*",
+      "route53:*",
+      "cloudfront:*",
+      "support:*",
+      "budgets:*",
+      "ce:*",
+      "shield:*",
+      "waf:*",
+      "wafv2:*",
+      "globalaccelerator:*",
+      "health:*",
+      "kms:*",
+      "sso:*"
+    ],
     "Resource": "*",
     "Condition": {
       "StringNotEquals": {
@@ -153,7 +176,9 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 }
 ```
 
-> 이 SCP를 OU에 적용하면 해당 OU 내 모든 계정의 모든 IAM 아이덴티티(루트 포함)가 서울 리전 외에서 어떤 API도 호출할 수 없습니다.
+> 이 SCP를 OU에 적용하면 해당 OU 내 모든 계정의 IAM 아이덴티티가 **서울 리전 밖에서는 `NotAction`에 없는 API를 호출할 수 없습니다.**
+
+> ⚠️ **`Action: "*"` 로 쓰면 안 되는 이유**: IAM·Organizations·STS·Route 53·CloudFront·Support·결제 같은 **글로벌 서비스는 리전 엔드포인트가 특정 리전(주로 `us-east-1`)으로 고정**돼 있습니다. 예외 없이 `Deny` + `aws:RequestedRegion` 을 걸면 **IAM 사용자 생성·역할 수임·Support 케이스 개설·결제 조회까지 함께 막혀** 조직이 잠깁니다. 공식 Control Tower의 **리전 거부 통제**도 이 때문에 `NotAction`으로 글로벌 서비스를 예외 처리하고(위 목록은 그 일부), **Control Tower 실행 역할(`AWSControlTowerExecution`)은 `aws:PrincipalARN` 조건으로 추가 예외**를 둡니다. 실제 적용 전에는 공식 통제의 예외 목록 전문을 확인하세요 — 공식 목록이 더 길고 갱신됩니다(출처 4번).
 
 > 🧠 원리: 왜 SCP는 IAM 정책과 별도 레이어로 존재하며 서비스 연결 역할에는 적용되지 않을까요?
 > SCP는 계정 내부 IAM 시스템이 아닌 Organizations 레이어(계정 외부)에서 평가됩니다 — 계정 IAM 관리자가 수정할 수 없는 이유입니다.
@@ -318,4 +343,8 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 1. AWS Organizations 소개 — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html
 2. 서비스 제어 정책(SCP) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
 3. AWS Control Tower란 무엇인가 — https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html
-4. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+4. 리전 기반 액세스 거부 통제(글로벌 서비스 NotAction 예외 전문) — https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html
+5. AWS 계정 루트 사용자(중앙 루트 접근 관리·신규 계정 기본 루트 자격증명 없음·권한 작업) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① 리전 제한 SCP 예시가 글로벌 서비스까지 차단하던 것을 `NotAction` 예외형으로 고치고 위험을 명시했습니다(근거 4번). ② 멤버 계정 루트에 대한 중앙 루트 접근 관리를 반영했습니다(근거 5번).

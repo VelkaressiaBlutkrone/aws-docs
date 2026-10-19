@@ -16,9 +16,13 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
   - title: IAM 자격 증명 공급자와 페더레이션 (공식)
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html
+  - title: 루트 사용자 모범 사례 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html
+  - title: AWS 계정 루트 사용자 — 중앙 루트 접근 관리 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # IAM — 자격증명·권한·페더레이션
@@ -221,7 +225,8 @@ Principal → sts:AssumeRole 호출
 - **페더레이션 선택**: 조직 직원 = IAM Identity Center, 기업 AD 단일계정 = SAML, 앱 사용자 = Cognito, GitHub Actions = OIDC.
 - **명시적 Deny 우선**: 어느 정책에서든 Deny가 있으면 Allow를 이깁니다. 시험에서 "모든 서비스를 Allow하는 정책 + 특정 서비스 Deny" → Deny가 이깁니다.
 - **신뢰 정책 vs 권한 정책**: 역할에는 반드시 둘 다 필요. 신뢰 정책만 있으면 수임은 가능해도 아무것도 못 하고, 권한 정책만 있으면 수임 자체가 안 됩니다.
-- **루트 사용자 보호**: MFA 필수, 액세스 키 발급 금지, 일상 작업에 사용 금지 — 이 세 가지는 AWS 모범 사례의 첫 번째 항목입니다.
+- **루트 사용자 보호(현행 정책)**: **모든 계정 유형(독립·관리·멤버)에 루트 MFA가 요구**되며, MFA가 없으면 **첫 콘솔 로그인 시도 후 35일 안에 등록**해야 합니다. 액세스 키 발급 금지·일상 작업 사용 금지는 그대로입니다.
+- **다계정에서는 루트를 아예 없앤다**: Organizations의 **중앙 루트 접근 관리**를 켜면 멤버 계정의 루트 비밀번호·액세스 키·서명 인증서·MFA를 제거할 수 있고, 제거된 계정은 **루트 로그인과 비밀번호 복구가 불가**합니다(복구를 허용하는 권한 작업은 관리 계정이 수행). **Organizations에서 새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다.** 시험에서 "멤버 계정 루트 보호"의 최신 정답 방향입니다.
 
 ---
 
@@ -298,4 +303,8 @@ Principal → sts:AssumeRole 호출
 2. IAM 정책과 권한 — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
 3. IAM 역할 — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
 4. IAM 자격 증명 공급자와 페더레이션 — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. 루트 사용자 모범 사례(루트 MFA 요구·35일 유예) — https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html
+6. AWS 계정 루트 사용자(중앙 루트 접근 관리·신규 계정 기본 루트 자격증명 없음) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: 루트 사용자 서술을 현행 정책(모든 계정 유형 MFA 요구·35일 유예, 중앙 루트 접근 관리, 신규 계정 기본 루트 자격증명 없음)으로 갱신했습니다. 근거는 위 5·6번입니다.
