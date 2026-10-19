@@ -97,6 +97,75 @@ void main() {
     });
   });
 
+  group('Task 1.3 — saa-t1-5 사실 정정', () {
+    final t15 = File('assets/content/saa/saa-t1-5.md').readAsStringSync();
+
+    test('G-1.3-06 KMS 접근: IAM 단독 불가·교집합 서술이 사라졌다', () {
+      // 근거: key-policy-overview — 계정 주체(:root) 문장은 IAM 정책으로의 위임 선언,
+      // 명시 허용이 없으면 암시적 거부
+      expect(t15.contains('IAM 정책만으로는 CMK 접근이 불가'), isFalse);
+      expect(t15.contains('키 정책의 **교집합**에서 접근이 허용'), isFalse);
+      expect(t15.contains('IAM 정책과 키 정책 모두 Allow 상태여야'), isFalse);
+      expect(t15.contains('위임'), isTrue, reason: '계정 위임 문장(Enable IAM User Permissions) 설명 필요');
+    });
+
+    test('G-1.3-07 FIPS 결정 규칙이 단일 테넌트 요건으로 바뀌었다', () {
+      // 근거: key-store-overview — KMS 표준 HSM도 FIPS 140-3 Level 3 검증
+      expect(t15.contains('"FIPS Level 3 감사" 키워드 → CloudHSM'), isFalse);
+      expect(t15.contains('KMS는 멀티테넌트 환경이고 AWS 관리형이므로 "전용 하드웨어 + 단독 통제" 요건을 충족하지 못합니다'),
+          isFalse);
+      expect(t15.contains('단일 테넌트'), isTrue);
+    });
+
+    test('G-1.3-08 AWS 관리형 키 vs AWS 소유 키 구분', () {
+      // 근거: KMS concepts — AWS 관리형 키는 내 계정에 존재·조회 가능·월 보관료 없음
+      expect(t15.contains('| **AWS 관리형 키** | AWS | 불가 (AWS 소유) | 연 1회 자동 | 무료 |'),
+          isFalse);
+      expect(t15.contains('조회'), isTrue);
+      expect(t15.contains('월 보관료'), isTrue);
+    });
+
+    test('G-1.3-09 S3 암호화에 기본 암호화·DSSE-KMS가 반영됐다', () {
+      // 근거: serv-side-encryption — 2023-01-05 이후 모든 신규 업로드 자동 암호화,
+      // 네 가지 상호 배타 옵션, 2026-04 신규 버킷 SSE-C 기본 비활성
+      expect(t15.contains('DSSE-KMS'), isTrue);
+      expect(t15.contains('2023'), isTrue, reason: '기본 암호화 시점');
+      expect(t15.contains('Bucket Key') || t15.contains('버킷 키'), isTrue);
+    });
+
+    test('G-1.3-10 ACM 요금: 내보내기 가능 인증서는 유료', () {
+      expect(t15.contains('ACM이 발급하는 인증서는 추가 요금 없음'), isFalse);
+      expect(t15.contains('내보내기'), isTrue);
+    });
+
+    test('G-1.3-11 ACM 자동 갱신은 DNS 검증 기준', () {
+      // 근거: dns-renewal-validation — "Managed renewal is fully automated for
+      // ACM certificates that were originally issued using DNS validation"
+      expect(t15.contains('DNS 검증 또는 이메일 검증이 유효한 상태여야'), isFalse);
+      expect(t15.contains('45일'), isTrue);
+    });
+
+    test('G-1.3-12 Vault Lock 유예는 사용자 지정(최소 3일)', () {
+      expect(t15.contains('쿨다운(기본 3일)'), isFalse);
+      expect(t15.contains('ChangeableForDays'), isTrue);
+      expect(t15.contains('72시간'), isTrue);
+    });
+
+    test('G-1.3-13 Macie는 머신러닝 + 패턴 매칭', () {
+      expect(t15.contains('민감정보(PII — 주민번호·신용카드·여권번호 등)를 머신러닝으로 자동 탐지'),
+          isFalse);
+      expect(t15.contains('패턴 매칭'), isTrue);
+      expect(t15.contains('정규식') || t15.contains('regex'), isTrue,
+          reason: '사용자 정의 데이터 식별자는 정규식 기반');
+    });
+
+    test('lastVerified와 새 출처가 반영됐다', () {
+      expect(t15.contains('lastVerified: 2026-10-19'), isTrue);
+      expect(t15.contains('key-policy-overview'), isTrue);
+      expect(t15.contains('dns-renewal-validation'), isTrue);
+    });
+  });
+
   group('정정 날짜·출처', () {
     test('두 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
       expect(t13.contains('lastVerified: 2026-10-19'), isTrue);
