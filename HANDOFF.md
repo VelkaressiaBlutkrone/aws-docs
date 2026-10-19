@@ -1,6 +1,6 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-10-19(#135~#142 릴리스 반영) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-10-19(#135~#144 릴리스 반영) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -10,7 +10,9 @@ _갱신: 2026-10-19(#135~#142 릴리스 반영) · 다음 작업자(사람 또�
 
 **브랜치 전략(2026-06-15~):** `main` 보호, `develop` 통합. 작업 브랜치 → develop PR → (릴리스 시) develop → main PR. 전역 규칙 `~/.claude/rules/git-branch-flow.md`.
 
-**✅ 최신 상태(2026-10-19 실측):** develop == `origin/main` == `68ab263`(PR#142 릴리스, Pages run 39230610259 build·deploy success) — **미릴리스 커밋 0 · 열린 PR 0**. `flutter test` **1,076 그린** · `flutter analyze` **0건** · 라이브 index 200 · R2 강의 mp3 206(2026-10-17 실측). 릴리스 직후 라이브 검증: DEA 신규 학습문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`. 최근 작업은 **Associate 5종 콘텐츠 1차 + SAA/SOA 사실 정정**(§0-u, #135~#140), 그 앞은 **동기 프로토콜 v2**(§0-t, PR#128~#132)와 **2026-09-22 앱 코드·UX 리뷰 반영**(§0-s, PR#122~#127)이다.
+**✅ 최신 상태(2026-10-19 실측):** **PR#144까지 출고 완료 — develop·main 내용 동일(미릴리스 0) · 열린 PR 0 · 로컬·원격 브랜치는 `develop`·`main`만.** `flutter test` **1,076 그린** · `flutter analyze` **0건** · 라이브 index 200 · R2 강의 mp3 206(2026-10-17 실측). 콘텐츠 릴리스는 PR#142(`68ab263`, Pages run 39230610259 success), 그 뒤 현황 문서 부기만 PR#144(`b12cd10`, Pages success)로 따라 나갔다. 릴리스 직후 라이브 검증: DEA 신규 학습문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`. 최근 작업은 **Associate 5종 콘텐츠 1차 + SAA/SOA 사실 정정**(§0-2026-10-19, #135~#140), 그 앞은 **동기 프로토콜 v2**(§0-t, PR#128~#132)와 **2026-09-22 앱 코드·UX 리뷰 반영**(§0-s, PR#122~#127)이다.
+
+**📌 이 문서의 두 가지 서술 규약(2026-10-19):** ① 완료 섹션 라벨은 이제 **날짜(`## 0-YYYY-MM-DD.`)** 를 쓴다 — 옛 알파벳 라벨은 `0-q`~`0-t`와 `0-u`~`0-x`가 서로 다른 트랙에 쓰여 이미 충돌했다(아래 `0-u`는 2026-06 시각 리펙토링 PR4). ② 현황은 **커밋 해시로 고정하지 않고 "몇 번 PR까지 출고됐는지"로** 적는다 — 릴리스 직후의 부기 커밋이 곧바로 "미릴리스"가 되어 부기가 부기를 부르는 순환을 끊기 위해서다(#141→#143→#144에서 실제로 세 번 반복됐다).
 
 **⚠️ 이 문서의 공백:** 아래 완료 항목(§0-r 이하)은 2026-06 트랙까지만 기록돼 있다. 2026-07 전면 감사 → 오디오 R2 분리 호스팅 → SAA 오디오 롤아웃(2026-07-02~09-03) 이력의 정본은 [WORKLIST.md](WORKLIST.md) §A·§B와 [docs/audits/2026-07/ROADMAP.md](docs/audits/2026-07/ROADMAP.md)다.
 
@@ -25,7 +27,8 @@ _갱신: 2026-10-19(#135~#142 릴리스 반영) · 다음 작업자(사람 또�
 **다음 작업 우선순위:**
 - **① SAA-C03 weighted-ready 사람 검수 → flip** — 공개 게이트 관점에서는 부족 도메인만 우선한다. 현재 목표는 D1 19문항 이상 + D2 2문항 이상 추가 verified 확보. flip 후 `content_index` 해당 Task `questionCount` 실제 수로 동기화한다. `verified:true` flip은 사람 전용이며, 통합/약점 모의고사는 도메인별 weighted capacity 충족 전까지 계속 잠긴다. 워크플로 [[question-bank-verified-workflow]].
 - **② develop→main 릴리스** — 2026-10-19 PR#142로 9건(#133~#141)을 출고해 **미릴리스 0**. 다음 릴리스 때도 같은 절차: `develop` 대상 PR마다 CI가 돌지만 **develop push에는 CI가 돌지 않으므로**(ci.yml은 `pull_request` 트리거) 릴리스 PR의 `test` 체크로 통합 상태를 확인하고, main push 시 `pages.yml`이 Pages 배포를 수행한 뒤 라이브를 실측한다. 최신 상태는 [WORKLIST.md](WORKLIST.md) §B②.
-- **②-b SOA·DEA 문항 사람 검수 → flip** — SOA 300 + DEA 61 드래프트는 전부 `verified:false`·questionCount 0이라 노출이 없다. flip은 사람 전용이며, flip 시 `content_index`의 해당 Task `questionCount`를 실제 수로 동기화한다(SAA와 같은 워크플로 [[question-bank-verified-workflow]]). SOA 문서 쪽 정정 대상은 §0-u에 적어 둔 분류만 남았다.
+- **②-b SOA·DEA 문항 사람 검수 → flip(사람 전용)** — SOA 300 + DEA 61 드래프트는 전부 `verified:false`·questionCount 0이라 노출이 없다. flip 시 `content_index`의 해당 Task `questionCount`를 실제 수로 동기화한다(SAA와 같은 워크플로 [[question-bank-verified-workflow]]). SOA 문서 쪽 정정 대상은 §0-2026-10-19에 적어 둔 분류만 남았다.
+- **②-c 다음 콘텐츠 작업(AI가 바로 착수 가능, 우선순위순)** — ① **DEA-C01 도메인 2**: 조사 노트 `docs/content-research/DEA-C01/tasks/2-1.md`~`2-4.md`(+ `99-gaps.md`)를 근거로 학습문서 + 문항 드래프트 15개/Task, 레시피는 §0-2026-10-19의 #135와 동일(문서 → `.questions.json` → `content_index` 1줄 → `dea_questions_test.dart` id 누적, questionCount는 0 유지). ② **SOA 기존 20문서에 v1.1 신규 주제 반영**(S3 Files·DR 4전략·Organizations/SCP·Config 적합성 팩·VPC 엔드포인트·EventBridge) — 분류 근거는 `docs/content-research/SOA-C03/98-existing-gap.md`. ③ **갭 노트의 `[누락]`·`[부분]`·`[의심]`** — `[의심]`은 공식 문서로 확인되지 않으면 **고치지 않고 그대로 둔다**(2026-07 감사에서 의심 82건 중 11건이 REFUTED). ④ **DVA는 2026-10-27 이후**: C03 가이드 공개를 확인하고 `exam_guides/DVA-C03.json` 신설 + 코드의 `DVA-C02` 하드코딩(`site_data.dart:59`·`web/index.html`) 동시 교체. ⑤ **MLA**는 C01 기준 + C02 델타 부록.
 - **③ 2026-09-22 리뷰 후속 잔여** — 바로 할 수 있는 것은 QuizView `_finish`·오답노트 `_onFinished`에 try/finally + 저장 실패 알림(PR-m11). 디자인 결정이 필요한 것(M-6 대비 토큰 · UX-1·2 시험 러너 모바일 · UX-4 "이어서 풀기" 진입점 · M-10/UX-5)은 DESIGN.md 정렬 후. 목록은 [WORKLIST.md](WORKLIST.md) §B⑥ · [TODOS.md](TODOS.md), 정본은 [리뷰 §V-4](docs/audits/2026-09-22-app-code-ux-review.md). **사용자 몫:** 콘솔 Firestore 규칙을 레포 `firestore.rules`와 대조.
 - **점진:** 나머지 학습문서·문항의 `{#id}`/`section` 앵커 채움(C-중량은 t1-1만 시드, 나머지는 graceful 폴백=문서 최상단). 메모리 [[concept-deeplink]].
 - §0-b 선택 항목(2기기 pull 검증·개인정보 고지) · 잔여 존치 플래그(§0-y).
@@ -33,7 +36,7 @@ _갱신: 2026-10-19(#135~#142 릴리스 반영) · 다음 작업자(사람 또�
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
 
-## 0-u. 완료: Associate 5종 콘텐츠 1차 + SAA·SOA 학습문서 사실 정정 (2026-10-19, #135~#140 → PR#142로 main 릴리스·라이브 배포 완료)
+## 0-2026-10-19. 완료: Associate 5종 콘텐츠 1차 + SAA·SOA 학습문서 사실 정정 (2026-10-19, #135~#140 → PR#142로 main 릴리스·라이브 배포 완료)
 
 - **왜:** Associate 5종(SAA·SOA·DVA·DEA·MLA)을 자격증당 한 세션씩 공식 자료로 조사해 취합한 뒤, CLF-C02와 같은 방식의 학습 페이지를 한 시험씩 구성하기로 했다(오디오는 이번 범위 제외). 조사 노트 정본은 `docs/content-research/<CODE>/`이며 모든 사실에 공식 URL과 조회일을 붙였다.
 - **출고(develop):** `0bacc1e`(#135) · `4b13b07`(#136) · `1438205`(#137) · `9b8c844`(#138) · `f96efa0`(#139) · `6e4311c`(#140). 파일 중복 0으로 충돌 없이 순차 머지했고, 머지 전 로컬에서 6건을 한꺼번에 머지해 **1,076 그린**을 미리 확인했다.
