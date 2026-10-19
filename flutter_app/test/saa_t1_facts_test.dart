@@ -66,6 +66,61 @@ void main() {
     });
   });
 
+  group('G-1.1-08 자가 점검 Q1의 내부 불일치', () {
+    test('질문의 허용 리전과 해설의 허용 리전이 같다', () {
+      final q1Start = t12.indexOf('조직 전체의 모든 멤버 계정에서');
+      expect(q1Start, greaterThan(-1), reason: '자가 점검 Q1을 찾지 못했다');
+      final q1End = t12.indexOf('**Q2.**', q1Start);
+      final q1 = t12.substring(q1Start, q1End > 0 ? q1End : t12.length);
+      expect(q1.contains('us-east-1'), isTrue);
+      expect(q1.contains('ap-northeast-2'), isFalse,
+          reason: '질문은 us-east-1만 허용인데 해설이 ap-northeast-2를 허용 리전으로 설명하면 모순이다');
+    });
+  });
+
+  group('G-1.1-09 Identity Center의 ID 소스 분류', () {
+    test('Active Directory를 SAML 2.0 IdP로 설명하지 않는다', () {
+      expect(t11.contains('Active Directory 등 SAML 2.0 IdP'), isFalse,
+          reason: 'AD는 외부 SAML IdP가 아니라 AWS Directory Service로 연결하는 별도 ID 소스다');
+    });
+
+    test('공식 ID 소스 3갈래가 서술돼 있다', () {
+      expect(t11.contains('Identity Center 디렉터리'), isTrue);
+      expect(t11.contains('Directory Service'), isTrue,
+          reason: 'AD 연결 경로(AWS Managed Microsoft AD·AD Connector)를 밝혀야 한다');
+      expect(t11.contains('Entra ID') || t11.contains('Okta'), isTrue,
+          reason: '외부 SAML IdP의 공식 예시');
+    });
+
+    test('Identity Center 공식 출처를 싣는다', () {
+      expect(t11.contains('manage-your-identity-source'), isTrue);
+    });
+  });
+
+  group('G-1.1-11 정책 평가 규칙', () {
+    test('같은 계정은 합집합(어느 한쪽 Allow면 허용)으로 서술한다', () {
+      expect(t11.contains('합집합'), isTrue,
+          reason: '공식: resulting permissions are the union of the two types');
+      expect(t11.contains('신뢰한다'), isFalse,
+          reason: '"리소스 정책에서 Allow면 계정 주체로 신뢰한다"는 비공식 설명을 제거한다');
+    });
+
+    test('교차 계정은 양쪽 계정 평가가 모두 Allow여야 한다고 서술한다', () {
+      expect(t11.contains('양쪽 계정'), isTrue);
+    });
+
+    test('KMS 키 정책·역할 신뢰 정책 예외를 명시한다', () {
+      expect(t11.contains('KMS'), isTrue);
+      expect(t11.contains('암시적으로 거부') || t11.contains('암시적 거부'), isTrue,
+          reason: '공식: If you don\'t explicitly allow access to a KMS key, access is implicitly denied');
+    });
+
+    test('평가 로직 공식 출처를 싣는다', () {
+      expect(t11.contains('reference_policies_evaluation-logic'), isTrue);
+      expect(t11.contains('key-policy-overview'), isTrue);
+    });
+  });
+
   group('드래프트 문항도 현행 정책과 어긋나지 않는다', () {
     test('saa-t1-1-q15 해설이 루트 MFA 요구·35일 유예를 반영한다', () {
       final bank = File('assets/content/saa/saa-t1-1.questions.json')

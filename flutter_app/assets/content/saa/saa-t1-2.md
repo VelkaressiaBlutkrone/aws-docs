@@ -301,7 +301,7 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 
 <details><summary>정답 보기</summary>
 
-**루트(Root)에 SCP를 적용**합니다. `aws:RequestedRegion` 조건으로 `ap-northeast-2`(또는 허용 리전) 외의 모든 리전을 `Deny`하는 SCP를 루트에 붙이면, 조직 내 모든 멤버 계정의 IAM 사용자·역할·루트 사용자가 제한됩니다. 단, 관리 계정에는 SCP가 적용되지 않으므로 관리 계정은 별도 관리가 필요합니다. Permission Boundary는 개별 사용자·역할에만 적용되므로 조직 전체 가드레일에는 SCP가 맞습니다.
+**루트(Root)에 SCP를 적용**합니다. `aws:RequestedRegion` 조건으로 허용 리전(`us-east-1`) 외의 호출을 `Deny`하는 SCP를 루트에 붙이면, 조직 내 모든 멤버 계정의 IAM 사용자·역할·루트 사용자가 제한됩니다. 단 **글로벌 서비스는 `NotAction`으로 예외 처리**해야 합니다(§3의 예시 참고) — 예외 없이 막으면 IAM·Organizations·STS·Support까지 차단됩니다. 또한 관리 계정에는 SCP가 적용되지 않으므로 별도 관리가 필요합니다. Permission Boundary는 개별 사용자·역할에만 적용되므로 조직 전체 가드레일에는 SCP가 맞습니다.
 </details>
 
 **Q2.** 멤버 계정의 관리자가 `AdministratorAccess` 정책을 보유하고 있음에도 특정 서비스를 사용하지 못하고 있습니다. 가장 가능성 높은 원인은?
