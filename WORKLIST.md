@@ -1,6 +1,6 @@
 # WORKLIST — 통합 작업 목록
 
-_생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA 문항 fix·DEA 도메인 2·3 반영, 기준선 1,120) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
+_생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA 문항 fix·DEA 도메인 2·3 반영) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -28,8 +28,12 @@ _생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA �
   - **실행 플랜(잠금 2026-06-20, `/plan-eng-review`+codex 합의):** [2-pass 재검토 플랜](docs/superpowers/plans/2026-06-20-saa-rereview-plan.md) — 전수 360문항+24문서, AI 읽기전용 사전심사→사람 flip. 핵심 보강: 공개 게이트(`questionCount>0`→전 도메인 균형 세트), `content_index_test` 동적 불변식(첫 flip 회귀 차단), 문서 오류 스캔 문항 flip 선행. 착수=릴리스 후.
   - **다음 시험 구성 게이트(2026-08-06):** 통합/약점 모의고사는 공식 도메인 비중을 앱의 65문항 연습 세트에 적용할 수 있을 만큼 도메인별 검증 문항이 있어야 열린다. SAA-C03 기준 필요/현재 = D1 19/0 · D2 17/15 · D3 16/45 · D4 13/30 → 현재 잠김. 다음 사람 검수 batch의 공개 목표는 **D1 최소 19문항 + D2 최소 2문항 추가 verified** 확보. 부분 통과 규칙: 이미 필요 수량을 넘긴 도메인(D3/D4)은 공개 게이트 관점에서 pass로 두고, 부족 도메인만 계속 검수한다. 추천 batch: [2026-08-06-weighted-ready-batch.md](docs/saa-review/2026-08-06-weighted-ready-batch.md). 단, `verified:true` flip은 계속 사람만 수행한다.
   - **검수 freeze 정책(T8 · 전체 SAA · 규약+가드):** 검수 발효~전 도메인 flip 완료까지 SAA 콘텐츠(`flutter_app/assets/content/saa/*.{md,questions.json}`) 동결. **허용**=검수 구동 변경만(수정루프·T6 문서수정·flip·읽기전용 사전심사 산출물). **금지**=신규/무관 SAA 편집·대량 리포맷. **가드**=`.githooks/pre-commit`(발효 중 `saa-review*`/`review/saa*` 밖에서 SAA 콘텐츠 커밋 차단). 설치 1회 `git config core.hooksPath .githooks`; 발효 `touch .saa-frozen` / 해제 `rm .saa-frozen`(현재 dormant). 도구·테스트·플랜은 비대상. 우회 `--no-verify`(권장 안 함).
-- [~] **② develop → main 릴리스** — **미릴리스 분량 있음**(2026-10-20 작업이 develop에 들어가 있고 main에 안 나갔다) · `flutter test` **1,120 그린** · `flutter analyze` **0건**(develop 실측). 분량·열린 PR은 숫자로 적지 않고 `git log --oneline origin/main..develop`·`gh pr list --state open`으로 조회한다(HANDOFF §0 서술 규약 ②).
-  - **릴리스 절차 주의:** `develop` push에는 CI가 돌지 않으므로(ci.yml은 `pull_request` 트리거) 통합 상태는 **릴리스 PR의 `test` 체크**로 확인한다. 같은 파일을 건드린 PR이 둘 이상 열려 있으면 머지 전에 **로컬에서 순차 머지를 시험**한다(§B⑧ 교훈). 앞 PR 머지 **직후**의 연속 머지는 GitHub 판정 지연으로 실패하니, `gh pr view <n> --json mergeable,mergeStateStatus`가 `MERGEABLE/CLEAN`이 된 뒤 다시 실행한다 — 이 레포는 `--auto` 예약이 거부된다(Allow auto-merge 꺼짐).
+- [~] **② develop → main 릴리스** — 릴리스마다 반복되는 **상시 항목**이다. **미릴리스 여부는 여기 적지 않는다**(HANDOFF §0 서술 규약 ②) — `git log --oneline origin/main..develop`(비어 있으면 미릴리스 0)과 `gh pr list --state open`으로 조회한다. 기준선 수치의 정본은 [CLAUDE.md](CLAUDE.md) 빌드·테스트 절이다.
+  - **릴리스 절차 주의:** `develop` push에는 CI가 돌지 않으므로(ci.yml은 `pull_request` 트리거) 통합 상태는 **릴리스 PR의 `test` 체크**로 확인한다. 같은 파일을 건드린 PR이 둘 이상 열려 있으면 머지 전에 **로컬에서 순차 머지를 시험**한다(§B⑧ 교훈). 앞 PR 머지 **직후**의 연속 머지는 GitHub 판정 지연으로 실패하니, `gh pr view <n> --json mergeable,mergeStateStatus`가 `MERGEABLE/CLEAN`이 된 뒤 다시 실행한다 — 이 레포는 `--auto` 예약이 거부된다(Allow auto-merge 꺼짐). **타이밍 문제를 아예 없애는 한 줄**(체크가 끝날 때까지 기다리고 성공일 때만 머지):
+    ```sh
+    gh pr checks <n> --watch --fail-fast --repo VelkaressiaBlutkrone/aws-docs && gh pr merge <n> --merge --repo VelkaressiaBlutkrone/aws-docs
+    ```
+    2026-10-20에 머지 시도가 네 번 막혔는데(`has merge conflicts` 2회 · `not mergeable` 1회 · `base branch policy prohibits the merge` 1회) **전부 필수 체크 pending 또는 base 이동 직후의 재계산 지연**이었다. `--admin`은 CI 게이트를 건너뛰므로 쓰지 않는다.
   - **콘텐츠 릴리스 PR#142**(`68ab263`, Pages run 39230610259 build·deploy success) — 머지 9건(#133·#134 + #135~#141)을 한 번에 출고. 라이브 검증: index 200 · DEA 신규 문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`.
   - **부기 릴리스 2건**(루트 현황 문서만 담은 릴리스) — PR#144(`b12cd10`, Pages success) · PR#146(`de20ee0`, Pages run 39239830730 success). 부기 문서 PR가 그것을 릴리스하는 PR을 다시 부르는 순환이라, 2026-10-20부터 현황을 번호가 아닌 불변식으로 적는다(HANDOFF §0 서술 규약 ②).
   - **직전 릴리스 이력:** 2026-09-23 PR#132 `58154b7`(동기 v2 → §B⑤) · 2026-09-22 PR#127 `34b1cde`(앱 리뷰 반영 → §B④) · 2026-09-03 PR#121 `acfbeac`(강의 mp3 R2 분리) · 2026-09-03 PR#118(run 33717705582 success, 라이브 SAA mp3 206·미승인 t4-2 404 실측 — weighted capacity 게이트 PR#113·시험 게이트 해제 PR#114·SAA 오디오 PR#115·#116 포함) · 2026-07-03 PR#110·#112(감사 Phase A+AR) · 2026-06-20 PR#47 `00528f9`(SAA 재검토 인프라 T1~T8 + 첫 flip 6 Task) · 2026-06-20 PR#37 `a68ae14`(CLF 섹션 앵커) · 2026-06-20 PR#31 `89e2795`(멀티 일정).
@@ -51,13 +55,13 @@ _생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA �
   - **#137·#138·#139 SAA 학습문서 사실 정정 68건**(Task 1.1 5건 · 1.2·1.3 15건 · 2.1~4.4 48건) — `[오류]`·`[구식]`·`[부정확]`만 공식 문서로 전건 재확인, 근거 미확보 하위 주장은 쓰지 않고 PR 본문에 기록. 가드 3종(`saa_t1_facts_test`·`saa_t12_t13_facts_test`·`saa_t2_t4_facts_test`).
   - **#140 SOA 학습문서 사실 4건 정정** — Flow Logs REJECT 의미(공식 `action` 정의) · KMS 키 정책의 IAM 위임 · ACM 내보내기 가능 인증서 유료 · Trusted Advisor 현행 플랜(Business Support+·Enterprise·Unified Operations) + ElastiCache 3엔진·DynamoDB MREC/MRSC. 덤으로 학습문서 8개 끝의 작성 artifact(`</content>`·`</invoke>` 10줄) 제거·재발 가드.
   - **라이브 노출 불변식 유지:** SOA 300 + DEA 61 문항은 전부 `verified:false`이고 `content_index` questionCount는 0 — 사이트 노출·문항 수 변화 0. flip은 사람 검수 전용.
-  - **남은 일:** SOA·DEA 문항 사람 검수→flip · **DEA 도메인 4**(도메인 2·3은 §B⑧에서 완료) · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록.
+  - **남은 일:** SOA·DEA 문항 사람 검수→flip · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · SOA 기존 20문서에 v1.1 신규 주제 반영 · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록. **DEA-C01은 도메인 1~4 전부 완료**(§B⑧).
 
-- [x] **⑧ SAA 검수 문서 외부 리뷰 검증 + SAA 문항 fix 5건 + DEA 도메인 2·3** — 2026-10-20, #147·#149·#150·#148·#151 develop 머지. 경위·교훈 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20.
+- [x] **⑧ SAA 검수 문서 외부 리뷰 검증 + SAA 문항 fix 5건 + DEA 도메인 2·3·4 완주** — 2026-10-20. 1차 출고(#147·#149·#150·#148·#151)는 **PR#153으로 main 릴리스·Pages success·라이브 실측 완료**, 2차로 #154·#155와 이 부기가 나간다. 경위·교훈 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20.
   - **게이트 정의 확정:** 라이브 게이트는 `certExamHasWeightedCapacity`(lib 5곳)이고, 루브릭이 공개 조건으로 적고 있던 `certExamIsBalanced`는 **lib 호출 0 = dead code**였다. 루브릭 §1·§4를 "Task 단위 flip + 도메인별 weighted capacity"로 개정(#149).
   - **외부 리뷰 중 반영하지 않은 것:** 상단 인용문 "문장 잘림" 2건(실제로는 완결) · prescreen "경로 통일"(서로 다른 산출물이라 둘 다 기재가 맞음).
   - **문항 fix 5건(정답 변경 0):** `saa-t1-1-q13` STS 엔드포인트 · `saa-t1-4-q4`·`q12` WAF 보호 대상 9종(리뷰가 빠뜨린 Bedrock AgentCore Gateway 포함) · `saa-t1-4-q10` 관리형 교체(해설 + **정답 선택지 본문**) · `saa-t2-5-q8` Aurora 복제본 vs RDS 복제본. Test-First 가드 `test/saa_question_facts_test.dart` 20건(13건 RED → 20건 GREEN).
-  - **DEA 도메인 2·3:** 학습문서 8편 + 드래프트 120문항 → DEA 누계 학습문서 12편·드래프트 181문항, 전부 `verified:false`·questionCount 0(라이브 노출 변화 0).
+  - **DEA 도메인 2·3·4(#148·#151·#155):** 학습문서 13편 + 드래프트 195문항 → **DEA 누계 학습문서 17편·드래프트 256문항(도메인 1~4 전부)**, 전부 `verified:false`·questionCount 0(라이브 노출 변화 0). 도메인별 세션 위임 + 컨트롤러 PR 실물 검증. `pubspec.yaml`은 디렉터리 등록이라 무변경이 정답.
   - **⚠️ 교훈:** 같은 파일을 건드리는 병렬 PR은 GitHub이 각각 `CLEAN`으로 표시해도 **순차 머지 시 both-added 충돌**이 난다(로컬 시험 머지로만 드러남). 또 앞 PR 머지 직후의 연속 머지는 mergeability 재계산 지연으로 실패하며, **이 레포는 `--auto` 예약이 거부되므로**(Allow auto-merge 꺼짐) `MERGEABLE/CLEAN` 확인 후 재실행한다. 애초에 같은 레지스트리 파일을 건드리는 콘텐츠 작업은 **병렬로 돌리지 않는 것**이 정답이다.
   - **다음(사람 몫):** `saa-t1-1`·`saa-t1-4`·`saa-t2-5` 재검수 → flip. 열리면 D1 30/19·D2 30/17이지만 그 시점 D1에 **공식 Task 1.3이 0문항**이라 `saa-t1-5`가 1순위 보강 batch다.
 

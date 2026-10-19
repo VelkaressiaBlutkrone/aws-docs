@@ -1,0 +1,492 @@
+{
+  "examGuideTaskId": "dea-t4-3",
+  "taskTitle": "데이터 암호화 및 마스킹 보장",
+  "domain": 4,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t4-3-q1",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "규정 준수 법률 또는 회사 정책에 따른 데이터 마스킹 및 익명화 적용(4.3.1)",
+      "section": "masking",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift의 분석가는 신용카드 번호를 가려진 값으로 보고, 감사자는 원문을 보아야 한다. 저장된 데이터는 바꿀 수 없다. 가장 적합한 구성은?",
+      "options": [
+        "동적 데이터 마스킹 정책을 두 역할에 각각 연결하고, 같은 열에 여러 정책이 걸리면 PRIORITY로 충돌을 해소한다",
+        "Lake Formation 데이터 필터로 신용카드 열을 분석가에게서 제외한다",
+        "AWS Glue Studio의 Detect PII 변환으로 적재 단계에서 해시 처리한다",
+        "Amazon Macie로 신용카드 번호를 탐지해 자동 마스킹한다"
+      ],
+      "correct": 0,
+      "explanation": "Redshift 동적 데이터 마스킹은 질의 시점에 사용자·역할별로 민감 데이터를 다르게 보여 주며 저장된 데이터는 바꾸지 않습니다. 한 열에 서로 다른 정책을 서로 다른 역할에 붙일 수 있고 PRIORITY가 높은 정책이 적용됩니다.",
+      "wrongExplanations": {
+        "1": "Lake Formation 데이터 필터는 열·행·셀 수준으로 접근을 제한하는 수단이며 값을 가려 보여 주는 용도가 아닙니다.",
+        "2": "Detect PII는 ETL 단계에서 탐지 후 redact·해시하는 방식이라 \"질의 시점·원본 유지\" 요구와 어긋납니다.",
+        "3": "Macie는 S3 데이터를 스캔해 민감 데이터를 탐지하고 finding을 만드는 서비스이며 마스킹을 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Dynamic data masking (Amazon Redshift Database Developer Guide) — 질의 시점에 사용자·역할별로 표시 변경, 저장 데이터 불변",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_ddm.html"
+        },
+        {
+          "title": "SQL commands for managing dynamic data masking policies — PRIORITY가 높은 정책이 적용",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_ddm-procedures.html"
+        },
+        {
+          "title": "What is Amazon Macie? — 민감 데이터 탐지와 finding 생성",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q2",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "규정 준수 법률 또는 회사 정책에 따른 데이터 마스킹 및 익명화 적용(4.3.1)",
+      "section": "masking",
+      "difficulty": "applied",
+      "stem": "엔지니어가 Redshift 동적 데이터 마스킹을 적용한 뒤, 마스킹된 열 값을 WHERE 절 조건으로 써서 조회하자 결과가 예상과 다르게 나온다. 원인은?",
+      "options": [
+        "RLS 정책이 DDM보다 나중에 적용되어 행이 먼저 걸러지기 때문이다",
+        "마스킹 정책이 외부 테이블에만 적용되기 때문이다",
+        "DDM은 predicate·projection 연산보다 먼저 적용되므로, 마스킹된 컬럼 값으로 필터하면 실패하거나 결과가 달라진다",
+        "마스킹 정책의 PRIORITY가 낮아 적용되지 않았기 때문이다"
+      ],
+      "correct": 2,
+      "explanation": "DDM 정책은 predicate나 projection 연산보다 먼저 적용되므로 마스킹된 컬럼 값으로 필터하면 쿼리가 실패하거나 결과가 달라집니다.",
+      "wrongExplanations": {
+        "0": "RLS 정책은 DDM보다 먼저 적용됩니다. 순서가 반대입니다.",
+        "1": "DDM 정책은 시스템 테이블·외부 테이블·데이터셰어링 테이블·교차 DB 관계·임시 테이블·상관 쿼리에는 붙일 수 없습니다. 외부 테이블 전용이 아닙니다.",
+        "3": "PRIORITY는 같은 열에 여러 정책이 있을 때 어느 정책이 적용될지를 정하는 것이며, 필터 결과가 달라지는 원인은 적용 순서입니다."
+      },
+      "sources": [
+        {
+          "title": "Considerations when using dynamic data masking — DDM은 predicate/projection보다 먼저, RLS는 DDM보다 먼저 적용, 정책을 붙일 수 없는 relation 목록",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_ddm-considerations.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q3",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "규정 준수 법률 또는 회사 정책에 따른 데이터 마스킹 및 익명화 적용(4.3.1)",
+      "section": "masking",
+      "difficulty": "applied",
+      "stem": "AWS Glue Studio의 민감 데이터 탐지(Detect PII) 변환으로 PII를 처리하려 한다. 옳은 설명은?",
+      "options": [
+        "스캔 방식은 전체 행 스캔 한 가지뿐이다",
+        "같은 열에 redact와 해시를 함께 적용할 수 있다",
+        "탐지된 PII 값을 SHA-256 해시로 바꿀 수 있고, 각 셀을 탐지하는 전체 행 스캔과 PII 포함 필드를 찾는 행 표본 스캔 중 선택할 수 있다",
+        "탐지만 수행하며 마스킹·제거는 DataBrew에서만 가능하다"
+      ],
+      "correct": 2,
+      "explanation": "Glue Studio의 민감 데이터 탐지는 PII를 탐지·마스킹·제거하며, 탐지된 PII 값을 SHA-256 해시로 바꾸는 액션을 제공합니다. 스캔 방식은 각 셀을 탐지하는 전체 행 스캔과 PII 포함 필드를 찾는 행 표본 스캔(저비용) 두 가지입니다.",
+      "wrongExplanations": {
+        "0": "전체 행 스캔과 행 표본 스캔 두 가지 방식이 있습니다.",
+        "1": "같은 열에 redact와 해시를 함께 쓸 수는 없습니다.",
+        "3": "Glue Studio의 Detect PII 변환이 탐지·마스킹·제거를 수행합니다."
+      },
+      "sources": [
+        {
+          "title": "Detect and process sensitive data (AWS Glue Studio) — SHA-256 해시 액션, 행 표본 스캔, 같은 열에 redact와 해시 동시 사용 불가",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/detect-PII.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q4",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "규정 준수 법률 또는 회사 정책에 따른 데이터 마스킹 및 익명화 적용(4.3.1)",
+      "section": "masking",
+      "difficulty": "foundational",
+      "stem": "익명화와 가명처리(토큰화)의 차이로 옳은 것은?",
+      "options": [
+        "익명화와 가명처리 모두 원본으로 되돌릴 수 있어야 한다",
+        "익명화는 비가역이어야 하고, 가명처리 데이터는 추가 정보가 있어야만 특정 정보주체에 귀속시킬 수 있으며 그 추가 정보는 별도로 보관해야 한다",
+        "토큰화는 원본과의 연결이 완전히 끊어져 복원할 수 없다",
+        "가명처리 데이터는 익명 데이터와 동일하게 취급된다"
+      ],
+      "correct": 1,
+      "explanation": "익명화 과정에서 중요한 것은 비가역이어야 한다는 점입니다. 가명처리 데이터는 익명 데이터와 같지 않고, 추가 정보가 있어야만 특정 정보주체에 귀속시킬 수 있으며 그 추가 정보는 별도로 보관해야 합니다.",
+      "wrongExplanations": {
+        "0": "익명화는 반드시 비가역이어야 합니다.",
+        "2": "토큰은 토큰화 시스템을 통해 원본 민감 데이터에 매핑되는 참조값입니다.",
+        "3": "가명처리 데이터는 익명 데이터와 같지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Best practice 3.1 – Privacy by Design (Data Analytics Lens) — 익명화는 비가역, 가명처리는 추가 정보 별도 보관, 토큰은 토큰화 시스템으로 매핑되는 참조값",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/best-practice-3.1-privacy-by-design..html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q5",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "kms-keys",
+      "difficulty": "applied",
+      "stem": "엔지니어가 역할의 IAM 정책에 kms:Decrypt를 허용했는데도 AccessDenied가 발생한다. 가장 먼저 확인할 것은?",
+      "options": [
+        "KMS 키의 자동 회전이 활성화되어 있는지",
+        "키에 연결된 grant가 deny 규칙을 포함하는지",
+        "암호화 컨텍스트에 비밀 값이 들어 있는지",
+        "해당 KMS 키의 키 정책이 그 접근을 허용하는지"
+      ],
+      "correct": 3,
+      "explanation": "모든 KMS 키는 키 정책을 정확히 하나 가지며 키 정책이 접근 제어의 기본 수단입니다. 키 정책이 허용하지 않으면 IAM 정책의 allow는 효력이 없습니다.",
+      "wrongExplanations": {
+        "0": "자동 회전은 키 자료를 교체하는 기능이며 회전해도 이전 키 버전이 유지되어 복호화에 영향을 주지 않습니다.",
+        "1": "하나의 grant는 정확히 하나의 KMS 키에 대한 allow만 가능하며 deny를 넣을 수 없습니다.",
+        "2": "암호화 컨텍스트는 복호화 때 같은 값이 필요한 추가 인증 데이터이며, 비밀 값을 넣지 말라는 것은 별개의 모범 사례입니다."
+      },
+      "sources": [
+        {
+          "title": "Key policies in AWS KMS — 키마다 키 정책 하나, 키 정책이 허용하지 않으면 IAM allow는 무효, 키 정책은 리전별",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html"
+        },
+        {
+          "title": "Grants in AWS KMS — grant는 하나의 KMS 키에 대한 allow만 가능(deny 불가)",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/grants.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q6",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "kms-rotation",
+      "difficulty": "applied",
+      "stem": "보안 팀이 KMS 키의 자동 회전을 요구한다. 자동 회전에 대해 옳은 설명은?",
+      "options": [
+        "대칭 암호화 KMS 키에서만 지원되며, 회전해도 이전 키 버전이 유지되어 기존 데이터를 다시 암호화할 필요가 없다",
+        "비대칭 키와 HMAC 키도 자동 회전을 지원한다",
+        "회전하면 이전 키 버전이 삭제되므로 기존 데이터를 모두 재암호화해야 한다",
+        "AWS 관리형 키의 자동 회전은 사용자가 원하는 주기로 켜고 끌 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "자동 키 회전은 대칭 암호화 KMS 키에서만 지원됩니다. 또 AWS KMS가 이전 버전의 키를 복호화용으로 자동 보관하므로 회전 후에도 데이터를 다시 암호화할 필요가 없습니다.",
+      "wrongExplanations": {
+        "1": "비대칭 키, HMAC 키, 가져온 키 자료, 사용자 지정 키 스토어의 키는 자동 회전을 지원하지 않습니다.",
+        "2": "이전 버전의 키가 유지되므로 재암호화가 필요하지 않습니다.",
+        "3": "AWS 관리형 키는 매년 자동으로 회전하며 사용자가 자동 회전을 켜고 끌 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "enable_key_rotation (AWS SDK for Python Boto3 KMS API reference) — 대칭 암호화 키만 자동 회전, AWS 관리형 키는 사용자가 켜고 끌 수 없음",
+          "url": "https://docs.aws.amazon.com/boto3/latest/reference/services/kms/client/enable_key_rotation.html"
+        },
+        {
+          "title": "AWS Key Management Service (KMS) FAQs — 이전 버전 키를 복호화용으로 유지, 회전 주기 90~2560일, 온디맨드 회전 키당 10회",
+          "url": "https://aws.amazon.com/kms/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q7",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "kms-rotation",
+      "difficulty": "foundational",
+      "stem": "대용량 객체를 암호화할 때 KMS로 직접 Encrypt를 호출하는 대신 봉투 암호화를 쓰는 이유는?",
+      "options": [
+        "KMS 직접 암호화는 비대칭 키만 지원하기 때문이다",
+        "봉투 암호화는 암호화된 데이터 키를 KMS에 보관해 주기 때문이다",
+        "KMS는 최대 4 KB 데이터를 직접 암호화할 수 있고, 봉투 암호화는 작은 데이터 키만 네트워크로 오가므로 네트워크 부하가 줄어든다",
+        "봉투 암호화는 암호화 컨텍스트를 요구하지 않기 때문이다"
+      ],
+      "correct": 2,
+      "explanation": "AWS KMS는 최대 4 KB 데이터를 직접 암호화할 수 있지만, 봉투 암호화는 작은 데이터 키만 네트워크로 오가므로 네트워크 부하가 줄어드는 성능 이점이 큽니다. 봉투 암호화는 평문 데이터를 데이터 키로 암호화한 뒤 그 데이터 키를 다른 키로 암호화하는 방식입니다.",
+      "wrongExplanations": {
+        "0": "직접 암호화의 제약은 데이터 크기(최대 4 KB)이며 키 유형 때문이 아닙니다.",
+        "1": "암호화된 데이터 키는 암호화된 데이터 옆에 안전하게 저장할 수 있습니다.",
+        "3": "암호화 컨텍스트는 추가 인증 데이터로 쓰이는 선택 요소이며 봉투 암호화를 쓰는 이유가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Key Management Service (KMS) FAQs — 직접 암호화는 4 KB까지, 봉투 암호화는 네트워크 부하 감소",
+          "url": "https://aws.amazon.com/kms/faqs/"
+        },
+        {
+          "title": "AWS KMS cryptography essentials — 봉투 암호화 정의, 암호화된 데이터 키를 데이터 옆에 저장",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q8",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "kms-rotation",
+      "difficulty": "applied",
+      "stem": "개발자가 암호화 컨텍스트에 데이터베이스 암호를 넣어 전달하려 한다. 이 접근의 문제는?",
+      "options": [
+        "암호화 컨텍스트는 복호화 시 같은 값이 필요하지 않아 값이 유실된다",
+        "암호화 컨텍스트는 비밀이 아니며 암호화되지 않고 CloudTrail 로그에 평문으로 남으므로 민감 정보를 넣지 않아야 한다",
+        "암호화 컨텍스트는 최대 4 KB까지만 저장되어 암호가 잘린다",
+        "암호화 컨텍스트는 대칭 키에서만 지원되어 비대칭 키 환경에서 실패한다"
+      ],
+      "correct": 1,
+      "explanation": "암호화 컨텍스트는 비밀이 아닌 key-value 쌍으로 추가 인증 데이터로 쓰이며 암호문에 암호학적으로 바인딩됩니다. 암호화되지 않고 CloudTrail 로그에 평문으로 남으므로 민감 정보를 넣지 않습니다.",
+      "wrongExplanations": {
+        "0": "암호화 컨텍스트는 암호문에 바인딩되어 복호화할 때 같은 컨텍스트가 필요합니다.",
+        "2": "4 KB는 KMS가 직접 암호화할 수 있는 데이터 크기 한도이며 암호화 컨텍스트의 문제와 다릅니다.",
+        "3": "문제는 키 유형이 아니라 컨텍스트가 평문으로 기록된다는 점입니다."
+      },
+      "sources": [
+        {
+          "title": "Identity and access management best practices for AWS KMS — 암호화 컨텍스트는 비밀이 아니며 CloudTrail에 평문 기록, 복호화 시 동일 컨텍스트 필요",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-kms-best-practices/access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q9",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "s3-encryption",
+      "difficulty": "applied",
+      "stem": "대량의 객체가 SSE-KMS로 암호화된 S3 버킷에 분석 워크로드가 집중 접근하면서 KMS 요청 비용과 스로틀링이 문제가 되고 있다. 키 사용 감사와 키 권한 분리는 유지해야 한다. 어떻게 하는가?",
+      "options": [
+        "SSE-S3로 전환해 KMS 요청을 없앤다",
+        "DSSE-KMS로 전환하고 S3 Bucket Keys를 활성화한다",
+        "SSE-KMS를 유지하면서 S3 Bucket Keys를 활성화한다",
+        "SSE-C로 전환해 요청마다 고객이 키를 제공한다"
+      ],
+      "correct": 2,
+      "explanation": "S3 Bucket Keys는 버킷 수준 키로 S3에서 KMS로 가는 요청을 줄여 SSE-KMS의 KMS 요청 비용을 최대 99%까지 절감합니다. SSE-KMS를 유지하므로 키 사용 권한 분리와 감사 추적 이점도 유지됩니다.",
+      "wrongExplanations": {
+        "0": "SSE-S3는 KMS 키 사용 권한 분리와 사용 감사 추적이라는 SSE-KMS의 이점을 잃습니다.",
+        "1": "DSSE-KMS는 S3 Bucket Keys를 지원하지 않습니다.",
+        "3": "SSE-C는 요청마다 고객이 키를 제공해야 하고, 2026-04부터 신규 범용 버킷에서 기본 비활성입니다."
+      },
+      "sources": [
+        {
+          "title": "Reducing the cost of SSE-KMS with Amazon S3 Bucket Keys — KMS 요청 비용 최대 99% 절감, DSSE-KMS 미지원",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html"
+        },
+        {
+          "title": "Amazon S3 FAQs (encryption options) — SSE-KMS의 키 권한 분리·감사 추적 이점",
+          "url": "https://aws.amazon.com/s3/faqs/"
+        },
+        {
+          "title": "Using server-side encryption with customer-provided keys (SSE-C) — 신규 범용 버킷에서 기본 비활성",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q10",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "s3-encryption",
+      "difficulty": "applied",
+      "stem": "SSE-KMS가 적용된 S3 버킷에 작은 파일 업로드는 성공하는데 대용량 파일의 멀티파트 업로드만 AccessDenied로 실패한다. 추가로 필요한 권한은?",
+      "options": [
+        "s3:PutBucketPolicy",
+        "kms:Decrypt",
+        "kms:ScheduleKeyDeletion",
+        "kms:CreateGrant만 있으면 되고 추가 권한은 필요 없다"
+      ],
+      "correct": 1,
+      "explanation": "SSE-KMS 업로드에는 kms:GenerateDataKey가 필요하고, 멀티파트 업로드에는 kms:Decrypt까지 필요합니다. 멀티파트 업로드만 실패한다면 kms:Decrypt 누락이 유력합니다.",
+      "wrongExplanations": {
+        "0": "버킷 정책을 변경하는 권한이며 객체 업로드 암호화와 관계가 없습니다.",
+        "2": "키 삭제를 예약하는 권한이며 업로드와 무관합니다.",
+        "3": "멀티파트 업로드에는 kms:Decrypt가 필요합니다."
+      },
+      "sources": [
+        {
+          "title": "Why can't I upload a large file to Amazon S3 with AWS KMS key encryption? (re:Post) — 멀티파트 업로드에는 kms:Decrypt 필요",
+          "url": "https://repost.aws/knowledge-center/s3-large-file-encryption-kms-key"
+        },
+        {
+          "title": "Using server-side encryption with AWS KMS keys (SSE-KMS) — 업로드에 kms:GenerateDataKey 필요",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q11",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))(4.3.2)",
+      "section": "service-encryption",
+      "difficulty": "applied",
+      "stem": "운영 팀이 Amazon Kinesis Data Streams에 서버 측 암호화를 켠 뒤, 켜기 전에 이미 스트림에 들어온 레코드도 암호화되었는지 묻는다. 옳은 답은?",
+      "options": [
+        "스트림의 모든 레코드가 소급 적용되어 암호화된다",
+        "스트림을 재생성해야 기존 레코드가 암호화된다",
+        "DynamoDB처럼 항상 암호화되어 있으므로 질문 자체가 성립하지 않는다",
+        "활성화 이후 들어오는 데이터만 암호화된다"
+      ],
+      "correct": 3,
+      "explanation": "Kinesis Data Streams의 서버 측 암호화는 활성화 이후 들어오는 데이터만 암호화합니다.",
+      "wrongExplanations": {
+        "0": "소급 적용되지 않습니다.",
+        "1": "문서가 설명하는 동작은 활성화 이후 수신 데이터만 암호화된다는 것이며, 스트림 재생성이 기존 레코드를 암호화하는 절차로 제시되지 않습니다.",
+        "2": "모든 테이블이 항상 암호화되고 켜고 끄는 옵션이 없는 것은 DynamoDB이며, Kinesis Data Streams는 서버 측 암호화를 활성화하는 방식입니다."
+      },
+      "sources": [
+        {
+          "title": "What is server-side encryption for Kinesis Data Streams? — 활성화 이후 들어오는 데이터만 암호화",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/what-is-sse.html"
+        },
+        {
+          "title": "Client-side and server-side encryption (AWS Database Encryption SDK, DynamoDB) — DynamoDB는 모든 테이블이 항상 암호화되며 끄는 옵션 없음",
+          "url": "https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q12",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "AWS 계정 경계 간에 암호화 구성(4.3.3)",
+      "section": "cross-account",
+      "difficulty": "applied",
+      "stem": "계정 B의 분석 팀이 계정 A의 SSE-KMS 암호화 S3 객체를 읽어야 한다. 무엇이 필요한가?",
+      "options": [
+        "계정 A의 AWS 관리형 키(aws/s3) 사용을 계정 B에 허용한다",
+        "계정 B의 IAM 정책에만 kms:Decrypt를 허용한다",
+        "계정 A에서 키 별칭을 계정 B에 알려 주면 된다",
+        "고객 관리형 키를 쓰고 계정 A의 키 정책에서 계정 B에 권한을 허용하며, 계정 B의 IAM 정책에서도 그 키 사용을 위임한다"
+      ],
+      "correct": 3,
+      "explanation": "KMS 교차 계정 접근은 키 정책이 외부 계정에 허용할 권한의 범위를 정하고, 외부 계정의 사용자·역할은 IAM 정책(또는 grant)이 있어야 키를 쓸 수 있습니다. S3 SSE-KMS에서 교차 계정 접근을 주려면 고객 관리형 키를 써야 합니다.",
+      "wrongExplanations": {
+        "0": "AWS 관리형 키는 교차 계정 사용이 불가합니다.",
+        "1": "키 정책이 허용하지 않으면 IAM 정책의 allow는 효력이 없습니다.",
+        "2": "키 별칭을 쓰면 KMS가 요청자 계정에서 키를 해석하므로 정규화된 키 ARN을 쓰는 것이 권장됩니다."
+      },
+      "sources": [
+        {
+          "title": "Allowing users in other accounts to use a KMS key — 키 정책이 범위를 정하고 외부 계정의 IAM 정책이 위임",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html"
+        },
+        {
+          "title": "Using server-side encryption with AWS KMS keys (SSE-KMS) — 교차 계정 접근에는 고객 관리형 키, 별칭 대신 정규화된 키 ARN 권장",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
+        },
+        {
+          "title": "Replicating encrypted objects (SSE-S3, SSE-KMS, DSSE-KMS, SSE-C) — AWS 관리형 키는 교차 계정 사용 불가",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q13",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "AWS 계정 경계 간에 암호화 구성(4.3.3)",
+      "section": "cross-account",
+      "difficulty": "applied",
+      "stem": "SSE-KMS로 암호화된 S3 객체를 다른 리전으로 복제하도록 규칙을 만들었는데 암호화된 객체가 복제되지 않는다. 무엇을 해야 하는가?",
+      "options": [
+        "복제 규칙에서 KMS 암호화 객체 복제를 명시적으로 opt-in하고 대상 리전의 KMS 키를 지정한다",
+        "원본 객체를 SSE-S3로 다시 암호화한다",
+        "다중 리전 키를 만들면 복제 규칙 없이 자동 복제된다",
+        "S3 Bucket Keys를 끄면 복제가 시작된다"
+      ],
+      "correct": 0,
+      "explanation": "기본적으로 SSE-KMS/DSSE-KMS로 암호화된 객체는 복제되지 않으므로 복제 규칙에서 명시적으로 opt-in하고 대상 리전의 KMS 키를 지정해야 합니다. 대량의 KMS 암호화 객체가 교차 리전 복제로 들어오면 KMS 쿼터 스로틀링이 발생할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "요구는 암호화 유지이며, 암호화 방식을 바꾸는 것은 해결책이 아니라 요구 변경입니다.",
+        "2": "다중 리전 키는 같은 키 ID·키 자료를 여러 리전에 두는 기능이며 객체 복제를 자동화하지 않습니다. S3 교차 리전 복제는 대상 리전 키로 데이터 키를 복호화 후 재암호화합니다.",
+        "3": "S3 Bucket Keys는 KMS 요청 수를 줄이는 기능이며 복제 동작을 막는 원인이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Replicating encrypted objects (SSE-S3, SSE-KMS, DSSE-KMS, SSE-C) — 기본 미복제, 명시적 opt-in과 대상 리전 키 지정, KMS 쿼터 스로틀링",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html"
+        },
+        {
+          "title": "Multi-Region keys in AWS KMS — 대부분 서비스는 MRK를 단일 리전 키처럼 취급, S3 CRR은 대상 리전 키로 재암호화",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q14",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "전송 중 또는 전송 전 데이터 암호화 사용(4.3.4)",
+      "section": "in-transit",
+      "difficulty": "applied",
+      "stem": "보안 팀이 S3 버킷에 대한 모든 HTTP(비암호화) 요청을 차단하고, Amazon Redshift 클라이언트 연결에도 SSL을 강제하라고 요구한다. 각각 무엇을 설정하는가?",
+      "options": [
+        "S3는 SSE-KMS를 켜고, Redshift는 고객 관리형 키로 암호화한다",
+        "S3는 버킷 정책에서 aws:SecureTransport가 false인 요청을 명시적으로 Deny하고, Redshift는 require_ssl 파라미터를 설정한다",
+        "S3는 S3 Bucket Keys를 켜고, Redshift는 rds.force_ssl을 설정한다",
+        "S3는 VPC 엔드포인트 정책으로 HTTP를 거부하고, Redshift는 ClientBroker를 TLS로 설정한다"
+      ],
+      "correct": 1,
+      "explanation": "S3는 버킷 정책에서 aws:SecureTransport 조건이 false인 요청을 명시적으로 Deny해 HTTP 요청을 차단합니다. Redshift는 require_ssl 파라미터로 SSL을 강제하며, 2025-01-10 이후 신규·복원 클러스터와 서버리스 워크그룹은 SSL이 기본 강제됩니다.",
+      "wrongExplanations": {
+        "0": "SSE-KMS와 고객 관리형 키 암호화는 저장 시 암호화이며 전송 중 암호화 강제가 아닙니다.",
+        "2": "S3 Bucket Keys는 KMS 요청 비용을 줄이는 저장 시 설정이고, rds.force_ssl은 Amazon RDS for PostgreSQL의 파라미터입니다.",
+        "3": "ClientBroker는 Amazon MSK의 클라이언트-브로커 암호화 설정입니다."
+      },
+      "sources": [
+        {
+          "title": "Examples of Amazon S3 bucket policies — aws:SecureTransport가 false인 요청을 Deny",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html"
+        },
+        {
+          "title": "Behavior changes in Amazon Redshift — require_ssl 파라미터와 2025-01-10 이후 기본 강제",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/behavior-changes.html"
+        },
+        {
+          "title": "Amazon MSK encryption — ClientBroker 설정(TLS, TLS_PLAINTEXT, PLAINTEXT)",
+          "url": "https://docs.aws.amazon.com/msk/latest/developerguide/msk-encryption.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-3-q15",
+      "examGuideTaskId": "dea-t4-3",
+      "skill": "전송 중 또는 전송 전 데이터 암호화 사용(4.3.4)",
+      "section": "before-transit",
+      "difficulty": "applied",
+      "stem": "규제 기관이 \"AWS를 포함한 제3자가 평문 데이터에 접근할 수 없어야 한다\"고 요구한다. 데이터는 Amazon S3에 적재된다. 어떤 방식을 택하며 어떤 제약을 감수해야 하는가?",
+      "options": [
+        "SSE-KMS와 TLS를 함께 쓰면 요구가 충족되고 제약은 없다",
+        "SSE-C를 쓰면 고객이 키를 제공하므로 요구가 충족되고 Bucket Keys도 함께 쓸 수 있다",
+        "클라이언트 측 암호화를 쓴다. S3는 암·복호화에 관여하지 않고 이 객체를 일반 객체로만 인식하며, S3 Encryption Client는 Bucket Keys를 쓰지 않고 Lake Formation에 등록한 위치는 클라이언트 측 암호화를 지원하지 않는다",
+        "DSSE-KMS로 두 겹 암호화하면 AWS도 평문을 볼 수 없다"
+      ],
+      "correct": 2,
+      "explanation": "S3 Encryption Client로 암호화한 객체는 AWS를 포함한 제3자에게 노출되지 않으며 S3는 암·복호화에 관여하지 않고 이런 객체를 암호화된 객체로 인식하지 못해 일반 객체로만 봅니다. 제약으로 S3 Encryption Client는 KMS 키를 래핑 키로 지정해도 Bucket Keys를 쓰지 않으며, Lake Formation에 등록한 위치는 클라이언트 측 암호화를 지원하지 않습니다.",
+      "wrongExplanations": {
+        "0": "서버 측 암호화는 서비스가 받은 뒤 암호화하고 TLS는 전송 구간만 보호하므로 \"AWS도 평문 접근 불가\" 요구를 충족하지 않습니다.",
+        "1": "SSE-C는 S3가 암·복호화를 수행하는 서버 측 암호화이며 키만 고객이 요청마다 제공합니다. 또 2026-04부터 신규 범용 버킷에서 기본 비활성입니다.",
+        "3": "DSSE-KMS도 서버 측 암호화이며 서로 다른 AES-256-GCM 구현의 2계층 암호화입니다. 또 Bucket Keys를 지원하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Protecting data by using client-side encryption (Amazon S3) — AWS를 포함한 제3자 비노출, S3는 암·복호화 미관여·일반 객체로 인식, Bucket Keys 미사용",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingClientSideEncryption.html"
+        },
+        {
+          "title": "Registering an encrypted Amazon S3 location across AWS accounts (Lake Formation) — 클라이언트 측 암호화 미지원",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/register-cross-encrypted.html"
+        },
+        {
+          "title": "Amazon S3 FAQs (encryption options) — SSE-C는 S3가 암·복호화 수행, DSSE-KMS는 2계층 서버 측 암호화",
+          "url": "https://aws.amazon.com/s3/faqs/"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

@@ -18,6 +18,8 @@ void main() {
     'dea-t2-1', 'dea-t2-2', 'dea-t2-3', 'dea-t2-4',
     // D3 데이터 운영 및 지원 (22%) — 도메인 3 완료
     'dea-t3-1', 'dea-t3-2', 'dea-t3-3', 'dea-t3-4',
+    // D4 데이터 보안 및 거버넌스 (18%) — 도메인 4 완료
+    'dea-t4-1', 'dea-t4-2', 'dea-t4-3', 'dea-t4-4', 'dea-t4-5',
   ];
   const minPerTask = 15; // CLF 기준선과 동일한 Task당 밀도 목표
 
