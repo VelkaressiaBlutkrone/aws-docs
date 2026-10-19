@@ -187,6 +187,7 @@ flutter:
     - assets/audio/saa/saa-t4-1/review_checklist.md
     - assets/content/saa/
     - assets/content/soa/
+    - assets/content/dea/
 
   fonts:
     # Pretendard Variable 단일 파일(woff2 ~2.0MB — 정적 4 OTF 6.3MB 대체, PR3).

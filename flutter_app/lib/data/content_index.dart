@@ -607,6 +607,11 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-3', title: 'Route 53 DNS·CloudFront 콘텐츠 전송', domain: 5, mdAsset: 'assets/content/soa/soa-t5-3.md', questionsAsset: 'assets/content/soa/soa-t5-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-4', title: '네트워크 문제 해결 (Flow Logs·Reachability Analyzer)', domain: 5, mdAsset: 'assets/content/soa/soa-t5-4.md', questionsAsset: 'assets/content/soa/soa-t5-4.questions.json', questionCount: 0),
   ],
+  // DEA-C01: 도메인 1(데이터 수집 및 변환, 34%) 배치부터 누적 등록한다.
+  // 문항은 사람 검수 전 드래프트(verified:false)라 questionCount는 0이다.
+  'DEA-C01': [
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-1', title: '데이터 수집 수행 (스트리밍·배치·트리거)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-1.md', questionsAsset: 'assets/content/dea/dea-t1-1.questions.json', questionCount: 0),
+  ],
 };
 
 List<ContentEntry> contentFor(String certCode) =>
