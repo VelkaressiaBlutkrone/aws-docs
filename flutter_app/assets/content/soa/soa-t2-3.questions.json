@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t2-3",
+  "taskTitle": "백업·복원 전략 (AWS Backup·스냅샷·수명주기)",
+  "domain": 2,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t2-3-q1",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "foundational",
+      "stem": "AWS Backup에서 '언제·얼마나 자주·어디에 백업할지'를 정의하는 정책 컨테이너는?",
+      "options": [
+        "백업 볼트(Backup Vault)",
+        "백업 계획(Backup Plan)",
+        "복구 지점(Recovery Point)",
+        "리소스 할당(Resource Assignment)"
+      ],
+      "correct": 1,
+      "explanation": "백업 계획은 백업 규칙(일정·보존 기간·콜드 스토리지 전환·대상 볼트·교차 리전/계정 복사)을 담는 정책 컨테이너입니다. 볼트는 복구 지점을 저장하는 컨테이너이고, 리소스 할당은 어떤 리소스를 그 계획에 연결할지 정합니다.",
+      "wrongExplanations": {
+        "0": "볼트는 백업(복구 지점)을 저장하는 논리적 컨테이너입니다.",
+        "2": "복구 지점은 생성된 백업 그 자체입니다.",
+        "3": "리소스 할당은 대상 선택이며 일정·보존을 정의하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Backup 백업 계획 관리",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/about-backup-plans.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q2",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "applied",
+      "stem": "새로 만들어지는 리소스가 자동으로 백업 대상에 포함되게 하려면 AWS Backup에서 어떻게 할당하는가?",
+      "options": [
+        "리소스 ID를 계획에 직접 나열한다",
+        "태그로 리소스를 할당해 해당 태그가 붙은 리소스가 자동 포함되게 한다",
+        "매일 Lambda로 리소스 목록을 갱신한다",
+        "볼트마다 리소스를 수동 등록한다"
+      ],
+      "correct": 1,
+      "explanation": "태그 기반 할당을 쓰면 새 리소스에 그 태그만 붙어도 백업 대상에 자동 포함되므로, 인프라 변화가 계획 수정 없이 반영됩니다. 리소스 ID 나열 방식은 리소스 교체·증설마다 목록을 갱신해야 합니다.",
+      "wrongExplanations": {
+        "0": "ID 나열은 가능하지만 자동 포함이 되지 않아 운영 실수로 이어집니다.",
+        "2": "Lambda 자작 자동화는 관리형 태그 할당으로 대체할 수 있습니다.",
+        "3": "볼트는 저장 위치이며 리소스 등록 단위가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Backup — 리소스 할당",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q3",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "applied",
+      "stem": "계정이 침해되거나 담당자가 실수로 백업을 지우는 상황까지 격리하려면 백업 규칙에 무엇을 추가하는가?",
+      "options": [
+        "교차 계정 복사로 별도 계정의 볼트에 백업을 복사한다",
+        "볼트의 KMS 키를 교체한다",
+        "백업 주기를 1시간으로 줄인다",
+        "백업 보존 기간을 7일로 단축한다"
+      ],
+      "correct": 0,
+      "explanation": "백업 규칙에서 교차 계정 복사를 설정하면 별도 계정의 볼트로 백업이 복사되어 계정 침해나 실수 삭제로부터 격리됩니다. 리전 장애 대비는 교차 리전 복사가 담당합니다.",
+      "wrongExplanations": {
+        "1": "키 교체는 암호화 관리이며 삭제 위험을 격리하지 않습니다.",
+        "2": "주기를 줄여도 같은 계정에 있으면 함께 삭제될 수 있습니다.",
+        "3": "보존 단축은 오히려 복구 가능 범위를 줄입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Backup 교차 계정 백업 복사",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/create-cross-account-backup.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q4",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "applied",
+      "stem": "규제 감사 대응으로 '보존 기간 내에는 루트 사용자조차 백업을 삭제하거나 정책을 약화할 수 없어야 한다'는 요건이 있다. 적절한 설정은?",
+      "options": [
+        "Backup Vault Lock 규정 준수(Compliance) 모드",
+        "Backup Vault Lock 거버넌스(Governance) 모드",
+        "볼트 액세스 정책에서 삭제 액션만 거부",
+        "백업 보존 기간을 최대로 설정"
+      ],
+      "correct": 0,
+      "explanation": "Vault Lock 규정 준수 모드는 콜드오프(유예) 기간이 지나면 루트 사용자를 포함해 누구도 잠금을 해제하거나 보존 정책을 약화할 수 없습니다. 거버넌스 모드는 권한을 가진 관리자가 해제할 수 있어 운영 실수 방지용입니다.",
+      "wrongExplanations": {
+        "1": "거버넌스 모드는 권한자가 해제할 수 있어 불가역성 요건을 충족하지 못합니다.",
+        "2": "정책은 권한 변경으로 되돌릴 수 있어 불가역 보장이 아닙니다.",
+        "3": "보존 기간만 늘려도 삭제 자체를 막지는 못합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Backup Vault Lock",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q5",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "foundational",
+      "stem": "EBS 스냅샷의 저장 방식과 복원 특성을 올바르게 설명한 것은?",
+      "options": [
+        "증분식으로 저장되지만 어떤 스냅샷에서 복원해도 그 시점의 전체 볼륨이 복원된다",
+        "매번 전체 볼륨을 복사해 저장한다",
+        "최신 스냅샷만 복원에 사용할 수 있다",
+        "중간 스냅샷을 삭제하면 이후 스냅샷으로 복원할 수 없다"
+      ],
+      "correct": 0,
+      "explanation": "EBS 스냅샷은 첫 번째만 전체이고 이후에는 변경된 블록만 저장하는 증분식입니다. 그러나 각 스냅샷은 완전한 복원 지점이며, 중간 스냅샷을 삭제해도 다른 스냅샷이 참조하는 블록은 보존되므로 복원 능력이 유지됩니다.",
+      "wrongExplanations": {
+        "1": "증분 저장이 기본 동작입니다.",
+        "2": "보유한 어떤 스냅샷으로도 복원할 수 있습니다.",
+        "3": "참조되는 블록은 자동 보존되므로 복원이 가능합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EBS 스냅샷 작동 방식",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q6",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "applied",
+      "stem": "EBS 볼륨과 AMI의 생성·보존·삭제만 태그 기반 정책으로 자동화하려 한다. 가장 알맞은 도구는?",
+      "options": [
+        "Amazon Data Lifecycle Manager(DLM)",
+        "AWS Backup",
+        "AWS Config",
+        "Systems Manager State Manager"
+      ],
+      "correct": 0,
+      "explanation": "DLM은 EBS 스냅샷과 AMI의 생성·보존·삭제를 정책으로 자동화하며 태그로 대상을 지정합니다. 여러 서비스(RDS·DynamoDB·EFS 등)를 정책 하나로 중앙 관리해야 하면 AWS Backup을 사용합니다.",
+      "wrongExplanations": {
+        "1": "AWS Backup도 가능하지만 범위가 EBS·AMI로 한정된 요건에는 DLM이 더 가벼운 선택입니다.",
+        "2": "AWS Config는 구성 변경 추적·준수 평가 서비스입니다.",
+        "3": "State Manager는 인스턴스 구성 상태를 유지하는 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Data Lifecycle Manager",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q7",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "foundational",
+      "stem": "DLM이 RDS·DynamoDB 백업을 다루지 못하는 이유로 가장 적절한 것은?",
+      "options": [
+        "DLM은 EBS·EC2의 스냅샷 API를 직접 호출하는 방식이고, 관리형 DB는 자체 백업 메커니즘을 쓰기 때문",
+        "DLM은 리전당 하나만 만들 수 있기 때문",
+        "RDS는 스냅샷 기능이 없기 때문",
+        "DynamoDB는 태그를 지원하지 않기 때문"
+      ],
+      "correct": 0,
+      "explanation": "DLM은 EBS 볼륨·EC2 인스턴스의 스냅샷 API를 호출해 동작하므로 같은 API 체계를 공유하는 EBS·AMI 범위에서만 정책을 적용합니다. RDS·DynamoDB는 스토리지가 추상화된 관리형 서비스로 자체 백업 메커니즘을 가지며, 다중 서비스 통합은 AWS Backup이 담당합니다.",
+      "wrongExplanations": {
+        "1": "정책 개수 제약이 이유가 아닙니다.",
+        "2": "RDS에는 자동 백업·수동 스냅샷이 있습니다.",
+        "3": "DynamoDB도 태그를 지원합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Data Lifecycle Manager",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q8",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "difficulty": "foundational",
+      "stem": "RDS 자동 백업의 보존 기간으로 설정할 수 있는 범위는?",
+      "options": [
+        "1~7일",
+        "1~35일",
+        "1~90일",
+        "무기한"
+      ],
+      "correct": 1,
+      "explanation": "RDS 자동 백업은 매일 백업과 트랜잭션 로그를 유지하며 보존 기간을 1~35일로 설정합니다. 보존 기간 내에서는 특정 시점 복원(PITR)이 가능하고, 그보다 긴 보관은 수동 스냅샷이나 AWS Backup으로 처리합니다.",
+      "wrongExplanations": {
+        "0": "7일은 기본값에 가까운 값이지만 상한이 아닙니다.",
+        "2": "90일은 자동 백업의 보존 범위가 아닙니다.",
+        "3": "무기한 보존은 수동 스냅샷의 특성입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon RDS 자동 백업 소개",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q9",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "difficulty": "applied",
+      "stem": "운영자가 오늘 오전 10시 12분에 실수로 대량 DELETE를 실행했다. RDS에서 그 직전 상태로 되돌리려면?",
+      "options": [
+        "보존 기간 내 특정 시점 복원(PITR)으로 해당 시점의 새 DB 인스턴스를 복원한다",
+        "기존 인스턴스를 재부팅한다",
+        "읽기 전용 복제본을 승격한다",
+        "스냅샷을 생성한 뒤 같은 인스턴스에 덮어쓴다"
+      ],
+      "correct": 0,
+      "explanation": "자동 백업이 켜져 있으면 보존 기간 내 임의 시점으로 PITR이 가능합니다. 복원은 항상 새 DB 인스턴스로 이루어지며 기존 인스턴스를 덮어쓰지 않으므로, 복원 후 애플리케이션 연결 대상을 전환합니다.",
+      "wrongExplanations": {
+        "1": "재부팅은 데이터 변경을 되돌리지 않습니다.",
+        "2": "복제본도 DELETE를 복제했을 가능성이 높습니다.",
+        "3": "RDS 복원은 기존 인스턴스를 덮어쓰는 방식이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon RDS 특정 시점으로 DB 인스턴스 복원",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIT.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q10",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "difficulty": "applied",
+      "stem": "감사 요건 때문에 특정 시점의 DB 상태를 5년간 보관해야 한다. 적절한 방법은?",
+      "options": [
+        "수동 스냅샷을 만들어 보관한다(직접 삭제하기 전까지 유지됨)",
+        "자동 백업 보존 기간을 5년으로 설정한다",
+        "읽기 전용 복제본을 만들어 중지한다",
+        "트랜잭션 로그만 S3에 복사한다"
+      ],
+      "correct": 0,
+      "explanation": "수동 스냅샷은 사용자가 직접 삭제하기 전까지 보존되므로 35일 상한에 묶이지 않습니다. 장기 보관은 수동 스냅샷(또는 AWS Backup으로 관리)으로 처리하고, 운영 복구는 자동 백업의 PITR로 처리하는 것이 표준 분리입니다.",
+      "wrongExplanations": {
+        "1": "자동 백업 보존 기간은 최대 35일입니다.",
+        "2": "복제본은 백업이 아니고 중지 상태로 장기 보관하는 수단도 아닙니다.",
+        "3": "트랜잭션 로그만으로는 복원 기준점이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon RDS DB 스냅샷 생성",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateSnapshot.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q11",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "foundational",
+      "stem": "버전 관리가 켜진 S3 버킷에서 객체를 삭제하면 어떤 일이 일어나는가?",
+      "options": [
+        "삭제 마커가 추가되고 이전 버전은 남아 복구할 수 있다",
+        "모든 버전이 즉시 영구 삭제된다",
+        "객체가 Glacier로 이동한다",
+        "버킷의 버전 관리가 자동으로 중단된다"
+      ],
+      "correct": 0,
+      "explanation": "버전 관리가 활성화된 버킷에서는 삭제 요청이 삭제 마커를 추가하는 방식으로 처리되고 이전 버전은 그대로 남습니다. 삭제 마커를 제거하면 객체가 다시 보이므로 실수 삭제를 되돌릴 수 있습니다.",
+      "wrongExplanations": {
+        "1": "영구 삭제는 특정 버전 ID를 지정해 삭제할 때 일어납니다.",
+        "2": "스토리지 클래스 전환은 수명 주기 규칙의 동작입니다.",
+        "3": "버전 관리가 자동으로 중단되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "S3 버킷에서 버전 관리 사용",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q12",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "applied",
+      "stem": "버전의 영구 삭제와 버전 관리 중단에 추가 인증을 요구해 악의적·실수 삭제를 막으려 한다. 어떤 기능인가?",
+      "options": [
+        "MFA Delete",
+        "S3 Block Public Access",
+        "버킷 키(Bucket Key)",
+        "요청자 지불(Requester Pays)"
+      ],
+      "correct": 0,
+      "explanation": "MFA Delete를 켜면 객체 버전의 영구 삭제와 버킷 버전 관리 상태 변경에 MFA 인증 코드가 추가로 필요합니다. 실수·악의적 삭제에 대한 추가 방어선입니다.",
+      "wrongExplanations": {
+        "1": "Block Public Access는 공개 접근 차단 설정입니다.",
+        "2": "버킷 키는 SSE-KMS 요청 비용을 줄이는 기능입니다.",
+        "3": "요청자 지불은 데이터 전송 요금 부담 주체를 바꾸는 설정입니다."
+      },
+      "sources": [
+        {
+          "title": "S3 MFA Delete 구성",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q13",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "applied",
+      "stem": "S3 복제(CRR/SRR)를 설정하려는데 콘솔이 거부한다. 반드시 먼저 확인할 전제 조건은?",
+      "options": [
+        "소스·대상 버킷 모두 버전 관리가 활성화돼 있어야 한다",
+        "두 버킷이 같은 AZ에 있어야 한다",
+        "대상 버킷이 Glacier 스토리지 클래스여야 한다",
+        "소스 버킷에 MFA Delete가 켜져 있어야 한다"
+      ],
+      "correct": 0,
+      "explanation": "복제는 객체 버전 식별자를 기준으로 '무엇이 새 변경인지' 구분하기 때문에 소스·대상 버킷 모두 버전 관리가 필요합니다. 버전 관리를 켜지 않으면 복제 구성 자체가 거부됩니다.",
+      "wrongExplanations": {
+        "1": "S3 버킷은 리전 단위 리소스이며 AZ 개념으로 배치하지 않습니다.",
+        "2": "대상 스토리지 클래스는 선택 사항입니다.",
+        "3": "MFA Delete는 복제의 전제 조건이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "S3 복제 — 요구 사항",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q14",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "applied",
+      "stem": "버전 관리를 켠 뒤 S3 비용이 빠르게 증가했다. 가장 적절한 조치는?",
+      "options": [
+        "수명 주기 규칙으로 이전 버전을 저비용 클래스로 전환하거나 일정 기간 후 만료시킨다",
+        "버전 관리를 끄고 모든 버전을 삭제한다",
+        "버킷을 다른 리전으로 옮긴다",
+        "복제를 추가해 객체를 분산한다"
+      ],
+      "correct": 0,
+      "explanation": "버전 관리는 모든 버전을 보존하므로 비용이 누적됩니다. 수명 주기 규칙으로 이전 버전을 Standard-IA·Glacier 계열로 전환하거나 일정 기간 뒤 만료시키면 보호 기능을 유지하면서 비용을 통제할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "버전 관리를 끄면 실수 삭제·덮어쓰기 복구 능력을 잃습니다.",
+        "2": "리전 이동은 저장량 자체를 줄이지 않습니다.",
+        "3": "복제는 사본을 늘려 비용을 더 올립니다."
+      },
+      "sources": [
+        {
+          "title": "S3 수명 주기 구성으로 객체 관리",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-3-q15",
+      "examGuideTaskId": "soa-t2-3",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "applied",
+      "stem": "백업 작업이 매일 성공으로 기록되는데도 운영팀이 정기 복원 테스트를 수행해야 하는 이유는?",
+      "options": [
+        "백업 성공은 기록됐다는 뜻일 뿐, 데이터 무결성과 목표 RTO 내 복원 가능성은 실제 복원으로만 검증되기 때문",
+        "복원 테스트를 하지 않으면 백업이 자동 삭제되기 때문",
+        "AWS Backup이 복원 테스트 없이는 교차 리전 복사를 하지 않기 때문",
+        "복원 테스트가 백업 비용을 줄여 주기 때문"
+      ],
+      "correct": 0,
+      "explanation": "백업 작업 성공은 데이터가 저장소에 기록됐음을 의미할 뿐입니다. 스토리지 손상, 에이전트 오류, 의존 리소스 설정 변화 같은 문제는 복원 과정에서만 드러나므로, 정기 복원 테스트로 무결성과 RTO를 사전에 검증해야 합니다.",
+      "wrongExplanations": {
+        "1": "복원 테스트 여부와 백업 보존은 무관합니다.",
+        "2": "교차 리전 복사는 규칙 설정으로 동작합니다.",
+        "3": "복원 테스트는 비용 절감 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Backup으로 백업 복원",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/restoring-a-backup.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

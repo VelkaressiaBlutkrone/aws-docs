@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t2-4",
+  "taskTitle": "DR·데이터 복원력 (RTO/RPO·S3 복제)",
+  "domain": 2,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t2-4-q1",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "foundational",
+      "stem": "'마지막 복구 지점 이후 잃어도 되는 데이터의 양'을 정의하는 지표는?",
+      "options": [
+        "RTO(Recovery Time Objective)",
+        "RPO(Recovery Point Objective)",
+        "MTTR(Mean Time To Repair)",
+        "SLA(Service Level Agreement)"
+      ],
+      "correct": 1,
+      "explanation": "RPO는 재해 시 허용할 수 있는 데이터 손실량(마지막 복구 지점 이후의 시간)이고, RTO는 허용 다운타임입니다. RPO는 복제 방식·복제 주기가, RTO는 상시 가동 범위가 좌우합니다.",
+      "wrongExplanations": {
+        "0": "RTO는 '얼마나 빨리 복구해야 하는가'(허용 다운타임)입니다.",
+        "2": "MTTR은 평균 복구 소요 시간을 나타내는 운영 지표입니다.",
+        "3": "SLA는 서비스 수준 약정입니다."
+      },
+      "sources": [
+        {
+          "title": "클라우드의 재해 복구 옵션 — RTO·RPO",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q2",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "foundational",
+      "stem": "DR 전략 네 가지를 복구 속도가 느린 것부터 빠른 순서로 나열한 것은?",
+      "options": [
+        "Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active",
+        "Pilot Light → Backup & Restore → Multi-Site Active-Active → Warm Standby",
+        "Warm Standby → Pilot Light → Backup & Restore → Multi-Site Active-Active",
+        "Multi-Site Active-Active → Warm Standby → Pilot Light → Backup & Restore"
+      ],
+      "correct": 0,
+      "explanation": "Backup & Restore(수 시간) → Pilot Light(수십 분) → Warm Standby(수 분) → Multi-Site Active-Active(거의 0) 순으로 RTO가 짧아지고 비용은 올라갑니다.",
+      "wrongExplanations": {
+        "1": "Pilot Light가 Backup & Restore보다 빠릅니다.",
+        "2": "Warm Standby가 가장 느린 전략이 아닙니다.",
+        "3": "복구가 빠른 순서로 거꾸로 나열됐습니다."
+      },
+      "sources": [
+        {
+          "title": "클라우드의 재해 복구 옵션 — 전략 비교",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q3",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "applied",
+      "stem": "Pilot Light와 Warm Standby를 가르는 가장 정확한 기준은?",
+      "options": [
+        "Pilot Light는 추가 조치 없이는 요청을 처리할 수 없고, Warm Standby는 축소 용량으로 즉시 트래픽을 처리할 수 있다",
+        "Pilot Light는 다른 리전에, Warm Standby는 같은 리전에 구성한다",
+        "Pilot Light는 데이터 복제를 하지 않는다",
+        "Warm Standby는 RPO가 0이다"
+      ],
+      "correct": 0,
+      "explanation": "공식 백서는 Pilot Light를 '추가 조치 없이 요청을 처리할 수 없는' 구성으로, Warm Standby를 '축소 용량으로 즉시 트래픽을 처리할 수 있는' 구성으로 구분합니다. Pilot Light는 핵심 데이터만 상시 복제하고 앱 서버는 꺼 둡니다.",
+      "wrongExplanations": {
+        "1": "둘 다 보통 보조 리전에 구성하며 리전 위치가 구분 기준이 아닙니다.",
+        "2": "Pilot Light도 핵심 DB를 상시 복제합니다.",
+        "3": "Warm Standby의 RPO는 복제 방식에 따르며 0이 보장되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "DR 전략 — Pilot Light와 Warm Standby",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q4",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "applied",
+      "stem": "Pilot Light 환경에서 재해를 선언했을 때 수행해야 하는 절차에 해당하지 않는 것은?",
+      "options": [
+        "보조 리전 DB 복제본을 Primary로 승격한다",
+        "앱 서버 시작 템플릿에 새 DB 엔드포인트를 반영한다",
+        "Auto Scaling 그룹을 활성화해 앱 서버를 기동한다",
+        "보조 리전에 VPC와 서브넷을 처음부터 새로 만든다"
+      ],
+      "correct": 3,
+      "explanation": "Pilot Light는 핵심 데이터가 이미 보조 리전에 복제되어 있고 네트워크·템플릿 같은 기반 구성도 준비된 상태입니다. 재해 시 절차는 DB 승격, 엔드포인트 반영, 앱 서버 기동·확장입니다. 네트워크를 처음부터 만드는 것은 Backup & Restore에 가깝습니다.",
+      "wrongExplanations": {
+        "0": "복제본 승격은 Pilot Light 복구의 첫 단계입니다.",
+        "1": "새 Primary 엔드포인트를 앱 구성에 반영해야 합니다.",
+        "2": "꺼 둔 앱 서버를 기동·확장하는 것이 Pilot Light의 핵심 절차입니다."
+      },
+      "sources": [
+        {
+          "title": "DR 전략 — Pilot Light",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q5",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "applied",
+      "stem": "RTO는 수 시간을 허용하고 비용을 최소화해야 하는 내부 보고 시스템의 DR 전략으로 적절한 것은?",
+      "options": [
+        "Backup & Restore",
+        "Warm Standby",
+        "Multi-Site Active-Active",
+        "Pilot Light + Warm Standby 병행"
+      ],
+      "correct": 0,
+      "explanation": "RTO·RPO 목표를 충족하는 가장 저렴한 전략을 고르는 것이 원칙입니다. 수 시간의 다운타임이 허용되면 백업만 보관하고 재해 시 인프라·앱·데이터를 새로 배포하는 Backup & Restore가 비용 면에서 최적입니다.",
+      "wrongExplanations": {
+        "1": "축소판 스택을 상시 가동하는 비용이 요건에 비해 과합니다.",
+        "2": "Active-Active는 가장 비싼 전략으로 과잉 투자입니다.",
+        "3": "두 전략을 병행하면 비용이 더 늘어납니다."
+      },
+      "sources": [
+        {
+          "title": "클라우드의 재해 복구 옵션",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q6",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "foundational",
+      "stem": "S3 CRR과 SRR의 차이는?",
+      "options": [
+        "CRR은 다른 리전 버킷으로, SRR은 동일 리전의 다른 버킷으로 복제한다",
+        "CRR은 동기 복제, SRR은 비동기 복제다",
+        "CRR은 버전 관리가 필요하고 SRR은 필요하지 않다",
+        "CRR은 객체 전체, SRR은 메타데이터만 복제한다"
+      ],
+      "correct": 0,
+      "explanation": "CRR(Cross-Region Replication)은 다른 리전 버킷으로, SRR(Same-Region Replication)은 동일 리전의 다른 버킷으로 복제합니다. 둘 다 비동기이며 소스·대상 버킷의 버전 관리가 전제입니다.",
+      "wrongExplanations": {
+        "1": "둘 다 비동기 복제입니다.",
+        "2": "버전 관리는 CRR·SRR 공통 전제 조건입니다.",
+        "3": "둘 다 객체를 복제합니다."
+      },
+      "sources": [
+        {
+          "title": "S3 객체 복제",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q7",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "applied",
+      "stem": "CRR을 켰는데 기존에 저장돼 있던 객체들이 대상 버킷에 나타나지 않는다. 원인과 해결은?",
+      "options": [
+        "복제는 활성화 이후 추가·변경된 객체에만 적용되므로, 기존 객체는 배치 복제로 복사해야 한다",
+        "대상 버킷의 스토리지 클래스를 Standard로 바꿔야 한다",
+        "소스 버킷의 수명 주기 규칙을 삭제해야 한다",
+        "복제 규칙에 접두사를 반드시 지정해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "S3 복제는 규칙 활성화 이후 새로 추가되거나 변경된 객체에 적용됩니다. 기존 객체를 옮기려면 배치 복제(S3 Batch Replication)를 사용해야 합니다.",
+      "wrongExplanations": {
+        "1": "대상 스토리지 클래스는 기존 객체 복제 여부와 무관합니다.",
+        "2": "수명 주기 규칙은 복제 시작 조건이 아닙니다.",
+        "3": "접두사는 선택 사항이며, 지정하지 않으면 버킷 전체가 대상입니다."
+      },
+      "sources": [
+        {
+          "title": "S3 기존 객체 복제 — 배치 복제",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q8",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "difficulty": "applied",
+      "stem": "여러 계정의 액세스 로그를 한 버킷에 모아 분석하려 한다. 가장 적절한 S3 기능은?",
+      "options": [
+        "SRR(동일 리전 복제)로 로그 버킷을 집계 버킷에 복제한다",
+        "CRR로 다른 리전에 복제한다",
+        "버전 관리를 끄고 수명 주기로 이동한다",
+        "MFA Delete를 활성화한다"
+      ],
+      "correct": 0,
+      "explanation": "SRR은 동일 리전 내 다른 버킷으로 복제하며 로그 집계, 운영·테스트 계정 간 복제, 동일 리전 내 규정 준수 요건에 쓰입니다. 교차 계정 복제도 지원합니다.",
+      "wrongExplanations": {
+        "1": "CRR은 리전 장애 대비·지리적 분산 목적입니다.",
+        "2": "버전 관리를 끄면 복제 자체가 불가능해집니다.",
+        "3": "MFA Delete는 삭제 보호 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "S3 객체 복제 — 사용 사례",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q9",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "difficulty": "applied",
+      "stem": "RDS(비-Aurora)에서 리전 장애에 대비하면서 RPO를 가능한 낮추려 한다. 적절한 수단은?",
+      "options": [
+        "교차 리전 읽기 전용 복제본을 유지하고 재해 시 Primary로 승격한다",
+        "교차 리전 스냅샷 복사만 매주 수행한다",
+        "같은 리전에 읽기 복제본을 2개 둔다",
+        "자동 백업 보존 기간을 35일로 늘린다"
+      ],
+      "correct": 0,
+      "explanation": "교차 리전 읽기 전용 복제본은 다른 리전에 연속(비동기) 복제를 유지하므로 스냅샷 복사보다 RPO가 작습니다. 재해 시 복제본을 Primary로 수동 승격해 서비스를 복구합니다.",
+      "wrongExplanations": {
+        "1": "주간 스냅샷 복사는 RPO가 최대 1주일로 커집니다.",
+        "2": "같은 리전 복제본은 리전 장애를 견디지 못합니다.",
+        "3": "보존 기간 연장은 복구 가능 범위를 넓히지만 리전 장애 대비가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon RDS 교차 리전 읽기 전용 복제본",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q10",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "difficulty": "applied",
+      "stem": "교차 리전 읽기 전용 복제본이 장애 시 자동으로 Primary가 되지 않는 이유는?",
+      "options": [
+        "비동기 복제라 미반영 트랜잭션이 남아 있을 수 있어, 손실 허용 범위를 운영자가 판단한 뒤 수동 승격해야 하기 때문",
+        "다른 리전에는 승격 API가 없기 때문",
+        "자동 승격은 Multi-AZ에서만 지원되지 않기 때문",
+        "복제본은 읽기 전용이라 쓰기를 영구히 받을 수 없기 때문"
+      ],
+      "correct": 0,
+      "explanation": "비동기 복제에서는 Primary 장애 시점에 보조 리전으로 아직 전달되지 않은 트랜잭션이 남아 있을 수 있습니다. 자동 승격하면 그만큼 영구 손실이 되므로, 복제 지연을 확인하고 RPO 허용 범위인지 판단한 뒤 수동으로 승격합니다.",
+      "wrongExplanations": {
+        "1": "승격 API는 제공됩니다(수동 호출).",
+        "2": "Multi-AZ는 동기 복제라 자동 장애 조치가 가능합니다.",
+        "3": "승격하면 복제본이 쓰기 가능한 독립 인스턴스가 됩니다."
+      },
+      "sources": [
+        {
+          "title": "읽기 전용 복제본 승격",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.Promote.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q11",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "difficulty": "foundational",
+      "stem": "Aurora 워크로드에서 가장 낮은 RPO를 목표로 하는 멀티 리전 수단은?",
+      "options": [
+        "Aurora Global Database",
+        "교차 리전 스냅샷 복사",
+        "Aurora 복제본 추가",
+        "자동 백업 보존 기간 연장"
+      ],
+      "correct": 0,
+      "explanation": "Aurora Global Database는 전용 인프라로 보조 리전에 복제하며 복제 지연이 통상 1초 미만이고 승격도 빠릅니다. 가장 낮은 RPO가 필요한 Aurora 워크로드의 선택입니다.",
+      "wrongExplanations": {
+        "1": "스냅샷 복사는 RPO가 마지막 스냅샷 시점으로 커집니다.",
+        "2": "같은 리전 복제본은 리전 장애 대비가 아닙니다.",
+        "3": "보존 기간은 복구 가능 범위이며 복제 지연을 줄이지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Aurora 글로벌 데이터베이스",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q12",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "applied",
+      "stem": "RPO 목표가 '마지막 백업 이후 허용'이고 비용을 최소화해야 하는 DB의 멀티 리전 수단으로 가장 적절한 것은?",
+      "options": [
+        "교차 리전 스냅샷 복사",
+        "Aurora Global Database",
+        "교차 리전 읽기 전용 복제본",
+        "Multi-AZ 배포"
+      ],
+      "correct": 0,
+      "explanation": "RPO가 마지막 스냅샷 시점까지 허용된다면 교차 리전 스냅샷 복사가 가장 저렴합니다. 재해 시 복사된 스냅샷으로 새 인스턴스를 복원하는 Backup & Restore 수준의 DR입니다.",
+      "wrongExplanations": {
+        "1": "Global Database는 RPO가 가장 낮지만 비용이 큽니다.",
+        "2": "연속 복제는 더 낮은 RPO를 주지만 상시 인스턴스 비용이 듭니다.",
+        "3": "Multi-AZ는 동일 리전 내 가용성 구성으로 리전 장애 대비가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon RDS DB 스냅샷 복사",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q13",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "applied",
+      "stem": "리전 장애 시 트래픽을 보조 리전으로 자동 전환하려면 어떤 구성을 사용하는가?",
+      "options": [
+        "Route 53 헬스 체크 + 장애 조치 라우팅",
+        "ELB 교차 영역 부하 분산",
+        "Auto Scaling 예약 조정",
+        "S3 배치 복제"
+      ],
+      "correct": 0,
+      "explanation": "리전 간 트래픽 전환은 Route 53 헬스 체크와 장애 조치 라우팅으로 자동화합니다. DNS TTL 전파 지연이 있으므로 짧은 TTL이나 Global Accelerator 사용을 함께 검토합니다.",
+      "wrongExplanations": {
+        "1": "교차 영역 부하 분산은 한 로드 밸런서 내 AZ 간 분산 설정입니다.",
+        "2": "예약 조정은 시각 기반 용량 조정입니다.",
+        "3": "배치 복제는 기존 S3 객체를 복사하는 작업입니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 장애 조치 라우팅 정책",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q14",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "difficulty": "foundational",
+      "stem": "여러 서비스의 백업을 정책 하나로 다른 리전에 복사해 리전 장애에 대비하려 한다. 적절한 수단은?",
+      "options": [
+        "AWS Backup 백업 규칙의 교차 리전 복사",
+        "DLM의 EBS 스냅샷 정책",
+        "S3 수명 주기 전환",
+        "RDS 자동 백업 보존 기간 연장"
+      ],
+      "correct": 0,
+      "explanation": "AWS Backup은 EBS·RDS·DynamoDB·EFS·S3 등 여러 서비스를 하나의 계획으로 관리하며, 백업 규칙에서 다른 리전 볼트로 복사를 설정해 리전 장애에 대비할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "DLM은 EBS·AMI 범위로 한정됩니다.",
+        "2": "수명 주기 전환은 스토리지 클래스 변경이며 리전 복제가 아닙니다.",
+        "3": "자동 백업은 동일 리전에 보관됩니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Backup 교차 리전 백업 복사",
+          "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/cross-region-backup.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-4-q15",
+      "examGuideTaskId": "soa-t2-4",
+      "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "difficulty": "applied",
+      "stem": "DR 설계를 마친 뒤에도 정기적인 DR 훈련(game day)을 수행해야 하는 이유로 가장 적절한 것은?",
+      "options": [
+        "실제 복구 시간이 RTO를, 데이터 손실이 RPO를 충족하는지는 수행해 측정해야만 확인되기 때문",
+        "훈련을 하지 않으면 교차 리전 복제가 중단되기 때문",
+        "훈련 중에는 요금이 면제되기 때문",
+        "AWS가 분기별 훈련을 의무화하기 때문"
+      ],
+      "correct": 0,
+      "explanation": "설계상의 예상 복구 시간은 의존 서비스 지연, 절차 숙련도, 예상치 못한 구성 오류를 반영하지 못합니다. 승격·트래픽 전환 절차가 목표 RTO 안에 완료되는지, 복제 지연이 RPO 내인지는 실제 훈련으로 측정해야 보증할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "훈련 여부와 복제 동작은 무관합니다.",
+        "2": "훈련 중에도 리소스 사용 요금은 발생합니다.",
+        "3": "AWS가 고객의 훈련 주기를 의무화하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Well-Architected 신뢰성 기둥 — 재해 복구 테스트",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/testing-disaster-recovery.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
