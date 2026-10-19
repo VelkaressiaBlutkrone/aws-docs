@@ -10,7 +10,7 @@
 - **보류(근거 있음):** M-8 주기 reconcile — watch 구독에 onError·재구독이 없어 주기 동기가 다른 기기 변경 수신의 안전망 역할을 한다(HANDOFF §1 트레이드오프). m-6 에셋 디렉터리 등록 — 원본 mp3와 enrich 산출물이 같은 디렉터리에 로컬로 있어 디렉터리 단위 등록 시 로컬 빌드에 섞인다.
 - **사용자 몫:** Firebase 콘솔에 배포된 Firestore 규칙을 레포 `firestore.rules`와 맞추기. 레포 쪽은 에뮬레이터 테스트(`tool/firestore_rules_test`)와 `firestore-rules` 워크플로가 검증한다.
 
-**현재 기준선(2026-10-19 실측):** `flutter test` **1,076 그린** · `flutter analyze` **0건** · **PR#144까지 출고 완료**(develop·main 내용 동일, 미릴리스 0) · 열린 PR 0 · 라이브 200 · R2 mp3 206(2026-10-17 실측).
+**현재 기준선(2026-10-20 실측):** `flutter test` **1,076 그린** · `flutter analyze` **0건** · **develop·main 내용 동일(미릴리스 0)** · 열린 PR 0 · 라이브 200 · R2 mp3 206(2026-10-17 실측). 릴리스 PR 번호는 적지 않는다(HANDOFF §0 서술 규약 ②).
 
 ## 2026-07 전면 감사 로드맵 (정본: docs/audits/2026-07/ROADMAP.md)
 
