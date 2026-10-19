@@ -185,14 +185,15 @@
         "Aurora Read Replica — 같은 리전 내에서 동기 복제로 RPO를 0으로 만든다"
       ],
       "correct": 0,
-      "explanation": "교차 리전 RPO를 최소화하는 Aurora 기능은 Aurora Global Database입니다. 전용 복제 인프라를 사용해 보조 리전 복제 지연이 1초 미만이며, 장애 시 보조 리전을 1분 내 Primary로 승격할 수 있습니다. 일반 교차 리전 Read Replica는 비동기 복제 특성상 복제 지연이 더 길 수 있습니다.",
+      "explanation": "교차 리전 RPO를 최소화하는 Aurora 기능은 Aurora Global Database입니다. 전용 복제 인프라를 사용해 보조 리전 복제 지연이 통상 1초 미만이며, 장애 시 보조 리전을 통상 1분 내 Primary로 승격할 수 있습니다(보장값이 아니라 전형적 수치입니다). 일반 교차 리전 Read Replica는 비동기 복제 특성상 복제 지연이 더 길 수 있습니다.",
       "wrongExplanations": {
         "1": "RDS Multi-AZ는 같은 리전 내 다른 AZ로의 동기 복제 기능으로 AZ 장애 대응에 사용됩니다. 교차 리전 복제 기능이 아닙니다.",
         "2": "S3 Cross-Region Replication은 S3 객체 복제 기능으로 Aurora 데이터베이스에 직접 적용되지 않습니다.",
-        "3": "Aurora Read Replica는 교차 리전 복제 시 비동기 방식을 사용합니다. 동기 복제를 제공하지 않으며 같은 리전 내 Read Replica도 동기 복제가 아닙니다."
+        "3": "Aurora 복제본은 같은 리전에서 프라이머리와 클러스터 스토리지(데이터 볼륨)를 공유하므로 복제 지연이 사실상 없지만(통상 수십 ms), 리전 전체 장애에 대비하는 DR 수단은 아닙니다. 교차 리전 복제는 Aurora Global Database의 비동기 복제가 담당하며, RDS(비 Aurora) 읽기 전용 복제본도 비동기 복제입니다."
       },
       "sources": [
-        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" },
+        { "title": "Aurora 복제 지연 FAQ (공식)", "url": "https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-faq-availability-and-durability.html" }
       ],
       "verified": false
     },
