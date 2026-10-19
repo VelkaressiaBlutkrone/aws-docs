@@ -18,7 +18,11 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html
   - title: 보안 그룹과 네트워크 ACL 비교 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
-lastVerified: 2026-06-12
+  - title: 흐름 로그 레코드 — action 필드 정의 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
+  - title: 흐름 로그 제한 사항 — 기록되지 않는 트래픽 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-limitations.html
+lastVerified: 2026-10-19
 ---
 
 # 네트워크 문제 해결 — Flow Logs·Reachability Analyzer
@@ -34,7 +38,7 @@ lastVerified: 2026-06-12
 
 - [ ] **VPC Flow Logs** — VPC/서브넷/ENI 레벨로 캡처하고 대상(CloudWatch Logs/S3)을 고를 수 있다
 - [ ] **Flow Log 레코드 필드** — srcaddr/dstaddr/srcport/dstport/action(ACCEPT·REJECT) 을 해석할 수 있다
-- [ ] **SG vs NACL의 로그 가시성** — SG 거부는 Flow Log에 안 보이고, NACL 거부는 보이는 뉘앙스를 안다
+- [ ] **REJECT의 의미와 기록 제외 트래픽** — REJECT가 SG·NACL 양쪽을 모두 가리킬 수 있음과, Flow Logs가 아예 기록하지 않는 트래픽 목록을 안다
 - [ ] **Reachability Analyzer** — 소스→대상 경로를 분석하고 차단 구성요소를 찾을 수 있다
 - [ ] **Network Access Analyzer** — 의도치 않은 접근 경로를 식별하는 용도를 안다
 - [ ] **체계적 진단 순서** — SG → NACL → 라우팅 → IGW/NAT → DNS 순서로 좁혀갈 수 있다
@@ -45,7 +49,7 @@ lastVerified: 2026-06-12
 ## 🎯 왜 중요한가
 
 - Task 5.3은 SOA에서 가장 "운영자다운" 영역입니다. 시험은 "왜 연결이 안 되는가"를 주고, **어떤 도구로 어떤 순서로** 원인을 좁히는지를 묻습니다. 단순 암기가 아니라 **진단 절차**가 핵심입니다.
-- **Flow Logs의 ACCEPT/REJECT 해석**, 특히 **SG 거부는 로그에 안 보이고 NACL 거부는 보인다**는 뉘앙스는 실무·시험 모두에서 결정적입니다. 이 차이를 알면 "REJECT가 안 찍히는데 연결은 안 된다 → SG 의심"처럼 추론할 수 있습니다.
+- **Flow Logs의 ACCEPT/REJECT 해석**은 실무·시험 모두에서 결정적입니다. 공식 정의상 REJECT는 **보안 그룹 또는 네트워크 ACL이 허용하지 않은** 트래픽(또는 연결이 닫힌 뒤 도착한 패킷)이므로, REJECT 레코드의 포트·방향으로 차단된 흐름을 특정한 뒤 **SG와 NACL을 함께** 점검하는 절차가 핵심입니다.
 - **Reachability Analyzer**는 실제 트래픽 없이도 경로 도달성을 정적 분석해 **차단 구성요소(어느 SG/NACL/라우팅)** 를 콕 집어줍니다. 운영자가 빠르게 원인을 찾는 도구로 출제됩니다.
 
 ---
@@ -120,22 +124,32 @@ lastVerified: 2026-06-12
 > dstPort 조건을 함께 걸면 "특정 포트에 대한 차단만"처럼 좁은 범위로 드릴다운할 수 있어, 운영자가 수백만 건 로그에서 단서를 찾는 시간을 단축할 수 있습니다.
 > 이 단순한 필드 구조 덕분에 Logs Insights처럼 인터랙티브 쿼리 도구와 결합해 사고 타임라인을 빠르게 재구성할 수 있습니다.
 
-### 3) SG vs NACL의 로그 가시성 (★ 결정적 뉘앙스)
+### 3) REJECT의 의미와 기록되지 않는 트래픽 (★ 로그 해석)
 
-> **보안 그룹(stateful) 거부는 Flow Log에 REJECT로 잘 드러나지 않습니다.** SG는 상태를 추적해 "허용된 연결의 응답"을 자동 통과시키고, 허용되지 않은 인바운드는 조용히 버립니다. 반면 **네트워크 ACL(stateless) 거부는 REJECT로 명확히 기록**됩니다.
+> 공식 `action` 필드 정의는 **ACCEPT = 허용된 트래픽**, **REJECT = 거부된 트래픽**이며, REJECT의 예시로 **보안 그룹 또는 네트워크 ACL이 허용하지 않은** 트래픽과 **연결이 닫힌 뒤** 도착한 패킷을 함께 제시합니다. 즉 **SG 미허용도 REJECT로 기록될 수 있어**, REJECT 유무만으로 차단 계층(SG냐 NACL이냐)을 단정할 수 없습니다.
 
 | 상황 | Flow Log에 보이는 것 |
 |---|---|
-| NACL이 명시적/암묵적으로 거부 | **REJECT** (차단 지점 추적 가능) |
-| SG가 인바운드 미허용으로 차단 | REJECT로 잘 안 보임(연결이 성립 안 됨) |
+| NACL이 거부 | **REJECT** |
+| SG가 인바운드/아웃바운드를 허용하지 않음 | **REJECT**(공식 정의가 드는 예시) |
+| 연결이 닫힌 뒤 도착한 패킷 | **REJECT** |
 | SG·NACL 모두 통과 | **ACCEPT** |
 
-> **추론 패턴:** "연결이 안 되는데 Flow Log에 REJECT가 안 찍힌다" → **NACL은 통과했고 SG에서 막혔을** 가능성이 큽니다. "REJECT가 찍힌다" → **NACL 규칙(또는 이페머럴 포트 누락)** 을 의심합니다. SG는 stateful이라 응답 포트 문제는 없지만, NACL은 stateless라 응답용 이페머럴 포트가 막혀 REJECT가 날 수 있습니다.
+> **진단 절차:** REJECT 레코드의 `srcaddr`·`dstaddr`·`dstport`·방향으로 차단된 흐름을 특정한 뒤, **SG 인바운드/아웃바운드와 양쪽 서브넷 NACL 규칙을 함께** 점검합니다. NACL은 stateless라 응답용 **이페머럴 포트(1024–65535)**가 막혀 REJECT가 날 수 있으므로 요청 방향만 보고 끝내지 않습니다. REJECT 레코드가 **아예 없다면** 패킷이 그 ENI까지 도달하지 못했을 가능성(라우팅·이름 해석)과 아래 **기록 제외 트래픽**을 함께 고려합니다.
 
-> 🧠 원리: SG와 NACL이 같은 인바운드를 차단해도 로그 흔적이 다른 이유는 무엇일까요?
-> SG는 ENI 이후 계층에서 연결 상태를 추적해 허용 목록에 없는 패킷을 조용히 폐기하는데, 이 폐기가 트래픽 흐름 레코드에 REJECT로 잘 드러나지 않는 경우가 많습니다.
-> NACL은 각 패킷을 독립적으로 규칙과 대조하며, 거부 규칙에 매칭되면 명시적 거부가 발생해 Flow Log에 REJECT로 기록됩니다.
-> 이 차이를 알면 로그의 REJECT 유무로 차단 계층을 추론할 수 있어, 도구 없이도 첫 번째 진단 가설을 빠르게 세울 수 있습니다.
+**Flow Logs가 기록하지 않는 트래픽(공식 목록 일부):**
+
+- 인스턴스가 **Amazon DNS 서버**와 주고받는 트래픽 — 자체 DNS 서버를 쓰면 그 트래픽은 기록됩니다
+- **169.254.169.254**(인스턴스 메타데이터)·**169.254.169.123**(Amazon Time Sync Service) 트래픽
+- **DHCP** 트래픽, **ARP** 트래픽
+- 기본 VPC 라우터의 예약 IP로 가는 트래픽
+- 엔드포인트 네트워크 인터페이스와 **Network Load Balancer** 네트워크 인터페이스 사이의 트래픽
+- Windows 라이선스 활성화 트래픽, 트래픽 미러링의 **소스** 트래픽(미러 대상 트래픽만 보입니다)
+
+> 🧠 원리: 왜 "연결 실패 + REJECT 레코드 없음"을 곧바로 SG 문제로 단정할 수 없을까요?
+> 공식 `action` 정의가 SG 미허용과 NACL 거부를 **같은 REJECT 값의 예시로 나란히** 제시하므로, REJECT가 찍혔는지 여부만으로 어느 계층이 막았는지 가려낼 수 없습니다.
+> 또 Flow Logs에는 DNS·메타데이터·DHCP·ARP처럼 애초에 기록되지 않는 트래픽이 있고, 패킷이 해당 ENI에 도달하지 못하면(라우팅 누락·이름 해석 실패) 레코드 자체가 생기지 않습니다.
+> 그래서 레코드가 없을 때는 **Reachability Analyzer**로 구성상 도달성을 먼저 확인하고, 레코드가 있을 때는 REJECT 흐름의 포트·방향을 근거로 SG와 NACL 규칙을 함께 점검하는 순서가 안전합니다.
 
 ### 4) Reachability Analyzer — 정적 경로 도달성 분석
 
@@ -198,7 +212,8 @@ fields @timestamp, srcAddr, dstAddr, dstPort, action
 
 - **Flow Logs = 트래픽 메타데이터**(패킷 내용 아님). 레벨: **VPC / 서브넷 / ENI**. 대상: **CloudWatch Logs / S3 / Firehose**.
 - **action 필드 = ACCEPT / REJECT.** REJECT로 **차단 지점 추적**.
-- **SG 거부는 Flow Log에 잘 안 보이고(REJECT 없음), NACL 거부는 REJECT로 보인다.** → REJECT 부재 + 연결 실패 = **SG 의심**.
+- **REJECT = 보안 그룹 또는 네트워크 ACL이 허용하지 않은 트래픽**(또는 연결이 닫힌 뒤 도착한 패킷). SG 거부도 REJECT로 찍힐 수 있어 **REJECT 유무로 차단 계층을 단정할 수 없다.**
+- **기록 제외 트래픽**: Amazon DNS 서버·169.254.169.254·169.254.169.123·DHCP·ARP·기본 라우터 예약 IP·엔드포인트 ENI↔NLB ENI 등은 Flow Logs에 남지 않는다.
 - **SG = stateful**(응답 자동 허용), **NACL = stateless**(이페머럴 포트 별도) — 로그 해석의 핵심.
 - **Reachability Analyzer = 구성 기반 정적 도달성 분석**(트래픽 안 보냄), **차단 구성요소 지목**.
 - **Network Access Analyzer = 의도치 않은 접근 경로 감사**(보안·컴플라이언스).
@@ -212,8 +227,8 @@ fields @timestamp, srcAddr, dstAddr, dstPort, action
 1. **"Flow Logs가 패킷 내용(페이로드)을 보여준다."** → 아닙니다. Flow Logs는 **메타데이터**(src/dst IP·포트·프로토콜·action 등)만 기록합니다. 패킷 내용 캡처는 **Traffic Mirroring** 이 필요합니다.
    *(원리: §1 — 메타데이터만 경량 기록해야 상시 활성화가 현실적이고 민감 데이터 노출 없이 진단이 가능하다.)*
 
-2. **"연결이 안 되면 무조건 Flow Log에 REJECT가 찍힌다."** → **보안 그룹 거부는 REJECT로 잘 드러나지 않습니다**(SG는 stateful이라 미허용 인바운드를 조용히 버림). REJECT가 없는데 연결이 안 되면 **SG 인바운드**를 먼저 의심해야 합니다. NACL 거부라면 REJECT가 찍힙니다.
-   *(원리: §3 — SG는 패킷을 조용히 폐기해 REJECT가 잘 드러나지 않고, NACL은 명시적 거부로 REJECT를 남긴다.)*
+2. **"연결이 안 되면 무조건 Flow Log에 REJECT가 찍힌다."** → 꼭 그렇지 않습니다. 패킷이 해당 ENI에 도달하지 못하면(라우팅·이름 해석 문제) 레코드 자체가 없고, **Amazon DNS·메타데이터·DHCP·ARP 트래픽은 애초에 기록되지 않습니다.** 반대로 REJECT가 찍혔다면 공식 정의상 **SG도 NACL도** 원인일 수 있으므로 양쪽을 함께 점검합니다.
+   *(원리: §3 — 공식 action 정의는 SG 미허용과 NACL 거부를 같은 REJECT 예시로 제시하고, 기록 제외 트래픽 목록이 별도로 있다.)*
 
 3. **"NACL은 인바운드만 열면 된다."** → NACL은 **stateless**라 응답이 나가는 **이페머럴 포트(1024–65535)** 의 반대 방향 규칙이 없으면 응답이 막혀 REJECT가 발생합니다. SG는 stateful이라 이 문제가 없습니다.
    *(원리: §3 본문 — stateless는 요청·응답을 독립 평가하므로 양방향 규칙이 없으면 응답 방향에서 REJECT가 발생한다.)*
@@ -236,11 +251,11 @@ fields @timestamp, srcAddr, dstAddr, dstPort, action
 
 > 아래는 학습용 자가 점검입니다. (정식 검증 문항은 별도 문항 파일 참조)
 
-**Q1.** EC2-A에서 EC2-B의 443 포트로 접속이 안 됩니다. Flow Logs를 보니 해당 트래픽에 대한 **REJECT 레코드가 보이지 않습니다.** 어디를 의심해야 하나요?
+**Q1.** EC2-A에서 EC2-B의 443 포트로 접속이 안 됩니다. Flow Logs에 해당 흐름의 **REJECT 레코드가 찍혀 있습니다.** 어떤 순서로 좁혀 가야 하나요?
 
 <details><summary>정답 보기</summary>
 
-**보안 그룹(SG)** 을 먼저 의심합니다. SG는 stateful이라 허용되지 않은 인바운드를 **조용히 버리며 REJECT 로그를 남기지 않습니다.** NACL이 거부했다면 REJECT가 찍혔을 것입니다. 따라서 REJECT 부재 + 연결 실패 = EC2-B의 SG 인바운드에 443/EC2-A 소스가 허용되어 있는지, 또는 EC2-A의 SG 아웃바운드가 443을 허용하는지를 점검합니다.
+REJECT는 공식 정의상 **보안 그룹 또는 네트워크 ACL이 허용하지 않은** 트래픽(또는 연결이 닫힌 뒤 도착한 패킷)이므로 한 계층으로 단정할 수 없습니다. 레코드의 `dstport`와 방향을 확인한 뒤 ① EC2-B의 SG 인바운드에 443/EC2-A 소스가 있는지, ② EC2-A의 SG 아웃바운드가 443을 허용하는지, ③ 양쪽 서브넷 NACL이 요청 방향과 **응답용 이페머럴 포트**를 모두 허용하는지를 순서대로 점검합니다. 구성상 도달성을 한 번에 보려면 **Reachability Analyzer**로 차단 구성요소를 지목하게 하는 것이 빠릅니다.
 </details>
 
 **Q2.** 어떤 서브넷의 웹 서버로 들어오는 요청에 대해 Flow Logs에 인바운드 443은 ACCEPT인데, 응답 트래픽이 **REJECT** 로 찍힙니다. 원인은?
@@ -282,3 +297,7 @@ SG는 stateful이라 허용한 인바운드 연결의 응답 트래픽을 상태
 3. Reachability Analyzer란 무엇인가 — https://docs.aws.amazon.com/vpc/latest/reachability/what-is-reachability-analyzer.html
 4. Network Access Analyzer란 무엇인가 — https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html
 5. 보안 그룹과 네트워크 ACL 비교(인프라 보안) — https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
+6. 흐름 로그 레코드 — action 필드 정의("not allowed by the security groups or network ACLs") — https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
+7. 흐름 로그 제한 사항 — 기록되지 않는 트래픽 목록 — https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-limitations.html
+
+> 📝 **2026-10-19 정정**: 보안 그룹 거부가 Flow Log에 남지 않는다고 적었던 §3·시험 포인트·함정 2·자가 점검 Q1을 공식 `action` 필드 정의에 맞춰 고쳤습니다 — REJECT는 **SG 또는 NACL이 허용하지 않은** 트래픽(또는 연결이 닫힌 뒤 도착한 패킷)이므로 REJECT 유무로 차단 계층을 단정할 수 없습니다(근거 6번). 대신 **기록되지 않는 트래픽 공식 목록**과 "레코드가 없을 때의 진단 순서"를 추가했습니다(근거 7번).

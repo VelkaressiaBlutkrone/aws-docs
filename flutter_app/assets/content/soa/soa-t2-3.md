@@ -273,4 +273,3 @@ S3 복제는 소스 버킷에서 발생하는 객체 변경을 대상 버킷에 
 4. Amazon Data Lifecycle Manager — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html
 5. RDS 백업 작업(자동 백업·PITR·스냅샷) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
 6. S3 버전 관리 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
-</content>

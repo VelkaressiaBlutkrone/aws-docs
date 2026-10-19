@@ -272,4 +272,3 @@ rate(5 minutes)
 3. CloudTrail 로그 파일 무결성 검증 — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
 4. Amazon EventBridge란 무엇인가 — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
 5. AWS X-Ray란 무엇인가 — https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
-</content>
