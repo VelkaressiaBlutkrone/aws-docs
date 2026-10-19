@@ -16,9 +16,21 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
   - title: IAM 자격 증명 공급자와 페더레이션 (공식)
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html
+  - title: 정책 평가 로직 — 같은 계정 합집합 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+  - title: 교차 계정 정책 평가 로직 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html
+  - title: KMS 키 정책 만들기 (공식)
+    url: https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html
+  - title: IAM Identity Center ID 소스 관리 (공식)
+    url: https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source.html
+  - title: 루트 사용자 모범 사례 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html
+  - title: AWS 계정 루트 사용자 — 중앙 루트 접근 관리 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # IAM — 자격증명·권한·페더레이션
@@ -107,10 +119,10 @@ IAM은 **글로벌 서비스**입니다 — 리전이 없고, 추가 요금도 �
 
 > **SCP와 권한 경계의 공통점**: 둘 다 권한을 "부여"하지 않고 **최대치를 제한**합니다. SCP가 `s3:*`를 막으면 그 계정의 관리자도 S3를 사용할 수 없습니다.
 
-> 🧠 원리: 왜 리소스 기반 정책은 같은 계정 내에서 아이덴티티 기반 정책 없이도 접근을 허용할 수 있을까요?
-> IAM은 같은 계정 내 요청에 대해 "리소스 기반 정책에서 Allow를 발견하면 해당 계정의 주체로 신뢰한다"는 단순화된 규칙을 적용합니다.
-> 교차 계정 요청에서는 이 신뢰가 성립하지 않아 아이덴티티 기반 정책에도 허용이 있어야 접근이 가능합니다 — 리소스 정책과 아이덴티티 정책이 모두 Allow여야 교집합이 생깁니다.
-> 이 차이를 이해하면 S3 버킷 정책만으로 같은 계정 내 접근을 허용하는 패턴과, 교차 계정에서 양쪽 정책이 필요한 패턴을 구분할 수 있습니다.
+> 🧠 원리: 왜 같은 계정에서는 리소스 기반 정책만으로도 접근이 허용되고, 교차 계정에서는 양쪽 정책이 필요할까요?
+> **같은 계정**: 공식 평가 로직은 아이덴티티 기반 정책과 리소스 기반 정책이 부여한 권한을 **합집합**으로 봅니다 — 둘 중 **어느 한쪽에서 Allow면 허용**되고, 어느 쪽에든 명시적 `Deny`가 있으면 거부됩니다.
+> **교차 계정**: AWS가 **두 계정을 각각 평가**하고 **양쪽 모두 `Allow`일 때만** 허용합니다 — 요청하는 쪽(신뢰 계정)의 아이덴티티 정책과 리소스가 있는 쪽(신뢰하는 계정)의 리소스 정책이 둘 다 필요합니다.
+> **예외(시험 함정)**: 이 "한쪽만 Allow면 된다"는 **같은 계정** 규칙이 통하지 않는 리소스가 있습니다. **AWS KMS 키**는 키 정책이 명시적으로 허용하지 않으면 **암시적으로 거부**되며, 계정 주체(`:root`)를 허용한 문장은 "IAM 정책으로 위임하겠다"는 선언일 뿐입니다. **IAM 역할**도 신뢰 정책이 수임을 허용해야 `sts:AssumeRole`이 성립합니다.
 
 ### 4) 권한 평가 로직 (★ 단골 출제) {#policy-evaluation}
 
@@ -183,7 +195,7 @@ Principal → sts:AssumeRole 호출
 
 | 방식 | 적합한 상황 | 작동 방식 |
 |---|---|---|
-| **IAM Identity Center** | 조직 직원 다계정 접근 (권장) | Organizations 통합, SAML IdP 또는 내장 디렉터리 연동, SSO |
+| **IAM Identity Center** | 조직 직원 다계정 접근 (권장) | Organizations 통합 + SSO. ID 소스는 **① 외부 IdP(Okta·Microsoft Entra ID 등 SAML 2.0) ② 온프레미스·AWS 관리형 Active Directory(AWS Directory Service 경유) ③ Identity Center 디렉터리** 중 **조직당 하나** |
 | **SAML 2.0 (IAM 직접)** | 단일 계정, 기업 디렉터리(AD/Shibboleth) | IdP가 SAML assertion 발급 → `AssumeRoleWithSAML` |
 | **OIDC (웹 자격 증명)** | 모바일·웹 앱, GitHub Actions 등 | OIDC 토큰 → `AssumeRoleWithWebIdentity` |
 | **Amazon Cognito** | 앱 사용자(소비자) | User Pool 인증 + Identity Pool으로 임시 IAM 자격증명 |
@@ -221,7 +233,8 @@ Principal → sts:AssumeRole 호출
 - **페더레이션 선택**: 조직 직원 = IAM Identity Center, 기업 AD 단일계정 = SAML, 앱 사용자 = Cognito, GitHub Actions = OIDC.
 - **명시적 Deny 우선**: 어느 정책에서든 Deny가 있으면 Allow를 이깁니다. 시험에서 "모든 서비스를 Allow하는 정책 + 특정 서비스 Deny" → Deny가 이깁니다.
 - **신뢰 정책 vs 권한 정책**: 역할에는 반드시 둘 다 필요. 신뢰 정책만 있으면 수임은 가능해도 아무것도 못 하고, 권한 정책만 있으면 수임 자체가 안 됩니다.
-- **루트 사용자 보호**: MFA 필수, 액세스 키 발급 금지, 일상 작업에 사용 금지 — 이 세 가지는 AWS 모범 사례의 첫 번째 항목입니다.
+- **루트 사용자 보호(현행 정책)**: **모든 계정 유형(독립·관리·멤버)에 루트 MFA가 요구**되며, MFA가 없으면 **첫 콘솔 로그인 시도 후 35일 안에 등록**해야 합니다. 액세스 키 발급 금지·일상 작업 사용 금지는 그대로입니다.
+- **다계정에서는 루트를 아예 없앤다**: Organizations의 **중앙 루트 접근 관리**를 켜면 멤버 계정의 루트 비밀번호·액세스 키·서명 인증서·MFA를 제거할 수 있고, 제거된 계정은 **루트 로그인과 비밀번호 복구가 불가**합니다(복구를 허용하는 권한 작업은 관리 계정이 수행). **Organizations에서 새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다.** 시험에서 "멤버 계정 루트 보호"의 최신 정답 방향입니다.
 
 ---
 
@@ -276,7 +289,7 @@ Principal → sts:AssumeRole 호출
 
 <details><summary>정답 보기</summary>
 
-**AWS IAM Identity Center**(구 AWS SSO)입니다. Organizations과 통합되어 다계정 접근 관리를 중앙화하고, Active Directory 등 SAML 2.0 IdP와 연동해 SSO를 제공합니다. 단일 계정 + SAML 직접 연동(IAM)보다 다계정 환경에서 IAM Identity Center가 권장됩니다.
+**AWS IAM Identity Center**(구 AWS SSO)입니다. Organizations과 통합되어 다계정 접근 관리를 중앙화하고 SSO를 제공합니다. 이때 **Active Directory는 SAML IdP가 아니라 별도의 ID 소스 갈래**입니다 — 온프레미스 AD나 AWS 관리형 Microsoft AD를 **AWS Directory Service**(AWS Managed Microsoft AD·AD Connector·신뢰 관계)로 연결합니다. SAML 2.0 외부 IdP 갈래는 Okta·Microsoft Entra ID 같은 서비스용이고, 그 밖에 Identity Center 자체 디렉터리를 쓸 수도 있습니다(**조직당 ID 소스는 하나**, SAMBA4 기반 Simple AD는 미지원). 단일 계정 + SAML 직접 연동(IAM)보다 다계정 환경에서는 IAM Identity Center가 권장됩니다.
 </details>
 
 ---
@@ -298,4 +311,13 @@ Principal → sts:AssumeRole 호출
 2. IAM 정책과 권한 — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
 3. IAM 역할 — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html
 4. IAM 자격 증명 공급자와 페더레이션 — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. 루트 사용자 모범 사례(루트 MFA 요구·35일 유예) — https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html
+6. AWS 계정 루트 사용자(중앙 루트 접근 관리·신규 계정 기본 루트 자격증명 없음) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+8. 정책 평가 로직(같은 계정 = 합집합) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html
+9. 교차 계정 정책 평가 로직(양쪽 계정 모두 Allow) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic-cross-account.html
+10. KMS 키 정책 만들기(명시 허용 없으면 암시적 거부·계정 위임) — https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html
+11. IAM Identity Center ID 소스 관리(외부 IdP·AD·Identity Center 디렉터리) — https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source.html
+
+> 📝 **2026-10-19 정정**: ① 루트 사용자 서술을 현행 정책(모든 계정 유형 MFA 요구·35일 유예, 중앙 루트 접근 관리, 신규 계정 기본 루트 자격증명 없음)으로 갱신했습니다(근거 5·6번). ② 정책 평가 설명을 공식 규칙(같은 계정 = 합집합 / 교차 계정 = 양쪽 모두 Allow)으로 고치고 KMS 키 정책·역할 신뢰 정책 예외를 추가했습니다(근거 8~10번). ③ Active Directory를 SAML 2.0 IdP로 설명한 부분을 공식 ID 소스 3갈래로 정정했습니다(근거 11번).
