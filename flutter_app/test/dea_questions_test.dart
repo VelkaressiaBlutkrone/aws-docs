@@ -14,6 +14,8 @@ void main() {
   const deaTaskIds = [
     // D1 데이터 수집 및 변환 (34%) — 작성 완료분만 올린다(도메인 1 완료)
     'dea-t1-1', 'dea-t1-2', 'dea-t1-3', 'dea-t1-4',
+    // D2 데이터 스토어 관리 (26%) — 도메인 2 완료
+    'dea-t2-1', 'dea-t2-2', 'dea-t2-3', 'dea-t2-4',
     // D3 데이터 운영 및 지원 (22%) — 도메인 3 완료
     'dea-t3-1', 'dea-t3-2', 'dea-t3-3', 'dea-t3-4',
   ];
@@ -25,7 +27,7 @@ void main() {
 
       test('문항 파일이 존재한다', () {
         expect(File(path).existsSync(), isTrue,
-            reason: '$path 가 없습니다 — D1 배치 문항을 작성하세요.');
+            reason: '$path 가 없습니다 — 해당 도메인 배치 문항을 작성하세요.');
       });
 
       test('스키마·밀도 규칙을 만족한다', () {

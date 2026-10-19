@@ -1,0 +1,508 @@
+{
+  "examGuideTaskId": "dea-t2-1",
+  "taskTitle": "데이터 스토어 선택",
+  "domain": 2,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t2-1-q1",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 비용 및 성능 요구 사항에 따라 적합한 스토리지 서비스 구현(2.1.1)",
+      "section": "dynamodb-store",
+      "difficulty": "applied",
+      "stem": "주문 이력을 저장하는 Amazon DynamoDB 테이블이 있다. 데이터 대부분은 오래되어 거의 읽히지 않고, 월 비용에서 스토리지 비용이 읽기·쓰기 처리량 비용의 50%를 넘는다. 성능·내구성·가용성은 그대로 두고 애플리케이션 코드 변경 없이 총비용을 줄이려면 어떻게 해야 하는가?",
+      "options": [
+        "테이블을 온디맨드 용량 모드로 전환한다",
+        "테이블 클래스를 DynamoDB Standard-IA로 변경한다",
+        "테이블 앞에 DAX 클러스터를 추가한다",
+        "오래된 항목을 Amazon S3로 옮기도록 애플리케이션 로직을 추가한다"
+      ],
+      "correct": 1,
+      "explanation": "DynamoDB 문서는 저장 비용이 Standard 테이블의 처리량(읽기·쓰기) 비용의 50%를 넘을 때 Standard-IA 테이블 클래스가 총비용을 줄여 준다고 설명합니다. 테이블 클래스 전환에는 애플리케이션 코드 변경이 필요 없고, 보조 인덱스는 테이블과 같은 클래스를 씁니다.",
+      "wrongExplanations": {
+        "0": "용량 모드는 처리량에 대한 과금 방식을 바꾸는 설정입니다. 온디맨드로 바꿔도 저장 비용 자체는 줄지 않으므로 '저장 비용이 지배적'이라는 조건에 대응하지 못합니다.",
+        "2": "DAX는 DynamoDB 앞단의 인라인 캐시로, eventually consistent 읽기에서 마이크로초 응답이 필요할 때 쓰는 성능 수단입니다. 저장 비용을 줄이지 않고 오히려 클러스터 비용이 추가됩니다.",
+        "3": "애플리케이션이 S3 경로를 알고 조회 로직을 바꿔야 하므로 '코드 변경 없이'라는 요구와 정면으로 충돌합니다."
+      },
+      "sources": [
+        {
+          "title": "Considerations when choosing a table class in DynamoDB — 저장 비용이 처리량 비용의 50%를 넘을 때 Standard-IA, 코드 변경 불필요",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.tableclasses.html"
+        },
+        {
+          "title": "DynamoDB on-demand capacity mode — 요청 단위 과금(처리량 과금 방식)",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q2",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 비용 및 성능 요구 사항에 따라 적합한 스토리지 서비스 구현(2.1.1)",
+      "section": "redshift-deploy",
+      "difficulty": "applied",
+      "stem": "한 분석 팀이 하루에 몇 차례, 예측하기 어려운 시점에만 Amazon Redshift로 ad hoc 분석을 수행한다. 나머지 시간에는 웨어하우스가 유휴 상태다. 클러스터 관리 부담과 유휴 시간 비용을 최소화하려면 어떤 배포 형태가 가장 적합한가?",
+      "options": [
+        "Amazon Redshift Serverless 워크그룹을 사용한다",
+        "RA3 프로비저닝 클러스터에 예약 노드를 구매한다",
+        "DC2 프로비저닝 클러스터를 최소 노드 수로 운영한다",
+        "RA3 프로비저닝 클러스터에 동시성 스케일링을 활성화한다"
+      ],
+      "correct": 0,
+      "explanation": "Redshift Serverless는 데이터 웨어하우스가 활성일 때 소비한 컴퓨트 용량만 RPU-시간 기준으로 초 단위(60초 최소)로 과금합니다. 용량 단위는 RPU(1 RPU = 16 GB 메모리)이고 기본 base capacity는 128 RPUs이며, 동시성 스케일링과 Spectrum 요금을 따로 내지 않아 간헐적·예측 불가 워크로드에 맞습니다.",
+      "wrongExplanations": {
+        "1": "예약 노드는 steady-state 운영 워크로드에 적합한 비용 레버입니다. 하루 대부분이 유휴인 간헐적 워크로드에 장기 약정을 거는 것은 비용 요구와 어긋납니다.",
+        "2": "DC2는 압축 기준 1 TB 미만 소규모 데이터셋에 권장되는 노드 유형입니다. 클러스터를 계속 띄워 두는 구조라 유휴 시간 비용이 그대로 남습니다.",
+        "3": "동시성 스케일링은 동시 쿼리가 몰릴 때 임시 클러스터를 더해 주는 기능으로, 메인 클러스터의 유휴 비용과 관리 부담은 줄지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Compute capacity for Amazon Redshift Serverless — RPU 정의와 기본 base capacity 128 RPUs",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-capacity.html"
+        },
+        {
+          "title": "Amazon Redshift Pricing — 활성일 때만 RPU-시간 초 단위 과금, 동시성 스케일링·Spectrum 별도 요금 없음",
+          "url": "https://aws.amazon.com/redshift/pricing/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q3",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 액세스 패턴 및 요구 사항에 따라 적합한 스토리지 서비스 구성(2.1.2)",
+      "section": "lake-formation",
+      "difficulty": "applied",
+      "stem": "Amazon S3 데이터 레이크의 테이블 하나에서 부서에 따라 일부 열만 보이게 하고, 특정 행만 조회 가능하게 해야 한다. 데이터는 Athena와 Amazon Redshift Spectrum이 함께 조회한다. Data Catalog 객체가 수천 개여서 정책 관리 부담도 줄이고 싶다. 가장 적절한 구성은 무엇인가?",
+      "options": [
+        "S3 버킷 정책에 조건 키를 추가해 열·행 접근을 제한한다",
+        "데이터를 부서별 버킷으로 복제하고 각 버킷에 IAM 정책을 적용한다",
+        "AWS Lake Formation 권한을 LF-Tag 기반 접근 제어(LF-TBAC)로 부여한다",
+        "Data Catalog 테이블에 IAM 태그를 붙이고 IAM 정책의 태그 조건으로 제어한다"
+      ],
+      "correct": 2,
+      "explanation": "Lake Formation은 S3의 데이터 레이크 데이터와 Glue Data Catalog 메타데이터에 대한 세밀한 접근 제어를 제공하며, 자체 권한 모델로 IAM 권한 모델을 보강합니다. 열·행·셀 수준 제어가 Athena·Redshift Spectrum·EMR·Glue에서 강제되고, LF-Tag 기반 접근 제어(LF-TBAC)는 Data Catalog 객체가 많을 때 Lake Formation 권한을 부여하는 권장 방법입니다.",
+      "wrongExplanations": {
+        "0": "S3 버킷 정책은 객체·프리픽스 단위로 동작합니다. 한 테이블 안의 열이나 행을 구분해 제어하는 수단이 아닙니다.",
+        "1": "데이터를 복제하면 사본이 늘어 저장 비용·동기화 부담·일관성 문제가 생깁니다. 세밀한 접근 제어가 필요한 상황의 해법이 아닙니다.",
+        "3": "Lake Formation 문서는 IAM 태그와 LF-Tag가 서로 다른 것이며 호환되지 않는다고 명시합니다. Lake Formation 권한을 태그로 주려면 LF-Tag를 써야 합니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Lake Formation? — 세밀한 접근 제어, IAM 권한 모델 보강",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+        },
+        {
+          "title": "Lake Formation tag-based access control — 객체가 많을 때 권장 방법, IAM 태그와 LF-Tag는 다름",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q4",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 비용 및 성능 요구 사항에 따라 적합한 스토리지 서비스 구현(2.1.1)",
+      "section": "stream-rel-search",
+      "difficulty": "applied",
+      "stem": "기존 Apache Kafka 애플리케이션을 Amazon MSK로 옮긴 회사가 토픽 데이터를 몇 달 동안 보존하면서 스토리지 비용을 낮추려 한다. 클러스터는 프로비저닝 모드이고 대상 토픽은 compaction을 쓰지 않는다. 어떤 방법이 요구에 맞는가?",
+      "options": [
+        "MSK Serverless 클러스터로 전환해 스토리지를 추상화한다",
+        "토픽을 Kinesis Data Streams로 이전하고 보존 기간을 늘린다",
+        "MSK tiered storage를 활성화해 저비용 스토리지 티어를 함께 쓴다",
+        "Kafka Connect S3 싱크로 데이터를 S3에 복사하고 토픽 보존 기간을 1일로 줄인다"
+      ],
+      "correct": 2,
+      "explanation": "MSK tiered storage는 primary 스토리지와 저비용 스토리지의 두 티어로 보존 비용을 낮추는 기능입니다. 프로비저닝 모드 클러스터에서만 쓸 수 있고 저비용 스토리지의 최소 보존 기간은 3일이며 compacted topic은 지원하지 않습니다 — 지문의 조건(프로비저닝 모드, compaction 미사용, 장기 보존 + 비용 절감)과 모두 맞습니다.",
+      "wrongExplanations": {
+        "0": "tiered storage는 프로비저닝 모드 클러스터 전용입니다. Serverless로 전환하면 이 기능을 쓸 수 없습니다.",
+        "1": "Kafka 애플리케이션을 그대로 쓰는 것이 전제인데 Kinesis Data Streams로 옮기면 클라이언트를 모두 바꿔야 합니다. 보존 연장은 가능하지만 'Kafka 호환 유지'라는 전제를 깨뜨립니다.",
+        "3": "S3로 복사하면 Kafka 컨슈머가 토픽에서 과거 데이터를 읽을 수 없게 됩니다. 토픽 보존 자체를 길게 유지하면서 비용을 낮추는 요구를 만족하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Tiered storage for Standard brokers (Amazon MSK) — 두 티어 구조, 프로비저닝 전용, 저비용 티어 최소 보존 3일, compacted topic 미지원",
+          "url": "https://docs.aws.amazon.com/msk/latest/developerguide/msk-tiered-storage.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q5",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "스토리지 서비스를 적절한 사용 사례에 적용(2.1.3)",
+      "section": "store-map",
+      "difficulty": "applied",
+      "stem": "실시간 광고 입찰 서비스가 키/값 조회에 마이크로초 수준 읽기 지연을 요구하면서, 동시에 이 데이터를 캐시가 아닌 내구성 있는 주 데이터베이스로 보관해야 한다. 가장 적합한 서비스는 무엇인가?",
+      "options": [
+        "Amazon MemoryDB",
+        "Amazon ElastiCache를 Amazon RDS 앞단 캐시로 구성",
+        "Amazon DynamoDB에 DAX 클러스터 추가",
+        "Amazon Neptune"
+      ],
+      "correct": 0,
+      "explanation": "MemoryDB는 Valkey·Redis OSS 데이터 구조와 API를 쓰는 내구성 있는 인메모리 데이터베이스로, 마이크로초 읽기와 단일 자릿수 밀리초 쓰기를 제공하고 Multi-AZ 트랜잭션 로그로 내구성을 확보합니다. 문서는 내구성 있는 초고속 데이터베이스가 필요한 워크로드에 MemoryDB를 쓰라고 안내합니다.",
+      "wrongExplanations": {
+        "1": "ElastiCache는 다른 데이터베이스의 데이터를 캐시하는 용도로 흔히 쓰입니다. 주 데이터베이스가 따로 필요하므로 '캐시가 아닌 주 DB' 요구에 맞지 않습니다.",
+        "2": "DAX는 DynamoDB 전용 인라인 캐시로, eventually consistent 읽기에서 마이크로초 응답을 내는 캐시 계층입니다. 그 자체가 내구성 있는 주 데이터베이스는 아닙니다.",
+        "3": "Neptune은 관계가 많은(highly connected) 데이터셋을 위한 그래프 데이터베이스입니다. 키/값 조회의 마이크로초 지연 요구와 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Features of MemoryDB — 마이크로초 읽기·단일 자릿수 밀리초 쓰기, Multi-AZ 트랜잭션 로그 내구성",
+          "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/servicename-feature-overview.html"
+        },
+        {
+          "title": "Choosing between MemoryDB and ElastiCache — ElastiCache는 다른 DB 앞단 캐시, MemoryDB는 내구성 있는 초고속 DB",
+          "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/related-services-choose-between-memorydb-and-redis.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q6",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 비용 및 성능 요구 사항에 따라 적합한 스토리지 서비스 구현(2.1.1)",
+      "section": "stream-rel-search",
+      "difficulty": "applied",
+      "stem": "Amazon Aurora 클러스터의 월 청구서를 분석한 결과 I/O 요청 요금이 전체 Aurora 지출의 약 40%를 차지했다. 워크로드를 바꾸지 않고 비용 예측 가능성을 높이려면 무엇을 해야 하는가?",
+      "options": [
+        "Aurora Replica를 추가해 읽기 I/O를 분산한다",
+        "클러스터를 Aurora Standard 스토리지 구성으로 유지하고 인스턴스 크기를 줄인다",
+        "클러스터를 Aurora I/O-Optimized 스토리지 구성으로 전환한다",
+        "Multi-AZ 대기 복제본을 추가해 읽기 트래픽을 보낸다"
+      ],
+      "correct": 2,
+      "explanation": "Aurora 문서는 I/O 지출이 전체 Aurora 지출의 25% 이상일 때 Aurora I/O-Optimized를, 그보다 적을 때 Aurora Standard를 권장합니다. I/O-Optimized는 읽기·쓰기 I/O에 추가 요금이 없어 비용이 예측 가능해집니다. 단 Aurora Standard에서 I/O-Optimized로의 전환은 30일에 한 번만 가능합니다.",
+      "wrongExplanations": {
+        "0": "Aurora Replica는 읽기 처리량을 확장하는 수단입니다. Standard 구성에서는 복제본이 처리한 읽기도 I/O 요금 대상이므로 I/O 비용 비중 문제가 해결되지 않습니다.",
+        "1": "I/O 요금은 인스턴스 크기가 아니라 I/O 요청 수에 붙습니다. 인스턴스를 줄여도 I/O 비용 비중은 그대로이고 성능만 떨어집니다.",
+        "3": "Amazon RDS의 Multi-AZ 대기 복제본은 읽기 트래픽을 처리하지 않습니다. 또한 이 선택지는 Aurora의 I/O 과금 모델과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Aurora storage — I/O 지출 25% 이상이면 I/O-Optimized, 전환은 30일에 한 번",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html"
+        },
+        {
+          "title": "Working with DB instance read replicas (Amazon RDS) — Multi-AZ standby는 읽기 트래픽을 처리하지 않음",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q7",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 액세스 패턴 및 요구 사항에 따라 적합한 스토리지 서비스 구성(2.1.2)",
+      "section": "redshift-access",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift에서 수십억 행의 팩트 테이블과 수억 행의 디멘션 테이블을 공통 열 customer_id로 자주 조인한다. 조인 단계에서 노드 간 데이터 재분배가 성능 병목이다. 저장 공간 증가를 피하면서 조인을 가속하는 테이블 설계는 무엇인가?",
+      "options": [
+        "두 테이블의 분산 스타일을 EVEN으로 지정한다",
+        "두 테이블을 customer_id 기준 KEY 분산으로 지정한다",
+        "두 테이블의 분산 스타일을 ALL로 지정한다",
+        "디멘션 테이블에 customer_id 정렬 키만 지정하고 분산 스타일은 건드리지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "KEY 분산은 한 열의 값을 기준으로 행을 배치하므로, 두 테이블을 공통 조인 열로 분산하면 매칭되는 값이 물리적으로 같은 곳에 저장되어(colocation) 조인 시 재분배가 사라집니다. 두 테이블 모두 크기가 커서 ALL 복사가 부담스러운 상황에 맞는 선택입니다.",
+      "wrongExplanations": {
+        "0": "EVEN은 리더 노드가 열 값과 무관하게 슬라이스에 라운드 로빈으로 분배하는 방식으로, 조인에 참여하지 않는 테이블에 적합합니다. colocation이 생기지 않아 재분배 병목이 그대로 남습니다.",
+        "2": "ALL은 전체 테이블을 모든 노드에 복사하므로 필요한 저장 공간이 노드 수만큼 늘어나고 적재·갱신이 느려집니다. '저장 공간 증가를 피한다'는 조건과 충돌하며, 수억 행 테이블에는 부적합합니다.",
+        "3": "정렬 키는 블록 스킵(min/max 메타데이터)으로 필터 조건을 가속하는 수단입니다. 노드 간 데이터 배치를 바꾸지 않으므로 조인 재분배 병목은 해결되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Distribution styles (Amazon Redshift) — KEY 분산의 colocation, ALL은 스토리지가 노드 수만큼 증가, EVEN은 조인 불참 테이블",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_choosing_dist_sort.html"
+        },
+        {
+          "title": "Choose the best sort key (Amazon Redshift) — 정렬 키의 역할",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-sort-key.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q8",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 액세스 패턴 및 요구 사항에 따라 적합한 스토리지 서비스 구성(2.1.2)",
+      "section": "emr-storage",
+      "difficulty": "applied",
+      "stem": "Amazon EMR에서 매일 S3의 신규 데이터를 한 번 읽어 변환한 뒤 결과를 S3에 쓰는 배치 잡을 돌린다. 잡이 끝나면 클러스터를 종료하며, 컴퓨트 비용을 Spot 인스턴스로 낮추고 싶다. 적절한 구성은 무엇인가?",
+      "options": [
+        "입출력을 모두 HDFS에 두고 core 노드 수를 늘려 저장 용량을 확보한다",
+        "입출력을 S3에 두고 추가 컴퓨트를 task 노드(Spot)로 확보한다",
+        "입출력을 S3에 두고 추가 컴퓨트를 core 노드(Spot)로 확보한다",
+        "입력은 HDFS에 복사하고 결과도 HDFS에 보관해 S3 요청 비용을 없앤다"
+      ],
+      "correct": 1,
+      "explanation": "데이터셋을 실행마다 한 번 읽는 워크로드에는 EMRFS(S3)가 적합합니다. S3는 컴퓨트와 스토리지를 분리해 저장을 위해 core 노드를 늘릴 필요가 없고 HDFS 복제 비용도 들지 않으며 클러스터를 종료해도 데이터가 남습니다. task 노드는 HDFS 데이터 노드를 돌리지 않고 HDFS에 데이터를 저장하지 않으므로 Spot 같은 임시 용량에 적합합니다.",
+      "wrongExplanations": {
+        "0": "HDFS는 클러스터를 종료하면 회수되는 임시 저장소입니다. 결과를 HDFS에만 두면 클러스터 종료 시 사라지고, 저장 용량을 위해 core 노드를 늘리는 것은 S3를 쓸 때 불필요한 비용입니다.",
+        "2": "core 노드는 HDFS 데이터를 보유합니다. Spot으로 회수되면 HDFS 데이터가 영향을 받으므로 임시 용량 확보 대상으로는 task 노드가 적절합니다.",
+        "3": "HDFS가 임시 저장소라 클러스터 종료 시 결과가 사라집니다. 한 번만 읽는 데이터셋을 HDFS로 복사하는 것도 EMRFS의 이점(복제 비용 없음, 여러 클러스터 공유)을 버리는 선택입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EMR architecture and service layers — HDFS는 클러스터 종료 시 회수되는 임시 저장소, 입출력은 S3·중간 결과는 HDFS가 흔한 구성",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-overview-arch.html"
+        },
+        {
+          "title": "Understand node types in Amazon EMR — task 노드는 HDFS에 데이터를 저장하지 않음",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-master-core-task-nodes.html"
+        },
+        {
+          "title": "Choosing the right storage (Amazon EMR hardware) — EMRFS는 컴퓨트·스토리지 분리, HDFS 복제 비용 불필요",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/amazon-emr-hardware/storage.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q9",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "특정 액세스 패턴 및 요구 사항에 따라 적합한 스토리지 서비스 구성(2.1.2)",
+      "section": "dynamodb-store",
+      "difficulty": "applied",
+      "stem": "이미 운영 중인 DynamoDB 테이블(파티션 키 order_id)에 새 요구가 생겼다. customer_id를 파티션 키로 삼아 조회해야 하며, 이 조회가 테이블의 쓰기 처리량에 영향을 주지 않아야 한다. 어떻게 구성하는가?",
+      "options": [
+        "로컬 보조 인덱스(LSI)를 customer_id로 추가한다",
+        "테이블을 재생성하면서 복합 기본 키를 customer_id + order_id로 바꾼다",
+        "전역 보조 인덱스(GSI)를 customer_id로 추가한다",
+        "customer_id로 조회할 때마다 테이블 전체를 Scan하고 결과를 필터링한다"
+      ],
+      "correct": 2,
+      "explanation": "GSI는 파티션 키와 정렬 키를 base 테이블과 다르게 정의할 수 있고, 테이블 생성 이후에도 추가·삭제할 수 있으며, 자체 프로비저닝 설정으로 읽기·쓰기 용량을 테이블과 분리해 씁니다. 따라서 이미 운영 중인 테이블에 다른 파티션 키 조회를 더하는 요구에 맞습니다.",
+      "wrongExplanations": {
+        "0": "LSI는 파티션 키가 base 테이블과 같아야 하고 정렬 키만 다르게 정의합니다. 또한 테이블 생성 시에만 만들 수 있고 처리량을 테이블과 공유하므로 두 조건을 모두 어깁니다.",
+        "1": "테이블 재생성과 데이터 이전은 운영 중단과 애플리케이션 변경을 수반합니다. 보조 인덱스로 해결되는 요구에 과도한 변경입니다.",
+        "3": "Scan은 테이블 전체를 읽어 읽기 용량을 크게 소모하고 지연도 큽니다. 대체 키 조회를 위한 설계 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "General guidelines for secondary indexes in DynamoDB — GSI는 자체 프로비저닝 설정과 크기 제한 없음, LSI는 처리량 공유·파티션 키 값당 10 GB",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-indexes-general.html"
+        },
+        {
+          "title": "Local secondary indexes (DynamoDB) — LSI는 테이블 생성 시에만 만들 수 있음",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LSI.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q10",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "스토리지 서비스를 적절한 사용 사례에 적용(2.1.3)",
+      "section": "vector-index",
+      "difficulty": "applied",
+      "stem": "상품 정보가 Amazon Aurora PostgreSQL에 있다. 같은 데이터베이스에서 SQL 조인과 임베딩 유사도 검색을 함께 수행해야 하고, 벡터 인덱스를 빈 테이블에 먼저 만든 뒤 데이터를 점진적으로 적재하면서도 높은 recall과 낮은 쿼리 지연을 원한다. 가장 적합한 구성은 무엇인가?",
+      "options": [
+        "pgvector 확장을 설치하고 IVFFlat 인덱스를 만든다",
+        "임베딩을 Amazon MemoryDB로 옮겨 FLAT 인덱스를 쓴다",
+        "pgvector 확장을 설치하고 HNSW 인덱스를 만든다",
+        "임베딩을 Amazon S3 Vectors로 옮긴다"
+      ],
+      "correct": 2,
+      "explanation": "관계형 쿼리와 벡터 검색을 같은 데이터베이스에서 하려면 Aurora PostgreSQL + pgvector가 권장되고, pgvector는 0.5.0 버전부터 IVFFlat과 HNSW를 지원합니다. HNSW는 훈련 단계가 없어 초기 데이터 적재 없이 인덱스를 만들 수 있고, IVFFlat보다 구축은 느리지만 쿼리 성능과 recall이 좋습니다.",
+      "wrongExplanations": {
+        "0": "IVFFlat 인덱스는 중심점(centroid)을 정하고 영역을 만들려면 데이터가 먼저 있어야 하므로, 테이블에 데이터를 적재한 뒤에 만들어야 합니다. '빈 테이블에 먼저 생성'이라는 조건을 만족하지 못합니다.",
+        "1": "MemoryDB는 초저지연 실시간 애플리케이션용이고, FLAT은 인덱스의 모든 벡터를 선형으로 처리하는 brute force 방식입니다. 같은 DB에서 SQL 조인을 함께 하라는 요구와도 어긋납니다.",
+        "3": "S3 Vectors는 인덱스당 수십억 개 규모의 벡터를 장기 저장하고 드물게 조회하는 패턴에 최적화된 선택지입니다. 관계형 조인과 함께 쓰는 구성이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Optimize generative AI applications with pgvector indexing — 0.5.0부터 IVFFlat·HNSW 지원, IVFFlat은 중심점 계산에 데이터 필요",
+          "url": "https://aws.amazon.com/blogs/database/optimize-generative-ai-applications-with-pgvector-indexing-a-deep-dive-into-ivfflat-and-hnsw-techniques/"
+        },
+        {
+          "title": "Vector database options (AWS Prescriptive Guidance) — 관계형 쿼리와 벡터 검색을 함께 하면 Aurora PostgreSQL pgvector",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-options.html"
+        },
+        {
+          "title": "Vector search for Amazon DocumentDB — HNSW는 훈련 단계가 없고 쿼리 성능·recall이 우수",
+          "url": "https://docs.aws.amazon.com/documentdb/latest/devguide/vector-search.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q11",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "마이그레이션 도구를 데이터 처리 시스템에 통합(2.1.4)",
+      "section": "migration-tools",
+      "difficulty": "applied",
+      "stem": "외부 파트너사들이 매일 SFTP로 정산 파일을 업로드한다. 현재는 EC2에서 직접 SFTP 서버를 운영하는데, 서버 운영 부담을 없애고 파일을 Amazon S3에 바로 받고 싶다. 어떤 서비스를 쓰는가?",
+      "options": [
+        "AWS Transfer Family",
+        "AWS DataSync",
+        "AWS Database Migration Service(AWS DMS)",
+        "AWS Snowball Edge"
+      ],
+      "correct": 0,
+      "explanation": "AWS Transfer Family는 완전 관리형 서비스로 SFTP·FTPS·FTP·AS2 프로토콜과 브라우저를 통해 Amazon S3 또는 Amazon EFS로 파일을 주고받으며, 최대 3개 가용 영역에 걸친 오토스케일링 플릿이 뒷받침합니다. DataSync 문서도 제3자와 SFTP로 데이터를 교환한다면 Transfer Family를 쓰라고 안내합니다.",
+      "wrongExplanations": {
+        "1": "DataSync는 NFS·SMB 공유, HDFS, 객체 스토리지와 AWS 스토리지 사이에서 데이터를 옮기는 온라인 데이터 이동 서비스입니다. 외부 파트너가 접속하는 SFTP 엔드포인트를 제공하는 서비스가 아닙니다.",
+        "2": "DMS는 데이터베이스를 이전하고 변경분을 지속 복제하는 서비스입니다. 파일 전송 프로토콜 엔드포인트와는 무관합니다.",
+        "3": "Snowball Edge는 오프라인 대용량 전송 장비이며 신규 고객에게는 더 이상 제공되지 않습니다. 매일 들어오는 온라인 파일 수신 경로가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Transfer Family? — SFTP·FTPS·FTP·AS2, S3 또는 EFS, 최대 3개 AZ",
+          "url": "https://docs.aws.amazon.com/transfer/latest/userguide/what-is-aws-transfer-family.html"
+        },
+        {
+          "title": "AWS DataSync FAQs — 제3자와 SFTP 교환이면 Transfer Family, DataSync는 NFS·SMB 등의 온라인 이동",
+          "url": "https://aws.amazon.com/datasync/faqs/"
+        },
+        {
+          "title": "AWS Snowball Edge availability change — 신규 고객 제공 중단",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/snowball-edge-availability-change.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q12",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "데이터 마이그레이션 또는 원격 액세스 방법 구현(2.1.5)",
+      "section": "redshift-remote",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 데이터 웨어하우스 테이블을 Aurora PostgreSQL 운영 데이터베이스의 최신 주문 데이터와 조인하려 한다. 데이터를 복사·적재하는 ETL 없이 조회 시점의 최신 값이어야 한다. 가장 적절한 방법은 무엇인가?",
+      "options": [
+        "Redshift Spectrum 외부 테이블을 만든다",
+        "Redshift 페더레이션 쿼리를 위한 외부 스키마를 만든다",
+        "AUTO REFRESH를 켠 구체화된 뷰를 만든다",
+        "Redshift 데이터 공유(datashare)를 설정한다"
+      ],
+      "correct": 1,
+      "explanation": "페더레이션 쿼리는 외부 데이터베이스의 라이브 데이터를 Amazon Redshift와 S3 쿼리에 통합해 조회하게 해 주며 RDS·Aurora의 PostgreSQL과 MySQL을 지원합니다. ETL 없이 운영 DB의 최신 값을 조인해야 하는 요구에 맞습니다(외부 데이터 소스는 읽기 접근만 지원하고 동시성 스케일링과는 함께 동작하지 않습니다).",
+      "wrongExplanations": {
+        "0": "Spectrum은 Amazon S3에 있는 데이터를 외부 테이블로 조회하는 기능입니다. 운영 관계형 데이터베이스의 라이브 데이터를 조회하는 수단이 아닙니다.",
+        "2": "구체화된 뷰는 미리 계산해 저장한 결과이므로 기반 테이블이 바뀌어도 새로 고치기 전에는 내용이 그대로입니다. '조회 시점의 최신 값' 요구를 보장하지 못합니다.",
+        "3": "데이터 공유는 Amazon Redshift 클러스터·워크그룹·계정·리전 사이에서 라이브 데이터를 공유하는 기능입니다. Aurora 같은 외부 엔진의 데이터를 가져오는 경로가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Querying data with federated queries in Amazon Redshift — 외부 데이터베이스의 라이브 데이터를 통합 조회",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/federated-overview.html"
+        },
+        {
+          "title": "Considerations when accessing federated data — 읽기 접근만, 동시성 스케일링과 함께 동작하지 않음",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/federated-limitations.html"
+        },
+        {
+          "title": "Refreshing a materialized view (Amazon Redshift) — 새로 고치기 전에는 기반 테이블 변경이 반영되지 않음",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q13",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "데이터 액세스 방지하기 위해 잠금 관리(2.1.6)",
+      "section": "lock-management",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift에서 야간 ETL 세션이 트랜잭션을 연 채 멈춰 있고, 같은 테이블에 DDL과 쿼리를 보내는 다른 세션들이 계속 대기 상태다. 가장 적절한 조치는 무엇인가?",
+      "options": [
+        "WLM 큐의 동시성 값을 늘린다",
+        "동시성 스케일링을 활성화한다",
+        "SVV_TRANSACTIONS로 열린 트랜잭션과 잠금 경합을 확인하고 해당 세션을 PG_TERMINATE_BACKEND로 종료한다",
+        "테이블의 분산 스타일을 ALL로 변경한다"
+      ],
+      "correct": 2,
+      "explanation": "SVV_TRANSACTIONS 뷰로 열린 트랜잭션과 잠금 경합을 확인할 수 있고, 잠금을 쥔 세션을 PG_TERMINATE_BACKEND로 종료하면 그 세션의 트랜잭션이 롤백되면서 모든 잠금이 풀립니다. 트랜잭션 블록(BEGIN…END) 안이라 쿼리를 취소할 수 없는 경우 세션 자체를 종료해야 합니다.",
+      "wrongExplanations": {
+        "0": "WLM 큐 설정은 쿼리를 어떤 큐에서 몇 개까지 동시에 돌릴지 정하는 정책입니다. 테이블 잠금은 트랜잭션이 끝나거나 세션이 종료될 때 풀리므로 큐 설정으로 해결되지 않습니다.",
+        "1": "동시성 스케일링은 동시 쿼리가 몰릴 때 임시 클러스터를 더해 처리 용량을 늘리는 기능입니다. 잠금을 쥔 트랜잭션이 남아 있는 한 대기는 계속됩니다.",
+        "3": "분산 스타일은 데이터를 노드·슬라이스에 어떻게 배치할지 정하는 설계 항목으로, 잠금 해제 수단이 아닙니다. 게다가 ALL은 저장 공간을 노드 수만큼 늘립니다."
+      },
+      "sources": [
+        {
+          "title": "STV_LOCKS (Amazon Redshift) — SVV_TRANSACTIONS로 열린 트랜잭션·잠금 경합 확인, STV_LOCKS는 수퍼유저 전용",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_STV_LOCKS.html"
+        },
+        {
+          "title": "PG_CANCEL_BACKEND (Amazon Redshift) — PG_TERMINATE_BACKEND로 세션 종료 시 롤백·잠금 해제",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/PG_CANCEL_BACKEND.html"
+        },
+        {
+          "title": "LOCK (Amazon Redshift) — 잠금은 LOCK을 포함한 트랜잭션이 끝날 때 해제",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_LOCK.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q14",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "오픈 테이블 형식 관리(2.1.7)",
+      "section": "open-table-format",
+      "difficulty": "applied",
+      "stem": "Amazon Athena로 쿼리하는 Apache Iceberg 테이블에 잦은 변경이 쌓여 작은 파일이 많아지고, 오래된 스냅샷 때문에 S3 스토리지 사용량도 늘고 있다. 두 문제를 모두 해결하는 유지 관리 방법은 무엇인가?",
+      "options": [
+        "VACUUM만 주기적으로 실행한다",
+        "OPTIMIZE만 주기적으로 실행한다",
+        "Amazon Redshift COPY로 Iceberg 테이블을 로컬 테이블로 적재해 정리한다",
+        "OPTIMIZE로 작은 파일을 병합하고, VACUUM으로 오래된 스냅샷과 고아 파일을 정리한다"
+      ],
+      "correct": 3,
+      "explanation": "직접 운영하는 Iceberg 테이블에는 compaction(작은 파일·delete 파일 병합), snapshot expiration, unreferenced file removal 세 가지 유지 관리가 필요합니다. Athena에서 OPTIMIZE가 bin-packing으로 작은 파일을 병합하고, VACUUM이 스냅샷 만료와 고아 파일 제거를 수행합니다. 다만 스냅샷을 만료하면 그 스냅샷으로는 더 이상 time travel할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "VACUUM은 스냅샷 만료와 고아 파일 제거를 수행하지만 작은 파일을 큰 파일로 병합하지는 않습니다. 작은 파일 문제가 남습니다.",
+        "1": "OPTIMIZE는 작은 파일을 병합하는 compaction 작업입니다. 오래된 스냅샷이 정리되지 않아 스토리지 증가 문제가 남습니다.",
+        "2": "Amazon Redshift는 COPY 명령으로 Iceberg 테이블을 적재할 수 없습니다(INSERT INTO·CTAS를 씁니다). 또한 테이블 적재는 Iceberg 유지 관리 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Best practices for querying Apache Iceberg data with Amazon Redshift — 유지 관리 3종, Athena OPTIMIZE는 compaction·VACUUM은 스냅샷 만료와 고아 파일 제거",
+          "url": "https://aws.amazon.com/blogs/big-data/best-practices-for-querying-apache-iceberg-data-with-amazon-redshift/"
+        },
+        {
+          "title": "VACUUM (Amazon Athena) — 스냅샷 만료 후에는 해당 스냅샷으로 time travel 불가",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/vacuum-statement.html"
+        },
+        {
+          "title": "Using Apache Iceberg tables with Amazon Redshift — COPY 명령으로 Iceberg 테이블 적재 불가",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/querying-iceberg.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-1-q15",
+      "examGuideTaskId": "dea-t2-1",
+      "skill": "벡터 인덱스 유형 설명(2.1.8)",
+      "section": "vector-index",
+      "difficulty": "foundational",
+      "stem": "Amazon MemoryDB의 벡터 검색에서 FLAT 인덱스 알고리즘의 특성을 올바르게 설명한 것은 무엇인가?",
+      "options": [
+        "인덱스의 모든 벡터를 선형으로 처리하는 brute force 방식으로 정확한 답을 준다",
+        "벡터를 다층 그래프로 조직해 근사 검색을 수행한다",
+        "벡터 공간을 K-means로 영역으로 나누고 일부 영역만 검색한다",
+        "벡터를 양자화해 저장 공간을 줄이는 압축 전용 방식이다"
+      ],
+      "correct": 0,
+      "explanation": "MemoryDB 문서는 FLAT 알고리즘이 인덱스의 각 벡터를 선형으로 처리하는 brute force 방식이라고 설명합니다. 반면 HNSW는 정확한 답의 근사치를 주는 대신 실행 시간을 크게 줄입니다. MemoryDB가 지원하는 벡터 인덱스 알고리즘은 FLAT과 HNSW입니다.",
+      "wrongExplanations": {
+        "1": "다층 그래프로 조직하는 방식은 HNSW(Hierarchical Navigable Small World)의 설명입니다.",
+        "2": "K-means로 영역(lists)을 나누고 쿼리 시 가까운 영역 일부(probes)만 검색하는 방식은 IVF(IVFFlat)의 설명입니다.",
+        "3": "제시된 공식 문서에서 MemoryDB의 FLAT을 양자화 기반 압축 방식으로 설명하는 서술은 확인되지 않습니다. FLAT은 전수 선형 비교 방식입니다."
+      },
+      "sources": [
+        {
+          "title": "Vector search overview (Amazon MemoryDB) — FLAT은 brute force 선형 처리, HNSW는 근사치 제공",
+          "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/vector-search-overview.html"
+        },
+        {
+          "title": "Optimize generative AI applications with pgvector indexing — IVFFlat의 K-means 영역 분할과 probes",
+          "url": "https://aws.amazon.com/blogs/database/optimize-generative-ai-applications-with-pgvector-indexing-a-deep-dive-into-ivfflat-and-hnsw-techniques/"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

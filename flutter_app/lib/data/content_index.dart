@@ -607,13 +607,18 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-3', title: 'Route 53 DNS·CloudFront 콘텐츠 전송', domain: 5, mdAsset: 'assets/content/soa/soa-t5-3.md', questionsAsset: 'assets/content/soa/soa-t5-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-4', title: '네트워크 문제 해결 (Flow Logs·Reachability Analyzer)', domain: 5, mdAsset: 'assets/content/soa/soa-t5-4.md', questionsAsset: 'assets/content/soa/soa-t5-4.questions.json', questionCount: 0),
   ],
-  // DEA-C01: 도메인 1(데이터 수집 및 변환, 34%) 배치부터 누적 등록한다.
+  // DEA-C01: 도메인 1(데이터 수집 및 변환, 34%)·도메인 2(데이터 스토어 관리, 26%)를
+  // 배치별로 누적 등록한다.
   // 문항은 사람 검수 전 드래프트(verified:false)라 questionCount는 0이다.
   'DEA-C01': [
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-1', title: '데이터 수집 수행 (스트리밍·배치·트리거)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-1.md', questionsAsset: 'assets/content/dea/dea-t1-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-2', title: '데이터 변환 및 처리 (엔진 선택·비용·형식)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-2.md', questionsAsset: 'assets/content/dea/dea-t1-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-3', title: '데이터 파이프라인 오케스트레이션 (워크플로·복원력·알림)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-3.md', questionsAsset: 'assets/content/dea/dea-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-4', title: '프로그래밍 개념 (코드 최적화·Lambda·IaC·CI/CD)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-4.md', questionsAsset: 'assets/content/dea/dea-t1-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t2-1', title: '데이터 스토어 선택 (분석·NoSQL·스트림·벡터·잠금)', domain: 2, mdAsset: 'assets/content/dea/dea-t2-1.md', questionsAsset: 'assets/content/dea/dea-t2-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t2-2', title: '데이터 카탈로그 시스템 (Glue Data Catalog·크롤러·파티션·SageMaker Catalog)', domain: 2, mdAsset: 'assets/content/dea/dea-t2-2.md', questionsAsset: 'assets/content/dea/dea-t2-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t2-3', title: '데이터 수명 주기 관리 (COPY/UNLOAD·S3 수명 주기·보존·복원성)', domain: 2, mdAsset: 'assets/content/dea/dea-t2-3.md', questionsAsset: 'assets/content/dea/dea-t2-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t2-4', title: '데이터 모델·스키마 진화 설계 (테이블 설계·스키마 변환·계보·벡터화)', domain: 2, mdAsset: 'assets/content/dea/dea-t2-4.md', questionsAsset: 'assets/content/dea/dea-t2-4.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-1', title: '데이터 처리 자동화 (MWAA·Step Functions·SDK·Lambda·EventBridge)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-1.md', questionsAsset: 'assets/content/dea/dea-t3-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-2', title: '데이터 분석 (시각화·정리·뷰·Spark 노트북·SQL 집계)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-2.md', questionsAsset: 'assets/content/dea/dea-t3-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-3', title: '파이프라인 유지 관리·모니터링 (로그·알림·성능·CloudTrail)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-3.md', questionsAsset: 'assets/content/dea/dea-t3-3.questions.json', questionCount: 0),
