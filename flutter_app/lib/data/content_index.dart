@@ -612,6 +612,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   'DEA-C01': [
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-1', title: '데이터 수집 수행 (스트리밍·배치·트리거)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-1.md', questionsAsset: 'assets/content/dea/dea-t1-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-2', title: '데이터 변환 및 처리 (엔진 선택·비용·형식)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-2.md', questionsAsset: 'assets/content/dea/dea-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t1-3', title: '데이터 파이프라인 오케스트레이션 (워크플로·복원력·알림)', domain: 1, mdAsset: 'assets/content/dea/dea-t1-3.md', questionsAsset: 'assets/content/dea/dea-t1-3.questions.json', questionCount: 0),
   ],
 };
 
