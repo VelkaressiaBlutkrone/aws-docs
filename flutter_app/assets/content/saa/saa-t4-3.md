@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션
@@ -58,7 +58,7 @@ lastVerified: 2026-06-12
 | **총소유비용** | TCO (Total Cost of Ownership) | 인스턴스 비용 외에 운영·인건비·관리 도구 비용까지 포함한 실질 총비용 |
 | **NoSQL** | NoSQL | 고정 스키마 없이 key-value·문서·그래프 등 유연한 데이터 모델을 쓰는 비관계형 DB 범주 |
 | **다중 가용 영역** | Multi-AZ | 같은 리전 내 2개 이상 AZ에 DB를 복제해 AZ 장애를 자동으로 극복하는 RDS 배포 옵션 |
-| **절감 약정** | Savings Plans | EC2·Lambda 사용량에 대해 일정 금액을 1~3년 약정해 할인받는 옵션 — RDS에는 적용되지 않음 |
+| **절감 약정** | Savings Plans | 일정 금액을 약정해 할인받는 옵션. Compute·EC2 Instance 유형은 RDS에 적용되지 않지만, **Database Savings Plans**는 Aurora·RDS·DynamoDB·ElastiCache 등에 적용됨 |
 | **온라인 트랜잭션 처리** | OLTP (Online Transaction Processing) | 다수의 짧은 읽기·쓰기 트랜잭션을 빠르게 처리하는 워크로드 유형 — 관계형 DB가 전통적으로 담당하는 패턴 |
 
 ---
@@ -78,7 +78,7 @@ lastVerified: 2026-06-12
 | 관계형·불규칙 부하 | Aurora serverless | ACU 단위 초당 과금, 유휴 시 최소 비용 | 상시 프로비저닝 인스턴스 |
 | 대규모 key-value / 서버리스 앱 | DynamoDB | 온디맨드(예측 불가) / 프로비저닝(예측 가능) | RDS over-provision |
 | 읽기 캐싱·세션 저장 | ElastiCache (Redis/Memcached) | RDS 읽기 부하 감소 → 인스턴스 다운사이즈 가능 | 읽기 복제본만 무한 추가 |
-| 시계열·IoT 데이터 | Amazon Timestream | 관계형 DB 대비 1/10 비용 | RDS에 시계열 저장 |
+| 시계열·IoT 데이터 | Amazon Timestream for InfluxDB | LiveAnalytics는 **2025-06-20부터 신규 고객 접근 불가**(기존 고객은 계속 사용) → 신규는 InfluxDB 선택 | RDS에 시계열 저장 |
 | 그래프 관계 데이터 | Amazon Neptune | 목적 최적화로 쿼리 비용↓ | 복잡한 JOIN으로 RDS 과부하 |
 | 문서 (MongoDB 호환) | Amazon DocumentDB | 관리형으로 운영비↓ | EC2 위 MongoDB 자체 관리 |
 
@@ -117,11 +117,11 @@ lastVerified: 2026-06-12
 | 3년 | Partial Upfront | ~55% | 장기 약정 + 유연한 결제 |
 | 3년 | No Upfront | ~45% | 장기 약정, 초기 비용 0 |
 
-> RI는 **인스턴스 클래스·엔진·리전·Multi-AZ 여부**에 따라 별도로 구매합니다. 워크로드 변화가 예상되면 1년 RI + Partial Upfront가 유연성과 절감의 균형점입니다.
+> RI는 **리전·엔진·인스턴스 클래스·에디션·라이선스 유형**을 지정해 구매합니다. 단 **사이즈 유연성**이 있어 같은 인스턴스 클래스 타입 안에서는 크기가 달라도 할인이 자동 적용되고(예: db.r6i.large → db.r6i.xlarge, 단 db.r6id·db.r7g는 다른 타입), **Single-AZ ↔ Multi-AZ 사이에도 정규화 단위 기준으로 적용**됩니다. 사이즈 유연성 대상 엔진은 Db2·MariaDB·MySQL·Oracle(BYOL)·PostgreSQL이고, **RDS for SQL Server와 Oracle License Included는 예외**입니다. RI 할인은 **인스턴스 시간 요금만** 깎아 주며 스토리지·백업·I/O는 그대로입니다. 워크로드 변화가 예상되면 1년 RI + Partial Upfront가 유연성과 절감의 균형점입니다.
 
-> 🧠 원리: 왜 RDS RI는 인스턴스 클래스·엔진·리전 조합에 묶여 있을까요?
-> RDS RI는 물리 서버를 예약하는 것이 아니라, 특정 구성 속성(엔진·클래스·리전·Multi-AZ)에 결부된 청구 할인 약정입니다. 할인은 실제 사용 구성이 약정한 구성과 일치할 때만 자동 적용됩니다.
-> 이 구조 때문에 워크로드가 변경되어 인스턴스 클래스를 바꾸거나 리전을 이동하면 기존 RI가 적용되지 않아 낭비가 생길 수 있습니다.
+> 🧠 원리: 왜 RDS RI는 인스턴스 클래스 타입·엔진·리전 조합에 묶여 있을까요?
+> RDS RI는 물리 서버를 예약하는 것이 아니라, 특정 구성 속성(엔진·클래스 타입·리전)에 결부된 청구 할인 약정입니다. 할인은 실제 사용 구성이 약정 구성과 같은 범주에 들어올 때 자동 적용되며, 사이즈 유연성 덕분에 **크기와 AZ 구성(Single/Multi-AZ)은 정규화 단위로 환산해 흡수**됩니다.
+> 그래도 클래스 타입 자체를 바꾸거나(db.r6i → db.r7g) 리전을 이동하면 기존 RI가 적용되지 않아 낭비가 생길 수 있습니다.
 > 따라서 RI 구매 전에 워크로드의 안정성을 충분히 검토하는 것이 비용 절감을 실현하는 전제 조건입니다.
 
 ---
@@ -201,7 +201,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 | 항목 | 내용 |
 |---|---|
 | RDS 자동 백업 보존 기간 | 0~35일 설정 가능. 0으로 설정 시 자동 백업 비활성화(스냅샷은 수동 유지) |
-| 백업 스토리지 비용 | 프로비저닝 스토리지 크기까지는 무료(RDS 기본 제공 범위). 초과분은 GB당 요금 |
+| 백업 스토리지 비용 | 과금 기준은 **리전 전체의 자동 백업 + 수동 스냅샷 합계**(인스턴스별이 아님). 프로비저닝한 DB 스토리지 합계에 해당하는 무료 제공량이 있고 초과분은 GB당 요금 — 정확한 무료 범위는 RDS 요금 페이지 기준 |
 | 스냅샷 보존 | 수동 스냅샷은 삭제 전까지 보존·과금. 불필요한 스냅샷은 주기적으로 삭제 권장 |
 | Aurora 백업 | Aurora는 자동으로 연속 백업(S3) — 보존 기간 설정이 비용에 직접 영향 |
 | 교차 리전 복사 | 스냅샷 교차 리전 복사 시 대상 리전 스토리지 요금 별도 발생 |
@@ -224,7 +224,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 - **"읽기 부하 증가 + 비용 최소화"** → Read Replica 또는 ElastiCache로 분산 → Primary 인스턴스 다운사이즈.
 - **"minimal operational overhead"** → 관리형 서비스(RDS/Aurora/DynamoDB). EC2 위 자체 설치는 운영 부담·비용 증가.
 - **"개발·테스트 환경 + 비용 최소화"** → Aurora serverless(최솟값 설정) 또는 DynamoDB 온디맨드.
-- **RDS RI vs EC2 RI 혼동 주의**: RDS RI는 인스턴스 클래스·엔진·Multi-AZ 조합으로 구매. Savings Plans는 RDS에 적용되지 않습니다(Compute/EC2 Savings Plans는 RDS 미적용).
+- **RDS RI vs EC2 RI 혼동 주의**: RDS RI는 리전·엔진·인스턴스 클래스 타입으로 구매하되 **크기와 Single/Multi-AZ는 사이즈 유연성으로 흡수**됩니다(SQL Server·Oracle LI 제외). **Compute/EC2 Instance Savings Plans는 RDS에 적용되지 않지만, Database Savings Plans는 RDS·Aurora·DynamoDB·ElastiCache 등에 적용**됩니다(같은 워크로드에 RDS RI와 중복 적용은 불가).
 
 ---
 
@@ -245,8 +245,8 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 5. **"ElastiCache를 추가하면 비용이 오른다."** → ElastiCache 추가 비용이 발생하지만, DB 인스턴스를 다운사이즈하거나 읽기 복제본을 줄이면 순비용은 절감될 수 있습니다. 트레이드오프를 계산해야 합니다.
    *(원리: §3 본문 — 읽기 부하를 Read Replica나 ElastiCache로 분산하면 Primary 인스턴스를 더 작은 클래스로 유지할 수 있다.)*
 
-6. **"Compute Savings Plans가 RDS에도 적용된다."** → Compute Savings Plans와 EC2 Instance Savings Plans는 RDS에 적용되지 않습니다. RDS 비용 절감은 RDS 예약 인스턴스로만 가능합니다.
-   *(원리: §2 — RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 조합에 묶여 있으며, 조합이 바뀌면 할인이 적용되지 않아 워크로드 안정성 확인 후 구매해야 한다.)*
+6. **"Compute Savings Plans가 RDS에도 적용된다."** → Compute Savings Plans와 EC2 Instance Savings Plans는 RDS에 적용되지 않습니다. 다만 **Database Savings Plans**(Aurora·RDS·DynamoDB·ElastiCache·DocumentDB 등, 최대 35%)가 따로 있으므로 "DB 절감은 RI뿐"은 더 이상 맞지 않습니다.
+   *(원리: §2 — 약정 할인은 "무엇을 고정하느냐"로 갈린다. RI는 구성(엔진·클래스 타입·리전)을 고정해 깊은 할인을, Database SP는 금액을 고정해 서비스·엔진 간 이동 유연성을 준다.)*
 
 ---
 
@@ -286,7 +286,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 
 <details><summary>정답 보기</summary>
 
-RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조합에 결부된 청구 할인 약정이라, 실제 사용 구성이 약정 구성과 일치할 때만 할인이 자동 적용됩니다. Compute Savings Plans는 EC2·Fargate·Lambda의 컴퓨팅 사용량 총액에 대한 약정이라 서비스·인스턴스 유형과 무관하게 적용되는 반면, RDS RI는 구성 속성이 하나라도 달라지면 할인이 적용되지 않습니다.
+RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조합에 결부된 청구 할인 약정이라, 실제 사용 구성이 약정 구성과 일치할 때만 할인이 자동 적용됩니다. Compute Savings Plans는 EC2·Fargate·Lambda의 컴퓨팅 사용량 총액에 대한 약정이라 서비스·인스턴스 유형과 무관하게 적용되는 반면, RDS RI는 약정한 범주(엔진·클래스 타입·리전)를 벗어나면 할인이 적용되지 않습니다 — 크기와 Single/Multi-AZ는 사이즈 유연성으로 흡수되지만, 클래스 타입이나 엔진이 바뀌면 온디맨드 요율로 돌아갑니다(SQL Server·Oracle License Included는 사이즈 유연성도 없습니다). DB 사용량 전체에 금액으로 약정하고 싶다면 **Database Savings Plans**가 그 역할을 합니다.
 </details>
 
 ---
@@ -299,4 +299,10 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 2. Aurora serverless — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
 3. DynamoDB 읽기/쓰기 용량 모드 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
 4. AWS 데이터베이스 서비스 개요 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. RDS 예약 DB 인스턴스(사이즈 유연성 대상 엔진·Multi-AZ 적용·스토리지 미할인) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html
+6. Savings Plans 유형(Database Savings Plans) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
+7. Timestream for LiveAnalytics 가용성 변경(2025-06-20 신규 고객 불가) — https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html
+8. RDS 백업 소개(리전 단위 백업 스토리지 합계) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
+9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① "DB 절감은 RDS RI로만"을 고쳤습니다 — **Database Savings Plans**가 Aurora·RDS·DynamoDB·ElastiCache 등에 적용됩니다(근거 6번). ② RDS RI의 **사이즈 유연성**(대상 엔진, SQL Server·Oracle LI 예외, Single/Multi-AZ 적용, 인스턴스 시간만 할인)을 반영했습니다(근거 5번). ③ Timestream 칸을 **LiveAnalytics 신규 고객 불가 → InfluxDB**로 고치고 근거 없는 "1/10 비용"을 삭제했습니다(근거 7번). ④ 백업 스토리지 과금 기준을 **리전 전체 합계**로 바로잡았습니다(근거 8번). ⑤ **Aurora serverless** 명칭으로 통일했습니다.

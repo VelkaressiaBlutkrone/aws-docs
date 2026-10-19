@@ -346,4 +346,213 @@ void main() {
           isTrue);
     });
   });
+
+  group('Task 4.1 — saa-t4-1 / saa-t4-5', () {
+    test('G-4.1-13 Terminate가 모든 EBS 볼륨을 지우지는 않는다', () {
+      // 근거: preserving-volumes-on-termination — 루트는 시작 시 Delete,
+      // 데이터 볼륨은 콘솔 시작 시 Preserve / CLI 시작 시 Delete, 시작 후 연결은
+      // Preserve. "Preserved volumes continue to incur charges."
+      final t41 = doc('saa-t4-1');
+      expect(t41.contains('완전히 삭제(Terminate)해야 볼륨 요금이 멈춥니다'), isFalse);
+      expect(t41.contains('DeleteOnTermination'), isTrue);
+    });
+
+    test('G-4.1-14 128 KB 미만은 손해가 아니라 절감이 없는 것', () {
+      // 근거: storage-class-intro — "If the size of an object is less than
+      // 128 KB, it is not monitored and not eligible for auto-tiering.
+      // Smaller objects are always stored in the Frequent Access tier."
+      final t41 = doc('saa-t4-1');
+      expect(t41.contains('절감액을 초과'), isFalse);
+      expect(t41.contains('모니터링 대상이 아니'), isTrue);
+    });
+
+    test('G-4.1-15 Storage Class Analysis는 Storage Lens와 별개 기능', () {
+      final t41 = doc('saa-t4-1');
+      expect(t41.contains('Storage Lens와 별개'), isTrue);
+    });
+
+    test('G-4.1-20 Budget Actions 조치 3종(IAM·SCP·EC2/RDS 대상)', () {
+      // 근거: budgets-controls — "Your available actions include applying an
+      // IAM policy or a service control policy (SCP). They also include
+      // targeting specific Amazon EC2 or Amazon RDS instances"
+      final t45 = doc('saa-t4-5');
+      expect(t45.contains('SSM Automation 문서 실행'), isFalse);
+      expect(t45.contains('서비스 제어 정책(SCP)'), isTrue);
+      expect(t45.contains('실행 중 인스턴스'), isTrue);
+    });
+
+    test('G-4.1-21 Budgets는 실시간이 아니라 하루 최대 3회 갱신', () {
+      // 근거: budgets-managing-costs — "AWS Budgets information is updated up
+      // to three times a day. Updates typically occur 8–12 hours after the
+      // previous update."
+      final t45 = doc('saa-t4-5');
+      expect(t45.contains('실시간(갱신 주기 8~12시간)'), isFalse);
+      expect(t45.contains('하루 최대 3회'), isTrue);
+    });
+
+    test('G-4.1-22 CUR 2.0 / Data Exports가 반영됐다', () {
+      // 근거: dataexports-migrate — CUR 2.0은 고정 스키마·중첩 열·SQL 열 선택,
+      // 출력 형식 ZIP·GZIP·Parquet
+      final t45 = doc('saa-t4-5');
+      expect(t45.contains('CUR 2.0'), isTrue);
+      expect(t45.contains('Data Exports'), isTrue);
+      expect(t45.contains('Parquet'), isTrue);
+    });
+
+    test('G-4.1-24 근거 없는 Support 비용 반영일이 사라지고 현행 플랜명이다', () {
+      // 근거: aws.amazon.com/premiumsupport/plans/ — 현재 목록은 Basic·
+      // Business Support+·Enterprise·Unified Operations
+      final t45 = doc('saa-t4-5');
+      expect(t45.contains('해당 월 6~7일에 반영'), isFalse);
+      expect(t45.contains('Business Support+'), isTrue);
+    });
+
+    test('G-4.1-25 Compute Optimizer 룩백은 기본 14일, 향상 지표로 93일', () {
+      // 근거: enhanced-infrastructure-metrics — "extends the utilization
+      // metrics analysis lookback period to up to 93 days, compared to the
+      // default 14-day period" (유료 기능)
+      final t45 = doc('saa-t4-5');
+      expect(t45.contains('CloudWatch 지표 14일 이상 수집'), isFalse);
+      expect(t45.contains('93일'), isTrue);
+    });
+  });
+
+  group('Task 4.2 — saa-t4-2', () {
+    test('G-4.2-12 Convertible RI 최대 66%', () {
+      // 근거: EC2 RI 요금 — Standard "up to 72% off", Convertible "up to 66%"
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('최대 54%'), isFalse);
+      expect(t42.contains('Convertible RI** | 최대 66%'), isTrue);
+    });
+
+    test('G-4.2-13 Savings Plans 4종(Database SP 포함)', () {
+      // 근거: plan-types — "AWS offers four types of Savings Plans: Compute
+      // Savings Plans, Database Savings Plans, EC2 Instance Savings Plans,
+      // and SageMaker AI Savings Plans."
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('Database Savings Plans'), isTrue);
+      expect(t42.contains('SageMaker AI Savings Plans'), isTrue);
+    });
+
+    test('G-4.2-16 스팟 할당 전략 권고는 price-capacity-optimized', () {
+      // 근거: spot-best-practices — "We recommend using the
+      // price-capacity-optimized strategy"
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('lowestPrice   : 가장 저렴한 풀 우선 (비용 최소화)'), isFalse);
+      expect(t42.contains('price-capacity-optimized'), isTrue);
+    });
+
+    test('G-4.2-17 Graviton 비용 서술에서 근거 없는 수식 제거', () {
+      // 근거: aws.amazon.com/ec2/graviton/ — "AWS Graviton-based instances
+      // cost up to 20% less than comparable x86-based Amazon EC2 instances."
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('(Graviton3 기준)'), isFalse);
+      expect(t42.contains('최대 20%'), isTrue);
+    });
+
+    test('G-4.2-18 Dedicated Host는 예약으로 온디맨드보다 싸질 수 있다', () {
+      // 근거: dedicated-hosts/pricing — "Reservations can provide up to a 70%
+      // discount compared to the On-Demand price", Savings Plans 적용 가능
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('| **전용 호스트(Dedicated Host)** | 온디맨드 이상 비용 |'), isFalse);
+      expect(t42.contains('최대 70%'), isTrue);
+    });
+
+    test('G-4.2-19 Lambda는 1 ms, Fargate는 초 단위·최소 1분', () {
+      // 근거: Fargate 요금 "per second with a 1-minute minimum",
+      // Lambda 요금 1 ms 단위·프로비저닝 동시성은 유휴에도 과금
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('사용한 시간만 밀리초 단위로 과금 — 유휴 시 비용 없음'), isFalse);
+      expect(t42.contains('최소 1분'), isTrue);
+      expect(t42.contains('프로비저닝 동시성'), isTrue);
+    });
+  });
+
+  group('Task 4.3 — saa-t4-3', () {
+    test('G-4.3-12 Database Savings Plans가 RDS·Aurora에 적용된다', () {
+      final t43 = doc('saa-t4-3');
+      expect(t43.contains('RDS 비용 절감은 RDS 예약 인스턴스로만 가능합니다'), isFalse);
+      expect(t43.contains('Database Savings Plans'), isTrue);
+    });
+
+    test('G-4.3-13 RDS RI 사이즈 유연성', () {
+      // 근거: USER_WorkingWithReservedDBInstances — Db2·MariaDB·MySQL·
+      // Oracle BYOL·PostgreSQL은 사이즈 유연, SQL Server·Oracle LI는 예외.
+      // "Reserved DB instance benefits apply to both Multi-AZ and Single-AZ"
+      final t43 = doc('saa-t4-3');
+      expect(t43.contains('구성 속성이 하나라도 달라지면 할인이 적용되지 않습니다'), isFalse);
+      expect(t43.contains('사이즈 유연'), isTrue);
+      expect(t43.contains('SQL Server'), isTrue);
+    });
+
+    test('G-4.3-15 Timestream for LiveAnalytics는 신규 고객 불가', () {
+      // 근거: availability change — "close new customer access to Amazon
+      // Timestream for LiveAnalytics, effective 6/20/25", 대안은 InfluxDB
+      final t43 = doc('saa-t4-3');
+      expect(t43.contains('관계형 DB 대비 1/10 비용'), isFalse);
+      expect(t43.contains('InfluxDB'), isTrue);
+    });
+
+    test('G-4.3-20 백업 스토리지는 리전 합계 기준', () {
+      // 근거: USER_WorkingWithAutomatedBackups — "Your Amazon RDS backup
+      // storage for each AWS Region is composed of the automated backups and
+      // manual DB snapshots for that Region."
+      final t43 = doc('saa-t4-3');
+      expect(t43.contains('프로비저닝 스토리지 크기까지는 무료(RDS 기본 제공 범위)'), isFalse);
+      expect(t43.contains('리전 전체'), isTrue);
+    });
+  });
+
+  group('Task 4.4 — saa-t4-4', () {
+    test('G-4.4-12 TGW 통과 AZ 간 트래픽에 별도 AZ 전송 요금이 없다', () {
+      // 근거: EKS 비용 최적화 모범 사례 — "There is no destination cost
+      // associated with inter-AZ traffic that flows through the TGW."
+      final t44 = doc('saa-t4-4');
+      expect(t44.contains('\$0.01/GB + \$0.02/GB'), isFalse);
+      expect(t44.contains('TGW를 통과하는'), isTrue);
+    });
+
+    test('G-4.4-16 인터페이스 엔드포인트 시간 요금은 엔드포인트·AZ별', () {
+      // 근거: PrivateLink 요금 — "billed for each hour that your VPC endpoint
+      // remains provisioned in each Availability Zone", 상태와 무관하게 과금
+      final t44 = doc('saa-t4-4');
+      expect(t44.contains('\$0.01/GB + 시간당 ENI 요금'), isFalse);
+      expect(t44.contains('AZ별 시간 요금'), isTrue);
+    });
+
+    test('G-4.4-17 공용 IPv4 요금이 NAT 손익 계산에 반영됐다', () {
+      // 근거: using-instance-addressing — "AWS charges for all public IPv4
+      // addresses, including public IPv4 addresses associated with running
+      // instances and Elastic IP addresses" + NAT 손익 계산식($0.005/IP/시간)
+      final t44 = doc('saa-t4-4');
+      expect(t44.contains('\$0.005'), isTrue);
+      expect(t44.contains('공용 IPv4'), isTrue);
+    });
+  });
+
+  group('정정 날짜·출처 (Task 4.x)', () {
+    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+      for (final id in [
+        'saa-t4-1',
+        'saa-t4-2',
+        'saa-t4-3',
+        'saa-t4-4',
+        'saa-t4-5'
+      ]) {
+        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
+            reason: '$id lastVerified 누락');
+      }
+    });
+
+    test('새로 인용한 공식 출처가 실려 있다', () {
+      expect(doc('saa-t4-1').contains('preserving-volumes-on-termination'),
+          isTrue);
+      expect(doc('saa-t4-2').contains('savingsplans/latest/userguide/plan-types'),
+          isTrue);
+      expect(doc('saa-t4-3').contains('USER_WorkingWithReservedDBInstances'),
+          isTrue);
+      expect(doc('saa-t4-4').contains('privatelink/pricing'), isTrue);
+      expect(doc('saa-t4-5').contains('budgets-controls'), isTrue);
+    });
+  });
 }
