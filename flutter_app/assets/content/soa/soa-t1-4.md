@@ -273,4 +273,3 @@ ELB는 트래픽 라우팅 담당이고 인스턴스 수명 주기 관리는 Aut
 3. EC2 인스턴스 상태 확인(시스템 vs 인스턴스) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html
 4. EC2 인스턴스 자동 복구 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recovery.html
 5. ELB 대상 상태 확인(ALB) — https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
-</content>

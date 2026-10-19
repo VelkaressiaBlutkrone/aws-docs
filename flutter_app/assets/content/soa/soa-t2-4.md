@@ -18,7 +18,9 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html
   - title: 신뢰성 기둥 — AWS Well-Architected Framework (공식)
     url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
-lastVerified: 2026-06-12
+  - title: DynamoDB 글로벌 테이블 — MREC·MRSC (공식)
+    url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
+lastVerified: 2026-10-19
 ---
 
 # DR·데이터 복원력 — RTO/RPO·S3 복제·리전 장애 대비
@@ -161,7 +163,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 | **S3 객체** | CRR | 비동기(버전 관리 전제) |
 | **RDS(비-Aurora)** | 교차 리전 읽기 복제본 / 스냅샷 복사 | 비동기 / 스냅샷 시점 |
 | **Aurora** | Global Database | 비동기(1초 미만 지연) |
-| **DynamoDB** | Global Tables | 멀티 리전 활성·활성, 최종 일관성 |
+| **DynamoDB** | Global Tables | 멀티 리전 읽기·쓰기. 생성 시 일관성 모드 선택 — **MREC**(멀티 리전 최종 일관성, 기본) 또는 **MRSC**(멀티 리전 강한 일관성, 동일 계정 구성만). 생성 후 변경 불가 |
 | **통합 백업** | AWS Backup 교차 리전 복사 | 정책 기반 |
 
 > 트래픽 전환은 **Route 53 장애 조치 라우팅**(헬스 체크 기반)으로 자동화합니다(상세는 `soa-t2-2`). DNS TTL 전파 지연을 줄이려면 짧은 TTL이나 Global Accelerator를 고려합니다.
@@ -281,4 +283,6 @@ CRR은 버킷에서 발생하는 변경 이벤트(PUT·DELETE 등)를 감지해 
 3. RDS 교차 리전 읽기 전용 복제본 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html
 4. RDS 스냅샷 복사(교차 리전) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html
 5. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
-</content>
+6. DynamoDB 글로벌 테이블(MREC·MRSC 일관성 모드) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
+
+> 📝 **2026-10-19 정정**: DynamoDB 글로벌 테이블 칸에 최종 일관성만 적었던 서술을 정정했습니다 — 생성 시 **MREC(기본)와 MRSC** 중 하나를 고르고, 생성 후에는 바꿀 수 없으며 MRSC는 동일 계정 구성만 지원합니다(근거 6번).

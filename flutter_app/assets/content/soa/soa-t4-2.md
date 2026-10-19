@@ -20,7 +20,9 @@ sources:
     url: https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html
   - title: AWS Trusted Advisor (공식)
     url: https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
-lastVerified: 2026-06-12
+  - title: AWS Support 플랜 — 현행 목록 (공식)
+    url: https://aws.amazon.com/premiumsupport/plans/
+lastVerified: 2026-10-19
 ---
 
 # 규정 준수·거버넌스 — Config·Security Hub·GuardDuty·Inspector
@@ -171,12 +173,12 @@ lastVerified: 2026-06-12
 | **성능** | 과소/과대 프로비저닝, 서비스 한도 근접 |
 | **서비스 한도(할당량)** | 계정 한도 사용률 |
 
-> 전체 점검 항목은 **Business/Enterprise Support 플랜**에서 열립니다. 기본 플랜은 일부 보안·서비스 한도 점검만 제공합니다.
+> **점검 전체**는 **AWS Business Support+ · AWS Enterprise Support · AWS Unified Operations** 플랜 고객에게 제공됩니다. **Basic Support** 플랜에서는 **서비스 한도 범주의 모든 점검**과 **보안·내결함성 범주의 선택된 점검**만 콘솔에서 볼 수 있고, **자동 갱신이 제공되지 않아** 보안 범주 점검은 수동으로 새로 고쳐야 합니다. (과거 자료의 Developer·Business·Enterprise On-Ramp 플랜은 **2027-01-01 종료** 예정이라 플랜 명칭이 달라졌습니다.)
 
-> 🧠 원리: 왜 Trusted Advisor의 전체 점검 항목이 유료 Support 플랜에서만 열릴까요?
-> AWS 공식 문서는 비용 최적화·내결함성·성능 범주의 전체 점검이 Business/Enterprise Support 플랜에서 제공된다고 명시합니다.
-> 기본 플랜에서 열리는 항목은 일부 보안(퍼블릭 S3·루트 MFA 미설정 등)과 서비스 한도 점검으로 제한됩니다.
-> 운영자 관점에서는 기본 플랜 환경을 점검할 때, 보이지 않는 점검 항목이 있을 수 있다는 것을 전제로 Support 플랜별 점검 범위를 먼저 확인해야 합니다.
+> 🧠 원리: 왜 Trusted Advisor의 점검 범위가 지원 플랜에 따라 달라질까요?
+> Trusted Advisor 점검은 계정 구성을 지속적으로 평가하고 결과를 갱신하는 운영 서비스이므로, AWS는 이 범위를 지원 플랜의 구성 요소로 제공합니다.
+> Basic 플랜에서는 서비스 한도 전체와 보안·내결함성의 선택된 점검만 열리고 자동 갱신이 없어, 운영자가 콘솔에서 직접 새로 고쳐야 최신 결과를 봅니다.
+> 따라서 Basic 환경을 점검할 때는 "보이지 않는 점검 항목이 있고, 보이는 항목도 자동으로 갱신되지 않는다"는 두 가지를 전제로 결과를 읽어야 합니다.
 
 ### 6) Amazon Detective (간단 참고)
 
@@ -197,7 +199,7 @@ lastVerified: 2026-06-12
 - **Inspector = 취약점(CVE) 스캔**. 대상은 **EC2·ECR(컨테이너)·Lambda**. 지속 재스캔.
 - **Macie = S3 민감정보(PII) 탐지** (데이터 *내용*). Inspector(취약점)·GuardDuty(위협)와 혼동 금지.
 - **Security Hub = 통합·표준 점검(CIS/FSBP)·보안 점수**. 직접 탐지하지 않고 결과를 **ASFF**로 모은다.
-- **Trusted Advisor 5범주**: 비용·보안·내결함성·성능·서비스 한도. 전체 점검은 Business/Enterprise 지원 플랜.
+- **Trusted Advisor 5범주**: 비용·보안·내결함성·성능·서비스 한도. 점검 전체는 **Business Support+·Enterprise·Unified Operations** 플랜, **Basic**은 서비스 한도 전체 + 보안·내결함성 선택 점검(자동 갱신 없음).
 - **Detective = 사후 근본 원인 조사**(탐지 아님).
 - **결과 통합 흐름**: 탐지 도구(GuardDuty/Inspector/Macie/Config) → Security Hub 집계 → EventBridge → Lambda/SSM 자동 대응.
 
@@ -223,8 +225,8 @@ lastVerified: 2026-06-12
 6. **"Config 자동 교정은 Lambda를 직접 호출한다."** → Config의 자동 교정은 **SSM Automation 런북**을 실행합니다(런북 안에서 Lambda를 부를 수는 있음).
    *(원리: §1 본문 — Config 운영 흐름에서 교정 단계는 SSM Automation 런북을 실행하며, 런북이 필요에 따라 추가 서비스를 호출하는 구조다.)*
 
-7. **"Trusted Advisor 모든 점검이 무료다."** → 전체 점검 항목은 **Business/Enterprise Support 플랜**에서 제공됩니다. 기본 플랜은 일부만 열립니다.
-   *(원리: §5 — 전체 점검은 Business/Enterprise Support 플랜에서만 제공되며, 기본 플랜은 일부 보안·서비스 한도 점검만 열린다.)*
+7. **"Trusted Advisor 모든 점검을 어느 계정에서나 볼 수 있다."** → 점검 전체는 **Business Support+ · Enterprise · Unified Operations** 플랜에서 제공됩니다. **Basic**에서는 서비스 한도 범주 전체와 보안·내결함성의 선택된 점검만 열리고 자동 갱신도 없습니다.
+   *(원리: §5 — 점검은 지원 플랜의 구성 요소로 제공되며, Basic은 범위와 갱신 방식이 모두 제한된다.)*
 
 ---
 
@@ -278,4 +280,7 @@ Config 자동 교정은 실행 흐름을 SSM Automation에 위임하며, 런북�
 3. AWS Security Hub — 소개 — https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
 4. Amazon GuardDuty — 소개 — https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html
 5. Amazon Inspector — 소개 — https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html
-6. AWS Trusted Advisor — https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
+6. AWS Trusted Advisor — 플랜별 점검 범위·Basic 수동 갱신 — https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
+7. AWS Support 플랜(현행 목록) — https://aws.amazon.com/premiumsupport/plans/
+
+> 📝 **2026-10-19 정정**: Trusted Advisor 점검 범위를 구식 유료 지원 플랜 명칭으로 적었던 §5·시험 포인트·함정 7을 현행 기준으로 고쳤습니다 — 점검 전체는 **Business Support+ · Enterprise · Unified Operations**에 제공되고, **Basic**은 서비스 한도 범주 전체와 보안·내결함성의 선택된 점검만 열리며 **자동 갱신이 없습니다**(근거 6번). Developer·Business·Enterprise On-Ramp 플랜의 2027-01-01 종료 예정도 함께 적었습니다(근거 6·7번).

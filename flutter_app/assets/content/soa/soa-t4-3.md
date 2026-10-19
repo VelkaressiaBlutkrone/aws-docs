@@ -20,7 +20,11 @@ sources:
     url: https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html
   - title: S3 퍼블릭 액세스 차단 (Block Public Access) (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
-lastVerified: 2026-06-12
+  - title: KMS 키 정책 만들기 — 계정 위임·암시적 거부 (공식)
+    url: https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html
+  - title: AWS Certificate Manager 요금 (공식)
+    url: https://aws.amazon.com/certificate-manager/pricing/
+lastVerified: 2026-10-19
 ---
 
 # 데이터·인프라 보호 — KMS·암호화·Secrets Manager·ACM
@@ -89,7 +93,7 @@ lastVerified: 2026-06-12
 | **대칭(Symmetric)** | 단일 키로 암·복호화. KMS 기본값. S3·EBS 등 대부분의 저장 데이터 암호화 |
 | **비대칭(Asymmetric)** | 공개/개인 키 쌍. 암호화 또는 **서명/검증**. KMS 밖 대상과의 암호화·디지털 서명에 사용 |
 
-> **키 정책(Key Policy)**: CMK에 직접 붙는 **리소스 기반 정책**입니다. IAM 정책만으로는 CMK에 접근할 수 없고, **키 정책이 반드시 허용**해야 합니다(키 정책 + IAM 정책의 교집합).
+> **키 정책(Key Policy)**: CMK에 직접 붙는 **리소스 기반 정책**이며 접근 판단의 출발점입니다. 공식 문서는 "키에 대한 접근을 **명시적으로 허용하지 않으면 암시적으로 거부**된다"고 규정합니다. 키 정책의 주체가 **계정 주체**(`arn:aws:iam::<계정ID>:root`)인 문장은 어떤 IAM 주체에게도 권한을 직접 주지 않고, **그 계정이 IAM 정책으로 권한을 위임할 수 있게** 합니다(기본 키 정책의 `EnableIAMUserPermissions` 문장). 따라서 ① 키 정책이 계정에 위임한 상태에서 IAM 정책이 Allow하거나, ② 키 정책이 해당 주체(역할·사용자)를 직접 허용하면 접근됩니다. 교차 계정은 **키 정책과 상대 계정 IAM 정책 양쪽**에 권한이 있어야 합니다.
 
 > 🧠 원리: 왜 KMS는 키 자료를 서비스 외부로 평문 반출하지 않을까요?
 > 키 자료가 클라이언트 메모리나 디스크에 평문으로 존재하는 순간, 해당 환경이 침해되면 암호화된 모든 데이터가 위험해집니다.
@@ -181,7 +185,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 
 > 공식 정의: **"공인·사설 SSL/TLS 인증서를 생성·저장·갱신하는 서비스."**
 
-- **공인 인증서**: ACM이 발급하는 공인 TLS 인증서는 **무료**이며, ACM이 직접 발급한 경우 **만료 전 자동 갱신**(DNS/이메일 검증 유효 시).
+- **공인 인증서**: ACM과 **통합 서비스**(ELB·CloudFront·API Gateway 등)에 쓰는 공인 인증서는 **추가 비용 없이** 발급되고, ACM이 직접 발급한 경우 **만료 전 관리형 갱신**이 이뤄집니다(DNS 검증이면 완전 자동). 단 **내보내기 가능(exportable) 공인 인증서는 유료**로, 발급·갱신 시 표준 FQDN **$7**·와일드카드 **$79**가 청구됩니다(요금 페이지 기준).
 - **사설 인증서**: **ACM Private CA(AWS Private CA)**로 내부용 사설 인증서 발급.
 - **가져온 인증서**: 외부 CA 인증서를 가져올 수 있으나 **자동 갱신은 미지원**.
 
@@ -221,9 +225,9 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 - **SSE-S3**(AWS 관리·간단) / **SSE-KMS**(키 정책·감사·버킷 키로 비용 절감) / **SSE-C**(고객 키 제공·AWS가 저장 안 함·분실 시 복구 불가).
 - **RDS 암호화는 생성 후 직접 전환 불가** → 스냅샷 → 암호화 복사 → 복원.
 - **Secrets Manager = 자동 교체 내장**(RDS 통합), **Parameter Store = 자동 교체 없음**(SecureString은 무료).
-- **ACM 공인 인증서 무료 + 자동 갱신**. **CloudFront 인증서는 us-east-1**, ALB/API GW는 같은 리전.
+- **ACM 공인 인증서는 통합 서비스에 쓰면 추가 비용 없음 + 관리형 갱신**(내보내기 가능 인증서는 유료). **CloudFront 인증서는 us-east-1**, ALB/API GW는 같은 리전.
 - **S3 보호**: 버킷 정책 + **퍼블릭 액세스 차단(마스터 스위치)** + VPC 엔드포인트 정책. `aws:SecureTransport`로 HTTPS 강제.
-- **CMK 접근 = 키 정책 + IAM 정책 둘 다 Allow**여야 한다.
+- **CMK 접근은 키 정책이 출발점**: 명시 허용이 없으면 암시적 거부. 계정 주체(`:root`) 문장은 **IAM 정책으로의 위임** 선언이며, 교차 계정은 키 정책과 상대 계정 IAM 정책 **양쪽** 허용이 필요하다.
 
 ---
 
@@ -247,8 +251,8 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 6. **"CloudFront 인증서를 서비스 리전(예: 서울)에서 발급하면 된다."** → CloudFront 인증서는 반드시 **us-east-1**에서 발급해야 연결됩니다.
    *(원리: §7 — CloudFront는 ACM 인증서를 us-east-1에서만 조회하므로, 다른 리전에서 발급한 인증서는 연결 목록에 표시되지 않는다.)*
 
-7. **"CMK는 IAM 정책만 Allow하면 쓸 수 있다."** → CMK는 **키 정책**이 별도로 필요합니다. 키 정책에 해당 주체가 허용되지 않으면 IAM 정책이 Allow여도 접근 불가입니다.
-   *(원리: §1 — KMS 키 정책은 리소스 기반 정책으로 IAM 정책과 교집합이 적용되어 둘 다 Allow여야만 접근이 허용된다.)*
+7. **"CMK는 IAM 정책만 Allow하면 쓸 수 있다."** → 키 정책이 출발점입니다. 키 정책이 계정 주체(`:root`)로 **IAM 정책에 권한을 위임**하고 있거나 해당 주체를 직접 허용해야 하며, 명시 허용이 없으면 **암시적으로 거부**됩니다.
+   *(원리: §1 — 키 정책은 리소스 기반 정책이고, 계정 위임 문장이 없으면 IAM 정책의 Allow가 그 KMS 키에 닿지 않는다.)*
 
 8. **"퍼블릭 액세스 차단을 켜도 버킷 정책으로 공개할 수 있다."** → 퍼블릭 액세스 차단은 **마스터 스위치**라 퍼블릭을 부여하는 ACL·버킷 정책을 무력화합니다. 차단이 켜져 있으면 공개되지 않습니다.
    *(원리: §8 — 퍼블릭 액세스 차단은 버킷 정책과 ACL 두 경로를 모두 일괄 차단해 개별 정책 실수를 계정 단위로 방어한다.)*
@@ -306,3 +310,7 @@ SSE-KMS 기본 구성에서는 객체 1개를 쓰거나 읽을 때마다 KMS API
 4. AWS Secrets Manager — 소개 — https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
 5. AWS Certificate Manager — 개요 — https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html
 6. S3 퍼블릭 액세스 차단 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+7. KMS 키 정책 만들기 — 계정 주체의 IAM 위임·암시적 거부 — https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html
+8. AWS Certificate Manager 요금(내보내기 가능 인증서 $7·$79) — https://aws.amazon.com/certificate-manager/pricing/
+
+> 📝 **2026-10-19 정정**: ① 키 정책을 IAM 정책과의 교집합으로 설명했던 §1·시험 포인트·함정 7을 공식 구조로 고쳤습니다 — 키 정책의 계정 주체 문장은 **IAM 정책으로의 위임** 선언이고, 명시 허용이 없으면 **암시적 거부**입니다(근거 7번). ② ACM 공인 인증서를 무료로 단정했던 서술을 **통합 서비스 사용 시 추가 비용 없음 / 내보내기 가능 인증서는 유료**로 정정했습니다(근거 8번).

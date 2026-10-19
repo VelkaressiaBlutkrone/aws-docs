@@ -328,5 +328,3 @@ CloudWatch의 기본 EC2 지표는 하이퍼바이저가 외부에서 관찰할 
 4. 구독 필터를 사용한 실시간 로그 처리 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html
 5. CloudWatch Logs Insights 쿼리 구문 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html
 6. CloudWatch 에이전트 설치 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html
-</content>
-</invoke>
