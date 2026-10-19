@@ -293,5 +293,3 @@ ASG의 **상태 확인 유형에 ELB 상태 확인을 추가(활성화)**합니�
 4. Auto Scaling 인스턴스의 상태 확인(EC2 vs ELB) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html
 5. Amazon EC2 Auto Scaling 수명 주기 후크 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html
 6. Elastic Load Balancing 작동 방식 — https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
-</content>
-</invoke>

@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
   - title: 버스트 성능 인스턴스 구성 (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략
@@ -81,8 +81,9 @@ lastVerified: 2026-06-12
 ```
 m  7  g  d  .  2xlarge
 │  │  │  │     └─ 크기 (nano / micro / small / medium / large / xlarge / …)
-│  │  │  └──── 기능 접미사 (d=NVMe, n=네트워크 강화, b=EBS 최적화 등)
-│  │  └─────── 프로세서 (없음=Intel, a=AMD, g=Graviton/ARM)
+│  │  │  └──── 기능 접미사 (d=인스턴스 스토어, n=네트워크·EBS 최적화, b=블록 스토리지 최적화,
+│  │  │             e=추가 스토리지/메모리, z=고주파수, flex 등)
+│  │  └─────── 프로세서 (i=Intel, a=AMD, g=Graviton/ARM)
 │  └────────── 세대 (숫자가 클수록 최신)
 └───────────── 패밀리 (m=범용, c=컴퓨팅, r=메모리 등)
 ```
@@ -119,7 +120,7 @@ m  7  g  d  .  2xlarge
 
 | 프로세서 | 코드 접미사 | 특징 |
 |---|---|---|
-| Intel (Xeon) | 없음 | 광범위한 소프트웨어 호환성 |
+| Intel (Xeon) | `i` (예: M8i·C8i·R8i) | 광범위한 소프트웨어 호환성 |
 | AMD (EPYC) | `a` | Intel 대비 유사 성능, 가격 경쟁력 |
 | AWS Graviton (ARM) | `g` | 동급 x86 대비 최대 40% 가격-성능비 우위 (AWS 발표 기준), 전력 효율 |
 | AWS Trainium | Trn | ML 학습 전용 칩 |
@@ -338,3 +339,6 @@ EFA 경로:
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 8. 버스트 성능 인스턴스 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html (게이트 검수 반영: 2026-06-12)
 9. 버스트 성능 인스턴스 구성 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html (게이트 검수 반영: 2026-06-12)
+10. EC2 인스턴스 유형 명명 규칙(i=Intel, b=Block storage optimization, n=Network and EBS optimized) — https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-type-names.html
+
+> 📝 **2026-10-19 정정**: ① 프로세서 접미사를 정정했습니다 — Intel은 접미사 **없음이 아니라 `i`**이며, 이 문서의 대표 유형 M8i·C8i·R8i·X8i가 그 예입니다(근거 10번). ② 기능 접미사 설명을 공식 표현에 맞췄습니다 — **b = 블록 스토리지 최적화**, **n = 네트워크·EBS 최적화**(EBS 포함), 그 밖에 d·e·z·flex가 있습니다.

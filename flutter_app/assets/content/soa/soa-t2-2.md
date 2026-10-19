@@ -308,4 +308,3 @@ RDS Multi-AZ는 장애 조치 시 스탠바이를 Primary로 승격하면서 **R
 3. RDS 읽기 전용 복제본 작업 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
 4. NAT 게이트웨이 — 고가용성 구성 — https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
 5. Route 53 DNS 장애 조치 구성 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html
-</content>

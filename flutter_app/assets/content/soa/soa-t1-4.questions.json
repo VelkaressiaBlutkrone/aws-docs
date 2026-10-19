@@ -1,0 +1,417 @@
+{
+  "examGuideTaskId": "soa-t1-4",
+  "taskTitle": "가용성 지표 기반 문제 식별·해결 (Health Dashboard·상태 확인)",
+  "domain": 1,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t1-4-q1",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "foundational",
+      "stem": "특정 리전의 애플리케이션이 응답하지 않는다. AWS 측 광역 장애인지 내 구성 문제인지 가장 먼저 확인할 곳은?",
+      "options": [
+        "AWS Health Dashboard",
+        "CloudWatch Logs Insights 쿼리",
+        "인스턴스의 OS 로그",
+        "CloudTrail 이벤트 기록"
+      ],
+      "correct": 0,
+      "explanation": "장애 의심 시 첫 단계는 AWS Health Dashboard 확인입니다. AWS 측 광역 장애라면 내 구성을 수정해도 해결되지 않으므로, AWS 측 문제와 내 측 문제를 먼저 가른 뒤 적절한 복구 수단을 고릅니다.",
+      "wrongExplanations": {
+        "1": "로그 분석은 내 측 문제로 좁혀진 뒤의 단계입니다. AWS 광역 장애라면 로그에서 원인을 찾을 수 없습니다.",
+        "2": "OS 로그도 같은 이유로 후순위입니다.",
+        "3": "CloudTrail은 누가 어떤 API를 호출했는지 감사하는 기록이며 서비스 상태를 알려 주지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Health란 무엇인가",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q2",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "foundational",
+      "stem": "'내 계정의 어떤 리소스가 이번 이벤트에 영향을 받는지'와 '예정된 유지 관리'를 확인하려면 어떤 뷰를 보는가?",
+      "options": [
+        "Service health(서비스 상태) 뷰",
+        "Your account(계정 상태) 뷰",
+        "CloudWatch 대시보드",
+        "Trusted Advisor 체크"
+      ],
+      "correct": 1,
+      "explanation": "Service health는 모든 고객에게 동일한 '서비스가 전반적으로 정상인가' 뷰입니다. Your account(계정) 뷰는 나에게만 보이는 개인화된 뷰로, 영향받는 리소스와 예정된 유지 관리·권장 조치를 알려 줍니다.",
+      "wrongExplanations": {
+        "0": "서비스 전반 상태만 보여 주며 내 리소스 영향 여부는 알려 주지 않습니다.",
+        "2": "CloudWatch 대시보드는 내가 구성한 지표를 모아 보는 화면입니다.",
+        "3": "Trusted Advisor는 모범 사례 점검 도구이며 AWS 측 이벤트 알림 뷰가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Health Dashboard — 계정 상태 보기",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/aws-health-dashboard-status.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q3",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "difficulty": "applied",
+      "stem": "운영자가 대시보드를 상시 확인하지 않아도 AWS Health 이벤트를 즉시 전달받고 사전 조치를 자동화하려 한다. 모범 사례 구성은?",
+      "options": [
+        "AWS Health 이벤트를 EventBridge 규칙으로 받아 SNS 알림·Lambda 자동화를 트리거한다",
+        "Health Dashboard를 5분마다 새로 고치는 브라우저 확장을 쓴다",
+        "CloudTrail 추적을 켜고 S3 이벤트 알림을 구성한다",
+        "CloudWatch 에이전트로 Health 지표를 수집한다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Health 이벤트는 EventBridge로 들어오므로 규칙으로 매칭해 SNS 알림이나 Lambda 자동화를 트리거할 수 있습니다. 예정된 EC2 유지 관리(재부팅) 이벤트를 받아 트래픽 전환·스냅샷 생성 같은 사전 조치도 자동화할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "수동 확인은 대응 지연을 만들고 자동 조치가 불가능합니다.",
+        "2": "CloudTrail은 API 감사 기록이며 Health 이벤트 전달 경로가 아닙니다.",
+        "3": "CloudWatch 에이전트는 OS 지표·로그 수집 도구입니다."
+      },
+      "sources": [
+        {
+          "title": "EventBridge를 사용한 AWS Health 이벤트 모니터링",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q4",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "EC2 인스턴스에서 시스템 상태 확인(System status check)이 실패했다. 책임 경계와 적절한 조치는?",
+      "options": [
+        "AWS 인프라·호스트 문제이므로 인스턴스를 중지·시작해 다른 호스트로 이전하거나 자동 복구를 적용한다",
+        "내 OS 구성 문제이므로 네트워크 설정과 파일시스템을 점검한다",
+        "보안 그룹 규칙을 확인하고 인바운드를 허용한다",
+        "인스턴스 유형을 더 큰 크기로 변경한다"
+      ],
+      "correct": 0,
+      "explanation": "시스템 상태 확인은 인스턴스를 실행하는 AWS 인프라·호스트를 점검합니다. 실패는 호스트 하드웨어·네트워크·전원 문제를 뜻하므로 인스턴스를 다른 정상 호스트로 이전(중지 후 시작) 하거나 자동 복구로 대응합니다.",
+      "wrongExplanations": {
+        "1": "그것은 인스턴스 상태 확인(Instance status check) 실패에 해당하는 조치입니다.",
+        "2": "보안 그룹 문제는 상태 확인 실패로 나타나지 않습니다.",
+        "3": "인스턴스 크기는 호스트 장애와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스 상태 확인",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q5",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "인스턴스 상태 확인(Instance status check)만 실패하고 시스템 상태 확인은 통과했다. 가장 가능성 높은 원인은?",
+      "options": [
+        "호스트 하드웨어 장애",
+        "AZ 전체 네트워크 중단",
+        "잘못된 네트워크 구성·메모리 고갈·손상된 파일시스템 등 인스턴스 내부 문제",
+        "리전 간 라우팅 문제"
+      ],
+      "correct": 2,
+      "explanation": "인스턴스 상태 확인은 인스턴스 자체의 OS·구성을 점검합니다. 실패 원인은 잘못된 네트워크 구성, 메모리 고갈, 손상된 파일시스템, 부팅 실패 등 내부 문제이며 사용자가 직접 수정해야 합니다.",
+      "wrongExplanations": {
+        "0": "호스트 하드웨어 장애는 시스템 상태 확인 실패로 나타납니다.",
+        "1": "AZ 차원 문제도 시스템 상태 확인 영역입니다.",
+        "3": "리전 간 라우팅 문제는 인스턴스 상태 확인 항목이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스 상태 확인 — 인스턴스 상태 확인",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q6",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "foundational",
+      "stem": "시스템 또는 인스턴스 상태 확인 중 하나라도 실패했는지 한 지표로 감시하려면 어떤 CloudWatch 지표를 쓰는가?",
+      "options": [
+        "`StatusCheckFailed`",
+        "`StatusCheckFailed_System`",
+        "`StatusCheckFailed_Instance`",
+        "`CPUUtilization`"
+      ],
+      "correct": 0,
+      "explanation": "`StatusCheckFailed`는 시스템·인스턴스 상태 확인 중 하나라도 실패하면 보고됩니다. 원인별로 구분해 대응하려면 `StatusCheckFailed_System`과 `StatusCheckFailed_Instance`를 각각 사용합니다.",
+      "wrongExplanations": {
+        "1": "시스템 상태 확인 실패만 반영합니다.",
+        "2": "인스턴스 상태 확인 실패만 반영합니다.",
+        "3": "CPU 사용률은 상태 확인과 무관한 성능 지표입니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 상태 확인 지표",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q7",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "EC2 자동 복구(recover) 작업이 수행된 뒤 인스턴스는 어떤 상태가 되는가?",
+      "options": [
+        "새 인스턴스 ID와 새 프라이빗 IP로 교체된다",
+        "동일한 인스턴스 ID·프라이빗 IP·Elastic IP·메타데이터를 유지한 채 다른 호스트로 이전된다",
+        "AMI에서 새 인스턴스가 생성되고 EBS 볼륨이 재연결된다",
+        "Auto Scaling 그룹이 새 인스턴스를 시작하고 기존 인스턴스를 종료한다"
+      ],
+      "correct": 1,
+      "explanation": "복구는 새 인스턴스를 만드는 것이 아니라 기존 인스턴스를 다른 정상 호스트로 이전하는 동작입니다. 따라서 인스턴스 ID·프라이빗 IP·Elastic IP·메타데이터가 유지되며, 다만 인메모리 데이터는 유실될 수 있습니다.",
+      "wrongExplanations": {
+        "0": "식별자는 보존됩니다.",
+        "2": "AMI에서 재생성하는 방식이 아닙니다.",
+        "3": "ASG의 인스턴스 교체는 별개 메커니즘입니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스 복구",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q8",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "CloudWatch 경보로 EC2 자동 복구를 구성할 때 감시해야 하는 지표와 경보 작업의 조합은?",
+      "options": [
+        "`StatusCheckFailed_Instance` + EC2 종료 작업",
+        "`StatusCheckFailed_System` + EC2 복구 작업",
+        "`CPUUtilization` + Auto Scaling 정책",
+        "`StatusCheckFailed` + SNS 알림만"
+      ],
+      "correct": 1,
+      "explanation": "자동 복구는 인프라 계층 문제, 즉 시스템 상태 확인 실패에 대응합니다. `StatusCheckFailed_System` 지표에 경보를 걸고 경보 작업으로 EC2 복구(`arn:aws:automate:<region>:ec2:recover`)를 지정합니다.",
+      "wrongExplanations": {
+        "0": "인스턴스 내부 문제는 복구로 풀리지 않을 수 있고, 종료는 데이터 손실 위험이 있습니다.",
+        "2": "CPU 기반 정책은 용량 조정용이며 호스트 장애 복구와 다릅니다.",
+        "3": "알림만으로는 자동 복구가 일어나지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스 복구 — CloudWatch 경보 작업",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q9",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "인스턴스 내부에서 애플리케이션이 메모리를 모두 소진해 응답하지 않는다. EC2 자동 복구로 해결되지 않는 이유는?",
+      "options": [
+        "자동 복구는 시스템 상태 확인(인프라) 문제에 대응하며, OS 내부 문제는 호스트를 바꿔도 재현되기 때문",
+        "자동 복구는 Nitro 인스턴스에서만 동작하기 때문",
+        "자동 복구는 Elastic IP가 연결된 인스턴스에서만 동작하기 때문",
+        "자동 복구는 경보 평가 기간이 1시간이기 때문"
+      ],
+      "correct": 0,
+      "explanation": "자동 복구는 호스트·인프라 문제로 손상된 인스턴스를 다른 호스트로 이전하는 동작입니다. OS·애플리케이션 내부 원인(메모리 고갈 등)은 호스트를 옮겨도 그대로 재현되므로 구성·코드를 직접 수정해야 합니다.",
+      "wrongExplanations": {
+        "1": "인스턴스 세대 제약이 이 시나리오의 핵심이 아닙니다.",
+        "2": "Elastic IP 연결 여부가 복구 가능 조건이 아닙니다.",
+        "3": "평가 기간은 경보 설정값이며 근본 원인 설명이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스 상태 확인",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html"
+        },
+        {
+          "title": "EC2 인스턴스 복구",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q10",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "foundational",
+      "stem": "ELB 대상 상태 확인에서 '연속 몇 번 실패하면 unhealthy로 전환되는지'를 정하는 설정은?",
+      "options": [
+        "Interval",
+        "Timeout",
+        "UnhealthyThreshold",
+        "HealthyThreshold"
+      ],
+      "correct": 2,
+      "explanation": "UnhealthyThreshold는 연속 실패 횟수 기준으로 대상을 unhealthy로 전환하는 설정이고, HealthyThreshold는 연속 성공 횟수로 healthy로 복귀시키는 설정입니다. Interval은 확인 주기, Timeout은 응답 대기 시간입니다.",
+      "wrongExplanations": {
+        "0": "Interval은 상태 확인을 얼마나 자주 보낼지 정합니다.",
+        "1": "Timeout은 한 번의 확인에서 응답을 얼마나 기다릴지 정합니다.",
+        "3": "HealthyThreshold는 복귀 조건입니다."
+      },
+      "sources": [
+        {
+          "title": "대상 그룹 상태 확인 (Application Load Balancer)",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q11",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "ELB가 어떤 인스턴스를 unhealthy로 판정했다. 기본적으로 어떤 일이 일어나는가?",
+      "options": [
+        "로드 밸런서가 해당 대상으로의 트래픽 라우팅을 중단하고, 다시 healthy가 되면 재개한다",
+        "로드 밸런서가 인스턴스를 즉시 종료하고 새 인스턴스를 시작한다",
+        "인스턴스가 자동으로 재부팅된다",
+        "대상 그룹이 삭제된다"
+      ],
+      "correct": 0,
+      "explanation": "로드 밸런서는 healthy인 대상에만 트래픽을 라우팅합니다. unhealthy 판정 시 라우팅을 중단해 비정상 인스턴스를 격리하고, 다시 healthy가 되면 라우팅을 재개합니다. 인스턴스 교체는 Auto Scaling의 역할입니다.",
+      "wrongExplanations": {
+        "1": "종료·교체는 ASG가 수행하며, ELB 자체는 인스턴스 수명 주기를 관리하지 않습니다.",
+        "2": "ELB는 인스턴스를 재부팅하지 않습니다.",
+        "3": "대상 그룹은 삭제되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "대상 그룹 상태 확인",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q12",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "ELB가 unhealthy로 본 인스턴스를 자동으로 종료·교체해 자가 치유를 구현하려면?",
+      "options": [
+        "Auto Scaling 그룹의 상태 확인 유형을 ELB로 설정한다",
+        "ELB의 UnhealthyThreshold를 1로 낮춘다",
+        "대상 그룹의 등록 해제 지연을 0으로 설정한다",
+        "CloudWatch 경보로 EC2 복구 작업을 구성한다"
+      ],
+      "correct": 0,
+      "explanation": "ASG 상태 확인 유형을 ELB로 설정하면 ELB의 unhealthy 판정이 ASG 상태 확인 실패로 전달되고, ASG가 자체 교체 논리에 따라 인스턴스를 종료하고 새 인스턴스를 시작합니다.",
+      "wrongExplanations": {
+        "1": "임계값을 낮추면 판정이 빨라질 뿐 교체는 일어나지 않습니다.",
+        "2": "등록 해제 지연은 연결 드레이닝 시간 설정입니다.",
+        "3": "EC2 복구는 호스트 장애(시스템 상태 확인) 대응이며 애플리케이션 unhealthy 교체와 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 그룹에 Elastic Load Balancing 상태 확인 추가",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-add-elb-healthcheck.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q13",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "상태 확인 경로가 정적 페이지(`/index.html`)를 반환하도록 설정돼 있어, DB 연결이 끊긴 인스턴스도 healthy로 유지된다. 가장 적절한 개선은?",
+      "options": [
+        "상태 확인 주기를 더 짧게 설정한다",
+        "애플리케이션이 실제로 동작하는지(예: DB 연결까지) 검사하는 전용 `/health` 엔드포인트를 상태 확인 경로로 지정한다",
+        "성공 코드 범위를 200-499로 넓힌다",
+        "HealthyThreshold를 높인다"
+      ],
+      "correct": 1,
+      "explanation": "상태 확인 경로는 애플리케이션이 실제로 요청을 처리할 수 있는지 검사하도록 설계해야 합니다. 의존성(DB 등)까지 확인하는 `/health` 엔드포인트를 두면 겉으로만 살아 있는 인스턴스를 격리할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "주기를 줄여도 잘못된 검사 대상을 더 자주 확인할 뿐입니다.",
+        "2": "성공 코드를 넓히면 오히려 비정상 응답도 healthy로 간주됩니다.",
+        "3": "임계값 조정은 판정 민감도만 바꿉니다."
+      },
+      "sources": [
+        {
+          "title": "대상 그룹 상태 확인 — 경로와 성공 코드",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q14",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "API의 오류율이 올라갔다는 CloudWatch 경보를 받았다. 근본 원인을 찾기 위한 표준 진단 순서는?",
+      "options": [
+        "지표 이상 확인 → 로그(Logs/Logs Insights)에서 예외·의존성 실패 확인 → 근본 원인 판단",
+        "인스턴스를 모두 재부팅한 뒤 재현되는지 본다",
+        "인스턴스 유형을 상향 조정한 뒤 지표를 다시 본다",
+        "로그 보존 기간을 늘린 뒤 다음 발생을 기다린다"
+      ],
+      "correct": 0,
+      "explanation": "지표는 증상(느림·오류율 상승)을 알려 주고 로그는 원인(특정 예외·의존성 실패)을 알려 줍니다. 따라서 '지표 이상 → 로그 확인 → 근본 원인' 순서로 좁히며, 그 전에 AWS Health로 AWS 측 문제를 먼저 배제합니다.",
+      "wrongExplanations": {
+        "1": "재부팅은 증상만 덮고 원인을 지웁니다.",
+        "2": "용량 상향은 원인 규명 없이 비용만 올릴 수 있습니다.",
+        "3": "보존 기간 연장은 다음 사건 대비일 뿐 현재 분석이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "CloudWatch Logs Insights로 로그 데이터 분석",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-4-q15",
+      "examGuideTaskId": "soa-t1-4",
+      "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "difficulty": "applied",
+      "stem": "AWS Health가 '내 EC2 인스턴스에 예정된 유지 관리(재부팅)' 이벤트를 발행했다. 중단을 최소화하는 자동화 흐름으로 가장 적절한 것은?",
+      "options": [
+        "EventBridge 규칙으로 해당 이벤트를 매칭해 Lambda·SSM Automation으로 트래픽 전환·스냅샷 생성 등 사전 조치를 수행한다",
+        "경보를 만들어 EC2 복구 작업을 트리거한다",
+        "인스턴스를 즉시 종료하고 ASG가 새로 만들기를 기다린다",
+        "유지 관리 알림을 무시하고 재부팅 후 상태를 확인한다"
+      ],
+      "correct": 0,
+      "explanation": "Health 이벤트를 EventBridge로 받아 규칙이 일치하는 즉시 후속 작업을 트리거하면 운영자 개입 없이 사전 조치를 수행할 수 있습니다. 예정된 유지 관리 이벤트에는 트래픽 전환이나 스냅샷 생성 같은 준비 작업이 적합합니다.",
+      "wrongExplanations": {
+        "1": "EC2 복구는 호스트 장애 발생 후 대응 수단이며 예정된 유지 관리 사전 조치가 아닙니다.",
+        "2": "즉시 종료는 불필요하게 파괴적이고 데이터 손실 위험이 있습니다.",
+        "3": "무시하면 예정된 중단이 그대로 서비스 영향으로 이어집니다."
+      },
+      "sources": [
+        {
+          "title": "EventBridge를 사용한 AWS Health 이벤트 모니터링",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

@@ -18,7 +18,15 @@ sources:
     url: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+  - title: 웹 ACL 규칙 액션(종료·비종료) (공식)
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/web-acl-rule-actions.html
+  - title: Rate-based 규칙 상위 설정(평가 창·한도) (공식)
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-high-level-settings.html
+  - title: CreateWebACL — 스코프·보호 대상 리소스 (공식 API)
+    url: https://docs.aws.amazon.com/waf/latest/APIReference/API_CreateWebACL.html
+  - title: Cognito 사용자 풀 기능 플랜 (공식)
+    url: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
+lastVerified: 2026-10-19
 ---
 
 # 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager
@@ -83,10 +91,22 @@ lastVerified: 2026-06-12
 - Amazon Cognito User Pool
 - AWS App Runner 서비스
 - AWS Verified Access 인스턴스
+- AWS Amplify 애플리케이션
+- Amazon Bedrock AgentCore Gateway
+
+> **리전·스코프 규칙**: 웹 ACL은 만들 때 스코프를 고릅니다. **CloudFront 배포에 붙일 웹 ACL은 스코프 `CLOUDFRONT`이며 `us-east-1`(미국 동부 버지니아 북부)에서 만들어야** 합니다(CLI는 `--scope=CLOUDFRONT --region=us-east-1`, SDK·API는 `us-east-1` 리전 엔드포인트). 그 밖의 리소스는 스코프 `REGIONAL`이고 **리소스와 같은 리전**에 만듭니다.
 
 **웹 ACL(Web Access Control List):**
 
-웹 ACL은 WAF의 최상위 컨테이너입니다. 하나 이상의 규칙을 순서대로 평가하고, 첫 번째로 매칭된 규칙의 액션(Allow/Block/Count/CAPTCHA)을 실행합니다.
+웹 ACL은 WAF의 최상위 컨테이너입니다. 규칙을 **우선순위 숫자가 낮은 것부터** 평가하는데, **액션마다 평가를 끝내는지가 다릅니다.**
+
+| 액션 | 종료 여부 | 동작 |
+|---|---|---|
+| **Allow · Block** | **종료** | 매칭되면 그 요청에 대한 웹 ACL 평가를 멈추고 최종 처리를 확정합니다(뒤 규칙은 평가하지 않음) |
+| **Count** | **비종료** | 요청을 세고 **뒤 규칙 평가를 계속**합니다 — 규칙을 끄지 않고 영향도를 관측하는 용도 |
+| **CAPTCHA · Challenge** | **둘 다 가능** | 유효한 토큰이 있으면 Count처럼 세고 계속, 없으면 평가를 **종료**하고 퍼즐·무음 챌린지를 보냅니다 |
+
+> 어떤 규칙도 종료 액션을 내지 않으면 **웹 ACL의 기본 작업(default action)** 이 적용됩니다. 그래서 "Count 규칙을 앞에 둬서 차단이 안 됐다"는 식의 보기는 틀립니다 — Count는 흐름을 멈추지 않습니다.
 
 **규칙 유형:**
 
@@ -96,7 +116,7 @@ lastVerified: 2026-06-12
 | **지역(Geo) 규칙** | 특정 국가에서 오는 요청 필터링 |
 | **SQL Injection 탐지** | 요청 내 악성 SQL 코드 패턴 차단 |
 | **XSS 탐지** | 크로스사이트 스크립팅 스크립트 패턴 차단 |
-| **Rate-based 규칙** | 5분 또는 1분 내 특정 IP의 요청 수 초과 시 차단 (봇·브루트포스 방어) |
+| **Rate-based 규칙** | 평가 창(**60·120·300·600초** = 1·2·5·10분, **기본 300초**) 안의 요청 수가 한도를 넘으면 액션 적용. 한도 **최소 10**, 집계 기준(IP·헤더·커스텀 키) 선택 가능 (봇·브루트포스 방어) |
 | **관리형 규칙 그룹** | AWS 또는 AWS Marketplace 셀러가 제공하는 사전 구성 규칙 세트 |
 
 > **관리형 규칙 그룹**: AWS가 제공하는 `AWSManagedRulesCommonRuleSet` 같은 그룹을 웹 ACL에 추가하면 OWASP Top 10 공격 패턴을 별도 규칙 작성 없이 방어할 수 있습니다.
@@ -110,10 +130,10 @@ Count  → 통계만 수집 (규칙 테스트 시 활용)
 CAPTCHA / Challenge → 봇 여부 검증
 ```
 
-> 🧠 원리: 왜 WAF 웹 ACL은 모든 규칙을 종합 평가하지 않고 첫 매칭 규칙의 액션을 즉시 실행할까요?
-> WAF 규칙 평가는 요청당 수 밀리초 이내에 완료돼야 하므로, 모든 규칙을 끝까지 평가하면 규칙 수 증가에 비례해 지연이 쌓입니다.
-> 첫 매칭에서 결정하는 방식은 운영자가 규칙 번호 순서로 우선순위를 명시적으로 제어할 수 있게 하며, 특정 IP를 먼저 허용하거나 먼저 차단하는 예외 처리를 낮은 번호에 배치하는 것만으로 구현할 수 있습니다.
-> Allow를 먼저 두면 이후 Deny 규칙을 건너뛰고 통과되므로 화이트리스트 우선 정책을, Deny를 먼저 두면 블랙리스트 우선 정책을 비대칭 규칙 없이 표현할 수 있습니다.
+> 🧠 원리: 왜 Allow·Block만 평가를 끝내고 Count는 끝내지 않을까요?
+> Allow·Block은 요청의 **최종 처리를 확정**하는 결정이라 더 볼 규칙이 없습니다 — 그래서 종료 액션입니다.
+> 반면 Count는 "이 규칙이 매칭됐다"는 **관측 기록**일 뿐 처리를 정하지 않으므로, 여기서 평가를 멈추면 뒤 규칙의 차단 판단을 잃게 됩니다. 새 규칙을 Count로 먼저 돌려 오탐을 확인하고 Block으로 바꾸는 운영 패턴이 이 성질에 기댑니다.
+> 우선순위는 여전히 중요합니다 — 숫자가 낮은 규칙부터 평가하므로 Allow 규칙을 앞에 두면 뒤의 Block 규칙은 평가되지 않습니다(화이트리스트 우선). 반대로 Allow 대상 요청까지 Count 지표에 담으려면 Count 규칙에 **더 낮은 우선순위 숫자**를 줘 먼저 돌려야 합니다.
 
 ### 2) AWS Shield — DDoS 방어 {#shield}
 
@@ -172,7 +192,7 @@ Cognito는 두 개의 독립적인 컴포넌트로 구성됩니다.
 - 사용자 가입·로그인·디렉터리 관리
 - 로컬 사용자 또는 소셜(Google·Facebook·Apple·Amazon)·엔터프라이즈(SAML·OIDC) IdP 페더레이션 지원
 - 인증 성공 시 **JWT(ID 토큰·액세스 토큰·리프레시 토큰)** 발급
-- MFA(TOTP·SMS) 지원
+- **MFA·기능 플랜**: 사용자 풀은 **Lite · Essentials · Plus** 세 기능 플랜 중 하나를 고르고(신규 풀 기본값 **Essentials**), 플랜이 쓸 수 있는 기능을 가릅니다. **인증 앱(TOTP)·SMS MFA는 Lite부터** 가능하지만 **이메일 OTP MFA·패스키(FIDO2)·패스워드리스 로그인은 Essentials 이상**, **위험 기반 보호(위험 비밀번호·악성 로그인 탐지·사용자 활동 로그)는 Plus**입니다
 - AWS WAF 웹 ACL을 User Pool에 직접 연결 가능
 
 **Identity Pool (자격 증명 풀) — AWS 권한부여(Authorization):**
@@ -279,7 +299,7 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 - **Cognito User Pool = JWT 발급(인증)**: 앱 로그인 처리. Cognito Identity Pool = AWS STS 임시 자격증명 발급(AWS 권한부여). 둘을 혼동하면 오답.
 - **Secrets Manager = 자동 교체(rotation)**: 시험에서 "DB 비밀번호 자동 교체"가 요구사항이면 Secrets Manager가 정답. Parameter Store는 기본 자동 교체 없음.
 - **Firewall Manager = 다계정 정책 중앙화**: Organizations 기반으로 여러 계정에 WAF·Shield 정책을 일괄 배포.
-- **CloudFront + WAF**: CloudFront 배포에 WAF를 연결하면 요청이 오리진에 도달하기 전 엣지에서 필터링됩니다. us-east-1 제한 없음(WAF는 글로벌 CloudFront에 그대로 연결).
+- **CloudFront + WAF**: CloudFront 배포에 WAF를 연결하면 요청이 오리진에 도달하기 전 엣지에서 필터링됩니다. 단 **웹 ACL 자체는 스코프 `CLOUDFRONT`로 `us-east-1`에서 만들어야** 합니다(ALB·API Gateway 등은 스코프 `REGIONAL`로 리소스와 같은 리전). "리전 제한이 없다"는 보기는 오답입니다.
 
 ---
 
@@ -354,4 +374,10 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 2. How AWS Shield and Shield Advanced work (공식) — https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html
 3. What is Amazon Cognito? (공식) — https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html
 4. What is AWS Secrets Manager? (공식) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. 웹 ACL 규칙 액션(Allow·Block 종료 / Count 비종료 / CAPTCHA·Challenge 조건부) — https://docs.aws.amazon.com/waf/latest/developerguide/web-acl-rule-actions.html
+6. Rate-based 규칙 상위 설정(평가 창 60·120·300·600초, 기본 300, 한도 최소 10) — https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-high-level-settings.html
+7. CreateWebACL(보호 대상 리소스 목록 · CLOUDFRONT 스코프는 us-east-1) — https://docs.aws.amazon.com/waf/latest/APIReference/API_CreateWebACL.html
+8. Cognito 사용자 풀 기능 플랜(Lite·Essentials·Plus) — https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
+9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① 웹 ACL 평가를 "첫 매칭 액션 실행"에서 **종료/비종료 구분**(Count는 비종료)으로 고쳤습니다(근거 5번). ② Rate-based 평가 창을 **60·120·300·600초**로 정정했습니다(근거 6번). ③ 보호 대상에 **Amplify·Bedrock AgentCore Gateway**를 더하고 **CLOUDFRONT 스코프는 us-east-1** 규칙을 명시했습니다("리전 제한이 없다"는 단정 삭제, 근거 7번). ④ Cognito MFA 한 줄을 **기능 플랜 3종**으로 바꿨습니다(근거 8번).

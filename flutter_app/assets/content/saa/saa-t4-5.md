@@ -27,7 +27,7 @@ sources:
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html
   - title: 비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected
@@ -83,8 +83,8 @@ lastVerified: 2026-06-12
 | 도구 | 핵심 질문 | 데이터 범위 | 주요 출력 |
 |---|---|---|---|
 | **AWS Cost Explorer** | "지금까지 얼마를 어디에 썼나? 앞으로 얼마나 쓸까?" | 과거 13개월 + 미래 18개월 예측 | 인터랙티브 그래프·CSV·RI/SP 구매 추천 |
-| **AWS Budgets** | "예산을 초과하거나 초과할 것 같으면 알려줘 / 막아줘" | 실시간(갱신 주기 8~12시간) | 이메일·SNS 알림, Budget Actions(IAM 자동 적용) |
-| **Cost and Usage Report (CUR)** | "서비스·리소스·태그 단위로 최상세 내역이 필요하다" | 시간·일·월 단위 라인 아이템 | S3 CSV 파일 → Athena·Redshift·QuickSight 쿼리 |
+| **AWS Budgets** | "예산을 초과하거나 초과할 것 같으면 알려줘 / 막아줘" | **하루 최대 3회 갱신**(보통 8~12시간 간격) | 이메일·SNS 알림, Budget Actions(IAM·SCP·인스턴스 중지) |
+| **Cost and Usage Report (CUR)** | "서비스·리소스·태그 단위로 최상세 내역이 필요하다" | 시간·일·월 단위 라인 아이템 | S3 파일(CSV·Parquet) → Athena·Redshift·QuickSight 쿼리. 신규는 **Data Exports의 CUR 2.0** |
 | **Cost Anomaly Detection** | "예상치 못한 비용 급등을 자동으로 잡아줘" | ML 모델이 지속 학습 | 이상 감지 알림(이메일·SNS), 루트 코즈 분석 |
 
 > **한 줄 원칙**: "분석·예측 = Cost Explorer, 예산·경보·차단 = Budgets, 감사·BI = CUR, 자동 이상 감지 = Cost Anomaly Detection"
@@ -121,16 +121,18 @@ lastVerified: 2026-06-12
 | **Savings Plans 사용률 예산** | SP 활용도 | 사용률이 임계값 미달 |
 | **Savings Plans 커버리지 예산** | SP로 커버된 비율 | 커버리지가 임계값 미달 |
 
-**Budget Actions** — 임계값 초과 시 자동 조치:
+**Budget Actions** — 임계값 초과 시 조치(**자동 실행** 또는 **수동 승인 후 실행** 중 선택):
 
 ```
 예산 초과 감지
-  → IAM 정책 자동 연결 (추가 리소스 생성 차단)
-  → SNS 토픽 알림
-  → SSM Automation 문서 실행
+  → IAM 정책 연결 (추가 리소스 생성 차단)
+  → 서비스 제어 정책(SCP) 적용 (조직 단위 차단)
+  → 실행 중 인스턴스 대상 지정 (EC2·RDS 중지)
 ```
 
-> 알림 지연: Budgets 정보는 하루 최대 3회 갱신(8~12시간 간격). 초과 발생 후 알림까지 지연이 있을 수 있습니다.
+> SNS는 조치(action) 유형이 아니라 **알림 채널**입니다. 관리 계정에서 다른 계정에 SCP를 적용할 수는 있지만, 다른 계정의 EC2·RDS 인스턴스를 대상으로 지정할 수는 없습니다.
+
+> 알림 지연: Budgets 정보는 **하루 최대 3회** 갱신되고, 갱신은 보통 이전 갱신으로부터 8~12시간 뒤에 일어납니다 — 실시간이 아니므로 초과 발생 후 알림까지 지연이 있습니다.
 
 > 🧠 원리: 왜 Budget Actions는 알림만 보내는 대신 IAM 정책을 자동으로 연결하는 방식을 선택할까요?
 > AWS에서 리소스 생성 여부는 IAM 정책의 허용·거부 규칙으로 제어되므로, 예산 초과 시 Deny 정책을 연결하면 추가 리소스 생성이 즉시 차단됩니다.
@@ -148,14 +150,16 @@ lastVerified: 2026-06-12
 - 통합 분석 파이프라인:
 
 ```
-CUR (S3 CSV)
+CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
   → Amazon Athena (SQL 쿼리)
   → Amazon Redshift (DW 적재)
   → Amazon QuickSight (시각화)
 ```
 
+- **현행 방식은 Data Exports의 CUR 2.0**입니다. 기존 CUR과 같은 정보를 제공하면서 ① **고정 스키마**(기존 CUR은 사용 서비스·태그에 따라 열이 매월 달라짐), ② `resource_tags`·`cost_category`·`product`·`discount`의 **중첩 열**, ③ **SQL로 열 선택·행 필터·열 별칭** 지정을 지원합니다. 기존 파이프라인과 하위 호환되는 내보내기도 만들 수 있습니다.
+
 - 월말 인보이스 발행 후 확정(finalize). 이후 환불·크레딧 반영 시 소급 업데이트.
-- **Developer·Business·Enterprise Support 비용**은 전월 CUR 기준으로 해당 월 6~7일에 반영.
+- **AWS Support 비용**은 월말 인보이스 확정 과정에서 소급 반영됩니다(월중 CUR은 아직 반영 전인 잠정치). 참고로 현행 Support 플랜 목록은 **Basic · Business Support+ · Enterprise · Unified Operations**이며, 과거 자료의 Developer·Business·Enterprise On-Ramp 명칭과 다릅니다.
 
 > 🧠 원리: 왜 CUR은 월중에 생성되는 파일과 월말 확정 인보이스 이후 파일이 다를 수 있을까요?
 > AWS는 월중에도 현재까지의 사용량을 집계해 CUR 파일을 주기적으로 갱신하는데, 이 시점의 데이터는 아직 환불·크레딧·Support 비용이 반영되지 않은 잠정치입니다.
@@ -229,7 +233,7 @@ CUR (S3 CSV)
 
 | 도구 | 비용 관점 역할 | 분석 기반 |
 |---|---|---|
-| **AWS Compute Optimizer** | 인스턴스 과/저프로비저닝 감지 → **적정 크기(Rightsizing) 추천** | CloudWatch 지표 14일 이상 수집 |
+| **AWS Compute Optimizer** | 인스턴스 과/저프로비저닝 감지 → **적정 크기(Rightsizing) 추천** | CloudWatch 지표 **기본 룩백 14일**(유료 *향상된 인프라 지표*를 켜면 최대 **93일**) |
 | **AWS Trusted Advisor** | 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목 탐지 | 계정 스냅샷 기반 규칙 점검 |
 
 > **Compute Optimizer** = "이 인스턴스 크기가 맞나?" / **Trusted Advisor** = "이 리소스를 아직도 쓰고 있나?" — 질문이 다릅니다.
@@ -302,8 +306,8 @@ CUR (S3 CSV)
 6. **"Well-Architected 비용 최적화 원칙은 단순히 '아끼는 것'이다."** → 비용 최적화는 기능 요구사항을 **충족하는 범위에서** 비용을 최소화하는 것입니다. 보안·안정성을 희생하는 비용 절감은 Well-Architected 원칙 위반입니다.
    *(원리: §9 — 5개 기둥은 균형을 맞추도록 설계되어 있어, 비용 최적화는 다른 기둥 원칙을 지키는 범위 안에서만 유효하다.)*
 
-7. **"Budget Actions는 비용만 제한할 수 있다."** → Budget Actions는 IAM 정책 연결, SNS 알림, SSM Automation 실행의 세 가지 조치를 지원합니다. IAM 정책으로 특정 리소스 생성을 자동 차단하는 것이 가능합니다.
-   *(원리: §3 — IAM 정책 연결은 사람 개입 없이 자동으로 리소스 생성을 차단하는 제어 수단이다.)*
+7. **"Budget Actions의 조치에 SNS 알림이 포함된다."** → 조치 유형은 **IAM 정책 연결 · SCP 적용 · 실행 중 EC2/RDS 인스턴스 대상 지정** 세 가지이고, SNS는 조치가 아니라 알림 채널입니다. 각 조치는 자동 실행 또는 승인 후 실행을 고를 수 있습니다.
+   *(원리: §3 — IAM·SCP 연결은 사람 개입 없이 리소스 생성을 차단하는 제어 수단이고, 알림은 사람을 호출하는 통지 수단이라 역할이 다르다.)*
 
 ---
 
@@ -360,3 +364,9 @@ CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 �
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 7. 비용 할당 태그 Backfill — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html (게이트 검수 반영: 2026-06-12)
 8. 비용 할당 태그 활성화 — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html (게이트 검수 반영: 2026-06-12)
+9. 예산 조치 구성(IAM·SCP·EC2/RDS 대상, 자동 또는 승인 후 실행) — https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html
+10. CUR → Data Exports CUR 2.0 마이그레이션(고정 스키마·중첩 열·SQL 선택) — https://docs.aws.amazon.com/cur/latest/userguide/dataexports-migrate.html
+11. Compute Optimizer 향상된 인프라 지표(기본 14일 → 최대 93일, 유료) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/enhanced-infrastructure-metrics.html
+12. AWS Support 플랜(현행 목록) — https://aws.amazon.com/premiumsupport/plans/
+
+> 📝 **2026-10-19 정정**: ① Budget Actions 조치 3종을 **IAM 정책·SCP·실행 중 EC2/RDS 인스턴스 대상**으로 고쳤습니다 — SNS는 조치가 아닌 알림 채널이고, 자동 실행/승인 후 실행을 선택합니다(근거 9번). ② Budgets 데이터 범위를 "실시간"에서 **하루 최대 3회 갱신**으로 바로잡았습니다. ③ CUR 절에 **Data Exports의 CUR 2.0**(고정 스키마·중첩 열·SQL 선택·Parquet)을 반영했습니다(근거 10번). ④ 근거를 찾지 못한 "Support 비용은 해당 월 6~7일 반영" 문장을 삭제하고 **현행 Support 플랜 명칭**으로 갱신했습니다(근거 12번). ⑤ Compute Optimizer를 "지표 14일 이상 수집"에서 **기본 룩백 14일 / 향상된 인프라 지표 최대 93일**로 고쳤습니다(근거 11번).

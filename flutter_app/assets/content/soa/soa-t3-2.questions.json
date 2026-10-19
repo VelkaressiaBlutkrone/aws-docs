@@ -1,0 +1,417 @@
+{
+  "examGuideTaskId": "soa-t3-2",
+  "taskTitle": "AMI·리소스 배포·유지 관리·패치 전략",
+  "domain": 3,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t3-2-q1",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "applied",
+      "stem": "사용하지 않는 AMI를 등록 해제(deregister)했는데 EBS 비용이 줄지 않았다. 이유는?",
+      "options": [
+        "AMI는 스냅샷을 참조하는 메타데이터 레이어이고, 등록 해제해도 연결된 EBS 스냅샷은 자동 삭제되지 않기 때문",
+        "등록 해제는 24시간 뒤에 반영되기 때문",
+        "AMI를 공유 중인 계정이 있으면 비용이 그 계정으로 넘어가기 때문",
+        "AMI 등록 해제는 스냅샷을 Glacier로 옮기기 때문"
+      ],
+      "correct": 0,
+      "explanation": "AMI는 스냅샷을 참조하는 메타데이터이고 스냅샷은 독립된 EBS 리소스입니다. 같은 스냅샷을 여러 AMI가 공유 참조할 수 있어 자동 삭제하지 않으므로, 비용 정리는 AMI 등록 해제와 스냅샷 삭제 두 단계를 명시적으로 수행해야 합니다.",
+      "wrongExplanations": {
+        "1": "지연 반영 문제가 아니라 스냅샷이 남아 있는 것이 원인입니다.",
+        "2": "공유는 시작 권한 부여이며 스토리지 비용 주체를 바꾸지 않습니다.",
+        "3": "스냅샷이 자동으로 다른 계층으로 이동하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AMI 등록 해제",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/deregister-ami.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q2",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "foundational",
+      "stem": "AMI의 리소스 범위에 대한 설명으로 올바른 것은?",
+      "options": [
+        "AMI는 리전 단위 리소스이며 AMI ID는 리전마다 다르다",
+        "AMI는 글로벌 리소스이며 모든 리전에서 같은 ID로 쓰인다",
+        "AMI는 AZ 단위 리소스다",
+        "AMI는 계정 간에 기본적으로 공개된다"
+      ],
+      "correct": 0,
+      "explanation": "AMI는 특정 리전에 등록되는 리전 단위 리소스이므로 AMI ID가 리전마다 다릅니다. 멀티 리전 배포에서는 각 리전으로 AMI를 복사해야 하고, 복사본은 새 AMI ID와 새 스냅샷을 갖습니다.",
+      "wrongExplanations": {
+        "1": "AMI ID는 리전마다 다릅니다.",
+        "2": "AZ 단위 리소스가 아닙니다.",
+        "3": "기본은 소유자 전용이며 명시적으로 시작 권한을 공유해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Machine Image(AMI)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q3",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "applied",
+      "stem": "다른 리전의 다른 계정이 우리 표준 AMI로 인스턴스를 시작할 수 있게 하려면?",
+      "options": [
+        "AMI를 대상 리전으로 복사한 뒤, 복사본의 시작 권한을 해당 계정에 공유한다",
+        "AMI를 공개(public)로 전환한다",
+        "AMI ID를 그대로 알려 주면 다른 리전에서도 사용할 수 있다",
+        "스냅샷만 공유하면 상대 계정이 AMI를 자동 생성한다"
+      ],
+      "correct": 0,
+      "explanation": "리전 경계는 복사(Copy)로, 계정 경계는 시작 권한 공유(Share)로 넘습니다. 다른 리전 + 다른 계정이면 두 작업을 조합해야 하며, 암호화된 AMI라면 사용한 KMS 키도 함께 공유해야 상대가 복호화·시작할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "공개 전환은 과도한 노출로 보안상 부적절합니다.",
+        "2": "AMI ID는 리전마다 다르므로 다른 리전에서 쓸 수 없습니다.",
+        "3": "스냅샷 공유만으로 AMI가 자동 생성되지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AMI 복사",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html"
+        },
+        {
+          "title": "특정 AWS 계정과 AMI 공유",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sharingamis-explicit.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q4",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "applied",
+      "stem": "KMS로 암호화된 AMI를 다른 계정에 공유했는데 상대 계정에서 인스턴스 시작이 실패한다. 추가로 필요한 조치는?",
+      "options": [
+        "암호화에 사용한 KMS 키도 해당 계정에 공유한다",
+        "AMI를 공개로 전환한다",
+        "AMI를 같은 계정 내 다른 리전으로 복사한다",
+        "상대 계정에 EC2 전체 관리자 권한을 부여한다"
+      ],
+      "correct": 0,
+      "explanation": "암호화된 AMI를 공유받은 계정이 볼륨을 복호화하려면 사용된 KMS 키에 대한 접근 권한도 필요합니다. AMI 시작 권한만 공유하면 복호화가 불가능해 시작이 실패합니다.",
+      "wrongExplanations": {
+        "1": "공개 전환은 보안상 부적절하고 KMS 문제를 해결하지도 않습니다.",
+        "2": "같은 계정 내 복사는 상대 계정 권한과 무관합니다.",
+        "3": "과도한 권한 부여이며 KMS 키 접근 문제의 올바른 해법이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "암호화된 AMI 공유",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sharingamis-explicit.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q5",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "foundational",
+      "stem": "골든 AMI 패턴의 목적으로 가장 적절한 것은?",
+      "options": [
+        "보안 강화·에이전트·공통 패키지를 미리 적용한 표준 베이스 이미지로 일관성과 부팅 속도를 확보한다",
+        "인스턴스마다 다른 구성을 허용해 유연성을 높인다",
+        "AMI를 매번 새로 만들지 않도록 이미지 관리를 중단한다",
+        "모든 환경 설정을 이미지에 넣어 런타임 구성을 없앤다"
+      ],
+      "correct": 0,
+      "explanation": "골든 AMI는 패치·에이전트(SSM·CloudWatch)·공통 패키지·하드닝을 미리 적용한 표준 베이스 이미지입니다. 모든 인스턴스를 이 이미지에서 시작하면 구성 일관성이 확보되고, 런타임에 설치할 것이 적어 부팅도 빨라집니다.",
+      "wrongExplanations": {
+        "1": "목적은 표준화이며 인스턴스별 임의 구성과 반대입니다.",
+        "2": "정기적으로 패치를 반영해 다시 굽는 사이클이 포함됩니다.",
+        "3": "자주 바뀌는 설정은 런타임으로 분리하는 것이 모범 사례입니다."
+      },
+      "sources": [
+        {
+          "title": "AMI 생성 — 사용자 지정 AMI",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q6",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "applied",
+      "stem": "환경별 API 엔드포인트처럼 자주 바뀌는 설정을 골든 AMI에 굽지 않고 런타임에 적용하는 이유는?",
+      "options": [
+        "이미지 재빌드는 빌드·테스트·배포 사이클 전체를 다시 돌려야 해 작은 변경에도 비용이 크기 때문",
+        "AMI에는 환경 변수를 저장할 수 없기 때문",
+        "런타임 구성이 항상 더 안전하기 때문",
+        "AMI는 한 번 만들면 수정할 수 없기 때문"
+      ],
+      "correct": 0,
+      "explanation": "변하지 않는 베이스는 이미지에 굽고(bake-in), 자주 바뀌는 설정은 부팅 시 입히는(user data·SSM 등) 분리가 모범 사례입니다. 설정까지 이미지에 넣으면 작은 변경에도 AMI를 다시 굽고 플릿 전체를 교체해야 해 민첩성이 떨어집니다.",
+      "wrongExplanations": {
+        "1": "이미지에 설정을 포함하는 것 자체는 가능하며, 문제는 변경 비용입니다.",
+        "2": "런타임 구성이 자동으로 더 안전한 것은 아닙니다.",
+        "3": "AMI는 수정 대신 새 버전을 굽는 방식으로 갱신합니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스 사용자 데이터로 부팅 시 구성",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q7",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "applied",
+      "stem": "표준 이미지를 매월 자동으로 패치·테스트·재배포하고 여러 리전·계정에 공유하려 한다. 가장 적절한 서비스는?",
+      "options": [
+        "EC2 Image Builder",
+        "AWS Config",
+        "CloudFormation 드리프트 감지",
+        "AWS Backup"
+      ],
+      "correct": 0,
+      "explanation": "EC2 Image Builder는 이미지 레시피(베이스 이미지 + 구성 요소)로 빌드·테스트·배포를 파이프라인으로 자동화합니다. 스케줄이나 베이스 이미지 업데이트에 따라 새 버전을 자동으로 굽고, 여러 리전·계정으로 배포·공유할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "AWS Config는 구성 변경 추적·준수 평가 서비스입니다.",
+        "2": "드리프트 감지는 스택 구성 차이 탐지입니다.",
+        "3": "AWS Backup은 백업 중앙 관리 서비스입니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 Image Builder란 무엇인가",
+          "url": "https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q8",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "difficulty": "foundational",
+      "stem": "Image Builder 파이프라인이 수작업 AMI 빌드보다 나은 핵심 이유는?",
+      "options": [
+        "레시피와 구성 요소가 코드로 정의돼 버전 관리되고, 동일 입력이 동일 이미지를 만드는 재현성을 확보하기 때문",
+        "AMI 저장 비용이 면제되기 때문",
+        "AMI를 모든 리전에서 같은 ID로 쓸 수 있기 때문",
+        "패치가 적용되지 않은 이미지를 자동으로 삭제하기 때문"
+      ],
+      "correct": 0,
+      "explanation": "수작업 빌드는 절차가 사람의 기억·문서에 의존해 일관성이 깨지기 쉽습니다. Image Builder는 레시피·구성 요소를 코드로 관리해 재현성을 확보하므로, 정기 패치 사이클을 스케줄로 자동 실행할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "이미지·스냅샷 저장 비용은 그대로 발생합니다.",
+        "2": "AMI ID는 리전마다 다릅니다.",
+        "3": "구버전 이미지 정리는 별도 수명주기 정책의 영역입니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 Image Builder 이미지 레시피",
+          "url": "https://docs.aws.amazon.com/imagebuilder/latest/userguide/manage-recipes.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q9",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "foundational",
+      "stem": "Patch Manager에서 '어떤 패치를 승인·거부할지' 규칙을 정의하는 구성 요소는?",
+      "options": [
+        "패치 베이스라인(Patch Baseline)",
+        "패치 그룹(Patch Group)",
+        "유지 관리 기간(Maintenance Window)",
+        "Run Command 문서"
+      ],
+      "correct": 0,
+      "explanation": "패치 베이스라인은 심각도·분류·자동 승인 지연 등으로 어떤 패치를 승인·거부할지 정의합니다. 패치 그룹은 '어디에'(인스턴스 묶음), 유지 관리 기간은 '언제' 적용할지를 담당합니다.",
+      "wrongExplanations": {
+        "1": "패치 그룹은 태그로 인스턴스를 묶는 대상 지정입니다.",
+        "2": "유지 관리 기간은 실행 시간 창입니다.",
+        "3": "Run Command 문서는 임의 명령 실행 정의입니다."
+      },
+      "sources": [
+        {
+          "title": "Systems Manager 패치 베이스라인 정보",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-baselines.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q10",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "dev와 prod에 서로 다른 패치 정책을 적용하려 한다. 인스턴스를 패치 그룹에 넣는 방법은?",
+      "options": [
+        "`Patch Group` 태그를 붙이고 같은 값을 패치 베이스라인에 등록한다",
+        "인스턴스를 같은 서브넷에 배치한다",
+        "유지 관리 기간에 인스턴스 ID를 직접 나열한다",
+        "ASG 이름을 패치 그룹 이름과 동일하게 맞춘다"
+      ],
+      "correct": 0,
+      "explanation": "패치 그룹은 `Patch Group` 태그(키 철자 주의)로 인스턴스를 묶고, 같은 값을 패치 베이스라인에 등록해 연결합니다. 태그 기반이라 올바른 태그를 가진 새 인스턴스는 시작과 동시에 올바른 정책에 포함됩니다.",
+      "wrongExplanations": {
+        "1": "서브넷 배치는 패치 그룹과 무관합니다.",
+        "2": "ID 나열은 확장성이 없고 태그 기반 그룹화의 이점을 버립니다.",
+        "3": "ASG 이름은 패치 그룹 식별자가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "패치 그룹에 인스턴스 추가",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-group-tagging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q11",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "프로덕션 패치를 서비스 영향이 적은 새벽 시간대에만 적용하려 한다. 어떤 구성 요소를 사용하는가?",
+      "options": [
+        "유지 관리 기간(Maintenance Window)",
+        "패치 베이스라인의 자동 승인 지연",
+        "패치 그룹 태그",
+        "스택 정책"
+      ],
+      "correct": 0,
+      "explanation": "유지 관리 기간은 패치를 적용할 정해진 시간 창을 정의해 서비스 영향을 최소화합니다. '무엇을'(베이스라인)·'어디에'(패치 그룹)·'언제'(유지 관리 기간)를 분리해 환경별 정책을 안전하게 운영합니다.",
+      "wrongExplanations": {
+        "1": "자동 승인 지연은 패치 출시 후 며칠 뒤 승인할지를 정하는 규칙입니다.",
+        "2": "패치 그룹은 대상 지정입니다.",
+        "3": "스택 정책은 CloudFormation의 보호 장치입니다."
+      },
+      "sources": [
+        {
+          "title": "Systems Manager 유지 관리 기간",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q12",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "difficulty": "foundational",
+      "stem": "롤링 배포의 트레이드오프를 올바르게 설명한 것은?",
+      "options": [
+        "추가 인프라가 거의 필요 없지만 배포 중 두 버전이 공존하고 롤백이 느리다",
+        "추가 인프라가 두 배 필요하지만 롤백이 즉시 가능하다",
+        "혼합 버전이 없고 롤백도 빠르다",
+        "트래픽 전환 없이 즉시 전체가 새 버전이 된다"
+      ],
+      "correct": 0,
+      "explanation": "롤링은 기존 플릿을 일부씩 교체하므로 추가 인프라 부담이 적습니다. 다만 배포 중 구·신 버전이 동시에 트래픽을 받고, 후반부에 문제가 발견되면 교체된 인스턴스를 다시 되돌리는 추가 롤링이 필요해 롤백이 느립니다.",
+      "wrongExplanations": {
+        "1": "두 배 인프라와 즉시 롤백은 블루/그린의 특징입니다.",
+        "2": "혼합 버전 없음은 블루/그린의 특징입니다.",
+        "3": "롤링은 점진적 교체입니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 인스턴스 새로 고침으로 롤링 교체",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q13",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "difficulty": "applied",
+      "stem": "블루/그린 배포가 롤링보다 롤백이 빠른 근본 이유는?",
+      "options": [
+        "구버전(블루) 환경이 전환 후에도 유지되어, 로드 밸런서 대상을 다시 블루로 돌리는 단일 작업으로 되돌릴 수 있기 때문",
+        "그린 환경이 자동으로 블루를 백업하기 때문",
+        "블루/그린은 배포 중 트래픽을 차단하기 때문",
+        "블루/그린은 인스턴스를 교체하지 않기 때문"
+      ],
+      "correct": 0,
+      "explanation": "블루/그린은 새 환경(그린)을 별도로 띄우고 트래픽을 한 번에 전환합니다. 블루가 그대로 남아 있으므로 문제 발견 시 대상 그룹·DNS를 블루로 되돌리는 한 번의 작업으로 롤백이 끝납니다. 이것이 두 배 인프라 비용을 정당화하는 근거입니다.",
+      "wrongExplanations": {
+        "1": "자동 백업 메커니즘이 아니라 환경이 병존하는 구조입니다.",
+        "2": "전환 시 트래픽을 차단하지 않습니다.",
+        "3": "그린 환경을 새로 만들어 교체하는 방식입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS의 블루/그린 배포",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q14",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "difficulty": "applied",
+      "stem": "새 버전에 소량 트래픽만 먼저 흘려 문제를 확인한 뒤 전체 전환하려 한다. 이 배포 변형의 이름은?",
+      "options": [
+        "카나리(Canary)",
+        "롤링(Rolling)",
+        "인플레이스(In-place)",
+        "리크리에이트(Recreate)"
+      ],
+      "correct": 0,
+      "explanation": "카나리는 새 버전(그린)에 소량 트래픽만 먼저 보내 지표를 확인한 뒤 점차 비중을 늘리거나 전체 전환하는 블루/그린의 변형입니다. 문제가 보이면 영향 범위가 작은 상태에서 되돌릴 수 있습니다.",
+      "wrongExplanations": {
+        "1": "롤링은 인스턴스를 일부씩 교체하는 방식입니다.",
+        "2": "인플레이스는 같은 인스턴스에서 교체 배포하는 방식입니다.",
+        "3": "리크리에이트는 모두 종료 후 새로 만드는 방식입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS의 블루/그린 배포 — 카나리 전환",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/blue-green-deployments/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-2-q15",
+      "examGuideTaskId": "soa-t3-2",
+      "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "difficulty": "applied",
+      "stem": "골든 AMI를 새로 구운 뒤 플릿에 반영하는 표준 절차는?",
+      "options": [
+        "시작 템플릿이 새 AMI를 참조하도록 갱신하고 ASG 인스턴스 새로 고침으로 롤링 교체한다",
+        "실행 중인 인스턴스에 SSH로 접속해 OS를 업그레이드한다",
+        "ASG를 삭제하고 새로 만든다",
+        "새 AMI ID를 ASG의 상태 확인 설정에 입력한다"
+      ],
+      "correct": 0,
+      "explanation": "새 AMI를 구운 뒤에는 시작 템플릿의 새 버전이 그 AMI를 참조하도록 갱신하고, ASG 인스턴스 새로 고침(또는 CloudFormation 업데이트 정책)으로 롤링 교체합니다. 이렇게 하면 플릿이 점진적으로 새 이미지로 대체됩니다.",
+      "wrongExplanations": {
+        "1": "수동 접속 업그레이드는 구성 드리프트를 만듭니다.",
+        "2": "ASG를 삭제·재생성하는 것은 불필요하게 파괴적입니다.",
+        "3": "AMI는 상태 확인 설정에 넣는 값이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 인스턴스 새로 고침",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

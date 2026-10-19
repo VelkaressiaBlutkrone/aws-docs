@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: Compute Savings Plans and Reserved Instances (공식)
     url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing
@@ -74,11 +74,11 @@ lastVerified: 2026-06-12
 |---|---|---|---|
 | **온디맨드(On-Demand)** | 기준(0%) | 없음 | 짧고 예측 불가, 개발·테스트 |
 | **예약 인스턴스 — Standard RI** | 최대 72% | 1년 또는 3년 | 안정적 상시, 인스턴스 유형 고정 |
-| **예약 인스턴스 — Convertible RI** | 최대 54% | 1년 또는 3년 | 인스턴스 패밀리 변경 가능성 있음 |
+| **예약 인스턴스 — Convertible RI** | 최대 66% (3년 평균 약 54%) | 1년 또는 3년 | 인스턴스 패밀리 변경 가능성 있음 |
 | **Savings Plans — Compute** | 최대 66% | 1년 또는 3년 | EC2+Fargate+Lambda, 가장 유연 |
 | **Savings Plans — EC2 Instance** | 최대 72% | 1년 또는 3년 | 특정 패밀리·리전 고정, 높은 절감 |
 | **스팟(Spot)** | 최대 90% | 없음 | 중단 가능 배치·스테이트리스 |
-| **전용 호스트(Dedicated Host)** | 온디맨드 이상 비용 | 선택적 | BYOL 라이선스·규제 컴플라이언스 |
+| **전용 호스트(Dedicated Host)** | 호스트 단위 과금(초 단위·최소 60초). **예약 시 최대 70% 할인**, Savings Plans도 적용 | 선택적 | BYOL 라이선스·규제 컴플라이언스 |
 
 > 3년 약정 + All Upfront 결제가 가장 높은 할인을 제공합니다. 그러나 유연성은 그만큼 줄어듭니다.
 
@@ -110,7 +110,8 @@ lastVerified: 2026-06-12
 |---|---|---|
 | **Compute Savings Plans** | EC2 + Fargate + Lambda | 인스턴스 패밀리·리전·OS·테넌시 무관. 가장 유연 |
 | **EC2 Instance Savings Plans** | 특정 EC2 패밀리·리전 | 절감률 높음, 유연성 낮음 |
-| **SageMaker Savings Plans** | Amazon SageMaker | SageMaker 인스턴스 전용 |
+| **Database Savings Plans** | Aurora·RDS·DynamoDB·ElastiCache·DocumentDB·Neptune·Timestream·Keyspaces·DMS·OpenSearch | 최대 35% 절감. 최신 프로비저닝 세대와 **서버리스 사용량**에 엔진·패밀리·크기·AZ·리전 무관 적용 |
+| **SageMaker AI Savings Plans** | Amazon SageMaker AI | SageMaker AI 인스턴스 전용(최대 64%) |
 
 > Savings Plans는 **스팟 인스턴스에 적용되지 않습니다.** Spot에서 발생한 비용은 Savings Plans 약정 소진으로 처리되지 않습니다.
 
@@ -162,11 +163,15 @@ lastVerified: 2026-06-12
 여러 인스턴스 유형·AZ를 혼합하여 스팟 인스턴스를 요청하는 기능입니다. 특정 인스턴스 풀의 용량이 소진되면 다른 풀로 자동 전환하여 목표 용량을 유지합니다.
 
 ```
-스팟 플릿 전략:
-- lowestPrice   : 가장 저렴한 풀 우선 (비용 최소화)
-- diversified   : 여러 풀에 분산 (가용성 최대화)
-- capacityOptimized : 가용 용량이 가장 많은 풀 (중단 최소화)
+스팟 할당 전략:
+- price-capacity-optimized : 용량이 넉넉한 풀 중 가장 저렴한 쪽 (AWS 권고)
+- capacity-optimized       : 가용 용량이 가장 많은 풀 (중단 최소화)
+- capacity-optimized-prioritized : 용량 우선 + 유형 우선순위 반영
+- diversified              : 여러 풀에 분산 (가용성 최대화)
+- lowest-price             : 가장 저렴한 풀 우선 (EC2 Fleet 기본값, 중단 위험 큼)
 ```
+
+> AWS 모범 사례는 **`price-capacity-optimized`** 입니다 — "가장 가용 용량이 많은 풀 중 가능한 가장 낮은 가격"으로 프로비저닝해 회수 가능성을 낮춥니다. `CreateFleet` 기본값이 `lowest-price`라는 점과 혼동하지 마세요(기본값 ≠ 권고값).
 
 > 🧠 원리: 왜 AWS는 스팟 인스턴스를 즉시 회수하지 않고 2분 인터럽트 알림을 줄까요?
 > 스팟 인스턴스는 잉여 용량을 제공하므로 AWS가 용량을 회수할 때 애플리케이션이 갑자기 종료되면 진행 중인 작업이 소실됩니다.
@@ -231,13 +236,13 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 
 **서버리스 (Lambda·Fargate):**
 
-- 사용한 시간만 밀리초 단위로 과금 — 유휴 시 비용 없음
+- 과금 단위가 다릅니다: **Lambda는 1 ms 단위**(올림), **Fargate는 초 단위에 최소 1분**(Windows 컨테이너는 최소 5분). 또 Lambda **프로비저닝 동시성**은 활성화해 둔 시간 동안 요청이 없어도 과금됩니다
 - 서버 프로비저닝·관리 비용 제거
 - 예측 불가·간헐적 워크로드에 적합
 
 **AWS Graviton (ARM 기반):**
 
-- 동일 성능 대비 온디맨드 가격 약 20% 저렴 (Graviton3 기준)
+- 공식 서술: 동급 x86 기반 EC2 인스턴스 대비 **최대 20% 낮은 비용**
 - Savings Plans와 결합 시 추가 절감 가능
 - 지원: EC2(m7g·c7g·r7g 등), Lambda, Fargate, RDS, ElastiCache 등
 - 조건: 애플리케이션이 ARM 아키텍처에서 동작해야 함 (컨테이너·인터프리터 언어 전환 용이)
@@ -283,7 +288,7 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 5. **"No Upfront RI는 약정이 아니다."** → No Upfront RI도 1년 또는 3년 계약 의무입니다. 선납금이 없을 뿐이며, 매월 할인 요금이 청구됩니다.
    *(원리: §4 — 납입 방식은 선납 비중 차이로 할인율을 결정할 뿐, 기간 약정 의무 자체는 All Upfront·No Upfront 모두 동일하다.)*
 
-6. **"Standard RI와 Convertible RI의 할인율이 같다."** → Standard RI가 더 높은 할인(최대 72%)을 제공하지만, 인스턴스 유형 교환이 불가합니다. Convertible RI는 교환 가능한 대신 할인율이 낮습니다(최대 54%).
+6. **"Standard RI와 Convertible RI의 할인율이 같다."** → Standard RI가 더 높은 할인(최대 72%)을 제공하지만, 인스턴스 유형 교환이 불가합니다. Convertible RI는 교환 가능한 대신 할인율이 조금 낮습니다(최대 66%, 3년 평균 약 54%).
    *(원리: §1 — 인스턴스 유형을 구체적으로 고정할수록 절감률이 높고 유연성이 낮아지는 트레이드오프가 Standard/Convertible 차이에도 동일하게 적용된다.)*
 
 ---
@@ -339,3 +344,10 @@ Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 �
 4. AWS Compute Optimizer — 소개 — https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
 5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 6. Compute Savings Plans and Reserved Instances — https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html (게이트 검수 반영: 2026-06-12)
+7. Savings Plans 유형 4종(Compute·Database·EC2 Instance·SageMaker AI) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
+8. EC2 예약 인스턴스 요금(Standard 최대 72%·Convertible 최대 66%) — https://aws.amazon.com/ec2/pricing/reserved-instances/
+9. EC2 스팟 모범 사례(price-capacity-optimized 권고) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-best-practices.html
+10. Dedicated Hosts 요금(예약 최대 70% 할인) — https://aws.amazon.com/ec2/dedicated-hosts/pricing/
+11. AWS Fargate 요금(초 단위·최소 1분) — https://aws.amazon.com/fargate/pricing/ · AWS Graviton — https://aws.amazon.com/ec2/graviton/
+
+> 📝 **2026-10-19 정정**: ① Convertible RI 할인율을 **최대 66%**로 고쳤습니다(근거 8번). ② Savings Plans를 **4종**으로 갱신하고 **Database Savings Plans**를 추가했습니다(근거 7번). ③ 스팟 할당 전략을 현행 목록으로 바꾸고 **price-capacity-optimized 권고**를 명시했습니다(근거 9번). ④ Graviton 비용 서술에서 근거 없는 "Graviton3 기준" 수식을 빼고 공식 문장(동급 x86 대비 최대 20% 낮은 비용)으로 맞췄습니다(근거 11번). ⑤ Dedicated Host를 "온디맨드 이상 비용"에서 **예약 시 최대 70% 할인·SP 적용 가능**으로 정정했습니다(근거 10번). ⑥ 서버리스 과금을 **Lambda 1 ms / Fargate 초 단위·최소 1분**으로 분리하고 프로비저닝 동시성의 유휴 과금을 더했습니다(근거 11번).

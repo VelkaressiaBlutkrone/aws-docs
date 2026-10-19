@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택
@@ -195,7 +195,7 @@ lastVerified: 2026-06-12
 | 모드 | 설명 | 권장 대상 |
 |---|---|---|
 | **General Purpose** (기본) | 지연시간 민감 워크로드에 최적 | 웹 서비스, 콘텐츠 관리, 홈 디렉터리 |
-| **Max I/O** | 더 높은 집합 처리량·IOPS, 다소 높은 지연시간 | 수천 인스턴스가 동시 접근하는 빅데이터 분석 |
+| **Max I/O** | **이전 세대** 성능 모드. 고도 병렬 워크로드용이지만 작업당 지연시간이 General Purpose보다 큼. **One Zone 파일 시스템·Elastic 처리량과 함께 쓸 수 없음** | AWS는 **모든 파일 시스템에 General Purpose를 권장**합니다(신규 설계에서 Max I/O를 고르지 않음) |
 
 **처리량 모드:**
 
@@ -240,7 +240,7 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 | 항목 | 내용 |
 |---|---|
 | **프로토콜** | Lustre(POSIX 호환, Linux 전용) |
-| **성능** | 서브밀리초 지연시간, 수 TBps 처리량, 수백만 IOPS |
+| **성능(스토리지 클래스별)** | **SSD** = 전체 데이터에 *일관된* 서브밀리초 지연 + 최대 TBps / **Intelligent-Tiering** = **자주 접근하는 데이터**에 서브밀리초(선택적 SSD 읽기 캐시), 전체 데이터에 일관된 저지연은 아님 / **HDD** = 일관된 **한 자릿수 ms** + 최대 수십 GBps |
 | **S3 통합** | S3 버킷을 데이터 리포지토리로 연결 — S3 객체를 파일처럼 투명하게 노출 |
 | **배포 옵션** | Scratch(임시·단기), Persistent(장기·복제) |
 | **스토리지** | SSD, Intelligent-Tiering, HDD |
@@ -378,4 +378,7 @@ EBS Multi-Attach는 동일 볼륨을 여러 Nitro 인스턴스에 동시 연결�
 6. Amazon FSx for Lustre — What is? — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
 7. Amazon FSx for NetApp ONTAP — What is? — https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html
 8. Amazon FSx for OpenZFS — What is? — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html
-9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+9. Amazon EFS 성능 사양(Max I/O = previous generation, One Zone·Elastic 미지원) — https://docs.aws.amazon.com/efs/latest/ug/performance.html
+10. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① EFS **Max I/O를 이전 세대 성능 모드**로 고쳤습니다 — 지연시간이 더 크고 One Zone·Elastic 처리량과 병용할 수 없으며, AWS는 모든 파일 시스템에 General Purpose를 권장합니다(근거 9번). ② FSx for Lustre 성능을 한 줄 수치로 적었던 칸을 **스토리지 클래스별(SSD·Intelligent-Tiering·HDD)**로 분리했습니다(근거 6번).

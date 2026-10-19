@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략
@@ -173,7 +173,7 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 
 - 항목에 만료 타임스탬프 속성을 지정하면 DynamoDB가 **자동으로 항목을 삭제**합니다.
 - 추가 비용 없음. 세션 데이터·임시 토큰·캐시 항목 만료에 사용.
-- 삭제는 즉시가 아닌 **48시간 이내** 처리(근사치). 정확한 만료 시점이 중요하면 애플리케이션에서 별도 검증 필요.
+- 삭제는 즉시가 아니라 만료 후 **통상 수일(a few days) 내**에 최선 노력으로 처리되며, 이때 **쓰기 처리량을 소비하지 않습니다**. 만료됐지만 아직 삭제되지 않은 항목이 읽히므로, 정확한 만료가 중요하면 Query·Scan에 필터 표현식을 쓰거나 애플리케이션에서 검증합니다. (글로벌 테이블에서는 복제 리전의 삭제가 복제 쓰기 용량을 소비합니다.)
 
 ### 10) DynamoDB vs RDS 선택 기준 {#dynamodb-vs-rds}
 
@@ -181,7 +181,7 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 |---|---|---|
 | **스키마** | 스키마리스, 항목마다 속성 다름 | 고정 스키마, 정규화된 구조 |
 | **조인** | 불필요 또는 애플리케이션에서 처리 | 복잡한 조인·집계 쿼리 |
-| **확장** | 수평 확장, 무제한 처리량 | 수직 확장 위주 |
+| **확장** | 수평 확장(파티션 분산). 단 **파티션당 읽기 3,000·쓰기 1,000 단위/초** 한도가 있고 테이블·계정 쿼터도 존재 | 수직 확장 위주 |
 | **지연** | 한 자릿수 밀리초 일관 보장 | 가변적(쿼리 복잡도 의존) |
 | **운영** | 완전 관리형, 서버리스 | 패치·백업 등 일부 관리 필요 |
 | **워크로드 예** | 세션, IoT 텔레메트리, 카탈로그, 장바구니 | 금융 거래, ERP, 복잡 리포팅 |
@@ -193,7 +193,7 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 > 공식 정의: **"클라우드에서 분산 인메모리 데이터 스토어 또는 캐시 환경을 손쉽게 배포·운영·확장할 수 있게 해주는 웹 서비스."**
 
 - 데이터베이스가 아니라 **캐시 계층** — DB 앞단에 배치해 반복 읽기 부하를 흡수합니다.
-- 두 가지 엔진 지원: **Redis**와 **Memcached**.
+- 지원 엔진은 **3종**: **Valkey**·**Memcached**·**Redis OSS**. Valkey는 Redis OSS 호환 오픈소스 포크로, 신규 구성에서는 Valkey 또는 Redis OSS를 고릅니다.
 
 ### 12) Redis vs Memcached 비교 (★ 단골 출제) {#redis-vs-memcached}
 
@@ -207,7 +207,9 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 | **암호화** | 저장·전송 암호화, IAM 인증 지원 | 제한적 |
 | **적합 사례** | 세션 스토어, 리더보드, 랭킹, HA 필요, 복잡 자료구조 | 단순 대용량 캐시, 멀티코어 최대 활용 |
 
-> 결정 규칙: "영속성·HA·복잡 자료구조·Sorted Set·세션 HA" → **Redis**. "가장 단순·멀티스레드·스케일아웃만" → **Memcached**.
+> 결정 규칙: "영속성·HA·복잡 자료구조·Sorted Set·세션 HA" → **Valkey 또는 Redis OSS**. "가장 단순·멀티스레드·스케일아웃만" → **Memcached**.
+>
+> ⚠️ 위 비교표의 "Redis" 열은 **Valkey와 Redis OSS**(같은 계열)에 함께 적용됩니다 — 공식 엔진 목록은 Valkey·Memcached·Redis OSS 3종이며, 시험 문항에 "Redis"로만 나오면 이 계열로 읽습니다.
 
 > 🧠 원리: 왜 Memcached는 노드 재시작 후 데이터를 복구하지 못할까요?
 > Memcached는 데이터를 메모리에만 저장하고, 스냅샷이나 쓰기 로그 같은 영속 기록 수단을 제공하지 않습니다.
@@ -289,7 +291,7 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 7. **"Write-Through만 쓰면 완벽하다."** → Write-Through는 쓰기 지연이 증가하고 실제로 읽히지 않는 데이터도 캐시에 적재됩니다. 서비스 특성에 따라 Lazy Loading + TTL과 병행하거나 선택합니다.
    *(원리: §13 — Lazy Loading은 미스 시에만 DB를 조회해 낭비가 없지만 stale 위험이 있고, Write-Through는 stale 없지만 쓰기 지연과 불필요한 적재가 생긴다.)*
 
-8. **"TTL이 설정한 시각에 정확히 삭제된다."** → DynamoDB TTL 삭제는 만료 후 **최대 48시간 이내** 처리됩니다. 정확한 시점 제어가 필요하면 애플리케이션에서 만료 여부를 직접 확인해야 합니다.
+8. **"TTL이 설정한 시각에 정확히 삭제된다."** → DynamoDB TTL 삭제는 만료 후 **통상 수일 내**에 최선 노력으로 처리됩니다(언제든 삭제될 수 있고, 보장 시한이 있는 것이 아닙니다). 정확한 시점 제어가 필요하면 쿼리에 필터 표현식을 쓰거나 애플리케이션에서 만료 여부를 직접 확인해야 합니다.
    *(원리: §9 본문 — TTL 삭제는 비동기 백그라운드 프로세스로 처리되므로 만료 직후 항목이 즉시 사라지지 않을 수 있다.)*
 
 ---
@@ -343,4 +345,9 @@ DynamoDB는 파티션 키를 해시해 데이터를 여러 물리 파티션에 �
 2. DynamoDB 보조 인덱스 (GSI·LSI) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html
 3. DynamoDB Accelerator (DAX) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html
 4. Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. DynamoDB TTL("within a few days of their expiration time, without consuming write throughput") — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html
+6. ElastiCache 엔진 비교(Valkey·Memcached·Redis OSS) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html
+7. DynamoDB 파티션 키 설계(파티션당 3,000 읽기·1,000 쓰기 단위/초) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html
+8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① TTL 삭제 시점을 현행 서술인 **만료 후 수일 내(최선 노력)**로 고쳤습니다(근거 5번). ② ElastiCache 엔진을 **Valkey·Memcached·Redis OSS 3종**으로 갱신했습니다(근거 6번). ③ DynamoDB를 "무제한 처리량"으로 적었던 칸에 **파티션당 읽기 3,000·쓰기 1,000 단위/초** 한도를 명시했습니다(근거 7번).

@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t5-1",
+  "taskTitle": "VPC 네트워킹 구현 (서브넷·라우팅·SG·NACL·NAT)",
+  "domain": 5,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t5-1-q1",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "foundational",
+      "stem": "서브넷이 '퍼블릭'인지 결정하는 기준은?",
+      "options": [
+        "연결된 라우팅 테이블에 `0.0.0.0/0 → 인터넷 게이트웨이` 경로가 있는지",
+        "서브넷 생성 시 선택한 '퍼블릭' 체크박스",
+        "서브넷의 CIDR이 /24보다 큰지",
+        "서브넷이 여러 AZ에 걸쳐 있는지"
+      ],
+      "correct": 0,
+      "explanation": "퍼블릭/프라이빗은 서브넷 자체의 속성이 아니라 연결된 라우팅 테이블이 IGW 경로를 갖는지로 결정됩니다. 같은 서브넷도 라우팅 테이블을 바꾸면 성격이 바뀝니다.",
+      "wrongExplanations": {
+        "1": "서브넷에 퍼블릭 여부를 지정하는 속성은 없습니다(자동 퍼블릭 IP 할당은 별개 설정).",
+        "2": "CIDR 크기와 무관합니다.",
+        "3": "서브넷은 하나의 AZ에만 속합니다."
+      },
+      "sources": [
+        {
+          "title": "VPC의 서브넷",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q2",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "applied",
+      "stem": "`10.0.0.0/24` 서브넷에서 실제로 인스턴스에 할당할 수 있는 IP 개수는?",
+      "options": [
+        "256개",
+        "254개",
+        "251개",
+        "128개"
+      ],
+      "correct": 2,
+      "explanation": "AWS는 각 서브넷에서 5개 IP를 예약합니다(첫 4개 + 마지막 1개). 따라서 /24는 256 − 5 = 251개만 사용할 수 있습니다. 예약 주소는 네트워크, VPC 라우터, DNS, 향후 용도, 브로드캐스트입니다.",
+      "wrongExplanations": {
+        "0": "전체 주소 수이며 예약분을 빼지 않았습니다.",
+        "1": "온프레미스 관행(2개 예약) 기준입니다.",
+        "3": "/25에 해당하는 수치입니다."
+      },
+      "sources": [
+        {
+          "title": "서브넷 CIDR 블록 — 예약된 IP 주소",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q3",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "applied",
+      "stem": "라우팅 테이블에 `0.0.0.0/0 → igw`와 `10.0.5.0/24 → pcx(피어링)` 경로가 함께 있다. `10.0.5.10`으로 가는 트래픽은 어디로 가는가?",
+      "options": [
+        "피어링 연결(pcx) — 가장 구체적인 경로가 우선한다",
+        "인터넷 게이트웨이 — 먼저 추가된 경로가 우선한다",
+        "두 경로로 분산된다",
+        "라우팅 충돌로 트래픽이 폐기된다"
+      ],
+      "correct": 0,
+      "explanation": "라우팅은 longest prefix match로 가장 구체적인 경로를 선택합니다. `/24`가 `/0`보다 구체적이므로 피어링 경로가 적용됩니다. 덕분에 넓은 기본 경로를 유지하면서 특정 대역만 분기할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "추가 순서는 선택 기준이 아닙니다.",
+        "2": "라우팅 테이블은 트래픽을 분산하지 않습니다.",
+        "3": "서로 다른 프리픽스는 충돌이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 라우팅 테이블 — 경로 우선순위",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q4",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "퍼블릭 서브넷의 EC2 인스턴스가 인터넷에 나가지 못한다. 충족해야 하는 세 조건은?",
+      "options": [
+        "IGW가 VPC에 연결, 라우팅 테이블에 `0.0.0.0/0 → igw` 경로, 인스턴스에 퍼블릭 IP(또는 EIP)",
+        "NAT 게이트웨이, Elastic IP, 보안 그룹 인바운드 전체 허용",
+        "VPC 엔드포인트, 프라이빗 DNS, NACL 전체 허용",
+        "Transit Gateway 연결, 라우팅 전파, 퍼블릭 호스트네임"
+      ],
+      "correct": 0,
+      "explanation": "퍼블릭 통신의 3박자는 ① IGW를 VPC에 연결, ② 서브넷 라우팅 테이블에 IGW 경로, ③ 인스턴스에 퍼블릭 IP 또는 EIP입니다. 세 가지 중 하나라도 빠지면 인터넷 통신이 되지 않습니다.",
+      "wrongExplanations": {
+        "1": "NAT는 프라이빗 서브넷의 아웃바운드 경로이며 인바운드 전체 허용은 보안상 부적절합니다.",
+        "2": "VPC 엔드포인트는 AWS 서비스로의 프라이빗 연결입니다.",
+        "3": "TGW는 VPC·온프레미스 간 연결 허브입니다."
+      },
+      "sources": [
+        {
+          "title": "인터넷 게이트웨이로 인터넷에 연결",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q5",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "foundational",
+      "stem": "NAT 게이트웨이에 대한 설명으로 올바른 것은?",
+      "options": [
+        "보안 그룹을 연결할 수 없고 NACL로만 트래픽을 제어한다",
+        "보안 그룹을 연결해 인바운드를 제어한다",
+        "프라이빗 서브넷에 생성해야 한다",
+        "VPC 전체가 공유하는 리전 단위 리소스다"
+      ],
+      "correct": 0,
+      "explanation": "NAT 게이트웨이에는 보안 그룹을 연결할 수 없고 서브넷의 NACL로만 제어합니다. 또한 퍼블릭 서브넷에 생성하는 AZ 단위 리소스이며, AZ 내에서 이중화됩니다.",
+      "wrongExplanations": {
+        "1": "SG 연결은 NAT 인스턴스에서만 가능합니다.",
+        "2": "NAT 게이트웨이는 퍼블릭 서브넷에 둡니다.",
+        "3": "AZ 단위 리소스입니다."
+      },
+      "sources": [
+        {
+          "title": "NAT 게이트웨이 기본 사항",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q6",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "applied",
+      "stem": "NAT 게이트웨이를 AZ마다 두고 각 AZ의 프라이빗 라우팅 테이블이 같은 AZ의 NAT를 가리키게 하는 이유는?",
+      "options": [
+        "한 AZ 장애가 다른 AZ의 아웃바운드를 끊지 않게 하고, AZ를 넘는 전송 요금도 피하기 위해",
+        "NAT 게이트웨이의 처리량 상한을 늘리기 위해",
+        "NAT 게이트웨이에 보안 그룹을 붙이기 위해",
+        "프라이빗 서브넷에 퍼블릭 IP를 부여하기 위해"
+      ],
+      "correct": 0,
+      "explanation": "NAT 게이트웨이는 AZ 단위 리소스입니다. 모든 AZ가 하나를 공유하면 그 AZ가 단일 실패점이 되고 AZ 경계를 넘는 전송 요금도 발생합니다. AZ별 NAT + AZ별 라우팅 테이블이 표준 구성입니다.",
+      "wrongExplanations": {
+        "1": "처리량은 NAT 게이트웨이가 자동 확장합니다.",
+        "2": "NAT 게이트웨이에는 SG를 붙일 수 없습니다.",
+        "3": "NAT는 프라이빗 인스턴스에 퍼블릭 IP를 주지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "NAT 게이트웨이 기본 사항 — AZ별 구성",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q7",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "NAT 인스턴스를 직접 운영하는데 프라이빗 인스턴스의 아웃바운드가 전혀 되지 않는다. 가장 먼저 확인할 설정은?",
+      "options": [
+        "NAT 인스턴스의 소스/대상 확인(Source/Destination Check)이 비활성화됐는지",
+        "NAT 인스턴스의 인스턴스 유형이 t3 이상인지",
+        "프라이빗 서브넷에 IGW 경로가 있는지",
+        "NAT 인스턴스에 IAM 역할이 연결됐는지"
+      ],
+      "correct": 0,
+      "explanation": "EC2는 기본적으로 자기 IP가 출발지·목적지인 패킷만 처리합니다. NAT 인스턴스는 다른 인스턴스의 패킷을 중계해야 하므로 소스/대상 확인을 비활성화해야 합니다.",
+      "wrongExplanations": {
+        "1": "인스턴스 유형은 처리량에 영향을 주지만 중계 자체를 막지 않습니다.",
+        "2": "프라이빗 서브넷에 IGW 경로를 두면 프라이빗 서브넷이 아니게 됩니다.",
+        "3": "IAM 역할은 AWS API 권한이며 패킷 전달과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "NAT 인스턴스 — 소스/대상 확인 비활성화",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_NAT_Instance.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q8",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "foundational",
+      "stem": "보안 그룹과 네트워크 ACL의 차이로 올바른 것은?",
+      "options": [
+        "SG는 ENI 단위·stateful·허용 규칙만, NACL은 서브넷 단위·stateless·허용과 거부 모두",
+        "SG는 서브넷 단위·stateless, NACL은 ENI 단위·stateful",
+        "둘 다 stateful이며 차이는 규칙 개수 한도뿐",
+        "SG는 거부 규칙을 쓸 수 있고 NACL은 허용만 가능하다"
+      ],
+      "correct": 0,
+      "explanation": "SG는 ENI(인스턴스) 단위에서 동작하는 stateful 방화벽으로 허용 규칙만 가집니다. NACL은 서브넷 단위 stateless 방화벽으로 허용·거부를 모두 쓰고 규칙 번호 오름차순으로 평가합니다.",
+      "wrongExplanations": {
+        "1": "적용 단위와 상태성이 반대로 서술됐습니다.",
+        "2": "NACL은 stateless입니다.",
+        "3": "거부 규칙은 NACL에서만 가능합니다."
+      },
+      "sources": [
+        {
+          "title": "보안 그룹과 네트워크 ACL 비교",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q9",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "NACL에서 인바운드 HTTP(80)를 허용했는데도 웹 요청이 응답을 받지 못한다. 원인은?",
+      "options": [
+        "NACL은 stateless라 응답이 나가는 이페머럴 포트(1024–65535) 아웃바운드 규칙이 필요하다",
+        "NACL은 규칙 번호가 높은 것부터 평가하기 때문",
+        "보안 그룹이 stateless이기 때문",
+        "NACL은 TCP만 지원하기 때문"
+      ],
+      "correct": 0,
+      "explanation": "NACL은 들어오는 트래픽과 나가는 응답을 각각 따로 평가합니다. 인바운드 80을 허용해도 응답이 나가는 이페머럴 포트 범위의 아웃바운드 규칙이 없으면 응답이 차단됩니다.",
+      "wrongExplanations": {
+        "1": "NACL은 규칙 번호 오름차순으로 평가합니다.",
+        "2": "보안 그룹은 stateful입니다.",
+        "3": "NACL은 다양한 프로토콜을 지원합니다."
+      },
+      "sources": [
+        {
+          "title": "네트워크 ACL — 이페머럴 포트",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q10",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "특정 악성 IP 한 곳만 차단하려 한다. 어디에 규칙을 넣어야 하는가?",
+      "options": [
+        "네트워크 ACL — 거부(Deny) 규칙을 쓸 수 있다",
+        "보안 그룹 — 인바운드에 거부 규칙을 추가한다",
+        "라우팅 테이블 — 해당 IP를 블랙홀로 보낸다",
+        "VPC 엔드포인트 정책 — 소스 IP를 거부한다"
+      ],
+      "correct": 0,
+      "explanation": "보안 그룹에는 허용 규칙만 있어 특정 IP를 '차단'할 수 없습니다. 명시적 거부가 필요하면 서브넷 단위 NACL에 Deny 규칙을 추가합니다.",
+      "wrongExplanations": {
+        "1": "SG는 거부 규칙을 지원하지 않습니다.",
+        "2": "라우팅 테이블은 목적지 기반이며 출발지 IP 차단 수단이 아닙니다.",
+        "3": "엔드포인트 정책은 AWS 서비스 접근 제어용입니다."
+      },
+      "sources": [
+        {
+          "title": "네트워크 ACL로 서브넷 트래픽 제어",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q11",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "foundational",
+      "stem": "보안 그룹이 stateful이라는 말의 실질적 의미는?",
+      "options": [
+        "인바운드로 허용된 요청의 응답은 아웃바운드 규칙과 무관하게 자동 허용된다",
+        "규칙을 번호 순서대로 평가한다",
+        "거부 규칙을 쓸 수 있다",
+        "서브넷 전체에 적용된다"
+      ],
+      "correct": 0,
+      "explanation": "SG는 연결 상태를 추적하므로 인바운드로 허용된 요청의 응답은 아웃바운드 규칙과 무관하게 자동 허용되고, 그 반대도 마찬가지입니다. 따라서 '허용할 것만' 적으면 됩니다.",
+      "wrongExplanations": {
+        "1": "SG는 모든 규칙을 종합하며 순서가 무관합니다.",
+        "2": "거부 규칙은 NACL의 기능입니다.",
+        "3": "SG는 ENI 단위로 적용됩니다."
+      },
+      "sources": [
+        {
+          "title": "보안 그룹으로 리소스 트래픽 제어",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q12",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "foundational",
+      "stem": "VPC IPv4 CIDR 블록에 허용되는 프리픽스 범위는?",
+      "options": [
+        "/8 ~ /24",
+        "/16 ~ /28",
+        "/20 ~ /32",
+        "/24 고정"
+      ],
+      "correct": 1,
+      "explanation": "VPC의 IPv4 CIDR 블록은 /16에서 /28 범위로 지정합니다. 생성 후 보조 CIDR 블록을 추가해 주소 공간을 확장할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "/8은 허용 범위를 벗어납니다.",
+        "2": "/32는 단일 주소로 VPC CIDR로 쓸 수 없습니다.",
+        "3": "고정 값이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "VPC CIDR 블록",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q13",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "VPC 안의 인스턴스가 도메인 이름을 해석하지 못한다. 확인해야 할 VPC 속성은?",
+      "options": [
+        "`enableDnsSupport` (Amazon DNS 서버 해석 활성화)",
+        "`enableDnsHostnames`만 켜면 된다",
+        "`mapPublicIpOnLaunch`",
+        "`instanceTenancy`"
+      ],
+      "correct": 0,
+      "explanation": "`enableDnsSupport`는 VPC 내에서 Amazon 제공 DNS 서버(.2 주소) 해석을 활성화하는 속성입니다. 이것이 꺼져 있으면 인스턴스가 DNS 이름을 풀 수 없습니다. `enableDnsHostnames`는 인스턴스에 퍼블릭 DNS 호스트네임을 부여할지 여부입니다.",
+      "wrongExplanations": {
+        "1": "호스트네임 부여 설정만으로는 해석 기능이 켜지지 않습니다.",
+        "2": "퍼블릭 IP 자동 할당 설정입니다.",
+        "3": "테넌시는 전용 하드웨어 사용 여부입니다."
+      },
+      "sources": [
+        {
+          "title": "VPC의 DNS 속성",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-dns.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q14",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "difficulty": "foundational",
+      "stem": "VPC의 로컬 라우팅 경로(VPC CIDR → local)에 대한 설명으로 올바른 것은?",
+      "options": [
+        "자동 생성되며 삭제할 수 없고, VPC 내 서브넷 간 통신을 보장한다",
+        "운영자가 직접 추가해야 한다",
+        "삭제하면 서브넷 간 통신을 차단할 수 있다",
+        "AZ마다 별도로 생성해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "로컬 경로는 모든 라우팅 테이블에 자동으로 존재하며 삭제할 수 없습니다. VPC CIDR 범위 트래픽을 VPC 내부에서 처리하도록 보장하므로, 서브넷 간 트래픽 차단이 필요하면 SG·NACL로 처리합니다.",
+      "wrongExplanations": {
+        "1": "자동으로 존재합니다.",
+        "2": "삭제할 수 없습니다.",
+        "3": "AZ별 생성 개념이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 라우팅 테이블 — 로컬 경로",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-1-q15",
+      "examGuideTaskId": "soa-t5-1",
+      "skill": "네트워크 아키텍처 비용 최적화(5.1.4)",
+      "difficulty": "applied",
+      "stem": "프라이빗 서브넷의 EC2가 S3에 대량으로 접근하면서 NAT 게이트웨이 데이터 처리 요금이 커졌다. 비용을 줄이는 첫 조치는?",
+      "options": [
+        "S3용 게이트웨이 VPC 엔드포인트를 만들어 NAT를 우회한다",
+        "NAT 게이트웨이를 NAT 인스턴스로 교체한다",
+        "S3 버킷을 다른 리전으로 옮긴다",
+        "프라이빗 서브넷에 IGW 경로를 추가한다"
+      ],
+      "correct": 0,
+      "explanation": "S3·DynamoDB는 게이트웨이 엔드포인트를 지원하며 시간 요금·데이터 처리 요금이 없습니다. 라우팅 테이블에서 해당 트래픽이 NAT 대신 엔드포인트로 분기되어 NAT 처리 요금을 피할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "NAT 인스턴스는 운영 부담이 크고 처리량이 인스턴스 유형에 묶입니다.",
+        "2": "리전 이동은 지연·전송 비용을 오히려 늘릴 수 있습니다.",
+        "3": "IGW 경로 추가는 서브넷을 퍼블릭으로 만들어 보안 설계를 깨뜨립니다."
+      },
+      "sources": [
+        {
+          "title": "S3·DynamoDB용 게이트웨이 VPC 엔드포인트",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

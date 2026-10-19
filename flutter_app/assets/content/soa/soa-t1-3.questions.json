@@ -1,0 +1,421 @@
+{
+  "examGuideTaskId": "soa-t1-3",
+  "taskTitle": "CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)",
+  "domain": 1,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t1-3-q1",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "foundational",
+      "stem": "보안팀이 '특정 IAM 주체가 민감한 S3 객체를 다운로드했는지'를 CloudTrail에서 조회하려 하는데 기록이 없다. 원인은?",
+      "options": [
+        "S3 `GetObject`는 데이터 이벤트이며 기본으로 기록되지 않아 명시적으로 활성화해야 한다",
+        "관리 이벤트는 90일만 보관되므로 이미 삭제됐다",
+        "CloudTrail은 S3 작업을 기록하지 않는다",
+        "버킷에 서버 액세스 로깅을 켜야 CloudTrail이 기록을 시작한다"
+      ],
+      "correct": 0,
+      "explanation": "CloudTrail의 관리 이벤트(제어 평면 작업)는 기본으로 기록되지만, S3 `GetObject`/`PutObject`나 Lambda `Invoke` 같은 데이터 평면 작업은 고볼륨이라 기본으로 기록되지 않습니다. 객체 수준 감사가 필요하면 데이터 이벤트를 명시적으로 활성화해야 하며 추가 비용이 발생합니다.",
+      "wrongExplanations": {
+        "1": "90일은 추적 없이 콘솔에서 조회할 수 있는 이벤트 기록(Event history)의 범위이며, 데이터 이벤트가 애초에 수집되지 않은 것이 원인입니다.",
+        "2": "CloudTrail은 S3 관련 관리 이벤트(버킷 생성·정책 변경 등)를 기본 기록하고, 데이터 이벤트도 활성화하면 기록합니다.",
+        "3": "서버 액세스 로깅은 S3의 별도 기능이며 CloudTrail 기록의 전제 조건이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "CloudTrail 개념 — 관리 이벤트와 데이터 이벤트",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q2",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "foundational",
+      "stem": "추적(Trail)을 만들지 않은 계정에서 CloudTrail로 확인할 수 있는 것은?",
+      "options": [
+        "최근 90일간의 관리 이벤트를 콘솔 이벤트 기록에서 조회",
+        "최근 1년간의 모든 데이터 이벤트",
+        "아무것도 조회할 수 없다",
+        "다른 계정의 이벤트까지 포함한 전체 기록"
+      ],
+      "correct": 0,
+      "explanation": "추적을 만들지 않아도 최근 90일간의 관리 이벤트는 콘솔의 이벤트 기록(Event history)에서 조회할 수 있습니다. 90일을 넘는 장기 보관이나 전체 수집은 추적을 만들어 S3로 전달해야 합니다.",
+      "wrongExplanations": {
+        "1": "데이터 이벤트는 활성화하지 않으면 수집되지 않으며, 이벤트 기록의 기본 범위도 90일입니다.",
+        "2": "추적이 없어도 이벤트 기록 조회는 가능합니다.",
+        "3": "다른 계정 이벤트를 모으려면 조직 추적을 구성해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "CloudTrail 이벤트 기록으로 이벤트 보기",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q3",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "applied",
+      "stem": "AWS Organizations를 쓰는 기업이 모든 멤버 계정의 관리 이벤트를 중앙 S3 버킷에 모으고, 멤버 계정이 이를 해제할 수 없게 하려 한다. 어떤 구성인가?",
+      "options": [
+        "각 계정에서 단일 리전 추적을 만들어 같은 버킷을 지정한다",
+        "관리 계정에서 조직 추적(Organization Trail)을 다중 리전으로 생성한다",
+        "각 계정의 CloudTrail 이벤트 기록을 매주 내보낸다",
+        "SCP로 CloudTrail API를 전부 거부한다"
+      ],
+      "correct": 1,
+      "explanation": "조직 추적은 AWS Organizations의 모든 멤버 계정 이벤트를 관리 계정의 단일 위치로 통합 수집하며, 멤버 계정은 이 추적을 수정·삭제할 수 없어 중앙 감사의 무결성이 보장됩니다. 다중 리전으로 만들면 신규 리전도 자동 포함됩니다.",
+      "wrongExplanations": {
+        "0": "계정별 추적은 멤버 계정이 끌 수 있고, 리전마다 구성해야 하며 신규 리전이 누락됩니다.",
+        "2": "이벤트 기록 수동 내보내기는 지속적 수집이 아니고 90일 제한이 있습니다.",
+        "3": "CloudTrail API를 전부 거부하면 중앙 수집 구성 자체가 불가능해집니다."
+      },
+      "sources": [
+        {
+          "title": "조직을 위한 추적 생성",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q4",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "applied",
+      "stem": "감사인이 'S3에 전달된 CloudTrail 로그가 전달 이후 변경되지 않았음'을 증명해 달라고 요구한다. 어떤 기능을 사용하는가?",
+      "options": [
+        "로그 파일 무결성 검증(다이제스트 파일 + `validate-logs`)",
+        "S3 버전 관리",
+        "CloudTrail Insights",
+        "S3 서버 액세스 로깅"
+      ],
+      "correct": 0,
+      "explanation": "로그 파일 무결성 검증을 활성화하면 CloudTrail이 SHA-256 해시와 RSA 서명을 담은 다이제스트 파일을 생성합니다. `aws cloudtrail validate-logs`로 로그가 전달 후 변조·삭제됐는지 암호학적으로 검증할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "버전 관리는 덮어쓰기 이력을 남기지만 내용의 암호학적 무결성을 증명하지는 않습니다.",
+        "2": "Insights는 비정상적인 API 호출량을 탐지하는 기능입니다.",
+        "3": "서버 액세스 로깅은 버킷 접근 요청을 기록하며 로그 파일 내용의 무결성 증명과 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "CloudTrail 로그 파일 무결성 검증",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q5",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "applied",
+      "stem": "무결성 검증을 켰는데도 누군가 S3의 로그 객체를 삭제했다. 이 사실이 말해 주는 것은?",
+      "options": [
+        "다이제스트는 변조·삭제를 탐지할 뿐 차단하지 않으므로, 쓰기·삭제 자체를 막으려면 S3 Object Lock 같은 스토리지 통제가 필요하다",
+        "무결성 검증이 올바르게 활성화되지 않았다",
+        "다이제스트 파일이 삭제된 로그를 자동 복원한다",
+        "CloudTrail이 로그를 다시 전달해 복구한다"
+      ],
+      "correct": 0,
+      "explanation": "다이제스트는 원본 로그의 해시와 서명을 담은 별도 파일이므로 사후 비교로 '변조됐다'는 사실을 알려 줄 뿐, 변조·삭제 행위 자체를 막지는 못합니다. 예방 통제가 필요하면 버킷 정책, MFA Delete, S3 Object Lock, SSE 암호화를 함께 적용합니다.",
+      "wrongExplanations": {
+        "1": "검증이 정상 동작해도 삭제는 막히지 않습니다. 기능의 성격이 탐지이기 때문입니다.",
+        "2": "다이제스트에는 로그 내용이 없고 해시·서명만 있어 복원이 불가능합니다.",
+        "3": "CloudTrail은 이미 전달한 로그 객체를 재전달해 복구하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "CloudTrail 로그 파일 무결성 검증",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html"
+        },
+        {
+          "title": "S3 Object Lock 사용",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q6",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "foundational",
+      "stem": "CloudTrail 이벤트를 Athena를 따로 구성하지 않고 SQL로 직접 질의하며 불변 데이터 스토어에 장기 보관하려 한다. 적절한 기능은?",
+      "options": [
+        "CloudTrail Lake",
+        "CloudTrail Insights",
+        "CloudWatch Logs Insights",
+        "이벤트 기록(Event history)"
+      ],
+      "correct": 0,
+      "explanation": "CloudTrail Lake는 이벤트를 불변 데이터 스토어에 보관하고 SQL로 쿼리·분석하게 해 줍니다. 별도의 Athena 구성 없이 감사 조회를 수행할 수 있어 장기 보관·감사 분석에 적합합니다.",
+      "wrongExplanations": {
+        "1": "Insights는 비정상 API 활동 탐지 기능이며 SQL 쿼리 저장소가 아닙니다.",
+        "2": "Logs Insights는 CloudWatch Logs의 로그를 분석하는 기능으로 CloudTrail 전용 불변 스토어가 아닙니다.",
+        "3": "이벤트 기록은 최근 90일 관리 이벤트를 조회하는 콘솔 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CloudTrail Lake",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q7",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "applied",
+      "stem": "자격 증명이 탈취돼 갑자기 대량의 리소스가 생성되는 패턴을 탐지하려 한다. 계정마다 정상 호출량이 크게 다른 환경에서 가장 적합한 기능은?",
+      "options": [
+        "고정 임계치 CloudWatch 경보",
+        "CloudTrail Insights",
+        "로그 파일 무결성 검증",
+        "X-Ray 샘플링 규칙"
+      ],
+      "correct": 1,
+      "explanation": "CloudTrail Insights는 계정의 이력을 바탕으로 정상 기준선을 학습하고, 그 범위를 벗어나는 쓰기 API 호출량·오류율 급증만 이벤트로 발행합니다. 계정 규모에 따라 정상 범위가 크게 다를 때 고정 임계치보다 적합합니다.",
+      "wrongExplanations": {
+        "0": "고정 임계치는 호출량이 많은 계정에서는 오탐이 잦고, 적은 계정에서는 실제 침해를 놓칠 수 있습니다.",
+        "2": "무결성 검증은 로그 변조 탐지 기능입니다.",
+        "3": "X-Ray 샘플링은 분산 추적 비용을 조절하는 설정입니다."
+      },
+      "sources": [
+        {
+          "title": "CloudTrail Insights 이벤트 기록",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q8",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "difficulty": "foundational",
+      "stem": "EventBridge 규칙을 트리거하는 두 가지 방식은 무엇인가?",
+      "options": [
+        "이벤트 패턴 매칭과 스케줄(cron/rate) 표현식",
+        "CloudWatch 경보와 SNS 구독",
+        "API Gateway 호출과 S3 이벤트 알림",
+        "지표 필터와 구독 필터"
+      ],
+      "correct": 0,
+      "explanation": "EventBridge 규칙은 이벤트를 JSON 이벤트 패턴으로 매칭하거나, `cron(...)`·`rate(...)` 스케줄로 정기 트리거합니다. 매칭 시 Lambda, SNS, SQS, Step Functions, ECS, Systems Manager 등 대상을 호출합니다.",
+      "wrongExplanations": {
+        "1": "경보 상태 변경은 EventBridge가 받을 수 있는 이벤트 소스의 하나일 뿐, 규칙의 트리거 방식 분류가 아닙니다.",
+        "2": "이들도 이벤트 소스가 될 수 있으나 규칙 트리거 방식 두 가지의 설명은 아닙니다.",
+        "3": "지표 필터·구독 필터는 CloudWatch Logs의 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EventBridge 규칙",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q9",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "difficulty": "applied",
+      "stem": "매일 UTC 03:00에 정리 작업 Lambda를 실행하려 한다. EventBridge 스케줄 표현식으로 올바른 것은?",
+      "options": [
+        "`rate(1 day) at 03:00`",
+        "`cron(0 3 * * ? *)`",
+        "`cron(3 0 * * *)`",
+        "`schedule(daily 03:00 UTC)`"
+      ],
+      "correct": 1,
+      "explanation": "EventBridge cron 표현식은 6개 필드(분 시 일 월 요일 연)를 사용하며, 일·요일 중 하나는 `?`로 지정합니다. 매일 UTC 03:00은 `cron(0 3 * * ? *)`입니다.",
+      "wrongExplanations": {
+        "0": "`rate`는 간격만 지정하며 시각을 붙이는 구문이 없습니다.",
+        "2": "필드 순서가 분·시 순서에 맞지 않고 필드 수도 부족합니다.",
+        "3": "`schedule(...)`이라는 표현식 형식은 존재하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "EventBridge 규칙의 스케줄 표현식",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q10",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "difficulty": "applied",
+      "stem": "GuardDuty가 심각도 높은 Finding을 발행하면 해당 EC2 인스턴스를 자동 격리하려 한다. 가장 적절한 구성은?",
+      "options": [
+        "GuardDuty Finding을 EventBridge 규칙으로 매칭해 Lambda 또는 Systems Manager Automation을 대상으로 호출한다",
+        "CloudTrail 추적을 S3로 보내고 S3 이벤트 알림으로 Lambda를 호출한다",
+        "CloudWatch 지표 필터로 Finding을 지표화해 경보를 만든다",
+        "X-Ray 서비스 맵에서 인스턴스를 선택해 격리한다"
+      ],
+      "correct": 0,
+      "explanation": "GuardDuty·CloudTrail·경보 상태 변경 등 AWS 서비스 이벤트는 EventBridge 규칙으로 받아 Lambda·SSM Automation·Step Functions 같은 대상으로 자동 조치를 트리거하는 것이 표준 패턴입니다. 이벤트 패턴에 심각도 조건을 넣어 필요한 Finding만 선별합니다.",
+      "wrongExplanations": {
+        "1": "S3 경유는 지연이 크고 불필요하게 복잡합니다. GuardDuty는 EventBridge로 직접 이벤트를 발행합니다.",
+        "2": "지표 필터는 CloudWatch Logs 패턴을 지표화하는 기능으로 Finding 라우팅에 맞지 않습니다.",
+        "3": "X-Ray는 분산 추적 분석 도구이며 리소스 격리 기능이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "EventBridge를 통한 GuardDuty 결과 모니터링",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html"
+        },
+        {
+          "title": "Amazon EventBridge 규칙",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q11",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "difficulty": "foundational",
+      "stem": "EventBridge와 CloudWatch Events의 관계를 가장 정확히 설명한 것은?",
+      "options": [
+        "EventBridge는 CloudWatch Events의 후속·상위 호환 서비스로 같은 기본 이벤트 버스와 API를 공유한다",
+        "두 서비스는 완전히 분리된 이벤트 버스를 사용한다",
+        "CloudWatch Events가 EventBridge의 사용자 지정 버스를 대체했다",
+        "EventBridge는 스케줄 규칙을 지원하지 않는다"
+      ],
+      "correct": 0,
+      "explanation": "EventBridge는 CloudWatch Events의 후속 서비스로, 동일한 기본 이벤트 버스와 API를 공유하면서 사용자 지정·파트너 이벤트 버스, 스키마 레지스트리 등을 추가했습니다. 새 작업은 EventBridge로 구성합니다.",
+      "wrongExplanations": {
+        "1": "기본 버스는 공유됩니다.",
+        "2": "방향이 반대입니다. EventBridge가 후속 서비스입니다.",
+        "3": "EventBridge는 cron·rate 스케줄 규칙을 지원합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EventBridge란 무엇인가",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q12",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "foundational",
+      "stem": "X-Ray에서 하나의 요청이 여러 서비스를 거치며 만든 세그먼트들의 집합을 무엇이라 하는가?",
+      "options": [
+        "서브세그먼트",
+        "트레이스",
+        "서비스 맵",
+        "샘플링 규칙"
+      ],
+      "correct": 1,
+      "explanation": "세그먼트는 한 서비스가 처리한 작업 단위 데이터이고, 하나의 요청이 여러 서비스를 거치며 만든 세그먼트들의 집합이 트레이스(end-to-end)입니다. 서브세그먼트는 세그먼트 내부의 DB·외부 HTTP 호출 같은 세부 구간입니다.",
+      "wrongExplanations": {
+        "0": "서브세그먼트는 세그먼트 내부의 더 세밀한 작업 단위입니다.",
+        "2": "서비스 맵은 서비스 간 호출 관계와 지연·오류율을 시각화한 그래프입니다.",
+        "3": "샘플링 규칙은 추적 대상 비율을 정하는 설정입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS X-Ray 개념 — 세그먼트·서브세그먼트·트레이스",
+          "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q13",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "CloudWatch 지표로 API 응답이 느려진 것을 확인했다. 마이크로서비스 여러 개 중 어느 다운스트림 호출이 지연의 원인인지 좁히려면 무엇을 보는가?",
+      "options": [
+        "X-Ray 서비스 맵과 트레이스의 서브세그먼트",
+        "CloudTrail 관리 이벤트",
+        "로그 그룹 보존 정책",
+        "EventBridge 이벤트 패턴"
+      ],
+      "correct": 0,
+      "explanation": "X-Ray 서비스 맵은 요청이 거치는 서비스와 각 구간의 지연·오류율을 시각화합니다. 트레이스를 열어 서브세그먼트(DB 호출·외부 HTTP 호출)를 보면 어느 다운스트림이 지연의 원인인지 좁힐 수 있습니다.",
+      "wrongExplanations": {
+        "1": "CloudTrail은 누가 어떤 API를 호출했는지 감사하는 기록이며 구간별 지연을 알려 주지 않습니다.",
+        "2": "보존 정책은 로그 보관 기간 설정입니다.",
+        "3": "이벤트 패턴은 라우팅 조건이며 성능 분석 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "X-Ray 서비스 맵 보기",
+          "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-console-servicemap.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q14",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "difficulty": "applied",
+      "stem": "트래픽이 많은 서비스에 X-Ray를 도입하려는데 추적 비용과 오버헤드가 걱정된다. 기본적으로 제공되는 완화 수단은?",
+      "options": [
+        "샘플링 규칙으로 추적 대상 비율을 조절한다(예: 초당 기본 건수 + 나머지 일부 비율)",
+        "트레이스 보존 기간을 1일로 줄인다",
+        "서비스 맵을 비활성화한다",
+        "세그먼트를 CloudWatch Logs로 대신 전송한다"
+      ],
+      "correct": 0,
+      "explanation": "X-Ray는 전수 추적 대신 샘플링을 기본 동작으로 둡니다. 샘플링 규칙으로 초당 기본 건수와 초과 요청의 비율을 지정해 비용·오버헤드를 줄이면서도 이상 패턴과 병목 구간을 포착할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "보존 기간 축소는 비용 축소 수단으로 제시되는 기본 메커니즘이 아니며, 수집 단계의 오버헤드도 줄지 않습니다.",
+        "2": "서비스 맵은 수집된 데이터를 보는 화면이라 비활성화해도 수집 비용은 그대로입니다.",
+        "3": "세그먼트를 Logs로 보내는 것은 X-Ray의 추적 파이프라인이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "X-Ray 샘플링 규칙 구성",
+          "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t1-3-q15",
+      "examGuideTaskId": "soa-t1-3",
+      "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "difficulty": "applied",
+      "stem": "보안 기준선으로 '모든 리전의 관리 이벤트를 중앙 S3에 모으고, 핵심 API 호출에는 즉시 경보를 건다'를 구현해야 한다. 추적 구성에 추가해야 할 것은?",
+      "options": [
+        "추적을 CloudWatch Logs에도 전달하도록 구성하고, 지표 필터 + 경보를 만든다",
+        "추적 대상 S3 버킷에 수명주기 규칙을 추가한다",
+        "데이터 이벤트를 모든 버킷에 대해 활성화한다",
+        "CloudTrail Lake 데이터 스토어를 만들고 매일 SQL을 수동 실행한다"
+      ],
+      "correct": 0,
+      "explanation": "추적은 S3 전달 외에 CloudWatch Logs로도 전달할 수 있습니다. Logs로 보내면 지표 필터로 특정 API 호출(예: 보안 그룹 변경)을 지표화하고 경보를 걸어 즉시 알림을 받을 수 있습니다.",
+      "wrongExplanations": {
+        "1": "수명주기 규칙은 저장 비용 관리 수단이며 즉시 경보와 무관합니다.",
+        "2": "데이터 이벤트 전면 활성화는 고볼륨·고비용이고, 요건은 관리 이벤트 경보입니다.",
+        "3": "수동 SQL 실행은 '즉시 경보' 요건을 충족하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "CloudWatch Logs로 CloudTrail 이벤트 모니터링",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/monitor-cloudtrail-log-files-with-cloudwatch-logs.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

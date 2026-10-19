@@ -1,0 +1,520 @@
+{
+  "examGuideTaskId": "dea-t1-1",
+  "taskTitle": "데이터 수집 수행",
+  "domain": 1,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t1-1-q1",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "스트리밍 소스에서 데이터 읽기(1.1.1)",
+      "section": "streaming-choice",
+      "difficulty": "applied",
+      "stem": "한 회사가 애플리케이션 로그를 거의 실시간으로 Amazon S3 데이터 레이크에 Parquet 형식으로 적재하려고 한다. 소비자 애플리케이션 코드를 직접 작성·운영하는 일은 최소화하고 싶다. 가장 적합한 서비스는 무엇인가?",
+      "options": [
+        "Amazon Data Firehose",
+        "Amazon Kinesis Data Streams에 KCL 소비자 애플리케이션 구성",
+        "Amazon MSK에 Kafka Connect S3 싱크 구성",
+        "Amazon DynamoDB Streams"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Data Firehose는 완전 관리형 전달 서비스로 소비자 코드 없이 S3·Redshift·OpenSearch 등으로 적재하며, 버퍼링과 함께 JSON → Parquet/ORC 형식 변환, 동적 파티셔닝을 붙일 수 있습니다. '소비자 코드·서버 운영 최소화 + 형식 변환'은 Firehose의 단서입니다.",
+      "wrongExplanations": {
+        "1": "Kinesis Data Streams는 소비자가 당겨 읽는 스트림 저장소입니다. KCL 애플리케이션을 직접 작성·배포·확장해야 하므로 '소비자 코드 최소화' 요구에 어긋납니다.",
+        "2": "Amazon MSK는 관리형 Apache Kafka로, 기존 Kafka 애플리케이션이나 Kafka Connect 호환이 필요할 때 고릅니다. 이 시나리오에는 Kafka 호환 요구가 없고 클러스터·커넥터 운영 부담이 추가됩니다.",
+        "3": "DynamoDB Streams는 DynamoDB 테이블의 항목 수준 변경을 캡처하는 전용 스트림입니다. 애플리케이션 로그 수집 경로가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Data Firehose FAQs — 관리형 전달, 버퍼링·Lambda 변환·Parquet/ORC 변환·동적 파티셔닝",
+          "url": "https://aws.amazon.com/firehose/faqs/"
+        },
+        {
+          "title": "Amazon Kinesis Data Streams FAQs — 소비자가 읽어 가는 스트림, 다중 애플리케이션 소비",
+          "url": "https://aws.amazon.com/kinesis/data-streams/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q2",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "스트리밍 데이터 배포를 위한 팬인·팬아웃 관리(1.1.10)",
+      "section": "kds-capacity",
+      "difficulty": "applied",
+      "stem": "Kinesis Data Streams를 읽는 분석 애플리케이션이 1개에서 3개로 늘어난 뒤, 각 애플리케이션에서 읽기 스로틀과 지연 증가가 관측된다. 샤드 수는 그대로 두면서 이 문제를 해결하는 방법은 무엇인가?",
+      "options": [
+        "소비자를 향상된 팬아웃(EFO)으로 등록해 SubscribeToShard로 읽게 한다",
+        "GetRecords 호출 주기를 늘려 호출 횟수를 줄인다",
+        "스트림의 데이터 보존 기간을 7일로 늘린다",
+        "각 애플리케이션이 같은 파티션 키를 사용하도록 변경한다"
+      ],
+      "correct": 0,
+      "explanation": "공유 처리량 모드에서는 샤드의 읽기 한도(2 MB/s·초당 5 읽기 트랜잭션)를 그 샤드에 붙은 모든 소비자가 나눠 씁니다. 향상된 팬아웃(EFO)을 등록하면 소비자마다 샤드당 전용 2 MB/s를 받고 SubscribeToShard로 밀어 주므로 경합이 사라지고 지연도 통상 70 ms 수준으로 낮아집니다.",
+      "wrongExplanations": {
+        "1": "호출 주기를 늘리면 초당 읽기 트랜잭션 압박은 줄어들지만 소비자들이 2 MB/s를 나눠 쓰는 구조는 그대로여서 처리량 부족과 지연은 해결되지 않습니다.",
+        "2": "보존 기간은 데이터를 얼마나 오래 보관하고 재처리할 수 있는지를 정할 뿐 읽기 처리량 한도와는 무관합니다.",
+        "3": "파티션 키는 레코드가 어느 샤드로 들어갈지를 정하는 쓰기 측 개념입니다. 같은 키를 쓰면 오히려 한 샤드로 쏠려 핫 샤드가 됩니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Kinesis Data Streams FAQs — EFO 소비자당 샤드당 2 MB/s, 통상 70 ms",
+          "url": "https://aws.amazon.com/kinesis/data-streams/faqs/"
+        },
+        {
+          "title": "Quotas and limits (Kinesis Data Streams) — 샤드 읽기 2 MB/s·초당 5 트랜잭션, EFO 등록 수",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q3",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "제한 구현 및 속도 제한 극복(1.1.9)",
+      "section": "kds-capacity",
+      "difficulty": "applied",
+      "stem": "프로비저닝 모드 Kinesis Data Streams를 설계한다. 유입은 초당 3 MB, 단일 소비자의 읽기는 초당 4 MB가 필요하다. 공식 산정 방식에 따른 최소 샤드 수는 몇 개인가?",
+      "options": [
+        "2개",
+        "3개",
+        "4개",
+        "6개"
+      ],
+      "correct": 1,
+      "explanation": "초기 샤드 수는 max(쓰기 KB/1000, 읽기 KB/2000)으로 산정합니다. 쓰기는 3,000/1,000 = 3, 읽기는 4,000/2,000 = 2이므로 둘 중 큰 값인 3개가 최소입니다(샤드당 쓰기 1 MB/s, 읽기 2 MB/s).",
+      "wrongExplanations": {
+        "0": "2는 읽기 요구(4 MB/s ÷ 2 MB/s)만 고려한 값입니다. 쓰기 3 MB/s를 받으려면 샤드가 3개 필요하므로 쓰기 쪽이 제약입니다.",
+        "2": "4개는 읽기를 샤드당 1 MB/s로 잘못 계산했을 때 나오는 값입니다. 샤드 읽기 한도는 2 MB/s입니다.",
+        "3": "6개는 쓰기 3개와 읽기 산정값을 더한 결과입니다. 산정식은 합이 아니라 두 값 중 최대값을 씁니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Kinesis Data Streams FAQs — 초기 샤드 수 산정식과 샤드 처리량",
+          "url": "https://aws.amazon.com/kinesis/data-streams/faqs/"
+        },
+        {
+          "title": "Quotas and limits (Kinesis Data Streams) — 샤드당 쓰기 1 MB/s, 읽기 2 MB/s",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q4",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "배치 수집을 위한 적절한 구성 옵션 구현(1.1.3)",
+      "section": "firehose",
+      "difficulty": "foundational",
+      "stem": "Amazon Data Firehose로 S3에 전달할 때, 버퍼링 힌트를 따로 설정하지 않으면 적용되는 기본값은 무엇인가?",
+      "options": [
+        "1 MB 또는 60초",
+        "5 MB 또는 300초",
+        "64 MB 또는 900초",
+        "128 MB 또는 600초"
+      ],
+      "correct": 1,
+      "explanation": "S3 목적지의 버퍼 크기는 1~128 MB, 버퍼 간격은 0~900초 범위에서 설정하며 기본값은 5 MB 또는 300초입니다. 두 조건 중 먼저 충족되는 쪽에서 전달이 일어납니다.",
+      "wrongExplanations": {
+        "0": "1 MB는 설정 가능한 최소 버퍼 크기이고 60초는 임의 값입니다. 기본값이 아닙니다.",
+        "2": "64 MB는 Parquet/ORC 형식 변환이나 동적 파티셔닝을 활성화했을 때 적용되는 범위(64~128 MB)의 하한이며, 900초는 설정 가능한 최대 간격입니다.",
+        "3": "128 MB는 설정 가능한 최대 버퍼 크기입니다. 기본값으로 적용되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Data Firehose FAQs — S3 버퍼 크기·간격 범위와 기본값",
+          "url": "https://aws.amazon.com/firehose/faqs/"
+        },
+        {
+          "title": "Configure backup settings (Firehose buffering hints) — 먼저 충족되는 조건에서 전달",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/create-configure-backup.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q5",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "스트리밍 소스에서 데이터 읽기(1.1.1)",
+      "section": "firehose",
+      "difficulty": "applied",
+      "stem": "Direct PUT으로 데이터를 받는 Amazon Data Firehose 스트림의 S3 목적지에 장애가 발생해 전달이 계속 실패하고 있다. 전달되지 못한 데이터는 언제까지 보관되는가?",
+      "options": [
+        "최대 24시간",
+        "최대 7일",
+        "최대 365일",
+        "보관되지 않고 즉시 폐기된다"
+      ],
+      "correct": 0,
+      "explanation": "목적지 장애가 이어질 때 Direct PUT 소스로 들어온 데이터는 최대 24시간까지 보관되고 그 뒤에는 폐기됩니다. 반면 Kinesis Data Streams를 소스로 쓰면 데이터가 스트림에 남아 KDS에 설정한 보존 기간(기본 24시간, 최대 365일)까지 복구 창이 생깁니다.",
+      "wrongExplanations": {
+        "1": "7일은 Amazon MSK의 기본 보존 설정 등에서 등장하는 값이며 Firehose의 Direct PUT 보관 한도가 아닙니다.",
+        "2": "365일은 Kinesis Data Streams의 최대 보존 기간입니다. Firehose 자체의 보관 한도와 혼동하기 쉬운 함정입니다.",
+        "3": "즉시 폐기되지는 않습니다. Firehose는 재시도하면서 24시간까지 데이터를 보관합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Data Firehose Quota — 목적지 장애 시 Direct PUT 데이터 최대 24시간 보관",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/limits.html"
+        },
+        {
+          "title": "Amazon Data Firehose FAQs — S3 전달 재시도와 소스별 보존 동작",
+          "url": "https://aws.amazon.com/firehose/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q6",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "배치 수집을 위한 적절한 구성 옵션 구현(1.1.3)",
+      "section": "firehose",
+      "difficulty": "applied",
+      "stem": "Firehose에서 JSON 필드로 S3 prefix를 나누는 동적 파티셔닝을 켜고, 동시에 버퍼 간격을 0초(제로 버퍼링)로 설정해 지연을 수 초로 줄이려 한다. 이 구성의 문제는 무엇인가?",
+      "options": [
+        "제로 버퍼링은 동적 파티셔닝과 함께 사용할 수 없다",
+        "제로 버퍼링은 Parquet 변환을 자동으로 비활성화한다",
+        "동적 파티셔닝은 버퍼 크기를 1 MB 이하로 강제한다",
+        "동적 파티셔닝을 켜면 S3 버킷을 2개 이상 지정해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "버퍼 간격을 0으로 두는 제로 버퍼링은 수 초 내 전달을 가능하게 하지만 동적 파티셔닝에는 사용할 수 없습니다. 또한 Parquet/ORC 변환이나 동적 파티셔닝을 활성화하면 버퍼 크기 범위가 64~128 MB가 됩니다.",
+      "wrongExplanations": {
+        "1": "제로 버퍼링이 형식 변환 설정을 자동으로 끄지는 않습니다. 제약은 동적 파티셔닝과의 조합 불가입니다.",
+        "2": "동적 파티셔닝을 켜면 버퍼 크기는 오히려 64~128 MB 범위로 커집니다. 1 MB 이하로 강제되지 않습니다.",
+        "3": "하나의 Firehose 스트림은 S3 버킷 하나에만 전달합니다. 동적 파티셔닝은 같은 버킷 안에서 prefix를 나누는 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "Configure backup settings (Firehose buffering hints) — 제로 버퍼링과 동적 파티셔닝 제약",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/create-configure-backup.html"
+        },
+        {
+          "title": "Amazon Data Firehose FAQs — 형식 변환·동적 파티셔닝 시 버퍼 크기 범위, 스트림당 버킷 1개",
+          "url": "https://aws.amazon.com/firehose/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q7",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "데이터 수집 파이프라인의 반복 재생 가능성 설명(1.1.11)",
+      "section": "cdc-sources",
+      "difficulty": "applied",
+      "stem": "DynamoDB 테이블의 변경 이력을 캡처해야 한다. 요구사항은 최대 6개월 전 변경까지 다시 읽어 재처리할 수 있어야 하고, 여러 소비자가 Kinesis 생태계 도구로 읽는 것이다. 어떤 방식을 고르는가?",
+      "options": [
+        "DynamoDB Streams를 Lambda 트리거와 함께 사용한다",
+        "Kinesis Data Streams for DynamoDB로 변경을 복제한다",
+        "DynamoDB 테이블을 매일 S3로 내보내 Glue로 비교한다",
+        "DynamoDB Accelerator(DAX)를 활성화한다"
+      ],
+      "correct": 1,
+      "explanation": "Kinesis Data Streams for DynamoDB는 테이블 변경을 KDS로 복제하므로 보존을 최대 1년까지 늘릴 수 있고, EFO 소비자를 샤드당 최대 20개까지 붙여 KCL·Managed Service for Apache Flink·Firehose 등 Kinesis 생태계를 활용할 수 있습니다. 단 순서와 중복 제거를 보장하지 않으므로 ApproximateCreationDateTime으로 클라이언트가 정렬·중복 처리해야 합니다.",
+      "wrongExplanations": {
+        "0": "DynamoDB Streams는 보존이 24시간이고 샤드당 읽기 프로세스를 2개 이하로 두도록 권장하므로, 6개월 재생과 다수 소비자 요구를 만족할 수 없습니다.",
+        "2": "주기적 내보내기 후 비교는 항목 수준 변경 이력을 보존하지 못하고 지연도 큽니다. 변경 캡처(CDC) 요구에 맞지 않습니다.",
+        "3": "DAX는 읽기 캐시 가속기입니다. 변경 캡처나 재처리 기능과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Choose the right change data capture strategy for your Amazon DynamoDB applications — 보존 최대 1년, EFO 소비자, 순서·중복 비보장",
+          "url": "https://aws.amazon.com/blogs/database/choose-the-right-change-data-capture-strategy-for-your-amazon-dynamodb-applications/"
+        },
+        {
+          "title": "Change data capture for DynamoDB Streams — 보존 24시간, 샤드당 읽기 프로세스 2개 이하",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q8",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "스트리밍 소스에서 데이터 읽기(1.1.1)",
+      "section": "cdc-sources",
+      "difficulty": "foundational",
+      "stem": "DynamoDB Streams를 KEYS_ONLY 뷰 타입으로 활성화해 운영 중이다. 이제 변경 전후 항목 값이 모두 필요해졌다. 공식 문서 기준으로 올바른 설명은 무엇인가?",
+      "options": [
+        "스트림 뷰 타입은 설정 후 변경할 수 없으므로 스트림을 다시 만들어야 한다",
+        "콘솔에서 뷰 타입을 NEW_AND_OLD_IMAGES로 즉시 변경할 수 있다",
+        "뷰 타입은 소비자 쪽 GetRecords 파라미터로 결정하므로 코드만 바꾸면 된다",
+        "KEYS_ONLY 스트림도 기본적으로 이전 이미지를 포함하므로 변경이 필요 없다"
+      ],
+      "correct": 0,
+      "explanation": "DynamoDB Streams의 뷰 타입(KEYS_ONLY / NEW_IMAGE / OLD_IMAGE / NEW_AND_OLD_IMAGES)은 스트림을 활성화할 때 정하며 이후 변경할 수 없습니다. 다른 뷰 타입이 필요하면 스트림을 비활성화하고 다시 활성화해야 합니다.",
+      "wrongExplanations": {
+        "1": "뷰 타입은 설정 후 수정할 수 없습니다. 콘솔에서도 기존 스트림의 뷰 타입을 바꿀 수 없습니다.",
+        "2": "뷰 타입은 스트림 설정값이며 소비자 호출 파라미터가 아닙니다. 소비자가 받는 레코드 구성은 스트림 설정에 종속됩니다.",
+        "3": "KEYS_ONLY는 변경된 항목의 키 속성만 포함합니다. 이전·이후 이미지는 포함되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Change data capture for DynamoDB Streams — 뷰 타입 4종과 변경 불가 제약",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html"
+        },
+        {
+          "title": "Choose the right change data capture strategy for your Amazon DynamoDB applications — 스트림 구성 비교",
+          "url": "https://aws.amazon.com/blogs/database/choose-the-right-change-data-capture-strategy-for-your-amazon-dynamodb-applications/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q9",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "스트리밍 소스에서 데이터 읽기(1.1.1)",
+      "section": "cdc-sources",
+      "difficulty": "applied",
+      "stem": "온프레미스 관계형 데이터베이스의 변경을 AWS DMS의 CDC로 복제하는 설계를 검토한다. 이해관계자가 '복제 지연은 항상 1초 이내로 보장되는가'라고 묻는다. 공식 문서에 근거한 답은 무엇인가?",
+      "options": [
+        "CDC는 실시간 복제가 아니며 지연에 대한 SLA가 없다",
+        "CDC는 트랜잭션 로그를 읽으므로 1초 이내 지연이 보장된다",
+        "전체 로드와 CDC를 함께 쓰면 지연 보장이 활성화된다",
+        "복제 인스턴스 크기를 2배로 키우면 1초 이내가 보장된다"
+      ],
+      "correct": 0,
+      "explanation": "AWS DMS의 지속 복제(CDC)는 소스의 트랜잭션 로그를 읽어 변경을 전달하지만, 공식 문서는 CDC가 실시간 복제가 아니며 지연에 대한 SLA를 제공하지 않는다고 명시합니다. 따라서 '거의 실시간 보장' 류의 보기는 의심해야 합니다.",
+      "wrongExplanations": {
+        "1": "로그 기반이라는 점이 지연 보장을 의미하지는 않습니다. 소스 부하·네트워크·대상 처리량에 따라 지연이 달라집니다.",
+        "2": "전체 로드 후 CDC는 초기 적재와 이후 변경 반영을 잇는 작업 방식일 뿐, 지연 보장과 무관합니다.",
+        "3": "인스턴스 확대는 처리량을 개선할 수 있으나 공식적인 지연 SLA를 만들어 주지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Creating tasks for ongoing replication using AWS DMS — CDC는 실시간 복제가 아니고 지연 SLA 없음",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Task.CDC.html"
+        },
+        {
+          "title": "Using Amazon Kinesis Data Streams as a target for AWS DMS — 대상 전달 특성과 중복 처리 책임",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q10",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "배치 소스에서 데이터 읽기(1.1.2)",
+      "section": "batch-ingestion",
+      "difficulty": "applied",
+      "stem": "AWS Glue 잡에서 S3 소스에 대해 잡 북마크를 활성화했는데, 이미 처리한 파일이 다음 실행에서 다시 처리됐다. 가장 가능성 높은 원인은 무엇인가?",
+      "options": [
+        "해당 S3 객체가 덮어써져 수정 시각이 바뀌었다",
+        "북마크는 S3 소스에서 동작하지 않는다",
+        "잡이 실패하면 북마크가 항상 초기화된다",
+        "S3 버전 관리가 켜져 있으면 북마크가 무시된다"
+      ],
+      "correct": 0,
+      "explanation": "Glue 잡 북마크는 S3 객체의 수정 시각을 기준으로 처리 대상을 판별합니다. 따라서 이미 처리한 파일이라도 덮어써져 수정 시각이 갱신되면 새 데이터로 간주되어 다시 처리됩니다.",
+      "wrongExplanations": {
+        "1": "북마크는 S3 소스를 지원합니다. 다만 판별 기준이 객체 수정 시각이라는 점이 중요합니다(JDBC 소스는 순증가하는 키를 사용).",
+        "2": "잡 실패가 북마크를 자동 초기화하지는 않습니다. 초기화는 명시적인 리셋(rewind) 작업입니다.",
+        "3": "S3 버전 관리 설정이 북마크 동작을 무효화한다는 공식 설명은 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Tracking processed data using job bookmarks (AWS Glue) — S3 수정 시각 기준, 기본값 비활성",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/monitor-continuations.html"
+        },
+        {
+          "title": "Reading from JDBC tables in parallel (AWS Glue) — JDBC 소스의 키 기반 증분 읽기",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/run-jdbc-parallel-read-job.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q11",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "배치 수집을 위한 적절한 구성 옵션 구현(1.1.3)",
+      "section": "batch-ingestion",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift로 대용량 파일을 COPY로 적재할 때, 공식 모범 사례가 권장하는 입력 파일 구성은 무엇인가?",
+      "options": [
+        "압축 후 1 MB~1 GB 크기로 비슷하게 나누고 파일 수를 슬라이스 수의 배수로 맞춘다",
+        "단일 대용량 파일 하나로 만들어 한 번에 적재한다",
+        "파일을 1 KB 단위로 최대한 많이 쪼갠다",
+        "항상 비압축 CSV로 두고 파일 수는 노드 수와 같게 맞춘다"
+      ],
+      "correct": 0,
+      "explanation": "Redshift COPY 모범 사례는 파일을 비슷한 크기(압축 후 1 MB~1 GB)로 나누고, 파일 개수를 클러스터 슬라이스 수의 배수로 맞추어 모든 슬라이스가 균등하게 병렬 적재에 참여하도록 하는 것입니다.",
+      "wrongExplanations": {
+        "1": "단일 파일은 병렬 적재를 활용하지 못해 느립니다. 슬라이스 하나만 일하게 됩니다.",
+        "2": "과도하게 작은 파일은 파일당 오버헤드가 커져 비효율적입니다.",
+        "3": "압축은 전송·적재에 유리하며, 기준은 노드 수가 아니라 슬라이스 수의 배수입니다."
+      },
+      "sources": [
+        {
+          "title": "Loading data files (Amazon Redshift best practices) — 파일 크기·슬라이스 배수 권장",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-use-multiple-files.html"
+        },
+        {
+          "title": "Extend your Amazon Redshift Data Warehouse to your Data Lake — UNLOAD 파일 크기 권장",
+          "url": "https://aws.amazon.com/blogs/big-data/extend-your-amazon-redshift-data-warehouse-to-your-data-lake/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q12",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "데이터 API 사용(1.1.4)",
+      "section": "batch-ingestion",
+      "difficulty": "foundational",
+      "stem": "AWS Lambda 함수에서 Amazon Redshift에 SQL을 실행해야 하는데, JDBC 드라이버와 연결 풀, VPC 네트워크 구성을 관리하고 싶지 않다. 적합한 방법은 무엇인가?",
+      "options": [
+        "Amazon Redshift Data API로 SDK/HTTP 엔드포인트를 호출한다",
+        "Lambda 레이어에 JDBC 드라이버를 올려 직접 연결한다",
+        "Redshift 클러스터를 퍼블릭 액세스로 바꿔 인터넷에서 연결한다",
+        "Redshift Spectrum 외부 테이블을 만들어 Athena로 조회한다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Redshift Data API는 드라이버·연결·네트워크 구성을 관리하지 않고 SDK 또는 HTTP 엔드포인트로 SQL을 실행합니다. 호출은 비동기이고, 자격 증명은 Secrets Manager 또는 임시 DB 자격 증명을 사용합니다.",
+      "wrongExplanations": {
+        "1": "드라이버와 연결 관리를 직접 하게 되어 요구사항에 어긋나고, Lambda의 짧은 수명과 연결 폭증 문제도 남습니다.",
+        "2": "퍼블릭 액세스 전환은 보안 노출을 키우는 선택이며 연결 관리 부담도 그대로입니다.",
+        "3": "Spectrum·Athena는 S3 데이터 조회 경로입니다. Redshift에 SQL을 실행하는 요구와 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Using the Amazon Redshift Data API — 연결 관리 불필요, 비동기 호출, 자격 증명 옵션",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html"
+        },
+        {
+          "title": "RDS Proxy concepts and terminology — 연결 폭증 문제의 일반적 해법(비교용)",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.howitworks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q13",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "이벤트 트리거 설정(1.1.6)",
+      "section": "triggers",
+      "difficulty": "applied",
+      "stem": "S3에 객체가 생성되면 처리를 시작해야 한다. 요구사항은 ①SQS FIFO 큐로 전달 ②객체 크기 조건으로 필터 ③같은 이벤트를 여러 대상에 전달이다. 어떻게 구성하는가?",
+      "options": [
+        "S3 이벤트를 EventBridge로 보내고 규칙에서 필터·다중 대상을 구성한다",
+        "S3 이벤트 알림에서 SQS FIFO 큐를 대상으로 직접 지정한다",
+        "S3 이벤트 알림을 SNS FIFO 토픽에 연결하고 큐를 구독한다",
+        "S3 이벤트 알림을 Lambda로 받아 Lambda가 FIFO 큐에 넣는다"
+      ],
+      "correct": 0,
+      "explanation": "S3 이벤트 알림을 직접 쓰면 알림 설정 하나에 대상 유형 하나만 지정할 수 있고 SQS·SNS FIFO는 지원되지 않으며 고급 필터도 없습니다. S3 → EventBridge로 보내면 규칙으로 다중 대상, 객체 크기·키 이름·시간 범위 등 고급 필터, 이벤트 아카이브·재생까지 쓸 수 있고 FIFO 큐도 대상이 됩니다.",
+      "wrongExplanations": {
+        "1": "S3 이벤트 알림은 Standard 큐만 대상으로 지원합니다. FIFO 큐는 직접 지정할 수 없습니다.",
+        "2": "SNS FIFO 토픽도 S3 이벤트 알림의 직접 대상으로 지원되지 않습니다.",
+        "3": "Lambda를 중계로 쓰면 FIFO 전달은 가능하지만 객체 크기 고급 필터와 다중 대상 요구를 코드로 떠안게 되고, 공식 권장 구성은 EventBridge 경유입니다."
+      },
+      "sources": [
+        {
+          "title": "Event notification types and destinations (Amazon S3) — 대상 유형과 FIFO 제약, 최소 1회 전달",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-how-to-event-types-and-destinations.html"
+        },
+        {
+          "title": "New – Use Amazon S3 Event Notifications with Amazon EventBridge — 고급 필터·다중 대상",
+          "url": "https://aws.amazon.com/blogs/aws/new-use-amazon-s3-event-notifications-with-amazon-eventbridge/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q14",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "EventBridge·Airflow·시간 기반 일정으로 스케줄러 설정(1.1.5)",
+      "section": "triggers",
+      "difficulty": "applied",
+      "stem": "수집 작업을 매일 특정 시간대(Asia/Seoul) 기준으로 실행하고, 실패 시 재시도 한도와 유연한 시간 창을 지정하려 한다. AWS가 권장하는 수단은 무엇인가?",
+      "options": [
+        "Amazon EventBridge Scheduler 일정을 만든다",
+        "Amazon EventBridge 예약 규칙(legacy)을 만든다",
+        "AWS Glue 크롤러 일정을 5분 간격으로 설정한다",
+        "Amazon MWAA 환경을 만들어 DAG 하나만 둔다"
+      ],
+      "correct": 0,
+      "explanation": "EventBridge Scheduler는 rate·cron·one-time 일정과 시간대 지정, 유연한 시간 창, 재시도 한도를 지원하며 모든 스케줄 유형이 60초 정밀도로 대상을 호출합니다. 예약 규칙은 legacy로 표기되고 UTC 기준입니다.",
+      "wrongExplanations": {
+        "1": "예약 규칙은 legacy 기능이며 기본 이벤트 버스만 사용하고 UTC+0 기준이라 시간대 지정 요구를 만족하지 못합니다.",
+        "2": "Glue 일정은 cron 기반이지만 UTC 기준이고 최소 정밀도가 5분이며, 재시도 한도·유연한 시간 창 같은 스케줄러 기능을 제공하지 않습니다.",
+        "3": "MWAA는 복잡한 워크플로 오케스트레이션에 적합하지만 단일 일정 실행에는 운영 비용이 과도합니다."
+      },
+      "sources": [
+        {
+          "title": "Schedule types in EventBridge Scheduler — rate·cron·one-time, 시간대, 60초 정밀도",
+          "url": "https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html"
+        },
+        {
+          "title": "Creating a scheduled rule (legacy) in Amazon EventBridge — legacy 표기와 UTC 기준",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q15",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "Kinesis에서 Lambda 함수 호출(1.1.7)",
+      "section": "throttle-replay",
+      "difficulty": "applied",
+      "stem": "Kinesis Data Streams를 소비하는 Lambda 함수가 특정 불량 레코드에서 계속 실패해 해당 샤드의 처리가 멈췄다. 데이터를 잃지 않으면서 처리를 재개하는 구성은 무엇인가?",
+      "options": [
+        "재시도 횟수·레코드 연령 한도를 설정하고 배치 이등분을 켜고 실패 대상(SQS/SNS)을 지정한다",
+        "이벤트 소스 매핑을 삭제하고 다시 만든다",
+        "BatchSize를 1로 낮추고 재시도를 무제한으로 유지한다",
+        "스트림 보존 기간을 24시간으로 줄여 불량 레코드를 만료시킨다"
+      ],
+      "correct": 0,
+      "explanation": "기본값은 재시도와 레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주까지 막습니다. MaximumRetryAttempts·MaximumRecordAgeInSeconds로 정체를 끊고, BisectBatchOnFunctionError로 실패 배치를 반으로 나눠 불량 레코드를 격리하며, 폐기되는 레코드는 실패 대상(SQS/SNS)으로 보내 보관합니다.",
+      "wrongExplanations": {
+        "1": "매핑을 재생성하면 체크포인트가 흔들려 재처리·누락 위험이 생기고, 같은 불량 레코드에서 다시 멈춥니다.",
+        "2": "BatchSize를 줄이면 영향 범위는 좁아지지만 무제한 재시도가 남아 해당 레코드에서 계속 정체됩니다.",
+        "3": "보존을 줄이는 것은 데이터를 버리는 선택입니다. '데이터를 잃지 않는다'는 요구에 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "Lambda parameters for Kinesis Data Streams event source mappings — 재시도·연령 한도, 배치 이등분",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/services-kinesis-parameters.html"
+        },
+        {
+          "title": "Retain discarded batch records for a Kinesis Data Streams event source in Lambda — 실패 대상",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/kinesis-on-failure-destination.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-1-q16",
+      "examGuideTaskId": "dea-t1-1",
+      "skill": "데이터 소스 연결을 위한 IP 주소 허용 목록 만들기(1.1.8)",
+      "section": "throttle-replay",
+      "difficulty": "applied",
+      "stem": "파트너사가 자사 API 방화벽에 고정 출발 IP만 허용한다. AWS Lambda에서 그 API를 호출해야 할 때 올바른 구성은 무엇인가?",
+      "options": [
+        "Lambda를 프라이빗 서브넷에 연결하고 퍼블릭 서브넷의 NAT 게이트웨이와 Elastic IP로 나가게 한다",
+        "Lambda를 퍼블릭 서브넷에 연결하면 퍼블릭 IP로 나가므로 그대로 쓴다",
+        "파트너사에 ip-ranges.json의 AWS IP 범위를 등록해 달라고 요청한다",
+        "Lambda 함수에 Elastic IP를 직접 할당한다"
+      ],
+      "correct": 0,
+      "explanation": "VPC에 연결한 Lambda가 인터넷으로 나가려면 프라이빗 서브넷에 두고 퍼블릭 서브넷의 NAT 게이트웨이를 경유해야 하며, 이때 NAT 게이트웨이의 Elastic IP가 고정 출발 IP가 됩니다.",
+      "wrongExplanations": {
+        "1": "함수를 퍼블릭 서브넷에 연결하는 것만으로는 인터넷에 나갈 수 없습니다. Lambda 함수에는 퍼블릭 IP가 할당되지 않습니다.",
+        "2": "ip-ranges.json은 AWS 서비스의 공용 IP 범위로 매우 넓고 변동되며, 우리 애플리케이션의 고정 출구 IP가 아닙니다.",
+        "3": "Elastic IP는 Lambda 함수에 직접 할당할 수 없습니다. NAT 게이트웨이 등 네트워크 구성 요소에 연결합니다."
+      },
+      "sources": [
+        {
+          "title": "Enable internet access for VPC-connected Lambda functions — 프라이빗 서브넷 + NAT 게이트웨이 필요",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc-internet.html"
+        },
+        {
+          "title": "AWS IP address ranges — ip-ranges.json은 AWS 서비스의 공용 범위",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/aws-ip-ranges.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

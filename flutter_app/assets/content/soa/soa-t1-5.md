@@ -18,7 +18,9 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
   - title: Amazon ElastiCache 캐싱 전략 (공식)
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
-lastVerified: 2026-06-12
+  - title: ElastiCache 엔진 비교 — Valkey·Memcached·Redis OSS (공식)
+    url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html
+lastVerified: 2026-10-19
 ---
 
 # 컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)
@@ -37,7 +39,7 @@ lastVerified: 2026-06-12
 - [ ] **EBS 볼륨 타입** — gp3/gp2/io1/io2/st1/sc1의 특성과 선택 기준을 안다
 - [ ] **EBS 핵심 수치** — gp3 베이스라인(3000 IOPS/125 MB/s), gp2의 3 IOPS/GB·버스트를 안다
 - [ ] **RDS 읽기 확장** — 읽기 전용 복제본·파라미터 그룹·Performance Insights의 용도를 안다
-- [ ] **ElastiCache** — Redis vs Memcached, lazy loading vs write-through 전략을 구분한다
+- [ ] **ElastiCache** — 엔진 3종(Valkey·Memcached·Redis OSS)과 lazy loading vs write-through 전략을 구분한다
 - [ ] **병목 진단** — 지표를 보고 CPU/IOPS/처리량/메모리 중 무엇이 병목인지 식별할 수 있다
 
 ---
@@ -170,16 +172,16 @@ lastVerified: 2026-06-12
 
 > 공식: **"Amazon ElastiCache는 인메모리 캐시를 제공해, 자주 접근하는 데이터를 빠르게 반환하고 백엔드 데이터베이스 부하를 줄인다."**
 
-**Redis vs Memcached:**
+**엔진 선택** — 공식 지원 엔진은 **Valkey · Memcached · Redis OSS** 3종입니다(Valkey는 Redis OSS 호환 오픈소스 포크). 선택은 사실상 "Valkey/Redis OSS 계열 vs Memcached"로 갈립니다.
 
-| 항목 | Redis (ElastiCache for Redis/Valkey) | Memcached |
+| 항목 | Valkey / Redis OSS | Memcached |
 |---|---|---|
 | **데이터 구조** | 문자열·해시·리스트·정렬 집합 등 풍부 | 단순 키-값 |
 | **영속성/복제** | 스냅샷·복제·자동 장애 조치 지원(HA) | 없음(휘발성) |
 | **확장** | 클러스터 모드로 샤딩 + 복제 | 노드 추가로 수평 분할(멀티스레드) |
 | **용도** | 세션·리더보드·pub/sub·HA 캐시 등 풍부한 기능 | 단순·대용량 캐시, 멀티스레드 처리량 |
 
-> 풍부한 기능·고가용성·영속성이 필요하면 **Redis**, 단순하고 멀티스레드로 큰 처리량만 필요하면 **Memcached**를 고르는 것이 시험의 기본 갈림입니다.
+> 풍부한 기능·고가용성·영속성이 필요하면 **Valkey 또는 Redis OSS**, 단순하고 멀티스레드로 큰 처리량만 필요하면 **Memcached**를 고르는 것이 기본 갈림입니다. 시험 문항이 "Redis"로만 표기하면 **Valkey·Redis OSS 계열**로 읽습니다.
 
 **캐싱 전략:**
 
@@ -224,7 +226,7 @@ lastVerified: 2026-06-12
 - **EBS 최적화 인스턴스**: 인스턴스의 EBS 대역폭 한도가 볼륨 성능 상한이 될 수 있음 → 인스턴스 크기도 고려.
 - **RDS 읽기 복제본 = 읽기 확장(비동기)**, **Multi-AZ = 고가용성/장애 조치(동기)**. 혼동 금지.
 - **Performance Insights**로 부하 유발 쿼리/대기 이벤트 진단. **파라미터 그룹**으로 엔진 튜닝(정적 파라미터는 재부팅).
-- **Redis = 풍부한 기능·HA·영속성**, **Memcached = 단순·멀티스레드 처리량**.
+- **엔진 3종 = Valkey·Memcached·Redis OSS.** **Valkey/Redis OSS = 풍부한 기능·HA·영속성**, **Memcached = 단순·멀티스레드 처리량**.
 - **Lazy Loading(미스 시 적재, stale 가능)** vs **Write-Through(쓰기 시 갱신, 최신성↑·쓰기 지연↑)**, 보통 **TTL** 병행.
 
 ---
@@ -301,4 +303,6 @@ EC2 인스턴스의 컴퓨팅 자원과 RDS의 읽기 처리 경로는 독립된
 3. Amazon EBS 볼륨 유형(gp3/gp2/io1/io2/st1/sc1) — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
 4. Amazon RDS 읽기 전용 복제본 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
 5. Amazon ElastiCache 캐싱 전략 — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
-</content>
+6. ElastiCache 엔진 비교(Valkey·Memcached·Redis OSS) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html
+
+> 📝 **2026-10-19 정정**: ElastiCache 엔진을 Redis·Memcached 두 종류로 서술했던 비교표·결정 규칙·시험 포인트를 현행 **Valkey·Memcached·Redis OSS 3종** 기준으로 고쳤습니다(근거 6번).

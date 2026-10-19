@@ -20,7 +20,7 @@ sources:
     url: https://aws.amazon.com/ec2/pricing/on-demand/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용
@@ -108,11 +108,11 @@ S3 비용은 단순히 "저장 요금"만이 아닙니다. 세 축을 같이 봐
   (선택 활성화) 180일 이상 → Deep Archive Access
 ```
 
-> 128 KB 미만 객체는 모니터링 대상이 아니어서 항상 Frequent Access에 머뭅니다. 소용량 객체가 많은 버킷에서는 Intelligent-Tiering의 모니터링 비용이 절감액을 초과할 수 있습니다.
+> 128 KB 미만 객체는 **모니터링 대상이 아니며** 자동 계층화 대상도 아니어서 항상 Frequent Access 계층에 머뭅니다. 즉 소용량 객체가 많은 버킷에서 Intelligent-Tiering은 **손해가 아니라 절감이 없는** 쪽입니다 — 그 객체들은 계층 이동이 일어나지 않습니다. (128 KB 이상 객체에서 모니터링 요금이 절감을 넘어서는 임계값을 제시하는 공식 문장은 확인하지 못했습니다.)
 
 > 🧠 원리: 왜 S3 Intelligent-Tiering은 오브젝트당 모니터링 요금을 부과할까요?
 > 계층 자동 이동은 각 객체의 접근 이력을 추적해야 가능하며, 이 추적 자체에 저장·연산 비용이 발생합니다.
-> 모니터링 요금을 오브젝트 수에 비례해 부과하면, 소용량 객체가 수백만 개인 버킷은 추적 비용이 절감액을 초과하는 구조이므로 사용자가 직접 트레이드오프를 판단할 수 있습니다.
+> 모니터링 요금이 오브젝트 수에 비례하기 때문에, AWS는 128 KB 미만 객체를 추적 대상에서 아예 제외하고 항상 Frequent Access 단가로 저장합니다 — 추적 비용이 절감을 잠식하는 구간을 애초에 만들지 않는 설계입니다.
 > 결국 Intelligent-Tiering이 유리한 조건은 객체 수가 적거나 객체 크기가 크면서 접근 패턴이 불규칙한 경우로 좁혀집니다.
 
 ### 3) S3 수명주기 정책 — 자동 비용 절감 {#s3-lifecycle}
@@ -232,7 +232,7 @@ S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 
 - **미완성 멀티파트 업로드 탐지** — 7일 이상 된 미완성 멀티파트 업로드가 있는 버킷을 식별해 수명주기 규칙 추가를 권장합니다.
 - **수명주기 규칙 미적용 버킷 탐지** — Lifecycle 규칙이 없는 버킷을 찾아내 자동 전환·만료 적용 기회를 제안합니다.
 - **비접근 객체 분포** — 오랫동안 접근하지 않은 객체 비율을 보여줘 클래스 전환 타깃을 찾는 데 활용합니다.
-- **Storage Class Analysis** — 버킷별로 Standard vs Standard-IA 최적 전환 시점을 분석해 수명주기 정책 생성에 활용합니다.
+- **Storage Class Analysis** (별개 기능) — Standard vs Standard-IA 최적 전환 시점을 분석해 수명주기 정책 생성에 활용합니다. 단 이것은 **S3 분석(S3 analytics)의 기능이며 Storage Lens와 별개**입니다 — 버킷·접두어·태그 필터로 버킷마다 따로 설정합니다.
 
 > 🧠 원리: 왜 스토리지 비용 최적화를 위해 별도 관측 도구가 필요할까요?
 > 수십~수백 개 버킷에서 각각 접근 패턴, 수명주기 적용 여부, 미완성 업로드 존재 여부를 수동으로 점검하는 것은 현실적으로 어렵습니다.
@@ -263,8 +263,8 @@ S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 
 1. **"Glacier는 무조건 저렴하다."** → 검색 요금이 GB당 과금되고 최소 보관 기간(90~180일)이 있습니다. 자주 꺼내는 데이터를 Glacier에 두면 Standard보다 비쌀 수 있습니다.
    *(원리: §1 🧠 — 저장 요금이 낮은 계층일수록 검색 요금이 있으며, 두 축을 분리해 접근 빈도에 따라 최적 계층을 선택해야 한다.)*
 
-2. **"EC2를 Stop하면 EBS 요금도 안 낸다."** → EBS는 인스턴스가 중지 상태여도 프로비전된 용량에 대해 계속 과금됩니다. 완전히 삭제(Terminate)해야 볼륨 요금이 멈춥니다.
-   *(원리: §4 본문 — EBS는 인스턴스 중지 상태에서도 프로비전된 볼륨 용량에 대해 계속 과금되므로, 필요 없는 볼륨은 삭제해야 한다.)*
+2. **"EC2를 Stop하면 EBS 요금도 안 낸다."** → EBS는 인스턴스가 중지 상태여도 프로비전된 용량에 대해 계속 과금됩니다. 단, **Terminate가 모든 볼륨을 지우는 것은 아닙니다** — 삭제 여부는 볼륨의 `DeleteOnTermination` 값에 따릅니다. 기본값은 **시작 시 연결된 루트 볼륨만 삭제**이고, 데이터 볼륨은 콘솔로 시작 시 연결하면 **보존**(CLI는 삭제), 시작 후 연결한 볼륨은 모두 보존입니다. 남은 볼륨은 계속 과금되므로 직접 삭제해야 합니다.
+   *(원리: §4 본문 — EBS 과금은 볼륨 수명에 붙으므로, 인스턴스 수명과 볼륨 수명을 잇는 `DeleteOnTermination` 속성을 확인해야 비용이 멈춘다.)*
 
 3. **"수명주기 전환은 언제 해도 최소 보관 기간 요금이 없다."** → Standard-IA는 30일, Glacier 계열은 90일(Deep Archive 180일) 미만 보관 시 해당 기간 요금이 청구됩니다. 30일 이전에 Standard-IA로 전환하면 절감이 아닙니다.
    *(원리: §3 🧠 — 최소 보관 기간 충족 전 삭제·전환이 일어나면 잔여 기간에 해당하는 저장 요금이 청구된다.)*
@@ -278,8 +278,8 @@ S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 
 6. **"gp3는 gp2보다 성능이 낮아 저렴한 것이다."** → gp3는 기본 IOPS(3,000)가 크기와 무관하게 제공되며 버스트 없이 일관된 성능을 냅니다. gp2는 소용량일수록 IOPS가 낮고 버스트 크레딧에 의존합니다. gp3가 성능과 비용 모두 유리한 경우가 대부분입니다.
    *(원리: §4 🧠 — gp2는 크기-IOPS 연동 구조 때문에 소용량에서 성능 확보를 위해 과잉 프로비전이 필요했으나, gp3는 이 연동을 분리했다.)*
 
-7. **"Intelligent-Tiering은 모든 객체에 무조건 이득이다."** → 128 KB 미만 객체는 모니터링 대상이 아니며 항상 Frequent Access에 머뭅니다. 소용량 객체가 수백만 개 있는 버킷은 오브젝트당 모니터링 요금이 절감액을 초과할 수 있습니다.
-   *(원리: §2 🧠 — 모니터링 요금은 객체 수에 비례하므로, 절감액보다 추적 비용이 커지는 임계점이 존재한다.)*
+7. **"Intelligent-Tiering은 모든 객체에 무조건 이득이다."** → 128 KB 미만 객체는 **모니터링 대상이 아니며 자동 계층화 대상도 아니라** 항상 Frequent Access 단가로 저장됩니다. 그래서 소용량 객체가 대부분인 버킷에서는 Intelligent-Tiering으로 바꿔도 **절감이 없습니다**(그 객체들은 계층이 이동하지 않습니다).
+   *(원리: §2 🧠 — 모니터링 요금은 객체 수에 비례하므로, 계층 이동으로 얻는 절감이 작은 객체일수록 Intelligent-Tiering의 이득이 사라진다.)*
 
 ---
 
@@ -349,4 +349,9 @@ gp2는 IOPS가 볼륨 크기(GB)에 연동되어 결정되는 구조였습니다
 3. EBS 볼륨 타입 — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
 4. EBS General Purpose SSD (gp2·gp3) — https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html
 5. EC2 On-Demand 데이터 전송 요금 — https://aws.amazon.com/ec2/pricing/on-demand/
-6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+6. 인스턴스 종료 시 데이터 보존(DeleteOnTermination 기본값 표) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/preserving-volumes-on-termination.html
+7. S3 스토리지 클래스(Intelligent-Tiering 128 KB 미만은 모니터링·자동 계층화 제외) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html
+8. S3 분석 — Storage Class Analysis — https://docs.aws.amazon.com/AmazonS3/latest/userguide/analytics-storage-class.html
+9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① "Terminate해야 볼륨 요금이 멈춘다"를 **`DeleteOnTermination` 기본값**으로 고쳤습니다 — 루트(시작 시)만 기본 삭제, 데이터 볼륨은 콘솔 시작 시 보존·CLI 시작 시 삭제(근거 6번). ② Intelligent-Tiering의 128 KB 미만 객체를 "모니터링 비용이 절감을 초과"에서 **모니터링·자동 계층화 제외(절감이 없음)**로 고쳤습니다(근거 7번). ③ Storage Class Analysis가 **Storage Lens와 별개**인 S3 분석 기능임을 명시했습니다(근거 8번).
