@@ -1,0 +1,496 @@
+{
+  "examGuideTaskId": "dea-t4-5",
+  "taskTitle": "데이터 프라이버시 및 거버넌스 이해",
+  "domain": 4,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t4-5-q1",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "데이터 공유 권한 부여(예: Amazon Redshift의 데이터 공유)(4.5.1)",
+      "section": "redshift-sharing",
+      "difficulty": "applied",
+      "stem": "다른 AWS 계정의 분석 팀이 우리 Amazon Redshift 데이터를 복사 없이 최신 상태로 쿼리해야 한다. 올바른 절차는?",
+      "options": [
+        "datashare를 만들고 GRANT USAGE로 소비 계정을 추가한 뒤, 프로듀서 계정 관리자가 소비자를 authorize하고 소비 계정 관리자가 datashare를 associate한다",
+        "스냅샷을 공유해 소비 계정에서 새 클러스터로 복원한다",
+        "UNLOAD로 S3에 내보낸 뒤 소비 계정이 COPY로 적재한다",
+        "datashare를 만들고 GRANT USAGE만 수행하면 소비 계정이 바로 쿼리할 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "Redshift 데이터 공유는 수동 이동이나 복사 없이 라이브 데이터 접근을 제공합니다. 계정 간 공유에는 양방향 핸드셰이크가 필요해, 프로듀서 계정 관리자가 소비자를 authorize하고 소비 계정 관리자가 datashare를 계정 전체 또는 특정 클러스터에 associate합니다.",
+      "wrongExplanations": {
+        "1": "스냅샷 복원은 데이터를 복사하는 방식이라 \"복사 없이 최신 상태\" 요구에 맞지 않습니다.",
+        "2": "UNLOAD/COPY는 데이터를 내보내고 적재하는 복사 방식입니다.",
+        "3": "계정에 GRANT USAGE를 하면 datashare 상태가 pending_authorization이 되고, 프로듀서의 authorize와 소비자의 associate가 남아 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Considerations for data sharing in Amazon Redshift — 수동 이동·복사 없이 클러스터·계정·리전 간 라이브 데이터 공유",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/datashare-considerations.html"
+        },
+        {
+          "title": "Sharing data across AWS accounts (Amazon Redshift) — 계정 간 공유는 양방향 핸드셰이크, 소비 계정 관리자가 associate",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/across-account.html"
+        },
+        {
+          "title": "Producer administrator actions (Amazon Redshift) — GRANT USAGE 후 pending_authorization 상태",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/producer-cluster-admin.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q2",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "데이터 공유 권한 부여(예: Amazon Redshift의 데이터 공유)(4.5.1)",
+      "section": "redshift-sharing",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 교차 계정 데이터 공유를 준비하면서 확인해야 할 요건과 권한 위임 주체로 옳은 것은?",
+      "options": [
+        "프로듀서 클러스터만 암호화되어 있으면 되고, 모든 DB 사용자가 datashare 권한을 위임할 수 있다",
+        "프로듀서·소비자 클러스터가 모두 암호화되어야 하고, datashare 변경 권한 위임은 클러스터 superuser와 datashare 소유자가 할 수 있다",
+        "암호화 요건은 없고 계정 내 공유와 교차 계정 공유에는 각각 별도의 datashare를 만들어야 한다",
+        "소비자로 네임스페이스를 추가할 때도 프로듀서의 authorize가 반드시 필요하다"
+      ],
+      "correct": 1,
+      "explanation": "교차 계정 데이터 공유에서는 프로듀서와 소비자 클러스터가 모두 암호화되어야 합니다. 또 클러스터 superuser와 datashare 소유자가 datashare 변경·공유 권한을 다른 DB 사용자에게 위임할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "양쪽 클러스터가 모두 암호화되어야 하며, 권한 위임은 클러스터 superuser와 datashare 소유자가 합니다.",
+        "2": "암호화 요건이 있고, 계정 내 공유와 교차 계정 공유에 별도의 datashare를 만들 필요가 없습니다.",
+        "3": "네임스페이스를 소비자로 추가할 때는 authorize가 필요하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Sharing data across AWS accounts (Amazon Redshift) — 양쪽 클러스터 암호화 필요, 별도 datashare 불필요",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/across-account.html"
+        },
+        {
+          "title": "Producer administrator actions (Amazon Redshift) — superuser와 datashare 소유자가 권한 위임, 네임스페이스 소비자는 authorize 불필요",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/producer-cluster-admin.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q3",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "데이터 공유 권한 부여(예: Amazon Redshift의 데이터 공유)(4.5.1)",
+      "section": "redshift-sharing",
+      "difficulty": "applied",
+      "stem": "Redshift datashare로 공유한 객체에 열·행 수준 접근 권한을 중앙에서 정의·집행하려 한다. Lake Formation 관리 datashare의 제약으로 옳은 것은?",
+      "options": [
+        "셀 수준 Lake Formation 필터를 지원하고 교차 리전 공유도 가능하다",
+        "프로듀서의 Redshift 행·열 수준 접근 제어 정책이 그대로 적용되므로 Lake Formation에서 다시 설정할 필요가 없다",
+        "교차 리전 공유를 지원하지 않고 셀 수준 Lake Formation 필터도 지원하지 않으며, 프로듀서의 Redshift 행·열 수준 접근 제어 정책은 무시되므로 Lake Formation에서 설정해야 한다",
+        "같은 계정 공유만 지원하고 교차 계정 공유는 지원하지 않는다"
+      ],
+      "correct": 2,
+      "explanation": "Lake Formation 관리 datashare는 Lake Formation에서 DB·테이블·열·행 수준 접근 권한을 중앙 정의·집행하며 같은 계정·교차 계정 공유를 지원하지만 교차 리전 공유는 지원하지 않습니다. 또 셀 수준 Lake Formation 필터를 지원하지 않고, 프로듀서의 Redshift 행·열 수준 접근 제어 정책은 Lake Formation으로 공유할 때 무시되므로 Lake Formation에서 설정해야 합니다.",
+      "wrongExplanations": {
+        "0": "셀 수준 필터와 교차 리전 공유 모두 지원하지 않습니다.",
+        "1": "프로듀서의 Redshift 행·열 수준 접근 제어 정책은 무시됩니다.",
+        "3": "같은 계정과 교차 계정 공유를 모두 지원합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Lake Formation-managed datashares (Amazon Redshift) — Lake Formation에서 DB·테이블·열·행 권한 중앙 정의, 같은 계정·교차 계정 지원, 교차 리전 미지원",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/lf_datashare_overview.html"
+        },
+        {
+          "title": "Considerations for data sharing with AWS Lake Formation in Amazon Redshift — 셀 수준 필터 미지원, 양쪽 암호화 필요, Redshift 행·열 정책 무시",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/lake-formation-considerations.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q4",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "데이터 공유 권한 부여(예: Amazon Redshift의 데이터 공유)(4.5.1)",
+      "section": "redshift-sharing",
+      "difficulty": "foundational",
+      "stem": "소비자가 프로듀서의 datashare 객체에 INSERT를 수행해야 한다. 옳은 설명은?",
+      "options": [
+        "datashare 객체는 항상 읽기 전용이므로 쓰기는 불가능하다",
+        "프로듀서가 쓰기 권한을 datashare에 명시적으로 부여한 객체만 쓰기가 가능하며, 교차 계정에서는 프로듀서가 쓰기용으로 authorize하고 소비자가 특정 클러스터·워크그룹을 쓰기용으로 associate해야 한다",
+        "소비 계정 관리자가 associate만 하면 모든 객체에 쓰기가 가능해진다",
+        "쓰기 공유는 같은 계정 안에서만 가능하다"
+      ],
+      "correct": 1,
+      "explanation": "이전에는 datashare 객체가 항상 읽기 전용이었으나 쓰기가 추가됐습니다. 프로듀서가 INSERT·CREATE 같은 쓰기 권한을 datashare에 명시적으로 부여한 객체만 쓰기가 가능하고, 교차 계정에서는 프로듀서가 쓰기용으로 authorize하고 소비자가 특정 클러스터·워크그룹을 쓰기용으로 associate해야 합니다.",
+      "wrongExplanations": {
+        "0": "이전에는 읽기 전용이었으나 쓰기 기능이 추가됐습니다(일부 문서는 아직 읽기 목적 공유로만 서술합니다).",
+        "2": "프로듀서가 쓰기 권한을 명시적으로 부여한 객체만 쓰기가 가능합니다.",
+        "3": "교차 계정에서도 쓰기용 authorize와 associate 단계를 통해 가능합니다."
+      },
+      "sources": [
+        {
+          "title": "Considerations for data sharing in Amazon Redshift — 쓰기는 신규 기능, 프로듀서가 명시적으로 부여한 객체만, 교차 계정은 쓰기용 authorize·associate",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/datashare-considerations.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q5",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "PII 식별 구현(예: Lake Formation을 사용하는 Amazon Macie)(4.5.2)",
+      "section": "macie",
+      "difficulty": "applied",
+      "stem": "Amazon Macie 민감 데이터 검색 작업을 돌렸는데 일부 S3 객체가 메타데이터만 보고되고 내용이 분석되지 않았다. 가능한 원인은?",
+      "options": [
+        "객체가 SSE-S3로 암호화되어 있어 복호화할 수 없다",
+        "객체가 AWS 관리형 KMS 키로 암호화되어 있어 복호화할 수 없다",
+        "객체가 SSE-C 또는 클라이언트 측 암호화로 암호화되어 있거나, 고객 관리형 KMS 키로 암호화되었는데 Macie에 그 키 사용을 허용하지 않았다",
+        "객체 크기가 커서 검색 작업이 건너뛰었다"
+      ],
+      "correct": 2,
+      "explanation": "Macie는 SSE-S3와 AWS 관리형 KMS 키로 암호화된 객체를 서비스 연결 역할로 복호화·분석할 수 있습니다. 고객 관리형 KMS 키는 Macie가 키를 쓰도록 허용해야 하며 허용하지 않으면 객체의 메타데이터만 저장·보고합니다. SSE-C와 클라이언트 측 암호화 객체는 복호화할 수 없어 메타데이터만 저장·보고합니다.",
+      "wrongExplanations": {
+        "0": "SSE-S3 객체는 분석할 수 있습니다.",
+        "1": "AWS 관리형 KMS 키 객체는 서비스 연결 역할로 복호화·분석할 수 있습니다.",
+        "3": "메타데이터만 보고되는 조건으로 문서화된 것은 암호화 유형과 키 사용 허용 여부입니다."
+      },
+      "sources": [
+        {
+          "title": "Analyzing encrypted Amazon S3 objects (Amazon Macie) — SSE-S3·AWS 관리형 KMS는 분석 가능, 고객 관리형 KMS는 키 사용 허용 필요, SSE-C·클라이언트 측은 메타데이터만",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/discovery-supported-encryption-types.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q6",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "PII 식별 구현(예: Lake Formation을 사용하는 Amazon Macie)(4.5.2)",
+      "section": "macie",
+      "difficulty": "applied",
+      "stem": "데이터 레이크 전반에 민감 데이터가 어디 있는지 광범위한 가시성이 필요하고, 별도로 특정 버킷 몇 개는 깊이 있게 정밀 분석해야 한다. Macie를 어떻게 쓰는가?",
+      "options": [
+        "광범위한 가시성은 자동 민감 데이터 검색(버킷 인벤토리를 지속 평가하고 표본으로 대표 객체 선택), 정밀 분석은 민감 데이터 검색 작업(대상 버킷·샘플링 깊이·조건 지정, 1회성 또는 반복)",
+        "두 경우 모두 민감 데이터 검색 작업을 쓰고 샘플링 깊이만 다르게 지정한다",
+        "두 경우 모두 자동 민감 데이터 검색을 쓰고 사용자 지정 식별자만 추가한다",
+        "광범위한 가시성은 정책 finding으로, 정밀 분석은 EventBridge 규칙으로 수행한다"
+      ],
+      "correct": 0,
+      "explanation": "자동 민감 데이터 검색은 버킷 인벤토리를 지속 평가하고 표본으로 대표 객체를 골라 민감 데이터가 있을 수 있는 위치에 대한 광범위한 가시성을 줍니다. 민감 데이터 검색 작업은 대상 버킷·샘플링 깊이·사용자 정의 조건을 지정한 더 깊고 표적화된 분석이며 1회성 또는 반복 실행을 선택합니다.",
+      "wrongExplanations": {
+        "1": "광범위한 가시성은 자동 민감 데이터 검색의 역할로 문서화되어 있습니다.",
+        "2": "정밀 분석은 민감 데이터 검색 작업의 역할입니다.",
+        "3": "finding과 EventBridge는 결과 처리·자동화 경로이며 검색 방식이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Macie? — 자동 검색은 광범위한 가시성, 검색 작업은 더 깊고 표적화된 분석, 관리형·사용자 지정 식별자",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        },
+        {
+          "title": "Monitoring and processing Macie findings — finding을 EventBridge로 게시하고 Security Hub CSPM으로도 게시",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/findings-monitor.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q7",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "PII 식별 구현(예: Lake Formation을 사용하는 Amazon Macie)(4.5.2)",
+      "section": "macie",
+      "difficulty": "applied",
+      "stem": "S3 데이터 레이크에서 PII 위치를 찾은 뒤 마스킹하고 열 단위 접근까지 통제하려 한다. 공식 참조 아키텍처가 제시하는 흐름은?",
+      "options": [
+        "Macie가 탐지와 마스킹, 접근 통제를 모두 수행한다",
+        "Macie가 S3 객체를 분석해 민감 값을 식별하면 Glue 워크플로가 그 정보로 데이터를 익명화(마스킹·암호화)하고, Lake Formation이 설정한 태그에 권한을 매핑해 사용자별 세분화 접근을 적용한다",
+        "Lake Formation이 민감 데이터를 탐지하고 Macie가 권한을 집행한다",
+        "Redshift 동적 데이터 마스킹이 S3 객체의 PII를 직접 가린다"
+      ],
+      "correct": 1,
+      "explanation": "AWS 보안 블로그의 참조 아키텍처는 Macie가 S3 객체를 분석해 민감 값을 식별하면 Glue 워크플로가 그 정보로 데이터를 익명화(마스킹·암호화)하고, Lake Formation이 설정한 태그에 권한을 매핑해 사용자별 세분화 접근을 적용하는 흐름을 제시합니다. 식별 결과는 EventBridge에서 Firehose를 거쳐 S3로 보내 Glue가 마스킹할 필드를 알게 합니다.",
+      "wrongExplanations": {
+        "0": "Macie는 민감 데이터를 탐지해 finding을 만드는 서비스이며 마스킹과 접근 통제는 다른 서비스가 맡습니다.",
+        "2": "탐지는 Macie, 접근 통제는 Lake Formation입니다. 역할이 반대로 서술되었습니다.",
+        "3": "Redshift 동적 데이터 마스킹은 Redshift 질의 시점의 마스킹이며 S3 객체를 직접 다루지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Data masking and granular access control using Amazon Macie and AWS Lake Formation (AWS Security Blog) — Macie 탐지 → EventBridge/Firehose → Glue 익명화 → Lake Formation 태그 권한 매핑",
+          "url": "https://aws.amazon.com/blogs/security/data-masking-and-granular-access-control-using-amazon-macie-and-aws-lake-formation/"
+        },
+        {
+          "title": "What is Amazon Macie? — Macie는 민감 데이터를 탐지하고 finding을 생성",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q8",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "허용되지 않는 AWS 리전으로의 데이터 백업 또는 복제를 방지하기 위해 데이터 프라이버시 전략 구현(4.5.3)",
+      "section": "region-control",
+      "difficulty": "applied",
+      "stem": "데이터가 허용된 리전 밖으로 복제되면 안 된다. SCP에 aws:RequestedRegion Deny를 적용했는데도 허용 리전에서 S3 교차 리전 복제가 설정되어 데이터가 다른 리전으로 흘러간다. 무엇을 추가해야 하는가?",
+      "options": [
+        "aws:RequestedRegion 조건에 대상 리전을 추가한다",
+        "KMS 고객 관리형 키로 버킷을 암호화해 복제를 막는다",
+        "AWS Config 규칙으로 복제 구성을 조회한다",
+        "Control Tower의 S3 교차 리전 복제 금지 선택적 예방 컨트롤을 활성화한다. 이 컨트롤은 기본으로 꺼져 있다"
+      ],
+      "correct": 3,
+      "explanation": "aws:RequestedRegion은 호출되는 엔드포인트를 통제할 뿐 작업의 영향은 통제하지 않습니다. S3는 API 작업이 리전에 걸쳐 영향을 주며 한 리전에서 호출한 s3:PutBucketReplication이 복제 구성에 따라 다른 리전에 영향을 줍니다. Control Tower의 선택적 예방 컨트롤이 S3 데이터를 단일 리전에 가두기 위해 자동·비동기 객체 복사를 비활성화하며 기본으로 꺼져 있습니다.",
+      "wrongExplanations": {
+        "0": "조건 키는 호출 리전을 비교하는 것이며 복제의 대상 리전을 통제하지 않습니다.",
+        "1": "암호화는 데이터 보호 수단이며 복제 구성을 막지 않습니다.",
+        "2": "AWS Config는 구성 변경을 조회·평가하는 수단이며 예방 통제가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS global condition context keys (IAM User Guide) — aws:RequestedRegion은 호출 엔드포인트만 통제, S3 PutBucketReplication은 다른 리전에 영향",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html"
+        },
+        {
+          "title": "Elective controls with preventive behavior (AWS Control Tower controls reference) — S3 교차 리전 복제 비활성화 컨트롤, 기본 꺼짐",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/elective-preventive-controls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q9",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "허용되지 않는 AWS 리전으로의 데이터 백업 또는 복제를 방지하기 위해 데이터 프라이버시 전략 구현(4.5.3)",
+      "section": "region-control",
+      "difficulty": "applied",
+      "stem": "엔지니어가 \"요청 리전이 승인된 리전이 아니면 모든 서비스를 거부\"하는 SCP를 적용한 뒤 IAM 호출이 전부 실패한다. 원인과 대응은?",
+      "options": [
+        "IAM 같은 일부 글로벌 서비스는 엔드포인트가 하나(us-east-1)라서 전체 거부 정책에서 호출이 항상 실패하므로 NotAction 예외가 필요하다",
+        "SCP는 권한을 부여하므로 IAM에 별도 허용 문을 추가해야 한다",
+        "IAM은 리전 서비스이므로 승인 리전 목록에 모든 리전을 넣어야 한다",
+        "Control Tower Region deny를 함께 켜면 자동으로 해결된다"
+      ],
+      "correct": 0,
+      "explanation": "IAM 같은 일부 글로벌 서비스는 엔드포인트가 하나(us-east-1)라서 \"요청 리전이 X가 아니면 모든 서비스 거부\" 정책을 쓰면 IAM 호출이 항상 실패하므로 NotAction 예외가 필요합니다.",
+      "wrongExplanations": {
+        "1": "SCP는 권한을 부여하지 않는 가드레일입니다.",
+        "2": "IAM은 단일 엔드포인트를 쓰는 글로벌 서비스로 설명되며, 모든 리전을 승인 목록에 넣는 것은 리전 제한의 목적을 없앱니다.",
+        "3": "Control Tower Region deny도 홈 리전을 거부할 수 없고 IAM·Organizations 같은 일부 글로벌 서비스는 예외로 두는 구조이며, SCP의 NotAction 예외 누락을 대신 해결해 주지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS global condition context keys (IAM User Guide) — 글로벌 서비스는 단일 엔드포인트라 NotAction 예외 필요",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html"
+        },
+        {
+          "title": "Configure the Region deny control (AWS Control Tower User Guide) — 홈 리전 거부 불가, 일부 글로벌 서비스 예외",
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/region-deny.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q10",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "허용되지 않는 AWS 리전으로의 데이터 백업 또는 복제를 방지하기 위해 데이터 프라이버시 전략 구현(4.5.3)",
+      "section": "region-control",
+      "difficulty": "applied",
+      "stem": "AWS Control Tower의 Region deny 컨트롤을 적용하기 전에 반드시 확인할 점은?",
+      "options": [
+        "컨트롤은 랜딩존에만 적용할 수 있고 OU 단위 적용은 불가하다",
+        "홈 리전도 거부 대상으로 지정해야 효과가 있다",
+        "적용 전에 거부 대상 리전에 리소스가 있으면 적용 후 접근할 수 없게 되며, 홈 리전은 거부할 수 없고 IAM·Organizations 같은 일부 글로벌 서비스는 예외다",
+        "컨트롤을 켜면 기존 S3 교차 리전 복제 구성도 자동으로 제거된다"
+      ],
+      "correct": 2,
+      "explanation": "Region deny 컨트롤은 랜딩존 전체에 적용하는 컨트롤과 특정 OU에 적용하는 컨트롤 두 가지가 있습니다. 홈 리전은 거부할 수 없고 IAM·Organizations 같은 일부 글로벌 서비스는 예외이며, 적용 전에 거부 대상 리전에 리소스가 있으면 적용 후 접근할 수 없게 됩니다.",
+      "wrongExplanations": {
+        "0": "랜딩존 전체 컨트롤과 특정 OU에 적용하는 컨트롤 두 가지가 있습니다.",
+        "1": "홈 리전은 거부할 수 없습니다.",
+        "3": "복제 구성을 막는 것은 별도의 선택적 예방 컨트롤이며 기존 구성을 자동 제거한다는 동작은 문서화되어 있지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Configure the Region deny control (AWS Control Tower User Guide) — 랜딩존·OU 컨트롤 2종, 홈 리전 거부 불가, 글로벌 서비스 예외, 적용 후 기존 리소스 접근 불가",
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/region-deny.html"
+        },
+        {
+          "title": "Elective controls with preventive behavior (AWS Control Tower controls reference) — S3 교차 리전 복제 금지는 별도 선택적 컨트롤",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/elective-preventive-controls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q11",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "계정에서 발생한 구성 변경 보기(예: AWS Config)(4.5.4)",
+      "section": "aws-config",
+      "difficulty": "applied",
+      "stem": "어떤 리소스의 구성이 어제 시점별로 어떻게 바뀌었는지, 그리고 누가 그 변경을 호출했는지 알아야 한다. 각각 무엇을 쓰는가?",
+      "options": [
+        "둘 다 AWS Config 고급 쿼리로 조회한다",
+        "구성 변화는 CloudTrail 이벤트 기록으로, 호출자는 Config aggregator로 확인한다",
+        "둘 다 Config aggregator에서 조회한다",
+        "구성 변화는 AWS Config 구성 이력·타임라인으로 보고, 요청자·시각·IP 같은 호출 세부 정보는 CloudTrail 로그에서 얻는다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Config의 구성 이력은 한 리소스의 구성 항목들을 기간별로 모은 것이며 콘솔에서 타임라인으로 이전 구성 항목을 탐색할 수 있습니다. Config는 CloudTrail과 통합해 구성 변경을 특정 이벤트에 상관시키며, 요청자·시각·IP 같은 호출 세부 정보는 CloudTrail 로그에서 얻습니다.",
+      "wrongExplanations": {
+        "0": "고급 쿼리는 리소스의 현재 구성 상태만 조회하므로 과거 이력에는 쓸 수 없습니다.",
+        "1": "구성 이력은 Config의 기능이고 호출자 정보는 CloudTrail에서 얻습니다.",
+        "2": "aggregator는 여러 계정·리전의 구성·컴플라이언스 데이터를 모아 보는 읽기 전용 뷰입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config terminology and concepts — 구성 이력과 타임라인, aggregator는 읽기 전용 뷰",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html"
+        },
+        {
+          "title": "AWS Service Integrations with AWS Config — CloudTrail과 통합해 구성 변경을 이벤트에 상관, 호출 세부 정보는 CloudTrail",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/service-integrations.html"
+        },
+        {
+          "title": "AWS Config best practices (AWS Cloud Operations Blog) — 고급 쿼리는 현재 상태만, 과거 이력은 Athena로 history files 조회",
+          "url": "https://aws.amazon.com/blogs/mt/aws-config-best-practices/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q12",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "계정에서 발생한 구성 변경 보기(예: AWS Config)(4.5.4)",
+      "section": "aws-config",
+      "difficulty": "applied",
+      "stem": "중앙 계정에서 여러 계정·리전의 AWS Config 데이터를 활용하려 한다. aggregator와 고급 쿼리에 대해 옳은 것은?",
+      "options": [
+        "aggregator를 통해 모든 소스 계정에 Config 규칙을 배포할 수 있다",
+        "aggregator는 추가 비용 없이 여러 소스 계정·리전의 구성·컴플라이언스 데이터를 모아 보는 읽기 전용 뷰이며, 고급 쿼리는 현재 구성 상태만 조회하므로 과거 상태는 Athena로 Config history files를 조회한다",
+        "고급 쿼리는 과거 구성 상태까지 조회할 수 있어 Athena가 필요 없다",
+        "aggregator로 스냅샷 파일을 소스 계정에 푸시할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "aggregator는 여러 소스 계정·리전(또는 조직)의 구성·컴플라이언스 데이터를 한 계정으로 모아 보며 추가 비용이 없고, 읽기 전용 뷰라서 집계자를 통해 규칙을 배포하거나 스냅샷 파일을 소스 계정에 푸시할 수 없습니다. 고급 쿼리는 현재 구성 상태만 조회하므로 과거 이력은 Athena로 Config history files를 조회합니다.",
+      "wrongExplanations": {
+        "0": "읽기 전용 뷰라서 집계자를 통해 규칙을 배포할 수 없습니다.",
+        "2": "고급 쿼리는 현재 상태 데이터만 조회합니다.",
+        "3": "집계자를 통해 스냅샷 파일을 소스 계정에 푸시할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config terminology and concepts — aggregator는 추가 비용 없는 읽기 전용 뷰, 규칙 배포·스냅샷 푸시 불가",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html"
+        },
+        {
+          "title": "AWS Config best practices (AWS Cloud Operations Blog) — 고급 쿼리는 현재 상태만, 과거는 Athena로 history files",
+          "url": "https://aws.amazon.com/blogs/mt/aws-config-best-practices/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q13",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "데이터 주권 유지 관리(4.5.5)",
+      "section": "data-sovereignty",
+      "difficulty": "foundational",
+      "stem": "데이터 상주(residency)와 데이터 주권(sovereignty)의 차이, 그리고 AWS의 기본 동작으로 옳은 것은?",
+      "options": [
+        "상주와 주권은 같은 개념이며 AWS가 리전을 선택한다",
+        "AWS가 가용성을 위해 여러 리전에 콘텐츠를 자동 복제한다",
+        "S3에 저장된 객체는 명시적 전송·복제 없이도 가까운 리전으로 이동한다",
+        "상주는 데이터를 특정 관할권에 두어야 하는 요건이고 주권은 데이터가 물리적 위치의 법과 규정의 적용을 받는 것이다. 고객이 리전을 선택하며 AWS는 서비스 제공이나 법적 의무 같은 예외를 제외하고 선택한 리전 밖으로 콘텐츠를 이동·복제하지 않는다"
+      ],
+      "correct": 3,
+      "explanation": "데이터 상주는 데이터를 특정 관할권에 두어야 하는 요건이고 데이터 주권은 데이터가 물리적 위치의 법과 규정의 적용을 받는 것입니다. 고객이 콘텐츠를 저장할 AWS 리전을 선택하고, AWS는 서비스 제공이나 법적 의무 같은 예외를 제외하고 선택한 리전 밖으로 콘텐츠를 이동·복제하지 않습니다.",
+      "wrongExplanations": {
+        "0": "두 용어는 구분되며 리전 선택은 고객이 합니다.",
+        "1": "여러 리전에 복제·백업하는 것은 고객의 선택입니다.",
+        "2": "리전에 저장된 객체는 명시적으로 전송·복제하지 않는 한 그 리전을 떠나지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Definitions (AWS Well-Architected Digital Sovereignty Lens) — 데이터 상주와 데이터 주권의 정의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/digital-sovereignty-lens/definitions.html"
+        },
+        {
+          "title": "AWS Data Privacy FAQ — 고객이 리전 선택, 예외를 제외하고 리전 밖으로 이동·복제하지 않으며 다중 리전 복제는 고객의 선택",
+          "url": "https://aws.amazon.com/compliance/data-privacy-faq/"
+        },
+        {
+          "title": "What is Amazon S3? (Regions) — 명시적으로 전송·복제하지 않는 한 객체는 리전을 떠나지 않음",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q14",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "Amazon SageMaker Catalog 프로젝트를 통해 데이터 액세스 관리(4.5.6)",
+      "section": "sagemaker-catalog",
+      "difficulty": "applied",
+      "stem": "SageMaker Catalog에서 소비 프로젝트가 게시된 Lake Formation 관리 Glue 테이블을 구독했다. 승인 주체와 이행 방식으로 옳은 것은?",
+      "options": [
+        "승인자는 소비 프로젝트의 멤버이며 승인 시 S3 버킷 정책이 갱신된다",
+        "기본값은 자동 승인이며 승인 후 LF-TBAC로 접근이 관리된다",
+        "승인자는 소유(게시) 프로젝트의 멤버이고 기본값은 데이터 소유자의 수동 승인이며, 승인되면 SageMaker Unified Studio가 Lake Formation을 통해 승인된 테이블 접근을 부여·관리한다. LF-TBAC 방식의 접근 관리는 지원하지 않는다",
+        "승인 후 Redshift datashare가 생성되어 접근이 부여된다"
+      ],
+      "correct": 2,
+      "explanation": "승인자는 소유(게시) 프로젝트의 멤버여야 하고 기본값은 데이터 소유자의 수동 승인입니다. Lake Formation 관리 Glue 테이블은 승인되면 SageMaker Unified Studio가 Lake Formation을 통해 승인된 테이블에 대한 접근을 부여·관리하며, Lake Formation LF-TBAC 방식의 접근 관리는 지원하지 않습니다.",
+      "wrongExplanations": {
+        "0": "승인자는 소유(게시) 프로젝트의 멤버이며 이행은 Lake Formation을 통한 권한 부여입니다.",
+        "1": "기본값은 수동 승인이며(게시 시 승인 비활성화나 양쪽 프로젝트의 owner/contributor 요청자는 자동 승인), LF-TBAC 방식 관리는 지원되지 않습니다.",
+        "3": "grant와 datashare 생성은 Redshift 테이블·뷰 자산의 이행 방식입니다."
+      },
+      "sources": [
+        {
+          "title": "Approve or reject a subscription request in Amazon SageMaker Unified Studio — 승인자는 소유 프로젝트 멤버, 기본은 수동 승인, 전체/제한 접근 선택",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/approve-reject-subscription-request.html"
+        },
+        {
+          "title": "Grant access to managed AWS Glue Data Catalog assets in Amazon SageMaker Unified Studio — Lake Formation을 통한 접근 부여·관리, LF-TBAC 미지원",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/grant-access-to-glue-asset.html"
+        },
+        {
+          "title": "Grant access to managed Amazon Redshift assets in Amazon SageMaker Unified Studio — Redshift 자산은 grant와 datashare 생성",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/grant-access-to-redshift-asset.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-5-q15",
+      "examGuideTaskId": "dea-t4-5",
+      "skill": "거버넌스 데이터 프레임워크 및 데이터 공유 패턴 설명(4.5.7)",
+      "section": "governance-patterns",
+      "difficulty": "applied",
+      "stem": "제3자 공급자의 데이터를 Amazon Redshift에서 바로 쿼리하려 한다. AWS Data Exchange for Amazon Redshift의 특징으로 옳은 것은?",
+      "options": [
+        "구독하면 접근이 자동 부여되고 구독이 끝나면 자동으로 회수된다",
+        "구독 후 프로듀서에게 authorize를 요청하고 소비자가 associate해야 한다",
+        "조직 내부 팀 간 데이터 공유에 권장되는 기본 수단이다",
+        "구독 종료 후에도 데이터 사본이 소비자 클러스터에 남는다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Data Exchange for Amazon Redshift는 제3자 데이터를 구독해 Redshift에서 바로 쿼리하게 하며, 구독하면 접근이 자동 부여되고 구독이 끝나면 자동 회수됩니다.",
+      "wrongExplanations": {
+        "1": "authorize와 associate는 Redshift 데이터 공유의 교차 계정 절차입니다.",
+        "2": "Data Exchange는 제3자 데이터 구독·라이선스 수단이며 조직 내부 공유는 Redshift 데이터 공유·Lake Formation을 씁니다.",
+        "3": "구독이 끝나면 접근이 자동 회수됩니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Data Exchange for Amazon Redshift — 구독 시 접근 자동 부여, 구독 종료 시 자동 회수",
+          "url": "https://aws.amazon.com/data-exchange/why-aws-data-exchange/redshift-data-tables/"
+        },
+        {
+          "title": "Sharing data across AWS accounts (Amazon Redshift) — 교차 계정 공유의 authorize·associate 절차",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/across-account.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

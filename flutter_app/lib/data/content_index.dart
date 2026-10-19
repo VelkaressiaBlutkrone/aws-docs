@@ -607,7 +607,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-3', title: 'Route 53 DNS·CloudFront 콘텐츠 전송', domain: 5, mdAsset: 'assets/content/soa/soa-t5-3.md', questionsAsset: 'assets/content/soa/soa-t5-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t5-4', title: '네트워크 문제 해결 (Flow Logs·Reachability Analyzer)', domain: 5, mdAsset: 'assets/content/soa/soa-t5-4.md', questionsAsset: 'assets/content/soa/soa-t5-4.questions.json', questionCount: 0),
   ],
-  // DEA-C01: 도메인 1(데이터 수집 및 변환, 34%)·도메인 2(데이터 스토어 관리, 26%)를
+  // DEA-C01: 도메인 1(데이터 수집 및 변환, 34%)·도메인 2(데이터 스토어 관리, 26%)·
+  // 도메인 3(데이터 운영 및 지원, 22%)·도메인 4(데이터 보안 및 거버넌스, 18%)를
   // 배치별로 누적 등록한다.
   // 문항은 사람 검수 전 드래프트(verified:false)라 questionCount는 0이다.
   'DEA-C01': [
@@ -623,6 +624,11 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-2', title: '데이터 분석 (시각화·정리·뷰·Spark 노트북·SQL 집계)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-2.md', questionsAsset: 'assets/content/dea/dea-t3-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-3', title: '파이프라인 유지 관리·모니터링 (로그·알림·성능·CloudTrail)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-3.md', questionsAsset: 'assets/content/dea/dea-t3-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t3-4', title: '데이터 품질 보장 (Glue DQ·DataBrew 규칙·샘플링·스큐)', domain: 3, mdAsset: 'assets/content/dea/dea-t3-4.md', questionsAsset: 'assets/content/dea/dea-t3-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-1', title: '인증 메커니즘 적용 (보안 그룹·IAM 역할·VPC 엔드포인트·Secrets Manager)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-1.md', questionsAsset: 'assets/content/dea/dea-t4-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-2', title: '권한 부여 메커니즘 적용 (사용자 지정 정책·Lake Formation·RBAC/ABAC·최소 권한)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-2.md', questionsAsset: 'assets/content/dea/dea-t4-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-3', title: '데이터 암호화·마스킹 보장 (DDM·KMS·S3 SSE·교차 계정·전송 중/전)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-3.md', questionsAsset: 'assets/content/dea/dea-t4-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-4', title: '감사용 로그 준비 (CloudTrail·CloudWatch Logs·Lake·로그 분석)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-4.md', questionsAsset: 'assets/content/dea/dea-t4-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-5', title: '데이터 프라이버시·거버넌스 (Redshift 공유·Macie·리전 통제·Config·주권)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-5.md', questionsAsset: 'assets/content/dea/dea-t4-5.questions.json', questionCount: 0),
   ],
 };
 
