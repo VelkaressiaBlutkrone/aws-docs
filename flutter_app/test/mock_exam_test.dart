@@ -246,8 +246,8 @@ void main() {
     expect(r.length, 15); // 빈 도메인을 D1에서 백필해 N 유지(크래시 없음)
     expect(r.every((q) => q.id.startsWith('d1q')), isTrue); // 전부 D1 = 편향
     expect(r.map((q) => q.id).toSet().length, 15); // 중복 없음
-    // ↑ 이 "편향"이 바로 T4 공개 게이트(certExamIsBalanced)가 전 도메인 균형
-    //   전까지 통합 모의고사를 숨기는 이유다.
+    // ↑ 이 "편향"이 바로 공개 게이트(`certExamHasWeightedCapacity`)가 도메인별
+    //   필요 수량을 채울 때까지 통합 모의고사를 숨기는 이유다.
   });
 
   test('buildSampledExam: 풀이 완전히 비면 빈 결과(크래시 없음)', () {
