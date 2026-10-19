@@ -1,6 +1,6 @@
 # WORKLIST — 통합 작업 목록
 
-_생성: 2026-06-19 · 갱신: 2026-10-19(#135~#142 릴리스 반영) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
+_생성: 2026-06-19 · 갱신: 2026-10-19(#135~#144 릴리스 반영) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -28,26 +28,29 @@ _생성: 2026-06-19 · 갱신: 2026-10-19(#135~#142 릴리스 반영) · HANDOFF
   - **실행 플랜(잠금 2026-06-20, `/plan-eng-review`+codex 합의):** [2-pass 재검토 플랜](docs/superpowers/plans/2026-06-20-saa-rereview-plan.md) — 전수 360문항+24문서, AI 읽기전용 사전심사→사람 flip. 핵심 보강: 공개 게이트(`questionCount>0`→전 도메인 균형 세트), `content_index_test` 동적 불변식(첫 flip 회귀 차단), 문서 오류 스캔 문항 flip 선행. 착수=릴리스 후.
   - **다음 시험 구성 게이트(2026-08-06):** 통합/약점 모의고사는 공식 도메인 비중을 앱의 65문항 연습 세트에 적용할 수 있을 만큼 도메인별 검증 문항이 있어야 열린다. SAA-C03 기준 필요/현재 = D1 19/0 · D2 17/15 · D3 16/45 · D4 13/30 → 현재 잠김. 다음 사람 검수 batch의 공개 목표는 **D1 최소 19문항 + D2 최소 2문항 추가 verified** 확보. 부분 통과 규칙: 이미 필요 수량을 넘긴 도메인(D3/D4)은 공개 게이트 관점에서 pass로 두고, 부족 도메인만 계속 검수한다. 추천 batch: [2026-08-06-weighted-ready-batch.md](docs/saa-review/2026-08-06-weighted-ready-batch.md). 단, `verified:true` flip은 계속 사람만 수행한다.
   - **검수 freeze 정책(T8 · 전체 SAA · 규약+가드):** 검수 발효~전 도메인 flip 완료까지 SAA 콘텐츠(`flutter_app/assets/content/saa/*.{md,questions.json}`) 동결. **허용**=검수 구동 변경만(수정루프·T6 문서수정·flip·읽기전용 사전심사 산출물). **금지**=신규/무관 SAA 편집·대량 리포맷. **가드**=`.githooks/pre-commit`(발효 중 `saa-review*`/`review/saa*` 밖에서 SAA 콘텐츠 커밋 차단). 설치 1회 `git config core.hooksPath .githooks`; 발효 `touch .saa-frozen` / 해제 `rm .saa-frozen`(현재 dormant). 도구·테스트·플랜은 비대상. 우회 `--no-verify`(권장 안 함).
-- [x] **② develop → main 릴리스** — **최신 완료(2026-10-19 PR#142 `68ab263`, Pages run 39230610259 build·deploy success).** 머지 9건(#133·#134 + #135~#141)을 한 번에 출고. `origin/develop`==`origin/main`==`68ab263`, 미릴리스 커밋 0·열린 PR 0, `flutter test` **1,076 그린**·`flutter analyze` **0건** 실측. 라이브 검증: index 200 · DEA 신규 문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`. 직전 완료(2026-09-23 PR#132 `58154b7`, Deploy GitHub Pages success). 직전 릴리스: 2026-09-22 PR#127 `34b1cde`(앱 리뷰 반영 → §B④) · 2026-09-03 PR#121 `acfbeac`(강의 mp3 R2 분리) · 2026-09-03 PR#118(Deploy run 33717705582 success, 라이브 SAA mp3 206·미승인 t4-2 404 실측).** 포함: weighted capacity 게이트(PR#113)·시험 게이트 해제 문서(PR#114)·SAA 오디오 24 스캐폴드+20 합성(PR#115)·SAA 오디오 20문서 청취면제 승인(PR#116, 라이브 노출·번들 493MB).** 직전 완료: 2026-07-03 PR#110·#112(감사 Phase A+AR). 그 이전 이력(2026-06-20 PR#47 `00528f9`): 이력: 멀티 일정 PR#31 · CLF 섹션 앵커 PR#37 `a68ae14` · **SAA 재검토 인프라(T1~T8)+T6 문서 정확성 수정+첫 flip 6 Task PR#47**(679 test·analyze 신규0·build web·배포 그린·라이브 200+로더 확인; SAA 통합시험은 D1 미flip이라 게이트 숨김 유지). develop=main 동기.
+- [x] **② develop → main 릴리스** — **최신: PR#144까지 출고 완료(2026-10-19).** develop·main 내용 동일(미릴리스 0) · 열린 PR 0 · `flutter test` **1,076 그린** · `flutter analyze` **0건** 실측.
+  - **콘텐츠 릴리스 PR#142**(`68ab263`, Pages run 39230610259 build·deploy success) — 머지 9건(#133·#134 + #135~#141)을 한 번에 출고. 라이브 검증: index 200 · DEA 신규 문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`.
+  - **부기 릴리스 PR#144**(`b12cd10`, Pages success) — 루트 현황 문서 3개만. 이후 현황은 해시가 아니라 "몇 번 PR까지 출고"로 적는다(HANDOFF §0 서술 규약 ②).
+  - **직전 릴리스 이력:** 2026-09-23 PR#132 `58154b7`(동기 v2 → §B⑤) · 2026-09-22 PR#127 `34b1cde`(앱 리뷰 반영 → §B④) · 2026-09-03 PR#121 `acfbeac`(강의 mp3 R2 분리) · 2026-09-03 PR#118(run 33717705582 success, 라이브 SAA mp3 206·미승인 t4-2 404 실측 — weighted capacity 게이트 PR#113·시험 게이트 해제 PR#114·SAA 오디오 PR#115·#116 포함) · 2026-07-03 PR#110·#112(감사 Phase A+AR) · 2026-06-20 PR#47 `00528f9`(SAA 재검토 인프라 T1~T8 + 첫 flip 6 Task) · 2026-06-20 PR#37 `a68ae14`(CLF 섹션 앵커) · 2026-06-20 PR#31 `89e2795`(멀티 일정).
 - [x] **③ 학습문서 섹션 앵커 점진 채움(CLF)** — **구현 완료·PR#34 develop 머지**(merge `58a1463`, 2026-06-20). CLF 18 Task(clf-t1-2~t4-3) 헤딩 `{#slug}` + 문항 `section` 사람 매핑 편집 + Dart **존재** 가드(`f1f3679`). spec·plan: [spec](docs/superpowers/specs/2026-06-20-section-anchors-design.md)·[plan](docs/superpowers/plans/2026-06-20-section-anchors.md). ⚠️ 가드는 *앵커 존재*만 보장 — *올바른 섹션* 의미 매핑은 사람 검토 권장. SAA 앵커는 B-① 검수·flip 후 별도. **main 릴리스 완료**(PR#37 `a68ae14`, 2026-06-20 라이브). 출처: HANDOFF §0-r.
 
 - [x] **④ 2026-09-22 앱 코드·UX 리뷰 반영** — 외부 리뷰(🔴2·🟡10·🟢6·🎨5)를 코드 대조·재현 프로브·공식 문서로 전건 검증한 뒤 **PR#122~#126 develop 머지 → PR#127 `34b1cde` main 릴리스·Pages success**(2026-09-22). 내용: 동기 lost-update 경합(C-1·`CODE-D-004` 상향)·초기화 부활 임시 조치(C-2)·합격선 하드코딩 700 제거(M-1)·PR 게이트 CI 신설+Flutter 3.47.2 고정(M-5)·손상 이력 덮어쓰기 방지(M-3). **ANS-C01 합격선 750 정정은 반려 — 공식 가이드가 700이라 앱 데이터가 옳다.** 설정: develop·main 브랜치 보호에 `CI / test` 필수 체크 등록. 원문+검증 부록 [2026-09-22-app-code-ux-review.md](docs/audits/2026-09-22-app-code-ux-review.md), 잔여는 §B⑥. 메모리 [[app-review-2026-09-22]].
 
 - [x] **⑤ 동기 프로토콜 v2 — 삭제 표식·일정/진행 3-way·보안 규칙** — 리뷰 C-2의 근본 해결이 설계 선행을 요구해 [spec](docs/superpowers/specs/2026-09-23-sync-protocol-v2-design.md)을 먼저 쓰고, **PR#128(설계)·#129(PR1 삭제 표식)·#130(PR2 일정·진행 3-way, 일정 개별 삭제 전파)·#131(PR3 레거시 LWW·옛 사이드카 제거·관용 파싱·`firestore.rules`) develop 머지 → PR#132 `58154b7` main 릴리스·Pages success**(2026-09-23). 초기화가 모든 기기·클라우드에서 실제로 지워지고, 일정·일정 진행이 집합 3-way로 병합된다. 동기 대상은 응시·열람 기록 + 일정(v2)·일정 진행이며 진행 중 시험 세션은 로컬 전용(비범위). 보안 규칙은 레포(`firestore.rules`+`firebase.json`)가 관리하고 에뮬레이터 테스트(`tool/firestore_rules_test`)·`firestore-rules` 워크플로가 검증한다 — **콘솔 배포 규칙 대조는 사용자 몫(§D)**. 기준선: 테스트 **892 그린**·analyze **0건**(2026-10-17 실측). 메모리 [[sync-protocol-v2]].
 
-- [x] **⑦ Associate 5종 콘텐츠 1차 — DEA 도메인 1 · SOA 가이드 v1.1·문항 300 · SAA/SOA 학습문서 사실 정정** — 2026-10-19 **#135~#140 develop 머지 → PR#142로 main 릴리스·라이브 배포 완료**(`68ab263`). 자세한 경위·가드·남은 일은 [HANDOFF.md](HANDOFF.md) §0-u.
+- [ ] **⑥ 2026-09-22 리뷰 후속 잔여** — 정본은 [리뷰 §V-4 "남은 일"](docs/audits/2026-09-22-app-code-ux-review.md)과 [sync v2 PR3 "남은 것"](docs/superpowers/plans/2026-09-23-sync-protocol-v2-pr3.md), 백로그 상세는 [TODOS.md](TODOS.md).
+  - **바로 가능:** QuizView `_finish`·오답노트 `_onFinished`에 같은 try/finally + 저장 실패 사용자 알림(PR-m11).
+  - **디자인 결정 필요:** M-6 대비 토큰(DESIGN.md 정렬 선행) · UX-1·2(시험 러너 모바일) · UX-4(진행 중 세션 "이어서 풀기" 진입점) · M-10/UX-5(결과 화면).
+  - **후순위:** M-4(콘텐츠 공용 로더+병렬+가드) · M-7 · 리뷰 원문 Minor m-1~m-5 · `PlanCheckStore` 제거 여부(동기에서는 이미 제외, 읽는 화면 없음).
+  - **보류(근거 있음):** M-8 주기 reconcile(watch에 onError·재구독이 없어 주기 동기가 타 기기 변경 수신의 안전망 — HANDOFF §1) · m-6 에셋 디렉터리 등록(원본 mp3·enrich 산출물이 같은 디렉터리라 로컬 빌드에 섞임).
+
+- [x] **⑦ Associate 5종 콘텐츠 1차 — DEA 도메인 1 · SOA 가이드 v1.1·문항 300 · SAA/SOA 학습문서 사실 정정** — 2026-10-19 **#135~#140 develop 머지 → PR#142로 main 릴리스·라이브 배포 완료**(`68ab263`). 자세한 경위·가드·남은 일은 [HANDOFF.md](HANDOFF.md) §0-2026-10-19.
   - **#135 DEA-C01 도메인 1**: 학습문서 4개(`dea-t1-1`~`t1-4`) + 문항 드래프트 61개 + `dea_questions_test.dart` 가드 + `content_index`·`pubspec` 등록(questionCount 0). 조사 노트 정본은 `docs/content-research/`.
   - **#136 SOA-C03**: 공식 시험 가이드를 **v1.1로 동기화**(스킬 10건 문구 교체 + `soa_guide_v11_test.dart` 재발 방지) + **20개 엔트리 전부 문항 드래프트 300개**(`soa_questions_test.dart` 전수 가드).
   - **#137·#138·#139 SAA 학습문서 사실 정정 68건**(Task 1.1 5건 · 1.2·1.3 15건 · 2.1~4.4 48건) — `[오류]`·`[구식]`·`[부정확]`만 공식 문서로 전건 재확인, 근거 미확보 하위 주장은 쓰지 않고 PR 본문에 기록. 가드 3종(`saa_t1_facts_test`·`saa_t12_t13_facts_test`·`saa_t2_t4_facts_test`).
   - **#140 SOA 학습문서 사실 4건 정정** — Flow Logs REJECT 의미(공식 `action` 정의) · KMS 키 정책의 IAM 위임 · ACM 내보내기 가능 인증서 유료 · Trusted Advisor 현행 플랜(Business Support+·Enterprise·Unified Operations) + ElastiCache 3엔진·DynamoDB MREC/MRSC. 덤으로 학습문서 8개 끝의 작성 artifact(`</content>`·`</invoke>` 10줄) 제거·재발 가드.
   - **라이브 노출 불변식 유지:** SOA 300 + DEA 61 문항은 전부 `verified:false`이고 `content_index` questionCount는 0 — 사이트 노출·문항 수 변화 0. flip은 사람 검수 전용.
   - **남은 일:** SOA·DEA 문항 사람 검수→flip · DEA 도메인 2~4 · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록.
-
-- [ ] **⑥ 2026-09-22 리뷰 후속 잔여** — 정본은 [리뷰 §V-4 "남은 일"](docs/audits/2026-09-22-app-code-ux-review.md)과 [sync v2 PR3 "남은 것"](docs/superpowers/plans/2026-09-23-sync-protocol-v2-pr3.md), 백로그 상세는 [TODOS.md](TODOS.md).
-  - **바로 가능:** QuizView `_finish`·오답노트 `_onFinished`에 같은 try/finally + 저장 실패 사용자 알림(PR-m11).
-  - **디자인 결정 필요:** M-6 대비 토큰(DESIGN.md 정렬 선행) · UX-1·2(시험 러너 모바일) · UX-4(진행 중 세션 "이어서 풀기" 진입점) · M-10/UX-5(결과 화면).
-  - **후순위:** M-4(콘텐츠 공용 로더+병렬+가드) · M-7 · 리뷰 원문 Minor m-1~m-5 · `PlanCheckStore` 제거 여부(동기에서는 이미 제외, 읽는 화면 없음).
-  - **보류(근거 있음):** M-8 주기 reconcile(watch에 onError·재구독이 없어 주기 동기가 타 기기 변경 수신의 안전망 — HANDOFF §1) · m-6 에셋 디렉터리 등록(원본 mp3·enrich 산출물이 같은 디렉터리라 로컬 빌드에 섞임).
 
 ---
 
@@ -74,7 +77,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-19(#135~#142 릴리스 반영) · HANDOFF
 
 - [x] **TODOS.md stale 정리** — 완료 2건(C-중량·wrongSkills)은 2026-07-02에 제거됨. 코드 스플리팅 항목 경로도 `lib/data/content_index.dart`로 갱신(2026-09-03).
 - [x] **`.semgrep/` 인증 캐시 무시** — 플러그인이 레포 루트에 생성하는 `.semgrep/guardian.yml`(토큰성 파일) `.gitignore` 등재(2026-09-03 완료).
-- [ ] **임시 워크트리 잔재 삭제** — `D:\workspace\awc-before`(전/후 측정용)가 파일 잠금으로 미삭제. 탐색기 수동 삭제(git 등록은 prune 완료). 출처: HANDOFF §3.
+- [x] **임시 워크트리 잔재 삭제** — `D:\workspace\awc-before`(전/후 측정용) 부재 실측·종료(2026-10-19). git 등록은 그 전에 prune 완료. 출처: HANDOFF §3.
 
 ---
 
