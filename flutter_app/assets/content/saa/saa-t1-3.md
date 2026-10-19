@@ -18,7 +18,13 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+  - title: NAT 게이트웨이 기본 사항(AZ 이중화·대역폭·연결 수) (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html
+  - title: VPC Flow Logs(저장 대상 3종) (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html
+  - title: Amazon VPC 요금(피어링 전송 과금) (공식)
+    url: https://aws.amazon.com/vpc/pricing/
+lastVerified: 2026-10-19
 ---
 
 # VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트
@@ -128,12 +134,16 @@ AWS는 각 서브넷에서 **5개 IP를 예약**합니다 — 첫 번째(네트�
 | 항목 | NAT 게이트웨이 | NAT 인스턴스 |
 |---|---|---|
 | 관리 | AWS 관리형 (패치·스케일 자동) | 직접 운영 (AMI 업데이트, 스케일 수동) |
-| 가용성 | 자동 고가용성 | 단일 EC2 — 직접 HA 구성 필요 |
-| 대역폭 | 자동 스케일 (최대 100 Gbps) | 인스턴스 타입에 종속 |
+| 가용성 | **AZ 내 이중화**(해당 AZ 안에서만) — AZ 장애에는 AZ별 생성 필요 | 단일 EC2 — 직접 HA 구성 필요 |
+| 대역폭 | 5 Gbps에서 시작해 자동 스케일 (최대 100 Gbps) | 인스턴스 타입에 종속 |
+| 연결 수 | IPv4 주소당 **목적지별 동시 연결 55,000** (주소를 최대 8개까지 추가해 확장) | 인스턴스 타입·OS 설정에 종속 |
 | 비용 | 시간 + 데이터 처리 과금 | EC2 인스턴스 비용 |
 | 권장 | 신규 설계 시 표준 | 비용 절감 특수 상황 또는 레거시 |
 
 > 시험 포인트: NAT 게이트웨이는 **퍼블릭 서브넷에 배치**하고 Elastic IP를 연결합니다. 프라이빗 서브넷의 라우트 테이블에 `0.0.0.0/0 → NAT 게이트웨이`를 추가해야 아웃바운드가 동작합니다.
+
+> ⚠️ **"NAT 게이트웨이는 자동으로 고가용"이 아닙니다.** 각 NAT 게이트웨이는 **특정 AZ에 만들어지고 그 AZ 안에서만 이중화**됩니다. 여러 AZ의 리소스가 하나의 NAT 게이트웨이를 공유하면 **그 AZ가 내려갈 때 다른 AZ 리소스까지 인터넷이 끊깁니다.** 공식 권고는 **AZ마다 NAT 게이트웨이를 만들고 같은 AZ의 NAT로 라우팅**하는 것입니다. 이 구성이 시험에서 "AZ 장애에도 아웃바운드 유지" 요구의 정답 방향입니다.
+> 참고 한도: 퍼블릭 NAT 게이트웨이에 기본 **Elastic IP 2개**까지 연결(쿼터 상향 요청 가능), 보안 그룹은 연결할 수 없고 **NACL로 제어**(NAT는 포트 1024–65535 사용), **VPC 피어링을 거쳐 NAT로 향하는 경로는 불가**(NAT → 피어링 방향은 가능).
 
 > 🧠 원리: 왜 NAT 게이트웨이는 프라이빗이 아닌 퍼블릭 서브넷에 배치해야 할까요?
 > NAT 게이트웨이 자신이 인터넷에 패킷을 내보내려면 IGW에 도달할 수 있어야 합니다 — IGW 경로가 있는 퍼블릭 서브넷에 있어야만 가능합니다.
@@ -224,7 +234,7 @@ VPC 엔드포인트에는 IAM 리소스 정책(엔드포인트 정책)을 부착
 | 전이 라우팅 | 불가 | 가능 |
 | 확장성 | VPC 수 증가 시 관리 복잡 | 중앙 집중, 확장 용이 |
 | 적합 상황 | VPC 2~3개, 단순 연결 | VPC 다수 또는 온프레미스 포함 |
-| 비용 | 데이터 처리 과금 | 연결 시간 + 데이터 처리 과금 |
+| 비용 | 연결 보유 요금은 없음 — **AZ를 넘는 전송에 $0.01/GB**(양방향), 리전 간은 EC2 요금 기준 | 연결 시간 + 데이터 처리 과금 |
 
 > 🧠 원리: 왜 VPC 피어링은 구조적으로 전이 라우팅이 불가능할까요?
 > 피어링은 두 VPC 간 직접 경로만 추가합니다 — B 라우트 테이블에 A의 CIDR 경로가 있고, C 라우트 테이블에도 B 경로가 있지만, A가 C를 목적지로 보낸 패킷은 B의 라우터에서 다음 홉을 찾을 때 C로 향하는 피어링 경로 자체가 없습니다.
@@ -237,7 +247,7 @@ VPC Flow Logs는 VPC 내 네트워크 인터페이스를 오가는 **IP 트래�
 
 **활성화 수준**: VPC 전체 / 특정 서브넷 / 특정 네트워크 인터페이스(ENI) 단위로 설정 가능합니다.
 
-**로그 저장 대상**: CloudWatch Logs 또는 S3.
+**로그 저장 대상**: **CloudWatch Logs · Amazon S3 · Amazon Data Firehose** 세 곳입니다(Firehose로 보내면 외부 분석 도구로 바로 스트리밍할 수 있습니다).
 
 **주요 활용**
 
@@ -344,4 +354,9 @@ VPC Flow Logs는 VPC 내 네트워크 인터페이스를 오가는 **IP 트래�
 2. 보안 그룹으로 트래픽 제어 — https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html
 3. 네트워크 ACL로 서브넷 트래픽 제어 — https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
 4. AWS PrivateLink 개념 — https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. NAT 게이트웨이 기본 사항(AZ 내 이중화·AZ별 생성 권고·100 Gbps·55,000 연결) — https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html
+6. VPC Flow Logs(CloudWatch Logs·S3·Data Firehose) — https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html
+7. Amazon VPC 요금(피어링은 AZ 교차 전송 $0.01/GB) — https://aws.amazon.com/vpc/pricing/
+8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① NAT 게이트웨이 가용성 서술을 **AZ 내 이중화 + AZ별 생성 권고**로 고치고 대역폭·동시 연결 수치를 더했습니다(근거 5번). ② Flow Logs 저장 대상에 **Amazon Data Firehose**를 추가했습니다(근거 6번). ③ VPC 피어링 비용을 "데이터 처리 과금"에서 **AZ를 넘는 전송 과금**으로 정정했습니다(근거 7번).
