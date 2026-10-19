@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t3-3",
+  "taskTitle": "Systems Manager 운영 자동화 (Run Command·Patch·State Manager·Parameter Store)",
+  "domain": 3,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t3-3-q1",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "EC2 인스턴스가 Systems Manager 관리형 노드 목록에 나타나지 않는다. 확인해야 할 세 가지 전제 조건은?",
+      "options": [
+        "SSM Agent 설치·실행, SSM 권한을 가진 IAM 인스턴스 프로파일, SSM 엔드포인트 도달성",
+        "퍼블릭 IP, 키 페어, 인바운드 22번 포트 개방",
+        "Elastic IP, NAT 게이트웨이, 보안 그룹 인바운드 허용",
+        "CloudWatch 에이전트, 세부 모니터링, 상태 확인 유예 기간"
+      ],
+      "correct": 0,
+      "explanation": "관리형 노드가 되려면 ① SSM Agent 설치·실행, ② `AmazonSSMManagedInstanceCore` 같은 SSM 권한 역할 연결, ③ SSM 서비스 엔드포인트 도달성(NAT·IGW 또는 VPC 인터페이스 엔드포인트)이 모두 충족돼야 합니다. 하나만 빠져도 목록에 나타나지 않습니다.",
+      "wrongExplanations": {
+        "1": "SSM은 인바운드 포트·키 페어 없이 동작합니다.",
+        "2": "아웃바운드 도달성이 필요할 뿐 EIP·인바운드 허용이 조건은 아닙니다.",
+        "3": "CloudWatch 관련 설정은 SSM 등록 조건이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Systems Manager 관리형 노드 설정",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up-messageAPIs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q2",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "인터넷 게이트웨이도 NAT도 없는 프라이빗 서브넷 인스턴스를 SSM으로 관리하려면?",
+      "options": [
+        "ssm·ssmmessages·ec2messages용 VPC 인터페이스 엔드포인트를 만든다",
+        "인스턴스에 퍼블릭 IP를 할당한다",
+        "보안 그룹 인바운드에 443을 허용한다",
+        "SSM Agent를 제거하고 SSH로 접속한다"
+      ],
+      "correct": 0,
+      "explanation": "프라이빗 서브넷에서는 ssm, ssmmessages, ec2messages 인터페이스 엔드포인트(PrivateLink)를 만들면 인터넷 없이도 SSM 서비스에 도달할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "퍼블릭 IP 부여는 프라이빗 서브넷 설계를 깨뜨립니다.",
+        "2": "SSM은 아웃바운드 연결로 동작하므로 인바운드 허용이 필요 없습니다.",
+        "3": "SSH는 포트 개방·키 관리 부담을 되돌리는 방향입니다."
+      },
+      "sources": [
+        {
+          "title": "Systems Manager용 VPC 엔드포인트 생성",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-vpc.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q3",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "태그가 `Role=web`인 인스턴스 300대에 패키지 업데이트 명령을 SSH 없이 한 번에 실행하려 한다. 어떤 기능을 쓰는가?",
+      "options": [
+        "Run Command로 태그를 대상으로 지정해 문서를 실행한다",
+        "Session Manager로 한 대씩 접속해 수동 실행한다",
+        "State Manager 연결을 만들어 즉시 1회 실행한다",
+        "Patch Manager 베이스라인을 수정한다"
+      ],
+      "correct": 0,
+      "explanation": "Run Command는 SSM Agent를 통해 명령을 실행하므로 인바운드 포트·SSH 키가 필요 없고, 인스턴스 ID·태그·리소스 그룹으로 대상을 지정해 수백 대에 한 번에 보낼 수 있습니다.",
+      "wrongExplanations": {
+        "1": "한 대씩 접속은 300대 규모에 비효율적입니다.",
+        "2": "State Manager는 지속적 상태 유지가 목적인 반복 적용 기능입니다.",
+        "3": "Patch Manager는 OS 패치 승인·적용 전용입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Systems Manager Run Command",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q4",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "Run Command에서 `--max-concurrency`와 `--max-errors`를 따로 지정하는 이유는?",
+      "options": [
+        "전자는 한 번에 실행할 대상 수를 제어하는 속도 조절, 후자는 오류가 임계를 넘으면 나머지 실행을 멈추는 안전 차단이기 때문",
+        "전자는 리전 수, 후자는 계정 수를 의미하기 때문",
+        "두 값은 같은 역할을 하며 호환성 때문에 둘 다 남아 있기 때문",
+        "전자는 비용 상한, 후자는 실행 시간 상한이기 때문"
+      ],
+      "correct": 0,
+      "explanation": "concurrency는 '한 번에 몇 대에 보낼지'를 제어하는 속도 조절 장치이고, error threshold는 '오류가 몇 건 나면 중단할지'를 정하는 안전 차단 장치입니다. 속도와 안전성은 독립된 관심사이므로 따로 지정합니다.",
+      "wrongExplanations": {
+        "1": "리전·계정 수와는 무관합니다.",
+        "2": "역할이 서로 다릅니다.",
+        "3": "비용·시간 상한 설정이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Run Command 속도 제어 및 오류 임계값",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q5",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "보안팀이 '베이스천 호스트를 없애고 22번 포트를 모두 닫되, 접속 활동은 감사 로그로 남겨라'고 요구한다. 적절한 수단은?",
+      "options": [
+        "Session Manager — 인바운드 포트·키 없이 셸을 열고 CloudWatch Logs·S3·CloudTrail로 감사한다",
+        "EC2 Instance Connect로 임시 키를 발급한다",
+        "NAT 게이트웨이를 추가해 SSH를 우회한다",
+        "보안 그룹에 회사 IP만 허용해 22번을 유지한다"
+      ],
+      "correct": 0,
+      "explanation": "Session Manager는 인바운드 포트를 열거나 베이스천을 유지하거나 SSH 키를 관리하지 않고도 대화형 셸을 제공합니다. 세션 활동을 CloudWatch Logs·S3에 기록하고 시작·종료는 CloudTrail로 감사하며, 접근 통제는 IAM 정책으로 합니다.",
+      "wrongExplanations": {
+        "1": "EC2 Instance Connect도 유용하지만 22번 포트 경로와 키 발급 모델을 유지합니다.",
+        "2": "NAT는 아웃바운드용이며 SSH 접속 요건을 대체하지 않습니다.",
+        "3": "포트를 열어 두는 방식은 '모두 닫으라'는 요건에 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Systems Manager Session Manager",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q6",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "foundational",
+      "stem": "Session Manager가 인바운드 포트 없이 셸 채널을 열 수 있는 이유는?",
+      "options": [
+        "인스턴스의 SSM Agent가 SSM 엔드포인트로 아웃바운드 연결을 먼저 수립·유지하고, 사용자 요청이 오면 그 채널로 세션이 열리기 때문",
+        "SSM이 인스턴스의 22번 포트를 내부적으로 열기 때문",
+        "세션이 EC2 Instance Connect 엔드포인트를 경유하기 때문",
+        "SSM이 인스턴스에 퍼블릭 IP를 임시 할당하기 때문"
+      ],
+      "correct": 0,
+      "explanation": "전통적 SSH는 클라이언트가 서버의 열린 포트로 연결하지만, Session Manager는 인스턴스가 아웃바운드로 먼저 채널을 수립합니다. 인스턴스는 나가는 방향으로만 통신하므로 인바운드 규칙이 필요 없고, 스캔할 열린 포트도 없습니다.",
+      "wrongExplanations": {
+        "1": "22번 포트를 열지 않습니다.",
+        "2": "EC2 Instance Connect는 별개 기능입니다.",
+        "3": "퍼블릭 IP를 할당하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Session Manager 작동 방식",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q7",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "foundational",
+      "stem": "Patch Manager에서 패치를 '설치하지 않고 준수 상태만 확인'하려면 어떤 작업을 실행하는가?",
+      "options": [
+        "`AWS-RunPatchBaseline`을 Scan 작업으로 실행한다",
+        "`AWS-RunPatchBaseline`을 Install 작업으로 실행한다",
+        "패치 베이스라인을 삭제한다",
+        "유지 관리 기간을 비활성화한다"
+      ],
+      "correct": 0,
+      "explanation": "`AWS-RunPatchBaseline`은 Scan(스캔만)과 Install(설치, 필요 시 재부팅) 작업을 지원합니다. Scan으로 실행하면 설치 없이 누락 패치와 준수 상태만 보고합니다.",
+      "wrongExplanations": {
+        "1": "Install은 실제 설치와 재부팅을 수반합니다.",
+        "2": "베이스라인 삭제는 정책을 없애는 행위입니다.",
+        "3": "유지 관리 기간 비활성화는 스캔을 수행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Patch Manager 패치 작업 — Scan과 Install",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-about-aws-runpatchbaseline.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q8",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "인스턴스에 `patch group = prod-web` 태그를 붙였는데 패치 그룹으로 인식되지 않는다. 가장 가능성 높은 원인은?",
+      "options": [
+        "태그 키가 정확히 `Patch Group`(공백·대소문자 포함)이어야 하는데 다르게 입력됐다",
+        "태그 값에 하이픈을 쓸 수 없다",
+        "패치 그룹은 태그가 아니라 리소스 그룹으로만 지정한다",
+        "태그는 인스턴스가 중지된 상태에서만 반영된다"
+      ],
+      "correct": 0,
+      "explanation": "패치 그룹은 태그 키가 정확히 `Patch Group`일 때만 인식됩니다(공백·대소문자 포함). 같은 값을 패치 베이스라인에 등록해 연결해야 그룹별 정책이 적용됩니다.",
+      "wrongExplanations": {
+        "1": "값에 하이픈을 쓸 수 있습니다.",
+        "2": "패치 그룹은 태그 기반입니다.",
+        "3": "태그는 실행 중에도 반영됩니다."
+      },
+      "sources": [
+        {
+          "title": "패치 그룹에 관리형 노드 추가",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-group-tagging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q9",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "'모든 인스턴스에서 특정 에이전트가 항상 실행 중이어야 한다'를 보장하려 한다. 가장 적절한 SSM 기능은?",
+      "options": [
+        "State Manager 연결로 원하는 상태를 선언하고 일정에 따라 반복 적용한다",
+        "Run Command로 한 번 설치 명령을 보낸다",
+        "Session Manager로 접속해 서비스를 시작한다",
+        "Patch Manager 베이스라인에 에이전트를 추가한다"
+      ],
+      "correct": 0,
+      "explanation": "State Manager는 '이 인스턴스들은 항상 이 구성이어야 한다'를 연결(association)로 선언하고 일정에 따라 반복 적용합니다. 인스턴스가 새로 시작되거나 드리프트되면 다시 원하는 상태로 수렴시킵니다.",
+      "wrongExplanations": {
+        "1": "Run Command는 일회성 실행이라 이후 드리프트를 교정하지 않습니다.",
+        "2": "수동 접속은 규모와 지속성 요건에 맞지 않습니다.",
+        "3": "Patch Manager는 OS 패치 승인·적용 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Systems Manager State Manager",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q10",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "foundational",
+      "stem": "Run Command와 State Manager의 차이를 가장 정확히 설명한 것은?",
+      "options": [
+        "Run Command는 일회성 명령 실행, State Manager는 원하는 상태를 반복 적용해 지속적으로 강제",
+        "Run Command는 Windows 전용, State Manager는 Linux 전용",
+        "Run Command는 태그를 쓸 수 없고 State Manager만 태그를 쓴다",
+        "두 기능은 동일하며 콘솔 메뉴만 다르다"
+      ],
+      "correct": 0,
+      "explanation": "Run Command는 지금 한 번 명령을 실행하는 기능이고, State Manager는 연결을 통해 원하는 상태를 일정에 따라 반복 적용하는 구성 관리 기능입니다.",
+      "wrongExplanations": {
+        "1": "둘 다 Linux·Windows를 지원합니다.",
+        "2": "Run Command도 태그로 대상을 지정합니다.",
+        "3": "목적과 동작 주기가 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Systems Manager State Manager",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q11",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "'인스턴스 중지 → 패치 → AMI 생성 → 재시작'처럼 여러 단계로 이뤄진 유지 관리 작업을 한 번에 실행하려 한다. 적절한 기능은?",
+      "options": [
+        "Automation 런북(SSM 문서)",
+        "Run Command 단일 문서",
+        "Parameter Store 계층 파라미터",
+        "유지 관리 기간 단독 설정"
+      ],
+      "correct": 0,
+      "explanation": "Automation은 여러 단계로 이뤄진 유지 관리·배포·교정 작업을 런북으로 정의해 실행합니다. 선행 단계 성공 여부에 따라 다음 단계로 진행하거나 분기하는 로직을 문서에 내장할 수 있어 수동 절차 오류를 줄입니다.",
+      "wrongExplanations": {
+        "1": "Run Command는 단일 명령 실행에 적합합니다.",
+        "2": "Parameter Store는 구성값 저장소입니다.",
+        "3": "유지 관리 기간은 실행 시간 창일 뿐 절차를 정의하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Systems Manager Automation",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q12",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "foundational",
+      "stem": "`AWS-RestartEC2Instance`처럼 `AWS-`로 시작하는 Automation 런북의 특징은?",
+      "options": [
+        "AWS가 제공하는 사전 정의 런북이며 그대로 실행하거나 참고해 직접 만들 수 있다",
+        "계정마다 자동 생성되는 사용자 지정 런북이다",
+        "CloudFormation 템플릿의 일종이다",
+        "실행 전 반드시 복제해야 쓸 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "`AWS-*` 런북은 AWS가 제공하는 사전 정의 SSM 문서입니다. 자주 쓰는 운영 작업이 미리 정의돼 있어 그대로 실행할 수 있고, 직접 런북을 만들 때 참고할 수도 있습니다.",
+      "wrongExplanations": {
+        "1": "사용자 지정이 아니라 AWS 제공 문서입니다.",
+        "2": "SSM 문서이며 CloudFormation 템플릿이 아닙니다.",
+        "3": "복제 없이 바로 실행할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Systems Manager Automation 런북 참조",
+          "url": "https://docs.aws.amazon.com/systems-manager-automation-runbooks/latest/userguide/automation-runbook-reference.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q13",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "RDS 자격 증명을 주기적으로 자동 교체(rotation)해야 한다. 기본 제공 기능으로 이를 지원하는 서비스는?",
+      "options": [
+        "AWS Secrets Manager",
+        "SSM Parameter Store SecureString",
+        "SSM Parameter Store 표준 파라미터",
+        "AWS Config"
+      ],
+      "correct": 0,
+      "explanation": "Secrets Manager는 자격 증명 자동 교체를 기본 제공하며 RDS 등과 통합됩니다. Parameter Store의 SecureString은 KMS 암호화를 제공하지만 자동 교체는 기본 제공되지 않아 직접 Lambda로 구성해야 합니다.",
+      "wrongExplanations": {
+        "1": "SecureString은 암호화 저장이며 자동 교체 기능이 아닙니다.",
+        "2": "표준 파라미터는 평문 구성값 저장용입니다.",
+        "3": "AWS Config는 구성 추적·준수 평가 서비스입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Secrets Manager 비밀 교체",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q14",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "환경별 애플리케이션 구성값을 `/app/prod/db/host` 같은 경로 구조로 저장하고 KMS로 암호화할 수 있는 서비스는?",
+      "options": [
+        "SSM Parameter Store (SecureString 지원)",
+        "CloudWatch Logs",
+        "DynamoDB 테이블",
+        "CloudFormation Outputs"
+      ],
+      "correct": 0,
+      "explanation": "Parameter Store는 구성 데이터와 비밀을 위한 안전한 계층형 저장소로, 경로형 이름(`/app/prod/...`)과 KMS 암호화 SecureString을 지원합니다.",
+      "wrongExplanations": {
+        "1": "CloudWatch Logs는 로그 저장소입니다.",
+        "2": "DynamoDB로 구현할 수는 있으나 관리형 구성 저장소 기능을 직접 만들어야 합니다.",
+        "3": "Outputs는 스택 반환값 노출 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Systems Manager Parameter Store",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t3-3-q15",
+      "examGuideTaskId": "soa-t3-3",
+      "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "difficulty": "applied",
+      "stem": "Session Manager 세션에서 실행된 명령 기록을 규정 준수 목적으로 보관하려 한다. 어떻게 구성하는가?",
+      "options": [
+        "세션 로깅을 켜서 CloudWatch Logs 또는 S3로 출력을 전송한다",
+        "CloudTrail 데이터 이벤트를 켜면 명령 내용이 기록된다",
+        "Run Command 출력 설정을 변경한다",
+        "SSM Agent 로그를 인스턴스 로컬에만 보관한다"
+      ],
+      "correct": 0,
+      "explanation": "Session Manager는 세션 활동 로깅을 지원해 CloudWatch Logs 또는 S3로 출력을 보낼 수 있고, 세션 시작·종료는 CloudTrail에 기록됩니다. 규정 준수를 위해 중앙 로그 대상을 지정해 보관합니다.",
+      "wrongExplanations": {
+        "1": "CloudTrail은 API 호출 감사 기록이며 셸 명령 내용을 담지 않습니다.",
+        "2": "Run Command 설정은 다른 기능의 출력입니다.",
+        "3": "로컬 보관은 인스턴스 교체 시 사라져 감사 요건을 못 맞춥니다."
+      },
+      "sources": [
+        {
+          "title": "Session Manager 세션 활동 로깅",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-logging.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
