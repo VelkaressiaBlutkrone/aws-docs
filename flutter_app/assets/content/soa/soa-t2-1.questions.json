@@ -1,0 +1,417 @@
+{
+  "examGuideTaskId": "soa-t2-1",
+  "taskTitle": "Auto Scaling·ELB로 확장성·탄력성 구현",
+  "domain": 2,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t2-1-q1",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "CPU가 90%까지 올라갔는데도 Auto Scaling 그룹이 더 이상 인스턴스를 추가하지 않는다. 가장 먼저 확인할 것은?",
+      "options": [
+        "ASG의 최대 용량(Max)에 이미 도달했는지",
+        "시작 템플릿의 AMI가 최신인지",
+        "대상 그룹의 등록 해제 지연 값",
+        "CloudWatch 지표 보존 기간"
+      ],
+      "correct": 0,
+      "explanation": "조정 정책은 원하는 용량(desired)만 변경하며 min·max 경계는 절대 넘지 못합니다. '스케일 아웃이 안 된다'는 시나리오의 가장 흔한 원인은 max에 도달한 상태입니다.",
+      "wrongExplanations": {
+        "1": "AMI 버전은 새 인스턴스의 내용에 영향을 주지만 확장 자체를 막지 않습니다.",
+        "2": "등록 해제 지연은 종료 시 연결 드레이닝 시간이며 스케일 아웃과 무관합니다.",
+        "3": "지표 보존 기간은 과거 데이터 조회 범위일 뿐입니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 그룹 — 원하는 용량·최소·최대",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-groups.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q2",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "foundational",
+      "stem": "혼합 인스턴스 정책(스팟 + 온디맨드)과 버전 관리를 지원하므로 신규 ASG에서 사용해야 하는 구성 요소는?",
+      "options": [
+        "시작 구성(Launch Configuration)",
+        "시작 템플릿(Launch Template)",
+        "배치 그룹",
+        "대상 그룹"
+      ],
+      "correct": 1,
+      "explanation": "시작 템플릿은 새 인스턴스의 청사진(AMI·인스턴스 유형·보안 그룹·사용자 데이터)을 담으며 버전 관리와 혼합 인스턴스 정책을 지원합니다. 시작 구성은 레거시이므로 신규 구성에는 시작 템플릿을 사용합니다.",
+      "wrongExplanations": {
+        "0": "시작 구성은 레거시이며 버전 관리·혼합 인스턴스 정책을 지원하지 않습니다.",
+        "2": "배치 그룹은 인스턴스의 물리적 배치 전략입니다.",
+        "3": "대상 그룹은 로드 밸런서가 트래픽을 보내는 대상 집합입니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 그룹의 시작 템플릿",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/launch-templates.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q3",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "'평균 CPU 사용률을 50%로 유지'라는 요구만 주어졌고 임계값·증감 단계를 수동 관리하고 싶지 않다. 적절한 조정 정책은?",
+      "options": [
+        "단순 조정 정책",
+        "단계 조정 정책",
+        "타깃 추적 조정 정책",
+        "예약 조정"
+      ],
+      "correct": 2,
+      "explanation": "타깃 추적 정책은 목표 지표값 하나만 지정하면 ASG가 필요한 용량을 계산하고 경보도 내부에서 자동 생성합니다. 임계값·구간·증감 단계를 직접 튜닝할 필요가 없어 기본 권장 방식입니다.",
+      "wrongExplanations": {
+        "0": "단순 조정은 경보 1개에 고정 증감을 연결하는 레거시 방식입니다.",
+        "1": "단계 조정은 위반 정도별 증감 크기를 직접 정의해야 합니다.",
+        "3": "예약 조정은 시각 기반이며 지표 목표 유지 기능이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Auto Scaling 타깃 추적 조정 정책",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q4",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "매일 오전 9시에 트래픽이 급증하는 패턴이 분명하고, 부팅·워밍업이 오래 걸리는 애플리케이션이다. 가장 적절한 조합은?",
+      "options": [
+        "예약 조정 또는 예측 조정으로 사전 용량을 확보하고 동적 조정을 함께 둔다",
+        "단순 조정 정책만 사용하고 쿨다운을 길게 설정한다",
+        "ASG를 쓰지 않고 인스턴스를 수동으로 2배 유지한다",
+        "상태 확인 유예 기간을 0으로 설정한다"
+      ],
+      "correct": 0,
+      "explanation": "예약 조정은 지정 시각에 min/max/desired를 사전 설정하고, 예측 조정은 과거 패턴을 학습해 부하 도달 전에 용량을 확보합니다. 예측하지 못한 스파이크는 동적 조정이 보완하므로 둘을 함께 쓰는 것이 권장됩니다.",
+      "wrongExplanations": {
+        "1": "단순 조정은 부하가 발생한 뒤 반응하므로 워밍업이 긴 앱에서는 초반 품질 저하가 생깁니다.",
+        "2": "상시 과다 프로비저닝은 비용이 누적되고 탄력성의 이점을 버립니다.",
+        "3": "유예 기간을 0으로 두면 부팅 중 인스턴스가 조기 종료될 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Auto Scaling 예측 조정",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html"
+        },
+        {
+          "title": "Amazon EC2 Auto Scaling 예약 조정",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q5",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "foundational",
+      "stem": "예측 조정을 켰는데 예측이 생성되지 않는다. 가장 가능성 높은 이유는?",
+      "options": [
+        "지표 이력이 부족하다(최소 24시간의 지표가 필요)",
+        "타깃 추적 정책과 함께 쓸 수 없다",
+        "ASG가 단일 AZ에 있다",
+        "시작 템플릿 버전이 1개뿐이다"
+      ],
+      "correct": 0,
+      "explanation": "예측 조정은 최소 24시간의 지표가 있어야 예측을 시작하며 14일 이상의 이력이 권장됩니다. 도입 초기에는 실제 조정 없이 예측만 수행하는 모드로 검증할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "예측 조정은 동적 조정(타깃 추적 등)과 함께 쓰는 것이 권장 구성입니다.",
+        "2": "AZ 수는 예측 생성 조건이 아닙니다.",
+        "3": "시작 템플릿 버전 수와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Auto Scaling 예측 조정",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q6",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "스케일 아웃으로 새로 켜진 인스턴스의 CPU가 부팅 작업 때문에 100%로 튀어 또 스케일 아웃이 연쇄적으로 발생한다. 타깃 추적 정책에서 이를 막는 설정은?",
+      "options": [
+        "쿨다운(Cooldown)",
+        "인스턴스 워밍업(Instance warmup)",
+        "등록 해제 지연",
+        "종료 정책"
+      ],
+      "correct": 1,
+      "explanation": "타깃 추적·단계 조정 정책은 쿨다운 대신 인스턴스 워밍업을 사용합니다. 워밍업 동안 새 인스턴스는 ASG 지표 집계에서 제외되므로, 부팅 중 높은 CPU가 지표를 왜곡해 추가 확장을 유발하는 폭주를 막습니다.",
+      "wrongExplanations": {
+        "0": "쿨다운은 단순 조정 정책에 적용되는 개념입니다.",
+        "2": "등록 해제 지연은 종료 시 연결 드레이닝 시간입니다.",
+        "3": "종료 정책은 스케일 인 시 어떤 인스턴스를 먼저 줄일지 정합니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 인스턴스 워밍업",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/consolidated-view-of-warm-up-settings.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q7",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "foundational",
+      "stem": "단순 조정 정책에서 '직전 조정 효과가 지표에 반영될 때까지 추가 조정을 보류'하는 설정은?",
+      "options": [
+        "쿨다운",
+        "워밍업",
+        "상태 확인 유예 기간",
+        "스케일 인 보호"
+      ],
+      "correct": 0,
+      "explanation": "쿨다운은 단순 조정 정책에서 직전 조정의 효과가 지표에 반영되기까지 추가 조정을 보류해 연속 조정으로 인한 과잉 확장을 방지합니다.",
+      "wrongExplanations": {
+        "1": "워밍업은 새 인스턴스를 지표 집계·상태 확인에서 일시 제외하는 설정입니다.",
+        "2": "유예 기간은 인스턴스 시작 직후 상태 확인을 보류하는 시간입니다.",
+        "3": "스케일 인 보호는 특정 인스턴스가 스케일 인으로 종료되지 않게 보호합니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 조정 쿨다운",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q8",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "새 인스턴스가 트래픽을 받기 전에 설정 주입과 에이전트 설치를 마치도록 보장해야 한다. 어떤 기능을 쓰는가?",
+      "options": [
+        "시작 수명 주기 후크로 Pending:Wait 구간에서 초기화하고 CONTINUE를 보낸다",
+        "상태 확인 유예 기간을 늘린다",
+        "등록 해제 지연을 늘린다",
+        "타깃 추적 목표값을 낮춘다"
+      ],
+      "correct": 0,
+      "explanation": "시작 수명 주기 후크는 인스턴스를 Pending:Wait 상태로 잡아두어 초기화를 완료할 시간을 줍니다. 초기화 후 CONTINUE를 보내면 InService로 전환되어 대상 그룹에 등록되고, ABANDON을 보내면 인스턴스를 폐기합니다.",
+      "wrongExplanations": {
+        "1": "유예 기간은 상태 확인을 보류할 뿐 트래픽 수신 자체를 막지 않습니다.",
+        "2": "등록 해제 지연은 종료 단계의 설정입니다.",
+        "3": "목표값 조정은 초기화 완료 보장과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Auto Scaling 수명 주기 후크",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q9",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "foundational",
+      "stem": "종료 수명 주기 후크의 대표적인 용도는?",
+      "options": [
+        "종료 전에 로그 플러시·세션 저장·연결 드레이닝 같은 정리 작업 수행",
+        "인스턴스 유형을 변경",
+        "대상 그룹을 새로 생성",
+        "AMI를 자동으로 갱신"
+      ],
+      "correct": 0,
+      "explanation": "종료 후크는 인스턴스가 Terminating:Wait 상태에 머무는 동안 로그 수집·세션 저장·연결 드레이닝 같은 정리 작업을 수행하게 합니다. 기본 대기 시간은 1시간이며 최대 48시간까지 설정할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "인스턴스 유형 변경은 시작 템플릿의 영역입니다.",
+        "2": "대상 그룹 생성은 후크의 역할이 아닙니다.",
+        "3": "AMI 갱신은 별도 배포 절차입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Auto Scaling 수명 주기 후크",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q10",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "애플리케이션 프로세스가 교착 상태에 빠져 5xx만 반환하는데도 ASG가 인스턴스를 교체하지 않는다. 원인은?",
+      "options": [
+        "ASG 상태 확인이 EC2 유형만 사용하고 있어 OS가 살아 있으면 정상으로 판정된다",
+        "ASG 최소 용량이 0이다",
+        "대상 그룹의 상태 확인 간격이 너무 짧다",
+        "시작 템플릿에 사용자 데이터가 없다"
+      ],
+      "correct": 0,
+      "explanation": "EC2 상태 확인은 하이퍼바이저 관점의 인스턴스·시스템 상태만 봅니다. 앱 계층 장애를 ASG가 인지하려면 ELB 상태 확인을 활성화해 대상 그룹의 상태 확인 결과를 ASG가 쓰게 해야 합니다.",
+      "wrongExplanations": {
+        "1": "최소 용량은 교체 여부가 아니라 하한선을 정합니다.",
+        "2": "간격이 짧으면 오히려 판정이 빨라집니다.",
+        "3": "사용자 데이터 유무는 상태 판정과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 그룹의 상태 확인",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q11",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "부팅과 애플리케이션 초기화에 4분이 걸리는 앱이 ASG에서 계속 종료·재시작된다. 가장 적절한 조치는?",
+      "options": [
+        "상태 확인 유예 기간을 초기화 시간보다 길게 설정한다",
+        "최대 용량을 늘린다",
+        "타깃 추적 목표값을 높인다",
+        "ELB 상태 확인을 비활성화한다"
+      ],
+      "correct": 0,
+      "explanation": "상태 확인 유예 기간(기본 300초)은 인스턴스 시작 직후 상태 확인을 보류해 부팅·초기화 중 조기 종료를 방지합니다. 초기화가 더 오래 걸리면 유예 기간을 그만큼 늘려야 합니다.",
+      "wrongExplanations": {
+        "1": "용량 상한은 교체 루프의 원인이 아닙니다.",
+        "2": "목표값 조정은 조정 민감도만 바꿉니다.",
+        "3": "ELB 상태 확인을 끄면 앱 장애를 영구히 놓치게 됩니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 상태 확인 유예 기간",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-check-grace-period.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q12",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "foundational",
+      "stem": "ASG에 대상 그룹을 연결했을 때 인스턴스 등록·해제는 어떻게 처리되는가?",
+      "options": [
+        "시작 시 자동 등록되고 종료 시 자동 해제된다",
+        "운영자가 콘솔에서 수동 등록해야 한다",
+        "Lambda로 등록 스크립트를 작성해야 한다",
+        "시작 템플릿의 사용자 데이터에서 등록 API를 호출해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "ASG에 대상 그룹을 연결하면 새 인스턴스가 InService로 전환될 때 자동으로 대상 그룹에 등록되고, 종료될 때 자동으로 해제됩니다.",
+      "wrongExplanations": {
+        "1": "수동 등록은 ASG의 자동화 목적에 어긋나며 필요하지 않습니다.",
+        "2": "별도 Lambda가 필요하지 않습니다.",
+        "3": "사용자 데이터에서 등록 API를 호출할 필요가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 그룹에 Elastic Load Balancing 연결",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q13",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "NLB를 다중 AZ ASG와 함께 쓰는데 AZ별 인스턴스 수가 달라 인스턴스당 부하가 불균형하다. 설정과 트레이드오프는?",
+      "options": [
+        "교차 영역 부하 분산을 활성화하면 인스턴스 단위 분산이 고르게 되지만 AZ 간 데이터 전송 요금이 발생할 수 있다",
+        "교차 영역 부하 분산은 NLB에서 기본 활성이므로 설정할 것이 없다",
+        "ALB로 바꾸는 것만이 유일한 해결책이다",
+        "AZ를 하나로 줄이면 불균형이 사라지고 가용성에는 영향이 없다"
+      ],
+      "correct": 0,
+      "explanation": "교차 영역 부하 분산이 비활성이면 각 LB 노드가 자기 AZ 대상에만 분산하므로 AZ별 인스턴스 수 차이가 부하 불균형으로 나타납니다. ALB는 기본 활성(요금 없음)이지만 NLB·GLB는 기본 비활성이며, 활성화하면 AZ를 넘는 트래픽에 전송 요금이 붙을 수 있습니다.",
+      "wrongExplanations": {
+        "1": "기본 활성은 ALB이고 NLB는 기본 비활성입니다.",
+        "2": "NLB에서도 교차 영역 부하 분산을 켜면 해결됩니다.",
+        "3": "단일 AZ는 AZ 장애 내성을 포기하는 선택입니다."
+      },
+      "sources": [
+        {
+          "title": "Elastic Load Balancing 교차 영역 부하 분산",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q14",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "foundational",
+      "stem": "ASG를 여러 AZ(서브넷)에 걸쳐 구성하면 얻는 효과는?",
+      "options": [
+        "AZ 장애 시에도 생존하고, ASG가 AZ 간 인스턴스 균형을 자동으로 유지한다",
+        "인스턴스 부팅 시간이 단축된다",
+        "교차 영역 부하 분산이 자동으로 비활성된다",
+        "스케일 인이 비활성된다"
+      ],
+      "correct": 0,
+      "explanation": "ASG는 지정된 여러 AZ(서브넷)에 인스턴스를 균등 분산하고 AZ 간 균형 유지(rebalancing)를 자동 수행합니다. 덕분에 한 AZ에 문제가 생겨도 다른 AZ의 인스턴스로 서비스가 유지됩니다.",
+      "wrongExplanations": {
+        "1": "부팅 시간은 AMI·인스턴스 유형·초기화 작업에 달려 있습니다.",
+        "2": "교차 영역 부하 분산은 로드 밸런서 설정이며 자동으로 바뀌지 않습니다.",
+        "3": "스케일 인은 그대로 동작합니다."
+      },
+      "sources": [
+        {
+          "title": "Auto Scaling 그룹 — 여러 가용 영역에 분산",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t2-1-q15",
+      "examGuideTaskId": "soa-t2-1",
+      "skill": "컴퓨팅 환경에서 스케일링 메커니즘 구성 및 관리(2.1.1)",
+      "difficulty": "applied",
+      "stem": "조정 정책을 배포한 뒤 검증할 때, 스케일 아웃만 확인하고 끝내면 안 되는 이유는?",
+      "options": [
+        "스케일 인이 동작하지 않으면 불필요한 인스턴스가 계속 실행돼 비용이 누적된다",
+        "스케일 아웃은 항상 성공하므로 확인할 필요가 없다",
+        "스케일 인은 AWS가 자동 검증해 준다",
+        "스케일 인은 min 값과 무관하게 0까지 줄어든다"
+      ],
+      "correct": 0,
+      "explanation": "스케일 아웃이 정상이어도 스케일 인이 동작하지 않으면 부하가 줄어든 뒤에도 인스턴스가 남아 비용이 누적됩니다. 검증 절차는 부하 제거 후 desired 감소와 인스턴스 종료까지 확인해야 완결됩니다.",
+      "wrongExplanations": {
+        "1": "스케일 아웃도 max 도달·용량 부족 등으로 실패할 수 있습니다.",
+        "2": "AWS가 사용자의 정책 동작을 대신 검증해 주지 않습니다.",
+        "3": "스케일 인도 min 경계 아래로는 내려가지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EC2 Auto Scaling 동적 조정",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

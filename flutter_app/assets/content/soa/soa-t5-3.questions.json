@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t5-3",
+  "taskTitle": "Route 53 DNS·CloudFront 콘텐츠 전송",
+  "domain": 5,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t5-3-q1",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "DNS 구성(Route 53 Resolver)(5.2.1)",
+      "difficulty": "foundational",
+      "stem": "프라이빗 호스팅 영역이 동작하려면 연결된 VPC에서 켜져 있어야 하는 설정은?",
+      "options": [
+        "`enableDnsSupport`와 `enableDnsHostnames`",
+        "`mapPublicIpOnLaunch`",
+        "VPC 흐름 로그",
+        "`instanceTenancy`"
+      ],
+      "correct": 0,
+      "explanation": "프라이빗 호스팅 영역은 연결된 VPC의 DNS 리졸버를 통해서만 응답하므로, VPC의 `enableDnsSupport`(Amazon DNS 해석)와 `enableDnsHostnames`가 켜져 있어야 정상 동작합니다.",
+      "wrongExplanations": {
+        "1": "퍼블릭 IP 자동 할당 설정입니다.",
+        "2": "흐름 로그는 트래픽 메타데이터 기록 기능입니다.",
+        "3": "테넌시는 전용 하드웨어 사용 여부입니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 프라이빗 호스팅 영역 사용",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q2",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "DNS 구성(Route 53 Resolver)(5.2.1)",
+      "difficulty": "applied",
+      "stem": "같은 도메인 이름을 VPC 내부에서는 사설 IP로, 인터넷에서는 공인 IP로 해석하게 하려 한다. 이 구성을 무엇이라 하는가?",
+      "options": [
+        "스플릿-호라이즌 DNS(퍼블릭 + 프라이빗 호스팅 영역 병행)",
+        "Alias 레코드 중첩",
+        "Geolocation 라우팅",
+        "DNS 쿼리 로깅"
+      ],
+      "correct": 0,
+      "explanation": "같은 도메인에 퍼블릭 호스팅 영역과 프라이빗 호스팅 영역을 함께 두면, VPC 내부에서는 프라이빗 영역이 응답하고 외부에서는 퍼블릭 영역이 응답하는 스플릿-호라이즌 DNS가 됩니다.",
+      "wrongExplanations": {
+        "1": "Alias는 AWS 리소스를 가리키는 레코드 유형입니다.",
+        "2": "Geolocation은 사용자 지리 위치 기반 라우팅입니다.",
+        "3": "쿼리 로깅은 조회 기록 수집 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 프라이빗 호스팅 영역 사용",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q3",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "difficulty": "applied",
+      "stem": "루트 도메인 `example.com`을 ALB로 보내려는데 CNAME 생성이 거부된다. 올바른 해결은?",
+      "options": [
+        "Alias 레코드로 ALB를 대상으로 지정한다",
+        "CNAME 대신 TXT 레코드를 만든다",
+        "`www.example.com`만 사용하고 루트는 포기한다",
+        "NS 레코드를 삭제한 뒤 CNAME을 만든다"
+      ],
+      "correct": 0,
+      "explanation": "DNS 표준상 CNAME은 Zone Apex(루트 도메인)에 쓸 수 없습니다. Alias 레코드는 Route 53이 대상 AWS 리소스의 IP를 조회해 A/AAAA 응답으로 반환하므로 NS·SOA와 공존하며 루트 도메인에서도 사용할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "TXT는 텍스트 정보용 레코드입니다.",
+        "2": "Alias로 루트 도메인을 그대로 사용할 수 있습니다.",
+        "3": "NS 레코드 삭제는 영역 위임을 깨뜨리는 잘못된 조치입니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 별칭(Alias) 레코드 선택",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q4",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "difficulty": "foundational",
+      "stem": "Alias 레코드가 AWS 리소스 대상에서 CNAME보다 유리한 점은?",
+      "options": [
+        "Zone Apex에 사용할 수 있고 쿼리 요금이 없으며 리소스 IP 변경을 자동 추적한다",
+        "임의의 외부 도메인도 대상으로 지정할 수 있다",
+        "TTL을 0으로 설정할 수 있다",
+        "DNSSEC을 자동으로 활성화한다"
+      ],
+      "correct": 0,
+      "explanation": "Alias는 Zone Apex 사용이 가능하고, Alias 쿼리에는 요금이 부과되지 않으며, 대상 AWS 리소스의 IP 변경을 Route 53이 자동으로 반영합니다.",
+      "wrongExplanations": {
+        "1": "임의 도메인 대상 지정은 CNAME의 특성입니다.",
+        "2": "TTL 설정 가능 여부가 핵심 차이는 아닙니다.",
+        "3": "DNSSEC은 별도 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "별칭 레코드와 비별칭 레코드 비교",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q5",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "difficulty": "applied",
+      "stem": "새 버전에 트래픽 10%만 보내 점진적으로 비중을 늘리려 한다. 적절한 Route 53 라우팅 정책은?",
+      "options": [
+        "Weighted(가중) 라우팅",
+        "Latency(지연시간) 라우팅",
+        "Geolocation(지리위치) 라우팅",
+        "Multivalue(다중값) 응답"
+      ],
+      "correct": 0,
+      "explanation": "가중 라우팅은 레코드마다 가중치(0~255)를 두어 비율대로 트래픽을 분배합니다. A/B 테스트나 카나리 배포에서 비중을 점진적으로 올리는 데 적합합니다.",
+      "wrongExplanations": {
+        "1": "지연시간 라우팅은 네트워크 지연이 가장 낮은 리전으로 보냅니다.",
+        "2": "Geolocation은 사용자 지리 위치 기준입니다.",
+        "3": "Multivalue는 정상 레코드를 무작위로 반환하는 단순 분산입니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 가중치 기반 라우팅 정책",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-weighted.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q6",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "difficulty": "applied",
+      "stem": "데이터 주권 규정상 한국 사용자는 반드시 서울 리전으로 보내야 한다. 적절한 정책과 그 이유는?",
+      "options": [
+        "Geolocation — 사용자 IP의 지리적 위치(국가) 기준으로 라우팅하므로 규제 요건을 만족한다",
+        "Latency — 가장 빠른 리전으로 보내므로 보통 서울이 선택된다",
+        "Weighted — 서울 가중치를 100으로 둔다",
+        "Simple — 서울 레코드만 등록한다"
+      ],
+      "correct": 0,
+      "explanation": "Latency 정책은 실측 네트워크 지연 기준이라 인터넷 경로에 따라 다른 리전이 선택될 수 있어 데이터 주권 요건을 보장하지 못합니다. 국가 기준 라우팅이 필요하면 Geolocation을 사용합니다.",
+      "wrongExplanations": {
+        "1": "Latency는 지리 위치를 보장하지 않습니다.",
+        "2": "가중치 100은 다른 지역 사용자까지 서울로 보냅니다.",
+        "3": "Simple은 모든 사용자를 한 리소스로 보내 글로벌 서비스 요건과 충돌합니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 지리적 위치 라우팅 정책",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geo.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q7",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "difficulty": "foundational",
+      "stem": "Multivalue(다중값) 응답 라우팅의 특징으로 올바른 것은?",
+      "options": [
+        "상태 확인을 통과한 레코드를 최대 8개까지 무작위로 반환하는 단순 분산이며 로드 밸런서를 대체하지 않는다",
+        "가중치 비율대로 정확히 분배한다",
+        "지연시간이 가장 낮은 레코드 하나만 반환한다",
+        "Primary 실패 시 Secondary로 전환한다"
+      ],
+      "correct": 0,
+      "explanation": "Multivalue 응답은 상태 확인을 통과한 레코드를 최대 8개까지 반환해 클라이언트가 그중 하나를 선택하게 하는 단순 분산 방식입니다. 로드 밸런서의 대체가 아닙니다.",
+      "wrongExplanations": {
+        "1": "비율 분배는 Weighted 정책입니다.",
+        "2": "지연 기반 단일 선택은 Latency 정책입니다.",
+        "3": "Primary/Secondary 전환은 Failover 정책입니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 다중값 응답 라우팅 정책",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-multivalue.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q8",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "difficulty": "applied",
+      "stem": "웹 서버는 살아 있지만 DB 연결이 끊긴 경우에만 페일오버하고, 읽기 복제본 하나가 죽은 경우에는 유지하려 한다. 적절한 상태 확인 구성은?",
+      "options": [
+        "계산형 상태 확인으로 하위 체크를 AND/OR로 묶어 장애 조건을 세분화한다",
+        "엔드포인트 상태 확인의 간격을 10초로 줄인다",
+        "CloudWatch 경보 기반 상태 확인만 사용한다",
+        "상태 확인을 두 개 만들어 각각 다른 레코드에 연결한다"
+      ],
+      "correct": 0,
+      "explanation": "계산형 상태 확인은 여러 하위 체크를 AND/OR 논리로 묶어 '핵심 DB 실패는 전체 실패, 복제본 하나 실패는 정상 유지'처럼 장애 조건을 세분화할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "간격 단축은 감지 속도만 바꿉니다.",
+        "2": "경보 기반 체크도 하위 체크로 쓸 수 있지만, 조합 논리는 계산형이 제공합니다.",
+        "3": "체크를 나누는 것만으로 조합 조건이 표현되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Route 53 계산형 상태 확인",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q9",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "difficulty": "foundational",
+      "stem": "CloudFront에서 '경로 패턴별로 캐시 정책·TTL·헤더 전달'을 구성하는 단위는?",
+      "options": [
+        "캐시 동작(Cache Behavior)",
+        "오리진(Origin)",
+        "배포(Distribution)",
+        "엣지 로케이션(Edge Location)"
+      ],
+      "correct": 0,
+      "explanation": "캐시 동작은 경로 패턴(예: `/api/*`, `/static/*`)별로 캐시 정책·TTL·헤더·쿠키·쿼리 문자열 전달과 압축 등을 설정하는 단위입니다.",
+      "wrongExplanations": {
+        "1": "오리진은 원본 서버(S3·ALB 등)입니다.",
+        "2": "배포는 오리진·캐시 동작을 묶은 전체 구성 단위입니다.",
+        "3": "엣지 로케이션은 캐싱·전송 지점입니다."
+      },
+      "sources": [
+        {
+          "title": "CloudFront 캐시 동작 설정",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q10",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "CloudFront 캐싱 문제 파악 및 해결(5.3.3)",
+      "difficulty": "applied",
+      "stem": "오리진에서 파일을 교체했는데 사용자에게 여전히 이전 버전이 보인다. 원인과 두 가지 해결책은?",
+      "options": [
+        "TTL이 남아 엣지가 기존 객체를 반환하는 것 — 무효화(Invalidation) 또는 버전 파일명으로 해결",
+        "오리진 장애 — 오리진을 재시작하면 해결",
+        "지역 제한 설정 — 해당 국가를 허용하면 해결",
+        "OAC 미설정 — OAC를 추가하면 해결"
+      ],
+      "correct": 0,
+      "explanation": "엣지는 TTL 기간 동안 오리진에 재요청하지 않고 캐시된 객체를 반환합니다. 명시적으로 무효화해 캐시를 제거하거나, 파일명·쿼리에 버전을 넣어 새 객체로 인식되게 해야 합니다.",
+      "wrongExplanations": {
+        "1": "오리진은 정상이며 캐시 수명이 원인입니다.",
+        "2": "지역 제한은 접근 차단 설정입니다.",
+        "3": "OAC는 S3 오리진 보호 수단입니다."
+      },
+      "sources": [
+        {
+          "title": "CloudFront 파일 무효화",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q11",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "CloudFront 캐싱 문제 파악 및 해결(5.3.3)",
+      "difficulty": "applied",
+      "stem": "배포마다 `/*` 전체 무효화를 반복하는 운영 방식의 문제와 권장 대안은?",
+      "options": [
+        "잦은 전체 무효화는 비용·부하가 크므로, 파일명·쿼리에 버전을 넣어 새 객체로 취급하게 하는 방식이 권장된다",
+        "무효화는 항상 무료이므로 문제가 없다",
+        "TTL을 0으로 두는 것이 가장 좋은 대안이다",
+        "오리진을 S3에서 ALB로 바꾸면 해결된다"
+      ],
+      "correct": 0,
+      "explanation": "소수 경로 무효화는 비용이 적지만 잦은 전체 무효화는 비용과 부하가 큽니다. 운영 패턴으로는 `app.v2.js`처럼 버전 문자열을 붙여 새 객체로 인식되게 하는 방식이 권장됩니다.",
+      "wrongExplanations": {
+        "1": "무효화에는 비용·부하 고려가 필요합니다.",
+        "2": "TTL 0은 캐시 이점을 포기하고 오리진 부하를 키웁니다.",
+        "3": "오리진 종류를 바꿔도 캐시 수명 문제는 남습니다."
+      },
+      "sources": [
+        {
+          "title": "CloudFront 파일 무효화 — 비용과 대안",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q12",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "difficulty": "applied",
+      "stem": "S3 정적 사이트를 CloudFront 경유로만 접근하게 하고 S3 URL 직접 접근은 막으려 한다. 올바른 구성은?",
+      "options": [
+        "OAC(Origin Access Control)를 쓰고 버킷 정책에서 CloudFront 서비스 주체만 허용하며 퍼블릭 액세스 차단을 켠다",
+        "버킷을 퍼블릭으로 열고 CloudFront를 앞에 둔다",
+        "S3 정적 웹사이트 호스팅을 끄고 EC2로 서빙한다",
+        "버킷 ACL에 모든 사용자 읽기를 부여한다"
+      ],
+      "correct": 0,
+      "explanation": "OAC를 쓰면 버킷 정책에 CloudFront 서비스 주체만 허용하는 조건을 넣고 Block Public Access를 켤 수 있습니다. 사용자는 CloudFront 도메인으로만 접근하고 S3 직접 접근은 차단됩니다.",
+      "wrongExplanations": {
+        "1": "버킷을 퍼블릭으로 열면 직접 접근이 가능해 요건과 충돌합니다.",
+        "2": "불필요한 아키텍처 변경입니다.",
+        "3": "공개 ACL은 보안 모범 사례에 반합니다."
+      },
+      "sources": [
+        {
+          "title": "CloudFront에서 S3 오리진 액세스 제한(OAC)",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q13",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "difficulty": "applied",
+      "stem": "CloudFront 배포에 사용자 지정 도메인과 HTTPS를 적용하려 한다. ACM 인증서 발급 리전은?",
+      "options": [
+        "us-east-1(버지니아 북부)",
+        "배포를 만든 콘솔의 현재 리전",
+        "오리진이 있는 리전",
+        "리전과 무관하게 아무 곳이나 가능"
+      ],
+      "correct": 0,
+      "explanation": "CloudFront에 연결할 ACM 인증서는 us-east-1에서 발급해야 합니다. 다른 리전에서 발급하면 CloudFront의 인증서 선택 목록에 나타나지 않습니다. ALB·NLB·API Gateway는 리소스와 같은 리전의 인증서를 씁니다.",
+      "wrongExplanations": {
+        "1": "콘솔 리전과 무관합니다.",
+        "2": "오리진 리전이 아니라 us-east-1 고정입니다.",
+        "3": "리전 제약이 있습니다."
+      },
+      "sources": [
+        {
+          "title": "CloudFront 사용자 지정 SSL 인증서 요구 사항",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q14",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "difficulty": "applied",
+      "stem": "특정 국가에서의 접근만 차단해야 한다. CloudFront에서 사용할 기능은?",
+      "options": [
+        "지역 제한(Geo Restriction)",
+        "캐시 정책의 TTL 조정",
+        "OAC",
+        "무효화"
+      ],
+      "correct": 0,
+      "explanation": "CloudFront 지역 제한은 국가 단위로 접근을 허용 또는 차단합니다. 애플리케이션 계층 공격 방어가 필요하면 WAF를 함께 연동합니다.",
+      "wrongExplanations": {
+        "1": "TTL은 캐시 수명 설정입니다.",
+        "2": "OAC는 S3 오리진 접근 제한 수단입니다.",
+        "3": "무효화는 캐시 제거 작업입니다."
+      },
+      "sources": [
+        {
+          "title": "CloudFront 지역 제한",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/georestrictions.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-3-q15",
+      "examGuideTaskId": "soa-t5-3",
+      "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "difficulty": "applied",
+      "stem": "비-HTTP TCP/UDP 게임 서버에 고정 IP 두 개로 전 세계 저지연 접속을 제공해야 한다. 적절한 서비스는?",
+      "options": [
+        "AWS Global Accelerator",
+        "Amazon CloudFront",
+        "Route 53 Latency 라우팅만",
+        "ALB 교차 영역 부하 분산"
+      ],
+      "correct": 0,
+      "explanation": "Global Accelerator는 고정 애니캐스트 IP를 제공하고 AWS 글로벌 네트워크로 트래픽을 전달해 비-HTTP TCP/UDP 워크로드의 지연을 줄입니다. 엔드포인트는 NLB·ALB·EC2 인스턴스·Elastic IP입니다.",
+      "wrongExplanations": {
+        "1": "CloudFront는 HTTP(S) 콘텐츠 캐싱·전송에 초점이 있습니다.",
+        "2": "DNS 라우팅만으로는 고정 IP와 백본 전달을 제공하지 않습니다.",
+        "3": "교차 영역 부하 분산은 한 로드 밸런서 내 AZ 간 분산 설정입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Global Accelerator란 무엇인가",
+          "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

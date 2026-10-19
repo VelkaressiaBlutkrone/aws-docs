@@ -1,0 +1,417 @@
+{
+  "examGuideTaskId": "soa-t4-2",
+  "taskTitle": "규정 준수·거버넌스 (Config·Security Hub·GuardDuty·Inspector)",
+  "domain": 4,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t4-2-q1",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "difficulty": "foundational",
+      "stem": "리소스 '설정'이 정해진 규칙을 준수하는지 지속적으로 평가하고 변경 이력을 기록하는 서비스는?",
+      "options": [
+        "AWS Config",
+        "Amazon GuardDuty",
+        "Amazon Inspector",
+        "Amazon Macie"
+      ],
+      "correct": 0,
+      "explanation": "AWS Config는 리소스 구성을 기록하고 Config 규칙으로 준수(COMPLIANT)/비준수(NONCOMPLIANT)를 평가합니다. GuardDuty는 위협 활동, Inspector는 소프트웨어 취약점(CVE), Macie는 민감정보 탐지를 담당합니다.",
+      "wrongExplanations": {
+        "1": "GuardDuty는 악성 활동·침해 징후를 탐지합니다.",
+        "2": "Inspector는 CVE와 네트워크 노출을 스캔합니다.",
+        "3": "Macie는 S3의 민감정보를 분류합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config란 무엇인가",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q2",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "difficulty": "applied",
+      "stem": "PCI DSS 운영 모범 사례에 해당하는 Config 규칙 묶음을 한 번에 배포하려 한다. 어떤 기능을 쓰는가?",
+      "options": [
+        "적합성 팩(Conformance Pack)",
+        "구성 기록기(Configuration Recorder)",
+        "교정 작업(Remediation)",
+        "집계기(Aggregator)"
+      ],
+      "correct": 0,
+      "explanation": "적합성 팩은 Config 규칙과 교정 액션을 묶은 패키지를 한 번에 배포하는 기능입니다. PCI·HIPAA 운영 모범 사례 같은 샘플 팩이 제공되며 조직 전체에 배포할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "구성 기록기는 리소스 설정과 변경 이력을 기록하는 구성 요소입니다.",
+        "2": "교정 작업은 비준수 리소스를 수정하는 실행 단계입니다.",
+        "3": "집계기는 여러 계정·리전의 결과를 모아 보는 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config 적합성 팩",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q3",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "difficulty": "applied",
+      "stem": "Config가 변경 이벤트만 감시하지 않고 지속적으로 평가하도록 설계된 이유는?",
+      "options": [
+        "어떤 경로로 구성이 바뀌었든 다음 평가 주기에 비준수 상태를 반드시 포착하기 위해",
+        "변경 이벤트를 수집하는 API가 없기 때문",
+        "CloudTrail이 비활성화된 계정에서도 과금하기 위해",
+        "규칙을 리전별로 복제해야 하기 때문"
+      ],
+      "correct": 0,
+      "explanation": "리소스 설정은 콘솔·CLI·자동화 등 다양한 경로로 바뀝니다. 변경 이벤트만 감시하면 누락이나 누적 드리프트를 놓칠 수 있어, 지속 평가로 수동 변경·자동화 오류·예외 처리 후 미복구까지 동일한 가드레일에 포함시킵니다.",
+      "wrongExplanations": {
+        "1": "Config는 변경 트리거 평가도 지원합니다.",
+        "2": "과금 목적이 아닙니다.",
+        "3": "리전 복제와 무관한 설계 이유입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config 규칙 평가 모드",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config-rules.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q4",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "foundational",
+      "stem": "GuardDuty·Inspector·Macie·Config의 결과를 하나의 표준 형식으로 모아 보안 점수와 함께 보여 주는 서비스는?",
+      "options": [
+        "AWS Security Hub",
+        "Amazon Detective",
+        "AWS Trusted Advisor",
+        "AWS CloudTrail Lake"
+      ],
+      "correct": 0,
+      "explanation": "Security Hub는 여러 서비스·파트너 제품의 결과를 AWS Security Finding Format(ASFF)으로 정규화해 한 화면에 모으고, 보안 표준 점검 결과를 점수로 산출합니다. 직접 탐지하는 도구가 아니라 통합·표준화 계층입니다.",
+      "wrongExplanations": {
+        "1": "Detective는 탐지된 결과의 근본 원인 조사를 돕는 사후 조사 도구입니다.",
+        "2": "Trusted Advisor는 모범 사례 점검 서비스입니다.",
+        "3": "CloudTrail Lake는 감사 이벤트를 SQL로 조회하는 저장소입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Security Hub란 무엇인가",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q5",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "applied",
+      "stem": "Security Hub가 직접 탐지 로직을 구현하지 않고 다른 서비스의 결과를 모으는 방식이 주는 이점은?",
+      "options": [
+        "서로 다른 포맷의 경보를 ASFF로 정규화해 단일 쿼리·자동화 규칙으로 다룰 수 있다",
+        "탐지 서비스를 비활성화해도 결과가 계속 생성된다",
+        "GuardDuty를 켜지 않아도 위협이 탐지된다",
+        "CloudTrail 없이도 API 감사가 가능해진다"
+      ],
+      "correct": 0,
+      "explanation": "각 탐지 서비스는 고유한 데이터 소스·알고리즘에 최적화돼 있습니다. Security Hub는 중복 구현 대신 ASFF로 결과를 정규화해 모으므로, 도구마다 콘솔을 열지 않고 한 화면에서 우선순위를 판단하고 자동화 규칙을 공통 적용할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "소스 서비스를 끄면 그 결과는 더 이상 유입되지 않습니다.",
+        "2": "위협 탐지는 GuardDuty가 수행합니다.",
+        "3": "API 감사는 CloudTrail의 역할입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Security Finding Format(ASFF)",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q6",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "applied",
+      "stem": "Security Hub 결과에 따라 티켓 생성·리소스 격리 같은 자동 조치를 연결하려면?",
+      "options": [
+        "결과를 EventBridge로 보내 Lambda·SSM Automation을 트리거한다",
+        "Security Hub 콘솔에서 결과를 수동으로 닫는다",
+        "Config 적합성 팩을 추가 배포한다",
+        "GuardDuty 심각도 임계값을 낮춘다"
+      ],
+      "correct": 0,
+      "explanation": "Security Hub 결과는 EventBridge로 전달되므로, 규칙으로 매칭해 Lambda나 SSM Automation 런북을 실행하는 자동 대응을 구성할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "수동 처리는 자동 조치 요건을 충족하지 못합니다.",
+        "2": "적합성 팩은 구성 준수 규칙 묶음입니다.",
+        "3": "임계값 조정은 탐지 민감도만 바꿉니다."
+      },
+      "sources": [
+        {
+          "title": "EventBridge를 사용한 Security Hub 자동 대응",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-cloudwatch-events.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q7",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "foundational",
+      "stem": "GuardDuty의 기본 탐지가 사용하는 데이터 소스로 올바른 조합은?",
+      "options": [
+        "VPC Flow Logs·DNS 쿼리 로그·CloudTrail 이벤트",
+        "EC2 내부 에이전트가 수집한 프로세스 목록",
+        "ECR 이미지의 패키지 매니페스트",
+        "S3 객체 본문 스캔 결과"
+      ],
+      "correct": 0,
+      "explanation": "GuardDuty는 에이전트를 설치하지 않고 VPC Flow Logs, DNS 쿼리 로그, CloudTrail 이벤트를 분석해 머신러닝·이상 탐지·위협 인텔리전스로 침해 징후를 찾습니다.",
+      "wrongExplanations": {
+        "1": "기본 탐지는 에이전트가 필요 없습니다(런타임 모니터링은 별도 플랜).",
+        "2": "컨테이너 이미지 패키지 스캔은 Inspector의 영역입니다.",
+        "3": "S3 객체 내용 분류는 Macie의 영역입니다."
+      },
+      "sources": [
+        {
+          "title": "GuardDuty 데이터 소스",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_data-sources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q8",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "applied",
+      "stem": "GuardDuty가 인스턴스에 에이전트를 설치하지 않고도 위협을 탐지할 수 있는 이유로 가장 적절한 것은?",
+      "options": [
+        "침해 시나리오가 네트워크 통신·API 호출 같은 관측 가능한 신호를 남기고, 이 로그는 인스턴스 외부에서 수집되기 때문",
+        "모든 EC2 AMI에 GuardDuty 에이전트가 기본 포함되기 때문",
+        "GuardDuty가 인스턴스 메모리를 직접 읽기 때문",
+        "SSM Agent가 GuardDuty 데이터를 전송하기 때문"
+      ],
+      "correct": 0,
+      "explanation": "많은 침해는 VPC Flow Logs나 CloudTrail에 관측 가능한 흔적을 남깁니다. 이 로그는 인스턴스 외부에서 수집되므로 공격자가 인스턴스 내부를 장악해도 탐지 데이터가 사라지지 않고, 에이전트 배포·업데이트 부담도 없습니다.",
+      "wrongExplanations": {
+        "1": "기본 탐지는 에이전트를 쓰지 않습니다.",
+        "2": "메모리를 직접 읽지 않습니다.",
+        "3": "SSM Agent는 GuardDuty 기본 탐지의 전송 경로가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon GuardDuty란 무엇인가",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q9",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "applied",
+      "stem": "EC2·ECR 이미지·Lambda 함수의 알려진 CVE와 네트워크 노출을 지속적으로 평가하려 한다. 적절한 서비스는?",
+      "options": [
+        "Amazon Inspector",
+        "Amazon GuardDuty",
+        "AWS Config",
+        "Amazon Detective"
+      ],
+      "correct": 0,
+      "explanation": "Inspector는 EC2·ECR 컨테이너 이미지·Lambda를 자동 스캔해 알려진 CVE와 의도치 않은 네트워크 노출을 평가하고 위험 점수를 매깁니다. 새 CVE가 공개되거나 패키지가 바뀌면 재스캔합니다.",
+      "wrongExplanations": {
+        "1": "GuardDuty는 진행 중인 악성 활동을 탐지합니다.",
+        "2": "Config는 구성 준수 평가입니다.",
+        "3": "Detective는 사후 조사 도구입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Inspector란 무엇인가",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q10",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "foundational",
+      "stem": "GuardDuty와 Inspector의 역할을 한 줄로 구분한 것으로 올바른 것은?",
+      "options": [
+        "GuardDuty는 '지금 공격·침해가 일어나는가', Inspector는 '고쳐야 할 취약점(CVE)이 있는가'",
+        "GuardDuty는 CVE 스캔, Inspector는 트래픽 이상 탐지",
+        "둘 다 S3 민감정보를 탐지하며 차이는 심각도 산정 방식",
+        "GuardDuty는 구성 준수, Inspector는 모범 사례 점검"
+      ],
+      "correct": 0,
+      "explanation": "GuardDuty는 행위·트래픽 기반으로 진행 중인 위협을 탐지하고, Inspector는 워크로드의 소프트웨어 상태(CVE)와 네트워크 노출을 평가합니다. 시험에서 자주 묻는 구분입니다.",
+      "wrongExplanations": {
+        "1": "역할이 반대로 서술됐습니다.",
+        "2": "민감정보 탐지는 Macie입니다.",
+        "3": "구성 준수는 Config, 모범 사례 점검은 Trusted Advisor입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Inspector란 무엇인가",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        },
+        {
+          "title": "Amazon GuardDuty란 무엇인가",
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q11",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "applied",
+      "stem": "S3 버킷에 주민번호·카드번호 같은 민감정보가 어디에 저장돼 있는지 찾아야 한다. 적절한 서비스는?",
+      "options": [
+        "Amazon Macie",
+        "Amazon Inspector",
+        "AWS Config",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "Macie는 S3 객체를 분석해 민감정보가 어디에 있는지 식별합니다. 다른 도구는 각각 취약점(Inspector)·구성 준수(Config)·모범 사례(Trusted Advisor)를 봅니다.",
+      "wrongExplanations": {
+        "1": "Inspector는 소프트웨어 취약점 스캔입니다.",
+        "2": "Config는 설정 준수 평가입니다.",
+        "3": "Trusted Advisor는 계정 전반 모범 사례 점검입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Macie란 무엇인가",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q12",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "Trusted Advisor 보안 검사 결과 기반 문제 해결(4.1.4)",
+      "difficulty": "foundational",
+      "stem": "Trusted Advisor의 점검 범주에 해당하지 않는 것은?",
+      "options": [
+        "비용 최적화",
+        "보안",
+        "내결함성",
+        "소스 코드 품질"
+      ],
+      "correct": 3,
+      "explanation": "Trusted Advisor는 비용 최적화·보안·내결함성·성능·서비스 한도(할당량) 범주로 환경을 점검하고 권장 사항을 제시합니다. 소스 코드 품질은 점검 범주가 아닙니다.",
+      "wrongExplanations": {
+        "0": "유휴 리소스·미사용 EIP 등 비용 범주 점검이 있습니다.",
+        "1": "퍼블릭 S3·보안 그룹 과개방·루트 MFA 미설정 등 보안 점검이 있습니다.",
+        "2": "다중 AZ·백업·스냅샷 구성 등 내결함성 점검이 있습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Trusted Advisor 점검 범주",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor-check-reference.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q13",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "Trusted Advisor 보안 검사 결과 기반 문제 해결(4.1.4)",
+      "difficulty": "applied",
+      "stem": "Trusted Advisor 보안 점검에서 '루트 계정 MFA 미설정'이 보고됐다. 적절한 조치는?",
+      "options": [
+        "루트 사용자에 MFA 디바이스를 등록하고, 일상 작업은 최소 권한 IAM 역할로 수행한다",
+        "루트 액세스 키를 발급해 자동화에 사용한다",
+        "루트 비밀번호를 길게 변경하고 MFA는 생략한다",
+        "SCP로 루트 사용자를 차단한다"
+      ],
+      "correct": 0,
+      "explanation": "루트 보호의 기본은 MFA 활성화와 액세스 키 미발급, 일상 작업 미사용입니다. Trusted Advisor의 보안 점검 결과는 이런 기본 가드레일 누락을 찾아 줍니다.",
+      "wrongExplanations": {
+        "1": "루트 액세스 키는 발급하지 않는 것이 원칙입니다.",
+        "2": "비밀번호 강화만으로는 MFA 요건을 대체하지 못합니다.",
+        "3": "SCP는 멤버 계정 주체를 제한하는 가드레일이며 MFA 등록을 대신하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Trusted Advisor 점검 참조 — 보안",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor-check-reference.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q14",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "difficulty": "applied",
+      "stem": "GuardDuty가 의심스러운 IP와의 통신을 경보했다. 이 IP가 어떤 리소스와 언제 통신했는지 연관 관계를 추적해 사고 범위를 파악하려 한다. 적절한 도구는?",
+      "options": [
+        "Amazon Detective",
+        "AWS Config 적합성 팩",
+        "Amazon Inspector",
+        "AWS Trusted Advisor"
+      ],
+      "correct": 0,
+      "explanation": "Detective는 이미 수집된 로그를 그래프 구조로 인덱싱해 엔티티 간 연관 활동을 추적하게 해 줍니다. 탐지(GuardDuty)와 조사(Detective)를 분리해 각 단계에 최적화된 방식으로 대응합니다.",
+      "wrongExplanations": {
+        "1": "적합성 팩은 구성 준수 규칙 묶음입니다.",
+        "2": "Inspector는 취약점 스캔입니다.",
+        "3": "Trusted Advisor는 모범 사례 점검입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Detective란 무엇인가",
+          "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-2-q15",
+      "examGuideTaskId": "soa-t4-2",
+      "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "difficulty": "applied",
+      "stem": "'퍼블릭 액세스가 열린 S3 버킷'을 지속적으로 탐지하고 사람 개입 없이 차단까지 하려 한다. 적절한 구성은?",
+      "options": [
+        "Config 규칙으로 평가하고 비준수 리소스에 SSM Automation 교정을 자동 교정으로 연결한다",
+        "GuardDuty 심각도 High 경보만 이메일로 받는다",
+        "Inspector 스캔 일정을 매일로 설정한다",
+        "Trusted Advisor 보고서를 주간으로 내려받아 수동 조치한다"
+      ],
+      "correct": 0,
+      "explanation": "구성 가드레일의 지속 강제는 Config 규칙 평가 + 자동 교정(SSM Automation 런북)이 표준 조합입니다. 자동 교정으로 설정하면 비준수 발견 즉시 사람 개입 없이 교정이 실행됩니다.",
+      "wrongExplanations": {
+        "1": "알림만으로는 차단이 일어나지 않고, GuardDuty는 구성 준수 도구가 아닙니다.",
+        "2": "Inspector는 취약점 스캔이며 버킷 공개 설정을 교정하지 않습니다.",
+        "3": "수동 조치는 '사람 개입 없이' 요건에 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config 교정 작업",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

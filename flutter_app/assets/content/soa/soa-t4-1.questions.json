@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t4-1",
+  "taskTitle": "IAM·계정 보안 운영 (정책·역할·MFA·자격증명 보고서)",
+  "domain": 4,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t4-1-q1",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "foundational",
+      "stem": "다음 중 권한을 '부여'하지 않고 상한선만 정하는 정책 유형은?",
+      "options": [
+        "자격증명 기반 관리형 정책",
+        "리소스 기반 정책",
+        "권한 경계(Permissions Boundary)",
+        "인라인 정책"
+      ],
+      "correct": 2,
+      "explanation": "권한 경계와 SCP는 '이 범위 밖의 작업은 할 수 없다'는 허용 한도를 정의하며 권한을 부여하지 않습니다. 실제 권한 부여는 자격증명 기반 정책(관리형·인라인)과 리소스 기반 정책이 담당합니다.",
+      "wrongExplanations": {
+        "0": "관리형 정책은 사용자·그룹·역할에 연결해 권한을 부여합니다.",
+        "1": "리소스 기반 정책은 Principal을 명시해 권한을 부여하며 교차 계정 접근에 핵심입니다.",
+        "3": "인라인 정책도 대상에 임베드되어 권한을 부여합니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 권한 경계",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q2",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "applied",
+      "stem": "SCP가 `s3:*`를 Deny하는 OU의 계정에서, IAM 정책이 `s3:GetObject`를 Allow하고 있다. 결과는?",
+      "options": [
+        "허용된다 — 자격증명 정책의 Allow가 더 구체적이다",
+        "거부된다 — 어느 레이어든 명시적 Deny가 있으면 최종 거부다",
+        "리소스 정책이 있으면 허용된다",
+        "MFA로 인증하면 허용된다"
+      ],
+      "correct": 1,
+      "explanation": "정책 평가에서 명시적 Deny는 어느 레이어(SCP·권한 경계·자격증명·리소스·세션 정책)에 있든 모든 Allow를 이깁니다. SCP가 막으면 IAM 정책의 Allow와 무관하게 접근이 거부됩니다.",
+      "wrongExplanations": {
+        "0": "구체성은 Deny 우선 규칙을 뒤집지 못합니다.",
+        "2": "리소스 정책 Allow도 명시적 Deny를 이기지 못합니다.",
+        "3": "MFA 조건은 Deny 자체를 무력화하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 정책 평가 로직",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q3",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "다중 계정 전략 안전하게 구현(4.1.3)",
+      "difficulty": "applied",
+      "stem": "SCP에서 특정 서비스를 허용 목록에 올렸는데도 멤버 계정 사용자가 그 서비스를 쓸 수 없다. 이유는?",
+      "options": [
+        "SCP는 권한을 부여하지 않으므로 IAM 자격증명 정책에 Allow가 따로 있어야 한다",
+        "SCP는 적용에 24시간이 걸린다",
+        "SCP는 루트 사용자에게만 적용된다",
+        "SCP는 리전별로 따로 적용해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "SCP는 계정에서 허용 가능한 최대치를 정하는 가드레일이며 권한을 부여하지 않습니다. 최종 허용은 (SCP 허용) ∩ (권한 경계 허용) ∩ (자격증명 정책 Allow)이므로 IAM 정책의 Allow가 없으면 접근할 수 없습니다.",
+      "wrongExplanations": {
+        "1": "적용 지연 때문이 아닙니다.",
+        "2": "SCP는 해당 계정의 루트를 포함한 모든 IAM 주체에 적용됩니다.",
+        "3": "리전별 별도 적용 개념이 아니며, 리전 제한은 조건으로 표현합니다."
+      },
+      "sources": [
+        {
+          "title": "서비스 제어 정책(SCP)",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q4",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "다중 계정 전략 안전하게 구현(4.1.3)",
+      "difficulty": "applied",
+      "stem": "조직 가드레일을 설계할 때 워크로드를 Organizations 관리 계정에 두지 않는 이유는?",
+      "options": [
+        "관리 계정의 주체에는 SCP가 적용되지 않아 가드레일이 걸리지 않기 때문",
+        "관리 계정에서는 CloudTrail을 켤 수 없기 때문",
+        "관리 계정은 리전을 하나만 쓸 수 있기 때문",
+        "관리 계정에는 IAM 역할을 만들 수 없기 때문"
+      ],
+      "correct": 0,
+      "explanation": "SCP는 멤버 계정의 루트를 포함한 모든 IAM 주체에 적용되지만 관리 계정의 주체에는 적용되지 않습니다. 따라서 워크로드를 관리 계정에 두면 조직 가드레일이 적용되지 않는 사각지대가 생깁니다.",
+      "wrongExplanations": {
+        "1": "관리 계정에서도 CloudTrail을 사용할 수 있습니다.",
+        "2": "리전 제약이 있는 것이 아닙니다.",
+        "3": "역할 생성은 가능합니다."
+      },
+      "sources": [
+        {
+          "title": "SCP 작동 방식 — 관리 계정 예외",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q5",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "applied",
+      "stem": "개발자에게 IAM 역할 생성 권한을 주되, 그들이 관리자급 역할을 만들어 권한을 상승시키지 못하게 하려 한다. 적절한 수단은?",
+      "options": [
+        "생성하는 역할에 특정 권한 경계를 반드시 붙이도록 강제한다",
+        "개발자 정책에 `iam:*`를 Allow한다",
+        "SCP로 IAM 서비스 전체를 Deny한다",
+        "세션 정책을 개발자 사용자에게 연결한다"
+      ],
+      "correct": 0,
+      "explanation": "권한 경계는 자격증명 기반 정책이 사용자·역할에 부여할 수 있는 최대 권한을 제한합니다. 개발자가 만드는 역할에 지정된 경계를 붙이도록 강제하면, 경계 밖 권한은 Allow해도 작동하지 않아 권한 상승을 막습니다.",
+      "wrongExplanations": {
+        "1": "`iam:*` 허용은 권한 상승을 오히려 열어 줍니다.",
+        "2": "IAM 전체 Deny는 역할 생성 자체를 막아 요건과 충돌합니다.",
+        "3": "세션 정책은 AssumeRole 임시 세션에 적용되는 제한입니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 권한 경계",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q6",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "foundational",
+      "stem": "권한 경계가 '교집합'으로만 작동한다는 말의 의미는?",
+      "options": [
+        "자격증명 정책이 Allow한 것 중 경계도 허용한 작업만 실행 가능하며, 경계는 권한을 늘리지 않는다",
+        "경계에 Allow가 있으면 자격증명 정책 없이도 실행 가능하다",
+        "경계는 리소스 정책과 합집합으로 평가된다",
+        "경계는 명시적 Deny를 무시한다"
+      ],
+      "correct": 0,
+      "explanation": "권한 경계는 상한선이라 줄이는 방향으로만 작용합니다. 자격증명 정책이 Allow하고 경계도 허용 범위에 포함해야 실제로 작동하므로, 경계만으로는 아무 권한도 생기지 않습니다.",
+      "wrongExplanations": {
+        "1": "경계는 권한을 부여하지 않습니다.",
+        "2": "경계는 상한 제한이며 합집합 평가 대상이 아닙니다.",
+        "3": "명시적 Deny는 항상 우선합니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 권한 경계 평가",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q7",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "applied",
+      "stem": "EC2에서 실행되는 애플리케이션이 S3에 접근해야 한다. 자격증명 관리 방식으로 올바른 것은?",
+      "options": [
+        "역할을 인스턴스 프로파일로 연결해 SDK가 IMDS에서 임시 자격증명을 받게 한다",
+        "IAM 사용자 액세스 키를 애플리케이션 설정 파일에 넣는다",
+        "루트 사용자 액세스 키를 환경 변수로 주입한다",
+        "키 페어의 프라이빗 키로 S3에 서명한다"
+      ],
+      "correct": 0,
+      "explanation": "EC2에는 역할을 인스턴스 프로파일로 부착하는 것이 표준입니다. SDK가 인스턴스 메타데이터 서비스(IMDS)에서 임시 자격증명을 자동으로 받아 사용하므로 장기 키를 코드·설정에 넣지 않습니다.",
+      "wrongExplanations": {
+        "1": "장기 키 하드코딩은 유출·회전 문제를 만듭니다.",
+        "2": "루트 액세스 키는 발급하지 않는 것이 원칙입니다.",
+        "3": "EC2 키 페어는 SSH 인증용이며 AWS API 서명과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "EC2 인스턴스에서 실행되는 애플리케이션에 역할 사용",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q8",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "applied",
+      "stem": "교차 계정 역할 수임이 실패한다. 양쪽 계정에서 각각 확인해야 할 것은?",
+      "options": [
+        "대상 계정 역할의 신뢰 정책이 소스 주체를 허용하는지, 소스 주체 정책에 `sts:AssumeRole` Allow가 있는지",
+        "두 계정이 같은 리전에 있는지와 VPC 피어링 여부",
+        "대상 계정의 SCP가 S3를 허용하는지",
+        "소스 계정에 인스턴스 프로파일이 있는지"
+      ],
+      "correct": 0,
+      "explanation": "역할 수임은 두 단계 검사를 통과해야 합니다. ① 대상 계정 역할의 신뢰 정책이 소스 주체를 허용하고, ② 소스 주체의 자격증명 정책에 `sts:AssumeRole` Allow가 있어야 합니다. 어느 한쪽만 허용하면 거부됩니다.",
+      "wrongExplanations": {
+        "1": "IAM 수임은 네트워크 구성과 무관합니다.",
+        "2": "S3 권한은 수임 자체의 조건이 아닙니다.",
+        "3": "인스턴스 프로파일은 EC2에 역할을 부착하는 수단입니다."
+      },
+      "sources": [
+        {
+          "title": "교차 계정 액세스를 위한 역할 사용",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q9",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "applied",
+      "stem": "서드파티 SaaS가 우리 계정의 역할을 수임하도록 허용할 때 '혼동된 대리인(confused deputy)' 공격을 막는 방법은?",
+      "options": [
+        "신뢰 정책에 `sts:ExternalId` 조건을 추가하고 고유한 외부 ID를 요구한다",
+        "역할에 관리자 권한을 부여한다",
+        "역할 세션 지속 시간을 12시간으로 늘린다",
+        "서드파티에 IAM 사용자 액세스 키를 발급한다"
+      ],
+      "correct": 0,
+      "explanation": "외부 ID는 서드파티가 다른 고객의 역할을 수임하도록 속는 혼동된 대리인 문제를 방지합니다. 신뢰 정책에 `sts:ExternalId` 조건을 넣고 고유 값을 요구하면, 그 값을 아는 요청만 수임할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "과도한 권한 부여는 위험을 키웁니다.",
+        "2": "세션 길이는 이 공격 방지와 무관합니다.",
+        "3": "장기 키 발급은 더 위험한 대안입니다."
+      },
+      "sources": [
+        {
+          "title": "서드파티에 외부 ID 사용",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q10",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "applied",
+      "stem": "MFA 미인증 요청을 차단하는 정책에서 `Bool`이 아니라 `BoolIfExists`를 쓰는 이유는?",
+      "options": [
+        "`aws:MultiFactorAuthPresent` 키가 없는 요청에서도 조건이 성립해 Deny가 발동하도록 하기 위해",
+        "`Bool`은 숫자만 비교할 수 있기 때문",
+        "`BoolIfExists`가 MFA를 자동 등록해 주기 때문",
+        "`Bool`은 리소스 정책에서만 쓸 수 있기 때문"
+      ],
+      "correct": 0,
+      "explanation": "`aws:MultiFactorAuthPresent`는 인증 컨텍스트가 있는 요청에만 포함됩니다. `Bool`로 검사하면 키가 없는 요청에서 조건이 불일치해 Deny가 작동하지 않을 수 있지만, `BoolIfExists`는 키가 없을 때 조건을 참으로 처리해 안전하게 차단합니다.",
+      "wrongExplanations": {
+        "1": "`Bool`은 불리언 비교 연산자입니다.",
+        "2": "조건 연산자가 MFA를 등록해 주지 않습니다.",
+        "3": "두 연산자 모두 정책 유형과 무관하게 사용할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 조건 연산자 — ...IfExists",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q11",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "AWS 도구로 액세스 문제 해결 및 감사(4.1.2)",
+      "difficulty": "applied",
+      "stem": "계정 내 모든 IAM 사용자의 액세스 키 마지막 사용 시각과 MFA 활성화 여부를 한 번에 확인하려 한다. 적절한 도구는?",
+      "options": [
+        "자격증명 보고서(Credential Report)",
+        "IAM 정책 시뮬레이터",
+        "IAM Access Analyzer",
+        "CloudTrail 이벤트 기록"
+      ],
+      "correct": 0,
+      "explanation": "자격증명 보고서는 계정 내 모든 IAM 사용자의 비밀번호·액세스 키 상태, 마지막 사용 시각, MFA 활성화 여부를 CSV로 일괄 출력합니다. 미사용 키와 MFA 미설정 사용자를 색출하는 표준 수단입니다.",
+      "wrongExplanations": {
+        "1": "시뮬레이터는 특정 요청이 허용되는지 평가합니다.",
+        "2": "Access Analyzer는 외부 노출 리소스 탐지와 최소 권한 정책 생성에 쓰입니다.",
+        "3": "CloudTrail은 API 호출 기록이며 사용자별 자격증명 상태 요약이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 자격 증명 보고서 가져오기",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q12",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "AWS 도구로 액세스 문제 해결 및 감사(4.1.2)",
+      "difficulty": "applied",
+      "stem": "역할에 붙은 정책에서 한 번도 쓰이지 않은 서비스 권한을 찾아 제거하려 한다. 어떤 정보를 보는가?",
+      "options": [
+        "마지막 액세스 정보(Last Accessed) — 주체·정책이 어떤 서비스에 마지막으로 접근했는지",
+        "자격증명 보고서의 비밀번호 변경 시각",
+        "Trusted Advisor의 비용 검사",
+        "CloudWatch 지표의 `CPUUtilization`"
+      ],
+      "correct": 0,
+      "explanation": "마지막 액세스 정보는 사용자·역할·그룹·정책이 어떤 서비스에 마지막으로 접근했는지 보여 주므로 미사용 권한 회수에 직접 쓰입니다. 자격증명 보고서는 자격증명 객체의 상태를, 마지막 액세스는 실제 호출 이력을 알려 주는 직교하는 정보입니다.",
+      "wrongExplanations": {
+        "1": "비밀번호 변경 시각은 권한 사용 여부와 무관합니다.",
+        "2": "비용 검사는 권한 회수와 관련이 없습니다.",
+        "3": "CPU 지표는 성능 정보입니다."
+      },
+      "sources": [
+        {
+          "title": "마지막 액세스 정보로 권한 정제",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q13",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "AWS 도구로 액세스 문제 해결 및 감사(4.1.2)",
+      "difficulty": "applied",
+      "stem": "S3 버킷·IAM 역할·KMS 키가 외부 계정이나 공개에 노출됐는지 점검하려 한다. 적절한 도구는?",
+      "options": [
+        "IAM Access Analyzer",
+        "자격증명 보고서",
+        "Patch Manager 준수 보고서",
+        "CloudFormation 드리프트 감지"
+      ],
+      "correct": 0,
+      "explanation": "IAM Access Analyzer는 S3·IAM 역할·KMS·SQS 등 리소스가 외부 계정이나 공개에 노출됐는지 탐지하고, 사용 내역을 기반으로 최소 권한 정책 생성도 지원합니다.",
+      "wrongExplanations": {
+        "1": "자격증명 보고서는 사용자 자격증명 상태 요약입니다.",
+        "2": "패치 준수 보고서는 OS 패치 상태입니다.",
+        "3": "드리프트 감지는 스택 구성 차이 탐지입니다."
+      },
+      "sources": [
+        {
+          "title": "IAM Access Analyzer란 무엇인가",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q14",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "IAM 기능 구현(정책·MFA·역할·조건)(4.1.1)",
+      "difficulty": "foundational",
+      "stem": "루트 사용자 보호 모범 사례로 올바른 것은?",
+      "options": [
+        "MFA를 활성화하고 액세스 키를 발급하지 않으며 일상 작업에 사용하지 않는다",
+        "자동화를 위해 루트 액세스 키를 만들어 보관한다",
+        "루트 비밀번호를 팀 전체가 공유한다",
+        "루트로 일상 운영 작업을 수행하고 IAM 사용자는 만들지 않는다"
+      ],
+      "correct": 0,
+      "explanation": "루트 보호의 핵심은 MFA 활성화, 액세스 키 발급 금지, 일상 작업에 사용 금지입니다. 일상 운영은 최소 권한의 IAM 역할·Identity Center를 사용하고, 루트는 계정 닫기 등 루트만 가능한 작업에만 제한적으로 씁니다.",
+      "wrongExplanations": {
+        "1": "루트 액세스 키는 만들지 않는 것이 원칙입니다.",
+        "2": "자격증명 공유는 심각한 위험입니다.",
+        "3": "일상 작업은 최소 권한 아이덴티티로 수행합니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 보안 모범 사례 — 루트 사용자 보호",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t4-1-q15",
+      "examGuideTaskId": "soa-t4-1",
+      "skill": "AWS 도구로 액세스 문제 해결 및 감사(4.1.2)",
+      "difficulty": "applied",
+      "stem": "특정 IAM 역할이 어떤 S3 작업을 수행할 수 있는지 변경 전에 미리 확인하려 한다. 가장 적절한 도구는?",
+      "options": [
+        "IAM 정책 시뮬레이터",
+        "자격증명 보고서",
+        "Access Analyzer 외부 액세스 조사 결과",
+        "CloudTrail Insights"
+      ],
+      "correct": 0,
+      "explanation": "IAM 정책 시뮬레이터는 특정 주체가 특정 작업·리소스에 대해 허용되는지 실제 호출 없이 평가해 보여 줍니다. 정책 변경 전 영향 확인과 접근 거부 원인 진단에 쓰입니다.",
+      "wrongExplanations": {
+        "1": "자격증명 보고서는 자격증명 상태 요약입니다.",
+        "2": "Access Analyzer는 외부 노출 탐지에 초점이 있습니다.",
+        "3": "CloudTrail Insights는 비정상 API 활동 탐지입니다."
+      },
+      "sources": [
+        {
+          "title": "IAM 정책 시뮬레이터로 정책 테스트",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
