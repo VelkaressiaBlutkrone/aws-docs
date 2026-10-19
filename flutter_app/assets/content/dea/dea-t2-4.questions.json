@@ -1,0 +1,464 @@
+{
+  "examGuideTaskId": "dea-t2-4",
+  "taskTitle": "데이터 모델 및 스키마 진화 설계",
+  "domain": 2,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t2-4-q1",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계(2.4.1)",
+      "section": "redshift-table-design",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift에서 수십억 행 팩트 테이블이 조인에 전혀 참여하지 않는 스테이징 테이블과 함께 적재된다. 이 스테이징 테이블의 분산 스타일로 가장 적절한 것은 무엇인가?",
+      "options": [
+        "EVEN",
+        "ALL",
+        "KEY(팩트 테이블의 분산 키와 동일한 열)",
+        "분산 스타일을 지정하지 않고 정렬 키만 지정"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Redshift 문서는 테이블이 조인에 참여하지 않을 때 EVEN 분산이 적절하다고 설명합니다. EVEN은 리더 노드가 열 값과 무관하게 슬라이스에 라운드 로빈으로 행을 분배합니다.",
+      "wrongExplanations": {
+        "1": "ALL은 전체 테이블 사본을 모든 노드에 두는 방식으로 필요한 저장 공간이 노드 수만큼 늘고 적재·갱신이 느려집니다. 문서는 거의 갱신되지 않는 테이블에만 적합하다고 설명합니다.",
+        "2": "KEY 분산은 조인 열로 두 테이블을 colocate할 때 쓰는 방식입니다. 조인에 참여하지 않는 테이블에는 이점이 없습니다.",
+        "3": "분산 스타일을 지정하지 않으면 AUTO가 적용되는데, 이는 선택이 불분명할 때의 기본값입니다. 조인 불참이라는 정보가 이미 있으므로 EVEN이 문서가 제시하는 명확한 선택입니다."
+      },
+      "sources": [
+        {
+          "title": "Distribution styles (Amazon Redshift) — EVEN은 조인 불참 테이블에 적합, ALL은 스토리지가 노드 수만큼 증가, 미지정 시 AUTO",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_choosing_dist_sort.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q2",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "인덱싱, 파티셔닝 전략, 압축 및 기타 데이터 최적화 기술에 대한 모범 사례 설명(2.4.5)",
+      "section": "redshift-table-design",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 테이블을 매일 INSERT·UPDATE·DELETE로 갱신하면서, 쿼리 대부분이 event_date 열에 범위 조건을 쓴다. 정렬 키 설계로 가장 적절한 것은 무엇인가?",
+      "options": [
+        "event_date를 선두로 하는 INTERLEAVED 정렬 키",
+        "event_date를 선두로 하는 COMPOUND 정렬 키",
+        "정렬 키를 지정하지 않고 분산 스타일만 ALL로 지정",
+        "8개 열 전부를 INTERLEAVED 정렬 키로 지정"
+      ],
+      "correct": 1,
+      "explanation": "COMPOUND가 기본값이며, 문서는 INSERT·UPDATE·DELETE로 테이블을 정기적으로 갱신하는 경우 COMPOUND를 권장합니다. 또한 정렬하면 1 MB 디스크 블록마다 min/max 메타데이터가 저장되어 범위 조건 쿼리에서 블록을 건너뛸 수 있습니다.",
+      "wrongExplanations": {
+        "0": "INTERLEAVED는 키의 각 열에 같은 가중치를 주어 임의의 열 부분집합을 조건으로 쓸 때 유리합니다. 정기 갱신이 있는 테이블에는 COMPOUND가 권장됩니다.",
+        "2": "정렬 키가 없으면 범위 조건에서 블록 스킵 효과를 얻지 못합니다. 분산 스타일 ALL은 조인 colocation·저장 공간과 관련된 다른 축입니다.",
+        "3": "INTERLEAVED 정렬 키는 최대 8개 열을 쓸 수 있지만, 지문처럼 특정 열의 범위 조건이 지배적이고 갱신이 잦은 경우에는 COMPOUND가 맞습니다."
+      },
+      "sources": [
+        {
+          "title": "Sort keys (Amazon Redshift) — 기본 COMPOUND, 정기 갱신 시 COMPOUND 권장, INTERLEAVED 최대 8열, 1 MB 블록 min/max",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_Sorting_data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q3",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계(2.4.1)",
+      "section": "redshift-table-design",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 테이블에 PRIMARY KEY 제약조건을 선언했는데도 중복 행이 적재됐고, SELECT DISTINCT 결과가 예상과 다르게 나왔다. 이 현상의 원인은 무엇인가?",
+      "options": [
+        "제약조건이 트랜잭션 블록 안에서 선언되어 적용되지 않았다",
+        "UNIQUE·PRIMARY KEY·FOREIGN KEY는 강제되지 않는 정보용이며 플래너가 계획 힌트로만 쓴다",
+        "ENCODE AUTO가 켜져 있으면 제약조건 검사가 비활성화된다",
+        "COPY 명령은 제약조건을 검사하지만 INSERT는 검사하지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon Redshift 문서는 uniqueness·primary key·foreign key 제약조건이 정보용일 뿐이며 적재 시 강제되지 않고, 쿼리 플래너가 계획 힌트로 쓴다고 설명합니다. 키가 실제로 유효하지 않으면 잘못된 결과가 나올 수 있으므로 무결성이 보장될 때만 선언해야 합니다(NOT NULL은 강제됩니다).",
+      "wrongExplanations": {
+        "0": "트랜잭션 블록 여부와 무관하게 이 제약조건들은 강제되지 않습니다.",
+        "2": "ENCODE AUTO는 열 압축 인코딩을 자동 관리하는 설정입니다. 제약조건 동작과 무관합니다.",
+        "3": "COPY와 INSERT 모두 이 제약조건을 강제하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Table constraints (Amazon Redshift) — UNIQUE·PK·FK는 정보용이며 플래너 힌트, NOT NULL은 강제",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_Defining_constraints.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q4",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계(2.4.1)",
+      "section": "dynamodb-model",
+      "difficulty": "applied",
+      "stem": "Amazon DynamoDB 테이블에서 특정 파티션 키 값으로 트래픽이 몰려 스로틀링이 발생한다. 설계 관점에서 올바른 대응은 무엇인가?",
+      "options": [
+        "항목 크기를 400 KB에 가깝게 키워 요청 수를 줄인다",
+        "카디널리티가 높은 파티션 키를 쓰거나 쓰기 샤딩으로 부하를 고르게 분산한다",
+        "LSI를 추가해 조회를 분산한다",
+        "모든 항목을 같은 파티션 키 아래에 모아 Query로 한 번에 읽는다"
+      ],
+      "correct": 1,
+      "explanation": "DynamoDB의 모든 파티션은 초당 최대 읽기 3,000 단위·쓰기 1,000 단위를 제공하도록 설계되므로, 카디널리티가 높은 파티션 키를 골라 자주 접근하는 항목이 같은 파티션에 몰리지 않게 해야 합니다. 문서는 쓰기 샤딩으로 부하를 분산하는 방법도 안내합니다.",
+      "wrongExplanations": {
+        "0": "항목 크기가 클수록 한 항목에 동시에 보낼 수 있는 연산 수가 줄어듭니다. 항목당 한도는 400 KB이며 크기를 키우는 것은 핫 파티션 해법이 아닙니다.",
+        "2": "LSI는 base 테이블과 같은 파티션 키를 쓰고 처리량도 테이블과 공유합니다. 파티션 키 쏠림을 해소하지 못합니다.",
+        "3": "같은 파티션 키에 모으면 핫 파티션이 더 심해집니다. 설계 원칙과 정반대입니다."
+      },
+      "sources": [
+        {
+          "title": "Best practices for designing and using partition keys effectively in DynamoDB — 파티션당 읽기 3,000·쓰기 1,000 단위, 쓰기 샤딩",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html"
+        },
+        {
+          "title": "DynamoDB overview (AWS Prescriptive Guidance) — 고카디널리티 파티션 키로 핫 파티션 방지, 항목당 400 KB",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/modernization-rdbms-dynamodb/overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q5",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계(2.4.1)",
+      "section": "dynamodb-model",
+      "difficulty": "foundational",
+      "stem": "AWS 문서가 설명하는 DynamoDB 애플리케이션 설계의 첫 단계는 무엇인가?",
+      "options": [
+        "엔터티를 3정규형으로 정규화한다",
+        "시스템이 만족해야 할 구체적인 쿼리 패턴을 식별한다",
+        "테이블마다 GSI를 20개까지 미리 만들어 둔다",
+        "모든 속성을 테이블 스키마에 미리 정의한다"
+      ],
+      "correct": 1,
+      "explanation": "DynamoDB 문서는 애플리케이션 설계의 첫 단계가 시스템이 만족해야 할 구체적인 쿼리 패턴을 식별하는 것이라고 설명합니다. 또한 DynamoDB 애플리케이션에서는 테이블을 가능한 한 적게 유지해야 한다고 안내합니다(대용량 시계열 데이터나 액세스 패턴이 매우 다른 데이터셋은 예외).",
+      "wrongExplanations": {
+        "0": "정규화 우선은 관계형 설계 방식입니다. DynamoDB는 쿼리 패턴에 맞춰 데이터를 조직합니다.",
+        "2": "GSI는 필요한 쿼리에 맞춰 만드는 것이고 기본 쿼터가 테이블당 20개일 뿐 미리 채우는 설계가 아닙니다.",
+        "3": "DynamoDB는 스키마리스라 모든 속성을 미리 정의할 필요가 없습니다. 파티션 키는 필수이고 정렬 키는 선택입니다."
+      },
+      "sources": [
+        {
+          "title": "NoSQL design for DynamoDB — 첫 단계는 쿼리 패턴 식별, 테이블은 가능한 적게",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html"
+        },
+        {
+          "title": "DynamoDB overview (AWS Prescriptive Guidance) — 스키마리스, 파티션 키 필수·정렬 키 선택",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/modernization-rdbms-dynamodb/overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q6",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계(2.4.1)",
+      "section": "lf-tag-design",
+      "difficulty": "applied",
+      "stem": "AWS Lake Formation에서 LF-Tag를 설계해 권한을 주려 한다. LF-Tag 사용에 대한 제약으로 올바른 것은 무엇인가?",
+      "options": [
+        "리소스를 생성할 때 LF-Tag를 함께 지정할 수 있다",
+        "같은 LF-Tag 키에 여러 값을 한 리소스에 지정할 수 있다",
+        "LF-Tag는 미리 정의되어 있어야 하며 특정 리소스에는 한 키당 값을 하나만 지정할 수 있다",
+        "IAM 태그를 그대로 LF-Tag로 사용할 수 있다"
+      ],
+      "correct": 2,
+      "explanation": "Lake Formation 문서는 LF-Tag를 리소스에 부여하거나 보안 주체에 허용하기 전에 미리 정의해야 하고, 특정 리소스에는 특정 키의 값을 하나만 지정할 수 있으며, 리소스를 만들 때 LF-Tag를 함께 지정할 수 없다고 설명합니다.",
+      "wrongExplanations": {
+        "0": "문서는 리소스를 만들 때 LF-Tag를 지정할 수 없고 이미 존재하는 리소스에만 추가할 수 있다고 명시합니다.",
+        "1": "특정 리소스에는 특정 키에 대해 값을 하나만 지정할 수 있습니다.",
+        "3": "Lake Formation 문서는 IAM 태그와 LF-Tag가 같지 않으며 호환되지 않는다고 명시합니다."
+      },
+      "sources": [
+        {
+          "title": "Lake Formation tag-based access control best practices and considerations — 사전 정의 필요, 키당 값 하나, 생성 시 동시 부여 불가",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/lf-tag-considerations.html"
+        },
+        {
+          "title": "Lake Formation tag-based access control — IAM 태그와 LF-Tag는 다름",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q7",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "데이터 특성에 대한 변경 사항 해결(2.4.2)",
+      "section": "schema-evolution",
+      "difficulty": "applied",
+      "stem": "Kafka 프로듀서가 메시지 스키마에 새 필드를 추가하려 한다. 이미 배포돼 이전 스키마로 만들어진 컨슈머들이 새 데이터를 계속 처리할 수 있어야 한다. AWS Glue Schema Registry의 호환성 모드로 무엇을 설정하는가?",
+      "options": [
+        "BACKWARD",
+        "FORWARD",
+        "NONE",
+        "DISABLED"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue 문서는 FORWARD 호환성이 소비자가 현재 스키마 버전과 그 이후(subsequent) 버전으로 쓴 데이터를 모두 읽게 해 준다고 설명합니다. 이 모드에서 허용되는 변경이 필드 추가와 선택(optional) 필드 삭제여서 지문의 요구와 맞습니다.",
+      "wrongExplanations": {
+        "0": "BACKWARD는 소비자가 현재와 직전 버전을 읽게 해 주는 모드로, 가장 최근 스키마로 만든 애플리케이션을 위한 설정입니다. 허용 변경은 필드 삭제와 선택 필드 추가입니다.",
+        "2": "NONE은 새 버전을 호환성 검사 없이 수락하므로 프로듀서와 컨슈머 사이의 계약을 강제하지 못합니다.",
+        "3": "DISABLED는 새 버전 자체를 추가할 수 없게 막는 모드입니다. 필드를 추가하려는 요구와 충돌합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue Schema registry — 8가지 호환성 모드, FORWARD는 현재+이후 버전, BACKWARD는 현재+직전, NONE은 검사 없음, DISABLED는 새 버전 불가",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/schema-registry.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q8",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "데이터 특성에 대한 변경 사항 해결(2.4.2)",
+      "section": "schema-evolution",
+      "difficulty": "applied",
+      "stem": "S3 데이터 레이크의 테이블에서 컬럼 추가·삭제·이름 변경·순서 변경과 타입 확장(integer → bigint)을 모두 처리해야 하는데, 기존 데이터 파일을 다시 쓰고 싶지 않다. 어떤 선택이 적절한가?",
+      "options": [
+        "CSV 형식으로 저장하고 Athena에서 테이블 정의를 바꾼다",
+        "Parquet을 인덱스 기준 접근으로 전환해 모든 변경을 처리한다",
+        "Apache Iceberg 테이블로 저장한다",
+        "JSON으로 저장하고 Glue 크롤러가 스키마를 매번 다시 추론하게 한다"
+      ],
+      "correct": 2,
+      "explanation": "Athena 문서는 Iceberg 스키마 업데이트가 메타데이터 전용 변경이라 스키마를 바꿀 때 데이터 파일이 변경되지 않는다고 설명하며, 컬럼 추가·삭제·이름 변경·순서 변경과 타입 확장(integer → big integer, float → double 등)을 지원한다고 명시합니다.",
+      "wrongExplanations": {
+        "0": "CSV/TSV는 컬럼 순서 변경과 앞·중간 삽입, 컬럼 삭제가 불가합니다. 요구한 변경을 모두 소화하지 못합니다.",
+        "1": "Parquet을 인덱스 기준으로 전환하면 컬럼 이름 변경은 가능해지지만 중간 컬럼 추가·삭제·순서 변경이 불가해집니다. 한쪽을 얻고 다른 쪽을 잃는 교환입니다.",
+        "3": "JSON은 여러 변경을 허용하지만 컬럼 이름 변경이 불가하고, 크롤러 재추론은 스키마 진화를 보장하는 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Evolve Iceberg table schema (Amazon Athena) — 메타데이터 전용 변경, 데이터 파일 변경 없음, 타입 확장",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/querying-iceberg-evolving-table-schema.html"
+        },
+        {
+          "title": "Handle schema updates (Amazon Athena) — 포맷별 가능한 스키마 변경, Parquet은 이름 기준·ORC는 인덱스 기준이 기본",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/handling-schema-updates-chapter.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q9",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "데이터 특성에 대한 변경 사항 해결(2.4.2)",
+      "section": "schema-evolution",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 테이블의 VARCHAR(50) 컬럼에 더 긴 값이 들어와야 한다. ALTER TABLE ALTER COLUMN TYPE에 대한 설명으로 올바른 것은 무엇인가?",
+      "options": [
+        "모든 데이터 타입 사이의 변환을 지원한다",
+        "VARCHAR 크기 변경만 지원하며 기존 데이터의 최대 크기보다 작게 줄일 수 없다",
+        "트랜잭션 블록 안에서만 실행할 수 있다",
+        "UNIQUE 제약조건이 있는 컬럼에서만 실행할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon Redshift 문서는 이 절이 VARCHAR 데이터 타입의 크기 변경만 지원하며 기존 데이터의 최대 크기보다 작게 줄일 수 없다고 설명합니다. 기본값·UNIQUE·PRIMARY KEY·FOREIGN KEY가 있는 컬럼이나 트랜잭션 블록 안에서는 변경할 수 없습니다.",
+      "wrongExplanations": {
+        "0": "임의 타입 변환은 지원되지 않습니다. VARCHAR 크기 변경만 가능합니다.",
+        "2": "트랜잭션 블록 안에서는 이 변경을 수행할 수 없습니다. 설명이 반대입니다.",
+        "3": "UNIQUE 제약조건이 있는 컬럼은 오히려 변경할 수 없는 대상에 포함됩니다."
+      },
+      "sources": [
+        {
+          "title": "ALTER TABLE (Amazon Redshift) — VARCHAR 크기 변경만 지원, 기존 데이터 최대 크기 미만으로 축소 불가",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_ALTER_TABLE.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q10",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "스키마 변환 수행(2.4.3)",
+      "section": "schema-conversion",
+      "difficulty": "applied",
+      "stem": "온프레미스 Oracle 데이터베이스의 스키마와 저장 코드를 Amazon Aurora PostgreSQL로 변환하려 한다. 도구를 로컬에 설치하지 않고 콘솔에서 완전 관리형으로 작업하면서 어떤 객체가 자동 변환되고 어떤 객체에 수작업이 필요한지 보고서로 받고 싶다. 무엇을 쓰는가?",
+      "options": [
+        "AWS DMS Schema Conversion",
+        "AWS Glue Schema Registry",
+        "AWS Lake Formation",
+        "AWS DMS 데이터 마이그레이션 작업"
+      ],
+      "correct": 0,
+      "explanation": "DMS Schema Conversion은 AWS DMS 안의 완전 관리형·웹 기반 기능으로, 소스 스키마를 Aurora·Amazon RDS·Amazon Redshift 대상 형식으로 변환합니다. 평가 보고서로 자동 변환 가능한 부분과 수작업이 필요한 부분을 확인한 뒤 변환 코드를 적용하거나 SQL 스크립트로 내보낼 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Glue Schema Registry는 스트리밍 생산자·소비자 사이의 스키마 버전과 호환성을 관리하는 서비스입니다. 데이터베이스 스키마 변환 도구가 아닙니다.",
+        "2": "Lake Formation은 데이터 레이크의 접근 제어·거버넌스 계층입니다. 스키마 변환 기능이 아닙니다.",
+        "3": "DMS의 데이터 마이그레이션 기능은 데이터를 옮기는 기능입니다. DMS Schema Conversion은 스키마를 변환하며 데이터는 옮기지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Converting database schemas using DMS Schema Conversion — 완전 관리형·웹 기반, 평가 보고서, 스키마만 변환하고 데이터는 옮기지 않음",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/CHAP_SchemaConversion.html"
+        },
+        {
+          "title": "AWS Glue Schema registry — 스트리밍 스키마 버전·호환성 관리",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/schema-registry.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q11",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "스키마 변환 수행(2.4.3)",
+      "section": "schema-conversion",
+      "difficulty": "foundational",
+      "stem": "AWS Schema Conversion Tool(AWS SCT)과 DMS Schema Conversion의 차이로 올바른 것은 무엇인가?",
+      "options": [
+        "AWS SCT는 데이터까지 함께 이전하고 DMS Schema Conversion은 스키마만 변환한다",
+        "AWS SCT는 독립 실행형 애플리케이션 및 명령줄 도구이고, DMS Schema Conversion은 AWS DMS 안의 완전 관리형 웹 기반 기능이다",
+        "AWS SCT는 Amazon Redshift를 대상으로 지원하지 않는다",
+        "DMS Schema Conversion은 AWS SCT와 서로 다른 변환 엔진을 쓴다"
+      ],
+      "correct": 1,
+      "explanation": "AWS SCT는 독립 실행형 애플리케이션과 명령줄 도구로 제공되며 Windows·Fedora Linux·Ubuntu Linux에서 쓸 수 있습니다. DMS Schema Conversion은 AWS Schema Conversion Tool 위에 구축된 완전 관리형·웹 기반 기능입니다.",
+      "wrongExplanations": {
+        "0": "AWS SCT는 스키마 변환 도구이고, 데이터 이동은 DMS의 데이터 마이그레이션 기능이 담당합니다.",
+        "2": "AWS SCT는 데이터 웨어하우스 스키마 변환을 지원하며 Teradata·Netezza 같은 소스에서 Amazon Redshift를 대상으로 변환합니다.",
+        "3": "DMS Schema Conversion은 AWS Schema Conversion Tool 위에 구축된 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "Installing and Configuring AWS Schema Conversion Tool — 독립 실행형 애플리케이션 + 명령줄 도구, Windows·Fedora·Ubuntu",
+          "url": "https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_Installing.html"
+        },
+        {
+          "title": "Converting database schemas using DMS Schema Conversion — SCT 위에 구축된 완전 관리형·웹 기반 기능",
+          "url": "https://docs.aws.amazon.com/dms/latest/userguide/CHAP_SchemaConversion.html"
+        },
+        {
+          "title": "What is the AWS Schema Conversion Tool? — OLTP 및 데이터 웨어하우스 스키마 변환",
+          "url": "https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_Welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q12",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "AWS 도구를 사용하여 데이터 계보 설정(2.4.4)",
+      "section": "lineage",
+      "difficulty": "applied",
+      "stem": "감사 대응으로 배포된 모델이 어떤 학습 잡과 어떤 데이터셋(S3 URI)에서 만들어졌는지 추적해야 한다. 어떤 기능을 쓰는가?",
+      "options": [
+        "AWS Lake Formation LF-Tag",
+        "Amazon SageMaker ML Lineage Tracking",
+        "AWS Glue Schema Registry",
+        "AWS Glue 크롤러의 테이블 버전 아카이브"
+      ],
+      "correct": 1,
+      "explanation": "SageMaker ML Lineage Tracking의 tracking entity는 엔드투엔드 머신러닝 워크플로의 모든 요소를 표현합니다. SageMaker AI는 학습·처리·배치 변환 잡을 만들면 tracking entity를 자동 생성하고, artifact(S3 URI 등 입력·출력)·action·context·association으로 관계를 남겨 모델 거버넌스와 재현성에 씁니다.",
+      "wrongExplanations": {
+        "0": "LF-Tag는 Lake Formation 권한을 속성 기준으로 부여하는 수단입니다. 계보 추적 기능이 아닙니다.",
+        "2": "Glue Schema Registry는 스키마 버전과 호환성을 관리합니다. 모델과 학습 데이터의 관계를 추적하지 않습니다.",
+        "3": "테이블 버전 아카이브는 Glue Data Catalog 테이블의 갱신 전 상태를 보관하는 기술 메타데이터 기능입니다. ML 워크플로 계보가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Lineage Tracking Entities (Amazon SageMaker AI) — tracking entity가 ML 워크플로 전체 요소를 표현, 자동 생성·재사용, artifact·action·context·association",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking-entities.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q13",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "AWS 도구를 사용하여 데이터 계보 설정(2.4.4)",
+      "section": "lineage",
+      "difficulty": "applied",
+      "stem": "Amazon SageMaker Unified Studio에서 데이터 자산의 계보를 보려고 한다. 계보 이벤트가 기본적으로 자동 수집되지 않아 별도 설정이 필요한 대상은 무엇인가?",
+      "options": [
+        "AWS Glue 크롤러",
+        "Amazon Redshift",
+        "AWS Glue 콘솔에서 실행하는 Glue 잡",
+        "SageMaker Unified Studio의 Query Editor"
+      ],
+      "correct": 2,
+      "explanation": "SageMaker Unified Studio의 데이터 계보 지원 매트릭스에 따르면 Glue 크롤러와 Amazon Redshift는 기본 자동 수집 대상이지만, AWS Glue 콘솔에서 실행하는 Glue 잡과 Amazon EMR은 기본 자동이 아니라 설정이 필요합니다(Glue 잡은 계보 이벤트 생성 옵션과 도메인 ID 지정, EMR은 Spark 설정).",
+      "wrongExplanations": {
+        "0": "Glue 크롤러는 SageMaker Unified Studio에서 계보가 기본 자동 수집되는 대상입니다.",
+        "1": "Amazon Redshift도 기본 자동 수집 대상입니다.",
+        "3": "SageMaker Unified Studio의 도구(Query Editor·Visual ETL·JupyterLab 노트북)에서는 계보 수집이 자동화되어 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Data lineage support matrix (Amazon SageMaker Unified Studio) — 도구·서비스별 자동 수집 여부",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/datazone-support-matrix.html"
+        },
+        {
+          "title": "Data lineage in Amazon SageMaker Unified Studio — OpenLineage 호환 계보 이벤트 수집·시각화",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/datazone-data-lineage.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q14",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "인덱싱, 파티셔닝 전략, 압축 및 기타 데이터 최적화 기술에 대한 모범 사례 설명(2.4.5)",
+      "section": "optimization",
+      "difficulty": "applied",
+      "stem": "Athena로 조회하는 S3 테이블에 하루 수만 개의 작은 Parquet 파일이 쌓이면서 쿼리가 느려지고 S3 SlowDown 오류도 간헐적으로 발생한다. AWS 문서가 제시하는 가장 효과적인 접근은 무엇인가?",
+      "options": [
+        "파일이 쓰여지기 전에 더 큰 파일로 합치고, 필요하면 파티션 키 수를 줄인다",
+        "파티션을 시간 단위로 더 세분화해 각 파티션의 파일 수를 줄인다",
+        "Parquet row group 크기를 기본값보다 작게 줄인다",
+        "압축을 해제해 읽기 병렬성을 높인다"
+      ],
+      "correct": 0,
+      "explanation": "Athena 문서는 작은 파일을 합치는 가장 좋은 시점이 파일이 쓰여지기 전이라고 설명하며, 쓰는 쪽에서 더 큰 파일을 쓰거나 Glue ETL로 합치거나 파티션 키 수를 줄이는 방법을 제시합니다. 또 한 파티션에 파일이 1,000개를 넘으면 S3 목록 연산이 여러 번 필요해집니다.",
+      "wrongExplanations": {
+        "1": "파티션 키를 더 세분화하면 파일이 더 잘게 쪼개져 작은 파일 문제가 악화됩니다. 문서는 가장 흔한 쿼리에 맞추고 드문 쿼리를 위해 과도하게 파티셔닝하지 말라고 권고합니다.",
+        "2": "문서는 Parquet row group 기본 128 MB·ORC stripe 기본 64 MB를 제시하며, 컬럼이 많으면 키우는 편이 낫고 기본값보다 줄이는 것은 권장되지 않는다고 설명합니다.",
+        "3": "압축 데이터는 압축 해제 전 스캔 바이트 기준으로 과금되어 더 빠르고 저렴합니다. 압축을 푸는 것은 비용과 성능 모두에 불리합니다."
+      },
+      "sources": [
+        {
+          "title": "Optimize data (Amazon Athena) — 작은 파일은 쓰기 전에 병합, 파티션당 1,000개 초과 시 목록 연산 증가, row group·stripe 기본 크기, 압축의 과금·병렬성",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-4-q15",
+      "examGuideTaskId": "dea-t2-4",
+      "skill": "벡터화 개념 설명(2.4.6)",
+      "section": "vectorization",
+      "difficulty": "applied",
+      "stem": "Amazon Bedrock 지식 베이스로 사내 문서를 RAG에 쓰고 있다. 원본 문서 수십 개를 수정했는데 응답에 변경 내용이 반영되지 않는다. 무엇을 해야 하는가?",
+      "options": [
+        "임베딩 모델을 더 높은 차원의 모델로 교체한다",
+        "데이터 소스를 sync해 지식 베이스에 다시 색인한다",
+        "청킹 전략을 NONE으로 변경한다",
+        "벡터 스토어를 S3 Vectors로 교체한다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon Bedrock 문서는 데이터를 추가·수정·삭제한 뒤에는 데이터 소스를 sync해야 지식 베이스에 다시 색인된다고 설명합니다. sync는 증분이어서 마지막 sync 이후 추가·수정·삭제된 문서만 처리합니다(API로는 StartIngestionJob). Amazon Aurora(RDS) 이외의 벡터 스토어는 sync 후에도 새 임베딩이 질의에 반영되기까지 몇 분 걸릴 수 있습니다.",
+      "wrongExplanations": {
+        "0": "임베딩 모델을 바꿔도 변경된 문서가 색인되지 않으면 응답은 그대로입니다. 또 모델 교체는 전체 재색인을 수반하는 큰 변경입니다.",
+        "2": "청킹 전략은 문서를 어떻게 분할할지 정하는 설정입니다(FIXED_SIZE·HIERARCHICAL·SEMANTIC·NONE). 변경 내용 반영 여부와 무관합니다.",
+        "3": "벡터 스토어 종류는 저장·검색 위치를 정할 뿐이며, 색인되지 않은 변경을 반영해 주지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Sync your data with your Amazon Bedrock knowledge base — 변경 후 sync 필수, 증분 처리, Aurora 외 스토어는 반영 지연",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-data-source-sync-ingest.html"
+        },
+        {
+          "title": "ChunkingConfiguration (Amazon Bedrock API Reference) — 청킹 전략 종류",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_ChunkingConfiguration.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

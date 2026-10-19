@@ -1,0 +1,480 @@
+{
+  "examGuideTaskId": "dea-t3-1",
+  "taskTitle": "AWS 서비스를 사용하여 데이터 처리 자동화",
+  "domain": 3,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t3-1-q1",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "데이터 파이프라인 오케스트레이션(예: Amazon MWAA, AWS Step Functions)(3.1.1)",
+      "section": "mwaa-troubleshoot",
+      "difficulty": "applied",
+      "stem": "Amazon MWAA 환경에서 DAG 실행이 지연되고 있다. 환경 지표를 보니 대기(queued) 작업 수가 계속 증가하고, 실행 중인 작업은 정상적으로 끝나고 있다. 총 DAG 파싱 시간은 평소와 다르지 않다. 가장 적절한 조치는 무엇인가?",
+      "options": [
+        "동시에 실행하는 작업 수를 줄이고 최소 Apache Airflow 워커 수를 늘린다",
+        "환경의 VPC를 퍼블릭 라우팅으로 변경한다",
+        "DAG 폴더에 .airflowignore 파일을 추가해 파싱 대상을 줄인다",
+        "웹 서버 액세스 모드를 퍼블릭 네트워크로 전환한다"
+      ],
+      "correct": 0,
+      "explanation": "MWAA의 워커 자동 확장은 (실행 중 작업 + 대기 작업) ÷ 워커당 작업 수로 필요한 워커 수를 산정하고, 필요량이 현재보다 크면 최대 워커 수까지 Fargate 워커를 늘립니다. 대기 작업이 쌓이는 증상의 공식 문서 권고는 동시 실행 작업을 줄이고 최소 Apache Airflow 워커 수를 늘리는 것입니다.",
+      "wrongExplanations": {
+        "1": "환경의 VPC 네트워크는 환경을 만든 뒤에는 변경할 수 없습니다. 또한 큐 적체는 네트워크 구성이 아니라 워커 처리량의 문제입니다.",
+        "2": ".airflowignore는 DAG가 아닌 파일을 파싱에서 제외해 DAG 파싱 부하를 줄이는 수단입니다. 이 시나리오는 파싱 시간이 정상이므로 증상과 맞지 않습니다.",
+        "3": "웹 서버 액세스 모드는 Airflow UI 접근 경로를 정할 뿐 작업 큐 처리량과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring Amazon MWAA worker automatic scaling — 실행 중·대기 작업에 따라 워커를 증설",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-autoscaling.html"
+        },
+        {
+          "title": "Troubleshooting: DAGs, Operators, Connections, and other issues — 최소 Apache Airflow 워커 증가 권고",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/t-apache-airflow-202.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q2",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "Amazon 관리형 워크플로 문제 해결(3.1.2)",
+      "section": "mwaa-ops",
+      "difficulty": "applied",
+      "stem": "Amazon MWAA 환경의 구성을 변경해야 한다. 현재 몇 시간씩 걸리는 장시간 작업이 실행 중이며, 업데이트 때문에 이 작업이 실패하면 안 된다. 환경은 Apache Airflow 2.5를 사용한다. 어떻게 해야 하는가?",
+      "options": [
+        "업데이트를 그대로 적용한다. 기본 동작이 실행 중 작업을 보호한다",
+        "Graceful 워커 교체 전략을 선택해 업데이트한다",
+        "최대 워커 수를 1로 낮춘 뒤 업데이트한다",
+        "환경을 삭제하고 같은 구성으로 다시 만든다"
+      ],
+      "correct": 1,
+      "explanation": "MWAA 환경 업데이트의 기본 워커 교체 전략은 Forced이며, 활성 워커를 즉시 중지하므로 실행 중 작업이 실패합니다. Graceful 업데이트는 워커가 최대 12시간 동안 작업을 계속하게 하고 새 작업만 갱신된 워커로 보냅니다. Graceful을 쓰려면 Apache Airflow 2.4.3 이상이어야 하므로 2.5 환경은 조건을 만족합니다.",
+      "wrongExplanations": {
+        "0": "기본 전략은 Forced이고, Forced는 활성 워커를 즉시 중지해 실행 중인 작업이 실패합니다. 기본값이 작업을 보호하지 않습니다.",
+        "2": "최대 워커 수를 줄이는 것은 확장 상한을 바꿀 뿐이며, 업데이트 시 워커 교체 방식과 무관합니다. 오히려 처리량만 떨어집니다.",
+        "3": "환경을 다시 만들면 실행 중 작업이 모두 사라집니다. 구성 변경을 위해 환경을 재생성할 필요도 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Update an Amazon MWAA environment — Forced가 기본, Graceful은 최대 12시간 작업 지속",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/update-environment.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q3",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "Amazon 관리형 워크플로 문제 해결(3.1.2)",
+      "section": "mwaa-troubleshoot",
+      "difficulty": "applied",
+      "stem": "Amazon MWAA 환경에 requirements.txt를 올려 새 Python 패키지를 추가했는데 환경 업데이트가 20분 넘게 끝나지 않는다. 설치가 왜 실패했는지 확인하려면 어디를 보아야 하는가?",
+      "options": [
+        "Worker 로그 그룹의 작업 인스턴스 로그",
+        "WebServer 로그 그룹",
+        "Scheduler 로그 그룹의 requirements_install_ip 로그 스트림",
+        "DAGProcessing 로그 그룹"
+      ],
+      "correct": 2,
+      "explanation": "MWAA는 활성화한 로깅 옵션마다 CloudWatch 로그 그룹을 만들고, 패키지 설치 결과는 스케줄러 로그 그룹의 requirements_install_ip 로그 스트림에서 확인합니다. 환경 업데이트가 20분을 넘기면 설치 실패로 마지막 안정 컨테이너 이미지로 롤백 중일 가능성이 큽니다.",
+      "wrongExplanations": {
+        "0": "Worker 로그 그룹은 워커에서 실행된 작업의 로그를 담습니다. 환경 이미지 빌드 단계의 패키지 설치 결과는 여기에 남지 않습니다.",
+        "1": "WebServer 로그 그룹은 Airflow UI 관련 로그이며, 웹 서버 5xx 오류를 진단할 때 봅니다.",
+        "3": "DAGProcessing 로그 그룹은 스케줄러의 DAG 프로세서 매니저 로그로, DAG 파일 파싱 문제를 확인하는 곳입니다."
+      },
+      "sources": [
+        {
+          "title": "Accessing Airflow logs in Amazon CloudWatch — 로깅 옵션마다 로그 그룹 생성, requirements 설치 로그 위치",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/monitoring-airflow.html"
+        },
+        {
+          "title": "Troubleshooting: Creating and updating an Amazon MWAA environment — 20분 초과 시 롤백",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/t-create-update-environment.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q4",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "Amazon 관리형 워크플로 문제 해결(3.1.2)",
+      "section": "sfn-ops",
+      "difficulty": "applied",
+      "stem": "운영 팀이 AWS Step Functions Express 워크플로의 과거 실행 내역을 조사하려 하는데 Step Functions 콘솔에서 실행 이력을 찾을 수 없다. 이 상황의 원인과 해결책으로 가장 정확한 것은?",
+      "options": [
+        "Express 워크플로의 이력 보존 기간이 지났으므로 보존 기간을 늘린다",
+        "Express 워크플로는 Step Functions에 실행 이력을 기록하지 않으므로 CloudWatch Logs 로깅을 구성한다",
+        "상태 머신이 메트릭을 내보내지 않도록 설정되어 있으므로 CloudWatch 메트릭을 활성화한다",
+        "Express 워크플로를 Standard로 전환해야만 과거 실행을 조회할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "Standard 워크플로와 달리 Express 워크플로는 실행 이력을 AWS Step Functions에 기록하지 않습니다. 이력과 결과를 보려면 CloudWatch Logs 로깅을 구성해야 합니다. 콘솔에서 만든 Express 워크플로는 로깅이 기본으로 켜져 있고 Standard는 기본으로 꺼져 있습니다.",
+      "wrongExplanations": {
+        "0": "보존 기간의 문제가 아니라 애초에 Express는 Step Functions에 이력을 기록하지 않습니다.",
+        "2": "모든 상태 머신이 실행 메트릭을 내보냅니다. 메트릭은 실패·타임아웃 횟수 같은 집계값이지 실행별 이력이 아닙니다.",
+        "3": "Standard로 바꾸지 않아도 CloudWatch Logs 로깅으로 Express의 실행 이력을 남길 수 있습니다. 워크플로 유형 전환은 과도한 변경입니다."
+      },
+      "sources": [
+        {
+          "title": "Using CloudWatch Logs to log execution history in Step Functions — Express는 이력을 기록하지 않음",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/cw-logs.html"
+        },
+        {
+          "title": "Monitoring Step Functions metrics using Amazon CloudWatch — 모든 상태 머신이 메트릭 발행",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/procedure-cw-metrics.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q5",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "SDK를 호출하여 코드로 Amazon 기능에 액세스(3.1.3)",
+      "section": "boto3",
+      "difficulty": "applied",
+      "stem": "boto3로 작성한 적재 스크립트가 쓰로틀링 오류를 자주 받는다. 팀은 재시도를 하되 클라이언트 쪽에서 요청 속도 자체를 조절해 서비스 한도를 덜 때리고 싶어 한다. 어떤 재시도 모드가 이 요구에 해당하며, 도입 시 무엇을 고려해야 하는가?",
+      "options": [
+        "legacy 모드 — 가장 넓은 오류 목록에서 재시도하므로 쓰로틀링에 강하다",
+        "standard 모드 — 클라이언트 측 속도 제한을 제공하며 안정판이다",
+        "adaptive 모드 — 클라이언트 측 속도 제한을 제공하지만 실험적(experimental) 모드다",
+        "재시도 모드로는 불가능하므로 max_attempts를 0으로 두고 직접 구현해야 한다"
+      ],
+      "correct": 2,
+      "explanation": "boto3의 adaptive 모드는 standard 모드의 기능에 더해 클라이언트 측 속도 제한(client-side rate limiting)을 제공합니다. 다만 공식 문서는 adaptive를 실험적(experimental) 모드로 설명하므로 도입 전에 이 점을 고려해야 합니다.",
+      "wrongExplanations": {
+        "0": "legacy 모드는 오히려 제한된 오류·상태 코드 목록에서만 재시도합니다. 오류 목록을 넓힌 것은 standard 모드이며, legacy에는 속도 제한 기능이 없습니다.",
+        "1": "standard 모드는 서킷 브레이킹과 확장된 오류 목록, 지수 백오프(최대 20초)를 제공하지만 클라이언트 측 속도 제한은 adaptive 모드의 기능입니다.",
+        "3": "재시도 모드 설정만으로 속도 제한을 쓸 수 있습니다. 직접 구현은 불필요합니다."
+      },
+      "sources": [
+        {
+          "title": "Retries (Boto3 guide) — legacy·standard·adaptive 모드 특성과 adaptive의 실험적 상태",
+          "url": "https://docs.aws.amazon.com/boto3/latest/guide/retries.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q6",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "SDK를 호출하여 코드로 Amazon 기능에 액세스(3.1.3)",
+      "section": "boto3",
+      "difficulty": "foundational",
+      "stem": "boto3로 S3 버킷의 객체를 전부 나열하는 스크립트를 작성했는데 항상 같은 개수까지만 처리된다. list_objects 호출은 한 번에 최대 1,000개 객체를 반환한다. 코드를 가장 적절하게 고치는 방법은?",
+      "options": [
+        "get_paginator()로 페이지네이터를 만들어 잘린 결과를 끝까지 순회한다",
+        "get_waiter()로 웨이터를 만들어 모든 객체가 준비될 때까지 기다린다",
+        "재시도 모드를 adaptive로 바꾸어 호출을 반복한다",
+        "Config 객체의 total_max_attempts를 늘려 호출 횟수를 확보한다"
+      ],
+      "correct": 0,
+      "explanation": "Paginator는 잘린(truncated) API 결과를 전부 순회하도록 해 주는 추상화이며 get_paginator()로 만듭니다. PaginationConfig의 MaxItems·PageSize·StartingToken으로 조절할 수 있고 JMESPath로 클라이언트 측 필터링도 할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Waiter는 리소스가 원하는 상태에 도달할 때까지 폴링하는 헬퍼입니다. 결과 목록을 이어서 읽는 기능이 아니며, waiter가 아예 없는 클라이언트도 있습니다.",
+        "2": "재시도 모드는 오류가 났을 때 다시 호출하는 정책입니다. 성공한 응답이 잘려 오는 페이지네이션 문제와는 무관합니다.",
+        "3": "total_max_attempts는 한 요청의 총 시도 횟수를 정하는 값입니다. 다음 페이지를 가져오는 것과 관계가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Paginators (Boto3 guide) — 잘린 결과 순회, list_objects는 한 번에 최대 1000개",
+          "url": "https://docs.aws.amazon.com/boto3/latest/guide/paginators.html"
+        },
+        {
+          "title": "Low-level clients (Boto3 guide) — Waiter는 상태 폴링 헬퍼",
+          "url": "https://docs.aws.amazon.com/boto3/latest/guide/clients.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q7",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "AWS 서비스의 기능을 사용하여 데이터 처리(예: Amazon EMR, Amazon Redshift, AWS Glue)(3.1.4)",
+      "section": "service-features",
+      "difficulty": "applied",
+      "stem": "Amazon EMR 클러스터에 스텝 여러 개를 제출해 야간 배치를 돌린다. 중간 스텝 하나가 실패해도 클러스터를 유지하고 남은 스텝을 계속 실행하기를 원한다. 스텝의 ActionOnFailure를 무엇으로 설정해야 하는가?",
+      "options": [
+        "TERMINATE_CLUSTER",
+        "CANCEL_AND_WAIT",
+        "TERMINATE_JOB_FLOW_ON_ERROR",
+        "CONTINUE"
+      ],
+      "correct": 3,
+      "explanation": "스텝 실패 시 동작은 ActionOnFailure로 정하며 CONTINUE는 실패한 스텝 다음 스텝을 계속 진행합니다. TERMINATE_CLUSTER는 클러스터를 종료하고, CANCEL_AND_WAIT는 대기 중인 스텝을 취소하고 클러스터를 WAITING 상태로 둡니다.",
+      "wrongExplanations": {
+        "0": "TERMINATE_CLUSTER는 스텝이 실패하면 클러스터 자체를 종료합니다. 클러스터를 유지하라는 요구와 정면으로 어긋납니다.",
+        "1": "CANCEL_AND_WAIT는 클러스터는 유지하지만 대기 중인 나머지 스텝을 취소하고 WAITING 상태로 들어갑니다. 남은 스텝을 계속 실행하지 않습니다.",
+        "2": "ActionOnFailure의 값이 아닙니다. 선택지에 쓰인 이름은 실제 설정 값과 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "StepConfig (Amazon EMR API Reference) — ActionOnFailure 값(TERMINATE_CLUSTER·CANCEL_AND_WAIT·CONTINUE)",
+          "url": "https://docs.aws.amazon.com/emr/latest/APIReference/API_StepConfig.html"
+        },
+        {
+          "title": "Submit work to an Amazon EMR cluster — 스텝 제출과 상태",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-work-with-steps.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q8",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "AWS 서비스의 기능을 사용하여 데이터 처리(예: Amazon EMR, Amazon Redshift, AWS Glue)(3.1.4)",
+      "section": "service-features",
+      "difficulty": "applied",
+      "stem": "임시 분석에 쓰려고 띄운 Amazon EMR 클러스터들이 작업을 끝낸 뒤에도 WAITING 상태로 며칠씩 남아 비용이 발생하고 있다. 운영 부담을 늘리지 않고 이 비용을 줄이려면 무엇을 해야 하는가?",
+      "options": [
+        "스텝의 ActionOnFailure를 TERMINATE_CLUSTER로 바꾼다",
+        "클러스터에 자동 종료 정책을 설정해 유휴 시간이 지나면 종료되게 한다",
+        "클러스터 상태가 TERMINATED_WITH_ERRORS가 되도록 마지막 스텝을 실패시킨다",
+        "코어 노드를 스팟 인스턴스로 교체한다"
+      ],
+      "correct": 1,
+      "explanation": "자동 종료 정책(AutoTerminationPolicy)은 지정한 유휴 시간이 지나면 클러스터를 종료합니다. 유휴 시간은 60초에서 604,800초(7일) 범위에서 정할 수 있습니다. WAITING은 실행할 스텝이 없을 뿐 여전히 활성 상태라 과금되므로, 유휴 클러스터 비용 문제의 정석 해법입니다.",
+      "wrongExplanations": {
+        "0": "ActionOnFailure는 스텝이 실패했을 때의 동작입니다. 스텝이 모두 성공해 WAITING으로 남는 이 시나리오에는 적용되지 않습니다.",
+        "2": "일부러 실패를 만들어 종료시키는 것은 운영상 바람직하지 않고, 오류 종료(TERMINATED_WITH_ERRORS) 기록만 남깁니다. 정상적인 종료 수단이 따로 있습니다.",
+        "3": "스팟 인스턴스는 단가를 낮출 뿐 유휴 상태로 떠 있는 클러스터의 과금 자체를 없애지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "AutoTerminationPolicy (Amazon EMR API Reference) — 유휴 시간 60초~604800초",
+          "url": "https://docs.aws.amazon.com/emr/latest/APIReference/API_AutoTerminationPolicy.html"
+        },
+        {
+          "title": "Amazon EMR FAQs — 클러스터 상태(WAITING은 활성, TERMINATED/TERMINATED_WITH_ERRORS)",
+          "url": "https://aws.amazon.com/emr/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q9",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "AWS 서비스의 기능을 사용하여 데이터 처리(예: Amazon EMR, Amazon Redshift, AWS Glue)(3.1.4)",
+      "section": "service-features",
+      "difficulty": "applied",
+      "stem": "매시간 도는 AWS Glue ETL 잡이 S3 입력 경로의 데이터를 매번 전부 다시 읽어 실행 시간이 계속 늘고 있다. 새로 도착한 객체만 처리하도록 바꾸려면 무엇을 해야 하는가?",
+      "options": [
+        "잡 타임아웃을 480분으로 늘린다",
+        "트리거 유형을 conditional로 바꾼다",
+        "잡 북마크를 Enable로 설정한다",
+        "MaxRetries를 0으로 설정한다"
+      ],
+      "correct": 2,
+      "explanation": "AWS Glue 잡 북마크는 이미 처리한 데이터를 추적해 재처리를 막습니다. 기본값은 Disable이라 매 실행이 전체 데이터를 처리하고 이전 실행 출력 관리는 사용자 몫입니다. S3 소스에서는 객체의 마지막 수정 시간으로 처리 여부를 판단하므로, 수정된 파일은 다시 처리된다는 점도 함께 알아 두세요.",
+      "wrongExplanations": {
+        "0": "타임아웃을 늘리면 잡이 중단되지 않을 뿐 읽는 데이터 양은 그대로입니다. 실행 시간 증가의 원인을 해결하지 못합니다.",
+        "1": "conditional 트리거는 선행 잡·크롤러의 상태에 따라 실행을 거는 설정입니다. 어떤 데이터를 읽을지와는 무관합니다.",
+        "3": "MaxRetries는 잡이 실패했을 때 다시 시도하는 최대 횟수입니다. 증분 처리와 관계가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Tracking processed data using job bookmarks (AWS Glue) — 기본 Disable, S3는 마지막 수정 시간 기준",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/monitor-continuations.html"
+        },
+        {
+          "title": "AWS Glue triggers — on demand·schedule·conditional 트리거",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/about-triggers.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q10",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "AWS 서비스의 기능을 사용하여 데이터 처리(예: Amazon EMR, Amazon Redshift, AWS Glue)(3.1.4)",
+      "section": "service-features",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift의 구체화된 뷰가 매일 오전 7시에 열리는 경영 대시보드의 기반이다. 대시보드가 열릴 때 반드시 최신 상태여야 한다. 현재는 자동 새로 고침(AUTO REFRESH)만 켜져 있다. 가장 적절한 구성은?",
+      "options": [
+        "오전 7시 전에 REFRESH MATERIALIZED VIEW가 실행되도록 수동 또는 예약 새로 고침을 구성한다",
+        "자동 새로 고침을 끄고 대시보드가 기반 테이블을 직접 조회하게 한다",
+        "구체화된 뷰를 일반 뷰로 바꾸어 항상 최신 데이터를 읽게 한다",
+        "자동 새로 고침의 우선순위를 최고로 올려 다른 쿼리보다 먼저 실행되게 한다"
+      ],
+      "correct": 0,
+      "explanation": "자동 새로 고침은 기반 테이블이 변경되면 가능한 한 빨리 새로 고치지만 워크로드가 우선이므로 지연되거나 중단될 수 있습니다. 정해진 시각에 반드시 갱신돼야 하는 결정적(deterministic) 요구에는 수동 REFRESH MATERIALIZED VIEW 또는 스케줄러를 이용한 예약 새로 고침을 씁니다.",
+      "wrongExplanations": {
+        "1": "기반 테이블 직접 조회는 구체화된 뷰가 주는 성능 이점을 버리는 선택입니다. 대시보드 응답이 느려지고 클러스터 부하도 커집니다.",
+        "2": "일반 뷰로 바꾸면 매 조회가 원본을 계산하므로 역시 성능 이점을 잃습니다. 요구는 '정해진 시각의 최신성'이지 '항상 실시간'이 아닙니다.",
+        "3": "자동 새로 고침의 우선순위를 사용자가 올려 보장받는 구성이 아닙니다. 결정적 갱신이 필요하면 수동·예약 새로 고침을 쓰는 것이 공식 권고입니다."
+      },
+      "sources": [
+        {
+          "title": "Refreshing a materialized view (Amazon Redshift) — 자동 새로 고침은 워크로드 우선, 결정적 갱신은 수동·예약",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q11",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "데이터 API 사용 및 유지 관리(3.1.5)",
+      "section": "data-api",
+      "difficulty": "applied",
+      "stem": "AWS Step Functions 상태 머신이 Amazon Redshift Data API로 적재 문장을 실행한다. 일시적 오류에 대비해 상태 머신에 재시도를 설정했더니, 재시도가 일어난 날 같은 데이터가 두 번 적재됐다. 어떻게 막아야 하는가?",
+      "options": [
+        "BatchExecuteStatement의 ExecutionMode를 AUTO_COMMIT으로 설정한다",
+        "상태 머신의 재시도를 제거하고 실패 시 수동으로 재실행한다",
+        "Data API 대신 JDBC 드라이버로 직접 연결해 트랜잭션을 연다",
+        "ExecuteStatement 호출에 ClientToken을 지정하고 재시도 사이에 같은 값을 유지한다"
+      ],
+      "correct": 3,
+      "explanation": "ExecuteStatement와 BatchExecuteStatement에는 선택적 멱등 토큰인 ClientToken이 있으며 8시간 후 만료됩니다. AWS SDK로 직접 호출하면 SDK가 재시도용 토큰을 자동 생성하지만, Step Functions 상태 머신은 기본적으로 재시도가 꺼져 있고 재시도를 사용한다면 ClientToken을 넣어 재시도 사이에 같은 값을 유지해야 중복 실행을 막을 수 있습니다.",
+      "wrongExplanations": {
+        "0": "AUTO_COMMIT은 BatchExecuteStatement의 여러 문장을 단일 트랜잭션으로 묶지 않고 각각 커밋하게 하는 설정입니다. 재시도로 인한 중복 호출 자체를 막지 못하며 오히려 부분 적용 위험이 커집니다.",
+        "1": "재시도를 없애면 일시적 오류에 그대로 노출됩니다. 멱등 토큰이라는 정식 수단이 있으므로 복원력을 포기할 이유가 없습니다.",
+        "2": "Data API를 쓰는 이유가 영속 연결·드라이버 관리를 없애는 것입니다. JDBC로 되돌리는 것은 요구에 역행하며 중복 문제의 해법도 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Using the Amazon Redshift Data API — ClientToken 멱등성, Step Functions 재시도 시 토큰 유지",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q12",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "변환을 위한 데이터 준비(예: AWS Glue DataBrew 및 Amazon SageMaker Unified Studio)(3.1.6)",
+      "section": "data-prep",
+      "difficulty": "applied",
+      "stem": "데이터 분석가 팀이 코드를 작성하지 않고 원시 CSV의 값 분포를 살펴본 뒤 정제 규칙을 만들고, 그 규칙을 전체 데이터셋에 적용하는 작업을 반복하려 한다. 분석가들은 Spark나 Python을 쓰지 않는다. 가장 적합한 도구와 구성은?",
+      "options": [
+        "Amazon EMR에서 Spark 노트북을 띄워 분석가가 직접 변환 코드를 작성한다",
+        "AWS Glue DataBrew에서 프로젝트로 샘플을 탐색해 레시피를 만들고, 잡으로 전체 데이터셋에 적용한다",
+        "SageMaker Canvas의 Data Wrangler로 ETL 잡을 만들어 Glue 워크플로에 등록한다",
+        "Athena에서 CREATE TABLE AS SELECT 문을 작성해 정제 결과를 만든다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue DataBrew는 코드 없이 쓰는 완전 관리형 시각적 데이터 준비 서비스로 250개가 넘는 내장 변환을 제공합니다. 프로젝트는 읽기 전용 데이터셋과 레시피로 구성되고 콘솔은 기본으로 처음 500행 샘플을 보여 줍니다. 레시피를 게시하면 잡에서 전체 데이터셋에 적용하거나 프로파일을 만들 수 있고, Glue Studio와 통합되어 ETL 잡·워크플로 안에서 레시피를 오케스트레이션할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "Spark 노트북은 코드 작성을 전제로 합니다. '코드를 작성하지 않는다'는 요구와 맞지 않습니다.",
+        "2": "SageMaker Data Wrangler는 현재 SageMaker Canvas 안의 기능으로 제공되며 ML 데이터 준비·피처화가 목적입니다. 이 시나리오의 분석 데이터 정제 반복 작업에는 DataBrew가 더 맞습니다.",
+        "3": "CTAS는 SQL을 작성해야 하고, 값 분포를 시각적으로 탐색하며 규칙을 다듬는 작업 흐름을 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue DataBrew (AWS Prescriptive Guidance) — 코드 없는 시각적 준비, 250개 넘는 변환, Glue Studio 통합",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/databrew.html"
+        },
+        {
+          "title": "Creating and using AWS Glue DataBrew projects — 읽기 전용 데이터셋과 레시피, 기본 500행 샘플",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/projects.html"
+        },
+        {
+          "title": "Recommendations for choosing the right data preparation tool in SageMaker AI — Data Wrangler는 Canvas 기능",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-prep.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q13",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "데이터 쿼리(예: Amazon Athena)(3.1.7)",
+      "section": "athena",
+      "difficulty": "applied",
+      "stem": "Amazon Athena로 조회하는 S3 테이블의 파티션이 수만 개로 늘어 크롤러 실행과 파티션 메타데이터 관리가 부담이다. 파티션 경로는 날짜 기반으로 규칙적이다. 운영 부담을 줄이면서 파티션 정리(pruning) 이점을 유지하려면?",
+      "options": [
+        "크롤러 실행 주기를 늘려 파티션 등록 빈도를 낮춘다",
+        "테이블을 파티션 없이 다시 만들고 쿼리에서 WHERE 절로 거른다",
+        "파티션 프로젝션을 구성해 테이블 속성의 규칙으로 파티션을 계산하게 한다",
+        "Athena 워크그룹에 쿼리당 데이터 사용량 제어를 설정한다"
+      ],
+      "correct": 2,
+      "explanation": "파티션 프로젝션은 파티션 정보를 카탈로그 대신 테이블 속성의 규칙(값 범위·프로젝션 유형)으로 두고 Athena가 계산하게 합니다. 날짜처럼 규칙적인 파티션 구조에 적합하며 카탈로그에 수만 개 파티션을 등록·갱신할 필요가 없어집니다.",
+      "wrongExplanations": {
+        "0": "크롤러를 덜 돌리면 파티션 메타데이터가 최신이 아니게 되어 새 파티션을 읽지 못합니다. 부담을 미룰 뿐 해결이 아닙니다.",
+        "1": "파티션을 없애면 모든 쿼리가 전체 데이터를 스캔하므로 비용과 시간이 크게 늘어납니다. 파티션 정리 이점을 유지하라는 요구에 반합니다.",
+        "3": "데이터 사용량 제어는 쿼리당·워크그룹당 스캔량 한도를 거는 비용 통제 수단입니다. 파티션 메타데이터 관리 부담과는 다른 문제입니다."
+      },
+      "sources": [
+        {
+          "title": "Use partition projection with Amazon Athena — 테이블 속성 규칙으로 파티션 계산, 카탈로그 파티션 메타데이터 무시",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/partition-projection.html"
+        },
+        {
+          "title": "Configure per-query and per-workgroup data usage controls (Amazon Athena) — 스캔 한도는 비용 통제 수단",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/workgroups-setting-control-limits-cloudwatch.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q14",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "AWS Lambda를 사용하여 데이터 처리 자동화(3.1.8)",
+      "section": "lambda",
+      "difficulty": "applied",
+      "stem": "Amazon SQS 큐를 이벤트 소스로 쓰는 AWS Lambda 함수가 배치 안의 일부 메시지에서만 실패한다. 현재는 실패가 날 때마다 배치 전체가 큐로 돌아가 성공했던 메시지까지 다시 처리된다. 중복 처리를 줄이려면 무엇을 해야 하는가?",
+      "options": [
+        "부분 배치 응답을 사용해 실패한 메시지만 큐로 돌려보낸다",
+        "함수 타임아웃을 큐의 가시성 제한 시간보다 길게 설정한다",
+        "함수를 비동기 호출 방식으로 바꾸고 DLQ를 지정한다",
+        "예약 동시성을 늘려 배치를 더 빨리 처리한다"
+      ],
+      "correct": 0,
+      "explanation": "SQS 이벤트 소스 매핑에서 오류가 나면 기본으로 배치 전체가 큐로 돌아갑니다. 부분 배치 응답을 쓰면 실패한 메시지만 돌려보낼 수 있습니다. 함께 권장되는 구성은 함수 타임아웃을 큐 가시성 제한 시간 이하로 두고(가시성은 함수 타임아웃의 최소 6배 권장), 소스 큐 redrive 정책의 maxReceiveCount를 5 이상으로 두는 것입니다.",
+      "wrongExplanations": {
+        "1": "방향이 반대입니다. 함수 타임아웃은 큐 가시성 제한 시간 이하여야 하며, 가시성 제한 시간을 함수 타임아웃의 최소 6배로 두는 것이 권장됩니다.",
+        "2": "SQS는 이벤트 소스 매핑(폴링) 방식으로 연결됩니다. 비동기 호출 모델로 바꾸는 구성이 아니며, DLQ만으로는 배치 단위 재처리 문제가 해결되지 않습니다.",
+        "3": "동시성을 늘리면 처리량은 올라가지만 실패 배치가 통째로 되돌아가는 동작은 그대로입니다. 중복 처리를 줄이지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Creating and configuring an Amazon SQS event source mapping (Lambda) — 부분 배치 응답, 가시성 6배, maxReceiveCount 5 이상",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-configure.html"
+        },
+        {
+          "title": "How Lambda processes records from stream and queue-based event sources — 최소 한 번 처리, 멱등 설계",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-1-q15",
+      "examGuideTaskId": "dea-t3-1",
+      "skill": "이벤트 및 스케줄러 관리(예: Amazon EventBridge)(3.1.9)",
+      "section": "eventbridge",
+      "difficulty": "applied",
+      "stem": "미국 뉴욕 현지 시각 기준으로 매일 정해진 시각에 데이터 파이프라인을 시작해야 한다. 일광절약시간이 바뀌어도 현지 시각 기준은 유지돼야 하고, 호출이 실패하면 유실 없이 보관해야 한다. 가장 적합한 구성은?",
+      "options": [
+        "EventBridge 예약 규칙(scheduled rule)에 UTC cron 식을 쓰고 DST마다 식을 직접 수정한다",
+        "Lambda 함수를 1분마다 실행해 현지 시각을 계산하고 조건이 맞으면 파이프라인을 시작한다",
+        "EC2 인스턴스에 cron을 두고 인스턴스 시간대를 뉴욕으로 설정한다",
+        "EventBridge Scheduler에 시간대를 지정한 cron 일정을 만들고 DLQ로 SQS 표준 큐를 지정한다"
+      ],
+      "correct": 3,
+      "explanation": "EventBridge Scheduler는 cron·일회성 일정을 지정한 시간대로 평가하며 일광절약시간을 자동 반영합니다(봄에 존재하지 않는 시각이면 그날 호출을 건너뛰고, 가을에 시각이 반복돼도 한 번만 실행). 재시도를 모두 소진한 실패 일정은 DLQ로 보낼 수 있으며 대상은 SQS 표준 큐입니다. 시간 기반 호출에는 레거시인 예약 규칙 대신 Scheduler가 권장됩니다.",
+      "wrongExplanations": {
+        "0": "예약 규칙은 레거시이며 시간 기반 호출에는 Scheduler 사용이 권장됩니다. UTC cron을 DST마다 손으로 고치는 운영은 사고가 나기 쉽습니다.",
+        "1": "1분마다 함수를 깨우는 폴링은 불필요한 호출 비용을 만들고 시간대·DST 처리를 직접 구현해야 합니다. 관리형 기능이 이미 제공하는 일을 다시 만드는 셈입니다.",
+        "2": "EC2 cron은 인스턴스 가용성·패치·모니터링을 직접 책임져야 하고 실패 호출 보관 수단도 없습니다. 관리형 스케줄러를 쓰지 않을 이유가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Schedule types in EventBridge Scheduler — rate·cron·일회성, 시간대 지정과 DST 처리",
+          "url": "https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html"
+        },
+        {
+          "title": "Configuring a schedule's dead-letter queue in EventBridge Scheduler — SQS 표준 큐로 전달",
+          "url": "https://docs.aws.amazon.com/scheduler/latest/UserGuide/configuring-schedule-dlq.html"
+        },
+        {
+          "title": "Rules in Amazon EventBridge — 예약 규칙은 레거시, Scheduler 권장",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

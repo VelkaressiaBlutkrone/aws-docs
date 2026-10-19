@@ -1,0 +1,484 @@
+{
+  "examGuideTaskId": "dea-t2-2",
+  "taskTitle": "데이터 카탈로그 시스템 이해",
+  "domain": 2,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t2-2-q1",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "스키마를 검색하고 AWS Glue 크롤러를 사용하여 데이터 카탈로그 채우기(2.2.3)",
+      "section": "crawler-policy",
+      "difficulty": "applied",
+      "stem": "데이터 엔지니어가 Glue Data Catalog 테이블의 컬럼 정의를 직접 다듬어 두었다. 그런데 매일 밤 도는 크롤러가 그 정의를 덮어쓴다. 소스에 새 컬럼이 생기면 반영하되 기존 컬럼 정의는 그대로 유지하려면 크롤러를 어떻게 설정하는가?",
+      "options": [
+        "스키마 변경 정책을 \"Add new columns only\"(Tables.AddOrUpdateBehavior=MergeNewColumns)로 설정한다",
+        "스키마 변경 정책을 \"Ignore the change and don't update the table in the Data Catalog\"로 설정한다",
+        "DeleteBehavior를 DEPRECATE_IN_DATABASE로 설정한다",
+        "재크롤 모드를 증분(CRAWL_NEW_FOLDERS_ONLY)으로 바꾼다"
+      ],
+      "correct": 0,
+      "explanation": "크롤러의 기본 동작은 카탈로그 스키마를 크롤 대상에 맞게 갱신하는 것입니다. 기존 스키마를 바꾸지 않고 새 컬럼만 추가하도록 하려면 \"Add new columns only\"(API로는 Configuration의 Tables.AddOrUpdateBehavior=MergeNewColumns)를 씁니다.",
+      "wrongExplanations": {
+        "1": "이 옵션은 UpdateBehavior=LOG에 해당하며 기존 스키마를 바꾸지도, 새 컬럼을 추가하지도 않습니다. '새 컬럼은 반영'이라는 요구를 만족하지 못합니다.",
+        "2": "DeleteBehavior는 크롤러가 삭제된 객체를 발견했을 때의 동작(LOG / DELETE_FROM_DATABASE / DEPRECATE_IN_DATABASE)을 정합니다. 기존 컬럼 정의가 덮어써지는 문제와는 다른 축입니다.",
+        "3": "재크롤 모드는 어느 범위를 다시 크롤할지 정하는 설정입니다. 증분 모드는 update/delete 동작을 LOG로 강제하므로 새 컬럼도 반영되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Preventing a crawler from changing an existing schema — 기본은 갱신, MergeNewColumns로 새 컬럼만 추가, UpdateBehavior=LOG는 새 컬럼도 추가 안 함",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/crawler-schema-changes-prevent.html"
+        },
+        {
+          "title": "Crawler API (AWS Glue) — SchemaChangePolicy의 UpdateBehavior·DeleteBehavior 값",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-crawler-crawling.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q2",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "스키마를 검색하고 AWS Glue 크롤러를 사용하여 데이터 카탈로그 채우기(2.2.3)",
+      "section": "crawler-policy",
+      "difficulty": "applied",
+      "stem": "수백 TB 규모의 S3 테이블에서 기존 파티션 폴더 안에 객체가 계속 추가되고 일부는 삭제된다. 전체 재크롤은 시간과 비용이 과도하다. 변경된 부분만 반영하려면 어떤 재크롤 모드를 선택하는가?",
+      "options": [
+        "전체 재크롤(CRAWL_EVERYTHING)을 유지하고 스케줄 간격을 늘린다",
+        "증분 재크롤(CRAWL_NEW_FOLDERS_ONLY)을 사용한다",
+        "S3 이벤트 모드(CRAWL_EVENT_MODE)를 사용한다",
+        "크롤러를 끄고 Athena 파티션 프로젝션으로 대체한다"
+      ],
+      "correct": 2,
+      "explanation": "S3 이벤트 모드는 Amazon S3 이벤트를 SQS 큐에서 소비해 변경이 생긴 하위 폴더만 리스팅하므로 재크롤 시간과 비용을 줄입니다(첫 크롤은 전체 리스팅 모드, 크롤당 최대 100,000 메시지, 큐에 이벤트가 없으면 비용 없음).",
+      "wrongExplanations": {
+        "0": "간격을 늘려도 매 실행마다 데이터셋 전체를 다시 크롤하는 구조는 그대로입니다. 변경 반영이 늦어지기만 합니다.",
+        "1": "증분 재크롤은 새로 생긴 파티션(폴더)만 추가하며 기존 파티션의 수정이나 삭제는 감지하지 못합니다. 지문의 '기존 폴더 안의 추가·삭제' 요구를 만족하지 못합니다.",
+        "3": "파티션 프로젝션은 Athena 쿼리에서만 유효하고 카탈로그에 등록된 파티션 메타데이터를 무시합니다. 카탈로그를 공유하는 다른 엔진에는 적용되지 않으며 스키마 탐색을 대체하지도 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Accelerating crawls using Amazon S3 event notifications — SQS 이벤트로 변경된 폴더만, 첫 크롤은 리스팅 모드, 크롤당 100,000 메시지",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/crawler-s3-event-notifications.html"
+        },
+        {
+          "title": "Scheduling incremental crawls for adding new partitions — 기존 파티션의 수정·삭제 미감지",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/incremental-crawls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q3",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "파티션을 데이터 카탈로그와 동기화(2.2.4)",
+      "section": "partition-sync",
+      "difficulty": "applied",
+      "stem": "Firehose가 S3에 data/2026/10/20/ 형태(키=값 쌍이 아닌 경로)로 파일을 쓴다. Athena에서 새 날짜 데이터를 조회하려면 파티션을 등록해야 한다. 특정 날짜 파티션만 수동으로 추가하려면 어떤 방법을 쓰는가?",
+      "options": [
+        "MSCK REPAIR TABLE을 실행한다",
+        "ALTER TABLE ADD PARTITION을 LOCATION과 함께 실행한다",
+        "테이블 속성에 partition_filtering.enabled=true를 설정한다",
+        "Glue 파티션 인덱스를 생성한다"
+      ],
+      "correct": 1,
+      "explanation": "ALTER TABLE ADD PARTITION은 지정한 파티션 값과 위치만 추가합니다. LOCATION 절은 데이터가 Hive 스타일 파티셔닝(키=값)을 쓸 때는 선택이지만, 지문처럼 비 Hive 스타일 경로에서는 필수입니다.",
+      "wrongExplanations": {
+        "0": "MSCK REPAIR TABLE은 Hive 호환 파티션(키=값 경로)을 스캔해 추가합니다. 비 Hive 스타일 경로에는 동작하지 않으며 파티션을 제거하지도 않습니다.",
+        "2": "partition_filtering.enabled는 Athena가 Glue 파티션 인덱스를 활용하도록 켜는 테이블 속성입니다. 파티션을 등록하는 수단이 아닙니다.",
+        "3": "파티션 인덱스는 이미 카탈로그에 등록된 파티션의 조회를 가속하는 기능입니다. 등록되지 않은 파티션을 보이게 하지는 못합니다."
+      },
+      "sources": [
+        {
+          "title": "ALTER TABLE ADD PARTITION (Athena) — Hive 스타일이면 LOCATION 선택, 아니면 필수",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/alter-table-add-partition.html"
+        },
+        {
+          "title": "MSCK REPAIR TABLE (Athena) — Hive 호환 파티션 스캔, 추가만 하고 제거하지 않음",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/msck-repair-table.html"
+        },
+        {
+          "title": "Creating partition indexes (AWS Glue) — 조회 가속, Athena는 partition_filtering.enabled 필요",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/partition-indexes.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q4",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "파티션을 데이터 카탈로그와 동기화(2.2.4)",
+      "section": "partition-sync",
+      "difficulty": "applied",
+      "stem": "Athena·Amazon Redshift Spectrum·Amazon EMR이 같은 Glue Data Catalog 테이블을 읽는다. 파티션이 수십만 개로 늘면서 파티션 메타데이터 조회가 느려졌다. 세 엔진 모두에 효과가 있는 방법은 무엇인가?",
+      "options": [
+        "Athena 파티션 프로젝션을 활성화한다",
+        "파티션을 BatchCreatePartition으로 다시 등록한다",
+        "Glue 파티션 인덱스를 만들고 쿼리 표현식에 인덱스의 첫 키를 포함한다",
+        "크롤러 재크롤 모드를 전체(CRAWL_EVERYTHING)로 바꾼다"
+      ],
+      "correct": 2,
+      "explanation": "파티션 인덱스가 없으면 AWS Glue는 테이블의 모든 파티션을 로드한 뒤 표현식으로 필터링합니다. 인덱스는 테이블당 최대 3개 만들 수 있고 표현식에 인덱스의 첫 키가 포함되어야 사용되며, ACTIVE 상태의 인덱스는 Redshift Spectrum·EMR·Glue ETL Spark DataFrame이 자동으로 활용합니다(Athena는 테이블 속성 partition_filtering.enabled=true를 추가로 켭니다).",
+      "wrongExplanations": {
+        "0": "파티션 프로젝션은 테이블을 Athena로 질의할 때만 사용할 수 있고, 켜면 카탈로그에 등록된 파티션 메타데이터를 무시합니다. Spectrum·EMR은 표준 파티션 메타데이터를 쓰므로 효과가 없습니다.",
+        "1": "BatchCreatePartition은 파티션을 배치로 생성하는 등록 API(호출당 최대 100개)입니다. 조회 성능을 올리는 수단이 아닙니다.",
+        "3": "전체 재크롤은 매 실행마다 데이터셋 전체를 다시 크롤하는 설정으로, 크롤 비용만 늘고 파티션 조회 성능과는 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Creating partition indexes (AWS Glue) — 인덱스 없으면 전체 파티션 로드, 테이블당 3개, 첫 키 포함 필요, 엔진별 활용 조건",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/partition-indexes.html"
+        },
+        {
+          "title": "Use partition projection with Amazon Athena — Athena 쿼리에서만 유효, 카탈로그 파티션 메타데이터 무시",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/partition-projection.html"
+        },
+        {
+          "title": "BatchCreatePartition (AWS Glue Web API Reference) — PartitionInputList 최대 100개",
+          "url": "https://docs.aws.amazon.com/glue/latest/webapi/API_BatchCreatePartition.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q5",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "비즈니스 데이터 카탈로그 만들기 및 관리(2.2.6)",
+      "section": "business-catalog",
+      "difficulty": "applied",
+      "stem": "현업 분석가들이 비즈니스 용어로 데이터를 검색하고, 사용 사유를 적어 접근을 요청하고 데이터 소유 팀이 승인하는 흐름이 필요하다. 기술 스키마는 이미 Glue Data Catalog와 Amazon Redshift에 있다. 어떤 서비스를 쓰는가?",
+      "options": [
+        "AWS Glue 크롤러로 사용자 정의 분류자를 추가한다",
+        "AWS Lake Formation LF-Tag를 설계해 부여한다",
+        "Amazon SageMaker Catalog에 자산을 게시하고 구독 요청·승인 흐름을 쓴다",
+        "Glue Data Catalog 테이블에 테이블 버전을 활성화한다"
+      ],
+      "correct": 2,
+      "explanation": "Amazon SageMaker Catalog는 여러 프로젝트가 게시한 자산의 카탈로그이며 범위는 도메인입니다. 비즈니스 용어집·메타데이터 폼·데이터 제품으로 자산을 설명하고, 소비 프로젝트가 구독을 요청하면 소유 프로젝트가 승인하는 흐름을 제공합니다. 데이터 소스로 AWS Glue와 Amazon Redshift의 기술 메타데이터를 가져올 수 있습니다.",
+      "wrongExplanations": {
+        "0": "분류자는 크롤러가 파일 형식과 스키마를 추론할 때 쓰는 규칙입니다. 검색·구독 승인 워크플로와는 무관합니다.",
+        "1": "LF-Tag는 Lake Formation 권한을 속성 기준으로 부여하는 수단입니다. 비즈니스 용어 검색이나 구독 요청·승인 절차를 제공하지는 않습니다.",
+        "3": "테이블 버전은 UpdateTable 시 갱신 전 상태를 아카이브하는 기술 메타데이터 기능입니다. 비즈니스 카탈로그 기능이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Unified Studio terminology and concepts — 카탈로그 범위는 도메인, 자산 소유 프로젝트, 구독 요청 상태, 데이터 소스는 Glue·Redshift",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/concepts.html"
+        },
+        {
+          "title": "Catalog in IDC-based domains — 인벤토리 → 큐레이션 → 게시 흐름",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/working-with-business-catalog.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q6",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "비즈니스 데이터 카탈로그 만들기 및 관리(2.2.6)",
+      "section": "business-catalog",
+      "difficulty": "applied",
+      "stem": "Amazon SageMaker Unified Studio에서 한 팀이 프로젝트 인벤토리에 데이터 자산을 가져와 비즈니스 이름과 용어를 붙였다. 그런데 다른 팀이 카탈로그를 검색해도 이 자산이 보이지 않는다. 가장 가능성 높은 원인은 무엇인가?",
+      "options": [
+        "자산이 아직 카탈로그에 게시되지 않았다",
+        "자산에 메타데이터 폼이 연결되지 않았다",
+        "다른 팀의 프로젝트가 같은 도메인에 속하지 않는다",
+        "자산의 소유 프로젝트가 지정되지 않았다"
+      ],
+      "correct": 0,
+      "explanation": "프로젝트 인벤토리 자산은 명시적으로 게시하지 않으면 도메인의 모든 사용자가 검색·탐색할 수 없습니다. 게시해야 도메인 사용자가 발견할 수 있고, 인벤토리 자산 중 최신 버전만 게시할 수 있으며 갱신 후에는 다시 게시해야 합니다.",
+      "wrongExplanations": {
+        "1": "메타데이터 폼은 자산을 인벤토리로 만들거나 게시할 때 수집·저장할 메타데이터를 정의하는 수단입니다. 폼이 없다고 해서 게시된 자산이 검색에서 사라지지는 않습니다.",
+        "2": "SageMaker Catalog의 범위는 도메인이고 게시된 자산은 도메인의 모든 프로젝트가 발견할 수 있습니다. 같은 도메인이라는 전제에서는 게시 여부가 먼저 확인할 원인입니다.",
+        "3": "카탈로그에 있는 모든 자산에는 소유(생산자) 프로젝트가 있습니다. 소유 프로젝트가 비어 있는 상태는 정상 흐름에서 발생하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Catalog in IDC-based domains — 게시 전에는 도메인 사용자 검색·탐색에 보이지 않음, 최신 버전만 게시 가능",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/working-with-business-catalog.html"
+        },
+        {
+          "title": "Amazon SageMaker Unified Studio terminology and concepts — 카탈로그 범위는 도메인, 모든 자산에 소유 프로젝트 존재",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q7",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "기술 데이터 카탈로그 작성 및 참조(2.2.2)",
+      "section": "hive-metastore",
+      "difficulty": "applied",
+      "stem": "온프레미스에서 운영하던 Apache Hive 메타스토어를 그대로 유지하면서, 그 메타데이터가 가리키는 데이터를 Amazon Athena로 질의하려 한다. 어떻게 구성하는가?",
+      "options": [
+        "Glue 크롤러의 데이터 스토어로 Hive 메타스토어를 추가한다",
+        "Athena에서 Apache Hive 메타스토어 데이터 소스를 만들고 Lambda 함수를 생성·구성한다",
+        "Hive 메타스토어 테이블을 Glue Data Catalog에 BatchCreatePartition으로 등록한다",
+        "Athena 파티션 프로젝션을 활성화해 메타스토어 조회를 생략한다"
+      ],
+      "correct": 1,
+      "explanation": "Athena에서 외부 Apache Hive 메타스토어를 쓰려면 해당 데이터 소스를 만들고 Lambda 함수를 생성·구성해야 합니다. Glue Data Catalog는 Hive 메타스토어와 호환되는 애플리케이션과 통합되지만, 기존 메타스토어를 그대로 두고 질의하는 경로는 이 커넥터입니다.",
+      "wrongExplanations": {
+        "0": "크롤러가 크롤할 수 있는 데이터 스토어 목록(S3·DynamoDB·Delta/Iceberg/Hudi·JDBC·MongoDB 계열)에 Hive 메타스토어는 없습니다.",
+        "2": "BatchCreatePartition은 Glue Data Catalog에 파티션을 생성하는 API입니다. 'Hive 메타스토어를 그대로 유지한다'는 요구와 달리 메타데이터를 옮기는 작업이 됩니다.",
+        "3": "파티션 프로젝션은 파티션 값·위치를 테이블 속성의 규칙으로 계산하는 Athena 기능으로, 외부 메타스토어 연결과는 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Connect Athena to an Apache Hive metastore — Lambda 함수 생성·구성 필요",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/connect-to-data-source-hive-connecting-athena-to-an-apache-hive-metastore.html"
+        },
+        {
+          "title": "Supported data sources for crawling — 크롤러 지원 스토어 목록(Hive 메타스토어 없음)",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/crawler-data-stores.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q8",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "기술 데이터 카탈로그 작성 및 참조(2.2.2)",
+      "section": "catalog-structure",
+      "difficulty": "applied",
+      "stem": "여러 Amazon EMR 클러스터가 생성·종료를 반복하면서 같은 Hive 테이블 정의를 공유해야 한다. 클러스터가 종료돼도 테이블 정의가 남아야 한다. 어떤 구성이 적절한가?",
+      "options": [
+        "각 클러스터의 로컬 MySQL 메타스토어를 쓰고 정의를 스크립트로 복제한다",
+        "AWS Glue Data Catalog를 Hive 메타스토어로 지정한다",
+        "Hive 테이블을 LOCATION 없이 만들어 EMR 기본 위치에 저장한다",
+        "Athena 파티션 프로젝션을 활성화한다"
+      ],
+      "correct": 1,
+      "explanation": "EMR 릴리스 5.8.0 이상에서 Hive가 AWS Glue Data Catalog를 메타스토어로 쓰게 설정할 수 있고, 문서는 영속 메타스토어나 여러 클러스터가 공유하는 메타스토어가 필요할 때 이 구성을 권장합니다. Data Catalog는 영속 메타데이터 저장소이므로 클러스터가 종료돼도 테이블 정의가 남습니다.",
+      "wrongExplanations": {
+        "0": "클러스터마다 로컬 메타스토어를 두고 스크립트로 복제하면 정의가 어긋나기 쉽고 클러스터 종료 시 유실됩니다. 문서가 권장하는 구성이 아닙니다.",
+        "2": "LOCATION 없이 Hive 테이블을 만들면 기본 위치가 HDFS이고, HDFS는 임시 저장소라 클러스터가 종료되면 테이블 데이터가 사라집니다. 문서는 S3 LOCATION 지정을 권고합니다.",
+        "3": "파티션 프로젝션은 Athena 쿼리에서만 유효한 파티션 계산 기능입니다. EMR의 Hive 메타스토어 공유 문제를 해결하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Using the AWS Glue Data Catalog as the metastore for Hive (Amazon EMR) — EMR 5.8.0 이상, 영속·공유 메타스토어가 필요할 때 권장, LOCATION 미지정 시 HDFS로 데이터 유실",
+          "url": "https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hive-metastore-glue.html"
+        },
+        {
+          "title": "AWS Glue concepts — Data Catalog는 영속 메타데이터 저장소, 계정·리전당 1개",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q9",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "스키마를 검색하고 AWS Glue 크롤러를 사용하여 데이터 카탈로그 채우기(2.2.3)",
+      "section": "crawler-tables",
+      "difficulty": "applied",
+      "stem": "하나의 S3 프리픽스를 크롤했는데 의도와 달리 Glue Data Catalog에 테이블이 여러 개 생성됐다. 가장 가능성 높은 원인은 무엇인가?",
+      "options": [
+        "폴더 수준 스키마가 서로 비슷해 파티션으로 묶였다",
+        "파일 포맷·압축 방식·스키마·S3 파티션 구조가 폴더마다 다르다",
+        "크롤러 스케줄 간격이 최소 정밀도인 5분보다 짧게 설정됐다",
+        "SampleSize 값이 너무 작아 일부 파일만 읽혔다"
+      ],
+      "correct": 1,
+      "explanation": "크롤러는 파일 포맷·압축 방식·스키마·S3 파티션 구조가 서로 다르면 테이블을 여러 개 만듭니다. 반대로 폴더 수준 스키마가 대체로 비슷하면 별도 테이블이 아니라 한 테이블의 파티션으로 만듭니다. 의도적으로 테이블을 나누려면 각 테이블의 루트 폴더를 크롤러의 별도 데이터 스토어로 추가합니다.",
+      "wrongExplanations": {
+        "0": "스키마가 비슷한 경우는 오히려 테이블 하나의 파티션으로 묶이는 조건입니다. 지문의 증상(테이블이 여러 개)과 반대입니다.",
+        "2": "크롤러 스케줄의 최소 정밀도는 5분이며, 스케줄 설정은 테이블 분할과 무관합니다.",
+        "3": "SampleSize는 리프 폴더당 크롤할 파일 수(1~249)를 제한하는 옵션입니다. 샘플 수가 적다고 테이블이 여러 개로 나뉘는 것이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "How do I prevent the creation of multiple tables during an AWS Glue crawler run? — 포맷·압축·스키마·파티션 구조 차이가 원인",
+          "url": "https://repost.aws/knowledge-center/glue-crawler-multiple-tables"
+        },
+        {
+          "title": "Using crawlers to populate the Data Catalog — 스키마가 비슷하면 파티션으로, 별도 테이블은 루트 폴더를 별도 데이터 스토어로",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q10",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "카탈로그 구축을 위한 새 소스 또는 대상 연결 만들기(2.2.5)",
+      "section": "glue-connection",
+      "difficulty": "applied",
+      "stem": "프라이빗 서브넷의 Amazon RDS 인스턴스를 크롤하려고 AWS Glue JDBC 연결을 만들었는데 Test connection이 시간 초과된다. AWS 문서가 요구하는 점검 항목에 해당하는 것은 무엇인가?",
+      "options": [
+        "연결의 보안 그룹에 모든 TCP 포트에 대한 self-referenced 인바운드 규칙이 있는지 확인한다",
+        "연결의 보안 그룹 인바운드를 0.0.0.0/0으로 전체 개방한다",
+        "크롤러의 SampleSize를 249로 올린다",
+        "연결 유형을 Network에서 Kafka로 변경한다"
+      ],
+      "correct": 0,
+      "explanation": "AWS 문서는 Glue 연결의 보안 그룹 중 하나에 모든 TCP 포트에 대한 self-referenced 인바운드 규칙이 있어야 하고, 하나는 아웃바운드가 열려 있어야 한다고 설명합니다. 또 서브넷의 여유 IP 수가 잡 worker 수보다 많아야 하고, VPC 밖 데이터라면 NAT 게이트웨이 경로가 없으면 연결이 시간 초과됩니다.",
+      "wrongExplanations": {
+        "1": "전체 개방은 문서가 제시한 해법이 아니며 불필요하게 공격 표면을 넓힙니다. 요구되는 것은 self-referenced 규칙입니다.",
+        "2": "SampleSize는 리프 폴더당 크롤할 S3 파일 수를 제한하는 옵션입니다. JDBC 연결의 네트워크 도달성과 무관합니다.",
+        "3": "Kafka 연결 유형은 부트스트랩 서버 URL을 지정하는 스트리밍 소스용입니다. RDS 같은 JDBC 소스의 연결 유형이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Why does my AWS Glue test connection fail? — self-referenced 인바운드 규칙, 서브넷 여유 IP, NAT 경로",
+          "url": "https://repost.aws/knowledge-center/glue-test-connection-failed"
+        },
+        {
+          "title": "AWS Glue connection properties — Network·Kafka 등 연결 유형",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/connection-properties.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q11",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "카탈로그 구축을 위한 새 소스 또는 대상 연결 만들기(2.2.5)",
+      "section": "crawler-basics",
+      "difficulty": "foundational",
+      "stem": "AWS Glue 크롤러가 데이터 스토어를 크롤할 때 Glue 연결(Connection)이 반드시 필요한 대상은 무엇인가?",
+      "options": [
+        "Amazon S3 데이터 스토어",
+        "JDBC·MongoDB·Amazon DocumentDB 데이터 스토어",
+        "Amazon Kinesis Data Streams 데이터 스트림",
+        "Delta Lake 형식의 Amazon S3 테이블"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue 문서는 JDBC·MongoDB·Amazon DocumentDB 데이터 스토어를 크롤할 때 연결이 필수이고, Amazon S3는 Network 유형 연결을 선택적으로 지정할 수 있다고 설명합니다. 연결은 접속 정보를 저장한 Data Catalog 객체입니다.",
+      "wrongExplanations": {
+        "0": "S3 대상에는 Network 유형 연결을 선택적으로 지정할 수 있을 뿐 필수가 아닙니다.",
+        "2": "AWS Glue는 현재 데이터 스트림용 크롤러를 지원하지 않습니다. 스트리밍 소스는 Data Catalog 테이블을 수동으로 정의하고 스트림 속성을 지정합니다.",
+        "3": "Delta Lake는 크롤러가 네이티브 클라이언트로 접근하는 S3 기반 형식입니다. 연결이 필수인 대상 목록에 포함되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Supported data sources for crawling — JDBC·MongoDB·DocumentDB는 연결 필수, S3는 Network 연결 선택, 데이터 스트림용 크롤러 없음",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/crawler-data-stores.html"
+        },
+        {
+          "title": "AWS Glue concepts — 스트리밍 소스는 테이블을 수동 정의하고 스트림 속성 지정",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q12",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "파티션을 데이터 카탈로그와 동기화(2.2.4)",
+      "section": "partition-sync",
+      "difficulty": "applied",
+      "stem": "AWS Glue ETL 잡이 변환 결과를 Amazon S3에 Parquet으로 쓴다. 잡이 쓰는 즉시 새 파티션이 Glue Data Catalog에 등록되게 하려고 updateBehavior를 UPDATE_IN_DATABASE로 설정했지만 카탈로그가 갱신되지 않는다. 원인은 무엇인가?",
+      "options": [
+        "대상이 S3라서 카탈로그 갱신이 지원되지 않는다",
+        "enableUpdateCatalog를 true로 설정하지 않았다",
+        "Parquet 형식은 카탈로그 갱신을 지원하지 않는다",
+        "updateBehavior를 LOG로 설정해야 한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue 문서는 enableUpdateCatalog가 true로 설정되지 않으면 updateBehavior 값과 무관하게 카탈로그가 갱신되지 않는다고 설명합니다. enableUpdateCatalog=True와 partitionKeys를 함께 지정해야 테이블·파티션이 등록됩니다.",
+      "wrongExplanations": {
+        "0": "반대입니다. 이 기능은 Amazon S3 대상만 지원합니다.",
+        "2": "지원 형식은 json·csv·avro·parquet입니다(parquet은 Glue 최적화 parquet writer 필요). Parquet이 지원되지 않는다는 서술은 틀렸습니다.",
+        "3": "updateBehavior=LOG는 스키마를 유지하면서 새 파티션만 추가하는 선택지입니다. 기본값 UPDATE_IN_DATABASE도 새 파티션을 추가하므로, 지문 증상의 원인은 updateBehavior가 아니라 enableUpdateCatalog입니다."
+      },
+      "sources": [
+        {
+          "title": "Updating the schema, and adding new partitions in the Data Catalog using AWS Glue ETL jobs — enableUpdateCatalog 필수, S3 타깃만, json·csv·avro·parquet",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/update-from-job.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q13",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "데이터 카탈로그를 사용하여 데이터 소스의 데이터 사용(2.2.1)",
+      "section": "catalog-structure",
+      "difficulty": "foundational",
+      "stem": "AWS Glue Data Catalog의 테이블과 데이터베이스에 대한 설명으로 올바른 것은 무엇인가?",
+      "options": [
+        "테이블을 만들면 원본 데이터가 Data Catalog로 복사된다",
+        "테이블·데이터베이스는 메타데이터 정의이고 실제 데이터는 원래 데이터 스토어에 남는다",
+        "Data Catalog는 계정당 하나이며 모든 리전에서 공유된다",
+        "데이터베이스는 물리적 스토리지 단위이고 테이블은 그 안의 파일이다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue 문서는 Data Catalog의 테이블 정의가 메타데이터이며 실제 데이터는 원래 데이터 스토어에 남는다고 설명합니다. 데이터베이스는 연관된 테이블 정의를 묶은 논리 그룹입니다.",
+      "wrongExplanations": {
+        "0": "Data Catalog는 메타데이터 저장소이므로 원본 데이터를 복사하지 않습니다.",
+        "2": "각 AWS 계정은 리전마다 하나의 AWS Glue Data Catalog를 가집니다. 모든 리전에서 공유되는 단일 카탈로그가 아닙니다.",
+        "3": "데이터베이스는 물리적 스토리지가 아니라 테이블 정의의 논리 그룹이고, 테이블도 파일이 아니라 메타데이터 정의입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue concepts — 테이블 정의는 메타데이터이고 실제 데이터는 원래 스토어에, 계정·리전마다 카탈로그 1개",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q14",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "스키마를 검색하고 AWS Glue 크롤러를 사용하여 데이터 카탈로그 채우기(2.2.3)",
+      "section": "crawler-basics",
+      "difficulty": "foundational",
+      "stem": "비표준 형식의 로그 파일을 크롤하는데 크롤러가 스키마를 제대로 인식하지 못한다. 사용자 정의 분류자를 추가했을 때 AWS Glue가 분류자를 호출하는 순서와 판정 규칙은 무엇인가?",
+      "options": [
+        "내장 분류자를 먼저 호출하고, 실패하면 사용자 정의 분류자를 호출한다",
+        "사용자 정의 분류자를 지정한 순서대로 먼저 호출하고, certainty가 1.0인 결과를 쓰며 없으면 가장 높은 certainty를 쓴다",
+        "모든 분류자를 동시에 호출하고 가장 먼저 응답한 결과를 쓴다",
+        "사용자 정의 분류자만 호출하며 내장 분류자는 사용되지 않는다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue는 사용자 정의 분류자를 지정한 순서대로 먼저 호출하고, 필요하면 내장 분류자도 호출합니다. certainty 1.0을 반환한 분류자의 결과를 쓰고, 없으면 가장 높은 certainty의 결과를, 0.0을 넘는 것이 없으면 기본 분류 문자열 UNKNOWN을 씁니다.",
+      "wrongExplanations": {
+        "0": "순서가 반대입니다. 사용자 정의 분류자가 먼저 호출됩니다.",
+        "2": "분류자는 우선순위가 매겨진 목록을 순서대로 거치며, certainty 값으로 결과를 선택합니다. 응답 속도로 고르지 않습니다.",
+        "3": "사용자 정의 분류자가 결과를 내지 못하면 내장 분류자도 호출됩니다."
+      },
+      "sources": [
+        {
+          "title": "Defining and managing classifiers — 사용자 정의 분류자 먼저, certainty 1.0 우선, 없으면 최고 certainty, 0.0 초과 없으면 UNKNOWN",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/add-classifier.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t2-2-q15",
+      "examGuideTaskId": "dea-t2-2",
+      "skill": "파티션을 데이터 카탈로그와 동기화(2.2.4)",
+      "section": "partition-sync",
+      "difficulty": "applied",
+      "stem": "날짜·시간 파티션이 규칙적으로 늘어나는 S3 테이블을 Athena로만 질의한다. 파티션 등록 작업 자체를 없애고 싶다. 파티션 프로젝션을 활성화할 때 함께 알아야 할 제약은 무엇인가?",
+      "options": [
+        "프로젝션을 켜면 Athena가 카탈로그에 등록된 파티션 메타데이터를 무시하며, 프로젝션은 Athena로 질의할 때만 쓸 수 있다",
+        "프로젝션을 켜면 범위 밖 파티션 값을 조회할 때 쿼리가 오류로 실패한다",
+        "프로젝션은 Hive 스타일(키=값) 경로에서만 동작한다",
+        "프로젝션을 켜면 MSCK REPAIR TABLE을 더 자주 실행해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "Athena 문서는 테이블에 파티션 프로젝션을 활성화하면 Athena가 그 테이블의 파티션 메타데이터를 무시한다고 설명하며, 파티션 프로젝션은 테이블을 Athena로 질의할 때만 사용할 수 있다고 명시합니다. 그래서 Redshift Spectrum·EMR 등 다른 엔진이 같은 테이블을 읽는 환경에는 맞지 않습니다.",
+      "wrongExplanations": {
+        "1": "문서는 프로젝션 범위 밖의 값을 조회해도 오류가 아니라 쿼리가 실행되고 0행을 반환한다고 설명합니다.",
+        "2": "Hive 스타일 경로에서만 동작한다는 제약은 MSCK REPAIR TABLE에 해당합니다. 프로젝션은 테이블 속성에 정의한 규칙으로 값을 계산합니다.",
+        "3": "프로젝션은 파티션을 수동으로 등록할 필요를 없애는 기능입니다. MSCK 실행을 더 자주 요구하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Use partition projection with Amazon Athena — 카탈로그 파티션 메타데이터 무시, Athena 질의에서만 사용 가능, 범위 밖 값은 0행 반환",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/partition-projection.html"
+        },
+        {
+          "title": "MSCK REPAIR TABLE (Athena) — Hive 호환 파티션에서 동작",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/msck-repair-table.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

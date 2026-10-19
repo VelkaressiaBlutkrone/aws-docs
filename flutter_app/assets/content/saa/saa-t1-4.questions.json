@@ -89,7 +89,7 @@
         "Amazon API Gateway REST API"
       ],
       "correct": 2,
-      "explanation": "AWS WAF는 HTTP/HTTPS 트래픽을 처리하는 리소스(CloudFront·ALB·API Gateway·AppSync·Cognito User Pool·App Runner·Verified Access)에 연결됩니다. RDS는 데이터베이스 서비스로 HTTP 요청을 처리하지 않으며 WAF 웹 ACL 연결 대상이 아닙니다.",
+      "explanation": "AWS WAF는 HTTP/HTTPS 트래픽을 처리하는 리소스(CloudFront·API Gateway REST API·ALB·AppSync GraphQL API·Cognito User Pool·App Runner·Bedrock AgentCore Gateway·Verified Access·Amplify 9종)에 연결됩니다. RDS는 데이터베이스 서비스로 HTTP 요청을 처리하지 않으며 WAF 웹 ACL 연결 대상이 아닙니다.",
       "wrongExplanations": {
         "0": "CloudFront 배포는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다.",
         "1": "ALB는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다.",
@@ -228,19 +228,20 @@
       "stem": "애플리케이션이 RDS 데이터베이스에 접속하는 비밀번호를 코드에 하드코딩해 왔다. 보안 강화를 위해 비밀번호를 코드에서 제거하고 90일마다 자동 교체하도록 설계를 변경하려 한다. 가장 적합한 서비스는?",
       "options": [
         "AWS Systems Manager Parameter Store(표준 티어) — 무료이며 자동 교체 기능이 내장돼 있다",
-        "AWS Secrets Manager — RDS 자격증명을 저장하고 Lambda 기반 자동 교체 일정을 90일로 설정한다",
+        "AWS Secrets Manager — RDS 자격증명을 저장하고 관리형 교체 일정을 90일로 설정한다",
         "AWS KMS — 비밀번호를 KMS 키로 암호화해 코드에 저장한다",
         "Amazon S3 — 암호화된 비밀번호 파일을 S3에 저장하고 애플리케이션이 런타임에 읽는다"
       ],
       "correct": 1,
-      "explanation": "AWS Secrets Manager는 RDS 자격증명 저장과 자동 교체를 모두 지원합니다. RDS에 대한 내장 Lambda 교체 함수를 제공하며, 교체 일정을 설정하면 Secrets Manager가 자동으로 DB 비밀번호를 변경하고 최신 값을 보관합니다. 애플리케이션은 런타임에 API를 호출해 최신 자격증명을 동적으로 조회합니다.",
+      "explanation": "AWS Secrets Manager는 RDS 자격증명 저장과 자동 교체를 모두 지원합니다. RDS·Aurora 마스터 사용자 자격증명은 Lambda 함수가 필요 없는 관리형 교체(managed rotation)를 쓰고, 그 외 비밀은 Lambda 교체 함수를 씁니다. 어느 쪽이든 교체 일정을 설정하면 Secrets Manager가 자동으로 DB 비밀번호를 변경하고 최신 값을 보관합니다. 애플리케이션은 런타임에 API를 호출해 최신 자격증명을 동적으로 조회합니다.",
       "wrongExplanations": {
         "0": "Parameter Store 표준 티어는 기본 자동 교체 기능이 없습니다. 교체가 필요하면 직접 구현해야 합니다 — 자동 교체 요구사항에는 Secrets Manager가 적합합니다.",
         "2": "KMS는 데이터 암호화 서비스입니다. 비밀번호를 코드에서 제거하고 자동 교체하는 수명 주기 관리 기능이 없습니다.",
         "3": "S3에 비밀번호 파일을 저장하면 자동 교체 메커니즘이 없고 파일 관리·접근 제어가 복잡해집니다. Secrets Manager가 이 목적에 설계된 서비스입니다."
       },
       "sources": [
-        { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" }
+        { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" },
+        { "title": "Secrets Manager 관리형 교체 (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_managed.html" }
       ],
       "verified": false
     },
@@ -285,7 +286,7 @@
       "wrongExplanations": {
         "0": "ALB에만 WAF를 연결하면 악성 요청이 CloudFront 엣지를 통과해 오리진 리전까지 도달한 후 차단됩니다. 엣지 필터링보다 오리진 부하와 비용이 증가합니다.",
         "1": "WAF는 EC2 보안 그룹에 직접 적용되지 않습니다. 보안 그룹은 네트워크 트래픽(IP·포트) 제어 도구이며 HTTP 요청 내용을 파싱하지 않습니다.",
-        "3": "Route 53에는 WAF 웹 ACL을 연결할 수 없습니다. WAF가 지원하는 리소스는 CloudFront·ALB·API Gateway·AppSync·Cognito User Pool·App Runner·Verified Access입니다."
+        "3": "Route 53에는 WAF 웹 ACL을 연결할 수 없습니다. WAF가 지원하는 리소스는 CloudFront·API Gateway REST API·ALB·AppSync GraphQL API·Cognito User Pool·App Runner·Bedrock AgentCore Gateway·Verified Access·Amplify입니다."
       },
       "sources": [
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
