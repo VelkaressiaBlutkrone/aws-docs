@@ -1,6 +1,6 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-10-19(#135~#144 릴리스 반영) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-10-20(릴리스 번호 서술 규약 교체 · §2·§3 아카이브 표기) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -10,9 +10,9 @@ _갱신: 2026-10-19(#135~#144 릴리스 반영) · 다음 작업자(사람 또�
 
 **브랜치 전략(2026-06-15~):** `main` 보호, `develop` 통합. 작업 브랜치 → develop PR → (릴리스 시) develop → main PR. 전역 규칙 `~/.claude/rules/git-branch-flow.md`.
 
-**✅ 최신 상태(2026-10-19 실측):** **PR#144까지 출고 완료 — develop·main 내용 동일(미릴리스 0) · 열린 PR 0 · 로컬·원격 브랜치는 `develop`·`main`만.** `flutter test` **1,076 그린** · `flutter analyze` **0건** · 라이브 index 200 · R2 강의 mp3 206(2026-10-17 실측). 콘텐츠 릴리스는 PR#142(`68ab263`, Pages run 39230610259 success), 그 뒤 현황 문서 부기만 PR#144(`b12cd10`, Pages success)로 따라 나갔다. 릴리스 직후 라이브 검증: DEA 신규 학습문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`. 최근 작업은 **Associate 5종 콘텐츠 1차 + SAA/SOA 사실 정정**(§0-2026-10-19, #135~#140), 그 앞은 **동기 프로토콜 v2**(§0-t, PR#128~#132)와 **2026-09-22 앱 코드·UX 리뷰 반영**(§0-s, PR#122~#127)이다.
+**✅ 최신 상태(2026-10-20 실측):** **develop·main 내용 동일(미릴리스 0) · 열린 PR 0 · 로컬·원격 브랜치는 `develop`·`main`만.** `flutter test` **1,076 그린** · `flutter analyze` **0건** · 라이브 index 200 · R2 강의 mp3 206(2026-10-17 실측). **"몇 번 PR까지 출고"식 번호 표기는 쓰지 않는다**(서술 규약 ②) — 번호가 필요하면 `gh pr list --base main --state merged --limit 1` 또는 `git log --oneline develop..main`으로 조회한다. 직전 콘텐츠 릴리스는 PR#142(`68ab263`, Pages run 39230610259 success)이고, 그 뒤 루트 현황 문서만 담은 부기 릴리스가 PR#144·PR#146으로 두 번 따라 나갔다. 콘텐츠 릴리스 직후 라이브 검증: DEA 신규 학습문서 200 · 정정된 SAA/SOA 본문 반영 · `exam_guides/SOA-C03.json` `guideVersion 1.1`. 최근 작업은 **Associate 5종 콘텐츠 1차 + SAA/SOA 사실 정정**(§0-2026-10-19, #135~#140), 그 앞은 **동기 프로토콜 v2**(§0-t, PR#128~#132)와 **2026-09-22 앱 코드·UX 리뷰 반영**(§0-s, PR#122~#127)이다.
 
-**📌 이 문서의 두 가지 서술 규약(2026-10-19):** ① 완료 섹션 라벨은 이제 **날짜(`## 0-YYYY-MM-DD.`)** 를 쓴다 — 옛 알파벳 라벨은 `0-q`~`0-t`와 `0-u`~`0-x`가 서로 다른 트랙에 쓰여 이미 충돌했다(아래 `0-u`는 2026-06 시각 리펙토링 PR4). ② 현황은 **커밋 해시로 고정하지 않고 "몇 번 PR까지 출고됐는지"로** 적는다 — 릴리스 직후의 부기 커밋이 곧바로 "미릴리스"가 되어 부기가 부기를 부르는 순환을 끊기 위해서다(#141→#143→#144에서 실제로 세 번 반복됐다).
+**📌 이 문서의 두 가지 서술 규약(① 2026-10-19 · ② 2026-10-20 개정):** ① 완료 섹션 라벨은 이제 **날짜(`## 0-YYYY-MM-DD.`)** 를 쓴다 — 옛 알파벳 라벨은 `0-q`~`0-t`와 `0-u`~`0-x`가 서로 다른 트랙에 쓰여 이미 충돌했다(아래 `0-u`는 2026-06 시각 리펙토링 PR4). ② 현황은 **커밋 해시도 PR 번호도 쓰지 않고 불변식("develop·main 내용 동일 · 미릴리스 0 · 열린 PR 0")으로** 적는다 — 릴리스 직후의 부기 커밋이 곧바로 "미릴리스"가 되어 부기가 부기를 부르기 때문이다(부기 문서 PR가 그것을 릴리스하는 PR을 다시 부른 일이 `#143`→`#144`, `#145`→`#146`으로 두 번 반복됐다. 그 앞 `#141`은 콘텐츠 릴리스 `#142`에 함께 실렸다). 2026-10-19의 1차 시도("해시 대신 몇 번 PR까지 출고")도 `#146`이 들어오자 같은 이유로 구식화해서, 2026-10-20에 번호를 아예 쓰지 않는 쪽으로 바꿨다. **완료 이력에 번호를 적는 것은 그대로 둔다**(이미 끝난 사실은 구식화하지 않는다) — 금지되는 것은 "지금 어디까지 나갔나"를 번호로 적는 것이다.
 
 **⚠️ 이 문서의 공백:** 아래 완료 항목(§0-r 이하)은 2026-06 트랙까지만 기록돼 있다. 2026-07 전면 감사 → 오디오 R2 분리 호스팅 → SAA 오디오 롤아웃(2026-07-02~09-03) 이력의 정본은 [WORKLIST.md](WORKLIST.md) §A·§B와 [docs/audits/2026-07/ROADMAP.md](docs/audits/2026-07/ROADMAP.md)다.
 
@@ -160,6 +160,9 @@ _갱신: 2026-10-19(#135~#144 릴리스 반영) · 다음 작업자(사람 또�
 ---
 
 ## 2. 대기 작업 (콘텐츠 백로그 — 연기 조건 "고도화 완료"는 2026-06-12 충족, **모의고사 중량·증가 브레인스토밍에서 우선순위 재검토 대기**)
+
+> ⚠️ **아래는 2026-06 시점 스냅샷(아카이브)이다.** 현재 현황·우선순위는 §0과 [WORKLIST.md](WORKLIST.md)를 본다. 이 절의 "릴리스 대기"·"현재 문항 0" 같은 서술은 당시 값이며 지금은 맞지 않는다(③ C-중량은 main 릴리스 완료, ② SAA 문항은 드래프트 360 존재).
+
 이전 핸드오프 상세는 git `9c30e72`의 `HANDOFF.md` 참조. 요약:
 - **① ≥15 심화:** ~~CLF 각 Task 12→15 verified(+57문항).~~ **완료·배포(2026-06-15, §0-q) — 라이브 반영.** 워크플로 메모리 [[content-density-loop]].
 - **② SAA-C03 문항 착수:** 현재 문항 0(학습문서만). **고도화 후 재검토.**
@@ -169,12 +172,12 @@ _갱신: 2026-10-19(#135~#144 릴리스 반영) · 다음 작업자(사람 또�
 ---
 
 ## 3. 워킹트리 / 메모
-- 미커밋: 없음. 전체 스위트 기준점: **develop = 512 그린**(Phase 1 딥링크 코어) · **`feat/concept-deeplink` = 519 그린**(Phase 1+2; Phase 2 복구 PR로 develop 반영 예정). 499→519 신규: 앵커 파서·문항 section·anchor_scroll·study_deep_link·wrong_skills·concept_report 단위테스트(이 중 wrong_skills·concept_report = Phase 2, 현재 develop 미포함).
+- **현재 기준선은 §0을 본다**(2026-10-20 실측 `flutter test` **1,076 그린** · `flutter analyze` **0건**). 아래 "512/519 그린"은 **2026-06-18 당시 값(아카이브)**: develop = 512 그린(Phase 1 딥링크 코어) · `feat/concept-deeplink` = 519 그린(Phase 1+2). 499→519 신규는 앵커 파서·문항 section·anchor_scroll·study_deep_link·wrong_skills·concept_report 단위테스트였고, 그때 develop에 없던 wrong_skills·concept_report는 PR#21로 복구돼 지금은 들어 있다.
 - **브랜치(2026-06-15~):** `main`(보호·배포)·`develop`(통합)만 존재. 작업은 `feat/*`→develop PR→(릴리스)develop→main PR. main은 develop보다 릴리스 머지커밋만큼 앞설 수 있으나 콘텐츠 동일. 문항 추가 워크플로·서브에이전트 위임 규율: [[question-bank-verified-workflow]]·[[subagent-git-branch-pollution]].
 - **테스트 함정 추가(PR4):** testWidgets 본문에서 `rootBundle.loadString`을 await하면 파일 연속 실행에서 행(10분 타임아웃, 단독은 통과) — 에셋은 `setUpAll` 1회 로드. 메모리 [[flutter-selectionarea-widget-test-pitfall]] 갱신됨.
 - `verify_splash` 사용: `cd flutter_app && node tool/verify_splash.mjs [--skip-build] [--throttle <ms>] [--theme dark] [--label <x>]` — 보고서/스크린샷은 `build/verify_splash/`. PR3에서 리소스 필터·스로틀(HEAVY)·MIME에 woff2 보정 완료(otf/ttf/woff2 동등 취급). 전/후 비교 보고서: `pr3-before-light.json` / `pr3-after2-light.json`.
 - **로컬 dogfood 서버 주의:** 포트 8124에 이전 세션의 진단용 node 서버(cwd 기준 `build/web` 서빙)가 살아 있을 수 있음 — `EADDRINUSE`면 새로 띄우지 말고 서빙 콘텐츠 해시를 로컬 빌드와 대조 후 재사용(요청 시점에 파일을 읽는 구조라 재빌드가 그대로 반영됨). browse dogfood 함정 모음(SW 캐시·taskId `clf-t1-1` 형식·해시 goto≠리로드·main.dart.js 한국어 grep 무효): 메모리 [[flutter-web-dogfood-browse]].
-- **정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제 — 탐색기에서 수동 삭제. git 등록은 prune 완료.
+- ~~**정리 필요(사소):** `D:\workspace\awc-before`(전/후 측정용 임시 워크트리 잔재)가 파일 잠금으로 미삭제.~~ **해소 확인(2026-10-20 실측):** 디렉터리 부재 · `git worktree list`도 `D:/workspace/awc-docs` 하나뿐(git 등록은 그 전에 prune 완료). [WORKLIST.md](WORKLIST.md) §E에도 완료로 기록됨.
 - 시각 QA 레시피: 메모리 [[flutter-web-visual-qa-recipe]]. 방향·결정: [[study-app-cloud-direction]]. 시각 리펙토링 경위·실측: [[visual-refactor-design-approved]].
 
 **✅ 완료(2026-06-18 세션2): C-중량 Phase 1 develop → main 릴리스·라이브 확인.** 스택 PR 경합으로 Phase 2가 develop에 누락됐음을 확인(§0 정정 박스) → 사용자 결정으로 **Phase 1만 우선 릴리스**(PR#19, main fc7b07f → Pages 배포 성공 → 라이브 dogfood 통과). **다음 세션 첫 수: ①C-중량 Phase 2 develop 복구** (`feat/concept-deeplink`→develop PR, 델타 5커밋, 머지 후 519 검증 → 차기 릴리스). 그다음 **②SAA-C03 문항 착수**(현재 0) · C-중량 나머지 문서 앵커 점진 채움 · §0-b 선택 항목. 문항 생산은 §0-q 파이프라인(서브에이전트 드래프터→AI 리뷰→컨트롤러 실측→사람 검수 게이트→flip) 재사용.
