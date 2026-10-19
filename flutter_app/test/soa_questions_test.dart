@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// 쓰지 않는다 — 딥링크는 문서 최상단으로 graceful 폴백된다.
 void main() {
   // 문항 작성을 완료한(드래프트 포함) 콘텐츠 엔트리 — 배치별로 누적 추가한다.
-  // 남은 엔트리: soa-t5-1 ~ soa-t5-4 (총 20개 중 도메인 1~4의 16개 완료)
+  // SOA 20개 엔트리 전부 문항 작성 완료(도메인 1~5). 추가 엔트리가 생기면 여기 누적한다.
   const soaTaskIds = [
     'soa-t1-1',
     'soa-t1-2',
@@ -30,6 +30,10 @@ void main() {
     'soa-t4-1',
     'soa-t4-2',
     'soa-t4-3',
+    'soa-t5-1',
+    'soa-t5-2',
+    'soa-t5-3',
+    'soa-t5-4',
   ];
   const minPerTask = 15; // CLF 기준선과 동일한 Task당 밀도 목표
 

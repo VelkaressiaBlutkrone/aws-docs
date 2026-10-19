@@ -1,0 +1,413 @@
+{
+  "examGuideTaskId": "soa-t5-4",
+  "taskTitle": "네트워크 연결 문제 해결 (Flow Logs·Reachability Analyzer)",
+  "domain": 5,
+  "certCode": "SOA-C03",
+  "questions": [
+    {
+      "id": "soa-t5-4-q1",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "foundational",
+      "stem": "VPC Flow Logs가 기록하는 것은?",
+      "options": [
+        "IP 트래픽의 메타데이터(출발지·목적지 IP·포트·프로토콜·action 등)",
+        "패킷의 전체 페이로드",
+        "애플리케이션 로그 본문",
+        "DNS 쿼리 응답 본문"
+      ],
+      "correct": 0,
+      "explanation": "Flow Logs는 네트워크 인터페이스를 오가는 IP 트래픽의 메타데이터를 집계 간격 단위로 기록합니다. 패킷 내용(페이로드) 캡처가 필요하면 Traffic Mirroring을 사용해야 합니다.",
+      "wrongExplanations": {
+        "1": "페이로드 캡처는 Traffic Mirroring의 역할입니다.",
+        "2": "애플리케이션 로그는 CloudWatch Logs 에이전트 등으로 수집합니다.",
+        "3": "DNS 응답 본문은 Route 53 Resolver 쿼리 로깅의 영역입니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 흐름 로그",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q2",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "foundational",
+      "stem": "Flow Logs를 생성할 수 있는 범위(레벨)로 올바른 조합은?",
+      "options": [
+        "VPC · 서브넷 · 네트워크 인터페이스(ENI)",
+        "리전 · VPC · AZ",
+        "계정 · 조직 · OU",
+        "보안 그룹 · NACL · 라우팅 테이블"
+      ],
+      "correct": 0,
+      "explanation": "Flow Logs는 VPC, 서브넷, 개별 ENI 수준에서 생성할 수 있습니다. 넓은 범위로 켜면 포함된 모든 ENI의 트래픽이 기록됩니다.",
+      "wrongExplanations": {
+        "1": "AZ나 리전 단위로 만드는 기능이 아닙니다.",
+        "2": "계정·조직 단위 설정이 아닙니다.",
+        "3": "보안 그룹·NACL은 로그 생성 단위가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 흐름 로그 — 생성 범위",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q3",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "foundational",
+      "stem": "Flow Logs의 전달 대상으로 지정할 수 있는 것은?",
+      "options": [
+        "CloudWatch Logs · Amazon S3 · Amazon Data Firehose",
+        "DynamoDB · Redshift · Athena",
+        "SQS · SNS · EventBridge",
+        "EBS 볼륨 · EFS · FSx"
+      ],
+      "correct": 0,
+      "explanation": "Flow Logs는 CloudWatch Logs, Amazon S3, Amazon Data Firehose로 전달할 수 있습니다. 실시간 조회·경보는 CloudWatch Logs, 저비용 장기 보관·Athena 분석은 S3, 스트리밍 파이프라인은 Firehose를 씁니다.",
+      "wrongExplanations": {
+        "1": "Athena는 S3에 저장된 로그를 쿼리하는 도구이며 직접 전달 대상이 아닙니다.",
+        "2": "메시징 서비스는 Flow Logs의 직접 대상이 아닙니다.",
+        "3": "블록·파일 스토리지는 전달 대상이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 흐름 로그 — 전달 대상",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q4",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "어제 발생한 네트워크 사고를 조사하려고 지금 Flow Logs를 켰다. 결과는?",
+      "options": [
+        "켠 이후의 트래픽만 기록되므로 어제 트래픽은 조회할 수 없다 — 평소 활성화가 운영 정석이다",
+        "최근 24시간 트래픽이 소급 기록된다",
+        "집계 간격만큼(최대 10분) 소급된다",
+        "S3를 대상으로 지정하면 소급 수집된다"
+      ],
+      "correct": 0,
+      "explanation": "Flow Logs는 생성 이후의 트래픽만 기록하고 과거 트래픽을 소급 캡처하지 않습니다. 사고 시점을 되짚으려면 평소에 켜 두어야 합니다.",
+      "wrongExplanations": {
+        "1": "소급 기록 기능은 없습니다.",
+        "2": "집계 간격은 기록 단위이며 소급 범위가 아닙니다.",
+        "3": "전달 대상과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 흐름 로그 작업",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/working-with-flow-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q5",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "Flow Log 레코드의 `action` 필드가 `REJECT`인 경우 공식 문서가 드는 예시는?",
+      "options": [
+        "보안 그룹 또는 네트워크 ACL이 허용하지 않은 트래픽, 또는 연결이 닫힌 뒤 도착한 패킷",
+        "네트워크 ACL만 거부한 트래픽",
+        "오리진 서버가 5xx를 반환한 요청",
+        "DNS 해석에 실패한 요청"
+      ],
+      "correct": 0,
+      "explanation": "공식 필드 설명은 REJECT를 \"트래픽이 거부됨 — 예: 보안 그룹 또는 네트워크 ACL이 허용하지 않았거나, 연결이 닫힌 뒤 패킷이 도착한 경우\"로 정의합니다. 즉 SG 거부도 REJECT로 기록될 수 있습니다.",
+      "wrongExplanations": {
+        "1": "NACL만 해당한다고 좁히는 것은 공식 서술과 다릅니다.",
+        "2": "애플리케이션 응답 코드는 Flow Logs의 기록 대상이 아닙니다.",
+        "3": "DNS 해석 실패는 action 값으로 표현되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Flow Log 레코드 — action 필드",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q6",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "foundational",
+      "stem": "Flow Log의 `log-status`가 `NODATA`인 것은 무엇을 의미하는가?",
+      "options": [
+        "집계 간격 동안 해당 네트워크 인터페이스에 트래픽이 없었다",
+        "로그가 내부 오류로 일부 누락됐다",
+        "권한이 없어 로그가 기록되지 않았다",
+        "트래픽이 거부됐다"
+      ],
+      "correct": 0,
+      "explanation": "`NODATA`는 집계 간격 동안 해당 ENI로 오가는 트래픽이 없었다는 뜻입니다. 일부 레코드가 누락된 경우는 `SKIPDATA`이고, 정상 기록은 `OK`입니다.",
+      "wrongExplanations": {
+        "1": "누락은 `SKIPDATA`입니다.",
+        "2": "권한 문제는 로그 생성 단계에서 드러납니다.",
+        "3": "거부는 `action` 필드의 REJECT로 표시됩니다."
+      },
+      "sources": [
+        {
+          "title": "Flow Log 레코드 — log-status",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q7",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "Flow Log의 기본 집계 간격과 선택 가능한 값은?",
+      "options": [
+        "기본 최대 10분이며 생성 시 1분으로 지정할 수 있다",
+        "기본 1분이며 변경할 수 없다",
+        "기본 5분이며 15분까지 늘릴 수 있다",
+        "기본 1시간이며 10분으로 줄일 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "집계 간격은 기본 최대 10분이고, 생성 시 최대 1분으로 지정할 수 있습니다. 1분 간격은 레코드 수가 더 많아집니다(Nitro 기반 인스턴스의 ENI는 지정값과 무관하게 1분 이하).",
+      "wrongExplanations": {
+        "1": "기본값은 10분입니다.",
+        "2": "5분·15분 옵션은 없습니다.",
+        "3": "1시간 기본값이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Flow Log 레코드 — 집계 간격",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q8",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "CloudWatch Logs Insights로 '443 포트에 대한 거부된 흐름만' 찾으려 한다. 적절한 쿼리는?",
+      "options": [
+        "`filter action = \"REJECT\" and dstPort = 443`을 포함한 쿼리",
+        "`stats count(*) by srcAddr`만 실행",
+        "`filter @message like /ACCEPT/`",
+        "`parse @message`만 실행"
+      ],
+      "correct": 0,
+      "explanation": "Flow Logs를 CloudWatch Logs로 보내면 Logs Insights에서 `filter action = \"REJECT\" and dstPort = 443`처럼 조건을 걸어 차단된 흐름만 빠르게 추출할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "집계만으로는 거부 흐름을 선별하지 못합니다.",
+        "2": "ACCEPT 필터는 허용된 흐름을 봅니다.",
+        "3": "`parse`는 필드 추출 명령입니다."
+      },
+      "sources": [
+        {
+          "title": "CloudWatch Logs Insights 쿼리 구문",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q9",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "NACL에서 인바운드만 열고 응답용 이페머럴 포트 아웃바운드를 열지 않으면 어떤 증상이 나타나는가?",
+      "options": [
+        "요청은 들어오지만 응답이 차단돼 통신이 완성되지 않는다",
+        "요청 자체가 들어오지 않는다",
+        "보안 그룹이 자동으로 응답을 허용해 문제가 없다",
+        "라우팅 테이블이 자동으로 경로를 추가한다"
+      ],
+      "correct": 0,
+      "explanation": "NACL은 stateless라 요청과 응답을 각각 평가합니다. 인바운드만 허용하고 응답이 나가는 이페머럴 포트(1024–65535) 아웃바운드 규칙이 없으면 응답이 막혀 통신이 완성되지 않습니다.",
+      "wrongExplanations": {
+        "1": "인바운드는 허용했으므로 요청은 들어옵니다.",
+        "2": "SG는 자신의 상태 추적만 하며 NACL 평가를 대신하지 않습니다.",
+        "3": "라우팅은 자동 추가되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "네트워크 ACL — 이페머럴 포트",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q10",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "운영 중인 환경에서 트래픽을 발생시키지 않고 'EC2-A → EC2-B 22번 포트' 도달 가능성을 점검하고 차단 구성요소를 찾으려 한다. 적절한 도구는?",
+      "options": [
+        "VPC Reachability Analyzer",
+        "VPC Flow Logs",
+        "Network Access Analyzer",
+        "Traffic Mirroring"
+      ],
+      "correct": 0,
+      "explanation": "Reachability Analyzer는 실제 패킷을 보내지 않고 SG·NACL·라우팅 같은 구성만으로 경로를 분석해 도달 가능 여부와 차단 구성요소를 지목합니다. 운영 중에도 안전하게 반복 실행할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Flow Logs는 실제 발생한 트래픽의 흔적을 보여 줍니다.",
+        "2": "Network Access Analyzer는 광범위 접근 경로 감사용입니다.",
+        "3": "Traffic Mirroring은 패킷 복사 분석 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "VPC Reachability Analyzer란 무엇인가",
+          "url": "https://docs.aws.amazon.com/vpc/latest/reachability/what-is-reachability-analyzer.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q11",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "applied",
+      "stem": "'인터넷에서 데이터베이스 서브넷에 도달할 수 있는 경로가 하나라도 존재하는가'를 정기 감사하려 한다. 적절한 도구는?",
+      "options": [
+        "Network Access Analyzer — 접근 범위를 정의해 정책 위반 경로를 전수 열거한다",
+        "Reachability Analyzer — 소스·대상 한 쌍씩 점검한다",
+        "Flow Logs — 과거 트래픽을 조회한다",
+        "Config 적합성 팩 — 구성 준수만 평가한다"
+      ],
+      "correct": 0,
+      "explanation": "Network Access Analyzer는 접근 범위(Network Access Scope)를 정의하면 VPC 구성을 스캔해 의도치 않은 접근 경로를 모두 열거합니다. 특정 소스-대상 쌍의 도달성 진단은 Reachability Analyzer의 역할입니다.",
+      "wrongExplanations": {
+        "1": "쌍 단위 점검은 범위가 열린 감사 질문에 비효율적입니다.",
+        "2": "Flow Logs는 실제 트래픽 흔적이며 경로 존재 여부를 전수 증명하지 않습니다.",
+        "3": "Config는 구성 준수 평가로 경로 열거 기능이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Network Access Analyzer란 무엇인가",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q12",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "VPC 구성 문제 해결(5.3.1)",
+      "difficulty": "foundational",
+      "stem": "연결 장애를 진단할 때 인스턴스에 가까운 계층부터 좁혀 가는 순서로 적절한 것은?",
+      "options": [
+        "보안 그룹 → 네트워크 ACL → 라우팅 테이블 → IGW/NAT → DNS",
+        "DNS → IGW/NAT → 라우팅 테이블 → NACL → 보안 그룹",
+        "라우팅 테이블 → DNS → 보안 그룹 → NACL → IGW",
+        "IGW → 보안 그룹 → DNS → NACL → 라우팅"
+      ],
+      "correct": 0,
+      "explanation": "SG는 인스턴스에 가장 가까운 계층이라 잘못된 규칙이 있으면 바깥 계층이 모두 정상이어도 패킷이 도달하지 않습니다. 가까운 계층부터 확인하면 흔한 SG·NACL 구성 오류에서 일찍 멈출 수 있습니다.",
+      "wrongExplanations": {
+        "1": "바깥 계층부터 보면 정상 계층을 여러 번 거쳐 진단이 길어집니다.",
+        "2": "순서가 뒤섞여 효율이 떨어집니다.",
+        "3": "같은 이유로 비효율적입니다."
+      },
+      "sources": [
+        {
+          "title": "VPC 연결 문제 해결",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-troubleshooting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q13",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "ALB를 통과한 각 요청의 클라이언트 IP·응답 코드·지연 시간을 사후 분석해야 한다. 어떤 로그를 켜는가?",
+      "options": [
+        "ELB 액세스 로그(S3로 전달)",
+        "VPC Flow Logs",
+        "CloudTrail 관리 이벤트",
+        "EC2 상태 확인 지표"
+      ],
+      "correct": 0,
+      "explanation": "ELB 액세스 로그는 로드 밸런서가 처리한 각 요청의 상세 정보(클라이언트 IP, 응답 코드, 처리 시간 등)를 S3에 기록합니다. Flow Logs는 IP 흐름 메타데이터만 담아 요청 단위 분석에는 부족합니다.",
+      "wrongExplanations": {
+        "1": "Flow Logs에는 HTTP 응답 코드가 없습니다.",
+        "2": "CloudTrail은 AWS API 호출 감사 기록입니다.",
+        "3": "상태 확인 지표는 대상 건강 상태만 보여 줍니다."
+      },
+      "sources": [
+        {
+          "title": "Application Load Balancer 액세스 로그",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q14",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "WAF 웹 ACL이 어떤 규칙으로 요청을 차단했는지 요청 단위로 확인하려 한다. 무엇을 구성하는가?",
+      "options": [
+        "WAF 웹 ACL 로깅을 켜서 CloudWatch Logs·S3·Firehose로 전달한다",
+        "VPC Flow Logs의 action 필드를 확인한다",
+        "CloudFront 표준 로그만 확인한다",
+        "ELB 액세스 로그의 TLS 필드를 확인한다"
+      ],
+      "correct": 0,
+      "explanation": "WAF 웹 ACL 로깅을 활성화하면 요청별로 매칭된 규칙과 조치(ALLOW·BLOCK·COUNT 등)가 기록되어 차단 원인을 규칙 단위로 추적할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Flow Logs에는 WAF 규칙 정보가 없습니다.",
+        "2": "CloudFront 로그는 요청 전달 기록이며 WAF 규칙 매칭 상세가 아닙니다.",
+        "3": "ELB 액세스 로그에는 WAF 규칙 매칭 정보가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS WAF 웹 ACL 트래픽 로깅",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/logging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "soa-t5-4-q15",
+      "examGuideTaskId": "soa-t5-4",
+      "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "difficulty": "applied",
+      "stem": "Flow Logs를 장기 보관하면서 비용을 낮추고 필요할 때 SQL로 분석하려 한다. 적절한 구성은?",
+      "options": [
+        "S3를 전달 대상으로 지정하고 Athena로 쿼리한다",
+        "CloudWatch Logs에 무기한 보관하고 Logs Insights로만 조회한다",
+        "Firehose로 받아 Lambda에 적재한다",
+        "EBS 볼륨에 파일로 저장한다"
+      ],
+      "correct": 0,
+      "explanation": "장기 보관은 S3가 비용 효율적이며 Athena로 SQL 분석이 가능합니다. 실시간 조회·경보가 필요한 구간만 CloudWatch Logs로 보내는 조합이 일반적입니다.",
+      "wrongExplanations": {
+        "1": "CloudWatch Logs 무기한 보관은 저장 비용이 큽니다.",
+        "2": "Lambda는 저장소가 아닙니다.",
+        "3": "EBS 직접 저장은 Flow Logs의 전달 대상이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "S3로 흐름 로그 게시",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
