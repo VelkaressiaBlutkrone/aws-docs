@@ -110,4 +110,90 @@ void main() {
       expect(doc('saa-t2-5').contains('GlobalTables'), isTrue);
     });
   });
+
+  group('Task 3.1 — saa-t3-1 / saa-t3-2', () {
+    test('G-3.1-09 S3 단일 객체 최대 크기는 멀티파트로 50 TB', () {
+      // 근거: upload-objects — "With a single PUT operation, you can upload a
+      // single object up to 5 GB in size" / "you can upload a single large
+      // object, up to 50 TB in size"
+      final t31 = doc('saa-t3-1');
+      expect(t31.contains('단일 객체 최대 5TB'), isFalse);
+      expect(t31.contains('50 TB'), isTrue);
+    });
+
+    test('G-3.1-10 멀티파트 필수 기준은 5 GB 초과(이상이 아니다)', () {
+      final t31 = doc('saa-t3-1');
+      expect(t31.contains('5 GB 이상 필수'), isFalse);
+      expect(t31.contains('5 GB 초과'), isTrue);
+    });
+
+    test('G-3.1-11 EFS Max I/O는 이전 세대 성능 모드다', () {
+      // 근거: efs performance — "Max I/O mode is a previous generation
+      // performance type... not supported for One Zone file systems or file
+      // systems that use Elastic throughput... we recommend using General
+      // Purpose performance mode for all file systems."
+      final t32 = doc('saa-t3-2');
+      expect(t32.contains('수천 인스턴스가 동시 접근하는 빅데이터 분석'), isFalse);
+      expect(t32.contains('이전 세대'), isTrue);
+      expect(t32.contains('Elastic 처리량'), isTrue);
+    });
+
+    test('G-3.1-13 FSx for Lustre 성능은 스토리지 클래스별로 다르다', () {
+      // 근거: fsx lustre what-is — SSD "consistent sub-millisecond latency
+      // access to your full dataset", Intelligent-Tiering "sub-millisecond
+      // latency access to frequently-accessed data", HDD "consistent
+      // single-digit ms latency and up to tens of GBps"
+      final t32 = doc('saa-t3-2');
+      expect(t32.contains('| **성능** | 서브밀리초 지연시간, 수 TBps 처리량, 수백만 IOPS |'),
+          isFalse);
+      expect(t32.contains('한 자릿수 ms'), isTrue);
+      expect(t32.contains('자주 접근하는 데이터'), isTrue);
+    });
+  });
+
+  group('Task 3.2 — saa-t3-3 / saa-t3-4', () {
+    test('G-3.2-10 프로세서 접미사: i=Intel', () {
+      // 근거: instance-type-names — "i – Intel processors"
+      final t33 = doc('saa-t3-3');
+      expect(t33.contains('없음=Intel'), isFalse);
+      expect(t33.contains('| Intel (Xeon) | 없음 |'), isFalse);
+      expect(t33.contains('i=Intel'), isTrue);
+    });
+
+    test('G-3.2-11 기능 접미사: b=블록 스토리지 최적화, n=네트워크·EBS 최적화', () {
+      // 근거: instance-type-names — "b – Block storage optimization",
+      // "n – Network and EBS optimized", 그 밖에 d·e·z·flex
+      final t33 = doc('saa-t3-3');
+      expect(t33.contains('n=네트워크 강화, b=EBS 최적화'), isFalse);
+      expect(t33.contains('블록 스토리지 최적화'), isTrue);
+      expect(t33.contains('네트워크·EBS 최적화'), isTrue);
+    });
+
+    test('G-3.2-15 Lambda 메모리는 "유일한" 손잡이가 아니라 주된 손잡이다', () {
+      // 근거: configuration-memory — "Memory is the principal lever for
+      // controlling the performance of a function." + Lambda Power Tuning
+      final t34 = doc('saa-t3-4');
+      expect(t34.contains('성능 튜닝의 유일한 손잡이'), isFalse);
+      expect(t34.contains('유일한 해결 경로'), isFalse);
+      expect(t34.contains('주된'), isTrue);
+      expect(t34.contains('Power Tuning'), isTrue);
+    });
+  });
+
+  group('정정 날짜·출처 (Task 3.1·3.2)', () {
+    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+      for (final id in ['saa-t3-1', 'saa-t3-2', 'saa-t3-3', 'saa-t3-4']) {
+        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
+            reason: '$id lastVerified 누락');
+      }
+    });
+
+    test('새로 인용한 공식 출처가 실려 있다', () {
+      expect(doc('saa-t3-1').contains('upload-objects'), isTrue);
+      expect(doc('saa-t3-2').contains('efs/latest/ug/performance'), isTrue);
+      expect(doc('saa-t3-2').contains('LustreGuide/what-is'), isTrue);
+      expect(doc('saa-t3-3').contains('instance-type-names'), isTrue);
+      expect(doc('saa-t3-4').contains('configuration-memory'), isTrue);
+    });
+  });
 }

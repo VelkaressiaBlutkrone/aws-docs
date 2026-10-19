@@ -32,7 +32,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 컨테이너·서버리스·배치 컴퓨팅 선택
@@ -189,7 +189,7 @@ Lambda는 saa-t2-2에서 이벤트 기반 패턴으로 다뤘습니다. 여기�
 
 | 개념 | 핵심 |
 |---|---|
-| **메모리 ↔ CPU** | 메모리를 올리면 CPU도 비례 증가 — 성능 튜닝의 유일한 손잡이 |
+| **메모리 ↔ CPU** | 메모리를 올리면 CPU도 비례 증가(1,769 MB = 1 vCPU) — 공식 서술상 성능 제어의 **주된(principal) 손잡이** |
 | **최대 실행 시간** | **15분** — 이보다 긴 작업은 Lambda 부적합 |
 | **동시성(Concurrency)** | 계정·리전당 기본 1,000 동시 실행 제한 (조정 가능) |
 | **예약 동시성(Reserved)** | 특정 함수에 동시성 할당 보장 + 상한선 설정 |
@@ -199,7 +199,7 @@ Lambda는 saa-t2-2에서 이벤트 기반 패턴으로 다뤘습니다. 여기�
 > **성능 제약 요약**: 15분 초과·상태 유지·지속 연결(WebSocket 서버) → Lambda 부적합. 이 경우 ECS/Fargate 또는 EC2로 이동합니다.
 
 > 🧠 원리: 왜 Lambda는 메모리 설정 하나로 CPU 성능까지 함께 조정될까요?
-> 메모리가 연산 용량 전체를 함께 움직이는 단일 손잡이이므로, CPU 병목이 생겼을 때도 메모리를 늘리는 것이 유일한 해결 경로가 됩니다.
+> 메모리가 연산 용량 전체를 함께 움직이므로 CPU·네트워크·메모리 병목 모두 메모리를 올려 완화할 수 있습니다. 다만 공식 서술은 메모리를 **주된(principal)** 손잡이로 표현하며, 병목을 넘어서면 이득이 줄어듭니다 — 아키텍처(arm64)·임시 스토리지 같은 다른 요소도 영향을 주고, 변곡점은 **AWS Lambda Power Tuning**으로 찾습니다.
 > 이 구조는 성능·비용 튜닝을 1차원 탐색으로 단순화합니다 — 메모리를 올리면 처리 속도가 빨라져 실행 시간이 줄고, 메모리 단가 상승과 실행 시간 단축이 상쇄되는 최적점을 단일 파라미터 조정으로 찾을 수 있습니다.
 > 사용자 관점에서는 "메모리 하나만 조정하면 연산 자원이 함께 따라온다"는 예측 가능성이 운영 단순성으로 이어집니다.
 
@@ -278,7 +278,7 @@ HPC(High Performance Computing)는 노드 간 초저지연 통신이 필요한 �
 1. **"Lambda로 15분 이상 작업을 처리한다."** → Lambda의 최대 실행 시간은 15분입니다. 초과 시 강제 종료됩니다. 장시간 배치 작업은 AWS Batch, 장기 실행 컨테이너는 ECS/Fargate를 사용합니다.
    *(원리: §4 본문 — Lambda의 최대 실행 시간은 15분으로 고정되어 있어, 이를 초과하는 작업은 강제 종료된다.)*
 
-2. **"메모리를 늘려도 CPU는 그대로다."** → Lambda는 메모리와 CPU가 비례합니다. 메모리를 두 배 늘리면 vCPU도 비례해 증가합니다. 성능 튜닝의 유일한 손잡이가 메모리임을 기억합니다.
+2. **"메모리를 늘려도 CPU는 그대로다."** → Lambda는 메모리와 CPU가 비례합니다. 메모리를 두 배 늘리면 vCPU도 비례해 증가합니다(1,769 MB에서 1 vCPU). 공식 문서가 메모리를 성능 제어의 **주된(principal) 손잡이**로 설명하는 이유입니다 — 단, CPU 병목을 넘어서면 이득이 줄어듭니다.
    *(원리: §4 — Lambda는 메모리 크기에 비례해 연산 용량이 결정되는 구조라 CPU가 독립 설정값으로 존재하지 않는다.)*
 
 3. **"Fargate는 독립 서비스다."** → Fargate는 ECS 또는 EKS의 **시작 유형(실행 모드)**입니다. 독립적으로 사용하지 않으며, 오케스트레이터(ECS/EKS) 위에서 동작합니다.
@@ -355,3 +355,5 @@ Lambda의 실행 환경은 요청 처리 후 언제든 종료·재생성될 수 
 10. Elastic Fabric Adapter — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
 11. Amazon FSx for Lustre — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
 12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: Lambda 메모리를 성능 튜닝의 "유일한" 손잡이로 적었던 표현을 공식 서술("Memory is the principal lever")에 맞춰 **주된 손잡이**로 고쳤습니다. 병목을 넘어서면 이득이 줄고 아키텍처·임시 스토리지도 영향을 주므로 변곡점은 Lambda Power Tuning으로 확인합니다(근거 7번).
