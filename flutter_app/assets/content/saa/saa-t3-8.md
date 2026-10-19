@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -209,7 +209,7 @@ Direct Connect Gateway (글로벌)
 |---|---|---|
 | 연결 경로 | 공용 인터넷 (IPsec 암호화) | 전용 물리 회선 |
 | 구축 시간 | 수 분 (즉시) | 수 주 (리드타임) |
-| 대역폭·지연 | 변동 (인터넷 상황 의존) | 일관됨 (SLA 보장) |
+| 대역폭·지연 | 변동 (인터넷 상황 의존) | 전용 회선이라 일관적. 단 약정은 **가용성 SLA**뿐(다중 사이트 중복 **99.99%** / 다중 사이트 비중복 99.9% / 단일 연결 95.0%)이며 대역폭·지연 자체를 SLA로 보장하지는 않음 |
 | 암호화 | 기본 포함 | 기본 없음 |
 | 비용 | 낮음 | 높음 (전용 회선) |
 | 적합 상황 | 빠른 구축, 백업 연결, 소규모 트래픽 | 고대역폭, 저지연, 규정 준수, 대규모 전송 |
@@ -359,3 +359,6 @@ VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모�
 5. AWS PrivateLink — 소개 — https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 7. AWS Transit Gateway — VPC 어태치먼트 (공식) — https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html (게이트 검수 반영: 2026-06-12)
+8. AWS Direct Connect SLA(가용성 99.99%/99.9%/95.0%, 대역폭·지연 약정 없음) — https://aws.amazon.com/directconnect/sla/
+
+> 📝 **2026-10-19 정정**: Direct Connect의 "대역폭·지연 일관됨(SLA 보장)" 서술을 정정했습니다 — SLA가 약정하는 것은 **연결 가용성**(다중 사이트 중복 99.99%, 비중복 99.9%, 단일 연결 95.0%)이며 대역폭·지연 수치를 보장하는 문장은 없습니다(근거 8번).

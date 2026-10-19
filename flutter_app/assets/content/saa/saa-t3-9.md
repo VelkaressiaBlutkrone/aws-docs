@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation
@@ -43,7 +43,7 @@ lastVerified: 2026-06-12
 - [ ] **Athena 작동 방식** — S3 직접 쿼리·서버리스·비용 모델을 설명할 수 있다
 - [ ] **EMR vs Glue 선택** — 관리형 클러스터(EMR) vs 서버리스 ETL(Glue)의 선택 기준을 안다
 - [ ] **Lake Formation 역할** — Glue Data Catalog 위의 세밀한 접근 제어 계층 역할을 설명할 수 있다
-- [ ] **배치 vs 스트리밍 수집** — 요구사항에 따라 DataSync·Snow 패밀리·Transfer Family·Kinesis 중 올바른 서비스를 고를 수 있다
+- [ ] **배치 vs 스트리밍 수집** — 요구사항에 따라 DataSync·Transfer Family·AWS Data Transfer Terminal·Kinesis 중 올바른 서비스를 고를 수 있다(Snow 패밀리는 신규 주문 불가)
 
 ---
 
@@ -78,7 +78,7 @@ lastVerified: 2026-06-12
 [수집 계층]           [저장·처리 계층]          [분석·시각화 계층]
 Kinesis Data Streams  →  S3 (데이터 레이크)   →  Athena (서버리스 SQL)
 Kinesis Data Firehose →  Redshift (DW)        →  EMR (Spark/Hadoop)
-DataSync / Snow 패밀리→  Glue Data Catalog    →  QuickSight (BI)
+DataSync / 전송 터미널 →  Glue Data Catalog    →  QuickSight (BI)
 Transfer Family       →  Lake Formation (거버넌스)
 ```
 
@@ -96,7 +96,9 @@ Transfer Family       →  Lake Formation (거버넌스)
   - 쓰기(수집): 초당 1 MB 또는 초당 1,000 레코드
   - 읽기(소비): 초당 2 MB
 - 데이터 보존(retention): 기본 24시간, 최대 365일까지 연장 가능
-- 동일 스트림을 **여러 컨슈머가 동시에 독립적으로** 읽을 수 있습니다 (fan-out). 예: 아카이브 애플리케이션 + 실시간 집계 애플리케이션이 같은 스트림을 동시 소비
+- 동일 스트림을 여러 컨슈머가 **각자 오프셋을 유지하며** 읽을 수 있습니다 (fan-out). 예: 아카이브 애플리케이션 + 실시간 집계 애플리케이션이 같은 스트림을 소비
+  - 기본(비-EFO) 컨슈머는 `GetRecords`로 **샤드당 읽기 2 MB/s를 공유**합니다 — 컨슈머가 늘면 서로 처리량을 나눠 씁니다(샤드당 읽기 트랜잭션 초당 5회)
+  - 컨슈머별 **전용 처리량**이 필요하면 **EFO(Enhanced Fan-Out)** 컨슈머를 등록해 `SubscribeToShard`로 읽습니다 — 스트림당 최대 20개(On-demand Advantage는 50개)
 - 레코드 재처리(replay)가 가능합니다 — 보존 기간 내에 오프셋을 되돌릴 수 있습니다
 - Kinesis Client Library(KCL) 또는 AWS Lambda를 컨슈머로 사용할 수 있습니다
 
@@ -113,7 +115,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 #### Amazon Managed Service for Apache Flink (스트림 분석)
 
-- 실시간 스트림 데이터에 **Java·Scala·SQL**로 분석 로직을 작성합니다
+- 실시간 스트림 데이터에 **Java·Scala·Python·SQL**로 분석 로직을 작성합니다
 - 완전 관리형 — Apache Flink 인프라를 직접 관리하지 않아도 됩니다
 - 입력 소스로 Kinesis Data Streams 또는 Amazon MSK(Kafka)를 사용합니다
 - 이전 명칭: Kinesis Data Analytics for Apache Flink
@@ -219,7 +221,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 - Glue Data Catalog 위에 올라가는 **권한 제어 계층**입니다 — Catalog가 메타데이터를 담당하고, Lake Formation이 접근 제어를 담당합니다
 - 컬럼·행·셀 수준의 세밀한(fine-grained) 접근 제어 지원
-- 적용 범위: Athena, EMR(Apache Spark), Redshift Spectrum, Glue ETL 전반에 Lake Formation 권한이 일관되게 적용됩니다
+- 적용 범위는 **엔진마다 다릅니다**: Athena SQL·Redshift Spectrum·EMR(EC2)의 Apache Spark·EMR Serverless의 Spark는 테이블 읽기/쓰기 + 열·행·셀 읽기를 지원하지만, **EMR의 Apache Hive는 행·셀 수준을 지원하지 않고**, **Athena Spark·EMR on EKS·EMR Serverless의 Hive는 미지원**이며, **Glue ETL의 열·행·셀 읽기는 Glue 5.0 이상**에서만 됩니다
 - IAM 권한 모델을 **확장**(augment)합니다 — IAM을 대체하지 않고 그 위에 추가됩니다
 - 태그 기반 접근 제어(TBAC·LF-Tag): 수천 개 리소스에 태그를 붙여 권한을 일괄 관리
 - 교차 계정 데이터 공유 지원
@@ -264,16 +266,17 @@ Transfer Family       →  Lake Formation (거버넌스)
 | 서비스 | 용도 | 핵심 특성 |
 |---|---|---|
 | **AWS DataSync** | 온프레미스 ↔ AWS 파일 반복 동기화 | NFS·SMB → S3·EFS·FSx. 증분·스케줄·검증 지원 |
-| **Snow 패밀리** | 대역폭 부족 시 오프라인 대용량 이전 | Snowcone(수 TB) → Snowball Edge(TB~PB) → Snowmobile(EB) |
+| **Snow 패밀리** ⚠️ | 과거의 오프라인 대용량 이전 수단 | **신규 고객은 어떤 Snow Family 디바이스도 주문할 수 없습니다**(기존 고객은 계속 사용). 엣지 컴퓨팅 대안은 **Outposts** |
+| **AWS Data Transfer Terminal** | 물리 저장장치를 가져가 고속 업로드 | AWS 시설을 예약해 직접 업로드 — 현행 물리 전송 경로 |
 | **Transfer Family** | 기존 SFTP/FTPS/FTP 워크플로우를 S3·EFS로 | 관리형 파일 전송 서버. 클라이언트 수정 불필요 |
 | **Direct Connect** | 전용 네트워크 회선으로 안정적 대용량 전송 | 낮은 지연·일관된 대역폭. 초기 구축 필요 |
 
-> 선택 기준: 네트워크 대역폭이 있고 반복 동기화면 **DataSync**, 대역폭 부족·초대용량 일회성 이전이면 **Snow**, 기존 SFTP 도구를 그대로 쓰면 **Transfer Family**.
+> 선택 기준: 네트워크 대역폭이 있고 반복 동기화면 **DataSync**, 대역폭 부족·초대용량 일회성 이전이면 **AWS Data Transfer Terminal**(또는 파트너 솔루션), 기존 SFTP 도구를 그대로 쓰면 **Transfer Family**. Snow 패밀리는 신규 주문이 불가하므로 신규 설계의 정답이 아닙니다.
 
-> 🧠 원리: 왜 Snow 패밀리는 "대역폭 부족" 상황에서 네트워크 전송보다 물리적 장치 배송이 빠른 수단이 될 수 있을까요?
+> 🧠 원리: 왜 "대역폭 부족" 상황에서는 네트워크 전송보다 물리적 데이터 이동이 빠른 수단이 될 수 있을까요?
 > 수백 TB 이상의 데이터를 인터넷이나 전용 회선으로 전송할 때 걸리는 시간은 가용 대역폭에 반비례하며, 낮은 대역폭 환경에서는 전송 완료까지 매우 긴 시간이 걸릴 수 있습니다.
 > 물리적 장치에 데이터를 담아 배송하면 배송 시간은 가용 대역폭에 의존하지 않으므로, 대역폭이 충분하지 않은 환경에서는 물리 이전이 네트워크 전송보다 짧은 시간 안에 완료될 수 있습니다.
-> 이 물리-네트워크 트레이드오프가 Snow 패밀리의 선택 기준이 "데이터 크기와 가용 대역폭의 비율"로 결정되는 이유입니다.
+> 이 물리-네트워크 트레이드오프 때문에 오프라인 이전의 선택 기준은 "데이터 크기와 가용 대역폭의 비율"로 결정됩니다. 과거에는 Snow 패밀리가 그 역할을 맡았고, 신규 고객에게는 **AWS Data Transfer Terminal**·파트너 솔루션이 같은 자리를 대체합니다.
 
 ---
 
@@ -300,7 +303,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 - **Lake Formation은 추가 계층**: Glue Data Catalog를 그대로 사용하면서 그 위에 컬럼·행·셀 수준 권한을 추가합니다. Lake Formation 자체가 Data Catalog를 대체하지 않습니다.
 - **샤드 계산**: Data Streams에서 처리량이 부족하면 샤드를 추가(스케일 아웃)합니다. 쓰기 1 MB/s·1,000건/s, 읽기 2 MB/s 한계를 기억하세요.
 - **Data Catalog 공유**: Glue 크롤러가 등록한 테이블은 Athena·EMR·Redshift Spectrum이 동일 메타데이터를 공유 사용합니다. 중복 스키마 정의가 불필요합니다.
-- **Snow 패밀리 선택**: "대역폭 부족 + 수백 TB 이상"이면 네트워크 전송 시간 계산 없이 Snow를 선택합니다. Snowball Edge는 엣지 컴퓨팅도 가능합니다.
+- **오프라인 대용량 이전**: "대역폭 부족 + 수백 TB 이상"이면 물리 전송을 고려합니다. 다만 **Snow 패밀리는 신규 고객 주문이 불가**하므로 현행 대안은 **AWS Data Transfer Terminal**·파트너이고, 엣지 컴퓨팅은 **Outposts**입니다. (공식 In-Scope 서비스 목록에는 "AWS Snow Family"가 아직 남아 있어, 보기로 등장하면 기존 고객 맥락으로 읽습니다.)
 
 ---
 
@@ -321,8 +324,8 @@ Transfer Family       →  Lake Formation (거버넌스)
 5. **"Lake Formation이 IAM을 대체한다."** → Lake Formation은 IAM 권한 모델을 대체하지 않고 **확장**합니다. Lake Formation 권한과 IAM 권한 모두 충족해야 접근이 허용됩니다.
    *(원리: §7 — Lake Formation은 IAM이 표현하기 어려운 데이터 객체 수준 세밀 제어를 추가하는 확장 계층이므로, IAM과 Lake Formation 권한이 모두 만족돼야 접근이 허용된다.)*
 
-6. **"Kinesis Data Streams 샤드는 자동 확장된다."** → 샤드 수는 자동으로 증가하지 않습니다. 처리량이 한계에 도달하면 수동으로 샤드 수를 늘리거나 Shard Split을 사용합니다. (Enhanced Fan-Out은 소비 측 처리량을 늘리는 기능입니다.)
-   *(원리: §2 본문 — Kinesis 4종은 각 단계의 수집·처리 복잡도를 분리한 설계이며, Data Streams의 샤드는 처리량 단위를 명시적으로 제어하는 수동 관리 구조다.)*
+6. **"Kinesis Data Streams 샤드는 늘 수동 관리다."** → 모드에 따라 다릅니다. **온디맨드 모드**는 용량 계획 없이 샤드를 자동 관리하며 **이전 30일 피크의 2배**까지 수용합니다(그 이상 급증하면 약 15분간 스로틀 가능). **프로비저닝 모드**에서만 샤드 수를 직접 정하고 `UpdateShardCount`·Shard Split으로 조정합니다. (Enhanced Fan-Out은 소비 측 처리량을 늘리는 기능입니다.)
+   *(원리: §2 본문 — 샤드는 처리량 단위이므로, 용량 결정을 AWS에 맡기면(온디맨드) 자동 분할·관리가 되고, 직접 통제하면(프로비저닝) 분할 지점을 세밀하게 고를 수 있다.)*
 
 7. **"DataSync와 Firehose가 같은 역할이다."** → DataSync는 파일 시스템(NFS·SMB)을 S3·EFS로 동기화하는 전송 도구입니다. Firehose는 스트리밍 레코드를 목적지로 전달하는 적재 서비스입니다. 데이터 성격이 다릅니다.
    *(원리: §9 — 배치 수집(파일 동기화)과 스트리밍 수집(레코드 단위 실시간)은 데이터 단위와 처리 지연이 근본적으로 다르므로 서비스 역할도 다르다.)*
@@ -337,7 +340,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 <details><summary>정답 보기</summary>
 
-**Amazon Kinesis Data Streams**입니다. 동일 스트림을 여러 컨슈머가 독립적으로 읽는 fan-out을 지원합니다. 두 애플리케이션(예: 집계용 + 아카이브용)이 같은 스트림에서 각자의 오프셋을 유지하며 데이터를 소비할 수 있습니다. Firehose는 단일 목적지 적재 전용이므로 다중 독립 컨슈머 시나리오에는 적합하지 않습니다.
+**Amazon Kinesis Data Streams**입니다. 동일 스트림을 여러 컨슈머가 읽는 fan-out을 지원합니다. 두 애플리케이션(예: 집계용 + 아카이브용)이 같은 스트림에서 각자의 오프셋을 유지하며 데이터를 소비할 수 있습니다. 단 기본 컨슈머는 샤드당 2 MB/s를 **공유**하므로, 컨슈머마다 전용 처리량이 필요하면 **EFO**로 등록합니다. Firehose는 단일 목적지 적재 전용이므로 다중 독립 컨슈머 시나리오에는 적합하지 않습니다.
 </details>
 
 **Q2.** 실시간으로 들어오는 IoT 센서 데이터를 코드 작성 없이 Amazon S3에 자동으로 적재하려 합니다. 어떤 서비스를 사용하나요?
@@ -358,7 +361,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 <details><summary>정답 보기</summary>
 
-**AWS Lake Formation**입니다. Glue Data Catalog 위에 컬럼·행·셀 수준의 세밀한 접근 제어를 제공합니다. 분석가 IAM 역할별로 특정 컬럼 접근을 허용하거나 거부할 수 있으며, 이 권한은 Athena·EMR·Redshift Spectrum 쿼리 시 일관되게 적용됩니다.
+**AWS Lake Formation**입니다. Glue Data Catalog 위에 컬럼·행·셀 수준의 세밀한 접근 제어를 제공합니다. 분석가 IAM 역할별로 특정 컬럼 접근을 허용하거나 거부할 수 있으며, 이 권한은 Athena SQL·Redshift Spectrum·EMR의 Spark 쿼리에 적용됩니다(엔진별 지원 범위 차이는 §7 참조 — 예: EMR의 Hive는 행·셀 수준 미지원).
 </details>
 
 **Q5 (원리).** 왜 Glue Crawler가 스키마를 등록한 테이블은 Athena와 EMR이 별도 설정 없이 바로 쿼리할 수 있을까요?
@@ -380,4 +383,11 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 4. Amazon Athena — 서비스 소개 — https://docs.aws.amazon.com/athena/latest/ug/what-is.html
 5. Amazon EMR — 서비스 소개 — https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html
 6. AWS Lake Formation — 서비스 소개 — https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
-7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. AWS Snowball Edge 가용성 변경("no longer available to new customers", 대안 DataSync·Data Transfer Terminal·Outposts) — https://docs.aws.amazon.com/snowball/latest/developer-guide/snowball-edge-availability-change.html
+8. Kinesis Data Streams 모드 선택(온디맨드는 샤드 자동 관리, 이전 30일 피크의 2배) — https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html
+9. Kinesis Data Streams 쿼터("maximum total data read rate of 2 MB per second via GetRecords", EFO 20·50) — https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+10. Lake Formation — 다른 AWS 서비스와 함께 사용(엔진별 지원 표) — https://docs.aws.amazon.com/lake-formation/latest/dg/working-with-services.html
+11. Amazon Managed Service for Apache Flink("you can use Java, Scala, Python, or SQL") — https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① Snow 패밀리를 현재 선택지로 서술한 대목(수집 표·선택 기준·시험 포인트·체크리스트)을 고쳤습니다 — **신규 고객은 주문할 수 없고** 대안은 DataSync·AWS Data Transfer Terminal·파트너, 엣지 컴퓨팅은 Outposts입니다(근거 7번). ② KDS 샤드 확장을 모드별로 분리했습니다 — **온디맨드는 자동 관리**(이전 30일 피크의 2배), 프로비저닝만 수동 조정(근거 8번). ③ fan-out 서술에 **기본 컨슈머는 샤드당 2 MB/s 공유, 전용 처리량은 EFO**를 명시했습니다(근거 9번). ④ Lake Formation 적용 범위를 **엔진별 차이**로 고쳤습니다(근거 10번). ⑤ Managed Flink 지원 언어에 **Python**을 더했습니다(근거 11번).

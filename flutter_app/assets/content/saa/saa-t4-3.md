@@ -10,7 +10,7 @@ coversTasks:
 sources:
   - title: Amazon RDS 예약 인스턴스 (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html
-  - title: Aurora Serverless v2 (공식)
+  - title: Aurora serverless (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
   - title: DynamoDB 읽기/쓰기 용량 모드 (공식)
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
@@ -36,7 +36,7 @@ lastVerified: 2026-06-12
 - [ ] **관리형 vs 자체 관리 비용 차이** — EC2 위 DB와 RDS/Aurora의 총소유비용(TCO) 차이를 안다
 - [ ] **RDS 예약 인스턴스** — 기간·결제 옵션별 할인율과 선택 기준을 안다
 - [ ] **용량 계획 비용 절감** — 스토리지 자동 확장·인스턴스 rightsizing·읽기 복제본·캐싱의 비용 효과를 안다
-- [ ] **서버리스·온디맨드 옵션** — Aurora Serverless v2(ACU)와 DynamoDB 온디맨드/프로비저닝 모드를 언제 선택하는지 안다
+- [ ] **서버리스·온디맨드 옵션** — Aurora serverless(ACU)와 DynamoDB 온디맨드/프로비저닝 모드를 언제 선택하는지 안다
 - [ ] **데이터 수명주기 비용** — 백업 보존 기간이 스토리지 비용에 미치는 영향을 안다
 
 ---
@@ -75,7 +75,7 @@ lastVerified: 2026-06-12
 |---|---|---|---|
 | OLTP 관계형 (예측 가능한 부하) | RDS (MySQL/PostgreSQL) | 예약 인스턴스로 최대 60% 절감 | EC2 자체 관리(운영 인건비 추가) |
 | OLTP 관계형 (가변·고가용성) | Aurora (프로비저닝) | 스토리지 자동 확장, I/O 비용 별도 | 과스펙 Multi-AZ RDS |
-| 관계형·불규칙 부하 | Aurora Serverless v2 | ACU 단위 초당 과금, 유휴 시 최소 비용 | 상시 프로비저닝 인스턴스 |
+| 관계형·불규칙 부하 | Aurora serverless | ACU 단위 초당 과금, 유휴 시 최소 비용 | 상시 프로비저닝 인스턴스 |
 | 대규모 key-value / 서버리스 앱 | DynamoDB | 온디맨드(예측 불가) / 프로비저닝(예측 가능) | RDS over-provision |
 | 읽기 캐싱·세션 저장 | ElastiCache (Redis/Memcached) | RDS 읽기 부하 감소 → 인스턴스 다운사이즈 가능 | 읽기 복제본만 무한 추가 |
 | 시계열·IoT 데이터 | Amazon Timestream | 관계형 DB 대비 1/10 비용 | RDS에 시계열 저장 |
@@ -162,7 +162,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 
 ### 4) 서버리스·온디맨드 옵션 {#serverless-on-demand}
 
-**Aurora Serverless v2**
+**Aurora serverless**
 
 | 항목 | 내용 |
 |---|---|
@@ -173,7 +173,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 | 적합한 워크로드 | 트래픽이 불규칙하거나 간헐적인 앱, 개발·테스트 환경, 신규 앱 용량 예측 불가 상황 |
 | 장점 | 관계형 DB 기능(트랜잭션·복잡한 쿼리)을 유지하면서 서버리스 비용 모델 적용 |
 
-> Aurora Serverless v2는 0.5 ACU 단위로 스케일되므로 프로비저닝 클러스터처럼 인스턴스 클래스 전체를 업그레이드할 필요가 없습니다. 처리량이 증가할 때 부분적으로만 용량이 추가됩니다.
+> Aurora serverless는 0.5 ACU 단위로 스케일되므로 프로비저닝 클러스터처럼 인스턴스 클래스 전체를 업그레이드할 필요가 없습니다. 처리량이 증가할 때 부분적으로만 용량이 추가됩니다.
 
 **DynamoDB 용량 모드 비교 (★ 시험 핵심)**
 
@@ -189,9 +189,9 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 
 > DynamoDB 기본 권장은 **온디맨드 모드**입니다. 트래픽이 안정적이고 예측 가능한 경우에만 프로비저닝+Auto Scaling으로 비용을 낮춥니다.
 
-> 🧠 원리: 왜 Aurora Serverless v2는 인스턴스 클래스 전체를 교체하지 않고 0.5 ACU 단위로 조금씩 스케일할 수 있을까요?
+> 🧠 원리: 왜 Aurora serverless는 인스턴스 클래스 전체를 교체하지 않고 0.5 ACU 단위로 조금씩 스케일할 수 있을까요?
 > 전통적인 프로비저닝 인스턴스는 CPU·메모리가 고정된 서버 단위로 운영되기 때문에 용량을 늘리려면 다음 단계 인스턴스 클래스로 전환해야 합니다.
-> Aurora Serverless v2는 Aurora의 공유 스토리지 아키텍처 위에서 컴퓨팅 용량을 동적으로 조정하도록 설계되어, 서버 교체 없이 할당된 CPU·메모리 비율을 세밀하게 변경할 수 있습니다.
+> Aurora serverless는 Aurora의 공유 스토리지 아키텍처 위에서 컴퓨팅 용량을 동적으로 조정하도록 설계되어, 서버 교체 없이 할당된 CPU·메모리 비율을 세밀하게 변경할 수 있습니다.
 > 이 덕분에 트래픽이 조금씩 증가할 때도 용량이 그에 맞게 부분적으로만 추가되어, 과잉 프로비저닝 없이 필요한 만큼만 비용이 발생합니다.
 
 ---
@@ -217,13 +217,13 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 
 ## ✍️ 시험 포인트
 
-- **"예측 불가 트래픽 + 관계형 DB"** → Aurora Serverless v2. DynamoDB는 NoSQL이므로 관계형 스키마 요구 시 부적합.
+- **"예측 불가 트래픽 + 관계형 DB"** → Aurora serverless. DynamoDB는 NoSQL이므로 관계형 스키마 요구 시 부적합.
 - **"예측 불가 트래픽 + NoSQL"** → DynamoDB 온디맨드 모드.
 - **"안정적·예측 가능 + NoSQL"** → DynamoDB 프로비저닝 + Auto Scaling. 동일 처리량 기준 온디맨드보다 저렴.
 - **"상시 실행 RDS + 비용 절감"** → 예약 인스턴스(RI). All Upfront 3년이 최대 절감.
 - **"읽기 부하 증가 + 비용 최소화"** → Read Replica 또는 ElastiCache로 분산 → Primary 인스턴스 다운사이즈.
 - **"minimal operational overhead"** → 관리형 서비스(RDS/Aurora/DynamoDB). EC2 위 자체 설치는 운영 부담·비용 증가.
-- **"개발·테스트 환경 + 비용 최소화"** → Aurora Serverless v2(최솟값 설정) 또는 DynamoDB 온디맨드.
+- **"개발·테스트 환경 + 비용 최소화"** → Aurora serverless(최솟값 설정) 또는 DynamoDB 온디맨드.
 - **RDS RI vs EC2 RI 혼동 주의**: RDS RI는 인스턴스 클래스·엔진·Multi-AZ 조합으로 구매. Savings Plans는 RDS에 적용되지 않습니다(Compute/EC2 Savings Plans는 RDS 미적용).
 
 ---
@@ -233,8 +233,8 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 1. **"가장 싸면 정답이다."** → 오답. 비용 문제는 "요구를 충족하는 것들 중 가장 저렴한 것"입니다. HA·성능 SLA를 깨는 선택은 무조건 탈락입니다.
    *(원리: §1 — 워크로드에 맞는 DB를 고르면 더 작은 인스턴스와 단순한 운영으로 같은 부하를 처리할 수 있어 인스턴스·운영 비용이 함께 줄어든다.)*
 
-2. **"Aurora Serverless v2는 항상 무료에 가깝다."** → 최솟값 ACU를 0으로 설정하지 않으면 유휴 상태에서도 최솟값만큼 과금됩니다. 개발 환경에서는 자동 일시정지(Pause) 설정을 확인하세요.
-   *(원리: §4 — Aurora Serverless v2는 공유 스토리지 위에서 컴퓨팅을 동적으로 조정하도록 설계되어 최솟값 아래로는 축소되지 않는다.)*
+2. **"Aurora serverless는 항상 무료에 가깝다."** → 최솟값 ACU를 0으로 설정하지 않으면 유휴 상태에서도 최솟값만큼 과금됩니다. 개발 환경에서는 자동 일시정지(Pause) 설정을 확인하세요.
+   *(원리: §4 — Aurora serverless는 공유 스토리지 위에서 컴퓨팅을 동적으로 조정하도록 설계되어 최솟값 아래로는 축소되지 않는다.)*
 
 3. **"DynamoDB 온디맨드가 항상 저렴하다."** → 트래픽이 예측 가능하고 대량이면 프로비저닝 모드가 더 저렴합니다. 온디맨드는 단가가 더 높고, 높은 트래픽이 지속되면 비용이 역전됩니다.
    *(원리: §4 본문 — 온디맨드는 요청 단위 과금으로 미사용 비용이 없지만 단가가 높아, 예측 가능·안정적 트래픽에서는 프로비저닝 총비용이 더 유리하다.)*
@@ -258,7 +258,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 
 <details><summary>정답 보기</summary>
 
-**Aurora Serverless v2**입니다. 관계형 스키마(MySQL/PostgreSQL 호환)를 유지하면서, ACU 단위로 트래픽에 따라 자동 스케일합니다. 유휴 시 최솟값 ACU만 과금되므로 예측 불가 워크로드에서 비용 효율적입니다. 미리 인스턴스 클래스를 정하지 않아도 되므로 운영 부담도 줄어듭니다.
+**Aurora serverless**입니다. 관계형 스키마(MySQL/PostgreSQL 호환)를 유지하면서, ACU 단위로 트래픽에 따라 자동 스케일합니다. 유휴 시 최솟값 ACU만 과금되므로 예측 불가 워크로드에서 비용 효율적입니다. 미리 인스턴스 클래스를 정하지 않아도 되므로 운영 부담도 줄어듭니다.
 </details>
 
 **Q2.** 전자상거래 회사가 RDS MySQL 인스턴스를 3년간 안정적으로 운영할 계획입니다. 비용을 최대한 줄이려면 어떤 구매 옵션을 선택해야 하나요?
@@ -296,7 +296,7 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Amazon RDS 예약 인스턴스 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html
-2. Aurora Serverless v2 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
+2. Aurora serverless — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
 3. DynamoDB 읽기/쓰기 용량 모드 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
 4. AWS 데이터베이스 서비스 개요 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
 5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

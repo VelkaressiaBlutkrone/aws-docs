@@ -196,4 +196,154 @@ void main() {
       expect(doc('saa-t3-4').contains('configuration-memory'), isTrue);
     });
   });
+
+  group('Task 3.3 — saa-t3-5 / saa-t3-6', () {
+    test('G-3.3-10 gp3는 버스트 모델이 아니다', () {
+      // 근거: general-purpose — "gp3 volumes do not use burst performance.
+      // They can indefinitely sustain their full provisioned IOPS and
+      // throughput performance." 버스트는 gp2(3 IOPS/GiB, 1 TiB 미만)만 해당.
+      final t35 = doc('saa-t3-5');
+      expect(t35.contains('범용 SSD(gp2/gp3)는 버스트 크레딧 방식'), isFalse);
+      expect(t35.contains('gp3는 버스트'), isTrue);
+      expect(t35.contains('3,000 IOPS'), isTrue);
+    });
+
+    test('G-3.3-13 Aurora serverless 명칭(v2 표기 제거)', () {
+      // 근거: AuroraUserGuide/aurora-serverless-v2.html 제목·본문이
+      // "Aurora serverless"로 바뀌었다("Using Aurora serverless").
+      for (final id in ['saa-t3-5', 'saa-t4-3']) {
+        expect(doc(id).contains('Aurora Serverless v2'), isFalse,
+            reason: '$id 에 구식 명칭 잔존');
+        expect(doc(id).contains('Aurora serverless'), isTrue);
+      }
+    });
+
+    test('G-3.3-11 DynamoDB TTL 삭제는 만료 후 수일 내(최선 노력)', () {
+      // 근거: TTL — "DynamoDB automatically deletes expired items within a few
+      // days of their expiration time, without consuming write throughput."
+      final t36 = doc('saa-t3-6');
+      expect(t36.contains('48시간 이내'), isFalse);
+      expect(t36.contains('수일'), isTrue);
+    });
+
+    test('G-3.3-12 ElastiCache 엔진은 Valkey·Memcached·Redis OSS 3종', () {
+      // 근거: SelectEngine — "Amazon ElastiCache supports the Valkey,
+      // Memcached, and Redis OSS cache engines."
+      final t36 = doc('saa-t3-6');
+      expect(t36.contains('두 가지 엔진 지원'), isFalse);
+      expect(t36.contains('Valkey'), isTrue);
+      expect(t36.contains('Redis OSS'), isTrue);
+    });
+
+    test('G-3.3-15 DynamoDB 처리량은 무제한이 아니라 파티션 한도가 있다', () {
+      // 근거: bp-partition-key-design — "Every partition in a DynamoDB table is
+      // designed to deliver a maximum capacity of 3,000 read units per second
+      // and 1,000 write units per second."
+      final t36 = doc('saa-t3-6');
+      expect(t36.contains('수평 확장, 무제한 처리량'), isFalse);
+      expect(t36.contains('파티션당'), isTrue);
+    });
+  });
+
+  group('Task 3.4 — saa-t3-7 / saa-t3-8', () {
+    test('G-3.4-10 Global Accelerator 엔드포인트에 CloudFront는 없다', () {
+      // 근거: about-endpoints — "Endpoints for standard accelerators in AWS
+      // Global Accelerator can be Network Load Balancers, Application Load
+      // Balancers, Amazon EC2 instances, or Elastic IP addresses."
+      final t37 = doc('saa-t3-7');
+      expect(t37.contains('CloudFront 앞에 Global Accelerator'), isFalse);
+      expect(t37.contains('**Global Accelerator** + CloudFront 조합'), isFalse);
+      expect(t37.contains('Elastic IP 주소'), isTrue);
+    });
+
+    test('G-3.4-11 GWLB는 L3, ALB 프로토콜에 gRPC 포함', () {
+      final t37 = doc('saa-t3-7');
+      expect(t37.contains('| **GLB** (Gateway LB) | L3/L4 |'), isFalse);
+      expect(t37.contains('gRPC'), isTrue);
+    });
+
+    test('G-3.4-13 Direct Connect SLA는 가용성 약정이다', () {
+      // 근거: Direct Connect SLA — 다중 사이트 중복 99.99%, 비중복 99.9%,
+      // 단일 연결 95.0%. 대역폭·지연 약정은 없다.
+      final t38 = doc('saa-t3-8');
+      expect(t38.contains('일관됨 (SLA 보장)'), isFalse);
+      expect(t38.contains('가용성 SLA'), isTrue);
+      expect(t38.contains('99.99%'), isTrue);
+    });
+  });
+
+  group('Task 3.5 — saa-t3-9', () {
+    test('G-3.5-09 Snow Family는 신규 주문 불가', () {
+      // 근거: snowball-edge-availability-change — "AWS Snowball Edge is no
+      // longer available to new customers... AWS will no longer offer any AWS
+      // Snow Family devices for new customers to order." 대안은 DataSync·
+      // AWS Data Transfer Terminal·파트너, 엣지 컴퓨팅은 Outposts.
+      final t39 = doc('saa-t3-9');
+      expect(t39.contains('Snowball Edge는 엣지 컴퓨팅도 가능합니다'), isFalse);
+      expect(t39.contains('신규 고객'), isTrue);
+      expect(t39.contains('Data Transfer Terminal'), isTrue);
+      expect(t39.contains('Outposts'), isTrue);
+    });
+
+    test('G-3.5-10 KDS 온디맨드 모드는 샤드를 자동 관리한다', () {
+      // 근거: how-do-i-size-a-stream — "With the on-demand mode, Kinesis Data
+      // Streams automatically manages the shards"; 이전 30일 피크의 2배 수용.
+      final t39 = doc('saa-t3-9');
+      expect(t39.contains('샤드 수는 자동으로 증가하지 않습니다'), isFalse);
+      expect(t39.contains('온디맨드'), isTrue);
+      expect(t39.contains('30일'), isTrue);
+    });
+
+    test('G-3.5-11 기본 소비자는 샤드당 2 MB/s를 공유, 전용 처리량은 EFO', () {
+      // 근거: service-sizes-and-limits — "Each shard can support up to a
+      // maximum total data read rate of 2 MB per second via GetRecords."
+      final t39 = doc('saa-t3-9');
+      expect(t39.contains('**여러 컨슈머가 동시에 독립적으로** 읽을 수 있습니다'), isFalse);
+      expect(t39.contains('EFO'), isTrue);
+      expect(t39.contains('공유'), isTrue);
+    });
+
+    test('G-3.5-12 Lake Formation 지원 범위는 엔진별로 다르다', () {
+      // 근거: working-with-services — Hive on EMR은 행/셀 미지원, Athena Spark·
+      // EMR on EKS 미지원, Glue ETL 열/행 읽기는 Glue 5.0 이상.
+      final t39 = doc('saa-t3-9');
+      expect(
+          t39.contains('Athena, EMR(Apache Spark), Redshift Spectrum, Glue ETL 전반에 Lake Formation 권한이 일관되게 적용됩니다'),
+          isFalse);
+      expect(t39.contains('Glue 5.0'), isTrue);
+      expect(t39.contains('Hive'), isTrue);
+    });
+
+    test('G-3.5-15 Managed Flink 지원 언어에 Python 포함', () {
+      // 근거: managed-flink what-is — "you can use Java, Scala, Python, or SQL"
+      final t39 = doc('saa-t3-9');
+      expect(t39.contains('**Java·Scala·SQL**'), isFalse);
+      expect(t39.contains('Python'), isTrue);
+    });
+  });
+
+  group('정정 날짜·출처 (Task 3.3~3.5)', () {
+    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+      for (final id in [
+        'saa-t3-5',
+        'saa-t3-6',
+        'saa-t3-7',
+        'saa-t3-8',
+        'saa-t3-9'
+      ]) {
+        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
+            reason: '$id lastVerified 누락');
+      }
+    });
+
+    test('새로 인용한 공식 출처가 실려 있다', () {
+      expect(doc('saa-t3-5').contains('ebs/latest/userguide/general-purpose'),
+          isTrue);
+      expect(doc('saa-t3-6').contains('SelectEngine'), isTrue);
+      expect(doc('saa-t3-7').contains('global-accelerator'), isTrue);
+      expect(doc('saa-t3-8').contains('directconnect/sla'), isTrue);
+      expect(doc('saa-t3-9').contains('snowball-edge-availability-change'),
+          isTrue);
+    });
+  });
 }
