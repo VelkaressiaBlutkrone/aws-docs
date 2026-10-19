@@ -309,10 +309,11 @@
       "wrongExplanations": {
         "0": "역할의 자격증명은 영구가 아니라 임시입니다 — '역할은 영구 권한'은 흔한 오해입니다.",
         "2": "역할은 장기 자격증명이 없습니다 — 수임 시 임시 STS 토큰만 발급됩니다.",
-        "3": "임시 자격증명은 리전에 종속되지 않습니다 — IAM·STS는 글로벌 성격으로 동작합니다."
+        "3": "임시 자격증명은 리전에 종속되지 않습니다 — 발급받은 토큰으로 다른 리전의 API도 호출할 수 있습니다. 다만 STS 자체는 글로벌 엔드포인트와 리전 엔드포인트를 모두 제공하며, 기본 활성 리전에서는 글로벌 엔드포인트 요청도 요청이 발생한 같은 리전에서 처리됩니다(opt-in 리전 요청만 US East(버지니아 북부)가 처리). AWS는 리전 엔드포인트 사용을 권장합니다."
       },
       "sources": [
-        { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
+        { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" },
+        { "title": "AWS STS 리전 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-sts-regionalized-endpoints.html" }
       ],
       "verified": false
     },
