@@ -1,0 +1,480 @@
+{
+  "examGuideTaskId": "dea-t3-3",
+  "taskTitle": "데이터 파이프라인 유지 관리 및 모니터링",
+  "domain": 3,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t3-3-q1",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "감사를 위해 로그 추출(3.3.1)",
+      "section": "extract-logs",
+      "difficulty": "applied",
+      "stem": "감사팀이 8개월 전에 일어난 IAM 역할 삭제의 호출자를 확인해 달라고 요청했다. 계정에는 trail이 구성되어 있지 않고 CloudTrail은 기본 상태다. 현재 상황에 대한 설명으로 가장 정확한 것은?",
+      "options": [
+        "CloudTrail 이벤트 기록은 모든 리전의 이벤트를 무기한 보관하므로 콘솔에서 바로 조회할 수 있다",
+        "이벤트 기록은 현재 리전의 최근 90일 관리 이벤트만 담으므로 8개월 전 기록은 조회할 수 없다. 장기 보관을 위해 trail을 만들어 S3로 전달해야 한다",
+        "AWS Config 구성 이력에서 호출자 정보를 확인할 수 있으므로 CloudTrail은 필요 없다",
+        "trail이 없어도 CloudWatch Logs Insights로 과거 CloudTrail 이벤트를 쿼리할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "CloudTrail 이벤트 기록(Event history)은 설정 없이 쓸 수 있지만 현재 보고 있는 리전의 최근 90일, 그것도 생성·수정·삭제 같은 관리 이벤트로 한정됩니다. 데이터 이벤트와 읽기 전용 활동까지 포함한 완전한 기록과 장기 보관은 trail을 만들어 S3·CloudWatch Logs·EventBridge로 전달해야 합니다.",
+      "wrongExplanations": {
+        "0": "이벤트 기록은 무기한이 아니라 최근 90일이며, 현재 보고 있는 리전으로 한정됩니다.",
+        "2": "AWS Config는 리소스 구성이 어떻게 바뀌었는지를 기록하는 서비스입니다. '누가 어떤 API를 호출했나'는 CloudTrail의 영역이며, 연속 변경은 구성 항목 하나로 합쳐질 수도 있습니다.",
+        "3": "CloudTrail 이벤트가 CloudWatch Logs로 가려면 trail과 CloudWatch Logs 통합이 구성되어 있어야 합니다. trail이 없으면 로그가 존재하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CloudTrail FAQs — 이벤트 기록은 현재 리전 90일·관리 이벤트, trail은 S3·CloudWatch Logs·EventBridge 전달",
+          "url": "https://aws.amazon.com/cloudtrail/faqs/"
+        },
+        {
+          "title": "AWS Config terminology and concepts — 구성 항목과 구성 이력",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q2",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "감사를 위해 로그 추출(3.3.1)",
+      "section": "extract-logs",
+      "difficulty": "applied",
+      "stem": "애플리케이션 로그를 CloudWatch Logs에 수집하면서 동시에 Amazon S3로 지속적으로 아카이브해야 한다. 공식 문서가 권장하는 방식은 무엇인가?",
+      "options": [
+        "CreateExportTask를 매시간 호출하는 예약 Lambda를 만든다",
+        "로그 그룹 보존 기간을 늘리고 Logs Insights로 조회한다",
+        "구독 필터를 구성해 로그 이벤트를 Amazon Data Firehose 같은 대상으로 거의 실시간 전달한다",
+        "로그 그룹을 Infrequent Access 클래스로 만들고 S3 내보내기를 켠다"
+      ],
+      "correct": 2,
+      "explanation": "CloudWatch Logs의 S3 내보내기(CreateExportTask)는 비동기 배치성 작업이며, API 문서는 로그를 계속 아카이브하는 용도로는 정기적 내보내기 대신 구독을 쓰라고 권고합니다. 구독 필터는 로그 이벤트를 Kinesis Data Streams·Amazon Data Firehose·Lambda로 거의 실시간 전달하며, 전달 데이터는 base64 인코딩 후 gzip 압축됩니다.",
+      "wrongExplanations": {
+        "0": "정기적인 내보내기 반복은 문서가 지속 아카이브 용도로 권장하지 않는 방식입니다. 동시에 활성인 내보내기 작업 수에도 계정·리전별 한도가 있습니다.",
+        "1": "보존 기간을 늘리면 CloudWatch Logs에 더 오래 남을 뿐 S3로 아카이브되지 않습니다. 저장 비용도 계속 발생합니다.",
+        "3": "Infrequent Access 클래스는 구독 필터를 지원하지 않으며, IA와 S3 내보내기의 조합은 공식 자료 간 서술이 엇갈려 설계 근거로 삼기에 적절하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "CreateExportTask (CloudWatch Logs API Reference) — 지속 아카이브에는 구독 권고",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateExportTask.html"
+        },
+        {
+          "title": "Real-time processing of log data with subscriptions — Kinesis·Firehose·Lambda로 준실시간 전달, Standard 클래스만",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q3",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "감사 및 추적을 지원하는 로깅 및 모니터링 솔루션 배포(3.3.2)",
+      "section": "deploy-logging",
+      "difficulty": "foundational",
+      "stem": "보안팀이 \"어떤 보안 그룹의 인바운드 규칙이 지난달에 어떻게 바뀌어 왔는지\" 구성 변화의 이력을 보고 싶어 한다. 어떤 서비스가 이 질문에 가장 직접적으로 답하는가?",
+      "options": [
+        "AWS Config — 지원 리소스가 바뀔 때마다 구성 항목을 만들고 구성 이력 파일을 S3로 전달한다",
+        "AWS CloudTrail — 리소스 구성의 시간별 상태를 스냅샷으로 저장한다",
+        "Amazon CloudWatch Logs — 리소스 구성 변화를 로그 스트림으로 저장한다",
+        "Amazon EventBridge — 구성 변경 이력을 이벤트 버스에 보관한다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Config는 지원 리소스가 바뀔 때마다 구성 항목(configuration item)을 만들고 리소스 유형별 구성 이력 파일을 지정한 S3 버킷에 자동 전달합니다. 즉 '리소스 구성이 시간에 따라 어떻게 바뀌었나'에 답하는 서비스입니다.",
+      "wrongExplanations": {
+        "1": "CloudTrail은 '누가·언제·어디서 어떤 API를 호출했나'를 기록합니다. 구성 상태의 시간별 스냅샷을 만드는 서비스가 아닙니다.",
+        "2": "CloudWatch Logs는 애플리케이션·서비스가 출력한 로그 이벤트를 담습니다. 리소스 구성 이력을 자동으로 만들지 않습니다.",
+        "3": "EventBridge는 이벤트를 규칙에 따라 대상으로 전달하는 버스입니다. 이력을 보관하는 저장소가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config terminology and concepts — 구성 항목 생성과 구성 이력 파일 S3 전달",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html"
+        },
+        {
+          "title": "AWS CloudTrail FAQs — API 호출 이벤트(요청자·서비스·작업·파라미터·응답 요소)",
+          "url": "https://aws.amazon.com/cloudtrail/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q4",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "감사 및 추적을 지원하는 로깅 및 모니터링 솔루션 배포(3.3.2)",
+      "section": "deploy-logging",
+      "difficulty": "applied",
+      "stem": "AWS Organizations를 쓰는 회사가 관리 계정과 모든 멤버 계정의 API 호출을 하나의 S3 버킷에 모으려 한다. 앞으로 추가될 리전과 신규 계정도 자동으로 포함되어야 한다. 가장 적절한 구성은?",
+      "options": [
+        "계정마다 단일 리전 trail을 만들고 각 계정의 버킷에 저장한 뒤 주기적으로 복사한다",
+        "관리 계정에서 CloudTrail 이벤트 기록을 내보내는 Lambda를 매일 실행한다",
+        "계정마다 AWS Config를 켜고 구성 이력 파일을 공용 버킷으로 모은다",
+        "조직 trail을 만들어 공용 S3 버킷으로 전달한다. 모든 리전에 적용하는 trail은 새로 추가되는 리전도 자동으로 기록한다"
+      ],
+      "correct": 3,
+      "explanation": "조직 trail은 관리 계정과 모든 멤버 계정의 이벤트를 같은 S3 버킷·CloudWatch Logs·EventBridge로 전달하며, 콘솔에서 만든 조직 trail은 모두 멀티 리전입니다. 모든 리전에 적용하는 trail(IsMultiRegionTrail=true)은 새로 추가되는 리전도 자동으로 기록하고 설정 복제는 보통 30초 안에 끝납니다.",
+      "wrongExplanations": {
+        "0": "계정별 단일 리전 trail은 신규 리전을 자동으로 포함하지 않고, 버킷 간 복사라는 운영 부담과 지연이 생깁니다.",
+        "1": "이벤트 기록은 현재 리전 최근 90일의 관리 이벤트만 담습니다. 조직 전체의 완전한 기록을 모으는 수단이 아닙니다.",
+        "2": "AWS Config는 리소스 구성 변화를 기록합니다. API 호출 주체를 모으는 요구와 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CloudTrail FAQs — 멀티 리전 trail의 신규 리전 자동 기록, 설정 복제 30초",
+          "url": "https://aws.amazon.com/cloudtrail/faqs/"
+        },
+        {
+          "title": "CloudTrail concepts — 조직 trail은 관리·멤버 계정 이벤트를 같은 대상으로 전달",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q5",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "모니터링 중 알림 기능을 사용하여 경고 전송(3.3.3)",
+      "section": "notifications",
+      "difficulty": "applied",
+      "stem": "AWS Glue ETL 작업이 FAILED 또는 TIMEOUT 상태가 되면 운영팀 Amazon SNS 주제로 즉시 통지해야 한다. 작업 스크립트는 수정할 수 없다. 가장 적절한 구성은?",
+      "options": [
+        "CloudTrail Insights를 켜 Glue API 호출의 이상 징후를 탐지하고 SNS로 보낸다",
+        "Glue Job State Change 이벤트를 매칭하는 EventBridge 규칙을 만들고 대상을 SNS 주제로 지정한다",
+        "Glue 로그 그룹에 구독 필터를 걸어 Lambda가 로그를 파싱하고 SNS를 호출하게 한다",
+        "Glue 작업 스크립트 마지막에 boto3로 SNS publish를 호출한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS Glue는 Glue Job State Change 이벤트(SUCCEEDED, FAILED, TIMEOUT, STOPPED)를 EventBridge로 발행합니다. 이 이벤트를 매칭하는 규칙을 만들어 대상을 SNS로 지정하면 스크립트를 수정하지 않고도 통지를 받을 수 있습니다. 공식 문서 예시도 성공 시 Lambda 실행, 실패 시 SNS 통지입니다.",
+      "wrongExplanations": {
+        "0": "CloudTrail Insights는 API 호출량·오류율이 기준선에서 벗어난 비정상 활동을 탐지하는 기능이며 개별 trail에 구성합니다. 작업 상태 변경 알림이 아닙니다.",
+        "2": "상태 변경 이벤트가 이미 발행되는데 로그를 파싱하는 것은 간접적이고 취약한 경로입니다. 파싱 규칙이 로그 형식 변화에 깨질 수 있습니다.",
+        "3": "스크립트 수정이 필요하므로 '작업 스크립트는 수정할 수 없다'는 제약과 정면으로 충돌합니다. 또한 작업이 TIMEOUT으로 끝나면 해당 코드가 실행되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Automating AWS Glue with EventBridge — Glue Job State Change(SUCCEEDED·FAILED·TIMEOUT·STOPPED)",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/automating-awsglue-with-cloudwatch-events.html"
+        },
+        {
+          "title": "AWS CloudTrail FAQs — Insights는 호출량·오류율 기준선 이탈 탐지",
+          "url": "https://aws.amazon.com/cloudtrail/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q6",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "모니터링 중 알림 기능을 사용하여 경고 전송(3.3.3)",
+      "section": "notifications",
+      "difficulty": "applied",
+      "stem": "Amazon DynamoDB의 ThrottledRequests 지표에 CloudWatch 경보를 걸었다. 쓰로틀이 전혀 없는 평온한 시간대에는 데이터 포인트가 생기지 않는다. 경보가 이 구간을 정상으로 취급하게 하려면 누락 데이터 처리를 무엇으로 설정해야 하는가?",
+      "options": [
+        "breaching",
+        "missing",
+        "notBreaching",
+        "ignore"
+      ],
+      "correct": 2,
+      "explanation": "CloudWatch 경보는 누락된 데이터 포인트를 notBreaching, breaching, ignore, missing 중 하나로 취급합니다. DynamoDB ThrottledRequests처럼 오류가 날 때만 데이터가 생기는 지표는 데이터가 없는 것이 정상이므로 notBreaching이 맞습니다.",
+      "wrongExplanations": {
+        "0": "breaching은 누락을 위반으로 취급합니다. 연속 보고되는 지표가 끊겼을 때 문제로 보려는 경우에 쓰며, 이 시나리오에서는 정상 구간마다 경보가 울립니다.",
+        "1": "missing은 전체 기본값으로, 누락 구간을 평가에서 빼고 이전 상태를 유지합니다. '정상으로 취급'하라는 요구를 명시적으로 만족하지 않습니다.",
+        "3": "ignore는 경보 상태를 바꾸지 않는 설정이며 AWS/DynamoDB 네임스페이스 지표의 기본값입니다. 누락 구간을 정상(OK)으로 평가하게 만들지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring how CloudWatch alarms treat missing data — 네 가지 설정, 기본 missing, DynamoDB 네임스페이스 기본 ignore, ThrottledRequests는 notBreaching",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q7",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "모니터링 중 알림 기능을 사용하여 경고 전송(3.3.3)",
+      "section": "notifications",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift 클러스터 이벤트 알림을 SNS로 받으려고 기존 SNS FIFO 주제를 지정했더니 구독을 만들 수 없다. 원인과 해결책으로 올바른 것은?",
+      "options": [
+        "Redshift 이벤트 구독은 SNS 표준 주제만 지원하므로 표준 주제를 만들어 지정한다",
+        "이벤트 구독에는 심각도 필터를 반드시 지정해야 하므로 ERROR를 선택한다",
+        "Redshift는 SNS를 지원하지 않으므로 EventBridge 규칙으로 대체한다",
+        "클러스터의 감사 로깅을 먼저 켜야 이벤트 구독을 만들 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "Amazon Redshift 이벤트 구독은 SNS 표준 주제만 사용할 수 있으며 FIFO 주제는 지원하지 않습니다. 구독은 소스 유형·ID·범주(Monitoring, Security 등)·심각도(INFO, ERROR)로 필터링할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "심각도 필터는 선택 사항입니다. 지정하지 않아도 구독을 만들 수 있으며, FIFO 주제 문제를 해결하지도 못합니다.",
+        "2": "Redshift는 이벤트 구독으로 SNS에 알립니다. 지원하지 않는 것은 SNS 전체가 아니라 FIFO 주제입니다.",
+        "3": "감사 로깅은 연결·사용자·사용자 활동 로그를 남기는 별개 기능입니다. 이벤트 구독의 선행 조건이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Redshift cluster event notification subscriptions — SNS 표준 주제만, 소스 유형·ID·범주·심각도 필터",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications-subscribe.html"
+        },
+        {
+          "title": "Database audit logging (Amazon Redshift) — 감사 로깅은 기본 꺼짐인 별개 기능",
+          "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/db-auditing.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q8",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "성능 문제 해결(3.3.4)",
+      "section": "perf-troubleshoot",
+      "difficulty": "applied",
+      "stem": "Amazon Kinesis Data Streams를 소비하는 애플리케이션의 GetRecords.IteratorAgeMilliseconds가 며칠에 걸쳐 완만하게 증가하고 있다. 가장 정확한 해석과 근본 조치는?",
+      "options": [
+        "하류 API의 일시적 실패이므로 소비자 재시도 간격만 조정하면 된다",
+        "생산자 쪽 쓰로틀이므로 WriteProvisionedThroughputExceeded를 기준으로 샤드를 줄인다",
+        "보존 기간을 365일로 늘리면 문제가 해결된다",
+        "소비자의 처리 속도가 유입을 따라가지 못하는 상태다. 소비 로직을 점검하고 샤드를 늘려 병렬성을 확대한다"
+      ],
+      "correct": 3,
+      "explanation": "이터레이터 나이의 급증은 하류 API 실패 같은 일시적 문제를 가리키지만, 완만한 증가는 소비자의 처리 속도 부족(자원·로직 미확장)을 뜻합니다. 이터레이터 나이가 보존 기간의 50%를 넘으면 레코드 만료로 인한 데이터 손실 위험이 있으며, 보존 기간 연장은 임시 방편이고 근본 해결은 소비 로직 점검과 샤드 증설을 통한 병렬성 확대입니다.",
+      "wrongExplanations": {
+        "0": "일시적 하류 실패는 이터레이터 나이의 급증으로 나타납니다. 며칠에 걸친 완만한 증가와는 양상이 다릅니다.",
+        "1": "이터레이터 나이는 소비 지연 지표입니다. 생산자 쓰로틀은 WriteProvisionedThroughputExceeded로 따로 판별하며, 샤드를 줄이면 상황이 더 나빠집니다.",
+        "2": "보존 기간 연장은 레코드 만료를 미루는 임시 방편일 뿐 소비 지연 자체를 해결하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshooting Kinesis Data Streams consumers — 급증 vs 완만한 증가의 해석, 보존 50%, 근본 조치",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/troubleshooting-consumers.html"
+        },
+        {
+          "title": "Monitor Kinesis Data Streams with Amazon CloudWatch — IteratorAge는 Maximum 통계 경보 권장, 읽기·쓰기 쓰로틀 지표",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q9",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "성능 문제 해결(3.3.4)",
+      "section": "perf-troubleshoot",
+      "difficulty": "applied",
+      "stem": "트래픽이 몰리는 시간대에 AWS Lambda 기반 수집 파이프라인에서 일부 요청이 처리되지 않는데, CloudWatch의 Invocations와 Errors 지표에는 이상이 보이지 않는다. 가장 먼저 확인해야 할 지표와 그 이유는?",
+      "options": [
+        "Duration — 함수 실행이 길어지면 호출이 누락된 것처럼 보인다",
+        "Throttles — 쓰로틀된 요청은 Invocations·Errors에 잡히지 않는다. 함께 ConcurrentExecutions를 Maximum 통계로 확인한다",
+        "IteratorAge — 모든 호출 방식에서 호출 거부를 나타내는 지표다",
+        "ConcurrentExecutions를 Average 통계로 확인 — 평균이 할당량에 닿았는지 본다"
+      ],
+      "correct": 1,
+      "explanation": "ConcurrentExecutions가 리전 동시 실행 할당량 또는 함수 예약 동시성 한도에 닿으면 Lambda가 추가 호출을 쓰로틀합니다. 쓰로틀된 요청은 Invocations·Errors 지표에 잡히지 않으므로 Throttles 지표를 봐야 하며, 한도 접촉 여부는 ConcurrentExecutions의 Maximum 통계로 확인합니다.",
+      "wrongExplanations": {
+        "0": "Duration은 실행 시간을 나타냅니다. 실행이 길어지는 것과 요청이 아예 거부되는 것은 다른 현상이며, Duration만으로는 쓰로틀을 판별할 수 없습니다.",
+        "2": "IteratorAge는 DynamoDB·Kinesis 스트림 소스에서 레코드가 함수로 전달되기까지의 시간입니다. 모든 호출 방식의 호출 거부 지표가 아닙니다.",
+        "3": "Average 통계는 순간적인 한도 접촉을 가립니다. 동시 실행 한도 접촉은 Maximum 통계로 확인해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Types of metrics for Lambda — ConcurrentExecutions 한도 접촉 시 쓰로틀, 쓰로틀 요청은 Invocations·Errors 미포함",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q10",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "성능 문제 해결(3.3.4)",
+      "section": "perf-troubleshoot",
+      "difficulty": "applied",
+      "stem": "AWS Glue Spark 작업의 실행 시간이 점점 길어진다. 작업 지표를 보니 최대 필요 executor 수가 활성 executor 수를 크게 웃돈다. 이 신호가 뜻하는 것과 조치는?",
+      "options": [
+        "작업 북마크가 꺼져 있어 전체 데이터를 재처리하는 것이므로 북마크를 켠다",
+        "동시 실행 한도를 초과한 것이므로 MaxConcurrentRuns를 늘린다",
+        "DPU가 과소 할당된 상태이므로 워커 수·DPU를 늘려 용량을 맞춘다",
+        "작업 타임아웃이 짧은 것이므로 Timeout 값을 늘린다"
+      ],
+      "correct": 2,
+      "explanation": "최대 필요 executor는 실행 중 태스크와 대기 태스크를 더해 executor당 태스크 수로 나눠 계산하며, 활성 executor와 비교해 과소 할당 배율을 구합니다. 필요 executor가 할당된 용량을 크게 넘으면 DPU 과소 할당이므로 워커·DPU를 증설합니다. DPU는 4 vCPU와 16 GB 메모리의 상대 측정 단위입니다.",
+      "wrongExplanations": {
+        "0": "북마크는 읽는 데이터 범위를 정하는 설정입니다. executor 부족이라는 용량 신호와는 다른 문제이며, 지표가 가리키는 바와 맞지 않습니다.",
+        "1": "MaxConcurrentRuns는 같은 작업의 동시 실행 개수 한도(기본 1)입니다. 한 실행 안에서 executor가 부족한 상황과 무관합니다.",
+        "3": "타임아웃을 늘리면 작업이 중단되지 않을 뿐 실행 시간은 그대로입니다. 원인인 용량 부족을 해결하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Monitoring for DPU capacity planning (AWS Glue) — 최대 필요 executor 대비 활성 executor로 과소 할당 판단",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/monitor-debug-capacity.html"
+        },
+        {
+          "title": "Jobs (AWS Glue API) — DPU 정의, MaxConcurrentRuns 기본 1, Timeout",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-jobs-job.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q11",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "AWS CloudTrail을 사용하여 API 호출 추적(3.3.5)",
+      "section": "cloudtrail",
+      "difficulty": "applied",
+      "stem": "데이터 레이크 버킷에서 누가 객체를 삭제하는지 추적해야 한다. trail은 이미 있고 관리 이벤트를 기록 중이지만 객체 삭제 기록이 보이지 않는다. 비용도 최대한 억제해야 한다. 어떻게 해야 하는가?",
+      "options": [
+        "해당 버킷에 대한 데이터 이벤트를 활성화하고, 고급 이벤트 선택기로 eventName 등을 필터링해 기록 범위를 좁힌다",
+        "trail을 멀티 리전으로 바꾸면 객체 수준 작업이 기록된다",
+        "CloudTrail Insights를 켜서 삭제 호출의 급증을 탐지한다",
+        "S3 서버 액세스 로그를 켜고 로그 파일 무결성 검증으로 삭제를 확인한다"
+      ],
+      "correct": 0,
+      "explanation": "S3 객체 수준 API(GetObject·PutObject·DeleteObject 등)는 데이터 이벤트이며 기본으로 기록되지 않습니다. 데이터 이벤트는 대용량이 많고 추가 요금이 붙으므로, 고급 이벤트 선택기로 eventName 같은 필드를 필터링해 관심 있는 이벤트만 기록하면 비용을 통제할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "멀티 리전 설정은 기록 대상 리전을 넓힐 뿐 이벤트 유형을 바꾸지 않습니다. 데이터 이벤트는 여전히 꺼진 상태입니다.",
+        "2": "Insights는 API 호출량·오류율이 기준선에서 벗어난 비정상 활동을 탐지합니다. 개별 삭제의 호출자를 식별하는 기록이 아닙니다.",
+        "3": "로그 파일 무결성 검증은 CloudTrail의 기능이며 서버 액세스 로그는 지원하지 않습니다. 객체 수준 동작 기록에는 CloudTrail이 권장됩니다."
+      },
+      "sources": [
+        {
+          "title": "Logging data events (CloudTrail) — 데이터 이벤트 기본 비활성, 고급 이벤트 선택기로 필터링해 비용 통제",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html"
+        },
+        {
+          "title": "Logging options for Amazon S3 — 객체 수준 동작 기록에는 CloudTrail 권장, 무결성 검증은 CloudTrail만",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/logging-with-S3.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q12",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "파이프라인 문제 해결 및 유지 관리(예: AWS Glue, Amazon EMR)(3.3.6)",
+      "section": "glue-emr-maintain",
+      "difficulty": "applied",
+      "stem": "AWS CLI로 생성한 Amazon EMR 클러스터에서 단계가 실패했고 클러스터는 이미 종료됐다. 실패 원인을 찾으려는데 로그를 전혀 볼 수 없다. 원인과 앞으로의 조치는?",
+      "options": [
+        "EMR은 단계 로그를 남기지 않으므로 애플리케이션에서 직접 CloudWatch Logs로 보내야 한다",
+        "자동 종료 정책이 켜져 있어 로그가 삭제된 것이므로 정책을 끈다",
+        "로그는 클러스터 종료 후 7일간 보관되므로 지금 조회하면 된다",
+        "로그는 기본적으로 각 노드의 로컬 디렉터리에 쓰이고 클러스터 종료 후 사라진다. 클러스터 생성 시 S3 로그 경로를 지정해 아카이브해야 하며, CLI·API로 만든 클러스터는 이 설정을 수동으로 해야 한다"
+      ],
+      "correct": 3,
+      "explanation": "EMR 로그는 기본으로 모든 노드의 /mnt/var/log/에 쓰이며 클러스터 종료 후에는 노드 로컬 로그를 쓸 수 없습니다. 따라서 S3 로그 경로를 지정해 아카이브해야 합니다. 콘솔로 만든 클러스터는 기본으로 로그 아카이빙이 켜지지만 CLI·API로 만든 클러스터는 수동으로 설정해야 합니다.",
+      "wrongExplanations": {
+        "0": "EMR은 단계 로그를 남깁니다(controller·syslog·stderr·stdout). 문제는 로그의 존재가 아니라 보관 위치입니다.",
+        "1": "자동 종료 정책은 유휴 클러스터를 종료하는 기능이며 로그를 삭제하지 않습니다. 로그가 사라지는 이유는 노드 로컬 저장이기 때문입니다.",
+        "2": "종료된 클러스터의 노드 로컬 로그는 보관되지 않습니다. S3 아카이브를 미리 구성하지 않았다면 조회할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Configure Amazon EMR cluster logging and debugging — /mnt/var/log/, 종료 후 사용 불가, S3 아카이브",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-debugging.html"
+        },
+        {
+          "title": "View Amazon EMR log files — 단계 로그 4종, 콘솔 생성은 기본 켜짐·CLI/API는 수동",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-manage-view-web-log-files.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q13",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "파이프라인 문제 해결 및 유지 관리(예: AWS Glue, Amazon EMR)(3.3.6)",
+      "section": "glue-emr-maintain",
+      "difficulty": "applied",
+      "stem": "Trino만 실행하는 Amazon EMR 클러스터에 자동 종료 정책을 설정했는데 유휴 상태가 오래 지속돼도 클러스터가 종료되지 않는다. 가장 정확한 설명은?",
+      "options": [
+        "유휴 시간 기본값이 7일이므로 더 기다려야 한다",
+        "자동 종료는 Presto·Trino·HBase 같은 비 YARN 애플리케이션에서는 지원되지 않는다",
+        "자동 종료는 단계가 한 번도 제출되지 않은 클러스터에만 동작한다",
+        "ActionOnFailure를 TERMINATE_CLUSTER로 설정해야 자동 종료가 작동한다"
+      ],
+      "correct": 1,
+      "explanation": "EMR 자동 종료 정책은 Presto·Trino·HBase 같은 비 YARN 애플리케이션에서는 지원되지 않습니다. 유휴 판정은 활성 YARN 애플리케이션 없음, HDFS 사용률 낮음, 활성 노트북·EMR Studio 연결 없음, 온클러스터 UI 미사용, 대기 중 단계 없음 등을 보며 EMR 릴리스에 따라 기준이 다릅니다.",
+      "wrongExplanations": {
+        "0": "유휴 시간 기본값은 60분이며 1분에서 7일 범위에서 지정합니다. 7일이 기본값이 아닙니다.",
+        "2": "유휴 판정 기준에 '대기 중 단계 없음'이 포함될 뿐, 단계를 제출한 적이 있는 클러스터에서도 자동 종료는 동작합니다.",
+        "3": "ActionOnFailure는 단계가 실패했을 때의 동작을 정하는 설정이며 자동 종료 정책과 별개입니다."
+      },
+      "sources": [
+        {
+          "title": "Using an auto-termination policy for Amazon EMR cluster cleanup — 유휴 판정 기준, 기본 60분·1분~7일, 비 YARN 미지원",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-auto-termination-policy.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q14",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "Amazon CloudWatch Logs를 사용하여 애플리케이션 데이터 로깅(구성 및 자동화에 중점을 둠)(3.3.7)",
+      "section": "cwlogs-config",
+      "difficulty": "applied",
+      "stem": "비용을 줄이려고 자주 조회하지 않는 애플리케이션 로그 그룹을 Infrequent Access 로그 클래스로 만들었다. 이후 \"ERROR 문자열이 나타나면 경보\"를 걸기 위해 메트릭 필터를 만들려는데 생성할 수 없다. 원인과 조치로 올바른 것은?",
+      "options": [
+        "메트릭 필터는 로그 그룹당 1개만 만들 수 있으므로 기존 필터를 지운다",
+        "메트릭 필터는 과거 로그에 소급 적용되지 않으므로 새 로그가 쌓일 때까지 기다린다",
+        "IA 클래스는 메트릭 필터를 지원하지 않는다. 로그 클래스는 생성 후 변경할 수 없으므로 Standard 클래스 로그 그룹을 새로 만들어야 한다",
+        "IA 클래스에서는 보존 기간을 먼저 지정해야 메트릭 필터를 만들 수 있다"
+      ],
+      "correct": 2,
+      "explanation": "Infrequent Access 로그 클래스는 구독 필터·메트릭 필터·Live Tail·GetLogEvents/FilterLogEvents를 지원하지 않습니다(Logs Insights와 교차 계정 기능은 지원). 또한 두 클래스는 수집 비용만 다르며 생성 후 클래스를 바꿀 수 없으므로, 경보가 필요하면 Standard 클래스 로그 그룹을 새로 만들어야 합니다.",
+      "wrongExplanations": {
+        "0": "메트릭 필터 개수 한도 때문이 아닙니다. IA 클래스에서는 메트릭 필터 기능 자체가 지원되지 않습니다.",
+        "1": "메트릭 필터가 소급 적용되지 않는 것은 사실이지만, 그것은 필터를 만든 뒤의 동작입니다. 지금은 필터 생성 자체가 되지 않는 상황입니다.",
+        "3": "보존 기간은 메트릭 필터 생성의 선행 조건이 아닙니다. CloudWatch Logs의 기본 보존은 무기한입니다."
+      },
+      "sources": [
+        {
+          "title": "Log classes (CloudWatch Logs) — IA는 구독·메트릭 필터·Live Tail 미지원, 수집 비용만 차이, 클래스 변경 불가",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html"
+        },
+        {
+          "title": "Creating metrics from log events using filters — 소급 적용되지 않음, Standard 클래스만 지원",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/MonitoringLogData.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t3-3-q15",
+      "examGuideTaskId": "dea-t3-3",
+      "skill": "AWS 서비스를 통해 로그 분석(예: Athena, Amazon EMR, Amazon OpenSearch Service, CloudWatch Logs Insights)(3.3.8)",
+      "section": "log-analysis",
+      "difficulty": "applied",
+      "stem": "보안 분석가들이 Amazon S3에 수년간 쌓인 AWS CloudTrail 로그를 임시로, 서버를 운영하지 않고 SQL로 조사하려 한다. 파티션이 매우 많아 카탈로그 관리 부담도 피하고 싶다. 가장 적절한 구성은?",
+      "options": [
+        "Amazon Athena로 CloudTrail 로그 테이블을 만들고 파티션 프로젝션을 구성해 쿼리한다",
+        "CloudWatch Logs Insights로 S3의 CloudTrail 로그를 직접 쿼리한다",
+        "Amazon OpenSearch Service 도메인을 만들어 모든 과거 로그를 인덱싱한 뒤 검색한다",
+        "Amazon EMR 클러스터를 상시 운영하며 Spark로 로그를 조회한다"
+      ],
+      "correct": 0,
+      "explanation": "S3에 쌓인 로그를 서버 없이 SQL로 조회하는 데에는 Athena가 적합합니다. CloudTrail 로그는 CloudTrail 콘솔에서 테이블을 만들거나 Athena 콘솔에서 수동으로 만들어 쿼리하며, 파티션 프로젝션은 파티션 값·위치를 테이블 속성 설정으로 계산해 Data Catalog 조회를 피하므로 파티션이 매우 많을 때 관리 부담을 줄입니다.",
+      "wrongExplanations": {
+        "1": "CloudWatch Logs Insights는 CloudWatch Logs에 있는 로그를 쿼리합니다. S3에 저장된 로그를 직접 조회하지 않습니다.",
+        "2": "OpenSearch Service는 실시간 로그 분석·빈번한 쿼리·전문 검색에 적합합니다. 수년치 과거 로그를 임시 조사 목적으로 전부 인덱싱하는 것은 비용과 운영 부담이 큽니다.",
+        "3": "EMR은 거대한 로그 집합의 페타바이트급 배치 분석에 쓰며 클러스터 운영이 필요합니다. '서버를 운영하지 않고'라는 요구와 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "Query AWS CloudTrail logs (Amazon Athena) — CloudTrail 로그 테이블 생성과 파티션 프로젝션 방식",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html"
+        },
+        {
+          "title": "Use partition projection with Amazon Athena — 테이블 속성 규칙으로 파티션 계산, 카탈로그 조회 회피",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/partition-projection.html"
+        },
+        {
+          "title": "Amazon CloudWatch FAQs — Logs Insights는 CloudWatch Logs의 로그를 대상으로 하는 즉석 쿼리",
+          "url": "https://aws.amazon.com/cloudwatch/faqs/"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
