@@ -9,6 +9,10 @@ coversTasks:
   - "2.1"
   - "2.2"
 sources:
+  - title: Gateway Load Balancer — 소개(L3·모든 IP 패킷) (공식)
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html
+  - title: Classic Load Balancer — 소개(이전 세대) (공식)
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html
   - title: Elastic Load Balancing — 개요 (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html
   - title: Application Load Balancer — 소개 (공식)
@@ -19,7 +23,7 @@ sources:
     url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # ELB + Auto Scaling — 탄력적 확장 설계
@@ -83,8 +87,8 @@ ELB는 현재 세대 3종(ALB·NLB·GWLB)과 레거시 CLB로 구성됩니다.
 |---|---|---|---|---|
 | **ALB** (Application LB) | L7 | HTTP / HTTPS / gRPC | 경로·호스트 기반 라우팅, WAF 연동, Lambda 대상, 컨테이너 친화 | 웹 앱, 마이크로서비스, API Gateway 대체 |
 | **NLB** (Network LB) | L4 | TCP / UDP / TLS / QUIC | 초고성능(초당 수백만 요청), AZ당 **고정 Elastic IP**, 초저지연 | 게임 서버, 금융 거래, VoIP, IoT |
-| **GWLB** (Gateway LB) | L3/4 | GENEVE(6081) | 서드파티 보안 어플라이언스(방화벽·IDS) 인라인 삽입 | 트래픽 검사·필터링 파이프라인 |
-| **CLB** (Classic LB) | L4/L7 | HTTP / HTTPS / TCP | 레거시. 신규 사용 비권장 | 기존 EC2-Classic 환경만 |
+| **GWLB** (Gateway LB) | L3 | GENEVE(6081) | **모든 IP 패킷·모든 포트**를 수신해 서드파티 보안 어플라이언스(방화벽·IDS) 인라인 삽입 | 트래픽 검사·필터링 파이프라인 |
+| **CLB** (Classic LB) | L4/L7 | HTTP / HTTPS / TCP | **이전 세대** LB. AWS가 현행 세대로 마이그레이션 권고 | 기존에 CLB로 구성된 환경의 유지보수 |
 
 > **선택 기준**: "HTTP 경로·호스트별 라우팅이 필요하다" → ALB. "UDP·고정 IP·초저지연이 필요하다" → NLB. "서드파티 방화벽을 모든 트래픽에 인라인으로 적용해야 한다" → GWLB.
 
@@ -125,7 +129,7 @@ NLB는 L4에서 동작하며 ALB가 할 수 없는 두 가지 시나리오에서
 | 특성 | 설명 |
 |---|---|
 | **고정 IP** | AZ당 하나의 로드밸런서 노드 → Elastic IP 할당 가능. 방화벽 화이트리스트에 IP를 등록해야 하는 경우 필수 |
-| **초고성능** | 초당 수백만 요청 처리, 연결 지연 < 1ms 수준 |
+| **초고성능** | 초당 수백만 요청 처리(공식 서술 "millions of requests per second"). 구체적 밀리초 수치는 공식 문서에 없음 |
 | **TCP 연결 유지** | 개별 TCP 연결은 수명 동안 동일한 대상으로 라우팅(플로우 해시) |
 | **교차 영역 부하 분산** | 기본 비활성화(ALB와 다름). 활성화 시 추가 데이터 전송 비용 발생 가능 |
 
@@ -332,4 +336,8 @@ ASG에 ELB를 연결하면 인스턴스가 시작될 때 자동으로 대상 그
 2. Application Load Balancer — 소개 (공식) — https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html
 3. Network Load Balancer — 소개 (공식) — https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html
 4. Amazon EC2 Auto Scaling — 개요 (공식) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. Gateway Load Balancer — 소개("operates at the third layer... the network layer", 모든 IP 패킷·모든 포트) — https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html
+6. Classic Load Balancer — 소개("the previous generation of load balancers") — https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① GWLB 계층을 `L3/4` → **L3(네트워크 계층)**으로 고치고 "모든 IP 패킷·모든 포트 수신"을 명시했습니다(근거 5번). ② CLB 사용 사례 칸을 **이전 세대 LB(현행 세대로 마이그레이션 권고)**로 정정했습니다 — EC2-Classic 전용 LB가 아닙니다(근거 6번). ③ NLB의 "연결 지연 1ms 미만" 수치는 공식 근거를 찾지 못해 삭제했습니다(공식 서술은 초당 수백만 요청).

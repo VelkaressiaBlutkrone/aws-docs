@@ -12,13 +12,17 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
   - title: Amazon API Gateway — 소개 (공식)
     url: https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
+  - title: Lambda 쿼터(타임아웃 900초·Managed Instances 5,400초·Durable functions) (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+  - title: PutFunctionEventInvokeConfig(이벤트 큐 6시간·재시도 0~2·Destinations) (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
   - title: Amazon ECS — 소개 (공식)
     url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
   - title: AWS Fargate — 소개 (공식)
     url: https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -96,8 +100,10 @@ Lambda는 **이벤트가 발생하면 코드를 실행**하는 서버리스 함�
 | 방식 | 대표 이벤트 소스 | 실패 처리 |
 |---|---|---|
 | **동기(Sync)** | API Gateway, SDK 직접 호출 | 호출자에게 즉시 에러 반환 |
-| **비동기(Async)** | S3, SNS, EventBridge | 자동 재시도 2회 → DLQ 또는 Destinations |
+| **비동기(Async)** | S3, SNS, EventBridge | 기본 재시도 2회(0~2 설정), 이벤트 큐 보관 **최대 6시간** → DLQ 또는 Destinations |
 | **스트림·큐 폴링** | SQS, Kinesis, DynamoDB Streams | 배치 폴링, 실패 시 재처리 또는 DLQ |
+
+**비동기 호출의 실패 처리** — Destinations는 **성공(on-success)과 실패(on-failure)를 따로** 지정하며 대상은 Lambda 함수·SQS 큐·SNS 토픽·EventBridge 이벤트 버스·S3 버킷입니다. 단 **S3는 실패(on-failure) 대상만** 지원합니다. 이벤트는 큐에서 최대 6시간 보관되고, 모든 처리 시도에 실패하거나 큐에 너무 오래 머문 이벤트는 폐기되므로 DLQ 또는 Destinations를 붙여야 기록이 남습니다.
 
 **동시성과 콜드 스타트**
 
@@ -255,7 +261,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
-1. **"Lambda는 15분 이상도 실행할 수 있다."** → 일반 Lambda 함수의 최대 실행 시간은 15분입니다. 이를 초과하는 워크로드는 Fargate, AWS Batch, Step Functions(Durable Lambda) 등을 사용해야 합니다.
+1. **"Lambda는 15분 이상도 실행할 수 있다."** → 함수 타임아웃 기본 상한은 900초(15분)입니다. 단, **Lambda Managed Instances** 함수를 비동기 또는 이벤트 소스 매핑으로 호출하면 **최대 5,400초(90분)**까지 허용됩니다(Amazon MQ·DocumentDB 제외). 더 긴 워크로드나 장시간 워크플로는 Fargate, AWS Batch, Step Functions로 옮깁니다. 참고로 **Durable functions**는 Step Functions의 일부가 아니라 Lambda의 기능군입니다.
    *(원리: §4 — Lambda는 단발 이벤트 처리에 최적화된 실행 모델이라 장시간 유지 프로세스는 Fargate·Batch 같은 다른 계층이 담당한다.)*
 
 2. **"Reserved Concurrency를 설정하면 콜드 스타트가 없어진다."** → Reserved Concurrency는 동시 실행 상한을 예약하는 기능으로, 워밍업과 무관합니다. 콜드 스타트 제거는 Provisioned Concurrency를 사용해야 합니다.
@@ -327,4 +333,8 @@ ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없�
 2. Amazon API Gateway — 소개 — https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
 3. Amazon ECS — 소개 — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
 4. AWS Fargate — 소개 — https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. Lambda 쿼터(함수 타임아웃 900초, Managed Instances 비동기·이벤트 소스 매핑 5,400초, Durable functions 절) — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+6. PutFunctionEventInvokeConfig(이벤트 큐 최대 6시간·MaximumRetryAttempts 0~2·S3는 on-failure 전용) — https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① 함정 1이 Durable 기능을 Step Functions의 일부로 적었던 표기를 고쳤습니다 — **Durable functions는 Lambda의 기능군**이고, Managed Instances 함수의 비동기·이벤트 소스 매핑 호출은 **최대 90분**입니다(근거 5번). ② 비동기 호출 행에 **이벤트 큐 보관 최대 6시간**·재시도 0~2 설정을 더하고, Destinations의 성공/실패 분리와 **S3는 실패 대상만 지원**을 §4에 적었습니다(근거 6번).

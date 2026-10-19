@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서
@@ -206,7 +206,7 @@ OAC를 사용하면 S3 버킷 정책에 CloudFront 서비스 주체(Service Prin
 | **적합 워크로드** | 정적/동적 웹, 스트리밍, API | 게임·IoT·VoIP·**고정 IP 필요**, 비-HTTP |
 | **가격 클래스** | 리전별 엣지 선택 가능 | 없음 |
 
-> CloudFront와 Global Accelerator는 함께 사용할 수 있습니다. CloudFront 앞에 Global Accelerator를 붙여 고정 IP를 제공하면서 CDN 캐싱도 활용하는 구성이 가능합니다.
+> ⚠️ 표준 가속기의 엔드포인트는 **NLB·ALB·EC2 인스턴스·Elastic IP 주소** 4종이며, **CloudFront는 Global Accelerator의 엔드포인트가 아닙니다.** 따라서 "CloudFront에 Global Accelerator를 붙여 고정 IP를 준다"는 구성은 성립하지 않습니다. 고정 IP + HTTP가 필요하면 **Global Accelerator → ALB/NLB**로 받고, 캐싱이 필요하면 **CloudFront를 별도 경로**로 설계합니다.
 
 > 🧠 원리: 왜 캐싱이 필요한지 여부가 CloudFront와 Global Accelerator의 선택 기준이 될까요?
 > CloudFront는 엣지 로케이션에 콘텐츠 사본을 저장해 동일 요청에 오리진을 거치지 않고 응답하므로, 반복 요청이 많은 정적·동적 웹 콘텐츠에서 오리진 부하를 줄입니다.
@@ -219,9 +219,9 @@ AWS ELB(Elastic Load Balancing)는 세 가지 유형이 있으며, 시험에서�
 
 | 유형 | 계층 | 프로토콜 | 성능 특성 | 대표 용도 |
 |---|---|---|---|---|
-| **ALB** (Application LB) | L7 | HTTP·HTTPS·WebSocket | 경로/호스트 기반 라우팅, Lambda·컨테이너 대상 | 마이크로서비스, REST API |
+| **ALB** (Application LB) | L7 | HTTP·HTTPS·WebSocket·**gRPC** | 경로/호스트 기반 라우팅, Lambda·컨테이너 대상 | 마이크로서비스, REST API, gRPC 서비스 |
 | **NLB** (Network LB) | L4 | TCP·UDP·TLS | **초고성능·초저지연**, **고정 IP** 지원, 수백만 RPS | TCP 실시간 게임, 금융 거래, IoT |
-| **GLB** (Gateway LB) | L3/L4 | IP | 트래픽을 어플라이언스(방화벽·IDS 등)로 투명하게 전달 | 네트워크 어플라이언스 통합 |
+| **GLB** (Gateway LB) | **L3** | 모든 IP 패킷·모든 포트 | 트래픽을 어플라이언스(방화벽·IDS 등)로 투명하게 전달 | 네트워크 어플라이언스 통합 |
 
 > **NLB 선택 신호**: "초저지연", "TCP/UDP", "고정 IP", "수백만 요청/초" — 이 키워드가 보이면 NLB입니다.
 > **ALB 선택 신호**: "경로 기반 라우팅", "호스트 기반 라우팅", "Lambda 대상", "컨테이너(ECS/EKS)".
@@ -248,7 +248,7 @@ AWS ELB(Elastic Load Balancing)는 세 가지 유형이 있으며, 시험에서�
 | "회원 전용 복수 파일 세션 접근 제한" | CloudFront **Signed Cookie** |
 | "UDP 게임·IoT·VoIP, 고정 IP 필요" | **Global Accelerator** |
 | "비-HTTP, TCP/UDP 초저지연 라우팅" | **Global Accelerator** |
-| "CloudFront에 고정 IP를 부여하고 싶다" | **Global Accelerator** + CloudFront 조합 |
+| "고정 IP로 HTTP 서비스를 제공해야 한다" | **Global Accelerator** → ALB/NLB (CloudFront는 GA 엔드포인트가 아님) |
 | "L4, TCP, 초고성능, 고정 IP 로드 밸런서" | **NLB** |
 | "경로 기반 라우팅, 컨테이너·Lambda 대상" | **ALB** |
 
@@ -338,4 +338,8 @@ NLB는 L4(TCP·UDP) 수준에서 패킷 흐름만 보고 대상 엔드포인트�
 2. Route 53 라우팅 정책 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html
 3. Amazon CloudFront 개발자 가이드 — 소개 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
 4. AWS Global Accelerator 개발자 가이드 — 소개 — https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. Global Accelerator 표준 가속기 엔드포인트(NLB·ALB·EC2·Elastic IP) — https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoints.html
+6. Gateway Load Balancer — 소개(L3·모든 IP 패킷) — https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① "Global Accelerator로 CloudFront에 고정 IP를 부여한다"는 서술을 삭제했습니다 — 표준 가속기의 엔드포인트는 **NLB·ALB·EC2 인스턴스·Elastic IP** 4종이며 CloudFront는 엔드포인트 유형이 아닙니다(근거 5번). ② GWLB 계층을 **L3**로, 수신 범위를 "모든 IP 패킷·모든 포트"로 고쳤습니다(근거 6번). ③ ALB 프로토콜에 **gRPC**를 더했습니다.

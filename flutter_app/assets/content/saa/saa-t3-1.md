@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어
@@ -72,7 +72,7 @@ lastVerified: 2026-06-12
 핵심 사실:
 
 - **버킷(Bucket)**: 전역(글로벌) 고유 이름. 생성 후 이름·리전 변경 불가.
-- **객체(Object)**: 파일 + 메타데이터. 단일 객체 최대 5TB. 키(Key)로 고유 식별.
+- **객체(Object)**: 파일 + 메타데이터. 단일 `PUT`은 **최대 5 GB**, 멀티파트 업로드를 쓰면 **최대 50 TB**(파트 5 MB~50 TB)까지 올릴 수 있습니다. 콘솔 업로드는 160 GB까지. 키(Key)로 고유 식별.
 - **내구성**: **99.999999999% (11 nine)** — 모든 클래스 동일.
 - **강력한 일관성(Strong Consistency)**: PUT/DELETE 요청 직후 GET이 최신 데이터를 반환. (2020년 12월부터 모든 리전에서 보장)
 - **기본 상태**: 버킷과 객체는 기본적으로 **비공개(private)**. 공개는 명시적으로 설정해야 합니다.
@@ -156,7 +156,7 @@ Day 365  → 객체 삭제 (만료)
 | 기법 | 원리 | 사용 시점 |
 |---|---|---|
 | **프리픽스 병렬화** | 여러 프리픽스에 분산 저장 → 각 프리픽스가 독립적으로 처리량 한도를 가짐 | 대용량 데이터 읽기/쓰기 |
-| **멀티파트 업로드** | 단일 파일을 여러 파트로 나눠 병렬 업로드 후 서버에서 조립 | 100 MB 이상 파일 권장, 5 GB 이상 필수 |
+| **멀티파트 업로드** | 단일 파일을 여러 파트로 나눠 병렬 업로드 후 서버에서 조립 | 100 MB 이상 파일 권장, **5 GB 초과 시 필수**(단일 PUT 상한이 5 GB) |
 | **S3 Transfer Acceleration** | CloudFront 엣지 로케이션을 경유해 원거리 업로드를 가속 | 업로더가 S3 리전에서 지리적으로 멀 때 |
 | **바이트 범위 요청(Byte-Range Fetch)** | 하나의 객체에서 특정 바이트 범위만 GET | 대용량 파일의 부분 읽기·병렬 다운로드 |
 
@@ -337,4 +337,7 @@ S3의 접근 제어는 여러 계층이 겹쳐서 작동합니다. 요청은 아
 2. S3 스토리지 클래스 비교 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html
 3. S3 수명 주기 관리 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
 4. S3 성능 최적화 모범 사례 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. S3 객체 업로드(단일 PUT 5 GB·멀티파트 50 TB·콘솔 160 GB) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html
+6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① 단일 객체 상한을 5TB로 적었던 문장을 **단일 PUT 5 GB / 멀티파트 50 TB**로 고쳤습니다(근거 5번). ② 멀티파트 필수 기준을 "5 GB 이상"에서 **5 GB 초과**로 통일했습니다 — 공식 문장은 단일 PUT이 "up to 5 GB"이므로 본문·해설의 "초과"가 맞습니다. 참고로 Storage Gateway FAQ 등 일부 공식 페이지는 아직 5 TB로 서술해 문서 간 상충이 남아 있습니다.

@@ -22,7 +22,7 @@ sources:
     url: https://aws.amazon.com/directconnect/pricing/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink
@@ -106,6 +106,16 @@ NAT Gateway는 프라이빗 서브넷 인스턴스가 인터넷에 나가는 관
 
 NAT Gateway는 특정 AZ에 생성됩니다. 다른 AZ의 인스턴스가 이 NAT Gateway를 사용하면 교차 AZ 전송 요금($0.01/GB)이 데이터 처리 요금($0.045/GB)에 추가로 붙습니다. 따라서 각 AZ에 NAT Gateway를 따로 두거나, 리소스를 NAT Gateway와 같은 AZ에 배치하는 것이 비용을 낮춥니다.
 
+**공용 IPv4 요금까지 넣은 손익 계산** — 2024-02-01부터 AWS는 실행 중인 인스턴스에 붙은 공용 IPv4와 Elastic IP를 포함해 **모든 공용 IPv4 주소에 시간당 요금($0.005/IP/시간)**을 부과합니다. 그래서 "퍼블릭 서브넷의 인스턴스마다 공용 IP" 대신 "프라이빗 서브넷 + NAT Gateway"로 옮기는 것이 쌀 수도 있습니다. 공식 문서가 제시하는 비교식은 다음과 같습니다(합이 1보다 작으면 NAT Gateway가 더 저렴).
+
+```
+(NAT 시간 요금 + NAT 공용 IP 요금 + NAT 전송 요금) / 기존 공용 IP 비용
+  NAT 시간 요금    = $0.045 × 730시간 × NAT를 둔 AZ 수
+  NAT 공용 IP 요금 = $0.005 × 730시간 × NAT에 붙은 IP 수
+  NAT 전송 요금    = $0.045 × 월 전송 GB
+  기존 공용 IP 비용 = $0.005 × 730시간 × 공용 IPv4 주소 수
+```
+
 **S3·DynamoDB 트래픽을 Gateway Endpoint로 우회**
 
 프라이빗 서브넷의 EC2가 S3나 DynamoDB에 접근할 때, NAT Gateway를 경유하면 처리 요금이 발생합니다. Gateway Endpoint를 사용하면 트래픽이 AWS 내부 경로로 직접 전달되어 NAT를 우회합니다.
@@ -129,9 +139,9 @@ NAT Gateway는 특정 AZ에 생성됩니다. 다른 AZ의 인스턴스가 이 NA
 | 유형 | 지원 서비스 | 요금 | 용도 |
 |---|---|---|---|
 | **Gateway Endpoint** | S3, DynamoDB만 | **무료** | 프라이빗 서브넷 → S3/DynamoDB, NAT 우회 |
-| **Interface Endpoint (PrivateLink)** | 200+ AWS 서비스 | $0.01/GB + 시간당 ENI 요금 | 그 외 AWS 서비스, SaaS, 교차 계정 서비스 |
+| **Interface Endpoint (PrivateLink)** | 다수의 AWS 서비스 | $0.01/GB + **엔드포인트·AZ별 시간 요금** | 그 외 AWS 서비스, SaaS, 교차 계정 서비스 |
 
-Interface Endpoint의 데이터 처리 요금은 월간 누적 사용량에 따라 단계적으로 할인됩니다(1PB까지 $0.01/GB, 이후 구간별 인하). 단, Gateway Endpoint로 커버 가능한 S3·DynamoDB는 Interface Endpoint를 쓸 이유가 없습니다.
+Interface Endpoint의 시간 요금은 **엔드포인트가 프로비저닝된 AZ마다** 부과되며(서비스 연결 상태와 무관하게 과금되므로 쓰지 않는 엔드포인트는 삭제해야 합니다), 데이터 처리 요금은 리전 내 월 누적 사용량에 따라 단계적으로 인하됩니다(첫 1 PB $0.01/GB → 다음 4 PB $0.006/GB → 5 PB 초과 $0.004/GB). 인터페이스 엔드포인트를 통한 **교차 AZ 데이터 전송은 과금되지 않습니다.** 단, Gateway Endpoint로 커버 가능한 S3·DynamoDB는 Interface Endpoint를 쓸 이유가 없습니다.
 
 > 🧠 원리: 왜 Gateway Endpoint와 Interface Endpoint는 지원 서비스 범위가 다를까요?
 > Gateway Endpoint는 VPC 라우팅 테이블에 경로를 추가해 트래픽을 AWS 내부 경로로 분기하는 방식으로 동작합니다. 이 구조는 S3·DynamoDB처럼 리전 단위로 단일 엔드포인트를 제공하는 서비스에만 적용할 수 있습니다.
@@ -165,7 +175,7 @@ CloudFront는 엣지 로케이션에 콘텐츠를 캐싱합니다. 이것이 비
 |---|---|---|
 | 연결 고정 요금 | 없음 | $0.05/시간 (어태치먼트당) |
 | 데이터 처리 요금 | 없음 (전송 비용만 적용) | $0.02/GB |
-| 교차 AZ 전송 | $0.01/GB | $0.01/GB + $0.02/GB |
+| 교차 AZ 전송 | AZ를 넘으면 $0.01/GB | **별도 AZ 전송 요금 없음** (TGW 처리 $0.02/GB만) |
 | 관리 방식 | VPC 쌍마다 개별 설정(풀메시) | 중앙 라우터 허브 |
 | 최적 규모 | VPC 수 적음 (2~5개) | VPC 수 많음 (수십 개 이상) |
 
@@ -205,7 +215,7 @@ Direct Connect 아웃바운드 단가는 인터넷 아웃바운드 단가의 약
 | EC2 → 인터넷 직접 아웃바운드 | EC2 → IGW → 인터넷 | $0.09/GB 수준 |
 | EC2 → 인터넷 (CloudFront 캐싱 후) | 오리진 미도달(캐시 히트) | $0 (오리진 전송 없음) |
 | VPC-A → VPC-B 교차 AZ (피어링) | VPC 피어링 | $0.01/GB |
-| VPC-A → VPC-B 교차 AZ (TGW) | Transit Gateway | $0.01/GB + $0.02/GB = $0.03/GB |
+| VPC-A → VPC-B 교차 AZ (TGW) | Transit Gateway | $0.02/GB (처리 요금만 — **TGW를 통과하는 AZ 간 트래픽에는 목적지 AZ 전송 요금이 붙지 않음**) |
 
 ---
 
@@ -294,4 +304,8 @@ VPC 피어링은 완전한 연결을 위해 VPC 쌍마다 개별 연결이 필�
 4. AWS PrivateLink 요금 — https://aws.amazon.com/privatelink/pricing/
 5. Amazon CloudFront 요금 — https://aws.amazon.com/cloudfront/pricing/
 6. AWS Direct Connect 요금 — https://aws.amazon.com/directconnect/pricing/
-7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. EKS 비용 최적화 — 네트워킹("no destination cost associated with inter-AZ traffic that flows through the TGW", 피어링 동일 AZ 무료·교차 AZ 과금, 인터페이스 엔드포인트 교차 AZ 미과금) — https://docs.aws.amazon.com/eks/latest/best-practices/cost-opt-networking.html
+8. EC2 인스턴스 IP 주소 지정(공용 IPv4 과금·NAT 손익 계산식) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html
+9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① Transit Gateway 비용에서 **교차 AZ 전송 요금을 이중 계상**했던 칸(비교표·시나리오표)을 고쳤습니다 — TGW를 통과하는 AZ 간 트래픽에는 목적지 AZ 전송 요금이 붙지 않고 처리 요금 $0.02/GB만 적용됩니다(근거 7번). ② 인터페이스 엔드포인트 시간 요금을 "ENI별"에서 **엔드포인트·AZ별**로 고치고 처리 요금 계층과 교차 AZ 미과금을 더했습니다(근거 4·7번). ③ NAT 절감 설명에 **공용 IPv4 시간 요금($0.005/IP/시간)**과 공식 손익 계산식을 더했습니다(근거 8번).

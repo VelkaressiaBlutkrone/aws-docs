@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html
   - title: Amazon Aurora — Global Database (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html
-  - title: Amazon Aurora — Serverless v2 (공식)
+  - title: Amazon Aurora — Aurora serverless (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
   - title: Amazon RDS Proxy (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
@@ -32,7 +32,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+lastVerified: 2026-10-19
 ---
 
 # RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시
@@ -50,7 +50,7 @@ lastVerified: 2026-06-12
 - [ ] **Multi-AZ 목적** — 동기 복제·자동 페일오버·가용성(HA)의 의미를 설명할 수 있다
 - [ ] **Read Replica 목적** — 비동기 복제·읽기 확장·교차 리전·엔진별 최대 개수를 설명할 수 있다
 - [ ] **Multi-AZ vs Read Replica 구분** — 목적·복제 방식·읽기 가능 여부를 비교 설명할 수 있다
-- [ ] **Aurora 차별점** — 클라우드 네이티브 스토리지(3 AZ·6벌 복제)·15개 복제본·글로벌 DB·Serverless v2를 설명할 수 있다
+- [ ] **Aurora 차별점** — 클라우드 네이티브 스토리지(3 AZ·6벌 복제)·15개 복제본·글로벌 DB·Aurora serverless를 설명할 수 있다
 - [ ] **RDS Proxy 필요 상황** — Lambda 연결 풀링·페일오버 단축 시나리오를 안다
 - [ ] **스토리지 타입 선택** — 범용 SSD vs Provisioned IOPS 적합 워크로드를 구분할 수 있다
 
@@ -60,7 +60,7 @@ lastVerified: 2026-06-12
 
 - 도메인 3(24%)에서 DB 관련 시나리오 비중이 높습니다. "DB 장애 대응 vs 읽기 부하 분산"은 **시험 최빈출 비교** 중 하나입니다.
 - Multi-AZ와 Read Replica는 이름에서 오해를 유발합니다. Multi-AZ는 읽기 확장이 아니고, Read Replica는 자동 페일오버가 아닙니다. 둘을 혼동하면 바로 오답입니다.
-- Aurora는 RDS의 확장이지만 스토리지 구조·복제·페일오버 속도가 근본적으로 다릅니다. Aurora Global Database와 Serverless v2는 시험 시나리오에 자주 등장합니다.
+- Aurora는 RDS의 확장이지만 스토리지 구조·복제·페일오버 속도가 근본적으로 다릅니다. Aurora Global Database와 Aurora serverless는 시험 시나리오에 자주 등장합니다.
 - RDS Proxy는 Lambda + RDS 조합에서 연결 고갈 문제를 해결하는 패턴으로 단독 출제됩니다.
 
 ---
@@ -163,12 +163,12 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 
 | 타입 | 적합 워크로드 |
 |---|---|
-| **범용 SSD(gp2/gp3)** | 중간 규모, 개발·테스트, 비용 효율 중시 |
+| **범용 SSD(gp2/gp3)** | 중간 규모, 개발·테스트, 비용 효율 중시. gp2는 버스트 크레딧 모델, **gp3는 버스트 없이 기준 3,000 IOPS·125 MiB/s를 지속** |
 | **Provisioned IOPS SSD(io1/io2)** | I/O 집약·저지연·일관된 처리량이 필요한 프로덕션 |
 | **Magnetic** | 사용 중단됨. 새 DB 인스턴스 생성에는 제공되지 않으며 gp3 또는 io2 사용 권장 |
 
 > 🧠 원리: 왜 I/O 집약 워크로드에서는 범용 SSD보다 Provisioned IOPS가 필요할까요?
-> 범용 SSD(gp2/gp3)는 버스트 크레딧 방식으로 순간적인 높은 처리량을 허용하지만, 크레딧이 소진되면 기준 처리량으로 되돌아가 성능이 불규칙해집니다.
+> 범용 SSD 중 **gp2는 버스트 크레딧 방식**(GiB당 3 IOPS 기준선, 1 TiB 미만 볼륨은 3,000 IOPS까지 버스트)이라 크레딧이 소진되면 기준 처리량으로 되돌아가 성능이 불규칙해집니다. 반면 **gp3는 버스트 성능을 쓰지 않고** 기준 3,000 IOPS·125 MiB/s를 지속하며, IOPS·처리량을 용량과 독립적으로 올릴 수 있습니다.
 > Provisioned IOPS는 요청한 IOPS를 지속적으로 제공하도록 설계되어, 트랜잭션이 밀집된 OLTP 워크로드에서 예측 가능한 낮은 지연을 유지할 수 있습니다.
 > 따라서 피크 I/O가 간헐적이면 범용 SSD로 충분하지만, 높은 I/O가 지속된다면 Provisioned IOPS를 선택해야 성능 저하 없이 서비스가 가능합니다.
 
@@ -191,7 +191,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 
 | 기능 | 설명 |
 |---|---|
-| **Aurora Serverless v2** | 트래픽에 따라 자동 미세 스케일. 간헐적·불규칙 워크로드, 운영 부담 최소화 |
+| **Aurora serverless** | 트래픽에 따라 자동 미세 스케일. 간헐적·불규칙 워크로드, 운영 부담 최소화 |
 | **Aurora Global Database** | 리전 간 복제 지연이 일반적으로 **1초 미만**. 글로벌 저지연 읽기 및 재해 복구(RPO는 보통 초 단위, RTO는 분 단위) |
 | **자동 백업 + 역추적(Backtrack)** | PITR 외에도 특정 시점으로 DB를 되감기 가능(MySQL 호환만) |
 
@@ -210,14 +210,14 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 | **페일오버 시간** | DB 인스턴스 보통 60~120초, DB 클러스터는 더 짧음 | 보통 60초 미만, 자주 30초 미만 |
 | **스토리지 최대** | 일반 64TiB(Oracle·SQL Server는 추가 볼륨으로 256TiB 가능) | **256TiB** |
 | **글로벌 읽기** | 교차 리전 Read Replica | Aurora Global Database(일반적으로 1초 미만 복제) |
-| **Serverless** | 없음 | Aurora Serverless v2 |
+| **Serverless** | 없음 | Aurora serverless |
 | **비용** | 상대적으로 낮음 | 상대적으로 높음(가용성 대비) |
 
-> 🧠 원리: 왜 Aurora Serverless v2는 간헐적·불규칙 워크로드에 더 유리할까요?
-> Serverless v2는 실제 사용량에 따라 컴퓨팅 용량을 세밀하게 조정하므로, 부하가 낮은 시간대에는 그에 비례해 비용이 줄어드는 구조입니다.
+> 🧠 원리: 왜 Aurora serverless는 간헐적·불규칙 워크로드에 더 유리할까요?
+> Aurora serverless는 실제 사용량에 따라 컴퓨팅 용량을 세밀하게 조정하므로, 부하가 낮은 시간대에는 그에 비례해 비용이 줄어드는 구조입니다.
 > 프로비저닝 Aurora는 피크 부하에 맞게 인스턴스를 미리 할당하므로, 부하가 낮을 때도 프로비저닝된 용량만큼의 비용이 발생합니다.
 > 반대로 부하가 지속적으로 높고 예측 가능한 경우에는 프로비저닝 인스턴스가 더 안정적인 성능을 제공할 수 있습니다.
-> 따라서 Serverless v2는 부하가 드문드문 있거나 예측 불가한 워크로드에 더 유리한 선택이 됩니다.
+> 따라서 Aurora serverless는 부하가 드문드문 있거나 예측 불가한 워크로드에 더 유리한 선택이 됩니다.
 
 ### 9) RDS Proxy {#rds-proxy}
 
@@ -251,7 +251,7 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 | DB 장애 **자동 복구**, 다운타임 최소화 | RDS **Multi-AZ** |
 | **읽기 트래픽** 급증, 읽기 부하 분산 | **Read Replica** |
 | 글로벌 저지연 읽기 / 리전 재해 복구 | **Aurora Global Database** |
-| 불규칙·간헐적 부하, 운영 부담 최소화 | **Aurora Serverless v2** |
+| 불규칙·간헐적 부하, 운영 부담 최소화 | **Aurora serverless** |
 | Lambda 다량 연결로 DB 연결 고갈 | **RDS Proxy** |
 | 페일오버 시 애플리케이션 연결 유지 | **RDS Proxy** |
 | I/O 집약 프로덕션 DB 스토리지 | **Provisioned IOPS SSD** |
@@ -274,8 +274,8 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 3. **"Aurora는 일반 RDS에 비해 비용만 높다."** → Aurora는 3 AZ 6벌 복제·빠른 페일오버·15개 복제본이라는 가용성을 제공합니다. 고가용성 요구사항을 계산하면 비용 대비 이점이 있습니다.
    *(원리: §7 — 스토리지를 컴퓨팅과 분리한 공유 분산 구조 덕분에 복제본을 늘려도 쓰기 성능에 영향이 작고, 이 아키텍처가 15개 복제본·빠른 페일오버를 가능하게 한다.)*
 
-4. **"Aurora Serverless는 아무 때나 쓰면 된다."** → Serverless v2는 간헐적·예측 불가 워크로드에 최적입니다. 일정한 높은 트래픽에는 프로비저닝 Aurora가 더 저렴하고 안정적입니다.
-   *(원리: §8 — Serverless v2는 사용량에 비례해 비용이 조정되므로 부하가 낮은 구간에서 유리하고, 부하가 지속적으로 높으면 프로비저닝 인스턴스가 더 안정적인 성능을 제공할 수 있다.)*
+4. **"Aurora serverless는 아무 때나 쓰면 된다."** → Aurora serverless는 간헐적·예측 불가 워크로드에 최적입니다. 일정한 높은 트래픽에는 프로비저닝 Aurora가 더 저렴하고 안정적입니다.
+   *(원리: §8 — Aurora serverless는 사용량에 비례해 비용이 조정되므로 부하가 낮은 구간에서 유리하고, 부하가 지속적으로 높으면 프로비저닝 인스턴스가 더 안정적인 성능을 제공할 수 있다.)*
 
 5. **"운영 중 비암호화 RDS DB를 클릭 한 번으로 암호화할 수 있다."** → 불가. 스냅샷 생성 → 암호화 복사 → 복원의 절차가 필요합니다. 암호화는 생성 시에 설정하는 것이 권장됩니다.
    *(원리: §1 본문 — 완전 관리형 서비스는 OS·스토리지 레이어를 AWS가 관리하므로, 운영 중 암호화 적용은 새 암호화 인스턴스로 데이터를 옮기는 절차가 필요하다.)*
@@ -338,7 +338,10 @@ Lambda는 동시 실행마다 별도 컨테이너에서 새 DB 연결을 생성�
 6. Amazon Aurora 개요 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html
 7. Amazon Aurora — High availability — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html
 8. Amazon Aurora — Global Database — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html
-9. Amazon Aurora — Serverless v2 — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
+9. Amazon Aurora — Aurora serverless — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
 10. Amazon RDS Proxy — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
 11. Amazon RDS — DB instance storage — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
-12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+12. Amazon EBS 범용 SSD("gp3 volumes do not use burst performance") — https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html
+13. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: ① 범용 SSD를 gp2·gp3 한 묶음으로 "버스트 크레딧"이라 설명했던 원리 블록을 분리했습니다 — **gp3는 버스트 모델이 아니며** 기준 3,000 IOPS·125 MiB/s를 지속합니다(근거 12번). ② **Aurora serverless** 명칭으로 통일했습니다(공식 문서 제목이 "Using Aurora serverless"로 변경 — 과거 자료의 "v2" 표기와 같은 기능입니다).

@@ -18,7 +18,11 @@ sources:
     url: https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+  - title: Amazon SNS 데드레터 큐(구독 단위·100,015회) (공식)
+    url: https://docs.aws.amazon.com/sns/latest/dg/sns-dead-letter-queues.html
+  - title: Amazon SNS 메시지 전달 재시도 정책 (공식)
+    url: https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html
+lastVerified: 2026-10-19
 ---
 
 # 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions
@@ -149,12 +153,12 @@ SNS 토픽
     └─── SQS 큐 C ──► 소비자 C (데이터 분석)
 ```
 
-SNS만으로 Lambda·HTTP를 직접 구독하면 재시도·처리 보장이 약합니다. **SQS를 끼우면** 각 소비자가 자기 속도로 안정적으로 처리하고, 실패 시 DLQ로 격리됩니다.
+SNS가 SQS·Lambda 같은 **AWS 관리형 엔드포인트**로 전달할 때는 서버 측 오류에 대해 **최대 100,015회·23일**까지 재시도하고, **구독 단위 DLQ**를 붙이면 재시도를 모두 소진한 메시지도 보존됩니다(클라이언트 측 오류는 재시도 없이 폐기). 그래서 **SQS를 끼우는 진짜 이유는 유실 방지가 아니라** 소비자별 **버퍼링·독립 속도·재처리**입니다 — 각 소비자가 자기 속도로 Pull하고, 실패 메시지는 자기 큐의 DLQ로 격리됩니다.
 
 > 🧠 원리: 왜 팬아웃 패턴에서 SNS → Lambda 직접 구독 대신 SNS → SQS → Lambda 조합을 권장할까요?
-> SNS가 Lambda를 직접 Push할 때, Lambda가 동시성 한도에 도달하면 SNS는 제한된 횟수만 재시도하고 이후 메시지를 버립니다.
-> SQS를 중간에 두면 메시지가 큐에 안전하게 보존되고 Lambda가 여유가 생길 때 직접 Pull하므로, Lambda 동시성 폭발 없이 속도를 스스로 조절합니다.
-> 이 배치 모델은 각 소비자 큐에 독립적인 DLQ를 붙일 수 있어, 소비자 A의 실패가 소비자 B의 처리에 영향을 주지 않는 결함 격리를 제공합니다.
+> SNS가 Lambda를 직접 Push해도 서버 측 오류라면 최대 100,015회·23일 재시도하고 구독 단위 DLQ로 보존되므로, 권장 이유는 "메시지 유실"이 아니라 **흐름 제어**입니다.
+> SQS를 중간에 두면 메시지가 큐에 쌓인 채 Lambda가 여유가 생길 때 직접 Pull하므로, 소비자가 처리 속도를 스스로 조절하고(버퍼링) 느린 소비자가 다른 소비자의 전달을 막지 않습니다.
+> 또 각 소비자 큐마다 독립적인 DLQ와 보존 기간을 둘 수 있어 재처리 시점을 소비자별로 고를 수 있으므로, 소비자 A의 실패가 소비자 B의 처리에 영향을 주지 않는 결함 격리를 제공합니다.
 
 ---
 
@@ -229,7 +233,7 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 
 - **SQS = 버퍼링·디커플링**: "다운스트림이 트래픽 폭증을 못 버틴다" → SQS 큐로 완충 후 소비자 오토스케일.
 - **SNS = 1:N 동시 Push**: "하나의 이벤트를 여러 시스템에 동시에 알려야" → SNS 토픽. SQS는 1개 메시지를 1개 소비자만 가져갑니다.
-- **팬아웃 = SNS + SQS 조합**: SNS만으로 Lambda·HTTP를 직접 구독하면 처리 보장이 약함. **SQS를 끼워야** 독립 소비 + 재시도 + DLQ가 확보됩니다.
+- **팬아웃 = SNS + SQS 조합**: SNS 직접 구독도 AWS 관리형 엔드포인트(SQS·Lambda)라면 **100,015회·23일 재시도 + 구독 단위 DLQ**가 있습니다. **SQS를 끼우는 이유**는 소비자별 **버퍼링·독립 속도·재처리**입니다.
 - **EventBridge = 이벤트 패턴·SaaS·스케줄**: "특정 조건의 이벤트만 골라서 보내야" 또는 "SaaS 이벤트를 AWS로 받아야" → EventBridge.
 - **Step Functions = 오케스트레이션**: "Lambda A → 조건 분기 → Lambda B 또는 C → 오류 시 재시도" 같은 복잡한 흐름 → Step Functions. 단순 트리거는 Lambda 직접 호출로 충분.
 - **Standard vs FIFO**: 처리량이 우선이고 순서·중복이 무관 → Standard. 금융·주문처럼 순서·중복이 민감 → FIFO. FIFO는 처리량이 제한되므로 과도 사용 주의.
@@ -246,8 +250,8 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 2. **"순서가 필요 없는데 FIFO를 선택"** → FIFO는 Standard보다 처리량이 낮고 비용이 높습니다. 순서·중복 제거가 필요하지 않은 경우 Standard 큐를 사용하세요.
    *(원리: §2 — FIFO의 exactly-once 보장은 중복 제거 ID 추적과 엄격한 순서 관리에 처리량을 소모하므로, 불필요한 제약을 감수할 이유가 없다.)*
 
-3. **"SNS만으로 각 소비자 안정 처리를 기대"** → SNS는 Push 후 재시도가 제한적입니다. 처리 보장·재시도·DLQ가 필요하면 **SNS + SQS 팬아웃**이 올바른 패턴입니다.
-   *(원리: §4 — SNS→Lambda 직접 Push는 Lambda 동시성 한도 초과 시 메시지를 버릴 수 있어, SQS 중간 버퍼가 처리 보장의 핵심이다.)*
+3. **"SNS 직접 구독은 재시도가 없어 메시지를 버린다"** → SQS·Lambda 같은 AWS 관리형 엔드포인트에는 서버 측 오류 시 **최대 100,015회·23일** 재시도와 **구독 단위 DLQ**가 있습니다(재시도를 소진했을 때만 폐기). 소비자마다 처리 속도·재처리 시점을 따로 두어야 할 때 **SNS + SQS 팬아웃**을 씁니다.
+   *(원리: §4 — SNS의 전달 정책이 유실 방지를 이미 담당하므로, SQS를 끼우는 값은 소비자별 버퍼링·독립 속도·재처리에 있다.)*
 
 4. **"Visibility Timeout이 짧으면 메시지가 사라진다"** → 짧으면 처리 중에 다른 소비자에게 다시 노출되어 **중복 처리**가 발생합니다. 만료 시 메시지가 삭제되는 것이 아니라 재노출됩니다.
    *(원리: §2 — Visibility Timeout은 처리 중 잠금 시간으로, 만료는 삭제가 아닌 잠금 해제이므로 중복 소비가 발생한다.)*
@@ -312,4 +316,8 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 2. Amazon SNS — 개발자 가이드 — https://docs.aws.amazon.com/sns/latest/dg/welcome.html
 3. Amazon EventBridge — 사용 설명서 — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
 4. AWS Step Functions — 개발자 가이드 — https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html
-5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+5. Amazon SNS 데드레터 큐(DLQ는 구독 단위, 관리형 엔드포인트 100,015회·23일) — https://docs.aws.amazon.com/sns/latest/dg/sns-dead-letter-queues.html
+6. Amazon SNS 메시지 전달 재시도(AWS 관리형 엔드포인트 전달 정책) — https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html
+7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+> 📝 **2026-10-19 정정**: SNS 직접 구독의 재시도 서술을 정정했습니다. SQS·Lambda 같은 AWS 관리형 엔드포인트는 서버 측 오류 시 **최대 100,015회·23일** 재시도하고 **구독 단위 DLQ**를 붙일 수 있습니다(근거 5·6번). 팬아웃에 SQS를 끼우는 이유를 "유실 방지"에서 **버퍼링·독립 속도·재처리**로 고쳤습니다(§4 원리·시험 포인트·함정 3).
