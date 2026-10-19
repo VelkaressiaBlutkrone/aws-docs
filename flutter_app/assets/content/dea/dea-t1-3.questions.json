@@ -1,0 +1,488 @@
+{
+  "examGuideTaskId": "dea-t1-3",
+  "taskTitle": "데이터 파이프라인 오케스트레이션",
+  "domain": 1,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t1-3-q1",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "오케스트레이션 서비스로 ETL 워크플로 구축(1.3.1)",
+      "section": "integration-patterns",
+      "difficulty": "applied",
+      "stem": "AWS Step Functions 워크플로에서 AWS Glue 잡을 호출한 뒤, 그 잡이 완전히 끝난 다음 단계로 진행해야 한다. 가장 적절한 구성은 무엇인가?",
+      "options": [
+        "Task 상태의 리소스 ARN에 .sync를 붙여 Run a Job 패턴으로 호출한다",
+        "기본 Request Response로 호출하고 다음 상태에서 바로 결과를 읽는다",
+        "Wait 상태와 Choice 상태로 폴링 루프를 만들어 잡 상태를 확인한다",
+        "Express 워크플로로 전환해 동기 실행으로 호출한다"
+      ],
+      "correct": 0,
+      "explanation": "리소스 ARN 끝에 .sync를 붙이는 Run a Job 패턴은 Step Functions가 작업 완료까지 기다립니다. Glue·Athena·EMR·EMR Serverless·Batch·ECS 등이 Standard 워크플로에서 이 패턴을 지원합니다.",
+      "wrongExplanations": {
+        "1": "Request Response는 호출 응답을 받으면 바로 다음 상태로 넘어가므로 잡 완료를 보장하지 못합니다.",
+        "2": "폴링 루프는 동작하지만 상태 전이 수가 늘어 Standard 비용이 증가합니다. 공식 문서도 .sync나 콜백을 권장합니다.",
+        "3": "Express는 .sync 패턴을 지원하지 않고 최대 실행 시간도 5분이라 Glue 잡 대기에 부적합합니다."
+      },
+      "sources": [
+        {
+          "title": "Discover service integration patterns in Step Functions — Run a Job(.sync) 지원 서비스",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html"
+        },
+        {
+          "title": "Choosing workflow type in Step Functions — Express의 패턴 제약",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q2",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "서버리스 워크플로 구현 및 유지 관리(1.3.3)",
+      "section": "integration-patterns",
+      "difficulty": "applied",
+      "stem": "데이터 파이프라인 중간에 담당자의 수동 승인이 필요하다. 승인이 올 때까지 워크플로를 멈춰 두려면 어떤 통합 패턴을 쓰는가?",
+      "options": [
+        ".waitForTaskToken(Wait for Callback) 패턴",
+        ".sync(Run a Job) 패턴",
+        "Request Response 패턴",
+        "Express 워크플로의 동기 실행"
+      ],
+      "correct": 0,
+      "explanation": "Wait for Callback(.waitForTaskToken)은 태스크 토큰이 SendTaskSuccess 또는 SendTaskFailure로 돌아올 때까지 워크플로를 일시 중지합니다. 사람 승인, 타사 시스템, 레거시 연동에 쓰이며 토큰은 같은 AWS 계정의 주체가 보내야 합니다.",
+      "wrongExplanations": {
+        "1": ".sync는 AWS 서비스 작업의 완료를 기다리는 패턴으로, 외부 사람의 응답을 기다리는 수단이 아닙니다.",
+        "2": "Request Response는 호출 즉시 다음 상태로 진행합니다.",
+        "3": "Express는 최대 5분이고 콜백 패턴을 지원하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Discover service integration patterns in Step Functions — Wait for Callback과 태스크 토큰",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/connect-to-resource.html"
+        },
+        {
+          "title": "Orchestrating Lambda Event Functions with Step Functions — 승인 흐름 구성",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/with-step-functions.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q3",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "성능·가용성·확장성·복원성·내결함성이 우수한 파이프라인 구축(1.3.2)",
+      "section": "standard-vs-express",
+      "difficulty": "applied",
+      "stem": "IoT 디바이스에서 초당 수만 건의 이벤트가 들어오고, 각 이벤트는 DynamoDB에 같은 키로 쓰는 멱등 변환을 거친다. 처리 시간은 건당 수백 밀리초다. 어떤 Step Functions 워크플로 유형이 적합한가?",
+      "options": [
+        "Express — 고빈도·단기 실행에 맞고 멱등 작업에 적합하다",
+        "Standard — exactly-once 보장이 필요하다",
+        "Express — exactly-once를 보장하므로 중복이 없다",
+        "Standard — 초당 100,000 실행을 지원한다"
+      ],
+      "correct": 0,
+      "explanation": "Express는 고빈도 이벤트 처리(IoT 수집·스트리밍 변환)에 적합하고 최대 5분까지 실행됩니다. 비동기 Express는 at-least-once라 실행이 두 번 이상 일어날 수 있으므로 DynamoDB PUT처럼 멱등한 작업에 맞습니다.",
+      "wrongExplanations": {
+        "1": "exactly-once가 필요한 비멱등 작업(결제·EMR 클러스터 시작)이라면 Standard가 맞지만, 이 시나리오는 멱등 변환입니다.",
+        "2": "Express의 비동기 실행은 at-least-once입니다. exactly-once는 Standard의 특성입니다.",
+        "3": "초당 100,000 실행 시작률은 Express의 수치입니다. Standard는 초당 2,000입니다."
+      },
+      "sources": [
+        {
+          "title": "Choosing workflow type in Step Functions — Standard/Express 의미론과 사용 사례",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
+        },
+        {
+          "title": "What is Step Functions? — 실행 시작률 비교",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q4",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "서버리스 워크플로 구현 및 유지 관리(1.3.3)",
+      "section": "standard-vs-express",
+      "difficulty": "foundational",
+      "stem": "운영 중인 Express 상태 머신을 Standard로 바꿔 장기 실행 ETL에 쓰려고 한다. 올바른 설명은 무엇인가?",
+      "options": [
+        "워크플로 유형은 생성 시 결정되며 변경할 수 없어 새 상태 머신을 만들어야 한다",
+        "콘솔에서 유형을 Standard로 전환할 수 있다",
+        "별칭을 만들면 유형이 자동 전환된다",
+        "Redrive를 실행하면 Standard로 승격된다"
+      ],
+      "correct": 0,
+      "explanation": "상태 머신은 만들 때 Standard 또는 Express를 선택하며 생성 후에는 유형을 변경할 수 없습니다. 유형을 바꾸려면 새 상태 머신을 생성해야 합니다.",
+      "wrongExplanations": {
+        "1": "유형 전환 기능은 제공되지 않습니다.",
+        "2": "별칭은 두 버전 사이로 실행 트래픽을 나누는 기능이며 유형과 무관합니다.",
+        "3": "Redrive는 실패한 Standard 실행을 재개하는 기능이고 Express는 지원하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Choosing workflow type in Step Functions — 생성 후 유형 변경 불가",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
+        },
+        {
+          "title": "State machine aliases in Step Functions workflows — 별칭의 역할",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/concepts-state-machine-alias.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q5",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "서버리스 워크플로 구현 및 유지 관리(1.3.3)",
+      "section": "map-state",
+      "difficulty": "applied",
+      "stem": "S3 버킷에 있는 50만 개 객체를 항목마다 같은 변환으로 처리해야 한다. Step Functions Map 상태를 어떻게 구성하는가?",
+      "options": [
+        "Distributed 모드로 S3 데이터 소스를 입력으로 사용한다",
+        "Inline 모드로 동시성을 10,000으로 올린다",
+        "Inline 모드로 입력 배열을 S3 객체 키 목록으로 만든다",
+        "Express 상태 머신에서 Distributed Map을 사용한다"
+      ],
+      "correct": 0,
+      "explanation": "Distributed Map은 JSON 배열뿐 아니라 S3 데이터 소스를 입력으로 쓰고 최대 10,000개의 병렬 자식 워크플로 실행을 만들며 자식마다 별도 이력을 갖습니다. 데이터 256 KiB 초과, 이력 25,000 항목 초과, 동시성 40 초과 중 하나라도 해당하면 Distributed가 기준입니다.",
+      "wrongExplanations": {
+        "1": "Inline 모드의 동시성 상한은 40입니다. 10,000으로 올릴 수 없습니다.",
+        "2": "Inline은 JSON 배열만 입력으로 받고 부모 실행 이력에 항목이 쌓여 25,000 이벤트 한도에 걸립니다.",
+        "3": "Distributed Map은 Standard 상태 머신에서만 사용할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Map workflow state — Inline/Distributed 비교와 선택 기준",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/state-map.html"
+        },
+        {
+          "title": "Choosing workflow type in Step Functions — Distributed Map은 Standard 전용",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q6",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "성능·가용성·확장성·복원성·내결함성이 우수한 파이프라인 구축(1.3.2)",
+      "section": "error-handling",
+      "difficulty": "applied",
+      "stem": "어제 중간 단계에서 실패한 Standard 워크플로 실행이 있다. 성공한 앞 단계를 다시 실행하지 않고 실패 지점부터 재개하려 한다. 가능한 방법과 제약은 무엇인가?",
+      "options": [
+        "Redrive로 재개할 수 있고, 최근 14일 내 실행이며 상태 머신 정의가 그대로여야 한다",
+        "Redrive로 재개할 수 있고, 정의를 수정한 뒤에도 같은 실행을 재개할 수 있다",
+        "불가능하다. 항상 새 실행을 처음부터 시작해야 한다",
+        "Express로 전환한 뒤 Redrive를 사용해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "Redrive는 최근 14일 안에 실패·중단·타임아웃된 Standard 실행을 같은 입력으로 실패 단계부터 재개합니다. 성공한 단계의 결과와 이력은 보존되고 재실행되지 않으며, 같은 상태 머신 정의·실행 ARN을 사용합니다.",
+      "wrongExplanations": {
+        "1": "정의를 수정했다면 Redrive 대상이 아니라 새 실행을 시작해야 합니다.",
+        "2": "Redrive 기능이 있으므로 처음부터 시작할 필요는 없습니다.",
+        "3": "Express 워크플로는 Redrive를 지원하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Restarting state machine executions with redrive in Step Functions — 14일·정의 동일 조건",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/redrive-executions.html"
+        },
+        {
+          "title": "Step Functions service quotas — Express의 Redrive 미지원",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/service-quotas.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q7",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "성능·가용성·확장성·복원성·내결함성이 우수한 파이프라인 구축(1.3.2)",
+      "section": "error-handling",
+      "difficulty": "applied",
+      "stem": "Step Functions Task 상태에 Retry를 IntervalSeconds 3, BackoffRate 2, MaxAttempts 3으로 설정했다. 첫 실패 후 두 번째 재시도는 언제 일어나며, 비용에는 어떤 영향이 있는가?",
+      "options": [
+        "첫 재시도 3초 후, 두 번째 재시도는 그로부터 6초 후이며 재시도도 상태 전이로 과금된다",
+        "첫 재시도 3초 후, 두 번째 재시도도 3초 후이며 재시도는 과금되지 않는다",
+        "첫 재시도 6초 후, 두 번째 재시도는 12초 후이며 재시도는 과금되지 않는다",
+        "재시도 간격은 무작위로 결정되며 과금과 무관하다"
+      ],
+      "correct": 0,
+      "explanation": "IntervalSeconds가 첫 재시도까지의 대기 시간이고 BackoffRate가 간격 증가 배수입니다. 3초·배수 2이면 첫 재시도는 3초 뒤, 두 번째는 그 6초 뒤입니다. 그리고 재시도는 상태 전이로 취급되어 과금됩니다.",
+      "wrongExplanations": {
+        "1": "BackoffRate 2가 적용되므로 간격은 일정하지 않고, 재시도는 과금 대상입니다.",
+        "2": "첫 재시도는 IntervalSeconds인 3초 뒤입니다.",
+        "3": "무작위화는 JitterStrategy를 FULL로 설정했을 때 적용되는 선택 사항이며 기본 동작이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Handling errors in Step Functions workflows — Retry 필드와 간격 계산, 전이 과금",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html"
+        },
+        {
+          "title": "AWS Step Functions Express Workflows (Serverless Applications Lens) — 폴링과 전이 비용",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/step-functions-workflows.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q8",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "오케스트레이션 서비스로 ETL 워크플로 구축(1.3.1)",
+      "section": "mwaa",
+      "difficulty": "applied",
+      "stem": "팀에 기존 Apache Airflow DAG 자산이 많고, 운영자가 Airflow 웹 UI에서 직접 태스크를 재실행하며 디버깅해야 한다. 어떤 선택이 적절한가?",
+      "options": [
+        "프로비저닝된 Amazon MWAA 환경을 사용한다",
+        "MWAA Serverless를 사용한다",
+        "Step Functions로 DAG를 재작성한다",
+        "Glue 워크플로로 DAG를 대체한다"
+      ],
+      "correct": 0,
+      "explanation": "MWAA Serverless는 워크플로를 YAML(DAG factory) 형식으로 정의하고 Airflow UI에 직접 접근할 수 없습니다. 공식 안내는 사용자 정의 Python 연산자·복잡한 DAG 로직·Airflow 웹 UI 직접 접근·지속적 대량 워크로드가 필요하면 프로비저닝된 MWAA를 고려하라고 합니다.",
+      "wrongExplanations": {
+        "1": "Airflow UI 직접 접근이 요구사항이므로 Serverless는 맞지 않습니다.",
+        "2": "기존 DAG 자산을 버리고 재작성하는 것은 요구사항(이식성·기존 자산 활용)에 반합니다.",
+        "3": "Glue 워크플로는 Glue 잡·크롤러·트리거 체인을 다루는 기능으로 Airflow DAG의 대체물이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon MWAA Serverless? — YAML 정의, UI 직접 접근 불가, 프로비저닝 권고 조건",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/mwaa-serverless-userguide/what-is-mwaa-serverless.html"
+        },
+        {
+          "title": "Amazon MWAA FAQs — 오픈소스·이식성 우선이면 MWAA",
+          "url": "https://aws.amazon.com/managed-workflows-for-apache-airflow/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q9",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "오케스트레이션 서비스로 ETL 워크플로 구축(1.3.1)",
+      "section": "mwaa",
+      "difficulty": "foundational",
+      "stem": "비용을 줄이려고 Amazon MWAA 환경 클래스를 mw1.micro로 설정했는데, 작업이 몰릴 때 워커가 늘어나지 않는다. 가장 가능성 높은 이유는 무엇인가?",
+      "options": [
+        "mw1.micro는 오토스케일링을 지원하지 않는다",
+        "최소 워커 수를 1로 설정했기 때문이다",
+        "스케줄러 수가 2 미만이기 때문이다",
+        "DAG가 S3 버킷에 동기화되지 않았기 때문이다"
+      ],
+      "correct": 0,
+      "explanation": "MWAA 환경 클래스는 mw1.micro부터 mw1.2xlarge까지 있고 클래스가 클수록 기본 동시 작업 수가 늘어납니다. 공식 문서는 mw1.micro가 오토스케일링을 지원하지 않는다고 명시합니다.",
+      "wrongExplanations": {
+        "1": "최소 워커 수는 축소 하한일 뿐이며, 오토스케일을 지원하는 클래스라면 부하에 따라 늘어납니다.",
+        "2": "스케줄러는 최소 2에서 최대 5까지 구성되며 워커 오토스케일 가능 여부를 결정하지 않습니다.",
+        "3": "DAG 동기화 문제라면 작업이 아예 스케줄되지 않습니다. 증상은 워커 수가 늘지 않는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring the Amazon MWAA environment class — 클래스별 동시 작업 수, micro의 오토스케일링 미지원",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/environment-class.html"
+        },
+        {
+          "title": "Explore Amazon MWAA network architecture — 워커 오토스케일 동작",
+          "url": "https://docs.aws.amazon.com/mwaa/latest/migrationguide/mwaa-architecture.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q10",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "오케스트레이션 서비스로 ETL 워크플로 구축(1.3.1)",
+      "section": "eventbridge",
+      "difficulty": "applied",
+      "stem": "Amazon EventBridge Scheduler로 매시 ETL 작업을 시작하도록 구성했다. 대상 호출이 계속 실패할 때 데이터 팀이 그 사실을 사후에 확인할 수 있게 하려면 무엇을 해야 하는가?",
+      "options": [
+        "일정에 데드레터 큐(DLQ)를 설정한다",
+        "재시도 횟수를 기본값보다 늘린다",
+        "flexible time window를 활성화한다",
+        "예약 규칙(legacy)으로 전환한다"
+      ],
+      "correct": 0,
+      "explanation": "EventBridge Scheduler는 at-least-once로 전달하며 기본적으로 최대 24시간·185회까지 재시도합니다. DLQ를 설정하지 않으면 실패한 이벤트는 폐기되므로, 사후 확인이 필요하면 DLQ를 지정해야 합니다.",
+      "wrongExplanations": {
+        "1": "재시도를 늘려도 최종 실패 이벤트는 DLQ가 없으면 폐기됩니다.",
+        "2": "flexible time window는 호출을 시간 창에 분산해 하위 서비스 부하를 줄이는 기능입니다.",
+        "3": "예약 규칙은 legacy이며 시간대·대규모 예약·DLQ 같은 Scheduler 기능을 대체하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Introducing Amazon EventBridge Scheduler — at-least-once, 재시도 기본값, DLQ 미설정 시 폐기",
+          "url": "https://aws.amazon.com/blogs/compute/introducing-amazon-eventbridge-scheduler/"
+        },
+        {
+          "title": "Amazon EventBridge FAQs — 버스·Scheduler·Pipes의 역할 구분",
+          "url": "https://aws.amazon.com/eventbridge/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q11",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "오케스트레이션 서비스로 ETL 워크플로 구축(1.3.1)",
+      "section": "glue-workflows",
+      "difficulty": "applied",
+      "stem": "Glue 워크플로를 EventBridge 이벤트로 시작하도록 구성했다. 이벤트가 몰려 동시 실행 상한을 초과하면 어떻게 되는가?",
+      "options": [
+        "상한을 넘어 시작되지 못한 런은 Glue가 재시도하지 않는다",
+        "초과된 런은 대기열에 쌓여 순차적으로 실행된다",
+        "워크플로가 자동으로 동시 실행 상한을 올린다",
+        "EventBridge가 실패한 시작을 무한 재시도한다"
+      ],
+      "correct": 0,
+      "explanation": "Glue 워크플로의 동시 실행 상한은 생성 시 지정하며, 상한을 넘어 시작되지 못한 런을 Glue가 재시도하지 않습니다. 따라서 예상 이벤트량에 맞춰 상한을 조정해야 합니다. 또한 실패로 끝난 런을 시작시킨 이벤트는 다시 고려되지 않습니다.",
+      "wrongExplanations": {
+        "1": "대기열에 쌓아 순차 실행하는 동작은 문서화돼 있지 않습니다.",
+        "2": "동시 실행 상한이 자동으로 조정되지는 않습니다.",
+        "3": "EventBridge의 재시도는 규칙 대상 호출에 대한 것이며, 워크플로 동시성 초과를 보상하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Overview of workflows in AWS Glue — 동시 실행 상한과 재시도 없음, 이벤트 트리거",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/workflows_overview.html"
+        },
+        {
+          "title": "Automating AWS Glue with EventBridge — 이벤트 기반 시작",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/automating-awsglue-with-cloudwatch-events.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q12",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "알림 서비스를 사용하여 알림 전송(1.3.4)",
+      "section": "notifications",
+      "difficulty": "applied",
+      "stem": "AWS Glue ETL 잡이 실패하면 데이터 팀 이메일로 알림을 보내야 한다. 가장 표준적인 구성은 무엇인가?",
+      "options": [
+        "Glue 잡 상태 변경 이벤트를 EventBridge 규칙으로 받아 SNS 토픽에 게시하고 이메일을 구독한다",
+        "Glue 잡 스크립트 끝에서 SES로 직접 메일을 보낸다",
+        "SQS FIFO 큐를 만들어 이메일 주소를 구독시킨다",
+        "SNS FIFO 토픽에 이메일 엔드포인트를 구독한다"
+      ],
+      "correct": 0,
+      "explanation": "Glue는 잡 상태 변경을 EventBridge 이벤트로 발행하므로, 규칙으로 실패 이벤트를 받아 SNS 토픽에 게시하고 이메일 구독을 붙이는 것이 표준 구성입니다. 재시도·폴백 같은 흐름 제어는 Step Functions의 Retry/Catch가 담당합니다.",
+      "wrongExplanations": {
+        "1": "잡 스크립트 안에서 메일을 보내면 잡이 비정상 종료될 때 알림 자체가 실행되지 않습니다.",
+        "2": "SQS는 소비자가 가져가는 큐이며 이메일 주소를 구독시킬 수 없습니다.",
+        "3": "SNS FIFO 토픽은 SQS 표준·FIFO 큐로만 전달할 수 있고 이메일·SMS·모바일·HTTP(S) 엔드포인트는 구독할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Automating AWS Glue with EventBridge — 잡 상태 변경 이벤트",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/automating-awsglue-with-cloudwatch-events.html"
+        },
+        {
+          "title": "Amazon SNS message delivery for FIFO topics — FIFO 토픽의 구독 가능 엔드포인트 제약",
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/fifo-message-delivery.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q13",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "알림 서비스를 사용하여 알림 전송(1.3.4)",
+      "section": "notifications",
+      "difficulty": "applied",
+      "stem": "SQS 큐를 소비하는 처리기가 메시지 처리에 평균 2분, 최대 8분이 걸린다. 같은 메시지가 다른 소비자에게 중복 전달되지 않게 하려면 무엇을 조정하는가?",
+      "options": [
+        "가시성 제한 시간을 처리·삭제에 걸리는 최대 시간 이상으로 설정한다",
+        "긴 폴링 대기 시간을 20초로 설정한다",
+        "maxReceiveCount를 1로 낮춘다",
+        "큐 유형을 FIFO로 변경한다"
+      ],
+      "correct": 0,
+      "explanation": "가시성 제한 시간은 한 소비자가 받은 메시지가 다른 소비자에게 보이지 않는 시간으로 기본 30초이며 0초에서 12시간 사이로 설정합니다. 소비자가 그 시간 안에 처리·삭제하지 못하면 메시지가 다시 보이므로, 보통 처리와 삭제에 걸리는 최대 시간으로 맞춥니다.",
+      "wrongExplanations": {
+        "1": "긴 폴링은 빈 응답을 줄여 비용을 낮추는 설정으로 중복 전달과 무관합니다.",
+        "2": "maxReceiveCount는 DLQ 이동 기준입니다. 1로 낮추면 한 번 실패한 메시지가 바로 DLQ로 갑니다.",
+        "3": "큐 유형은 만든 뒤 변경할 수 없고, FIFO로 바꿔도 가시성 제한 시간이 짧으면 재전달은 발생합니다."
+      },
+      "sources": [
+        {
+          "title": "Visibility timeout (Amazon SQS) — 기본 30초, 0초~12시간, 설정 기준",
+          "url": "https://docs.aws.amazon.com/help-panel/AWSSimpleQueueService/latest/console/hp-createq-config-vis-timeout.html"
+        },
+        {
+          "title": "CreateQueue (Amazon SQS API Reference) — 큐 유형 변경 불가, maxReceiveCount 기본값",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q14",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "알림 서비스를 사용하여 알림 전송(1.3.4)",
+      "section": "notifications",
+      "difficulty": "foundational",
+      "stem": "SQS FIFO 큐에 데드레터 큐를 붙이려 한다. 공식 요건으로 맞는 것은 무엇인가?",
+      "options": [
+        "FIFO 큐의 DLQ는 FIFO 큐여야 한다",
+        "FIFO 큐의 DLQ는 Standard 큐여야 한다",
+        "FIFO 큐에는 DLQ를 설정할 수 없다",
+        "DLQ 유형은 maxReceiveCount 값에 따라 자동 결정된다"
+      ],
+      "correct": 0,
+      "explanation": "FIFO 큐의 데드레터 큐는 FIFO 큐여야 하고, Standard 큐의 DLQ는 Standard 큐여야 합니다. 메시지는 redrive 정책의 maxReceiveCount(기본 10)를 넘으면 DLQ로 이동합니다.",
+      "wrongExplanations": {
+        "1": "Standard 큐의 DLQ가 Standard여야 하는 것이고, FIFO는 FIFO여야 합니다.",
+        "2": "FIFO 큐도 DLQ를 설정할 수 있습니다.",
+        "3": "maxReceiveCount는 이동 기준 횟수이며 DLQ 유형을 결정하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "CreateQueue (Amazon SQS API Reference) — FIFO DLQ 요건과 maxReceiveCount",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html"
+        },
+        {
+          "title": "Using dead-letter queues in Amazon SQS — redrive 정책",
+          "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t1-3-q15",
+      "examGuideTaskId": "dea-t1-3",
+      "skill": "성능·가용성·확장성·복원성·내결함성이 우수한 파이프라인 구축(1.3.2)",
+      "section": "resilience",
+      "difficulty": "applied",
+      "stem": "일시적 오류로 재실행되는 ETL 잡이 대상 테이블에 중복 행을 남긴다. Well-Architected Data Analytics Lens의 복구 자동화 지침에 맞는 설계는 무엇인가?",
+      "options": [
+        "ETL을 멱등으로 설계해 덮어쓰기 또는 삭제 후 쓰기 방식으로 적재한다",
+        "재시도 횟수를 무제한으로 두어 결국 성공하게 한다",
+        "중복 제거를 위해 다운스트림 쿼리에 DISTINCT를 추가한다",
+        "재시도 간격을 고정값으로 두어 예측 가능하게 한다"
+      ],
+      "correct": 0,
+      "explanation": "Lens의 복구 자동화 지침은 재실행 시 중복이나 오래된 데이터가 생기지 않도록 ETL을 멱등으로 설계하라고 안내하며, 덮어쓰기(예: Spark overwrite)와 삭제 후 쓰기 방법을 제시합니다(삭제는 신중히 적용).",
+      "wrongExplanations": {
+        "1": "재시도 횟수는 제한해야 합니다. 무제한 재시도는 비용과 부하를 키우고 근본 원인을 가립니다.",
+        "2": "다운스트림에서 가리는 것은 증상 완화일 뿐이며 적재 데이터의 정합성 문제는 남습니다.",
+        "3": "고정 간격은 동시 재시도 군집을 유발합니다. 지수 백오프와 지터가 권장됩니다."
+      },
+      "sources": [
+        {
+          "title": "Best practice 6.4 – Automate the recovery of analytics and ETL job failures — 멱등 설계와 재시도 제한",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/best-practice-6.4-automate-the-recovery-of-analytics-and-etl-job-failures..html"
+        },
+        {
+          "title": "REL05-BP03 Control and limit retry calls — 백오프·지터·최대 횟수",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
