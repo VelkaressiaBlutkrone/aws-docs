@@ -1,0 +1,480 @@
+{
+  "examGuideTaskId": "dea-t4-2",
+  "taskTitle": "권한 부여 메커니즘 적용",
+  "domain": 4,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t4-2-q1",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "관리형 정책이 요구 사항을 충족하지 못하면 사용자 지정 IAM 정책 만들기(4.2.1)",
+      "section": "custom-policies",
+      "difficulty": "applied",
+      "stem": "여러 ETL 역할에 같은 맞춤 권한 집합을 적용하고, 앞으로 권한을 한 곳에서 수정하려 한다. 어떤 정책 유형을 써야 하며 만들 때 권장되는 출발점은?",
+      "options": [
+        "고객 관리형 정책을 만든다. 기존 AWS 관리형 정책을 복사해 시작하는 방법이 권장된다",
+        "인라인 정책을 역할마다 만든다. 역할과 일대일로 묶여 관리가 명확하다",
+        "AWS 관리형 정책을 직접 수정해 필요한 권한만 남긴다",
+        "권한 경계를 각 역할에 붙여 필요한 권한을 부여한다"
+      ],
+      "correct": 0,
+      "explanation": "정책이 둘 이상의 엔터티에 적용될 수 있으면 관리형 정책이 낫습니다. 고객 관리형 정책은 내 계정에 만들어 여러 주체에 붙이는 독립 정책이며, 기존 AWS 관리형 정책을 복사해 시작하는 방법이 권장됩니다.",
+      "wrongExplanations": {
+        "1": "인라인 정책은 단일 IAM 자격 증명과 일대일로 묶이고 자격 증명을 삭제하면 함께 삭제됩니다. 여러 역할에 재사용하거나 한 곳에서 수정하기에 적합하지 않습니다.",
+        "2": "AWS 관리형 정책은 AWS가 만들고 관리하며 정의된 권한을 바꿀 수 없습니다.",
+        "3": "권한 경계는 ID 기반 정책이 부여할 수 있는 최대 권한을 설정하는 기능이며 권한 자체를 부여하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Managed policies and inline policies (IAM User Guide) — 관리형 정책은 수정 불가, 고객 관리형은 관리형 복사로 시작, 인라인은 일대일",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html"
+        },
+        {
+          "title": "Security best practices in IAM — 권한 경계는 최대 권한을 정하며 권한 자체는 부여하지 않음",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q2",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "관리형 정책이 요구 사항을 충족하지 못하면 사용자 지정 IAM 정책 만들기(4.2.1)",
+      "section": "custom-policies",
+      "difficulty": "foundational",
+      "stem": "조직 관리자가 모든 계정에 SCP를 적용하고 개발자 역할에 권한 경계를 설정했다. 그런데 개발자가 만든 역할이 아무 작업도 수행하지 못한다. 가장 가능성이 높은 원인은?",
+      "options": [
+        "SCP와 권한 경계가 서로 충돌해 모든 요청이 거부되었다",
+        "SCP와 권한 경계는 권한을 부여하지 않는 상한·가드레일이므로, 실제 권한을 주는 ID 기반 또는 리소스 기반 정책이 없다",
+        "권한 경계는 리소스 기반 정책만 제한하므로 ID 기반 정책을 다시 붙여야 한다",
+        "SCP는 ID 기반 정책을 자동으로 생성하므로 전파를 기다려야 한다"
+      ],
+      "correct": 1,
+      "explanation": "SCP·RCP는 조직·OU·계정 수준 가드레일이지만 권한을 부여하지 못하므로 ID 기반 또는 리소스 기반 정책이 따로 필요합니다. 권한 경계도 ID 기반 정책이 부여할 수 있는 최대 권한을 설정할 뿐 그 자체로는 권한을 주지 않습니다.",
+      "wrongExplanations": {
+        "0": "둘의 충돌이 아니라 권한을 부여하는 정책의 부재가 원인입니다.",
+        "2": "권한 경계는 ID 기반 정책이 IAM 엔터티에 부여할 수 있는 최대 권한을 설정하는 기능입니다.",
+        "3": "SCP는 권한을 부여하지 않으며 ID 기반 정책을 생성하지도 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Security best practices in IAM — 권한 경계는 권한 자체를 부여하지 않고, SCP·RCP로는 어떤 권한도 부여되지 않음",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q3",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "애플리케이션 및 데이터베이스 자격 증명 저장(예: Secrets Manager 및 AWS Systems Manager Parameter Store)(4.2.2)",
+      "section": "credential-stores",
+      "difficulty": "applied",
+      "stem": "AWS Glue ETL 작업이 쓰는 JDBC 데이터베이스 자격 증명을 안전하게 저장하려 한다. 보안 팀은 암호를 정기적으로 자동 교체하고, 코드나 스크립트에 암호가 남지 않기를 요구한다. 가장 적절한 구성은?",
+      "options": [
+        "암호를 Parameter Store 표준 SecureString에 저장하고 파라미터 정책으로 자동 회전을 설정한다",
+        "암호화한 암호 파일을 S3 버킷에 두고 Glue 스크립트가 읽게 한다",
+        "비밀을 Secrets Manager에 저장하고 Glue 연결이 비밀을 참조하게 하며, Glue 역할에 비밀 조회 권한을 부여한다",
+        "Glue 역할에 AWSGlueServiceRole 관리형 정책만 붙이고 Secrets Manager 비밀을 별도 권한 없이 참조한다"
+      ],
+      "correct": 2,
+      "explanation": "AWS Glue는 데이터 스토어 연결 자격 증명을 Secrets Manager에 두는 것을 권장하며 ETL 작업·크롤러 실행 시점에 비밀을 조회합니다. Secrets Manager는 비밀 회전을 제공하고, Glue용 IAM 역할에는 비밀 조회 권한을 별도로 줘야 합니다.",
+      "wrongExplanations": {
+        "0": "Parameter Store의 파라미터 정책 유형은 Expiration, ExpirationNotification, NoChangeNotification이며 회전이 아닙니다.",
+        "1": "요구한 자동 교체를 제공하는 관리형 기능이 아니며 비밀 관리 부담이 그대로 남습니다.",
+        "3": "AWSGlueServiceRole 관리형 정책에는 Secrets Manager 권한이 없어 비밀을 조회할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Storing connection credentials in AWS Secrets Manager (AWS Glue) — Secrets Manager 사용 권장, Glue 역할에 조회 권한 필요하며 AWSGlueServiceRole에는 그 권한 없음",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/connection-properties-secrets-manager.html"
+        },
+        {
+          "title": "PutParameter (AWS Systems Manager API Reference) — 파라미터 정책 유형(만료·알림)",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q4",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "애플리케이션 및 데이터베이스 자격 증명 저장(예: Secrets Manager 및 AWS Systems Manager Parameter Store)(4.2.2)",
+      "section": "credential-stores",
+      "difficulty": "applied",
+      "stem": "파이프라인 구성 값이 6 KB로 늘어났고, 값에 만료 알림 정책을 걸고 다른 AWS 계정과 공유해야 한다. Parameter Store를 쓸 때 필요한 선택과 주의할 점은?",
+      "options": [
+        "표준 티어를 쓰고 값을 두 파라미터로 나눠 저장하면 정책과 공유가 모두 가능하다",
+        "고급 티어를 쓰고 AWS RAM으로 공유한다. 표준에서 고급으로는 언제든 바꿀 수 있지만 고급에서 표준으로는 되돌릴 수 없다",
+        "고급 티어를 쓰면 파라미터 정책으로 자동 회전까지 설정할 수 있다",
+        "표준 티어는 값 8 KB까지 지원하므로 티어 변경 없이 그대로 쓴다"
+      ],
+      "correct": 1,
+      "explanation": "표준 파라미터는 값 4 KB·계정/리전당 10,000개이고 파라미터 정책을 쓸 수 없습니다. 고급 파라미터는 값 8 KB·계정/리전당 100,000개이며 요금이 발생하고 파라미터 정책을 쓸 수 있으며, 고급 파라미터를 AWS RAM으로 다른 계정과 공유합니다. 표준에서 고급으로는 언제든 바꿀 수 있지만 고급에서 표준으로는 되돌릴 수 없습니다.",
+      "wrongExplanations": {
+        "0": "표준 티어는 파라미터 정책을 쓸 수 없고 공유 대상은 고급 파라미터입니다. 값을 나누는 것은 요구를 충족하지 못합니다.",
+        "2": "지원되는 파라미터 정책 유형은 Expiration, ExpirationNotification, NoChangeNotification이며 회전 유형의 정책은 없습니다.",
+        "3": "표준 파라미터의 값 크기 한도는 4 KB이고 8 KB는 고급 티어입니다."
+      },
+      "sources": [
+        {
+          "title": "PutParameter (AWS Systems Manager API Reference) — 표준 4 KB·10,000개, 고급 8 KB·100,000개, 요금, 티어 변경 불가역, 정책 유형",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter.html"
+        },
+        {
+          "title": "Working with shared parameters in Parameter Store — 고급 파라미터를 AWS RAM으로 공유",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-shared-parameters.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q5",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "데이터베이스 사용자, 그룹 및 역할에 데이터베이스 액세스와 권한 제공(예: Amazon Redshift)(4.2.3)",
+      "section": "db-permissions",
+      "difficulty": "applied",
+      "stem": "Amazon Redshift의 customers 테이블을 영업팀과 마케팅팀이 조회한다. 영업팀 분석가는 자기 리전의 행만 보아야 하고, 마케팅팀은 모든 행을 보되 신용카드 번호는 가려진 값으로 보아야 한다. 원본 데이터는 바꾸면 안 된다. 어떻게 구성하는가?",
+      "options": [
+        "두 팀 모두에 열 수준 SELECT 권한만 부여한다",
+        "신용카드 번호 열을 해시 값으로 바꿔 원본 테이블을 갱신한다",
+        "영업팀 역할에 RLS 정책을, 마케팅팀 역할에 동적 데이터 마스킹 정책을 연결한다",
+        "Lake Formation 권한 모델을 Redshift 내부 로컬 테이블에 직접 적용한다"
+      ],
+      "correct": 2,
+      "explanation": "RLS 정책은 보이는 열의 특정 행으로 접근을 제한하고, 동적 데이터 마스킹은 데이터를 변형하지 않고 쿼리 시점에 민감 데이터가 보이는 방식을 바꾸는 마스킹 정책을 사용자·역할에 적용합니다.",
+      "wrongExplanations": {
+        "0": "열 수준 권한은 접근 가능한 열만 제한하며 행 제한이나 값 마스킹을 하지 못합니다.",
+        "1": "원본 데이터를 바꾸면 안 된다는 요구를 위반합니다. 동적 데이터 마스킹은 저장된 데이터를 바꾸지 않습니다.",
+        "3": "Lake Formation 권한은 Data Catalog 리소스·S3 위치·기반 데이터 접근을 통제하는 모델입니다."
+      },
+      "sources": [
+        {
+          "title": "Row-level security (Amazon Redshift Database Developer Guide) — 열 수준 권한과 RLS로 보이는 열의 특정 행을 추가 제한",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_rls.html"
+        },
+        {
+          "title": "Dynamic data masking (Amazon Redshift Database Developer Guide) — 사용자·역할별 마스킹 정책, 우선순위로 충돌 해결",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_ddm.html"
+        },
+        {
+          "title": "Overview of Lake Formation permissions — Lake Formation 권한의 통제 대상",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q6",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "데이터베이스 사용자, 그룹 및 역할에 데이터베이스 액세스와 권한 제공(예: Amazon Redshift)(4.2.3)",
+      "section": "db-permissions",
+      "difficulty": "applied",
+      "stem": "애플리케이션이 암호를 코드에 두지 않고 IAM으로 데이터베이스에 로그인하려 한다. Amazon Redshift와 Amazon RDS의 임시 자격 증명 만료에 대해 옳은 것은?",
+      "options": [
+        "Redshift와 RDS 모두 토큰이 15분간 유효하다",
+        "Redshift는 기본 900초이고 900~3600초 범위에서 지정할 수 있으며, RDS IAM 인증 토큰은 생성 후 15분간 유효하다",
+        "Redshift는 1시간 고정이고 RDS는 만료가 없다",
+        "Redshift는 900초 고정이며 변경할 수 없고, RDS는 사용자가 만료를 지정한다"
+      ],
+      "correct": 1,
+      "explanation": "Redshift의 GetClusterCredentials는 임시 DB 사용자 이름과 암호를 반환하며 기본 만료는 900초이고 900초에서 3600초 범위에서 지정할 수 있습니다. RDS IAM 데이터베이스 인증은 암호 대신 인증 토큰을 쓰며 토큰은 생성 후 15분간 유효합니다.",
+      "wrongExplanations": {
+        "0": "Redshift는 기본 900초이며 900~3600초 범위에서 지정할 수 있습니다.",
+        "2": "Redshift는 1시간 고정이 아니며 RDS 토큰도 15분 뒤 만료됩니다.",
+        "3": "Redshift의 만료는 900~3600초 범위에서 지정할 수 있고, RDS 토큰 유효 기간은 15분으로 문서화되어 있습니다."
+      },
+      "sources": [
+        {
+          "title": "GetClusterCredentials (Amazon Redshift API Reference) — 기본 900초, 900~3600초 범위 지정",
+          "url": "https://docs.aws.amazon.com/redshift/latest/APIReference/API_GetClusterCredentials.html"
+        },
+        {
+          "title": "Connecting to your DB instance using IAM authentication (Amazon RDS User Guide) — 토큰은 15분간 유효",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.Connecting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q7",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "AWS Lake Formation을 통해 권한 관리(Amazon Redshift, Amazon EMR, Amazon Athena, Amazon S3)(4.2.4)",
+      "section": "lake-formation",
+      "difficulty": "applied",
+      "stem": "분석가에게 Lake Formation에서 테이블 SELECT 권한을 부여했는데도 Glue 작업이 실패한다. 가장 먼저 확인할 것은?",
+      "options": [
+        "Lake Formation 권한을 다른 리전에서 다시 부여했는지",
+        "데이터 필터를 함께 지정했는지",
+        "LF-Tag를 IAM 태그와 동일하게 맞췄는지",
+        "요청 주체에게 Lake Formation·Glue API와 리소스 접근을 허용하는 IAM 권한이 있는지"
+      ],
+      "correct": 3,
+      "explanation": "요청이 성공하려면 IAM과 Lake Formation 검사를 모두 통과해야 합니다. IAM 권한은 Lake Formation·Glue API와 리소스 접근을 통제하고, Lake Formation 권한은 Data Catalog 리소스·S3 위치·기반 데이터 접근을 통제합니다.",
+      "wrongExplanations": {
+        "0": "Lake Formation 권한은 부여한 리전에서만 유효하지만, 같은 리전에서 SELECT를 부여한 상황에서 먼저 확인할 것은 IAM 권한입니다.",
+        "1": "데이터 필터는 열·행·셀 수준 제한을 구현하는 선택 사항이며 작업 실패의 필수 조건이 아닙니다.",
+        "2": "IAM 태그와 LF-Tag는 같지 않으며 서로 바꿔 쓸 수 없습니다. 둘을 맞추는 것은 해결책이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Overview of Lake Formation permissions — IAM과 Lake Formation 검사를 모두 통과해야 하며 권한은 부여 리전에서만 유효",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-overview.html"
+        },
+        {
+          "title": "Lake Formation tag-based access control — IAM 태그와 LF-Tag는 다르며 호환되지 않음",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q8",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "AWS Lake Formation을 통해 권한 관리(Amazon Redshift, Amazon EMR, Amazon Athena, Amazon S3)(4.2.4)",
+      "section": "lake-formation",
+      "difficulty": "applied",
+      "stem": "Lake Formation 데이터 필터를 \"특정 열 포함/제외\"와 \"행 필터 표현식\"을 함께 지정해 만들었다. 이 필터가 구현하는 보안 수준과 함께 부여할 수 있는 권한은?",
+      "options": [
+        "셀 수준 보안이며, 필터는 읽기 작업에만 적용되므로 함께 부여할 수 있는 권한은 SELECT뿐이다",
+        "열 수준 보안이며, SELECT와 INSERT를 함께 부여할 수 있다",
+        "행 수준 보안이며, ALTER를 포함한 모든 권한에 적용된다",
+        "테이블 수준 보안이며 쓰기 작업에도 필터가 적용된다"
+      ],
+      "correct": 0,
+      "explanation": "데이터 필터를 특정 열 포함/제외와 행 필터 표현식으로 함께 채우면 셀 수준 보안이 됩니다(모든 열 와일드카드+행 표현식은 행 수준, 특정 열+모든 행은 열 수준). 필터는 읽기 작업에만 적용되므로 필터와 함께 부여할 수 있는 Lake Formation 권한은 SELECT뿐입니다.",
+      "wrongExplanations": {
+        "1": "특정 열만 지정하고 모든 행을 선택했을 때가 열 수준이며, 필터와 함께 부여 가능한 권한은 SELECT뿐입니다.",
+        "2": "모든 열 와일드카드와 행 필터 표현식을 쓸 때가 행 수준이고, 필터는 읽기 작업에만 적용됩니다.",
+        "3": "필터는 읽기 작업에만 적용되며 쓰기 작업에는 적용되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Data filtering and cell-level security in Lake Formation — 열·행·셀 수준 조합, 셀 수준은 행·열 필터 결합, 필터는 읽기 작업에만 적용",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html"
+        },
+        {
+          "title": "Managing data filters (AWS Lake Formation Developer Guide) — 필터는 하나의 Data Catalog 테이블에 속하며 권한 부여 시 선택",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/managing-filters.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q9",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "AWS Lake Formation을 통해 권한 관리(Amazon Redshift, Amazon EMR, Amazon Athena, Amazon S3)(4.2.4)",
+      "section": "lake-formation",
+      "difficulty": "applied",
+      "stem": "회사는 Glue Data Catalog 테이블에 IAM 정책과 S3 권한만으로 ETL 작업이 접근해 왔다. 이제 일부 분석가에게만 Lake Formation의 열·행 수준 권한을 적용하고 싶지만 기존 ETL 작업과 다른 사용자의 접근이 끊기면 안 된다. 어떻게 하는가?",
+      "options": [
+        "모든 주체에 대해 Lake Formation 권한을 즉시 필수로 전환하고 기존 IAM 기반 접근을 제거한다",
+        "S3 버킷 정책만으로 분석가별 열·행 접근을 제한한다",
+        "하이브리드 접근 모드를 사용하고 해당 분석가만 Lake Formation 권한을 쓰도록 옵트인한다",
+        "Glue 크롤러의 권한만 조정한다"
+      ],
+      "correct": 2,
+      "explanation": "하이브리드 접근 모드는 같은 Data Catalog 객체에 두 가지 권한 경로를 제공합니다. 옵트인한 주체는 Lake Formation 권한과 IAM 권한을 모두 요구받고, 옵트인하지 않은 주체는 기존처럼 IAM 권한만으로 접근하므로 기존 사용자·워크로드의 접근이 끊기지 않습니다.",
+      "wrongExplanations": {
+        "0": "전면 전환은 기존 사용자·워크로드 접근을 끊을 수 있어 하이브리드 모드를 쓰는 이유와 정반대입니다.",
+        "1": "열·행·셀 수준 보안은 Lake Formation 데이터 필터로 구현합니다.",
+        "3": "크롤러 권한 조정으로는 분석가별 열·행 수준 제한을 충족하지 못합니다."
+      },
+      "sources": [
+        {
+          "title": "Hybrid access mode (AWS Lake Formation Developer Guide) — 두 권한 경로, 옵트인 주체는 Lake Formation+IAM 모두 필요",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/hybrid-access-mode.html"
+        },
+        {
+          "title": "Data filtering and cell-level security in Lake Formation — 열·행·셀 수준 보안은 데이터 필터로 구현",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q10",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "AWS Lake Formation을 통해 권한 관리(Amazon Redshift, Amazon EMR, Amazon Athena, Amazon S3)(4.2.4)",
+      "section": "lake-formation",
+      "difficulty": "applied",
+      "stem": "데이터 레이크 테이블을 다른 AWS 계정에 공유했고 수신 계정이 공유를 수락했다. 그런데 수신 계정에서 Amazon Athena로 조회가 되지 않는다. 무엇이 필요한가?",
+      "options": [
+        "수신 계정에서 S3 위치를 다시 등록한다",
+        "공유를 LF-TBAC 방식으로 다시 만든다",
+        "수신 계정에서 공유 리소스에 대한 리소스 링크를 만든다",
+        "프로듀서 계정에서 Lake Formation 권한을 모든 리전에 부여한다"
+      ],
+      "correct": 2,
+      "explanation": "Lake Formation은 AWS RAM으로 계정 간 권한 부여를 처리하며, 수신 계정에서 Athena나 Redshift Spectrum으로 조회하려면 공유 리소스에 대한 리소스 링크가 필요합니다.",
+      "wrongExplanations": {
+        "0": "S3 위치 등록은 기반 데이터 접근을 통제하기 위해 데이터 소유 쪽에서 하는 작업이며, 조회 실패의 원인으로 문서화된 조건은 리소스 링크 부재입니다.",
+        "1": "명명된 리소스 방식과 LF-TBAC 모두 교차 계정 공유를 지원하므로 방식 변경이 해결책이 아닙니다.",
+        "3": "Lake Formation 권한은 부여한 리전에서만 유효하지만, 수신 계정의 조회 실패 원인은 리소스 링크 부재입니다."
+      },
+      "sources": [
+        {
+          "title": "Cross-account data sharing in Lake Formation — AWS RAM으로 계정 간 부여, 수신 계정은 리소스 링크 없이 Athena·Redshift Spectrum 조회 불가",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/cross-data-sharing-lf.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q11",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "AWS Lake Formation을 통해 권한 관리(Amazon Redshift, Amazon EMR, Amazon Athena, Amazon S3)(4.2.4)",
+      "section": "lake-formation",
+      "difficulty": "foundational",
+      "stem": "Lake Formation이 기반 데이터 접근을 통제하도록 S3 위치를 등록할 때 옳은 설명은?",
+      "options": [
+        "등록 단위는 개별 S3 객체이며 객체마다 역할을 지정한다",
+        "위치를 등록하면 IAM 권한 검사가 생략된다",
+        "등록한 위치는 클라이언트 측 암호화만 지원한다",
+        "등록 시 읽기/쓰기 권한이 있는 IAM 역할을 지정하고, 통합 서비스가 접근을 요청하면 Lake Formation이 그 역할로 임시 자격 증명을 공급한다"
+      ],
+      "correct": 3,
+      "explanation": "Lake Formation이 기반 데이터 접근을 통제하려면 S3 위치를 등록하고 등록할 때 읽기/쓰기 권한이 있는 IAM 역할을 지정합니다. 통합 서비스가 접근을 요청하면 Lake Formation이 그 역할로 임시 자격 증명을 공급합니다.",
+      "wrongExplanations": {
+        "0": "위치는 버킷이나 버킷 아래 프리픽스이며 개별 S3 객체는 아닙니다.",
+        "1": "요청이 성공하려면 IAM과 Lake Formation 검사를 모두 통과해야 합니다.",
+        "2": "Lake Formation에 등록한 위치는 클라이언트 측 암호화를 지원하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Underlying data access control (AWS Lake Formation Developer Guide) — 등록 시 IAM 역할 지정, 임시 자격 증명 공급, 위치는 버킷·프리픽스 단위",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/access-control-underlying-data.html"
+        },
+        {
+          "title": "Registering an encrypted Amazon S3 location across AWS accounts (Lake Formation) — 클라이언트 측 암호화 미지원",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/register-cross-encrypted.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q12",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "비즈니스 요구 사항을 해결하는 권한 부여 방법 적용(역할 기반, 태그 기반 및 속성 기반)(4.2.5)",
+      "section": "authz-methods",
+      "difficulty": "applied",
+      "stem": "데이터 레이크 테이블에 분류 태그(예: Confidential)를 붙여 수백 개 테이블과 많은 분석가의 접근을 관리하려 한다. 새 테이블이 추가되어도 권한을 개별로 다시 부여하지 않고 태그 값 일치로 적용되길 원한다. 가장 적합한 방식은?",
+      "options": [
+        "Lake Formation LF-TBAC: LF-Tag를 리소스와 주체에 붙이고 태그 값으로 권한을 부여한다",
+        "테이블마다 명명된 리소스 방식으로 SELECT를 개별 부여한다",
+        "IAM 태그를 Data Catalog 테이블에 붙이면 Lake Formation이 그 태그로 권한을 집행한다",
+        "S3 객체 태그를 붙이고 Lake Formation이 그 태그를 LF-Tag로 사용하게 한다"
+      ],
+      "correct": 0,
+      "explanation": "LF-TBAC는 속성(LF-Tag)에 따라 권한을 정하는 인가 전략으로, LF-Tag를 Data Catalog 리소스에 붙이고 그 태그로 주체에게 권한을 부여합니다. 리소스가 많을 때 권장되는 방법입니다.",
+      "wrongExplanations": {
+        "1": "리소스가 많을수록 개별 부여 부담이 커져 LF-TBAC가 권장되는 조건과 어긋납니다.",
+        "2": "IAM 태그와 LF-Tag는 같지 않으며 서로 바꿔 쓸 수 없습니다.",
+        "3": "LF-Tag는 Data Catalog 리소스에 붙이는 전용 태그이며 S3 객체 태그를 LF-Tag로 쓰지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Lake Formation tag-based access control — LF-TBAC는 리소스가 많을 때 권장되는 방법, LF-Tag는 IAM 태그와 다름",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q13",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "비즈니스 요구 사항을 해결하는 권한 부여 방법 적용(역할 기반, 태그 기반 및 속성 기반)(4.2.5)",
+      "section": "authz-methods",
+      "difficulty": "applied",
+      "stem": "리소스가 빠르게 늘어나는 환경에서 정책을 계속 늘리지 않고 접근을 제어하려 ABAC를 도입한다. 함께 세워야 할 가드레일은?",
+      "options": [
+        "주체와 리소스의 태그를 서로 다르게 유지하는 규칙",
+        "태그를 수정할 수 있는 권한을 통제하는 가드레일. 조직 전체에서 태그 수정 조건을 제한하는 데 SCP를 쓸 수 있다",
+        "ABAC 도입 시 모든 역할에 AWS 관리형 정책을 추가로 붙인다",
+        "리소스 태그를 지우고 역할 세션 태그만 사용한다"
+      ],
+      "correct": 1,
+      "explanation": "ABAC는 태그에 의존하므로 의도치 않은 접근을 막는 가드레일이 중요하고, 조직 전체에서 태그 수정 조건을 제한하는 데 SCP를 쓸 수 있습니다. 태그를 바꿀 수 있는 권한이 사실상 접근 권한이 되기 때문입니다.",
+      "wrongExplanations": {
+        "0": "ABAC는 역할이나 세션의 태그가 리소스의 태그와 일치하도록 요구해 권한을 줍니다. 태그를 다르게 유지하면 접근이 성립하지 않습니다.",
+        "2": "AWS 관리형 정책은 모든 고객용이라 특정 사례에 최소 권한이 아닐 수 있고, 태그 수정 통제라는 가드레일과도 무관합니다.",
+        "3": "ABAC는 AWS 리소스, IAM 역할, 역할 세션에 태그를 정의하고 양쪽 태그 일치를 요구하는 방식입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Identity and Access Management (IAM) FAQs — ABAC는 태그 기반이며 역할·세션 태그가 리소스 태그와 일치하도록 요구",
+          "url": "https://aws.amazon.com/iam/faqs/"
+        },
+        {
+          "title": "ABAC for individual resources (Tagging best practices whitepaper) — 의도치 않은 접근을 막는 가드레일이 중요하며 SCP로 태그 보호",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/abac-for-individual-resources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q14",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "최소 권한의 원칙을 충족하는 사용자 지정 정책 구성(4.2.6)",
+      "section": "least-privilege",
+      "difficulty": "applied",
+      "stem": "Glue ETL 작업의 IAM 역할이 개발 초기에 AWS 관리형 정책으로 광범위한 권한을 받은 채 운영 중이다. 보안 팀은 최근 실제로 사용한 작업과 리소스에 맞춘 최소 권한 정책으로 교체하길 원한다. 어떻게 하는가?",
+      "options": [
+        "역할에 권한 경계를 설정하고 기존 관리형 정책은 그대로 둔다",
+        "조직에 SCP를 적용해 필요한 권한을 부여한다",
+        "Access Analyzer가 생성한 공개·교차 계정 액세스 결과를 정책으로 그대로 사용한다",
+        "IAM Access Analyzer 정책 생성으로 CloudTrail 접근 활동 기반 정책 템플릿을 만들고 테스트한 뒤 배포한다"
+      ],
+      "correct": 3,
+      "explanation": "IAM Access Analyzer는 CloudTrail 로그를 검토해 지정한 기간에 엔터티가 쓴 권한을 담은 정책 템플릿을 생성합니다. 이를 테스트한 뒤 프로덕션에 배포하는 흐름이 사용 내역 기반 최소 권한 축소입니다.",
+      "wrongExplanations": {
+        "0": "권한 경계는 부여 가능한 최대 권한을 정할 뿐이며 사용 내역에 맞춘 정책을 만들지 않습니다.",
+        "1": "SCP·RCP는 권한을 부여하지 않는 조직 가드레일입니다.",
+        "2": "공개·교차 계정 액세스 결과(finding)는 외부 접근을 허용하는 리소스를 알려 주는 탐지 결과이며 정책이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "IAM Access Analyzer policy generation — CloudTrail 로그를 검토해 엔터티가 쓴 권한을 담은 정책 템플릿 생성",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html"
+        },
+        {
+          "title": "Security best practices in IAM — 생성된 정책을 테스트 후 배포, 권한 경계·SCP는 권한을 부여하지 않음, 공개·교차 계정 finding",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-2-q15",
+      "examGuideTaskId": "dea-t4-2",
+      "skill": "최소 권한의 원칙을 충족하는 사용자 지정 정책 구성(4.2.6)",
+      "section": "least-privilege",
+      "difficulty": "applied",
+      "stem": "엔지니어가 방금 작성한 사용자 지정 정책이 정책 언어와 모범 사례에 맞는지 저장 전에 점검하고, 별도로 조직에서 쓰지 않는 권한과 자격 증명을 정리하려 한다. 각각 무엇을 쓰는가?",
+      "options": [
+        "작성 점검은 IAM Access Analyzer 정책 검증(100개가 넘는 정책 검사와 조치 가능한 권고), 미사용 정리는 마지막 액세스 정보",
+        "작성 점검은 정책 생성, 미사용 정리는 정책 검증",
+        "둘 다 권한 경계로 수행한다",
+        "작성 점검은 공개·교차 계정 findings, 미사용 정리는 SCP"
+      ],
+      "correct": 0,
+      "explanation": "IAM Access Analyzer 정책 검증은 정책 언어와 모범 사례를 점검하는 정책 검사를 100개가 넘게 제공하고 조치 가능한 권고를 줍니다. 마지막 액세스 정보는 필요 없는 사용자·역할·권한·정책·자격 증명을 찾아 제거하고 정책을 최소 권한에 맞게 다듬는 데 씁니다.",
+      "wrongExplanations": {
+        "1": "정책 생성은 CloudTrail 접근 활동으로 정책 템플릿을 만드는 기능이며 작성한 정책의 문법·모범 사례 점검이 아닙니다.",
+        "2": "권한 경계는 ID 기반 정책이 부여할 수 있는 최대 권한을 설정하는 기능입니다.",
+        "3": "공개·교차 계정 findings는 외부 접근을 허용하는 리소스 탐지 결과이고, SCP는 권한을 부여하지 않는 조직 가드레일입니다."
+      },
+      "sources": [
+        {
+          "title": "Security best practices in IAM — 정책 검증은 100개가 넘는 정책 검사와 권고, 마지막 액세스 정보로 미사용 권한·자격 증명 정리",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        },
+        {
+          "title": "IAM Access Analyzer policy generation — 정책 생성은 활동 기반 템플릿 생성 기능",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

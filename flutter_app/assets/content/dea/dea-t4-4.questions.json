@@ -1,0 +1,492 @@
+{
+  "examGuideTaskId": "dea-t4-4",
+  "taskTitle": "감사용 로그 준비",
+  "domain": 4,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t4-4-q1",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS CloudTrail을 사용하여 API 호출 추적(4.4.1)",
+      "section": "cloudtrail",
+      "difficulty": "applied",
+      "stem": "감사인이 8개월 전 특정 API 호출 기록을 요구한다. 팀은 CloudTrail 콘솔의 이벤트 기록(Event history)만 쓰고 있었다. 무엇이 문제이며 어떻게 해야 하는가?",
+      "options": [
+        "이벤트 기록은 현재 리전 최근 90일의 관리 이벤트만 보여 주고 영구 기록이 아니므로, 지속 기록을 위해 trail을 만들어 S3에 전달해야 한다",
+        "이벤트 기록의 보존 기간을 1년으로 늘리면 된다",
+        "이벤트 기록은 모든 리전을 포함하므로 조회 조건만 바꾸면 된다",
+        "이벤트 기록은 데이터 이벤트까지 포함하므로 데이터 이벤트 필터를 켜면 된다"
+      ],
+      "correct": 0,
+      "explanation": "CloudTrail 이벤트 기록은 현재 보고 있는 리전의 최근 90일 이벤트를 보여 주며 생성·수정·삭제 API 호출 같은 관리 이벤트로 한정됩니다. 영구 기록이 아니므로 계정 이벤트의 지속 기록을 위해서는 trail을 만들어야 합니다.",
+      "wrongExplanations": {
+        "1": "이벤트 기록의 범위는 최근 90일로 고정되어 있고 보존 기간을 늘리는 설정이 아닙니다.",
+        "2": "이벤트 기록은 현재 보고 있는 리전으로 한정됩니다.",
+        "3": "이벤트 기록은 관리 이벤트로 한정됩니다. 데이터 이벤트는 trail 구성 시 기본 비활성이며 추가 비용이 듭니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CloudTrail FAQs — 이벤트 기록은 현재 리전 최근 90일 관리 이벤트로 한정, 데이터 이벤트는 추가 비용",
+          "url": "https://aws.amazon.com/cloudtrail/faqs/"
+        },
+        {
+          "title": "Security best practices in AWS CloudTrail — 지속 기록에는 trail 필요",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q2",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS CloudTrail을 사용하여 API 호출 추적(4.4.1)",
+      "section": "cloudtrail",
+      "difficulty": "applied",
+      "stem": "여러 계정·리전의 API 활동을 한 곳에 보관하고, 로그가 사후에 바뀌거나 지워지지 않았음을 입증해야 한다. 어떤 설계가 가장 적합한가?",
+      "options": [
+        "각 계정에서 단일 리전 trail을 만들고 계정별 S3 버킷에 보관한다",
+        "관리 계정 또는 위임 관리자 계정에서 멀티 리전 조직 trail을 만들어 별도 Log Archive 계정의 S3 버킷으로 보내고 로그 파일 무결성 검증을 활성화한다",
+        "CloudWatch Logs 보존 기간을 10년으로 설정해 trail 대신 사용한다",
+        "MFA Delete와 S3 수명 주기 규칙을 함께 적용해 삭제를 막는다"
+      ],
+      "correct": 1,
+      "explanation": "조직 trail은 관리 계정 또는 위임 관리자 계정에서 만들며 관리 계정과 모든 멤버 계정의 이벤트를 기록하고, 모든 리전에 적용하면 새로 생기는 리전도 자동으로 기록합니다. 별도 로그 아카이브 계정의 S3를 보관 버킷으로 지정하고, 로그 파일 무결성 검증을 켜면 CloudTrail이 digest 파일을 시간 단위로 전달해 변경·삭제 여부를 사후 확인할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "단일 리전 trail은 다른 리전의 활동을 기록하지 못하고 계정별 분산 보관은 중앙 보관·업무 분리 요구를 충족하지 못합니다.",
+        "2": "지속적인 API 활동 기록에는 trail이 필요하며 CloudWatch Logs 보존 설정이 trail을 대체하지 않습니다.",
+        "3": "MFA Delete는 수명 주기 구성과 함께 쓸 수 없습니다. 또 무결성 \"입증\"은 로그 파일 무결성 검증의 역할입니다."
+      },
+      "sources": [
+        {
+          "title": "Creating a trail for an organization — 관리 계정 또는 위임 관리자에서 생성, 관리 계정과 모든 멤버 계정 기록",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
+        },
+        {
+          "title": "Security best practices in AWS CloudTrail — 로그 아카이브 계정 분리, MFA Delete는 수명 주기와 병용 불가",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html"
+        },
+        {
+          "title": "AWS CloudTrail FAQs — 모든 리전 trail은 신규 리전 자동 기록, digest 파일은 시간당 전달",
+          "url": "https://aws.amazon.com/cloudtrail/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q3",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS CloudTrail을 사용하여 API 호출 추적(4.4.1)",
+      "section": "cloudtrail",
+      "difficulty": "applied",
+      "stem": "감사인이 S3에 보관된 CloudTrail 로그를 분석용 버킷으로 복사한 뒤 AWS CLI로 무결성을 검증하려 한다. 결과는?",
+      "options": [
+        "digest 파일을 함께 복사했다면 검증할 수 있다",
+        "복사본의 해시를 다시 계산하면 CLI가 자동으로 검증한다",
+        "AWS CLI는 CloudTrail이 전달한 위치의 파일을 검증하며 로컬로 내려받거나 옮긴 로그는 CLI로 검증할 수 없다",
+        "CLI는 로그 파일 전체를 검증하므로 digest 파일이 참조하지 않는 로그도 검증된다"
+      ],
+      "correct": 2,
+      "explanation": "AWS CLI는 CloudTrail이 로그를 전달한 위치에서 파일을 검증하며, digest 파일이 참조하는 로그 파일만 검증합니다. 로컬 디스크로 내려받은 로그 파일은 AWS CLI로 검증할 수 없습니다. 옮긴 로그는 직접 만든 검증 도구를 써야 합니다.",
+      "wrongExplanations": {
+        "0": "digest를 함께 복사해도 CLI는 CloudTrail이 전달한 원래 위치의 파일을 검증합니다.",
+        "1": "해시 재계산으로 CLI 검증이 성립하지 않습니다. 해시는 SHA-256, 서명은 SHA-256 with RSA로 digest 파일에 담깁니다.",
+        "3": "AWS CLI는 digest 파일이 참조하는 로그 파일만 검증합니다."
+      },
+      "sources": [
+        {
+          "title": "Validating CloudTrail log file integrity with the AWS CLI — digest가 참조하는 로그만 검증, 로컬 다운로드본은 CLI 검증 불가",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-cli.html"
+        },
+        {
+          "title": "Validating CloudTrail log file integrity — SHA-256 해시와 SHA-256 with RSA 서명, CLI는 전달된 위치에서 검증",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q4",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS CloudTrail을 사용하여 API 호출 추적(4.4.1)",
+      "section": "cloudtrail",
+      "difficulty": "applied",
+      "stem": "SSE-KMS로 암호화하도록 설정한 trail에서 어느 시점부터 S3 버킷에 로그가 더 이상 쌓이지 않는다. 가장 가능성이 높은 원인은?",
+      "options": [
+        "KMS 키가 비활성화되었거나 키 정책이 CloudTrail에 맞게 구성되지 않아 CloudTrail이 로그를 전달하지 못한다",
+        "로그 파일 무결성 검증이 켜져 있어 전달이 차단된다",
+        "데이터 이벤트가 기본 비활성이라 관리 이벤트도 전달되지 않는다",
+        "S3 수명 주기 규칙이 전달 즉시 객체를 삭제한다"
+      ],
+      "correct": 0,
+      "explanation": "KMS 키가 비활성화되었거나 키 정책이 CloudTrail에 맞게 구성되지 않으면 CloudTrail이 로그를 전달하지 못합니다. 버킷·KMS 정책에 aws:SourceArn 조건 키를 넣는 것이 모범 사례입니다.",
+      "wrongExplanations": {
+        "1": "무결성 검증은 digest 파일을 추가로 전달하는 기능이며 로그 전달을 차단하지 않습니다.",
+        "2": "데이터 이벤트가 기본 비활성이라는 사실은 관리 이벤트 전달과 무관하며, 리전별 관리 이벤트 첫 사본은 무료로 전달됩니다.",
+        "3": "수명 주기 규칙은 보존 정책을 정하는 수단이며 전달 자체를 막지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Configure AWS KMS key policies for CloudTrail — 키 비활성 또는 키 정책 미구성 시 로그 전달 불가",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/create-kms-key-policy-for-cloudtrail.html"
+        },
+        {
+          "title": "Security best practices in AWS CloudTrail — aws:SourceArn 조건 키 모범 사례, 수명 주기로 보존 정책",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q5",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS CloudTrail을 사용하여 API 호출 추적(4.4.1)",
+      "section": "cloudtrail",
+      "difficulty": "foundational",
+      "stem": "AWS Security Reference Architecture의 Log Archive 계정을 별도로 두는 이유로 가장 적절한 것은?",
+      "options": [
+        "로그 저장 비용이 다른 계정보다 저렴하기 때문이다",
+        "보안 관련 로그·백업을 수집·보관하는 전용 계정으로, 불변 스토리지이며 통제·자동화·모니터링되는 경로로만 접근하도록 설계해 업무를 분리하기 때문이다",
+        "로그 파일 무결성 검증은 전용 계정에서만 활성화할 수 있기 때문이다",
+        "조직 trail은 멤버 계정에서만 만들 수 있기 때문이다"
+      ],
+      "correct": 1,
+      "explanation": "AWS SRA의 Log Archive 계정은 보안 관련 로그와 백업을 수집·보관하는 전용 계정으로, 불변 스토리지이며 통제·자동화·모니터링되는 경로로만 접근하도록 설계합니다. 로그 가용성은 S3 Object Lock, 객체 버전, 수명 주기 규칙으로 확보합니다.",
+      "wrongExplanations": {
+        "0": "비용이 아니라 권한 분리와 보관 통제가 목적입니다.",
+        "2": "무결성 검증은 trail 설정이며 전용 계정에서만 켤 수 있는 기능이 아닙니다.",
+        "3": "조직 trail은 관리 계정 또는 위임 관리자 계정에서 만듭니다."
+      },
+      "sources": [
+        {
+          "title": "Security OU – Log Archive account (AWS Security Reference Architecture) — 보안 로그·백업 전용 계정, 불변 스토리지와 통제된 접근, Object Lock·버전·수명 주기로 가용성",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/log-archive.html"
+        },
+        {
+          "title": "Creating a trail for an organization — 관리 계정 또는 위임 관리자 계정에서 생성",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q6",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "Amazon CloudWatch Logs를 사용하여 애플리케이션 로그 저장(4.4.2)",
+      "section": "cloudwatch-logs",
+      "difficulty": "applied",
+      "stem": "기존 CloudWatch Logs 로그 그룹에 고객 관리형 KMS 키를 연결했다. 암호화 적용 범위로 옳은 것은?",
+      "options": [
+        "로그 그룹의 모든 기존 데이터가 즉시 새 키로 재암호화된다",
+        "KMS 키는 계정 수준에서만 연결할 수 있어 로그 그룹별 설정은 불가하다",
+        "비대칭 KMS 키를 포함해 모든 키 유형을 쓸 수 있다",
+        "연결 후 새로 수집되는 데이터만 해당 키로 암호화되며, 키를 분리해도 이미 그 키로 암호화된 데이터는 남아 계속 읽을 수 있지만 키가 비활성화되면 그 로그를 읽지 못한다"
+      ],
+      "correct": 3,
+      "explanation": "CloudWatch Logs에서 KMS 키는 로그 그룹 수준에서 연결하며 연결 후 새로 수집되는 데이터만 해당 키로 암호화됩니다. 키를 나중에 분리해도 이미 그 키로 암호화된 데이터는 그대로 남고 CloudWatch Logs가 계속 읽을 수 있지만, 키가 비활성화되면 그 로그를 읽지 못합니다.",
+      "wrongExplanations": {
+        "0": "기존 데이터가 재암호화되지 않습니다.",
+        "1": "KMS 키는 로그 그룹 수준에서 생성 시 또는 이후에 연결합니다.",
+        "2": "CloudWatch Logs는 대칭 KMS 키만 지원합니다."
+      },
+      "sources": [
+        {
+          "title": "Encrypt log data in CloudWatch Logs using AWS Key Management Service — 로그 그룹 수준 연결, 연결 이후 신규 수집분만 암호화, 대칭 키만 지원",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q7",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "Amazon CloudWatch Logs를 사용하여 애플리케이션 로그 저장(4.4.2)",
+      "section": "cloudwatch-logs",
+      "difficulty": "applied",
+      "stem": "비용을 줄이려 수집량이 많은 로그 그룹을 Infrequent Access(IA) 클래스로 만들었다. 그 뒤 이 로그를 Amazon Data Firehose로 실시간 전달하려 하자 구독 필터를 설정할 수 없다. 원인과 대응은?",
+      "options": [
+        "IA 클래스는 Logs Insights만 지원하므로 Logs Insights로 질의해 전달한다",
+        "IA 클래스의 보존 기간이 2일로 고정되어 전달 대상이 없다",
+        "구독 필터는 Standard 클래스 로그 그룹에서만 지원되고 로그 클래스는 생성 후 변경할 수 없으므로, 전달이 필요하면 Standard 클래스 로그 그룹을 새로 만들어야 한다",
+        "IA 클래스는 KMS 암호화를 지원하지 않아 전달이 차단된다"
+      ],
+      "correct": 2,
+      "explanation": "구독 필터는 Standard 클래스 로그 그룹에서만 지원됩니다. 또 로그 클래스는 생성 후 변경할 수 없고 두 클래스는 수집 비용만 다릅니다. IA 클래스는 임시 쿼리와 사후 포렌식 분석에 적합합니다.",
+      "wrongExplanations": {
+        "0": "IA는 기능 일부만 제공하는 클래스이며, 구독 필터 제약의 해결책으로 Logs Insights 질의가 제시되지 않습니다.",
+        "1": "보존이 짧게 고정된 쪽은 Lambda 로그를 S3나 Firehose로 보내는 용도의 Delivery 클래스에 대한 서술이며, 문서 간 일수 표현에 차이가 있습니다.",
+        "3": "제약의 근거는 로그 클래스별 지원 기능이며 KMS 암호화 지원 여부가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Log classes (Amazon CloudWatch Logs) — Standard와 IA, 생성 후 클래스 변경 불가, 수집 비용만 다름, Delivery 클래스는 Logs Insights 미제공",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html"
+        },
+        {
+          "title": "Real-time processing of log data with subscriptions — 구독 필터는 Standard 클래스에서만 지원",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q8",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "Amazon CloudWatch Logs를 사용하여 애플리케이션 로그 저장(4.4.2)",
+      "section": "cloudwatch-logs",
+      "difficulty": "applied",
+      "stem": "애플리케이션 로그를 S3에 지속적으로 아카이브해야 한다. 공식 문서가 권고하는 방식은?",
+      "options": [
+        "일정에 따라 CreateExportTask를 반복 호출해 S3로 내보낸다",
+        "구독을 사용한다. 지속 아카이브용으로 정기 내보내기를 쓰기보다 구독을 쓰라고 권고하며, 구독 필터는 Kinesis Data Streams·Amazon Data Firehose·Lambda로 거의 실시간 전달한다",
+        "로그 그룹의 보존 기간을 늘려 S3 없이 보관한다",
+        "조직 중앙화 규칙으로 S3에 직접 복제한다"
+      ],
+      "correct": 1,
+      "explanation": "CreateExportTask 문서는 지속 아카이브용으로 정기 내보내기를 쓰기보다 구독을 쓰라고 권고합니다. 구독 필터는 Kinesis Data Streams, Amazon Data Firehose, Lambda로 거의 실시간 전달합니다.",
+      "wrongExplanations": {
+        "0": "내보내기는 비동기 작업이며 지속 아카이브에는 비권장입니다.",
+        "2": "보존 기간 연장은 CloudWatch Logs 안에 두는 것이며 S3 아카이브 요구를 충족하지 않습니다.",
+        "3": "중앙화 규칙은 여러 멤버 계정·리전의 로그를 조직 내 중앙 계정으로 복제하는 기능입니다."
+      },
+      "sources": [
+        {
+          "title": "CreateExportTask (Amazon CloudWatch Logs API Reference) — 지속 아카이브에는 구독 권고, 비동기 작업",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_CreateExportTask.html"
+        },
+        {
+          "title": "Real-time processing of log data with subscriptions — Kinesis Data Streams·Firehose·Lambda로 거의 실시간 전달",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
+        },
+        {
+          "title": "Cross-account cross-Region log centralization — 중앙화 규칙은 중앙 계정으로 복제",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs_Centralization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q9",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "Amazon CloudWatch Logs를 사용하여 애플리케이션 로그 저장(4.4.2)",
+      "section": "cloudwatch-logs",
+      "difficulty": "applied",
+      "stem": "조직의 여러 멤버 계정·리전 CloudWatch Logs를 중앙 계정으로 모으려 한다. 중앙화 규칙에 대해 반드시 알아야 할 점은?",
+      "options": [
+        "규칙을 만들면 과거 로그까지 소급해 중앙화된다",
+        "목적지 계정에서는 백업 리전을 둘 수 없다",
+        "소스의 고객 관리형 KMS 암호화 로그는 중앙화할 수 없다",
+        "규칙 생성 이후 도착한 새 로그만 대상이며 과거 로그는 중앙화되지 않는다"
+      ],
+      "correct": 3,
+      "explanation": "AWS Organizations와 연동한 중앙화 규칙은 여러 멤버 계정·리전의 로그를 조직 내 중앙 계정으로 복제하지만, 규칙 생성 이후 도착한 새 로그만 대상이며 과거 로그는 중앙화되지 않습니다.",
+      "wrongExplanations": {
+        "0": "과거 로그는 중앙화되지 않습니다.",
+        "1": "목적지 계정에서 백업 리전을 둘 수 있습니다.",
+        "2": "소스의 고객 관리형 KMS 암호화 로그 처리 방식을 고를 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Cross-account cross-Region log centralization — 규칙 생성 이후 새 로그만, 백업 리전, 고객 관리형 KMS 암호화 로그 처리 방식 선택",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs_Centralization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q10",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "Amazon CloudWatch Logs를 사용하여 애플리케이션 로그 저장(4.4.2)",
+      "section": "cloudwatch-logs",
+      "difficulty": "applied",
+      "stem": "보안 계정으로 다른 계정의 로그를 거의 실시간 전달하려 교차 계정 구독을 구성한다. 구성 요건으로 옳은 것은?",
+      "options": [
+        "수신 계정이 Kinesis Data Streams를 감싸는 destination을 만들고 송신 계정이 구독 필터로 보내며, 로그 그룹과 destination은 같은 리전이어야 하고 송신 계정마다 구독 필터를 따로 만들어야 한다",
+        "송신 계정이 destination을 만들고 수신 계정이 구독 필터를 만든다",
+        "조직 정책을 한 번 적용하면 송신 계정의 구독 필터가 자동 생성된다",
+        "로그 그룹과 destination이 서로 다른 리전이어야 중복 전달을 피할 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "교차 계정 로그 공유에서는 수신 계정이 Kinesis Data Streams를 감싸는 destination을 만들고 송신 계정이 구독 필터로 보냅니다. 로그 그룹과 destination은 같은 리전이어야 하며, 한 조직의 여러 계정이 한 수신 계정으로 보내게 하는 정책을 줄 수 있지만 송신 계정마다 구독 필터는 따로 만들어야 합니다.",
+      "wrongExplanations": {
+        "1": "destination은 수신 계정이 만들고 구독 필터는 송신 계정이 만듭니다.",
+        "2": "정책을 줄 수 있어도 송신 계정마다 구독 필터를 따로 만들어야 합니다.",
+        "3": "로그 그룹과 destination은 같은 리전이어야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Cross-account cross-Region log data sharing using Amazon Kinesis Data Streams — 수신 계정 destination, 송신 계정 구독 필터, 같은 리전, 송신 계정마다 필터 별도",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CrossAccountSubscriptions-Kinesis.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q11",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "중앙 집중식 로깅 쿼리에 AWS CloudTrail Lake 사용(4.4.3)",
+      "section": "cloudtrail-lake",
+      "difficulty": "applied",
+      "stem": "여러 계정·리전의 CloudTrail 이벤트를 관리형 SQL로 중앙 조사하는 방안을 검토한다. 2026-10 현재 공식 문서를 근거로 고려해야 할 점은?",
+      "options": [
+        "CloudTrail Lake는 중단 예고가 없어 신규 구축에 그대로 권장된다",
+        "CloudTrail Lake 중단에 따라 trail과 CloudTrail Insights도 함께 종료되므로 전면 재설계가 필요하다",
+        "CloudTrail Lake는 2026-05-31부터 신규 고객에게 열리지 않고 문서가 CloudWatch 이전을 권고하므로, 신규 구축은 조직 trail → S3 → Athena 또는 CloudWatch를 고려한다. CloudTrail 자체(trail·Insights·집계 이벤트)는 영향이 없다",
+        "Lake 로그를 CloudWatch로 이전하면 2023년 이전 데이터까지 모두 함께 이전된다"
+      ],
+      "correct": 2,
+      "explanation": "AWS는 2026-05-31부터 CloudTrail Lake를 신규 고객에게 열지 않으며 기존 고객에게는 중요한 버그 수정·보안 업데이트만 제공합니다. 문서는 Lake 로그를 Amazon CloudWatch로 이전하길 권고하고, CloudTrail 자체(trail, Insights, 집계 이벤트)는 영향이 없습니다.",
+      "wrongExplanations": {
+        "0": "가용성 변경 문서가 신규 고객 중단을 알립니다.",
+        "1": "CloudTrail 자체는 영향이 없습니다.",
+        "3": "2023년 이전 데이터는 이전되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "CloudTrail Lake availability change — 2026-05-31 신규 고객 중단, CloudWatch 이전 권고, CloudTrail 자체는 영향 없음, 2023년 이전 데이터 미이전",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html"
+        },
+        {
+          "title": "Query AWS CloudTrail logs (Amazon Athena User Guide) — S3의 trail 로그를 테이블로 만들어 SQL 쿼리",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q12",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "중앙 집중식 로깅 쿼리에 AWS CloudTrail Lake 사용(4.4.3)",
+      "section": "cloudtrail-lake",
+      "difficulty": "applied",
+      "stem": "CloudTrail Lake 이벤트 데이터 스토어(EDS)와 보존·쿼리에 대해 옳은 것은?",
+      "options": [
+        "EDS는 수정 가능한 컬렉션이며 보존 기간 제한이 없다",
+        "EDS는 불변 컬렉션이고, 보존 기간은 1년 연장형 가격 옵션이면 최대 3,653일, 7년형이면 최대 2,557일이며, EDS를 AWS Glue Data Catalog에 연합하면 Athena로 SQL 쿼리도 할 수 있다",
+        "EDS에 연결한 KMS 키는 언제든 제거하거나 변경할 수 있다",
+        "쿼리 결과는 영구 보관되며 쿼리 비용은 저장량 기준으로 과금된다"
+      ],
+      "correct": 1,
+      "explanation": "이벤트는 이벤트 데이터 스토어에 모이고 EDS는 불변 컬렉션입니다. 보존 기간은 1년 연장형 가격 옵션이면 최대 3,653일(약 10년), 7년형이면 최대 2,557일(약 7년)이며, EDS를 AWS Glue Data Catalog에 연합하면 Athena로 SQL 쿼리도 할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "EDS는 불변 컬렉션이며 가격 옵션에 따른 보존 상한이 있습니다.",
+        "2": "EDS에 자체 KMS 키를 선택할 수 있지만 연결 후 키를 제거·변경할 수 없습니다.",
+        "3": "쿼리 결과는 7일까지 볼 수 있고 쿼리는 스캔한 데이터량으로 과금됩니다."
+      },
+      "sources": [
+        {
+          "title": "Working with AWS CloudTrail Lake — EDS는 불변, 보존 3,653일/2,557일, Glue Data Catalog 연합으로 Athena 쿼리, 결과 7일, 스캔량 과금, KMS 키 변경 불가",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q13",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS 서비스를 사용하여 로그 분석(예: Athena, CloudWatch Logs Insights, Amazon OpenSearch Service)(4.4.4)",
+      "section": "log-analysis",
+      "difficulty": "applied",
+      "stem": "보안 팀이 S3에 쌓인 CloudTrail 로그를 한 달에 몇 번만 표준 SQL로 조사하려 한다. 인프라 운영 부담을 최소화하는 선택은?",
+      "options": [
+        "Amazon OpenSearch Service 도메인에 로그를 인덱싱해 쿼리한다",
+        "Amazon EMR 클러스터를 상시 가동해 배치로 분석한다",
+        "로그를 CloudWatch Logs로 옮겨 Logs Insights로 질의한다",
+        "Amazon Athena로 S3 데이터를 표준 SQL로 임시 쿼리한다. 서버리스이며 실행한 쿼리에 대해서만 과금된다"
+      ],
+      "correct": 3,
+      "explanation": "Athena는 S3 데이터를 표준 SQL로 임시(ad-hoc) 쿼리하는 서버리스 서비스이며 실행한 쿼리에 대해서만 과금됩니다. 데이터가 이미 S3에 있고 조회가 드문 경우에 적합합니다.",
+      "wrongExplanations": {
+        "0": "OpenSearch Service는 실시간 로그 분석, 빈번한 쿼리, 전문 검색에 적합하며 도메인 운영 부담이 따릅니다.",
+        "1": "EMR은 로그 파일 집합이 매우 커 페타바이트급 분석이 필요할 때 쓰며 클러스터를 직접 실행해야 합니다.",
+        "2": "Logs Insights는 CloudWatch Logs에 있는 로그를 질의하는 기능이며, S3에 이미 있는 로그를 옮기는 것은 불필요한 단계입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Athena? — S3 데이터를 표준 SQL로 분석하는 서버리스 서비스, 실행한 쿼리에만 과금",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        },
+        {
+          "title": "AWS service logs (Centralized Logging with OpenSearch) — 실시간 분석·빈번한 쿼리·전문 검색에 OpenSearch",
+          "url": "https://docs.aws.amazon.com/solutions/latest/centralized-logging-with-opensearch/aws-service-logs.html"
+        },
+        {
+          "title": "REL06-BP05 Analyze logs (AWS Well-Architected Framework) — 거대한 로그 집합은 EMR로 페타바이트급 분석",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_storage_analytics.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q14",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "AWS 서비스를 사용하여 로그 분석(예: Athena, CloudWatch Logs Insights, Amazon OpenSearch Service)(4.4.4)",
+      "section": "log-analysis",
+      "difficulty": "foundational",
+      "stem": "CloudWatch Logs에 이미 수집된 애플리케이션 로그를 별도 인프라 구축 없이 즉석에서 대화형으로 분석하려 한다. 가장 적합한 서비스와 과금 방식은?",
+      "options": [
+        "CloudWatch Logs Insights — 종량제이며 쿼리가 스캔한 수집 로그량으로 과금된다",
+        "Amazon Athena — 로그 그룹을 테이블로 등록해 쿼리한다",
+        "Amazon OpenSearch Service — 도메인을 먼저 프로비저닝해야 한다",
+        "CloudTrail Lake — CloudWatch Logs를 EDS에 수집해 쿼리한다"
+      ],
+      "correct": 0,
+      "explanation": "CloudWatch Logs Insights는 CloudWatch Logs의 로그를 대화형으로 분석하며 별도 설정·인프라 없이 즉시 시작할 수 있고, 종량제로 쿼리가 스캔한 수집 로그량에 따라 과금됩니다.",
+      "wrongExplanations": {
+        "1": "Athena는 S3에 있는 데이터를 SQL로 쿼리합니다.",
+        "2": "OpenSearch Service는 도메인에 로그를 인덱싱하는 방식이며 실시간·빈번한 쿼리·전문 검색에 적합합니다.",
+        "3": "CloudTrail Lake는 CloudTrail 이벤트를 이벤트 데이터 스토어에 모아 쿼리하는 기능이며 2026-05-31부터 신규 고객에게 열리지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon CloudWatch FAQs — Logs Insights는 별도 설정·인프라 없이 즉시 시작, 쿼리가 스캔한 로그량 종량제",
+          "url": "https://aws.amazon.com/cloudwatch/faqs/"
+        },
+        {
+          "title": "What is Amazon Athena? — S3 데이터를 SQL로 분석",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+        },
+        {
+          "title": "CloudTrail Lake availability change — 2026-05-31 신규 고객 중단",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-4-q15",
+      "examGuideTaskId": "dea-t4-4",
+      "skill": "다양한 AWS 서비스를 통합하여 로깅 수행(예: 대용량 로그 데이터의 경우 Amazon EMR)(4.4.5)",
+      "section": "integrated-logging",
+      "difficulty": "applied",
+      "stem": "회사는 CloudTrail·VPC Flow Logs·ELB·GuardDuty·AWS Config·AWS WAF 로그를 모아 보관하고, 로그 파일 집합이 매우 커진 뒤에는 배치 분석까지 하려 한다. 공식 문서를 근거로 한 조합은?",
+      "options": [
+        "모든 로그를 CloudWatch Logs IA 클래스에 모은 뒤 구독 필터로 Firehose에 전달한다",
+        "모든 로그를 CloudTrail Lake EDS에 모아 SQL로만 분석한다",
+        "전용 계정의 중앙 S3 버킷에 로그를 모아 소수 버킷에서 통제·접근·업무 분리를 강제하고, 로그 파일 집합이 매우 크면 Amazon EMR 클러스터로 페타바이트급 분석을 수행하며 보존 요구사항에 맞춰 S3 수명 주기를 적용한다",
+        "각 계정의 로컬 버킷에 로그를 분산 보관하고 필요할 때만 복사해 분석한다"
+      ],
+      "correct": 2,
+      "explanation": "CloudTrail, VPC Flow Logs, Elastic Load Balancing, GuardDuty, AWS Config, AWS WAF 같은 서비스가 S3에 로그를 남기므로 전용 계정의 중앙 S3 버킷에 모아 소수 버킷에서 통제·접근·업무 분리를 강제합니다. 로그 파일 집합이 매우 크면 Amazon EMR 클러스터로 페타바이트급 분석을 수행하고 보존 요구사항을 정해 S3 수명 주기를 적용합니다.",
+      "wrongExplanations": {
+        "0": "구독 필터는 Standard 클래스 로그 그룹에서만 지원되므로 IA 클래스에서는 설정할 수 없습니다.",
+        "1": "CloudTrail Lake는 CloudTrail 이벤트를 대상으로 하며 2026-05-31부터 신규 고객에게 열리지 않습니다.",
+        "3": "분산 보관은 중앙 통제·업무 분리를 강제하는 설계와 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "Security OU – Log Archive account (AWS Security Reference Architecture) — 여러 서비스가 S3에 로그를 남기며 전용 계정 중앙 버킷으로 통제·업무 분리",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture/log-archive.html"
+        },
+        {
+          "title": "REL06-BP05 Analyze logs (AWS Well-Architected Framework) — 거대한 로그 집합은 EMR로 페타바이트급 분석, 보존 요구사항에 S3 수명 주기",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_storage_analytics.html"
+        },
+        {
+          "title": "Real-time processing of log data with subscriptions — 구독 필터는 Standard 클래스에서만 지원",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

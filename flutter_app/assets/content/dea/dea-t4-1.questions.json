@@ -1,0 +1,476 @@
+{
+  "examGuideTaskId": "dea-t4-1",
+  "taskTitle": "인증 메커니즘 적용",
+  "domain": 4,
+  "certCode": "DEA-C01",
+  "questions": [
+    {
+      "id": "dea-t4-1-q1",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "VPC 보안 그룹 업데이트(4.1.1)",
+      "section": "security-groups",
+      "difficulty": "applied",
+      "stem": "AWS Glue ETL 작업이 사설 서브넷에 있는 Amazon RDS for PostgreSQL에 JDBC 연결로 접속해야 한다. 보안 정책상 0.0.0.0/0 인바운드는 허용할 수 없다. Glue 구성 요소 간 통신을 허용하면서 노출을 최소화하는 구성은?",
+      "options": [
+        "Glue 연결의 보안 그룹에 소스가 0.0.0.0/0인 모든 TCP 인바운드 규칙을 추가한다",
+        "Glue 연결의 보안 그룹에 소스가 같은 보안 그룹(자기 자신)인 모든 TCP 포트 인바운드 규칙을 추가한다",
+        "서브넷의 네트워크 ACL에 모든 인바운드 트래픽을 거부하는 규칙을 추가한다",
+        "Glue 작업이 쓰는 ENI에 공인 IP를 할당한다"
+      ],
+      "correct": 1,
+      "explanation": "Glue 구성 요소끼리 통신하려면 모든 TCP 포트에 대한 자기 참조 인바운드 규칙이 필요합니다. 자기 참조 규칙은 소스를 같은 보안 그룹으로 한정하므로 VPC를 모든 네트워크에 열지 않습니다. 공식 절차는 RDS가 쓰는 보안 그룹에 모든 TCP 포트의 자기 참조 인바운드 규칙을 추가하는 것입니다.",
+      "wrongExplanations": {
+        "0": "전체 개방이라 \"0.0.0.0/0 금지\" 요구를 위반합니다. 자기 참조 규칙이 바로 이 개방의 대안입니다.",
+        "2": "네트워크 ACL의 거부 규칙은 통신을 막을 뿐 Glue 구성 요소 간 통신을 허용하지 못합니다. 또 네트워크 ACL은 stateless라 응답 트래픽을 자동 허용하지 않습니다.",
+        "3": "Glue 작업의 ENI는 지정한 서브넷의 사설 IP만 받고 공인 IP는 받지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Setting up Amazon VPC for JDBC connections to Amazon RDS data stores from AWS Glue — 모든 TCP 포트 자기 참조 인바운드 규칙, VPC 전체 개방 아님",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/setup-vpc-for-glue-access.html"
+        },
+        {
+          "title": "Setting up network access to data stores (AWS Glue) — ENI에 공인 IP 미할당",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/start-connecting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q2",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "관리형 서비스와 비관리형 서비스의 차이점 설명(4.1.6)",
+      "section": "managed-services",
+      "difficulty": "foundational",
+      "stem": "회사가 EC2 인스턴스에 직접 설치해 운영하던 Hadoop 클러스터를 Amazon EMR로 옮기려 한다. 공동 책임 모델 관점에서 달라지는 점으로 옳은 것은?",
+      "options": [
+        "관리형 서비스는 패치·취약점 관리 같은 일부 보안 작업을 AWS가 맡아 고객의 보안·규정 준수 의무를 줄여 주지만, 데이터 관리와 IAM 권한 적용은 여전히 고객 책임이다",
+        "관리형 서비스로 옮기면 데이터 암호화 옵션 선택과 IAM 권한 설정도 AWS가 책임진다",
+        "EC2는 추상화된 서비스이므로 게스트 OS 패치는 원래부터 AWS 책임이었다",
+        "관리형 서비스 사용은 AWS Well-Architected Framework에서 권장하지 않는 패턴이다"
+      ],
+      "correct": 0,
+      "explanation": "관리형 서비스는 패치·취약점 관리 같은 일부 보안 작업을 AWS가 맡아 고객의 보안·규정 준수 의무를 줄여 줍니다. 다만 S3·DynamoDB 같은 추상화된 서비스에서도 고객은 데이터 관리(암호화 옵션 포함)와 IAM 권한 적용을 책임집니다. Amazon EMR은 Apache Hadoop·Spark 같은 빅데이터 프레임워크 실행을 단순화하는 관리형 클러스터 플랫폼입니다.",
+      "wrongExplanations": {
+        "1": "추상화된 서비스에서도 데이터 관리(암호화 옵션 포함)와 IAM 권한 적용은 고객 책임으로 남습니다.",
+        "2": "EC2는 IaaS로 분류되며 게스트 OS의 업데이트·보안 패치, 설치한 애플리케이션, 보안 그룹 구성이 고객 책임입니다.",
+        "3": "관리형 서비스 사용은 AWS Well-Architected Framework의 모범 사례입니다."
+      },
+      "sources": [
+        {
+          "title": "Understanding the security scope (AWS Prescriptive Guidance) — 관리형 서비스는 보안·규정 준수 의무를 줄여 주며 Well-Architected 모범 사례",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-accelerating-security-maturity/understanding-the-security-scope.html"
+        },
+        {
+          "title": "Shared Responsibility Model (AWS Cloud Compliance) — EC2는 IaaS로 게스트 OS·앱·보안 그룹이 고객 책임, 추상화 서비스는 데이터·IAM이 고객 책임",
+          "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
+        },
+        {
+          "title": "What is Amazon EMR? (Amazon EMR Management Guide) — 빅데이터 프레임워크 실행을 단순화하는 관리형 클러스터 플랫폼",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q3",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "VPC 보안 그룹 업데이트(4.1.1)",
+      "section": "security-groups",
+      "difficulty": "applied",
+      "stem": "AWS Glue 연결의 보안 그룹에 자기 참조 규칙을 올바르게 추가했는데도 작업이 워커를 늘린 뒤부터 연결에 실패한다. 보안 그룹 외에 점검해야 할 항목은?",
+      "options": [
+        "Glue 작업이 여러 VPC의 서브넷에 동시에 접근하도록 설정되어 있는지",
+        "Glue 연결에 공인 IP가 할당되지 않았는지",
+        "서브넷의 여유 IP 주소 수가 작업에 지정한 워커 수보다 많은지",
+        "네트워크 ACL에 응답 트래픽을 허용하는 거부 규칙이 있는지"
+      ],
+      "correct": 2,
+      "explanation": "Glue 연결 실패의 점검 항목 중 하나는 서브넷의 여유 IP 수가 작업에 지정한 워커 수보다 많아야 한다는 것입니다. 워커 수를 늘린 뒤 실패했다면 서브넷에 ENI를 만들 IP가 부족해진 상황이 유력합니다.",
+      "wrongExplanations": {
+        "0": "작업이나 개발 엔드포인트는 한 번에 하나의 VPC(서브넷)만 접근하므로 여러 VPC 동시 접근 자체가 설정될 수 없습니다.",
+        "1": "Glue 작업의 ENI는 원래 사설 IP만 받고 공인 IP를 받지 않습니다. 정상 동작이며 워커 수 증가와 무관합니다.",
+        "3": "거부 규칙은 트래픽을 허용하지 않습니다. 또 네트워크 ACL은 stateless라 응답 트래픽을 자동 허용하지 않는다는 점이 문제이지, \"응답을 허용하는 거부 규칙\"이라는 것은 성립하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Why does my AWS Glue test connection fail? (AWS re:Post Knowledge Center) — 여유 IP 수가 워커 수보다 많아야 하고 NAT 경로가 없으면 연결 타임아웃",
+          "url": "https://repost.aws/knowledge-center/glue-test-connection-failed"
+        },
+        {
+          "title": "Setting up network access to data stores (AWS Glue) — 한 번에 하나의 VPC(서브넷)만 접근, 공인 IP 미할당",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/start-connecting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q4",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "VPC 보안 그룹 업데이트(4.1.1)",
+      "section": "security-groups",
+      "difficulty": "applied",
+      "stem": "VPC에 연결한 AWS Lambda 함수가 외부 API를 호출하지 못한다. 엔지니어는 함수를 퍼블릭 서브넷으로 옮겼지만 여전히 실패한다. 원인과 해결로 옳은 것은?",
+      "options": [
+        "Lambda 함수에 공인 IP를 직접 할당하면 인터넷 접근이 열린다",
+        "VPC 연결 Lambda는 보안 그룹의 인바운드 규칙이 열려 있어야 아웃바운드 호출이 가능하다",
+        "퍼블릭 서브넷에 두면 인터넷이 열리므로 원인은 네트워크가 아니라 실행 역할이다",
+        "VPC 연결 함수는 인터넷 경로가 없으면 VPC 안 리소스에만 연결할 수 있으므로, 사설 서브넷에 두고 퍼블릭 서브넷의 NAT 게이트웨이를 쓰거나 AWS 서비스는 인터페이스 VPC 엔드포인트로 접근한다"
+      ],
+      "correct": 3,
+      "explanation": "VPC에 연결한 Lambda 함수는 인터넷 경로가 없으면 VPC 안 리소스에만 연결할 수 있습니다. 공용 서브넷에 붙여도 인터넷이 열리지 않으므로, 사설 서브넷에 두고 퍼블릭 서브넷의 NAT 게이트웨이를 쓰며, AWS 서비스는 인터페이스 VPC 엔드포인트로 접근할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "VPC 연결 Lambda 함수에 공인 IP를 할당해 인터넷 접근을 여는 방식이 아닙니다. 경로는 NAT 게이트웨이나 인터페이스 엔드포인트로 만듭니다.",
+        "1": "문제는 아웃바운드 경로(인터넷 경로)의 부재이며, 인바운드 규칙을 여는 것으로 외부 API 호출이 가능해지지 않습니다.",
+        "2": "공용 서브넷에 붙여도 인터넷이 열리지 않는다는 것이 핵심이므로 전제가 틀렸습니다."
+      },
+      "sources": [
+        {
+          "title": "How do I give internet access to a Lambda function that's connected to Amazon VPC? (AWS re:Post Knowledge Center) — 인터넷 경로 없으면 VPC 안 리소스만, 사설 서브넷+NAT 또는 인터페이스 엔드포인트",
+          "url": "https://repost.aws/knowledge-center/internet-access-lambda-function"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q5",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "AWS Identity and Access Management(AWS IAM) 그룹, 역할, 엔드포인트 및 서비스 생성 및 업데이트(4.1.2)",
+      "section": "vpc-endpoints",
+      "difficulty": "applied",
+      "stem": "온프레미스 데이터센터의 배치 서버가 이미 구성된 사설 연결로 VPC에 접속해 있고, 인터넷을 거치지 않고 Amazon S3 버킷에 접근해야 한다. 이 VPC에는 S3 게이트웨이 엔드포인트가 이미 있다. 무엇을 추가해야 하는가?",
+      "options": [
+        "게이트웨이 엔드포인트가 연결된 라우팅 테이블을 온프레미스 라우터로 전파한다",
+        "S3용 인터페이스 VPC 엔드포인트를 추가한다",
+        "게이트웨이 엔드포인트 정책에 온프레미스 CIDR 범위를 허용 규칙으로 추가한다",
+        "퍼블릭 서브넷에 NAT 게이트웨이를 만들어 온프레미스 트래픽을 전달한다"
+      ],
+      "correct": 1,
+      "explanation": "게이트웨이 엔드포인트는 온프레미스에서의 접근을 허용하지 않습니다. 인터페이스 엔드포인트는 사설 IP를 사용해 VPN·Direct Connect로 연결된 온프레미스에서도 S3에 접근하게 해 주며 요금이 청구됩니다. 두 유형은 같은 VPC에서 함께 쓸 수 있습니다.",
+      "wrongExplanations": {
+        "0": "게이트웨이 엔드포인트는 온프레미스 접근 자체가 불가하므로 라우팅을 전파해도 해결되지 않습니다.",
+        "2": "엔드포인트 정책은 엔드포인트를 쓸 수 있는 주체와 접근 가능한 리소스를 제한하는 추가 경계일 뿐 새 경로를 만들지 않습니다.",
+        "3": "NAT 게이트웨이는 인터넷 경로를 만드는 구성이며 \"인터넷을 거치지 않는 사설 접근\" 요구에 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS PrivateLink for Amazon S3 — 게이트웨이 엔드포인트는 온프레미스·타 리전 접근 불가, 인터페이스 엔드포인트는 사설 IP로 온프레미스 접근 가능하며 병용 가능",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html"
+        },
+        {
+          "title": "Policies and permissions in AWS Identity and Access Management — 엔드포인트 정책은 ID 기반 정책을 대체하지 않음",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q6",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "AWS Identity and Access Management(AWS IAM) 그룹, 역할, 엔드포인트 및 서비스 생성 및 업데이트(4.1.2)",
+      "section": "vpc-endpoints",
+      "difficulty": "foundational",
+      "stem": "같은 VPC의 사설 서브넷에서 도는 워크로드가 추가 비용 없이 Amazon S3와 Amazon DynamoDB에 인터넷 게이트웨이나 NAT 장치 없이 접근해야 한다. 가장 적합한 구성은?",
+      "options": [
+        "S3와 DynamoDB용 게이트웨이 엔드포인트를 만든다",
+        "S3와 DynamoDB용 인터페이스 엔드포인트를 만든다",
+        "퍼블릭 서브넷에 NAT 게이트웨이를 만들고 라우팅한다",
+        "워크로드 인스턴스에 공인 IP를 할당한다"
+      ],
+      "correct": 0,
+      "explanation": "게이트웨이 엔드포인트는 Amazon S3와 DynamoDB를 대상으로 하며 인터넷 게이트웨이나 NAT 장치 없이 연결을 제공하고 추가 요금이 없습니다.",
+      "wrongExplanations": {
+        "1": "인터페이스 엔드포인트는 AWS PrivateLink 기반으로 요금이 청구됩니다. 추가 비용 없이라는 요구에 맞지 않습니다.",
+        "2": "NAT 게이트웨이는 인터넷 경로를 만드는 구성이며 \"인터넷 게이트웨이나 NAT 장치 없이\"라는 요구에 어긋납니다.",
+        "3": "공인 IP 할당은 인터넷 경로를 쓰는 방식이며 사설 경로 요구에 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Gateway endpoints (AWS PrivateLink Guide) — S3·DynamoDB 대상, 인터넷 게이트웨이·NAT 없이 연결, 추가 요금 없음",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+        },
+        {
+          "title": "AWS PrivateLink for Amazon S3 — 인터페이스 엔드포인트는 요금 청구",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q7",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "역할, 엔드포인트 및 서비스에 IAM 정책 적용(예: S3 Access Points, AWS PrivateLink)(4.1.5)",
+      "section": "vpc-endpoints",
+      "difficulty": "applied",
+      "stem": "보안 팀이 \"VPC 엔드포인트를 지나는 요청만 특정 S3 버킷으로 제한\"하라고 요구한다. 엔드포인트 정책에 대해 옳은 설명은?",
+      "options": [
+        "엔드포인트 정책을 붙이면 ID 기반 정책이 없어도 그 엔드포인트를 통한 접근이 허용된다",
+        "엔드포인트 정책은 엔드포인트가 아니라 대상 서비스의 리소스에 붙는다",
+        "엔드포인트 정책은 ID 기반·리소스 기반 정책을 대체하지 않고 엔드포인트를 지나는 트래픽에만 적용되는 추가 경계이며, 사용자 정의 정책을 붙이지 않으면 전체 접근을 허용하는 기본 정책이 붙는다",
+        "엔드포인트 정책을 붙이지 않으면 그 엔드포인트를 통한 모든 접근이 거부된다"
+      ],
+      "correct": 2,
+      "explanation": "엔드포인트 정책은 엔드포인트에 붙이는 리소스 기반 정책으로 그 엔드포인트를 쓸 수 있는 주체와 접근 가능한 리소스를 제한합니다. ID 기반 정책·대상 서비스의 리소스 기반 정책을 대체하지 않는 추가 경계이며, 사용자 정의 정책을 붙이지 않으면 전체 접근을 허용하는 기본 정책이 붙습니다.",
+      "wrongExplanations": {
+        "0": "엔드포인트 정책은 권한을 부여하는 수단이 아니라 추가 경계입니다. ID 기반 정책 등 본래의 권한이 따로 필요합니다.",
+        "1": "엔드포인트 정책은 VPC 엔드포인트에 붙입니다.",
+        "3": "정책을 붙이지 않으면 거부가 아니라 전체 접근을 허용하는 기본 정책이 붙습니다."
+      },
+      "sources": [
+        {
+          "title": "Policies and permissions in AWS Identity and Access Management — 기본값은 전체 허용 정책, 엔드포인트 정책은 ID 기반 정책을 대체하지 않음",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q8",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "AWS Identity and Access Management(AWS IAM) 그룹, 역할, 엔드포인트 및 서비스 생성 및 업데이트(4.1.2)",
+      "section": "iam-identities",
+      "difficulty": "applied",
+      "stem": "엔지니어가 S3 버킷 정책의 Principal 요소에 분석팀 IAM 사용자 그룹의 ARN을 지정하려 한다. 결과는?",
+      "options": [
+        "그룹에 속한 사용자 전원에게 버킷 접근이 허용된다",
+        "그룹을 다른 그룹에 중첩하면 상위 그룹까지 권한이 전파된다",
+        "그룹의 구성원이 역할을 assume할 때만 적용된다",
+        "IAM 사용자 그룹은 권한과 관련된 것이고 인증과는 무관하므로 정책의 Principal로 지정할 수 없다"
+      ],
+      "correct": 3,
+      "explanation": "IAM 사용자 그룹은 인증이 아니라 권한과 관련되므로 정책의 Principal로 지정할 수 없습니다. 그룹에 ID 기반 정책을 붙여 구성원 모두에게 권한을 주는 방식으로 써야 합니다.",
+      "wrongExplanations": {
+        "0": "Principal로 지정할 수 없으므로 이런 결과가 나오지 않습니다. 권한은 그룹에 ID 기반 정책을 붙여 부여합니다.",
+        "1": "IAM 사용자 그룹은 중첩할 수 없고 사용자만 포함할 수 있습니다.",
+        "2": "그룹은 Principal로 지정할 수 없으므로 assume 여부와 무관하게 성립하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "IAM user groups — 그룹은 중첩 불가, 권한과 관련되며 정책의 Principal로 지정 불가",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q9",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "AWS Identity and Access Management(AWS IAM) 그룹, 역할, 엔드포인트 및 서비스 생성 및 업데이트(4.1.2)",
+      "section": "iam-identities",
+      "difficulty": "foundational",
+      "stem": "서비스 역할과 서비스 연결 역할(SLR)의 차이로 옳은 것은?",
+      "options": [
+        "서비스 역할은 IAM 관리자가 만들고 수정·삭제할 수 있지만, 서비스 연결 역할은 서비스가 권한을 미리 정의하고 IAM 관리자는 권한을 볼 수만 있고 편집할 수 없다",
+        "서비스 역할은 신뢰 정책이 없고 서비스 연결 역할만 신뢰 정책을 가진다",
+        "서비스 연결 역할은 관리자가 자유롭게 권한을 편집할 수 있고 서비스 역할은 편집할 수 없다",
+        "둘 다 삭제할 때 관련 리소스를 먼저 지울 필요가 없다"
+      ],
+      "correct": 0,
+      "explanation": "서비스 역할은 서비스가 사용자 대신 작업하려고 맡는 IAM 역할이며 IAM 관리자가 만들고 수정·삭제할 수 있습니다. 서비스 연결 역할은 AWS 서비스에 직접 연결된 특수한 서비스 역할로, 서비스가 권한(신뢰 정책 포함)을 미리 정의하고 IAM 관리자는 권한을 볼 수만 있고 편집할 수 없습니다.",
+      "wrongExplanations": {
+        "1": "역할은 신뢰 정책으로 누가 assume할 수 있는지를 정합니다. 서비스 연결 역할은 그 신뢰 정책까지 서비스가 미리 정의합니다.",
+        "2": "방향이 반대입니다. 편집할 수 없는 쪽이 서비스 연결 역할입니다.",
+        "3": "서비스 연결 역할을 지우려면 먼저 관련 리소스를 삭제해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Create a service-linked role (IAM User Guide) — 서비스가 사전 정의하며 관리자는 권한을 볼 수만 있고, 삭제 전 관련 리소스 삭제 필요",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create-service-linked-role.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q10",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "암호 관리를 위한 자격 증명 만들기 및 회전(예: AWS Secrets Manager)(4.1.3)",
+      "section": "secrets-rotation",
+      "difficulty": "applied",
+      "stem": "Amazon Aurora MySQL 클러스터의 마스터 사용자 암호를 정기적으로 자동 교체해야 한다. 팀은 회전용 Lambda 코드를 직접 작성·운영하고 싶지 않다. 운영 부담이 가장 적은 방법은?",
+      "options": [
+        "Secrets Manager에서 Aurora가 마스터 사용자 자격 증명에 제공하는 관리형 회전을 사용한다",
+        "사용자 정의 Lambda 회전 함수를 작성해 VPC 안에 배포한다",
+        "암호를 Lambda 환경 변수에 저장하고 EventBridge 일정으로 환경 변수를 갱신한다",
+        "비밀을 AWS 관리형 키로 암호화하고 교차 계정 접근을 설정한다"
+      ],
+      "correct": 0,
+      "explanation": "Aurora·RDS·DocumentDB의 마스터 사용자 자격 증명과 Redshift 관리자 암호 등은 관리형 회전을 제공하며, 관리형 회전은 서비스가 회전을 설정·관리하고 Lambda 함수를 쓰지 않습니다. 보통 1분 안에 완료됩니다.",
+      "wrongExplanations": {
+        "1": "Lambda 회전 함수를 쓰면 함수 코드·실행 역할·네트워크·보안 그룹을 직접 관리해야 해 \"직접 작성·운영하고 싶지 않다\"는 요구에 어긋납니다.",
+        "2": "Secrets Manager의 회전 기능을 쓰지 않고 회전을 직접 구현하는 방식이라 운영 부담이 가장 큽니다.",
+        "3": "교차 계정 공유와는 무관한 요구이며, AWS 관리형 키로는 비밀의 교차 계정 접근이 불가합니다."
+      },
+      "sources": [
+        {
+          "title": "Managed rotation for AWS Secrets Manager secrets — Lambda 없이 서비스가 회전 설정·관리, 마스터 사용자 자격 증명과 Redshift 관리자 암호 제공, 보통 1분 내 완료",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_managed.html"
+        },
+        {
+          "title": "Access AWS Secrets Manager secrets from a different account — AWS 관리형 키로는 교차 계정 접근 불가",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples_cross.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q11",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "암호 관리를 위한 자격 증명 만들기 및 회전(예: AWS Secrets Manager)(4.1.3)",
+      "section": "secrets-rotation",
+      "difficulty": "applied",
+      "stem": "데이터 파이프라인이 24시간 가동되며 자격 증명 회전 중에도 연결 실패가 없어야 한다. Secrets Manager의 회전 전략으로 무엇을 고르고 그 이유는?",
+      "options": [
+        "single user 전략 — 비밀에 든 한 사용자만 갱신해 변경 범위가 작기 때문",
+        "alternating users 전략 — 한 비밀에서 두 사용자를 번갈아 갱신해 새 자격 증명을 테스트하는 동안에도 다른 사용자의 자격 증명이 유효하기 때문",
+        "회전 주기를 1시간으로 줄여 실패 구간을 짧게 만드는 전략",
+        "회전을 끄고 암호를 수동으로 교체하는 전략"
+      ],
+      "correct": 1,
+      "explanation": "alternating users는 한 비밀에서 두 사용자를 번갈아 갱신해 새 자격 증명을 테스트하는 동안에도 다른 사용자의 자격 증명이 유효하므로 가용성이 더 높은 옵션입니다. 관리형 회전 문서도 최고 가용성이 필요하면 alternating users를 권고합니다.",
+      "wrongExplanations": {
+        "0": "single user는 비밀에 든 한 사용자의 자격 증명을 갱신하며, alternating users가 더 높은 가용성 옵션으로 설명됩니다.",
+        "2": "회전 주기는 최소 4시간 간격까지 설정할 수 있어 1시간으로 줄일 수 없고, 주기 단축이 회전 중 무중단을 보장하지도 않습니다.",
+        "3": "자동 회전 요구를 포기하는 방식이며 무중단과도 관계가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Rotation strategy (AWS Secrets Manager console help) — 두 전략 중 alternating users가 더 높은 가용성 옵션",
+          "url": "https://docs.aws.amazon.com/help-panel/secretsmanager/latest/console/rotation-separate-creds-rds-pane.html"
+        },
+        {
+          "title": "RotationRulesType (AWS Secrets Manager API Reference) — 최소 4시간 간격",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_RotationRulesType.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q12",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "암호 관리를 위한 자격 증명 만들기 및 회전(예: AWS Secrets Manager)(4.1.3)",
+      "section": "secrets-rotation",
+      "difficulty": "applied",
+      "stem": "Lambda 회전 함수가 중간에 실패한 뒤, 이후 회전 요청마다 \"이전 회전이 아직 진행 중\"이라는 오류가 반환된다. 가장 가능성이 높은 상태는?",
+      "options": [
+        "AWSPREVIOUS 레이블이 제거되어 마지막 정상 버전을 찾을 수 없다",
+        "AWSCURRENT 레이블이 두 버전에 동시에 붙어 있다",
+        "AWSPENDING 레이블이 AWSCURRENT와 다른 버전에 남아 있다",
+        "스테이징 레이블이 모두 제거되어 비밀 버전을 식별할 수 없다"
+      ],
+      "correct": 2,
+      "explanation": "AWSPENDING이 AWSCURRENT와 다른 버전에 남은 채 회전이 끝나면, 이후 회전 호출은 이전 회전이 아직 진행 중이라고 보고 오류를 반환합니다. 회전이 실패하면 AWSPENDING이 빈 비밀 버전에 붙어 있을 수 있습니다.",
+      "wrongExplanations": {
+        "0": "AWSPREVIOUS는 finishSecret이 AWSCURRENT를 새 버전으로 옮길 때 이전 버전에 붙여 마지막으로 정상이던 버전을 보존하는 레이블이며, 이 오류의 원인으로 문서화되어 있지 않습니다.",
+        "1": "문서가 설명하는 오류 조건은 AWSPENDING이 AWSCURRENT와 다른 버전에 남아 있는 상태입니다.",
+        "3": "스테이징 레이블은 회전 중 비밀 버전을 식별하는 데 쓰이며, 이 오류의 원인으로 문서화된 조건은 AWSPENDING 잔존입니다."
+      },
+      "sources": [
+        {
+          "title": "Lambda rotation functions (AWS Secrets Manager User Guide) — AWSPENDING이 AWSCURRENT와 다른 버전에 남으면 이후 회전은 진행 중으로 판단해 오류 반환, 4단계와 스테이징 레이블",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_lambda-functions.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q13",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "액세스를 위한 IAM 역할 설정(예: AWS Lambda, Amazon API Gateway, AWS CLI, AWS CloudFormation)(4.1.4)",
+      "section": "service-roles",
+      "difficulty": "applied",
+      "stem": "개발자에게 리소스 생성 권한을 직접 주지 않고 AWS CloudFormation으로만 배포하게 하려 한다. 어떻게 구성하는가?",
+      "options": [
+        "개발자에게 템플릿의 모든 리소스를 만들 수 있는 IAM 정책을 부여한다",
+        "스택에 서비스 역할을 전달하고 개발자에게는 스택 작업 권한과 iam:PassRole 권한을 부여한다",
+        "CloudFormation은 항상 서비스 역할로 동작하므로 추가 설정이 필요 없다",
+        "개발자 역할에 권한 경계를 설정하면 CloudFormation이 그 경계로 리소스를 만든다"
+      ],
+      "correct": 1,
+      "explanation": "CloudFormation에 서비스 역할을 전달하면 CloudFormation이 그 역할로 스택 작업을 수행하므로 사용자에게 리소스 생성 권한을 직접 줄 필요가 없습니다. 이때 사용자는 스택 작업 권한과 해당 역할을 전달할 권한(iam:PassRole)이 있어야 합니다.",
+      "wrongExplanations": {
+        "0": "개발자에게 리소스 생성 권한을 직접 주지 않겠다는 요구와 정반대입니다.",
+        "2": "기본값은 호출한 IAM 주체의 자격 증명으로 스택 작업을 수행합니다. 서비스 역할을 전달해야 그 역할로 동작합니다.",
+        "3": "권한 경계는 ID 기반 정책이 부여할 수 있는 최대 권한을 정할 뿐이며 권한 자체를 주지 않고, CloudFormation의 작업 주체를 바꾸지도 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring least-privilege permissions to use CloudFormation (AWS Prescriptive Guidance) — 기본은 호출자 자격 증명, 서비스 역할을 전달하면 그 역할로 스택 작업 수행",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/least-privilege-cloudformation/permissions-use-cloudformation.html"
+        },
+        {
+          "title": "Security best practices in IAM — 권한 경계는 최대 권한을 정하며 권한 자체는 부여하지 않음",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q14",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "역할, 엔드포인트 및 서비스에 IAM 정책 적용(예: S3 Access Points, AWS PrivateLink)(4.1.5)",
+      "section": "policy-attachment",
+      "difficulty": "applied",
+      "stem": "여러 팀이 하나의 S3 데이터 레이크 버킷을 공유한다. 팀마다 접근 가능한 프리픽스와 네트워크 경로가 달라 단일 버킷 정책이 복잡해져 변경이 어렵다. 팀별로 정책을 분리하려면?",
+      "options": [
+        "버킷 정책의 Principal에 팀별 IAM 사용자 그룹 ARN을 지정한다",
+        "VPC 엔드포인트 정책으로 팀별 프리픽스 접근 권한을 부여한다",
+        "팀마다 버킷을 따로 만들고 S3 복제로 데이터를 동기화한다",
+        "팀별 S3 액세스 포인트를 만들고 버킷 정책으로 접근 제어를 액세스 포인트에 위임한다"
+      ],
+      "correct": 3,
+      "explanation": "S3 액세스 포인트는 버킷에 붙은 이름 있는 네트워크 엔드포인트로 액세스 포인트마다 별도의 권한·네트워크 제어를 둘 수 있고, 액세스 포인트 정책은 기본 버킷 정책과 함께 평가됩니다. 버킷 정책으로 접근 제어를 액세스 포인트에 위임하면 버킷에 대한 모든 접근이 액세스 포인트에 붙은 정책으로 통제됩니다.",
+      "wrongExplanations": {
+        "0": "IAM 사용자 그룹은 정책의 Principal로 지정할 수 없습니다.",
+        "1": "엔드포인트 정책은 ID 기반·리소스 기반 정책을 대체하지 않는 추가 경계이며 권한을 부여하는 수단이 아닙니다.",
+        "2": "요구사항은 정책 분리이며, 버킷 증설과 데이터 복제는 불필요한 관리 부담과 데이터 중복을 만듭니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring IAM policies for using access points (Amazon S3 User Guide) — 버킷 정책으로 위임하면 버킷 접근을 액세스 포인트 정책이 통제",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-policies.html"
+        },
+        {
+          "title": "Access control in Amazon S3 — 액세스 포인트 정책은 기반 버킷 정책과 함께 평가되는 리소스 기반 정책",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-management.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "dea-t4-1-q15",
+      "examGuideTaskId": "dea-t4-1",
+      "skill": "SageMaker Unified Studio의 도메인, 도메인 단위 및 프로젝트 사용(4.1.7)",
+      "section": "unified-studio",
+      "difficulty": "applied",
+      "stem": "한 조직이 Amazon SageMaker Unified Studio에서 마케팅·재무 사업부별로 프로젝트 생성 권한과 사용할 수 있는 프로젝트 프로필을 따로 위임하려 한다. 어떻게 구성해야 하는가?",
+      "options": [
+        "사업부마다 IAM 기반 도메인을 같은 계정에 추가로 만든다",
+        "모든 프로젝트 멤버를 Owner로 지정해 각자 멤버를 관리하게 한다",
+        "사업부별 도메인 단위를 만들고 도메인 단위 소유자에게 프로젝트 생성 등의 권한 정책을 부여한다",
+        "프로젝트 프로필을 모두 삭제하고 사용자가 블루프린트를 직접 선택하게 한다"
+      ],
+      "correct": 2,
+      "explanation": "도메인 단위는 자산과 도메인 엔티티를 사업부·팀 단위로 조직하며, 계정 소유자로부터 도메인 단위 소유자에게 위임된 권한을 제공합니다. 그래서 사업부별로 프로젝트 프로필을 만들고 쓸 수 있는 사람을 제한할 수 있고, 도메인 단위 생성·프로젝트 생성·프로젝트 멤버십 등의 권한 정책을 줄 수 있습니다.",
+      "wrongExplanations": {
+        "0": "IAM 기반 도메인은 계정당 하나만 둘 수 있습니다(문서에 따라 계정·리전당 1개로도 표현됩니다).",
+        "1": "Owner는 기여에 더해 멤버 추가·제거, 설명 편집, 프로젝트 삭제까지 가능하므로 위임 범위를 통제하지 못합니다.",
+        "3": "프로젝트 프로필은 프로젝트 생성에 쓰는 블루프린트의 모음이며, 프로젝트에서 쓸 수 있는 도구·리소스가 이 프로필에 따라 정해집니다. 삭제는 표준 템플릿을 없애는 선택입니다."
+      },
+      "sources": [
+        {
+          "title": "Domain units and authorization policies in Amazon SageMaker Unified Studio — 계정 소유자에서 도메인 단위 소유자로 위임, 프로젝트 프로필 생성·사용 대상 제한",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/adminguide/domain-units.html"
+        },
+        {
+          "title": "Add project members (Amazon SageMaker Unified Studio User Guide) — Owner는 멤버 추가·제거와 프로젝트 삭제 가능",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/add-project-members.html"
+        },
+        {
+          "title": "Domains in Amazon SageMaker Unified Studio — IAM 기반 도메인은 계정당 1개",
+          "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/adminguide/working-with-domains.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
