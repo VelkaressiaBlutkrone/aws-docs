@@ -20,7 +20,11 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
   - title: 게이트웨이 VPC 엔드포인트 (S3·DynamoDB) (공식)
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html
-lastVerified: 2026-06-12
+  - title: AWS PrivateLink로 서비스 만들기 (엔드포인트 서비스) (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html
+  - title: Gateway Load Balancer 엔드포인트 서비스 만들기 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-gateway-load-balancer-endpoint-service.html
+lastVerified: 2026-10-20
 ---
 
 # 하이브리드·연결 — 피어링·TGW·VPN·Direct Connect·엔드포인트
@@ -185,6 +189,40 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 > Interface 엔드포인트는 서브넷에 ENI를 생성하고 프라이빗 DNS로 서비스 도메인을 그 ENI의 사설 IP로 해석하는 방식이어서, 라우팅 변경 없이 어떤 서비스든 사설 접근이 가능합니다.
 > 운영 관점에서 Gateway는 라우팅 테이블 변경·SG 없음, Interface는 ENI 생성·SG 필요·프라이빗 DNS 활성화 여부가 핵심 구성 포인트입니다.
 
+### 6) AWS PrivateLink — 제공자(provider) 관점 (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 5.1.2를 「프라이빗 네트워킹 연결 구성」에서 **「… 구성(예: VPC 엔드포인트, AWS PrivateLink, VPC 피어링)」**으로 바꿨습니다. §5가 **소비자(consumer)** 관점이었으므로, 여기서는 **내 서비스를 PrivateLink로 노출하는 제공자 관점**을 봅니다. PrivateLink는 AWS 서비스 전용이 아니라 **자체 서비스도 같은 방식으로 노출**할 수 있습니다.
+
+**엔드포인트 서비스(endpoint service) 만들기 — 로드 밸런서가 전제:**
+
+엔드포인트 서비스 구성을 만들려면 먼저 다음 중 하나가 있어야 합니다.
+
+| 제공자 측 로드 밸런서 | 소비자가 연결하는 방식 |
+|---|---|
+| **Network Load Balancer(NLB)** | **인터페이스 엔드포인트** |
+| **Gateway Load Balancer(GWLB)** | **Gateway Load Balancer 엔드포인트**(트래픽 검사 시스템 등) |
+
+**구성 시 결정하는 항목:**
+
+- **가용 영역**: 엔드포인트 서비스는 **선택한 로드 밸런서에 활성화된 AZ**에서 제공됩니다. 소비자가 연결할 AZ 범위가 여기서 결정됩니다.
+- **수락 필요(Acceptance required)**: 켜면 연결 요청을 **수동으로 수락**해야 합니다. 끄면 요청이 **자동 수락**됩니다.
+- **프라이빗 DNS 이름**: 서비스에 프라이빗 DNS 이름을 연결하면 소비자가 그 이름으로 접근할 수 있습니다. 설정하지 않으면 소비자는 **AWS가 제공하는 엔드포인트별 DNS 이름**을 씁니다. 단 **소비자가 프라이빗 DNS 이름을 쓰기 전에 제공자가 그 도메인의 소유권을 검증**해야 합니다.
+- **지원 IP 주소 유형**: IPv4 · IPv6 · 둘 다 중 선택.
+- **교차 리전 접근**: 서비스를 호스팅한 리전 외의 리전에서도 쓰게 하려면 **서비스 리전(Service Regions)**을 추가로 지정합니다.
+
+**서비스를 소비자에게 열어 주는 절차:**
+
+1. 각 소비자가 연결할 수 있도록 **권한을 추가**합니다(허용 주체 지정).
+2. 소비자에게 **서비스 이름과 지원 가용 영역**을 알려 줘, 소비자가 인터페이스 엔드포인트를 만들 수 있게 합니다.
+3. **수락 필요**를 켠 경우 소비자의 **연결 요청을 수락**합니다.
+
+> 소비자/제공자 대칭: §5의 "인터페이스 엔드포인트(PrivateLink)"는 **소비자가 만드는 ENI**이고, 이 절의 "엔드포인트 서비스"는 **제공자가 NLB/GWLB 앞에 세우는 노출 지점**입니다. AWS 관리형 서비스의 인터페이스 엔드포인트도 구조상 같습니다 — AWS가 제공자 역할을 하는 것입니다.
+
+> 🧠 원리: 왜 PrivateLink 엔드포인트 서비스는 로드 밸런서를 전제로 할까요?
+> PrivateLink는 소비자 VPC의 ENI에서 제공자 VPC로 **주소 공간을 공유하지 않고** 트래픽을 전달합니다. 양쪽 CIDR이 겹쳐도 되는 이유가 여기 있습니다(피어링과의 결정적 차이, §1).
+> 이 구조가 성립하려면 제공자 쪽에 **어떤 사설 IP로 가야 하는지를 소비자가 몰라도 되는 단일 진입점**이 필요합니다. 로드 밸런서가 그 진입점이 되어, 뒤쪽 대상의 IP·개수·배치를 소비자에게 전혀 노출하지 않습니다.
+> 그래서 연결 모델이 로드 밸런서 종류로 갈립니다: 일반 TCP/UDP 서비스는 NLB + 인터페이스 엔드포인트, 트래픽을 가로채 검사하는 용도는 GWLB + GWLB 엔드포인트입니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -198,6 +236,9 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 - **Gateway 엔드포인트 = S3·DynamoDB 전용, 라우팅 기반, 무료, SG 없음.**
 - **Interface 엔드포인트 = PrivateLink, ENI+사설 IP, 시간당+데이터 과금, SG 있음, 프라이빗 DNS.**
 - **DX + VPN 백업** = 평시 DX, 장애 시 VPN 자동 우회.
+- **PrivateLink는 자체 서비스도 노출 가능**. 제공자는 **엔드포인트 서비스**를 만드는데 **NLB(→인터페이스 엔드포인트)** 또는 **GWLB(→GWLB 엔드포인트)**가 전제.
+- **수락 필요**를 켜면 연결 요청 수동 수락, 끄면 자동 수락. 제공 **AZ는 로드 밸런서에 활성화된 AZ**로 결정.
+- **프라이빗 DNS 이름은 제공자가 도메인 소유권을 검증**해야 소비자가 쓸 수 있다. 미설정 시 소비자는 **AWS 제공 엔드포인트별 DNS 이름** 사용.
 
 ---
 

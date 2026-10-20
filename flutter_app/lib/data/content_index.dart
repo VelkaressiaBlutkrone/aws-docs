@@ -715,20 +715,9 @@ ExamReadinessStatus examWeightedCapacityStatus(
 bool certExamHasWeightedCapacity(String certCode) =>
     examWeightedCapacityStatus(certCode).ready;
 
-/// (순수) 주어진 엔트리 집합에서 *모든* 도메인에 검증 문항(questionCount>0)이
-/// 있는가. 통합 모의고사가 특정 도메인에 편향되지 않으려면 전 도메인이 채워져야 한다.
-bool examIsBalanced(List<ContentEntry> entries) {
-  if (entries.isEmpty) return false;
-  final allDomains = entries.map((e) => e.domain).toSet();
-  final verifiedDomains = entries
-      .where((e) => e.hasQuestions)
-      .map((e) => e.domain)
-      .toSet();
-  return verifiedDomains.length == allDomains.length;
-}
-
-/// 통합 모의고사 공개 게이트: 자격증의 *전 도메인*에 검증 문항이 있어야 노출(T4).
-/// `certHasVerifiedQuestions`(문항 1개라도)와 달리, 부분 verified 상태에서
-/// 편향된 "통합 모의고사"가 노출되는 것을 막는다(codex#1·2 — 정직함).
-bool certExamIsBalanced(String certCode) =>
-    examIsBalanced(contentFor(certCode));
+// 옛 공개 게이트 `examIsBalanced`/`certExamIsBalanced`("전 도메인에 검증 문항
+// 1개 이상")는 2026-10-20에 제거했다. 2026-08-06 weighted capacity 게이트가
+// 그 역할을 대신한 뒤로 lib 호출이 0이었고(테스트만 참조), 검수 루브릭이 그
+// 함수를 공개 조건으로 적어 둔 탓에 "도메인 일괄 flip" 같은 틀린 절차가
+// 문서에 남아 있었다. 편향 방지는 이제 도메인별 필요 수량이 담당한다 —
+// `certExamHasWeightedCapacity`. 경위: HANDOFF.md §0-2026-10-20.

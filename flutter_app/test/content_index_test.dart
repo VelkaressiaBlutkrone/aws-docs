@@ -94,33 +94,10 @@ void main() {
     );
   });
 
-  // ── T4: 통합 모의고사 공개 게이트 (전 도메인 균형) ──────────────────
-  group('examIsBalanced (순수): 전 도메인 검증 시에만 true', () {
-    test('빈 목록 → false', () => expect(examIsBalanced(const []), isFalse));
-    test('전 도메인 검증 → true', () {
-      expect(examIsBalanced([_e(1, 15), _e(2, 15), _e(3, 15)]), isTrue);
-    });
-    test('부분 검증(일부 도메인만 verified) → false (편향 방지)', () {
-      expect(examIsBalanced([_e(1, 15), _e(2, 0), _e(3, 0)]), isFalse);
-    });
-    test('전부 0 → false', () {
-      expect(examIsBalanced([_e(1, 0), _e(2, 0)]), isFalse);
-    });
-    test('한 도메인에 여러 verified Task여도 다른 도메인 0이면 false', () {
-      expect(examIsBalanced([_e(1, 15), _e(1, 15), _e(2, 0)]), isFalse);
-    });
-  });
-
-  test(
-    'certExamIsBalanced: CLF balanced(true), SAA 부분 verified·D1 미충족(false), 미지정(false)',
-    () {
-      expect(certExamIsBalanced('CLF-C02'), isTrue);
-      // SAA는 일부 Task만 flip(D2~D4 부분)·D1 0 → 전 도메인 균형 미충족 → false(통합 모의고사 숨김).
-      expect(certExamIsBalanced('SAA-C03'), isFalse);
-      expect(certExamIsBalanced('NOPE'), isFalse);
-    },
-  );
-
+  // ── 통합/약점 모의고사 공개 게이트 ──────────────────────────────────
+  // 옛 `examIsBalanced`/`certExamIsBalanced`(전 도메인 ≥1) 테스트는 함수와 함께
+  // 2026-10-20에 제거했다. 게이트는 아래 weighted capacity가 전담하며, 편향
+  // 방지는 "도메인별 필요 수량"이 담당한다(HANDOFF.md §0-2026-10-20).
   group('weighted capacity readiness: 공식 비중을 앱의 65문항 연습 세트에 적용', () {
     test('CLF-C02는 현재 검증 문항으로 통합 모의고사 ready', () {
       final s = examWeightedCapacityStatus('CLF-C02');
