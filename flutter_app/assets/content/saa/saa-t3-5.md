@@ -30,9 +30,15 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html
   - title: Amazon RDS — DB instance storage (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
+  - title: AWS DMS 동종 데이터 마이그레이션(네이티브 도구·3가지 모드) (공식)
+    url: https://docs.aws.amazon.com/dms/latest/userguide/data-migrations.html
+  - title: AWS SCT 시작하기(이기종 스키마 변환) (공식)
+    url: https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_GettingStarted.html
+  - title: Aurora 복제본 추가(프라이머리 1개·복제본은 읽기 전용) (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-replicas-adding.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시
@@ -244,6 +250,52 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 
 ---
 
+### 10) DB 마이그레이션 — DMS와 SCT {#db-migration}
+
+엔진을 **그대로 두느냐 바꾸느냐**가 도구를 가릅니다.
+
+| | **동종(homogeneous)** | **이기종(heterogeneous)** |
+|---|---|---|
+| 뜻 | 같은 엔진끼리 (Oracle → Oracle, PostgreSQL → RDS for PostgreSQL) | 다른 엔진으로 (Oracle → Aurora PostgreSQL, SQL Server → MySQL) |
+| 스키마·코드 객체 | 엔진 **네이티브 도구**로 그대로 옮김 — DMS 동종 데이터 마이그레이션은 AWS가 서버리스 환경을 띄워 네이티브 도구를 자동 실행 | **AWS SCT**(Schema Conversion Tool)가 대상 스키마와 대부분의 코드 객체를 변환 |
+| 데이터 이전 | **AWS DMS** | **AWS DMS** |
+
+- **원본·대상 중 최소 하나는 AWS 서비스**여야 합니다(온프레미스 → AWS, AWS → 온프레미스 모두 가능).
+- **마이그레이션 중에도 원본 DB는 계속 운영**됩니다 — 다운타임 최소화가 DMS의 설계 목적입니다.
+- 실행 모드는 세 가지 — **전체 로드(full load)** · **지속 복제(CDC)** · **전체 로드 + CDC**. CDC(Change Data Capture)는 원본의 트랜잭션 로그를 읽어 변경분을 대상에 **트랜잭션 일관성 있게** 적용합니다.
+
+> **시험 신호**: "엔진을 바꾼다" → **SCT로 스키마 변환 + DMS로 데이터 이전**. "같은 엔진으로 옮기되 다운타임을 최소화" → **DMS 전체 로드 + CDC**. 스키마 변환은 DMS가 아니라 SCT의 일입니다.
+
+> 🧠 원리: 왜 이기종 전환에는 도구가 둘(SCT·DMS)이나 필요할까요?
+> 데이터 행을 옮기는 일과 스키마를 옮기는 일은 난이도가 다릅니다. 행은 값이라 엔진이 달라도 대응되는 타입으로 바꿔 넣을 수 있지만, 테이블 정의·인덱스·저장 프로시저·트리거 같은 코드 객체는 엔진마다 문법과 기능이 달라 기계적으로 옮길 수 없습니다.
+> 그래서 AWS는 변환이 필요한 쪽(스키마·코드 객체)을 SCT로 떼어 내고, 반복적이고 양이 많은 쪽(데이터 이전과 지속 복제)을 DMS에 맡깁니다.
+> 동종 전환에서 SCT가 등장하지 않는 것도 같은 이유입니다 — 변환할 것이 없으니 엔진의 네이티브 도구로 충분합니다.
+
+---
+
+### 11) 쓰기 집약 워크로드의 한계 {#write-scaling}
+
+지금까지 본 확장 수단(읽기 복제본·Aurora Auto Scaling·RDS Proxy)은 전부 **읽기** 쪽입니다. 쓰기는 사정이 다릅니다.
+
+- Aurora DB 클러스터에는 **읽기와 쓰기를 모두 받는 프라이머리 인스턴스가 하나**뿐이고, 최대 15개의 Aurora 복제본은 **읽기 전용**입니다(같은 클러스터 볼륨에 연결되지만 쓰기는 받지 않습니다).
+- 그래서 복제본을 늘리면 **읽기만** 확장되고, 쓰기 처리량의 상한은 **단일 라이터** 인스턴스의 크기에 묶입니다.
+
+쓰기가 한계에 닿았을 때의 선택지:
+
+| 수단 | 내용 |
+|---|---|
+| **스케일 업** | 라이터 인스턴스를 더 큰 클래스로. 가장 간단하지만 인스턴스 최대 크기가 천장 |
+| **샤딩** | 쓰기를 키 기준으로 여러 클러스터에 분할. 애플리케이션이 라우팅을 떠안음 |
+| **분산 키-값 전환** | DynamoDB처럼 파티션으로 쓰기를 수평 분산하는 엔진으로 이동 |
+| **큐로 버퍼링** | SQS 등으로 쓰기를 받아 두고 소비자가 일정 속도로 기록 — 순간 폭주를 평탄화 |
+
+> 🧠 원리: 왜 읽기는 복제본으로 쉽게 늘어나는데 쓰기는 그렇지 않을까요?
+> 읽기는 같은 데이터를 여러 곳에서 동시에 봐도 서로 간섭하지 않으므로, 사본을 늘리는 것만으로 처리량이 늘어납니다.
+> 쓰기는 다릅니다 — 여러 곳에서 같은 데이터를 동시에 바꾸면 어느 쪽이 최종 상태인지 정해야 하고, 그 합의 비용이 노드 수에 따라 커집니다. 그래서 하나의 라이터에 쓰기를 모아 순서를 확정하는 구조가 단순하고 빠릅니다.
+> 단일 라이터는 결함이 아니라 **일관성을 싸게 유지하려는 선택**이며, 그 대가로 쓰기 확장은 설계 단계에서 분할(샤딩)이나 엔진 교체로 풀어야 합니다.
+
+---
+
 ## ✍️ 시험 포인트
 
 | 요구사항 | 정답 |
@@ -343,5 +395,10 @@ Lambda는 동시 실행마다 별도 컨테이너에서 새 DB 연결을 생성�
 11. Amazon RDS — DB instance storage — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
 12. Amazon EBS 범용 SSD("gp3 volumes do not use burst performance") — https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html
 13. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+14. AWS DMS 동종 데이터 마이그레이션(네이티브 도구 자동 실행, full load / ongoing replication / full load+CDC) — https://docs.aws.amazon.com/dms/latest/userguide/data-migrations.html
+15. AWS SCT 시작하기(이기종 전환의 대상 스키마·코드 객체 변환) — https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_GettingStarted.html
+16. Aurora 복제본 추가("The primary DB instance supports read and write operations", 복제본은 읽기 전용·최대 15) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-replicas-adding.html
 
 > 📝 **2026-10-19 정정**: ① 범용 SSD를 gp2·gp3 한 묶음으로 "버스트 크레딧"이라 설명했던 원리 블록을 분리했습니다 — **gp3는 버스트 모델이 아니며** 기준 3,000 IOPS·125 MiB/s를 지속합니다(근거 12번). ② **Aurora serverless** 명칭으로 통일했습니다(공식 문서 제목이 "Using Aurora serverless"로 변경 — 과거 자료의 "v2" 표기와 같은 기능입니다).
+
+> 📝 **2026-10-20 보강**: 공식 가이드 Task 3.3 Knowledge 「동종/이기종 마이그레이션」과 「쓰기 집약 패턴」에 대응하는 서술이 없어 **§10 DMS·SCT**, **§11 쓰기 집약 한계**를 신설했습니다(근거 14~16번). Aurora 클러스터의 프라이머리가 하나이고 복제본이 읽기 전용이라는 점은 공식 Aurora 사용자 가이드로 확인했습니다.
