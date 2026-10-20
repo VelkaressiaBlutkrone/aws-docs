@@ -160,7 +160,14 @@ void main() {
     });
 
     test('lastVerified와 새 출처가 반영됐다', () {
-      expect(t15.contains('lastVerified: 2026-10-19'), isTrue);
+      // 2026-10-20: 날짜를 리터럴로 못박으면 다음 재검수가 이 테스트를 먼저
+      // 터뜨린다(교훈 saa-t1-4-q10). 되돌아가는 것만 막고 갱신은 허용한다.
+      final stamp = RegExp(r'lastVerified: (\d{4}-\d{2}-\d{2})')
+          .firstMatch(t15)
+          ?.group(1);
+      expect(stamp, isNotNull, reason: 'lastVerified 항목이 없다');
+      expect(stamp!.compareTo('2026-10-19') >= 0, isTrue,
+          reason: 'lastVerified 가 2026-10-19 이전으로 되돌아갔다: $stamp');
       expect(t15.contains('key-policy-overview'), isTrue);
       expect(t15.contains('dns-renewal-validation'), isTrue);
     });
