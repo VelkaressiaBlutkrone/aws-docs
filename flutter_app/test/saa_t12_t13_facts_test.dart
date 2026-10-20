@@ -174,9 +174,19 @@ void main() {
   });
 
   group('정정 날짜·출처', () {
-    test('두 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
-      expect(t13.contains('lastVerified: 2026-10-19'), isTrue);
-      expect(t14.contains('lastVerified: 2026-10-19'), isTrue);
+    // 2026-10-21: 이 그룹도 리터럴 날짜를 쓰고 있었다. 같은 파일 G-1.3 그룹이
+    // 이미 "날짜를 리터럴로 못박으면 다음 재검수가 이 테스트를 먼저 터뜨린다"는
+    // 교훈으로 비교형으로 바꿨는데 여기는 남아 있었고, 갭 배치 B3가 `saa-t1-3` 을
+    // 2026-10-21로 재검수하면서 실제로 터졌다. 되돌아가는 것만 막고 갱신은 허용한다.
+    test('두 문서의 lastVerified가 2026-10-19 이후다', () {
+      for (final e in {'saa-t1-3': t13, 'saa-t1-4': t14}.entries) {
+        final stamp = RegExp(r'lastVerified: (\d{4}-\d{2}-\d{2})')
+            .firstMatch(e.value)
+            ?.group(1);
+        expect(stamp, isNotNull, reason: '${e.key}: lastVerified 항목이 없다');
+        expect(stamp!.compareTo('2026-10-19') >= 0, isTrue,
+            reason: '${e.key}: lastVerified 가 2026-10-19 이전으로 되돌아갔다: $stamp');
+      }
     });
 
     test('새로 인용한 공식 출처가 실려 있다', () {

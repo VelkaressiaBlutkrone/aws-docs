@@ -45,7 +45,7 @@
 | V-01 | WAF 개발자 가이드에서 **CloudFront용 웹 ACL(스코프 CLOUDFRONT)을 US East (N. Virginia)에서 생성**한다는 문장 | `1-2.md`, `98` G-1.2-06 | CDK/CloudFormation 문서를 근거로 사용 |
 | V-02 | **Regional NAT gateway 도입 시점**(발표일) | `1-2.md` F-10 | 기능만 기록, 시점 단정 안 함 |
 | V-03 | AWS Security Hub 명칭 개편(서비스 이름·범위) | `1-2.md` | 현행 표기만 사용 |
-| V-04 | IMDSv2 강제·Session Manager 등 **애플리케이션 구성 보안**의 공식 근거 | `98` G-1.2-05 | 미반영 |
+| V-04 | IMDSv2 강제·Session Manager 등 **애플리케이션 구성 보안**의 공식 근거 | `98` G-1.2-05 | **IMDSv2는 해소**(R-9, 2026-10-21) · Session Manager는 여전히 미확보 |
 | V-05 | S3 **MFA Delete와 Object Lock 병용** 가능 여부 | `1-3.md`, `98` G-1.3-16·G-1.1-14 | 단정 안 함 |
 | V-06 | KMS **grant**·`kms:ViaService` 조건 세부 | `1-3.md` | 개념 수준만 |
 | V-07 | AWS Config 적합성 팩·CloudTrail 로그 파일 **무결성 검증** 세부 | `1-3.md` | 개념 수준만 |
@@ -167,6 +167,7 @@
 | R-6 | **Compute Optimizer의 RDS·Aurora 지원 여부**(기존 학습문서 서술 미재확인) | 지원 리소스 목록 확보(RDS·Aurora·EBS·Lambda·Fargate·유휴 권고 포함) | `4-2.md` F-13 |
 | R-7 | **Glacier 복원 티어별 시간의 단일 공식 문장**(V-44) | 사용자 가이드 본문에서 FR(Expedited 1–5분/Standard 3–5시간/Bulk 5–12시간 무료)·DA(Standard 12시간/Bulk 48시간)를 직접 확보. 단 같은 페이지 비교표·제품 페이지와 표기가 달라 **새 상충 C-04로 기록** | `4-1.md` F-03 |
 | R-8 | **ElastiCache Multi-AZ 공식 문장**(V-12; `2-2.md` 각주에서 미확보였음) | `3-3.md` F-12가 공식 FAQ·AutoFailover 문서로 확보: Multi-AZ=AZ 간 복제+장애 시 복제본 자동 승격(DNS 엔드포인트 유지), 복제 그룹=기본 1+읽기 복제본 최대 5, 노드 기반 Valkey/Redis OSS Multi-AZ·Serverless는 99.99% SLA 대상 | `3-3.md` F-12 |
+| R-9 | **IMDSv2 강제의 공식 근거**(V-04; `1-2.md`·`98` G-1.2-05 에서 미확보였음) | EC2 API 레퍼런스로 확보(2026-10-21): `httpTokens=required` 면 세션 토큰 없이는 메타데이터를 가져올 수 없고 **IMDSv1 자격증명이 제공되지 않는다**; `optional` 이면 토큰 없는 요청에 IMDSv1 자격증명이 돌아온다. 기본값은 AMI `ImdsSupport` 와 계정 수준 기본값의 조합(AMI `v2.0` + 계정 `no-preference` → `required`, 계정이 "V1 or V2" → `optional`), AMI `v2.0` 은 `HttpPutResponseHopLimit` 2. 적용은 `run-instances --metadata-options HttpTokens=required` · `modify-instance-metadata-options --http-tokens required`. ⚠️ **Session Manager 쪽 근거는 이번에도 확보하지 못했다** — V-04 는 그 부분만 열린 상태로 남긴다 | `97-gap-batch-map.md` B11 (저작은 `saa-t1-4`, flip 이후) |
 
 ---
 
