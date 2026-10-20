@@ -41,7 +41,7 @@
         "최소 보관 기간이 180일이므로 단기 데이터에는 적합하지 않다"
       ],
       "correct": 1,
-      "explanation": "S3 Intelligent-Tiering에서 128 KB 미만 객체는 모니터링 대상이 아니어서 접근 빈도와 무관하게 항상 Frequent Access 계층에 머뭅니다. 소용량 객체가 수백만 개인 버킷에서는 오브젝트당 모니터링 요금이 절감액을 초과할 수 있으므로 주의가 필요합니다.",
+      "explanation": "S3 Intelligent-Tiering에서 128 KB 미만 객체는 모니터링 대상이 아니어서 접근 빈도와 무관하게 항상 Frequent Access 계층에 머뭅니다. 이 객체들에는 모니터링·자동화 요금이 아예 붙지 않습니다 — 손해가 나는 것이 아니라 자동 티어링으로 얻을 절감이 없는 것입니다. 모니터링 요금은 128 KB 이상 객체 수에 비례해 발생합니다.",
       "wrongExplanations": {
         "0": "Intelligent-Tiering은 검색 요금이 없는 것이 핵심 특징입니다. 모니터링 요금은 객체 수에 비례해 발생하지만, 128 KB 미만 객체는 모니터링 대상에서도 제외됩니다.",
         "2": "Intelligent-Tiering은 30일 미접근 시 Infrequent Access로 이동하지만, '접근 여부와 관계없이'가 아니라 30일간 접근이 없었을 때 자동 전환됩니다.",
@@ -185,14 +185,15 @@
         "EC2 중지 후 7일이 지나면 EBS 볼륨이 자동 삭제되어 요금이 멈춘다"
       ],
       "correct": 2,
-      "explanation": "EBS는 인스턴스가 중지(stop)된 상태에서도 프로비전된 볼륨 용량에 대해 계속 과금됩니다. 완전히 삭제(Terminate)해야 볼륨 요금이 멈춥니다. 미사용 인스턴스를 단순히 중지하는 것만으로는 EBS 비용을 제거할 수 없습니다.",
+      "explanation": "EBS는 인스턴스가 중지(stop)된 상태에서도 프로비전된 볼륨 용량에 대해 계속 과금됩니다. 과금을 멈추려면 볼륨 자체를 삭제해야 합니다 — 인스턴스를 종료(Terminate)하면 DeleteOnTermination이 true인 볼륨만 삭제되고(루트 볼륨은 기본 true, 추가 볼륨은 기본 false), 보존된 볼륨은 계속 과금됩니다. 미사용 인스턴스를 단순히 중지하는 것만으로는 EBS 비용을 제거할 수 없습니다.",
       "wrongExplanations": {
         "0": "EC2가 중지 상태여도 EBS 요금은 계속 발생합니다. EBS는 프로비전된 용량에 기반해 과금되므로 인스턴스 상태와 무관합니다.",
         "1": "EBS 요금은 인스턴스 실행 여부와 무관하게 프로비전된 볼륨 용량에 대해 과금됩니다. 인스턴스가 실행 중일 때만 과금되는 것이 아닙니다.",
-        "3": "EBS 볼륨은 자동으로 삭제되지 않습니다. 사용자가 직접 삭제하거나 인스턴스 종료 시 자동 삭제 설정을 활성화해야 합니다."
+        "3": "EBS 볼륨은 중지 후 시간이 지나도 자동으로 삭제되지 않습니다. 사용자가 직접 삭제하거나, 인스턴스 종료 시 자동 삭제(DeleteOnTermination) 설정이 켜져 있어야 합니다."
       },
       "sources": [
-        { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+        { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
+        { "title": "인스턴스 종료 시 데이터 보존 — DeleteOnTermination (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/preserving-volumes-on-termination.html" }
       ],
       "verified": false
     },
