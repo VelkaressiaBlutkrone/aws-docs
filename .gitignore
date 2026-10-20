@@ -48,3 +48,5 @@ node_modules/
 **/firebase-debug.log
 **/firestore-debug.log
 **/ui-debug.log
+# 외부 리뷰 업로드용 임시 압축본 — 정본은 docs/saa-review/prescreen/*.json(커밋됨)
+docs/saa-review/*.zip
