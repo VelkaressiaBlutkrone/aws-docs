@@ -265,7 +265,8 @@
         "3": "복제 방식이 동일하지 않습니다. 물리적 거리(지연)가 다르므로 AZ 간에는 동기, 리전 간에는 비동기를 사용하는 이분법이 적용됩니다."
       },
       "sources": [
-        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
+        { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" },
+        { "title": "RDS 고가용성 — Multi-AZ 동기 스탠바이 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/gettingstartedguide/scaling-ha.html" }
       ],
       "verified": false
     },

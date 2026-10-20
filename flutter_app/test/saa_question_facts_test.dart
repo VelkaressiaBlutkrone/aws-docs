@@ -100,7 +100,10 @@ void main() {
       final option = (q['options'] as List)[1] as String;
       expect(option.contains('Lambda 기반'), isFalse,
           reason: 'RDS 마스터 자격증명은 Lambda 없는 관리형 교체를 쓴다');
-      expect(option.contains('관리형 교체'), isTrue);
+      // 2026-10-20 2차 재검수: 1차에서 "관리형 교체"로 바꾼 것이 반대쪽으로 치우쳤다
+      // (관리형 교체는 마스터 자격증명 전용인데 stem은 앱이 접속하는 비밀번호다).
+      // 어느 한쪽으로 단정하지 않는 중립 표현을 요구한다 — 아래 2차 그룹이 고정.
+      expect(option.contains('자동 교체'), isTrue);
     });
 
     test('해설의 "내장 Lambda 교체 함수" 단정이 사라졌다', () {
@@ -162,6 +165,164 @@ void main() {
 
     test('공식 Aurora 복제 지연 문서를 출처로 싣는다', () {
       expect(hasSource(q, 'aurora-faq-availability-and-durability'), isTrue);
+    });
+  });
+
+  // ── 2차 재검수(2026-10-20): fix 4건 + 출처 보강 3건 ──────────────────────
+  //
+  // 1차 fix를 머지한 뒤 45문항을 다시 훑어 나온 항목이다. `correct`는 2차에서도
+  // 하나도 바뀌지 않았다.
+  //
+  // - `saa-t1-4-q6` **Count는 비종료 액션**이다. Allow·Block만 평가를 멈추고,
+  //   CAPTCHA·Challenge는 유효 토큰이면 Count처럼 다음 규칙으로 넘어간다.
+  //   어떤 규칙에도 매칭되지 않으면 웹 ACL 기본 액션이 적용된다.
+  //   근거: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-wafv2-webacl-ruleaction.html
+  //   ("Count: Instructs AWS WAF to count the web request and then continue
+  //    evaluating the request using the remaining rules in the web ACL")
+  // - `saa-t1-4-q5` 평가 기간 유효값은 60·120·300·600초이고 **기본 300초(5분)**.
+  //   근거: https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-high-level-settings.html
+  // - `saa-t1-4-q1` XSS는 Core rule set, **SQL injection은 SQL database 규칙
+  //   그룹(AWSManagedRulesSQLiRuleSet)**이 담당한다.
+  //   근거: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html
+  // - `saa-t1-4-q10` 관리형 교체는 **마스터 자격증명 전용**이라, 앱이 접속하는
+  //   비밀번호를 묻는 stem에는 중립 표현("자동 교체")이 맞다 — 1차 수정이
+  //   반대쪽으로 치우쳤던 것을 되돌린다. Parameter Store는 **티어와 관계없이**
+  //   자동 교체가 없다(고급 티어 정책은 만료·알림만).
+  //   근거: https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html
+  group('saa-t1-4-q6 WAF 규칙 액션 — 종료/비종료', () {
+    final q = question('saa-t1-4', 'saa-t1-4-q6');
+
+    test('정답은 그대로 인덱스 2', () => expect(q['correct'], 2));
+
+    test('정답 선택지가 "첫 매칭 액션 즉시 실행"에서 "종료 액션"으로 바뀌었다', () {
+      final option = (q['options'] as List)[2] as String;
+      expect(option.contains('종료 액션'), isTrue);
+      expect(option.contains('Count'), isFalse,
+          reason: 'Count는 비종료라 "첫 매칭에 즉시 실행"의 예시가 될 수 없다');
+    });
+
+    test('"이후 규칙은 평가하지 않습니다" 단정이 사라졌다', () {
+      expect(
+        (q['explanation'] as String).contains('이후 규칙은 평가하지 않습니다'),
+        isFalse,
+      );
+    });
+
+    test('해설이 비종료 액션과 웹 ACL 기본 액션을 설명한다', () {
+      final text = q['explanation'] as String;
+      expect(text.contains('비종료'), isTrue);
+      expect(text.contains('기본 액션'), isTrue,
+          reason: '어떤 규칙에도 매칭되지 않으면 기본 액션이 적용된다');
+    });
+
+    test('공식 규칙 액션 레퍼런스를 출처로 싣는다', () {
+      expect(hasSource(q, 'wafv2-webacl-ruleaction'), isTrue);
+    });
+  });
+
+  group('saa-t1-4-q5 rate-based 평가 기간', () {
+    final q = question('saa-t1-4', 'saa-t1-4-q5');
+
+    test('정답은 그대로 인덱스 1', () => expect(q['correct'], 1));
+
+    test('옛 "(5분 또는 1분)" 서술이 사라졌다', () {
+      expect((q['explanation'] as String).contains('5분 또는 1분'), isFalse);
+    });
+
+    test('해설이 공식 평가 기간 4종과 기본값을 적는다', () {
+      final text = q['explanation'] as String;
+      for (final v in ['60', '120', '300', '600']) {
+        expect(text.contains(v), isTrue, reason: '유효 설정 $v초가 빠졌다');
+      }
+      expect(text.contains('기본'), isTrue);
+    });
+
+    test('공식 rate-based 설정 문서를 출처로 싣는다', () {
+      expect(hasSource(q, 'rate-based-high-level-settings'), isTrue);
+    });
+  });
+
+  group('saa-t1-4-q1 관리형 규칙 그룹의 역할 분리', () {
+    final q = question('saa-t1-4', 'saa-t1-4-q1');
+
+    test('정답은 그대로 인덱스 1', () => expect(q['correct'], 1));
+
+    test('해설이 SQLi 담당 규칙 그룹을 명시한다', () {
+      expect(
+        (q['explanation'] as String).contains('AWSManagedRulesSQLiRuleSet'),
+        isTrue,
+      );
+    });
+
+    test('Core rule set이 SQLi까지 막는 것처럼 읽히지 않는다', () {
+      final text = q['explanation'] as String;
+      final i = text.indexOf('AWSManagedRulesCommonRuleSet');
+      expect(i, greaterThan(-1));
+      expect(text.substring(0, i).contains('XSS'), isTrue,
+          reason: 'CommonRuleSet 앞에 그것이 XSS 담당임이 드러나야 한다');
+    });
+
+    test('공식 use-case 규칙 그룹 문서를 출처로 싣는다', () {
+      expect(hasSource(q, 'aws-managed-rule-groups-use-case'), isTrue);
+    });
+  });
+
+  group('saa-t1-4-q10 선택지 중립화 + Parameter Store 티어', () {
+    final q = question('saa-t1-4', 'saa-t1-4-q10');
+
+    test('정답은 그대로 인덱스 1', () => expect(q['correct'], 1));
+
+    test('정답 선택지가 "관리형"이 아니라 중립 표현 "자동 교체"다', () {
+      final option = (q['options'] as List)[1] as String;
+      expect(option.contains('자동 교체'), isTrue);
+      expect(option.contains('관리형 교체'), isFalse,
+          reason: '관리형 교체는 마스터 자격증명 전용이라 stem(앱 접속 비밀번호)과 어긋난다');
+    });
+
+    test('해설은 관리형 교체와 Lambda 교체 두 경로를 계속 구분한다', () {
+      final text = q['explanation'] as String;
+      expect(text.contains('관리형 교체'), isTrue);
+      expect(text.contains('Lambda'), isTrue);
+    });
+
+    test('오답 근거가 Parameter Store를 티어와 무관하게 서술한다', () {
+      final w = wrong(q, '0');
+      expect(w.contains('티어와 관계없이'), isTrue);
+      expect(w.contains('표준 티어는'), isFalse,
+          reason: '"표준 티어는"이라고 쓰면 고급 티어에는 교체가 있는 것처럼 읽힌다');
+    });
+
+    test('공식 Parameter Store 정책 문서를 출처로 싣는다', () {
+      expect(hasSource(q, 'parameter-store-policies'), isTrue);
+    });
+  });
+
+  group('출처 보강 3건 (정답·해설 변경 없음)', () {
+    test('saa-t1-1-q1: IAM 글로벌 엔드포인트 공식 페이지', () {
+      expect(
+        hasSource(question('saa-t1-1', 'saa-t1-1-q1'), 'UserGuide/programming'),
+        isTrue,
+      );
+    });
+
+    test('saa-t1-4-q11: Parameter Store 정책 페이지', () {
+      expect(
+        hasSource(
+          question('saa-t1-4', 'saa-t1-4-q11'),
+          'parameter-store-policies',
+        ),
+        isTrue,
+      );
+    });
+
+    test('saa-t2-5-q11: RDS Multi-AZ 동기 복제 공식 페이지', () {
+      expect(
+        hasSource(
+          question('saa-t2-5', 'saa-t2-5-q11'),
+          'gettingstartedguide/scaling-ha',
+        ),
+        isTrue,
+      );
     });
   });
 }

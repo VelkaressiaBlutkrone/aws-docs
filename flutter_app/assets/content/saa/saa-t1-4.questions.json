@@ -17,14 +17,15 @@
         "Amazon Cognito User Pool — 인증 단계에서 악성 요청을 사전 차단한다"
       ],
       "correct": 1,
-      "explanation": "SQL injection과 XSS는 HTTP 요청 내용(페이로드·헤더)의 악성 패턴이므로 L7 필터인 AWS WAF가 담당합니다. WAF 웹 ACL에 SQL injection 탐지 규칙, XSS 탐지 규칙을 추가하거나 AWS 관리형 규칙 그룹(AWSManagedRulesCommonRuleSet)을 사용하면 오리진에 도달하기 전에 차단됩니다.",
+      "explanation": "SQL injection과 XSS는 HTTP 요청 내용(페이로드·헤더)의 악성 패턴이므로 L7 필터인 AWS WAF가 담당합니다. WAF 웹 ACL에 SQL injection·XSS 탐지 규칙을 직접 추가하거나 AWS 관리형 규칙 그룹을 쓰면 오리진에 도달하기 전에 차단됩니다. 관리형 규칙 그룹은 용도가 나뉩니다 — XSS는 Core rule set(AWSManagedRulesCommonRuleSet)의 CrossSiteScripting 규칙들이, SQL injection은 SQL database 규칙 그룹(AWSManagedRulesSQLiRuleSet)이 담당합니다.",
       "wrongExplanations": {
         "0": "Shield는 DDoS(대용량 트래픽 공격, L3/L4/L7) 방어 전용입니다. HTTP 요청 페이로드를 파싱해 SQL 패턴을 탐지하는 기능이 없습니다.",
         "2": "Firewall Manager는 다계정에 WAF·Shield 정책을 중앙 배포하는 관리 서비스입니다. 자체적으로 SQL injection을 탐지하거나 차단하지 않습니다 — 탐지·차단은 배포된 WAF가 담당합니다.",
         "3": "Cognito User Pool은 앱 사용자 인증(로그인·가입) 전용입니다. HTTP 요청의 SQL injection 패턴을 분석하거나 차단하는 기능이 없습니다."
       },
       "sources": [
-        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
+        { "title": "AWS WAF 용도별 관리형 규칙 그룹 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html" }
       ],
       "verified": false
     },
@@ -113,14 +114,15 @@
         "지역(Geo) 규칙 — 공격이 발생하는 국가 전체를 차단한다"
       ],
       "correct": 1,
-      "explanation": "Rate-based 규칙은 지정 시간(5분 또는 1분) 내 특정 IP의 요청 수가 임계치를 초과하면 해당 IP를 자동으로 차단합니다. 브루트포스·자격증명 스터핑·봇 공격처럼 단시간에 대량 요청이 발생하는 패턴 방어에 적합합니다.",
+      "explanation": "Rate-based 규칙은 지정한 평가 기간(유효값 60·120·300·600초 = 1·2·5·10분, 기본 300초=5분) 내 특정 IP의 요청 수가 임계치를 초과하면 해당 IP를 자동으로 차단합니다. 브루트포스·자격증명 스터핑·봇 공격처럼 단시간에 대량 요청이 발생하는 패턴 방어에 적합합니다.",
       "wrongExplanations": {
         "0": "IP 세트 규칙은 사전에 알려진 IP를 수동으로 등록해 차단합니다. 새로운 IP에서 시작되는 브루트포스에는 반응할 수 없고 수동 업데이트가 필요합니다.",
         "2": "SQL Injection 탐지 규칙은 요청 본문의 악성 SQL 패턴을 감지합니다. 정상 로그인 폼 요청처럼 보이는 브루트포스는 SQL 패턴이 없으면 탐지되지 않습니다.",
         "3": "지역(Geo) 규칙은 특정 국가의 모든 트래픽을 차단하므로 정상 사용자도 피해를 받을 수 있으며, 요청 빈도 기준이 아닌 단순 출처 기준 필터입니다."
       },
       "sources": [
-        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
+        { "title": "AWS WAF rate-based 규칙 설정 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-high-level-settings.html" }
       ],
       "verified": false
     },
@@ -133,18 +135,19 @@
       "options": [
         "모든 규칙을 평가한 후 Allow 수가 많으면 허용, Deny 수가 많으면 차단하는 다수결로 결정된다",
         "모든 규칙을 평가하고 가장 엄격한(제한적인) 액션이 최종 적용된다",
-        "규칙을 순서대로 평가하고 첫 번째로 매칭된 규칙의 액션(Allow/Block/Count 등)이 즉시 실행된다",
+        "규칙을 우선순위 순서대로 평가하고, 처음 매칭된 종료 액션(Allow/Block)이 최종 결정이 된다",
         "Block 규칙이 하나라도 있으면 나머지 규칙과 관계없이 모든 요청이 차단된다"
       ],
       "correct": 2,
-      "explanation": "WAF 웹 ACL은 규칙을 번호 순서대로 평가하고 첫 번째로 매칭된 규칙의 액션(Allow/Block/Count/CAPTCHA)을 즉시 실행합니다. 이후 규칙은 평가하지 않습니다. 이 방식으로 운영자가 규칙 우선순위를 명시적으로 제어할 수 있습니다.",
+      "explanation": "WAF 웹 ACL은 규칙을 우선순위 번호 순서대로 평가합니다. Allow·Block은 종료(terminating) 액션이라 매칭되는 순간 평가를 멈추고 그 액션이 최종 결정이 됩니다. 반면 Count는 비종료 액션이라 요청을 세어 기록만 하고 다음 규칙을 계속 평가하며, CAPTCHA·Challenge도 유효한 토큰이 있으면 Count처럼 다음 규칙으로 넘어갑니다(토큰이 없거나 만료되면 그 자리에서 차단). 어떤 규칙에도 매칭되지 않으면 웹 ACL의 기본 액션이 적용됩니다. 이 순서 제어 덕분에 운영자가 규칙 우선순위를 명시적으로 설계할 수 있습니다.",
       "wrongExplanations": {
-        "0": "웹 ACL은 다수결로 동작하지 않습니다 — 첫 매칭 규칙의 액션이 즉시 결정됩니다.",
-        "1": "모든 규칙을 종합해 가장 엄격한 액션을 적용하는 방식이 아닙니다. 첫 매칭에서 바로 결정됩니다.",
+        "0": "웹 ACL은 다수결로 동작하지 않습니다 — 우선순위 순서대로 평가해 처음 매칭된 종료 액션이 결정합니다.",
+        "1": "모든 규칙을 종합해 가장 엄격한 액션을 적용하는 방식이 아닙니다. 처음 매칭된 종료 액션에서 결정되고, 그 전에 매칭된 Count 규칙은 기록만 남깁니다.",
         "3": "Block 규칙이 있더라도 요청이 그 규칙과 매칭되어야 차단됩니다 — 단순히 Block 규칙 존재만으로 모든 요청이 차단되지 않습니다."
       },
       "sources": [
-        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
+        { "title": "AWS WAF 규칙 액션 레퍼런스 (공식)", "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-wafv2-webacl-ruleaction.html" }
       ],
       "verified": false
     },
@@ -228,20 +231,21 @@
       "stem": "애플리케이션이 RDS 데이터베이스에 접속하는 비밀번호를 코드에 하드코딩해 왔다. 보안 강화를 위해 비밀번호를 코드에서 제거하고 90일마다 자동 교체하도록 설계를 변경하려 한다. 가장 적합한 서비스는?",
       "options": [
         "AWS Systems Manager Parameter Store(표준 티어) — 무료이며 자동 교체 기능이 내장돼 있다",
-        "AWS Secrets Manager — RDS 자격증명을 저장하고 관리형 교체 일정을 90일로 설정한다",
+        "AWS Secrets Manager — RDS 자격증명을 저장하고 자동 교체 일정을 90일로 설정한다",
         "AWS KMS — 비밀번호를 KMS 키로 암호화해 코드에 저장한다",
         "Amazon S3 — 암호화된 비밀번호 파일을 S3에 저장하고 애플리케이션이 런타임에 읽는다"
       ],
       "correct": 1,
       "explanation": "AWS Secrets Manager는 RDS 자격증명 저장과 자동 교체를 모두 지원합니다. RDS·Aurora 마스터 사용자 자격증명은 Lambda 함수가 필요 없는 관리형 교체(managed rotation)를 쓰고, 그 외 비밀은 Lambda 교체 함수를 씁니다. 어느 쪽이든 교체 일정을 설정하면 Secrets Manager가 자동으로 DB 비밀번호를 변경하고 최신 값을 보관합니다. 애플리케이션은 런타임에 API를 호출해 최신 자격증명을 동적으로 조회합니다.",
       "wrongExplanations": {
-        "0": "Parameter Store 표준 티어는 기본 자동 교체 기능이 없습니다. 교체가 필요하면 직접 구현해야 합니다 — 자동 교체 요구사항에는 Secrets Manager가 적합합니다.",
+        "0": "Parameter Store는 티어와 관계없이 자동 교체 기능을 제공하지 않습니다 — 고급 티어의 파라미터 정책은 만료·알림만 처리하고 값을 바꾸지 않습니다. 공식 문서도 자동 교체가 필요하면 Secrets Manager를 권장합니다.",
         "2": "KMS는 데이터 암호화 서비스입니다. 비밀번호를 코드에서 제거하고 자동 교체하는 수명 주기 관리 기능이 없습니다.",
         "3": "S3에 비밀번호 파일을 저장하면 자동 교체 메커니즘이 없고 파일 관리·접근 제어가 복잡해집니다. Secrets Manager가 이 목적에 설계된 서비스입니다."
       },
       "sources": [
         { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" },
-        { "title": "Secrets Manager 관리형 교체 (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_managed.html" }
+        { "title": "Secrets Manager 관리형 교체 (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_managed.html" },
+        { "title": "Parameter Store 파라미터 정책 (공식)", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html" }
       ],
       "verified": false
     },
@@ -265,7 +269,8 @@
         "3": "Parameter Store는 기본 자동 교체를 지원하지 않습니다. S3는 설정값 저장에 버전 관리와 접근 제어가 복잡해 Parameter Store보다 부적합합니다."
       },
       "sources": [
-        { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" }
+        { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" },
+        { "title": "Parameter Store 파라미터 정책 (공식)", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html" }
       ],
       "verified": false
     },

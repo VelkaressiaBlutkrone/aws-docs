@@ -24,7 +24,8 @@
         "3": "IAM은 추가 요금이 없는 무료 글로벌 서비스입니다. 사용량 기반 과금 대상이 아닙니다."
       },
       "sources": [
-        { "title": "AWS Identity and Access Management — 소개 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html" }
+        { "title": "AWS Identity and Access Management — 소개 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html" },
+        { "title": "IAM·STS 글로벌 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html" }
       ],
       "verified": false
     },
