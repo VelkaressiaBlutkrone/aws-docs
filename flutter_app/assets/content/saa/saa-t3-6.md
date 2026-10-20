@@ -16,9 +16,13 @@ sources:
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html
   - title: Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html
+  - title: AWS 데이터베이스 선택 가이드(목적별 엔진) (공식)
+    url: https://docs.aws.amazon.com/databases-on-aws-how-to-choose/
+  - title: Amazon MemoryDB란 무엇인가(내구성 인메모리 DB) (공식)
+    url: https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략
@@ -247,6 +251,32 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 
 ---
 
+### 15) 목적별(purpose-built) DB 유형 {#purpose-built-db}
+
+AWS는 "하나의 DB로 모든 것"이 아니라 **데이터 모양과 질의 패턴에 맞는 엔진**을 고르라고 안내합니다. 지금까지 본 DynamoDB(키-값)와 ElastiCache(캐시) 바깥에 어떤 축이 있는지 알아 둬야 시나리오 문제에서 엉뚱한 엔진을 고르지 않습니다.
+
+| 데이터 모양 | 서비스 | 전형적인 질의 |
+|---|---|---|
+| 관계형 | Aurora · RDS | 조인·트랜잭션·집계 |
+| 키-값 | **DynamoDB** | 키로 단건 조회·쓰기 (세션 스토어·장바구니) |
+| **문서** | **Amazon DocumentDB** | 중첩 JSON 문서 안의 필드로 필터·정렬 |
+| **와이드 컬럼** | **Amazon Keyspaces**(Apache Cassandra 호환) | 파티션 키 + 넓은 컬럼 집합 |
+| **그래프** | **Amazon Neptune** | 관계 순회 — "누가 누구와 연결됐나", 최단 경로 |
+| **인메모리(캐시)** | **ElastiCache** | 읽기 성능 보강용 **휘발성 캐시 계층** |
+| **인메모리(DB)** | **MemoryDB** | 캐시 속도를 쓰되 **데이터 자체를 보관**하는 주 DB |
+| 시계열 | Timestream | 시간 축 기준 집계 (`saa-t4-3` §7) |
+
+> **가장 자주 헷갈리는 축 — ElastiCache vs MemoryDB**: 둘 다 인메모리지만 역할이 반대입니다. **ElastiCache는 원본 DB 앞에 두는 휘발성 캐시**라 데이터가 사라져도 원본에서 다시 채우면 됩니다. **MemoryDB는 그 자체가 내구성 있는 주 DB**로, 캐시와 DB를 따로 운영하지 않아도 되는 쪽입니다. "캐시가 날아가면 곤란하다 / 캐시 외에 별도 DB를 두고 싶지 않다"가 신호면 MemoryDB입니다.
+
+> **DocumentDB vs Neptune**: 둘 다 비정형에 가깝지만 질의 대상이 다릅니다. **문서 안의 값**을 찾으면 DocumentDB, **문서(엔티티) 사이의 연결**을 따라가면 Neptune입니다.
+
+> 🧠 원리: 왜 AWS는 엔진을 이렇게 잘게 나눠 둘까요?
+> 데이터베이스의 성능은 대부분 **저장 구조가 질의 패턴과 맞는가**에서 결정됩니다. 관계 순회를 관계형 DB에서 하면 깊이가 깊어질수록 조인이 기하급수로 늘고, 시간 축 집계를 범용 엔진에서 하면 불필요한 인덱스 유지 비용을 치릅니다.
+> 하나의 엔진이 모든 패턴에 최적일 수는 없으므로, AWS는 패턴별로 저장 구조를 달리 설계한 엔진을 따로 제공하고 "요구에 맞는 것을 고르라"고 안내합니다.
+> 그래서 시험에서도 서비스 이름을 외우기보다 **"이 워크로드의 질의는 무엇을 따라가는가"**(키·문서 필드·관계·시간)를 먼저 읽는 쪽이 빠릅니다.
+
+---
+
 ## ✍️ 시험 포인트
 
 | 시나리오 | 정답 |
@@ -349,5 +379,9 @@ DynamoDB는 파티션 키를 해시해 데이터를 여러 물리 파티션에 �
 6. ElastiCache 엔진 비교(Valkey·Memcached·Redis OSS) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html
 7. DynamoDB 파티션 키 설계(파티션당 3,000 읽기·1,000 쓰기 단위/초) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html
 8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+9. AWS 데이터베이스 선택 가이드(관계형·키-값·문서·와이드 컬럼·그래프·인메모리 등 목적별 엔진) — https://docs.aws.amazon.com/databases-on-aws-how-to-choose/
+10. Amazon MemoryDB란 무엇인가("durable, in-memory database service that delivers ultra-fast performance") — https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
 
 > 📝 **2026-10-19 정정**: ① TTL 삭제 시점을 현행 서술인 **만료 후 수일 내(최선 노력)**로 고쳤습니다(근거 5번). ② ElastiCache 엔진을 **Valkey·Memcached·Redis OSS 3종**으로 갱신했습니다(근거 6번). ③ DynamoDB를 "무제한 처리량"으로 적었던 칸에 **파티션당 읽기 3,000·쓰기 1,000 단위/초** 한도를 명시했습니다(근거 7번).
+
+> 📝 **2026-10-20 보강**: 공식 가이드 Task 3.3 Knowledge 「목적별 DB 유형」에 대응하는 서술이 없어 **§15**를 신설했습니다(근거 9~10번). 문서(DocumentDB)·와이드 컬럼(Keyspaces)·그래프(Neptune)·인메모리 두 갈래(ElastiCache = 휘발 캐시 / MemoryDB = 내구성 주 DB)를 선택 축으로 정리했습니다.
