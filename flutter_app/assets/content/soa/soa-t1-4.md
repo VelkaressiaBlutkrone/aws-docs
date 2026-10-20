@@ -18,7 +18,13 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recovery.html
   - title: ELB 대상 상태 확인 (Application Load Balancer) (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
-lastVerified: 2026-06-12
+  - title: AWS DevOps Agent 소개 (공식)
+    url: https://docs.aws.amazon.com/devopsagent/latest/userguide/about-aws-devops-agent.html
+  - title: AWS DevOps Agent 책임 있는 AI — Agent Space·토폴로지 (공식)
+    url: https://docs.aws.amazon.com/ai/responsible-ai/aws-aidevops-agent/overview.html
+  - title: Kiro와 Amazon Q Developer의 관계 (공식 FAQ)
+    url: https://aws.amazon.com/q/developer/faqs/
+lastVerified: 2026-10-20
 ---
 
 # 가용성 지표 기반 문제 식별·해결 (Health Dashboard·상태 확인)
@@ -185,6 +191,38 @@ aws cloudwatch put-metric-alarm \
 > 로그는 개별 요청 단위의 예외 메시지·스택 트레이스·의존성 응답을 기록해, 지표의 이상 신호가 어떤 구체적 원인에서 비롯됐는지 좁혀줍니다.
 > "지표 이상 → 로그 확인 → 근본 원인" 순서는 이 두 신호의 역할 차이를 반영하며, Health Dashboard 확인을 먼저 끼워 AWS 측 문제를 먼저 배제해야 로그 분석이 올바른 레이어에서 이루어집니다.
 
+### 7) AI 에이전트 계열 도구 — AWS DevOps Agent·Kiro (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 1.2.1의 **예시 목록**을 바꿨습니다: `AWS User Notifications`·`오토 스케일링`이 빠지고 **`Kiro`·`AWS DevOps Agent`**가 들어왔습니다. 전통 서비스(CloudWatch·Lambda·Systems Manager·CloudTrail)에 **AI 에이전트 계열**이 더해진 형태입니다.
+
+> ℹ️ 두 서비스는 v1.1에서 예시로 처음 등장했습니다. 공식 가이드는 **예시 추가만 기록**하고 출제 형태·깊이를 밝히지 않으므로, 여기서는 **공식 문서로 확인되는 정의와 경계**만 정리합니다.
+
+**AWS DevOps Agent — 운영 조사·완화 쪽:**
+
+- 공식 정의: **릴리스 관리와 프로덕션 운영에 걸친 AI 기반 상시 에이전트**로, 릴리스 준비성 검토·릴리스 테스트부터 운영 문제 조사·예방까지 다룹니다. 대상 환경은 AWS·멀티클라우드·온프레미스입니다.
+- 동작 방식: 리소스와 **그 관계를 학습**하고, 관측 도구·코드 리포지토리·CI/CD 파이프라인과 연동해 **텔레메트리·코드·배포 데이터를 상호 연관**시킵니다.
+- 실행 경계: **Agent Space**라는 고객이 정의한 범위 환경 안에서 동작합니다. Agent Space는 에이전트가 접근할 수 있는 리소스·서비스를 정의하고, 각 Agent Space는 애플리케이션 환경의 **토폴로지(지식 그래프)**를 유지합니다.
+- 중요한 한계: DevOps Agent는 **출력에 신뢰도 점수를 제공하지 않습니다.** 조사 결과나 권장 사항이 타당한지는 **사람의 판단**으로 결정해야 합니다(근거 데이터를 확인하고 검증한 뒤 조치).
+
+**Kiro — 개발 쪽:**
+
+- 공식 정의: **스펙 기반 개발(spec-driven development)**로 개념에서 프로덕션까지 가도록 돕는 **독립형 에이전틱 개발 환경**입니다. 프롬프트를 상세 스펙으로 바꾸고, 그 스펙에서 동작하는 코드·문서·테스트를 만들어 냅니다.
+- Amazon Q Developer의 기능·기술(에이전트 모드·MCP·steering·CLI)을 일부 활용하되, AI 작업을 위한 **별도의 개발자 경험**을 제공합니다.
+
+| 도구 | 주 사용 지점 | 이 문서 Task와의 접점 |
+|---|---|---|
+| **CloudWatch·CloudTrail** | 지표·로그·API 이력 수집 | 탐지·진단의 1차 신호(§1~§6) |
+| **Systems Manager·Lambda** | 교정 작업 실행 | 자동 교정 실행 수단(`soa-t3-3`·`soa-t3-4`) |
+| **AWS DevOps Agent** | 조사·릴리스 준비성 검토 | 신호를 모아 **근본 원인 가설**을 제시(사람이 검증) |
+| **Kiro** | 개발·스펙·테스트 저작 | 운영 자동화 코드·런북을 **만드는** 쪽 |
+
+> 경계 정리: DevOps Agent는 **운영 중 문제를 조사**하는 쪽이고, Kiro는 **코드를 만드는** 쪽입니다. 둘 다 CloudWatch·Systems Manager 같은 기존 서비스를 **대체하지 않습니다** — 신호 수집과 작업 실행은 여전히 그 서비스들이 합니다.
+
+> 🧠 원리: 왜 에이전트 계열 도구가 추가돼도 §1~§6의 진단 순서는 그대로 유효할까요?
+> 에이전트는 새로운 신호를 만들어 내지 않습니다. CloudWatch 지표·로그, X-Ray 추적, CloudTrail API 이력, 리소스 구성처럼 **이미 존재하는 데이터를 상호 연관**시켜 가설을 제시할 뿐입니다. 신호가 애초에 수집되지 않으면 에이전트도 볼 것이 없습니다.
+> 그래서 "지표 이상 → 로그 확인 → 근본 원인"이라는 순서와 "AWS 측 문제인지 먼저 가른다"는 분류 단계는 전제 조건으로 남습니다. 에이전트는 ④ 진단 단계의 **속도**를 바꾸는 요소이고, ①~③의 구조를 대체하지 않습니다.
+> 또 공식 문서가 신뢰도 점수를 제공하지 않는다고 밝힌 만큼, 에이전트의 결론도 결국 같은 신호로 **사람이 검증**해야 합니다. 운영자가 신호의 의미를 읽는 능력이 여전히 1차 역량인 이유입니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -198,6 +236,8 @@ aws cloudwatch put-metric-alarm \
 - **ELB 상태 확인**: UnhealthyThreshold 연속 실패 → 트래픽 제외(격리), HealthyThreshold 연속 성공 → 복귀.
 - **ASG 상태 확인을 ELB로** 설정하면 unhealthy 인스턴스를 **종료·교체**(자가 치유).
 - 진단 순서: **지표 이상 → 로그 확인 → 근본 원인**. AWS 측 vs 내 측 문제를 먼저 분리.
+- **AWS DevOps Agent = 조사·릴리스 준비성 검토**, 실행 경계는 **Agent Space**(접근 범위 정의 + 토폴로지 유지). **신뢰도 점수를 주지 않으므로 사람이 검증**해야 한다.
+- **Kiro = 스펙 기반 개발** 환경(코드·문서·테스트 생성). 운영 신호 수집·작업 실행은 여전히 CloudWatch·Systems Manager 소관.
 
 ---
 

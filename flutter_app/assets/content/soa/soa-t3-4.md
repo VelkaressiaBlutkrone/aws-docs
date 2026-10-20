@@ -20,7 +20,13 @@ sources:
     url: https://docs.aws.amazon.com/config/latest/developerguide/remediation.html
   - title: Lambda로 운영 작업 자동화 (공식)
     url: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
-lastVerified: 2026-06-12
+  - title: 예약 규칙(레거시) 생성 — Scheduler 권장 (공식)
+    url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html
+  - title: EventBridge PutTargets — 규칙당 대상 한도 (공식 API 참조)
+    url: https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutTargets.html
+  - title: AWS DevOps Agent를 EventBridge와 통합 (공식)
+    url: https://docs.aws.amazon.com/devopsagent/latest/userguide/configuring-integrations-and-knowledge-integrating-devops-agent-into-event-driven-applications-using-amazon-eventbridge-index.html
+lastVerified: 2026-10-20
 ---
 
 # 자동화 패턴 (EventBridge·Lambda·자동 복구)
@@ -76,7 +82,7 @@ lastVerified: 2026-06-12
 | 규칙 유형 | 트리거 | 예 |
 |---|---|---|
 | **이벤트 패턴 규칙** | AWS 서비스/앱이 발생시킨 **이벤트가 패턴에 일치**할 때 | EC2 상태 `stopped`, Config 비규정, GuardDuty 발견 |
-| **스케줄 규칙** | **cron/rate 식**에 따라 주기적으로 | 매일 02:00 정리 작업, 5분마다 점검 |
+| **예약 규칙 (스케줄 규칙)** | **cron/rate 식**에 따라 주기적으로 — 공식 문서가 **레거시(legacy) 기능**으로 표시 | 매일 02:00 정리 작업, 5분마다 점검 |
 
 ```
 # 이벤트 패턴 예: EC2가 stopped 상태가 되면 트리거
@@ -88,6 +94,10 @@ lastVerified: 2026-06-12
 ```
 
 > 이벤트 패턴 규칙은 **"무언가 일어났을 때(reactive)"**, 스케줄 규칙은 **"정해진 시각에(proactive)"** 동작합니다. AWS 서비스 이벤트 대부분은 기본 이벤트 버스(default event bus)로 흘러들어옵니다.
+
+> ⚠️ **예약 규칙은 레거시입니다 (v1.1 시점 현행 지침).** 공식 문서는 예약 규칙(scheduled rules)을 **EventBridge의 레거시(legacy) 기능**으로 명시하고, 일정에 따라 대상을 호출할 때는 **EventBridge Scheduler 사용을 권장**합니다. Scheduler는 반복 패턴용 cron·rate 식과 **일회성 호출**을 모두 만들 수 있고, **유연한 시간 창(time window)·재시도 한도·실패 호출의 최대 보존 시간**을 설정할 수 있으며 대상 API·서비스 범위가 더 넓습니다.
+>
+> 기존 예약 규칙의 동작 특성은 그대로 알아 둬야 합니다: **모든 예약 이벤트는 UTC+0 시간대**를 쓰고 **일정의 최소 정밀도는 1분**입니다. cron 식으로도 **1분보다 세밀하게는 안 되고**, EventBridge와 대상 서비스가 분산 구조라 트리거 시각과 실제 실행 사이에 **수 초의 지연**이 있을 수 있습니다.
 
 > 🧠 원리: EventBridge는 왜 이벤트 패턴과 스케줄을 하나의 규칙 모델로 합치지 않고 두 종류로 나눌까요?
 > 이벤트 패턴 규칙은 "이벤트가 실제로 도착했을 때"만 평가되므로 트리거가 없으면 규칙 엔진이 관여하지 않지만, 스케줄 규칙은 이벤트 없이도 내부 타이머가 지정한 시각에 독립적으로 동작해야 합니다.
@@ -104,7 +114,7 @@ lastVerified: 2026-06-12
 | **SNS 주제** | 이메일·SMS·팬아웃 알림 |
 | **Step Functions** | 복잡한 워크플로 오케스트레이션 |
 
-> 하나의 규칙에 **여러 대상**을 붙일 수 있습니다(예: Lambda로 교정 + SNS로 알림 동시에). 대상 호출에는 EventBridge가 사용할 **IAM 역할/리소스 권한**이 필요합니다.
+> 하나의 규칙에 **여러 대상**을 붙일 수 있습니다(예: Lambda로 교정 + SNS로 알림 동시에). 단 **대상은 규칙당 최대 5개**입니다(`PutTargets` 기준). 더 많은 곳에 보내야 하면 규칙을 나누거나, SNS 주제로 팬아웃하거나, 다른 이벤트 버스를 대상으로 둡니다. 대상 호출에는 EventBridge가 사용할 **IAM 역할/리소스 권한**이 필요합니다.
 
 > 🧠 원리: EventBridge 규칙이 Lambda나 SSM Automation을 실행하려면 왜 별도 IAM 역할이 필요할까요?
 > EventBridge는 사용자를 대신해 다른 서비스 API를 호출하는 구조이므로, 그 호출이 허용된 주체임을 AWS가 확인할 수 있어야 합니다.
@@ -192,6 +202,28 @@ Config 비규정 / GuardDuty 발견  → EventBridge 규칙  → Lambda(교정 �
 > EventBridge·Config·경보 등 다양한 AWS 서비스가 Lambda를 트리거로 지원하기 때문에, 운영자는 트리거 종류마다 별도 실행 환경을 준비하지 않고 함수 코드에만 집중할 수 있습니다.
 > 결과적으로 Lambda 하나가 교정 로직·알림·태깅 등 다양한 운영 작업을 맥락에 따라 처리하는 범용 자동화 단위가 됩니다.
 
+### 8) AWS DevOps Agent를 이벤트 기반 자동화에 엮기 (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 3.2.2의 예시에 **EventBridge**와 **AWS DevOps Agent**를 추가했습니다. DevOps Agent 자체의 정의·실행 경계(Agent Space)는 `soa-t1-4` §7에서 다루고, 여기서는 **이 문서의 주제인 이벤트 기반 자동화에 어떻게 연결되는지**만 봅니다.
+
+- **AWS DevOps Agent는 조사(investigation) 또는 완화(mitigation)의 상태가 바뀔 때 EventBridge로 이벤트를 보냅니다.** 운영자는 그 이벤트를 규칙으로 받아 후속 작업을 자동화합니다.
+- 공식 문서가 드는 활용 예:
+
+| 트리거 이벤트 | 대상 | 자동화 내용 |
+|---|---|---|
+| 조사가 **완료**됐을 때 | **Lambda** | 조사 결과를 가공·적재 |
+| 조사가 **실패 또는 시간 초과**됐을 때 | **SNS** | 담당자에게 알림 |
+| 새 조사가 **생성**됐을 때 | 티켓 시스템 | 티켓 자동 등록·갱신 |
+| 완화 작업이 **완료**됐을 때 | **Step Functions** | 후속 워크플로 시작 |
+
+- 즉 연결 방식은 이 문서 §1~§2의 모델과 **똑같습니다**: 이벤트 패턴 규칙 + 대상(Lambda·SNS·Step Functions) + IAM 역할. DevOps Agent는 **새로운 이벤트 소스가 하나 늘어난 것**으로 이해하면 됩니다.
+- 설계상의 위치: 기존 파이프라인이 **"지표/구성 이상 → 교정"**이었다면(§5·§6), DevOps Agent를 끼우면 **"이상 → 에이전트 조사 → 조사 결과 이벤트 → 후속 자동화"**가 됩니다. 단 `soa-t1-4` §7에 적은 대로 에이전트 출력에는 **신뢰도 점수가 없으므로**, 조사 결과를 받아 **바로 파괴적 교정을 실행하는 자동화는 적절하지 않습니다** — 알림·티켓·분석처럼 사람 검토를 거치는 경로가 맞습니다.
+
+> 🧠 원리: 왜 에이전트의 조사 결과를 즉시 자동 교정으로 연결하지 않는 편이 나을까요?
+> §6의 Config 자동 교정은 **규칙이 참/거짓으로 판정**한 결과에 반응합니다. "암호화가 꺼져 있다"는 결정적 사실이므로 교정 동작도 결정적으로 정의할 수 있습니다.
+> 에이전트의 조사 결과는 텔레메트리·코드·배포 데이터를 상호 연관시킨 **추론**이고, 공식 문서도 신뢰도 점수를 제공하지 않으며 사람의 판단으로 유효성을 결정하라고 명시합니다.
+> 따라서 같은 EventBridge 모델을 쓰더라도 **반응의 강도를 다르게** 두는 것이 안전합니다: 결정적 신호에는 자동 교정, 추론 결과에는 알림·티켓·분석을 붙이고 교정은 승인 뒤에 실행합니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -204,6 +236,9 @@ Config 비규정 / GuardDuty 발견  → EventBridge 규칙  → Lambda(교정 �
 - **탐지→대응 파이프라인**: Config/GuardDuty/CloudTrail/지표 → **EventBridge(또는 경보)** → **Lambda/SSM Automation** (+ SNS 알림).
 - **Config 자동 교정 = Config 규칙(비준수) + SSM Automation 런북**. 자동 교정 시 사람 개입 없이 즉시 교정.
 - **Lambda = 커스텀 운영 로직**, **Automation 런북 = AWS 표준 다단계 작업**. 상황에 맞게 선택/병행.
+- **예약 규칙은 레거시** — 일정 호출은 **EventBridge Scheduler 권장**. 예약 규칙은 **UTC+0·최소 정밀도 1분**, 수 초 지연 가능.
+- **대상은 규칙당 최대 5개.** 더 필요하면 규칙 분리·SNS 팬아웃·다른 이벤트 버스.
+- **AWS DevOps Agent는 조사·완화 상태 전이를 EventBridge 이벤트로 발행** → Lambda·SNS·Step Functions로 후속 자동화. 추론 결과이므로 **파괴적 자동 교정에 직결하지 않는다**.
 
 ---
 

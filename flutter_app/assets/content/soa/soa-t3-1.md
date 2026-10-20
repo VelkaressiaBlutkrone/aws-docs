@@ -20,7 +20,11 @@ sources:
     url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html
   - title: DeletionPolicy 속성 (공식)
     url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
-lastVerified: 2026-06-12
+  - title: AWS CDK v2 개발자 안내서 — synth·diff·bootstrap·배포 (공식)
+    url: https://docs.aws.amazon.com/cdk/v2/guide/migrate.html
+  - title: AWS CDK 부트스트래핑 사용자 지정 (부트스트랩 리소스·계약) (공식)
+    url: https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping-customizing.html
+lastVerified: 2026-10-20
 ---
 
 # CloudFormation 프로비저닝 (템플릿·스택·StackSets·드리프트)
@@ -217,6 +221,32 @@ aws cloudformation execute-change-set \
 > 따라서 Snapshot을 지원하지 않는 리소스에 이 값을 지정하면 CloudFormation은 오류를 반환합니다.
 > 운영자 관점에서 핵심은 "상태가 있는 리소스에는 반드시 Retain 또는 Snapshot을 선택하고, 구성만 있는 리소스는 Delete(기본값)를 유지한다"는 규칙입니다.
 
+### 8) AWS CDK — CloudFormation 위의 코드 레이어 (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 3.1.2를 **「CloudFormation 및 AWS CDK를 사용하여 AWS 리소스를 만들고 관리」**로 재서술했습니다. 운영자에게 중요한 것은 **CDK가 CloudFormation을 거쳐 배포된다**는 구조입니다.
+
+**핵심 구조 — 합성(synthesis):**
+
+- `cdk synth`는 CDK 앱의 스택을 **CloudFormation 템플릿으로 합성**합니다. 합성은 애플리케이션의 각 CDK 스택에서 CloudFormation 템플릿을 만들어 냅니다.
+- **CDK 앱을 배포하면 AWS CDK CLI가 CloudFormation 서비스를 이용해** 리소스를 프로비저닝합니다. 즉 **CDK는 CloudFormation을 대체하지 않습니다** — 템플릿을 사람이 쓰는 대신 코드가 생성하고, 실제 생성·업데이트·롤백은 여전히 CloudFormation이 수행합니다.
+- 운영상 함의: 스택 이벤트·드리프트 감지·변경 세트·`DeletionPolicy` 같은 이 문서의 모든 내용이 **CDK로 배포한 스택에도 그대로 적용**됩니다.
+
+**운영자가 쓰는 명령 3개:**
+
+| 명령 | 하는 일 | 언제 |
+|---|---|---|
+| **`cdk bootstrap`** | 환경을 배포 가능 상태로 준비 | **처음 배포하는 AWS 환경**에서 1회 |
+| **`cdk synth`** | 스택을 **CloudFormation 템플릿으로 합성** | 배포 전 산출물 확인·검토 |
+| **`cdk diff`** | 배포된 스택과 현재 앱을 비교 | 변경 범위 확인(CloudFormation 변경 세트와 같은 역할) |
+
+- **부트스트래핑**은 AWS 환경에 리소스를 만들고, CDK가 **배포를 수행하고 애플리케이션 자산을 관리**하는 데 그 리소스를 사용합니다. 합성된 템플릿은 **배포 시 사용할 부트스트랩 리소스를 함께 지정**하므로, 부트스트랩하지 않은 환경에는 배포가 실패합니다.
+- 기존 CloudFormation 스택·템플릿에서 CDK로 옮긴 경우, **`cdk synth` 결과를 원본 템플릿과 비교**해 리소스·속성 값이 같은지 검증하고, **`cdk diff`로 배포된 스택과 대조**하는 것이 공식 절차입니다.
+
+> 🧠 원리: 왜 CDK는 템플릿을 거치지 않고 리소스를 직접 만들지 않을까요?
+> CloudFormation은 스택 단위로 **의존성 순서·실패 시 롤백·드리프트 추적**을 보장하는 상태 기계입니다. 이 보장을 다시 구현하려면 CDK가 같은 수준의 상태 관리와 롤백 엔진을 직접 가져야 합니다.
+> 템플릿으로 합성해 CloudFormation에 넘기면 CDK는 "무엇을 만들지 기술하는" 문제만 풀고, "안전하게 적용하는" 문제는 이미 검증된 엔진에 맡길 수 있습니다.
+> 그래서 CDK는 프로그래밍 언어의 추상화(반복·조건·재사용)를 얻으면서도 운영 보장은 CloudFormation과 동일합니다. 운영자가 스택 이벤트로 디버깅하는 방식이 바뀌지 않는 것도 이 때문입니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -230,6 +260,8 @@ aws cloudformation execute-change-set \
 - **드리프트 감지 = out-of-band 수동 변경 탐지(탐지만, 자동 복구 아님)**.
 - **DeletionPolicy**: Delete / **Retain(남김)** / **Snapshot(스냅샷 후 삭제)**. stateful 리소스 보호에 필수.
 - **내장 함수**: `Ref`(식별자), `Fn::GetAtt`(속성), `Fn::Sub`(치환), `Fn::FindInMap`(Mappings). 의사 파라미터 `AWS::Region`·`AWS::AccountId`.
+- **CDK는 CloudFormation을 거쳐 배포된다**: `cdk synth`가 **CloudFormation 템플릿으로 합성**하고, 배포는 CDK CLI가 CloudFormation 서비스로 수행. 드리프트·변경 세트·DeletionPolicy가 그대로 적용됨.
+- **`cdk bootstrap`은 새 환경에서 1회** — 배포·자산 관리에 쓰는 리소스를 만든다. 부트스트랩 안 된 환경엔 배포 실패. **`cdk diff`는 배포된 스택과 비교**.
 
 ---
 

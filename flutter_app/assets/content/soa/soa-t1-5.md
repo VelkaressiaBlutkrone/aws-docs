@@ -20,7 +20,13 @@ sources:
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html
   - title: ElastiCache 엔진 비교 — Valkey·Memcached·Redis OSS (공식)
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html
-lastVerified: 2026-10-19
+  - title: Amazon EFS 기능 — 스토리지 클래스·수명 주기 관리 (공식)
+    url: https://docs.aws.amazon.com/efs/latest/ug/features.html
+  - title: Amazon S3 Files (공식 제품 페이지)
+    url: https://aws.amazon.com/s3/features/files/
+  - title: S3 Files 콘솔 안내 — 동기화·NFS·암호화 (공식)
+    url: https://docs.aws.amazon.com/help-panel/AmazonS3/latest/console/hp-s3-files-page.html
+lastVerified: 2026-10-20
 ---
 
 # 컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)
@@ -214,6 +220,45 @@ lastVerified: 2026-10-19
 > 예를 들어 IOPS 병목에서 인스턴스를 키우면 CPU는 늘어나지만 스토리지 처리 경로는 바뀌지 않아 지연이 그대로 남습니다.
 > 지표가 어느 자원 경로에서 포화를 가리키는지 정확히 읽은 뒤, 그 경로에 직접 작용하는 조정(볼륨 타입 전환, 복제본 추가, 캐시 도입 등)을 선택해야 병목이 해소됩니다.
 
+### 6) 공유 스토리지 선택 — EFS·FSx·S3 Files (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 1.3.4의 예시에 **Amazon S3 Files**를 추가했습니다(v1.0은 `Amazon EFS, Amazon FSx` 2종). 공유 스토리지는 이제 **3개 축**으로 비교합니다.
+
+| 항목 | **Amazon EFS** | **Amazon FSx** | **Amazon S3 Files** |
+|---|---|---|---|
+| 성격 | 리눅스용 관리형 NFS 파일 시스템 | 상용·고성능 파일 시스템 4종 | **S3 버킷을 파일 시스템으로 노출** |
+| 프로토콜 | NFS | 유형별(SMB·NFS 등) | **NFSv4**(4.0/4.1/4.2) |
+| 유형 | 단일 서비스 | **Windows File Server · Lustre · NetApp ONTAP · OpenZFS** | 단일 서비스 |
+| 데이터 원본 | 파일 시스템 자체 | 파일 시스템 자체 | **연결된 S3 버킷**(데이터는 S3에 남음) |
+| 비용 최적화 | **수명 주기 관리**로 클래스 전환 | 유형별 프로비저닝 | 미사용 데이터를 파일 시스템에서 제거 |
+
+**Amazon EFS — 수명 주기 정책이 핵심(Skill 1.3.4가 직접 지목):**
+
+- 스토리지 클래스는 **EFS Standard · EFS Infrequent Access(IA) · EFS Archive** 3종입니다. 새 데이터는 먼저 Standard에 쓰이고, **수명 주기 관리**로 IA·Archive로 계층화됩니다.
+- 기본 권장 정책은 **30일 연속 미접근 시 Standard → IA**, **90일 연속 미접근 시 → Archive**입니다.
+- EFS Archive는 **Elastic 처리량** 파일 시스템에서 지원됩니다. Archive로 전환하는 수명 주기 정책이 있으면 처리량 모드를 Bursting·Provisioned로 바꿀 수 없습니다.
+
+**Amazon FSx — 프로토콜·생태계로 고른다:**
+
+- 파일 시스템 유형은 **Windows File Server · Lustre · NetApp ONTAP · OpenZFS** 4종입니다.
+- **Windows 파일 공유(SMB)와 Active Directory 통합**이 필요하면 FSx for Windows File Server, **HPC·ML 학습**처럼 초고속 처리량이 필요하면 FSx for Lustre입니다.
+
+**Amazon S3 Files — v1.1 신규:**
+
+- 공식 정의: **모든 AWS 컴퓨팅을 S3의 데이터에 직접 연결하는 공유 파일 시스템**입니다. 버킷을 파일 시스템으로 접근 가능하게 만들어, S3 객체·접두사를 파일·디렉터리로 읽고 쓰고 잠글 수 있습니다.
+- **S3 버전 관리가 연결된 버킷에 활성화돼 있어야 합니다.** 편집 내용은 **새 객체 버전**으로 버킷에 기록돼 이전 버전이 보존됩니다.
+- 양쪽에서 같은 데이터를 동시에 수정하면 **S3 버킷이 기준(source of truth)**입니다.
+- **NFSv4.2·4.1·4.0**을 지원하며 강한 일관성·파일 잠금 같은 파일 시스템 의미론을 제공합니다. 접근 제어는 **POSIX 권한**으로도 가능합니다.
+- 비용: 미사용 데이터는 파일 시스템에서 제거되고 **데이터는 연결된 버킷에 내구성 있게 남아**, 다음 접근 시 다시 가져옵니다.
+- 암호화: 기본적으로 **연결된 S3 버킷의 암호화 구성을 그대로 적용**합니다.
+
+> 선택 기준: **데이터가 이미 S3에 있고** 파일 기반 도구로 그 데이터를 다뤄야 하면 **S3 Files**(복제·동기화 없이). 리눅스 공유 파일 시스템이 필요하면 **EFS**. Windows SMB·AD나 Lustre급 처리량이 필요하면 **FSx**.
+
+> 🧠 원리: 왜 S3 Files는 연결된 버킷에 S3 버전 관리를 요구할까요?
+> 파일 시스템은 파일의 **일부만 제자리에서 수정**하는 작업(한 블록 덮어쓰기)을 전제합니다. 반면 S3 객체는 부분 수정이 없고 **객체 전체를 다시 쓰는** 모델입니다.
+> 그래서 파일 편집을 S3에 반영하려면 매 변경을 **새 객체 버전으로 기록**해야 합니다. 버전 관리가 없으면 직전 상태를 덮어써 중간 상태가 사라지고, 동시 수정이 겹칠 때 어느 쪽이 유효한지 판정할 근거도 없어집니다.
+> 버전 관리를 전제로 두면 "버킷이 기준(source of truth)"이라는 충돌 규칙이 성립하고, 파일 시스템 쪽 편집이 버킷의 버전 이력으로 환원됩니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -228,6 +273,9 @@ lastVerified: 2026-10-19
 - **Performance Insights**로 부하 유발 쿼리/대기 이벤트 진단. **파라미터 그룹**으로 엔진 튜닝(정적 파라미터는 재부팅).
 - **엔진 3종 = Valkey·Memcached·Redis OSS.** **Valkey/Redis OSS = 풍부한 기능·HA·영속성**, **Memcached = 단순·멀티스레드 처리량**.
 - **Lazy Loading(미스 시 적재, stale 가능)** vs **Write-Through(쓰기 시 갱신, 최신성↑·쓰기 지연↑)**, 보통 **TTL** 병행.
+- **공유 스토리지 3축 = EFS(리눅스 NFS) · FSx(Windows/Lustre/ONTAP/OpenZFS) · S3 Files(버킷을 파일 시스템으로)**.
+- **EFS 수명 주기 기본 권장 = 30일 미접근 → IA, 90일 → Archive**. Archive는 **Elastic 처리량** 필요.
+- **S3 Files는 S3 버전 관리 필수**, 편집은 새 객체 버전으로 기록, 동시 수정 시 **버킷이 기준(source of truth)**, 프로토콜은 **NFSv4**.
 
 ---
 
