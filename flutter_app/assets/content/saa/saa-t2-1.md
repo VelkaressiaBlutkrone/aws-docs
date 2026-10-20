@@ -22,7 +22,21 @@ sources:
     url: https://docs.aws.amazon.com/sns/latest/dg/sns-dead-letter-queues.html
   - title: Amazon SNS 메시지 전달 재시도 정책 (공식)
     url: https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html
-lastVerified: 2026-10-19
+  - title: Amazon SQS 메시지 쿼터 — 파티션 300 TPS·배칭 3,000·고처리량 리전별 상한 (공식)
+    url: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html
+  - title: SQS 최대 메시지 페이로드 1 MiB 상향 (공식 공지)
+    url: https://aws.amazon.com/about-aws/whats-new/2025/08/amazon-sqs-max-payload-size-1mib/
+  - title: Amazon SQS 가시성 타임아웃 — in-flight 메시지와 쿼터 (공식)
+    url: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
+  - title: Application integration 개요 — Amazon MQ 엔진·표준 프로토콜 (공식)
+    url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/application-integration.html
+  - title: Amazon MQ 마이그레이션 가이드 — 상용 브로커 이전·교차 리전 복제 (공식)
+    url: https://docs.aws.amazon.com/amazon-mq/latest/migration-guide/concept-chapter-about.html
+  - title: Amazon EventBridge Pipes — 단일 소스·단일 타깃·보강 (공식)
+    url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes.html
+  - title: Amazon AppFlow — 목적별 통합 서비스 (공식 백서)
+    url: https://docs.aws.amazon.com/whitepapers/latest/patterns-for-ingesting-saas-data-into-aws-data-lakes/purpose-built-integration-service.html
+lastVerified: 2026-10-21
 ---
 
 # 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions
@@ -108,6 +122,23 @@ lastVerified: 2026-10-19
 | **DLQ (Dead-Letter Queue)** | 최대 수신 횟수를 초과한 실패 메시지를 별도 큐로 격리. 장애 분석·재처리에 활용 | 별도 큐 ARN 지정 |
 | **Long Polling** | 큐가 비어 있을 때 최대 20초 대기 후 응답. 빈 응답 빈도를 낮춰 비용·CPU 절감 | 기본 Short Polling |
 | **메시지 보존 기간** | 큐에 저장되는 최대 기간. 초과 시 자동 삭제 | 기본 4일 (최대 14일) |
+
+**SQS 세부 사양 (★ 시험 수치):**
+
+| 항목 | 값 |
+|---|---|
+| **최대 메시지 크기** | **1 MiB** — 2025-08에 256 KiB에서 상향됐습니다(Standard·FIFO 모두, 전 상업 리전·GovCloud). 더 큰 본문은 **Extended Client Library**로 S3에 두고 참조만 보냅니다 |
+| **지연 큐(Delay Queue)** | 기본·최소 **0초**, 최대 **15분(900초)** |
+| **in-flight 메시지** | Standard·FIFO 각 **약 120,000건**(수신했으나 아직 삭제되지 않은 메시지). Standard는 증액 가능, FIFO는 AWS Support 문의 |
+| **메시지 속성** | 메시지당 10개 |
+| **배치** | 한 요청에 최대 10개 |
+
+- **in-flight 한도에 닿으면** Short polling은 `OverLimit` 오류를 돌려주고, **Long polling은 오류 없이 새 메시지를 주지 않습니다.** 처리 후 즉시 삭제가 1차 대책이고, 그다음이 큐·소비자 분산입니다.
+- **DLQ 리드라이브 정책** — 큐에 `maxReceiveCount`를 설정하면 그 횟수를 넘겨 수신된 메시지가 DLQ로 이동합니다. 위 표의 "최대 수신 횟수"가 이 값입니다.
+- **FIFO 고처리량 모드** — 기본(비고처리량)은 **파티션당 API 액션별 300 TPS**이고 배칭하면 **3,000 msg/s**(300 호출 × 10건)입니다. 고처리량 모드의 상한은 **리전마다 다릅니다** — 비배칭 TPS가 버지니아·오레곤·아일랜드 **70,000**, 그 외는 더 낮아 최저 **2,400**이고, 배칭하면 각 10배(**700,000** ~ **24,000** msg/s)입니다. 수치를 외우기보다 **"리전 의존 + 배칭이 10배"** 구조를 기억하세요.
+- 처리량을 더 올리려면 **메시지 그룹 ID를 여러 개로 분산**합니다 — 한 그룹 안의 메시지는 순차 처리되므로 그룹을 나눠야 병렬성이 올라갑니다.
+
+> ⚠️ **공식 자료 간 불일치 — 메시지 크기.** SQS **쿼터 페이지**는 아직 `Message Size = 256 Kilobytes`로 적혀 있습니다(2026-10-21 확인). 상향은 What's New 공지로 발표됐고 Lambda의 SQS 이벤트 소스 매핑도 1 MiB를 지원합니다(출처 8·9번). **1 MiB를 현행으로** 보되, 구 수치를 본 자료는 날짜를 확인하세요.
 
 > 🧠 원리: 왜 SQS는 소비자가 직접 폴링(Pull)하는 구조를 쓸까요?
 > 서버가 소비자에게 Push하려면 소비자의 주소·상태를 추적하는 레지스트리가 필요하고, 소비자가 느리거나 다운되면 Push가 실패해 재시도 로직이 복잡해집니다.
@@ -229,6 +260,61 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 
 ---
 
+### 8) 공식 범위의 나머지 통합 서비스 — Amazon MQ·Pipes·AppFlow {#other-integration-services}
+
+공식 시험 가이드의 in-scope **Application Integration**은 **AppFlow · EventBridge · MQ · SNS · SQS · Step Functions** 6종입니다. §2~§7이 네 종을 다뤘으니 나머지를 채웁니다.
+
+**Amazon MQ — 관리형 메시지 브로커**
+
+- **Apache ActiveMQ Classic·RabbitMQ**를 AWS가 프로비저닝·설정·유지관리합니다.
+- **업계 표준 API·프로토콜**을 그대로 씁니다 — **JMS·NMS·AMQP·STOMP·MQTT·WebSocket**. 그래서 공식 서술이 "대부분의 경우 메시징 코드를 다시 쓸 필요가 없다"고 적습니다.
+- ActiveMQ 엔진은 **IBM MQ·TIBCO EMS** 같은 상용 브로커의 이전을 단순화합니다(JMS 호환 → 최소 코드 변경). RabbitMQ 엔진은 **교차 리전 데이터 복제**를 제공합니다.
+- **시험 신호**: "기존 브로커를 쓰는 애플리케이션을 **코드 변경 없이** 옮겨야" → **Amazon MQ**. 반대로 표준 프로토콜 호환이 요구 사항에 없다면 브로커를 운영할 이유가 약합니다 — 그때는 SQS·SNS의 서버리스 모델이 더 단순합니다.
+
+**Amazon EventBridge Pipes — 점대점 통합**
+
+- **단일 소스에서 단일 타깃**으로 이벤트를 보냅니다. 이벤트 버스·규칙이 pub/sub 팬아웃이라면 **Pipes는 점대점**입니다.
+- 소스와 타깃 사이에 **필터링**(일치한 이벤트만 과금)과 **보강(enrichment)**을 둘 수 있습니다.
+- 보강 수단은 **API destination · API Gateway · Lambda · Step Functions**(Express 워크플로만)입니다. 보강은 **동기** 호출이고 응답은 최대 **6 MB**이며, 배칭할 때 배치 안의 순서를 유지합니다.
+- **시험 신호**: "SQS 큐 → (주문에 고객 정보를 채워) → Step Functions"처럼 **중간에 데이터를 보강해야 하는 1:1 연결** → Pipes. 여러 구독자에게 뿌려야 하면 버스·규칙이나 SNS입니다.
+
+**Amazon AppFlow — SaaS ↔ AWS 데이터 전송**
+
+- 완전 관리형 통합 서비스로 **SaaS 애플리케이션**(Salesforce·Marketo·Slack·ServiceNow 등)과 **AWS 서비스**(S3·Redshift 등) 사이에서 데이터를 **양방향**으로 옮깁니다.
+- 실행 트리거는 **스케줄 · 비즈니스 이벤트 실시간 대응 · 온디맨드** 세 가지입니다.
+- 플로우 안에서 **데이터 변환**(마스킹·필드 연결)과 **검증·필터링**을 구성해, 별도 처리 단계 없이 바로 쓸 수 있는 데이터를 만듭니다.
+- **전송 중 자동 암호화**를 하고, PrivateLink와 통합된 SaaS는 트래픽이 **퍼블릭 인터넷을 지나지 않도록** 제한할 수 있습니다.
+- **시험 신호**: "코드 없이 SaaS 데이터를 S3·Redshift로 정기 수집" → AppFlow. EventBridge의 SaaS 파트너 소스는 *이벤트*를 받는 것이고 AppFlow는 *레코드·데이터셋*을 옮기는 것이 갈림길입니다.
+
+> 🧠 원리: 왜 AWS는 SQS·SNS가 있는데도 Amazon MQ를 따로 두었을까요?
+> SQS·SNS는 **AWS 고유 API**로 호출하는 서버리스 서비스입니다 — 운영 부담이 없는 대신 클라이언트가 그 API에 맞춰 작성돼 있어야 합니다.
+> 수십 년 된 기업 애플리케이션은 **JMS·AMQP 같은 표준 위에 쓰여** 있고, 그 코드를 SQS API로 바꾸는 것은 이전 비용의 큰 몫입니다.
+> Amazon MQ는 그 표준을 말하는 **브로커 자체**를 관리형으로 제공해, 코드를 그대로 두고 인프라만 옮기게 합니다 — 공식 서술의 "메시징 코드를 다시 쓸 필요가 없다"가 그 뜻입니다.
+> 그래서 선택은 성능이 아니라 **"기존 코드가 무엇을 말하는가"**로 갈립니다.
+
+---
+
+### 9) 확장·통합 수단 선택 지도 {#integration-selection-map}
+
+Task 2.1은 "확장 가능하고 느슨하게 결합된 아키텍처"입니다. 어느 수단을 어디서 고르는지 한 번에 보고, **세부 수치는 담당 문서로 넘깁니다** — 같은 수치를 두 곳에 두면 한쪽만 갱신되는 드리프트가 생깁니다.
+
+| 무엇을 분리·확장하나 | 수단 | 세부 정본 |
+|---|---|---|
+| 생산자·소비자 **속도 차이** 흡수 | SQS(버퍼링) | 이 문서 §2 |
+| 하나의 이벤트를 **여러 구독자**에게 | SNS · EventBridge 버스 | §3 · §4 · §5 |
+| **조건에 맞는 이벤트만** 라우팅 | EventBridge 규칙 | §5 |
+| **1:1 연결 + 중간 보강** | EventBridge Pipes | §8 |
+| **상태 전이·재시도·감사** | Step Functions | §6 |
+| **기존 표준 프로토콜 브로커** 이전 | Amazon MQ | §8 |
+| **SaaS 데이터** 정기 수집 | AppFlow | §8 |
+| **요청 처리 용량** 확장 | Lambda 동시성 · ASG | `saa-t2-2` · `saa-t2-3` |
+| **읽기 부하** 분산 | **읽기 전용 복제본** · 캐시 | `saa-t3-5` · `saa-t3-6` |
+| **DB 엔진·용량** 선택 | 목적별 DB | `saa-t3-5` · `saa-t3-6` |
+
+> **읽기 전용 복제본은 언제 쓰나** — 읽기 질의가 쓰기보다 훨씬 많고 약간의 복제 지연을 감수할 수 있을 때입니다. 복제본은 **쓰기 상한을 올리지 못합니다**(라이터는 하나) — 쓰기가 한계면 복제본이 답이 아니고 스케일 업·샤딩·큐 버퍼링 쪽입니다. 엔진별 복제본 상한과 복제 방식의 정본은 **`saa-t3-5`**이니 수치는 그 문서에서 확인하세요.
+
+---
+
 ## ✍️ 시험 포인트
 
 - **SQS = 버퍼링·디커플링**: "다운스트림이 트래픽 폭증을 못 버틴다" → SQS 큐로 완충 후 소비자 오토스케일.
@@ -319,5 +405,14 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 5. Amazon SNS 데드레터 큐(DLQ는 구독 단위, 관리형 엔드포인트 100,015회·23일) — https://docs.aws.amazon.com/sns/latest/dg/sns-dead-letter-queues.html
 6. Amazon SNS 메시지 전달 재시도(AWS 관리형 엔드포인트 전달 정책) — https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+8. Amazon SQS 메시지 쿼터(파티션당 300 TPS·배칭 3,000·고처리량 모드 리전별 상한·보존 기간) — https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html
+9. SQS 최대 메시지 페이로드 256 KiB → **1 MiB** 상향 공지(Standard·FIFO·전 상업 리전·Lambda 이벤트 소스 매핑 포함) — https://aws.amazon.com/about-aws/whats-new/2025/08/amazon-sqs-max-payload-size-1mib/
+10. Amazon SQS 가시성 타임아웃 — in-flight 약 120,000건·Short/Long polling 동작 차이 — https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html
+11. Application integration 개요 — Amazon MQ(ActiveMQ Classic·RabbitMQ·JMS·NMS·AMQP·STOMP·MQTT·WebSocket) — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/application-integration.html
+12. Amazon MQ 마이그레이션 가이드(IBM MQ·TIBCO EMS 이전·RabbitMQ 교차 리전 복제) — https://docs.aws.amazon.com/amazon-mq/latest/migration-guide/concept-chapter-about.html
+13. Amazon EventBridge Pipes(단일 소스→단일 타깃·필터 과금·보강 동기 호출·응답 6 MB·Express만) — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes.html
+14. Amazon AppFlow — 목적별 통합 서비스(SaaS↔AWS·스케줄/이벤트/온디맨드·변환·전송 중 암호화·PrivateLink) — https://docs.aws.amazon.com/whitepapers/latest/patterns-for-ingesting-saas-data-into-aws-data-lakes/purpose-built-integration-service.html
+
+> 📝 **2026-10-21 보강(갭 `G-2.1-02`·`G-2.1-03`·`G-2.1-05`·`G-2.1-09`, 배치 B5)**: ① §2에 **SQS 세부 사양**(메시지 **1 MiB**·지연 큐 900초·in-flight 약 120,000·`maxReceiveCount`·FIFO 고처리량의 **리전 의존** 상한)을 더했습니다(근거 8·9·10번). 기존 "300 TPS·배치 3,000"은 공식과 일치해 그대로 두고 그 위에 확장했습니다. ② **§8 신설** — 공식 in-scope Application Integration 6종 중 빠져 있던 **Amazon MQ·EventBridge Pipes·AppFlow**(근거 11·12·13·14번). ③ **§9 신설** — 확장·통합 수단 선택 지도. DB·읽기 복제본 수치는 복제하지 않고 `saa-t3-5`·`saa-t3-6`을 가리킵니다. 기존 §1~§7의 번호·앵커는 바꾸지 않았습니다.
 
 > 📝 **2026-10-19 정정**: SNS 직접 구독의 재시도 서술을 정정했습니다. SQS·Lambda 같은 AWS 관리형 엔드포인트는 서버 측 오류 시 **최대 100,015회·23일** 재시도하고 **구독 단위 DLQ**를 붙일 수 있습니다(근거 5·6번). 팬아웃에 SQS를 끼우는 이유를 "유실 방지"에서 **버퍼링·독립 속도·재처리**로 고쳤습니다(§4 원리·시험 포인트·함정 3).
