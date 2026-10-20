@@ -251,22 +251,23 @@
       "examGuideTaskId": "saa-t3-9",
       "skill": "데이터 전송 서비스 선택(DataSync vs Snow 패밀리)",
       "difficulty": "applied",
-      "stem": "온프레미스 NAS(NFS)에 있는 500 TB의 데이터를 AWS S3로 이전해야 한다. 회사의 인터넷 대역폭은 1 Gbps이며, 이 속도로 전송하면 수개월이 걸린다. 가장 적합한 이전 방법은?",
+      "stem": "온프레미스 NAS(NFS)에 있는 500 TB의 데이터를 AWS S3로 이전해야 한다. 회사의 인터넷 대역폭은 1 Gbps이며, 이 속도로 전송하면 수개월이 걸린다. 이 회사는 이미 AWS Snowball Edge를 사용 중인 기존 고객이다. 가장 적합한 이전 방법은?",
       "options": [
-        "AWS Snow 패밀리(Snowball Edge) — 물리적 장치에 데이터를 담아 배송하면 대역폭에 의존하지 않고 이전할 수 있다",
+        "AWS Snow 패밀리(Snowball Edge) — 기존 고객은 계속 사용할 수 있고, 물리적 장치에 데이터를 담아 배송하면 대역폭에 의존하지 않고 이전할 수 있다",
         "AWS DataSync — NFS를 S3로 직접 동기화하므로 대역폭과 무관하게 빠르게 이전할 수 있다",
         "Amazon Data Firehose — 온프레미스 소스를 Firehose에 연결해 S3로 스트리밍 이전한다",
         "AWS Transfer Family — SFTP 프로토콜로 NFS 데이터를 S3로 직접 전송한다"
       ],
       "correct": 0,
-      "explanation": "대역폭이 부족해 네트워크 전송에 수개월이 걸리는 경우, Snow 패밀리(Snowball Edge)를 사용해 물리적 장치에 데이터를 담아 AWS 데이터센터로 배송합니다. 물리적 배송 시간은 가용 대역폭에 의존하지 않으므로 낮은 대역폭 환경에서 네트워크 전송보다 훨씬 빠르게 이전을 완료할 수 있습니다.",
+      "explanation": "대역폭이 부족해 네트워크 전송에 수개월이 걸리는 경우, 물리적 장치에 데이터를 담아 AWS로 배송하는 경로를 택합니다. 배송 시간은 가용 대역폭에 의존하지 않으므로 낮은 대역폭 환경에서 네트워크 전송보다 훨씬 빠르게 이전을 완료할 수 있습니다(Snowball Edge는 NFSv3·NFSv4·NFSv4.1을 지원하므로 NAS에서 직접 적재할 수 있습니다). 단 Snowball Edge는 신규 고객에게 더 이상 제공되지 않습니다 — AWS는 신규 고객에게 어떤 Snow Family 디바이스도 제공하지 않고, 이미 사용 중인 기존 고객만 계속 사용할 수 있습니다(이 문항이 기존 고객을 전제로 두는 이유입니다). 신규 고객이라면 온라인 전송은 DataSync, 물리 전송은 AWS Data Transfer Terminal 또는 파트너 솔루션을 택하고, 엣지 컴퓨팅 대안은 AWS Outposts입니다.",
       "wrongExplanations": {
         "1": "DataSync는 NFS·SMB를 S3·EFS·FSx로 동기화하는 도구이지만, 네트워크를 통해 전송하므로 가용 대역폭의 제약을 받습니다. 1 Gbps에서 500 TB 전송은 여전히 수개월이 걸립니다.",
         "2": "Firehose는 스트리밍 레코드를 목적지로 전달하는 서비스로, 온프레미스 파일 시스템 데이터를 대규모로 이전하는 용도가 아닙니다.",
         "3": "Transfer Family는 SFTP/FTPS/FTP 워크플로우를 S3·EFS로 연결하는 관리형 파일 전송 서버입니다. 네트워크를 통해 전송하므로 대역폭 제약을 피할 수 없습니다."
       },
       "sources": [
-        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+        { "title": "AWS Snowball Edge 가용성 변경 — 신규 고객 제공 중단, 대안은 DataSync·Data Transfer Terminal·파트너, 엣지는 Outposts (공식)", "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/snowball-edge-availability-change.html" },
+        { "title": "What is Snowball Edge? — 리저널 운송업체로 디바이스를 배송해 전송, NFSv3·NFSv4·NFSv4.1 지원 (공식)", "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html" }
       ],
       "verified": false
     },

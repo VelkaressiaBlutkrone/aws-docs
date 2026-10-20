@@ -59,6 +59,10 @@ void main() {
 
   // 문항별로 "사실이어야 하는 텍스트"만 모아 둔다(오답 보기 제외).
   final scanned = <({String file, String id, String text})>[];
+  // 그중 **정답으로 권하는 쪽**(`options[correct]` + `explanation`)만 따로 모아 둔다.
+  // 아래 조건부 단정의 트리거는 "이 서비스를 답으로 권했는가"이므로 분류 라벨인
+  // `skill` 과 오답 반박인 `wrongExplanations` 는 넣지 않는다.
+  final answerSide = <({String file, String id, String text})>[];
   for (final file in files) {
     final name = file.uri.pathSegments.last;
     final data = json.decode(file.readAsStringSync()) as Map<String, dynamic>;
@@ -83,6 +87,15 @@ void main() {
         file: name,
         id: q['id'] as String? ?? '(id 없음)',
         text: parts.join('\n'),
+      ));
+      answerSide.add((
+        file: name,
+        id: q['id'] as String? ?? '(id 없음)',
+        text: [
+          if (correct is int && correct >= 0 && correct < options.length)
+            options[correct],
+          q['explanation'] as String? ?? '',
+        ].join('\n'),
       ));
     }
   }
@@ -109,6 +122,37 @@ void main() {
                 '문장: "${rule.text}"');
       });
     }
+  });
+
+  // ── 조건부 단정 — 금지 문장 목록으로는 표현할 수 없는 모순 ──────────────
+  //
+  // `_rules` 는 "이 문장이 있으면 안 된다"만 표현한다. 그런데 `saa-t3-9-q11` 의
+  // 결함은 **금지 문장이 있어서**가 아니라 **있어야 할 단서가 없어서** 생겼다 —
+  // 대역폭 부족 500 TB 이전의 정답으로 Snow 패밀리를 권하면서 "신규 고객은 주문할
+  // 수 없다"는 제약을 한 마디도 하지 않았고, 같은 문서 md(`saa-t3-9.md` §10)는 그
+  // 제약 때문에 "Snow 패밀리는 신규 주문이 불가하므로 신규 설계의 정답이 아닙니다"
+  // 라고 못박고 있다. 부분 문구만 보는 단정으로는 이 모순이 잡히지 않아 이 가드가
+  // 처음 생길 때(PR#165) 놓쳤다.
+  //
+  // 그래서 **금지는 고정하고 요구는 느슨하게** 쓴다: 트리거는 "정답 쪽에서 Snow 를
+  // 언급했는가"(`Snow` — `Snowball`·`Snow 패밀리`·`Snowball Edge` 를 모두 포함),
+  // 요구는 핵심 키워드 `신규 고객` 하나뿐이다. 어떤 문장으로 쓰든 공식 사실("no
+  // longer available to new customers")을 한국어로 옮기면 이 키워드가 들어간다.
+  //
+  // 오답 보기와 `wrongExplanations` 는 트리거에서 제외했다 — "Snowball 은 스키마
+  // 변환 도구가 아니다" 같은 반박문에 가용성 단서를 요구하는 것은 거짓양성이다.
+  test('saa_t2_t4 G-3.5-09 — Snow 패밀리를 정답으로 권하면 "신규 고객" 제약을 함께 말한다',
+      () {
+    final hits = answerSide
+        .where((s) => s.text.contains('Snow') && !s.text.contains('신규 고객'))
+        .map((s) => '${s.file} ${s.id}')
+        .toList();
+    expect(hits, isEmpty,
+        reason: 'Snow 패밀리를 정답으로 권하면서 신규 고객 주문 불가를 말하지 않았다.\n'
+            '공식: "AWS Snowball Edge is no longer available to new customers" — '
+            '신규 고객은 어떤 Snow Family 디바이스도 주문할 수 없고(기존 고객은 계속 사용), '
+            '대안은 온라인 DataSync·물리 AWS Data Transfer Terminal·파트너, 엣지는 Outposts다.\n'
+            'md: saa-t3-9.md \u00a7 10 "Snow 패밀리는 신규 주문이 불가하므로 신규 설계의 정답이 아닙니다"');
   });
 }
 
