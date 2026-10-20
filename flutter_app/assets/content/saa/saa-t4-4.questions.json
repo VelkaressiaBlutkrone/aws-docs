@@ -92,12 +92,13 @@
       "explanation": "S3 Gateway Endpoint를 생성하고 라우팅 테이블에 추가하면 S3 트래픽이 AWS 내부 경로로 직접 전달되어 NAT Gateway를 우회합니다. Gateway Endpoint는 추가 요금이 없으며(무료), 같은 리전 S3 접근 시 데이터 전송 요금도 발생하지 않아 NAT 처리 요금($0.045/GB)이 완전히 제거됩니다.",
       "wrongExplanations": {
         "0": "NAT Gateway 크기 교체는 처리 속도 개선이지 비용 절감과 무관합니다. 처리 요금은 통과 데이터량에 따라 발생합니다.",
-        "2": "S3 Interface Endpoint(PrivateLink)는 $0.01/GB + 시간당 ENI 요금이 발생합니다. S3는 무료인 Gateway Endpoint로 커버 가능하므로 Interface Endpoint를 쓸 이유가 없습니다.",
+        "2": "S3 Interface Endpoint(PrivateLink)는 처리 데이터 GB당 요금(리전 월 1 PB까지 $0.01/GB)에 더해 AZ별 시간 요금이 발생합니다 — 시간 요금은 ENI 단위가 아니라 엔드포인트가 각 AZ에 프로비저닝돼 있는 시간 기준이며, 서비스 연결 상태와 무관하게 과금됩니다. S3는 무료인 Gateway Endpoint로 커버 가능하므로 Interface Endpoint를 쓸 이유가 없습니다.",
         "3": "퍼블릭 서브넷으로 이동하면 NAT 비용은 없어지지만 인스턴스가 인터넷에 직접 노출되어 보안 위험이 커집니다."
       },
       "sources": [
         { "title": "VPC 게이트웨이 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" },
-        { "title": "NAT 게이트웨이 요금 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" }
+        { "title": "NAT 게이트웨이 요금 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" },
+        { "title": "AWS PrivateLink 요금 (공식)", "url": "https://aws.amazon.com/privatelink/pricing/" }
       ],
       "verified": false
     },

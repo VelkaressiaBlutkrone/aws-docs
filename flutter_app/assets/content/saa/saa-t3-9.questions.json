@@ -324,22 +324,23 @@
       "examGuideTaskId": "saa-t3-9",
       "skill": "Kinesis Data Streams 샤드 자동 확장 여부",
       "difficulty": "foundational",
-      "stem": "Kinesis Data Streams 스트림의 처리량이 한계에 가까워지고 있다. 샤드는 처리량이 한계를 초과하면 자동으로 추가되는가?",
+      "stem": "프로비저닝(Provisioned) 모드로 운영 중인 Kinesis Data Streams 스트림의 처리량이 한계에 가까워지고 있다. 이 모드에서 샤드는 처리량이 한계를 초과하면 자동으로 추가되는가?",
       "options": [
-        "아니다 — 샤드 수는 자동으로 증가하지 않으며, 처리량 한계에 도달하면 수동으로 샤드를 추가하거나 Shard Split을 사용해야 한다",
+        "아니다 — 프로비저닝 모드에서는 샤드 수가 자동으로 늘지 않으며, 처리량 한계에 도달하면 UpdateShardCount나 Shard Split으로 직접 늘려야 한다",
         "그렇다 — Kinesis Data Streams는 Auto Scaling이 내장되어 처리량 초과 시 샤드를 자동 추가한다",
         "그렇다 — Enhanced Fan-Out이 활성화되면 샤드가 자동 확장된다",
         "아니다 — 샤드를 늘리려면 스트림을 삭제하고 더 많은 샤드로 재생성해야 한다"
       ],
       "correct": 0,
-      "explanation": "Kinesis Data Streams의 샤드 수는 자동으로 증가하지 않습니다. 처리량이 한계에 도달하면 수동으로 샤드 수를 늘리거나 Shard Split을 사용해야 합니다. Enhanced Fan-Out은 소비 측의 읽기 처리량을 높이는 기능(컨슈머당 전용 2 MB/s)이지 샤드를 자동 추가하는 기능이 아닙니다.",
+      "explanation": "프로비저닝 모드에서는 샤드 수를 직접 관리합니다 — 처리량이 한계에 도달하면 UpdateShardCount로 샤드 수를 늘리거나 Shard Split으로 분할해야 하고, 자동으로 늘지 않습니다. 반면 온디맨드 모드는 Kinesis Data Streams가 샤드를 자동 관리해 필요한 처리량을 제공하며(이전 30일 피크의 2배까지 수용), 현재 용량 모드는 On-demand Standard · On-demand Advantage · Provisioned 3종입니다. Enhanced Fan-Out은 소비 측의 읽기 처리량을 높이는 기능(컨슈머당 전용 2 MB/s)이지 샤드를 자동 추가하는 기능이 아닙니다.",
       "wrongExplanations": {
-        "1": "Kinesis Data Streams에는 자동 샤드 확장(Auto Scaling) 기능이 내장되어 있지 않습니다. 처리량 초과 시 ProvisionedThroughputExceededException이 발생하며, 수동 조정이 필요합니다.",
+        "1": "프로비저닝 모드에는 샤드 자동 확장이 없습니다 — 처리량을 초과하면 ProvisionedThroughputExceededException이 발생하고 직접 조정해야 합니다. 샤드 관리를 서비스에 맡기려면 온디맨드 모드로 전환해야 하며, 프로비저닝 모드 자체에 Auto Scaling이 내장된 것은 아닙니다.",
         "2": "Enhanced Fan-Out은 각 컨슈머에게 전용 읽기 처리량을 제공하는 기능으로, 샤드의 수나 쓰기 처리량을 자동으로 늘리지 않습니다.",
         "3": "스트림을 삭제·재생성하지 않아도 기존 스트림에서 샤드 수를 증가시킬 수 있습니다(Shard Split 또는 UpdateShardCount). 재생성은 불필요합니다."
       },
       "sources": [
-        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" },
+        { "title": "Kinesis Data Streams — 용량 모드 선택 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html" }
       ],
       "verified": false
     },
