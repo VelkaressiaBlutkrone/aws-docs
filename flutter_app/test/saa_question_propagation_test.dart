@@ -45,11 +45,10 @@ import 'package:flutter_test/flutter_test.dart';
 ///   구조에만 존재하는 문자열은 문항 JSON에 나타날 수 없다.
 /// - **일반 어휘·짧은 수치 조각.** `신뢰한다`·`< 1ms`·`자동 고가용성`·`두 가지 엔진 지원`
 ///   등은 다른 서비스 맥락에서 정당하다(Aurora는 실제로 "두 가지 엔진"이다).
-/// - **`Aurora Serverless v2`.** 공식 문서 제목이 "Aurora serverless"로 바뀐 **명칭
-///   현대화**이고 사실 오류가 아니다. 게다가 flip된 6문항(`saa-t3-5` 1 · `saa-t4-3` 5)의
-///   `skill` 라벨에 들어 있고, 그 문자열은 약점 리포트(`wrongSkills`)에 사용자 데이터로
-///   적재된다 — 라벨을 바꾸면 기존 적재 키가 고아가 되므로 마이그레이션 판단이 따로
-///   필요하다. 그 판단이 끝난 뒤에 넣어라.
+///
+/// `Aurora Serverless v2` 는 이 파일이 처음 생길 때(2026-10-20 PR#165) **적재 키가 고아가
+/// 된다**는 이유로 제외돼 있었다. **그 판단은 틀렸고 2026-10-20에 바로잡아 목록에 넣었다**
+/// — 근거는 해당 항목 주석에 있다.
 void main() {
   final files = Directory('assets/content/saa')
       .listSync()
@@ -234,6 +233,18 @@ final List<({String text, String origin, String why})> _rules = [
     text: '범용 SSD(gp2/gp3)는 버스트 크레딧 방식',
     origin: 'saa_t2_t4 G-3.3-10',
     why: 'gp3는 버스트를 쓰지 않고 프로비저닝 성능을 무기한 유지한다(버스트는 gp2만)',
+  ),
+  // `skill` 라벨에 들어 있어 사용자 데이터 호환이 걸린다고 보고 PR#165에서 미뤘던
+  // 항목이다. 코드를 확인한 결과 `skill` 은 **적재 키가 아니다** — 로컬 키는
+  // `awsdocs.history.v1`(history_store), 클라우드 키는 `certId|examId|date`(sync_merge)이고,
+  // `WrongSkill.skill` 은 "stale 문항에도 개념 보존"을 위한 비정규화 스냅샷이다
+  // (attempt_record). 소비처 5곳은 전부 표시·Task별 dedup이고 딥링크는 `section` 을 쓴다.
+  // 남는 영향은 리포트가 문자열로 dedup하므로 옛 라벨과 새 라벨이 두 줄로 보일 수 있다는
+  // 것뿐이다(손실 없음·마이그레이션 불필요). 그래서 2026-10-20에 목록에 넣었다.
+  (
+    text: 'Aurora Serverless v2',
+    origin: 'saa_t2_t4 G-3.3-13',
+    why: '공식 문서가 "Aurora serverless"로 표기한다 — v2 표기는 구식이다',
   ),
   (
     text: '수평 확장, 무제한 처리량',
