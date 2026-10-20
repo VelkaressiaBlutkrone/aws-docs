@@ -55,7 +55,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA �
   - **#137·#138·#139 SAA 학습문서 사실 정정 68건**(Task 1.1 5건 · 1.2·1.3 15건 · 2.1~4.4 48건) — `[오류]`·`[구식]`·`[부정확]`만 공식 문서로 전건 재확인, 근거 미확보 하위 주장은 쓰지 않고 PR 본문에 기록. 가드 3종(`saa_t1_facts_test`·`saa_t12_t13_facts_test`·`saa_t2_t4_facts_test`).
   - **#140 SOA 학습문서 사실 4건 정정** — Flow Logs REJECT 의미(공식 `action` 정의) · KMS 키 정책의 IAM 위임 · ACM 내보내기 가능 인증서 유료 · Trusted Advisor 현행 플랜(Business Support+·Enterprise·Unified Operations) + ElastiCache 3엔진·DynamoDB MREC/MRSC. 덤으로 학습문서 8개 끝의 작성 artifact(`</content>`·`</invoke>` 10줄) 제거·재발 가드.
   - **라이브 노출 불변식 유지:** SOA 300 + DEA 61 문항은 전부 `verified:false`이고 `content_index` questionCount는 0 — 사이트 노출·문항 수 변화 0. flip은 사람 검수 전용.
-  - **남은 일:** SOA·DEA 문항 사람 검수→flip · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · SOA 기존 20문서에 v1.1 신규 주제 반영 · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록. **DEA-C01은 도메인 1~4 전부 완료**(§B⑧).
+  - **남은 일:** SOA·DEA 문항 사람 검수→flip · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록. **DEA-C01은 도메인 1~4 전부 완료 · SOA v1.1 신규 주제 13항목 반영 완료**(§B⑧).
 
 - [x] **⑧ SAA 검수 문서 외부 리뷰 검증 + SAA 문항 fix 5건 + DEA 도메인 2·3·4 완주** — 2026-10-20. 1차 출고(#147·#149·#150·#148·#151)는 **PR#153으로 main 릴리스·Pages success·라이브 실측 완료**, 2차로 #154·#155와 이 부기가 나간다. 경위·교훈 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20.
   - **게이트 정의 확정 + 옛 게이트 제거:** 라이브 게이트는 `certExamHasWeightedCapacity`(lib 5곳)이고, 루브릭이 공개 조건으로 적고 있던 `certExamIsBalanced`는 **lib 호출 0 = dead code**였다. 루브릭 §1·§4를 "Task 단위 flip + 도메인별 weighted capacity"로 개정(#149)하고, **그 함수·테스트를 제거**했다(커버리지 손실 없음을 weighted capacity 테스트로 확인, 테스트 6건 감소).
@@ -63,6 +63,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA �
   - **문항 fix 5건(정답 변경 0):** `saa-t1-1-q13` STS 엔드포인트 · `saa-t1-4-q4`·`q12` WAF 보호 대상 9종(리뷰가 빠뜨린 Bedrock AgentCore Gateway 포함) · `saa-t1-4-q10` 관리형 교체(해설 + **정답 선택지 본문**) · `saa-t2-5-q8` Aurora 복제본 vs RDS 복제본. Test-First 가드 `test/saa_question_facts_test.dart` 20건(13건 RED → 20건 GREEN).
   - **DEA 도메인 2·3·4(#148·#151·#155):** 학습문서 13편 + 드래프트 195문항 → **DEA 누계 학습문서 17편·드래프트 256문항(도메인 1~4 전부)**, 전부 `verified:false`·questionCount 0(라이브 노출 변화 0). 도메인별 세션 위임 + 컨트롤러 PR 실물 검증. `pubspec.yaml`은 디렉터리 등록이라 무변경이 정답.
   - **⚠️ 교훈:** 같은 파일을 건드리는 병렬 PR은 GitHub이 각각 `CLEAN`으로 표시해도 **순차 머지 시 both-added 충돌**이 난다(로컬 시험 머지로만 드러남). 또 앞 PR 머지 직후의 연속 머지는 mergeability 재계산 지연으로 실패하며, **이 레포는 `--auto` 예약이 거부되므로**(Allow auto-merge 꺼짐) `MERGEABLE/CLEAN` 확인 후 재실행한다. 애초에 같은 레지스트리 파일을 건드리는 콘텐츠 작업은 **병렬로 돌리지 않는 것**이 정답이다.
+  - **SOA-C03 v1.1 신규 주제(#159):** 공식 Revisions Skill 변경 10건 + in-scope 추가 5건을 갭 노트 §4로 필터한 **13항목을 학습문서 10편**에 반영 + `soa_v11_topics_test.dart` 가드 35건. **기존 문서 본문 수정이라 라이브에 노출된다**(DEA 작업과 달리 신규 문서 추가가 아님). `soa_facts_test`의 `lastVerified`는 문서별 날짜 맵으로 강화.
   - **다음(사람 몫):** `saa-t1-1`·`saa-t1-4`·`saa-t2-5` 재검수 → flip. 열리면 D1 30/19·D2 30/17이지만 그 시점 D1에 **공식 Task 1.3이 0문항**이라 `saa-t1-5`가 1순위 보강 batch다.
 
 ---
