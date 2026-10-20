@@ -176,17 +176,17 @@
     {
       "id": "saa-t3-5-q8",
       "examGuideTaskId": "saa-t3-5",
-      "skill": "Aurora Serverless v2 적합 워크로드",
+      "skill": "Aurora serverless 적합 워크로드",
       "difficulty": "applied",
       "stem": "스타트업이 새 애플리케이션을 출시했다. 트래픽이 예측 불가능하고 간헐적이며, DB 운영 부담을 최소화하고 싶다. 가장 적합한 DB 옵션은?",
       "options": [
-        "Aurora Serverless v2를 사용한다",
+        "Aurora serverless를 사용한다",
         "프로비저닝된 Aurora 클러스터를 피크 부하에 맞게 최대 사양으로 설정한다",
         "일반 RDS MySQL을 사용하고 트래픽에 따라 수동으로 인스턴스 크기를 조정한다",
         "Aurora Global Database를 사용해 여러 리전에 분산한다"
       ],
       "correct": 0,
-      "explanation": "Aurora Serverless v2는 트래픽에 따라 컴퓨팅 용량을 자동으로 미세 조정합니다. 간헐적·불규칙 워크로드에서 부하가 낮을 때 비용이 비례해 줄어들고 운영 부담이 최소화됩니다.",
+      "explanation": "Aurora serverless는 트래픽에 따라 컴퓨팅 용량을 자동으로 미세 조정합니다. 간헐적·불규칙 워크로드에서 부하가 낮을 때 비용이 비례해 줄어들고 운영 부담이 최소화됩니다.",
       "wrongExplanations": {
         "1": "피크에 맞게 프로비저닝하면 부하가 낮을 때도 최대 사양 비용이 발생합니다. 간헐적 워크로드에는 비효율적입니다.",
         "2": "수동 인스턴스 크기 조정은 운영 부담이 크고 트래픽 변화에 빠르게 대응하기 어렵습니다.",
