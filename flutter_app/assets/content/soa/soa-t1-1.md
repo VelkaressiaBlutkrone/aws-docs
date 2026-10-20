@@ -20,7 +20,11 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
   - title: EC2 인스턴스 모니터링 (기본 vs 세부) (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
-lastVerified: 2026-06-12
+  - title: Lambda 함수 지표 사용 (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics.html
+  - title: Amazon Bedrock 런타임 지표 모니터링 (공식)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+lastVerified: 2026-10-20
 ---
 
 # CloudWatch 지표·경보·대시보드
@@ -235,6 +239,34 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 > 반면 대시보드 위젯은 여러 리전의 지표 데이터를 읽어 화면에 표시하는 "수동적 조회"이므로, 리전 경계를 가로질러 쿼리하는 데 제약이 없습니다.
 > 멀티 리전 운영 환경에서는 이 차이를 인식해 경보는 각 리전에 별도로 만들고, 통합 모니터링 화면은 교차 리전 대시보드로 구성하는 패턴이 권장됩니다.
 
+### 6) 워크로드별 지표 — 서버리스·AI (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Task 1.1의 Skill 문구를 **"워크로드(예: 서버리스, 컴퓨팅, AI)에 대한 모니터링 및 로깅 구성"**으로 바꿨습니다. 워크로드 종류마다 **지표가 어디서 나오는지**가 다릅니다.
+
+| 워크로드 | 지표 게시 주체 | 게시 주기 | 네임스페이스 |
+|---|---|---|---|
+| **컴퓨팅(EC2)** | 하이퍼바이저 | 기본 5분 / **세부 모니터링 1분** | `AWS/EC2` |
+| **서버리스(Lambda)** | Lambda 서비스 | **1분**(설정 불필요) | `AWS/Lambda` |
+| **AI(Amazon Bedrock)** | Bedrock 서비스 | 호출 시 게시 | `AWS/Bedrock` |
+
+**서버리스(Lambda):**
+
+- **Lambda는 지표를 1분 간격으로** CloudWatch에 보냅니다. EC2의 "기본 5분 / 세부 1분" 구분이 **Lambda에는 없습니다** — 켜고 끌 설정 자체가 없습니다.
+- 함수 수준의 심층 지표(메모리 사용량·CPU·네트워크)가 필요하면 **Lambda Insights**를 씁니다. Lambda Insights는 **Lambda 계층(layer)으로 제공되는 CloudWatch Lambda 확장**을 사용합니다.
+
+**AI(Amazon Bedrock):**
+
+- Bedrock은 지표를 **`AWS/Bedrock` 네임스페이스**에 게시합니다.
+- 운영에서 보는 핵심 지표는 **`Invocations`**(호출 수) · **`InvocationLatency`**(지연) · **`InputTokenCount`** · **`OutputTokenCount`**(입력·출력 토큰 수)입니다. 토큰 수 지표가 곧 **사용량·비용의 1차 신호**입니다.
+- 차원은 **`ModelId`**가 모든 지표에 적용됩니다. 즉 **모델별로 호출량·지연·토큰을 분리해서** 봐야 어느 모델이 비용·지연을 유발하는지 가려낼 수 있습니다.
+
+> 운영 관점: "왜 비용이 늘었나"는 `InputTokenCount`·`OutputTokenCount`를 `ModelId` 차원으로 나눠 보고, "왜 느린가"는 `InvocationLatency`를 같은 차원으로 나눠 봅니다.
+
+> 🧠 원리: 왜 EC2에는 기본/세부 모니터링 구분이 있고 Lambda·Bedrock에는 없을까요?
+> EC2 지표는 하이퍼바이저가 인스턴스 **외부에서** 주기적으로 수집해 게시하므로, 수집 주기를 짧게 하면 그만큼 추가 비용이 발생하는 구조입니다. 그래서 주기를 선택지로 둡니다.
+> Lambda·Bedrock은 **서비스가 요청을 직접 처리하는 주체**여서 호출 자체가 이미 서비스 내부 이벤트입니다. 게시할 데이터가 호출 시점에 그냥 존재하므로 "더 자주 수집한다"는 개념이 성립하지 않습니다.
+> 결과적으로 운영자가 조정할 레버가 EC2에는 있고(세부 모니터링), 서버리스·AI에는 없습니다. 대신 서버리스는 Lambda Insights처럼 **확장을 추가해 더 깊은 지표**를 얻는 방향으로 갈라집니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -251,6 +283,8 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 - **복합 경보**는 AND/OR/NOT로 결합 → **알림 노이즈 감소**가 목적.
 - **사용자 지정 지표는 PutMetricData로 게시**. 메모리·디스크 사용량 등은 기본 지표가 아님 → **CloudWatch agent 필요**.
 - **대시보드는 교차 리전**, **경보·지표는 리전 단위**.
+- **Lambda 지표는 1분 간격이 고정**(세부 모니터링 설정 없음). 심층 지표는 **Lambda Insights**(Lambda 계층 확장).
+- **Bedrock 지표 = `AWS/Bedrock`**, 차원 **`ModelId`**. 사용량·비용 신호는 **`InputTokenCount`·`OutputTokenCount`**, 지연은 `InvocationLatency`.
 
 ---
 

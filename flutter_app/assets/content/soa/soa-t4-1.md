@@ -22,7 +22,13 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
   - title: 서비스 제어 정책 (SCP) (공식)
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
-lastVerified: 2026-06-12
+  - title: SCP 평가 — FullAWSAccess·허용/거부 목록 전략 (공식)
+    url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_evaluation.html
+  - title: CreateOrganization — 기능 세트(ALL vs CONSOLIDATED_BILLING) (공식 API 참조)
+    url: https://docs.aws.amazon.com/organizations/latest/APIReference/API_CreateOrganization.html
+  - title: IAM Identity Center 권한 세트 위임 관리 (공식)
+    url: https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetdelegation.html
+lastVerified: 2026-10-20
 ---
 
 # IAM·계정 보안 운영 — 정책·역할·MFA·자격증명 보고서
@@ -218,6 +224,49 @@ aws iam get-credential-report --query 'Content' --output text | base64 -d
 > 이 특성 때문에 워크로드를 관리 계정에 두면 그 계정의 주체는 SCP Deny 규칙을 우회하게 되고, 다른 회원 계정에 적용한 가드레일이 해당 워크로드에는 전혀 작동하지 않습니다.
 > 따라서 보안 모범 사례는 관리 계정을 조직 관리 전용으로 격리하고 실제 워크로드는 별도 회원 계정에 배치하도록 권고합니다.
 
+### 8) 다중 계정 전략 — Organizations·SCP·IAM Identity Center (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 4.1.3을 「다중 계정 전략을 안전하게 구현」에서 **「… 구현(예: AWS Organizations, 서비스 제어 정책, IAM Identity Center)」**으로 바꿨습니다. §7이 SCP의 성격만 다뤘으므로, 여기서 세 도구의 구조를 정리합니다.
+
+**① AWS Organizations — 계정을 담는 그릇:**
+
+- 조직은 **루트 → 조직 단위(OU) → 계정**의 계층입니다. OU에 정책을 붙이면 **그 아래 모든 계정에 상속**됩니다.
+- 조직에는 **기능 세트(feature set)**가 두 가지 있습니다:
+
+| 기능 세트 | 내용 |
+|---|---|
+| **통합 결제(`CONSOLIDATED_BILLING`)** | 회원 계정의 청구가 관리 계정으로 통합·지불 |
+| **모든 기능(all features, `ALL`)** | 통합 결제의 모든 기능 + **관리 계정이 모든 회원 계정에 모든 정책 유형을 적용 가능** |
+
+- **SCP를 쓰려면 「모든 기능」이 필요합니다.** 정책 유형을 적용하는 능력이 이 기능 세트에 속하기 때문입니다. 새 조직은 **기본적으로 「모든 기능」으로 생성**됩니다.
+
+**② 서비스 제어 정책(SCP) — 기본값과 두 가지 전략:**
+
+- Organizations는 **`FullAWSAccess`라는 AWS 관리형 SCP를 루트·OU·계정이 생성될 때마다 자동으로 연결**합니다. 이 정책은 **모든 서비스와 작업을 허용**합니다.
+- 즉 **SCP의 출발점은 "전부 거부"가 아니라 "전부 허용"**입니다. 그래서 기존 환경에 SCP를 도입해도 아무것도 막히지 않고, 막고 싶은 것을 **명시적으로 Deny로 써야** 합니다.
+
+| 전략 | 방식 | 특징 |
+|---|---|---|
+| **거부 목록(deny list)** | `FullAWSAccess`를 그대로 두고 **Deny SCP를 추가** | 명시적 Deny가 명시적·암시적 Allow를 모두 덮어씀. 도입이 안전(기본은 아무것도 안 막힘) |
+| **허용 목록(allow list)** | `FullAWSAccess`를 **허용 서비스만 담은 정책으로 교체** | **신규 AWS 서비스는 명시 전까지 차단**. 루트에 붙이면 조직 전체에 단일 허용 목록이 적용됨 |
+
+- 주의: **허용 문구(Allow)만으로 설계하면 의도치 않은 접근이 생길 수 있습니다** — 더 넓거나 겹치는 Allow가 더 제한적인 것을 덮어쓸 수 있기 때문입니다. 공식 문서도 이 점을 경고합니다.
+- SCP의 성격(권한 상한선·루트 포함·관리 계정 예외)은 §7과 같습니다.
+
+**③ IAM Identity Center — 사람의 접근:**
+
+- 여러 AWS 계정과 애플리케이션에 대한 **단일 로그인(SSO) 접근을 중앙에서 관리**합니다.
+- 자격 증명은 Identity Center에서 직접 만들 수도 있고, **Microsoft Active Directory 도메인이나 외부 자격 증명 공급자(IdP)**를 연결할 수도 있습니다.
+- 접근 권한의 단위는 **권한 세트(permission set)**입니다. 권한 세트는 Identity Center 자격 증명 저장소나 **외부 IdP의 페더레이션 사용자·그룹에 적용**되며, 계정·OU·조직 루트를 대상으로 할당합니다.
+- 전제: **권한 세트를 쓰려면 Identity Center의 조직 인스턴스(Organization instance)**가 필요합니다.
+
+> 세 도구의 분업: **Organizations가 계정을 묶고(OU) → SCP가 그 안에서 할 수 있는 일의 상한을 정하고 → Identity Center가 사람을 어느 계정에 어떤 권한으로 들여보낼지 정합니다.** SCP는 권한을 **주지 않고**, Identity Center 권한 세트가 실제로 **부여**합니다(§1의 "부여하는 정책 vs 한도만 정하는 정책" 구분과 같습니다).
+
+> 🧠 원리: 왜 Organizations는 SCP의 기본값을 「전부 허용」(`FullAWSAccess`)으로 둘까요?
+> 기본값이 「전부 거부」라면, 조직을 만들거나 계정을 OU로 옮기는 순간 기존에 돌던 워크로드가 모두 멈춥니다. 가드레일을 도입하려다 장애를 만드는 구조가 됩니다.
+> 「전부 허용」을 기본으로 두면 SCP를 붙이는 것 자체는 무해하고, 운영자는 **막고 싶은 것만 점진적으로 Deny로 추가**할 수 있습니다. 그래서 공식 문서가 거부 목록 전략을 "안전한 도입 방식"으로 설명합니다.
+> 반대로 "명시된 것만 허용"이 필요한 조직은 `FullAWSAccess`를 **의도적으로 교체**해야 하고, 그 순간부터 **신규 서비스가 기본 차단**된다는 운영 부담(새 서비스를 쓸 때마다 정책 갱신)을 받아들이는 것입니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -232,6 +281,10 @@ aws iam get-credential-report --query 'Content' --output text | base64 -d
 - **Access Analyzer** = 외부/공개 노출 탐지 + 최소 권한 정책 생성.
 - **루트**: MFA 필수, 액세스 키 금지, 일상 사용 금지.
 - **SCP는 루트 사용자에도 적용**되나, **관리 계정**에는 적용되지 않는다.
+- **SCP의 기본값은 「전부 허용」** — Organizations가 루트·OU·계정마다 **`FullAWSAccess`** 관리형 SCP를 자동 연결한다. "SCP를 붙이면 기본적으로 막힌다"는 오답.
+- **거부 목록 = `FullAWSAccess` 유지 + Deny 추가**(안전한 도입), **허용 목록 = `FullAWSAccess` 교체**(신규 서비스 기본 차단). Allow만으로 설계하면 넓은 Allow가 제한을 덮어쓸 수 있다.
+- **SCP를 쓰려면 조직이 「모든 기능(all features)」이어야 한다**(통합 결제만으로는 정책 적용 불가). 신규 조직은 기본이 모든 기능.
+- **IAM Identity Center = 권한 세트(permission set)로 다계정 SSO 부여.** 외부 IdP·AD 연결 가능, **조직 인스턴스 필요**. SCP는 상한, 권한 세트가 실제 부여.
 
 ---
 

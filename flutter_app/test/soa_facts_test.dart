@@ -142,17 +142,22 @@ void main() {
   });
 
   group('정정 날짜·출처', () {
-    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
-      for (final id in [
-        'soa-t1-5',
-        'soa-t2-4',
-        'soa-t4-2',
-        'soa-t4-3',
-        'soa-t5-4'
-      ]) {
-        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
-            reason: '$id lastVerified 누락');
-      }
+    test('정정한 문서의 lastVerified가 갱신됐다', () {
+      // 이 5개 문서는 2026-10-19 사실 정정으로 갱신됐다. 그 뒤 2026-10-20에
+      // 공식 가이드 v1.1 신규 주제를 반영한 3개(soa-t1-5·t2-4·t4-2)는 그 날짜로
+      // 다시 갱신됐으므로 문서별 기대값을 명시한다(느슨한 비교가 아니다).
+      // v1.1 반영분 10개 문서의 전수 고정은 soa_v11_topics_test.dart V-15.
+      const expected = <String, String>{
+        'soa-t1-5': '2026-10-20',
+        'soa-t2-4': '2026-10-20',
+        'soa-t4-2': '2026-10-20',
+        'soa-t4-3': '2026-10-19',
+        'soa-t5-4': '2026-10-19',
+      };
+      expected.forEach((id, date) {
+        expect(doc(id).contains('lastVerified: $date'), isTrue,
+            reason: '$id lastVerified가 $date 가 아니다');
+      });
     });
 
     test('새로 인용한 공식 출처가 실려 있다', () {

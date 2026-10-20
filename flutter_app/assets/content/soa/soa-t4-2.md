@@ -22,7 +22,15 @@ sources:
     url: https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
   - title: AWS Support 플랜 — 현행 목록 (공식)
     url: https://aws.amazon.com/premiumsupport/plans/
-lastVerified: 2026-10-19
+  - title: 조직 전체의 규정 준수 팩 관리 API (공식)
+    url: https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html
+  - title: AWS 전역 조건 컨텍스트 키 — aws:RequestedRegion (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
+  - title: AWS Security Agent (공식 제품 페이지)
+    url: https://aws.amazon.com/security-agent/
+  - title: AWS Security Agent 사용자 안내서 — 조사 결과 (공식)
+    url: https://docs.aws.amazon.com/securityagent/latest/userguide/run-diff-scan-s3.html
+lastVerified: 2026-10-20
 ---
 
 # 규정 준수·거버넌스 — Config·Security Hub·GuardDuty·Inspector
@@ -37,7 +45,7 @@ lastVerified: 2026-10-19
 이 문서를 끝내면 다음을 스스로 설명하고, 콘솔/CLI에서 직접 운영할 수 있어야 합니다.
 
 - [ ] **각 도구가 무엇을 보는가** — Config(구성)·GuardDuty(위협)·Inspector(취약점)·Macie(민감정보)를 명확히 구분한다
-- [ ] **AWS Config** — 구성 기록·규칙 평가·적합성 팩·SSM 자동 교정을 설명할 수 있다
+- [ ] **AWS Config** — 구성 기록·규칙 평가·규정 준수 팩·SSM 자동 교정을 설명할 수 있다
 - [ ] **Security Hub** — 보안 표준(CIS/FSBP)·통합 결과(ASFF)·보안 점수의 역할을 안다
 - [ ] **GuardDuty** — 에이전트 없이 로그 분석으로 위협을 탐지함을 설명할 수 있다
 - [ ] **Inspector** — EC2·ECR·Lambda 취약점(CVE)을 자동·지속 스캔함을 안다
@@ -99,7 +107,7 @@ lastVerified: 2026-10-19
 |---|---|
 | **구성 항목/기록기(Configuration Recorder)** | 리소스의 현재 설정을 스냅샷으로 기록하고 변경 이력을 보관 |
 | **Config 규칙(Rule)** | 리소스가 *준수(COMPLIANT)/비준수(NONCOMPLIANT)*인지 평가. AWS 관리형 규칙 또는 Lambda/Guard 커스텀 규칙 |
-| **적합성 팩(Conformance Pack)** | 규칙·교정 액션을 묶은 패키지를 한 번에 배포(예: PCI/HIPAA 운영 모범 사례 팩) |
+| **규정 준수 팩(Conformance Pack)** | 규칙·교정 액션을 묶은 패키지를 한 번에 배포(예: PCI/HIPAA 운영 모범 사례 팩) |
 | **자동 교정(Remediation)** | 비준수 리소스를 **SSM Automation 런북**으로 자동 수정(예: 퍼블릭 버킷 차단) |
 
 > **운영 흐름**: 구성 변경 발생 → Config 규칙이 평가 → NONCOMPLIANT면 SSM Automation 교정 실행 또는 EventBridge로 알림. "S3 퍼블릭 차단", "EBS 암호화 미설정 볼륨 탐지" 같은 가드레일을 **지속적으로** 강제합니다.
@@ -190,11 +198,67 @@ lastVerified: 2026-10-19
 > Detective는 이미 수집된 로그 데이터를 그래프 구조로 미리 인덱싱해, 운영자가 "이 엔티티와 연결된 활동 전체"를 수 클릭으로 조회할 수 있게 합니다.
 > 탐지(GuardDuty)와 조사(Detective)를 분리한 구조 덕분에 각 단계에 최적화된 방식으로 대응할 수 있습니다.
 
+### 7) 규정 준수 요구 사항 적용 — 규정 준수 팩·리전 및 서비스 선택 (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 4.1.5를 **「규정 준수 요구 사항 및 지속적인 모니터링 적용(예: 리전 및 서비스 선택, AWS Config 규정 준수 팩)」**으로 확장했습니다(v1.0은 「규정 준수 요구 사항 적용(예: AWS 리전 및 서비스 선택)」). 예시 두 개가 그대로 출제 축입니다.
+
+**① AWS Config 규정 준수 팩(Conformance Pack) — 조직 단위로 배포:**
+
+- 규정 준수 팩은 **Config 규칙과 (선택적으로) 교정 작업을 묶은 묶음**으로, 한 계정·한 리전에 **또는 AWS Organizations 조직 전체에** 하나의 단위로 배포합니다(§1).
+- 조직 배포는 **`PutOrganizationConformancePack`** API가 조직의 회원 계정 전체에 팩을 배치합니다. 배포 전에 **Config 기록이 켜져 있어야** 합니다.
+- 조직 규정 준수 팩은 **관리 계정 또는 위임 관리자(delegated administrator) 계정**에서 배포할 수 있습니다. 보안상 위임 관리자 계정을 쓰는 편이 권장됩니다(관리 계정에 워크로드·운영을 모으지 않는다는 `soa-t4-1` §7 원칙과 같은 방향).
+- 운영 API 묶음: 배포는 `PutOrganizationConformancePack`, 조회는 `DescribeOrganizationConformancePacks`, 배포 상태는 `DescribeOrganizationConformancePackStatuses`, 계정별 상세는 `GetOrganizationConformancePackDetailedStatus`, 삭제는 `DeleteOrganizationConformancePack`입니다. **삭제는 모든 회원 계정에서 규칙과 교정 작업을 함께 제거**합니다.
+- 이것이 Skill 문구의 **「지속적인 모니터링」**에 해당하는 수단입니다: 팩을 조직에 한 번 배포해 두면 새 계정·새 리소스도 같은 가드레일 안에서 계속 평가됩니다.
+
+**② 리전 및 서비스 선택 — `aws:RequestedRegion`:**
+
+- **`aws:RequestedRegion`**은 요청이 호출한 리전을 정책에 적힌 리전과 비교하는 **전역 조건 키**입니다. 이 키로 **어느 리전을 요청할 수 있는지** 통제합니다. 항상 요청 컨텍스트에 포함되는 단일 값 문자열입니다.
+- 모든 서비스·모든 작업에 적용되므로, SCP(`soa-t4-1` §8)나 자격증명 기반 정책에 넣어 "승인된 리전만 사용" 가드레일을 만듭니다.
+- **함정 1 — 글로벌 서비스:** IAM처럼 **단일 엔드포인트를 쓰는 일부 글로벌 서비스**는 엔드포인트가 US East(N. Virginia)에 물리적으로 있어 **IAM 호출이 항상 `us-east-1`로 나갑니다.** 따라서 "요청 리전이 `us-west-2`가 아니면 모두 거부"하는 정책을 만들면 **IAM 호출이 전부 실패**합니다. 글로벌 서비스를 `NotAction`으로 빼는 식의 예외가 필요합니다.
+- **함정 2 — 영향 범위 ≠ 호출 리전:** 이 조건 키는 **어느 엔드포인트가 호출되는지를 통제하지만 그 작업의 영향(impact)은 통제하지 않습니다.** 일부 서비스는 리전을 넘는 영향을 갖습니다. 예를 들어 `s3:PutBucketReplication`은 한 리전에서 호출되지만 복제 구성에 따라 **다른 리전이 영향을 받습니다.** `s3:CreateBucket`으로 다른 리전에 버킷을 만들 수도 있어, 이 경우는 **`s3:LocationConstraint`** 조건 키로 통제합니다.
+
+> 정리: 데이터 거주(data residency) 요구를 `aws:RequestedRegion` 하나로 완결했다고 보면 안 됩니다. **호출 리전 통제 + 리전 간 영향을 갖는 작업의 개별 통제 + Config 규정 준수 팩의 지속 평가**가 함께 필요합니다.
+
+> 🧠 원리: 왜 리전 조건 키만으로는 데이터 거주 요구를 충족할 수 없을까요?
+> `aws:RequestedRegion`은 요청이 **어느 엔드포인트로 들어갔는지**를 기준으로 평가됩니다. 이는 접근 통제가 관찰할 수 있는 유일한 지점이 호출 시점이기 때문입니다.
+> 그런데 일부 API는 호출 한 번으로 **다른 리전의 상태를 바꿉니다.** S3 복제 구성이 대표적입니다 — 호출은 한 리전에서 일어나지만 데이터는 구성에 적힌 목적지 리전으로 흐릅니다. 조건 키는 그 흐름을 볼 수 없습니다.
+> 그래서 통제가 두 층으로 갈립니다: 호출 자체는 조건 키로 막고, **리전 간 영향을 갖는 작업은 그 작업 고유의 조건 키**(예: `s3:LocationConstraint`)나 리소스 정책으로 따로 막습니다.
+> 마지막으로 "이미 만들어진 리소스가 지금도 규정을 지키는가"는 접근 통제가 답할 수 없는 질문이라, **Config 규정 준수 팩의 지속 평가**가 세 번째 층으로 필요합니다.
+
+### 8) AWS Security Agent — 조사 결과의 새 소스 (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Skill 4.2.5의 조사 결과(finding) 소스 목록에 **AWS Security Agent**를 추가했습니다(기존: Security Hub · GuardDuty · Config · Inspector).
+
+> ℹ️ 공식 제품 페이지의 제목은 **"AWS Security Agent (now part of AWS Continuum)"** 로, **AWS Continuum**의 일부로 병기돼 있습니다. v1.1에서 처음 등장한 항목이라 공식 문서가 밝히는 범위만 적습니다.
+
+- 공식 정의: **개발 수명 주기 전반에서 애플리케이션을 선제적으로 보호하는 프런티어 에이전트**입니다.
+- 주요 기능:
+  - **애플리케이션에 맞춰 수행하는 온디맨드 침투 테스트(penetration testing)** — 검증된 보안 위험을 찾아 보고합니다.
+  - **위협 모델(threat model) 생성**과 **코드 보안 검토(code security review)** 수행 — 취약점을 찾고 검증하고 교정까지 제공합니다.
+- 조사 결과(finding)에 담기는 것: 보안 문제 설명 · **심각도(Critical·High·Medium·Low)** · 코드 위치 · 영향에 대한 위험 추론 · **교정 지침**.
+- 다른 서비스와의 경계:
+
+| 서비스 | 무엇을 보는가 | 시점 |
+|---|---|---|
+| **Inspector** | 알려진 취약점(CVE) 스캔 | 배포된 리소스(EC2·ECR·Lambda) |
+| **GuardDuty** | 런타임 위협·악성 활동 | 운영 중 |
+| **Config** | 구성 준수 | 운영 중(지속 평가) |
+| **AWS Security Agent** | **애플리케이션 고유의 보안 위험**(침투 테스트·위협 모델·코드 검토) | **개발 수명 주기 전반** |
+| **Security Hub** | 위 결과들을 **집계·표준 점검** | 상시 |
+
+> 경계 정리: Inspector가 **알려진 CVE**를 찾는 쪽이라면, Security Agent는 **직접 작성한 코드의 애플리케이션 고유 위험**을 침투 테스트로 검증하는 쪽입니다. Security Agent는 Security Hub나 GuardDuty의 하위 기능이 아니라 **별도 서비스**이며, Skill 4.2.5의 문맥에서는 **조사 결과를 만들어 내는 또 하나의 소스**로 읽습니다.
+
+> 🧠 원리: 왜 CVE 스캔과 별개로 애플리케이션 고유 위험을 찾는 수단이 따로 필요할까요?
+> Inspector 같은 CVE 스캔은 **이미 공개된 취약점 목록과 설치된 패키지·버전을 대조**합니다. 대조할 식별자가 존재한다는 전제가 깔려 있습니다.
+> 그러나 직접 작성한 코드의 결함에는 대조할 CVE가 없습니다. 권한 검사를 빠뜨린 관리자 엔드포인트처럼 **코드가 "설계대로" 동작하는데도 위험한** 경우가 그렇습니다. 목록 대조 방식은 이런 결함을 원리적으로 찾을 수 없습니다.
+> 그래서 접근법이 갈립니다: 알려진 취약점은 **목록 대조**로, 애플리케이션 고유 위험은 **실제로 공격을 시도해 보는 방식**(침투 테스트)과 위협 모델·코드 검토로 찾습니다.
+> 운영자 관점의 함의는 **두 결과를 같은 심각도 척도로 단순 비교하지 말아야 한다**는 점입니다. 전자는 패치로 닫히고, 후자는 설계·코드 수정이 필요해 교정 경로가 다릅니다.
+
 ---
 
 ## ✍️ 시험 포인트
 
-- **Config = 구성 준수**(설정이 규칙을 지키나). 비준수 시 **SSM Automation 자동 교정** + 적합성 팩으로 묶어 배포.
+- **Config = 구성 준수**(설정이 규칙을 지키나). 비준수 시 **SSM Automation 자동 교정** + 규정 준수 팩으로 묶어 배포.
 - **GuardDuty = 위협 탐지**. **에이전트 불필요**, VPC Flow Logs·DNS·CloudTrail을 머신러닝으로 분석.
 - **Inspector = 취약점(CVE) 스캔**. 대상은 **EC2·ECR(컨테이너)·Lambda**. 지속 재스캔.
 - **Macie = S3 민감정보(PII) 탐지** (데이터 *내용*). Inspector(취약점)·GuardDuty(위협)와 혼동 금지.
@@ -202,6 +266,9 @@ lastVerified: 2026-10-19
 - **Trusted Advisor 5범주**: 비용·보안·내결함성·성능·서비스 한도. 점검 전체는 **Business Support+·Enterprise·Unified Operations** 플랜, **Basic**은 서비스 한도 전체 + 보안·내결함성 선택 점검(자동 갱신 없음).
 - **Detective = 사후 근본 원인 조사**(탐지 아님).
 - **결과 통합 흐름**: 탐지 도구(GuardDuty/Inspector/Macie/Config) → Security Hub 집계 → EventBridge → Lambda/SSM 자동 대응.
+- **규정 준수 팩 조직 배포 = `PutOrganizationConformancePack`**. **관리 계정 또는 위임 관리자**에서 배포. 배포 전 **Config 기록 활성화** 필요. 삭제 시 회원 계정의 규칙·교정까지 제거.
+- **`aws:RequestedRegion` = 호출 리전 통제 전역 조건 키.** 함정 ①**IAM 등 글로벌 서비스는 항상 `us-east-1`** → 예외 없으면 전부 실패. 함정 ②**호출 리전은 막아도 리전 간 영향은 못 막는다**(예: `s3:PutBucketReplication`; 버킷 위치는 `s3:LocationConstraint`).
+- **AWS Security Agent**(공식 제목에 **AWS Continuum** 병기) = **온디맨드 침투 테스트·위협 모델·코드 보안 검토**로 애플리케이션 고유 위험을 찾는 **별도 서비스**. Inspector(알려진 CVE)와 구분.
 
 ---
 
@@ -245,7 +312,7 @@ lastVerified: 2026-10-19
 
 <details><summary>정답 보기</summary>
 
-**AWS Config 규칙**으로 EBS 암호화 여부를 평가하고(예: `encrypted-volumes` 관리형 규칙), NONCOMPLIANT 리소스에 **SSM Automation 자동 교정**을 연결합니다. 여러 규칙·교정을 **적합성 팩(Conformance Pack)**으로 묶어 일괄 배포하면 계정·OU 전반에 가드레일을 지속적으로 강제할 수 있습니다.
+**AWS Config 규칙**으로 EBS 암호화 여부를 평가하고(예: `encrypted-volumes` 관리형 규칙), NONCOMPLIANT 리소스에 **SSM Automation 자동 교정**을 연결합니다. 여러 규칙·교정을 **규정 준수 팩(Conformance Pack)**으로 묶어 일괄 배포하면 계정·OU 전반에 가드레일을 지속적으로 강제할 수 있습니다.
 </details>
 
 **Q3.** 여러 계정에서 GuardDuty·Inspector·Macie 결과가 흩어져 나옵니다. CIS·FSBP 표준 대비 보안 점수를 보고 결과를 한곳에서 우선순위화하려면?

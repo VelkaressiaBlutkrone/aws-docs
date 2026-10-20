@@ -20,7 +20,11 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html
   - title: CloudWatch 에이전트 설치 (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html
-lastVerified: 2026-06-12
+  - title: Lambda와 CloudWatch Logs 사용 (실행 역할 권한) (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html
+  - title: CloudWatch Logs·S3로 모델 호출 모니터링 (공식)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+lastVerified: 2026-10-20
 ---
 
 # CloudWatch Logs·Logs Insights·구독 필터·에이전트
@@ -238,6 +242,34 @@ fields @timestamp, statusCode
 > Lambda나 컨테이너 환경에서는 표준 출력에 쓰는 것이 이미 설정된 경로이므로, EMF 형식 JSON을 표준 출력에 내보내는 것만으로 로그와 지표를 동시에 기록할 수 있습니다.
 > 지표 전송을 위한 별도 API 호출이 없어 함수 실행 시간이나 네트워크 오버헤드가 추가되지 않는다는 점이 서버리스 환경에서의 실용적 이점입니다.
 
+### 8) 워크로드별 로깅 — 서버리스·AI (v1.1 신규 범위)
+
+공식 가이드 v1.1은 Task 1.1을 **"워크로드(예: 서버리스, 컴퓨팅, AI)에 대한 모니터링 및 로깅 구성"**으로 확장했습니다. EC2는 에이전트를 설치해야 로그가 올라가지만(§6), 서버리스·AI는 **권한과 설정 스위치**가 관문입니다.
+
+**서버리스(Lambda) — 권한이 관문:**
+
+- Lambda 함수 로그는 **함수의 실행 역할(execution role)에 CloudWatch Logs 권한이 있어야** 적재됩니다. 권한이 없으면 함수는 실행되지만 **로그 그룹에 아무것도 남지 않습니다.**
+- 이 권한은 AWS 관리형 정책 **`AWSLambdaBasicExecutionRole`**로 붙이는 것이 표준입니다.
+- 함정: "함수가 도는데 로그가 안 보인다" → 에이전트 문제가 아니라 **실행 역할 권한**을 먼저 봅니다.
+
+**AI(Amazon Bedrock) — 스위치가 관문:**
+
+- Bedrock의 **모델 호출 로깅(model invocation logging)은 기본적으로 비활성**입니다. 켜지 않으면 요청·응답 본문이 어디에도 남지 않습니다.
+- 대상(destination)은 **CloudWatch Logs와 Amazon S3**이며, **같은 계정·같은 리전**의 대상만 지원합니다.
+- 로깅이 적용되는 호출은 **`bedrock-runtime` 엔드포인트를 통한 호출**에 한정됩니다. 로깅 가능한 작업은 `InvokeModel` · `InvokeModelWithResponseStream` · `Converse` · `ConverseStream`입니다.
+- 켠 뒤에는 로그 그룹에 요청·응답 메타데이터가 쌓이므로, **Logs Insights로 호출 주체별 토큰 사용량을 집계**하는 분석이 가능해집니다(지표는 `soa-t1-1` §6).
+
+| 워크로드 | 로그가 안 남는 1차 원인 | 해결 |
+|---|---|---|
+| **EC2** | 에이전트 미설치 | CloudWatch 에이전트 설치·구성(§6) |
+| **Lambda** | 실행 역할에 Logs 권한 없음 | `AWSLambdaBasicExecutionRole` 부여 |
+| **Bedrock** | 모델 호출 로깅이 비활성(기본) | 로깅 활성화 + 같은 리전 대상 지정 |
+
+> 🧠 원리: 왜 Bedrock의 호출 로깅은 기본적으로 꺼져 있을까요?
+> 모델 호출 로그에는 프롬프트와 응답 **본문 전체**가 담길 수 있습니다. 이는 사용자 입력·생성 결과라는 민감 데이터를 그대로 저장한다는 뜻입니다.
+> 기본으로 켜 두면 고객이 의도하지 않은 데이터 보관이 발생하고, 보존 기간·접근 권한·규정 준수 범위가 모두 고객 책임으로 넘어갑니다.
+> 그래서 AWS는 **옵트인(명시적 활성화)** 으로 두고, 대상도 같은 계정·같은 리전으로 묶어 데이터가 경계를 넘지 않게 합니다. 운영자는 "로그가 없다"를 결함이 아니라 **설정하지 않은 상태**로 읽어야 합니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -252,6 +284,8 @@ fields @timestamp, statusCode
 - **에이전트 배포는 SSM Run Command + Parameter Store**로 플릿에 일괄. 에이전트엔 IAM 역할 필요.
 - **장기/저비용 로그 보관**은 구독 필터·Firehose로 **S3 내보내기**가 정석.
 - **EMF**는 구조화 로그 한 줄로 사용자 지정 지표를 게시하는 형식(서버리스에서 유용).
+- **Lambda 로그가 비어 있으면 실행 역할 권한**을 본다 → `AWSLambdaBasicExecutionRole`. 에이전트 문제가 아니다.
+- **Bedrock 모델 호출 로깅은 기본 비활성(옵트인)**. 대상은 CloudWatch Logs·S3이며 **같은 계정·같은 리전**만. 적용 범위는 **`bedrock-runtime`** 호출.
 
 ---
 
