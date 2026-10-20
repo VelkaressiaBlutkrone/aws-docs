@@ -24,7 +24,23 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html
   - title: Amazon VPC 요금(피어링 전송 과금) (공식)
     url: https://aws.amazon.com/vpc/pricing/
-lastVerified: 2026-10-19
+  - title: Amazon DNS 이해 — 규칙·고려사항 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/AmazonDNS-concepts.html
+  - title: Systems Manager VPC 엔드포인트 제약 — 게이트웨이 엔드포인트는 VPC 밖으로 확장 불가 (공식)
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-vpc.html
+  - title: Amazon VPC FAQ — SG vs NACL (공식)
+    url: https://aws.amazon.com/vpc/faqs/
+  - title: Amazon VPC 쿼터 — 보안 그룹 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html
+  - title: Route 53 Resolver DNS Firewall 작동 방식 (공식)
+    url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-dns-firewall-overview.html
+  - title: AWS PrivateLink for DynamoDB — 게이트웨이 vs 인터페이스 엔드포인트 (공식)
+    url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/privatelink-interface-endpoints.html
+  - title: AWS Network Firewall FAQ (공식)
+    url: https://aws.amazon.com/network-firewall/faqs
+  - title: AWS 서비스 엔드포인트 — 리전·글로벌·FIPS·듀얼스택 (공식)
+    url: https://docs.aws.amazon.com/general/latest/gr/rande.html
+lastVerified: 2026-10-21
 ---
 
 # VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트
@@ -191,6 +207,20 @@ SG와 NACL은 서로 보완합니다 — SG는 인스턴스 단위 세밀 제어
 
 > 중요: Gateway Endpoint는 **PrivateLink를 사용하지 않습니다**. 라우트 테이블에 경로만 추가하는 방식이라 별도 ENI가 없고 추가 비용이 없습니다. Interface Endpoint는 PrivateLink 기반으로 ENI가 생성되며 과금됩니다.
 
+**적용 범위 — Gateway Endpoint는 VPC 밖으로 확장되지 않습니다 (★ 시험 포인트):**
+
+| 접근 경로 | Gateway Endpoint | Interface Endpoint |
+|---|---|---|
+| **같은 VPC 안에서** | 사용 가능 | 사용 가능 |
+| **온프레미스**(Direct Connect·Site-to-Site VPN) | **사용 불가** | 사용 가능 |
+| **피어링 상대 VPC** | **사용 불가** | 사용 가능(인트라·인터 리전 피어링) |
+| **다른 리전에서** | **사용 불가** | 피어링·Transit Gateway 경유로 가능 |
+| 사용하는 IP | 서비스의 **퍼블릭 IP** | VPC의 **사설 IP** |
+
+공식 서술은 "**VPC 게이트웨이 엔드포인트 연결은 VPC 밖으로 확장할 수 없다** — VPC 피어링 반대편의 리소스는 그 게이트웨이 엔드포인트로 통신할 수 없다"입니다(출처 10번). 그래서 온프레미스 호출자와 VPC 내부 호출자가 함께 있으면 **같은 VPC에 두 유형을 같이 두는** 구성을 씁니다 — 내부 트래픽은 무료인 Gateway로, 온프레미스 트래픽은 Interface로 받습니다.
+
+> ⚠️ **함정**: "프라이빗 서브넷 + 온프레미스에서 S3에 사설로 접근" 같은 문제에서 **Gateway Endpoint를 고르면 틀립니다.** Gateway는 라우트 테이블 기반이라 그 VPC의 라우트 테이블을 참조하는 주체만 쓸 수 있고, 온프레미스는 그 라우트 테이블을 쓰지 않습니다. 답은 Interface Endpoint이며, 온프레미스 DNS가 엔드포인트의 사설 IP를 받도록 조건부 전달(conditional forwarding)이나 Route 53 Resolver 인바운드 엔드포인트를 함께 설계합니다.
+
 **PrivateLink란?**
 
 AWS PrivateLink는 서비스를 **다른 VPC에 사설로 노출**하는 메커니즘입니다. Interface Endpoint의 기반 기술로, 트래픽이 인터넷·퍼블릭 IP를 거치지 않고 AWS 내부망에서만 이동합니다. SaaS 공급자가 자신의 서비스를 다른 계정 VPC에 안전하게 제공할 때도 사용됩니다.
@@ -262,6 +292,77 @@ VPC Flow Logs는 VPC 내 네트워크 인터페이스를 오가는 **IP 트래�
 > 페이로드까지 캡처하면 모든 트래픽의 실제 데이터를 저장해야 해 스토리지 비용과 처리 지연이 급증하고, TLS 암호화 트래픽은 어차피 해독 없이는 의미가 없습니다.
 > 보안 감사·트러블슈팅에서 필요한 것은 "어디서 어디로 어떤 포트가 허용/거부됐는가"이고, 이는 메타데이터만으로 충분히 답할 수 있습니다.
 > 페이로드가 필요한 심층 패킷 검사(DPI)는 별도 전용 도구(Network Firewall, Suricata IDS 등)의 역할로 분리하는 것이 단일 책임 설계입니다.
+
+---
+
+### 7) 심층 트래픽 제어 — Network Firewall·DNS Firewall {#advanced-traffic-control}
+
+SG·NACL은 IP·포트·프로토콜 수준의 필터입니다. 도메인 이름이나 위협 시그니처처럼 그 위 계층을 봐야 하는 통제는 전용 서비스가 맡습니다.
+
+**SG·NACL이 걸러내지 못하는 것 (★ 시험 포인트):**
+
+- **Amazon DNS 서버로 가거나 오는 트래픽은 NACL·보안 그룹으로 필터할 수 없습니다**(출처 9번). VPC Resolver를 지나는 DNS를 통제하려면 아래 **DNS Firewall**을 씁니다.
+- **NACL은 같은 서브넷 안의 인스턴스 간 트래픽을 걸러내지 않습니다**(출처 11번). 같은 서브넷 내부를 가르려면 **SG**를 써야 합니다 — NACL을 촘촘히 짜도 서브넷 내부 통신은 그대로 흐릅니다.
+
+**보안 그룹 쿼터 (★ 시험 수치, 출처 12번):**
+
+| 항목 | 기본값 | 조정 |
+|---|---|---|
+| 리전당 VPC 보안 그룹 | **2,500** | 가능 |
+| SG당 인바운드·아웃바운드 규칙 | **각 60** | 가능 |
+| ENI당 보안 그룹 | **5** | 가능(최대 **16**) |
+
+- 규칙 수는 **인바운드·아웃바운드가 따로**, 그리고 **IPv4·IPv6가 따로** 계산됩니다. 기본값 60이면 IPv4 인바운드 60개와 IPv6 인바운드 60개를 각각 가질 수 있습니다.
+- ⚠️ **SG당 규칙 수 × ENI당 SG 수는 1,000을 넘을 수 없습니다.** 한쪽을 올리면 다른 쪽이 묶입니다 — 규칙을 200개로 올리면 ENI당 SG는 5개까지입니다.
+
+**AWS Network Firewall** — VPC용 관리형 네트워크 방화벽입니다.
+
+- **stateless 규칙**(출발·목적지 IP·포트·프로토콜)과 **stateful 규칙**(연결·세션을 수명 동안 유지하며 방향까지 판단) 양쪽을 지원합니다.
+- **관리형 규칙 그룹**을 쓸 수 있습니다 — AWS 관리형(도메인·IP 규칙 그룹, 위협 시그니처 규칙 그룹, 글로벌 위협 인텔리전스 기반 방어)과 파트너 관리형(Marketplace 구독)이 있습니다. AWS 관리형 규칙은 Network Firewall 사용 고객에게 추가 비용이 없습니다.
+- TCP·UDP 포트를 지정하는 필터뿐 아니라 **포트 지정 없이 공통 프로토콜**을 필터할 수 있습니다.
+
+**Route 53 Resolver DNS Firewall** — Route 53 VPC Resolver를 지나 **VPC에서 나가는 DNS 쿼리**를 통제합니다.
+
+- 도메인 필터링 규칙을 **rule group**으로 정의하고 VPC에 연결하면 그 VPC의 DNS 필터링이 켜집니다. 도메인 목록을 **허용·차단·알림(ALERT)** 할 수 있고, 차단 응답을 바꿀 수 있습니다(기본 `NODATA`). DNS 터널링·DGA 방어용 Advanced 규칙도 있습니다.
+- ⚠️ **도메인 이름만 필터합니다** — 그 이름을 IP로 해석해 차단하지는 않습니다. 또 **DNS 트래픽만** 보며 HTTPS·SSH·TLS·FTP 같은 다른 애플리케이션 계층 프로토콜은 필터하지 않습니다(출처 13번). IP·프로토콜 수준까지 막아야 하면 Network Firewall과 함께 씁니다.
+- Firewall Manager로 Organizations 전체 계정에 중앙 배포·관리할 수 있습니다.
+
+| 통제 | 보는 것 | 적용 범위 |
+|---|---|---|
+| 보안 그룹 | IP·포트·프로토콜 (Stateful) | ENI |
+| NACL | IP·포트·프로토콜 (Stateless) | 서브넷 |
+| Network Firewall | IP·포트·프로토콜 + 세션·위협 시그니처 | VPC |
+| DNS Firewall | **도메인 이름** | VPC(Resolver를 지나는 쿼리) |
+
+> 🧠 원리: 왜 도메인 기준 차단이 SG·NACL이 아니라 별도 서비스로 갈라져 있을까요?
+> SG·NACL이 보는 것은 패킷의 IP·포트·프로토콜입니다 — 도메인 이름은 패킷 헤더가 아니라 DNS 쿼리의 **페이로드** 안에 있습니다.
+> 그래서 "이 도메인을 막아라"는 요구는 헤더 기반 필터의 표현 범위를 벗어나고, 쿼리를 해석하는 지점인 Resolver에서만 판단할 수 있습니다.
+> 공식 서술도 그 한계를 그대로 적습니다 — DNS Firewall은 **도메인 이름만** 필터하며 그 이름을 IP로 해석해 차단하지 않고, DNS가 아닌 HTTPS·SSH·TLS·FTP는 필터하지 않습니다(출처 13번).
+> 그래서 도메인 기준과 IP·프로토콜 기준은 서로를 대체하지 못하고, Network Firewall과 DNS Firewall을 함께 두는 구성이 나옵니다.
+
+---
+
+### 8) AWS 서비스 엔드포인트 유형 — 리전·FIPS·듀얼스택 {#service-endpoints}
+
+프로그램으로 AWS 서비스를 호출할 때 쓰는 **진입점 URL**입니다. §4의 VPC 엔드포인트와는 다른 개념입니다 — VPC 엔드포인트는 VPC 안에 사설 경로를 만드는 *리소스*이고, 서비스 엔드포인트는 그 서비스 API의 *주소 체계*입니다.
+
+| 유형 | 구문·예 | 설명 |
+|---|---|---|
+| **리전 엔드포인트** | `service-code.region-code.amazonaws.com` (예 `dynamodb.us-west-2.amazonaws.com`) | 대부분의 서비스가 제공. 일반적으로 IPv4를 지원합니다 |
+| **글로벌 엔드포인트** | 리전이 없는 주소 | 리전을 넘는 서비스 — CloudFront · IAM · Organizations · Route 53 · Shield Advanced · Global Accelerator · Cloud WAN · WAF Classic |
+| **FIPS 엔드포인트** | 예 `kms-fips.us-west-2.amazonaws.com` | FIPS 140을 준수하는 TLS 라이브러리를 씁니다. 미국 정부와 거래하는 기업에서 요구될 수 있습니다. **최소 TLS 1.2**(권장 1.3) |
+| **듀얼스택 엔드포인트** | `service-code.region-code.api.aws` | IPv4·IPv6 양쪽으로 호출 가능. **Amazon S3만 예외**로 `service-code.dualstack.region-code.amazonaws.com` 형식을 씁니다 |
+
+- 일부 서비스는 리전 엔드포인트와 함께 **리전이 없는 general 엔드포인트**도 제공합니다(EC2 `ec2.amazonaws.com` · EC2 Auto Scaling · EMR). 이때 AWS는 요청을 기본 리전인 **us-east-1**로 보냅니다.
+- 지정 방법 — SDK는 `AWS_USE_FIPS_ENDPOINT=true` 환경 변수나 `~/.aws/config`의 `use_fips_endpoint=true`로, CLI는 `--endpoint-url` 옵션으로 대체 엔드포인트를 씁니다.
+
+> 🧠 원리: 왜 같은 서비스에 리전·FIPS·듀얼스택 엔드포인트가 따로 있을까요?
+> 엔드포인트는 단순한 주소가 아니라 **접속 조건의 묶음**입니다 — 어느 리전의 자원을 보는지, 어떤 TLS 라이브러리로 협상하는지, IPv4·IPv6 중 무엇으로 받는지가 주소로 갈립니다.
+> 리전마다 주소가 다른 것은 리전의 자원이 서로 독립이기 때문입니다 — 공식 서술도 한 리전에 만든 EC2 인스턴스나 SQS 큐는 다른 모든 리전의 그것과 독립이라고 적습니다(출처 16번).
+> FIPS가 별도 주소인 것은 요건이 **TLS 협상 자체**에 걸리기 때문입니다: FIPS 엔드포인트는 FIPS 140을 준수하는 TLS 라이브러리를 쓰고 최소 TLS 1.2를 요구합니다. 같은 주소에서 요청마다 고르게 둘 수 있는 성질이 아닙니다.
+> 듀얼스택도 같은 이유로 `api.aws` 라는 별도 주소 체계를 둡니다 — IPv4·IPv6 양쪽으로 접근할 수 있게 하려면 주소가 갈려야 합니다(출처 16번).
+
+> ⚠️ **글로벌 엔드포인트와 글로벌 서비스를 구분하세요.** 위 목록은 *엔드포인트가 리전을 넘는* 서비스이고, 이들 중 일부는 FIPS 같은 추가 엔드포인트를 따로 갖습니다. `saa-t1-2` §3의 리전 제한 SCP가 글로벌 서비스까지 막아 조직을 잠그는 함정이 바로 이 구분에서 나옵니다.
 
 ---
 
@@ -358,5 +459,15 @@ VPC Flow Logs는 VPC 내 네트워크 인터페이스를 오가는 **IP 트래�
 6. VPC Flow Logs(CloudWatch Logs·S3·Data Firehose) — https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html
 7. Amazon VPC 요금(피어링은 AZ 교차 전송 $0.01/GB) — https://aws.amazon.com/vpc/pricing/
 8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+9. Amazon DNS 이해 — 규칙·고려사항(Amazon DNS 서버 트래픽은 NACL·SG로 필터 불가) — https://docs.aws.amazon.com/vpc/latest/userguide/AmazonDNS-concepts.html
+10. Systems Manager VPC 엔드포인트 제약(게이트웨이 엔드포인트 연결은 VPC 밖으로 확장 불가·피어링 반대편 사용 불가) — https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-vpc.html
+11. Amazon VPC FAQ(NACL은 같은 서브넷 내 인스턴스 간 트래픽을 필터하지 않음·stateless vs stateful) — https://aws.amazon.com/vpc/faqs/
+12. Amazon VPC 쿼터 — 보안 그룹(리전당 2,500·규칙 각 60·ENI당 5~16·규칙×SG ≤ 1,000) — https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html
+13. Route 53 Resolver DNS Firewall 작동 방식(도메인 이름만 필터·IP 해석 안 함·DNS 외 프로토콜 미필터) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-dns-firewall-overview.html
+14. AWS PrivateLink for DynamoDB — 게이트웨이 vs 인터페이스 엔드포인트(온프레미스·타 리전 접근 불가·퍼블릭/사설 IP·과금) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/privatelink-interface-endpoints.html
+15. AWS Network Firewall FAQ(stateless·stateful 규칙·AWS/파트너 관리형 규칙 그룹) — https://aws.amazon.com/network-firewall/faqs
+16. AWS 서비스 엔드포인트(리전·글로벌·FIPS 최소 TLS 1.2·듀얼스택 `api.aws`, S3만 `dualstack.`) — https://docs.aws.amazon.com/general/latest/gr/rande.html
+
+> 📝 **2026-10-21 보강(갭 `G-1.2-02`·`G-1.2-04`·`G-1.2-15`, 배치 B3)**: ① §4에 **Gateway Endpoint의 적용 범위 제약**(온프레미스·피어링 VPC·타 리전 불가 → Interface Endpoint)을 표와 함정으로 추가했습니다(근거 10·14번). ② **§7 심층 트래픽 제어**를 신설해 Network Firewall·DNS Firewall·보안 그룹 쿼터와 **SG·NACL이 걸러내지 못하는 트래픽**(Amazon DNS·같은 서브넷 내부)을 넣었습니다(근거 9·11·12·13·15번). ③ **§8 AWS 서비스 엔드포인트 유형**(리전·글로벌·FIPS·듀얼스택)을 신설했습니다(근거 16번). 기존 §1~§6의 번호와 앵커는 바꾸지 않았습니다.
 
 > 📝 **2026-10-19 정정**: ① NAT 게이트웨이 가용성 서술을 **AZ 내 이중화 + AZ별 생성 권고**로 고치고 대역폭·동시 연결 수치를 더했습니다(근거 5번). ② Flow Logs 저장 대상에 **Amazon Data Firehose**를 추가했습니다(근거 6번). ③ VPC 피어링 비용을 "데이터 처리 과금"에서 **AZ를 넘는 전송 과금**으로 정정했습니다(근거 7번).

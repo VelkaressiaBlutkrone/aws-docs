@@ -138,9 +138,19 @@ void main() {
   });
 
   group('정정 날짜 기록', () {
-    test('두 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
-      expect(t11.contains('lastVerified: 2026-10-19'), isTrue);
-      expect(t12.contains('lastVerified: 2026-10-19'), isTrue);
+    // 2026-10-21: 리터럴 날짜를 쓰고 있어, 갭 배치 B3가 `saa-t1-2` 를 2026-10-21로
+    // 재검수하자 이 테스트가 먼저 터졌다. `saa_t12_t13_facts_test.dart` 의 G-1.3
+    // 그룹이 같은 교훈으로 이미 비교형을 쓰고 있다 — 되돌아가는 것만 막고
+    // 갱신은 허용한다.
+    test('두 문서의 lastVerified가 2026-10-19 이후다', () {
+      for (final e in {'saa-t1-1': t11, 'saa-t1-2': t12}.entries) {
+        final stamp = RegExp(r'lastVerified: (\d{4}-\d{2}-\d{2})')
+            .firstMatch(e.value)
+            ?.group(1);
+        expect(stamp, isNotNull, reason: '${e.key}: lastVerified 항목이 없다');
+        expect(stamp!.compareTo('2026-10-19') >= 0, isTrue,
+            reason: '${e.key}: lastVerified 가 2026-10-19 이전으로 되돌아갔다: $stamp');
+      }
     });
   });
 }

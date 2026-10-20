@@ -20,7 +20,11 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+  - title: AWS Organizations 쿼터·서비스 한도 (공식)
+    url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
+  - title: Control Tower 랜딩 존 통제 — 예방 통제 제약 (공식 Prescriptive Guidance)
+    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/designing-control-tower-landing-zone/controls.html
+lastVerified: 2026-10-21
 ---
 
 # 다중 계정 보안 — Organizations·Control Tower·SCP
@@ -196,6 +200,24 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 | **목적** | 조직 전체 가드레일 | 위임 시 과도 권한 방지 |
 | **권한 부여** | 불가(상한선만) | 불가(상한선만) |
 
+**SCP 쿼터 (★ 시험 수치):**
+
+| 항목 | 한도 |
+|---|---|
+| 루트·OU당·계정당 **직접 연결** SCP | 각 **최대 10개** — 하드 한도(상향 요청 불가) |
+| 엔티티당 **최소** SCP | **1개** — SCP를 활성화하면 모든 엔티티가 항상 1개 이상을 갖습니다. 마지막 SCP는 제거할 수 없습니다 |
+| SCP 문서 최대 크기 | **10,240자** |
+| 조직 내 SCP 총 개수 | **10,000개** |
+| OU 중첩 깊이 | 루트 아래 **5단계** |
+| 조직 내 OU 수 | **2,000개** |
+| 조직 내 루트 수 | **1개** |
+
+- **상속된 정책은 연결 한도에 계산되지 않습니다.** 위 10개는 그 엔티티에 *직접* 붙은 SCP만 셉니다 — 상위 OU에서 상속돼 영향을 주는 SCP는 따로입니다. 그래서 OU를 중첩하면 한 계정에 실질적으로 작용하는 SCP 수는 10개를 넘을 수 있습니다.
+- 정책 크기를 셀 때 **콘솔**로 저장하면 JSON 요소 사이·따옴표 밖의 공백과 줄바꿈이 제거돼 10,240자에 포함되지 않습니다. **SDK·CLI**로 저장하면 준 그대로 저장되고 자동 제거가 없습니다.
+
+> ⚠️ **"SCP 최대 5개"를 본 적이 있다면 — 출처가 다른 수치입니다.**
+> Organizations 서비스 자체의 쿼터는 한도 페이지의 **10개**입니다(출처 7번). **5개**는 Control Tower 랜딩 존 설계 지침이 *예방 통제* 맥락에서 적는 수치로, **Control Tower가 만든 SCP까지 합산한** "OU당 5개·OU 5단계"입니다(출처 8번). 범위가 다르므로 문맥을 보고 가르세요 — Organizations 쿼터를 묻는지, Control Tower 통제 설계를 묻는지.
+
 ### 4) AWS Control Tower {#control-tower}
 
 > 공식 정의: **"규범적 모범 사례를 따르는 AWS 다계정 환경을 간편하게 설정하고 거버넌스하는 서비스."** AWS Organizations·Service Catalog·IAM Identity Center를 오케스트레이션합니다.
@@ -346,5 +368,9 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 4. 리전 기반 액세스 거부 통제(글로벌 서비스 NotAction 예외 전문) — https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html
 5. AWS 계정 루트 사용자(중앙 루트 접근 관리·신규 계정 기본 루트 자격증명 없음·권한 작업) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. AWS Organizations 쿼터·서비스 한도(SCP 연결 10·문서 10,240자·OU 중첩 5단계·상속 미계산·하드 한도) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
+8. Control Tower 랜딩 존 통제 — 예방 통제 제약(OU당 SCP 5개·OU 5단계, Control Tower 생성 SCP 포함) — https://docs.aws.amazon.com/prescriptive-guidance/latest/designing-control-tower-landing-zone/controls.html
 
 > 📝 **2026-10-19 정정**: ① 리전 제한 SCP 예시가 글로벌 서비스까지 차단하던 것을 `NotAction` 예외형으로 고치고 위험을 명시했습니다(근거 4번). ② 멤버 계정 루트에 대한 중앙 루트 접근 관리를 반영했습니다(근거 5번).
+
+> 📝 **2026-10-21 보강(갭 `G-1.1-15`)**: SCP 쿼터 수치를 §3에 추가했습니다 — 직접 연결 10개(하드 한도)·문서 10,240자·조직 내 10,000개·OU 2,000개, 그리고 **상속 정책은 연결 한도에 계산되지 않는다**는 점(근거 7번). 기존 "OU 중첩 최대 5단계"는 공식과 일치해 그대로 뒀습니다. "SCP 최대 5개"라는 다른 수치는 **Control Tower 예방 통제 맥락**의 것이라 범위를 구분해 병기했습니다(근거 8번) — 두 수치 중 어느 쪽이 구식인지는 단정하지 않았습니다.
