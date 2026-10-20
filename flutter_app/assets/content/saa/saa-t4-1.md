@@ -18,9 +18,15 @@ sources:
     url: https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html
   - title: EC2 데이터 전송 요금 (On-Demand 페이지 공식)
     url: https://aws.amazon.com/ec2/pricing/on-demand/
+  - title: AWS Transfer Family FAQ — 요금 부과 방식 (공식)
+    url: https://aws.amazon.com/aws-transfer-family/faqs/
+  - title: AWS DataSync FAQ — DataSync와 Storage Gateway를 언제 쓰는가 (공식)
+    url: https://aws.amazon.com/datasync/faqs/
+  - title: S3 Transfer Acceleration — 추가 전송 요금 (공식)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용
@@ -241,6 +247,31 @@ S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 
 
 ---
 
+### 8) 온프레미스 데이터를 옮기는 비용 — 전송·하이브리드 서비스 선택 {#transfer-service-cost}
+
+"온프레미스 데이터를 AWS로 옮기는 가장 저렴한 방법"은 **옮기는 성격**에 따라 답이 갈립니다. 한 번 옮기고 끝인지, 계속 접근해야 하는지, 외부 파트너가 붙는지를 먼저 봅니다.
+
+| 수단 | 과금 구조 | 언제 가장 싼가 |
+|---|---|---|
+| **AWS DataSync** | 복사한 데이터 **GB당** 과금 | 대역폭이 있고 **옮기기만** 하면 될 때(일회성·주기적 동기화) |
+| **AWS Transfer Family** | **활성화한 프로토콜별 시간당** + 전송량(GB). AS2는 메시지 수 기준 | 외부 파트너가 SFTP·FTPS·FTP·AS2 클라이언트를 그대로 써야 할 때 |
+| **AWS Storage Gateway** | 게이트웨이 + 클라우드에 저장된 용량·요청 | 이전이 끝난 뒤에도 온프레미스 앱이 **계속** 접근해야 할 때 |
+| **S3 Transfer Acceleration** | S3 표준 전송 요금에 **추가 요금**, **가속된 전송에만** 과금 | 대륙 간 업로드처럼 거리·객체 크기 때문에 실제로 가속 효과가 날 때 |
+
+**시험에서 자주 틀리는 두 가지**
+
+- **Transfer Family 서버를 "중지"해도 요금은 멈추지 않습니다.** 과금은 엔드포인트를 만들어 프로토콜을 켠 시점부터 **삭제할 때까지** 이어집니다. 비용을 끊으려면 서버를 삭제해야 합니다.
+- **Transfer Acceleration은 공짜 최적화가 아닙니다.** S3 전송 요금에 **더해지는** 요금이고, 가속이 실제로 일어난 전송에만 붙습니다. 거리가 가깝거나 객체가 작으면 효과 없이 비용만 늘 수 있습니다.
+
+> 오프라인 물리 전송은 선택지에서 빠졌습니다 — **Snow 패밀리는 신규 고객이 주문할 수 없고**, 현행 물리 경로는 AWS Data Transfer Terminal입니다(`saa-t3-9` §10).
+
+> 🧠 원리: 왜 "전송 도구"와 "접근 계층"은 과금 축이 다를까요?
+> DataSync처럼 데이터를 옮기는 도구는 작업이 끝나면 역할도 끝나므로, 비용을 **옮긴 양**에 비례시키는 것이 쓰는 만큼 내는 구조에 맞습니다.
+> 반면 Transfer Family나 Storage Gateway는 외부 클라이언트와 온프레미스 앱이 언제든 접속할 수 있도록 **엔드포인트를 상시 띄워 두는** 서비스라, 데이터가 흐르지 않는 시간에도 그 대기 상태 자체에 비용이 듭니다.
+> 그래서 전송 도구는 "얼마나 옮겼나", 접근 계층은 "얼마나 오래 켜 두었나"가 요금의 주축이 되고, Transfer Family를 중지해도 과금이 계속되는 것도 같은 이유입니다.
+
+---
+
 ## ✍️ 시험 포인트
 
 | 시나리오 | 정답 패턴 |
@@ -353,5 +384,10 @@ gp2는 IOPS가 볼륨 크기(GB)에 연동되어 결정되는 구조였습니다
 7. S3 스토리지 클래스(Intelligent-Tiering 128 KB 미만은 모니터링·자동 계층화 제외) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html
 8. S3 분석 — Storage Class Analysis — https://docs.aws.amazon.com/AmazonS3/latest/userguide/analytics-storage-class.html
 9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+10. AWS Transfer Family FAQ(프로토콜별 시간당 + 전송량 과금, AS2는 메시지 수, 서버 중지해도 과금 계속·삭제해야 종료) — https://aws.amazon.com/aws-transfer-family/faqs/
+11. AWS DataSync FAQ(옮기는 작업은 DataSync, 이후 지속 접근은 File Gateway) — https://aws.amazon.com/datasync/faqs/
+12. S3 Transfer Acceleration(추가 데이터 전송 요금이 붙을 수 있음) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html
 
 > 📝 **2026-10-19 정정**: ① "Terminate해야 볼륨 요금이 멈춘다"를 **`DeleteOnTermination` 기본값**으로 고쳤습니다 — 루트(시작 시)만 기본 삭제, 데이터 볼륨은 콘솔 시작 시 보존·CLI 시작 시 삭제(근거 6번). ② Intelligent-Tiering의 128 KB 미만 객체를 "모니터링 비용이 절감을 초과"에서 **모니터링·자동 계층화 제외(절감이 없음)**로 고쳤습니다(근거 7번). ③ Storage Class Analysis가 **Storage Lens와 별개**인 S3 분석 기능임을 명시했습니다(근거 8번).
+
+> 📝 **2026-10-20 보강**: 공식 가이드 Task 4.1 Knowledge 「하이브리드 스토리지·마이그레이션 서비스 선택」에 대응하는 서술이 없어 **§8**을 신설했습니다(근거 10~12번). DataSync·Transfer Family·Storage Gateway·Transfer Acceleration의 **과금 축 차이**와, **Transfer Family는 중지가 아니라 삭제해야 과금이 멈춘다**는 점을 공식 FAQ로 확인해 적었습니다.

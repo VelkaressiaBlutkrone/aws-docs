@@ -20,9 +20,13 @@ sources:
     url: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html
   - title: AWS Lake Formation — 서비스 소개 (공식)
     url: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+  - title: AWS DataSync FAQ — DataSync와 Storage Gateway를 언제 쓰는가 (공식)
+    url: https://aws.amazon.com/datasync/faqs/
+  - title: AWS Transfer Family FAQ — 요금 부과 방식 (공식)
+    url: https://aws.amazon.com/aws-transfer-family/faqs/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation
@@ -268,8 +272,11 @@ Transfer Family       →  Lake Formation (거버넌스)
 | **AWS DataSync** | 온프레미스 ↔ AWS 파일 반복 동기화 | NFS·SMB → S3·EFS·FSx. 증분·스케줄·검증 지원 |
 | **Snow 패밀리** ⚠️ | 과거의 오프라인 대용량 이전 수단 | **신규 고객은 어떤 Snow Family 디바이스도 주문할 수 없습니다**(기존 고객은 계속 사용). 엣지 컴퓨팅 대안은 **Outposts** |
 | **AWS Data Transfer Terminal** | 물리 저장장치를 가져가 고속 업로드 | AWS 시설을 예약해 직접 업로드 — 현행 물리 전송 경로 |
-| **Transfer Family** | 기존 SFTP/FTPS/FTP 워크플로우를 S3·EFS로 | 관리형 파일 전송 서버. 클라이언트 수정 불필요 |
+| **Transfer Family** | 기존 **SFTP·FTPS·FTP·AS2** 워크플로우를 S3·EFS로 | 관리형 파일 전송 서버. 클라이언트 수정 불필요. 요금은 **활성화한 프로토콜별 시간당 + 전송량(GB)**, AS2는 **주고받은 메시지 수** 기준 |
 | **Direct Connect** | 전용 네트워크 회선으로 안정적 대용량 전송 | 낮은 지연·일관된 대역폭. 초기 구축 필요 |
+| **Storage Gateway**(S3 File Gateway 등) | 이전이 끝난 뒤에도 온프레미스에서 **지속적으로** 클라우드 데이터 접근 | NFS·SMB·iSCSI 인터페이스 + 로컬 캐시. **전송 작업 도구가 아니라 상시 접근 계층** |
+
+> **DataSync vs Storage Gateway — 공식이 가르는 기준**: AWS는 **"DataSync로 기존 데이터를 S3로 이전하고, 그 뒤 Storage Gateway의 File Gateway 구성으로 이전된 데이터에 계속 접근하라"**고 안내합니다. 즉 **옮기는 작업은 DataSync**, **옮긴 뒤 온프레미스 앱이 계속 읽고 쓰는 통로는 File Gateway**입니다. 둘은 경쟁 관계가 아니라 **단계가 다른 조합**이고, 시나리오에 "마이그레이션 후에도 온프레미스 애플리케이션이 그대로 파일에 접근해야 한다"가 붙으면 File Gateway가 답에 들어갑니다.
 
 > 선택 기준: 네트워크 대역폭이 있고 반복 동기화면 **DataSync**, 대역폭 부족·초대용량 일회성 이전이면 **AWS Data Transfer Terminal**(또는 파트너 솔루션), 기존 SFTP 도구를 그대로 쓰면 **Transfer Family**. Snow 패밀리는 신규 주문이 불가하므로 신규 설계의 정답이 아닙니다.
 
@@ -389,5 +396,9 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 10. Lake Formation — 다른 AWS 서비스와 함께 사용(엔진별 지원 표) — https://docs.aws.amazon.com/lake-formation/latest/dg/working-with-services.html
 11. Amazon Managed Service for Apache Flink("you can use Java, Scala, Python, or SQL") — https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
 12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+13. AWS DataSync FAQ("migrate existing data to Amazon S3, and subsequently use the File Gateway configuration") — https://aws.amazon.com/datasync/faqs/
+14. AWS Transfer Family FAQ(프로토콜별 시간당 + 전송량 과금, AS2는 메시지 수, 중지해도 과금 계속·삭제해야 종료) — https://aws.amazon.com/aws-transfer-family/faqs/
 
 > 📝 **2026-10-19 정정**: ① Snow 패밀리를 현재 선택지로 서술한 대목(수집 표·선택 기준·시험 포인트·체크리스트)을 고쳤습니다 — **신규 고객은 주문할 수 없고** 대안은 DataSync·AWS Data Transfer Terminal·파트너, 엣지 컴퓨팅은 Outposts입니다(근거 7번). ② KDS 샤드 확장을 모드별로 분리했습니다 — **온디맨드는 자동 관리**(이전 30일 피크의 2배), 프로비저닝만 수동 조정(근거 8번). ③ fan-out 서술에 **기본 컨슈머는 샤드당 2 MB/s 공유, 전용 처리량은 EFO**를 명시했습니다(근거 9번). ④ Lake Formation 적용 범위를 **엔진별 차이**로 고쳤습니다(근거 10번). ⑤ Managed Flink 지원 언어에 **Python**을 더했습니다(근거 11번).
+
+> 📝 **2026-10-20 보강**: ① 전송 서비스 표에 **Storage Gateway** 행을 넣고, 공식 DataSync FAQ가 가르는 **"이전은 DataSync · 이후 지속 접근은 File Gateway"** 구분을 명시했습니다(근거 13번). ② Transfer Family의 프로토콜에 **AS2**를 넣고 요금 구조(프로토콜별 시간당 + 전송량, AS2는 메시지 수)를 적었습니다(근거 14번).

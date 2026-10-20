@@ -24,9 +24,15 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html
   - title: Amazon FSx for OpenZFS — What is? (공식)
     url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html
+  - title: Amazon S3 File Gateway — What is? (공식)
+    url: https://docs.aws.amazon.com/filegateway/latest/files3/what-is-file-s3.html
+  - title: Volume Gateway 작동 방식(캐시형·저장형) (공식)
+    url: https://docs.aws.amazon.com/storagegateway/latest/vgw/StorageGatewayConcepts.html
+  - title: Amazon FSx File Gateway 변경 이력(신규 고객 이용 불가) (공식)
+    url: https://docs.aws.amazon.com/filegateway/latest/filefsxw/DocumentHistory.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택
@@ -282,6 +288,31 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 
 ---
 
+### 9) 하이브리드 스토리지 — AWS Storage Gateway {#storage-gateway}
+
+지금까지는 전부 **AWS 안에서** 쓰는 스토리지였습니다. 온프레미스 애플리케이션을 **고치지 않고** 클라우드 스토리지를 쓰게 하는 쪽이 **AWS Storage Gateway**입니다. 온프레미스 가상 머신(VMware ESXi·Microsoft Hyper-V·Linux KVM 등)이나 **하드웨어 어플라이언스**로 배포하고, VPC 안의 **EC2 인스턴스**로도 띄울 수 있습니다. 최근에 쓴 데이터는 **로컬 캐시**에 남아 저지연으로 읽힙니다.
+
+| 게이트웨이 | 온프레미스에 보이는 인터페이스 | 실제 저장 위치 |
+|---|---|---|
+| **Amazon S3 File Gateway** | **NFS**(v3·v4.1)·**SMB**(v2·v3) 파일 공유 | S3 객체 — 올라간 뒤에는 수명 주기·교차 리전 복제·버전 관리를 그대로 적용 |
+| **Amazon FSx File Gateway** ⚠️ | SMB 파일 공유 | FSx for Windows File Server. **2024-10-28부터 신규 고객은 이용할 수 없습니다**(기존 고객은 계속 사용) |
+| **Volume Gateway** | **iSCSI** 블록 볼륨 | S3. 시점 백업은 **EBS 스냅샷** 형태로 보관 |
+| **Tape Gateway** | **iSCSI VTL**(가상 테이프 라이브러리) | 활성 테이프는 S3, 백업 앱이 eject·export 하면 **S3 Glacier Flexible Retrieval 또는 S3 Glacier Deep Archive**로 아카이브 |
+
+**Volume Gateway의 두 모드 (★ 시험 핵심)**
+
+- **캐시형(cached volumes)** — **주 데이터는 S3**에 두고 자주 쓰는 데이터만 로컬 캐시에 둡니다. 온프레미스 스토리지를 증설하지 않고 용량을 늘리는 쪽. 볼륨 하나는 **1 GiB~32 TiB**, 게이트웨이당 **32개**까지(합계 최대 1,024 TiB).
+- **저장형(stored volumes)** — **전체 데이터셋을 온프레미스에 두고** S3로는 비동기 시점 스냅샷만 보냅니다. 전체 데이터에 저지연 접근이 필요하고 클라우드는 오프사이트 백업으로만 쓰는 쪽.
+
+> **구분 신호**: "기존 백업 소프트웨어를 그대로 쓰면서 물리 테이프를 없애고 싶다" → **Tape Gateway**. "온프레미스 앱이 iSCSI 블록 볼륨을 요구한다" → **Volume Gateway**. "NFS·SMB 파일 공유인데 실제 데이터는 S3 객체로 두고 싶다" → **S3 File Gateway**.
+
+> 🧠 원리: 왜 Storage Gateway는 어떤 유형이든 **로컬 캐시**를 두어야 할까요?
+> NFS·SMB·iSCSI는 원래 로컬 디스크나 같은 건물 안의 스토리지를 전제로 만들어진 프로토콜이라, 애플리케이션이 블록이나 파일을 읽을 때 돌아오는 응답이 빠를 것이라고 가정하고 동작합니다.
+> 그런데 실제 데이터가 클라우드에 있으면 읽기마다 인터넷·전용 회선을 왕복해야 하므로, 프로토콜이 가정한 응답 시간과 실제 응답 시간 사이에 큰 간극이 생깁니다.
+> 로컬 캐시는 그 간극을 메우는 장치입니다 — 최근 접근한 데이터를 온프레미스에 두어 프로토콜이 기대하는 속도로 응답하고, 클라우드로의 업로드는 뒤에서 비동기로 처리합니다. 그래서 캐시 크기 산정이 Storage Gateway 설계의 핵심 변수가 됩니다.
+
+---
+
 ## ✍️ 시험 포인트
 
 - **EBS 기본 추천**: gp3 — 용량과 독립적으로 IOPS·처리량을 설정 가능하고 gp2보다 비용 효율적. 새 워크로드엔 gp3를 선택.
@@ -380,5 +411,11 @@ EBS Multi-Attach는 동일 볼륨을 여러 Nitro 인스턴스에 동시 연결�
 8. Amazon FSx for OpenZFS — What is? — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/what-is-fsx.html
 9. Amazon EFS 성능 사양(Max I/O = previous generation, One Zone·Elastic 미지원) — https://docs.aws.amazon.com/efs/latest/ug/performance.html
 10. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+11. Amazon S3 File Gateway — What is?(NFS v3·v4.1 / SMB v2·v3, VM·하드웨어 어플라이언스·EC2 AMI, 로컬 캐시) — https://docs.aws.amazon.com/filegateway/latest/files3/what-is-file-s3.html
+12. Volume Gateway 작동 방식(캐시형 1 GiB~32 TiB·게이트웨이당 32볼륨, 저장형은 전체 데이터셋 온프레미스) — https://docs.aws.amazon.com/storagegateway/latest/vgw/StorageGatewayConcepts.html
+13. Tape Gateway(가상 테이프 라이브러리 → S3 Glacier Flexible Retrieval·Deep Archive 아카이브) — https://aws.amazon.com/storagegateway/vtl/
+14. Amazon FSx File Gateway 변경 이력(2024-10-28부터 신규 고객 이용 불가) — https://docs.aws.amazon.com/filegateway/latest/filefsxw/DocumentHistory.html
 
 > 📝 **2026-10-19 정정**: ① EFS **Max I/O를 이전 세대 성능 모드**로 고쳤습니다 — 지연시간이 더 크고 One Zone·Elastic 처리량과 병용할 수 없으며, AWS는 모든 파일 시스템에 General Purpose를 권장합니다(근거 9번). ② FSx for Lustre 성능을 한 줄 수치로 적었던 칸을 **스토리지 클래스별(SSD·Intelligent-Tiering·HDD)**로 분리했습니다(근거 6번).
+
+> 📝 **2026-10-20 보강**: 공식 가이드 Task 3.1 Knowledge 「하이브리드 스토리지 솔루션」에 대응하는 서술이 없어 **§9 AWS Storage Gateway**를 신설했습니다(근거 11~14번). 게이트웨이 4유형·Volume Gateway 캐시형/저장형 구분·Tape Gateway 아카이브 대상을 공식 문서로 확인했고, **FSx File Gateway가 2024-10-28부터 신규 고객에게 제공되지 않는다**는 점을 함께 표시했습니다.

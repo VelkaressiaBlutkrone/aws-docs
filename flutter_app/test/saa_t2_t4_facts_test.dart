@@ -6,6 +6,17 @@ import 'package:flutter_test/flutter_test.dart';
 /// 외부 조사(docs/content-research/SAA-C03/98-existing-gap.md)가 올린 항목 중
 /// `[오류]`·`[구식]`·`[부정확]`만 공식 문서로 재확인한 뒤 정정했다. 재확인 과정에서
 /// 근거 문장을 찾지 못한 하위 주장은 쓰지 않았다(PR 본문에 그대로 기록).
+/// `lastVerified` 는 되돌아가는 것만 막고 갱신은 허용한다. 날짜를 리터럴로 못박으면
+/// 다음 재검수·보강이 본래 검사하려던 사실 대신 이 단정을 먼저 터뜨린다
+/// (2026-10-20 교훈 — 선례 `saa_t12_t13_facts_test.dart`).
+void expectLastVerifiedAtLeast(String body, String floor, String id) {
+  final stamp =
+      RegExp(r'lastVerified: (\d{4}-\d{2}-\d{2})').firstMatch(body)?.group(1);
+  expect(stamp, isNotNull, reason: '$id lastVerified 항목이 없다');
+  expect(stamp!.compareTo(floor) >= 0, isTrue,
+      reason: '$id lastVerified 가 $floor 이전으로 되돌아갔다: $stamp');
+}
+
 void main() {
   String doc(String id) =>
       File('assets/content/saa/$id.md').readAsStringSync();
@@ -95,10 +106,9 @@ void main() {
   });
 
   group('정정 날짜·출처 (Task 2.x)', () {
-    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+    test('정정한 문서의 lastVerified가 2026-10-19 이후다', () {
       for (final id in ['saa-t2-1', 'saa-t2-2', 'saa-t2-3', 'saa-t2-5']) {
-        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
-            reason: '$id lastVerified 누락');
+        expectLastVerifiedAtLeast(doc(id), '2026-10-19', id);
       }
     });
 
@@ -181,10 +191,11 @@ void main() {
   });
 
   group('정정 날짜·출처 (Task 3.1·3.2)', () {
-    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+    test('정정한 문서의 lastVerified가 2026-10-19 이후다', () {
+      // 2026-10-20: 날짜를 리터럴로 못박으면 다음 재검수·보강이 이 테스트를 먼저
+      // 터뜨린다(선례 saa_t12_t13_facts_test). 되돌아가는 것만 막고 갱신은 허용한다.
       for (final id in ['saa-t3-1', 'saa-t3-2', 'saa-t3-3', 'saa-t3-4']) {
-        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
-            reason: '$id lastVerified 누락');
+        expectLastVerifiedAtLeast(doc(id), '2026-10-19', id);
       }
     });
 
@@ -323,7 +334,7 @@ void main() {
   });
 
   group('정정 날짜·출처 (Task 3.3~3.5)', () {
-    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+    test('정정한 문서의 lastVerified가 2026-10-19 이후다', () {
       for (final id in [
         'saa-t3-5',
         'saa-t3-6',
@@ -331,8 +342,7 @@ void main() {
         'saa-t3-8',
         'saa-t3-9'
       ]) {
-        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
-            reason: '$id lastVerified 누락');
+        expectLastVerifiedAtLeast(doc(id), '2026-10-19', id);
       }
     });
 
@@ -531,7 +541,7 @@ void main() {
   });
 
   group('정정 날짜·출처 (Task 4.x)', () {
-    test('정정한 문서의 lastVerified가 2026-10-19로 갱신됐다', () {
+    test('정정한 문서의 lastVerified가 2026-10-19 이후다', () {
       for (final id in [
         'saa-t4-1',
         'saa-t4-2',
@@ -539,8 +549,7 @@ void main() {
         'saa-t4-4',
         'saa-t4-5'
       ]) {
-        expect(doc(id).contains('lastVerified: 2026-10-19'), isTrue,
-            reason: '$id lastVerified 누락');
+        expectLastVerifiedAtLeast(doc(id), '2026-10-19', id);
       }
     });
 
