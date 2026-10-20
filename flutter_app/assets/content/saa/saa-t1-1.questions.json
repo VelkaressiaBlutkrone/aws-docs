@@ -229,19 +229,20 @@
       "stem": "한 기업이 Microsoft Active Directory를 사용 중이며 수백 명의 직원이 여러 AWS 계정에 SSO로 접근해야 한다. 가장 적합한 서비스는?",
       "options": [
         "직원마다 각 계정에 IAM 사용자를 개별 생성한다",
-        "AWS IAM Identity Center를 사용해 Organizations과 통합하고 SAML IdP를 연동한다",
+        "AWS IAM Identity Center를 사용해 Organizations과 통합하고 기존 Active Directory를 ID 소스로 연동한다",
         "Amazon Cognito User Pool로 직원을 인증한다",
         "각 직원에게 루트 사용자 자격증명을 발급한다"
       ],
       "correct": 1,
-      "explanation": "조직 직원이 다계정에 SSO로 접근하는 시나리오에는 IAM Identity Center가 권장됩니다 — Organizations과 통합되어 다계정 접근을 중앙 관리하고, Active Directory 등 SAML 2.0 IdP와 연동해 SSO를 제공합니다.",
+      "explanation": "조직 직원이 다계정에 SSO로 접근하는 시나리오에는 IAM Identity Center가 권장됩니다 — Organizations과 통합되어 다계정 접근을 중앙 관리하고, 기존 디렉터리를 ID 소스로 연동해 SSO를 제공합니다. ID 소스는 Identity Center 디렉터리 · Active Directory · 외부 SAML 2.0 IdP(Okta·Microsoft Entra ID 등) 3갈래이며, Microsoft AD는 외부 SAML IdP가 아니라 AWS Directory Service 경로(AWS Managed Microsoft AD 또는 AD Connector)로 연결합니다.",
       "wrongExplanations": {
         "0": "수백 명 × 여러 계정마다 IAM 사용자를 만들면 생성·삭제·키 교체 관리가 폭증하고 퇴사 처리 누락 위험이 커집니다 — 페더레이션이 권장됩니다.",
         "2": "Cognito는 앱 사용자(소비자) 인증에 적합합니다. 조직 직원의 다계정 SSO에는 IAM Identity Center가 맞습니다.",
         "3": "루트 자격증명은 절대 배포하지 않습니다 — 보안 모범 사례 위반입니다."
       },
       "sources": [
-        { "title": "IAM 자격 증명 공급자와 페더레이션 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html" }
+        { "title": "IAM 자격 증명 공급자와 페더레이션 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html" },
+        { "title": "IAM Identity Center — ID 소스 관리 (공식)", "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source.html" }
       ],
       "verified": false
     },

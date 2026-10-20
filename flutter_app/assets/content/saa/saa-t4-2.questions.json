@@ -325,19 +325,20 @@
       "stem": "AWS Graviton 인스턴스에 대한 설명으로 옳은 것은?",
       "options": [
         "Graviton은 x86 기반 인스턴스와 동일한 가격으로 제공되어 비용 절감 효과가 없다",
-        "Graviton은 동일 성능 대비 온디맨드 가격이 약 20% 저렴하며, Savings Plans와 결합 시 추가 절감이 가능하다",
+        "Graviton은 비교 가능한 x86 기반 인스턴스 대비 최대 20% 저렴하며, Savings Plans와 결합 시 추가 절감이 가능하다",
         "Graviton은 EC2에서만 지원되며 Lambda·Fargate·RDS에서는 사용할 수 없다",
         "Graviton은 모든 애플리케이션에서 x86 대비 항상 높은 성능을 제공한다"
       ],
       "correct": 1,
-      "explanation": "AWS Graviton(ARM 기반)은 동일 성능 대비 온디맨드 가격이 약 20% 저렴합니다(Graviton3 기준). Savings Plans와 결합하면 추가 절감도 가능합니다. 단, 애플리케이션이 ARM 아키텍처에서 동작해야 한다는 조건이 있습니다. 컨테이너·인터프리터 언어 환경은 전환이 비교적 용이합니다.",
+      "explanation": "AWS Graviton(ARM 기반) 인스턴스는 비교 가능한 x86 기반 EC2 인스턴스보다 최대 20% 저렴합니다 — 공식 수치는 특정 세대가 아니라 Graviton 패밀리 기준이며, 실제 절감폭은 인스턴스 패밀리·리전·사용량에 따라 다릅니다. Savings Plans와 결합하면 추가 절감도 가능합니다. 단, 애플리케이션이 ARM 아키텍처에서 동작해야 한다는 조건이 있습니다. 컨테이너·인터프리터 언어 환경은 전환이 비교적 용이합니다.",
       "wrongExplanations": {
-        "0": "Graviton 인스턴스는 동일 성능 대비 x86 대비 약 20% 저렴한 가격을 제공합니다. 비용 절감이 Graviton 도입의 핵심 이점 중 하나입니다.",
+        "0": "Graviton 인스턴스는 비교 가능한 x86 기반 인스턴스 대비 최대 20% 저렴한 가격을 제공합니다. 비용 절감이 Graviton 도입의 핵심 이점 중 하나입니다.",
         "2": "Graviton은 EC2(m7g·c7g·r7g 등) 외에도 Lambda·Fargate·RDS·ElastiCache 등 다양한 서비스에서 지원됩니다.",
         "3": "Graviton은 일반적으로 동일 성능을 더 저렴하게 제공하지만, 애플리케이션이 ARM 아키텍처에서 동작해야 한다는 조건이 있습니다. 모든 애플리케이션에서 항상 x86보다 높은 성능을 보장한다는 서술은 옳지 않습니다."
       },
       "sources": [
-        { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
+        { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" },
+        { "title": "AWS Graviton 프로세서 — 비용 최적화 (공식)", "url": "https://aws.amazon.com/ec2/graviton/" }
       ],
       "verified": true
     },
