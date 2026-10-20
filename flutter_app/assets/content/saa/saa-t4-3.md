@@ -16,9 +16,15 @@ sources:
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
   - title: AWS 데이터베이스 서비스 개요 (공식 화이트페이퍼)
     url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
+  - title: AWS DMS 요금(복제 인스턴스·로그 스토리지·SCT 무료) (공식)
+    url: https://aws.amazon.com/dms/pricing/
+  - title: Amazon Timestream — What is?(InfluxDB 검토 권고) (공식)
+    url: https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html
+  - title: Amazon Redshift 요금(컴퓨트·관리형 스토리지 독립 과금) (공식)
+    url: https://aws.amazon.com/redshift/pricing/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션
@@ -215,6 +221,53 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 
 ---
 
+### 6) DB 마이그레이션 비용 — DMS·SCT {#db-migration-cost}
+
+엔진 전환·클라우드 이전의 비용은 **이전 도구 자체**보다 **얼마나 오래 복제를 띄워 두는가**에서 갈립니다.
+
+| 항목 | 과금 |
+|---|---|
+| **DMS 온디맨드** | **복제 인스턴스** 시간당 + **추가 로그 스토리지**. 인스턴스에는 스왑·로그·캐시용 스토리지가 이미 포함 |
+| **DMS 서버리스** | 사용한 만큼 시간당 |
+| **AWS SCT** | **무료** — DMS에 포함돼 별도 비용이 없습니다 |
+| 데이터 전송 | **DMS로 들어오는 전송 무료**. DMS ↔ RDS·Redshift·EC2가 **같은 AZ면 무료**, 다른 AZ·리전·AWS 외부는 표준 전송 요금 |
+| 절감 약정 | **Database Savings Plans** 적용 가능 |
+
+**비용을 줄이는 지점**
+
+- **복제 인스턴스를 같은 AZ에** 두면 전송 요금이 사라집니다 — 원본·대상·복제 인스턴스의 배치가 곧 비용입니다.
+- **CDC를 언제 끄는가**가 총액을 좌우합니다. 전체 로드만 하면 짧게 끝나지만, 컷오버까지 지속 복제를 띄워 두면 그 기간 전체가 인스턴스 요금입니다.
+- 스키마 변환 때문에 비용을 걱정할 필요는 없습니다 — SCT는 무료입니다.
+
+> 🧠 원리: 왜 마이그레이션 요금이 "옮긴 데이터 양"이 아니라 "띄워 둔 시간"으로 매겨질까요?
+> DMS는 파일을 복사해 주는 서비스가 아니라, 원본의 트랜잭션 로그를 계속 읽어 대상에 적용하는 **실행 중인 복제 엔진**입니다. 전체 로드가 끝난 뒤에도 컷오버 전까지 변경분을 따라가야 하므로 인스턴스가 살아 있어야 합니다.
+> 그래서 과금의 주축이 전송량이 아니라 인스턴스 시간이 되고, 같은 데이터를 옮겨도 컷오버를 미루면 비용이 늘어납니다.
+> 비용 설계의 결론은 단순합니다 — **전환 일정을 짧게 잡고, 복제 경로를 같은 AZ 안에 두는 것**입니다.
+
+---
+
+### 7) 시계열·열 기반 DB의 비용 축 {#timeseries-columnar-cost}
+
+시간 축 데이터와 분석용 열 기반 저장은 관계형과 과금 축 자체가 다릅니다.
+
+| 선택지 | 과금 축 |
+|---|---|
+| **Timestream for InfluxDB** | 컴퓨트와 스토리지가 **분리**돼 사용한 만큼 과금. 내부적으로 **Parquet 열 저장(S3)** 구조 |
+| **Amazon Redshift**(RA3·RG 노드) | **컴퓨트와 관리형 스토리지(RMS)를 독립 과금**. RMS는 SSD↔S3 자동 오프로드이고 **리더 노드는 무료** |
+| **Redshift Serverless** | **RPU-시간**을 초 단위로(최소 60초) |
+| **Athena + Parquet**(`saa-t3-9` 참조) | 스캔한 데이터 양 — 열 형식으로 저장하면 스캔량이 줄어 비용이 내려감 |
+
+> ⚠️ **Timestream for LiveAnalytics 대신 Timestream for InfluxDB**를 검토하라는 것이 현행 안내입니다(LiveAnalytics는 신규 접근이 닫혔습니다).
+
+> 선택은 **쿼리 빈도와 상주 여부**로 갈립니다. 상시 대시보드가 붙어 클러스터를 계속 띄워 둬야 하면 프로비저닝 노드, 하루에 몇 번 도는 배치면 Serverless나 Athena 쪽이 유휴 시간 비용을 피합니다. *어느 서비스가 절대적으로 더 싸다고 말할 수 있는 공식 기준은 없습니다* — 워크로드의 상주 시간으로 판단하세요.
+
+> 🧠 원리: 왜 분석용 DB는 컴퓨트와 스토리지를 따로 과금할까요?
+> 분석 워크로드는 보관 기간이 길고 쿼리는 간헐적입니다. 데이터는 몇 년치가 쌓이지만 실제로 계산이 도는 시간은 하루 중 일부뿐인 경우가 많습니다.
+> 컴퓨트와 스토리지가 묶여 있으면 데이터를 더 보관하려고 쓰지도 않는 계산 자원까지 늘려야 하므로, 쌓을수록 낭비가 커집니다.
+> 두 축을 분리하면 "오래 보관하되 계산은 필요할 때만"이 가능해지고, 그래서 Redshift의 관리형 스토리지나 Timestream의 분리 과금처럼 **보관 비용과 질의 비용을 따로 내는 구조**가 분석 쪽의 표준이 됩니다.
+
+---
+
 ## ✍️ 시험 포인트
 
 - **"예측 불가 트래픽 + 관계형 DB"** → Aurora serverless. DynamoDB는 NoSQL이므로 관계형 스키마 요구 시 부적합.
@@ -304,5 +357,10 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 7. Timestream for LiveAnalytics 가용성 변경(2025-06-20 신규 고객 불가) — https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html
 8. RDS 백업 소개(리전 단위 백업 스토리지 합계) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
 9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+10. AWS DMS 요금("The AWS Schema Conversion Tool incurs no cost", 복제 인스턴스 + 추가 로그 스토리지, DMS 인바운드·같은 AZ 전송 무료) — https://aws.amazon.com/dms/pricing/
+11. Amazon Timestream — What is?(LiveAnalytics 대신 "consider Amazon Timestream for InfluxDB") — https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html
+12. Amazon Redshift 요금(컴퓨트와 관리형 스토리지 독립 과금·리더 노드 무료·Serverless RPU-시간) — https://aws.amazon.com/redshift/pricing/
 
 > 📝 **2026-10-19 정정**: ① "DB 절감은 RDS RI로만"을 고쳤습니다 — **Database Savings Plans**가 Aurora·RDS·DynamoDB·ElastiCache 등에 적용됩니다(근거 6번). ② RDS RI의 **사이즈 유연성**(대상 엔진, SQL Server·Oracle LI 예외, Single/Multi-AZ 적용, 인스턴스 시간만 할인)을 반영했습니다(근거 5번). ③ Timestream 칸을 **LiveAnalytics 신규 고객 불가 → InfluxDB**로 고치고 근거 없는 "1/10 비용"을 삭제했습니다(근거 7번). ④ 백업 스토리지 과금 기준을 **리전 전체 합계**로 바로잡았습니다(근거 8번). ⑤ **Aurora serverless** 명칭으로 통일했습니다.
+
+> 📝 **2026-10-20 보강**: 공식 가이드 Task 4.3 Knowledge 「DB 마이그레이션」·「시계열·열 기반 DB」에 대응하는 서술이 없어 **§6·§7**을 신설했습니다(근거 10~12번). 과금 축만 적고 **열 기반 DB 사이의 비용 우열은 단정하지 않았습니다** — 공식 비교 기준 문장을 확보하지 못했습니다(`99-gaps.md` V-74).
