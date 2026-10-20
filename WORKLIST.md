@@ -58,7 +58,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-20(SAA 검수 문서 리뷰 검증·SAA �
   - **남은 일:** SOA·DEA 문항 사람 검수→flip · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · SOA 기존 20문서에 v1.1 신규 주제 반영 · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록. **DEA-C01은 도메인 1~4 전부 완료**(§B⑧).
 
 - [x] **⑧ SAA 검수 문서 외부 리뷰 검증 + SAA 문항 fix 5건 + DEA 도메인 2·3·4 완주** — 2026-10-20. 1차 출고(#147·#149·#150·#148·#151)는 **PR#153으로 main 릴리스·Pages success·라이브 실측 완료**, 2차로 #154·#155와 이 부기가 나간다. 경위·교훈 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20.
-  - **게이트 정의 확정:** 라이브 게이트는 `certExamHasWeightedCapacity`(lib 5곳)이고, 루브릭이 공개 조건으로 적고 있던 `certExamIsBalanced`는 **lib 호출 0 = dead code**였다. 루브릭 §1·§4를 "Task 단위 flip + 도메인별 weighted capacity"로 개정(#149).
+  - **게이트 정의 확정 + 옛 게이트 제거:** 라이브 게이트는 `certExamHasWeightedCapacity`(lib 5곳)이고, 루브릭이 공개 조건으로 적고 있던 `certExamIsBalanced`는 **lib 호출 0 = dead code**였다. 루브릭 §1·§4를 "Task 단위 flip + 도메인별 weighted capacity"로 개정(#149)하고, **그 함수·테스트를 제거**했다(커버리지 손실 없음을 weighted capacity 테스트로 확인, 테스트 6건 감소).
   - **외부 리뷰 중 반영하지 않은 것:** 상단 인용문 "문장 잘림" 2건(실제로는 완결) · prescreen "경로 통일"(서로 다른 산출물이라 둘 다 기재가 맞음).
   - **문항 fix 5건(정답 변경 0):** `saa-t1-1-q13` STS 엔드포인트 · `saa-t1-4-q4`·`q12` WAF 보호 대상 9종(리뷰가 빠뜨린 Bedrock AgentCore Gateway 포함) · `saa-t1-4-q10` 관리형 교체(해설 + **정답 선택지 본문**) · `saa-t2-5-q8` Aurora 복제본 vs RDS 복제본. Test-First 가드 `test/saa_question_facts_test.dart` 20건(13건 RED → 20건 GREEN).
   - **DEA 도메인 2·3·4(#148·#151·#155):** 학습문서 13편 + 드래프트 195문항 → **DEA 누계 학습문서 17편·드래프트 256문항(도메인 1~4 전부)**, 전부 `verified:false`·questionCount 0(라이브 노출 변화 0). 도메인별 세션 위임 + 컨트롤러 PR 실물 검증. `pubspec.yaml`은 디렉터리 등록이라 무변경이 정답.

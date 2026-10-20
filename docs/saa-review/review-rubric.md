@@ -16,7 +16,7 @@
 **flip 단위 = Task(15문항).** 공개 게이트는 "전 도메인 일괄 flip"이 아니라 **도메인별 weighted capacity**다: 앱의 65문항 연습 세트에 공식 비중을 `allocateByWeight`(floor + 최대 잉여법, 동률은 선언 순서)로 배분한 수량 — SAA-C03 = **D1 19 · D2 17 · D3 16 · D4 13** — 이상을 도메인별로 채우면 통합/약점 모의고사가 열린다. 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
 
 - 라이브 게이트 함수는 **`certExamHasWeightedCapacity`**(= `examWeightedCapacityStatus().ready`)다. 홈 시험 섹션·`cert_detail`·`exam_page`·`cert_exam_page`·`weighted_exam`이 모두 이 함수를 쓴다.
-- ⚠️ **`certExamIsBalanced`("전 도메인에 검증 문항 1개 이상")는 더 이상 게이트가 아니다** — 2026-10-20 실측으로 `lib` 내 호출이 0이고 테스트만 참조한다. 이 문서의 옛 서술(도메인 일괄 flip·부분 flip 미노출)이 그 함수를 공개 조건으로 적고 있었다.
+- ⚠️ **옛 게이트 `certExamIsBalanced`("전 도메인에 검증 문항 1개 이상")는 2026-10-20에 코드에서 제거됐다** — 2026-08-06 weighted capacity 게이트가 역할을 대신한 뒤 `lib` 호출이 0이었다. 이 문서의 옛 서술(도메인 일괄 flip·부분 flip 미노출)이 그 함수를 공개 조건으로 적고 있었다. 지금 게이트는 `certExamHasWeightedCapacity` 하나다.
 - 도메인 순서는 **권장**일 뿐 게이트가 아니다. 실제로는 D3·D4가 먼저 verified돼 있고(45·30) 부족한 쪽이 D1·D2다 — 판정은 순서가 아니라 수량으로 한다.
 - 편향 방지는 수량 게이트가 담당한다. 다만 수량만 채우면 공식 Task Statement 하나가 완전히 빈 조합이 가능하므로(D1의 Task 1.3), 품질 균형은 batch 문서의 리스크 항목으로 관리한다.
 
