@@ -400,4 +400,12 @@ final List<({String text, String origin, String why})> _rules = [
     origin: 'saa_t2_t4 G-4.4-16',
     why: '인터페이스 엔드포인트 시간 요금은 ENI가 아니라 엔드포인트·AZ별로 붙는다',
   ),
+  // 2026-10-21 갭 배치 B5. `saa-t2-1.md` 를 메시지 1 MiB 로 보강하면서 전수 대조한
+  // 결과, `saa-t2-1-q6` 의 `wrongExplanations` 가 구식 256KB 를 그대로 들고 있었다
+  // (verified:true — 라이브 노출 중이었다). 같은 계열의 재발을 막는다.
+  (
+    text: '크기 제한(256KB)',
+    origin: 'saa_gaps_b5 G-2.1-05',
+    why: 'SQS 최대 메시지 크기는 2025-08에 256 KiB에서 1 MiB로 상향됐다',
+  ),
 ];

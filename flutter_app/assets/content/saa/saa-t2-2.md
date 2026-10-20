@@ -22,7 +22,19 @@ sources:
     url: https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+  - title: Amazon API Gateway 쿼터 — 계정·리전 스로틀·버스트·저RPS 리전 (공식)
+    url: https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
+  - title: API Gateway 통합 타임아웃 — 29초·증액 지원 유형 (공식)
+    url: https://docs.aws.amazon.com/help-panel/apigateway/latest/console/rest-timeout.html
+  - title: API Gateway 엔드포인트 유형 3종 (공식 보안 개요)
+    url: https://docs.aws.amazon.com/whitepapers/latest/security-overview-amazon-api-gateway/about-amazon-api-gateway.html
+  - title: EKS Kubernetes 버전 수명주기 — 표준 14개월·연장 12개월·기본 EXTENDED (공식)
+    url: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
+  - title: App2Container 지원 애플리케이션 — 신규 고객 불가·AWS Transform 대안 (공식)
+    url: https://docs.aws.amazon.com/app2container/latest/UserGuide/supported-applications.html
+  - title: Lambda 비동기 호출 페이로드 256 KB → 1 MB 상향 (공식 공지)
+    url: https://aws.amazon.com/about-aws/whats-new/2025/10/aws-lambda-payload-size-256-kb-1-mb-invocations/
+lastVerified: 2026-10-21
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -135,6 +147,34 @@ S3 업로드 → (비동기) Lambda(이미지 리사이즈) → 결과 S3 저장
 
 ---
 
+**Lambda 한도 (★ 시험 수치):**
+
+| 항목 | 값 |
+|---|---|
+| **동시 실행** | 계정·리전당 기본 **1,000** — 증액 가능(수만 단위까지) |
+| **함수당 확장 속도** | **10초마다 1,000개** 실행 환경 |
+| **메모리** | 128 ~ **10,240 MB**(1 MB 단위). **1,769 MB에서 1 vCPU 상당** — CPU는 메모리에 비례해 배정됩니다 |
+| **타임아웃** | **900초(15분)** |
+| **호출 페이로드** | 요청·응답 **각 6 MB**(동기) · 스트리밍 응답 200 MB(동기) · **1 MB**(비동기) |
+| **`/tmp` 임시 저장소** | 기본 **512 MB**, 설정 범위 512 ~ **10,240 MB**(1 MB 단위) |
+| **컨테이너 이미지** | 코드 패키지 **10 GB**(최대 비압축 이미지 크기, 전 레이어 포함) |
+| **배포 패키지(.zip)** | 업로드 50 MB(압축) · **250 MB**(압축 해제, 레이어·커스텀 런타임 포함) |
+| **레이어** | 함수당 **5개** |
+| **환경 변수** | 전체 합계 **4 KB** |
+
+- **비동기 페이로드는 2025-10에 256 KB에서 1 MB로 상향**됐습니다. 과금은 첫 256 KB까지 1요청, 그 뒤 **64 KB마다 요청 1건을 더** 세는 방식입니다.
+- 동시 실행 한도는 **계정·리전 단위로 공유**되므로, 한 함수가 폭주하면 같은 리전의 다른 함수까지 스로틀될 수 있습니다.
+
+**비동기 호출의 보관·대상 (G-2.1-12 보강):**
+
+위에서 "자동 재시도 2회 → DLQ 또는 Destinations"를 적었습니다. 공식 서술의 나머지를 더합니다.
+
+- Lambda는 비동기 호출 이벤트를 **큐에 최대 6시간 보관**합니다. 모든 처리 시도가 실패하거나 큐에 너무 오래 머물면 **이벤트를 폐기**합니다 — 폐기분을 남기려면 **DLQ**를 구성합니다.
+- **Destination(대상)** 은 큐·토픽·**S3 버킷**·함수·이벤트 버스로 호출 레코드를 보냅니다. **성공(on-success)과 실패(on-failure) 대상을 따로** 지정할 수 있고, DLQ와 **병행**하거나 DLQ **대신** 쓸 수 있습니다.
+- ⚠️ **S3 버킷은 on-failure 대상만 지원합니다.** 성공 레코드를 남기려면 다른 대상 유형을 쓰세요.
+
+---
+
 ### 2) Amazon API Gateway {#api-gateway}
 
 > 공식 정의: "어떤 규모에서든 REST, HTTP, WebSocket API를 생성·게시·유지·모니터링·보안 처리하는 AWS 서비스."
@@ -178,6 +218,34 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 ---
 
+**API Gateway 수치·엔드포인트 유형 (★ 시험 수치):**
+
+| 스로틀 항목 | 값 |
+|---|---|
+| 계정·리전당 스로틀 | **10,000 RPS** + 토큰 버킷 버스트 최대 **5,000 요청** — HTTP·REST·WebSocket·WebSocket 콜백 API **합산** |
+| ⚠️ 일부 리전은 더 낮음 | 기본 **2,500 RPS** · 버스트 **1,250** — 케이프타운·밀라노·자카르타·UAE·하이데라바드·멜버른·스페인·취리히·텔아비브·캘거리·말레이시아·태국·멕시코 |
+
+- **버스트 쿼터는 고객이 조정하거나 변경 요청할 수 없습니다** — 서비스 팀이 그 계정·리전의 전체 RPS 쿼터에 따라 정합니다. 계정 수준 RPS 쪽은 증액 요청이 가능합니다.
+- 스로틀은 **네 단계로 순서대로** 적용됩니다: ① 사용량 계획의 클라이언트별·메서드별 → ② 스테이지의 메서드별 → ③ 계정·리전 → ④ AWS 리전 전체. 리전 전체 한도는 고객이 바꿀 수 없고, 아래 단계는 그 위 한도를 넘을 수 없습니다.
+
+**통합 타임아웃**
+
+- 기본 **29초**이고 사용자 설정 범위는 **50 ~ 29,000 ms**입니다.
+- 29초를 **넘기려면** Service Quotas 증액 요청이 필요하며 **Regional·프라이빗 REST API에서만** 지원됩니다. 이때 계정 수준 스로틀 쿼터를 낮춰야 할 수 있습니다.
+- 늘리는 길이 API 유형에 묶여 있으므로, 오래 걸리는 백엔드는 타임아웃을 키우는 대신 **비동기화**(즉시 응답 + SQS·Step Functions로 처리)로 설계를 바꾸는 쪽이 제약이 적습니다.
+
+**엔드포인트 유형 3종**
+
+| 유형 | 접근 경로 | 기본값인 API |
+|---|---|---|
+| **엣지 최적화(Edge-optimized)** | 관리형 CloudFront 배포로 가장 가까운 POP에 라우팅. 클라이언트 TLS는 **엣지 로케이션에서 종료**되고 CloudFront↔API Gateway 구간은 AWS가 관리 | **REST API**의 기본 |
+| **Regional** | 선택한 리전 안에서 TLS를 종료. 자체 CloudFront·CDN을 앞에 붙일 수 있고 HTTP/2가 기본 활성 | **HTTP·WebSocket API**의 기본 |
+| **프라이빗(Private)** | **VPC와 승인된 서브넷에서만** interface VPC 엔드포인트로 접근. 다른 VPC·다른 계정에 엔드포인트를 만들어 공유할 수도 있습니다 | — |
+
+- 엣지 최적화는 **클라이언트가 같은 리전의 다른 서비스인 경우**나 **CloudFront 캐싱 동작을 세밀하게 제어해야 하는 경우**에는 적합하지 않습니다 — 그때는 Regional에 직접 관리하는 CloudFront 배포를 붙입니다.
+
+---
+
 ### 3) 컨테이너 — ECS vs EKS, EC2 vs Fargate {#containers}
 
 컨테이너를 AWS에서 실행할 때 두 가지 축을 결정합니다.
@@ -211,6 +279,31 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 > 컨테이너 오케스트레이션(어떤 컨테이너를, 얼마나, 어떻게 배치할지)과 인프라 관리(서버 프로비저닝·패치·스케일링)는 책임 범위가 달라 함께 두면 어느 한쪽 변경이 다른 쪽에 영향을 줍니다.
 > Fargate가 인프라 레이어를 가져가면 ECS/EKS는 오케스트레이션 로직에만 집중하고, 개발자는 EC2 인스턴스 유형·수량·패치 일정을 신경 쓰지 않아도 컨테이너를 배포할 수 있습니다.
 > 이 분리로 EC2 시작 유형은 GPU·특수 인스턴스처럼 하드웨어 제어가 필요한 케이스를 그대로 커버하고, Fargate는 서버 관리를 원하지 않는 케이스를 담당해 단일 오케스트레이터에서 두 인프라 모델이 공존합니다.
+
+---
+
+**EKS 버전 지원과 과금 구조 (★ 시험 포인트):**
+
+- **표준 지원 14개월** — Kubernetes 마이너 버전이 EKS에 출시된 시점부터이고, 업스트림 Kubernetes의 마이너 버전 지원 창과 같습니다.
+- **연장 지원 12개월** — 표준 지원이 끝난 직후 시작됩니다. 따라서 **버전당 총 26개월**입니다.
+- 연장 지원은 **클러스터 시간당 추가 비용**이 듭니다(컨트롤 플레인 요금에 더해지는 구조).
+- ⚠️ **업그레이드 정책 기본값이 `EXTENDED`** 입니다 — 신규·기존 클러스터 모두, 따로 지정하지 않으면 **자동으로 연장 지원에 등록**돼 추가 비용이 발생합니다. 원치 않으면 연장 지원을 비활성화하거나 표준 지원 버전으로 올려야 하고, 비활성화하면 표준 지원 종료 시점에 **자동 업그레이드**됩니다.
+- 26개월을 모두 지나도 올리지 않으면 **자동 업그레이드**되는데, 올라가는 것은 **컨트롤 플레인만**입니다 — 노드 그룹은 따라 올라가지 않습니다.
+- 표준 지원 버전에서 연장 지원 버전으로 **롤백하면 연장 지원 과금이 재개**됩니다.
+- Kubernetes **1.23 이상**이 연장 지원 대상입니다.
+
+> 구체 요율은 리전·시점에 따라 달라지므로 적지 않습니다. 시험이 묻는 것은 **"표준 14개월 + 연장 12개월 = 26개월, 연장은 유료, 기본값이 연장 등록"** 구조입니다.
+
+**기존 애플리케이션을 컨테이너로 옮기기 (G-2.1-01):**
+
+공식 Task 2.1 Knowledge에 "애플리케이션을 컨테이너로 마이그레이션하는 방법"이 있습니다.
+
+- **AWS App2Container(A2C)** 는 CLI로 온프레미스·EC2·타 클라우드의 **Java·ASP.NET 애플리케이션을 코드 변경 없이** 컨테이너화하고 ECS·EKS 배포 산출물을 만드는 도구입니다. 지원 대상은 **Java(Linux)** 와 **ASP.NET(Windows·Linux)** 이며, 지원 프레임워크를 찾으면 필요한 파일만 담는 *application mode*, 못 찾으면 비시스템 파일을 모두 담는 *process mode*로 동작합니다. **데이터베이스 계층은 컨테이너화하지 않습니다.**
+- ⚠️ **현재 제공 상태 — 신규 고객은 쓸 수 없습니다.** 공식 사용자 가이드가 A2C(및 Porting Assistant for .NET·Toolkit for .NET Refactoring·Microservice Extractor for .NET)를 **"no longer open to new customers"** 로 적고, **2025-11-07 이전에 가입한 고객**만 계속 쓸 수 있다고 안내합니다. 공식이 제시하는 대안은 **AWS Transform** 입니다.
+- ⚠️ **시험 범위 판정은 불확실합니다.** A2C는 공식 가이드의 in-scope·out-of-scope 목록 **어디에도 없습니다.** "컨테이너 이전 방법"이라는 Knowledge 항목 자체는 범위 안이지만, 특정 도구가 정답이라고 단정할 근거는 없습니다.
+- 그래서 시나리오는 **도구 이름보다 제약**으로 읽으세요 — "코드 변경 불가"면 리호스팅·컨테이너화 경로, "표준 메시징 프로토콜 유지"면 Amazon MQ(`saa-t2-1` §8), "DB까지 함께 이전"이면 DMS·SCT(`saa-t3-5` §10)가 각각 다른 축입니다.
+
+> ⚠️ **In-Scope 목록은 "범위"이고 서비스 현황은 별개입니다.** Snow Family는 목록에 **있으나** 신규 주문이 불가하고, App2Container는 목록에 **없으면서** 신규 가입이 불가합니다 — 반대 방향의 같은 함정입니다. **목록만으로 현행 선택지를 단정하지 마세요.**
 
 ---
 
@@ -336,5 +429,14 @@ ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없�
 5. Lambda 쿼터(함수 타임아웃 900초, Managed Instances 비동기·이벤트 소스 매핑 5,400초, Durable functions 절) — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
 6. PutFunctionEventInvokeConfig(이벤트 큐 최대 6시간·MaximumRetryAttempts 0~2·S3는 on-failure 전용) — https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+8. Lambda 쿼터 — 동시 실행 1,000·함수당 10초마다 1,000 실행 환경·페이로드 동기 6 MB/비동기 1 MB·컨테이너 이미지 10 GB·`/tmp` 512~10,240 MB·1,769 MB=1 vCPU — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+9. Lambda 비동기 호출 페이로드 256 KB → **1 MB** 상향(256 KB까지 1요청·이후 64 KB당 추가 과금) — https://aws.amazon.com/about-aws/whats-new/2025/10/aws-lambda-payload-size-256-kb-1-mb-invocations/
+10. Amazon API Gateway 쿼터(계정·리전 10,000 RPS·버스트 5,000·일부 13개 리전 2,500/1,250·버스트는 고객 조정 불가) — https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
+11. API Gateway 통합 타임아웃(기본 29초·50~29,000 ms·**Regional·프라이빗 REST만** 증액 지원) — https://docs.aws.amazon.com/help-panel/apigateway/latest/console/rest-timeout.html
+12. API Gateway 엔드포인트 유형 3종(엣지 최적화=REST 기본·Regional=HTTP·WebSocket 기본·프라이빗) — https://docs.aws.amazon.com/whitepapers/latest/security-overview-amazon-api-gateway/about-amazon-api-gateway.html
+13. EKS Kubernetes 버전 수명주기(표준 14개월 + 연장 12개월 = 26개월·기본값 `EXTENDED`·자동 업그레이드는 컨트롤 플레인만·롤백 시 과금 재개·1.23+ 대상) — https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
+14. App2Container 지원 애플리케이션(Java·ASP.NET·application/process mode·DB 계층 미포함 · **신규 고객 불가**, 2025-11-07 이전 가입자만 · 대안 **AWS Transform**) — https://docs.aws.amazon.com/app2container/latest/UserGuide/supported-applications.html
+
+> 📝 **2026-10-21 보강(갭 `G-2.1-01`·`G-2.1-06`·`G-2.1-07`·`G-2.1-08`·`G-2.1-12`, 배치 B5)**: ① §1에 **Lambda 한도표**와 **비동기 호출의 보관·대상**(큐 6시간·on-success/on-failure 분리·**S3는 on-failure 전용**)을 더했습니다(근거 6·8·9번). ② §2에 **스로틀·통합 타임아웃·엔드포인트 유형 3종**을 더했습니다 — 버스트는 고객이 조정할 수 없고, 29초 증액은 **Regional·프라이빗 REST만** 지원합니다(근거 10·11·12번). ③ §3에 **EKS 버전 지원 구조**(14+12=26개월·기본값 `EXTENDED`)와 **컨테이너 이전 경로**(App2Container의 신규 고객 불가 상태·대안 AWS Transform·시험 범위 불확실)를 더했습니다(근거 13·14번). **EKS 시간당 요율은 리전·시점 의존이라 적지 않았습니다.** 기존 §1~§4의 번호·앵커는 바꾸지 않았습니다.
 
 > 📝 **2026-10-19 정정**: ① 함정 1이 Durable 기능을 Step Functions의 일부로 적었던 표기를 고쳤습니다 — **Durable functions는 Lambda의 기능군**이고, Managed Instances 함수의 비동기·이벤트 소스 매핑 호출은 **최대 90분**입니다(근거 5번). ② 비동기 호출 행에 **이벤트 큐 보관 최대 6시간**·재시도 0~2 설정을 더하고, Destinations의 성공/실패 분리와 **S3는 실패 대상만 지원**을 §4에 적었습니다(근거 6번).
