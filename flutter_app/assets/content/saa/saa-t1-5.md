@@ -34,7 +34,7 @@ sources:
     url: https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html
   - title: Amazon Macie란 무엇인가(머신러닝+패턴 매칭) (공식)
     url: https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-20
 ---
 
 # 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스
@@ -217,8 +217,8 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 > CloudFront는 글로벌 엣지 서비스이지만 인증서는 us-east-1에서만 발급·연결합니다. 다른 리전에서 발급하면 CloudFront 배포에 연결할 수 없습니다.
 
 > 🧠 원리: 왜 CloudFront에 연결하는 ACM 인증서는 반드시 us-east-1에서 발급해야 할까요?
-> CloudFront 컨트롤 플레인은 us-east-1을 거점으로 배포 설정을 전 세계 엣지 PoP에 복제합니다 — 인증서 참조도 이 흐름 안에서 처리됩니다.
-> ACM 인증서는 리전 리소스입니다. 서울 리전 인증서의 ARN은 us-east-1 컨트롤 플레인이 참조할 수 없는 다른 리전 범위에 있습니다.
+> 공식 문서는 **us-east-1의 ACM 인증서가 CloudFront 배포에 연결되면 그 배포에 설정된 모든 지리적 위치로 배포된다**고 설명합니다. 그래서 이 리전이 CloudFront용 인증서를 요청·가져오는 유일한 위치입니다.
+> ACM 인증서는 리전 리소스이고 **리전 간 복사가 되지 않습니다.** 서울 리전에서 발급한 인증서는 CloudFront 배포에 연결할 수 없고, us-east-1에서 새로 요청해야 합니다.
 > 이 제약은 CloudFront만의 특수 케이스이며, ALB·API Gateway 같은 리전 서비스는 해당 리소스와 동일 리전의 인증서를 그대로 사용합니다.
 
 ---
@@ -300,7 +300,7 @@ EC2·EBS·S3·RDS·Aurora·DynamoDB·EFS·FSx·EKS·DocumentDB·Neptune·Redshif
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"CloudFront 인증서를 서울(ap-northeast-2)에서 발급했다."** → 연결 불가. CloudFront 인증서는 반드시 **us-east-1**에서 발급해야 합니다. ACM 인증서는 리전 리소스이며 CloudFront만 us-east-1을 요구하는 특수 케이스입니다.
-   *(원리: §5 — CloudFront 컨트롤 플레인이 us-east-1 기점이라 다른 리전 ARN을 참조할 수 없다.)*
+   *(원리: §5 — 공식 요구사항이다. us-east-1 인증서가 배포에 설정된 모든 지리적 위치로 배포되며, ACM 인증서는 리전 간 복사가 되지 않는다.)*
 
 2. **"운영 중인 RDS 인스턴스를 콘솔 클릭으로 암호화했다."** → 불가능. 암호화되지 않은 RDS 인스턴스는 **스냅샷 생성 → 스냅샷을 암호화 복사 → 암호화된 스냅샷에서 복원** 절차를 거쳐야 합니다.
    *(원리: §2 — RDS 암호화는 인스턴스 생성 시 설정되며, 이후 in-place 변경이 불가해 스냅샷 경유 재생성이 유일한 경로다.)*
@@ -372,3 +372,5 @@ CloudFront 배포에 사용하는 ACM 인증서는 **us-east-1(버지니아 북�
 13. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 
 > 📝 **2026-10-19 정정(8건)**: ① KMS 키 정책과 IAM 정책의 관계를 공식 규칙(계정 위임 문장 / 직접 허용 / 암시적 거부, 교차 계정만 양쪽 필요)으로 고쳤습니다(근거 5번). ② FIPS 결정 규칙과 자가 점검 Q1을 **단일 테넌트 요건** 기준으로 정정했습니다 — KMS 표준 HSM도 FIPS 140-3 Level 3 검증(근거 7번). ③ AWS 관리형 키와 AWS 소유 키를 구분하고 요금 표기를 바로잡았습니다(근거 6번). ④ S3 암호화에 기본 암호화·DSSE-KMS·Bucket Key·SSE-C 기본 비활성을 반영했습니다(근거 8번). ⑤⑥ ACM 요금(내보내기 가능 인증서 유료)과 자동 갱신 조건(DNS 검증·45일)을 정정했습니다(근거 9·10번). ⑦ Vault Lock 유예를 **사용자 지정 최소 3일**로 고쳤습니다(근거 11번). ⑧ Macie를 **머신러닝 + 패턴 매칭**으로 정정했습니다(근거 12번).
+
+> 📝 **2026-10-20 정정(1건)**: §5 CloudFront 인증서 리전 제약의 「원리」에서 **컨트롤 플레인이 배포 설정을 엣지 PoP에 복제한다**는 기전 서술을 뺐습니다 — 공식 문서에서 근거를 찾지 못한 주장이었습니다(근거 3번 ACM 개요는 "us-east-1 인증서가 배포에 설정된 모든 지리적 위치로 배포된다"까지만 말합니다). 요구사항 자체(us-east-1 발급)는 공식이라 그대로 뒀습니다. 같은 날 파생 문항 15개도 2026-10-19 정정이 전파되지 않은 것을 찾아 함께 맞췄습니다(`docs/saa-review/2026-10-20-t1-5-review-sheet.md`).
