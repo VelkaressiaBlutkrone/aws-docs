@@ -72,7 +72,7 @@
         "3": "Cost Anomaly Detection은 이상 비용 감지용 도구로 SQL 기반 세분화 분석 파이프라인을 제공하지 않습니다. CUR이 SQL 분석의 소스입니다."
       },
       "sources": [
-        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" }
+        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서 (BI 시각화는 Amazon Quick Sight, 옛 이름 QuickSight)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" }
       ],
       "verified": false
     },
@@ -216,7 +216,7 @@
         "3": "Cost Anomaly Detection은 이상 비용 감지용이고 시간 단위 SQL 감사에 맞지 않습니다. 순서도 바뀌어 있습니다."
       },
       "sources": [
-        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" },
+        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서 (BI 시각화는 Amazon Quick Sight, 옛 이름 QuickSight)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" },
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
       ],
       "verified": false

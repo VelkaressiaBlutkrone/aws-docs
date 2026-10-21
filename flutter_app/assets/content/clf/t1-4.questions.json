@@ -53,7 +53,7 @@
       "explanation": "AWS Compute Optimizer는 AWS 리소스의 구성과 사용률 메트릭을 분석해 rightsizing 권장과 유휴 리소스 식별을 제공합니다. 리소스가 최적인지 보고하고 비용을 줄이며 성능을 높이는 최적화 권장을 생성합니다.",
       "wrongExplanations": {
         "1": "AWS Snowball은 대량 데이터를 물리 디바이스로 전송하는 서비스로, 리소스 사용률 분석·rightsizing 권장과 무관합니다.",
-        "2": "Amazon QuickSight는 BI 대시보드·시각화 서비스로, 리소스 rightsizing 권장 서비스가 아닙니다.",
+        "2": "Amazon QuickSight(현 Amazon Quick Sight — Amazon Quick 안의 BI 기능으로 이어졌고 기존 API·SDK는 그대로 동작합니다)는 BI 대시보드·시각화 서비스로, 리소스 rightsizing 권장 서비스가 아닙니다.",
         "3": "AWS CAF는 클라우드 도입 전략 프레임워크로, 리소스 rightsizing 권장 도구가 아닙니다."
       },
       "sources": [
