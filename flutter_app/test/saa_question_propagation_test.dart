@@ -408,4 +408,12 @@ final List<({String text, String origin, String why})> _rules = [
     origin: 'saa_gaps_b5 G-2.1-05',
     why: 'SQS 최대 메시지 크기는 2025-08에 256 KiB에서 1 MiB로 상향됐다',
   ),
+  // 2026-10-21 갭 배치 B6. `saa-t2-4` 에 Aurora 장애 조치 시간을 공식 문구로 적고
+  // 전수 대조하니 `saa-t3-5-q12`(verified:true)가 "30초 미만"만 적어 상한을
+  // 빠뜨리고 있었다. 같은 파일 `q6` 은 정확히 적고 있어 문서 내부도 어긋났다.
+  (
+    text: '30초 미만 페일오버',
+    origin: 'saa_gaps_b6 G-2.2-08',
+    why: '공식 Aurora 사용자 가이드는 "통상 60초 미만, 흔히 30초 미만"으로 적는다',
+  ),
 ];
