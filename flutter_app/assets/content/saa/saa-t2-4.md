@@ -18,7 +18,25 @@ sources:
     url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-06-12
+  - title: Aurora 고가용성 — 6개 스토리지 노드·장애 조치 시간 (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html
+  - title: DynamoDB 글로벌 테이블 동작 — MREC·MRSC·증인 (공식)
+    url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html
+  - title: Route 53 라우팅 정책 선택 — 8종 (공식)
+    url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html
+  - title: Route 53 헬스 체크 판정 — 18% 규칙·응답 시간 (공식)
+    url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html
+  - title: 멀티값 응답 라우팅 — 최대 8개 (공식)
+    url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-multivalue.html
+  - title: 재시도 제어·제한 — Well-Architected REL05-BP03 (공식)
+    url: https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_mitigate_interaction_failure_limit_retries.html
+  - title: 회로 차단기 패턴 (공식 Prescriptive Guidance)
+    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/circuit-breaker.html
+  - title: X-Ray 트레이스 맵 (공식)
+    url: https://docs.aws.amazon.com/xray/latest/devguide/xray-console-servicemap.html
+  - title: Service Quotas 요청 템플릿 (공식)
+    url: https://docs.aws.amazon.com/servicequotas/latest/userguide/organization-templates.html
+lastVerified: 2026-10-21
 ---
 
 # 고가용성 패턴 — Multi-AZ·단일 실패점 제거
@@ -283,6 +301,157 @@ ElastiCache Redis / DynamoDB (세션·상태 저장)
 
 ---
 
+### 9) HA 지표 — 가용성 %와 연간 허용 중단 {#availability-targets}
+
+가용성은 퍼센트 하나로 말하지만, **실제로 허용되는 중단 시간**으로 바꿔 보면 설계 난이도가 드러납니다. 아래는 365일(8,760시간) 기준 산술 환산입니다 — 공식 수치가 아니라 `365 × 24h × (1 − 가용성)` 계산값입니다.
+
+| 가용성 | 연간 허용 중단 | 30일 환산 |
+|---|---|---|
+| 99% | 약 3일 15시간 36분 | 약 7시간 12분 |
+| 99.9% (three nines) | 약 8시간 46분 | 약 43분 |
+| 99.95% | 약 4시간 23분 | 약 22분 |
+| 99.99% (four nines) | 약 52분 34초 | 약 4분 19초 |
+| 99.999% (five nines) | 약 5분 15초 | 약 26초 |
+
+9가 하나 늘 때마다 허용 중단이 **10분의 1**로 줄어듭니다. 99.9%는 "주말 한 번 고생"이지만 99.99%는 **한 해 통틀어 1시간도 안 되는** 예산이라, 사람이 알아차리고 손으로 대응하는 설계로는 닿을 수 없습니다 — 자동 장애 조치가 필수가 되는 경계가 여기입니다.
+
+> ⚠️ **SLA와 설계 목표는 다릅니다.**
+> **SLA**는 AWS가 서비스 수준 계약 문서에 적는 수치이고, **설계 목표**는 "그렇게 되도록 설계했다"는 서술입니다. 예컨대 Aurora 관련 공식 자료는 Aurora를 **99.99%를 넘는 가용성을 목표로 설계**했다고 적는데, 이것은 계약 수치가 아닙니다.
+> 이 문서는 **서비스별 SLA 퍼센트를 적지 않습니다.** SLA는 개정되고 리전·구성에 따라 조건이 달라 암기 대상이 아닙니다. 출제 축은 "목표를 몇 개의 9로 둘 것인가"와 **그에 맞는 설계**(AZ 수·복제 방식·장애 조치 시간)를 고르는 쪽입니다.
+
+---
+
+### 10) DB 가용성 옵션 심화 {#db-availability-options}
+
+**Aurora — 스토리지와 컴퓨트가 분리돼 있습니다**
+
+- 프라이머리에 쓰면 Aurora가 **여러 AZ에 걸쳐 클러스터 볼륨의 스토리지 노드 6개에 동기 복제**합니다. 이 구조가 데이터 중복을 주고 **I/O 프리즈를 없애며 시스템 백업 중 지연 스파이크를 최소화**합니다.
+- 클러스터 볼륨은 단일 리전의 여러 AZ에 걸치고 **각 AZ가 클러스터 볼륨 데이터의 사본**을 가집니다 → **AZ 하나의 장애를 데이터 손실 없이, 짧은 중단만으로** 견딥니다.
+- 프라이머리(라이터) 외에 **읽기 전용 Aurora 복제본을 최대 15개** 둘 수 있고, 비동기 복제라 프라이머리 성능에 영향을 주지 않습니다.
+- 프라이머리 장애 시 ① **기존 Aurora 복제본을 승격**하거나 ② **새 프라이머리를 생성**합니다. 복제본이 하나 이상 있으면 승격 경로입니다.
+- ⚠️ **장애 조치 시간** — 공식 사용자 가이드는 "**통상 60초 미만, 흔히 30초 미만**"으로 적습니다. "30초"만 기억하면 상한을 놓칩니다.
+- **클러스터 엔드포인트**는 항상 현재 프라이머리를 가리키므로 장애 조치 후에도 연결 문자열이 그대로입니다.
+- 가장 빠른 복구 경로는 종종 **재시작**입니다 — 재시작이 장애 조치보다 빠르고 오버헤드가 적습니다.
+
+**RDS Multi-AZ — 두 가지 배치 (★ 시험 핵심)**
+
+| | Multi-AZ **DB 인스턴스** | Multi-AZ **DB 클러스터** |
+|---|---|---|
+| 스탠바이 | **1개**(읽기 불가) | **2개 · 읽기 가능 스탠바이** |
+| 장애 조치 | 통상 **60~120초** | 통상 **35초 미만** |
+| 구조 | 동기 복제 | 트랜잭션 로그를 인스턴스 **로컬 스토리지**에 먼저 쓰고 영구 스토리지로 플러시 → 커밋 지연이 **최대 2배 빠름** |
+
+§4·§5가 Multi-AZ **인스턴스** 중심이므로, "읽기도 받는 스탠바이가 필요하다" 또는 "장애 조치를 1분 안쪽으로" 같은 요구가 나오면 **클러스터** 쪽을 봐야 합니다.
+
+**DynamoDB 글로벌 테이블 — 두 일관성 모드**
+
+| 모드 | 동작 |
+|---|---|
+| **MREC**(기본) | 항목 변경이 다른 복제본에 **통상 1초 내** 복제되고 리전 간 **최종 일관성**. 쓰기 지연이 더 낮습니다 |
+| **MRSC** | 쓰기가 성공을 반환하기 **전에 최소 1개 다른 리전에 동기 복제**. 어떤 복제본에서든 강한 일관성 읽기가 **항상 최신 버전**을 반환하고, 조건부 쓰기도 최신 버전에 대해 평가됩니다 |
+
+- ⚠️ **MRSC는 정확히 3개 리전**에 배포해야 합니다. **복제본 3개** 또는 **복제본 2개 + 증인(witness) 1개** 구성입니다. 증인은 복제본에 쓰인 변경 데이터를 담지만 **읽기·쓰기를 할 수 없고**, 두 복제본과 다른 리전에 있으며 **DynamoDB가 소유·관리**해 계정에 나타나지 않습니다(`DescribeTable`로 확인).
+- MRSC는 **일부 리전에서만** 제공되고, 쓰기·강한 일관성 읽기 지연이 **선택한 리전 조합에 따라 달라집니다**(교차 리전 통신이 필요해서입니다).
+- **시험 신호**: "리전 장애에도 **RPO 0**가 필요하다 / 어느 리전에서 읽어도 최신 데이터여야" → **MRSC**. "지연이 더 중요하고 최종 일관성으로 충분" → **MREC**.
+
+---
+
+### 11) Route 53 라우팅 정책과 헬스 체크 수치 {#route53-policies}
+
+§6이 장애 조치 라우팅을 다뤘으니, 정책 전체 지도와 헬스 체크의 **수치**를 채웁니다. 정책별 상세 설계는 **`saa-t3-7`** 이 정본입니다.
+
+**라우팅 정책은 8종입니다**
+
+| 정책 | 언제 쓰는가 |
+|---|---|
+| **단순(Simple)** | 도메인의 한 기능을 수행하는 **단일 리소스** |
+| **장애 조치(Failover)** | **액티브-패시브** 장애 조치 |
+| **가중(Weighted)** | 지정한 **비율**로 여러 리소스에 분배 |
+| **지연 시간(Latency)** | 여러 리전의 리소스 중 **지연이 가장 좋은 리전**으로 |
+| **지리적 위치(Geolocation)** | **사용자의 위치** 기준 |
+| **지리 근접(Geoproximity)** | **리소스의 위치** 기준 + 선택적으로 한쪽으로 트래픽 **편향** |
+| **IP 기반(IP-based)** | 트래픽이 출발하는 **IP 주소**를 알고 있을 때 |
+| **멀티값 응답(Multivalue answer)** | 무작위로 고른 **최대 8개 정상 레코드** 반환 |
+
+- 멀티값 응답은 **로드 밸런서의 대체가 아닙니다.** 정상 레코드가 8개 이하면 전부 반환하고, **전부 비정상이면 최대 8개 비정상 레코드를 반환**합니다. 헬스 체크를 연결하지 않은 레코드는 **항상 정상으로 간주**됩니다.
+
+**헬스 체크 수치 (★ 시험 포인트)**
+
+- 요청 간격은 **30초(기본) 또는 10초**를 고릅니다.
+- **실패 임계값**은 "연속 몇 번 실패하면 비정상으로 볼지"입니다.
+- ⚠️ **18% 규칙** — 전 세계 헬스 체커 중 **18%를 넘는** 비율이 정상이라 보고하면 Route 53은 엔드포인트를 정상으로, **18% 이하면 비정상**으로 봅니다. 여러 리전의 체커가 정상으로 판단하도록 고른 값이며 공식이 **향후 변경될 수 있다**고 적습니다.
+- HTTP·HTTPS 체크는 **4초 안에 TCP 연결**, 연결 후 **2초 안에 2xx·3xx 응답**을 요구합니다.
+- ⚠️ **HTTPS 헬스 체크는 SSL/TLS 인증서를 검증하지 않습니다** — 인증서가 무효하거나 만료돼도 그 때문에 실패하지 않습니다. 인증서 만료 감시는 ACM·CloudWatch 쪽 일입니다.
+- 헬스 체커들은 서로 조율하지 않으므로, 초당 여러 요청이 몰린 뒤 몇 초간 공백이 생기는 패턴이 **정상 동작**입니다.
+
+---
+
+### 12) 분산 설계 패턴 — 재시도·백오프·회로 차단기 {#distributed-patterns}
+
+재시도는 네트워크 장애의 기본 대응이지만, **그대로 두면 장애를 키웁니다.**
+
+- 오류가 나자마자 모든 클라이언트가 재시도하면 네트워크가 신규·재시도 요청으로 포화되고 **재시도 폭풍(retry storm)** 이 되어 가용성이 더 떨어집니다. 이 패턴이 계속되면 **전체 시스템 장애**로 이어질 수 있습니다.
+- **지수 백오프** — 재시도 간격을 점진적으로 늘려 혼잡을 피합니다. 백오프는 **최대값으로 캡**해야 합니다.
+- **지터(jitter)** — 백오프만으로는 부족합니다. 분산 시스템에서 모든 클라이언트가 동시에 백오프하면 **재시도 호출 군집**이 생기므로, 대기 시간에 **무작위성**을 더해 시간축에 흩뿌립니다.
+- **최대 재시도 횟수 또는 경과 시간**을 정하고 그 뒤엔 실패시킵니다. 스택 **하위** 서비스는 최대 재시도를 **0 또는 1**로 제한해도 효과적입니다 — 재시도를 상위 스택에 위임하는 설계입니다.
+- ⚠️ 공식 경고: "**백오프 알고리즘이 존재한다고 절대 가정하지 말고 항상 테스트·검증하라.**" AWS SDK는 기본 구현을 갖지만 설정을 확인해야 합니다. Well-Architected는 이 모범 사례를 세우지 않을 때의 **위험 수준을 높음(High)** 으로 적습니다.
+
+**회로 차단기(circuit breaker)** — 실패할 가능성이 큰 호출을 **아예 보내지 않는** 패턴입니다.
+
+| 상태 | 동작 |
+|---|---|
+| **CLOSED**(정상) | 요청이 정상적으로 흐릅니다 |
+| **OPEN**(실패) | 반복 실패를 감지하면 전환. 새 요청을 **즉시 거부**해 대상 서비스의 압력을 줄이고 클라이언트 자원을 보존합니다 |
+| **HALF_OPEN**(시험) | 타임아웃이 지나면 **소수의 시험 요청**만 허용. 성공하면 다시 CLOSED로 돌아갑니다 |
+
+공식 고려사항 — 코드 비대를 막기 위해 **마이크로서비스 비의존·API 기반**으로 구현 · 다중 스레드에서 **첫 실패 호출이 만료 타임아웃을 정하고 후속 호출이 그것을 무한히 밀지 않도록** 구현 · 관리자가 회로를 **강제로 open/close** 할 수 있어야 함 · OPEN 중 실패한 호출을 식별할 **로깅** 필요.
+
+> 재시도와 회로 차단기는 **대체가 아니라 층**입니다. 일시적 오류는 재시도(백오프·지터)가 흡수하고, 지속되는 장애는 회로 차단기가 끊습니다. 둘 중 하나만 두면 "복구 가능한 실패를 포기"하거나 "죽은 서비스를 계속 때리는" 쪽으로 기웁니다.
+
+---
+
+### 13) 운영 가시성과 서비스 쿼터 {#visibility-and-quotas}
+
+**AWS X-Ray — 분산 추적으로 "어디가 느린가"를 찾습니다**
+
+- 추적 데이터로 **애플리케이션을 구성하는 서비스의 시각 표현**(트레이스 맵·서비스 맵)을 만들어, **오류가 있는 서비스 · 지연이 높은 연결 · 실패한 요청의 추적**을 식별합니다.
+- 맵은 **서비스 노드**(요청을 처리하는 쪽) · **업스트림 클라이언트 노드**(요청의 출처) · **다운스트림 서비스 노드**(앱이 처리 중 쓰는 웹 서비스·리소스)를 보여 줍니다.
+- **SQS·Lambda를 쓰는 이벤트 기반 애플리케이션의 연결된 뷰**와 **교차 계정 추적**을 지원합니다.
+- 노드 테두리 색이 문제 유형을 가립니다 — **빨강 = 서버 결함(500대)** · **노랑 = 클라이언트 오류(400대)** · **보라 = 스로틀링(429 Too Many Requests)**.
+
+**Service Quotas — 한도를 가용성 설계의 일부로 다루기**
+
+- 쿼터(한도)를 **한곳에서 조회·관리**합니다(콘솔·API·CLI). **기본 쿼터**와 계정에 **적용된(applied) 쿼터**를 모두 볼 수 있습니다 — applied는 과거에 그 계정에 부여된 재정의입니다.
+- **CloudWatch 경보**를 붙여 사용량이 쿼터에 가까워질 때 알림을 받습니다. 쿼터를 "터지면 올리는 것"이 아니라 **선제적으로 관리**하는 축입니다.
+- **쿼터 요청 템플릿** — Organizations 조직에 연결하면 **새 계정이 만들어질 때 자동으로 쿼터 증액을 요청**합니다. 조직이 **all features**여야 하고(통합 결제 기능만이면 쓸 수 없습니다), 템플릿에는 **최대 10개 쿼터**를 담습니다. 상업 리전만 지원합니다.
+- ⚠️ **템플릿을 갱신해도 기존 계정의 쿼터 값은 바뀌지 않습니다** — 템플릿은 "앞으로 만들 계정"에만 적용됩니다.
+- **시험 신호**: "DR **대기 환경**을 다른 리전에 둔다" → 그 리전의 **쿼터가 장애 조치 시 필요한 규모를 감당하는지** 미리 확인·증액해야 합니다. §7 정적 안정성과 같은 사고 방식입니다 — **장애 시점에 증액을 요청해서는 늦습니다.**
+
+---
+
+### 14) 관리형 서비스 선택과 가용성 {#managed-services}
+
+공식 Task 2.2 Knowledge에 "**관리형 서비스와 적합한 사용 사례**(예: Amazon Comprehend, Amazon Polly)"가 있습니다.
+
+> ⚠️ **공식 문구 자체가 모호합니다.** 영문 가이드는 `AWS Managed Services (AMS) with appropriate use cases (for example, Amazon Comprehend, Amazon Polly)`로 적는데, **AMS**(AWS가 고객 환경 운영을 대행하는 서비스)와 예시로 든 AI 서비스는 **다른 범주**입니다. AMS는 공식 in-scope 목록에도 없습니다. 그래서 이 절은 **in-scope 목록에 있는 관리형 AI 서비스**를 기준으로 정리하고, AMS 자체에 대한 주장은 하지 않습니다.
+
+**가용성 관점에서 관리형 서비스를 고르는 이유** — 직접 운영하면 Multi-AZ 배치·장애 조치·패치·용량을 전부 설계해야 하지만, 관리형 서비스를 쓰면 그 책임이 AWS로 넘어갑니다. 공동 책임 모델이 가용성 설계에 주는 가장 직접적인 효과입니다.
+
+| 데이터 양식 | 용도 | 서비스 |
+|---|---|---|
+| 텍스트 | 감정 분석 · 엔티티 인식 · 토픽 모델링 | **Amazon Comprehend** |
+| 텍스트 | 대화형 인터페이스 · 챗봇 · 의도 인식 | **Amazon Lex** |
+| 텍스트 | 실시간·배치 **번역** | **Amazon Translate** |
+| 문서 | 인쇄 텍스트 · **필기** · 레이아웃 · 데이터 추출 | **Amazon Textract** |
+| 이미지·비디오 | 객체 탐지 · 콘텐츠 검토 · 얼굴 분석 | **Amazon Rekognition** |
+| 오디오 | **음성 → 텍스트** 전사 | **Amazon Transcribe** |
+| 오디오 | **텍스트 → 음성** | **Amazon Polly** |
+
+- **시험 신호**: "고객 리뷰에서 감정을 뽑아야" → Comprehend. "스캔한 서류의 표와 **필기**를 읽어야" → Textract(단순 OCR을 넘어 레이아웃·데이터까지). "업로드 이미지의 부적절 콘텐츠를 걸러야" → Rekognition **콘텐츠 검토**. "안내 음성을 만들어야" → Polly. "통화 녹음을 글로" → Transcribe.
+- ⚠️ 모델을 **직접 학습·배포**해야 하는 요구라면 관리형 AI 서비스가 아니라 **SageMaker AI** 축입니다. 관리형 AI 서비스는 사전 학습된 기능을 API로 쓰는 쪽입니다.
+
+---
+
 ## ✍️ 시험 포인트
 
 | 시나리오 문구 | 정답 방향 |
@@ -380,3 +549,19 @@ RDS Multi-AZ는 다른 AZ에 동기 스탠바이를 유지하므로 Primary 장�
 3. RDS Multi-AZ 배포 구성 및 관리 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
 4. Route 53 헬스 체크 생성 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html
 5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+6. Aurora 고가용성(6개 스토리지 노드 동기 복제·AZ별 사본·복제본 최대 15·장애 조치 **통상 60초 미만·흔히 30초 미만**·클러스터 엔드포인트·재시작이 더 빠름) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html
+7. DynamoDB 글로벌 테이블 동작(MREC 기본·통상 1초 / MRSC 동기 복제·**정확히 3개 리전**·복제본 3 또는 2+증인·증인은 읽기/쓰기 불가·일부 리전만) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html
+8. Route 53 라우팅 정책 선택 — **8종**(단순·장애 조치·가중·지연 시간·지리적 위치·지리 근접·IP 기반·멀티값 응답) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html
+9. Route 53 헬스 체크 판정(간격 10/30초·**18% 규칙**·HTTP TCP 4초·응답 2초·**HTTPS는 인증서 미검증**·체커 비조율) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html
+10. 멀티값 응답 라우팅(최대 8개 정상 레코드·전부 비정상이면 최대 8개 비정상 반환·헬스 체크 미연결은 정상 간주·LB 대체 아님) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-multivalue.html
+11. 재시도 제어·제한 — Well-Architected `REL05-BP03`(재시도 폭풍·지수 백오프·지터·최대 캡·하위 서비스 0~1회·"백오프 존재를 가정하지 말라"·위험 High) — https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_mitigate_interaction_failure_limit_retries.html
+12. 회로 차단기 패턴(CLOSED·OPEN·HALF_OPEN·서비스 비의존 구현·다중 스레드 타임아웃·강제 open/close·로깅) — https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/circuit-breaker.html
+13. X-Ray 트레이스 맵(서비스·업스트림·다운스트림 노드·SQS/Lambda 연결 뷰·교차 계정·노드 색 = 500/400/429) — https://docs.aws.amazon.com/xray/latest/devguide/xray-console-servicemap.html
+14. Service Quotas 요청 템플릿(기본/적용 쿼터·CloudWatch 경보·all features 필요·최대 10개·**기존 계정 미소급**·상업 리전만) — https://docs.aws.amazon.com/servicequotas/latest/userguide/organization-templates.html
+15. RDS Multi-AZ DB 클러스터(읽기 가능 스탠바이 2·장애 조치 통상 35초 미만·커밋 지연 최대 2배 빠름) — https://aws.amazon.com/blogs/database/is-amazon-rds-for-postgresql-or-amazon-aurora-postgresql-a-better-choice-for-me/
+16. 관리형 AI 서비스 선택(양식별 용도 — Comprehend·Lex·Translate·Textract·Rekognition·Transcribe·Polly) — https://repost.aws/articles/ARg2nreO9URO2VyMnRKOt3ZA/building-a-decision-framework-to-select-the-right-aws-ml-service-for-your-workload
+
+> 📝 **2026-10-21 보강(갭 `G-2.2-01`·`02`·`04`·`05`·`07`·`08`·`09`, 배치 B6)**: **§9~§14를 신설**했습니다 — ① **§9** 가용성 %↔연간 중단 환산(산술 계산값)과 **SLA vs 설계 목표 구분**. ② **§10** Aurora 6사본·장애 조치 **통상 60초 미만·흔히 30초 미만**·Multi-AZ 클러스터·DynamoDB **MREC/MRSC**(근거 6·7·15번). ③ **§11** 라우팅 정책 8종·**18% 규칙**·**HTTPS 인증서 미검증**(근거 8·9·10번). ④ **§12** 백오프·지터·재시도 제한·회로 차단기 3상태(근거 11·12번). ⑤ **§13** X-Ray·Service Quotas 템플릿(근거 13·14번). ⑥ **§14** in-scope 관리형 AI 서비스(근거 16번).
+>
+> **쓰지 않은 것:** 서비스별 **SLA 퍼센트**(개정·구성 의존이라 암기 대상이 아니고 `99-gaps` V-13 계열) · **RDS Proxy 장애 조치 단축 66%**(V-14 미확인). `G-2.2-04`는 공식 문구가 AMS와 AI 서비스를 섞어 모호해(`99-gaps` C-18) **in-scope 목록 기준으로 좁혀** 적고 AMS에 대한 주장은 하지 않았습니다. 기존 §1~§8의 번호·앵커는 바꾸지 않았습니다.
+

@@ -23,7 +23,25 @@ sources:
     url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+  - title: ASG 헬스 체크 유예 기간 — 콘솔 300초·CLI 0초 (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-check-grace-period.html
+  - title: ASG 동적 조정 — 복수 정책은 큰 용량 우선 (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html
+  - title: ASG 조정 쿨다운 — 기본 300초 (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html
+  - title: ASG 웜 풀 — 부팅이 긴 앱의 지연 줄이기 (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html
+  - title: 인스턴스 새로 고침 동작·제한 (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-refresh-overview.html
+  - title: 인스턴스 유지관리 정책 (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-maintenance-policy-overview-and-considerations.html
+  - title: LifecycleHook API — GlobalTimeout·HeartbeatTimeout (공식)
+    url: https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LifecycleHook.html
+  - title: 불변 인프라로 배포 — Well-Architected REL08-BP04 (공식)
+    url: https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_tracking_change_management_immutable_infrastructure.html
+  - title: EC2 자동 인스턴스 복구 — 보존·상실 항목 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
+lastVerified: 2026-10-21
 ---
 
 # ELB + Auto Scaling — 탄력적 확장 설계
@@ -239,13 +257,106 @@ ASG에 ELB를 연결하면 인스턴스가 시작될 때 자동으로 대상 그
 |---|---|
 | **시작 훅** | 인스턴스가 트래픽을 받기 전 초기화 작업. 예: 설정 파일 다운로드, 에이전트 설치 |
 | **종료 훅** | 인스턴스가 실제 종료되기 전 정리 작업. 예: 세션 저장, 로그 플러시, 알림 발송 |
-| **대기 시간** | 기본 1시간(최대 48시간). 작업 완료 후 `CONTINUE` 또는 `ABANDON` 신호를 보내야 다음 단계 진행 |
+| **대기 시간** | `HeartbeatTimeout` 기본 **3,600초(1시간)**, 설정 범위 **30~7,200초**. 작업 완료 후 `CONTINUE` 또는 `ABANDON` 신호를 보내야 다음 단계 진행 |
+| **최대 대기(`GlobalTimeout`)** | **172,800초(48시간) 또는 `HeartbeatTimeout`의 100배 중 더 작은 값**. 기본 1시간이면 100배가 360,000초라 48시간이 상한이지만, `HeartbeatTimeout`을 줄이면 상한도 함께 줄어듭니다 |
+| **타임아웃 시 동작** | `DefaultResult`에 지정한 값(`CONTINUE` \| `ABANDON`)을 수행. `RecordLifecycleActionHeartbeat` API로 타임아웃을 늦출 수 있습니다 |
 | **연동** | EventBridge 이벤트, SQS 메시지, SNS 알림으로 훅 이벤트를 수신해 Lambda 등을 트리거 |
 
 > 🧠 원리: 왜 수명 주기 훅은 ASG 외부에서 완료 신호(`CONTINUE`/`ABANDON`)를 받기 전까지 대기할까요?
 > ASG는 인스턴스가 준비됐는지 직접 판단할 수 없어, 외부 스크립트나 Lambda가 초기화 작업을 완료했음을 알릴 방법이 필요합니다.
 > 대기 상태(`Pending:Wait` / `Terminating:Wait`)를 두면 초기화·정리 작업이 완료되기 전에 ELB가 트래픽을 보내거나 인스턴스가 강제 종료되는 경쟁 조건을 방지할 수 있습니다.
 > `ABANDON` 신호는 초기화 실패 시 해당 인스턴스를 교체 흐름으로 넘겨 불완전하게 준비된 인스턴스가 트래픽을 받지 않도록 합니다.
+
+---
+
+### 9) ASG 운영 세부 — 타이밍 설정과 교체 동작 {#asg-operations}
+
+ASG는 "용량을 정하는 것"이 아니라 **언제 판단하고 얼마를 기다릴지**가 실제 동작을 가릅니다.
+
+| 설정 | 값·동작 |
+|---|---|
+| **헬스 체크 유예 기간** | ⚠️ **기본값이 생성 경로에 따라 갈립니다** — **콘솔 300초 / AWS CLI·SDK 0초**(0은 유예 비활성). 새로 시작된 인스턴스가 ELB 헬스 체크를 즉시 통과하지 못해 불필요하게 종료되는 것을 막습니다 |
+| 유예 적용 대상 | 새로 시작된 인스턴스 · standby에서 복귀한 인스턴스 · 수동으로 연결(attach)한 인스턴스 |
+| ⚠️ 유예 중 예외 | 유예 기간 중이라도 인스턴스가 EC2 **`running` 상태가 아니면 즉시 `Unhealthy`로 표시하고 교체**합니다(예: 인스턴스를 중지하면 바로 교체) |
+| **기본 쿨다운** | **300초** — 단순 조정 정책이 쓰는 기본값. 정책별 쿨다운을 지정하면 기본값을 덮어씁니다 |
+| **기본 인스턴스 워밍업** | 인스턴스가 `InService`에 도달한 뒤 자원 사용이 안정되는 시간. **워밍업이 끝나기 전에는 집계 CloudWatch 지표에 포함되지 않습니다** — 그래서 동적 조정이 "아직 몸을 안 푼" 인스턴스를 세어 과소 확장하는 일을 막습니다 |
+
+**축소 정책의 쿨다운은 따로 줄이는 것이 보통입니다** — 종료는 시작보다 훨씬 빠른 작업이라 기본 300초가 너무 길고, 축소 정책에 더 짧은 값을 주면 더 빨리 줄여 비용을 아낄 수 있습니다.
+
+**복수 동적 조정 정책이 동시에 발동하면 (★ 시험 포인트)**
+
+대상 추적 여러 개, 단계 조정 여러 개, 또는 둘을 섞어 쓸 수 있습니다. 두 정책이 같은 순간에 발동하면 **Amazon EC2 Auto Scaling은 가장 큰 용량을 제공하는 정책을 택합니다** — 스케일 아웃과 스케일 인 양쪽 모두에 적용됩니다.
+
+예: CPU 기반 정책이 1대를 시작하고 SQS 큐 기반 정책이 2대를 시작한다면 → **SQS 정책이 우선**해 2대를 시작합니다. 축소에서도 기준이 서로 달라도(3대 종료 vs 25% 감소) **더 큰 용량을 남기는 쪽**을 택합니다.
+
+**웜 풀 — 부팅이 긴 애플리케이션의 지연 줄이기**
+
+- ASG 옆에 두는 **사전 초기화된 EC2 인스턴스 풀**입니다. 스케일 아웃이 필요하면 ASG가 웜 풀에서 끌어와 희망 용량을 채웁니다(**warm start**). 풀에서 나온 인스턴스는 희망 용량에 계산됩니다.
+- 기본 크기는 **ASG 최대 용량 − 희망 용량**입니다(희망 6·최대 10이면 웜 풀 4). `MaxGroupPreparedCapacity`로 따로 지정할 수 있습니다.
+- 웜 풀에 있는 동안에는, 조정 정책이 **`InService` 인스턴스의 지표만** 보고 스케일 아웃을 판단합니다.
+
+**인스턴스 새로 고침 — 제한을 알아야 쓸 수 있습니다**
+
+- 교체를 계속 진행할 수 있는 **최대 총 기간은 14일**입니다.
+- standby·스케일 인 보호 인스턴스를 기다리거나 새 인스턴스가 헬스 체크를 통과하지 못해 진행이 막히면 **1시간 동안 재시도**하고 상태 메시지를 남깁니다. 1시간 뒤에도 해결되지 않으면 작업이 **실패**합니다.
+- ⚠️ **skip matching은 사용자 데이터 스크립트로 배포한 코드 변경을 감지하지 못합니다.** 사용자 데이터로 새 코드를 끌어오는 구성이면 skip matching을 끄세요.
+- 인스턴스 새로 고침이 활성인 동안에는 시작 템플릿·시작 구성·혼합 인스턴스 정책을 **업데이트할 수 없습니다**.
+
+**인스턴스 유지관리 정책** — 교체 시 용량을 어떻게 다룰지 고르는 설정입니다.
+
+| 옵션 | 동작 | 적합 |
+|---|---|---|
+| **시작 후 종료**(Launch before terminating) | 새 인스턴스를 먼저 띄운 뒤 기존 것을 종료 | 비용보다 **가용성** 우선 |
+| **종료와 동시 시작**(Terminate and launch) | 기존 종료와 동시에 새로 시작 | 가용성보다 **비용** 우선 · 현재 용량 이상으로 늘리지 말아야 할 때 |
+| **커스텀** | 교체 중 유지할 용량의 최소·최대 범위를 직접 지정 | 비용·가용성 절충 |
+
+정책을 두지 않는 것이 ASG의 기본이고, 그때의 기본 동작은 헬스 체크 실패·인스턴스 새로 고침·최대 수명 도달·재조정 모두 **"종료와 동시 시작"** 입니다.
+
+> 🧠 원리: 왜 유예 기간·쿨다운·워밍업이 따로 있을까요?
+> 세 값이 가리키는 **판단 주체와 질문**이 다릅니다.
+> 유예 기간은 "이 인스턴스를 **죽일지**"(헬스 체크)를, 쿨다운은 "**또 조정할지**"(단순 조정 정책)를, 워밍업은 "이 인스턴스를 **지표에 셀지**"(집계)를 묻습니다.
+> 하나로 합치면 "부팅이 느린 앱"과 "지표가 늦게 안정되는 앱"을 구분할 수 없게 됩니다 — 전자는 유예를, 후자는 워밍업을 늘려야 하는데 그 둘은 서로 다른 시간입니다.
+> 공식이 "유예 기간을 너무 높게 잡으면 헬스 체크의 효과가 떨어진다"고 경고하는 것도 이 분리 때문입니다 — 유예로 워밍업 문제를 덮으면 진짜 고장도 못 잡습니다.
+
+---
+
+### 10) 불변 인프라와 배포 전략 {#immutable-infrastructure}
+
+**불변 인프라(immutable infrastructure)** 는 운영 워크로드에 **업데이트·보안 패치·구성 변경을 제자리(in-place)에서 하지 않는다**는 모델입니다(Well-Architected `REL08-BP04`). 변경이 필요하면 **새 인프라에 구축해 배포**합니다.
+
+- 가장 흔한 구현은 **불변 서버** — SSH로 들어가 버전을 올리는 대신, 모든 변경이 **코드 저장소 푸시**에서 시작합니다.
+- 변경이 허용되지 않으므로 **배포된 시스템의 상태를 확신**할 수 있습니다. 그래서 불변 인프라는 본질적으로 더 **일관·신뢰·예측 가능**합니다.
+- ASG의 **인스턴스 새로 고침**(§9)이 이 모델의 실행 수단입니다 — 인스턴스를 고치지 않고 새 시작 템플릿 버전으로 교체합니다.
+
+**불변 인프라에 배포할 때 쓰는 두 전략**
+
+| 전략 | 방식 | 되돌리기 |
+|---|---|---|
+| **카나리** | 소수 고객을 새 버전(보통 단일 인스턴스 = 카나리)으로 보내고 동작 변화·오류를 깊이 관찰. 문제가 없으면 원하는 속도로 계속 배포 | 치명적 문제 시 카나리에서 트래픽을 빼고 이전 버전으로 돌림 |
+| **블루/그린** | 전체 플릿을 **병렬로** 배포하고 두 스택(blue·green)을 번갈아 씀. 보통 한 번에 전환하지만 **Route 53 가중 라우팅**으로 비율을 올려가며 전환할 수도 있음 | 이전 스택이 그대로 있어 되돌리기가 빠름 |
+
+CodeDeploy는 카나리·블루/그린 배포 구성을, Elastic Beanstalk은 블루/그린 구성을 지원합니다.
+
+---
+
+### 11) 앱을 바꿀 수 없는 워크로드의 신뢰성 {#legacy-reliability}
+
+공식 Task 2.2 Skill에 "**애플리케이션을 변경할 수 없을 때** 신뢰성을 개선하는 방법"이 있습니다. 코드를 손댈 수 없으면 **인프라 계층에서** 복원력을 만듭니다.
+
+**EC2 자동 복구** — 하드웨어·호스트 소프트웨어 장애로 인스턴스 가용성이 깨질 때 AWS가 **다른 하드웨어로 마이그레이션을 시도**합니다. 두 가지 메커니즘이 있습니다.
+
+| 메커니즘 | 활성화 |
+|---|---|
+| **단순 자동 복구** | 지원 인스턴스에서 **기본 활성** |
+| **CloudWatch 액션 기반 복구** | **수동 구성** — `StatusCheckFailed_System` 지표를 감시하는 경보를 만들고, 값이 **1**(시스템 상태 점검 실패)일 때 **복구 작업**을 수행하게 지정 |
+
+- ⚠️ **시스템 상태 점검**이 실패해야 동작합니다. **인스턴스 상태 점검만 실패하면 자동 복구는 동작하지 않습니다** — 시스템 점검 실패는 호스트의 하드웨어·소프트웨어 문제이고, 인스턴스 점검 실패는 게스트 OS·구성 문제라 복구 대상이 다릅니다.
+- **복구 후 보존되는 것**: 인스턴스 ID · 퍼블릭·프라이빗·탄력적 IP · 인스턴스 메타데이터 · 배치 그룹 · 연결된 EBS 볼륨 · 가용 영역
+- ⚠️ **상실되는 것**: 휘발성 메모리(RAM) 데이터 · **인스턴스 스토어 볼륨의 데이터**(CloudWatch 액션 기반 복구에 해당) · OS 가동 시간이 0으로 리셋
+
+**단일 인스턴스 ASG(`min=max=desired=1`)** — 수평 확장이 불가능한 앱도 ASG에 넣으면 **헬스 체크 실패 시 자동 교체**를 얻습니다. 확장은 못 해도 **자가 복구**는 생깁니다. 상태를 인스턴스 밖(EFS·RDS·ElastiCache)으로 빼 두면 교체가 안전해집니다(§8 스테이트리스 전제와 같은 이유).
+
+> **시험 신호**: "앱을 수정할 수 없다 / 레거시다 / 수평 확장이 안 된다" + "가용성을 높여야" → **단일 인스턴스 ASG + 자동 복구 + 상태 외부화**. 코드 변경을 요구하는 답(마이크로서비스 분해·재작성)은 전제를 어깁니다.
 
 ---
 
@@ -339,5 +450,16 @@ ASG에 ELB를 연결하면 인스턴스가 시작될 때 자동으로 대상 그
 5. Gateway Load Balancer — 소개("operates at the third layer... the network layer", 모든 IP 패킷·모든 포트) — https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html
 6. Classic Load Balancer — 소개("the previous generation of load balancers") — https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+8. ASG 헬스 체크 유예 기간(콘솔 300초·CLI/SDK 0초·유예 중 `running` 아니면 즉시 교체·적용 대상 3종) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-check-grace-period.html
+9. ASG 동적 조정 — 복수 정책 동시 발동 시 **가장 큰 용량을 제공하는 정책** 우선 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html
+10. ASG 조정 쿨다운 — 단순 조정 정책 **기본 300초**·정책별 쿨다운이 기본값을 덮어씀 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html
+11. ASG 웜 풀(기본 크기 = 최대 − 희망·`MaxGroupPreparedCapacity`·warm start·`InService` 지표만으로 판단) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html
+12. 인스턴스 새로 고침(최대 총 기간 **14일**·1시간 타임아웃·skip matching의 사용자 데이터 한계·활성 중 템플릿 업데이트 불가) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-refresh-overview.html
+13. 인스턴스 유지관리 정책(3옵션·정책 없을 때 기본은 "종료와 동시 시작") — https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-maintenance-policy-overview-and-considerations.html
+14. `LifecycleHook` API — `HeartbeatTimeout` 기본 3,600초·범위 30~7,200초, `GlobalTimeout` **172,800초(48시간) 또는 HeartbeatTimeout의 100배 중 더 작은 값**, `DefaultResult`·`RecordLifecycleActionHeartbeat` — https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LifecycleHook.html
+15. 불변 인프라로 배포 — Well-Architected `REL08-BP04`(in-place 변경 금지·불변 서버·카나리/블루그린·Route 53 가중 라우팅) — https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_tracking_change_management_immutable_infrastructure.html
+16. EC2 자동 인스턴스 복구(단순 자동 복구 기본 활성·CloudWatch 액션 기반·시스템 점검만 해당·보존/상실 항목·`StatusCheckFailed_System` 0/1) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
+
+> 📝 **2026-10-21 보강(갭 `G-2.2-03`·`G-2.2-06`·`G-2.2-11`, 배치 B6)**: ① **§9 신설** — 유예 기간의 **콘솔/CLI 기본값 분기**·기본 쿨다운 300초·기본 워밍업·복수 정책의 **큰 용량 우선**·웜 풀·인스턴스 새로 고침 제한·인스턴스 유지관리 정책(근거 8~13번). ② **§10 신설** — 불변 인프라와 카나리·블루/그린(근거 15번). ③ **§11 신설** — 앱 변경 불가 워크로드의 EC2 자동 복구와 단일 인스턴스 ASG(근거 16번). ④ **§8 수명 주기 훅 보강 — `99-gaps` V-15 해소**: 기존 "기본 1시간(최대 48시간)"은 조건이 빠져 있었습니다. 공식 `GlobalTimeout`은 **48시간 또는 `HeartbeatTimeout`의 100배 중 더 작은 값**이라 조건을 함께 적었습니다(근거 14번). 기존 §1~§8의 번호·앵커는 바꾸지 않았습니다.
 
 > 📝 **2026-10-19 정정**: ① GWLB 계층을 `L3/4` → **L3(네트워크 계층)**으로 고치고 "모든 IP 패킷·모든 포트 수신"을 명시했습니다(근거 5번). ② CLB 사용 사례 칸을 **이전 세대 LB(현행 세대로 마이그레이션 권고)**로 정정했습니다 — EC2-Classic 전용 LB가 아닙니다(근거 6번). ③ NLB의 "연결 지연 1ms 미만" 수치는 공식 근거를 찾지 못해 삭제했습니다(공식 서술은 초당 수백만 요청).
