@@ -30,7 +30,7 @@
 | C-17 | Quick(QuickSight) 요금제 | 구 백서(Standard $9/사용자·Enterprise $18/작성자+독자 세션) vs 현행 FAQ(사용자당 월 정액) | `3-5.md` F-14 | 요금제 암기 금지, SPICE·임베딩·서버리스 BI 구조 중심 |
 | C-18 | 영문 가이드의 "AWS managed services" 표기 | Task 2.1 지식 소문자 "AWS managed services" vs 2.2 "AWS Managed Services (AMS) with appropriate use cases (for example, Amazon Comprehend, Amazon Polly)" — 예시가 AMS와 무관해 의미 모호 | `2-2.md` | (해석) 공식 설명은 없음. 출제 범위는 "AWS 관리형 서비스 일반"으로 보는 것이 안전 |
 | C-19 | Storage Class Analysis 권고 범위 | 콘솔 도움말 "Standard→Standard-IA 전환 시점" vs FAQ "IA·One Zone-IA 전환 또는 Glacier 아카이브 대상 식별" | `4-1.md` F-10 | 접근 패턴 분석 도구라는 점만 확실 |
-| C-20 | EBS gp3 성능 상한 | 2022 블로그 "16,000 IOPS·1,000 MiB/s" vs 현행 표 **80,000 IOPS·2,000 MiB/s** | `4-1.md` F-15·`3-1.md` F-07: 현행 채택 | 구 수치는 구식 |
+| C-20 | EBS gp3 성능 상한 | 2022 블로그 "16,000 IOPS·1,000 MiB/s" vs 현행 표 **80,000 IOPS·2,000 MiB/s** | `4-1.md` F-15·`3-1.md` F-07: 현행 채택 | 구 수치는 구식. **2026-10-21 재확인(갭 배치 B7a)**: 공식 EBS 사용자 가이드가 기준 3,000 IOPS·125 MiB/s, 최대 **80,000 IOPS**(GiB당 500·160 GiB 이상)·**2,000 MiB/s**(IOPS당 0.25·8,000 IOPS 이상)로 적어 **현행 채택이 옳다.** ⚠️ 다만 일부 SDK 문서(ECS 관리형 볼륨 등)는 gp3 를 `3,000–16,000 IOPS` 로 적는다 — **서비스별 관리형 볼륨의 제약**이고 볼륨 자체 상한이 아니므로 구분해야 한다(`saa-t3-2` §3 에 그렇게 적었다) |
 | C-21 | In-Scope 목록의 서비스 상태 | 목록에 "Amazon Aurora Serverless"(구 명칭)·"AWS Snow Family"(신규 주문 불가)가 남아 있음 | `00-overview.md` §5, `3-3.md` F-07, `3-5.md` F-09 | 목록=범위, 서비스 현황=별개로 구분해 학습 |
 
 ---
