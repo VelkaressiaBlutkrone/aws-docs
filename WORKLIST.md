@@ -1,6 +1,6 @@
 # WORKLIST — 통합 작업 목록
 
-_생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — HANDOFF §0-2026-10-21) · 그 앞은 2026-10-21(갭 배치 행 매핑 재도출 — §B⑨가 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)를 가리키도록) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
+_생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — HANDOFF §0-2026-10-21-b) · 그 앞은 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — HANDOFF §0-2026-10-21) · 그 앞은 2026-10-21(갭 배치 행 매핑 재도출 — §B⑨가 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)를 가리키도록) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -66,7 +66,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — HAND
   - **SOA-C03 v1.1 신규 주제(#159):** 공식 Revisions Skill 변경 10건 + in-scope 추가 5건을 갭 노트 §4로 필터한 **13항목을 학습문서 10편**에 반영 + `soa_v11_topics_test.dart` 가드 35건. **기존 문서 본문 수정이라 라이브에 노출된다**(DEA 작업과 달리 신규 문서 추가가 아님). `soa_facts_test`의 `lastVerified`는 문서별 날짜 맵으로 강화.
   - **다음(사람 몫):** `saa-t1-1`·`saa-t1-4`·`saa-t2-5` 재검수 → flip. 열리면 D1 30/19·D2 30/17이지만 그 시점 D1에 **공식 Task 1.3이 0문항**이라 `saa-t1-5`가 1순위 보강 batch다.
 
-- [~] **⑨ SAA 검수 2차 트랙 — md→문항 전파 감사 + 영구 가드 + 갭 배치** — 2026-10-20, #164~#168 + 부기 #169가 **PR#170으로 main 릴리스·Pages success·라이브 실측 완료**(main `3fd4b7d`). 경위·교훈·운영 규칙 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20. **열린 항목은 갭 배치뿐** — 행 단위 배정의 정본은 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)다(134행 전수 → B1~B11 · 겹치는 문서가 있어 **순차로만** · **B11은 사람 flip 이후**). 어느 배치까지 들어왔는지는 `git log --oneline --grep="갭 배치" origin/main..develop`과 `gh pr list --state merged --search "갭 배치"`로 확인한다(여기에 진행 상태를 적지 않는다 — §0 서술 규약 ②). 배치 저작의 경위·교훈(가드 설계 순서 ①~④와 그 반대 사례·맵 상세 표가 원본 행을 대체하는 규칙·공식이 통념과 달랐던 항목)은 [HANDOFF.md](HANDOFF.md) §0-2026-10-21이 정본이다.
+- [~] **⑨ SAA 검수 2차 트랙 — md→문항 전파 감사 + 영구 가드 + 갭 배치** — 2026-10-20, #164~#168 + 부기 #169가 **PR#170으로 main 릴리스·Pages success·라이브 실측 완료**(main `3fd4b7d`). 경위·교훈·운영 규칙 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20. **열린 항목은 갭 배치뿐** — 행 단위 배정의 정본은 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)다(134행 전수 → B1~B11 · 겹치는 문서가 있어 **순차로만** · **B11은 사람 flip 이후**). 어느 배치까지 들어왔는지는 `git log --oneline --grep="갭 배치" origin/main..develop`과 `gh pr list --state merged --search "갭 배치"`로 확인한다(여기에 진행 상태를 적지 않는다 — §0 서술 규약 ②). 배치 저작의 경위·교훈(가드 설계 순서 ①~④와 그 반대 사례·맵 상세 표가 원본 행을 대체하는 규칙·공식이 통념과 달랐던 항목)은 [HANDOFF.md](HANDOFF.md) §0-2026-10-21이 정본이고, **B8 완결·B9a·명칭 일관성은 §0-2026-10-21-b**다(공식이 통념과 달랐던 12건 표·가드 설계의 반대 방향 3건·2단 머지 체인이 끊기는 조건 포함).
   - **핵심 발견:** 2026-10-19 md 사실 정정이 **파생 문항에 전파되지 않았다.** md 가드의 금지 문장을 문항 전수와 대조해 **7건**을 찾았고 그중 `saa-t4-2`는 **이미 flip돼 라이브 노출 중**이었다. 신설 가드 `flutter_app/test/saa_question_propagation_test.dart`가 같은 계열을 막는다 — **md 가드에 금지 문장을 추가하면 이 목록에도 추가**해야 한다.
   - **문항 수정 누계(2차 트랙):** t1-5 fix 6·출처 11 · 전파 7건(fix 5 + 전제 보강 2) · Aurora 명칭 5건 · Snow 전제 1건. **정답 인덱스 변경은 전 구간 0건**이고 `verified` flip은 하지 않았다(사람 전용).
   - **갭 배치:** SAA `[누락]` 50 + `[부분]` 84 = **134행**을 B1~B11에 **전수 배정**했다(미배정 0) — 정본 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md). 2026-10-20 서술의 배치 행수(4+32+63+13=112)는 같은 문단의 "실질 열림 129행"과 **17행 어긋나고** 제외 5행의 번호도 기록되지 않아, 2026-10-21에 공식 Task 경계로 **재도출**했다. **배치는 순차로만** — 겹치는 문서가 7쌍 있어 병렬은 both-added 충돌을 낸다. 부분 제약 16항목은 `99-gaps.md` V 목록 때문에 수치·단정 금지.

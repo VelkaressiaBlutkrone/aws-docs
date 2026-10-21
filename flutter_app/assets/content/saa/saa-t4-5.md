@@ -84,7 +84,7 @@ lastVerified: 2026-10-19
 |---|---|---|---|
 | **AWS Cost Explorer** | "지금까지 얼마를 어디에 썼나? 앞으로 얼마나 쓸까?" | 과거 13개월 + 미래 18개월 예측 | 인터랙티브 그래프·CSV·RI/SP 구매 추천 |
 | **AWS Budgets** | "예산을 초과하거나 초과할 것 같으면 알려줘 / 막아줘" | **하루 최대 3회 갱신**(보통 8~12시간 간격) | 이메일·SNS 알림, Budget Actions(IAM·SCP·인스턴스 중지) |
-| **Cost and Usage Report (CUR)** | "서비스·리소스·태그 단위로 최상세 내역이 필요하다" | 시간·일·월 단위 라인 아이템 | S3 파일(CSV·Parquet) → Athena·Redshift·QuickSight 쿼리. 신규는 **Data Exports의 CUR 2.0** |
+| **Cost and Usage Report (CUR)** | "서비스·리소스·태그 단위로 최상세 내역이 필요하다" | 시간·일·월 단위 라인 아이템 | S3 파일(CSV·Parquet) → Athena·Redshift·Quick Sight 쿼리. 신규는 **Data Exports의 CUR 2.0** |
 | **Cost Anomaly Detection** | "예상치 못한 비용 급등을 자동으로 잡아줘" | ML 모델이 지속 학습 | 이상 감지 알림(이메일·SNS), 루트 코즈 분석 |
 
 > **한 줄 원칙**: "분석·예측 = Cost Explorer, 예산·경보·차단 = Budgets, 감사·BI = CUR, 자동 이상 감지 = Cost Anomaly Detection"
@@ -153,8 +153,10 @@ lastVerified: 2026-10-19
 CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
   → Amazon Athena (SQL 쿼리)
   → Amazon Redshift (DW 적재)
-  → Amazon QuickSight (시각화)
+  → Amazon Quick Sight (시각화)
 ```
+
+> ℹ️ **정직성 메모 — BI 서비스 이름이 바뀌었습니다.** 공식 문서는 **`Amazon Quick`** 을 상위 서비스로 두고, 기존 **QuickSight** 를 그 안의 **`Amazon Quick Sight`**(두 단어) 기능으로 잇습니다 — *"QuickSight continues as Amazon Quick Sight, a feature within Quick."* ⚠️ **기존 QuickSight API·SDK·연동은 변경 없이 그대로 동작**하고 네임스페이스도 `quicksight` 입니다. 시험 문항과 과거 자료는 아직 **QuickSight** 로 적을 수 있으니 **두 이름을 같은 것으로** 알아 두세요. 개명의 전모는 `saa-t3-9` §8에 있습니다.
 
 - **현행 방식은 Data Exports의 CUR 2.0**입니다. 기존 CUR과 같은 정보를 제공하면서 ① **고정 스키마**(기존 CUR은 사용 서비스·태그에 따라 열이 매월 달라짐), ② `resource_tags`·`cost_category`·`product`·`discount`의 **중첩 열**, ③ **SQL로 열 선택·행 필터·열 별칭** 지정을 지원합니다. 기존 파이프라인과 하위 호환되는 내보내기도 만들 수 있습니다.
 

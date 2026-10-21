@@ -132,7 +132,36 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 - 읽기 전용 독립 엔드포인트를 가집니다. 읽기 트래픽을 분산해 주 인스턴스 부하를 낮춥니다.
 - **교차 리전(Cross-Region)** Read Replica 지원 — 글로벌 읽기 분산 및 재해 복구(DR) 활용.
 - 필요 시 독립 DB 인스턴스로 **수동 승격(promote)** 가능합니다.
-- 비동기 특성상 **복제 지연(lag)** 이 있어, 쓰기 직후 즉시 읽기가 필요한 워크로드에는 부적합할 수 있습니다.
+- 비동기 특성상 **복제 지연(lag)** 이 있어, 쓰기 직후 즉시 읽기가 필요한 워크로드에는 부적합할 수 있습니다. 지연은 `ReplicaLag` 지표로 감시합니다.
+- ⚠️ **복제본을 만들려면 소스에 자동 백업이 켜져 있어야 합니다**(보존 기간이 0이 아니어야 합니다).
+- ⚠️ **승격은 되돌릴 수 없습니다.** 승격된 복제본은 쓰기 가능한 독립 인스턴스가 되고 WAL 수신을 멈춥니다.
+
+**연쇄(캐스케이드) 복제본 — RDS for PostgreSQL**
+
+- **PostgreSQL 14.1 이상**에서만 복제본의 복제본을 만들 수 있고, 체인은 **최대 3단계**까지입니다. 14.1 미만에서는 복제본에서 복제본을 만들 수 없습니다.
+- 체인 중간을 승격하면 **하위 복제본은 승격된 인스턴스로부터 WAL을 계속 받습니다**(끊기지 않습니다).
+- ⚠️ 소스에 사용자 트랜잭션이 없으면 **복제 지연이 최대 5분까지 보고될 수 있습니다.** 지연을 `현재 시각 − 마지막 커밋 트랜잭션 시각`으로 계산하는데, 기본적으로 WAL 세그먼트가 5분마다 전환되기 전까지 값이 계속 커지기 때문입니다 — **장애가 아닙니다.**
+
+**Aurora Auto Scaling — 리더를 지표에 맞춰 늘리고 줄이기 (★ 시험 포인트)**
+
+Aurora는 Aurora Replica 수를 대상 추적으로 자동 조정할 수 있습니다. 사전 정의 지표는 둘입니다.
+
+| 사전 정의 지표 | 보는 값 |
+|---|---|
+| `RDSReaderAverageCPUUtilization` | 클러스터 내 모든 Aurora Replica의 `CPUUtilization` 평균 |
+| `RDSReaderAverageDatabaseConnections` | 모든 Aurora Replica의 `DatabaseConnections` 평균 |
+
+- ⚠️ **클러스터당 대상 지표마다 Auto Scaling 정책은 1개**만 만들 수 있습니다.
+- 대상 지표는 **모든 리더 인스턴스의 평균**으로 계산됩니다 — Auto Scaling이 만든 것뿐 아니라 **수동으로 추가한 리더도 포함**하고, **커스텀 엔드포인트에 연결된 리더도 포함**합니다(커스텀 엔드포인트 자체는 계산에 영향을 주지 않습니다). ⚠️ **라이터는 제외**됩니다. CloudWatch 차원은 `DBClusterIdentifier`·`Role=READER`입니다.
+
+```
+예) 라이터 50% · 리더1(커스텀 엔드포인트) 90% · 리더2(커스텀 엔드포인트) 90%
+    · 리더3(Auto Scaling이 추가) 10%
+
+    대상 지표 = (90 + 90 + 10) / 3 = 63.33%     ← 라이터 50%는 들어가지 않습니다
+```
+
+> 이 계산 규칙이 함정입니다. "커스텀 엔드포인트로 분리해 둔 리더는 Auto Scaling 판단에서 빠진다"고 착각하면, 전용 리더가 과부하인데도 평균이 낮아 확장이 안 되는 상황을 설명할 수 없습니다.
 
 > 🧠 원리: 왜 Read Replica는 비동기 복제를 사용할까요?
 > 동기 복제는 모든 쓰기가 복제본의 확인을 기다려야 하므로, 복제본이 많아질수록 주 인스턴스의 쓰기 지연이 복제본 수만큼 누적됩니다.
@@ -173,6 +202,26 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 | **Provisioned IOPS SSD(io1/io2)** | I/O 집약·저지연·일관된 처리량이 필요한 프로덕션 |
 | **Magnetic** | 사용 중단됨. 새 DB 인스턴스 생성에는 제공되지 않으며 gp3 또는 io2 사용 권장 |
 
+**스토리지 오토스케일링 — 세 조건이 동시에 맞아야 발동합니다 (★ 시험 포인트)**
+
+용량 계획이 어려운 워크로드는 스토리지 오토스케일링을 켜 둡니다. RDS는 **아래 세 조건이 모두 맞을 때** 스토리지 수정을 시작합니다.
+
+| 조건 | 공식 기준 |
+|---|---|
+| 여유 공간 | 사용 가능한 여유 공간이 **할당 스토리지의 10% 이하** |
+| 지속 시간 | 그 저장 공간 부족 상태가 **최소 5분** 지속 |
+| 직전 작업 | 이전 스토리지 수정의 최적화가 완료됐고, **지난 24시간 동안 스토리지 수정이 4회 미만** |
+
+증가량은 다음 **셋 중 더 큰 값**입니다.
+
+- **10 GiB**
+- 현재 할당 스토리지의 **10%**
+- 지난 1시간의 `FreeStorageSpace` 지표로 예측한 **향후 7시간** 성장분이 현재 할당 크기를 넘는 경우 그 초과분
+
+**최대 스토리지 임계값**(오토스케일링 상한)은 현재 할당보다 **최소 10% 이상** 크게 잡아야 하고, 임계값 접근 알림을 피하려면 **26% 이상**이 권장됩니다. 예를 들어 할당 1000 GiB면 **최소 1100 GiB**, **권장 1260 GiB**입니다. 10% 미만으로 잡으면 유효하지 않은 크기 오류가 납니다.
+
+> ⚠️ **스토리지 오토스케일링은 추가 스토리지 볼륨(additional storage volumes)에는 지원되지 않습니다.** Oracle·SQL Server에서 데이터 볼륨을 따로 붙여 쓰는 구성이라면 그 볼륨은 자동 확장 대상이 아닙니다.
+
 > 🧠 원리: 왜 I/O 집약 워크로드에서는 범용 SSD보다 Provisioned IOPS가 필요할까요?
 > 범용 SSD 중 **gp2는 버스트 크레딧 방식**(GiB당 3 IOPS 기준선, 1 TiB 미만 볼륨은 3,000 IOPS까지 버스트)이라 크레딧이 소진되면 기준 처리량으로 되돌아가 성능이 불규칙해집니다. 반면 **gp3는 버스트 성능을 쓰지 않고** 기준 3,000 IOPS·125 MiB/s를 지속하며, IOPS·처리량을 용량과 독립적으로 올릴 수 있습니다.
 > Provisioned IOPS는 요청한 IOPS를 지속적으로 제공하도록 설계되어, 트랜잭션이 밀집된 OLTP 워크로드에서 예측 가능한 낮은 지연을 유지할 수 있습니다.
@@ -200,6 +249,41 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 | **Aurora serverless** | 트래픽에 따라 자동 미세 스케일. 간헐적·불규칙 워크로드, 운영 부담 최소화 |
 | **Aurora Global Database** | 리전 간 복제 지연이 일반적으로 **1초 미만**. 글로벌 저지연 읽기 및 재해 복구(RPO는 보통 초 단위, RTO는 분 단위) |
 | **자동 백업 + 역추적(Backtrack)** | PITR 외에도 특정 시점으로 DB를 되감기 가능(MySQL 호환만) |
+
+**스토리지 구성 두 가지 — I/O 지출 25%가 분기점 (★ 시험 포인트)**
+
+| 구성 | 과금 | 고르는 기준 |
+|---|---|---|
+| **Aurora I/O-Optimized** | 사용량·스토리지만 — **읽기/쓰기 I/O 작업에 추가 요금이 없습니다** | I/O 지출이 전체 Aurora 지출의 **25% 이상**일 때 |
+| **Aurora Standard** | 사용량·스토리지 + **I/O 100만 건당 표준 요율** | I/O 지출이 전체의 **25% 미만**일 때 |
+
+⚠️ **전환은 방향에 따라 제약이 다릅니다.**
+
+- **Standard → I/O-Optimized: 30일에 한 번**만 가능합니다.
+- **I/O-Optimized → Standard: 언제든지** 가능합니다.
+- 비(非)NVMe 기반 인스턴스는 전환에 **중단이 없습니다**(Aurora serverless 인스턴스가 비NVMe라 재부팅도 필요 없습니다). ⚠️ **NVMe 기반 인스턴스는 DB 엔진 재시작이 필요해 짧은 중단이 발생할 수 있습니다.**
+
+**Performance Insights — 부하를 "활성 세션"으로 봅니다**
+
+Performance Insights는 DB 부하를 활성 세션 수로 환산해 보여 줍니다. 핵심 지표는 둘입니다.
+
+- **`db.load.avg`** — 엔진의 활성 세션 수를 **스케일한 표현**. 대부분의 용도에서는 이것만 조회하면 됩니다.
+- `db.sampledload.avg` — 활성 세션 수의 **원시 값**. 활성 세션이 내부 임계값을 넘으면 Performance Insights가 샘플링하므로 이 값이 `db.load.avg`보다 작아집니다(임계값 미만이면 두 값이 같습니다).
+
+**Aurora Global Database 구성 요건 — 보조 리전을 늘리면 1차의 리더가 줄어듭니다 (★ 시험 핵심)**
+
+| 항목 | 1차 리전 | 보조 리전 |
+|---|---|---|
+| Aurora DB 클러스터 | 1 | **최대 10** |
+| 라이터 인스턴스 | 1 | **0** (보조는 전부 읽기 전용) |
+| 클러스터당 읽기 전용 인스턴스 | 최대 15 | **총 16** |
+
+- ⚠️ **1차 클러스터가 가질 수 있는 Aurora Replica 수 = 15 − (보조 리전 수)** 입니다. "1차의 리더 인스턴스 수 + 보조 클러스터 수 ≤ 15"로 외우면 됩니다. 예를 들어 **보조 리전이 10개면 1차는 Replica를 5개만** 둘 수 있고, 1차에 리더가 14개면 보조 클러스터는 1개까지만 붙습니다.
+- **DB 인스턴스 클래스는 메모리 집약형에 최적화된 것이 필요**합니다 — **`db.r5` 이상**이 권장됩니다.
+- 모든 클러스터는 서로 **다른 리전**에 있어야 하고, 클러스터 이름은 전 리전에서 유일해야 합니다.
+- ⚠️ **Global Database가 지원하지 않는 것**: **역추적(Backtrack)** · **보조 DB 클러스터의 Aurora Auto Scaling** · 자동 마이너 버전 업그레이드(설정해도 효과가 없습니다). 관리형 교차 리전 스위치오버·페일오버는 1차와 보조의 **메이저·마이너 엔진 버전이 같을 때**만 가능합니다.
+
+> 위 표의 "보조 16"과 "1차 15"를 따로 외우면 틀립니다 — **둘은 15라는 하나의 예산을 나눠 쓰는 관계**입니다. 글로벌 읽기 확장을 설계하라는 문제에서 리전 수와 리더 수를 동시에 최대로 잡은 선택지는 그래서 오답입니다.
 
 > 🧠 원리: 왜 Aurora는 스토리지 레이어를 컴퓨팅과 분리했을까요?
 > 전통적인 DB 아키텍처에서는 읽기와 쓰기가 같은 디스크 I/O 대역폭을 공유하므로, 복제본이 많아질수록 스토리지 경쟁이 심해집니다.
@@ -242,6 +326,26 @@ Aurora는 MySQL·PostgreSQL 호환이지만 스토리지 구조가 근본적으�
 | Lambda → RDS 연결 | 함수 실행마다 새 연결 생성으로 DB 연결 고갈 위험 |
 | 연결 수가 많은 마이크로서비스 | 다수의 서비스 인스턴스가 DB에 직접 연결 시 과부하 |
 | 페일오버 중단 최소화 | 프록시가 연결을 유지한 채 스탠바이로 전환 |
+
+**다중화(multiplexing)와 핀닝(pinning) — 효율이 어디서 깨지는가 (★ 시험 핵심)**
+
+연결 풀링이 실제로 이득을 내는 기전은 **다중화**입니다. 요청이 이전 요청의 상태에 의존하지 않으면, RDS Proxy는 **트랜잭션이 끝날 때마다 뒤쪽 DB 연결을 재사용**합니다. 기본적으로 한 클라이언트 연결의 SQL 트랜잭션들이 여러 DB 연결 사이를 오갈 수 있습니다.
+
+**핀닝**은 그 반대입니다. 프록시가 **다른 세션에 적용하면 안 되는 세션 상태 변경**을 감지하면 그 클라이언트 연결을 특정 DB 연결에 **고정**합니다.
+
+| 항목 | 동작 |
+|---|---|
+| 고정되는 범위 | 이후 모든 트랜잭션이 **같은 DB 연결**을 씁니다 |
+| 풀리는 시점 | ⚠️ **세션이 끝날 때까지** — 즉 **클라이언트 연결이 끊길 때까지**입니다. 트랜잭션이 끝나도 풀리지 않습니다 |
+| 다른 클라이언트 | 그동안 **그 DB 연결을 재사용할 수 없습니다** |
+| 대표 원인 | `SET`·`SELECT`로 **세션 변수나 구성 파라미터를 변경**하는 것 |
+
+- 엔진이 **추적하는 statement·변수**는 예외입니다 — 이 경우 핀닝하지 않고, **같은 값을 가진 세션끼리만** 그 연결을 재사용합니다.
+- ⚠️ **PostgreSQL은 변수를 설정하면 세션 핀닝이 발생합니다.** MySQL 계열에는 **세션 핀닝 필터**를 프록시에 적용해, 정확성에 영향이 없다고 판단한 작업을 핀닝에서 면제할 수 있습니다.
+- 발생 빈도는 CloudWatch 지표 **`DatabaseConnectionsCurrentlySessionPinned`**로 봅니다.
+- 완화책의 정석: 모든 클라이언트가 똑같이 수행하는 `SET` 초기화문을 애플리케이션에서 빼고 프록시의 **초기화 쿼리(initialization query)**로 옮기는 것입니다. 그러면 프록시가 새 연결을 만들 때마다 그 설정을 적용하므로 **트랜잭션 수준 다중화가 보존**됩니다.
+
+> **다중 테넌트에서 특히 아픕니다.** 테넌트마다 세션 변수를 바꿔 격리하는 구조라면 거의 모든 연결이 핀닝돼 프록시를 둔 이득이 사라집니다. 거의 전부가 핀닝되고 있다면 프록시 설정이 아니라 **애플리케이션이 세션 상태를 쓰는 방식**을 고쳐야 합니다.
 
 > 🧠 원리: 왜 Lambda가 RDS에 직접 연결하면 연결 고갈이 발생할까요?
 > Lambda는 함수 실행마다 새 프로세스(컨테이너)가 기동되고, 각 프로세스가 DB에 별도 연결을 맺습니다.
@@ -398,6 +502,18 @@ Lambda는 동시 실행마다 별도 컨테이너에서 새 DB 연결을 생성�
 14. AWS DMS 동종 데이터 마이그레이션(네이티브 도구 자동 실행, full load / ongoing replication / full load+CDC) — https://docs.aws.amazon.com/dms/latest/userguide/data-migrations.html
 15. AWS SCT 시작하기(이기종 전환의 대상 스키마·코드 객체 변환) — https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_GettingStarted.html
 16. Aurora 복제본 추가("The primary DB instance supports read and write operations", 복제본은 읽기 전용·최대 15) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-replicas-adding.html
+17. RDS 스토리지 오토스케일링(발동 3조건·증분 규칙·최대 임계값 10%/26%·추가 스토리지 볼륨 미지원) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.Autoscaling.html (갭 배치 B8a: 2026-10-21)
+18. Aurora 스토리지 구성(I/O-Optimized vs Standard·25% 기준·30일 1회·NVMe 재시작) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html (갭 배치 B8a: 2026-10-21)
+19. Aurora Auto Scaling(사전 정의 지표 2종·대상 지표당 정책 1개·리더 평균 계산·라이터 제외) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Integrating.AutoScaling.html (갭 배치 B8a: 2026-10-21)
+20. RDS Proxy 핀닝 회피(다중화·핀닝 원인·세션 종료까지 고정·초기화 쿼리·`DatabaseConnectionsCurrentlySessionPinned`) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/rds-proxy-pinning.html (갭 배치 B8a: 2026-10-21)
+21. RDS for PostgreSQL 읽기 복제본 구성(소스당 15·14.1+ 체인 3단계·자동 백업 전제·무트랜잭션 시 지연 5분) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PostgreSQL.Replication.ReadReplicas.Configuration.html (갭 배치 B8a: 2026-10-21)
+22. Aurora Global Database 구성 요건(보조 10·1차 Replica 15−s·메모리 최적화 db.r5+) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.configuration.requirements.html (갭 배치 B8a: 2026-10-21)
+23. Aurora Global Database 제한(Backtrack·보조 클러스터 Auto Scaling·자동 마이너 업그레이드 미지원) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html (갭 배치 B8a: 2026-10-21)
+24. Performance Insights API(`db.load.avg` = 활성 세션 수의 스케일된 표현) — https://docs.aws.amazon.com/performance-insights/latest/APIReference/API_ResponseResourceMetricKey.html (갭 배치 B8a: 2026-10-21)
+
+> 📝 **2026-10-21 보강 (갭 배치 B8a)**: ① §3에 **Aurora Auto Scaling**(사전 정의 지표 2종·**대상 지표당 정책 1개**·리더 평균 계산에서 **라이터 제외**·커스텀 엔드포인트 리더 포함)과 **PostgreSQL 연쇄 복제본**(14.1+·3단계·소스 자동 백업 전제·무트랜잭션 시 지연 5분)·`ReplicaLag`·승격 비가역을 추가했습니다(근거 19·21번). ② §6에 **스토리지 오토스케일링 발동 3조건**(여유 10% 이하·5분 지속·24시간 4회 미만)과 증분 규칙(10 GiB / 10% / 7시간 예측 중 큰 값)·최대 임계값 권고(10% 필수·**26% 권장**)·**추가 스토리지 볼륨 미지원**을 추가했습니다(근거 17번). ③ §7에 **Aurora I/O-Optimized vs Standard**(25% 분기·**I/O-Optimized 전환은 30일 1회 / Standard 복귀는 수시**·NVMe는 엔진 재시작)·**Performance Insights `db.load.avg`**·**Global Database 구성 요건**(**1차 Replica = 15 − 보조 리전 수**)을 추가했습니다(근거 18·22·23·24번). ④ §9에 **다중화와 핀닝**(세션 종료까지 고정·PostgreSQL은 변수 설정만으로 핀닝·MySQL 세션 핀닝 필터·초기화 쿼리·`DatabaseConnectionsCurrentlySessionPinned`)을 추가했습니다(근거 20번).
+>
+> **쓰지 않은 것**: ① 갭 노트가 적은 **연쇄 복제본 "최대 155"** — 공식 문서는 소스당 15개와 14.1+ 3단계만 적고 155라는 총수를 두지 않아 쓰지 않았습니다. ② **Provisioned IOPS 범위(1,000–256,000)** — 이번 조회에서 공식 확인에 이르지 못해 수치를 비워 두었습니다. ③ **Oracle·SQL Server 추가 스토리지 볼륨**의 세부는 오토스케일링 미지원이라는 사실만 적고 구성 방법은 다루지 않았습니다.
 
 > 📝 **2026-10-19 정정**: ① 범용 SSD를 gp2·gp3 한 묶음으로 "버스트 크레딧"이라 설명했던 원리 블록을 분리했습니다 — **gp3는 버스트 모델이 아니며** 기준 3,000 IOPS·125 MiB/s를 지속합니다(근거 12번). ② **Aurora serverless** 명칭으로 통일했습니다(공식 문서 제목이 "Using Aurora serverless"로 변경 — 과거 자료의 "v2" 표기와 같은 기능입니다).
 
