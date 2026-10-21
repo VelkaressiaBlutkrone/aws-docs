@@ -32,7 +32,7 @@ lastVerified: 2026-10-19
 
 이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.4의 Skill 항목 기반)
 
-- [ ] **Route 53 라우팅 정책 7종** — 각 정책의 동작과 대표 용도를 시나리오에 매핑할 수 있다
+- [ ] **Route 53 라우팅 정책 8종** — 각 정책의 동작과 대표 용도를 시나리오에 매핑할 수 있다
 - [ ] **Alias vs CNAME** — Zone Apex 제약, 비용, 대상 차이를 설명할 수 있다
 - [ ] **Route 53 헬스 체크** — Failover·Multivalue 정책과의 연계 방식을 설명할 수 있다
 - [ ] **CloudFront CDN 동작 원리** — 엣지 로케이션·캐시 동작·오리진·TTL을 설명할 수 있다
@@ -47,9 +47,9 @@ lastVerified: 2026-10-19
 ## 🎯 왜 중요한가
 
 - 도메인 3(24%)에서 "글로벌 사용자에게 가장 빠르게", "DR 시 자동 전환", "고정 IP 필요", "S3 직접 접근 차단" 같은 시나리오가 반복 출제됩니다.
-- Route 53 라우팅 정책 7종은 이름이 비슷해 혼동하기 쉬운 단골 함정입니다. Latency vs Geolocation, Geolocation vs Geoproximity의 차이를 숫자와 기준으로 구분해야 합니다.
+- Route 53 라우팅 정책 8종은 이름이 비슷해 혼동하기 쉬운 단골 함정입니다. Latency vs Geolocation, Geolocation vs Geoproximity의 차이를 숫자와 기준으로 구분해야 합니다.
 - CloudFront와 Global Accelerator는 둘 다 "글로벌 저지연"을 키워드로 갖습니다. 캐싱 여부, 프로토콜, IP 고정 여부가 선택 기준입니다.
-- CLF에서 개념 수준으로 봤다면, SAA는 **설계 결정**을 묻습니다. 7종 중 어떤 정책을, CloudFront/Global Accelerator 중 어느 것을, ALB/NLB 중 무엇을 — 각 시나리오에서 왜 선택하는지가 핵심입니다.
+- CLF에서 개념 수준으로 봤다면, SAA는 **설계 결정**을 묻습니다. 8종 중 어떤 정책을, CloudFront/Global Accelerator 중 어느 것을, ALB/NLB 중 무엇을 — 각 시나리오에서 왜 선택하는지가 핵심입니다.
 
 ---
 
@@ -98,7 +98,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 > Alias는 Route 53 전용 확장으로, 실제로 레코드 유형이 A 또는 AAAA로 동작하면서 AWS 리소스의 현재 IP를 자동으로 따라가 Zone Apex 제약을 우회합니다.
 > 이 메커니즘 덕분에 루트 도메인을 ALB·CloudFront 같은 가변 IP 리소스로 안전하게 연결할 수 있습니다.
 
-### 3) Route 53 라우팅 정책 7종 (★ 핵심 비교) {#routing-policies}
+### 3) Route 53 라우팅 정책 8종 (★ 핵심 비교) {#routing-policies}
 
 | 정책 | 동작 원리 | 대표 용도 |
 |---|---|---|
@@ -108,7 +108,12 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 | **Failover(장애조치)** | 헬스 체크 기반 — Primary 비정상 시 Secondary로 자동 전환 | DR, 액티브-패시브 고가용성 |
 | **Geolocation(지리위치)** | **사용자의 지리적 위치(국가·대륙)** 기준 라우팅 | 콘텐츠 현지화, 지역 규제 준수 |
 | **Geoproximity(지리근접)** | 리소스 위치 기준 + **bias(편향값)** 로 트래픽 이동 범위 조정 | 트래픽을 특정 리전으로 점진 이동 (Traffic Flow 필요) |
-| **Multivalue Answer(다중값)** | 최대 8개 정상 레코드를 무작위 반환 + 헬스 체크 연동 | 단순 부하 분산 (로드 밸런서 대체 아님) |
+| **IP-based(IP 기반)** | **알고 있는 클라이언트 IP 범위(CIDR)** 를 엔드포인트에 매핑해 라우팅 | ISP·기업망별 경로 고정, 특정 대역을 지정 엔드포인트로 |
+| **Multivalue Answer(다중값)** | **최대 8개** 정상 레코드를 무작위 반환 + 헬스 체크 연동 | 단순 부하 분산 (로드 밸런서 대체 아님) |
+
+> ⚠️ **IP 기반 라우팅이 빠지면 8종이 아닙니다.** 이름이 비슷한 세 가지를 기준으로 갈라 두세요 — **Latency**는 *실측 네트워크 지연*, **Geolocation**은 *사용자 IP의 지리적 위치*, **IP-based**는 *우리가 알고 있는 IP 범위 자체*입니다. "특정 ISP 사용자를 지정 엔드포인트로 보내라"처럼 **위치가 아니라 IP 대역이 조건**이면 IP 기반입니다.
+
+> **지연·지리 정책의 공통 한계 — 리졸버의 위치로 추정합니다**: Route 53은 사용자의 위치를 **DNS 리졸버의 위치**로 추정하고, 리졸버가 **EDNS0 클라이언트 서브넷**을 지원하면 사용자 IP의 일부를 넘겨받아 더 정확히 추정합니다. 그래서 사용자가 자기 위치와 먼 공용 리졸버를 쓰면 Latency·Geolocation 모두 의도와 다른 엔드포인트로 갈 수 있습니다 — 정책의 결함이 아니라 **DNS의 구조적 한계**입니다.
 
 > **Latency vs Geolocation 핵심 구분**: Latency는 **네트워크 지연 시간**(측정값)으로 결정, Geolocation은 **사용자 IP의 지리적 위치**로 결정합니다. "가장 빠른 응답"을 원하면 Latency, "국가별 다른 콘텐츠·규제"를 원하면 Geolocation입니다.
 
@@ -172,6 +177,29 @@ OAC를 사용하면 S3 버킷 정책에 CloudFront 서비스 주체(Service Prin
 - **HTTPS 강제** — 뷰어-CloudFront 구간, CloudFront-오리진 구간 모두 설정 가능.
 - **ACM 인증서는 반드시 `us-east-1`** — CloudFront와 연결할 SSL/TLS 인증서는 버지니아 북부 리전에서 발급해야 합니다.
 
+#### 캐시가 2단이고, Origin Shield로 3단이 됩니다 (★ 시험 포인트)
+
+- 엣지 로케이션에서 미스가 나면 바로 오리진으로 가지 않고 **리전 엣지 캐시(regional edge cache)**를 먼저 거칩니다. 거기서 히트하면 오리진 요청이 발생하지 않습니다.
+- **Origin Shield**는 그 리전 엣지 캐시 하나를 **오리진 앞의 전용 방패**로 고정하는 기능입니다. 오리진 요청이 한 지점으로 모여 **중복 요청이 합쳐지고** 오리진 부하가 줄어듭니다.
+- 관측: Origin Shield에서의 캐시 히트는 CloudFront 로그의 `x-edge-detailed-result-type` 필드에 **`OriginShieldHit`** 으로 찍힙니다. 엣지 → (Origin Shield 역할의) 리전 엣지 캐시로 라우팅돼 히트한 경우는 `OriginShieldHit`이 아니라 그냥 `Hit`입니다. 보려면 **표준 로그**(무료) 또는 실시간 액세스 로그(유료)를 켜야 합니다.
+- **Origin Shield는 오리진의 속성**입니다 — 오리진 그룹에 속한 오리진이어도 요청은 **각 오리진의 Origin Shield를 통과**합니다.
+- ⚠️ **Lambda@Edge와 함께 쓰면 실행 리전이 바뀝니다** — 오리진 대면 트리거(origin request·origin response)가 **Origin Shield가 활성된 리전**에서 실행됩니다. 뷰어 대면 트리거는 영향이 없습니다.
+
+#### 오리진 그룹 장애 조치 — 조건이 좁습니다
+
+프라이머리·보조 두 오리진으로 **오리진 그룹**을 만들고 캐시 동작에 연결합니다. 프라이머리의 응답 상태 코드별로 이렇게 갈립니다.
+
+| 프라이머리 응답 | CloudFront 동작 |
+|---|---|
+| HTTP **2xx** | 파일을 캐시하고 뷰어에 반환 |
+| HTTP **3xx** | 상태 코드를 **뷰어에 그대로** 반환(장애 조치하지 않음) |
+| HTTP 4xx·5xx 중 **장애 조치용으로 구성한 코드** | 같은 요청을 **보조 오리진**으로 보냄 |
+| HTTP 4xx·5xx 중 **구성하지 않은 코드** | 오류를 **뷰어에 반환** |
+
+- 연결 실패는 **`503`**, 응답 타임아웃은 **`504`** 를 장애 조치 코드로 설정해 두어야 잡힙니다.
+- ⚠️ **뷰어 요청의 HTTP 메서드가 `GET`·`HEAD`·`OPTIONS`일 때만 장애 조치합니다.** `POST`·`PUT` 등에서는 장애 조치하지 않습니다 — 쓰기 요청을 두 오리진에 중복 적용하지 않기 위한 설계입니다.
+- ⚠️ CloudFront는 **들어오는 모든 요청을 언제나 프라이머리로** 보냅니다. 직전 요청이 보조로 넘어갔더라도 다음 요청은 다시 프라이머리부터이고, 실패한 뒤에만 보조로 갑니다 — **보조가 프라이머리를 대체하는 전환이 아닙니다.**
+
 > 🧠 원리: 왜 CloudFront는 엣지 로케이션에서 캐시 미스가 나도 성능 이점이 있을까요?
 > 캐시 미스 시에도 사용자 → 엣지 로케이션 구간은 공용 인터넷보다 짧아, 이 구간의 지연을 줄이는 효과는 그대로 유지됩니다.
 > 엣지 → 오리진 구간은 AWS 내부 네트워크를 통해 전달되므로, 사용자가 오리진에 직접 연결하는 것보다 경로가 안정적일 수 있습니다.
@@ -225,6 +253,39 @@ AWS ELB(Elastic Load Balancing)는 세 가지 유형이 있으며, 시험에서�
 
 > **NLB 선택 신호**: "초저지연", "TCP/UDP", "고정 IP", "수백만 요청/초" — 이 키워드가 보이면 NLB입니다.
 > **ALB 선택 신호**: "경로 기반 라우팅", "호스트 기반 라우팅", "Lambda 대상", "컨테이너(ECS/EKS)".
+
+**ALB — 알고리즘과 가중 대상 그룹 (★ 시험 포인트)**
+
+| 라우팅 알고리즘 | 동작 |
+|---|---|
+| `round_robin` | 순서대로 돌림 — 기본값 |
+| **`least_outstanding_requests`** | **미처리(진행 중) 요청이 가장 적은** 대상으로 보냄 — 요청 처리 시간이 들쭉날쭉할 때 쏠림을 줄입니다 |
+| `weighted_random` | 가중치를 둔 무작위. **자동 대상 가중치(ATW) 이상 완화**를 켤 수 있습니다. ⚠️ **느린 시작(slow start) 모드와 함께 쓸 수 없습니다** |
+
+**가중 대상 그룹**은 `forward` 액션에 대상 그룹을 여러 개 두고 **가중치로 비율을 지정**하는 기능입니다. 가중치 기본값은 1이므로 대상 그룹이 하나면 100%가 그쪽으로 갑니다. 두 그룹에 같은 가중치를 주면 절반씩 나뉩니다 — 이것이 **블루/그린·카나리 배포**를 로드 밸런서 계층에서 구현하는 정석입니다(Route 53 가중 라우팅과 달리 DNS 캐시에 영향받지 않습니다).
+
+**NLB — 고정 IP와 소스 IP 보존**
+
+- **인터넷 경계 NLB**는 **AZ마다 Elastic IP를 지정**할 수 있어 고정 IP를 갖습니다(지정하지 않으면 AWS가 AZ마다 하나 할당). **내부 NLB**는 각 서브넷에서 프라이빗 IP를 지정해 고정합니다. AZ를 활성화할 때는 그 AZ의 **서브넷 1개**를 지정하고, 인터넷 경계는 서브넷에 **사용 가능 IP 8개 이상**이 필요합니다. ⚠️ **Local Zone의 서브넷은 지정할 수 없습니다.**
+- **클라이언트 IP 보존**은 대상 그룹 유형에 따라 기본값이 **다릅니다.**
+
+| 대상 그룹 | 기본값 |
+|---|---|
+| 인스턴스 타입 | 활성 |
+| IP 타입 — UDP·TCP_UDP·QUIC·TCP_QUIC | **활성(비활성화 불가)** |
+| IP 타입 — **TCP·TLS** | ⚠️ **비활성** — `preserve_client_ip.enabled` 로 켭니다 |
+
+- 보존이 켜지면 트래픽이 NLB에서 대상으로 **직접** 흘러야 하고, 대상이 같은 VPC 또는 **같은 리전의 피어링 VPC**에 있어야 합니다. ⚠️ **Transit Gateway를 거쳐 도달하는 대상과 Gateway Load Balancer 엔드포인트로 검사하는 경우에는 지원되지 않습니다.** 설정 변경은 **새 TCP 연결에만** 적용됩니다.
+
+**고정 IP + L7 라우팅을 동시에 원할 때**
+
+ALB는 고정 IP가 없고 NLB는 L7 라우팅이 없습니다. 둘 다 필요하면 **NLB를 앞에 두고 대상으로 ALB를 등록**하거나, **Global Accelerator**의 고정 애니캐스트 IP를 ALB 앞에 둡니다.
+
+**GWLB — 어떻게 "투명하게" 전달하는가**
+
+- OSI **3계층**에서 **모든 포트의 모든 IP 패킷**을 수신해 리스너 규칙의 대상 그룹으로 보냅니다. 전달 수단은 **GENEVE 프로토콜(RFC 8926) 포트 6081**이며, 대상 그룹의 프로토콜·포트도 **GENEVE / 6081** 고정입니다.
+- 원본 패킷을 GENEVE로 **캡슐화**하고, 헤더는 **TLV(Type-Length-Value) 형식**에 **Option Class `0x0108`** 로 정보를 담습니다. ⚠️ **어플라이언스가 TLV를 역캡슐화해야** 원본 패킷을 처리할 수 있습니다 — 아무 가상 어플라이언스나 붙는 것이 아니라 **GENEVE를 지원하는 제품**이어야 합니다.
+- VPC 경계를 넘는 트래픽 교환은 **Gateway Load Balancer 엔드포인트**로 하고, 경로는 **라우트 테이블**로 구성합니다.
 
 > 🧠 원리: 왜 NLB는 L7인 ALB보다 더 높은 처리량과 낮은 지연을 달성할 수 있을까요?
 > ALB는 HTTP 헤더·경로·호스트를 파싱해 라우팅 결정을 내리므로, 각 연결에서 L7 패킷 분석 처리가 추가됩니다.
@@ -341,5 +402,17 @@ NLB는 L4(TCP·UDP) 수준에서 패킷 흐름만 보고 대상 엔드포인트�
 5. Global Accelerator 표준 가속기 엔드포인트(NLB·ALB·EC2·Elastic IP) — https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoints.html
 6. Gateway Load Balancer — 소개(L3·모든 IP 패킷) — https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+8. Route 53 라우팅 정책 선택(**8종** · 다중값 최대 8개 · EDNS0로 사용자 위치 추정) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html (갭 배치 B8b: 2026-10-21)
+9. CloudFront 오리진 장애 조치(상태 코드별 동작 · `GET`·`HEAD`·`OPTIONS` 한정 · 503/504 구성) — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/high_availability_origin_failover.html (갭 배치 B8b: 2026-10-21)
+10. 오리진 그룹의 요청·응답 동작(항상 프라이머리부터) — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorOriginGroups.html (갭 배치 B8b: 2026-10-21)
+11. CloudFront Origin Shield(리전 엣지 캐시 활용 · `OriginShieldHit` · 오리진 속성 · Lambda@Edge 리전) — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/origin-shield.html (갭 배치 B8b: 2026-10-21)
+12. NLB 대상 그룹 속성 — 클라이언트 IP 보존 기본값·제약(`preserve_client_ip.enabled`·TGW·GWLB 경유 미지원) — https://docs.aws.amazon.com/elasticloadbalancing/latest/network/edit-target-group-attributes.html (갭 배치 B8b: 2026-10-21)
+13. NLB 가용 영역 업데이트(AZ별 Elastic IP로 고정 IP · 서브넷 IP 8개 · Local Zone 서브넷 불가) — https://docs.aws.amazon.com/elasticloadbalancing/latest/network/availability-zones.html (갭 배치 B8b: 2026-10-21)
+14. GWLB 대상 그룹(GENEVE·포트 6081·TLV Option Class `0x0108`) — https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/target-groups.html (갭 배치 B8b: 2026-10-21)
+15. ELBv2 라우팅 알고리즘(`round_robin`·`least_outstanding_requests`·`weighted_random`+ATW·slow start 병용 불가)과 가중 대상 그룹 — https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_elasticloadbalancingv2-readme.html (갭 배치 B8b: 2026-10-21)
+
+> 📝 **2026-10-21 보강 (갭 배치 B8b)**: ① **§3 제목과 본문 4개소를 `7종` → `8종`으로 정정**했습니다 — 공식 목록에서 **`IP 기반(IP-based)` 라우팅이 빠져** 있었습니다. 다중값 응답의 **최대 8개**와, 지연·지리 정책이 사용자 위치를 **DNS 리졸버 위치로 추정**하며 **EDNS0 클라이언트 서브넷**이 있으면 정확해진다는 구조적 한계도 함께 적었습니다(근거 8번). 앵커 `{#routing-policies}`는 그대로 뒀습니다. ② §5에 **리전 엣지 캐시·Origin Shield**(`OriginShieldHit`·오리진의 속성·Lambda@Edge 오리진 트리거의 실행 리전 이동)와 **오리진 그룹 장애 조치 상태 코드 표**를 추가했습니다 — ⚠️ **`GET`·`HEAD`·`OPTIONS`에서만** 장애 조치하고, **들어오는 모든 요청은 언제나 프라이머리부터**라는 점이 핵심입니다(근거 9·10·11번). ③ §8에 **ALB 알고리즘 3종과 가중 대상 그룹**(블루/그린), **NLB 고정 IP와 클라이언트 IP 보존 기본값 표**, **고정 IP + L7 패턴**, **GWLB의 GENEVE 6081·TLV `0x0108`** 를 추가했습니다(근거 12~15번).
+>
+> **전파 범위를 먼저 쟀습니다**: `7종` 표기는 이 파일 4개소뿐이고 **문항 뱅크 전체에 0건**이었습니다. `saa-t3-7` 문항은 드래프트 0/15이며 "ALB는 고정 IP가 없다"는 기존 해설은 새 §8과 일치합니다.
 
 > 📝 **2026-10-19 정정**: ① "Global Accelerator로 CloudFront에 고정 IP를 부여한다"는 서술을 삭제했습니다 — 표준 가속기의 엔드포인트는 **NLB·ALB·EC2 인스턴스·Elastic IP** 4종이며 CloudFront는 엔드포인트 유형이 아닙니다(근거 5번). ② GWLB 계층을 **L3**로, 수신 범위를 "모든 IP 패킷·모든 포트"로 고쳤습니다(근거 6번). ③ ALB 프로토콜에 **gRPC**를 더했습니다.
