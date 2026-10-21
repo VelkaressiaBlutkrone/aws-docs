@@ -32,7 +32,31 @@ sources:
     url: https://docs.aws.amazon.com/filegateway/latest/filefsxw/DocumentHistory.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-20
+  - title: EBS 범용 SSD — gp3 성능·비율·버스트 미사용 (공식)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html
+  - title: EBS 프로비저닝 IOPS SSD — io2 Block Express·Nitro 제약 (공식)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/provisioned-iops.html
+  - title: EBS 최적화 — 전용 대역폭·I/O 크기와 지연 (공식)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/ebs-optimization.html
+  - title: Elastic Volumes 수정 제약 — 축소 불가·24시간 4회 (공식)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modify-volume.html
+  - title: Multi-Attach 볼륨의 NVMe 예약(스토리지 펜싱) (공식)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/nvme-reservations.html
+  - title: 인스턴스 스토어 데이터 지속성 — 소실 조건 표 (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html
+  - title: EFS 성능 사양 — 처리량 모드 선택 기준 (공식)
+    url: https://docs.aws.amazon.com/efs/latest/ug/performance.html
+  - title: EFS 파일 시스템 처리량 관리 — 모드 변경 제약 (공식)
+    url: https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html
+  - title: FSx for Lustre S3 링크(DRA) — 최대 8개·충돌 미방지 (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/create-dra-linked-data-repo.html
+  - title: FSx for Lustre 백업 지원 범위 — 링크된 파일 시스템 미지원 (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html
+  - title: FSx for OpenZFS 성능 — 배포 유형·스토리지 클래스 변경 불가 (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance.html
+  - title: FSx for OpenZFS Intelligent-Tiering 동작 (공식)
+    url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance-intelligent-tiering.html
+lastVerified: 2026-10-21
 ---
 
 # 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택
@@ -147,6 +171,27 @@ lastVerified: 2026-10-20
 > SSD는 전기 신호로 셀에 직접 접근하므로 이 대기가 없고, 작은 요청을 빠르게 반복할수록(랜덤 I/O) 차이가 극대화됩니다.
 > 반면 HDD는 헤드를 한 번 위치시킨 후 연속 구간을 쭉 읽는 순차 처리(처리량 중심)에서는 비용 대비 효율이 높아, st1·sc1 같은 스트리밍 전용 볼륨으로 포지셔닝됩니다.
 
+**EBS 성능을 결정하는 조건 (★ 시험 수치)**
+
+볼륨 타입만으로 성능이 정해지지 않습니다 — **인스턴스 쪽 한계**와 **I/O 크기**가 함께 걸립니다.
+
+| 항목 | gp3 | io2 Block Express |
+|---|---|---|
+| 기준 성능(스토리지 가격 포함) | **3,000 IOPS · 125 MiB/s** | — |
+| 최대 IOPS | **80,000** — **GiB당 500 IOPS** 비율, **160 GiB 이상**에서 달성(500 × 160) | **256,000** — IOPS:GiB **1,000:1**, **256 GiB 이상**에서 달성 |
+| 최대 처리량 | **2,000 MiB/s** — **프로비저닝 IOPS당 0.25 MiB/s**, 8,000 IOPS 이상 + 16 GiB 이상 | **4,000 MiB/s** — IOPS당 0.256 MiB/s, 16,000 IOPS 이상 |
+| 용량 | — | 최대 **64 TiB** |
+| 버스트 | ⚠️ **쓰지 않습니다** — 프로비저닝한 IOPS·처리량을 **무한히 지속** | 쓰지 않음 |
+
+- ⚠️ **io2의 256,000 IOPS는 Nitro 기반 인스턴스에서만 달성됩니다.** 그 외 인스턴스는 **최대 32,000 IOPS**입니다(볼륨은 64,000 IOPS까지 **연결**할 수 있지만 **달성**은 32,000까지라는 점이 함정입니다).
+- **I/O 크기 기준** — 인스턴스 타입 표의 최대 IOPS는 **16 KiB I/O 기준**이고, 최대 처리량은 **128 KiB I/O 스트리밍 읽기 기준**입니다. I/O 크기가 커지면 지연도 함께 커집니다.
+- **EBS 최적화 인스턴스**는 EBS I/O 전용 대역폭을 따로 제공해 인스턴스의 다른 트래픽과의 경합을 줄입니다. ⚠️ **인스턴스의 EBS 성능은 "인스턴스 성능 한계"와 "연결된 볼륨 성능 합계" 중 더 작은 쪽**에 묶입니다 — 공식 예시는 `r6i.16xlarge`에서 80,000 IOPS를 내려면 16,000 IOPS gp3 볼륨 **5개**가 필요하다는 것입니다.
+- **지연·일관성 설계 목표** — io2 Block Express는 16 KiB I/O에서 **평균 500마이크로초 미만**, io1·io2는 프로비저닝 IOPS의 **90% 이상을 연간 99.9%**, gp2·gp3는 **90% 이상을 연간 99%** 제공하도록 설계됩니다.
+
+> Outposts에서는 gp3가 최대 16 TiB·16,000 IOPS·1,000 MiB/s로 제한됩니다. 또 일부 SDK 문서(ECS 관리형 볼륨 등)는 gp3 IOPS 범위를 `3,000–16,000`으로 적는데, **EBS 사용자 가이드의 80,000이 볼륨 자체의 상한**입니다 — 서비스별 관리형 볼륨의 제약과 구분하세요.
+
+---
+
 ### 4) EBS 스냅샷·암호화·Multi-Attach {#ebs-features}
 
 **스냅샷(Snapshot):**
@@ -169,6 +214,31 @@ lastVerified: 2026-10-20
 > Nitro 기반 호스트는 전용 하드웨어 오프로드 칩을 통해 데이터가 네트워크를 떠나기 전(호스트 → EBS 스토리지 서버 전송 중)에 투명하게 암호화하므로, 인스턴스에서 실행되는 애플리케이션 코드 경로가 암호화 처리에 관여하지 않습니다.
 > 이 구조가 "암호화된 볼륨에서 만든 스냅샷도 자동으로 암호화"되는 일관성의 기반이 됩니다.
 
+**Multi-Attach 보강 — 펜싱은 NVMe 예약으로 합니다**
+
+- `io1`·`io2` 볼륨을 **같은 AZ의 최대 16개 Nitro 인스턴스**에 **동시 연결**할 수 있습니다.
+- 동시 쓰기를 조율하는 수단이 **NVMe 예약(reservations)** 입니다 — **업계 표준 스토리지 펜싱 프로토콜** 집합으로, 여러 인스턴스의 공유 볼륨 접근을 제어·조율하는 예약을 만들고 관리합니다. 공유 스토리지 애플리케이션이 데이터 일관성을 지키는 데 씁니다.
+- ⚠️ 그래서 "애플리케이션이 직접 담당한다"는 말은 **맨손으로 하라는 뜻이 아닙니다** — 클러스터 인식 파일 시스템이나 NVMe 예약 같은 **펜싱 수단**을 써야 한다는 뜻입니다. Multi-Attach는 **일반 파일 시스템을 여러 인스턴스가 그대로 공유하는 용도가 아닙니다.**
+- Multi-Attach 활성 볼륨은 **`io1` ↔ `io2` 양방향 유형 변경만** 지원하고(연결된 상태에서도 가능), 변경 시 **NVMe 예약 활성 상태가 대상 유형으로 이어집니다.** 다른 유형 변경은 지원되지 않습니다.
+
+**Elastic Volumes — 운영 중 변경의 규칙 (★ 시험 포인트)**
+
+현행 세대 인스턴스에 연결된 볼륨은 **중지·분리 없이** 크기·타입·IOPS를 바꿀 수 있습니다(이전 세대는 분리·재연결이나 중지·재시작이 필요할 수 있습니다).
+
+| 규칙 | 내용 |
+|---|---|
+| **크기 축소** | ⚠️ **불가.** 늘리는 것만 됩니다. 줄여야 하면 **작은 볼륨을 새로 만들어 `rsync`·`robocopy` 로 데이터를 옮깁니다** |
+| **변경 횟수** | **롤링 24시간 내 최대 4회.** 볼륨이 `in-use`·`available` 이고 이전 수정이 모두 `completed` 여야 합니다 |
+| **순서** | 한 수정이 `completed` 가 되기 전에는 같은 볼륨의 다음 수정을 시작할 수 없습니다 |
+| **취소** | 제출한 수정 요청은 **취소할 수 없습니다** |
+| **크기 상한** | 새 크기가 **파일 시스템·파티셔닝 스킴이 지원하는 용량**을 넘을 수 없습니다 |
+| **타입 변경 시 한계** | 타입을 바꾸지 않으면 **현재 타입**의 한계 내, 바꾸면 **대상 타입**의 한계 내에서만 |
+| 루트 볼륨 제약 | `io1`·`io2`·`gp2`·`gp3`·`standard` 루트 볼륨은 **`st1`·`sc1` 으로 변경 불가**(분리된 상태여도) |
+
+- ⚠️ **크기를 늘린 뒤에는 파일 시스템 크기를 확장**해야 새 용량을 쓸 수 있습니다. 볼륨만 키우고 끝내면 OS가 보는 용량은 그대로입니다 — 시험에서 "볼륨을 늘렸는데 공간이 안 늘어난다"는 시나리오의 답입니다.
+
+---
+
 ### 5) 인스턴스 스토어(임시 블록 스토리지) {#instance-store}
 
 인스턴스 스토어는 EC2 인스턴스에 **물리적으로 부착된** 임시 블록 스토리지입니다.
@@ -186,6 +256,30 @@ lastVerified: 2026-10-20
 > 인스턴스 스토어는 EC2 호스트 서버에 물리적으로 부착된 디스크입니다. 인스턴스를 중지하면 AWS는 해당 인스턴스를 다시 시작할 때 다른 물리 호스트에 배치할 수 있으며, 이 경우 원래 호스트의 로컬 디스크에는 더 이상 접근할 수 없습니다.
 > 재부팅은 같은 물리 호스트에서 OS만 재시작하므로 로컬 디스크 연결이 유지되지만, 중지·종료는 호스트 배치가 고정되지 않아 데이터 접근이 보장되지 않습니다.
 > EBS가 네트워크를 통해 독립된 스토리지 서버에 데이터를 저장하는 방식과 달리, 인스턴스 스토어는 호스트 물리 장치에 묶여 있다는 점이 이 차이의 근본 원인입니다.
+
+**인스턴스 스토어 데이터가 사라지는 조건 — 공식 표 전체 (★ 시험 필출)**
+
+"중지·종료"만 외우면 틀립니다. 공식 데이터 지속성 표는 다음과 같습니다.
+
+| 이벤트 | 데이터 |
+|---|---|
+| **재부팅**(인스턴스·시스템·OS 재시작) | **유지** |
+| **중지** | 유지되지 않음 |
+| **최대 절전(hibernate)** | 유지되지 않음 |
+| **종료** | 유지되지 않음 |
+| **인스턴스 유형 변경** | 유지되지 않음 |
+| **인스턴스 은퇴(retirement)** | 유지되지 않음 |
+| OS에서 셧다운 시작 | 유지되지 않음 |
+| EBS 기반 AMI 생성 | 생성된 AMI에 유지되지 않음 |
+| S3 기반 AMI 생성(Linux) | AMI 번들에는 유지됨 |
+
+- 인스턴스 스토어 볼륨은 **시작 시에만 연결**되고 이후 연결할 수 없으며, 한 인스턴스에서 분리해 다른 인스턴스에 붙일 수도 없습니다. 인스턴스 **수명 동안만** 존재하도록 설계돼 있어, 그 이상 지속되게 **구성할 방법이 없습니다.**
+- ⚠️ 중지·최대 절전·종료 시 인스턴스 스토어의 **모든 블록이 암호학적으로 소거(cryptographically erased)** 됩니다.
+- ⚠️ **EBS 루트 볼륨 인스턴스에 붙은 인스턴스 스토어 볼륨도 마찬가지**입니다 — 루트가 EBS라서 안전하다고 오해하기 쉬운 지점입니다.
+- **인스턴스 은퇴**는 AWS가 기반 호스트의 복구 불가 장애를 감지했을 때 예정됩니다 — 루트 볼륨 유형에 따라 **EBS 루트는 중지**, **인스턴스 스토어 루트는 종료**로 예정되고, 어느 쪽이든 인스턴스 스토어 데이터는 사라집니다.
+- 남겨야 하는 데이터는 미리 **EBS·S3·EFS** 같은 영구 스토리지로 복사해 두는 것이 유일한 방법입니다.
+
+---
 
 ### 6) Amazon EFS(Elastic File System) {#efs}
 
@@ -225,6 +319,22 @@ lastVerified: 2026-10-20
 > EFS는 AWS가 완전 관리하는 분산 스토리지 인프라에 파일 데이터를 저장하며, 사용자가 마운트하는 파일시스템은 그 인프라의 논리적 뷰입니다. 물리 용량 할당은 AWS가 내부적으로 처리하므로 사용자에게 노출되지 않습니다.
 > EBS처럼 볼륨 크기를 미리 예약하지 않아도 되는 이유는, 파일이 추가될 때마다 AWS가 스토리지를 자동으로 확보하는 서버리스 모델이기 때문입니다.
 > 이 구조는 편리하지만 스토리지 비용이 사용량에 비례해 증가하므로, 접근 빈도가 낮은 파일을 IA 클래스로 자동 전환하는 수명 주기 정책이 비용 관리 수단이 됩니다.
+
+**EFS 처리량 모드 선택 기준 (★ 시험 포인트)**
+
+모드 이름만으로는 고를 수 없습니다 — 공식 선택 기준은 **평균/피크 비율**입니다.
+
+| 모드 | 언제 고르는가 |
+|---|---|
+| **Elastic**(기본·권장) | 스파이크가 있거나 예측이 어려워 성능 요구를 미리 가늠하기 힘들 때, 또는 애플리케이션의 **평균/피크 처리량 비율이 5% 이하**일 때. 성능이 워크로드 활동에 맞춰 자동으로 오르내립니다 |
+| **Provisioned** | 워크로드의 성능 요구를 **이미 알 때**, 또는 **평균/피크 비율이 5% 이상**일 때. 파일 시스템 크기·버스트 크레딧과 **무관하게** 처리량을 지정합니다 |
+| **Bursting** | 처리량이 **파일 시스템 저장량에 따라 확장**되길 원할 때. **하루 최대 12시간** 더 높은 수준으로 버스트합니다 |
+
+- ⚠️ Bursting을 쓰다가 **허용 처리량의 80%를 넘게 쓰거나 버스트 크레딧을 다 소진했다면**, 공식 권고는 **Elastic 또는 Provisioned로 전환**입니다. 이것이 "처리량 제약(throughput-constrained)" 상태의 판단 기준입니다.
+- 모드 변경 자체는 **애플리케이션 다운타임을 일으키지 않습니다.** 다만 ⚠️ **Provisioned로 바꾸거나 프로비저닝 양을 늘리면 24시간 이상 기다려야** 다시 모드를 바꾸거나 양을 줄일 수 있습니다.
+- Elastic도 자동 확장을 믿고 방치하지 말고 **CloudWatch `MeteredIOBytes` 모니터링과 사용 경보**를 두는 것이 공식 운영 권고입니다.
+
+---
 
 ### 7) Amazon FSx 패밀리 {#fsx-family}
 
@@ -270,6 +380,28 @@ FSx는 AWS가 완전 관리형으로 제공하는 서드파티·업계 표준 �
 > 각 파일시스템(Windows File Server·Lustre·ONTAP·OpenZFS)은 독자적인 프로토콜·잠금 의미론·성능 특성을 가지며, 기존 온프레미스 워크로드는 특정 파일시스템 API에 의존하도록 작성된 경우가 많습니다.
 > 하나의 범용 파일시스템으로 통합하면 어느 한쪽의 동작이 달라져 마이그레이션 시 애플리케이션 수정이 불가피해집니다. FSx가 각 엔진을 그대로 관리형으로 제공하는 이유는 "리프트앤시프트" — 코드 변경 없이 온프레미스 파일시스템을 AWS로 옮기는 것 — 을 가능하게 하기 위함입니다.
 > 결과적으로 FSx 제품 선택은 "어떤 파일시스템을 현재 쓰고 있는가"에서 시작하며, 프로토콜·OS·워크로드 특성이 제품을 결정합니다.
+
+**FSx 보조 특성 — 시험에 나오는 제약들**
+
+**FSx for Lustre ↔ S3 링크(DRA)**
+
+- 파일 시스템 디렉터리와 S3 버킷·프리픽스의 연결을 **DRA(data repository association)** 라 부릅니다. 파일 시스템 생성 시 또는 **이후 언제든** 만들 수 있습니다.
+- 파일 시스템당 **최대 8개 DRA**. 요청은 8개까지 큐에 들어가지만 **한 번에 하나만 처리**되고, 각 DRA는 **고유한 디렉터리와 고유한 S3 버킷·프리픽스**를 가져야 합니다.
+- 자동 가져오기 전용 · 자동 내보내기 전용 · **양방향** 중에서 고를 수 있습니다. 양방향이면 S3 변경이 파일 시스템으로 자동 반영되고, 파일 변경이 S3로 비동기 내보내기됩니다.
+- ⚠️ **같은 파일을 파일 시스템과 S3 양쪽에서 수정하면 애플리케이션 수준 조율이 필요합니다** — FSx for Lustre는 **여러 위치의 충돌 쓰기를 막지 않습니다.**
+- ⚠️ **백업은 S3 데이터 리포지토리에 링크되지 않은 persistent 파일 시스템에서만 지원**됩니다. **scratch는 미지원**(임시·단기 처리용), **S3에 링크된 파일 시스템도 미지원**입니다 — S3가 주 데이터 리포지토리이고 파일 시스템이 항상 전체 데이터셋을 담지는 않기 때문입니다.
+- DRA·자동 내보내기·다중 데이터 리포지토리는 **FSx for Lustre 2.10 또는 `Scratch 1` 파일 시스템에서는 쓸 수 없습니다.**
+
+**FSx for OpenZFS — 생성 후 바꿀 수 없는 것**
+
+- ⚠️ **배포 유형과 스토리지 클래스는 파일 시스템 생성 후 변경할 수 없습니다.** 바꾸려면 데이터를 옮겨야 합니다.
+  - **백업에서 복원** — Single-AZ 1 → Single-AZ 2, Single-AZ(비HA) → Single-AZ(HA)는 가능합니다. ⚠️ 그러나 **Single-AZ 백업으로 Multi-AZ를 만들 수 없고, 복원으로 스토리지 클래스를 바꿀 수도 없습니다.**
+  - **온디맨드 복제** — 배포 유형·스토리지 클래스가 다른 파일 시스템 사이에서 데이터를 동기화할 수 있습니다.
+- 반대로 **생성 후에도 바꿀 수 있는 것**: 처리량 용량(**증감 모두**) · 프로비저닝 SSD IOPS(고정값 또는 **GiB당 3 SSD IOPS 자동 유지**) · 네트워크 유형 · 주간 유지관리 창 · 자동 일일 백업 설정.
+- **스토리지 용량**은 SSD(프로비저닝)에서는 **증가만** 가능하고 감소는 불가합니다. **Intelligent-Tiering** 클래스는 데이터에 맞춰 **자동으로 늘고 줄어듭니다.**
+- **Intelligent-Tiering 클래스**는 고가용성 파일 서버 쌍 + 서버별 인메모리 캐시 구조이고, 볼륨 대신 **탄력적·지능형 계층화 리전 블록 스토리지**를 씁니다. 선택적 **프로비저닝 SSD 읽기 캐시**(사이징 모드 Automatic·Custom·None)와 내장 **SSD 기반 쓰기 로그**를 둡니다. SSD(프로비저닝) 대비 **최대 85% 비용 절감**이고, 지연은 Intelligent-Tiering 접근이 **수십 ms 수준 TTFB + 요청당 비용**, SSD 읽기 캐시 적중이 **1 ms 미만 + 요청당 비용 없음**입니다.
+
+---
 
 ### 8) EFS vs FSx 선택 기준 비교 {#efs-vs-fsx}
 
@@ -415,6 +547,22 @@ EBS Multi-Attach는 동일 볼륨을 여러 Nitro 인스턴스에 동시 연결�
 12. Volume Gateway 작동 방식(캐시형 1 GiB~32 TiB·게이트웨이당 32볼륨, 저장형은 전체 데이터셋 온프레미스) — https://docs.aws.amazon.com/storagegateway/latest/vgw/StorageGatewayConcepts.html
 13. Tape Gateway(가상 테이프 라이브러리 → S3 Glacier Flexible Retrieval·Deep Archive 아카이브) — https://aws.amazon.com/storagegateway/vtl/
 14. Amazon FSx File Gateway 변경 이력(2024-10-28부터 신규 고객 이용 불가) — https://docs.aws.amazon.com/filegateway/latest/filefsxw/DocumentHistory.html
+15. EBS 범용 SSD — gp3(기준 3,000 IOPS·125 MiB/s, 최대 **80,000 IOPS**·GiB당 500, 최대 **2,000 MiB/s**·IOPS당 0.25, **버스트 미사용**, Outposts 제한) — https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html
+16. EBS 프로비저닝 IOPS SSD — io2 Block Express(최대 **256,000 IOPS**·1,000:1·256 GiB 이상, 4,000 MiB/s·IOPS당 0.256, 64 TiB, **Nitro에서만 256,000·그 외 32,000**, 16 KiB에서 500µs 미만) — https://docs.aws.amazon.com/ebs/latest/userguide/provisioned-iops.html
+17. EBS 최적화(전용 대역폭·I/O 크기가 지연에 영향·io1·io2 90%/99.9%·gp2·gp3 90%/99%) — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-optimization.html
+18. Elastic Volumes 수정 제약(**크기 축소 불가**·롤링 24시간 **4회**·취소 불가·파일 시스템 확장 필요·타입별 한계·Multi-Attach는 io1↔io2만·루트 볼륨 st1/sc1 불가·Nitro 256,000 / 그 외 64,000 연결·32,000 달성) — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modify-volume.html
+19. Multi-Attach 볼륨의 **NVMe 예약**(업계 표준 스토리지 펜싱 프로토콜) — https://docs.aws.amazon.com/ebs/latest/userguide/nvme-reservations.html
+20. 인스턴스 스토어 데이터 지속성 표(재부팅 유지 / 중지·**최대 절전**·종료·**유형 변경**·**은퇴**·셧다운 미유지, **암호학적 소거**, 시작 시에만 연결) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html
+21. EFS 성능 사양 — 처리량 모드 선택 기준(**평균/피크 5%**·Bursting 하루 **12시간**·80% 초과 시 전환 권고) — https://docs.aws.amazon.com/efs/latest/ug/performance.html
+22. EFS 처리량 관리(모드 변경은 다운타임 없음·**Provisioned 증액 후 24시간 대기**·`MeteredIOBytes` 모니터링 권고) — https://docs.aws.amazon.com/efs/latest/ug/managing-throughput.html
+23. FSx for Lustre S3 링크 DRA(**최대 8개**·동시 1건 처리·고유 디렉터리·양방향·**충돌 쓰기 미방지**·2.10/`Scratch 1` 미지원) — https://docs.aws.amazon.com/fsx/latest/LustreGuide/create-dra-linked-data-repo.html
+24. FSx for Lustre 백업 지원 범위(**S3에 링크되지 않은 persistent만**·scratch 미지원) — https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html
+25. FSx for OpenZFS 성능 — **배포 유형·스토리지 클래스 생성 후 변경 불가**(복원·온디맨드 복제로만 이전, Single-AZ 백업→Multi-AZ 불가) — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance.html
+26. FSx for OpenZFS Intelligent-Tiering(HA 파일 서버 쌍·탄력적 리전 블록 스토리지·SSD 읽기 캐시 3모드·SSD 대비 **최대 85% 절감**·TTFB 수십 ms vs 캐시 1 ms 미만) — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance-intelligent-tiering.html
+
+> 📝 **2026-10-21 보강(갭 `G-3.1-02`·`03`·`04`·`07`·`08`·`14`, 배치 B7a)**: ① **§3에 EBS 성능 결정 조건** — gp3/io2 상한·비율, **io2 256,000은 Nitro 전용**(그 외 32,000, 볼륨은 64,000까지 *연결*만 가능), I/O 크기 기준(IOPS 16 KiB·처리량 128 KiB), EBS 최적화와 **인스턴스 한계 vs 볼륨 합계 중 작은 쪽** 제약(근거 15·16·17번). ② **§4에 Multi-Attach 보강**(최대 16 Nitro·**NVMe 예약 = 업계 표준 펜싱**·io1↔io2만 변경)과 **Elastic Volumes 규칙**(축소 불가·24시간 4회·취소 불가·**파일 시스템 확장 필요**)(근거 18·19번). ③ **§5에 인스턴스 스토어 소실 조건 공식 표** — 기존 "중지·종료·하드웨어 장애" 외에 **최대 절전·인스턴스 유형 변경·은퇴·셧다운**도 소실이고 **모든 블록이 암호학적으로 소거**됩니다(근거 20번). ④ **§6에 EFS 처리량 모드 선택 기준**(평균/피크 **5%**·Bursting 하루 12시간·80% 초과 시 전환·Provisioned 증액 후 24시간)(근거 21·22번). ⑤ **§7에 FSx 보조 특성** — Lustre DRA 최대 8개·충돌 미방지·**링크된 파일 시스템 백업 미지원**, OpenZFS **배포 유형·스토리지 클래스 변경 불가**와 Intelligent-Tiering(근거 23·24·25·26번).
+>
+> **쓰지 않은 것:** FSx for Windows의 **AD 통합 "필수"** 단정(`99-gaps` V-18) · FSx for Lustre **IOPS 한도**(V-19) · FSx for OpenZFS **디스크 IOPS 수치**(C-16 — 이 문서 §7의 "최대 2,000,000 IOPS"는 공식 미확인으로 열려 있는 별건 `[의심]` 항목이라 이번 배치에서 건드리지 않았습니다) · **EFS IA 절감률**(C-02 — 95% vs 92% 상충) · 인스턴스 스토어 **NVMe 성능 수치**(V-20).
 
 > 📝 **2026-10-19 정정**: ① EFS **Max I/O를 이전 세대 성능 모드**로 고쳤습니다 — 지연시간이 더 크고 One Zone·Elastic 처리량과 병용할 수 없으며, AWS는 모든 파일 시스템에 General Purpose를 권장합니다(근거 9번). ② FSx for Lustre 성능을 한 줄 수치로 적었던 칸을 **스토리지 클래스별(SSD·Intelligent-Tiering·HDD)**로 분리했습니다(근거 6번).
 

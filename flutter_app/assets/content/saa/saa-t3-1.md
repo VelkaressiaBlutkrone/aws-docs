@@ -18,7 +18,13 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+  - title: S3 성능 최적화 모범 사례 — 프리픽스 요청률·503·키 무작위화 불필요 (공식)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
+  - title: 고성능 워크로드 — S3 Express One Zone (공식)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-high-performance.html
+  - title: S3 Express One Zone 성능 설계 패턴 — 디렉터리 버킷 (공식)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-optimizing-performance-design-patterns.html
+lastVerified: 2026-10-21
 ---
 
 # S3 스토리지 성능 — 스토리지 클래스·수명주기·접근 제어
@@ -115,6 +121,19 @@ lastVerified: 2026-10-19
 
 > 128 KB 미만 객체는 모니터링 대상이 아니며 항상 Frequent Access에 유지됩니다.
 
+**S3 Express One Zone 심화 — 다른 클래스와 구조가 다릅니다 (★ 시험 포인트)**
+
+위 표에 한 행으로 있지만, Express One Zone은 **버킷 종류 자체가 다릅니다.**
+
+- 데이터가 **디렉터리 버킷(directory bucket)** 에 저장됩니다. 범용 버킷이 **평면 네임스페이스**에 프리픽스로 정리하는 것과 달리, 디렉터리 버킷은 키를 **계층적 네임스페이스의 디렉터리**로 정리합니다(파일 시스템과 비슷하며 `/`가 유일한 구분자).
+- `dir1/dir2/file1.txt`를 올리면 `dir1/`·`dir2/`가 **자동 생성·관리**되고, `DeleteObject`·`AbortMultiPartUpload` 후 비면 **자동 제거**됩니다. 한 디렉터리의 객체·하위 디렉터리 수에는 상한이 없습니다.
+- **요청률**: 디렉터리 버킷당 **최대 2,000,000 GET**·**최대 200,000 PUT** TPS. 디렉터리가 **즉시 확장**되어 `503 (Slow Down)` 가능성을 줄이므로 **키 프리픽스 무작위화가 필요하지 않습니다.** 대신 그 결과로 **키가 사전순으로 저장되지 않습니다**(범용 버킷은 사전순으로 가까운 키가 같은 서버에 놓일 가능성이 큽니다).
+- **단일 AZ를 직접 골라 컴퓨트와 같은 AZ에 공존**시킬 수 있는 첫 S3 클래스입니다 — 그래서 가장 빠른 접근이 가능하고, **한 자릿수 밀리초** 지연이 일관되게 나옵니다.
+- **단일 AZ 내 99.95% 가용성**으로 설계되고 **S3 SLA가 적용**됩니다. AZ 안의 여러 디바이스에 중복 저장하며 동시 디바이스 장애를 감지·복구합니다. ⚠️ 다만 **AZ 전체가 손실·손상되면 데이터가 유실될 수 있습니다.**
+- 인증은 세션 기반 **`CreateSession`** 으로 임시 자격증명을 받는 방식이고, 디렉터리 버킷은 **Block Public Access가 항상 활성**이며 데이터는 **SSE-S3로 자동 암호화**됩니다.
+
+> ⚠️ **요청 비용 절감률은 공식 자료 간 수치가 다릅니다.** 사용자 가이드는 S3 Standard 대비 **요청 비용 80% 낮음**으로, AWS Solutions 문서는 **50% 절감**으로 적습니다. 어느 쪽도 공식이므로 **한쪽을 단정하지 말고** "요청 비용이 상당히 낮다 + 접근 속도 최대 10배"라는 방향만 기억하세요(`99-gaps` C-03).
+
 > 🧠 원리: 왜 저비용 스토리지 클래스에는 최소 보관 기간이 존재할까요?
 > AWS 공식 문서는 최소 보관 기간을 요금 규칙으로 명시합니다 — 기간 이전에 삭제·전환해도 해당 기간만큼의 요금이 청구됩니다.
 > 이 규칙은 각 클래스가 특정 보관 주기를 전제로 설계되어 있음을 시사하며, 기간 도달 전에 객체를 제거하면 예상보다 비용이 높아질 수 있습니다.
@@ -151,7 +170,20 @@ Day 365  → 객체 삭제 (만료)
 
 ### 4) 성능 최적화 {#s3-performance}
 
-> 공식 기준: S3는 프리픽스당 초당 **3,500 PUT/DELETE** 또는 **5,500 GET/HEAD** 요청을 지원합니다. 프리픽스 수에는 제한이 없습니다.
+> 공식 기준: S3는 **파티션된 프리픽스당** 초당 **최소 3,500 `PUT/COPY/POST/DELETE`** 또는 **5,500 `GET/HEAD`** 요청을 지원합니다. 버킷의 프리픽스 수에는 제한이 없습니다.
+
+**프리픽스 병렬화의 산술 (★ 시험 포인트)**
+
+프리픽스마다 위 한도가 따로 걸리므로, 프리픽스를 늘리면 그만큼 곱해집니다 — 공식 예시가 **프리픽스 10개로 읽기를 병렬화하면 초당 55,000 읽기 요청**입니다(5,500 × 10). 쓰기도 여러 프리픽스에 나눠 쓰는 방식으로 같이 확장됩니다.
+
+- ⚠️ **스케일링은 점진적이고 즉시가 아닙니다.** S3가 새 요청률에 맞춰 내부를 재조정하는 동안 **HTTP `503 (Slow Down)`** 응답이 보일 수 있고, 스케일링이 끝나면 사라집니다. 그래서 신규 애플리케이션은 **요청률을 단계적으로 올리는** 것이 권장되고, `503`에는 **지수 백오프 재시도**로 대응합니다(AWS SDK에 기본 포함).
+- 실제 성능은 워크로드 특성·사용 패턴·시스템 구성에 따라 달라집니다. CloudWatch의 **5xx 오류 지표**를 보면 한도에 근접하는 시점을 알 수 있습니다.
+
+> ⚠️ **"키 이름을 무작위화해야 한다"는 옛 지침입니다.** 공식 성능 가이드는 *"이 지침이 이전 지침을 대체한다 — 이전에는 빈번한 검색 성능을 위해 해시 문자로 프리픽스 이름을 무작위화하라고 권고했으나 **이제는 그럴 필요가 없다**"* 고 적습니다. S3가 자동으로 파티셔닝합니다.
+>
+> 혼동하지 말아야 할 것 — **"키 *이름*을 해시로 섞을 필요가 없다"**(위 문장)와 **"프리픽스를 여러 개로 나눠 병렬화한다"**(바로 위 산술)는 다른 이야기입니다. 후자는 지금도 유효한 설계이고, 날짜·시간처럼 **한 프리픽스에 쏠리는 키 설계**는 여전히 피하는 쪽입니다.
+
+**참고 수치** — 데이터 레이크처럼 대량 스캔을 하는 애플리케이션은 **단일 인스턴스에서 최대 100 Gb/s**까지 네트워크 인터페이스를 쓰고, 여러 인스턴스로 집계해 초당 수 테라비트를 냅니다. 지연에 민감한 애플리케이션은 작은 객체(큰 객체의 first-byte-out) 지연이 **대략 100~200 ms** 수준입니다. 단일 HTTP 연결에서 더 높은 전송률이나 한 자릿수 ms 지연이 필요하면 **CloudFront·ElastiCache** 캐싱이나 **S3 Express One Zone**(§2)을 봅니다. SSE-KMS를 쓰는 워크로드는 **KMS 요청 한도**도 함께 확인해야 합니다.
 
 | 기법 | 원리 | 사용 시점 |
 |---|---|---|
@@ -339,5 +371,13 @@ S3의 접근 제어는 여러 계층이 겹쳐서 작동합니다. 요청은 아
 4. S3 성능 최적화 모범 사례 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
 5. S3 객체 업로드(단일 PUT 5 GB·멀티파트 50 TB·콘솔 160 GB) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html
 6. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+7. S3 성능 최적화 모범 사례(프리픽스당 3,500 `PUT/COPY/POST/DELETE`·5,500 `GET/HEAD`·프리픽스 10개 → 55,000 rps·점진 스케일링 중 `503`·**키 이름 무작위화는 더 이상 불필요**·단일 인스턴스 100 Gb/s·작은 객체 100~200 ms) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
+8. 고성능 워크로드 — S3 Express One Zone(단일 AZ 선택·컴퓨트 공존·한 자릿수 ms·**단일 AZ 내 99.95% 가용성 설계**·접근 **최대 10배**·요청 비용 **80% 낮음**·`CreateSession`·Block Public Access 항상 활성·SSE-S3·AZ 손실 시 유실 가능) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-high-performance.html
+9. S3 Express One Zone 성능 설계 패턴(디렉터리 버킷당 **GET 2,000,000·PUT 200,000 TPS**·계층 네임스페이스·`/` 유일 구분자·디렉터리 자동 생성·제거·**키 무작위화 불필요**·사전순 미보장) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-optimizing-performance-design-patterns.html
+
+> 📝 **2026-10-21 보강(갭 `G-3.1-05`·`G-3.1-06`, 배치 B7a)**: ① §4의 쓰기 계열 표기를 **`PUT/DELETE` → `PUT/COPY/POST/DELETE`** 로 고치고(공식은 COPY·POST 포함), **프리픽스 병렬화 산술**(10개 → 55,000 rps)·**점진 스케일링과 `503`**·**키 이름 무작위화는 옛 지침**이라는 점을 더했습니다(근거 7번). ② §2에 **Express One Zone 심화**를 더했습니다 — 디렉터리 버킷·계층 네임스페이스·요청률·단일 AZ 공존·99.95% 가용성 설계·`CreateSession`(근거 8·9번).
+>
+> **갭 노트의 수치 2건을 공식으로 바로잡았습니다** — 요청률은 "읽기 200,000·쓰기 100,000"이 아니라 **GET 2,000,000·PUT 200,000 TPS**이고, "SLA 99.9%"가 아니라 **단일 AZ 내 99.95% 가용성 설계 + S3 SLA 적용**입니다. **요청 비용 절감률은 단정하지 않았습니다** — 사용자 가이드 80%와 Solutions 문서 50%가 상충합니다(`99-gaps` C-03).
+
 
 > 📝 **2026-10-19 정정**: ① 단일 객체 상한을 5TB로 적었던 문장을 **단일 PUT 5 GB / 멀티파트 50 TB**로 고쳤습니다(근거 5번). ② 멀티파트 필수 기준을 "5 GB 이상"에서 **5 GB 초과**로 통일했습니다 — 공식 문장은 단일 PUT이 "up to 5 GB"이므로 본문·해설의 "초과"가 맞습니다. 참고로 Storage Gateway FAQ 등 일부 공식 페이지는 아직 5 TB로 서술해 문서 간 상충이 남아 있습니다.
