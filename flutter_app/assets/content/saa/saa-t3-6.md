@@ -136,7 +136,32 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 | **온디맨드(On-Demand)** | AWS가 트래픽에 맞춰 자동 조정. 사용량만큼만 과금 | 트래픽 예측 불가, 스파이크, 초기 서비스 |
 | **프로비저닝(Provisioned)** | RCU·WCU를 직접 지정. Auto Scaling 결합 가능 | 트래픽 예측 가능, 비용 최적화 필요 |
 
-> RCU(Read Capacity Unit): 최종 일관성 읽기 4KB/1초당 0.5 RCU, 강력 일관성 1 RCU. WCU(Write Capacity Unit): 1KB 쓰기당 1 WCU.
+> RCU(Read Capacity Unit): 최종 일관성 읽기 4KB/1초당 0.5 RCU, 강력 일관성 1 RCU. WCU(Write Capacity Unit): 1KB 쓰기당 1 WCU. **트랜잭션 읽기·쓰기는 각각 2배**(4 KB까지 읽기 2 RCU, 1 KB까지 쓰기 2 WCU)를 씁니다. 온디맨드의 요청 단위(RRU·WRU)도 같은 크기 규칙을 따릅니다.
+
+> **모드 전환에도 비대칭이 있습니다** — 프로비저닝 → 온디맨드는 **24시간 롤링 윈도에서 최대 4회**까지, 온디맨드 → 프로비저닝은 **언제든지** 가능합니다.
+
+**용량보다 먼저 막히는 것 — 파티션 한도와 항목 크기 (★ 시험 핵심)**
+
+| 한도 | 값 |
+|---|---|
+| 파티션당 읽기 | **3,000 읽기 단위/초** |
+| 파티션당 쓰기 | **1,000 쓰기 단위/초** |
+| 항목 최대 크기 | **400 KB** — 속성 **이름**의 바이트 길이와 값의 바이트 길이를 **모두 합한** 값입니다 |
+| LSI가 있는 테이블 | 테이블 항목 데이터 + **모든 LSI의 해당 항목(키·프로젝션 속성 포함)** 합계가 400 KB |
+
+- ⚠️ **테이블 전체 용량이 남아 있어도 한 파티션이 위 한도를 넘으면 스로틀됩니다.** 읽기와 쓰기는 파티션에서 독립적으로 관리되므로, **읽기만 스로틀되고 쓰기는 정상**일 수도 있습니다.
+- 이때 스로틀 예외에 **`KeyRangeThroughputExceeded`** 이유 타입이 담겨 "핫 파티션"임을 알려 줍니다. 원인은 용량 부족이 아니라 **파티션 키 설계**입니다.
+- **적응형 용량(adaptive capacity)**은 트래픽이 몰린 파티션의 처리량을 **자동·즉시** 올려 줍니다. 모든 테이블에 기본 활성이고 **추가 비용이 없으며 켜거나 끌 수 없습니다.** 단 **테이블의 총 프로비저닝 용량과 파티션 최대 용량을 넘지 못합니다** — 핫 파티션을 완화하지만 없애지는 않습니다.
+
+**온디맨드가 "즉시" 받아 주는 양 — warm throughput**
+
+현행 공식 문서는 온디맨드의 즉시 수용량을 **warm throughput**으로 설명합니다.
+
+- **새 온디맨드 테이블은 읽기 12,000 단위/초 · 쓰기 4,000 단위/초**의 warm throughput으로 시작하고, 그 수준까지는 **지속 트래픽을 즉시** 받습니다.
+- 그 값을 넘는 요청이 오면 warm throughput이 **자동으로 더 높은 값으로 조정**됩니다. 값 자체는 테이블·GSI가 **과거 사용량에 따라 얼마나 확장돼 있는지**를 나타내며, 모든 테이블·보조 인덱스에 기본 제공되고 무료입니다.
+- 제품 출시·세일처럼 **계획된 피크**(10배·100배)가 있으면 **사전 웜업(pre-warming)**으로 값을 선제적으로 올릴 수 있습니다. 처리량 설정이나 과금 모드는 바꾸지 않습니다. ⚠️ **한 번 올린 warm throughput 값은 낮출 수 없고**, 사전 웜업 요청 자체는 과금됩니다.
+
+> 시험 신호: "출시 당일 100배 트래픽이 예상된다 — 스로틀 없이 받으려면?" → 온디맨드로 바꾸는 것만으로는 부족하고 **사전 웜업**이 답입니다.
 
 > 🧠 원리: 왜 온디맨드 모드는 트래픽 스파이크에 더 유연할까요?
 > 프로비저닝 모드는 설정한 RCU·WCU 한도 안에서만 요청을 처리하므로, 예상보다 트래픽이 많아지면 초과 요청이 스로틀됩니다.
@@ -159,10 +184,26 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 
 - DynamoDB 테이블을 여러 리전에 **Active-Active**로 복제.
 - 모든 리전에서 읽기와 쓰기 모두 가능 — RDS Read Replica(읽기 전용)와 다릅니다.
-- 충돌 해결: "최후 작성자 우선(last-writer-wins)" 정책 자동 적용.
 - 시험 신호어: "글로벌 다중 리전 쓰기", "재해 복구(DR) + 낮은 지연", "Active-Active".
 
-> 🧠 원리: 왜 Global Tables의 충돌 해결 방식이 "최후 작성자 우선"일까요?
+**일관성 모드가 두 가지입니다 — 충돌 해결 방식이 모드에 달려 있습니다 (★ 시험 핵심)**
+
+| 모드 | 복제 | 동작 |
+|---|---|---|
+| **MREC** (다중 리전 최종 일관성) | 비동기 | **기본값.** 항목 변경이 보통 **1초 내**에 다른 복제본으로 전파되고 리전 간에는 최종 일관성입니다. 충돌은 **"최후 작성자 우선(last-writer-wins)"**으로 자동 해소됩니다 |
+| **MRSC** (다중 리전 강력 일관성) | **동기** | 항목 변경이 **최소 한 개의 다른 리전으로 복제된 뒤에야** 쓰기가 성공으로 반환됩니다. 어느 복제본에서든 **강력 일관성 읽기는 항상 최신 버전**을 반환합니다 |
+
+- ⚠️ 모드를 지정하지 않으면 **MREC**가 됩니다. 하나의 글로벌 테이블 안에서 **복제본마다 다른 모드를 둘 수 없고**, **생성한 뒤에는 모드를 바꿀 수 없습니다.**
+- **MRSC도 active-active**입니다 — 각 리전 테이블이 읽기·쓰기를 동등하게 받습니다.
+- MRSC에서도 **최종 일관성 읽기는 최근 변경을 포함하지 않을 수 있습니다**(다른 리전의 변경은 물론, 바로 같은 리전에서 막 일어난 변경조차). 최신값이 필요하면 **강력 일관성 읽기**를 요청해야 합니다.
+- 다른 리전에서 수정 중인 항목을 고치려 하면 쓰기가 **`ReplicatedWriteConflictException`**으로 실패합니다. 해당 항목이 더 이상 수정 중이 아니면 **재시도하면 성공**합니다.
+- ⚠️ **MRSC는 쓰기와 강력 일관성 읽기의 지연이 높습니다** — 리전 간 통신이 필요하고, 접근 리전과 가장 가까운 참여 리전 사이의 왕복 지연만큼 늘어납니다. 최종 일관성 읽기에는 추가 지연이 없습니다.
+- ⚠️ MRSC는 항목을 **개별적으로** 복제하므로 **트랜잭션 API를 지원하지 않습니다.**
+- ⚠️ **MRSC 글로벌 테이블은 정확히 3개 리전에 배포해야 합니다** — **복제본 3개**, 또는 **복제본 2개 + 증인(witness) 1개**입니다. 증인은 최근 기록을 담아 가용성 구조를 받쳐 주는 구성 요소로, **읽기·쓰기를 할 수 없고 스토리지·쓰기 비용이 들지 않으며** 두 복제본과 다른 리전에 둡니다.
+
+> 그래서 "글로벌 테이블은 last-writer-wins"라는 한 줄만 외우면 틀립니다 — 그것은 **MREC의 동작**이고, **MRSC에서는 충돌이 예외로 드러나** 애플리케이션이 재시도로 처리합니다. 다만 MRSC는 **정확히 3리전·트랜잭션 불가·쓰기 지연 증가**라는 값을 치릅니다.
+
+> 🧠 원리: 왜 Global Tables의 기본 충돌 해결 방식이 "최후 작성자 우선"일까요?
 > 여러 리전에서 동시에 같은 항목에 쓰기가 발생하면, 어느 값이 최종 상태여야 하는지를 자동으로 결정해야 합니다.
 > 최후 작성자 우선 정책은 타임스탬프가 가장 늦은 쓰기를 채택하므로, 애플리케이션이 충돌 해결 로직을 별도로 구현하지 않아도 일관된 상태로 수렴할 수 있습니다.
 > 다만 이 정책은 "거의 동시에" 발생한 쓰기에서는 어느 리전의 시계가 더 앞섰는지에 따라 결과가 달라질 수 있으므로, 충돌 민감도가 높은 워크로드는 설계 단계에서 이를 고려해야 합니다.
@@ -198,6 +239,44 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 
 - 데이터베이스가 아니라 **캐시 계층** — DB 앞단에 배치해 반복 읽기 부하를 흡수합니다.
 - 지원 엔진은 **3종**: **Valkey**·**Memcached**·**Redis OSS**. Valkey는 Redis OSS 호환 오픈소스 포크로, 신규 구성에서는 Valkey 또는 Redis OSS를 고릅니다.
+
+**배포 형태가 둘입니다 — 노드 기반 vs ElastiCache Serverless (★ 시험 포인트)**
+
+| 형태 | 무엇을 정하나 | 특징 |
+|---|---|---|
+| **노드 기반(node-based)** | 노드 타입·샤드 수·복제본 수를 직접 | 버전·패치 제어 폭이 넓고, 이전 엔진 버전 호환이 필요하면 이쪽 |
+| **ElastiCache Serverless** | 아무것도 — 용량이 자동 | **Valkey · Redis OSS 7.0 이상 · Memcached 1.6 이상** 호환. 용량 산정 없이 시작 |
+
+ElastiCache Serverless의 한도:
+
+| 한도 | 값 |
+|---|---|
+| 캐시당 크기 | **5,000 GiB** |
+| 슬롯당 크기 | **32 GiB** |
+| 처리 단위 | 초당 **15,000,000 ECPU**(ElastiCache Processing Unit) |
+| 키 이름 길이 | 4 KiB |
+
+**엔진 버전은 올리는 방향만 있습니다**
+
+- 엔진 버전은 **업그레이드만 가능하고 다운그레이드는 지원되지 않습니다.** 되돌리려면 이전 버전으로 새 캐시를 만들어 데이터를 옮기는 수밖에 없습니다.
+- ⚠️ 아래 업그레이드 특성은 **노드 기반 전용**이며 **Serverless에는 적용되지 않습니다.**
+  - **Redis OSS 5.0.6 이상**은 **최소 다운타임** 업그레이드 — 업그레이드 전 과정에서 읽기가 가능하고, 쓰기도 **수초간의 페일오버를 제외하면** 대부분 가능합니다. 5.0.6 미만은 DNS 전파 때문에 페일오버가 **30초~1분** 걸릴 수 있습니다.
+  - **Valkey 7.2 · Redis OSS 6.0 이상**부터는 마이너 릴리스마다 **패치 버전을 여러 개 두지 않고 단일 버전**을 제공합니다.
+  - **Redis OSS 7**부터 클러스터 모드 비활성 ↔ 활성 전환을 지원하지만, **엔진 업그레이드와 동시에는 전환할 수 없습니다**(백업 후 별도 절차).
+  - 업그레이드 시 기존 클라이언트 연결이 종료되므로, 클라이언트에 **재시도와 지수 백오프**를 두는 것이 권장됩니다.
+  - 심각한 보안 취약점이 발생하면 AWS가 **사용자 대신 패치할 권리를 보유**합니다.
+
+**ElastiCache vs MemoryDB — 캐시인가, 데이터베이스인가 (★ 단골 함정)**
+
+| 항목 | ElastiCache | **Amazon MemoryDB** |
+|---|---|---|
+| 공식 성격 | 인메모리 **캐시/데이터 스토어** | **내구성 있는(durable) 인메모리 데이터베이스** |
+| 내구성 근거 | 캐시 계층 — 원본은 뒤쪽 DB | **Multi-AZ 트랜잭션 로그**로 여러 AZ에 내구성 있게 저장 → 빠른 페일오버·DB 복구·노드 재시작 |
+| 일관성 | 엔진 복제 특성에 따름 | **프라이머리는 read-after-write 강력 일관성**, 복제본은 보장된 최종 일관성 |
+| 지연 | 마이크로초급 읽기 | 마이크로초 읽기 · **한 자릿수 ms 쓰기** |
+| 쓰임 | DB 앞단 캐시 | **주(primary) 데이터베이스로 단독 사용 가능** — 캐시와 영속 DB를 따로 운영할 필요가 없습니다 |
+
+> 시험 신호: "인메모리 속도가 필요하고 **데이터를 잃으면 안 된다**", "캐시와 DB를 둘 다 운영하는 부담을 없애라" → **MemoryDB**. "뒤에 RDS/DynamoDB가 있고 읽기 부하만 덜어라" → **ElastiCache**.
 
 ### 12) Redis vs Memcached 비교 (★ 단골 출제) {#redis-vs-memcached}
 
@@ -381,6 +460,21 @@ DynamoDB는 파티션 키를 해시해 데이터를 여러 물리 파티션에 �
 8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 9. AWS 데이터베이스 선택 가이드(관계형·키-값·문서·와이드 컬럼·그래프·인메모리 등 목적별 엔진) — https://docs.aws.amazon.com/databases-on-aws-how-to-choose/
 10. Amazon MemoryDB란 무엇인가("durable, in-memory database service that delivers ultra-fast performance") — https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
+11. DynamoDB 제약(항목 400 KB·용량 단위 크기·트랜잭션 2배·모드 전환 24시간 4회) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Constraints.html (갭 배치 B8a: 2026-10-21)
+12. DynamoDB 버스트·적응형 용량(파티션 3,000/1,000 초과 시 스로틀·적응형은 기본 활성·무료) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/burst-adaptive-capacity.html (갭 배치 B8a: 2026-10-21)
+13. DynamoDB warm throughput(새 온디맨드 테이블 읽기 12,000·쓰기 4,000·사전 웜업·값 하향 불가) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/warm-throughput.html (갭 배치 B8a: 2026-10-21)
+14. 핫 파티션 스로틀 이유 타입 `KeyRangeThroughputExceeded` — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/throttling-key-range-limit-exceeded-mitigation.html (갭 배치 B8a: 2026-10-21)
+15. 글로벌 테이블 동작 — 일관성 모드(MREC 기본·MRSC·생성 후 변경 불가) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html (갭 배치 B8a: 2026-10-21)
+16. 글로벌 테이블 설계 — MRSC 핵심 사실(정확히 3리전·증인·트랜잭션 API 미지원·`ReplicatedWriteConflictException`) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-global-table-design.html (갭 배치 B8a: 2026-10-21)
+17. ElastiCache Serverless 엔진 버전·한도(Valkey·Redis OSS 7.0+·Memcached 1.6+ / 5,000 GiB·32 GiB·15,000,000 ECPU·키 4 KiB) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/migration-to-serverless-prerequisites.html (갭 배치 B8a: 2026-10-21)
+18. ElastiCache 노드 기반 업그레이드 고려사항(5.0.6+ 최소 다운타임·Valkey 7.2/Redis OSS 6.0+ 단일 버전·Serverless 비적용) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/VersionManagement-upgrade-considerations.html (갭 배치 B8a: 2026-10-21)
+19. MemoryDB 기능(Multi-AZ 트랜잭션 로그·프라이머리 read-after-write 일관성·한 자릿수 ms 쓰기) — https://docs.aws.amazon.com/memorydb/latest/devguide/servicename-feature-overview.html (갭 배치 B8a: 2026-10-21)
+
+> 📝 **2026-10-21 보강 (갭 배치 B8a)**: ① §5에 **파티션 한도**(읽기 3,000·쓰기 1,000)와 **항목 400 KB**(속성 이름 바이트 포함·LSI 합산), `KeyRangeThroughputExceeded`, **적응형 용량**(기본 활성·무료·끌 수 없음·파티션 최대를 못 넘음), **모드 전환 비대칭**(프로비저닝→온디맨드 24시간 4회), 트랜잭션 2배, 그리고 현행 온디맨드 모델인 **warm throughput**(새 테이블 읽기 12,000·쓰기 4,000·사전 웜업·**올린 값 하향 불가**)을 추가했습니다(근거 11~14번). ② §7에 **일관성 모드 두 가지**를 넣었습니다 — 기존 서술이 충돌 해소를 **last-writer-wins로만** 적고 있었는데, 그것은 **기본 모드 MREC의 동작**이고 **MRSC**에서는 충돌이 `ReplicatedWriteConflictException`으로 드러납니다. MRSC의 값(정확히 **3리전**·복제본 2+**증인** 1 가능·**트랜잭션 API 미지원**·쓰기·강력읽기 지연 증가·**생성 후 모드 변경 불가**)도 함께 적었습니다(근거 15·16번). ③ §11에 **ElastiCache Serverless와 한도**, **엔진은 업그레이드만 가능**(다운그레이드 미지원)과 노드 기반 업그레이드 특성, **ElastiCache vs MemoryDB 비교표**를 추가했습니다(근거 17~19번) — §15의 목적별 DB 개요보다 한 단 깊은 층입니다.
+>
+> **파생 문항 1개소 정밀화**: `saa-t3-6.questions.json`의 글로벌 테이블 해설이 충돌 해소를 LWW로만 적어, **기본 모드 MREC에서의 동작**임을 밝히도록 고쳤습니다(정답 인덱스·`verified` 무변경, 드래프트라 라이브 노출 없음).
+>
+> **쓰지 않은 것**: 갭 노트가 적은 온디맨드의 **"이전 피크 2배·30분 규칙"**과 **프로비저닝 버스트 5분** — 현행 공식 문서는 그 규칙 대신 **warm throughput**으로 설명하며 두 수치를 두지 않아 쓰지 않았습니다.
 
 > 📝 **2026-10-19 정정**: ① TTL 삭제 시점을 현행 서술인 **만료 후 수일 내(최선 노력)**로 고쳤습니다(근거 5번). ② ElastiCache 엔진을 **Valkey·Memcached·Redis OSS 3종**으로 갱신했습니다(근거 6번). ③ DynamoDB를 "무제한 처리량"으로 적었던 칸에 **파티션당 읽기 3,000·쓰기 1,000 단위/초** 한도를 명시했습니다(근거 7번).
 

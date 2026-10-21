@@ -209,7 +209,7 @@
         "DynamoDB + DynamoDB Streams로 수동 교차 리전 복제를 구현한다"
       ],
       "correct": 2,
-      "explanation": "DynamoDB Global Tables는 여러 리전에 Active-Active로 테이블을 복제합니다. 모든 리전에서 읽기와 쓰기가 모두 가능하며, 충돌 해결은 최후 작성자 우선(last-writer-wins) 정책으로 자동 처리됩니다. RDS Read Replica는 읽기 전용이므로 멀티 리전 쓰기 요구사항을 충족하지 못합니다.",
+      "explanation": "DynamoDB Global Tables는 여러 리전에 Active-Active로 테이블을 복제합니다. 모든 리전에서 읽기와 쓰기가 모두 가능하며, 충돌 해결은 기본 모드인 다중 리전 최종 일관성(MREC)에서 최후 작성자 우선(last-writer-wins) 정책으로 자동 처리됩니다. RDS Read Replica는 읽기 전용이므로 멀티 리전 쓰기 요구사항을 충족하지 못합니다.",
       "wrongExplanations": {
         "0": "RDS Read Replica는 읽기 전용 복제본으로, 각 리전에서 쓰기가 불가능합니다. Active-Active 다중 리전 쓰기 요구사항을 충족하지 못합니다.",
         "1": "CloudFront는 정적 콘텐츠 캐시이며 동적 DynamoDB 쓰기를 처리할 수 없습니다. 단일 리전 DynamoDB는 원거리 리전에서의 지연 문제를 해결하지 못합니다.",
