@@ -147,6 +147,28 @@ ECS의 핵심 리소스:
 | **Service** | 지정된 수의 Task를 지속 실행 — 장기 상주 앱(웹 서버 등) |
 | **Cluster** | Task/Service가 실행되는 논리 단위 |
 
+**ECS 용량 공급자(Capacity Provider) — "어디서 실행할지"를 전략으로 적는 층 (★ 시험 핵심)**
+
+| 용량 공급자 | 대상 | 특징 |
+|---|---|---|
+| `FARGATE` | 서버리스 | 온디맨드 Fargate 용량 |
+| `FARGATE_SPOT` | 서버리스 | 여유 컴퓨팅 용량으로 할인 — ⚠️ AWS가 용량을 회수하면 **2분 경고** 뒤 태스크가 중단됩니다(중단을 견디는 워크로드만) |
+| Auto Scaling 그룹 용량 공급자 | EC2 | ASG를 붙여 ECS가 컨테이너 인스턴스 수까지 관리 |
+
+전략(capacity provider strategy)의 제약:
+
+- 한 전략에는 **Fargate 계열 또는 ASG 계열 중 한 쪽만** 넣을 수 있습니다. 클러스터는 두 계열을 함께 가질 수 있지만, 전략 하나가 둘을 동시에 담지는 못합니다.
+- 전략 하나에 용량 공급자는 최대 **20개**입니다.
+- `weight` 기본값이 경로마다 갈립니다 — **콘솔 1 / API·CLI 0**. 모든 용량 공급자의 weight가 0이면 `RunTask`·`CreateService`가 실패합니다.
+- `base`를 지정할 수 있는 용량 공급자는 **전략 안에 하나**뿐입니다(미지정 시 0).
+- ASG 용량 공급자를 쓰는 서비스를 **Fargate 용량 공급자로 변경할 수 없습니다**(반대도 불가).
+
+**클러스터 오토스케일링(관리형 스케일링)** — ASG 용량 공급자를 만들 때 관리형 스케일링을 켜고 `targetCapacity`(목표 인스턴스 사용률)를 주면, ECS가 해당 ASG에 **CloudWatch 알람 2개와 대상 추적 조정 정책을 대신 만들어 붙입니다.**
+
+> 판단 기준은 `CapacityProviderReservation` 지표(네임스페이스 `AWS/ECS/ManagedScaling`)이고, 공식 산식은 **`(필요한 인스턴스 수) / (실행 중인 인스턴스 수) × 100`**입니다. `targetCapacity`를 80%로 두면 "항상 20%는 여유로 비워 두라"는 뜻이 되어, 태스크가 새 인스턴스 부팅을 기다리지 않고 바로 뜹니다 — 대가는 유휴 용량 비용입니다.
+>
+> ⚠️ 이때 생성된 대상 추적 정책을 **직접 수정하지 않습니다.** 바꿀 것은 **용량 공급자의 관리형 스케일링 설정**입니다.
+
 **Amazon EKS(Elastic Kubernetes Service)**
 
 > 공식 정의: "Kubernetes 클러스터 운영의 복잡성을 제거하는 완전 관리형 Kubernetes 서비스."
@@ -160,7 +182,17 @@ EKS는 표준 모드에서 Kubernetes 컨트롤 플레인을 AWS가 관리합니
 | 이식성 | AWS 한정 | 온프레미스·멀티클라우드 호환 |
 | 선택 기준 | AWS 네이티브 스택, 빠른 도입 | 기존 K8s 워크로드, 표준 도구 필요 |
 
-> 시험에 "쿠버네티스"가 등장하면 EKS, "노드 관리 없이" + "쿠버네티스"이면 EKS + Fargate입니다.
+**EKS의 컴퓨트(노드) 선택지 — 공식이 드는 다섯 가지**
+
+| 선택지 | 노드를 누가 관리하나 | 고르는 이유 |
+|---|---|---|
+| **EKS Auto Mode** | AWS가 **데이터 플레인까지** | 컴퓨팅 오토스케일링·네트워킹·로드 밸런싱·DNS·스토리지·GPU 지원을 내장 구성요소로 받고 운영 부담을 최소화 |
+| **AWS Fargate** | AWS (관리할 인스턴스 없음) | 자원 요구만 적고 프로비저닝·확장·유지를 맡김 |
+| **Karpenter** | 사용자가 컨트롤러를 운영 | 바뀌는 부하에 맞춰 **적정 크기** 노드를 즉시(just-in-time) 띄움 |
+| **관리형 노드 그룹** | AWS가 패치·갱신·스케일링, 사용자가 `kubelet` 인수 등 | 자동화와 커스터마이즈의 중간 — 고급 CPU·메모리 관리 정책까지 손댈 수 있음 |
+| **자체 관리 노드** | 전부 사용자 | 기반 인프라를 세밀하게 통제해야 할 때 |
+
+> 시험에 "쿠버네티스"가 등장하면 EKS, "노드 관리 없이" + "쿠버네티스"이면 EKS + Fargate 또는 EKS Auto Mode입니다. "노드 유형을 워크로드마다 자동으로 골라 띄워라"가 핵심이면 **Karpenter**입니다.
 
 **AWS Fargate — 서버리스 컨테이너 실행 모드**
 
@@ -178,6 +210,8 @@ Fargate는 독립 서비스가 아니라 **ECS 또는 EKS의 실행 모드(시�
 
 > Fargate의 각 Task는 자체 격리 경계를 가집니다 — 커널·CPU·메모리·네트워크 인터페이스를 다른 Task와 공유하지 않습니다.
 
+> ⚠️ **Fargate가 못 가는 곳이 있습니다**: Amazon ECS on AWS Fargate 워크로드는 **Local Zones·Wavelength Zones·AWS Outposts에서 지원되지 않습니다.** 저지연 엣지 위치나 온프레미스에서 컨테이너를 돌려야 하면 **EC2 시작 유형**을 골라야 합니다 — 리전 밖 배치 선택지는 §7에서 다룹니다.
+
 > 🧠 원리: 왜 Fargate는 독립 서비스가 아닌 ECS 또는 EKS의 "실행 모드"로 설계됐을까요?
 > 컨테이너를 실행하려면 스케줄링(어떤 태스크를 언제 어디서 실행할지)과 인프라(실제로 실행할 컴퓨팅 자원)가 분리돼야 합니다.
 > ECS와 EKS는 스케줄링 계층을 담당하고, Fargate는 그 아래 인프라 계층을 대체하는 역할이므로 오케스트레이터 없이 단독으로 존재할 수 없는 구조입니다.
@@ -189,7 +223,7 @@ Lambda는 saa-t2-2에서 이벤트 기반 패턴으로 다뤘습니다. 여기�
 
 | 개념 | 핵심 |
 |---|---|
-| **메모리 ↔ CPU** | 메모리를 올리면 CPU도 비례 증가(1,769 MB = 1 vCPU) — 공식 서술상 성능 제어의 **주된(principal) 손잡이** |
+| **메모리 ↔ CPU** | 설정 범위 **128 MB ~ 10,240 MB**(1 MB 단위). 메모리를 올리면 CPU도 비례 증가(**1,769 MB = 1 vCPU**) — 공식 서술상 성능 제어의 **주된(principal) 손잡이** |
 | **최대 실행 시간** | **15분** — 이보다 긴 작업은 Lambda 부적합 |
 | **동시성(Concurrency)** | 계정·리전당 기본 1,000 동시 실행 제한 (조정 가능) |
 | **예약 동시성(Reserved)** | 특정 함수에 동시성 할당 보장 + 상한선 설정 |
@@ -197,6 +231,56 @@ Lambda는 saa-t2-2에서 이벤트 기반 패턴으로 다뤘습니다. 여기�
 | **콜드 스타트** | 첫 호출 또는 유휴 후 컨테이너 초기화 지연 (수십~수백 ms) |
 
 > **성능 제약 요약**: 15분 초과·상태 유지·지속 연결(WebSocket 서버) → Lambda 부적합. 이 경우 ECS/Fargate 또는 EC2로 이동합니다.
+
+**명령어 세트 아키텍처 — arm64(Graviton) 선택**
+
+Lambda는 `x86_64`와 `arm64`(AWS Graviton) 중 하나를 고릅니다. 공식 문서는 전환을 "해 보고 비교하라"는 **절차**로 안내하며, 이득 폭을 수치로 못박지 않습니다.
+
+| 단계 | 할 일 |
+|---|---|
+| 1 | 함수가 쓰는 라이브러리·패키지, 빌드·배포·테스트 도구(컴파일러·CI/CD·프로비저닝 스크립트), Lambda 확장·서드파티 모니터링 도구까지 **의존성 목록**을 만든다 |
+| 2 | 각 의존성의 버전을 확인하고 **arm64 빌드가 있는지** 확인한다 |
+| 3 | 마이그레이션 환경을 만들어 부트스트랩·테스트·디버깅 |
+| 4 | **성능을 x86_64 버전과 비교** |
+| 5 | 인프라 파이프라인이 arm64를 지원하도록 고친 뒤 단계적으로 배포 |
+
+> 전환 검증의 실전 수단은 **별칭 라우팅 구성(alias routing configuration)**입니다 — 트래픽을 x86 버전과 arm64 버전으로 나눠 보내 성능·지연을 같은 부하에서 비교합니다.
+
+**Fargate 태스크 크기 — 조합이 정해져 있습니다 (★ 시험 포인트)**
+
+Fargate는 태스크 정의에서 **태스크 수준 CPU·메모리를 반드시** 지정하며, 아래 조합만 유효합니다.
+
+| CPU | 메모리 | 지원 OS |
+|---|---|---|
+| 256 (**.25 vCPU**) | 512 MiB · 1 GB · 2 GB | Linux |
+| 512 (.5 vCPU) | 1 ~ 4 GB (1 GB 단위) | Linux |
+| 1024 (1 vCPU) | 2 ~ 8 GB (1 GB 단위) | Linux, Windows |
+| 2048 (2 vCPU) | 4 ~ 16 GB (1 GB 단위) | Linux, Windows |
+| 4096 (4 vCPU) | 8 ~ 30 GB (1 GB 단위) | Linux, Windows |
+| 8192 (8 vCPU) | 16 ~ 60 GB (**4 GB 단위**) | Linux (플랫폼 `1.4.0`+) |
+| 16384 (16 vCPU) | 32 ~ **120 GB** (**8 GB 단위**) | Linux (플랫폼 `1.4.0`+) |
+| 32768 (32 vCPU) | 60 GB · 120 GB · 244 GB | Linux (플랫폼 `1.4.0`+) |
+
+> 임시 스토리지는 최대 **200 GiB**까지 지정할 수 있습니다(Fargate 호스팅 태스크 전용). CPU 값은 CPU 단위(`1024`) 또는 vCPU 문자열(`1 vCPU`)로, 메모리는 MiB(`3072`) 또는 GB(`3 GB`)로 적을 수 있습니다.
+>
+> 시험에서 "2 vCPU에 3 GB"처럼 **표에 없는 조합**을 주고 배포 실패 원인을 묻는 유형이 나옵니다. 세로(CPU)를 먼저 고르면 가로(메모리) 범위가 따라 정해지는 구조입니다.
+
+**SQS 이벤트 소스 매핑(ESM)은 어떤 속도로 늘어나는가 (★ 시험 핵심)**
+
+Lambda가 SQS를 **폴링**하는 쪽이라, 동시성은 호출량이 아니라 **ESM의 스케일링 규칙**이 정합니다.
+
+| 단계 | 표준 큐 동작 |
+|---|---|
+| 시작 | 메시지가 보이면 **다섯 배치를 동시에** 처리 — 동시 호출 5개로 출발 |
+| 증가 | 메시지가 계속 있으면 배치를 읽는 프로세스를 **분당 최대 300개 동시 호출씩** 늘림 |
+| 상한 | 한 ESM이 동시에 처리할 수 있는 최대 호출 수는 **1,250** |
+| 감소 | 트래픽이 줄면 동시 호출 5개로 되돌리고, 비용을 줄이려 **최소 2개**까지 더 내려갑니다(⚠️ **최대 동시성 설정을 쓰면 이 최적화가 적용되지 않습니다**) |
+
+- **최대 동시성(maximum concurrency)**은 **이벤트 소스 단위** 설정이라, 한 함수에 여러 SQS 이벤트 소스를 붙이면 각각 따로 줄 수 있습니다. 한 큐가 함수의 예약 동시성이나 계정 할당량을 전부 먹는 것을 막는 용도이며 **설정 자체는 무료**입니다.
+- ⚠️ **최대 동시성과 예약 동시성은 서로 독립된 두 설정**입니다. 최대 동시성을 함수의 예약 동시성보다 **높게 두면 안 됩니다** — 그러면 Lambda가 메시지를 스로틀할 수 있습니다.
+- **프로비저닝 모드**를 켜면 전용 이벤트 폴러를 최소·최대로 두어 **약 3배 빠른 스케일링과 최대 16배 처리 용량**을 얻고, 동시 호출 상한이 **100,000**까지 올라갑니다(폴러 1개당 1 MB/초 또는 동시 호출 10개 또는 SQS 폴링 API 10회/초). ⚠️ 최대 동시성 설정과는 **함께 쓸 수 없습니다.**
+- **FIFO 큐**는 동시 호출이 **메시지 그룹 ID 수와 최대 동시성 설정 중 작은 쪽**으로 묶입니다 — 메시지 그룹이 6개면 최대 동시성을 10으로 줘도 동시 호출은 6개입니다.
+- `BatchSize` 기본값은 **10**이고, 상한은 표준 큐 **10,000** / FIFO 큐 **10**입니다. 배치 윈도(`MaximumBatchingWindowInSeconds`)는 **FIFO 큐에서 지원되지 않습니다.**
 
 > 🧠 원리: 왜 Lambda는 메모리 설정 하나로 CPU 성능까지 함께 조정될까요?
 > 메모리가 연산 용량 전체를 함께 움직이므로 CPU·네트워크·메모리 병목 모두 메모리를 올려 완화할 수 있습니다. 다만 공식 서술은 메모리를 **주된(principal)** 손잡이로 표현하며, 병목을 넘어서면 이득이 줄어듭니다 — 아키텍처(arm64)·임시 스토리지 같은 다른 요소도 영향을 주고, 변곡점은 **AWS Lambda Power Tuning**으로 찾습니다.
@@ -252,6 +336,120 @@ HPC(High Performance Computing)는 노드 간 초저지연 통신이 필요한 �
 > 클러스터 배치 그룹은 인스턴스들을 물리적으로 가까운 위치에 배치해 네트워크 경로를 단축하지만, 여전히 OS 네트워크 스택(커널 소켓, 프로토콜 처리)을 통해 데이터가 전달됩니다.
 > MPI 같은 HPC 통신 패턴은 수천 번의 소규모 메시지를 주고받는 방식이라 OS 스택 처리 오버헤드가 누적되면 지연이 커집니다.
 > EFA는 OS-bypass 방식으로 메시지를 네트워크 인터페이스까지 직접 전달해 커널 오버헤드를 제거하므로, 배치 그룹의 물리적 근접성과 EFA의 통신 효율이 함께 있어야 초저지연 인터노드 통신이 가능합니다.
+
+### 7) 엣지 컴퓨팅 — 리전 밖에서 코드를 돌리는 선택지 {#edge-compute}
+
+여기까지는 전부 **리전 안**의 컴퓨팅이었습니다. 사용자와의 물리적 거리 자체가 병목이면 리전 안에서 인스턴스를 키워도 지연이 줄지 않습니다. 그때 고르는 층이 둘 있습니다 — **엣지에서 코드를 실행**하거나, **AWS 인프라를 사용자 쪽으로 가져오는** 것입니다.
+
+**① 엣지 함수 — CloudFront 위에서 코드 실행**
+
+| 항목 | CloudFront Functions | Lambda@Edge |
+|---|---|---|
+| 실행 위치 | CloudFront 엣지 로케이션 | CloudFront 리전 엣지 캐시·엣지 로케이션 |
+| 실행 시간 한도 | 절대 시간이 아니라 **컴퓨팅 사용률(compute utilization) 0~100**으로 측정 — 100이 허용 시간 전부 | **함수 타임아웃 30초** |
+| 최대 코드 크기 | **10 KB** (⚠️ 조정 불가 — 더 담아야 하면 CloudFront KeyValueStore) | 압축 패키지 **50 MB** |
+| 최대 메모리 | **2 MB** | Lambda 쿼터와 동일 |
+| 요청 본문 | ⚠️ **접근 불가** | Include Body 옵션으로 접근 가능(크기 제한 있음) |
+| 네트워크 호출 | ⚠️ 런타임이 **네트워크·파일 시스템·환경 변수·타이머 접근을 제한**하고 동적 코드 평가도 막습니다 | S3 버킷·DynamoDB 테이블·EC2 등 **리전 자원 호출 가능** |
+| 계정당 함수 수 | 100 | 배포당 100 (함수 쓸 수 있는 배포 500) |
+| 한 함수에 연결 가능한 배포 | 100 | 500 |
+| 동시성·처리량 | — | 리전당 동시 실행 **1,000**(인스턴스당 10 요청/초, 총 호출 한도 = 동시성 × 10), 리전당 **10,000 요청/초** |
+
+> 공식 쿼터 표에서 **이벤트 유형(뷰어 / 오리진)에 따라 갈리는 항목은 "함수가 생성한 응답 크기"뿐**입니다 — 뷰어 이벤트 **40 KB**, 오리진 이벤트 **1 MB**. 본문을 노출하거나 교체할 때도 같은 경계가 쓰입니다: 평문은 뷰어 40 KB / 오리진 1 MB, base64 인코딩은 뷰어 **53.2 KB** / 오리진 **1.33 MB**. 이 한도를 넘는 본문을 반환하면 요청이 **HTTP 502**(Lambda 검증 오류)로 실패합니다.
+>
+> **선택 지도**: 헤더 조작·URL 재작성·간단한 리다이렉트·토큰 검증처럼 **짧고 자족적인 변환**이면 CloudFront Functions가 맞습니다. **외부 자원을 조회**해야 하거나(세션 DB 조회, S3 직접 읽기) **요청 본문**을 봐야 하면 Lambda@Edge만 가능합니다. CloudFront Functions의 로그는 **10 KB에서 잘립니다.**
+
+**② AWS 인프라를 사용자 쪽으로 — 세 가지 배치 선택지**
+
+| 선택지 | 무엇인가 | 고르는 신호 |
+|---|---|---|
+| **AWS Local Zones** | 리전의 확장으로, 컴퓨팅·스토리지·DB 등 **일부 서비스를 대도시·산업 중심지 가까이** 배치. 로컬 인터넷 입·출구를 갖고, 부모 리전과는 AWS 전용 고대역폭 네트워크로 연결 | "특정 도시 사용자에게 한 자릿수 ms 지연", 하이브리드 마이그레이션 단순화 |
+| **AWS Wavelength Zones** | 표준 AWS 컴퓨팅·스토리지를 **통신사 5G 네트워크의 엣지**에 배치 | "5G 기기", "모바일 초저지연" |
+| **AWS Outposts** | 네이티브 AWS 서비스·인프라·운영 모델을 **고객의 데이터센터·코로케이션·온프레미스**로 가져옴 | "데이터가 건물 안에 있어야 한다", 온프레미스 시스템과의 저지연 결합 |
+
+> ⚠️ 세 곳 모두 **ECS on Fargate를 지원하지 않습니다**(§3 참고). 엣지 위치에서 컨테이너를 돌리려면 EC2 시작 유형입니다.
+
+> 🧠 원리: 왜 CloudFront Functions는 네트워크 호출조차 막아 둘까요?
+> CloudFront Functions는 모든 뷰어 요청·응답 경로에 끼어들어 **초당 수백만 건 규모**로 실행되는 것을 전제로 설계됐습니다. 그 규모에서 외부 호출 한 번의 대기 시간은 전체 응답 지연에 그대로 더해지고, 호출 대상이 느려지면 CDN 전체가 같이 느려집니다.
+> 그래서 런타임이 네트워크·파일 시스템·타이머를 아예 제거해, 함수가 **자기 입력만 보고 즉시 끝나는 변환**만 할 수 있게 강제합니다. 10 KB 코드·2 MB 메모리 한도도 같은 취지의 울타리입니다.
+> 반대로 Lambda@Edge는 호출 빈도가 낮은 오리진 이벤트까지 포함해 **외부 조회가 필요한 로직**을 맡으므로 30초 타임아웃과 리전 자원 접근을 허용합니다 — 두 서비스의 제약 차이는 성능 등급이 아니라 **실행 빈도에 맞춘 역할 분담**입니다.
+
+### 8) 컴퓨팅 스케일링 지표 — 무엇을 보고 늘릴 것인가 {#compute-scaling-metrics}
+
+컴퓨팅을 고른 다음 문제는 **"몇 대로 둘지"를 무엇이 결정하느냐**입니다. EC2 Auto Scaling은 `saa-t2-3`에서 다뤘고, 여기서는 **Application Auto Scaling**(ECS 서비스·Lambda·DynamoDB 등 ASG가 아닌 자원)과 **큐를 완충재로 쓰는 패턴**을 봅니다.
+
+**Application Auto Scaling의 사전 정의 지표 (ECS 서비스)**
+
+| 사전 정의 지표 유형 | 보는 CloudWatch 지표 |
+|---|---|
+| `ECSServiceAverageCPUUtilization` | `CPUUtilization` |
+| `ECSServiceAverageMemoryUtilization` | `MemoryUtilization` |
+| `ECSServiceAverageCPUUtilizationHighResolution` | `CPUUtilization` (**20초** 고해상도) |
+| `ECSServiceAverageMemoryUtilizationHighResolution` | `MemoryUtilization` (**20초** 고해상도) |
+| `ALBRequestCountPerTarget` | `RequestCountPerTarget` |
+
+- 사전 정의 지표는 기본적으로 **1분 평균**을 백분율로 봅니다. `...HighResolution` 두 가지는 **20초 간격** 지표를 써서 20초마다 판단하며, ⚠️ **ECS에서 고해상도 지표를 먼저 활성화**해야 정책을 만들 수 있습니다.
+- ⚠️ `ALBRequestCountPerTarget`은 **Spot Fleet과 ECS 서비스에만** 적용되는 지표 유형입니다.
+
+**대상 추적이 "안 하는 일"을 알아야 합니다 (★ 시험 포인트)**
+
+| 동작 | 공식 규칙 |
+|---|---|
+| 방향 | 지표가 목표값을 **넘을 때 확장**합니다. 목표값보다 **낮을 때 확장하는 용도로는 쓸 수 없습니다** |
+| **데이터 부족** | 지표에 데이터가 없으면 **아무 조정도 하지 않습니다** — 데이터 부족을 "사용률 낮음"으로 해석해 축소하지 않습니다 |
+| 오차 | 용량을 올림·내림으로 **보수적으로 반올림**하므로 목표값과 실제 지표에 틈이 보이는 것이 정상입니다 |
+| 비대칭 | 가용성을 위해 **확장은 가능한 빠르게, 축소는 완만하게** 합니다 |
+| ⚠️ 배포 중 | **ECS 배포가 진행되는 동안 Application Auto Scaling은 축소를 끕니다**(확장은 계속). 외부 배포 컨트롤러를 쓰는 서비스에는 적용되지 않습니다 |
+| 복수 정책 | 지표가 서로 다르면 여러 개를 둘 수 있고, 가용성 우선 원칙에 따라 **어느 하나라도 확장을 원하면 확장**합니다 |
+
+**큐를 완충재로 — "태스크당 백로그"로 조정하기**
+
+생산자와 소비자 사이에 큐를 두면 스파이크를 큐가 흡수하고 소비자는 자기 속도로 처리합니다(큐 자체는 `saa-t2-1` §2 참고). 이때 **무엇을 지표로 삼느냐**가 핵심입니다.
+
+- SQS는 큐 깊이를 `ApproximateNumberOfMessagesVisible`로 CloudWatch에 올립니다. 그러나 이 값을 지표로 **직접** 쓰면 안 됩니다 — 큐에 쌓인 메시지 수는 **실행 중인 태스크 수에 비례해 변하지 않기** 때문에, 큰 큐를 "비례해서 더 많은 태스크가 필요하다"로 해석해 필요 이상으로 확장하고 비용을 키웁니다.
+- 대신 **태스크당 백로그 = 큐 깊이 ÷ 실행 중인 태스크 수**를 씁니다. CloudWatch **지표 수식(metric math)**으로 큐 깊이를 실행 태스크 수로 나눠 계산합니다. 이 값은 태스크 1개가 지는 부하에 비례하므로 조정 지표로 적합합니다.
+- 목표값 = **허용 가능한 태스크당 백로그 = 허용 지연 ÷ 메시지 1건 평균 처리 시간**.
+
+```
+예) 허용 지연 10초, 평균 처리 시간 0.1초
+    → 목표값 = 10 / 0.1 = 100 (메시지/태스크)
+
+    현재 큐 1,500건 · 실행 태스크 10개
+    → 태스크당 백로그 = 1,500 / 10 = 150  (목표 100 초과)
+    → 태스크 5개 확장해 15개로 → 1,500 / 15 = 100
+```
+
+> EC2 Auto Scaling에서는 같은 계산을 **인스턴스당 백로그**로 합니다 — `saa-t2-3` §9를 보세요. 나누는 분모가 "실행 태스크 수"에서 "`InService` 인스턴스 수"로 바뀌는 것뿐, 사고 방식은 동일합니다.
+
+> 🧠 원리: 왜 큐 길이 자체가 아니라 "나눈 값"이어야 조정 지표가 될까요?
+> 대상 추적 정책은 "지표를 목표값에 붙여 두기 위해 용량을 몇으로 해야 하는가"를 역산합니다. 이 역산이 성립하려면 **용량을 늘렸을 때 지표가 그만큼 내려가는 관계**가 있어야 합니다.
+> 큐 길이는 그 관계가 없습니다 — 태스크를 두 배로 늘려도 지금 큐에 쌓인 1,500건은 그 순간 1,500건 그대로입니다. 그래서 정책은 "아직 목표에 못 닿았다"며 계속 확장하고, 큐가 비워질 무렵에는 필요 없는 태스크가 잔뜩 남습니다.
+> 큐 깊이를 실행 태스크 수로 나누면 용량이 분모로 들어가 **용량을 늘리는 즉시 지표가 내려가는** 관계가 생깁니다. 목표값을 "허용 지연 ÷ 처리 시간"으로 잡는 것도 같은 맥락입니다 — 지표의 단위를 시간(지연)으로 환산할 수 있어야 비즈니스 요구를 숫자로 번역할 수 있습니다.
+
+### 9) 데이터 처리 컴퓨팅 — EMR 배포 선택 {#emr-deployment}
+
+Spark·Hadoop 같은 분산 처리를 돌릴 때는 인스턴스를 직접 묶는 대신 Amazon EMR을 고릅니다. 시험에서는 **"어느 배포 형태인가"**와 **"어느 노드에 Spot을 쓰는가"**가 반복됩니다.
+
+| 배포 | 확장 단위 | 특징·고르는 신호 |
+|---|---|---|
+| **EMR on Amazon EC2** | **클러스터 단위** | 노드 수를 직접 정의. 코어 노드는 적게 두고 **태스크 노드를 늘렸다 줄여** 맞춥니다. **EMR 관리형 스케일링** 또는 사용자 지정 오토스케일링 정책으로 최소·최대 노드 수만 주고 맡길 수 있습니다 |
+| **EMR on Amazon EKS** | **잡(job) 단위** — 할당 vCPU·메모리에 비례 | 이미 EKS를 쓰고 있고 쿠버네티스 위에서 배치 잡을 돌리고 싶을 때 |
+| **EMR on AWS Outposts** | 제약 큼 | 온프레미스 데이터·앱 **옆에서** 돌려야 하는 저지연 워크로드. ⚠️ Outposts의 EC2 용량이 한정돼 확장이 어렵고, **Spot 인스턴스를 쓸 수 없어** 비용이 올라갑니다. 스토리지는 **S3만** 지원되며 **S3 on Outposts는 지원되지 않습니다** |
+| **EMR Serverless** | 신경 쓸 필요 없음 | **예측하기 어려운 워크로드**에 비용 효율적 — 용량 산정 자체가 없습니다 |
+
+> 공식 비용 최적화 문서는 EMR 배포를 위 **네 가지**로 셉니다. "EC2 / EKS / Serverless 세 가지"로 외우면 Outposts 선택지가 빠집니다.
+
+**태스크 노드에 Spot을 쓰는 이유 (★ 시험 핵심)**
+
+- 태스크 노드는 데이터를 처리하지만 **HDFS에 영구 데이터를 보관하지 않습니다.** 그래서 Spot 가격 상승으로 종료돼도 **데이터 손실이 없고** 클러스터 영향이 최소입니다.
+- 프라이머리·코어 인스턴스 그룹을 **온디맨드**로 두면 클러스터 수명 동안 용량이 보장되고, 피크 처리나 가속이 필요할 때 태스크 노드를 덧붙입니다.
+- 태스크 인스턴스 그룹을 Spot으로 6대 요청했는데 최대 Spot 가격 이하로 5대만 있으면, EMR은 **5대로 시작하고 나머지 1대를 나중에 가능해지면 추가**합니다.
+- ⚠️ 태스크 노드는 콘솔·CLI·API로 추가·제거할 수 있고 **태스크 그룹도 추가**할 수 있지만, **한 번 만든 태스크 그룹은 제거할 수 없습니다.**
+
+> 🧠 원리: 왜 Spot을 코어 노드가 아니라 태스크 노드에만 권할까요?
+> EMR 클러스터의 노드는 역할이 셋으로 갈립니다 — 프라이머리는 클러스터를 조율하고, 코어 노드는 **HDFS 데이터 블록을 보관**하며, 태스크 노드는 계산만 합니다.
+> Spot의 전제는 "언제든 회수될 수 있다"입니다. 코어 노드가 회수되면 그 위의 HDFS 블록이 사라져 복제 수준이 깨지고, 최악에는 잡 전체가 데이터 유실로 실패합니다. 반면 태스크 노드가 사라지면 그 노드가 맡던 계산만 다른 노드로 재시도되면 끝입니다.
+> 즉 "Spot을 어디에 쓸 수 있는가"는 가격 문제가 아니라 **상태를 들고 있는가**의 문제입니다. 같은 기준이 ECS의 `FARGATE_SPOT`, EC2 Auto Scaling 혼합 인스턴스 정책에도 그대로 적용됩니다 — 상태 없는 계산 계층에 Spot을 붙이는 것이 일관된 패턴입니다.
 
 ---
 
@@ -355,5 +553,26 @@ Lambda의 실행 환경은 요청 처리 후 언제든 종료·재생성될 수 
 10. Elastic Fabric Adapter — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
 11. Amazon FSx for Lustre — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
 12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+13. ECS 클러스터 오토스케일링(관리형 스케일링·`CapacityProviderReservation`) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-auto-scaling.html (갭 배치 B7b: 2026-10-21)
+14. ECS Fargate 용량 공급자(FARGATE·FARGATE_SPOT·전략 제약) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html (갭 배치 B7b: 2026-10-21)
+15. EKS 아키텍처 — 컴퓨트(노드) 유형 — https://docs.aws.amazon.com/eks/latest/userguide/eks-architecture.html (갭 배치 B7b: 2026-10-21)
+16. ECS — 공유 서브넷·Local Zones·Wavelength Zones(Fargate 미지원) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-regions-zones.html (갭 배치 B7b: 2026-10-21)
+17. Fargate 태스크 정의 차이 — 태스크 CPU·메모리 조합 — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html (갭 배치 B7b: 2026-10-21)
+18. Lambda — 명령어 세트 아키텍처 선택(arm64 마이그레이션) — https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html (갭 배치 B7b: 2026-10-21)
+19. Lambda — SQS 이벤트 소스 매핑 스케일링 동작 — https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-scaling.html (갭 배치 B7b: 2026-10-21)
+20. Lambda — SQS 이벤트 소스 매핑 파라미터(`BatchSize`·`ProvisionedPollerConfig`) — https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-parameters.html (갭 배치 B7b: 2026-10-21)
+21. CloudFront 쿼터 — CloudFront Functions·Lambda@Edge — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html (갭 배치 B7b: 2026-10-21)
+22. CloudFront Functions 제약(런타임·본문·컴퓨팅 사용률) — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-function-restrictions.html (갭 배치 B7b: 2026-10-21)
+23. Lambda@Edge 제약(Include Body 크기 한도) — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-at-edge-function-restrictions.html (갭 배치 B7b: 2026-10-21)
+24. VPC를 Local Zone·Wavelength Zone·Outpost로 확장 — https://docs.aws.amazon.com/vpc/latest/userguide/Extend_VPCs.html (갭 배치 B7b: 2026-10-21)
+25. Application Auto Scaling — CloudWatch 사전 정의 지표 — https://docs.aws.amazon.com/autoscaling/application/userguide/monitoring-cloudwatch.html (갭 배치 B7b: 2026-10-21)
+26. ECS 서비스 대상 추적 조정 정책(동작 규칙) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html (갭 배치 B7b: 2026-10-21)
+27. SQS 큐 기반 ECS 서비스 조정(태스크당 백로그) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-queue.html (갭 배치 B7b: 2026-10-21)
+28. 분석 서비스 비용 최적화 — EMR 배포 네 가지 — https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html (갭 배치 B7b: 2026-10-21)
+29. EMR 인스턴스 유형 구성·Spot 베스트 프랙티스(태스크 노드) — https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-instances-guidelines.html (갭 배치 B7b: 2026-10-21)
+
+> 📝 **2026-10-21 보강 (갭 배치 B7b — Task 3.2)**: §3에 **ECS 용량 공급자·전략 제약·클러스터 관리형 스케일링**과 **EKS 컴퓨트 다섯 선택지**, Fargate의 **Local Zones·Wavelength·Outposts 미지원**을 추가했습니다(근거 13·14·15·16번). §4에 **Lambda 메모리 범위 128~10,240 MB·arm64 마이그레이션 절차·Fargate 태스크 CPU·메모리 조합표·SQS 이벤트 소스 매핑 스케일링**(5배치 시작 → 분당 +300 → 상한 1,250)을 추가했습니다(근거 17·18·19·20번). 새 절 **§7 엣지 컴퓨팅 · §8 컴퓨팅 스케일링 지표 · §9 EMR 배포 선택**을 원리 블록과 함께 넣었습니다(근거 21~29번).
+>
+> **쓰지 않은 것**: ① **CloudFront Functions의 "최대 실행 시간 1 ms"** — 현행 공식 쿼터 표에 그 항목이 없고, 실행 시간은 **컴퓨팅 사용률(0~100)**로만 측정하도록 서술돼 있어 밀리초 수치를 쓰지 않았습니다. ② **Lambda@Edge "뷰어 이벤트 5초 / 오리진 30초"** — 현행 쿼터 표는 **함수 타임아웃을 30초 하나**로 적고, 이벤트 유형으로 갈리는 항목은 생성 응답 크기(40 KB / 1 MB)뿐입니다. 널리 인용되는 5초 분기는 현행 문서에서 확인되지 않아 싣지 않았습니다. ③ **arm64의 가격-성능 우위 퍼센트** — 공식 Lambda 아키텍처 문서는 수치 대신 "x86_64와 성능을 비교하라"는 절차만 제시하므로 수치를 쓰지 않았습니다. ④ **Lambda 콜드 스타트 구간 수치**(`99-gaps` V-27)와 **AWS Batch 잡 타임아웃 상한**(V-23)은 공식 확인 전이라 비워 두었습니다. ⑤ **AWS Auto Scaling 조정 계획(scaling plans)의 현행 제공 상태**(V-22)도 확인되지 않아 Application Auto Scaling만 다뤘습니다.
 
 > 📝 **2026-10-19 정정**: Lambda 메모리를 성능 튜닝의 "유일한" 손잡이로 적었던 표현을 공식 서술("Memory is the principal lever")에 맞춰 **주된 손잡이**로 고쳤습니다. 병목을 넘어서면 이득이 줄고 아키텍처·임시 스토리지도 영향을 주므로 변곡점은 Lambda Power Tuning으로 확인합니다(근거 7번).
