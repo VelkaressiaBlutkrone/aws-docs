@@ -147,6 +147,34 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 > 핵심 구분: **재처리·커스텀 처리**가 필요하면 Data Streams. **코드 없이 S3 등으로 그냥 적재**하면 Firehose. **스트림에 집계·분석 로직**이 필요하면 Managed Flink.
 
+#### Data Streams 설계 세부 — 소비자가 몇이냐가 설계를 가릅니다 (★ 시험 핵심)
+
+**① 보존 기간의 정확한 모델**
+
+| 항목 | 공식 값 |
+|---|---|
+| 기본값 | 생성 시 **24시간** |
+| 최댓값 | **8,760시간(365일)** — `IncreaseStreamRetentionPeriod` |
+| 최솟값 | **24시간** — `DecreaseStreamRetentionPeriod` |
+| 과금 | ⚠️ **24시간을 넘는 보존에는 추가 요금**이 붙습니다 |
+
+- 늘릴 때: 옛 보존 기간에 걸려 접근 불가가 되던 레코드가 **수 분 내**에 다시 살아납니다(24→48시간이면 23시간 55분 전 레코드도 24시간 뒤에 여전히 읽힙니다). ⚠️ 다만 **이미 만료된 데이터는 되살아나지 않습니다** — 24→168시간으로 올려도 24시간보다 오래된 데이터는 그대로 접근 불가입니다.
+- 줄일 때: ⚠️ **새 보존 기간보다 오래된 레코드가 거의 즉시 접근 불가**가 됩니다. `DecreaseStreamRetentionPeriod` 호출은 되돌릴 수 없는 손실로 이어질 수 있습니다.
+- 현재 값은 `DescribeStream`으로 확인합니다. 보존 기간은 **"컨슈머가 장애에서 회복할 시간을 벌어 주는 안전망"**으로 잡습니다 — 처리 로직 결함이나 다운스트림 장애가 몇 시간 이어질 수 있다면 그만큼 길게 둡니다.
+
+**② 소비자 처리량 — 향상된 팬아웃(EFO)**
+
+| 항목 | 공유 처리량 소비자 (기본, 비-EFO) | **향상된 팬아웃(EFO) 소비자** |
+|---|---|---|
+| 읽기 처리량 | **샤드당 총 2 MB/초 고정** — 여러 소비자가 그 2 MB/초를 **나눠 씁니다** | 등록한 **소비자마다 샤드당 최대 2 MB/초**를 다른 소비자와 **독립적으로** |
+| 메시지 전파 지연 | 소비자 1개면 평균 약 **200 ms**, 5개면 약 **1,000 ms** | 1개든 5개든 평균 약 **70 ms** |
+| 전달 모델 | `GetRecords`로 **끌어오기(pull)** | `SubscribeToShard`로 Kinesis가 **HTTP/2로 밀어 줌(push)** |
+| 비용 | 해당 없음 | **데이터 검색 비용 + 소비자-샤드 시간 비용** |
+
+- 등록 한도는 스트림당 **On-demand Advantage 50개 / On-demand Standard·프로비저닝 20개**이고, 한 소비자는 한 번에 **한 스트림**에만 등록됩니다. `RegisterStreamConsumer`는 계정당 **초당 5건**, 동시에 `CREATING` 상태인 소비자 **5개**까지입니다(6번째는 `LimitExceededException`).
+- ⚠️ **EFO는 읽기 쪽 기능입니다.** 샤드의 **입력(쓰기) 처리량을 늘리지 않습니다** — 쓰기가 막히면 샤드를 늘려야 합니다.
+- 시험 신호: **"소비자를 더 붙였더니 전부 느려졌다"** → 공유 처리량의 2 MB/초를 나눠 쓰고 있다는 뜻이고 답은 **EFO**입니다. 반대로 **"수집 자체가 스로틀된다"** 면 EFO가 아니라 **샤드 증설·온디맨드 전환**입니다.
+
 > 🧠 원리: 왜 Data Streams는 데이터를 전달 후에도 보존하는 반면, Firehose는 전달 즉시 제거할까요?
 > Data Streams는 여러 컨슈머가 각자의 속도로 같은 데이터를 읽어야 하므로, 가장 느린 컨슈머가 읽을 때까지 데이터를 스트림에 유지해야 fan-out이 가능합니다.
 > Firehose는 단일 목적지로 데이터를 전달하는 역할만 수행하므로, 전달이 완료된 데이터를 별도로 보존할 이유가 없고 보존 비용도 발생하지 않습니다.
@@ -238,13 +266,39 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ---
 
-### 8) Amazon QuickSight (BI 시각화) {#quicksight}
+### 8) Amazon Quick Sight (BI 시각화) {#quicksight}
 
-- 완전 관리형 **비즈니스 인텔리전스(BI)** 서비스. 대화형 대시보드·차트 생성
+> ⚠️ **명칭이 바뀌었습니다.** 공식 문서는 **`Amazon Quick`** 을 상위 서비스로 두고, 기존 QuickSight 를 그 안의 **`Amazon Quick Sight`**(두 단어) **기능**으로 잇습니다. 공식 서술은 *"Amazon Quick evolved from Amazon QuickSight. QuickSight continues as Amazon Quick Sight, a feature within Quick"* 이며, ⚠️ **기존 QuickSight API·SDK·연동은 변경 없이 그대로 동작합니다**(API 네임스페이스는 여전히 `quicksight`). 문서 경로도 `/quick/` 으로 옮겨졌습니다. 과거 자료의 `QuickSight` 표기는 **같은 기능의 옛 이름**입니다.
+>
+> **Amazon Quick** 은 자연어 챗으로 상호작용하며 AI 에이전트가 연결된 데이터·앱에 대해 요청을 처리하는 서비스이고, **Quick Sight**(시각화·BI) 외에 **Quick Flows**(작업 자동화) · **Quick Automate**(업무 프로세스 자동화) · **Quick Index**(사내 문서·데이터 연결) · **Quick Research**(인용 포함 리서치 보고서) · **Apps in Amazon Quick**(자연어로 웹 앱 구축)을 함께 가집니다.
+
+- 완전 관리형 **비즈니스 인텔리전스(BI)** 기능. 대화형 대시보드·차트 생성
 - 소스: Athena, S3, Redshift, RDS, Aurora, 온프레미스 DB 등
-- **SPICE** (Super-fast, Parallel, In-memory Calculation Engine) — 인메모리 캐시로 빠른 쿼리 응답
-- 서버리스, 사용자 수 기반 과금(Standard·Enterprise 에디션)
+- **SPICE** (Super-fast, Parallel, In-memory Calculation Engine) — 인메모리 캐시로 밀리초급 응답. 데이터셋은 **최대 200 GB**까지 확장
 - 데이터를 분석한 다음 결과를 **시각화·공유**하는 마지막 계층
+
+**가져오기(SPICE) vs 직접 쿼리 — 데이터셋 모드 (★ 시험 포인트)**
+
+| 모드 | 동작 | 고르는 기준 |
+|---|---|---|
+| **SPICE(가져오기)** | 데이터를 인메모리 엔진으로 **복제해 두고** 질의 | 대시보드 동시 사용자가 많고 **응답 속도**가 중요할 때. 소스 부하를 차단합니다. 대신 **신선도는 갱신 주기에 묶입니다** |
+| **직접 쿼리(Direct Query)** | 질의마다 **소스에 그대로** 전달 | **항상 최신**이어야 할 때. 대신 소스가 질의 부하를 전부 받습니다 |
+
+**과금과 임베디드**
+
+- 두 요소로 갈립니다 — **리포트 작성자는 사용자당**, **리포트 독자는 30분 세션당**이며 독자는 **월 최대 $5.00**입니다. 그래서 "보기만 하는 사용자가 수천 명"인 설계에서 사용자당 과금을 가정하면 비용을 크게 틀립니다.
+- 대시보드를 자사 애플리케이션에 **임베디드**로 넣을 수 있어, 고객에게 분석을 그대로 노출하는 구조가 가능합니다.
+
+**⚠️ VPC 연결은 데이터 소스를 가립니다 (★ 함정)**
+
+프라이빗 서브넷의 DB에 붙으려면 **VPC 연결**을 쓰는데, **모든 소스가 지원되지 않습니다.**
+
+| 구분 | 소스 |
+|---|---|
+| VPC 연결 **지원** | OpenSearch Service · Redshift · RDS · Aurora · Impala · Databricks · Exasol · MariaDB · SQL Server · MySQL · Oracle · PostgreSQL · Presto · Snowflake · Starburst · Teradata · Trino |
+| VPC 연결 **미지원** | ⚠️ **Athena** · Google BigQuery · Apache Spark · Timestream, 그리고 SaaS 커넥터(Salesforce·ServiceNow·Jira·GitHub) |
+
+> 미지원 소스에 VPC 연결을 붙이면 요청이 **잘못된 파라미터(invalid parameter) 오류로 실패**합니다. "Athena 쿼리를 VPC 연결로 사설화하라"는 선택지는 그래서 오답입니다 — Athena 쪽 사설 접근은 **VPC 엔드포인트**로 푸는 문제입니다.
 
 ---
 
@@ -280,6 +334,22 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 > 선택 기준: 네트워크 대역폭이 있고 반복 동기화면 **DataSync**, 대역폭 부족·초대용량 일회성 이전이면 **AWS Data Transfer Terminal**(또는 파트너 솔루션), 기존 SFTP 도구를 그대로 쓰면 **Transfer Family**. Snow 패밀리는 신규 주문이 불가하므로 신규 설계의 정답이 아닙니다.
 
+**크기·속도 요건을 숫자로 환산하기 (★ 시험 포인트)**
+
+전송 방식 선택은 감이 아니라 산수입니다.
+
+```
+전송 소요 시간 ≈ 데이터량 ÷ 실효 대역폭
+
+예) 100 TB를 1 Gbps(≈ 0.125 GB/s)로 보내면
+    100,000 GB ÷ 0.125 GB/s ≈ 800,000초 ≈ 9.3일   ← 회선을 100% 쓴다는 낙관적 가정
+```
+
+- 실효 대역폭은 **업무 시간대 다른 트래픽과 나눠 쓰는 몫**이므로, 위 계산보다 길어지는 쪽이 정상입니다. 그래서 **DataSync에 대역폭 제한을 걸어 업무 시간에는 양보하고 야간에 몰아주는** 운영이 흔합니다.
+- **DataSync 대역폭 제한**: 콘솔에서 **"Use available"**(가용 대역폭 전부) 또는 **"Set bandwidth limit (MiB/s)"** 로 상한을 줍니다. API로는 `UpdateTaskExecution`의 **`BytesPerSecond`** 파라미터입니다.
+- ⚠️ **이미 실행 중이거나 대기 중인 태스크 실행의 제한도 수정할 수 있고**, 새 제한은 **60초 내**에 적용됩니다 — 전송을 멈추고 다시 시작할 필요가 없습니다.
+- DataSync는 **증분 전송**이라 두 번째 실행부터는 바뀐 파일만 옮깁니다. 스케줄로 반복하면 "최초 1회는 길고 이후는 짧은" 패턴이 됩니다.
+
 > 🧠 원리: 왜 "대역폭 부족" 상황에서는 네트워크 전송보다 물리적 데이터 이동이 빠른 수단이 될 수 있을까요?
 > 수백 TB 이상의 데이터를 인터넷이나 전용 회선으로 전송할 때 걸리는 시간은 가용 대역폭에 반비례하며, 낮은 대역폭 환경에서는 전송 완료까지 매우 긴 시간이 걸릴 수 있습니다.
 > 물리적 장치에 데이터를 담아 배송하면 배송 시간은 가용 대역폭에 의존하지 않으므로, 대역폭이 충분하지 않은 환경에서는 물리 이전이 네트워크 전송보다 짧은 시간 안에 완료될 수 있습니다.
@@ -297,7 +367,90 @@ Transfer Family       →  Lake Formation (거버넌스)
 | 실시간 스트림 → S3·Redshift 적재 | **Firehose** | 코드 불필요, 완전 관리형 적재 |
 | 실시간 스트림 + 재처리·다중 컨슈머 | **Kinesis Data Streams** | 보존 기간, fan-out, 커스텀 처리 |
 | 데이터 레이크 컬럼·행 수준 접근 제어 | **Lake Formation** | Glue Catalog 위의 세밀한 권한 관리 |
-| 대화형 BI 대시보드 | **QuickSight** | 완전 관리형 BI, SPICE 인메모리 |
+| 대화형 BI 대시보드 | **Amazon Quick Sight** | 완전 관리형 BI, SPICE 인메모리 (옛 이름 QuickSight — §8) |
+| **데이터 웨어하우스 + S3를 걸치는 복잡 쿼리·다수 동시 BI** | **Redshift / Redshift Spectrum** | Redshift SQL을 **엑사바이트 규모 S3 데이터에 제자리로** 실행. CSV·TSV·Parquet·Sequence·**RCFile** 직접 쿼리 |
+| **로그·전문 검색 분석과 운영 대시보드** | **OpenSearch Service** | 전문 검색 + OpenSearch Dashboards + 알림 플러그인 |
+
+**Athena vs Redshift Spectrum — 공식이 가르는 기준 (★ 단골)**
+
+- ⚠️ 둘은 **공통 데이터 카탈로그와 공통 데이터 형식을 공유**하므로 **같은 데이터에 둘 다 쓸 수 있습니다.** 양자택일 문제로 보이면 함정입니다.
+- 공식 안내는 역할 분담입니다 — **Athena**는 **일회성 데이터 탐색과 SQL 쿼리**, **Redshift Spectrum**은 **더 복잡한 쿼리**와 **다수의 데이터 레이크 사용자가 동시에 BI·리포팅을 돌리는** 상황입니다.
+- Spectrum의 강점은 **Redshift 로컬에 있는 자주 쓰는 데이터와 S3의 전체 데이터셋을 한 쿼리로 걸치는** 것입니다. ⚠️ **S3 데이터를 Redshift로 적재하는 기능이 아닙니다** — 적재 없이 제자리에서 읽습니다.
+
+**OpenSearch를 CloudWatch 대신 고르는 이유**
+
+CloudWatch Logs로도 로그를 보지만, 공식이 드는 OpenSearch 전환 사유는 이렇습니다.
+
+- **필드 수준의 세분화된 데이터 접근 제어** — 사용자 권한에 따라 특정 필드를 익명화할 수 있어, 민감 데이터를 노출하지 않고 트러블슈팅을 맡길 수 있습니다.
+- **여러 계정·리전·인프라의 로그를 한 클러스터에 집계**해 중앙 운영팀이 교차 분석.
+- Fluent Bit·Fluentd·Logstash 같은 **ElasticSearch 계열 에이전트로 직접 수집·보강**(CloudWatch 에이전트가 지원하지 않는 OS 포함).
+- 이미 **ELK 스택·Kibana 대시보드에 투자**가 되어 있는 경우.
+
+> CloudWatch Logs 구독 필터로 로그를 OpenSearch로 **스트리밍**할 수 있어, "CloudWatch로 1차 수집하고 OpenSearch로 심화 분석"이 현실적인 조합입니다.
+
+### 12) 데이터 형식 변환과 수집 패턴 {#format-conversion-patterns}
+
+"CSV로 들어온 로그를 Parquet로 바꿔 Athena 비용을 줄여라"는 전형적인 요구입니다. 수단이 **셋**이고, 어느 층에서 바꾸느냐가 다릅니다.
+
+| 수단 | 어디서 바꾸나 | 특징 |
+|---|---|---|
+| **Firehose 레코드 형식 변환** | **수집 중(적재 직전)** | JSON → **Parquet 또는 ORC**. ⚠️ **S3 목적지만 지원**합니다. 지정하면 **Snappy 압축이 자동 활성화**되고, **AWS Glue 테이블의 컬럼 정보**로 역직렬화·직렬화합니다. **동적 파티셔닝**을 함께 걸면 키별로 접두어를 나눠 씁니다 |
+| **Athena CTAS** | **이미 S3에 있는 데이터를 쿼리로** | `CREATE TABLE AS SELECT` 한 문장에 **파티셔닝 + 압축 지정 + 컬럼 형식 변환**을 동시에. 출력 형식은 **PARQUET·ORC·AVRO·JSON·TEXTFILE** |
+| **Glue ETL 잡 / EMR** | **별도 처리 단계** | 복잡한 변환·조인·커스텀 라이브러리가 필요할 때 |
+
+**Athena CTAS 의 두 가지 결정적 성질**
+
+- 만들어진 **테이블과 파티션이 Glue Data Catalog 에 자동 등록**되어 후속 쿼리에서 **즉시** 쓸 수 있습니다 — 별도 크롤러 실행이 필요하지 않습니다.
+- ⚠️ **S3 출력 위치가 비어 있어야 합니다.** 데이터가 이미 있는 경로를 지정하면 쿼리가 오류로 실패합니다. 워크그룹의 결과 위치 설정이 우선하는 경우에는 `s3://.../tables/query_id/` 에 생성됩니다.
+- 기존 테이블에 **행을 덧붙일** 때는 `INSERT INTO` 를 씁니다 — CTAS 가 지원하는 모든 변환을 그대로 쓸 수 있습니다.
+
+**Glue 작업 북마크 — 같은 파일을 두 번 처리하지 않기**
+
+- 북마크는 **작업의 상태(state)** 를 `job_name` + 버전 번호로 저장합니다. 스크립트가 `job.init` 으로 **최신 상태를 읽고**, `job.commit` 에서 상태 요소를 **원자적으로 저장**합니다.
+- 상태 요소는 스크립트의 **소스·변환·싱크 인스턴스별**이며 **transformation context** 로 식별됩니다.
+- S3 소스의 북마크는 **타임스탬프로 새 객체만 걸러** 증분 처리합니다 — 상위 작업이 계속 쓰는 경로에서 "어디까지 처리했는가"를 그렇게 기억합니다.
+- 북마크에는 **실행 번호**(성공한 실행마다 단조 증가)·**시도 번호**(실패 뒤 재실행에서만 증가)·**버전 번호**가 함께 들어갑니다. 재처리를 강제해야 하면 북마크를 비활성화하거나 되감습니다.
+
+**수집 패턴 — 배치와 스트리밍 사이**
+
+§9의 2분법만으로는 실무 요건을 다 담지 못합니다.
+
+| 패턴 | 설명 | 신호 |
+|---|---|---|
+| **마이크로 배치** | 작은 묶음을 짧은 주기로 — 스트리밍의 지연과 배치의 단순함 사이 | "분 단위 신선도면 충분하다" |
+| **스트리밍 배칭** | 스트림을 모아 한 번에 적재(Firehose의 버퍼링이 이 방식) | 목적지의 쓰기 비용·작은 파일 문제를 줄일 때 |
+| **동종 수집** | 소스와 대상의 엔진·스키마가 같음 | 리프트 앤 시프트 |
+| **이기종 수집** | 엔진·스키마가 달라 변환이 필요 | 스키마 변환·형식 변환이 끼는 설계 |
+| **하이브리드(람다 아키텍처형)** | **실시간 계층 + 배치 계층을 함께** 두고 결과를 합침 | "대시보드는 즉시, 정산은 정확히" 둘 다 요구될 때 |
+
+> 작은 파일이 많이 쌓이면 Athena·Spark 모두 느려집니다. 그래서 스트리밍 수집에서는 **버퍼링으로 파일을 키우는 것**이 성능·비용 양쪽에 이롭습니다 — 다만 그만큼 **신선도를 내주는** 교환입니다.
+
+### 13) 수집 접점의 보안 {#ingestion-security}
+
+파이프라인의 보안은 저장소뿐 아니라 **데이터가 들어오는 접점**에서 결정됩니다.
+
+**Kinesis 인터페이스 VPC 엔드포인트 — 경로 자체를 묶기**
+
+- 인터페이스 엔드포인트(PrivateLink)를 두면 VPC 안의 생산자·소비자가 **인터넷을 거치지 않고** Kinesis API 를 호출합니다.
+- **VPC 엔드포인트 정책**으로 그 엔드포인트를 통한 동작을 제한할 수 있습니다. 예를 들어 조회만 허용하려면 `kinesis:List*`·`kinesis:Describe*` 만 `Allow` 하고, 특정 스트림만 쓰게 하려면 `Resource` 를 그 스트림 ARN 으로 좁힙니다.
+- ⚠️ **엔드포인트 정책 하나로는 "그 경로로만"이 성립하지 않습니다.** 공식 방식은 **IAM 정책과 함께** 쓰는 것입니다 — IAM 사용자·역할에 붙인 정책에서 **지정한 VPC 엔드포인트를 경유할 때만** Kinesis 동작을 허용하도록 조건을 걸어야, 퍼블릭 경로로 우회하는 호출이 막힙니다.
+
+```
+① 엔드포인트 정책  : 이 엔드포인트를 지나는 호출 중 무엇을 허용할지
+② IAM 정책 조건    : 이 자격증명은 그 엔드포인트를 지날 때만 허용
+→ 둘을 겹쳐야 "사설 경로 전용"이 된다
+```
+
+**레이크 쪽 접점**
+
+- S3 데이터 레이크는 **버킷 정책 + 암호화 + 감사 로그**가 기본 3축입니다(세부는 `saa-t3-1`·`saa-t4-1` 계열 참고).
+- 컬럼·행 수준 권한이 필요하면 **Lake Formation** 이 Glue Data Catalog 위에서 그 역할을 합니다(§7·§11).
+- 분석 계층의 사설 접근은 서비스마다 수단이 다릅니다 — ⚠️ **Amazon Quick Sight 의 VPC 연결은 Athena 를 지원하지 않습니다**(§8). Athena 쪽은 **VPC 엔드포인트**로 푸는 문제입니다.
+
+> 🧠 원리: 왜 엔드포인트 정책만으로는 "사설 경로 전용"이 되지 않을까요?
+> 엔드포인트 정책은 **그 엔드포인트를 지나는 트래픽에만** 적용됩니다. 즉 "이 문으로 들어오면 무엇을 할 수 있는가"를 정하는 규칙입니다.
+> 그런데 같은 자격증명은 퍼블릭 엔드포인트로도 Kinesis API 를 호출할 수 있습니다 — 그 호출은 엔드포인트 정책을 아예 거치지 않으므로, 아무리 엔드포인트 정책을 좁혀도 **다른 문이 열려 있는 상태**가 됩니다.
+> 그래서 자격증명 쪽(IAM 정책)에 "지정한 엔드포인트를 경유할 때만 허용"이라는 조건을 함께 걸어야 두 경로가 모두 닫힙니다. 보안 경계를 **경로에만** 두거나 **주체에만** 두면 한쪽이 비는 것이 이 구조의 교훈입니다.
 
 ---
 
@@ -398,6 +551,27 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 12. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 13. AWS DataSync FAQ("migrate existing data to Amazon S3, and subsequently use the File Gateway configuration") — https://aws.amazon.com/datasync/faqs/
 14. AWS Transfer Family FAQ(프로토콜별 시간당 + 전송량 과금, AS2는 메시지 수, 중지해도 과금 계속·삭제해야 종료) — https://aws.amazon.com/aws-transfer-family/faqs/
+15. **Amazon Quick 이란?**(상위 서비스·Quick Sight 는 그 안의 기능·"QuickSight continues as Amazon Quick Sight"·기존 API·SDK 무변경) — https://docs.aws.amazon.com/quick/latest/userguide/what-is.html (갭 배치 B8c: 2026-10-21)
+16. Quick Sight VPC 연결 지원 데이터 소스(⚠️ Athena·BigQuery·Spark·Timestream 미지원·invalid parameter 오류) — https://docs.aws.amazon.com/quick/latest/userguide/vpc-connection-supported-data-sources.html (갭 배치 B8c: 2026-10-21)
+17. Kinesis Data Streams 용어·개념 — 보존 기간(기본 24시간·최대 8,760시간=365일·24시간 초과 추가 과금) — https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html (갭 배치 B8c: 2026-10-21)
+18. 데이터 보존 기간 변경(증가는 수 분 내 반영·만료분은 복구 안 됨·감소는 거의 즉시 접근 불가) — https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html (갭 배치 B8c: 2026-10-21)
+19. 향상된 팬아웃 소비자(공유 2 MB/초 분할 vs 소비자별 2 MB/초·200/1,000 ms vs 70 ms·`SubscribeToShard` HTTP/2 푸시) — https://docs.aws.amazon.com/streams/latest/dev/enhanced-consumers.html (갭 배치 B8c: 2026-10-21)
+20. `RegisterStreamConsumer`(On-demand Advantage 50 / Standard·Provisioned 20·초당 5건·동시 `CREATING` 5) — https://docs.aws.amazon.com/kinesis/latest/APIReference/API_RegisterStreamConsumer.html (갭 배치 B8c: 2026-10-21)
+21. Firehose 데이터 형식 변환(JSON→Parquet/ORC·**S3 목적지만**·Snappy 자동·Glue 테이블 스키마·동적 파티셔닝) — https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_kinesisfirehose-readme.html (갭 배치 B8c: 2026-10-21)
+22. Athena CTAS·`INSERT INTO` ETL(한 문장에 파티셔닝·압축·컬럼 형식·Glue Catalog 자동 등록) — https://docs.aws.amazon.com/athena/latest/ug/ctas-insert-into-etl.html (갭 배치 B8c: 2026-10-21)
+23. 콘솔에서 CTAS 쿼리 만들기(⚠️ **출력 위치가 비어 있어야 함**·워크그룹 설정 우선 시 `tables/query_id/`) — https://docs.aws.amazon.com/athena/latest/ug/ctas-console.html (갭 배치 B8c: 2026-10-21)
+24. Glue 작업 북마크로 처리분 추적(`job.init`/`job.commit`·transformation context·S3 타임스탬프 필터·실행·시도·버전 번호) — https://docs.aws.amazon.com/glue/latest/dg/monitor-continuations.html (갭 배치 B8c: 2026-10-21)
+25. DataSync 태스크 대역폭 제한(`Set bandwidth limit (MiB/s)`·실행 중·대기 중 수정 가능·60초 내 적용·`UpdateTaskExecution`의 `BytesPerSecond`) — https://docs.aws.amazon.com/datasync/latest/userguide/configure-bandwidth.html (갭 배치 B8c: 2026-10-21)
+26. Kinesis Data Streams 인터페이스 VPC 엔드포인트(엔드포인트 정책 예시 3종·IAM 정책과 함께 써야 경로 한정) — https://docs.aws.amazon.com/streams/latest/dev/vpc.html (갭 배치 B8c: 2026-10-21)
+27. 데이터 레이크 제자리 쿼리 — Redshift Spectrum(엑사바이트·CSV/TSV/Parquet/Sequence/RCFile·**Athena와 카탈로그·형식 공유**·역할 분담) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/in-place-querying.html (갭 배치 B8c: 2026-10-21)
+28. OpenSearch Service 로그 분석 워크로드(전문 검색·Dashboards·알림 플러그인·수집 경로) — https://docs.aws.amazon.com/wellarchitected/latest/amazon-opensearch-service-lens/log-analytics-workloads.html (갭 배치 B8c: 2026-10-21)
+29. CloudWatch 로그 분석에서 OpenSearch 로 넘어가는 사유(필드 수준 접근 제어·다계정·다리전 집계·ES 에이전트·기존 ELK) — https://docs.aws.amazon.com/prescriptive-guidance/latest/implementing-logging-monitoring-cloudwatch/cloudwatch-search-analysis.html (갭 배치 B8c: 2026-10-21)
+
+> 📝 **2026-10-21 보강 (갭 배치 B8c — B8 완결)**: ① §3에 **Data Streams 설계 세부**를 추가했습니다 — 보존 기간 모델(**기본 24시간 · 최소 24시간 · 최대 8,760시간(365일)** · 24시간 초과 추가 과금 · 증가는 수 분 내 반영되지만 **이미 만료된 데이터는 되살아나지 않음** · 감소는 거의 즉시 접근 불가)과 **향상된 팬아웃(EFO)** 비교표(공유는 샤드당 2 MB/초를 **나눠 씀** vs EFO는 **소비자별 2 MB/초** · 200/1,000 ms vs **70 ms** · `GetRecords` 풀 vs `SubscribeToShard` **HTTP/2 푸시** · 등록 한도 50/20)입니다(근거 17~20번). ② §8의 **명칭을 `Amazon Quick Sight` 로 정정**하고 **`Amazon Quick` 과의 상위·하위 관계**를 적었습니다 — API·SDK 는 변경 없이 동작합니다. SPICE vs **직접 쿼리**, 데이터셋 **200 GB**, 과금 2요소(작성자 사용자당 / 독자 **30분 세션·월 최대 $5.00**), 임베디드, 그리고 ⚠️ **VPC 연결 지원·미지원 소스 표**(**Athena 미지원**)를 추가했습니다(근거 15·16번). ③ §10에 **전송 시간 산술**과 **DataSync 대역폭 제한**(`BytesPerSecond` · 실행 중에도 변경 가능 · **60초 내** 적용)을 추가했습니다(근거 25번). ④ §11 선택표에 **Redshift/Spectrum·OpenSearch 행**을 넣고 **Athena vs Spectrum 역할 분담**(공통 카탈로그 공유 · Spectrum 은 적재가 아니라 제자리 쿼리)과 **OpenSearch 를 CloudWatch 대신 고르는 사유**를 적었습니다(근거 27~29번). ⑤ 새 절 **§12 데이터 형식 변환과 수집 패턴**(Firehose 변환은 **S3 목적지만** · Snappy 자동 · Athena **CTAS**의 Glue 자동 등록과 **빈 출력 위치 전제** · Glue **북마크** · 마이크로 배치·하이브리드 등 패턴)과 **§13 수집 접점의 보안**(Kinesis 엔드포인트 정책은 **IAM 정책과 겹쳐야** 사설 경로 전용이 된다)을 원리 블록과 함께 추가했습니다(근거 21~24·26번).
+>
+> **⚠️ 명칭 정정은 이 문서까지만 했습니다**: `QuickSight` 옛 표기가 **레포 전체 9파일 4자격증**(`clf/t1-3`·`clf/t1-4`·`clf/t3-7`·`dea/dea-t3-2`·`saa/saa-t4-5` 등)에 남아 있습니다. 한 배치에서 절반만 바꾸면 더 나쁘므로 **전역 통일은 별 트랙**으로 분리했습니다(#166 Aurora 명칭 통일과 같은 방식).
+>
+> **쓰지 않은 것 5건**: ① **Firehose 버퍼 크기·간격 수치** — 이번 조회로 확보하지 못했습니다. ② **MSK vs Kinesis 선택의 수치 기준** — 미확보. ③ **Lake Formation S3 위치 등록·IAM 역할 세부** — 미확보로, 기능 존재와 역할만 적었습니다. ④ **OpenSearch 세부 구성**(노드·샤드 수) — `99-gaps` **V-42** 가 열려 있습니다. ⑤ **Quick Sight ML 인사이트의 알고리즘 세부** — 미확보로, 기능 수준으로만 다뤘습니다. 다섯 건 모두 가드가 표기를 금지합니다.
 
 > 📝 **2026-10-19 정정**: ① Snow 패밀리를 현재 선택지로 서술한 대목(수집 표·선택 기준·시험 포인트·체크리스트)을 고쳤습니다 — **신규 고객은 주문할 수 없고** 대안은 DataSync·AWS Data Transfer Terminal·파트너, 엣지 컴퓨팅은 Outposts입니다(근거 7번). ② KDS 샤드 확장을 모드별로 분리했습니다 — **온디맨드는 자동 관리**(이전 30일 피크의 2배), 프로비저닝만 수동 조정(근거 8번). ③ fan-out 서술에 **기본 컨슈머는 샤드당 2 MB/s 공유, 전용 처리량은 EFO**를 명시했습니다(근거 9번). ④ Lake Formation 적용 범위를 **엔진별 차이**로 고쳤습니다(근거 10번). ⑤ Managed Flink 지원 언어에 **Python**을 더했습니다(근거 11번).
 
