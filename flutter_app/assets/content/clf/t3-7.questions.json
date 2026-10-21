@@ -186,7 +186,7 @@
         "Amazon SageMaker"
       ],
       "correct": 0,
-      "explanation": "Amazon QuickSight는 클라우드 규모의 비즈니스 인텔리전스(BI) 서비스로, 데이터 소스에 연결해 대화형 대시보드와 시각화를 만들고 게시·임베드할 수 있습니다.",
+      "explanation": "Amazon QuickSight는 클라우드 규모의 비즈니스 인텔리전스(BI) 서비스로, 데이터 소스에 연결해 대화형 대시보드와 시각화를 만들고 게시·임베드할 수 있습니다. 현행 공식 명칭은 Amazon Quick 안의 Amazon Quick Sight 기능이며 기존 QuickSight API·SDK는 그대로 동작합니다 — 두 이름은 같은 기능입니다.",
       "wrongExplanations": {
         "1": "AWS Glue는 데이터를 ETL로 준비·통합하는 서비스로, 대시보드 시각화 도구가 아닙니다.",
         "2": "Amazon Athena는 S3 데이터를 SQL로 쿼리하는 분석 엔진으로, 대시보드 시각화·BI 도구가 아닙니다.",

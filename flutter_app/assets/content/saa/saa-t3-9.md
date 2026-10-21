@@ -82,7 +82,7 @@ lastVerified: 2026-10-20
 [수집 계층]           [저장·처리 계층]          [분석·시각화 계층]
 Kinesis Data Streams  →  S3 (데이터 레이크)   →  Athena (서버리스 SQL)
 Kinesis Data Firehose →  Redshift (DW)        →  EMR (Spark/Hadoop)
-DataSync / 전송 터미널 →  Glue Data Catalog    →  QuickSight (BI)
+DataSync / 전송 터미널 →  Glue Data Catalog    →  Quick Sight (BI)
 Transfer Family       →  Lake Formation (거버넌스)
 ```
 
@@ -569,7 +569,7 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 
 > 📝 **2026-10-21 보강 (갭 배치 B8c — B8 완결)**: ① §3에 **Data Streams 설계 세부**를 추가했습니다 — 보존 기간 모델(**기본 24시간 · 최소 24시간 · 최대 8,760시간(365일)** · 24시간 초과 추가 과금 · 증가는 수 분 내 반영되지만 **이미 만료된 데이터는 되살아나지 않음** · 감소는 거의 즉시 접근 불가)과 **향상된 팬아웃(EFO)** 비교표(공유는 샤드당 2 MB/초를 **나눠 씀** vs EFO는 **소비자별 2 MB/초** · 200/1,000 ms vs **70 ms** · `GetRecords` 풀 vs `SubscribeToShard` **HTTP/2 푸시** · 등록 한도 50/20)입니다(근거 17~20번). ② §8의 **명칭을 `Amazon Quick Sight` 로 정정**하고 **`Amazon Quick` 과의 상위·하위 관계**를 적었습니다 — API·SDK 는 변경 없이 동작합니다. SPICE vs **직접 쿼리**, 데이터셋 **200 GB**, 과금 2요소(작성자 사용자당 / 독자 **30분 세션·월 최대 $5.00**), 임베디드, 그리고 ⚠️ **VPC 연결 지원·미지원 소스 표**(**Athena 미지원**)를 추가했습니다(근거 15·16번). ③ §10에 **전송 시간 산술**과 **DataSync 대역폭 제한**(`BytesPerSecond` · 실행 중에도 변경 가능 · **60초 내** 적용)을 추가했습니다(근거 25번). ④ §11 선택표에 **Redshift/Spectrum·OpenSearch 행**을 넣고 **Athena vs Spectrum 역할 분담**(공통 카탈로그 공유 · Spectrum 은 적재가 아니라 제자리 쿼리)과 **OpenSearch 를 CloudWatch 대신 고르는 사유**를 적었습니다(근거 27~29번). ⑤ 새 절 **§12 데이터 형식 변환과 수집 패턴**(Firehose 변환은 **S3 목적지만** · Snappy 자동 · Athena **CTAS**의 Glue 자동 등록과 **빈 출력 위치 전제** · Glue **북마크** · 마이크로 배치·하이브리드 등 패턴)과 **§13 수집 접점의 보안**(Kinesis 엔드포인트 정책은 **IAM 정책과 겹쳐야** 사설 경로 전용이 된다)을 원리 블록과 함께 추가했습니다(근거 21~24·26번).
 >
-> **⚠️ 명칭 정정은 이 문서까지만 했습니다**: `QuickSight` 옛 표기가 **레포 전체 9파일 4자격증**(`clf/t1-3`·`clf/t1-4`·`clf/t3-7`·`dea/dea-t3-2`·`saa/saa-t4-5` 등)에 남아 있습니다. 한 배치에서 절반만 바꾸면 더 나쁘므로 **전역 통일은 별 트랙**으로 분리했습니다(#166 Aurora 명칭 통일과 같은 방식).
+> **명칭 일관성은 별 트랙에서 마무리했습니다(2026-10-21)**: 레포는 옛 이름을 **일부러 유지**합니다 — `clf/t3-7.md` 의 정직성 메모가 "CLF 에선 '대시보드·시각화·BI = QuickSight' 로 기억하면 됩니다" 라고 적은 대로, **AWS 시험이 개명보다 늦기** 때문입니다. 그래서 블라인드 통일 대신 **옛 표기를 쓰는 모든 문서에 현행 명칭이 함께 있도록** 보강했고, 그 공존을 `test/quicksight_naming_consistency_test.dart` 가 영구 가드로 지킵니다.
 >
 > **쓰지 않은 것 5건**: ① **Firehose 버퍼 크기·간격 수치** — 이번 조회로 확보하지 못했습니다. ② **MSK vs Kinesis 선택의 수치 기준** — 미확보. ③ **Lake Formation S3 위치 등록·IAM 역할 세부** — 미확보로, 기능 존재와 역할만 적었습니다. ④ **OpenSearch 세부 구성**(노드·샤드 수) — `99-gaps` **V-42** 가 열려 있습니다. ⑤ **Quick Sight ML 인사이트의 알고리즘 세부** — 미확보로, 기능 수준으로만 다뤘습니다. 다섯 건 모두 가드가 표기를 금지합니다.
 
