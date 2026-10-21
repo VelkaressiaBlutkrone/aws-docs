@@ -30,7 +30,7 @@
 | C-17 | Quick(QuickSight) 요금제 | 구 백서(Standard $9/사용자·Enterprise $18/작성자+독자 세션) vs 현행 FAQ(사용자당 월 정액) | `3-5.md` F-14 | 요금제 암기 금지, SPICE·임베딩·서버리스 BI 구조 중심 |
 | C-18 | 영문 가이드의 "AWS managed services" 표기 | Task 2.1 지식 소문자 "AWS managed services" vs 2.2 "AWS Managed Services (AMS) with appropriate use cases (for example, Amazon Comprehend, Amazon Polly)" — 예시가 AMS와 무관해 의미 모호 | `2-2.md` | (해석) 공식 설명은 없음. 출제 범위는 "AWS 관리형 서비스 일반"으로 보는 것이 안전 |
 | C-19 | Storage Class Analysis 권고 범위 | 콘솔 도움말 "Standard→Standard-IA 전환 시점" vs FAQ "IA·One Zone-IA 전환 또는 Glacier 아카이브 대상 식별" | `4-1.md` F-10 | 접근 패턴 분석 도구라는 점만 확실 |
-| C-20 | EBS gp3 성능 상한 | 2022 블로그 "16,000 IOPS·1,000 MiB/s" vs 현행 표 **80,000 IOPS·2,000 MiB/s** | `4-1.md` F-15·`3-1.md` F-07: 현행 채택 | 구 수치는 구식 |
+| C-20 | EBS gp3 성능 상한 | 2022 블로그 "16,000 IOPS·1,000 MiB/s" vs 현행 표 **80,000 IOPS·2,000 MiB/s** | `4-1.md` F-15·`3-1.md` F-07: 현행 채택 | 구 수치는 구식. **2026-10-21 재확인(갭 배치 B7a)**: 공식 EBS 사용자 가이드가 기준 3,000 IOPS·125 MiB/s, 최대 **80,000 IOPS**(GiB당 500·160 GiB 이상)·**2,000 MiB/s**(IOPS당 0.25·8,000 IOPS 이상)로 적어 **현행 채택이 옳다.** ⚠️ 다만 일부 SDK 문서(ECS 관리형 볼륨 등)는 gp3 를 `3,000–16,000 IOPS` 로 적는다 — **서비스별 관리형 볼륨의 제약**이고 볼륨 자체 상한이 아니므로 구분해야 한다(`saa-t3-2` §3 에 그렇게 적었다) |
 | C-21 | In-Scope 목록의 서비스 상태 | 목록에 "Amazon Aurora Serverless"(구 명칭)·"AWS Snow Family"(신규 주문 불가)가 남아 있음 | `00-overview.md` §5, `3-3.md` F-07, `3-5.md` F-09 | 목록=범위, 서비스 현황=별개로 구분해 학습 |
 
 ---
@@ -45,7 +45,7 @@
 | V-01 | WAF 개발자 가이드에서 **CloudFront용 웹 ACL(스코프 CLOUDFRONT)을 US East (N. Virginia)에서 생성**한다는 문장 | `1-2.md`, `98` G-1.2-06 | CDK/CloudFormation 문서를 근거로 사용 |
 | V-02 | **Regional NAT gateway 도입 시점**(발표일) | `1-2.md` F-10 | 기능만 기록, 시점 단정 안 함 |
 | V-03 | AWS Security Hub 명칭 개편(서비스 이름·범위) | `1-2.md` | 현행 표기만 사용 |
-| V-04 | IMDSv2 강제·Session Manager 등 **애플리케이션 구성 보안**의 공식 근거 | `98` G-1.2-05 | 미반영 |
+| V-04 | IMDSv2 강제·Session Manager 등 **애플리케이션 구성 보안**의 공식 근거 | `98` G-1.2-05 | **IMDSv2는 해소**(R-9, 2026-10-21) · Session Manager는 여전히 미확보 |
 | V-05 | S3 **MFA Delete와 Object Lock 병용** 가능 여부 | `1-3.md`, `98` G-1.3-16·G-1.1-14 | 단정 안 함 |
 | V-06 | KMS **grant**·`kms:ViaService` 조건 세부 | `1-3.md` | 개념 수준만 |
 | V-07 | AWS Config 적합성 팩·CloudTrail 로그 파일 **무결성 검증** 세부 | `1-3.md` | 개념 수준만 |
@@ -54,13 +54,14 @@
 | ID | 확인할 내용 | 관련 | 현재 처리 |
 |---|---|---|---|
 | V-08 | Amazon MQ **사용 사례** 공식 문장 | `2-1.md` | 일반 서술 |
-| V-09 | App2Container의 **현재 제공 상태** | `2-1.md` F-28 | 블로그 서술만 |
+| V-09 | ~~App2Container의 **현재 제공 상태**~~ — **해소(2026-10-21, 갭 배치 B5)**. 번호 유지를 위해 행만 남김 | `2-1.md` F-28 | 공식 사용자 가이드가 확정: **신규 고객 불가**("no longer open to new customers", 2025-11-07 이전 가입자만 계속 사용)·공식 대안은 **AWS Transform**. `saa-t2-2` §3 에 그 상태를 함께 저작했다. ⚠️ in-scope·out-of-scope 목록 어디에도 없어 **시험 범위 판정은 여전히 불확실**하다 |
+| V-83 | API Gateway **캐싱이 REST API 전용**이라는 공식 문장(`98` G-2.1-07 이 그렇게 적었으나 2026-10-21 조회에서 해당 문장을 확보하지 못했다) | `98` G-2.1-07 | 미확인 — 배치 B5 는 캐싱 주장을 **본문에 쓰지 않았다** |
 | V-10 | ALB **교차 영역 기본값(켜짐)** 의 공식 문서 문장(블로그로만 확인) | `2-1.md` F-25 | 블로그 표기 |
 | V-11 | "ECS 컨트롤 플레인 **추가 비용 없음**" | `98` G-2.1-14 | 미확인 |
 | V-12 | ~~ElastiCache Multi-AZ 공식 문장 미확보~~ — **해소(R-8)**. 번호 유지를 위해 행만 남김 | `2-2.md` 각주 | `3-3.md` F-12(공식 FAQ·AutoFailover 문서)로 확보 |
 | V-13 | EC2 **Region-level SLA** 수치 | `2-2.md` | 미기재 |
 | V-14 | RDS Proxy 장애 조치 단축 **"66%"** 수치(블로그는 "최소 3초"만) | `2-2.md` | 미기재 |
-| V-15 | ASG 수명 주기 훅 대기 **기본 1시간(확인)·최대 48시간(미확인)** | `3-2.md`, `98` G-2.2-19 | 기본값만 기재 |
+| V-15 | ~~ASG 수명 주기 훅 대기 **기본 1시간(확인)·최대 48시간(미확인)**~~ — **해소(2026-10-21, 갭 배치 B6)**. 번호 유지를 위해 행만 남김 | `3-2.md`, `98` G-2.2-19 | 공식 `LifecycleHook` API 레퍼런스가 확정: `HeartbeatTimeout` 기본 **3,600초**·범위 30~7,200초, `GlobalTimeout`은 **172,800초(48시간) 또는 `HeartbeatTimeout`의 100배 중 더 작은 값**. 기존 서술("최대 48시간")은 **틀린 게 아니라 조건이 빠진 것**이었다(기본 1시간이면 100배가 48시간보다 커서 48시간이 상한). `saa-t2-3` §8에 조건을 보강했다 → `98` G-2.2-19(`[의심]`)도 해소 |
 | V-16 | AWS Elastic Disaster Recovery가 **RDS 같은 관리형 서비스에 사용 불가**인지 | `98` G-2.2-16 | 미확인 |
 | V-75 | NLB **"연결 지연 < 1ms"** 수치의 공식 근거(공식 표현은 "초저지연·초당 수백만 요청"뿐); GWLB 계층 표기("L3/4" vs 공식 CLI 레퍼런스 "layer 3") | `98` G-2.2-14 | 수치 미기재, 공식 표현만 사용 |
 | V-76 | Well-Architected Reliability Pillar가 "이중화를 통한 단일 실패점 제거"를 핵심 원칙으로 **명시**한다는 인용 문구의 원문 | `98` G-2.2-17 | 의역 가능성 — 단정 안 함 |
@@ -73,11 +74,11 @@
 | V-19 | FSx for Lustre 정확한 **IOPS 한도** 문장 | `3-1.md` | 미기재 |
 | V-20 | 인스턴스 스토어 **NVMe 성능** 수치 | `3-1.md` | 미기재 |
 | V-21 | EC2 **M·C 계열 vCPU:메모리 비율**(R 계열 1:8만 확인) | `98` G-3.2-12 | R만 기재 |
-| V-22 | **AWS Auto Scaling 스케일링 플랜**의 지원 종료/신규 가용성 공지 | `3-2.md` F-12 | 마이그레이션 권고만 확인 |
+| V-22 | **AWS Auto Scaling 스케일링 플랜**의 지원 종료/신규 가용성 공지 | `3-2.md` F-12 | 마이그레이션 권고만 확인. ⚠️ **2026-10-21 (갭 배치 B7b) 재탐색에도 미해소** — 검색으로는 EC2 Auto Scaling **예측 스케일링**이 현행이라는 것과 ECS 오토스케일링 개선(20초 고해상도 지표)만 확인됐고, `autoscaling-plans` API 의 현행 제공 상태를 적은 공식 문장은 찾지 못했다. 그래서 `saa-t3-4` §8 은 **Application Auto Scaling 만** 다루고 스케일링 플랜은 언급하지 않는다(가드가 그 금지를 강제) |
 | V-23 | **AWS Batch 작업 제한 시간 상한**(최소 60초만 확인) | `98` G-3.2-16 | "무제한" 서술은 미검증 |
-| V-24 | CloudFront Functions **실행 시간·메모리 한도**, Lambda@Edge 한도 | `3-2.md` F-23 | 수치 미기재 |
-| V-25 | **Spread 배치 그룹 AZ당 7개**의 사용자 가이드 원문(블로그 표만) | `3-2.md` F-06 | 블로그 표기 |
-| V-26 | 배치 그룹 "전용 호스트: 불가"·"Spot 중지/최대 절전: 불가" | `98` G-3.2-14 | 미확인(파티션 PG는 Dedicated Instances 허용) |
+| V-24 | ~~CloudFront Functions **실행 시간·메모리 한도**, Lambda@Edge 한도~~ — **해소(2026-10-21, 갭 배치 B7b)**. 번호 유지를 위해 행만 남김 | `3-2.md` F-23 | 공식 쿼터·제약 문서가 확정: **CloudFront Functions** = 계정당 함수 100개·**최대 함수 크기 10 KB(조정 불가)**·**최대 메모리 2 MB**·함수당 배포 100개, 로그 10 KB 절단, **요청 본문 접근 불가**, 런타임이 동적 코드 평가·네트워크·파일 시스템·환경 변수·타이머를 제한. ⚠️ **실행 시간 한도는 절대 수치가 아니라 "컴퓨팅 사용률(compute utilization) 0~100"으로만 적힌다** — 널리 인용되는 "최대 1 ms"는 현행 쿼터 표에 **없다**. **Lambda@Edge** = **함수 타임아웃 30초**(이벤트 유형으로 갈리는 항목은 **생성 응답 크기 40 KB / 1 MB** 뿐 — "뷰어 5초" 분기는 현행 문서에서 확인되지 않음), 압축 패키지 50 MB, 계정당 배포 500개·배포당 함수 100개·함수당 배포 500개, 리전당 동시 실행 1,000(인스턴스당 10 req/s, 총 호출 한도 = 동시성 × 10)·리전당 10,000 req/s, Include Body 절단 40 KB/1 MB·교체 한도 평문 40 KB/1 MB·base64 53.2 KB/1.33 MB·초과 시 **HTTP 502**. `saa-t3-4` §7 에 저작 |
+| V-25 | ~~**Spread 배치 그룹 AZ당 7개**의 사용자 가이드 원문(블로그 표만)~~ — **해소(2026-10-21, 갭 배치 B7b)**. 번호 유지를 위해 행만 남김 | `3-2.md` F-06 | 공식 사용자 가이드 "Placement strategies" 본문이 확정: 랙 수준 분산 배치 그룹은 동일 리전 다중 AZ 를 걸칠 수 있으나 **각 AZ 에서 실행 인스턴스 최대 7개**(AZ 3개 리전이면 총 21개, 8번째는 시작 실패). 7개가 더 필요하면 **분산 배치 그룹을 여러 개** 쓰라는 권고까지 같은 문단에 있다. 호스트 수준 분산은 **Outposts 전용**. 기존 `saa-t3-3` §5 표의 "AZ당 최대 7개" 서술이 옳았다 |
+| V-26 | ~~배치 그룹 "전용 호스트: 불가"·"Spot 중지/최대 절전: 불가"~~ — **부분 해소(2026-10-21, 갭 배치 B7b)**. 번호 유지를 위해 행만 남김 | `98` G-3.2-14 | 같은 "Placement strategies" 문서에서 **파티션 PG 와 전용 인스턴스(Dedicated Instances) 조합은 최대 2개 파티션**, **용량 예약은 파티션 PG 안의 용량을 예약하지 않음**, **Capacity Blocks 는 배치 그룹 미지원**, 클러스터 PG 는 **존 RI 로 용량 예약 불가(ODCR 권장)** 를 확보했다. ⚠️ **"Spot 중지·최대 절전 불가"의 직접 문장은 이번에도 확보하지 못했다** — `saa-t3-3` §5 표의 그 두 칸은 근거 보강 전까지 그대로 둔다 |
 | V-27 | Lambda 콜드 스타트 "수십~수백 ms" 근거 | `98` G-3.2-17 | 근거 없음 |
 | V-28 | **"Aurora serverless" 개명**의 공식 제품 문서 본문 확인, Aurora Serverless v1 종료 시점 | `3-3.md` F-07, `98` G-3.3-13 | 블로그 안내문만 확보 |
 | V-29 | **QLDB 현행 상태** | `3-3.md` | 단정 안 함 |
@@ -167,6 +168,11 @@
 | R-6 | **Compute Optimizer의 RDS·Aurora 지원 여부**(기존 학습문서 서술 미재확인) | 지원 리소스 목록 확보(RDS·Aurora·EBS·Lambda·Fargate·유휴 권고 포함) | `4-2.md` F-13 |
 | R-7 | **Glacier 복원 티어별 시간의 단일 공식 문장**(V-44) | 사용자 가이드 본문에서 FR(Expedited 1–5분/Standard 3–5시간/Bulk 5–12시간 무료)·DA(Standard 12시간/Bulk 48시간)를 직접 확보. 단 같은 페이지 비교표·제품 페이지와 표기가 달라 **새 상충 C-04로 기록** | `4-1.md` F-03 |
 | R-8 | **ElastiCache Multi-AZ 공식 문장**(V-12; `2-2.md` 각주에서 미확보였음) | `3-3.md` F-12가 공식 FAQ·AutoFailover 문서로 확보: Multi-AZ=AZ 간 복제+장애 시 복제본 자동 승격(DNS 엔드포인트 유지), 복제 그룹=기본 1+읽기 복제본 최대 5, 노드 기반 Valkey/Redis OSS Multi-AZ·Serverless는 99.99% SLA 대상 | `3-3.md` F-12 |
+| R-9 | **IMDSv2 강제의 공식 근거**(V-04; `1-2.md`·`98` G-1.2-05 에서 미확보였음) | EC2 API 레퍼런스로 확보(2026-10-21): `httpTokens=required` 면 세션 토큰 없이는 메타데이터를 가져올 수 없고 **IMDSv1 자격증명이 제공되지 않는다**; `optional` 이면 토큰 없는 요청에 IMDSv1 자격증명이 돌아온다. 기본값은 AMI `ImdsSupport` 와 계정 수준 기본값의 조합(AMI `v2.0` + 계정 `no-preference` → `required`, 계정이 "V1 or V2" → `optional`), AMI `v2.0` 은 `HttpPutResponseHopLimit` 2. 적용은 `run-instances --metadata-options HttpTokens=required` · `modify-instance-metadata-options --http-tokens required`. ⚠️ **Session Manager 쪽 근거는 이번에도 확보하지 못했다** — V-04 는 그 부분만 열린 상태로 남긴다 | `97-gap-batch-map.md` B11 (저작은 `saa-t1-4`, flip 이후) |
+| R-10 | **엣지 함수 쿼터**(V-24; `3-2.md` F-23 에서 수치 미기재였음) | CloudFront 쿼터·제약 문서 3종으로 확보(2026-10-21). ⚠️ 통념 2건이 현행 문서와 달랐다 — CloudFront Functions 의 "**1 ms**"는 쿼터 표에 없고 **컴퓨팅 사용률(0~100)**로만 측정하며, Lambda@Edge 의 "**뷰어 5초 / 오리진 30초**" 분기도 없이 **함수 타임아웃 30초 하나**다(이벤트 유형으로 갈리는 항목은 생성 응답 크기뿐). 둘 다 **쓰지 않고** 공식 지표로 저작했다 | `saa-t3-4` §7 (갭 배치 B7b) |
+| R-11 | **Spread 배치 그룹 AZ당 7개의 사용자 가이드 원문**(V-25; 블로그 표기만 있었음) | 공식 "Placement strategies" 본문으로 확보(2026-10-21): 랙 수준은 다중 AZ 가능하나 **AZ당 실행 인스턴스 7개**, 8번째는 시작 실패, 더 필요하면 그룹을 여러 개. 호스트 수준은 Outposts 전용. 기존 `saa-t3-3` §5 서술이 옳았음을 확인 | `saa-t3-3` §5 (갭 배치 B7b) |
+| R-12 | **EMR 배포 형태의 개수**(통념 3종 vs 공식) | 공식 비용 최적화 백서가 **네 가지**로 확정(2026-10-21): EMR on EC2 · EMR on EKS · **EMR on Outposts** · EMR Serverless. 확장 단위도 갈린다(EC2=클러스터 / EKS=잡의 vCPU·메모리 / Serverless=관리 불필요). ⚠️ **Outposts 는 Spot 미제공·S3 만 지원(S3 on Outposts 미지원)** 이라 비용이 올라간다 | `saa-t3-4` §9 (갭 배치 B7b) |
+| R-13 | **T 패밀리 기본 `unlimited` 목록**(기존 본문이 T3/T3a/T4g 로만 적어 **T8i 누락**) | 공식 unlimited 모드 문서로 확정(2026-10-21): **T8i·T4g·T3a·T3** 가 기본 `unlimited`. 더해 **전용 호스트의 T3 은 기본 `standard` 이고 `unlimited` 미지원**, Spot 은 크레딧 적립 유휴가 없어 **`standard` 권장**. 본문 3개소와 `saa-t3-3.questions.json` 드래프트 해설 1개소를 정정 | `saa-t3-3` §2 (갭 배치 B7b) |
 
 ---
 

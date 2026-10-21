@@ -400,4 +400,20 @@ final List<({String text, String origin, String why})> _rules = [
     origin: 'saa_t2_t4 G-4.4-16',
     why: '인터페이스 엔드포인트 시간 요금은 ENI가 아니라 엔드포인트·AZ별로 붙는다',
   ),
+  // 2026-10-21 갭 배치 B5. `saa-t2-1.md` 를 메시지 1 MiB 로 보강하면서 전수 대조한
+  // 결과, `saa-t2-1-q6` 의 `wrongExplanations` 가 구식 256KB 를 그대로 들고 있었다
+  // (verified:true — 라이브 노출 중이었다). 같은 계열의 재발을 막는다.
+  (
+    text: '크기 제한(256KB)',
+    origin: 'saa_gaps_b5 G-2.1-05',
+    why: 'SQS 최대 메시지 크기는 2025-08에 256 KiB에서 1 MiB로 상향됐다',
+  ),
+  // 2026-10-21 갭 배치 B6. `saa-t2-4` 에 Aurora 장애 조치 시간을 공식 문구로 적고
+  // 전수 대조하니 `saa-t3-5-q12`(verified:true)가 "30초 미만"만 적어 상한을
+  // 빠뜨리고 있었다. 같은 파일 `q6` 은 정확히 적고 있어 문서 내부도 어긋났다.
+  (
+    text: '30초 미만 페일오버',
+    origin: 'saa_gaps_b6 G-2.2-08',
+    why: '공식 Aurora 사용자 가이드는 "통상 60초 미만, 흔히 30초 미만"으로 적는다',
+  ),
 ];

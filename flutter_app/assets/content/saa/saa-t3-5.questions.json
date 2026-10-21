@@ -278,11 +278,11 @@
       "options": [
         "RDS Oracle — 익숙한 엔진을 유지하는 것이 최우선이다",
         "RDS MySQL — 최대 15개 Read Replica를 지원한다",
-        "Amazon Aurora(MySQL 또는 PostgreSQL 호환) — 최대 15개 복제본·30초 미만 페일오버·3 AZ 6벌 복제를 제공한다",
+        "Amazon Aurora(MySQL 또는 PostgreSQL 호환) — 최대 15개 복제본·통상 60초 미만(흔히 30초 미만) 페일오버·3 AZ 6벌 복제를 제공한다",
         "RDS PostgreSQL — Aurora와 동일한 스토리지 구조를 갖는다"
       ],
       "correct": 2,
-      "explanation": "Aurora는 MySQL·PostgreSQL 호환으로 오픈소스 마이그레이션 대상이 됩니다. 최대 15개 복제본, 30초 미만 페일오버, 3 AZ 6벌 복제를 제공해 고가용성·읽기 확장 모두에 우수합니다.",
+      "explanation": "Aurora는 MySQL·PostgreSQL 호환으로 오픈소스 마이그레이션 대상이 됩니다. 최대 15개 복제본, 통상 60초 미만(흔히 30초 미만) 페일오버, 3 AZ 6벌 복제를 제공해 고가용성·읽기 확장 모두에 우수합니다.",
       "wrongExplanations": {
         "0": "Oracle은 오픈소스가 아니며 상용 라이선스 비용이 발생합니다. 오픈소스 마이그레이션 요구사항에 맞지 않습니다.",
         "1": "일반 RDS MySQL은 최대 5개 Read Replica를 지원합니다. 15개는 Aurora의 한계입니다.",
