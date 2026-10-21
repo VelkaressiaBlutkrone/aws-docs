@@ -1,6 +1,6 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — §0-2026-10-21) · 그 앞은 2026-10-21(갭 배치 행 매핑 재도출 — 정본 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md), §0 ②-c·§0-2026-10-20 정정) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
+_갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — §0-2026-10-21-b) · 그 앞은 2026-10-21(갭 배치 B3·B5·B6·B7 — §0-2026-10-21) · 그 앞은 2026-10-21(갭 배치 행 매핑 재도출 — 정본 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md), §0 ②-c·§0-2026-10-20 정정) · 다음 작업자(사람 또는 새 세션)가 이 문서만 읽고 이어받을 수 있도록._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -35,6 +35,57 @@ _갱신: 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — §0-2026-10-21) · 그 앞
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
+
+## 0-2026-10-21-b. 완료: SAA 갭 배치 B8 완결 · B9a · QuickSight 명칭 일관성 (2026-10-21, #180~#186)
+
+행 단위 배정 정본은 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)다. 어디까지 들어왔는지는 그 문서 §6의 조회 명령으로 본다(여기에 진행 상태를 적지 않는다 — §0 서술 규약 ②).
+
+- **#180 부기 + #181 릴리스:** B3·B5·B6·B7a·B7b를 `main`에 올렸다(main `4ce38c3`, Pages `39538707378` success). 라이브 실측으로 신설 절·정정 수치·"쓰지 않기로 한 것"의 부재까지 확인했다.
+- **#182 B8a — Task 3.3 잔여(6행):** `saa-t3-5` §3·§6·§7·§9(Aurora Auto Scaling·스토리지 오토스케일링 3조건·I/O-Optimized 25%·RDS Proxy 핀닝) · `saa-t3-6` §5·§7·§11(파티션 한도·글로벌 테이블 모드·ElastiCache Serverless). 가드 33건.
+- **#183 B8b — Task 3.4 + `G-1.2-03`(10행):** `saa-t3-7` §3·§5·§8(라우팅 정책 **8종 정정**·Origin Shield·ALB 알고리즘) · `saa-t3-8` §2·§3·§4 + **§8·§9 신설**(TGW 쿼터·ECMP·**MACsec**·서브넷 설계·Cloud WAN·Resolver). 가드 36건.
+- **#184 B8c — Task 3.5 잔여(7행) · B8 완결:** `saa-t3-9` §3·§8·§10·§11 + **§12·§13 신설**(보존 모델·EFO·**Amazon Quick Sight 명칭**·DataSync 대역폭·Redshift Spectrum·형식 변환·수집 접점 보안). 가드 29건. **이로써 B8 23행이 닫혔다.**
+- **#185 QuickSight 명칭 일관성 + 영구 가드:** ⚠️ **블라인드 통일을 하지 않았다** — `clf/t3-7.md:116`의 정직성 메모가 "CLF에선 '대시보드·시각화·BI = QuickSight'로 기억하면 됩니다"라 적고 `dea/dea-t3-2.md:205`가 옛 이름을 함정으로 다루는 것을 발견했다. **AWS 시험이 개명보다 늦으므로** 레포의 그 결정이 타당하다. 그래서 기준을 **"공존"**으로 잡아 **옛 표기를 쓰는 문서에는 현행 명칭이 함께 있도록** 보강하고, `test/quicksight_naming_consistency_test.dart`(4건)로 **영구 고정**했다. 라이브 CLF 문항은 **보기·정답을 손대지 않고 해설에만** 병기했다.
+- **#186 B9a — Task 4.1 스토리지(10행):** `saa-t4-1` §1·§3·§4·§6·§7 + **§9·§10 신설**(Requester Pays·Glacier 40 KB 오버헤드·`all_storage_classes_128K`·st1/sc1·Snapshots Archive·ONTAP 티어·Storage Lens 티어·크기 비대칭·선택 매트릭스). 가드 30건.
+
+**⚠️ 공식이 통념·갭 노트와 달랐던 것 (이 트랙의 수확)**
+
+| 항목 | 공식 |
+|---|---|
+| DynamoDB 온디맨드 | "이전 피크 2배·30분"이 **현행 문서에 없다** — **warm throughput**(새 테이블 읽기 12,000·쓰기 4,000, 올린 값 하향 불가) |
+| Aurora Global DB | **1차 Replica = 15 − 보조 리전 수** (갭 노트는 "보조 16"만 적어 트레이드오프를 빠뜨렸다) |
+| 글로벌 테이블 LWW | **MREC(기본)의 동작**이고 **MRSC**에서는 `ReplicatedWriteConflictException`으로 드러난다(정확히 3리전·트랜잭션 API 미지원) |
+| Route 53 라우팅 정책 | **8종** — `IP 기반`이 빠져 있었다 |
+| MACsec | **홉 단위 링크 보호**라 DX 장비와 **직접 2계층 인접** 필요 → **종단 간 암호화가 아니다** |
+| CloudFront 오리진 장애 조치 | **`GET`·`HEAD`·`OPTIONS`에서만**, 모든 요청은 **언제나 프라이머리부터** |
+| NLB 클라이언트 IP 보존 | 기본값이 대상 그룹마다 다르고 **IP 타입 TCP·TLS는 비활성** · TGW·GWLB 경유 미지원 |
+| CloudFront Functions | "최대 1 ms"가 쿼터 표에 **없다** — **컴퓨팅 사용률(0~100)** |
+| Lambda@Edge | "뷰어 5초 / 오리진 30초" 분기가 **없다** — **타임아웃 30초 하나** |
+| Kinesis 보존 | "확장 7일/장기 365일"이 아니라 **기본·최소 24시간 · 최대 8,760시간(365일) · 24시간 초과 추가 과금** |
+| QuickSight | **Amazon Quick**(상위) 안의 **Amazon Quick Sight**(기능), **API·SDK 무변경** |
+| Glacier 전환 | 객체당 **40 KB** = **8 KB Standard 요율 + 32 KB Glacier 요율** → 작은 객체는 **집계가 먼저** |
+
+**⚠️ 가드 설계 — 같은 실수가 이 트랙에서 일곱 번 났다**
+
+전부 *틀린 주장을 바로잡는 올바른 문장*이 금지 문자열에 걸린 경우다. 맵 §4가 순서를 못박았다 — **① 교정 문맥 요구 → ② 행·구간 한정(`body()`·`linesWith()`) → ③ 단정형 전체만 금지 → ④ 단어 하나는 금지하지 않음**. 이번 트랙에서 **반대 방향 셋**이 새로 나왔다.
+
+1. **긍정 단정도 공식 표기로** — `contains('EMR on EKS')`가 터졌는데 공식은 `Amazon EMR on Amazon EKS`였다(본문이 옳고 가드가 좁았다).
+2. **헬퍼 복사는 analyze를 깨뜨린다** — B7b의 `linesWith()`를 습관적으로 복사했다가 B8a에서 `unused_element`로 **analyze 0건 게이트가 깨졌다.** 가드를 쓴 직후 `flutter analyze`를 돌린다.
+3. **확인 부족이 원인일 수 있다** — B8c에서 `최대 365일`을 금지했는데 기존 §3 표가 옳았다. 회피하지 않고 **공식으로 확인한 뒤** 금지를 좁혀야 한다.
+
+**⚠️ 맵을 고칠 때의 규칙 두 개(모두 §2 기계 검증이 잡았다)**
+
+- 배치 상세 표는 §4의 **원본 행 목록을 대체**한다 — 추가만 하면 **중복 10건·144 vs 134**로 터진다(B7b).
+- **한 줄에 행 id 하나** — `G-3.4-05`·`G-1.2-03`을 한 줄에 합쳤더니 **133 vs 134**로 터졌다(B8b). B5·B6에서도 났던 실수다.
+- 매 배치 **직후 §2 검증**(`map=gap`·`comm -3` 공백·중복 0)을 돌리는 규율이 이 트랙에서 **세 번** 값을 했다.
+
+**머지 운영 교훈**
+
+- `merge A && gh pr checks B --watch && merge B` **체인은 끊긴다** — base가 움직인 직후에는 새 CI 런이 **아직 생성되지 않아** `gh pr checks`가 head 브랜치 조회로 떨어져 비정상 종료하고 **두 번째 머지가 실행되지 않는다**("no checks reported on the 'develop' branch"). **2단 머지는 두 단계로 나눠** 넘기고 단계별로 실측한다. 메모리 [[stacked-pr-merge-order-race]].
+- **머지 대기가 배치 전체를 멈추게 하지 않는다** — B9a에서 `gh pr view --json files`로 겹침을 실측해 **겹치는 파일이 `saa-t4-5.md` 하나뿐**임을 확인하고 `saa-t4-1` 10행을 먼저 넣었다(나머지 2행 = B9a-2). 맵·`99-gaps`가 겹치지 않으면 이 분해가 가능하다.
+- `gh pr merge`는 분류기 **`Merge Without Review`로 실측 차단**된다(2026-10-21 재확인) — 사용자 몫이다.
+
+- **기준선:** 테스트 **1,595 그린**(1,324 + B3~B7b 가드 137 + 전파 가드 2 + B8a 33 + B8b 36 + B8c 29 + 명칭 가드 4 + B9a 30) · `flutter analyze` **0건** — 전부 develop(`6651316`) 실측. 수치의 정본은 [CLAUDE.md](CLAUDE.md) 빌드·테스트 절이다.
+- **남은 일:** ① **B9a-2**(`saa-t4-5` 2행 — `G-4.1-11` Cost Explorer 38개월·`G-4.1-12` Trusted Advisor 플랜) ② **B9b**(Task 4.2 12행 → `saa-t4-2`, ⚠️ **`verified:true` 15/15 라이브 문항 문서**) ③ **B10**(20행) ④ **B11 8행은 사람 flip 이후** ⑤ **develop→main 릴리스**(현재 미릴리스 10커밋 + 이 부기) ⑥ 사람 몫: `saa-t1-1`·`saa-t1-4`·`saa-t2-5` 재검수 → flip, 그다음 `saa-t1-5` flip.
 
 ## 0-2026-10-21. 완료: SAA 갭 배치 B3·B5·B6·B7 — 공식 대조 저작 + 가드 137건 (2026-10-21, #175~#179)
 
