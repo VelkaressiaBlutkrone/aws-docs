@@ -27,7 +27,7 @@ sources:
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html
   - title: 비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-22
 ---
 
 # 비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected
@@ -100,6 +100,20 @@ lastVerified: 2026-10-19
 - Cost Explorer가 사용하는 데이터셋은 CUR과 동일한 소스.
 - 서비스·계정·리전·태그·인스턴스 유형 등 다차원 필터·그룹핑 지원.
 - **RI / Savings Plans 구매 추천** 내장 — 현재 사용 패턴 기반으로 비용 절감 기회를 제안.
+
+**조회 범위와 세분화** — 기본 조회 범위는 당월을 포함한 **14개월**(과거 13개월 + 당월)이고 단위는 **일·월**입니다. 더 길게 보거나 더 촘촘히 보려면 **관리 계정**이 Billing and Cost Management 콘솔의 *Cost Management 환경설정*에서 옵션을 켜야 합니다.
+
+| 옵션 | 범위·단위 | 제약 |
+|---|---|---|
+| **다년 데이터** | 월 단위로 **최대 38개월** — 조직 전체에 적용 | **Cost Explorer에서만** 보임 — Savings Plans·예약의 **사용률·커버리지 보고서**는 이 데이터를 지원하지 않음 |
+| **시간 단위** | 전 서비스를 시간 단위로, 또는 **EC2 인스턴스를 리소스 단위**로 | 시간 단위 데이터와 일 단위 리소스 데이터는 **최근 14일**만 |
+| **일 단위 리소스 데이터** | 서비스를 골라 리소스 단위로 | 선택 목록에는 **최근 6개월간 사용한 서비스만** 나오고 비용이 큰 순으로 정렬됨 |
+
+- 설정 변경이 Cost Explorer에 반영되기까지 **최대 48시간**이 걸리고, 저장한 뒤 **48시간** 동안은 다시 바꿀 수 없습니다.
+- 조직 안의 누구도 **3개월 연속** 다년 데이터를 열어보지 않으면 AWS가 **자동으로 비활성화**합니다 — 필요하면 환경설정에서 다시 켭니다.
+- 세분화 데이터는 **과금 대상 비용을 보여주는 결제 뷰**에서만 보입니다. Billing Conductor의 표준·이전(transfer) 결제 그룹 계정으로 쓰는 경우에는 조회할 수 없습니다.
+
+> 💡 시험에서 "연도별 비용 추세"·"인스턴스 단위 시간대별 비용"이 나오면 **Cost Explorer를 쓸 수 있는지**가 아니라 **관리 계정이 그 옵션을 켰는지**가 쟁점입니다. 기본 상태로는 둘 다 보이지 않습니다.
 
 > 🧠 원리: 왜 Cost Explorer와 CUR은 같은 데이터셋을 공유하면서도 별개의 도구로 존재할까요?
 > CUR은 라인 아이템 단위의 원시 데이터를 S3에 전달하는 파이프라인이고, Cost Explorer는 그 위에 집계·필터·그룹핑을 미리 계산해 대화형 뷰로 제공하는 분석 레이어입니다.
@@ -211,6 +225,13 @@ CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
   → CUR에서 태그 컬럼으로 팀·프로젝트별 배분
 ```
 
+**활성화는 두 번 기다립니다.** 리소스에 사용자 정의 태그를 붙인 뒤 비용 할당 태그 페이지에 **그 키가 나타나기까지 최대 24시간**, 거기서 활성화를 누르고 **실제로 활성화되기까지 다시 최대 24시간**이 걸립니다. 태그를 붙인 당일에 Cost Explorer 필터가 될 것으로 기대하면 안 됩니다.
+
+- 활성화·비활성화는 **키 단위**입니다 — 한 키를 활성화하면 그 키를 공유하는 **모든 태그 값**에 적용됩니다.
+- `UpdateCostAllocationTagsStatus` API로 여러 키를 **일괄 활성화**할 수 있습니다.
+- **AWS 생성 태그**(`aws:createdBy` 등)는 **관리 계정이 활성화하면** 조직의 모든 멤버 계정에 적용되며, 결제 콘솔과 비용 보고서에서만 보입니다.
+- **`awsApplication` 태그**는 Service Catalog **AppRegistry**에 등록된 애플리케이션에 연결된 리소스에 자동으로 붙고 **비용 할당 태그로 자동 활성화**됩니다. 비활성화할 수는 있지만 그러면 그 애플리케이션의 비용 보고가 끊기고 **자동으로 다시 켜지지 않습니다**. 이 태그는 비용 할당 태그 **쿼터에 포함되지 않습니다**.
+
 > 🧠 원리: 왜 리소스에 태그를 붙이는 것만으로는 충분하지 않고 Billing Console에서 별도 활성화가 필요할까요?
 > AWS 리소스 태그는 운영 목적(검색·자동화·접근 제어)으로 폭넓게 사용되고, 모든 태그를 자동으로 청구 데이터에 포함하면 관련 없는 태그까지 CUR 컬럼으로 추가되어 데이터가 과도하게 커집니다.
 > Billing Console에서 비용 할당 태그를 명시적으로 활성화하는 단계는 "이 태그 키를 청구 분류 기준으로 사용하겠다"는 의도를 선언하는 것으로, 이후 생성되는 CUR 데이터부터 해당 컬럼이 포함됩니다.
@@ -235,10 +256,21 @@ CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
 
 | 도구 | 비용 관점 역할 | 분석 기반 |
 |---|---|---|
-| **AWS Compute Optimizer** | 인스턴스 과/저프로비저닝 감지 → **적정 크기(Rightsizing) 추천** | CloudWatch 지표 **기본 룩백 14일**(유료 *향상된 인프라 지표*를 켜면 최대 **93일**) |
+| **AWS Compute Optimizer** | 인스턴스 과/저프로비저닝 감지 → **적정 크기(Rightsizing) 추천** | CloudWatch 지표 **기본 룩백 14일** — 유료 *향상된 인프라 지표*를 켜면 **32일**·**93일**로 늘릴 수 있음 |
 | **AWS Trusted Advisor** | 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목 탐지 | 계정 스냅샷 기반 규칙 점검 |
 
 > **Compute Optimizer** = "이 인스턴스 크기가 맞나?" / **Trusted Advisor** = "이 리소스를 아직도 쓰고 있나?" — 질문이 다릅니다.
+
+**Trusted Advisor 전체 점검에는 지원 플랜 조건이 붙습니다.** 비용 점검을 포함한 전체 목록은 무료로 열리지 않습니다.
+
+| 플랜 | 쓸 수 있는 점검 | 접근 방식 |
+|---|---|---|
+| **Basic** | **서비스 한도 카테고리** 전체 + **보안·내결함성 카테고리의 일부** 점검 | 콘솔만. **자동 점검 갱신**이 없어 보안 점검은 직접 새로고침해야 함 |
+| **Business Support+** · **Enterprise Support** · **Unified Operations** | **전체 점검** | 콘솔 + Trusted Advisor API + EventBridge로 점검 결과 모니터링 |
+
+비용 카테고리에서 자주 나오는 점검은 저사용 EC2 인스턴스, 유휴 로드밸런서, 과다 프로비저닝된 EBS 볼륨(Compute Optimizer 연계), S3 수명 주기 미구성 등입니다.
+
+> ⚠️ **플랜 개편 — 2027-01-01**: Developer Support와 Business Support는 **2027-01-01에 종료**되고, **Enterprise On-Ramp**도 같은 날 종료되면서 2026년 중 계약 갱신이나 일괄 처리로 **Enterprise Support로 자동 승급**됩니다. 단 **AWS GovCloud (US)** 리전에서는 Developer·Business·Enterprise On-Ramp가 **계속 제공**됩니다. 시험 문항과 과거 자료에는 옛 플랜 이름이 남아 있을 수 있으니 두 체계를 함께 알아 두세요.
 
 > 🧠 원리: 왜 Compute Optimizer는 CloudWatch 지표를 기반으로 하고, Trusted Advisor는 규칙 기반 스냅샷 점검을 사용할까요?
 > 인스턴스 적정 크기 판단은 순간 스냅샷이 아닌 시간 경과에 따른 실제 부하 패턴을 봐야 과/저프로비저닝을 구분할 수 있어, 지속 수집된 CloudWatch 지표가 필요합니다.
@@ -285,6 +317,9 @@ CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
 | 다계정 환경에서 RI 할인을 조직 전체에 공유 | AWS Organizations 통합 결제 + RI 공유 |
 | 태그 키를 `Env`·`env`·`ENV` 혼용 — 일관화 강제 | AWS Organizations 태그 정책 |
 | "사용한 만큼만 지불, 미사용 시 중단"은 어느 Well-Architected 원칙? | 소비 모델 채택(Adopt a consumption model) |
+| 작년 대비 올해 비용을 비교해야 하는데 Cost Explorer에 24개월 전 데이터가 없음 | 관리 계정이 **다년 데이터**(월 단위, 최대 38개월) 활성화 |
+| 특정 EC2 인스턴스의 지난주 시간대별 비용을 봐야 함 | 관리 계정이 **시간 단위 + EC2 리소스 단위** 활성화(최근 14일) |
+| Basic 플랜 계정에서 Trusted Advisor 비용 점검 전체를 보려면? | Business Support+ · Enterprise Support · Unified Operations 중 하나로 업그레이드 |
 
 ---
 
@@ -310,6 +345,12 @@ CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
 
 7. **"Budget Actions의 조치에 SNS 알림이 포함된다."** → 조치 유형은 **IAM 정책 연결 · SCP 적용 · 실행 중 EC2/RDS 인스턴스 대상 지정** 세 가지이고, SNS는 조치가 아니라 알림 채널입니다. 각 조치는 자동 실행 또는 승인 후 실행을 고를 수 있습니다.
    *(원리: §3 — IAM·SCP 연결은 사람 개입 없이 리소스 생성을 차단하는 제어 수단이고, 알림은 사람을 호출하는 통지 수단이라 역할이 다르다.)*
+
+8. **"Basic 플랜에서도 Trusted Advisor 비용 점검을 전부 볼 수 있다."** → Basic은 **서비스 한도 카테고리** 전체와 **보안·내결함성 카테고리의 일부**만 열리고, 자동 점검 갱신도 없습니다. 비용 점검을 포함한 전체 목록과 API 접근은 **Business Support+ · Enterprise Support · Unified Operations** 플랜이 필요합니다.
+   *(원리: §8 — 전체 점검은 유료 지원 플랜의 제공 범위에 묶여 있고, Basic은 콘솔에서 제한된 카테고리만 본다.)*
+
+9. **"Cost Explorer는 켜면 바로 몇 년 치든 시간 단위든 다 볼 수 있다."** → 기본은 **14개월·일·월 단위**입니다. 다년(최대 38개월)·시간 단위·리소스 단위는 **관리 계정이 따로 켜야** 하고, 반영까지 최대 48시간이 걸립니다. 시간 단위·일 단위 리소스 데이터는 **최근 14일**만 남습니다.
+   *(원리: §2 — 세분화 데이터는 저장·집계 부담이 커서 기본값이 아니라 조직 차원의 선택 항목으로 분리돼 있다.)*
 
 ---
 
@@ -349,7 +390,14 @@ CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
 
 <details><summary>정답 보기</summary>
 
-CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 키를 비용 할당 태그로 활성화해야 합니다. 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않으므로, 리소스에 태그가 존재하더라도 활성화 전 기간의 태그 필터링이 되지 않는 상황이 발생합니다. 단, backfill 요청을 통해 최대 12개월까지 소급 적용이 가능하며, 이 경우 Cost Explorer·Data Exports·CUR이 자동으로 갱신됩니다(리소스에 해당 태그가 실제로 붙어 있었던 기간에 한함).
+CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 키를 비용 할당 태그로 활성화해야 합니다. 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않으므로, 리소스에 태그가 존재하더라도 활성화 전 기간의 태그 필터링이 되지 않는 상황이 발생합니다. 단, backfill 요청을 통해 최대 12개월까지 소급 적용이 가능하며, 이 경우 Cost Explorer·Data Exports·CUR이 자동으로 갱신됩니다(리소스에 해당 태그가 실제로 붙어 있었던 기간에 한함). 또한 태그를 붙인 직후에도 즉시 활성화되지 않습니다 — 키가 비용 할당 태그 페이지에 나타나기까지 최대 24시간, 활성화되기까지 다시 최대 24시간이 걸립니다.
+</details>
+
+**Q6.** 재무팀이 "작년 대비 올해 비용 추세를 보고 싶다"며 Cost Explorer에서 24개월 전 데이터를 찾는데 보이지 않습니다. 같은 팀이 "지난주 특정 EC2 인스턴스의 시간대별 비용"도 요청했습니다. 각각 무엇을 해야 합니까?
+
+<details><summary>정답 보기</summary>
+
+둘 다 **관리 계정**이 Cost Management 환경설정에서 옵션을 켜야 합니다. 연도 비교는 **다년 데이터**(월 단위, 최대 38개월)를, 인스턴스 시간대별 비용은 **시간 단위 + EC2 인스턴스 리소스 단위** 데이터를 활성화합니다. 설정은 반영까지 **최대 48시간**이 걸리고 저장 후 48시간은 다시 바꿀 수 없습니다. 주의할 점이 둘 있습니다 — 시간 단위·일 단위 리소스 데이터는 **최근 14일**만 남으므로 "지난주"는 조회되지만 24개월 전 시간대별 데이터는 **어떤 설정으로도 볼 수 없습니다**. 그리고 다년 데이터는 Cost Explorer에서만 보이고 Savings Plans·예약의 **사용률·커버리지 보고서**에는 적용되지 않습니다. 조직에서 **3개월 연속** 아무도 열어보지 않으면 다년 데이터는 자동 비활성화됩니다.
 </details>
 
 ---
@@ -370,5 +418,13 @@ CUR에서 태그 컬럼이 포함되려면 Billing Console에서 해당 태그 �
 10. CUR → Data Exports CUR 2.0 마이그레이션(고정 스키마·중첩 열·SQL 선택) — https://docs.aws.amazon.com/cur/latest/userguide/dataexports-migrate.html
 11. Compute Optimizer 향상된 인프라 지표(기본 14일 → 최대 93일, 유료) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/enhanced-infrastructure-metrics.html
 12. AWS Support 플랜(현행 목록) — https://aws.amazon.com/premiumsupport/plans/
+13. Cost Explorer 다년 데이터(월 단위 최대 38개월 · 48시간 내 제공 · 3개월 연속 미접근 시 비활성화 · SP/예약 보고서 미지원) — https://docs.aws.amazon.com/cost-management/latest/userguide/ce-multi-year-data.html
+14. 다년·세분화 데이터 설정(관리 계정이 활성화 · 시간/일 리소스 단위는 최근 14일 · 반영 최대 48시간 · 저장 후 48시간 변경 불가 · Billing Conductor 제약) — https://docs.aws.amazon.com/cost-management/latest/userguide/ce-configuring-data.html
+15. 비용 할당 태그 활성화(목록 등장 최대 24시간 + 활성화 최대 24시간 · 키 단위가 모든 값에 적용 · `UpdateCostAllocationTagsStatus` 일괄 활성화 · `awsApplication` 자동 활성화와 쿼터 예외) — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
+16. AWS 생성 비용 할당 태그(관리 계정이 활성화하면 멤버 계정 전체 적용) — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activate-built-in-tags.html
+17. Trusted Advisor 지원 플랜 조건(Basic은 서비스 한도 전체 + 보안·내결함성 일부 · 전체 점검은 Business Support+/Enterprise/Unified Operations · 2027-01-01 플랜 종료 · GovCloud 존치) — https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
+18. Compute Optimizer 룩백 기간(14·32·93일) — https://docs.aws.amazon.com/help-panel/compute-optimizer/latest/console/rightsizing-lookback.html
 
 > 📝 **2026-10-19 정정**: ① Budget Actions 조치 3종을 **IAM 정책·SCP·실행 중 EC2/RDS 인스턴스 대상**으로 고쳤습니다 — SNS는 조치가 아닌 알림 채널이고, 자동 실행/승인 후 실행을 선택합니다(근거 9번). ② Budgets 데이터 범위를 "실시간"에서 **하루 최대 3회 갱신**으로 바로잡았습니다. ③ CUR 절에 **Data Exports의 CUR 2.0**(고정 스키마·중첩 열·SQL 선택·Parquet)을 반영했습니다(근거 10번). ④ 근거를 찾지 못한 "Support 비용은 해당 월 6~7일 반영" 문장을 삭제하고 **현행 Support 플랜 명칭**으로 갱신했습니다(근거 12번). ⑤ Compute Optimizer를 "지표 14일 이상 수집"에서 **기본 룩백 14일 / 향상된 인프라 지표 최대 93일**로 고쳤습니다(근거 11번).
+
+> 📝 **2026-10-22 보강 — 갭 배치 B9a-2(`G-4.1-11`·`G-4.1-12`)**: ① §2에 Cost Explorer의 **기본 14개월(과거 13개월 + 당월)·일·월 단위**와, 관리 계정이 켜는 **다년(월 단위 최대 38개월)·시간 단위·일 단위 리소스 데이터**를 넣었습니다(근거 13·14번) — 시간·일 리소스 데이터는 **최근 14일**, 설정 반영 **최대 48시간**, **3개월 연속** 미접근 시 다년 데이터 자동 비활성화, 다년 데이터는 SP·예약 **사용률·커버리지 보고서** 미지원. ② §6에 태그 **활성화 2단 지연(각 최대 24시간)**·키 단위 활성화가 **모든 태그 값**에 적용·`UpdateCostAllocationTagsStatus` 일괄 활성화·**AWS 생성 태그는 관리 계정이 활성화**·`awsApplication` 자동 활성화와 쿼터 예외를 넣었습니다(근거 15·16번). ③ §8에 **Trusted Advisor 전체 점검의 지원 플랜 조건**과 **2027-01-01 플랜 개편·GovCloud(US) 존치**를 넣고(근거 17번), Compute Optimizer 룩백에 **32일**을 추가했습니다(근거 18번). ④ ⚠️ **갭 노트 정정**: `98-existing-gap.md`의 `G-4.1-12`는 Basic 플랜을 "보안 6종 + 서비스 한도"로 적었지만, 공식은 **서비스 한도 카테고리 전체 + 보안·내결함성 카테고리의 일부**입니다 — 내결함성이 빠져 있었고 "6종"이라는 수치는 해당 문서에 없습니다. 본문은 공식을 따랐습니다. ⑤ **쓰지 않은 것 4건**(근거 미확보): Cost Explorer 세분화의 추가 과금(설정 문서에 과금 언급이 없음) · Cost Optimization Hub(`4-1.md` F-30~F-36에 근거 행 부재) · CUR 2.0·FOCUS 1.0 세부(`99-gaps` V-88 — 기본 서술은 §1 표·§4에 이미 있음) · Support 플랜 월 최소 요금(시험 범위 밖·휘발성). 네 건 모두 `test/saa_gaps_b9a2_test.dart`가 금지합니다.

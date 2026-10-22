@@ -36,7 +36,7 @@ _갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — §0-2026
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
 
-## 0-2026-10-21-b. 완료: SAA 갭 배치 B8 완결 · B9a · QuickSight 명칭 일관성 (2026-10-21, #180~#186)
+## 0-2026-10-21-b. 완료: SAA 갭 배치 B8 완결 · B9a · QuickSight 명칭 일관성 (2026-10-21, #180~#188)
 
 행 단위 배정 정본은 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)다. 어디까지 들어왔는지는 그 문서 §6의 조회 명령으로 본다(여기에 진행 상태를 적지 않는다 — §0 서술 규약 ②).
 
@@ -46,6 +46,7 @@ _갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — §0-2026
 - **#184 B8c — Task 3.5 잔여(7행) · B8 완결:** `saa-t3-9` §3·§8·§10·§11 + **§12·§13 신설**(보존 모델·EFO·**Amazon Quick Sight 명칭**·DataSync 대역폭·Redshift Spectrum·형식 변환·수집 접점 보안). 가드 29건. **이로써 B8 23행이 닫혔다.**
 - **#185 QuickSight 명칭 일관성 + 영구 가드:** ⚠️ **블라인드 통일을 하지 않았다** — `clf/t3-7.md:116`의 정직성 메모가 "CLF에선 '대시보드·시각화·BI = QuickSight'로 기억하면 됩니다"라 적고 `dea/dea-t3-2.md:205`가 옛 이름을 함정으로 다루는 것을 발견했다. **AWS 시험이 개명보다 늦으므로** 레포의 그 결정이 타당하다. 그래서 기준을 **"공존"**으로 잡아 **옛 표기를 쓰는 문서에는 현행 명칭이 함께 있도록** 보강하고, `test/quicksight_naming_consistency_test.dart`(4건)로 **영구 고정**했다. 라이브 CLF 문항은 **보기·정답을 손대지 않고 해설에만** 병기했다.
 - **#186 B9a — Task 4.1 스토리지(10행):** `saa-t4-1` §1·§3·§4·§6·§7 + **§9·§10 신설**(Requester Pays·Glacier 40 KB 오버헤드·`all_storage_classes_128K`·st1/sc1·Snapshots Archive·ONTAP 티어·Storage Lens 티어·크기 비대칭·선택 매트릭스). 가드 30건.
+- **#187 부기 + #188 릴리스:** B8a·B8b·B8c·명칭 일관성·B9a를 `main`에 올렸다(main `af1ae96`, Pages `39558732849` success). 릴리스 PR의 `test` 체크 pass + 로컬 analyze 0·test 1,595 그린을 먼저 확인했고, 라이브 실측은 index 200 · 이번에 바뀐 `saa-t4-1.md` 200으로 **레포 파일과 바이트 동일**(로컬 체크아웃의 CRLF 571자를 제거하면 완전 일치 — 첫 `diff`가 DIFFERENT로 나오는 건 줄끝 차이일 뿐이다).
 
 **⚠️ 공식이 통념·갭 노트와 달랐던 것 (이 트랙의 수확)**
 
@@ -82,10 +83,10 @@ _갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — §0-2026
 
 - `merge A && gh pr checks B --watch && merge B` **체인은 끊긴다** — base가 움직인 직후에는 새 CI 런이 **아직 생성되지 않아** `gh pr checks`가 head 브랜치 조회로 떨어져 비정상 종료하고 **두 번째 머지가 실행되지 않는다**("no checks reported on the 'develop' branch"). **2단 머지는 두 단계로 나눠** 넘기고 단계별로 실측한다. 메모리 [[stacked-pr-merge-order-race]].
 - **머지 대기가 배치 전체를 멈추게 하지 않는다** — B9a에서 `gh pr view --json files`로 겹침을 실측해 **겹치는 파일이 `saa-t4-5.md` 하나뿐**임을 확인하고 `saa-t4-1` 10행을 먼저 넣었다(나머지 2행 = B9a-2). 맵·`99-gaps`가 겹치지 않으면 이 분해가 가능하다.
-- `gh pr merge`는 분류기 **`Merge Without Review`로 실측 차단**된다(2026-10-21 재확인) — 사용자 몫이다.
+- `gh pr merge`는 **판정이 세션마다 다르다** — 이 트랙(2026-10-21 오전)에서는 분류기 `Merge Without Review`로 실측 차단됐지만, 같은 날 릴리스 PR#188에서는 `gh pr merge 188 --merge`가 **차단 없이 통과**했다(main `af1ae96`). 그래서 **과거 차단 기록을 근거로 사람에게 넘기지 않고 매번 직접 시도한다** — 실측 거부 메시지를 받은 뒤에만 사용자 몫이다(전역 규칙 `ai-task-ownership` 원칙 2). ⚠️ 통과했을 때 **출력이 비어 exit 0만 남을 수 있으므로** 머지 여부는 `gh pr view <n> --json state,mergeCommit,mergedAt`으로 실측한다(`merged` 필드는 없다 — 쓰면 `Unknown JSON field` 오류).
 
 - **기준선:** 테스트 **1,595 그린**(1,324 + B3~B7b 가드 137 + 전파 가드 2 + B8a 33 + B8b 36 + B8c 29 + 명칭 가드 4 + B9a 30) · `flutter analyze` **0건** — 전부 develop(`6651316`) 실측. 수치의 정본은 [CLAUDE.md](CLAUDE.md) 빌드·테스트 절이다.
-- **남은 일:** ① **B9a-2**(`saa-t4-5` 2행 — `G-4.1-11` Cost Explorer 38개월·`G-4.1-12` Trusted Advisor 플랜) ② **B9b**(Task 4.2 12행 → `saa-t4-2`, ⚠️ **`verified:true` 15/15 라이브 문항 문서**) ③ **B10**(20행) ④ **B11 8행은 사람 flip 이후** ⑤ **develop→main 릴리스**(현재 미릴리스 10커밋 + 이 부기) ⑥ 사람 몫: `saa-t1-1`·`saa-t1-4`·`saa-t2-5` 재검수 → flip, 그다음 `saa-t1-5` flip.
+- **남은 일:** ① **B9a-2**(`saa-t4-5` 2행 — `G-4.1-11` Cost Explorer 38개월·`G-4.1-12` Trusted Advisor 플랜) ② **B9b**(Task 4.2 12행 → `saa-t4-2`, ⚠️ **`verified:true` 15/15 라이브 문항 문서**) ③ **B10**(20행) ④ **B11 8행은 사람 flip 이후** ⑤ **develop→main 릴리스** — 릴리스마다 반복되는 상시 항목이라 분량·여부를 여기 적지 않는다(§0 조회법 — 서술 규약 ②) ⑥ 사람 몫: `saa-t1-1`·`saa-t1-4`·`saa-t2-5` 재검수 → flip, 그다음 `saa-t1-5` flip.
 
 ## 0-2026-10-21. 완료: SAA 갭 배치 B3·B5·B6·B7 — 공식 대조 저작 + 가드 137건 (2026-10-21, #175~#179)
 
