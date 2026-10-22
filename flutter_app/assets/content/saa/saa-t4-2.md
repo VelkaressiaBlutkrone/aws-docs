@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: Compute Savings Plans and Reserved Instances (공식)
     url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-22
 ---
 
 # 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing
@@ -104,6 +104,35 @@ lastVerified: 2026-10-19
 > 달러 사용량($/hr)을 단위로 하면 인스턴스 패밀리나 서비스가 바뀌어도 해당 시간에 발생한 비용이 약정 한도 내에 있으면 할인이 자동으로 적용됩니다.
 > 이 추상화 덕분에 워크로드를 EC2에서 Lambda나 Fargate로 전환해도 기존 약정이 유효하게 유지됩니다.
 
+**용량 보장은 할인과 별개의 축입니다.** 시험은 이 둘을 섞어 묻습니다.
+
+| 수단 | 요금 할인 | 특정 AZ 용량 확보 |
+|---|---|---|
+| **Regional RI** | ○ (리전 내 모든 AZ에 적용·크기 유연성) | ✗ |
+| **Zonal RI** | ○ | **○** (특정 AZ에 용량 예약) |
+| **On-Demand Capacity Reservation(ODCR)** | ✗ (자체 할인 없음) | **○** |
+| **Savings Plans** | ○ | ✗ — **용량을 예약하지 않습니다** |
+
+- **ODCR**은 즉시 사용형이면 **약정이 필요 없고** 생성·수정·취소가 자유롭습니다(미래 시작형에는 약정 기간이 붙습니다). 자체 할인은 없지만 **Savings Plans와 Regional RI의 할인이 일치하는 속성에 자동 적용**되므로 "용량은 ODCR, 할인은 SP 또는 Regional RI"로 조합합니다. ⚠️ **Zonal RI의 할인은 Capacity Reservation에 적용되지 않습니다.**
+- ⚠️ 그래서 요건이 "**특정 AZ의 용량을 확보해야 한다**"면 Savings Plans는 답이 아닙니다 — Zonal RI 또는 ODCR입니다.
+
+**할인 적용 순서** — 한 시간의 사용분에 여러 할인이 걸릴 때 적용 순서가 정해져 있습니다.
+
+```
+Free Tier → RI → EC2 Instance Savings Plans → Compute Savings Plans → 온디맨드
+```
+
+- 적용 범위가 **더 좁은 쪽이 먼저**입니다 — 그래서 EC2 Instance SP가 Compute SP보다 먼저 적용됩니다. 같은 단계에서는 **할인 폭이 가장 큰 사용분부터** 소진합니다.
+- ⚠️ **시간당 약정은 다음 시간으로 이월되지 않습니다.** 그 시간에 쓰지 못한 약정은 사라지고, 약정을 넘는 사용분은 온디맨드로 청구됩니다.
+
+**RI Marketplace** — 쓰지 않게 된 RI를 판매할 수 있지만 조건이 좁습니다.
+
+- **Standard RI만** 판매할 수 있고 **Convertible RI는 불가**합니다(RDS·ElastiCache 등 다른 서비스의 RI도 불가).
+- 남은 약정 기간이 **1개월 이상**이어야 하고, 판매하면 선납가의 **12%**가 서비스 수수료로 붙습니다.
+- 볼륨 할인으로 구매한 RI는 판매할 수 없습니다.
+
+**Dedicated Host 과금** — 호스트를 할당해 둔 시간에 **초 단위(최소 60초)**로 과금되고, 그 호스트에 인스턴스를 몇 개·어떤 크기로 올리든 금액은 같습니다. 예약하면 **최대 70%** 할인되며, Savings Plans는 **가상 호스트**에만 적용됩니다(`.metal` 인스턴스는 제외).
+
 ### 3) Savings Plans 유형 {#savings-plans-types}
 
 | 유형 | 적용 대상 | 특징 |
@@ -173,6 +202,16 @@ lastVerified: 2026-10-19
 
 > AWS 모범 사례는 **`price-capacity-optimized`** 입니다 — "가장 가용 용량이 많은 풀 중 가능한 가장 낮은 가격"으로 프로비저닝해 회수 가능성을 낮춥니다. `CreateFleet` 기본값이 `lowest-price`라는 점과 혼동하지 마세요(기본값 ≠ 권고값).
 
+> 전략 선택의 기준: **기본은 `price-capacity-optimized`**(가격과 용량의 **균형** — AWS 권고). **중단 최소화가 비용보다 절대적으로 우선**이면 `capacity-optimized` 입니다 — 가용 용량이 가장 많은 풀을 고르므로 가격은 양보합니다. 두 전략을 뭉쳐 외우면 "비용보다 중단 최소화 우선" 문항에서 틀립니다.
+
+**중단을 줄이는 설계는 전략 선택으로 끝나지 않습니다.**
+
+- **스팟 용량 풀 = AZ × 인스턴스 유형**입니다. 한 풀에 몰아 요청하면 그 풀이 회수될 때 용량이 한꺼번에 사라지므로, **여러 풀로 다양화**하는 것이 1차 방어입니다.
+- **속성 기반** 인스턴스 유형 선택 — 유형 이름을 일일이 나열하는 대신 vCPU·메모리 같은 **요건**으로 지정하면 조건에 맞는 신규·비인기 유형까지 후보에 들어와 풀이 넓어집니다.
+- **Spot 배치 점수** — 원하는 용량·유형 조합이 어느 리전·AZ에서 잘 공급될지를 점수로 알려줍니다. 워크로드를 옮길 수 있다면 배치 전에 확인합니다.
+- **ASG의 Capacity Rebalancing** — 재조정 권고를 받으면 ASG가 **회수 전에** 대체 인스턴스를 먼저 띄워 교체합니다(2분 알림만 기다리지 않습니다).
+- ⚠️ **온디맨드 폴백은 권장되지 않습니다.** 스팟이 잡히지 않을 때 자동으로 온디맨드를 띄우는 구성은 비용이 튀고, 그 용량 요청이 **다른 스팟 인스턴스의 중단을 유발**할 수 있습니다. 먼저 풀 다양화로 해결합니다.
+
 > 🧠 원리: 왜 AWS는 스팟 인스턴스를 즉시 회수하지 않고 2분 인터럽트 알림을 줄까요?
 > 스팟 인스턴스는 잉여 용량을 제공하므로 AWS가 용량을 회수할 때 애플리케이션이 갑자기 종료되면 진행 중인 작업이 소실됩니다.
 > 2분 알림 창은 체크포인트 저장, 진행 중 데이터 플러시, 결과 업로드 등 종료 전 정리 작업을 가능하게 해 중단 비용을 줄여줍니다.
@@ -198,9 +237,22 @@ lastVerified: 2026-10-19
 > 오토스케일링은 실제 수요에 맞춰 인스턴스 수를 조정하므로 유휴 용량이 줄고, 특히 수요 변동 폭이 큰 워크로드에서 절감 효과가 높아집니다.
 > 단, 스케일 아웃 반응 시간이 존재하므로 트래픽 급등에 대비해 최소 기반 용량은 유지해야 합니다.
 
-**스팟 + 오토스케일링 혼합:**
+**스팟 + 오토스케일링 혼합 — 혼합 인스턴스 정책:**
 
-Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)을 혼합하면 안정성을 유지하면서 비용을 낮출 수 있습니다.
+Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)을 혼합하면 안정성을 유지하면서 비용을 낮출 수 있습니다. 그룹은 **기본적으로 온디맨드만** 쓰므로, 비율을 조정해야 스팟이 들어옵니다.
+
+- **온디맨드 기본(base) 용량**을 먼저 확보한 뒤, 그 위의 증설분을 온디맨드/스팟 **비율**(0~100%)로 나눕니다. 예를 들어 base 10 + 50/50이면 처음 10대는 온디맨드이고 이후 증설분은 절반씩이며, base 0 + 0/100이면 전부 스팟입니다.
+- ⚠️ 비율을 인스턴스 **수**로 환산할 때 소수는 **온디맨드 쪽으로 올림**합니다(안정성 우선).
+- **가중치**를 주면 유형마다 "용량 1단위"의 크기가 달라집니다(예: `m5.xlarge`=2, `m5.large`=1) — 목표 용량을 vCPU 같은 실제 능력 기준으로 맞출 수 있습니다.
+- 스팟 할당 전략과 **Capacity Rebalancing**을 함께 켜서 중단에 대비합니다.
+
+**예측 스케일링의 데이터 전제:**
+
+- 지표가 **최소 24시간** 쌓여야 동작하고, **최근 14일 분석**으로 **향후 48시간**의 시간당 용량을 예측해 **6시간마다** 갱신합니다.
+- 처음에는 예측만 하는 모드로 두고 정확도를 확인한 뒤 실제 스케일링으로 바꿉니다.
+- ⚠️ 예측 스케일링은 **스케일 아웃만** 담당합니다 — 줄이는 쪽은 동적 정책(대상 추적 등)이 처리하므로 **함께 설정**해야 비용이 실제로 내려갑니다.
+
+**웜 풀** — 부팅·초기화가 오래 걸리는 앱은 사전 초기화된 인스턴스를 **웜 풀**에 두어 스케일 아웃 지연을 줄일 수 있습니다. 기본 크기는 **최대 용량 − 희망 용량**이고, 풀에 있는 인스턴스는 스케일링 정책 지표에 포함되지 않습니다. 풀 상태를 Stopped로 두면 인스턴스 사용료 없이 EBS만 과금됩니다.
 
 ### 7) Rightsizing — AWS Compute Optimizer {#rightsizing}
 
@@ -214,18 +266,22 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 - AWS Lambda 함수
 - Amazon ECS 서비스(Fargate)
 - Amazon RDS 및 Aurora 데이터베이스
+- **상용 라이선스 인스턴스**(EC2에서 실행하는 **SQL Server** 등) — 라이선스 관점의 권고도 제공
 
 **작동 방식:**
 
 - 기본 분석 기간: **최근 14일** CloudWatch 지표
-- 확장 기간(유료): **93일** (Enhanced Infrastructure Metrics 기능)
+- 확장 기간(유료 *Enhanced Infrastructure Metrics*): **32일** 또는 **93일**
 - CPU 사용률·메모리·네트워크·디스크 I/O 분석 후 과프로비저닝 또는 저프로비저닝 판정
+- 옵트인 서비스입니다 — 계정(또는 조직)에서 켜야 권고가 생성됩니다
 
 **권장 결과 유형:**
 
 - 과프로비저닝 → 더 작은 인스턴스 유형 권장
 - 저프로비저닝 → 더 큰 인스턴스 유형 권장
 - 유휴(Idle) → 중지 또는 삭제 권장
+
+**유휴 권고는 컴퓨팅 밖까지 넓어졌습니다.** EBS 볼륨·Fargate 태스크·EC2·Auto Scaling 그룹·RDS 외에 **NAT Gateway**, DynamoDB 프로비저닝 테이블, ElastiCache(Redis/Valkey), **MemoryDB**의 유휴 리소스도 식별합니다 — "안 쓰는데 켜져 있는 것"을 찾는 도구로 쓰는 범위가 EC2 크기 조정보다 훨씬 넓습니다.
 
 > 🧠 원리: 왜 Compute Optimizer는 자동 변경 없이 권장 사항만 제안하는 방식으로 동작할까요?
 > 인스턴스 크기 변경은 재시작을 수반하며, 운영 중인 서비스에 다운타임이 생길 수 있습니다.
@@ -239,6 +295,19 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 - 과금 단위가 다릅니다: **Lambda는 1 ms 단위**(올림), **Fargate는 초 단위에 최소 1분**(Windows 컨테이너는 최소 5분). 또 Lambda **프로비저닝 동시성**은 활성화해 둔 시간 동안 요청이 없어도 과금됩니다
 - 서버 프로비저닝·관리 비용 제거
 - 예측 불가·간헐적 워크로드에 적합
+- **Lambda 과금 축** = 요청 수 + 기간(**GB-초** — 할당 메모리 × 실행 시간). 월 100만 요청과 **400,000** GB-초는 무료 티어이고, 사용량이 커지면 GB-초에 **계층 요금**(구간이 올라갈수록 할인)이 적용됩니다. Compute Savings Plans는 기간·프로비저닝 동시성에 적용되지만 **요청 요금에는 적용되지 않습니다**
+- **Fargate 과금 축** = 프로비저닝한 vCPU·메모리·스토리지. 이미지 pull 시작부터 태스크 종료까지 재고, 임시 스토리지는 20 GB까지 추가 비용이 없습니다. 중단을 허용할 수 있으면 **Fargate Spot**으로 최대 70%까지 낮출 수 있습니다
+
+**어느 쪽이 싼가 — 부하 모양이 가릅니다.**
+
+| 부하 모양 | 유리한 쪽 | 왜 |
+|---|---|---|
+| 간헐적·예측 불가(대부분 유휴) | **Lambda** | 유휴 시 과금이 없고 1 ms 단위로만 센다 |
+| 장시간 실행·마이크로서비스·배치 | **Fargate** | 요청-응답이 아닌 상시 프로세스에 맞고 태스크 단위로 과금된다 |
+| **24/7** 고처리량 프로덕션 | **약정을 붙인 컨테이너(EC2·ECS)** | 사용률이 높을수록 종량제보다 RI·Savings Plans 할인이 크게 작용한다 |
+| 개발·테스트 | 둘 다 저렴 | 업무 시간만 쓰도록 스케줄링하거나 0까지 줄일 수 있다 |
+
+> ⚠️ "서버리스가 항상 싸다"는 일반화는 틀립니다. **유휴가 많을 때** 싸고, 사용률이 높고 항상 켜져 있어야 한다면 **약정 할인을 받는 컨테이너·EC2가 대체로 더 저렴**합니다.
 
 **AWS Graviton (ARM 기반):**
 
@@ -246,6 +315,14 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 - Savings Plans와 결합 시 추가 절감 가능
 - 지원: EC2(m7g·c7g·r7g 등), Lambda, Fargate, RDS, ElastiCache 등
 - 조건: 애플리케이션이 ARM 아키텍처에서 동작해야 함 (컨테이너·인터프리터 언어 전환 용이)
+
+**프로세서와 패밀리 선택도 비용 축입니다** — 인스턴스 이름의 접미 문자가 프로세서를 나타냅니다(`a`=**AMD**, `g`=Graviton, `i`=Intel).
+
+- **AMD(`a`)** 계열은 동급 Intel 대비 컴퓨트 비용이 **약 10%** 낮습니다 — x86 호환이라 **이식 작업 없이** 적용할 수 있는 가장 값싼 절감입니다.
+- **Graviton(`g`)** 은 절감 폭이 더 크지만 ARM 재빌드·검증이 필요합니다. ⚠️ **Windows Server는 x86 전용이라 Graviton을 쓸 수 없습니다** — CPU에 종속된 라이선스를 쓰는 레거시도 보류합니다.
+- **범주를 먼저 고르고 그다음 크기를 맞춥니다.** 범용(균형·웹·중소 DB) · **컴퓨트 최적화**(배치·미디어 트랜스코딩·게임 서버) · 메모리 최적화(인메모리 DB·분석) · 스토리지 최적화(저지연 랜덤 I/O) · 가속 컴퓨팅 · HPC 최적화. 범주를 잘못 고르면 크기 조정으로는 복구되지 않습니다(선택 기준 상세는 `saa-t3-3`).
+- **T 계열(버스트)** 은 기본이 **unlimited** 모드입니다 — 24시간 평균이 기준선 이하면 추가 요금이 없지만, 꾸준히 기준선을 넘기면 vCPU-시간 단위 요금이 붙어 **같은 크기의 일반 인스턴스보다 비싸질 수 있습니다.**
+- **Optimize CPUs** — license-included Windows·SQL Server 인스턴스는 vCPU 수와 하이퍼스레딩을 줄여 **vCPU 기반 라이선스 비용**을 낮출 수 있습니다(컴퓨팅 요금이 아니라 라이선스 요금을 줄이는 수단).
 
 > 🧠 원리: 왜 서버리스(Lambda·Fargate) 과금은 유휴 시 비용이 발생하지 않을까요?
 > EC2는 인스턴스가 실행 중인 시간 전체에 대해 과금되므로, 요청이 없는 유휴 시간도 동일하게 청구됩니다.
@@ -268,6 +345,14 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 | 간헐적 짧은 워크로드, 비용 최소화 | Lambda (서버리스) |
 | 동일 성능·저렴한 인스턴스 패밀리 | Graviton 계열 (m7g, c7g 등) |
 | Savings Plans vs RI 둘 다 가능할 때 | Savings Plans (AWS 공식 우선 권장) |
+| **특정 AZ의 용량을 반드시 확보**해야 함 | Zonal RI 또는 On-Demand Capacity Reservation — Savings Plans는 용량을 예약하지 않음 |
+| 용량도 확보하고 할인도 받고 싶음 | ODCR + Savings Plans(또는 Regional RI) 조합 |
+| 쓰지 않게 된 RI를 처분 | RI Marketplace — Standard RI만, 수수료 12%, Convertible 불가 |
+| 중단 최소화가 비용보다 **절대 우선**인 스팟 플릿 | `capacity-optimized` (일반 권고는 `price-capacity-optimized`) |
+| 반복 패턴이 있고 부팅이 오래 걸리는 앱 | 예측 스케일링 + 웜 풀 |
+| Windows Server 워크로드의 프로세서 비용 절감 | AMD(`a`) 계열 — Graviton은 쓸 수 없음 |
+| 안 쓰는 NAT Gateway·유휴 DB까지 찾아야 함 | AWS Compute Optimizer 유휴 권고 |
+| **24/7** 고처리량 프로덕션 API의 비용 최소화 | 약정을 붙인 컨테이너·EC2 (Lambda보다 유리) |
 
 ---
 
@@ -349,5 +434,23 @@ Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 �
 9. EC2 스팟 모범 사례(price-capacity-optimized 권고) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-best-practices.html
 10. Dedicated Hosts 요금(예약 최대 70% 할인) — https://aws.amazon.com/ec2/dedicated-hosts/pricing/
 11. AWS Fargate 요금(초 단위·최소 1분) — https://aws.amazon.com/fargate/pricing/ · AWS Graviton — https://aws.amazon.com/ec2/graviton/
+12. RI 유형·Regional vs Zonal·지불 옵션 — https://aws.amazon.com/ec2/pricing/reserved-instances/ · https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html
+13. On-Demand Capacity Reservation 과금·할인 결합(SP·Regional RI 적용, Zonal RI 미적용) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-pricing-billing.html
+14. Savings Plans가 용량을 예약하지 않음 · SP vs RI 비교 — https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
+15. 할인 적용 순서·시간당 약정 이월 불가 — https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-applying.html
+16. RI Marketplace 조건(Standard만·잔여 1개월 이상·수수료 12%) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html
+17. Dedicated Host 요금(호스트 초 단위·예약 최대 70%·SP는 가상 호스트만) — https://aws.amazon.com/ec2/dedicated-hosts/pricing/
+18. 스팟 모범 사례(풀 다양화·속성 기반 선택·Spot 배치 점수·온디맨드 폴백 비권장) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-best-practices.html
+19. ASG 혼합 인스턴스 그룹(온디맨드 기본값·base 용량·비율 반올림·가중치) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/mixed-instances-groups-set-up-overview.html
+20. 예측 스케일링(지표 24시간·14일 분석·향후 48시간 예측·스케일 아웃만) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/predictive-scaling-policy-overview.html
+21. 웜 풀(기본 크기 = 최대 용량 − 희망 용량) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html
+22. Compute Optimizer 지원 리소스·유휴 권고 대상 — https://docs.aws.amazon.com/compute-optimizer/latest/ug/supported-resources.html · 룩백 기간(14·32·93일) — https://docs.aws.amazon.com/help-panel/compute-optimizer/latest/console/rightsizing-lookback.html
+23. 프로세서별 가격(AMD 약 10% 저렴)·Windows는 x86 전용 — https://docs.aws.amazon.com/prescriptive-guidance/latest/optimize-costs-microsoft-workloads/right-size-selection.html
+24. 인스턴스 범주와 용도 — https://aws.amazon.com/ec2/instance-types/ · 이름 규칙 — https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-type-names.html
+25. T 계열 unlimited 모드 과금 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-unlimited-mode.html
+26. Optimize CPUs(vCPU 기반 라이선스 절감) — https://aws.amazon.com/ec2/pricing/on-demand/
+27. Lambda 요금 구조·계층 요금·무료 티어 — https://repost.aws/knowledge-center/lambda-reduce-costs · 컨테이너 vs 함수 비용 비교 — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/fargate-or-lambda.html
 
 > 📝 **2026-10-19 정정**: ① Convertible RI 할인율을 **최대 66%**로 고쳤습니다(근거 8번). ② Savings Plans를 **4종**으로 갱신하고 **Database Savings Plans**를 추가했습니다(근거 7번). ③ 스팟 할당 전략을 현행 목록으로 바꾸고 **price-capacity-optimized 권고**를 명시했습니다(근거 9번). ④ Graviton 비용 서술에서 근거 없는 "Graviton3 기준" 수식을 빼고 공식 문장(동급 x86 대비 최대 20% 낮은 비용)으로 맞췄습니다(근거 11번). ⑤ Dedicated Host를 "온디맨드 이상 비용"에서 **예약 시 최대 70% 할인·SP 적용 가능**으로 정정했습니다(근거 10번). ⑥ 서버리스 과금을 **Lambda 1 ms / Fargate 초 단위·최소 1분**으로 분리하고 프로비저닝 동시성의 유휴 과금을 더했습니다(근거 11번).
+
+> 📝 **2026-10-22 보강 — 갭 배치 B9b-1(`G-4.2-08`·`11`·`10`·`20`·`09`·`07`)**: ① §2에 **용량 보장과 할인을 가르는 표**(Regional/Zonal RI · ODCR · SP)를 넣고 **Savings Plans는 용량을 예약하지 않는다**는 공식 사실을 명시했습니다 — 특정 AZ 용량이 요건이면 Zonal RI·ODCR입니다(근거 12·13·14번). **할인 적용 순서**(Free Tier → RI → EC2 Instance SP → Compute SP)와 **시간당 약정 이월 불가**(근거 15번), **RI Marketplace** 조건(Standard만·잔여 1개월 이상·수수료 12%, 근거 16번), **Dedicated Host** 과금과 SP는 가상 호스트만 적용(`.metal` 제외, 근거 17번)을 더했습니다. ② §5에 **스팟 용량 풀 = AZ × 인스턴스 유형**·속성 기반 선택·Spot 배치 점수·ASG Capacity Rebalancing·**온디맨드 폴백 비권장**을 넣고, **`price-capacity-optimized`(일반 권고)와 `capacity-optimized`(중단 최소화 절대 우선)를 구분**해 적었습니다(근거 18번). ③ §6에 **혼합 인스턴스 정책**(온디맨드 기본값·base 용량·비율 소수는 온디맨드 쪽으로 올림·가중치, 근거 19번), **예측 스케일링 전제**(지표 24시간·14일 분석·향후 48시간·6시간 갱신·**스케일 아웃만**, 근거 20번), **웜 풀**(기본 크기 = 최대 − 희망, 근거 21번)을 더했습니다. ④ §7에 Compute Optimizer **룩백 32일** 옵션·**상용 라이선스(SQL Server on EC2)**·**유휴 권고 대상 확장**(NAT Gateway·DynamoDB 프로비저닝·ElastiCache·MemoryDB)·옵트인을 넣었습니다(근거 22번). ⑤ §8에 **프로세서·패밀리 선택**(AMD `a` 약 10% 저렴 · ⚠️ **Windows Server는 Graviton 불가** · 범주 6종 · T 계열 `unlimited` 과금 조건 · **Optimize CPUs**, 근거 23·24·25·26번)과 **Lambda/Fargate 과금 축 + 부하 모양별 선택표**(간헐→Lambda / 장시간·배치→Fargate / **24/7 고처리량→약정 붙인 컨테이너**, 근거 27번)를 더했습니다. ⑥ **쓰지 않은 것**(G-02 요율 규율): Lambda 요청·GB-초 단가 · T `unlimited` vCPU-시간 정액 · Optimize CPUs 절감액 · NLB 25% 절감 블로그 사례 · FinOps 월 비용 예시. 무료 티어 **수량**은 요율이 아니라 한도라서 적었습니다. 가드는 `test/saa_gaps_b9b1_test.dart`.
