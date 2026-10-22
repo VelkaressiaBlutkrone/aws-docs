@@ -329,6 +329,86 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 > Lambda와 Fargate는 요청이 들어올 때만 컨테이너·실행 환경을 프로비저닝하고 완료되면 자원을 반환하므로, 대기 상태에서 점유하는 컴퓨팅이 없어 과금도 발생하지 않습니다.
 > 이 구조 덕분에 간헐적·예측 불가 워크로드는 항상 켜둔 인스턴스 없이도 수요에 맞춰 처리됩니다.
 
+### 9) 로드 밸런서 비용 — LCU·NLCU {#elb-cost}
+
+ELB 요금은 **시간당 기본 요금 + 용량 단위**로 구성됩니다. 용량 단위는 ALB가 **LCU**, NLB가 **NLCU**이며, 여러 차원을 동시에 재지만 **사용량이 가장 큰 한 차원**만 과금합니다.
+
+| LB | 용량 단위 차원 |
+|---|---|
+| **ALB (LCU)** | ① 신규 연결(초당) ② 활성 연결(분당) ③ 처리 바이트(시간당 GB) ④ **규칙 평가**(규칙 수 × 요청률, 처음 10개 규칙은 무료) |
+| **NLB (NLCU)** | ① 신규 연결·플로우(초당 — TCP·UDP·TLS가 각각 다름) ② 활성 연결·플로우 ③ 처리 바이트 |
+
+- "차원을 전부 더한다"가 아니라 **최댓값 하나만** 청구된다는 점이 시험 포인트입니다. 규칙이 10개 이하라면 규칙 평가 차원은 아예 무시됩니다.
+- **NLB·GWLB는 LCU 예약**을 지원합니다 — 예약한 분량은 **실제 사용량과 무관하게 과금**되므로, 피크 지표를 보고 상시 필요한 만큼만 예약합니다.
+- **ALB 통합이 비용을 줄이는 가장 큰 축입니다.** 호스트·**경로 기반** 조건 라우팅으로 여러 앱을 **하나의 ALB**에 모으면 LB 개수만큼 붙던 시간당 요금이 줄어듭니다. 반대로 "정적 IP가 필요해 NLB를 앞에 두고 뒤에 ALB를 붙이는" 구성은 **LB 두 개의 요금과 운영 부담**을 함께 집니다.
+- 대상(EC2·컨테이너 등)의 요금은 별도입니다.
+
+> 🧠 원리: 왜 ELB는 여러 차원을 재면서 가장 큰 한 차원만 과금할까요?
+> 로드 밸런서가 실제로 소모하는 자원은 연결이 많을 때, 데이터가 많을 때, 규칙이 복잡할 때 각각 다른 이유로 늘어납니다. 어느 축이 병목인지는 워크로드마다 달라서, 모든 축을 더하면 같은 부하인데도 요금이 과도하게 커집니다.
+> 최댓값 하나만 과금하면 "가장 부담을 준 축"만 비용이 되므로, 사용자는 자기 워크로드에서 실제로 비싼 축만 최적화하면 됩니다.
+> 그래서 ALB 비용 설계는 "연결을 줄일까, 데이터를 줄일까, 규칙을 줄일까"를 한꺼번에 고민하는 게 아니라 **내 워크로드의 지배 차원을 먼저 찾는 것**에서 시작합니다.
+
+### 10) 끄고 줄이는 절감 — 최대 절전·스케줄 중지·수평 vs 수직 {#stop-and-shrink}
+
+가장 확실한 절감은 **안 쓰는 것을 끄는 것**입니다. Well-Architected 비용 최적화 기둥의 "소비 모델 채택"이 드는 예가 개발·테스트 환경입니다 — 주 5일 하루 8시간만 쓰면 **40시간 대 168시간**이므로, 안 쓸 때 끄면 **최대 75%**를 줄일 수 있습니다.
+
+| 워크로드 클래스 | 절감 수단 |
+|---|---|
+| **프로덕션** | 상시 가동 전제 → 약정(RI·Savings Plans)·rightsizing·오토스케일링 |
+| **비프로덕션**(개발·테스트·스테이징) | **스케줄 중지**가 1순위. **중단을 허용할 수 있**는 작업이면 Spot도 후보. 요금이 낮은 리전 배치도 선택지 |
+
+- **Instance Scheduler on AWS**는 태그로 지정한 EC2·RDS를 **일정에 따라 자동 시작·중지**합니다(업무 시간 외·주말, 교차 계정). 사람이 손으로 끄는 운영은 빠뜨리기 쉬워 절감이 새어 나갑니다.
+- ⚠️ 오토스케일링의 Scheduled Scaling과는 **층이 다릅니다** — 이쪽은 **인스턴스 자체를 끄고 켜는 것**이고, 그쪽은 **그룹의 용량을 조정하는 것**입니다.
+
+**최대 절전(hibernation)** — 메모리(RAM) 내용을 EBS 루트 볼륨에 저장했다가 시작 시 그대로 복원합니다(프로세스 재개·인스턴스 ID 유지).
+
+- 최대 절전된(stopped) 인스턴스는 **사용료가 없습니다.** RAM 내용을 EBS로 옮기는 전송 요금도 없습니다.
+- ⚠️ 그러나 **RAM 내용을 담은 EBS 스토리지는 계속 과금**되고, `stopping` 으로 전환되는 동안에는 인스턴스 요금이 붙습니다. "끄면 0원"이 아닙니다.
+- 시작 시점에 최대 절전을 **활성화해 둬야** 쓸 수 있습니다(나중에 켤 수 없습니다). 부트스트랩·캐시 워밍이 오래 걸리는 앱에서 값이 큽니다.
+
+**수평 vs 수직 스케일링** — 같은 부하를 감당하는 두 방향이고 비용 성질이 다릅니다.
+
+| 축 | 방식 | 비용 관점 |
+|---|---|---|
+| **수평 스케일링**(scale out/in) | 같은 크기 인스턴스의 **수**를 늘리고 줄임 | 수요에 맞춰 **잘게 줄일 수 있어** 유휴가 적다. Spot·혼합 정책을 섞을 수 있다 |
+| **수직 스케일링**(scale up/down) | 인스턴스를 **더 큰·작은 유형**으로 교체 | 단계가 거칠고 교체에 **재시작**이 필요하다. 단일 노드만 쓰는 앱에서는 이 축밖에 없다 |
+
+> 🧠 원리: 왜 비용 최적화에서는 수직 스케일링보다 수평 스케일링을 먼저 고려할까요?
+> 수직 스케일링은 유형 단위로만 올리고 내릴 수 있어, 필요한 용량이 두 유형 사이에 있으면 큰 쪽을 골라야 하고 그 차액이 상시 유휴로 남습니다.
+> 수평 스케일링은 같은 크기 단위를 더하고 빼므로 수요 곡선에 더 촘촘히 붙고, 남는 용량에 Spot을 섞어 단가까지 낮출 수 있습니다.
+> 그래서 수직 스케일링은 "그 축밖에 없을 때"(단일 노드 제약, 메모리 집약 단일 프로세스)의 수단으로 두고, 평소 절감은 수평 축에서 가져옵니다.
+
+### 11) 배치 결정이 만드는 비용 — 리전·엣지·하이브리드 {#placement-cost}
+
+**리전 선택** — 리소스 요금은 **리전마다 다릅니다**(토지·전력·광섬유·세금이 다르기 때문).
+
+- 데이터 프라이버시·규정·지연 요건이 묶지 않는다면 **요금이 낮은 리전**에 두는 것이 가장 단순한 절감입니다. 특히 개발·테스트는 사용자 지연이 중요하지 않아 옮기기 쉽습니다.
+- ⚠️ 이미 돌고 있는 워크로드는 **이전 비용**(데이터 전송·재구축·검증 공수)과 절감을 비교해 판단합니다. 절감이 이전 비용을 넘을 때만 옮깁니다.
+- 리전 비교는 **Pricing Calculator**로 합니다. 리전 평가는 비용만이 아니라 **지연·서비스 제공 여부·규정**까지 네 축으로 봅니다.
+- ⚠️ 리전별 구체 단가는 수시로 바뀌므로 이 문서는 **과금 축만** 적습니다 — 시험도 "어느 리전이 더 싸다"가 아니라 "요금이 리전마다 다르다는 사실과 그 판단 방법"을 묻습니다.
+
+**엣지 컴퓨팅** — CloudFront 앞단에서 코드를 돌리는 두 선택지는 비용 성질이 다릅니다.
+
+| | CloudFront Functions | Lambda@Edge |
+|---|---|---|
+| 과금 축 | **호출 수** | 요청 수 + **기간(GB-초)** |
+| 무료 티어 | 있음 | ⚠️ **무료 티어가 없습니다** |
+| 적합 | 헤더 조작·URL 리라이트·간단한 인증 같은 **짧고 가벼운 변형** | 네트워크 호출·큰 의존성이 필요한 **무거운 로직** |
+
+- 요건이 허락하면 **CloudFront Functions를 먼저** 고려합니다. 트리거는 **가장 구체적인 behavior에만** 걸어 불필요한 호출을 줄이고, Lambda@Edge를 쓸 때는 메모리를 과하게 잡지 않습니다.
+
+**하이브리드 — AWS Outposts** 는 온프레미스에 AWS 랙을 두는 모델이라 과금 구조가 클라우드와 다릅니다.
+
+- **3년 기간으로 용량을 구매**하고 All·Partial·No Upfront 중에 고릅니다(월 지불도 3년간 이어집니다).
+- 가격에 배송·**설치·유지보수**·패치·랙 제거가 **포함**됩니다 — 별도 계약이 아닙니다.
+- ⚠️ 약정이 끝나면 갱신하거나 반납하는데, **아무 통보를 하지 않으면 월 단위 요율로 자동 갱신**됩니다.
+- 리전과 Outpost 사이의 데이터 전송 등은 **별도 과금**입니다.
+
+> 🧠 원리: 왜 Outposts는 종량제가 아니라 3년 기간 구매 모델일까요?
+> Outposts는 AWS가 고객 사이트에 **물리 랙을 배치·설치하고 수명 동안 유지보수**하는 형태라 하드웨어와 현장 서비스 원가가 선투입됩니다.
+> 클라우드 리전처럼 여러 고객이 같은 용량을 공유할 수 없어 사용량이 들쭉날쭉해도 그 랙은 그 고객만 씁니다 — 종량제로 두면 AWS가 유휴 위험을 전부 부담하게 됩니다.
+> 그래서 기간 약정으로 원가를 회수하는 구조가 되고, "필요할 때만 켠다"는 클라우드식 절감 전략은 Outposts에 적용되지 않습니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -353,6 +433,14 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 | Windows Server 워크로드의 프로세서 비용 절감 | AMD(`a`) 계열 — Graviton은 쓸 수 없음 |
 | 안 쓰는 NAT Gateway·유휴 DB까지 찾아야 함 | AWS Compute Optimizer 유휴 권고 |
 | **24/7** 고처리량 프로덕션 API의 비용 최소화 | 약정을 붙인 컨테이너·EC2 (Lambda보다 유리) |
+| ALB 요금이 늘었는데 어느 축 때문인지 모름 | LCU 4차원 중 **지배 차원**을 먼저 확인 — 가장 큰 한 차원만 과금 |
+| 앱이 여러 개인데 로드 밸런서 요금이 과도 | 호스트·경로 기반 라우팅으로 **ALB 하나에 통합** |
+| 개발·테스트 환경 비용을 가장 크게 줄이려면 | **Instance Scheduler**로 업무 시간 외 자동 중지 (최대 75%) |
+| 부팅·캐시 워밍이 오래 걸리는데 상시 가동은 비싸다 | **최대 절전** — 단, RAM을 담은 EBS는 계속 과금 |
+| 단일 노드 RDBMS의 성능이 부족 | **수직 스케일링** (수평 축이 없는 경우의 수단) |
+| 헤더 조작·URL 리라이트 정도의 엣지 로직 | **CloudFront Functions** — Lambda@Edge는 무료 티어가 없음 |
+| 온프레미스에 AWS 인프라가 필요 | **Outposts** — 3년 기간 구매, 설치·유지보수 포함 |
+| 개발 환경을 더 싼 리전으로 옮길지 판단 | 절감 vs **이전 비용** 비교 (Pricing Calculator) |
 
 ---
 
@@ -450,7 +538,16 @@ Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 �
 25. T 계열 unlimited 모드 과금 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-unlimited-mode.html
 26. Optimize CPUs(vCPU 기반 라이선스 절감) — https://aws.amazon.com/ec2/pricing/on-demand/
 27. Lambda 요금 구조·계층 요금·무료 티어 — https://repost.aws/knowledge-center/lambda-reduce-costs · 컨테이너 vs 함수 비용 비교 — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/fargate-or-lambda.html
+28. ELB 요금 — LCU·NLCU 차원과 **가장 큰 한 차원만 과금** — https://aws.amazon.com/elasticloadbalancing/pricing/ · NLB LCU 예약 — https://docs.aws.amazon.com/help-panel/elasticloadbalancing/latest/console/hp-nlb-lb-capacity-units.html · GWLB LCU 예약 — https://docs.aws.amazon.com/help-panel/elasticloadbalancing/latest/console/hp-glb-lb-capacity-units.html
+29. EC2 최대 절전(사용료 없음·EBS는 과금·`stopping` 과금·시작 시 활성화) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html · 인스턴스 수명 주기 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html
+30. Well-Architected "소비 모델 채택" — 개발·테스트 중지로 **최대 75%(40시간 vs 168시간)** — https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html
+31. Instance Scheduler on AWS(EC2·RDS 자동 시작·중지) — https://docs.aws.amazon.com/prescriptive-guidance/latest/optimize-costs-microsoft-workloads/windows-ec2-schedules.html
+32. 리전별 요금 차이와 리전 선택(이전 비용 비교·Pricing Calculator) — https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/cost_pricing_model_region_cost.html
+33. 엣지 함수 비용(CloudFront Functions vs Lambda@Edge·무료 티어 부재) — https://aws.amazon.com/cloudfront/pricing/pay-as-you-go/
+34. Outposts 요금 모델(3년 기간·지불 옵션 3종·설치·유지보수 포함·자동 갱신) — https://aws.amazon.com/outposts/rack/pricing/
 
 > 📝 **2026-10-19 정정**: ① Convertible RI 할인율을 **최대 66%**로 고쳤습니다(근거 8번). ② Savings Plans를 **4종**으로 갱신하고 **Database Savings Plans**를 추가했습니다(근거 7번). ③ 스팟 할당 전략을 현행 목록으로 바꾸고 **price-capacity-optimized 권고**를 명시했습니다(근거 9번). ④ Graviton 비용 서술에서 근거 없는 "Graviton3 기준" 수식을 빼고 공식 문장(동급 x86 대비 최대 20% 낮은 비용)으로 맞췄습니다(근거 11번). ⑤ Dedicated Host를 "온디맨드 이상 비용"에서 **예약 시 최대 70% 할인·SP 적용 가능**으로 정정했습니다(근거 10번). ⑥ 서버리스 과금을 **Lambda 1 ms / Fargate 초 단위·최소 1분**으로 분리하고 프로비저닝 동시성의 유휴 과금을 더했습니다(근거 11번).
 
 > 📝 **2026-10-22 보강 — 갭 배치 B9b-1(`G-4.2-08`·`11`·`10`·`20`·`09`·`07`)**: ① §2에 **용량 보장과 할인을 가르는 표**(Regional/Zonal RI · ODCR · SP)를 넣고 **Savings Plans는 용량을 예약하지 않는다**는 공식 사실을 명시했습니다 — 특정 AZ 용량이 요건이면 Zonal RI·ODCR입니다(근거 12·13·14번). **할인 적용 순서**(Free Tier → RI → EC2 Instance SP → Compute SP)와 **시간당 약정 이월 불가**(근거 15번), **RI Marketplace** 조건(Standard만·잔여 1개월 이상·수수료 12%, 근거 16번), **Dedicated Host** 과금과 SP는 가상 호스트만 적용(`.metal` 제외, 근거 17번)을 더했습니다. ② §5에 **스팟 용량 풀 = AZ × 인스턴스 유형**·속성 기반 선택·Spot 배치 점수·ASG Capacity Rebalancing·**온디맨드 폴백 비권장**을 넣고, **`price-capacity-optimized`(일반 권고)와 `capacity-optimized`(중단 최소화 절대 우선)를 구분**해 적었습니다(근거 18번). ③ §6에 **혼합 인스턴스 정책**(온디맨드 기본값·base 용량·비율 소수는 온디맨드 쪽으로 올림·가중치, 근거 19번), **예측 스케일링 전제**(지표 24시간·14일 분석·향후 48시간·6시간 갱신·**스케일 아웃만**, 근거 20번), **웜 풀**(기본 크기 = 최대 − 희망, 근거 21번)을 더했습니다. ④ §7에 Compute Optimizer **룩백 32일** 옵션·**상용 라이선스(SQL Server on EC2)**·**유휴 권고 대상 확장**(NAT Gateway·DynamoDB 프로비저닝·ElastiCache·MemoryDB)·옵트인을 넣었습니다(근거 22번). ⑤ §8에 **프로세서·패밀리 선택**(AMD `a` 약 10% 저렴 · ⚠️ **Windows Server는 Graviton 불가** · 범주 6종 · T 계열 `unlimited` 과금 조건 · **Optimize CPUs**, 근거 23·24·25·26번)과 **Lambda/Fargate 과금 축 + 부하 모양별 선택표**(간헐→Lambda / 장시간·배치→Fargate / **24/7 고처리량→약정 붙인 컨테이너**, 근거 27번)를 더했습니다. ⑥ **쓰지 않은 것**(G-02 요율 규율): Lambda 요청·GB-초 단가 · T `unlimited` vCPU-시간 정액 · Optimize CPUs 절감액 · NLB 25% 절감 블로그 사례 · FinOps 월 비용 예시. 무료 티어 **수량**은 요율이 아니라 한도라서 적었습니다. 가드는 `test/saa_gaps_b9b1_test.dart`.
+
+> 📝 **2026-10-22 보강 — 갭 배치 B9b-2(`G-4.2-01`~`06`)**: 문서에 **아예 없던 주제 6행**을 새 절 3개로 넣었습니다(얇은 절 6개보다 읽기 흐름이 낫습니다). ① **§9 로드 밸런서 비용** — ALB **LCU** 4차원(신규 연결·활성 연결·처리 바이트·**규칙 평가**, 처음 10규칙 무료)과 NLB **NLCU** 3차원, ⚠️ **사용량이 가장 큰 한 차원만 과금**, **NLB·GWLB의 LCU 예약**(사용과 무관하게 과금), **호스트·경로 기반 라우팅으로 ALB 통합**이 비용의 가장 큰 축(근거 28번). ② **§10 끄고 줄이는 절감** — WA "소비 모델 채택"의 **40시간 대 168시간 → 최대 75%**, **Instance Scheduler**(⚠️ Scheduled Scaling과 층이 다름), **최대 절전**(사용료 없음 / ⚠️ **RAM을 담은 EBS는 계속 과금**·`stopping` 과금·시작 시 활성화 필요), **수평 vs 수직 스케일링**의 비용 성질(근거 29·30·31번). ③ **§11 배치 결정이 만드는 비용** — 리전별 요금 차이와 **이전 비용 비교·Pricing Calculator**, **CloudFront Functions vs Lambda@Edge**(⚠️ Lambda@Edge는 **무료 티어가 없음**), **Outposts**(3년 기간 구매·지불 3종·**설치·유지보수 포함**·미통보 시 자동 갱신·리전↔Outpost 전송 별도)(근거 32·33·34번). ④ ⚠️ **라이브 q1 정합** — 오답 해설이 "개발·테스트에 Spot은 부적합"이라고 못박으므로, 비프로덕션의 Spot 활용은 **"중단을 허용할 수 있는"** 조건부로만 적었고 가드가 무조건 권유 문구를 금지합니다. ⑤ **쓰지 않은 것**(G-02 요율 규율): CloudFront Functions·Lambda@Edge **호출·GB-초 단가** · AMD·Graviton **인스턴스 시간당 예시 가격** · Outposts **구성 가격** · **리전별 GB 요율**. 리전 이름 자체는 요율이 아니라 예시 지명이라 썼습니다. 가드는 `test/saa_gaps_b9b2_test.dart`.
