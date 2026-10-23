@@ -46,9 +46,15 @@ _갱신: 2026-10-22(SAA 갭 배치 **B9 종료** — B9a-2·B9b-1·B9b-2 + ⚠�
 - **#192 B9b-2 — Task 4.2 신규 절 6행(`saa-t4-2`):** **§9 로드 밸런서 비용**(ALB **LCU** 4차원·NLB **NLCU** 3차원·⚠️ **사용량이 가장 큰 한 차원만 과금**·**LCU 예약**은 사용과 무관하게 과금·**ALB 통합**이 최대 절감 축) · **§10 끄고 줄이는 절감**(**최대 절전** — 사용료 없음 / ⚠️ **RAM을 담은 EBS는 계속 과금**·`stopping` 과금·시작 시 활성화 필요 · **수평 vs 수직** 비용 성질 · **Instance Scheduler** · WA "소비 모델 채택"의 **40시간 대 168시간 → 최대 75%**) · **§11 배치 결정이 만드는 비용**(리전별 요금 차이와 **이전 비용 vs 절감**·Pricing Calculator · CloudFront Functions vs **Lambda@Edge**(⚠️ **무료 티어 없음**) · **Outposts** 3년 기간 구매·설치·유지보수 포함·미통보 시 자동 갱신). 가드 18건. **이로써 B9 24행(B9a 10 + B9a-2 2 + B9b-1 6 + B9b-2 6)이 닫혔다.**
 - **#193 릴리스:** main `2bbf388`, Pages `39726708560` success. 라이브 실측으로 `saa-t4-2`·`saa-t4-5`가 레포 파일과 **바이트 동일**(CRLF 제외)임을 확인하고, 신규 서술(`LCU`·`Outposts`·`Instance Scheduler`·`최대 절전`·`Optimize CPUs`·`최대 38개월`·`awsApplication` 등)이 라이브에 실제로 올라온 것도 확인했다. **문항 파일은 무변경** — `saa-t4-5`는 15건 전부 `verified:false`(노출 0), `saa-t4-2`는 15/15 `verified:true` 라이브지만 손대지 않았으므로 **노출 문항 수·정답은 그대로**다.
 
-**⚠️ 사람 몫 — `saa-t4-2`의 라이브 문항 2건 (AI가 고칠 수 없다)**
+**⚠️ 남은 과제 — `saa-t4-2`의 라이브 문항 2건**
 
-`verified:true` flip·수정은 사람 전용이라 손대지 않았다. 둘 다 갭 노트가 이미 `[의심]`으로 지목한 항목이다.
+> 📝 **2026-10-24 정정:** 이 절을 처음 쓸 때 "`verified:true` 수정은 사람 전용이라 AI가 고칠 수 없다"고 적었는데 **틀린 판정이었다.** 선례 `dcbdaa1`("md 정정이 문항에 미전파된 7건 반영")이 **라이브 `verified:true` 문항의 `stem`·`options` 텍스트·`explanation`·`wrongExplanations`를 AI가 고쳤고**, 그 커밋이 경계를 명시한다 — *"verified 플래그 · correct 인덱스 · content_index questionCount 전부 무변경"*. 실제 경계는 이렇다:
+>
+> - ✅ **AI 가능**: `stem` · `options` **텍스트** · `explanation` · `wrongExplanations` · `sources`
+> - ⛔ **AI 금지**: `verified` 플래그(flip) · `correct` 인덱스 · 보기 **개수** · `content_index` questionCount
+> - ⚠️ **별건**: `skill` 라벨 — `AttemptRecord.wrongSkills`에 **사용자 응시 기록으로 직렬화**되므로(`lib/models/attempt_record.dart`) 바꾸면 기존 기록의 약점 리포트 라벨이 어긋난다. 마이그레이션 판단이 선행돼야 한다(`dcbdaa1`도 같은 이유로 제외했다).
+>
+> 따라서 아래 2건은 **AI가 해설을 고칠 수 있다.** 같은 계열 작업의 실제 사례가 `saa-t4-3` 3건 정정(2026-10-24)이다.
 
 | 문항 | 문제 | 확인된 공식 |
 |---|---|---|
