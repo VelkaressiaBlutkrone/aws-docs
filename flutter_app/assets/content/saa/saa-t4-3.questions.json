@@ -113,11 +113,11 @@
         "Savings Plans는 RDS 예약 인스턴스와 동일한 할인율을 제공한다"
       ],
       "correct": 1,
-      "explanation": "Compute Savings Plans와 EC2 Instance Savings Plans는 모두 RDS에 적용되지 않습니다. RDS 비용 절감은 RDS 예약 인스턴스(Reserved Instance)로만 가능합니다.",
+      "explanation": "Compute Savings Plans와 EC2 Instance Savings Plans는 모두 RDS에 적용되지 않습니다. 다만 RDS 비용 절감 수단이 예약 인스턴스뿐인 것은 아닙니다 — Aurora·RDS·DynamoDB·ElastiCache 등에 적용되는 별도 유형인 Database Savings Plans를 쓸 수 있습니다. 즉 '컴퓨팅 계열 Savings Plans는 RDS에 적용되지 않는다'가 정확한 서술입니다.",
       "wrongExplanations": {
         "0": "Compute Savings Plans는 EC2·Fargate·Lambda의 컴퓨팅 사용량에 대한 약정이며 RDS에는 적용되지 않습니다.",
-        "2": "EC2 Instance Savings Plans도 RDS에는 적용되지 않습니다. RDS는 별도의 예약 인스턴스를 구매해야 합니다.",
-        "3": "Savings Plans와 RDS RI는 별개의 할인 체계로, 할인율과 적용 대상 모두 다릅니다."
+        "2": "EC2 Instance Savings Plans도 RDS에는 적용되지 않습니다. RDS에는 RDS 예약 인스턴스 또는 Database Savings Plans를 씁니다.",
+        "3": "컴퓨팅 계열 Savings Plans와 RDS RI는 별개의 할인 체계로 할인율과 적용 대상이 모두 다릅니다. RDS에 적용되는 Database Savings Plans도 약정 단위·할인율이 RDS RI와 다릅니다."
       },
       "sources": [
         { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
@@ -257,7 +257,7 @@
         "보존 기간을 줄이면 자동 백업 스토리지 비용이 줄어든다"
       ],
       "correct": 3,
-      "explanation": "RDS 자동 백업 보존 기간 설정이 길수록 백업 스토리지가 더 많이 누적됩니다. 보존 기간을 30일에서 7일로 줄이면 저장되는 자동 백업 데이터가 줄어 스토리지 비용이 감소합니다. 단, 프로비저닝 스토리지 크기까지는 무료 범위이며 초과분에만 요금이 부과됩니다.",
+      "explanation": "RDS 자동 백업 보존 기간 설정이 길수록 백업 스토리지가 더 많이 누적됩니다. 보존 기간을 30일에서 7일로 줄이면 저장되는 자동 백업 데이터가 줄어 스토리지 비용이 감소합니다. 단, 백업 스토리지 무료 범위는 계정·리전 전체의 프로비저닝 DB 스토리지 합계를 기준으로 비교하며(그 리전의 자동 백업 + 수동 스냅샷 합계) 초과분에만 요금이 부과됩니다.",
       "wrongExplanations": {
         "0": "보존 기간은 자동 백업이 보관되는 기간을 결정하므로 스토리지 비용에 직접 영향을 줍니다. 기간이 길수록 더 많은 백업 데이터가 쌓입니다.",
         "1": "백업 보존 기간 변경은 인스턴스 비용이 아닌 백업 스토리지 비용에 영향을 줍니다.",
@@ -301,15 +301,15 @@
       "options": [
         "Aurora serverless로 전환한다",
         "RDS 인스턴스를 더 큰 클래스로 업그레이드한다",
-        "Amazon Timestream으로 전환한다",
+        "Amazon Timestream for InfluxDB로 전환한다",
         "DynamoDB 프로비저닝 모드로 전환한다"
       ],
       "correct": 2,
-      "explanation": "Amazon Timestream은 시계열·IoT 데이터에 특화된 서비스로 관계형 DB 대비 약 1/10 비용을 제공합니다. 시간 기반 집계를 위한 인덱스·파티셔닝을 내부적으로 처리하므로 쿼리 복잡성도 낮아집니다. 목적에 맞는 DB를 선택하는 것 자체가 비용 최적화의 출발점입니다.",
+      "explanation": "Amazon Timestream은 시계열·IoT 데이터에 특화된 서비스로, 시간 기반 집계를 위한 인덱스·파티셔닝을 내부적으로 처리하므로 관계형 DB에서 직접 구현할 때보다 쿼리 복잡성과 운영 부담이 낮아집니다. ⚠️ 단 Timestream for LiveAnalytics는 2025-06-20부터 신규 고객 접근이 닫혔으므로(기존 고객은 계속 사용), 신규 구축은 Timestream for InfluxDB를 씁니다. 목적에 맞는 DB를 선택하는 것 자체가 비용 최적화의 출발점입니다.",
       "wrongExplanations": {
-        "0": "Aurora serverless는 관계형 DB로 시계열 데이터의 특화 저장·쿼리 최적화를 제공하지 않습니다. 비용 절감 효과가 Timestream보다 낮습니다.",
+        "0": "Aurora serverless는 관계형 DB로 시계열 데이터의 특화 저장·쿼리 최적화를 제공하지 않습니다. 시간 기반 집계에 필요한 인덱스·파티셔닝을 직접 설계해야 하므로 쿼리 복잡성 문제가 그대로 남습니다.",
         "1": "인스턴스 업그레이드는 비용을 증가시킵니다. 문제의 근본 원인인 '잘못된 DB 선택'을 해결하지 못합니다.",
-        "3": "DynamoDB는 NoSQL key-value 서비스로 시계열 집계 쿼리를 위한 최적화가 되어 있지 않습니다. 시계열 특화 기능은 Timestream이 제공합니다."
+        "3": "DynamoDB는 NoSQL key-value 서비스로 시계열 집계 쿼리를 위한 최적화가 되어 있지 않습니다. 시계열 특화 기능은 Timestream for InfluxDB가 제공합니다."
       },
       "sources": [
         { "title": "AWS 데이터베이스 서비스 개요 (공식 화이트페이퍼)", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html" }

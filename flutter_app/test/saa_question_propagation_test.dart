@@ -154,6 +154,26 @@ void main() {
             '대안은 온라인 DataSync·물리 AWS Data Transfer Terminal·파트너, 엣지는 Outposts다.\n'
             'md: saa-t3-9.md \u00a7 10 "Snow 패밀리는 신규 주문이 불가하므로 신규 설계의 정답이 아닙니다"');
   });
+
+  // Snow 와 달리 Timestream 에는 **안전한 변형이 있다**(for InfluxDB). 그래서 위 Snow
+  // 가드를 그대로 베끼지 않고 `InfluxDB` 또는 `신규 고객` 중 **하나라도** 있으면
+  // 통과시킨다 — 위험은 "신규 고객이 쓸 수 없는 LiveAnalytics 를 정답으로 권하는 것"뿐이다.
+  test('saa_t2_t4 G-4.3-15 — Timestream을 정답으로 권하면 InfluxDB 또는 신규 고객 제약을 말한다',
+      () {
+    final hits = answerSide
+        .where((s) =>
+            s.text.contains('Timestream') &&
+            !s.text.contains('InfluxDB') &&
+            !s.text.contains('신규 고객'))
+        .map((s) => '${s.file} ${s.id}')
+        .toList();
+    expect(hits, isEmpty,
+        reason: 'Timestream을 정답 쪽에서 권하면서 InfluxDB·신규 고객 제약을 말하지 않았다.\n'
+            '공식: "close new customer access to Amazon Timestream for LiveAnalytics, '
+            'effective 6/20/25" — 신규 구축의 대안은 Timestream for InfluxDB다.\n'
+            'md: saa-t4-3.md 목적별 표가 "Amazon Timestream for InfluxDB"를 적고 '
+            'LiveAnalytics의 신규 고객 접근 불가를 함께 밝힌다');
+  });
 }
 
 /// 금지 문장 목록. `origin` = 이 문장을 금지한 md 가드의 단정, `why` = 공식 사실.
@@ -370,23 +390,55 @@ final List<({String text, String origin, String why})> _rules = [
     origin: 'saa_t2_t4 G-4.2-19',
     why: 'Fargate는 초 단위·최소 1분이고 Lambda 프로비저닝 동시성은 유휴에도 과금된다',
   ),
+  // ⚠️ 우선순위 단정은 어미·표현이 쉽게 바뀌므로 **핵심 어구만** 등록한다(2026-10-24).
   (
-    text: 'RDS 비용 절감은 RDS 예약 인스턴스로만 가능합니다',
+    text: '먼저 고려하도록 권장',
+    origin: 'saa_t2_t4 G-4.2-14',
+    why: 'sp-ris 는 비교 표와 용량 예약 부재만 제시하고 우선순위를 명시하지 않는다',
+  ),
+  // ⚠️ 처음에 `먼저 고려하라` 로 넣었다가 **정정문 자체**("먼저 고려하라고 *말하지
+  //    않습니다*")에 걸렸다 — 이 파일 상단이 경고한 **반박문 거짓양성**이 실제로 났다.
+  //    그래서 반박문이 쓰지 않는 **단정형 어미까지** 포함해 좁혔다(2026-10-24).
+  (
+    text: '먼저 고려하라고 명시',
+    origin: 'saa_t2_t4 G-4.2-14 (단정형 변형)',
+    why: 'sp-ris 는 비교 표와 용량 예약 부재만 제시하고 우선순위를 명시하지 않는다',
+  ),
+  // ⚠️ 2026-10-24 좁힘 — md 가드의 문장을 **그대로 복사**해 두었더니 `saa-t4-3 q5` 가
+  //    `(Reserved Instance)` 를 끼워 넣어 `contains` 를 빠져나갔다(라이브 문항에 거짓
+  //    서술이 남아 있었다). 괄호·부사가 끼어들 수 있는 문장은 **변형을 열거**한다.
+  (
+    text: 'RDS 예약 인스턴스로만 가능',
     origin: 'saa_t2_t4 G-4.3-12',
     why: 'Database Savings Plans가 RDS·Aurora에 적용된다',
   ),
   (
-    text: '구성 속성이 하나라도 달라지면 할인이 적용되지 않습니다',
+    text: 'RDS 예약 인스턴스(Reserved Instance)로만 가능',
+    origin: 'saa_t2_t4 G-4.3-12 (괄호 삽입 변형 — 2026-10-24 실측)',
+    why: 'Database Savings Plans가 RDS·Aurora에 적용된다',
+  ),
+  // 어미가 바뀌어도 잡히도록 끝을 잘랐다(2026-10-24).
+  (
+    text: '하나라도 달라지면 할인이',
     origin: 'saa_t2_t4 G-4.3-13',
     why: 'RDS RI는 엔진에 따라 사이즈 유연하고 Multi-AZ·Single-AZ 모두에 적용된다',
   ),
+  // ⚠️ `약` 같은 부사가 끼면 빠져나간다 — `saa-t4-3 q13` 이 "대비 **약** 1/10 비용"으로
+  //    실제로 빠져나갔다(2026-10-24 실측). 두 변형을 함께 둔다.
   (
-    text: '관계형 DB 대비 1/10 비용',
+    text: '관계형 DB 대비 1/10',
     origin: 'saa_t2_t4 G-4.3-15',
     why: 'Timestream for LiveAnalytics는 신규 고객 접근이 닫혔고 대안은 InfluxDB다',
   ),
   (
-    text: '프로비저닝 스토리지 크기까지는 무료(RDS 기본 제공 범위)',
+    text: '관계형 DB 대비 약 1/10',
+    origin: 'saa_t2_t4 G-4.3-15 (부사 삽입 변형 — 2026-10-24 실측)',
+    why: 'Timestream for LiveAnalytics는 신규 고객 접근이 닫혔고 대안은 InfluxDB다',
+  ),
+  // ⚠️ 괄호 주석부가 다르면 빠져나간다 — `saa-t4-3 q11` 이 "무료 **범위이며**"로 빠져
+  //    나갔다(2026-10-24 실측). 괄호 앞까지만 남긴다.
+  (
+    text: '프로비저닝 스토리지 크기까지는 무료',
     origin: 'saa_t2_t4 G-4.3-20',
     why: 'RDS 백업 스토리지는 리전 전체의 자동 백업 + 수동 스냅샷 합계 기준이다',
   ),
