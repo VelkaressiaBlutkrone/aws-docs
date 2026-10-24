@@ -53,6 +53,11 @@ class _ExamPageState extends State<ExamPage> {
   Future<_ExamLoad> _load() async {
     final examId = _examId;
 
+    // 만료 세션 정리(§4.6) — 실행 시점은 설계 §7이 빌더에게 남겼다. 실패는 삼킨다.
+    try {
+      _store.clearExpired();
+    } catch (_) {}
+
     // 스냅샷이 있으면 **에셋을 전혀 읽지 않고** 그대로 복원한다(설계 §4.1).
     // 그래서 진행 중 시험은 콘텐츠 릴리스를 가로질러도 시작 시점 문항을 유지한다.
     final run = _store.loadRun(examId);
@@ -115,6 +120,7 @@ class _ExamPageState extends State<ExamPage> {
       startedAtIso: startedAt.toIso8601String(),
       durationSec: durationSec,
       questions: presented,
+      passingScore: overview?.passingScore,
     );
 
     return _ExamLoad(
@@ -281,7 +287,9 @@ class _ExamLoad {
         initialPicked: p.picked,
         initialFlagged: p.flagged.toSet(),
         restored: true,
-        passingScore: null,
+        // 스냅샷이 합격선을 들고 온다 — 복원 경로는 에셋을 읽지 않으므로 여기서
+        // 버리면 결과 화면 부제가 신규 시험과 달라진다(최종 리뷰 I-5).
+        passingScore: s.passingScore,
         nonce: s.nonce,
       );
 }

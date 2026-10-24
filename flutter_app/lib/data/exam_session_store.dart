@@ -63,7 +63,13 @@ class ExamSessionStore {
     final raw = _b.read(_snapshotKey(examId));
     if (raw == null || raw.isEmpty) return null;
     try {
-      return ExamSnapshot.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      final s = ExamSnapshot.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      // ⚠️ 파싱되는 **퇴화** 스냅샷도 거른다. `fromJson`이 누락 필드를 기본값으로
+      // 메우므로 `{"examId":"x"}` 같은 레코드도 통과하는데, 그대로 복원하면
+      // 문항 0개는 `_qs[_index]`에서 RangeError(릴리스 웹에서 화면 파손)를 내고
+      // `durationSec <= 0`은 복원 직후 자동 제출돼 이력을 오염시킨다.
+      if (s.questions.isEmpty || s.durationSec <= 0) return null;
+      return s;
     } catch (_) {
       return null; // 손상 데이터 무시 → 새 시험
     }
