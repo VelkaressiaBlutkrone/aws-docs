@@ -64,6 +64,13 @@ class _CertExamPageState extends State<CertExamPage> {
     // ready→not-ready로 뒤집을 수 있는데, 게이트가 먼저 돌면 진행 중이던 세션이 복원
     // 판정에 닿기도 전에 지워진다 — "그 시험 진행 동안 유지"가 조용히 깨지고 반목표
     // ("오히려 세션을 잃는 것")에 걸린다. 게이트는 **새 시험 시작 경로에만** 적용한다.
+    // 만료 세션 정리(§4.6). 설계 §7이 "언제 도는가"를 빌더에게 남겼고, 시험 화면 진입이
+    // 가장 자연스러운 지점이다 — 쌓이는 쪽과 같은 경로라 압박이 생기는 곳에서 바로 돈다.
+    // ⚠️ 실패는 삼킨다: 정리가 안 되는 것보다 시험이 막히는 쪽이 나쁘다(반목표).
+    try {
+      _store.clearExpired();
+    } catch (_) {}
+
     final run = _store.loadRun(_examId);
     final restorable =
         run == null ? null : _Restorable(run.snapshot, run.progress);
@@ -166,7 +173,15 @@ class _CertExamPageState extends State<CertExamPage> {
       (o?.scoredQuestions ?? 50) + (o?.unscoredQuestions ?? 15);
 
   void _startFresh(_MockLoad d) {
-    _store.clear(_examId);
+    _store.clear(_examId); // 구포맷 단일 키
+    // ⚠️ 옛 런도 지운다. 안 지우면 아래 스냅샷 쓰기가 쿼터로 실패했을 때 **옛 스냅샷이
+    // 남고 진행만 새 nonce로** 덮여, 새로고침 시 옛 시험이 되살아나고 새 답이 사라진다
+    // (nonce가 못 막는 갈래 — 2026-10-25 최종 리뷰 I-3).
+    try {
+      _store.clearRun(_examId);
+    } catch (_) {
+      // 삭제까지 막히는 저장소라면 복원을 포기시킬 수단이 없다 — 시험은 진행한다.
+    }
     final rng = Random();
     final sampled = widget.weighted
         ? buildSampledExam<String>(
@@ -202,6 +217,7 @@ class _CertExamPageState extends State<CertExamPage> {
         startedAtIso: startedAt.toIso8601String(),
         durationSec: durationSec,
         questions: questions,
+        passingScore: d.overview?.passingScore,
       ));
     } catch (_) {
       // 복원만 포기하고 시험은 진행한다
@@ -214,6 +230,7 @@ class _CertExamPageState extends State<CertExamPage> {
         startedAt,
         durationSec,
         nonce,
+        d.overview?.passingScore,
       ),
     );
   }
@@ -278,6 +295,16 @@ class _CertExamPageState extends State<CertExamPage> {
               ),
             );
           }
+          // ⚠️ 진행 중 런을 **잠금·빈 상태 분기보다 먼저** 본다. 뒤에 두면 잠금 화면의
+          // "이어서 풀기"를 눌러 `_running`이 설정돼도 다음 빌드가 여전히 잠금 화면을
+          // 돌려줘 죽은 버튼이 된다 — §4.3의 목적이 통째로 작동하지 않는다
+          // (2026-10-25 최종 리뷰 C-1).
+          if (_running != null) {
+            return _examView(
+              _running!,
+              _running!.passingScore ?? data.overview?.passingScore,
+            );
+          }
           if (data.capacityLocked) {
             return Center(
               child: _withResume(
@@ -301,9 +328,6 @@ class _CertExamPageState extends State<CertExamPage> {
                 description: '문항이 사람 검수를 통과하면 모의고사가 열립니다.',
               ),
             );
-          }
-          if (_running != null) {
-            return _examView(_running!, data.overview?.passingScore);
           }
           return _startScreen(data);
         },
@@ -572,12 +596,16 @@ class _RunParams {
   /// 세대 식별자 — 진행 레코드가 들고 다닌다(설계 §4.4.1).
   final String nonce;
 
+  /// 복원 런이 들고 온 합격선. 잠금 화면에서 이어 풀면 `overview`가 없으므로 이쪽을 쓴다.
+  final int? passingScore;
+
   _RunParams.fresh(
     this.questions,
     this.optionOrders,
     this.startedAt,
     this.durationSec,
     this.nonce,
+    this.passingScore,
   ) : index = 0,
       picked = const <int, int>{},
       flagged = const <int>{},
@@ -594,5 +622,6 @@ class _RunParams {
       picked = r.progress.picked,
       flagged = r.progress.flagged.toSet(),
       nonce = r.snapshot.nonce,
+      passingScore = r.snapshot.passingScore,
       restored = true;
 }

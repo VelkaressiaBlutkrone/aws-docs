@@ -16,6 +16,7 @@ class ExamSnapshot {
     required this.startedAtIso,
     required this.durationSec,
     required this.questions,
+    this.passingScore,
   });
 
   final String examId;
@@ -32,6 +33,10 @@ class ExamSnapshot {
   /// 출제 문항(표시 순서 적용 완료).
   final List<Question> questions;
 
+  /// 공식 합격선(1000점 환산). 복원 경로는 에셋을 읽지 않으므로 스냅샷이 들고 가야
+  /// 결과 화면 부제가 신규 시험과 같아진다(§2 "그때 보던 그 해설"). 메타가 없으면 null.
+  final int? passingScore;
+
   Map<String, dynamic> toJson() => {
         'examId': examId,
         'certId': certId,
@@ -40,6 +45,7 @@ class ExamSnapshot {
         'startedAtIso': startedAtIso,
         'durationSec': durationSec,
         'questions': [for (final q in questions) q.toJson()],
+        'passingScore': passingScore,
       };
 
   /// ⚠️ **`QuestionBank.fromJson`을 쓰지 않는다**(설계 §4.2). 그 생성자는
@@ -56,6 +62,7 @@ class ExamSnapshot {
           for (final e in (j['questions'] as List?) ?? const [])
             Question.fromJson(e as Map<String, dynamic>),
         ],
+        passingScore: (j['passingScore'] as num?)?.toInt(),
       );
 }
 
