@@ -4,7 +4,7 @@
 
 외부 앱 코드·UX 리뷰(🔴2·🟡10·🟢6·🎨5)의 **반영분은 2026-09-22 PR#122~#127로, 설계 선행이 필요했던 동기 항목(C-2 초기화 부활·M-9)은 2026-09-23 PR#128~#132(동기 프로토콜 v2)로 전부 출고**됐다. 현황표는 [WORKLIST.md](WORKLIST.md) §B④⑤⑥. 남은 것은 아래뿐이다.
 
-- **바로 가능한 작은 수정:** QuizView `_finish`와 오답노트 `_onFinished`에 같은 try/finally 적용 + 저장 실패 시 사용자 알림(PR-m11). 저장 실패가 결과 화면 전환을 막던 멈춤을 없앤다.
+- ✅ **출고됨(PR-m11)** — QuizView `_finish`·오답노트 `_onFinished`의 try/finally + 저장 실패 알림은 `c8540b8`("fix(quiz): 응시 기록 저장이 실패해도 결과 화면·복습 목록이 멈추지 않게")로 들어갔다. 배선은 `quiz_page.dart`·`review_page.dart`의 `onSaveFailure` → `notifyAttemptSaveFailure`이고 가드는 `test/quiz_view_test.dart`다. **"바로 가능한 작은 수정"으로 남아 있던 것은 이 항목뿐이라, 이제 아래 분류만 남는다**(2026-10-24 실측 정정 — 네 문서가 출고 뒤에도 미착수로 적고 있었다).
 - **디자인 결정 필요:** M-6 대비(contrast) 토큰 — DESIGN.md 정렬 선행 · UX-1·2 시험 러너 모바일 레이아웃 · UX-4 진행 중 세션 "이어서 풀기" 진입점(홈 due 배너 옆 / `cert_detail` 상단, `ExamSessionStore.load` + `examIdsForCert`로 결정적 조회) · M-10/UX-5 결과 화면.
 - **후순위 정리:** M-4(콘텐츠 공용 로더 + 병렬 + 가드) · M-7 · 리뷰 원문 Minor m-1~m-5 · `PlanCheckStore` 제거 여부(동기에서는 이미 제외했고 읽는 화면도 없는 죽은 코드).
 - **보류(근거 있음):** M-8 주기 reconcile — watch 구독에 onError·재구독이 없어 주기 동기가 다른 기기 변경 수신의 안전망 역할을 한다(HANDOFF §1 트레이드오프). m-6 에셋 디렉터리 등록 — 원본 mp3와 enrich 산출물이 같은 디렉터리에 로컬로 있어 디렉터리 단위 등록 시 로컬 빌드에 섞인다.

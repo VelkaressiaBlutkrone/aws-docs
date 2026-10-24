@@ -44,7 +44,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 
 - [x] **⑤ 동기 프로토콜 v2 — 삭제 표식·일정/진행 3-way·보안 규칙** — 리뷰 C-2의 근본 해결이 설계 선행을 요구해 [spec](docs/superpowers/specs/2026-09-23-sync-protocol-v2-design.md)을 먼저 쓰고, **PR#128(설계)·#129(PR1 삭제 표식)·#130(PR2 일정·진행 3-way, 일정 개별 삭제 전파)·#131(PR3 레거시 LWW·옛 사이드카 제거·관용 파싱·`firestore.rules`) develop 머지 → PR#132 `58154b7` main 릴리스·Pages success**(2026-09-23). 초기화가 모든 기기·클라우드에서 실제로 지워지고, 일정·일정 진행이 집합 3-way로 병합된다. 동기 대상은 응시·열람 기록 + 일정(v2)·일정 진행이며 진행 중 시험 세션은 로컬 전용(비범위). 보안 규칙은 레포(`firestore.rules`+`firebase.json`)가 관리하고 에뮬레이터 테스트(`tool/firestore_rules_test`)·`firestore-rules` 워크플로가 검증한다 — **콘솔 배포 규칙 대조는 사용자 몫(§D)**. 기준선: 테스트 **892 그린**·analyze **0건**(2026-10-17 실측). 메모리 [[sync-protocol-v2]].
 
 - [ ] **⑥ 2026-09-22 리뷰 후속 잔여** — 정본은 [리뷰 §V-4 "남은 일"](docs/audits/2026-09-22-app-code-ux-review.md)과 [sync v2 PR3 "남은 것"](docs/superpowers/plans/2026-09-23-sync-protocol-v2-pr3.md), 백로그 상세는 [TODOS.md](TODOS.md).
-  - **바로 가능:** QuizView `_finish`·오답노트 `_onFinished`에 같은 try/finally + 저장 실패 사용자 알림(PR-m11).
+  - ✅ **출고됨:** QuizView `_finish`·오답노트 `_onFinished`의 try/finally + 저장 실패 사용자 알림(PR-m11)은 `c8540b8`로 들어갔다 — **"바로 가능" 분류는 이제 비어 있고, ⑥에 남은 것은 아래 디자인·후순위·보류뿐이다**(2026-10-24 실측 정정).
   - **디자인 결정 필요:** M-6 대비 토큰(DESIGN.md 정렬 선행) · UX-1·2(시험 러너 모바일) · UX-4(진행 중 세션 "이어서 풀기" 진입점) · M-10/UX-5(결과 화면).
   - **후순위:** M-4(콘텐츠 공용 로더+병렬+가드) · M-7 · 리뷰 원문 Minor m-1~m-5 · `PlanCheckStore` 제거 여부(동기에서는 이미 제외, 읽는 화면 없음).
   - **보류(근거 있음):** M-8 주기 reconcile(watch에 onError·재구독이 없어 주기 동기가 타 기기 변경 수신의 안전망 — HANDOFF §1) · m-6 에셋 디렉터리 등록(원본 mp3·enrich 산출물이 같은 디렉터리라 로컬 빌드에 섞임).
