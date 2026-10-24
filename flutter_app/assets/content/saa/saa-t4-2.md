@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: Compute Savings Plans and Reserved Instances (공식)
     url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-lastVerified: 2026-10-22
+lastVerified: 2026-10-24
 ---
 
 # 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing
@@ -94,10 +94,12 @@ lastVerified: 2026-10-22
 | **약정 단위** | 인스턴스 구성(타입·리전·OS·테넌시) | 시간당 달러 사용량($/hr) |
 | **유연성** | Standard: 변경 제한 / Convertible: 교환 가능 | Compute: 인스턴스 패밀리·리전·서비스 자유 변경 |
 | **커버 서비스** | EC2, RDS 등 서비스별 RI 별도 | Compute SP: EC2+Fargate+Lambda |
-| **AWS 공식 권장** | — | **Savings Plans 우선 권장** |
+| **선택 기준** | 특정 AZ **용량 확보가 요건**일 때 — Zonal RI·ODCR | 패밀리·리전·서비스를 바꿀 **유연성**이 요건일 때 |
 | **Marketplace 판매** | Standard RI: 가능 | 불가 |
 
-> AWS 공식 문서는 "Savings Plans를 Reserved Instances보다 먼저 고려하라"고 명시합니다. 더 유연하고 동등한 수준의 절감율을 제공하기 때문입니다.
+> ⚠️ **"AWS가 Savings Plans를 먼저 고려하라고 명시한다"는 서술은 공식에서 확인되지 않습니다.** 공식 비교 페이지가 제시하는 것은 절감률·유연성 **비교 표**와, **Savings Plans는 용량을 예약하지 않는다**는 점입니다(대신 ODCR을 잡아 두면 그 위에 SP 할인이 적용됩니다).
+>
+> 그래서 선택은 **우선순위가 아니라 조건**으로 가릅니다 — 패밀리·리전·서비스를 바꿀 여지가 크면 **Savings Plans**, 특정 AZ의 **용량 확보가 요건**이면 **Zonal RI 또는 ODCR**이고, 실무에서는 **둘을 혼합**합니다. 어느 쪽이든 약정은 기간 중 **취소할 수 없으므로** 계획한 뒤 구매합니다.
 
 > 🧠 원리: 왜 Savings Plans는 인스턴스 구성이 아닌 "시간당 달러 사용량"을 약정 단위로 삼을까요?
 > 인스턴스 구성(타입·리전·OS)으로 약정하면 사용 중 워크로드 성격이 바뀌어 인스턴스를 교체하고 싶어도 약정에 묶입니다.
@@ -142,7 +144,7 @@ Free Tier → RI → EC2 Instance Savings Plans → Compute Savings Plans → �
 | **Database Savings Plans** | Aurora·RDS·DynamoDB·ElastiCache·DocumentDB·Neptune·Timestream·Keyspaces·DMS·OpenSearch | 최대 35% 절감. 최신 프로비저닝 세대와 **서버리스 사용량**에 엔진·패밀리·크기·AZ·리전 무관 적용 |
 | **SageMaker AI Savings Plans** | Amazon SageMaker AI | SageMaker AI 인스턴스 전용(최대 64%) |
 
-> Savings Plans는 **스팟 인스턴스에 적용되지 않습니다.** Spot에서 발생한 비용은 Savings Plans 약정 소진으로 처리되지 않습니다.
+> Savings Plans는 **스팟 인스턴스에 적용되지 않습니다.** 공식은 **스팟 사용량과 RI가 커버한 사용량**을 함께 적용 대상에서 제외한다고 적습니다 — Spot에서 발생한 비용은 Savings Plans 약정 소진으로 처리되지 않고, RI가 이미 덮은 사용량에도 SP가 겹쳐 적용되지 않습니다(§2의 **할인 적용 순서** RI → SP와 맞물립니다).
 
 > 🧠 원리: 왜 Savings Plans 약정이 스팟 비용에는 적용되지 않을까요?
 > Savings Plans는 온디맨드 요금에서 일정 사용량을 약속하는 구조로, 온디맨드 비용을 기준으로 할인을 산정합니다.
@@ -424,7 +426,7 @@ ELB 요금은 **시간당 기본 요금 + 용량 단위**로 구성됩니다. �
 | 야간 트래픽 감소 시 자동 축소 | Scheduled Scaling (Auto Scaling) |
 | 간헐적 짧은 워크로드, 비용 최소화 | Lambda (서버리스) |
 | 동일 성능·저렴한 인스턴스 패밀리 | Graviton 계열 (m7g, c7g 등) |
-| Savings Plans vs RI 둘 다 가능할 때 | Savings Plans (AWS 공식 우선 권장) |
+| Savings Plans vs RI 선택 | **조건으로 가른다** — 유연성 요건이면 SP / 특정 AZ **용량 확보가 요건**이면 Zonal RI·ODCR / 실무는 혼합 |
 | **특정 AZ의 용량을 반드시 확보**해야 함 | Zonal RI 또는 On-Demand Capacity Reservation — Savings Plans는 용량을 예약하지 않음 |
 | 용량도 확보하고 할인도 받고 싶음 | ODCR + Savings Plans(또는 Regional RI) 조합 |
 | 쓰지 않게 된 RI를 처분 | RI Marketplace — Standard RI만, 수수료 12%, Convertible 불가 |
@@ -551,3 +553,5 @@ Savings Plans는 온디맨드 기준 사용량($/hr)에 할인을 적용하는 �
 > 📝 **2026-10-22 보강 — 갭 배치 B9b-1(`G-4.2-08`·`11`·`10`·`20`·`09`·`07`)**: ① §2에 **용량 보장과 할인을 가르는 표**(Regional/Zonal RI · ODCR · SP)를 넣고 **Savings Plans는 용량을 예약하지 않는다**는 공식 사실을 명시했습니다 — 특정 AZ 용량이 요건이면 Zonal RI·ODCR입니다(근거 12·13·14번). **할인 적용 순서**(Free Tier → RI → EC2 Instance SP → Compute SP)와 **시간당 약정 이월 불가**(근거 15번), **RI Marketplace** 조건(Standard만·잔여 1개월 이상·수수료 12%, 근거 16번), **Dedicated Host** 과금과 SP는 가상 호스트만 적용(`.metal` 제외, 근거 17번)을 더했습니다. ② §5에 **스팟 용량 풀 = AZ × 인스턴스 유형**·속성 기반 선택·Spot 배치 점수·ASG Capacity Rebalancing·**온디맨드 폴백 비권장**을 넣고, **`price-capacity-optimized`(일반 권고)와 `capacity-optimized`(중단 최소화 절대 우선)를 구분**해 적었습니다(근거 18번). ③ §6에 **혼합 인스턴스 정책**(온디맨드 기본값·base 용량·비율 소수는 온디맨드 쪽으로 올림·가중치, 근거 19번), **예측 스케일링 전제**(지표 24시간·14일 분석·향후 48시간·6시간 갱신·**스케일 아웃만**, 근거 20번), **웜 풀**(기본 크기 = 최대 − 희망, 근거 21번)을 더했습니다. ④ §7에 Compute Optimizer **룩백 32일** 옵션·**상용 라이선스(SQL Server on EC2)**·**유휴 권고 대상 확장**(NAT Gateway·DynamoDB 프로비저닝·ElastiCache·MemoryDB)·옵트인을 넣었습니다(근거 22번). ⑤ §8에 **프로세서·패밀리 선택**(AMD `a` 약 10% 저렴 · ⚠️ **Windows Server는 Graviton 불가** · 범주 6종 · T 계열 `unlimited` 과금 조건 · **Optimize CPUs**, 근거 23·24·25·26번)과 **Lambda/Fargate 과금 축 + 부하 모양별 선택표**(간헐→Lambda / 장시간·배치→Fargate / **24/7 고처리량→약정 붙인 컨테이너**, 근거 27번)를 더했습니다. ⑥ **쓰지 않은 것**(G-02 요율 규율): Lambda 요청·GB-초 단가 · T `unlimited` vCPU-시간 정액 · Optimize CPUs 절감액 · NLB 25% 절감 블로그 사례 · FinOps 월 비용 예시. 무료 티어 **수량**은 요율이 아니라 한도라서 적었습니다. 가드는 `test/saa_gaps_b9b1_test.dart`.
 
 > 📝 **2026-10-22 보강 — 갭 배치 B9b-2(`G-4.2-01`~`06`)**: 문서에 **아예 없던 주제 6행**을 새 절 3개로 넣었습니다(얇은 절 6개보다 읽기 흐름이 낫습니다). ① **§9 로드 밸런서 비용** — ALB **LCU** 4차원(신규 연결·활성 연결·처리 바이트·**규칙 평가**, 처음 10규칙 무료)과 NLB **NLCU** 3차원, ⚠️ **사용량이 가장 큰 한 차원만 과금**, **NLB·GWLB의 LCU 예약**(사용과 무관하게 과금), **호스트·경로 기반 라우팅으로 ALB 통합**이 비용의 가장 큰 축(근거 28번). ② **§10 끄고 줄이는 절감** — WA "소비 모델 채택"의 **40시간 대 168시간 → 최대 75%**, **Instance Scheduler**(⚠️ Scheduled Scaling과 층이 다름), **최대 절전**(사용료 없음 / ⚠️ **RAM을 담은 EBS는 계속 과금**·`stopping` 과금·시작 시 활성화 필요), **수평 vs 수직 스케일링**의 비용 성질(근거 29·30·31번). ③ **§11 배치 결정이 만드는 비용** — 리전별 요금 차이와 **이전 비용 비교·Pricing Calculator**, **CloudFront Functions vs Lambda@Edge**(⚠️ Lambda@Edge는 **무료 티어가 없음**), **Outposts**(3년 기간 구매·지불 3종·**설치·유지보수 포함**·미통보 시 자동 갱신·리전↔Outpost 전송 별도)(근거 32·33·34번). ④ ⚠️ **라이브 q1 정합** — 오답 해설이 "개발·테스트에 Spot은 부적합"이라고 못박으므로, 비프로덕션의 Spot 활용은 **"중단을 허용할 수 있는"** 조건부로만 적었고 가드가 무조건 권유 문구를 금지합니다. ⑤ **쓰지 않은 것**(G-02 요율 규율): CloudFront Functions·Lambda@Edge **호출·GB-초 단가** · AMD·Graviton **인스턴스 시간당 예시 가격** · Outposts **구성 가격** · **리전별 GB 요율**. 리전 이름 자체는 요율이 아니라 예시 지명이라 썼습니다. 가드는 `test/saa_gaps_b9b2_test.dart`.
+
+> 📝 **2026-10-24 정정 — SP vs RI 우선순위 단정 제거(`G-4.2-14`) · Spot 미적용 근거 확보(`G-4.2-15`)**: ① 문항이 출처로 달아 둔 바로 그 공식 페이지(`sp-ris`)를 **전문 확인한 결과 "Savings Plans를 먼저 고려하라"는 문장이 없습니다.** 그 페이지가 제시하는 것은 절감률·유연성 **비교 표**와 *"Savings Plans doesn't provide capacity reservations, but you can allocate On-Demand Capacity Reservation (ODCR) for your needs and your Savings Plans will apply."* 입니다. **용량 확보가 요건이면 SP는 답이 아니므로** 우선순위 단정은 과잉 일반화라, §2 비교표의 `AWS 공식 권장` 행·그 아래 인용 단정·시험 포인트 행을 모두 **조건 서술**(유연성 → SP / 특정 AZ 용량 → Zonal RI·ODCR / 실무는 혼합)로 바꿨습니다. ② 같은 페이지에서 **종전에 미확보였던 문장을 확보**했습니다 — *"Savings Plans doesn't apply to spot usage or usage covered by RIs."* Spot 뿐 아니라 **RI가 커버한 사용량**도 함께 제외된다는 점을 §3에 더했습니다(§2의 **할인 적용 순서** RI → SP와 맞물립니다). ③ 파생 문항 **q5는 조건형으로 재작성**하고 **q6은 근거를 정확화**했습니다(`correct` 인덱스·보기 개수 무변경). 근거는 출처 14번, 기록은 `99-gaps` **V-80**(미확보 확정)·**V-52**(해소), 가드는 `saa_t2_t4_facts_test`(`G-4.2-14`·`G-4.2-15`)와 전파 가드입니다.
