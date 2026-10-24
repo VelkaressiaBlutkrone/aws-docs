@@ -1,4 +1,3 @@
-import 'question.dart';
 
 /// 진행 중 시험 세션(localStorage 복원 대상). 스펙 §4.
 class ExamSession {
@@ -87,9 +86,10 @@ class ExamSession {
   }
 }
 
-/// 문제은행 지문(문항 수 + ID 목록) — 콘텐츠 개정 감지용.
-String bankFingerprint(QuestionBank bank) =>
-    '${bank.questions.length}:${bank.questions.map((q) => q.id).join(',')}';
+// `bankFingerprint(QuestionBank)` 제거(2026-10-25, 스냅샷 체제). 개정 감지용이었는데
+// 설계 2026-10-24 §3이 감지 안을 기각했다 — 복원이 스냅샷만 쓰고 에셋을 읽지 않으므로
+// 대조할 대상 자체가 없다. `ExamSession.bankFingerprint` **필드**는 남는다: 구포맷
+// 세션 JSON을 읽어 폐기 판정할 때 그대로 역직렬화된다(§4.8).
 
 /// 실전 비례 페이스. 공식 메타 누락 시 폴백 84s/문항.
 int examDurationSec({

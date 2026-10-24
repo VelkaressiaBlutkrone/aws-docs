@@ -17,6 +17,7 @@ import '../data/weighted_exam.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
+import '../models/exam_snapshot.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
@@ -58,19 +59,41 @@ class _CertExamPageState extends State<CertExamPage> {
     final readiness = examWeightedCapacityStatus(widget.cert.code);
     final history = _history.all();
     final attemptCount = nonReviewAttemptCount(widget.cert.code, history);
+
+    // ⚠️ 복원을 게이트보다 **먼저** 본다(설계 §4.3). 문항을 내리는 릴리스가 capacity를
+    // ready→not-ready로 뒤집을 수 있는데, 게이트가 먼저 돌면 진행 중이던 세션이 복원
+    // 판정에 닿기도 전에 지워진다 — "그 시험 진행 동안 유지"가 조용히 깨지고 반목표
+    // ("오히려 세션을 잃는 것")에 걸린다. 게이트는 **새 시험 시작 경로에만** 적용한다.
+    // 만료 세션 정리(§4.6). 설계 §7이 "언제 도는가"를 빌더에게 남겼고, 시험 화면 진입이
+    // 가장 자연스러운 지점이다 — 쌓이는 쪽과 같은 경로라 압박이 생기는 곳에서 바로 돈다.
+    // ⚠️ 실패는 삼킨다: 정리가 안 되는 것보다 시험이 막히는 쪽이 나쁘다(반목표).
+    try {
+      _store.clearExpired();
+    } catch (_) {}
+
+    final run = _store.loadRun(_examId);
+    final restorable =
+        run == null ? null : _Restorable(run.snapshot, run.progress);
+    if (restorable == null) _store.clear(_examId); // 구포맷 단일 키 폐기(§4.8)
+
+    // ⚠️ 게이트는 **새 시험 시작**에만 적용한다(설계 §4.3). 진행 중 시험이 있으면
+    // 세션을 지우지 않고 잠금 화면에 "이어서 풀기"를 띄운다 — 문항을 내리는 릴리스가
+    // capacity를 ready→not-ready로 뒤집어도 풀던 시험을 뺏지 않는다.
     if (!readiness.ready) {
-      _store.clearCertExamSessions(widget.cert.code);
+      if (restorable == null) _store.clearCertExamSessions(widget.cert.code);
       return _MockLoad.capacityLocked(
         readiness: readiness,
         weightedAttemptCount: attemptCount,
+        restorable: restorable,
       );
     }
     if (widget.weighted &&
         !weightedExamAttemptUnlocked(widget.cert.code, history)) {
-      _store.clear(_examId);
+      if (restorable == null) _store.clear(_examId);
       return _MockLoad.attemptLocked(
         readiness: readiness,
         weightedAttemptCount: attemptCount,
+        restorable: restorable,
       );
     }
 
@@ -99,7 +122,8 @@ class _CertExamPageState extends State<CertExamPage> {
     }
     final pool = groupByDomain(banks);
     final all = [for (final b in banks) ...b.questions];
-    final byId = indexById(all);
+    // `indexById`로 만들던 ID 색인은 더 이상 필요 없다 — 복원이 스냅샷만 쓰므로
+    // 현재 뱅크에서 문항을 ID로 되찾는 단계가 사라졌다(설계 §4.7).
 
     var weights = <int, int>{};
     ExamOverview? overview;
@@ -131,29 +155,9 @@ class _CertExamPageState extends State<CertExamPage> {
       taskWeights = weightByTaskFromReport(report);
     }
 
-    // 복원 가능한 진행 세션? — 문항 ID 복원 + 선택지 순서 완비 검증(스펙 §3.3)
-    //
-    // ⚠️ exam_page와 달리 여기서는 `bankFingerprint`를 보지 않는다 — 누락이 아니라
-    // 의도다. 통합/약점 모의고사는 여러 뱅크를 병합해 출제하므로 비교할 단일 지문이
-    // 없고, 개정 감지는 `restoreOrdered`의 ID 존재 검사가 대신한다(스펙
-    // `2026-06-08-option-shuffle-question-sampling-design.md` §3.3: "차출 도입으로
-    // '풀 뱅크 + fingerprint' 복원이 불가능해지므로 통합 모의고사와 같은 방식으로
-    // 통일"). 분기 전수는 `test/cert_exam_restore_test.dart`가 고정한다.
-    final existing = _store.load(_examId);
-    _Restorable? restorable;
-    if (existing != null && !existing.submitted) {
-      final restored = restoreOrdered(existing.questionIds, byId);
-      if (restored == null ||
-          !ordersCoverQuestions(restored, existing.optionOrders)) {
-        _store.clear(_examId); // 개정/불일치/구버전 폐기
-      } else {
-        restorable = _Restorable(
-          existing,
-          applyOptionOrders(restored, existing.optionOrders),
-        );
-      }
-    }
-
+    // 복원 후보는 위에서 이미 처리했다 — 여기 도달했다는 건 진행 세션이 없다는 뜻이다.
+    // 개정 감지(`bankFingerprint`·`restoreOrdered`)는 스냅샷 도입으로 불필요해졌다:
+    // 복원이 에셋을 읽지 않으므로 대조할 대상 자체가 없다(설계 §3에서 감지 안 기각).
     return _MockLoad(
       pool: pool,
       weights: weights,
@@ -169,7 +173,15 @@ class _CertExamPageState extends State<CertExamPage> {
       (o?.scoredQuestions ?? 50) + (o?.unscoredQuestions ?? 15);
 
   void _startFresh(_MockLoad d) {
-    _store.clear(_examId);
+    _store.clear(_examId); // 구포맷 단일 키
+    // ⚠️ 옛 런도 지운다. 안 지우면 아래 스냅샷 쓰기가 쿼터로 실패했을 때 **옛 스냅샷이
+    // 남고 진행만 새 nonce로** 덮여, 새로고침 시 옛 시험이 되살아나고 새 답이 사라진다
+    // (nonce가 못 막는 갈래 — 2026-10-25 최종 리뷰 I-3).
+    try {
+      _store.clearRun(_examId);
+    } catch (_) {
+      // 삭제까지 막히는 저장소라면 복원을 포기시킬 수단이 없다 — 시험은 진행한다.
+    }
     final rng = Random();
     final sampled = widget.weighted
         ? buildSampledExam<String>(
@@ -193,18 +205,67 @@ class _CertExamPageState extends State<CertExamPage> {
       unscored: d.overview?.unscoredQuestions,
       count: questions.length,
     );
+    // 시작 시 스냅샷을 1회 쓴다(설계 §4.5 — 통합·약점은 시작 화면이 있다).
+    // ⚠️ 쓰기 실패는 삼킨다 — 저장이 안 되는 것보다 시작이 막히는 쪽이 나쁘다(반목표).
+    final nonce = '${startedAt.microsecondsSinceEpoch}';
+    try {
+      _store.saveSnapshot(ExamSnapshot(
+        examId: _examId,
+        certId: widget.cert.code,
+        taskId: '${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}',
+        nonce: nonce,
+        startedAtIso: startedAt.toIso8601String(),
+        durationSec: durationSec,
+        questions: questions,
+        passingScore: d.overview?.passingScore,
+      ));
+    } catch (_) {
+      // 복원만 포기하고 시험은 진행한다
+    }
+
     setState(
       () => _running = _RunParams.fresh(
         questions,
         orders,
         startedAt,
         durationSec,
+        nonce,
+        d.overview?.passingScore,
       ),
     );
   }
 
+  /// 진행 저장 — 스냅샷은 시작 때 이미 썼으므로 여기서는 가변부만 갱신한다(§4.4).
+  void _onProgress(ExamProgress p) {
+    try {
+      _store.saveProgress(p);
+    } catch (_) {
+      // 저장 실패가 시험을 막으면 안 된다(반목표)
+    }
+  }
+
+  /// 잠금 화면 위에 "이어서 풀기"를 덧붙인다(설계 §4.3) — 게이트는 새 시험 시작만
+  /// 막고, 이미 진행 중인 시험은 끝까지 풀 수 있어야 한다.
+  Widget _withResume(Widget locked, _Restorable? restorable) {
+    if (restorable == null) return locked;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        locked,
+        const SizedBox(height: Gap.lg),
+        SizedBox(
+          width: 220,
+          child: PrimaryButton(
+            label: '이어서 풀기',
+            onTap: () => _resume(restorable),
+          ),
+        ),
+      ],
+    );
+  }
+
   void _resume(_Restorable r) {
-    setState(() => _running = _RunParams.restored(r.session, r.questions));
+    setState(() => _running = _RunParams.fromSnapshot(r));
   }
 
   @override
@@ -234,11 +295,31 @@ class _CertExamPageState extends State<CertExamPage> {
               ),
             );
           }
+          // ⚠️ 진행 중 런을 **잠금·빈 상태 분기보다 먼저** 본다. 뒤에 두면 잠금 화면의
+          // "이어서 풀기"를 눌러 `_running`이 설정돼도 다음 빌드가 여전히 잠금 화면을
+          // 돌려줘 죽은 버튼이 된다 — §4.3의 목적이 통째로 작동하지 않는다
+          // (2026-10-25 최종 리뷰 C-1).
+          if (_running != null) {
+            return _examView(
+              _running!,
+              _running!.passingScore ?? data.overview?.passingScore,
+            );
+          }
           if (data.capacityLocked) {
-            return Center(child: _capacityLockedView(data.readiness!));
+            return Center(
+              child: _withResume(
+                _capacityLockedView(data.readiness!),
+                data.restorable,
+              ),
+            );
           }
           if (data.attemptLocked) {
-            return Center(child: _attemptLockedView(data.weightedAttemptCount));
+            return Center(
+              child: _withResume(
+                _attemptLockedView(data.weightedAttemptCount),
+                data.restorable,
+              ),
+            );
           }
           if (data.total == 0) {
             return const Center(
@@ -247,9 +328,6 @@ class _CertExamPageState extends State<CertExamPage> {
                 description: '문항이 사람 검수를 통과하면 모의고사가 열립니다.',
               ),
             );
-          }
-          if (_running != null) {
-            return _examView(_running!, data.overview?.passingScore);
           }
           return _startScreen(data);
         },
@@ -278,9 +356,9 @@ class _CertExamPageState extends State<CertExamPage> {
           initialPicked: r.picked,
           initialFlagged: r.flagged,
           restored: r.restored,
-          optionOrders: r.optionOrders,
           passingScore: passingScore,
-          onChanged: _store.save,
+          runNonce: r.nonce,
+          onProgress: _onProgress,
           onFinished: (rec) => recordFinishedAttempt(rec,
               history: _history, sessions: _store, examId: _examId),
           resultsActionsBuilder: (ctx, justFinished) {
@@ -442,12 +520,12 @@ class _CertExamPageState extends State<CertExamPage> {
   }
 }
 
-/// 복원 가능한 진행 세션 — 세션과 그에 맞춰 정렬 복원된 문항은 항상 함께 존재한다.
-/// (둘 중 하나만 있는 상태를 타입으로 배제.)
+/// 복원 가능한 진행 세션(스냅샷 체제) — 스냅샷과 그 세대의 진행은 항상 함께 존재한다.
+/// 문항은 스냅샷이 들고 있으므로 복원이 에셋을 읽지 않는다(설계 §4.1).
 class _Restorable {
-  const _Restorable(this.session, this.questions);
-  final ExamSession session;
-  final List<Question> questions;
+  const _Restorable(this.snapshot, this.progress);
+  final ExamSnapshot snapshot;
+  final ExamProgress progress;
 }
 
 /// 로드 결과(풀·인덱스·가중·메타·복원 후보).
@@ -468,26 +546,26 @@ class _MockLoad {
   const _MockLoad.capacityLocked({
     required this.readiness,
     required this.weightedAttemptCount,
+    required this.restorable,
   }) : pool = const <int, List<Question>>{},
        weights = const <int, int>{},
        taskPool = const <String, List<Question>>{},
        taskWeights = const <String, int>{},
        overview = null,
        total = 0,
-       restorable = null,
        capacityLocked = true,
        attemptLocked = false;
 
   const _MockLoad.attemptLocked({
     required this.readiness,
     required this.weightedAttemptCount,
+    required this.restorable,
   }) : pool = const <int, List<Question>>{},
        weights = const <int, int>{},
        taskPool = const <String, List<Question>>{},
        taskWeights = const <String, int>{},
        overview = null,
        total = 0,
-       restorable = null,
        capacityLocked = false,
        attemptLocked = true;
 
@@ -515,22 +593,35 @@ class _RunParams {
   final Set<int> flagged;
   final bool restored;
 
+  /// 세대 식별자 — 진행 레코드가 들고 다닌다(설계 §4.4.1).
+  final String nonce;
+
+  /// 복원 런이 들고 온 합격선. 잠금 화면에서 이어 풀면 `overview`가 없으므로 이쪽을 쓴다.
+  final int? passingScore;
+
   _RunParams.fresh(
     this.questions,
     this.optionOrders,
     this.startedAt,
     this.durationSec,
+    this.nonce,
+    this.passingScore,
   ) : index = 0,
       picked = const <int, int>{},
       flagged = const <int>{},
       restored = false;
 
-  _RunParams.restored(ExamSession s, this.questions)
-    : optionOrders = s.optionOrders,
-      startedAt = DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
-      durationSec = s.durationSec,
-      index = s.index,
-      picked = s.picked,
-      flagged = s.flagged.toSet(),
+  /// 스냅샷 복원 — 보기는 이미 표시 순서가 적용돼 있어 `optionOrders`가 비어 있다.
+  _RunParams.fromSnapshot(_Restorable r)
+    : questions = r.snapshot.questions,
+      optionOrders = const {},
+      startedAt =
+          DateTime.tryParse(r.snapshot.startedAtIso) ?? DateTime.now(),
+      durationSec = r.snapshot.durationSec,
+      index = r.progress.index,
+      picked = r.progress.picked,
+      flagged = r.progress.flagged.toSet(),
+      nonce = r.snapshot.nonce,
+      passingScore = r.snapshot.passingScore,
       restored = true;
 }

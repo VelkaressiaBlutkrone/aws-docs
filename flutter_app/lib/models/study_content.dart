@@ -11,6 +11,8 @@ class StudySource {
         title: (j['title'] ?? '').toString(),
         url: (j['url'] ?? '').toString(),
       );
+
+  Map<String, dynamic> toJson() => {'title': title, 'url': url};
 }
 
 /// 인라인 조각: 평문/굵게/코드/URL.

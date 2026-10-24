@@ -58,6 +58,25 @@ class Question {
     );
   }
 
+  /// 시험 세션 스냅샷용 직렬화(설계 2026-10-24 §4.1). `fromJson`과 왕복이 맞아야 한다 —
+  /// `wrongExplanations`의 int 키는 JSON에서 문자열이 되고 `fromJson`이 되돌린다.
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'examGuideTaskId': examGuideTaskId,
+        'skill': skill,
+        'section': section,
+        'difficulty': difficulty,
+        'stem': stem,
+        'options': options,
+        'correct': correct,
+        'explanation': explanation,
+        'wrongExplanations': {
+          for (final e in wrongExplanations.entries) e.key.toString(): e.value,
+        },
+        'sources': [for (final s in sources) s.toJson()],
+        'verified': verified,
+      };
+
   /// [order] = 표시 순서대로 나열한 원본 인덱스 순열(예: [2,0,3,1]).
   /// options 재배열 + correct 재매핑 + wrongExplanations 키 재매핑한 새 Question 반환.
   /// 유효하지 않은 순열(길이 불일치·중복·범위 밖)이면 원본을 그대로 반환한다

@@ -4,6 +4,7 @@ import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/history_store.dart';
 import 'package:aws_docs/models/attempt_record.dart';
 import 'package:aws_docs/models/exam_session.dart';
+import 'package:aws_docs/models/exam_snapshot.dart';
 import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/pages/exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
@@ -40,26 +41,10 @@ Widget _host(Widget child) =>
     MaterialApp(theme: AppTheme.light, home: Scaffold(body: child));
 
 void main() {
-  testWidgets('onChanged 세션에 출제 문항 ID가 순서대로 담긴다', (tester) async {
-    ExamSession? saved;
-    final started = DateTime(2026, 6, 6);
-    await tester.pumpWidget(_host(ExamView(
-      bank: _bank(),
-      certId: 'CLF-C02',
-      taskId: 'clf-t2-3',
-      startedAt: started,
-      durationSec: 600,
-      now: () => started.add(const Duration(seconds: 5)),
-      onChanged: (s) => saved = s,
-    )));
-    await tester.pump();
-
-    await tester.tap(find.text('계정 해지')); // 선택 → onChanged 발화
-    await tester.pump();
-
-    expect(saved, isNotNull);
-    expect(saved!.questionIds, ['q1', 'q2']);
-  });
+  // 구경로 테스트 2건 제거(2026-10-25, 스냅샷 체제 Task 7): `onChanged`가 출제 문항
+  // ID·`optionOrders`·뱅크 지문을 세션에 담는지 보던 테스트였다. 스냅샷이 문항을 직접
+  // 들고 가면서 그 필드들이 사라졌으므로 검증할 동작 자체가 없다. 대체 가드는
+  // `onProgress는 진행만 통지한다` + `exam_snapshot_test.dart`의 라운드트립이다.
 
   testWidgets('정답 선택 후 제출 → 채점, flagged 기록', (tester) async {
     AttemptRecord? finished;
@@ -163,6 +148,71 @@ void main() {
           throwsStateError);
       expect(sessions.load('exam:clf-t2-3'), isNull);
     });
+
+    // 설계 2026-10-24 §4.6 — 키가 둘이 됐으므로 한쪽만 지우면 다음 입장에서
+    // 반쪽 상태를 만난다.
+    ExamSnapshot snap() => ExamSnapshot(
+          examId: 'exam:clf-t2-3',
+          certId: 'CLF-C02',
+          taskId: 'clf-t2-3',
+          nonce: 'run-1',
+          startedAtIso: DateTime(2026, 6, 6).toIso8601String(),
+          durationSec: 300,
+          questions: _bank().questions,
+        );
+
+    test('제출 시 스냅샷과 진행을 모두 비운다', () {
+      final b = MemoryBackend();
+      final sessions = ExamSessionStore(backend: b)
+        ..saveSnapshot(snap())
+        ..saveProgress(const ExamProgress(
+            examId: 'exam:clf-t2-3',
+            nonce: 'run-1',
+            index: 1,
+            picked: {0: 1},
+            flagged: []));
+      recordFinishedAttempt(rec,
+          history: HistoryStore(backend: b),
+          sessions: sessions,
+          examId: 'exam:clf-t2-3');
+      expect(sessions.loadSnapshot('exam:clf-t2-3'), isNull);
+      expect(sessions.loadProgress('exam:clf-t2-3'), isNull);
+    });
+
+    test('기록 저장이 실패해도 두 키는 정리된다', () {
+      final b = _QuotaOnHistory();
+      final sessions = ExamSessionStore(backend: b)..saveSnapshot(snap());
+      expect(
+          () => recordFinishedAttempt(rec,
+              history: HistoryStore(backend: b),
+              sessions: sessions,
+              examId: 'exam:clf-t2-3'),
+          throwsStateError);
+      expect(sessions.loadSnapshot('exam:clf-t2-3'), isNull);
+    });
+  });
+
+  testWidgets('onProgress는 진행만 통지한다(문항 목록·지문 없음)', (tester) async {
+    // ExamProgress에는 questions가 없다 — 스냅샷이 이미 들고 있다(설계 §4.4).
+    ExamProgress? saved;
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(),
+      certId: 'CLF-C02',
+      taskId: 'clf-t2-3',
+      startedAt: DateTime(2026, 6, 6),
+      durationSec: 300,
+      now: () => DateTime(2026, 6, 6, 0, 0, 10),
+      runNonce: 'run-1',
+      onProgress: (p) => saved = p,
+    )));
+    // 시작 문항은 q1 — 그 보기를 고른다.
+    await tester.tap(find.text('계정 해지').first);
+    await tester.pump();
+
+    expect(saved, isNotNull);
+    expect(saved!.nonce, 'run-1');
+    expect(saved!.picked, {0: 1});
+    expect(saved!.examId, 'exam:clf-t2-3');
   });
 
   testWidgets('다이얼로그 중 시간 만료 → 단일 제출, 고립 다이얼로그 없음', (tester) async {
@@ -222,35 +272,6 @@ void main() {
     expect(finished!.flaggedQuestionIds, ['q2']); // 복원된 플래그 보존
   });
 
-  testWidgets('세션에 optionOrders와 주입된 전체 뱅크 지문이 기록된다', (tester) async {
-    ExamSession? saved;
-    final started = DateTime(2026, 6, 8);
-    await tester.pumpWidget(_host(ExamView(
-      bank: _bank(),
-      certId: 'CLF-C02',
-      taskId: 'clf-t2-3',
-      startedAt: started,
-      durationSec: 600,
-      optionOrders: const {
-        'q1': [1, 0],
-        'q2': [0, 1],
-      },
-      sessionFingerprint: 'fp-full-bank',
-      now: () => started.add(const Duration(seconds: 5)),
-      onChanged: (s) => saved = s,
-    )));
-    await tester.pump();
-
-    await tester.tap(find.text('계정 해지')); // 선택 → onChanged 발화
-    await tester.pump();
-
-    expect(saved, isNotNull);
-    expect(saved!.optionOrders, {
-      'q1': [1, 0],
-      'q2': [0, 1],
-    });
-    expect(saved!.bankFingerprint, 'fp-full-bank'); // 주입 지문 우선
-  });
 
   testWidgets('R1: resultsActionsBuilder 없으면 기존 학습문서로 버튼 유지', (tester) async {
     final started = DateTime(2026, 6, 6);
