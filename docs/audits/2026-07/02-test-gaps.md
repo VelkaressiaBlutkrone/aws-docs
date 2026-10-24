@@ -113,9 +113,17 @@ lib 110개 / test 77개. 순수 로직 계층(샘플링·병합·스케줄러·�
 | StudyDoc | 파서·뷰·앵커·딥링크·heading slot·**shouldShowLecturePlayer 순수 게이트**·audio_nav 전부 단위 커버 | openDoc/nowPlaying 연결(90~93행)·미니플레이어 조립·섹션 시크 글루 — TEST-003/004와 연동 |
 | Quiz | **QuizView 자체는 위젯테스트 렌더 가능**(quiz_view_test: 해설 공개·review 레코드 기록) | QuizPage 외곽(rootBundle 로드) 얇은 글루만 |
 | Exam | **ExamView 렌더 테스트 두꺼움**(exam_view_test 8 케이스: 시간 만료 단일 제출·다이얼로그 중 만료·복원·세션 기록) | ExamPage 외곽(가이드 로드·폴백 페이스) |
-| CertExam | ExamView 공유로 View는 커버, 부품(mock_exam/weighted_exam/exam_session) 전부 단위 커버 | **_load() 조립 로직 전체 — 최대 공백(TEST-001/002)** |
+| CertExam | ExamView 공유로 View는 커버, 부품(mock_exam/weighted_exam/exam_session) 전부 단위 커버 | ~~**_load() 조립 로직 전체 — 최대 공백(TEST-001/002)**~~ → **TEST-001 2026-10-24 해소**(`test/cert_exam_restore_test.dart`). TEST-002는 그대로 |
 
-결론: "View 분리 + 순수함수 추출" 대체 전략이 Quiz/Exam/CertDetail/StudyDoc에는 실효적으로 작동 중. **CertExamPage만 조립 로직이 State 내부에 남아 대체가 없다.**
+결론: "View 분리 + 순수함수 추출" 대체 전략이 Quiz/Exam/CertDetail/StudyDoc에는 실효적으로 작동 중. ~~**CertExamPage만 조립 로직이 State 내부에 남아 대체가 없다.**~~
+
+> ⚠️ **2026-10-24 전제 정정 — CertExamPage는 위젯 테스트로 렌더된다.**
+>
+> 이 표가 CertExam을 "대체 커버만 가능"으로 분류한 근거는 SelectionArea 제약이었는데, **`CertExamPage` 자체에는 `SelectionArea`가 없다**(`cert_detail_page.dart`·`home_page.dart`·`study_doc_page.dart`에만 있다). 제약은 **라우터로 `/cert/:code/exam`에 들어갈 때 부모 `CertDetailPage`가 스택에 빌드되는 경우**에만 성립한다. 탐침으로 실측하니 `ThemeScope`로 감싸 **직접** 렌더하면 정상 동작하고, 위젯 테스트에서 `rootBundle`로 `questions.json`·`exam_guides`도 실제로 로드된다(문항 풀 301개·65문항·90분이 그대로 찍힌다).
+>
+> 그래서 TEST-001은 순수함수 추출 대신 **`CertExamPage({... KvBackend? backend})` 주입구 + 위젯 테스트 4분기**로 닫았다. 진짜 막고 있던 것은 렌더가 아니라 **페이지가 스토어를 내부 생성**해 테스트가 진행 세션을 심을 수 없다는 점이었다(VM의 `defaultBackend()`는 호출마다 별도 `MemoryBackend`).
+>
+> ⚠️ **함정:** 에셋을 읽는 페이지를 한 파일에서 두 번 이상 렌더하면 `rootBundle` 캐시에 앞 테스트 zone의 future가 남아 **다음 테스트가 영영 멈춘다**(예외도 안 난다). `setUp(rootBundle.clear)`가 필요하다.
 
 ## 발견 항목
 

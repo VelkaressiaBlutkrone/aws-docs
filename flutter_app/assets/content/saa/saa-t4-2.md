@@ -14,6 +14,8 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html
   - title: Amazon EC2 스팟 인스턴스 (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html
+  - title: Behavior of Spot Instance interruptions (공식)
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/interruption-behavior.html
   - title: AWS Compute Optimizer — 소개 (공식)
     url: https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
@@ -173,7 +175,7 @@ Free Tier → RI → EC2 Instance Savings Plans → Compute Savings Plans → �
 **핵심 특성:**
 
 - 온디맨드 대비 최대 **90% 할인**
-- AWS가 용량을 필요로 하면 **2분 인터럽트 알림** 후 회수(종료·중지·동면 중 선택 가능)
+- AWS가 용량을 필요로 하면 **2분 인터럽트 알림** 후 회수(종료·중지·동면 중 선택 가능 — **기본값은 종료**)
 - EC2 인스턴스 재조정 권장 신호(Rebalance Recommendation)로 중단 전 사전 알림 제공
 
 **적합 워크로드:**

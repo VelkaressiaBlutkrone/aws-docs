@@ -26,17 +26,28 @@ import 'exam_page.dart'; // ExamView
 /// 통합 모의고사 진입점. 자격증 전체 검증 문항 풀을 병합해 도메인 가중으로
 /// N문항을 샘플링·출제하고, 진행 중 세션을 복원한다. ExamView를 재사용한다.
 class CertExamPage extends StatefulWidget {
-  const CertExamPage({super.key, required this.cert, this.weighted = false});
+  const CertExamPage({
+    super.key,
+    required this.cert,
+    this.weighted = false,
+    this.backend,
+  });
   final Certification cert;
   final bool weighted;
+
+  /// 이력·진행 세션 저장소 백엔드. null이면 `defaultBackend()`(웹=localStorage,
+  /// 그 외=메모리)라서 앱 동작은 그대로다. 테스트가 진행 세션을 심어 복원 판정을
+  /// 검증할 때만 주입한다 — VM의 `defaultBackend()`는 호출마다 별도 MemoryBackend라
+  /// 주입구 없이는 심은 세션을 페이지가 볼 수 없다.
+  final KvBackend? backend;
 
   @override
   State<CertExamPage> createState() => _CertExamPageState();
 }
 
 class _CertExamPageState extends State<CertExamPage> {
-  final _store = ExamSessionStore();
-  final _history = HistoryStore();
+  late final _store = ExamSessionStore(backend: widget.backend);
+  late final _history = HistoryStore(backend: widget.backend);
   late Future<_MockLoad> _future = _load(); // 재할당은 에러 재시도에서만
   _RunParams? _running;
 
@@ -121,6 +132,13 @@ class _CertExamPageState extends State<CertExamPage> {
     }
 
     // 복원 가능한 진행 세션? — 문항 ID 복원 + 선택지 순서 완비 검증(스펙 §3.3)
+    //
+    // ⚠️ exam_page와 달리 여기서는 `bankFingerprint`를 보지 않는다 — 누락이 아니라
+    // 의도다. 통합/약점 모의고사는 여러 뱅크를 병합해 출제하므로 비교할 단일 지문이
+    // 없고, 개정 감지는 `restoreOrdered`의 ID 존재 검사가 대신한다(스펙
+    // `2026-06-08-option-shuffle-question-sampling-design.md` §3.3: "차출 도입으로
+    // '풀 뱅크 + fingerprint' 복원이 불가능해지므로 통합 모의고사와 같은 방식으로
+    // 통일"). 분기 전수는 `test/cert_exam_restore_test.dart`가 고정한다.
     final existing = _store.load(_examId);
     _Restorable? restorable;
     if (existing != null && !existing.submitted) {
