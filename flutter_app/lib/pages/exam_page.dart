@@ -14,6 +14,7 @@ import '../data/mock_exam.dart';
 import '../data/weighted_exam.dart';
 import '../models/exam_guide.dart';
 import '../models/exam_session.dart';
+import '../models/exam_snapshot.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
@@ -27,8 +28,12 @@ export 'exam/exam_view.dart' show ExamView, recordFinishedAttempt;
 
 /// 얇은 로더: 문제은행 + 공식 시험 메타를 읽고 세션을 복원해 ExamView에 주입.
 class ExamPage extends StatefulWidget {
-  const ExamPage({super.key, required this.entry});
+  const ExamPage({super.key, required this.entry, this.backend});
   final ContentEntry entry;
+
+  /// 이력·세션 저장소 백엔드. null이면 `defaultBackend()`라 앱 동작은 그대로다.
+  /// 테스트가 스냅샷을 심어 복원을 검증할 때만 주입한다(`CertExamPage`와 같은 seam).
+  final KvBackend? backend;
 
   @override
   State<ExamPage> createState() => _ExamPageState();
@@ -36,12 +41,27 @@ class ExamPage extends StatefulWidget {
 
 class _ExamPageState extends State<ExamPage> {
   late Future<_ExamLoad> _future = _load(); // 재할당은 에러 재시도에서만
-  final _store = ExamSessionStore();
-  final _history = HistoryStore();
+  late final _store = ExamSessionStore(backend: widget.backend);
+  late final _history = HistoryStore(backend: widget.backend);
+
+  /// 첫 상호작용 때 쓸 스냅샷(설계 §4.5 — 진입만 하고 이탈하면 저장하지 않는다).
+  /// 이미 썼으면 null로 비워 두 번 쓰지 않는다(§4.4 — 스냅샷은 시작 시 1회).
+  ExamSnapshot? _pendingSnapshot;
 
   String get _examId => 'exam:${widget.entry.taskId}';
 
   Future<_ExamLoad> _load() async {
+    final examId = _examId;
+
+    // 스냅샷이 있으면 **에셋을 전혀 읽지 않고** 그대로 복원한다(설계 §4.1).
+    // 그래서 진행 중 시험은 콘텐츠 릴리스를 가로질러도 시작 시점 문항을 유지한다.
+    final run = _store.loadRun(examId);
+    if (run != null) {
+      _pendingSnapshot = null; // 이미 저장돼 있다
+      return _ExamLoad.fromSnapshot(run.snapshot, run.progress);
+    }
+    _store.clear(examId); // 구포맷 단일 키 폐기(§4.8)
+
     final qRaw = await rootBundle.loadString(widget.entry.questionsAsset);
     final fullBank = QuestionBank.fromJson(
       json.decode(qRaw) as Map<String, dynamic>,
@@ -59,7 +79,6 @@ class _ExamPageState extends State<ExamPage> {
       overview = null; // 메타 없으면 폴백 페이스(examDurationSec)
     }
 
-    final examId = _examId;
     final fp = bankFingerprint(fullBank);
     final existing = _store.load(examId);
 
@@ -113,6 +132,17 @@ class _ExamPageState extends State<ExamPage> {
       initialFlagged = const {};
     }
 
+    // 차출·셔플이 확정됐으니 스냅샷을 메모리에 들어 둔다 — 첫 상호작용 때 쓴다(§4.5).
+    _pendingSnapshot = ExamSnapshot(
+      examId: examId,
+      certId: widget.entry.certForHistory,
+      taskId: widget.entry.taskId,
+      nonce: '${startedAt.microsecondsSinceEpoch}',
+      startedAtIso: startedAt.toIso8601String(),
+      durationSec: durationSec,
+      questions: presented,
+    );
+
     return _ExamLoad(
       bank: QuestionBank(
         examGuideTaskId: fullBank.examGuideTaskId,
@@ -130,7 +160,23 @@ class _ExamPageState extends State<ExamPage> {
       initialFlagged: initialFlagged,
       restored: restoredQs != null,
       passingScore: overview?.passingScore,
+      nonce: _pendingSnapshot!.nonce,
     );
+  }
+
+  /// 첫 상호작용에서만 스냅샷을 쓰고, 그 뒤로는 진행만 갱신한다(설계 §4.4·§4.5).
+  /// ⚠️ 쓰기 실패는 삼킨다 — 저장이 안 되는 것보다 시험이 막히는 쪽이 나쁘다(반목표).
+  void _onProgress(ExamProgress p) {
+    final pending = _pendingSnapshot;
+    try {
+      if (pending != null) {
+        _store.saveSnapshot(pending);
+        _pendingSnapshot = null;
+      }
+      _store.saveProgress(p);
+    } catch (_) {
+      _pendingSnapshot = null; // 재시도해도 같은 쿼터에 막힌다 — 복원만 포기한다
+    }
   }
 
   @override
@@ -184,7 +230,8 @@ class _ExamPageState extends State<ExamPage> {
                 optionOrders: data.optionOrders,
                 sessionFingerprint: data.fullBankFingerprint,
                 passingScore: data.passingScore,
-                onChanged: _store.save,
+                runNonce: data.nonce,
+                onProgress: _onProgress,
                 onFinished: (r) => recordFinishedAttempt(r,
                     history: _history, sessions: _store, examId: examId),
                 resultsActionsBuilder: (ctx, justFinished) {
@@ -232,7 +279,11 @@ class _ExamLoad {
     required this.initialFlagged,
     required this.restored,
     required this.passingScore,
+    this.nonce = '',
   });
+
+  /// 세대 식별자 — 진행 레코드가 들고 다닌다(설계 §4.4.1).
+  final String nonce;
   final QuestionBank bank;
   final String fullBankFingerprint;
   final Map<String, List<int>> optionOrders;
@@ -243,4 +294,26 @@ class _ExamLoad {
   final Set<int> initialFlagged;
   final bool restored;
   final int? passingScore; // 시험 가이드 메타(없으면 null)
+
+  /// 스냅샷 복원 — 에셋을 읽지 않는다. 보기는 이미 표시 순서가 적용돼 있으므로
+  /// `optionOrders`는 비운다(설계 §4.1).
+  factory _ExamLoad.fromSnapshot(ExamSnapshot s, ExamProgress p) => _ExamLoad(
+        bank: QuestionBank(
+          examGuideTaskId: s.taskId,
+          taskTitle: '',
+          certCode: s.certId,
+          domain: 0,
+          questions: s.questions,
+        ),
+        fullBankFingerprint: '',
+        optionOrders: const {},
+        startedAt: DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
+        durationSec: s.durationSec,
+        initialIndex: p.index,
+        initialPicked: p.picked,
+        initialFlagged: p.flagged.toSet(),
+        restored: true,
+        passingScore: null,
+        nonce: s.nonce,
+      );
 }

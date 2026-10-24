@@ -4,6 +4,7 @@ import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/history_store.dart';
 import 'package:aws_docs/models/attempt_record.dart';
 import 'package:aws_docs/models/exam_session.dart';
+import 'package:aws_docs/models/exam_snapshot.dart';
 import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/pages/exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
@@ -163,6 +164,71 @@ void main() {
           throwsStateError);
       expect(sessions.load('exam:clf-t2-3'), isNull);
     });
+
+    // 설계 2026-10-24 §4.6 — 키가 둘이 됐으므로 한쪽만 지우면 다음 입장에서
+    // 반쪽 상태를 만난다.
+    ExamSnapshot snap() => ExamSnapshot(
+          examId: 'exam:clf-t2-3',
+          certId: 'CLF-C02',
+          taskId: 'clf-t2-3',
+          nonce: 'run-1',
+          startedAtIso: DateTime(2026, 6, 6).toIso8601String(),
+          durationSec: 300,
+          questions: _bank().questions,
+        );
+
+    test('제출 시 스냅샷과 진행을 모두 비운다', () {
+      final b = MemoryBackend();
+      final sessions = ExamSessionStore(backend: b)
+        ..saveSnapshot(snap())
+        ..saveProgress(const ExamProgress(
+            examId: 'exam:clf-t2-3',
+            nonce: 'run-1',
+            index: 1,
+            picked: {0: 1},
+            flagged: []));
+      recordFinishedAttempt(rec,
+          history: HistoryStore(backend: b),
+          sessions: sessions,
+          examId: 'exam:clf-t2-3');
+      expect(sessions.loadSnapshot('exam:clf-t2-3'), isNull);
+      expect(sessions.loadProgress('exam:clf-t2-3'), isNull);
+    });
+
+    test('기록 저장이 실패해도 두 키는 정리된다', () {
+      final b = _QuotaOnHistory();
+      final sessions = ExamSessionStore(backend: b)..saveSnapshot(snap());
+      expect(
+          () => recordFinishedAttempt(rec,
+              history: HistoryStore(backend: b),
+              sessions: sessions,
+              examId: 'exam:clf-t2-3'),
+          throwsStateError);
+      expect(sessions.loadSnapshot('exam:clf-t2-3'), isNull);
+    });
+  });
+
+  testWidgets('onProgress는 진행만 통지한다(문항 목록·지문 없음)', (tester) async {
+    // ExamProgress에는 questions가 없다 — 스냅샷이 이미 들고 있다(설계 §4.4).
+    ExamProgress? saved;
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(),
+      certId: 'CLF-C02',
+      taskId: 'clf-t2-3',
+      startedAt: DateTime(2026, 6, 6),
+      durationSec: 300,
+      now: () => DateTime(2026, 6, 6, 0, 0, 10),
+      runNonce: 'run-1',
+      onProgress: (p) => saved = p,
+    )));
+    // 시작 문항은 q1 — 그 보기를 고른다.
+    await tester.tap(find.text('계정 해지').first);
+    await tester.pump();
+
+    expect(saved, isNotNull);
+    expect(saved!.nonce, 'run-1');
+    expect(saved!.picked, {0: 1});
+    expect(saved!.examId, 'exam:clf-t2-3');
   });
 
   testWidgets('다이얼로그 중 시간 만료 → 단일 제출, 고립 다이얼로그 없음', (tester) async {

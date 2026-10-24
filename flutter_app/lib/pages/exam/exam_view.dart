@@ -8,6 +8,7 @@ import '../../data/history_store.dart';
 import '../../data/wrong_skills.dart';
 import '../../models/attempt_record.dart';
 import '../../models/exam_session.dart';
+import '../../models/exam_snapshot.dart';
 import '../../models/question.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/app_header.dart';
@@ -32,6 +33,8 @@ class ExamView extends StatefulWidget {
     this.optionOrders = const {},
     this.sessionFingerprint,
     this.onChanged,
+    this.onProgress,
+    this.runNonce,
     this.onFinished,
     this.onExit,
     this.now,
@@ -58,6 +61,14 @@ class ExamView extends StatefulWidget {
   final String? sessionFingerprint;
 
   final void Function(ExamSession)? onChanged;
+
+  /// 스냅샷 체제의 진행 통지(설계 2026-10-24 §4.4). 가변부만 넘긴다 — 출제 문항은
+  /// 스냅샷이 이미 들고 있다. `onChanged`와 당분간 공존하며, 페이지가 모두 옮겨간 뒤
+  /// 구경로를 제거한다(expand → migrate → contract).
+  final void Function(ExamProgress)? onProgress;
+
+  /// 진행 레코드가 들고 다닐 세대 식별자. 스냅샷의 `nonce`와 같아야 짝으로 인정된다.
+  final String? runNonce;
   final void Function(AttemptRecord)? onFinished;
   final VoidCallback? onExit;
   final DateTime Function()? now;
@@ -143,7 +154,18 @@ class _ExamViewState extends State<ExamView> {
     submitted: _submitted,
   );
 
-  void _persist() => widget.onChanged?.call(_session());
+  ExamProgress _progress() => ExamProgress(
+        examId: 'exam:${widget.taskId}',
+        nonce: widget.runNonce ?? '',
+        index: _index,
+        picked: _picked,
+        flagged: _flagged.toList()..sort(),
+      );
+
+  void _persist() {
+    widget.onChanged?.call(_session());
+    widget.onProgress?.call(_progress());
+  }
 
   void _pick(int opt) {
     setState(() => _picked[_index] = opt);
@@ -392,6 +414,7 @@ void recordFinishedAttempt(
   try {
     history.add(r);
   } finally {
-    sessions.clear(examId);
+    sessions.clear(examId); // 구포맷 단일 키
+    sessions.clearRun(examId); // 스냅샷·진행 두 키(설계 §4.6)
   }
 }
