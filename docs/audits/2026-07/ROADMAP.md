@@ -83,8 +83,8 @@
 
 | 항목 | 근거 | 크기 |
 |---|---|---|
-| exam_page.dart 683줄 3분할(러너·위젯·로더) | CODE-P-007 | M |
-| CertExamPage `_load()` 세션 복원 판정 순수함수 추출 + 3분기 단위테스트 | TEST-001 (H, 최대 공백) | M |
+| ~~exam_page.dart 683줄 3분할(러너·위젯·로더)~~ **→ 2026-10-24 완료(PR#204)**: 감사 후 739줄까지 늘어 있었고 246줄로 줄였다. `exam/exam_view.dart`(러너)·`exam/exam_bits.dart`(위젯)·`exam_page.dart`(로더) 3분할, `export … show`로 임포트 경로 무변경 | CODE-P-007 | M |
+| ~~CertExamPage `_load()` 세션 복원 판정 순수함수 추출 + 3분기 단위테스트~~ **→ 2026-10-24 완료(`test/cert_exam_restore_test.dart`, 4분기)**: ⚠️ **접근이 다르다.** 순수함수를 뽑는 대신 `CertExamPage`에 `KvBackend? backend` 주입구를 내고 **위젯 테스트로 페이지 자체**를 검증했다 — 감사가 전제한 "렌더 불가"가 실측 결과 **직접 렌더에는 해당하지 않아서**다(아래 §제약 반영 주석 참조). 덕분에 폐기 시 `_store.clear(_examId)` 부수효과까지 단언한다 | TEST-001 (H, 최대 공백) | M |
 | 뱅크 로드 루프 4벌·PrescriptionHub 배선 2벌·_resetCert 2벌 공용화 | CODE-P-012·013·018 | M |
 | content_index.dart 511줄 cert별 분리 | CODE-D-005 | M |
 | KV store 보일러플레이트 공용 헬퍼 | CODE-D-006 | M |
@@ -102,7 +102,7 @@
 
 | 항목 | 근거 | 크기 |
 |---|---|---|
-| **의존성 업그레이드** go_router 16→17(ShellRoute 미사용→영향0)·Firebase 트리오 마이너 | DEP-001~004 | S |
+| **의존성 업그레이드** ~~go_router 16→17(ShellRoute 미사용→영향0)~~ **→ 2026-10-24 완료(PR#205): 17이 아니라 18.1.1까지** — `flutter pub outdated`의 resolvable이 18.1.1이었다. 감사의 "ShellRoute 미사용→영향0" 판정은 실측으로 재확인(`grep` 0건), 18.0.0의 최소 Dart 3.12는 로컬·CI 3.13.2로 충족. 코드 0줄 · 번들 −11,744 B. **Firebase 트리오 마이너는 미착수** | DEP-001~004 | S |
 | Flutter SDK: 업그레이드 불요(현 SDK가 최신 요구 충족) | DEP (07-deps) | — |
 | **174MB 오디오 자산 전략**: mp3 별도 호스팅/CDN·SW 캐시(반복방문 재다운로드) — 현재 preload=metadata라 초기로드 무영향. **→ 2026-09-03 완료: Cloudflare R2 분리 호스팅**(`aws-audio.leva.ai.kr`, 불변 키, spec `2026-09-03-audio-r2-hosting-design`) | PLAY-105 | L |
 | **기계 게이트 스크립트화**: fontWeight↔fontVariations Wght 1:1 게이트 테스트, 문항 correct 범위 불변식 | CODE-W-002, CODE-C-009 | S |

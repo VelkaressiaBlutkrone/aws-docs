@@ -26,17 +26,28 @@ import 'exam_page.dart'; // ExamView
 /// 통합 모의고사 진입점. 자격증 전체 검증 문항 풀을 병합해 도메인 가중으로
 /// N문항을 샘플링·출제하고, 진행 중 세션을 복원한다. ExamView를 재사용한다.
 class CertExamPage extends StatefulWidget {
-  const CertExamPage({super.key, required this.cert, this.weighted = false});
+  const CertExamPage({
+    super.key,
+    required this.cert,
+    this.weighted = false,
+    this.backend,
+  });
   final Certification cert;
   final bool weighted;
+
+  /// 이력·진행 세션 저장소 백엔드. null이면 `defaultBackend()`(웹=localStorage,
+  /// 그 외=메모리)라서 앱 동작은 그대로다. 테스트가 진행 세션을 심어 복원 판정을
+  /// 검증할 때만 주입한다 — VM의 `defaultBackend()`는 호출마다 별도 MemoryBackend라
+  /// 주입구 없이는 심은 세션을 페이지가 볼 수 없다.
+  final KvBackend? backend;
 
   @override
   State<CertExamPage> createState() => _CertExamPageState();
 }
 
 class _CertExamPageState extends State<CertExamPage> {
-  final _store = ExamSessionStore();
-  final _history = HistoryStore();
+  late final _store = ExamSessionStore(backend: widget.backend);
+  late final _history = HistoryStore(backend: widget.backend);
   late Future<_MockLoad> _future = _load(); // 재할당은 에러 재시도에서만
   _RunParams? _running;
 
