@@ -41,26 +41,10 @@ Widget _host(Widget child) =>
     MaterialApp(theme: AppTheme.light, home: Scaffold(body: child));
 
 void main() {
-  testWidgets('onChanged 세션에 출제 문항 ID가 순서대로 담긴다', (tester) async {
-    ExamSession? saved;
-    final started = DateTime(2026, 6, 6);
-    await tester.pumpWidget(_host(ExamView(
-      bank: _bank(),
-      certId: 'CLF-C02',
-      taskId: 'clf-t2-3',
-      startedAt: started,
-      durationSec: 600,
-      now: () => started.add(const Duration(seconds: 5)),
-      onChanged: (s) => saved = s,
-    )));
-    await tester.pump();
-
-    await tester.tap(find.text('계정 해지')); // 선택 → onChanged 발화
-    await tester.pump();
-
-    expect(saved, isNotNull);
-    expect(saved!.questionIds, ['q1', 'q2']);
-  });
+  // 구경로 테스트 2건 제거(2026-10-25, 스냅샷 체제 Task 7): `onChanged`가 출제 문항
+  // ID·`optionOrders`·뱅크 지문을 세션에 담는지 보던 테스트였다. 스냅샷이 문항을 직접
+  // 들고 가면서 그 필드들이 사라졌으므로 검증할 동작 자체가 없다. 대체 가드는
+  // `onProgress는 진행만 통지한다` + `exam_snapshot_test.dart`의 라운드트립이다.
 
   testWidgets('정답 선택 후 제출 → 채점, flagged 기록', (tester) async {
     AttemptRecord? finished;
@@ -288,35 +272,6 @@ void main() {
     expect(finished!.flaggedQuestionIds, ['q2']); // 복원된 플래그 보존
   });
 
-  testWidgets('세션에 optionOrders와 주입된 전체 뱅크 지문이 기록된다', (tester) async {
-    ExamSession? saved;
-    final started = DateTime(2026, 6, 8);
-    await tester.pumpWidget(_host(ExamView(
-      bank: _bank(),
-      certId: 'CLF-C02',
-      taskId: 'clf-t2-3',
-      startedAt: started,
-      durationSec: 600,
-      optionOrders: const {
-        'q1': [1, 0],
-        'q2': [0, 1],
-      },
-      sessionFingerprint: 'fp-full-bank',
-      now: () => started.add(const Duration(seconds: 5)),
-      onChanged: (s) => saved = s,
-    )));
-    await tester.pump();
-
-    await tester.tap(find.text('계정 해지')); // 선택 → onChanged 발화
-    await tester.pump();
-
-    expect(saved, isNotNull);
-    expect(saved!.optionOrders, {
-      'q1': [1, 0],
-      'q2': [0, 1],
-    });
-    expect(saved!.bankFingerprint, 'fp-full-bank'); // 주입 지문 우선
-  });
 
   testWidgets('R1: resultsActionsBuilder 없으면 기존 학습문서로 버튼 유지', (tester) async {
     final started = DateTime(2026, 6, 6);
