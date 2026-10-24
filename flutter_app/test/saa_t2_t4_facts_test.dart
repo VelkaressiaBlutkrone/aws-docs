@@ -460,6 +460,28 @@ void main() {
       expect(t42.contains('최대 20%'), isTrue);
     });
 
+    test('G-4.2-14 SP vs RI는 우선순위가 아니라 조건으로 적는다', () {
+      // 근거: sp-ris 전문 확인(2026-10-24) — 이 페이지는 절감률·유연성 **비교 표**와
+      // "Savings Plans doesn't provide capacity reservations, but you can
+      // allocate On-Demand Capacity Reservation (ODCR) for your needs and your
+      // Savings Plans will apply." 를 제시할 뿐 **"먼저 고려하라"는 문장이 없다.**
+      // 용량 확보가 요건이면 SP 는 답이 아니므로 우선순위 단정은 과잉 일반화다.
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('먼저 고려하라"고 명시'), isFalse);
+      expect(t42.contains('Savings Plans 우선 권장'), isFalse);
+      expect(t42.contains('AWS 공식 우선 권장'), isFalse);
+      expect(t42.contains('용량 확보가 요건'), isTrue);
+    });
+
+    test('G-4.2-15 SP가 Spot·RI 커버 사용량에 적용되지 않는 근거', () {
+      // 근거: sp-ris — "Savings Plans doesn't apply to spot usage or usage
+      // covered by RIs." 2026-10-24 확보로 종전 "공식 문장 미확보" 판정이 해소됐다.
+      // Spot 뿐 아니라 **RI 가 커버한 사용량**도 함께 제외된다는 점이 핵심이다
+      // (할인 적용 순서 RI → SP 와 맞물린다).
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('RI가 커버한 사용량'), isTrue);
+    });
+
     test('G-4.2-18 Dedicated Host는 예약으로 온디맨드보다 싸질 수 있다', () {
       // 근거: dedicated-hosts/pricing — "Reservations can provide up to a 70%
       // discount compared to the On-Demand price", Savings Plans 적용 가능

@@ -117,7 +117,7 @@
 | V-49 | 비용 할당 태그 **backfill "최대 12개월"** | `98` G-4.1-27 | 콘솔 도움말만(24시간에 1회) |
 | V-50 | CUR **"100만 행" 분할 기준**·Support 비용 CUR **반영 "6~7일"** | `98` G-4.1-23·24 | 미확인 |
 | V-51 | EFS **Archive 접근 요금** 세부 | `4-1.md` F-22 | IA만 확인 |
-| V-52 | **"SP는 Spot에 적용되지 않는다"** 공식 문장 | `98` G-4.2-15 | 확보 못함 |
+| V-52 | **"SP는 Spot에 적용되지 않는다"** 공식 문장 | `98` G-4.2-15 | **해소(2026-10-24)** — `sp-ris` 전문 확인에서 확보했다: *"Savings Plans doesn't apply to spot usage or usage covered by RIs."* ⚠️ Spot 뿐 아니라 **RI가 커버한 사용량**도 함께 제외된다(할인 적용 순서 RI → SP와 맞물린다). `saa-t4-2` §3과 문항 q6에 반영하고 가드로 고정했다 |
 | V-53 | **미사용 On-Demand Capacity Reservation의 과금** 방식 | `4-2.md` F-07 | 할인 적용 규칙만 |
 | V-54 | Spot 중단 시 **종료·중지·최대 절전 중 선택** 가능하다는 서술 — 이번 조회에서는 **최대 절전 지정 가능**(Stop API로는 불가)만 문장 확보, 종료·중지 선택지의 직접 문장 미확보. 아울러 Spot **할당 전략 현행 목록**, **웜 풀 상태별 과금** | `4-2.md`, `98` G-4.2-21 | 일부 확인 |
 | V-55 | "**비프로덕션은 단일 AZ 등 낮은 가용성**" 공식 문장, EC2 **최대 절전 지원 패밀리·RAM 한도·최대 60일** | `4-2.md` | 설계 판단으로 표기 |
@@ -140,7 +140,7 @@
 | V-77 | Intelligent-Tiering에서 **128 KB 이상 객체의 모니터링 요금이 절감액을 넘는 임계**(확인된 것: 128 KB 미만은 자동 계층화 대상 아님·항상 Frequent Access 단가) | `98` G-4.1-14 | 임계 수치 미기재 |
 | V-78 | **미연결 EBS 볼륨을 Cost Explorer로 탐지**한다는 서술의 문서화된 근거(문서화된 수단은 Trusted Advisor·Compute Optimizer) | `98` G-4.1-17 | 문서화된 수단만 기재 |
 | V-79 | `AbortIncompleteMultipartUpload`를 **"7일 후 정리 권장"** 이라는 공식 권장값 문장(7일은 API 문서의 예시값) | `98` G-4.1-18 | 일수는 사용자 정의로 기재 |
-| V-80 | 공식 문서가 **"Savings Plans를 RI보다 먼저 고려하라"** 고 명시한다는 문장(확인된 서술은 "유연성이면 SP, 특정 AZ 용량이면 RI, 혼합이 모범 사례"[re:Post]) | `98` G-4.2-14 | 혼합 모범 사례로 기재 |
+| V-80 | 공식 문서가 **"Savings Plans를 RI보다 먼저 고려하라"** 고 명시한다는 문장 | `98` G-4.2-14 | **미확보 확정(2026-10-24)** — 문항이 출처로 달아 둔 바로 그 페이지(`sp-ris`)를 **전문 확인했으나 우선순위를 말하는 문장이 없다.** 그 페이지가 제시하는 것은 절감률·유연성 **비교 표**와 *"Savings Plans doesn't provide capacity reservations, but you can allocate On-Demand Capacity Reservation (ODCR) for your needs and your Savings Plans will apply."* 다. ⚠️ **용량 확보가 요건이면 SP는 답이 아니므로** 우선순위 단정은 과잉 일반화다 → `saa-t4-2` md 3곳(§2 표·§2 인용·시험 포인트)과 문항 q5를 **조건 서술**(유연성 → SP / 특정 AZ 용량 → Zonal RI·ODCR / 혼합)로 고치고 가드로 고정했다 |
 | V-81 | DynamoDB **"기본 권장은 온디맨드"** 라는 공식 문장(확인된 서술은 "예측 불가=온디맨드 모범 사례, 일관·점진 증가=프로비저닝") | `98` G-4.3-18 | 조건부 서술로 기재 |
 | V-82 | Gateway 엔드포인트의 **"S3·DynamoDB 같은 리전 전송 무료"** 중 DynamoDB 쪽 근거(S3는 확인, DynamoDB는 미확보) | `98` G-4.4-19 | DynamoDB 무료 여부는 단정 안 함 |
 
