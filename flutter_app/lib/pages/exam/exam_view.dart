@@ -7,7 +7,6 @@ import '../../data/exam_session_store.dart';
 import '../../data/history_store.dart';
 import '../../data/wrong_skills.dart';
 import '../../models/attempt_record.dart';
-import '../../models/exam_session.dart';
 import '../../models/exam_snapshot.dart';
 import '../../models/question.dart';
 import '../../theme/app_theme.dart';
@@ -30,9 +29,6 @@ class ExamView extends StatefulWidget {
     this.initialPicked = const {},
     this.initialFlagged = const {},
     this.restored = false,
-    this.optionOrders = const {},
-    this.sessionFingerprint,
-    this.onChanged,
     this.onProgress,
     this.runNonce,
     this.onFinished,
@@ -53,16 +49,7 @@ class ExamView extends StatefulWidget {
   final Set<int> initialFlagged;
   final bool restored;
 
-  /// 세션에 기록할 문항별 선택지 표시 순서(복원용). 셔플 미적용 호출부는 빈 맵.
-  final Map<String, List<int>> optionOrders;
-
-  /// 세션에 기록할 뱅크 지문. null이면 표시 뱅크에서 계산.
-  /// 차출 시험은 표시 뱅크(5문항)가 아니라 전체 뱅크 지문으로 개정을 감지해야 하므로 주입한다.
-  final String? sessionFingerprint;
-
-  final void Function(ExamSession)? onChanged;
-
-  /// 스냅샷 체제의 진행 통지(설계 2026-10-24 §4.4). 가변부만 넘긴다 — 출제 문항은
+  /// 진행 통지(설계 2026-10-24 §4.4). 가변부만 넘긴다 — 출제 문항은
   /// 스냅샷이 이미 들고 있다. `onChanged`와 당분간 공존하며, 페이지가 모두 옮겨간 뒤
   /// 구경로를 제거한다(expand → migrate → contract).
   final void Function(ExamProgress)? onProgress;
@@ -139,21 +126,6 @@ class _ExamViewState extends State<ExamView> {
     super.dispose();
   }
 
-  ExamSession _session() => ExamSession(
-    examId: 'exam:${widget.taskId}',
-    certId: widget.certId,
-    taskId: widget.taskId,
-    startedAtIso: widget.startedAt.toIso8601String(),
-    durationSec: widget.durationSec,
-    index: _index,
-    picked: _picked,
-    flagged: _flagged.toList()..sort(),
-    bankFingerprint: widget.sessionFingerprint ?? bankFingerprint(widget.bank),
-    questionIds: _qs.map((q) => q.id).toList(),
-    optionOrders: widget.optionOrders,
-    submitted: _submitted,
-  );
-
   ExamProgress _progress() => ExamProgress(
         examId: 'exam:${widget.taskId}',
         nonce: widget.runNonce ?? '',
@@ -162,10 +134,7 @@ class _ExamViewState extends State<ExamView> {
         flagged: _flagged.toList()..sort(),
       );
 
-  void _persist() {
-    widget.onChanged?.call(_session());
-    widget.onProgress?.call(_progress());
-  }
+  void _persist() => widget.onProgress?.call(_progress());
 
   void _pick(int opt) {
     setState(() => _picked[_index] = opt);

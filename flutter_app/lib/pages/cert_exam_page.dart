@@ -332,7 +332,6 @@ class _CertExamPageState extends State<CertExamPage> {
           initialPicked: r.picked,
           initialFlagged: r.flagged,
           restored: r.restored,
-          optionOrders: r.optionOrders,
           passingScore: passingScore,
           runNonce: r.nonce,
           onProgress: _onProgress,

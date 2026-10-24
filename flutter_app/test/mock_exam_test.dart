@@ -121,15 +121,8 @@ void main() {
     expect(r.length, 2);
   });
 
-  test('restoreOrdered: 모든 ID 존재 시 순서대로, 누락/빈목록 시 null', () {
-    final byId = indexById([_q('a', 1), _q('b', 1), _q('c', 1)]);
-    expect(restoreOrdered(['c', 'a'], byId)!.map((q) => q.id).toList(), [
-      'c',
-      'a',
-    ]);
-    expect(restoreOrdered(['a', 'z'], byId), isNull);
-    expect(restoreOrdered(const [], byId), isNull);
-  });
+  // `restoreOrdered` 테스트 제거(2026-10-25) — 함수가 사라졌다. 스냅샷이 문항을 직접
+  // 들고 가면서 ID로 현재 풀에서 되찾는 단계가 없어졌다(설계 §4.7).
 
   test('buildSampledExam<String>: Task 키 — 합 N · 전부 풀 소속 · 결정적', () {
     final pool = {
@@ -200,20 +193,9 @@ void main() {
     expect(identical(shuffled[1], pool[1]), isTrue); // 순서 없음 → 원본
   });
 
-  test('ordersCoverQuestions: 누락·길이 불일치 감지', () {
-    final pool = [_q('a', 1), _q('b', 1)];
-    final ok = randomOptionOrders(pool, Random(1));
-    expect(ordersCoverQuestions(pool, ok), isTrue);
-    expect(ordersCoverQuestions(pool, {'a': ok['a']!}), isFalse); // b 누락
-    expect(
-      ordersCoverQuestions(pool, {
-        'a': ok['a']!,
-        'b': const [0, 1],
-      }),
-      isFalse,
-    ); // 길이 불일치
-    expect(ordersCoverQuestions(pool, const {}), isFalse); // 구버전 세션
-  });
+  // `ordersCoverQuestions` 테스트 제거(2026-10-25) — 함수가 사라졌다. 스냅샷은 보기를
+  // 이미 표시 순서로 저장하므로 재적용할 순서가 없고, 손상 방어는 `sanitizeProgress`가
+  // 맡는다(`exam_snapshot_test.dart`가 그쪽을 덮는다).
 
   test('분포 스모크: 셔플 후 정답 위치가 단일 인덱스에 95% 이상 몰리지 않는다', () {
     // 현재 데이터의 A-쏠림 재현: 전부 correct=0인 130문항

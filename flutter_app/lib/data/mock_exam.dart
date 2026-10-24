@@ -62,17 +62,8 @@ Map<String, Question> indexById(Iterable<Question> questions) => {
   for (final q in questions) q.id: q,
 };
 
-/// 저장된 출제 ID를 현재 풀로 복원. 모든 ID가 존재할 때만 순서대로 반환, 아니면 null.
-List<Question>? restoreOrdered(List<String> ids, Map<String, Question> byId) {
-  if (ids.isEmpty) return null;
-  final out = <Question>[];
-  for (final id in ids) {
-    final q = byId[id];
-    if (q == null) return null; // 콘텐츠 개정/불일치 → 복원 거부
-    out.add(q);
-  }
-  return out;
-}
+// `restoreOrdered` 제거(2026-10-25, 스냅샷 체제 — 설계 2026-10-24 §4.7). 저장된 ID로
+// 현재 풀에서 문항을 되찾던 함수인데, 스냅샷이 문항을 직접 들고 가면서 그 단계가 없어졌다.
 
 /// Task 연습/시험 차출 수(스펙 §2). 풀이 이보다 작으면 전부 출제.
 const taskSampleCount = 5;
@@ -105,9 +96,6 @@ List<Question> applyOptionOrders(
     orders[q.id] == null ? q : q.withOptionOrder(orders[q.id]!),
 ];
 
-/// 복원 전 검증: 모든 문항에 길이가 맞는 표시 순서가 있는가(스펙 §3.3).
-/// 구버전 세션(optionOrders 없음)은 여기서 걸러져 새 시험으로 시작된다.
-bool ordersCoverQuestions(
-  List<Question> questions,
-  Map<String, List<int>> orders,
-) => questions.every((q) => orders[q.id]?.length == q.options.length);
+// `ordersCoverQuestions` 제거(2026-10-25, 스냅샷 체제 — 설계 2026-10-24 §4.7). 복원 전
+// 표시 순서 완비를 검증하던 함수인데, 스냅샷은 보기를 이미 표시 순서로 저장하므로
+// 재적용할 순서 자체가 없다. 손상 방어는 `sanitizeProgress`가 맡는다.

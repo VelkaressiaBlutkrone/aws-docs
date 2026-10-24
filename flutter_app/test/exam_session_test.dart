@@ -1,29 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/models/exam_session.dart';
-import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/local_kv.dart';
 
-QuestionBank _bank(List<String> ids) => QuestionBank(
-  examGuideTaskId: 'clf-t2-3',
-  taskTitle: '접근 관리',
-  certCode: 'CLF-C02',
-  domain: 2,
-  questions: [
-    for (final id in ids)
-      Question(
-        id: id,
-        examGuideTaskId: 'clf-t2-3',
-        stem: 's',
-        options: const ['a', 'b'],
-        correct: 0,
-        explanation: 'e',
-        wrongExplanations: const {},
-        sources: const [],
-        verified: true,
-      ),
-  ],
-);
 
 void main() {
   test('questionIds 라운드트립 + 누락 시 빈 목록(하위호환)', () {
@@ -76,20 +55,8 @@ void main() {
     expect(back.flagged, [1, 2]);
   });
 
-  test('bankFingerprint는 문항 변경 시 달라진다', () {
-    expect(
-      bankFingerprint(_bank(['a', 'b', 'c'])),
-      bankFingerprint(_bank(['a', 'b', 'c'])),
-    );
-    expect(
-      bankFingerprint(_bank(['a', 'b', 'c'])),
-      isNot(bankFingerprint(_bank(['a', 'b']))),
-    ); // 문항 수 변경
-    expect(
-      bankFingerprint(_bank(['a', 'b', 'c'])),
-      isNot(bankFingerprint(_bank(['a', 'b', 'x']))),
-    ); // ID 변경
-  });
+  // `bankFingerprint` 함수 테스트 제거(2026-10-25) — 함수 자체가 사라졌다.
+  // 개정 감지는 설계 2026-10-24 §3에서 기각됐다(복원이 에셋을 읽지 않으므로 대조 불가).
 
   test('examDurationSec: CLF 90분/65문항 페이스 비례', () {
     // 90*60/65 ≈ 83.08s/문항 → 7문항 = 581.54 → round 582

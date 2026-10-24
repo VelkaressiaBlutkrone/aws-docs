@@ -79,25 +79,9 @@ class _ExamPageState extends State<ExamPage> {
       overview = null; // 메타 없으면 폴백 페이스(examDurationSec)
     }
 
-    final fp = bankFingerprint(fullBank);
-    final existing = _store.load(examId);
-
-    // 복원 조건: 미제출 + 전체 뱅크 지문 일치 + 차출 ID 전부 존재 + 선택지 순서 완비(스펙 §3.3).
-    // 구버전 세션(optionOrders 없음)은 ordersCoverQuestions에서 걸러져 새 시험으로 시작.
-    List<Question>? restoredQs;
-    if (existing != null &&
-        !existing.submitted &&
-        existing.bankFingerprint == fp) {
-      final ordered = restoreOrdered(
-        existing.questionIds,
-        indexById(fullBank.questions),
-      );
-      if (ordered != null &&
-          ordersCoverQuestions(ordered, existing.optionOrders)) {
-        restoredQs = applyOptionOrders(ordered, existing.optionOrders);
-      }
-    }
-
+    // 복원은 위에서 `loadRun`으로 끝났다 — 여기 도달했다는 건 진행 세션이 없다는 뜻이다.
+    // 구경로(지문 일치 + ID 복원 + 순서 완비)는 스냅샷 도입으로 사라졌다: 복원이 에셋을
+    // 읽지 않으므로 대조할 대상 자체가 없다(설계 §3에서 감지 안 기각, §4.7).
     final DateTime startedAt;
     final int durationSec;
     final int initialIndex;
@@ -105,17 +89,7 @@ class _ExamPageState extends State<ExamPage> {
     final Set<int> initialFlagged;
     final List<Question> presented;
     final Map<String, List<int>> optionOrders;
-    if (restoredQs != null) {
-      presented = restoredQs;
-      optionOrders = existing!.optionOrders;
-      // 손상된 startedAt이면 now로 폴백(타이머 리셋 가능 — 정상 흐름에선 항상 기록됨).
-      startedAt = DateTime.tryParse(existing.startedAtIso) ?? DateTime.now();
-      durationSec = existing.durationSec;
-      initialIndex = existing.index;
-      initialPicked = existing.picked;
-      initialFlagged = existing.flagged.toSet();
-    } else {
-      if (existing != null) _store.clear(examId); // 개정/제출/구버전 세션 폐기
+    {
       final rng = Random();
       final sampled = samplePool(fullBank.questions, taskSampleCount, rng);
       optionOrders = randomOptionOrders(sampled, rng);
@@ -151,14 +125,13 @@ class _ExamPageState extends State<ExamPage> {
         domain: fullBank.domain,
         questions: presented,
       ),
-      fullBankFingerprint: fp,
       optionOrders: optionOrders,
       startedAt: startedAt,
       durationSec: durationSec,
       initialIndex: initialIndex,
       initialPicked: initialPicked,
       initialFlagged: initialFlagged,
-      restored: restoredQs != null,
+      restored: false, // 여기까지 왔다면 신규 시험이다(복원은 loadRun이 처리)
       passingScore: overview?.passingScore,
       nonce: _pendingSnapshot!.nonce,
     );
@@ -227,8 +200,6 @@ class _ExamPageState extends State<ExamPage> {
                 initialPicked: data.initialPicked,
                 initialFlagged: data.initialFlagged,
                 restored: data.restored,
-                optionOrders: data.optionOrders,
-                sessionFingerprint: data.fullBankFingerprint,
                 passingScore: data.passingScore,
                 runNonce: data.nonce,
                 onProgress: _onProgress,
@@ -270,7 +241,6 @@ class _ExamPageState extends State<ExamPage> {
 class _ExamLoad {
   const _ExamLoad({
     required this.bank,
-    required this.fullBankFingerprint,
     required this.optionOrders,
     required this.startedAt,
     required this.durationSec,
@@ -285,7 +255,6 @@ class _ExamLoad {
   /// 세대 식별자 — 진행 레코드가 들고 다닌다(설계 §4.4.1).
   final String nonce;
   final QuestionBank bank;
-  final String fullBankFingerprint;
   final Map<String, List<int>> optionOrders;
   final DateTime startedAt;
   final int durationSec;
@@ -305,7 +274,6 @@ class _ExamLoad {
           domain: 0,
           questions: s.questions,
         ),
-        fullBankFingerprint: '',
         optionOrders: const {},
         startedAt: DateTime.tryParse(s.startedAtIso) ?? DateTime.now(),
         durationSec: s.durationSec,
