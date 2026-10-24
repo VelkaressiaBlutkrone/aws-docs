@@ -444,6 +444,21 @@ void main() {
       expect(t42.contains('SageMaker AI Savings Plans'), isTrue);
     });
 
+    test('G-4.2-21 스팟 중단 동작 3종 + 기본값은 종료', () {
+      // 근거: interruption-behavior — "When you create a Spot request, you can
+      // specify the interruption behavior. The following are the possible
+      // interruption behaviors: Stop, Hibernate, Terminate. The default
+      // behavior is that Amazon EC2 terminates Spot Instances when they are
+      // interrupted". `[의심]`이었던 이유는 앞선 조회가 UserGuide 대신 Ruby SDK
+      // API 문서에 닿아서였다 — 2026-10-24에 직접 문장을 확보해 해소했다.
+      final t42 = doc('saa-t4-2');
+      expect(t42.contains('종료·중지·동면 중 선택 가능'), isTrue);
+      expect(t42.contains('기본값은 종료'), isTrue,
+          reason: '기본 동작이 종료라는 시험 포인트가 빠지면 세 선택지가 동등해 보인다');
+      expect(t42.contains('interruption-behavior'), isTrue,
+          reason: '직접 근거 URL이 sources에 있어야 한다');
+    });
+
     test('G-4.2-16 스팟 할당 전략 권고는 price-capacity-optimized', () {
       // 근거: spot-best-practices — "We recommend using the
       // price-capacity-optimized strategy"
