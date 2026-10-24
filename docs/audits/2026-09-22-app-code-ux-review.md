@@ -649,8 +649,8 @@ void _startPeriodic() {
   - 동기 경로도 공용 관용 파서 사용과 손실 시 원문 보존(PR-m10)
   - `firestore.rules` 버전 관리
   - 과거 동기 흔적이 있는 비로그인 사용자와 완료 스낵바의 문구(PR-m1·m2)
-- **바로 할 수 있는 작은 수정:** QuizView `_finish`와 오답노트 `_onFinished`에 같은 try/finally 적용(PR-m11), 저장 실패 시 사용자 알림
+- ✅ **출고됨 — "바로 할 수 있는 작은 수정"은 비었다(2026-10-24 실측 정정):** PR-m11(QuizView `_finish`·오답노트 `_onFinished`에 같은 try/finally + 저장 실패 시 사용자 알림)은 `c8540b8`로 들어갔다. 배선은 `onSaveFailure` → `notifyAttemptSaveFailure`, 가드는 `test/quiz_view_test.dart`. 위 "후속으로 넘긴 것" 목록은 그때의 이력이라 그대로 둔다.
 - **디자인 결정 필요:** M-6(DESIGN.md 토큰), UX-1·2·4, M-10/UX-5
 - **후순위 정리:** m-1~m-5(리뷰 원문 Minor), M-4(공용 로더 + 병렬 + 가드), M-7
 - **보류:** M-8, m-6(리뷰 원문 Minor)
-- **#124 머지 후:** 브랜치 보호에 `CI / test`를 required check로 등록(GitHub 설정)
+- ✅ **완료 — #124 머지 후 브랜치 보호 등록:** `develop`·`main` 둘 다 required status check가 `["test"]`로 등록돼 있다. 확인은 `gh api repos/VelkaressiaBlutkrone/aws-docs/branches/<branch>/protection --jq '.required_status_checks.contexts'`(2026-10-24 실측). [WORKLIST.md](../../WORKLIST.md) §B④도 같은 사실을 적고 있었는데 이 줄만 미완으로 남아 있었다.
