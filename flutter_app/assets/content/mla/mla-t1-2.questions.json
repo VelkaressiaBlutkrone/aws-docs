@@ -3,13 +3,14 @@
   "taskTitle": "데이터 변환 및 특성 추출 수행",
   "domain": 1,
   "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
   "questions": [
     {
       "id": "mla-t1-2-q1",
       "examGuideTaskId": "mla-t1-2",
       "skill": "데이터 정리·변환 기법(K1, SK1)",
       "section": "cleaning",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "SageMaker Data Wrangler에서 결측값이 있는 숫자 열을 해당 열의 중앙값으로 채우려고 한다. 어떤 변환을 고르는가?",
       "options": [
         "Fill missing",
@@ -157,7 +158,7 @@
       "examGuideTaskId": "mla-t1-2",
       "skill": "특성 추출·변환 기법(K2)",
       "section": "feature-transforms",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "Data Wrangler의 Reduce dimensionality(PCA) 변환을 구성할 때 올바른 설명은 무엇인가?",
       "options": [
         "성분 수와 분산 임계 비율을 함께 지정해야 한다",
@@ -241,7 +242,7 @@
       "examGuideTaskId": "mla-t1-2",
       "skill": "인코딩 기법(K3)",
       "section": "encoding",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "AWS Glue DataBrew의 ONE_HOT_ENCODING 레시피 단계를 쓰려고 한다. 대상 열에 대한 제약으로 옳은 것은 무엇인가?",
       "options": [
         "대상 열의 고유값이 최대 10개여야 한다",
@@ -529,7 +530,7 @@
       "examGuideTaskId": "mla-t1-2",
       "skill": "데이터 주석·레이블링 서비스 이해(K6, SK3)",
       "section": "labeling",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "운영 중인 문서 처리 파이프라인에서 추출 신뢰도가 낮은 결과만 사람이 검토하도록 워크플로를 만들려 한다. 가이드가 제시하는 서비스는 무엇인가?",
       "options": [
         "SageMaker Ground Truth의 자동 데이터 레이블링",
@@ -589,7 +590,7 @@
       "examGuideTaskId": "mla-t1-2",
       "skill": "특성 추출·변환 기법(K2)",
       "section": "feature-transforms",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "왜도가 큰 금액 열의 분포를 완만하게 만들려고 한다. AWS Glue DataBrew에서 쓰는 레시피 단계는 무엇인가?",
       "options": [
         "BUCKETIZATION 단계로 구간을 나눈다",
@@ -649,7 +650,7 @@
       "examGuideTaskId": "mla-t1-2",
       "skill": "AWS 변환 도구 사용(K4, SK1)",
       "section": "tool-choice",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "기존 Hadoop·Spark 작업 자산이 많고 클러스터 구성과 인스턴스 유형까지 직접 제어하면서 대규모 변환을 돌리려 한다. 가장 적절한 서비스는 무엇인가?",
       "options": [
         "AWS Glue DataBrew 레시피 잡",

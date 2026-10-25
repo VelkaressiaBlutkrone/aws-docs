@@ -80,7 +80,7 @@ lastVerified: 2026-10-17
 |---|---|
 | Amazon SageMaker → **SageMaker AI** | 2024-12-03 개명(ML 서비스 쪽). 문서 URL의 `sagemaker`는 그대로 |
 | SageMaker Data Wrangler | Studio Classic 기능 → **Canvas 안으로 통합**. 새 Studio에서는 Canvas로만 접근 |
-| Studio Classic | ⚠️ 기존 워크로드만 유지, 신규 온보딩 불가 |
+| Studio Classic | ⚠️ 기존 워크로드만 유지, 신규 온보딩 불가. **2024-12-31 유지보수 종료** |
 | Ground Truth · A2I · Mechanical Turk | ⚠️ 신규 고객 불가 / 유지 모드 / 폐쇄 — 자세한 것은 9) |
 | Feature Store · Canvas | 'SageMaker AI 기능 묶음' 신규 고객 중단 공지 **대상이 아님** |
 
@@ -156,7 +156,7 @@ lastVerified: 2026-10-17
 
 | 도구 | 언제 | 핵심 제약 |
 |---|---|---|
-| **Data Wrangler**(Canvas) | ML 데이터를 시각적으로 가져와 변환·특성화하고 Feature Store·Pipelines로 내보낼 때 | 대화형 변환은 **샘플에만** 적용, 전체 처리는 별도 처리 잡. **5 GB 초과 데이터에 권장**. Process numeric·Handle missing은 단일 열 |
+| **Data Wrangler**(Canvas) | ML 데이터를 시각적으로 가져와 변환·특성화하고 Feature Store·Pipelines로 내보낼 때 | 대화형 변환은 **샘플에만** 적용, 전체 처리는 별도 처리 잡. 문서는 **5 GB를 넘는 데이터셋이면 Canvas 단독 처리 대신 Data Wrangler(처리 잡) 사용을 권장**합니다(5 GB 이하를 못 쓴다는 뜻이 아닙니다). Process numeric·Handle missing은 단일 열 |
 | **AWS Glue**(ETL) | 서버리스 Spark ETL + Data Catalog 연동 + ML 변환 + 스트리밍 ETL | 시각적 노드 또는 PySpark·Scala. DynamicFrame |
 | **AWS Glue DataBrew** | 코드 없이 정리·정규화하고 **레시피를 재사용**할 때 | 250개 이상 사전 구축 변환, 서버리스, **레시피 1개에 변환 100개까지** |
 | **Amazon EMR**(Spark) | 기존 Hadoop·Spark 자산, 클러스터·인스턴스까지 제어 | 배포 옵션 EC2·EKS·Outposts·Serverless |
@@ -243,11 +243,11 @@ lastVerified: 2026-10-17
 
 ## 🧪 자가 점검
 
-1. 범주 값이 수천 개이고 오탈자가 많은 열을 인코딩해야 한다. 어떤 인코딩을 고르고, 그 방식이 one-hot과 다른 점은?
-2. 중첩 JSON 로그를 관계형 테이블로 옮기려 한다. Glue의 어떤 메서드를 쓰고 무엇을 해 주는가?
-3. Firehose에서 Lambda 변환이 타임아웃으로 실패한다. 확인할 한도 세 가지는?
-4. 특성 그룹에 레코드를 넣었는데 온라인 조회에 나오지 않는다. 확인할 두 가지는?
-5. 레이블 품질이 낮아 다시 작업해야 한다. 검증과 조정 중 무엇을 골라야 하는가?
+1. 범주 값이 수천 개이고 오탈자가 많은 열을 인코딩해야 한다. 어떤 인코딩을 고르고, 그 방식이 one-hot과 다른 점은? *(→ 4) 인코딩)*
+2. 중첩 JSON 로그를 관계형 테이블로 옮기려 한다. Glue의 어떤 메서드를 쓰고 무엇을 해 주는가? *(→ 5) Glue 변환)*
+3. Firehose에서 Lambda 변환이 타임아웃으로 실패한다. 확인할 한도 세 가지는? *(→ 7) 스트리밍 변환)*
+4. 특성 그룹에 레코드를 넣었는데 온라인 조회에 나오지 않는다. 확인할 두 가지는? *(→ 8) Feature Store)*
+5. 레이블 품질이 낮아 다시 작업해야 한다. 검증과 조정 중 무엇을 골라야 하는가? *(→ 9) 레이블링)*
 
 ---
 

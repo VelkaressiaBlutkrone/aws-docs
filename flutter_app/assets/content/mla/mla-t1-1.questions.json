@@ -3,6 +3,7 @@
   "taskTitle": "데이터를 수집 및 저장",
   "domain": 1,
   "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
   "questions": [
     {
       "id": "mla-t1-1-q1",
@@ -41,7 +42,7 @@
       "examGuideTaskId": "mla-t1-1",
       "skill": "데이터 액세스 패턴에 따라 적절한 데이터 형식 선택(SK2)",
       "section": "formats",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "수집 단계에서 레코드가 끊임없이 쓰이고, 쌓인 데이터는 나중에 분석 쿼리로 읽는다. 수집 단계 파일 형식과 이후 처리에 대한 설명으로 가장 적절한 것은 무엇인가?",
       "options": [
         "수집·분석 모두 Parquet으로 통일하고 수집 단계에서 작은 파일로 자주 기록한다",
@@ -105,7 +106,7 @@
       "examGuideTaskId": "mla-t1-1",
       "skill": "데이터 형식 및 수집 메커니즘 이해(K1)",
       "section": "training-input",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "SageMaker 내장 알고리즘에 CSV로 학습 데이터를 넘기려고 한다. 파일 구성에 대한 설명으로 옳은 것은 무엇인가?",
       "options": [
         "헤더 레코드가 없어야 하고 타깃(레이블) 변수가 첫 번째 열이어야 한다",
@@ -197,7 +198,7 @@
       "examGuideTaskId": "mla-t1-1",
       "skill": "핵심 AWS 데이터 소스 사용 방법(K2)",
       "section": "input-modes",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "전처리 결과가 이미 Amazon EFS 파일 시스템에 있고 여러 팀이 그 파일을 공유해 쓰고 있다. 이 데이터를 SageMaker 학습 잡의 입력으로 쓰려고 한다. 가장 적절한 구성은 무엇인가?",
       "options": [
         "EFS를 학습 잡의 데이터 소스로 지정하고 학습 잡을 VPC에 연결한다",
@@ -605,7 +606,7 @@
       "examGuideTaskId": "mla-t1-1",
       "skill": "AWS 스트리밍 데이터 소스를 사용한 수집(K3)",
       "section": "streaming",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "사내 팀이 이미 Apache Kafka 프로듀서·컨슈머와 Kafka Connect 플러그인을 운영 중이다. 코드를 바꾸지 않고 AWS에서 같은 스트리밍 파이프라인을 운영하려면 무엇을 고르는가?",
       "options": [
         "Amazon Kinesis Data Streams로 옮기고 KCL 소비자를 새로 만든다",
@@ -669,7 +670,7 @@
       "examGuideTaskId": "mla-t1-1",
       "skill": "데이터 형식 및 수집 메커니즘 이해(K1)",
       "section": "training-input",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "SageMaker 내장 알고리즘 다수가 표준 입력으로 받고, Pipe 모드와 함께 쓰이도록 설계된 이진 레코드 형식은 무엇인가?",
       "options": [
         "Apache Avro 컨테이너 파일(application/avro)",
