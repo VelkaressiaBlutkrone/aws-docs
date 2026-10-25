@@ -29,6 +29,7 @@ class ExamView extends StatefulWidget {
     this.initialPicked = const {},
     this.initialFlagged = const {},
     this.restored = false,
+    this.progressRestored = true,
     this.onProgress,
     this.runNonce,
     this.onFinished,
@@ -48,6 +49,11 @@ class ExamView extends StatefulWidget {
   final Map<int, int> initialPicked;
   final Set<int> initialFlagged;
   final bool restored;
+
+  /// 복원하면서 **저장된 진행까지 되살렸는지**(설계 §4.4.1). nonce가 어긋나거나 진행 키가
+  /// 없으면 문항만 복원하고 index 0·무선택에서 시작하는데, 그때도 "이전 진행을
+  /// 복원했습니다"를 띄우면 답이 하나도 없는 화면이 거짓말을 한다.
+  final bool progressRestored;
 
   /// 진행 통지(설계 2026-10-24 §4.4). 가변부만 넘긴다 — 출제 문항은
   /// 스냅샷이 이미 들고 있다. `onChanged`와 당분간 공존하며, 페이지가 모두 옮겨간 뒤
@@ -276,7 +282,9 @@ class _ExamViewState extends State<ExamView> {
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
               child: Text(
-                '이전 진행을 복원했습니다.',
+                widget.progressRestored
+                    ? '이전 진행을 복원했습니다.'
+                    : '이전 진행은 복원하지 못해 처음부터 표시합니다.',
                 style: t.labelSmall?.copyWith(color: c.textMuted),
               ),
             ),

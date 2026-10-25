@@ -176,6 +176,26 @@ void main() {
         reason: '타임존이 박혀 있어야 오프셋이 바뀌어도 같은 절대 시각으로 읽힌다');
   });
 
+  testWidgets('⚠️ nonce가 어긋난 진행을 버렸으면 복원했다고 말하지 않는다', (tester) async {
+    // §4.4.1 — 두 탭·부분 쓰기로 세대가 엇갈리면 진행을 버린다. 그때도 "이전 진행을
+    // 복원했습니다"가 떠서, 답이 하나도 없는 화면이 거짓말을 했다.
+    final b = MemoryBackend();
+    final store = ExamSessionStore(backend: b);
+    store.saveSnapshot(_snapshot(nonce: 'run-2'));
+    store.saveProgress(ExamProgress(
+      examId: 'exam:${_entry().taskId}',
+      nonce: 'run-1', // 옛 세대
+      index: 1,
+      picked: const {0: 1},
+      flagged: const [],
+    ));
+
+    await _pump(tester, b);
+
+    expect(find.text('이전 진행을 복원했습니다.'), findsNothing);
+    expect(find.text('이전 진행은 복원하지 못해 처음부터 표시합니다.'), findsOneWidget);
+  });
+
   testWidgets('진입이 구포맷 키를 빈 값으로 새로 만들지 않는다', (tester) async {
     final b = MemoryBackend();
     await _pump(tester, b);

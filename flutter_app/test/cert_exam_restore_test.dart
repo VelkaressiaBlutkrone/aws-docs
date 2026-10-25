@@ -76,8 +76,13 @@ ExamSnapshot _snapshot(String code, {String nonce = 'run-1'}) => ExamSnapshot(
       questions: [_snapQ('s1', '스냅샷 전용 문항'), _snapQ('s2', '두 번째')],
     );
 
-Future<void> _pump(WidgetTester tester, String code, KvBackend backend) async {
-  tester.view.physicalSize = const Size(1400, 2400);
+Future<void> _pump(
+  WidgetTester tester,
+  String code,
+  KvBackend backend, {
+  Size size = const Size(1400, 2400),
+}) async {
+  tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
@@ -246,5 +251,33 @@ void main() {
 
     expect(b.keys().where((k) => k.startsWith('awsdocs.examSession.v1:')), isEmpty,
         reason: '없던 키에 빈 값을 쓰면 진입마다 영구 축적된다');
+  });
+
+  testWidgets('짧은 뷰포트에서도 잠금 화면에서 이어서 풀 수 있다', (tester) async {
+    // 비스크롤 Column이면 덧붙인 버튼이 잘려 **탭조차 못 한다** — §4.3이 통째로 막힌다.
+    final b = MemoryBackend();
+    ExamSessionStore(backend: b).saveSnapshot(_snapshot('SAA-C03'));
+
+    await _pump(tester, 'SAA-C03', b, size: const Size(400, 240));
+
+    expect(tester.takeException(), isNull, reason: '오버플로 없이 렌더돼야 한다');
+    await tester.ensureVisible(find.text('이어서 풀기')); // 스크롤 조상이 없으면 여기서 던진다
+    await tester.tap(find.text('이어서 풀기'));
+    await tester.pumpAndSettle(
+      const Duration(milliseconds: 100),
+      EnginePhase.sendSemanticsUpdate,
+      const Duration(seconds: 10),
+    );
+
+    expect(find.text('스냅샷 전용 문항'), findsOneWidget);
+  });
+
+  testWidgets('짧은 뷰포트에서도 시작 화면이 넘치지 않는다', (tester) async {
+    final b = MemoryBackend();
+
+    await _pump(tester, 'CLF-C02', b, size: const Size(400, 240));
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('시작'), findsOneWidget);
   });
 }

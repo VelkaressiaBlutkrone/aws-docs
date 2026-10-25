@@ -105,11 +105,16 @@ class ExamSessionStore {
   /// 시간은 보지 않는다. 판정은 여기 바깥에 있다: 두 페이지의 진입 경로는 [clearExpired]를
   /// 먼저 돌려 만료분을 치우고(§4.6), 그래도 복원된 만료 세션은 `ExamView`가 첫 프레임
   /// 뒤 자동 제출한다. 그래서 시계를 주입받지 않는다.
-  ({ExamSnapshot snapshot, ExamProgress progress})? loadRun(String examId) {
+  /// [progressRestored]는 **저장된 진행을 채택했는지**를 알린다. 화면이 "이전 진행을
+  /// 복원했습니다"를 띄울 자격이 있는지 판단하는 근거다 — 버린 진행을 복원했다고 말하면
+  /// 답이 하나도 없는 화면이 거짓말을 한다.
+  ({ExamSnapshot snapshot, ExamProgress progress, bool progressRestored})?
+      loadRun(String examId) {
     final snapshot = loadSnapshot(examId);
     if (snapshot == null) return null;
     final stored = loadProgress(examId);
-    final progress = (stored != null && stored.nonce == snapshot.nonce)
+    final keep = stored != null && stored.nonce == snapshot.nonce;
+    final progress = keep
         ? sanitizeProgress(stored, snapshot.questions)
         : ExamProgress(
             examId: examId,
@@ -118,7 +123,7 @@ class ExamSessionStore {
             picked: const {},
             flagged: const [],
           );
-    return (snapshot: snapshot, progress: progress);
+    return (snapshot: snapshot, progress: progress, progressRestored: keep);
   }
 
   void clearRun(String examId) {
