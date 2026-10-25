@@ -92,14 +92,14 @@ lastVerified: 2026-10-17
 |---|---|---|---|
 | 이상값 | **Handle outliers**: Robust standard deviation · Standard deviation · Quantile · Min-Max numeric. 처리 방식은 **Clip·Remove·Invalidate**. 범주는 Replace rare | FLAG/REMOVE/REPLACE_OUTLIERS, RESCALE_OUTLIERS_WITH_Z_SCORE, RESCALE_OUTLIERS_WITH_SKEW. 전략 Z_SCORE·MODIFIED_Z_SCORE·IQR(threshold 기본 3) | 전용 변환 없음 → Filter·SQL·Derived column으로 구현 |
 | 결측 | **Handle missing values**: Fill missing(**지정한 값**) · Impute missing(**계산값**: 숫자 평균·중앙값, 범주 최빈값) · Add indicator · Drop missing | FILL_WITH_AVERAGE·_MEDIAN·_MODE·_CUSTOM 등, REMOVE_MISSING | **FillMissingValues**(ML 모델이 대체값을 예측해 새 필드에 기록), Drop Null Fields |
-| 중복 | Concatenate의 중복 제거, 사용자 지정 변환 | DELETE_DUPLICATE_ROWS(행 전체 일치) · **REMOVE_DUPLICATES(선택 열 기준)** · FLAG 계열 | Drop Duplicates, **FindMatches**(공통 키 없는 유사 중복, ML) |
+| 중복 | Concatenate의 'Remove duplicates after concatenation', **사용자 지정 변환의 `Drop duplicate rows` 스니펫**(`df.dropDuplicates(subset)`) — 현행 변환 목록의 **Manage Rows에는 Sort·Shuffle뿐**이다 | DELETE_DUPLICATE_ROWS(행 전체 일치) · **REMOVE_DUPLICATES(선택 열 기준)** · FLAG 계열 | Drop Duplicates, **FindMatches**(공통 키 없는 유사 중복, ML) |
 | 결합 | Join 7종, Concatenate | JOIN 7종, UNION | Join, Union, **mergeDynamicFrame**(기본키 병합, 스테이징이 덮어씀), Lookup |
 
 자주 틀리는 지점:
 
 - **Fill missing은 지정한 값, Impute missing은 계산값**(평균·중앙값·최빈값)입니다. 상수로 채우려면 Fill입니다.
 - Process numeric·Handle missing은 **한 번에 한 열에만** 적용됩니다.
-- Glue **Drop Null Fields는 모든 값이 null인 열을 제거**합니다. 빈 문자열·문자열 `"null"`·`-1`·`0` 같은 자리표시자는 자동으로 null로 인식하지 않습니다.
+- Glue **Drop Null Fields는 "모든 값이 null인 열"만 제거**합니다 — 정상 값과 결측이 **섞인 열은 대상이 아닙니다**(부분 결측은 `FillMissingValues`나 필터로 처리합니다). 빈 문자열·문자열 `"null"`·`-1` 같은 자리표시자는 **기본값으로는** null로 인식되지 않지만, `NullCheckBoxList`(`IsEmpty`·`IsNullString`·`IsNegOne`)와 `NullTextList`(사용자 지정 자리표시자)로 null로 간주하게 **설정할 수 있습니다.** 설정해도 "열 전체가 null"이 되어야 삭제됩니다.
 - 정확 일치 중복은 DELETE_DUPLICATE_ROWS·Drop Duplicates로, **철자·표기가 다른 유사 중복은 FindMatches**로 풉니다.
 
 > 🧠 **원리** — Spark DataFrame은 스키마가 먼저 필요하고 같은 필드의 타입이 레코드마다 다르면 string으로 보고하기 쉽습니다. Glue **DynamicFrame**은 레코드가 자기 기술적이라 초기 스키마 없이 읽고, 불일치를 choice 타입으로 표현했다가 `resolveChoice`로 해소합니다. 지저분한 데이터 ETL에 DynamicFrame을 쓰는 이유입니다.

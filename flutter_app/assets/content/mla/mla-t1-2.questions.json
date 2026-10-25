@@ -70,19 +70,19 @@
       "skill": "데이터 정리·변환 기법(K1, SK1)",
       "section": "cleaning",
       "difficulty": "applied",
-      "stem": "Glue 작업에서 Drop Null Fields 변환을 넣었는데 결측이 섞인 열이 그대로 남아 있다. 확인해 보니 그 열에는 빈 문자열과 문자열 \"null\", 그리고 -1이 섞여 있었다. 가장 적절한 설명은 무엇인가?",
+      "stem": "Glue 작업에 Drop Null Fields 변환을 넣었는데, 정상 값과 결측이 섞여 있는 열이 그대로 남아 있다. 그 열의 결측은 빈 문자열과 문자열 \"null\", -1로 기록돼 있다. 이 변환의 동작으로 옳은 것은 무엇인가?",
       "options": [
-        "Drop Null Fields는 모든 값이 null인 열만 제거하므로 자리표시자는 먼저 null로 바꿔야 한다",
-        "Drop Null Fields는 DynamicFrame에서는 동작하지 않는다",
-        "Drop Null Fields는 행 단위로만 동작한다",
-        "Drop Null Fields는 Glue 4.0 이상에서만 동작한다"
+        "자리표시자를 null로 인식하도록 설정하면 그 열이 제거된다",
+        "열(필드) 단위가 아니라 행 단위로 동작하므로 결측 행이 지워진다",
+        "모든 값이 null인 열만 제거하므로, 정상 값이 섞인 열은 설정을 바꿔도 제거되지 않는다",
+        "DynamicFrame에서는 동작하지 않아 Spark DataFrame으로 변환해야 한다"
       ],
-      "correct": 0,
-      "explanation": "Drop Null Fields는 모든 값이 null인 열을 제거하는 변환입니다. 빈 문자열, 문자열 \"null\", -1, 0 같은 자리표시자는 자동으로 null로 인식되지 않으므로 앞 단계에서 null로 변환해야 합니다.",
+      "correct": 2,
+      "explanation": "Drop Null Fields는 '열의 모든 값이 null'인 경우에만 그 열을 제거합니다. 정상 값이 하나라도 있으면 대상이 아니므로, 부분 결측은 FillMissingValues나 필터로 처리해야 합니다. 참고로 빈 문자열·문자열 \"null\"·-1은 기본값으로는 null로 인식되지 않지만 NullCheckBoxList(IsEmpty·IsNullString·IsNegOne)와 사용자 지정 자리표시자 목록으로 null로 간주하게 설정할 수 있습니다.",
       "wrongExplanations": {
-        "1": "DynamicFrame을 대상으로 동작하는 Glue 변환입니다.",
-        "2": "열(필드) 단위로 동작합니다. 행 제거는 Remove null rows 같은 별도 변환입니다.",
-        "3": "Glue 4.0 이상이 요구되는 것은 데이터 통합(DI) 변환 묶음이며 Drop Null Fields는 그 묶음이 아닙니다."
+        "0": "설정으로 자리표시자를 null로 인식시킬 수는 있지만, 그래도 '열 전체가 null'이 되어야 제거됩니다. 정상 값이 섞여 있으면 조건을 채우지 못합니다.",
+        "1": "열(필드) 단위로 동작합니다. 행을 지우는 것은 Remove null rows 같은 별도 변환입니다.",
+        "3": "DynamicFrame을 대상으로 동작하는 Glue 변환입니다. Glue 4.0 이상이 요구되는 것은 데이터 통합(DI) 변환 묶음입니다."
       },
       "sources": [
         {
