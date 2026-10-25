@@ -72,9 +72,11 @@ void main() {
         }
       });
 
-      test('개념 확인(associate) 문항이 Task당 5개 이상이다', () {
+      test('개념 확인(foundational) 문항이 Task당 5개 이상이다', () {
         // 전부 시나리오형(applied)이면 학습 순서상 진입 장벽이 높다.
         // 정의·규칙을 묻는 문항이 섞여 있어야 개념을 먼저 세울 수 있다.
+        // ⚠️ 라벨은 레포 전체 규약(foundational·applied)을 따른다 — 'associate'는
+        // 시험 등급명과 겹쳐 모호하고 다른 자격증 파일이 쓰지 않는다.
         final map = json.decode(File(path).readAsStringSync())
             as Map<String, dynamic>;
         final byDifficulty = <String, int>{};
@@ -82,8 +84,19 @@ void main() {
           final d = (q['difficulty'] ?? '').toString();
           byDifficulty[d] = (byDifficulty[d] ?? 0) + 1;
         }
-        expect(byDifficulty['associate'] ?? 0, greaterThanOrEqualTo(5),
+        expect(byDifficulty.keys, everyElement(isIn(['foundational', 'applied'])),
+            reason: '$taskId 난이도 라벨은 foundational·applied만 쓴다: $byDifficulty');
+        expect(byDifficulty['foundational'] ?? 0, greaterThanOrEqualTo(5),
             reason: '$taskId 난이도 분포: $byDifficulty');
+      });
+
+      test('문항 파일에 검증 기준일(lastVerified)이 있다', () {
+        // md 머리말은 lastVerified를 갖는데 문항 파일에는 없어 상태가 엇갈렸다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        expect(RegExp(r'^\d{4}-\d{2}-\d{2}$')
+            .hasMatch((map['lastVerified'] ?? '').toString()), isTrue,
+            reason: '$taskId: 문항 사실 확인 기준일을 YYYY-MM-DD로 적는다');
       });
 
       test('해설에 마크다운 표기가 없다', () {

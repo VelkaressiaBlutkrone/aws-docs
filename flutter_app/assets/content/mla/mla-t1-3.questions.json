@@ -3,6 +3,7 @@
   "taskTitle": "데이터 무결성을 보장하고 모델링을 위한 데이터 준비",
   "domain": 1,
   "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
   "questions": [
     {
       "id": "mla-t1-3-q1",
@@ -101,7 +102,7 @@
       "examGuideTaskId": "mla-t1-3",
       "skill": "사전·사후 편향 지표 구분(K1)",
       "section": "metric-choice",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "아직 모델을 학습하지 않은 상태에서 데이터의 편향을 측정하려 한다. 사전 훈련 편향 지표에 대한 설명으로 옳은 것은 무엇인가?",
       "options": [
         "모델 예측이 필요하므로 임시 엔드포인트를 만들어야 한다",
@@ -285,7 +286,7 @@
       "examGuideTaskId": "mla-t1-3",
       "skill": "데이터세트 분할·셔플·층화(SK3)",
       "section": "split",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "Data Wrangler의 Stratified split을 쓰려는데 기준 열의 고유값이 매우 많다. 확인해야 할 제약은 무엇인가?",
       "options": [
         "기준 열의 고유값이 100개 이하여야 한다",
@@ -621,7 +622,7 @@
       "examGuideTaskId": "mla-t1-3",
       "skill": "민감 데이터 탐지·분류(K4, K5)",
       "section": "sensitive-data",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "영어로 작성된 임상 노트에서 보호 대상 건강 정보(PHI)를 찾아내려 한다. 가장 적절한 서비스와 주의 사항은 무엇인가?",
       "options": [
         "Amazon Macie로 S3 객체를 스캔하고 결과를 그대로 신뢰한다",
@@ -685,7 +686,7 @@
       "examGuideTaskId": "mla-t1-3",
       "skill": "접근 통제(K4)",
       "section": "access-residency",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "Lake Formation에서 LF-Tags를 쓰려고 한다. IAM 태그와의 관계로 옳은 것은 무엇인가?",
       "options": [
         "LF-Tags와 IAM 태그는 서로 다르며 바꿔 쓸 수 없다",
@@ -713,7 +714,7 @@
       "examGuideTaskId": "mla-t1-3",
       "skill": "편향 소스 식별(SK2)",
       "section": "bias-sources",
-      "difficulty": "associate",
+      "difficulty": "foundational",
       "stem": "데이터를 모을 때 무작위 샘플링을 쓰지 않고 접근하기 쉬운 일부 지점의 기록만 모았다. 그 결과 데이터셋이 전체 모집단을 직접 대표하지 못한다. AWS 문서가 설명하는 편향 소스 분류로 가장 가까운 것은 무엇인가?",
       "options": [
         "알고리즘 편향",
