@@ -20,7 +20,7 @@
       "correct": 0,
       "explanation": "CI는 facet 간 구성원 수의 불균형을 재는 지표로 (n_a − n_d)/(n_a + n_d)로 계산되며 레이블을 보지 않습니다. 그룹 표현이 현실을 반영하는지 확인할 때 쓰는 지표입니다.",
       "wrongExplanations": {
-        "1": "DPL은 facet 간 **긍정 레이블 비율**의 차이를 재므로 레이블이 필요합니다.",
+        "1": "DPL은 facet 간 긍정 레이블 비율의 차이를 재므로 레이블이 필요합니다.",
         "2": "KL은 두 facet의 레이블 분포 사이 발산을 재는 분포형 지표입니다.",
         "3": "CDD는 하위집단(group variable)으로 조건화해 거절·수락 비중의 격차를 보는 지표입니다."
       },
@@ -44,13 +44,13 @@
       "difficulty": "applied",
       "stem": "전체로 보면 두 그룹의 승인 격차가 없어 보이는데, 지역별로 나눠 보면 한쪽 그룹이 계속 불리하다. 이런 하위집단 효과(Simpson's paradox)를 배제하고 편향을 재려면 무엇이 필요한가?",
       "options": [
-        "KS 지표를 계산한다",
+        "KS 지표를 계산해 가장 불균형한 레이블을 찾는다",
         "CDD 지표를 계산하고 group variable을 지정한다",
-        "CI 지표를 facet마다 계산한다",
-        "사후 훈련 지표 DPPL을 계산한다"
+        "CI 지표를 facet 값마다 따로 계산해 비교한다",
+        "사후 훈련 지표 DPPL을 계산해 예측 편향을 본다"
       ],
       "correct": 1,
-      "explanation": "Conditional Demographic Disparity(CDD, 구성 키 `CDDL`)는 하위집단으로 조건화한 격차의 가중 평균으로, Simpson's paradox를 배제하기 위한 지표입니다. 계산에는 하위집단을 만드는 범주형 열(`group_variable`)이 필요합니다.",
+      "explanation": "Conditional Demographic Disparity(CDD, 구성 키 CDDL)는 하위집단으로 조건화한 격차의 가중 평균으로, Simpson's paradox를 배제하기 위한 지표입니다. 계산에는 하위집단을 만드는 범주형 열(group_variable)이 필요합니다.",
       "wrongExplanations": {
         "0": "KS는 레이블 분포 간 최대 발산을 찾는 분포형 지표로 하위집단 조건화와 무관합니다.",
         "2": "CI는 구성원 수 불균형만 보고 레이블 결과를 보지 않습니다.",
@@ -142,11 +142,11 @@
         "Clarify의 CI 지표를 재계산"
       ],
       "correct": 0,
-      "explanation": "클래스 가중치는 데이터를 그대로 두고 손실에서 소수 클래스에 큰 가중을 주는 방식입니다. XGBoost는 `scale_pos_weight`(기본 1, 전형적인 값은 음성 수 합 / 양성 수 합)를 제공합니다.",
+      "explanation": "클래스 가중치는 데이터를 그대로 두고 손실에서 소수 클래스에 큰 가중을 주는 방식입니다. XGBoost는 scale_pos_weight(기본 1, 전형적인 값은 음성 수 합 / 양성 수 합)를 제공합니다.",
       "wrongExplanations": {
-        "1": "Random oversample은 소수 샘플을 복제해 **데이터 분포 자체를 바꿉니다.**",
+        "1": "Random oversample은 소수 샘플을 복제해 데이터 분포 자체를 바꿉니다.",
         "2": "SMOTE도 보간으로 합성 샘플을 만들어 데이터를 바꾸는 방식입니다.",
-        "3": "CI는 불균형을 **측정**할 뿐 조정하지 않습니다."
+        "3": "CI는 불균형을 측정할 뿐 조정하지 않습니다."
       },
       "sources": [
         {
@@ -168,17 +168,17 @@
       "difficulty": "applied",
       "stem": "소수 클래스를 단순 복제하지 않고 늘리기 위해 Data Wrangler의 Balance data에서 SMOTE를 골랐다. SMOTE의 동작으로 옳은 것은 무엇인가?",
       "options": [
-        "다수 클래스 샘플을 무작위로 제거해 비율을 맞춘다",
+        "다수 클래스 샘플을 무작위로 제거해 원하는 비율까지 맞춘다",
         "소수 클래스 샘플 사이를 보간해 새 샘플을 만들며, 이웃 계산은 숫자 특징으로 한다",
-        "손실 함수에서 소수 클래스 가중치를 자동으로 올린다",
-        "범주형 특징만 있는 데이터셋에서만 동작한다"
+        "손실 함수에서 소수 클래스의 가중치를 자동으로 올려 학습한다",
+        "소수 클래스 샘플을 그대로 복제해 원하는 비율까지 늘린다"
       ],
       "correct": 1,
       "explanation": "SMOTE는 소수 범주 샘플 사이를 보간해 합성 샘플을 만듭니다. 숫자 특징은 가중 평균으로, 비수치 특징은 두 원본 중 하나에서 확률적으로 복사하며 이웃(거리)은 숫자 특징만으로 계산합니다.",
       "wrongExplanations": {
-        "0": "그것은 Random undersample의 동작입니다.",
-        "2": "손실 가중치는 알고리즘 하이퍼파라미터(예: `scale_pos_weight`)의 영역입니다.",
-        "3": "SMOTE를 포함한 Balance data 연산자는 숫자와 비수치 특징이 섞인 데이터셋을 지원합니다."
+        "0": "그것은 Random undersample의 동작입니다. 데이터 양이 줄어드는 대신 비율이 맞춰집니다.",
+        "2": "손실 가중치는 데이터를 그대로 두고 학습만 조정하는 방식이며, 알고리즘 하이퍼파라미터(예: scale_pos_weight)의 영역입니다.",
+        "3": "그것은 Random oversample의 동작입니다. SMOTE는 복제가 아니라 이웃 샘플 사이를 보간해 새 값을 만듭니다."
       },
       "sources": [
         {
@@ -204,9 +204,9 @@
       "correct": 0,
       "explanation": "공식 문서는 합성 증강이 원본과 같은 편향을 가진 새 데이터를 만들기 때문에 증강 전에 원본의 편향을 먼저 해소하라고 안내하며, 증강에는 편향 왜곡을 줄이기 위한 감독이 필요하다고 적습니다.",
       "wrongExplanations": {
-        "1": "증강 표본에도 원본과 **같은** 레이블 규칙을 유지해야 합니다.",
+        "1": "증강 표본에도 원본과 같은 레이블 규칙을 유지해야 합니다.",
         "2": "증강은 데이터를 늘려 과적합을 완화하는 쪽으로 서술됩니다.",
-        "3": "합성 데이터 품질 검증 항목은 오히려 분포·상관 같은 **통계 속성의 보존**을 확인하라고 합니다."
+        "3": "합성 데이터 품질 검증 항목은 오히려 분포·상관 같은 통계 속성의 보존을 확인하라고 합니다."
       },
       "sources": [
         {
@@ -289,16 +289,16 @@
       "stem": "Data Wrangler의 Stratified split을 쓰려는데 기준 열의 고유값이 매우 많다. 확인해야 할 제약은 무엇인가?",
       "options": [
         "기준 열의 고유값이 100개 이하여야 한다",
-        "기준 열은 반드시 숫자여야 한다",
-        "분할 비율의 합이 2가 되어야 한다",
-        "랜덤 시드를 지정할 수 없다"
+        "기준 열이 범주형이면 층화 분할을 쓸 수 없다",
+        "분할 비율은 비율이 아니라 행 수로 지정해야 한다",
+        "층화 분할에는 랜덤 시드를 지정할 수 없어 재현이 안 된다"
       ],
       "correct": 0,
       "explanation": "층화 분할은 입력 열의 각 값이 각 분할에 비례해 들어가도록 나누며, 입력 열의 고유값이 100개 이하여야 한다는 제약이 있습니다.",
       "wrongExplanations": {
-        "1": "층화 기준은 범주 값이며 숫자여야 한다는 제약은 없습니다.",
-        "2": "분할 비율의 합은 1이어야 합니다.",
-        "3": "재현 가능한 분할을 위해 랜덤 시드를 지정할 수 있습니다."
+        "1": "층화 분할은 오히려 범주 값의 비율을 분할 간에 유지하는 기능입니다. 기준 열의 값 종류가 너무 많은 것이 제약입니다.",
+        "2": "분할은 비율로 지정하며 그 합이 1이어야 합니다.",
+        "3": "랜덤 시드를 지정할 수 있고, 같은 시드를 쓰면 같은 분할이 재현됩니다."
       },
       "sources": [
         {
@@ -314,7 +314,7 @@
       "skill": "저장 시·전송 중 암호화(K3)",
       "section": "encryption",
       "difficulty": "applied",
-      "stem": "SageMaker 학습 작업의 출력 모델 아티팩트를 **다른 계정**의 S3 버킷에 저장해야 한다. 암호화 구성으로 가장 적절한 것은 무엇인가?",
+      "stem": "SageMaker 학습 작업의 출력 모델 아티팩트를 다른 계정의 S3 버킷에 저장해야 한다. 암호화 구성으로 가장 적절한 것은 무엇인가?",
       "options": [
         "AWS managed key(aws/s3)를 OutputDataConfig에 지정한다",
         "고객 관리형 KMS 키를 만들어 작업 요청에 지정하고 실행 역할에 권한을 준다",
@@ -322,7 +322,7 @@
         "암호화를 끄고 버킷 정책으로만 접근을 제한한다"
       ],
       "correct": 1,
-      "explanation": "AWS managed key(`aws/s3`)는 키 정책을 편집할 수 없어 교차 계정 권한을 부여할 수 없습니다. 그래서 자체 고객 관리형 KMS 키를 만들어 작업 요청에 지정하고, 실행 역할이 그 키로 암호화할 수 있게 해야 합니다.",
+      "explanation": "AWS managed key(aws/s3)는 키 정책을 편집할 수 없어 교차 계정 권한을 부여할 수 없습니다. 그래서 자체 고객 관리형 KMS 키를 만들어 작업 요청에 지정하고, 실행 역할이 그 키로 암호화할 수 있게 해야 합니다.",
       "wrongExplanations": {
         "0": "AWS managed key로 암호화한 객체는 교차 계정으로 공유할 수 없습니다.",
         "2": "SSE-C는 요청마다 키를 보내야 해서 다른 역할·서비스와 공유하기 비실용적이며, 신규 범용 버킷에서는 기본 차단되는 방향으로 바뀌었습니다.",
@@ -349,15 +349,15 @@
       "stem": "규정상 분산 학습에서 노드 간 통신을 암호화해야 한다. SageMaker에서 어떻게 설정하고 무엇을 함께 확인해야 하는가?",
       "options": [
         "EnableInterContainerTrafficEncryption을 true로 두고 보안 그룹에 UDP 500·ESP 50 규칙을 둔다",
-        "ResourceConfig.VolumeKmsKeyId를 지정하면 노드 간 통신도 암호화된다",
-        "OutputDataConfig.KmsKeyId를 지정하면 된다",
-        "VPC 엔드포인트를 만들면 노드 간 통신이 자동 암호화된다"
+        "ResourceConfig.VolumeKmsKeyId를 지정하면 볼륨과 노드 간 통신이 함께 암호화된다",
+        "OutputDataConfig.KmsKeyId를 지정해 출력과 통신을 같은 키로 암호화한다",
+        "VPC 엔드포인트를 만들면 인스턴스 사이 통신이 자동으로 암호화된다"
       ],
       "correct": 0,
-      "explanation": "노드 간(컨테이너 간) 트래픽 암호화는 `EnableInterContainerTrafficEncryption=True`로 켜며, 사전 조건으로 보안 그룹에 자기 자신을 소스로 하는 UDP 500과 ESP 50 인·아웃바운드 규칙이 필요합니다.",
+      "explanation": "노드 간(컨테이너 간) 트래픽 암호화는 EnableInterContainerTrafficEncryption=True로 켜며, 사전 조건으로 보안 그룹에 자기 자신을 소스로 하는 UDP 500과 ESP 50 인·아웃바운드 규칙이 필요합니다.",
       "wrongExplanations": {
-        "1": "`VolumeKmsKeyId`는 ML 스토리지 볼륨 암호화용입니다.",
-        "2": "`OutputDataConfig.KmsKeyId`는 S3로 나가는 출력(모델 아티팩트) 암호화용입니다.",
+        "1": "VolumeKmsKeyId는 ML 스토리지 볼륨 암호화용입니다.",
+        "2": "OutputDataConfig.KmsKeyId는 S3로 나가는 출력(모델 아티팩트) 암호화용입니다.",
         "3": "VPC 엔드포인트는 네트워크 경로 구성이며 노드 간 통신 암호화를 켜지 않습니다."
       },
       "sources": [
@@ -384,7 +384,7 @@
       "correct": 1,
       "explanation": "Macie는 S3 객체를 대상으로 머신러닝과 패턴 매칭(managed data identifiers)으로 민감 데이터를 탐지해 sensitive data finding을 만듭니다. 버킷 인벤토리를 지속 평가하는 자동 민감 데이터 검색과 대상을 지정한 검색 작업 두 방식이 있습니다.",
       "wrongExplanations": {
-        "0": "Comprehend의 PII 기능은 영어·스페인어 **텍스트 문서**를 대상으로 합니다. S3 객체 전반의 민감 데이터 인벤토리 용도가 아닙니다.",
+        "0": "Comprehend의 PII 기능은 영어·스페인어 텍스트 문서를 대상으로 합니다. S3 객체 전반의 민감 데이터 인벤토리 용도가 아닙니다.",
         "2": "DataBrew는 표 형식 데이터를 시각적으로 준비하면서 PII를 탐지·마스킹하는 도구입니다.",
         "3": "Comprehend Medical은 임상 텍스트의 PHI를 탐지합니다."
       },
@@ -409,16 +409,16 @@
       "stem": "고객 지원 텍스트에서 PII를 가린 사본을 만들어 학습에 쓰려 한다. Amazon Comprehend로 편집(redaction)할 때의 제약은 무엇인가?",
       "options": [
         "편집은 비동기 배치 작업에서만 가능하다",
-        "편집은 실시간 분석에서만 가능하다",
-        "편집은 한국어 문서에만 지원된다",
-        "편집하면 원본 문서가 자동으로 삭제된다"
+        "편집은 실시간 분석에서만 가능하고 배치 작업은 탐지까지다",
+        "편집은 엔터티 타입 치환만 지원하고 마스크 문자는 쓸 수 없다",
+        "편집 결과를 받으려면 입력·출력 버킷이 서로 다른 리전이어야 한다"
       ],
       "correct": 0,
-      "explanation": "Comprehend의 PII 편집(redaction)은 비동기 배치 작업으로만 수행할 수 있습니다(`StartPiiEntitiesDetectionJob`에 `Mode=ONLY_REDACTION`과 `RedactionConfig` 지정). 실시간 분석은 엔터티 위치 파악까지입니다.",
+      "explanation": "Comprehend의 PII 편집(redaction)은 비동기 배치 작업으로만 수행할 수 있습니다(StartPiiEntitiesDetectionJob에 Mode=ONLY_REDACTION과 RedactionConfig 지정). 실시간 분석은 엔터티 위치 파악까지입니다.",
       "wrongExplanations": {
-        "1": "실시간 분석은 탐지(위치 파악)까지이고 편집은 배치 작업의 기능입니다.",
-        "2": "PII 기능은 영어와 스페인어 텍스트를 지원합니다.",
-        "3": "편집 작업은 결과를 출력 버킷에 쓰며 원본을 삭제하지 않습니다."
+        "1": "반대입니다. 실시간 분석은 탐지(위치 파악)까지이고, 편집은 비동기 배치 작업의 기능입니다.",
+        "2": "MaskMode로 엔터티 타입 치환(예: [NAME])과 마스크 문자 중 하나를 고를 수 있습니다.",
+        "3": "입력·출력 버킷은 호출하는 API와 같은 리전에 있어야 합니다."
       },
       "sources": [
         {
@@ -440,13 +440,13 @@
       "difficulty": "applied",
       "stem": "ETL 중인 표 형식 데이터에서 PII 열을 탐지해 같은 값이 항상 같은 결과가 되도록 단방향으로 변환하고 싶다. AWS Glue의 민감 데이터 탐지에서 고를 동작은 무엇인가?",
       "options": [
-        "Redact detected text",
-        "Partially redact",
+        "Redact detected text(탐지한 텍스트를 가림)",
+        "Partially redact(일부 문자만 남기고 가림)",
         "Apply cryptographic hash(SHA-256)",
         "Enrich(탐지 결과를 새 열로 추가)"
       ],
       "correct": 2,
-      "explanation": "Glue의 민감 데이터 처리 동작 중 암호화 해시(SHA-256)는 같은 입력에 항상 같은 해시를 만드는 단방향 변환입니다. `actionUsed` 값으로는 `SHA256_HASH`로 표시됩니다.",
+      "explanation": "Glue의 민감 데이터 처리 동작 중 암호화 해시(SHA-256)는 같은 입력에 항상 같은 해시를 만드는 단방향 변환입니다. actionUsed 값으로는 SHA256_HASH로 표시됩니다.",
       "wrongExplanations": {
         "0": "Redact는 탐지한 텍스트를 가리는 편집 동작이라 같은 값의 일관된 식별자가 남지 않습니다.",
         "1": "부분 편집도 값을 가리는 방식입니다.",
@@ -506,7 +506,7 @@
         "Data Wrangler의 Data Quality and Insights Report를 실행한다"
       ],
       "correct": 0,
-      "explanation": "Glue Data Quality는 규칙을 DQDL로 작성하며 Data Catalog와 ETL 작업 두 곳에서 실행할 수 있는데, **불량 레코드 식별은 ETL 작업에서만** 가능합니다. 동적 규칙(`last()`)도 ETL 전용입니다.",
+      "explanation": "Glue Data Quality는 규칙을 DQDL로 작성하며 Data Catalog와 ETL 작업 두 곳에서 실행할 수 있는데, 불량 레코드 식별은 ETL 작업에서만 가능합니다. 동적 규칙(last())도 ETL 전용입니다.",
       "wrongExplanations": {
         "1": "Data Catalog 실행에서는 불량 레코드를 식별할 수 없습니다.",
         "2": "DataBrew는 ruleset 기준 충족 여부로 전체 통과·실패를 판정하며 행 격리 기능은 문서에 서술돼 있지 않습니다.",
@@ -532,17 +532,17 @@
       "difficulty": "applied",
       "stem": "훈련 데이터를 FSx for Lustre 파일 시스템에서 읽도록 입력 채널을 구성했는데 작업이 파일 시스템에 접근하지 못한다. 확인해야 할 요건으로 옳은 것은 무엇인가?",
       "options": [
-        "훈련 작업이 VPC에 연결되고 서브넷이 파일 시스템과 같은 AZ이며 보안 그룹이 TCP 988·1018–1023을 허용하는지",
-        "파일 시스템이 훈련 작업과 다른 리전에 있는지",
-        "보안 그룹이 NFS TCP 2049만 허용하는지",
-        "DirectoryPath를 비워 두었는지"
+        "훈련 작업의 VPC 연결, 서브넷 AZ, 보안 그룹 포트(988·1018–1023)가 맞는지",
+        "파일 시스템이 훈련 작업과 다른 리전에 있고 S3 연결이 꺼져 있는지",
+        "보안 그룹이 NFS TCP 2049만 허용하고 마운트 대상이 있는지",
+        "DirectoryPath가 MountName으로 시작하지 않고 비어 있는지"
       ],
       "correct": 0,
       "explanation": "FSx for Lustre를 학습 입력으로 쓰려면 훈련 작업이 VPC에 연결돼야 하고, 파일 시스템이 단일 AZ이므로 같은 AZ의 서브넷을 지정해야 하며, 보안 그룹은 Lustre가 쓰는 TCP 988과 1018–1023을 허용해야 합니다.",
       "wrongExplanations": {
-        "1": "데이터셋과 파일 시스템은 훈련 작업과 **같은 리전**이어야 합니다.",
-        "2": "NFS TCP 2049는 **EFS**의 요건입니다.",
-        "3": "`FileSystemDataSource`는 `FileSystemId`·`FileSystemType`·`DirectoryPath`·`FileSystemAccessMode` 네 필드가 모두 필수이며, FSx의 경로는 `MountName`으로 시작해야 합니다."
+        "1": "데이터셋과 파일 시스템은 훈련 작업과 같은 리전이어야 합니다.",
+        "2": "NFS TCP 2049는 EFS의 요건입니다.",
+        "3": "FileSystemDataSource는 FileSystemId·FileSystemType·DirectoryPath·FileSystemAccessMode 네 필드가 모두 필수이며, FSx의 경로는 MountName으로 시작해야 합니다."
       },
       "sources": [
         {
@@ -562,7 +562,7 @@
       "skill": "모델 훈련 리소스로 데이터 로드(SK4)",
       "section": "training-load",
       "difficulty": "applied",
-      "stem": "S3에 객체가 8개뿐인 데이터셋으로 인스턴스 16대를 써서 분산 학습을 돌리며 `ShardedByS3Key`를 지정했다. 어떤 일이 일어나는가?",
+      "stem": "S3에 객체가 8개뿐인 데이터셋으로 인스턴스 16대를 써서 분산 학습을 돌리며 ShardedByS3Key를 지정했다. 어떤 일이 일어나는가?",
       "options": [
         "SageMaker가 객체를 자동으로 분할해 16대에 고르게 나눈다",
         "일부 노드는 데이터를 받지 못한 채 비용만 발생한다",
@@ -570,11 +570,11 @@
         "모든 노드가 전체 데이터를 복제해 받는다"
       ],
       "correct": 1,
-      "explanation": "`ShardedByS3Key`는 S3 객체를 인스턴스에 나눠 주는 방식이라 객체 수보다 인스턴스가 많으면 일부 노드는 데이터를 받지 못하고 비용만 발생합니다.",
+      "explanation": "ShardedByS3Key는 S3 객체를 인스턴스에 나눠 주는 방식이라 객체 수보다 인스턴스가 많으면 일부 노드는 데이터를 받지 못하고 비용만 발생합니다.",
       "wrongExplanations": {
         "0": "객체 내부를 쪼개 주지는 않습니다. 분배 단위는 S3 객체입니다.",
         "2": "검증 오류로 막아 주지 않습니다. 그래서 더 위험합니다.",
-        "3": "전체 복제는 `FullyReplicated`를 지정했을 때의 동작입니다."
+        "3": "전체 복제는 FullyReplicated를 지정했을 때의 동작입니다."
       },
       "sources": [
         {

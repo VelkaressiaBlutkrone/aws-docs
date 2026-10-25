@@ -72,6 +72,48 @@ void main() {
         }
       });
 
+      test('해설에 마크다운 표기가 없다', () {
+        // 해설은 `Text()` 위젯으로 **평문** 렌더된다(quiz_widgets.dart:245·251).
+        // 마크다운을 쓰면 `**`와 백틱이 화면에 글자 그대로 보인다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final offenders = <String>[];
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final texts = <String>[
+            (q['explanation'] ?? '').toString(),
+            ...(q['wrongExplanations'] as Map).values.map((v) => v.toString()),
+          ];
+          for (final t in texts) {
+            if (t.contains('**') || t.contains('`')) {
+              offenders.add('${q['id']}: ${t.substring(0, t.length.clamp(0, 40))}…');
+            }
+          }
+        }
+        expect(offenders, isEmpty,
+            reason: '해설은 평문으로 렌더된다 — 마크다운 제거:\n${offenders.join('\n')}');
+      });
+
+      test('정답 보기가 오답보다 지나치게 길지 않다', () {
+        // 가장 긴 보기가 정답인 패턴은 내용을 몰라도 찍게 만든다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final offenders = <String>[];
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final options = (q['options'] as List).cast<String>();
+          final correct = (q['correct'] as num).toInt();
+          final longestWrong = [
+            for (var i = 0; i < options.length; i++)
+              if (i != correct) options[i].length,
+          ].reduce((a, b) => a > b ? a : b);
+          if (options[correct].length > longestWrong * 1.4) {
+            offenders.add(
+                '${q['id']}: 정답 ${options[correct].length}자 vs 최장 오답 $longestWrong자');
+          }
+        }
+        expect(offenders, isEmpty,
+            reason: '정답이 유독 길면 단서가 된다(오답을 비슷한 구체성으로):\n${offenders.join('\n')}');
+      });
+
       test('문항의 section이 학습문서 앵커와 짝이 맞는다', () {
         // 개념 딥링크(`?at=`)는 문항 `section`을 md의 `{#id}` 앵커로 찾아간다.
         // 짝이 깨지면 링크가 조용히 죽으므로 문서와 함께 가드한다.
