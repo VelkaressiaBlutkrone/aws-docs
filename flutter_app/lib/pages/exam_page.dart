@@ -63,7 +63,8 @@ class _ExamPageState extends State<ExamPage> {
     final run = _store.loadRun(examId);
     if (run != null) {
       _pendingSnapshot = null; // 이미 저장돼 있다
-      return _ExamLoad.fromSnapshot(run.snapshot, run.progress);
+      return _ExamLoad.fromSnapshot(run.snapshot, run.progress,
+          progressRestored: run.progressRestored);
     }
     _store.clear(examId); // 구포맷 단일 키 폐기(§4.8)
 
@@ -208,6 +209,7 @@ class _ExamPageState extends State<ExamPage> {
                 initialPicked: data.initialPicked,
                 initialFlagged: data.initialFlagged,
                 restored: data.restored,
+                progressRestored: data.progressRestored,
                 passingScore: data.passingScore,
                 runNonce: data.nonce,
                 onProgress: _onProgress,
@@ -258,6 +260,7 @@ class _ExamLoad {
     required this.restored,
     required this.passingScore,
     this.nonce = '',
+    this.progressRestored = true,
   });
 
   /// 세대 식별자 — 진행 레코드가 들고 다닌다(설계 §4.4.1).
@@ -270,11 +273,20 @@ class _ExamLoad {
   final Map<int, int> initialPicked;
   final Set<int> initialFlagged;
   final bool restored;
+
+  /// 저장된 진행을 채택했는지(§4.4.1) — 복원 노트 문구가 이걸로 갈린다.
+  final bool progressRestored;
   final int? passingScore; // 시험 가이드 메타(없으면 null)
 
   /// 스냅샷 복원 — 에셋을 읽지 않는다. 보기는 이미 표시 순서가 적용돼 있으므로
   /// `optionOrders`는 비운다(설계 §4.1).
-  factory _ExamLoad.fromSnapshot(ExamSnapshot s, ExamProgress p) => _ExamLoad(
+  factory _ExamLoad.fromSnapshot(
+    ExamSnapshot s,
+    ExamProgress p, {
+    required bool progressRestored,
+  }) =>
+      _ExamLoad(
+        progressRestored: progressRestored,
         bank: QuestionBank(
           examGuideTaskId: s.taskId,
           taskTitle: '',

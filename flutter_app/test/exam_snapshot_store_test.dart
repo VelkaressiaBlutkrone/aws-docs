@@ -76,6 +76,24 @@ void main() {
     expect(run.progress.picked, {0: 1});
   });
 
+  test('짝이 맞으면 진행을 채택했다고 알린다', () {
+    store.saveSnapshot(_snap());
+    store.saveProgress(_prog(index: 1));
+    expect(store.loadRun(_examId)!.progressRestored, isTrue);
+  });
+
+  test('⚠️ nonce 불일치면 진행을 채택하지 않았다고 알린다', () {
+    // 버린 진행을 "이전 진행을 복원했습니다"로 알리면 화면이 거짓말을 한다.
+    store.saveSnapshot(_snap(nonce: 'run-2'));
+    store.saveProgress(_prog(nonce: 'run-1', index: 1));
+    expect(store.loadRun(_examId)!.progressRestored, isFalse);
+  });
+
+  test('진행 키가 없으면 채택한 진행도 없다', () {
+    store.saveSnapshot(_snap());
+    expect(store.loadRun(_examId)!.progressRestored, isFalse);
+  });
+
   test('⚠️ nonce 불일치: 진행을 버리고 index 0·무선택으로 복원', () {
     // 키 분리가 만드는 손상 채널 — 옛 진행이 새 스냅샷에 얹히면 안 된다(§4.4.1)
     store.saveSnapshot(_snap(nonce: 'B'));
