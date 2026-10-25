@@ -214,7 +214,10 @@ class _CertExamPageState extends State<CertExamPage> {
         certId: widget.cert.code,
         taskId: '${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}',
         nonce: nonce,
-        startedAtIso: startedAt.toIso8601String(),
+        // ⚠️ UTC로 쓴다(`...Z`). 오프셋 없는 로컬 벽시계로 저장하면 DST·시간대 이동 뒤
+        // 같은 문자열이 다른 절대 시각으로 읽혀 `clearExpired`가 **살아 있는** 세션을
+        // 만료로 오판할 수 있다 — 반목표("오히려 세션을 잃는 것").
+        startedAtIso: startedAt.toUtc().toIso8601String(),
         durationSec: durationSec,
         questions: questions,
         passingScore: d.overview?.passingScore,

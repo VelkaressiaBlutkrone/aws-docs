@@ -40,7 +40,8 @@ void resetCert(String certCode, {KvBackend? backend, int Function()? nowMs}) {
   PlanCheckStore(backend: b).clearCert(certCode);
   final sessions = ExamSessionStore(backend: b);
   for (final id in examIdsForCert(certCode)) {
-    sessions.clear(id);
+    sessions.clear(id); // 구포맷 단일 키
+    sessions.clearRun(id); // 스냅샷·진행 2키 — 안 지우면 초기화 뒤 시험이 되살아난다
   }
   SyncMeta(b).markReset(certCode, (nowMs ?? _utcNowMs)());
 }

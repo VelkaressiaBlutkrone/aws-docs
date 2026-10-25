@@ -150,4 +150,33 @@ void main() {
     );
     expect(store.clearExpired(now: () => _start), 0);
   });
+
+  test('clear는 없는 키에 빈 값을 새로 쓰지 않는다', () {
+    store.clear(_examId);
+    expect(backend.keys(), isEmpty,
+        reason: '진입마다 무조건 쓰면 구포맷 키가 빈 값으로 영구 축적된다');
+  });
+
+  test('clearRun은 없는 키를 새로 만들지 않는다', () {
+    store.clearRun(_examId);
+    expect(backend.keys(), isEmpty, reason: '빈 진행 키를 새로 만들면 고아 키가 쌓인다');
+  });
+
+  test('clearExpired: 스냅샷 없는 고아 진행 키를 비운다', () {
+    // 짝 스냅샷이 없으면 loadRun이 영원히 null이다 — 복원될 수 없는 키가 쿼터만 먹는다.
+    store.saveProgress(_prog());
+
+    expect(store.clearExpired(now: () => _start), 0, reason: '만료된 런은 없다');
+    expect(store.loadProgress(_examId), isNull);
+  });
+
+  test('clearExpired: 살아 있는 세션의 진행 키는 건드리지 않는다', () {
+    // 반목표 — 정리가 산 시험을 지우는 것
+    store.saveSnapshot(_snap());
+    store.saveProgress(_prog(index: 1));
+
+    store.clearExpired(now: () => _start.add(const Duration(seconds: 10)));
+
+    expect(store.loadProgress(_examId)?.index, 1);
+  });
 }

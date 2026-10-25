@@ -117,7 +117,9 @@ class _ExamPageState extends State<ExamPage> {
       certId: widget.entry.certForHistory,
       taskId: widget.entry.taskId,
       nonce: '${startedAt.microsecondsSinceEpoch}',
-      startedAtIso: startedAt.toIso8601String(),
+      // ⚠️ UTC로 쓴다(`...Z`) — 오프셋 없는 로컬 벽시계는 DST·시간대 이동 뒤 다른 절대
+      // 시각으로 읽혀 `clearExpired`가 산 세션을 만료로 오판할 수 있다(반목표).
+      startedAtIso: startedAt.toUtc().toIso8601String(),
       durationSec: durationSec,
       questions: presented,
       passingScore: overview?.passingScore,

@@ -8,6 +8,8 @@ import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/study_reset.dart';
 import 'package:aws_docs/models/attempt_record.dart';
 import 'package:aws_docs/models/exam_session.dart';
+import 'package:aws_docs/models/exam_snapshot.dart';
+import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/models/study_plan.dart';
 import 'package:aws_docs/data/study_plan_store.dart';
 import 'package:aws_docs/data/plan_check_store.dart';
@@ -38,6 +40,40 @@ ExamSession _sess(String examId) => ExamSession(
       questionIds: const ['q1'],
       optionOrders: const {},
       submitted: false,
+    );
+
+Question _q(String id) => Question(
+      id: id,
+      examGuideTaskId: 'clf-t1-1',
+      skill: '',
+      section: '',
+      difficulty: '',
+      stem: '문항 $id',
+      options: const ['보기 0', '보기 1'],
+      correct: 0,
+      explanation: '',
+      wrongExplanations: const {},
+      sources: const [],
+      verified: true,
+    );
+
+/// 새 포맷 스냅샷(2키 체제). 시작 시각을 미래로 둬서 만료 정리와 헷갈리지 않게 한다.
+ExamSnapshot _snap(String examId) => ExamSnapshot(
+      examId: examId,
+      certId: 'CLF-C02',
+      taskId: 'clf-t1-1',
+      nonce: 'run-1',
+      startedAtIso: '2099-01-01T00:00:00.000Z',
+      durationSec: 600,
+      questions: [_q('q1')],
+    );
+
+ExamProgress _prog(String examId) => ExamProgress(
+      examId: examId,
+      nonce: 'run-1',
+      index: 0,
+      picked: const {},
+      flagged: const [],
     );
 
 void main() {
@@ -129,6 +165,22 @@ void main() {
       expect(ExamSessionStore(backend: b).load('exam:CLF-C02-mock'), isNull);
       expect(ExamSessionStore(backend: b).load('exam:clf-t1-1'), isNull);
       expect(ExamSessionStore(backend: b).load('exam:saa-t1-1'), isNotNull);
+    });
+
+    test('resetCert: 새 포맷 스냅샷·진행도 함께 지운다', () {
+      // 구포맷 키만 지우면 초기화 뒤 스냅샷이 남아 **진행 중이던 시험이 되살아난다**.
+      final b = MemoryBackend();
+      final store = ExamSessionStore(backend: b);
+      store.saveSnapshot(_snap('exam:CLF-C02-mock'));
+      store.saveProgress(_prog('exam:CLF-C02-mock'));
+      store.saveSnapshot(_snap('exam:clf-t1-1'));
+      store.saveSnapshot(_snap('exam:SAA-C03-mock'));
+
+      resetCert('CLF-C02', backend: b);
+
+      expect(store.loadRun('exam:CLF-C02-mock'), isNull);
+      expect(store.loadRun('exam:clf-t1-1'), isNull, reason: 'Task 시험도 같이 지운다');
+      expect(store.loadRun('exam:SAA-C03-mock'), isNotNull, reason: '다른 자격증은 보존');
     });
 
     test('resetAll: 모든 store를 비운다', () {
