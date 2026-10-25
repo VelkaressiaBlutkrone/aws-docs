@@ -555,6 +555,126 @@
         }
       ],
       "verified": false
+    },
+    {
+      "id": "mla-t1-2-q20",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "데이터 정리·변환 기법(K1, SK1)",
+      "section": "cleaning",
+      "difficulty": "applied",
+      "stem": "센서 값 열에 측정 오류로 보이는 극단값이 섞여 있다. 행을 버리지 않으면서 극단값이 모델을 지배하지 않게 하려 한다. Data Wrangler의 Handle outliers에서 고를 처리 방식은 무엇인가?",
+      "options": [
+        "Clip — 임계 범위를 벗어난 값을 경계값으로 바꾼다",
+        "Remove — 임계 범위를 벗어난 값이 있는 행을 제거한다",
+        "Invalidate — 임계 범위를 벗어난 값을 결측으로 표시한다",
+        "Replace rare — 드물게 나타나는 범주를 지정 문자열로 바꾼다"
+      ],
+      "correct": 0,
+      "explanation": "Handle outliers의 Fix method는 Clip·Remove·Invalidate 세 가지입니다. 행을 유지하면서 극단값의 영향만 줄이려면 값을 경계값으로 바꾸는 Clip이 맞습니다.",
+      "wrongExplanations": {
+        "1": "Remove는 해당 행을 제거하므로 '행을 버리지 않는다'는 요건과 어긋납니다.",
+        "2": "Invalidate는 값을 결측으로 만들어 이후 결측 처리 단계가 필요해집니다. 값 자체를 살리는 선택이 아닙니다.",
+        "3": "Replace rare는 숫자 이상값이 아니라 드문 범주를 다루는 옵션입니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Handle outliers",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q21",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "특성 추출·변환 기법(K2)",
+      "section": "feature-transforms",
+      "difficulty": "associate",
+      "stem": "왜도가 큰 금액 열의 분포를 완만하게 만들려고 한다. AWS Glue DataBrew에서 쓰는 레시피 단계는 무엇인가?",
+      "options": [
+        "BUCKETIZATION 단계로 구간을 나눈다",
+        "SKEWNESS 단계에서 LOG 변환을 적용한다",
+        "SCALE 단계에서 MIN_MAX를 적용한다",
+        "BINARIZATION 단계에서 임계값을 지정한다"
+      ],
+      "correct": 1,
+      "explanation": "DataBrew의 SKEWNESS 단계는 왜도를 다루는 비선형 변환으로 LOG·ROOT·SQUARE를 제공합니다. 로그 변환은 한쪽으로 긴 꼬리를 가진 분포를 완만하게 만드는 대표적인 방법입니다.",
+      "wrongExplanations": {
+        "0": "BUCKETIZATION(콘솔명 Binning)은 숫자를 구간으로 나누는 변환으로, 분포의 모양을 바꾸는 것이 아니라 범주로 바꿉니다.",
+        "2": "MIN_MAX는 값의 범위를 0~1로 옮기는 스케일링입니다. 범위만 바뀌고 왜도는 그대로입니다.",
+        "3": "BINARIZATION은 임계값과 비교해 0 또는 1로 만드는 단계라 정보가 대부분 사라집니다."
+      },
+      "sources": [
+        {
+          "title": "DataBrew SKEWNESS 레시피 단계",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.SKEWNESS.html"
+        },
+        {
+          "title": "DataBrew Data science recipe steps",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.data-science.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q22",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "인코딩·텍스트 특성화(K3)",
+      "section": "encoding",
+      "difficulty": "applied",
+      "stem": "상품 리뷰 텍스트를 수치 특성으로 바꾸면서, 모든 문서에 흔한 단어의 비중을 낮추고 싶다. Data Wrangler의 Featurize text에서 어떤 구성을 쓰는가?",
+      "options": [
+        "Character statistics로 단어 수·대문자 비율을 뽑는다",
+        "Vectorize에서 Count 벡터라이저를 쓰고 Apply IDF를 켠다",
+        "Vectorize에서 Hashing 벡터라이저를 쓰고 특성 수를 늘린다",
+        "One-hot encode로 리뷰 문장을 범주로 인코딩한다"
+      ],
+      "correct": 1,
+      "explanation": "Featurize text의 Vectorize는 토크나이저와 벡터라이저(Count 또는 Hashing)를 고르고, Apply IDF를 켜면 TF-IDF가 됩니다. IDF는 많은 문서에 등장하는 흔한 단어의 가중치를 낮춥니다.",
+      "wrongExplanations": {
+        "0": "Character statistics는 단어 수·대문자·숫자 비율 같은 통계 열을 만드는 변환이라 단어별 가중치와 무관합니다.",
+        "2": "Hashing은 계산이 더 빠른 벡터라이저 선택지이고, 특성 수를 늘리는 것은 충돌을 줄일 뿐 흔한 단어의 비중을 낮추지 않습니다.",
+        "3": "원-핫 인코딩은 범주형 열을 다루는 방식이라 자유 텍스트 문장에는 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Featurize text·Vectorize·Apply IDF",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q23",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "AWS 변환 도구 사용(K4, SK1)",
+      "section": "tool-choice",
+      "difficulty": "associate",
+      "stem": "기존 Hadoop·Spark 작업 자산이 많고 클러스터 구성과 인스턴스 유형까지 직접 제어하면서 대규모 변환을 돌리려 한다. 가장 적절한 서비스는 무엇인가?",
+      "options": [
+        "AWS Glue DataBrew 레시피 잡",
+        "Amazon EMR",
+        "SageMaker Data Wrangler 데이터 흐름",
+        "AWS Glue 시각적 ETL 작업"
+      ],
+      "correct": 1,
+      "explanation": "Amazon EMR은 Hadoop·Spark 같은 빅데이터 프레임워크를 관리형 클러스터에서 실행하는 플랫폼으로, 클러스터·인스턴스 구성을 직접 제어할 수 있습니다. 기존 Spark 자산을 그대로 옮기기에 적합합니다.",
+      "wrongExplanations": {
+        "0": "DataBrew는 코드 없이 쓰는 시각적 준비 도구라 기존 Spark 코드를 실행하는 경로가 아닙니다.",
+        "2": "Data Wrangler는 ML 데이터를 시각적으로 준비하는 도구이며 클러스터 제어를 제공하지 않습니다.",
+        "3": "Glue는 서버리스라 클러스터·인스턴스 유형을 직접 고르는 요구와 맞지 않습니다. 워커 유형 선택은 가능하지만 클러스터 제어와는 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon EMR?",
+          "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html"
+        },
+        {
+          "title": "What is AWS Glue? — 서버리스 데이터 통합",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

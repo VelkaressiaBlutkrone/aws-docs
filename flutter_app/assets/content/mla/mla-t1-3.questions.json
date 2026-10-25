@@ -583,6 +583,162 @@
         }
       ],
       "verified": false
+    },
+    {
+      "id": "mla-t1-3-q20",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "규정 준수·데이터 레지던시(K5)",
+      "section": "access-residency",
+      "difficulty": "applied",
+      "stem": "규정상 학습 데이터와 작업이 지정한 리전 밖으로 나가면 안 된다. IAM 정책으로 리전을 제한할 때 함께 처리해야 하는 것은 무엇인가?",
+      "options": [
+        "aws:RequestedRegion으로 Deny하되 글로벌 서비스는 NotAction으로 제외한다",
+        "aws:RequestedRegion으로 모든 서비스를 예외 없이 Deny한다",
+        "KMS 키 정책에 리전 조건을 넣어 데이터 이동을 막는다",
+        "S3 버킷 정책에서 aws:SecureTransport를 false로 Deny한다"
+      ],
+      "correct": 0,
+      "explanation": "aws:RequestedRegion 조건 키로 지정한 리전 밖의 작업을 Deny하는 것이 기본 구현이지만, IAM·CloudFront·Route 53·Support처럼 us-east-1 단일 엔드포인트를 쓰는 글로벌 서비스는 NotAction으로 제외해야 정상 요청까지 막히지 않습니다.",
+      "wrongExplanations": {
+        "1": "예외 없이 막으면 글로벌 서비스 호출이 함께 차단돼 계정 운영이 깨집니다.",
+        "2": "KMS 키 정책은 키 사용 권한을 다룹니다. 키는 버킷과 같은 리전이어야 하지만, 리전 밖 '작업'을 막는 수단은 아닙니다.",
+        "3": "aws:SecureTransport는 전송 중 암호화(HTTPS) 강제 조건이며 리전 제한과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS: Denies access to AWS based on the requested Region (IAM)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-requested-region.html"
+        },
+        {
+          "title": "Deny access to AWS based on the requested AWS Region (Control Tower)",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q21",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "민감 데이터 탐지·분류(K4, K5)",
+      "section": "sensitive-data",
+      "difficulty": "associate",
+      "stem": "영어로 작성된 임상 노트에서 보호 대상 건강 정보(PHI)를 찾아내려 한다. 가장 적절한 서비스와 주의 사항은 무엇인가?",
+      "options": [
+        "Amazon Macie로 S3 객체를 스캔하고 결과를 그대로 신뢰한다",
+        "Amazon Comprehend Medical의 DetectPHI를 쓰고 사람 검토를 병행한다",
+        "Amazon Comprehend의 PII 탐지를 쓰고 신뢰도는 보지 않는다",
+        "AWS Glue DataBrew 프로파일 작업으로 PHI 엔터티를 탐지한다"
+      ],
+      "correct": 1,
+      "explanation": "Comprehend Medical의 DetectPHI는 임상 텍스트에서 PHI 엔터티만 탐지합니다. 엔터티마다 신뢰 점수를 주며, 공식 문서는 규정 준수 용도라면 추가로 사람 검토를 권고합니다.",
+      "wrongExplanations": {
+        "0": "Macie는 S3 객체의 민감 데이터를 탐지·보고하는 서비스로 임상 텍스트의 PHI 엔터티 추출이 목적이 아니며, 어떤 탐지 결과든 그대로 신뢰하라는 안내는 없습니다.",
+        "2": "Comprehend의 PII 기능은 일반 PII를 다루고 PHI 전용 엔터티 집합이 아닙니다. 신뢰 점수는 임계값 설정의 근거라 무시하면 안 됩니다.",
+        "3": "DataBrew의 PII 탐지는 표 형식 데이터의 열을 대상으로 하며 임상 텍스트의 PHI 추출용이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Detect PHI (Amazon Comprehend Medical)",
+          "url": "https://docs.aws.amazon.com/comprehend-medical/latest/dev/textanalysis-phi.html"
+        },
+        {
+          "title": "Personally identifiable information (PII) — Amazon Comprehend",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/pii.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q22",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "클래스 불균형 완화·증강(K2)",
+      "section": "augmentation",
+      "difficulty": "applied",
+      "stem": "이미지 분류 데이터셋에서 한 클래스의 표본이 다른 클래스의 10분의 1이다. 추가 촬영 없이 표본을 늘리려 할 때 적절한 접근과 주의점은 무엇인가?",
+      "options": [
+        "SMOTE로 이미지 픽셀을 보간해 합성 이미지를 만든다",
+        "자르기·뒤집기·회전·밝기 같은 증강을 적용하되 원본의 편향을 먼저 확인한다",
+        "소수 클래스 이미지를 그대로 복제하고 레이블 규칙을 완화한다",
+        "다수 클래스 이미지를 절반 삭제해 비율만 맞춘다"
+      ],
+      "correct": 1,
+      "explanation": "컴퓨터 비전 증강은 위치 변환(자르기·뒤집기·회전)과 색 변환(밝기·대비·채도)으로 새 표본을 만듭니다. 다만 증강은 원본과 같은 편향을 가진 데이터를 만들기 때문에, 증강 전에 원본의 편향을 먼저 해소하라고 공식 문서가 안내합니다.",
+      "wrongExplanations": {
+        "0": "SMOTE는 표 형식 특성 사이를 보간하는 기법으로, 이웃 계산도 숫자 특징으로 합니다. 이미지 픽셀 보간용 기법이 아닙니다.",
+        "2": "복제는 가능한 선택이지만 레이블 규칙을 완화하면 안 됩니다. 증강 표본에도 원본과 같은 레이블 규칙을 유지해야 합니다.",
+        "3": "다수 클래스를 줄이는 언더샘플링은 비율은 맞추지만 학습 데이터 자체를 잃습니다. 표본을 '늘리려는' 요구와 반대입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Data Augmentation? (AWS) — CV 증강과 편향 승계",
+          "url": "https://aws.amazon.com/what-is/data-augmentation/"
+        },
+        {
+          "title": "Transform Data (Data Wrangler) — Balance data·이미지 변환",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q23",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "접근 통제(K4)",
+      "section": "access-residency",
+      "difficulty": "associate",
+      "stem": "Lake Formation에서 LF-Tags를 쓰려고 한다. IAM 태그와의 관계로 옳은 것은 무엇인가?",
+      "options": [
+        "LF-Tags와 IAM 태그는 서로 다르며 바꿔 쓸 수 없다",
+        "LF-Tags는 IAM 태그의 별칭이라 같은 값을 공유한다",
+        "LF-Tags를 붙이면 IAM 정책의 태그 조건이 자동으로 적용된다",
+        "LF-Tags는 테이블에만 붙일 수 있고 상속되지 않는다"
+      ],
+      "correct": 0,
+      "explanation": "LF-Tags는 Lake Formation 권한을 위한 속성이고 IAM 태그는 IAM 정책용이라 서로 다르며 바꿔 쓸 수 없습니다. LF-Tags는 계층적이어서 데이터베이스에 붙이면 그 안의 테이블이, 테이블에 붙이면 열이 상속하고 필요하면 재정의할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "이름만 비슷할 뿐 저장 위치와 평가 주체가 다릅니다.",
+        "2": "LF-Tags는 Lake Formation 권한 평가에 쓰이며 IAM 정책의 태그 조건과 연동되지 않습니다.",
+        "3": "데이터베이스·테이블·열 수준에 붙일 수 있고 하위 리소스가 상속합니다."
+      },
+      "sources": [
+        {
+          "title": "Lake Formation tag-based access control",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q24",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "편향 소스 식별(SK2)",
+      "section": "bias-sources",
+      "difficulty": "associate",
+      "stem": "데이터를 모을 때 무작위 샘플링을 쓰지 않고 접근하기 쉬운 일부 지점의 기록만 모았다. 그 결과 데이터셋이 전체 모집단을 직접 대표하지 못한다. AWS 문서가 설명하는 편향 소스 분류로 가장 가까운 것은 무엇인가?",
+      "options": [
+        "알고리즘 편향",
+        "회상 편향",
+        "선택 편향",
+        "레이블 편향"
+      ],
+      "correct": 2,
+      "explanation": "선택 편향은 수집한 데이터셋이 모집단을 직접 대표하지 못하는 경우로, 무작위 샘플링을 쓰지 않거나 다양한 데이터 포인트를 빠뜨릴 때 생깁니다. 그룹 표현이 현실을 반영하는지는 CI 지표로 점검합니다.",
+      "wrongExplanations": {
+        "0": "알고리즘 편향은 모델 구조·설정에서 비롯되며 데이터 준비 단계의 문제가 아닙니다.",
+        "1": "회상 편향은 학습 중 특정 클래스에 쏠린 표현 때문에 한 클래스만 잘 식별되는 문제를 가리킵니다.",
+        "3": "레이블 편향은 주석자가 무의식적으로 편향을 주입하는 경우로, 레이블 분포 차이(DPL)로 드러납니다."
+      },
+      "sources": [
+        {
+          "title": "MLREL03-BP04 데이터 편향 탐지·완화 (Machine Learning Lens)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html"
+        },
+        {
+          "title": "Class Imbalance (CI) — 그룹 표현 점검",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }
