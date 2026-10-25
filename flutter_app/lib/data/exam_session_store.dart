@@ -25,7 +25,16 @@ class ExamSessionStore {
       _b.write(_key(session.examId), jsonEncode(session.toJson()));
 
   /// 빈 문자열 기록 = load에서 null 처리(KvBackend에 삭제 API 없음).
-  void clear(String examId) => _b.write(_key(examId), '');
+  void clear(String examId) => _delete(_key(examId));
+
+  /// 키를 비운다. **이미 없거나 비어 있으면 쓰지 않는다** — 무조건 쓰면 두 페이지의
+  /// 진입 경로가 구포맷 키에 빈 값을 새로 만들어 진입마다 영구 축적된다
+  /// (2026-10-25 리뷰 Minor). 쿼터를 아끼는 쪽이 정리의 목적과도 맞다.
+  void _delete(String key) {
+    final cur = _b.read(key);
+    if (cur == null || cur.isEmpty) return;
+    _b.write(key, '');
+  }
 
   /// 자격증 통합/약점 모의고사 진행 세션을 함께 폐기한다.
   void clearCertExamSessions(String certCode) {
@@ -40,8 +49,8 @@ class ExamSessionStore {
       _snapshotPrefix,
       _progressPrefix,
     ]) {
-      for (final k in _b.keys()) {
-        if (k.startsWith(prefix)) _b.write(k, '');
+      for (final k in _b.keys().toList()) {
+        if (k.startsWith(prefix)) _delete(k);
       }
     }
   }
@@ -91,16 +100,21 @@ class ExamSessionStore {
   /// 복원 결과. 스냅샷이 없거나 손상됐으면 `null`(= 새 시험).
   ///
   /// 진행 키가 없거나 **nonce가 다르면** 진행만 버리고 index 0·무선택으로 복원한다
-  /// (§4.4.1) — 세션 자체는 살린다. 만료 여부로는 거르지 않는다: 만료 세션은 복원
-  /// 직후 `ExamView`가 자동 제출해 사용자가 결과를 본다.
-  ({ExamSnapshot snapshot, ExamProgress progress})? loadRun(
-    String examId, {
-    DateTime Function()? now,
-  }) {
+  /// (§4.4.1) — 세션 자체는 살린다.
+  ///
+  /// 시간은 보지 않는다. 판정은 여기 바깥에 있다: 두 페이지의 진입 경로는 [clearExpired]를
+  /// 먼저 돌려 만료분을 치우고(§4.6), 그래도 복원된 만료 세션은 `ExamView`가 첫 프레임
+  /// 뒤 자동 제출한다. 그래서 시계를 주입받지 않는다.
+  /// [progressRestored]는 **저장된 진행을 채택했는지**를 알린다. 화면이 "이전 진행을
+  /// 복원했습니다"를 띄울 자격이 있는지 판단하는 근거다 — 버린 진행을 복원했다고 말하면
+  /// 답이 하나도 없는 화면이 거짓말을 한다.
+  ({ExamSnapshot snapshot, ExamProgress progress, bool progressRestored})?
+      loadRun(String examId) {
     final snapshot = loadSnapshot(examId);
     if (snapshot == null) return null;
     final stored = loadProgress(examId);
-    final progress = (stored != null && stored.nonce == snapshot.nonce)
+    final keep = stored != null && stored.nonce == snapshot.nonce;
+    final progress = keep
         ? sanitizeProgress(stored, snapshot.questions)
         : ExamProgress(
             examId: examId,
@@ -109,18 +123,22 @@ class ExamSessionStore {
             picked: const {},
             flagged: const [],
           );
-    return (snapshot: snapshot, progress: progress);
+    return (snapshot: snapshot, progress: progress, progressRestored: keep);
   }
 
   void clearRun(String examId) {
-    _b.write(_snapshotKey(examId), '');
-    _b.write(_progressKey(examId), '');
+    _delete(_snapshotKey(examId));
+    _delete(_progressKey(examId));
   }
 
-  /// 제한 시간이 이미 지난 세션만 정리한다(§4.6). 지운 수를 돌려준다.
+  /// 제한 시간이 이미 지난 세션만 정리한다(§4.6). 지운 **런** 수를 돌려준다.
   ///
   /// ⚠️ 살아 있는 시험은 건드리지 않는다. 시작 시각을 파싱할 수 없으면 **판단 불가**로
   /// 보고 남긴다 — 판단 불가를 삭제 근거로 쓰면 반목표("오히려 세션을 잃는 것")다.
+  ///
+  /// 짝 스냅샷이 없는 **고아 진행 키**도 함께 비운다(반환 수에는 넣지 않는다). 복원은
+  /// 스냅샷이 있어야 성립하므로(§4.4.1) 고아 진행 키는 영원히 복원될 수 없고 쿼터만
+  /// 먹는다 — 시간 기준과 달리 "산 세션을 지울 위험"이 구조적으로 없다.
   int clearExpired({DateTime Function()? now}) {
     final clock = (now ?? DateTime.now)();
     var removed = 0;
@@ -135,6 +153,11 @@ class ExamSessionStore {
         clearRun(examId);
         removed++;
       }
+    }
+    // 고아 진행 키 쓸기 — 위에서 지운 런의 진행 키는 이미 비어 있어 건너뛴다.
+    for (final k in _b.keys().toList()) {
+      if (!k.startsWith(_progressPrefix)) continue;
+      if (loadSnapshot(k.substring(_progressPrefix.length)) == null) _delete(k);
     }
     return removed;
   }

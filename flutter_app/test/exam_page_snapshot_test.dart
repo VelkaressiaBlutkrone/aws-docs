@@ -159,4 +159,48 @@ void main() {
     expect(b.writeCount('awsdocs.examSnapshot.v1:$examId'), 1);
     expect(b.writeCount('awsdocs.examProgress.v1:$examId'), greaterThan(1));
   });
+
+  testWidgets('시작 시각을 타임존이 명시된 ISO로 저장한다', (tester) async {
+    // 오프셋 없는 로컬 벽시계로 저장하면 DST·시간대 이동 뒤 clearExpired가 **살아 있는**
+    // 세션을 만료로 오판할 수 있다(반목표: 오히려 세션을 잃는 것).
+    final b = MemoryBackend();
+    await _pump(tester, b);
+
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pump();
+
+    final iso = ExamSessionStore(backend: b)
+        .loadSnapshot('exam:${_entry().taskId}')!
+        .startedAtIso;
+    expect(DateTime.parse(iso).isUtc, isTrue,
+        reason: '타임존이 박혀 있어야 오프셋이 바뀌어도 같은 절대 시각으로 읽힌다');
+  });
+
+  testWidgets('⚠️ nonce가 어긋난 진행을 버렸으면 복원했다고 말하지 않는다', (tester) async {
+    // §4.4.1 — 두 탭·부분 쓰기로 세대가 엇갈리면 진행을 버린다. 그때도 "이전 진행을
+    // 복원했습니다"가 떠서, 답이 하나도 없는 화면이 거짓말을 했다.
+    final b = MemoryBackend();
+    final store = ExamSessionStore(backend: b);
+    store.saveSnapshot(_snapshot(nonce: 'run-2'));
+    store.saveProgress(ExamProgress(
+      examId: 'exam:${_entry().taskId}',
+      nonce: 'run-1', // 옛 세대
+      index: 1,
+      picked: const {0: 1},
+      flagged: const [],
+    ));
+
+    await _pump(tester, b);
+
+    expect(find.text('이전 진행을 복원했습니다.'), findsNothing);
+    expect(find.text('이전 진행은 복원하지 못해 처음부터 표시합니다.'), findsOneWidget);
+  });
+
+  testWidgets('진입이 구포맷 키를 빈 값으로 새로 만들지 않는다', (tester) async {
+    final b = MemoryBackend();
+    await _pump(tester, b);
+
+    expect(b.keys().where((k) => k.startsWith('awsdocs.examSession.v1:')), isEmpty,
+        reason: '없던 키에 빈 값을 쓰면 진입마다 영구 축적된다');
+  });
 }

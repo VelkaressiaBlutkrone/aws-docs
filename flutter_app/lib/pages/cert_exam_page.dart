@@ -73,7 +73,9 @@ class _CertExamPageState extends State<CertExamPage> {
 
     final run = _store.loadRun(_examId);
     final restorable =
-        run == null ? null : _Restorable(run.snapshot, run.progress);
+        run == null
+            ? null
+            : _Restorable(run.snapshot, run.progress, run.progressRestored);
     if (restorable == null) _store.clear(_examId); // 구포맷 단일 키 폐기(§4.8)
 
     // ⚠️ 게이트는 **새 시험 시작**에만 적용한다(설계 §4.3). 진행 중 시험이 있으면
@@ -214,7 +216,10 @@ class _CertExamPageState extends State<CertExamPage> {
         certId: widget.cert.code,
         taskId: '${widget.cert.code}-${widget.weighted ? 'weak' : 'mock'}',
         nonce: nonce,
-        startedAtIso: startedAt.toIso8601String(),
+        // ⚠️ UTC로 쓴다(`...Z`). 오프셋 없는 로컬 벽시계로 저장하면 DST·시간대 이동 뒤
+        // 같은 문자열이 다른 절대 시각으로 읽혀 `clearExpired`가 **살아 있는** 세션을
+        // 만료로 오판할 수 있다 — 반목표("오히려 세션을 잃는 것").
+        startedAtIso: startedAt.toUtc().toIso8601String(),
         durationSec: durationSec,
         questions: questions,
         passingScore: d.overview?.passingScore,
@@ -243,6 +248,12 @@ class _CertExamPageState extends State<CertExamPage> {
       // 저장 실패가 시험을 막으면 안 된다(반목표)
     }
   }
+
+  /// 세로 공간이 남으면 가운데, 모자라면 스크롤. 비스크롤 `Column`으로 두면 짧은
+  /// 뷰포트에서 아래쪽(잠금 화면의 "이어서 풀기", 시작 화면의 버튼)이 잘려 **닿을 수조차
+  /// 없다** — 실측: 폭 400에서 시작 화면은 높이 360, 잠금 화면은 240부터 넘쳤다.
+  static Widget _scrollCenter(Widget child) =>
+      Center(child: SingleChildScrollView(child: child));
 
   /// 잠금 화면 위에 "이어서 풀기"를 덧붙인다(설계 §4.3) — 게이트는 새 시험 시작만
   /// 막고, 이미 진행 중인 시험은 끝까지 풀 수 있어야 한다.
@@ -306,16 +317,16 @@ class _CertExamPageState extends State<CertExamPage> {
             );
           }
           if (data.capacityLocked) {
-            return Center(
-              child: _withResume(
+            return _scrollCenter(
+              _withResume(
                 _capacityLockedView(data.readiness!),
                 data.restorable,
               ),
             );
           }
           if (data.attemptLocked) {
-            return Center(
-              child: _withResume(
+            return _scrollCenter(
+              _withResume(
                 _attemptLockedView(data.weightedAttemptCount),
                 data.restorable,
               ),
@@ -356,6 +367,7 @@ class _CertExamPageState extends State<CertExamPage> {
           initialPicked: r.picked,
           initialFlagged: r.flagged,
           restored: r.restored,
+          progressRestored: r.progressRestored,
           passingScore: passingScore,
           runNonce: r.nonce,
           onProgress: _onProgress,
@@ -421,8 +433,8 @@ class _CertExamPageState extends State<CertExamPage> {
             .round();
     final pass = d.overview?.passingScore;
     final restorable = d.restorable;
-    return Center(
-      child: ConstrainedBox(
+    return _scrollCenter(
+      ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 560),
         child: Padding(
           padding: const EdgeInsets.all(Gap.xl),
@@ -523,9 +535,12 @@ class _CertExamPageState extends State<CertExamPage> {
 /// 복원 가능한 진행 세션(스냅샷 체제) — 스냅샷과 그 세대의 진행은 항상 함께 존재한다.
 /// 문항은 스냅샷이 들고 있으므로 복원이 에셋을 읽지 않는다(설계 §4.1).
 class _Restorable {
-  const _Restorable(this.snapshot, this.progress);
+  const _Restorable(this.snapshot, this.progress, this.progressRestored);
   final ExamSnapshot snapshot;
   final ExamProgress progress;
+
+  /// 저장된 진행을 채택했는지(§4.4.1) — 복원 노트 문구가 이걸로 갈린다.
+  final bool progressRestored;
 }
 
 /// 로드 결과(풀·인덱스·가중·메타·복원 후보).
@@ -592,6 +607,7 @@ class _RunParams {
   final Map<int, int> picked;
   final Set<int> flagged;
   final bool restored;
+  final bool progressRestored;
 
   /// 세대 식별자 — 진행 레코드가 들고 다닌다(설계 §4.4.1).
   final String nonce;
@@ -609,7 +625,8 @@ class _RunParams {
   ) : index = 0,
       picked = const <int, int>{},
       flagged = const <int>{},
-      restored = false;
+      restored = false,
+      progressRestored = true;
 
   /// 스냅샷 복원 — 보기는 이미 표시 순서가 적용돼 있어 `optionOrders`가 비어 있다.
   _RunParams.fromSnapshot(_Restorable r)
@@ -623,5 +640,6 @@ class _RunParams {
       flagged = r.progress.flagged.toSet(),
       nonce = r.snapshot.nonce,
       passingScore = r.snapshot.passingScore,
-      restored = true;
+      restored = true,
+      progressRestored = r.progressRestored;
 }

@@ -272,6 +272,22 @@ void main() {
     expect(finished!.flaggedQuestionIds, ['q2']); // 복원된 플래그 보존
   });
 
+  testWidgets('⚠️ 진행을 복원하지 못했으면 복원했다고 말하지 않는다', (tester) async {
+    // nonce 불일치·진행 키 부재로 진행을 버린 복원(§4.4.1)에서도 "이전 진행을
+    // 복원했습니다"가 떴다 — 답이 하나도 없는 화면에서 거짓말이 된다.
+    final started = DateTime(2026, 6, 6);
+    await tester.pumpWidget(_host(ExamView(
+      bank: _bank(), certId: 'CLF-C02', taskId: 'clf-t2-3',
+      startedAt: started, durationSec: 600,
+      restored: true,
+      progressRestored: false,
+      now: () => started.add(const Duration(seconds: 30)),
+    )));
+    await tester.pump();
+
+    expect(find.text('이전 진행을 복원했습니다.'), findsNothing);
+    expect(find.text('이전 진행은 복원하지 못해 처음부터 표시합니다.'), findsOneWidget);
+  });
 
   testWidgets('R1: resultsActionsBuilder 없으면 기존 학습문서로 버튼 유지', (tester) async {
     final started = DateTime(2026, 6, 6);
