@@ -252,8 +252,17 @@ class _CertExamPageState extends State<CertExamPage> {
   /// 세로 공간이 남으면 가운데, 모자라면 스크롤. 비스크롤 `Column`으로 두면 짧은
   /// 뷰포트에서 아래쪽(잠금 화면의 "이어서 풀기", 시작 화면의 버튼)이 잘려 **닿을 수조차
   /// 없다** — 실측: 폭 400에서 시작 화면은 높이 360, 잠금 화면은 240부터 넘쳤다.
-  static Widget _scrollCenter(Widget child) =>
-      Center(child: SingleChildScrollView(child: child));
+  ///
+  /// ⚠️ `context`는 **Scaffold body 아래**의 것이어야 한다(FutureBuilder 빌더). 페이지
+  /// State의 context로 부르면 `headerScrollInset`이 0을 돌려줘, 글래스 헤더가 덮는
+  /// body 위쪽에 첫 줄이 깔린다 — 실측: 제목 상단 24.0 vs 헤더 하단 56.0.
+  static Widget _scrollCenter(BuildContext context, Widget child) => Center(
+        child: SingleChildScrollView(
+          // gap 0 — 자식이 이미 자기 여백을 갖고 있다. 여기서 더하는 건 헤더 높이뿐.
+          padding: EdgeInsets.only(top: headerScrollInset(context, gap: 0)),
+          child: child,
+        ),
+      );
 
   /// 잠금 화면 위에 "이어서 풀기"를 덧붙인다(설계 §4.3) — 게이트는 새 시험 시작만
   /// 막고, 이미 진행 중인 시험은 끝까지 풀 수 있어야 한다.
@@ -318,6 +327,7 @@ class _CertExamPageState extends State<CertExamPage> {
           }
           if (data.capacityLocked) {
             return _scrollCenter(
+              context,
               _withResume(
                 _capacityLockedView(data.readiness!),
                 data.restorable,
@@ -326,6 +336,7 @@ class _CertExamPageState extends State<CertExamPage> {
           }
           if (data.attemptLocked) {
             return _scrollCenter(
+              context,
               _withResume(
                 _attemptLockedView(data.weightedAttemptCount),
                 data.restorable,
@@ -340,7 +351,9 @@ class _CertExamPageState extends State<CertExamPage> {
               ),
             );
           }
-          return _startScreen(data);
+          // ⚠️ 이 `context`(FutureBuilder 빌더)를 넘긴다 — Scaffold body 아래여야
+          // 헤더 인셋이 실제 헤더 높이를 돌려준다.
+          return _startScreen(context, data);
         },
       ),
     );
@@ -416,7 +429,7 @@ class _CertExamPageState extends State<CertExamPage> {
         '오답 복습을 제외한 응시 기록이 $kWeightedExamMinAttempts회 쌓이면 열립니다. 현재 $attemptCount/$kWeightedExamMinAttempts회입니다.',
   );
 
-  Widget _startScreen(_MockLoad d) {
+  Widget _startScreen(BuildContext context, _MockLoad d) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final target = _targetN(d.overview);
@@ -434,6 +447,7 @@ class _CertExamPageState extends State<CertExamPage> {
     final pass = d.overview?.passingScore;
     final restorable = d.restorable;
     return _scrollCenter(
+      context,
       ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 560),
         child: Padding(

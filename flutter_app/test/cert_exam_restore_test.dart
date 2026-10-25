@@ -21,6 +21,7 @@ import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/pages/cert_exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
+import 'package:aws_docs/widgets/app_header.dart';
 
 /// 키별 쓰기 횟수를 세는 백엔드.
 class _CountingBackend extends MemoryBackend {
@@ -279,5 +280,22 @@ void main() {
 
     expect(tester.takeException(), isNull);
     expect(find.text('시작'), findsOneWidget);
+  });
+
+  testWidgets('짧은 뷰포트에서 시작 화면 첫 줄이 글래스 헤더에 가리지 않는다', (tester) async {
+    // body가 헤더 **뒤까지** 깔리므로(extendBodyBehindAppBar) 스크롤 상단 인셋이 없으면
+    // 첫 줄이 헤더에 덮여 읽을 수 없다 — 레포의 다른 스크롤 페이지는 전부 인셋을 쓴다.
+    final b = MemoryBackend();
+
+    await _pump(tester, 'CLF-C02', b, size: const Size(400, 360));
+
+    final title = find.descendant(
+      of: find.byType(SingleChildScrollView),
+      matching: find.text('통합 모의고사'),
+    );
+    expect(
+      tester.getTopLeft(title).dy,
+      greaterThanOrEqualTo(tester.getBottomLeft(find.byType(AppHeader)).dy),
+    );
   });
 }
