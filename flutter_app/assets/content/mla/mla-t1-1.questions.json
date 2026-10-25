@@ -567,6 +567,134 @@
         }
       ],
       "verified": false
+    },
+    {
+      "id": "mla-t1-1-q19",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "핵심 AWS 데이터 소스 사용 방법(K2)",
+      "section": "storage-choice",
+      "difficulty": "applied",
+      "stem": "온프레미스에서 쓰던 NetApp 파일 데이터를 Amazon FSx for NetApp ONTAP으로 옮겨 두었다. NFS로 쓰는 기존 애플리케이션을 유지하면서, 같은 데이터를 ML 학습에도 쓰려고 한다. 가장 적절한 방법은 무엇인가?",
+      "options": [
+        "ONTAP 볼륨에 S3 access point를 붙여 S3 API로 읽는다",
+        "ONTAP 파일 시스템을 학습 잡의 입력 채널로 직접 마운트한다",
+        "데이터를 EFS로 복사한 뒤 NFS 애플리케이션도 EFS로 옮긴다",
+        "ONTAP을 FSx for Lustre로 전환하고 S3 연결을 설정한다"
+      ],
+      "correct": 0,
+      "explanation": "FSx for NetApp ONTAP 볼륨에 S3 access point를 붙이면 GetObject·PutObject 같은 S3 객체 연산으로 파일 데이터를 읽고 쓸 수 있고, 데이터는 ONTAP 파일 시스템에 그대로 남아 NFS·SMB 접근도 유지됩니다. 기존 애플리케이션을 건드리지 않고 S3 호환 경로를 여는 방법입니다.",
+      "wrongExplanations": {
+        "1": "학습 잡이 직접 마운트할 수 있는 파일 시스템은 EFS와 FSx for Lustre입니다. ONTAP은 그 목록에 없고 S3 access point 경유가 문서화된 경로입니다.",
+        "2": "데이터를 복사하면 두 벌이 생기고, NFS 애플리케이션까지 옮기는 것은 요구에 없는 이전 작업입니다.",
+        "3": "FSx for Lustre는 고성능 병렬 파일 시스템으로 용도가 다르고, 전환하면 기존 NetApp 기능과 NFS·SMB 구성을 잃습니다."
+      },
+      "sources": [
+        {
+          "title": "Accessing your data via Amazon S3 access points (FSx for NetApp ONTAP)",
+          "url": "https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/accessing-data-via-s3-access-points.html"
+        },
+        {
+          "title": "Setting up training jobs to access datasets — S3·EFS·FSx for Lustre",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q20",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "AWS 스트리밍 데이터 소스를 사용한 수집(K3)",
+      "section": "streaming",
+      "difficulty": "associate",
+      "stem": "사내 팀이 이미 Apache Kafka 프로듀서·컨슈머와 Kafka Connect 플러그인을 운영 중이다. 코드를 바꾸지 않고 AWS에서 같은 스트리밍 파이프라인을 운영하려면 무엇을 고르는가?",
+      "options": [
+        "Amazon Kinesis Data Streams로 옮기고 KCL 소비자를 새로 만든다",
+        "Amazon MSK를 사용한다",
+        "Amazon Data Firehose로 옮기고 전달 대상만 설정한다",
+        "Amazon Managed Service for Apache Flink로 애플리케이션을 다시 쓴다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon MSK는 오픈소스 Apache Kafka를 관리형으로 실행하며 기존 애플리케이션·도구·플러그인을 코드 변경 없이 지원합니다. 공식 FAQ도 스트리밍이 처음이면 Kinesis Data Streams, 이미 Kafka 애플리케이션이 있으면 MSK를 고르라고 안내합니다.",
+      "wrongExplanations": {
+        "0": "Kinesis Data Streams는 Kafka API 호환이 아니라 소비자 애플리케이션을 KCL 등으로 새로 작성해야 합니다.",
+        "2": "Firehose는 대상으로 전달·변환하는 관리형 파이프라인이며 Kafka 프로듀서·컨슈머 코드를 그대로 받지 않습니다.",
+        "3": "Managed Service for Apache Flink는 스트림 처리 엔진입니다. Kafka 브로커를 대체하는 것이 아니라 스트림을 읽어 계산하는 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "Welcome to the Amazon MSK Developer Guide — 기존 애플리케이션 호환",
+          "url": "https://docs.aws.amazon.com/msk/latest/developerguide/what-is-msk.html"
+        },
+        {
+          "title": "Amazon Kinesis Data Streams FAQs — KDS vs MSK 선택 기준",
+          "url": "https://aws.amazon.com/kinesis/data-streams/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q21",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "관련 AWS 서비스 옵션을 사용한 스토리지 데이터 추출(SK1)",
+      "section": "troubleshoot",
+      "difficulty": "applied",
+      "stem": "학습 인스턴스의 EBS 볼륨을 io2로 바꾸고 IOPS를 두 배로 올렸는데 읽기 지연이 거의 줄지 않았다. 다음으로 확인할 것은 무엇인가?",
+      "options": [
+        "볼륨 크기를 늘려 IOPS 비율 상한을 높인다",
+        "볼륨을 같은 가용 영역의 다른 인스턴스에 다시 연결한다",
+        "인스턴스 쪽 EBS 성능 한도와 EBS-optimized 여부를 확인한다",
+        "볼륨 유형을 st1으로 바꿔 처리량을 확보한다"
+      ],
+      "correct": 2,
+      "explanation": "EBS 성능은 볼륨 한도와 인스턴스 한도 중 작은 쪽이 상한입니다. 볼륨 IOPS를 올려도 인스턴스의 EBS 성능 한도에 걸려 있으면 개선되지 않으므로, 더 큰 인스턴스나 EBS-optimized 인스턴스가 필요한지 봐야 합니다.",
+      "wrongExplanations": {
+        "0": "IOPS:GiB 비율 상한에 걸린 경우에만 의미가 있습니다. 이미 IOPS를 올려 뒀는데 효과가 없다면 병목이 볼륨 쪽이 아닐 가능성이 큽니다.",
+        "1": "EBS 볼륨은 같은 가용 영역의 인스턴스에 연결합니다. 다른 인스턴스로 옮겨도 인스턴스 한도 문제는 그대로입니다.",
+        "3": "st1은 HDD 처리량 지향 유형이라 IOPS가 지배적인 워크로드에는 오히려 불리합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EBS volume types — 볼륨·인스턴스 성능 한도",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+        },
+        {
+          "title": "Get the maximum Amazon EBS optimized performance (Amazon EC2)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimization-performance.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q22",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "데이터 형식 및 수집 메커니즘 이해(K1)",
+      "section": "training-input",
+      "difficulty": "associate",
+      "stem": "SageMaker 내장 알고리즘 다수가 표준 입력으로 받고, Pipe 모드와 함께 쓰이도록 설계된 이진 레코드 형식은 무엇인가?",
+      "options": [
+        "Apache Avro 컨테이너 파일(application/avro)",
+        "application/x-recordio-protobuf",
+        "Apache Parquet 열 기반 파일(application/x-parquet)",
+        "JSON Lines 텍스트 파일(application/jsonlines)"
+      ],
+      "correct": 1,
+      "explanation": "recordIO-protobuf는 관측값을 4바이트 float 집합의 이진 표현으로 바꿔 protobuf values 필드에 담는 SageMaker 형식으로, Factorization Machines·K-Means·k-NN·Linear Learner·PCA 등 다수 알고리즘의 입력이며 Pipe 모드와 함께 쓰입니다.",
+      "wrongExplanations": {
+        "0": "Avro는 수집·스트리밍 단계에 유리한 행 기반 형식이며 내장 알고리즘의 표준 입력 목록에 없습니다.",
+        "2": "Parquet은 분석용 열 기반 형식이고 XGBoost·DeepAR 같은 일부 알고리즘만 입력으로 받습니다.",
+        "3": "JSON Lines는 BlazingText·DeepAR 등이 받는 텍스트 형식입니다."
+      },
+      "sources": [
+        {
+          "title": "Common Data Formats for Training (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html"
+        },
+        {
+          "title": "Parameters for Built-in Algorithms — 입력 모드·파일 형식",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html"
+        }
+      ],
+      "verified": false
     }
   ]
 }

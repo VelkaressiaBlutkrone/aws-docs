@@ -72,6 +72,20 @@ void main() {
         }
       });
 
+      test('개념 확인(associate) 문항이 Task당 5개 이상이다', () {
+        // 전부 시나리오형(applied)이면 학습 순서상 진입 장벽이 높다.
+        // 정의·규칙을 묻는 문항이 섞여 있어야 개념을 먼저 세울 수 있다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final byDifficulty = <String, int>{};
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final d = (q['difficulty'] ?? '').toString();
+          byDifficulty[d] = (byDifficulty[d] ?? 0) + 1;
+        }
+        expect(byDifficulty['associate'] ?? 0, greaterThanOrEqualTo(5),
+            reason: '$taskId 난이도 분포: $byDifficulty');
+      });
+
       test('해설에 마크다운 표기가 없다', () {
         // 해설은 `Text()` 위젯으로 **평문** 렌더된다(quiz_widgets.dart:245·251).
         // 마크다운을 쓰면 `**`와 백틱이 화면에 글자 그대로 보인다.
