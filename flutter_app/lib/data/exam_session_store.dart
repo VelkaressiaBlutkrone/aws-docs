@@ -100,12 +100,12 @@ class ExamSessionStore {
   /// 복원 결과. 스냅샷이 없거나 손상됐으면 `null`(= 새 시험).
   ///
   /// 진행 키가 없거나 **nonce가 다르면** 진행만 버리고 index 0·무선택으로 복원한다
-  /// (§4.4.1) — 세션 자체는 살린다. 만료 여부로는 거르지 않는다: 만료 세션은 복원
-  /// 직후 `ExamView`가 자동 제출해 사용자가 결과를 본다.
-  ({ExamSnapshot snapshot, ExamProgress progress})? loadRun(
-    String examId, {
-    DateTime Function()? now,
-  }) {
+  /// (§4.4.1) — 세션 자체는 살린다.
+  ///
+  /// 시간은 보지 않는다. 판정은 여기 바깥에 있다: 두 페이지의 진입 경로는 [clearExpired]를
+  /// 먼저 돌려 만료분을 치우고(§4.6), 그래도 복원된 만료 세션은 `ExamView`가 첫 프레임
+  /// 뒤 자동 제출한다. 그래서 시계를 주입받지 않는다.
+  ({ExamSnapshot snapshot, ExamProgress progress})? loadRun(String examId) {
     final snapshot = loadSnapshot(examId);
     if (snapshot == null) return null;
     final stored = loadProgress(examId);

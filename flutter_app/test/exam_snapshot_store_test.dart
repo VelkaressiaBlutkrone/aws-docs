@@ -27,13 +27,17 @@ Question _q(String id) => Question(
       verified: true,
     );
 
-ExamSnapshot _snap({String nonce = 'run-1', String examId = _examId}) =>
+ExamSnapshot _snap({
+  String nonce = 'run-1',
+  String examId = _examId,
+  String? startedAtIso,
+}) =>
     ExamSnapshot(
       examId: examId,
       certId: 'CLF-C02',
       taskId: 'CLF-C02-mock',
       nonce: nonce,
-      startedAtIso: _start.toIso8601String(),
+      startedAtIso: startedAtIso ?? _start.toIso8601String(),
       durationSec: 5400,
       questions: [_q('a'), _q('b')],
     );
@@ -107,12 +111,12 @@ void main() {
     expect(store.loadRun(_examId)!.progress.picked, isEmpty);
   });
 
-  test('⚠️ 만료 세션도 loadRun은 복원한다(자동 제출은 ExamView 몫)', () {
-    // 저장소가 걸러 버리면 사용자는 결과 화면을 못 본다
-    store.saveSnapshot(_snap());
+  test('⚠️ loadRun은 만료 여부로 걸러내지 않는다', () {
+    // 시간 판정은 저장소 밖에 있다: 페이지 진입은 `clearExpired`가 먼저 돌고(§4.6),
+    // 그래도 복원된 만료 세션은 `ExamView`가 첫 프레임 뒤 자동 제출한다.
+    store.saveSnapshot(_snap(startedAtIso: '2020-01-01T00:00:00.000Z'));
     store.saveProgress(_prog(index: 1)); // 문항 2개이므로 1이 마지막
-    final run = store.loadRun(_examId,
-        now: () => _start.add(const Duration(seconds: 5401 + 60)));
+    final run = store.loadRun(_examId);
     expect(run, isNotNull);
     expect(run!.progress.index, 1, reason: '만료 여부가 복원을 막지 않는다');
   });
@@ -144,11 +148,12 @@ void main() {
 
   test('clearExpired: 시작 시각이 손상된 세션은 건드리지 않는다', () {
     // 반목표 — 판단 불가를 삭제 근거로 쓰지 않는다
-    backend.write(
-      'awsdocs.examSnapshot.v1:$_examId',
-      '{"examId":"$_examId","startedAtIso":"없는날짜","durationSec":5400,"questions":[]}',
-    );
+    // ⚠️ **문항이 있는** 레코드를 심는다. 문항 0개를 심으면 퇴화 가드에서 먼저 걸러져
+    // startedAt 분기에 닿지도 않고 통과한다 — 이름만 맞고 아무것도 고정하지 못한다.
+    store.saveSnapshot(_snap(startedAtIso: '없는날짜'));
+
     expect(store.clearExpired(now: () => _start), 0);
+    expect(store.loadSnapshot(_examId), isNotNull, reason: '판단 불가 세션은 남는다');
   });
 
   test('clear는 없는 키에 빈 값을 새로 쓰지 않는다', () {

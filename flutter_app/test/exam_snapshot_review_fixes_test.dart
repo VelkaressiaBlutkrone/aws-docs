@@ -156,9 +156,9 @@ void main() {
     await tester.pump();
     await _settle(tester);
 
-    // 제출까지 가지 않고도 주입이 끊기지 않았는지 본다: 복원 로드가 합격선을 들고 왔다면
-    // 스냅샷에서 읽은 값이 그대로 남아 있어야 한다.
-    expect(ExamSessionStore(backend: b).loadSnapshot(examId)!.passingScore, 700);
+    // ⚠️ 저장소를 되읽는 것은 테스트가 심은 값을 다시 보는 것뿐이다(빈 통과). 페이지가
+    // 스냅샷의 합격선을 **ExamView까지** 넘겼는지 위젯 트리에서 직접 본다.
+    expect(tester.widget<ExamView>(find.byType(ExamView)).passingScore, 700);
     expect(find.text('스냅샷 전용 문항'), findsOneWidget);
   });
 
