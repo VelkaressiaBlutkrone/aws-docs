@@ -81,11 +81,13 @@ ML 파이프라인에서 가장 먼저 깨지는 곳은 모델이 아니라 **�
 | JSON / JSON Lines | 행 기반 텍스트(중첩 가능) | 이벤트·로그. Firehose 형식 변환의 입력. BlazingText·DeepAR는 `application/jsonlines` | CSV와 같은 텍스트 제약 |
 | Avro | 행 기반 | **쓰기가 잦은** 수집·스트리밍 단계 | 압축률은 Parquet·ORC보다 낮다 |
 | Parquet | 열 기반 | **읽기 중심 분석**. Athena가 필요한 열·블록만 읽음. XGBoost·DeepAR가 입력으로 받음 | 파일이 너무 작으면 열 기반 오버헤드가 이점을 넘음 |
-| ORC | 열 기반 | 파일이 더 작은 편이고 인덱스가 쿼리를 빠르게 할 수 있음. **복합 타입(array·map·struct) 지원이 넓음** | 복잡한 쿼리 범위는 Parquet이 더 넓다고 서술됨 |
+| ORC | 열 기반 | 파일이 더 작은 편이고 인덱스가 쿼리를 빠르게 할 수 있음 | **쿼리 유형의 범위**는 Parquet이 더 넓다고 서술됨 |
 | RecordIO-protobuf | SageMaker 이진 레코드 | 내장 알고리즘 다수의 표준 입력. Pipe 모드와 함께 | 직접 만들려면 변환이 필요 |
 
 - 기본 블록 크기는 **Parquet row group 128 MB · ORC stripe 64 MB**입니다. 기본값보다 줄이는 것은 권장되지 않습니다.
-- Athena에서 **복합 타입 열을 자주 조회**하면 ORC를 고려합니다 — Parquet는 복합 타입 열을 읽을 때 행 전체를 읽는 알려진 한계가 있습니다.
+- **복합 타입은 ORC**: Athena에서 `array`·`map`·`struct` 같은 복합 타입 열을 조회하면, Parquet는 **지정한 열만 선택적으로 읽는 대신 행 전체를 읽습니다.** Athena 문서가 "알려진 문제(known issue)"로 적고 **대안으로 ORC를 고려하라**고 안내하는 지점입니다.
+  > 원문: *"when you query columns stored in Parquet that have complex data types … Athena reads an entire row of data instead of selectively reading only the specified columns. This is a known issue in Athena. As a workaround, consider using ORC."* ([Optimize your tables](https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-s3-throttling-optimizing-your-tables.html), 2026-10-26 재확인)
+- 쿼리 **유형의 범위**가 넓어야 하면 Parquet, **복합 타입 조회**가 잦으면 ORC — 둘은 서로 다른 축입니다.
 
 > 🧠 **원리** — 열 기반이 분석에 유리한 이유는 세 가지입니다. ① 쿼리에 필요한 열만 읽고, ② 같은 열의 값이 모여 있어 압축이 잘 되며, ③ 파일 메타데이터(최솟값·최댓값)로 필요 없는 데이터를 건너뜁니다. Athena는 **압축 해제 전 스캔 바이트 수**로 요금을 매기므로 열 기반 + 압축은 속도와 비용을 함께 줄입니다.
 
