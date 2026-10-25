@@ -1,0 +1,560 @@
+{
+  "examGuideTaskId": "mla-t1-2",
+  "taskTitle": "데이터 변환 및 특성 추출 수행",
+  "domain": 1,
+  "certCode": "MLA-C01",
+  "questions": [
+    {
+      "id": "mla-t1-2-q1",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "데이터 정리·변환 기법(K1, SK1)",
+      "section": "cleaning",
+      "difficulty": "associate",
+      "stem": "SageMaker Data Wrangler에서 결측값이 있는 숫자 열을 해당 열의 중앙값으로 채우려고 한다. 어떤 변환을 고르는가?",
+      "options": [
+        "Fill missing",
+        "Impute missing",
+        "Add indicator for missing",
+        "Drop missing"
+      ],
+      "correct": 1,
+      "explanation": "Impute missing은 숫자 열의 평균·중앙값, 범주 열의 최빈값처럼 **계산된 값**으로 결측을 채웁니다. 임의의 상수·문자열로 채우는 것은 Fill missing입니다.",
+      "wrongExplanations": {
+        "0": "Fill missing은 사용자가 **지정한 값**으로 채웁니다. 중앙값 같은 통계 계산을 해 주지 않습니다.",
+        "2": "Add indicator for missing은 결측 여부를 나타내는 불리언 열을 추가할 뿐 값을 채우지 않습니다.",
+        "3": "Drop missing은 결측이 있는 행을 삭제합니다. 데이터를 잃게 됩니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Handle missing values",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q2",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "데이터 정리·변환 기법(K1, SK1)",
+      "section": "cleaning",
+      "difficulty": "applied",
+      "stem": "고객 데이터 두 벌을 합쳤더니 같은 고객이 이름 철자와 주소 표기만 다르게 중복돼 있다. 공통 고유 키는 없다. 가장 적절한 AWS Glue 기능은 무엇인가?",
+      "options": [
+        "Drop Duplicates 변환",
+        "DataBrew의 DELETE_DUPLICATE_ROWS",
+        "FindMatches ML 변환",
+        "DynamicFrame의 mergeDynamicFrame"
+      ],
+      "correct": 2,
+      "explanation": "FindMatches는 공통 고유 키가 없고 값이 정확히 일치하지 않아도 중복·일치 레코드를 찾는 ML 변환입니다. 라벨링 파일로 변환을 학습시켜 사용합니다.",
+      "wrongExplanations": {
+        "0": "Drop Duplicates는 행 전체 또는 지정한 키가 **정확히 일치**하는 중복을 제거합니다. 철자가 다른 레코드는 잡지 못합니다.",
+        "1": "DELETE_DUPLICATE_ROWS는 이전 행과 완전히 일치하는 행을 지웁니다. 역시 정확 일치 기준입니다.",
+        "3": "mergeDynamicFrame은 기본키를 기준으로 스테이징 프레임을 병합하는 기능이며, 키가 없는 유사 중복 탐지 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Record matching with AWS Lake Formation FindMatches (AWS Glue)",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/machine-learning.html"
+        },
+        {
+          "title": "Transform data with AWS Glue managed transforms — Drop Duplicates",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/edit-jobs-transforms.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q3",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "데이터 정리·변환 기법(K1, SK1)",
+      "section": "cleaning",
+      "difficulty": "applied",
+      "stem": "Glue 작업에서 Drop Null Fields 변환을 넣었는데 결측이 섞인 열이 그대로 남아 있다. 확인해 보니 그 열에는 빈 문자열과 문자열 \"null\", 그리고 -1이 섞여 있었다. 가장 적절한 설명은 무엇인가?",
+      "options": [
+        "Drop Null Fields는 모든 값이 null인 열만 제거하므로 자리표시자는 먼저 null로 바꿔야 한다",
+        "Drop Null Fields는 DynamicFrame에서는 동작하지 않는다",
+        "Drop Null Fields는 행 단위로만 동작한다",
+        "Drop Null Fields는 Glue 4.0 이상에서만 동작한다"
+      ],
+      "correct": 0,
+      "explanation": "Drop Null Fields는 모든 값이 null인 열을 제거하는 변환입니다. 빈 문자열, 문자열 \"null\", -1, 0 같은 자리표시자는 자동으로 null로 인식되지 않으므로 앞 단계에서 null로 변환해야 합니다.",
+      "wrongExplanations": {
+        "1": "DynamicFrame을 대상으로 동작하는 Glue 변환입니다.",
+        "2": "열(필드) 단위로 동작합니다. 행 제거는 Remove null rows 같은 별도 변환입니다.",
+        "3": "Glue 4.0 이상이 요구되는 것은 데이터 통합(DI) 변환 묶음이며 Drop Null Fields는 그 묶음이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue Visual job API — FillMissingValues·DropNullFields 동작",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-visual-job-api.html"
+        },
+        {
+          "title": "Transform data with AWS Glue managed transforms",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/edit-jobs-transforms.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q4",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "특성 추출·변환 기법(K2)",
+      "section": "feature-transforms",
+      "difficulty": "applied",
+      "stem": "값의 분포에 극단적인 이상값이 섞인 숫자 특성을 스케일링해야 한다. 이상값의 영향을 덜 받는 Data Wrangler 스케일러는 무엇인가?",
+      "options": [
+        "Min Max Scaler",
+        "Max Absolute Scaler",
+        "Standard Scaler",
+        "Robust Scaler"
+      ],
+      "correct": 3,
+      "explanation": "Robust Scaler는 이상값에 강건한 통계를 사용하는 스케일러로 문서에 서술돼 있습니다. 이상값이 섞인 특성의 스케일링에 적합합니다.",
+      "wrongExplanations": {
+        "0": "Min Max Scaler는 최솟값·최댓값으로 범위를 맞추므로 극단값 하나가 전체 스케일을 좌우합니다.",
+        "1": "Max Absolute Scaler는 최대 절대값으로 나누므로 역시 극단값에 크게 흔들립니다.",
+        "2": "Standard Scaler는 평균과 표준편차를 쓰는데 두 통계 모두 이상값에 민감합니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Process numeric 스케일러",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q5",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "특성 추출·변환 기법(K2)",
+      "section": "feature-transforms",
+      "difficulty": "applied",
+      "stem": "타임스탬프 열에서 시간 특성을 만들려 한다. 모델은 선형 회귀이고, 하루 주기의 시간 패턴을 반영하고 싶다. Data Wrangler의 Featurize date/time에서 권장되는 임베딩 모드는 무엇인가?",
+      "options": [
+        "cyclic",
+        "ordinal",
+        "one-hot",
+        "hashing"
+      ],
+      "correct": 0,
+      "explanation": "Featurize date/time 문서는 선형 모델과 딥 네트워크에는 cyclic, 트리 기반 알고리즘에는 ordinal 임베딩 모드를 권장합니다. 주기성을 선형 모델이 이해할 수 있는 형태로 만들기 때문입니다.",
+      "wrongExplanations": {
+        "1": "ordinal은 트리 기반 알고리즘에 권장되는 모드입니다.",
+        "2": "one-hot은 범주형 인코딩 방식이며 Featurize date/time의 임베딩 모드 선택지가 아닙니다.",
+        "3": "hashing은 텍스트 벡터화(Vectorize)의 벡터라이저 선택지입니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Featurize date/time 임베딩 모드",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q6",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "특성 추출·변환 기법(K2)",
+      "section": "feature-transforms",
+      "difficulty": "associate",
+      "stem": "Data Wrangler의 Reduce dimensionality(PCA) 변환을 구성할 때 올바른 설명은 무엇인가?",
+      "options": [
+        "성분 수와 분산 임계 비율을 함께 지정해야 한다",
+        "성분 수 또는 분산 임계 비율 중 하나만 지정한다",
+        "범주형 열에만 적용할 수 있다",
+        "출력은 항상 원본 열을 그대로 두고 새 열만 추가한다"
+      ],
+      "correct": 1,
+      "explanation": "Reduce dimensionality(PCA)는 성분 수를 직접 지정하거나 분산 임계 비율을 지정하는 두 방식 중 하나만 쓰도록 문서에 설명돼 있습니다.",
+      "wrongExplanations": {
+        "0": "둘을 동시에 지정하는 구성이 아닙니다.",
+        "2": "PCA는 숫자 특성의 차원을 줄이는 기법입니다. 범주형 전용이 아닙니다.",
+        "3": "출력 구성은 변환 설정에 따릅니다. '항상 원본을 유지한다'는 규칙은 문서에 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Reduce dimensionality",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q7",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "인코딩 기법(K3)",
+      "section": "encoding",
+      "difficulty": "applied",
+      "stem": "제품명 열은 고유 값이 수천 개이고 사용자가 직접 입력해 오탈자가 많다. 이 열을 모델 입력으로 만들 때 Data Wrangler에서 가장 적절한 인코딩은 무엇인가?",
+      "options": [
+        "One-hot encode로 범주마다 열을 만든다",
+        "Ordinal encode로 0부터 범주 수 사이 정수를 부여한다",
+        "Similarity encode로 임베딩 벡터를 만든다",
+        "Featurize text의 Character statistics만 사용한다"
+      ],
+      "correct": 2,
+      "explanation": "Similarity encode는 범주 변수가 매우 많거나 잡음(오탈자)이 많은 데이터를 위한 인코딩입니다. 3-gram 토큰과 min-hash 임베딩을 써서 비슷한 문자열이 비슷한 값의 벡터가 되고, 저차원이라 범주 수에 잘 확장됩니다.",
+      "wrongExplanations": {
+        "0": "범주가 수천 개면 원-핫은 차원이 폭발하고 오탈자마다 별도 범주가 생깁니다.",
+        "1": "Ordinal encode는 순서가 있는 범주를 위한 인코딩입니다. 순서가 없는 제품명에 정수를 매기면 없는 순서를 모델에 주게 되고 오탈자 문제도 그대로입니다.",
+        "3": "Character statistics는 단어 수·대문자 비율 같은 통계 열을 만드는 변환으로, 범주 식별 정보를 보존하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Similarity encode",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q8",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "인코딩 기법(K3)",
+      "section": "encoding",
+      "difficulty": "applied",
+      "stem": "Data Wrangler 흐름에서 One-hot encode 단계를 정의한 뒤, 새 범주가 들어 있는 갱신된 데이터로 같은 흐름을 실행했다. 새 범주는 어떻게 처리되는가?",
+      "options": [
+        "인코더가 자동으로 새 열을 추가해 인코딩한다",
+        "누락값으로 취급되어 Invalid handling strategy가 적용된다",
+        "단계가 실패하고 흐름 전체가 중단된다",
+        "범주가 자동으로 가장 가까운 기존 범주에 병합된다"
+      ],
+      "correct": 1,
+      "explanation": "Data Wrangler 인코더는 단계를 정의한 시점의 범주에 대해서만 인코딩을 만듭니다. 이후 데이터에 새 범주가 나타나면 누락값으로 취급되고, 단계에 설정한 Invalid handling strategy(Skip·Keep·Error 등)가 적용됩니다.",
+      "wrongExplanations": {
+        "0": "정의 시점 범주만 학습하므로 자동으로 새 열이 추가되지 않습니다.",
+        "2": "Invalid handling strategy를 Error로 두면 오류가 나지만 기본적으로 전략에 따라 처리되며 '항상 중단'은 아닙니다.",
+        "3": "유사 범주로 병합하는 동작은 없습니다. 비슷한 문자열을 가깝게 다루려면 Similarity encode를 씁니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (SageMaker Data Wrangler) — Encode categorical·Invalid handling strategy",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q9",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "인코딩 기법(K3)",
+      "section": "encoding",
+      "difficulty": "associate",
+      "stem": "AWS Glue DataBrew의 ONE_HOT_ENCODING 레시피 단계를 쓰려고 한다. 대상 열에 대한 제약으로 옳은 것은 무엇인가?",
+      "options": [
+        "대상 열의 고유값이 최대 10개여야 한다",
+        "대상 열은 반드시 숫자여야 한다",
+        "레시피당 한 번만 사용할 수 있다",
+        "대상 열에 결측값이 있으면 사용할 수 없다"
+      ],
+      "correct": 0,
+      "explanation": "DataBrew의 ONE_HOT_ENCODING은 대상 열의 고유값이 최대 10개여야 한다고 문서에 명시돼 있습니다. 고유값이 많은 열은 다른 방법을 써야 합니다.",
+      "wrongExplanations": {
+        "1": "원-핫 인코딩은 범주형 열을 숫자 열로 바꾸는 단계입니다. 입력이 숫자여야 한다는 제약이 아닙니다.",
+        "2": "레시피당 사용 횟수 제한이 아니라 대상 열의 고유값 수 제한입니다. 레시피에는 변환 100개까지라는 별도 한도가 있습니다.",
+        "3": "결측값 유무가 사용 가능 여부를 가르는 조건으로 문서에 적혀 있지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "DataBrew ONE_HOT_ENCODING — 대상 열 고유값 10개 제한",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.ONE_HOT_ENCODING.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q10",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "AWS 변환 도구 사용(K4, SK1)",
+      "section": "glue-transforms",
+      "difficulty": "applied",
+      "stem": "Glue 작업에서 같은 필드가 레코드마다 문자열이거나 정수인 데이터를 읽었다. DynamicFrame이 이 필드를 choice 타입으로 표현했을 때, 타입별로 별도의 열(`columnName_type`)을 만들어 두 타입을 모두 보존하려면 어떤 해소 방식을 쓰는가?",
+      "options": [
+        "cast",
+        "project",
+        "make_cols",
+        "make_struct"
+      ],
+      "correct": 2,
+      "explanation": "`resolveChoice`의 `make_cols`는 choice 타입을 타입별 열(`columnName_type`)로 펼쳐 두 타입의 값을 모두 보존합니다.",
+      "wrongExplanations": {
+        "0": "cast는 지정한 하나의 타입으로 변환하므로 변환할 수 없는 값은 잃게 됩니다.",
+        "1": "project는 지정한 타입의 값만 남기고 나머지를 버립니다.",
+        "3": "make_struct는 값을 구조체로 묶습니다. 타입별 열로 펼치는 방식이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "DynamicFrame class (AWS Glue) — resolveChoice 옵션",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-crawler-pyspark-extensions-dynamic-frame.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q11",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "AWS 변환 도구 사용(K4, SK1)",
+      "section": "glue-transforms",
+      "difficulty": "applied",
+      "stem": "중첩 구조와 배열이 섞인 JSON 데이터를 관계형 데이터베이스로 옮길 수 있는 평평한 테이블 집합으로 바꾸려 한다. 어떤 DynamicFrame 메서드를 쓰는가?",
+      "options": [
+        "relationalize",
+        "apply_mapping",
+        "split_rows",
+        "spigot"
+      ],
+      "correct": 0,
+      "explanation": "relationalize는 중첩 열을 풀고 배열 열을 피벗해 관계형 데이터베이스에 맞는 테이블 목록으로 변환합니다. NoSQL 데이터를 관계형으로 옮길 때 쓰도록 문서가 설명합니다.",
+      "wrongExplanations": {
+        "1": "apply_mapping은 열 이름과 타입을 선언적으로 매핑합니다. 중첩 구조를 평평하게 만드는 기능이 아니며, 지정하지 않은 필드는 결과에서 빠집니다.",
+        "2": "split_rows는 조건에 따라 행을 나누는 메서드입니다.",
+        "3": "spigot은 변환 중간 샘플을 S3에 기록하는 디버깅용 메서드입니다."
+      },
+      "sources": [
+        {
+          "title": "DynamicFrame class (AWS Glue) — relationalize",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-crawler-pyspark-extensions-dynamic-frame.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q12",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "AWS 변환 도구 사용(K4, SK1)",
+      "section": "tool-choice",
+      "difficulty": "applied",
+      "stem": "비즈니스 분석가 팀이 코드를 쓰지 않고 데이터를 정리·정규화하고, 같은 정리 절차를 매달 새 파일에 반복 적용하려 한다. 결과는 S3에 저장하면 된다. 가장 적절한 서비스는 무엇인가?",
+      "options": [
+        "Amazon EMR에서 Spark 작업 실행",
+        "AWS Glue DataBrew 레시피와 레시피 잡",
+        "SageMaker Processing 잡",
+        "AWS Glue PySpark 스크립트 작업"
+      ],
+      "correct": 1,
+      "explanation": "DataBrew는 코드 없이 정리·정규화하도록 만들어진 서비스로, 변환 단계를 레시피로 저장·게시해 재사용하고 레시피 잡이 결과를 S3에 씁니다. 대상 사용자로 비즈니스 분석가가 문서에 명시돼 있습니다.",
+      "wrongExplanations": {
+        "0": "EMR은 클러스터를 다루는 Spark 플랫폼으로 코드와 운영이 필요합니다.",
+        "2": "SageMaker Processing은 스크립트·컨테이너를 실행하는 잡 기반 방식이라 코드가 필요합니다.",
+        "3": "Glue PySpark 스크립트 작업도 코드를 작성해야 합니다. 시각적 노드 편집이 있지만 '코드 없이 레시피 재사용'이라는 요구에는 DataBrew가 정확히 맞습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Glue DataBrew? — 코드 없는 정리·정규화, 레시피",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
+        },
+        {
+          "title": "Creating and using AWS Glue DataBrew recipes",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/recipes.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q13",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "AWS 변환 도구 사용(K4, SK1)",
+      "section": "tool-choice",
+      "difficulty": "applied",
+      "stem": "Data Wrangler 데이터 흐름에서 변환 결과를 확인했는데, 전체 데이터셋에 적용했을 때 통계가 다르게 나왔다. 가장 가능성이 큰 이유는 무엇인가?",
+      "options": [
+        "대화형 변환은 샘플에만 적용되고 전체 처리는 별도 처리 잡에서 수행되기 때문",
+        "데이터 흐름은 항상 무작위로 열 순서를 바꾸기 때문",
+        "Data Wrangler는 5 GB 미만 데이터만 처리하기 때문",
+        "흐름을 저장할 때마다 변환 단계가 초기화되기 때문"
+      ],
+      "correct": 0,
+      "explanation": "Data Wrangler의 대화형 변환은 가져온 데이터의 샘플에 적용되고, 전체 데이터 처리는 처리 잡(Canvas 처리 또는 Processing 잡)으로 실행됩니다. 통계 기반 변환은 대상 데이터 범위에 따라 결과가 달라질 수 있습니다.",
+      "wrongExplanations": {
+        "1": "열 순서를 무작위로 바꾸는 동작은 없습니다.",
+        "2": "5 GB는 '초과 데이터셋에 Data Wrangler 사용을 권장한다'는 맥락의 수치이며 처리 가능 상한이 아닙니다.",
+        "3": "흐름의 변환 단계는 저장되며 초기화되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "How data processing works in Data Wrangler — 샘플 대화형 변환과 처리 잡",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-processing.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q14",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "스트리밍 데이터 변환(K5)",
+      "section": "streaming-transform",
+      "difficulty": "applied",
+      "stem": "Amazon Data Firehose의 Lambda 변환이 간헐적으로 실패한다. 함수는 배치 크기가 커질 때 느려진다. 문서가 명시한 한도로 옳은 조합은 무엇인가?",
+      "options": [
+        "변환 버퍼 힌트 0.2–3 MB · 동기 호출 요청과 응답 각 6 MB · 호출 최대 5분",
+        "변환 버퍼 힌트 1–128 MB · 동기 호출 6 MB · 호출 최대 15분",
+        "변환 버퍼 힌트 0.2–3 MB · 동기 호출 10 MB · 호출 최대 15분",
+        "변환 버퍼 힌트 64–128 MB · 동기 호출 6 MB · 호출 최대 5분"
+      ],
+      "correct": 0,
+      "explanation": "Firehose의 Lambda 변환은 버퍼 크기 힌트 0.2–3 MB(기본 1 MB)로 모은 배치를 Lambda에 동기 호출하며, 요청과 응답 페이로드는 각각 6 MB, 호출 시간은 최대 5분입니다.",
+      "wrongExplanations": {
+        "1": "1–128 MB는 S3 대상의 전달 버퍼 크기 범위이고, Lambda 호출 한도는 5분입니다.",
+        "2": "동기 호출 페이로드 한도는 6 MB입니다.",
+        "3": "64–128 MB는 Parquet 변환·동적 파티셔닝을 켠 S3 버퍼 크기 범위입니다."
+      },
+      "sources": [
+        {
+          "title": "Transform source data in Amazon Data Firehose — 버퍼 힌트·6 MB·5분",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q15",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "스트리밍 데이터 변환(K5)",
+      "section": "streaming-transform",
+      "difficulty": "applied",
+      "stem": "AWS Glue 스트리밍 ETL 작업을 중지했다가 다시 시작했더니 이전에 처리한 데이터부터 다시 읽지 않고 이어서 처리했다. 이 동작의 근거는 무엇인가?",
+      "options": [
+        "작업 북마크가 처리한 파티션을 기록하기 때문",
+        "Spark Structured Streaming의 체크포인트가 읽은 위치를 추적하기 때문",
+        "Kinesis 스트림의 보존 기간이 지났기 때문",
+        "Glue가 처리한 레코드를 Data Catalog에 기록하기 때문"
+      ],
+      "correct": 1,
+      "explanation": "Glue 스트리밍 ETL은 Spark Structured Streaming 위에서 동작하며 작업 북마크 대신 체크포인트로 읽은 위치를 추적합니다. 처음부터 다시 처리하려면 체크포인트 폴더를 지워야 합니다.",
+      "wrongExplanations": {
+        "0": "스트리밍 ETL 작업은 작업 북마크를 지원하지 않습니다.",
+        "2": "보존 기간이 지나면 오히려 데이터를 읽지 못합니다. 이어서 처리하는 동작의 근거가 아닙니다.",
+        "3": "Data Catalog는 메타데이터(테이블·스키마) 저장소이며 처리 위치를 기록하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Streaming ETL jobs in AWS Glue — 체크포인트",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/add-job-streaming.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q16",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "SageMaker Feature Store로 특성 생성·관리(SK2)",
+      "section": "feature-store",
+      "difficulty": "applied",
+      "stem": "특성 그룹에 TTL을 설정하려고 한다. 이 특성 그룹은 오프라인 스토어만 구성돼 있다. 어떤 일이 일어나는가?",
+      "options": [
+        "오프라인 스토어의 Parquet 파일이 만료 시 삭제된다",
+        "400 오류가 발생한다 — TTL은 온라인 스토어가 있어야 한다",
+        "TTL이 무시되고 경고 없이 저장된다",
+        "특성 그룹이 자동으로 온라인 스토어를 함께 만든다"
+      ],
+      "correct": 1,
+      "explanation": "TTL은 온라인 스토어의 레코드 만료를 위한 기능입니다. 온라인 스토어 없이 TTL을 사용하면 400 오류가 발생한다고 문서에 명시돼 있습니다.",
+      "wrongExplanations": {
+        "0": "오프라인 스토어는 append-only이며 만료 레코드가 하드 삭제되는 쪽은 온라인 스토어입니다. 삭제 레코드는 오히려 오프라인에 추가됩니다.",
+        "2": "무시되는 것이 아니라 오류로 거부됩니다.",
+        "3": "온라인 스토어가 자동으로 생성되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Time to live (TTL) duration for records (Feature Store)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-time-to-live.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q17",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "SageMaker Feature Store로 특성 생성·관리(SK2)",
+      "section": "feature-store",
+      "difficulty": "applied",
+      "stem": "과거 특정 시점의 특성 값으로 학습 데이터셋을 만들어, 그 시점 이후에 생성된 값이 학습에 섞이지 않게 하려고 한다. Feature Store의 어떤 성질이 이것을 가능하게 하는가?",
+      "options": [
+        "온라인 스토어가 식별자별 최신 레코드만 유지한다",
+        "오프라인 스토어가 모든 레코드를 이벤트 시간과 함께 append-only로 보관한다",
+        "특성 그룹이 생성 후 스키마를 바꿀 수 있다",
+        "AWS RAM으로 특성 그룹을 교차 계정 공유할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "오프라인 스토어는 모든 레코드를 이벤트 시간과 함께 append-only로 보관하므로 과거 시점의 특성 상태를 재현할 수 있습니다. 공식 문서는 이 시점 정확(point-in-time) 조회가 미래 데이터 유입(feature leakage)을 막는다고 설명합니다.",
+      "wrongExplanations": {
+        "0": "온라인 스토어는 최신 레코드만 유지하므로 과거 시점을 재현할 수 없습니다.",
+        "2": "스키마 변경 가능성은 특성 그룹 관리의 성질이며 시점 재현과 무관합니다.",
+        "3": "교차 계정 공유는 접근 범위의 문제이고 시점 정확 조인과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Create a dataset from your feature groups — 시점 정확 조인",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-create-a-dataset.html"
+        },
+        {
+          "title": "Amazon SageMaker Feature Store 제품 페이지 — point-in-time 쿼리와 feature leakage",
+          "url": "https://aws.amazon.com/sagemaker/ai/feature-store/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q18",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "데이터 주석·레이블링 서비스 이해(K6, SK3)",
+      "section": "labeling",
+      "difficulty": "applied",
+      "stem": "이미지 분류(단일 레이블) 데이터셋 3,000개를 SageMaker Ground Truth로 레이블링하면서 자동 데이터 레이블링으로 비용을 줄이려 한다. 확인해야 할 조건은 무엇인가?",
+      "options": [
+        "최소 1,250개 객체가 필요하며 스트리밍 레이블링 잡에서는 쓸 수 없다",
+        "최소 50,000개 객체가 필요하다",
+        "사용자 지정 작업 유형에서만 사용할 수 있다",
+        "비공개 작업 인력에서는 사용할 수 없다"
+      ],
+      "correct": 0,
+      "explanation": "자동 데이터 레이블링은 최소 1,250개 객체가 필요하고(5,000개 이상 강력 권장), 지원 작업 유형은 이미지 분류(단일)·의미 분할·객체 감지(경계 상자)·텍스트 분류(단일) 4종이며 사용자 지정 작업 유형과 스트리밍 잡에서는 사용할 수 없습니다.",
+      "wrongExplanations": {
+        "1": "최소 요건은 1,250개이고 5,000개 이상이 강력히 권장되는 수치입니다.",
+        "2": "사용자 지정 작업 유형에서는 오히려 사용할 수 없습니다.",
+        "3": "작업 인력 종류가 자동 레이블링 사용 가능 여부를 가르지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Automate data labeling (Ground Truth) — 최소 객체 수·지원 작업 유형",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-2-q19",
+      "examGuideTaskId": "mla-t1-2",
+      "skill": "데이터 주석·레이블링 서비스 이해(K6, SK3)",
+      "section": "labeling",
+      "difficulty": "associate",
+      "stem": "운영 중인 문서 처리 파이프라인에서 추출 신뢰도가 낮은 결과만 사람이 검토하도록 워크플로를 만들려 한다. 가이드가 제시하는 서비스는 무엇인가?",
+      "options": [
+        "SageMaker Ground Truth의 자동 데이터 레이블링",
+        "Amazon Augmented AI(A2I)의 휴먼 검토 워크플로",
+        "Ground Truth의 레이블 검증 작업 유형",
+        "SageMaker Processing 잡"
+      ],
+      "correct": 1,
+      "explanation": "A2I는 AI 서비스나 자체 ML 모델의 저신뢰 예측 또는 무작위 표본 예측을 사람이 검토하도록 휴먼 검토 워크플로를 구축·관리하는 서비스입니다. Ground Truth가 학습용 레이블을 만드는 쪽이라면 A2I는 운영 중 예측을 검토하는 쪽입니다. ⚠️ A2I는 현재 신규 고객을 받지 않습니다.",
+      "wrongExplanations": {
+        "0": "자동 데이터 레이블링은 학습 데이터셋을 만드는 과정에서 사람이 레이블링할 대상을 고르는 기능입니다.",
+        "2": "레이블 검증은 기존 레이블의 정확성을 사람이 표시·평가하는 작업 유형이며 운영 추론 결과의 검토 워크플로가 아닙니다.",
+        "3": "Processing 잡은 전·후처리와 모델 평가를 실행하는 수단이며 사람 검토 워크플로를 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Using Amazon Augmented AI for Human Review (A2I)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html"
+        },
+        {
+          "title": "Training data labeling using humans with Amazon SageMaker Ground Truth",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
