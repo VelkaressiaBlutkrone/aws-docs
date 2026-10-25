@@ -161,4 +161,31 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.text('시작'), findsNothing, reason: '시험 화면으로 넘어갔다');
   });
+
+  testWidgets('시작 시각을 타임존이 명시된 ISO로 저장한다', (tester) async {
+    // 오프셋 없는 로컬 벽시계로 저장하면 DST·시간대 이동 뒤 clearExpired가 **살아 있는**
+    // 세션을 만료로 오판할 수 있다(반목표: 오히려 세션을 잃는 것).
+    final b = MemoryBackend();
+    await _pump(tester, 'CLF-C02', b);
+
+    await tester.tap(find.text('시작'));
+    await tester.pumpAndSettle(
+      const Duration(milliseconds: 100),
+      EnginePhase.sendSemanticsUpdate,
+      const Duration(seconds: 10),
+    );
+
+    final iso =
+        ExamSessionStore(backend: b).loadSnapshot('exam:CLF-C02-mock')!.startedAtIso;
+    expect(DateTime.parse(iso).isUtc, isTrue,
+        reason: '타임존이 박혀 있어야 오프셋이 바뀌어도 같은 절대 시각으로 읽힌다');
+  });
+
+  testWidgets('진입이 구포맷 키를 빈 값으로 새로 만들지 않는다', (tester) async {
+    final b = MemoryBackend();
+    await _pump(tester, 'CLF-C02', b);
+
+    expect(b.keys().where((k) => k.startsWith('awsdocs.examSession.v1:')), isEmpty,
+        reason: '없던 키에 빈 값을 쓰면 진입마다 영구 축적된다');
+  });
 }

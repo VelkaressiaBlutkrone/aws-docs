@@ -25,7 +25,16 @@ class ExamSessionStore {
       _b.write(_key(session.examId), jsonEncode(session.toJson()));
 
   /// 빈 문자열 기록 = load에서 null 처리(KvBackend에 삭제 API 없음).
-  void clear(String examId) => _b.write(_key(examId), '');
+  void clear(String examId) => _delete(_key(examId));
+
+  /// 키를 비운다. **이미 없거나 비어 있으면 쓰지 않는다** — 무조건 쓰면 두 페이지의
+  /// 진입 경로가 구포맷 키에 빈 값을 새로 만들어 진입마다 영구 축적된다
+  /// (2026-10-25 리뷰 Minor). 쿼터를 아끼는 쪽이 정리의 목적과도 맞다.
+  void _delete(String key) {
+    final cur = _b.read(key);
+    if (cur == null || cur.isEmpty) return;
+    _b.write(key, '');
+  }
 
   /// 자격증 통합/약점 모의고사 진행 세션을 함께 폐기한다.
   void clearCertExamSessions(String certCode) {
@@ -40,8 +49,8 @@ class ExamSessionStore {
       _snapshotPrefix,
       _progressPrefix,
     ]) {
-      for (final k in _b.keys()) {
-        if (k.startsWith(prefix)) _b.write(k, '');
+      for (final k in _b.keys().toList()) {
+        if (k.startsWith(prefix)) _delete(k);
       }
     }
   }
@@ -113,14 +122,18 @@ class ExamSessionStore {
   }
 
   void clearRun(String examId) {
-    _b.write(_snapshotKey(examId), '');
-    _b.write(_progressKey(examId), '');
+    _delete(_snapshotKey(examId));
+    _delete(_progressKey(examId));
   }
 
-  /// 제한 시간이 이미 지난 세션만 정리한다(§4.6). 지운 수를 돌려준다.
+  /// 제한 시간이 이미 지난 세션만 정리한다(§4.6). 지운 **런** 수를 돌려준다.
   ///
   /// ⚠️ 살아 있는 시험은 건드리지 않는다. 시작 시각을 파싱할 수 없으면 **판단 불가**로
   /// 보고 남긴다 — 판단 불가를 삭제 근거로 쓰면 반목표("오히려 세션을 잃는 것")다.
+  ///
+  /// 짝 스냅샷이 없는 **고아 진행 키**도 함께 비운다(반환 수에는 넣지 않는다). 복원은
+  /// 스냅샷이 있어야 성립하므로(§4.4.1) 고아 진행 키는 영원히 복원될 수 없고 쿼터만
+  /// 먹는다 — 시간 기준과 달리 "산 세션을 지울 위험"이 구조적으로 없다.
   int clearExpired({DateTime Function()? now}) {
     final clock = (now ?? DateTime.now)();
     var removed = 0;
@@ -135,6 +148,11 @@ class ExamSessionStore {
         clearRun(examId);
         removed++;
       }
+    }
+    // 고아 진행 키 쓸기 — 위에서 지운 런의 진행 키는 이미 비어 있어 건너뛴다.
+    for (final k in _b.keys().toList()) {
+      if (!k.startsWith(_progressPrefix)) continue;
+      if (loadSnapshot(k.substring(_progressPrefix.length)) == null) _delete(k);
     }
     return removed;
   }
