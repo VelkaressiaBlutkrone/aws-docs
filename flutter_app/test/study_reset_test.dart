@@ -132,13 +132,18 @@ void main() {
 
   group('ExamSessionStore.clearAll', () {
     test('clearAll: 모든 세션 키 제거', () {
+      // ⚠️ 구포맷 키만 심으면 clearAll이 덮는 **새 접두사 2개**를 전혀 보지 못한다.
       final b = MemoryBackend();
       ExamSessionStore(backend: b)
         ..save(_sess('exam:clf-t1-1'))
-        ..save(_sess('exam:CLF-C02-mock'));
+        ..save(_sess('exam:CLF-C02-mock'))
+        ..saveSnapshot(_snap('exam:CLF-C02-mock'))
+        ..saveProgress(_prog('exam:CLF-C02-mock'));
       ExamSessionStore(backend: b).clearAll();
       expect(ExamSessionStore(backend: b).load('exam:clf-t1-1'), isNull);
       expect(ExamSessionStore(backend: b).load('exam:CLF-C02-mock'), isNull);
+      expect(ExamSessionStore(backend: b).loadRun('exam:CLF-C02-mock'), isNull,
+          reason: '스냅샷·진행 2키도 함께 비워야 한다');
     });
   });
 

@@ -22,6 +22,18 @@ import 'package:aws_docs/pages/cert_exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
 
+/// 키별 쓰기 횟수를 세는 백엔드.
+class _CountingBackend extends MemoryBackend {
+  final counts = <String, int>{};
+  @override
+  void write(String key, String value) {
+    counts[key] = (counts[key] ?? 0) + 1;
+    super.write(key, value);
+  }
+
+  int writeCount(String key) => counts[key] ?? 0;
+}
+
 /// 스냅샷 키 쓰기만 실패시키는 백엔드(쿼터 초과 모사).
 class _QuotaOnSnapshot extends MemoryBackend {
   @override
@@ -87,8 +99,10 @@ void main() {
     expect(certExamHasWeightedCapacity('SAA-C03'), isFalse);
   });
 
-  testWidgets('⚠️ capacity가 미충족이어도 진행 중 시험은 살아남는다', (tester) async {
-    // 설계 §4.3 — 문항을 내리는 릴리스가 capacity를 뒤집어도 풀던 시험을 뺏지 않는다.
+  testWidgets('⚠️ capacity 미충족에서도 진행 세션을 지우지 않는다(잠금 화면에 "이어서 풀기")',
+      (tester) async {
+    // 설계 §4.3 — 게이트가 세션을 지워 버리면 이 버튼이 아예 렌더되지 않는다.
+    // 버튼이 **실제로 시험을 여는지**는 exam_snapshot_review_fixes_test의 C-1 가드가 본다.
     final b = MemoryBackend();
     ExamSessionStore(backend: b).saveSnapshot(_snapshot('SAA-C03'));
 
@@ -120,7 +134,7 @@ void main() {
   });
 
   testWidgets('시작 버튼이 스냅샷을 1회 쓴다', (tester) async {
-    final b = MemoryBackend();
+    final b = _CountingBackend();
     await _pump(tester, 'CLF-C02', b);
 
     await tester.tap(find.text('시작'));
@@ -133,6 +147,51 @@ void main() {
     final snap = ExamSessionStore(backend: b).loadSnapshot('exam:CLF-C02-mock');
     expect(snap, isNotNull);
     expect(snap!.questions, isNotEmpty);
+    expect(b.writeCount('awsdocs.examSnapshot.v1:exam:CLF-C02-mock'), 1,
+        reason: '"1회"는 이름만이 아니라 단언돼야 한다(설계 §4.4)');
+  });
+
+  testWidgets('⚠️ 통합 모의고사도 시험 중 스냅샷을 다시 쓰지 않는다', (tester) async {
+    // 설계 §4.4의 존재 이유 — 깨지면 매 탭 112 KB를 다시 쓴다. ExamPage 쪽은
+    // exam_page_snapshot_test가 보고 있고, 시작 화면이 있는 이 경로는 가드가 없었다.
+    final b = _CountingBackend();
+    await _pump(tester, 'CLF-C02', b);
+    await tester.tap(find.text('시작'));
+    await tester.pumpAndSettle(
+      const Duration(milliseconds: 100),
+      EnginePhase.sendSemanticsUpdate,
+      const Duration(seconds: 10),
+    );
+
+    await tester.tap(find.text('2')); // 문항 그리드 2번으로 이동 → 진행 저장
+    await tester.pump();
+
+    expect(b.writeCount('awsdocs.examSnapshot.v1:exam:CLF-C02-mock'), 1);
+    expect(b.writeCount('awsdocs.examProgress.v1:exam:CLF-C02-mock'),
+        greaterThanOrEqualTo(1));
+  });
+
+  testWidgets('만료된 스냅샷으로 진입하면 복원하지 않고 새 시험을 시작한다', (tester) async {
+    // 진입 경로는 clearExpired가 먼저 돈다(§4.6) — 그래서 만료 세션은 "이어서 풀기"로
+    // 되살아나지 않고, 0점 자동 제출로 이력을 오염시키지도 않는다.
+    final b = MemoryBackend();
+    ExamSessionStore(backend: b).saveSnapshot(ExamSnapshot(
+      examId: 'exam:CLF-C02-mock',
+      certId: 'CLF-C02',
+      taskId: 'CLF-C02-mock',
+      nonce: 'run-old',
+      startedAtIso:
+          DateTime.now().subtract(const Duration(days: 2)).toUtc().toIso8601String(),
+      durationSec: 5400,
+      questions: [_snapQ('s1', '스냅샷 전용 문항')],
+    ));
+
+    await _pump(tester, 'CLF-C02', b);
+
+    expect(find.text('이어서 풀기'), findsNothing);
+    expect(find.text('시작'), findsOneWidget);
+    expect(ExamSessionStore(backend: b).loadSnapshot('exam:CLF-C02-mock'), isNull,
+        reason: '만료분은 진입 시 정리된다');
   });
 
   testWidgets('구포맷 세션은 복원하지 않고 새 시험 시작 화면', (tester) async {
