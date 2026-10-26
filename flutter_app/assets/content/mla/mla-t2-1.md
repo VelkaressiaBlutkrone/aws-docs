@@ -45,7 +45,7 @@ lastVerified: 2026-10-17
 - [ ] 혼동 짝(LDA/NTM · RCF/IP Insights · 이미지 3종 · Linear Learner/FM)을 출력 단위와 입력 성격으로 구분한다
 - [ ] 설명 의무가 있을 때 **내재적 해석 모델 우선**, 성능이 필요하면 복잡 모델 + 사후 설명이라는 권고 순서를 안다
 - [ ] Translate·Transcribe·Rekognition·Textract·Comprehend 등 AI 서비스를 **입력의 형태**로 구분한다
-- [ ] JumpStart와 Bedrock을 통제권·실행 환경·과금으로 가르고, 맞춤화는 프롬프트 → RAG → 미세조정 순으로 올린다
+- [ ] JumpStart와 Bedrock을 통제권·실행 환경·과금으로 가르고, 맞춤화는 프롬프트 → 미세조정 → RAG 순으로 올린다
 - [ ] 수명 주기(Maintenance·Sunset)를 알고, 신규 고객이 쓸 수 없는 서비스가 보기에 섞여 있음을 안다
 
 ---
@@ -212,11 +212,12 @@ SageMaker 공식 문서는 구현 선택지를 **사전학습 모델 → 내장 
 
 - **연계 패턴**: 스캔 문서 → Textract로 텍스트화 → Comprehend로 분석. Transcribe 자막 → Translate 번역 → Polly 음성화. SageMaker Canvas의 Ready-to-use 모델은 Rekognition·Textract·Comprehend로 구동됩니다.
 - **맞춤이 필요할 때 서비스 안에서**: Comprehend 사용자 정의 모델, Rekognition Custom Labels(소량 이미지), Textract Custom Queries.
-- 보안·지연·정확도 기준: 대부분의 특화 AI 서비스는 VPC 프라이빗 엔드포인트를 지원하지 않지만 **Rekognition Custom Labels·Comprehend Custom은 VPC 엔드포인트로 접근**할 수 있고 Translate·Transcribe·Comprehend도 지원합니다. 상위 AI 서비스는 빠르지만 특정 지연 요구는 못 맞출 수 있고, 직접 만든 모델이 더 높은 정확도를 낼 수 있습니다.
+- **지연·정확도 기준**: 상위 AI 서비스는 빠르지만 특정 지연 요구는 못 맞출 수 있고, SageMaker로 직접 만든 모델이 더 높은 정확도를 낼 수 있습니다.
+- ⚠️ **보안(VPC 엔드포인트) 서술은 기준일을 확인하고 쓰세요.** 의사결정 가이드는 Rekognition Custom Labels·Comprehend Custom이 VPC 엔드포인트로 접근 가능하고 Translate·Transcribe·Comprehend도 지원한다고 적으면서, 동시에 "대부분의 특화 AI 서비스는 프라이빗 엔드포인트를 지원하지 않는다"고도 씁니다. **이 가이드의 최종 갱신일은 2024-05-03**이라 이 일반화는 지금 상태의 근거로 쓸 수 없습니다 — VPC 접근이 요구에 들어오면 **서비스별 현재 문서로 확인**합니다.
 
 ### 8) 서비스 수명 주기 — 보기에 섞이는 "못 쓰는 서비스" {#service-status}
 
-**Maintenance** = 신규 온보딩 불가, 기존 고객은 계속 사용 · **Sunset** = 종료 일정이 정해진 단계 · **Full Shutdown** = 완전 제거. 아래는 **시험 범위에는 남아 있지만 실제 상태가 다른** 항목입니다(2026-10-17 기준).
+**Maintenance** = 신규 온보딩 불가, 기존 고객은 계속 사용 · **Sunset** = 종료 일정이 정해진 단계 · **Full Shutdown** = 완전 제거. 아래는 **시험 범위에는 남아 있지만 실제 상태가 다른** 항목입니다(2026-10-17 기준). 날짜가 둘 적힌 행은 **공지일 → 발효일**이고, 신규 고객이 실제로 막히는 시점은 뒤의 날짜입니다.
 
 | 서비스·기능 | 상태 | 공식 안내 대안 |
 |---|---|---|
@@ -226,8 +227,8 @@ SageMaker 공식 문서는 구현 선택지를 **사전학습 모델 → 내장 
 | Lookout for Equipment | 2026-10-07 지원 종료 | AWS IoT SiteWise 다변량 이상 탐지 |
 | Amazon Fraud Detector | 2025-11-07부터 신규 불가 | SageMaker·AutoGluon·AWS WAF |
 | CodeGuru Reviewer | 2025-11-07부터 새 리포지토리 연결 불가 | Q Developer 코드 리뷰·Inspector |
-| Amazon DevOps Guru | 신규 불가 2026-10-29, 지원 종료 2027-09-30 | CloudWatch 이상 탐지 |
-| Amazon Kendra | 2026-06-30 Maintenance, 2026-07-30부터 신규 불가 | **Bedrock Knowledge Bases** |
+| Amazon DevOps Guru | 신규 불가 2026-10-29 · 지원 종료 2027-09-30(조회일 기준 **임박**) | CloudWatch 이상 탐지 |
+| Amazon Kendra | 2026-06-30 공지(Maintenance 진입) → **2026-07-30부터 신규 고객 접근 불가** | **Bedrock Knowledge Bases** |
 | Amazon Q Business | 신규 고객 불가 | **Amazon Quick** |
 | Amazon A2I · Clarify · Debugger · Model Monitor | SageMaker AI 기능 묶음으로 2026-07-30부터 신규 불가 | (개별 안내) |
 | Comprehend 일부 | 토픽 모델링·이벤트 탐지·프롬프트 안전 분류 2026-04-30부터 신규 불가 | Bedrock LLM·Guardrails |
@@ -244,7 +245,7 @@ FM 맞춤화의 권장 순서는 ① **프롬프트 엔지니어링**(가중치 
 | 기준 | SageMaker JumpStart | Amazon Bedrock |
 |---|---|---|
 | 정체 | SageMaker 안의 **모델 허브** — 사전학습 모델·FM·솔루션 템플릿 | **서버리스 FM 플랫폼(API)** |
-| 모델 풀 | 1,000개에 가까운 모델 | 100개 이상 FM. Claude 등 일부 독점 모델은 Bedrock에만 |
+| 모델 풀 | 더 넓음(조회일 기준 1,000개에 가까운 모델) | 조회일 기준 100개 이상 FM. **Claude 등 일부 독점 모델은 Bedrock에만** |
 | 실행 환경 | 사용자가 정하는 인스턴스·엔드포인트(컨테이너·오케스트레이션 접근) | 서버리스, 인프라 관리 최소 |
 | 과금 | 학습·추론 **인스턴스 사용량** | **토큰당**(온디맨드)·배치·Provisioned Throughput·서비스 티어 |
 | 맞춤화 | 프롬프트 → 미세조정 → RAG(모델별 지원 상이) | 지도 미세조정·강화 미세조정·증류·Custom Model Import·Knowledge Bases |
@@ -277,7 +278,7 @@ FM 맞춤화의 권장 순서는 ① **프롬프트 엔지니어링**(가중치 
 
 - **단순 알고리즘 먼저**: 계산량이 큰 알고리즘은 정확도를 근소하게 올리는 대신 운영비를 크게 늘릴 수 있고, 단순 알고리즘 탐색 없이 딥러닝을 쓰는 것은 안티패턴입니다.
 - **하드웨어도 비용**: CatBoost는 CPU 전용, RCF는 GPU를 활용하지 못하고, LDA는 단일 인스턴스 CPU입니다. 이들에 GPU를 붙이면 낭비입니다. 반대로 XGBoost는 GPU 단가가 높아도 더 빨리 끝나 비용 효율적일 수 있습니다.
-- ⚠️ Bedrock 사용자 정의 모델 추론은 문서 사이에 설명이 다릅니다 — Provisioned Throughput 문서는 "PT를 구매해야 한다"고, 추론 설정 문서는 **PT 구매 또는 온디맨드 배포** 두 가지를 제시합니다. 시험 문항이 구 규칙(PT 필수)을 전제할 수 있습니다.
+- 📍 **Bedrock 사용자 정의 모델의 추론 경로**(PT 구매 vs 조건부 온디맨드 배포, 문서 간 서술 차이 포함)는 **Task 2.2 문서 12) 파인튜닝**이 정본입니다. 비용 관점에서 알아 둘 것은 하나입니다 — 맞춤화한 모델을 부르려면 **추론 용량 비용이 따로 든다**는 점.
 
 ---
 

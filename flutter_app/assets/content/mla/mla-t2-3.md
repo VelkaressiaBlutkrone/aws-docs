@@ -248,21 +248,20 @@ lastVerified: 2026-10-17
 
 **용어** — `facet`은 편향을 측정하는 속성(열)이고 유리한 쪽을 **facet a**, 불리한 쪽을 **facet d**로 씁니다. `group variable`은 조건부 인구통계 격차에서 하위 그룹을 나누는 범주형 열로 **심슨 역설** 대응이며 그 지표에만 필요합니다.
 
-**사전 편향 지표 8종** — 모든 사전 지표는 **모델 출력에 의존하지 않아 어떤 모델에도 유효**합니다.
+**사전 편향 지표 8종**(CI·DPL·KL·JS·LP·TVD·KS·CDD)은 모두 **모델 출력에 의존하지 않아 어떤 모델에도 유효**합니다.
 
-| 약어 | 이름 | 무엇을 재나 | 범위 |
-|---|---|---|---|
-| **CI** | Class Imbalance | facet 값 간 **구성원 수** 불균형(결과가 아니라 표본 수) | −1~+1 |
-| **DPL** | Difference in Proportions of Labels | facet별 **양성 레이블 비율 차** | 이진·다중 −1~+1 |
-| KL | Kullback-Leibler Divergence | facet 간 결과 분포의 엔트로피적 발산 | 0~+∞ |
-| JS | Jensen-Shannon Divergence | 같은 질문(발산) | 0~+∞ |
-| LP | Lp-norm | facet별 결과 분포의 p-norm 차 | 0~+∞ |
-| TVD | Total Variation Distance | L1-norm 차이의 절반 | 0~+∞ |
-| KS | Kolmogorov-Smirnov | facet 간 결과 분포의 **최대** 발산 | 0~+1 |
-| CDD | Conditional Demographic Disparity | facet 전체와 **하위 그룹별** 결과 격차(심슨 역설 배제) | −1~+1 |
+> 📍 **사전 지표의 정의·산식·암기 틀은 Task 1.3 문서 「데이터 무결성·편향 관리」가 정본**입니다. 그 문서가 CI·DPL·CDD와 분포형 5종(KL·JS·LP·TVD·KS)을 산식과 함께 정리합니다. 여기서는 이 Task(2.3)의 몫인 **사후 지표와의 관계**만 다룹니다.
 
+이 Task에서 기억할 것은 **두 짝**입니다.
+
+| 사전(관측 레이블) | 사후(예측 레이블) | 두 값을 비교하면 |
+|---|---|---|
+| **DPL** — facet별 양성 **레이블** 비율 차 | **DPPL** — facet별 양성 **예측** 비율 차 | 훈련이 양성 비율 편향을 **키웠는지**(DPPL > DPL이면 증가) |
+| **CDD** — 하위 그룹별 결과 격차(심슨 역설 배제) | **CDDPL** — 같은 지표를 **예측 레이블로** 계산 | 하위 그룹 수준에서 같은 질문 |
+
+- 나머지 사전 지표(CI와 분포형 5종)는 사후 짝이 없습니다. **CI만 결과가 아니라 표본 수**를 본다는 점이 사후 지표 전체와 가르는 특징입니다.
 - 설정의 `methods`에 쓰는 약어는 `CI`·`DPL`·`KL`·`JS`·`LP`·`TVD`·`KS`·**`CDDL`**(CDD의 설정 약어)이며, `all`로 두면 사전 지표를 모두 계산합니다. 편향 분석에는 `label_values_or_threshold`(긍정 결과를 뜻하는 값)가 **필수**입니다.
-- **쓰는 순서(SK1)**: ① 데이터 단계에서 **CI·DPL**로 표본 불균형과 레이블 편향을 본다 → ② 훈련 후 같은 facet에 사후 지표를 계산한다 → ③ **DPL과 DPPL을 비교**하면 훈련이 양성 비율 편향을 키웠는지 알 수 있다(DPPL > DPL이면 증가). 어떤 지표가 맞는지는 **사람이 이해관계자와 협의해** 정합니다.
+- **쓰는 순서(SK1)**: ① 데이터 단계에서 **CI·DPL**로 표본 불균형과 레이블 편향을 본다 → ② 훈련 후 같은 facet에 사후 지표를 계산한다 → ③ **DPL과 DPPL을 비교**한다. 어떤 지표가 맞는지는 **사람이 이해관계자와 협의해** 정합니다.
 
 > 🧠 **원리** — 사전 지표는 모델 출력 없이 원본 데이터의 레이블·facet 분포만 비교하므로 **모델 훈련에 자원을 쓰기 전에** 계산할 수 있습니다. 반대로 사후 지표는 예측 레이블이 필요해 모델(또는 예측 결과)이 있어야 합니다.
 
@@ -273,7 +272,7 @@ lastVerified: 2026-10-17
 | 약어 | 이름 | 무엇을 비교하나 |
 |---|---|---|
 | **DPPL** | Difference in Positive Proportions in Predicted Labels | facet a·d의 **예측 양성 비율 차** |
-| **DI** | Disparate Impact | 예측 양성 비율의 **비**(예: a 60%·d 50% → 0.8). **1이면 인구통계 평등** |
+| **DI** | Disparate Impact | 예측 양성 비율의 **비**(q′d ÷ q′a). 공식 예시는 a 60%·d 50% → `.5/.6 = 0.8`(문서 표기 그대로이고 정확히는 ≈0.83). **1이면 인구통계 평등**, 1 미만이면 a의 예측 양성 비율이 높음 |
 | CDDPL | Conditional Demographic Disparity in Predicted Labels | 하위 그룹별 예측 레이블의 거절·수락 격차(사전 CDD를 **예측 레이블로** 계산) |
 | **FT** | Counterfactual Fliptest | facet d의 각 구성원과 **가장 비슷한 facet a 구성원**(k-최근접 이웃)의 예측이 다른지 |
 | **AD** | Accuracy Difference | facet 간 **예측 정확도 차**. 한계: Type I과 Type II 오류를 구분하지 못함 |

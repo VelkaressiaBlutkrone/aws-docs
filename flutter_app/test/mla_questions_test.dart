@@ -94,6 +94,11 @@ void main() {
 
       test('문항 파일에 검증 기준일(lastVerified)이 있다', () {
         // md 머리말은 lastVerified를 갖는데 문항 파일에는 없어 상태가 엇갈렸다.
+        // ⚠️ 의미: 이 날짜는 **출처를 조회·대조한 기준일**이지 사람 검수가 끝난 날이
+        // 아니다. 사람 검수 완료 여부는 문항별 `verified` 플래그가 따로 나타낸다
+        // (드래프트 단계에서는 lastVerified가 있으면서 verified:false인 것이 정상).
+        // md의 lastVerified(조사 노트 조회일)와 값이 다를 수 있다 — 문서는 노트를
+        // 작성한 날, 문항은 그 문항을 쓰며 출처를 다시 확인한 날이다.
         final map = json.decode(File(path).readAsStringSync())
             as Map<String, dynamic>;
         expect(RegExp(r'^\d{4}-\d{2}-\d{2}$')
