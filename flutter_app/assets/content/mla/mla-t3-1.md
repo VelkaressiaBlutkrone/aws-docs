@@ -141,7 +141,7 @@ SageMaker AI는 모델을 올리는 방식을 네 가지로 나눕니다. 먼저
 
 **변환 방향** — 인스턴스 기반 실시간 엔드포인트를 서버리스로 바꿀 수는 **없습니다**(`ValidationError`). 서버리스 → 실시간은 가능하지만 되돌릴 수 없습니다.
 
-선택 단서: 유휴 구간이 길고 콜드 스타트를 허용하며 CPU 모델이고 4 MB·60초 안에 끝난다 → 서버리스. 버스트 시점이 예측 가능하고 지연이 민감하다 → 서버리스 + PC. 용량 모델과 PC 오토 스케일링은 [`mla-t3-2` 5)·6)](mla-t3-2.md#capacity-models)이 정본입니다.
+선택 단서: 유휴 구간이 길고 콜드 스타트를 허용하며 CPU 모델이고 4 MB·60초 안에 끝난다 → 서버리스. 버스트 시점이 예측 가능하고 지연이 민감하다 → 서버리스 + PC. 용량 모델과 PC 오토 스케일링은 `mla-t3-2` 5)·6)이 정본입니다.
 
 ### 3) 비동기 추론 — 큐와 S3 {#async-detail}
 
@@ -235,7 +235,7 @@ Triton 컨테이너는 단일 모델·앙상블·MME 모드를 모두 지원합�
 - **다른 배포 대상의 롤백** — Lambda는 버전 + **가중 별칭**으로 카나리를 만들고 빠르게 되돌립니다. ECS는 롤링 업데이트의 **배포 서킷 브레이커**가 실패 배포를 마지막 `COMPLETED` 배포로 자동 롤백합니다.
 - **테스트 환경** — 프로덕션 엔드포인트에 올리기 전에 노트북 인스턴스에서 **로컬 모드**(`instance_type='local'`)로 배포해 검증할 수 있습니다. 서버리스·비동기(0 스케일)는 개발·테스트의 유휴 비용을 줄입니다.
 
-> 승인 상태 전이가 **CI/CD 파이프라인을 어떻게 시작시키는지**(전이 4종 표, EventBridge 이벤트)는 [`mla-t3-3` 10)](mla-t3-3.md#projects-registry)이 정본입니다. 여기서는 배포 모범 사례로서의 버전 관리·롤백만 다룹니다.
+> 승인 상태 전이가 **CI/CD 파이프라인을 어떻게 시작시키는지**(전이 4종 표, EventBridge 이벤트)는 `mla-t3-3` 10)이 정본입니다. 여기서는 배포 모범 사례로서의 버전 관리·롤백만 다룹니다.
 
 ### 8) 배포 가드레일 — 블루/그린과 롤링 {#deployment-guardrails}
 
@@ -248,15 +248,15 @@ Triton 컨테이너는 단일 모델·앙상블·MME 모드를 모두 지원합�
 | 블루/그린 **linear** | n개 균등 단계 | `LinearStepSize` **10–50%**, 단계마다 베이킹 | 회귀 위험 최소 | 기간·비용이 단계 수에 비례 |
 | **롤링** | 배치 크기만큼 새 인스턴스 → 트래픽 이동 → 구 인스턴스 정리를 반복 | `MaximumBatchSize` **5–50%**, `RollbackMaximumBatchSize`, `WaitIntervalInSeconds`, `MaximumExecutionTimeoutInSeconds` ≤ 28,800초(8시간) | 블루/그린보다 필요 용량이 적다 | 서버리스·다중 변형 엔드포인트 불가 |
 
-> ⚠️ **`CanarySize` 50%의 기준이 문서마다 다르게 적혀 있습니다.** 개발자 가이드는 "그린(새) 플릿 용량의 50% 이하"(원문 "50% of the new fleet's capacity"), API 레퍼런스는 "변형 전체 인스턴스 수의 50% 이하"(원문 "50% of the variant's total instance count")라고 씁니다. 상한 비율 50%는 양쪽이 같으니 **그 수치만** 기억하고, 분모가 무엇인지에 답이 걸리는 문항은 피합니다. API 파라미터 관점의 정리는 [`mla-t3-3` 12)](mla-t3-3.md#deploy-strategy-rollback)에 있습니다.
+> ⚠️ **`CanarySize` 50%의 기준이 문서마다 다르게 적혀 있습니다.** 개발자 가이드는 "그린(새) 플릿 용량의 50% 이하"(원문 "50% of the new fleet's capacity"), API 레퍼런스는 "변형 전체 인스턴스 수의 50% 이하"(원문 "50% of the variant's total instance count")라고 씁니다. 상한 비율 50%는 양쪽이 같으니 **그 수치만** 기억하고, 분모가 무엇인지에 답이 걸리는 문항은 피합니다. API 파라미터 관점의 정리는 `mla-t3-3` 12)에 있습니다.
 
 **공통 전제** — 모니터링용 **CloudWatch 경보를 먼저 만들고** `DeploymentConfig.AutoRollbackConfiguration.Alarms`에 이름으로 지정합니다. 베이킹 기간에 경보가 하나라도 울리면 트래픽이 블루(구) 플릿으로 롤백됩니다. 신규 엔드포인트 구성은 기존과 **변형 이름이 같아야** 합니다. Marketplace 컨테이너나 Inf1 인스턴스를 쓰는 엔드포인트는 가드레일을 쓸 수 없고 **"all-at-once + 최종 베이킹 없음" 블루/그린으로 폴백**합니다. 다단계·베이킹이 있는 블루/그린은 업데이트 동안 **두 플릿 요금을 모두** 냅니다. 롤링이 실패하고 자동 롤백도 실패하면 `UpdateRollbackFailed` 상태가 되며 다시 `UpdateEndpoint`로 복구합니다.
 
-**섀도 테스트와 A/B** — 섀도 변형은 요청 **사본**을 받고 프로덕션 변형의 응답만 호출자에게 돌아가므로 사용자 영향이 없습니다(서버리스·비동기·Marketplace·멀티 컨테이너·MME·Inf1 엔드포인트는 사용 불가). A/B는 프로덕션 변형의 가중치로 트래픽을 나누거나 `TargetVariant`로 특정 변형을 직접 호출합니다. 두 기법의 상세·비교는 [`mla-t2-3` 14)](mla-t2-3.md#shadow-ab)이 정본입니다.
+**섀도 테스트와 A/B** — 섀도 변형은 요청 **사본**을 받고 프로덕션 변형의 응답만 호출자에게 돌아가므로 사용자 영향이 없습니다(서버리스·비동기·Marketplace·멀티 컨테이너·MME·Inf1 엔드포인트는 사용 불가). A/B는 프로덕션 변형의 가중치로 트래픽을 나누거나 `TargetVariant`로 특정 변형을 직접 호출합니다. 두 기법의 상세·비교는 `mla-t2-3` 14)이 정본입니다.
 
 > 🧠 원리: 블루/그린은 새 플릿을 **전부** 띄운 뒤 트래픽을 옮기며 베이킹 기간 동안 경보를 감시합니다. 롤링은 단계마다 구 플릿을 정리하므로 한꺼번에 필요한 추가 용량이 **배치 크기 수준**입니다. GPU처럼 수급이 어려운 인스턴스를 쓰는 대형 엔드포인트에 롤링을 권하는 이유가 이것입니다.
 
-CodeDeploy의 사전 정의 구성(`LambdaCanary10Percent5Minutes` 등)과의 대응은 [`mla-t3-3` 12)](mla-t3-3.md#deploy-strategy-rollback)에 있습니다.
+CodeDeploy의 사전 정의 구성(`LambdaCanary10Percent5Minutes` 등)과의 대응은 `mla-t3-3` 12)에 있습니다.
 
 ### 9) 컴퓨팅 자원 선택 — 패밀리·가속기·대역폭 {#compute-choice}
 
@@ -323,7 +323,7 @@ SageMaker AI ML 인스턴스 전반에서 **부하 테스트와 모델 튜닝을
 
 > ⚠️ 요구사항 목록은 `/invocations`와 `/ping`에 **POST**를 수용한다고 쓰고 헬스체크 절은 주기적 **GET** 요청이라 씁니다(원문 불일치). 실무·시험 기준으로는 **"추론은 POST `/invocations`, 헬스체크는 `/ping` 200 응답"**까지만 외웁니다.
 
-컨테이너를 **만들고 유지하는 쪽**(ECR 푸시 절차, 이미지 스캔, 수명 주기 정책, 훈련 컨테이너 계약)은 [`mla-t3-2` 11)](mla-t3-2.md#byoc-ecr)이 정본입니다. 여기서는 **"어느 이미지를 고를 것인가"**만 다룹니다.
+컨테이너를 **만들고 유지하는 쪽**(ECR 푸시 절차, 이미지 스캔, 수명 주기 정책, 훈련 컨테이너 계약)은 `mla-t3-2` 11)이 정본입니다. 여기서는 **"어느 이미지를 고를 것인가"**만 다룹니다.
 
 ### 12) 엣지 최적화 — SageMaker Neo {#edge-neo}
 
@@ -346,7 +346,7 @@ SageMaker AI Workflows 개요는 **SageMaker가 직접 제공하는 것**(Pipeli
 | **Amazon MWAA** | 관리형 Apache Airflow, Python DAG | 환경(스케줄러·워커)이 자동 스케일 | **이미 Airflow를 쓰거나** 워크플로를 AWS 리소스에서 추상화하고 싶을 때 |
 | **Kubernetes용 Operators·Kubeflow 컴포넌트** | Kubernetes API·`kubectl`로 SageMaker 작업 생성 | ACK 기반 최신 Operators | Kubernetes 중심 조직 |
 
-시험 범위 내 오케스트레이션 서비스 목록에는 MWAA·SNS·SQS·Step Functions가 있습니다. Pipelines의 **내부 구조**(DAG·단계 18종·캐싱·재시도 정책)와 CI/CD 도구(CodePipeline 등)는 [`mla-t3-3` 9)](mla-t3-3.md#sagemaker-pipelines)이 정본입니다.
+시험 범위 내 오케스트레이션 서비스 목록에는 MWAA·SNS·SQS·Step Functions가 있습니다. Pipelines의 **내부 구조**(DAG·단계 18종·캐싱·재시도 정책)와 CI/CD 도구(CodePipeline 등)는 `mla-t3-3` 9)이 정본입니다.
 
 ### 14) 배포 대상 선택 — 엔드포인트 vs EKS·ECS·Lambda {#deploy-target}
 
@@ -365,7 +365,7 @@ SageMaker AI Workflows 개요는 **SageMaker가 직접 제공하는 것**(Pipeli
 
 ### 15) 배포·오케스트레이션 수단의 현재 가용성 {#deploy-service-status}
 
-> 📍 **수명 주기 용어**(Maintenance · Sunset · Full Shutdown)와 **시험 범위에 남아 있지만 신규 고객이 못 쓰는 서비스 표**, 그리고 "날짜가 둘 적힌 행은 공지일 → 발효일"이라는 읽는 법은 [`mla-t2-1` 8)](mla-t2-1.md#service-status)이 정본입니다. 여기서는 다시 쓰지 않습니다.
+> 📍 **수명 주기 용어**(Maintenance · Sunset · Full Shutdown)와 **시험 범위에 남아 있지만 신규 고객이 못 쓰는 서비스 표**, 그리고 "날짜가 둘 적힌 행은 공지일 → 발효일"이라는 읽는 법은 `mla-t2-1` 8)이 정본입니다. 여기서는 다시 쓰지 않습니다.
 
 이 절이 다루는 것은 하나뿐입니다 — **"이 배포·오케스트레이션 수단을 지금 새 계정에서 쓸 수 있는가."** 3.1의 보기에는 기능 자체는 맞지만 더는 선택할 수 없는 항목이 섞여 들어옵니다.
 
@@ -376,11 +376,11 @@ SageMaker AI Workflows 개요는 **SageMaker가 직접 제공하는 것**(Pipeli
 | **AWS IoT Greengrass v1** | 2025-10 Sunset 공지 → **2026-10-07 지원 종료**. v2로 이전한다. 다만 Greengrass 자체가 **가이드 범위 외 서비스**다 | 엣지 문항은 **Neo 컴파일 + DLR**까지만 → 12) |
 | **SageMaker AI Operators for Kubernetes**(원 버전) | 2023-02-15 지원 종료 | **ACK 기반** 최신 Operators → 13) |
 
-**개명이 배포 도구에 남기는 것** — 2024-12-03에 Amazon SageMaker가 Amazon SageMaker AI로 바뀌었지만(경위는 `mla-t2-1` 8)), 배포 관점에서 기억할 결론은 하나입니다: **`sagemaker` API 네임스페이스·CLI·`AmazonSageMaker*` 관리형 정책·`AWS::SageMaker::*` CloudFormation 리소스 접두어·콘솔·문서 URL이 모두 그대로**라는 것입니다. 즉 개명은 템플릿·SDK 코드를 바꾸지 않습니다(IaC 쪽 세부는 [`mla-t3-2` 8)](mla-t3-2.md#iac-choice)).
+**개명이 배포 도구에 남기는 것** — 2024-12-03에 Amazon SageMaker가 Amazon SageMaker AI로 바뀌었지만(경위는 `mla-t2-1` 8)), 배포 관점에서 기억할 결론은 하나입니다: **`sagemaker` API 네임스페이스·CLI·`AmazonSageMaker*` 관리형 정책·`AWS::SageMaker::*` CloudFormation 리소스 접두어·콘솔·문서 URL이 모두 그대로**라는 것입니다. 즉 개명은 템플릿·SDK 코드를 바꾸지 않습니다(IaC 쪽 세부는 `mla-t3-2` 8)).
 
 **오케스트레이터 선택지의 가용성** — 13)의 네 선택지(Pipelines · Step Functions · MWAA · Kubernetes Operators) 가운데 신규 고객이 막힌 것은 없습니다. 주의할 것은 위 표의 **원 버전 Operators**뿐이고, 그 밖에는 "Step Functions의 콜백 Task Token이 SageMaker 통합에서 미지원"처럼 **가용성이 아니라 기능 범위**의 제약입니다.
 
-⚠️ 배포 경로에 얽히는 기능 중 **Model Monitor·Clarify·Debugger**는 신규 고객에게 닫혀 있습니다(상태·대안은 `mla-t2-1` 8)의 표). 이 Task에서 그 사실이 실제로 쓰이는 지점은 **서버리스 추론의 "쓸 수 없는 기능" 목록**(→ 2))이고, 드리프트 기반 재훈련에서의 영향은 [`mla-t3-3` 14)](mla-t3-3.md#retraining)가 다룹니다.
+⚠️ 배포 경로에 얽히는 기능 중 **Model Monitor·Clarify·Debugger**는 신규 고객에게 닫혀 있습니다(상태·대안은 `mla-t2-1` 8)의 표). 이 Task에서 그 사실이 실제로 쓰이는 지점은 **서버리스 추론의 "쓸 수 없는 기능" 목록**(→ 2))이고, 드리프트 기반 재훈련에서의 영향은 `mla-t3-3` 14)가 다룹니다.
 
 ---
 
@@ -499,24 +499,81 @@ Inference Recommender의 **Advanced(엔드포인트 추천)** 작업이고 **평
 - **삭제된 항목 1개**: 「엣지 디바이스에서 모델을 최적화하는 방법(예: SageMaker Neo)」 — 즉 **12)는 C01에서만 묻습니다.**
 - 읽는 법: C01의 3.1이 "고전적 추론 옵션 + 인스턴스·컨테이너 선택"이었다면 C02는 그 무게를 **FM 호스팅·에이전트·RAG**로 옮깁니다. 1)의 옵션 비교와 9)의 가속기 선택은 그대로 쓰이고, **엣지(12))의 비중은 사라집니다.**
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- 추론 옵션: [Deploy models for inference](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html) · [Deploy models — 경로 비교](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html) · [호스팅 FAQ](https://docs.aws.amazon.com/sagemaker/latest/dg/hosting-faqs.html) · [Optimize costs for inference](https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html)
-- 서버리스: [Serverless Inference](https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html) · [서버리스 호출](https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints-invoke.html) · [ProductionVariantServerlessConfig](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariantServerlessConfig.html)
-- 비동기: [Asynchronous inference](https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html) · [InvokeEndpointAsync](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_runtime_InvokeEndpointAsync.html) · [비동기 오토 스케일링](https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-autoscale.html) · [AsyncInferenceNotificationConfig](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AsyncInferenceNotificationConfig.html)
-- 배치 변환: [Batch transform](https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html) · [CreateTransformJob](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateTransformJob.html) · [TransformResources](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_TransformResources.html) · [ModelClientConfig](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ModelClientConfig.html)
-- 다중 모델: [Multi-model endpoints](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html) · [MME 인스턴스 권고](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoint-instance.html) · [멀티 컨테이너 생성](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-container-create.html) · [멀티 컨테이너 direct](https://docs.aws.amazon.com/sagemaker/latest/dg/multi-container-direct.html) · [추론 파이프라인](https://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipelines.html) · [추론 컴포넌트](https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-deploy-models.html) · [0 인스턴스 스케일](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-zero-instances.html) · [InvokeEndpoint](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_runtime_InvokeEndpoint.html)
-- 배포 전략: [Deployment guardrails](https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html) · [블루/그린](https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green.html) · [canary](https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green-canary.html) · [linear](https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green-linear.html) · [롤링](https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-rolling.html) · [제외 대상](https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-exclusions.html) · [섀도 테스트](https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html) · [A/B 테스트](https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html)
-- 버전·롤백: [Model Registry](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html) · [승인 상태](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html) · [Lambda 별칭 라우팅](https://docs.aws.amazon.com/lambda/latest/dg/configuring-alias-routing.html) · [ECS 배포 서킷 브레이커](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-circuit-breaker.html)
-- 컴퓨팅: [EC2 인스턴스 유형 사양](https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-type-specifications.html) · [가속 컴퓨팅](https://docs.aws.amazon.com/ec2/latest/instancetypes/ac.html) · [EFA](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html) · [Graviton 엔드포인트](https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-graviton.html) · [Inferentia](https://aws.amazon.com/ai/machine-learning/inferentia/) · [Trainium](https://aws.amazon.com/ai/machine-learning/trainium/) · [EKS CPU 추론 모범 사례](https://docs.aws.amazon.com/eks/latest/best-practices/aiml-cpu-inference.html) · [Compute Optimizer CLI](https://docs.aws.amazon.com/cli/latest/reference/compute-optimizer/index.html)
-- 추천·컨테이너: [Inference Recommender](https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender.html) · [추천 작업 유형](https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-recommendation-jobs.html) · [기존 엔드포인트 벤치마킹](https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-existing-endpoint.html) · [Docker 컨테이너](https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html) · [추론 코드 요구사항](https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html) · [Triton](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-models-frameworks-triton.html) · [DJL Serving](https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-models-frameworks-djl-serving.html) · [LMI](https://docs.aws.amazon.com/sagemaker/latest/dg/large-model-inference.html)
-- 엣지: [SageMaker Neo](https://docs.aws.amazon.com/sagemaker/latest/dg/neo.html) · [엣지 디바이스](https://docs.aws.amazon.com/sagemaker/latest/dg/neo-edge-devices.html) · [클라우드 대상](https://docs.aws.amazon.com/sagemaker/latest/dg/neo-supported-cloud.html) · [Edge Manager 중단](https://docs.aws.amazon.com/sagemaker/latest/dg/edge.html) · [Edge Manager EOL 안내](https://docs.aws.amazon.com/sagemaker/latest/dg/edge-eol.html) · [Greengrass v1 이전](https://docs.aws.amazon.com/greengrass/v2/developerguide/migrate-from-v1.html)
-- 오케스트레이터·대상: [SageMaker AI Workflows](https://docs.aws.amazon.com/sagemaker/latest/dg/workflows.html) · [Pipelines](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html) · [MWAA FAQ](https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-faqs.html) · [Step Functions SageMaker 통합](https://docs.aws.amazon.com/step-functions/latest/dg/connect-sagemaker.html) · [Operators(ACK)](https://docs.aws.amazon.com/sagemaker/latest/dg/kubernetes-sagemaker-operators-ack.html) · [Lambda 할당량](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html) · [ECS GPU](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-gpu.html)
-- 수명·범위: [AWS Lifecycle Changes](https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html) · [SageMaker AI 개명](https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html) · [Model Monitor 가용성 변경](https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html) · [범위 내 서비스](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/mla-01-in-scope-services.html) · [범위 외 서비스](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/mla-01-out-of-scope-services.html)
-- [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. Deploy models for inference — https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html
+2. Deploy models — 경로 비교 — https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html
+3. 호스팅 FAQ — https://docs.aws.amazon.com/sagemaker/latest/dg/hosting-faqs.html
+4. Optimize costs for inference — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html
+5. Serverless Inference — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+6. 서버리스 호출 — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints-invoke.html
+7. ProductionVariantServerlessConfig — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariantServerlessConfig.html
+8. Asynchronous inference — https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
+9. InvokeEndpointAsync — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_runtime_InvokeEndpointAsync.html
+10. 비동기 오토 스케일링 — https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-autoscale.html
+11. AsyncInferenceNotificationConfig — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AsyncInferenceNotificationConfig.html
+12. Batch transform — https://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform.html
+13. CreateTransformJob — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateTransformJob.html
+14. TransformResources — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_TransformResources.html
+15. ModelClientConfig — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ModelClientConfig.html
+16. Multi-model endpoints — https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints.html
+17. MME 인스턴스 권고 — https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoint-instance.html
+18. 멀티 컨테이너 생성 — https://docs.aws.amazon.com/sagemaker/latest/dg/multi-container-create.html
+19. 멀티 컨테이너 direct — https://docs.aws.amazon.com/sagemaker/latest/dg/multi-container-direct.html
+20. 추론 파이프라인 — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-pipelines.html
+21. 추론 컴포넌트 — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-deploy-models.html
+22. 0 인스턴스 스케일 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-zero-instances.html
+23. InvokeEndpoint — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_runtime_InvokeEndpoint.html
+24. Deployment guardrails — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html
+25. 블루/그린 — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green.html
+26. canary — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green-canary.html
+27. linear — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green-linear.html
+28. 롤링 — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-rolling.html
+29. 제외 대상 — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-exclusions.html
+30. 섀도 테스트 — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+31. A/B 테스트 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html
+32. Model Registry — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+33. 승인 상태 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html
+34. Lambda 별칭 라우팅 — https://docs.aws.amazon.com/lambda/latest/dg/configuring-alias-routing.html
+35. ECS 배포 서킷 브레이커 — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-circuit-breaker.html
+36. EC2 인스턴스 유형 사양 — https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-type-specifications.html
+37. 가속 컴퓨팅 — https://docs.aws.amazon.com/ec2/latest/instancetypes/ac.html
+38. EFA — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html
+39. Graviton 엔드포인트 — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-graviton.html
+40. Inferentia — https://aws.amazon.com/ai/machine-learning/inferentia/
+41. Trainium — https://aws.amazon.com/ai/machine-learning/trainium/
+42. EKS CPU 추론 모범 사례 — https://docs.aws.amazon.com/eks/latest/best-practices/aiml-cpu-inference.html
+43. Compute Optimizer CLI — https://docs.aws.amazon.com/cli/latest/reference/compute-optimizer/index.html
+44. Inference Recommender — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender.html
+45. 추천 작업 유형 — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-recommendation-jobs.html
+46. 기존 엔드포인트 벤치마킹 — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-existing-endpoint.html
+47. Docker 컨테이너 — https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html
+48. 추론 코드 요구사항 — https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html
+49. Triton — https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-models-frameworks-triton.html
+50. DJL Serving — https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-models-frameworks-djl-serving.html
+51. LMI — https://docs.aws.amazon.com/sagemaker/latest/dg/large-model-inference.html
+52. SageMaker Neo — https://docs.aws.amazon.com/sagemaker/latest/dg/neo.html
+53. 엣지 디바이스 — https://docs.aws.amazon.com/sagemaker/latest/dg/neo-edge-devices.html
+54. 클라우드 대상 — https://docs.aws.amazon.com/sagemaker/latest/dg/neo-supported-cloud.html
+55. Edge Manager 중단 — https://docs.aws.amazon.com/sagemaker/latest/dg/edge.html
+56. Edge Manager EOL 안내 — https://docs.aws.amazon.com/sagemaker/latest/dg/edge-eol.html
+57. Greengrass v1 이전 — https://docs.aws.amazon.com/greengrass/v2/developerguide/migrate-from-v1.html
+58. SageMaker AI Workflows — https://docs.aws.amazon.com/sagemaker/latest/dg/workflows.html
+59. Pipelines — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html
+60. MWAA FAQ — https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-faqs.html
+61. Step Functions SageMaker 통합 — https://docs.aws.amazon.com/step-functions/latest/dg/connect-sagemaker.html
+62. Operators(ACK) — https://docs.aws.amazon.com/sagemaker/latest/dg/kubernetes-sagemaker-operators-ack.html
+63. Lambda 할당량 — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+64. ECS GPU — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-gpu.html
+65. AWS Lifecycle Changes — https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+66. SageMaker AI 개명 — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+67. Model Monitor 가용성 변경 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
+68. 범위 내 서비스 — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/mla-01-in-scope-services.html
+69. 범위 외 서비스 — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/mla-01-out-of-scope-services.html
+70. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/3-1.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

@@ -674,56 +674,58 @@ EventBridge는 SageMaker AI의 **상태 변경 이벤트**를 감시해 자동 �
 
 ### 📌 출처
 
-- Data and model quality monitoring with Amazon SageMaker Model Monitor (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
-- Amazon SageMaker Model Monitor availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
-- Clarify availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
-- Data capture (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture.html
-- Capture data from real-time endpoint (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-endpoint.html
-- Capture data from batch transform job (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-batch.html
-- DataCaptureConfig (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_DataCaptureConfig.html
-- Create a Baseline (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-create-baseline.html
-- Schema for Statistics (statistics.json file) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-statistics.html
-- Schema for Constraints (constraints.json file) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-byoc-constraints.html
-- Schema for Violations (constraint_violations.json file) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-violations.html
-- Interpret results (Model Monitor) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-results.html
-- CloudWatch Metrics (Model Monitor 데이터 품질) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-cloudwatch.html
-- Schedule monitoring jobs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-scheduling.html
-- ScheduleConfig (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ScheduleConfig.html
-- Model Monitor FAQs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-faqs.html
-- Data quality (Model Monitor) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-quality.html
-- Model quality (Model Monitor) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality.html
-- Schedule model quality monitoring jobs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-schedule.html
-- Ingest Ground Truth labels and merge them with predictions (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-merge.html
-- Model quality metrics and Amazon CloudWatch monitoring (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
-- Amazon SageMaker Model Monitor prebuilt container (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-pre-built-container.html
-- Bias drift for models in production (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift.html
-- Bias Drift Violations (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift-violations.html
-- CloudWatch Metrics for Bias Drift Analysis (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift-cw.html
-- Feature attribution drift for models in production (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-feature-attribution-drift.html
-- Model Feature Attribution Drift Violations (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-model-attribution-drift-violations.html
-- CloudWatch Metrics for Feature Drift Analysis (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-feature-attribute-drift-cw.html
-- Amazon SageMaker AI metrics in Amazon CloudWatch (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html
-- CloudWatch Logs for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html
-- Events that Amazon SageMaker AI sends to Amazon EventBridge (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html
-- Using CloudWatch anomaly detection (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html
-- Automating Step Functions event delivery with EventBridge (공식 문서) — https://docs.aws.amazon.com/step-functions/latest/dg/eventbridge-integration.html
-- Automating AWS Glue with EventBridge (공식 문서) — https://docs.aws.amazon.com/glue/latest/dg/automating-awsglue-with-cloudwatch-events.html
-- Baseline calculation, drift detection and lifecycle with ClarifyCheck and QualityCheck steps (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-quality-clarify-baseline-lifecycle.html
-- Testing models with production variants (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html
-- ProductionVariant (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html
-- UpdateEndpointWeightsAndCapacities (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_UpdateEndpointWeightsAndCapacities.html
-- InvokeEndpoint (SageMaker Runtime API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_runtime_InvokeEndpoint.html
-- CreateEndpointConfig (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateEndpointConfig.html
-- Shadow tests (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
-- Auto-Rollback Configuration and Monitoring (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-configuration.html
-- Machine Learning Lens — Document revisions — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/document-revisions.html
-- Well-Architected machine learning design principles (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/design-principles.html
-- Machine Learning Lens — Monitoring (ML 수명주기 단계) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
-- Machine Learning Lens — Best practices by ML lifecycle — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/best-practices-by-ml-lifecycle-phase.html
-- MLPERF06-BP01 Include human-in-the-loop monitoring (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp01.html
-- MLPERF06-BP03 Evaluate data drift (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html
-- MLPERF06-BP04 Monitor, detect, and handle model performance degradation (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp04.html
-- MLPERF06-BP05 Establish an automated re-training framework (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html
-- MLOPS06-BP02 Enable model observability and tracking (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops06-bp02.html
-- AWS Prescriptive Guidance — Detecting drift in production applications — https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-monitoring-drift.html
-- MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+1. Data and model quality monitoring with Amazon SageMaker Model Monitor (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html
+2. Amazon SageMaker Model Monitor availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
+3. Clarify availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
+4. Data capture (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture.html
+5. Capture data from real-time endpoint (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-endpoint.html
+6. Capture data from batch transform job (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-batch.html
+7. DataCaptureConfig (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_DataCaptureConfig.html
+8. Create a Baseline (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-create-baseline.html
+9. Schema for Statistics (statistics.json file) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-statistics.html
+10. Schema for Constraints (constraints.json file) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-byoc-constraints.html
+11. Schema for Violations (constraint_violations.json file) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-violations.html
+12. Interpret results (Model Monitor) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-results.html
+13. CloudWatch Metrics (Model Monitor 데이터 품질) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-cloudwatch.html
+14. Schedule monitoring jobs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-scheduling.html
+15. ScheduleConfig (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ScheduleConfig.html
+16. Model Monitor FAQs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-faqs.html
+17. Data quality (Model Monitor) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-quality.html
+18. Model quality (Model Monitor) (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality.html
+19. Schedule model quality monitoring jobs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-schedule.html
+20. Ingest Ground Truth labels and merge them with predictions (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-merge.html
+21. Model quality metrics and Amazon CloudWatch monitoring (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html
+22. Amazon SageMaker Model Monitor prebuilt container (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-pre-built-container.html
+23. Bias drift for models in production (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift.html
+24. Bias Drift Violations (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift-violations.html
+25. CloudWatch Metrics for Bias Drift Analysis (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift-cw.html
+26. Feature attribution drift for models in production (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-feature-attribution-drift.html
+27. Model Feature Attribution Drift Violations (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-model-attribution-drift-violations.html
+28. CloudWatch Metrics for Feature Drift Analysis (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-feature-attribute-drift-cw.html
+29. Amazon SageMaker AI metrics in Amazon CloudWatch (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html
+30. CloudWatch Logs for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html
+31. Events that Amazon SageMaker AI sends to Amazon EventBridge (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html
+32. Using CloudWatch anomaly detection (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html
+33. Automating Step Functions event delivery with EventBridge (공식 문서) — https://docs.aws.amazon.com/step-functions/latest/dg/eventbridge-integration.html
+34. Automating AWS Glue with EventBridge (공식 문서) — https://docs.aws.amazon.com/glue/latest/dg/automating-awsglue-with-cloudwatch-events.html
+35. Baseline calculation, drift detection and lifecycle with ClarifyCheck and QualityCheck steps (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-quality-clarify-baseline-lifecycle.html
+36. Testing models with production variants (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html
+37. ProductionVariant (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html
+38. UpdateEndpointWeightsAndCapacities (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_UpdateEndpointWeightsAndCapacities.html
+39. InvokeEndpoint (SageMaker Runtime API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_runtime_InvokeEndpoint.html
+40. CreateEndpointConfig (SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateEndpointConfig.html
+41. Shadow tests (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+42. Auto-Rollback Configuration and Monitoring (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-configuration.html
+43. Machine Learning Lens — Document revisions — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/document-revisions.html
+44. Well-Architected machine learning design principles (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/design-principles.html
+45. Machine Learning Lens — Monitoring (ML 수명주기 단계) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html
+46. Machine Learning Lens — Best practices by ML lifecycle — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/best-practices-by-ml-lifecycle-phase.html
+47. MLPERF06-BP01 Include human-in-the-loop monitoring (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp01.html
+48. MLPERF06-BP03 Evaluate data drift (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html
+49. MLPERF06-BP04 Monitor, detect, and handle model performance degradation (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp04.html
+50. MLPERF06-BP05 Establish an automated re-training framework (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html
+51. MLOPS06-BP02 Enable model observability and tracking (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops06-bp02.html
+52. AWS Prescriptive Guidance — Detecting drift in production applications — https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-monitoring-drift.html
+53. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+
+조사 노트: `docs/content-research/MLA-C01/tasks/4-1.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

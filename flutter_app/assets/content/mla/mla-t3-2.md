@@ -61,7 +61,7 @@ lastVerified: 2026-10-17
 
 두 번째 축은 **"어디까지가 관리형인가"**입니다. 서버리스 추론은 스케일링 정책을 만들 일이 없고, 비동기는 0대까지 내려가지만 깨우는 장치를 따로 붙여야 하며, 일반 실시간 변형은 최소 1대를 유지합니다. 같은 "자동 확장"이라는 말 아래에 서로 다른 계약이 있습니다.
 
-세 번째는 **격리 설정의 방향**입니다. `VpcConfig`는 컨테이너에 VPC 네트워크를 *주는* 설정이고 `EnableNetworkIsolation`은 컨테이너의 네트워크를 *끊는* 설정입니다. 둘을 반대로 외우면 시나리오 문항에서 반드시 틀립니다.
+세 번째는 **격리 설정의 방향**입니다. `VpcConfig`는 컨테이너에 VPC 네트워크를 **주는** 설정이고 `EnableNetworkIsolation`은 컨테이너의 네트워크를 **끊는** 설정입니다. 둘을 반대로 외우면 시나리오 문항에서 반드시 틀립니다.
 
 ---
 
@@ -193,7 +193,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 |---|---|---|
 | 일반 실시간 변형 | **불가** | 최소값 ≥ 1. 트래픽이 0이어도 최소 인스턴스 수가 유지된다 |
 | 추론 컴포넌트 기반 | 가능 | 컴포넌트 `MinCapacity` 0 + 변형 `ManagedInstanceScaling.MinInstanceCount` 0 |
-| 비동기 | 가능 | `MinCapacity` 0. 요청은 큐에서 대기한다(보조 정책은 [`mla-t3-1` 3)](mla-t3-1.md#async-detail)) |
+| 비동기 | 가능 | `MinCapacity` 0. 요청은 큐에서 대기한다(보조 정책은 `mla-t3-1` 3)) |
 | 서버리스 | 유휴 시 0 | 정책이 필요 없다(SageMaker가 관리). 단 **프로비저닝된 동시성의 최소는 1** |
 
 - **쿨다운의 의미** — scale-out 쿨다운은 "지속적으로, 그러나 과하지 않게" 늘리려는 장치이고, scale-in 쿨다운은 가용성을 지키려 보수적으로 줄이려는 장치입니다. **scale-in 쿨다운 중에 다른 경보가 scale-out을 요구하면 즉시 scale-out 하며 scale-in 쿨다운은 중단됩니다.** 쿨다운은 정책 관련 조정에만 적용되고 예약 작업은 기다리지 않습니다.
@@ -203,7 +203,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 
 ### 5) 추론 옵션별 용량 모델 {#capacity-models}
 
-**용량을 누가 정하느냐**(프로비저닝 vs 온디맨드)가 스케일링 방식을 가릅니다. 각 옵션의 **한도**(페이로드·처리 시간)는 [`mla-t3-1` 1)](mla-t3-1.md#inference-options)이 정본입니다.
+**용량을 누가 정하느냐**(프로비저닝 vs 온디맨드)가 스케일링 방식을 가릅니다. 각 옵션의 **한도**(페이로드·처리 시간)는 `mla-t3-1` 1)이 정본입니다.
 
 | 옵션 | 용량 모델 | 스케일링 방식 | 0대까지? |
 |---|---|---|---|
@@ -231,13 +231,13 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 
 > Savings Plans 적용 대상 목록에 **서버리스·비동기 추론은 명시돼 있지 않습니다.** 적용 여부를 단정하는 문장을 문서에서 찾을 수 없으므로 이 관계를 판단 근거로 쓰지 않습니다.
 
-**SageMaker의 Spot** — SageMaker 문서가 설명하는 Spot 활용은 **관리형 스팟 훈련**입니다(최대 90% 절감, `EnableManagedSpotTraining` + `MaxWaitTimeInSeconds`, 체크포인트 권장). 상세는 [`mla-t2-2` 4)](mla-t2-2.md#speedup)가 정본입니다. **호스팅 엔드포인트 인스턴스에 Spot을 쓰는 공식 설명은 확인되지 않았으므로** 그 조합을 정답으로 고르지 않습니다.
+**SageMaker의 Spot** — SageMaker 문서가 설명하는 Spot 활용은 **관리형 스팟 훈련**입니다(최대 90% 절감, `EnableManagedSpotTraining` + `MaxWaitTimeInSeconds`, 체크포인트 권장). 상세는 `mla-t2-2` 4)가 정본입니다. **호스팅 엔드포인트 인스턴스에 Spot을 쓰는 공식 설명은 확인되지 않았으므로** 그 조합을 정답으로 고르지 않습니다.
 
 ### 7) 비용 효율·확장성·유지관리 모범 사례 {#cost-best-practices}
 
 **공식 문서가 권하는 것**
 
-1. 작업에 맞는 추론 옵션 고르기 → [`mla-t3-1` 5)](mla-t3-1.md#option-decision)
+1. 작업에 맞는 추론 옵션 고르기 → `mla-t3-1` 5)
 2. 오토 스케일링으로 **피크 기준 상시 프로비저닝을 피함**. 비동기는 고정 인스턴스 수로 처리율을 맞추거나 0대까지 줄여 추가 절감
 3. SageMaker AI Savings Plans
 4. **Inference Recommender로 인스턴스 비교**(SageMaker 추론은 70종 이상 인스턴스 유형·크기 제공, Inferentia·Graviton 포함)
@@ -255,7 +255,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 | Amazon EC2 인스턴스 사용 | Generative AI Lens: 사용자 지정 ML 인프라에는 **EC2 Auto Scaling**으로 수요에 맞춰 자원을 배분 |
 | 엔드포인트 뒤에서 Lambda 사용 | API Gateway → Lambda → SageMaker 엔드포인트 호출 구조(블로그). Lambda 컨테이너 이미지로 작은 모델 추론도 가능 |
 
-⚠️ 옛 비용 최적화 글의 **Elastic Inference 권고는 더 이상 유효하지 않습니다**(→ [`mla-t3-1` 15)](mla-t3-1.md#deploy-service-status)).
+⚠️ 옛 비용 최적화 글의 **Elastic Inference 권고는 더 이상 유효하지 않습니다**(→ `mla-t3-1` 15)).
 
 ### 8) IaC 선택 — CloudFormation vs CDK {#iac-choice}
 
@@ -270,7 +270,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 
 **SageMaker 리소스의 IaC 표현**
 
-- ⚠️ 2024-12-03 개명에도 **CloudFormation 리소스 접두어 `AWS::SageMaker::`는 그대로**입니다(경위는 [`mla-t3-1` 15)](mla-t3-1.md#deploy-service-status)). 템플릿을 고칠 필요가 없습니다.
+- ⚠️ 2024-12-03 개명에도 **CloudFormation 리소스 접두어 `AWS::SageMaker::`는 그대로**입니다(경위는 `mla-t3-1` 15)). 템플릿을 고칠 필요가 없습니다.
 - 리소스 타입: `AWS::SageMaker::Model` · `EndpointConfig` · `Endpoint` · `InferenceComponent` · `Pipeline` · `Project` · `ModelPackageGroup` · `FeatureGroup` 등.
 - **의존 체인 `Model → EndpointConfig → Endpoint`** — 같은 템플릿에서 `Fn::GetAtt`로 연결합니다(예: `Model.ModelName`, `EndpointConfig.EndpointConfigName`).
 
@@ -285,7 +285,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 > ⚠️ 서버리스 문서는 "프로비저닝된 동시성의 오토 스케일링은 CloudFormation에서 현재 지원되지 않는다"고 쓰는데, CloudFormation `ScalableTarget` 레퍼런스는 `sagemaker:variant:DesiredProvisionedConcurrency`를 허용 값으로 나열합니다(문서 간 상충). **이 지원 여부를 정답 근거로 쓰지 않습니다.**
 
 - **CDK의 SageMaker 지원** — `aws_cdk.aws_sagemaker`는 **L1만** 있고 "공식 손으로 작성한 L2가 아직 없다"고 안내합니다. 별도 패키지 `@aws-cdk/aws-sagemaker-alpha`가 L2를 제공하지만 **실험적**이어서 하위 호환 없이 API가 바뀔 수 있습니다. alpha 모듈은 서버리스 변형과 인스턴스 변형을 **한 EndpointConfig에 섞을 수 없습니다.**
-- **SageMaker Projects** — 조직이 ML 개발 환경과 MLOps용 CI/CD를 표준화하는 기능입니다. 템플릿은 **S3 버킷에 둔 사용자 지정 템플릿**, AWS Service Catalog 템플릿, SageMaker 제공 템플릿으로 프로비저닝하며 **문서는 Service Catalog보다 S3 보관을 권장**합니다. 템플릿 구성과 CI/CD 연결은 [`mla-t3-3` 10)](mla-t3-3.md#projects-registry)이 정본입니다.
+- **SageMaker Projects** — 조직이 ML 개발 환경과 MLOps용 CI/CD를 표준화하는 기능입니다. 템플릿은 **S3 버킷에 둔 사용자 지정 템플릿**, AWS Service Catalog 템플릿, SageMaker 제공 템플릿으로 프로비저닝하며 **문서는 Service Catalog보다 S3 보관을 권장**합니다. 템플릿 구성과 CI/CD 연결은 `mla-t3-3` 10)이 정본입니다.
 - **배포 방법 선택** — 노코드는 Studio JumpStart, 코드 기반 세밀 제어는 SDK `ModelBuilder`, **대규모·반복 운영은 Boto3·CloudFormation 같은 IaC와 CI/CD 도구**입니다.
 
 ### 9) 스택 간 통신 {#cross-stack}
@@ -294,7 +294,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 |---|---|---|
 | `Outputs` + `Export` → `Fn::ImportValue` | **같은 계정·같은 리전** | **강함** — Export 이름은 계정·리전 내 고유하고, 임포트 중인 출력은 **삭제·변경 불가** |
 | `Fn::GetStackOutput` | **계정·리전을 넘어 가능** | **약함** — Export가 필요 없고, 대상이 삭제돼도 소비 스택에 알리지 않으며 참조 무결성을 강제하지 않는다 |
-| 중첩 스택(`AWS::CloudFormation::Stack`) | 하나의 부모 아래 **그룹 내부** | 그룹 *내부* 정보 공유용. 그룹 밖의 스택과 공유하려면 Export를 쓴다 |
+| 중첩 스택(`AWS::CloudFormation::Stack`) | 하나의 부모 아래 **그룹 내부** | 그룹 **내부** 정보 공유용. 그룹 밖의 스택과 공유하려면 Export를 쓴다 |
 | CDK 자동 참조 | 같은 환경의 다른 스택 | CDK가 생산 스택에 export, 소비 스택에 `Fn::ImportValue`를 자동 합성(기본 = strong). 강도: Strong / Weak(`Fn::GetStackOutput`) / Both(전환 단계) |
 
 - 전형적 사용: 네트워크 스택이 VPC·보안 그룹·서브넷을 `Export`하고 애플리케이션 스택이 `Fn::ImportValue`로 가져옵니다. 네트워크 스택을 먼저 만들어야 하고, 스택 이름을 export 이름 접두어로 써 출처를 구분합니다. SageMaker에서는 네트워크 스택의 서브넷·보안 그룹 ID를 모델 스택의 `VpcConfig`가 쓰는 구조에 해당합니다.
@@ -316,11 +316,11 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 | **AWS Fargate** | ECS의 **서버리스 컴퓨트 엔진** | 서버 관리·용량 계획 불필요, 종량 과금 | ECS의 EC2 용량 옵션(서버를 직접 관리)과 대비된다 |
 | **SageMaker AI** | 컨테이너를 **관리형으로 실행하는 ML 플랫폼** | 이미지는 ECR 등에서 가져온다. 엔드포인트·AAS 오토 스케일링·모델 레지스트리와 통합 | ECS·EKS에 직접 올리는 서빙과 달리 ML 전용 운영 기능을 제공한다 |
 
-배포 대상 자체를 고르는 문제(SageMaker 엔드포인트 vs Kubernetes vs ECS·EKS vs Lambda)는 [`mla-t3-1` 14)](mla-t3-1.md#deploy-target)가 정본입니다.
+배포 대상 자체를 고르는 문제(SageMaker 엔드포인트 vs Kubernetes vs ECS·EKS vs Lambda)는 `mla-t3-1` 14)가 정본입니다.
 
 ### 11) 컨테이너 구축·유지 — 훈련 계약과 ECR 운영 {#byoc-ecr}
 
-**컨테이너 선택 사다리**(내장 → 사전 빌드 → 확장 → 어댑트 → 직접 빌드)와 **추론 컨테이너 계약**(8080·`/invocations`·`/ping`)은 [`mla-t3-1` 11)](mla-t3-1.md#container-choice)이 정본입니다. 여기서는 **만들고 유지하는 쪽**을 다룹니다.
+**컨테이너 선택 사다리**(내장 → 사전 빌드 → 확장 → 어댑트 → 직접 빌드)와 **추론 컨테이너 계약**(8080·`/invocations`·`/ping`)은 `mla-t3-1` 11)이 정본입니다. 여기서는 **만들고 유지하는 쪽**을 다룹니다.
 
 **툴킷** — SageMaker Training Toolkit(훈련용)과 SageMaker AI Inference Toolkit(배포용)이 컨테이너를 SageMaker에 맞추는 기능을 구현하며 코드·리소스 위치와 시작 시 실행할 엔트리포인트를 정의합니다. 훈련·추론 이미지를 **하나로 쓸 수도, 둘로 나눌 수도** 있습니다. 둘로 나누면 저장 요구와 비용이 늘 수 있지만 **작은 컨테이너가 더 빨리 시작해 호스팅이 트래픽 증가에 더 빠르게 확장**합니다.
 
@@ -349,7 +349,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 | **스캔 — 강화(Enhanced)** | **Amazon Inspector 연동**으로 OS + 프로그래밍 언어 패키지, 푸시 시·**지속 스캔**, 새 취약점은 EventBridge 이벤트로 통지 |
 | **수명 주기 정책** | 하나 이상의 규칙이 만료시킬 이미지를 결정한다. 적용 전에 **미리보기(preview)**로 만료 대상을 확인하고, 규칙 **우선순위 숫자가 낮을수록 우선**이며, 조건을 충족한 이미지는 **24시간 이내** 만료된다 |
 
-컨테이너 파일 변경이 파이프라인을 일으켜 이미지를 빌드·ECR에 푸시하는 SageMaker Projects 템플릿도 있습니다(→ [`mla-t3-3` 10)](mla-t3-3.md#projects-registry)).
+컨테이너 파일 변경이 파이프라인을 일으켜 이미지를 빌드·ECR에 푸시하는 SageMaker Projects 템플릿도 있습니다(→ `mla-t3-3` 10)).
 
 ### 12) VPC 안의 SageMaker 엔드포인트 {#vpc-endpoint}
 
@@ -360,7 +360,7 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 | 컨테이너가 다른 AWS 서비스·외부에 접근 | 인터페이스 엔드포인트를 지원하는 서비스는 **인터페이스 VPC 엔드포인트**, 미지원 서비스·외부 리소스는 **NAT 게이트웨이** + 보안 그룹 아웃바운드 허용 | |
 | 클라이언트가 인터넷 없이 SageMaker API·Runtime 호출 | **인터페이스 VPC 엔드포인트(AWS PrivateLink)** — SageMaker API용, SageMaker Runtime용 | 프라이빗 DNS를 켜면 기본 호스트명이 VPC 엔드포인트로 해석된다. **Runtime 엔드포인트는 클라이언트의 AZ에서 활성화돼야** DNS 해석이 정상이다 |
 | 컨테이너가 어떤 네트워크 호출도 못 하게 | **`EnableNetworkIsolation=true`**(`CreateModel`) → 인바운드·아웃바운드 호출 불가(S3 포함), AWS 자격 증명 미제공 | **S3 다운로드·업로드는 SageMaker가 실행 역할로 컨테이너와 별도로 처리**한다. VPC와 함께 쓰면 이 전송이 VPC 서브넷을 경유한다. AWS Marketplace 리소스를 쓰는 모델·훈련에는 필수 |
-| 서버리스 엔드포인트에 VPC | **불가** — VPC 구성·네트워크 격리가 제외 기능 | → [`mla-t3-1` 2)](mla-t3-1.md#serverless-detail) |
+| 서버리스 엔드포인트에 VPC | **불가** — VPC 구성·네트워크 격리가 제외 기능 | → `mla-t3-1` 2) |
 
 - VPC를 구성하지 않으면 훈련·추론 컨테이너는 **기본적으로 인터넷에 접근하고 VPC 내부 리소스에는 접근하지 못합니다.**
 - 클라이언트가 VPC 밖(온프레미스)이면 Site-to-Site VPN 또는 Direct Connect로 VPC에 연결한 뒤 PrivateLink를 씁니다.
@@ -519,18 +519,54 @@ SageMaker 문서는 워크로드 변화에 자동 대응하는 정책으로 **�
 - **삭제된 항목**: 이 Task에는 없음
 - 읽는 법: C01의 3.2가 "엔드포인트 오토 스케일링 + IaC + 컨테이너·VPC 구성"이었다면, C02는 거기에 **FM 서빙 성능·비용 최적화와 Bedrock 리소스 프로비저닝**을 더합니다. 1)~4)의 스케일링 구조와 8)~9)의 IaC는 그대로 쓰이고, 그 위에 Bedrock 쪽 구성 대상이 올라옵니다.
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- 오토 스케일링: [엔드포인트 오토 스케일링](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling.html) · [정책 옵션](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-policy.html) · [사전 요구 사항](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-prerequisites.html) · [고해상도 지표](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-code-define.html) · [0 인스턴스 스케일](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-zero-instances.html) · [부하 테스트](https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-scaling-loadtest.html) · [비동기 오토 스케일링](https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-autoscale.html) · [서버리스 PC 오토 스케일링](https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints-autoscale.html)
-- Application Auto Scaling: [What is AAS](https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html) · [대상 추적 정책](https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html) · [단계 정책](https://docs.aws.amazon.com/autoscaling/application/userguide/step-scaling-policy-overview.html) · [예약 스케일링](https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-scheduled-scaling.html) · [SageMaker 통합](https://docs.aws.amazon.com/autoscaling/application/userguide/services-that-can-integrate-sagemaker.html)
-- 비용·용량: [Optimize costs for inference](https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html) · [관리형 스팟 훈련](https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html) · [EC2 구매 옵션 의사결정 가이드](https://docs.aws.amazon.com/decision-guides/latest/decision-guides/ec2-purchasing-options-aws-how-to-choose.html) · [EC2 Spot 인스턴스](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html) · [SageMaker 훈련 계획](https://docs.aws.amazon.com/sagemaker/latest/dg/reserve-capacity-with-training-plans.html) · [MLREL05-BP01](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel05-bp01.html)
-- IaC: [CDK 시작하기](https://docs.aws.amazon.com/cdk/v2/guide/home.html) · [CDK 구성 요소(L1·L2·L3)](https://docs.aws.amazon.com/cdk/v2/guide/constructs.html) · [CDK 스택 간 참조](https://docs.aws.amazon.com/cdk/v2/guide/resources.html) · [스택 간 참조 워크스루](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/walkthrough-crossstackref.html) · [SageMaker CloudFormation 리소스](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/AWS_SageMaker.html) · [AWS::SageMaker::Endpoint](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-endpoint.html) · [AWS::SageMaker::EndpointConfig](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-endpointconfig.html) · [AWS::ApplicationAutoScaling::ScalableTarget](https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-applicationautoscaling-scalabletarget.html)
-- 컨테이너: [Docker 컨테이너](https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html) · [자체 컨테이너 어댑트](https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo-dockerfile.html) · [훈련 컨테이너 환경 변수·경로](https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo-running-container.html) · [추론 코드 요구 사항](https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html) · [What is Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html) · [ECR 이미지 스캔](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html) · [ECR 수명 주기 정책](https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html) · [What is Amazon ECS](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html) · [What is Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
-- VPC·배포: [호스팅 엔드포인트와 VPC](https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html) · [인터페이스 VPC 엔드포인트](https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html) · [네트워크 격리](https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html) · [실시간 추론 배포](https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-deploy-models.html) · [SageMaker Projects](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-whatis.html) · [SageMaker Python SDK](https://sagemaker.readthedocs.io/en/stable/)
-- [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. 엔드포인트 오토 스케일링 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling.html
+2. 정책 옵션 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-policy.html
+3. 사전 요구 사항 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-prerequisites.html
+4. 고해상도 지표 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-code-define.html
+5. 0 인스턴스 스케일 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-zero-instances.html
+6. 부하 테스트 — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-scaling-loadtest.html
+7. 비동기 오토 스케일링 — https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-autoscale.html
+8. 서버리스 PC 오토 스케일링 — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints-autoscale.html
+9. What is AAS — https://docs.aws.amazon.com/autoscaling/application/userguide/what-is-application-auto-scaling.html
+10. 대상 추적 정책 — https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html
+11. 단계 정책 — https://docs.aws.amazon.com/autoscaling/application/userguide/step-scaling-policy-overview.html
+12. 예약 스케일링 — https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-scheduled-scaling.html
+13. SageMaker 통합 — https://docs.aws.amazon.com/autoscaling/application/userguide/services-that-can-integrate-sagemaker.html
+14. Optimize costs for inference — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html
+15. 관리형 스팟 훈련 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html
+16. EC2 구매 옵션 의사결정 가이드 — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/ec2-purchasing-options-aws-how-to-choose.html
+17. EC2 Spot 인스턴스 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html
+18. SageMaker 훈련 계획 — https://docs.aws.amazon.com/sagemaker/latest/dg/reserve-capacity-with-training-plans.html
+19. MLREL05-BP01 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel05-bp01.html
+20. CDK 시작하기 — https://docs.aws.amazon.com/cdk/v2/guide/home.html
+21. CDK 구성 요소(L1·L2·L3) — https://docs.aws.amazon.com/cdk/v2/guide/constructs.html
+22. CDK 스택 간 참조 — https://docs.aws.amazon.com/cdk/v2/guide/resources.html
+23. 스택 간 참조 워크스루 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/walkthrough-crossstackref.html
+24. SageMaker CloudFormation 리소스 — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/AWS_SageMaker.html
+25. AWS::SageMaker::Endpoint — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-endpoint.html
+26. AWS::SageMaker::EndpointConfig — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-endpointconfig.html
+27. AWS::ApplicationAutoScaling::ScalableTarget — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-applicationautoscaling-scalabletarget.html
+28. Docker 컨테이너 — https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html
+29. 자체 컨테이너 어댑트 — https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo-dockerfile.html
+30. 훈련 컨테이너 환경 변수·경로 — https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo-running-container.html
+31. 추론 코드 요구 사항 — https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html
+32. What is Amazon ECR — https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html
+33. ECR 이미지 스캔 — https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html
+34. ECR 수명 주기 정책 — https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html
+35. What is Amazon ECS — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
+36. What is Amazon EKS — https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
+37. 호스팅 엔드포인트와 VPC — https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html
+38. 인터페이스 VPC 엔드포인트 — https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html
+39. 네트워크 격리 — https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html
+40. 실시간 추론 배포 — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-deploy-models.html
+41. SageMaker Projects — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-whatis.html
+42. SageMaker Python SDK — https://sagemaker.readthedocs.io/en/stable/
+43. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/3-2.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)
