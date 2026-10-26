@@ -61,17 +61,17 @@ void main() {
 
   // MLA-C01은 도메인별로 나눠 들어온다(공식 Task 12개 = 4도메인 × 3). 배치가
   // 끝날 때마다 이 숫자를 올린다 — 올리지 않으면 신규 문서가 조용히 누락돼도 모른다.
-  test('MLA-C01: 학습문서 9개 (도메인 3 배치까지)', () {
+  test('MLA-C01: 학습문서 12개 (도메인 4 배치까지 = 공식 Task 전부)', () {
     expect(certHasContent('MLA-C01'), isTrue);
-    expect(certContentSummary('MLA-C01').docs, 9);
+    expect(certContentSummary('MLA-C01').docs, 12);
   });
 
-  test('MLA-C01: 도메인별 문서 수 D1:3 D2:3 D3:3', () {
+  test('MLA-C01: 도메인별 문서 수 D1:3 D2:3 D3:3 D4:3', () {
     final byDomain = <int, int>{};
     for (final e in contentFor('MLA-C01')) {
       byDomain[e.domain] = (byDomain[e.domain] ?? 0) + 1;
     }
-    expect(byDomain, {1: 3, 2: 3, 3: 3});
+    expect(byDomain, {1: 3, 2: 3, 3: 3, 4: 3});
   });
 
   test('MLA-C01: 문항은 전부 드래프트라 통합 모의고사에 노출되지 않는다', () {

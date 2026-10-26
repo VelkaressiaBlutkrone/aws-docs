@@ -1,0 +1,1089 @@
+{
+  "examGuideTaskId": "mla-t4-3",
+  "taskTitle": "AWS 리소스 보호",
+  "domain": 4,
+  "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
+  "questions": [
+    {
+      "id": "mla-t4-3-q1",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템과 상호 작용하는 사용자 및 애플리케이션에 대한 IAM 정책 및 역할 구성(SK2)",
+      "section": "execution-role-passrole",
+      "difficulty": "applied",
+      "stem": "데이터 과학자가 CreateTrainingJob을 호출하자 iam:PassRole 권한이 없다는 오류가 났다. 추가할 권한과 좁히는 방법은 무엇인가?",
+      "options": [
+        "iam:PassRole을 역할 ARN으로 한정하고 iam:PassedToService 조건을 붙인다",
+        "AdministratorAccess를 부여해 역할 전달 권한을 포함시킨다",
+        "실행 역할에 iam:PassRole을 추가해 자기 자신을 전달하게 한다",
+        "역할에 태그를 붙이고 ResourceTag 조건으로 전달을 허용한다"
+      ],
+      "correct": 0,
+      "explanation": "실행 역할을 요청에 실어 보내는 API를 호출하는 주체는 그 역할을 서비스에 건넬 권한이 필요합니다. 정책은 Resource를 허용할 역할 ARN으로 좁히고 Condition에 iam:PassedToService를 sagemaker.amazonaws.com으로 둡니다.",
+      "wrongExplanations": {
+        "1": "관리자 정책은 문서가 권장하지 않음으로 분류하는 범위이며 최소 권한에 반합니다.",
+        "2": "PassRole이 필요한 주체는 호출자입니다. 실행 역할은 서비스가 assume하는 쪽이라 자기 전달이라는 개념이 성립하지 않습니다.",
+        "3": "역할 태그와 ResourceTag 조건으로 PassRole을 통제하는 방식은 결과가 일정하지 않다고 문서가 경고합니다."
+      },
+      "sources": [
+        {
+          "title": "How to use SageMaker AI execution roles",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
+        },
+        {
+          "title": "Grant a user permissions to pass a role to an AWS service (IAM User Guide)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q2",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템과 상호 작용하는 사용자 및 애플리케이션에 대한 IAM 정책 및 역할 구성(SK2)",
+      "section": "execution-role-passrole",
+      "difficulty": "foundational",
+      "stem": "모든 SageMaker 실행 역할이 공통으로 갖는 신뢰 정책의 내용은 무엇인가?",
+      "options": [
+        "Principal의 Service가 sagemaker.amazonaws.com이고 Action이 sts:AssumeRole이다",
+        "Principal이 호출하는 IAM 사용자이고 Action이 sts:GetCallerIdentity다",
+        "Principal이 계정 루트이고 Action이 iam:PassRole이다",
+        "Principal이 ec2.amazonaws.com이고 Action이 sts:AssumeRoleWithWebIdentity다"
+      ],
+      "correct": 0,
+      "explanation": "SageMaker AI는 사용자를 대신해 다른 AWS 서비스를 호출하며 그 권한을 실행 역할로 받습니다. 모든 실행 역할의 신뢰 정책은 동일하게 Principal의 Service가 sagemaker.amazonaws.com이고 Action이 sts:AssumeRole입니다. 즉 역할을 assume하는 주체가 SageMaker AI 서비스입니다.",
+      "wrongExplanations": {
+        "1": "사용자가 직접 assume하는 것은 사용자 연합 역할의 성질입니다. 실행 역할은 서비스가 assume합니다.",
+        "2": "iam:PassRole은 신뢰 정책이 아니라 호출자의 ID 기반 정책에 들어가는 액션입니다.",
+        "3": "ec2.amazonaws.com은 EC2 인스턴스 프로필의 신뢰 주체이며 SageMaker 실행 역할과 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "How to use SageMaker AI execution roles",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q3",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템과 상호 작용하는 사용자 및 애플리케이션에 대한 IAM 정책 및 역할 구성(SK2)",
+      "section": "execution-role-passrole",
+      "difficulty": "foundational",
+      "stem": "사용자 연합 역할과 SageMaker 실행 역할의 가장 큰 차이는 무엇인가?",
+      "options": [
+        "assume하는 주체가 사용자인지 SageMaker AI 서비스인지가 다르다",
+        "연합 역할만 권한 경계를 가질 수 있고 실행 역할은 가질 수 없다",
+        "연합 역할은 리전별로 만들고 실행 역할은 전역 리소스다",
+        "연합 역할은 관리형 정책만, 실행 역할은 인라인 정책만 붙일 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "사용자 연합 역할은 사용자가 직접 assume해 콘솔 등 AWS 리소스에 접근하는 용도이고, 실행 역할은 사용자나 자동화 도구를 대신해 서비스가 기능을 수행하도록 SageMaker AI가 assume합니다. 커스텀 웹 앱이 presigned URL로 Studio에 접근하면 두 역할이 섞인 하이브리드가 되므로 양쪽 모두에 최소 권한을 적용해야 합니다.",
+      "wrongExplanations": {
+        "1": "실행 역할에도 권한 경계를 붙일 수 있고, 경계가 있으면 IAM 정책과 경계가 둘 다 허용한 동작만 실행됩니다.",
+        "2": "IAM 역할은 전역 리소스이며 연합 역할이 리전별이라는 구분은 없습니다.",
+        "3": "두 역할 모두 관리형 정책과 인라인 정책을 쓸 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Role Manager FAQs",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-faqs.html"
+        },
+        {
+          "title": "IAM Access Management (SageMaker Pipelines)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q4",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템과 상호 작용하는 사용자 및 애플리케이션에 대한 IAM 정책 및 역할 구성(SK2)",
+      "section": "execution-role-passrole",
+      "difficulty": "applied",
+      "stem": "SageMaker Studio 실행 역할에서 혼동된 대리인 문제를 막으려 한다. 신뢰 정책에 추가할 조건은 무엇인가?",
+      "options": [
+        "aws:SourceArn 조건으로 호출 출처 ARN을 제한한다",
+        "aws:SourceIp 조건으로 호출 IP 대역을 제한한다",
+        "sagemaker:ResourceTag 조건으로 리소스 태그를 요구한다",
+        "iam:PassedToService 조건을 신뢰 정책에 추가한다"
+      ],
+      "correct": 0,
+      "explanation": "실행 역할 신뢰 정책에 aws:SourceArn 조건을 추가해 호출 출처를 제한합니다. Studio 예시는 ArnLike로 해당 리전과 계정의 SageMaker ARN 패턴을 지정하며, 계정 번호가 ARN에 들어 있으므로 aws:SourceAccount는 따로 필요하지 않습니다.",
+      "wrongExplanations": {
+        "1": "aws:SourceIp는 API 호출이나 presigned URL 실행을 특정 대역으로 제한하는 ID 기반 정책 조건입니다.",
+        "2": "sagemaker:ResourceTag는 태그 기반 접근 제어 조건이며 혼동된 대리인 방지 수단이 아닙니다.",
+        "3": "iam:PassedToService는 역할을 건네는 호출자의 ID 기반 정책에 쓰는 조건입니다."
+      },
+      "sources": [
+        {
+          "title": "Cross-service confused deputy prevention (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security-confused-deputy-prevention.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q5",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "AWS 서비스에 대한 액세스를 제어하는 IAM 역할, 정책 및 그룹(예: IAM, 버킷 정책, SageMaker Role Manager)(K1)",
+      "section": "least-privilege-policies",
+      "difficulty": "applied",
+      "stem": "실행 역할에 AmazonSageMakerFullAccess를 붙였는데 company-data 버킷에서 S3 AccessDenied가 난다. 가장 먼저 의심할 것은 무엇인가?",
+      "options": [
+        "버킷 이름에 sagemaker나 aws-glue가 없어 정책 범위 밖이다",
+        "FullAccess에는 S3 권한이 전혀 포함되어 있지 않다",
+        "실행 역할에 iam:PassRole이 없어 S3 호출이 거부된다",
+        "버킷이 다른 리전에 있어 교차 리전 접근이 차단된다"
+      ],
+      "correct": 0,
+      "explanation": "AmazonSageMakerFullAccess의 S3 허용은 이름에 SageMaker, Sagemaker, sagemaker, aws-glue가 들어간 버킷과 객체에 대한 일부 작업으로 한정됩니다. s3:CreateBucket이나 s3:ListBucket 같은 일부 액션은 모든 S3 리소스에 허용되지만 데이터 읽기와 쓰기는 이름 규칙의 영향을 받습니다.",
+      "wrongExplanations": {
+        "1": "S3 권한이 전혀 없는 것은 아닙니다. 이름 규칙을 만족하는 버킷에는 작업이 허용됩니다.",
+        "2": "iam:PassRole은 역할을 서비스에 건네는 권한이며 S3 객체 접근과 직접 관련이 없습니다.",
+        "3": "교차 리전 때문에 AccessDenied가 난다는 서술은 문서에 없습니다. 키 접근과 버킷 정책, 권한 경계가 흔한 원인입니다."
+      },
+      "sources": [
+        {
+          "title": "How to use SageMaker AI execution roles",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
+        },
+        {
+          "title": "AWS managed policies for Amazon SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q6",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "AWS 서비스에 대한 액세스를 제어하는 IAM 역할, 정책 및 그룹(예: IAM, 버킷 정책, SageMaker Role Manager)(K1)",
+      "section": "least-privilege-policies",
+      "difficulty": "foundational",
+      "stem": "IAM 사용자 그룹을 S3 버킷 정책의 Principal로 지정할 수 있는가?",
+      "options": [
+        "지정할 수 없다. 그룹은 인증 주체가 아니라 권한 단위다",
+        "지정할 수 있다. 그룹 ARN을 Principal에 적으면 된다",
+        "지정할 수 있지만 같은 계정의 버킷에만 적용된다",
+        "지정할 수 없다. 그룹은 리소스 기반 정책만 가질 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "IAM 사용자 그룹은 IAM 사용자의 모음이며 그룹에 ID 기반 정책을 붙여 여러 사용자의 권한을 한 번에 관리합니다. 그룹은 인증 주체가 아니라 권한 단위이므로 리소스 기반 정책의 Principal로 쓸 수 없습니다.",
+      "wrongExplanations": {
+        "1": "그룹 ARN을 Principal에 적는 것은 지원되지 않습니다.",
+        "2": "같은 계정이든 다른 계정이든 그룹은 Principal이 될 수 없습니다.",
+        "3": "그룹은 리소스 기반 정책을 갖지 않습니다. 붙이는 것은 ID 기반 정책입니다."
+      },
+      "sources": [
+        {
+          "title": "IAM user groups (IAM User Guide)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q7",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 아티팩트에 대한 최소 권한 액세스 구성(SK1)",
+      "section": "least-privilege-policies",
+      "difficulty": "applied",
+      "stem": "훈련 작업 실행 역할의 S3 권한을 요청 필드 단위로 좁히려 한다. s3:ListBucket은 무엇을 기준으로 한정하는가?",
+      "options": [
+        "InputDataConfig의 S3DataSource S3Uri가 가리키는 버킷",
+        "OutputDataConfig의 S3OutputPath가 가리키는 객체 키",
+        "AlgorithmSpecification의 TrainingImage 리포지토리",
+        "StoppingCondition에 지정한 체크포인트 경로"
+      ],
+      "correct": 0,
+      "explanation": "s3:ListBucket은 InputDataConfig의 DataSource S3DataSource S3Uri가 가리키는 버킷으로 한정합니다. s3:GetObject와 PutObject, DeleteObject는 S3Uri와 OutputDataConfig의 S3OutputPath로 한정하고, CreateModel이면 PrimaryContainer의 ModelDataUrl을 씁니다.",
+      "wrongExplanations": {
+        "1": "출력 경로는 객체 수준 액션을 좁히는 기준이며 버킷 목록 조회 권한의 기준이 아닙니다.",
+        "2": "TrainingImage는 ECR 관련 액션을 리포지토리 ARN으로 좁히는 기준입니다.",
+        "3": "StoppingCondition은 최대 런타임 같은 중지 조건을 담는 필드이며 경로를 지정하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "How to use SageMaker AI execution roles",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q8",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 아티팩트에 대한 최소 권한 액세스 구성(SK1)",
+      "section": "least-privilege-policies",
+      "difficulty": "applied",
+      "stem": "넓은 정책으로 한동안 운영한 뒤 실제 사용 내역에 맞춰 정책을 좁히려 한다. 어떤 도구를 쓰고 전제 조건은 무엇인가?",
+      "options": [
+        "IAM Access Analyzer 정책 생성이며 이벤트를 기록하는 추적이 먼저 있어야 한다",
+        "IAM 정책 시뮬레이터이며 라이브 요청을 보내 결과를 수집해야 한다",
+        "SageMaker Role Manager이며 페르소나를 먼저 선택해야 한다",
+        "AWS Config 관리형 규칙이며 구성 이력 기록을 켜야 한다"
+      ],
+      "correct": 0,
+      "explanation": "IAM Access Analyzer의 정책 생성은 최대 90일의 과거 CloudTrail 이벤트를 분석해 실제 사용한 작업만 담은 정책을 만들어 줍니다. 서비스 역할과 이벤트를 기록하는 추적이 먼저 있어야 합니다. 권장 흐름은 넓은 정책으로 대표 기간 30일에서 90일 운영한 뒤 생성된 정책으로 교체하는 것입니다.",
+      "wrongExplanations": {
+        "1": "정책 시뮬레이터는 실제 요청을 보내지 않고 정책 평가 결과를 보여 주는 도구이며 사용 내역을 수집하지 않습니다.",
+        "2": "Role Manager는 사전 정의된 정적 활동 템플릿이고 신규 고객에게 닫혀 있습니다. 문서는 Access Analyzer가 이를 대체한다고 설명합니다.",
+        "3": "Config 규칙은 리소스 구성을 평가하는 통제이며 IAM 정책을 생성하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "IAM Access Analyzer policy generation (IAM User Guide)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html"
+        },
+        {
+          "title": "Role Manager availability change",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q9",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "AWS 서비스에 대한 액세스를 제어하는 IAM 역할, 정책 및 그룹(예: IAM, 버킷 정책, SageMaker Role Manager)(K1)",
+      "section": "least-privilege-policies",
+      "difficulty": "foundational",
+      "stem": "정책 평가에서 명시적 거부와 명시적 허용이 함께 적용되면 결과는 무엇인가?",
+      "options": [
+        "명시적 거부가 명시적 허용을 이긴다",
+        "나중에 평가된 정책의 결과가 적용된다",
+        "리소스 기반 정책의 허용이 ID 기반 거부를 이긴다",
+        "두 정책이 상충하면 요청이 보류되고 재평가된다"
+      ],
+      "correct": 0,
+      "explanation": "기본은 암묵적 거부이고 명시적 거부가 명시적 허용을 이깁니다. 그래서 다른 정책이 허용해도 막아야 하는 필수 통제는 Deny 형태로 씁니다. 권한 경계가 있으면 IAM 정책과 경계가 둘 다 허용한 동작만 실행되고, 조직 수준에서는 SCP가 유효 권한을 제한합니다.",
+      "wrongExplanations": {
+        "1": "평가 순서가 결과를 바꾸지 않습니다. 거부가 있으면 거부입니다.",
+        "2": "정책 유형에 상관없이 거부가 우선합니다. 리소스 기반 허용이 거부를 덮지 않습니다.",
+        "3": "보류나 재평가 같은 동작은 없습니다. 평가 결과는 허용 또는 거부입니다."
+      },
+      "sources": [
+        {
+          "title": "How AWS enforcement code logic evaluates requests to allow or deny access (IAM User Guide)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q10",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "AWS 서비스에 대한 액세스를 제어하는 IAM 역할, 정책 및 그룹(예: IAM, 버킷 정책, SageMaker Role Manager)(K1)",
+      "section": "role-manager-status",
+      "difficulty": "foundational",
+      "stem": "SageMaker Role Manager가 제공하던 사전 구성 페르소나 세 가지는 무엇인가?",
+      "options": [
+        "Data scientist, MLOps, SageMaker AI compute",
+        "Administrator, Developer, Auditor",
+        "Trainer, Deployer, Monitor",
+        "Owner, Contributor, Reader"
+      ],
+      "correct": 0,
+      "explanation": "Role Manager는 일반 ML 활동용으로 Data scientist와 MLOps, SageMaker AI compute 세 페르소나를 사전 구성해 제공했습니다. 앞의 둘은 사람 쪽 권한이고 SageMaker AI compute는 훈련과 추론 컴퓨팅 리소스가 쓰는 서비스 실행 역할입니다.",
+      "wrongExplanations": {
+        "1": "Administrator와 Developer, Auditor는 일반적인 역할 구분이며 Role Manager의 페르소나 이름이 아닙니다.",
+        "2": "Trainer와 Deployer, Monitor는 문서에 없는 이름입니다.",
+        "3": "Owner와 Contributor, Reader는 다른 플랫폼의 권한 모델에서 쓰는 명칭입니다."
+      },
+      "sources": [
+        {
+          "title": "Persona reference (Amazon SageMaker Role Manager)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-personas.html"
+        },
+        {
+          "title": "Amazon SageMaker Role Manager",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q11",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "AWS 서비스에 대한 액세스를 제어하는 IAM 역할, 정책 및 그룹(예: IAM, 버킷 정책, SageMaker Role Manager)(K1)",
+      "section": "role-manager-status",
+      "difficulty": "applied",
+      "stem": "새 계정에서 Role Manager를 쓰려 하자 사용할 수 없다고 나온다. 상태와 기존 역할의 처리는 어떻게 되는가?",
+      "options": [
+        "신규 고객에게 닫혔고 기존 역할은 표준 IAM 역할이라 정리가 필요 없다",
+        "완전히 종료되었고 기존 역할도 만료되므로 재생성해야 한다",
+        "리전별로 순차 종료 중이며 다른 리전에서는 계속 생성할 수 있다",
+        "IAM role manager로 이름이 바뀌었으므로 IAM 콘솔에서 같은 기능을 쓴다"
+      ],
+      "correct": 0,
+      "explanation": "Role Manager는 신규 고객에게 더 이상 열려 있지 않고 기존 고객은 계속 사용하며 보안과 가용성 개선은 이어지지만 새 기능 계획은 없습니다. 기존에 만든 역할은 Role Manager 런타임 의존성이 없는 표준 IAM 역할이라 정리나 마이그레이션이 필요하지 않습니다.",
+      "wrongExplanations": {
+        "1": "기존 고객은 계속 사용할 수 있고 만들어진 역할이 만료되지도 않습니다.",
+        "2": "리전별 순차 종료라는 서술은 없습니다. 기능 묶음 공지는 2026-07-30부터 신규 고객에게 열려 있지 않다고 밝힙니다.",
+        "3": "AWS Security Blog가 소개하는 IAM role manager는 켜는 위치와 동작이 다른 별개 기능입니다. 가이드가 말하는 대상은 SageMaker Role Manager입니다."
+      },
+      "sources": [
+        {
+          "title": "Role Manager availability change",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html"
+        },
+        {
+          "title": "How AWS IAM role manager rethinks the starting point for IAM roles (AWS Security Blog)",
+          "url": "https://aws.amazon.com/blogs/security/how-aws-iam-role-manager-rethinks-the-starting-point-for-iam-roles/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q12",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "SageMaker AI 보안 및 규정 준수 기능(K2)",
+      "section": "condition-key-guardrails",
+      "difficulty": "applied",
+      "stem": "조직 전체에서 네트워크 격리를 끈 훈련 작업이 만들어지지 않게 하려 한다. 어떤 정책을 어떤 형태로 쓰는가?",
+      "options": [
+        "sagemaker:NetworkIsolation이 false일 때 Deny하는 SCP를 쓴다",
+        "sagemaker:NetworkIsolation이 true일 때만 Allow하는 리소스 정책을 쓴다",
+        "AWS Config 규칙으로 격리되지 않은 작업을 자동 종료한다",
+        "sagemaker:VpcSubnets가 비어 있을 때 Deny하는 SCP를 쓴다"
+      ],
+      "correct": 0,
+      "explanation": "조건 키로 요청에 담긴 보안 설정을 검사하며, 필수 통제는 다른 정책이 허용해도 막아야 하므로 Deny 형태로 씁니다. 백서의 가드레일 예제는 CreateTrainingJob과 CreateHyperParameterTuningJob에 대해 sagemaker:NetworkIsolation이 false이면 거부하고, 조직 단위 적용은 AWS Organizations의 SCP가 맡습니다.",
+      "wrongExplanations": {
+        "1": "Allow와 조건 조합도 유효한 패턴이지만 조직 전체 강제에는 Deny 가드레일을 쓰고, 훈련 작업 생성은 리소스 정책으로 통제하지 않습니다.",
+        "2": "Config 규칙은 이미 존재하는 리소스를 평가해 NON_COMPLIANT로 표시하는 평가 통제이며 생성을 막지 않습니다.",
+        "3": "VpcSubnets 조건은 VPC 안에서만 실행하도록 강제하는 키입니다. 네트워크 격리와는 다른 통제입니다."
+      },
+      "sources": [
+        {
+          "title": "Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html"
+        },
+        {
+          "title": "Actions, resources, and condition keys for Amazon SageMaker (Service Authorization Reference)",
+          "url": "https://docs.aws.amazon.com/service-authorization/latest/reference/list_sagemaker.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q13",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "SageMaker AI 보안 및 규정 준수 기능(K2)",
+      "section": "condition-key-guardrails",
+      "difficulty": "applied",
+      "stem": "Studio 도메인이 퍼블릭 인터넷에 열린 상태로 만들어지는 것을 막으려 한다. 어떤 조건 키를 어떤 값으로 검사하는가?",
+      "options": [
+        "sagemaker:AppNetworkAccessType이 PublicInternetOnly이면 Deny한다",
+        "sagemaker:DirectInternetAccess가 Enabled이면 Deny한다",
+        "sagemaker:RootAccess가 Enabled이면 Deny한다",
+        "sagemaker:VpcSecurityGroupIds가 비어 있으면 Deny한다"
+      ],
+      "correct": 0,
+      "explanation": "Studio 도메인의 인터넷 접근은 AppNetworkAccessType으로 정해지고 기본값이 PublicInternetOnly입니다. 백서의 가드레일 예제는 이 값이 PublicInternetOnly이면 CreateDomain을 거부합니다. VpcOnly로 두면 EFS 외 모든 트래픽이 지정한 VPC와 서브넷을 경유합니다.",
+      "wrongExplanations": {
+        "1": "DirectInternetAccess는 노트북 인스턴스의 직접 인터넷 접근을 가리키는 키입니다.",
+        "2": "RootAccess는 노트북 인스턴스의 root 권한을 통제하는 키입니다.",
+        "3": "VpcSecurityGroupIds는 VPC 안에서만 실행하도록 강제할 때 VpcSubnets와 함께 검사하는 키입니다."
+      },
+      "sources": [
+        {
+          "title": "Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html"
+        },
+        {
+          "title": "CreateDomain (Amazon SageMaker API Reference)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q14",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 리소스에 대한 네트워크 액세스 제어(K3)",
+      "section": "condition-key-guardrails",
+      "difficulty": "applied",
+      "stem": "SageMaker API 호출을 특정 인터페이스 엔드포인트 경유로만 허용하는 IAM 정책을 적용했다. 함께 알아 둘 부작용은 무엇인가?",
+      "options": [
+        "VPC 한정 정책을 적용하면 사용자는 콘솔로 해당 API를 쓸 수 없다",
+        "엔드포인트 경유 요청의 지연이 두 배로 늘어난다",
+        "다른 리전의 호출은 자동으로 허용되어 통제가 무력화된다",
+        "실행 역할의 ENI 관련 권한이 자동으로 제거된다"
+      ],
+      "correct": 0,
+      "explanation": "aws:SourceVpc나 aws:SourceVpce 조건으로 호출 출처를 제한할 수 있지만, VPC 한정 IAM 정책을 적용하면 사용자가 콘솔로 해당 API를 쓸 수 없다고 문서가 명시합니다. 같은 성질로 버킷 정책에 aws:SourceVpce Deny를 걸면 콘솔 요청도 막힙니다.",
+      "wrongExplanations": {
+        "1": "지연이 두 배로 늘어난다는 수치 서술은 문서에 없습니다.",
+        "2": "조건은 요청의 출처 VPC나 엔드포인트를 기준으로 평가되므로 다른 리전 호출이 자동 허용되지 않습니다.",
+        "3": "IAM 정책 조건이 실행 역할의 다른 권한을 제거하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI identity-based policy examples",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html"
+        },
+        {
+          "title": "Controlling access from VPC endpoints with bucket policies (Amazon S3)",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q15",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 아티팩트에 대한 최소 권한 액세스 구성(SK1)",
+      "section": "artifact-protection",
+      "difficulty": "applied",
+      "stem": "다른 계정으로 모델을 배포하려는데 CreateModel이 리소스 기반 정책이 허용하지 않는다는 오류로 실패한다. 구성해야 하는 것은 무엇인가?",
+      "options": [
+        "모델 패키지 그룹과 ECR 리포지토리, S3 버킷 정책과 KMS 그랜트를 모두 만든다",
+        "모델 패키지 그룹 리소스 정책만 만들면 나머지는 자동 상속된다",
+        "상대 계정에 AmazonSageMakerFullAccess를 부여하면 해결된다",
+        "모델 승인 상태를 Approved로 바꾸면 교차 계정 접근이 열린다"
+      ],
+      "correct": 0,
+      "explanation": "교차 계정 모델 배포는 모델 그룹 리소스 정책과 ECR 리포지토리 정책, S3 버킷 정책, 학습 출력 KMS 키 그랜트를 모두 만들어야 하고 하나라도 빠지면 이 오류가 납니다. 교차 계정 접근은 리소스 쪽 허용과 주체 쪽 허용이 모두 있어야 성립합니다.",
+      "wrongExplanations": {
+        "1": "자동 상속은 없습니다. 이미지와 아티팩트, 키는 각각 리소스 정책이 필요합니다.",
+        "2": "상대 계정의 ID 기반 정책만으로는 리소스 쪽 허용이 생기지 않습니다. 오류 문구 자체가 리소스 기반 정책의 부재를 가리킵니다.",
+        "3": "승인 상태는 레지스트리 단계 통제이며 교차 계정 접근 권한을 부여하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Deploy a Model from the Registry with Python (cross-account deployment)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-deploy.html"
+        },
+        {
+          "title": "How do I troubleshoot common model registry issues in SageMaker AI? (re:Post)",
+          "url": "https://repost.aws/knowledge-center/sagemaker-model-registry-issues"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q16",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 아티팩트에 대한 최소 권한 액세스 구성(SK1)",
+      "section": "artifact-protection",
+      "difficulty": "applied",
+      "stem": "훈련 출력 버킷이 다른 계정에 있다. S3용 AWS 관리형 키를 쓰면 되는가?",
+      "options": [
+        "쓸 수 없다. 키 정책을 편집할 수 없어 교차 계정 권한을 줄 수 없다",
+        "쓸 수 있다. AWS 관리형 키는 같은 조직 안에서 자동 공유된다",
+        "쓸 수 있다. 출력 버킷 정책에서 상대 계정을 허용하면 충분하다",
+        "쓸 수 없다. 교차 계정에서는 암호화를 끄고 전송해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "S3용 AWS 관리형 키의 키 정책은 편집할 수 없어 교차 계정 권한을 줄 수 없습니다. 출력 버킷이 다른 계정이면 고객 관리형 키를 요청에 명시하고 실행 역할에 암호화 권한을 줘야 합니다. 기본 암호화가 SSE-S3여도 교차 계정에는 고객 관리형 키가 필요합니다.",
+      "wrongExplanations": {
+        "1": "조직 안에서 자동 공유되는 성질은 없습니다. 키 정책을 편집할 수 없는 것이 제약의 핵심입니다.",
+        "2": "버킷 정책만으로는 키 사용 허용이 생기지 않습니다. KMS는 키 정책과 IAM 정책, 그랜트를 함께 평가합니다.",
+        "3": "암호화를 끄는 것은 해법이 아닙니다. 고객 관리형 키를 쓰는 것이 문서의 경로입니다."
+      },
+      "sources": [
+        {
+          "title": "Notebook instances, SageMaker AI jobs, and Endpoints (encryption at rest)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html"
+        },
+        {
+          "title": "Protect Data at Rest Using Encryption (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q17",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "SageMaker AI 보안 및 규정 준수 기능(K2)",
+      "section": "ml-encryption",
+      "difficulty": "foundational",
+      "stem": "훈련 작업에 KMS 키를 지정하지 않으면 ML 스토리지 볼륨은 어떻게 처리되는가?",
+      "options": [
+        "일시적 키로 암호화한 뒤 그 키를 즉시 폐기한다",
+        "암호화되지 않은 상태로 유지되며 작업 종료 시 삭제된다",
+        "계정의 기본 EBS 키로 암호화되고 키가 보존된다",
+        "암호화를 켤 수 없어 작업 생성이 실패한다"
+      ],
+      "correct": 0,
+      "explanation": "ML 스토리지 볼륨은 키를 주지 않으면 일시적 키로 암호화한 뒤 그 키를 즉시 폐기합니다. 노트북 인스턴스는 OS와 ML 볼륨 모두 시스템 관리 KMS 키를 씁니다. 다만 로컬 스토리지가 있는 Nitro 인스턴스는 하드웨어 모듈로 암호화되며 이 유형에는 KMS 키를 쓸 수 없습니다.",
+      "wrongExplanations": {
+        "1": "암호화되지 않은 상태로 두지 않습니다. 일시적 키로 암호화됩니다.",
+        "2": "기본 EBS 키로 암호화되고 키가 보존된다는 서술은 없습니다. 작업 출력은 키 미지정 시 역할 계정의 기본 S3용 KMS 키를 씁니다.",
+        "3": "키를 지정하지 않아도 작업은 생성됩니다."
+      },
+      "sources": [
+        {
+          "title": "Notebook instances, SageMaker AI jobs, and Endpoints (encryption at rest)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q18",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "SageMaker AI 보안 및 규정 준수 기능(K2)",
+      "section": "ml-encryption",
+      "difficulty": "applied",
+      "stem": "규제 요구로 분산 훈련의 노드 간 통신을 암호화해야 한다. 설정과 사전 작업은 무엇인가?",
+      "options": [
+        "EnableInterContainerTrafficEncryption을 켜고 UDP 500과 ESP 50을 허용한다",
+        "EnableNetworkIsolation을 켜면 노드 간 통신까지 자동으로 암호화된다",
+        "TLS 1.3을 요청 헤더로 지정하면 노드 간 전송도 암호화된다",
+        "VpcConfig에 서브넷을 두 개 이상 지정하면 노드 간 암호화가 적용된다"
+      ],
+      "correct": 0,
+      "explanation": "서비스 플랫폼 내부의 분산 훈련 노드 간 통신은 기본적으로 암호화되지 않습니다. 훈련과 튜닝 요청에 EnableInterContainerTrafficEncryption을 True로 주고, API로 할 때는 VPC 보안 그룹에 UDP 500과 ESP 50 규칙을 자기 보안 그룹 ID를 소스로 인바운드와 아웃바운드에 먼저 추가합니다. 단일 인스턴스 작업에는 영향이 없고 다중 인스턴스에서는 훈련 시간과 비용이 늘 수 있습니다.",
+      "wrongExplanations": {
+        "1": "네트워크 격리는 컨테이너의 아웃바운드 호출을 막는 설정이며 노드 간 통신 암호화와 다른 기능입니다. 격리에서도 피어 간 통신은 허용됩니다.",
+        "2": "TLS 1.2 지원과 1.3 권장은 서비스 간 인터네트워크 전송에 대한 서술이며 플랫폼 내부 전송을 요청 헤더로 바꿀 수 없습니다.",
+        "3": "서브넷을 여러 개 지정하는 것은 가용성과 IP 확보를 위한 구성이며 암호화를 켜지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Protect Communications Between ML Compute Instances in a Distributed Training Job",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html"
+        },
+        {
+          "title": "Protecting Data in Transit with Encryption (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-in-transit.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q19",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템을 안전하게 격리하기 위한 VPC, 서브넷 및 보안 그룹 구축(SK5)",
+      "section": "isolation-compare",
+      "difficulty": "applied",
+      "stem": "훈련 컨테이너가 외부로 어떤 데이터도 보낼 수 없어야 한다. 어떤 설정이고 훈련 데이터는 어떻게 들어오는가?",
+      "options": [
+        "EnableNetworkIsolation을 켜며 데이터는 입력 채널로만 제공된다",
+        "VpcConfig에 사설 서브넷을 지정하며 S3 엔드포인트로 데이터를 가져온다",
+        "DirectInternetAccess를 Disabled로 두며 NAT로 데이터를 가져온다",
+        "AppNetworkAccessType을 VpcOnly로 두며 EFS로 데이터를 가져온다"
+      ],
+      "correct": 0,
+      "explanation": "네트워크 격리를 켜면 컨테이너는 S3를 포함한 어떤 서비스로도 아웃바운드 호출을 못 하고 AWS 자격 증명도 받지 못합니다. 입력 데이터 다운로드와 CloudWatch 로그 전송은 노드에서 도는 SageMaker 내부 프로세스가 컨테이너와 별개로 수행하므로 컨테이너는 입력 채널로 제공된 데이터만 읽습니다.",
+      "wrongExplanations": {
+        "1": "VPC 모드는 트래픽을 사용자가 통제하는 VPC 경로로 돌리는 수단이며 컨테이너의 아웃바운드를 전부 막지 않습니다.",
+        "2": "노트북 인스턴스의 인터넷을 끄는 설정이며 훈련 컨테이너의 아웃바운드 차단이 아닙니다.",
+        "3": "Studio 도메인의 인터넷을 끄는 설정이며 훈련 컨테이너 격리와 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Run Training and Inference Containers in Internet-Free Mode",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html"
+        },
+        {
+          "title": "How does my SageMaker container access Amazon S3 data and push logs to CloudWatch when I turn on network isolation? (re:Post)",
+          "url": "https://repost.aws/knowledge-center/sagemaker-access-network-isolation"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q20",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템을 안전하게 격리하기 위한 VPC, 서브넷 및 보안 그룹 구축(SK5)",
+      "section": "isolation-compare",
+      "difficulty": "applied",
+      "stem": "AWS Marketplace에서 가져온 알고리즘으로 훈련 작업을 돌리려 한다. 반드시 켜야 하는 설정은 무엇인가?",
+      "options": [
+        "네트워크 격리이며 Marketplace 리소스 사용 시 필수다",
+        "노드 간 트래픽 암호화이며 Marketplace 컨테이너에 필수다",
+        "VPC 모드이며 Marketplace 알고리즘은 사설 서브넷만 지원한다",
+        "데이터 캡처이며 Marketplace 알고리즘은 감사 기록이 필수다"
+      ],
+      "correct": 0,
+      "explanation": "AWS Marketplace 리소스로 훈련하거나 모델을 실행할 때는 네트워크 격리가 필수입니다. 참고로 Chainer와 강화 학습 관리형 컨테이너는 S3 접근이 필요해 네트워크 격리를 지원하지 않습니다.",
+      "wrongExplanations": {
+        "1": "노드 간 트래픽 암호화는 선택 설정이며 Marketplace 사용의 필수 조건이 아닙니다.",
+        "2": "VPC 모드는 선택 사항이고 Marketplace 알고리즘이 사설 서브넷만 지원한다는 서술은 없습니다.",
+        "3": "데이터 캡처는 요청과 응답을 S3에 남기는 기능이며 필수 조건으로 제시되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Run Training and Inference Containers in Internet-Free Mode",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q21",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템을 안전하게 격리하기 위한 VPC, 서브넷 및 보안 그룹 구축(SK5)",
+      "section": "isolation-compare",
+      "difficulty": "foundational",
+      "stem": "Studio 도메인의 AppNetworkAccessType 기본값과 VpcOnly의 서브넷 요건은 무엇인가?",
+      "options": [
+        "기본값은 PublicInternetOnly이고 VpcOnly는 사설 서브넷만 쓸 수 있다",
+        "기본값은 VpcOnly이고 퍼블릭 서브넷도 지정할 수 있다",
+        "기본값은 PublicInternetOnly이고 VpcOnly는 퍼블릭 서브넷이 필요하다",
+        "기본값이 없어 필수 항목이며 서브넷 종류 제약은 없다"
+      ],
+      "correct": 0,
+      "explanation": "CreateDomain의 AppNetworkAccessType 기본값은 PublicInternetOnly이고 VpcOnly로 두면 EFS 외 모든 트래픽이 지정한 VPC와 서브넷을 경유합니다. VpcOnly는 사설 서브넷만 가능하며 인터페이스 엔드포인트나 NAT가 없으면 노트북과 훈련, 호스팅을 할 수 없습니다.",
+      "wrongExplanations": {
+        "1": "기본값은 VpcOnly가 아니라 PublicInternetOnly입니다.",
+        "2": "VpcOnly는 사설 서브넷만 가능합니다. 퍼블릭 서브넷이 필요하다는 서술은 반대입니다.",
+        "3": "기본값이 존재하므로 필수 항목이 아니고 서브넷 종류 제약도 있습니다."
+      },
+      "sources": [
+        {
+          "title": "CreateDomain (Amazon SageMaker API Reference)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html"
+        },
+        {
+          "title": "Connect Studio notebooks in a VPC to external resources",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q22",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템을 안전하게 격리하기 위한 VPC, 서브넷 및 보안 그룹 구축(SK5)",
+      "section": "vpc-requirements",
+      "difficulty": "applied",
+      "stem": "인터넷이 없는 사설 서브넷의 훈련 작업이 S3 데이터를 가져오지 못한다. 어떤 엔드포인트를 어떻게 구성하는가?",
+      "options": [
+        "S3 게이트웨이 엔드포인트를 만들어 라우트 테이블에 연결한다",
+        "S3 인터페이스 엔드포인트를 만들고 사설 DNS를 켠다",
+        "SageMaker Runtime 인터페이스 엔드포인트를 만들어 연결한다",
+        "ECR 인터페이스 엔드포인트를 만들어 포트 443을 허용한다"
+      ],
+      "correct": 0,
+      "explanation": "S3는 게이트웨이 엔드포인트를 만들어 라우트 테이블에 연결하면 S3 라우트가 자동 추가되고 추가 요금이 없습니다. 표준 S3 URL이 해석되도록 기본 DNS 설정을 써야 하며, 인터넷이 막힌 VPC의 훈련 컨테이너는 이 엔드포인트가 없으면 버킷에 접근하지 못합니다.",
+      "wrongExplanations": {
+        "1": "문서가 S3에 안내하는 것은 게이트웨이 엔드포인트입니다. 라우트 테이블 연결이 핵심입니다.",
+        "2": "SageMaker Runtime 엔드포인트는 추론 호출 경로를 사설화하는 수단이며 S3 데이터 접근과 다릅니다.",
+        "3": "SageMaker의 훈련과 처리 이미지 pull은 SageMaker가 자동 수행하므로 ECR 엔드포인트가 필수라고 단정할 수 없고, S3 데이터 접근의 해법도 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Give SageMaker AI Training Jobs Access to Resources in Your Amazon VPC",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html"
+        },
+        {
+          "title": "Gateway endpoints for Amazon S3 (Amazon VPC PrivateLink)",
+          "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q23",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 시스템을 안전하게 격리하기 위한 VPC, 서브넷 및 보안 그룹 구축(SK5)",
+      "section": "vpc-requirements",
+      "difficulty": "applied",
+      "stem": "Studio VpcOnly 도메인에서 앱이 뜨지 않는다. 보안 그룹에서 반드시 확인할 포트는 무엇인가?",
+      "options": [
+        "NFS인 TCP 2049를 인바운드와 아웃바운드 모두 허용했는지",
+        "HTTPS인 TCP 443만 인바운드로 허용했는지",
+        "SSH인 TCP 22를 사설 대역에 허용했는지",
+        "UDP 500과 ESP 50을 자기 보안 그룹에 허용했는지"
+      ],
+      "correct": 0,
+      "explanation": "Studio VpcOnly에서는 도메인과 EFS 사이 NFS인 TCP 2049가 필요하며 앱을 성공적으로 띄우려면 인바운드와 아웃바운드 모두 허용해야 합니다. 보안 그룹 내 TCP는 문서 기준으로 8192에서 65535 범위가 설명되며, 아웃바운드 연결 허용도 필요합니다.",
+      "wrongExplanations": {
+        "1": "443은 인터페이스 엔드포인트 쪽에서 필요한 포트이며 EFS 연결 요건과 다릅니다.",
+        "2": "SSH는 Studio 앱 실행 요건으로 문서에 제시되지 않습니다.",
+        "3": "UDP 500과 ESP 50은 컨테이너 간 트래픽 암호화를 켤 때 필요한 규칙입니다."
+      },
+      "sources": [
+        {
+          "title": "Connect Studio notebooks in a VPC to external resources",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html"
+        },
+        {
+          "title": "CreateDomain (Amazon SageMaker API Reference)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q24",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 리소스에 대한 네트워크 액세스 제어(K3)",
+      "section": "vpc-requirements",
+      "difficulty": "applied",
+      "stem": "VPC 엔드포인트 정책으로 sagemaker:InvokeEndpoint를 특정 엔드포인트에만 허용했다. 이 통제의 한계는 무엇인가?",
+      "options": [
+        "VPC 밖에서의 호출은 막히지 않으므로 별도 IAM 정책이 필요하다",
+        "같은 VPC 안의 다른 서브넷에서 오는 호출은 통제되지 않는다",
+        "엔드포인트 정책은 액션을 제한할 수 없고 주체만 제한한다",
+        "정책을 적용하면 모든 SageMaker API 호출이 즉시 차단된다"
+      ],
+      "correct": 0,
+      "explanation": "VPC 엔드포인트 정책은 그 엔드포인트를 통과하는 요청에만 적용됩니다. 문서 예시처럼 특정 엔드포인트 호출만 허용하면 다른 API와 다른 엔드포인트 호출은 이 VPC 엔드포인트를 통해서는 거부되지만, VPC 밖에서의 호출은 이 정책으로 막히지 않으므로 별도 IAM 정책으로 제한해야 합니다. FIPS 런타임 엔드포인트의 InvokeEndpoint는 엔드포인트 정책을 지원하지 않습니다.",
+      "wrongExplanations": {
+        "1": "같은 VPC 안에서 그 엔드포인트를 지나는 요청에는 정책이 적용됩니다.",
+        "2": "엔드포인트 정책으로 주체와 액션, 리소스를 모두 제한할 수 있습니다.",
+        "3": "정책에 허용한 호출은 계속 동작합니다. 모든 호출이 차단되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Connect to SageMaker AI Within your VPC",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q25",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "ML 리소스에 대한 네트워크 액세스 제어(K3)",
+      "section": "defense-layers",
+      "difficulty": "applied",
+      "stem": "격리된 훈련 환경에서 클러스터가 외부와 통신한 내역을 확인하려 한다. 어떤 수단을 쓰는가?",
+      "options": [
+        "VPC Flow Logs로 훈련 클러스터의 입출력 트래픽을 본다",
+        "CloudTrail 데이터 이벤트로 네트워크 패킷을 기록한다",
+        "AWS Config 타임라인으로 보안 그룹 트래픽을 조회한다",
+        "Amazon Macie로 송신 데이터의 민감도를 분석한다"
+      ],
+      "correct": 0,
+      "explanation": "VPC 안에서 만든 훈련 작업의 클러스터 입출력 트래픽은 VPC Flow Logs로 감시합니다. 계층 방어 체크리스트에서 관측 층을 담당하며 CloudTrail과 Config가 함께 쓰입니다.",
+      "wrongExplanations": {
+        "1": "CloudTrail은 API 호출을 기록하는 감사 기록이며 네트워크 패킷을 담지 않습니다.",
+        "2": "Config 타임라인은 리소스 구성 변경 이력이며 실제 트래픽을 보여 주지 않습니다.",
+        "3": "Macie는 S3 객체의 민감 데이터를 탐지하는 서비스이며 네트워크 트래픽을 분석하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI identity-based policy examples",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html"
+        },
+        {
+          "title": "Build a Secure Enterprise Machine Learning Platform on AWS — Networking architecture",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q26",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "SageMaker AI 보안 및 규정 준수 기능(K2)",
+      "section": "governance-compliance",
+      "difficulty": "foundational",
+      "stem": "Model Cards에서 승인 상태 갱신 외의 편집을 하면 어떻게 되는가?",
+      "options": [
+        "새 버전이 만들어져 불변 기록이 유지된다",
+        "기존 내용이 덮어써지고 이전 값은 사라진다",
+        "편집이 거부되고 카드를 다시 만들어야 한다",
+        "편집 내역이 CloudTrail에만 남고 카드에는 반영되지 않는다"
+      ],
+      "correct": 0,
+      "explanation": "Model Cards는 승인 상태 갱신 외의 편집을 하면 새 버전을 만들어 불변 기록을 유지합니다. 모델의 의도된 사용과 위험 등급, 훈련 상세와 지표, 평가 결과와 권고 사항을 한곳에 문서화하며 PDF로 내보낼 수 있어 감사 활동을 지원합니다.",
+      "wrongExplanations": {
+        "1": "덮어쓰기가 아니라 새 버전 생성입니다. 그래서 감사 기록으로 쓸 수 있습니다.",
+        "2": "편집은 거부되지 않습니다. 버전이 늘어납니다.",
+        "3": "편집 결과는 카드의 새 버전으로 반영됩니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Model Cards",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q27",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "SageMaker AI 보안 및 규정 준수 기능(K2)",
+      "section": "governance-compliance",
+      "difficulty": "foundational",
+      "stem": "SageMaker AI가 특정 규정 준수 프로그램 범위에 있는지와 감사 보고서는 각각 어디서 확인하는가?",
+      "options": [
+        "범위는 Services in Scope 목록, 보고서는 AWS Artifact",
+        "범위와 보고서 모두 SageMaker AI 규정 준수 문서에 나열되어 있다",
+        "범위는 AWS Audit Manager, 보고서는 AWS Config 적합성 팩",
+        "범위는 HIPAA 적격 서비스 목록, 보고서는 Trusted Advisor 점검"
+      ],
+      "correct": 0,
+      "explanation": "SageMaker AI의 규정 준수 검증 문서는 개별 프로그램을 나열하지 않고, 서비스가 특정 프로그램 범위에 있는지는 AWS Services in Scope by Compliance Program에서 확인하라고 안내하며 제3자 감사 보고서는 AWS Artifact로 내려받습니다. 규정 준수 책임은 데이터 민감도와 회사 목표, 법규에 따라 사용자가 집니다.",
+      "wrongExplanations": {
+        "1": "SageMaker AI 규정 준수 문서는 개별 프로그램을 나열하지 않습니다.",
+        "2": "Audit Manager는 이 시험 가이드의 범위 외 서비스이며 Config 적합성 팩은 구성 평가 묶음입니다.",
+        "3": "HIPAA 적격 서비스 목록은 HIPAA 여부를 확인하는 곳이고 Trusted Advisor는 비용과 보안 점검 권고 도구입니다."
+      },
+      "sources": [
+        {
+          "title": "Compliance validation for Amazon SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-compliance.html"
+        },
+        {
+          "title": "HIPAA Eligible Services Reference",
+          "url": "https://aws.amazon.com/compliance/hipaa-eligible-services-reference/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q28",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "CI/CD 파이프라인을 위한 보안 모범 사례(K4)",
+      "section": "cicd-security",
+      "difficulty": "applied",
+      "stem": "CodeBuild 프로젝트가 외부 API 토큰을 써야 한다. 환경 변수를 어떻게 구성하는가?",
+      "options": [
+        "유형을 PARAMETER_STORE나 SECRETS_MANAGER로 지정한다",
+        "유형을 PLAINTEXT로 두고 값을 Base64로 인코딩한다",
+        "buildspec의 env 섹션에 값을 직접 적고 파일을 암호화한다",
+        "파이프라인 변수 기본값에 토큰을 넣고 액션에서 참조한다"
+      ],
+      "correct": 0,
+      "explanation": "민감 값을 PLAINTEXT 환경 변수에 두면 콘솔과 CLI에 평문으로 노출되므로 유형을 PARAMETER_STORE 또는 SECRETS_MANAGER로 지정합니다. 자동 교체가 필요하면 Secrets Manager를 쓰고, Parameter Store는 저장된 비밀의 자동 교체를 제공하지 않아 Secrets Manager 비밀을 참조하는 방식을 안내합니다.",
+      "wrongExplanations": {
+        "1": "Base64 인코딩한 값은 저장된 값과 다른 문자열이라 로그 마스킹이 적용되지 않습니다.",
+        "2": "buildspec에 값을 적으면 소스에 비밀이 들어갑니다. 파일 암호화는 빌드 시점 노출을 막지 못합니다.",
+        "3": "CodePipeline은 파이프라인과 액션 구성이나 변수 기본값에 토큰을 직접 넣지 말라고 명시합니다. 로그에 표시됩니다."
+      },
+      "sources": [
+        {
+          "title": "EnvironmentVariable (AWS CodeBuild API Reference)",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/APIReference/API_EnvironmentVariable.html"
+        },
+        {
+          "title": "Data protection in AWS CodeBuild",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/data-protection.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q29",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "CI/CD 파이프라인을 위한 보안 모범 사례(K4)",
+      "section": "cicd-security",
+      "difficulty": "applied",
+      "stem": "프로덕션 배포 전에 사람 승인 게이트를 두려 한다. CodePipeline 수동 승인의 제약은 무엇인가?",
+      "options": [
+        "7일 안에 응답이 없으면 실패이며 Source 스테이지에는 추가할 수 없다",
+        "30일 동안 대기하며 어느 스테이지에나 추가할 수 있다",
+        "승인자가 파이프라인 소유자여야 하며 SNS 알림은 지원되지 않는다",
+        "승인 액션은 교차 계정 파이프라인에서만 쓸 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "수동 승인 액션은 승인 액션 앞에서 파이프라인을 멈추고 IAM 권한이 있는 주체가 승인하거나 거부합니다. 거부되거나 7일 안에 응답이 없으면 액션 실패와 같고 Source 스테이지에는 추가할 수 없습니다. SNS 알림을 쓰려면 서비스 역할에 SNS 권한을, 승인 상태를 갱신할 주체에는 승인 권한을 먼저 부여합니다.",
+      "wrongExplanations": {
+        "1": "대기 기간은 7일이며 Source 스테이지에는 추가할 수 없습니다.",
+        "2": "승인자는 IAM 권한이 있는 주체이며 소유자일 필요가 없고 SNS 알림도 지원됩니다.",
+        "3": "승인 액션은 단일 계정 파이프라인에서도 쓸 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Add a manual approval action to a stage (CodePipeline)",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html"
+        },
+        {
+          "title": "Add a manual approval action to a pipeline in CodePipeline",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q30",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "CI/CD 파이프라인을 위한 보안 모범 사례(K4)",
+      "section": "cicd-security",
+      "difficulty": "applied",
+      "stem": "ECR 리포지토리에서 같은 태그로 이미지가 덮어써지는 것을 막으려 한다. 설정과 시도 시 결과는 무엇인가?",
+      "options": [
+        "불변 태그를 켜며 시도 시 ImageTagAlreadyExistsException이 난다",
+        "Enhanced 스캔을 켜며 덮어쓰기 시도 시 스캔 실패로 차단된다",
+        "리포지토리 정책에 Deny를 추가하며 푸시가 조용히 무시된다",
+        "수명 주기 정책을 추가하며 이전 이미지가 자동 삭제된다"
+      ],
+      "correct": 0,
+      "explanation": "ECR의 태그 불변성을 켜면 같은 태그를 덮어쓸 수 없고 시도하면 ImageTagAlreadyExistsException이 발생합니다. 함께 쓰는 보안 수단으로 Basic 스캔과 Amazon Inspector 연동 Enhanced 스캔, 리소스 기반 리포지토리 정책이 있습니다.",
+      "wrongExplanations": {
+        "1": "Enhanced 스캔은 취약점을 자동으로 지속 스캔하는 기능이며 태그 덮어쓰기를 막지 않습니다.",
+        "2": "리포지토리 정책으로 권한을 제한할 수 있지만 조용히 무시되는 동작은 없습니다. 태그 불변성이 전용 수단입니다.",
+        "3": "수명 주기 정책은 보존 규칙에 따라 이미지를 정리하는 기능이며 덮어쓰기 방지와 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Preventing image tags from being overwritten in Amazon ECR",
+          "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html"
+        },
+        {
+          "title": "Scan images for software vulnerabilities in Amazon ECR",
+          "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q31",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "지속적인 보안 및 규정 준수를 위한 ML 시스템 모니터링, 감사 및 로깅(SK3)",
+      "section": "security-audit",
+      "difficulty": "applied",
+      "stem": "암호화 키 없이 만들어진 엔드포인트 구성을 모두 찾아내려 한다. 어떤 수단이 맞는가?",
+      "options": [
+        "AWS Config 관리형 규칙으로 구성을 평가한다",
+        "IAM 정책에 Deny 조건을 추가해 기존 리소스를 표시한다",
+        "CloudTrail 데이터 이벤트로 암호화 설정을 조회한다",
+        "Macie로 엔드포인트 구성의 민감 설정을 탐지한다"
+      ],
+      "correct": 0,
+      "explanation": "이미 존재하는 리소스의 구성을 평가해 규정 위반을 표시하는 것은 AWS Config의 역할입니다. sagemaker-endpoint-config-kms-key-required 규칙은 KmsKeyId가 설정되지 않은 엔드포인트 구성을 NON_COMPLIANT로 표시하며 Configuration changes로 트리거됩니다.",
+      "wrongExplanations": {
+        "1": "IAM 조건 키와 SCP는 요청을 거부하는 예방 통제이며 이미 만들어진 리소스를 찾아내지 않습니다.",
+        "2": "CloudTrail은 API 호출 기록이며 현재 구성 상태의 목록을 제공하지 않습니다.",
+        "3": "Macie는 S3 객체의 민감 데이터를 탐지하는 서비스이며 리소스 구성 평가 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Config rule sagemaker-endpoint-config-kms-key-required",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-endpoint-config-kms-key-required.html"
+        },
+        {
+          "title": "AWS Config terminology and concepts",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q32",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "지속적인 보안 및 규정 준수를 위한 ML 시스템 모니터링, 감사 및 로깅(SK3)",
+      "section": "security-audit",
+      "difficulty": "applied",
+      "stem": "지난 6개월간 누가 엔드포인트를 호출했는지 보고해야 한다. CloudTrail 이벤트 기록에 호출 기록이 없는 이유는 무엇인가?",
+      "options": [
+        "InvokeEndpoint는 데이터 이벤트라 기본 미기록이고 이벤트 기록에도 남지 않는다",
+        "이벤트 기록은 쓰기 이벤트만 보여 주고 읽기 호출은 제외한다",
+        "엔드포인트 호출은 CloudTrail 대상이 아니며 CloudWatch Logs에만 남는다",
+        "이벤트 기록은 리전별 30일만 보관하므로 6개월 전 기록이 사라졌다"
+      ],
+      "correct": 0,
+      "explanation": "InvokeEndpoint는 AWS::SageMaker::Endpoint 리소스 유형의 데이터 이벤트라 기본적으로 기록되지 않고 이벤트 기록에도 남지 않으며 추가 요금이 붙습니다. 추적을 만들고 고급 이벤트 선택기로 데이터 이벤트를 옵트인해야 하며, 지난 기록은 소급해서 만들 수 없습니다. 이 호출들은 요청 파라미터도 기록하지 않습니다.",
+      "wrongExplanations": {
+        "1": "이벤트 기록은 최근 90일의 관리 이벤트를 보여 주며 읽기 전용 관리 이벤트도 포함합니다.",
+        "2": "엔드포인트 호출은 데이터 이벤트로 기록할 수 있습니다. CloudTrail 대상에서 제외된 것이 아닙니다.",
+        "3": "이벤트 기록의 보관 기간은 90일입니다. 다만 데이터 이벤트는 기간과 무관하게 남지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Logging Amazon SageMaker AI API calls using AWS CloudTrail",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q33",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "보안 문제 해결 및 디버깅(SK4)",
+      "section": "security-troubleshoot",
+      "difficulty": "applied",
+      "stem": "처리 작업을 VPC 모드로 만들려는데 생성 단계에서 검증이 실패한다. 실행 역할 정책에서 확인할 것은 무엇인가?",
+      "options": [
+        "ec2 네트워크 인터페이스 권한에 조건이나 리소스 필터를 걸었는지",
+        "s3:ListBucket을 입력 버킷으로 좁혔는지",
+        "kms:CreateGrant를 볼륨 키에 부여했는지",
+        "iam:PassRole에 PassedToService 조건을 넣었는지"
+      ],
+      "correct": 0,
+      "explanation": "프라이빗 VPC를 지정한 작업에는 ec2의 네트워크 인터페이스 관련 권한이 필요하고, 처리 작업은 이 ec2 권한에 조건이나 리소스 필터를 걸면 생성 시 검증이 실패합니다. 해당 권한은 필터 없이 부여해야 합니다.",
+      "wrongExplanations": {
+        "1": "입력 버킷으로 좁히는 것은 권장되는 최소 권한 구성이며 VPC 검증 실패 원인이 아닙니다.",
+        "2": "kms:CreateGrant는 리소스 구성에 KMS 키를 지정할 때 필요한 권한이며 VPC 검증과 다릅니다.",
+        "3": "PassRole 조건은 역할을 건네는 호출자 쪽 설정이며 VPC 검증 단계와 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "How to use SageMaker AI execution roles",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
+        },
+        {
+          "title": "Give SageMaker AI Processing Jobs Access to Resources in Your Amazon VPC",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/process-vpc.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q34",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "보안 문제 해결 및 디버깅(SK4)",
+      "section": "security-troubleshoot",
+      "difficulty": "applied",
+      "stem": "정책을 여러 번 고쳤는데도 AccessDenied가 계속 난다. 오류 메시지를 읽을 때 주의할 점은 무엇인가?",
+      "options": [
+        "여러 정책 유형이 거부해도 메시지에는 한 유형만 나오므로 전부 검토한다",
+        "메시지에 나온 정책 유형이 유일한 원인이므로 그것만 고치면 된다",
+        "메시지가 비어 있으면 암묵적 거부이므로 Deny 문장을 찾으면 된다",
+        "메시지는 항상 가장 바깥의 SCP를 먼저 알려 준다"
+      ],
+      "correct": 0,
+      "explanation": "명시적 거부는 ID 기반 정책이나 리소스 기반 정책, 권한 경계, SCP, 세션 정책 중 하나에서 올 수 있고 여러 유형이 거부해도 오류 메시지에는 한 유형만 나옵니다. 그래서 메시지에 나온 정책 외에 적용되는 모든 정책을 검토해야 합니다. 요청 없이 평가 결과를 보려면 IAM 정책 시뮬레이터를 씁니다.",
+      "wrongExplanations": {
+        "1": "메시지에 나온 유형이 유일한 원인이라고 볼 수 없습니다. 다른 유형도 동시에 거부하고 있을 수 있습니다.",
+        "2": "암묵적 거부는 적용되는 Allow도 Deny도 없을 때 발생하므로 Deny 문장을 찾는 접근이 맞지 않습니다.",
+        "3": "메시지가 특정 정책 유형을 먼저 알려 준다는 규칙은 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshoot access denied error messages (IAM User Guide)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html"
+        },
+        {
+          "title": "IAM policy testing with the IAM policy simulator",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t4-3-q35",
+      "examGuideTaskId": "mla-t4-3",
+      "skill": "보안 문제 해결 및 디버깅(SK4)",
+      "section": "security-troubleshoot",
+      "difficulty": "applied",
+      "stem": "인터넷을 끈 노트북 인스턴스에서 훈련 작업을 시작할 수 없다. 조치와 제약은 무엇인가?",
+      "options": [
+        "NAT나 VPC 엔드포인트를 두며 네트워크 설정은 생성 후 바꿀 수 없다",
+        "DirectInternetAccess를 Enabled로 되돌리면 재시작만으로 반영된다",
+        "RootAccess를 Enabled로 바꾸면 외부 호출이 허용된다",
+        "네트워크 격리를 켜면 SageMaker API 호출이 대신 처리된다"
+      ],
+      "correct": 0,
+      "explanation": "인터넷 접근을 끈 노트북 인스턴스가 SageMaker 훈련과 엔드포인트 서비스에 닿으려면 NAT 게이트웨이나 SageMaker API와 Runtime VPC 엔드포인트가 필요하고 보안 그룹이 아웃바운드를 허용해야 합니다. 생성 후 네트워크 설정은 변경할 수 없으므로 새 인스턴스를 만들어야 하며, DirectInternetAccess나 KmsKeyId 변경은 리소스 교체입니다.",
+      "wrongExplanations": {
+        "1": "재시작만으로 반영되지 않습니다. 이 속성 변경은 리소스 교체이고 생성 후 네트워크 설정은 바꿀 수 없습니다.",
+        "2": "RootAccess는 노트북 사용자의 root 권한을 다루는 설정이며 네트워크 접근과 무관합니다.",
+        "3": "네트워크 격리는 훈련과 추론 컨테이너의 아웃바운드를 막는 설정이며 노트북의 API 호출을 대행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "How do I troubleshoot network connectivity from my SageMaker notebook instance that has direct internet access deactivated? (re:Post)",
+          "url": "https://repost.aws/knowledge-center/sagemaker-notebook-vpc-troubleshoot"
+        },
+        {
+          "title": "AWS::SageMaker::NotebookInstance (CloudFormation Template Reference)",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-notebookinstance.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

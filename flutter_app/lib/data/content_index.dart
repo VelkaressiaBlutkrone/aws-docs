@@ -644,6 +644,9 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t3-1', title: '배포 인프라 선택 (추론 옵션 4종·다중 모델·가드레일·컴퓨팅·컨테이너·엣지)', domain: 3, mdAsset: 'assets/content/mla/mla-t3-1.md', questionsAsset: 'assets/content/mla/mla-t3-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t3-2', title: '인프라 생성·스크립팅 (오토 스케일링·용량 모델·IaC·컨테이너 운영·VPC)', domain: 3, mdAsset: 'assets/content/mla/mla-t3-2.md', questionsAsset: 'assets/content/mla/mla-t3-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t3-3', title: 'CI/CD 파이프라인 설정 (CodePipeline·CodeBuild·CodeDeploy·SageMaker Pipelines·재훈련)', domain: 3, mdAsset: 'assets/content/mla/mla-t3-3.md', questionsAsset: 'assets/content/mla/mla-t3-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t4-1', title: '모델 추론 모니터링 (드리프트·Model Monitor·CloudWatch·EventBridge·A/B)', domain: 4, mdAsset: 'assets/content/mla/mla-t4-1.md', questionsAsset: 'assets/content/mla/mla-t4-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t4-2', title: '인프라·비용 모니터링과 최적화 (지연 분해·CloudTrail·적정 규모·구매 옵션·태깅)', domain: 4, mdAsset: 'assets/content/mla/mla-t4-2.md', questionsAsset: 'assets/content/mla/mla-t4-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t4-3', title: 'AWS 리소스 보호 (실행 역할·조건 키 가드레일·네트워크 격리·CI/CD 보안·감사)', domain: 4, mdAsset: 'assets/content/mla/mla-t4-3.md', questionsAsset: 'assets/content/mla/mla-t4-3.questions.json', questionCount: 0),
   ],
 };
 
