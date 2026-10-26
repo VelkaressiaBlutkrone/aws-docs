@@ -118,7 +118,7 @@ void main() {
   // content_index의 questionCount는 그 Task .questions.json의 verified:true
   // 문항 수와 *항상* 일치해야 한다. 특정 숫자(예: SAA==0)에 의존하지 않으므로
   // 첫 SAA flip 시에도 깨지지 않고, flip 후 count 동기화 누락을 잡아낸다.
-  // (saa_review.mjs flip이 verified 전환 + content_index questionCount를 함께
+  // (review.mjs flip이 verified 전환 + content_index questionCount를 함께
   //  갱신하므로 정상 워크플로에서는 항상 일치.)
   test('동적 불변식: 모든 Task questionCount == .questions.json verified 수', () {
     final mismatches = <String>[];
