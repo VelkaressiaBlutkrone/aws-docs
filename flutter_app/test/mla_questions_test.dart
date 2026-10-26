@@ -150,6 +150,74 @@ void main() {
             reason: '정답이 유독 길면 단서가 된다(오답을 비슷한 구체성으로):\n${offenders.join('\n')}');
       });
 
+      test('스킬 태그가 공식 가이드에 실재하고 Task의 전 항목을 덮는다', () {
+        // 문항의 `skill`은 공식 가이드 문장 + 꼬리 태그(예: "…(SK2)") 형식이다.
+        // 태그가 가이드에 없는 번호를 가리키면 커버리지 집계가 조용히 어긋나고,
+        // 어떤 K·SK에도 문항이 없으면 그 항목은 학습자가 연습할 수 없다.
+        // 2026-10-26 도메인 3 외부 리뷰가 손으로 찾아낸 공백(3.3 K3 버전 관리)을
+        // 기계가 잡게 하려고 신설했다.
+        //
+        // ⚠️ 본문 일치는 요구하지 않는다. 도메인 1은 "(K1, SK1)"처럼 한 괄호에 복수
+        // 태그를 쓰고 문장도 가이드 원문과 글자 단위로 같지 않다(도메인 2~3은 단일
+        // 태그 + 원문). 본문 통일까지 가드하면 범위 밖 90여 문항이 깨지므로 여기서는
+        // **태그의 실재·범위와 커버리지**만 본다 — 표기 통일은 별건이다.
+        final m = RegExp(r'^mla-t(\d)-(\d)$').firstMatch(taskId)!;
+        final taskNo = '${m.group(1)}.${m.group(2)}';
+
+        final guide = json.decode(
+                File('assets/exam_guides/MLA-C01.json').readAsStringSync())
+            as Map<String, dynamic>;
+        Map<String, dynamic>? task;
+        for (final d in (guide['domains'] as List)) {
+          for (final t in ((d as Map)['tasks'] as List)) {
+            if ((t as Map)['no'] == taskNo) task = t.cast<String, dynamic>();
+          }
+        }
+        expect(task, isNotNull, reason: '가이드에 Task $taskNo 가 없다');
+        final kCount = (task!['knowledge'] as List).length;
+        final skCount = (task['skills'] as List).length;
+
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final tagRe = RegExp(r'\(([^()]*(?:SK|K)\d+[^()]*)\)\s*$');
+        final oneRe = RegExp(r'SK\d+|K\d+');
+        final seen = <String>{};
+        final invalid = <String>[];
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final skill = (q['skill'] ?? '').toString();
+          final inner = tagRe.firstMatch(skill)?.group(1);
+          final tags = inner == null
+              ? const <String>[]
+              : oneRe.allMatches(inner).map((x) => x.group(0)!).toList();
+          if (tags.isEmpty) {
+            invalid.add('${q['id']}: 꼬리 태그 없음 — "$skill"');
+            continue;
+          }
+          for (final tag in tags) {
+            final isSk = tag.startsWith('SK');
+            final idx = int.parse(tag.substring(isSk ? 2 : 1));
+            final limit = isSk ? skCount : kCount;
+            if (idx < 1 || idx > limit) {
+              invalid.add('${q['id']}: $tag — 가이드 Task $taskNo 는 '
+                  'K$kCount·SK$skCount 뿐');
+            } else {
+              seen.add(tag);
+            }
+          }
+        }
+        expect(invalid, isEmpty,
+            reason: '$taskId 스킬 태그가 가이드 범위를 벗어났다:\n${invalid.join('\n')}');
+
+        final all = [
+          for (var i = 1; i <= kCount; i++) 'K$i',
+          for (var i = 1; i <= skCount; i++) 'SK$i',
+        ];
+        final gaps = all.where((t) => !seen.contains(t)).toList();
+        expect(gaps, isEmpty,
+            reason: '$taskId: 문항이 하나도 없는 가이드 항목 $gaps '
+                '— 해당 항목을 묻는 문항을 추가하세요');
+      });
+
       test('문항의 section이 학습문서 앵커와 짝이 맞는다', () {
         // 개념 딥링크(`?at=`)는 문항 `section`을 md의 `{#id}` 앵커로 찾아간다.
         // 짝이 깨지면 링크가 조용히 죽으므로 문서와 함께 가드한다.

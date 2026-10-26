@@ -221,7 +221,8 @@ lastVerified: 2026-10-17
 
 - in-place는 기존 인스턴스에서 이전 버전을 멈추고 새 버전을 설치하므로 가용성이 영향받을 수 있습니다. blue/green은 새 환경(green)에 설치하고 검증한 뒤 트래픽을 옮깁니다.
 - **Lambda·ECS 배포에서는 CodeDeploy agent를 쓰지 않습니다.**
-- DevOps 백서의 매트릭스는 EC2/온프레미스에서 canary·linear를 지원하지 않는다고 표시합니다. ⚠️ 같은 플랫폼에 `CodeDeployDefault.AllAtOnce`가 사전 정의 구성으로 있어 표기가 상충해 보이므로, 문항 판단은 **"EC2/온프레미스에는 canary·linear 트래픽 이동이 없다"**까지만 씁니다.
+- DevOps 백서의 매트릭스는 EC2/온프레미스에서 canary·linear·all-at-once를 지원하지 않는다고 표시하는데, 같은 플랫폼의 사전 정의 구성에는 `CodeDeployDefault.AllAtOnce`가 있습니다. 모순처럼 보이지만 **이름이 같고 층위가 다른 두 개념**으로 읽는 것이 자연스럽습니다 — 매트릭스의 all-at-once는 Lambda·ECS의 **트래픽 이동 방식**이고, EC2/온프레미스의 `AllAtOnce`·`HalfAtATime`·`OneAtATime`은 **최소 정상 호스트 기준의 배포 속도 구성**입니다.
+  ⚠️ 다만 **이 구분을 명시한 공식 문장은 확인되지 않았습니다**(이 문서의 해석입니다). 그래서 문항 판단은 양쪽 문서가 함께 지지하는 **"EC2/온프레미스에는 canary·linear 트래픽 이동이 없다"**까지만 씁니다.
 
 **AppSpec과 훅**
 
@@ -432,7 +433,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 | 개념 | CodeDeploy | SageMaker 엔드포인트 가드레일 |
 |---|---|---|
 | All-at-once | `LambdaAllAtOnce` / `ECSAllAtOnce` | `ALL_AT_ONCE`(**업데이트 정책을 지정하지 않을 때의 기본값**) |
-| Canary | `LambdaCanary10Percent5Minutes` 등 — **값이 고정된 이름** | `CANARY`: 2단계, `CanarySize`(변형 전체 인스턴스 수의 **50% 이하**), `WaitIntervalInSeconds` |
+| Canary | `LambdaCanary10Percent5Minutes` 등 — **값이 고정된 이름** | `CANARY`: 2단계, `CanarySize`(**50% 이하** — API 레퍼런스는 분모를 "변형 전체 인스턴스 수", 개발자 가이드는 "그린 플릿 용량"으로 적는다 → [`mla-t3-1` 8)](mla-t3-1.md#deployment-guardrails)), `WaitIntervalInSeconds` |
 | Linear | `LambdaLinear10PercentEvery1Minute` 등 | `LINEAR`: n단계, `LinearStepSize`(**10~50%**) |
 | Rolling / in-place | EC2/온프레 in-place + `HalfAtATime`·`OneAtATime` | `RollingUpdatePolicy`: `MaximumBatchSize` **5~50%** |
 | 롤백 트리거 | 배포 그룹에 연결한 경보·실패한 훅·자동 롤백 설정 → **마지막 정상 리비전 재배포** | `AutoRollbackConfiguration.Alarms`(**1~10개**) + 베이킹 기간 |

@@ -231,9 +231,11 @@ Triton 컨테이너는 단일 모델·앙상블·MME 모드를 모두 지원합�
 | 방식 | 트래픽 이동 | 주요 파라미터 | 장점 | 단점 |
 |---|---|---|---|---|
 | 블루/그린 **all-at-once** | 한 번에 100% 이동 후 베이킹 | — | 업데이트 시간·비용 최소 | 회귀가 트래픽 100%에 영향 |
-| 블루/그린 **canary** | 2단계: 소량 canary → 나머지 | `CanarySize` ≤ 그린 플릿 용량의 **50%**, `WaitIntervalInSeconds`, `TerminationWaitInSeconds`, `MaximumExecutionTimeoutInSeconds` | 영향 범위를 canary 플릿으로 한정 | 배포 내내 두 플릿 병행 |
+| 블루/그린 **canary** | 2단계: 소량 canary → 나머지 | `CanarySize` ≤ **50%**(아래 ⚠️), `WaitIntervalInSeconds`, `TerminationWaitInSeconds`, `MaximumExecutionTimeoutInSeconds` | 영향 범위를 canary 플릿으로 한정 | 배포 내내 두 플릿 병행 |
 | 블루/그린 **linear** | n개 균등 단계 | `LinearStepSize` **10–50%**, 단계마다 베이킹 | 회귀 위험 최소 | 기간·비용이 단계 수에 비례 |
 | **롤링** | 배치 크기만큼 새 인스턴스 → 트래픽 이동 → 구 인스턴스 정리를 반복 | `MaximumBatchSize` **5–50%**, `RollbackMaximumBatchSize`, `WaitIntervalInSeconds`, `MaximumExecutionTimeoutInSeconds` ≤ 28,800초(8시간) | 블루/그린보다 필요 용량이 적다 | 서버리스·다중 변형 엔드포인트 불가 |
+
+> ⚠️ **`CanarySize` 50%의 기준이 문서마다 다르게 적혀 있습니다.** 개발자 가이드는 "그린(새) 플릿 용량의 50% 이하"(원문 "50% of the new fleet's capacity"), API 레퍼런스는 "변형 전체 인스턴스 수의 50% 이하"(원문 "50% of the variant's total instance count")라고 씁니다. 상한 비율 50%는 양쪽이 같으니 **그 수치만** 기억하고, 분모가 무엇인지에 답이 걸리는 문항은 피합니다. API 파라미터 관점의 정리는 [`mla-t3-3` 12)](mla-t3-3.md#deploy-strategy-rollback)에 있습니다.
 
 **공통 전제** — 모니터링용 **CloudWatch 경보를 먼저 만들고** `DeploymentConfig.AutoRollbackConfiguration.Alarms`에 이름으로 지정합니다. 베이킹 기간에 경보가 하나라도 울리면 트래픽이 블루(구) 플릿으로 롤백됩니다. 신규 엔드포인트 구성은 기존과 **변형 이름이 같아야** 합니다. Marketplace 컨테이너나 Inf1 인스턴스를 쓰는 엔드포인트는 가드레일을 쓸 수 없고 **"all-at-once + 최종 베이킹 없음" 블루/그린으로 폴백**합니다. 다단계·베이킹이 있는 블루/그린은 업데이트 동안 **두 플릿 요금을 모두** 냅니다. 롤링이 실패하고 자동 롤백도 실패하면 `UpdateRollbackFailed` 상태가 되며 다시 `UpdateEndpoint`로 복구합니다.
 
