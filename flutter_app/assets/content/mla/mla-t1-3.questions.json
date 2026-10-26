@@ -1,0 +1,745 @@
+{
+  "examGuideTaskId": "mla-t1-3",
+  "taskTitle": "데이터 무결성을 보장하고 모델링을 위한 데이터 준비",
+  "domain": 1,
+  "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
+  "questions": [
+    {
+      "id": "mla-t1-3-q1",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "사전 훈련 편향 지표 이해(K1)",
+      "section": "pretraining-metrics",
+      "difficulty": "applied",
+      "stem": "대출 심사 데이터셋에서 연령대 열의 그룹 구성 비율이 실제 신청자 분포를 반영하는지 보려고 한다. 레이블(승인 여부)과는 무관하게 그룹의 표현만 재는 사전 훈련 편향 지표는 무엇인가?",
+      "options": [
+        "Class Imbalance(CI)",
+        "Difference in Proportions of Labels(DPL)",
+        "Kullback-Leibler Divergence(KL)",
+        "Conditional Demographic Disparity(CDD)"
+      ],
+      "correct": 0,
+      "explanation": "CI는 facet 간 구성원 수의 불균형을 재는 지표로 (n_a − n_d)/(n_a + n_d)로 계산되며 레이블을 보지 않습니다. 그룹 표현이 현실을 반영하는지 확인할 때 쓰는 지표입니다.",
+      "wrongExplanations": {
+        "1": "DPL은 facet 간 긍정 레이블 비율의 차이를 재므로 레이블이 필요합니다.",
+        "2": "KL은 두 facet의 레이블 분포 사이 발산을 재는 분포형 지표입니다.",
+        "3": "CDD는 하위집단(group variable)으로 조건화해 거절·수락 비중의 격차를 보는 지표입니다."
+      },
+      "sources": [
+        {
+          "title": "Class Imbalance (CI) — SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html"
+        },
+        {
+          "title": "Pre-training Data Bias — facet·label 정의",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q2",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "사전 훈련 편향 지표 이해(K1)",
+      "section": "pretraining-metrics",
+      "difficulty": "applied",
+      "stem": "전체로 보면 두 그룹의 승인 격차가 없어 보이는데, 지역별로 나눠 보면 한쪽 그룹이 계속 불리하다. 이런 하위집단 효과(Simpson's paradox)를 배제하고 편향을 재려면 무엇이 필요한가?",
+      "options": [
+        "KS 지표를 계산해 가장 불균형한 레이블을 찾는다",
+        "CDD 지표를 계산하고 group variable을 지정한다",
+        "CI 지표를 facet 값마다 따로 계산해 비교한다",
+        "사후 훈련 지표 DPPL을 계산해 예측 편향을 본다"
+      ],
+      "correct": 1,
+      "explanation": "Conditional Demographic Disparity(CDD, 구성 키 CDDL)는 하위집단으로 조건화한 격차의 가중 평균으로, Simpson's paradox를 배제하기 위한 지표입니다. 계산에는 하위집단을 만드는 범주형 열(group_variable)이 필요합니다.",
+      "wrongExplanations": {
+        "0": "KS는 레이블 분포 간 최대 발산을 찾는 분포형 지표로 하위집단 조건화와 무관합니다.",
+        "2": "CI는 구성원 수 불균형만 보고 레이블 결과를 보지 않습니다.",
+        "3": "DPPL은 모델 예측이 필요한 사후 훈련 지표입니다. 학습 전 데이터의 하위집단 격차를 보는 지표가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Conditional Demographic Disparity (CDD) — SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q3",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "사전 훈련 편향 지표 이해(K1)",
+      "section": "pretraining-metrics",
+      "difficulty": "applied",
+      "stem": "두 facet의 레이블 분포 차이를 재려는데, 한쪽 facet에 특정 레이블 샘플이 아예 없어 지표가 무한대로 나왔다. 대칭적이면서 이 문제를 피하는 지표는 무엇인가?",
+      "options": [
+        "Kullback-Leibler Divergence(KL)",
+        "Jensen-Shannon Divergence(JS)",
+        "Lp-norm(LP)",
+        "Difference in Proportions of Labels(DPL)"
+      ],
+      "correct": 1,
+      "explanation": "JS는 KL을 기반으로 하되 두 분포의 평균 분포를 기준으로 대칭화한 발산이라 KL의 무한대 문제를 피합니다.",
+      "wrongExplanations": {
+        "0": "KL이 바로 비대칭이고 한쪽에 특정 레이블 샘플이 없으면 무한대가 될 수 있는 지표입니다.",
+        "2": "LP는 분포 간 p-노름 거리로 무한대 문제와는 다른 지표이며, 음이 아닌 값이라 방향(역방향 편향)을 구분하지 못합니다.",
+        "3": "DPL은 분포 전체가 아니라 긍정 레이블 비율의 차이를 봅니다."
+      },
+      "sources": [
+        {
+          "title": "Jensen-Shannon Divergence (JS) — SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-jensen-shannon-divergence.html"
+        },
+        {
+          "title": "Kullback-Leibler Divergence (KL) — SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-kl-divergence.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q4",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "사전·사후 편향 지표 구분(K1)",
+      "section": "metric-choice",
+      "difficulty": "foundational",
+      "stem": "아직 모델을 학습하지 않은 상태에서 데이터의 편향을 측정하려 한다. 사전 훈련 편향 지표에 대한 설명으로 옳은 것은 무엇인가?",
+      "options": [
+        "모델 예측이 필요하므로 임시 엔드포인트를 만들어야 한다",
+        "모델 출력에 의존하지 않으므로 모델 없이 계산할 수 있다",
+        "학습이 끝난 뒤에만 계산할 수 있다",
+        "레이블 열이 없어도 모든 지표를 계산할 수 있다"
+      ],
+      "correct": 1,
+      "explanation": "사전 훈련 지표는 model-agnostic이라 모델 출력에 의존하지 않고 학습 전에 계산합니다. 임시(shadow) 엔드포인트를 만들어 예측을 얻는 쪽은 사후 훈련 지표입니다.",
+      "wrongExplanations": {
+        "0": "임시 엔드포인트는 사후 훈련 편향 분석에서 모델 이름을 지정했을 때의 동작입니다.",
+        "2": "학습 전에 계산하는 것이 사전 훈련 지표의 목적입니다.",
+        "3": "CI는 레이블과 무관하지만 DPL·KL·JS 등 나머지 지표는 레이블 분포를 사용합니다."
+      },
+      "sources": [
+        {
+          "title": "Pre-training Data Bias (SageMaker Clarify)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
+        },
+        {
+          "title": "Run SageMaker Clarify Processing Jobs for Bias Analysis",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-processing-job-run.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q5",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "편향 완화 전략 선택(K2, SK2)",
+      "section": "imbalance",
+      "difficulty": "applied",
+      "stem": "사기 거래가 전체의 2%뿐인 이진 분류 데이터셋이 있다. 원본 데이터를 바꾸지 않고 학습 단계에서 소수 클래스의 영향을 키우려면 무엇을 쓰는가?",
+      "options": [
+        "XGBoost의 scale_pos_weight 하이퍼파라미터",
+        "Data Wrangler의 Balance data에서 Random oversample",
+        "Data Wrangler의 Balance data에서 SMOTE",
+        "Clarify의 CI 지표를 재계산"
+      ],
+      "correct": 0,
+      "explanation": "클래스 가중치는 데이터를 그대로 두고 손실에서 소수 클래스에 큰 가중을 주는 방식입니다. XGBoost는 scale_pos_weight(기본 1, 전형적인 값은 음성 수 합 / 양성 수 합)를 제공합니다.",
+      "wrongExplanations": {
+        "1": "Random oversample은 소수 샘플을 복제해 데이터 분포 자체를 바꿉니다.",
+        "2": "SMOTE도 보간으로 합성 샘플을 만들어 데이터를 바꾸는 방식입니다.",
+        "3": "CI는 불균형을 측정할 뿐 조정하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "XGBoost hyperparameters — scale_pos_weight",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html"
+        },
+        {
+          "title": "Class Imbalance (CI) — 측정 후 재균형 권고",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q6",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "편향 완화 전략 선택(K2, SK2)",
+      "section": "imbalance",
+      "difficulty": "applied",
+      "stem": "소수 클래스를 단순 복제하지 않고 늘리기 위해 Data Wrangler의 Balance data에서 SMOTE를 골랐다. SMOTE의 동작으로 옳은 것은 무엇인가?",
+      "options": [
+        "다수 클래스 샘플을 무작위로 제거해 원하는 비율까지 맞춘다",
+        "소수 클래스 샘플 사이를 보간해 새 샘플을 만들며, 이웃 계산은 숫자 특징으로 한다",
+        "손실 함수에서 소수 클래스의 가중치를 자동으로 올려 학습한다",
+        "소수 클래스 샘플을 그대로 복제해 원하는 비율까지 늘린다"
+      ],
+      "correct": 1,
+      "explanation": "SMOTE는 소수 범주 샘플 사이를 보간해 합성 샘플을 만듭니다. 숫자 특징은 가중 평균으로, 비수치 특징은 두 원본 중 하나에서 확률적으로 복사하며 이웃(거리)은 숫자 특징만으로 계산합니다.",
+      "wrongExplanations": {
+        "0": "그것은 Random undersample의 동작입니다. 데이터 양이 줄어드는 대신 비율이 맞춰집니다.",
+        "2": "손실 가중치는 데이터를 그대로 두고 학습만 조정하는 방식이며, 알고리즘 하이퍼파라미터(예: scale_pos_weight)의 영역입니다.",
+        "3": "그것은 Random oversample의 동작입니다. SMOTE는 복제가 아니라 이웃 샘플 사이를 보간해 새 값을 만듭니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (Data Wrangler) — Balance data·SMOTE",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q7",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "데이터 증강·합성 데이터 이해(K2, SK3)",
+      "section": "augmentation",
+      "difficulty": "applied",
+      "stem": "과소 대표된 그룹의 데이터를 늘리려고 기존 데이터로 증강을 수행하려 한다. 공식 문서가 경고하는 점은 무엇인가?",
+      "options": [
+        "증강은 원본과 같은 편향을 가진 데이터를 만들므로 원본의 편향을 먼저 해소해야 한다",
+        "증강 데이터는 레이블이 자동으로 생성되므로 레이블 규칙을 바꿔야 한다",
+        "증강은 데이터 크기를 줄이므로 과적합이 심해진다",
+        "증강 데이터는 원본과 통계 속성이 달라야 유효하다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 합성 증강이 원본과 같은 편향을 가진 새 데이터를 만들기 때문에 증강 전에 원본의 편향을 먼저 해소하라고 안내하며, 증강에는 편향 왜곡을 줄이기 위한 감독이 필요하다고 적습니다.",
+      "wrongExplanations": {
+        "1": "증강 표본에도 원본과 같은 레이블 규칙을 유지해야 합니다.",
+        "2": "증강은 데이터를 늘려 과적합을 완화하는 쪽으로 서술됩니다.",
+        "3": "합성 데이터 품질 검증 항목은 오히려 분포·상관 같은 통계 속성의 보존을 확인하라고 합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Data Augmentation? (AWS)",
+          "url": "https://aws.amazon.com/what-is/data-augmentation/"
+        },
+        {
+          "title": "RAIDP02-BP04 합성·증강 데이터 품질 검증 (Responsible AI Lens)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp04.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q8",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "편향 소스 식별·완화(SK2)",
+      "section": "bias-sources",
+      "difficulty": "applied",
+      "stem": "과거 심사 기록으로 학습 데이터를 만들었는데, 심사자들의 주관이 레이블에 반영돼 특정 그룹의 긍정 레이블 비율이 낮다. 이 편향 소스와 측정 지표를 가장 잘 짝지은 것은 무엇인가?",
+      "options": [
+        "선택 편향 — CI",
+        "레이블 편향 — DPL",
+        "알고리즘 편향 — DPPL",
+        "측정 편향 — KS"
+      ],
+      "correct": 1,
+      "explanation": "주석자·심사자가 무의식적으로 편향을 주입하는 것이 레이블 편향이며, facet 간 긍정 레이블 비율의 차이는 DPL로 측정합니다. 공식 문서는 높은 DPL이 역사적 편견을 반영한 신호일 수 있다고 설명합니다.",
+      "wrongExplanations": {
+        "0": "선택 편향은 수집한 데이터셋이 모집단을 대표하지 못하는 문제이고, CI는 그룹 표현(구성원 수)을 봅니다. 이 사례의 문제는 레이블 쪽입니다.",
+        "2": "알고리즘 편향은 모델 구조·설정의 문제로 데이터 준비 단계의 사전 훈련 지표로 다루지 않습니다.",
+        "3": "측정 편향은 수집 과정의 오류이며 KS는 레이블 분포의 최대 발산을 찾는 지표입니다."
+      },
+      "sources": [
+        {
+          "title": "Difference in Proportions of Labels (DPL) — SageMaker Clarify",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html"
+        },
+        {
+          "title": "MLREL03-BP04 데이터 편향 탐지·완화 (Machine Learning Lens)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q9",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "데이터세트 분할·셔플·층화(SK3)",
+      "section": "split",
+      "difficulty": "applied",
+      "stem": "고객별로 여러 건의 거래 행이 있는 데이터셋을 훈련·테스트로 나누려 한다. 같은 고객의 데이터가 두 분할에 모두 들어가 평가가 낙관적으로 나오는 것을 막으려면 어떤 분할을 쓰는가?",
+      "options": [
+        "Randomized split",
+        "Ordered split",
+        "Stratified split",
+        "Split by key"
+      ],
+      "correct": 3,
+      "explanation": "Split by key는 지정한 키(예: customer_id)가 둘 이상의 분할에 나타나지 않도록 나눕니다. 같은 개체의 데이터가 훈련과 테스트에 섞이는 것을 막는 분할 방식입니다.",
+      "wrongExplanations": {
+        "0": "무작위 분할은 같은 고객의 행이 양쪽에 흩어질 수 있습니다.",
+        "1": "순서 기반 분할도 같은 고객이 경계 양쪽에 걸칠 수 있습니다.",
+        "2": "층화 분할은 입력 열 값의 비율을 분할 간에 유지하는 것이지 키 중복을 막지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (Data Wrangler) — Split data 옵션",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q10",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "데이터세트 분할·셔플·층화(SK3)",
+      "section": "split",
+      "difficulty": "foundational",
+      "stem": "Data Wrangler의 Stratified split을 쓰려는데 기준 열의 고유값이 매우 많다. 확인해야 할 제약은 무엇인가?",
+      "options": [
+        "기준 열의 고유값이 100개 이하여야 한다",
+        "기준 열이 범주형이면 층화 분할을 쓸 수 없다",
+        "분할 비율은 비율이 아니라 행 수로 지정해야 한다",
+        "층화 분할에는 랜덤 시드를 지정할 수 없어 재현이 안 된다"
+      ],
+      "correct": 0,
+      "explanation": "층화 분할은 입력 열의 각 값이 각 분할에 비례해 들어가도록 나누며, 입력 열의 고유값이 100개 이하여야 한다는 제약이 있습니다.",
+      "wrongExplanations": {
+        "1": "층화 분할은 오히려 범주 값의 비율을 분할 간에 유지하는 기능입니다. 기준 열의 값 종류가 너무 많은 것이 제약입니다.",
+        "2": "분할은 비율로 지정하며 그 합이 1이어야 합니다.",
+        "3": "랜덤 시드를 지정할 수 있고, 같은 시드를 쓰면 같은 분할이 재현됩니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (Data Wrangler) — Stratified split 제약",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q11",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "저장 시·전송 중 암호화(K3)",
+      "section": "encryption",
+      "difficulty": "applied",
+      "stem": "SageMaker 학습 작업의 출력 모델 아티팩트를 다른 계정의 S3 버킷에 저장해야 한다. 암호화 구성으로 가장 적절한 것은 무엇인가?",
+      "options": [
+        "AWS managed key(aws/s3)를 OutputDataConfig에 지정한다",
+        "고객 관리형 KMS 키를 만들어 작업 요청에 지정하고 실행 역할에 권한을 준다",
+        "SSE-C로 요청마다 키를 전달한다",
+        "암호화를 끄고 버킷 정책으로만 접근을 제한한다"
+      ],
+      "correct": 1,
+      "explanation": "AWS managed key(aws/s3)는 키 정책을 편집할 수 없어 교차 계정 권한을 부여할 수 없습니다. 그래서 자체 고객 관리형 KMS 키를 만들어 작업 요청에 지정하고, 실행 역할이 그 키로 암호화할 수 있게 해야 합니다.",
+      "wrongExplanations": {
+        "0": "AWS managed key로 암호화한 객체는 교차 계정으로 공유할 수 없습니다.",
+        "2": "SSE-C는 요청마다 키를 보내야 해서 다른 역할·서비스와 공유하기 비실용적이며, 신규 범용 버킷에서는 기본 차단되는 방향으로 바뀌었습니다.",
+        "3": "암호화를 끄는 것은 요구를 충족하지 못하고, 교차 계정 접근 문제의 해법도 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Notebook instances, SageMaker AI jobs, and Endpoints 암호화 — 교차 계정 출력",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html"
+        },
+        {
+          "title": "Using server-side encryption with AWS KMS keys (SSE-KMS)",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q12",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "저장 시·전송 중 암호화(K3)",
+      "section": "encryption",
+      "difficulty": "applied",
+      "stem": "규정상 분산 학습에서 노드 간 통신을 암호화해야 한다. SageMaker에서 어떻게 설정하고 무엇을 함께 확인해야 하는가?",
+      "options": [
+        "EnableInterContainerTrafficEncryption을 true로 두고 보안 그룹에 UDP 500·ESP 50 규칙을 둔다",
+        "ResourceConfig.VolumeKmsKeyId를 지정하면 볼륨과 노드 간 통신이 함께 암호화된다",
+        "OutputDataConfig.KmsKeyId를 지정해 출력과 통신을 같은 키로 암호화한다",
+        "VPC 엔드포인트를 만들면 인스턴스 사이 통신이 자동으로 암호화된다"
+      ],
+      "correct": 0,
+      "explanation": "노드 간(컨테이너 간) 트래픽 암호화는 EnableInterContainerTrafficEncryption=True로 켜며, 사전 조건으로 보안 그룹에 자기 자신을 소스로 하는 UDP 500과 ESP 50 인·아웃바운드 규칙이 필요합니다.",
+      "wrongExplanations": {
+        "1": "VolumeKmsKeyId는 ML 스토리지 볼륨 암호화용입니다.",
+        "2": "OutputDataConfig.KmsKeyId는 S3로 나가는 출력(모델 아티팩트) 암호화용입니다.",
+        "3": "VPC 엔드포인트는 네트워크 경로 구성이며 노드 간 통신 암호화를 켜지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Protect Communications Between ML Compute Instances in a Distributed Training Job",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q13",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "민감 데이터 탐지·분류 서비스(K4)",
+      "section": "sensitive-data",
+      "difficulty": "applied",
+      "stem": "S3 버킷에 쌓인 객체 중 어디에 민감 데이터가 있는지 지속적으로 파악하려 한다. 가장 적절한 서비스는 무엇인가?",
+      "options": [
+        "Amazon Comprehend의 PII 탐지",
+        "Amazon Macie",
+        "AWS Glue DataBrew 레시피",
+        "Amazon Comprehend Medical의 DetectPHI"
+      ],
+      "correct": 1,
+      "explanation": "Macie는 S3 객체를 대상으로 머신러닝과 패턴 매칭(managed data identifiers)으로 민감 데이터를 탐지해 sensitive data finding을 만듭니다. 버킷 인벤토리를 지속 평가하는 자동 민감 데이터 검색과 대상을 지정한 검색 작업 두 방식이 있습니다.",
+      "wrongExplanations": {
+        "0": "Comprehend의 PII 기능은 영어·스페인어 텍스트 문서를 대상으로 합니다. S3 객체 전반의 민감 데이터 인벤토리 용도가 아닙니다.",
+        "2": "DataBrew는 표 형식 데이터를 시각적으로 준비하면서 PII를 탐지·마스킹하는 도구입니다.",
+        "3": "Comprehend Medical은 임상 텍스트의 PHI를 탐지합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Macie?",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+        },
+        {
+          "title": "Using managed data identifiers (Amazon Macie)",
+          "url": "https://docs.aws.amazon.com/macie/latest/user/managed-data-identifiers.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q14",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "민감 데이터 익명화·마스킹(K4)",
+      "section": "sensitive-data",
+      "difficulty": "applied",
+      "stem": "고객 지원 텍스트에서 PII를 가린 사본을 만들어 학습에 쓰려 한다. Amazon Comprehend로 편집(redaction)할 때의 제약은 무엇인가?",
+      "options": [
+        "편집은 비동기 배치 작업에서만 가능하다",
+        "편집은 실시간 분석에서만 가능하고 배치 작업은 탐지까지다",
+        "편집은 엔터티 타입 치환만 지원하고 마스크 문자는 쓸 수 없다",
+        "편집 결과를 받으려면 입력·출력 버킷이 서로 다른 리전이어야 한다"
+      ],
+      "correct": 0,
+      "explanation": "Comprehend의 PII 편집(redaction)은 비동기 배치 작업으로만 수행할 수 있습니다(StartPiiEntitiesDetectionJob에 Mode=ONLY_REDACTION과 RedactionConfig 지정). 실시간 분석은 엔터티 위치 파악까지입니다.",
+      "wrongExplanations": {
+        "1": "반대입니다. 실시간 분석은 탐지(위치 파악)까지이고, 편집은 비동기 배치 작업의 기능입니다.",
+        "2": "MaskMode로 엔터티 타입 치환(예: [NAME])과 마스크 문자 중 하나를 고를 수 있습니다.",
+        "3": "입력·출력 버킷은 호출하는 API와 같은 리전에 있어야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Personally identifiable information (PII) — Amazon Comprehend",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/pii.html"
+        },
+        {
+          "title": "Redacting PII entities with asynchronous jobs (API)",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/redact-api-pii.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q15",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "민감 데이터 익명화·마스킹(K4)",
+      "section": "sensitive-data",
+      "difficulty": "applied",
+      "stem": "ETL 중인 표 형식 데이터에서 PII 열을 탐지해 같은 값이 항상 같은 결과가 되도록 단방향으로 변환하고 싶다. AWS Glue의 민감 데이터 탐지에서 고를 동작은 무엇인가?",
+      "options": [
+        "Redact detected text(탐지한 텍스트를 가림)",
+        "Partially redact(일부 문자만 남기고 가림)",
+        "Apply cryptographic hash(SHA-256)",
+        "Enrich(탐지 결과를 새 열로 추가)"
+      ],
+      "correct": 2,
+      "explanation": "Glue의 민감 데이터 처리 동작 중 암호화 해시(SHA-256)는 같은 입력에 항상 같은 해시를 만드는 단방향 변환입니다. actionUsed 값으로는 SHA256_HASH로 표시됩니다.",
+      "wrongExplanations": {
+        "0": "Redact는 탐지한 텍스트를 가리는 편집 동작이라 같은 값의 일관된 식별자가 남지 않습니다.",
+        "1": "부분 편집도 값을 가리는 방식입니다.",
+        "3": "Enrich는 탐지 결과를 새 열로 추가할 뿐 원래 값을 변환하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Detect and process sensitive data (AWS Glue)",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/detect-PII.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q16",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "접근 통제와 규정 준수(K4, K5)",
+      "section": "access-residency",
+      "difficulty": "applied",
+      "stem": "데이터 레이크에서 분석가 그룹이 특정 열은 보지 못하고 특정 행만 조회하도록 제한하려 한다. Lake Formation에서 무엇을 사용하는가?",
+      "options": [
+        "데이터 필터(열 사양 + 행 필터 표현식)",
+        "IAM 태그를 테이블에 부착",
+        "DataBrew의 마스킹 레시피 단계",
+        "KMS 키 정책의 조건 키"
+      ],
+      "correct": 0,
+      "explanation": "Lake Formation의 데이터 필터는 열 사양(포함·제외할 열)과 행 필터 표현식으로 구성되며, 둘을 함께 쓰면 셀 수준 보안이 됩니다. 테이블에 SELECT 권한을 줄 때 필터를 선택합니다.",
+      "wrongExplanations": {
+        "1": "IAM 태그와 LF-Tags는 다르고 서로 바꿔 쓸 수 없습니다. LF-TBAC는 태그 값으로 권한을 주는 방식이며 행·열 제한 자체는 데이터 필터가 담당합니다.",
+        "2": "DataBrew 마스킹은 값을 변환해 새 데이터를 만드는 준비 단계입니다. 조회 시 노출 제한과는 다릅니다.",
+        "3": "KMS 키 정책은 암호화 키 사용 권한을 다루며 행·열 수준 조회 제한과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "Data filtering and cell-level security in Lake Formation",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html"
+        },
+        {
+          "title": "Lake Formation tag-based access control",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q17",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "데이터 품질 검증(SK1)",
+      "section": "data-quality",
+      "difficulty": "applied",
+      "stem": "ETL 파이프라인에 품질 게이트를 넣어 규칙을 코드로 관리하고, 규칙을 어긴 불량 레코드를 행 단위로 식별하려 한다. 어떤 선택이 적절한가?",
+      "options": [
+        "AWS Glue Data Quality를 ETL 작업에서 실행한다",
+        "AWS Glue Data Quality를 Data Catalog에서 실행한다",
+        "DataBrew 프로파일 작업에 ruleset을 연결한다",
+        "Data Wrangler의 Data Quality and Insights Report를 실행한다"
+      ],
+      "correct": 0,
+      "explanation": "Glue Data Quality는 규칙을 DQDL로 작성하며 Data Catalog와 ETL 작업 두 곳에서 실행할 수 있는데, 불량 레코드 식별은 ETL 작업에서만 가능합니다. 동적 규칙(last())도 ETL 전용입니다.",
+      "wrongExplanations": {
+        "1": "Data Catalog 실행에서는 불량 레코드를 식별할 수 없습니다.",
+        "2": "DataBrew는 ruleset 기준 충족 여부로 전체 통과·실패를 판정하며 행 격리 기능은 문서에 서술돼 있지 않습니다.",
+        "3": "Data Wrangler의 품질 보고서는 모델링 전 탐색용 분석이며 파이프라인 게이트와 행 격리를 제공하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue Data Quality — 실행 위치와 기능 차이",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html"
+        },
+        {
+          "title": "Data Quality Definition Language (DQDL) reference",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/dqdl.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q18",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "모델 훈련 리소스로 데이터 로드(SK4)",
+      "section": "training-load",
+      "difficulty": "applied",
+      "stem": "훈련 데이터를 FSx for Lustre 파일 시스템에서 읽도록 입력 채널을 구성했는데 작업이 파일 시스템에 접근하지 못한다. 확인해야 할 요건으로 옳은 것은 무엇인가?",
+      "options": [
+        "훈련 작업의 VPC 연결, 서브넷 AZ, 보안 그룹 포트(988·1018–1023)가 맞는지",
+        "파일 시스템이 훈련 작업과 다른 리전에 있고 S3 연결이 꺼져 있는지",
+        "보안 그룹이 NFS TCP 2049만 허용하고 마운트 대상이 있는지",
+        "DirectoryPath가 MountName으로 시작하지 않고 비어 있는지"
+      ],
+      "correct": 0,
+      "explanation": "FSx for Lustre를 학습 입력으로 쓰려면 훈련 작업이 VPC에 연결돼야 하고, 파일 시스템이 단일 AZ이므로 같은 AZ의 서브넷을 지정해야 하며, 보안 그룹은 Lustre가 쓰는 TCP 988과 1018–1023을 허용해야 합니다.",
+      "wrongExplanations": {
+        "1": "데이터셋과 파일 시스템은 훈련 작업과 같은 리전이어야 합니다.",
+        "2": "NFS TCP 2049는 EFS의 요건입니다.",
+        "3": "FileSystemDataSource는 FileSystemId·FileSystemType·DirectoryPath·FileSystemAccessMode 네 필드가 모두 필수이며, FSx의 경로는 MountName으로 시작해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Configure data input channel to use Amazon FSx for Lustre",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-fsx.html"
+        },
+        {
+          "title": "File system access control with Amazon VPC (FSx for Lustre)",
+          "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/limit-access-security-groups.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q19",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "모델 훈련 리소스로 데이터 로드(SK4)",
+      "section": "training-load",
+      "difficulty": "applied",
+      "stem": "S3에 객체가 8개뿐인 데이터셋으로 인스턴스 16대를 써서 분산 학습을 돌리며 ShardedByS3Key를 지정했다. 어떤 일이 일어나는가?",
+      "options": [
+        "SageMaker가 객체를 자동으로 분할해 16대에 고르게 나눈다",
+        "일부 노드는 데이터를 받지 못한 채 비용만 발생한다",
+        "작업이 시작되지 않고 검증 오류가 난다",
+        "모든 노드가 전체 데이터를 복제해 받는다"
+      ],
+      "correct": 1,
+      "explanation": "ShardedByS3Key는 S3 객체를 인스턴스에 나눠 주는 방식이라 객체 수보다 인스턴스가 많으면 일부 노드는 데이터를 받지 못하고 비용만 발생합니다.",
+      "wrongExplanations": {
+        "0": "객체 내부를 쪼개 주지는 않습니다. 분배 단위는 S3 객체입니다.",
+        "2": "검증 오류로 막아 주지 않습니다. 그래서 더 위험합니다.",
+        "3": "전체 복제는 FullyReplicated를 지정했을 때의 동작입니다."
+      },
+      "sources": [
+        {
+          "title": "S3DataSource (SageMaker API Reference) — S3DataDistributionType",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q20",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "규정 준수·데이터 레지던시(K5)",
+      "section": "access-residency",
+      "difficulty": "applied",
+      "stem": "규정상 학습 데이터와 작업이 지정한 리전 밖으로 나가면 안 된다. IAM 정책으로 리전을 제한할 때 함께 처리해야 하는 것은 무엇인가?",
+      "options": [
+        "aws:RequestedRegion으로 Deny하되 글로벌 서비스는 NotAction으로 제외한다",
+        "aws:RequestedRegion으로 모든 서비스를 예외 없이 Deny한다",
+        "KMS 키 정책에 리전 조건을 넣어 데이터 이동을 막는다",
+        "S3 버킷 정책에서 aws:SecureTransport를 false로 Deny한다"
+      ],
+      "correct": 0,
+      "explanation": "aws:RequestedRegion 조건 키로 지정한 리전 밖의 작업을 Deny하는 것이 기본 구현이지만, IAM·CloudFront·Route 53·Support처럼 us-east-1 단일 엔드포인트를 쓰는 글로벌 서비스는 NotAction으로 제외해야 정상 요청까지 막히지 않습니다.",
+      "wrongExplanations": {
+        "1": "예외 없이 막으면 글로벌 서비스 호출이 함께 차단돼 계정 운영이 깨집니다.",
+        "2": "KMS 키 정책은 키 사용 권한을 다룹니다. 키는 버킷과 같은 리전이어야 하지만, 리전 밖 '작업'을 막는 수단은 아닙니다.",
+        "3": "aws:SecureTransport는 전송 중 암호화(HTTPS) 강제 조건이며 리전 제한과 무관합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS: Denies access to AWS based on the requested Region (IAM)",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-requested-region.html"
+        },
+        {
+          "title": "Deny access to AWS based on the requested AWS Region (Control Tower)",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q21",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "민감 데이터 탐지·분류(K4, K5)",
+      "section": "sensitive-data",
+      "difficulty": "foundational",
+      "stem": "영어로 작성된 임상 노트에서 보호 대상 건강 정보(PHI)를 찾아내려 한다. 가장 적절한 서비스와 주의 사항은 무엇인가?",
+      "options": [
+        "Amazon Macie로 S3 객체를 스캔하고 결과를 그대로 신뢰한다",
+        "Amazon Comprehend Medical의 DetectPHI를 쓰고 사람 검토를 병행한다",
+        "Amazon Comprehend의 PII 탐지를 쓰고 신뢰도는 보지 않는다",
+        "AWS Glue DataBrew 프로파일 작업으로 PHI 엔터티를 탐지한다"
+      ],
+      "correct": 1,
+      "explanation": "Comprehend Medical의 DetectPHI는 임상 텍스트에서 PHI 엔터티만 탐지합니다. 엔터티마다 신뢰 점수를 주며, 공식 문서는 규정 준수 용도라면 추가로 사람 검토를 권고합니다.",
+      "wrongExplanations": {
+        "0": "Macie는 S3 객체의 민감 데이터를 탐지·보고하는 서비스로 임상 텍스트의 PHI 엔터티 추출이 목적이 아니며, 어떤 탐지 결과든 그대로 신뢰하라는 안내는 없습니다.",
+        "2": "Comprehend의 PII 기능은 일반 PII를 다루고 PHI 전용 엔터티 집합이 아닙니다. 신뢰 점수는 임계값 설정의 근거라 무시하면 안 됩니다.",
+        "3": "DataBrew의 PII 탐지는 표 형식 데이터의 열을 대상으로 하며 임상 텍스트의 PHI 추출용이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Detect PHI (Amazon Comprehend Medical)",
+          "url": "https://docs.aws.amazon.com/comprehend-medical/latest/dev/textanalysis-phi.html"
+        },
+        {
+          "title": "Personally identifiable information (PII) — Amazon Comprehend",
+          "url": "https://docs.aws.amazon.com/comprehend/latest/dg/pii.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q22",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "클래스 불균형 완화·증강(K2)",
+      "section": "augmentation",
+      "difficulty": "applied",
+      "stem": "이미지 분류 데이터셋에서 한 클래스의 표본이 다른 클래스의 10분의 1이다. 추가 촬영 없이 표본을 늘리려 할 때 적절한 접근과 주의점은 무엇인가?",
+      "options": [
+        "SMOTE로 이미지 픽셀을 보간해 합성 이미지를 만든다",
+        "자르기·뒤집기·회전·밝기 같은 증강을 적용하되 원본의 편향을 먼저 확인한다",
+        "소수 클래스 이미지를 그대로 복제하고 레이블 규칙을 완화한다",
+        "다수 클래스 이미지를 절반 삭제해 비율만 맞춘다"
+      ],
+      "correct": 1,
+      "explanation": "컴퓨터 비전 증강은 위치 변환(자르기·뒤집기·회전)과 색 변환(밝기·대비·채도)으로 새 표본을 만듭니다. 다만 증강은 원본과 같은 편향을 가진 데이터를 만들기 때문에, 증강 전에 원본의 편향을 먼저 해소하라고 공식 문서가 안내합니다.",
+      "wrongExplanations": {
+        "0": "SMOTE는 표 형식 특성 사이를 보간하는 기법으로, 이웃 계산도 숫자 특징으로 합니다. 이미지 픽셀 보간용 기법이 아닙니다.",
+        "2": "복제는 가능한 선택이지만 레이블 규칙을 완화하면 안 됩니다. 증강 표본에도 원본과 같은 레이블 규칙을 유지해야 합니다.",
+        "3": "다수 클래스를 줄이는 언더샘플링은 비율은 맞추지만 학습 데이터 자체를 잃습니다. 표본을 '늘리려는' 요구와 반대입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Data Augmentation? (AWS) — CV 증강과 편향 승계",
+          "url": "https://aws.amazon.com/what-is/data-augmentation/"
+        },
+        {
+          "title": "Transform Data (Data Wrangler) — Balance data·이미지 변환",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q23",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "접근 통제(K4)",
+      "section": "access-residency",
+      "difficulty": "foundational",
+      "stem": "Lake Formation에서 LF-Tags를 쓰려고 한다. IAM 태그와의 관계로 옳은 것은 무엇인가?",
+      "options": [
+        "LF-Tags와 IAM 태그는 서로 다르며 바꿔 쓸 수 없다",
+        "LF-Tags는 IAM 태그의 별칭이라 같은 값을 공유한다",
+        "LF-Tags를 붙이면 IAM 정책의 태그 조건이 자동으로 적용된다",
+        "LF-Tags는 테이블에만 붙일 수 있고 상속되지 않는다"
+      ],
+      "correct": 0,
+      "explanation": "LF-Tags는 Lake Formation 권한을 위한 속성이고 IAM 태그는 IAM 정책용이라 서로 다르며 바꿔 쓸 수 없습니다. LF-Tags는 계층적이어서 데이터베이스에 붙이면 그 안의 테이블이, 테이블에 붙이면 열이 상속하고 필요하면 재정의할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "이름만 비슷할 뿐 저장 위치와 평가 주체가 다릅니다.",
+        "2": "LF-Tags는 Lake Formation 권한 평가에 쓰이며 IAM 정책의 태그 조건과 연동되지 않습니다.",
+        "3": "데이터베이스·테이블·열 수준에 붙일 수 있고 하위 리소스가 상속합니다."
+      },
+      "sources": [
+        {
+          "title": "Lake Formation tag-based access control",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-3-q24",
+      "examGuideTaskId": "mla-t1-3",
+      "skill": "편향 소스 식별(SK2)",
+      "section": "bias-sources",
+      "difficulty": "foundational",
+      "stem": "데이터를 모을 때 무작위 샘플링을 쓰지 않고 접근하기 쉬운 일부 지점의 기록만 모았다. 그 결과 데이터셋이 전체 모집단을 직접 대표하지 못한다. AWS 문서가 설명하는 편향 소스 분류로 가장 가까운 것은 무엇인가?",
+      "options": [
+        "알고리즘 편향",
+        "회상 편향",
+        "선택 편향",
+        "레이블 편향"
+      ],
+      "correct": 2,
+      "explanation": "선택 편향은 수집한 데이터셋이 모집단을 직접 대표하지 못하는 경우로, 무작위 샘플링을 쓰지 않거나 다양한 데이터 포인트를 빠뜨릴 때 생깁니다. 그룹 표현이 현실을 반영하는지는 CI 지표로 점검합니다.",
+      "wrongExplanations": {
+        "0": "알고리즘 편향은 모델 구조·설정에서 비롯되며 데이터 준비 단계의 문제가 아닙니다.",
+        "1": "회상 편향은 학습 중 특정 클래스에 쏠린 표현 때문에 한 클래스만 잘 식별되는 문제를 가리킵니다.",
+        "3": "레이블 편향은 주석자가 무의식적으로 편향을 주입하는 경우로, 레이블 분포 차이(DPL)로 드러납니다."
+      },
+      "sources": [
+        {
+          "title": "MLREL03-BP04 데이터 편향 탐지·완화 (Machine Learning Lens)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html"
+        },
+        {
+          "title": "Class Imbalance (CI) — 그룹 표현 점검",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

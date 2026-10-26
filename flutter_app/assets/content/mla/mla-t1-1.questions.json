@@ -1,0 +1,701 @@
+{
+  "examGuideTaskId": "mla-t1-1",
+  "taskTitle": "데이터를 수집 및 저장",
+  "domain": 1,
+  "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
+  "questions": [
+    {
+      "id": "mla-t1-1-q1",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "데이터 액세스 패턴에 따라 적절한 데이터 형식 선택(SK2)",
+      "section": "formats",
+      "difficulty": "applied",
+      "stem": "한 팀이 S3 데이터 레이크를 Athena로 조회한다. 테이블에는 array와 struct 같은 복합 타입 열이 있고, 분석 쿼리는 그 복합 타입 열을 자주 읽는다. 현재는 모든 파일이 Parquet인데 해당 쿼리의 스캔량이 유독 크다. 가장 적절한 조치는 무엇인가?",
+      "options": [
+        "해당 테이블의 파일을 ORC로 변환한다",
+        "Parquet row group 크기를 기본값보다 작게 줄인다",
+        "파일을 gzip으로 압축해 다시 저장한다",
+        "복합 타입 열을 JSON 텍스트로 풀어 CSV로 저장한다"
+      ],
+      "correct": 0,
+      "explanation": "Athena 공식 문서는 Parquet에 저장된 복합 타입(array·map·struct) 열을 조회하면 지정한 열만 선택적으로 읽는 대신 행 전체를 읽는다고 설명하며, 이를 알려진 문제로 적고 대안으로 ORC를 제시합니다. 열 기반을 유지하면서 복합 타입 조회 비용을 줄이는 선택지는 ORC입니다.",
+      "wrongExplanations": {
+        "1": "블록 크기를 기본값(Parquet row group 128 MB)보다 줄이는 것은 공식 문서가 권장하지 않습니다. 열이 많으면 오히려 키우는 쪽이 성능에 유리하고, 복합 타입 열의 읽기 범위 문제와도 무관합니다.",
+        "2": "압축은 스캔 바이트를 줄이는 일반적인 수단이지만, 이 문제의 원인은 복합 타입 열을 읽을 때 행 전체를 읽는 Parquet의 한계입니다. 압축만으로는 그 읽기 범위가 바뀌지 않습니다.",
+        "3": "CSV는 행 기반 텍스트라 열 단위 선택이 불가능합니다. 열 기반의 이점을 모두 버리는 선택이라 스캔량이 더 늘어납니다."
+      },
+      "sources": [
+        {
+          "title": "Optimize your tables (Amazon Athena) — Parquet 복합 타입 열 조회 시 행 전체를 읽는 한계",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-s3-throttling-optimizing-your-tables.html"
+        },
+        {
+          "title": "Use columnar storage formats (Amazon Athena) — ORC·Parquet 비교",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/columnar-storage.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q2",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "데이터 액세스 패턴에 따라 적절한 데이터 형식 선택(SK2)",
+      "section": "formats",
+      "difficulty": "foundational",
+      "stem": "수집 단계에서 레코드가 끊임없이 쓰이고, 쌓인 데이터는 나중에 분석 쿼리로 읽는다. 수집 단계 파일 형식과 이후 처리에 대한 설명으로 가장 적절한 것은 무엇인가?",
+      "options": [
+        "수집·분석 모두 Parquet으로 통일하고 수집 단계에서 작은 파일로 자주 기록한다",
+        "수집 단계는 행 기반(Avro)이 유리하고, 분석용으로는 Parquet·ORC로 변환한다",
+        "수집 단계는 ORC로 받고 분석 단계에서 Avro로 변환해 쿼리한다",
+        "압축한 CSV는 열 기반 형식과 동등한 병렬 읽기 성능을 낸다"
+      ],
+      "correct": 1,
+      "explanation": "공식 백서는 행 기반(Avro)이 읽기보다 쓰기가 잦을 때 유리하고 Parquet·ORC는 읽기 중심이라고 정리합니다. 그래서 수집은 행 기반으로 받고 분석용으로 열 기반으로 변환하는 흐름이 자연스럽습니다.",
+      "wrongExplanations": {
+        "0": "열 기반은 읽기 중심에 유리하고, 파일이 작을수록 열 기반 오버헤드가 이점을 넘습니다. 수집 단계에서 작은 파일을 자주 쓰는 패턴과는 특히 맞지 않습니다.",
+        "2": "ORC는 열 기반이라 쓰기가 잦은 수집 단계용이 아니고, Avro는 행 기반이라 분석 쿼리의 열 선택 이점을 주지 못합니다. 역할이 뒤바뀐 선택입니다.",
+        "3": "압축된 텍스트는 대부분 파일을 처음부터 읽어야 해 병렬 처리가 제한됩니다. Parquet·ORC는 내부 블록 단위로 나눠 읽을 수 있어 동등하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Cost optimization in analytics services (AWS 백서) — 행 기반은 쓰기가 잦을 때, 열 기반은 읽기 중심",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html"
+        },
+        {
+          "title": "Optimize data (Amazon Athena) — 압축 텍스트의 병렬 처리 제약",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q3",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "데이터 형식 및 수집 메커니즘 이해(K1)",
+      "section": "training-input",
+      "difficulty": "applied",
+      "stem": "데이터 레이크에 Parquet으로 저장된 표형 데이터를 SageMaker 내장 Linear Learner로 학습하려 한다. 학습 잡을 만들 때 가장 먼저 해야 할 일은 무엇인가?",
+      "options": [
+        "Parquet 파일 경로를 그대로 입력 채널에 지정한다",
+        "학습 인스턴스의 EBS 볼륨을 데이터 크기 이상으로 키운다",
+        "데이터를 recordIO-protobuf 또는 CSV로 변환한다",
+        "입력 모드를 Pipe로 바꾸면 Parquet도 읽을 수 있다"
+      ],
+      "correct": 2,
+      "explanation": "Linear Learner가 학습 입력으로 지원하는 형식은 recordIO-wrapped protobuf와 CSV입니다. 분석에 좋은 Parquet이라도 알고리즘이 받는 content type이 아니면 입력이 되지 않으므로 형식 변환이 먼저입니다.",
+      "wrongExplanations": {
+        "0": "Linear Learner의 지원 형식 목록에 Parquet은 없습니다. 경로만 지정해서는 알고리즘 컨테이너가 역직렬화할 수 없습니다.",
+        "1": "디스크 용량은 File 모드의 다운로드 제약과 관련된 사안이고, 입력 형식이 맞지 않는 문제는 볼륨을 키워도 해결되지 않습니다.",
+        "3": "입력 모드는 데이터를 '어떻게 전달하는가'이고 content type은 '어떤 형식으로 읽는가'입니다. Pipe로 바꾼다고 알고리즘이 지원하지 않는 형식을 받게 되지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Linear Learner Algorithm (SageMaker AI) — recordIO-protobuf·CSV 지원",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html"
+        },
+        {
+          "title": "Common Data Formats for Training (SageMaker AI) — content type과 알고리즘 매핑",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q4",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "데이터 형식 및 수집 메커니즘 이해(K1)",
+      "section": "training-input",
+      "difficulty": "foundational",
+      "stem": "SageMaker 내장 알고리즘에 CSV로 학습 데이터를 넘기려고 한다. 파일 구성에 대한 설명으로 옳은 것은 무엇인가?",
+      "options": [
+        "헤더 레코드가 없어야 하고 타깃(레이블) 변수가 첫 번째 열이어야 한다",
+        "헤더 레코드가 있어야 열 이름으로 타깃을 찾을 수 있다",
+        "타깃 변수를 마지막 열에 두고 헤더로 열 이름을 지정한다",
+        "레이블이 없는 비지도 알고리즘은 CSV 대신 recordIO-protobuf를 써야 한다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 CSV 입력에 헤더 레코드가 없어야 하고 타깃 변수가 첫 번째 열이어야 한다고 명시합니다. XGBoost 문서도 CSV에 헤더가 없어야 하며 첫 열을 레이블로 가정한다고 적습니다.",
+      "wrongExplanations": {
+        "1": "헤더 레코드는 허용되지 않습니다. 알고리즘은 열 이름이 아니라 위치 규칙으로 레이블을 찾습니다.",
+        "2": "레이블은 첫 번째 열이어야 하고 헤더 레코드는 허용되지 않습니다. 마지막 열에 두면 레이블이 특성으로 해석됩니다.",
+        "3": "비지도 알고리즘도 CSV를 쓸 수 있습니다. 레이블 열이 없다는 것을 content type에 적으면 됩니다(예: content_type=text/csv;label_size=0)."
+      },
+      "sources": [
+        {
+          "title": "Common Data Formats for Training (SageMaker AI) — CSV 헤더 없음·레이블 첫 열·label_size",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html"
+        },
+        {
+          "title": "How to use SageMaker AI XGBoost — CSV 입력 규칙",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-how-to-use.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q5",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "핵심 AWS 데이터 소스 사용 방법(K2)",
+      "section": "input-modes",
+      "difficulty": "applied",
+      "stem": "학습 데이터가 S3에 있고 크기는 크지 않지만 작은 이미지 파일이 수백만 개다. File 모드로 돌렸더니 학습이 시작되기까지 시간이 지나치게 오래 걸린다. 공식 선택 가이드가 먼저 제시하는 방향은 무엇인가?",
+      "options": [
+        "학습 인스턴스 수를 늘려 다운로드를 분산한다",
+        "파일을 TFRecord·WebDataset·RecordIO 같은 큰 컨테이너로 직렬화한다",
+        "데이터를 Glacier Instant Retrieval로 옮겨 비용을 줄인다",
+        "입력 모드를 그대로 두고 EBS 볼륨만 키운다"
+      ],
+      "correct": 1,
+      "explanation": "공식 선택 흐름은 데이터가 작지만 작은 파일이 많으면 TFRecord·WebDataset·RecordIO 같은 큰 컨테이너로 직렬화하라고 안내합니다. File 모드의 다운로드 시간은 데이터 크기뿐 아니라 파일 평균 크기와 개수에 좌우되기 때문입니다.",
+      "wrongExplanations": {
+        "0": "인스턴스를 늘려도 각 인스턴스가 파일을 내려받는 오버헤드 자체는 남습니다. 분산(ShardedByS3Key)은 데이터 분할이지 작은 파일 오버헤드의 해법이 아닙니다.",
+        "2": "스토리지 클래스 변경은 비용 설계이고 시작 지연과 무관합니다. 아카이브 계열은 오히려 접근 제약이 생깁니다.",
+        "3": "디스크 용량이 아니라 수백만 개 파일을 내려받는 시간이 병목입니다. 볼륨을 키워도 시작 지연은 줄지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Choosing an input mode and a storage unit (SageMaker AI) — 작은 파일은 큰 컨테이너로 직렬화",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q6",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "핵심 AWS 데이터 소스 사용 방법(K2)",
+      "section": "input-modes",
+      "difficulty": "applied",
+      "stem": "학습 데이터셋이 수 TB이고 개별 파일은 수백 MB다. 시작 전 전체 다운로드를 피하고 싶고, VPC·파일 시스템을 새로 구성하지 않으려 한다. 입력 데이터는 augmented manifest로 관리하고 있다. 이 상황에서 FastFile 모드를 쓸 때 반드시 확인해야 할 제약은 무엇인가?",
+      "options": [
+        "FastFile은 학습 잡과 다른 리전의 S3 버킷을 입력 위치로 지정해야 한다",
+        "FastFile은 S3 prefix만 지원하고 manifest·augmented manifest는 지원하지 않는다",
+        "FastFile은 단일 인스턴스 학습 전용이라 분산 학습 잡에는 입력 모드로 지정할 수 없다",
+        "FastFile은 임의 읽기에 최적화돼 있어 순차 읽기 처리량이 떨어진다"
+      ],
+      "correct": 1,
+      "explanation": "FastFile 모드의 데이터 소스는 S3 prefix만 지원하며 manifest·augmented manifest는 지원하지 않습니다. augmented manifest를 계속 쓰려면 File 모드를 쓰거나 입력 구성을 prefix 기반으로 바꿔야 합니다.",
+      "wrongExplanations": {
+        "0": "학습 데이터셋은 학습 잡과 같은 리전에 있어야 합니다. 다른 리전 전용이라는 제약은 없습니다.",
+        "2": "인스턴스 수와 무관한 입력 모드입니다. 분산 학습에서도 사용할 수 있습니다.",
+        "3": "반대입니다. FastFile은 순차 읽기에 최적이고 임의 읽기는 가능하지만 처리량이 떨어집니다."
+      },
+      "sources": [
+        {
+          "title": "Setting up training jobs to access datasets (SageMaker AI) — FastFile은 S3 prefix만 지원",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html"
+        },
+        {
+          "title": "Choosing an input mode and a storage unit (SageMaker AI) — 순차 읽기 최적",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q7",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "핵심 AWS 데이터 소스 사용 방법(K2)",
+      "section": "input-modes",
+      "difficulty": "foundational",
+      "stem": "전처리 결과가 이미 Amazon EFS 파일 시스템에 있고 여러 팀이 그 파일을 공유해 쓰고 있다. 이 데이터를 SageMaker 학습 잡의 입력으로 쓰려고 한다. 가장 적절한 구성은 무엇인가?",
+      "options": [
+        "EFS를 학습 잡의 데이터 소스로 지정하고 학습 잡을 VPC에 연결한다",
+        "EFS 데이터를 FSx for NetApp ONTAP으로 옮겨 학습 채널에 직접 마운트한다",
+        "EFS 데이터를 S3로 복사한 뒤 File 모드로 읽어 VPC 구성을 피한다",
+        "EFS를 Pipe 모드로 지정해 FIFO 파이프로 스트리밍한다"
+      ],
+      "correct": 0,
+      "explanation": "SageMaker 학습이 읽을 수 있는 데이터 소스는 S3·EFS·FSx for Lustre이며, 공식 선택 흐름은 데이터가 이미 EFS에 있으면 EFS를 쓰라고 안내합니다. EFS·FSx를 쓰려면 학습 잡을 VPC에 연결해야 합니다.",
+      "wrongExplanations": {
+        "1": "FSx for NetApp ONTAP은 ML 데이터 소스로 쓸 수 있지만(공식 가이드 K2의 예시) 학습 잡이 직접 마운트하는 소스 목록(S3·EFS·FSx for Lustre)에는 없습니다. ONTAP 볼륨에 S3 access point를 붙여 S3 호환 경로로 읽는 방식이 문서화돼 있으므로, 여기서는 이미 EFS에 있는 데이터를 굳이 옮길 이유가 없습니다.",
+        "2": "EFS는 지원되는 학습 데이터 소스입니다. 이미 EFS에 있는 데이터를 굳이 복사할 이유가 없습니다.",
+        "3": "Pipe는 S3 데이터를 FIFO 파이프로 스트리밍하는 모드입니다. EFS는 마운트해 사용하는 소스로 Pipe 모드의 대상이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Setting up training jobs to access datasets (SageMaker AI) — S3·EFS·FSx for Lustre",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html"
+        },
+        {
+          "title": "Choosing an input mode and a storage unit (SageMaker AI) — 이미 EFS에 있으면 EFS",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q8",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "AWS 스트리밍 데이터 소스를 사용한 수집(K3)",
+      "section": "streaming",
+      "difficulty": "applied",
+      "stem": "애플리케이션이 JSON 이벤트를 쏟아내고 있다. 이 이벤트를 S3에 Parquet으로 적재해 Athena와 학습에 쓰려 하며, 소비자 애플리케이션을 직접 작성·운영하고 싶지 않다. Amazon Data Firehose의 형식 변환을 쓰려면 무엇이 필요한가?",
+      "options": [
+        "Kinesis Data Streams를 소스로 둔 Firehose 스트림만 형식 변환을 지원한다",
+        "역직렬화기, AWS Glue Data Catalog의 스키마, 직렬화기 세 가지를 구성해야 한다",
+        "Lambda 변환 함수를 반드시 함께 구성해야 Parquet으로 변환된다",
+        "S3 버퍼 크기를 1 MB 이하로 낮춰야 변환이 동작한다"
+      ],
+      "correct": 1,
+      "explanation": "Firehose의 형식 변환은 입력 JSON을 읽을 역직렬화기(Hive JSON SerDe·OpenX JSON SerDe), 대상 스키마를 담은 Glue Data Catalog 테이블, 출력용 직렬화기(Parquet·ORC SerDe) 세 가지로 구성합니다.",
+      "wrongExplanations": {
+        "0": "형식 변환은 소스가 Direct PUT이든 Kinesis 데이터 스트림이든 사용할 수 있습니다. 소스 종류가 변환 가능 여부를 가르지 않습니다.",
+        "2": "Lambda 변환은 입력이 JSON이 아닐 때 먼저 JSON으로 바꾸는 용도로 쓰입니다. 입력이 이미 JSON이면 형식 변환만으로 Parquet·ORC로 바꿀 수 있습니다.",
+        "3": "Parquet 변환을 켜면 S3 버퍼 크기 범위가 오히려 64–128 MB로 바뀝니다. 버퍼를 줄이는 것은 변환의 요건이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Convert input data format in Amazon Data Firehose — 역직렬화기·Glue 스키마·직렬화기",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html"
+        },
+        {
+          "title": "What is Amazon Data Firehose? — 코드·서버 없이 전달·변환",
+          "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q9",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "AWS 스트리밍 데이터 소스를 사용한 수집(K3)",
+      "section": "streaming",
+      "difficulty": "applied",
+      "stem": "실시간 이벤트 스트림을 서로 다른 세 팀이 각자 다른 주기로 읽어야 하고, 장애가 나면 며칠 전 데이터부터 다시 처리해야 한다. 어떤 구성이 가장 적절한가?",
+      "options": [
+        "Amazon Data Firehose 스트림 세 개를 만들어 각 팀의 S3 버킷에 적재한다",
+        "Kinesis Data Streams에 보존 기간을 늘려 두고 팀별 소비자가 읽게 한다",
+        "SQS 표준 큐로 이벤트를 받아 팀별로 메시지를 삭제하며 처리한다",
+        "Managed Service for Apache Flink 애플리케이션에서 세 팀의 로직을 모두 수행한다"
+      ],
+      "correct": 1,
+      "explanation": "Kinesis Data Streams는 레코드를 샤드에 저장해 여러 소비자가 각자 읽고, 보존 기간(기본 24시간, 최대 365일) 안에서는 과거 데이터를 재처리할 수 있습니다. 소비자가 많아 읽기 처리량이 부족하면 향상된 팬아웃(EFO)을 씁니다.",
+      "wrongExplanations": {
+        "0": "Firehose는 설정한 대상 하나로 전달하는 파이프이며 장기 보존·재처리를 위한 저장소가 아닙니다. 스트림을 늘려도 과거 데이터 재처리 요건은 충족되지 않습니다.",
+        "2": "표준 큐는 소비자가 메시지를 처리하고 삭제하는 모델이라 같은 메시지를 여러 팀이 독립적으로 재처리하는 데 맞지 않습니다.",
+        "3": "Flink는 스트림 처리 엔진입니다. 세 팀의 독립적인 읽기·재처리 요구를 한 애플리케이션에 몰아넣는 것은 보존·재처리 요건의 해법이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Kinesis Data Streams Terminology and concepts — 샤드 저장·소비자",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html"
+        },
+        {
+          "title": "Change the data retention period (Kinesis Data Streams) — 기본 24시간·최대 365일",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q10",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "AWS 스트리밍 데이터 소스를 사용한 수집(K3)",
+      "section": "streaming",
+      "difficulty": "applied",
+      "stem": "스트림에서 5분 단위 윈도로 사용자별 집계를 계산하고 그 결과를 특성으로 쓰려고 한다. 집계 로직은 상태를 유지해야 하며 SQL 또는 Python으로 작성하고 싶다. 가장 적절한 서비스는 무엇인가?",
+      "options": [
+        "Amazon Data Firehose의 Lambda 변환",
+        "Amazon Managed Service for Apache Flink",
+        "AWS Glue 크롤러",
+        "Amazon Kinesis Data Analytics for SQL 애플리케이션"
+      ],
+      "correct": 1,
+      "explanation": "Managed Service for Apache Flink는 Java·Scala·Python·SQL로 스트리밍 데이터를 처리·분석하는 서비스로, 윈도 집계·조인 같은 상태 있는 계산과 스트리밍 ETL이 본래 용도입니다.",
+      "wrongExplanations": {
+        "0": "Firehose의 Lambda 변환은 레코드 단위 변환이며 호출 시간 5분·페이로드 6 MB 한도가 있습니다. 윈도를 가로지르는 상태 있는 집계를 위한 수단이 아닙니다.",
+        "2": "Glue 크롤러는 데이터 스토어의 스키마를 추론해 Data Catalog에 테이블을 만드는 배치 도구입니다. 스트림 집계와 무관합니다.",
+        "3": "Kinesis Data Analytics for SQL 애플리케이션은 폐지돼 신규 생성이 불가합니다. 후속은 Managed Service for Apache Flink입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Managed Service for Apache Flink? — 스트리밍 ETL·시계열 분석",
+          "url": "https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html"
+        },
+        {
+          "title": "Amazon Kinesis Data Analytics for SQL Applications discontinuation",
+          "url": "https://docs.aws.amazon.com/kinesisanalytics/latest/dev/discontinuation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q11",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "사용 사례와 절충점을 포함한 AWS 스토리지 옵션(K4)",
+      "section": "storage-choice",
+      "difficulty": "applied",
+      "stem": "수집한 원시 데이터의 접근 패턴을 예측할 수 없다. 일부는 매일 읽히고 일부는 몇 달 동안 쓰이지 않는데, 어느 쪽인지 미리 알 수 없다. 운영 부담 없이 비용을 최적화하려면 어떤 S3 스토리지 클래스를 고르고 무엇을 함께 고려해야 하는가?",
+      "options": [
+        "S3 One Zone-IA를 쓰고 복제본을 따로 두지 않는다",
+        "S3 Glacier Flexible Retrieval을 쓰고 필요할 때 복원한다",
+        "S3 Intelligent-Tiering을 쓰되 객체당 모니터링 요금과 128 KB 기준을 고려한다",
+        "S3 Standard-IA를 쓰고 30일마다 수동으로 클래스를 바꾸며 검색 요금을 감수한다"
+      ],
+      "correct": 2,
+      "explanation": "Intelligent-Tiering은 접근 패턴을 모르거나 자주 바뀌는 데이터를 위한 클래스로, 30일 연속 미접근이면 Infrequent Access 티어로 자동 이동합니다. 객체당 모니터링·자동화 요금이 있고 128 KB 미만 객체는 모니터링 대상이 아니라는 점을 함께 봐야 합니다.",
+      "wrongExplanations": {
+        "0": "One Zone-IA는 가용 영역 하나에만 저장돼 AZ 손실 시 복원이 불가하고, 드물게 접근하는 데이터를 전제로 합니다. 패턴을 모르는 데이터에 적합하지 않습니다.",
+        "1": "Glacier Flexible Retrieval의 객체는 보관 상태라 실시간 접근이 불가하고 먼저 복원해야 합니다. 매일 읽힐 수 있는 데이터에 쓸 수 없습니다.",
+        "3": "수동 전환은 운영 부담을 늘리고, Standard-IA는 월 1회 접근 수준을 전제로 GB당 검색 요금과 최소 기간 기준이 붙습니다."
+      },
+      "sources": [
+        {
+          "title": "Understanding and managing Amazon S3 storage classes — Intelligent-Tiering 동작·요금·128 KB 기준",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q12",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "비용·성능·데이터 구조를 기반으로 초기 스토리지 구성 결정(SK6)",
+      "section": "storage-choice",
+      "difficulty": "applied",
+      "stem": "대규모 학습 잡이 S3에 있는 데이터셋을 서브밀리초 지연으로, 매우 높은 처리량으로 읽어야 한다. 데이터는 학습이 끝나면 더 이상 필요 없고 비용을 최소화하고 싶다. 가장 적절한 선택은 무엇인가?",
+      "options": [
+        "FSx for Lustre scratch 파일 시스템을 S3와 연결해 쓴다",
+        "FSx for Lustre persistent 파일 시스템을 만든다",
+        "EFS Provisioned 처리량 모드로 전환한다",
+        "EBS st1 볼륨을 여러 인스턴스에 연결한다"
+      ],
+      "correct": 0,
+      "explanation": "FSx for Lustre는 S3 버킷과 연동해 객체를 파일처럼 제공하며 서브밀리초 지연과 매우 높은 처리량을 냅니다. scratch 배포 유형은 데이터를 복제하지 않는 대신 단기·처리 집약 워크로드에 비용이 최적화돼 있어 '끝나면 버리는' 학습 데이터에 맞습니다.",
+      "wrongExplanations": {
+        "1": "persistent는 데이터 복제와 장애 서버 교체를 제공하는 장기·가용성 중심 옵션입니다. 임시 데이터에는 비용이 더 듭니다.",
+        "2": "EFS는 여러 컴퓨트가 공유하는 범용 NFS 파일 저장소로, 수 TBps·수백만 IOPS 규모의 병렬 파일 시스템 처리량을 목표로 하지 않습니다. Provisioned 모드는 켜 둔 처리량만큼 과금하므로 '끝나면 버리는' 임시 워크로드의 비용 요건과도 어긋납니다.",
+        "3": "EBS 볼륨은 같은 가용 영역의 인스턴스에 연결하는 블록 스토리지이며 여러 인스턴스가 공유하는 병렬 파일 시스템 용도가 아닙니다. st1은 HDD 처리량 지향 유형입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon FSx for Lustre? — S3 연동·서브밀리초 지연",
+          "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html"
+        },
+        {
+          "title": "Deployment and storage class options for FSx for Lustre — scratch vs persistent",
+          "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q13",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "관련 AWS 서비스 옵션을 사용한 스토리지 데이터 추출(SK1)",
+      "section": "transfer",
+      "difficulty": "applied",
+      "stem": "여러 대륙의 지사가 본사 리전의 S3 버킷 하나로 수 GB짜리 파일을 매일 업로드하는데 전송이 느리다. S3 Transfer Acceleration을 적용하려 할 때 확인해야 할 요건으로 옳은 것은 무엇인가?",
+      "options": [
+        "버킷 이름에 마침표(\".\")가 없어야 하고 가상 호스트 스타일 요청을 써야 한다",
+        "버킷의 모든 객체를 먼저 S3 Express One Zone으로 옮겨야 한다",
+        "가속을 켜면 prefix당 요청률 한도도 함께 올라간다",
+        "전송 가속은 다운로드 성능만 개선하므로 업로드에는 효과가 없다"
+      ],
+      "correct": 0,
+      "explanation": "Transfer Acceleration은 버킷 수준 기능으로, 버킷 이름이 DNS 호환이어야 하고 마침표를 포함할 수 없으며 가상 호스트 스타일 요청만 지원합니다. 켠 뒤 속도가 오르기까지 최대 20분이 걸릴 수 있습니다.",
+      "wrongExplanations": {
+        "1": "Transfer Acceleration은 범용 버킷의 기능이며 스토리지 클래스를 바꿔야 쓸 수 있는 것이 아닙니다.",
+        "2": "가속은 CloudFront 엣지를 경유해 거리로 인한 지연을 줄이는 기능입니다. prefix당 요청률 한도와는 무관합니다.",
+        "3": "전 세계 고객이 중앙 버킷에 업로드하는 경우가 대표적인 적합 사례로 문서에 제시돼 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring fast, secure file transfers using Amazon S3 Transfer Acceleration — 버킷 이름·가상 호스트 스타일·활성화 시간",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html"
+        },
+        {
+          "title": "Performance design patterns for Amazon S3 — 적합한 상황",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-design-patterns.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q14",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "관련 AWS 서비스 옵션을 사용한 스토리지 데이터 추출(SK1)",
+      "section": "transfer",
+      "difficulty": "applied",
+      "stem": "운영 중인 DynamoDB 테이블 전체를 ML 학습용으로 S3에 내보내야 한다. 운영 트래픽에 영향을 주지 않는 방법은 무엇인가?",
+      "options": [
+        "애플리케이션에서 Scan API를 반복 호출해 S3에 적재한다",
+        "읽기 용량을 일시적으로 10배로 올린 뒤 Scan으로 덤프한다",
+        "DynamoDB의 S3 내보내기 기능을 사용한다(PITR 활성화 필요)",
+        "DynamoDB Streams를 켜고 Lambda로 S3에 적재해 전체 스냅샷을 만든다"
+      ],
+      "correct": 2,
+      "explanation": "DynamoDB의 Export to S3는 테이블의 읽기 용량(RCU)을 소모하지 않고 성능에 영향을 주지 않으며, 사용하려면 특정 시점 복구(PITR)가 활성화돼 있어야 합니다. 출력은 DynamoDB JSON 또는 Amazon Ion 형식입니다.",
+      "wrongExplanations": {
+        "0": "Scan은 테이블의 읽기 용량을 소모합니다. 전체 테이블을 반복 스캔하면 운영 트래픽에 영향을 줍니다.",
+        "1": "용량을 올리면 비용이 늘고 여전히 테이블의 읽기 경로를 사용합니다. 영향을 없애는 방법이 아닙니다.",
+        "3": "DynamoDB Streams는 테이블의 항목 수준 변경을 캡처하는 스트림이라 '지금 시점의 전체 테이블'을 만들지 못합니다. 전체 덤프는 Export to S3가 담당합니다."
+      },
+      "sources": [
+        {
+          "title": "DynamoDB data export to Amazon S3: how it works — RCU 미소모·PITR 요건",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataExport.HowItWorks.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q15",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "SageMaker Data Wrangler 및 Feature Store로 데이터 수집(SK3)",
+      "section": "wrangler-featurestore",
+      "difficulty": "applied",
+      "stem": "스트리밍 소비자가 Feature Store에 PutRecord로 특성을 쓰고 있다. 일부 레코드가 온라인 스토어에는 보이지 않고 오프라인 스토어에만 쌓인다. 가장 가능성이 큰 원인은 무엇인가?",
+      "options": [
+        "해당 레코드의 EventTime이 기존 레코드보다 크지 않아 과거 레코드로 처리됐다",
+        "온라인 스토어의 TTL이 만료돼 해당 레코드가 하드 삭제됐다",
+        "TargetStores를 지정하지 않아 오프라인에만 기록됐다",
+        "온라인 스토어는 배치 수집만 지원하고 PutRecord는 오프라인 전용이다"
+      ],
+      "correct": 0,
+      "explanation": "PutRecord는 새 레코드의 EventTime이 더 크면 온라인·오프라인 모두에 쓰고, 그렇지 않으면 과거(historic) 레코드로 보고 오프라인에만 씁니다. 온라인 스토어가 특성의 최신 레코드만 유지하기 때문입니다.",
+      "wrongExplanations": {
+        "1": "TTL 만료는 ExpiresAt(EventTime + TtlDuration) 시점에 온라인 스토어에서 하드 삭제하고 오프라인에 삭제 레코드를 추가합니다. 쓴 직후부터 온라인에 나타나지 않는 이 상황과는 다른 현상입니다.",
+        "2": "TargetStores를 생략하면 특성 그룹에 구성된 모든 스토어에 씁니다. 온라인 반영 여부를 가르는 것은 EventTime 규칙입니다.",
+        "3": "PutRecord는 스트리밍 수집 경로로 온라인 스토어에 최신 값을 즉시 반영하는 데 쓰입니다."
+      },
+      "sources": [
+        {
+          "title": "PutRecord (SageMaker Feature Store Runtime API) — EventTime 비교 규칙",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_feature_store_PutRecord.html"
+        },
+        {
+          "title": "Create, store, and share features with Feature Store — 온라인은 최신 레코드만",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q16",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "여러 소스의 데이터 병합(SK4)",
+      "section": "merge",
+      "difficulty": "applied",
+      "stem": "S3의 CSV 로그와 외부 관계형 데이터베이스의 테이블을 SQL 한 문장으로 조회해 분석하려 한다. Athena Federated Query를 쓸 때 알아 두어야 할 제약은 무엇인가?",
+      "options": [
+        "연합 쿼리는 읽기 전용이라 INSERT INTO 같은 쓰기를 할 수 없다",
+        "연합 쿼리는 Glue Data Catalog에 테이블을 먼저 만들어야만 동작한다",
+        "연합 쿼리 결과는 Parquet으로만 저장된다",
+        "연합 쿼리는 한 번에 두 개 이상의 데이터 소스를 조인할 수 없다"
+      ],
+      "correct": 0,
+      "explanation": "Athena 연합 쿼리는 S3 밖의 데이터 소스를 제자리에서 조회하는 기능으로 읽기 전용입니다. 결과를 새 테이블로 저장하려면 CTAS 같은 별도 수단을 씁니다.",
+      "wrongExplanations": {
+        "1": "연합 쿼리는 커넥터를 통해 외부 소스를 조회합니다. 모든 소스를 미리 카탈로그 테이블로 만들어야 하는 것은 아닙니다.",
+        "2": "결과 저장 형식은 CTAS 등에서 지정하는 것이며 연합 쿼리 자체가 Parquet만 쓰는 것은 아닙니다.",
+        "3": "여러 소스를 한 쿼리에서 결합할 수 있다는 점이 연합 쿼리의 목적입니다."
+      },
+      "sources": [
+        {
+          "title": "Use Amazon Athena Federated Query — 읽기 전용",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/federated-queries.html"
+        },
+        {
+          "title": "Create a table from query results (CTAS) — 결과를 새 테이블로 저장",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/ctas.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q17",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "용량·확장성과 관련된 수집·저장 문제 해결 및 디버깅(SK5)",
+      "section": "troubleshoot",
+      "difficulty": "applied",
+      "stem": "Kinesis Data Streams를 on-demand 모드로 바꿨는데도 ProvisionedThroughputExceededException이 계속 발생한다. 지표를 보니 한 샤드에만 트래픽이 몰려 있다. 가장 적절한 조치는 무엇인가?",
+      "options": [
+        "스트림 보존 기간을 365일로 늘린다",
+        "파티션 키 설계를 바꿔 레코드를 고르게 분산한다",
+        "소비자를 향상된 팬아웃(EFO)으로 전환한다",
+        "Firehose 스트림을 추가해 같은 데이터를 중복 적재한다"
+      ],
+      "correct": 1,
+      "explanation": "on-demand 모드의 자동 확장은 전체 트래픽 증가에는 대응하지만 파티션 키 불균형은 해결하지 못합니다. 단일 파티션 키가 샤드 한도(쓰기 1 MB/s·1,000 records/s)를 넘으면 키 설계를 바꿔 고르게 분산해야 합니다.",
+      "wrongExplanations": {
+        "0": "보존 기간은 과거 데이터를 얼마나 오래 읽을 수 있는지를 정할 뿐 쓰기 처리량 한도와 무관합니다.",
+        "2": "EFO는 소비자(읽기) 쪽 전용 처리량을 제공하는 기능입니다. 쓰기 쪽 핫 샤드 문제를 해결하지 못합니다.",
+        "3": "같은 데이터를 중복 적재해도 원인인 키 불균형은 그대로입니다. 비용만 늘어납니다."
+      },
+      "sources": [
+        {
+          "title": "Choose the right mode to stream in (Kinesis Data Streams) — on-demand와 파티션 키 불균형",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html"
+        },
+        {
+          "title": "Provisioned throughput exception errors (Kinesis Data Streams)",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/kinesis-fis-provisioned-throughput.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q18",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "용량·확장성과 관련된 수집·저장 문제 해결 및 디버깅(SK5)",
+      "section": "troubleshoot",
+      "difficulty": "applied",
+      "stem": "Athena 쿼리가 S3에서 503 Slow Down 오류를 자주 만난다. 대상 테이블은 작은 파일 수십만 개로 이루어져 있다. 가장 효과적인 조치 조합은 무엇인가?",
+      "options": [
+        "S3 Transfer Acceleration을 켜고 쿼리를 재시도한다",
+        "버킷을 One Zone-IA로 전환해 요청 비용을 낮춘다",
+        "파일을 더 크게 합치고, 요청을 여러 prefix로 분산하며, 지수 백오프로 재시도한다",
+        "Athena 워크그룹의 동시 쿼리 수를 늘려 처리량을 높인다"
+      ],
+      "correct": 2,
+      "explanation": "503 Slow Down은 prefix당 요청률(쓰기류 3,500·읽기류 5,500 req/s) 초과 신호입니다. 공식 문서의 조치는 파일을 크게 합치기, 여러 prefix로 분산, 지수 백오프 재시도, 요청률 점진 상향입니다.",
+      "wrongExplanations": {
+        "0": "Transfer Acceleration은 거리로 인한 전송 지연을 줄이는 기능이며 요청률 한도를 올리지 않습니다.",
+        "1": "스토리지 클래스는 비용·가용성 설계이고 prefix 요청률 한도와 무관합니다.",
+        "3": "동시 쿼리를 늘리면 같은 prefix에 대한 요청이 더 몰려 오류가 악화됩니다."
+      },
+      "sources": [
+        {
+          "title": "Best practices design patterns: optimizing Amazon S3 performance — prefix 요청률·분산·백오프",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html"
+        },
+        {
+          "title": "Optimize data (Amazon Athena) — 작은 파일 합치기",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q19",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "핵심 AWS 데이터 소스 사용 방법(K2)",
+      "section": "storage-choice",
+      "difficulty": "applied",
+      "stem": "온프레미스에서 쓰던 NetApp 파일 데이터를 Amazon FSx for NetApp ONTAP으로 옮겨 두었다. NFS로 쓰는 기존 애플리케이션을 유지하면서, 같은 데이터를 ML 학습에도 쓰려고 한다. 가장 적절한 방법은 무엇인가?",
+      "options": [
+        "ONTAP 볼륨에 S3 access point를 붙여 S3 API로 읽는다",
+        "ONTAP 파일 시스템을 학습 잡의 입력 채널로 직접 마운트한다",
+        "데이터를 EFS로 복사한 뒤 NFS 애플리케이션도 EFS로 옮긴다",
+        "ONTAP을 FSx for Lustre로 전환하고 S3 연결을 설정한다"
+      ],
+      "correct": 0,
+      "explanation": "FSx for NetApp ONTAP 볼륨에 S3 access point를 붙이면 GetObject·PutObject 같은 S3 객체 연산으로 파일 데이터를 읽고 쓸 수 있고, 데이터는 ONTAP 파일 시스템에 그대로 남아 NFS·SMB 접근도 유지됩니다. 기존 애플리케이션을 건드리지 않고 S3 호환 경로를 여는 방법입니다.",
+      "wrongExplanations": {
+        "1": "학습 잡이 직접 마운트할 수 있는 파일 시스템은 EFS와 FSx for Lustre입니다. ONTAP은 그 목록에 없고 S3 access point 경유가 문서화된 경로입니다.",
+        "2": "데이터를 복사하면 두 벌이 생기고, NFS 애플리케이션까지 옮기는 것은 요구에 없는 이전 작업입니다.",
+        "3": "FSx for Lustre는 고성능 병렬 파일 시스템으로 용도가 다르고, 전환하면 기존 NetApp 기능과 NFS·SMB 구성을 잃습니다."
+      },
+      "sources": [
+        {
+          "title": "Accessing your data via Amazon S3 access points (FSx for NetApp ONTAP)",
+          "url": "https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/accessing-data-via-s3-access-points.html"
+        },
+        {
+          "title": "Setting up training jobs to access datasets — S3·EFS·FSx for Lustre",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q20",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "AWS 스트리밍 데이터 소스를 사용한 수집(K3)",
+      "section": "streaming",
+      "difficulty": "foundational",
+      "stem": "사내 팀이 이미 Apache Kafka 프로듀서·컨슈머와 Kafka Connect 플러그인을 운영 중이다. 코드를 바꾸지 않고 AWS에서 같은 스트리밍 파이프라인을 운영하려면 무엇을 고르는가?",
+      "options": [
+        "Amazon Kinesis Data Streams로 옮기고 KCL 소비자를 새로 만든다",
+        "Amazon MSK를 사용한다",
+        "Amazon Data Firehose로 옮기고 전달 대상만 설정한다",
+        "Amazon Managed Service for Apache Flink로 애플리케이션을 다시 쓴다"
+      ],
+      "correct": 1,
+      "explanation": "Amazon MSK는 오픈소스 Apache Kafka를 관리형으로 실행하며 기존 애플리케이션·도구·플러그인을 코드 변경 없이 지원합니다. 공식 FAQ도 스트리밍이 처음이면 Kinesis Data Streams, 이미 Kafka 애플리케이션이 있으면 MSK를 고르라고 안내합니다.",
+      "wrongExplanations": {
+        "0": "Kinesis Data Streams는 Kafka API 호환이 아니라 소비자 애플리케이션을 KCL 등으로 새로 작성해야 합니다.",
+        "2": "Firehose는 대상으로 전달·변환하는 관리형 파이프라인이며 Kafka 프로듀서·컨슈머 코드를 그대로 받지 않습니다.",
+        "3": "Managed Service for Apache Flink는 스트림 처리 엔진입니다. Kafka 브로커를 대체하는 것이 아니라 스트림을 읽어 계산하는 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "Welcome to the Amazon MSK Developer Guide — 기존 애플리케이션 호환",
+          "url": "https://docs.aws.amazon.com/msk/latest/developerguide/what-is-msk.html"
+        },
+        {
+          "title": "Amazon Kinesis Data Streams FAQs — KDS vs MSK 선택 기준",
+          "url": "https://aws.amazon.com/kinesis/data-streams/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q21",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "관련 AWS 서비스 옵션을 사용한 스토리지 데이터 추출(SK1)",
+      "section": "troubleshoot",
+      "difficulty": "applied",
+      "stem": "학습 인스턴스의 EBS 볼륨을 io2로 바꾸고 IOPS를 두 배로 올렸는데 읽기 지연이 거의 줄지 않았다. 다음으로 확인할 것은 무엇인가?",
+      "options": [
+        "볼륨 크기를 늘려 IOPS 비율 상한을 높인다",
+        "볼륨을 같은 가용 영역의 다른 인스턴스에 다시 연결한다",
+        "인스턴스 쪽 EBS 성능 한도와 EBS-optimized 여부를 확인한다",
+        "볼륨 유형을 st1으로 바꿔 처리량을 확보한다"
+      ],
+      "correct": 2,
+      "explanation": "EBS 성능은 볼륨 한도와 인스턴스 한도 중 작은 쪽이 상한입니다. 볼륨 IOPS를 올려도 인스턴스의 EBS 성능 한도에 걸려 있으면 개선되지 않으므로, 더 큰 인스턴스나 EBS-optimized 인스턴스가 필요한지 봐야 합니다.",
+      "wrongExplanations": {
+        "0": "IOPS:GiB 비율 상한에 걸린 경우에만 의미가 있습니다. 이미 IOPS를 올려 뒀는데 효과가 없다면 병목이 볼륨 쪽이 아닐 가능성이 큽니다.",
+        "1": "EBS 볼륨은 같은 가용 영역의 인스턴스에 연결합니다. 다른 인스턴스로 옮겨도 인스턴스 한도 문제는 그대로입니다.",
+        "3": "st1은 HDD 처리량 지향 유형이라 IOPS가 지배적인 워크로드에는 오히려 불리합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EBS volume types — 볼륨·인스턴스 성능 한도",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+        },
+        {
+          "title": "Get the maximum Amazon EBS optimized performance (Amazon EC2)",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimization-performance.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t1-1-q22",
+      "examGuideTaskId": "mla-t1-1",
+      "skill": "데이터 형식 및 수집 메커니즘 이해(K1)",
+      "section": "training-input",
+      "difficulty": "foundational",
+      "stem": "SageMaker 내장 알고리즘 다수가 표준 입력으로 받고, Pipe 모드와 함께 쓰이도록 설계된 이진 레코드 형식은 무엇인가?",
+      "options": [
+        "Apache Avro 컨테이너 파일(application/avro)",
+        "application/x-recordio-protobuf",
+        "Apache Parquet 열 기반 파일(application/x-parquet)",
+        "JSON Lines 텍스트 파일(application/jsonlines)"
+      ],
+      "correct": 1,
+      "explanation": "recordIO-protobuf는 관측값을 4바이트 float 집합의 이진 표현으로 바꿔 protobuf values 필드에 담는 SageMaker 형식으로, Factorization Machines·K-Means·k-NN·Linear Learner·PCA 등 다수 알고리즘의 입력이며 Pipe 모드와 함께 쓰입니다.",
+      "wrongExplanations": {
+        "0": "Avro는 수집·스트리밍 단계에 유리한 행 기반 형식이며 내장 알고리즘의 표준 입력 목록에 없습니다.",
+        "2": "Parquet은 분석용 열 기반 형식이고 XGBoost·DeepAR 같은 일부 알고리즘만 입력으로 받습니다.",
+        "3": "JSON Lines는 BlazingText·DeepAR 등이 받는 텍스트 형식입니다."
+      },
+      "sources": [
+        {
+          "title": "Common Data Formats for Training (SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html"
+        },
+        {
+          "title": "Parameters for Built-in Algorithms — 입력 모드·파일 형식",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

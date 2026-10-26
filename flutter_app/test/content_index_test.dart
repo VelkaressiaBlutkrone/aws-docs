@@ -59,6 +59,27 @@ void main() {
     expect(byDomain, {1: 5, 2: 4, 3: 4, 4: 3, 5: 4});
   });
 
+  // MLA-C01은 도메인별로 나눠 들어온다(공식 Task 12개 = 4도메인 × 3). 배치가
+  // 끝날 때마다 이 숫자를 올린다 — 올리지 않으면 신규 문서가 조용히 누락돼도 모른다.
+  test('MLA-C01: 학습문서 6개 (도메인 2 배치까지)', () {
+    expect(certHasContent('MLA-C01'), isTrue);
+    expect(certContentSummary('MLA-C01').docs, 6);
+  });
+
+  test('MLA-C01: 도메인별 문서 수 D1:3 D2:3', () {
+    final byDomain = <int, int>{};
+    for (final e in contentFor('MLA-C01')) {
+      byDomain[e.domain] = (byDomain[e.domain] ?? 0) + 1;
+    }
+    expect(byDomain, {1: 3, 2: 3});
+  });
+
+  test('MLA-C01: 문항은 전부 드래프트라 통합 모의고사에 노출되지 않는다', () {
+    // verified flip은 사람 검수 전용 — 문서만 먼저 나간다.
+    expect(certHasVerifiedQuestions('MLA-C01'), isFalse);
+    expect(contentFor('MLA-C01').every((e) => !e.hasQuestions), isTrue);
+  });
+
   // ── 동적 불변식 (T3, flip 회귀 가드) ──────────────────────────────
   // content_index의 questionCount는 그 Task .questions.json의 verified:true
   // 문항 수와 *항상* 일치해야 한다. 특정 숫자(예: SAA==0)에 의존하지 않으므로

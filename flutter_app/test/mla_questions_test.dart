@@ -1,0 +1,168 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter_test/flutter_test.dart';
+
+/// MLA-C01 문항 드래프트 구조·밀도 가드.
+///
+/// `QuestionBank.fromJson`은 verified 게이트로 비검증 문항을 제외하므로,
+/// 드래프트(verified:false) 단계 검증은 raw JSON을 직접 파싱해 스키마를 확인한다
+/// (dea_questions_test.dart와 같은 패턴).
+/// 품질 바(question_model_test.dart의 런타임 규칙과 동일):
+/// options 정확히 4개, correct 범위 내, wrongExplanations 키=정답 아닌 인덱스, sources 존재.
+void main() {
+  // 문항 작성을 완료한(드래프트 포함) Task — 도메인 배치별로 누적 추가한다.
+  const mlaTaskIds = [
+    // D1 기계 학습(ML)을 위한 데이터 준비 (28%) — 도메인 1 완료
+    'mla-t1-1', 'mla-t1-2', 'mla-t1-3',
+    // D2 ML 모델 개발 (26%) — 도메인 2 완료
+    'mla-t2-1', 'mla-t2-2', 'mla-t2-3',
+  ];
+  const minPerTask = 15; // CLF·DEA 기준선과 동일한 Task당 밀도 목표
+
+  for (final taskId in mlaTaskIds) {
+    group(taskId, () {
+      final path = 'assets/content/mla/$taskId.questions.json';
+
+      test('문항 파일이 존재한다', () {
+        expect(File(path).existsSync(), isTrue,
+            reason: '$path 가 없습니다 — 해당 도메인 배치 문항을 작성하세요.');
+      });
+
+      test('스키마·밀도 규칙을 만족한다', () {
+        final file = File(path);
+        if (!file.existsSync()) {
+          fail('$path 없음(앞 테스트에서 보고됨)');
+        }
+        final map = json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+        expect(map['examGuideTaskId'], taskId);
+        expect(map['certCode'], 'MLA-C01');
+
+        final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+        expect(questions.length, greaterThanOrEqualTo(minPerTask),
+            reason: '$taskId 문항 수 ${questions.length} < $minPerTask');
+
+        final ids = <String>{};
+        for (final q in questions) {
+          final qid = (q['id'] ?? '').toString();
+          expect(qid, isNotEmpty);
+          expect(ids.add(qid), isTrue, reason: '중복 id: $qid');
+          expect((q['stem'] ?? '').toString(), isNotEmpty);
+          expect((q['explanation'] ?? '').toString(), isNotEmpty);
+
+          final options = (q['options'] as List);
+          expect(options.length, 4, reason: '$qid options 4개 아님');
+
+          final correct = (q['correct'] as num).toInt();
+          expect(correct, inInclusiveRange(0, 3), reason: '$qid correct 범위 밖');
+
+          final we = (q['wrongExplanations'] as Map);
+          final keys = we.keys.map((k) => int.parse(k.toString())).toSet();
+          // 정답이 아닌 0..3 인덱스 전부에 오답해설이 있어야 한다
+          final expected = {0, 1, 2, 3}..remove(correct);
+          expect(keys, expected, reason: '$qid wrongExplanations 키=비정답 인덱스 전부');
+
+          final sources = (q['sources'] as List);
+          expect(sources, isNotEmpty, reason: '$qid sources 비어있음');
+          for (final s in sources.cast<Map<String, dynamic>>()) {
+            expect((s['url'] ?? '').toString(), startsWith('http'));
+            expect((s['title'] ?? '').toString(), isNotEmpty);
+          }
+
+          // 드래프트 단계: 사람 검수 전이므로 verified는 false여야 한다(AI flip 금지).
+          expect(q['verified'], isFalse,
+              reason: '$qid verified=true — flip은 사람 검수 전용이다');
+        }
+      });
+
+      test('개념 확인(foundational) 문항이 Task당 5개 이상이다', () {
+        // 전부 시나리오형(applied)이면 학습 순서상 진입 장벽이 높다.
+        // 정의·규칙을 묻는 문항이 섞여 있어야 개념을 먼저 세울 수 있다.
+        // ⚠️ 라벨은 레포 전체 규약(foundational·applied)을 따른다 — 'associate'는
+        // 시험 등급명과 겹쳐 모호하고 다른 자격증 파일이 쓰지 않는다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final byDifficulty = <String, int>{};
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final d = (q['difficulty'] ?? '').toString();
+          byDifficulty[d] = (byDifficulty[d] ?? 0) + 1;
+        }
+        expect(byDifficulty.keys, everyElement(isIn(['foundational', 'applied'])),
+            reason: '$taskId 난이도 라벨은 foundational·applied만 쓴다: $byDifficulty');
+        expect(byDifficulty['foundational'] ?? 0, greaterThanOrEqualTo(5),
+            reason: '$taskId 난이도 분포: $byDifficulty');
+      });
+
+      test('문항 파일에 검증 기준일(lastVerified)이 있다', () {
+        // md 머리말은 lastVerified를 갖는데 문항 파일에는 없어 상태가 엇갈렸다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        expect(RegExp(r'^\d{4}-\d{2}-\d{2}$')
+            .hasMatch((map['lastVerified'] ?? '').toString()), isTrue,
+            reason: '$taskId: 문항 사실 확인 기준일을 YYYY-MM-DD로 적는다');
+      });
+
+      test('해설에 마크다운 표기가 없다', () {
+        // 해설은 `Text()` 위젯으로 **평문** 렌더된다(quiz_widgets.dart:245·251).
+        // 마크다운을 쓰면 `**`와 백틱이 화면에 글자 그대로 보인다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final offenders = <String>[];
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final texts = <String>[
+            (q['explanation'] ?? '').toString(),
+            ...(q['wrongExplanations'] as Map).values.map((v) => v.toString()),
+          ];
+          for (final t in texts) {
+            if (t.contains('**') || t.contains('`')) {
+              offenders.add('${q['id']}: ${t.substring(0, t.length.clamp(0, 40))}…');
+            }
+          }
+        }
+        expect(offenders, isEmpty,
+            reason: '해설은 평문으로 렌더된다 — 마크다운 제거:\n${offenders.join('\n')}');
+      });
+
+      test('정답 보기가 오답보다 지나치게 길지 않다', () {
+        // 가장 긴 보기가 정답인 패턴은 내용을 몰라도 찍게 만든다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final offenders = <String>[];
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final options = (q['options'] as List).cast<String>();
+          final correct = (q['correct'] as num).toInt();
+          final longestWrong = [
+            for (var i = 0; i < options.length; i++)
+              if (i != correct) options[i].length,
+          ].reduce((a, b) => a > b ? a : b);
+          if (options[correct].length > longestWrong * 1.4) {
+            offenders.add(
+                '${q['id']}: 정답 ${options[correct].length}자 vs 최장 오답 $longestWrong자');
+          }
+        }
+        expect(offenders, isEmpty,
+            reason: '정답이 유독 길면 단서가 된다(오답을 비슷한 구체성으로):\n${offenders.join('\n')}');
+      });
+
+      test('문항의 section이 학습문서 앵커와 짝이 맞는다', () {
+        // 개념 딥링크(`?at=`)는 문항 `section`을 md의 `{#id}` 앵커로 찾아간다.
+        // 짝이 깨지면 링크가 조용히 죽으므로 문서와 함께 가드한다.
+        final qFile = File(path);
+        final mdFile = File('assets/content/mla/$taskId.md');
+        if (!qFile.existsSync() || !mdFile.existsSync()) {
+          fail('$taskId 문서·문항 파일 없음(앞 테스트에서 보고됨)');
+        }
+        final anchors = RegExp(r'\{#([a-z0-9-]+)\}')
+            .allMatches(mdFile.readAsStringSync())
+            .map((m) => m.group(1)!)
+            .toSet();
+        final map = json.decode(qFile.readAsStringSync()) as Map<String, dynamic>;
+        for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+          final section = (q['section'] ?? '').toString();
+          expect(section, isNotEmpty, reason: '${q['id']} section 비어있음');
+          expect(anchors, contains(section),
+              reason: '${q['id']} section "$section" 앵커가 $taskId.md에 없다');
+        }
+      });
+    });
+  }
+}

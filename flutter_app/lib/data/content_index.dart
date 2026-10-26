@@ -630,6 +630,18 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-4', title: '감사용 로그 준비 (CloudTrail·CloudWatch Logs·Lake·로그 분석)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-4.md', questionsAsset: 'assets/content/dea/dea-t4-4.questions.json', questionCount: 0),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-5', title: '데이터 프라이버시·거버넌스 (Redshift 공유·Macie·리전 통제·Config·주권)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-5.md', questionsAsset: 'assets/content/dea/dea-t4-5.questions.json', questionCount: 0),
   ],
+  // MLA-C01: 공식 Task 12개(4도메인 × 3)를 도메인 배치별로 누적 등록한다.
+  // 도메인 1(ML을 위한 데이터 준비, 28%)·2(ML 모델 개발, 26%)·
+  // 3(ML 워크플로의 배포 및 오케스트레이션, 22%)·4(모니터링·유지 관리·보안, 24%).
+  // 문항은 사람 검수 전 드래프트(verified:false)라 questionCount는 0이다.
+  'MLA-C01': [
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t1-1', title: '데이터 수집·저장 (형식·스트리밍·스토리지·학습 입력 모드)', domain: 1, mdAsset: 'assets/content/mla/mla-t1-1.md', questionsAsset: 'assets/content/mla/mla-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t1-2', title: '데이터 변환·특성 추출 (정리·인코딩·도구 선택·Feature Store)', domain: 1, mdAsset: 'assets/content/mla/mla-t1-2.md', questionsAsset: 'assets/content/mla/mla-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t1-3', title: '데이터 무결성·편향 관리 (지표·불균형·암호화·민감정보·품질)', domain: 1, mdAsset: 'assets/content/mla/mla-t1-3.md', questionsAsset: 'assets/content/mla/mla-t1-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-1', title: '모델링 접근 방식 선택 (선택 사다리·내장 알고리즘·AI 서비스·해석 가능성·비용)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-1.md', questionsAsset: 'assets/content/mla/mla-t2-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-2', title: '모델 훈련·개선 (분산·조기 중지·정규화·AMT·파인튜닝·Model Registry)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-2.md', questionsAsset: 'assets/content/mla/mla-t2-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-3', title: '모델 성능 분석 (지표·기준선·수렴 진단·Clarify 편향·SHAP·섀도 테스트)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-3.md', questionsAsset: 'assets/content/mla/mla-t2-3.questions.json', questionCount: 0),
+  ],
 };
 
 List<ContentEntry> contentFor(String certCode) =>
