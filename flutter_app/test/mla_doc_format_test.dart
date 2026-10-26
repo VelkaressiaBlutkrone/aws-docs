@@ -25,6 +25,7 @@ void main() {
     'mla-t1-1', 'mla-t1-2', 'mla-t1-3',
     'mla-t2-1', 'mla-t2-2', 'mla-t2-3',
     'mla-t3-1', 'mla-t3-2', 'mla-t3-3',
+    'mla-t4-1', 'mla-t4-2', 'mla-t4-3',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;

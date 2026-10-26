@@ -18,6 +18,8 @@ void main() {
     'mla-t2-1', 'mla-t2-2', 'mla-t2-3',
     // D3 ML 워크플로의 배포 및 오케스트레이션 (22%) — 도메인 3 완료
     'mla-t3-1', 'mla-t3-2', 'mla-t3-3',
+    // D4 ML 솔루션 모니터링·유지 관리·보안 (24%) — 도메인 4 완료
+    'mla-t4-1', 'mla-t4-2', 'mla-t4-3',
   ];
   const minPerTask = 15; // CLF·DEA 기준선과 동일한 Task당 밀도 목표
 
