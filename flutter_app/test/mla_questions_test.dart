@@ -23,6 +23,20 @@ void main() {
   ];
   const minPerTask = 15; // CLF·DEA 기준선과 동일한 Task당 밀도 목표
 
+  /// 사람 검수를 마쳐 flip을 허용한 Task — **사람만 여기에 추가한다.**
+  ///
+  /// 예전에는 모든 문항에 `verified: false`를 단정해 AI flip을 막았는데, 그러면
+  /// 사람이 첫 Task를 flip하는 순간 테스트가 깨져 **flip 자체가 불가능**했다
+  /// (SAA에는 같은 단정이 없다 — flip이 살아 있는 자격증이기 때문이다).
+  /// 지금은 보호 의도를 유지하면서 길을 연다: 이 목록에 **없는** Task는 전 문항이
+  /// `verified: false`여야 하고, 목록에 넣는 행위가 곧 사람의 서명이다
+  /// (flip 커밋의 diff에 드러나므로 감사 추적이 된다).
+  ///
+  /// 검수 절차·루브릭은 `docs/saa-review/review-rubric.md` C1~C6을 그대로 쓴다.
+  /// flip 단위는 Task이고, 통합 모의고사 공개에 필요한 양은 도메인당
+  /// D1 18 · D2 17 · D3 14 · D4 16(연습 65문항에 공식 비중 배분)이다.
+  const flipApprovedTaskIds = <String>{};
+
   for (final taskId in mlaTaskIds) {
     group(taskId, () {
       final path = 'assets/content/mla/$taskId.questions.json';
@@ -72,9 +86,30 @@ void main() {
             expect((s['title'] ?? '').toString(), isNotEmpty);
           }
 
-          // 드래프트 단계: 사람 검수 전이므로 verified는 false여야 한다(AI flip 금지).
-          expect(q['verified'], isFalse,
-              reason: '$qid verified=true — flip은 사람 검수 전용이다');
+          // `verified`는 bool이어야 한다. 값 자체는 아래 flip 허용 목록 가드가 본다.
+          expect(q['verified'], isA<bool>(),
+              reason: '$qid verified가 bool이 아니다');
+        }
+      });
+
+      test('flip 허용 목록에 없으면 전 문항이 드래프트다 (AI flip 금지)', () {
+        // 사람이 `flipApprovedTaskIds`에 Task를 넣기 전에는 verified:true가
+        // 하나도 없어야 한다. 허용한 Task는 이 가드를 통과하고, 실제 수량
+        // 정합성은 content_index_test의 동적 불변식(questionCount ↔ verified)이 본다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final qs = (map['questions'] as List).cast<Map<String, dynamic>>();
+        final flipped =
+            qs.where((q) => q['verified'] == true).map((q) => q['id']).toList();
+        if (flipApprovedTaskIds.contains(taskId)) {
+          expect(flipped, isNotEmpty,
+              reason: '$taskId: flip 허용 목록에 있는데 verified 문항이 없다 — '
+                  '검수를 끝냈으면 flip하고, 아직이면 목록에서 빼라');
+        } else {
+          expect(flipped, isEmpty,
+              reason: '$taskId: 사람 검수 전인데 verified=true 문항이 있다 — '
+                  'flip은 사람 전용이다. 검수를 마쳤다면 flipApprovedTaskIds에 '
+                  '$taskId 을 추가하라:\n${flipped.take(5).join(', ')}');
         }
       });
 
