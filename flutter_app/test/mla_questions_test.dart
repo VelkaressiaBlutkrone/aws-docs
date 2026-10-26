@@ -16,6 +16,8 @@ void main() {
     'mla-t1-1', 'mla-t1-2', 'mla-t1-3',
     // D2 ML 모델 개발 (26%) — 도메인 2 완료
     'mla-t2-1', 'mla-t2-2', 'mla-t2-3',
+    // D3 ML 워크플로의 배포 및 오케스트레이션 (22%) — 도메인 3 완료
+    'mla-t3-1', 'mla-t3-2', 'mla-t3-3',
   ];
   const minPerTask = 15; // CLF·DEA 기준선과 동일한 Task당 밀도 목표
 
