@@ -14,6 +14,8 @@ void main() {
   const mlaTaskIds = [
     // D1 기계 학습(ML)을 위한 데이터 준비 (28%) — 도메인 1 완료
     'mla-t1-1', 'mla-t1-2', 'mla-t1-3',
+    // D2 ML 모델 개발 (26%) — 도메인 2 완료
+    'mla-t2-1', 'mla-t2-2', 'mla-t2-3',
   ];
   const minPerTask = 15; // CLF·DEA 기준선과 동일한 Task당 밀도 목표
 
