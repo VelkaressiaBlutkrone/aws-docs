@@ -81,6 +81,14 @@ const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
     practiceQuestionCount: 65,
     weightByDomain: {1: 30, 2: 26, 3: 24, 4: 20},
   ),
+  // MLA-C01 공식 Task 12개(4도메인 × 3)가 전부 들어온 뒤 추가했다(2026-10-26).
+  // 정책이 없으면 `examWeightedCapacityStatus`가 `hasPolicy: false`로 fail closed라
+  // 사람이 문항을 전부 flip해도 통합/약점 모의고사가 잠긴 채 남는다.
+  // 비중은 공식 시험 가이드의 도메인 가중(28·26·22·24)이다.
+  'MLA-C01': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 28, 2: 26, 3: 22, 4: 24},
+  ),
 };
 
 class ExamReadinessStatus {
