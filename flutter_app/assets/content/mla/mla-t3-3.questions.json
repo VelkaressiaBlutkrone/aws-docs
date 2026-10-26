@@ -1,0 +1,781 @@
+{
+  "examGuideTaskId": "mla-t3-3",
+  "taskTitle": "자동화된 오케스트레이션 도구를 사용하여 CI/CD 파이프라인 설정",
+  "domain": 3,
+  "certCode": "MLA-C01",
+  "lastVerified": "2026-10-26",
+  "questions": [
+    {
+      "id": "mla-t3-3-q1",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "CI/CD 원칙과 이를 ML 워크플로에 적용하는 방법(K4)",
+      "section": "cicd-principles",
+      "difficulty": "foundational",
+      "stem": "AWS 공식 정의에서 지속적 전달(continuous delivery)이 보장하는 상태는 무엇인가?",
+      "options": [
+        "성공한 변경을 언제든 릴리스할 수 있는 상태를 유지하는 것",
+        "성공한 변경을 사람 개입 없이 즉시 프로덕션에 올리는 것",
+        "변경을 같은 브랜치에 자주 통합해 오류를 빨리 찾아내는 것",
+        "릴리스 주기를 정해 두고 그 시점에 한꺼번에 배포하는 것"
+      ],
+      "correct": 0,
+      "explanation": "지속적 전달은 릴리스 프로세스를 자동화하는 방법론으로, 모든 변경이 자동으로 빌드되고 테스트되고 배포되지만 프로덕션 최종 푸시 시점은 사람이나 자동 테스트, 비즈니스 규칙이 결정합니다. 공식 문서는 성공한 변경을 즉시 릴리스할 수 있다는 뜻이고 모든 변경을 바로 릴리스해야 한다는 뜻은 아니라고 명시합니다.",
+      "wrongExplanations": {
+        "1": "사람 개입 없이 프로덕션까지 자동으로 올리는 것은 더 나아간 형태입니다. 지속적 전달의 정의에는 최종 푸시 시점을 사람이나 규칙이 결정하는 단계가 들어 있습니다.",
+        "2": "같은 위치에 작업을 자주 통합하고 각 변경을 빌드와 검증으로 확인하는 관행은 지속적 통합의 정의입니다. 초점이 코드의 자동 빌드와 테스트에 있습니다.",
+        "3": "정해진 주기에 한꺼번에 배포하는 방식은 릴리스 주기를 두는 전통적 접근이며, Gitflow 같은 브랜치 전략과 함께 설명됩니다. 지속적 전달은 언제든 릴리스 가능한 상태를 지향합니다."
+      },
+      "sources": [
+        {
+          "title": "Continuous delivery and continuous integration (CodePipeline) — CI와 CD의 정의",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-continuous-delivery-integration.html"
+        },
+        {
+          "title": "CI/CD 파이프라인과 환경 범위 (AWS 규범 가이드)",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q2",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "CI/CD 원칙과 이를 ML 워크플로에 적용하는 방법(K4)",
+      "section": "cicd-principles",
+      "difficulty": "applied",
+      "stem": "일반 소프트웨어 CI/CD를 ML 워크플로로 옮길 때 공식 문서가 추가로 버전 관리하고 추적해야 한다고 적는 자산은 무엇인가?",
+      "options": [
+        "데이터와 모델 파라미터, 훈련 구성, 모델 아티팩트",
+        "컨테이너 이미지 태그와 빌드 로그, 테스트 리포트",
+        "엔드포인트 구성과 인스턴스 유형, 오토 스케일링 정책",
+        "파이프라인 실행 이력과 수동 승인 기록, 경보 설정"
+      ],
+      "correct": 0,
+      "explanation": "ML용 CI/CD는 코드 변경만이 아니라 데이터와 모델 파라미터, 훈련 구성을 함께 추적해야 합니다. Well-Architected ML Lens는 코드와 구성, 인프라 정의에 더해 모델 아티팩트까지 버전 관리 대상으로 꼽고, 그 위에 오케스트레이션 도구 선택과 Model Registry 연동을 쌓으라고 안내합니다.",
+      "wrongExplanations": {
+        "1": "이미지 태그와 빌드 로그, 테스트 리포트는 일반 소프트웨어 CI/CD에서도 다루는 산출물입니다. ML에서 새로 들어오는 축은 데이터와 훈련 구성, 모델 그 자체입니다.",
+        "2": "엔드포인트 구성과 스케일링 정책은 인프라 정의에 해당하며 IaC로 버전 관리하는 대상입니다. ML이 추가로 요구하는 것은 그 인프라가 아니라 학습에 들어간 데이터와 설정입니다.",
+        "3": "실행 이력과 승인 기록은 파이프라인 도구가 남기는 운영 기록입니다. 재현성을 위해 버전 관리해야 하는 자산 목록과는 층위가 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "MLOPS04-BP01 (Machine Learning Lens) — ML CI/CD 구성 요소",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html"
+        },
+        {
+          "title": "MLOps 체크리스트 — 지속적 통합 단계",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-integration.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q3",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "AWS CodePipeline, AWS CodeBuild 및 AWS CodeDeploy의 기능 및 할당량(K1)",
+      "section": "devtools-roles",
+      "difficulty": "foundational",
+      "stem": "AWS CodeDeploy가 애플리케이션을 배포할 수 있는 컴퓨트 플랫폼 세 가지는 무엇인가?",
+      "options": [
+        "EC2 및 온프레미스 인스턴스, Lambda, Amazon ECS",
+        "EC2 및 온프레미스 인스턴스, Lambda, SageMaker 엔드포인트",
+        "EC2 및 온프레미스 인스턴스, Amazon EKS, Amazon ECS",
+        "Amazon EKS, Amazon ECS, SageMaker 엔드포인트"
+      ],
+      "correct": 0,
+      "explanation": "CodeDeploy는 EC2 인스턴스와 온프레미스 인스턴스, 서버리스 Lambda 함수, Amazon ECS 서비스 세 가지 컴퓨트 플랫폼에 배포합니다. SageMaker 엔드포인트는 이 목록에 없고, 엔드포인트의 점진적 배포와 자동 롤백은 SageMaker 배포 가드레일이 담당합니다.",
+      "wrongExplanations": {
+        "1": "SageMaker 엔드포인트는 CodeDeploy의 컴퓨트 플랫폼이 아닙니다. 엔드포인트에서 canary나 linear로 트래픽을 옮기려면 SageMaker 배포 가드레일을 씁니다.",
+        "2": "Amazon EKS는 CodeDeploy의 컴퓨트 플랫폼 목록에 없습니다. EKS는 CodePipeline의 deploy 액션 제공자로는 등장합니다.",
+        "3": "EC2와 온프레미스 인스턴스가 빠졌고 SageMaker 엔드포인트가 들어가 있습니다. 세 플랫폼 중 가장 먼저 꼽히는 것이 EC2와 온프레미스입니다."
+      },
+      "sources": [
+        {
+          "title": "What is CodeDeploy? — 컴퓨트 플랫폼 3종",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
+        },
+        {
+          "title": "Deployment guardrails — SageMaker 엔드포인트의 점진 배포",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q4",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "단계를 포함한 CodeBuild, CodeDeploy 및 CodePipeline 구성 및 문제 해결(SK1)",
+      "section": "devtools-roles",
+      "difficulty": "applied",
+      "stem": "커밋이 들어오면 단위 테스트를 돌리고 아티팩트를 만든 뒤 스테이징에 배포하고, 사람이 승인하면 프로덕션에 올리는 파이프라인을 만든다. 서비스 배치로 맞는 것은 무엇인가?",
+      "options": [
+        "CodePipeline이 단계를 엮고 CodeBuild가 빌드와 테스트를 맡고 승인은 approval 액션으로 둔다",
+        "CodeBuild가 단계를 엮고 CodePipeline이 빌드와 테스트를 맡고 승인은 CodeDeploy 훅으로 둔다",
+        "CodeDeploy가 단계를 엮고 CodeBuild가 빌드와 배포를 맡고 승인은 EventBridge 규칙으로 둔다",
+        "SageMaker Pipelines가 단계를 엮고 CodeBuild가 빌드를 맡고 승인은 Condition 단계로 둔다"
+      ],
+      "correct": 0,
+      "explanation": "CodePipeline은 소프트웨어 변경이 릴리스를 거치는 단계를 모델링하고 자동화하는 오케스트레이터이고, CodeBuild는 소스를 컴파일하고 단위 테스트를 실행해 배포 가능한 아티팩트를 만드는 빌드 서비스입니다. 사람의 확인은 CodePipeline의 액션 유형 중 approval로 두며 Amazon SNS와 통합됩니다.",
+      "wrongExplanations": {
+        "1": "역할이 서로 바뀌었습니다. 단계를 엮는 것은 CodePipeline이고 빌드와 테스트를 실행하는 것은 CodeBuild입니다. CodeDeploy 훅은 배포 라이프사이클 안에서 스크립트를 실행하는 장치입니다.",
+        "2": "CodeDeploy는 컴퓨트 플랫폼에 리비전을 배포하는 서비스이며 파이프라인 전체를 엮지 않습니다. 사람 승인은 파이프라인의 approval 액션이 제공합니다.",
+        "3": "SageMaker Pipelines는 ML 작업의 DAG를 실행하는 오케스트레이션 서비스입니다. Condition 단계는 단계 속성을 평가해 분기하는 자동 판정이고 사람의 승인 게이트와는 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "CodePipeline concepts — 액션 유형 6종",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
+        },
+        {
+          "title": "What is AWS CodeBuild? — 빌드·단위 테스트·아티팩트 생성 역할",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q5",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "AWS CodePipeline, AWS CodeBuild 및 AWS CodeDeploy의 기능 및 할당량(K1)",
+      "section": "codepipeline",
+      "difficulty": "foundational",
+      "stem": "실행이 몰릴 때 먼저 시작한 실행을 추월하지 않고 들어온 순서대로 처리하게 하는 CodePipeline 실행 모드는 무엇인가?",
+      "options": [
+        "QUEUED",
+        "SUPERSEDED",
+        "PARALLEL",
+        "SEQUENTIAL"
+      ],
+      "correct": 0,
+      "explanation": "QUEUED 모드에서는 실행이 대기하며 먼저 시작한 실행을 추월하지 않고 순서대로 처리됩니다. 기본 모드인 SUPERSEDED는 더 최근에 시작한 실행이 앞선 실행을 추월할 수 있고 추월당한 실행은 그 상태로 멈춥니다. QUEUED와 PARALLEL은 V2 파이프라인 유형에서만 지원됩니다.",
+      "wrongExplanations": {
+        "1": "SUPERSEDED는 기본 모드이며 최근 실행이 앞선 실행을 추월하도록 허용합니다. 순서 보장이 필요한 경우와는 반대 동작입니다.",
+        "2": "PARALLEL은 실행이 서로 독립이어서 다른 실행을 기다리지 않는 모드입니다. 순서대로 처리하는 것이 목적이라면 맞지 않습니다.",
+        "3": "제공되는 실행 모드는 SUPERSEDED, QUEUED, PARALLEL 세 가지입니다. 순서 보장 모드의 이름은 QUEUED입니다."
+      },
+      "sources": [
+        {
+          "title": "CodePipeline concepts — 실행 모드 3종",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
+        },
+        {
+          "title": "Pipeline types — V1과 V2 기능 비교",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-types-planning.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q6",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "단계를 포함한 CodeBuild, CodeDeploy 및 CodePipeline 구성 및 문제 해결(SK1)",
+      "section": "codepipeline",
+      "difficulty": "applied",
+      "stem": "S3를 소스로 쓰는 파이프라인이 두 달 동안 쓰이지 않았다. 다시 객체를 업로드했는데 실행이 시작되지 않는다. 이 파이프라인은 소스 변경을 폴링으로 감지하도록 구성되어 있다. 원인과 권장 조치는 무엇인가?",
+      "options": [
+        "30일 넘게 비활성이면 폴링이 꺼지므로 이벤트 기반 변경 감지로 이전한다",
+        "폴링 파이프라인 수가 리전 상한에 걸렸으므로 쿼터 증액을 요청한다",
+        "버킷의 버전 관리가 꺼져 객체 버전이 없으므로 버전 관리를 활성화한다",
+        "아티팩트 버킷의 수명 주기 정책이 소스를 지웠으므로 정책을 조정한다"
+      ],
+      "correct": 0,
+      "explanation": "CodePipeline 문서는 폴링 방식이 권장되지 않으며 30일 넘게 비활성인 파이프라인은 폴링이 꺼진다고 적습니다. 권장 경로는 S3와 CodeCommit, ECR에 대해 EventBridge 규칙을 쓰는 자동 변경 감지로 이전하는 것입니다.",
+      "wrongExplanations": {
+        "1": "폴링 파이프라인 상한은 리전당 300개이고 이 값은 고정이라 증액할 수 없습니다. 그리고 상한에 걸린 상황이라면 파이프라인 생성 단계에서 문제가 드러납니다.",
+        "2": "S3를 소스로 쓸 때 버전 관리가 켜진 버킷을 구성하는 것은 맞지만, 두 달 비활성 뒤에 시작이 멈춘 증상을 설명하는 것은 폴링 비활성화입니다.",
+        "3": "아티팩트 버킷은 액션끼리 산출물을 넘기는 저장소이고 소스 객체를 담는 곳이 아닙니다. 소스 감지가 멈춘 것과는 다른 계층입니다."
+      },
+      "sources": [
+        {
+          "title": "CodePipeline concepts — 폴링 비활성화와 상한",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
+        },
+        {
+          "title": "Start a pipeline in CodePipeline — 권장 변경 감지 방법",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-about-starting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q7",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "지속적 배포 흐름 구조를 적용하여 파이프라인 호출(예: Gitflow, GitHub Flow)(SK2)",
+      "section": "codepipeline",
+      "difficulty": "applied",
+      "stem": "릴리스 파이프라인을 Git 태그가 붙을 때만 시작하고, 문서 디렉터리만 바뀐 푸시는 무시하려 한다. 이를 위해 필요한 파이프라인 구성은 무엇인가?",
+      "options": [
+        "V2 유형으로 만들고 태그와 파일 경로 트리거 필터를 정의한다",
+        "V1 유형으로 만들고 소스 액션에 트리거를 두 개 지정한다",
+        "V1 유형으로 만들고 스테이지 진입 조건으로 태그를 검사한다",
+        "V2 유형으로 만들고 실행 모드를 PARALLEL로 바꿔 분기한다"
+      ],
+      "correct": 0,
+      "explanation": "Git 태그와 풀 리퀘스트, 브랜치, 파일 경로를 기준으로 하는 트리거와 필터링은 V2 파이프라인 유형에서만 지원됩니다. 태그 릴리스를 감지하는 트리거를 쓰면 자동 변경 감지는 꺼지며, 코드 푸시 필터로 파일 경로를 제외할 수 있습니다.",
+      "wrongExplanations": {
+        "1": "소스 액션 하나에는 트리거를 하나만 지정할 수 있습니다. 그리고 태그 트리거와 필터링 자체가 V2 기능입니다.",
+        "2": "스테이지 조건도 V2에서만 제공되는 기능이고, 역할은 스테이지 진입이나 성공, 실패 시점에 규칙을 적용하는 것입니다. 파이프라인 시작 조건을 거르는 수단은 트리거 필터입니다.",
+        "3": "PARALLEL은 실행끼리 독립적으로 돌게 하는 실행 모드입니다. 어떤 변경이 파이프라인을 시작할지 거르는 기능과는 목적이 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Pipeline types — V2에서만 지원되는 트리거와 필터링",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-types-planning.html"
+        },
+        {
+          "title": "CodePipeline concepts — 트리거 필터와 소스 액션 제약",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q8",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "CI/CD 파이프라인에서 자동화된 테스트 만들기(예: 통합 테스트, 단위 테스트, 엔드투엔드 테스트)(SK5)",
+      "section": "codebuild",
+      "difficulty": "foundational",
+      "stem": "CodeBuild 테스트 리포트에서 buildspec에 형식을 지정하지 않을 때의 기본 형식과, 리포트의 보존 기간은 각각 무엇인가?",
+      "options": [
+        "JUNITXML 형식이며 생성 30일 후 만료된다",
+        "CUCUMBERJSON 형식이며 생성 30일 후 만료된다",
+        "JUNITXML 형식이며 만료되지 않고 계속 보관된다",
+        "NUNITXML 형식이며 생성 90일 후 만료된다"
+      ],
+      "correct": 0,
+      "explanation": "buildspec의 reports에서 file-format을 생략하면 기본값은 JUNITXML입니다. 그리고 리포트는 생성 30일 후 만료되어 볼 수 없게 되므로, 더 오래 보관하려면 원시 파일을 S3로 내보내야 합니다. 내보낸 파일은 만료되지 않습니다.",
+      "wrongExplanations": {
+        "1": "Cucumber JSON은 지원 형식 가운데 하나이지만 기본값은 아닙니다. 생략 시 적용되는 형식은 JUNITXML입니다.",
+        "2": "형식은 맞지만 보존 조건이 틀렸습니다. 리포트는 30일 후 만료되며 장기 보관은 S3 내보내기로 처리합니다.",
+        "3": "형식과 보존 기간이 모두 다릅니다. NUnit XML도 지원 형식이지만 기본값이 아니고, 만료 기준은 30일입니다."
+      },
+      "sources": [
+        {
+          "title": "Buildspec reference — reports와 file-format 기본값",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html"
+        },
+        {
+          "title": "Test reporting in CodeBuild — 만료와 S3 내보내기",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q9",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "단계를 포함한 CodeBuild, CodeDeploy 및 CodePipeline 구성 및 문제 해결(SK1)",
+      "section": "codebuild",
+      "difficulty": "applied",
+      "stem": "buildspec의 pre_build 단계에서 작업 디렉터리를 옮기고 환경 변수를 설정했는데, build 단계에서 두 가지가 모두 사라져 있다. 원인과 조치는 무엇인가?",
+      "options": [
+        "buildspec 버전이 0.1이라 명령마다 별도 셸에서 실행되므로 0.2로 올린다",
+        "단계 사이에 환경이 초기화되므로 설정을 env 블록의 변수로 옮겨 선언한다",
+        "컴퓨트 모드가 Lambda라 상태가 유지되지 않으므로 EC2 모드로 바꾼다",
+        "캐시가 복원되며 디렉터리를 덮어쓰므로 로컬 캐시를 끄고 다시 빌드한다"
+      ],
+      "correct": 0,
+      "explanation": "buildspec 버전 0.1은 CodeBuild가 각 명령을 기본 셸의 별도 인스턴스에서 실행하기 때문에 앞선 명령의 디렉터리 이동이나 환경 변수가 다음 명령으로 이어지지 않습니다. 문서는 0.2를 권장하며, 0.2에서는 같은 셸 안에서 명령이 이어 실행됩니다.",
+      "wrongExplanations": {
+        "1": "env 블록의 변수로 선언하면 값은 전달되지만, 증상의 원인은 버전 0.1의 셸 분리입니다. 버전을 0.2로 올리면 디렉터리 이동까지 함께 유지됩니다.",
+        "2": "Lambda 컴퓨트 모드는 빠른 시작과 자동 확장에 최적화된 선택지이며, 단계 사이에 상태가 끊기는 증상의 원인으로 문서가 드는 것은 buildspec 버전입니다.",
+        "3": "캐시는 의존성이나 Docker 레이어, 소스를 재사용해 빌드를 빠르게 하는 기능입니다. 단계 사이의 셸 상태 유실과는 관계가 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "Buildspec reference — 버전 0.1과 0.2의 셸 동작 차이",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html"
+        },
+        {
+          "title": "Troubleshooting CodeBuild — 단계 간 상태 유실",
+          "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/troubleshooting.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q10",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "배포 전략 및 롤백 작업(예: 블루/그린 배포, canary, 선형)(K5)",
+      "section": "codedeploy",
+      "difficulty": "foundational",
+      "stem": "CodeDeploy로 EC2 또는 온프레미스 인스턴스에 배포할 때 배포 구성을 지정하지 않으면 적용되는 기본 구성은 무엇인가?",
+      "options": [
+        "CodeDeployDefault.OneAtATime",
+        "CodeDeployDefault.HalfAtATime",
+        "CodeDeployDefault.AllAtOnce",
+        "CodeDeployDefault.LambdaAllAtOnce"
+      ],
+      "correct": 0,
+      "explanation": "배포 구성을 지정하지 않으면 CodeDeploy는 EC2와 온프레미스 플랫폼에서 OneAtATime 구성을 사용합니다. 이 플랫폼의 사전 정의 구성은 AllAtOnce와 HalfAtATime, OneAtATime 세 가지이며 최소 정상 호스트 수를 기준으로 동작합니다.",
+      "wrongExplanations": {
+        "1": "HalfAtATime은 사전 정의 구성 가운데 하나로 절반 이상의 인스턴스가 성공해야 배포가 성공으로 판정됩니다. 다만 생략 시 적용되는 기본값은 아닙니다.",
+        "2": "AllAtOnce는 한 인스턴스라도 성공하면 전체 성공으로 판정하는 가장 빠른 구성입니다. 기본값으로 적용되지는 않습니다.",
+        "3": "Lambda 접두어가 붙은 구성은 AWS Lambda 컴퓨트 플랫폼용입니다. EC2와 온프레미스 배포에는 적용되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Deployment configurations — 플랫폼별 사전 정의 구성과 기본값",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html"
+        },
+        {
+          "title": "What is CodeDeploy? — 컴퓨트 플랫폼과 배포 유형",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q11",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "배포 전략 및 롤백 작업(예: 블루/그린 배포, canary, 선형)(K5)",
+      "section": "codedeploy",
+      "difficulty": "applied",
+      "stem": "ECS 서비스에 blue/green 배포를 걸고 10퍼센트씩 트래픽을 옮기는 canary 구성을 고르려 했으나 선택할 수 있는 구성이 하나뿐이다. 이 서비스는 Network Load Balancer를 쓴다. 이유와 적용되는 구성은 무엇인가?",
+      "options": [
+        "NLB를 쓰면 ECSAllAtOnce 구성만 지원되기 때문이다",
+        "NLB를 쓰면 ECSCanary10Percent5Minutes만 지원되기 때문이다",
+        "ECS 플랫폼은 canary 트래픽 이동을 제공하지 않기 때문이다",
+        "blue/green 배포에서는 사용자 지정 구성만 쓸 수 있기 때문이다"
+      ],
+      "correct": 0,
+      "explanation": "배포 구성 문서는 ECS 배포에서 Network Load Balancer를 사용하는 경우 ECSAllAtOnce 구성만 지원된다고 적습니다. Application Load Balancer를 쓰면 canary와 linear 계열 사전 정의 구성을 고를 수 있습니다.",
+      "wrongExplanations": {
+        "1": "NLB 환경에서 지원되는 것은 전체를 한 번에 옮기는 구성입니다. canary 계열 구성은 그 조건에서 선택 대상이 아닙니다.",
+        "2": "ECS 플랫폼은 canary와 linear, all-at-once 트래픽 이동을 모두 제공합니다. 선택이 하나로 줄어든 것은 로드 밸런서 종류 때문입니다.",
+        "3": "ECS와 Lambda는 사용자 지정 canary 또는 linear 구성을 만들 수 있고 사전 정의 구성도 함께 제공됩니다. blue/green이라서 사용자 지정만 가능한 것은 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Deployment configurations on an Amazon ECS compute platform",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html"
+        },
+        {
+          "title": "Deployment strategies (AWS DevOps 백서) — 플랫폼별 지원 매트릭스",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/deployment-strategies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q12",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "단계를 포함한 CodeBuild, CodeDeploy 및 CodePipeline 구성 및 문제 해결(SK1)",
+      "section": "troubleshooting",
+      "difficulty": "applied",
+      "stem": "Lambda 함수의 blue/green 배포가 AfterAllowTraffic 훅 단계에서 한 시간 넘게 머물다 실패했다. 가장 가능성 높은 원인은 무엇인가?",
+      "options": [
+        "검증 함수가 훅 실행 상태를 CodeDeploy에 알리지 않았다",
+        "CodeDeploy agent가 오래된 버전이어서 서명 검증에 실패했다",
+        "배포 그룹에 연결한 CloudWatch 경보가 임계를 넘어 울렸다",
+        "AppSpec 파일을 JSON으로 작성해 훅 이름을 인식하지 못했다"
+      ],
+      "correct": 0,
+      "explanation": "Lambda와 ECS 배포의 검증 함수는 putLifecycleEventHookExecutionStatus를 호출해 Succeeded 또는 Failed를 CodeDeploy에 알려야 하고, 한 시간 안에 알리지 않으면 배포가 실패합니다. 훅 단계에서 오래 멈춰 있다가 실패하는 전형적인 증상입니다.",
+      "wrongExplanations": {
+        "1": "agent 관련 서명 검증 오류는 EC2와 온프레미스 배포에서 나타나는 증상입니다. Lambda와 ECS 배포에서는 CodeDeploy agent를 쓰지 않습니다.",
+        "2": "경보가 울리면 자동 롤백이 시작되며 마지막 정상 리비전이 다시 배포됩니다. 한 시간 가까이 훅에 머무는 양상과는 다릅니다.",
+        "3": "Lambda와 ECS 플랫폼의 AppSpec은 YAML과 JSON을 모두 허용합니다. 항상 YAML이어야 하는 쪽은 EC2와 온프레미스 플랫폼입니다."
+      },
+      "sources": [
+        {
+          "title": "AppSpec hooks 구조 — 검증 함수의 1시간 제약",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html"
+        },
+        {
+          "title": "AppSpec 파일 — 플랫폼별 형식",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/application-specification-files.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q13",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "코드 리포지토리와 파이프라인이 함께 작동하는 방식(K6)",
+      "section": "git-repo-pipeline",
+      "difficulty": "applied",
+      "stem": "소스 액션에서 리포지토리를 Full clone 출력 형식으로 구성했다. 이 출력을 소비할 수 있는 후속 액션에 대한 제약은 무엇인가?",
+      "options": [
+        "하위 CodeBuild 액션에서만 사용할 수 있다",
+        "하위 CodeDeploy 액션에서만 사용할 수 있다",
+        "같은 스테이지의 액션에서만 사용할 수 있다",
+        "approval 액션을 거친 뒤에만 사용할 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "Full clone은 커밋의 얕은 복사 ZIP 대신 Git URL 참조를 넘기는 출력 형식이며, 문서는 이 형식을 하위 CodeBuild 액션에서만 쓸 수 있다고 적습니다. Git 이력이 필요한 빌드 작업을 위한 선택지입니다.",
+      "wrongExplanations": {
+        "1": "CodeDeploy는 컴퓨트 플랫폼에 리비전을 배포하는 액션이며 Git URL 참조를 소비하는 쪽이 아닙니다. Full clone을 받는 것은 빌드 액션입니다.",
+        "2": "제약은 스테이지 위치가 아니라 액션 제공자의 종류입니다. 액션끼리는 파이프라인 아티팩트 버킷을 통해 산출물을 넘깁니다.",
+        "3": "approval 액션은 사람의 확인을 받는 게이트이고 아티팩트 형식과는 무관합니다. 제약은 소비하는 액션이 CodeBuild여야 한다는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Source actions and change detection methods — Full clone 출력과 제약",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/change-detection-methods.html"
+        },
+        {
+          "title": "CodeCommit source action reference — 출력 아티팩트 형식",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodeCommit.html"
+        },
+        {
+          "title": "CodePipeline 통합 목록 — 소스 액션 제공자",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/integrations-action-type.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q14",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "지속적 배포 흐름 구조를 적용하여 파이프라인 호출(예: Gitflow, GitHub Flow)(SK2)",
+      "section": "branch-strategy",
+      "difficulty": "applied",
+      "stem": "규정 준수 심사가 엄격하고 여러 프로덕션 버전을 동시에 유지해야 하는 크고 분산된 팀이다. AWS 규범 가이드 기준으로 맞는 브랜치 전략과 그에 따르는 대가는 무엇인가?",
+      "options": [
+        "Gitflow — 가장 복잡해 파이프라인에 규정 준수용 단계가 더 필요하다",
+        "GitHub Flow — 단명 브랜치라 규정 준수 절차를 자연히 흡수한다",
+        "Trunk — 단일 브랜치라 여러 프로덕션 버전을 쉽게 병행할 수 있다",
+        "Gitflow — 가장 단순해 파이프라인을 하나로 줄여 운영할 수 있다"
+      ],
+      "correct": 0,
+      "explanation": "규범 가이드는 Gitflow가 크고 분산된 팀, 엄격한 릴리스와 규정 준수 요구, 여러 프로덕션 버전 동시 유지에 적합하다고 적습니다. 동시에 세 전략 중 가장 복잡해서 CI/CD 파이프라인에 규정 준수용 단계가 더 필요하고 여러 릴리스를 동시에 지원해야 한다고 설명합니다.",
+      "wrongExplanations": {
+        "1": "GitHub Flow는 작고 성숙한 팀에 적합하며, 엄격한 규정 준수나 릴리스 절차가 있는 팀에는 잘 맞지 않는다고 문서가 적습니다.",
+        "2": "Trunk는 모든 개발자가 단일 브랜치에서 작업하며 항상 릴리스 가능한 상태를 유지하는 전략입니다. 여러 프로덕션 버전을 동시에 유지하는 요구에는 release 브랜치를 두는 Gitflow가 맞습니다.",
+        "3": "전략은 맞지만 평가가 틀렸습니다. 가이드는 세 전략을 복잡도 순으로 Trunk, GitHub Flow, Gitflow로 소개하며 Gitflow를 가장 복잡한 쪽에 둡니다."
+      },
+      "sources": [
+        {
+          "title": "Advantages and disadvantages of the Gitflow strategy",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/advantages-and-disadvantages-of-the-gitflow-strategy.html"
+        },
+        {
+          "title": "Git branching strategies — 복잡도 순서",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q15",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "AWS 서비스를 사용하여 오케스트레이션 자동화(예: ML 모델 배포, 모델 구축 자동화)(SK3)",
+      "section": "sagemaker-pipelines",
+      "difficulty": "foundational",
+      "stem": "SageMaker 파이프라인의 DAG 구조, 즉 단계가 어떤 순서로 연결되는지를 결정하는 것은 무엇인가?",
+      "options": [
+        "단계 사이의 데이터 의존성",
+        "코드에서 단계를 정의한 순서",
+        "단계 목록에 넘긴 배열 순서",
+        "각 단계에 지정한 우선순위 값"
+      ],
+      "correct": 0,
+      "explanation": "파이프라인은 방향성 비순환 그래프로 연결된 단계 묶음이고, 그 구조는 한 단계의 출력 속성을 다른 단계의 입력으로 넘기는 데이터 의존성으로 결정됩니다. 데이터 의존성이 없는 단계는 실행 즉시 시작되어 병렬로 돌며, 데이터 연결 없이 시작 순서만 강제하려면 DependsOn을 지정합니다.",
+      "wrongExplanations": {
+        "1": "코드에 적은 순서가 실행 순서를 정하지는 않습니다. 의존성이 없으면 정의 순서와 무관하게 병렬로 실행됩니다.",
+        "2": "단계 목록은 파이프라인에 포함할 단계를 모아 넘기는 것이고 배열의 순서가 실행 순서를 뜻하지 않습니다. 순서는 의존성에서 나옵니다.",
+        "3": "단계에 우선순위 값을 주는 설정은 없습니다. 동시에 돌 수 있는 단계 수를 제한하는 ParallelismConfiguration이 따로 있을 뿐입니다."
+      },
+      "sources": [
+        {
+          "title": "Pipelines overview — DAG와 데이터 의존성",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html"
+        },
+        {
+          "title": "Amazon SageMaker Pipelines — 서비스 정의",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q16",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "훈련 및 추론 작업 구성(예: Amazon EventBridge 규칙, SageMaker Pipelines, CodePipeline 사용)(SK4)",
+      "section": "sagemaker-pipelines",
+      "difficulty": "applied",
+      "stem": "파이프라인에서 서로 독립이라고 생각한 두 처리 단계가 계속 순서대로 실행되어 전체 시간이 길어진다. 병렬로 돌게 하려면 무엇을 확인해 고쳐야 하는가?",
+      "options": [
+        "한 단계의 출력 속성을 다른 단계 입력으로 넘기고 있는지 확인해 끊는다",
+        "ParallelismConfiguration 값을 올려 동시 실행 단계 수 상한을 늘린다",
+        "두 단계에 DependsOn을 서로 지정해 실행 순서를 명시적으로 교차시킨다",
+        "단계 캐싱을 켜서 이전 실행 결과를 재사용하도록 타임아웃을 설정한다"
+      ],
+      "correct": 0,
+      "explanation": "DAG는 데이터 의존성으로 결정되므로, 한 단계의 출력 속성을 다른 단계의 입력으로 참조하면 두 단계는 순차 실행됩니다. 의도하지 않은 참조를 끊으면 의존성이 없어져 두 단계가 실행 즉시 시작되어 병렬로 돕니다.",
+      "wrongExplanations": {
+        "1": "ParallelismConfiguration은 동시에 돌 수 있는 단계 수의 상한을 제한하는 설정입니다. 의존성 때문에 순차로 묶인 단계는 상한을 올려도 병렬이 되지 않습니다.",
+        "2": "DependsOn은 데이터 연결 없이 시작 순서를 강제하는 설정이라 순차 실행을 더 굳히는 방향입니다. 더구나 서로 지정하면 순환 의존성으로 검증 예외가 납니다.",
+        "3": "캐싱은 조건이 같은 이전 성공 실행의 결과를 재사용해 시간을 줄이는 기능입니다. 두 단계의 실행 순서 자체를 바꾸지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Pipelines overview — 데이터 의존성과 병렬 실행, DependsOn",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html"
+        },
+        {
+          "title": "Step caching — 재사용 조건과 범위",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-caching.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q17",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "AWS 서비스를 사용하여 오케스트레이션 자동화(예: ML 모델 배포, 모델 구축 자동화)(SK3)",
+      "section": "sagemaker-pipelines",
+      "difficulty": "foundational",
+      "stem": "SageMaker 파이프라인 단계의 재시도 정책에서 MaxAttempts의 기본값과 최대값, 그리고 ExpireAfterMin과의 관계는 무엇인가?",
+      "options": [
+        "기본 5에 최대 20이며 ExpireAfterMin과 둘 중 하나만 지정한다",
+        "기본 3에 최대 10이며 ExpireAfterMin과 함께 지정해야 한다",
+        "기본 5에 최대 20이며 ExpireAfterMin과 함께 지정해야 한다",
+        "기본 1에 최대 20이며 ExpireAfterMin이 우선 적용된다"
+      ],
+      "correct": 0,
+      "explanation": "MaxAttempts는 기본값 5에 최대값 20이고, MaxAttempts와 ExpireAfterMin은 둘 중 하나만 지정할 수 있으며 둘 다 주면 검증 오류가 납니다. Step.SERVICE_FAULT와 Step.THROTTLING은 Pipelines가 기본으로 자동 재시도하며 정책으로 덮어쓸 수 있습니다.",
+      "wrongExplanations": {
+        "1": "기본값과 최대값이 모두 다르고, 두 필드를 함께 지정할 수도 없습니다. 함께 주면 검증 오류가 발생합니다.",
+        "2": "기본값과 최대값은 맞지만 두 필드를 함께 지정할 수 없습니다. 둘 중 하나만 선택해 재시도 한계를 표현합니다.",
+        "3": "기본값이 다르고 우선순위 규칙도 없습니다. 둘 중 하나만 지정하는 것이 문서의 요구입니다."
+      },
+      "sources": [
+        {
+          "title": "Retry policy for pipeline steps — 필드와 제약",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-retry-policy.html"
+        },
+        {
+          "title": "Pipeline steps — 재시도 정책을 지원하는 단계",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q18",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "코드 리포지토리와 파이프라인이 함께 작동하는 방식(K6)",
+      "section": "projects-registry",
+      "difficulty": "foundational",
+      "stem": "SageMaker 제공 프로젝트 템플릿을 쓰는 환경에서 Model Registry의 승인 상태 전이 중 아무 동작도 일으키지 않는 것은 무엇인가?",
+      "options": [
+        "PendingManualApproval에서 Rejected로",
+        "PendingManualApproval에서 Approved로",
+        "Approved에서 Rejected로",
+        "Rejected에서 Approved로"
+      ],
+      "correct": 0,
+      "explanation": "모델 승인 상태 문서는 PendingManualApproval에서 Rejected로 가는 전이에 동작이 없다고 적습니다. 아직 배포된 적이 없는 버전을 거부하는 경우이기 때문입니다. 나머지 세 전이는 모두 CI/CD 배포를 시작시킵니다.",
+      "wrongExplanations": {
+        "1": "승인 대기에서 승인으로 바뀌면 그 승인된 모델 버전의 CI/CD 배포가 시작됩니다. 가장 전형적인 승격 경로입니다.",
+        "2": "승인된 상태에서 거부로 바뀌면 가장 최근 Approved 상태인 버전을 배포하는 CI/CD가 시작됩니다. 사실상 롤백으로 동작합니다.",
+        "3": "거부된 상태에서 승인으로 바뀌면 그 버전의 배포가 시작됩니다. 수정 후 다시 올리는 경로입니다."
+      },
+      "sources": [
+        {
+          "title": "Update the approval status of a model — 전이별 동작",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html"
+        },
+        {
+          "title": "Automate SageMaker AI with EventBridge — 모델 패키지 상태 변화 이벤트",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q19",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "AWS 서비스를 사용하여 오케스트레이션 자동화(예: ML 모델 배포, 모델 구축 자동화)(SK3)",
+      "section": "projects-registry",
+      "difficulty": "applied",
+      "stem": "SageMaker가 제공하는 모델 구축·훈련 프로젝트 템플릿에서 CodePipeline의 build 단계가 하는 일은 무엇인가?",
+      "options": [
+        "SageMaker 파이프라인을 만들고 갱신한 뒤 실행을 시작해 완료까지 기다린다",
+        "CloudFormation 스택을 만들어 스테이징 엔드포인트에 모델을 배포한다",
+        "모델 패키지의 승인 상태를 Approved로 바꿔 배포 파이프라인을 시작한다",
+        "Model Monitor 일정을 만들어 데이터 품질 드리프트를 감시하도록 설정한다"
+      ],
+      "correct": 0,
+      "explanation": "모델 구축·훈련 템플릿은 source와 build 두 단계의 CodePipeline을 만들고, build 단계가 SageMaker 파이프라인을 만들고 갱신한 뒤 실행을 시작해 완료까지 대기합니다. 이것이 CodePipeline과 SageMaker Pipelines를 잇는 문서상의 연결 방식이며, 통합 테스트를 스테이징에서 실제로 돌리는 지점도 여기입니다.",
+      "wrongExplanations": {
+        "1": "CloudFormation 스택으로 스테이징 엔드포인트를 배포하는 것은 모델 배포 템플릿의 build 단계가 하는 일입니다. 두 템플릿은 역할이 나뉘어 있습니다.",
+        "2": "승인 상태 변경은 사람이 하거나 파이프라인의 Condition 단계가 자동 평가합니다. 모델 구축 템플릿의 build 단계가 직접 승인하지는 않습니다.",
+        "3": "Model Monitor 일정 배포는 모니터링 전용 템플릿이 담당합니다. 그 템플릿은 스테이징 엔드포인트가 갱신될 때마다 EventBridge 규칙으로 별도 파이프라인을 시작합니다."
+      },
+      "sources": [
+        {
+          "title": "SageMaker AI 제공 프로젝트 템플릿 — 템플릿별 구성 요소",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-sm.html"
+        },
+        {
+          "title": "What is a SageMaker AI Project? — Projects의 역할",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-whatis.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q20",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "데이터 수집 자동화 및 오케스트레이션 서비스와의 통합(K2)",
+      "section": "ingestion-automation",
+      "difficulty": "applied",
+      "stem": "S3 버킷에 새 훈련 데이터 객체가 올라올 때마다 SageMaker 파이프라인을 시작하려 한다. 공식 문서 기준 구성은 무엇인가?",
+      "options": [
+        "버킷의 EventBridge 알림을 켜고 객체 생성 패턴 규칙의 타깃으로 파이프라인을 지정한다",
+        "파이프라인에 S3 소스 단계를 추가하고 폴링 주기를 가장 짧게 설정해 변화를 감지한다",
+        "Glue 크롤러를 일정으로 돌려 카탈로그가 갱신되면 파이프라인이 자동으로 시작되게 둔다",
+        "CodePipeline을 만들고 S3 소스 액션의 출력을 SageMaker 전용 액션으로 넘겨 실행한다"
+      ],
+      "correct": 0,
+      "explanation": "S3는 버킷 이벤트를 EventBridge로 보낼 수 있고, 알림을 켜면 모든 이벤트가 전송되므로 객체 생성 이벤트 패턴으로 규칙을 만들어 걸러냅니다. SageMaker Pipelines는 EventBridge 타깃으로 지원되므로 그 규칙의 타깃으로 지정하면 새 객체가 도착할 때마다 파이프라인이 시작됩니다.",
+      "wrongExplanations": {
+        "1": "파이프라인에 소스 폴링 단계를 두는 구조는 SageMaker Pipelines의 단계 유형에 없습니다. 이벤트 기반 시작이 문서가 안내하는 경로입니다.",
+        "2": "Glue 워크플로는 Schedule과 On demand, EventBridge 이벤트를 시작 트리거로 쓰며 크롤러와 잡을 돌립니다. 카탈로그 갱신이 SageMaker 파이프라인을 직접 시작시키지는 않습니다.",
+        "3": "CodePipeline의 통합 목록에서 SageMaker 전용 액션 제공자는 확인되지 않았습니다. Projects 템플릿은 CodeBuild 단계에서 파이프라인을 실행하는 방식으로 연결합니다."
+      },
+      "sources": [
+        {
+          "title": "Using EventBridge with Amazon S3 — 버킷 이벤트 전송",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventBridge.html"
+        },
+        {
+          "title": "Schedule a pipeline with Amazon EventBridge — 타깃 지원",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipeline-eventbridge.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q21",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "배포 전략 및 롤백 작업(예: 블루/그린 배포, canary, 선형)(K5)",
+      "section": "deploy-strategy-rollback",
+      "difficulty": "foundational",
+      "stem": "CodeDeploy의 자동 롤백은 내부적으로 어떻게 구현되는가?",
+      "options": [
+        "마지막 정상 리비전을 새 배포로 다시 배포한다",
+        "진행 중인 배포를 취소하고 변경을 되돌려 놓는다",
+        "이전 배포의 스냅샷을 복원해 상태를 맞춰 놓는다",
+        "실패한 배포의 훅을 역순으로 다시 실행해 되돌린다"
+      ],
+      "correct": 0,
+      "explanation": "CodeDeploy는 롤백을 이전에 배포한 리비전을 새 배포로 재배포하는 방식으로 구현합니다. 그래서 롤백에도 새 배포 ID가 부여되고, 훅과 배포 구성의 영향을 똑같이 받습니다. 자동 롤백은 배포가 실패하거나 지정한 모니터링 임계가 충족될 때 일어나며 마지막 정상 리비전이 배포됩니다.",
+      "wrongExplanations": {
+        "1": "되돌리는 방식이 아니라 다시 배포하는 방식입니다. 그래서 롤백 과정에도 라이프사이클 훅이 그대로 실행됩니다.",
+        "2": "스냅샷 복원 개념은 CodeDeploy의 롤백 구현이 아닙니다. 배포 단위는 리비전이고 롤백은 그 리비전의 재배포입니다.",
+        "3": "훅은 배포 과정의 단계별 스크립트 실행 지점이며 역순 실행으로 상태를 되돌리는 장치가 아닙니다. 롤백은 별도의 새 배포로 수행됩니다."
+      },
+      "sources": [
+        {
+          "title": "Redeploy and roll back a deployment — 롤백 구현 방식",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html"
+        },
+        {
+          "title": "Deployment steps — 롤백과 배포 ID",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-server.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q22",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "배포 전략 및 롤백 작업(예: 블루/그린 배포, canary, 선형)(K5)",
+      "section": "deploy-strategy-rollback",
+      "difficulty": "applied",
+      "stem": "팀이 SageMaker 실시간 엔드포인트의 모델 교체를 canary로 하려고 CodeDeploy 애플리케이션과 배포 그룹을 만들려 한다. 어디가 틀렸고 무엇으로 해야 하는가?",
+      "options": [
+        "엔드포인트는 CodeDeploy 플랫폼이 아니므로 배포 가드레일의 CANARY를 쓴다",
+        "엔드포인트는 ECS 플랫폼으로 등록해야 하므로 ECSCanary 구성을 골라 쓴다",
+        "엔드포인트는 in-place 배포만 되므로 CodeDeploy의 OneAtATime을 쓴다",
+        "엔드포인트는 Lambda 플랫폼으로 감싸야 하므로 LambdaCanary 구성을 쓴다"
+      ],
+      "correct": 0,
+      "explanation": "CodeDeploy의 컴퓨트 플랫폼은 EC2와 온프레미스, Lambda, ECS 세 가지이고 SageMaker 엔드포인트는 포함되지 않습니다. 엔드포인트의 점진 배포는 SageMaker 배포 가드레일이 제공하며, 트래픽 이동 유형을 CANARY로 지정하고 CanarySize와 대기 시간을 API 파라미터로 직접 줍니다. 자동 롤백은 CloudWatch 경보를 지정해 구성합니다.",
+      "wrongExplanations": {
+        "1": "SageMaker 엔드포인트를 ECS 서비스로 등록할 수는 없습니다. ECS 사전 정의 canary 구성은 ECS task set에 적용되는 설정입니다.",
+        "2": "엔드포인트 업데이트는 기본적으로 블루그린 방식으로 수행되며 canary와 linear, 롤링까지 선택할 수 있습니다. in-place만 가능하다는 제약은 없습니다.",
+        "3": "Lambda 사전 정의 구성은 Lambda 함수 버전에 트래픽을 옮기는 설정입니다. 엔드포인트를 Lambda로 감싸는 방식은 문서가 제시하는 배포 경로가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is CodeDeploy? — 컴퓨트 플랫폼 3종",
+          "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
+        },
+        {
+          "title": "TrafficRoutingConfig — CANARY와 CanarySize 지정",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_TrafficRoutingConfig.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q23",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "CI/CD 파이프라인에서 자동화된 테스트 만들기(예: 통합 테스트, 단위 테스트, 엔드투엔드 테스트)(SK5)",
+      "section": "automated-tests",
+      "difficulty": "applied",
+      "stem": "모델 평가 지표가 임계에 못 미칠 때 그 모델이 Model Registry에 등록되지 않도록 파이프라인에서 막으려 한다. 어떤 단계를 쓰고 그 단계의 제약은 무엇인가?",
+      "options": [
+        "Condition 단계를 쓰며 중첩할 수 없고 양 분기에 같은 단계를 쓸 수 없다",
+        "Callback 단계를 쓰며 SQS 큐 응답을 기다려야 하고 리전이 같아야 한다",
+        "QualityCheck 단계를 쓰며 항상 새 baseline을 계산해 비교해야 한다",
+        "Fail 단계를 쓰며 동시 실행 중인 단계가 끝날 때까지 기다려야 한다"
+      ],
+      "correct": 0,
+      "explanation": "Condition 단계는 단계 속성을 평가해 조건 목록과 참 분기, 거짓 분기로 흐름을 나눕니다. SageMaker 예제 DAG에서도 평가 지표가 한계 미만인지 검사해 미달이면 등록 단계로 가지 않습니다. 제약은 중첩이 불가능하고 양 분기에 같은 단계를 쓸 수 없다는 것입니다.",
+      "wrongExplanations": {
+        "1": "Callback 단계는 외부 프로세스를 워크플로에 편입하기 위해 SQS 큐에 토큰 메시지를 보내고 응답을 기다리는 장치입니다. 평가 지표로 분기하는 용도가 아닙니다.",
+        "2": "QualityCheck는 데이터와 모델 품질의 baseline을 제안하고 드리프트를 검사하는 단계로, 평가 지표 임계 판정과는 목적이 다릅니다. 게다가 이 단계는 신규 고객에게 닫힌 Model Monitor 컨테이너를 씁니다.",
+        "3": "Fail 단계는 조건이 충족되지 않을 때 실행을 중단하고 사용자 지정 오류 메시지를 남기는 단계입니다. 판정 자체를 하는 것은 Condition이고 Fail은 그 거짓 분기에 붙여 씁니다."
+      },
+      "sources": [
+        {
+          "title": "Pipeline steps — Condition 단계와 제약",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html"
+        },
+        {
+          "title": "Pipelines overview — 평가 지표 조건으로 등록 차단",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t3-3-q24",
+      "examGuideTaskId": "mla-t3-3",
+      "skill": "모델 재훈련을 위한 메커니즘 구축 및 통합(SK6)",
+      "section": "retraining",
+      "difficulty": "applied",
+      "stem": "모델을 매주 월요일 고정 일정으로만 재훈련하도록 구성했다. Well-Architected ML Lens 기준으로 이 구성의 문제와 권고되는 조건 정의는 무엇인가?",
+      "options": [
+        "성능과 데이터 패턴을 보지 않는 고정 일정은 안티패턴이므로 성능 저하와 드리프트, 신규 데이터로 조건을 정의한다",
+        "일정 기반 시작은 레거시 경로이므로 EventBridge Scheduler로 바꾸고 주기를 더 짧게 잡아 자주 재훈련한다",
+        "재훈련은 모델 승인 이벤트로만 시작해야 하므로 Model Package State Change 규칙으로 트리거를 교체한다",
+        "일정 재훈련은 비용이 커지므로 파이프라인 단계 캐싱을 켜서 같은 단계를 재사용해 비용만 줄인다"
+      ],
+      "correct": 0,
+      "explanation": "ML Lens는 성능과 데이터 패턴과 무관하게 고정 일정으로 재훈련하는 것을 안티패턴으로 꼽습니다. 권고되는 방식은 성능 지표를 정의하고 모니터링한 뒤 재훈련 조건을 일정 주기, 임계 이하 성능 저하, 데이터 드리프트, 신규 훈련 데이터로 정의하는 것입니다. 필요할 때만 재훈련하라는 지속가능성 지침도 같은 방향입니다.",
+      "wrongExplanations": {
+        "1": "일정 호출 수단으로 Scheduler가 권장되는 것은 맞지만, 주기를 더 짧게 해 자주 돌리는 것은 문제를 키우는 방향입니다. 핵심은 수단이 아니라 재훈련 조건을 무엇으로 정의하느냐입니다.",
+        "2": "모델 패키지 상태 변화 이벤트는 승인된 모델을 배포하는 릴리스 자동화의 트리거입니다. 재훈련을 시작시키는 조건과는 역할이 다릅니다.",
+        "3": "단계 캐싱은 조건이 같은 이전 성공 실행을 재사용해 시간과 비용을 줄이는 기능입니다. 재훈련 시점 판단을 개선하지는 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Machine Learning Lens — 재훈련 프레임워크와 안티패턴",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html"
+        },
+        {
+          "title": "MLSUS06-BP02 — 필요할 때만 재훈련",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
