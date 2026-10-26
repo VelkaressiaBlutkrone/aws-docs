@@ -57,6 +57,23 @@ lastVerified: 2026-10-17
 
 ---
 
+## ⚡ 시험 직전 요약
+
+> 시험 직전에 이 열 줄만 다시 봅니다. 근거와 맥락은 아래 본문에 있습니다.
+
+- **도구 5분기**: 코드 없이 레시피 재사용 → **DataBrew** · ML 데이터를 시각적으로 준비해 Feature Store로 → **Data Wrangler** · 서버리스 Spark + 카탈로그 → **Glue** · 클러스터 제어 → **EMR** · SageMaker 안의 스크립트 잡 → **Processing**
+- **스케일링**: 이상값에 강건 → **Robust Scaler**(DataBrew는 Z_SCORE 계열)
+- **인코딩**: 범주 수천 개 + 오탈자 → **Similarity encode**(3-gram → min-hash, 기본 차원 30). 원-핫은 차원이 폭발한다
+- **Glue 변환**: 중첩 JSON을 관계형으로 → **`relationalize`** · 한 필드에 여러 타입 → **`resolveChoice`**
+- **중복**: 공통 키 없이 유사 중복을 찾는다 → **FindMatches**(ML). 정확 일치는 DELETE_DUPLICATE_ROWS·Drop Duplicates
+- **Firehose + Lambda 변환 3숫자**: 버퍼 0.2–3 MB · 호출 **5분** · 요청과 응답 **각 6 MB**
+- **자동 데이터 레이블링**: **최소 1,250개**(5,000개↑ 권장), 지원 **4종**(이미지 분류·의미 분할·객체 감지·텍스트 분류), 사용자 지정 유형·스트리밍 잡은 불가
+- ⚠️ **검증 ≠ 조정**: 검증은 정확성을 표시·평가만 하고 **고치지 못한다**. 수정하는 쪽은 **조정(adjustment)**
+- **Feature Store 온라인 조회가 비면**: `EventTime` 비교 규칙과 `TargetStores` 지정을 본다
+- ⚠️ 레이블링·사람 검토 서비스는 상태를 함께 본다 — Ground Truth·A2I **신규 고객 불가**, Ground Truth Plus **지원 종료**, Mechanical Turk **폐쇄**
+
+---
+
 ## 🔤 먼저 알아야 할 용어
 
 | 용어 | 뜻 |
@@ -243,11 +260,40 @@ lastVerified: 2026-10-17
 
 ## 🧪 자가 점검
 
-1. 범주 값이 수천 개이고 오탈자가 많은 열을 인코딩해야 한다. 어떤 인코딩을 고르고, 그 방식이 one-hot과 다른 점은? *(→ 4) 인코딩)*
-2. 중첩 JSON 로그를 관계형 테이블로 옮기려 한다. Glue의 어떤 메서드를 쓰고 무엇을 해 주는가? *(→ 5) Glue 변환)*
-3. Firehose에서 Lambda 변환이 타임아웃으로 실패한다. 확인할 한도 세 가지는? *(→ 7) 스트리밍 변환)*
-4. 특성 그룹에 레코드를 넣었는데 온라인 조회에 나오지 않는다. 확인할 두 가지는? *(→ 8) Feature Store)*
-5. 레이블 품질이 낮아 다시 작업해야 한다. 검증과 조정 중 무엇을 골라야 하는가? *(→ 9) 레이블링)*
+**Q1.** 범주 값이 수천 개이고 오탈자가 많은 열을 인코딩해야 한다. 어떤 인코딩을 고르고, 그 방식이 one-hot과 다른 점은? (→ 4) 인코딩)
+
+<details><summary>정답 보기</summary>
+
+**Similarity encode.** 3-gram 토큰을 min-hash 임베딩으로 바꿔 **비슷한 문자열이 비슷한 벡터**가 되므로 오탈자가 흩어지지 않고 모입니다(Target dimension 기본 30). one-hot은 범주마다 열을 하나씩 만들어 수천 개면 **차원이 폭발**하고 오탈자를 전혀 다른 범주로 취급합니다. 드문 범주를 정리하는 Replace rare와 함께 쓸 수도 있습니다.
+</details>
+
+**Q2.** 중첩 JSON 로그를 관계형 테이블로 옮기려 한다. Glue의 어떤 메서드를 쓰고 무엇을 해 주는가? (→ 5) Glue 변환)
+
+<details><summary>정답 보기</summary>
+
+**`relationalize`.** **중첩 열을 풀고 배열을 피벗**해 관계형 DB에 맞는 **테이블 목록**으로 바꿔 줍니다(NoSQL → RDB 이전에 유용). 한 필드에 여러 타입이 섞여 있는 문제는 다른 메서드인 **`resolveChoice`**가 담당합니다 — 둘을 섞지 마세요.
+</details>
+
+**Q3.** Firehose에서 Lambda 변환이 타임아웃으로 실패한다. 확인할 한도 세 가지는? (→ 7) 스트리밍 변환)
+
+<details><summary>정답 보기</summary>
+
+**변환 버퍼 0.2–3 MB · 호출 최대 5분 · 요청과 응답 각각 6 MB.** 세 숫자 중 어디에 걸렸는지로 처방이 갈립니다. ⚠️ 이 버퍼(0.2–3 MB)는 **S3 전달 버퍼**(크기 1–128 MB·간격 0–900초)와 다른 값이니 혼동하지 마세요.
+</details>
+
+**Q4.** 특성 그룹에 레코드를 넣었는데 온라인 조회에 나오지 않는다. 확인할 두 가지는? (→ 8) Feature Store)
+
+<details><summary>정답 보기</summary>
+
+① **`EventTime` 비교** — `PutRecord`는 새 레코드의 `EventTime`이 기존보다 더 클 때만 온라인·오프라인 둘 다에 쓰고, 그렇지 않으면 과거 레코드로 보고 **오프라인에만** 씁니다. ② **`TargetStores` 지정** — 대상이 오프라인으로만 좁혀져 있을 수 있습니다. 온라인 스토어는 최신 레코드만, 오프라인은 append-only 이력입니다.
+</details>
+
+**Q5.** 레이블 품질이 낮아 다시 작업해야 한다. 검증과 조정 중 무엇을 골라야 하는가? (→ 9) 레이블링)
+
+<details><summary>정답 보기</summary>
+
+**조정(adjustment).** 검증(verification)은 기존 레이블의 정확성을 **표시·평가만 하고 수정하지 못합니다.** 이전 주석을 실제로 고치는 것은 조정입니다. ⚠️ 다만 Ground Truth는 **신규 고객에게 닫혀** 있어(Ground Truth Plus는 지원 종료, A2I는 유지 모드, Mechanical Turk는 폐쇄) 새 계정에서는 이 경로 자체를 쓸 수 없습니다.
+</details>
 
 ---
 
