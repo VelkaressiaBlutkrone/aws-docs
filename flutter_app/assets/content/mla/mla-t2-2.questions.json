@@ -64,7 +64,7 @@
     {
       "id": "mla-t2-2-q3",
       "examGuideTaskId": "mla-t2-2",
-      "skill": "모델 훈련 시간을 줄이는 방법(예: 조기 중지, 분산 훈련)(K2)",
+      "skill": "훈련 프로세스의 요소(예: 에포크, 단계, 배치 크기)(K1)",
       "section": "training-elements",
       "difficulty": "applied",
       "stem": "데이터 병렬 훈련에서 노드 수를 2배로 늘렸다. 수렴 속도를 유지하기 위해 공식 문서가 권하는 조정은 무엇인가?",
@@ -92,7 +92,7 @@
     {
       "id": "mla-t2-2-q4",
       "examGuideTaskId": "mla-t2-2",
-      "skill": "하이퍼파라미터 튜닝 기법(예: 무작위 검색, 베이지안 최적화)(K6)",
+      "skill": "모델 훈련 시간을 줄이는 방법(예: 조기 중지, 분산 훈련)(K2)",
       "section": "early-stopping",
       "difficulty": "foundational",
       "stem": "AMT 튜닝 작업 수준의 조기 중지가 훈련 작업을 멈출지 판단할 때 비교하는 기준은 무엇인가?",
@@ -224,14 +224,14 @@
         "모델과 레코드 한 개가 디바이스 하나에 들어가야 한다",
         "모델을 여러 디바이스로 나눌 수 있어야 한다",
         "워커마다 서로 다른 모델 구조를 가져야 한다",
-        "인스턴스가 단일 GPU 구성이어야 한다"
+        "워커 수가 데이터 샤드 수보다 많아야 한다"
       ],
       "correct": 0,
       "explanation": "데이터 병렬은 각 GPU가 모델 복제본을 가진 채 서로 다른 배치를 처리하는 방식이므로, 모델과 레코드 한 개가 디바이스 하나에 들어가야 합니다.",
       "wrongExplanations": {
         "1": "모델을 여러 디바이스로 나누는 것은 모델 병렬의 방식입니다.",
         "2": "데이터 병렬에서 모든 복제본은 같은 모델을 가지고 갱신을 동기화해 같은 가중치를 유지합니다.",
-        "3": "단일 GPU 구성은 전제가 아닙니다. 데이터 병렬은 여러 GPU와 여러 인스턴스로 확장하는 전략입니다."
+        "3": "데이터는 워커에 나눠 배정되므로 워커보다 샤드가 적으면 쉬는 워커가 생길 뿐이고, 성립 조건으로 문서가 드는 것은 디바이스에 들어가는지 여부입니다."
       },
       "sources": [
         {
@@ -308,22 +308,22 @@
     {
       "id": "mla-t2-2-q11",
       "examGuideTaskId": "mla-t2-2",
-      "skill": "하이퍼파라미터 튜닝 수행(예: SageMaker AI 자동 모델 튜닝(AMT) 사용)(SK4)",
+      "skill": "모델 훈련 시간을 줄이는 방법(예: 조기 중지, 분산 훈련)(K2)",
       "section": "speedup",
       "difficulty": "foundational",
       "stem": "관리형 웜 풀과 AMT 웜 스타트의 차이를 맞게 설명한 것은 무엇인가?",
       "options": [
         "웜 풀은 이전 튜닝 결과를 재사용하고 웜 스타트는 인스턴스를 유지한다",
         "웜 풀은 인스턴스를 유지하고 웜 스타트는 이전 튜닝 결과를 출발점으로 쓴다",
-        "둘 다 인스턴스를 유지하는 기능이고 적용 범위만 다르다",
-        "둘 다 이전 결과를 재사용하며 과금 방식만 다르다"
+        "웜 풀은 체크포인트를 S3에 보관해 중단 지점부터 재개하게 한다",
+        "웜 스타트는 스팟 인스턴스를 미리 확보해 중단을 줄인다"
       ],
       "correct": 1,
       "explanation": "관리형 웜 풀은 유지 기간을 지정해 인스턴스를 살려 두어 반복 실험의 기동 지연을 줄이는 기능입니다. AMT 웜 스타트는 이전 튜닝 작업의 결과를 출발점으로 새 튜닝 작업을 시작하는 기능입니다.",
       "wrongExplanations": {
         "0": "두 설명이 서로 바뀌어 있습니다. 인스턴스를 유지하는 쪽이 웜 풀입니다.",
-        "2": "웜 스타트는 인스턴스를 유지하는 기능이 아니라 탐색의 출발점을 물려받는 기능입니다.",
-        "3": "웜 풀은 이전 결과를 재사용하지 않습니다. 인스턴스를 유지해 기동 시간을 줄입니다."
+        "2": "중단 지점부터 재개하게 하는 것은 체크포인트입니다. 웜 풀이 줄이는 것은 인스턴스 기동 지연입니다.",
+        "3": "스팟 용량 확보는 관리형 스팟 훈련의 영역입니다. 웜 스타트가 물려받는 것은 이전 튜닝의 탐색 결과입니다."
       },
       "sources": [
         {
@@ -418,7 +418,7 @@
       "explanation": "Image Classification은 체크포인트 저장 빈도를 하이퍼파라미터로 두고, 저장된 체크포인트가 모델 아티팩트에 포함되어 파일 크기가 체크포인트 수에 비례해 커집니다.",
       "wrongExplanations": {
         "1": "모델은 데이터가 아니라 패턴을 저장하므로 입력이 커도 모델이 반드시 커지지는 않습니다.",
-        "2": "혼합 정밀도는 훈련 속도와 메모리를 줄이는 기법이고 가중치를 두 벌 저장하는 동작으로 문서가 설명하지 않습니다.",
+        "2": "혼합 정밀도는 훈련 중 메모리와 속도를 다루는 기법이고, 저장되는 모델 아티팩트의 크기를 늘리는 요인으로 제시되지 않습니다.",
         "3": "데이터 증강은 훈련 중 샘플을 변형하는 기법이며 변형 결과를 아티팩트에 담지 않습니다."
       },
       "sources": [
@@ -451,12 +451,12 @@
       },
       "sources": [
         {
-          "title": "Model Fit: Underfitting vs. Overfitting (Amazon Machine Learning, 레거시 서비스 문서)",
-          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html"
+          "title": "What Is Overfitting? (AWS) — 과적합·과소적합 진단과 처방",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
         },
         {
-          "title": "What Is Overfitting? (AWS)",
-          "url": "https://aws.amazon.com/what-is/overfitting/"
+          "title": "Model Fit: Underfitting vs. Overfitting — 보조 출처(Amazon Machine Learning, 신규 사용자 중단된 구서비스 문서)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html"
         }
       ],
       "verified": false
@@ -471,24 +471,28 @@
       "options": [
         "L1은 전체 가중치를 고르게 줄이고 L2는 가중치를 0으로 만든다",
         "L1은 작은 가중치를 0으로 밀어 특성 수를 줄이고 L2는 전체를 고르게 줄인다",
-        "둘 다 가중치를 0으로 만들고 적용 가능한 알고리즘만 다르다",
-        "L1은 신경망 전용이고 L2는 선형 모델 전용이다"
+        "L1은 특성 간 상관이 높을 때 가중치를 안정화하는 쪽이다",
+        "L2는 사용되는 특성의 수를 줄여 희소한 모델을 만든다"
       ],
       "correct": 1,
       "explanation": "L1은 작은 가중치를 0으로 밀어 사용되는 특성 수를 줄여 희소한 모델을 만들고, L2는 전체 가중치를 작게 만들며 특성 간 상관이 높을 때 가중치를 안정화합니다.",
       "wrongExplanations": {
         "0": "두 효과가 서로 바뀌어 있습니다. 가중치를 0으로 미는 쪽이 L1입니다.",
-        "2": "가중치를 0으로 만드는 것은 L1의 특징입니다. L2는 0으로 만들지 않고 고르게 줄입니다.",
-        "3": "L1과 L2는 모두 선형 모델과 트리 모델에 파라미터로 제공됩니다. 신경망 전용 기법은 드롭아웃입니다."
+        "2": "상관이 높은 특성들의 가중치를 안정화하는 쪽은 L2입니다. Linear Learner에서는 weight decay 파라미터로 제공됩니다.",
+        "3": "희소한 모델을 만드는 쪽은 L1입니다. L2는 가중치를 0으로 만들지 않고 고르게 줄입니다."
       },
       "sources": [
         {
-          "title": "Training Parameters (Amazon Machine Learning, 레거시 서비스 문서) — L1·L2 효과",
-          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/training-parameters.html"
+          "title": "Linear learner hyperparameters — l1(L1)·wd(weight decay, L2) 파라미터",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html"
         },
         {
-          "title": "Linear learner hyperparameters — l1·wd",
-          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html"
+          "title": "What Is Overfitting? (AWS) — 정규화 기법 분류",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        },
+        {
+          "title": "Training Parameters — 보조 출처(Amazon Machine Learning, 신규 사용자 중단된 구서비스 문서)의 L1·L2 효과 서술",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/training-parameters.html"
         }
       ],
       "verified": false
@@ -515,11 +519,11 @@
       },
       "sources": [
         {
-          "title": "Fine-tuning large language models in healthcare (AWS Prescriptive Guidance) — PEFT",
+          "title": "Fine-tuning large language models in healthcare (AWS Prescriptive Guidance) — PEFT가 언어 능력의 치명적 손실을 막는다",
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/generative-ai-nlp-healthcare/fine-tuning.html"
         },
         {
-          "title": "Automatically retrain neural networks with Renate (AWS 블로그) — 망각 완화",
+          "title": "Automatically retrain neural networks with Renate — 보조 출처(AWS 블로그). 치명적 망각의 정의 문장은 공식 문서가 아니라 이 블로그에서 확인됨",
           "url": "https://aws.amazon.com/blogs/machine-learning/automatically-retrain-neural-networks-with-renate/"
         }
       ],
@@ -655,15 +659,15 @@
       "options": [
         "부스팅은 모델을 순차로, 배깅은 병렬로 훈련한다",
         "부스팅은 모델을 병렬로, 배깅은 순차로 훈련한다",
-        "부스팅은 지도 학습에, 배깅은 비지도 학습에 쓴다",
-        "부스팅은 트리 전용이고 배깅은 신경망 전용이다"
+        "부스팅은 여러 모델을 다층으로 쌓아 결합하는 방식이다",
+        "배깅은 하나의 모델을 여러 데이터 조각에 이어서 학습시킨다"
       ],
       "correct": 0,
       "explanation": "AWS 개념 페이지는 부스팅을 서로 다른 모델을 차례로 훈련해 최종 결과를 얻는 것으로, 배깅을 모델들을 병렬로 훈련하는 것으로 설명합니다. 순차와 병렬이 문서상의 구분 기준입니다.",
       "wrongExplanations": {
         "1": "두 설명이 서로 바뀌어 있습니다. 차례로 훈련하는 쪽이 부스팅입니다.",
-        "2": "두 방법 모두 앙상블 기법이며 학습 패러다임으로 나뉘지 않습니다. SageMaker의 부스팅 사례는 표 형식 지도 학습 알고리즘들입니다.",
-        "3": "부스팅과 배깅은 결합 방식에 관한 구분이며 특정 모델 종류에 묶이지 않습니다."
+        "2": "여러 모델을 다층으로 쌓아 결합하는 방식은 스태킹입니다. AutoGluon-Tabular와 Autopilot 앙상블 모드가 그 사례입니다.",
+        "3": "배깅은 여러 모델을 독립적으로 병렬 훈련해 결합합니다. 하나의 모델을 이어서 학습시키는 것은 증분 훈련 쪽 개념입니다."
       },
       "sources": [
         {
@@ -737,6 +741,134 @@
         {
           "title": "Custom Docker containers with SageMaker AI",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers-adapt-your-own.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t2-2-q25",
+      "examGuideTaskId": "mla-t2-2",
+      "skill": "모델 성능을 개선하는 방법(K4)",
+      "section": "improve-performance",
+      "difficulty": "applied",
+      "stem": "모델 성능이 기대에 못 미친다. 공식 문서가 반복 개선의 첫 단계로 드는 것은 무엇인가?",
+      "options": [
+        "학습률과 배치 크기부터 조정해 본다",
+        "앙상블로 여러 모델의 예측을 결합한다",
+        "더 복잡한 알고리즘으로 교체해 본다",
+        "훈련 예제 수를 늘려 본다"
+      ],
+      "correct": 3,
+      "explanation": "문서는 반복 개선의 첫 단계로 훈련 예제 수를 늘리는 것을 들고, 성능이 나쁠 때 하이퍼파라미터를 조정하기 전에 데이터 양이 부족한 경우부터 배제하라고 적습니다.",
+      "wrongExplanations": {
+        "0": "하이퍼파라미터 튜닝은 데이터 양 부족을 배제한 다음 단계입니다.",
+        "1": "앙상블은 성능 개선 방법 중 하나이지만 첫 단계로 제시되지는 않습니다.",
+        "2": "단순 알고리즘을 탐색하지 않고 복잡도부터 올리는 것은 비용 관점에서 안티패턴으로 분류됩니다."
+      },
+      "sources": [
+        {
+          "title": "What Is Overfitting? (AWS) — 하이퍼파라미터 조정 전에 데이터 양부터 확인",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        },
+        {
+          "title": "Improving Model Accuracy — 보조 출처(Amazon Machine Learning, 신규 사용자 중단된 구서비스 문서)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/improving-model-accuracy.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t2-2-q26",
+      "examGuideTaskId": "mla-t2-2",
+      "skill": "모델 하이퍼파라미터 및 모델 성능에 미치는 영향(예: 트리 기반 모델의 트리 수, 신경망의 계층 수)(K7)",
+      "section": "improve-performance",
+      "difficulty": "applied",
+      "stem": "XGBoost 모델이 훈련 데이터에만 잘 맞는다. 공식 하이퍼파라미터 문서의 설명에 맞는 조정 방향은 무엇인가?",
+      "options": [
+        "max_depth를 키우고 eta를 올린다",
+        "num_round를 늘리고 gamma를 0으로 둔다",
+        "max_depth를 줄이고 eta를 낮춘다",
+        "subsample을 1로 올리고 alpha를 0으로 둔다"
+      ],
+      "correct": 2,
+      "explanation": "문서는 max_depth를 키울수록 모델이 복잡해지고 과적합 가능성이 커진다고 적고, eta는 업데이트 보폭을 줄여 과적합을 막는다고 설명합니다. 과적합 상황에서는 둘을 반대 방향으로 조정합니다.",
+      "wrongExplanations": {
+        "0": "두 조정 모두 모델을 더 복잡하고 공격적으로 만들어 과적합을 키우는 방향입니다.",
+        "1": "gamma는 값이 클수록 알고리즘이 보수적이 되므로 0으로 두면 제약이 풀립니다. 라운드 수를 더 늘리는 것도 같은 방향입니다.",
+        "3": "subsample을 1로 두면 행 샘플링이 사라지고 alpha를 0으로 두면 L1 정규화가 꺼집니다. 둘 다 과적합 방지와 반대입니다."
+      },
+      "sources": [
+        {
+          "title": "XGBoost hyperparameters (Amazon SageMaker AI)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html"
+        },
+        {
+          "title": "Tune an XGBoost Model — 영향이 큰 하이퍼파라미터",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-tuning.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t2-2-q27",
+      "examGuideTaskId": "mla-t2-2",
+      "skill": "SageMaker AI 지원 프레임워크와 함께 SageMaker AI 스크립트 모드를 사용하여 모델 훈련(예: TensorFlow, PyTorch)(SK2)",
+      "section": "script-mode",
+      "difficulty": "foundational",
+      "stem": "스크립트 모드로 PyTorch 훈련 스크립트를 돌린다. 학습이 끝난 모델 아티팩트를 SageMaker가 압축해 S3로 올리게 하려면 스크립트는 어느 경로에 저장해야 하는가?",
+      "options": [
+        "/opt/ml/output/data",
+        "/opt/ml/checkpoints",
+        "/opt/ml/input/data",
+        "/opt/ml/model"
+      ],
+      "correct": 3,
+      "explanation": "모델 디렉터리 환경 변수가 가리키는 /opt/ml/model이 최종 모델 아티팩트 저장 위치이고, 훈련이 끝나면 SageMaker가 이 디렉터리를 압축해 S3에 업로드합니다.",
+      "wrongExplanations": {
+        "0": "손실·정확도·가중치 같은 부수 출력을 두는 경로이며 모델 아티팩트와 구분됩니다.",
+        "1": "훈련 중 체크포인트가 S3와 동기화되는 경로로 중단 복구에 쓰입니다.",
+        "2": "채널별 훈련 데이터를 읽는 입력 경로입니다."
+      },
+      "sources": [
+        {
+          "title": "SageMaker AI environment variables and the default paths for training storage locations",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-train-storage-env-var-summary.html"
+        },
+        {
+          "title": "Checkpoints in Amazon SageMaker AI — 체크포인트 경로 구분",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-checkpoints.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "mla-t2-2-q28",
+      "examGuideTaskId": "mla-t2-2",
+      "skill": "자동화된 하이퍼파라미터 최적화 기능 통합(SK5)",
+      "section": "amt-warmstart",
+      "difficulty": "applied",
+      "stem": "AMT에서 하이퍼파라미터 범위와 자원 한도를 직접 정하지 않고 AMT가 추측하게 하려 한다. 어떤 기능이고 무엇을 주어야 하는가?",
+      "options": [
+        "웜 스타트 — 이전 튜닝 작업을 부모로 지정한다",
+        "Autotune — 하이퍼파라미터 이름과 예시 값을 준다",
+        "Hyperband — 반복형 알고리즘과 에포크 지표를 준다",
+        "Grid — 탐색할 범주형 값 목록을 모두 준다"
+      ],
+      "correct": 1,
+      "explanation": "Autotune은 하이퍼파라미터 범위와 자원 한도, 조기 중지, 재시도, 전략, 수렴 감지의 값을 자동으로 추측합니다. AutoParameters에 하이퍼파라미터 이름과 예시 값을 주고 모드를 켜면 AMT가 적합 여부를 판단해 범위를 정합니다.",
+      "wrongExplanations": {
+        "0": "웜 스타트는 이전 튜닝 결과를 출발점으로 쓰는 기능이고 탐색 범위는 여전히 사용자가 정합니다.",
+        "2": "Hyperband는 자원을 재할당하는 탐색 전략이며 범위를 대신 정해 주지는 않습니다.",
+        "3": "Grid는 주어진 범주형 조합을 모두 시도하는 전략이라 값 목록을 사용자가 제공해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Define Hyperparameter Ranges — Autotune과 AutoParameters",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html"
+        },
+        {
+          "title": "Understand the hyperparameter tuning strategies available in Amazon SageMaker AI",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html"
         }
       ],
       "verified": false
