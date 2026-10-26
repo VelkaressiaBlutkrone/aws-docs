@@ -277,4 +277,55 @@ void main() {
       });
     });
   }
+
+  // ── M2: 작성 과정 메모 금지 (루브릭 §2 주의 문단) ──────────────────────────
+  // 학습자용 문장에 **작성자의 검증 상태**가 섞이면 해설이 사실 서술을 멈추고
+  // "나는 이걸 확인하지 못했다"를 설명하게 된다. 2026-10-27 외부 검수가 7문항에서
+  // 이것을 집어냈다(예: "공식 문서에서 확인되지 않으므로 요건으로 삼을 수
+  // 없습니다" — 실제로는 서버리스 제외 기능 목록에 데이터 캡처와 Model Monitor가
+  // 둘 다 적혀 있었다). 확인된 것은 사실로 쓰고, 확인되지 않은 것은 해설에서 뺀다.
+  //
+  // ⚠️ 겨냥하는 것은 작성자의 검증 상태를 적은 문장뿐이다. "~라는 서술은 없습니다"
+  // 처럼 보기의 주장을 부정하고 곧바로 사실을 제시하는 문장은 정당하므로 금지하지
+  // 않는다(전수 스캔에서 7개소가 그 쪽이었다). 학습문서(.md)도 대상이 아니다 —
+  // 거기서는 "공식 문서에서 확인되지 않았으므로 정답으로 고르지 않습니다"가 의도된
+  // 시험 전략 서술이고 31개소가 그렇게 쓰여 있다.
+  test('문항 본문에 작성 과정 메모가 없다 (M2)', () {
+    const forbidden = [
+      '확인되지 않',
+      '확인할 수 없',
+      '원문에 나오지 않',
+      '문서가 반올림',
+      '단정하지 않',
+      '공식 문서는 없',
+      '문구는 없',
+      '가장 가까운 공식',
+    ];
+    final offenders = <String>[];
+    for (final taskId in mlaTaskIds) {
+      final file = File('assets/content/mla/$taskId.questions.json');
+      if (!file.existsSync()) continue;
+      final map = json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+      for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+        final options = (q['options'] as List?) ?? const [];
+        final wrong = (q['wrongExplanations'] as Map?) ?? const {};
+        final fields = <String, String>{
+          'stem': '${q['stem']}',
+          'explanation': '${q['explanation']}',
+          for (var i = 0; i < options.length; i++) 'options[$i]': '${options[i]}',
+          for (final e in wrong.entries) 'wrongExplanations[${e.key}]': '${e.value}',
+        };
+        for (final field in fields.entries) {
+          for (final phrase in forbidden) {
+            if (field.value.contains(phrase)) {
+              offenders.add('${q['id']} ${field.key}: "$phrase"');
+            }
+          }
+        }
+      }
+    }
+    expect(offenders, isEmpty,
+        reason: '작성 과정 메모를 사실 서술로 바꾸거나 지우세요(루브릭 M2):\n'
+            '${offenders.join('\n')}');
+  });
 }

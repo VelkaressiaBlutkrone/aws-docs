@@ -493,16 +493,16 @@
       "difficulty": "applied",
       "stem": "새로 만든 계정에서 딥러닝 추론 비용을 낮추려 Amazon Elastic Inference 액셀러레이터를 붙이려 했으나 인스턴스가 시작되지 않는다. 상황 판단과 대안으로 맞는 것은 무엇인가?",
       "options": [
-        "신규 고객은 EI를 시작할 수 없어 Inferentia나 Graviton으로 간다",
+        "EI는 더 이상 제공되지 않으므로 Inferentia나 Graviton으로 간다",
         "EI는 리전별 출시 차이가 있어 지원 리전으로 옮겨 다시 시작한다",
         "EI는 액셀러레이터 쿼터가 기본 0이어서 증액을 요청한 뒤 쓴다",
         "EI는 실시간 전용이어서 비동기 엔드포인트로 바꿔 붙여 쓴다"
       ],
       "correct": 0,
-      "explanation": "AWS는 2023-04-15 이후 신규 고객을 Elastic Inference에 온보딩하지 않으며, 신규 고객은 SageMaker·ECS·EC2에서 EI 액셀러레이터가 붙은 인스턴스를 시작할 수 없습니다. 현재 SageMaker 비용 최적화 문서가 드는 수단은 Inferentia와 Graviton 같은 인스턴스 선택, Neo 최적화, 멀티 모델 엔드포인트로의 통합입니다.",
+      "explanation": "Elastic Inference는 2023-04-15에 신규 고객 온보딩이 중단됐고, 지금은 SageMaker API 레퍼런스가 ProductionVariant의 AcceleratorType을 더 이상 지원되지 않는 파라미터로 적으면서 Elastic Inference 자체가 더 이상 제공되지 않는다고 밝힙니다. 계정이 새것인지와 무관하게 EI를 붙이는 설계를 버려야 하고, 현재 SageMaker 비용 최적화 문서가 드는 수단은 Inferentia와 Graviton 같은 인스턴스 선택, Neo 최적화, 멀티 모델 엔드포인트로의 통합입니다.",
       "wrongExplanations": {
-        "1": "막힌 이유는 리전이 아니라 신규 고객 온보딩 중단입니다. 다른 리전으로 옮겨도 같은 제약이 적용됩니다.",
-        "2": "쿼터 증액으로 풀리는 문제가 아닙니다. 신규 고객에게는 이 기능 자체가 열리지 않으며, ECS 콘솔 문서는 EI를 더 이상 제공하지 않는다고 적습니다.",
+        "1": "막힌 이유는 리전이 아니라 기능 제공 종료입니다. 다른 리전으로 옮겨도 EI는 쓸 수 없습니다.",
+        "2": "쿼터 증액으로 풀리는 문제가 아닙니다. API 레퍼런스와 ECS 콘솔 문서가 모두 EI를 더 이상 제공하지 않는다고 적습니다.",
         "3": "엔드포인트 유형을 바꿔도 EI를 쓸 수 없습니다. 추론 가속이 필요하면 가속기가 내장된 인스턴스 계열을 고르는 쪽으로 설계를 바꿉니다."
       },
       "sources": [
@@ -517,6 +517,10 @@
         {
           "title": "Amazon Elastic Inference (AWS SDK for Java) — 2023-04-15 신규 고객 온보딩 중단 공지",
           "url": "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/elasticinference/package-summary.html"
+        },
+        {
+          "title": "ProductionVariant (SageMaker API Reference) — AcceleratorType 미지원·EI 제공 종료",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html"
         }
       ],
       "verified": false
@@ -567,7 +571,7 @@
         "모델 아티팩트가 tar.gz이 아니어서 읽기 전용 경로에 풀리지 않는다"
       ],
       "correct": 0,
-      "explanation": "추론 코드 요구 사항 문서는 컨테이너가 시작 후 8분 안에 헬스 체크 경로로 200을 계속 반환하지 않으면 SageMaker가 인스턴스 시작을 실패로 처리한다고 적습니다. 모델 적재가 그 창을 넘기면 엔드포인트 생성 자체가 실패하므로, 적재를 더 빠르게 하거나 준비 완료 전에도 200을 돌려주도록 헬스 체크를 분리해야 합니다.",
+      "explanation": "추론 코드 요구 사항 문서는 컨테이너가 시작 후 8분 안에 헬스 체크 경로로 200을 계속 반환하지 않으면 SageMaker가 인스턴스 시작을 실패로 처리한다고 적습니다. 모델 적재가 그 창을 넘기면 엔드포인트 생성 자체가 실패하므로, 적재를 더 빠르게 하거나 준비 완료 전에도 200을 돌려주도록 헬스 체크를 분리하거나, ProductionVariant의 ContainerStartupHealthCheckTimeoutInSeconds로 시작 헬스 체크 제한을 최대 3600초까지 늘려야 합니다.",
       "wrongExplanations": {
         "1": "소켓 연결 수락 한도는 250밀리초이지만 이는 연결을 받아들이는 속도에 대한 요건입니다. 모델 적재가 끝나기 전에도 서버는 연결을 받고 있으므로 이 한도와는 다른 지점에서 실패합니다.",
         "2": "60초는 추론 요청 하나에 응답해야 하는 한도입니다. 엔드포인트가 아직 만들어지지 못한 단계에서는 추론 요청이 들어오지 않습니다.",
@@ -581,6 +585,10 @@
         {
           "title": "Use Docker containers to build models",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html"
+        },
+        {
+          "title": "ProductionVariant — ContainerStartupHealthCheckTimeoutInSeconds(60~3600초)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html"
         }
       ],
       "verified": false
