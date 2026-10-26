@@ -514,19 +514,68 @@ ML Lens는 트레이드오프 분석을 "**경쟁하는 요구**(정확도·복�
 - **삭제된 항목**: 이 Task에는 없음
 - 읽는 법: C01의 지표 체계(1~4)와 기준선·진단(5~7)은 그대로 쓰이고, C02는 여기에 **생성형 출력을 어떻게 평가하는가**를 더합니다. 12)에 적은 `fmeval`·Bedrock Evaluations가 그 방향의 출발점입니다.
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- 지표: [Metrics and validation (Autopilot)](https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html) · [Autopilot 성능 보고서](https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-model-insights.html) · [AutoMLJobObjective](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobObjective.html) · [시계열 목적 지표](https://docs.aws.amazon.com/sagemaker/latest/dg/timeseries-objective-metric.html) · [Tune an XGBoost Model](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-tuning.html) · [XGBoost 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html)
-- 기준선·절충: [MLPERF04-BP02 성능 개선 대안 탐색](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp02.html) · [MLPERF04-BP05 절충 분석](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp05.html) · [Model Monitor 기준선](https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-create-baseline.html) · [모델 품질 기준선](https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-baseline.html) · [Model Monitor 가용성 변경](https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html) · [MLCOST04-BP01 인스턴스 크기](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html)
-- 수렴·Debugger: [Amazon SageMaker Debugger](https://docs.aws.amazon.com/sagemaker/latest/dg/train-debugger.html) · [내장 규칙 목록](https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-built-in-rules.html) · [텐서 저장 구성](https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-configure-hook.html) · [규칙 내장 액션](https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-built-in-actions.html) · [Debugger 가용성 변경](https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-availability-change.html) · [Profiler 가용성 변경](https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html) · [Debugger Insights 대시보드](https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-on-studio-insights-walkthrough.html)
-- Clarify 편향: [처리 작업 구성](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-configure-processing-jobs.html) · [사전 데이터 편향](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html) · [사전 편향 지표](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-data-bias.html) · [사후 편향 지표](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-post-training-bias.html) · [CI](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html) · [DPL](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html) · [DPPL](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-dppl.html) · [DI](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-di.html) · [AD](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-ad.html) · [RD](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-rd.html) · [FT](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-ft.html) · [GE](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-ge.html) · [CDDPL](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-cddpl.html)
-- Clarify 설명: [Model Explainability](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html) · [Shapley 값 기여도](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-shapley-values.html) · [SHAP 기준선](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-feature-attribute-shap-baselines.html) · [분석 설정 파일](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-processing-job-configure-analysis.html) · [분석 결과](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-processing-job-analysis-results.html) · [온라인 설명](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-online-explainability.html) · [Clarify 가용성 변경](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html)
-- 재현성: [Experiments (Studio Classic)](https://docs.aws.amazon.com/sagemaker/latest/dg/experiments.html) · [관리형 MLflow](https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow.html) · [MLflow App 설정](https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow-app-setup.html) · [ML Lineage Tracking](https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html) · [Model Registry](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html) · [MLOPS03-BP02 추적·버전 관리](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops03-bp02.html) · [MLOPS02-BP04 계보 추적](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops02-bp04.html) · [AMT 모범 사례](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-considerations.html)
-- 섀도·A/B: [Validation of models in production](https://docs.aws.amazon.com/sagemaker/latest/dg/model-validation.html) · [Shadow tests](https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html) · [섀도 테스트 생성](https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests-create.html) · [섀도 테스트 모니터링](https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests-view-monitor-edit-dashboard.html) · [섀도 변형 승격](https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests-complete.html) · [프로덕션 변형 테스트](https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html) · [섀도 변형 배포](https://docs.aws.amazon.com/sagemaker/latest/dg/model-shadow-deployment.html) · [CreateInferenceExperiment](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateInferenceExperiment.html) · [ProductionVariant](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html)
-- [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. Metrics and validation (Autopilot) — https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+2. Autopilot 성능 보고서 — https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-model-insights.html
+3. AutoMLJobObjective — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobObjective.html
+4. 시계열 목적 지표 — https://docs.aws.amazon.com/sagemaker/latest/dg/timeseries-objective-metric.html
+5. Tune an XGBoost Model — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-tuning.html
+6. XGBoost 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
+7. MLPERF04-BP02 성능 개선 대안 탐색 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp02.html
+8. MLPERF04-BP05 절충 분석 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp05.html
+9. Model Monitor 기준선 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-create-baseline.html
+10. 모델 품질 기준선 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-baseline.html
+11. Model Monitor 가용성 변경 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
+12. MLCOST04-BP01 인스턴스 크기 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html
+13. Amazon SageMaker Debugger — https://docs.aws.amazon.com/sagemaker/latest/dg/train-debugger.html
+14. 내장 규칙 목록 — https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-built-in-rules.html
+15. 텐서 저장 구성 — https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-configure-hook.html
+16. 규칙 내장 액션 — https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-built-in-actions.html
+17. Debugger 가용성 변경 — https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-availability-change.html
+18. Profiler 가용성 변경 — https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html
+19. Debugger Insights 대시보드 — https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-on-studio-insights-walkthrough.html
+20. 처리 작업 구성 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-configure-processing-jobs.html
+21. 사전 데이터 편향 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html
+22. 사전 편향 지표 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-data-bias.html
+23. 사후 편향 지표 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-post-training-bias.html
+24. CI — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html
+25. DPL — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html
+26. DPPL — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-dppl.html
+27. DI — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-di.html
+28. AD — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-ad.html
+29. RD — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-rd.html
+30. FT — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-ft.html
+31. GE — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-ge.html
+32. CDDPL — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-post-training-bias-metric-cddpl.html
+33. Model Explainability — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html
+34. Shapley 값 기여도 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-shapley-values.html
+35. SHAP 기준선 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-feature-attribute-shap-baselines.html
+36. 분석 설정 파일 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-processing-job-configure-analysis.html
+37. 분석 결과 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-processing-job-analysis-results.html
+38. 온라인 설명 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-online-explainability.html
+39. Clarify 가용성 변경 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
+40. Experiments (Studio Classic) — https://docs.aws.amazon.com/sagemaker/latest/dg/experiments.html
+41. 관리형 MLflow — https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow.html
+42. MLflow App 설정 — https://docs.aws.amazon.com/sagemaker/latest/dg/mlflow-app-setup.html
+43. ML Lineage Tracking — https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking.html
+44. Model Registry — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+45. MLOPS03-BP02 추적·버전 관리 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops03-bp02.html
+46. MLOPS02-BP04 계보 추적 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops02-bp04.html
+47. AMT 모범 사례 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-considerations.html
+48. Validation of models in production — https://docs.aws.amazon.com/sagemaker/latest/dg/model-validation.html
+49. Shadow tests — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html
+50. 섀도 테스트 생성 — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests-create.html
+51. 섀도 테스트 모니터링 — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests-view-monitor-edit-dashboard.html
+52. 섀도 변형 승격 — https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests-complete.html
+53. 프로덕션 변형 테스트 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html
+54. 섀도 변형 배포 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-shadow-deployment.html
+55. CreateInferenceExperiment — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateInferenceExperiment.html
+56. ProductionVariant — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html
+57. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/2-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

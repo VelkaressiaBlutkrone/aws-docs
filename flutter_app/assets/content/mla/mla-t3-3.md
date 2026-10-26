@@ -325,7 +325,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 
 ### 9) SageMaker Pipelines — DAG·단계·캐싱·재시도 {#sagemaker-pipelines}
 
-**정의** — ML 개발을 자동화하는 **목적 특화 워크플로 오케스트레이션 서비스**입니다. 오케스트레이션 인프라를 SageMaker AI가 자동으로 프로비저닝·확장·종료하고, 시각 편집기·SDK·API·JSON으로 만듭니다. 비용은 Studio 환경과 파이프라인이 오케스트레이션하는 **하위 작업**에 대해서만 냅니다. **내장 버전 관리와 ML Lineage Tracking**으로 실행 이력과 데이터 계보를 추적합니다. 오케스트레이터 선택 비교는 [`mla-t3-1` 13)](mla-t3-1.md#orchestrator-choice)이 정본입니다.
+**정의** — ML 개발을 자동화하는 **목적 특화 워크플로 오케스트레이션 서비스**입니다. 오케스트레이션 인프라를 SageMaker AI가 자동으로 프로비저닝·확장·종료하고, 시각 편집기·SDK·API·JSON으로 만듭니다. 비용은 Studio 환경과 파이프라인이 오케스트레이션하는 **하위 작업**에 대해서만 냅니다. **내장 버전 관리와 ML Lineage Tracking**으로 실행 이력과 데이터 계보를 추적합니다. 오케스트레이터 선택 비교는 `mla-t3-1` 13)이 정본입니다.
 
 **DAG** — 파이프라인은 방향성 비순환 그래프로 연결된 단계 묶음이고, ⚠️ **DAG 구조는 한 단계의 출력 속성을 다른 단계의 입력으로 넘기는 데이터 의존성으로 결정**됩니다.
 
@@ -341,7 +341,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 | 흐름 제어 | **Condition**(단계 속성을 평가해 분기. ⚠️ **중첩 불가**, 양 분기에 같은 단계 사용 불가) · **Fail**(실행 중단 + 사용자 지정 오류 메시지) · **Callback**(SQS 큐에 토큰 메시지를 보내고 응답 대기) · **Lambda**(기존 함수는 파이프라인과 **같은 리전**) |
 | 품질 검사 ⚠️ | **QualityCheck**(데이터·모델 품질 baseline 제안과 드리프트 검사 — **Model Monitor 컨테이너** 사용) · **ClarifyCheck**(편향·설명 가능성 baseline 드리프트 검사 — **Clarify 컨테이너** 사용) |
 
-⚠️ QualityCheck·ClarifyCheck가 기대는 **Model Monitor와 Clarify는 신규 고객에게 닫혀 있습니다**(상태·대안은 [`mla-t2-1` 8)](mla-t2-1.md#service-status)). 두 단계 자체의 향후 지원 변화를 알려 주는 공지는 확인되지 않았으므로, **"신규 고객에게 닫힌 기능에 의존한다"까지만** 알아 둡니다.
+⚠️ QualityCheck·ClarifyCheck가 기대는 **Model Monitor와 Clarify는 신규 고객에게 닫혀 있습니다**(상태·대안은 `mla-t2-1` 8)). 두 단계 자체의 향후 지원 변화를 알려 주는 공지는 확인되지 않았으므로, **"신규 고객에게 닫힌 기능에 의존한다"까지만** 알아 둡니다.
 
 **파라미터** — `ParameterString` / `ParameterInteger` / `ParameterFloat` / `ParameterBoolean` 4종. 기본값을 두고 실행 시작 시 덮어쓸 수 있으며, 단계 정의에 쓰는 모든 파라미터는 파이프라인 정의에 선언해야 합니다.
 
@@ -380,7 +380,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 
 ### 10) Projects와 Model Registry 승인 → 배포 자동화 {#projects-registry}
 
-**SageMaker Projects** — 조직이 데이터 과학자 개발 환경과 MLOps 엔지니어용 CI/CD 시스템을 **표준화**하도록 돕습니다. 프로젝트 이름·ID가 모든 리소스에 태그로 붙어 파이프라인·등록 모델·엔드포인트·데이터셋·저장소를 함께 볼 수 있습니다. 템플릿 보관 위치와 선택 기준은 [`mla-t3-2` 8)](mla-t3-2.md#iac-choice)에 있습니다.
+**SageMaker Projects** — 조직이 데이터 과학자 개발 환경과 MLOps 엔지니어용 CI/CD 시스템을 **표준화**하도록 돕습니다. 프로젝트 이름·ID가 모든 리소스에 태그로 붙어 파이프라인·등록 모델·엔드포인트·데이터셋·저장소를 함께 볼 수 있습니다. 템플릿 보관 위치와 선택 기준은 `mla-t3-2` 8)에 있습니다.
 
 **템플릿 선택지** — 코드 저장소는 **서드파티 Git**(GitHub·Bitbucket 등), CI/CD 자동화는 **AWS CodePipeline 또는 Jenkins**, 파이프라인 단계는 모델 구축·훈련 / 모델 배포 / 둘 다.
 
@@ -398,7 +398,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 
 서드파티 Git 템플릿은 CodeConnections(구 CodeStar Connections) 연결이 필요하고, 그 연결에 키 `sagemaker`·값 `true` **태그를 달아야** 합니다.
 
-**승인 상태 전이 4종과 동작** — Model Registry의 모델 버전 기본 정보는 [`mla-t3-1` 7)](mla-t3-1.md#versioning-rollback)에 있습니다. 여기서는 전이가 **무엇을 시작시키는지**를 봅니다.
+**승인 상태 전이 4종과 동작** — Model Registry의 모델 버전 기본 정보는 `mla-t3-1` 7)에 있습니다. 여기서는 전이가 **무엇을 시작시키는지**를 봅니다.
 
 | 전이 | 동작 |
 |---|---|
@@ -444,7 +444,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 | 개념 | CodeDeploy | SageMaker 엔드포인트 가드레일 |
 |---|---|---|
 | All-at-once | `LambdaAllAtOnce` / `ECSAllAtOnce` | `ALL_AT_ONCE`(**업데이트 정책을 지정하지 않을 때의 기본값**) |
-| Canary | `LambdaCanary10Percent5Minutes` 등 — **값이 고정된 이름** | `CANARY`: 2단계, `CanarySize`(**50% 이하** — API 레퍼런스는 분모를 "변형 전체 인스턴스 수", 개발자 가이드는 "그린 플릿 용량"으로 적는다 → [`mla-t3-1` 8)](mla-t3-1.md#deployment-guardrails)), `WaitIntervalInSeconds` |
+| Canary | `LambdaCanary10Percent5Minutes` 등 — **값이 고정된 이름** | `CANARY`: 2단계, `CanarySize`(**50% 이하** — API 레퍼런스는 분모를 "변형 전체 인스턴스 수", 개발자 가이드는 "그린 플릿 용량"으로 적는다 → `mla-t3-1` 8)), `WaitIntervalInSeconds` |
 | Linear | `LambdaLinear10PercentEvery1Minute` 등 | `LINEAR`: n단계, `LinearStepSize`(**10~50%**) |
 | Rolling / in-place | EC2/온프레 in-place + `HalfAtATime`·`OneAtATime` | `RollingUpdatePolicy`: `MaximumBatchSize` **5~50%** |
 | 롤백 트리거 | 배포 그룹에 연결한 경보·실패한 훅·자동 롤백 설정 → **마지막 정상 리비전 재배포** | `AutoRollbackConfiguration.Alarms`(**1~10개**) + 베이킹 기간 |
@@ -452,7 +452,7 @@ Gitflow는 세 전략 중 가장 복잡해 CI/CD 파이프라인에 **규정 준
 
 ⚠️ 핵심 차이 둘: ① **CodeDeploy의 사전 정의 canary·linear는 비율과 시간이 이름에 박혀 있고**, SageMaker는 용량(인스턴스 수·비율)과 대기 시간을 **API 파라미터로 직접** 지정합니다. ② **CodeDeploy는 SageMaker 엔드포인트를 컴퓨트 플랫폼으로 지원하지 않습니다.**
 
-가드레일의 방식별 장단점과 제외 대상은 [`mla-t3-1` 8)](mla-t3-1.md#deployment-guardrails)이 정본입니다. `BlueGreenUpdatePolicy`의 `MaximumExecutionTimeoutInSeconds` 범위는 600~28,800초, `TerminationWaitInSeconds` 기본값은 0입니다.
+가드레일의 방식별 장단점과 제외 대상은 `mla-t3-1` 8)이 정본입니다. `BlueGreenUpdatePolicy`의 `MaximumExecutionTimeoutInSeconds` 범위는 600~28,800초, `TerminationWaitInSeconds` 기본값은 0입니다.
 
 MLOps 체크리스트는 모델 승격 방식으로 **canary·shadow·blue/green·A/B 중 하나 이상**과 **롤백 수단 하나 이상**을 요구합니다.
 
@@ -647,19 +647,67 @@ Pipelines 쪽 설계: Model Monitor 위반 때문에 재훈련하는 경우 해�
 - **삭제된 항목**: 이 Task에는 없음
 - 읽는 법: C01의 3.3이 "코드 → 모델 → 배포의 세 루프 자동화"였다면 C02는 거기에 **에이전트 워크플로·프롬프트 버전 관리·FM 맞춤화 자동화**를 더합니다. 2)~6)의 개발자 도구와 9)~10)의 Pipelines·Registry 구조는 그대로 쓰이고, 그 위에 생성형 AI 자산(프롬프트·에이전트)의 버전 관리가 올라옵니다.
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- CodePipeline: [CI와 CD의 정의](https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-continuous-delivery-integration.html) · [개념(스테이지·액션·실행 모드)](https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html) · [파이프라인 유형 V1·V2](https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-types-planning.html) · [파이프라인 시작 방법](https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-about-starting.html) · [소스 액션과 변경 감지 방법](https://docs.aws.amazon.com/codepipeline/latest/userguide/change-detection-methods.html) · [CodeCommit 소스 액션 레퍼런스](https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodeCommit.html) · [통합 목록](https://docs.aws.amazon.com/codepipeline/latest/userguide/integrations-action-type.html) · [일정으로 시작](https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-trigger-source-schedule.html) · [할당량](https://docs.aws.amazon.com/codepipeline/latest/userguide/limits.html) · [문제 해결](https://docs.aws.amazon.com/codepipeline/latest/userguide/troubleshooting.html)
-- CodeBuild: [buildspec 레퍼런스](https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html) · [컴퓨트 유형](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html) · [빌드 캐싱](https://docs.aws.amazon.com/codebuild/latest/userguide/build-caching.html) · [테스트 리포트](https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html) · [문제 해결](https://docs.aws.amazon.com/codebuild/latest/userguide/troubleshooting.html) · [할당량](https://docs.aws.amazon.com/codebuild/latest/userguide/limits.html) · [What is AWS CodeBuild?](https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html)
-- CodeDeploy: [What is CodeDeploy](https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html) · [배포 구성](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html) · [AppSpec 파일](https://docs.aws.amazon.com/codedeploy/latest/userguide/application-specification-files.html) · [훅 구조](https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html) · [롤백과 재배포](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html) · [배포 단계](https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-server.html) · [문제 해결](https://docs.aws.amazon.com/codedeploy/latest/userguide/troubleshooting-deployments.html) · [할당량](https://docs.aws.amazon.com/codedeploy/latest/userguide/limits.html) · [DevOps 배포 전략](https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/deployment-strategies.html)
-- Git·브랜치: [버전 관리 개요](https://aws.amazon.com/what-is/repo/) · [병합 전략](https://docs.aws.amazon.com/help-panel/codecommit/latest/helppanel/pull-requests.merge.html) · [브랜치 전략 선택](https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html) · [Gitflow](https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/gitflow-branching-strategy.html) · [GitHub Flow](https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-hub-flow-branching-strategy.html) · [Trunk](https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/trunk-branching-strategy.html) · [CodeConnections 개명](https://docs.aws.amazon.com/dtconsole/latest/userguide/rename.html) · [CodeCommit 이력](https://docs.aws.amazon.com/codecommit/latest/userguide/history.html)
-- SageMaker Pipelines: [Pipelines](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html) · [개요·DAG](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html) · [단계 유형](https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html) · [파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-parameters.html) · [단계 캐싱](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-caching.html) · [재시도 정책](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-retry-policy.html) · [EventBridge로 시작](https://docs.aws.amazon.com/sagemaker/latest/dg/pipeline-eventbridge.html) · [baseline 수명 주기](https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-quality-clarify-baseline-lifecycle.html)
-- Projects·Registry: [SageMaker Projects](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-whatis.html) · [제공 템플릿](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-sm.html) · [Model Registry](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html) · [승인 상태](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html) · [SageMaker EventBridge 이벤트](https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html)
-- 수집 자동화·테스트: [S3 → EventBridge](https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventBridge.html) · [Glue 워크플로](https://docs.aws.amazon.com/glue/latest/dg/workflows_overview.html) · [EventBridge 규칙과 Scheduler](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html) · [MLOPS04-BP01](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html) · [MLREL04-BP01](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel04-bp01.html) · [MLSUS06-BP02](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html) · [MLOps 체크리스트 — 지속적 통합](https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-integration.html) · [지속적 배포](https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-deployment.html)
-- [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. CI와 CD의 정의 — https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-continuous-delivery-integration.html
+2. 개념(스테이지·액션·실행 모드) — https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html
+3. 파이프라인 유형 V1·V2 — https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-types-planning.html
+4. 파이프라인 시작 방법 — https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-about-starting.html
+5. 소스 액션과 변경 감지 방법 — https://docs.aws.amazon.com/codepipeline/latest/userguide/change-detection-methods.html
+6. CodeCommit 소스 액션 레퍼런스 — https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodeCommit.html
+7. 통합 목록 — https://docs.aws.amazon.com/codepipeline/latest/userguide/integrations-action-type.html
+8. 일정으로 시작 — https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-trigger-source-schedule.html
+9. 할당량 — https://docs.aws.amazon.com/codepipeline/latest/userguide/limits.html
+10. 문제 해결 — https://docs.aws.amazon.com/codepipeline/latest/userguide/troubleshooting.html
+11. buildspec 레퍼런스 — https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+12. 컴퓨트 유형 — https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html
+13. 빌드 캐싱 — https://docs.aws.amazon.com/codebuild/latest/userguide/build-caching.html
+14. 테스트 리포트 — https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html
+15. 문제 해결 — https://docs.aws.amazon.com/codebuild/latest/userguide/troubleshooting.html
+16. 할당량 — https://docs.aws.amazon.com/codebuild/latest/userguide/limits.html
+17. What is AWS CodeBuild? — https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html
+18. What is CodeDeploy — https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html
+19. 배포 구성 — https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html
+20. AppSpec 파일 — https://docs.aws.amazon.com/codedeploy/latest/userguide/application-specification-files.html
+21. 훅 구조 — https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html
+22. 롤백과 재배포 — https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html
+23. 배포 단계 — https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-server.html
+24. 문제 해결 — https://docs.aws.amazon.com/codedeploy/latest/userguide/troubleshooting-deployments.html
+25. 할당량 — https://docs.aws.amazon.com/codedeploy/latest/userguide/limits.html
+26. DevOps 배포 전략 — https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/deployment-strategies.html
+27. 버전 관리 개요 — https://aws.amazon.com/what-is/repo/
+28. 병합 전략 — https://docs.aws.amazon.com/help-panel/codecommit/latest/helppanel/pull-requests.merge.html
+29. 브랜치 전략 선택 — https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html
+30. Gitflow — https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/gitflow-branching-strategy.html
+31. GitHub Flow — https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-hub-flow-branching-strategy.html
+32. Trunk — https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/trunk-branching-strategy.html
+33. CodeConnections 개명 — https://docs.aws.amazon.com/dtconsole/latest/userguide/rename.html
+34. CodeCommit 이력 — https://docs.aws.amazon.com/codecommit/latest/userguide/history.html
+35. Pipelines — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html
+36. 개요·DAG — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html
+37. 단계 유형 — https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html
+38. 파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-parameters.html
+39. 단계 캐싱 — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-caching.html
+40. 재시도 정책 — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-retry-policy.html
+41. EventBridge로 시작 — https://docs.aws.amazon.com/sagemaker/latest/dg/pipeline-eventbridge.html
+42. baseline 수명 주기 — https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-quality-clarify-baseline-lifecycle.html
+43. SageMaker Projects — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-whatis.html
+44. 제공 템플릿 — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-templates-sm.html
+45. Model Registry — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+46. 승인 상태 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html
+47. SageMaker EventBridge 이벤트 — https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html
+48. S3 → EventBridge — https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventBridge.html
+49. Glue 워크플로 — https://docs.aws.amazon.com/glue/latest/dg/workflows_overview.html
+50. EventBridge 규칙과 Scheduler — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html
+51. MLOPS04-BP01 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html
+52. MLREL04-BP01 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel04-bp01.html
+53. MLSUS06-BP02 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html
+54. MLOps 체크리스트 — 지속적 통합 — https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-integration.html
+55. 지속적 배포 — https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-deployment.html
+56. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/3-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

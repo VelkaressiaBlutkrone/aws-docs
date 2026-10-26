@@ -103,7 +103,7 @@ ML 파이프라인에서 가장 먼저 깨지는 곳은 모델이 아니라 **�
 
 - 기본 블록 크기는 **Parquet row group 128 MB · ORC stripe 64 MB**입니다. 기본값보다 줄이는 것은 권장되지 않습니다.
 - **복합 타입은 ORC**: Athena에서 `array`·`map`·`struct` 같은 복합 타입 열을 조회하면, Parquet는 **지정한 열만 선택적으로 읽는 대신 행 전체를 읽습니다.** Athena 문서가 "알려진 문제(known issue)"로 적고 **대안으로 ORC를 고려하라**고 안내하는 지점입니다.
-  > 원문: *"when you query columns stored in Parquet that have complex data types … Athena reads an entire row of data instead of selectively reading only the specified columns. This is a known issue in Athena. As a workaround, consider using ORC."* ([Optimize your tables](https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-s3-throttling-optimizing-your-tables.html), 2026-10-26 재확인)
+  > 원문: "when you query columns stored in Parquet that have complex data types … Athena reads an entire row of data instead of selectively reading only the specified columns. This is a known issue in Athena. As a workaround, consider using ORC." — Optimize your tables (2026-10-26 재확인) — https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-s3-throttling-optimizing-your-tables.html
 - 쿼리 **유형의 범위**가 넓어야 하면 Parquet, **복합 타입 조회**가 잦으면 ORC — 둘은 서로 다른 축입니다.
 
 > 🧠 **원리** — 열 기반이 분석에 유리한 이유는 세 가지입니다. ① 쿼리에 필요한 열만 읽고, ② 같은 열의 값이 모여 있어 압축이 잘 되며, ③ 파일 메타데이터(최솟값·최댓값)로 필요 없는 데이터를 건너뜁니다. Athena는 **압축 해제 전 스캔 바이트 수**로 요금을 매기므로 열 기반 + 압축은 속도와 비용을 함께 줄입니다.
@@ -328,23 +328,56 @@ File 모드는 **학습 시작 전에 전부 내려받고** 그다음 시작하�
   - `1.1.8` AI 및 ML 애플리케이션을 위한 **다양한 데이터 유형**(텍스트·이미지·오디오)을 수집하고 저장합니다.
 - **삭제된 항목**: 이 Task에는 없음
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- [Common Data Formats for Training (SageMaker AI)](https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html) · [Parameters for Built-in Algorithms](https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html) · [XGBoost 입출력 인터페이스](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-how-to-use.html) · [Linear Learner](https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html)
-- [Setting up training jobs to access datasets](https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html) · [Choosing an input mode and a storage unit](https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html)
-- [Use columnar storage formats (Athena)](https://docs.aws.amazon.com/athena/latest/ug/columnar-storage.html) · [Optimize data (Athena)](https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html) · [Optimize your tables (Athena)](https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-s3-throttling-optimizing-your-tables.html)
-- [What is Amazon Data Firehose?](https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html) · [Convert input data format](https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html) · [Configure buffering hints](https://docs.aws.amazon.com/firehose/latest/dev/create-configure-backup.html) · [Transform source data](https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) · [Handle data delivery failures](https://docs.aws.amazon.com/firehose/latest/dev/retry.html)
-- [KDS Terminology and concepts](https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html) · [Choose the right mode to stream in](https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html) · [Quotas and limits](https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html) · [Provisioned throughput exception errors](https://docs.aws.amazon.com/streams/latest/dev/kinesis-fis-provisioned-throughput.html)
-- [What is Amazon Managed Service for Apache Flink?](https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html) · [KDA for SQL 폐지 안내](https://docs.aws.amazon.com/kinesisanalytics/latest/dev/discontinuation.html) · [What is MSK Serverless?](https://docs.aws.amazon.com/msk/latest/developerguide/serverless.html)
-- [S3 스토리지 클래스](https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html) · [S3 성능 모범 사례](https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html) · [Transfer Acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html) · [멀티파트 업로드](https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html)
-- [EBS 볼륨 유형](https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html) · [EBS Provisioned IOPS](https://docs.aws.amazon.com/ebs/latest/userguide/provisioned-iops.html) · [What is Amazon EFS?](https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html) · [What is FSx for Lustre?](https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html) · [FSx for ONTAP S3 access points](https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/accessing-data-via-s3-access-points.html)
-- [Feature Store 수집 경로](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-ingest-data.html) · [Feature Store 개요](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html) · [PutRecord API](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_feature_store_PutRecord.html) · [Data Wrangler 가져오기](https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-import.html)
-- [Glue 크롤러](https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html) · [Glue Join](https://docs.aws.amazon.com/glue/latest/dg/transforms-configure-join.html) · [Glue OOM 디버깅](https://docs.aws.amazon.com/glue/latest/dg/monitor-profile-debug-oom-abnormalities.html) · [Athena CTAS](https://docs.aws.amazon.com/athena/latest/ug/ctas.html) · [Athena Federated Query](https://docs.aws.amazon.com/athena/latest/ug/federated-queries.html)
-- [RDS 스냅샷 S3 export](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ExportSnapshot.html) · [DynamoDB Export to S3](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataExport.HowItWorks.html) · [AWS DataSync](https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html)
-- [SageMaker AI 개명 안내](https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html) · [AWS 서비스 수명주기](https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html) · [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. Common Data Formats for Training (SageMaker AI) — https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html
+2. Parameters for Built-in Algorithms — https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html
+3. XGBoost 입출력 인터페이스 — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-how-to-use.html
+4. Linear Learner — https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html
+5. Setting up training jobs to access datasets — https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
+6. Choosing an input mode and a storage unit — https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html
+7. Use columnar storage formats (Athena) — https://docs.aws.amazon.com/athena/latest/ug/columnar-storage.html
+8. Optimize data (Athena) — https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html
+9. Optimize your tables (Athena) — https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-s3-throttling-optimizing-your-tables.html
+10. What is Amazon Data Firehose? — https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html
+11. Convert input data format — https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html
+12. Configure buffering hints — https://docs.aws.amazon.com/firehose/latest/dev/create-configure-backup.html
+13. Transform source data — https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html
+14. Handle data delivery failures — https://docs.aws.amazon.com/firehose/latest/dev/retry.html
+15. KDS Terminology and concepts — https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html
+16. Choose the right mode to stream in — https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html
+17. Quotas and limits — https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html
+18. Provisioned throughput exception errors — https://docs.aws.amazon.com/streams/latest/dev/kinesis-fis-provisioned-throughput.html
+19. What is Amazon Managed Service for Apache Flink? — https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+20. KDA for SQL 폐지 안내 — https://docs.aws.amazon.com/kinesisanalytics/latest/dev/discontinuation.html
+21. What is MSK Serverless? — https://docs.aws.amazon.com/msk/latest/developerguide/serverless.html
+22. S3 스토리지 클래스 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html
+23. S3 성능 모범 사례 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html
+24. Transfer Acceleration — https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html
+25. 멀티파트 업로드 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html
+26. EBS 볼륨 유형 — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html
+27. EBS Provisioned IOPS — https://docs.aws.amazon.com/ebs/latest/userguide/provisioned-iops.html
+28. What is Amazon EFS? — https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html
+29. What is FSx for Lustre? — https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
+30. FSx for ONTAP S3 access points — https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/accessing-data-via-s3-access-points.html
+31. Feature Store 수집 경로 — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-ingest-data.html
+32. Feature Store 개요 — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html
+33. PutRecord API — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_feature_store_PutRecord.html
+34. Data Wrangler 가져오기 — https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-import.html
+35. Glue 크롤러 — https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html
+36. Glue Join — https://docs.aws.amazon.com/glue/latest/dg/transforms-configure-join.html
+37. Glue OOM 디버깅 — https://docs.aws.amazon.com/glue/latest/dg/monitor-profile-debug-oom-abnormalities.html
+38. Athena CTAS — https://docs.aws.amazon.com/athena/latest/ug/ctas.html
+39. Athena Federated Query — https://docs.aws.amazon.com/athena/latest/ug/federated-queries.html
+40. RDS 스냅샷 S3 export — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ExportSnapshot.html
+41. DynamoDB Export to S3 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataExport.HowItWorks.html
+42. AWS DataSync — https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html
+43. SageMaker AI 개명 안내 — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+44. AWS 서비스 수명주기 — https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+45. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/1-1.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)
