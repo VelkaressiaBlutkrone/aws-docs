@@ -551,7 +551,7 @@
         "AD(Accuracy Difference)"
       ],
       "correct": 1,
-      "explanation": "DI는 facet 간 예측 양성 비율의 비(facet d 비율 ÷ facet a 비율)입니다. 공식 문서의 예는 facet a 60%, facet d 50%이고 결과를 0.5/0.6 = 0.8로 적습니다(정확히는 약 0.83이며 문서가 반올림해 표기한 값입니다). 1이면 인구통계 평등이고 1 미만이면 facet a의 예측 양성 비율이 높습니다.",
+      "explanation": "DI는 facet 간 예측 양성 비율의 비(facet d 비율 ÷ facet a 비율)입니다. 공식 문서의 예는 facet a 60%, facet d 50%이고 DI를 0.5/0.6 = 0.8로 적습니다. 1이면 인구통계 평등이고 1 미만이면 facet a의 예측 양성 비율이 높습니다.",
       "wrongExplanations": {
         "0": "DPPL은 같은 질문을 비율이 아니라 차로 묻는 지표입니다.",
         "2": "RD는 facet 간 재현율의 차를 봅니다. 예측 양성 비율이 아니라 실제 양성을 얼마나 찾았는지의 차이입니다.",
