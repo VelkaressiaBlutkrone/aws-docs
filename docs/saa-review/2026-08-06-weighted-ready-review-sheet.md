@@ -18,10 +18,10 @@
 - [ ] `saa-review/*` 브랜치에서 작업 (SAA 콘텐츠 freeze 규약)
 - [ ] freeze를 쓸 경우 `core.hooksPath=.githooks` 설정 후 `.saa-frozen` 존재 확인
 - [ ] `node tool/saa_prescreen.mjs build` 결과 구조 플래그 0건 확인
-- [ ] `node tool/saa_review.mjs build` 결과 HTML 뷰어 열람
+- [ ] `node tool/review.mjs build saa` 결과 HTML 뷰어 열람
 - [ ] 각 문항에 `review-rubric.md` C1~C6 적용
 - [ ] `fix` 반영 후 `saa_prescreen.mjs build` **재실행** → 구조 플래그 0 재확인
-- [ ] 사람 검수자가 통과 판정한 Task만 `node tool/saa_review.mjs flip <taskId>` 실행
+- [ ] 사람 검수자가 통과 판정한 Task만 `node tool/review.mjs flip saa <taskId>` 실행
 - [ ] flip 후 자동 실행되는 `saa_questions_test` / `content_index_test` 통과 확인
 
 > **선행 조건(2026-10-20):** 아래 집중 확인 5문항은 공식 문서 대조로 전부 `fix` 판정됐고, 수정은 별도 PR로 반영된다. **그 PR이 머지된 뒤** 재검수하고 flip한다 — 수정 전 본문을 기준으로 pass를 주면 구식 해설이 그대로 공개된다.
@@ -165,9 +165,9 @@ Task 판정:
 
 ```powershell
 cd flutter_app
-node tool/saa_review.mjs flip saa-t1-1
-node tool/saa_review.mjs flip saa-t1-4
-node tool/saa_review.mjs flip saa-t2-5
+node tool/review.mjs flip saa saa-t1-1
+node tool/review.mjs flip saa saa-t1-4
+node tool/review.mjs flip saa saa-t2-5
 ```
 
 세 Task가 모두 flip되면 SAA-C03 readiness는 D1 30/19, D2 30/17, D3 45/16, D4 30/13이 되어 **루브릭 §1 개정본(도메인별 weighted capacity) 기준으로** 공개 조건을 충족한다. 단, 그 시점의 D1 노출 문항은 공식 Task 1.3(데이터 보안)을 다루지 않는다 — `saa-t1-5`가 1순위 보강 batch다([batch 문서](2026-08-06-weighted-ready-batch.md) 리스크 항목).

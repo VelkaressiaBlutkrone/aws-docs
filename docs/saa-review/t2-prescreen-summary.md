@@ -63,7 +63,7 @@
 > ⚠ t4-1·t4-4·t3-3의 pass+review+fix 합이 15 미만인 칸은 일부 문항이 그 외 권고(예: 카운트 산정 차이)일 수 있음 — 정확 detail은 각 [prescreen/<taskId>.json](prescreen/) 참조.
 
 ## 사용 방법(T7 루브릭과 연계)
-1. 도메인순(D1→D4)으로 검수 시 각 Task의 `prescreen/<taskId>.json`을 saa_review HTML 뷰어와 나란히 본다.
+1. 도메인순(D1→D4)으로 검수 시 각 Task의 `prescreen/<taskId>.json`을 review.mjs HTML 뷰어와 나란히 본다.
 2. **suspect 7 → 최우선**, t3-4 출처 7 → 일괄 교체, fix 18 → 경미 수정, review 104 → 확인.
 3. 각 문항 [review-rubric.md](review-rubric.md) C1~C6 적용 → 판정 → 수정 루프 → 도메인 일괄 flip(사람).
 4. **AI는 여기까지(플래그)** — 정답 확정·flip은 사람.

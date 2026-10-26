@@ -1,13 +1,13 @@
 // SAA 문항 사전심사(prescreen) — 결정적(deterministic) 구조·정합성 플래그 생성기.
 // 의미·정답·출처 정확성(품질) 판단은 사람/AI 패스(T2)의 몫. 여기선 기계적 검사만.
-// saa_review.mjs의 questionFlags를 재사용(DRY). 순수 함수는 export(테스트용);
+// review.mjs의 questionFlags를 재사용(DRY). 순수 함수는 export(테스트용);
 // main()은 import.meta.url 가드로 직접 실행 시만.
 //
 // 산출: build/saa_review/<taskId>.prescreen.json (문항id별 구조·정합성 플래그).
 //       T2(AI 의미+출처 패스)와 사람 검수가 이 위에 의미 판단을 얹는다.
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
-import { questionFlags } from './saa_review.mjs';
+import { questionFlags } from './review.mjs';
 
 const SAA_DIR = 'assets/content/saa';
 const OUT_DIR = 'build/saa_review';
