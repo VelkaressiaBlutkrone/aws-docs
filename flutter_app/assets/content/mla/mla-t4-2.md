@@ -655,78 +655,80 @@ ML Lens MLPERF06-BP05는 재훈련 트리거를 **일정 · 성능 임계 이탈
 
 ### 📌 출처
 
-- Amazon SageMaker AI metrics in Amazon CloudWatch (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html
-- CloudWatch Logs for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html
-- Well-Architected machine learning design principles (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/design-principles.html
-- MLOPS05-BP01 Establish deployment environment metrics (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops05-bp01.html
-- Machine Learning Lens — Performance efficiency — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/performance-efficiency.html
-- Machine Learning Lens — Reliability — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/reliability.html
-- MLREL05-BP01 Allow automatic scaling of the model endpoint (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel05-bp01.html
-- Best practices for deploying models on SageMaker AI Hosting Services (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-best-practices.html
-- Profiler availability change (Amazon SageMaker Profiler 공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html
-- Deploy models with Amazon SageMaker Serverless Inference (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
-- Alarms and logs for tracking metrics from serverless endpoints (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints-monitoring.html
-- AWS Lambda — Understanding Lambda function scaling (공식 문서) — https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html
-- SageMaker AI automatic scaling — Define a scaling policy (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-code-define.html
-- How target tracking scaling for Application Auto Scaling works (공식 문서) — https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html
-- Amazon CloudWatch — Visualizing your service quotas and setting alarms (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Quotas-Visualize-Alarms.html
-- Get compute capacity for SageMaker Training Jobs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/train-get-capacity.html
-- What is AWS X-Ray? (공식 문서) — https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
-- Integrating AWS X-Ray with other AWS services (공식 문서) — https://docs.aws.amazon.com/xray/latest/devguide/xray-services.html
-- AWS X-Ray concepts (공식 문서) — https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html
-- Amazon CloudWatch Lambda Insights (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights.html
-- Analyzing log data with CloudWatch Logs Insights (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html
-- CloudWatch Logs Insights language query syntax (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html
-- Using Amazon CloudWatch alarms (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
-- Using CloudWatch anomaly detection (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html
-- Using Amazon CloudWatch dashboards (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
-- What is Amazon Quick? (공식 문서) — https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
-- Logging Amazon SageMaker AI API calls using AWS CloudTrail (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html
-- AWS CloudTrail — Creating a trail for your AWS account (공식 문서) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html
-- AWS CloudTrail — Creating a trail with the CloudTrail console (공식 문서) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-a-trail-using-the-console-first-time.html
-- AWS CloudTrail — CloudTrail Lake availability change (공식 공지) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html
-- Amazon EventBridge — AWS service events delivered via AWS CloudTrail (공식 문서) — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event-cloudtrail.html
-- Events that Amazon SageMaker AI sends to Amazon EventBridge (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html
-- Schedule Pipeline Runs (SageMaker Pipelines와 EventBridge, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/pipeline-eventbridge.html
-- Amazon EventBridge event reference — Amazon CloudWatch events (공식 문서) — https://docs.aws.amazon.com/eventbridge/latest/ref/events-ref-cloudwatch.html
-- MLPERF06-BP05 Establish an automated re-training framework (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html
-- Amazon EC2 instance type specifications (공식 문서) — https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-type-specifications.html
-- Amazon EC2 instance types (현재 세대 인스턴스 목록, 공식 문서) — https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-types.html
-- Amazon SageMaker Inference Recommender (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender.html
-- Recommendation jobs with Amazon SageMaker Inference Recommender (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-recommendation-jobs.html
-- Get an inference recommendation for an existing endpoint (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-existing-endpoint.html
-- Recommendation results (Inference Recommender 결과 지표, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-interpret-results.html
-- What is AWS Compute Optimizer? (공식 문서) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
-- AWS resources supported by Compute Optimizer (공식 문서) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/supported-resources.html
-- Compute Optimizer — Viewing idle resource recommendations (공식 문서) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html
-- MLCOST04-BP01 Select optimal computing instance size (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html
-- MLCOST05-BP03 Right-size the model hosting instance fleet (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost05-bp03.html
-- MLCOST06-BP03 Monitor endpoint usage and right-size the instance fleet (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp03.html
-- Inference cost optimization best practices (SageMaker AI 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html
-- Analyzing your costs and usage with AWS Cost Explorer (공식 문서) — https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html
-- Use AWS Billing and Cost Management (공식 문서) — https://docs.aws.amazon.com/cost-management/latest/userguide/what-is-costmanagement.html
-- AWS Trusted Advisor (공식 문서) — https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
-- AWS Trusted Advisor — Cost optimization checks (공식 문서) — https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html
-- Managing your costs with AWS Budgets (공식 문서) — https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
-- Organizing and tracking costs using AWS cost allocation tags (공식 문서) — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html
-- Activating user-defined cost allocation tags (공식 문서) — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
-- Amazon SageMaker Studio administration best practices — Cost attribution (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/sagemaker-studio-admin-best-practices/cost-attribution.html
-- SageMaker AI — Custom tag propagation (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/custom-tags.html
-- SageMaker AI — Automatic tag propagation (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/domain-multiple-tag.html
-- Amazon SageMaker API Reference — AddTags — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AddTags.html
-- MLCOST06-BP01 Monitor usage and cost by ML activity (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp01.html
-- MLCOST04-BP12 Set up a budget and use resource tagging to track costs (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp12.html
-- MLCOST01-BP02 Use managed services to reduce total cost of ownership (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost01-bp02.html
-- What are AWS Cost and Usage Reports? (공식 문서) — https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
-- Cloud Intelligence Dashboards — CUDOS, CID, KPI (공식 가이던스) — https://docs.aws.amazon.com/guidance/latest/cloud-intelligence-dashboards/cudos-cid-kpi.html
-- Managed Spot Training in Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html
-- Savings Plans types (공식 문서) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
-- What are Savings Plans? (공식 문서) — https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html
-- Compute Savings Plans and Reserved Instances (공식 문서) — https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-- Reserve Flexible Training Plans for ML workloads (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/reserve-capacity-with-training-plans.html
-- How AWS Pricing Works — AWS Cost Optimization (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/aws-cost-optimization.html
-- What is Amazon SageMaker AI? (개명·네임스페이스 유지, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
-- AWS Product Lifecycle (서비스 수명 용어, 공식 문서) — https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
-- Custom Inference Code with Hosting Services (컨테이너 헬스 체크, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html
-- Amazon SageMaker Model Monitor availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
-- MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+1. Amazon SageMaker AI metrics in Amazon CloudWatch (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html
+2. CloudWatch Logs for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html
+3. Well-Architected machine learning design principles (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/design-principles.html
+4. MLOPS05-BP01 Establish deployment environment metrics (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops05-bp01.html
+5. Machine Learning Lens — Performance efficiency — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/performance-efficiency.html
+6. Machine Learning Lens — Reliability — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/reliability.html
+7. MLREL05-BP01 Allow automatic scaling of the model endpoint (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel05-bp01.html
+8. Best practices for deploying models on SageMaker AI Hosting Services (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-best-practices.html
+9. Profiler availability change (Amazon SageMaker Profiler 공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html
+10. Deploy models with Amazon SageMaker Serverless Inference (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+11. Alarms and logs for tracking metrics from serverless endpoints (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints-monitoring.html
+12. AWS Lambda — Understanding Lambda function scaling (공식 문서) — https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html
+13. SageMaker AI automatic scaling — Define a scaling policy (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-code-define.html
+14. How target tracking scaling for Application Auto Scaling works (공식 문서) — https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html
+15. Amazon CloudWatch — Visualizing your service quotas and setting alarms (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Quotas-Visualize-Alarms.html
+16. Get compute capacity for SageMaker Training Jobs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/train-get-capacity.html
+17. What is AWS X-Ray? (공식 문서) — https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
+18. Integrating AWS X-Ray with other AWS services (공식 문서) — https://docs.aws.amazon.com/xray/latest/devguide/xray-services.html
+19. AWS X-Ray concepts (공식 문서) — https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html
+20. Amazon CloudWatch Lambda Insights (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights.html
+21. Analyzing log data with CloudWatch Logs Insights (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html
+22. CloudWatch Logs Insights language query syntax (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html
+23. Using Amazon CloudWatch alarms (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+24. Using CloudWatch anomaly detection (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html
+25. Using Amazon CloudWatch dashboards (공식 문서) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
+26. What is Amazon Quick? (공식 문서) — https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
+27. Logging Amazon SageMaker AI API calls using AWS CloudTrail (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html
+28. AWS CloudTrail — Creating a trail for your AWS account (공식 문서) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-and-update-a-trail.html
+29. AWS CloudTrail — Creating a trail with the CloudTrail console (공식 문서) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-create-a-trail-using-the-console-first-time.html
+30. AWS CloudTrail — CloudTrail Lake availability change (공식 공지) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html
+31. Amazon EventBridge — AWS service events delivered via AWS CloudTrail (공식 문서) — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event-cloudtrail.html
+32. Events that Amazon SageMaker AI sends to Amazon EventBridge (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html
+33. Schedule Pipeline Runs (SageMaker Pipelines와 EventBridge, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/pipeline-eventbridge.html
+34. Amazon EventBridge event reference — Amazon CloudWatch events (공식 문서) — https://docs.aws.amazon.com/eventbridge/latest/ref/events-ref-cloudwatch.html
+35. MLPERF06-BP05 Establish an automated re-training framework (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html
+36. Amazon EC2 instance type specifications (공식 문서) — https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-type-specifications.html
+37. Amazon EC2 instance types (현재 세대 인스턴스 목록, 공식 문서) — https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-types.html
+38. Amazon SageMaker Inference Recommender (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender.html
+39. Recommendation jobs with Amazon SageMaker Inference Recommender (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-recommendation-jobs.html
+40. Get an inference recommendation for an existing endpoint (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-existing-endpoint.html
+41. Recommendation results (Inference Recommender 결과 지표, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender-interpret-results.html
+42. What is AWS Compute Optimizer? (공식 문서) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html
+43. AWS resources supported by Compute Optimizer (공식 문서) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/supported-resources.html
+44. Compute Optimizer — Viewing idle resource recommendations (공식 문서) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html
+45. MLCOST04-BP01 Select optimal computing instance size (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html
+46. MLCOST05-BP03 Right-size the model hosting instance fleet (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost05-bp03.html
+47. MLCOST06-BP03 Monitor endpoint usage and right-size the instance fleet (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp03.html
+48. Inference cost optimization best practices (SageMaker AI 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html
+49. Analyzing your costs and usage with AWS Cost Explorer (공식 문서) — https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html
+50. Use AWS Billing and Cost Management (공식 문서) — https://docs.aws.amazon.com/cost-management/latest/userguide/what-is-costmanagement.html
+51. AWS Trusted Advisor (공식 문서) — https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html
+52. AWS Trusted Advisor — Cost optimization checks (공식 문서) — https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html
+53. Managing your costs with AWS Budgets (공식 문서) — https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
+54. Organizing and tracking costs using AWS cost allocation tags (공식 문서) — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html
+55. Activating user-defined cost allocation tags (공식 문서) — https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
+56. Amazon SageMaker Studio administration best practices — Cost attribution (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/sagemaker-studio-admin-best-practices/cost-attribution.html
+57. SageMaker AI — Custom tag propagation (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/custom-tags.html
+58. SageMaker AI — Automatic tag propagation (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/domain-multiple-tag.html
+59. Amazon SageMaker API Reference — AddTags — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AddTags.html
+60. MLCOST06-BP01 Monitor usage and cost by ML activity (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp01.html
+61. MLCOST04-BP12 Set up a budget and use resource tagging to track costs (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp12.html
+62. MLCOST01-BP02 Use managed services to reduce total cost of ownership (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost01-bp02.html
+63. What are AWS Cost and Usage Reports? (공식 문서) — https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html
+64. Cloud Intelligence Dashboards — CUDOS, CID, KPI (공식 가이던스) — https://docs.aws.amazon.com/guidance/latest/cloud-intelligence-dashboards/cudos-cid-kpi.html
+65. Managed Spot Training in Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html
+66. Savings Plans types (공식 문서) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
+67. What are Savings Plans? (공식 문서) — https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html
+68. Compute Savings Plans and Reserved Instances (공식 문서) — https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
+69. Reserve Flexible Training Plans for ML workloads (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/reserve-capacity-with-training-plans.html
+70. How AWS Pricing Works — AWS Cost Optimization (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/aws-cost-optimization.html
+71. What is Amazon SageMaker AI? (개명·네임스페이스 유지, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+72. AWS Product Lifecycle (서비스 수명 용어, 공식 문서) — https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+73. Custom Inference Code with Hosting Services (컨테이너 헬스 체크, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html
+74. Amazon SageMaker Model Monitor availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
+75. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+
+조사 노트: `docs/content-research/MLA-C01/tasks/4-2.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

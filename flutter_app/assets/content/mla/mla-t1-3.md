@@ -344,19 +344,55 @@ SageMaker에서 KMS 키를 주는 자리:
 - **삭제된 항목 1개** — C01에서만 묻습니다
   - **모델 훈련 리소스에 로드할 데이터 구성**(예: Amazon EFS, Amazon FSx) → 이 문서의 12)
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- [Pre-training Bias Metrics](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-data-bias.html) · [Pre-training Data Bias(용어)](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html) · [CI](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html) · [DPL](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html) · [KL](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-kl-divergence.html) · [JS](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-jensen-shannon-divergence.html) · [LP](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-lp-norm.html) · [TVD](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-total-variation-distance.html) · [KS](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-kolmogorov-smirnov.html) · [CDD](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html) · [Clarify 가용성 변경](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html)
-- [Transform Data (Data Wrangler — Balance data·Split data)](https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html) · [EDA(Canvas)](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-analyses.html) · [XGBoost 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html) · [Linear learner 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html) · [Channel(ShuffleConfig)](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_Channel.html)
-- [What is Data Augmentation?](https://aws.amazon.com/what-is/data-augmentation/) · [합성 데이터 생성 고려사항(Clean Rooms ML)](https://docs.aws.amazon.com/clean-rooms/latest/userguide/considerations-for-data-generation.html) · [RAIDP02-BP04](https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp04.html) · [MLREL03-BP04](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html)
-- [S3 서버 측 암호화](https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html) · [SSE-KMS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html) · [SSE-C](https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html) · [SageMaker 저장 시 암호화](https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html) · [분산 학습 통신 암호화](https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html) · [KMS 키 정책](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html)
-- [Amazon Macie](https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html) · [Comprehend PII](https://docs.aws.amazon.com/comprehend/latest/dg/pii.html) · [PII 편집(비동기)](https://docs.aws.amazon.com/comprehend/latest/dg/redact-api-pii.html) · [Comprehend Medical DetectPHI](https://docs.aws.amazon.com/comprehend-medical/latest/dev/textanalysis-phi.html) · [Glue 민감 데이터 탐지](https://docs.aws.amazon.com/glue/latest/dg/detect-PII.html) · [DataBrew PII 처리](https://docs.aws.amazon.com/databrew/latest/dg/personal-information-protection.html)
-- [Lake Formation 태그 기반 접근 제어](https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html) · [데이터 필터·셀 수준 보안](https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html) · [리전 기반 Deny(IAM)](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-requested-region.html)
-- [AWS Glue Data Quality](https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html) · [DQDL 레퍼런스](https://docs.aws.amazon.com/glue/latest/dg/dqdl.html) · [Glue 이상 탐지](https://docs.aws.amazon.com/glue/latest/dg/data-quality-anomaly-detection.html) · [DataBrew 품질 검증](https://docs.aws.amazon.com/databrew/latest/dg/profile.data-quality-rules.html)
-- [훈련 데이터 접근 설정](https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html) · [FSx for Lustre 입력 채널](https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-fsx.html) · [FileSystemDataSource](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_FileSystemDataSource.html) · [훈련 작업 VPC 접근](https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html) · [S3DataSource](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html)
+1. Pre-training Bias Metrics — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-measure-data-bias.html
+2. Pre-training Data Bias(용어) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html
+3. CI — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html
+4. DPL — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html
+5. KL — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-kl-divergence.html
+6. JS — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-jensen-shannon-divergence.html
+7. LP — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-lp-norm.html
+8. TVD — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-total-variation-distance.html
+9. KS — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-kolmogorov-smirnov.html
+10. CDD — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html
+11. Clarify 가용성 변경 — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
+12. Transform Data (Data Wrangler — Balance data·Split data) — https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html
+13. EDA(Canvas) — https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-analyses.html
+14. XGBoost 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
+15. Linear learner 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html
+16. Channel(ShuffleConfig) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_Channel.html
+17. What is Data Augmentation? — https://aws.amazon.com/what-is/data-augmentation/
+18. 합성 데이터 생성 고려사항(Clean Rooms ML) — https://docs.aws.amazon.com/clean-rooms/latest/userguide/considerations-for-data-generation.html
+19. RAIDP02-BP04 — https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp04.html
+20. MLREL03-BP04 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html
+21. S3 서버 측 암호화 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html
+22. SSE-KMS — https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html
+23. SSE-C — https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html
+24. SageMaker 저장 시 암호화 — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html
+25. 분산 학습 통신 암호화 — https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html
+26. KMS 키 정책 — https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html
+27. Amazon Macie — https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
+28. Comprehend PII — https://docs.aws.amazon.com/comprehend/latest/dg/pii.html
+29. PII 편집(비동기) — https://docs.aws.amazon.com/comprehend/latest/dg/redact-api-pii.html
+30. Comprehend Medical DetectPHI — https://docs.aws.amazon.com/comprehend-medical/latest/dev/textanalysis-phi.html
+31. Glue 민감 데이터 탐지 — https://docs.aws.amazon.com/glue/latest/dg/detect-PII.html
+32. DataBrew PII 처리 — https://docs.aws.amazon.com/databrew/latest/dg/personal-information-protection.html
+33. Lake Formation 태그 기반 접근 제어 — https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html
+34. 데이터 필터·셀 수준 보안 — https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html
+35. 리전 기반 Deny(IAM) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_aws_deny-requested-region.html
+36. AWS Glue Data Quality — https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html
+37. DQDL 레퍼런스 — https://docs.aws.amazon.com/glue/latest/dg/dqdl.html
+38. Glue 이상 탐지 — https://docs.aws.amazon.com/glue/latest/dg/data-quality-anomaly-detection.html
+39. DataBrew 품질 검증 — https://docs.aws.amazon.com/databrew/latest/dg/profile.data-quality-rules.html
+40. 훈련 데이터 접근 설정 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
+41. FSx for Lustre 입력 채널 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-fsx.html
+42. FileSystemDataSource — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_FileSystemDataSource.html
+43. 훈련 작업 VPC 접근 — https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html
+44. S3DataSource — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/1-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

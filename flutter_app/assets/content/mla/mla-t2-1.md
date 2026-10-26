@@ -389,24 +389,80 @@ Kendra는 **Maintenance 단계로 신규 고객에게 닫혀** 있어 새로 만
 - **삭제된 항목**: 이 Task에는 없음
 - 읽는 법: C01에서 이 Task가 "고전 ML 알고리즘 선택 + AI 서비스 매핑"이었다면, C02는 그 무게를 **FM 평가·미세조정 전략·RAG 패턴**으로 옮깁니다. 1)의 사다리와 11)의 과금 비교는 그대로 쓰이고, 4)의 내장 알고리즘 카탈로그 비중이 줄어듭니다.
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- [Types of Algorithms](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html) · [Built-in algorithms and pretrained models](https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html) · [Parameters for Built-in Algorithms](https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html)
-- 계열별 알고리즘 페이지: [표 형식](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-tabular.html) · [텍스트](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-text.html) · [비지도](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-unsupervised.html) · [컴퓨터 비전](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-vision.html) · [시계열](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-time-series.html)
-- 개별 알고리즘: [XGBoost](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html) · [Linear Learner](https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html) · [k-NN](https://docs.aws.amazon.com/sagemaker/latest/dg/k-nearest-neighbors.html) · [Factorization Machines](https://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines.html) · [CatBoost](https://docs.aws.amazon.com/sagemaker/latest/dg/catboost.html) · [AutoGluon-Tabular](https://docs.aws.amazon.com/sagemaker/latest/dg/autogluon-tabular.html) · [TabTransformer](https://docs.aws.amazon.com/sagemaker/latest/dg/tabtransformer.html)
-- [K-Means](https://docs.aws.amazon.com/sagemaker/latest/dg/k-means.html) · [PCA](https://docs.aws.amazon.com/sagemaker/latest/dg/pca.html) · [Random Cut Forest](https://docs.aws.amazon.com/sagemaker/latest/dg/randomcutforest.html) · [IP Insights](https://docs.aws.amazon.com/sagemaker/latest/dg/ip-insights.html) · [LDA](https://docs.aws.amazon.com/sagemaker/latest/dg/lda.html) · [NTM](https://docs.aws.amazon.com/sagemaker/latest/dg/ntm.html)
-- [BlazingText](https://docs.aws.amazon.com/sagemaker/latest/dg/blazingtext.html) · [Sequence-to-Sequence](https://docs.aws.amazon.com/sagemaker/latest/dg/seq-2-seq.html) · [Object2Vec](https://docs.aws.amazon.com/sagemaker/latest/dg/object2vec.html) · [Semantic Segmentation](https://docs.aws.amazon.com/sagemaker/latest/dg/semantic-segmentation.html) · [DeepAR](https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html)
-- 의사결정 가이드: [Choosing an AWS machine learning service](https://docs.aws.amazon.com/decision-guides/latest/decision-guides/ml-guide.html) · [Amazon Bedrock or Amazon SageMaker AI?](https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html)
-- ML Lens: [ML problem framing](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html) · [MLCOST02-BP01](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html) · [MLCOST02-BP02](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp02.html) · [MLCOST04-BP14](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp14.html) · [MLPERF06-BP02](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html)
-- 해석 가능성: [Model interpretability (백서)](https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices-healthcare-life-sciences/model-interpretability.html) · [ML model interpretability (Prescriptive Guidance)](https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html) · [Local interpretability](https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/local.html) · [What Is Explainable AI?](https://aws.amazon.com/what-is/explainable-ai/)
-- AutoML·JumpStart: [Autopilot](https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html) · [Canvas](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html) · [How custom models work](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-build-model.html) · [AutoMLJobConfig](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobConfig.html) · [JumpStart 사전학습 모델](https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html) · [JumpStart 솔루션 템플릿](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-solutions.html) · [FM 맞춤화](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize.html)
-- Bedrock: [What is Amazon Bedrock?](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html) · [Provisioned Throughput](https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html) · [사용자 정의 모델 추론 설정](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html) · [모델 맞춤화](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html) · [Agents Classic maintenance](https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html) · [요금](https://aws.amazon.com/bedrock/pricing/)
-- AI 서비스: [Translate](https://docs.aws.amazon.com/translate/latest/dg/what-is.html) · [Transcribe](https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html) · [Polly](https://docs.aws.amazon.com/polly/latest/dg/what-is.html) · [Textract](https://docs.aws.amazon.com/textract/latest/dg/what-is.html) · [Comprehend](https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html) · [Rekognition](https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html) · [Lex V2](https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html) · [Personalize](https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html) · [Personalize 준비 체크리스트](https://docs.aws.amazon.com/personalize/latest/dg/readiness-checklist.html)
-- 수명 주기·가용성: [AWS Lifecycle Changes](https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html) · [Kendra](https://docs.aws.amazon.com/kendra/latest/dg/kendra-availability-change.html) · [Q Business](https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/qbusiness-availability-change.html) · [Comprehend](https://docs.aws.amazon.com/comprehend/latest/dg/comprehend-availability-change.html) · [Clarify](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html) · [Forecast](https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html) · [Fraud Detector](https://docs.aws.amazon.com/frauddetector/latest/ug/what-is-frauddetector.html) · [DevOps Guru](https://docs.aws.amazon.com/devops-guru/latest/userguide/devops-guru-end-of-support.html) · [컨테이너 지원 정책](https://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-support-policy.html)
-- [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. Types of Algorithms — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+2. Built-in algorithms and pretrained models — https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html
+3. Parameters for Built-in Algorithms — https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html
+4. 표 형식 — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-tabular.html
+5. 텍스트 — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-text.html
+6. 비지도 — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-unsupervised.html
+7. 컴퓨터 비전 — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-vision.html
+8. 시계열 — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-time-series.html
+9. XGBoost — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html
+10. Linear Learner — https://docs.aws.amazon.com/sagemaker/latest/dg/linear-learner.html
+11. k-NN — https://docs.aws.amazon.com/sagemaker/latest/dg/k-nearest-neighbors.html
+12. Factorization Machines — https://docs.aws.amazon.com/sagemaker/latest/dg/fact-machines.html
+13. CatBoost — https://docs.aws.amazon.com/sagemaker/latest/dg/catboost.html
+14. AutoGluon-Tabular — https://docs.aws.amazon.com/sagemaker/latest/dg/autogluon-tabular.html
+15. TabTransformer — https://docs.aws.amazon.com/sagemaker/latest/dg/tabtransformer.html
+16. K-Means — https://docs.aws.amazon.com/sagemaker/latest/dg/k-means.html
+17. PCA — https://docs.aws.amazon.com/sagemaker/latest/dg/pca.html
+18. Random Cut Forest — https://docs.aws.amazon.com/sagemaker/latest/dg/randomcutforest.html
+19. IP Insights — https://docs.aws.amazon.com/sagemaker/latest/dg/ip-insights.html
+20. LDA — https://docs.aws.amazon.com/sagemaker/latest/dg/lda.html
+21. NTM — https://docs.aws.amazon.com/sagemaker/latest/dg/ntm.html
+22. BlazingText — https://docs.aws.amazon.com/sagemaker/latest/dg/blazingtext.html
+23. Sequence-to-Sequence — https://docs.aws.amazon.com/sagemaker/latest/dg/seq-2-seq.html
+24. Object2Vec — https://docs.aws.amazon.com/sagemaker/latest/dg/object2vec.html
+25. Semantic Segmentation — https://docs.aws.amazon.com/sagemaker/latest/dg/semantic-segmentation.html
+26. DeepAR — https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html
+27. Choosing an AWS machine learning service — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/ml-guide.html
+28. Amazon Bedrock or Amazon SageMaker AI? — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html
+29. ML problem framing — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html
+30. MLCOST02-BP01 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html
+31. MLCOST02-BP02 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp02.html
+32. MLCOST04-BP14 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp14.html
+33. MLPERF06-BP02 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html
+34. Model interpretability (백서) — https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices-healthcare-life-sciences/model-interpretability.html
+35. ML model interpretability (Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
+36. Local interpretability — https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/local.html
+37. What Is Explainable AI? — https://aws.amazon.com/what-is/explainable-ai/
+38. Autopilot — https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html
+39. Canvas — https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html
+40. How custom models work — https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-build-model.html
+41. AutoMLJobConfig — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobConfig.html
+42. JumpStart 사전학습 모델 — https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
+43. JumpStart 솔루션 템플릿 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-solutions.html
+44. FM 맞춤화 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-customize.html
+45. What is Amazon Bedrock? — https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
+46. Provisioned Throughput — https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html
+47. 사용자 정의 모델 추론 설정 — https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html
+48. 모델 맞춤화 — https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html
+49. Agents Classic maintenance — https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
+50. 요금 — https://aws.amazon.com/bedrock/pricing/
+51. Translate — https://docs.aws.amazon.com/translate/latest/dg/what-is.html
+52. Transcribe — https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html
+53. Polly — https://docs.aws.amazon.com/polly/latest/dg/what-is.html
+54. Textract — https://docs.aws.amazon.com/textract/latest/dg/what-is.html
+55. Comprehend — https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html
+56. Rekognition — https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html
+57. Lex V2 — https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html
+58. Personalize — https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html
+59. Personalize 준비 체크리스트 — https://docs.aws.amazon.com/personalize/latest/dg/readiness-checklist.html
+60. AWS Lifecycle Changes — https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+61. Kendra — https://docs.aws.amazon.com/kendra/latest/dg/kendra-availability-change.html
+62. Q Business — https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/qbusiness-availability-change.html
+63. Comprehend — https://docs.aws.amazon.com/comprehend/latest/dg/comprehend-availability-change.html
+64. Clarify — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
+65. Forecast — https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html
+66. Fraud Detector — https://docs.aws.amazon.com/frauddetector/latest/ug/what-is-frauddetector.html
+67. DevOps Guru — https://docs.aws.amazon.com/devops-guru/latest/userguide/devops-guru-end-of-support.html
+68. 컨테이너 지원 정책 — https://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-containers-support-policy.html
+69. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/2-1.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

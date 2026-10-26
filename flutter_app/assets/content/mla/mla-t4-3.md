@@ -666,84 +666,86 @@ SageMaker는 `sagemaker:` 접두 조건 키로 **"리소스를 만들 때 요청
 
 ### 📌 출처
 
-- How to use SageMaker AI execution roles (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html
-- AWS managed policies for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html
-- Amazon SageMaker AI identity-based policy examples (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html
-- Troubleshooting Amazon SageMaker AI Identity and Access (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_troubleshoot.html
-- Grant a user permissions to pass a role to an AWS service (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
-- Role Manager FAQs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-faqs.html
-- Amazon SageMaker Role Manager (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager.html
-- Role Manager availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html
-- Persona reference (Amazon SageMaker Role Manager, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-personas.html
-- Actions, resources, and condition keys for Amazon SageMaker (Service Authorization Reference) — https://docs.aws.amazon.com/service-authorization/latest/reference/list_sagemaker.html
-- Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html
-- Build a Secure Enterprise Machine Learning Platform on AWS — Networking architecture (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html
-- Protect Data at Rest Using Encryption (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html
-- Notebook instances, SageMaker AI jobs, and Endpoints (encryption at rest 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html
-- Protecting Data in Transit with Encryption (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-in-transit.html
-- Protect Communications Between ML Compute Instances in a Distributed Training Job (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html
-- Data Protection in Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/data-protection.html
-- Run Training and Inference Containers in Internet-Free Mode (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html
-- Give SageMaker AI Training Jobs Access to Resources in Your Amazon VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html
-- Give SageMaker AI Hosted Endpoints Access to Resources in Your Amazon VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html
-- Give SageMaker AI Processing Jobs Access to Resources in Your Amazon VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/process-vpc.html
-- Connect to SageMaker AI Within your VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html
-- Connect Studio notebooks in a VPC to external resources (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html
-- VpcConfig (Amazon SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_VpcConfig.html
-- CreateDomain (Amazon SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html
-- AWS::SageMaker::NotebookInstance (CloudFormation Template Reference) — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-notebookinstance.html
-- Control root access to a SageMaker notebook instance (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-root-access.html
-- Logging Amazon SageMaker AI API calls using AWS CloudTrail (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html
-- CloudWatch Logs for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html
-- AWS Config rule sagemaker-notebook-no-direct-internet-access — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-no-direct-internet-access.html
-- AWS Config rule sagemaker-notebook-instance-root-access-check — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-instance-root-access-check.html
-- AWS Config rule sagemaker-notebook-instance-inside-vpc — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-instance-inside-vpc.html
-- AWS Config rule sagemaker-notebook-instance-kms-key-configured — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-instance-kms-key-configured.html
-- AWS Config rule sagemaker-endpoint-config-kms-key-required — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-endpoint-config-kms-key-required.html
-- AWS Config rule sagemaker-model-isolation-enabled — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-model-isolation-enabled.html
-- AWS Config rule sagemaker-model-in-vpc — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-model-in-vpc.html
-- AWS Config rule sagemaker-domain-in-vpc — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-domain-in-vpc.html
-- List of AWS Config Managed Rules (공식 문서) — https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html
-- AWS Config terminology and concepts (공식 문서) — https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html
-- What is Amazon Macie? (공식 문서) — https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
-- CloudTrail Lake availability change (공식 공지) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html
-- IAM Access Analyzer policy generation (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html
-- IAM policy testing with the IAM policy simulator (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html
-- IAM user groups (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html
-- How AWS enforcement code logic evaluates requests to allow or deny access (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html
-- Troubleshoot access denied error messages (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html
-- Troubleshooting AWS KMS permissions (공식 문서) — https://docs.aws.amazon.com/kms/latest/developerguide/policy-evaluation.html
-- Identity and access management best practices for AWS KMS (AWS 규범 가이드) — https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-kms-best-practices/access.html
-- Compliance validation for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-compliance.html
-- HIPAA Eligible Services Reference (공식) — https://aws.amazon.com/compliance/hipaa-eligible-services-reference/
-- Amazon SageMaker Model Cards (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
-- Model governance to manage permissions and track model performance (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/governance.html
-- Deploy a Model from the Registry with Python (교차 계정 배포, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-deploy.html
-- IAM Access Management (SageMaker Pipelines 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-access.html
-- Cross-service confused deputy prevention (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security-confused-deputy-prevention.html
-- Security best practices (AWS CodePipeline User Guide) — https://docs.aws.amazon.com/codepipeline/latest/userguide/security-best-practices.html
-- Configure server-side encryption for artifacts stored in Amazon S3 for CodePipeline (공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/S3-artifact-encryption.html
-- Create a pipeline in CodePipeline that uses resources from another AWS account (공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create-cross-account.html
-- Add a manual approval action to a stage (CodePipeline 공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html
-- Add a manual approval action to a pipeline in CodePipeline (공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html
-- EnvironmentVariable (AWS CodeBuild API Reference) — https://docs.aws.amazon.com/codebuild/latest/APIReference/API_EnvironmentVariable.html
-- Data protection in AWS CodeBuild (공식 문서) — https://docs.aws.amazon.com/codebuild/latest/userguide/data-protection.html
-- Use AWS CodeBuild with Amazon Virtual Private Cloud (공식 문서) — https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
-- Allow CodeBuild to interact with other AWS services (공식 문서) — https://docs.aws.amazon.com/codebuild/latest/userguide/setting-up-service-role.html
-- Scan images for software vulnerabilities in Amazon ECR (공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html
-- Preventing image tags from being overwritten in Amazon ECR (공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html
-- How Amazon Elastic Container Registry works with IAM (공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/security_iam_service-with-iam.html
-- Amazon ECR interface VPC endpoints (AWS PrivateLink, 공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
-- How Amazon SageMaker AI uses AWS Secrets Manager (공식 문서) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating-sagemaker.html
-- Use AWS Secrets Manager secrets in Parameter Store (공식 문서) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_parameterstore.html
-- Rotate AWS Secrets Manager secrets (공식 문서) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html
-- Amazon CodeGuru Reviewer availability change (공식 공지) — https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/codeguru-reviewer-availability-change.html
-- Controlling access from VPC endpoints with bucket policies (Amazon S3 공식 문서) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.html
-- Gateway endpoints for Amazon S3 (Amazon VPC PrivateLink 공식 문서) — https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html
-- Infrastructure security in Amazon VPC (공식 문서) — https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
-- Building Data Lakes on AWS — Catalog and search (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/data-cataloging.html
-- Invoke endpoints with OpenAI-compatible APIs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-openai-compatible.html
-- What is Amazon SageMaker AI? (개명 안내, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
-- Clarify availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
-- Model Monitor availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
-- MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+1. How to use SageMaker AI execution roles (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html
+2. AWS managed policies for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html
+3. Amazon SageMaker AI identity-based policy examples (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html
+4. Troubleshooting Amazon SageMaker AI Identity and Access (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_troubleshoot.html
+5. Grant a user permissions to pass a role to an AWS service (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html
+6. Role Manager FAQs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-faqs.html
+7. Amazon SageMaker Role Manager (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager.html
+8. Role Manager availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html
+9. Persona reference (Amazon SageMaker Role Manager, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-personas.html
+10. Actions, resources, and condition keys for Amazon SageMaker (Service Authorization Reference) — https://docs.aws.amazon.com/service-authorization/latest/reference/list_sagemaker.html
+11. Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html
+12. Build a Secure Enterprise Machine Learning Platform on AWS — Networking architecture (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html
+13. Protect Data at Rest Using Encryption (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html
+14. Notebook instances, SageMaker AI jobs, and Endpoints (encryption at rest 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html
+15. Protecting Data in Transit with Encryption (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-in-transit.html
+16. Protect Communications Between ML Compute Instances in a Distributed Training Job (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html
+17. Data Protection in Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/data-protection.html
+18. Run Training and Inference Containers in Internet-Free Mode (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html
+19. Give SageMaker AI Training Jobs Access to Resources in Your Amazon VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html
+20. Give SageMaker AI Hosted Endpoints Access to Resources in Your Amazon VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html
+21. Give SageMaker AI Processing Jobs Access to Resources in Your Amazon VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/process-vpc.html
+22. Connect to SageMaker AI Within your VPC (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html
+23. Connect Studio notebooks in a VPC to external resources (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html
+24. VpcConfig (Amazon SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_VpcConfig.html
+25. CreateDomain (Amazon SageMaker API Reference) — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html
+26. AWS::SageMaker::NotebookInstance (CloudFormation Template Reference) — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-notebookinstance.html
+27. Control root access to a SageMaker notebook instance (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-root-access.html
+28. Logging Amazon SageMaker AI API calls using AWS CloudTrail (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html
+29. CloudWatch Logs for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/logging-cloudwatch.html
+30. AWS Config rule sagemaker-notebook-no-direct-internet-access — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-no-direct-internet-access.html
+31. AWS Config rule sagemaker-notebook-instance-root-access-check — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-instance-root-access-check.html
+32. AWS Config rule sagemaker-notebook-instance-inside-vpc — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-instance-inside-vpc.html
+33. AWS Config rule sagemaker-notebook-instance-kms-key-configured — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-notebook-instance-kms-key-configured.html
+34. AWS Config rule sagemaker-endpoint-config-kms-key-required — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-endpoint-config-kms-key-required.html
+35. AWS Config rule sagemaker-model-isolation-enabled — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-model-isolation-enabled.html
+36. AWS Config rule sagemaker-model-in-vpc — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-model-in-vpc.html
+37. AWS Config rule sagemaker-domain-in-vpc — https://docs.aws.amazon.com/config/latest/developerguide/sagemaker-domain-in-vpc.html
+38. List of AWS Config Managed Rules (공식 문서) — https://docs.aws.amazon.com/config/latest/developerguide/managed-rules-by-aws-config.html
+39. AWS Config terminology and concepts (공식 문서) — https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html
+40. What is Amazon Macie? (공식 문서) — https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
+41. CloudTrail Lake availability change (공식 공지) — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html
+42. IAM Access Analyzer policy generation (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html
+43. IAM policy testing with the IAM policy simulator (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html
+44. IAM user groups (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html
+45. How AWS enforcement code logic evaluates requests to allow or deny access (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html
+46. Troubleshoot access denied error messages (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html
+47. Troubleshooting AWS KMS permissions (공식 문서) — https://docs.aws.amazon.com/kms/latest/developerguide/policy-evaluation.html
+48. Identity and access management best practices for AWS KMS (AWS 규범 가이드) — https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-kms-best-practices/access.html
+49. Compliance validation for Amazon SageMaker AI (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-compliance.html
+50. HIPAA Eligible Services Reference (공식) — https://aws.amazon.com/compliance/hipaa-eligible-services-reference/
+51. Amazon SageMaker Model Cards (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html
+52. Model governance to manage permissions and track model performance (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/governance.html
+53. Deploy a Model from the Registry with Python (교차 계정 배포, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-deploy.html
+54. IAM Access Management (SageMaker Pipelines 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-access.html
+55. Cross-service confused deputy prevention (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/security-confused-deputy-prevention.html
+56. Security best practices (AWS CodePipeline User Guide) — https://docs.aws.amazon.com/codepipeline/latest/userguide/security-best-practices.html
+57. Configure server-side encryption for artifacts stored in Amazon S3 for CodePipeline (공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/S3-artifact-encryption.html
+58. Create a pipeline in CodePipeline that uses resources from another AWS account (공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-create-cross-account.html
+59. Add a manual approval action to a stage (CodePipeline 공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html
+60. Add a manual approval action to a pipeline in CodePipeline (공식 문서) — https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html
+61. EnvironmentVariable (AWS CodeBuild API Reference) — https://docs.aws.amazon.com/codebuild/latest/APIReference/API_EnvironmentVariable.html
+62. Data protection in AWS CodeBuild (공식 문서) — https://docs.aws.amazon.com/codebuild/latest/userguide/data-protection.html
+63. Use AWS CodeBuild with Amazon Virtual Private Cloud (공식 문서) — https://docs.aws.amazon.com/codebuild/latest/userguide/vpc-support.html
+64. Allow CodeBuild to interact with other AWS services (공식 문서) — https://docs.aws.amazon.com/codebuild/latest/userguide/setting-up-service-role.html
+65. Scan images for software vulnerabilities in Amazon ECR (공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html
+66. Preventing image tags from being overwritten in Amazon ECR (공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html
+67. How Amazon Elastic Container Registry works with IAM (공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/security_iam_service-with-iam.html
+68. Amazon ECR interface VPC endpoints (AWS PrivateLink, 공식 문서) — https://docs.aws.amazon.com/AmazonECR/latest/userguide/vpc-endpoints.html
+69. How Amazon SageMaker AI uses AWS Secrets Manager (공식 문서) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating-sagemaker.html
+70. Use AWS Secrets Manager secrets in Parameter Store (공식 문서) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/integrating_parameterstore.html
+71. Rotate AWS Secrets Manager secrets (공식 문서) — https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html
+72. Amazon CodeGuru Reviewer availability change (공식 공지) — https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/codeguru-reviewer-availability-change.html
+73. Controlling access from VPC endpoints with bucket policies (Amazon S3 공식 문서) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.html
+74. Gateway endpoints for Amazon S3 (Amazon VPC PrivateLink 공식 문서) — https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html
+75. Infrastructure security in Amazon VPC (공식 문서) — https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
+76. Building Data Lakes on AWS — Catalog and search (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/data-cataloging.html
+77. Invoke endpoints with OpenAI-compatible APIs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-openai-compatible.html
+78. What is Amazon SageMaker AI? (개명 안내, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+79. Clarify availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
+80. Model Monitor availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
+81. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+
+조사 노트: `docs/content-research/MLA-C01/tasks/4-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

@@ -310,19 +310,48 @@ lastVerified: 2026-10-17
   - `1.2.9` **FM 미세 조정·지속적 사전 훈련·모델 증류**용 데이터 준비
 - **삭제된 항목**: 이 Task에는 없음
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- [Transform Data (Data Wrangler)](https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html) · [Transform data (Canvas)](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html) · [How data processing works in Data Wrangler](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-processing.html) · [Export](https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-data-export.html)
-- [What is AWS Glue DataBrew?](https://docs.aws.amazon.com/databrew/latest/dg/what-is.html) · [DataBrew recipes](https://docs.aws.amazon.com/databrew/latest/dg/recipes.html) · [Data science recipe steps](https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.data-science.html) · [ONE_HOT_ENCODING](https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.ONE_HOT_ENCODING.html) · [BUCKETIZATION](https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.BUCKETIZATION.html) · [REMOVE_DUPLICATES](https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.REMOVE_DUPLICATES.html)
-- [What is AWS Glue?](https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html) · [Glue managed transforms](https://docs.aws.amazon.com/glue/latest/dg/edit-jobs-transforms.html) · [PySpark transforms reference](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-transforms.html) · [DynamicFrame class](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-crawler-pyspark-extensions-dynamic-frame.html) · [FindMatches](https://docs.aws.amazon.com/glue/latest/dg/machine-learning.html) · [Streaming ETL jobs](https://docs.aws.amazon.com/glue/latest/dg/add-job-streaming.html)
-- [What is Amazon EMR?](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html) · [EMR Serverless](https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/emr-serverless.html) · [SageMaker Processing](https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html)
-- [Transform source data in Firehose](https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html) · [Convert input data format](https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html) · [Managed Service for Apache Flink](https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html)
-- [Feature Store 개요](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html) · [Feature Store 개념](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-concepts.html) · [오프라인 스토어 형식](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-offline.html) · [TTL](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-time-to-live.html) · [데이터셋 만들기(시점 정확 조인)](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-create-a-dataset.html) · [교차 계정 공유](https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-cross-account.html)
-- [Ground Truth 개요](https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html) · [자동 데이터 레이블링](https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html) · [주석 통합](https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html) · [레이블 검증·조정](https://docs.aws.amazon.com/sagemaker/latest/dg/sms-verification-data.html) · [작업 인력](https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-management.html) · [Amazon A2I](https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html)
-- [Well-Architected ML Lens: 특성 엔지니어링](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html) · [How linear learner works](https://docs.aws.amazon.com/sagemaker/latest/dg/ll_how-it-works.html) · [AWS 서비스 수명주기](https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html)
+1. Transform Data (Data Wrangler) — https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html
+2. Transform data (Canvas) — https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-transform.html
+3. How data processing works in Data Wrangler — https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-processing.html
+4. Export — https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-data-export.html
+5. What is AWS Glue DataBrew? — https://docs.aws.amazon.com/databrew/latest/dg/what-is.html
+6. DataBrew recipes — https://docs.aws.amazon.com/databrew/latest/dg/recipes.html
+7. Data science recipe steps — https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.data-science.html
+8. ONE_HOT_ENCODING — https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.ONE_HOT_ENCODING.html
+9. BUCKETIZATION — https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.BUCKETIZATION.html
+10. REMOVE_DUPLICATES — https://docs.aws.amazon.com/databrew/latest/dg/recipe-actions.REMOVE_DUPLICATES.html
+11. What is AWS Glue? — https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html
+12. Glue managed transforms — https://docs.aws.amazon.com/glue/latest/dg/edit-jobs-transforms.html
+13. PySpark transforms reference — https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-transforms.html
+14. DynamicFrame class — https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-crawler-pyspark-extensions-dynamic-frame.html
+15. FindMatches — https://docs.aws.amazon.com/glue/latest/dg/machine-learning.html
+16. Streaming ETL jobs — https://docs.aws.amazon.com/glue/latest/dg/add-job-streaming.html
+17. What is Amazon EMR? — https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html
+18. EMR Serverless — https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/emr-serverless.html
+19. SageMaker Processing — https://docs.aws.amazon.com/sagemaker/latest/dg/processing-job.html
+20. Transform source data in Firehose — https://docs.aws.amazon.com/firehose/latest/dev/data-transformation.html
+21. Convert input data format — https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html
+22. Managed Service for Apache Flink — https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html
+23. Feature Store 개요 — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html
+24. Feature Store 개념 — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-concepts.html
+25. 오프라인 스토어 형식 — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-offline.html
+26. TTL — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-time-to-live.html
+27. 데이터셋 만들기(시점 정확 조인) — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-create-a-dataset.html
+28. 교차 계정 공유 — https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store-cross-account.html
+29. Ground Truth 개요 — https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html
+30. 자동 데이터 레이블링 — https://docs.aws.amazon.com/sagemaker/latest/dg/sms-automated-labeling.html
+31. 주석 통합 — https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html
+32. 레이블 검증·조정 — https://docs.aws.amazon.com/sagemaker/latest/dg/sms-verification-data.html
+33. 작업 인력 — https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-management.html
+34. Amazon A2I — https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
+35. Well-Architected ML Lens: 특성 엔지니어링 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/feature-engineering.html
+36. How linear learner works — https://docs.aws.amazon.com/sagemaker/latest/dg/ll_how-it-works.html
+37. AWS 서비스 수명주기 — https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/1-2.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

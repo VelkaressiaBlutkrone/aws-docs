@@ -95,6 +95,42 @@ void main() {
         expect(details.every((d) => d.body.isNotEmpty), isTrue,
             reason: '$taskId: 본문이 빈 접이식 블록이 있다');
       });
+
+      test('파서가 렌더하지 않는 표기를 쓰지 않는다', () {
+        // `markdown_parser.dart`의 인라인 정규식(_inlineRe)은 `**굵게**`·`` `코드` ``·
+        // **맨 URL**만 인식한다. 그래서 다음 둘은 화면에 글자 그대로 보인다:
+        //   · `[제목](https://…)` → `[제목](`와 `)`가 노출되고 URL만 색칠된다
+        //     (`study_markdown_view.dart`는 색만 바꾸고 탭 핸들러도 없다)
+        //   · `*이탤릭*` → 별표가 그대로 남는다
+        // 2026-10-26 실측: MLA 9편이 링크 표기를 527회 썼는데 CLF 56 외의 다른
+        // 자격증은 0건이었다. 출처는 `제목 — https://…` 번호 목록(DEA 집 관행),
+        // 문서 간 포인터는 평문(`mla-t3-2` 5))으로 적는다.
+        //
+        // ⚠️ 코드 스팬은 **자리표시자로** 바꾼다(빈 문자열이 아니다). 빈 문자열로
+        // 지우면 `` **`코드`** ``가 `****`가 되고, 빈 굵게는 `[^*\n]+`에 걸리지
+        // 않아 별표 4개가 남는다. 그 잔여가 뒤따르는 `**`와 짝을 이뤄 가짜 이탤릭을
+        // 만든다(2026-10-26에 이 가드를 만들며 실제로 밟은 함정이다).
+        // 코드 안의 별표(`cron(0 * ? * * *)`·`ecr:*`)는 코드로 렌더되므로 정상이고,
+        // 굵게도 벗겨야 남은 별표 쌍이 단일 이탤릭임을 가릴 수 있다.
+        var s = raw().replaceAll(RegExp(r'`[^`]*`'), '\u0000');
+        final links = RegExp(r'\[[^\]\n]+\]\([^)\n]+\)')
+            .allMatches(s)
+            .map((m) => m.group(0)!)
+            .toList();
+        expect(links, isEmpty,
+            reason: '$taskId: 링크 표기 ${links.length}건 — 괄호가 글자로 보인다. '
+                '출처는 "제목 — URL", 포인터는 평문으로:\n'
+                '${links.take(3).join('\n')}');
+
+        s = s.replaceAll(RegExp(r'\*\*[^*\n]*\*\*'), '');
+        final italics = RegExp(r'\*[^*\n]+\*')
+            .allMatches(s)
+            .map((m) => m.group(0)!)
+            .toList();
+        expect(italics, isEmpty,
+            reason: '$taskId: 단일 이탤릭 ${italics.length}건 — 별표가 글자로 보인다. '
+                '강조는 **굵게**를 쓴다:\n${italics.take(3).join('\n')}');
+      });
     });
   }
 }

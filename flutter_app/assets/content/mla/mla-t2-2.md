@@ -498,23 +498,80 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
   - **모델 크기 축소**(예: 데이터 유형 변경, 정리, 특성 선택 업데이트, 압축)
 - 읽는 법: 이 문서의 5) 모델 크기와 12) 파인튜닝은 **C01 고유 비중이 큰 절**입니다. C02에서는 그 무게가 프롬프트 엔지니어링과 검색·임베딩 최적화로 옮겨갑니다.
 
-출처: [MLA-C01 및 MLA-C02 비교 (한국어 공식)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html) · 조회일 2026-10-17
+출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
 ---
 
 ### 📌 출처
 
-- 분산 훈련: [Distributed training](https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training.html) · [Strategies for distributed training](https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training-strategies.html) · [SMDDP 소개](https://docs.aws.amazon.com/sagemaker/latest/dg/data-parallel-intro.html) · [SMDDP 구성 팁](https://docs.aws.amazon.com/sagemaker/latest/dg/data-parallel-config.html) · [SMDDP 지원 범위](https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-data-parallel-support.html) · [SMP v2](https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-v2.html) · [모델 병렬 개념](https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-intro-v2.html) · [혼합 정밀도](https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-core-features-v2-mixed-precision.html)
-- 시간·비용: [관리형 스팟 훈련](https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html) · [StoppingCondition](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_StoppingCondition.html) · [체크포인트](https://docs.aws.amazon.com/sagemaker/latest/dg/model-checkpoints.html) · [관리형 웜 풀](https://docs.aws.amazon.com/sagemaker/latest/dg/train-warm-pools.html) · [훈련 데이터 접근 설정](https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html) · [환경 변수·경로](https://docs.aws.amazon.com/sagemaker/latest/dg/model-train-storage-env-var-summary.html) · [MLCOST04-BP01 인스턴스 크기](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html) · [MLCOST04-BP07 분산 훈련](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp07.html)
-- AMT: [자동 모델 튜닝](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html) · [튜닝 전략](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html) · [범위 정의](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html) · [조기 중지](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html) · [웜 스타트](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-warm-start.html) · [리소스 한도](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-limits.html) · [모범 사례](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-considerations.html) · [지표 정의](https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-metrics-variables.html) · [다중 알고리즘 HPO](https://docs.aws.amazon.com/sagemaker/latest/dg/multiple-algorithm-hpo.html)
-- 알고리즘·하이퍼파라미터: [XGBoost](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html) · [XGBoost 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html) · [XGBoost 튜닝](https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-tuning.html) · [Linear Learner 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html) · [Image Classification 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/IC-Hyperparameter.html) · [AutoGluon-Tabular](https://docs.aws.amazon.com/sagemaker/latest/dg/autogluon-tabular.html) · [증분 훈련](https://docs.aws.amazon.com/sagemaker/latest/dg/incremental-training.html)
-- 과적합·정규화: [Model Fit: Underfitting vs. Overfitting (레거시)](https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html) · [Training Parameters (레거시)](https://docs.aws.amazon.com/machine-learning/latest/dg/training-parameters.html) · [Improving Model Accuracy (레거시)](https://docs.aws.amazon.com/machine-learning/latest/dg/improving-model-accuracy.html) · [What Is Overfitting?](https://aws.amazon.com/what-is/overfitting/)
-- 모델 크기: [GENSUS03-BP01 (Generative AI Lens)](https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensus03-bp01.html) · [모델 최적화 기법 (Prescriptive Guidance)](https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-inference-architecture-and-best-practices-on-aws/model-optimization.html) · [SageMaker Neo](https://docs.aws.amazon.com/sagemaker/latest/dg/neo.html)
-- 구현·통합: [Types of Algorithms](https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html) · [프레임워크·언어](https://docs.aws.amazon.com/sagemaker/latest/dg/frameworks.html) · [Model Hosting FAQs](https://docs.aws.amazon.com/sagemaker/latest/dg/hosting-faqs.html) · [커스텀 Docker 컨테이너](https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers-adapt-your-own.html) · [MXNet](https://docs.aws.amazon.com/sagemaker/latest/dg/mxnet.html) · [Chainer](https://docs.aws.amazon.com/sagemaker/latest/dg/chainer.html)
-- 파인튜닝: [JumpStart 미세조정 하이퍼파라미터](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning.html) · [도메인 적응](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-domain-adaptation.html) · [명령 기반](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-instruction-based.html) · [Studio에서 미세조정](https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-use-studio-updated-fine-tune.html) · [Bedrock 모델 맞춤화](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html) · [Bedrock 하이퍼파라미터](https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models-hp.html) · [Bedrock 데이터 준비](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html) · [사용자 지정 모델 추론](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html) · [PEFT (Prescriptive Guidance)](https://docs.aws.amazon.com/prescriptive-guidance/latest/generative-ai-nlp-healthcare/fine-tuning.html)
-- AutoML: [Autopilot](https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html) · [Autopilot 훈련 모드](https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-model-support-validation.html) · [MLCOST04-BP05 AutoML](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp05.html) · [MLCOST04-BP11 HPO](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp11.html)
-- Model Registry: [Model Registry](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html) · [모델·버전·그룹](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-models.html) · [승인 상태](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html) · [버전 등록](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-version.html) · [교차 계정 공유](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-ram.html) · [스테이징 구성](https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-staging-construct.html)
-- 상태 공지: [Profiler 지원 종료](https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html) · [Debugger 신규 중단](https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-availability-change.html) · [Training Compiler](https://docs.aws.amazon.com/sagemaker/latest/dg/training-compiler.html) · [SageMaker AI 개명](https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html)
-- [MLA-C01 공식 시험 가이드 (한국어)](https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html)
+1. Distributed training — https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training.html
+2. Strategies for distributed training — https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training-strategies.html
+3. SMDDP 소개 — https://docs.aws.amazon.com/sagemaker/latest/dg/data-parallel-intro.html
+4. SMDDP 구성 팁 — https://docs.aws.amazon.com/sagemaker/latest/dg/data-parallel-config.html
+5. SMDDP 지원 범위 — https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-data-parallel-support.html
+6. SMP v2 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-v2.html
+7. 모델 병렬 개념 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-intro-v2.html
+8. 혼합 정밀도 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-core-features-v2-mixed-precision.html
+9. 관리형 스팟 훈련 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html
+10. StoppingCondition — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_StoppingCondition.html
+11. 체크포인트 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-checkpoints.html
+12. 관리형 웜 풀 — https://docs.aws.amazon.com/sagemaker/latest/dg/train-warm-pools.html
+13. 훈련 데이터 접근 설정 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
+14. 환경 변수·경로 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-train-storage-env-var-summary.html
+15. MLCOST04-BP01 인스턴스 크기 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html
+16. MLCOST04-BP07 분산 훈련 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp07.html
+17. 자동 모델 튜닝 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning.html
+18. 튜닝 전략 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html
+19. 범위 정의 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html
+20. 조기 중지 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html
+21. 웜 스타트 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-warm-start.html
+22. 리소스 한도 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-limits.html
+23. 모범 사례 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-considerations.html
+24. 지표 정의 — https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-metrics-variables.html
+25. 다중 알고리즘 HPO — https://docs.aws.amazon.com/sagemaker/latest/dg/multiple-algorithm-hpo.html
+26. XGBoost — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html
+27. XGBoost 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost_hyperparameters.html
+28. XGBoost 튜닝 — https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-tuning.html
+29. Linear Learner 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/ll_hyperparameters.html
+30. Image Classification 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/IC-Hyperparameter.html
+31. AutoGluon-Tabular — https://docs.aws.amazon.com/sagemaker/latest/dg/autogluon-tabular.html
+32. 증분 훈련 — https://docs.aws.amazon.com/sagemaker/latest/dg/incremental-training.html
+33. Model Fit: Underfitting vs. Overfitting (레거시) — https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html
+34. Training Parameters (레거시) — https://docs.aws.amazon.com/machine-learning/latest/dg/training-parameters.html
+35. Improving Model Accuracy (레거시) — https://docs.aws.amazon.com/machine-learning/latest/dg/improving-model-accuracy.html
+36. What Is Overfitting? — https://aws.amazon.com/what-is/overfitting/
+37. GENSUS03-BP01 (Generative AI Lens) — https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensus03-bp01.html
+38. 모델 최적화 기법 (Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-inference-architecture-and-best-practices-on-aws/model-optimization.html
+39. SageMaker Neo — https://docs.aws.amazon.com/sagemaker/latest/dg/neo.html
+40. Types of Algorithms — https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html
+41. 프레임워크·언어 — https://docs.aws.amazon.com/sagemaker/latest/dg/frameworks.html
+42. Model Hosting FAQs — https://docs.aws.amazon.com/sagemaker/latest/dg/hosting-faqs.html
+43. 커스텀 Docker 컨테이너 — https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers-adapt-your-own.html
+44. MXNet — https://docs.aws.amazon.com/sagemaker/latest/dg/mxnet.html
+45. Chainer — https://docs.aws.amazon.com/sagemaker/latest/dg/chainer.html
+46. JumpStart 미세조정 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning.html
+47. 도메인 적응 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-domain-adaptation.html
+48. 명령 기반 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-instruction-based.html
+49. Studio에서 미세조정 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-use-studio-updated-fine-tune.html
+50. Bedrock 모델 맞춤화 — https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html
+51. Bedrock 하이퍼파라미터 — https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models-hp.html
+52. Bedrock 데이터 준비 — https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html
+53. 사용자 지정 모델 추론 — https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html
+54. PEFT (Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/generative-ai-nlp-healthcare/fine-tuning.html
+55. Autopilot — https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html
+56. Autopilot 훈련 모드 — https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-model-support-validation.html
+57. MLCOST04-BP05 AutoML — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp05.html
+58. MLCOST04-BP11 HPO — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp11.html
+59. Model Registry — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
+60. 모델·버전·그룹 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-models.html
+61. 승인 상태 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-approve.html
+62. 버전 등록 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-version.html
+63. 교차 계정 공유 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-ram.html
+64. 스테이징 구성 — https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-staging-construct.html
+65. Profiler 지원 종료 — https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html
+66. Debugger 신규 중단 — https://docs.aws.amazon.com/sagemaker/latest/dg/debugger-availability-change.html
+67. Training Compiler — https://docs.aws.amazon.com/sagemaker/latest/dg/training-compiler.html
+68. SageMaker AI 개명 — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+69. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/2-2.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)
