@@ -345,22 +345,23 @@
       "examGuideTaskId": "saa-t4-3",
       "skill": "Aurora serverless 스케일 단위 특성",
       "difficulty": "applied",
-      "stem": "Aurora serverless가 프로비저닝 인스턴스와 달리 0.5 ACU 단위로 세밀하게 스케일할 수 있는 이유는?",
+      "stem": "Aurora serverless가 프로비저닝 인스턴스와 달리 최소 0.5 ACU 단위까지 세밀하게 스케일할 수 있는 이유는?",
       "options": [
         "Aurora는 공유 스토리지 아키텍처 위에서 컴퓨팅 용량을 동적으로 조정하도록 설계되어 서버 교체 없이 CPU·메모리 비율을 세밀하게 변경할 수 있기 때문이다",
         "Aurora serverless는 컨테이너 기반이므로 리소스를 자유롭게 조정할 수 있기 때문이다",
         "0.5 ACU 단위는 마케팅 단위이며 실제 내부에서는 전체 인스턴스가 교체된다",
-        "Aurora serverless는 별도의 물리 서버를 예약하지 않아 서버 교체 없이 용량을 변경할 수 있기 때문이다"
+        "Aurora serverless는 스케일할 때마다 인스턴스를 다음 단계 클래스로 교체하고 그 사이 연결을 끊기 때문이다"
       ],
       "correct": 0,
-      "explanation": "전통적인 프로비저닝 인스턴스는 CPU·메모리가 고정된 서버 단위로 운영되어 용량 증가 시 다음 단계 인스턴스 클래스로 전환해야 합니다. Aurora serverless는 Aurora의 공유 스토리지 아키텍처 위에서 컴퓨팅 용량을 동적으로 조정하도록 설계되어, 서버 교체 없이 할당된 CPU·메모리 비율을 0.5 ACU 단위로 세밀하게 변경할 수 있습니다.",
+      "explanation": "전통적인 프로비저닝 인스턴스는 CPU·메모리가 고정된 서버 단위로 운영되어 용량 증가 시 다음 단계 인스턴스 클래스로 전환해야 합니다. Aurora serverless는 스토리지와 컴퓨팅이 분리된 구조 위에서 컴퓨팅 용량만 동적으로 조정하며, 대부분의 스케일링 이벤트는 writer·reader를 같은 호스트에 그대로 두고 일어나 진행 중인 DB 작업을 중단시키지 않습니다. 증가 폭은 최소 0.5 ACU이고, 현재 용량이 클수록 증가 폭도 커져 스케일링이 더 빠르게 일어납니다.",
       "wrongExplanations": {
         "1": "Aurora serverless의 세밀한 스케일은 컨테이너 때문이 아니라 공유 스토리지 아키텍처 위에서 컴퓨팅을 동적으로 조정하는 설계 덕분입니다.",
-        "2": "0.5 ACU 단위는 실제 과금·용량 조정 단위입니다. 내부에서 전체 인스턴스가 교체되는 것이 아니라 할당된 리소스 비율이 변경됩니다.",
-        "3": "물리 서버 예약 여부보다 Aurora의 공유 스토리지 아키텍처와 컴퓨팅 동적 조정 설계가 핵심 이유입니다."
+        "2": "0.5 ACU는 마케팅 단위가 아니라 공식 문서가 적는 실제 최소 증가 폭입니다. 현재 용량이 클수록 증가 폭도 커지며, 내부에서 전체 인스턴스가 교체되는 것이 아니라 할당된 컴퓨팅 용량이 변경됩니다.",
+        "3": "Aurora serverless의 스케일링은 진행 중인 DB 작업을 중단시키지 않습니다. 대부분의 스케일링 이벤트는 writer·reader를 같은 호스트에 그대로 두고, 드물게 호스트를 옮기는 경우에도 연결은 Aurora serverless가 자동으로 관리합니다. 인스턴스 클래스를 교체하며 연결을 끊는 것은 프로비저닝 인스턴스의 용량 변경 방식입니다."
       },
       "sources": [
-        { "title": "Aurora serverless (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html" }
+        { "title": "Aurora serverless (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html" },
+        { "title": "Aurora serverless 동작 — 최소 0.5 ACU 증가·같은 호스트 스케일링 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html" }
       ],
       "verified": true
     }

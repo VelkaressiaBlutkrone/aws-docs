@@ -7,25 +7,26 @@
     {
       "id": "saa-t3-4-q1",
       "examGuideTaskId": "saa-t3-4",
-      "skill": "컴퓨팅 선택 결정 트리 — 운영 부담 스펙트럼",
+      "skill": "컴퓨팅 선택 — 운영 부담을 가르는 축",
       "difficulty": "foundational",
-      "stem": "솔루션스 아키텍트가 팀에게 AWS 컴퓨팅 서비스의 운영 부담 스펙트럼을 설명하고 있다. 운영 부담이 가장 낮은 것부터 높은 순으로 올바르게 나열한 것은?",
+      "stem": "솔루션스 아키텍트가 팀에게 AWS 컴퓨팅의 운영 부담 차이를 설명하고 있다. 컨테이너 워크로드에서 운영 부담이 가장 낮은 선택을 가르는 공식 기준으로 가장 정확한 것은?",
       "options": [
-        "Lambda → Fargate → EKS → ECS EC2 시작 유형 → EC2",
-        "EC2 → ECS EC2 시작 유형 → EKS → Fargate → Lambda",
-        "Fargate → Lambda → ECS EC2 시작 유형 → EKS → EC2",
-        "Lambda → ECS EC2 시작 유형 → Fargate → EKS → EC2"
+        "노드(EC2 인스턴스)를 누가 관리하는가 — Fargate나 Lambda처럼 AWS가 관리하는 컴퓨팅을 쓰면 서버와 클러스터를 관리하지 않는다",
+        "오케스트레이터가 쿠버네티스인가 — EKS는 ECS(EC2 시작 유형)보다 운영 부담이 낮다",
+        "EKS가 컨트롤 플레인을 관리해 주므로 노드 패치·스케일링까지 AWS 책임이 된다",
+        "최대 실행 시간이 짧은 서비스일수록 운영 부담이 낮다"
       ],
       "correct": 0,
-      "explanation": "운영 부담 스펙트럼은 EC2(최대 제어·최대 책임) → ECS EC2 시작 유형 → EKS → Fargate → Lambda(최소 제어·최소 책임)입니다. 역방향으로 읽으면 운영 부담이 가장 낮은 것부터 높은 순은 Lambda → Fargate → EKS → ECS EC2 시작 유형 → EC2입니다.",
+      "explanation": "공식 결정 가이드는 컨테이너 컴퓨팅을 내가 관리하는 EC2 인스턴스에서 실행하거나 AWS가 관리하는 컴퓨팅인 Fargate에서 실행한다로 가릅니다. Lambda는 서버·OS 유지보수·용량 프로비저닝·자동 스케일링·로깅까지 AWS가 전부 수행하고, Fargate는 서버나 EC2 인스턴스 클러스터를 관리하지 않게 합니다. 그래서 least operational overhead는 서버리스를 가리킵니다.",
       "wrongExplanations": {
-        "1": "이 순서는 운영 부담이 가장 높은 것(EC2)부터 낮은 것(Lambda)까지의 역순입니다. 질문은 낮은 것부터 높은 순서를 요구합니다.",
-        "2": "Fargate는 Lambda보다 운영 부담이 높습니다. Fargate는 노드 관리가 없지만 오케스트레이터(ECS/EKS) 설정이 필요하며, Lambda는 함수 코드만 관리하면 됩니다.",
-        "3": "ECS EC2 시작 유형이 Fargate보다 운영 부담이 낮다고 나열돼 있으나, ECS EC2 시작 유형은 EC2 노드를 직접 프로비저닝·패치·스케일링해야 하므로 Fargate보다 운영 부담이 큽니다."
+        "1": "공식 문서는 ECS와 EKS 사이에 운영 부담 순서를 매기지 않습니다. 둘의 갈림길은 부담의 크기가 아니라 쿠버네티스 표준 호환이 필요한지입니다. 두 서비스 모두 노드를 직접 관리하는 구성과 Fargate 구성을 함께 가질 수 있어, 오케스트레이터 종류만으로 부담의 크기를 정할 수 없습니다.",
+        "2": "EKS가 걷어 주는 것은 쿠버네티스 컨트롤 플레인의 설치·운영·유지보수입니다. 데이터 플레인(노드)의 패치·스케일링은 Fargate나 EKS Auto Mode를 쓰지 않으면 여전히 사용자 책임입니다.",
+        "3": "최대 실행 시간은 운영 부담과 다른 축입니다. Lambda의 15분 한도는 운영 부담이 낮아서 생긴 결과가 아니라 실행 모델의 제약이고, Fargate는 실행 시간 제한 없이도 서버를 관리하지 않습니다."
       },
       "sources": [
         { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" },
-        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
+        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" },
+        { "title": "컴퓨팅 서비스 선택 결정 가이드 — 노드 관리 주체 (공식)", "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/choosing-aws-compute-service.html" }
       ],
       "verified": true
     },

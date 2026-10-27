@@ -487,4 +487,222 @@ void main() {
       );
     });
   });
+
+  // ── 2차 외부 검수 우선순위 1 — 잔여 6문항 독립 재검수 반영 (2026-10-27) ──────
+  //
+  // 보고가 "정답이 둘이거나 틀림"(t3-4-q1·t4-2-q11·t4-3-q15)과 "정답 모호"
+  // (t2-1-q6·t2-1-q15·t4-2-q1)로 분류한 6문항이다. 여섯 건 모두 `verified:true`로
+  // **라이브 노출 중**이었고, 공식 문서로 재검수한 결과 **정답 인덱스는 한 건도
+  // 바뀌지 않았다** — 결함은 전부 "지문이 갈림길을 말하지 않음" 또는 "보기·근거
+  // 본문이 틀림"이었다. 그래서 각 그룹의 첫 단정은 정답 불변을 고정한다.
+  //
+  // 근거(공식 문서 원문):
+  // - "You have the option of running containers on EC2 instances that you manage,
+  //   or you can run them on Fargate on AWS managed compute." / "Amazon EKS removes
+  //   the need to install, operate, and maintain your own Kubernetes control plane
+  //   on AWS." / "Lambda ... performs all of the administration of the compute
+  //   resources, including server and operating system maintenance, capacity
+  //   provisioning and automatic scaling, and logging."
+  //   https://docs.aws.amazon.com/decision-guides/latest/decision-guides/choosing-aws-compute-service.html
+  // - "By default, FIFO queues support 300 transactions per second, per API action
+  //   for SendMessage, ReceiveMessage, and DeleteMessage." / 배치 API로 "up to 3,000
+  //   messages per second per API action"
+  //   https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/troubleshooting-fifo-throttling-issues.html
+  // - "every queue message is delivered to one of potentially many consumer
+  //   processes" / SNS는 "deliver the message to all the SQS queues that are
+  //   subscribed to the topic"
+  // - "We recommend that you use On-Demand Instances for applications with
+  //   short-term, irregular workloads that cannot be interrupted."
+  //   https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-on-demand-instances.html
+  // - "Spot Instances are a cost-effective choice if you can be flexible about when
+  //   your applications run and if your applications can be interrupted."
+  // - "Predictive scaling works by analyzing historical load data to detect daily or
+  //   weekly patterns" / "Applications that take a long time to initialize"
+  //   https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html
+  // - "Scaling happens in increments as small as 0.5 ACUs. The larger the current
+  //   capacity, the larger the scaling increment" / "most scaling events operations
+  //   keep the writer or reader on the same host" / "Scaling doesn't disrupt any
+  //   database operations that are underway."
+  //   https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html
+
+  group('saa-t3-4.md 운영 부담 — 공식에 없는 5종 전순서를 싣지 않는다', () {
+    final md =
+        File('assets/content/saa/saa-t3-4.md').readAsStringSync();
+
+    test('"ECS EC2 시작 유형 → EKS" 전순서 단정이 사라졌다', () {
+      expect(
+        md.contains('ECS EC2 시작 유형 → EKS'),
+        isFalse,
+        reason: 'AWS는 다섯 옵션의 운영 부담 전순서를 공표하지 않는다 — '
+            'EKS가 ECS(EC2 시작 유형)보다 부담이 낮다는 근거는 어디에도 없다',
+      );
+    });
+
+    test('EKS의 관리 범위가 컨트롤 플레인으로 한정되고 "순서 없음"을 명시한다', () {
+      expect(md.contains('쿠버네티스 컨트롤 플레인'), isTrue);
+      expect(md.contains('공식 운영 부담 순서가 없'), isTrue);
+    });
+  });
+
+  group('saa-t3-4-q1 운영 부담을 가르는 축', () {
+    final q = question('saa-t3-4', 'saa-t3-4-q1');
+
+    test('정답 인덱스는 그대로 0', () {
+      expect(q['correct'], 0);
+    });
+
+    test('보기에서 5종 전순서 나열이 사라졌다', () {
+      final options = (q['options'] as List).cast<String>().join('\n');
+      expect(options.contains('EKS → ECS'), isFalse);
+      expect(options.contains('Fargate → EKS'), isFalse);
+    });
+
+    test('공식 축(노드를 누가 관리)과 컨트롤 플레인 한정이 들어왔다', () {
+      expect(
+        (q['options'] as List).cast<String>()[0].contains('노드(EC2 인스턴스)를 누가 관리'),
+        isTrue,
+      );
+      expect(wrong(q, '2').contains('컨트롤 플레인'), isTrue);
+    });
+
+    test('공식 컴퓨팅 선택 결정 가이드를 출처로 싣는다', () {
+      expect(hasSource(q, 'choosing-aws-compute-service'), isTrue);
+    });
+  });
+
+  group('saa-t2-1-q6 SQS 단독으로 1:N이 불가한 이유', () {
+    final q = question('saa-t2-1', 'saa-t2-1-q6');
+
+    test('정답 인덱스는 그대로 1', () {
+      expect(q['correct'], 1);
+    });
+
+    test('참인데 오답으로 놓였던 보기가 사라졌다', () {
+      final all = [
+        ...(q['options'] as List).cast<String>(),
+        ...(q['wrongExplanations'] as Map<String, dynamic>).values
+            .cast<String>(),
+      ].join('\n');
+      expect(
+        all.contains('이메일·SMS 전송 기능이 없'),
+        isFalse,
+        reason: 'SQS가 이메일·SMS를 보내지 않는 것은 참이라 오답 보기로 쓸 수 없다',
+      );
+      expect(
+        all.contains('직접 지원하지 않는 것은 사실'),
+        isFalse,
+        reason: '오답 근거가 그 보기도 타당한 이유라고 시인하면 정답이 둘이 된다',
+      );
+    });
+
+    test('보기 3이 가시성 타임아웃 오해를 반박하는 형태로 바뀌었다', () {
+      expect(wrong(q, '3').contains('가시성 타임아웃'), isTrue);
+      expect(wrong(q, '3').contains('하나의 소비자'), isTrue);
+    });
+  });
+
+  group('saa-t2-1-q15 FIFO 기본 처리량', () {
+    final q = question('saa-t2-1', 'saa-t2-1-q15');
+
+    test('정답 인덱스는 그대로 1', () {
+      expect(q['correct'], 1);
+    });
+
+    test('지문이 배치 API 제외를 명시한다', () {
+      expect(
+        (q['stem'] as String).contains('배치 API 없이'),
+        isTrue,
+        reason: '300 TPS는 API 요청 기준이라 배치를 쓰면 초당 500건이 가능하다 — '
+            '지문이 이 전제를 말해야 보기 1의 "불가"가 성립한다',
+      );
+    });
+
+    test('"파티션당 300 TPS" 오류가 문항 전체에서 사라졌다', () {
+      // 보기 1만 보던 단정으로는 놓친다 — 같은 오류가 `wrongExplanations["3"]`
+      // 에도 있었다(2026-10-27 실측). 문항 전체를 본다.
+      final all = [
+        ...(q['options'] as List).cast<String>(),
+        q['explanation'] as String,
+        ...(q['wrongExplanations'] as Map<String, dynamic>).values
+            .cast<String>(),
+      ].join('\n');
+      expect(
+        all.contains('파티션당 300 TPS'),
+        isFalse,
+        reason: '기본 300 TPS는 파티션당이 아니라 각 API 작업당이다',
+      );
+    });
+
+    test('각 API 작업당 300 TPS와 배치 3,000 메시지/초가 공식 수치로 들어왔다', () {
+      expect(
+        (q['options'] as List).cast<String>()[1].contains('각 API 작업당 300 TPS'),
+        isTrue,
+      );
+      expect((q['explanation'] as String).contains('3,000 메시지/초'), isTrue);
+    });
+  });
+
+  group('saa-t4-2-q1 단기·불규칙 워크로드 구매 옵션', () {
+    final q = question('saa-t4-2', 'saa-t4-2-q1');
+
+    test('정답 인덱스는 그대로 1', () {
+      expect(q['correct'], 1);
+    });
+
+    test('지문이 "중단되면 안 되는"을 명시한다', () {
+      expect(
+        (q['stem'] as String).contains('중단되면 안 되는'),
+        isTrue,
+        reason: '이 조건이 없으면 개발·테스트는 Spot의 교과서적 용례라 정답이 둘이 된다',
+      );
+    });
+
+    test('오답 근거가 Spot의 공식 기준(시점 유연·중단 허용)을 적는다', () {
+      expect(wrong(q, '2').contains('중단을 견딜 수 있을 때'), isTrue);
+    });
+  });
+
+  group('saa-t4-2-q11 예측 가능한 패턴의 오토스케일링', () {
+    final q = question('saa-t4-2', 'saa-t4-2-q11');
+
+    test('정답 인덱스는 그대로 2(Scheduled Scaling)', () {
+      expect(q['correct'], 2);
+    });
+
+    test('지문이 시각 고정을 명시해 Predictive와 갈린다', () {
+      expect(
+        (q['stem'] as String).contains('09:00·18:00으로 고정'),
+        isTrue,
+        reason: '공식 Predictive 문서가 "business hours / evenings and weekends"를 '
+            '자기 용례로 적으므로, 시각 고정이 없으면 보기 3도 성립한다',
+      );
+    });
+
+    test('오답 근거가 Predictive의 공식 성격을 적는다', () {
+      expect(wrong(q, '3').contains('과거 부하 데이터를 분석'), isTrue);
+    });
+  });
+
+  group('saa-t4-3-q15 Aurora serverless 스케일 단위', () {
+    final q = question('saa-t4-3', 'saa-t4-3-q15');
+
+    test('정답 인덱스는 그대로 0', () {
+      expect(q['correct'], 0);
+    });
+
+    test('보기 0과 중복이던 보기 3이 거짓 서술로 바뀌었다', () {
+      final options = (q['options'] as List).cast<String>();
+      expect(
+        options[3].contains('별도의 물리 서버를 예약하지 않아'),
+        isFalse,
+        reason: '보기 0과 같은 "서버 교체 없이"를 말해 정답이 둘이었다',
+      );
+      expect(options[3].contains('연결을 끊기 때문이다'), isTrue);
+    });
+
+    test('0.5 ACU가 최소 단위이고 용량이 클수록 증가 폭이 커진다는 사실이 들어왔다', () {
+      expect((q['stem'] as String).contains('최소 0.5 ACU'), isTrue);
+      expect((q['explanation'] as String).contains('현재 용량이 클수록'), isTrue);
+    });
+  });
 }
