@@ -7,25 +7,26 @@
     {
       "id": "saa-t3-4-q1",
       "examGuideTaskId": "saa-t3-4",
-      "skill": "컴퓨팅 선택 결정 트리 — 운영 부담 스펙트럼",
+      "skill": "컴퓨팅 선택 — 운영 부담을 가르는 축",
       "difficulty": "foundational",
-      "stem": "솔루션스 아키텍트가 팀에게 AWS 컴퓨팅 서비스의 운영 부담 스펙트럼을 설명하고 있다. 운영 부담이 가장 낮은 것부터 높은 순으로 올바르게 나열한 것은?",
+      "stem": "솔루션스 아키텍트가 팀에게 AWS 컴퓨팅의 운영 부담 차이를 설명하고 있다. 컨테이너 워크로드에서 운영 부담이 가장 낮은 선택을 가르는 공식 기준으로 가장 정확한 것은?",
       "options": [
-        "Lambda → Fargate → EKS → ECS EC2 시작 유형 → EC2",
-        "EC2 → ECS EC2 시작 유형 → EKS → Fargate → Lambda",
-        "Fargate → Lambda → ECS EC2 시작 유형 → EKS → EC2",
-        "Lambda → ECS EC2 시작 유형 → Fargate → EKS → EC2"
+        "노드(EC2 인스턴스)를 누가 관리하는가 — Fargate나 Lambda처럼 AWS가 관리하는 컴퓨팅을 쓰면 서버와 클러스터를 관리하지 않는다",
+        "오케스트레이터가 쿠버네티스인가 — EKS는 ECS(EC2 시작 유형)보다 운영 부담이 낮다",
+        "EKS가 컨트롤 플레인을 관리해 주므로 노드 패치·스케일링까지 AWS 책임이 된다",
+        "최대 실행 시간이 짧은 서비스일수록 운영 부담이 낮다"
       ],
       "correct": 0,
-      "explanation": "운영 부담 스펙트럼은 EC2(최대 제어·최대 책임) → ECS EC2 시작 유형 → EKS → Fargate → Lambda(최소 제어·최소 책임)입니다. 역방향으로 읽으면 운영 부담이 가장 낮은 것부터 높은 순은 Lambda → Fargate → EKS → ECS EC2 시작 유형 → EC2입니다.",
+      "explanation": "공식 결정 가이드는 컨테이너 컴퓨팅을 내가 관리하는 EC2 인스턴스에서 실행하거나 AWS가 관리하는 컴퓨팅인 Fargate에서 실행한다로 가릅니다. Lambda는 서버·OS 유지보수·용량 프로비저닝·자동 스케일링·로깅까지 AWS가 전부 수행하고, Fargate는 서버나 EC2 인스턴스 클러스터를 관리하지 않게 합니다. 그래서 least operational overhead는 서버리스를 가리킵니다.",
       "wrongExplanations": {
-        "1": "이 순서는 운영 부담이 가장 높은 것(EC2)부터 낮은 것(Lambda)까지의 역순입니다. 질문은 낮은 것부터 높은 순서를 요구합니다.",
-        "2": "Fargate는 Lambda보다 운영 부담이 높습니다. Fargate는 노드 관리가 없지만 오케스트레이터(ECS/EKS) 설정이 필요하며, Lambda는 함수 코드만 관리하면 됩니다.",
-        "3": "ECS EC2 시작 유형이 Fargate보다 운영 부담이 낮다고 나열돼 있으나, ECS EC2 시작 유형은 EC2 노드를 직접 프로비저닝·패치·스케일링해야 하므로 Fargate보다 운영 부담이 큽니다."
+        "1": "공식 문서는 ECS와 EKS 사이에 운영 부담 순서를 매기지 않습니다. 둘의 갈림길은 부담의 크기가 아니라 쿠버네티스 표준 호환이 필요한지입니다. 두 서비스 모두 노드를 직접 관리하는 구성과 Fargate 구성을 함께 가질 수 있어, 오케스트레이터 종류만으로 부담의 크기를 정할 수 없습니다.",
+        "2": "EKS가 걷어 주는 것은 쿠버네티스 컨트롤 플레인의 설치·운영·유지보수입니다. 데이터 플레인(노드)의 패치·스케일링은 Fargate나 EKS Auto Mode를 쓰지 않으면 여전히 사용자 책임입니다.",
+        "3": "최대 실행 시간은 운영 부담과 다른 축입니다. Lambda의 15분 한도는 운영 부담이 낮아서 생긴 결과가 아니라 실행 모델의 제약이고, Fargate는 실행 시간 제한 없이도 서버를 관리하지 않습니다."
       },
       "sources": [
         { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" },
-        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" }
+        { "title": "AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html" },
+        { "title": "컴퓨팅 서비스 선택 결정 가이드 — 노드 관리 주체 (공식)", "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/choosing-aws-compute-service.html" }
       ],
       "verified": true
     },
@@ -37,16 +38,16 @@
       "stem": "한 회사가 Lambda 함수를 사용해 야간 재무 보고서를 생성하려 한다. 보고서 생성 작업은 평균 20분이 걸린다. 이 설계의 문제점은?",
       "options": [
         "Lambda는 메모리 부족으로 대용량 보고서를 처리할 수 없다",
-        "Lambda의 최대 실행 시간은 15분이므로 20분 작업은 강제 종료된다",
+        "표준 Lambda의 최대 실행 시간은 900초(15분)이므로 20분 작업은 강제 종료된다",
         "Lambda는 야간 스케줄 트리거를 지원하지 않는다",
         "Lambda는 재무 데이터 처리에 규정상 사용할 수 없다"
       ],
       "correct": 1,
-      "explanation": "Lambda의 최대 실행 시간은 15분입니다. 20분 작업은 이 제한을 초과해 강제 종료됩니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용해야 합니다.",
+      "explanation": "Lambda 함수의 타임아웃은 기본 3초이고 1초 단위로 최대 900초(15분)까지 올릴 수 있습니다. 20분 작업은 이 상한을 초과해 강제 종료됩니다. AWS Lambda Managed Instances를 쓰는 함수의 비동기 호출과 이벤트 소스 매핑 호출(Amazon MQ·DocumentDB 제외)은 최대 5,400초(90분)까지 허용되지만, 일반 호출 경로의 상한은 그대로 900초입니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용합니다.",
       "wrongExplanations": {
-        "0": "Lambda의 메모리는 설정으로 조정 가능하며, 보고서 처리 자체가 불가능하다는 설명은 문서에 없습니다. 핵심 문제는 실행 시간 제한입니다.",
+        "0": "Lambda 메모리는 함수 설정으로 조정할 수 있어 메모리가 이 설계의 걸림돌이 아닙니다. 20분 작업이 막히는 이유는 타임아웃 상한입니다.",
         "2": "Lambda는 EventBridge(CloudWatch Events) 스케줄 트리거를 지원합니다. 야간 스케줄 자체는 문제가 아닙니다.",
-        "3": "규정상 Lambda 사용 제한에 대한 내용은 이 문서에 없습니다. 문제는 15분 실행 시간 제한입니다."
+        "3": "재무 데이터 처리 자체는 Lambda의 제약 사항이 아닙니다. 20분 작업이 막히는 이유는 900초 타임아웃 상한입니다."
       },
       "sources": [
         { "title": "Configure Lambda function timeout (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html" }
@@ -162,11 +163,11 @@
         "Job, Job Queue, Compute Environment 3계층으로 구성되며, Job Queue는 우선순위 설정이 가능하다"
       ],
       "correct": 3,
-      "explanation": "AWS Batch는 Job(실행 단위, Docker 컨테이너 기반), Job Queue(Job이 대기하는 큐, 우선순위 설정 가능), Compute Environment(Job을 실행하는 컴퓨팅 풀, EC2 On-Demand/Spot 또는 Fargate) 3계층으로 구성됩니다.",
+      "explanation": "AWS Batch는 Job(실행 단위, Docker 컨테이너 기반), Job Queue(Job이 대기하는 큐, 우선순위 설정 가능), Compute Environment(Job을 실행하는 컴퓨팅 풀, EC2 On-Demand/Spot 또는 Fargate) 3계층으로 구성됩니다. 여기에 Job Definition도 AWS Batch의 리소스로, 잡을 어떻게 실행할지(컨테이너 이미지·vCPU·메모리·명령·환경 변수·IAM 역할 등)를 정의하며 모든 잡이 하나를 참조합니다.",
       "wrongExplanations": {
-        "0": "Job Definition, Task, Service는 ECS의 리소스입니다. AWS Batch는 Job, Job Queue, Compute Environment로 구성됩니다.",
+        "0": "Task와 Service는 ECS의 리소스이지만 Job Definition은 AWS Batch의 리소스입니다 — 잡이 어떻게 실행될지를 정의하고 모든 잡이 이를 참조합니다. 이 보기가 틀린 이유는 Job Definition이 ECS 것이기 때문이 아니라, Batch의 3계층이 Job, Job Queue, Compute Environment이기 때문입니다.",
         "1": "Job, Cluster, Service는 ECS의 개념을 혼합한 것입니다. AWS Batch의 3계층은 Job, Job Queue, Compute Environment입니다.",
-        "2": "AWS Batch는 Lambda 함수를 실행 엔진으로 사용하지 않습니다. 내부적으로 ECS, EKS, Fargate를 실행 엔진으로 사용합니다."
+        "2": "Job Definition은 AWS Batch의 리소스로 맞지만, Lambda 함수는 Batch의 계층이 아닙니다. Batch는 내부적으로 ECS, EKS, Fargate를 실행 엔진으로 사용합니다."
       },
       "sources": [
         { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }

@@ -487,4 +487,382 @@ void main() {
       );
     });
   });
+
+  // ── 2차 외부 검수 우선순위 1 — 잔여 6문항 독립 재검수 반영 (2026-10-27) ──────
+  //
+  // 보고가 "정답이 둘이거나 틀림"(t3-4-q1·t4-2-q11·t4-3-q15)과 "정답 모호"
+  // (t2-1-q6·t2-1-q15·t4-2-q1)로 분류한 6문항이다. 여섯 건 모두 `verified:true`로
+  // **라이브 노출 중**이었고, 공식 문서로 재검수한 결과 **정답 인덱스는 한 건도
+  // 바뀌지 않았다** — 결함은 전부 "지문이 갈림길을 말하지 않음" 또는 "보기·근거
+  // 본문이 틀림"이었다. 그래서 각 그룹의 첫 단정은 정답 불변을 고정한다.
+  //
+  // 근거(공식 문서 원문):
+  // - "You have the option of running containers on EC2 instances that you manage,
+  //   or you can run them on Fargate on AWS managed compute." / "Amazon EKS removes
+  //   the need to install, operate, and maintain your own Kubernetes control plane
+  //   on AWS." / "Lambda ... performs all of the administration of the compute
+  //   resources, including server and operating system maintenance, capacity
+  //   provisioning and automatic scaling, and logging."
+  //   https://docs.aws.amazon.com/decision-guides/latest/decision-guides/choosing-aws-compute-service.html
+  // - "By default, FIFO queues support 300 transactions per second, per API action
+  //   for SendMessage, ReceiveMessage, and DeleteMessage." / 배치 API로 "up to 3,000
+  //   messages per second per API action"
+  //   https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/troubleshooting-fifo-throttling-issues.html
+  // - "every queue message is delivered to one of potentially many consumer
+  //   processes" / SNS는 "deliver the message to all the SQS queues that are
+  //   subscribed to the topic"
+  // - "We recommend that you use On-Demand Instances for applications with
+  //   short-term, irregular workloads that cannot be interrupted."
+  //   https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-on-demand-instances.html
+  // - "Spot Instances are a cost-effective choice if you can be flexible about when
+  //   your applications run and if your applications can be interrupted."
+  // - "Predictive scaling works by analyzing historical load data to detect daily or
+  //   weekly patterns" / "Applications that take a long time to initialize"
+  //   https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html
+  // - "Scaling happens in increments as small as 0.5 ACUs. The larger the current
+  //   capacity, the larger the scaling increment" / "most scaling events operations
+  //   keep the writer or reader on the same host" / "Scaling doesn't disrupt any
+  //   database operations that are underway."
+  //   https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html
+
+  group('saa-t3-4.md 운영 부담 — 공식에 없는 5종 전순서를 싣지 않는다', () {
+    final md =
+        File('assets/content/saa/saa-t3-4.md').readAsStringSync();
+
+    test('"ECS EC2 시작 유형 → EKS" 전순서 단정이 사라졌다', () {
+      expect(
+        md.contains('ECS EC2 시작 유형 → EKS'),
+        isFalse,
+        reason: 'AWS는 다섯 옵션의 운영 부담 전순서를 공표하지 않는다 — '
+            'EKS가 ECS(EC2 시작 유형)보다 부담이 낮다는 근거는 어디에도 없다',
+      );
+    });
+
+    test('EKS의 관리 범위가 컨트롤 플레인으로 한정되고 "순서 없음"을 명시한다', () {
+      expect(md.contains('쿠버네티스 컨트롤 플레인'), isTrue);
+      expect(md.contains('공식 운영 부담 순서가 없'), isTrue);
+    });
+  });
+
+  group('saa-t3-4-q1 운영 부담을 가르는 축', () {
+    final q = question('saa-t3-4', 'saa-t3-4-q1');
+
+    test('정답 인덱스는 그대로 0', () {
+      expect(q['correct'], 0);
+    });
+
+    test('보기에서 5종 전순서 나열이 사라졌다', () {
+      final options = (q['options'] as List).cast<String>().join('\n');
+      expect(options.contains('EKS → ECS'), isFalse);
+      expect(options.contains('Fargate → EKS'), isFalse);
+    });
+
+    test('공식 축(노드를 누가 관리)과 컨트롤 플레인 한정이 들어왔다', () {
+      expect(
+        (q['options'] as List).cast<String>()[0].contains('노드(EC2 인스턴스)를 누가 관리'),
+        isTrue,
+      );
+      expect(wrong(q, '2').contains('컨트롤 플레인'), isTrue);
+    });
+
+    test('공식 컴퓨팅 선택 결정 가이드를 출처로 싣는다', () {
+      expect(hasSource(q, 'choosing-aws-compute-service'), isTrue);
+    });
+  });
+
+  group('saa-t2-1-q6 SQS 단독으로 1:N이 불가한 이유', () {
+    final q = question('saa-t2-1', 'saa-t2-1-q6');
+
+    test('정답 인덱스는 그대로 1', () {
+      expect(q['correct'], 1);
+    });
+
+    test('참인데 오답으로 놓였던 보기가 사라졌다', () {
+      final all = [
+        ...(q['options'] as List).cast<String>(),
+        ...(q['wrongExplanations'] as Map<String, dynamic>).values
+            .cast<String>(),
+      ].join('\n');
+      expect(
+        all.contains('이메일·SMS 전송 기능이 없'),
+        isFalse,
+        reason: 'SQS가 이메일·SMS를 보내지 않는 것은 참이라 오답 보기로 쓸 수 없다',
+      );
+      expect(
+        all.contains('직접 지원하지 않는 것은 사실'),
+        isFalse,
+        reason: '오답 근거가 그 보기도 타당한 이유라고 시인하면 정답이 둘이 된다',
+      );
+    });
+
+    test('보기 3이 가시성 타임아웃 오해를 반박하는 형태로 바뀌었다', () {
+      expect(wrong(q, '3').contains('가시성 타임아웃'), isTrue);
+      expect(wrong(q, '3').contains('하나의 소비자'), isTrue);
+    });
+  });
+
+  group('saa-t2-1-q15 FIFO 기본 처리량', () {
+    final q = question('saa-t2-1', 'saa-t2-1-q15');
+
+    test('정답 인덱스는 그대로 1', () {
+      expect(q['correct'], 1);
+    });
+
+    test('지문이 배치 API 제외를 명시한다', () {
+      expect(
+        (q['stem'] as String).contains('배치 API 없이'),
+        isTrue,
+        reason: '300 TPS는 API 요청 기준이라 배치를 쓰면 초당 500건이 가능하다 — '
+            '지문이 이 전제를 말해야 보기 1의 "불가"가 성립한다',
+      );
+    });
+
+    test('"파티션당 300 TPS" 오류가 문항 전체에서 사라졌다', () {
+      // 보기 1만 보던 단정으로는 놓친다 — 같은 오류가 `wrongExplanations["3"]`
+      // 에도 있었다(2026-10-27 실측). 문항 전체를 본다.
+      final all = [
+        ...(q['options'] as List).cast<String>(),
+        q['explanation'] as String,
+        ...(q['wrongExplanations'] as Map<String, dynamic>).values
+            .cast<String>(),
+      ].join('\n');
+      expect(
+        all.contains('파티션당 300 TPS'),
+        isFalse,
+        reason: '기본 300 TPS는 파티션당이 아니라 각 API 작업당이다',
+      );
+    });
+
+    test('각 API 작업당 300 TPS와 배치 3,000 메시지/초가 공식 수치로 들어왔다', () {
+      expect(
+        (q['options'] as List).cast<String>()[1].contains('각 API 작업당 300 TPS'),
+        isTrue,
+      );
+      expect((q['explanation'] as String).contains('3,000 메시지/초'), isTrue);
+    });
+  });
+
+  group('saa-t4-2-q1 단기·불규칙 워크로드 구매 옵션', () {
+    final q = question('saa-t4-2', 'saa-t4-2-q1');
+
+    test('정답 인덱스는 그대로 1', () {
+      expect(q['correct'], 1);
+    });
+
+    test('지문이 "중단되면 안 되는"을 명시한다', () {
+      expect(
+        (q['stem'] as String).contains('중단되면 안 되는'),
+        isTrue,
+        reason: '이 조건이 없으면 개발·테스트는 Spot의 교과서적 용례라 정답이 둘이 된다',
+      );
+    });
+
+    test('오답 근거가 Spot의 공식 기준(시점 유연·중단 허용)을 적는다', () {
+      expect(wrong(q, '2').contains('중단을 견딜 수 있을 때'), isTrue);
+    });
+  });
+
+  group('saa-t4-2-q11 예측 가능한 패턴의 오토스케일링', () {
+    final q = question('saa-t4-2', 'saa-t4-2-q11');
+
+    test('정답 인덱스는 그대로 2(Scheduled Scaling)', () {
+      expect(q['correct'], 2);
+    });
+
+    test('지문이 시각 고정을 명시해 Predictive와 갈린다', () {
+      expect(
+        (q['stem'] as String).contains('09:00·18:00으로 고정'),
+        isTrue,
+        reason: '공식 Predictive 문서가 "business hours / evenings and weekends"를 '
+            '자기 용례로 적으므로, 시각 고정이 없으면 보기 3도 성립한다',
+      );
+    });
+
+    test('오답 근거가 Predictive의 공식 성격을 적는다', () {
+      expect(wrong(q, '3').contains('과거 부하 데이터를 분석'), isTrue);
+    });
+  });
+
+  group('saa-t4-3-q15 Aurora serverless 스케일 단위', () {
+    final q = question('saa-t4-3', 'saa-t4-3-q15');
+
+    test('정답 인덱스는 그대로 0', () {
+      expect(q['correct'], 0);
+    });
+
+    test('보기 0과 중복이던 보기 3이 거짓 서술로 바뀌었다', () {
+      final options = (q['options'] as List).cast<String>();
+      expect(
+        options[3].contains('별도의 물리 서버를 예약하지 않아'),
+        isFalse,
+        reason: '보기 0과 같은 "서버 교체 없이"를 말해 정답이 둘이었다',
+      );
+      expect(options[3].contains('연결을 끊기 때문이다'), isTrue);
+    });
+
+    test('0.5 ACU가 최소 단위이고 용량이 클수록 증가 폭이 커진다는 사실이 들어왔다', () {
+      expect((q['stem'] as String).contains('최소 0.5 ACU'), isTrue);
+      expect((q['explanation'] as String).contains('현재 용량이 클수록'), isTrue);
+    });
+  });
+
+  // ── 2차 검수 우선순위 1 §C — 해설·오답 정정 16건 (2026-10-27) ──────────────
+  //
+  // 보고(`docs/saa-review/2026-10-27-saa-c03-question-review.md` §C)가 `fix`로 분류한
+  // 16문항이다. 전부 `verified:true`로 라이브 노출 중이고, **정답 인덱스는 한 건도
+  // 바뀌지 않았다** — 결함이 모두 해설·오답 근거·지문 본문에 있었다.
+  //
+  // 표 하나로 "옛 문구 0건 + 공식 사실 있음"을 쌍으로 고정한다. 문항마다 테스트가
+  // 두 개 생긴다(정답 불변 / 문구 쌍). `forbidden` 은 문항 전체(보기·해설·오답 근거·
+  // 지문)를 보고, `required` 도 같은 범위를 본다 — 같은 오류가 보기와
+  // `wrongExplanations` **양쪽**에 있던 사례가 이 배치에도 있었다(t3-5-q11·t3-4-q2).
+  //
+  // ⚠️ 보고와 **다르게 판정한 한 건**: 보고는 `t3-5-q11` 의 Magnetic 서술을 "사용
+  // 중단되어 신규 인스턴스에 제공되지 않음"으로 바꾸라고 했지만, 공식 EBS 볼륨 타입
+  // 문서는 Magnetic(`standard`)을 "previous generation" 으로 적고 현재 세대 사용을
+  // 권장하는 데서 멈춘다 — 신규 제공 중단이라는 서술은 없다. 그래서 기존 "신규 사용
+  // 비권장" 쪽을 공식 문구("이전 세대", 평균 약 100 IOPS)로 다듬는 선에서 끝냈다.
+  // 보고는 검수 결과 데이터이고 지시문이 아니다(CLAUDE.md 절대 조건 1).
+  group('§C 해설·오답 정정 16건', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t2-1', qid: 'saa-t2-1-q7', correct: 1,
+        forbidden: ['각 소비자별 독립적인 재시도·DLQ 보장에는 SQS 큐가 필요'],
+        required: ['대상마다 재시도 정책', '내구성 버퍼', '자기 속도로'],
+        why: 'EventBridge도 대상마다 재시도 정책(기본 5회 또는 300초)과 DLQ를 갖는다 — '
+            '갈림길은 재시도 유무가 아니라 내구성 버퍼다',
+      ),
+      (
+        task: 'saa-t2-1', qid: 'saa-t2-1-q9', correct: 1,
+        forbidden: ['구독자 측에서 자체 필터링이 필요'],
+        required: ['구독마다 필터 정책'],
+        why: 'SNS 구독에는 필터 정책을 붙일 수 있다 — 갈림길은 필터 유무가 아니라 경로다',
+      ),
+      (
+        task: 'saa-t2-1', qid: 'saa-t2-1-q11', correct: 1,
+        forbidden: ['CloudWatch Logs로 전송하지 콘솔에서 직접 조회하지 않습니다'],
+        required: ['별도 로깅 설정 없이', '90일'],
+        why: 'Express도 로깅을 켜면 CloudWatch Logs와 Step Functions 콘솔에서 볼 수 있다. '
+            '갈림길은 Standard가 설정 없이 90일까지 이력을 남긴다는 점이다',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q7', correct: 1,
+        forbidden: ['다른 AZ·리전으로 복사할 수 있습니다'],
+        required: ['리전 내 모든 가용 영역에 자동 복제'],
+        why: '스냅샷은 AZ 리소스가 아니라 리전 리소스다 — 데이터가 리전 내 전 AZ에 '
+            '자동 복제되어 어느 AZ에서든 복원하고, 다른 리전으로는 복사한다',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q14', correct: 1,
+        forbidden: ['AZ 간·리전 간 복사가 모두 가능'],
+        required: ['리전 리소스'],
+        why: '(q7과 같은 결함)',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q15', correct: 1,
+        forbidden: ['Standard-IA'],
+        required: ['Infrequent Access(IA)', '파일 시스템 유형'],
+        why: '현행 EFS 스토리지 클래스는 EFS Standard·EFS Infrequent Access(IA)·'
+            'EFS Archive다. One Zone은 스토리지 클래스가 아니라 파일 시스템 유형이다',
+      ),
+      (
+        task: 'saa-t3-4', qid: 'saa-t3-4-q2', correct: 1,
+        forbidden: ['문서에 없습니다'],
+        required: ['900초', '5,400초(90분)'],
+        why: '표준 Lambda 타임아웃 상한은 900초이고, Lambda Managed Instances의 비동기·'
+            '이벤트 소스 매핑 호출은 5,400초(90분)다. "문서에 없습니다"는 작성자 메모(M2)',
+      ),
+      (
+        task: 'saa-t3-4', qid: 'saa-t3-4-q7', correct: 3,
+        forbidden: ['Job Definition, Task, Service는 ECS의 리소스'],
+        required: ['Job Definition도 AWS Batch의 리소스'],
+        why: 'Job Definition은 AWS Batch의 리소스다 — ECS 것은 Task와 Service뿐이다',
+      ),
+      (
+        task: 'saa-t3-5', qid: 'saa-t3-5-q5', correct: 1,
+        forbidden: ['공식 문서 기준 256TiB'],
+        required: ['엔진 버전에 따라 최대 256 TiB'],
+        why: '"최대 128TiB, 공식 문서 기준 256TiB"처럼 두 수치를 함께 적던 서술을 '
+            '공식 문구(엔진 버전에 따라 최대 256 TiB)로 통일했다',
+      ),
+      (
+        task: 'saa-t3-5', qid: 'saa-t3-5-q6', correct: 3,
+        forbidden: ['일반 RDS Multi-AZ'],
+        required: ['Multi-AZ DB 인스턴스 배포', 'Multi-AZ DB 클러스터 배포'],
+        why: 'Multi-AZ는 배포 유형이 둘이다 — DB 클러스터 배포는 읽기 가능한 리더를 '
+            '두고 페일오버 시간도 복제 지연에 좌우되므로 배포 유형을 한정해야 한다',
+      ),
+      (
+        task: 'saa-t3-5', qid: 'saa-t3-5-q11', correct: 3,
+        forbidden: ['범용 SSD(gp2/gp3)'],
+        required: ['gp3는 버스트를 쓰지 않아'],
+        why: '공식 문서: "gp3 volumes do not use burst performance." 버스트 크레딧은 gp2다',
+      ),
+      (
+        task: 'saa-t4-2', qid: 'saa-t4-2-q12', correct: 1,
+        forbidden: ['권장 사항만 제안하며 실제 변경은 사용자가 직접'],
+        required: ['자동화 규칙', 'EBS 볼륨에 한해'],
+        why: '2025-11 자동화 규칙으로 EBS 볼륨에 한해 권장 사항이 자동 적용된다 — '
+            '인스턴스 크기는 여전히 자동 변경되지 않는다',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q1', correct: 1,
+        forbidden: ['유휴 시 최솟값 ACU만 과금되므로'],
+        required: ['0 ACU', '자동 일시정지'],
+        why: '최근 Aurora MySQL·PostgreSQL 버전은 0 ACU까지 축소돼 컴퓨팅 요금이 0이 된다',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q6', correct: 0,
+        forbidden: ['최대 128TB까지 지원'],
+        required: ['최대 256 TiB까지 지원'],
+        why: 'Aurora 클러스터 볼륨은 엔진 버전에 따라 최대 256 TiB다',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q7', correct: 2,
+        forbidden: ['RDS Multi-AZ Standby는 HA를 위한 대기 복제본'],
+        required: ['Multi-AZ DB 클러스터 배포는 읽기 가능한 리더'],
+        why: '(q6·t3-5-q6과 같은 계열) 배포 유형을 한정하지 않으면 거짓이 된다',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q9', correct: 0,
+        forbidden: ['트래픽이 불규칙하고 야간·주말에 거의 없는 패턴'],
+        required: ['피크 시각과 규모'],
+        why: '지문은 규칙적 패턴으로 읽히는데 해설만 "불규칙"이라 모순이었다 — '
+            '지문에 예측이 어렵다는 조건을 넣어 온디맨드가 답이 되게 했다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스는 그대로 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+  });
 }
