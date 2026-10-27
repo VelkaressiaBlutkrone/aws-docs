@@ -325,4 +325,166 @@ void main() {
       );
     });
   });
+
+  // ── 2차 외부 검수(2026-10-27): 이미 공개된 문항 3건 사실 정정 ───────────────
+  //
+  // `verified:true`로 **라이브 노출 중이던** SAA 문항에서 사실 오류 3건이 나왔다.
+  // 세 건 모두 `correct`(정답)는 바뀌지 않았다 — 해설·오답근거와 q12 지문만 고쳤다.
+  //
+  // 학습문서는 셋 다 이미 옳게 적고 있어 **문항 단독 오류**였다: `saa-t3-5.md` §3은
+  // "일반적으로 최대 15개 … Db2는 3개, Oracle·SQL Server는 5개처럼 엔진별 예외"로,
+  // `saa-t3-4.md` §5는 Batch의 EKS와 Fargate를 섞어 단정하지 않는다. 그래서 md 가드는
+  // 건드리지 않았고, 따라서 `saa_question_propagation_test.dart` 의 금지 문장 목록도
+  // 그대로다(그 목록은 md 가드에서 온 항목만 담는다는 계약이다).
+  //
+  // 근거(공식 문서 원문):
+  // - "AWS Batch on Amazon EKS supports Amazon EC2 instances (On-Demand and Spot)
+  //   as compute resources. To use Fargate with AWS Batch, use an Amazon ECS
+  //   compute environment instead."
+  //   https://docs.aws.amazon.com/batch/latest/userguide/eks.html
+  // - "You can create up to 15 read replicas from one DB instance within the same
+  //   Region." (MySQL·MariaDB 동일 문구)
+  //   https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_MySQL.Replication.ReadReplicas.html
+  // - "Each DB instance can have up to 15 read replicas, except for the following
+  //   engines: Db2 - Can have up to three replicas. Oracle - Can have up to five
+  //   read replicas. SQL Server - Can have up to five read replicas."
+  //   https://docs.aws.amazon.com/cli/latest/reference/rds/create-db-instance-read-replica.html
+  // - "An Aurora DB cluster can contain up to 15 Aurora Replicas."
+  //   https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html
+  // - "When you promote a read replica, RDS reboots the DB instance before making
+  //   it available. The promotion process can take several minutes or longer to
+  //   complete" / "You can't use the DB instance as a replication target because
+  //   it is no longer a read replica."
+  //   https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.Promote.html
+
+  group('saa-t3-4-q15 AWS Batch on EKS는 EC2 전용', () {
+    final q = question('saa-t3-4', 'saa-t3-4-q15');
+
+    test('정답은 그대로 Spot 인스턴스(인덱스 2)', () {
+      expect(q['correct'], 2);
+    });
+
+    test('"EKS Fargate 컴퓨팅 환경 구성이 가능하다" 단정이 사라졌다', () {
+      expect(
+        wrong(q, '3').contains('Compute Environment로 구성하는 것은 가능'),
+        isFalse,
+        reason: 'AWS Batch on EKS는 Fargate를 컴퓨팅 리소스로 지원하지 않는다',
+      );
+    });
+
+    test('EKS는 EC2만 쓰고 Fargate는 ECS 컴퓨팅 환경이라는 공식 사실이 들어왔다', () {
+      final text = wrong(q, '3');
+      expect(text.contains('EC2 인스턴스(On-Demand·Spot)'), isTrue);
+      expect(text.contains('ECS 컴퓨팅 환경'), isTrue);
+    });
+
+    test('공식 EKS 컴퓨팅 환경 문서를 출처로 싣는다', () {
+      expect(hasSource(q, 'batch/latest/userguide/eks'), isTrue);
+    });
+  });
+
+  group('saa-t3-5-q2 읽기 복제본 최대 개수', () {
+    final q = question('saa-t3-5', 'saa-t3-5-q2');
+
+    test('정답은 그대로 Read Replica 추가(인덱스 1)', () {
+      expect(q['correct'], 1);
+    });
+
+    test('"RDS는 최대 5개" 단정이 사라졌다', () {
+      expect(
+        (q['explanation'] as String).contains('RDS는 최대 5개'),
+        isFalse,
+        reason: 'MySQL·MariaDB·PostgreSQL은 소스 1개당 15개다 — 5개는 Oracle·SQL Server다',
+      );
+    });
+
+    test('소스당 15개와 엔진별 예외가 공식 수치로 들어왔다', () {
+      final text = q['explanation'] as String;
+      expect(text.contains('소스 1개당 최대 15개'), isTrue);
+      expect(text.contains('Db2 3개, Oracle·SQL Server 5개는 예외'), isTrue);
+    });
+
+    test('공식 MySQL 읽기 복제본 문서를 출처로 싣는다', () {
+      expect(hasSource(q, 'USER_MySQL.Replication.ReadReplicas'), isTrue);
+    });
+  });
+
+  group('saa-t3-5-q12 Aurora vs RDS — 갈림길은 복제본 수가 아니라 페일오버', () {
+    final q = question('saa-t3-5', 'saa-t3-5-q12');
+
+    test('정답은 그대로 Aurora(인덱스 2)', () {
+      expect(q['correct'], 2);
+    });
+
+    test('지문이 페일오버 시간 최소화를 함께 요구한다', () {
+      expect(
+        (q['stem'] as String).contains('페일오버 시간도 최소화'),
+        isTrue,
+        reason: '복제본 수가 15개로 같아진 뒤에는 이것만이 보기 B·C를 가른다',
+      );
+    });
+
+    test('보기 B가 참인데도 반박하던 두 단정이 사라졌다', () {
+      final text = wrong(q, '1');
+      expect(text.contains('최대 5개 Read Replica'), isFalse);
+      expect(
+        text.contains('15개는 Aurora의 한계'),
+        isFalse,
+        reason: '15개는 Aurora 전용 수치가 아니다 — RDS for MySQL도 15개다',
+      );
+    });
+
+    test('복제본 수는 같고 승격 비용에서 갈린다는 사실이 들어왔다', () {
+      final text = wrong(q, '1');
+      expect(text.contains('소스 1개당 최대 15개 Read Replica'), isTrue);
+      expect(text.contains('복제본 수로는 Aurora와 차이가 없'), isTrue);
+      expect(text.contains('수 분 이상 걸릴 수 있'), isTrue);
+    });
+
+    test('공식 Aurora 고가용성·복제본 승격 문서를 출처로 싣는다', () {
+      expect(hasSource(q, 'Concepts.AuroraHighAvailability'), isTrue);
+      expect(hasSource(q, 'USER_ReadRepl.Promote'), isTrue);
+    });
+  });
+
+  // 같은 일반화가 다른 SAA 문항에 남아 있거나 되살아나지 않도록 전수로 고정한다.
+  // 오답 보기(`options`)는 일부러 틀린 서술이므로 제외한다 —
+  // `saa_question_propagation_test.dart` 와 같은 이유다.
+  group('전파 — "RDS 복제본은 5개" 류 일반화가 SAA 문항 어디에도 없다', () {
+    test('모든 SAA 문항의 사실 서술에서 0건', () {
+      const banned = <String>['RDS는 최대 5개', 'RDS MySQL은 최대 5개'];
+      final files = Directory('assets/content/saa')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
+      final hits = <String>[];
+      for (final file in files) {
+        final data =
+            json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+        final questions =
+            (data['questions'] as List?)?.whereType<Map<String, dynamic>>() ??
+                const <Map<String, dynamic>>[];
+        for (final q in questions) {
+          final wrongs = q['wrongExplanations'];
+          final text = <String>[
+            q['stem'] as String? ?? '',
+            q['explanation'] as String? ?? '',
+            if (wrongs is Map) ...wrongs.values.whereType<String>(),
+          ].join('\n');
+          for (final phrase in banned) {
+            if (text.contains(phrase)) {
+              hits.add('${q['id']}: "$phrase"');
+            }
+          }
+        }
+      }
+      expect(
+        hits,
+        isEmpty,
+        reason: '소스 1개당 상한은 15개다(Db2 3개, Oracle·SQL Server 5개가 예외)',
+      );
+    });
+  });
 }
