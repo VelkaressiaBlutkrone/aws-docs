@@ -20,13 +20,15 @@
 
 공개 게이트는 "전 도메인 일괄 flip"이 아니라 **도메인별 weighted capacity**다: 앱의 65문항 연습 세트에 공식 비중을 `allocateByWeight`(floor + 최대 잉여법, 동률은 선언 순서)로 배분한 수량 이상을 도메인별로 채우면 통합/약점 모의고사가 열린다.
 
-| 자격증 | 공식 비중(D1·D2·D3·D4) | 필요 수량 = 65 배분 |
+| 자격증 | 공식 비중(D1·D2·D3·D4[·D5]) | 필요 수량 = 65 배분 |
 |---|---|---|
 | SAA-C03 | 30 · 26 · 24 · 20 | **D1 19 · D2 17 · D3 16 · D4 13** |
 | MLA-C01 | 28 · 26 · 22 · 24 | **D1 18 · D2 17 · D3 14 · D4 16** |
 | CLF-C02 | 24 · 30 · 34 · 12 | D1 16 · D2 19 · D3 22 · D4 8 |
+| SOA-C03 | 22 · 22 · 22 · 16 · 18 (**5도메인**) | **D1 14 · D2 14 · D3 14 · D4 11 · D5 12** |
+| DEA-C01 | 34 · 26 · 22 · 18 | **D1 22 · D2 17 · D3 14 · D4 12** |
 
-수치의 정본은 코드다 — 비중은 `kExamReadinessRequirements`(`lib/data/content_index.dart`), 배분 결과는 `test/content_index_test.dart`가 세 자격증 모두 고정하고 있고 비중 자체는 `assets/exam_guides/<cert>.json`과 대조된다(정책을 추가하고 테스트 목록을 빠뜨리면 **검증 없이 통과하므로** 양쪽을 함께 늘린다). ⚠️ **정책이 없는 자격증은 fail closed**다(`hasPolicy: false` → `ready: false`) — SOA·DEA는 정책이 없어 문항을 전부 flip해도 잠긴 채 남는다. SAA의 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
+수치의 정본은 코드다 — 비중은 `kExamReadinessRequirements`(`lib/data/content_index.dart`), 배분 결과는 `test/content_index_test.dart`가 다섯 자격증 모두 고정하고 있고 비중 자체는 `assets/exam_guides/<cert>.json`과 대조된다(대조 루프가 하드코딩 목록이 아니라 `kExamReadinessRequirements.keys`를 돌므로, 정책을 추가하면 테스트를 빠뜨려도 비중 동기화는 검증된다 — 2026-10-27부터). ⚠️ **정책이 없는 자격증은 fail closed**다(`hasPolicy: false` → `ready: false`) — 문항을 전부 flip해도 잠긴 채 남는다. SOA-C03·DEA-C01은 2026-10-27에 정책을 넣어 이 함정을 풀었고(그 전에는 둘 다 정책이 없었다), 남은 자격증(AIF·AIP·ANS·DOP·DVA·SAP·SCS)은 아직 정책이 없다. **정책 추가는 공개가 아니다** — verified가 0이면 전 도메인이 부족해 게이트는 그대로 잠겨 있다. SAA의 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
 
 - 라이브 게이트 함수는 **`certExamHasWeightedCapacity`**(= `examWeightedCapacityStatus().ready`)다. 홈 시험 섹션·`cert_detail`·`exam_page`·`cert_exam_page`·`weighted_exam`이 모두 이 함수를 쓴다.
 - ⚠️ **옛 게이트 `certExamIsBalanced`("전 도메인에 검증 문항 1개 이상")는 2026-10-20에 코드에서 제거됐다** — 2026-08-06 weighted capacity 게이트가 역할을 대신한 뒤 `lib` 호출이 0이었다. 이 문서의 옛 서술(도메인 일괄 flip·부분 flip 미노출)이 그 함수를 공개 조건으로 적고 있었다. 지금 게이트는 `certExamHasWeightedCapacity` 하나다.
