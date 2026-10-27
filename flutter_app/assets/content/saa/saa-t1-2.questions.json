@@ -26,7 +26,7 @@
       "sources": [
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q5",
@@ -122,7 +122,7 @@
       "sources": [
         { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q6",
@@ -146,7 +146,7 @@
       "sources": [
         { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q7",
@@ -171,7 +171,7 @@
         { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" },
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q8",
@@ -195,14 +195,14 @@
       "sources": [
         { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q9",
       "examGuideTaskId": "saa-t1-2",
       "skill": "Control Tower 가드레일 유형(예방·탐지·사전예방)",
       "difficulty": "foundational",
-      "stem": "AWS Control Tower에는 세 가지 가드레일 유형이 있다. '리소스 프로비저닝 전에 비준수 리소스가 생성되는 것을 IaC 배포 단계에서 차단'하는 유형과 구현 도구의 조합으로 옳은 것은?",
+      "stem": "AWS Control Tower에는 세 가지 제어(control, 이전 명칭 가드레일) 유형이 있다. '리소스 프로비저닝 전에 비준수 리소스가 생성되는 것을 IaC 배포 단계에서 차단'하는 유형과 구현 도구의 조합으로 옳은 것은?",
       "options": [
         "예방적(Preventive) — SCP",
         "탐지적(Detective) — AWS Config 규칙",
@@ -210,16 +210,17 @@
         "탐지적(Detective) — CloudTrail"
       ],
       "correct": 2,
-      "explanation": "사전예방적(Proactive) 가드레일은 CloudFormation 훅으로 구현됩니다. IaC 배포 단계에서 리소스가 생성되기 전 규정 준수 여부를 확인해 비준수 리소스를 사전에 차단합니다. 예방적 가드레일은 SCP, 탐지적 가드레일은 AWS Config 규칙으로 구현됩니다.",
+      "explanation": "사전예방적(Proactive) 제어는 CloudFormation 훅으로 구현됩니다. IaC 배포 단계에서 리소스가 생성되기 전 규정 준수 여부를 확인해 비준수 리소스를 사전에 차단합니다. 예방적 제어는 SCP, 탐지적 제어는 AWS Config 규칙으로 구현됩니다. 공식 문서는 옛 명칭 가드레일과 제어를 동의어로 두고 용어를 제어로 전환하고 있습니다.",
       "wrongExplanations": {
-        "0": "예방적 가드레일은 SCP로 구현해 규정 위반 IAM API 호출 자체를 차단합니다. 하지만 이미 잘못 구성된 기존 리소스나 IaC 배포 단계는 커버하지 못합니다.",
-        "1": "탐지적 가드레일은 AWS Config 규칙으로 실시간 구성 변화를 감시해 SCP가 놓친 드리프트를 발견합니다. 배포 전 차단이 아니라 배포 후 상태 감지입니다.",
-        "3": "CloudTrail은 Control Tower 가드레일의 구현 도구가 아닙니다. CloudTrail은 API 호출 감사 로그 서비스로, 탐지적 가드레일은 AWS Config 규칙이 담당합니다."
+        "0": "예방적 제어는 SCP로 구현해 금지된 API 작업 자체를 거부합니다(IAM API 호출로 한정되지 않습니다). 하지만 이미 잘못 구성된 기존 리소스나 IaC 배포 단계는 커버하지 못합니다.",
+        "1": "탐지적 제어는 AWS Config 규칙으로 실시간 구성 변화를 감시해 SCP가 놓친 드리프트를 발견합니다. 배포 전 차단이 아니라 배포 후 상태 감지입니다.",
+        "3": "CloudTrail은 Control Tower 제어의 구현 도구가 아닙니다. CloudTrail은 API 호출 감사 로그 서비스로, 탐지적 제어는 AWS Config 규칙이 담당합니다."
       },
       "sources": [
-        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" }
+        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" },
+        { "title": "AWS Control Tower의 제어 — 예방·탐지·사전예방, 가드레일과 동의어(공식)", "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/controls.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q10",
@@ -238,12 +239,13 @@
       "wrongExplanations": {
         "0": "Control Tower는 Organizations를 대체하지 않습니다. Control Tower가 배포되면 그 아래 Organizations 트리가 실제 구조를 담당하며 두 서비스는 함께 동작합니다.",
         "2": "Organizations는 Control Tower 없이 단독으로 사용 가능한 독립 서비스입니다. 통합 결제와 SCP는 Organizations만으로도 구성할 수 있습니다.",
-        "3": "Control Tower는 Organizations와 긴밀하게 통합되어 있습니다. Control Tower를 설정하면 Organizations OU 트리, SCP, IAM Identity Center가 자동으로 구성됩니다."
+        "3": "Control Tower는 Organizations와 긴밀하게 통합되어 있습니다. 다만 '설정하면 전부 자동 구성된다'고 단정할 수는 없습니다 — 랜딩 존 4.0부터 AWS Config·CloudTrail·SecurityRoles·Backup 같은 서비스 통합을 켜고 끌 수 있고, Security OU 생성도 Control Tower가 더 이상 강제하지 않습니다."
       },
       "sources": [
-        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" }
+        { "title": "AWS Control Tower란 무엇인가 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html" },
+        { "title": "랜딩 존 4.0 주요 변경 — 서비스 통합·조직 구조가 선택 사항(공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/key-changes-lz-v4.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q11",
@@ -267,7 +269,7 @@
       "sources": [
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q12",
@@ -291,7 +293,7 @@
       "sources": [
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q13",
@@ -315,7 +317,7 @@
       "sources": [
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q14",
@@ -339,7 +341,7 @@
       "sources": [
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-2-q15",
@@ -364,7 +366,7 @@
         { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" },
         { "title": "SAA-C03 공식 시험 가이드 (한국어)", "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
