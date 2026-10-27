@@ -120,7 +120,7 @@
         "3": "Visibility Timeout은 메시지 수신 후 잠금 시간으로 빈 큐에서의 빈 응답 문제와 관계없습니다."
       },
       "sources": [
-        { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
+        { "title": "SQS 짧은 폴링과 긴 폴링 — 최대 대기 20초 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html" }
       ],
       "verified": true
     },

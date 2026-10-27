@@ -313,7 +313,7 @@
         "3": "Spot 인스턴스도 실행 중인 시간에 과금되며, 간헐적 워크로드에서 요청 없는 시간의 비용이 발생합니다. 또한 AWS가 회수할 수 있어 API 응답성에 영향을 줄 수 있습니다."
       },
       "sources": [
-        { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
+        { "title": "AWS Lambda 요금 — 쓴 만큼만, 요청과 실행 시간, 1 ms 단위 (공식)", "url": "https://aws.amazon.com/lambda/pricing/" }
       ],
       "verified": true
     },
