@@ -89,6 +89,22 @@ const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
     practiceQuestionCount: 65,
     weightByDomain: {1: 28, 2: 26, 3: 22, 4: 24},
   ),
+  // SOA-C03·DEA-C01도 같은 fail closed 함정에 걸려 있었다 — 학습문서와 드래프트
+  // 문항은 이미 전부 들어와 있는데 정책이 없어, 사람이 검수해 flip해도 모의고사가
+  // 영원히 잠긴 채 남았다(2026-10-27 추가). 정책 추가는 공개가 아니다: verified가
+  // 0인 동안은 전 도메인이 부족해 게이트가 그대로 잠겨 있다.
+  //
+  // ⚠️ SOA-C03은 도메인이 **5개**다(공식명 CloudOps Engineer, 가이드 v1.1).
+  // 비중 22·22·22·16·18 → 65문항 배분은 14·14·14·11·12.
+  'SOA-C03': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 22, 2: 22, 3: 22, 4: 16, 5: 18},
+  ),
+  // DEA-C01 공식 비중 34·26·22·18 → 65문항 배분은 22·17·14·12.
+  'DEA-C01': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 34, 2: 26, 3: 22, 4: 18},
+  ),
 };
 
 class ExamReadinessStatus {

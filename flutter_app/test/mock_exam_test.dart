@@ -38,6 +38,30 @@ void main() {
     expect(a, {1: 19, 2: 17, 3: 16, 4: 13});
   });
 
+  // ⚠️ SOA-C03은 도메인이 **5개**다(다른 자격증은 4개). 위 가드는 전부 4키라
+  // "키가 4개"라는 가정이 섞여 들어도 잡지 못했다 — 5키에서도 floor + 최대 잔여가
+  // 합을 정확히 N으로 맞추는지 여기서 고정한다.
+  test('allocateByWeight: SOA 5도메인 비중을 65문항에 적용하면 14/14/14/11/12', () {
+    final a = allocateByWeight({1: 22, 2: 22, 3: 22, 4: 16, 5: 18}, 65);
+    expect(a.values.fold(0, (s, v) => s + v), 65);
+    expect(a, {1: 14, 2: 14, 3: 14, 4: 11, 5: 12});
+  });
+
+  test('allocateByWeight: DEA 공식 비중을 65문항 연습 세트에 적용하면 22/17/14/12', () {
+    final a = allocateByWeight({1: 34, 2: 26, 3: 22, 4: 18}, 65);
+    expect(a.values.fold(0, (s, v) => s + v), 65);
+    expect(a, {1: 22, 2: 17, 3: 14, 4: 12});
+  });
+
+  test('allocateByWeight: 5키 배분 합은 모든 N에서 N이다 (키 수 가정 없음)', () {
+    const soa = {1: 22, 2: 22, 3: 22, 4: 16, 5: 18};
+    for (final n in [1, 2, 5, 13, 50, 64, 65, 66, 100, 237]) {
+      final a = allocateByWeight(soa, n);
+      expect(a.keys.toSet(), soa.keys.toSet(), reason: 'n=$n 키 누락');
+      expect(a.values.fold(0, (s, v) => s + v), n, reason: 'n=$n 배분 합 불일치');
+    }
+  });
+
   test('allocateByWeight: 동률 remainder는 선언 순서로 결정된다', () {
     final a = allocateByWeight({'a': 1, 'b': 1, 'c': 1}, 2);
     expect(a, {'a': 1, 'b': 1, 'c': 0});

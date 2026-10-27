@@ -183,21 +183,105 @@ void main() {
       expect(s.deficitByDomain, isEmpty);
     });
 
-    test('정책 없는 cert는 fail closed', () {
+    // SOA-C03·DEA-C01도 2026-10-27까지 정책이 없어 fail closed였다. 사람이
+    // 드래프트(SOA 300 · DEA 256)를 전부 검수해 flip해도 모의고사가 잠긴 채
+    // 남는 함정이라 정책을 넣었다 — MLA가 같은 함정에 걸려 있었다(#246).
+    test('SOA-C03: 5도메인 정책이 있고 필요 수량이 공식 비중과 맞는다', () {
       final s = examWeightedCapacityStatus('SOA-C03');
+      expect(s.hasPolicy, isTrue,
+          reason: 'kExamReadinessRequirements에 SOA-C03이 없으면 게이트가 fail closed다');
+      expect(s.practiceQuestionCount, 65);
+      // 공식 비중 D1 22 · D2 22 · D3 22 · D4 16 · D5 18 을 연습 65문항에
+      // allocateByWeight(floor + 최대 잔여)로 배분한 값. 5도메인이라 다른
+      // 자격증(4도메인)과 달리 잔여 배분이 D5·D4로 간다.
+      expect(s.requiredByDomain, {1: 14, 2: 14, 3: 14, 4: 11, 5: 12});
+      expect(s.requiredByDomain.values.fold(0, (a, b) => a + b), 65,
+          reason: '배분 합이 연습 세트 크기와 달라지면 도메인 하나가 조용히 비거나 넘친다');
+    });
+
+    test('DEA-C01: 정책이 있고 필요 수량이 공식 비중과 맞는다', () {
+      final s = examWeightedCapacityStatus('DEA-C01');
+      expect(s.hasPolicy, isTrue,
+          reason: 'kExamReadinessRequirements에 DEA-C01이 없으면 게이트가 fail closed다');
+      expect(s.practiceQuestionCount, 65);
+      // 공식 비중 D1 34 · D2 26 · D3 22 · D4 18 → 65문항 배분.
+      expect(s.requiredByDomain, {1: 22, 2: 17, 3: 14, 4: 12});
+      expect(s.requiredByDomain.values.fold(0, (a, b) => a + b), 65);
+    });
+
+    // ⚠️ 이 단정은 **flip 상호형**이다. availableByDomain에 지금의 0을 박으면
+    // 사람이 첫 Task를 flip하는 순간 깨져 flip 자체를 막는다(#246에서 MLA가
+    // 그 함정에 걸렸다). 그래서 숫자가 아니라 "게이트가 content_index의 현재
+    // verified 수량을 그대로 반영하는가"를 본다.
+    test('SOA-C03·DEA-C01: 게이트가 현재 verified 수량을 그대로 반영한다', () {
+      for (final code in ['SOA-C03', 'DEA-C01']) {
+        final s = examWeightedCapacityStatus(code);
+        final byDomain = <int, int>{
+          for (final d in s.requiredByDomain.keys) d: 0,
+        };
+        for (final e in contentFor(code)) {
+          byDomain[e.domain] = (byDomain[e.domain] ?? 0) + e.questionCount;
+        }
+        expect(s.availableByDomain, byDomain,
+            reason: '$code 게이트 집계가 content_index와 어긋났다');
+        for (final d in s.requiredByDomain.keys) {
+          final need = s.requiredByDomain[d]!;
+          final have = byDomain[d] ?? 0;
+          if (have < need) {
+            expect(s.deficitByDomain[d], need - have,
+                reason: '$code D$d 부족분 계산 오류');
+          } else {
+            expect(s.deficitByDomain.containsKey(d), isFalse,
+                reason: '$code D$d 는 충족인데 부족 목록에 있다');
+          }
+        }
+        expect(s.ready, s.deficitByDomain.isEmpty);
+        expect(certExamHasWeightedCapacity(code), s.ready);
+      }
+    });
+
+    // 정책 추가는 **공개가 아니다**. verified가 0인 동안은 전 도메인이 부족해야
+    // 하고 게이트는 잠겨 있어야 한다 — 합성 엔트리로 박아 두면 나중에 사람이
+    // flip해도 이 단정은 그대로 유효하다.
+    test('SOA-C03·DEA-C01: 정책만으로는 열리지 않는다 (verified 0 → 전 도메인 부족)', () {
+      for (final code in ['SOA-C03', 'DEA-C01']) {
+        final s = examWeightedCapacityStatus(code, entries: const []);
+        expect(s.hasPolicy, isTrue);
+        expect(s.ready, isFalse);
+        expect(s.deficitByDomain, s.requiredByDomain,
+            reason: '$code: 검증 문항 0인데 부족 도메인이 전부가 아니다');
+      }
+    });
+
+    // 2026-10-27 실측: SOA·DEA 문항은 전부 드래프트(verified 0)라 정책을 넣어도
+    // 라이브 노출은 그대로 잠긴 채다. 이 줄은 **게이트를 실제로 여는 릴리스**에서만
+    // 바뀐다(도메인별 필요 수량을 전부 채운 시점).
+    test('SOA-C03·DEA-C01: 정책 추가 후에도 현재는 locked', () {
+      expect(certExamHasWeightedCapacity('SOA-C03'), isFalse);
+      expect(certExamHasWeightedCapacity('DEA-C01'), isFalse);
+    });
+
+    test('정책 없는 cert는 fail closed', () {
+      // ⚠️ 정책 있는 cert를 여기 쓰면 이 테스트가 의미를 잃는다(예전에는
+      // SOA-C03을 썼는데 2026-10-27에 정책이 생겼다). 가이드는 있고 정책은
+      // 없는 자격증을 쓴다.
+      expect(kExamReadinessRequirements.containsKey('ANS-C01'), isFalse,
+          reason: 'ANS-C01에 정책이 생겼으면 아직 정책 없는 다른 cert로 바꾼다');
+      final s = examWeightedCapacityStatus('ANS-C01');
       expect(s.hasPolicy, isFalse);
       expect(s.ready, isFalse);
-      expect(certExamHasWeightedCapacity('SOA-C03'), isFalse);
+      expect(certExamHasWeightedCapacity('ANS-C01'), isFalse);
     });
 
     test('readiness 정책은 exam guide의 65문항/도메인 비중과 동기화된다', () {
-      // ⚠️ 이 목록은 하드코딩이라 정책을 추가하고 여기를 빠뜨리면 **검증 없이
-      // 통과한다**(2026-10-26 MLA 정책 추가 때 실제로 그랬다). 정책을 늘리면
-      // 반드시 여기도 늘린다 — 아래 단정이 그것을 다시 잡아 준다.
+      // 대조 목록은 **의도 선언**이다(정책이 조용히 늘거나 사라지는 것을 잡는다).
+      // 반면 아래 루프는 하드코딩 목록이 아니라 정책 키 전체를 돈다 — 2026-10-26
+      // MLA 정책 추가 때 하드코딩 목록을 빠뜨려 **검증 없이 통과**한 적이 있어,
+      // 2026-10-27 SOA·DEA 추가에서 루프를 키 집합으로 돌렸다.
       expect(kExamReadinessRequirements.keys.toSet(),
-          {'CLF-C02', 'SAA-C03', 'MLA-C01'},
+          {'CLF-C02', 'SAA-C03', 'MLA-C01', 'SOA-C03', 'DEA-C01'},
           reason: 'readiness 정책을 추가·삭제했으면 이 테스트의 대조 목록도 맞춘다');
-      for (final code in ['CLF-C02', 'SAA-C03', 'MLA-C01']) {
+      for (final code in kExamReadinessRequirements.keys) {
         final raw = File('assets/exam_guides/$code.json').readAsStringSync();
         final guide = json.decode(raw) as Map<String, dynamic>;
         final overview = guide['overview'] as Map<String, dynamic>;
