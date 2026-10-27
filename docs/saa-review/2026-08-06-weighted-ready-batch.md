@@ -53,22 +53,22 @@ D1 2개 Task + D2 1개 Task를 검수하고 Task 단위로 flip하는 것이 가
 1. 구조 prescreen 재생성:
    `cd flutter_app && node tool/saa_prescreen.mjs build`
 2. HTML 뷰어 재생성:
-   `cd flutter_app && node tool/saa_review.mjs build`
+   `cd flutter_app && node tool/review.mjs build saa`
 3. `flutter_app/build/saa_review/index.html`을 열고 추천 batch의 모든 문항을 `docs/saa-review/review-rubric.md` C1~C6로 검수한다.
 4. advisory JSON을 나란히 본다:
    `docs/saa-review/prescreen/saa-t1-1.json`,
    `docs/saa-review/prescreen/saa-t1-4.json`,
    `docs/saa-review/prescreen/saa-t2-5.json`.
 5. 사람 검수자가 전 문항 pass로 판단한 Task만 flip한다:
-   `cd flutter_app && node tool/saa_review.mjs flip <taskId>`
+   `cd flutter_app && node tool/review.mjs flip saa <taskId>`
 
 추천 flip 순서:
 
 ```powershell
 cd flutter_app
-node tool/saa_review.mjs flip saa-t1-1
-node tool/saa_review.mjs flip saa-t1-4
-node tool/saa_review.mjs flip saa-t2-5
+node tool/review.mjs flip saa saa-t1-1
+node tool/review.mjs flip saa saa-t1-4
+node tool/review.mjs flip saa saa-t2-5
 ```
 
 각 flip은 해당 `.questions.json`의 verified 전환, `content_index.dart` questionCount 동기화, `saa_questions_test`/`content_index_test` 실행을 수행한다. flip 후에는 사람이 직접 커밋한다.

@@ -74,17 +74,51 @@ void main() {
     expect(byDomain, {1: 3, 2: 3, 3: 3, 4: 3});
   });
 
-  test('MLA-C01: 문항은 전부 드래프트라 통합 모의고사에 노출되지 않는다', () {
-    // verified flip은 사람 검수 전용 — 문서만 먼저 나간다.
-    expect(certHasVerifiedQuestions('MLA-C01'), isFalse);
-    expect(contentFor('MLA-C01').every((e) => !e.hasQuestions), isTrue);
+  // 통합/약점 모의고사 공개 게이트는 `certExamHasWeightedCapacity`이고
+  // **정책이 없는 cert는 fail closed**다(`hasPolicy: false` → `ready: false`).
+  // 그래서 정책을 두지 않으면 사람이 321문항을 전부 flip해도 모의고사가 잠긴
+  // 채로 남는다 — 2026-10-26에 flip 검수 범위를 산정하며 실측으로 드러났다.
+  test('MLA-C01: 가중 게이트 정책이 있고 필요 수량이 공식 비중과 맞는다', () {
+    final status = examWeightedCapacityStatus('MLA-C01');
+    expect(status.hasPolicy, isTrue,
+        reason: 'kExamReadinessRequirements에 MLA-C01이 없으면 게이트가 fail closed다');
+    expect(status.practiceQuestionCount, 65);
+    // 공식 비중 D1 28 · D2 26 · D3 22 · D4 24 를 연습 65문항에
+    // allocateByWeight(floor + 최대 잉여)로 배분한 값.
+    expect(status.requiredByDomain, {1: 18, 2: 17, 3: 14, 4: 16});
+  });
+
+  // ⚠️ 이 테스트는 **flip 상호형**이다. 예전에는 "MLA 문항은 전부 드래프트"라고
+  // 단정했는데, 그러면 사람이 첫 Task를 flip하는 순간 깨져 flip 자체를 막았다
+  // (SAA에는 같은 단정이 없다 — flip이 살아 있는 자격증이기 때문이다).
+  // 지금은 특정 숫자가 아니라 **게이트가 현재 상태를 올바르게 반영하는지**를 본다.
+  test('MLA-C01: 가중 게이트가 현재 verified 수량을 그대로 반영한다', () {
+    final status = examWeightedCapacityStatus('MLA-C01');
+    final byDomain = <int, int>{};
+    for (final e in contentFor('MLA-C01')) {
+      byDomain[e.domain] = (byDomain[e.domain] ?? 0) + e.questionCount;
+    }
+    expect(status.availableByDomain, byDomain,
+        reason: '게이트가 집계한 도메인별 검증 문항 수가 content_index와 어긋났다');
+    // 부족분은 필요 − 보유이며, 충족한 도메인은 목록에 없다.
+    for (final d in status.requiredByDomain.keys) {
+      final need = status.requiredByDomain[d]!;
+      final have = byDomain[d] ?? 0;
+      if (have < need) {
+        expect(status.deficitByDomain[d], need - have, reason: 'D$d 부족분 계산 오류');
+      } else {
+        expect(status.deficitByDomain.containsKey(d), isFalse,
+            reason: 'D$d 는 충족인데 부족 목록에 있다');
+      }
+    }
+    expect(status.ready, status.deficitByDomain.isEmpty);
   });
 
   // ── 동적 불변식 (T3, flip 회귀 가드) ──────────────────────────────
   // content_index의 questionCount는 그 Task .questions.json의 verified:true
   // 문항 수와 *항상* 일치해야 한다. 특정 숫자(예: SAA==0)에 의존하지 않으므로
   // 첫 SAA flip 시에도 깨지지 않고, flip 후 count 동기화 누락을 잡아낸다.
-  // (saa_review.mjs flip이 verified 전환 + content_index questionCount를 함께
+  // (review.mjs flip이 verified 전환 + content_index questionCount를 함께
   //  갱신하므로 정상 워크플로에서는 항상 일치.)
   test('동적 불변식: 모든 Task questionCount == .questions.json verified 수', () {
     final mismatches = <String>[];
@@ -157,7 +191,13 @@ void main() {
     });
 
     test('readiness 정책은 exam guide의 65문항/도메인 비중과 동기화된다', () {
-      for (final code in ['CLF-C02', 'SAA-C03']) {
+      // ⚠️ 이 목록은 하드코딩이라 정책을 추가하고 여기를 빠뜨리면 **검증 없이
+      // 통과한다**(2026-10-26 MLA 정책 추가 때 실제로 그랬다). 정책을 늘리면
+      // 반드시 여기도 늘린다 — 아래 단정이 그것을 다시 잡아 준다.
+      expect(kExamReadinessRequirements.keys.toSet(),
+          {'CLF-C02', 'SAA-C03', 'MLA-C01'},
+          reason: 'readiness 정책을 추가·삭제했으면 이 테스트의 대조 목록도 맞춘다');
+      for (final code in ['CLF-C02', 'SAA-C03', 'MLA-C01']) {
         final raw = File('assets/exam_guides/$code.json').readAsStringSync();
         final guide = json.decode(raw) as Map<String, dynamic>;
         final overview = guide['overview'] as Map<String, dynamic>;

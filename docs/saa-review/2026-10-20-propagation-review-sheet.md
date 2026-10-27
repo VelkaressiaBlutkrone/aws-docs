@@ -51,7 +51,7 @@ md 전용 가드(`saa_t1_facts_test.dart` · `saa_t12_t13_facts_test.dart` ·
 - [x] `content_index`의 `questionCount` 무변경 (문항 수 변동 없음)
 - [x] 원문 바이트 치환으로 수정 — CRLF 보존·`sources` 1줄 compact 서식 보존 (bare LF 0 실측)
 - [x] 공식 문서 URL 7계열 **실재 확인** (슬러그 추측 없음 — 1건은 리다이렉트를 확인하고 교체)
-- [ ] `node tool/saa_review.mjs build` HTML 뷰어 열람 (**사람**)
+- [ ] `node tool/review.mjs build saa` HTML 뷰어 열람 (**사람**)
 - [ ] 7문항 판정 확정 (**사람**)
 - [ ] flip은 이 작업 범위 밖 — `saa-t4-2`는 이미 flip돼 있고 나머지는 드래프트로 둔다
 

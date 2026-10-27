@@ -23,6 +23,20 @@ void main() {
   ];
   const minPerTask = 15; // CLF·DEA 기준선과 동일한 Task당 밀도 목표
 
+  /// 사람 검수를 마쳐 flip을 허용한 Task — **사람만 여기에 추가한다.**
+  ///
+  /// 예전에는 모든 문항에 `verified: false`를 단정해 AI flip을 막았는데, 그러면
+  /// 사람이 첫 Task를 flip하는 순간 테스트가 깨져 **flip 자체가 불가능**했다
+  /// (SAA에는 같은 단정이 없다 — flip이 살아 있는 자격증이기 때문이다).
+  /// 지금은 보호 의도를 유지하면서 길을 연다: 이 목록에 **없는** Task는 전 문항이
+  /// `verified: false`여야 하고, 목록에 넣는 행위가 곧 사람의 서명이다
+  /// (flip 커밋의 diff에 드러나므로 감사 추적이 된다).
+  ///
+  /// 검수 절차·루브릭은 `docs/saa-review/review-rubric.md` C1~C6을 그대로 쓴다.
+  /// flip 단위는 Task이고, 통합 모의고사 공개에 필요한 양은 도메인당
+  /// D1 18 · D2 17 · D3 14 · D4 16(연습 65문항에 공식 비중 배분)이다.
+  const flipApprovedTaskIds = <String>{};
+
   for (final taskId in mlaTaskIds) {
     group(taskId, () {
       final path = 'assets/content/mla/$taskId.questions.json';
@@ -72,9 +86,30 @@ void main() {
             expect((s['title'] ?? '').toString(), isNotEmpty);
           }
 
-          // 드래프트 단계: 사람 검수 전이므로 verified는 false여야 한다(AI flip 금지).
-          expect(q['verified'], isFalse,
-              reason: '$qid verified=true — flip은 사람 검수 전용이다');
+          // `verified`는 bool이어야 한다. 값 자체는 아래 flip 허용 목록 가드가 본다.
+          expect(q['verified'], isA<bool>(),
+              reason: '$qid verified가 bool이 아니다');
+        }
+      });
+
+      test('flip 허용 목록에 없으면 전 문항이 드래프트다 (AI flip 금지)', () {
+        // 사람이 `flipApprovedTaskIds`에 Task를 넣기 전에는 verified:true가
+        // 하나도 없어야 한다. 허용한 Task는 이 가드를 통과하고, 실제 수량
+        // 정합성은 content_index_test의 동적 불변식(questionCount ↔ verified)이 본다.
+        final map = json.decode(File(path).readAsStringSync())
+            as Map<String, dynamic>;
+        final qs = (map['questions'] as List).cast<Map<String, dynamic>>();
+        final flipped =
+            qs.where((q) => q['verified'] == true).map((q) => q['id']).toList();
+        if (flipApprovedTaskIds.contains(taskId)) {
+          expect(flipped, isNotEmpty,
+              reason: '$taskId: flip 허용 목록에 있는데 verified 문항이 없다 — '
+                  '검수를 끝냈으면 flip하고, 아직이면 목록에서 빼라');
+        } else {
+          expect(flipped, isEmpty,
+              reason: '$taskId: 사람 검수 전인데 verified=true 문항이 있다 — '
+                  'flip은 사람 전용이다. 검수를 마쳤다면 flipApprovedTaskIds에 '
+                  '$taskId 을 추가하라:\n${flipped.take(5).join(', ')}');
         }
       });
 
@@ -242,4 +277,55 @@ void main() {
       });
     });
   }
+
+  // ── M2: 작성 과정 메모 금지 (루브릭 §2 주의 문단) ──────────────────────────
+  // 학습자용 문장에 **작성자의 검증 상태**가 섞이면 해설이 사실 서술을 멈추고
+  // "나는 이걸 확인하지 못했다"를 설명하게 된다. 2026-10-27 외부 검수가 7문항에서
+  // 이것을 집어냈다(예: "공식 문서에서 확인되지 않으므로 요건으로 삼을 수
+  // 없습니다" — 실제로는 서버리스 제외 기능 목록에 데이터 캡처와 Model Monitor가
+  // 둘 다 적혀 있었다). 확인된 것은 사실로 쓰고, 확인되지 않은 것은 해설에서 뺀다.
+  //
+  // ⚠️ 겨냥하는 것은 작성자의 검증 상태를 적은 문장뿐이다. "~라는 서술은 없습니다"
+  // 처럼 보기의 주장을 부정하고 곧바로 사실을 제시하는 문장은 정당하므로 금지하지
+  // 않는다(전수 스캔에서 7개소가 그 쪽이었다). 학습문서(.md)도 대상이 아니다 —
+  // 거기서는 "공식 문서에서 확인되지 않았으므로 정답으로 고르지 않습니다"가 의도된
+  // 시험 전략 서술이고 31개소가 그렇게 쓰여 있다.
+  test('문항 본문에 작성 과정 메모가 없다 (M2)', () {
+    const forbidden = [
+      '확인되지 않',
+      '확인할 수 없',
+      '원문에 나오지 않',
+      '문서가 반올림',
+      '단정하지 않',
+      '공식 문서는 없',
+      '문구는 없',
+      '가장 가까운 공식',
+    ];
+    final offenders = <String>[];
+    for (final taskId in mlaTaskIds) {
+      final file = File('assets/content/mla/$taskId.questions.json');
+      if (!file.existsSync()) continue;
+      final map = json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+      for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+        final options = (q['options'] as List?) ?? const [];
+        final wrong = (q['wrongExplanations'] as Map?) ?? const {};
+        final fields = <String, String>{
+          'stem': '${q['stem']}',
+          'explanation': '${q['explanation']}',
+          for (var i = 0; i < options.length; i++) 'options[$i]': '${options[i]}',
+          for (final e in wrong.entries) 'wrongExplanations[${e.key}]': '${e.value}',
+        };
+        for (final field in fields.entries) {
+          for (final phrase in forbidden) {
+            if (field.value.contains(phrase)) {
+              offenders.add('${q['id']} ${field.key}: "$phrase"');
+            }
+          }
+        }
+      }
+    }
+    expect(offenders, isEmpty,
+        reason: '작성 과정 메모를 사실 서술로 바꾸거나 지우세요(루브릭 M2):\n'
+            '${offenders.join('\n')}');
+  });
 }

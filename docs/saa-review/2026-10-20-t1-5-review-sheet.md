@@ -51,9 +51,9 @@ verified 0으로 남기 때문이다([batch 문서](2026-08-06-weighted-ready-ba
 - [x] `fix` 반영 후 `saa_prescreen.mjs build` **재실행** → 구조 플래그 0 재확인
 - [x] 각 문항에 `review-rubric.md` C1~C6 적용 (AI 권고)
 - [x] `correct`(정답 인덱스)·보기 개수 무변경 — 회귀 가드로 고정
-- [ ] `node tool/saa_review.mjs build` 결과 HTML 뷰어 열람 (**사람**)
+- [ ] `node tool/review.mjs build saa` 결과 HTML 뷰어 열람 (**사람**)
 - [ ] 15문항 판정 확정 (**사람**)
-- [ ] `node tool/saa_review.mjs flip saa-t1-5` (**사람 전용**)
+- [ ] `node tool/review.mjs flip saa saa-t1-5` (**사람 전용**)
 - [ ] flip 후 자동 실행되는 `saa_questions_test` / `content_index_test` 통과 확인
 
 ## 집중 확인 문항 (내용이 바뀐 6건)
@@ -206,7 +206,7 @@ C6은 `saa_prescreen.mjs build`의 구조 플래그 0으로 갈음한다.
 
 ```powershell
 cd flutter_app
-node tool/saa_review.mjs flip saa-t1-5
+node tool/review.mjs flip saa saa-t1-5
 ```
 
 - [ ] `flutter test` 그린 확인 (flip CLI가 `saa_questions_test`·`content_index_test` 실행)
