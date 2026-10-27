@@ -193,6 +193,10 @@
         {
           "title": "Monitor Amazon SageMaker AI with Amazon CloudWatch — 비동기 엔드포인트 지표",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html"
+        },
+        {
+          "title": "Alarms and logs for tracking metrics from asynchronous endpoints — 비동기에서 미발행되는 지표 목록(Invocations·InvocationsPerInstance)",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-monitor.html"
         }
       ],
       "verified": false
