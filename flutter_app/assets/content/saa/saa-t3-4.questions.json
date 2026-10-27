@@ -38,16 +38,16 @@
       "stem": "한 회사가 Lambda 함수를 사용해 야간 재무 보고서를 생성하려 한다. 보고서 생성 작업은 평균 20분이 걸린다. 이 설계의 문제점은?",
       "options": [
         "Lambda는 메모리 부족으로 대용량 보고서를 처리할 수 없다",
-        "Lambda의 최대 실행 시간은 15분이므로 20분 작업은 강제 종료된다",
+        "표준 Lambda의 최대 실행 시간은 900초(15분)이므로 20분 작업은 강제 종료된다",
         "Lambda는 야간 스케줄 트리거를 지원하지 않는다",
         "Lambda는 재무 데이터 처리에 규정상 사용할 수 없다"
       ],
       "correct": 1,
-      "explanation": "Lambda의 최대 실행 시간은 15분입니다. 20분 작업은 이 제한을 초과해 강제 종료됩니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용해야 합니다.",
+      "explanation": "Lambda 함수의 타임아웃은 기본 3초이고 1초 단위로 최대 900초(15분)까지 올릴 수 있습니다. 20분 작업은 이 상한을 초과해 강제 종료됩니다. AWS Lambda Managed Instances를 쓰는 함수의 비동기 호출과 이벤트 소스 매핑 호출(Amazon MQ·DocumentDB 제외)은 최대 5,400초(90분)까지 허용되지만, 일반 호출 경로의 상한은 그대로 900초입니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용합니다.",
       "wrongExplanations": {
-        "0": "Lambda의 메모리는 설정으로 조정 가능하며, 보고서 처리 자체가 불가능하다는 설명은 문서에 없습니다. 핵심 문제는 실행 시간 제한입니다.",
+        "0": "Lambda 메모리는 함수 설정으로 조정할 수 있어 메모리가 이 설계의 걸림돌이 아닙니다. 20분 작업이 막히는 이유는 타임아웃 상한입니다.",
         "2": "Lambda는 EventBridge(CloudWatch Events) 스케줄 트리거를 지원합니다. 야간 스케줄 자체는 문제가 아닙니다.",
-        "3": "규정상 Lambda 사용 제한에 대한 내용은 이 문서에 없습니다. 문제는 15분 실행 시간 제한입니다."
+        "3": "재무 데이터 처리 자체는 Lambda의 제약 사항이 아닙니다. 20분 작업이 막히는 이유는 900초 타임아웃 상한입니다."
       },
       "sources": [
         { "title": "Configure Lambda function timeout (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html" }
@@ -163,11 +163,11 @@
         "Job, Job Queue, Compute Environment 3계층으로 구성되며, Job Queue는 우선순위 설정이 가능하다"
       ],
       "correct": 3,
-      "explanation": "AWS Batch는 Job(실행 단위, Docker 컨테이너 기반), Job Queue(Job이 대기하는 큐, 우선순위 설정 가능), Compute Environment(Job을 실행하는 컴퓨팅 풀, EC2 On-Demand/Spot 또는 Fargate) 3계층으로 구성됩니다.",
+      "explanation": "AWS Batch는 Job(실행 단위, Docker 컨테이너 기반), Job Queue(Job이 대기하는 큐, 우선순위 설정 가능), Compute Environment(Job을 실행하는 컴퓨팅 풀, EC2 On-Demand/Spot 또는 Fargate) 3계층으로 구성됩니다. 여기에 Job Definition도 AWS Batch의 리소스로, 잡을 어떻게 실행할지(컨테이너 이미지·vCPU·메모리·명령·환경 변수·IAM 역할 등)를 정의하며 모든 잡이 하나를 참조합니다.",
       "wrongExplanations": {
-        "0": "Job Definition, Task, Service는 ECS의 리소스입니다. AWS Batch는 Job, Job Queue, Compute Environment로 구성됩니다.",
+        "0": "Task와 Service는 ECS의 리소스이지만 Job Definition은 AWS Batch의 리소스입니다 — 잡이 어떻게 실행될지를 정의하고 모든 잡이 이를 참조합니다. 이 보기가 틀린 이유는 Job Definition이 ECS 것이기 때문이 아니라, Batch의 3계층이 Job, Job Queue, Compute Environment이기 때문입니다.",
         "1": "Job, Cluster, Service는 ECS의 개념을 혼합한 것입니다. AWS Batch의 3계층은 Job, Job Queue, Compute Environment입니다.",
-        "2": "AWS Batch는 Lambda 함수를 실행 엔진으로 사용하지 않습니다. 내부적으로 ECS, EKS, Fargate를 실행 엔진으로 사용합니다."
+        "2": "Job Definition은 AWS Batch의 리소스로 맞지만, Lambda 함수는 Batch의 계층이 아닙니다. Batch는 내부적으로 ECS, EKS, Fargate를 실행 엔진으로 사용합니다."
       },
       "sources": [
         { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }

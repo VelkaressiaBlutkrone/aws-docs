@@ -282,9 +282,9 @@
         "Compute Optimizer는 비용 최적화만 분석하고 성능 문제는 감지하지 않는다"
       ],
       "correct": 1,
-      "explanation": "Compute Optimizer는 기본 14일(확장 시 93일, Enhanced Infrastructure Metrics 유료 기능) CloudWatch 지표를 분석하여 rightsizing 권장 사항을 제안합니다. 인스턴스 변경은 운영자 판단이 필요하므로 자동 변경이 아닌 권장 사항 제공 방식으로 동작합니다.",
+      "explanation": "Compute Optimizer는 기본 14일(확장 시 93일, Enhanced Infrastructure Metrics 유료 기능) CloudWatch 지표를 분석하여 rightsizing 권장 사항을 제안합니다. 인스턴스 크기 변경은 권장 사항으로만 제시되고 적용은 사용자가 합니다. 2025-11부터는 자동화 규칙으로 EBS 볼륨에 한해 권장 사항을 일정에 따라 자동 적용할 수 있습니다.",
       "wrongExplanations": {
-        "0": "Compute Optimizer는 자동으로 인스턴스 크기를 변경하지 않습니다. 권장 사항만 제안하며 실제 변경은 사용자가 직접 해야 합니다. 인스턴스 변경은 재시작을 수반하므로 운영자 판단이 필요합니다.",
+        "0": "Compute Optimizer는 인스턴스 크기를 자동으로 바꾸지 않습니다 — 인스턴스 rightsizing은 권장 사항으로만 제시되고 적용은 사용자가 합니다. 다만 2025-11에 추가된 자동화 규칙으로 EBS 볼륨에 한해 권장 사항을 자동 적용할 수 있습니다(미연결 볼륨을 스냅샷 후 삭제, 볼륨 타입을 최신 세대로 업그레이드). 규칙은 일·주·월 단위로 실행되고 수행된 작업은 대시보드에서 되돌릴 수 있습니다.",
         "2": "Compute Optimizer는 EC2 인스턴스 외에도 EC2 Auto Scaling 그룹·EBS 볼륨·Lambda 함수·ECS 서비스(Fargate)·RDS 및 Aurora 데이터베이스를 분석합니다.",
         "3": "Compute Optimizer는 과프로비저닝(비용 낭비)과 저프로비저닝(성능 부족) 모두를 감지하고 권장 사항을 제공합니다."
       },
