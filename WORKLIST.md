@@ -1,6 +1,6 @@
 # WORKLIST — 통합 작업 목록
 
-_생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — HANDOFF §0-2026-10-21-b) · 그 앞은 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — HANDOFF §0-2026-10-21) · 그 앞은 2026-10-21(갭 배치 행 매핑 재도출 — §B⑨가 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)를 가리키도록) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
+_생성: 2026-06-19 · 갱신: 2026-10-27(이탤릭 트랙 §B⑪ 신설 + §B⑦에 readiness 정책 반영 — HANDOFF §0-2026-10-27) · 그 앞은 2026-10-27(MLA-C01 트랙 §B⑩ 신설 — 콘텐츠 완주·1차 검수 반영·첫 flip `mla-t2-2`) · 그 앞은 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 일관성 — HANDOFF §0-2026-10-21-b) · 그 앞은 2026-10-21(SAA 갭 배치 B3·B5·B6·B7 — HANDOFF §0-2026-10-21) · 그 앞은 2026-10-21(갭 배치 행 매핑 재도출 — §B⑨가 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md)를 가리키도록) · HANDOFF.md(상세 이력·아키텍처)·TODOS.md(백로그)·멀티 일정 플랜에 흩어진 작업을 한곳에 통합한 단일 현황표._
 
 🔗 라이브: https://velkaressiablutkrone.github.io/aws-docs/
 
@@ -55,7 +55,7 @@ _생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 
   - **#137·#138·#139 SAA 학습문서 사실 정정 68건**(Task 1.1 5건 · 1.2·1.3 15건 · 2.1~4.4 48건) — `[오류]`·`[구식]`·`[부정확]`만 공식 문서로 전건 재확인, 근거 미확보 하위 주장은 쓰지 않고 PR 본문에 기록. 가드 3종(`saa_t1_facts_test`·`saa_t12_t13_facts_test`·`saa_t2_t4_facts_test`).
   - **#140 SOA 학습문서 사실 4건 정정** — Flow Logs REJECT 의미(공식 `action` 정의) · KMS 키 정책의 IAM 위임 · ACM 내보내기 가능 인증서 유료 · Trusted Advisor 현행 플랜(Business Support+·Enterprise·Unified Operations) + ElastiCache 3엔진·DynamoDB MREC/MRSC. 덤으로 학습문서 8개 끝의 작성 artifact(`</content>`·`</invoke>` 10줄) 제거·재발 가드.
   - **라이브 노출 불변식 유지:** SOA 300 + DEA 61 문항은 전부 `verified:false`이고 `content_index` questionCount는 0 — 사이트 노출·문항 수 변화 0. flip은 사람 검수 전용.
-  - **남은 일:** SOA·DEA 문항 사람 검수→flip · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록. **DEA-C01은 도메인 1~4 전부 완료 · SOA v1.1 신규 주제 13항목 반영 완료**(§B⑧).
+  - **남은 일:** SOA·DEA 문항 사람 검수→flip(**게이트 정책은 #254로 들어갔다** — 그전까지는 `kExamReadinessRequirements`에 두 자격증이 없어 전 문항을 flip해도 fail closed로 잠긴 채였다) · SAA/SOA 갭 노트의 다른 분류(`[누락]`·`[부분]`·`[의심]`) · DVA는 2026-10-27 C03 가이드 공개 후 전환 · MLA는 C01 기준 + C02 델타 부록. **DEA-C01은 도메인 1~4 전부 완료 · SOA v1.1 신규 주제 13항목 반영 완료**(§B⑧).
 
 - [x] **⑧ SAA 검수 문서 외부 리뷰 검증 + SAA 문항 fix 5건 + DEA 도메인 2·3·4 완주 + SOA v1.1** — 2026-10-20, **전부 main 릴리스·Pages success·라이브 실측 완료**(#153·#157·#161·#163). 경위·교훈 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-20.
   - **게이트 정의 확정 + 옛 게이트 제거:** 라이브 게이트는 `certExamHasWeightedCapacity`(lib 5곳)이고, 루브릭이 공개 조건으로 적고 있던 `certExamIsBalanced`는 **lib 호출 0 = dead code**였다. 루브릭 §1·§4를 "Task 단위 flip + 도메인별 weighted capacity"로 개정(#149)하고, **그 함수·테스트를 제거**했다(커버리지 손실 없음을 weighted capacity 테스트로 확인, 테스트 6건 감소).
@@ -72,6 +72,20 @@ _생성: 2026-06-19 · 갱신: 2026-10-21(SAA 갭 배치 B8 완결·B9a·명칭 
   - **갭 배치:** SAA `[누락]` 50 + `[부분]` 84 = **134행**을 B1~B11에 **전수 배정**했다(미배정 0) — 정본 [97-gap-batch-map.md](docs/content-research/SAA-C03/97-gap-batch-map.md). 2026-10-20 서술의 배치 행수(4+32+63+13=112)는 같은 문단의 "실질 열림 129행"과 **17행 어긋나고** 제외 5행의 번호도 기록되지 않아, 2026-10-21에 공식 Task 경계로 **재도출**했다. **배치는 순차로만** — 겹치는 문서가 7쌍 있어 병렬은 both-added 충돌을 낸다. 부분 제약 16항목은 `99-gaps.md` V 목록 때문에 수치·단정 금지.
   - **SOA:** §3 Skill 커버리지에서 「없음」 **6개**만 배치 대상(「부분」 45는 커버리지 등급이라 제외 — 올리면 20편 전면 재집필).
   - **라이브 노출된 변경:** `saa-t1-5.md`(#164) · 문항 `saa-t4-2`·`t3-5`·`t4-3`(flip된 Task, #165·#166) · md 3편 보강(#168). 나머지는 드래프트라 노출 0.
+
+- [~] **⑩ MLA-C01 문항 사람 검수 → `verified:true` flip** — 콘텐츠는 **공식 Task 12개(4도메인 × 3) 전부 완료·라이브**다: 학습문서 **12편** · 문항 **321**(배치 #224·#230·#234·#240 + 외부 리뷰 반영 #225~#228·#232·#236 + 포맷 3종 #238, 릴리스 #231·#233·#235·**#242**). 경위·레시피·가드의 정본은 [HANDOFF.md](HANDOFF.md) §0-2026-10-26과 [2026-10-26-mla-content-review.md](docs/audits/2026-10-26-mla-content-review.md)다(같은 지적이 3회 반복·3회 기각된 항목이 있으니 그 문서의 ④·⑤를 먼저 읽는다). **열린 항목은 사람 flip뿐** — 검수·flip은 사용자 전용(AI flip 금지)이고, 도구는 `cd flutter_app && node tool/review.mjs build mla` → `flip mla <taskId>`로 `verified`·`content_index` questionCount·`mla_questions_test.dart`의 `flipApprovedTaskIds`를 함께 갱신한다(#247).
+  - **1차 검수(2026-10-27) 반영 완료:** 외부 검수 **307 pass·정답 오류 0** 중 수정 14건(사실 오류 4·해설 보강 2·작성자 메모 7·출처 교체 1)은 #250, 출처 재확인 19건은 #251에서 닫았다. 재확인 기록의 정본은 [2026-10-27-mla-source-recheck.md](docs/saa-review/2026-10-27-mla-source-recheck.md) — 루브릭이 요구하는 **flip 직전 재확인은 그 표를 여는 것으로 갈음**하고, 문서 끝 "다시 확인해야 하는 조건" 3가지에 걸리는 항목만 다시 연다. ⭐ 가용성 날짜의 정본은 개발자 가이드가 아니라 **제품 features 페이지의 End of Support Notice**다(dg의 `*-availability-change.html`은 날짜를 적지 않는다). 신설 가드: `mla_questions_test.dart`의 **M2 — 문항 본문에 작성 과정 메모 0건**.
+  - **첫 flip(2026-10-27):** `mla-t2-2` **28문항** verified(#252). 나머지 11 Task는 드래프트다. 도메인별 보유량의 정본은 `content_index.dart`의 questionCount이고 게이트 충족 여부는 `content_index_test.dart`의 MLA 가중 게이트 케이스가 단정한다(여기에 진행 수치를 더 적지 않는다 — §0 서술 규약 ②).
+  - **게이트:** 필요 수량은 321이 아니라 **65**다(공식 비중을 앱의 연습 65문항에 배분) → **D1 18 · D2 17 · D3 14 · D4 16**. flip 단위가 Task라 **도메인당 1 Task**면 열리고, t2-2로 D2가 충족됐으니 **남은 건 D1·D3·D4 각 1 Task**다. ⚠️ **정책이 없는 자격증은 `hasPolicy:false → ready:false`로 fail closed** — MLA는 #246에서 정책을 넣고 "MLA 문항은 전부 드래프트"라는 단정 2곳을 걷어내야 비로소 첫 flip이 가능했다(그 단정이 첫 flip에서 테스트를 깨뜨리게 돼 있었다). SOA·DEA는 **아직 정책이 없다**(§B⑦의 남은 일).
+  - **Task 고를 때:** 1차 검수가 **같은 사실 묶음 7건**을 flip 후 교체 후보로 남겼다. t2-2가 flip된 지금 **D3는 어느 Task를 골라도 쌍이 노출되고**(t3-1-q12·t3-3-q18 ↔ t2-2-q23), t4-2는 t2-2-q10과 쌍 + 내부 중복(q15·q17)까지 있다 — **D1은 `t1-2`, D4는 `t4-1`이 깨끗**하다(t1-1은 q7·q19가 내부 중복). 품질로는 검수 보고가 `mla-t3-3`(수정 0건)을 다음으로 권한다.
+  - ⚠️ **freeze 가드는 MLA에 없다:** `.githooks/pre-commit`은 `flutter_app/assets/content/saa/**`만 보고 마커도 `.saa-frozen` 하나뿐인데, 레포에 그 마커가 없고 `core.hooksPath`도 미설정이라 **현재 아무 자격증도 동결돼 있지 않다**(2026-10-27 실측). MLA에 같은 동결을 둘지는 미결정.
+
+- [~] **⑪ 레포 전역 평문 표기 — 단일 `*이탤릭*` 잔여** — 앱의 마크다운 파서는 `**굵게**`와 코드 스팬만 렌더하고 단일 `*이탤릭*`은 **별표를 글자로 노출**한다. 링크 표기(`[텍스트](링크)`)는 전 자격증 **0건**이 됐고 [content_format_test.dart](flutter_app/test/content_format_test.dart)가 `.md` 전수를 고정한다. 이탤릭은 **clf·mla가 0건**이 되어 그 둘만 집계 가드 `italicCleanCerts`에 들어가 있다 — 한 자격증을 비울 때마다 그 집합에 추가해 전역으로 좁힌다. 경위·교훈은 [HANDOFF.md](HANDOFF.md) §0-2026-10-27이 정본이다.
+  - **남은 양:** **saa 192 · soa 145 · dea 194**(코드 스팬 제외 정밀 계수, 2026-10-27 실측). ⚠️ 가드 레시피 기준 숫자는 다르다 — [CLAUDE.md](CLAUDE.md)에는 saa 194 · soa 144 · dea 194로 적혀 있고, CLF도 레시피 762 vs 정밀 726이었다(차이는 `**굵게**` 안쪽·경계의 이탤릭).
+  - **판단 기준(CLF에서 확립, #255):** ① 강조가 의미 있으면 `**굵게**`로 올린다 ② **문장급 괄호 주석**(`*(…)*`)은 강조가 아니라 톤 표시이므로 **별표만 지운다** — 굵게로 올리면 문서가 굵은 글씨로 뒤덮인다 ③ 용어 첫 등장·영문 병기는 그 문서의 다른 곳과 일관되게 맞춘다.
+  - **자격증별 성격:** 괄호 주석 비중이 **saa 162/192 · soa 134/145**로 높아 대부분 ②로 끝나지만, **dea는 3/194**라 ①·③ 판단이 거의 전부다 — dea가 가장 손이 많이 간다.
+  - ⚠️ **측정 함정:** 이 환경의 `grep -P`는 `-P supports only unibyte and UTF-8 locales`로 **실패**한다. 0건이 나오면 믿지 말고 별표 총수 − `**` 쌍으로 대조하거나 node로 센다(코드 스팬을 자리표시자로 가린 뒤).
+  - **라이브 영향:** saa·soa·dea 학습문서는 모두 라이브라 본문이 바뀐다. 자격증 하나당 PR 하나로 끊어 간다(겹치는 파일이 없어 병렬도 가능하지만 `CLAUDE.md` 기준선 줄이 겹치므로 **순차가 안전**하다 — §0-2026-10-27 교훈 3).
 
 ---
 

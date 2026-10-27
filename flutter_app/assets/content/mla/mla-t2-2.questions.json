@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training-strategies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q5",
@@ -147,7 +147,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-early-stopping.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q6",
@@ -179,7 +179,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/multiple-algorithm-hpo.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q7",
@@ -211,7 +211,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-intro-v2.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q8",
@@ -239,7 +239,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/distributed-training.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q9",
@@ -271,7 +271,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q10",
@@ -303,7 +303,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-checkpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q11",
@@ -335,7 +335,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-warm-start.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q12",
@@ -367,7 +367,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q13",
@@ -399,7 +399,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensus03-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q14",
@@ -427,7 +427,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/IC-Hyperparameter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q15",
@@ -459,7 +459,7 @@
           "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/model-fit-underfitting-vs-overfitting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q16",
@@ -495,7 +495,7 @@
           "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/training-parameters.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q17",
@@ -527,7 +527,7 @@
           "url": "https://aws.amazon.com/blogs/machine-learning/automatically-retrain-neural-networks-with-renate/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q18",
@@ -559,7 +559,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-considerations.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q19",
@@ -587,7 +587,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-define-ranges.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q20",
@@ -615,7 +615,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-warm-start.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q21",
@@ -647,7 +647,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-instruction-based.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q22",
@@ -679,7 +679,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q23",
@@ -711,7 +711,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry-staging-construct.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q24",
@@ -743,7 +743,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers-adapt-your-own.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q25",
@@ -775,7 +775,7 @@
           "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/improving-model-accuracy.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q26",
@@ -807,7 +807,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-tuning.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q27",
@@ -839,7 +839,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-checkpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-2-q28",
@@ -871,7 +871,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automatic-model-tuning-how-it-works.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

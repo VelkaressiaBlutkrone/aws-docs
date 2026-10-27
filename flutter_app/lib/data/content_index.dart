@@ -89,6 +89,22 @@ const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
     practiceQuestionCount: 65,
     weightByDomain: {1: 28, 2: 26, 3: 22, 4: 24},
   ),
+  // SOA-C03·DEA-C01도 같은 fail closed 함정에 걸려 있었다 — 학습문서와 드래프트
+  // 문항은 이미 전부 들어와 있는데 정책이 없어, 사람이 검수해 flip해도 모의고사가
+  // 영원히 잠긴 채 남았다(2026-10-27 추가). 정책 추가는 공개가 아니다: verified가
+  // 0인 동안은 전 도메인이 부족해 게이트가 그대로 잠겨 있다.
+  //
+  // ⚠️ SOA-C03은 도메인이 **5개**다(공식명 CloudOps Engineer, 가이드 v1.1).
+  // 비중 22·22·22·16·18 → 65문항 배분은 14·14·14·11·12.
+  'SOA-C03': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 22, 2: 22, 3: 22, 4: 16, 5: 18},
+  ),
+  // DEA-C01 공식 비중 34·26·22·18 → 65문항 배분은 22·17·14·12.
+  'DEA-C01': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 34, 2: 26, 3: 22, 4: 18},
+  ),
 };
 
 class ExamReadinessStatus {
@@ -647,7 +663,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t1-2', title: '데이터 변환·특성 추출 (정리·인코딩·도구 선택·Feature Store)', domain: 1, mdAsset: 'assets/content/mla/mla-t1-2.md', questionsAsset: 'assets/content/mla/mla-t1-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t1-3', title: '데이터 무결성·편향 관리 (지표·불균형·암호화·민감정보·품질)', domain: 1, mdAsset: 'assets/content/mla/mla-t1-3.md', questionsAsset: 'assets/content/mla/mla-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-1', title: '모델링 접근 방식 선택 (선택 사다리·내장 알고리즘·AI 서비스·해석 가능성·비용)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-1.md', questionsAsset: 'assets/content/mla/mla-t2-1.questions.json', questionCount: 0),
-    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-2', title: '모델 훈련·개선 (분산·조기 중지·정규화·AMT·파인튜닝·Model Registry)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-2.md', questionsAsset: 'assets/content/mla/mla-t2-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-2', title: '모델 훈련·개선 (분산·조기 중지·정규화·AMT·파인튜닝·Model Registry)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-2.md', questionsAsset: 'assets/content/mla/mla-t2-2.questions.json', questionCount: 28),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t2-3', title: '모델 성능 분석 (지표·기준선·수렴 진단·Clarify 편향·SHAP·섀도 테스트)', domain: 2, mdAsset: 'assets/content/mla/mla-t2-3.md', questionsAsset: 'assets/content/mla/mla-t2-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t3-1', title: '배포 인프라 선택 (추론 옵션 4종·다중 모델·가드레일·컴퓨팅·컨테이너·엣지)', domain: 3, mdAsset: 'assets/content/mla/mla-t3-1.md', questionsAsset: 'assets/content/mla/mla-t3-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t3-2', title: '인프라 생성·스크립팅 (오토 스케일링·용량 모델·IaC·컨테이너 운영·VPC)', domain: 3, mdAsset: 'assets/content/mla/mla-t3-2.md', questionsAsset: 'assets/content/mla/mla-t3-2.questions.json', questionCount: 0),

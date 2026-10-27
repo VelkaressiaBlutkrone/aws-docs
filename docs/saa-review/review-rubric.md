@@ -20,13 +20,15 @@
 
 공개 게이트는 "전 도메인 일괄 flip"이 아니라 **도메인별 weighted capacity**다: 앱의 65문항 연습 세트에 공식 비중을 `allocateByWeight`(floor + 최대 잉여법, 동률은 선언 순서)로 배분한 수량 이상을 도메인별로 채우면 통합/약점 모의고사가 열린다.
 
-| 자격증 | 공식 비중(D1·D2·D3·D4) | 필요 수량 = 65 배분 |
+| 자격증 | 공식 비중(D1·D2·D3·D4[·D5]) | 필요 수량 = 65 배분 |
 |---|---|---|
 | SAA-C03 | 30 · 26 · 24 · 20 | **D1 19 · D2 17 · D3 16 · D4 13** |
 | MLA-C01 | 28 · 26 · 22 · 24 | **D1 18 · D2 17 · D3 14 · D4 16** |
 | CLF-C02 | 24 · 30 · 34 · 12 | D1 16 · D2 19 · D3 22 · D4 8 |
+| SOA-C03 | 22 · 22 · 22 · 16 · 18 (**5도메인**) | **D1 14 · D2 14 · D3 14 · D4 11 · D5 12** |
+| DEA-C01 | 34 · 26 · 22 · 18 | **D1 22 · D2 17 · D3 14 · D4 12** |
 
-수치의 정본은 코드다 — 비중은 `kExamReadinessRequirements`(`lib/data/content_index.dart`), 배분 결과는 `test/content_index_test.dart`가 세 자격증 모두 고정하고 있고 비중 자체는 `assets/exam_guides/<cert>.json`과 대조된다(정책을 추가하고 테스트 목록을 빠뜨리면 **검증 없이 통과하므로** 양쪽을 함께 늘린다). ⚠️ **정책이 없는 자격증은 fail closed**다(`hasPolicy: false` → `ready: false`) — SOA·DEA는 정책이 없어 문항을 전부 flip해도 잠긴 채 남는다. SAA의 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
+수치의 정본은 코드다 — 비중은 `kExamReadinessRequirements`(`lib/data/content_index.dart`), 배분 결과는 `test/content_index_test.dart`가 다섯 자격증 모두 고정하고 있고 비중 자체는 `assets/exam_guides/<cert>.json`과 대조된다(대조 루프가 하드코딩 목록이 아니라 `kExamReadinessRequirements.keys`를 돌므로, 정책을 추가하면 테스트를 빠뜨려도 비중 동기화는 검증된다 — 2026-10-27부터). ⚠️ **정책이 없는 자격증은 fail closed**다(`hasPolicy: false` → `ready: false`) — 문항을 전부 flip해도 잠긴 채 남는다. SOA-C03·DEA-C01은 2026-10-27에 정책을 넣어 이 함정을 풀었고(그 전에는 둘 다 정책이 없었다), 남은 자격증(AIF·AIP·ANS·DOP·DVA·SAP·SCS)은 아직 정책이 없다. **정책 추가는 공개가 아니다** — verified가 0이면 전 도메인이 부족해 게이트는 그대로 잠겨 있다. SAA의 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
 
 - 라이브 게이트 함수는 **`certExamHasWeightedCapacity`**(= `examWeightedCapacityStatus().ready`)다. 홈 시험 섹션·`cert_detail`·`exam_page`·`cert_exam_page`·`weighted_exam`이 모두 이 함수를 쓴다.
 - ⚠️ **옛 게이트 `certExamIsBalanced`("전 도메인에 검증 문항 1개 이상")는 2026-10-20에 코드에서 제거됐다** — 2026-08-06 weighted capacity 게이트가 역할을 대신한 뒤 `lib` 호출이 0이었다. 이 문서의 옛 서술(도메인 일괄 flip·부분 flip 미노출)이 그 함수를 공개 조건으로 적고 있었다. 지금 게이트는 `certExamHasWeightedCapacity` 하나다.
@@ -62,7 +64,7 @@
 >
 > 비교 대상 혼동(C3): 오답 근거에서 닮은 기능을 섞지 않는다 — 예: **Aurora 복제본**(같은 리전, 클러스터 스토리지 공유)과 **RDS 읽기 전용 복제본**(비동기 복제)은 복제 방식이 다르다.
 >
-> 가용성 변경(C4·C5): 신규 고객 온보딩 중단·제공 종료 같은 **서비스 상태**에 기댄 서술은 flip 직전에 공식 공지·API 레퍼런스를 다시 열어 확인하고, 확인한 상태를 해설에 그대로 쓴다. 가이드에 남아 있어도 신규 고객이 쓸 수 없는 기능은 문항을 버리지 말고 **상태를 명시**한다 — "신규 고객 온보딩 중단"과 "제공 종료"는 다른 서술이니 섞지 않는다. 또 같은 기능의 상태를 두 문항이 다르게 적으면 그것만으로 결함이다(Task 사이에서도 맞춘다). MLA는 SageMaker 주변 기능이 특히 자주 바뀌므로 상태 서술이 든 문항을 Task별로 모아 한 번에 확인한다.
+> 가용성 변경(C4·C5): 신규 고객 온보딩 중단·제공 종료 같은 **서비스 상태**에 기댄 서술은 flip 직전에 공식 공지·API 레퍼런스를 다시 열어 확인하고, 확인한 상태를 해설에 그대로 쓴다. 가이드에 남아 있어도 신규 고객이 쓸 수 없는 기능은 문항을 버리지 말고 **상태를 명시**한다 — "신규 고객 온보딩 중단"과 "제공 종료"는 다른 서술이니 섞지 않는다. 또 같은 기능의 상태를 두 문항이 다르게 적으면 그것만으로 결함이다(Task 사이에서도 맞춘다). MLA는 SageMaker 주변 기능이 특히 자주 바뀌므로 상태 서술이 든 문항을 Task별로 모아 한 번에 확인한다. ⭐ **날짜의 정본은 개발자 가이드가 아니라 제품 features 페이지의 End of Support Notice다**(dg의 `*-availability-change.html`은 날짜를 적지 않는다). MLA 19건의 확인 결과와 재확인 조건은 [2026-10-27-mla-source-recheck.md](2026-10-27-mla-source-recheck.md)에 있다 — flip 직전 재확인은 그 표를 먼저 열어 갈음한다.
 >
 > 작성자 메모 금지(M2): "공식 문서에서 확인되지 않으므로", "원문에 나오지 않습니다", "문서가 반올림한 듯하다" 같은 **작성 과정 메모를 학습자용 문장에 남기지 않는다.** 확인된 것은 사실로 쓰고, 확인되지 않은 것은 해설에서 뺀다. 판단 보류는 문항이 아니라 §5 승인 로그에 남긴다.
 
