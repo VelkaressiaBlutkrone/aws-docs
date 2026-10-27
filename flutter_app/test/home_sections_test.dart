@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/app_router.dart';
 import 'package:aws_docs/data/cert_lookup.dart';
+import 'package:aws_docs/data/content_index.dart';
 import 'package:aws_docs/pages/cert_exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
@@ -130,7 +131,12 @@ void main() {
     await tester.pump();
 
     expect(find.text('SAA-C03 통합 모의고사는 아직 준비 중입니다.'), findsOneWidget);
-    expect(find.textContaining('D1 0/19'), findsOneWidget);
+    // ⚠️ 진행 라벨에 'D1 0/19' 같은 **지금 숫자를 박으면** 사람이 D1 Task를
+    // flip하는 순간 깨진다(2026-10-27 t1-1·t1-2 flip에서 실제로 깨졌다).
+    // 게이트가 잠긴 동안 "현재 집계 라벨이 그대로 렌더되는가"만 본다.
+    final label = examWeightedCapacityStatus('SAA-C03').domainProgressLabel;
+    expect(label, isNotEmpty);
+    expect(find.textContaining(label), findsOneWidget);
     expect(find.text('시작'), findsNothing);
   });
 }

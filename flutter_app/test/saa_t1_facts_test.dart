@@ -12,7 +12,9 @@ import 'package:flutter_test/flutter_test.dart';
 ///   (공식 리전 거부 통제는 NotAction으로 iam/organizations/route53/sts 등을 예외 처리)
 /// - G-1.1-10 `[구식]` 루트 사용자 서술이 현행 정책 미반영
 ///   근거: https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html
-///   (모든 계정 유형 루트 MFA 요구 · 첫 로그인 후 35일 유예) ·
+///   (모든 계정 유형 루트 MFA 요구 · 첫 로그인 후 14일 유예 —
+///    "within 14 days of their first sign-in attempt". 2026-10-19 정정이
+///    35일로 잘못 적었고 2026-10-27에 고쳤다) ·
 ///   https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
 ///   (중앙 루트 접근 관리 · "New accounts you create in Organizations have no
 ///   root user credentials by default")
@@ -41,9 +43,11 @@ void main() {
   });
 
   group('G-1.1-10 루트 사용자 현행 정책', () {
-    test('루트 MFA 요구와 35일 유예가 서술돼 있다', () {
-      expect(t11.contains('35일'), isTrue,
-          reason: '첫 로그인 후 35일 안에 MFA를 등록해야 한다는 현행 규칙');
+    test('루트 MFA 요구와 14일 유예가 서술돼 있다', () {
+      expect(t11.contains('14일'), isTrue,
+          reason: '첫 로그인 시도 후 14일 안에 MFA를 등록해야 한다는 공식 규칙');
+      expect(t11.contains('35일 안에 등록'), isFalse,
+          reason: '2026-10-19 정정이 잘못 적은 35일이 되살아나면 안 된다');
     });
 
     test('옛 3종 서술("MFA 필수, 액세스 키 발급 금지, 일상 작업에 사용 금지")이 그대로 남아 있지 않다', () {
@@ -121,8 +125,8 @@ void main() {
     });
   });
 
-  group('드래프트 문항도 현행 정책과 어긋나지 않는다', () {
-    test('saa-t1-1-q15 해설이 루트 MFA 요구·35일 유예를 반영한다', () {
+  group('문항도 현행 정책과 어긋나지 않는다', () {
+    test('saa-t1-1-q15 해설이 루트 MFA 요구·14일 유예를 반영한다', () {
       final bank = File('assets/content/saa/saa-t1-1.questions.json')
           .readAsStringSync();
       final q15Start = bank.indexOf('"saa-t1-1-q15"');
@@ -130,8 +134,10 @@ void main() {
       final q15End =
           (q15Start + 2500) < bank.length ? q15Start + 2500 : bank.length;
       final q15 = bank.substring(q15Start, q15End);
-      expect(q15.contains('35일'), isTrue,
-          reason: '정답은 그대로지만 해설은 현행 정책(모든 계정 유형 MFA 요구·35일 유예)을 담아야 한다');
+      expect(q15.contains('14일'), isTrue,
+          reason: '정답은 그대로지만 해설은 공식 정책(모든 계정 유형 MFA 요구·14일 유예)을 담아야 한다');
+      expect(q15.contains('35일'), isFalse,
+          reason: '2026-10-19 정정이 잘못 적은 35일이 되살아나면 안 된다');
       expect(q15.contains('root-user-best-practices'), isTrue,
           reason: '근거 출처를 루트 모범 사례 페이지로 둔다');
     });

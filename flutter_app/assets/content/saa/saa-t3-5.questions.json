@@ -41,14 +41,15 @@
         "RDS 인스턴스를 더 큰 인스턴스 타입으로 교체해 수직 확장한다"
       ],
       "correct": 1,
-      "explanation": "Read Replica는 읽기 확장 전용 기능입니다. 비동기 복제로 주 인스턴스의 변경을 복제하고, 읽기 전용 엔드포인트로 읽기 트래픽을 분산해 주 인스턴스 부하를 낮춥니다. RDS는 최대 5개, Aurora는 최대 15개를 지원합니다.",
+      "explanation": "Read Replica는 읽기 확장 전용 기능입니다. 비동기 복제로 주 인스턴스의 변경을 복제하고, 읽기 전용 엔드포인트로 읽기 트래픽을 분산해 주 인스턴스 부하를 낮춥니다. RDS DB 인스턴스는 같은 리전에서 소스 1개당 최대 15개를 만들 수 있고(Db2 3개, Oracle·SQL Server 5개는 예외), Aurora도 클러스터당 최대 15개 Aurora Replica를 지원합니다.",
       "wrongExplanations": {
         "0": "Multi-AZ 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장은 Read Replica의 역할입니다.",
         "2": "Read Replica는 비동기 복제를 사용합니다. 동기 복제를 스탠바이에 적용하는 것은 Multi-AZ의 방식이며 읽기 분산에 사용하지 않습니다.",
         "3": "수직 확장(인스턴스 타입 변경)은 일시적 해결책이며 읽기 부하를 구조적으로 분산하지 못합니다. 수평 확장(Read Replica)이 권장됩니다."
       },
       "sources": [
-        { "title": "RDS 읽기 복제본 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html" }
+        { "title": "RDS 읽기 복제본 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html" },
+        { "title": "RDS for MySQL 읽기 복제본 — 소스당 최대 15개 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_MySQL.Replication.ReadReplicas.html" }
       ],
       "verified": true
     },
@@ -274,7 +275,7 @@
       "examGuideTaskId": "saa-t3-5",
       "skill": "Aurora vs RDS 선택 기준",
       "difficulty": "applied",
-      "stem": "한 기업이 Oracle Database에서 오픈소스 DB로 마이그레이션을 검토 중이다. 고가용성이 중요하고 Read Replica를 최대한 많이 필요로 한다. 가장 적합한 선택은?",
+      "stem": "한 기업이 Oracle Database에서 오픈소스 DB로 마이그레이션을 검토 중이다. 고가용성이 중요해 Read Replica를 최대한 많이 두면서 페일오버 시간도 최소화해야 한다. 가장 적합한 선택은?",
       "options": [
         "RDS Oracle — 익숙한 엔진을 유지하는 것이 최우선이다",
         "RDS MySQL — 최대 15개 Read Replica를 지원한다",
@@ -285,11 +286,13 @@
       "explanation": "Aurora는 MySQL·PostgreSQL 호환으로 오픈소스 마이그레이션 대상이 됩니다. 최대 15개 복제본, 통상 60초 미만(흔히 30초 미만) 페일오버, 3 AZ 6벌 복제를 제공해 고가용성·읽기 확장 모두에 우수합니다.",
       "wrongExplanations": {
         "0": "Oracle은 오픈소스가 아니며 상용 라이선스 비용이 발생합니다. 오픈소스 마이그레이션 요구사항에 맞지 않습니다.",
-        "1": "일반 RDS MySQL은 최대 5개 Read Replica를 지원합니다. 15개는 Aurora의 한계입니다.",
+        "1": "RDS for MySQL도 소스 1개당 최대 15개 Read Replica를 지원하므로, 복제본 수로는 Aurora와 차이가 없습니다. 갈림길은 지문이 요구하는 페일오버 시간입니다 — Aurora는 3 AZ에 걸친 공유 클러스터 볼륨 위에서 Aurora Replica를 프라이머리로 승격하지만, RDS for MySQL의 Read Replica는 장애를 직접 감지해 수동으로 승격해야 하고 그 승격은 재부팅을 포함해 수 분 이상 걸릴 수 있으며 되돌릴 수도 없습니다.",
         "3": "일반 RDS PostgreSQL은 Aurora와 스토리지 구조가 다릅니다. Aurora의 3 AZ 6벌 복제는 Aurora 전용 구조입니다."
       },
       "sources": [
-        { "title": "Amazon Aurora 개요 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html" }
+        { "title": "Amazon Aurora 개요 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html" },
+        { "title": "Aurora 고가용성 — 복제본 승격 페일오버 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html" },
+        { "title": "RDS 읽기 복제본 승격 — 재부팅·수 분 소요·되돌릴 수 없음 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.Promote.html" }
       ],
       "verified": true
     },

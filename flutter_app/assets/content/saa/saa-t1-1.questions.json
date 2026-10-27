@@ -27,7 +27,7 @@
         { "title": "AWS Identity and Access Management — 소개 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html" },
         { "title": "IAM·STS 글로벌 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q2",
@@ -51,7 +51,7 @@
       "sources": [
         { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q3",
@@ -75,7 +75,7 @@
       "sources": [
         { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q4",
@@ -99,7 +99,7 @@
       "sources": [
         { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q5",
@@ -123,7 +123,7 @@
       "sources": [
         { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q6",
@@ -147,7 +147,7 @@
       "sources": [
         { "title": "IAM 정책과 권한 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q7",
@@ -171,7 +171,7 @@
       "sources": [
         { "title": "IAM 정책과 권한 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q8",
@@ -195,7 +195,7 @@
       "sources": [
         { "title": "IAM 정책과 권한 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q9",
@@ -219,7 +219,7 @@
       "sources": [
         { "title": "IAM 정책과 권한 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q10",
@@ -244,7 +244,7 @@
         { "title": "IAM 자격 증명 공급자와 페더레이션 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html" },
         { "title": "IAM Identity Center — ID 소스 관리 (공식)", "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q11",
@@ -268,7 +268,7 @@
       "sources": [
         { "title": "IAM 자격 증명 공급자와 페더레이션 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q12",
@@ -292,7 +292,7 @@
       "sources": [
         { "title": "IAM 자격 증명 공급자와 페더레이션 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q13",
@@ -317,7 +317,7 @@
         { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" },
         { "title": "AWS STS 리전 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-sts-regionalized-endpoints.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q14",
@@ -341,7 +341,7 @@
       "sources": [
         { "title": "IAM 정책과 권한 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-1-q15",
@@ -356,16 +356,16 @@
         "루트 사용자 비밀번호를 팀원과 공유해 둔다"
       ],
       "correct": 1,
-      "explanation": "루트 사용자 보호의 축은 MFA 등록, 액세스 키 미발급, 일상 작업 사용 금지입니다. 현행 정책에서 루트 MFA는 권고가 아니라 요구 사항이며(독립·관리·멤버 모든 계정 유형), MFA가 없으면 첫 콘솔 로그인 시도 후 35일 안에 등록해야 합니다. 다계정 환경이라면 중앙 루트 접근 관리로 멤버 계정의 루트 자격증명을 제거하는 것이 현행 모범 사례이고, Organizations에서 새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다. 일상 작업에는 IAM Identity Center 사용자나 최소 권한 역할을 씁니다.",
+      "explanation": "루트 사용자 보호의 축은 MFA 등록, 액세스 키 미발급, 일상 작업 사용 금지입니다. 현행 정책에서 루트 MFA는 권고가 아니라 요구 사항이며(독립·관리·멤버 모든 계정 유형), MFA가 없으면 첫 콘솔 로그인 시도 후 14일 안에 등록해야 합니다. 다계정 환경이라면 중앙 루트 접근 관리로 멤버 계정의 루트 자격증명을 제거하는 것이 현행 모범 사례이고, Organizations에서 새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다. 일상 작업에는 IAM Identity Center 사용자나 최소 권한 역할을 씁니다.",
       "wrongExplanations": {
         "0": "루트로 일상 작업을 수행하는 것은 모범 사례에 어긋납니다 — 일상 작업은 최소 권한 아이덴티티로 합니다.",
         "2": "루트 사용자에는 액세스 키를 발급하지 않는 것이 원칙입니다 — 자동화에는 역할을 사용합니다.",
         "3": "루트 자격증명 공유는 심각한 보안 위험입니다 — 루트는 MFA로 강하게 보호하고 사용을 최소화합니다."
       },
       "sources": [
-        { "title": "루트 사용자 모범 사례 — 모든 계정 유형 MFA 요구·첫 로그인 후 35일 유예(공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html" }
+        { "title": "루트 사용자 모범 사례 — 모든 계정 유형 MFA 요구·첫 로그인 후 14일 유예(공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/root-user-best-practices.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

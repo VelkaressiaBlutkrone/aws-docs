@@ -163,14 +163,51 @@ void main() {
       expect(certExamHasWeightedCapacity('CLF-C02'), isTrue);
     });
 
-    test('SAA-C03는 현재 D1/D2 가중 수량 미달이라 locked', () {
+    // ⚠️ 여기에 availableByDomain·deficit·라벨의 **지금 숫자를 박으면 안 된다.**
+    // 사람이 D1 Task를 flip하는 순간 깨져 flip 자체를 막는다 — 2026-10-27에
+    // `review.mjs flip saa saa-t1-1`이 실제로 이 줄에서 멈췄다(기대 {1:0,…} vs
+    // 실제 {1:30,…}). #246의 MLA "전부 드래프트" 단정과 같은 함정이다.
+    // 그래서 숫자가 아니라 "게이트가 content_index의 현재 verified 수량을 그대로
+    // 반영하는가"를 본다. 정책값(requiredByDomain)만 리터럴로 남긴다.
+    test('SAA-C03: 게이트가 현재 verified 수량을 그대로 반영한다', () {
       final s = examWeightedCapacityStatus('SAA-C03');
       expect(s.hasPolicy, isTrue);
-      expect(s.ready, isFalse);
       expect(s.requiredByDomain, {1: 19, 2: 17, 3: 16, 4: 13});
-      expect(s.availableByDomain, {1: 0, 2: 15, 3: 45, 4: 30});
-      expect(s.deficitByDomain, {1: 19, 2: 2});
-      expect(s.domainProgressLabel, 'D1 0/19 · D2 15/17 · D3 45/16 · D4 30/13');
+
+      final byDomain = <int, int>{
+        for (final d in s.requiredByDomain.keys) d: 0,
+      };
+      for (final e in contentFor('SAA-C03')) {
+        byDomain[e.domain] = (byDomain[e.domain] ?? 0) + e.questionCount;
+      }
+      expect(s.availableByDomain, byDomain,
+          reason: 'SAA-C03 게이트 집계가 content_index와 어긋났다');
+      for (final d in s.requiredByDomain.keys) {
+        final need = s.requiredByDomain[d]!;
+        final have = byDomain[d] ?? 0;
+        if (have < need) {
+          expect(s.deficitByDomain[d], need - have,
+              reason: 'SAA-C03 D$d 부족분 계산 오류');
+        } else {
+          expect(s.deficitByDomain.containsKey(d), isFalse,
+              reason: 'SAA-C03 D$d 는 충족인데 부족 목록에 있다');
+        }
+      }
+      expect(s.ready, s.deficitByDomain.isEmpty);
+      expect(certExamHasWeightedCapacity('SAA-C03'), s.ready);
+
+      final keys = s.requiredByDomain.keys.toList()..sort();
+      expect(
+        s.domainProgressLabel,
+        keys.map((d) => 'D$d ${byDomain[d]}/${s.requiredByDomain[d]}').join(' · '),
+        reason: '라벨 형식이 바뀌면 cert 페이지 진행 문구가 조용히 달라진다',
+      );
+    });
+
+    // 게이트를 실제로 여는 것은 **의식적인 릴리스 결정**이다. 이 줄은 그때만
+    // 바뀐다 — 2026-10-27 t1-1·t1-2 flip(D1 30/19 충족) 뒤에도 D2가 15/17이라
+    // 잠긴 채다. 위 유도형 단정과 달리 이것은 "아직 열지 않았다"는 선언이다.
+    test('SAA-C03: 현재는 locked (D2 미달)', () {
       expect(certExamHasWeightedCapacity('SAA-C03'), isFalse);
     });
 
