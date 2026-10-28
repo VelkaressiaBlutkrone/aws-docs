@@ -146,7 +146,7 @@
         "3": "볼륨 할인 합산은 리전 제약이 없습니다. 멤버 계정 전체의 서비스 사용량이 합산됩니다."
       },
       "sources": [
-        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
+        { "title": "AWS Organizations 통합 결제 — 사용량 합산 볼륨 할인 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html" }
       ],
       "verified": false
     },

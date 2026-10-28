@@ -2755,4 +2755,163 @@ void main() {
               'extremely low latencies for latency-sensitive applications"');
     });
   });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 5 (t4-1·t4-4·t4-5). 비용 문항이라
+  // 수치가 많아 **수치가 실제로 적힌 페이지**를 골랐다.
+  //
+  // ⚠️ `aws.amazon.com/*/pricing/` 요율 **표는 JS 로 그려져 본문에 안 나온다.**
+  //    그래서 수치가 산문으로 적힌 페이지를 함께 단다 — TGW 요금 페이지의 가격
+  //    예시($0.05/어태치먼트-시간 · 1 GB = $0.02), 데이터 전송 비용 개요 블로그,
+  //    EKS 비용 최적화 가이드($0.01/GB each way).
+  // ⚠️ `t4-1-q12` 는 보고 제안(S3·CloudFront 요금 페이지)과 **다른 페이지**를 쓴다.
+  //    CloudFront 요금 페이지는 현재 정액제(flat-rate) 안내로 바뀌어 "오리진→CF
+  //    무료"가 없다. 그 문장의 정본은 CloudFront **소개 페이지의 Pricing 절**이다.
+  //    소개 페이지가 늘 틀린 출처인 것이 아니라, 사실을 담고 있으면 맞는 출처다.
+  // ⚠️ `t4-4-q2` 는 **교체가 아니라 추가**다. 기존 출처(VPC 요금)가 "traffic stays
+  //    in the same Availability Zone using private IP addresses" 로 이 문항의
+  //    갈림길(사설 IP 조건)을 그대로 적고 있어 지울 이유가 없었다.
+  group('2026-10-28 출처 교체 — 배치 5 (t4-1·t4-4·t4-5)', () {
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q10',
+        add: 'nat-gateway-pricing',
+        drop: 'ec2/pricing/on-demand',
+        why: '"you are charged for each hour that your NAT gateway is available and each '
+            'gigabyte of data that it processes" + 비용 절감 전략으로 "If most traffic '
+            'through your NAT gateway is to AWS services that support interface endpoints '
+            'or gateway endpoints, consider creating an interface endpoint or gateway '
+            'endpoint for these services"',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q12',
+        add: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        drop: 'ec2/pricing/on-demand',
+        why: 'Pricing 절이 그대로 적는다: "The data transfer from your origin to CloudFront '
+            'is always free when using AWS origins like Amazon Simple Storage Service '
+            '(Amazon S3) ... You are only billed for the outbound data transfer from '
+            'CloudFront to the viewer when using AWS origins."',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q15',
+        add: 'mpu-abort-incomplete-mpu-lifecycle-config',
+        drop: 'storage-class-intro',
+        why: '"As a best practice, we recommend that you configure a lifecycle rule by '
+            'using the AbortIncompleteMultipartUpload action to minimize your storage '
+            'costs." + 예시가 DaysAfterInitiation 7 이고 "This rule applies to both '
+            'existing multipart uploads and those that you create later."',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q1',
+        add: 'ec2/pricing/on-demand',
+        drop: 'vpc/pricing',
+        why: '데이터 전송 비용 개요가 방향 규칙을 그대로 적는다: "There is no charge for '
+            'inbound data transfer across all services in all Regions. Data transfer from '
+            'AWS to the internet is charged per service, with rates specific to the '
+            'originating Region."',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q10',
+        add: 'transit-gateway/pricing',
+        drop: 'vpc/pricing',
+        why: '가격 예시가 수치를 적는다: "the rate is \$0.1 per hour (\$0.05 per VPC '
+            'attachment)" + "The Transit Gateway Data Processing will result in a charge '
+            'of \$0.02" (1 GB). 피어링 쪽은 개요 블로그의 "Data transfer over a VPC peering '
+            'connection that stays within an Availability Zone is free"',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q11',
+        add: 'transit-gateway/pricing',
+        drop: 'vpc/pricing',
+        why: '"you are charged for the number of connections that you make to the Transit '
+            'Gateway per hour and the amount of traffic that flows through" + 개요 블로그의 '
+            '"Transit Gateway can interconnect hundreds or thousands of VPCs"',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q15',
+        add: 'overview-of-data-transfer-costs',
+        drop: 'vpc/pricing',
+        why: '개요 블로그가 이 문항 상황을 그대로 적는다: "Replication between the primary '
+            'and standby instances does not incur additional data transfer charges. '
+            'However, data transfer charges will apply from any consumers outside the '
+            'current primary instance Availability Zone."',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q6',
+        add: 'consolidated-billing',
+        drop: 'budgets-managing-costs',
+        why: '"Combined usage - You can combine the usage across all accounts in the '
+            'organization. This shares the volume pricing discounts, Reserved Instance '
+            'discounts, and Savings Plans. This can result in a lower charge ... than with '
+            'individual standalone accounts." + "No extra fee"',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 사실을 담지 않은 옛 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t4-1-q10: 게이트웨이 엔드포인트 무료 근거도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t4-1', 'saa-t4-1-q10'),
+              'privatelink/gateway-endpoints'),
+          isTrue,
+          reason: 'NAT 요금 페이지는 "게이트웨이 엔드포인트는 무료"를 적지 않는다. 근거: '
+              '"There is no additional charge for using gateway endpoints."');
+    });
+
+    test('saa-t4-4-q1·q10·q11: 데이터 전송 비용 개요 출처도 함께 달렸다', () {
+      for (final qid in <String>['saa-t4-4-q1', 'saa-t4-4-q10', 'saa-t4-4-q11']) {
+        expect(hasSource(question('saa-t4-4', qid), 'overview-of-data-transfer-costs'),
+            isTrue,
+            reason: '$qid: 요금 페이지의 요율 표는 JS 로 그려져 본문에 없다. 방향·AZ·'
+                '피어링·TGW 규칙이 산문으로 적힌 개요 문서를 함께 달아야 한다');
+      }
+    });
+
+    test('saa-t4-4-q15: 교차 AZ 단가 근거도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t4-4', 'saa-t4-4-q15'), 'network-cost-reduction'),
+          isTrue,
+          reason: '개요 블로그는 교차 AZ 과금을 적지만 단가를 주지 않는다. 근거: '
+              '"Cross-AZ data transfer ... per-GB transfer charges (\$0.01/GB each way)"');
+    });
+
+    // 교체가 아니라 추가인 유일한 문항이다 — 기존 출처가 이미 사실을 담고 있었다.
+    test('saa-t4-4-q2: 사설 IP 조건 출처를 유지하면서 요율 페이지를 더했다', () {
+      final q = question('saa-t4-4', 'saa-t4-4-q2');
+      expect(hasSource(q, 'vpc/pricing'), isTrue,
+          reason: 'VPC 요금 페이지가 이 문항의 갈림길을 그대로 적는다: "no charge for the '
+              'data transfer between the NAT gateway and the EC2 instance since the '
+              'traffic stays in the same Availability Zone using private IP addresses" '
+              '— 지울 이유가 없다');
+      expect(hasSource(q, 'ec2/pricing/on-demand'), isTrue,
+          reason: 'EC2 인스턴스 간 같은 리전 데이터 전송 요율의 정본 페이지가 없다');
+    });
+
+    test('saa-t4-4-q1: 확인되지 않는 단일 아웃바운드 단가를 쓰지 않는다', () {
+      final q = question('saa-t4-4', 'saa-t4-4-q1');
+      expect(q['correct'], 3, reason: '출처 교체 작업에서 정답은 바뀌지 않는다');
+      final text = allText(q);
+      expect(text.contains('0.09'), isFalse,
+          reason: 'saa-t4-4-q1 이 아웃바운드를 단일 단가로 단정하고 있다. 공식 문서는 '
+              '"charged per service, with rates specific to the originating Region" 까지만 '
+              '말하고, 요율 표는 리전·서비스별로 다르다');
+      expect(text.contains('송신 리전'), isTrue,
+          reason: 'saa-t4-4-q1 에 문서가 적는 근거(서비스별·송신 리전별 요율)가 없다');
+    });
+  });
 }
