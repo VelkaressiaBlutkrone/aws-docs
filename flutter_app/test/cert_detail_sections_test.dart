@@ -80,10 +80,11 @@ void main() {
     expect(find.textContaining('오답노트 · 틀린 2문항'), findsOneWidget);
   });
 
-  testWidgets('LearningContentSection: SAA는 응시 3회여도 capacity 부족이면 약점 모의고사 잠김', (
+  testWidgets('LearningContentSection: MLA는 응시 3회여도 capacity 부족이면 약점 모의고사 잠김', (
     tester,
   ) async {
-    final entries = contentFor('SAA-C03');
+    // SAA는 2026-10-28 게이트가 열렸다. 잠긴 표본은 D1·D3·D4 verified가 0인 MLA다.
+    final entries = contentFor('MLA-C01');
     await tester.pumpWidget(
       _host(
         LearningContentSection(

@@ -205,10 +205,17 @@ void main() {
     });
 
     // 게이트를 실제로 여는 것은 **의식적인 릴리스 결정**이다. 이 줄은 그때만
-    // 바뀐다 — 2026-10-27 t1-1·t1-2 flip(D1 30/19 충족) 뒤에도 D2가 15/17이라
-    // 잠긴 채다. 위 유도형 단정과 달리 이것은 "아직 열지 않았다"는 선언이다.
-    test('SAA-C03: 현재는 locked (D2 미달)', () {
-      expect(certExamHasWeightedCapacity('SAA-C03'), isFalse);
+    // 바뀐다 — 2026-10-28 검수자가 `flip saa saa-t2-5`로 D2를 15 → 30으로 올려
+    // 네 도메인이 모두 충족됐다(D1 30/19 · D2 30/17 · D3 45/16 · D4 30/13).
+    // 위 유도형 단정과 달리 이것은 "열기로 했다"는 선언이고, 그래서 실수로
+    // 어떤 Task의 flip이 되돌아가 게이트가 조용히 닫히는 것도 여기서 걸린다.
+    //
+    // ⚠️ 이 단정이 flip 자체를 막았다 — `review.mjs flip`이 끝에
+    // `content_index_test`를 돌리므로, D2가 충족되는 순간 옛 `isFalse` 가 깨져
+    // flip 명령이 파일을 쓴 뒤 레드로 끝났다(`--force`는 쓰기 전 구조 검사만
+    // 건너뛴다). 다음 cert의 게이트를 열 때는 **선언을 먼저 바꾼 뒤 flip**한다.
+    test('SAA-C03: 게이트 개방 — 네 도메인 모두 충족', () {
+      expect(certExamHasWeightedCapacity('SAA-C03'), isTrue);
     });
 
     test('SAA-C03 합성 엔트리가 도메인별 필요 수량을 채우면 ready', () {
