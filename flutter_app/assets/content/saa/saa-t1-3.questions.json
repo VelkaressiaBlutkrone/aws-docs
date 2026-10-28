@@ -24,7 +24,7 @@
         "3": "VPC CIDR 크기는 서브넷 내 IP 개수에 영향을 주지만 인터넷 연결 여부와는 직접적인 관계가 없습니다."
       },
       "sources": [
-        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
+        { "title": "VPC 서브넷 — 라우팅으로 결정되는 서브넷 유형 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html" }
       ],
       "verified": false
     },
@@ -48,7 +48,7 @@
         "2": "표준 IP 네트워크의 2개 예약(네트워크·브로드캐스트)에 더해 AWS는 VPC 라우터·DNS·예약 IP를 3개 더 예약해 총 5개입니다."
       },
       "sources": [
-        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
+        { "title": "서브넷 CIDR 블록 — 예약 IP 5개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html" }
       ],
       "verified": false
     },
@@ -192,7 +192,7 @@
         "2": "프라이빗 서브넷에 퍼블릭 IP를 할당해도 라우트 테이블에 IGW 경로가 없으면 인터넷 접근이 불가합니다. 또한 프라이빗 서브넷 EC2에 직접 퍼블릭 IP를 부여하면 보안 설계 목적이 무너집니다."
       },
       "sources": [
-        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
+        { "title": "NAT 게이트웨이 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" }
       ],
       "verified": false
     },
@@ -264,7 +264,7 @@
         "3": "전이 라우팅을 지원하는 것은 Transit Gateway입니다. VPC 피어링은 구조적으로 전이 라우팅이 불가능합니다."
       },
       "sources": [
-        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
+        { "title": "VPC 피어링 연결 동작 방식 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
       "verified": false
     },
@@ -361,7 +361,7 @@
         "2": "CIDR 중복은 성능이 아니라 연결 가능 여부 자체를 차단합니다. AWS는 모호한 라우팅을 방지하기 위해 피어링 생성 시 CIDR 중복을 거부합니다."
       },
       "sources": [
-        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
+        { "title": "VPC 피어링 연결 동작 방식 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
       "verified": false
     }

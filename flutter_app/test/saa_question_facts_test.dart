@@ -2268,4 +2268,116 @@ void main() {
       }
     });
   });
+
+  // 2026-10-28 검수 보고 `출처 교체 (resource 61건)` — 드래프트 Task 배치 1.
+  //
+  // 사실은 맞는데 **인용 페이지가 그 사실을 담고 있지 않던** 경우다. 열 문항 모두
+  // 서비스 "소개" 페이지(`orgs_introduction` · `what-is-amazon-vpc` ·
+  // `what-is-aws-waf`) 하나만 달고 있었다. 교체 페이지를 직접 열어 문항이 주장하는
+  // 사실이 실제로 그 페이지에 있는지 확인한 뒤 바꿨다. `correct`·본문은 손대지 않는다.
+  //
+  // ⚠️ `saa-t1-2` 는 2026-10-27 flip(#258) 이후 **verified 15/15 라이브**다. 보고서의
+  //    ✔ 표시는 그 flip 전에 작성돼 t1-2 가 빠져 있었다. 출처 교체는 사실 서술을
+  //    바꾸지 않는 핫픽스라 flip 과 무관하다.
+  // ⚠️ `saa-t1-2-q13` 은 보고 제안(`permissionsetsconcept`)이 **임시 자격증명을 아예
+  //    말하지 않는다** — 그 페이지는 권한 세트 템플릿과 세션 길이만 다룬다. 그래서
+  //    "Users in IAM Identity Center are granted temporary credentials" 를 적는
+  //    `howtogetcredentials` 로 바꿨다. q14 는 보고 제안대로 `permissionsetsconcept` 다.
+  group('2026-10-28 출처 교체 — 배치 1 (t1-2·t1-3·t1-4)', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q11',
+        add: 'controltower/latest/userguide/special-accounts',
+        drop: 'orgs_introduction',
+        why: '"The Config aggregator account should be restricted to security and '
+            'compliance teams with auditor (read-only) and administrator (full-access) '
+            'cross-account roles to all accounts in the landing zone" + "You might know '
+            'this account by its previous name: the audit account"',
+      ),
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q12',
+        add: 'orgs_manage_org_support-all-features',
+        drop: 'orgs_introduction',
+        why: '"Consolidated billing features - This feature set is limited to generating '
+            'a single bill across an organization. No other management capabilities are '
+            'available with consolidated billing." + 전체 기능 쪽에만 "organization policies"',
+      ),
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q13',
+        add: 'howtogetcredentials',
+        drop: 'orgs_introduction',
+        why: '"Users in IAM Identity Center are granted temporary credentials ... these '
+            'credentials are generated every time you sign in" + "Permission sets are '
+            'stored in IAM Identity Center and define the level of access that an IAM '
+            'Identity Center user has to an AWS account"',
+      ),
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q14',
+        add: 'permissionsetsconcept',
+        drop: 'orgs_introduction',
+        why: '"use that single permission set to grant access to a list of target AWS '
+            'accounts within your AWS Organization" + "As you modify the permission set, '
+            'IAM Identity Center ensures that the corresponding IAM policies and roles '
+            'are updated accordingly"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q1',
+        add: 'configure-subnets',
+        drop: 'what-is-amazon-vpc',
+        why: '"The subnet type is determined by how you configure routing for your '
+            'subnets" + "Public subnet - The subnet has a direct route to an internet '
+            'gateway" / "Private subnet - The subnet does not have a direct route"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q2',
+        add: 'subnet-sizing',
+        drop: 'what-is-amazon-vpc',
+        why: '"The first four IP addresses and the last IP address in each subnet CIDR '
+            'block are not available for your use" + 네트워크 주소·VPC 라우터·DNS(base+2)·'
+            'AWS 예약·브로드캐스트 5종을 그대로 열거한다',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q8',
+        add: 'vpc-nat-gateway',
+        drop: 'what-is-amazon-vpc',
+        why: '"instances in a private subnet can connect to services outside your VPC but '
+            'external services can\'t initiate a connection with those instances" + '
+            '"Connections must always be initiated from within the VPC containing the '
+            'NAT gateway"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q11',
+        add: 'peering/vpc-peering-basics',
+        drop: 'what-is-amazon-vpc',
+        why: '"transitive peering relationships are not supported" + "you cannot use VPC '
+            'A as a transit point for peering between VPC B and VPC C ... you must create '
+            'a unique VPC peering connection between them"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q15',
+        add: 'peering/vpc-peering-basics',
+        drop: 'what-is-amazon-vpc',
+        why: '"The accepter VPC can be owned by you, or another AWS account, and cannot '
+            'have a CIDR block that overlaps with the CIDR block of the requester VPC"',
+      ),
+      (
+        task: 'saa-t1-4', qid: 'saa-t1-4-q7',
+        add: 'fms-chapter',
+        drop: 'what-is-aws-waf',
+        why: '"With Firewall Manager, you set up your protections just once and the '
+            'service automatically applies them across your accounts and resources, even '
+            'as you add new accounts and resources" + 보호 목록 첫 항목이 AWS WAF',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+  });
 }
