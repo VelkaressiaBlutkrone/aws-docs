@@ -1588,4 +1588,157 @@ void main() {
           'restoring-objects-retrieval-options'), isTrue);
     });
   });
+
+  group('§우선순위3 배치2 — D3 saa-t3-6·t3-7 (9건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q9', correct: 2,
+        forbidden: ['CloudFront는 정적 콘텐츠 캐시이며'],
+        required: ['정적·동적 콘텐츠 모두를 가속', '오리진인 단일 리전 DynamoDB'],
+        why: 'CloudFront 는 정적·동적 웹 콘텐츠 모두의 배포를 가속한다 — 보기 1이 '
+            '탈락하는 이유는 캐시 대상이 아니라, 쓰기가 결국 오리진인 단일 리전 '
+            '테이블까지 가야 하고 리전 장애 대비가 없다는 점이다',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q11', correct: 1,
+        forbidden: [
+          '금융 거래 데이터는 RDS 선택 신호입니다',
+          '금융 거래 데이터에 관계형 데이터베이스가 적합하다',
+        ],
+        required: ['금융 거래 여부 자체는 결정 신호가 아닙니다', 'TransactWriteItems'],
+        why: 'DynamoDB 도 TransactWriteItems·TransactGetItems 로 ACID 트랜잭션을 '
+            '지원한다(같은 계정·같은 리전 범위) — RDS 를 가르는 신호는 금융 거래가 '
+            '아니라 복잡한 조인·집계와 고정된 스키마다',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q12', correct: 1,
+        forbidden: [
+          'Memcached는 영속성과 복제 기능이 없으므로',
+          'Memcached는 멀티스레드 처리 능력은 있지만 복제와 HA 기능이 없습니다',
+        ],
+        required: ['노드 기반(node-based) Memcached', '서버리스 Memcached', '마이크로초'],
+        why: '복제가 없는 것은 노드 기반 Memcached 클러스터다 — 서버리스 캐시는 복제된 '
+            'Multi-AZ 구조로 노드 장애를 가린다. DynamoDB(한 자릿수 밀리초)를 '
+            '가려내려면 지문이 마이크로초 수준의 인메모리 응답을 요구해야 한다',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q13', correct: 2,
+        forbidden: [
+          '스냅샷(RDB)과 AOF 로그로 영속성을 제공해',
+          '스냅샷(RDB)으로 영속성을 지원한다',
+        ],
+        required: ['2.8.22', 'MemoryDB'],
+        why: 'ElastiCache 는 Redis OSS 2.8.22 이후 appendonly·appendfsync 를 '
+            '지원하지 않아 AOF 가 없다 — 보존 수단은 스냅샷(RDB) 백업과 복제·'
+            'Multi-AZ 이고, 디스크 기반 영속성이 필요하면 MemoryDB 다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q1', correct: 1,
+        forbidden: ['Route 53 Traffic Flow 기능에서만 사용할 수 있습니다'],
+        required: ['bias(편향값, 1~99 / -1~-99)'],
+        why: 'Geoproximity 는 레코드를 만들 때 고르는 라우팅 정책이고 프라이빗 호스팅 '
+            '영역에서도 쓸 수 있다 — Traffic Flow 전용이 아니다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q3', correct: 1,
+        forbidden: ['헬스 체크 연동은 Failover 정책에서 선택이 아니라 필수입니다'],
+        required: ['Evaluate Target Health', '별칭(alias) 레코드를 만들 수 없는'],
+        why: '별칭 레코드를 만들 수 있는 AWS 리소스로 보낼 때는 헬스 체크를 만들지 '
+            '말고 Evaluate Target Health 를 Yes 로 두는 것이 공식 권장이다 — '
+            '헬스 체크가 필수인 것은 별칭을 못 쓰는 엔드포인트일 때다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q5', correct: 1,
+        forbidden: ['Route 53 Traffic Flow에서만 사용 가능합니다'],
+        required: ['거리 계산으로 정해지므로'],
+        why: 'q1 과 같은 "Traffic Flow 전용" 서술이 오답 근거에 복제돼 있었다 — '
+            'Geoproximity 가 규제 준수에 부적합한 진짜 이유는 경계가 거리 계산으로 '
+            '정해져 국가 단위를 보장하지 못한다는 점이다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q6', correct: 1,
+        forbidden: [
+          'Traffic Flow 기능에서만 사용할 수 있습니다',
+          'Traffic Flow에서만 사용 가능하다',
+          'Traffic Flow에서만 사용 가능합니다',
+        ],
+        required: ['1 - (bias/100)', 'Traffic Flow 전용이 아니고', '프라이빗 호스팅 영역'],
+        why: '정답 보기가 "Traffic Flow 에서만 사용 가능" 을 달고 있어 맞는 보기가 '
+            '없는 상태였다. 공식 문서는 Geoproximity 를 레코드 생성 시 고르는 '
+            '라우팅 정책으로 싣고 프라이빗 호스팅 영역 사용까지 명시한다 — '
+            'Traffic Flow 에서만 되는 것은 편향 범위를 보여 주는 지도다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q11', correct: 2,
+        forbidden: ['또한 CloudFront는 고정 IP가 아닌 도메인 기반(가변 IP)입니다'],
+        required: ['Anycast 고정 IP 목록', 'HTTP/HTTPS 트래픽에만'],
+        why: 'CloudFront 에도 Anycast 고정 IP 목록 기능이 있다(허용 목록용 21개, '
+            '에이펙스 도메인용 3개) — 갈림길은 고정 IP 유무가 아니라 그 IP 가 '
+            'CloudFront 배포의 HTTP/HTTPS 트래픽에만 쓰여 UDP 에 못 쓴다는 점이다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (
+        task: 'saa-t3-6',
+        qid: 'saa-t3-6-q9',
+        fragment: 'AmazonCloudFront/latest/DeveloperGuide/Introduction'
+      ),
+      (task: 'saa-t3-6', qid: 'saa-t3-6-q11', fragment: 'transaction-apis'),
+      (
+        task: 'saa-t3-6',
+        qid: 'saa-t3-6-q12',
+        fragment: 'disaster-recovery-resiliency'
+      ),
+      (task: 'saa-t3-6', qid: 'saa-t3-6-q13', fragment: 'engine-versions'),
+      (task: 'saa-t3-6', qid: 'saa-t3-6-q13', fragment: 'what-is-memorydb'),
+      (task: 'saa-t3-7', qid: 'saa-t3-7-q3', fragment: 'dns-failover-types'),
+      (
+        task: 'saa-t3-7',
+        qid: 'saa-t3-7-q6',
+        fragment: 'routing-policy-geoproximity'
+      ),
+      (task: 'saa-t3-7', qid: 'saa-t3-7-q11', fragment: 'request-static-ips'),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+  });
 }
