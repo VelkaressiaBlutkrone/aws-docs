@@ -14,6 +14,8 @@ sources:
     url: https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html
   - title: AWS Direct Connect Gateway (공식)
     url: https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html
+  - title: Private IP AWS Site-to-Site VPN with Direct Connect (공식)
+    url: https://docs.aws.amazon.com/vpn/latest/s2svpn/private-ip-dx.html
   - title: AWS Transit Gateway — 소개 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html
   - title: AWS PrivateLink — 소개 (공식)
@@ -22,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
-lastVerified: 2026-10-19
+lastVerified: 2026-10-28
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -207,7 +209,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 
 - 구축 시간: 수 주 (파트너사 협의, 물리 회선 설치)
 - 경로: 전용 물리 회선 → 일관된 대역폭·저지연
-- 암호화: **기본 없음**. 선택지가 둘입니다 — DX 위에 IPsec VPN을 얹는 **DX over VPN**, 또는 아래의 **MACsec**
+- 암호화: **기본 없음**. 선택지가 둘입니다 — DX 위에 IPsec VPN을 얹는 **VPN over Direct Connect**, 또는 아래의 **MACsec**
 - 비용: 포트 시간당 + 아웃바운드 데이터 전송비 (인터넷 대비 낮은 단가)
 
 **MACsec — 2계층 암호화 (★ 시험 핵심 · 기존 서술에 빠져 있던 선택지)**
@@ -288,7 +290,7 @@ Direct Connect Gateway (글로벌)
 **조합 패턴:**
 
 1. **DX + VPN 백업**: 평시 DX로 안정적으로 운영, DX 장애 시 VPN으로 자동 우회. 가용성과 성능을 동시에 확보합니다.
-2. **DX over VPN (암호화 DX)**: DX 자체는 암호화가 없으므로, 규정상 전송 암호화가 필요한 경우 DX 위에 VPN 터널을 얹습니다.
+2. **VPN over Direct Connect (암호화 DX)**: DX 자체는 암호화가 없으므로, 규정상 전송 암호화가 필요한 경우 DX 위에 VPN 터널을 얹습니다. 퍼블릭 VIF로 VPN 퍼블릭 엔드포인트에 붙이는 방식과, 전송 VIF 위에서 사설 IP만 쓰는 **Private IP VPN** 방식이 있습니다.
 
 > 🧠 원리: 왜 DX + VPN 백업 패턴이 두 서비스의 단점을 서로 보완할 수 있을까요?
 > VPN은 구축이 빠르고 암호화가 포함되어 있지만 공용 인터넷 경로를 사용해 대역폭과 지연이 변동될 수 있고, DX는 일관된 전용 회선을 제공하지만 회선 장애 시 대체 경로가 없습니다.
@@ -405,7 +407,7 @@ VPC와 온프레미스 사이에서 **DNS 서버를 따로 세우지 않고** �
 | 온프레미스 ↔ AWS, 즉시 연결, 저비용 | **Site-to-Site VPN** |
 | 온프레미스 ↔ AWS, 일관된 저지연·고대역폭 | **Direct Connect** |
 | DX 장애 시 자동 우회 | **DX + VPN 백업** |
-| DX 연결에 암호화 추가 | **DX over VPN** |
+| DX 연결에 암호화 추가 | **VPN over Direct Connect** |
 | 단일 DX로 여러 리전 VPC 접근 | **Direct Connect Gateway** |
 | VPC 2~3개 단순 연결 | **VPC 피어링** |
 | VPC 다수 + 온프레미스 중앙 연결 | **Transit Gateway** |
@@ -425,7 +427,7 @@ VPC와 온프레미스 사이에서 **DNS 서버를 따로 세우지 않고** �
 1. **"지금 당장 연결이 필요하다" → Direct Connect 선택.** Direct Connect 구축에는 수 주의 리드타임이 걸립니다. 즉시성이 요구되면 **Site-to-Site VPN**이 답입니다.
    *(원리: §3 본문 — VPN은 공용 인터넷을 이용한 소프트웨어 설정만으로 즉시 연결이 가능하고, DX는 물리 회선 설치가 선행되어야 한다.)*
 
-2. **"Direct Connect는 기본 암호화된다."** Direct Connect는 전용 물리 회선이지만 **기본 암호화가 없습니다.** 전송 암호화가 필요하면 DX over VPN 패턴을 사용해야 합니다.
+2. **"Direct Connect는 기본 암호화된다."** Direct Connect는 전용 물리 회선이지만 **기본 암호화가 없습니다.** 전송 암호화가 필요하면 VPN over Direct Connect 패턴을 사용해야 합니다.
    *(원리: §4 — 물리적 격리는 전송 계층 암호화가 아니며, 암호화가 필요하면 DX 위에 IPsec 터널을 얹어야 한다.)*
 
 3. **"VPC 피어링을 통해 세 VPC가 서로 통신한다."** 피어링은 비전이입니다. A-B, B-C가 있어도 A는 C를 볼 수 없습니다. 세 VPC 모두 통신하려면 Transit Gateway 또는 각 쌍을 직접 피어링해야 합니다.
@@ -467,7 +469,7 @@ VPC 피어링으로만 구성하면 8×7/2 = **28개**의 피어링이 필요하
 
 <details><summary>정답 보기</summary>
 
-Direct Connect는 **기본 암호화를 제공하지 않습니다.** 전용 회선이라는 점이 물리적 보안을 제공하지만 전송 계층 암호화는 아닙니다. 해결책은 **DX over VPN 패턴**입니다. Direct Connect 연결 위에 IPsec VPN 터널을 구성하면 전용 회선의 일관된 대역폭·저지연 특성을 유지하면서 데이터 암호화 요건도 충족할 수 있습니다.
+Direct Connect는 **기본 암호화를 제공하지 않습니다.** 전용 회선이라는 점이 물리적 보안을 제공하지만 전송 계층 암호화는 아닙니다. 해결책은 **VPN over Direct Connect 패턴**입니다. Direct Connect 연결 위에 IPsec VPN 터널을 구성하면 전용 회선의 일관된 대역폭·저지연 특성을 유지하면서 데이터 암호화 요건도 충족할 수 있습니다.
 </details>
 
 **Q4.** SaaS 공급자가 자신의 서비스를 여러 고객 AWS 계정에 안전하게 제공하려 합니다. 고객의 VPC CIDR이 공급자 VPC와 겹칠 수 있습니다. 가장 적합한 아키텍처는?

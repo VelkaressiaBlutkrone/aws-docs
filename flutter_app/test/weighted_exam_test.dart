@@ -108,31 +108,32 @@ void main() {
   });
 
   test('최종 게이트: 응시 3회여도 weighted capacity 부족이면 잠김', () {
+    // 잠긴 표본은 MLA다 — SAA는 2026-10-28 t2-5 flip으로 게이트가 열렸다.
     final history = [
       _rec(
-        certId: 'SAA-C03',
-        examId: 'exam:SAA-C03-mock',
+        certId: 'MLA-C01',
+        examId: 'exam:MLA-C01-mock',
         date: '2026-06-01',
         presented: ['q1'],
         wrong: const [],
       ),
       _rec(
-        certId: 'SAA-C03',
-        examId: 'exam:SAA-C03-mock',
+        certId: 'MLA-C01',
+        examId: 'exam:MLA-C01-mock',
         date: '2026-06-02',
         presented: ['q2'],
         wrong: const [],
       ),
       _rec(
-        certId: 'SAA-C03',
-        examId: 'exam:SAA-C03-mock',
+        certId: 'MLA-C01',
+        examId: 'exam:MLA-C01-mock',
         date: '2026-06-03',
         presented: ['q3'],
         wrong: const [],
       ),
     ];
 
-    expect(weightedExamAttemptUnlocked('SAA-C03', history), isTrue);
-    expect(certWeightedExamUnlocked('SAA-C03', history), isFalse);
+    expect(weightedExamAttemptUnlocked('MLA-C01', history), isTrue);
+    expect(certWeightedExamUnlocked('MLA-C01', history), isFalse);
   });
 }
