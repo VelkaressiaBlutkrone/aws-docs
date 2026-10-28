@@ -1467,4 +1467,1451 @@ void main() {
       });
     }
   });
+
+  group('§우선순위3 배치1 — D3 saa-t3-1·t3-3 (7건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q1', correct: 1,
+        forbidden: [
+          '내구성은 스토리지 클래스에 관계없이 모든 클래스에서',
+          '이며 모든 클래스의 내구성은 99.999999999%',
+        ],
+        required: ['현재 권장되는 모든', 'Reduced Redundancy Storage', '99.99%'],
+        why: '스토리지 클래스 비교 표에 권장되지 않는(Not recommended) Reduced '
+            'Redundancy Storage 가 설계 내구성 99.99% 로 올라 있다 — "모든 클래스가 '
+            '11 nine" 은 사실이 아니고 "현재 권장되는 모든 클래스" 로 한정해야 한다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q4', correct: 2,
+        forbidden: [
+          '수 분 이내에 데이터를 꺼낼',
+          '복원 시간은 최대 12시간입니다',
+          '분~12시간의 복원 시간이 걸립니다',
+        ],
+        required: ['복원 절차를 거치지 않고 밀리초', '대량(Bulk) 48시간', '1~5분'],
+        why: 'Flexible Retrieval 의 신속(Expedited) 복원은 250MB 미만 객체를 보통 '
+            '1~5분에 꺼내 주므로 "수 분 이내" 로는 Instant Retrieval 을 가릴 수 없다. '
+            'Deep Archive 복원은 표준 12시간 이내·대량 48시간 이내이고 신속 복원이 없다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q7', correct: 1,
+        forbidden: ['학습 문서의'],
+        required: ['접근 빈도에 맞춰 단계적으로'],
+        why: '"학습 문서의 예시와 정확히 일치합니다" 는 문항 바깥을 가리키는 작성 과정 '
+            '메모다 — 학습자에게는 수명 주기 설계 근거만 보여야 한다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q11', correct: 1,
+        forbidden: [
+          'Block Public Access → IAM 정책 → 버킷 정책 → ACL',
+          '계층 순서로 평가됩니다',
+          'IAM 정책뿐만 아니라',
+          '접근 제어 평가의 최우선 계층',
+        ],
+        required: ['재정의(override)', '가장 제한적인 조합', 'IAM 자격증명 정책이 아니라'],
+        why: '공식 문서는 평가 순서를 적지 않는다 — BPA 는 버킷 정책·액세스 포인트 '
+            '정책·ACL 같은 리소스 쪽 공개 허용 설정을 재정의하며, 액세스 포인트·버킷·'
+            '계정·조직 설정 중 가장 제한적인 조합이 적용된다. IAM 자격증명 정책은 '
+            'BPA 의 대상이 아니다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q13', correct: 1,
+        forbidden: [
+          'URL 만료 전까지 유효하다',
+          '만료 시간이 설정되며 만료 후에는 접근이 거부됩니다',
+        ],
+        required: ['역할 세션', '이른 쪽'],
+        why: '역할(임시 자격증명)로 서명한 프리사인 URL 은 더 긴 만료 시간을 지정했어도 '
+            '역할 세션이 끝나면 만료된다 — 유효 기간은 URL 만료와 세션 만료 중 이른 쪽이다',
+      ),
+      (
+        task: 'saa-t3-3', qid: 'saa-t3-3-q11', correct: 1,
+        forbidden: ['150개 브로커를 배치하면 8번째 인스턴스부터 시작이 실패합니다'],
+        required: ['AZ마다 최대 7개', '총 21개'],
+        why: '랙 수준 분산 배치 그룹은 같은 리전의 여러 AZ 에 걸칠 수 있고 상한은 '
+            'AZ마다 실행 인스턴스 7개다 — 3 AZ 리전이면 총 21개가 상한이다',
+      ),
+      (
+        task: 'saa-t3-3', qid: 'saa-t3-3-q12', correct: 1,
+        forbidden: ['배치 그룹(클러스터·파티션·분산 모두)은 전용 인스턴스와 함께 사용할 수 없습니다'],
+        required: ['지원하지 않는 것은 분산', '전용 호스트(Dedicated Host)는 어떤 배치 그룹에도'],
+        why: '전용 인스턴스를 지원하지 않는 것은 분산 배치 그룹 하나다. 클러스터·파티션은 '
+            '함께 쓸 수 있고, 전용 호스트는 어떤 배치 그룹에도 시작할 수 없다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    test('saa-t3-1-q11 은 BPA 공식 문서를 출처로 싣는다', () {
+      expect(hasSource(question('saa-t3-1', 'saa-t3-1-q11'),
+          'access-control-block-public-access'), isTrue);
+    });
+
+    test('saa-t3-1-q13 은 프리사인 URL 공식 문서를 출처로 싣는다', () {
+      expect(hasSource(question('saa-t3-1', 'saa-t3-1-q13'),
+          'using-presigned-url'), isTrue);
+    });
+
+    test('saa-t3-1-q4 는 아카이브 복원 옵션 문서를 출처로 싣는다', () {
+      expect(hasSource(question('saa-t3-1', 'saa-t3-1-q4'),
+          'restoring-objects-retrieval-options'), isTrue);
+    });
+  });
+
+  group('§우선순위3 배치2 — D3 saa-t3-6·t3-7 (9건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q9', correct: 2,
+        forbidden: ['CloudFront는 정적 콘텐츠 캐시이며'],
+        required: ['정적·동적 콘텐츠 모두를 가속', '오리진인 단일 리전 DynamoDB'],
+        why: 'CloudFront 는 정적·동적 웹 콘텐츠 모두의 배포를 가속한다 — 보기 1이 '
+            '탈락하는 이유는 캐시 대상이 아니라, 쓰기가 결국 오리진인 단일 리전 '
+            '테이블까지 가야 하고 리전 장애 대비가 없다는 점이다',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q11', correct: 1,
+        forbidden: [
+          '금융 거래 데이터는 RDS 선택 신호입니다',
+          '금융 거래 데이터에 관계형 데이터베이스가 적합하다',
+        ],
+        required: ['금융 거래 여부 자체는 결정 신호가 아닙니다', 'TransactWriteItems'],
+        why: 'DynamoDB 도 TransactWriteItems·TransactGetItems 로 ACID 트랜잭션을 '
+            '지원한다(같은 계정·같은 리전 범위) — RDS 를 가르는 신호는 금융 거래가 '
+            '아니라 복잡한 조인·집계와 고정된 스키마다',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q12', correct: 1,
+        forbidden: [
+          'Memcached는 영속성과 복제 기능이 없으므로',
+          'Memcached는 멀티스레드 처리 능력은 있지만 복제와 HA 기능이 없습니다',
+        ],
+        required: ['노드 기반(node-based) Memcached', '서버리스 Memcached', '마이크로초'],
+        why: '복제가 없는 것은 노드 기반 Memcached 클러스터다 — 서버리스 캐시는 복제된 '
+            'Multi-AZ 구조로 노드 장애를 가린다. DynamoDB(한 자릿수 밀리초)를 '
+            '가려내려면 지문이 마이크로초 수준의 인메모리 응답을 요구해야 한다',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q13', correct: 2,
+        forbidden: [
+          '스냅샷(RDB)과 AOF 로그로 영속성을 제공해',
+          '스냅샷(RDB)으로 영속성을 지원한다',
+        ],
+        required: ['2.8.22', 'MemoryDB'],
+        why: 'ElastiCache 는 Redis OSS 2.8.22 이후 appendonly·appendfsync 를 '
+            '지원하지 않아 AOF 가 없다 — 보존 수단은 스냅샷(RDB) 백업과 복제·'
+            'Multi-AZ 이고, 디스크 기반 영속성이 필요하면 MemoryDB 다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q1', correct: 1,
+        forbidden: ['Route 53 Traffic Flow 기능에서만 사용할 수 있습니다'],
+        required: ['bias(편향값, 1~99 / -1~-99)'],
+        why: 'Geoproximity 는 레코드를 만들 때 고르는 라우팅 정책이고 프라이빗 호스팅 '
+            '영역에서도 쓸 수 있다 — Traffic Flow 전용이 아니다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q3', correct: 1,
+        forbidden: ['헬스 체크 연동은 Failover 정책에서 선택이 아니라 필수입니다'],
+        required: ['Evaluate Target Health', '별칭(alias) 레코드를 만들 수 없는'],
+        why: '별칭 레코드를 만들 수 있는 AWS 리소스로 보낼 때는 헬스 체크를 만들지 '
+            '말고 Evaluate Target Health 를 Yes 로 두는 것이 공식 권장이다 — '
+            '헬스 체크가 필수인 것은 별칭을 못 쓰는 엔드포인트일 때다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q5', correct: 1,
+        forbidden: ['Route 53 Traffic Flow에서만 사용 가능합니다'],
+        required: ['거리 계산으로 정해지므로'],
+        why: 'q1 과 같은 "Traffic Flow 전용" 서술이 오답 근거에 복제돼 있었다 — '
+            'Geoproximity 가 규제 준수에 부적합한 진짜 이유는 경계가 거리 계산으로 '
+            '정해져 국가 단위를 보장하지 못한다는 점이다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q6', correct: 1,
+        forbidden: [
+          'Traffic Flow 기능에서만 사용할 수 있습니다',
+          'Traffic Flow에서만 사용 가능하다',
+          'Traffic Flow에서만 사용 가능합니다',
+        ],
+        required: ['1 - (bias/100)', 'Traffic Flow 전용이 아니고', '프라이빗 호스팅 영역'],
+        why: '정답 보기가 "Traffic Flow 에서만 사용 가능" 을 달고 있어 맞는 보기가 '
+            '없는 상태였다. 공식 문서는 Geoproximity 를 레코드 생성 시 고르는 '
+            '라우팅 정책으로 싣고 프라이빗 호스팅 영역 사용까지 명시한다 — '
+            'Traffic Flow 에서만 되는 것은 편향 범위를 보여 주는 지도다',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q11', correct: 2,
+        forbidden: ['또한 CloudFront는 고정 IP가 아닌 도메인 기반(가변 IP)입니다'],
+        required: ['Anycast 고정 IP 목록', 'HTTP/HTTPS 트래픽에만'],
+        why: 'CloudFront 에도 Anycast 고정 IP 목록 기능이 있다(허용 목록용 21개, '
+            '에이펙스 도메인용 3개) — 갈림길은 고정 IP 유무가 아니라 그 IP 가 '
+            'CloudFront 배포의 HTTP/HTTPS 트래픽에만 쓰여 UDP 에 못 쓴다는 점이다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (
+        task: 'saa-t3-6',
+        qid: 'saa-t3-6-q9',
+        fragment: 'AmazonCloudFront/latest/DeveloperGuide/Introduction'
+      ),
+      (task: 'saa-t3-6', qid: 'saa-t3-6-q11', fragment: 'transaction-apis'),
+      (
+        task: 'saa-t3-6',
+        qid: 'saa-t3-6-q12',
+        fragment: 'disaster-recovery-resiliency'
+      ),
+      (task: 'saa-t3-6', qid: 'saa-t3-6-q13', fragment: 'engine-versions'),
+      (task: 'saa-t3-6', qid: 'saa-t3-6-q13', fragment: 'what-is-memorydb'),
+      (task: 'saa-t3-7', qid: 'saa-t3-7-q3', fragment: 'dns-failover-types'),
+      (
+        task: 'saa-t3-7',
+        qid: 'saa-t3-7-q6',
+        fragment: 'routing-policy-geoproximity'
+      ),
+      (task: 'saa-t3-7', qid: 'saa-t3-7-q11', fragment: 'request-static-ips'),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+  });
+
+  group('§우선순위3 배치3 — D3 saa-t3-8·t3-9 (6건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q2', correct: 2,
+        forbidden: [
+          '온프레미스 데이터센터와도 연결해야 한다',
+          '여기에 온프레미스 연결까지 각 VPC마다 추가로 설정해야 하므로',
+        ],
+        required: ['10×9/2 = 45개', 'VPC 피어링은 두 VPC 사이를 잇는 연결'],
+        why: 'VPC 피어링은 두 VPC 사이의 네트워킹 연결이라 온프레미스에는 쓸 수 없다 '
+            '— "피어링만으로 온프레미스까지" 는 전제가 성립하지 않아 지문을 VPC 10개 '
+            '완전 메시로 한정했다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q6', correct: 3,
+        forbidden: ['DX over VPN'],
+        required: ['VPN over Direct Connect', 'MACsec'],
+        why: '공식 명칭은 Direct Connect 위에 Site-to-Site VPN 을 얹는 "VPN over '
+            'Direct Connect" 다 — "DX over VPN" 은 위아래가 거꾸로다. 암호화 선택지는 '
+            'IPsec VPN 과 MACsec(IEEE 802.1AE) 둘이다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q7', correct: 2,
+        forbidden: ['DX over VPN'],
+        required: ['VPN over Direct Connect', 'MACsec'],
+        why: '같은 명칭 역전이 정답 보기와 해설에 있었다. 공식 문서는 Direct Connect 가 '
+            '기본적으로 전송 중 트래픽을 암호화하지 않는다고 적고, 암호화 수단으로 '
+            'Site-to-Site VPN 결합과 MACsec 을 함께 싣는다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q9', correct: 0,
+        forbidden: ['DX over VPN'],
+        required: ['VPN over Direct Connect'],
+        why: '오답 근거에 같은 명칭 역전이 복제돼 있었다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q10', correct: 3,
+        forbidden: [
+          '온프레미스를 경유하는 트래픽(hair-pinning)은 지원되지 않습니다',
+          '온프레미스를 경유하는 라우팅을 활성화하면 된다',
+        ],
+        required: ['2021년 11월', '슈퍼넷', 'BGP 경로 리플렉터'],
+        why: '공식 문서는 2021년 11월부터의 예외를 명시한다 — 같은 가상 인터페이스에서 '
+            'VPC CIDR 을 포함하는 슈퍼넷(10.0.0.0/8, 0.0.0.0/0 등)을 온프레미스에서 '
+            '광고하면 그 VPC 들이 Direct Connect 엔드포인트를 거쳐 서로 통신한다. '
+            '따라서 "hair-pinning 불가" 는 틀렸고, 보기도 존재하지 않는 기능으로 '
+            '바꿔야 정답이 하나로 남는다. AWS 가 차단 방법까지 안내하므로 의도된 '
+            '설계가 아니라 부작용이다',
+      ),
+      (
+        task: 'saa-t3-9', qid: 'saa-t3-9-q11', correct: 0,
+        forbidden: [
+          '이 문항이 기존 고객을 전제로 두는 이유입니다',
+          '회사의 인터넷 대역폭은 1 Gbps이며, 이 속도로 전송하면 수개월이 걸린다',
+        ],
+        required: ['약 200 Mbps', '약 230일'],
+        why: '500 TB 를 1 Gbps 회선 속도로 보내면 약 46일이라 "수개월" 이 아니다. '
+            '지문을 이전에 쓸 수 있는 가용 대역폭 약 200 Mbps 로 한정하면 약 230일로 '
+            '수개월이 맞다. 괄호 안 "이 문항이 … 이유입니다" 는 작성 과정 메모다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (task: 'saa-t3-8', qid: 'saa-t3-8-q2', fragment: 'what-is-vpc-peering'),
+      (task: 'saa-t3-8', qid: 'saa-t3-8-q6', fragment: 'encryption-in-transit'),
+      (task: 'saa-t3-8', qid: 'saa-t3-8-q7', fragment: 'encryption-in-transit'),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+
+    test('saa-t3-8 문항에 "DX over VPN" 명칭 역전이 한 건도 남지 않았다', () {
+      final map = json.decode(
+              File('assets/content/saa/saa-t3-8.questions.json')
+                  .readAsStringSync())
+          as Map<String, dynamic>;
+      final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+      for (final q in questions) {
+        // `skill` 까지 본다 — 실제로 saa-t3-8-q7 의 스킬 태그가 "DX over VPN
+        // 암호화 패턴" 이었고, 스킬 태그는 학습자에게 그대로 노출된다.
+        final text = <String>[
+          q['stem'] as String? ?? '',
+          q['skill'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+        expect(text.contains('DX over VPN'), isFalse,
+            reason: '${q['id']} 에 "DX over VPN" 이 남아 있다 — 공식 명칭은 '
+                '"VPN over Direct Connect"(Direct Connect 위에 VPN)다');
+      }
+    });
+  });
+
+  group('§우선순위3 배치4 — D4 saa-t4-1 (8건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q1', correct: 0,
+        forbidden: [
+          '세 가지 축으로 가장 올바르게 묶인 것은',
+          'S3 비용은 크게 세 축으로 구성됩니다',
+          '스토리지·요청·검색 세 축이 기준입니다',
+          'S3 기본 비용 구조의 세 축이 아닙니다',
+        ],
+        required: [
+          '이 셋으로 끝나는 것은 아닙니다',
+          '데이터 전송, 관리 및 인사이트, 복제, 변환 및 쿼리',
+        ],
+        why: '공식 S3 요금 페이지는 요금 항목을 스토리지 및 요청, 데이터 전송, 관리 및 '
+            '인사이트, 복제, 변환 및 쿼리 등 여러 탭으로 나눈다 — "세 축" 은 실제 '
+            '요금 구조가 아니라 요약이므로 단정해서는 안 된다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q3', correct: 2,
+        forbidden: ['검색 요금이 GB당 과금되며 복원에 수분~12시간이 걸립니다'],
+        required: [
+          '대량(Bulk) 복원은 이 클래스에서 무료',
+          '신속 1~5분, 표준 3~5시간, 대량 5~12시간',
+        ],
+        why: '공식 문서는 Bulk 복원이 S3 Glacier Flexible Retrieval·'
+            'S3 Intelligent-Tiering 객체에 무료라고 적는다 — "검색 요금이 GB당 '
+            '과금된다" 는 단정이 과하다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q4', correct: 3,
+        forbidden: [
+          '최소 보관 기간(30일)이 충족되지 않아 잔여 15일분 요금이 청구됩니다',
+          'Standard-IA 최소 보관 기간 30일과 일치',
+          '복원에 최대 12시간이 걸립니다',
+        ],
+        required: ['접근 패턴 불일치', '대량(Bulk) 복원은 48시간 이내', '335일이라 충족'],
+        why: '최소 보관 기간은 그 클래스에 머문 기간으로 세므로 Day 15 → Day 45 는 '
+            'Standard-IA 에 정확히 30일 머물러 요금이 생기지 않는다. 2026-07-16 부터 '
+            '전환 대기 30일 제약도 없어졌다 — 보기 0 이 탈락하는 이유는 접근 패턴 '
+            '불일치다. Deep Archive 복원은 표준 12시간·대량 48시간 이내다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q5', correct: 0,
+        forbidden: [
+          '20일 만에 Standard-IA로 전환하는 수명주기 정책',
+          '20일 시점에 전환해도 30일분 요금이 청구된다',
+          '20일 시점에 전환하면 잔여 10일분에 해당하는 Standard-IA 저장 요금이 청구됩니다',
+          '30일 이전에 Standard-IA로 전환하면 절감이 아니라 오히려 비용이 늘어날 수 있으므로',
+        ],
+        required: [
+          '그 스토리지 클래스에 머문 기간',
+          '2026년 7월 16일',
+          '생성 직후(0일)에도',
+        ],
+        why: '최소 보관 기간은 객체 생성 시점이 아니라 그 클래스에 머문 기간으로 센다. '
+            '게다가 2026-07-16 부터 Standard-IA·One Zone-IA 전환은 생성 직후(0일)에도 '
+            '가능해져 "Standard 에 30일" 제약이 없어졌다 — 따라서 20일 전환 자체는 '
+            '문제가 아니고, 맞는 보기가 없는 상태였다. 요금이 붙는 경우는 전환 후 '
+            '30일을 채우지 않고 만료·재전환하는 것이다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q6', correct: 2,
+        forbidden: [
+          '복원에 최대 12시간이 걸려 즉시 접근 요건을 충족하지 못합니다',
+          '복원에 수분~12시간이 필요합니다',
+          '복원에 수분~12시간이 소요됩니다',
+          '최소 보관 기간 180일, 복원에 최대 12시간이 걸려',
+        ],
+        required: ['대량(Bulk) 48시간 이내', '신속 1~5분, 표준 3~5시간, 대량 5~12시간'],
+        why: 'Deep Archive 복원은 표준 12시간 이내·대량 48시간 이내이고 신속 복원이 '
+            '아예 없다. Flexible Retrieval 은 신속 1~5분·표준 3~5시간·대량 5~12시간이라 '
+            '"수분~12시간" 은 구간을 뭉갠 표현이다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q8', correct: 2,
+        forbidden: ['루트 볼륨은 기본 true, 추가 볼륨은 기본 false'],
+        required: [
+          '볼륨 종류·연결 시점·연결 수단에 따라 다릅니다',
+          '시작 시 콘솔이면 보존·CLI면 삭제',
+        ],
+        why: '공식 표는 기본값을 네 축으로 나눈다 — 시작 시 연결한 루트 볼륨은 삭제, '
+            '시작 후 연결한 루트 볼륨은 보존, 데이터 볼륨은 시작 시 콘솔이면 보존·'
+            'CLI면 삭제, 시작 후 연결은 보존이다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q9', correct: 0,
+        forbidden: [
+          'Cost Explorer로 미연결 볼륨을 탐지한 뒤 삭제한다',
+          'Trusted Advisor 또는 Cost Explorer를 통해 탐지할 수 있습니다',
+          'Trusted Advisor나 Cost Explorer가 이 목적에',
+        ],
+        required: [
+          'Compute Optimizer의 유휴 리소스 권장',
+          'Cost Explorer의 적정 크기 조정(rightsizing) 권장은 EC2 인스턴스만',
+        ],
+        why: 'Compute Optimizer 의 유휴 리소스 권장은 EBS 볼륨을 포함하고 32일 연결 '
+            '상태를 분석해 미연결 볼륨을 찾는다. Cost Explorer 의 rightsizing 권장은 '
+            'EC2 인스턴스 전용이라 미연결 볼륨 식별 도구가 아니다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q14', correct: 0,
+        forbidden: ['문서에서 설명하는 EFS 계층 최적화 방법이 아닙니다'],
+        required: ['수동 관리 없이', 'Transition into Standard'],
+        why: '"문서에서 설명하는 … 방법이 아니다" 는 문항 바깥을 가리키는 작성 과정 '
+            '메모다. 보기가 탈락하는 이유는 지문의 "수동 관리 없이" 요건에 어긋난다는 '
+            '것이다. 또 S3 스토리지 클래스 페이지를 EFS 문항의 출처로 쓰고 있었다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q1',
+        fragment: 'aws.amazon.com/s3/pricing'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q3',
+        fragment: 'restoring-objects-retrieval-options'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q4',
+        fragment: 's3-removes-30-day-transitions'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q5',
+        fragment: 's3-removes-30-day-transitions'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q5',
+        fragment: 'lifecycle-transition-general-considerations'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q6',
+        fragment: 'restoring-objects-retrieval-options'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q9',
+        fragment: 'view-idle-recommendations'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q14',
+        fragment: 'lifecycle-management-efs'
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+
+    test('saa-t4-1-q14 는 EFS 문항이므로 S3 스토리지 클래스 페이지를 출처로 쓰지 않는다', () {
+      expect(hasSource(question('saa-t4-1', 'saa-t4-1-q14'), 'AmazonS3'), isFalse,
+          reason: 'EFS 수명 주기 문항의 출처가 S3 스토리지 클래스 페이지였다');
+    });
+  });
+
+  group('§우선순위3 배치5 — D4 saa-t4-4·t4-5 (12건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q6', correct: 3,
+        forbidden: ['Interface Endpoint를 쓸 이유가 없습니다'],
+        required: ['온프레미스에서는 접근할 수 없고', '다른 AWS 리전'],
+        why: '공식 비교 표는 Gateway Endpoint 를 "온프레미스에서 접근 불가 · 다른 '
+            'AWS 리전에서 접근 불가 · 과금 없음" 으로, Interface Endpoint 를 그 반대로 '
+            '싣는다 — 같은 리전 VPC 안에서만 Gateway 가 유리하고, 온프레미스·타 '
+            '리전에서는 Interface Endpoint 가 필요하다',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q12', correct: 2,
+        forbidden: ['GB당 총비용 비교로 옳은 것은'],
+        required: ['송신 측 1 GB 기준', '양방향'],
+        why: '공식 요금 페이지는 피어링의 AZ 간 전송을 "In·Out 양방향 각각 \$0.01/GB" '
+            '로 적는다 — 1 GB 를 주고받으면 합계는 \$0.02 다. 따라서 "GB당 총비용" '
+            '으로 물으면 한 방향만 센 \$0.01 이 답이 될 수 없어 지문을 송신 측 기준으로 '
+            '한정해야 한다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q2', correct: 1,
+        forbidden: ['IAM 정책 연결, SNS 알림, SSM Automation 실행의 세 가지 조치'],
+        required: ['IAM 정책 적용', 'SCP(서비스 제어 정책) 적용', 'EC2·RDS 인스턴스를 대상으로'],
+        why: '공식 문서가 꼽는 budget action 은 IAM 정책 적용, 서비스 제어 정책(SCP) '
+            '적용, 특정 EC2·RDS 인스턴스를 대상으로 지정하는 것이다 — SNS 알림은 '
+            'action 이 아니라 budget notification 이다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q3', correct: 2,
+        forbidden: ['CUR(S3 CSV)', 'S3 CSV로 전달합니다'],
+        required: ['Apache Parquet'],
+        why: '공식 문서는 "AWS CUR 은 Athena 용으로 Apache Parquet 압축 형식만 '
+            '지원한다" 고 적는다 — CSV 로는 Athena 통합이 되지 않는다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q5', correct: 2,
+        forbidden: [],
+        required: ['관리 계정 사용자가 backfill을 요청하면'],
+        why: 'q5 의 M2 결함은 본문이 아니라 **출처 제목**의 "(게이트 검수 반영: '
+            '2026-06-12)" 라벨이었다(이 그룹의 집계형 테스트가 고정한다). 본문도 '
+            'backfill 을 누가 요청하는지 적지 않아, 공식 문서대로 관리 계정 사용자로 '
+            '명시했다 — q13 과 같은 사실이다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q12', correct: 3,
+        forbidden: [],
+        required: ['태그 정책(Tag Policy)'],
+        why: 'q12 의 M2 결함도 **출처 제목**의 "(게이트 검수 반영: 2026-06-12)" '
+            '라벨이었다(집계형 테스트가 고정한다). 본문 사실은 이미 옳아 정답 '
+            '불변만 고정한다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q7', correct: 3,
+        forbidden: ['Compute Optimizer가 유휴 EBS·로드밸런서 탐지를 담당하지 않습니다'],
+        required: ['EBS 볼륨을 포함하지만 로드밸런서는 대상이 아니'],
+        why: 'Compute Optimizer 의 유휴 리소스 권장 대상에는 EBS 볼륨이 들어 있다'
+            '(32일 연결 상태 분석) — 다만 로드밸런서는 대상 목록에 없고, 유휴 '
+            '로드밸런서는 Trusted Advisor 가 잡는다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q8', correct: 1,
+        forbidden: ['Practice cloud financial management'],
+        required: ['Implement cloud financial management'],
+        why: '공식 설계 원칙 이름은 Implement cloud financial management 다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q9', correct: 0,
+        forbidden: ['S3 CSV로 저장하고'],
+        required: ['Apache Parquet'],
+        why: 'q3 과 같은 오류 — Athena 통합은 Parquet 형식만 지원한다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q13', correct: 2,
+        forbidden: [
+          '이 문서에서 언급되지 않습니다. backfill은 활성화된 태그 키에 대해 요청할 수 있습니다',
+        ],
+        required: ['관리 계정 사용자가 요청'],
+        why: '공식 문서 첫 문장이 "관리 계정 사용자가 최대 12개월치 backfill 을 요청할 '
+            '수 있다" 다 — "이 문서에서 언급되지 않는다" 는 서술이 바로 그 문서를 '
+            '출처로 달고 있었다. 보기 3 이 오답인 이유는 관리 계정 제한이 아니라 '
+            '"불가능하다" 는 결론이다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q14', correct: 0,
+        forbidden: ['5개 기둥'],
+        required: ['6개 기둥', '지속 가능성'],
+        why: 'Well-Architected 프레임워크는 여섯 기둥이다 — 운영 우수성, 보안, 안정성, '
+            '성능 효율성, 비용 최적화, 지속 가능성',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q15', correct: 1,
+        forbidden: ['이 문서에서 언급되지 않습니다. 문서에 따르면'],
+        required: ['무료 호출 한도가 따로 없습니다'],
+        why: '"이 문서에서 언급되지 않는다" 는 작성자의 검증 상태 서술이다 — 학습자에게는 '
+            '사실 서술(무료 한도가 없고 요청당 과금)만 보여야 한다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (
+        task: 'saa-t4-4',
+        qid: 'saa-t4-4-q6',
+        fragment: 'privatelink-interface-endpoints'
+      ),
+      (
+        task: 'saa-t4-4',
+        qid: 'saa-t4-4-q12',
+        fragment: 'transit-gateway/pricing'
+      ),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q2', fragment: 'budgets-controls'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q3', fragment: 'cur-query-athena'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q7', fragment: 'view-idle-recommendations'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q9', fragment: 'cur-query-athena'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q14', fragment: 'cost-optimization-pillar'),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+
+    // M2 집계형 — 출처 제목과 본문 어디에도 작성 과정 메모가 남지 않았다.
+    // `allText` 는 sources 를 보지 않으므로 여기서 따로 검사한다: t4-5 의 M2 4건
+    // 중 q5·q12 는 금지 문구가 **출처 제목**에 있었다.
+    test('saa-t4-5 문항의 출처 제목에 "게이트 검수 반영" 라벨이 남지 않았다', () {
+      final map = json.decode(
+              File('assets/content/saa/saa-t4-5.questions.json')
+                  .readAsStringSync())
+          as Map<String, dynamic>;
+      final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+      for (final q in questions) {
+        for (final s in (q['sources'] as List).cast<Map<String, dynamic>>()) {
+          expect((s['title'] as String).contains('게이트 검수 반영'), isFalse,
+              reason: '${q['id']} 의 출처 제목에 작성 과정 메모가 남아 있다: '
+                  '"${s['title']}"');
+        }
+      }
+    });
+
+    test('saa-t4-5 문항 본문에 "이 문서에서 언급되지 않" 류 검증 상태 서술이 없다', () {
+      final map = json.decode(
+              File('assets/content/saa/saa-t4-5.questions.json')
+                  .readAsStringSync())
+          as Map<String, dynamic>;
+      final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+      for (final q in questions) {
+        final text = <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+        expect(text.contains('이 문서에서 언급되지 않'), isFalse,
+            reason: '${q['id']} 에 작성자의 검증 상태 서술이 남아 있다 — 학습자에게는 '
+                '사실 서술만 보여야 한다');
+      }
+    });
+  });
+
+  // 2026-10-28 검수 보고 `출처 교체 (resource 61건)` — 드래프트 Task 배치 1.
+  //
+  // 사실은 맞는데 **인용 페이지가 그 사실을 담고 있지 않던** 경우다. 열 문항 모두
+  // 서비스 "소개" 페이지(`orgs_introduction` · `what-is-amazon-vpc` ·
+  // `what-is-aws-waf`) 하나만 달고 있었다. 교체 페이지를 직접 열어 문항이 주장하는
+  // 사실이 실제로 그 페이지에 있는지 확인한 뒤 바꿨다. `correct`·본문은 손대지 않는다.
+  //
+  // ⚠️ `saa-t1-2` 는 2026-10-27 flip(#258) 이후 **verified 15/15 라이브**다. 보고서의
+  //    ✔ 표시는 그 flip 전에 작성돼 t1-2 가 빠져 있었다. 출처 교체는 사실 서술을
+  //    바꾸지 않는 핫픽스라 flip 과 무관하다.
+  // ⚠️ `saa-t1-2-q13` 은 보고 제안(`permissionsetsconcept`)이 **임시 자격증명을 아예
+  //    말하지 않는다** — 그 페이지는 권한 세트 템플릿과 세션 길이만 다룬다. 그래서
+  //    "Users in IAM Identity Center are granted temporary credentials" 를 적는
+  //    `howtogetcredentials` 로 바꿨다. q14 는 보고 제안대로 `permissionsetsconcept` 다.
+  group('2026-10-28 출처 교체 — 배치 1 (t1-2·t1-3·t1-4)', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q11',
+        add: 'controltower/latest/userguide/special-accounts',
+        drop: 'orgs_introduction',
+        why: '"The Config aggregator account should be restricted to security and '
+            'compliance teams with auditor (read-only) and administrator (full-access) '
+            'cross-account roles to all accounts in the landing zone" + "You might know '
+            'this account by its previous name: the audit account"',
+      ),
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q12',
+        add: 'orgs_manage_org_support-all-features',
+        drop: 'orgs_introduction',
+        why: '"Consolidated billing features - This feature set is limited to generating '
+            'a single bill across an organization. No other management capabilities are '
+            'available with consolidated billing." + 전체 기능 쪽에만 "organization policies"',
+      ),
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q13',
+        add: 'howtogetcredentials',
+        drop: 'orgs_introduction',
+        why: '"Users in IAM Identity Center are granted temporary credentials ... these '
+            'credentials are generated every time you sign in" + "Permission sets are '
+            'stored in IAM Identity Center and define the level of access that an IAM '
+            'Identity Center user has to an AWS account"',
+      ),
+      (
+        task: 'saa-t1-2', qid: 'saa-t1-2-q14',
+        add: 'permissionsetsconcept',
+        drop: 'orgs_introduction',
+        why: '"use that single permission set to grant access to a list of target AWS '
+            'accounts within your AWS Organization" + "As you modify the permission set, '
+            'IAM Identity Center ensures that the corresponding IAM policies and roles '
+            'are updated accordingly"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q1',
+        add: 'configure-subnets',
+        drop: 'what-is-amazon-vpc',
+        why: '"The subnet type is determined by how you configure routing for your '
+            'subnets" + "Public subnet - The subnet has a direct route to an internet '
+            'gateway" / "Private subnet - The subnet does not have a direct route"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q2',
+        add: 'subnet-sizing',
+        drop: 'what-is-amazon-vpc',
+        why: '"The first four IP addresses and the last IP address in each subnet CIDR '
+            'block are not available for your use" + 네트워크 주소·VPC 라우터·DNS(base+2)·'
+            'AWS 예약·브로드캐스트 5종을 그대로 열거한다',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q8',
+        add: 'vpc-nat-gateway',
+        drop: 'what-is-amazon-vpc',
+        why: '"instances in a private subnet can connect to services outside your VPC but '
+            'external services can\'t initiate a connection with those instances" + '
+            '"Connections must always be initiated from within the VPC containing the '
+            'NAT gateway"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q11',
+        add: 'peering/vpc-peering-basics',
+        drop: 'what-is-amazon-vpc',
+        why: '"transitive peering relationships are not supported" + "you cannot use VPC '
+            'A as a transit point for peering between VPC B and VPC C ... you must create '
+            'a unique VPC peering connection between them"',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q15',
+        add: 'peering/vpc-peering-basics',
+        drop: 'what-is-amazon-vpc',
+        why: '"The accepter VPC can be owned by you, or another AWS account, and cannot '
+            'have a CIDR block that overlaps with the CIDR block of the requester VPC"',
+      ),
+      (
+        task: 'saa-t1-4', qid: 'saa-t1-4-q7',
+        add: 'fms-chapter',
+        drop: 'what-is-aws-waf',
+        why: '"With Firewall Manager, you set up your protections just once and the '
+            'service automatically applies them across your accounts and resources, even '
+            'as you add new accounts and resources" + 보호 목록 첫 항목이 AWS WAF',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+  });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 2 (t2-2·t2-3). 여섯 문항 모두
+  // `welcome`·`what-is` 소개 페이지 하나만 달고 있었다.
+  //
+  // ⚠️ `saa-t2-2-q1` 은 출처를 **둘** 둔다. 보고가 제안한
+  //    `invocation-async-error-handling` 은 재시도 2회·DLQ 를 적지만 "S3 가
+  //    Lambda 를 비동기로 호출한다"는 말이 없다 — 그 사실은 오답 근거 [1] 의
+  //    핵심이라 `invocation-async` 를 함께 단다.
+  // ⚠️ `saa-t2-2-q8` 의 "지연도 낮다"는 **어느 공식 페이지에도 없다.** 정본
+  //    비교 페이지와 HTTP API 소개 페이지 모두 "lower price"·"minimal features"
+  //    까지만 말한다. 근거 없는 주장을 남기면 출처만 바꾼 셈이라 문구를 문서가
+  //    적는 근거(기능 최소화 → 낮은 가격)로 바꿨다. 드래프트 Task 라 라이브
+  //    영향은 없고 `correct`(1)는 그대로다.
+  group('2026-10-28 출처 교체 — 배치 2 (t2-2·t2-3)', () {
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q1',
+        add: 'invocation-async-error-handling',
+        drop: 'lambda/latest/dg/welcome',
+        why: '"by default Lambda attempts to run it two more times" + "When an event '
+            'expires or fails all processing attempts, Lambda discards it. To capture '
+            'discarded events, configure a dead-letter queue for the function."',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q5',
+        add: 'lambda-intro-execution-role',
+        drop: 'lambda/latest/dg/welcome',
+        why: '"an execution role is an AWS Identity and Access Management (IAM) role that '
+            'grants the function permission to access AWS services and resources" + '
+            '"Lambda automatically assumes your execution role" + DynamoDB 용례',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q8',
+        add: 'http-api-vs-rest',
+        drop: 'developerguide/welcome',
+        why: '"HTTP APIs are designed with minimal features so that they can be offered '
+            'at a lower price" + "Choose REST APIs if you need features such as API keys, '
+            'per-client throttling, request validation, AWS WAF integration" + 기능표의 '
+            'Caching·AWS WAF·API keys 가 REST Yes / HTTP No',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q10',
+        add: 'api-gateway-api-usage-plans',
+        drop: 'developerguide/welcome',
+        why: '"A quota limit sets the target maximum number of requests with a given API '
+            'key that can be submitted within a specified time interval" + "A throttling '
+            'limit sets the target point at which request throttling should start"',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q8',
+        add: 'as-scaling-target-tracking',
+        drop: 'what-is-amazon-ec2-auto-scaling',
+        why: '공식 페이지가 **CPU 50% 예시를 그대로** 싣는다: "you want the CPU utilization '
+            'of the Auto Scaling group to stay at around 50 percent" + "your Auto Scaling '
+            'group will scale out ... It will scale in" + "Amazon EC2 Auto Scaling creates '
+            'and manages the CloudWatch alarms"',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q9',
+        add: 'ec2-auto-scaling-predictive-scaling',
+        drop: 'what-is-amazon-ec2-auto-scaling',
+        why: '"analyzing historical load data to detect daily or weekly patterns" + '
+            '"Applications that take a long time to initialize, causing a noticeable '
+            'latency impact ... during scale-out events" + "launching capacity in advance '
+            'of forecasted load, compared to using only dynamic scaling, which is '
+            'reactive in nature"',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t2-2-q1: S3→Lambda 비동기 호출 출처도 함께 달렸다', () {
+      // 'invocation-async' 는 'invocation-async-error-handling' 의 부분 문자열이라
+      // `.html` 까지 붙여 정확히 가린다.
+      expect(
+          hasSource(question('saa-t2-2', 'saa-t2-2-q1'), 'invocation-async.html'),
+          isTrue,
+          reason: '오답 근거 [1] 의 "S3→Lambda 는 비동기" 를 담은 페이지가 없다. 근거: '
+              '"Several AWS services, such as Amazon Simple Storage Service (Amazon S3) '
+              'and Amazon Simple Notification Service (Amazon SNS), invoke Event Functions '
+              'asynchronously"');
+    });
+
+    test('saa-t2-2-q8: 근거 없는 "지연이 낮다" 주장이 없고 낮은 가격 근거가 있다', () {
+      final q = question('saa-t2-2', 'saa-t2-2-q8');
+      expect(q['correct'], 1, reason: '출처 교체 작업에서 정답은 바뀌지 않는다');
+      final text = allText(q);
+      for (final banned in <String>['지연도 낮다', '지연이 낮다']) {
+        expect(text.contains(banned), isFalse,
+            reason: 'saa-t2-2-q8 에 공식 문서가 적지 않는 지연 주장이 남아 있다: '
+                '"$banned" — 정본 비교 페이지와 HTTP API 소개 페이지 모두 '
+                '"lower price"·"minimal features" 까지만 말한다');
+      }
+      expect(text.contains('낮은 가격'), isTrue,
+          reason: 'saa-t2-2-q8 에 문서가 적는 근거("lower price")가 없다');
+    });
+  });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 3 (t3-1·t3-6).
+  //
+  // ⚠️ 두 문항은 **사실이 둘**이라 출처를 둘 둔다. 보고가 제안한 페이지 하나로는
+  //    오답 근거의 핵심이 빈다.
+  //    - `saa-t3-6-q5`: `provisioned-capacity-mode` 가 "강력한 일관성 = 2배" 를
+  //      적지만 **GSI 가 최종 일관성만 지원한다**는 말이 없다(오답 [3] 의 근거).
+  //      `GSI` 의 "Global secondary indexes support eventually consistent reads,
+  //      each of which consume one half of a read capacity unit" 를 함께 단다.
+  //    - `saa-t3-6-q10`: `TTL` 이 자동 삭제·무비용을 적지만 Streams 가 없다.
+  //      `Streams` 의 "time-ordered sequence of item-level modifications" 를 함께.
+  group('2026-10-28 출처 교체 — 배치 3 (t3-1·t3-6)', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q8',
+        add: 'upload-objects',
+        drop: 'optimizing-performance',
+        why: '"With a single PUT operation, you can upload a single object up to 5 GB in '
+            'size" + "Using the multipart upload API operation, you can upload a single '
+            'large object, up to 50 TB in size"',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q12',
+        add: 'private-content-restricting-access-to-s3',
+        drop: 'AmazonS3/latest/userguide/Welcome',
+        why: '"CloudFront provides two ways to send authenticated requests to an Amazon S3 '
+            'origin: origin access control (OAC) and origin access identity (OAI). OAC '
+            'helps you secure your origins" + "We recommend that you use OAC" + 그 배포만 '
+            '허용하는 버킷 정책 예시',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q14',
+        add: 'replication-requirements',
+        drop: 'AmazonS3/latest/userguide/Welcome',
+        why: '"Amazon S3 replication requires the following: ... Both source and '
+            'destination buckets must have versioning enabled."',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q15',
+        add: 's3-batch-replication-batch',
+        drop: 'AmazonS3/latest/userguide/Welcome',
+        why: '"S3 Batch Replication differs from live replication, which continuously and '
+            'automatically replicates new objects ... Instead, S3 Batch Replication occurs '
+            'on demand on existing objects" + 대상에 "Objects that existed before a '
+            'replication configuration was in place"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q2',
+        add: 'bp-partition-key-uniform-load',
+        drop: 'developerguide/Introduction',
+        why: '공식 페이지의 "Bad" 예시가 **바로 이 문항의 상황**이다: "Status code, where '
+            'there are only a few possible status codes. | Bad" (User ID = Good) + "A '
+            'partition key design that does not distribute I/O requests effectively can '
+            'create hot partitions that result in throttling"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q5',
+        add: 'provisioned-capacity-mode',
+        drop: 'developerguide/Introduction',
+        why: '"For an item up to 4 KB, one read capacity unit (RCU) represents one strongly '
+            'consistent read operation per second, or two eventually consistent read '
+            'operations per second" + "strongly consistent read operations, which consume '
+            'twice as many database resources as eventually consistent reads"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q10',
+        add: 'developerguide/TTL.html',
+        drop: 'developerguide/Introduction',
+        why: '"TTL allows you to define a per-item expiration timestamp" + "DynamoDB '
+            'automatically deletes expired items ... without consuming write throughput" + '
+            '"cost-effective method for deleting items"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q14',
+        add: 'dg/Strategies',
+        drop: 'ElastiCache/latest/dg/WhatIs',
+        why: 'Write-through 장점 "Data in the cache is never stale. Because the data in the '
+            'cache is updated every time it is written to the database" + 단점 "Write '
+            'penalty ... adds latency" · "Cache churn. Most data is never read, which is a '
+            'waste of resources"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q15',
+        add: 'dg/Strategies',
+        drop: 'ElastiCache/latest/dg/WhatIs',
+        why: 'Lazy loading 단점 "Stale data. If data is written to the cache only when there '
+            'is a cache miss, data in the cache can become stale ... To address this issue, '
+            'you can use the Write-through and Adding TTL strategies" + TTL 절 "When an '
+            'application attempts to read an expired key, it is treated as though the key '
+            'is not found. The database is queried for the key and the cache is updated."',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t3-6-q5: GSI 최종 일관성 전용 출처도 함께 달렸다', () {
+      expect(hasSource(question('saa-t3-6', 'saa-t3-6-q5'), 'developerguide/GSI.html'),
+          isTrue,
+          reason: '오답 근거 [3] 의 "GSI 는 최종 일관성 읽기만 지원" 을 담은 페이지가 없다. '
+              '근거: "Global secondary indexes support eventually consistent reads, each '
+              'of which consume one half of a read capacity unit"');
+    });
+
+    test('saa-t3-6-q10: DynamoDB Streams 출처도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t3-6', 'saa-t3-6-q10'), 'developerguide/Streams.html'),
+          isTrue,
+          reason: '해설의 "항목 변경 이벤트를 순서대로 기록" 을 담은 페이지가 없다. 근거: '
+              '"DynamoDB Streams captures a time-ordered sequence of item-level '
+              'modifications" + "the stream records appear in the same sequence as the '
+              'actual modifications"');
+    });
+  });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 4 (t3-7·t3-8·t3-9).
+  //
+  // ⚠️ 보고가 적은 `t3-8-q12` URL 은 **죽은 슬러그**다. 실측하면
+  //    `aws-technical-content/latest/aws-vpc-connectivity-options/aws-privatelink.html`
+  //    → `whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink.html` 로
+  //    리다이렉트된다(`rds-reserved-instances` 와 같은 계열). 정본을 쓴다. 레포에
+  //    옛 슬러그를 쓰던 문항은 없었다(전역 실측 0건) — 보고서에만 있었다.
+  // ⚠️ `saa-t3-7-q13` 은 출처를 **둘** 둔다. docs 소개 페이지가 L4·수백만 RPS·
+  //    고정 IP 는 적지만 "초저지연"을 **말하지 않는다**. 그 문구는 제품 페이지의
+  //    "millions of requests per second while maintaining ultra-low latencies" 가
+  //    정본이라 함께 단다.
+  group('2026-10-28 출처 교체 — 배치 4 (t3-7·t3-8·t3-9)', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q2',
+        add: 'resource-record-sets-choosing-alias-non-alias',
+        drop: 'Route53/latest/DeveloperGuide/Welcome',
+        why: '"Unlike a CNAME record, you can create an alias record at the top node of a '
+            'DNS namespace, also known as the zone apex ... You cannot create a CNAME '
+            'record for example.com" + "Route 53 detects changes in the resource on its '
+            'own" + "Route 53 does not charge for alias queries to AWS resources"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q7',
+        add: 'private-content-restricting-access-to-s3',
+        drop: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        why: '"We recommend that you use OAC instead" + "Use an S3 bucket policy to allow '
+            'the CloudFront service principal (cloudfront.amazonaws.com) to access the '
+            'bucket. Use a Condition element ... only when the request is on behalf of '
+            'the CloudFront distribution"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q8',
+        add: 'private-content-choosing-signed-urls-cookies',
+        drop: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        why: '"Use signed URLs ... You want to restrict access to individual files" vs '
+            '"Use signed cookies ... You want to provide access to multiple restricted '
+            'files ... or all of the files in the subscribers area of website"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q9',
+        add: 'cnames-and-https-requirements',
+        drop: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        why: '"To use a certificate in AWS Certificate Manager (ACM) to require HTTPS '
+            'between viewers and CloudFront, make sure you request (or import) the '
+            'certificate in the US East (N. Virginia) Region (us-east-1)."',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q13',
+        add: 'elasticloadbalancing/latest/network/introduction',
+        drop: 'Route53/latest/DeveloperGuide/Welcome',
+        why: '"A Network Load Balancer functions at the fourth layer of the ... (OSI) '
+            'model. It can handle millions of requests per second." + 대상 그룹이 "TCP, '
+            'UDP, TCP_UDP, TLS, QUIC, and TCP_QUIC" + "Support for static IP addresses '
+            'for the load balancer"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q15',
+        add: 'elasticloadbalancing/latest/application/introduction',
+        drop: 'Route53/latest/DeveloperGuide/Welcome',
+        why: '"An Application Load Balancer functions at the application layer, the '
+            'seventh layer" + "Support for Path conditions. You can configure rules for '
+            'your listener that forward requests based on the URL in the request" + '
+            '"Support for registering Lambda functions as targets" + ECS 컨테이너 지원',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q1',
+        add: 'peering/vpc-peering-basics',
+        drop: 'what-is-transit-gateway',
+        why: '"transitive peering relationships are not supported. You do not have any '
+            'peering relationship with VPCs that your VPC is not directly peered with" + '
+            '"you cannot use VPC A as a transit point for peering between VPC B and VPC C"',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q11',
+        add: 'privatelink/gateway-endpoints',
+        drop: 'what-is-privatelink',
+        why: '"Gateway VPC endpoints provide reliable connectivity to Amazon S3 and '
+            'DynamoDB without requiring an internet gateway or a NAT device" + "There is '
+            'no additional charge for using gateway endpoints." + 라우트 테이블에 prefix '
+            'list 경로가 자동 추가되고 "Gateway endpoints do not use AWS PrivateLink"',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q12',
+        add: 'whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink',
+        drop: 'what-is-privatelink',
+        why: '"AWS PrivateLink is a good solution when the VPCs have overlapped IP '
+            'addresses." + "The interface endpoints are created directly inside of your '
+            'VPC, using elastic network interfaces and IP addresses in your VPC subnets"',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q13',
+        add: 'create-endpoint-service',
+        drop: 'what-is-privatelink',
+        why: '"You can create your own service powered by AWS PrivateLink, known as an '
+            'endpoint service. You are the service provider" + "Endpoint services require '
+            'either a Network Load Balancer or a Gateway Load Balancer" + 소비자는 '
+            '인터페이스 엔드포인트를 만든다',
+      ),
+      (
+        task: 'saa-t3-9', qid: 'saa-t3-9-q3',
+        add: 'streams/latest/dev/key-concepts',
+        drop: 'streams/latest/dev/introduction',
+        why: '샤드 정의가 수치를 그대로 적는다: "Each shard can support up to 5 transactions '
+            'per second for reads, up to a maximum total data read rate of 2 MB per second '
+            'and up to 1,000 records per second for writes, up to a maximum total data '
+            'write rate of 1 MB per second (including partition keys)."',
+      ),
+      (
+        task: 'saa-t3-9', qid: 'saa-t3-9-q15',
+        add: 'what-is-kinesis-video',
+        drop: 'streams/latest/dev/introduction',
+        why: '"stream live video from devices to the AWS Cloud" + "capture massive amounts '
+            'of live video data from millions of sources, including smartphones, security '
+            'cameras, webcams" + "durably store media data for the specified retention '
+            'period ... and encrypts it at rest"',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t3-7-q13: 초저지연 근거 페이지도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t3-7', 'saa-t3-7-q13'),
+              'elasticloadbalancing/network-load-balancer'),
+          isTrue,
+          reason: 'docs 소개 페이지는 "초저지연"을 말하지 않는다. 근거: 제품 페이지의 '
+              '"capable of handling millions of requests per second while maintaining '
+              'ultra-low latencies" + "Low Latency: Network Load Balancer offers '
+              'extremely low latencies for latency-sensitive applications"');
+    });
+  });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 5 (t4-1·t4-4·t4-5). 비용 문항이라
+  // 수치가 많아 **수치가 실제로 적힌 페이지**를 골랐다.
+  //
+  // ⚠️ `aws.amazon.com/*/pricing/` 요율 **표는 JS 로 그려져 본문에 안 나온다.**
+  //    그래서 수치가 산문으로 적힌 페이지를 함께 단다 — TGW 요금 페이지의 가격
+  //    예시($0.05/어태치먼트-시간 · 1 GB = $0.02), 데이터 전송 비용 개요 블로그,
+  //    EKS 비용 최적화 가이드($0.01/GB each way).
+  // ⚠️ `t4-1-q12` 는 보고 제안(S3·CloudFront 요금 페이지)과 **다른 페이지**를 쓴다.
+  //    CloudFront 요금 페이지는 현재 정액제(flat-rate) 안내로 바뀌어 "오리진→CF
+  //    무료"가 없다. 그 문장의 정본은 CloudFront **소개 페이지의 Pricing 절**이다.
+  //    소개 페이지가 늘 틀린 출처인 것이 아니라, 사실을 담고 있으면 맞는 출처다.
+  // ⚠️ `t4-4-q2` 는 **교체가 아니라 추가**다. 기존 출처(VPC 요금)가 "traffic stays
+  //    in the same Availability Zone using private IP addresses" 로 이 문항의
+  //    갈림길(사설 IP 조건)을 그대로 적고 있어 지울 이유가 없었다.
+  group('2026-10-28 출처 교체 — 배치 5 (t4-1·t4-4·t4-5)', () {
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q10',
+        add: 'nat-gateway-pricing',
+        drop: 'ec2/pricing/on-demand',
+        why: '"you are charged for each hour that your NAT gateway is available and each '
+            'gigabyte of data that it processes" + 비용 절감 전략으로 "If most traffic '
+            'through your NAT gateway is to AWS services that support interface endpoints '
+            'or gateway endpoints, consider creating an interface endpoint or gateway '
+            'endpoint for these services"',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q12',
+        add: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        drop: 'ec2/pricing/on-demand',
+        why: 'Pricing 절이 그대로 적는다: "The data transfer from your origin to CloudFront '
+            'is always free when using AWS origins like Amazon Simple Storage Service '
+            '(Amazon S3) ... You are only billed for the outbound data transfer from '
+            'CloudFront to the viewer when using AWS origins."',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q15',
+        add: 'mpu-abort-incomplete-mpu-lifecycle-config',
+        drop: 'storage-class-intro',
+        why: '"As a best practice, we recommend that you configure a lifecycle rule by '
+            'using the AbortIncompleteMultipartUpload action to minimize your storage '
+            'costs." + 예시가 DaysAfterInitiation 7 이고 "This rule applies to both '
+            'existing multipart uploads and those that you create later."',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q1',
+        add: 'ec2/pricing/on-demand',
+        drop: 'vpc/pricing',
+        why: '데이터 전송 비용 개요가 방향 규칙을 그대로 적는다: "There is no charge for '
+            'inbound data transfer across all services in all Regions. Data transfer from '
+            'AWS to the internet is charged per service, with rates specific to the '
+            'originating Region."',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q10',
+        add: 'transit-gateway/pricing',
+        drop: 'vpc/pricing',
+        why: '가격 예시가 수치를 적는다: "the rate is \$0.1 per hour (\$0.05 per VPC '
+            'attachment)" + "The Transit Gateway Data Processing will result in a charge '
+            'of \$0.02" (1 GB). 피어링 쪽은 개요 블로그의 "Data transfer over a VPC peering '
+            'connection that stays within an Availability Zone is free"',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q11',
+        add: 'transit-gateway/pricing',
+        drop: 'vpc/pricing',
+        why: '"you are charged for the number of connections that you make to the Transit '
+            'Gateway per hour and the amount of traffic that flows through" + 개요 블로그의 '
+            '"Transit Gateway can interconnect hundreds or thousands of VPCs"',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q15',
+        add: 'overview-of-data-transfer-costs',
+        drop: 'vpc/pricing',
+        why: '개요 블로그가 이 문항 상황을 그대로 적는다: "Replication between the primary '
+            'and standby instances does not incur additional data transfer charges. '
+            'However, data transfer charges will apply from any consumers outside the '
+            'current primary instance Availability Zone."',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q6',
+        add: 'consolidated-billing',
+        drop: 'budgets-managing-costs',
+        why: '"Combined usage - You can combine the usage across all accounts in the '
+            'organization. This shares the volume pricing discounts, Reserved Instance '
+            'discounts, and Savings Plans. This can result in a lower charge ... than with '
+            'individual standalone accounts." + "No extra fee"',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 사실을 담지 않은 옛 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t4-1-q10: 게이트웨이 엔드포인트 무료 근거도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t4-1', 'saa-t4-1-q10'),
+              'privatelink/gateway-endpoints'),
+          isTrue,
+          reason: 'NAT 요금 페이지는 "게이트웨이 엔드포인트는 무료"를 적지 않는다. 근거: '
+              '"There is no additional charge for using gateway endpoints."');
+    });
+
+    test('saa-t4-4-q1·q10·q11: 데이터 전송 비용 개요 출처도 함께 달렸다', () {
+      for (final qid in <String>['saa-t4-4-q1', 'saa-t4-4-q10', 'saa-t4-4-q11']) {
+        expect(hasSource(question('saa-t4-4', qid), 'overview-of-data-transfer-costs'),
+            isTrue,
+            reason: '$qid: 요금 페이지의 요율 표는 JS 로 그려져 본문에 없다. 방향·AZ·'
+                '피어링·TGW 규칙이 산문으로 적힌 개요 문서를 함께 달아야 한다');
+      }
+    });
+
+    test('saa-t4-4-q15: 교차 AZ 단가 근거도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t4-4', 'saa-t4-4-q15'), 'network-cost-reduction'),
+          isTrue,
+          reason: '개요 블로그는 교차 AZ 과금을 적지만 단가를 주지 않는다. 근거: '
+              '"Cross-AZ data transfer ... per-GB transfer charges (\$0.01/GB each way)"');
+    });
+
+    // 교체가 아니라 추가인 유일한 문항이다 — 기존 출처가 이미 사실을 담고 있었다.
+    test('saa-t4-4-q2: 사설 IP 조건 출처를 유지하면서 요율 페이지를 더했다', () {
+      final q = question('saa-t4-4', 'saa-t4-4-q2');
+      expect(hasSource(q, 'vpc/pricing'), isTrue,
+          reason: 'VPC 요금 페이지가 이 문항의 갈림길을 그대로 적는다: "no charge for the '
+              'data transfer between the NAT gateway and the EC2 instance since the '
+              'traffic stays in the same Availability Zone using private IP addresses" '
+              '— 지울 이유가 없다');
+      expect(hasSource(q, 'ec2/pricing/on-demand'), isTrue,
+          reason: 'EC2 인스턴스 간 같은 리전 데이터 전송 요율의 정본 페이지가 없다');
+    });
+
+    test('saa-t4-4-q1: 확인되지 않는 단일 아웃바운드 단가를 쓰지 않는다', () {
+      final q = question('saa-t4-4', 'saa-t4-4-q1');
+      expect(q['correct'], 3, reason: '출처 교체 작업에서 정답은 바뀌지 않는다');
+      final text = allText(q);
+      expect(text.contains('0.09'), isFalse,
+          reason: 'saa-t4-4-q1 이 아웃바운드를 단일 단가로 단정하고 있다. 공식 문서는 '
+              '"charged per service, with rates specific to the originating Region" 까지만 '
+              '말하고, 요율 표는 리전·서비스별로 다르다');
+      expect(text.contains('송신 리전'), isTrue,
+          reason: 'saa-t4-4-q1 에 문서가 적는 근거(서비스별·송신 리전별 요율)가 없다');
+    });
+  });
 }

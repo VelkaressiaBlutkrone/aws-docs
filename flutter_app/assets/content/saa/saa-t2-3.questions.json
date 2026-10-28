@@ -193,7 +193,7 @@
         "3": "예측 정책은 ML이 과거 트래픽 패턴을 분석해 부하 도달 전에 선제적으로 확장하는 정책입니다. 단순 CPU 목표 유지 목적에 대한 가장 단순한 설정은 대상 추적입니다."
       },
       "sources": [
-        { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
+        { "title": "대상 추적 조정 정책 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html" }
       ],
       "verified": false
     },
@@ -217,7 +217,7 @@
         "3": "수동 조정은 자동화가 없어 매주 사람이 직접 개입해야 합니다. 실수나 누락 시 서비스 장애로 이어집니다."
       },
       "sources": [
-        { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
+        { "title": "예측 조정 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html" }
       ],
       "verified": false
     },

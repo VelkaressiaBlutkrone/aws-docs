@@ -190,6 +190,16 @@ final List<({String text, String origin, String why})> _rules = [
     why: 'AD는 외부 SAML IdP가 아니라 AWS Directory Service로 연결하는 별도 ID 소스다',
   ),
 
+  // ── saa_t2_t4_facts_test.dart (Task 3.4) ──────────────────────────────
+  // 2026-10-28 추가. md 쪽 5개소를 정정하며 함께 걸었다. 문항 쪽은 우선순위 3
+  // 작업(PR#266)이 이미 `VPN over Direct Connect` 로 맞춰 둬 처음부터 0건이므로
+  // 이 항목은 회귀 가드다 — md와 문항이 다시 어긋나는 것을 막는다.
+  (
+    text: 'DX over VPN',
+    origin: 'saa_t2_t4 G-3.4-14',
+    why: '공식 문서는 VPN을 DX 위에 얹는 "VPN over Direct Connect"로 적는다 — 위아래가 거꾸로다',
+  ),
+
   // ── saa_t12_t13_facts_test.dart (Task 1.2·1.3) ────────────────────────
   (
     text: 'us-east-1 제한 없음',

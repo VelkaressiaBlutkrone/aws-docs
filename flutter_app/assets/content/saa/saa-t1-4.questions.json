@@ -172,7 +172,7 @@
         "3": "Shield Advanced는 DDoS 방어 서비스이며 WAF 웹 ACL 정책의 다계정 자동 배포 기능을 제공하지 않습니다."
       },
       "sources": [
-        { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
+        { "title": "AWS Firewall Manager (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html" }
       ],
       "verified": false
     },

@@ -9,7 +9,7 @@ coversTasks:
   - "4.3"
 sources:
   - title: Amazon RDS 예약 인스턴스 (공식)
-    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html
   - title: Aurora serverless (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
   - title: DynamoDB 읽기/쓰기 용량 모드 (공식)
@@ -24,7 +24,7 @@ sources:
     url: https://aws.amazon.com/redshift/pricing/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-24
+lastVerified: 2026-10-28
 ---
 
 # 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션
@@ -473,33 +473,32 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 
 이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
-1. Amazon RDS 예약 인스턴스 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html
-2. Aurora serverless — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
-3. DynamoDB 읽기/쓰기 용량 모드 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
-4. AWS 데이터베이스 서비스 개요 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
-5. RDS 예약 DB 인스턴스(사이즈 유연성 대상 엔진·Multi-AZ 적용·스토리지 미할인) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html
-6. Savings Plans 유형(Database Savings Plans) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
-7. Timestream for LiveAnalytics 가용성 변경(2025-06-20 신규 고객 불가) — https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html
-8. RDS 백업 소개(리전 단위 백업 스토리지 합계) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
-9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-10. AWS DMS 요금("The AWS Schema Conversion Tool incurs no cost", 복제 인스턴스 + 추가 로그 스토리지, DMS 인바운드·같은 AZ 전송 무료) — https://aws.amazon.com/dms/pricing/
-11. Amazon Timestream — What is?(LiveAnalytics 대신 "consider Amazon Timestream for InfluxDB") — https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html
-12. Amazon Redshift 요금(컴퓨트와 관리형 스토리지 독립 과금·리더 노드 무료·Serverless RPU-시간) — https://aws.amazon.com/redshift/pricing/
-13. MySQL vs PostgreSQL 비교(읽기 빈번 vs 쓰기 빈번·객체-관계형·ACID) — https://aws.amazon.com/compare/the-difference-between-mysql-vs-postgresql/
-14. 상용 엔진 → 오픈소스 전환의 라이선스 절감 관점 — https://docs.aws.amazon.com/prescriptive-guidance/latest/optimize-costs-microsoft-workloads/right-size-selection.html
-15. RDS Proxy 요금(대상 인스턴스 용량 기준 · vCPU-시간당 / Aurora serverless는 ACU-시간당 · 초 단위 10분 최소) — https://aws.amazon.com/rds/proxy/pricing/
-16. RDS 중지(최대 7일 후 자동 재시작 · 중지 중 인스턴스 시간 미과금 · 스토리지·백업·퍼블릭 IPv4는 과금) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html · https://repost.aws/knowledge-center/rds-stop-seven-days
-17. Multi-AZ 비용(대기 인스턴스·스토리지로 약 2배) — https://aws.amazon.com/rds/features/multi-az/ · https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_OnDemandDBInstances.html
-18. RDS Extended Support 과금(vCPU-시간 단위 · Aurora serverless는 ACU-시간 · Multi-AZ 대기도 과금 · 연차에 따라 상승) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support-charges.html
-19. Trusted Advisor DB 비용 점검(유휴 DB 인스턴스·RDS/ElastiCache/Redshift/OpenSearch 예약 최적화) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/supported-resources.html
-20. AWS Budgets RI 알림이 EC2·RDS·Redshift·ElastiCache 예약을 지원 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/aws-cost-management.html
-21. Aurora 스토리지 구성(I/O-Optimized는 읽기·쓰기 I/O 요금 없음 · **I/O 지출이 전체의 25% 초과 시 최대 40% 절감**) — https://aws.amazon.com/rds/aurora/pricing/
-22. RDS 교차 리전 읽기 복제본(리전 간 데이터 전송 과금) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html
-23. Aurora 백업 보존(클러스터 총 Aurora 스토리지의 **100%까지 무료** · 보존 기간 밖 수동 스냅샷 · 스냅샷 **복사본은 항상 과금**) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.Retaining.html
-24. RDS 백업 무료 범위(계정·리전 전체의 프로비저닝 DB 스토리지 합계 · 증분 백업) — https://aws.amazon.com/rds/faqs/
-25. DynamoDB 요금(예약 용량 1년 최대 54%·3년 최대 77% · Standard-IA 저장 비용 60% 절감) — https://aws.amazon.com/dynamodb/pricing/
-26. DynamoDB 백업·복원 과금(PITR·온디맨드 백업·복원) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/backup-restore-billing.html
-27. DynamoDB 용량 모드(**평균 활용률 35% 미만이면 온디맨드가 저렴**) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
+1. Aurora serverless — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
+2. DynamoDB 읽기/쓰기 용량 모드 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
+3. AWS 데이터베이스 서비스 개요 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
+4. RDS 예약 DB 인스턴스(사이즈 유연성 대상 엔진·Multi-AZ 적용·스토리지 미할인) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html
+5. Savings Plans 유형(Database Savings Plans) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
+6. Timestream for LiveAnalytics 가용성 변경(2025-06-20 신규 고객 불가) — https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html
+7. RDS 백업 소개(리전 단위 백업 스토리지 합계) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
+8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+9. AWS DMS 요금("The AWS Schema Conversion Tool incurs no cost", 복제 인스턴스 + 추가 로그 스토리지, DMS 인바운드·같은 AZ 전송 무료) — https://aws.amazon.com/dms/pricing/
+10. Amazon Timestream — What is?(LiveAnalytics 대신 "consider Amazon Timestream for InfluxDB") — https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html
+11. Amazon Redshift 요금(컴퓨트와 관리형 스토리지 독립 과금·리더 노드 무료·Serverless RPU-시간) — https://aws.amazon.com/redshift/pricing/
+12. MySQL vs PostgreSQL 비교(읽기 빈번 vs 쓰기 빈번·객체-관계형·ACID) — https://aws.amazon.com/compare/the-difference-between-mysql-vs-postgresql/
+13. 상용 엔진 → 오픈소스 전환의 라이선스 절감 관점 — https://docs.aws.amazon.com/prescriptive-guidance/latest/optimize-costs-microsoft-workloads/right-size-selection.html
+14. RDS Proxy 요금(대상 인스턴스 용량 기준 · vCPU-시간당 / Aurora serverless는 ACU-시간당 · 초 단위 10분 최소) — https://aws.amazon.com/rds/proxy/pricing/
+15. RDS 중지(최대 7일 후 자동 재시작 · 중지 중 인스턴스 시간 미과금 · 스토리지·백업·퍼블릭 IPv4는 과금) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html · https://repost.aws/knowledge-center/rds-stop-seven-days
+16. Multi-AZ 비용(대기 인스턴스·스토리지로 약 2배) — https://aws.amazon.com/rds/features/multi-az/ · https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_OnDemandDBInstances.html
+17. RDS Extended Support 과금(vCPU-시간 단위 · Aurora serverless는 ACU-시간 · Multi-AZ 대기도 과금 · 연차에 따라 상승) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/extended-support-charges.html
+18. Trusted Advisor DB 비용 점검(유휴 DB 인스턴스·RDS/ElastiCache/Redshift/OpenSearch 예약 최적화) — https://docs.aws.amazon.com/compute-optimizer/latest/ug/supported-resources.html
+19. AWS Budgets RI 알림이 EC2·RDS·Redshift·ElastiCache 예약을 지원 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/aws-cost-management.html
+20. Aurora 스토리지 구성(I/O-Optimized는 읽기·쓰기 I/O 요금 없음 · **I/O 지출이 전체의 25% 초과 시 최대 40% 절감**) — https://aws.amazon.com/rds/aurora/pricing/
+21. RDS 교차 리전 읽기 복제본(리전 간 데이터 전송 과금) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html
+22. Aurora 백업 보존(클러스터 총 Aurora 스토리지의 **100%까지 무료** · 보존 기간 밖 수동 스냅샷 · 스냅샷 **복사본은 항상 과금**) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.Retaining.html
+23. RDS 백업 무료 범위(계정·리전 전체의 프로비저닝 DB 스토리지 합계 · 증분 백업) — https://aws.amazon.com/rds/faqs/
+24. DynamoDB 요금(예약 용량 1년 최대 54%·3년 최대 77% · Standard-IA 저장 비용 60% 절감) — https://aws.amazon.com/dynamodb/pricing/
+25. DynamoDB 백업·복원 과금(PITR·온디맨드 백업·복원) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/backup-restore-billing.html
+26. DynamoDB 용량 모드(**평균 활용률 35% 미만이면 온디맨드가 저렴**) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
 
 > 📝 **2026-10-24 보강 — 갭 배치 B10a-2(`G-4.3-06`·`07`·`08`·`10`)**: 기존 절 4곳을 깊게 했습니다. ① **§3 읽기 복제본** — 복제본은 **표준 인스턴스와 같은 요율의 별도 인스턴스**라 "주 인스턴스 다운사이즈 절감 > 복제본 요금"이어야 이득이고, **교차 리전 복제본**은 전송이 더 붙으며 MySQL·MariaDB의 **연쇄** 구성으로 전송을 줄일 수 있습니다. ⚠️ Multi-AZ 대기는 읽기를 처리하지 않아 수단이 갈립니다(근거 22번). ② **§3 Aurora 스토리지 구성** — **I/O 지출 25%** 기준과 **최대 40% 절감**, ⚠️ 전환은 **방향마다 제약이 다릅니다**(I/O-Optimized → Standard는 언제든 / Standard → I/O-Optimized는 **30일에 한 번**)(근거 21번). ③ **§4** — 모드 선택의 **정량 기준(평균 활용률 35%)**으로 "기본 권장은 온디맨드"라는 과잉 일반화를 대체하고(근거 27번), **예약 용량·Standard-IA·TTL로 만료·Database SP** 절감 표와 **Redshift Serverless(최소 60초)·ElastiCache Serverless**를 더했습니다(근거 25번). ④ **§5** — 백업이 **증분**이라는 점, **Aurora는 클러스터 총 스토리지의 100%까지 무료**이고 보존 기간 밖 수동 스냅샷·**복사본은 항상 과금**, **DynamoDB PITR·온디맨드 백업·복원**, **AWS Backup** 일원화를 넣었습니다(근거 23·24·26번). ⑤ ⚠️ **작업 중 자기 정정 2건**: `최대 40% 절감`을 블로그 전용으로 보고 금지했다가 **요금 페이지 본문에서 확인**해 금지를 걷고 요구로 바꿨고, I/O-Optimized **전환 방향을 반대로 적었다가** 바로잡았습니다. 가드는 `test/saa_gaps_b10a2_test.dart`.
 

@@ -21,7 +21,7 @@
       "wrongExplanations": {
         "0": "Geolocation은 사용자의 지리적 위치(국가·대륙)를 기준으로 어떤 리소스에 접근 가능한지를 제어합니다. 네트워크 지연이 아니라 지리 규칙으로 라우팅하므로 '가장 빠른 응답'을 보장하지 않습니다.",
         "2": "Weighted 정책은 레코드별 가중치 비율로 트래픽을 분배합니다. A/B 테스트·점진 배포에 사용하며, 네트워크 지연 기준 라우팅과 관계없습니다.",
-        "3": "Geoproximity는 리소스 위치 + bias(편향값)로 트래픽 이동 범위를 조정하는 정책으로 Route 53 Traffic Flow 기능에서만 사용할 수 있습니다. 실측 지연을 기준으로 라우팅하지 않습니다."
+        "3": "Geoproximity는 리소스 위치 + bias(편향값, 1~99 / -1~-99)로 트래픽이 흐르는 지리적 범위를 조정하는 정책입니다. 실측 네트워크 지연을 기준으로 라우팅하지 않으므로 '가장 빠른 응답'을 보장하지 않습니다."
       },
       "sources": [
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
@@ -48,7 +48,7 @@
         "3": "MX 레코드는 이메일 서버를 지정하는 레코드로 ALB 연결과 무관합니다."
       },
       "sources": [
-        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+        { "title": "별칭 레코드와 비별칭 레코드 중 선택 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html" }
       ],
       "verified": false
     },
@@ -57,7 +57,7 @@
       "examGuideTaskId": "saa-t3-7",
       "skill": "Route 53 Failover 정책과 헬스 체크",
       "difficulty": "applied",
-      "stem": "한 기업이 Route 53 Failover 정책으로 액티브-패시브 DR을 구성하려 한다. Primary 엔드포인트 장애 시 Secondary로 자동 전환되게 하려면 반드시 추가해야 하는 설정은?",
+      "stem": "한 기업이 Route 53 Failover 정책으로 액티브-패시브 DR을 구성하려 한다. Primary·Secondary 모두 별칭(alias) 레코드를 만들 수 없는 온프레미스 엔드포인트라서 IP로 직접 지정했다. Primary 엔드포인트 장애 시 Secondary로 자동 전환되게 하려면 반드시 추가해야 하는 설정은?",
       "options": [
         "Route 53 Geolocation 정책을 Failover와 함께 사용한다",
         "헬스 체크(Health Check)를 Primary 레코드에 연결한다",
@@ -65,14 +65,15 @@
         "Secondary 레코드에만 가중치(Weight)를 설정한다"
       ],
       "correct": 1,
-      "explanation": "Failover 정책은 Primary가 비정상일 때 Secondary로 전환하는 것이 유일한 목적입니다. 비정상 여부를 판별할 수단이 없으면 전환 트리거 자체가 없으므로, 헬스 체크 연동은 Failover 정책에서 선택이 아니라 필수입니다. 헬스 체크 없이는 Route 53이 Primary의 상태를 알 방법이 없어 장애가 발생해도 계속 Primary 주소를 반환합니다.",
+      "explanation": "Failover 정책은 Primary가 비정상일 때 Secondary로 전환하는 것이 유일한 목적입니다. 비정상 여부를 판별할 수단이 없으면 전환 트리거 자체가 없으므로, 별칭(alias) 레코드를 만들 수 없는 엔드포인트를 IP로 직접 지정한 이 구성에서는 헬스 체크 연동이 필수입니다. 헬스 체크 없이는 Route 53이 Primary의 상태를 알 방법이 없어 장애가 발생해도 계속 Primary 주소를 반환합니다. 예외도 알아 두세요 — 별칭 레코드를 만들 수 있는 AWS 리소스(ELB, 웹사이트로 구성한 S3 버킷 등)로 보낼 때는 그 리소스용 헬스 체크를 만들지 말고 Evaluate Target Health를 Yes로 두는 것이 공식 권장 방식입니다.",
       "wrongExplanations": {
         "0": "Geolocation 정책은 사용자의 지리적 위치를 기준으로 라우팅합니다. Failover 정책과 다른 라우팅 정책으로 함께 사용해도 장애 자동 전환 기능을 제공하지 않습니다.",
-        "2": "TTL을 낮추면 DNS 전파 지연을 줄이는 데 도움이 되지만, 헬스 체크 없이는 Failover 자체가 동작하지 않습니다. TTL 설정만으로는 전환 트리거가 생기지 않습니다.",
+        "2": "TTL을 낮추면 DNS 전파 지연을 줄이는 데 도움이 되지만, 이 구성에서는 헬스 체크 없이 Failover 자체가 동작하지 않습니다. TTL 설정만으로는 전환 트리거가 생기지 않습니다.",
         "3": "가중치(Weight)는 Weighted 라우팅 정책의 요소로, Failover 정책의 Primary/Secondary 전환 메커니즘과 관계없습니다."
       },
       "sources": [
-        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" },
+        { "title": "액티브-액티브·액티브-패시브 페일오버 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-types.html" }
       ],
       "verified": false
     },
@@ -116,7 +117,7 @@
       "explanation": "Geolocation 정책은 사용자 IP의 지리적 위치(국가·대륙)를 기준으로 라우팅합니다. 콘텐츠 현지화, 지역 규제 준수 시나리오에서 사용자가 어느 국가에 있느냐에 따라 다른 리소스로 보낼 수 있습니다. Latency 정책은 네트워크 지연 최적화가 목적이라 국가별 규제 준수 용도와 다릅니다.",
       "wrongExplanations": {
         "0": "Latency 정책은 실측 네트워크 지연을 기준으로 가장 빠른 리전을 선택합니다. 지리적 위치가 아니라 지연 측정값이 기준이라, 규제 준수처럼 '반드시 특정 국가 서버만' 사용해야 하는 요구에 적합하지 않습니다.",
-        "2": "Geoproximity는 리소스 위치 + bias 값으로 트래픽 이동 범위를 조정하는 정책이며 Route 53 Traffic Flow에서만 사용 가능합니다. 국가 단위 강제 라우팅을 위한 정책이 아닙니다.",
+        "2": "Geoproximity는 리소스 위치 + bias 값으로 트래픽이 흐르는 지리적 범위를 조정하는 정책입니다. 경계가 거리 계산으로 정해지므로 '반드시 특정 국가 서버만' 같은 국가 단위 강제 라우팅을 보장하지 못합니다.",
         "3": "Multivalue Answer는 최대 8개 정상 레코드를 무작위 반환하는 DNS 응답입니다. 클라이언트가 반환된 IP 중 하나를 선택하므로 국가별 강제 라우팅을 보장하지 않습니다."
       },
       "sources": [
@@ -132,19 +133,20 @@
       "stem": "Route 53 Geoproximity 정책에 대한 설명으로 옳은 것은?",
       "options": [
         "Geoproximity는 사용자 IP의 국가·대륙 위치를 기준으로 라우팅하며, 기본 Route 53 레코드에서 설정할 수 있다",
-        "Geoproximity는 리소스 위치를 기준으로 하되 bias(편향값)로 트래픽 이동 범위를 조정하며, Route 53 Traffic Flow에서만 사용 가능하다",
+        "Geoproximity는 리소스 위치를 기준으로 하되 bias를 1~99로 주면 그 리소스가 트래픽을 받는 지리적 범위가 넓어지고 -1~-99로 주면 좁아진다",
         "Geoproximity는 Latency 정책과 동일하게 실측 네트워크 지연을 기준으로 라우팅한다",
         "Geoproximity는 bias 없이도 Weighted 정책처럼 트래픽을 수동 비율로 분배할 수 있다"
       ],
       "correct": 1,
-      "explanation": "Geoproximity는 리소스의 물리적 위치를 기준으로 가장 가까운 리소스로 라우팅하되, bias(편향값)를 양수로 설정하면 해당 리소스 쪽으로 더 많은 트래픽이 흐르고 음수면 줄어듭니다. 중요한 제약으로, Geoproximity는 Route 53 Traffic Flow 기능에서만 사용할 수 있습니다.",
+      "explanation": "Geoproximity는 사용자와 리소스의 위치를 기준으로 가장 가까운 리소스로 라우팅하되 bias로 그 범위를 조정합니다. 양수 1~99는 해당 리소스가 트래픽을 받는 지리적 범위를 넓히고(인접 범위는 좁아집니다), 음수 -1~-99는 좁힙니다. 계산식은 '편향 거리 = 실제 거리 × [1 - (bias/100)]'입니다. Geoproximity는 레코드를 만들 때 고르는 라우팅 정책이고 프라이빗 호스팅 영역에서도 쓸 수 있습니다 — Traffic Flow 전용이 아니고, Traffic Flow에서만 쓸 수 있는 것은 편향 범위를 그려 보여 주는 지도입니다.",
       "wrongExplanations": {
-        "0": "사용자 IP의 국가·대륙을 기준으로 라우팅하는 것은 Geolocation 정책입니다. 또한 Geoproximity는 기본 Route 53 레코드에서 설정할 수 없고 Traffic Flow에서만 사용 가능합니다.",
+        "0": "사용자 IP의 국가·대륙을 기준으로 라우팅하는 것은 Geolocation 정책입니다. 뒷부분(기본 Route 53 레코드에서 설정할 수 있다)은 맞지만 앞부분이 Geolocation의 설명이라 이 보기는 옳지 않습니다.",
         "2": "Geoproximity는 실측 네트워크 지연이 아니라 리소스의 지리적 위치(+ bias 값)를 기준으로 라우팅합니다. 실측 지연 기준은 Latency 정책의 동작 방식입니다.",
         "3": "Geoproximity의 bias는 특정 리소스 쪽으로 트래픽 흐름 범위를 늘리거나 줄이는 것이지, Weighted처럼 정확한 수동 비율 분배를 제공하지 않습니다."
       },
       "sources": [
-        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
+        { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" },
+        { "title": "Geoproximity 라우팅 — bias 계산식 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geoproximity.html" }
       ],
       "verified": false
     },
@@ -168,7 +170,7 @@
         "3": "CORS는 브라우저에서 다른 오리진으로의 요청을 제어하는 메커니즘입니다. CORS 설정만으로는 S3 URL 직접 접근(비브라우저 클라이언트 포함)을 막을 수 없습니다."
       },
       "sources": [
-        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+        { "title": "CloudFront OAC로 S3 오리진 접근 제한 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html" }
       ],
       "verified": false
     },
@@ -192,7 +194,7 @@
         "3": "지역 제한(Geo Restriction)은 특정 국가에서의 CloudFront 접근을 허용·차단하는 기능입니다. 개별 사용자 회원 인증 기반 접근 제한이 아닙니다."
       },
       "sources": [
-        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+        { "title": "서명 URL과 서명 쿠키 중 선택 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-choosing-signed-urls-cookies.html" }
       ],
       "verified": false
     },
@@ -216,7 +218,7 @@
         "3": "ACM 인증서 자체는 리전 서비스이며 CloudFront용은 반드시 us-east-1 리전에서 발급한 것만 사용할 수 있습니다. 다른 리전 인증서를 CloudFront에 연결하면 오류가 발생합니다."
       },
       "sources": [
-        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+        { "title": "CloudFront SSL/TLS 인증서 요건 — ACM 리전 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html" }
       ],
       "verified": false
     },
@@ -259,12 +261,13 @@
       "correct": 2,
       "explanation": "Global Accelerator는 Anycast 고정 IP 2개(IPv4)를 제공해 클라이언트 방화벽 화이트리스트를 한 번만 등록하면 됩니다. TCP/UDP를 모두 지원하므로 UDP 게임 트래픽에 사용할 수 있고, AWS 글로벌 백본 네트워크를 통해 최적 경로로 전달해 초저지연을 달성합니다. CloudFront는 HTTP/HTTPS 전용이라 UDP 게임 트래픽에 사용할 수 없습니다.",
       "wrongExplanations": {
-        "0": "CloudFront는 HTTP/HTTPS 프로토콜 전용 CDN입니다. UDP 트래픽을 처리할 수 없어 게임 서버 시나리오에 적합하지 않습니다. 또한 CloudFront는 고정 IP가 아닌 도메인 기반(가변 IP)입니다.",
+        "0": "CloudFront는 HTTP/HTTPS 프로토콜 전용 CDN이라 UDP 트래픽을 처리할 수 없습니다. 기본은 도메인 기반(가변 IP)이고, Anycast 고정 IP 목록 기능으로 전용 고정 IP(허용 목록용 21개 또는 에이펙스 도메인용 3개)를 받을 수는 있지만 그 IP도 CloudFront 배포의 HTTP/HTTPS 트래픽에만 쓰이므로 UDP 게임 서버에는 적용할 수 없습니다.",
         "1": "Route 53은 DNS 레벨에서 엔드포인트를 지정하는 역할을 하며, DNS 해석 이후의 네트워크 경로를 최적화하거나 고정 IP를 제공하지 않습니다.",
         "3": "ALB는 L7 HTTP/HTTPS 로드 밸런서로 고정 IP를 기본 제공하지 않습니다(NLB가 고정 IP 지원). UDP 게임 트래픽 처리에도 적합하지 않습니다."
       },
       "sources": [
-        { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" }
+        { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" },
+        { "title": "CloudFront Anycast 고정 IP 요청 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html" }
       ],
       "verified": false
     },
@@ -312,7 +315,8 @@
         "3": "Classic Load Balancer는 레거시 유형으로 현재 신규 사용이 권장되지 않습니다. 초저지연·고정 IP·수백만 RPS 요구에는 NLB가 적합합니다."
       },
       "sources": [
-        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+        { "title": "Network Load Balancer란? — L4·수백만 RPS·고정 IP (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" },
+        { "title": "Network Load Balancer 제품 페이지 — 초저지연 (공식)", "url": "https://aws.amazon.com/elasticloadbalancing/network-load-balancer/" }
       ],
       "verified": false
     },
@@ -360,7 +364,7 @@
         "3": "Route 53은 DNS 레벨에서 엔드포인트를 지정하는 역할이며 URL 경로를 파싱하지 않습니다. 마이크로서비스 내부 경로 분기는 로드 밸런서(ALB)가 담당합니다."
       },
       "sources": [
-        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+        { "title": "Application Load Balancer란? — L7 경로 조건 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html" }
       ],
       "verified": false
     }

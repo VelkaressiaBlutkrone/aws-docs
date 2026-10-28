@@ -458,7 +458,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       domain: 2,
       mdAsset: 'assets/content/saa/saa-t2-5.md',
       questionsAsset: 'assets/content/saa/saa-t2-5.questions.json',
-      questionCount: 0,
+      questionCount: 15,
       audioApproved: true,
       audioSha8: '51430c09',
     ),

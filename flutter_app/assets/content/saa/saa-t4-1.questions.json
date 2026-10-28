@@ -9,22 +9,23 @@
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 스토리지 클래스 비용 구조 이해",
       "difficulty": "foundational",
-      "stem": "S3 스토리지 비용을 구성하는 세 가지 축으로 가장 올바르게 묶인 것은?",
+      "stem": "다음 중 세 항목이 모두 실제 S3 요금 항목인 것은?",
       "options": [
-        "스토리지 요금, 요청 요금, 검색(Retrieval) 요금",
+        "스토리지 요금, 요청 요금, 데이터 검색(Retrieval) 요금",
         "스토리지 요금, 컴퓨팅 요금, 네트워크 요금",
         "스토리지 요금, 암호화 요금, 복제 요금",
         "스토리지 요금, IAM 요금, 감사 로그 요금"
       ],
       "correct": 0,
-      "explanation": "S3 비용은 크게 세 축으로 구성됩니다 — 저장된 GB·월 기준 스토리지 요금, PUT·GET·LIST 등 API 호출 수 기준 요청 요금, 객체를 꺼낼 때 GB당 부과되는 검색(Retrieval) 요금. 이 세 축을 모두 고려해야 예상치 못한 청구를 피할 수 있습니다.",
+      "explanation": "세 항목 모두 실제 S3 요금 항목입니다 — 저장된 GB·월 기준 스토리지 요금, PUT·GET·LIST 등 API 호출 수 기준 요청 요금, 객체를 꺼낼 때 GB당 부과되는 데이터 검색(Retrieval) 요금입니다(공식 요금 페이지는 요청과 데이터 검색을 '스토리지 및 요청'에 함께 싣습니다). 다만 S3 요금이 이 셋으로 끝나는 것은 아닙니다 — 공식 요금 페이지는 데이터 전송, 관리 및 인사이트, 복제, 변환 및 쿼리 등으로 요금 항목을 더 나눕니다. 비용을 추정할 때는 이 항목들까지 함께 봐야 예상치 못한 청구를 피할 수 있습니다.",
       "wrongExplanations": {
-        "1": "컴퓨팅 요금은 S3 비용 구조에 포함되지 않습니다. S3는 서버리스 오브젝트 스토리지로 EC2 같은 컴퓨팅 비용이 별도로 발생하지 않습니다.",
-        "2": "암호화·복제는 S3의 기능이지만 S3 기본 비용 구조의 세 축이 아닙니다. 복제는 복제 대상 클래스의 스토리지 요금이 추가로 발생하는 방식입니다.",
-        "3": "IAM 요금이나 감사 로그 요금은 S3 스토리지 비용 구조의 축이 아닙니다. IAM은 무료 서비스이며 S3 비용은 스토리지·요청·검색 세 축이 기준입니다."
+        "1": "컴퓨팅 요금은 S3 요금 항목이 아닙니다 — S3는 서버리스 오브젝트 스토리지로 EC2 같은 컴퓨팅 비용이 별도로 발생하지 않습니다. 데이터 전송(네트워크) 요금은 실제 S3 요금 항목이지만, 컴퓨팅 요금이 함께 묶여 있어 이 보기는 옳지 않습니다.",
+        "2": "'암호화 요금'이라는 S3 요금 항목은 없습니다. 복제는 공식 요금 페이지에 '복제' 항목이 따로 있고 복제 대상 클래스의 스토리지 요금도 추가로 발생하지만, 암호화 요금이 함께 묶여 있어 이 보기는 옳지 않습니다.",
+        "3": "IAM 자체에는 추가 요금이 없고, '감사 로그 요금'이라는 S3 요금 항목도 없습니다(API 호출 기록은 CloudTrail 요금으로 청구됩니다)."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
+        { "title": "Amazon S3 요금 (공식)", "url": "https://aws.amazon.com/s3/pricing/" }
       ],
       "verified": false
     },
@@ -69,10 +70,11 @@
       "wrongExplanations": {
         "0": "S3 Standard는 자주 접근하는 데이터(월 1회 이상)에 적합하고, 접근이 드문 경우 저장 요금이 높아 비효율적입니다. 접근 패턴이 불명확한 데이터를 무조건 Standard에 두는 것은 비용 최적화와 거리가 멉니다.",
         "1": "S3 Standard-IA는 검색 요금이 GB당 과금됩니다. 접근 빈도가 예측 불가한 데이터에서 검색 요금을 피하려면 Intelligent-Tiering이 더 적합합니다.",
-        "3": "S3 Glacier Flexible Retrieval은 검색 요금이 GB당 과금되며 복원에 수분~12시간이 걸립니다. 접근 패턴이 불규칙한 데이터를 즉시 꺼내야 하는 경우에는 적합하지 않습니다."
+        "3": "S3 Glacier Flexible Retrieval은 객체를 읽기 전에 복원 절차를 거쳐야 합니다(신속 1~5분, 표준 3~5시간, 대량 5~12시간). 신속·표준 복원에는 GB당 검색 요금이 붙고, 대량(Bulk) 복원은 이 클래스에서 무료이지만 5~12시간이 걸립니다. 접근 패턴이 불규칙한 데이터를 바로 꺼내야 하는 경우에는 어느 쪽도 적합하지 않습니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
+        { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" }
       ],
       "verified": false
     },
@@ -89,14 +91,16 @@
         "Day 0: Standard → Day 30: Standard-IA → Day 90: Glacier Flexible Retrieval → Day 365: Expiration"
       ],
       "correct": 3,
-      "explanation": "Day 0~30은 Standard(자주 접근), Day 30에 Standard-IA 전환(Standard-IA 최소 보관 기간 30일과 일치), Day 90에 Glacier Flexible Retrieval 전환(최소 보관 기간 90일 충족), Day 365에 Expiration으로 삭제. 최소 보관 기간 요금 없이 각 접근 패턴에 맞는 비용 절감이 가능합니다.",
+      "explanation": "Day 0~30은 Standard(자주 접근), Day 30에 Standard-IA 전환(30~90일의 '가끔 접근' 구간과 맞고 Standard-IA에 60일 머물러 최소 보관 30일을 넘김), Day 90에 Glacier Flexible Retrieval 전환(Day 365까지 275일 머물러 최소 보관 90일 충족), Day 365에 Expiration으로 삭제. 각 구간의 접근 패턴에 맞고 최소 보관 기간 요금도 생기지 않습니다. 최소 보관 기간은 객체를 만든 시점이 아니라 그 클래스에 머문 기간으로 센다는 점이 핵심입니다.",
       "wrongExplanations": {
-        "0": "Day 15에 Standard-IA로 전환하면 Standard-IA의 최소 보관 기간(30일)이 충족되지 않아 잔여 15일분 요금이 청구됩니다. 최소 보관 기간 이전 전환은 절감이 아니라 비용 증가로 이어질 수 있습니다.",
-        "1": "Day 30에 바로 Glacier Deep Archive로 전환하면 30~90일 사이 가끔 접근이 필요한 경우 복원에 최대 12시간이 걸립니다. 또한 최소 보관 기간(180일)을 Day 365 Expiration 전까지 채우는지 확인해야 합니다.",
+        "0": "요금 문제는 없습니다 — 2026년 7월 16일부터 Standard-IA 전환은 생성 직후에도 가능하고, Day 15 → Day 45는 Standard-IA에 정확히 30일 머물러 최소 보관 기간도 충족합니다. 이 정책이 탈락하는 이유는 접근 패턴 불일치입니다. Day 15~30은 아직 자주 접근하는 구간인데 Standard-IA는 GB당 검색 요금이 붙고, Day 45~90은 가끔 접근해야 하는데 Glacier Flexible Retrieval은 복원 절차를 거쳐야 합니다.",
+        "1": "Day 30에 바로 Glacier Deep Archive로 전환하면 30~90일 사이 가끔 접근해야 할 때 복원을 기다려야 합니다 — 표준 복원은 12시간 이내, 대량(Bulk) 복원은 48시간 이내이고 신속 복원은 이 클래스에 없습니다. 최소 보관 기간 180일은 Day 30~365 구간이 335일이라 충족되므로, 탈락 이유는 접근 지연입니다.",
         "2": "Intelligent-Tiering은 접근 패턴이 불규칙할 때 적합합니다. 접근 패턴이 명확히 알려진 경우에는 수명주기 정책으로 직접 전환 시점을 지정하는 것이 더 비용 효율적입니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
+        { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" },
+        { "title": "S3, Standard-IA·One Zone-IA 전환의 30일 대기 제약 폐지 (2026-07-16)", "url": "https://aws.amazon.com/about-aws/whats-new/2026/07/s3-removes-30-day-transitions-standard-ia-one-zone-ia/" }
       ],
       "verified": false
     },
@@ -105,22 +109,24 @@
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 수명주기 최소 보관 기간 함정",
       "difficulty": "applied",
-      "stem": "한 팀이 S3 Standard에 업로드된 객체를 업로드 직후 20일 만에 Standard-IA로 전환하는 수명주기 정책을 적용했다. 이 설정의 문제점은?",
+      "stem": "한 팀이 S3 Standard에 업로드된 객체를 생성 20일 뒤 Standard-IA로 전환하고, 전환으로부터 10일 뒤(생성 30일 시점) 만료(삭제)하는 수명주기 정책을 적용했다. 이 설정의 문제점은?",
       "options": [
-        "Standard-IA의 최소 보관 기간은 30일이므로 20일 시점에 전환해도 30일분 요금이 청구된다",
+        "Standard-IA에 머문 기간이 30일 미만이라 최소 보관 기간 30일분 스토리지 요금이 청구된다",
         "Standard-IA는 수명주기 전환 대상이 아니므로 정책이 동작하지 않는다",
         "수명주기 Transition에는 검색 요금이 발생해 비용이 급증한다",
         "문제없다. 더 빨리 전환할수록 절감 효과가 크다"
       ],
       "correct": 0,
-      "explanation": "Standard-IA의 최소 보관 기간은 30일입니다. 20일 시점에 전환하면 잔여 10일분에 해당하는 Standard-IA 저장 요금이 청구됩니다. 이 구조에서 30일 이전에 Standard-IA로 전환하면 절감이 아니라 오히려 비용이 늘어날 수 있으므로, 전환 시점은 최소 보관 기간 이후로 설정해야 합니다.",
+      "explanation": "최소 보관 기간은 객체를 만든 시점이 아니라 그 스토리지 클래스에 머문 기간으로 셉니다. Standard-IA·One Zone-IA는 30일, Glacier Flexible Retrieval은 90일, Glacier Deep Archive는 180일이고, 그 기간을 채우기 전에 객체를 만료·재전환하면 남은 기간분이 청구됩니다. 이 정책은 전환 10일 뒤에 삭제하므로 Standard-IA 30일분이 청구됩니다. 참고로 2026년 7월 16일부터 Standard-IA·One Zone-IA 전환은 생성 직후(0일)에도 가능해져 'Standard에 30일 두어야 한다'는 과거 제약은 없어졌습니다 — 따라서 20일 시점에 전환한 것 자체는 문제가 아니고, 문제는 전환 후 30일을 채우지 않고 삭제하는 것입니다.",
       "wrongExplanations": {
-        "1": "Standard-IA는 수명주기 전환 대상 클래스입니다. 정책 자체는 동작하지만, 최소 보관 기간 요금이 청구되는 비용 문제가 발생합니다.",
+        "1": "Standard-IA는 수명주기 전환 대상 클래스이고, 2026년 7월 16일부터는 생성 직후(0일)에도 전환할 수 있습니다. 정책 자체는 동작하며, 비용 문제는 전환 후 최소 보관 기간을 채우지 않고 삭제하는 데서 생깁니다.",
         "2": "수명주기 Transition 자체에는 GB 검색 요금이 발생하지 않습니다. 전환 PUT 요청 요금은 발생하지만, 이것이 주된 문제는 아닙니다.",
-        "3": "더 빨리 전환한다고 절감 효과가 커지지 않습니다. 최소 보관 기간 이전에 전환하면 잔여 기간 요금이 추가로 청구되어 비용이 증가할 수 있습니다."
+        "3": "더 빨리 전환한다고 절감 효과가 커지지 않습니다. 전환 시점 자체는 이제 자유롭지만, 전환한 클래스에서 최소 보관 기간을 채우지 않고 삭제하면 남은 기간분이 추가로 청구되어 비용이 늘어날 수 있습니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
+        { "title": "수명 주기 전환의 제약과 고려 사항 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html" },
+        { "title": "S3, Standard-IA·One Zone-IA 전환의 30일 대기 제약 폐지 (2026-07-16)", "url": "https://aws.amazon.com/about-aws/whats-new/2026/07/s3-removes-30-day-transitions-standard-ia-one-zone-ia/" }
       ],
       "verified": false
     },
@@ -137,14 +143,15 @@
         "S3 Glacier Flexible Retrieval — 즉시 접근이 가능하며 저장 비용이 가장 낮음"
       ],
       "correct": 2,
-      "explanation": "S3 Glacier Instant Retrieval은 즉시(밀리초) 복원이 가능하고, 분기 1회 수준의 드문 접근에 적합한 클래스입니다. Glacier Deep Archive는 복원에 최대 12시간이 걸려 즉시 접근 요건을 충족하지 못합니다. Glacier Flexible Retrieval도 복원에 수분~12시간이 필요합니다.",
+      "explanation": "S3 Glacier Instant Retrieval은 즉시(밀리초) 복원이 가능하고, 분기 1회 수준의 드문 접근에 적합한 클래스입니다. Glacier Deep Archive는 표준 복원 12시간 이내·대량(Bulk) 48시간 이내이고 신속 복원이 아예 없어 즉시 접근 요건을 충족하지 못합니다. Glacier Flexible Retrieval도 복원 절차를 거쳐야 합니다(신속 1~5분, 표준 3~5시간, 대량 5~12시간).",
       "wrongExplanations": {
         "0": "S3 Standard는 즉시 접근이 가능하지만 분기 1회 수준으로 드물게 접근하는 장기 보관 데이터에는 저장 비용이 불필요하게 높습니다.",
-        "1": "S3 Glacier Deep Archive는 최소 보관 기간 180일, 복원에 최대 12시간이 걸려 밀리초 즉시 접근 요건을 충족하지 못합니다.",
-        "3": "S3 Glacier Flexible Retrieval은 복원에 수분~12시간이 소요됩니다. '즉시 접근 가능'하지 않으며, 즉시(밀리초) 복원을 제공하는 것은 Glacier Instant Retrieval입니다."
+        "1": "S3 Glacier Deep Archive는 최소 보관 기간이 180일이고, 복원은 표준 12시간 이내·대량(Bulk) 48시간 이내입니다. 신속 복원이 없어 밀리초 즉시 접근 요건을 충족하지 못합니다.",
+        "3": "S3 Glacier Flexible Retrieval은 읽기 전에 복원 절차를 거쳐야 합니다(신속 1~5분, 표준 3~5시간, 대량 5~12시간). '즉시 접근 가능'하지 않으며, 복원 없이 밀리초로 읽을 수 있는 것은 Glacier Instant Retrieval입니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
+        { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" }
       ],
       "verified": false
     },
@@ -185,7 +192,7 @@
         "EC2 중지 후 7일이 지나면 EBS 볼륨이 자동 삭제되어 요금이 멈춘다"
       ],
       "correct": 2,
-      "explanation": "EBS는 인스턴스가 중지(stop)된 상태에서도 프로비전된 볼륨 용량에 대해 계속 과금됩니다. 과금을 멈추려면 볼륨 자체를 삭제해야 합니다 — 인스턴스를 종료(Terminate)하면 DeleteOnTermination이 true인 볼륨만 삭제되고(루트 볼륨은 기본 true, 추가 볼륨은 기본 false), 보존된 볼륨은 계속 과금됩니다. 미사용 인스턴스를 단순히 중지하는 것만으로는 EBS 비용을 제거할 수 없습니다.",
+      "explanation": "EBS는 인스턴스가 중지(stop)된 상태에서도 프로비전된 볼륨 용량에 대해 계속 과금됩니다. 과금을 멈추려면 볼륨 자체를 삭제해야 합니다 — 인스턴스를 종료(Terminate)하면 DeleteOnTermination이 true인 볼륨만 삭제되고 보존된 볼륨은 계속 과금됩니다. 이 기본값은 볼륨 종류·연결 시점·연결 수단에 따라 다릅니다 — 시작 시 연결한 루트 볼륨은 삭제, 시작 후 연결한 루트 볼륨은 보존, 데이터 볼륨은 시작 시 콘솔이면 보존·CLI면 삭제, 시작 후 연결한 데이터 볼륨은 보존입니다. 미사용 인스턴스를 단순히 중지하는 것만으로는 EBS 비용을 제거할 수 없습니다.",
       "wrongExplanations": {
         "0": "EC2가 중지 상태여도 EBS 요금은 계속 발생합니다. EBS는 프로비전된 용량에 기반해 과금되므로 인스턴스 상태와 무관합니다.",
         "1": "EBS 요금은 인스턴스 실행 여부와 무관하게 프로비전된 볼륨 용량에 대해 과금됩니다. 인스턴스가 실행 중일 때만 과금되는 것이 아닙니다.",
@@ -204,20 +211,21 @@
       "difficulty": "applied",
       "stem": "한 팀이 여러 EC2 인스턴스를 종료(Terminate)했지만 연결되지 않은 EBS 볼륨이 대량으로 남아 있어 비용이 계속 발생하고 있다. 이 낭비를 탐지하고 정리하는 방법으로 가장 적절한 것은?",
       "options": [
-        "AWS Trusted Advisor 또는 Cost Explorer로 미연결 볼륨을 탐지한 뒤 삭제한다",
+        "AWS Trusted Advisor 또는 AWS Compute Optimizer로 미연결 볼륨을 탐지한 뒤 삭제한다",
         "CloudTrail 로그를 분석해 볼륨을 수동으로 찾는다",
         "Auto Scaling 그룹을 설정해 미사용 볼륨을 자동 정리한다",
         "S3 수명주기 정책으로 미사용 EBS 볼륨을 자동 삭제한다"
       ],
       "correct": 0,
-      "explanation": "미연결 EBS 볼륨은 AWS Trusted Advisor 또는 Cost Explorer를 통해 탐지할 수 있습니다. 두 서비스 모두 인스턴스에 연결되지 않은 볼륨을 식별해 줍니다. 또한 Data Lifecycle Manager(DLM)로 누적된 오래된 스냅샷을 자동 정리할 수 있습니다.",
+      "explanation": "미연결 EBS 볼륨은 AWS Trusted Advisor 또는 AWS Compute Optimizer로 탐지합니다. Compute Optimizer의 유휴 리소스 권장은 EBS 볼륨을 대상에 포함하며, 32일 연결 상태를 분석해 미연결 볼륨을 찾아 줍니다. Trusted Advisor에도 EBS 볼륨 비용 최적화 권장 검사가 있습니다. 반면 Cost Explorer의 적정 크기 조정(rightsizing) 권장은 EC2 인스턴스만 다루므로 미연결 볼륨 식별 도구가 아닙니다. 또한 Data Lifecycle Manager(DLM)로 누적된 오래된 스냅샷을 자동 정리할 수 있습니다.",
       "wrongExplanations": {
-        "1": "CloudTrail은 API 호출 감사 로그 도구로, 미연결 볼륨 탐지에는 적합하지 않습니다. Trusted Advisor나 Cost Explorer가 이 목적에 더 직접적입니다.",
+        "1": "CloudTrail은 API 호출 감사 로그 도구로, 미연결 볼륨 탐지에는 적합하지 않습니다. Trusted Advisor나 Compute Optimizer가 이 목적에 더 직접적입니다.",
         "2": "Auto Scaling 그룹은 EC2 인스턴스 수를 자동으로 조정하는 기능입니다. 미연결 EBS 볼륨을 정리하는 기능이 아닙니다.",
         "3": "S3 수명주기 정책은 S3 객체를 관리하는 도구입니다. EBS 볼륨은 S3 수명주기 정책으로 제어할 수 없습니다."
       },
       "sources": [
-        { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+        { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
+        { "title": "Compute Optimizer 유휴 리소스 권장 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
       ],
       "verified": false
     },
@@ -241,7 +249,8 @@
         "3": "CloudFront는 다운로드(읽기) 트래픽 비용 절감에 효과적이지만, EC2에서 S3로의 업로드 경로에는 직접적인 효과가 없습니다."
       },
       "sources": [
-        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+        { "title": "NAT 게이트웨이 요금과 절감 전략 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" },
+        { "title": "게이트웨이 엔드포인트 — 추가 요금 없음 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }
       ],
       "verified": false
     },
@@ -289,7 +298,7 @@
         "3": "S3 Standard-IA는 저장 요금을 낮추지만 검색 요금(GB당)이 발생합니다. 자주 접근하는 이미지를 Standard-IA로 전환하면 검색 요금이 높아져 오히려 비용이 증가할 수 있습니다."
       },
       "sources": [
-        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+        { "title": "CloudFront 소개 — 오리진→CloudFront 전송 무료 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
       ],
       "verified": false
     },
@@ -330,14 +339,14 @@
         "FSx for Windows로 마이그레이션해 HDD 계층을 사용한다"
       ],
       "correct": 0,
-      "explanation": "EFS Intelligent-Tiering을 활성화하면 접근 패턴에 따라 파일이 Standard↔Infrequent Access↔Archive 계층 간 자동으로 이동합니다. 자주 접근하지 않는 파일은 저렴한 계층으로 이동하고, 다시 접근하면 Standard로 복귀합니다. 수동 관리 없이 비용 최적화가 가능합니다.",
+      "explanation": "EFS 수명 주기 관리는 세 가지 정책으로 동작합니다 — Transition into IA(Standard에서 지정 기간 접근이 없으면 Infrequent Access로, 기본 30일), Transition into Archive(기본 90일), Transition into Standard(IA·Archive에 있는 파일에 접근하면 Standard로 되돌릴지). EFS Intelligent-Tiering은 이 Transition into Standard를 '첫 접근 시'로 두어, 자주 접근하지 않는 파일은 저렴한 계층으로 내려가고 다시 접근하면 Standard로 올라오게 합니다. 수동 관리 없이 비용 최적화가 가능합니다.",
       "wrongExplanations": {
         "1": "EBS는 단일 EC2 인스턴스에 블록 장치로 연결되는 스토리지로, 여러 인스턴스가 공유하는 EFS의 대체재가 아닙니다. 파일 단위 계층 이동도 지원하지 않습니다.",
-        "2": "수동으로 S3 Glacier로 이동하면 EFS 파일시스템 인터페이스를 통한 접근이 불가해집니다. 자동화 없이 수동 관리는 운영 부담이 크고 문서에서 설명하는 EFS 계층 최적화 방법이 아닙니다.",
+        "2": "수동으로 S3 Glacier로 이동하면 EFS 파일시스템 인터페이스를 통한 접근이 불가해집니다. 또한 지문이 요구한 '수동 관리 없이'라는 조건에 정면으로 어긋나므로, EFS 수명 주기 정책으로 자동 전환하는 쪽이 맞습니다.",
         "3": "FSx for Windows HDD 계층은 처리량 중심 워크로드에 적합합니다. EFS의 파일 단위 자동 계층 이동 기능과 동등한 대안이 아니며, 공유 파일시스템 요구를 유지하면서 비용을 자동 최적화하려면 EFS Intelligent-Tiering이 맞습니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "EFS 스토리지 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html" }
       ],
       "verified": false
     },
@@ -361,7 +370,7 @@
         "3": "Intelligent-Tiering으로 전환해도 미완성 멀티파트 업로드는 자동으로 정리되지 않습니다. 미완성 업로드 정리는 스토리지 클래스와 무관하며 전용 수명주기 액션이 필요합니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "미완료 멀티파트 업로드 삭제 수명주기 규칙 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html" }
       ],
       "verified": false
     }

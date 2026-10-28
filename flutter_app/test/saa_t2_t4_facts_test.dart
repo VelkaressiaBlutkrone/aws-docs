@@ -314,6 +314,18 @@ void main() {
       expect(t38.contains('가용성 SLA'), isTrue);
       expect(t38.contains('99.99%'), isTrue);
     });
+
+    test('G-3.4-14 암호화 DX의 명칭은 VPN over Direct Connect다', () {
+      // 근거: vpn/latest/s2svpn/private-ip-dx — "you can deploy IPsec VPN over
+      // Direct Connect" / "private IP VPN over Direct Connect". 얹히는 쪽이
+      // VPN이므로 "DX over VPN"은 위아래가 거꾸로다. 퍼블릭 VIF로 VPN 퍼블릭
+      // 엔드포인트에 붙이는 방식과, 전송 VIF 위에서 사설 IP만 쓰는
+      // Private IP VPN 두 가지가 있다(reference-architecture hybrid-vpn-over-dx).
+      final t38 = doc('saa-t3-8');
+      expect(t38.contains('DX over VPN'), isFalse);
+      expect(t38.contains('VPN over Direct Connect'), isTrue);
+      expect(t38.contains('Private IP VPN'), isTrue);
+    });
   });
 
   group('Task 3.5 — saa-t3-9', () {
@@ -385,6 +397,7 @@ void main() {
       expect(doc('saa-t3-6').contains('SelectEngine'), isTrue);
       expect(doc('saa-t3-7').contains('global-accelerator'), isTrue);
       expect(doc('saa-t3-8').contains('directconnect/sla'), isTrue);
+      expect(doc('saa-t3-8').contains('private-ip-dx'), isTrue);
       expect(doc('saa-t3-9').contains('snowball-edge-availability-change'),
           isTrue);
     });
@@ -580,6 +593,34 @@ void main() {
       final t43 = doc('saa-t4-3');
       expect(t43.contains('프로비저닝 스토리지 크기까지는 무료(RDS 기본 제공 범위)'), isFalse);
       expect(t43.contains('리전 전체'), isTrue);
+    });
+
+    test('G-4.3-21 죽은 슬러그 rds-reserved-instances.html 를 쓰지 않는다', () {
+      // `rds-reserved-instances.html` 는 실측하면 `UserGuide/` 인덱스로
+      // 리다이렉트된다(2026-10-28 curl 확인). 예약 인스턴스 정본은
+      // `USER_WorkingWithReservedDBInstances.html` 이다.
+      //
+      // ⚠️ 2차 검수 §D 출처 교체(#262)가 `.questions.json` 만 대상이어서 문항
+      // 6건은 고쳐졌는데 `saa-t4-3.md` 의 프런트매터 url 과 참고자료 2곳이
+      // 남았다 — **학습문서는 문항 가드가 보지 않는다.** 그래서 md 전수로 건다.
+      // 섹션 앵커 `{#rds-reserved-instances}` 는 정상이므로 `.html` 까지 본다.
+      final mds = Directory('assets/content/saa')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.md'))
+          .toList();
+      expect(mds, isNotEmpty, reason: 'SAA 학습문서를 찾지 못했다');
+      final offenders = <String>[];
+      for (final f in mds) {
+        if (f.readAsStringSync().contains('rds-reserved-instances.html')) {
+          offenders.add(f.uri.pathSegments.last);
+        }
+      }
+      expect(offenders, isEmpty,
+          reason: '죽은 슬러그가 남아 있다(정본은 '
+              'USER_WorkingWithReservedDBInstances.html): $offenders');
+      expect(doc('saa-t4-3').contains('USER_WorkingWithReservedDBInstances'),
+          isTrue);
     });
   });
 

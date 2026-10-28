@@ -48,7 +48,7 @@
         "3": "프로비저닝 vs 온디맨드 모드는 총 처리량 설정 방식의 차이이지, 핫 파티션 집중 문제의 원인이 아닙니다. 온디맨드 모드로 바꿔도 PK 설계가 잘못되면 핫 파티션 문제가 발생할 수 있습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "워크로드를 분산하는 파티션 키 설계 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-uniform-load.html" }
       ],
       "verified": false
     },
@@ -120,7 +120,8 @@
         "3": "GSI는 최종 일관성 읽기만 지원합니다. 강력한 일관성 읽기 자체가 GSI에서 불가능하므로 이 설명은 성립하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "DynamoDB 프로비저닝 용량 모드 — RCU·WCU (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/provisioned-capacity-mode.html" },
+        { "title": "글로벌 보조 인덱스 — 최종 일관성 읽기 전용 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html" }
       ],
       "verified": false
     },
@@ -212,11 +213,12 @@
       "explanation": "DynamoDB Global Tables는 여러 리전에 Active-Active로 테이블을 복제합니다. 모든 리전에서 읽기와 쓰기가 모두 가능하며, 충돌 해결은 기본 모드인 다중 리전 최종 일관성(MREC)에서 최후 작성자 우선(last-writer-wins) 정책으로 자동 처리됩니다. RDS Read Replica는 읽기 전용이므로 멀티 리전 쓰기 요구사항을 충족하지 못합니다.",
       "wrongExplanations": {
         "0": "RDS Read Replica는 읽기 전용 복제본으로, 각 리전에서 쓰기가 불가능합니다. Active-Active 다중 리전 쓰기 요구사항을 충족하지 못합니다.",
-        "1": "CloudFront는 정적 콘텐츠 캐시이며 동적 DynamoDB 쓰기를 처리할 수 없습니다. 단일 리전 DynamoDB는 원거리 리전에서의 지연 문제를 해결하지 못합니다.",
+        "1": "CloudFront는 정적·동적 콘텐츠 모두를 가속할 수 있습니다. 다만 쓰기 요청은 결국 오리진인 단일 리전 DynamoDB 테이블까지 가야 하므로 원거리 리전의 쓰기 지연이 남고, 리전 장애에 대비한 재해 복구도 제공되지 않습니다.",
         "3": "Streams 기반 수동 복제는 구현 복잡성이 높고 완전 관리형이 아닙니다. Global Tables는 이를 완전 관리형으로 제공하므로 더 적합합니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" },
+        { "title": "Amazon CloudFront란? (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
       ],
       "verified": false
     },
@@ -240,7 +242,8 @@
         "3": "Global Tables는 다중 리전 복제를 위한 기능으로, 이벤트 기반 처리와 자동 만료 삭제 요구사항과는 직접 관련이 없습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "DynamoDB TTL — 만료 항목 자동 삭제 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html" },
+        { "title": "DynamoDB Streams — 변경 데이터 캡처 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html" }
       ],
       "verified": false
     },
@@ -251,20 +254,21 @@
       "difficulty": "applied",
       "stem": "한 아키텍트가 신규 애플리케이션의 데이터베이스를 선택하고 있다. 데이터가 복잡한 조인과 집계 쿼리를 자주 사용하고, 고정된 스키마 구조를 유지하며, 금융 거래 데이터를 다룬다. 가장 적합한 서비스는?",
       "options": [
-        "Amazon DynamoDB — 서버리스이고 한 자릿수 밀리초 성능을 제공하므로 금융 데이터에도 적합하다",
-        "Amazon RDS — 복잡한 조인·집계, 고정 스키마, 금융 거래 데이터에 관계형 데이터베이스가 적합하다",
+        "Amazon DynamoDB — 서버리스이고 한 자릿수 밀리초 성능을 제공하며 ACID 트랜잭션도 지원한다",
+        "Amazon RDS — 복잡한 조인·집계와 고정된(정규화된) 스키마에 관계형 데이터베이스가 적합하다",
         "Amazon DynamoDB Global Tables — 다중 리전 복제로 금융 거래의 고가용성을 보장한다",
         "DAX + DynamoDB — 캐시를 추가하면 복잡한 조인 쿼리도 처리할 수 있다"
       ],
       "correct": 1,
-      "explanation": "복잡한 조인·집계 쿼리, 고정 스키마, 금융 거래 데이터는 RDS 선택 신호입니다. RDS는 정규화된 구조와 복잡한 SQL 쿼리를 지원하고 금융 거래와 같은 ACID 트랜잭션 요구사항에 적합합니다. DynamoDB는 조인이 불필요하거나 애플리케이션에서 처리하는 스키마리스 워크로드(세션, IoT, 카탈로그, 장바구니 등)에 적합합니다.",
+      "explanation": "복잡한 조인·집계 쿼리와 고정된(정규화된) 스키마가 RDS 선택 신호입니다. RDS는 정규화된 구조와 복잡한 SQL 쿼리를 지원합니다. 반면 금융 거래 여부 자체는 결정 신호가 아닙니다 — DynamoDB도 TransactWriteItems·TransactGetItems로 같은 계정·같은 리전 안에서 ACID 트랜잭션을 지원합니다. DynamoDB는 조인이 불필요하거나 애플리케이션에서 처리하는 스키마리스 워크로드(세션, IoT, 카탈로그, 장바구니 등)에 적합합니다.",
       "wrongExplanations": {
         "0": "DynamoDB는 복잡한 조인·집계 쿼리를 기본적으로 지원하지 않습니다. 조인은 애플리케이션 레이어에서 처리해야 하므로 이런 요구사항에는 부적합합니다.",
         "2": "Global Tables는 다중 리전 복제 기능으로, 복잡한 조인·집계 쿼리 지원 여부를 바꾸지 않습니다.",
         "3": "DAX는 읽기 캐시로, DynamoDB에 존재하지 않는 조인 기능을 추가하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" },
+        { "title": "DynamoDB 트랜잭션 동작 방식 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html" }
       ],
       "verified": false
     },
@@ -273,22 +277,23 @@
       "examGuideTaskId": "saa-t3-6",
       "skill": "ElastiCache Redis vs Memcached — 선택 기준",
       "difficulty": "applied",
-      "stem": "Auto Scaling 그룹 뒤에 있는 수십 대의 웹 서버가 사용자 로그인 세션을 공유 저장소에 보관해야 한다. 특정 노드에 장애가 발생해도 세션이 유지되어야 하며(HA), 복잡한 자료구조가 필요 없다. 가장 적합한 서비스는?",
+      "stem": "Auto Scaling 그룹 뒤에 있는 수십 대의 웹 서버가 사용자 로그인 세션을 공유 저장소에 보관해야 한다. 특정 노드에 장애가 발생해도 세션이 유지되어야 하며(HA), 복잡한 자료구조는 필요 없지만 마이크로초 수준의 인메모리 응답이 필요하다. 가장 적합한 서비스는?",
       "options": [
-        "ElastiCache for Memcached — 멀티스레드로 높은 처리량을 제공하고 세션 저장에 최적화되어 있다",
+        "ElastiCache for Memcached(노드 기반) — 멀티스레드로 높은 처리량을 제공하고 세션 저장에 최적화되어 있다",
         "ElastiCache for Redis — 복제와 Multi-AZ 자동 Failover를 지원해 노드 장애 시에도 세션이 유지된다",
-        "ElastiCache for Memcached — 영속성 기능이 없어 메모리 사용이 효율적이고 세션 HA에 적합하다",
+        "ElastiCache for Memcached(노드 기반) — 영속성 기능이 없어 메모리 사용이 효율적이고 세션 HA에 적합하다",
         "DynamoDB — 서버리스로 세션 데이터 저장에 Auto Scaling 없이 무한 확장 가능하다"
       ],
       "correct": 1,
-      "explanation": "세션 저장 + HA + Failover 요구사항은 ElastiCache for Redis의 정답 신호입니다. Redis는 복제와 Multi-AZ 자동 Failover를 지원해 노드 장애 시에도 세션이 유지됩니다. Memcached는 영속성과 복제 기능이 없으므로 노드 장애 시 저장된 세션이 모두 소실됩니다.",
+      "explanation": "세션 저장 + HA + Failover 요구사항은 ElastiCache for Redis의 정답 신호입니다. Redis는 복제와 Multi-AZ 자동 Failover를 지원해 노드 장애 시에도 세션이 유지됩니다. 노드 기반(node-based) Memcached 클러스터는 복제를 지원하지 않아 노드 장애 시 그 노드에 있던 세션이 소실됩니다(서버리스 Memcached 캐시는 복제된 Multi-AZ 구조로 노드 장애를 가립니다).",
       "wrongExplanations": {
-        "0": "Memcached는 멀티스레드 처리 능력은 있지만 복제와 HA 기능이 없습니다. 노드 장애 시 세션이 사라지므로 HA 요구사항을 충족하지 못합니다.",
-        "2": "Memcached의 영속성 없음은 장점이 아닌 제약으로, 세션 HA 요구사항과 정반대입니다. 노드 재시작 시 모든 데이터가 소실됩니다.",
-        "3": "DynamoDB도 세션 스토어로 사용할 수 있지만, 인메모리 속도가 필요하고 HA 캐시가 요구되는 이 시나리오에서는 ElastiCache Redis가 더 적합합니다."
+        "0": "노드 기반 Memcached 클러스터는 멀티스레드 처리 능력은 있지만 복제를 지원하지 않습니다. 노드 장애 시 그 노드의 세션이 사라지므로 HA 요구사항을 충족하지 못합니다.",
+        "2": "영속성이 없다는 점은 장점이 아닌 제약으로, 세션 HA 요구사항과 정반대입니다. 노드 기반 Memcached 클러스터는 복제도 없어 노드 재시작·장애 시 그 노드의 데이터가 소실됩니다.",
+        "3": "DynamoDB도 세션 스토어로 사용할 수 있지만 응답은 한 자릿수 밀리초 수준입니다. 마이크로초 수준의 인메모리 응답과 HA 캐시를 함께 요구하는 이 시나리오에서는 ElastiCache for Redis가 더 적합합니다."
       },
       "sources": [
-        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" },
+        { "title": "ElastiCache 복원력 — 노드 장애 완화 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/disaster-recovery-resiliency.html" }
       ],
       "verified": false
     },
@@ -301,18 +306,20 @@
       "options": [
         "ElastiCache for Memcached — 단순 키-값으로 점수를 저장하고 높은 처리량으로 빠른 조회가 가능하다",
         "ElastiCache for Memcached — 멀티스레드 기능으로 순위 계산을 병렬 처리할 수 있다",
-        "ElastiCache for Redis — Sorted Set 자료구조로 실시간 순위 계산이 가능하고 스냅샷(RDB)으로 영속성을 지원한다",
+        "ElastiCache for Redis — Sorted Set 자료구조로 실시간 순위 계산이 가능하고 스냅샷(RDB) 백업으로 복구를 지원한다",
         "Amazon DynamoDB — TTL로 만료된 점수를 자동 삭제하고 GSI로 순위를 조회할 수 있다"
       ],
       "correct": 2,
-      "explanation": "리더보드·랭킹 + 영속성 조합은 ElastiCache for Redis의 대표 사용 사례입니다. Redis의 Sorted Set 자료구조는 점수 기반 자동 정렬과 상위 N명 조회를 효율적으로 지원합니다. Redis는 스냅샷(RDB)과 AOF 로그로 영속성을 제공해 서버 재시작 후에도 데이터를 복구할 수 있습니다.",
+      "explanation": "리더보드·랭킹 + 영속성 조합은 ElastiCache for Redis의 대표 사용 사례입니다. Redis의 Sorted Set 자료구조는 점수 기반 자동 정렬과 상위 N명 조회를 효율적으로 지원합니다. 다만 ElastiCache는 Redis OSS 2.8.22 이후 appendonly·appendfsync를 지원하지 않아 AOF가 없습니다. 보존 수단은 스냅샷(RDB) 백업과 복제·Multi-AZ 자동 페일오버이며, 스냅샷에서 새 클러스터를 복원할 수 있습니다. 디스크 기반의 진짜 영속성이 필요하면 Multi-AZ 트랜잭션 로그로 내구성을 제공하는 Amazon MemoryDB를 씁니다.",
       "wrongExplanations": {
-        "0": "Memcached는 단순 키-값 문자열만 저장하며 Sorted Set 같은 복잡한 자료구조를 지원하지 않습니다. 영속성도 없어 재시작 시 데이터가 소실됩니다.",
-        "1": "Memcached의 멀티스레드 기능은 단순 대용량 캐시 처리량에 유리하지만, 순위 계산에 필요한 Sorted Set 자료구조나 영속성을 제공하지 않습니다.",
+        "0": "Memcached는 단순 키-값 문자열만 저장하며 Sorted Set 같은 복잡한 자료구조를 지원하지 않습니다. 스냅샷 백업도 지원하지 않아 재시작 시 데이터가 소실됩니다.",
+        "1": "Memcached의 멀티스레드 기능은 단순 대용량 캐시 처리량에 유리하지만, 순위 계산에 필요한 Sorted Set 자료구조도 스냅샷 백업도 제공하지 않습니다.",
         "3": "DynamoDB의 TTL과 GSI 조합으로 순위 조회는 가능하지만, Redis Sorted Set처럼 인메모리에서 실시간 순위 계산에 최적화되어 있지 않습니다."
       },
       "sources": [
-        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" },
+        { "title": "ElastiCache 엔진 버전 — 2.8.22 이후 appendonly 미지원 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/engine-versions.html" },
+        { "title": "MemoryDB란? — 내구성 있는 인메모리 DB (공식)", "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html" }
       ],
       "verified": false
     },
@@ -336,7 +343,7 @@
         "3": "긴 TTL은 stale 데이터를 줄이기는커녕 오래 유지시킵니다. 이 요구사항에 완전히 반대되는 전략입니다."
       },
       "sources": [
-        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+        { "title": "ElastiCache 캐싱 전략 — Lazy Loading·Write-Through·TTL (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
       "verified": false
     },
@@ -360,7 +367,7 @@
         "3": "DynamoDB Streams는 DynamoDB 테이블의 변경 이벤트를 캡처하는 기능입니다. 이 시나리오는 RDS 기반 ElastiCache 캐싱 문제이므로 DynamoDB Streams는 해당 사항이 없습니다."
       },
       "sources": [
-        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+        { "title": "ElastiCache 캐싱 전략 — Lazy Loading·Write-Through·TTL (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
       "verified": false
     }

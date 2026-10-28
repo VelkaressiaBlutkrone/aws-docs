@@ -41,14 +41,15 @@
         "CloudWatch 알람으로 $5,000 초과를 감지하고 SNS로 이메일을 보낸다"
       ],
       "correct": 1,
-      "explanation": "AWS Budgets는 예산 초과 알림과 자동 조치를 모두 지원합니다. $5,000 임계값에 이메일 알림을 설정하고, $7,000 임계값에 Budget Actions로 ec2:RunInstances를 Deny하는 IAM 정책을 자동 연결하면 사람 개입 없이 추가 인스턴스 생성이 차단됩니다. Budget Actions는 IAM 정책 연결, SNS 알림, SSM Automation 실행의 세 가지 조치를 지원합니다.",
+      "explanation": "AWS Budgets는 예산 초과 알림과 자동 조치를 모두 지원합니다. $5,000 임계값에 이메일 알림을 설정하고, $7,000 임계값에 Budget Actions로 ec2:RunInstances를 Deny하는 IAM 정책을 자동 연결하면 사람 개입 없이 추가 인스턴스 생성이 차단됩니다. 공식 문서가 꼽는 budget action은 IAM 정책 적용, SCP(서비스 제어 정책) 적용, 그리고 특정 EC2·RDS 인스턴스를 대상으로 지정해 중지하는 것입니다. SNS 알림은 action이 아니라 예산 알림(notification)이며, 조치는 자동 실행하거나 수동 승인 후 실행하도록 설정할 수 있습니다.",
       "wrongExplanations": {
         "0": "Cost Explorer는 분석·시각화 도구로 알림이나 자동 차단 기능이 없습니다. 예산 초과 제어에는 Budgets를 사용해야 합니다.",
         "2": "Cost Anomaly Detection은 예상치 못한 비용 급등을 ML로 감지하는 도구로, 고정 임계값 기반 알림이나 IAM 정책 자동 연결 기능을 제공하지 않습니다.",
         "3": "CloudWatch 알람으로 이메일 알림을 보낼 수는 있지만, 예산 임계값 기반 IAM 정책 자동 연결(자동 차단)은 Budget Actions의 기능입니다."
       },
       "sources": [
-        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
+        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" },
+        { "title": "예산 조치(budget actions) 구성 (공식)", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html" }
       ],
       "verified": false
     },
@@ -61,18 +62,19 @@
       "options": [
         "AWS Budgets → SNS → Lambda → QuickSight",
         "Cost Explorer API → Redshift → QuickSight",
-        "CUR(S3 CSV) → Amazon Athena(SQL 쿼리) → Amazon QuickSight(시각화)",
+        "CUR(S3에 Parquet) → Amazon Athena(SQL 쿼리) → Amazon QuickSight(시각화)",
         "AWS Cost Anomaly Detection → S3 → Athena"
       ],
       "correct": 2,
-      "explanation": "Cost and Usage Report(CUR)는 시간·일·월 단위 라인 아이템을 S3 CSV로 전달합니다. Athena 통합을 활성화하면 Glue 크롤러와 Athena 테이블이 자동 생성되어 SQL 쿼리가 가능하고, QuickSight로 시각화까지 이어지는 통합 파이프라인을 구성할 수 있습니다.",
+      "explanation": "Cost and Usage Report(CUR)는 시간·일·월 단위 라인 아이템을 S3에 전달합니다. 단, Athena로 쿼리하려면 형식이 Apache Parquet이어야 합니다 — 공식 문서는 CUR이 Athena용으로 Apache Parquet 압축 형식만 지원한다고 적습니다(CSV로는 Athena 통합이 되지 않습니다). Athena 통합을 활성화하면 Glue 크롤러와 Athena 테이블이 자동 생성되어 SQL 쿼리가 가능하고, QuickSight로 시각화까지 이어지는 통합 파이프라인을 구성할 수 있습니다.",
       "wrongExplanations": {
         "0": "이 파이프라인은 예산 알림용 구성으로, SQL 기반 비용 세분화 분석과 BI 시각화에는 맞지 않습니다.",
         "1": "Cost Explorer는 인터랙티브 UI 기반 분석 도구로, 시간 단위 라인 아이템의 원시 데이터를 Redshift로 직접 전달하는 파이프라인을 제공하지 않습니다.",
         "3": "Cost Anomaly Detection은 이상 비용 감지용 도구로 SQL 기반 세분화 분석 파이프라인을 제공하지 않습니다. CUR이 SQL 분석의 소스입니다."
       },
       "sources": [
-        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서 (BI 시각화는 Amazon Quick Sight, 옛 이름 QuickSight)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" }
+        { "title": "AWS Cost and Usage Report (CUR) — 공식 문서 (BI 시각화는 Amazon Quick Sight, 옛 이름 QuickSight)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" },
+        { "title": "Athena로 CUR 쿼리 — Parquet 전용 (공식)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/cur-query-athena.html" }
       ],
       "verified": false
     },
@@ -113,14 +115,14 @@
         "EC2 인스턴스에 태그를 붙이려면 IAM 관리자 권한이 필요하다"
       ],
       "correct": 2,
-      "explanation": "리소스에 태그를 붙이는 것만으로는 Cost Explorer·CUR에서 해당 태그로 필터링할 수 없습니다. Billing Console에서 태그 키를 비용 할당 태그로 명시적으로 활성화해야 청구 데이터에 컬럼이 포함됩니다. 이 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, backfill 요청으로 최대 12개월까지 소급 적용할 수 있습니다.",
+      "explanation": "리소스에 태그를 붙이는 것만으로는 Cost Explorer·CUR에서 해당 태그로 필터링할 수 없습니다. Billing Console에서 태그 키를 비용 할당 태그로 명시적으로 활성화해야 청구 데이터에 컬럼이 포함됩니다. 이 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, 관리 계정 사용자가 backfill을 요청하면 최대 12개월까지 소급 적용할 수 있습니다.",
       "wrongExplanations": {
         "0": "Cost Explorer는 태그 필터링을 지원합니다. 다만 Billing Console에서 비용 할당 태그로 활성화된 태그 키에 한해서만 필터에 나타납니다.",
         "1": "태그 키에 콜론이 포함되는 것은 허용됩니다. `team:finance` 형태의 태그는 유효한 사용자 정의 태그 형식입니다.",
         "3": "태그 부착 권한은 IAM 정책에서 제어하는 것이 맞지만, 이 시나리오에서 태그가 이미 3개월 전부터 붙어 있다고 했으므로 태그 부착 자체의 권한 문제가 아닙니다."
       },
       "sources": [
-        { "title": "비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
+        { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
       ],
       "verified": false
     },
@@ -144,7 +146,7 @@
         "3": "볼륨 할인 합산은 리전 제약이 없습니다. 멤버 계정 전체의 서비스 사용량이 합산됩니다."
       },
       "sources": [
-        { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
+        { "title": "AWS Organizations 통합 결제 — 사용량 합산 볼륨 할인 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html" }
       ],
       "verified": false
     },
@@ -161,14 +163,15 @@
         "(1) AWS Compute Optimizer, (2) AWS Trusted Advisor"
       ],
       "correct": 3,
-      "explanation": "Compute Optimizer는 CloudWatch 지표 14일 이상을 수집해 인스턴스 과/저프로비저닝을 감지하고 적정 크기(Rightsizing)를 추천합니다 — '이 인스턴스 크기가 맞나?'에 답합니다. Trusted Advisor는 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목을 현재 상태 스냅샷 기반으로 탐지합니다 — '이 리소스를 아직도 쓰고 있나?'에 답합니다.",
+      "explanation": "Compute Optimizer는 CloudWatch 지표 14일 이상을 수집해 인스턴스 과/저프로비저닝을 감지하고 적정 크기(Rightsizing)를 추천합니다 — '이 인스턴스 크기가 맞나?'에 답합니다. Trusted Advisor는 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목을 현재 상태 스냅샷 기반으로 탐지합니다 — '이 리소스를 아직도 쓰고 있나?'에 답합니다. 참고로 Compute Optimizer에도 유휴 리소스 권장이 있고 거기에는 EBS 볼륨이 포함되지만 로드밸런서는 대상이 아니므로, 유휴 로드밸런서까지 묻는 (2)에는 Trusted Advisor가 맞습니다.",
       "wrongExplanations": {
         "0": "역할이 바뀌었습니다. Trusted Advisor는 미사용 리소스 탐지용이고, Compute Optimizer는 인스턴스 크기 추천용입니다.",
         "1": "Cost Explorer는 비용 추세 분석·예측 도구이고, Budgets는 예산 알림·차단 도구입니다. 두 도구 모두 인스턴스 크기 추천이나 유휴 리소스 탐지를 직접 수행하지 않습니다.",
-        "2": "Cost Anomaly Detection은 이상 비용 자동 감지용이고, Compute Optimizer는 적정 크기 추천용입니다. Compute Optimizer가 유휴 EBS·로드밸런서 탐지를 담당하지 않습니다."
+        "2": "Cost Anomaly Detection은 이상 비용 자동 감지용이라 (1)에 맞지 않습니다. 또 Compute Optimizer의 유휴 리소스 권장은 EBS 볼륨을 포함하지만 로드밸런서는 대상이 아니므로, 유휴 로드밸런서까지 찾아야 하는 (2)를 Compute Optimizer 혼자로는 충족하지 못합니다 — 그쪽은 Trusted Advisor가 잡습니다."
       },
       "sources": [
-        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
+        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" },
+        { "title": "Compute Optimizer 유휴 리소스 권장 — 대상 목록 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
       ],
       "verified": false
     },
@@ -189,7 +192,7 @@
       "wrongExplanations": {
         "0": "이것은 '미분화된 무거운 작업 중단(Stop spending money on undifferentiated heavy lifting)' 원칙입니다. 데이터 센터 운영을 AWS에 위임해 비즈니스에 집중하는 것을 의미합니다.",
         "2": "이것은 '전반적 효율성 측정(Measure overall efficiency)' 원칙입니다. 비즈니스 산출물과 비용을 함께 측정하는 것을 의미합니다.",
-        "3": "이것은 '클라우드 재무 관리 실천(Practice cloud financial management)' 원칙입니다. 비용 효율성을 조직 역량으로 구축하는 것을 의미합니다."
+        "3": "이것은 '클라우드 재무 관리 구현(Implement cloud financial management)' 원칙입니다. 비용 효율적인 조직이 되도록 지식·프로그램·리소스·프로세스에 투자해 역량을 구축하는 것을 의미합니다."
       },
       "sources": [
         { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" }
@@ -209,7 +212,7 @@
         "(A) Cost Anomaly Detection, (B) CUR"
       ],
       "correct": 0,
-      "explanation": "CUR은 시간·일·월 단위 라인 아이템을 S3 CSV로 저장하고 Athena 통합으로 SQL 쿼리를 지원합니다 — 심층 감사·파이프라인용 원시 데이터입니다. Cost Explorer는 같은 데이터셋 위에서 집계·필터·그룹핑을 미리 계산해 인터랙티브 그래프로 제공하는 분석 레이어입니다 — 즉각적인 시각적 탐색에 적합합니다.",
+      "explanation": "CUR은 시간·일·월 단위 라인 아이템을 S3에 저장하고, Athena용으로는 Apache Parquet 형식으로 내보내 Athena 통합으로 SQL 쿼리를 지원합니다 — 심층 감사·파이프라인용 원시 데이터입니다. Cost Explorer는 같은 데이터셋 위에서 집계·필터·그룹핑을 미리 계산해 인터랙티브 그래프로 제공하는 분석 레이어입니다 — 즉각적인 시각적 탐색에 적합합니다.",
       "wrongExplanations": {
         "1": "Cost Explorer는 Athena SQL 쿼리 파이프라인을 제공하지 않습니다. Budgets는 시각화 도구가 아닙니다.",
         "2": "Budgets는 예산 알림·자동 조치용 도구로 시간 단위 SQL 감사나 즉각 시각화 모두 해당하지 않습니다.",
@@ -217,7 +220,8 @@
       },
       "sources": [
         { "title": "AWS Cost and Usage Report (CUR) — 공식 문서 (BI 시각화는 Amazon Quick Sight, 옛 이름 QuickSight)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" },
-        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
+        { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" },
+        { "title": "Athena로 CUR 쿼리 — Parquet 전용 (공식)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/cur-query-athena.html" }
       ],
       "verified": false
     },
@@ -289,7 +293,7 @@
         "2": "Cost Explorer에서 태그를 수동으로 합치는 것은 근본 원인(혼용)을 해결하지 않으며 데이터 정확성을 보장하지 않습니다."
       },
       "sources": [
-        { "title": "비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
+        { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
       ],
       "verified": false
     },
@@ -306,14 +310,14 @@
         "불가능하다. backfill은 AWS 관리 계정에서만 요청할 수 있다"
       ],
       "correct": 2,
-      "explanation": "비용 할당 태그 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, backfill 요청을 통해 최대 12개월까지 소급 적용이 가능합니다. 단, 리소스에 해당 태그가 실제로 붙어 있었던 기간에 한합니다. backfill이 완료되면 Cost Explorer·Data Exports·CUR이 자동으로 갱신됩니다.",
+      "explanation": "비용 할당 태그 활성화 이전 기간의 데이터는 기본적으로 소급 반영되지 않지만, 관리 계정 사용자가 요청하면 backfill로 최대 12개월까지 소급 적용이 가능합니다. 단, 리소스에 해당 태그가 실제로 붙어 있었던 기간에 한합니다. backfill이 완료되면 Cost Explorer·Data Exports·CUR이 자동으로 갱신됩니다.",
       "wrongExplanations": {
         "0": "소급 반영이 절대 불가능한 것은 아닙니다. backfill 요청으로 최대 12개월까지 소급 적용이 가능합니다.",
         "1": "자동으로 전체 이력에 소급 반영되지는 않습니다. 기본 동작은 활성화 시점 이후부터 반영이며, 소급 적용은 backfill 요청을 별도로 해야 합니다.",
-        "3": "backfill 요청이 관리 계정에서만 가능하다는 제한은 이 문서에서 언급되지 않습니다. backfill은 활성화된 태그 키에 대해 요청할 수 있습니다."
+        "3": "backfill을 관리 계정 사용자가 요청한다는 것은 공식 문서에 맞는 서술입니다. 하지만 그것이 소급 적용을 '불가능'하게 만들지는 않으므로, 결론이 틀려 이 보기는 옳지 않습니다."
       },
       "sources": [
-        { "title": "비용 할당 태그 Backfill — 공식 문서 (게이트 검수 반영: 2026-06-12)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html" }
+        { "title": "비용 할당 태그 Backfill (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html" }
       ],
       "verified": false
     },
@@ -333,7 +337,7 @@
       "explanation": "Well-Architected 비용 최적화 기둥의 공식 정의는 '기능 요구사항을 충족하면서 최저 가격으로 결과를 달성하는 워크로드'입니다. '기능 요구사항 충족'이라는 전제가 핵심으로, 보안·안정성·성능을 희생하는 비용 절감은 다른 기둥의 원칙을 위반합니다. 시험에서 'most cost-effective' 선택지는 항상 요구사항을 충족하는 옵션 중에서 고르는 것입니다.",
       "wrongExplanations": {
         "1": "무조건 최저 청구액을 추구하는 것이 아닙니다. 기능 요구사항을 충족하는 범위 내에서 최저 비용을 추구하는 것이 정의입니다.",
-        "2": "보안·성능·안정성을 완화하는 비용 절감은 Well-Architected의 5개 기둥 균형 원칙을 위반합니다. 비용 최적화는 다른 기둥을 지키는 범위 안에서만 유효합니다.",
+        "2": "보안·성능·안정성을 완화하는 비용 절감은 Well-Architected의 6개 기둥(운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성) 균형 원칙을 위반합니다. 비용 최적화는 다른 기둥을 지키는 범위 안에서만 유효합니다.",
         "3": "스팟 인스턴스 활용은 비용 효율적 리소스 선택의 한 예이지 비용 최적화 기둥의 정의가 아닙니다."
       },
       "sources": [
@@ -358,7 +362,7 @@
       "wrongExplanations": {
         "0": "API 호출은 무료가 아닙니다. 프로그래밍 방식 API 호출은 요청당 $0.01이 부과됩니다.",
         "2": "콘솔 UI는 무료이지만 API는 무료가 아닙니다. 두 가지 요금 정책이 다릅니다.",
-        "3": "월 1,000회 무료 한도라는 정책은 이 문서에서 언급되지 않습니다. 문서에 따르면 API 호출은 요청당 $0.01로 과금됩니다."
+        "3": "월 1,000회 무료 한도 같은 정책은 없습니다. Cost Explorer API는 요청당 $0.01로 과금되며 무료 호출 한도가 따로 없습니다."
       },
       "sources": [
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }

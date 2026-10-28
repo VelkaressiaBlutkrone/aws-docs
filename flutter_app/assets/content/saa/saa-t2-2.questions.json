@@ -24,7 +24,8 @@
         "3": "버킷 정책은 S3 리소스에 대한 접근 권한을 제어하는 것이지, Lambda 호출 실패 이벤트를 보존하는 메커니즘이 아닙니다."
       },
       "sources": [
-        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
+        { "title": "Lambda 비동기 호출 오류 처리·DLQ (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html" },
+        { "title": "Lambda 비동기 호출 — S3·SNS가 쓰는 방식 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html" }
       ],
       "verified": false
     },
@@ -122,7 +123,7 @@
         "2": "퍼블릭 액세스 설정은 인증 없이 누구나 접근 가능하게 하는 것으로, 데이터 노출 위험이 매우 큽니다. 최소 권한 원칙에 위배됩니다."
       },
       "sources": [
-        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
+        { "title": "Lambda 실행 역할 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html" }
       ],
       "verified": false
     },
@@ -182,19 +183,19 @@
       "stem": "팀이 Lambda 함수를 단순히 HTTP 요청으로 호출하는 API를 구축하려 한다. 캐싱·WAF 통합·사용 계획은 필요 없고 비용을 최소화하는 것이 목표다. 어떤 API Gateway 유형을 선택해야 하는가?",
       "options": [
         "REST API — 모든 기능을 갖춰 나중에 요구사항이 생겨도 대응할 수 있다",
-        "HTTP API — 단순 Lambda 프록시에 더 저렴하고 지연도 낮다",
+        "HTTP API — 기능이 최소화돼 더 낮은 가격으로 제공되고 단순 Lambda 프록시에 적합하다",
         "WebSocket API — 지속 연결로 요청당 오버헤드를 줄인다",
         "REST API — HTTP API보다 Lambda와의 통합이 더 안정적이다"
       ],
       "correct": 1,
-      "explanation": "HTTP API는 REST API보다 저렴하고 지연이 낮으며, 단순 Lambda 프록시 구성에 최적화되어 있습니다. 캐싱·사용 계획·WAF 같은 REST API의 고급 기능이 필요 없다면, 불필요한 기능에 비용을 지불하는 REST API 대신 HTTP API가 적합합니다.",
+      "explanation": "HTTP API는 기능을 최소화해 REST API보다 낮은 가격으로 제공되며, 단순 Lambda 프록시 구성에 적합합니다. 캐싱·사용 계획·WAF 같은 REST API의 고급 기능이 필요 없다면, 불필요한 기능에 비용을 지불하는 REST API 대신 HTTP API가 적합합니다.",
       "wrongExplanations": {
         "0": "미래 요구사항을 대비해 지금 필요 없는 기능을 포함한 서비스를 선택하는 것은 비용 낭비입니다. 요구사항이 생기면 그때 전환하는 것이 적절하며, 현재 기준에서는 HTTP API가 맞습니다.",
         "2": "WebSocket API는 실시간 양방향 통신용으로 단순 HTTP 요청-응답과는 다른 모델입니다. 단발 HTTP 호출에 WebSocket을 쓰면 오히려 불필요한 복잡도가 생깁니다.",
         "3": "HTTP API도 Lambda와의 통합을 완전히 지원합니다. REST API가 Lambda 통합 안정성 면에서 우월하다는 것은 사실이 아닙니다."
       },
       "sources": [
-        { "title": "Amazon API Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html" }
+        { "title": "REST API와 HTTP API 중 선택 (공식)", "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html" }
       ],
       "verified": false
     },
@@ -242,7 +243,7 @@
         "3": "CloudFront·WAF는 API Gateway 앞에 추가할 수 있지만, 클라이언트별 세밀한 호출 횟수 제한은 API Gateway의 Usage Plan·Throttling이 담당합니다."
       },
       "sources": [
-        { "title": "Amazon API Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html" }
+        { "title": "REST API 사용량 계획과 API 키 (공식)", "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html" }
       ],
       "verified": false
     },
