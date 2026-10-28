@@ -357,5 +357,24 @@ void main() {
     test('공식 문구(배포에 설정된 지리적 위치로 배포)가 근거로 들어왔다', () {
       expect(t15.contains('지리적 위치'), isTrue);
     });
+
+    // 2026-10-28 2차 검수 우선순위 2. 아래 세 단정은 파생 문항과 함께 고친 것이다
+    // (`saa-t1-5-q14` · `saa-t1-5-q7`). 전파 가드는
+    // `saa_question_propagation_test.dart` 의 `_rules` 에 있다.
+    test('"재생성이 유일한 경로" 단정이 본문에서 사라졌다', () {
+      expect(body.contains('재생성이 유일한 경로'), isFalse,
+          reason: 'Blue/Green 배포에서 green 에 TargetKmsKeyId 를 지정하는 경로도 있다');
+    });
+
+    test('Blue/Green TargetKmsKeyId 경로가 본문에 들어왔다', () {
+      expect(body.contains('TargetKmsKeyId'), isTrue);
+      expect(body.contains('Blue/Green'), isTrue);
+    });
+
+    test('ACM 관리형 갱신 적격에 내보낸(exported) 인증서가 들어왔다', () {
+      expect(body.contains('내보낸(exported) 인증서도 적격'), isTrue,
+          reason: '공식 managed-renewal 은 "ELIGIBLE if exported since being '
+              'issued or last renewed" 를 적는다');
+    });
   });
 }

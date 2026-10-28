@@ -34,7 +34,11 @@ sources:
     url: https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html
   - title: Amazon Macie란 무엇인가(머신러닝+패턴 매칭) (공식)
     url: https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
-lastVerified: 2026-10-20
+  - title: ACM 관리형 갱신 적격 조건(서비스 연결 또는 내보냄·가져온 인증서 비적격) (공식)
+    url: https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
+  - title: RDS Blue/Green 배포 TargetResourceConfiguration(green 암호화 TargetKmsKeyId) (공식 API)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
+lastVerified: 2026-10-28
 ---
 
 # 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스
@@ -150,7 +154,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 |---|---|
 | S3 | **기본 암호화**: 2023-01-05부터 **모든 신규 업로드가 SSE-S3로 자동 암호화**(추가 비용·성능 영향 없음). 상호 배타적 네 옵션 — **SSE-S3**(S3 관리 키·기본값) · **SSE-KMS**(CMK 지정) · **DSSE-KMS**(AES-256 **이중 레이어**) · **SSE-C**(고객 제공 키). 버킷 기본값으로 지정할 수 있는 건 SSE-KMS·DSSE-KMS. **SSE-C는 2026-04부터 신규 범용 버킷에서 기본 비활성**(쓰려면 `PutBucketEncryption`으로 명시 활성화). SSE-KMS는 **S3 Bucket Key**로 KMS 호출을 줄여 비용을 낮춥니다 |
 | EBS | 볼륨 생성 시 KMS CMK 지정, 스냅샷에도 동일 키 적용 |
-| RDS | DB 인스턴스 생성 시 암호화 활성화 (생성 후 변경 불가 — 스냅샷 경유) |
+| RDS | DB 인스턴스 생성 시 암호화 활성화. 생성 후 **in-place 전환은 불가** — 대표 경로는 **스냅샷 경유 재생성**이고, **Blue/Green 배포에서 green 리소스에 `TargetKmsKeyId`를 지정**하는 경로도 있습니다(근거 15번) |
 | DynamoDB | 테이블 암호화(AWS 소유 키·AWS 관리형 키·CMK 선택) |
 
 > 🧠 원리: 왜 KMS 키는 서비스 바깥으로 절대 내보내지 않는 설계를 채택했을까요?
@@ -203,7 +207,9 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 > 공식 정의: **"공인·사설 SSL/TLS X.509 인증서와 키를 생성·저장·갱신하는 복잡함을 처리하는 서비스."**
 
 - **공인 TLS 인증서 요금**: ALB·CloudFront 같은 **통합 AWS 서비스에 붙여 쓰는 공인 인증서는 추가 요금이 없습니다**(인증서를 붙이는 리소스 비용은 별도). 단 **내보내기 가능(exportable) 공인 인증서**는 EC2·컨테이너·온프레미스 등 AWS 밖에도 배포할 수 있는 대신 **추가 요금이 붙습니다**(발급·갱신 시 과금, 요금은 공식 요금 페이지 기준).
-- **자동 갱신**: **완전 자동 갱신은 처음부터 DNS 검증으로 발급한 인증서**에 해당합니다. ACM은 **만료 45일 전**에 ①인증서가 AWS 서비스에서 사용 중인지 ②ACM이 준 CNAME 레코드가 공개 DNS에 그대로 있는지를 확인해 갱신합니다(자동 검증이 실패하면 30·15·7·3·1일 전에 AWS Health·EventBridge 이벤트 발송). **이메일 검증 인증서는 소유자가 갱신 메일에 응답**해야 하므로 완전 자동이 아닙니다. 참고로 공인 인증서 유효 기간은 **198일**입니다.
+- **자동 갱신**: **완전 자동 갱신은 처음부터 DNS 검증으로 발급한 인증서**에 해당합니다. ACM은 **만료 45일 전**에 ①인증서가 AWS 서비스에서 사용 중인지 ②ACM이 준 CNAME 레코드가 공개 DNS에 그대로 있는지를 확인해 갱신합니다(자동 검증이 실패하면 30·15·7·3·1일 전에 AWS Health·EventBridge 이벤트 발송). **이메일 검증 인증서는 소유자가 갱신 메일에 응답**해야 하므로 완전 자동이 아닙니다. 참고로 공인 인증서 유효 기간은 **198일**입니다(395일로 발급된 옛 인증서는 만료 60일 전에 갱신되고 갱신 후 198일을 받습니다).
+
+- **관리형 갱신 적격 조건**: "AWS 서비스에서 사용 중"만이 아닙니다 — ① **ELB·CloudFront 같은 AWS 서비스에 연결**돼 있거나 ② **발급·갱신 이후 내보낸(exported) 인증서도 적격**입니다. 반대로 **가져온(imported) 인증서와 이미 만료된 인증서는 비적격**입니다. 내보낸 인증서는 ACM이 갱신해 주지만 **갱신본을 서버에 배포하는 일은 사용자 몫**입니다(근거 14번).
 - **지원 통합**: ALB·NLB·CloudFront·API Gateway·Elastic Beanstalk.
 - **가져온 인증서**: 외부 CA에서 발급한 인증서를 ACM으로 가져올 수 있으나, 자동 갱신은 지원되지 않습니다.
 
@@ -303,7 +309,7 @@ EC2·EBS·S3·RDS·Aurora·DynamoDB·EFS·FSx·EKS·DocumentDB·Neptune·Redshif
    *(원리: §5 — 공식 요구사항이다. us-east-1 인증서가 배포에 설정된 모든 지리적 위치로 배포되며, ACM 인증서는 리전 간 복사가 되지 않는다.)*
 
 2. **"운영 중인 RDS 인스턴스를 콘솔 클릭으로 암호화했다."** → 불가능. 암호화되지 않은 RDS 인스턴스는 **스냅샷 생성 → 스냅샷을 암호화 복사 → 암호화된 스냅샷에서 복원** 절차를 거쳐야 합니다.
-   *(원리: §2 — RDS 암호화는 인스턴스 생성 시 설정되며, 이후 in-place 변경이 불가해 스냅샷 경유 재생성이 유일한 경로다.)*
+   *(원리: §2 — RDS 암호화는 인스턴스 생성 시 설정되며 이후 in-place 변경이 불가하다. 대표 경로는 스냅샷 경유 재생성이고, Blue/Green 배포에서 green 리소스에 `TargetKmsKeyId`를 지정하는 경로도 있다. 어느 쪽이든 기존 인스턴스를 그 자리에서 암호화하는 것은 아니다.)*
 
 3. **"IAM 정책에 kms 권한만 주면 CMK를 쓸 수 있다."** → 키 정책이 **계정에 권한을 위임**(`Enable IAM User Permissions`)하고 있거나 주체를 **직접 허용**해야 합니다. 둘 다 없으면 IAM에서 Allow해도 차단됩니다. 반대로 **위임 문장이 있는 기본 키 정책이라면 IAM 정책만으로도 접근이 가능**합니다 — "항상 양쪽이 필요하다"는 서술은 교차 계정에만 맞습니다.
    *(원리: §2 — 키 정책이 명시 허용하지 않으면 암시적 거부이고, 계정 주체 문장은 IAM 정책으로의 위임 선언이다.)*
@@ -370,7 +376,11 @@ CloudFront 배포에 사용하는 ACM 인증서는 **us-east-1(버지니아 북�
 11. AWS Backup Vault Lock(grace time 최소 3일·ChangeableForDays) — https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html
 12. Amazon Macie란 무엇인가(머신러닝 + 패턴 매칭·정규식 사용자 정의 식별자) — https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
 13. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+14. ACM 관리형 갱신 적격 조건("ELIGIBLE if associated with another AWS service" / "**ELIGIBLE if exported since being issued or last renewed**" / "NOT ELIGIBLE if imported" / "NOT ELIGIBLE if already expired") — https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
+15. RDS Blue/Green 배포 `TargetResourceConfiguration` — `TargetKmsKeyId` 는 "**The blue resource is unencrypted and you want to encrypt the green resource**" 인 경우에 지정한다 — https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
 
 > 📝 **2026-10-19 정정(8건)**: ① KMS 키 정책과 IAM 정책의 관계를 공식 규칙(계정 위임 문장 / 직접 허용 / 암시적 거부, 교차 계정만 양쪽 필요)으로 고쳤습니다(근거 5번). ② FIPS 결정 규칙과 자가 점검 Q1을 **단일 테넌트 요건** 기준으로 정정했습니다 — KMS 표준 HSM도 FIPS 140-3 Level 3 검증(근거 7번). ③ AWS 관리형 키와 AWS 소유 키를 구분하고 요금 표기를 바로잡았습니다(근거 6번). ④ S3 암호화에 기본 암호화·DSSE-KMS·Bucket Key·SSE-C 기본 비활성을 반영했습니다(근거 8번). ⑤⑥ ACM 요금(내보내기 가능 인증서 유료)과 자동 갱신 조건(DNS 검증·45일)을 정정했습니다(근거 9·10번). ⑦ Vault Lock 유예를 **사용자 지정 최소 3일**로 고쳤습니다(근거 11번). ⑧ Macie를 **머신러닝 + 패턴 매칭**으로 정정했습니다(근거 12번).
 
 > 📝 **2026-10-20 정정(1건)**: §5 CloudFront 인증서 리전 제약의 「원리」에서 **컨트롤 플레인이 배포 설정을 엣지 PoP에 복제한다**는 기전 서술을 뺐습니다 — 공식 문서에서 근거를 찾지 못한 주장이었습니다(근거 3번 ACM 개요는 "us-east-1 인증서가 배포에 설정된 모든 지리적 위치로 배포된다"까지만 말합니다). 요구사항 자체(us-east-1 발급)는 공식이라 그대로 뒀습니다. 같은 날 파생 문항 15개도 2026-10-19 정정이 전파되지 않은 것을 찾아 함께 맞췄습니다(`docs/saa-review/2026-10-20-t1-5-review-sheet.md`).
+
+> 📝 **2026-10-28 정정·보강(2건, 2차 검수 우선순위 2)**: ① §2 RDS 행과 「흔한 오해」 2번에서 **스냅샷 경유만이 전환 경로**라는 단정을 걷어내고 **Blue/Green 배포의 `TargetKmsKeyId`** 경로를 함께 적었습니다(근거 15번) — 파생 문항 `saa-t1-5-q14`의 해설에도 같은 단정이 있어 함께 고쳤습니다. ② §5 ACM 자동 갱신에 **관리형 갱신 적격 조건**을 더했습니다 — AWS 서비스 연결 **또는 발급·갱신 이후 내보냄(exported)** 이 적격이고 가져온·만료 인증서는 비적격입니다(근거 14번). 파생 문항 `saa-t1-5-q7`에 유효 기간 198일과 내보낸 인증서 적격이 빠져 있어 함께 반영했습니다.

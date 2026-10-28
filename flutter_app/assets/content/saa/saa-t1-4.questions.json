@@ -45,11 +45,12 @@
       "explanation": "AWS Shield Standard는 모든 AWS 고객에게 자동으로 적용되는 무료 DDoS 방어 서비스입니다. L3/L4 수준의 일반 DDoS 공격을 자동 완화하며 추가 설정이 필요 없습니다. Shield Advanced는 별도 유료 구독이 필요합니다.",
       "wrongExplanations": {
         "0": "Shield Advanced는 유료 구독이 필요하며 모든 계정에 자동 적용되지 않습니다 — 명시적으로 구독해야 합니다.",
-        "1": "WAF는 L7 HTTP/HTTPS 요청 내용 필터링 서비스로 유료(웹 ACL·규칙·요청 건수 기준 요금)이며 DDoS 자동 완화 서비스가 아닙니다.",
+        "1": "WAF에도 L7 DDoS를 완화하는 Anti-DDoS 관리형 규칙 그룹(AWSManagedRulesAntiDDoSRuleSet)이 있습니다. 다만 그 그룹을 웹 ACL에 추가하고 차단 민감도를 구성해야 동작하며 추가 요금이 붙습니다 — 추가 설정 없이 모든 계정에 자동 적용되는 무료 방어가 아닙니다. Rate-based 규칙도 직접 만들어 넣어야 합니다.",
         "3": "GuardDuty는 위협 탐지(로그 분석) 서비스이지 DDoS 완화 서비스가 아닙니다."
       },
       "sources": [
-        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" },
+        { "title": "AWS WAF Anti-DDoS 관리형 규칙 그룹 — 가장 상위 Anti-DDoS 보호·추가 요금 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html" }
       ],
       "verified": false
     },

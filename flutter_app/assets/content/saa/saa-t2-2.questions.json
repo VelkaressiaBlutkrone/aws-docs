@@ -45,10 +45,11 @@
       "wrongExplanations": {
         "0": "Reserved Concurrency는 함수가 사용할 수 있는 동시 실행 상한을 예약하는 기능입니다. 워밍업과는 다른 축이므로 콜드 스타트를 제거하지 못합니다.",
         "1": "메모리를 늘리면 CPU도 비례해 증가해 실행 속도가 빨라질 수 있지만, 실행 환경 초기화 지연(콜드 스타트) 자체를 제거하지는 않습니다.",
-        "2": "VPC 연결은 Lambda가 VPC 내부 리소스에 접근하기 위한 설정입니다. VPC를 연결하면 ENI 생성으로 오히려 콜드 스타트가 길어질 수 있으며, 콜드 스타트 제거와는 무관합니다."
+        "2": "VPC 연결은 Lambda가 VPC 내부 리소스에 접근하기 위한 설정이지 네트워크를 미리 초기화하는 기능이 아닙니다. Hyperplane ENI는 호출 시점이 아니라 함수에 VPC를 설정하는 시점에 Lambda가 미리 만들고, 준비될 때까지 함수는 Pending 상태라 호출 자체가 되지 않습니다 — 콜드 스타트 대책이 아닙니다."
       },
       "sources": [
-        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
+        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" },
+        { "title": "Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성·준비 전까지 Pending (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html" }
       ],
       "verified": false
     },
