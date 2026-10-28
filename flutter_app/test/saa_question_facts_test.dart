@@ -1741,4 +1741,136 @@ void main() {
       });
     }
   });
+
+  group('§우선순위3 배치3 — D3 saa-t3-8·t3-9 (6건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q2', correct: 2,
+        forbidden: [
+          '온프레미스 데이터센터와도 연결해야 한다',
+          '여기에 온프레미스 연결까지 각 VPC마다 추가로 설정해야 하므로',
+        ],
+        required: ['10×9/2 = 45개', 'VPC 피어링은 두 VPC 사이를 잇는 연결'],
+        why: 'VPC 피어링은 두 VPC 사이의 네트워킹 연결이라 온프레미스에는 쓸 수 없다 '
+            '— "피어링만으로 온프레미스까지" 는 전제가 성립하지 않아 지문을 VPC 10개 '
+            '완전 메시로 한정했다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q6', correct: 3,
+        forbidden: ['DX over VPN'],
+        required: ['VPN over Direct Connect', 'MACsec'],
+        why: '공식 명칭은 Direct Connect 위에 Site-to-Site VPN 을 얹는 "VPN over '
+            'Direct Connect" 다 — "DX over VPN" 은 위아래가 거꾸로다. 암호화 선택지는 '
+            'IPsec VPN 과 MACsec(IEEE 802.1AE) 둘이다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q7', correct: 2,
+        forbidden: ['DX over VPN'],
+        required: ['VPN over Direct Connect', 'MACsec'],
+        why: '같은 명칭 역전이 정답 보기와 해설에 있었다. 공식 문서는 Direct Connect 가 '
+            '기본적으로 전송 중 트래픽을 암호화하지 않는다고 적고, 암호화 수단으로 '
+            'Site-to-Site VPN 결합과 MACsec 을 함께 싣는다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q9', correct: 0,
+        forbidden: ['DX over VPN'],
+        required: ['VPN over Direct Connect'],
+        why: '오답 근거에 같은 명칭 역전이 복제돼 있었다',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q10', correct: 3,
+        forbidden: [
+          '온프레미스를 경유하는 트래픽(hair-pinning)은 지원되지 않습니다',
+          '온프레미스를 경유하는 라우팅을 활성화하면 된다',
+        ],
+        required: ['2021년 11월', '슈퍼넷', 'BGP 경로 리플렉터'],
+        why: '공식 문서는 2021년 11월부터의 예외를 명시한다 — 같은 가상 인터페이스에서 '
+            'VPC CIDR 을 포함하는 슈퍼넷(10.0.0.0/8, 0.0.0.0/0 등)을 온프레미스에서 '
+            '광고하면 그 VPC 들이 Direct Connect 엔드포인트를 거쳐 서로 통신한다. '
+            '따라서 "hair-pinning 불가" 는 틀렸고, 보기도 존재하지 않는 기능으로 '
+            '바꿔야 정답이 하나로 남는다. AWS 가 차단 방법까지 안내하므로 의도된 '
+            '설계가 아니라 부작용이다',
+      ),
+      (
+        task: 'saa-t3-9', qid: 'saa-t3-9-q11', correct: 0,
+        forbidden: [
+          '이 문항이 기존 고객을 전제로 두는 이유입니다',
+          '회사의 인터넷 대역폭은 1 Gbps이며, 이 속도로 전송하면 수개월이 걸린다',
+        ],
+        required: ['약 200 Mbps', '약 230일'],
+        why: '500 TB 를 1 Gbps 회선 속도로 보내면 약 46일이라 "수개월" 이 아니다. '
+            '지문을 이전에 쓸 수 있는 가용 대역폭 약 200 Mbps 로 한정하면 약 230일로 '
+            '수개월이 맞다. 괄호 안 "이 문항이 … 이유입니다" 는 작성 과정 메모다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (task: 'saa-t3-8', qid: 'saa-t3-8-q2', fragment: 'what-is-vpc-peering'),
+      (task: 'saa-t3-8', qid: 'saa-t3-8-q6', fragment: 'encryption-in-transit'),
+      (task: 'saa-t3-8', qid: 'saa-t3-8-q7', fragment: 'encryption-in-transit'),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+
+    test('saa-t3-8 문항에 "DX over VPN" 명칭 역전이 한 건도 남지 않았다', () {
+      final map = json.decode(
+              File('assets/content/saa/saa-t3-8.questions.json')
+                  .readAsStringSync())
+          as Map<String, dynamic>;
+      final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+      for (final q in questions) {
+        // `skill` 까지 본다 — 실제로 saa-t3-8-q7 의 스킬 태그가 "DX over VPN
+        // 암호화 패턴" 이었고, 스킬 태그는 학습자에게 그대로 노출된다.
+        final text = <String>[
+          q['stem'] as String? ?? '',
+          q['skill'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+        expect(text.contains('DX over VPN'), isFalse,
+            reason: '${q['id']} 에 "DX over VPN" 이 남아 있다 — 공식 명칭은 '
+                '"VPN over Direct Connect"(Direct Connect 위에 VPN)다');
+      }
+    });
+  });
 }
