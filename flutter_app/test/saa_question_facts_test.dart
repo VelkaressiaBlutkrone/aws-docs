@@ -2493,4 +2493,125 @@ void main() {
           reason: 'saa-t2-2-q8 에 문서가 적는 근거("lower price")가 없다');
     });
   });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 3 (t3-1·t3-6).
+  //
+  // ⚠️ 두 문항은 **사실이 둘**이라 출처를 둘 둔다. 보고가 제안한 페이지 하나로는
+  //    오답 근거의 핵심이 빈다.
+  //    - `saa-t3-6-q5`: `provisioned-capacity-mode` 가 "강력한 일관성 = 2배" 를
+  //      적지만 **GSI 가 최종 일관성만 지원한다**는 말이 없다(오답 [3] 의 근거).
+  //      `GSI` 의 "Global secondary indexes support eventually consistent reads,
+  //      each of which consume one half of a read capacity unit" 를 함께 단다.
+  //    - `saa-t3-6-q10`: `TTL` 이 자동 삭제·무비용을 적지만 Streams 가 없다.
+  //      `Streams` 의 "time-ordered sequence of item-level modifications" 를 함께.
+  group('2026-10-28 출처 교체 — 배치 3 (t3-1·t3-6)', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q8',
+        add: 'upload-objects',
+        drop: 'optimizing-performance',
+        why: '"With a single PUT operation, you can upload a single object up to 5 GB in '
+            'size" + "Using the multipart upload API operation, you can upload a single '
+            'large object, up to 50 TB in size"',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q12',
+        add: 'private-content-restricting-access-to-s3',
+        drop: 'AmazonS3/latest/userguide/Welcome',
+        why: '"CloudFront provides two ways to send authenticated requests to an Amazon S3 '
+            'origin: origin access control (OAC) and origin access identity (OAI). OAC '
+            'helps you secure your origins" + "We recommend that you use OAC" + 그 배포만 '
+            '허용하는 버킷 정책 예시',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q14',
+        add: 'replication-requirements',
+        drop: 'AmazonS3/latest/userguide/Welcome',
+        why: '"Amazon S3 replication requires the following: ... Both source and '
+            'destination buckets must have versioning enabled."',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q15',
+        add: 's3-batch-replication-batch',
+        drop: 'AmazonS3/latest/userguide/Welcome',
+        why: '"S3 Batch Replication differs from live replication, which continuously and '
+            'automatically replicates new objects ... Instead, S3 Batch Replication occurs '
+            'on demand on existing objects" + 대상에 "Objects that existed before a '
+            'replication configuration was in place"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q2',
+        add: 'bp-partition-key-uniform-load',
+        drop: 'developerguide/Introduction',
+        why: '공식 페이지의 "Bad" 예시가 **바로 이 문항의 상황**이다: "Status code, where '
+            'there are only a few possible status codes. | Bad" (User ID = Good) + "A '
+            'partition key design that does not distribute I/O requests effectively can '
+            'create hot partitions that result in throttling"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q5',
+        add: 'provisioned-capacity-mode',
+        drop: 'developerguide/Introduction',
+        why: '"For an item up to 4 KB, one read capacity unit (RCU) represents one strongly '
+            'consistent read operation per second, or two eventually consistent read '
+            'operations per second" + "strongly consistent read operations, which consume '
+            'twice as many database resources as eventually consistent reads"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q10',
+        add: 'developerguide/TTL.html',
+        drop: 'developerguide/Introduction',
+        why: '"TTL allows you to define a per-item expiration timestamp" + "DynamoDB '
+            'automatically deletes expired items ... without consuming write throughput" + '
+            '"cost-effective method for deleting items"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q14',
+        add: 'dg/Strategies',
+        drop: 'ElastiCache/latest/dg/WhatIs',
+        why: 'Write-through 장점 "Data in the cache is never stale. Because the data in the '
+            'cache is updated every time it is written to the database" + 단점 "Write '
+            'penalty ... adds latency" · "Cache churn. Most data is never read, which is a '
+            'waste of resources"',
+      ),
+      (
+        task: 'saa-t3-6', qid: 'saa-t3-6-q15',
+        add: 'dg/Strategies',
+        drop: 'ElastiCache/latest/dg/WhatIs',
+        why: 'Lazy loading 단점 "Stale data. If data is written to the cache only when there '
+            'is a cache miss, data in the cache can become stale ... To address this issue, '
+            'you can use the Write-through and Adding TTL strategies" + TTL 절 "When an '
+            'application attempts to read an expired key, it is treated as though the key '
+            'is not found. The database is queried for the key and the cache is updated."',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t3-6-q5: GSI 최종 일관성 전용 출처도 함께 달렸다', () {
+      expect(hasSource(question('saa-t3-6', 'saa-t3-6-q5'), 'developerguide/GSI.html'),
+          isTrue,
+          reason: '오답 근거 [3] 의 "GSI 는 최종 일관성 읽기만 지원" 을 담은 페이지가 없다. '
+              '근거: "Global secondary indexes support eventually consistent reads, each '
+              'of which consume one half of a read capacity unit"');
+    });
+
+    test('saa-t3-6-q10: DynamoDB Streams 출처도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t3-6', 'saa-t3-6-q10'), 'developerguide/Streams.html'),
+          isTrue,
+          reason: '해설의 "항목 변경 이벤트를 순서대로 기록" 을 담은 페이지가 없다. 근거: '
+              '"DynamoDB Streams captures a time-ordered sequence of item-level '
+              'modifications" + "the stream records appear in the same sequence as the '
+              'actual modifications"');
+    });
+  });
 }

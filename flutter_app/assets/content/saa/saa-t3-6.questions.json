@@ -48,7 +48,7 @@
         "3": "프로비저닝 vs 온디맨드 모드는 총 처리량 설정 방식의 차이이지, 핫 파티션 집중 문제의 원인이 아닙니다. 온디맨드 모드로 바꿔도 PK 설계가 잘못되면 핫 파티션 문제가 발생할 수 있습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "워크로드를 분산하는 파티션 키 설계 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-uniform-load.html" }
       ],
       "verified": false
     },
@@ -120,7 +120,8 @@
         "3": "GSI는 최종 일관성 읽기만 지원합니다. 강력한 일관성 읽기 자체가 GSI에서 불가능하므로 이 설명은 성립하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "DynamoDB 프로비저닝 용량 모드 — RCU·WCU (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/provisioned-capacity-mode.html" },
+        { "title": "글로벌 보조 인덱스 — 최종 일관성 읽기 전용 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html" }
       ],
       "verified": false
     },
@@ -241,7 +242,8 @@
         "3": "Global Tables는 다중 리전 복제를 위한 기능으로, 이벤트 기반 처리와 자동 만료 삭제 요구사항과는 직접 관련이 없습니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "DynamoDB TTL — 만료 항목 자동 삭제 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html" },
+        { "title": "DynamoDB Streams — 변경 데이터 캡처 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html" }
       ],
       "verified": false
     },
@@ -341,7 +343,7 @@
         "3": "긴 TTL은 stale 데이터를 줄이기는커녕 오래 유지시킵니다. 이 요구사항에 완전히 반대되는 전략입니다."
       },
       "sources": [
-        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+        { "title": "ElastiCache 캐싱 전략 — Lazy Loading·Write-Through·TTL (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
       "verified": false
     },
@@ -365,7 +367,7 @@
         "3": "DynamoDB Streams는 DynamoDB 테이블의 변경 이벤트를 캡처하는 기능입니다. 이 시나리오는 RDS 기반 ElastiCache 캐싱 문제이므로 DynamoDB Streams는 해당 사항이 없습니다."
       },
       "sources": [
-        { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" }
+        { "title": "ElastiCache 캐싱 전략 — Lazy Loading·Write-Through·TTL (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
       "verified": false
     }
