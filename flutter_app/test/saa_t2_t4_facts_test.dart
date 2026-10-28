@@ -594,6 +594,34 @@ void main() {
       expect(t43.contains('프로비저닝 스토리지 크기까지는 무료(RDS 기본 제공 범위)'), isFalse);
       expect(t43.contains('리전 전체'), isTrue);
     });
+
+    test('G-4.3-21 죽은 슬러그 rds-reserved-instances.html 를 쓰지 않는다', () {
+      // `rds-reserved-instances.html` 는 실측하면 `UserGuide/` 인덱스로
+      // 리다이렉트된다(2026-10-28 curl 확인). 예약 인스턴스 정본은
+      // `USER_WorkingWithReservedDBInstances.html` 이다.
+      //
+      // ⚠️ 2차 검수 §D 출처 교체(#262)가 `.questions.json` 만 대상이어서 문항
+      // 6건은 고쳐졌는데 `saa-t4-3.md` 의 프런트매터 url 과 참고자료 2곳이
+      // 남았다 — **학습문서는 문항 가드가 보지 않는다.** 그래서 md 전수로 건다.
+      // 섹션 앵커 `{#rds-reserved-instances}` 는 정상이므로 `.html` 까지 본다.
+      final mds = Directory('assets/content/saa')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.md'))
+          .toList();
+      expect(mds, isNotEmpty, reason: 'SAA 학습문서를 찾지 못했다');
+      final offenders = <String>[];
+      for (final f in mds) {
+        if (f.readAsStringSync().contains('rds-reserved-instances.html')) {
+          offenders.add(f.uri.pathSegments.last);
+        }
+      }
+      expect(offenders, isEmpty,
+          reason: '죽은 슬러그가 남아 있다(정본은 '
+              'USER_WorkingWithReservedDBInstances.html): $offenders');
+      expect(doc('saa-t4-3').contains('USER_WorkingWithReservedDBInstances'),
+          isTrue);
+    });
   });
 
   group('Task 4.4 — saa-t4-4', () {
