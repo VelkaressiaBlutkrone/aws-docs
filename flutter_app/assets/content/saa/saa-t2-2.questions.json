@@ -357,7 +357,7 @@
       "correct": 2,
       "explanation": "Lambda를 VPC에 연결하면 ENI를 통해 VPC 내부 리소스(RDS 등)에 접근할 수 있습니다. 단, VPC에 연결된 Lambda는 기본적으로 인터넷 접근이 차단됩니다. 외부 인터넷 접근이 필요하면 Lambda가 위치한 서브넷에서 NAT Gateway를 통한 인터넷 라우팅을 구성해야 합니다.",
       "wrongExplanations": {
-        "0": "VPC에 연결된 Lambda는 퍼블릭 IP를 가질 수 없습니다. Lambda의 ENI는 VPC 내부 통신에 사용되며, 인터넷 접근은 NAT Gateway·VPC 엔드포인트로 처리합니다.",
+        "0": "VPC에 연결된 Lambda는 퍼블릭 IP를 가질 수 없습니다. Lambda의 ENI는 VPC 내부 통신에 쓰이고, 외부 인터넷으로 나가려면 NAT 게이트웨이가 필요합니다. VPC 엔드포인트는 인터넷 경로가 아니라 AWS 서비스에 인터넷 게이트웨이·NAT 없이 닿는 비공개 경로입니다.",
         "1": "Provisioned Concurrency는 실행 환경 워밍업(콜드 스타트 제거)을 위한 기능입니다. VPC와 인터넷 동시 접근 여부와는 무관합니다.",
         "3": "API Gateway는 Lambda의 진입점 역할을 하는 것으로, Lambda가 외부 API나 RDS에 접근하는 네트워크 경로를 제공하지 않습니다. Lambda 자체의 VPC 설정과 NAT Gateway가 필요합니다."
       },

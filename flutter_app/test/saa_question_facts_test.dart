@@ -1242,4 +1242,86 @@ void main() {
       });
     }
   });
+
+  // ── 우선순위 2 B조(1) — VPC 엔드포인트·Flow Logs 4건 (2026-10-28) ──────────
+  //
+  // 근거:
+  // - `vpc/privatelink/gateway-endpoints.html`
+  //   "While traffic to Amazon S3 or DynamoDB **traverses the internet gateway, it does
+  //   not leave the AWS network**."
+  //   "**Amazon S3 and DynamoDB support both gateway endpoints and interface endpoints.**"
+  //   "Gateway VPC endpoints provide reliable connectivity to Amazon S3 and DynamoDB
+  //   **without requiring an internet gateway or a NAT device**"
+  // - `vpc/userguide/flow-logs.html`
+  //   "Flow log data can be published to the following locations: **Amazon CloudWatch Logs,
+  //   Amazon S3, or Amazon Data Firehose**."
+  //
+  // ⚠️ `t1-3-q10` 은 보고가 적은 것보다 넓게 틀렸다 — "교차 적용 불가"라고 **단정**하고
+  //   있었고, 이는 같은 Task `q9` 의 오답 근거("Interface Endpoint도 인터넷 없이 S3에
+  //   접근 가능")와 **문서 내부에서 모순**이었다. 공식 문서는 S3·DynamoDB가 두 유형을
+  //   **둘 다** 지원한다고 적는다.
+  group('§우선순위2 B조(1) — VPC 엔드포인트·Flow Logs 4건', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q9', correct: 2,
+        forbidden: ['인터넷 퍼블릭 엔드포인트를 경유'],
+        required: ['AWS 네트워크를 벗어나지 않'],
+        why: 'NAT 경유 S3 트래픽은 퍼블릭 서비스 엔드포인트를 쓰지만 AWS 네트워크를 '
+            '벗어나지는 않는다 — 보기를 오답으로 만드는 근거는 비용(NAT 과금)이다',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q10', correct: 1,
+        forbidden: ['교차 적용 불가'],
+        required: ['둘 다 지원'],
+        why: 'S3·DynamoDB는 Gateway와 Interface 엔드포인트를 둘 다 지원한다 — '
+            '구분점은 Gateway가 그 두 서비스에만 쓰인다는 쪽이다',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q13', correct: 3,
+        forbidden: <String>[],
+        required: ['Data Firehose'],
+        why: 'Flow Logs 발행 대상은 CloudWatch Logs·S3·Data Firehose 세 곳이다',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q15', correct: 2,
+        forbidden: ['NAT Gateway·VPC 엔드포인트로 처리'],
+        required: ['외부 인터넷으로 나가려면 NAT'],
+        why: 'VPC 엔드포인트는 인터넷 경로가 아니라 AWS 서비스에 IGW·NAT 없이 닿는 '
+            '비공개 경로다 — 외부 인터넷은 NAT 게이트웨이가 맡는다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스는 그대로 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+  });
 }
