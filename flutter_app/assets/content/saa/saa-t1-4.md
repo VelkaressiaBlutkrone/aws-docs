@@ -26,7 +26,9 @@ sources:
     url: https://docs.aws.amazon.com/waf/latest/APIReference/API_CreateWebACL.html
   - title: Cognito 사용자 풀 기능 플랜 (공식)
     url: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
-lastVerified: 2026-10-19
+  - title: AWS WAF Anti-DDoS 관리형 규칙 그룹(유료·웹 ACL에 추가) (공식)
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
+lastVerified: 2026-10-28
 ---
 
 # 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager
@@ -120,6 +122,8 @@ lastVerified: 2026-10-19
 | **관리형 규칙 그룹** | AWS 또는 AWS Marketplace 셀러가 제공하는 사전 구성 규칙 세트 |
 
 > **관리형 규칙 그룹**: AWS가 제공하는 `AWSManagedRulesCommonRuleSet` 같은 그룹을 웹 ACL에 추가하면 OWASP Top 10 공격 패턴을 별도 규칙 작성 없이 방어할 수 있습니다.
+
+> **WAF도 L7 DDoS를 완화한다 — 단, 유료 옵트인이다**: `AWSManagedRulesAntiDDoSRuleSet`(Anti-DDoS 관리형 규칙 그룹)은 **WAF에서 쓸 수 있는 가장 상위 Anti-DDoS 보호**입니다. 다만 이 그룹을 **웹 ACL에 추가하고** 차단 민감도·챌린지를 구성해야 동작하며 **추가 요금**이 붙습니다. 그래서 "추가 설정 없이 모든 계정에 자동 적용되는 무료 DDoS 방어"는 WAF가 아니라 **Shield Standard**입니다 — 시험에서 이 둘을 바꿔 놓은 보기가 나옵니다(근거 10번).
 
 **WAF 액션:**
 
@@ -379,5 +383,8 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 7. CreateWebACL(보호 대상 리소스 목록 · CLOUDFRONT 스코프는 us-east-1) — https://docs.aws.amazon.com/waf/latest/APIReference/API_CreateWebACL.html
 8. Cognito 사용자 풀 기능 플랜(Lite·Essentials·Plus) — https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
 9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+10. AWS WAF Anti-DDoS 관리형 규칙 그룹(가장 상위 Anti-DDoS 보호·**추가 요금**·웹 ACL에 추가해 민감도 구성) — https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
 
 > 📝 **2026-10-19 정정**: ① 웹 ACL 평가를 "첫 매칭 액션 실행"에서 **종료/비종료 구분**(Count는 비종료)으로 고쳤습니다(근거 5번). ② Rate-based 평가 창을 **60·120·300·600초**로 정정했습니다(근거 6번). ③ 보호 대상에 **Amplify·Bedrock AgentCore Gateway**를 더하고 **CLOUDFRONT 스코프는 us-east-1** 규칙을 명시했습니다("리전 제한이 없다"는 단정 삭제, 근거 7번). ④ Cognito MFA 한 줄을 **기능 플랜 3종**으로 바꿨습니다(근거 8번).
+
+> 📝 **2026-10-28 보강(1건, 2차 검수 우선순위 2)**: §1에 **Anti-DDoS 관리형 규칙 그룹**(`AWSManagedRulesAntiDDoSRuleSet`)을 더했습니다 — WAF도 L7 DDoS를 완화하지만 웹 ACL에 추가해야 동작하는 유료 옵트인이고, "추가 설정 없이 자동 적용되는 무료 방어"는 Shield Standard입니다(근거 10번). 파생 문항 `saa-t1-4-q2`의 오답 근거가 WAF의 DDoS 완화 능력을 전면 부정하고 있어 함께 고쳤습니다.

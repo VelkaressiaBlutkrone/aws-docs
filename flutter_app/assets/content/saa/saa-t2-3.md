@@ -41,7 +41,11 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_tracking_change_management_immutable_infrastructure.html
   - title: EC2 자동 인스턴스 복구 — 보존·상실 항목 (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
-lastVerified: 2026-10-21
+  - title: ELB 동작 방식 — 교차 영역 분산 2대/8대 예시와 25%·6.25% (공식)
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
+  - title: ALB 대상 그룹 속성 — 교차 영역 끄기·고정 세션 (공식)
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html
+lastVerified: 2026-10-28
 ---
 
 # ELB + Auto Scaling — 탄력적 확장 설계
@@ -163,9 +167,11 @@ NLB는 L4에서 동작하며 ALB가 할 수 없는 두 가지 시나리오에서
 | **비활성화(기본 — NLB·GWLB)** | 각 로드밸런서 노드는 자신이 속한 AZ의 대상에만 트래픽 분산 |
 | **활성화(기본 — ALB)** | 각 로드밸런서 노드가 모든 AZ의 정상 대상에 균등 분산 |
 
-교차 영역 부하 분산이 중요한 이유: AZ별 인스턴스 수가 다를 때(예: AZ-a에 2대, AZ-b에 8대) 비활성화 상태면 AZ-a의 인스턴스 2대가 전체 트래픽의 50%를 받아 과부하가 발생합니다. 활성화 시 10대 전체에 10%씩 균등 분산됩니다.
+교차 영역 부하 분산이 중요한 이유: AZ별 인스턴스 수가 다를 때(예: AZ-a에 2대, AZ-b에 8대) 비활성화 상태면 각 노드가 **자기 AZ의 대상에만** 분산합니다. 요청이 두 노드에 50:50으로 들어오면 **AZ-a의 2대가 50%를 나눠 한 대당 25%**, AZ-b의 8대는 **한 대당 6.25%**를 받아 4배 차이가 납니다. 활성화 시 10대 전체에 10%씩 균등 분산됩니다(근거 20번 — 공식 문서가 이 2대/8대 예시를 그대로 씁니다).
 
-> ALB는 교차 영역 부하 분산이 **기본 활성화**되어 있으며 추가 요금이 없습니다. NLB와 GWLB는 기본 비활성화이며, 활성화 시 AZ 간 데이터 전송 요금이 발생할 수 있습니다.
+> ALB는 **로드밸런서 수준에서는 교차 영역 부하 분산이 항상 켜져 있고**, 끌 수 있는 곳은 **대상 그룹 수준**입니다(`load_balancing.cross_zone.enabled` 를 `false` 로) — 대상 그룹 설정이 그 대상 그룹에 대해 로드밸런서 설정을 덮어씁니다. 추가 요금은 없습니다. NLB와 GWLB는 기본 비활성화이며, 활성화 시 AZ 간 데이터 전송 요금이 발생할 수 있습니다.
+
+> 대상 그룹에서 끌 때 따라오는 제약 두 가지: **고정 세션을 켤 수 없고**(교차 영역이 꺼져 있으면 지원되지 않아 활성화 시도가 실패합니다), 참여 AZ 중 **하나가 비면 그 노드로 들어온 HTTP 요청이 503**을 받습니다. 그래서 끄려면 AZ마다 용량을 미리 맞춰 둬야 합니다(근거 21번).
 
 > 🧠 원리: 왜 ALB는 교차 영역 분산이 기본 활성화이고 NLB는 기본 비활성화일까요?
 > ALB는 HTTP 연결을 LB 노드에서 종료하고 새 연결로 대상에 전달하므로, AZ를 넘어 대상을 선택해도 추가 비용이 내부에서 흡수됩니다.
@@ -480,7 +486,7 @@ CodeDeploy는 카나리·블루/그린 배포 구성을, Elastic Beanstalk은 �
 
 <details><summary>정답 보기</summary>
 
-**ASG의 자가 복구는 인스턴스를 교체하지만, 쿠키로 종료된 인스턴스에 묶인 세션 데이터까지 이전하지는 않기 때문입니다.** 새 인스턴스가 정상 기동돼 트래픽을 받을 수 있어도, 클라이언트의 `AWSALB` 쿠키는 이미 사라진 대상을 가리키므로 ALB는 해당 사용자를 새 인스턴스로 자연스럽게 연결하지 못하고 세션이 끊깁니다. ElastiCache 같은 외부 세션 저장소를 도입하면 세션 데이터가 인스턴스 수명 주기와 분리되어, 교체된 어떤 인스턴스든 동일 세션 키로 데이터를 읽어 처리할 수 있으므로 ASG 자가 복구가 사용자에게 투명하게 작동합니다.
+**ASG의 자가 복구는 인스턴스를 교체하지만, 종료된 인스턴스에 쌓여 있던 세션 데이터까지 옮겨 주지는 않기 때문입니다.** 클라이언트의 `AWSALB` 쿠키가 이미 사라진 대상을 가리키면 **ALB는 새 대상을 골라 쿠키를 그 대상 정보로 갱신합니다** — 끊기는 것은 연결이 아니라 세션입니다. 새 대상에는 로그인 상태·장바구니 같은 데이터가 없으므로 사용자는 처음부터 다시 시작하게 됩니다(근거 21번). ElastiCache 같은 외부 세션 저장소를 도입하면 세션 데이터가 인스턴스 수명 주기와 분리되어, 교체된 어떤 인스턴스든 동일 세션 키로 데이터를 읽어 처리할 수 있으므로 ASG 자가 복구가 사용자에게 투명하게 작동합니다.
 </details>
 
 ---
@@ -508,6 +514,10 @@ CodeDeploy는 카나리·블루/그린 배포 구성을, Elastic Beanstalk은 �
 17. ASG 대상 추적 조정 정책 — 사전 정의 지표 4종·`ResourceLabel`·1분 이하 간격 권장·상세 모니터링 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html (갭 배치 B7b: 2026-10-21)
 18. SQS 기반 조정 정책 — 인스턴스당 백로그·허용 백로그 계산 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-using-sqs-queue.html (갭 배치 B7b: 2026-10-21)
 19. 예측 스케일링 동작(최소 24시간·과거 14일·48시간 시간별 예측·6시간 갱신·예측 전용 모드·축소하지 않음·`SchedulingBufferTime`) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/predictive-scaling-policy-overview.html (갭 배치 B7b: 2026-10-21)
+20. ELB 동작 방식 — 교차 영역 분산의 공식 예시("two targets in Availability Zone A and eight targets in Availability Zone B … each load balancer node receives 50% of the traffic", 비활성화 시 **25%·6.25%**) + "With Application Load Balancers, cross-zone load balancing is **always enabled at the load balancer level**. **At the target group level, cross-zone load balancing can be disabled.**" — https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
+21. ALB 대상 그룹 속성 — `load_balancing.cross_zone.enabled` 끄기, 빈 AZ의 503, 고정 세션("if it refers to a target that was deregistered or is unhealthy, **the load balancer selects a new target and updates the cookie**", "Sticky sessions are not supported if cross-zone load balancing is disabled") — https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html
+
+> 📝 **2026-10-28 정정·보강(2건, 2차 검수 우선순위 2)**: ① §5 자가 점검 Q5 해설에서 **ALB가 사용자를 새 인스턴스로 연결해 주지 못한다**는 서술을 고쳤습니다 — 공식 문서는 쿠키가 가리키는 대상이 등록 해제되거나 비정상이면 로드밸런서가 **새 대상을 골라 쿠키를 갱신한다**고 적습니다. 끊기는 것은 연결이 아니라 세션 데이터입니다(근거 21번). 파생 문항 `saa-t2-3-q6`의 정답 보기·해설에 같은 오류가 있어 함께 고쳤습니다. ② §4 교차 영역 분산에 **대상 그룹 수준 비활성화**(2022-11)와 공식 수치 **25%·6.25%**, 끌 때의 제약(고정 세션 불가·빈 AZ의 503)을 더했습니다(근거 20·21번) — ALB는 로드밸런서 수준에서는 항상 켜져 있습니다. 이 변경으로 파생 문항 `saa-t2-3-q4`의 정답 보기("기본 활성화이므로 원인일 수 없다")가 거짓이 돼 문항을 재작성했습니다(사용자 승인, 정답 0 → 1).
 
 > 📝 **2026-10-21 보강(갭 `G-3.2-03`, 배치 B7b)**: §9에 **조정 지표** 계층을 추가했습니다 — 사전 정의 지표 네 가지와 `ResourceLabel` 요구, **메모리는 사전 정의 지표에 없다**는 점, 지표 간격 권장(EC2 기본 5분 → 상세 모니터링 1분), 사용자 지정 지표의 정석인 **인스턴스당 백로그** 계산, 그리고 **예측 스케일링의 전제**(최소 24시간·과거 14일·48시간 예측·6시간 갱신·예측 전용 모드·축소하지 않음)입니다(근거 17·18·19번). 기존 §9의 타이밍 설정·복수 정책·웜 풀 서술은 그대로 두고 그 앞에 끼워 넣었습니다.
 >

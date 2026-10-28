@@ -283,14 +283,15 @@
         "DRS는 Warm Standby 전략을 기반으로 하며 스테이징 영역에서 축소판 전체 스택을 가동한다"
       ],
       "correct": 2,
-      "explanation": "AWS DRS는 Pilot Light 전략을 기반으로 합니다. 스테이징 영역에서 저비용 스토리지와 최소 컴퓨팅으로 블록 레벨 복제본을 상시 유지합니다. 페일오버 이벤트 시 스테이징 리소스를 사용해 AWS에서 전체 용량 인스턴스를 수 분 안에 자동 생성합니다. 이는 DB 데이터만 상시 복제하고 재해 시 서버를 기동·확장하는 Pilot Light의 구조와 일치합니다.",
+      "explanation": "AWS DRS는 Pilot Light 전략을 씁니다. 원본 서버의 블록 레벨 복제로 서버에 호스팅된 애플리케이션과 데이터베이스를 AWS로 계속 복제하고, 스테이징 영역으로 쓰는 VPC에 데이터 사본과 꺼진(switched-off) 리소스를 저비용 스토리지·최소 컴퓨팅으로 유지합니다. 페일오버 이벤트가 트리거되면 그 스테이징 리소스로 대상 VPC에 전체 용량 배포를 자동 생성해 수 분 안에 복구 인스턴스를 띄웁니다. 복제·백업에 필요한 리소스는 상시 가동하고 애플리케이션 서버는 꺼 두는 Pilot Light의 구조와 일치합니다.",
       "wrongExplanations": {
         "0": "DRS는 Active-Active 전략을 사용하지 않습니다. 스테이징 영역에 복제본만 유지하고 페일오버 시 인스턴스를 생성하는 구조입니다.",
         "1": "DRS는 Backup & Restore가 아닌 Pilot Light 기반입니다. 스테이징 영역은 정기 백업이 아니라 블록 레벨 지속 복제본을 유지합니다.",
         "3": "DRS의 스테이징 영역은 최소 컴퓨팅만 사용하므로 Warm Standby처럼 축소판 전체 스택을 상시 가동하지 않습니다."
       },
       "sources": [
-        { "title": "AWS Elastic Disaster Recovery란? (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" }
+        { "title": "AWS Elastic Disaster Recovery 소개 — 저비용 스토리지·최소 컴퓨팅 스테이징 (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" },
+        { "title": "DR 백서 — DRS는 서버 블록 레벨 복제, Pilot Light, 꺼진 리소스 스테이징 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
       ],
       "verified": false
     },
@@ -362,7 +363,8 @@
         "3": "DRS는 교차 리전 DR을 지원하는 서비스입니다. 온프레미스/EC2 서버를 다른 AWS 리전으로 복제해 DR을 구성합니다."
       },
       "sources": [
-        { "title": "AWS Elastic Disaster Recovery란? (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" }
+        { "title": "AWS Elastic Disaster Recovery 소개 (공식)", "url": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html" },
+        { "title": "DR 백서 — EC2 호스팅 앱·DB만 대상이고 RDS는 제외 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" }
       ],
       "verified": false
     }

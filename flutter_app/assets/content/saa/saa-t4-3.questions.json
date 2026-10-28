@@ -17,7 +17,7 @@
         "RDS MySQL On-Demand 인스턴스를 사용한다"
       ],
       "correct": 1,
-      "explanation": "Aurora serverless는 관계형 스키마(MySQL/PostgreSQL 호환)를 유지하면서 ACU 단위로 트래픽에 따라 자동 스케일합니다. 유휴 시 최솟값 ACU만 과금되므로 예측 불가 워크로드에서 비용 효율적이고, 관리형 서비스이므로 운영 부담도 줄어듭니다.",
+      "explanation": "Aurora serverless는 관계형 스키마(MySQL/PostgreSQL 호환)를 유지하면서 ACU 단위로 트래픽에 따라 자동 스케일합니다. 최근 Aurora MySQL·PostgreSQL 버전에서는 최소 용량을 0 ACU로 둘 수 있어 워크로드가 없으면 0까지 축소되고(자동 일시정지·재개) 컴퓨팅 요금이 발생하지 않습니다. 0이 아닌 최솟값을 두면 유휴 시에도 그 최솟값만큼 과금됩니다. 관리형 서비스이므로 운영 부담도 줄어듭니다.",
       "wrongExplanations": {
         "0": "EC2에 직접 설치하면 패치·백업·HA 구성을 모두 직접 해야 하므로 운영 인건비가 추가돼 TCO가 불리합니다. 'minimal operational overhead' 조건에 어긋납니다.",
         "2": "DynamoDB는 NoSQL이므로 관계형 스키마 요구 시 부적합합니다. 관계형 스키마가 필요한 워크로드에는 사용할 수 없습니다.",
@@ -120,7 +120,7 @@
         "3": "컴퓨팅 계열 Savings Plans와 RDS RI는 별개의 할인 체계로 할인율과 적용 대상이 모두 다릅니다. RDS에 적용되는 Database Savings Plans도 약정 단위·할인율이 RDS RI와 다릅니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "Savings Plans 유형 — Compute 는 EC2·Fargate·Lambda, Database 는 Aurora·RDS 등 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html" }
       ],
       "verified": true
     },
@@ -140,11 +140,11 @@
       "explanation": "RDS 스토리지 자동 확장은 설정한 최대 스토리지 임계치까지 자동 확장합니다. 단, 블록 스토리지(EBS) 특성상 확장 후 수동 다운사이즈가 불가합니다. 처음부터 필요한 크기를 정확히 잡거나 자동 확장 최대치를 신중히 설정해야 합니다.",
       "wrongExplanations": {
         "1": "RDS 스토리지는 확장 후 자동 축소가 되지 않습니다. 블록 스토리지 특성상 축소는 데이터 이전 작업이 필요해 관리형 기능으로 제공되지 않습니다.",
-        "2": "스토리지 자동 확장은 RDS와 Aurora 모두 지원합니다. Aurora는 10GB 단위로 자동 확장되며 최대 128TB까지 지원합니다.",
+        "2": "스토리지 자동 확장은 RDS와 Aurora 모두 지원합니다. Aurora 클러스터 볼륨은 데이터가 늘면 자동으로 커지고 엔진 버전에 따라 최대 256 TiB까지 지원하며, 데이터를 지우면 할당된 공간도 함께 줄어듭니다.",
         "3": "스토리지 자동 확장 중 DB 인스턴스가 재부팅되지 않습니다. 운영 중인 DB에 영향 없이 스토리지가 확장됩니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "RDS DB 인스턴스 스토리지 — 증설과 스토리지 오토스케일링 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html" }
       ],
       "verified": true
     },
@@ -164,11 +164,11 @@
       "explanation": "ElastiCache는 반복 쿼리 결과를 캐싱해 DB 요청 수 자체를 줄입니다. 캐시 적중 시 DB 쿼리가 발생하지 않아 DB 부하가 크게 줄어들고, 이를 통해 Primary 인스턴스를 다운사이즈하거나 업그레이드를 미룰 수 있습니다.",
       "wrongExplanations": {
         "0": "업사이즈는 인스턴스 비용을 증가시킵니다. 문제의 조건('업그레이드 없이')에도 어긋납니다.",
-        "1": "RDS Multi-AZ Standby는 HA를 위한 대기 복제본으로 읽기 요청을 직접 처리하지 않습니다. 읽기 부하 분산에는 Read Replica가 맞습니다.",
+        "1": "Multi-AZ DB 인스턴스 배포의 스탠바이는 HA 전용이라 읽기 요청을 처리하지 않습니다. 배포 유형을 구분해야 합니다 — Multi-AZ DB 클러스터 배포는 읽기 가능한 리더 두 개를 두어 읽기 처리량을 늘릴 수 있습니다. 어느 쪽이든 이 지문처럼 반복 조회가 많으면 캐싱이 DB 요청 수 자체를 줄이는 더 직접적인 해법이고, 읽기 확장만 필요하면 Read Replica입니다.",
         "3": "백업 보존 기간 변경은 백업 스토리지 비용에 영향을 주지만 CPU 읽기 부하 문제와는 무관합니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "ElastiCache 캐싱 전략 — 앱과 DB 사이의 인메모리 저장소 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
       "verified": true
     },
@@ -201,7 +201,7 @@
       "examGuideTaskId": "saa-t4-3",
       "skill": "DynamoDB 온디맨드 vs 프로비저닝 모드 선택",
       "difficulty": "applied",
-      "stem": "한 SNS 서비스의 DynamoDB 테이블은 평일 낮에 초당 수십만 건의 요청이 발생하지만, 야간과 주말에는 거의 트래픽이 없다. 비용 최적화를 위해 어떤 용량 모드가 적합한가?",
+      "stem": "한 SNS 서비스의 DynamoDB 테이블은 평일 낮에 요청이 몰리고 야간과 주말에는 거의 트래픽이 없다. 다만 피크 시각과 규모가 날마다 크게 달라 용량을 미리 정하기 어렵다. 비용 최적화를 위해 어떤 용량 모드가 적합한가?",
       "options": [
         "온디맨드 모드를 사용한다",
         "프로비저닝 모드로 피크 처리량을 고정 설정한다",
@@ -209,7 +209,7 @@
         "어떤 모드를 써도 비용 차이가 없다"
       ],
       "correct": 0,
-      "explanation": "트래픽이 불규칙하고 야간·주말에 거의 없는 패턴에서는 온디맨드 모드가 적합합니다. 트래픽이 없을 때 비용이 발생하지 않고, 급증 시 자동으로 대응합니다. 반면 프로비저닝 모드는 미사용 용량도 과금됩니다.",
+      "explanation": "피크 시각과 규모를 미리 알 수 없고 유휴 구간이 긴 패턴에서는 온디맨드 모드가 적합합니다. 요청 단위로만 과금되어 트래픽이 없을 때 비용이 발생하지 않고, 급증에도 자동으로 대응합니다. 반면 프로비저닝 모드는 미사용 용량도 시간당 과금됩니다.",
       "wrongExplanations": {
         "1": "프로비저닝 모드로 피크 처리량을 고정 설정하면 야간·주말에 사용하지 않는 용량에도 요금이 발생합니다. 트래픽 변동이 큰 경우 비효율적입니다.",
         "2": "프로비저닝 + Auto Scaling은 최솟값 이하로 줄이지 않아 야간 완전 유휴 시 온디맨드보다 비쌀 수 있습니다.",
@@ -264,7 +264,7 @@
         "2": "보존 기간을 0으로 설정하면 자동 백업만 비활성화됩니다. 수동 스냅샷은 인스턴스와 독립된 수명을 가지므로 자동 삭제되지 않습니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "RDS 백업 소개 — 보존 기간·리전 합계·무료 허용량 100% (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html" }
       ],
       "verified": true
     },
@@ -288,7 +288,7 @@
         "3": "수동 스냅샷은 S3로 이동되지 않습니다. 원래 리전의 스냅샷 저장소에 남아 있으며 별도 삭제가 필요합니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "RDS 백업 소개 — 수동 스냅샷은 인스턴스 삭제 시 지워지지 않는다 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html" }
       ],
       "verified": true
     },
@@ -312,7 +312,7 @@
         "3": "DynamoDB는 NoSQL key-value 서비스로 시계열 집계 쿼리를 위한 최적화가 되어 있지 않습니다. 시계열 특화 기능은 Timestream for InfluxDB가 제공합니다."
       },
       "sources": [
-        { "title": "AWS 데이터베이스 서비스 개요 (공식 화이트페이퍼)", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html" }
+        { "title": "Timestream for LiveAnalytics 가용성 변경 — 2025-06-20 신규 고객 차단 (공식)", "url": "https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html" }
       ],
       "verified": true
     },
@@ -329,14 +329,14 @@
         "AWS Cost Explorer 사용량 리포트"
       ],
       "correct": 1,
-      "explanation": "AWS Compute Optimizer는 RDS 인스턴스의 CPU·메모리 사용률을 분석해 적정 인스턴스 크기를 추천합니다. 과잉 프로비저닝된 인스턴스를 식별하고 rightsizing 권고를 제공해 비용 절감에 활용할 수 있습니다.",
+      "explanation": "AWS Compute Optimizer는 리소스의 구성과 사용률 지표를 분석해 적정 크기(rightsizing) 권장 사항을 제시하고 유휴 리소스를 식별합니다. 지원 리소스에 Amazon Aurora와 Amazon RDS 데이터베이스가 포함되므로, 과잉 프로비저닝된 RDS 인스턴스를 찾아 비용 절감에 활용할 수 있습니다.",
       "wrongExplanations": {
         "0": "Amazon Inspector는 보안 취약점·패치 누락을 탐지하는 보안 서비스입니다. 인스턴스 rightsizing 추천 기능이 없습니다.",
         "2": "CloudWatch Logs Insights는 로그 데이터를 분석하는 쿼리 도구입니다. 인스턴스 사용률 기반 rightsizing 추천을 제공하지 않습니다.",
         "3": "AWS Cost Explorer는 비용 추이와 예측을 보여주지만, CPU·메모리 사용률 분석과 정밀한 rightsizing 추천은 Compute Optimizer가 전담합니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "AWS Compute Optimizer — 지원 리소스에 RDS·Aurora 포함 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html" }
       ],
       "verified": true
     },
@@ -345,22 +345,23 @@
       "examGuideTaskId": "saa-t4-3",
       "skill": "Aurora serverless 스케일 단위 특성",
       "difficulty": "applied",
-      "stem": "Aurora serverless가 프로비저닝 인스턴스와 달리 0.5 ACU 단위로 세밀하게 스케일할 수 있는 이유는?",
+      "stem": "Aurora serverless가 프로비저닝 인스턴스와 달리 최소 0.5 ACU 단위까지 세밀하게 스케일할 수 있는 이유는?",
       "options": [
         "Aurora는 공유 스토리지 아키텍처 위에서 컴퓨팅 용량을 동적으로 조정하도록 설계되어 서버 교체 없이 CPU·메모리 비율을 세밀하게 변경할 수 있기 때문이다",
         "Aurora serverless는 컨테이너 기반이므로 리소스를 자유롭게 조정할 수 있기 때문이다",
         "0.5 ACU 단위는 마케팅 단위이며 실제 내부에서는 전체 인스턴스가 교체된다",
-        "Aurora serverless는 별도의 물리 서버를 예약하지 않아 서버 교체 없이 용량을 변경할 수 있기 때문이다"
+        "Aurora serverless는 스케일할 때마다 인스턴스를 다음 단계 클래스로 교체하고 그 사이 연결을 끊기 때문이다"
       ],
       "correct": 0,
-      "explanation": "전통적인 프로비저닝 인스턴스는 CPU·메모리가 고정된 서버 단위로 운영되어 용량 증가 시 다음 단계 인스턴스 클래스로 전환해야 합니다. Aurora serverless는 Aurora의 공유 스토리지 아키텍처 위에서 컴퓨팅 용량을 동적으로 조정하도록 설계되어, 서버 교체 없이 할당된 CPU·메모리 비율을 0.5 ACU 단위로 세밀하게 변경할 수 있습니다.",
+      "explanation": "전통적인 프로비저닝 인스턴스는 CPU·메모리가 고정된 서버 단위로 운영되어 용량 증가 시 다음 단계 인스턴스 클래스로 전환해야 합니다. Aurora serverless는 스토리지와 컴퓨팅이 분리된 구조 위에서 컴퓨팅 용량만 동적으로 조정하며, 대부분의 스케일링 이벤트는 writer·reader를 같은 호스트에 그대로 두고 일어나 진행 중인 DB 작업을 중단시키지 않습니다. 증가 폭은 최소 0.5 ACU이고, 현재 용량이 클수록 증가 폭도 커져 스케일링이 더 빠르게 일어납니다.",
       "wrongExplanations": {
         "1": "Aurora serverless의 세밀한 스케일은 컨테이너 때문이 아니라 공유 스토리지 아키텍처 위에서 컴퓨팅을 동적으로 조정하는 설계 덕분입니다.",
-        "2": "0.5 ACU 단위는 실제 과금·용량 조정 단위입니다. 내부에서 전체 인스턴스가 교체되는 것이 아니라 할당된 리소스 비율이 변경됩니다.",
-        "3": "물리 서버 예약 여부보다 Aurora의 공유 스토리지 아키텍처와 컴퓨팅 동적 조정 설계가 핵심 이유입니다."
+        "2": "0.5 ACU는 마케팅 단위가 아니라 공식 문서가 적는 실제 최소 증가 폭입니다. 현재 용량이 클수록 증가 폭도 커지며, 내부에서 전체 인스턴스가 교체되는 것이 아니라 할당된 컴퓨팅 용량이 변경됩니다.",
+        "3": "Aurora serverless의 스케일링은 진행 중인 DB 작업을 중단시키지 않습니다. 대부분의 스케일링 이벤트는 writer·reader를 같은 호스트에 그대로 두고, 드물게 호스트를 옮기는 경우에도 연결은 Aurora serverless가 자동으로 관리합니다. 인스턴스 클래스를 교체하며 연결을 끊는 것은 프로비저닝 인스턴스의 용량 변경 방식입니다."
       },
       "sources": [
-        { "title": "Aurora serverless (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html" }
+        { "title": "Aurora serverless (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html" },
+        { "title": "Aurora serverless 동작 — 최소 0.5 ACU 증가·같은 호스트 스케일링 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.how-it-works.html" }
       ],
       "verified": true
     }

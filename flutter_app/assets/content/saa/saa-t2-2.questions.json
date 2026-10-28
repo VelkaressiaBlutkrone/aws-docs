@@ -45,10 +45,11 @@
       "wrongExplanations": {
         "0": "Reserved Concurrency는 함수가 사용할 수 있는 동시 실행 상한을 예약하는 기능입니다. 워밍업과는 다른 축이므로 콜드 스타트를 제거하지 못합니다.",
         "1": "메모리를 늘리면 CPU도 비례해 증가해 실행 속도가 빨라질 수 있지만, 실행 환경 초기화 지연(콜드 스타트) 자체를 제거하지는 않습니다.",
-        "2": "VPC 연결은 Lambda가 VPC 내부 리소스에 접근하기 위한 설정입니다. VPC를 연결하면 ENI 생성으로 오히려 콜드 스타트가 길어질 수 있으며, 콜드 스타트 제거와는 무관합니다."
+        "2": "VPC 연결은 Lambda가 VPC 내부 리소스에 접근하기 위한 설정이지 네트워크를 미리 초기화하는 기능이 아닙니다. Hyperplane ENI는 호출 시점이 아니라 함수에 VPC를 설정하는 시점에 Lambda가 미리 만들고, 준비될 때까지 함수는 Pending 상태라 호출 자체가 되지 않습니다 — 콜드 스타트 대책이 아닙니다."
       },
       "sources": [
-        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
+        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" },
+        { "title": "Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성·준비 전까지 Pending (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html" }
       ],
       "verified": false
     },
@@ -142,7 +143,7 @@
       "wrongExplanations": {
         "0": "Reserved Concurrency를 낮추면 스로틀(429)이 발생해 처리량이 떨어집니다. 근본 원인(커넥션 급증)을 해결하지 못하고 기능을 제한하는 임시방편입니다.",
         "1": "Lambda 메모리를 늘려도 각 인스턴스가 여는 DB 커넥션 수는 변하지 않습니다. 메모리 증가는 CPU 성능 개선에는 효과가 있지만 커넥션 폭증 문제와는 무관합니다.",
-        "3": "RDS Multi-AZ는 고가용성·장애 조치를 위한 기능으로, 커넥션 수 한도를 늘리거나 풀링을 제공하지 않습니다. 스탠바이 인스턴스는 읽기 트래픽을 분산하지 않습니다."
+        "3": "Multi-AZ는 고가용성·장애 조치를 위한 배포이고 커넥션 수 한도를 늘리거나 풀링을 제공하지 않습니다. Multi-AZ DB 인스턴스 배포의 스탠바이는 읽기도 받지 않고, Multi-AZ DB 클러스터 배포는 읽기 가능한 리더를 두지만 커넥션 풀링은 역시 제공하지 않습니다 — 커넥션 폭증은 RDS Proxy가 푸는 문제입니다."
       },
       "sources": [
         { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
@@ -357,7 +358,7 @@
       "correct": 2,
       "explanation": "Lambda를 VPC에 연결하면 ENI를 통해 VPC 내부 리소스(RDS 등)에 접근할 수 있습니다. 단, VPC에 연결된 Lambda는 기본적으로 인터넷 접근이 차단됩니다. 외부 인터넷 접근이 필요하면 Lambda가 위치한 서브넷에서 NAT Gateway를 통한 인터넷 라우팅을 구성해야 합니다.",
       "wrongExplanations": {
-        "0": "VPC에 연결된 Lambda는 퍼블릭 IP를 가질 수 없습니다. Lambda의 ENI는 VPC 내부 통신에 사용되며, 인터넷 접근은 NAT Gateway·VPC 엔드포인트로 처리합니다.",
+        "0": "VPC에 연결된 Lambda는 퍼블릭 IP를 가질 수 없습니다. Lambda의 ENI는 VPC 내부 통신에 쓰이고, 외부 인터넷으로 나가려면 NAT 게이트웨이가 필요합니다. VPC 엔드포인트는 인터넷 경로가 아니라 AWS 서비스에 인터넷 게이트웨이·NAT 없이 닿는 비공개 경로입니다.",
         "1": "Provisioned Concurrency는 실행 환경 워밍업(콜드 스타트 제거)을 위한 기능입니다. VPC와 인터넷 동시 접근 여부와는 무관합니다.",
         "3": "API Gateway는 Lambda의 진입점 역할을 하는 것으로, Lambda가 외부 API나 RDS에 접근하는 네트워크 경로를 제공하지 않습니다. Lambda 자체의 VPC 설정과 NAT Gateway가 필요합니다."
       },
