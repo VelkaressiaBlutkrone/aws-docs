@@ -314,6 +314,18 @@ void main() {
       expect(t38.contains('가용성 SLA'), isTrue);
       expect(t38.contains('99.99%'), isTrue);
     });
+
+    test('G-3.4-14 암호화 DX의 명칭은 VPN over Direct Connect다', () {
+      // 근거: vpn/latest/s2svpn/private-ip-dx — "you can deploy IPsec VPN over
+      // Direct Connect" / "private IP VPN over Direct Connect". 얹히는 쪽이
+      // VPN이므로 "DX over VPN"은 위아래가 거꾸로다. 퍼블릭 VIF로 VPN 퍼블릭
+      // 엔드포인트에 붙이는 방식과, 전송 VIF 위에서 사설 IP만 쓰는
+      // Private IP VPN 두 가지가 있다(reference-architecture hybrid-vpn-over-dx).
+      final t38 = doc('saa-t3-8');
+      expect(t38.contains('DX over VPN'), isFalse);
+      expect(t38.contains('VPN over Direct Connect'), isTrue);
+      expect(t38.contains('Private IP VPN'), isTrue);
+    });
   });
 
   group('Task 3.5 — saa-t3-9', () {
@@ -385,6 +397,7 @@ void main() {
       expect(doc('saa-t3-6').contains('SelectEngine'), isTrue);
       expect(doc('saa-t3-7').contains('global-accelerator'), isTrue);
       expect(doc('saa-t3-8').contains('directconnect/sla'), isTrue);
+      expect(doc('saa-t3-8').contains('private-ip-dx'), isTrue);
       expect(doc('saa-t3-9').contains('snowball-edge-availability-change'),
           isTrue);
     });
