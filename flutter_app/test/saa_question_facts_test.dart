@@ -1061,4 +1061,66 @@ void main() {
       expect(text.contains('유휴 리소스'), isTrue);
     });
   });
+
+  // ── 2차 검수 우선순위 2 — 게이트 최단 경로 t2-5 (2026-10-28) ────────────────
+  //
+  // 우선순위 2는 "D1·D2 초안"인데, #258의 t1-1·t1-2 flip으로 **D1은 이미 충족됐다**
+  // (30 ≥ 19). 남은 것은 D2 하나뿐이다 — t2-1(15)만 verified라 17에 2문항 모자라고,
+  // D2 Task를 **하나만 더** flip하면 게이트가 열린다.
+  //
+  // 보고 판정으로 가장 싼 D2 Task가 t2-5(DR)다: pass 13 · fix 1(q12) · resource 1(q15).
+  // 그래서 이 두 건을 먼저 닫는다. ⚠️ **flip 자체는 사람만** 한다 — 이 가드는 "문항이
+  // 고쳐졌다"만 보고, verified 수량·게이트 상태 같은 상태 숫자는 보지 않는다.
+  //
+  // 근거(DR 백서 "Disaster recovery options in the cloud" §AWS Elastic Disaster Recovery):
+  // - "DRS continuously replicates **server-hosted applications and server-hosted
+  //   databases** from any source into AWS using **block-level replication of the
+  //   underlying server**."
+  // - "It can also be used for disaster recovery of AWS hosted workloads if they consist
+  //   only of applications and databases hosted on EC2 (**that is, not RDS**)."
+  // - "uses the Pilot Light strategy, maintaining a copy of data and **'switched-off'
+  //   resources** in an Amazon VPC used as a **staging area**. When a failover event is
+  //   triggered, the staged resources are used to automatically create a **full-capacity
+  //   deployment**."
+  // 그리고 DRS what-is: "The staging area design reduces costs by using **affordable
+  // storage and minimal compute resources**" / "converts your servers to boot and run
+  // natively on AWS".
+  group('§우선순위2 게이트 경로 — saa-t2-5 (DR)', () {
+    test('saa-t2-5-q12: 정답 인덱스는 그대로 2(Pilot Light)', () {
+      expect(question('saa-t2-5', 'saa-t2-5-q12')['correct'], 2);
+    });
+
+    test('saa-t2-5-q12: "DB 데이터만 복제" 단정이 사라지고 서버 블록 레벨 복제가 들어왔다', () {
+      final text = question('saa-t2-5', 'saa-t2-5-q12')['explanation'] as String;
+      expect(
+        text.contains('DB 데이터만 상시 복제'),
+        isFalse,
+        reason: 'DRS는 DB 데이터가 아니라 원본 **서버**를 블록 레벨로 복제한다',
+      );
+      expect(text.contains('블록 레벨'), isTrue);
+      expect(text.contains('꺼진'), isTrue,
+          reason: '스테이징 영역이 유지하는 것은 데이터 사본과 "switched-off" 리소스다');
+    });
+
+    test('saa-t2-5-q12: DR 백서를 출처로 싣는다', () {
+      expect(
+        hasSource(question('saa-t2-5', 'saa-t2-5-q12'),
+            'disaster-recovery-options-in-the-cloud'),
+        isTrue,
+      );
+    });
+
+    test('saa-t2-5-q15: 정답 인덱스는 그대로 1(서버 기반만, RDS 불가)', () {
+      expect(question('saa-t2-5', 'saa-t2-5-q15')['correct'], 1);
+    });
+
+    test('saa-t2-5-q15: "not RDS"를 적는 DR 백서를 출처로 싣는다', () {
+      expect(
+        hasSource(question('saa-t2-5', 'saa-t2-5-q15'),
+            'disaster-recovery-options-in-the-cloud'),
+        isTrue,
+        reason: 'what-is-drs 페이지에는 RDS 제외가 없고, DR 백서가 "(that is, not RDS)"를 적는다',
+      );
+    });
+  });
 }
