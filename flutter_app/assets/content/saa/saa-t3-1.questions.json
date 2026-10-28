@@ -12,16 +12,16 @@
       "stem": "S3 버킷을 새로 생성했을 때 기본 상태와 내구성에 대한 설명으로 옳은 것은?",
       "options": [
         "버킷은 기본적으로 공개(public) 상태이며 내구성은 99.9%(3 nine)이다",
-        "버킷과 객체는 기본적으로 비공개(private)이며 모든 클래스의 내구성은 99.999999999%(11 nine)이다",
+        "버킷과 객체는 기본적으로 비공개(private)이며 현재 권장되는 모든 클래스의 내구성은 99.999999999%(11 nine)이다",
         "버킷은 기본적으로 비공개이지만 One Zone-IA 클래스의 내구성은 11 nine보다 낮다",
         "버킷은 기본적으로 공개이며 내구성은 클래스마다 다르다"
       ],
       "correct": 1,
-      "explanation": "S3의 기본 상태는 비공개(private)입니다. 버킷과 객체는 명시적으로 공개를 설정하지 않는 한 외부에서 접근할 수 없습니다. 내구성은 스토리지 클래스에 관계없이 모든 클래스에서 99.999999999%(11 nine)으로 동일합니다.",
+      "explanation": "S3의 기본 상태는 비공개(private)입니다. 버킷과 객체는 명시적으로 공개를 설정하지 않는 한 외부에서 접근할 수 없습니다. 내구성은 현재 권장되는 모든 스토리지 클래스에서 99.999999999%(11 nine)으로 동일합니다. 예외는 권장되지 않는(Not recommended) Reduced Redundancy Storage(RRS) 하나로, 설계 내구성이 99.99%입니다.",
       "wrongExplanations": {
         "0": "버킷의 기본 상태는 공개가 아니라 비공개입니다. 또한 11 nine은 3 nine이 아닙니다.",
-        "2": "One Zone-IA를 포함한 모든 S3 스토리지 클래스의 내구성은 동일하게 11 nine입니다. One Zone-IA는 단일 AZ를 사용해 가용성(99.5%)이 낮지만 내구성은 같습니다.",
-        "3": "버킷의 기본 상태는 비공개이며 내구성은 모든 클래스에서 동일하게 11 nine입니다."
+        "2": "One Zone-IA를 포함해 현재 권장되는 모든 S3 스토리지 클래스의 내구성은 동일하게 11 nine입니다. One Zone-IA는 단일 AZ를 사용해 가용성(99.5%)이 낮지만 내구성은 같습니다.",
+        "3": "버킷의 기본 상태는 공개가 아니라 비공개입니다. 내구성도 권장되지 않는 Reduced Redundancy Storage(99.99%)를 빼면 현재 권장되는 모든 클래스에서 동일하게 11 nine이므로, 두 서술이 모두 틀렸습니다."
       },
       "sources": [
         { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" },
@@ -82,22 +82,23 @@
       "examGuideTaskId": "saa-t3-1",
       "skill": "Glacier 클래스 복원 시간 비교",
       "difficulty": "foundational",
-      "stem": "의료 기관이 환자 영상 파일을 아카이브하려 한다. 응급 상황에서 요청 후 수 분 이내에 데이터를 꺼낼 수 있어야 한다. 가장 적합한 S3 스토리지 클래스는?",
+      "stem": "의료 기관이 환자 영상 파일을 아카이브하려 한다. 응급 상황에서 복원 절차를 거치지 않고 밀리초 단위로 데이터를 꺼낼 수 있어야 한다. 가장 적합한 S3 스토리지 클래스는?",
       "options": [
         "S3 Glacier Deep Archive — 최저 비용이며 응급 상황에도 충분히 빠르다",
-        "S3 Glacier Flexible Retrieval — 분~12시간 복원 시간으로 응급 상황에 대응 가능하다",
+        "S3 Glacier Flexible Retrieval — 신속 복원 1~5분, 표준 3~5시간, 대량 5~12시간으로 복원된다",
         "S3 Glacier Instant Retrieval — 밀리초 복원 시간으로 즉시 접근이 가능하다",
         "S3 Standard-IA — Glacier보다 비싸지만 복원 절차가 필요 없어 즉시 접근된다"
       ],
       "correct": 2,
-      "explanation": "응급 상황에서 즉시(밀리초) 접근이 필요한 아카이브 데이터에는 S3 Glacier Instant Retrieval이 적합합니다. 분기 1회 수준으로 접근하지만 꺼낼 때는 즉시 복원이 필요한 시나리오가 정확히 이 클래스의 설계 목적입니다.",
+      "explanation": "복원 절차를 거치지 않고 밀리초 단위로 접근해야 하는 아카이브 데이터에는 S3 Glacier Instant Retrieval이 적합합니다. 이 클래스의 객체는 실시간으로 GET할 수 있어 RestoreObject 요청이 필요 없습니다. 분기 1회 수준으로 접근하지만 꺼낼 때는 즉시 읽어야 하는 시나리오가 정확히 이 클래스의 설계 목적입니다.",
       "wrongExplanations": {
-        "0": "Glacier Deep Archive의 복원 시간은 최대 12시간입니다. 응급 상황에서 즉시 접근이 필요한 경우에는 적합하지 않습니다.",
-        "1": "Glacier Flexible Retrieval은 분~12시간의 복원 시간이 걸립니다. '수 분 이내' 요건을 보장하지 못하므로 응급 의료 시나리오에 부적합합니다.",
-        "3": "Standard-IA는 즉시 접근이 가능하지만 아카이브 데이터에는 비용이 과도합니다. 분기 1회 수준으로 접근하면서 즉시 접근이 필요하다면 Glacier Instant Retrieval이 비용과 성능을 모두 충족합니다."
+        "0": "Deep Archive는 RestoreObject 복원을 거쳐야 하고, 복원 시간은 표준 12시간 이내·대량(Bulk) 48시간 이내입니다. 신속(Expedited) 복원은 이 클래스에서 제공되지 않으므로 밀리초 접근 요건을 충족하지 못합니다.",
+        "1": "Flexible Retrieval도 RestoreObject 복원을 거쳐야 합니다. 신속(Expedited) 복원은 250MB 미만 객체를 보통 1~5분에 꺼내 주지만, 복원 절차 없이 밀리초로 읽어야 하는 요건은 충족하지 못합니다.",
+        "3": "Standard-IA는 복원 절차 없이 밀리초로 접근되지만 아카이브 데이터에는 스토리지 비용이 과도합니다. 분기 1회 수준으로 접근하면서 즉시 접근이 필요하다면 Glacier Instant Retrieval이 비용과 성능을 모두 충족합니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
+        { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" }
       ],
       "verified": false
     },
@@ -162,7 +163,7 @@
         "30일 후 One Zone-IA로 전환하고 만료 없이 영구 보관한다"
       ],
       "correct": 1,
-      "explanation": "이 시나리오는 학습 문서의 수명 주기 예시와 정확히 일치합니다. 30일까지 자주 접근 → Standard, 30~90일 가끔 접근 → Standard-IA, 90~365일 장기 아카이브 → Glacier Flexible Retrieval, 365일 후 만료(자동 삭제). Expiration 액션으로 관리 부담 없이 자동 정리됩니다.",
+      "explanation": "접근 빈도에 맞춰 단계적으로 저렴한 클래스로 내려가는 구성입니다. 30일까지 자주 접근 → Standard, 30~90일 가끔 접근 → Standard-IA, 90~365일 장기 아카이브 → Glacier Flexible Retrieval, 365일 후 만료(자동 삭제). Expiration 액션으로 관리 부담 없이 자동 정리됩니다.",
       "wrongExplanations": {
         "0": "최초 30일간 자주 분석에 사용하는 로그를 즉시 Glacier Deep Archive에 저장하면 검색 요금(12시간 복원)과 최소 보관 기간(180일) 요금 문제가 발생합니다. 접근 빈도에 맞게 단계적으로 전환해야 합니다.",
         "2": "Standard에 365일 보관 후 수동 삭제하면 30일 이후의 '가끔 접근' 구간에서도 Standard 요금이 계속 발생합니다. 수명 주기 자동화로 비용을 크게 절감할 수 있습니다.",
@@ -258,14 +259,14 @@
         "Block Public Access는 IAM 정책에만 영향을 미치므로 버킷 정책의 Allow는 유효하다"
       ],
       "correct": 1,
-      "explanation": "Block Public Access는 접근 제어 평가의 최우선 계층입니다. 버킷 정책이나 ACL에 공개 접근을 허용하는 설정이 있더라도 Block Public Access가 ON이면 그 설정을 무시하고 공개 접근을 차단합니다. 이 설계는 하위 정책 실수로부터 계정과 버킷을 보호하는 단일 제어점 역할을 합니다.",
+      "explanation": "Block Public Access는 버킷 정책·액세스 포인트 정책·객체 권한(ACL)이 공개 접근을 허용해도 그 설정을 재정의(override)해 공개 접근을 차단합니다. Amazon S3는 요청을 받으면 액세스 포인트·버킷·계정(Organizations 정책이 있으면 조직까지) 수준의 설정을 확인하고 그중 가장 제한적인 조합을 적용하며, 요청된 접근을 금지하는 설정이 하나라도 있으면 요청을 거부합니다. 리소스 정책 실수로부터 계정과 버킷을 보호하는 중앙 제어점 역할입니다.",
       "wrongExplanations": {
-        "0": "Block Public Access가 ON인 경우 버킷 정책의 Allow보다 우선합니다. 버킷 정책에 Allow가 있어도 Block Public Access에 의해 공개 접근은 거부됩니다.",
-        "2": "S3 접근 제어는 설정 순서가 아닌 계층 순서로 평가됩니다. Block Public Access → IAM 정책 → 버킷 정책 → ACL 순서이며 Block Public Access가 항상 최우선입니다.",
-        "3": "Block Public Access는 IAM 정책뿐만 아니라 버킷 정책, ACL 등 모든 공개 접근 허용 설정을 무효화합니다. 계정 또는 버킷 수준의 최우선 안전장치입니다."
+        "0": "Block Public Access가 ON이면 버킷 정책의 Allow를 재정의(override)합니다. 버킷 정책에 Allow가 있어도 Block Public Access에 의해 공개 접근은 거부됩니다.",
+        "2": "설정 순서는 평가에 영향을 주지 않습니다. S3는 액세스 포인트·버킷·계정·조직 수준의 Block Public Access 설정 중 가장 제한적인 조합을 적용하며, 공개 접근을 금지하는 설정이 하나라도 있으면 요청을 거부합니다.",
+        "3": "Block Public Access가 재정의하는 대상은 IAM 자격증명 정책이 아니라 버킷 정책·액세스 포인트 정책·ACL 같은 리소스 쪽 공개 허용 설정입니다. 따라서 버킷 정책의 Allow는 무효화됩니다."
       },
       "sources": [
-        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+        { "title": "S3 퍼블릭 액세스 차단 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html" }
       ],
       "verified": false
     },
@@ -301,19 +302,19 @@
       "stem": "IAM 역할 A가 S3 버킷에 대한 s3:GetObject 권한만 가지고 있다. 이 역할로 서명한 프리사인 URL을 생성했다. 이 URL을 받은 사용자가 할 수 있는 것은?",
       "options": [
         "버킷의 모든 객체를 읽고 쓸 수 있다 — 프리사인 URL은 버킷 전체 접근을 부여한다",
-        "서명 시 지정한 객체의 다운로드만 가능하며, URL 만료 전까지 유효하다",
+        "서명 시 지정한 객체의 다운로드만 가능하며, URL 만료 시점과 서명에 쓴 역할 세션 만료 시점 중 이른 쪽까지 유효하다",
         "URL을 받은 사용자는 서명한 역할의 모든 권한을 상속받는다",
         "프리사인 URL은 IAM 인증이 필요하므로 인증 없는 사용자는 사용할 수 없다"
       ],
       "correct": 1,
-      "explanation": "프리사인 URL은 서명한 IAM 주체의 권한 이하로만 작동합니다. 역할 A가 s3:GetObject만 가지므로 프리사인 URL도 해당 객체 다운로드만 가능합니다. 만료 시간이 설정되며 만료 후에는 접근이 거부됩니다. IAM 인증 없이도 URL만으로 접근할 수 있습니다.",
+      "explanation": "프리사인 URL은 서명한 IAM 주체의 권한 이하로만 작동합니다. 역할 A가 s3:GetObject만 가지므로 프리사인 URL도 해당 객체 다운로드만 가능합니다. 임시 자격증명(역할)으로 서명한 URL은 더 긴 만료 시간을 지정했더라도 역할 세션이 끝나면 만료되므로, 유효 기간은 URL 만료와 세션 만료 중 이른 쪽입니다. IAM 인증 없이도 URL만으로 접근할 수 있습니다.",
       "wrongExplanations": {
         "0": "프리사인 URL은 버킷 전체가 아닌 서명 시 지정한 특정 객체와 작업에 대해서만 접근을 허용합니다. 서명한 역할의 권한 이하(s3:GetObject만)로 제한됩니다.",
         "2": "URL을 받은 사용자는 서명 주체의 권한을 상속받는 것이 아닙니다. 프리사인 URL은 서명 시 지정된 단일 작업(예: 특정 객체 GET)에 대한 임시 접근만 부여합니다.",
         "3": "프리사인 URL의 핵심 용도가 바로 인증 없는 사용자에게 일시적 접근을 부여하는 것입니다. IAM 자격증명 없이도 URL만으로 서명된 요청을 수행할 수 있습니다."
       },
       "sources": [
-        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+        { "title": "프리사인 URL로 객체 다운로드·업로드 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html" }
       ],
       "verified": false
     },
