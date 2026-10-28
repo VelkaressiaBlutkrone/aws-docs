@@ -2380,4 +2380,117 @@ void main() {
       });
     }
   });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 2 (t2-2·t2-3). 여섯 문항 모두
+  // `welcome`·`what-is` 소개 페이지 하나만 달고 있었다.
+  //
+  // ⚠️ `saa-t2-2-q1` 은 출처를 **둘** 둔다. 보고가 제안한
+  //    `invocation-async-error-handling` 은 재시도 2회·DLQ 를 적지만 "S3 가
+  //    Lambda 를 비동기로 호출한다"는 말이 없다 — 그 사실은 오답 근거 [1] 의
+  //    핵심이라 `invocation-async` 를 함께 단다.
+  // ⚠️ `saa-t2-2-q8` 의 "지연도 낮다"는 **어느 공식 페이지에도 없다.** 정본
+  //    비교 페이지와 HTTP API 소개 페이지 모두 "lower price"·"minimal features"
+  //    까지만 말한다. 근거 없는 주장을 남기면 출처만 바꾼 셈이라 문구를 문서가
+  //    적는 근거(기능 최소화 → 낮은 가격)로 바꿨다. 드래프트 Task 라 라이브
+  //    영향은 없고 `correct`(1)는 그대로다.
+  group('2026-10-28 출처 교체 — 배치 2 (t2-2·t2-3)', () {
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q1',
+        add: 'invocation-async-error-handling',
+        drop: 'lambda/latest/dg/welcome',
+        why: '"by default Lambda attempts to run it two more times" + "When an event '
+            'expires or fails all processing attempts, Lambda discards it. To capture '
+            'discarded events, configure a dead-letter queue for the function."',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q5',
+        add: 'lambda-intro-execution-role',
+        drop: 'lambda/latest/dg/welcome',
+        why: '"an execution role is an AWS Identity and Access Management (IAM) role that '
+            'grants the function permission to access AWS services and resources" + '
+            '"Lambda automatically assumes your execution role" + DynamoDB 용례',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q8',
+        add: 'http-api-vs-rest',
+        drop: 'developerguide/welcome',
+        why: '"HTTP APIs are designed with minimal features so that they can be offered '
+            'at a lower price" + "Choose REST APIs if you need features such as API keys, '
+            'per-client throttling, request validation, AWS WAF integration" + 기능표의 '
+            'Caching·AWS WAF·API keys 가 REST Yes / HTTP No',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q10',
+        add: 'api-gateway-api-usage-plans',
+        drop: 'developerguide/welcome',
+        why: '"A quota limit sets the target maximum number of requests with a given API '
+            'key that can be submitted within a specified time interval" + "A throttling '
+            'limit sets the target point at which request throttling should start"',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q8',
+        add: 'as-scaling-target-tracking',
+        drop: 'what-is-amazon-ec2-auto-scaling',
+        why: '공식 페이지가 **CPU 50% 예시를 그대로** 싣는다: "you want the CPU utilization '
+            'of the Auto Scaling group to stay at around 50 percent" + "your Auto Scaling '
+            'group will scale out ... It will scale in" + "Amazon EC2 Auto Scaling creates '
+            'and manages the CloudWatch alarms"',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q9',
+        add: 'ec2-auto-scaling-predictive-scaling',
+        drop: 'what-is-amazon-ec2-auto-scaling',
+        why: '"analyzing historical load data to detect daily or weekly patterns" + '
+            '"Applications that take a long time to initialize, causing a noticeable '
+            'latency impact ... during scale-out events" + "launching capacity in advance '
+            'of forecasted load, compared to using only dynamic scaling, which is '
+            'reactive in nature"',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t2-2-q1: S3→Lambda 비동기 호출 출처도 함께 달렸다', () {
+      // 'invocation-async' 는 'invocation-async-error-handling' 의 부분 문자열이라
+      // `.html` 까지 붙여 정확히 가린다.
+      expect(
+          hasSource(question('saa-t2-2', 'saa-t2-2-q1'), 'invocation-async.html'),
+          isTrue,
+          reason: '오답 근거 [1] 의 "S3→Lambda 는 비동기" 를 담은 페이지가 없다. 근거: '
+              '"Several AWS services, such as Amazon Simple Storage Service (Amazon S3) '
+              'and Amazon Simple Notification Service (Amazon SNS), invoke Event Functions '
+              'asynchronously"');
+    });
+
+    test('saa-t2-2-q8: 근거 없는 "지연이 낮다" 주장이 없고 낮은 가격 근거가 있다', () {
+      final q = question('saa-t2-2', 'saa-t2-2-q8');
+      expect(q['correct'], 1, reason: '출처 교체 작업에서 정답은 바뀌지 않는다');
+      final text = allText(q);
+      for (final banned in <String>['지연도 낮다', '지연이 낮다']) {
+        expect(text.contains(banned), isFalse,
+            reason: 'saa-t2-2-q8 에 공식 문서가 적지 않는 지연 주장이 남아 있다: '
+                '"$banned" — 정본 비교 페이지와 HTTP API 소개 페이지 모두 '
+                '"lower price"·"minimal features" 까지만 말한다');
+      }
+      expect(text.contains('낮은 가격'), isTrue,
+          reason: 'saa-t2-2-q8 에 문서가 적는 근거("lower price")가 없다');
+    });
+  });
 }
