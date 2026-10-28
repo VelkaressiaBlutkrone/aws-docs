@@ -1467,4 +1467,125 @@ void main() {
       });
     }
   });
+
+  group('§우선순위3 배치1 — D3 saa-t3-1·t3-3 (7건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q1', correct: 1,
+        forbidden: [
+          '내구성은 스토리지 클래스에 관계없이 모든 클래스에서',
+          '이며 모든 클래스의 내구성은 99.999999999%',
+        ],
+        required: ['현재 권장되는 모든', 'Reduced Redundancy Storage', '99.99%'],
+        why: '스토리지 클래스 비교 표에 권장되지 않는(Not recommended) Reduced '
+            'Redundancy Storage 가 설계 내구성 99.99% 로 올라 있다 — "모든 클래스가 '
+            '11 nine" 은 사실이 아니고 "현재 권장되는 모든 클래스" 로 한정해야 한다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q4', correct: 2,
+        forbidden: [
+          '수 분 이내에 데이터를 꺼낼',
+          '복원 시간은 최대 12시간입니다',
+          '분~12시간의 복원 시간이 걸립니다',
+        ],
+        required: ['복원 절차를 거치지 않고 밀리초', '대량(Bulk) 48시간', '1~5분'],
+        why: 'Flexible Retrieval 의 신속(Expedited) 복원은 250MB 미만 객체를 보통 '
+            '1~5분에 꺼내 주므로 "수 분 이내" 로는 Instant Retrieval 을 가릴 수 없다. '
+            'Deep Archive 복원은 표준 12시간 이내·대량 48시간 이내이고 신속 복원이 없다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q7', correct: 1,
+        forbidden: ['학습 문서의'],
+        required: ['접근 빈도에 맞춰 단계적으로'],
+        why: '"학습 문서의 예시와 정확히 일치합니다" 는 문항 바깥을 가리키는 작성 과정 '
+            '메모다 — 학습자에게는 수명 주기 설계 근거만 보여야 한다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q11', correct: 1,
+        forbidden: [
+          'Block Public Access → IAM 정책 → 버킷 정책 → ACL',
+          '계층 순서로 평가됩니다',
+          'IAM 정책뿐만 아니라',
+          '접근 제어 평가의 최우선 계층',
+        ],
+        required: ['재정의(override)', '가장 제한적인 조합', 'IAM 자격증명 정책이 아니라'],
+        why: '공식 문서는 평가 순서를 적지 않는다 — BPA 는 버킷 정책·액세스 포인트 '
+            '정책·ACL 같은 리소스 쪽 공개 허용 설정을 재정의하며, 액세스 포인트·버킷·'
+            '계정·조직 설정 중 가장 제한적인 조합이 적용된다. IAM 자격증명 정책은 '
+            'BPA 의 대상이 아니다',
+      ),
+      (
+        task: 'saa-t3-1', qid: 'saa-t3-1-q13', correct: 1,
+        forbidden: [
+          'URL 만료 전까지 유효하다',
+          '만료 시간이 설정되며 만료 후에는 접근이 거부됩니다',
+        ],
+        required: ['역할 세션', '이른 쪽'],
+        why: '역할(임시 자격증명)로 서명한 프리사인 URL 은 더 긴 만료 시간을 지정했어도 '
+            '역할 세션이 끝나면 만료된다 — 유효 기간은 URL 만료와 세션 만료 중 이른 쪽이다',
+      ),
+      (
+        task: 'saa-t3-3', qid: 'saa-t3-3-q11', correct: 1,
+        forbidden: ['150개 브로커를 배치하면 8번째 인스턴스부터 시작이 실패합니다'],
+        required: ['AZ마다 최대 7개', '총 21개'],
+        why: '랙 수준 분산 배치 그룹은 같은 리전의 여러 AZ 에 걸칠 수 있고 상한은 '
+            'AZ마다 실행 인스턴스 7개다 — 3 AZ 리전이면 총 21개가 상한이다',
+      ),
+      (
+        task: 'saa-t3-3', qid: 'saa-t3-3-q12', correct: 1,
+        forbidden: ['배치 그룹(클러스터·파티션·분산 모두)은 전용 인스턴스와 함께 사용할 수 없습니다'],
+        required: ['지원하지 않는 것은 분산', '전용 호스트(Dedicated Host)는 어떤 배치 그룹에도'],
+        why: '전용 인스턴스를 지원하지 않는 것은 분산 배치 그룹 하나다. 클러스터·파티션은 '
+            '함께 쓸 수 있고, 전용 호스트는 어떤 배치 그룹에도 시작할 수 없다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    test('saa-t3-1-q11 은 BPA 공식 문서를 출처로 싣는다', () {
+      expect(hasSource(question('saa-t3-1', 'saa-t3-1-q11'),
+          'access-control-block-public-access'), isTrue);
+    });
+
+    test('saa-t3-1-q13 은 프리사인 URL 공식 문서를 출처로 싣는다', () {
+      expect(hasSource(question('saa-t3-1', 'saa-t3-1-q13'),
+          'using-presigned-url'), isTrue);
+    });
+
+    test('saa-t3-1-q4 는 아카이브 복원 옵션 문서를 출처로 싣는다', () {
+      expect(hasSource(question('saa-t3-1', 'saa-t3-1-q4'),
+          'restoring-objects-retrieval-options'), isTrue);
+    });
+  });
 }
