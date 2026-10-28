@@ -86,7 +86,7 @@
       "stem": "한 팀이 CMK를 생성하고 IAM 역할에 kms:GenerateDataKey와 kms:Decrypt를 Allow하는 아이덴티티 기반 정책을 붙였다. 그런데 S3 SSE-KMS 암호화 시 해당 역할이 접근 거부(AccessDenied)를 받는다. 가장 가능성 높은 원인은?",
       "options": [
         "S3 버킷 정책에 s3:PutObject가 없어서 거부된 것이다",
-        "IAM 아이덴티티 기반 정책만으로는 CMK에 접근할 수 없으며, CMK의 키 정책에도 해당 역할이 명시적으로 허용돼 있어야 한다",
+        "CMK의 키 정책이 그 역할을 직접 허용하지도 않고, IAM 정책으로 권한을 위임하는 계정 주체 문장도 없어서 IAM 정책의 Allow가 효력을 갖지 못한 것이다",
         "CMK는 같은 리전에서만 사용할 수 있어서 리전이 달라 거부된 것이다",
         "AWS 관리형 키와 달리 CMK는 S3 SSE와 통합을 지원하지 않는다"
       ],
@@ -162,14 +162,14 @@
       "options": [
         "ACM 인증서는 만료 기간과 무관하게 항상 자동 갱신된다",
         "외부 CA에서 발급해 ACM으로 가져온 인증서도 자동 갱신이 지원된다",
-        "ACM이 직접 발급한 인증서 중 완전 자동 갱신 대상은 DNS 검증으로 발급한 것이며, 검증이 유효하고 AWS 서비스에서 사용 중이어야 한다",
-        "ACM 인증서는 1년마다 수동으로 갱신 요청을 해야 한다"
+        "ACM이 직접 발급한 인증서 중 완전 자동 갱신 대상은 DNS 검증으로 발급한 것이며, 검증이 유효하고 AWS 서비스에 연결돼 있거나 발급·갱신 이후 내보낸(exported) 상태여야 한다",
+        "ACM 공인 인증서는 유효 기간 198일마다 수동으로 갱신 요청을 해야 한다"
       ],
       "correct": 2,
-      "explanation": "완전 자동 갱신은 처음부터 DNS 검증으로 발급한 인증서에 해당합니다. ACM은 만료 45일 전에 ① 인증서가 AWS 서비스에서 사용 중인지 ② ACM이 준 CNAME 레코드가 공개 DNS에 그대로 있는지를 확인해 갱신합니다. 이메일 검증 인증서는 ACM이 만료 임박 알림 메일을 보내고 소유자가 응답해야 하므로 완전 자동이 아닙니다. 가져온(imported) 인증서와 이미 만료된 인증서는 관리형 갱신 대상이 아닙니다.",
+      "explanation": "완전 자동 갱신은 처음부터 DNS 검증으로 발급한 인증서에 해당합니다. 공인 인증서의 유효 기간은 198일이고, ACM은 만료 45일 전에 ① 인증서가 AWS 서비스에서 사용 중인지 ② ACM이 준 CNAME 레코드가 공개 DNS에 그대로 있는지를 확인해 갱신합니다. 적격 조건은 AWS 서비스 연결만이 아닙니다 — 발급·갱신 이후 내보낸(exported) 인증서도 적격이고, 이때 갱신본을 서버에 배포하는 일은 사용자 몫입니다. 이메일 검증 인증서는 ACM이 만료 임박 알림 메일을 보내고 소유자가 응답해야 하므로 완전 자동이 아닙니다. 가져온(imported) 인증서와 이미 만료된 인증서는 관리형 갱신 대상이 아닙니다.",
       "wrongExplanations": {
-        "0": "ACM 관리형 갱신에는 적격 조건이 있습니다 — 인증서가 AWS 서비스에서 사용 중이어야 하고, DNS 검증이면 ACM이 준 CNAME 레코드가 공개 DNS에 남아 있어야 합니다. 이미 만료된 인증서는 갱신 대상이 아닙니다.",
-        "1": "외부 CA에서 발급해 ACM으로 가져온 인증서는 자동 갱신이 지원되지 않습니다. 만료 전 수동으로 새 인증서를 가져와야 합니다.",
+        "0": "ACM 관리형 갱신에는 적격 조건이 있습니다 — 인증서가 AWS 서비스에 연결돼 있거나 내보낸 상태여야 하고, DNS 검증이면 ACM이 준 CNAME 레코드가 공개 DNS에 남아 있어야 합니다. 이미 만료된 인증서는 갱신 대상이 아닙니다.",
+        "1": "외부 CA에서 발급해 ACM으로 가져온(imported) 인증서는 자동 갱신이 지원되지 않습니다 — 만료 전 수동으로 새 인증서를 가져와야 합니다. ACM이 발급한 뒤 내보낸(exported) 인증서는 이와 달라 관리형 갱신 대상이니 혼동하지 마세요.",
         "3": "ACM이 직접 발급하고 DNS 검증한 인증서는 수동 갱신 요청 없이 자동으로 갱신됩니다. 만료 전 수동으로 새 인증서를 가져와야 하는 것은 가져온(imported) 인증서입니다."
       },
       "sources": [
@@ -337,7 +337,7 @@
         "인스턴스를 중지하면 자동으로 저장 중 암호화가 활성화된다"
       ],
       "correct": 1,
-      "explanation": "암호화되지 않은 RDS 인스턴스는 인플레이스로 암호화를 활성화할 수 없습니다. 유일한 경로는 스냅샷 경유 재생성입니다 — ① 암호화되지 않은 인스턴스의 스냅샷 생성, ② 스냅샷을 암호화 복사(KMS 키 지정), ③ 암호화된 스냅샷으로 새 인스턴스 복원, ④ 이후 원본 인스턴스를 교체합니다.",
+      "explanation": "암호화되지 않은 RDS 인스턴스는 인플레이스로 암호화를 활성화할 수 없습니다. 대표 경로는 스냅샷 경유 재생성입니다 — ① 암호화되지 않은 인스턴스의 스냅샷 생성, ② 스냅샷을 암호화 복사(KMS 키 지정), ③ 암호화된 스냅샷으로 새 인스턴스 복원, ④ 이후 원본 인스턴스를 교체합니다. 다른 경로도 있습니다 — Blue/Green 배포를 만들 때 green 리소스에 TargetKmsKeyId를 지정하면 암호화되지 않은 blue를 암호화된 green으로 바꿀 수 있습니다. 어느 쪽이든 기존 인스턴스를 그 자리에서 암호화하는 것은 아닙니다.",
       "wrongExplanations": {
         "0": "RDS 암호화는 인스턴스 생성 시 설정되며 생성 후 콘솔에서 인플레이스 활성화가 불가능합니다. 이 옵션은 생성 이후에 제공되지 않습니다.",
         "2": "enable-encryption이라는 RDS CLI 명령은 존재하지 않습니다. RDS는 생성 시 암호화 옵션을 제공하며 사후 직접 변경은 지원하지 않습니다.",
@@ -345,7 +345,8 @@
       },
       "sources": [
         { "title": "Amazon RDS 리소스 암호화 — 생성 후 인플레이스 전환 불가 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html" },
-        { "title": "Amazon RDS 스냅샷 복사 — 암호화되지 않은 스냅샷의 암호화 복사 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html" }
+        { "title": "Amazon RDS 스냅샷 복사 — 암호화되지 않은 스냅샷의 암호화 복사 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html" },
+        { "title": "RDS Blue/Green 배포 TargetResourceConfiguration — green 암호화는 TargetKmsKeyId (공식 API)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html" }
       ],
       "verified": false
     },

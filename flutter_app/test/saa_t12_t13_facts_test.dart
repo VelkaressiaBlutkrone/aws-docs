@@ -53,6 +53,23 @@ void main() {
     });
   });
 
+  // 2026-10-28 2차 검수 우선순위 2 — 파생 문항 `saa-t1-4-q2` 의 오답 근거가
+  // "WAF는 DDoS 자동 완화 서비스가 아니다"로 단정하고 있었다. WAF에는 Anti-DDoS
+  // 관리형 규칙 그룹이 실재하므로, 갈림길을 "웹 ACL에 직접 추가해야 하고 추가 요금이
+  // 붙는다"로 옮기고 학습문서에도 그 사실을 적었다.
+  group('Anti-DDoS 관리형 규칙 그룹 (2026-10-28)', () {
+    // 근거: waf-anti-ddos-advanced — "The `AWSManagedRulesAntiDDoSRuleSet`
+    // managed rule group is the most advanced tier of Anti-DDoS protections
+    // available in AWS WAF." / "You are charged additional fees when you use
+    // this managed rule group."
+    test('WAF의 Anti-DDoS 규칙 그룹이 유료 옵트인으로 서술돼 있다', () {
+      expect(t14.contains('AWSManagedRulesAntiDDoSRuleSet'), isTrue);
+      expect(t14.contains('추가 요금'), isTrue);
+      expect(t14.contains('Shield Standard'), isTrue,
+          reason: '"추가 설정 없이 자동 적용되는 무료 방어"는 WAF가 아니라 Shield Standard다');
+    });
+  });
+
   group('G-1.2-10 Cognito 기능 플랜', () {
     // 근거: cognito-sign-in-feature-plans — Lite/Essentials/Plus
     test('세 플랜과 플랜별 경계가 서술돼 있다', () {

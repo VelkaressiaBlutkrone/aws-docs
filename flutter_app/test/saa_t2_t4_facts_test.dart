@@ -65,6 +65,18 @@ void main() {
       expect(t22.contains('6시간'), isTrue);
       expect(t22.contains('S3는 실패'), isTrue);
     });
+
+    // 2026-10-28 2차 검수 우선순위 2 — 파생 문항 `saa-t2-2-q2` 와 함께 고쳤다.
+    test('Hyperplane ENI는 VPC 설정 시점에 미리 만들어진다', () {
+      // 근거: configuration-vpc — "The first time you attach a function to a
+      // VPC using a particular subnet and security group combination, Lambda
+      // creates a Hyperplane ENI." / "your function remains in the Pending
+      // state and you can't invoke it"
+      final t22 = doc('saa-t2-2');
+      expect(t22.contains('Lambda가 VPC 리소스에 접근할 때 생성'), isFalse);
+      expect(t22.contains('Hyperplane ENI'), isTrue);
+      expect(t22.contains('Pending'), isTrue);
+    });
   });
 
   group('Task 2.2 — saa-t2-3 / saa-t2-5', () {
@@ -102,6 +114,27 @@ void main() {
       expect(t25.contains('멀티 리전 읽기·쓰기, 최종 일관성 |'), isFalse);
       expect(t25.contains('MREC'), isTrue);
       expect(t25.contains('MRSC'), isTrue);
+    });
+
+    // 2026-10-28 2차 검수 우선순위 2 — 파생 문항 `saa-t2-3-q6`·`q4` 와 함께 고쳤다.
+    test('고정 세션: 대상이 사라지면 ALB가 새 대상을 골라 쿠키를 갱신한다', () {
+      // 근거: edit-target-group-attributes#sticky-sessions — "if it refers to a
+      // target that was deregistered or is unhealthy, the load balancer selects
+      // a new target and updates the cookie with information about the new
+      // target."  (보고가 적은 sticky-sessions.html 은 죽은 슬러그다)
+      final t23 = doc('saa-t2-3');
+      expect(t23.contains('새 인스턴스로 자연스럽게 연결하지 못'), isFalse);
+      expect(t23.contains('새 대상을 골라 쿠키를 갱신'), isTrue);
+    });
+
+    test('교차 영역 분산: ALB는 대상 그룹 수준에서만 끌 수 있다', () {
+      // 근거: how-elastic-load-balancing-works — "With Application Load
+      // Balancers, cross-zone load balancing is always enabled at the load
+      // balancer level. At the target group level, cross-zone load balancing
+      // can be disabled."
+      final t23 = doc('saa-t2-3');
+      expect(t23.contains('대상 그룹 수준'), isTrue);
+      expect(t23.contains('load_balancing.cross_zone.enabled'), isTrue);
     });
   });
 

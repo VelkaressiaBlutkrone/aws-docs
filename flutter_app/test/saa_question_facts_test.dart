@@ -1324,4 +1324,147 @@ void main() {
       });
     }
   });
+
+  // ── 우선순위 2 B조(2) — 잔여 7건 (2026-10-28) ────────────────────────────
+  //
+  // 2026-10-27 2차 검수 보고 우선순위 2의 마지막 묶음. 전부 드래프트 Task라 라이브
+  // 노출은 없다. 정답 인덱스는 6건이 불변이고, `saa-t2-3-q4` 한 건만 **사용자 승인으로
+  // 0 → 1** 로 옮겼다 — 대상 그룹 수준에서 교차 영역을 끄는 기능(2022-11)이 정답 보기를
+  // 거짓으로 만들어 맞는 보기가 하나도 없었다.
+  //
+  // 근거:
+  // - `waf/latest/developerguide/waf-anti-ddos-advanced.html`
+  //   "The `AWSManagedRulesAntiDDoSRuleSet` managed rule group is the **most advanced
+  //   tier of Anti-DDoS protections available in AWS WAF**."
+  //   "**You are charged additional fees when you use this managed rule group.**"
+  //   `waf-anti-ddos-rg-using.html` — "**Add** the AWS managed rule group,
+  //   `AWSManagedRulesAntiDDoSRuleSet` **to your protection pack (web ACL)**"
+  // - `kms/latest/developerguide/key-policy-overview.html`
+  //   "the policy statement **doesn't give permission to any IAM principal**. Instead,
+  //   it gives the AWS account permission to **use IAM policies to delegate** the
+  //   permissions specified in the key policy."
+  // - `acm/latest/userguide/managed-renewal.html`
+  //   "ELIGIBLE if associated with another AWS service, such as Elastic Load Balancing
+  //   or CloudFront." / "**ELIGIBLE if exported since being issued or last renewed.**"
+  //   / "NOT ELIGIBLE if imported." / "NOT ELIGIBLE if already expired."
+  //   `acm-exportable-certificates.html` — "Certificates have a **198 days** validity
+  //   period." / "ACM renews certificates set to expire **45 days** before their
+  //   expiration date."
+  // - `AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html` —
+  //   `TargetKmsKeyId` "Specify this setting in either of the following cases: You want
+  //   the green resource to use a different KMS key than the blue resource. **The blue
+  //   resource is unencrypted and you want to encrypt the green resource.**"
+  // - `lambda/latest/dg/configuration-vpc.html`
+  //   "**The first time you attach a function to a VPC** using a particular subnet and
+  //   security group combination, **Lambda creates a Hyperplane ENI**."
+  //   "For new functions, while Lambda is creating a Hyperplane ENI, your function
+  //   **remains in the Pending state and you can't invoke it**."
+  // - `elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html`
+  //   "two targets in Availability Zone A and eight targets in Availability Zone B …
+  //   each load balancer node receives 50% of the traffic"
+  //   "If cross-zone load balancing is disabled: Each of the two targets in Availability
+  //   Zone A receives **25%** of the traffic. Each of the eight targets in Availability
+  //   Zone B receives **6.25%** of the traffic."
+  //   "With Application Load Balancers, cross-zone load balancing is **always enabled at
+  //   the load balancer level**. **At the target group level, cross-zone load balancing
+  //   can be disabled.**"
+  // - `elasticloadbalancing/latest/application/edit-target-group-attributes.html`
+  //   "If the cookie is present but can't be decoded, or if it refers to a target that
+  //   was deregistered or is unhealthy, **the load balancer selects a new target and
+  //   updates the cookie** with information about the new target."
+  //   "Sticky sessions are not supported if cross-zone load balancing is disabled."
+  //
+  // ⚠ 보고가 고정 세션 근거로 적은 `application/sticky-sessions.html` 은
+  //   `application/introduction.html` 로 리다이렉트되는 **죽은 슬러그**다(2026-10-28
+  //   실측). 정본은 위 `edit-target-group-attributes.html#sticky-sessions` 다.
+  //
+  // ⚠ `saa-t1-5-q4` 는 **해설과 학습문서는 이미 옳은데 정답 보기만 뒤처진** 경우여서,
+  //   같은 문항 안에서 보기와 해설이 서로 모순이었다. 문항 전체를 보는 집계형 가드가
+  //   아니면 해설만 보는 기존 가드를 비껴 간다.
+  group('§우선순위2 B조(2) — 잔여 7건', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t1-4', qid: 'saa-t1-4-q2', correct: 2,
+        forbidden: ['DDoS 자동 완화 서비스가 아닙니다'],
+        required: ['AWSManagedRulesAntiDDoSRuleSet', '웹 ACL에 추가'],
+        why: 'WAF에도 Anti-DDoS 관리형 규칙 그룹이 있다 — 갈림길은 웹 ACL에 직접 '
+            '추가해야 하고 추가 요금이 붙는다는 점이다',
+      ),
+      (
+        task: 'saa-t1-5', qid: 'saa-t1-5-q4', correct: 1,
+        forbidden: ['해당 역할이 명시적으로 허용돼 있어야 한다'],
+        required: ['위임하는 계정 주체 문장도 없어서'],
+        why: '기본 키 정책의 계정 위임 문장만 있어도 역할을 키 정책에 적지 않고 IAM '
+            '정책만으로 접근된다 — 갈림길은 명시적 허용이 아니라 위임 문장 유무다',
+      ),
+      (
+        task: 'saa-t1-5', qid: 'saa-t1-5-q7', correct: 2,
+        forbidden: ['1년마다 수동으로', 'AWS 서비스에서 사용 중이어야 한다'],
+        required: ['198일', '내보낸(exported)'],
+        why: '공인 인증서 유효 기간은 198일이고, 적격 대상에는 AWS 서비스 연결만 아니라 '
+            '발급·갱신 이후 내보낸(exported) 인증서도 들어간다',
+      ),
+      (
+        task: 'saa-t1-5', qid: 'saa-t1-5-q14', correct: 1,
+        forbidden: ['유일한 경로는 스냅샷 경유'],
+        required: ['TargetKmsKeyId', 'Blue/Green'],
+        why: 'Blue/Green 배포를 만들 때 green 리소스에 TargetKmsKeyId 를 지정하면 '
+            '암호화되지 않은 blue 를 암호화된 green 으로 바꿀 수 있다',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q2', correct: 3,
+        forbidden: ['ENI 생성으로 오히려 콜드 스타트가 길어질 수 있으며'],
+        required: ['VPC를 설정하는 시점', 'Pending'],
+        why: 'Hyperplane ENI 는 함수 생성·VPC 설정 시점에 미리 만들어지고 준비될 때까지 '
+            '함수가 Pending 이라 호출 자체가 되지 않는다 — 2019년 이전 모델이다',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q4', correct: 1,
+        forbidden: ['이 설정이 원인일 수 없으며'],
+        required: ['대상 그룹', '25%', '6.25%'],
+        why: 'ALB 는 로드밸런서 수준에서는 교차 영역 분산이 항상 켜지고 끌 수 있는 곳은 '
+            '대상 그룹 수준이다 — 끄면 2대/8대 배치에서 25%·6.25% 가 된다',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q6', correct: 3,
+        forbidden: ['새 인스턴스로 자연스럽게 연결하지 못'],
+        required: ['새 대상을 골라 쿠키를 갱신'],
+        why: '쿠키가 가리키는 대상이 등록 해제되거나 비정상이면 로드밸런서가 새 대상을 '
+            '골라 쿠키를 갱신한다 — 끊기는 것은 연결이 아니라 세션 데이터다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+  });
 }

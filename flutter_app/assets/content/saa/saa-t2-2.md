@@ -34,7 +34,9 @@ sources:
     url: https://docs.aws.amazon.com/app2container/latest/UserGuide/supported-applications.html
   - title: Lambda 비동기 호출 페이로드 256 KB → 1 MB 상향 (공식 공지)
     url: https://aws.amazon.com/about-aws/whats-new/2025/10/aws-lambda-payload-size-256-kb-1-mb-invocations/
-lastVerified: 2026-10-21
+  - title: Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성 (공식)
+    url: https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
+lastVerified: 2026-10-28
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -84,7 +86,7 @@ lastVerified: 2026-10-21
 | **스테이트리스** | Stateless | 각 호출이 이전 호출의 메모리·상태를 공유하지 않는 설계 특성 |
 | **오케스트레이터** | Orchestrator | 컨테이너의 배치·재시작·스케일링을 자동으로 관리하는 제어 레이어 |
 | **이벤트 소스** | Event Source | Lambda를 트리거하는 발생원 — S3·SQS·API Gateway 등 |
-| **ENI** | Elastic Network Interface | VPC 내 네트워크 인터페이스 — Lambda가 VPC 리소스에 접근할 때 생성 |
+| **ENI** | Elastic Network Interface | VPC 내 네트워크 인터페이스 — Lambda는 **함수에 VPC를 설정하는 시점**에 Hyperplane ENI를 미리 만든다(호출 시점이 아니다) |
 | **RDS Proxy** | RDS Proxy | Lambda↔RDS 간 커넥션 풀링 레이어 — 급증하는 연결 수를 흡수 |
 
 ---
@@ -131,7 +133,7 @@ Lambda는 **이벤트가 발생하면 코드를 실행**하는 서버리스 함�
 - 메모리: 128 MB ~ 10,240 MB. 메모리 증가 시 CPU도 비례 증가
 - 저장: `/tmp` 임시 디렉터리(함수 인스턴스 내에서만 유효)
 - 레이어(Layers): 공통 라이브러리·의존성을 공유
-- VPC 접근: ENI를 통해 VPC 내부 리소스(RDS 등) 접근 가능. 대량 동시 연결 시 RDS Proxy 권장
+- VPC 접근: ENI를 통해 VPC 내부 리소스(RDS 등) 접근 가능. **Hyperplane ENI는 함수 생성·VPC 설정 시점에 만들어지고, 준비될 때까지 함수가 `Pending` 상태라 호출 자체가 되지 않는다** — 호출 때 ENI를 만들어 콜드 스타트가 길어지던 것은 2019년 이전 모델이다(근거 15번). 같은 서브넷·보안 그룹 조합을 쓰는 함수들은 이 ENI를 공유한다. 대량 동시 연결 시 RDS Proxy 권장
 - **실행 역할(Execution Role)**: Lambda가 다른 AWS 서비스에 접근하기 위해 수임하는 IAM 역할. 함수 생성 시 반드시 지정
 
 ```
@@ -436,6 +438,9 @@ ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없�
 12. API Gateway 엔드포인트 유형 3종(엣지 최적화=REST 기본·Regional=HTTP·WebSocket 기본·프라이빗) — https://docs.aws.amazon.com/whitepapers/latest/security-overview-amazon-api-gateway/about-amazon-api-gateway.html
 13. EKS Kubernetes 버전 수명주기(표준 14개월 + 연장 12개월 = 26개월·기본값 `EXTENDED`·자동 업그레이드는 컨트롤 플레인만·롤백 시 과금 재개·1.23+ 대상) — https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
 14. App2Container 지원 애플리케이션(Java·ASP.NET·application/process mode·DB 계층 미포함 · **신규 고객 불가**, 2025-11-07 이전 가입자만 · 대안 **AWS Transform**) — https://docs.aws.amazon.com/app2container/latest/UserGuide/supported-applications.html
+15. Lambda VPC 연결 — "**The first time you attach a function to a VPC** using a particular subnet and security group combination, **Lambda creates a Hyperplane ENI**" / "your function **remains in the Pending state and you can't invoke it**" — https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
+
+> 📝 **2026-10-28 정정(1건, 2차 검수 우선순위 2)**: 용어 표의 ENI 행과 §1 VPC 접근 불릿을 **Hyperplane ENI가 함수 생성·VPC 설정 시점에 미리 만들어진다**로 고쳤습니다 — 준비될 때까지 함수는 `Pending` 이라 호출되지 않으므로, 호출 때 ENI를 만들어 콜드 스타트가 길어진다는 것은 2019년 이전 모델입니다(근거 15번). 파생 문항 `saa-t2-2-q2`의 오답 근거가 그 옛 모델을 그대로 쓰고 있어 함께 고쳤습니다.
 
 > 📝 **2026-10-21 보강(갭 `G-2.1-01`·`G-2.1-06`·`G-2.1-07`·`G-2.1-08`·`G-2.1-12`, 배치 B5)**: ① §1에 **Lambda 한도표**와 **비동기 호출의 보관·대상**(큐 6시간·on-success/on-failure 분리·**S3는 on-failure 전용**)을 더했습니다(근거 6·8·9번). ② §2에 **스로틀·통합 타임아웃·엔드포인트 유형 3종**을 더했습니다 — 버스트는 고객이 조정할 수 없고, 29초 증액은 **Regional·프라이빗 REST만** 지원합니다(근거 10·11·12번). ③ §3에 **EKS 버전 지원 구조**(14+12=26개월·기본값 `EXTENDED`)와 **컨테이너 이전 경로**(App2Container의 신규 고객 불가 상태·대안 AWS Transform·시험 범위 불확실)를 더했습니다(근거 13·14번). **EKS 시간당 요율은 리전·시점 의존이라 적지 않았습니다.** 기존 §1~§4의 번호·앵커는 바꾸지 않았습니다.
 
