@@ -285,7 +285,7 @@
       "wrongExplanations": {
         "0": "EC2 기본 상태 체크는 하이퍼바이저·네트워크 레벨입니다. 애플리케이션 프로세스 크래시나 500 오류는 OS가 살아 있어도 발생하므로 EC2 체크만으로는 감지되지 않습니다.",
         "1": "수동 종료는 자동화가 아니라 운영자 개입이 필요합니다. ASG의 자가 복구 목적을 달성하지 못합니다.",
-        "2": "NLB는 L4(TCP/UDP)에서 동작하므로 HTTP 500 오류 같은 L7 응답 코드를 감지하지 않습니다. HTTP 레벨 헬스 체크는 ALB 또는 ELB 헬스 체크 설정을 통해 이루어집니다."
+        "2": "NLB도 대상 그룹 헬스 체크로 TCP·HTTP·HTTPS 중 어느 것이든 쓸 수 있어 HTTP 응답 코드를 확인할 수 있습니다. 그러나 로드 밸런서 종류를 바꾸는 것이 교체를 만들어 주지는 않습니다 — 인스턴스 종료·교체는 ASG 헬스 체크 유형에 ELB를 켜야 일어납니다."
       },
       "sources": [
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
