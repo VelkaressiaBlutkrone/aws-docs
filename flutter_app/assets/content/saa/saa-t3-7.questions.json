@@ -48,7 +48,7 @@
         "3": "MX 레코드는 이메일 서버를 지정하는 레코드로 ALB 연결과 무관합니다."
       },
       "sources": [
-        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+        { "title": "별칭 레코드와 비별칭 레코드 중 선택 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html" }
       ],
       "verified": false
     },
@@ -170,7 +170,7 @@
         "3": "CORS는 브라우저에서 다른 오리진으로의 요청을 제어하는 메커니즘입니다. CORS 설정만으로는 S3 URL 직접 접근(비브라우저 클라이언트 포함)을 막을 수 없습니다."
       },
       "sources": [
-        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+        { "title": "CloudFront OAC로 S3 오리진 접근 제한 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html" }
       ],
       "verified": false
     },
@@ -194,7 +194,7 @@
         "3": "지역 제한(Geo Restriction)은 특정 국가에서의 CloudFront 접근을 허용·차단하는 기능입니다. 개별 사용자 회원 인증 기반 접근 제한이 아닙니다."
       },
       "sources": [
-        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+        { "title": "서명 URL과 서명 쿠키 중 선택 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-choosing-signed-urls-cookies.html" }
       ],
       "verified": false
     },
@@ -218,7 +218,7 @@
         "3": "ACM 인증서 자체는 리전 서비스이며 CloudFront용은 반드시 us-east-1 리전에서 발급한 것만 사용할 수 있습니다. 다른 리전 인증서를 CloudFront에 연결하면 오류가 발생합니다."
       },
       "sources": [
-        { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
+        { "title": "CloudFront SSL/TLS 인증서 요건 — ACM 리전 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html" }
       ],
       "verified": false
     },
@@ -315,7 +315,8 @@
         "3": "Classic Load Balancer는 레거시 유형으로 현재 신규 사용이 권장되지 않습니다. 초저지연·고정 IP·수백만 RPS 요구에는 NLB가 적합합니다."
       },
       "sources": [
-        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+        { "title": "Network Load Balancer란? — L4·수백만 RPS·고정 IP (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" },
+        { "title": "Network Load Balancer 제품 페이지 — 초저지연 (공식)", "url": "https://aws.amazon.com/elasticloadbalancing/network-load-balancer/" }
       ],
       "verified": false
     },
@@ -363,7 +364,7 @@
         "3": "Route 53은 DNS 레벨에서 엔드포인트를 지정하는 역할이며 URL 경로를 파싱하지 않습니다. 마이크로서비스 내부 경로 분기는 로드 밸런서(ALB)가 담당합니다."
       },
       "sources": [
-        { "title": "Amazon Route 53 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html" }
+        { "title": "Application Load Balancer란? — L7 경로 조건 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html" }
       ],
       "verified": false
     }

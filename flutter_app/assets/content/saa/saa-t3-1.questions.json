@@ -194,7 +194,7 @@
         "3": "파일 크기를 줄이기 위해 압축하는 것은 데이터 변형을 초래하며 올바른 업로드 방법이 아닙니다. 멀티파트 업로드를 사용하면 원본 파일을 그대로 업로드할 수 있습니다."
       },
       "sources": [
-        { "title": "S3 성능 최적화 모범 사례 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html" }
+        { "title": "S3 객체 업로드 — 단일 PUT 5 GB 한도 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html" }
       ],
       "verified": false
     },
@@ -290,7 +290,7 @@
         "3": "프리사인 URL은 특정 사용자에게 한시적 접근을 부여할 때 사용합니다. 불특정 다수의 글로벌 사용자에게 정적 웹사이트를 서비스하는 방식으로는 적합하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+        { "title": "CloudFront OAC로 S3 오리진 접근 제한 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html" }
       ],
       "verified": false
     },
@@ -338,7 +338,7 @@
         "3": "대상 버킷만 버전 관리를 활성화하는 것으로는 불충분합니다. 소스 버킷도 반드시 버전 관리를 활성화해야 합니다."
       },
       "sources": [
-        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+        { "title": "S3 복제 요건과 고려사항 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-requirements.html" }
       ],
       "verified": false
     },
@@ -362,7 +362,7 @@
         "3": "CRR에는 '이전 30일' 같은 소급 기간 개념이 없습니다. 기존 객체는 기간에 관계없이 자동 소급 복제되지 않으며 Batch Replication이 필요합니다."
       },
       "sources": [
-        { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" }
+        { "title": "Batch Replication으로 기존 객체 복제 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html" }
       ],
       "verified": false
     }
