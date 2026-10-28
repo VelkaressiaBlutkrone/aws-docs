@@ -24,7 +24,7 @@
         "3": "NAT 게이트웨이는 프라이빗 서브넷의 아웃바운드 인터넷 트래픽용이며, VPC 피어링의 비전이 제약을 우회하는 수단이 아닙니다."
       },
       "sources": [
-        { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" }
+        { "title": "VPC 피어링 연결 동작 방식 — 비전이성 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
       "verified": false
     },
@@ -267,7 +267,7 @@
         "3": "NAT 게이트웨이는 비용이 발생하고 인터넷을 경유합니다. S3·DynamoDB에 대한 인터넷 우회 요건과 비용 최소화 요건 모두 충족하지 못합니다."
       },
       "sources": [
-        { "title": "AWS PrivateLink — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" }
+        { "title": "게이트웨이 엔드포인트 — S3·DynamoDB 전용·무료 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }
       ],
       "verified": false
     },
@@ -291,7 +291,7 @@
         "2": "Direct Connect Gateway는 온프레미스와 VPC 연결 목적이며 VPC 간 CIDR 겹침을 해결하는 기능이 없습니다."
       },
       "sources": [
-        { "title": "AWS PrivateLink — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" }
+        { "title": "VPC 연결 옵션 백서 — PrivateLink와 CIDR 중복 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink.html" }
       ],
       "verified": false
     },
@@ -315,7 +315,7 @@
         "3": "게이트웨이 엔드포인트는 S3·DynamoDB 전용이며 사용자 정의 서비스를 노출하는 데 사용할 수 없습니다."
       },
       "sources": [
-        { "title": "AWS PrivateLink — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html" }
+        { "title": "PrivateLink 엔드포인트 서비스 생성 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html" }
       ],
       "verified": false
     },

@@ -249,7 +249,8 @@
         "3": "CloudFront는 다운로드(읽기) 트래픽 비용 절감에 효과적이지만, EC2에서 S3로의 업로드 경로에는 직접적인 효과가 없습니다."
       },
       "sources": [
-        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+        { "title": "NAT 게이트웨이 요금과 절감 전략 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" },
+        { "title": "게이트웨이 엔드포인트 — 추가 요금 없음 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }
       ],
       "verified": false
     },
@@ -297,7 +298,7 @@
         "3": "S3 Standard-IA는 저장 요금을 낮추지만 검색 요금(GB당)이 발생합니다. 자주 접근하는 이미지를 Standard-IA로 전환하면 검색 요금이 높아져 오히려 비용이 증가할 수 있습니다."
       },
       "sources": [
-        { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
+        { "title": "CloudFront 소개 — 오리진→CloudFront 전송 무료 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
       ],
       "verified": false
     },
@@ -369,7 +370,7 @@
         "3": "Intelligent-Tiering으로 전환해도 미완성 멀티파트 업로드는 자동으로 정리되지 않습니다. 미완성 업로드 정리는 스토리지 클래스와 무관하며 전용 수명주기 액션이 필요합니다."
       },
       "sources": [
-        { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
+        { "title": "미완료 멀티파트 업로드 삭제 수명주기 규칙 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html" }
       ],
       "verified": false
     }

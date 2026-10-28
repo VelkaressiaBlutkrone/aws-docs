@@ -267,7 +267,7 @@
         "3": "감사 계정은 관리 계정의 백업이 아닙니다. 관리 계정 장애 시 대체되는 기능은 없으며, 감사 계정의 목적은 독립적인 보안 모니터링입니다."
       },
       "sources": [
-        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+        { "title": "AWS Control Tower 서비스 통합 계정 (공식)", "url": "https://docs.aws.amazon.com/controltower/latest/userguide/special-accounts.html" }
       ],
       "verified": true
     },
@@ -291,7 +291,7 @@
         "3": "Organizations와 SCP는 글로벌 서비스로 특정 리전에 종속되지 않습니다."
       },
       "sources": [
-        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+        { "title": "AWS Organizations 전체 기능 활성화 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_org_support-all-features.html" }
       ],
       "verified": true
     },
@@ -315,7 +315,7 @@
         "2": "IAM Identity Center는 루트 사용자로 로그인하지 않습니다. 루트 사용자 자격증명을 일상 작업에 사용하는 것은 보안 모범 사례에 어긋납니다."
       },
       "sources": [
-        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+        { "title": "IAM Identity Center 임시 자격증명 발급 (공식)", "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/howtogetcredentials.html" }
       ],
       "verified": true
     },
@@ -339,7 +339,7 @@
         "3": "SCP는 권한 부여가 아니라 상한선 설정입니다. 개발자에게 읽기 권한을 부여하려면 IAM 정책(권한 세트 포함)이 필요하며 SCP만으로는 권한을 줄 수 없습니다."
       },
       "sources": [
-        { "title": "AWS Organizations 소개 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html" }
+        { "title": "IAM Identity Center 권한 세트 (공식)", "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html" }
       ],
       "verified": true
     },

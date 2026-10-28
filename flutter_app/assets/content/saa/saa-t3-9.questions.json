@@ -72,7 +72,7 @@
         "3": "샤드당 쓰기 한계는 5 MB/s가 아닌 1 MB/s입니다. 5배 과대 추정입니다."
       },
       "sources": [
-        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+        { "title": "Kinesis Data Streams 용어와 개념 — 샤드 처리량 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html" }
       ],
       "verified": false
     },
@@ -365,7 +365,7 @@
         "3": "Managed Service for Apache Flink는 스트림 데이터에 분석 로직(Java·Scala·SQL)을 작성하는 서비스로, 영상 스트림 수집·저장 기능이 아닙니다. 영상 전용 수집·저장에는 Video Streams를 사용합니다."
       },
       "sources": [
-        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+        { "title": "Amazon Kinesis Video Streams란? (공식)", "url": "https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/what-is-kinesis-video.html" }
       ],
       "verified": false
     }

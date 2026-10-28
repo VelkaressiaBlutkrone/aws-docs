@@ -17,14 +17,15 @@
         "인터넷에서 AWS로 들어오는 인바운드는 무료이며, AWS에서 인터넷으로 나가는 아웃바운드는 과금된다"
       ],
       "correct": 3,
-      "explanation": "AWS 데이터 전송 비용의 핵심 규칙은 방향입니다. 인터넷 → AWS(인바운드)는 항상 무료이고, AWS → 인터넷(아웃바운드)은 약 $0.09/GB(첫 10TB 기준) 수준으로 과금됩니다. 비용은 항상 아웃바운드·처리·교차 경계에서 발생합니다.",
+      "explanation": "AWS 데이터 전송 비용의 핵심 규칙은 방향입니다. 인터넷 → AWS(인바운드)는 항상 무료이고, AWS → 인터넷(아웃바운드)은 서비스별로, 송신 리전에 따라 다른 요율로 과금됩니다. 비용은 항상 아웃바운드·처리·교차 경계에서 발생합니다.",
       "wrongExplanations": {
         "0": "인바운드 트래픽은 항상 무료입니다. 아웃바운드만 과금 대상입니다.",
         "1": "같은 리전이어도 AZ가 다르면 교차 AZ 전송 요금($0.01/GB)이 발생합니다. 무료 조건은 '같은 AZ + 프라이빗 IP' 두 조건을 동시에 충족해야 합니다.",
         "2": "교차 리전 트래픽은 약 $0.02/GB 수준으로 과금되며, 교차 AZ보다 단가가 높습니다."
       },
       "sources": [
-        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" }
+        { "title": "EC2 온디맨드 요금 — 데이터 전송 (공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" },
+        { "title": "데이터 전송 비용 개요 — 인바운드 무료·아웃바운드 과금 (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" }
       ],
       "verified": false
     },
@@ -48,7 +49,8 @@
         "3": "같은 서브넷이어도 퍼블릭 IP를 사용하면 과금될 수 있습니다."
       },
       "sources": [
-        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" }
+        { "title": "Amazon VPC 요금 — 같은 AZ·사설 IP 는 과금 없음 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" },
+        { "title": "EC2 온디맨드 요금 — 같은 리전 내 데이터 전송 (공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
       ],
       "verified": false
     },
@@ -244,7 +246,8 @@
         "3": "Direct Connect는 온프레미스와의 전용 회선 연결로 VPC 간 통신 방식이 아닙니다."
       },
       "sources": [
-        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" }
+        { "title": "Transit Gateway 요금 — 어태치먼트 시간당·GB당 처리 (공식)", "url": "https://aws.amazon.com/transit-gateway/pricing/" },
+        { "title": "데이터 전송 비용 개요 — VPC 피어링과 TGW (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" }
       ],
       "verified": false
     },
@@ -268,7 +271,8 @@
         "3": "인터넷을 경유하는 VPC 간 통신은 보안·비용·신뢰성 모두 최악입니다."
       },
       "sources": [
-        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" }
+        { "title": "Transit Gateway 요금 — 어태치먼트 시간당·GB당 처리 (공식)", "url": "https://aws.amazon.com/transit-gateway/pricing/" },
+        { "title": "데이터 전송 비용 개요 — TGW 는 수백~수천 VPC 연결 (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" }
       ],
       "verified": false
     },
@@ -365,7 +369,8 @@
         "3": "RDS에 대한 쿼리도 AZ 경계를 넘으면 교차 AZ 전송 요금이 발생합니다."
       },
       "sources": [
-        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" }
+        { "title": "데이터 전송 비용 개요 — 프라이머리 AZ 밖 소비자는 과금 (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" },
+        { "title": "네트워크 비용 절감 — 교차 AZ 단가 (공식)", "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/eks-cost-optimization/network-cost-reduction.html" }
       ],
       "verified": false
     }
