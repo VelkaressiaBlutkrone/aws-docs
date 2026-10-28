@@ -1061,4 +1061,267 @@ void main() {
       expect(text.contains('유휴 리소스'), isTrue);
     });
   });
+
+  // ── 2차 검수 우선순위 2 — 게이트 최단 경로 t2-5 (2026-10-28) ────────────────
+  //
+  // 우선순위 2는 "D1·D2 초안"인데, #258의 t1-1·t1-2 flip으로 **D1은 이미 충족됐다**
+  // (30 ≥ 19). 남은 것은 D2 하나뿐이다 — t2-1(15)만 verified라 17에 2문항 모자라고,
+  // D2 Task를 **하나만 더** flip하면 게이트가 열린다.
+  //
+  // 보고 판정으로 가장 싼 D2 Task가 t2-5(DR)다: pass 13 · fix 1(q12) · resource 1(q15).
+  // 그래서 이 두 건을 먼저 닫는다. ⚠️ **flip 자체는 사람만** 한다 — 이 가드는 "문항이
+  // 고쳐졌다"만 보고, verified 수량·게이트 상태 같은 상태 숫자는 보지 않는다.
+  //
+  // 근거(DR 백서 "Disaster recovery options in the cloud" §AWS Elastic Disaster Recovery):
+  // - "DRS continuously replicates **server-hosted applications and server-hosted
+  //   databases** from any source into AWS using **block-level replication of the
+  //   underlying server**."
+  // - "It can also be used for disaster recovery of AWS hosted workloads if they consist
+  //   only of applications and databases hosted on EC2 (**that is, not RDS**)."
+  // - "uses the Pilot Light strategy, maintaining a copy of data and **'switched-off'
+  //   resources** in an Amazon VPC used as a **staging area**. When a failover event is
+  //   triggered, the staged resources are used to automatically create a **full-capacity
+  //   deployment**."
+  // 그리고 DRS what-is: "The staging area design reduces costs by using **affordable
+  // storage and minimal compute resources**" / "converts your servers to boot and run
+  // natively on AWS".
+  group('§우선순위2 게이트 경로 — saa-t2-5 (DR)', () {
+    test('saa-t2-5-q12: 정답 인덱스는 그대로 2(Pilot Light)', () {
+      expect(question('saa-t2-5', 'saa-t2-5-q12')['correct'], 2);
+    });
+
+    test('saa-t2-5-q12: "DB 데이터만 복제" 단정이 사라지고 서버 블록 레벨 복제가 들어왔다', () {
+      final text = question('saa-t2-5', 'saa-t2-5-q12')['explanation'] as String;
+      expect(
+        text.contains('DB 데이터만 상시 복제'),
+        isFalse,
+        reason: 'DRS는 DB 데이터가 아니라 원본 **서버**를 블록 레벨로 복제한다',
+      );
+      expect(text.contains('블록 레벨'), isTrue);
+      expect(text.contains('꺼진'), isTrue,
+          reason: '스테이징 영역이 유지하는 것은 데이터 사본과 "switched-off" 리소스다');
+    });
+
+    test('saa-t2-5-q12: DR 백서를 출처로 싣는다', () {
+      expect(
+        hasSource(question('saa-t2-5', 'saa-t2-5-q12'),
+            'disaster-recovery-options-in-the-cloud'),
+        isTrue,
+      );
+    });
+
+    test('saa-t2-5-q15: 정답 인덱스는 그대로 1(서버 기반만, RDS 불가)', () {
+      expect(question('saa-t2-5', 'saa-t2-5-q15')['correct'], 1);
+    });
+
+    test('saa-t2-5-q15: "not RDS"를 적는 DR 백서를 출처로 싣는다', () {
+      expect(
+        hasSource(question('saa-t2-5', 'saa-t2-5-q15'),
+            'disaster-recovery-options-in-the-cloud'),
+        isTrue,
+        reason: 'what-is-drs 페이지에는 RDS 제외가 없고, DR 백서가 "(that is, not RDS)"를 적는다',
+      );
+    });
+  });
+
+  // ── 우선순위 2 A조 — 2024~2026 변경 미반영 8건 (2026-10-28) ────────────────
+  //
+  // 전부 **드래프트 Task**(verified:false)라 라이브 노출은 없다. 결함이 세 변경으로
+  // 묶이고, 변경 단위로 한 번에 고치는 것이 보고의 권고다.
+  //
+  // ① **Regional NAT Gateway**(2025-11) — `vpc/nat-gateways-regional.html`
+  //    "A regional NAT gateway **automatically expands across Availability Zones** based on
+  //    your workload presence. Unlike standard NAT gateways (**referred to as zonal NAT
+  //    gateways**), which operate in a single Availability Zone…"
+  //    "**Enhanced security – No public subnets required.**"
+  //    "Regional NAT Gateways **do not offer private connectivity**"(프라이빗 NAT는 zonal)
+  //    → "NAT GW는 퍼블릭 서브넷에 둔다"·"AZ마다 둬야 한다"·"내부적으로 다중 AZ를 지원하지
+  //      않는다"가 **영역형에만** 맞는 말이 됐다. 지문을 zonal로 좁히고 regional을 병기한다.
+  //
+  // ② **ASG가 교체 주체다** — `autoscaling/ec2-auto-scaling-health-checks.html`
+  //    "It can receive notifications from various sources when an instance becomes unhealthy
+  //    and **must be replaced**. These sources include … **Elastic Load Balancing** …"
+  //    "When Amazon EC2 Auto Scaling determines that an InService instance is unhealthy,
+  //    **it replaces it** with a new instance"
+  //    ⚠️ `t2-4-q13` 은 **정답 보기 본문이 틀렸다** — "ALB 헬스 체크가 개별 인스턴스 교체를
+  //      담당"은 거짓이고, ALB는 라우팅에서 빼기만 한다. 정답 인덱스(1)는 그대로 둔다.
+  //    그리고 NLB도 HTTP 헬스 체크를 한다 — `network/target-group-health-checks.html`
+  //    "You can use **any available health check (TCP, HTTP, or HTTPS)**, and any port"
+  //
+  // ③ **Multi-AZ 는 배포 유형이 둘이다** — `AmazonRDS/multi-az-db-clusters-concepts.html`
+  //    "**Reader DB instances act as automatic failover targets and also serve read
+  //    traffic**" / "Multi-AZ DB cluster deployments use **semisynchronous** replication"
+  //    → "RDS Multi-AZ"라고만 쓰면 DB 클러스터 배포에서 거짓이 된다. 배포 유형을 한정한다.
+  //    (§C의 `t3-5-q6`·`t4-3-q7` 과 같은 계열이고, 이 보고에서 가장 자주 걸리는 항목이다.)
+  group('§우선순위2 A조 — 변경 미반영 8건', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q7', correct: 1,
+        forbidden: <String>[],
+        required: ['영역형(zonal)', '리전 NAT 게이트웨이'],
+        why: '퍼블릭 서브넷 요구는 영역형에만 해당한다 — 리전 NAT GW는 "No public subnets '
+            'required"이고 워크로드가 있는 AZ로 자동 확장한다',
+      ),
+      (
+        task: 'saa-t2-4', qid: 'saa-t2-4-q2', correct: 2,
+        forbidden: ['AZ마다 NAT 게이트웨이를 배치해야 합니다'],
+        required: ['리전 NAT 게이트웨이'],
+        why: '영역형은 AZ마다 둬야 하지만, 리전 NAT GW는 하나로 전 AZ를 덮는다',
+      ),
+      (
+        task: 'saa-t2-4', qid: 'saa-t2-4-q4', correct: 1,
+        forbidden: ['RDS Multi-AZ는 엔진에 관계없이 동기 복제'],
+        required: ['Multi-AZ DB 인스턴스 배포', 'Multi-AZ DB 클러스터'],
+        why: 'DB 인스턴스 배포는 동기 복제지만 DB 클러스터 배포는 반동기(semisynchronous)다',
+      ),
+      (
+        task: 'saa-t2-4', qid: 'saa-t2-4-q6', correct: 1,
+        forbidden: ['RDS Multi-AZ의 Standby는 읽기 불가로'],
+        required: ['Multi-AZ DB 인스턴스 배포', 'Multi-AZ DB 클러스터'],
+        why: 'DB 클러스터 배포의 리더는 읽기를 처리한다 — 배포 유형을 한정하지 않으면 거짓이다',
+      ),
+      (
+        task: 'saa-t2-4', qid: 'saa-t2-4-q11', correct: 1,
+        forbidden: ['NAT 게이트웨이는 ALB처럼 내부적으로 다중 AZ를 지원하지 않습니다'],
+        required: ['영역형(zonal)', '리전 NAT 게이트웨이'],
+        why: '리전 NAT GW는 실제로 전 AZ로 자동 확장하므로, 지문을 영역형으로 좁혀야 '
+            '보기 0이 거짓으로 남는다',
+      ),
+      (
+        task: 'saa-t2-4', qid: 'saa-t2-4-q13', correct: 1,
+        forbidden: ['개별 인스턴스 교체를 담당'],
+        required: ['라우팅에서 제외', 'ASG'],
+        why: 'ALB는 비정상 대상을 라우팅에서 빼고, 교체는 ELB 헬스 체크를 신호로 쓰는 ASG가 '
+            '한다 — 정답 보기 본문이 틀렸던 건이다',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q6', correct: 2,
+        forbidden: ['스탠바이 인스턴스는 읽기 트래픽을 분산하지 않습니다'],
+        required: ['Multi-AZ DB 클러스터'],
+        why: '배포 유형을 한정하지 않은 단정이다 — 커넥션 풀링 부재가 이 보기의 핵심 근거다',
+      ),
+      (
+        task: 'saa-t2-3', qid: 'saa-t2-3-q12', correct: 3,
+        forbidden: ['L7 응답 코드를 감지하지 않습니다'],
+        required: ['TCP·HTTP·HTTPS'],
+        why: 'NLB도 TCP·HTTP·HTTPS 헬스 체크를 쓸 수 있다 — 갈림길은 감지 여부가 아니라 '
+            '교체를 ASG가 한다는 점이다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스는 그대로 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+  });
+
+  // ── 우선순위 2 B조(1) — VPC 엔드포인트·Flow Logs 4건 (2026-10-28) ──────────
+  //
+  // 근거:
+  // - `vpc/privatelink/gateway-endpoints.html`
+  //   "While traffic to Amazon S3 or DynamoDB **traverses the internet gateway, it does
+  //   not leave the AWS network**."
+  //   "**Amazon S3 and DynamoDB support both gateway endpoints and interface endpoints.**"
+  //   "Gateway VPC endpoints provide reliable connectivity to Amazon S3 and DynamoDB
+  //   **without requiring an internet gateway or a NAT device**"
+  // - `vpc/userguide/flow-logs.html`
+  //   "Flow log data can be published to the following locations: **Amazon CloudWatch Logs,
+  //   Amazon S3, or Amazon Data Firehose**."
+  //
+  // ⚠️ `t1-3-q10` 은 보고가 적은 것보다 넓게 틀렸다 — "교차 적용 불가"라고 **단정**하고
+  //   있었고, 이는 같은 Task `q9` 의 오답 근거("Interface Endpoint도 인터넷 없이 S3에
+  //   접근 가능")와 **문서 내부에서 모순**이었다. 공식 문서는 S3·DynamoDB가 두 유형을
+  //   **둘 다** 지원한다고 적는다.
+  group('§우선순위2 B조(1) — VPC 엔드포인트·Flow Logs 4건', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q9', correct: 2,
+        forbidden: ['인터넷 퍼블릭 엔드포인트를 경유'],
+        required: ['AWS 네트워크를 벗어나지 않'],
+        why: 'NAT 경유 S3 트래픽은 퍼블릭 서비스 엔드포인트를 쓰지만 AWS 네트워크를 '
+            '벗어나지는 않는다 — 보기를 오답으로 만드는 근거는 비용(NAT 과금)이다',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q10', correct: 1,
+        forbidden: ['교차 적용 불가'],
+        required: ['둘 다 지원'],
+        why: 'S3·DynamoDB는 Gateway와 Interface 엔드포인트를 둘 다 지원한다 — '
+            '구분점은 Gateway가 그 두 서비스에만 쓰인다는 쪽이다',
+      ),
+      (
+        task: 'saa-t1-3', qid: 'saa-t1-3-q13', correct: 3,
+        forbidden: <String>[],
+        required: ['Data Firehose'],
+        why: 'Flow Logs 발행 대상은 CloudWatch Logs·S3·Data Firehose 세 곳이다',
+      ),
+      (
+        task: 'saa-t2-2', qid: 'saa-t2-2-q15', correct: 2,
+        forbidden: ['NAT Gateway·VPC 엔드포인트로 처리'],
+        required: ['외부 인터넷으로 나가려면 NAT'],
+        why: 'VPC 엔드포인트는 인터넷 경로가 아니라 AWS 서비스에 IGW·NAT 없이 닿는 '
+            '비공개 경로다 — 외부 인터넷은 NAT 게이트웨이가 맡는다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스는 그대로 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+  });
 }
