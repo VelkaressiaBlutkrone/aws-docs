@@ -2072,4 +2072,200 @@ void main() {
           reason: 'EFS 수명 주기 문항의 출처가 S3 스토리지 클래스 페이지였다');
     });
   });
+
+  group('§우선순위3 배치5 — D4 saa-t4-4·t4-5 (12건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q6', correct: 3,
+        forbidden: ['Interface Endpoint를 쓸 이유가 없습니다'],
+        required: ['온프레미스에서는 접근할 수 없고', '다른 AWS 리전'],
+        why: '공식 비교 표는 Gateway Endpoint 를 "온프레미스에서 접근 불가 · 다른 '
+            'AWS 리전에서 접근 불가 · 과금 없음" 으로, Interface Endpoint 를 그 반대로 '
+            '싣는다 — 같은 리전 VPC 안에서만 Gateway 가 유리하고, 온프레미스·타 '
+            '리전에서는 Interface Endpoint 가 필요하다',
+      ),
+      (
+        task: 'saa-t4-4', qid: 'saa-t4-4-q12', correct: 2,
+        forbidden: ['GB당 총비용 비교로 옳은 것은'],
+        required: ['송신 측 1 GB 기준', '양방향'],
+        why: '공식 요금 페이지는 피어링의 AZ 간 전송을 "In·Out 양방향 각각 \$0.01/GB" '
+            '로 적는다 — 1 GB 를 주고받으면 합계는 \$0.02 다. 따라서 "GB당 총비용" '
+            '으로 물으면 한 방향만 센 \$0.01 이 답이 될 수 없어 지문을 송신 측 기준으로 '
+            '한정해야 한다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q2', correct: 1,
+        forbidden: ['IAM 정책 연결, SNS 알림, SSM Automation 실행의 세 가지 조치'],
+        required: ['IAM 정책 적용', 'SCP(서비스 제어 정책) 적용', 'EC2·RDS 인스턴스를 대상으로'],
+        why: '공식 문서가 꼽는 budget action 은 IAM 정책 적용, 서비스 제어 정책(SCP) '
+            '적용, 특정 EC2·RDS 인스턴스를 대상으로 지정하는 것이다 — SNS 알림은 '
+            'action 이 아니라 budget notification 이다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q3', correct: 2,
+        forbidden: ['CUR(S3 CSV)', 'S3 CSV로 전달합니다'],
+        required: ['Apache Parquet'],
+        why: '공식 문서는 "AWS CUR 은 Athena 용으로 Apache Parquet 압축 형식만 '
+            '지원한다" 고 적는다 — CSV 로는 Athena 통합이 되지 않는다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q5', correct: 2,
+        forbidden: [],
+        required: ['관리 계정 사용자가 backfill을 요청하면'],
+        why: 'q5 의 M2 결함은 본문이 아니라 **출처 제목**의 "(게이트 검수 반영: '
+            '2026-06-12)" 라벨이었다(이 그룹의 집계형 테스트가 고정한다). 본문도 '
+            'backfill 을 누가 요청하는지 적지 않아, 공식 문서대로 관리 계정 사용자로 '
+            '명시했다 — q13 과 같은 사실이다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q12', correct: 3,
+        forbidden: [],
+        required: ['태그 정책(Tag Policy)'],
+        why: 'q12 의 M2 결함도 **출처 제목**의 "(게이트 검수 반영: 2026-06-12)" '
+            '라벨이었다(집계형 테스트가 고정한다). 본문 사실은 이미 옳아 정답 '
+            '불변만 고정한다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q7', correct: 3,
+        forbidden: ['Compute Optimizer가 유휴 EBS·로드밸런서 탐지를 담당하지 않습니다'],
+        required: ['EBS 볼륨을 포함하지만 로드밸런서는 대상이 아니'],
+        why: 'Compute Optimizer 의 유휴 리소스 권장 대상에는 EBS 볼륨이 들어 있다'
+            '(32일 연결 상태 분석) — 다만 로드밸런서는 대상 목록에 없고, 유휴 '
+            '로드밸런서는 Trusted Advisor 가 잡는다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q8', correct: 1,
+        forbidden: ['Practice cloud financial management'],
+        required: ['Implement cloud financial management'],
+        why: '공식 설계 원칙 이름은 Implement cloud financial management 다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q9', correct: 0,
+        forbidden: ['S3 CSV로 저장하고'],
+        required: ['Apache Parquet'],
+        why: 'q3 과 같은 오류 — Athena 통합은 Parquet 형식만 지원한다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q13', correct: 2,
+        forbidden: [
+          '이 문서에서 언급되지 않습니다. backfill은 활성화된 태그 키에 대해 요청할 수 있습니다',
+        ],
+        required: ['관리 계정 사용자가 요청'],
+        why: '공식 문서 첫 문장이 "관리 계정 사용자가 최대 12개월치 backfill 을 요청할 '
+            '수 있다" 다 — "이 문서에서 언급되지 않는다" 는 서술이 바로 그 문서를 '
+            '출처로 달고 있었다. 보기 3 이 오답인 이유는 관리 계정 제한이 아니라 '
+            '"불가능하다" 는 결론이다',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q14', correct: 0,
+        forbidden: ['5개 기둥'],
+        required: ['6개 기둥', '지속 가능성'],
+        why: 'Well-Architected 프레임워크는 여섯 기둥이다 — 운영 우수성, 보안, 안정성, '
+            '성능 효율성, 비용 최적화, 지속 가능성',
+      ),
+      (
+        task: 'saa-t4-5', qid: 'saa-t4-5-q15', correct: 1,
+        forbidden: ['이 문서에서 언급되지 않습니다. 문서에 따르면'],
+        required: ['무료 호출 한도가 따로 없습니다'],
+        why: '"이 문서에서 언급되지 않는다" 는 작성자의 검증 상태 서술이다 — 학습자에게는 '
+            '사실 서술(무료 한도가 없고 요청당 과금)만 보여야 한다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (
+        task: 'saa-t4-4',
+        qid: 'saa-t4-4-q6',
+        fragment: 'privatelink-interface-endpoints'
+      ),
+      (
+        task: 'saa-t4-4',
+        qid: 'saa-t4-4-q12',
+        fragment: 'transit-gateway/pricing'
+      ),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q2', fragment: 'budgets-controls'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q3', fragment: 'cur-query-athena'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q7', fragment: 'view-idle-recommendations'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q9', fragment: 'cur-query-athena'),
+      (task: 'saa-t4-5', qid: 'saa-t4-5-q14', fragment: 'cost-optimization-pillar'),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+
+    // M2 집계형 — 출처 제목과 본문 어디에도 작성 과정 메모가 남지 않았다.
+    // `allText` 는 sources 를 보지 않으므로 여기서 따로 검사한다: t4-5 의 M2 4건
+    // 중 q5·q12 는 금지 문구가 **출처 제목**에 있었다.
+    test('saa-t4-5 문항의 출처 제목에 "게이트 검수 반영" 라벨이 남지 않았다', () {
+      final map = json.decode(
+              File('assets/content/saa/saa-t4-5.questions.json')
+                  .readAsStringSync())
+          as Map<String, dynamic>;
+      final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+      for (final q in questions) {
+        for (final s in (q['sources'] as List).cast<Map<String, dynamic>>()) {
+          expect((s['title'] as String).contains('게이트 검수 반영'), isFalse,
+              reason: '${q['id']} 의 출처 제목에 작성 과정 메모가 남아 있다: '
+                  '"${s['title']}"');
+        }
+      }
+    });
+
+    test('saa-t4-5 문항 본문에 "이 문서에서 언급되지 않" 류 검증 상태 서술이 없다', () {
+      final map = json.decode(
+              File('assets/content/saa/saa-t4-5.questions.json')
+                  .readAsStringSync())
+          as Map<String, dynamic>;
+      final questions = (map['questions'] as List).cast<Map<String, dynamic>>();
+      for (final q in questions) {
+        final text = <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+        expect(text.contains('이 문서에서 언급되지 않'), isFalse,
+            reason: '${q['id']} 에 작성자의 검증 상태 서술이 남아 있다 — 학습자에게는 '
+                '사실 서술만 보여야 한다');
+      }
+    });
+  });
 }

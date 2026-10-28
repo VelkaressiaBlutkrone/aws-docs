@@ -139,15 +139,16 @@
         "Gateway Endpoint는 무료이고, Interface Endpoint(PrivateLink)는 $0.01/GB 데이터 처리 요금과 시간당 ENI 요금이 발생한다"
       ],
       "correct": 3,
-      "explanation": "Gateway Endpoint(S3, DynamoDB만 지원)는 무료입니다. Interface Endpoint(PrivateLink, 200개 이상 서비스 지원)는 $0.01/GB 데이터 처리 요금과 시간당 ENI 요금이 발생합니다. S3·DynamoDB는 Gateway Endpoint로 무료로 커버 가능하므로 Interface Endpoint를 쓸 이유가 없습니다.",
+      "explanation": "Gateway Endpoint(S3, DynamoDB만 지원)는 무료입니다. Interface Endpoint(PrivateLink, 200개 이상 서비스 지원)는 $0.01/GB 데이터 처리 요금과 시간당 ENI 요금이 발생합니다. 같은 리전의 VPC 안에서 S3·DynamoDB에 접근하는 경우라면 Gateway Endpoint로 무료로 커버되므로 비용 면에서 유리합니다. 다만 공식 비교 표에 따르면 Gateway Endpoint는 온프레미스에서는 접근할 수 없고 다른 AWS 리전에서도 접근할 수 없습니다 — 온프레미스(VPN·Direct Connect)나 다른 리전·피어링된 VPC에서 접근해야 하면 Interface Endpoint가 필요합니다.",
       "wrongExplanations": {
         "0": "Gateway Endpoint는 요금이 없습니다. 데이터 처리 요금은 Interface Endpoint에만 해당합니다.",
-        "1": "Interface Endpoint는 지원 서비스 범위가 넓지만 유료입니다. S3·DynamoDB처럼 Gateway Endpoint로 커버 가능한 경우라면 Gateway가 비용 면에서 유리합니다.",
+        "1": "Interface Endpoint는 지원 서비스 범위가 넓지만 유료이므로 '항상 저렴하다'는 서술이 틀렸습니다. 같은 리전 VPC 안에서 S3·DynamoDB를 쓰는 경우라면 Gateway가 비용 면에서 유리하고, 온프레미스나 다른 리전에서 접근해야 할 때만 Interface Endpoint가 필요합니다.",
         "2": "Gateway Endpoint는 무료이며 월정액 요금이 없습니다. Interface Endpoint가 유료입니다."
       },
       "sources": [
         { "title": "VPC 게이트웨이 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" },
-        { "title": "AWS PrivateLink 요금 (공식)", "url": "https://aws.amazon.com/privatelink/pricing/" }
+        { "title": "AWS PrivateLink 요금 (공식)", "url": "https://aws.amazon.com/privatelink/pricing/" },
+        { "title": "S3용 AWS PrivateLink — 엔드포인트 유형 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html" }
       ],
       "verified": false
     },
@@ -276,7 +277,7 @@
       "examGuideTaskId": "saa-t4-4",
       "skill": "VPC 피어링 vs Transit Gateway 데이터 처리 요금 차이",
       "difficulty": "foundational",
-      "stem": "VPC-A에서 VPC-B로 교차 AZ 트래픽을 보낼 때, VPC 피어링과 Transit Gateway의 GB당 총비용 비교로 옳은 것은?",
+      "stem": "VPC-A에서 VPC-B로 교차 AZ 트래픽을 보낼 때, 송신 측 1 GB 기준으로 VPC 피어링과 Transit Gateway의 GB당 비용을 비교한 것으로 옳은 것은?",
       "options": [
         "VPC 피어링 $0.03/GB, Transit Gateway $0.01/GB로 Transit Gateway가 저렴하다",
         "둘 다 $0.02/GB의 동일한 비용이다",
@@ -284,14 +285,15 @@
         "VPC 피어링 $0.02/GB, Transit Gateway $0.01/GB로 Transit Gateway가 저렴하다"
       ],
       "correct": 2,
-      "explanation": "교차 AZ 구간에서 VPC 피어링은 교차 AZ 전송 요금 $0.01/GB만 발생합니다(데이터 처리 요금 없음). Transit Gateway는 교차 AZ 전송 $0.01/GB에 Transit Gateway 데이터 처리 요금 $0.02/GB가 추가되어 $0.03/GB입니다. 동일 조건에서 피어링이 항상 저렴하고, TGW는 대규모 관리 편의성에 대한 비용입니다.",
+      "explanation": "송신 측 1 GB 기준으로 보면, 교차 AZ 구간의 VPC 피어링은 교차 AZ 전송 요금 $0.01/GB만 발생합니다(데이터 처리 요금 없음). Transit Gateway는 교차 AZ 전송 $0.01/GB에 Transit Gateway 데이터 처리 요금 $0.02/GB가 추가되어 $0.03/GB입니다. 주의할 점은 교차 AZ 전송 요금이 공식 요금 페이지 기준으로 In·Out 양방향에 각각 붙는다는 것입니다 — 1 GB를 주고받으면 전송 요금만 $0.02가 되므로, 단가를 비교할 때는 어느 방향을 세는지 기준을 고정해야 합니다. 동일 조건에서 피어링이 저렴하고, TGW의 추가 비용은 대규모 관리 편의성에 대한 값입니다.",
       "wrongExplanations": {
         "0": "피어링과 Transit Gateway의 비용 관계가 반대입니다. 피어링이 $0.01/GB로 더 저렴합니다.",
         "1": "둘의 비용은 다릅니다. 피어링 $0.01/GB, Transit Gateway $0.03/GB입니다.",
         "3": "피어링과 Transit Gateway의 단가가 반대로 기술됐습니다. 피어링이 $0.01/GB로 저렴하고 Transit Gateway가 $0.03/GB입니다."
       },
       "sources": [
-        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" }
+        { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" },
+        { "title": "AWS Transit Gateway 요금 (공식)", "url": "https://aws.amazon.com/transit-gateway/pricing/" }
       ],
       "verified": false
     },
