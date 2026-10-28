@@ -708,8 +708,8 @@ void main() {
 
   // ── 2차 검수 우선순위 1 §C — 해설·오답 정정 16건 (2026-10-27) ──────────────
   //
-  // 보고(`docs/saa-review/2026-10-27-saa-c03-question-review.md` §C)가 `fix`로 분류한
-  // 16문항이다. 전부 `verified:true`로 라이브 노출 중이고, **정답 인덱스는 한 건도
+  // 2026-10-27 외부 검수 보고(전문은 레포 밖 공유 노트에 보관한다 — 사용자 결정)의 §C가
+  // `fix`로 분류한 16문항이다. 전부 `verified:true`로 라이브 노출 중이고, **정답 인덱스는 한 건도
   // 바뀌지 않았다** — 결함이 모두 해설·오답 근거·지문 본문에 있었다.
   //
   // 표 하나로 "옛 문구 0건 + 공식 사실 있음"을 쌍으로 고정한다. 문항마다 테스트가
@@ -864,5 +864,201 @@ void main() {
         }
       });
     }
+  });
+
+  // ── 2차 검수 우선순위 1 §D — 공개 Task 출처 교체 (2026-10-28) ───────────────
+  //
+  // 2026-10-27 외부 검수 보고(전문은 레포 밖 공유 노트에 보관한다 — 사용자 결정)의 §D가
+  // `resource`로 분류한 공개 Task 14문항 + 깨진 링크를 쓰던 `t4-3-q6`·`q7`(§C 소속이라
+  // §D 표에는 없었다)까지 **16문항**이다. 사실은 맞는데 **인용한 페이지가 그 사실을 담고 있지
+  // 않던** 경우이고, 대부분 서비스 "소개(welcome·what-is)" 페이지였다.
+  //
+  // ⚠️ `rds-reserved-instances.html` 은 **깨진 링크다** — 실측하면
+  // `UserGuide/Welcome.html` 로 리다이렉트된다(2026-10-28 확인). t4-3의 6문항
+  // (q5·q6·q7·q11·q12·q14)이 이것을 쓰고 있었다. 아래 집계 단정이 0건으로 고정한다.
+  //
+  // ⚠️ **보고 제안보다 정확한 페이지를 쓴 3건**이 있다:
+  // - `t4-3-q5` 는 보고가 RDS 예약 인스턴스 페이지를 제안했지만, 이 문항의 사실은
+  //   "Compute SP는 EC2·Fargate·Lambda에 적용되고 RDS에는 아니다 + Database Savings
+  //   Plans가 따로 있다"다. 그 둘을 한 페이지에 적는 **Savings Plans types**를 썼다.
+  // - `t4-3-q11`·`q12` 는 보고가 요금 페이지와 "RDS 스냅샷 삭제 문서(URL 미특정)"를
+  //   가리켰는데, **Introduction to backups**가 "Manual snapshots are not deleted when
+  //   an instance is deleted" 와 "free amount of backup storage equal to 100 percent of
+  //   the total provisioned database storage" 를 모두 담고 있어 그 한 페이지로 닫았다.
+  // 보고가 "교체 후보 미확인"으로 남긴 `t4-2-q13`(Lambda 요금)과 "URL 미특정"으로 남긴
+  // `t4-3-q12`도 이렇게 해결했다.
+  //
+  // ⚠️ **교체 페이지에 없는 수치는 지웠다**(보고 §E "확인 필요"가 가리킨 2건):
+  // - `t3-5-q7` 의 "RPO 약 1초·RTO 약 1분 충족" — 공식 Aurora Global Database 문서는
+  //   "latency typically under a second"만 적고 RPO·RTO를 수치로 제시하지 않는다
+  //   (`rds.global_db_rpo` 는 20초~68년 범위의 **설정값**이다). 복제 지연만 남겼다.
+  // - `t4-3-q14` 의 "RDS 인스턴스의 CPU·메모리 사용률을 분석" — what-is 페이지는
+  //   "configuration and utilization metrics"와 지원 리소스에 RDS·Aurora가 든다는 것까지
+  //   적고, RDS의 메모리 분석을 따로 명시하지 않는다. 공식 문구로 바꿨다.
+  group('§D 공개 Task 출처 교체 16건', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t2-1', qid: 'saa-t2-1-q5',
+        add: 'sqs-short-and-long-polling', drop: 'SQSDeveloperGuide/welcome',
+        why: '"The maximum long polling wait time is 20 seconds" 와 short polling이 '
+            '기본값이라는 서술이 이 페이지에 있다',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q1',
+        add: 'efs/latest/ug/whatisefs', drop: 'what-is-ebs',
+        why: '정답이 파일 스토리지인데 블록 스토리지 소개 페이지를 인용하고 있었다. '
+            'EFS는 NFS 프로토콜과 "massively parallel access from compute instances"를 적는다',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q5',
+        add: 'ebs-volumes-multi', drop: 'what-is-ebs',
+        why: '"Multi-Attach enables you to attach a single Provisioned IOPS SSD (io1 or '
+            'io2) volume to multiple instances that are in the same Availability Zone" + '
+            'Nitro 16대 + "Your applications must provide write ordering"',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q6',
+        add: 'instance-store-lifetime', drop: 'what-is-ebs',
+        why: '"The data on an instance store volume persists even if the instance is '
+            'rebooted. However, the data does not persist if the instance is stopped, '
+            'hibernated, or terminated."',
+      ),
+      (
+        task: 'saa-t3-2', qid: 'saa-t3-2-q13',
+        add: 'what-is-fsx-ontap', drop: 'WindowsGuide/what-is',
+        why: '"Multi-protocol access to data using the Network File System (NFS), Server '
+            'Message Block (SMB), Internet Small Computer Systems Interface (iSCSI)" + '
+            'Linux·Windows·macOS + "without the need to change your application code"',
+      ),
+      (
+        task: 'saa-t3-5', qid: 'saa-t3-5-q7',
+        add: 'aurora-global-database', drop: 'CHAP_AuroraOverview',
+        why: '"Aurora replicates data to the secondary AWS Regions using dedicated '
+            'infrastructure, with latency typically under a second" + 최대 10개 보조 리전',
+      ),
+      (
+        task: 'saa-t3-5', qid: 'saa-t3-5-q8',
+        add: 'aurora-serverless-v2.html', drop: 'CHAP_AuroraOverview',
+        why: '"on-demand, autoscaling configuration" + "You\'re charged only for the '
+            'resources that your DB clusters consume" + 변동·예측 불가 워크로드 용례',
+      ),
+      (
+        task: 'saa-t3-5', qid: 'saa-t3-5-q14',
+        add: 'USER_PIT', drop: 'UserGuide/Welcome',
+        why: '"You can restore to any point in time within your backup retention period." '
+            '보존 기간 0~35일은 ModifyDBInstance의 "Must be a value from 0 to 35"다',
+      ),
+      (
+        task: 'saa-t4-2', qid: 'saa-t4-2-q13',
+        add: 'lambda/pricing', drop: 'what-is-savings-plans',
+        why: '"charges you only for what you use" + "priced per request and execution '
+            'duration" + "price per 1 ms". 보고가 "교체 후보 미확인"으로 남긴 건이다',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q5',
+        add: 'savingsplans/latest/userguide/plan-types', drop: 'rds-reserved-instances',
+        why: '"Compute Savings Plans ... also apply to your Fargate and Lambda usage" + '
+            '"Database Savings Plans ... on Aurora, RDS, DynamoDB, ElastiCache, ..."',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q6',
+        add: 'USER_PIOPS.StorageTypes', drop: 'rds-reserved-instances',
+        why: '"Later, you can increase the amount or change the type of storage" + 목차에 '
+            '"Managing capacity automatically with Amazon RDS storage autoscaling"',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q7',
+        add: 'ElastiCache/latest/dg/Strategies', drop: 'rds-reserved-instances',
+        why: '"ElastiCache is an in-memory key-value store that sits between your '
+            'application and the data store (database)" — 캐시 적중 시 DB 쿼리가 없다',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q11',
+        add: 'USER_WorkingWithAutomatedBackups', drop: 'rds-reserved-instances',
+        why: '"RDS saves the automated backups ... according to the backup retention '
+            'period" + "free amount of backup storage equal to 100 percent of the total '
+            'provisioned database storage in your AWS account for each Region"',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q12',
+        add: 'USER_WorkingWithAutomatedBackups', drop: 'rds-reserved-instances',
+        why: '"Manual snapshots are not deleted when an instance is deleted. You can have '
+            'up to 100 manual snapshots per Region."',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q13',
+        add: 'AmazonTimestreamForLiveAnalytics-availability-change',
+        drop: 'aws-overview/database',
+        why: '"close new customer access to Amazon Timestream for LiveAnalytics, effective '
+            '6/20/25" + "evaluate Amazon Timestream for InfluxDB as an alternative"',
+      ),
+      (
+        task: 'saa-t4-3', qid: 'saa-t4-3-q14',
+        add: 'what-is-compute-optimizer', drop: 'rds-reserved-instances',
+        why: '지원 리소스에 "Amazon Aurora and Amazon Relational Database Service (Amazon '
+            'RDS) databases" 가 들어 있고 "rightsizing recommendations"를 제시한다',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('SAA 문항 전수에서 깨진 링크 rds-reserved-instances 가 0건', () {
+      final files = Directory('assets/content/saa')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
+      final hits = <String>[];
+      for (final file in files) {
+        final data =
+            json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+        final questions =
+            (data['questions'] as List?)?.whereType<Map<String, dynamic>>() ??
+                const <Map<String, dynamic>>[];
+        for (final q in questions) {
+          final urls = (q['sources'] as List?)
+                  ?.whereType<Map<String, dynamic>>()
+                  .map((s) => s['url'] as String? ?? '') ??
+              const <String>[];
+          if (urls.any((u) => u.contains('rds-reserved-instances'))) {
+            hits.add(q['id'] as String? ?? '(id 없음)');
+          }
+        }
+      }
+      expect(hits, isEmpty,
+          reason: 'rds-reserved-instances.html 은 UserGuide/Welcome.html 로 '
+              '리다이렉트되는 깨진 링크다(2026-10-28 실측)');
+    });
+
+    test('saa-t3-5-q7: 공식 문서에 없는 RPO·RTO 수치 단정이 사라졌다', () {
+      final text = question('saa-t3-5', 'saa-t3-5-q7')['explanation'] as String;
+      expect(
+        text.contains('RPO 약 1초·RTO 약 1분의 재해 복구 목표를 충족'),
+        isFalse,
+        reason: '공식 Aurora Global Database 문서는 RPO·RTO를 수치로 제시하지 않는다',
+      );
+      expect(text.contains('통상 1초 미만'), isTrue,
+          reason: '문서가 적는 것은 복제 지연("latency typically under a second")이다');
+    });
+
+    test('saa-t4-3-q14: Compute Optimizer 서술이 공식 문구로 바뀌었다', () {
+      final text = question('saa-t4-3', 'saa-t4-3-q14')['explanation'] as String;
+      expect(
+        text.contains('RDS 인스턴스의 CPU·메모리 사용률을 분석해'),
+        isFalse,
+        reason: 'what-is 페이지는 RDS의 메모리 분석을 따로 명시하지 않는다',
+      );
+      expect(text.contains('구성과 사용률 지표'), isTrue);
+      expect(text.contains('유휴 리소스'), isTrue);
+    });
   });
 }

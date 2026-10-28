@@ -120,7 +120,7 @@
         "3": "컴퓨팅 계열 Savings Plans와 RDS RI는 별개의 할인 체계로 할인율과 적용 대상이 모두 다릅니다. RDS에 적용되는 Database Savings Plans도 약정 단위·할인율이 RDS RI와 다릅니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "Savings Plans 유형 — Compute 는 EC2·Fargate·Lambda, Database 는 Aurora·RDS 등 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html" }
       ],
       "verified": true
     },
@@ -144,7 +144,7 @@
         "3": "스토리지 자동 확장 중 DB 인스턴스가 재부팅되지 않습니다. 운영 중인 DB에 영향 없이 스토리지가 확장됩니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "RDS DB 인스턴스 스토리지 — 증설과 스토리지 오토스케일링 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html" }
       ],
       "verified": true
     },
@@ -168,7 +168,7 @@
         "3": "백업 보존 기간 변경은 백업 스토리지 비용에 영향을 주지만 CPU 읽기 부하 문제와는 무관합니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "ElastiCache 캐싱 전략 — 앱과 DB 사이의 인메모리 저장소 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
       "verified": true
     },
@@ -264,7 +264,7 @@
         "2": "보존 기간을 0으로 설정하면 자동 백업만 비활성화됩니다. 수동 스냅샷은 인스턴스와 독립된 수명을 가지므로 자동 삭제되지 않습니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "RDS 백업 소개 — 보존 기간·리전 합계·무료 허용량 100% (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html" }
       ],
       "verified": true
     },
@@ -288,7 +288,7 @@
         "3": "수동 스냅샷은 S3로 이동되지 않습니다. 원래 리전의 스냅샷 저장소에 남아 있으며 별도 삭제가 필요합니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "RDS 백업 소개 — 수동 스냅샷은 인스턴스 삭제 시 지워지지 않는다 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html" }
       ],
       "verified": true
     },
@@ -312,7 +312,7 @@
         "3": "DynamoDB는 NoSQL key-value 서비스로 시계열 집계 쿼리를 위한 최적화가 되어 있지 않습니다. 시계열 특화 기능은 Timestream for InfluxDB가 제공합니다."
       },
       "sources": [
-        { "title": "AWS 데이터베이스 서비스 개요 (공식 화이트페이퍼)", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html" }
+        { "title": "Timestream for LiveAnalytics 가용성 변경 — 2025-06-20 신규 고객 차단 (공식)", "url": "https://docs.aws.amazon.com/timestream/latest/developerguide/AmazonTimestreamForLiveAnalytics-availability-change.html" }
       ],
       "verified": true
     },
@@ -329,14 +329,14 @@
         "AWS Cost Explorer 사용량 리포트"
       ],
       "correct": 1,
-      "explanation": "AWS Compute Optimizer는 RDS 인스턴스의 CPU·메모리 사용률을 분석해 적정 인스턴스 크기를 추천합니다. 과잉 프로비저닝된 인스턴스를 식별하고 rightsizing 권고를 제공해 비용 절감에 활용할 수 있습니다.",
+      "explanation": "AWS Compute Optimizer는 리소스의 구성과 사용률 지표를 분석해 적정 크기(rightsizing) 권장 사항을 제시하고 유휴 리소스를 식별합니다. 지원 리소스에 Amazon Aurora와 Amazon RDS 데이터베이스가 포함되므로, 과잉 프로비저닝된 RDS 인스턴스를 찾아 비용 절감에 활용할 수 있습니다.",
       "wrongExplanations": {
         "0": "Amazon Inspector는 보안 취약점·패치 누락을 탐지하는 보안 서비스입니다. 인스턴스 rightsizing 추천 기능이 없습니다.",
         "2": "CloudWatch Logs Insights는 로그 데이터를 분석하는 쿼리 도구입니다. 인스턴스 사용률 기반 rightsizing 추천을 제공하지 않습니다.",
         "3": "AWS Cost Explorer는 비용 추이와 예측을 보여주지만, CPU·메모리 사용률 분석과 정밀한 rightsizing 추천은 Compute Optimizer가 전담합니다."
       },
       "sources": [
-        { "title": "Amazon RDS 예약 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-reserved-instances.html" }
+        { "title": "AWS Compute Optimizer — 지원 리소스에 RDS·Aurora 포함 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html" }
       ],
       "verified": true
     },
