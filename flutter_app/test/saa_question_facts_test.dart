@@ -1873,4 +1873,203 @@ void main() {
       }
     });
   });
+
+  group('§우선순위3 배치4 — D4 saa-t4-1 (8건)', () {
+    final fixes = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> forbidden,
+      List<String> required,
+      String why,
+    })>[
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q1', correct: 0,
+        forbidden: [
+          '세 가지 축으로 가장 올바르게 묶인 것은',
+          'S3 비용은 크게 세 축으로 구성됩니다',
+          '스토리지·요청·검색 세 축이 기준입니다',
+          'S3 기본 비용 구조의 세 축이 아닙니다',
+        ],
+        required: [
+          '이 셋으로 끝나는 것은 아닙니다',
+          '데이터 전송, 관리 및 인사이트, 복제, 변환 및 쿼리',
+        ],
+        why: '공식 S3 요금 페이지는 요금 항목을 스토리지 및 요청, 데이터 전송, 관리 및 '
+            '인사이트, 복제, 변환 및 쿼리 등 여러 탭으로 나눈다 — "세 축" 은 실제 '
+            '요금 구조가 아니라 요약이므로 단정해서는 안 된다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q3', correct: 2,
+        forbidden: ['검색 요금이 GB당 과금되며 복원에 수분~12시간이 걸립니다'],
+        required: [
+          '대량(Bulk) 복원은 이 클래스에서 무료',
+          '신속 1~5분, 표준 3~5시간, 대량 5~12시간',
+        ],
+        why: '공식 문서는 Bulk 복원이 S3 Glacier Flexible Retrieval·'
+            'S3 Intelligent-Tiering 객체에 무료라고 적는다 — "검색 요금이 GB당 '
+            '과금된다" 는 단정이 과하다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q4', correct: 3,
+        forbidden: [
+          '최소 보관 기간(30일)이 충족되지 않아 잔여 15일분 요금이 청구됩니다',
+          'Standard-IA 최소 보관 기간 30일과 일치',
+          '복원에 최대 12시간이 걸립니다',
+        ],
+        required: ['접근 패턴 불일치', '대량(Bulk) 복원은 48시간 이내', '335일이라 충족'],
+        why: '최소 보관 기간은 그 클래스에 머문 기간으로 세므로 Day 15 → Day 45 는 '
+            'Standard-IA 에 정확히 30일 머물러 요금이 생기지 않는다. 2026-07-16 부터 '
+            '전환 대기 30일 제약도 없어졌다 — 보기 0 이 탈락하는 이유는 접근 패턴 '
+            '불일치다. Deep Archive 복원은 표준 12시간·대량 48시간 이내다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q5', correct: 0,
+        forbidden: [
+          '20일 만에 Standard-IA로 전환하는 수명주기 정책',
+          '20일 시점에 전환해도 30일분 요금이 청구된다',
+          '20일 시점에 전환하면 잔여 10일분에 해당하는 Standard-IA 저장 요금이 청구됩니다',
+          '30일 이전에 Standard-IA로 전환하면 절감이 아니라 오히려 비용이 늘어날 수 있으므로',
+        ],
+        required: [
+          '그 스토리지 클래스에 머문 기간',
+          '2026년 7월 16일',
+          '생성 직후(0일)에도',
+        ],
+        why: '최소 보관 기간은 객체 생성 시점이 아니라 그 클래스에 머문 기간으로 센다. '
+            '게다가 2026-07-16 부터 Standard-IA·One Zone-IA 전환은 생성 직후(0일)에도 '
+            '가능해져 "Standard 에 30일" 제약이 없어졌다 — 따라서 20일 전환 자체는 '
+            '문제가 아니고, 맞는 보기가 없는 상태였다. 요금이 붙는 경우는 전환 후 '
+            '30일을 채우지 않고 만료·재전환하는 것이다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q6', correct: 2,
+        forbidden: [
+          '복원에 최대 12시간이 걸려 즉시 접근 요건을 충족하지 못합니다',
+          '복원에 수분~12시간이 필요합니다',
+          '복원에 수분~12시간이 소요됩니다',
+          '최소 보관 기간 180일, 복원에 최대 12시간이 걸려',
+        ],
+        required: ['대량(Bulk) 48시간 이내', '신속 1~5분, 표준 3~5시간, 대량 5~12시간'],
+        why: 'Deep Archive 복원은 표준 12시간 이내·대량 48시간 이내이고 신속 복원이 '
+            '아예 없다. Flexible Retrieval 은 신속 1~5분·표준 3~5시간·대량 5~12시간이라 '
+            '"수분~12시간" 은 구간을 뭉갠 표현이다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q8', correct: 2,
+        forbidden: ['루트 볼륨은 기본 true, 추가 볼륨은 기본 false'],
+        required: [
+          '볼륨 종류·연결 시점·연결 수단에 따라 다릅니다',
+          '시작 시 콘솔이면 보존·CLI면 삭제',
+        ],
+        why: '공식 표는 기본값을 네 축으로 나눈다 — 시작 시 연결한 루트 볼륨은 삭제, '
+            '시작 후 연결한 루트 볼륨은 보존, 데이터 볼륨은 시작 시 콘솔이면 보존·'
+            'CLI면 삭제, 시작 후 연결은 보존이다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q9', correct: 0,
+        forbidden: [
+          'Cost Explorer로 미연결 볼륨을 탐지한 뒤 삭제한다',
+          'Trusted Advisor 또는 Cost Explorer를 통해 탐지할 수 있습니다',
+          'Trusted Advisor나 Cost Explorer가 이 목적에',
+        ],
+        required: [
+          'Compute Optimizer의 유휴 리소스 권장',
+          'Cost Explorer의 적정 크기 조정(rightsizing) 권장은 EC2 인스턴스만',
+        ],
+        why: 'Compute Optimizer 의 유휴 리소스 권장은 EBS 볼륨을 포함하고 32일 연결 '
+            '상태를 분석해 미연결 볼륨을 찾는다. Cost Explorer 의 rightsizing 권장은 '
+            'EC2 인스턴스 전용이라 미연결 볼륨 식별 도구가 아니다',
+      ),
+      (
+        task: 'saa-t4-1', qid: 'saa-t4-1-q14', correct: 0,
+        forbidden: ['문서에서 설명하는 EFS 계층 최적화 방법이 아닙니다'],
+        required: ['수동 관리 없이', 'Transition into Standard'],
+        why: '"문서에서 설명하는 … 방법이 아니다" 는 문항 바깥을 가리키는 작성 과정 '
+            '메모다. 보기가 탈락하는 이유는 지문의 "수동 관리 없이" 요건에 어긋난다는 '
+            '것이다. 또 S3 스토리지 클래스 페이지를 EFS 문항의 출처로 쓰고 있었다',
+      ),
+    ];
+
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    for (final f in fixes) {
+      test('${f.qid}: 정답 인덱스 ${f.correct}', () {
+        expect(question(f.task, f.qid)['correct'], f.correct);
+      });
+
+      test('${f.qid}: 옛 문구가 사라지고 공식 사실이 들어왔다', () {
+        final text = allText(question(f.task, f.qid));
+        for (final bad in f.forbidden) {
+          expect(text.contains(bad), isFalse,
+              reason: '${f.qid} 에 옛 문구가 남아 있다: "$bad"\n공식: ${f.why}');
+        }
+        for (final good in f.required) {
+          expect(text.contains(good), isTrue,
+              reason: '${f.qid} 에 공식 사실이 없다: "$good"\n공식: ${f.why}');
+        }
+      });
+    }
+
+    final swaps = <({String task, String qid, String fragment})>[
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q1',
+        fragment: 'aws.amazon.com/s3/pricing'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q3',
+        fragment: 'restoring-objects-retrieval-options'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q4',
+        fragment: 's3-removes-30-day-transitions'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q5',
+        fragment: 's3-removes-30-day-transitions'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q5',
+        fragment: 'lifecycle-transition-general-considerations'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q6',
+        fragment: 'restoring-objects-retrieval-options'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q9',
+        fragment: 'view-idle-recommendations'
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q14',
+        fragment: 'lifecycle-management-efs'
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 공식 페이지(${s.fragment})를 출처로 싣는다', () {
+        expect(hasSource(question(s.task, s.qid), s.fragment), isTrue,
+            reason: '${s.qid} 가 ${s.fragment} 를 출처로 싣지 않는다');
+      });
+    }
+
+    test('saa-t4-1-q14 는 EFS 문항이므로 S3 스토리지 클래스 페이지를 출처로 쓰지 않는다', () {
+      expect(hasSource(question('saa-t4-1', 'saa-t4-1-q14'), 'AmazonS3'), isFalse,
+          reason: 'EFS 수명 주기 문항의 출처가 S3 스토리지 클래스 페이지였다');
+    });
+  });
 }
