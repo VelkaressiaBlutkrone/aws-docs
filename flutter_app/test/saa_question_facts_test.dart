@@ -2614,4 +2614,145 @@ void main() {
               'actual modifications"');
     });
   });
+
+  // 2026-10-28 출처 교체 — 드래프트 Task 배치 4 (t3-7·t3-8·t3-9).
+  //
+  // ⚠️ 보고가 적은 `t3-8-q12` URL 은 **죽은 슬러그**다. 실측하면
+  //    `aws-technical-content/latest/aws-vpc-connectivity-options/aws-privatelink.html`
+  //    → `whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink.html` 로
+  //    리다이렉트된다(`rds-reserved-instances` 와 같은 계열). 정본을 쓴다. 레포에
+  //    옛 슬러그를 쓰던 문항은 없었다(전역 실측 0건) — 보고서에만 있었다.
+  // ⚠️ `saa-t3-7-q13` 은 출처를 **둘** 둔다. docs 소개 페이지가 L4·수백만 RPS·
+  //    고정 IP 는 적지만 "초저지연"을 **말하지 않는다**. 그 문구는 제품 페이지의
+  //    "millions of requests per second while maintaining ultra-low latencies" 가
+  //    정본이라 함께 단다.
+  group('2026-10-28 출처 교체 — 배치 4 (t3-7·t3-8·t3-9)', () {
+    final swaps = <({String task, String qid, String add, String drop, String why})>[
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q2',
+        add: 'resource-record-sets-choosing-alias-non-alias',
+        drop: 'Route53/latest/DeveloperGuide/Welcome',
+        why: '"Unlike a CNAME record, you can create an alias record at the top node of a '
+            'DNS namespace, also known as the zone apex ... You cannot create a CNAME '
+            'record for example.com" + "Route 53 detects changes in the resource on its '
+            'own" + "Route 53 does not charge for alias queries to AWS resources"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q7',
+        add: 'private-content-restricting-access-to-s3',
+        drop: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        why: '"We recommend that you use OAC instead" + "Use an S3 bucket policy to allow '
+            'the CloudFront service principal (cloudfront.amazonaws.com) to access the '
+            'bucket. Use a Condition element ... only when the request is on behalf of '
+            'the CloudFront distribution"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q8',
+        add: 'private-content-choosing-signed-urls-cookies',
+        drop: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        why: '"Use signed URLs ... You want to restrict access to individual files" vs '
+            '"Use signed cookies ... You want to provide access to multiple restricted '
+            'files ... or all of the files in the subscribers area of website"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q9',
+        add: 'cnames-and-https-requirements',
+        drop: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
+        why: '"To use a certificate in AWS Certificate Manager (ACM) to require HTTPS '
+            'between viewers and CloudFront, make sure you request (or import) the '
+            'certificate in the US East (N. Virginia) Region (us-east-1)."',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q13',
+        add: 'elasticloadbalancing/latest/network/introduction',
+        drop: 'Route53/latest/DeveloperGuide/Welcome',
+        why: '"A Network Load Balancer functions at the fourth layer of the ... (OSI) '
+            'model. It can handle millions of requests per second." + 대상 그룹이 "TCP, '
+            'UDP, TCP_UDP, TLS, QUIC, and TCP_QUIC" + "Support for static IP addresses '
+            'for the load balancer"',
+      ),
+      (
+        task: 'saa-t3-7', qid: 'saa-t3-7-q15',
+        add: 'elasticloadbalancing/latest/application/introduction',
+        drop: 'Route53/latest/DeveloperGuide/Welcome',
+        why: '"An Application Load Balancer functions at the application layer, the '
+            'seventh layer" + "Support for Path conditions. You can configure rules for '
+            'your listener that forward requests based on the URL in the request" + '
+            '"Support for registering Lambda functions as targets" + ECS 컨테이너 지원',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q1',
+        add: 'peering/vpc-peering-basics',
+        drop: 'what-is-transit-gateway',
+        why: '"transitive peering relationships are not supported. You do not have any '
+            'peering relationship with VPCs that your VPC is not directly peered with" + '
+            '"you cannot use VPC A as a transit point for peering between VPC B and VPC C"',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q11',
+        add: 'privatelink/gateway-endpoints',
+        drop: 'what-is-privatelink',
+        why: '"Gateway VPC endpoints provide reliable connectivity to Amazon S3 and '
+            'DynamoDB without requiring an internet gateway or a NAT device" + "There is '
+            'no additional charge for using gateway endpoints." + 라우트 테이블에 prefix '
+            'list 경로가 자동 추가되고 "Gateway endpoints do not use AWS PrivateLink"',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q12',
+        add: 'whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink',
+        drop: 'what-is-privatelink',
+        why: '"AWS PrivateLink is a good solution when the VPCs have overlapped IP '
+            'addresses." + "The interface endpoints are created directly inside of your '
+            'VPC, using elastic network interfaces and IP addresses in your VPC subnets"',
+      ),
+      (
+        task: 'saa-t3-8', qid: 'saa-t3-8-q13',
+        add: 'create-endpoint-service',
+        drop: 'what-is-privatelink',
+        why: '"You can create your own service powered by AWS PrivateLink, known as an '
+            'endpoint service. You are the service provider" + "Endpoint services require '
+            'either a Network Load Balancer or a Gateway Load Balancer" + 소비자는 '
+            '인터페이스 엔드포인트를 만든다',
+      ),
+      (
+        task: 'saa-t3-9', qid: 'saa-t3-9-q3',
+        add: 'streams/latest/dev/key-concepts',
+        drop: 'streams/latest/dev/introduction',
+        why: '샤드 정의가 수치를 그대로 적는다: "Each shard can support up to 5 transactions '
+            'per second for reads, up to a maximum total data read rate of 2 MB per second '
+            'and up to 1,000 records per second for writes, up to a maximum total data '
+            'write rate of 1 MB per second (including partition keys)."',
+      ),
+      (
+        task: 'saa-t3-9', qid: 'saa-t3-9-q15',
+        add: 'what-is-kinesis-video',
+        drop: 'streams/latest/dev/introduction',
+        why: '"stream live video from devices to the AWS Cloud" + "capture massive amounts '
+            'of live video data from millions of sources, including smartphones, security '
+            'cameras, webcams" + "durably store media data for the specified retention '
+            'period ... and encrypts it at rest"',
+      ),
+    ];
+
+    for (final s in swaps) {
+      test('${s.qid}: 사실을 담은 페이지로 출처가 교체됐다', () {
+        final q = question(s.task, s.qid);
+        expect(hasSource(q, s.add), isTrue,
+            reason: '${s.qid} 에 새 출처가 없다: "${s.add}"\n근거: ${s.why}');
+        expect(hasSource(q, s.drop), isFalse,
+            reason: '${s.qid} 에 옛 소개 페이지 출처가 남아 있다: "${s.drop}"');
+      });
+    }
+
+    test('saa-t3-7-q13: 초저지연 근거 페이지도 함께 달렸다', () {
+      expect(
+          hasSource(question('saa-t3-7', 'saa-t3-7-q13'),
+              'elasticloadbalancing/network-load-balancer'),
+          isTrue,
+          reason: 'docs 소개 페이지는 "초저지연"을 말하지 않는다. 근거: 제품 페이지의 '
+              '"capable of handling millions of requests per second while maintaining '
+              'ultra-low latencies" + "Low Latency: Network Load Balancer offers '
+              'extremely low latencies for latency-sensitive applications"');
+    });
+  });
 }
