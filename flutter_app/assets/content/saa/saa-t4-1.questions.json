@@ -27,7 +27,7 @@
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
         { "title": "Amazon S3 요금 (공식)", "url": "https://aws.amazon.com/s3/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q2",
@@ -51,7 +51,7 @@
       "sources": [
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q3",
@@ -76,7 +76,7 @@
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
         { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q4",
@@ -102,7 +102,7 @@
         { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" },
         { "title": "S3, Standard-IA·One Zone-IA 전환의 30일 대기 제약 폐지 (2026-07-16)", "url": "https://aws.amazon.com/about-aws/whats-new/2026/07/s3-removes-30-day-transitions-standard-ia-one-zone-ia/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q5",
@@ -128,7 +128,7 @@
         { "title": "수명 주기 전환의 제약과 고려 사항 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html" },
         { "title": "S3, Standard-IA·One Zone-IA 전환의 30일 대기 제약 폐지 (2026-07-16)", "url": "https://aws.amazon.com/about-aws/whats-new/2026/07/s3-removes-30-day-transitions-standard-ia-one-zone-ia/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q6",
@@ -153,7 +153,7 @@
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
         { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q7",
@@ -177,7 +177,7 @@
       "sources": [
         { "title": "EBS General Purpose SSD (gp2·gp3) (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q8",
@@ -202,7 +202,7 @@
         { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
         { "title": "인스턴스 종료 시 데이터 보존 — DeleteOnTermination (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/preserving-volumes-on-termination.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q9",
@@ -227,7 +227,7 @@
         { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
         { "title": "Compute Optimizer 유휴 리소스 권장 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q10",
@@ -251,7 +251,7 @@
       "sources": [
         { "title": "AWS Transfer Family FAQ — 중지해도 과금은 삭제할 때까지 (공식)", "url": "https://aws.amazon.com/aws-transfer-family/faqs/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q11",
@@ -275,7 +275,7 @@
       "sources": [
         { "title": "EC2 데이터 전송 요금 (On-Demand 페이지 공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q12",
@@ -299,7 +299,7 @@
       "sources": [
         { "title": "CloudFront 소개 — 오리진→CloudFront 전송 무료 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q13",
@@ -323,7 +323,7 @@
       "sources": [
         { "title": "S3 Storage Lens — 기본 개념과 지표·권장사항 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage_lens_basics_metrics_recommendations.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q14",
@@ -347,7 +347,7 @@
       "sources": [
         { "title": "EFS 스토리지 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-1-q15",
@@ -371,7 +371,7 @@
       "sources": [
         { "title": "미완료 멀티파트 업로드 삭제 수명주기 규칙 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

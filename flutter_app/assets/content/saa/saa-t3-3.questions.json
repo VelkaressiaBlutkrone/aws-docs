@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Amazon EC2 인스턴스 유형 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "Amazon EC2 인스턴스 유형 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "Amazon EC2 인스턴스 유형 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "버스트 성능 인스턴스 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q5",
@@ -122,7 +122,7 @@
       "sources": [
         { "title": "버스트 성능 인스턴스 구성 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q6",
@@ -146,7 +146,7 @@
       "sources": [
         { "title": "Amazon EC2 인스턴스 유형 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q7",
@@ -170,7 +170,7 @@
       "sources": [
         { "title": "EC2 구매 옵션 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q8",
@@ -194,7 +194,7 @@
       "sources": [
         { "title": "EC2 구매 옵션 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q9",
@@ -218,7 +218,7 @@
       "sources": [
         { "title": "EC2 구매 옵션 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q10",
@@ -242,7 +242,7 @@
       "sources": [
         { "title": "EC2 배치 그룹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q11",
@@ -266,7 +266,7 @@
       "sources": [
         { "title": "배치 전략 상세 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q12",
@@ -290,7 +290,7 @@
       "sources": [
         { "title": "배치 전략 상세 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q13",
@@ -314,7 +314,7 @@
       "sources": [
         { "title": "EC2 배치 그룹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q14",
@@ -338,7 +338,7 @@
       "sources": [
         { "title": "향상된 네트워킹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-3-q15",
@@ -362,7 +362,7 @@
       "sources": [
         { "title": "Elastic Fabric Adapter (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

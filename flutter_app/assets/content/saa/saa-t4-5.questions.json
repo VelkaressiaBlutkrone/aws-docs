@@ -26,7 +26,7 @@
       "sources": [
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q2",
@@ -51,7 +51,7 @@
         { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" },
         { "title": "예산 조치(budget actions) 구성 (공식)", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q3",
@@ -76,7 +76,7 @@
         { "title": "AWS Cost and Usage Report (CUR) — 공식 문서 (BI 시각화는 Amazon Quick Sight, 옛 이름 QuickSight)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/what-is-cur.html" },
         { "title": "Athena로 CUR 쿼리 — Parquet 전용 (공식)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/cur-query-athena.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q4",
@@ -100,7 +100,7 @@
       "sources": [
         { "title": "AWS Cost Anomaly Detection — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q5",
@@ -124,7 +124,7 @@
       "sources": [
         { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q6",
@@ -148,7 +148,7 @@
       "sources": [
         { "title": "AWS Organizations 통합 결제 — 사용량 합산 볼륨 할인 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/consolidated-billing.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q7",
@@ -173,7 +173,7 @@
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" },
         { "title": "Compute Optimizer 유휴 리소스 권장 — 대상 목록 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q8",
@@ -197,7 +197,7 @@
       "sources": [
         { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q9",
@@ -223,7 +223,7 @@
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" },
         { "title": "Athena로 CUR 쿼리 — Parquet 전용 (공식)", "url": "https://docs.aws.amazon.com/cur/latest/userguide/cur-query-athena.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q10",
@@ -247,7 +247,7 @@
       "sources": [
         { "title": "AWS Budgets — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q11",
@@ -271,7 +271,7 @@
       "sources": [
         { "title": "AWS Cost Anomaly Detection — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q12",
@@ -295,7 +295,7 @@
       "sources": [
         { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q13",
@@ -319,7 +319,7 @@
       "sources": [
         { "title": "예약 인스턴스·Savings Plans 할인 공유 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/ri-turn-off.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q14",
@@ -343,7 +343,7 @@
       "sources": [
         { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-5-q15",
@@ -367,7 +367,7 @@
       "sources": [
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "워크로드를 분산하는 파티션 키 설계 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-uniform-load.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "DynamoDB 보조 인덱스 (GSI·LSI) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "DynamoDB 보조 인덱스 (GSI·LSI) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q5",
@@ -123,7 +123,7 @@
         { "title": "DynamoDB 프로비저닝 용량 모드 — RCU·WCU (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/provisioned-capacity-mode.html" },
         { "title": "글로벌 보조 인덱스 — 최종 일관성 읽기 전용 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q6",
@@ -147,7 +147,7 @@
       "sources": [
         { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q7",
@@ -171,7 +171,7 @@
       "sources": [
         { "title": "DynamoDB Accelerator (DAX) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q8",
@@ -195,7 +195,7 @@
       "sources": [
         { "title": "DynamoDB Accelerator (DAX) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q9",
@@ -220,7 +220,7 @@
         { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" },
         { "title": "Amazon CloudFront란? (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q10",
@@ -245,7 +245,7 @@
         { "title": "DynamoDB TTL — 만료 항목 자동 삭제 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html" },
         { "title": "DynamoDB Streams — 변경 데이터 캡처 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q11",
@@ -270,7 +270,7 @@
         { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" },
         { "title": "DynamoDB 트랜잭션 동작 방식 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/transaction-apis.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q12",
@@ -295,7 +295,7 @@
         { "title": "Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html" },
         { "title": "ElastiCache 복원력 — 노드 장애 완화 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/disaster-recovery-resiliency.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q13",
@@ -321,7 +321,7 @@
         { "title": "ElastiCache 엔진 버전 — 2.8.22 이후 appendonly 미지원 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/engine-versions.html" },
         { "title": "MemoryDB란? — 내구성 있는 인메모리 DB (공식)", "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q14",
@@ -345,7 +345,7 @@
       "sources": [
         { "title": "ElastiCache 캐싱 전략 — Lazy Loading·Write-Through·TTL (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-6-q15",
@@ -370,7 +370,7 @@
         { "title": "ElastiCache 배포 옵션 선택 — 서버리스 vs 노드 기반 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.deployment.html" },
         { "title": "ElastiCache 동작 방식 — 서버리스는 용량 계획 불필요 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.corecomponents.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
