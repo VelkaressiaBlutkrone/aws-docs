@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show visibleForTesting;
+
 import 'audio_asset_url.dart';
 import 'exam_allocation.dart';
 
@@ -674,8 +676,38 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   ],
 };
 
+/// 테스트 전용 콘텐츠 인덱스 덮어쓰기(자격증별). 앱 경로에서는 항상 null이다.
+///
+/// ## 왜 있는가
+///
+/// 잠금 화면·"준비 중" 라벨·약점 모의고사 잠금 같은 **게이트 미달 동작**을
+/// 검증하는 테스트가 "지금 잠겨 있는 자격증"을 표본으로 써 왔다. 그 표본은
+/// 사람이 문항을 flip해 게이트를 열 때마다 깨져서 SAA(2026-10-28) →
+/// MLA(2026-10-29) → DEA로 두 번 이사했고, 콘텐츠 있는 5종(CLF·SAA·SOA·DEA·MLA)이
+/// 전부 개방되면 **옮길 자격증이 남지 않는다**(HANDOFF.md §0-2026-10-29 교훈 2).
+/// 제품 동작은 어느 자격증이 검수를 통과했는지와 무관해야 하므로, 테스트가
+/// "콘텐츠 인덱스가 이렇게 말한다면"을 직접 주입한다.
+///
+/// `contentFor`가 유일한 조회 지점이라 이 한 곳만 덮어쓰면 그 아래의
+/// `certHasContent`·`certContentSummary`·`certHasVerifiedQuestions`·
+/// `examWeightedCapacityStatus`·`certExamHasWeightedCapacity`와 그것을 읽는
+/// 위젯 전부가 **같은 주입 상태**를 본다 — 위젯마다 주입구를 뚫지 않아도 된다.
+///
+/// ## 쓰는 법
+///
+/// 덮어쓰지 않은 자격증은 실제 인덱스를 그대로 본다(`{}`가 아니라 **빈 목록**을
+/// 넣으면 그 자격증만 "콘텐츠 없음"이 된다). 누출되면 다른 테스트가 조용히
+/// 틀린 상태를 보므로 **`tearDown`/`addTearDown`으로 반드시 null로 되돌린다.**
+///
+/// ```dart
+/// debugContentIndexOverride = const {'CLF-C02': [ /* 합성 엔트리 */ ]};
+/// addTearDown(() => debugContentIndexOverride = null);
+/// ```
+@visibleForTesting
+Map<String, List<ContentEntry>>? debugContentIndexOverride;
+
 List<ContentEntry> contentFor(String certCode) =>
-    kContentIndex[certCode] ?? const [];
+    debugContentIndexOverride?[certCode] ?? kContentIndex[certCode] ?? const [];
 
 /// 해당 자격증에 검증 콘텐츠(학습문서)가 존재하는가.
 bool certHasContent(String certCode) => contentFor(certCode).isNotEmpty;

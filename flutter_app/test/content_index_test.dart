@@ -5,6 +5,67 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/content_index.dart';
 
 void main() {
+  // ⚠️ 이 블록이 "잠긴 cert 표본" 문제의 구조적 해소다. 게이트가 열리는 순간
+  // 잠금 화면·"준비 중" 라벨을 검증하던 테스트가 깨지는데, 표본은 이미
+  // SAA(2026-10-28) → MLA(2026-10-29) → DEA 로 두 번 이사했고 콘텐츠 있는
+  // 5종(CLF·SAA·SOA·DEA·MLA)이 전부 개방되면 **옮길 cert 가 없다**
+  // (HANDOFF §0-2026-10-29 교훈 2). 제품 동작은 어느 자격증이 검수를 통과했는지와
+  // 무관해야 하므로, 테스트가 이 주입구로 "콘텐츠 인덱스가 이렇게 말한다면"을
+  // 직접 만든다. 정책 없는 cert 로는 대체할 수 없었다 — `domainProgressLabel` 이
+  // 빈 문자열이 된다(착수 노트 §3).
+  group('contentFor 테스트 주입구(debugContentIndexOverride)', () {
+    tearDown(() => debugContentIndexOverride = null);
+
+    const synthetic = ContentEntry(
+      certCode: 'CLF-C02',
+      taskId: 'synthetic-t1-1',
+      title: '합성 엔트리',
+      domain: 1,
+      mdAsset: 'assets/content/clf/clf-t1-1.md',
+      questionsAsset: 'assets/content/clf/clf-t1-1.questions.json',
+      questionCount: 3,
+    );
+
+    test('덮어쓴 cert 만 바뀌고 나머지는 실제 인덱스를 그대로 본다', () {
+      final realSaa = contentFor('SAA-C03');
+      debugContentIndexOverride = const {'CLF-C02': [synthetic]};
+
+      expect(contentFor('CLF-C02'), [synthetic]);
+      expect(contentFor('SAA-C03'), realSaa, reason: '덮어쓰지 않은 cert 는 그대로여야 한다');
+    });
+
+    test('빈 목록으로 덮어쓰면 "콘텐츠 없음"이 된다 (null 과 구분된다)', () {
+      debugContentIndexOverride = const {'CLF-C02': []};
+      expect(contentFor('CLF-C02'), isEmpty);
+      expect(certHasContent('CLF-C02'), isFalse);
+    });
+
+    test('게이트·요약이 주입된 엔트리에서 파생된다', () {
+      // 열린 cert(CLF-C02)를 "문항은 있는데 도메인 비중 미달"로 만들 수 있어야
+      // 잠금 화면 테스트가 실제 flip 상태에서 풀린다.
+      debugContentIndexOverride = const {'CLF-C02': [synthetic]};
+
+      expect(certContentSummary('CLF-C02').questions, 3);
+      expect(certHasVerifiedQuestions('CLF-C02'), isTrue);
+      final s = examWeightedCapacityStatus('CLF-C02');
+      expect(s.hasPolicy, isTrue);
+      expect(s.availableByDomain, {1: 3, 2: 0, 3: 0, 4: 0});
+      expect(s.ready, isFalse);
+      expect(certExamHasWeightedCapacity('CLF-C02'), isFalse);
+      expect(s.domainProgressLabel, isNotEmpty);
+    });
+
+    test('null 로 되돌리면 실제 인덱스가 복구된다', () {
+      final real = contentFor('CLF-C02');
+      debugContentIndexOverride = const {'CLF-C02': []};
+      expect(contentFor('CLF-C02'), isEmpty);
+      debugContentIndexOverride = null;
+      expect(contentFor('CLF-C02'), real);
+      expect(certExamHasWeightedCapacity('CLF-C02'), isTrue,
+          reason: 'CLF-C02 는 실제로 게이트가 열려 있다 — 주입구가 누출되면 여기서 터진다');
+    });
+  });
+
   test('certHasContent: 콘텐츠 보유 true, 미보유/미지정 false', () {
     expect(certHasContent('CLF-C02'), isTrue);
     expect(certHasContent('DVA-C02'), isFalse);
@@ -298,10 +359,23 @@ void main() {
     });
 
     // 2026-10-27 실측: SOA·DEA 문항은 전부 드래프트(verified 0)라 정책을 넣어도
-    // 라이브 노출은 그대로 잠긴 채다. 이 줄은 **게이트를 실제로 여는 릴리스**에서만
-    // 바뀐다(도메인별 필요 수량을 전부 채운 시점).
-    test('SOA-C03·DEA-C01: 정책 추가 후에도 현재는 locked', () {
+    // 라이브 노출은 그대로 잠긴 채다.
+    //
+    // ⚠️ **flip 하는 사람에게**: 아래 두 선언은 `review.mjs flip` 이 마지막에 돌리는
+    // `content_index_test` 안에 있다. 게이트를 여는 Task 를 flip 하면 **파일을 다 쓴 뒤**
+    // 여기서 레드로 끝난다(`--force` 는 쓰기 **전** 구조 검사만 건너뛰어 소용없다).
+    // 순서는 ① 그 자격증 선언 삭제 → ② flip → ③ 커밋이다. 2026-10-28 에
+    // `flip saa saa-t2-5` 가 같은 구조의 SAA 선언에서 실제로 멈췄다.
+    //
+    // **자격증별로 분리해 둔 이유**가 그것이다 — SOA 를 여는 PR 이 DEA 줄을
+    // 건드리지 않는다(착수 노트 §2). 이 선언 외에 게이트 개방으로 깨지는 테스트는
+    // 없다: 잠금 동작을 검증하는 테스트는 `debugContentIndexOverride` 로 주입해
+    // 실제 flip 상태에서 풀어 뒀다(2026-10-29 양쪽 개방 시뮬레이션으로 실측).
+    test('SOA-C03: 정책 추가 후에도 현재는 locked', () {
       expect(certExamHasWeightedCapacity('SOA-C03'), isFalse);
+    });
+
+    test('DEA-C01: 정책 추가 후에도 현재는 locked', () {
       expect(certExamHasWeightedCapacity('DEA-C01'), isFalse);
     });
 

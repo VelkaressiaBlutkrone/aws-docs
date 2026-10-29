@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:aws_docs/data/cert_lookup.dart';
 import 'package:aws_docs/data/content_index.dart'
-    show certExamHasWeightedCapacity;
+    show ContentEntry, certExamHasWeightedCapacity, debugContentIndexOverride;
 import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/history_store.dart' show KvBackend, MemoryBackend;
 import 'package:aws_docs/models/exam_snapshot.dart';
@@ -77,6 +77,36 @@ ExamSnapshot _snapshot(String code, {String nonce = 'run-1'}) => ExamSnapshot(
       questions: [_snapQ('s1', '스냅샷 전용 문항'), _snapQ('s2', '두 번째')],
     );
 
+/// 잠금 화면을 검증할 때 쓰는 **주입된 미충족 cert**. 실제로는 게이트가 열려
+/// 있는 자격증이라, 어느 자격증이 검수를 통과하든 이 테스트는 그대로 돈다.
+///
+/// ⚠️ 전에는 "지금 잠긴 cert"를 표본으로 썼다 — SAA(2026-10-28) → MLA(2026-10-29)
+/// → DEA로 두 번 이사했고, 콘텐츠 있는 5종이 전부 개방되면 **옮길 곳이 없다**
+/// (HANDOFF.md §0-2026-10-29 교훈 2). `CertExamPage._load()`는
+/// `examWeightedCapacityStatus`를 내부에서 부르므로 생성자로는 주입할 수 없고,
+/// 콘텐츠 인덱스 조회 지점을 덮어써야 한다.
+const _lockedCode = 'SAA-C03';
+
+/// `_lockedCode`를 "문항은 있는데 도메인 비중 미달"로 만든다(테스트당 1회).
+void _injectCapacityShortfall() {
+  debugContentIndexOverride = const {
+    _lockedCode: [
+      ContentEntry(
+        certCode: _lockedCode,
+        taskId: 'saa-t1-1',
+        title: '합성 엔트리(문항 보유·비중 미달)',
+        domain: 1,
+        mdAsset: 'assets/content/saa/saa-t1-1.md',
+        questionsAsset: 'assets/content/saa/saa-t1-1.questions.json',
+        questionCount: 3,
+      ),
+    ],
+  };
+  addTearDown(() => debugContentIndexOverride = null);
+  expect(certExamHasWeightedCapacity(_lockedCode), isFalse,
+      reason: '주입이 먹지 않으면 잠금 화면 단정이 거짓 통과한다');
+}
+
 Future<void> _pump(
   WidgetTester tester,
   String code,
@@ -99,33 +129,36 @@ Future<void> _pump(
 void main() {
   setUp(rootBundle.clear);
 
-  test('전제: CLF-C02는 통합 모의고사 capacity 충족, DEA-C01은 미충족', () {
+  test('전제: 주입구로 capacity 미충족을 만들 수 있고, 실제 CLF-C02는 충족이다', () {
     // 아래 게이트 테스트가 기대는 사실 — 바뀌면 그 테스트부터 다시 읽어야 한다.
-    // 잠긴 표본은 SAA -> MLA(2026-10-28) -> DEA(2026-10-29) 로 옮겨 왔다.
-    // MLA 를 flip 할 수 있게 되면서 또 옮겼다. DEA-C01 은 정책이 있고
-    // verified 0 이라 같은 잠금 화면을 렌더하며, 드래프트 256문항에 검수
-    // 착수 전이라 당분간 잠긴 채로 남는다. 누군가 DEA 를 flip 하면 이
-    // 단정이 먼저 터진다 — 그때 또 옮겨라.
+    // 전에는 "지금 잠긴 cert"(SAA → MLA → DEA)를 표본으로 썼고, 사람이 그 자격증을
+    // flip 할 때마다 이 단정이 먼저 터졌다. 이제 표본을 주입하므로 어느 자격증이
+    // 열려도 돈다 — `_lockedCode` 는 **실제로는 열린** 자격증이다.
     expect(certExamHasWeightedCapacity('CLF-C02'), isTrue);
-    expect(certExamHasWeightedCapacity('DEA-C01'), isFalse);
+    expect(certExamHasWeightedCapacity(_lockedCode), isTrue,
+        reason: '주입 전에는 열려 있어야 한다 — 주입이 상태를 만든다는 것이 이 테스트의 요지다');
+    _injectCapacityShortfall();
   });
 
   testWidgets('⚠️ capacity 미충족에서도 진행 세션을 지우지 않는다(잠금 화면에 "이어서 풀기")',
       (tester) async {
     // 설계 §4.3 — 게이트가 세션을 지워 버리면 이 버튼이 아예 렌더되지 않는다.
     // 버튼이 **실제로 시험을 여는지**는 exam_snapshot_review_fixes_test의 C-1 가드가 본다.
+    _injectCapacityShortfall();
     final b = MemoryBackend();
-    ExamSessionStore(backend: b).saveSnapshot(_snapshot('DEA-C01'));
+    ExamSessionStore(backend: b).saveSnapshot(_snapshot(_lockedCode));
 
-    await _pump(tester, 'DEA-C01', b);
+    await _pump(tester, _lockedCode, b);
 
     expect(find.text('이어서 풀기'), findsOneWidget);
   });
 
   testWidgets('capacity 미충족에서 새 시험 시작은 여전히 막힌다', (tester) async {
+    _injectCapacityShortfall();
     final b = MemoryBackend(); // 진행 세션 없음
-    await _pump(tester, 'DEA-C01', b);
+    await _pump(tester, _lockedCode, b);
     expect(find.text('시작'), findsNothing);
+    expect(find.text('시작 →'), findsNothing);
     expect(find.text('이어서 풀기'), findsNothing);
   });
 
@@ -261,10 +294,11 @@ void main() {
 
   testWidgets('짧은 뷰포트에서도 잠금 화면에서 이어서 풀 수 있다', (tester) async {
     // 비스크롤 Column이면 덧붙인 버튼이 잘려 **탭조차 못 한다** — §4.3이 통째로 막힌다.
+    _injectCapacityShortfall();
     final b = MemoryBackend();
-    ExamSessionStore(backend: b).saveSnapshot(_snapshot('DEA-C01'));
+    ExamSessionStore(backend: b).saveSnapshot(_snapshot(_lockedCode));
 
-    await _pump(tester, 'DEA-C01', b, size: const Size(400, 240));
+    await _pump(tester, _lockedCode, b, size: const Size(400, 240));
 
     expect(tester.takeException(), isNull, reason: '오버플로 없이 렌더돼야 한다');
     await tester.ensureVisible(find.text('이어서 풀기')); // 스크롤 조상이 없으면 여기서 던진다

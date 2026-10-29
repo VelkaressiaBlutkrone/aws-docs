@@ -80,28 +80,33 @@ void main() {
     expect(find.textContaining('오답노트 · 틀린 2문항'), findsOneWidget);
   });
 
-  testWidgets('LearningContentSection: DEA는 응시 3회여도 capacity 부족이면 약점 모의고사 잠김', (
+  testWidgets('LearningContentSection: 응시 3회여도 capacity 부족이면 약점 모의고사 잠김', (
     tester,
   ) async {
     // ⚠️ **실제 cert의 verified 수량에 묶지 않는다.** 이 위젯은
     // `entries.any((e) => e.questionCount > 0)` 로 약점 모의고사 줄을 그릴지
-    // 정하고, 잠금 여부만 `certExamHasWeightedCapacity(certCode)` 로 본다.
-    // 그래서 "문항은 있는데 도메인 비중이 모자란" 상태를 재현하려면 엔트리를
-    // 직접 만든다 — 표본 cert 가 flip 될 때마다 테스트를 옮기지 않아도 된다
-    // (SAA 2026-10-28 → MLA → DEA 로 두 번 옮긴 뒤의 구조적 해소).
-    // DEA-C01 은 verified 0 이라 capacity 가 false 이고, 드래프트 256문항에
-    // 검수 착수 전이라 그 상태가 오래 간다.
+    // 정하지만, **잠금 여부는 전역 인덱스**를 읽는 `certExamHasWeightedCapacity(certCode)`
+    // 가 정한다 — 그래서 합성 엔트리만으로는 표본 cert 의 flip 에서 풀리지 않는다
+    // (2026-10-29 양쪽 개방 시뮬레이션에서 이 테스트가 실제로 깨졌다. 표본이
+    // SAA → MLA → DEA 로 두 번 이사한 뒤 "해소됐다"고 적혀 있었지만 아니었다).
+    // 같은 엔트리를 `debugContentIndexOverride` 로도 주입해 **두 경로가 같은
+    // 상태를 보게** 해야 비로소 cert 와 무관해진다.
     const entries = [
       ContentEntry(
-        certCode: 'DEA-C01',
-        taskId: 'dea-t1-1',
-        title: '합성 엔트리(문항 보유)',
+        certCode: 'CLF-C02',
+        taskId: 'clf-t1-1',
+        title: '합성 엔트리(문항 보유·비중 미달)',
         domain: 1,
-        mdAsset: 'assets/content/dea/dea-t1-1.md',
-        questionsAsset: 'assets/content/dea/dea-t1-1.questions.json',
+        mdAsset: 'assets/content/clf/clf-t1-1.md',
+        questionsAsset: 'assets/content/clf/clf-t1-1.questions.json',
         questionCount: 15,
       ),
     ];
+    debugContentIndexOverride = const {'CLF-C02': entries};
+    addTearDown(() => debugContentIndexOverride = null);
+    expect(certExamHasWeightedCapacity('CLF-C02'), isFalse,
+        reason: '주입이 먹지 않으면 아래 잠금 단정이 거짓 통과한다');
+
     await tester.pumpWidget(
       _host(
         LearningContentSection(

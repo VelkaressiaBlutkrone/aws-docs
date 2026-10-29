@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/models/attempt_record.dart';
+import 'package:aws_docs/data/content_index.dart';
 import 'package:aws_docs/data/task_score_report.dart';
 import 'package:aws_docs/data/weighted_exam.dart';
 
@@ -108,32 +109,38 @@ void main() {
   });
 
   test('최종 게이트: 응시 3회여도 weighted capacity 부족이면 잠김', () {
-    // 잠긴 표본은 DEA다 — SAA(2026-10-28)에 이어 MLA도 flip 가능해져 옮겼다.
+    // ⚠️ **실제 cert 의 flip 상태에 묶지 않는다.** 전에는 "지금 잠긴 cert"를
+    // 표본으로 썼고 그 표본이 SAA → MLA → DEA 로 두 번 이사했다(개방될 때마다
+    // 이 테스트가 깨졌다). 콘텐츠 있는 5종이 전부 개방되면 옮길 곳이 없으므로,
+    // 열린 cert(CLF-C02)에 "문항은 있는데 도메인 비중 미달"을 주입해 푼다.
+    debugContentIndexOverride = const {
+      'CLF-C02': [
+        ContentEntry(
+          certCode: 'CLF-C02',
+          taskId: 'clf-t1-1',
+          title: '합성 엔트리(문항 보유·비중 미달)',
+          domain: 1,
+          mdAsset: 'assets/content/clf/clf-t1-1.md',
+          questionsAsset: 'assets/content/clf/clf-t1-1.questions.json',
+          questionCount: 3,
+        ),
+      ],
+    };
+    addTearDown(() => debugContentIndexOverride = null);
+    expect(certExamHasWeightedCapacity('CLF-C02'), isFalse,
+        reason: '주입이 먹지 않으면 아래 단정이 거짓 통과한다');
+
     final history = [
-      _rec(
-        certId: 'DEA-C01',
-        examId: 'exam:DEA-C01-mock',
-        date: '2026-06-01',
-        presented: ['q1'],
-        wrong: const [],
-      ),
-      _rec(
-        certId: 'DEA-C01',
-        examId: 'exam:DEA-C01-mock',
-        date: '2026-06-02',
-        presented: ['q2'],
-        wrong: const [],
-      ),
-      _rec(
-        certId: 'DEA-C01',
-        examId: 'exam:DEA-C01-mock',
-        date: '2026-06-03',
-        presented: ['q3'],
-        wrong: const [],
-      ),
+      for (final d in ['2026-06-01', '2026-06-02', '2026-06-03'])
+        _rec(
+          examId: 'exam:CLF-C02-mock',
+          date: d,
+          presented: ['q$d'],
+          wrong: const [],
+        ),
     ];
 
-    expect(weightedExamAttemptUnlocked('DEA-C01', history), isTrue);
-    expect(certWeightedExamUnlocked('DEA-C01', history), isFalse);
+    expect(weightedExamAttemptUnlocked('CLF-C02', history), isTrue);
+    expect(certWeightedExamUnlocked('CLF-C02', history), isFalse);
   });
 }

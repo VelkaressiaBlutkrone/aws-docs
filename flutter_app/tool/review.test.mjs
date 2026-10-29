@@ -209,9 +209,24 @@ test('questionFilePath: 없는 taskId는 throw', () => {
   assert.throws(() => questionFilePath(resolveCert('mla'), 'mla-t9-9'), /mla-t9-9/);
 });
 
-test('addToAllowlist: 실제 mla_questions_test.dart에 적용된다', () => {
+test('addToAllowlist: 실제 mla_questions_test.dart의 선언 스타일에 적용된다', () => {
   // 선언 스타일이 바뀌면(한 줄 → 여러 줄 등) 여기서 먼저 깨진다.
+  //
+  // ⚠️ **목록의 현재 내용을 박지 않는다.** 전에는 결과가
+  // `<String>{'mla-t1-1'}`과 같기를 요구했는데, 그것은 목록이 비어 있던
+  // 시점의 상태였다 — 2026-10-29에 사람이 MLA 12 Task를 전부 flip하자
+  // 이 테스트가 레드가 됐고, node 테스트가 CI에 없어 **조용히** 레드로 남아
+  // 있었다(2026-10-29 실측). 상태가 아니라 **동작**을 본다: 기존 항목을
+  // 보존하면서 새 Task 하나를 뒤에 붙이는가.
   const { file, symbol } = resolveCert('mla').flipAllowlist;
-  const out = addToAllowlist(readFileSync(appPath(file), 'utf8'), symbol, 'mla-t1-1');
-  assert.match(out, /const flipApprovedTaskIds = <String>\{'mla-t1-1'\};/);
+  const src = readFileSync(appPath(file), 'utf8');
+  const decl = new RegExp(`const\\s+${symbol}\\s*=\\s*<String>\\{([\\s\\S]*?)\\};`);
+  const before = decl.exec(src);
+  assert.ok(before, `${file}에서 ${symbol} 선언을 찾지 못했다 — 선언 스타일이 바뀌었다`);
+
+  const fresh = 'mla-t9-9'; // 실재하지 않는 Task — 목록 내용과 무관하게 새 항목이다
+  const after = decl.exec(addToAllowlist(src, symbol, fresh));
+  assert.ok(after, '적용 결과에서 선언을 다시 찾지 못했다');
+  const kept = before[1].replace(/\s*,?\s*$/, '');
+  assert.equal(after[1], kept.trim() ? `${kept}, '${fresh}'` : `'${fresh}'`);
 });

@@ -20,6 +20,34 @@ Widget _home() {
   );
 }
 
+/// 게이트 미달 동작을 검증할 때 쓰는 **주입된 cert**. 실제로는 게이트가 열려
+/// 있는 자격증이라, 어느 자격증이 검수를 통과하든 이 테스트는 그대로 돈다
+/// (표본이 SAA → MLA → DEA로 두 번 이사한 뒤의 구조적 해소 —
+/// HANDOFF.md §0-2026-10-29 교훈 2).
+const _injectedCode = 'MLA-C01';
+
+/// `_injectedCode`의 콘텐츠 인덱스를 합성 엔트리로 덮어쓴다.
+/// `questionCount: 0`이면 "학습문서만", 0보다 작은 수량이면 "문항은 있는데
+/// 도메인 비중 미달"이 된다(필요 수량은 MLA D1 18).
+void _injectEntries({required int questionCount}) {
+  debugContentIndexOverride = {
+    _injectedCode: [
+      ContentEntry(
+        certCode: _injectedCode,
+        taskId: 'mla-t1-1',
+        title: '합성 엔트리',
+        domain: 1,
+        mdAsset: 'assets/content/mla/mla-t1-1.md',
+        questionsAsset: 'assets/content/mla/mla-t1-1.questions.json',
+        questionCount: questionCount,
+      ),
+    ],
+  };
+  addTearDown(() => debugContentIndexOverride = null);
+  expect(certExamHasWeightedCapacity(_injectedCode), isFalse,
+      reason: '주입이 먹지 않으면 아래 "준비 중" 단정이 거짓 통과한다');
+}
+
 void main() {
   testWidgets('학습문서 섹션: CLF-C02 요약 카드 + 준비 중 그룹', (tester) async {
     await tester.pumpWidget(_home());
@@ -32,11 +60,14 @@ void main() {
     expect(find.text('DVA-C02'), findsWidgets);
   });
 
-  testWidgets('학습문서만 cert(SAA): 학습 섹션 노출 + 문항 준비 중 라벨', (tester) async {
+  testWidgets('학습문서만 cert: 학습 섹션 노출 + 문항 준비 중 라벨', (tester) async {
+    // 문항 0 cert는 '문항 준비 중' 라벨로 학습문서 섹션에 노출. 실제로 문항 0인
+    // 자격증은 사람이 flip하면 사라지므로(2026-10-29 양쪽 개방 시뮬레이션에서
+    // 이 테스트가 깨졌다) 그 상태를 주입한다.
+    _injectEntries(questionCount: 0);
     await tester.pumpWidget(_home());
     await tester.pump();
 
-    // 문항 0 cert는 '문항 준비 중' 라벨로 학습문서 섹션에 노출.
     expect(find.textContaining('문항 준비 중'), findsWidgets);
   });
 
@@ -106,18 +137,20 @@ void main() {
 
   testWidgets('통합 모의고사 카드: 게이트 열린 cert는 검증 문항 수, 미달 cert는 준비 중 라벨',
       (tester) async {
+    // "문항은 있는데 도메인 비중 미달"을 주입해 두 분기를 한 화면에서 본다 —
+    // 실제로 미달인 자격증은 사람이 flip하면 사라진다.
+    _injectEntries(questionCount: 3);
     await tester.pumpWidget(_home());
     await tester.pump();
-    // CLF-C02·SAA-C03은 게이트가 열려 CTA가 동작하므로 검증 문항 수를 표기한다.
+    // 주입하지 않은 cert(CLF-C02·SAA-C03 등)는 게이트가 열려 검증 문항 수를 표기한다.
     expect(find.textContaining('통합 모의고사 · 검증'), findsWidgets);
-    // DEA-C01은 학습 콘텐츠는 있지만 verified가 0이라 준비 중으로 남는다.
     expect(find.text('통합 모의고사 · 준비 중'), findsWidgets);
-    expect(find.text('DEA-C01'), findsWidgets);
+    expect(find.text(_injectedCode), findsWidgets);
   });
 
   testWidgets('통합 모의고사 직접 진입은 weighted capacity 부족 시 잠김', (tester) async {
-    // 잠긴 표본은 DEA다 — SAA(2026-10-28)에 이어 MLA도 flip 가능해져 옮겼다.
-    final cert = certByCode('DEA-C01')!;
+    _injectEntries(questionCount: 3);
+    final cert = certByCode(_injectedCode)!;
     await tester.pumpWidget(
       ThemeScope(
         isDark: false,
@@ -132,11 +165,12 @@ void main() {
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump();
 
-    expect(find.text('DEA-C01 통합 모의고사는 아직 준비 중입니다.'), findsOneWidget);
+    expect(find.text('$_injectedCode 통합 모의고사는 아직 준비 중입니다.'), findsOneWidget);
     // ⚠️ 진행 라벨에 'D1 0/19' 같은 **지금 숫자를 박으면** 사람이 D1 Task를
     // flip하는 순간 깨진다(2026-10-27 t1-1·t1-2 flip에서 실제로 깨졌다).
     // 게이트가 잠긴 동안 "현재 집계 라벨이 그대로 렌더되는가"만 본다.
-    final label = examWeightedCapacityStatus('DEA-C01').domainProgressLabel;
+    final label =
+        examWeightedCapacityStatus(_injectedCode).domainProgressLabel;
     expect(label, isNotEmpty);
     expect(find.textContaining(label), findsOneWidget);
     expect(find.text('시작'), findsNothing);
