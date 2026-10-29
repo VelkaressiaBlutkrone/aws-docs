@@ -279,7 +279,7 @@
         "하이퍼파라미터 · 인스턴스 · 지표의 기본값 설정"
       ],
       "correct": 0,
-      "explanation": "공식 문서에서 baseline은 개선 여부를 재는 비교용 단순 모델, 배포 후 드리프트 탐지의 기준이 되는 Model Monitor 기준선, 특성이 없는 상태를 대신하는 SHAP 설명 기준선 세 가지로 쓰입니다. 목적도 만드는 방법도 다릅니다.",
+      "explanation": "공식 문서에서 baseline은 개선 여부를 재는 비교용 단순 모델, 배포 후 드리프트 탐지의 기준이 되는 Model Monitor 기준선, 특성이 없는 상태를 대신하는 SHAP 설명 기준선 세 가지로 쓰입니다. 목적도 만드는 방법도 다릅니다. ⚠️ Model Monitor는 현재 신규 고객을 받지 않습니다(기존 고객은 사용 가능).",
       "wrongExplanations": {
         "1": "데이터 분할은 평가 방법에 관한 구분이며 baseline이라는 용어가 가리키는 대상이 아닙니다.",
         "2": "지표의 초기 측정값은 비교용 단순 모델의 산출물일 수 있지만 세 가지 용례를 설명하지 못합니다.",
@@ -462,7 +462,7 @@
       "explanation": "공지는 기울기·활성화·가중치 분석의 대체로 TensorBoard를 지목하며, 훈련 단계별 모델 내부를 보는 히스토그램·분포 플러그인을 제공한다고 적습니다. MLflow는 스칼라 지표와 실행 비교 쪽입니다.",
       "wrongExplanations": {
         "1": "CloudWatch는 CPU·GPU·메모리 같은 시스템 리소스 프로파일링의 대체로 제시됩니다.",
-        "2": "Bedrock Evaluations는 파운데이션 모델 평가 쪽 대체이며, 공지는 이것이 예측형 모델의 편향 감지·설명 대체가 아니라고 명시합니다.",
+        "2": "Bedrock Evaluations는 Clarify 공지가 파운데이션 모델 평가(FMEval)의 대체로 드는 경로이고, 그 Clarify 공지가 예측형 모델의 편향 감지·설명 대체는 아니라고 적습니다. Debugger 공지의 대체 표에는 Bedrock이 아예 없고 MLflow·TensorBoard·CloudWatch만 있습니다.",
         "3": "Model Monitor는 배포 후 드리프트 모니터링 기능이고 같은 묶음 공지로 신규 고객이 쓸 수 없습니다."
       },
       "sources": [
