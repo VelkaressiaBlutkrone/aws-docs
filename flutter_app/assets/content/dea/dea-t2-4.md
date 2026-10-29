@@ -62,16 +62,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **zone map** | zone map | Redshift가 1 MB 블록마다 저장하는 *min/max 메타데이터* — 범위 조건에서 블록을 건너뛴다 |
-| **팩트 / 디멘션** | fact / dimension | 사건 기록을 담는 *큰* 테이블 / 그 속성을 설명하는 *작은* 테이블 |
-| **ATO** | automatic table optimization | Redshift가 정렬 키·분산 키를 *자동으로 골라 적용*하는 자가 튜닝 |
-| **스키마 드리프트** | schema drift | 소스의 컬럼·타입이 *예고 없이 바뀌어* 파이프라인이 어긋나는 현상 |
-| **호환성 모드** | compatibility mode | 스키마 레지스트리가 *새 버전 등록을 허용할지 판단*하는 규칙 |
-| **스키마 온 리드** | schema-on-read | 저장할 때가 아니라 *읽을 때 스키마를 적용*하는 방식(Athena) |
-| **계보** | lineage | 데이터가 *어디서 왔고 어떻게 변환됐는지* 추적한 기록 |
-| **임베딩** | embedding | 텍스트 청크를 나타내는 *숫자열(벡터)* |
-| **청킹** | chunking | 문서를 *임베딩하기 좋은 조각으로 나누는* 전처리 |
-| **RAG** | retrieval augmented generation | 저장소에서 관련 정보를 *찾아와 LLM 응답을 보강*하는 기법 |
+| **zone map** | zone map | Redshift가 1 MB 블록마다 저장하는 min/max 메타데이터 — 범위 조건에서 블록을 건너뛴다 |
+| **팩트 / 디멘션** | fact / dimension | 사건 기록을 담는 큰 테이블 / 그 속성을 설명하는 작은 테이블 |
+| **ATO** | automatic table optimization | Redshift가 정렬 키·분산 키를 자동으로 골라 적용하는 자가 튜닝 |
+| **스키마 드리프트** | schema drift | 소스의 컬럼·타입이 예고 없이 바뀌어 파이프라인이 어긋나는 현상 |
+| **호환성 모드** | compatibility mode | 스키마 레지스트리가 새 버전 등록을 허용할지 판단하는 규칙 |
+| **스키마 온 리드** | schema-on-read | 저장할 때가 아니라 읽을 때 스키마를 적용하는 방식(Athena) |
+| **계보** | lineage | 데이터가 어디서 왔고 어떻게 변환됐는지 추적한 기록 |
+| **임베딩** | embedding | 텍스트 청크를 나타내는 숫자열(벡터) |
+| **청킹** | chunking | 문서를 임베딩하기 좋은 조각으로 나누는 전처리 |
+| **RAG** | retrieval augmented generation | 저장소에서 관련 정보를 찾아와 LLM 응답을 보강하는 기법 |
 
 ---
 

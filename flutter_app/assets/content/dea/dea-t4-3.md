@@ -73,16 +73,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **익명화** | anonymization | 개인을 식별하지 못하게 바꾸는 것(*비가역이어야 함*) |
-| **가명처리** | pseudonymization | *추가 정보가 있어야만* 되돌릴 수 있게 바꾸는 것 |
-| **토큰화** | tokenization | 민감 값을 *토큰화 시스템으로 원본에 매핑되는 참조값*으로 바꾸는 것 |
-| **DDM** | dynamic data masking | 저장 데이터를 바꾸지 않고 *질의 시 보이는 방식*을 바꾸는 것 |
-| **SSE** | server-side encryption | *서비스가 받은 뒤* 저장할 때 암호화하는 것 |
-| **봉투 암호화** | envelope encryption | 데이터는 *데이터 키로*, 그 데이터 키는 *다른 키로* 암호화하는 방식 |
-| **암호화 컨텍스트** | encryption context | 암호문에 묶이는 *비밀 아닌* key-value 추가 인증 데이터 |
-| **grant** | grant | 서비스가 쓰는 *임시 권한 위임*(allow만, deny 불가) |
-| **Bucket Keys** | S3 Bucket Keys | 버킷 수준 키로 *S3→KMS 요청 수를 줄이는* 기능 |
-| **MRK** | multi-Region key | *여러 리전에 같은 키 ID·키 자료*를 둔 KMS 키 |
+| **익명화** | anonymization | 개인을 식별하지 못하게 바꾸는 것(비가역이어야 함) |
+| **가명처리** | pseudonymization | 추가 정보가 있어야만 되돌릴 수 있게 바꾸는 것 |
+| **토큰화** | tokenization | 민감 값을 토큰화 시스템으로 원본에 매핑되는 참조값으로 바꾸는 것 |
+| **DDM** | dynamic data masking | 저장 데이터를 바꾸지 않고 질의 시 보이는 방식을 바꾸는 것 |
+| **SSE** | server-side encryption | 서비스가 받은 뒤 저장할 때 암호화하는 것 |
+| **봉투 암호화** | envelope encryption | 데이터는 데이터 키로, 그 데이터 키는 다른 키로 암호화하는 방식 |
+| **암호화 컨텍스트** | encryption context | 암호문에 묶이는 비밀 아닌 key-value 추가 인증 데이터 |
+| **grant** | grant | 서비스가 쓰는 임시 권한 위임(allow만, deny 불가) |
+| **Bucket Keys** | S3 Bucket Keys | 버킷 수준 키로 S3→KMS 요청 수를 줄이는 기능 |
+| **MRK** | multi-Region key | 여러 리전에 같은 키 ID·키 자료를 둔 KMS 키 |
 
 ---
 

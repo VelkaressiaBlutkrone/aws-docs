@@ -75,17 +75,17 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **datashare** | datashare | Redshift에서 *공유할 객체를 담는 그릇* |
-| **프로듀서·소비자** | producer / consumer | 데이터를 *내주는 쪽* / *받아 쓰는 쪽* |
-| **핸드셰이크** | handshake | 양쪽이 *각자 승인해야* 성립하는 절차 |
-| **네임스페이스** | namespace | Redshift 클러스터·워크그룹의 *논리적 식별 단위* |
-| **finding** | finding | Macie가 만드는 *탐지 결과 기록* |
-| **관리형 식별자** | managed data identifier | AWS가 *내장 기준으로* 민감 유형을 탐지하는 규칙 |
-| **데이터 상주** | data residency | 데이터를 *특정 관할권에 두어야 하는* 요건 |
-| **데이터 주권** | data sovereignty | 데이터가 *물리적 위치의 법·규정 적용*을 받는 것 |
-| **구성 항목** | configuration item | 어떤 시점의 *리소스 구성 스냅샷* |
-| **aggregator** | aggregator | 여러 계정·리전의 Config 데이터를 *한 계정에서 모아 보는* 것 |
-| **데이터 메시** | data mesh | 도메인별 생산자·소비자와 *중앙 거버넌스 계층*을 둔 구조 |
+| **datashare** | datashare | Redshift에서 공유할 객체를 담는 그릇 |
+| **프로듀서·소비자** | producer / consumer | 데이터를 내주는 쪽 / 받아 쓰는 쪽 |
+| **핸드셰이크** | handshake | 양쪽이 각자 승인해야 성립하는 절차 |
+| **네임스페이스** | namespace | Redshift 클러스터·워크그룹의 논리적 식별 단위 |
+| **finding** | finding | Macie가 만드는 탐지 결과 기록 |
+| **관리형 식별자** | managed data identifier | AWS가 내장 기준으로 민감 유형을 탐지하는 규칙 |
+| **데이터 상주** | data residency | 데이터를 특정 관할권에 두어야 하는 요건 |
+| **데이터 주권** | data sovereignty | 데이터가 물리적 위치의 법·규정 적용을 받는 것 |
+| **구성 항목** | configuration item | 어떤 시점의 리소스 구성 스냅샷 |
+| **aggregator** | aggregator | 여러 계정·리전의 Config 데이터를 한 계정에서 모아 보는 것 |
+| **데이터 메시** | data mesh | 도메인별 생산자·소비자와 중앙 거버넌스 계층을 둔 구조 |
 
 ---
 
