@@ -284,7 +284,7 @@
         "Network Access Analyzer — 접근 범위를 정의해 정책 위반 경로를 전수 열거한다",
         "Reachability Analyzer — 소스·대상 한 쌍씩 점검한다",
         "Flow Logs — 과거 트래픽을 조회한다",
-        "Config 적합성 팩 — 구성 준수만 평가한다"
+        "Config 규정 준수 팩 — 구성 준수만 평가한다"
       ],
       "correct": 0,
       "explanation": "Network Access Analyzer는 접근 범위(Network Access Scope)를 정의하면 VPC 구성을 스캔해 의도치 않은 접근 경로를 모두 열거합니다. 특정 소스-대상 쌍의 도달성 진단은 Reachability Analyzer의 역할입니다.",
