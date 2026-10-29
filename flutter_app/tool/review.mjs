@@ -56,12 +56,14 @@ export const CERTS = {
     label: 'SOA-C03',
     domains: 5, // ⚠️ 유일한 5도메인 자격증(공식명 CloudOps Engineer, 가이드 v1.1)
     tests: ['test/soa_questions_test.dart', 'test/content_index_test.dart'],
+    flipAllowlist: { file: 'test/soa_questions_test.dart', symbol: 'flipApprovedTaskIds' },
   },
   dea: {
     dir: 'assets/content/dea',
     label: 'DEA-C01',
     domains: 4,
     tests: ['test/dea_questions_test.dart', 'test/content_index_test.dart'],
+    flipAllowlist: { file: 'test/dea_questions_test.dart', symbol: 'flipApprovedTaskIds' },
   },
   mla: {
     dir: 'assets/content/mla',

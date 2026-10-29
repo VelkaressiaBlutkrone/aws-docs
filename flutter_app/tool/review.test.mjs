@@ -248,7 +248,7 @@ test('questionFilePath: 없는 taskId는 throw', () => {
   assert.throws(() => questionFilePath(resolveCert('mla'), 'mla-t9-9'), /mla-t9-9/);
 });
 
-test('addToAllowlist: 실제 mla_questions_test.dart의 선언 스타일에 적용된다', () => {
+test('addToAllowlist: flipAllowlist가 있는 전 자격증의 선언 스타일에 적용된다', () => {
   // 선언 스타일이 바뀌면(한 줄 → 여러 줄 등) 여기서 먼저 깨진다.
   //
   // ⚠️ **목록의 현재 내용을 박지 않는다.** 전에는 결과가
@@ -257,15 +257,26 @@ test('addToAllowlist: 실제 mla_questions_test.dart의 선언 스타일에 적�
   // 이 테스트가 레드가 됐고, node 테스트가 CI에 없어 **조용히** 레드로 남아
   // 있었다(2026-10-29 실측). 상태가 아니라 **동작**을 본다: 기존 항목을
   // 보존하면서 새 Task 하나를 뒤에 붙이는가.
-  const { file, symbol } = resolveCert('mla').flipAllowlist;
+  //
+  // ⚠️ **MLA 하나만 보지 않는다.** 2026-10-29에 SOA·DEA에도 허용 목록이
+  // 생겼고(그 전에는 전수 `verified: false` 단정이 사람의 첫 flip을 막았다),
+  // 한 자격증만 검사하면 다른 자격증의 선언 스타일이 어긋나도 모른다.
+  const certs = Object.entries(CERTS).filter(([, c]) => c.flipAllowlist);
+  assert.ok(certs.length >= 3, `flipAllowlist 보유 자격증 ${certs.length}종 — 줄었으면 확인하라`);
+  for (const [code, cert] of certs) {
+    checkAllowlistStyle(code, cert.flipAllowlist);
+  }
+});
+
+function checkAllowlistStyle(code, { file, symbol }) {
   const src = readFileSync(appPath(file), 'utf8');
   const decl = new RegExp(`const\\s+${symbol}\\s*=\\s*<String>\\{([\\s\\S]*?)\\};`);
   const before = decl.exec(src);
   assert.ok(before, `${file}에서 ${symbol} 선언을 찾지 못했다 — 선언 스타일이 바뀌었다`);
 
-  const fresh = 'mla-t9-9'; // 실재하지 않는 Task — 목록 내용과 무관하게 새 항목이다
+  const fresh = `${code}-t9-9`; // 실재하지 않는 Task — 목록 내용과 무관하게 새 항목이다
   const after = decl.exec(addToAllowlist(src, symbol, fresh));
-  assert.ok(after, '적용 결과에서 선언을 다시 찾지 못했다');
+  assert.ok(after, `${code}: 적용 결과에서 선언을 다시 찾지 못했다`);
   const kept = before[1].replace(/\s*,?\s*$/, '');
-  assert.equal(after[1], kept.trim() ? `${kept}, '${fresh}'` : `'${fresh}'`);
-});
+  assert.equal(after[1], kept.trim() ? `${kept}, '${fresh}'` : `'${fresh}'`, code);
+}
