@@ -79,8 +79,8 @@
       },
       "sources": [
         {
-          "title": "AWS Config 규칙 평가 모드",
-          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config-rules.html"
+          "title": "AWS Config 규칙 구성 요소 — 트리거 유형과 평가 모드",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html"
         }
       ],
       "verified": false

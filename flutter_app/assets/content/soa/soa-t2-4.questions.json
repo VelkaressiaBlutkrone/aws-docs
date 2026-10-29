@@ -403,8 +403,8 @@
       },
       "sources": [
         {
-          "title": "AWS Well-Architected 신뢰성 기둥 — 재해 복구 테스트",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/testing-disaster-recovery.html"
+          "title": "AWS Well-Architected 신뢰성 기둥 — REL13-BP03 재해 복구 구현 테스트",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_dr_tested.html"
         }
       ],
       "verified": false

@@ -272,8 +272,8 @@
       },
       "sources": [
         {
-          "title": "패치 그룹에 인스턴스 추가",
-          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-group-tagging.html"
+          "title": "패치 그룹에 태그 지정",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-tag-a-patch-group.html"
         }
       ],
       "verified": false
@@ -300,7 +300,7 @@
       "sources": [
         {
           "title": "Systems Manager 유지 관리 기간",
-          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-maintenance.html"
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows.html"
         }
       ],
       "verified": false

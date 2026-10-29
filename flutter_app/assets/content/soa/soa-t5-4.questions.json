@@ -322,8 +322,8 @@
       },
       "sources": [
         {
-          "title": "VPC 연결 문제 해결",
-          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-troubleshooting.html"
+          "title": "Amazon VPC 인프라 보안 — 네트워크 트래픽 제어 계층",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html"
         }
       ],
       "verified": false
