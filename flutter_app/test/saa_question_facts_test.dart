@@ -1654,14 +1654,9 @@ void main() {
             '말고 Evaluate Target Health 를 Yes 로 두는 것이 공식 권장이다 — '
             '헬스 체크가 필수인 것은 별칭을 못 쓰는 엔드포인트일 때다',
       ),
-      (
-        task: 'saa-t3-7', qid: 'saa-t3-7-q5', correct: 1,
-        forbidden: ['Route 53 Traffic Flow에서만 사용 가능합니다'],
-        required: ['거리 계산으로 정해지므로'],
-        why: 'q1 과 같은 "Traffic Flow 전용" 서술이 오답 근거에 복제돼 있었다 — '
-            'Geoproximity 가 규제 준수에 부적합한 진짜 이유는 경계가 거리 계산으로 '
-            '정해져 국가 단위를 보장하지 못한다는 점이다',
-      ),
+      // `saa-t3-7-q5` 레코드는 2026-10-28 중복·겹침 해소에서 지웠다 — 그 문항이
+      // Geoproximity 보기가 없는 IP 기반 라우팅 문항으로 교체돼 지킬 대상이 사라졌다.
+      // 같은 "Traffic Flow 전용" 서술 금지는 q1·q6 레코드가 계속 지킨다.
       (
         task: 'saa-t3-7', qid: 'saa-t3-7-q6', correct: 1,
         forbidden: [
@@ -2152,17 +2147,10 @@ void main() {
         required: ['Apache Parquet'],
         why: 'q3 과 같은 오류 — Athena 통합은 Parquet 형식만 지원한다',
       ),
-      (
-        task: 'saa-t4-5', qid: 'saa-t4-5-q13', correct: 2,
-        forbidden: [
-          '이 문서에서 언급되지 않습니다. backfill은 활성화된 태그 키에 대해 요청할 수 있습니다',
-        ],
-        required: ['관리 계정 사용자가 요청'],
-        why: '공식 문서 첫 문장이 "관리 계정 사용자가 최대 12개월치 backfill 을 요청할 '
-            '수 있다" 다 — "이 문서에서 언급되지 않는다" 는 서술이 바로 그 문서를 '
-            '출처로 달고 있었다. 보기 3 이 오답인 이유는 관리 계정 제한이 아니라 '
-            '"불가능하다" 는 결론이다',
-      ),
+      // `saa-t4-5-q13` 레코드는 2026-10-28 중복·겹침 해소에서 지웠다 — q5 해설이
+      // 이 문항의 정답을 그대로 적고 있어 q13 을 RI·Savings Plans 할인 공유 문항으로
+      // 교체했다. backfill 요청 주체(관리 계정 사용자)는 q5 레코드가 계속 지키고,
+      // "이 문서에서 언급되지 않" 금지는 이 그룹의 t4-5 집계형 테스트가 지킨다.
       (
         task: 'saa-t4-5', qid: 'saa-t4-5-q14', correct: 0,
         forbidden: ['5개 기둥'],
@@ -2574,16 +2562,12 @@ void main() {
             'penalty ... adds latency" · "Cache churn. Most data is never read, which is a '
             'waste of resources"',
       ),
-      (
-        task: 'saa-t3-6', qid: 'saa-t3-6-q15',
-        add: 'dg/Strategies',
-        drop: 'ElastiCache/latest/dg/WhatIs',
-        why: 'Lazy loading 단점 "Stale data. If data is written to the cache only when there '
-            'is a cache miss, data in the cache can become stale ... To address this issue, '
-            'you can use the Write-through and Adding TTL strategies" + TTL 절 "When an '
-            'application attempts to read an expired key, it is treated as though the key '
-            'is not found. The database is queried for the key and the cache is updated."',
-      ),
+      // `saa-t3-6-q15` 레코드는 2026-10-28 중복·겹침 해소에서 지웠다 — 그 문항의
+      // 오답 근거가 q14 의 정답(Write-Through)을 그대로 알려 줘 ElastiCache 배포
+      // 형태 문항으로 교체했다. 캐싱 전략 페이지(`dg/Strategies`) 출처는 q14
+      // 레코드가 계속 지킨다. ⚠️ 새 q15 는 `WhatIs.deployment` 를 출처로 쓰므로
+      // 이 레코드의 `drop: 'ElastiCache/latest/dg/WhatIs'` 가 남아 있으면 그
+      // 부분 문자열에 걸려 거짓 실패한다.
     ];
 
     for (final s in swaps) {
@@ -2780,16 +2764,10 @@ void main() {
         ].join('\n');
 
     final swaps = <({String task, String qid, String add, String drop, String why})>[
-      (
-        task: 'saa-t4-1', qid: 'saa-t4-1-q10',
-        add: 'nat-gateway-pricing',
-        drop: 'ec2/pricing/on-demand',
-        why: '"you are charged for each hour that your NAT gateway is available and each '
-            'gigabyte of data that it processes" + 비용 절감 전략으로 "If most traffic '
-            'through your NAT gateway is to AWS services that support interface endpoints '
-            'or gateway endpoints, consider creating an interface endpoint or gateway '
-            'endpoint for these services"',
-      ),
+      // `saa-t4-1-q10` 레코드는 2026-10-28 중복·겹침 해소에서 지웠다 — 그 문항이
+      // `saa-t4-4-q4` 와 거의 같아 Transfer Family 과금 문항으로 교체했다. NAT 요금
+      // 구조·게이트웨이 엔드포인트 무료 출처 단정은 같은 두 페이지를 이미 들고 있던
+      // `saa-t4-4-q4` 로 옮겼다(이 파일 마지막 그룹).
       (
         task: 'saa-t4-1', qid: 'saa-t4-1-q12',
         add: 'AmazonCloudFront/latest/DeveloperGuide/Introduction',
@@ -2864,14 +2842,8 @@ void main() {
       });
     }
 
-    test('saa-t4-1-q10: 게이트웨이 엔드포인트 무료 근거도 함께 달렸다', () {
-      expect(
-          hasSource(question('saa-t4-1', 'saa-t4-1-q10'),
-              'privatelink/gateway-endpoints'),
-          isTrue,
-          reason: 'NAT 요금 페이지는 "게이트웨이 엔드포인트는 무료"를 적지 않는다. 근거: '
-              '"There is no additional charge for using gateway endpoints."');
-    });
+    // `saa-t4-1-q10` 단독 테스트는 2026-10-28 중복·겹침 해소에서 지웠다 —
+    // 같은 단정을 `saa-t4-4-q4` 에 옮겨 두었다(이 파일 마지막 그룹).
 
     test('saa-t4-4-q1·q10·q11: 데이터 전송 비용 개요 출처도 함께 달렸다', () {
       for (final qid in <String>['saa-t4-4-q1', 'saa-t4-4-q10', 'saa-t4-4-q11']) {
@@ -2912,6 +2884,291 @@ void main() {
               '말하고, 요율 표는 리전·서비스별로 다르다');
       expect(text.contains('송신 리전'), isTrue,
           reason: 'saa-t4-4-q1 에 문서가 적는 근거(서비스별·송신 리전별 요율)가 없다');
+    });
+  });
+
+  // ── 2026-10-27 검수 보고 `중복·겹침 문항` — 8쌍 해소 (2026-10-28) ───────────
+  //
+  // 보고가 "거의 같은 문항 6쌍"과 "한 Task 안에서 정답만 뒤집어 출제한 2쌍"으로
+  // 적은 여덟 쌍이다. 한 모의고사에 함께 뽑히면 같은 문제를 두 번 풀거나 서로
+  // 답을 알려 준다. 각 쌍에서 더 잘 쓰인 쪽을 남기고, 다른 쪽을 그 Task 학습문서가
+  // 이미 가르치지만 아직 출제되지 않은 사실로 바꿨다.
+  //
+  // ⚠️ `correct` 는 **여덟 건 모두 바뀌지 않았다** — 새 문항의 정답을 교체 전과 같은
+  //    인덱스에 두었다. 앱이 모든 경로에서 보기를 섞으므로 인덱스는 학습자에게
+  //    보이지 않고, 기존 "정답 불변" 단정도 그대로 유지된다.
+  // ⚠️ t1-1·t1-2·t3-5 는 `verified:true` **라이브 노출 중**이었다(사용자 승인
+  //    2026-10-28). flip 이 아니라 본문만 바꾸는 핫픽스이므로 `verified` 는 손대지
+  //    않았고, 교체 사실이 그 Task 학습문서(`.md`)에 실제로 있는지 먼저 확인했다.
+  // ⚠️ 이 교체로 **옛 가드 7건을 지웠다** — 사라진 문항을 지키던 레코드다
+  //    (t3-7-q5 fix 2 · t4-5-q13 fix 2 · t3-6-q15 swap 1 · t4-1-q10 swap 1 +
+  //    t4-1-q10 단독 테스트 1). t4-1-q10 이 지키던 출처 사실(NAT 요금 구조·게이트웨이
+  //    엔드포인트 무료)은 같은 두 페이지를 이미 들고 있는 `saa-t4-4-q4` 로 옮겼다.
+  // ⚠️ t4-5 는 보고가 "q5 해설에 q13 정답이 그대로 들어 있다"고 적었지만, 그 문장은
+  //    PR #264 가 공식 문서에 맞춰 **일부러 넣고 가드까지 걸어 둔** 것이다
+  //    (`required: ['관리 계정 사용자가 backfill을 요청하면']`). 그래서 문장을 지워
+  //    가드를 느슨하게 만드는 대신, 그 문장이 답을 알려 주는 **q13 쪽을** 바꿨다.
+  group('2026-10-28 중복·겹침 문항 8쌍 해소', () {
+    String allText(Map<String, dynamic> q) => <String>[
+          q['stem'] as String? ?? '',
+          q['skill'] as String? ?? '',
+          q['explanation'] as String? ?? '',
+          ...(q['options'] as List).cast<String>(),
+          ...(q['wrongExplanations'] as Map<String, dynamic>).values
+              .cast<String>(),
+        ].join('\n');
+
+    String correctOption(Map<String, dynamic> q) =>
+        (q['options'] as List).cast<String>()[(q['correct'] as num).toInt()];
+
+    // 쌍마다 "양쪽에 동시에 나와서는 안 되는" 문구를 하나씩 고정한다.
+    // `keepAnswer` 는 남긴 쪽의 **정답 보기**에 남아 있어야 하고(그 Task 가 그 사실을
+    // 계속 가르친다), `gone` 은 교체한 쪽 **어디에도** 없어야 한다(중복 소멸).
+    final pairs = <({
+      String keepTask,
+      String keepQid,
+      String keepAnswer,
+      String dropTask,
+      String dropQid,
+      String gone,
+      String why,
+    })>[
+      (
+        keepTask: 'saa-t1-2',
+        keepQid: 'saa-t1-2-q2',
+        keepAnswer: 'SCP는 권한을 부여하지 않고 상한선만',
+        dropTask: 'saa-t1-1',
+        dropQid: 'saa-t1-1-q8',
+        gone: 'SCP는 권한을 부여하지 않',
+        why: 'SCP 는 t1-2(Organizations·Control Tower·SCP)의 핵심 주제이고 t1-2-q2 '
+            '쪽 해설이 유효 권한의 교집합과 관리 계정 루트 예외까지 적는다. t1-1-q8 은 '
+            '세션 정책 문항으로 바꿨다 — t1-1 의 SCP 문항은 q7·q9 가 남는다',
+      ),
+      (
+        keepTask: 'saa-t1-1',
+        keepQid: 'saa-t1-1-q9',
+        keepAnswer: '권한 경계는 개별 사용자·역할에',
+        dropTask: 'saa-t1-2',
+        dropQid: 'saa-t1-2-q5',
+        gone: '권한 경계',
+        why: '권한 경계는 t1-1.md §3 정책 유형 표가 가르치는 IAM 기능이라 t1-1 쪽을 '
+            '남겼다 — 여기서 빼면 권한 경계가 t1-1 에서 아예 사라진다. t1-2 는 SCP '
+            '문항이 q2·q3·q4·q6 네 개 남는다',
+      ),
+      (
+        keepTask: 'saa-t3-5',
+        keepQid: 'saa-t3-5-q15',
+        keepAnswer: 'Multi-AZ로 고가용성을 확보하고 Read Replica를 별도로 추가',
+        dropTask: 'saa-t3-5',
+        dropQid: 'saa-t3-5-q3',
+        gone: '자동 페일오버',
+        why: 'q1(Multi-AZ 정의)·q2(읽기 확장 선택)·q15(둘을 함께 쓰는 설계)가 각각 '
+            '다른 것을 묻는데 q3 만 순수 비교 암기였고, q15 의 오답 보기 [0]·[1] 이 '
+            'q3 의 정답 내용 그 자체였다',
+      ),
+      (
+        keepTask: 'saa-t2-4',
+        keepQid: 'saa-t2-4-q14',
+        keepAnswer: 'RDS Multi-AZ를 활성화한다',
+        dropTask: 'saa-t2-4',
+        dropQid: 'saa-t2-4-q7',
+        gone: '수동 승격',
+        why: 't2-4 는 같은 사실을 q6(목적 구분)·q7(페일오버 차이)·q14(키워드 매핑) '
+            '셋이 물고 있었다. q14 는 시나리오 키워드를 설계로 옮기는 Task 고유의 '
+            '기술이라 남기고, 순수 비교였던 q7 을 바꿨다',
+      ),
+      (
+        keepTask: 'saa-t4-4',
+        keepQid: 'saa-t4-4-q4',
+        keepAnswer: 'S3 Gateway Endpoint를 생성하고',
+        dropTask: 'saa-t4-1',
+        dropQid: 'saa-t4-1-q10',
+        gone: 'Gateway Endpoint',
+        why: 'VPC 엔드포인트 비용은 t4-4(비용 최적화 네트워크)의 주제이고 그쪽 오답 '
+            '근거가 Interface Endpoint 요금 구조까지 적는다. t4-1(비용 최적화 '
+            '스토리지)은 §8 전송·하이브리드 서비스 선택으로 바꿨다',
+      ),
+      (
+        keepTask: 'saa-t4-5',
+        keepQid: 'saa-t4-5-q5',
+        keepAnswer: '비용 할당 태그로 활성화하지 않았다',
+        dropTask: 'saa-t4-5',
+        dropQid: 'saa-t4-5-q13',
+        gone: 'backfill',
+        why: 'q5 해설의 backfill 문장은 PR #264 가 공식 문서에 맞춰 넣고 가드까지 걸어 '
+            '둔 것이다. 그 문장을 지워 가드를 느슨하게 하는 대신, 그 문장이 답을 '
+            '알려 주는 q13 을 §7 RI·Savings Plans 할인 공유로 바꿨다',
+      ),
+      (
+        keepTask: 'saa-t3-6',
+        keepQid: 'saa-t3-6-q14',
+        keepAnswer: 'Write-Through',
+        dropTask: 'saa-t3-6',
+        dropQid: 'saa-t3-6-q15',
+        gone: 'Lazy Loading',
+        why: 'q15 의 오답 근거 [0] 이 "Write-Through 로 전환하면 stale 문제를 근본적으로 '
+            '해결할 수 있다"고 적어 q14 의 정답과 근거를 그대로 넘겨주고 있었다. '
+            '더 어려운 쪽(stale 없음 = Write-Through)을 남겼다',
+      ),
+      (
+        keepTask: 'saa-t3-7',
+        keepQid: 'saa-t3-7-q1',
+        keepAnswer: 'Latency 정책',
+        dropTask: 'saa-t3-7',
+        dropQid: 'saa-t3-7-q5',
+        gone: '지역 규제',
+        why: '두 문항의 보기 집합이 거의 같은데 정답만 Latency ↔ Geolocation 으로 '
+            '뒤집혀 있었다. 가장 자주 나오는 Latency 쪽을 남기고, q5 는 md §3 이 '
+            '"빠지면 8종이 아니다"라고 못박은 IP 기반 라우팅으로 바꿨다. Geolocation '
+            '개념 자체는 q1·q6 의 보기로 계속 노출된다',
+      ),
+    ];
+
+    for (final p in pairs) {
+      test('${p.dropQid}: ${p.keepQid} 와 같은 사실을 더는 묻지 않는다', () {
+        expect(correctOption(question(p.keepTask, p.keepQid)).contains(p.keepAnswer),
+            isTrue,
+            reason: '${p.keepQid} 의 정답 보기에서 공통 사실이 사라졌다: '
+                '"${p.keepAnswer}"\n남긴 이유: ${p.why}');
+        expect(allText(question(p.dropTask, p.dropQid)).contains(p.gone), isFalse,
+            reason: '${p.dropQid} 에 ${p.keepQid} 와 겹치는 문구가 남아 있다: '
+                '"${p.gone}"\n교체 이유: ${p.why}');
+      });
+    }
+
+    // 교체한 여덟 문항: 정답 인덱스 불변 + 새 문항의 공식 사실·출처.
+    final replacements = <({
+      String task,
+      String qid,
+      int correct,
+      List<String> required,
+      String source,
+      String why,
+    })>[
+      (
+        task: 'saa-t1-1',
+        qid: 'saa-t1-1-q8',
+        correct: 1,
+        required: ['세션 정책', '교집합'],
+        source: 'access_policies.html#policies_session',
+        why: 'AssumeRole 공식 문서: 세션의 유효 권한은 역할의 아이덴티티 기반 정책과 '
+            '세션 정책의 교집합이고, 세션 정책으로 역할 정책이 허용하는 것보다 많은 '
+            '권한을 부여할 수 없다. t1-1.md §3 정책 유형 표의 세션 정책 행이다',
+      ),
+      (
+        task: 'saa-t1-2',
+        qid: 'saa-t1-2-q5',
+        correct: 2,
+        required: ['위임 관리자', '신뢰된 액세스'],
+        source: 'orgs_integrate_delegated_admin',
+        why: 'Organizations 공식 문서: 관리 계정과 그 사용자·역할은 그 계정이 반드시 '
+            '수행해야 하는 작업에만 쓰라(SCP 가 관리 계정의 사용자·역할을 제한하지 '
+            '않으므로). 멤버 계정을 위임 관리자로 등록하면 그 서비스의 관리 권한과 '
+            'Organizations 읽기 전용 권한을 얻고, 등록 전에 그 서비스의 위임 관리자 '
+            '지원 확인과 신뢰된 액세스 활성화가 필요하다. t1-2.md §1 의 항목이다',
+      ),
+      (
+        task: 'saa-t3-5',
+        qid: 'saa-t3-5-q3',
+        correct: 1,
+        required: ['AWS SCT', '이기종'],
+        source: 'SchemaConversionTool',
+        why: 'AWS SCT 공식 문서: 원본 데이터베이스의 스키마를 변환하고, 저장 프로시저와 '
+            '애플리케이션 SQL 도 변환한다. DMS 동종 마이그레이션 문서는 같은 엔진끼리는 '
+            '네이티브 도구로 함수·저장 프로시저 같은 보조 객체까지 옮긴다고 적는다 — '
+            '변환이 필요한 것은 엔진이 달라질 때다. t3-5.md §10 이고 그 md 의 출처 '
+            '14·15 번 페이지를 그대로 쓴다',
+      ),
+      (
+        task: 'saa-t2-4',
+        qid: 'saa-t2-4-q7',
+        correct: 1,
+        required: ['지수 백오프', '지터'],
+        source: 'rel_mitigate_interaction_failure_limit_retries',
+        why: 'Well-Architected REL05-BP03: 점진적으로 긴 간격으로 재시도하는 지수 '
+            '백오프를 쓰고, 재시도 간격을 무작위화하는 지터를 넣고, 최대 재시도 '
+            '횟수를 제한하라. 즉시 재시도는 재시도 폭풍을 일으키고, 백오프만으로는 '
+            '모든 클라이언트가 동시에 백오프해 재시도 호출 군집이 생긴다. '
+            't2-4.md §12 가 인용하는 바로 그 페이지(2022-03-31 판)다',
+      ),
+      (
+        task: 'saa-t4-1',
+        qid: 'saa-t4-1-q10',
+        correct: 1,
+        required: ['Transfer Family', '삭제할 때까지'],
+        source: 'aws-transfer-family/faqs',
+        why: 'Transfer Family 공식 FAQ: 활성화한 프로토콜별로 시간당 과금되며, 서버 '
+            '엔드포인트를 만들어 프로토콜로 접근을 구성한 시점부터 삭제할 때까지 '
+            '이어진다. "서버를 중지했는데 중지된 동안에도 과금되는가"에 대한 답이 '
+            '"예"다. t4-1.md §8 이 "시험에서 자주 틀리는 두 가지"로 적는 항목이다',
+      ),
+      (
+        task: 'saa-t4-5',
+        qid: 'saa-t4-5-q13',
+        correct: 2,
+        required: ['Savings Plans', '공유'],
+        source: 'aboutv2/ri-turn-off',
+        why: '공식 문서: 조직의 관리 계정이 조직 내 어느 계정에 대해서든 RI·Savings '
+            'Plans 할인 공유를 제어한다. 조직 전체 공유에서는 커밋먼트가 계정 소유자에게 '
+            '먼저 적용되고 남은 혜택이 다른 조직 계정과 공유되며, 구매 계정과 수혜 '
+            '계정 **양쪽** 모두 공유가 활성화돼 있어야 한다. t4-5.md §7 의 항목이고 '
+            'q6(사용량 합산 볼륨 할인)과는 다른 사실이다',
+      ),
+      (
+        task: 'saa-t3-6',
+        qid: 'saa-t3-6-q15',
+        correct: 2,
+        required: ['ElastiCache Serverless', '용량'],
+        source: 'WhatIs.deployment',
+        why: 'ElastiCache 공식 배포 옵션 문서: 배포 형태는 서버리스 캐싱과 노드 기반 '
+            '클러스터 둘이고, 새 워크로드이거나 예측이 어려운 워크로드·불규칙한 트래픽·'
+            '가장 쉽게 시작하고 싶을 때 서버리스를 고른다. 서버리스는 용량 계획·하드웨어 '
+            '관리·클러스터 설계 없이 캐시를 만들고 자동 확장한다. t3-6.md §11 의 '
+            '★ 시험 포인트다',
+      ),
+      (
+        task: 'saa-t3-7',
+        qid: 'saa-t3-7-q5',
+        correct: 1,
+        required: ['IP 기반', 'CIDR'],
+        source: 'routing-policy-ipbased',
+        why: 'Route 53 공식 IP 기반 라우팅 문서: 네트워크·애플리케이션·클라이언트에 '
+            '대해 알고 있는 지식으로 DNS 라우팅을 조정하며, 대표 사용 사례가 특정 '
+            'ISP 의 최종 사용자를 지정 엔드포인트로 보내 네트워크 전송 비용이나 성능을 '
+            '최적화하는 것이다. 클라이언트 IP 범위를 위치에 매핑한 CIDR 컬렉션을 쓴다. '
+            't3-7.md §3 이 "빠지면 8종이 아니다"라고 못박은 정책이다',
+      ),
+    ];
+
+    for (final r in replacements) {
+      test('${r.qid}: 정답 인덱스는 그대로 ${r.correct}', () {
+        expect(question(r.task, r.qid)['correct'], r.correct,
+            reason: '교체 문항의 정답은 교체 전과 같은 인덱스에 두었다 — '
+                '사용자 승인 범위 밖이다');
+      });
+
+      test('${r.qid}: 새 문항의 공식 사실과 출처가 들어왔다', () {
+        final q = question(r.task, r.qid);
+        for (final good in r.required) {
+          expect(allText(q).contains(good), isTrue,
+              reason: '${r.qid} 에 새 문항의 공식 사실이 없다: "$good"\n공식: ${r.why}');
+        }
+        expect(hasSource(q, r.source), isTrue,
+            reason: '${r.qid} 가 ${r.source} 를 출처로 싣지 않는다');
+      });
+    }
+
+    // saa-t4-1-q10 을 교체하면서 그 문항이 지키던 출처 가드를 여기로 옮겼다.
+    // 두 페이지를 이미 함께 들고 있던 `saa-t4-4-q4` 가 같은 사실의 정본이다.
+    test('saa-t4-4-q4: NAT 요금 구조와 게이트웨이 엔드포인트 무료 근거를 함께 싣는다', () {
+      final q = question('saa-t4-4', 'saa-t4-4-q4');
+      expect(hasSource(q, 'nat-gateway-pricing'), isTrue,
+          reason: '공식: "you are charged for each hour that your NAT gateway is '
+              'available and each gigabyte of data that it processes" + 절감 전략으로 '
+              '게이트웨이·인터페이스 엔드포인트 생성을 권한다');
+      expect(hasSource(q, 'privatelink/gateway-endpoints'), isTrue,
+          reason: 'NAT 요금 페이지는 "게이트웨이 엔드포인트는 무료"를 적지 않는다. 공식: '
+              '"There is no additional charge for using gateway endpoints."');
     });
   });
 }

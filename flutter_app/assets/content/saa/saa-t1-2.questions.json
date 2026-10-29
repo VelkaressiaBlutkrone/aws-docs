@@ -103,24 +103,24 @@
     {
       "id": "saa-t1-2-q5",
       "examGuideTaskId": "saa-t1-2",
-      "skill": "SCP vs 권한 경계 적용 범위",
-      "difficulty": "foundational",
-      "stem": "SCP(서비스 제어 정책)와 권한 경계(Permissions Boundary)에 대한 설명으로 가장 옳은 것은?",
+      "skill": "서비스 위임 관리자 — 관리 계정 사용 축소",
+      "difficulty": "applied",
+      "stem": "한 조직이 AWS Organizations 관리 계정에서 조직 전체를 대상으로 하는 보안 서비스를 운영하고 있다. 관리 계정 사용은 꼭 그 계정이 해야 하는 일로 줄이면서, 그 서비스의 조직 전체 운영은 계속하고 싶다. 가장 적합한 방법은?",
       "options": [
-        "SCP는 개별 IAM 사용자·역할에, 권한 경계는 계정·OU 전체에 적용된다",
-        "SCP는 직접 권한을 부여하고, 권한 경계는 권한의 상한선만 설정한다",
-        "둘 다 권한을 부여하지 않고 상한선만 설정하지만, SCP는 계정·OU에, 권한 경계는 개별 사용자·역할에 적용된다",
-        "SCP는 Organizations 전용이고 권한 경계도 Organizations 전용이다"
+        "관리 계정에 IAM 역할을 만들고 보안팀에 교차 계정 수임 권한을 주어 계속 관리 계정에서 운영한다",
+        "각 멤버 계정에서 그 서비스를 개별적으로 설정하고 결과를 계정마다 수동으로 모은다",
+        "보안 계정을 그 서비스의 위임 관리자(delegated administrator)로 등록해 조직 전체 계정을 그 계정에서 관리한다",
+        "루트(Root)에 SCP를 붙여 관리 계정 외의 계정에도 그 서비스의 관리 권한을 부여한다"
       ],
       "correct": 2,
-      "explanation": "SCP와 권한 경계 모두 권한을 부여하지 않고 허용 가능한 최대치(상한선)만 설정합니다. 차이는 적용 단위입니다. SCP는 Organizations 관리자가 계정·OU·루트 단위로 설정하고, 권한 경계는 계정 내 IAM 관리자가 개별 IAM 사용자·역할에 설정합니다.",
+      "explanation": "Organizations와 통합되는 많은 AWS 서비스는 멤버 계정을 **위임 관리자**로 등록해 관리 계정 사용을 줄일 수 있게 합니다. 공식 문서는 관리 계정과 그 사용자·역할을 그 계정이 반드시 수행해야 하는 작업에만 쓰기를 권하며, 그 이유로 SCP가 관리 계정의 사용자·역할을 제한하지 않는다는 점을 듭니다. 위임 관리자로 등록된 멤버 계정은 그 서비스의 관리 권한과 Organizations 읽기 전용 권한을 함께 얻습니다. 등록 전에 그 서비스가 위임 관리자를 지원하는지 확인하고 그 서비스의 **신뢰된 액세스(trusted access)**를 활성화해야 하며, 등록은 관리 계정에서만 할 수 있습니다.",
       "wrongExplanations": {
-        "0": "적용 범위가 뒤바뀌었습니다. SCP가 계정·OU 전체에 적용되고, 권한 경계가 개별 사용자·역할에 적용됩니다.",
-        "1": "SCP도 권한을 직접 부여하지 않습니다. 둘 다 상한선 설정 도구이며, 실제 권한 부여는 아이덴티티 기반 정책이나 리소스 기반 정책이 담당합니다.",
-        "3": "권한 경계는 Organizations와 무관한 단일 계정 내 IAM 기능입니다. Organizations가 없는 단일 계정에서도 권한 경계를 사용할 수 있습니다."
+        "0": "관리 계정에 역할을 만들어 수임하게 하면 운영이 여전히 관리 계정 안에서 이뤄집니다. 관리 계정 사용을 줄이자는 요구를 충족하지 못하고, 관리 계정은 SCP의 제한도 받지 않습니다.",
+        "1": "계정마다 개별 설정하고 결과를 수동으로 모으면 조직 전체를 아우르는 중앙 관리가 되지 않고 계정이 늘수록 누락이 생깁니다. 위임 관리자는 한 계정에서 조직의 모든 계정을 보게 합니다.",
+        "3": "SCP는 권한을 부여하지 않고 상한만 제한하는 가드레일이므로 다른 계정에 서비스 관리 권한을 줄 수 없습니다. 위임 관리자 등록은 SCP가 아니라 Organizations의 별도 기능입니다."
       },
       "sources": [
-        { "title": "서비스 제어 정책(SCP) (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html" }
+        { "title": "Organizations 위임 관리자 (공식)", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html" }
       ],
       "verified": true
     },

@@ -232,25 +232,24 @@
     {
       "id": "saa-t4-1-q10",
       "examGuideTaskId": "saa-t4-1",
-      "skill": "S3 Gateway Endpoint — NAT 비용 회피",
+      "skill": "Transfer Family 과금 — 중지와 삭제의 차이",
       "difficulty": "applied",
-      "stem": "프라이빗 서브넷의 EC2 인스턴스가 NAT Gateway를 통해 S3에 대량의 데이터를 업로드하고 있어 NAT Gateway 데이터 처리 비용이 크게 발생하고 있다. 비용을 줄이면서 보안도 강화하는 가장 효과적인 방법은?",
+      "stem": "외부 파트너가 SFTP 클라이언트로 S3에 파일을 올리도록 AWS Transfer Family 서버를 띄웠다. 두 달간 전송이 전혀 없을 예정이라 비용을 줄이려고 서버를 중지(StopServer)해 두었다. 비용은 어떻게 되는가?",
       "options": [
-        "EC2 인스턴스를 퍼블릭 서브넷으로 이동해 NAT Gateway를 거치지 않게 한다",
-        "VPC에 S3 Gateway Endpoint를 추가하고 프라이빗 서브넷 라우트 테이블에 등록한다",
-        "S3 버킷을 EC2와 같은 AZ로 이동해 전송 비용을 절감한다",
-        "CloudFront를 S3 앞에 배치해 업로드 트래픽을 줄인다"
+        "중지한 시간에는 시간당 요금이 멈추고 전송량 요금만 남는다",
+        "중지해도 시간당 요금은 계속된다 — 과금은 엔드포인트를 만들어 프로토콜을 켠 시점부터 삭제할 때까지 이어지므로, 비용을 끊으려면 서버를 삭제해야 한다",
+        "중지한 서버는 30일 뒤 자동 삭제되므로 그때까지만 과금된다",
+        "전송이 없으면 시간당 요금도 0이 되므로 중지할 필요조차 없다"
       ],
       "correct": 1,
-      "explanation": "S3 Gateway Endpoint를 VPC에 추가하고 프라이빗 서브넷 라우트 테이블에 등록하면 S3 트래픽이 NAT Gateway를 우회해 AWS 내부 네트워크로 직접 전달됩니다. Gateway Endpoint는 무료이며 NAT Gateway 데이터 처리 요금이 발생하지 않고, S3 트래픽이 인터넷에 노출되지 않아 보안도 강화됩니다.",
+      "explanation": "AWS Transfer Family는 **활성화한 프로토콜별로 시간당** 과금되고, 그 과금은 서버 엔드포인트를 만들어 하나 이상의 프로토콜로 접근을 구성한 시점부터 **삭제할 때까지** 이어집니다. 공식 FAQ는 서버를 중지해도 과금에 영향이 없다고 명시합니다 — 콘솔·CLI(`stop-server`)·API(`StopServer`) 어느 경로로 중지해도 같습니다. 비수기에 비용을 끊으려면 서버를 삭제해야 합니다. 업로드·다운로드 전송량(GB) 요금은 여기에 더해지는 별도 축이므로, 전송이 없으면 전송량 요금만 0이 됩니다.",
       "wrongExplanations": {
-        "0": "EC2를 퍼블릭 서브넷으로 이동하면 인터넷 아웃바운드 전송 요금이 발생하고 보안이 약화됩니다. Gateway Endpoint는 프라이빗 서브넷을 유지하면서 비용을 줄이는 방법입니다.",
-        "2": "S3는 리전 단위 서비스로 특정 AZ에 배치할 수 없습니다. 또한 AZ를 조정해 NAT Gateway 처리 요금을 회피하는 방법은 존재하지 않습니다.",
-        "3": "CloudFront는 다운로드(읽기) 트래픽 비용 절감에 효과적이지만, EC2에서 S3로의 업로드 경로에는 직접적인 효과가 없습니다."
+        "0": "중지는 시간당 요금을 멈추지 않습니다. 공식 FAQ의 \"서버를 중지했는데 중지된 동안에도 과금됩니까\"에 대한 답이 \"예\"이고, 과금 기준은 엔드포인트를 만든 시점부터 삭제할 때까지입니다.",
+        "2": "중지한 Transfer Family 서버가 일정 기간 뒤 자동 삭제되는 규칙은 없습니다. 삭제는 사용자가 직접 해야 하며 그때까지 프로토콜별 시간당 요금이 이어집니다.",
+        "3": "시간당 요금은 전송량과 무관하게 엔드포인트를 켜 둔 시간에 붙습니다. 전송이 전혀 없어도 활성화한 프로토콜 수만큼 시간당 요금이 발생합니다."
       },
       "sources": [
-        { "title": "NAT 게이트웨이 요금과 절감 전략 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" },
-        { "title": "게이트웨이 엔드포인트 — 추가 요금 없음 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }
+        { "title": "AWS Transfer Family FAQ — 중지해도 과금은 삭제할 때까지 (공식)", "url": "https://aws.amazon.com/aws-transfer-family/faqs/" }
       ],
       "verified": false
     },
