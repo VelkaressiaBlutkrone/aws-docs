@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-integration.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q3",
@@ -99,7 +99,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q4",
@@ -131,7 +131,7 @@
           "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q5",
@@ -163,7 +163,7 @@
           "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-types-planning.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q6",
@@ -195,7 +195,7 @@
           "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/pipelines-about-starting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q7",
@@ -227,7 +227,7 @@
           "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q8",
@@ -259,7 +259,7 @@
           "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q9",
@@ -291,7 +291,7 @@
           "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/troubleshooting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q10",
@@ -323,7 +323,7 @@
           "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q11",
@@ -355,7 +355,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/deployment-strategies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q12",
@@ -387,7 +387,7 @@
           "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/application-specification-files.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q13",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/integrations-action-type.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q14",
@@ -455,7 +455,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q15",
@@ -487,7 +487,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q16",
@@ -519,7 +519,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-caching.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q17",
@@ -551,7 +551,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q18",
@@ -583,7 +583,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q19",
@@ -615,7 +615,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-whatis.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q20",
@@ -647,7 +647,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipeline-eventbridge.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q21",
@@ -679,7 +679,7 @@
           "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-steps-server.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q22",
@@ -711,7 +711,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_TrafficRoutingConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q23",
@@ -743,7 +743,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q24",
@@ -775,7 +775,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q25",
@@ -800,14 +800,14 @@
       "sources": [
         {
           "title": "Merge a pull request — 병합 전략 3종",
-          "url": "https://docs.aws.amazon.com/help-panel/codecommit/latest/helppanel/pull-requests.merge.html"
+          "url": "https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-merge-pull-request.html"
         },
         {
           "title": "MLOPS04-BP01 (Machine Learning Lens) — ML 자산의 버전 관리와 브랜치 전략",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-3-q26",
@@ -839,7 +839,7 @@
           "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

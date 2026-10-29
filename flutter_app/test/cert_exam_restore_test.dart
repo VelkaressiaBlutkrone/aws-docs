@@ -99,13 +99,15 @@ Future<void> _pump(
 void main() {
   setUp(rootBundle.clear);
 
-  test('전제: CLF-C02는 통합 모의고사 capacity 충족, MLA-C01은 미충족', () {
+  test('전제: CLF-C02는 통합 모의고사 capacity 충족, DEA-C01은 미충족', () {
     // 아래 게이트 테스트가 기대는 사실 — 바뀌면 그 테스트부터 다시 읽어야 한다.
-    // 잠긴 표본은 2026-10-28에 SAA에서 MLA로 옮겼다(SAA 게이트 개방). 누군가
-    // MLA의 D1·D3·D4 Task를 flip하면 이 단정이 먼저 터진다 — 그때 표본을
-    // 다시 옮겨라(현재 MLA availableByDomain = {1:0, 2:28, 3:0, 4:0}).
+    // 잠긴 표본은 SAA -> MLA(2026-10-28) -> DEA(2026-10-29) 로 옮겨 왔다.
+    // MLA 를 flip 할 수 있게 되면서 또 옮겼다. DEA-C01 은 정책이 있고
+    // verified 0 이라 같은 잠금 화면을 렌더하며, 드래프트 256문항에 검수
+    // 착수 전이라 당분간 잠긴 채로 남는다. 누군가 DEA 를 flip 하면 이
+    // 단정이 먼저 터진다 — 그때 또 옮겨라.
     expect(certExamHasWeightedCapacity('CLF-C02'), isTrue);
-    expect(certExamHasWeightedCapacity('MLA-C01'), isFalse);
+    expect(certExamHasWeightedCapacity('DEA-C01'), isFalse);
   });
 
   testWidgets('⚠️ capacity 미충족에서도 진행 세션을 지우지 않는다(잠금 화면에 "이어서 풀기")',
@@ -113,16 +115,16 @@ void main() {
     // 설계 §4.3 — 게이트가 세션을 지워 버리면 이 버튼이 아예 렌더되지 않는다.
     // 버튼이 **실제로 시험을 여는지**는 exam_snapshot_review_fixes_test의 C-1 가드가 본다.
     final b = MemoryBackend();
-    ExamSessionStore(backend: b).saveSnapshot(_snapshot('MLA-C01'));
+    ExamSessionStore(backend: b).saveSnapshot(_snapshot('DEA-C01'));
 
-    await _pump(tester, 'MLA-C01', b);
+    await _pump(tester, 'DEA-C01', b);
 
     expect(find.text('이어서 풀기'), findsOneWidget);
   });
 
   testWidgets('capacity 미충족에서 새 시험 시작은 여전히 막힌다', (tester) async {
     final b = MemoryBackend(); // 진행 세션 없음
-    await _pump(tester, 'MLA-C01', b);
+    await _pump(tester, 'DEA-C01', b);
     expect(find.text('시작'), findsNothing);
     expect(find.text('이어서 풀기'), findsNothing);
   });
@@ -260,9 +262,9 @@ void main() {
   testWidgets('짧은 뷰포트에서도 잠금 화면에서 이어서 풀 수 있다', (tester) async {
     // 비스크롤 Column이면 덧붙인 버튼이 잘려 **탭조차 못 한다** — §4.3이 통째로 막힌다.
     final b = MemoryBackend();
-    ExamSessionStore(backend: b).saveSnapshot(_snapshot('MLA-C01'));
+    ExamSessionStore(backend: b).saveSnapshot(_snapshot('DEA-C01'));
 
-    await _pump(tester, 'MLA-C01', b, size: const Size(400, 240));
+    await _pump(tester, 'DEA-C01', b, size: const Size(400, 240));
 
     expect(tester.takeException(), isNull, reason: '오버플로 없이 렌더돼야 한다');
     await tester.ensureVisible(find.text('이어서 풀기')); // 스크롤 조상이 없으면 여기서 던진다

@@ -110,14 +110,14 @@ void main() {
     await tester.pump();
     // CLF-C02·SAA-C03은 게이트가 열려 CTA가 동작하므로 검증 문항 수를 표기한다.
     expect(find.textContaining('통합 모의고사 · 검증'), findsWidgets);
-    // MLA-C01은 학습 콘텐츠는 있지만 D1·D3·D4 verified가 0이라 준비 중으로 남는다.
+    // DEA-C01은 학습 콘텐츠는 있지만 verified가 0이라 준비 중으로 남는다.
     expect(find.text('통합 모의고사 · 준비 중'), findsWidgets);
-    expect(find.text('MLA-C01'), findsWidgets);
+    expect(find.text('DEA-C01'), findsWidgets);
   });
 
   testWidgets('통합 모의고사 직접 진입은 weighted capacity 부족 시 잠김', (tester) async {
-    // 잠긴 표본은 MLA다 — SAA는 2026-10-28 t2-5 flip으로 게이트가 열렸다.
-    final cert = certByCode('MLA-C01')!;
+    // 잠긴 표본은 DEA다 — SAA(2026-10-28)에 이어 MLA도 flip 가능해져 옮겼다.
+    final cert = certByCode('DEA-C01')!;
     await tester.pumpWidget(
       ThemeScope(
         isDark: false,
@@ -132,11 +132,11 @@ void main() {
     await tester.pump(const Duration(milliseconds: 250));
     await tester.pump();
 
-    expect(find.text('MLA-C01 통합 모의고사는 아직 준비 중입니다.'), findsOneWidget);
+    expect(find.text('DEA-C01 통합 모의고사는 아직 준비 중입니다.'), findsOneWidget);
     // ⚠️ 진행 라벨에 'D1 0/19' 같은 **지금 숫자를 박으면** 사람이 D1 Task를
     // flip하는 순간 깨진다(2026-10-27 t1-1·t1-2 flip에서 실제로 깨졌다).
     // 게이트가 잠긴 동안 "현재 집계 라벨이 그대로 렌더되는가"만 본다.
-    final label = examWeightedCapacityStatus('MLA-C01').domainProgressLabel;
+    final label = examWeightedCapacityStatus('DEA-C01').domainProgressLabel;
     expect(label, isNotEmpty);
     expect(find.textContaining(label), findsOneWidget);
     expect(find.text('시작'), findsNothing);

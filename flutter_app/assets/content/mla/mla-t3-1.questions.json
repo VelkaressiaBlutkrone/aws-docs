@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-inference-code.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q3",
@@ -99,7 +99,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariantServerlessConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q4",
@@ -131,7 +131,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q5",
@@ -163,7 +163,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q6",
@@ -199,7 +199,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-monitor.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q7",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateTransformJob.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q8",
@@ -263,7 +263,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateTransformJob.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q9",
@@ -295,7 +295,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-autoscale.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q10",
@@ -327,7 +327,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/multi-container-direct.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q11",
@@ -359,7 +359,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-advanced.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q12",
@@ -391,7 +391,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q13",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-exclusions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q14",
@@ -455,7 +455,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-blue-green.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q15",
@@ -487,7 +487,7 @@
           "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/ec2-instance-type-specifications.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q16",
@@ -527,7 +527,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q17",
@@ -559,7 +559,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/inference-recommender.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q18",
@@ -595,7 +595,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q19",
@@ -623,7 +623,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q20",
@@ -659,7 +659,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/edge-eol.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q21",
@@ -691,7 +691,7 @@
           "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-faqs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q22",
@@ -723,7 +723,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q23",
@@ -755,7 +755,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/kubernetes-sagemaker-operators-ack.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q24",
@@ -787,7 +787,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-1-q25",
@@ -819,7 +819,7 @@
           "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/ac.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
