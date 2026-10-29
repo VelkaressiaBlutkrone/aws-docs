@@ -800,7 +800,7 @@
       "sources": [
         {
           "title": "Merge a pull request — 병합 전략 3종",
-          "url": "https://docs.aws.amazon.com/help-panel/codecommit/latest/helppanel/pull-requests.merge.html"
+          "url": "https://docs.aws.amazon.com/codecommit/latest/userguide/how-to-merge-pull-request.html"
         },
         {
           "title": "MLOPS04-BP01 (Machine Learning Lens) — ML 자산의 버전 관리와 브랜치 전략",

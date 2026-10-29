@@ -329,6 +329,10 @@
         {
           "title": "Analyzing log data with CloudWatch Logs Insights",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        },
+        {
+          "title": "StartQuery API — 계정당 동시 쿼리 100개",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html"
         }
       ],
       "verified": false

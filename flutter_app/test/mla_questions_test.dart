@@ -328,4 +328,104 @@ void main() {
         reason: '작성 과정 메모를 사실 서술로 바꾸거나 지우세요(루브릭 M2):\n'
             '${offenders.join('\n')}');
   });
+
+  // ── 2026-10-29 2차 검수 잔여 + Model Monitor 상태 문장 ──────────────────
+  //
+  // 전 문항을 한 번에 읽는 헬퍼. 드래프트 단계라 raw JSON을 본다.
+  Map<String, Map<String, dynamic>> allQuestions() {
+    final out = <String, Map<String, dynamic>>{};
+    for (final taskId in mlaTaskIds) {
+      final file = File('assets/content/mla/$taskId.questions.json');
+      if (!file.existsSync()) continue;
+      final map = json.decode(file.readAsStringSync()) as Map<String, dynamic>;
+      for (final q in (map['questions'] as List).cast<Map<String, dynamic>>()) {
+        out['${q['id']}'] = q;
+      }
+    }
+    return out;
+  }
+
+  /// Model Monitor 가용성 상태 한 줄. Ground Truth·A2I 문항과 **같은 서식**이라
+  /// 문항만 보는 화면(오답노트·모의고사)에서도 상태가 함께 읽힌다.
+  ///
+  /// 근거: `sagemaker/latest/dg/model-monitor-availability-change` —
+  /// "Amazon SageMaker Model Monitor is no longer open to new customers.
+  ///  Existing customers can continue to use the service as normal."
+  ///
+  /// ⚠️ **대상은 "Model Monitor를 해법으로 가르치는" 문항**이지 언급하는 전부가
+  /// 아니다. 실측하면 MLA 문항 JSON 어디에든 "Model Monitor"가 나오는 것은
+  /// **23문항**이고(2차 검수 보고의 12는 출발점이지 전수 목록이 아니다),
+  /// 나머지는 오답 보기·출처 각주로만 나온다 — 거기에 상태를 달면 오히려
+  /// 틀린 보기를 설명하는 문장이 된다. 데이터 캡처(t4-1-q10·q11)는 Model
+  /// Monitor 없이도 쓰는 독립 기능이라 제외했다.
+  const mmStatusNote = '⚠️ Model Monitor는 현재 신규 고객을 받지 않습니다(기존 고객은 사용 가능).';
+  const mmTaughtIds = <String>[
+    'mla-t2-3-q10',
+    'mla-t4-1-q1', 'mla-t4-1-q2', 'mla-t4-1-q4', 'mla-t4-1-q5',
+    'mla-t4-1-q6', 'mla-t4-1-q7', 'mla-t4-1-q8', 'mla-t4-1-q9',
+    'mla-t4-1-q14', 'mla-t4-1-q15', 'mla-t4-1-q16', 'mla-t4-1-q29',
+  ];
+
+  test('Model Monitor를 해법으로 가르치는 문항에 가용성 상태가 같은 문구로 붙어 있다', () {
+    final qs = allQuestions();
+    final missing = <String>[];
+    for (final id in mmTaughtIds) {
+      final q = qs[id];
+      if (q == null) {
+        missing.add('$id 없음');
+        continue;
+      }
+      if (!'${q['explanation']}'.contains(mmStatusNote)) missing.add(id);
+    }
+    expect(missing, isEmpty,
+        reason: 'Model Monitor 상태 한 줄이 빠졌다(문구는 Ground Truth 문항과 동일해야 한다):\n'
+            '${missing.join(', ')}');
+
+    // 서식이 갈라지지 않게, Model Monitor의 옛 서술형 문장은 남아 있으면 안 된다.
+    // ⚠️ 서비스 이름까지 붙여서 본다 — 다른 서비스(Role Manager 등)도 같은
+    // "신규 고객에게 더 이상 열려 있지 않고" 서술을 정당하게 쓰고 있어서,
+    // 문구만 보면 무관한 문항을 잡는다(실제로 mla-t4-3-q11이 걸렸다).
+    final stale = <String>[];
+    for (final e in qs.entries) {
+      final expl = '${e.value['explanation']}';
+      if (expl.contains('Model Monitor 자체는 신규 고객에게 더 이상 열려 있지 않고')) {
+        stale.add(e.key);
+      }
+    }
+    expect(stale, isEmpty,
+        reason: '표준 문구로 통일하세요: ${stale.join(', ')}');
+  });
+
+  test('mla-t2-3-q16: Bedrock 대체 서술을 Clarify 공지 쪽으로 바로잡았다', () {
+    // Debugger 가용성 변경 페이지의 대체 표는 MLflow·TensorBoard·CloudWatch 뿐이고
+    // Bedrock Evaluations가 없다. "예측형 모델의 편향 감지·설명 대체가 아니다"는
+    // 문장은 **Clarify** 가용성 변경 페이지에 있다(FMEval 대체 맥락).
+    final q = allQuestions()['mla-t2-3-q16'];
+    expect(q, isNotNull);
+    final wrong = '${(q!['wrongExplanations'] as Map)['2']}';
+    expect(wrong.contains('공지는 이것이 예측형 모델의 편향 감지·설명 대체가 아니라고 명시'),
+        isFalse,
+        reason: '그 문장은 Debugger 공지가 아니라 Clarify 공지에 있다');
+    expect(wrong.contains('Clarify 공지'), isTrue);
+    expect(wrong.contains('Debugger 공지'), isTrue);
+  });
+
+  test('2차 검수 출처 교체 2건이 반영됐다', () {
+    final qs = allQuestions();
+    // t4-2-q11: 동시 쿼리 100은 맞다(StartQuery API·Logs Insights 할당량 문서가
+    // 둘 다 100으로 적는다). 수치를 고치는 것이 아니라 그 근거를 단다.
+    final q11 = qs['mla-t4-2-q11'];
+    expect(q11, isNotNull);
+    final srcs11 = '${q11!['sources']}';
+    expect(srcs11.contains('API_StartQuery'), isTrue);
+    expect('${q11['explanation']}'.contains('동시 쿼리 100개'), isTrue);
+
+    // t3-3-q25: 콘솔 도움말 패널 URL → CodeCommit 사용자 가이드.
+    final q25 = qs['mla-t3-3-q25'];
+    expect(q25, isNotNull);
+    final srcs25 = '${q25!['sources']}';
+    expect(srcs25.contains('help-panel'), isFalse,
+        reason: '콘솔 도움말 패널 URL은 출처로 쓰지 않는다');
+    expect(srcs25.contains('how-to-merge-pull-request'), isTrue);
+  });
 }
