@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q3",
@@ -95,7 +95,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-kl-divergence.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q4",
@@ -127,7 +127,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-processing-job-run.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q6",
@@ -187,7 +187,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q7",
@@ -219,7 +219,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp04.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q8",
@@ -251,7 +251,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q9",
@@ -279,7 +279,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q10",
@@ -307,7 +307,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q11",
@@ -343,7 +343,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q12",
@@ -371,7 +371,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q13",
@@ -403,7 +403,7 @@
           "url": "https://docs.aws.amazon.com/macie/latest/user/managed-data-identifiers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q14",
@@ -435,7 +435,7 @@
           "url": "https://docs.aws.amazon.com/comprehend/latest/dg/redact-api-pii.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q15",
@@ -463,7 +463,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/detect-PII.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q16",
@@ -495,7 +495,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q17",
@@ -527,7 +527,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/dqdl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q18",
@@ -559,7 +559,7 @@
           "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/limit-access-security-groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q19",
@@ -587,7 +587,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q20",
@@ -619,7 +619,7 @@
           "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/primary-region-deny-policy.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q21",
@@ -651,7 +651,7 @@
           "url": "https://docs.aws.amazon.com/comprehend/latest/dg/pii.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q22",
@@ -683,7 +683,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q23",
@@ -711,7 +711,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-3-q24",
@@ -743,7 +743,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-bias-metric-class-imbalance.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

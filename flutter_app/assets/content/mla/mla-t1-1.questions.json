@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/columnar-storage.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q3",
@@ -99,7 +99,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/cdf-training.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q4",
@@ -131,7 +131,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/xgboost-how-to-use.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q6",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q7",
@@ -223,7 +223,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data-best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q8",
@@ -255,7 +255,7 @@
           "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q9",
@@ -287,7 +287,7 @@
           "url": "https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q10",
@@ -319,7 +319,7 @@
           "url": "https://docs.aws.amazon.com/kinesisanalytics/latest/dev/discontinuation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q11",
@@ -347,7 +347,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q12",
@@ -379,7 +379,7 @@
           "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q13",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-design-patterns.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q14",
@@ -439,7 +439,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/S3DataExport.HowItWorks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q15",
@@ -471,7 +471,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/feature-store.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q16",
@@ -503,7 +503,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/ctas.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q17",
@@ -535,7 +535,7 @@
           "url": "https://docs.aws.amazon.com/streams/latest/dev/kinesis-fis-provisioned-throughput.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q18",
@@ -567,7 +567,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q19",
@@ -599,7 +599,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q20",
@@ -631,7 +631,7 @@
           "url": "https://aws.amazon.com/kinesis/data-streams/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q21",
@@ -663,7 +663,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimization-performance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t1-1-q22",
@@ -695,7 +695,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

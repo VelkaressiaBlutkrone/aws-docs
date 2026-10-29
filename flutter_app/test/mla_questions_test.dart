@@ -35,7 +35,7 @@ void main() {
   /// 검수 절차·루브릭은 `docs/saa-review/review-rubric.md` C1~C6을 그대로 쓴다.
   /// flip 단위는 Task이고, 통합 모의고사 공개에 필요한 양은 도메인당
   /// D1 18 · D2 17 · D3 14 · D4 16(연습 65문항에 공식 비중 배분)이다.
-  const flipApprovedTaskIds = <String>{'mla-t2-2'};
+  const flipApprovedTaskIds = <String>{'mla-t2-2', 'mla-t1-1', 'mla-t1-2', 'mla-t1-3', 'mla-t2-1', 'mla-t2-3', 'mla-t3-1', 'mla-t3-2', 'mla-t3-3', 'mla-t4-1', 'mla-t4-2', 'mla-t4-3'};
 
   for (final taskId in mlaTaskIds) {
     group(taskId, () {

@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q3",
@@ -95,7 +95,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security-confused-deputy-prevention.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q5",
@@ -155,7 +155,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security-iam-awsmanpol.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q6",
@@ -183,7 +183,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q7",
@@ -211,7 +211,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q8",
@@ -243,7 +243,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q9",
@@ -271,7 +271,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic_policy-eval-denyallow.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q10",
@@ -303,7 +303,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q11",
@@ -339,7 +339,7 @@
           "url": "https://aws.amazon.com/sagemaker/ai/features/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q12",
@@ -371,7 +371,7 @@
           "url": "https://docs.aws.amazon.com/service-authorization/latest/reference/list_sagemaker.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q13",
@@ -403,7 +403,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q14",
@@ -435,7 +435,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q15",
@@ -467,7 +467,7 @@
           "url": "https://repost.aws/knowledge-center/sagemaker-model-registry-issues"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q16",
@@ -499,7 +499,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q17",
@@ -527,7 +527,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q18",
@@ -559,7 +559,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-in-transit.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q19",
@@ -591,7 +591,7 @@
           "url": "https://repost.aws/knowledge-center/sagemaker-access-network-isolation"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q20",
@@ -619,7 +619,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/mkt-algo-model-internet-free.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q21",
@@ -651,7 +651,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-notebooks-and-internet-access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q22",
@@ -683,7 +683,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q23",
@@ -715,7 +715,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q24",
@@ -743,7 +743,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/interface-vpc-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q25",
@@ -775,7 +775,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q26",
@@ -803,7 +803,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q27",
@@ -835,7 +835,7 @@
           "url": "https://aws.amazon.com/compliance/hipaa-eligible-services-reference/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q28",
@@ -867,7 +867,7 @@
           "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/data-protection.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q29",
@@ -899,7 +899,7 @@
           "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q30",
@@ -931,7 +931,7 @@
           "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q31",
@@ -963,7 +963,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/config-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q32",
@@ -991,7 +991,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/logging-using-cloudtrail.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q33",
@@ -1023,7 +1023,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/process-vpc.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q34",
@@ -1055,7 +1055,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-3-q35",
@@ -1087,7 +1087,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-notebookinstance.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

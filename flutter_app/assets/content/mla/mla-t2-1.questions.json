@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/ml-guide.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q3",
@@ -99,7 +99,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/ml-guide.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q4",
@@ -127,7 +127,7 @@
           "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/qbusiness-availability-change.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q6",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q7",
@@ -223,7 +223,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/common-info-all-im-models.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q8",
@@ -255,7 +255,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/lda.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q9",
@@ -287,7 +287,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/randomcutforest.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q10",
@@ -319,7 +319,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-vision.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q11",
@@ -351,7 +351,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices-healthcare-life-sciences/model-interpretability.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q12",
@@ -383,7 +383,7 @@
           "url": "https://aws.amazon.com/what-is/explainable-ai/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q13",
@@ -415,7 +415,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/ml-problem-framing.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q14",
@@ -443,7 +443,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/algorithms-choose.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q15",
@@ -475,7 +475,7 @@
           "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q16",
@@ -507,7 +507,7 @@
           "url": "https://aws.amazon.com/bedrock/pricing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q17",
@@ -539,7 +539,7 @@
           "url": "https://aws.amazon.com/bedrock/pricing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q18",
@@ -571,7 +571,7 @@
           "url": "https://aws.amazon.com/rekognition/pricing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q19",
@@ -603,7 +603,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q20",
@@ -635,7 +635,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-automate-model-development.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q21",
@@ -667,7 +667,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q22",
@@ -699,7 +699,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t2-1-q23",
@@ -731,7 +731,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
