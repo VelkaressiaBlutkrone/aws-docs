@@ -63,16 +63,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **관리형 스토리지** | managed storage | Redshift RA3·RG가 쓰는 저장 계층 — 노드의 *로컬 SSD + S3* 를 합쳐 컴퓨트와 따로 확장·과금 |
-| **RPU** | Redshift Processing Unit | Redshift Serverless의 용량 단위. *1 RPU = 16 GB 메모리* |
+| **관리형 스토리지** | managed storage | Redshift RA3·RG가 쓰는 저장 계층 — 노드의 로컬 SSD + S3 를 합쳐 컴퓨트와 따로 확장·과금 |
+| **RPU** | Redshift Processing Unit | Redshift Serverless의 용량 단위. 1 RPU = 16 GB 메모리 |
 | **슬라이스** | slice | Redshift 노드 안의 병렬 처리 단위. 적재 파일 수를 여기에 맞춘다 |
-| **colocation** | colocation | 조인하는 두 테이블의 매칭 값을 *같은 슬라이스에 두어* 네트워크 이동을 없애는 것 |
-| **핫 파티션** | hot partition | DynamoDB에서 한 파티션 키에 트래픽이 몰려 *한도에 먼저 걸리는* 상태 |
+| **colocation** | colocation | 조인하는 두 테이블의 매칭 값을 같은 슬라이스에 두어 네트워크 이동을 없애는 것 |
+| **핫 파티션** | hot partition | DynamoDB에서 한 파티션 키에 트래픽이 몰려 한도에 먼저 걸리는 상태 |
 | **EFO** | enhanced fan-out | 소비자마다 전용 읽기 처리량을 주는 Kinesis Data Streams 소비자 방식 |
-| **ANN** | approximate nearest neighbor | *정확도를 조금 양보하고 속도를 얻는* 근사 최근접 이웃 검색 |
-| **recall** | recall | 근사 검색이 *진짜 정답을 얼마나 찾아내는가*의 비율 |
-| **오픈 테이블 형식** | open table format | S3 파일 위에 *트랜잭션·스키마 진화·시간 여행*을 얹는 표준(예: Apache Iceberg) |
-| **compaction** | compaction | 작은 파일 여러 개를 *큰 파일로 병합*해 조회 성능을 올리는 유지 관리 |
+| **ANN** | approximate nearest neighbor | 정확도를 조금 양보하고 속도를 얻는 근사 최근접 이웃 검색 |
+| **recall** | recall | 근사 검색이 진짜 정답을 얼마나 찾아내는가의 비율 |
+| **오픈 테이블 형식** | open table format | S3 파일 위에 트랜잭션·스키마 진화·시간 여행을 얹는 표준(예: Apache Iceberg) |
+| **compaction** | compaction | 작은 파일 여러 개를 큰 파일로 병합해 조회 성능을 올리는 유지 관리 |
 
 ---
 
@@ -267,7 +267,7 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 ## ⚠️ 흔한 함정 {#pitfalls}
 
 1. **"Lake Formation은 데이터 레이크 저장소다."** → ❌. Lake Formation은 **S3 데이터와 Glue Data Catalog 메타데이터의 접근 제어·거버넌스 계층**이고 **IAM 권한 모델을 보강**합니다. 저장은 S3입니다.
-   *(원리: §1·§5 — "어디에 담는가"와 "누가 볼 수 있는가"는 다른 축이다.)*
+   (원리: §1·§5 — "어디에 담는가"와 "누가 볼 수 있는가"는 다른 축이다.)
 2. **"on-demand로 바꾸면 저장 비용도 줄어든다."** → ❌. 용량 모드는 **처리량 과금 방식**을 바꿀 뿐입니다. 저장 비용이 지배적이면 **Standard-IA 테이블 클래스**입니다.
 3. **"소비자를 늘리려면 ALL 분산으로 바꾸면 된다"처럼 축을 섞는 보기.** → ❌. ALL은 **스토리지를 노드 수만큼 늘리는** 조인 colocation 수단이지 동시성·잠금·처리량 해법이 아닙니다.
 4. **"DC2가 언제나 가장 싸다."** → ❌. DC2는 **압축 기준 1 TB 미만** 소규모에 권장됩니다. 데이터 증가가 예상되면 RA3입니다.

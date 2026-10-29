@@ -62,16 +62,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **메타데이터** | metadata | 데이터 *자체가 아니라* 데이터에 관한 정보(컬럼 이름·타입·위치) |
+| **메타데이터** | metadata | 데이터 자체가 아니라 데이터에 관한 정보(컬럼 이름·타입·위치) |
 | **메타스토어** | metastore | 테이블 정의를 담는 저장소. Hive 생태계의 표준 구성 요소 |
-| **분류자** | classifier | 크롤러가 *파일 형식·스키마를 추론할 때* 쓰는 규칙(내장 또는 사용자 정의) |
-| **파티션** | partition | 테이블을 *키=값 폴더로 쪼갠 단위*. 필터로 읽을 범위를 줄인다 |
-| **Hive 스타일 파티션** | Hive-style partitioning | 경로가 `year=2026/month=10` 처럼 *키=값 쌍*으로 된 방식 |
-| **파티션 프로젝션** | partition projection | 카탈로그를 조회하지 않고 *설정 규칙으로 파티션을 계산*하는 Athena 기능 |
-| **파티션 인덱스** | partition index | 카탈로그에 등록된 파티션의 *조회를 가속*하는 Glue 기능 |
-| **연결** | connection | 자격 증명·URL·VPC 정보를 담은 *Data Catalog 객체* |
-| **도메인 / 프로젝트** | domain / project | SageMaker Unified Studio의 범위 단위 — *발견 범위*는 도메인, *소유 단위*는 프로젝트 |
-| **구독 요청** | subscription request | 다른 프로젝트의 자산을 *쓰게 해 달라고 요청*하고 승인받는 절차 |
+| **분류자** | classifier | 크롤러가 파일 형식·스키마를 추론할 때 쓰는 규칙(내장 또는 사용자 정의) |
+| **파티션** | partition | 테이블을 키=값 폴더로 쪼갠 단위. 필터로 읽을 범위를 줄인다 |
+| **Hive 스타일 파티션** | Hive-style partitioning | 경로가 `year=2026/month=10` 처럼 키=값 쌍으로 된 방식 |
+| **파티션 프로젝션** | partition projection | 카탈로그를 조회하지 않고 설정 규칙으로 파티션을 계산하는 Athena 기능 |
+| **파티션 인덱스** | partition index | 카탈로그에 등록된 파티션의 조회를 가속하는 Glue 기능 |
+| **연결** | connection | 자격 증명·URL·VPC 정보를 담은 Data Catalog 객체 |
+| **도메인 / 프로젝트** | domain / project | SageMaker Unified Studio의 범위 단위 — 발견 범위는 도메인, 소유 단위는 프로젝트 |
+| **구독 요청** | subscription request | 다른 프로젝트의 자산을 쓰게 해 달라고 요청하고 승인받는 절차 |
 
 ---
 
