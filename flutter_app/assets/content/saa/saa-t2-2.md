@@ -300,7 +300,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 공식 Task 2.1 Knowledge에 "애플리케이션을 컨테이너로 마이그레이션하는 방법"이 있습니다.
 
-- **AWS App2Container(A2C)** 는 CLI로 온프레미스·EC2·타 클라우드의 **Java·ASP.NET 애플리케이션을 코드 변경 없이** 컨테이너화하고 ECS·EKS 배포 산출물을 만드는 도구입니다. 지원 대상은 **Java(Linux)** 와 **ASP.NET(Windows·Linux)** 이며, 지원 프레임워크를 찾으면 필요한 파일만 담는 *application mode*, 못 찾으면 비시스템 파일을 모두 담는 *process mode*로 동작합니다. **데이터베이스 계층은 컨테이너화하지 않습니다.**
+- **AWS App2Container(A2C)** 는 CLI로 온프레미스·EC2·타 클라우드의 **Java·ASP.NET 애플리케이션을 코드 변경 없이** 컨테이너화하고 ECS·EKS 배포 산출물을 만드는 도구입니다. 지원 대상은 **Java(Linux)** 와 **ASP.NET(Windows·Linux)** 이며, 지원 프레임워크를 찾으면 필요한 파일만 담는 application mode, 못 찾으면 비시스템 파일을 모두 담는 process mode로 동작합니다. **데이터베이스 계층은 컨테이너화하지 않습니다.**
 - ⚠️ **현재 제공 상태 — 신규 고객은 쓸 수 없습니다.** 공식 사용자 가이드가 A2C(및 Porting Assistant for .NET·Toolkit for .NET Refactoring·Microservice Extractor for .NET)를 **"no longer open to new customers"** 로 적고, **2025-11-07 이전에 가입한 고객**만 계속 쓸 수 있다고 안내합니다. 공식이 제시하는 대안은 **AWS Transform** 입니다.
 - ⚠️ **시험 범위 판정은 불확실합니다.** A2C는 공식 가이드의 in-scope·out-of-scope 목록 **어디에도 없습니다.** "컨테이너 이전 방법"이라는 Knowledge 항목 자체는 범위 안이지만, 특정 도구가 정답이라고 단정할 근거는 없습니다.
 - 그래서 시나리오는 **도구 이름보다 제약**으로 읽으세요 — "코드 변경 불가"면 리호스팅·컨테이너화 경로, "표준 메시징 프로토콜 유지"면 Amazon MQ(`saa-t2-1` §8), "DB까지 함께 이전"이면 DMS·SCT(`saa-t3-5` §10)가 각각 다른 축입니다.
@@ -357,25 +357,25 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Lambda는 15분 이상도 실행할 수 있다."** → 함수 타임아웃 기본 상한은 900초(15분)입니다. 단, **Lambda Managed Instances** 함수를 비동기 또는 이벤트 소스 매핑으로 호출하면 **최대 5,400초(90분)**까지 허용됩니다(Amazon MQ·DocumentDB 제외). 더 긴 워크로드나 장시간 워크플로는 Fargate, AWS Batch, Step Functions로 옮깁니다. 참고로 **Durable functions**는 Step Functions의 일부가 아니라 Lambda의 기능군입니다.
-   *(원리: §4 — Lambda는 단발 이벤트 처리에 최적화된 실행 모델이라 장시간 유지 프로세스는 Fargate·Batch 같은 다른 계층이 담당한다.)*
+   (원리: §4 — Lambda는 단발 이벤트 처리에 최적화된 실행 모델이라 장시간 유지 프로세스는 Fargate·Batch 같은 다른 계층이 담당한다.)
 
 2. **"Reserved Concurrency를 설정하면 콜드 스타트가 없어진다."** → Reserved Concurrency는 동시 실행 상한을 예약하는 기능으로, 워밍업과 무관합니다. 콜드 스타트 제거는 Provisioned Concurrency를 사용해야 합니다.
-   *(원리: §1 — 콜드 스타트는 실행 환경 초기화 지연이므로 환경을 미리 워밍업(Provisioned)해야 제거되고, 상한 예약(Reserved)과는 다른 축이다.)*
+   (원리: §1 — 콜드 스타트는 실행 환경 초기화 지연이므로 환경을 미리 워밍업(Provisioned)해야 제거되고, 상한 예약(Reserved)과는 다른 축이다.)
 
 3. **"단순 Lambda 프록시에 REST API를 써야 한다."** → REST API는 캐싱·사용 계획·WAF 등 풍부한 기능을 제공하지만 더 비쌉니다. 단순 프록시라면 HTTP API가 더 저렴하고 지연도 낮습니다.
-   *(원리: §2 — API Gateway 유형은 필요 기능과 비용의 트레이드오프로 선택하며, 기능을 쓰지 않는데 REST API를 고르면 비용만 증가한다.)*
+   (원리: §2 — API Gateway 유형은 필요 기능과 비용의 트레이드오프로 선택하며, 기능을 쓰지 않는데 REST API를 고르면 비용만 증가한다.)
 
 4. **"Fargate를 쓰면 ECS가 필요 없다."** → Fargate는 ECS(또는 EKS)의 시작 유형입니다. ECS 없이 Fargate만 단독으로 존재하지 않습니다. ECS가 오케스트레이션을 담당하고, Fargate가 인프라(서버 없이 컨테이너 실행)를 담당합니다.
-   *(원리: §3 — 오케스트레이터(ECS/EKS)와 인프라 레이어(Fargate/EC2)는 별도 책임이라 Fargate는 인프라 레이어이고 오케스트레이션은 여전히 ECS/EKS가 필요하다.)*
+   (원리: §3 — 오케스트레이터(ECS/EKS)와 인프라 레이어(Fargate/EC2)는 별도 책임이라 Fargate는 인프라 레이어이고 오케스트레이션은 여전히 ECS/EKS가 필요하다.)
 
 5. **"EKS는 ECS보다 항상 낫다."** → EKS는 Kubernetes 표준을 따르므로 학습 곡선이 있고 컨트롤 플레인 요금이 발생합니다. Kubernetes가 불필요한 단순 AWS 컨테이너 워크로드는 ECS가 더 단순하고 경제적입니다.
-   *(원리: §4 — k8s 표준 이식성이 불필요하면 EKS의 추가 비용·복잡도를 감수할 이유가 없고, 서비스 선택은 요구사항 최소 충족 기준으로 한다.)*
+   (원리: §4 — k8s 표준 이식성이 불필요하면 EKS의 추가 비용·복잡도를 감수할 이유가 없고, 서비스 선택은 요구사항 최소 충족 기준으로 한다.)
 
 6. **"Lambda는 VPC 내부 리소스에 접근할 수 없다."** → Lambda는 VPC 설정을 통해 ENI로 VPC 내부 리소스(RDS, ElastiCache 등)에 접근할 수 있습니다. 단, 외부 인터넷 접근이 필요하면 NAT Gateway 또는 VPC 엔드포인트가 추가로 필요합니다.
-   *(원리: §1 — Lambda는 기본적으로 AWS 관리 VPC에서 실행되고, 고객 VPC 접근이 필요할 때만 ENI를 생성해 연결하는 opt-in 모델이다.)*
+   (원리: §1 — Lambda는 기본적으로 AWS 관리 VPC에서 실행되고, 고객 VPC 접근이 필요할 때만 ENI를 생성해 연결하는 opt-in 모델이다.)
 
 7. **"비동기 Lambda 실패는 그냥 두면 된다."** → 비동기 호출 실패 시 Lambda는 자동으로 2회 재시도합니다. 그래도 실패하면 이벤트가 소실되므로 반드시 DLQ(SQS) 또는 Destinations를 설정해야 합니다.
-   *(원리: §1 — 비동기 호출은 호출자가 결과를 기다리지 않아 실패를 알 수 없으므로, DLQ/Destinations가 실패 이벤트를 보존하는 유일한 안전망이다.)*
+   (원리: §1 — 비동기 호출은 호출자가 결과를 기다리지 않아 실패를 알 수 없으므로, DLQ/Destinations가 실패 이벤트를 보존하는 유일한 안전망이다.)
 
 ---
 
