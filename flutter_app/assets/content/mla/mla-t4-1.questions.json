@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-monitoring-drift.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q3",
@@ -91,7 +91,7 @@
           "url": "https://aws.amazon.com/blogs/machine-learning/bring-your-own-container-to-project-model-accuracy-drift-with-amazon-sagemaker-model-monitor/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q5",
@@ -155,7 +155,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q6",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q7",
@@ -223,7 +223,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-pre-built-container.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q8",
@@ -255,7 +255,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q9",
@@ -283,7 +283,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-cloudwatch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q10",
@@ -315,7 +315,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q11",
@@ -343,7 +343,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-data-capture-batch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q12",
@@ -375,7 +375,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-byoc-constraints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q13",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-byoc-constraints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q14",
@@ -439,7 +439,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-interpreting-results.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q15",
@@ -471,7 +471,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-scheduling.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q16",
@@ -503,7 +503,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q17",
@@ -531,7 +531,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-schedule.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q18",
@@ -559,7 +559,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-merge.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q19",
@@ -587,7 +587,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q20",
@@ -615,7 +615,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-bias-drift-violations.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q21",
@@ -647,7 +647,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-model-attribution-drift-violations.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q22",
@@ -675,7 +675,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/automating-sagemaker-with-eventbridge.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q23",
@@ -703,7 +703,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q24",
@@ -735,7 +735,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_UpdateEndpointWeightsAndCapacities.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q25",
@@ -767,7 +767,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateEndpointConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q26",
@@ -799,7 +799,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateEndpointConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q27",
@@ -827,7 +827,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/design-principles.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q28",
@@ -859,7 +859,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp04.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q29",
@@ -891,7 +891,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t4-1-q30",
@@ -923,7 +923,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deployment-guardrails-configuration.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

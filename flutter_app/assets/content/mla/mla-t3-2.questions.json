@@ -39,7 +39,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/plans/userguide/what-is-a-scaling-plan.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q2",
@@ -71,7 +71,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-prerequisites.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q3",
@@ -103,7 +103,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/application/userguide/step-scaling-policy-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q4",
@@ -135,7 +135,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/application/userguide/application-auto-scaling-scheduled-scaling.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q5",
@@ -167,7 +167,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q6",
@@ -199,7 +199,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q7",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-policy.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q8",
@@ -263,7 +263,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q9",
@@ -295,7 +295,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference-autoscale.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q10",
@@ -327,7 +327,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q11",
@@ -359,7 +359,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-managed-spot-training.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q12",
@@ -391,7 +391,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/reserve-capacity-with-training-plans.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q13",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel05-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q14",
@@ -455,7 +455,7 @@
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/constructs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q15",
@@ -487,7 +487,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q16",
@@ -519,7 +519,7 @@
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/resources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q17",
@@ -551,7 +551,7 @@
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/resources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q18",
@@ -583,7 +583,7 @@
           "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q19",
@@ -615,7 +615,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-training-algo-running-container.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q20",
@@ -647,7 +647,7 @@
           "url": "https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q21",
@@ -679,7 +679,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_VpcConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q22",
@@ -711,7 +711,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "mla-t3-2-q23",
@@ -743,7 +743,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-sagemaker-endpointconfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
