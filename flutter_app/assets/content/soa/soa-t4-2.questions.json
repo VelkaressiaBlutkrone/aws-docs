@@ -38,13 +38,13 @@
       "difficulty": "applied",
       "stem": "PCI DSS 운영 모범 사례에 해당하는 Config 규칙 묶음을 한 번에 배포하려 한다. 어떤 기능을 쓰는가?",
       "options": [
-        "적합성 팩(Conformance Pack)",
+        "규정 준수 팩(Conformance Pack)",
         "구성 기록기(Configuration Recorder)",
         "교정 작업(Remediation)",
         "집계기(Aggregator)"
       ],
       "correct": 0,
-      "explanation": "적합성 팩은 Config 규칙과 교정 액션을 묶은 패키지를 한 번에 배포하는 기능입니다. PCI·HIPAA 운영 모범 사례 같은 샘플 팩이 제공되며 조직 전체에 배포할 수 있습니다.",
+      "explanation": "규정 준수 팩은 Config 규칙과 교정 액션을 묶은 패키지를 한 번에 배포하는 기능입니다. PCI·HIPAA 운영 모범 사례 같은 샘플 팩이 제공되며 조직 전체에 배포할 수 있습니다.",
       "wrongExplanations": {
         "1": "구성 기록기는 리소스 설정과 변경 이력을 기록하는 구성 요소입니다.",
         "2": "교정 작업은 비준수 리소스를 수정하는 실행 단계입니다.",
@@ -52,7 +52,7 @@
       },
       "sources": [
         {
-          "title": "AWS Config 적합성 팩",
+          "title": "AWS Config 규정 준수 팩",
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html"
         }
       ],
@@ -148,14 +148,14 @@
       "options": [
         "결과를 EventBridge로 보내 Lambda·SSM Automation을 트리거한다",
         "Security Hub 콘솔에서 결과를 수동으로 닫는다",
-        "Config 적합성 팩을 추가 배포한다",
+        "Config 규정 준수 팩을 추가 배포한다",
         "GuardDuty 심각도 임계값을 낮춘다"
       ],
       "correct": 0,
       "explanation": "Security Hub 결과는 EventBridge로 전달되므로, 규칙으로 매칭해 Lambda나 SSM Automation 런북을 실행하는 자동 대응을 구성할 수 있습니다.",
       "wrongExplanations": {
         "1": "수동 처리는 자동 조치 요건을 충족하지 못합니다.",
-        "2": "적합성 팩은 구성 준수 규칙 묶음입니다.",
+        "2": "규정 준수 팩은 구성 준수 규칙 묶음입니다.",
         "3": "임계값 조정은 탐지 민감도만 바꿉니다."
       },
       "sources": [
@@ -367,14 +367,14 @@
       "stem": "GuardDuty가 의심스러운 IP와의 통신을 경보했다. 이 IP가 어떤 리소스와 언제 통신했는지 연관 관계를 추적해 사고 범위를 파악하려 한다. 적절한 도구는?",
       "options": [
         "Amazon Detective",
-        "AWS Config 적합성 팩",
+        "AWS Config 규정 준수 팩",
         "Amazon Inspector",
         "AWS Trusted Advisor"
       ],
       "correct": 0,
       "explanation": "Detective는 이미 수집된 로그를 그래프 구조로 인덱싱해 엔티티 간 연관 활동을 추적하게 해 줍니다. 탐지(GuardDuty)와 조사(Detective)를 분리해 각 단계에 최적화된 방식으로 대응합니다.",
       "wrongExplanations": {
-        "1": "적합성 팩은 구성 준수 규칙 묶음입니다.",
+        "1": "규정 준수 팩은 구성 준수 규칙 묶음입니다.",
         "2": "Inspector는 취약점 스캔입니다.",
         "3": "Trusted Advisor는 모범 사례 점검입니다."
       },
