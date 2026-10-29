@@ -111,7 +111,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 | **IP-based(IP 기반)** | **알고 있는 클라이언트 IP 범위(CIDR)** 를 엔드포인트에 매핑해 라우팅 | ISP·기업망별 경로 고정, 특정 대역을 지정 엔드포인트로 |
 | **Multivalue Answer(다중값)** | **최대 8개** 정상 레코드를 무작위 반환 + 헬스 체크 연동 | 단순 부하 분산 (로드 밸런서 대체 아님) |
 
-> ⚠️ **IP 기반 라우팅이 빠지면 8종이 아닙니다.** 이름이 비슷한 세 가지를 기준으로 갈라 두세요 — **Latency**는 *실측 네트워크 지연*, **Geolocation**은 *사용자 IP의 지리적 위치*, **IP-based**는 *우리가 알고 있는 IP 범위 자체*입니다. "특정 ISP 사용자를 지정 엔드포인트로 보내라"처럼 **위치가 아니라 IP 대역이 조건**이면 IP 기반입니다.
+> ⚠️ **IP 기반 라우팅이 빠지면 8종이 아닙니다.** 이름이 비슷한 세 가지를 기준으로 갈라 두세요 — **Latency**는 실측 네트워크 지연, **Geolocation**은 사용자 IP의 지리적 위치, **IP-based**는 우리가 알고 있는 IP 범위 자체입니다. "특정 ISP 사용자를 지정 엔드포인트로 보내라"처럼 **위치가 아니라 IP 대역이 조건**이면 IP 기반입니다.
 
 > **지연·지리 정책의 공통 한계 — 리졸버의 위치로 추정합니다**: Route 53은 사용자의 위치를 **DNS 리졸버의 위치**로 추정하고, 리졸버가 **EDNS0 클라이언트 서브넷**을 지원하면 사용자 IP의 일부를 넘겨받아 더 정확히 추정합니다. 그래서 사용자가 자기 위치와 먼 공용 리졸버를 쓰면 Latency·Geolocation 모두 의도와 다른 엔드포인트로 갈 수 있습니다 — 정책의 결함이 아니라 **DNS의 구조적 한계**입니다.
 
@@ -325,28 +325,28 @@ ALB는 고정 IP가 없고 NLB는 L7 라우팅이 없습니다. 둘 다 필요�
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Geolocation은 가장 가까운 리전으로 보낸다."** — 아닙니다. Geolocation은 사용자 IP의 **지리적 위치(국가·대륙)** 로만 결정하며, 가장 빠른 경로를 보장하지 않습니다. 네트워크 지연 기준으로 라우팅하려면 **Latency 정책**을 사용해야 합니다.
-   *(원리: §3 — Latency는 실측 지연으로 라우팅하고 Geolocation은 지리 규칙으로 접근 가능 리소스를 제어하므로 최적화 목표 자체가 다르다.)*
+   (원리: §3 — Latency는 실측 지연으로 라우팅하고 Geolocation은 지리 규칙으로 접근 가능 리소스를 제어하므로 최적화 목표 자체가 다르다.)
 
 2. **"CNAME 레코드를 Zone Apex(example.com)에 사용하면 된다."** — CNAME은 Zone Apex에 사용할 수 없습니다. DNS 표준 제약입니다. 루트 도메인을 AWS 리소스로 보내려면 **Alias 레코드**를 사용합니다.
-   *(원리: §2 — Zone Apex는 NS·SOA 레코드를 반드시 보유해야 해 CNAME과 공존 불가이므로, Alias가 A/AAAA 유형으로 동작하며 제약을 우회한다.)*
+   (원리: §2 — Zone Apex는 NS·SOA 레코드를 반드시 보유해야 해 CNAME과 공존 불가이므로, Alias가 A/AAAA 유형으로 동작하며 제약을 우회한다.)
 
 3. **"Global Accelerator는 CloudFront처럼 콘텐츠를 캐싱한다."** — 아닙니다. Global Accelerator는 **네트워크 경로만 최적화**하며 캐싱 기능이 없습니다. 캐싱이 필요하면 CloudFront를 사용해야 합니다.
-   *(원리: §7 — 콘텐츠를 엣지에서 끊을 수 있는가가 두 서비스의 역할 분기점이며, Global Accelerator는 경로만 결정하고 오리진으로 전달한다.)*
+   (원리: §7 — 콘텐츠를 엣지에서 끊을 수 있는가가 두 서비스의 역할 분기점이며, Global Accelerator는 경로만 결정하고 오리진으로 전달한다.)
 
 4. **"글로벌 저지연이 필요하면 항상 CloudFront."** — 비-HTTP(UDP·TCP 게임·IoT 등) 또는 **고정 IP**가 필요한 시나리오에서는 **Global Accelerator**가 정답입니다.
-   *(원리: §7 — HTTP가 아닌 프로토콜과 고정 IP 요구는 자동으로 Global Accelerator를 가리키며, CloudFront는 HTTP/HTTPS 전용이다.)*
+   (원리: §7 — HTTP가 아닌 프로토콜과 고정 IP 요구는 자동으로 Global Accelerator를 가리키며, CloudFront는 HTTP/HTTPS 전용이다.)
 
 5. **"Geoproximity는 별도 설정 없이 사용할 수 있다."** — Geoproximity는 **Route 53 Traffic Flow** 기능에서만 사용 가능합니다. Traffic Flow 없이는 설정할 수 없습니다.
-   *(원리: §3 본문 — Geoproximity는 Traffic Flow 기능에서만 bias 값과 함께 사용 가능하다.)*
+   (원리: §3 본문 — Geoproximity는 Traffic Flow 기능에서만 bias 값과 함께 사용 가능하다.)
 
 6. **"CloudFront용 ACM 인증서를 서울 리전(ap-northeast-2)에서 발급했다."** — CloudFront는 **us-east-1(버지니아 북부)** 에서 발급한 ACM 인증서만 사용할 수 있습니다.
-   *(원리: §5 본문 — CloudFront에 연결할 SSL/TLS 인증서는 반드시 us-east-1에서 발급해야 한다.)*
+   (원리: §5 본문 — CloudFront에 연결할 SSL/TLS 인증서는 반드시 us-east-1에서 발급해야 한다.)
 
 7. **"Multivalue Answer 정책은 로드 밸런서와 동일하다."** — Multivalue Answer는 DNS 레벨에서 복수 IP를 반환하는 것이며, 실제 연결을 중개하는 로드 밸런서가 아닙니다. 세션 지속성·상태 추적이 필요하면 로드 밸런서를 사용해야 합니다.
-   *(원리: §3 본문 — Multivalue Answer는 최대 8개 정상 레코드를 무작위 반환하는 DNS 응답이며, 연결 지속성·세션 관리를 제공하는 로드 밸런서와 다르다.)*
+   (원리: §3 본문 — Multivalue Answer는 최대 8개 정상 레코드를 무작위 반환하는 DNS 응답이며, 연결 지속성·세션 관리를 제공하는 로드 밸런서와 다르다.)
 
 8. **"OAI(Origin Access Identity)가 현재 권장 방식이다."** — OAI는 구형 방식입니다. 현재 AWS 권장은 **OAC(Origin Access Control)**입니다.
-   *(원리: §5 본문 — AWS는 OAI 대신 OAC를 현재 권장하며, OAC는 S3 버킷 정책에 CloudFront 서비스 주체 조건을 적용하는 방식이다.)*
+   (원리: §5 본문 — AWS는 OAI 대신 OAC를 현재 권장하며, OAC는 S3 버킷 정책에 CloudFront 서비스 주체 조건을 적용하는 방식이다.)
 
 ---
 
