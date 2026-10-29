@@ -27,7 +27,7 @@
         { "title": "AWS Key Management Service — 개요 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html" },
         { "title": "AWS Certificate Manager — 개요 (공식)", "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q2",
@@ -51,7 +51,7 @@
       "sources": [
         { "title": "AWS KMS 키 유형 — 관리형 키는 내 계정·조회 가능 / 소유 키는 서비스 계정 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q3",
@@ -76,7 +76,7 @@
         { "title": "AWS KMS 암호화 기초 — 봉투 암호화 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html" },
         { "title": "AWS KMS 암호화 상세 — Encrypt 직접 호출은 평문 4KB 상한 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/cryptographic-details/encrypt-operation.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q4",
@@ -101,7 +101,7 @@
         { "title": "AWS KMS 키 정책 — 명시 허용이 없으면 IAM 정책은 무효·기본 키 정책이 IAM 활성화 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html" },
         { "title": "AWS KMS 키 접근 제어 — 직접 허용 또는 계정 위임 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q5",
@@ -126,7 +126,7 @@
         { "title": "AWS CloudHSM — 소개(단일 테넌트·AWS에 보이지 않는 데이터 플레인) (공식)", "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html" },
         { "title": "AWS KMS 키 저장소 — 표준 HSM도 FIPS 140-3 Level 3·단일 테넌트 요구 시에만 사용자 지정 키 저장소 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q6",
@@ -151,7 +151,7 @@
         { "title": "AWS CloudHSM — 소개 (공식)", "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html" },
         { "title": "AWS KMS CloudHSM 키 저장소 — KMS의 광범위한 통합 + 전용 클러스터 통제 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/keystore-cloudhsm.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q7",
@@ -176,7 +176,7 @@
         { "title": "ACM 관리형 인증서 갱신 — 적격 조건·가져온 인증서는 비적격 (공식)", "url": "https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html" },
         { "title": "ACM DNS 검증 도메인 갱신 — 완전 자동·만료 45일 전 확인 (공식)", "url": "https://docs.aws.amazon.com/acm/latest/userguide/dns-renewal-validation.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q8",
@@ -200,7 +200,7 @@
       "sources": [
         { "title": "AWS Certificate Manager — 개요 (공식)", "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q9",
@@ -224,7 +224,7 @@
       "sources": [
         { "title": "Amazon Macie란 무엇인가 — 머신러닝+패턴 매칭·퍼블릭 버킷 탐지 (공식)", "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q10",
@@ -249,7 +249,7 @@
         { "title": "Amazon Inspector란 무엇인가 — EC2·ECR·Lambda 취약점(CVE) 스캔 (공식)", "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html" },
         { "title": "Amazon Macie란 무엇인가 — S3 민감정보 탐지 (공식)", "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q11",
@@ -273,7 +273,7 @@
       "sources": [
         { "title": "AWS Backup — 소개 (공식)", "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q12",
@@ -297,7 +297,7 @@
       "sources": [
         { "title": "AWS Backup — 소개 (공식)", "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q13",
@@ -322,7 +322,7 @@
         { "title": "AWS Backup — 소개 (공식)", "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html" },
         { "title": "AWS Backup Vault Lock — Compliance 모드·grace time 최소 3일(ChangeableForDays) (공식)", "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q14",
@@ -348,7 +348,7 @@
         { "title": "Amazon RDS 스냅샷 복사 — 암호화되지 않은 스냅샷의 암호화 복사 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html" },
         { "title": "RDS Blue/Green 배포 TargetResourceConfiguration — green 암호화는 TargetKmsKeyId (공식 API)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-5-q15",
@@ -372,7 +372,7 @@
       "sources": [
         { "title": "AWS CloudTrail로 AWS KMS API 호출 로깅 — 기본적으로 모든 KMS 액션 기록 (공식)", "url": "https://docs.aws.amazon.com/kms/latest/developerguide/logging-using-cloudtrail.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

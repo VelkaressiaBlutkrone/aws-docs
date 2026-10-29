@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "Kinesis Data Streams 용어와 개념 — 샤드 처리량 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q4",
@@ -99,7 +99,7 @@
         { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" },
         { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q5",
@@ -123,7 +123,7 @@
       "sources": [
         { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q6",
@@ -147,7 +147,7 @@
       "sources": [
         { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q7",
@@ -171,7 +171,7 @@
       "sources": [
         { "title": "Amazon Athena — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q8",
@@ -196,7 +196,7 @@
         { "title": "Amazon EMR — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html" },
         { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q9",
@@ -220,7 +220,7 @@
       "sources": [
         { "title": "AWS Lake Formation — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q10",
@@ -244,7 +244,7 @@
       "sources": [
         { "title": "AWS Lake Formation — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q11",
@@ -269,7 +269,7 @@
         { "title": "AWS Snowball Edge 가용성 변경 — 신규 고객 제공 중단, 대안은 DataSync·Data Transfer Terminal·파트너, 엣지는 Outposts (공식)", "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/snowball-edge-availability-change.html" },
         { "title": "What is Snowball Edge? — 리저널 운송업체로 디바이스를 배송해 전송, NFSv3·NFSv4·NFSv4.1 지원 (공식)", "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q12",
@@ -293,7 +293,7 @@
       "sources": [
         { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q13",
@@ -318,7 +318,7 @@
         { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" },
         { "title": "AWS Glue — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q14",
@@ -343,7 +343,7 @@
         { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" },
         { "title": "Kinesis Data Streams — 용량 모드 선택 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-9-q15",
@@ -367,7 +367,7 @@
       "sources": [
         { "title": "Amazon Kinesis Video Streams란? (공식)", "url": "https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/what-is-kinesis-video.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

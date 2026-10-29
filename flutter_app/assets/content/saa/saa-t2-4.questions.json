@@ -26,7 +26,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "RDS Multi-AZ DB 인스턴스 배포 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q5",
@@ -122,7 +122,7 @@
       "sources": [
         { "title": "RDS Multi-AZ 배포 구성 및 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q6",
@@ -146,7 +146,7 @@
       "sources": [
         { "title": "RDS Multi-AZ DB 인스턴스 배포 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q7",
@@ -170,7 +170,7 @@
       "sources": [
         { "title": "Well-Architected REL05-BP03 — 재시도 호출 제어·제한 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_mitigate_interaction_failure_limit_retries.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q8",
@@ -194,7 +194,7 @@
       "sources": [
         { "title": "Route 53 헬스 체크 생성 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q9",
@@ -218,7 +218,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q10",
@@ -242,7 +242,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q11",
@@ -266,7 +266,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q12",
@@ -290,7 +290,7 @@
       "sources": [
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q13",
@@ -314,7 +314,7 @@
       "sources": [
         { "title": "Route 53 헬스 체크 생성 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q14",
@@ -338,7 +338,7 @@
       "sources": [
         { "title": "RDS Multi-AZ 배포 구성 및 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-4-q15",
@@ -363,7 +363,7 @@
         { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" },
         { "title": "RDS Multi-AZ 배포 구성 및 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

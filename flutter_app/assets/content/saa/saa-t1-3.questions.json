@@ -26,7 +26,7 @@
       "sources": [
         { "title": "VPC 서브넷 — 라우팅으로 결정되는 서브넷 유형 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "서브넷 CIDR 블록 — 예약 IP 5개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "보안 그룹으로 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q4",
@@ -98,7 +98,7 @@
       "sources": [
         { "title": "네트워크 ACL로 서브넷 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q5",
@@ -122,7 +122,7 @@
       "sources": [
         { "title": "네트워크 ACL로 서브넷 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q6",
@@ -146,7 +146,7 @@
       "sources": [
         { "title": "네트워크 ACL로 서브넷 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q7",
@@ -170,7 +170,7 @@
       "sources": [
         { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q8",
@@ -194,7 +194,7 @@
       "sources": [
         { "title": "NAT 게이트웨이 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q9",
@@ -218,7 +218,7 @@
       "sources": [
         { "title": "AWS PrivateLink 개념 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q10",
@@ -242,7 +242,7 @@
       "sources": [
         { "title": "AWS PrivateLink 개념 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q11",
@@ -266,7 +266,7 @@
       "sources": [
         { "title": "VPC 피어링 연결 동작 방식 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q12",
@@ -290,7 +290,7 @@
       "sources": [
         { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q13",
@@ -314,7 +314,7 @@
       "sources": [
         { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q14",
@@ -339,7 +339,7 @@
         { "title": "보안 그룹으로 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html" },
         { "title": "네트워크 ACL로 서브넷 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-3-q15",
@@ -363,7 +363,7 @@
       "sources": [
         { "title": "VPC 피어링 연결 동작 방식 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

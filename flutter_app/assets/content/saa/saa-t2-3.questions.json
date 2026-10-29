@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Application Load Balancer — 소개 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "Network Load Balancer — 소개 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q3",
@@ -74,7 +74,7 @@
       "sources": [
         { "title": "Application Load Balancer — 소개 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q4",
@@ -99,7 +99,7 @@
         { "title": "ELB 동작 방식 — 교차 영역 분산 2대/8대 예시와 25%·6.25% (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html" },
         { "title": "ALB 대상 그룹 속성 — load_balancing.cross_zone.enabled 끄기·빈 AZ의 503·고정 세션 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q5",
@@ -123,7 +123,7 @@
       "sources": [
         { "title": "Network Load Balancer — 소개 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q6",
@@ -147,7 +147,7 @@
       "sources": [
         { "title": "ALB 대상 그룹 속성 — 쿠키가 가리킨 대상이 해제·비정상이면 새 대상 선택 후 쿠키 갱신 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q7",
@@ -171,7 +171,7 @@
       "sources": [
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q8",
@@ -195,7 +195,7 @@
       "sources": [
         { "title": "대상 추적 조정 정책 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q9",
@@ -219,7 +219,7 @@
       "sources": [
         { "title": "예측 조정 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q10",
@@ -243,7 +243,7 @@
       "sources": [
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q11",
@@ -267,7 +267,7 @@
       "sources": [
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q12",
@@ -291,7 +291,7 @@
       "sources": [
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q13",
@@ -316,7 +316,7 @@
         { "title": "Elastic Load Balancing — 개요 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html" },
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q14",
@@ -340,7 +340,7 @@
       "sources": [
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t2-3-q15",
@@ -365,7 +365,7 @@
         { "title": "Elastic Load Balancing — 개요 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html" },
         { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

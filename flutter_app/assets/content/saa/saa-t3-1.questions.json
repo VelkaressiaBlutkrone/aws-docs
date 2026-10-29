@@ -27,7 +27,7 @@
         { "title": "Amazon S3 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" },
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q2",
@@ -51,7 +51,7 @@
       "sources": [
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q3",
@@ -75,7 +75,7 @@
       "sources": [
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q4",
@@ -100,7 +100,7 @@
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" },
         { "title": "아카이브 복원 옵션 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q5",
@@ -124,7 +124,7 @@
       "sources": [
         { "title": "S3 스토리지 클래스 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q6",
@@ -148,7 +148,7 @@
       "sources": [
         { "title": "S3 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q7",
@@ -172,7 +172,7 @@
       "sources": [
         { "title": "S3 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q8",
@@ -196,7 +196,7 @@
       "sources": [
         { "title": "S3 객체 업로드 — 단일 PUT 5 GB 한도 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/upload-objects.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q9",
@@ -220,7 +220,7 @@
       "sources": [
         { "title": "S3 성능 최적화 모범 사례 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q10",
@@ -244,7 +244,7 @@
       "sources": [
         { "title": "S3 성능 최적화 모범 사례 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q11",
@@ -268,7 +268,7 @@
       "sources": [
         { "title": "S3 퍼블릭 액세스 차단 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q12",
@@ -292,7 +292,7 @@
       "sources": [
         { "title": "CloudFront OAC로 S3 오리진 접근 제한 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q13",
@@ -316,7 +316,7 @@
       "sources": [
         { "title": "프리사인 URL로 객체 다운로드·업로드 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q14",
@@ -340,7 +340,7 @@
       "sources": [
         { "title": "S3 복제 요건과 고려사항 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-requirements.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-1-q15",
@@ -364,7 +364,7 @@
       "sources": [
         { "title": "Batch Replication으로 기존 객체 복제 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

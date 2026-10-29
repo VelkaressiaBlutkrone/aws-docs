@@ -27,7 +27,7 @@
         { "title": "EC2 온디맨드 요금 — 데이터 전송 (공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" },
         { "title": "데이터 전송 비용 개요 — 인바운드 무료·아웃바운드 과금 (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q2",
@@ -52,7 +52,7 @@
         { "title": "Amazon VPC 요금 — 같은 AZ·사설 IP 는 과금 없음 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" },
         { "title": "EC2 온디맨드 요금 — 같은 리전 내 데이터 전송 (공식)", "url": "https://aws.amazon.com/ec2/pricing/on-demand/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q3",
@@ -76,7 +76,7 @@
       "sources": [
         { "title": "NAT 게이트웨이 요금 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q4",
@@ -102,7 +102,7 @@
         { "title": "NAT 게이트웨이 요금 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" },
         { "title": "AWS PrivateLink 요금 (공식)", "url": "https://aws.amazon.com/privatelink/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q5",
@@ -126,7 +126,7 @@
       "sources": [
         { "title": "NAT 게이트웨이 요금 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q6",
@@ -152,7 +152,7 @@
         { "title": "AWS PrivateLink 요금 (공식)", "url": "https://aws.amazon.com/privatelink/pricing/" },
         { "title": "S3용 AWS PrivateLink — 엔드포인트 유형 비교 (공식)", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q7",
@@ -176,7 +176,7 @@
       "sources": [
         { "title": "VPC 게이트웨이 엔드포인트 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q8",
@@ -200,7 +200,7 @@
       "sources": [
         { "title": "Amazon CloudFront 요금 (공식)", "url": "https://aws.amazon.com/cloudfront/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q9",
@@ -224,7 +224,7 @@
       "sources": [
         { "title": "Amazon CloudFront 요금 (공식)", "url": "https://aws.amazon.com/cloudfront/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q10",
@@ -249,7 +249,7 @@
         { "title": "Transit Gateway 요금 — 어태치먼트 시간당·GB당 처리 (공식)", "url": "https://aws.amazon.com/transit-gateway/pricing/" },
         { "title": "데이터 전송 비용 개요 — VPC 피어링과 TGW (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q11",
@@ -274,7 +274,7 @@
         { "title": "Transit Gateway 요금 — 어태치먼트 시간당·GB당 처리 (공식)", "url": "https://aws.amazon.com/transit-gateway/pricing/" },
         { "title": "데이터 전송 비용 개요 — TGW 는 수백~수천 VPC 연결 (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q12",
@@ -299,7 +299,7 @@
         { "title": "Amazon VPC 요금 (공식)", "url": "https://aws.amazon.com/vpc/pricing/" },
         { "title": "AWS Transit Gateway 요금 (공식)", "url": "https://aws.amazon.com/transit-gateway/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q13",
@@ -323,7 +323,7 @@
       "sources": [
         { "title": "AWS Direct Connect 요금 (공식)", "url": "https://aws.amazon.com/directconnect/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q14",
@@ -347,7 +347,7 @@
       "sources": [
         { "title": "AWS Direct Connect 요금 (공식)", "url": "https://aws.amazon.com/directconnect/pricing/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t4-4-q15",
@@ -372,7 +372,7 @@
         { "title": "데이터 전송 비용 개요 — 프라이머리 AZ 밖 소비자는 과금 (공식)", "url": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/" },
         { "title": "네트워크 비용 절감 — 교차 AZ 단가 (공식)", "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/eks-cost-optimization/network-cost-reduction.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

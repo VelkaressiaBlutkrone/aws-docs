@@ -27,7 +27,7 @@
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
         { "title": "AWS WAF 용도별 관리형 규칙 그룹 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q2",
@@ -52,7 +52,7 @@
         { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" },
         { "title": "AWS WAF Anti-DDoS 관리형 규칙 그룹 — 가장 상위 Anti-DDoS 보호·추가 요금 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q3",
@@ -76,7 +76,7 @@
       "sources": [
         { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q4",
@@ -100,7 +100,7 @@
       "sources": [
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q5",
@@ -125,7 +125,7 @@
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
         { "title": "AWS WAF rate-based 규칙 설정 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-high-level-settings.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q6",
@@ -150,7 +150,7 @@
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
         { "title": "AWS WAF 규칙 액션 레퍼런스 (공식)", "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-wafv2-webacl-ruleaction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q7",
@@ -174,7 +174,7 @@
       "sources": [
         { "title": "AWS Firewall Manager (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q8",
@@ -198,7 +198,7 @@
       "sources": [
         { "title": "What is Amazon Cognito? (공식)", "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q9",
@@ -222,7 +222,7 @@
       "sources": [
         { "title": "What is Amazon Cognito? (공식)", "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q10",
@@ -248,7 +248,7 @@
         { "title": "Secrets Manager 관리형 교체 (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_managed.html" },
         { "title": "Parameter Store 파라미터 정책 (공식)", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q11",
@@ -273,7 +273,7 @@
         { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" },
         { "title": "Parameter Store 파라미터 정책 (공식)", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q12",
@@ -298,7 +298,7 @@
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
         { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q13",
@@ -322,7 +322,7 @@
       "sources": [
         { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q14",
@@ -347,7 +347,7 @@
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
         { "title": "What is Amazon Cognito? (공식)", "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t1-4-q15",
@@ -372,7 +372,7 @@
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
         { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

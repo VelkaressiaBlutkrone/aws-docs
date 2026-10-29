@@ -26,7 +26,7 @@
       "sources": [
         { "title": "VPC 피어링 연결 동작 방식 — 비전이성 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q2",
@@ -51,7 +51,7 @@
         { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" },
         { "title": "VPC 피어링이란? (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q3",
@@ -75,7 +75,7 @@
       "sources": [
         { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q4",
@@ -99,7 +99,7 @@
       "sources": [
         { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q5",
@@ -124,7 +124,7 @@
         { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
         { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q6",
@@ -148,7 +148,7 @@
       "sources": [
         { "title": "Direct Connect의 암호화 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/encryption-in-transit.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q7",
@@ -172,7 +172,7 @@
       "sources": [
         { "title": "Direct Connect의 암호화 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/encryption-in-transit.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q8",
@@ -197,7 +197,7 @@
         { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
         { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q9",
@@ -221,7 +221,7 @@
       "sources": [
         { "title": "AWS Direct Connect Gateway (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q10",
@@ -245,7 +245,7 @@
       "sources": [
         { "title": "AWS Direct Connect Gateway (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways-intro.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q11",
@@ -269,7 +269,7 @@
       "sources": [
         { "title": "게이트웨이 엔드포인트 — S3·DynamoDB 전용·무료 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q12",
@@ -293,7 +293,7 @@
       "sources": [
         { "title": "VPC 연결 옵션 백서 — PrivateLink와 CIDR 중복 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-privatelink.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q13",
@@ -317,7 +317,7 @@
       "sources": [
         { "title": "PrivateLink 엔드포인트 서비스 생성 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q14",
@@ -341,7 +341,7 @@
       "sources": [
         { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-8-q15",
@@ -365,7 +365,7 @@
       "sources": [
         { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

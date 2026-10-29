@@ -26,7 +26,7 @@
       "sources": [
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q2",
@@ -50,7 +50,7 @@
       "sources": [
         { "title": "별칭 레코드와 비별칭 레코드 중 선택 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q3",
@@ -75,7 +75,7 @@
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" },
         { "title": "액티브-액티브·액티브-패시브 페일오버 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-types.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q4",
@@ -99,7 +99,7 @@
       "sources": [
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q5",
@@ -124,7 +124,7 @@
         { "title": "Route 53 IP 기반 라우팅 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-ipbased.html" },
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q6",
@@ -149,7 +149,7 @@
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" },
         { "title": "Geoproximity 라우팅 — bias 계산식 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geoproximity.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q7",
@@ -173,7 +173,7 @@
       "sources": [
         { "title": "CloudFront OAC로 S3 오리진 접근 제한 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q8",
@@ -197,7 +197,7 @@
       "sources": [
         { "title": "서명 URL과 서명 쿠키 중 선택 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-choosing-signed-urls-cookies.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q9",
@@ -221,7 +221,7 @@
       "sources": [
         { "title": "CloudFront SSL/TLS 인증서 요건 — ACM 리전 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q10",
@@ -245,7 +245,7 @@
       "sources": [
         { "title": "Amazon CloudFront 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q11",
@@ -270,7 +270,7 @@
         { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" },
         { "title": "CloudFront Anycast 고정 IP 요청 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q12",
@@ -294,7 +294,7 @@
       "sources": [
         { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q13",
@@ -319,7 +319,7 @@
         { "title": "Network Load Balancer란? — L4·수백만 RPS·고정 IP (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" },
         { "title": "Network Load Balancer 제품 페이지 — 초저지연 (공식)", "url": "https://aws.amazon.com/elasticloadbalancing/network-load-balancer/" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q14",
@@ -343,7 +343,7 @@
       "sources": [
         { "title": "Route 53 라우팅 정책 (공식)", "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html" }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "saa-t3-7-q15",
@@ -367,7 +367,7 @@
       "sources": [
         { "title": "Application Load Balancer란? — L7 경로 조건 (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html" }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
