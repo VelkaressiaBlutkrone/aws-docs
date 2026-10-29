@@ -144,8 +144,9 @@ SAA `t3-5-q2`의 "읽기 복제본 5개 → 15개" 정정이 `q12`의 참인 보
 
 ```sh
 cd flutter_app
-node tool/review.mjs build soa      # build/SOA-C03_review/index.html 생성 (20 Task, 300문항)
-node tool/review.mjs build dea      # build/DEA-C01_review/index.html 생성 (17 Task, 256문항)
+node tool/review.mjs build soa      # build/soa_review/index.html 생성 (20 Task, 300문항)
+node tool/review.mjs build dea      # build/dea_review/index.html 생성 (17 Task, 256문항)
+node tool/prescreen.mjs build soa   # build/soa_review/<taskId>.prescreen.json (구조·정합성 플래그)
 node tool/review.mjs flip soa soa-t1-1   # ⚠️ 사람만. 실행 자체가 검수자의 서명이다
 ```
 
@@ -164,7 +165,7 @@ node tool/review.mjs flip soa soa-t1-1   # ⚠️ 사람만. 실행 자체가 �
 2. **flip 선결 — 선언 정리** (§2) — `content_index_test.dart:303`을 자격증별로 분리해 SOA 개방 PR이 DEA 줄을 건드리지 않게 하고, DEA 표본 문제(§3)의 구조적 해소를 설계한다. **게이트를 열기 전에 미리** 해 두면 flip이 레드로 끝나지 않는다.
 3. **구조 전수 사전심사** — `soa_questions_test`·`dea_questions_test`는 구조(파일·수량·`correct` 범위·`wrongExplanations` 키·`sources` http 시작)만 본다. ⚠️ **출처 URL이 실재하는지는 어느 가드도 보지 않는다** — MLA 도메인 3에서 작성 URL 23건이 실제 오류였고, SAA에서 `rds-reserved-instances.html`이 **6문항에서** 죽은 링크였다. SOA 300 + DEA 256의 `sources`를 전수 수집해 실측(`curl -o /dev/null -w '%{http_code} %{url_effective}'`)하는 것이 가장 값싼 사전심사다.
 4. **전파 가드 SOA·DEA 판 신설** (§4-③) — md 가드의 금지 문장 목록과 문항 전수를 대조하는 테스트. SAA 판이 그대로 본이 된다.
-5. **prescreen 도구 자격증 일반형** — `tool/saa_prescreen.mjs`는 SAA 전용이다. `review.mjs`가 이미 `CERTS` 레지스트리로 일반화돼 있으니(#247) 같은 방식으로 돌린다.
+5. ~~**prescreen 도구 자격증 일반형**~~ — ✅ **완료(2026-10-29)**: `tool/prescreen.mjs build <cert>`로 다섯 자격증 전부 돈다. ⚠️ 도메인 수는 `CERTS[<cert>].domains`에서 읽는다(**SOA는 5개** — 옛 도구의 `^saa-t([1-4])-\d+$`로는 `soa-t5-*` 60문항이 오탐된다). ⚠️ **CLF만 문항 파일명에 자격증 접두가 없다**(`t1-1.questions.json`)지만 뱅크의 `examGuideTaskId`는 다섯 자격증 모두 접두를 쓴다 — 도구·가드는 그 필드를 본다. 실측: 전 자격증 **플래그 0건**. ⚠️ 위 §5 명령의 산출 경로를 정정했다 — **레지스트리 키**(`build/soa_review/`)이고 자격증 label이 아니다.
 6. **이탤릭 평문화** (§7) — 검수와 **같은 `.md`를 건드리므로** 검수 착수 전에 끝내 두는 쪽이 충돌이 없다.
 
 ---

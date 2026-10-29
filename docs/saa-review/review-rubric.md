@@ -2,7 +2,7 @@
 
 > 잠금 플랜 [2026-06-20-saa-rereview-plan](../superpowers/plans/2026-06-20-saa-rereview-plan.md) §5 T7.
 > 대상: **사람 검수자(사용자)**. **`verified` flip은 사람만**(AI flip 금지) — 이 문서는 그 사람 공정의 운영 가이드.
-> 전제 인프라(완료): T1 사전심사(`saa_prescreen.mjs` — **SAA 전용**)·T3 동적 불변식·T4 공개 게이트·T6 문서 스캔·T8 freeze 가드(**SAA 전용**).
+> 전제 인프라(완료): T1 사전심사(`prescreen.mjs` — 2026-10-29부터 **자격증 일반형**)·T3 동적 불변식·T4 공개 게이트·T6 문서 스캔·T8 freeze 가드(**SAA 전용**).
 > 검수 뷰어·flip 도구는 **자격증 일반형**이다(2026-10-27): `tool/review.mjs build <cert>` · `flip <cert> <taskId>`
 > (`<cert>`: clf·saa·soa·dea·mla). 루브릭 C1~C6과 아래 절차는 **다섯 자격증에 그대로 쓴다** — 자격증 전용 주의(flip이 돌리는 테스트,
 > `flipAllowlist` 유무)는 7번 flip 항목에 모아 뒀다. **SOA-C03·DEA-C01 착수 노트**는 [2026-10-29-soa-dea-review-prep.md](2026-10-29-soa-dea-review-prep.md)가
@@ -59,9 +59,12 @@
 
 ### 도메인별 절차
 1. **문서 선행(T6)**: 해당 도메인 학습문서의 핵심 오류를 먼저 수정(문항이 문서 파생이므로). 미수정 플래그는 [t6-doc-scan.md](t6-doc-scan.md) 참조.
-2. **결정적 사전심사(T1)**: `cd flutter_app && node tool/saa_prescreen.mjs build` → `build/saa_review/<taskId>.prescreen.json`(구조·정합성 플래그). **빌드 산출물이라 커밋하지 않는다**(도구의 `OUT_DIR = 'build/saa_review'`). 플래그 있는 문항 먼저 손본다.
-3. **의미·출처 사전심사(T2)**: AI 읽기전용 패스의 주석 아티팩트(의심 정답·약한 출처) → **`docs/saa-review/prescreen/<taskId>.json`**(키 `taskId`·`domain`·`count`·`questions`·`summary`). 2번의 build 산출물과 **다른 파일이며 이쪽은 커밋된다** — 경로가 둘인 것은 불일치가 아니다. *전용 도구는 없다(2026-10-27 실측: `flutter_app/tool/`에 `saa_prescreen.mjs`·`review.mjs` 둘뿐이고, 사전심사는 아직 SAA 전용이다) — 2026-08-06 AI 패스 산출물이 그 경로에 들어 있고, 없는 Task는 4번 뷰어로 직접 검수한다.* 판정값 `pass`/`review`는 **참고용**이고 최종 판정은 사람이 한다.
-4. **검수 뷰어**: `node tool/review.mjs build <cert>` → `build/<cert>_review/index.html`(정답 강조·기계 플래그). 브라우저로 열어 문항별 검수. `<cert>`는 `clf`·`saa`·`soa`·`dea`·`mla`이고 산출물 디렉터리는 자격증 label로 열린다(`build/SOA-C03_review/` 등). **빌드 산출물이라 커밋하지 않는다.**
+2. **결정적 사전심사(T1)**: `cd flutter_app && node tool/prescreen.mjs build <cert>` → `build/<cert>_review/<taskId>.prescreen.json`(구조·정합성 플래그). **빌드 산출물이라 커밋하지 않는다.** 플래그 있는 문항 먼저 손본다. 2026-10-29에 **자격증 일반형**이 됐다(그 전에는 `saa_prescreen.mjs`로 SAA만 돌았다 — 2026-08-06·2026-10-20 검수 시트가 적는 옛 명령이 그것이다).
+   - ⚠️ **도메인 수는 자격증별이다** — `CERTS[<cert>].domains`에서 읽는다. **SOA-C03은 5개**이고, 4로 못 박으면 `soa-t5-*`의 60문항이 "형식 이상"으로 오탐된다(옛 도구의 `^saa-t([1-4])-\d+$`가 그랬다). 그 값이 `assets/exam_guides/<label>.json`의 도메인 수와 맞는지는 `review.test.mjs`가 기계로 검사한다.
+   - ⚠️ **CLF만 문항 파일명에 자격증 접두가 없다**(`t1-1.questions.json`, 나머지는 `<cert>-t{D}-{n}.questions.json`). 뱅크 안의 `examGuideTaskId`는 다섯 자격증 모두 `<cert>-t{D}-{n}`이라 도구는 그 필드를 본다.
+   - 2026-10-29 실측: 다섯 자격증 전부 **구조·정합성 플래그 0건**(CLF 19 · SAA 24 · SOA 20 · DEA 17 · MLA 12 Task).
+3. **의미·출처 사전심사(T2)**: AI 읽기전용 패스의 주석 아티팩트(의심 정답·약한 출처) → **`docs/saa-review/prescreen/<taskId>.json`**(키 `taskId`·`domain`·`count`·`questions`·`summary`). 2번의 build 산출물과 **다른 파일이며 이쪽은 커밋된다** — 경로가 둘인 것은 불일치가 아니다. *전용 도구는 없다(2026-10-29 실측: `flutter_app/tool/`의 `prescreen.mjs`·`review.mjs`는 둘 다 **구조·정합성**만 보고 의미 판단을 하지 않는다) — 2026-08-06 AI 패스 산출물이 그 경로에 들어 있고, 없는 Task는 4번 뷰어로 직접 검수한다.* 판정값 `pass`/`review`는 **참고용**이고 최종 판정은 사람이 한다.
+4. **검수 뷰어**: `node tool/review.mjs build <cert>` → `build/<cert>_review/index.html`(정답 강조·기계 플래그). 브라우저로 열어 문항별 검수. `<cert>`는 `clf`·`saa`·`soa`·`dea`·`mla`이고, **산출물 디렉터리는 레지스트리 키**다(`build/soa_review/` — 2026-10-29 실행 확인. **자격증 label이 아니다**: `cmdBuild`가 `build/${cert.code}_review`를 쓴다). 사전심사(2번)도 같은 디렉터리에 쓰므로 자격증별로 한곳에 모인다. **빌드 산출물이라 커밋하지 않는다.**
    - Task 제목의 **"정답 쏠림" 배지는 작성 균형 참고용**이다. 앱은 보기 순서를 문항별로 섞어 내보내므로(`mock_exam.dart`의 `randomOptionOrders`·`applyOptionOrders` — 퀴즈·오답노트·모의고사 전 경로) JSON의 `correct` 인덱스는 학습자에게 그대로 보이지 않는다. **정답 위치를 옮기려고 문항을 고치지 않는다.** MLA 뷰어의 배지 7건이 그 예다(2026-10-27 실측): t2-1만 부분 쏠림(idx1 18/23)이고, **도메인 3·4의 6개 Task는 전 문항이 idx0**이다(t3-1 25/25 · t3-2 23/23 · t3-3 26/26 · t4-1 30/30 · t4-2 35/35 · t4-3 35/35) — 그대로 둔다.
    - ⚠️ **SOA는 쏠림이 20 Task 중 19건**이다(2026-10-29 실측, 전부 idx0 — `t1-1`·`t3-2`·`t3-3`·`t3-4`·`t5-2`·`t5-3`·`t5-4`는 15/15). DEA는 17 Task 중 5건(`t1-1` 13/16 · `t1-2`~`t1-4` 15/15 · `t2-4`만 idx1 9/15). **배지 수가 많은 것은 결함 수가 아니다** — 같은 이유로 그대로 둔다.
    - 반면 **`wrongExplanations` 키가 보기와 어긋나는 것은 실제 결함**이고, 그것은 배지가 아니라 문항별 구조 플래그로 잡힌다(C6). **MLA·SOA·DEA 모두 구조 플래그 0건**이다(MLA 2026-10-27 · SOA 300문항·DEA 256문항 2026-10-29 실측 — `questionFlags`를 전수에 돌려 확인).
@@ -115,7 +118,7 @@
 - **출처 교체(resource)**: 출처가 약함/무효 → 공식 출처로 교체 후 C4 재검수.
 - **폐기(drop)**: 범위 밖·구제 불가 → 제거(단, Task 밀도 ≥15 유지 필요 — `<cert>_questions_test`의 `minPerTask`. 폐기 시 대체 문항 작성).
 
-수정 루프: **수정 → 재검수 → 통과까지**. **Task 하나가 ‘전 문항 통과’면 그 Task를 flip할 수 있다**(도메인 전체를 기다리지 않는다 — MLA Task는 22~35문항, SOA·DEA는 15문항 묶음이다). `fix`를 반영했으면 구조 플래그 0을 재확인한 뒤 재검수한다 — SAA는 `saa_prescreen.mjs build`, 그 밖의 자격증은 `review.mjs build <cert>`(사전심사 도구는 아직 SAA 전용이다).
+수정 루프: **수정 → 재검수 → 통과까지**. **Task 하나가 ‘전 문항 통과’면 그 Task를 flip할 수 있다**(도메인 전체를 기다리지 않는다 — MLA Task는 22~35문항, SOA·DEA는 15문항 묶음이다). `fix`를 반영했으면 구조 플래그 0을 재확인한 뒤 재검수한다 — `node tool/prescreen.mjs build <cert>`(2026-10-29부터 다섯 자격증 전부 돈다).
 
 ## 4. flip 후 / 종료
 - Task flip 후 `flutter test`(또는 flip CLI가 돌린 그 자격증 테스트) 그린 확인.

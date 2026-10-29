@@ -122,7 +122,7 @@ test('renderHtml: label 없으면 자격증명을 박지 않는다', () => {
 
 // ── 자격증 레지스트리 ──────────────────────────────────────────────
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { CERTS, resolveCert, addToAllowlist, appPath, questionFilePath } from './review.mjs';
 
 test('resolveCert: mla는 dir·label·tests·flipAllowlist를 반환', () => {
@@ -145,6 +145,45 @@ test('CERTS: 자격증 5종이 등록돼 있다', () => {
 test('CERTS: 각 dir가 실재하는 디렉터리다', () => {
   for (const [code, cert] of Object.entries(CERTS)) {
     assert.ok(existsSync(appPath(cert.dir)), `${code}: ${cert.dir} 없음`);
+  }
+});
+
+test('CERTS: domains가 공식 시험 가이드의 도메인 수와 같다', () => {
+  // ⚠️ 도메인 수를 4로 못 박으면 **SOA-C03의 D5 Task(t5-1~t5-4, 60문항)**가
+  // 사전심사에서 "형식 이상"으로 오탐된다 — 옛 `saa_prescreen.mjs`의
+  // `^saa-t([1-4])-\d+$`가 그랬다. 정본은 `assets/exam_guides/<label>.json`이므로
+  // 레지스트리 값이 그것과 어긋나면 여기서 먼저 깨진다.
+  for (const [code, cert] of Object.entries(CERTS)) {
+    const guidePath = appPath(`assets/exam_guides/${cert.label}.json`);
+    assert.ok(existsSync(guidePath), `${code}: ${cert.label}.json 없음`);
+    const guide = JSON.parse(readFileSync(guidePath, 'utf8'));
+    assert.equal(cert.domains, guide.domains.length,
+      `${code}: domains ${cert.domains} ≠ 가이드 ${guide.domains.length}`);
+  }
+});
+
+test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위 안이다', () => {
+  // 레지스트리 값이 가이드와 같아도 콘텐츠가 그 범위를 넘으면 사전심사가 오탐한다.
+  //
+  // ⚠️ **파일명으로 보면 안 된다** — CLF만 `t1-1.questions.json`(접두 없음)이고
+  // saa·soa·dea·mla는 `<cert>-t{D}-{n}.questions.json`이다(2026-10-29 실측).
+  // 그래서 `questionFilePath`도 파일명 직접 매칭이 실패하면 뱅크의
+  // `examGuideTaskId`로 다시 찾는다. 사전심사가 쓰는 것도 그 필드이므로
+  // 여기서도 그것을 본다.
+  for (const [code, cert] of Object.entries(CERTS)) {
+    const files = readdirSync(appPath(cert.dir)).filter((f) => f.endsWith('.questions.json'));
+    assert.ok(files.length > 0, `${code}: 문항 파일 없음`);
+    for (const f of files) {
+      const bank = JSON.parse(readFileSync(appPath(`${cert.dir}/${f}`), 'utf8'));
+      const m = new RegExp(`^${code}-t(\\d+)-\\d+$`).exec(String(bank.examGuideTaskId ?? ''));
+      assert.ok(m,
+        `${code}: ${f}의 examGuideTaskId '${bank.examGuideTaskId}'가 ${code}-t{D}-{n} 형식이 아니다`);
+      const d = Number(m[1]);
+      assert.ok(d >= 1 && d <= cert.domains,
+        `${code}: ${f}의 도메인 ${d}이 domains ${cert.domains} 범위 밖이다`);
+      assert.equal(bank.domain, d,
+        `${code}: ${f}의 domain ${bank.domain} ≠ taskId 도메인 ${d}`);
+    }
   }
 });
 
