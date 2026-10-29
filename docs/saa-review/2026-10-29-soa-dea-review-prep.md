@@ -62,6 +62,15 @@ for (const c of ["soa","dea"]) { const dir="assets/content/"+c; let t=0,v=0,n=0;
 
 ## 2. ⚠️ flip 선결 — **사람이 flip하기 전에** 바꿔야 하는 테스트 단정
 
+> ### ✅ 2026-10-29 해소됨 (#279·#285) — 남은 것은 **그 자격증 locked 선언 1줄**뿐이다
+>
+> 아래 표는 **해소 전**의 기록이다. 지금은 양쪽 게이트를 열어 실측하면 레드가 **3건**이고 전부 설계대로다:
+> ① `content_index_test`의 `SOA-C03: … locked`(**flip하는 사람이 이 줄만 지운다** — 자격증별로 분리해 뒀다) ② 같은 파일의 `DEA-C01: …` ③ `questionCount == verified 수` 불변식(**시뮬레이션 산물**, 실제 `flip`은 둘을 함께 갱신한다).
+>
+> ⚠️ **아래 4건 목록은 불완전했다.** `soa_questions_test.dart`·`dea_questions_test.dart`의 **전수 `verified: false` 단정**이 빠져 있었고, 둘 다 `CERTS[<cert>].tests`에 들어 있어 **`flip`이 문항 파일을 다 쓴 뒤 반드시 레드로 끝났다**(MLA가 #246에서 겪은 함정 그대로). 세 번째로 `soa_v11_topics_test.dart`의 `"verified": true` 0건 단정은 `cert.tests`에 **없어서 flip은 통과하지만 전체 스위트를 깬다**. 셋 다 #285에서 **flip 허용 목록(`flipApprovedTaskIds`)**으로 바꿨고 `CERTS`에 `flipAllowlist`를 달아 **`flip`이 목록 추가를 대신** 한다.
+>
+> ⚠️ **`questionCount`만 올리는 시뮬레이션으로는 그 셋이 보이지 않는다** — `verified`를 실제로 바꿔야 드러난다. 그래서 이 노트의 "4건"을 전부로 믿지 말고 `grep -rn "verified" test` 로 직접 세는 쪽이 맞았다.
+
 `review.mjs flip`은 파일을 **다 쓴 뒤** 마지막에 `flutter test <cert.tests>`를 돌린다(`tool/review.mjs` `cmdFlip` 끝). `cert.tests`는 SOA가 `soa_questions_test.dart` + **`content_index_test.dart`**, DEA가 `dea_questions_test.dart` + **`content_index_test.dart`**다. 그래서 `content_index_test.dart`에 상태를 박은 단정이 남아 있으면 **flip 명령이 레드로 끝나고, 파일은 이미 바뀐 상태로 남는다.**
 
 > 2026-10-28에 실제로 일어났다 — 검수자가 `review.mjs flip saa saa-t2-5`를 돌렸고 `content_index_test.dart`의 `'SAA-C03: 현재는 locked (D2 미달)'`에서 멈췄다. `--force`는 **쓰기 전** 구조 플래그 검사만 건너뛰므로 소용없다.
@@ -91,6 +100,12 @@ for (const c of ["soa","dea"]) { const dir="assets/content/"+c; let t=0,v=0,n=0;
 ---
 
 ## 3. ⚠️ "잠긴 cert" 표본 — **다음에 옮길 곳이 없다**
+
+> ### ✅ 2026-10-29 구조적으로 해소됨 (#279)
+>
+> 더 이상 표본을 옮기지 않는다. `contentFor`가 유일한 조회 지점이므로 거기에 테스트 전용 주입구 **`debugContentIndexOverride`**(자격증별 fallthrough)를 뚫었고, 그 아래의 `certHasContent`·`certContentSummary`·`certHasVerifiedQuestions`·`examWeightedCapacityStatus`와 그것을 읽는 **위젯 전부**가 같은 주입 상태를 본다 — `CertExamPage._load()`처럼 게이트를 내부에서 부르는 경로까지 덮인다. 잠금 동작 테스트 9건을 **실제로 열린** 자격증(CLF·SAA·MLA)에 주입하는 방식으로 전환했다.
+>
+> ⚠️ **아래의 "`cert_detail_sections_test`는 표본 flip에 묶이지 않는다"는 서술은 틀렸다.** `LearningContentSection`은 **줄을 그릴지**만 `entries`로 정하고 **잠금 여부는 전역 인덱스**를 읽는 `certExamHasWeightedCapacity(certCode)`가 정한다 — 합성 엔트리만으로는 풀리지 않았고 양쪽 개방 시뮬레이션에서 실제로 깨졌다.
 
 위 4개 파일 중 3개는 "게이트가 잠긴 자격증"을 표본으로 써서 잠금 화면·준비 중 라벨을 검증한다. 그 표본은 이미 두 번 이사했다:
 
@@ -151,13 +166,28 @@ node tool/review.mjs flip soa soa-t1-1   # ⚠️ 사람만. 실행 자체가 �
 ```
 
 - `flip`이 하는 일: 해당 Task 문항의 `verified`를 true로 + `content_index.dart`의 `questionCount`를 실제 수로 + (MLA에만 있는) `flipApprovedTaskIds` 갱신 → 끝에 `cert.tests`를 돌린다.
-- **`flipAllowlist`는 MLA에만 있다.** SOA·DEA는 Dart 허용 목록이 없으므로, MLA처럼 "목록 밖의 `verified:true`를 막는 가드"가 없다. 같은 가드를 둘지는 미결정.
+- ✅ **`flipAllowlist`가 SOA·DEA에도 생겼다(2026-10-29, #285)** — 그전에는 두 자격증의 문항 가드가 **전 문항 `verified: false`를 전수 단정**해서 **사람의 첫 flip이 반드시 레드로 끝났다**(§2 참조). 지금은 `flipApprovedTaskIds` 목록 밖 Task만 드래프트를 요구하고, 목록 추가는 `flip` 명령이 대신 한다.
 - **`verified:true` flip은 사람 전용이다(AI flip 금지).** 이것이 이 레포의 최상위 규율이고, 이관받는 세션도 예외가 아니다.
 - 루브릭 [review-rubric.md](review-rubric.md)의 §0(착수 전)·§2(문항별 루브릭)·§3(수정 루프)·§5(승인 로그)를 따른다.
 
 ---
 
 ## 6. 검수 **전에** AI가 할 수 있는 준비 작업
+
+> ### ✅ 2026-10-29 **전부 완료** (#278~#285, 8 PR)
+>
+> 아래 6건 + 작업 중 실측으로 드러난 2건(**flip 허용 목록** · **`review.test.mjs`의 조용한 레드**)을 처리했다. 기준선 2,307 → **2,423**, `verified` 변경 **0건**. 경위·교훈 12건의 정본은 [HANDOFF.md](../../HANDOFF.md) §0-2026-10-29-b이고, 출처 실측 결과는 [2026-10-29-soa-dea-source-url-audit.md](2026-10-29-soa-dea-source-url-audit.md)다.
+>
+> | PR | 항목 | 성과 |
+> |---|---|---|
+> | #278 | ① 루브릭 확장 | 5종 공통으로. 밀도·배분·`cert.tests`·`flipAllowlist` 표 |
+> | #279·#285 | ② flip 선결 | 표본 주입구 + locked 선언 분리 + **허용 목록**(§2·§3 참조) |
+> | #280 | ③ 출처 URL 실측 | 고유 **561개** → 리다이렉트 **22건** 교체(전부 SOA) + 가드 24 |
+> | #281 | ④ 전파 가드 | 규칙 44건. **첫 실행에서 「적합성 팩」 8개소** 발견·정정 |
+> | #282 | ⑤ prescreen 일반형 | 5종 전부, 플래그 0건 |
+> | #283·#284 | ⑥ 이탤릭 평문화 | SOA 144 · DEA 194 → 0 |
+>
+> **남은 것은 사람 검수와 flip이다** — SOA 5 Task 75문항 / DEA 6 Task 91문항.
 
 사람 검수를 기다리지 않고 지금 할 수 있는 것들. 우선순위순이고, 각각 별건 PR이다.
 
@@ -172,7 +202,7 @@ node tool/review.mjs flip soa soa-t1-1   # ⚠️ 사람만. 실행 자체가 �
 
 ## 7. 인접 트랙 — 같은 파일을 건드리므로 순차로
 
-- **평문 표기 이탤릭 잔여** — `soa 145 · dea 194`(코드 스팬 제외 정밀 계수, 2026-10-27 실측. 가드 레시피 기준으로는 `soa 144 · dea 194`). 괄호 주석 비중이 **soa 134/145**로 높아 대부분 "별표만 지우기"로 끝나지만 **dea는 3/194**라 건별 판단이 거의 전부다. 기준·함정은 [WORKLIST.md](../../WORKLIST.md) §B⑪.
+- ~~**평문 표기 이탤릭 잔여**~~ — ✅ **soa·dea 0건 완료(2026-10-29, #283·#284)**. `italicCleanCerts` = {clf, mla, soa, dea}이고 **남은 것은 saa 192뿐**이다. ⚠️ 두 자격증의 성격이 전혀 달랐다 — SOA는 134/144가 괄호 주석이라 별표만 지우면 끝이었지만, **DEA는 괄호 주석이 3건**이고 나머지는 **이탤릭이 "논의 대상", 굵게가 "사실·정답"인 2층 구조**라 일괄 승격이 굵게 층을 무너뜨린다(191건 별표 제거 · **단독 강조 3건만** 승격). 기준·함정은 [WORKLIST.md](../../WORKLIST.md) §B⑪과 `content_format_test.dart` 머리말.
 - **SOA 갭 노트 §3 「없음」 6개** — 배치 대상(「부분」 45는 커버리지 등급이라 제외). 정본 `docs/content-research/SOA-C03/98-existing-gap.md`.
 - **DVA-C03 전환** — 가이드 공개 확인 후 `exam_guides/DVA-C03.json` 신설 + `site_data.dart`·`web/index.html`의 `DVA-C02` 하드코딩 동시 교체.
 
