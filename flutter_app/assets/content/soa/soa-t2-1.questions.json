@@ -164,8 +164,8 @@
       },
       "sources": [
         {
-          "title": "Auto Scaling 인스턴스 워밍업",
-          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/consolidated-view-of-warm-up-settings.html"
+          "title": "Auto Scaling 그룹의 기본 인스턴스 워밍업 설정",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html"
         }
       ],
       "verified": false

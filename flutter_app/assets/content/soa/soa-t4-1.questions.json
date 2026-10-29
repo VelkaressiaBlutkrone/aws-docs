@@ -241,8 +241,8 @@
       },
       "sources": [
         {
-          "title": "서드파티에 외부 ID 사용",
-          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html"
+          "title": "혼동된 대리인 문제 — 외부 ID",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html"
         }
       ],
       "verified": false
@@ -323,7 +323,7 @@
       "sources": [
         {
           "title": "마지막 액세스 정보로 권한 정제",
-          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html"
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_last-accessed.html"
         }
       ],
       "verified": false

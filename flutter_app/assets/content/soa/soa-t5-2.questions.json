@@ -52,8 +52,8 @@
       },
       "sources": [
         {
-          "title": "VPC 피어링 구성 — 지원되지 않는 구성",
-          "url": "https://docs.aws.amazon.com/vpc/latest/peering/invalid-peering-configurations.html"
+          "title": "VPC 피어링 기본 사항 — 제한 사항",
+          "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html#vpc-peering-limitations"
         }
       ],
       "verified": false
@@ -268,8 +268,8 @@
       },
       "sources": [
         {
-          "title": "Direct Connect 복원력 권장 사항",
-          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/high_resiliency_selftest.html"
+          "title": "REL02-BP02 — Direct Connect 백업으로서의 Site-to-Site VPN",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_private_networks.html"
         }
       ],
       "verified": false

@@ -19,7 +19,7 @@ sources:
   - title: 드리프트 감지로 구성되지 않은 변경 탐지 (공식)
     url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html
   - title: DeletionPolicy 속성 (공식)
-    url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
+    url: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html
   - title: AWS CDK v2 개발자 안내서 — synth·diff·bootstrap·배포 (공식)
     url: https://docs.aws.amazon.com/cdk/v2/guide/migrate.html
   - title: AWS CDK 부트스트래핑 사용자 지정 (부트스트랩 리소스·계약) (공식)
@@ -337,4 +337,4 @@ RDS 리소스에 **`DeletionPolicy: Retain`**(리소스를 남김) 또는 **`Sna
 3. 변경 세트로 스택 업데이트 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html
 4. StackSets로 여러 계정·리전에 배포 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html
 5. 드리프트 감지 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html
-6. DeletionPolicy 속성 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
+6. DeletionPolicy 속성 — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html

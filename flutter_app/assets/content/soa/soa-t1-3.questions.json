@@ -273,7 +273,7 @@
       "sources": [
         {
           "title": "EventBridge를 통한 GuardDuty 결과 모니터링",
-          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_cloudwatch.html"
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html"
         },
         {
           "title": "Amazon EventBridge 규칙",

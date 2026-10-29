@@ -12,10 +12,10 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
   - title: 지표 작업 (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html
-  - title: 이메일을 보내는 경보 생성 (경보 개념) (공식)
-    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
-  - title: 다른 경보를 기반으로 하는 복합 경보 (공식)
-    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_alarm_on_alarm.html
+  - title: CloudWatch 경보 사용 (경보 개념·복합 경보) (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+  - title: 복합 경보 생성 (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_Composite_Alarm.html
   - title: CloudWatch 대시보드 (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
   - title: EC2 인스턴스 모니터링 (기본 vs 세부) (공식)
@@ -360,7 +360,9 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 
 1. CloudWatch 개념(네임스페이스·차원·기간·통계·해상도) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
 2. 지표 작업 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html
-3. 이메일을 보내는 경보 생성(경보 상태·평가·누락 데이터) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
-4. 다른 경보를 기반으로 하는 복합 경보 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_alarm_on_alarm.html
-5. CloudWatch 대시보드 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
-6. EC2 인스턴스 모니터링(기본 vs 세부) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
+3. CloudWatch 경보 사용(경보 종류·복합 경보의 노이즈 감소) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+4. 경보 평가(경보 상태·M out of N 평가 기간) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html
+5. 누락 데이터 처리 구성(4가지 옵션) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html
+6. 복합 경보 생성 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_Composite_Alarm.html
+7. CloudWatch 대시보드 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
+8. EC2 인스턴스 모니터링(기본 vs 세부) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html

@@ -241,8 +241,8 @@
       },
       "sources": [
         {
-          "title": "Amazon EBS 최적화 인스턴스",
-          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-optimized.html"
+          "title": "Amazon EBS 최적화 인스턴스 유형",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html"
         }
       ],
       "verified": false
