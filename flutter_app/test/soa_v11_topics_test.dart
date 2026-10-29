@@ -388,14 +388,18 @@ void main() {
       expect(doc('soa-t5-2').contains('create-endpoint-service'), isTrue);
     });
 
-    test('문항 드래프트는 손대지 않았다 — 본문만 바뀌었다', () {
-      // verified:false 전수 가드는 soa_questions_test.dart가 이미 수행한다.
-      // 여기서는 본문 반영이 문항 파일로 번지지 않았는지만 확인한다.
+    test('본문을 고치면서 문항 파일을 잃지 않았다', () {
+      // ⚠️ 전에는 여기서도 `"verified": true`가 0건임을 단정했다. 그 단정은
+      // **사람이 그 Task를 flip하는 순간 깨져 flip을 막는다** — 그리고 AI flip
+      // 금지는 `soa_questions_test.dart`의 **flip 허용 목록 가드**가 이미, 그리고
+      // 더 정확하게 수행한다(목록 밖 Task만 드래프트를 요구하므로 사람의 flip이
+      // 통과한다). 본문 정정이 문항으로 번지는지는
+      // `soa_dea_question_propagation_test.dart`가 문구 단위로 본다.
+      // 그래서 여기서는 파일이 사라지지 않았는지만 확인한다.
       for (final id in changed) {
         final q = File('assets/content/soa/$id.questions.json');
         expect(q.existsSync(), isTrue, reason: '$id 문항 파일이 사라졌다');
-        expect(q.readAsStringSync().contains('"verified": true'), isFalse,
-            reason: '$id 문항이 flip됐다 — flip은 사람 검수 전용이다');
+        expect(q.readAsStringSync(), isNotEmpty, reason: '$id 문항 파일이 비었다');
       }
     });
   });

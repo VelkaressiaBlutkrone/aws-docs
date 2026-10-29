@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'flip_allowlist.dart';
+
 /// SOA-C03 문항 드래프트 구조·밀도 가드.
 ///
 /// `QuestionBank.fromJson`은 verified 게이트로 비검증 문항을 제외하므로,
@@ -36,6 +38,30 @@ void main() {
     'soa-t5-4',
   ];
   const minPerTask = 15; // CLF 기준선과 동일한 Task당 밀도 목표
+
+  /// 사람 검수를 마쳐 flip을 허용한 Task — **사람만 여기에 추가한다.**
+  ///
+  /// ⚠️ 2026-10-29까지 이 가드는 **전 문항 `verified: false`를 전수 단정**했다.
+  /// 그러면 AI flip은 막히지만 **사람이 첫 Task를 flip하는 순간에도 깨져 flip
+  /// 자체가 불가능**하다 — 이 파일은 `CERTS['soa'].tests`에 들어 있어
+  /// `review.mjs flip soa <taskId>`가 **문항 파일을 다 쓴 뒤** 마지막에 돌린다
+  /// (`--force`는 쓰기 **전** 구조 검사만 건너뛰어 소용없다). MLA가 #246에서
+  /// 같은 함정에 걸렸고 허용 목록으로 풀었다.
+  ///
+  /// 지금은 보호 의도를 유지하면서 길을 연다: 이 목록에 **없는** Task는 전 문항이
+  /// `verified: false`여야 하고, 목록에 넣는 행위가 곧 사람의 서명이다(flip 커밋의
+  /// diff에 드러나므로 감사 추적이 된다). **그 추가를 `flip` 명령이 대신 해 준다**
+  /// (`CERTS['soa'].flipAllowlist`).
+  ///
+  /// 판정은 `flip_allowlist.dart`의 순수 함수이고 양쪽 분기는
+  /// `flip_allowlist_test.dart`가 합성 입력으로 검증한다 — 실제 콘텐츠에
+  /// `verified: true`를 쓰지 않고도 "목록에 넣으면 통과한다"가 증명된다.
+  ///
+  /// 검수 절차·루브릭은 `docs/saa-review/review-rubric.md` C1~C6을 그대로 쓴다.
+  /// 통합 모의고사 공개에 필요한 양은 도메인당 D1 14 · D2 14 · D3 14 · D4 11 ·
+  /// D5 12(연습 65문항에 공식 비중 배분)이고, SOA Task는 전부 15문항이라
+  /// **도메인당 1 Task씩 5 Task 75문항**이면 게이트가 열린다.
+  const flipApprovedTaskIds = <String>{};
 
   for (final taskId in soaTaskIds) {
     group(taskId, () {
@@ -85,10 +111,31 @@ void main() {
             expect((s['title'] ?? '').toString(), isNotEmpty);
           }
 
-          // 드래프트 단계: 사람 검수 전이므로 verified는 false여야 한다(AI flip 금지).
-          expect(q['verified'], isFalse,
-              reason: '$qid verified=true — flip은 사람 검수 전용이다');
+          // `verified`는 bool이어야 한다. 값 자체는 아래 flip 허용 목록 가드가 본다.
+          expect(q['verified'], isA<bool>(),
+              reason: '$qid verified가 bool이 아니다');
         }
+      });
+
+      test('flip 허용 목록에 없으면 전 문항이 드래프트다 (AI flip 금지)', () {
+        final map =
+            json.decode(File(path).readAsStringSync()) as Map<String, dynamic>;
+        final qs = (map['questions'] as List).cast<Map<String, dynamic>>();
+        final flipped = flippedQuestionIds(qs);
+        expect(
+          flipAllowlistGuardPasses(
+            approved: flipApprovedTaskIds,
+            taskId: taskId,
+            questions: qs,
+          ),
+          isTrue,
+          reason: flipApprovedTaskIds.contains(taskId)
+              ? '$taskId: flip 허용 목록에 있는데 verified 문항이 없다 — '
+                  '검수를 끝냈으면 flip하고, 아직이면 목록에서 빼라'
+              : '$taskId: 사람 검수 전인데 verified=true 문항이 있다 — '
+                  'flip은 사람 전용이다. 검수를 마쳤다면 flipApprovedTaskIds에 '
+                  '$taskId 을 추가하라:\n${flipped.take(5).join(', ')}',
+        );
       });
     });
   }
