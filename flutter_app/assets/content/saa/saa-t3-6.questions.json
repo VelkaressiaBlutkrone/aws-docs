@@ -350,24 +350,25 @@
     {
       "id": "saa-t3-6-q15",
       "examGuideTaskId": "saa-t3-6",
-      "skill": "캐싱 전략 — Lazy Loading stale 위험과 TTL 병행",
+      "skill": "ElastiCache 배포 형태 선택 — 서버리스 vs 노드 기반",
       "difficulty": "applied",
-      "stem": "한 팀이 ElastiCache를 Lazy Loading(Cache-Aside) 전략으로 사용하고 있다. 그런데 캐시에 저장된 데이터가 DB에서 업데이트되었는데도 오래된 값(stale)이 반환되는 문제가 보고되었다. 이 문제를 완화하는 가장 적절한 방법은?",
+      "stem": "새로 출시하는 서비스에 ElastiCache 캐시를 도입한다. 트래픽 패턴을 아직 예측할 수 없어 노드 수와 샤드 수를 정하기 어렵고, 가능한 한 빨리 캐시를 띄우고 싶다. 어떤 배포 형태가 가장 적합한가?",
       "options": [
-        "Lazy Loading을 Write-Through로 완전히 교체한다",
-        "ElastiCache를 Memcached로 전환해 멀티스레드로 갱신 속도를 높인다",
-        "캐시 항목에 적절한 TTL을 설정해 일정 시간이 지나면 캐시 항목이 만료되고 DB에서 최신 값을 재조회하도록 한다",
-        "DynamoDB Streams를 활성화해 변경 이벤트를 ElastiCache에 전파한다"
+        "노드 기반 클러스터 — 노드 타입과 샤드 수를 넉넉하게 잡아 두면 예측이 필요 없다",
+        "노드 기반 클러스터 — 트래픽이 늘면 노드를 추가하면 되므로 어떤 상황에서든 더 낫다",
+        "ElastiCache Serverless — 용량 계획·하드웨어 관리·클러스터 설계 없이 캐시를 만들고, 사용률에 따라 자동으로 확장된다",
+        "ElastiCache에는 배포 형태를 고르는 선택지가 없고 노드 기반 클러스터뿐이다"
       ],
       "correct": 2,
-      "explanation": "Lazy Loading은 캐시 미스 시에만 DB를 조회해 저장하므로, 이후 DB 값이 변경되어도 캐시에는 이전 값이 그대로 남아 stale 데이터가 발생할 수 있습니다. TTL을 설정하면 일정 시간 후 캐시 항목이 자동 만료되어 다음 요청 시 DB에서 최신 값을 재조회합니다. TTL 값은 stale 허용 범위와 DB 부하 사이의 균형으로 결정합니다.",
+      "explanation": "ElastiCache의 배포 형태는 **서버리스 캐싱**과 **노드 기반 클러스터** 둘입니다. 공식 문서는 서버리스를 고를 조건으로 새 워크로드이거나 예측이 어려운 워크로드, 애플리케이션 트래픽이 불규칙할 때, 캐시를 가장 쉽게 시작하고 싶을 때를 듭니다. ElastiCache Serverless는 용량 계획·하드웨어 관리·클러스터 설계 없이 이름만 주면 단일 엔드포인트를 받고, 메모리·컴퓨팅·네트워크 사용률을 지속적으로 감시해 수직·수평으로 자동 확장하며 데이터를 여러 가용 영역에 중복 저장합니다. 반대로 노드 기반은 노드 타입·노드 수·AZ 배치를 세밀하게 통제해야 할 때, 트래픽이 비교적 예측 가능할 때, 용량 요구를 예측해 비용을 통제할 수 있을 때 고릅니다.",
       "wrongExplanations": {
-        "0": "Write-Through로 전환하면 stale 문제를 근본적으로 해결할 수 있지만, Write-Through는 쓰기 지연 증가와 불필요한 캐시 적재라는 단점이 있습니다. 반드시 전면 교체할 필요는 없으며 TTL 병행이 더 가벼운 해결책입니다.",
-        "1": "Memcached와 Redis의 차이는 자료구조·영속성·HA이며, 캐시 갱신 속도나 stale 문제와는 관련이 없습니다.",
-        "3": "DynamoDB Streams는 DynamoDB 테이블의 변경 이벤트를 캡처하는 기능입니다. 이 시나리오는 RDS 기반 ElastiCache 캐싱 문제이므로 DynamoDB Streams는 해당 사항이 없습니다."
+        "0": "노드 타입과 샤드 수를 넉넉하게 잡는 것은 예측을 피하는 것이 아니라 과다 프로비저닝으로 비용을 더 쓰는 것입니다. 공식 문서는 예측이 어려운 워크로드에 서버리스를 권합니다.",
+        "1": "노드 기반이 어떤 상황에서든 더 낫다는 것은 사실이 아닙니다. 공식 문서는 노드 기반을 노드 타입·수·배치를 세밀하게 통제해야 하거나 용량 요구를 예측해 비용을 통제할 수 있을 때의 선택으로 적습니다.",
+        "3": "ElastiCache에는 서버리스 배포 형태가 있습니다. 공식 문서가 배포 옵션을 서버리스 캐싱과 노드 기반 클러스터 둘로 제시하고, 두 형태 사이에 백업 복원도 지원합니다."
       },
       "sources": [
-        { "title": "ElastiCache 캐싱 전략 — Lazy Loading·Write-Through·TTL (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html" }
+        { "title": "ElastiCache 배포 옵션 선택 — 서버리스 vs 노드 기반 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.deployment.html" },
+        { "title": "ElastiCache 동작 방식 — 서버리스는 용량 계획 불필요 (공식)", "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.corecomponents.html" }
       ],
       "verified": false
     }
