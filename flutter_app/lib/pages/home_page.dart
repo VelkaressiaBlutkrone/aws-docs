@@ -9,12 +9,14 @@ import '../data/history_store.dart';
 import '../data/plan_progress.dart';
 import '../data/plan_progress_store.dart';
 import '../data/plan_progress_view.dart';
+import '../data/resume_exam.dart';
 import '../data/site_data.dart';
 import '../data/study_plan_store.dart';
 import '../data/study_reset.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
+import '../widgets/resume_exam_card.dart';
 import 'home/exams_section.dart';
 import 'home/footer_section.dart';
 import 'home/hero_section.dart';
@@ -30,9 +32,15 @@ IconData dueIcon(int overdue) =>
     overdue > 0 ? Icons.event_busy_outlined : Icons.event_outlined;
 
 /// 홈 — 섹션 위젯들은 `pages/home/`(PR4 분해), 이 파일은 골격(스크롤·앵커·
-/// 헤더 배선·오늘-할-일 배너)만 가진다.
+/// 헤더 배선·오늘-할-일 배너·이어서 풀기 카드)만 가진다.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.backend});
+
+  /// 진행 중 시험 세션 조회용 주입구(UX-4). 앱에서는 null이라 `defaultBackend()`
+  /// (웹=localStorage)를 쓴다. 테스트가 세션을 심어 카드 노출을 검증할 때만 주입한다 —
+  /// VM의 `defaultBackend()`는 호출마다 별도 MemoryBackend라 주입구 없이는
+  /// 심은 세션을 페이지가 볼 수 없다(`CertExamPage.backend`와 같은 사정).
+  final KvBackend? backend;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -214,6 +222,13 @@ class _HomePageState extends State<HomePage> {
                             HeroSection(
                               onGotoPaths: () => _goto(_paths),
                               onGotoExams: () => _goto(_exams),
+                            ),
+                            // 진행 중인 시험이 due 배너보다 급하다 — 시계가 돌고 있다.
+                            ResumeExamSection(
+                              exams:
+                                  resumableExamsAll(backend: widget.backend),
+                              showCertCode: true,
+                              onOpen: (route) => context.push(route),
                             ),
                             ?dueBanner,
                             const SourcesRow(),

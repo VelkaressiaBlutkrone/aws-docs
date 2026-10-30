@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/resume_exam.dart';
 import '../data/study_progress.dart';
 import '../data/viewed_docs_store.dart';
 import '../data/weighted_exam.dart';
@@ -15,6 +16,7 @@ import '../models/exam_guide.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
+import '../widgets/resume_exam_card.dart';
 import '../widgets/state_views.dart';
 import 'cert_detail/cert_detail_bits.dart';
 import 'cert_detail/cert_header_section.dart';
@@ -33,9 +35,14 @@ typedef _Loaded = ({
 /// 자격증 상세 — 섹션 위젯들은 `pages/cert_detail/`(PR4 분해), 이 파일은
 /// 로더(_load)와 골격(헤더·스크롤·상태 분기)만 가진다.
 class CertDetailPage extends StatefulWidget {
-  const CertDetailPage({super.key, required this.cert});
+  const CertDetailPage({super.key, required this.cert, this.backend});
 
   final Certification cert;
+
+  /// 진행 중 시험 세션 조회용 주입구(UX-4). 앱에서는 null이라 `defaultBackend()`를
+  /// 쓴다. 테스트가 세션을 심어 "이어서 풀기" 카드 노출을 검증할 때만 주입한다
+  /// (`CertExamPage.backend`와 같은 사정).
+  final KvBackend? backend;
 
   @override
   State<CertDetailPage> createState() => _CertDetailPageState();
@@ -150,6 +157,12 @@ class _CertDetailPageState extends State<CertDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CertHeaderSection(cert: cert, guide: guide),
+                          // 진행 중인 시험은 제일 위에 — 시계가 돌고 있다(UX-4).
+                          ResumeExamSection(
+                            exams: resumableExamsForCert(cert.code,
+                                backend: widget.backend),
+                            onOpen: (route) => context.push(route),
+                          ),
                           if (summary != null) SummaryBlock(summary: summary),
                           if (contentFor(cert.code).isNotEmpty)
                             LearningContentSection(
