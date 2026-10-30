@@ -36,10 +36,15 @@ IconData dueIcon(int overdue) =>
 class HomePage extends StatefulWidget {
   const HomePage({super.key, this.backend});
 
-  /// 진행 중 시험 세션 조회용 주입구(UX-4). 앱에서는 null이라 `defaultBackend()`
-  /// (웹=localStorage)를 쓴다. 테스트가 세션을 심어 카드 노출을 검증할 때만 주입한다 —
-  /// VM의 `defaultBackend()`는 호출마다 별도 MemoryBackend라 주입구 없이는
-  /// 심은 세션을 페이지가 볼 수 없다(`CertExamPage.backend`와 같은 사정).
+  /// 로컬 저장소 주입구. 앱에서는 null이라 `defaultBackend()`(웹=localStorage)를 쓰고,
+  /// 테스트가 상태를 심어 화면을 검증할 때만 주입한다 — VM의 `defaultBackend()`는
+  /// 호출마다 별도 MemoryBackend라 주입구 없이는 심은 것을 페이지가 볼 수 없다
+  /// (`CertExamPage.backend`와 같은 사정).
+  ///
+  /// 이 페이지의 **두 패널이 함께** 쓴다: 진행 중 시험 세션 조회(UX-4의 "이어서 풀기"
+  /// 카드)와 오늘-할-일 배너의 일정·진행·응시 스토어. ⚠️ 배너 쪽을 빠뜨리면 배너가
+  /// 테스트에서 영원히 안 그려져, "배너가 그려졌는가"를 전제로 쓰는 검사가 **거짓
+  /// 통과**한다(2026-10-30 `accent_on_surface2_test`에서 실측).
   final KvBackend? backend;
 
   @override
@@ -100,9 +105,12 @@ class _HomePageState extends State<HomePage> {
     final todayIso = DateTime.now().toIso8601String().substring(0, 10);
     // TODO: ScheduleSection과 동일하게 스토어·computePlanDone를 build마다 로드한다.
     // cert 수가 늘면 둘의 공유 계산을 고려.
-    final planStore = StudyPlanStore();
-    final progress = PlanProgressStore();
-    final history = HistoryStore().all();
+    // 주입구를 여기까지 넘긴다 — 안 넘기면 테스트가 심은 일정을 배너가 볼 수 없어
+    // "배너가 그려졌는가"를 전제로 쓰는 스캔이 거짓 통과한다(2026-10-30 실측).
+    // null이면 `defaultBackend()`라 앱 동작은 그대로다.
+    final planStore = StudyPlanStore(backend: widget.backend);
+    final progress = PlanProgressStore(backend: widget.backend);
+    final history = HistoryStore(backend: widget.backend).all();
     var today = 0, overdue = 0, active = 0;
     String? oneCert;
     for (final cert in certifications.where((cc) => certHasContent(cc.code))) {
