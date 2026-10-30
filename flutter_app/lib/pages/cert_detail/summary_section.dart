@@ -36,7 +36,7 @@ class SummaryBlock extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w800, fontVariations: Wght.w800,
                   letterSpacing: 0.4,
-                  color: c.accent,
+                  color: c.accentStrong,
                 ),
               ),
             ],
@@ -54,7 +54,7 @@ class SummaryBlock extends StatelessWidget {
           const SizedBox(height: Gap.md),
           Text(
             '비공식 학습 요약본 · 최신 세부 항목은 공식 안내서를 확인하세요.',
-            style: TextStyle(fontSize: 12, color: c.textFaint),
+            style: TextStyle(fontSize: 12, color: c.textMuted),
           ),
         ],
       ),

@@ -148,18 +148,18 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontVariations: Wght.w700,
-                              color: c.accent)),
+                              color: c.accentStrong)),
                     if (hasToday && hasOverdue)
                       TextSpan(
                           text: ' · ',
-                          style: TextStyle(color: c.textFaint)),
+                          style: TextStyle(color: c.textMuted)),
                     if (hasOverdue)
                       TextSpan(
                           text: '지난 일정 $overdue개',
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontVariations: Wght.w700,
-                              color: c.warning)),
+                              color: c.warningText)),
                   ]),
                 ),
               ),
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: c.accent)),
+                      color: c.accentStrong)),
             ],
           ),
         ),

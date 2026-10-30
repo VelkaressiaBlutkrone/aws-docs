@@ -328,7 +328,7 @@ class _ExamViewState extends State<ExamView> {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   fontVariations: Wght.w700,
-                  color: low ? c.warning : c.text,
+                  color: low ? c.warningText : c.text,
                 ),
               ),
               const Spacer(),

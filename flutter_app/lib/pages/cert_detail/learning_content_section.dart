@@ -323,12 +323,12 @@ class _ProgressBanner extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(label, style: t.labelSmall?.copyWith(color: c.textFaint)),
+      Text(label, style: t.labelSmall),
       const SizedBox(height: 2),
       Text(
         value,
         style: t.titleMedium?.copyWith(
-          color: c.accent,
+          color: c.accentStrong,
           fontFamily: AppTheme.monoFamily,
         ),
       ),

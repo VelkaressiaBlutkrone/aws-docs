@@ -435,7 +435,7 @@ class _PlanAgendaState extends State<PlanAgenda> {
                     child: Center(
                         child: Text(d,
                             style:
-                                t.labelSmall?.copyWith(color: c.textFaint)))),
+                                t.labelSmall))),
             ],
           ),
           const SizedBox(height: Gap.xs),

@@ -49,7 +49,7 @@ class ResumeExamCard extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontVariations: Wght.w700,
-                          color: c.accent)),
+                          color: c.accentStrong)),
                   TextSpan(
                       text: '  ·  ${remainingExamLabel(exam.remainingSec)}',
                       style: TextStyle(color: c.textMuted)),
@@ -59,7 +59,7 @@ class ResumeExamCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                      color: c.accent)),
+                      color: c.accentStrong)),
             ],
           ),
         ),

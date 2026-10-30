@@ -49,7 +49,7 @@ class SubLabel extends StatelessWidget {
         fontSize: 11,
         fontWeight: FontWeight.w800, fontVariations: Wght.w800,
         letterSpacing: 0.6,
-        color: c.textFaint,
+        color: c.textMuted,
       ),
     );
   }

@@ -210,7 +210,7 @@ class SecondaryButton extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   fontVariations: Wght.w700,
-                  color: active ? c.warning : c.textMuted,
+                  color: active ? c.warningText : c.textMuted,
                 ),
               ),
             ],
