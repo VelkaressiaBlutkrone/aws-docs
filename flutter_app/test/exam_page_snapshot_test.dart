@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:aws_docs/content/quiz_widgets.dart' show OptionTile;
 import 'package:aws_docs/data/content_index.dart';
 import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/history_store.dart' show KvBackend, MemoryBackend;
@@ -14,6 +15,12 @@ import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/pages/exam_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
+
+/// ⚠️ "첫 응답"은 `find.byType(OptionTile).first`로 집는다 — 전에는
+/// `find.byType(InkWell).first`였는데, 그건 **트리에서 먼저 나오는 아무 InkWell**이라
+/// 러너에 컨트롤이 하나 늘면 조용히 다른 것을 누른다. 실제로 UX-2의 상단 상시 제출
+/// 버튼이 들어오자 이 탭이 **제출**로 가서 세 테스트가 결과 화면에서 깨졌다.
+/// 선택지를 누르고 싶으면 선택지를 가리킨다.
 
 /// 스냅샷 키 쓰기만 실패시키는 백엔드(쿼터 초과 모사).
 class _QuotaOnSnapshot extends MemoryBackend {
@@ -110,7 +117,7 @@ void main() {
     final b = MemoryBackend();
     await _pump(tester, b);
 
-    await tester.tap(find.byType(InkWell).first);
+    await tester.tap(find.byType(OptionTile).first);
     await tester.pump();
 
     final store = ExamSessionStore(backend: b);
@@ -127,7 +134,7 @@ void main() {
     final b = _QuotaOnSnapshot();
     await _pump(tester, b);
 
-    await tester.tap(find.byType(InkWell).first);
+    await tester.tap(find.byType(OptionTile).first);
     await tester.pump();
 
     expect(tester.takeException(), isNull, reason: '예외가 사용자에게 닿으면 안 된다');
@@ -151,7 +158,7 @@ void main() {
     await _pump(tester, b);
 
     for (var i = 0; i < 3; i++) {
-      await tester.tap(find.byType(InkWell).first);
+      await tester.tap(find.byType(OptionTile).first);
       await tester.pump();
     }
 
@@ -166,7 +173,7 @@ void main() {
     final b = MemoryBackend();
     await _pump(tester, b);
 
-    await tester.tap(find.byType(InkWell).first);
+    await tester.tap(find.byType(OptionTile).first);
     await tester.pump();
 
     final iso = ExamSessionStore(backend: b)

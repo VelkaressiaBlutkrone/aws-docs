@@ -81,7 +81,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         color: c.textMuted);
     final dateStyle = TextStyle(
         fontSize: 13,
-        color: c.textFaint,
+        color: c.textMuted,
         fontFeatures: const [FontFeature.tabularFigures()]);
 
     return AppHeaderShell(

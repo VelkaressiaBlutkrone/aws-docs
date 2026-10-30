@@ -5,7 +5,7 @@
 외부 앱 코드·UX 리뷰(🔴2·🟡10·🟢6·🎨5)의 **반영분은 2026-09-22 PR#122~#127로, 설계 선행이 필요했던 동기 항목(C-2 초기화 부활·M-9)은 2026-09-23 PR#128~#132(동기 프로토콜 v2)로 전부 출고**됐다. 현황표는 [WORKLIST.md](WORKLIST.md) §B④⑤⑥. 남은 것은 아래뿐이다.
 
 - ✅ **출고됨(PR-m11)** — QuizView `_finish`·오답노트 `_onFinished`의 try/finally + 저장 실패 알림은 `c8540b8`("fix(quiz): 응시 기록 저장이 실패해도 결과 화면·복습 목록이 멈추지 않게")로 들어갔다. 배선은 `quiz_page.dart`·`review_page.dart`의 `onSaveFailure` → `notifyAttemptSaveFailure`이고 가드는 `test/quiz_view_test.dart`다. **"바로 가능한 작은 수정"으로 남아 있던 것은 이 항목뿐이라, 이제 아래 분류만 남는다**(2026-10-24 실측 정정 — 네 문서가 출고 뒤에도 미착수로 적고 있었다).
-- **디자인 결정 필요:** M-6 대비(contrast) 토큰 — DESIGN.md 정렬 선행 · UX-1·2 시험 러너 모바일 레이아웃 · UX-4 진행 중 세션 "이어서 풀기" 진입점(홈 due 배너 옆 / `cert_detail` 상단, `ExamSessionStore.load` + `examIdsForCert`로 결정적 조회) · M-10/UX-5 결과 화면.
+- ✅ **디자인 결정 5건 전부 반영(2026-10-30, 미릴리스)** — 사용자 승인하 M-6(A+B 혼합)·UX-1(접이식)·UX-2(제출+점프)·UX-4(홈+상세, 통합+약점)·UX-5(필터+정답 접힘)를 각 독립 커밋으로 넣었다. 결정 근거는 [DESIGN.md](DESIGN.md) `## Contrast` 절과 Decisions Log 2026-10-30 4행이 정본이다. **미룬 것:** M-10의 지연 빌드(Sliver 전환) — 호출부 2곳을 `CustomScrollView`로 바꿔야 하고 `headerScrollInset`·`SelectionArea` 회귀 위험이 커 사용자가 범위에서 제외했다(전수 만점 65문항만 65장을 펼쳐 그리는 잔여 경로). **후속:** `accent/surface2` 감사를 7곳까지만 했다 — surface2 패널이 29곳이고 나머지는 중첩을 눈으로 확인하지 않았다(토큰 가드가 조합 자체는 막는다).
 - **후순위 정리:** M-4(콘텐츠 공용 로더 + 병렬 + 가드) · M-7 · 리뷰 원문 Minor m-1~m-5 · `PlanCheckStore` 제거 여부(동기에서는 이미 제외했고 읽는 화면도 없는 죽은 코드).
 - **보류(근거 있음):** M-8 주기 reconcile — watch 구독에 onError·재구독이 없어 주기 동기가 다른 기기 변경 수신의 안전망 역할을 한다(HANDOFF §1 트레이드오프). m-6 에셋 디렉터리 등록 — 원본 mp3와 enrich 산출물이 같은 디렉터리에 로컬로 있어 디렉터리 단위 등록 시 로컬 빌드에 섞인다.
 - **사용자 몫:** Firebase 콘솔에 배포된 Firestore 규칙을 레포 `firestore.rules`와 맞추기. 레포 쪽은 에뮬레이터 테스트(`tool/firestore_rules_test`)와 `firestore-rules` 워크플로가 검증한다.
