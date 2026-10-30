@@ -90,6 +90,11 @@ class _ExamViewState extends State<ExamView> {
   late final Set<int> _flagged = {...widget.initialFlagged};
   bool _submitted = false;
   bool _dialogOpen = false;
+
+  /// 좁은 화면에서 문항 그리드를 펼쳤는지(UX-1). 기본 접힘 — 360px에서 65칩이 9줄
+  /// (≈338px)을 차지해 지문을 첫 뷰포트 밖으로 밀어내던 것이 리뷰의 발견이다.
+  /// 데스크톱(≥768)에서는 쓰이지 않는다.
+  bool _gridExpanded = false;
   AttemptRecord? _justFinished; // 제출된 응시(처방 허브가 잠금/현재응시 계산에 사용)
   Timer? _ticker;
 
@@ -242,9 +247,32 @@ class _ExamViewState extends State<ExamView> {
     return '$m:$s';
   }
 
+  /// 문항 번호 그리드 본체. 좁은 화면에서는 [_gridExpanded]일 때만 그린다(UX-1).
+  Widget _grid() => Wrap(
+        spacing: Gap.xs,
+        runSpacing: Gap.xs,
+        children: [
+          for (var k = 0; k < _qs.length; k++)
+            GridChip(
+              label: '${k + 1}',
+              answered: _picked.containsKey(k),
+              flagged: _flagged.contains(k),
+              current: k == _index,
+              onTap: () => _go(k),
+            ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     if (_submitted) return _results(context);
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          _runner(context, compact: constraints.maxWidth < examCompactBreakpoint),
+    );
+  }
+
+  Widget _runner(BuildContext context, {required bool compact}) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final q = _qs[_index];
@@ -275,7 +303,10 @@ class _ExamViewState extends State<ExamView> {
                 ),
               ),
               const Spacer(),
-              Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
+              // 좁은 화면에서는 진행을 요약 칩 한 곳에만 둔다 — 두 곳에 같은 숫자를
+              // 적으면 좁은 상단 행이 중복으로 차고, 요약 칩이 왜 있는지 흐려진다.
+              if (!compact)
+                Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
             ],
           ),
           if (widget.restored)
@@ -289,20 +320,34 @@ class _ExamViewState extends State<ExamView> {
               ),
             ),
           const SizedBox(height: Gap.md),
-          Wrap(
-            spacing: Gap.xs,
-            runSpacing: Gap.xs,
-            children: [
-              for (var k = 0; k < _qs.length; k++)
-                GridChip(
-                  label: '${k + 1}',
-                  answered: _picked.containsKey(k),
-                  flagged: _flagged.contains(k),
-                  current: k == _index,
-                  onTap: () => _go(k),
-                ),
-            ],
-          ),
+          if (compact) ...[
+            ExamGridSummaryChip(
+              label: examGridSummaryLabel(
+                index: _index,
+                total: _qs.length,
+                answered: _picked.length,
+                flagged: _flagged.length,
+              ),
+              expanded: _gridExpanded,
+              onTap: () => setState(() => _gridExpanded = !_gridExpanded),
+            ),
+            AnimatedSize(
+              // DESIGN.md Motion: short 150–250ms, enter ease-out.
+              // disableAnimations(접근성 7A)에서는 즉시 전환.
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              alignment: Alignment.topLeft,
+              child: _gridExpanded
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: Gap.md),
+                      child: _grid(),
+                    )
+                  : const SizedBox(width: double.infinity),
+            ),
+          ] else
+            _grid(),
           const SizedBox(height: Gap.lg),
           Text(q.stem, style: t.titleLarge),
           const SizedBox(height: Gap.lg),
