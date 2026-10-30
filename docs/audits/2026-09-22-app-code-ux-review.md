@@ -653,6 +653,7 @@ void _startPeriodic() {
 - ✅ **반영 완료(2026-10-30) — 디자인 결정 5건:** M-6 · UX-1 · UX-2 · UX-4 · UX-5. 사용자 승인하 각 독립 커밋, 가드 102건(기준선 2,466 → 2,568). 결정 근거는 `DESIGN.md` `## Contrast` 절 + Decisions Log 2026-10-30 4행이 정본이다.
   - **부록 A 정정:** 토큰 값을 재계산해 리뷰 수치가 **아직 유효함**을 확인했다(소수 둘째 자리까지 일치). 다만 ⚠️ **부록 A의 제안값은 `surface2`에서 AA 미달이다**(light `textFaint #697280` → 4.31 · dark `#808A9B` → 4.15; 본문도 "카드 내부 라벨은 textMuted 권장"으로 인정하고 있었다). 그래서 값만 올리는 A안 대신 **텍스트를 `textMuted`로 옮기고 faint를 비활성·장식 전용으로 격하**했다(= 부록이 원칙으로 적은 쪽). ⚠️ **부록 A에 없던 조합:** `accent / surface2` **4.21 (미달)** — 부록은 `accent/surface` 4.76만 적었는데 surface2 패널 7곳이 accent 텍스트였다. 기존 `accentStrong`(5.65)으로 이전. ⚠️ **부록 A에 없던 조합:** `correct / bg` **4.18 (미달)** — `correct` 값 교체로 함께 해소.
   - **M-10은 일부만:** 필터·접힘은 들어갔고 **Sliver 지연 빌드는 범위에서 제외**(사용자 결정) — `ResultsView`가 호출부의 `SingleChildScrollView > Column` 안이라 `CustomScrollView`화가 필요하고 `headerScrollInset`·`SelectionArea` 회귀 위험이 크다. 전수 만점 65문항이 유일한 잔여 경로다.
+  - ✅ **`accent / surface2` 감사 종료(2026-10-30 후속):** 1차에 7곳만 고치고 "나머지 22곳은 중첩을 확인하지 못했다"로 남겼던 것을, 렌더된 트리를 걷는 스캐너(`flutter_app/test/contrast_scan.dart`)로 닫았다 — **실제 위반 0건**. ⚠️ 이 종류는 **소스 grep으로 판정 불가**다("이 accent 텍스트가 어느 배경 위인가"가 소스에 없다). 부록 A처럼 토큰 쌍을 적는 방식도 같은 한계가 있어, 앞으로 대비 항목은 **쌍이 아니라 렌더 결과**로 검증한다.
   - **UX-3(칩 44px hit area)·M-7(Semantics)은 이번 범위가 아니다** — 리뷰의 우선순위 권고 1·2·3(UX-1·4·2)과 M-6·UX-5만 승인받았다.
 - **후순위 정리:** m-1~m-5(리뷰 원문 Minor), M-4(공용 로더 + 병렬 + 가드), M-7
 - **보류:** M-8, m-6(리뷰 원문 Minor)
