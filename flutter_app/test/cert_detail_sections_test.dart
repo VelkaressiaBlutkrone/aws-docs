@@ -15,8 +15,13 @@ import 'package:aws_docs/pages/cert_detail/official_guide_section.dart';
 import 'package:aws_docs/pages/cert_detail/summary_section.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 
-/// cert_detail 분해 섹션 가드(PR4 T8) — 페이지 전체는 SelectionArea+비동기로
-/// 위젯 테스트 렌더 불가하므로, 추출된 각 섹션을 셸 밖에서 단독 렌더해 가드한다.
+/// cert_detail 분해 섹션 가드(PR4 T8) — 추출된 각 섹션을 셸 밖에서 단독 렌더해 가드한다.
+///
+/// ⚠️ 여기 있던 "페이지 전체는 SelectionArea+비동기로 위젯 테스트 렌더 불가" 단정은
+/// **틀렸다**(2026-10-30 실측) — `ThemeScope`로 감싸면 `CertDetailPage`도 직접 뜬다
+/// (`test/resume_exam_card_test.dart`의 상세 배선 테스트가 그렇게 돈다. `CertExamPage`가
+/// 2026-10-24에 같은 정정을 받았다). 섹션 단독 렌더 방식 자체는 그대로 둔다 — 섹션별
+/// 입력 조합을 짚는 데는 에셋 로드 없이 도는 이 방식이 더 싸다.
 Widget _host(Widget child) => MaterialApp(
   theme: AppTheme.light,
   home: Scaffold(body: SingleChildScrollView(child: child)),

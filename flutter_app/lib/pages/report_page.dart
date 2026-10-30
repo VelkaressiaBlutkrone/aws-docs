@@ -189,7 +189,7 @@ class _ReportPageState extends State<ReportPage> {
           const SizedBox(width: Gap.md),
           Text('$pct%',
               style: t.titleLarge
-                  ?.copyWith(color: c.accent, fontFamily: AppTheme.monoFamily)),
+                  ?.copyWith(color: c.accentStrong, fontFamily: AppTheme.monoFamily)),
           const Spacer(),
           Text('응시 ${r.correctTotal}/${r.attemptedTotal} 문항',
               style: t.labelLarge?.copyWith(color: c.textMuted)),
@@ -203,7 +203,7 @@ class _ReportPageState extends State<ReportPage> {
     final isWeak = s.status == TaskStatus.weak;
     final isUnattempted = s.status == TaskStatus.unattempted;
     final Color tone =
-        isUnattempted ? c.textFaint : (isWeak ? c.wrong : c.correct);
+        isUnattempted ? c.textMuted : (isWeak ? c.wrong : c.correct);
     final String rateLabel =
         isUnattempted ? '미응시' : '정답률 ${((s.rate ?? 0) * 100).round()}%';
     return Padding(
@@ -237,7 +237,7 @@ class _ReportPageState extends State<ReportPage> {
                     isUnattempted
                         ? '총 ${s.total}문항'
                         : '응시 ${s.attempted}/${s.total}문항',
-                    style: t.labelSmall?.copyWith(color: c.textFaint)),
+                    style: t.labelSmall),
                 const Spacer(),
                 if (isWeak)
                   InkWell(
@@ -256,7 +256,7 @@ class _ReportPageState extends State<ReportPage> {
             if (isWeak && (d.conceptByTask[s.taskId]?.isNotEmpty ?? false)) ...[
               const SizedBox(height: Gap.md),
               Text('놓친 개념',
-                  style: t.labelSmall?.copyWith(color: c.textFaint)),
+                  style: t.labelSmall),
               const SizedBox(height: Gap.xs),
               Wrap(
                 spacing: Gap.sm,
@@ -319,7 +319,7 @@ class _ConceptLink extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       fontVariations: Wght.w700,
-                      color: c.accent)),
+                      color: c.accentStrong)),
             ],
           ),
         ),

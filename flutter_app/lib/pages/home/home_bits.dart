@@ -36,7 +36,7 @@ class HomeBand extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600, fontVariations: Wght.w600,
-                      color: c.textFaint)),
+                      color: c.textMuted)),
             ],
           ),
           const SizedBox(height: Gap.xl),

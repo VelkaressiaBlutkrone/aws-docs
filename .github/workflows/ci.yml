@@ -1,7 +1,9 @@
 name: CI
 
-# PR 게이트: develop·main 대상 PR마다 정적 분석(0건)과 전체 테스트를 돌린다.
+# PR 게이트: develop·main 대상 PR마다 node 도구 테스트·정적 분석(0건)·전체 테스트를 돌린다.
 # 로컬 규율(CLAUDE.md 빌드·테스트 절)을 머지 전 기계 게이트로 옮긴 것.
+# 체크 이름(`test`)은 브랜치 보호의 필수 체크라 바꾸지 않는다 — 새 job 으로 쪼개면
+# 그 job 은 필수 목록에 없어 게이트가 되지 않으므로, 단계를 이 job 안에 더한다.
 on:
   pull_request:
     branches: [develop, main]
@@ -23,6 +25,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      # node 도구 테스트를 Flutter 앞에 둔다 — 1초면 끝나므로 여기서 먼저 레드가 난다.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # firestore-rules.yml과 같은 값
+
+      # `tool/*.test.mjs`(node:test)가 CI에 없어서 레드가 **조용히 남은 적이 있다** —
+      # review.test.mjs 의 허용 목록 단정이 MLA 전 Task flip(#275) 때 깨졌는데 아무 신호도
+      # 없었다(#285 교훈 10). 글롭으로 돌려 새 테스트 파일이 자동으로 포함되게 하고,
+      # 첫 실패에서 멈추지 않고 전부 돈 뒤 집계한다(어느 파일이 깨졌는지 한 번에 보려고).
+      - name: Test (node tools)
+        run: |
+          found=0
+          fail=0
+          for f in tool/*.test.mjs; do
+            [ -e "$f" ] || continue
+            found=$((found+1))
+            echo "::group::$f"
+            node "$f" || fail=1
+            echo "::endgroup::"
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "::error::tool/*.test.mjs 가 하나도 없다 — 경로 규칙이 바뀌었는지 확인할 것"
+            exit 1
+          fi
+          echo "node 테스트 파일 $found개 실행"
+          exit $fail
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2

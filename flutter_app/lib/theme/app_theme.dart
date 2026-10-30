@@ -27,6 +27,7 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.info,
     required this.infoWeak,
     required this.warning,
+    required this.warningText,
     required this.warningWeak,
   });
 
@@ -51,6 +52,11 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color info;
   final Color infoWeak;
   final Color warning;
+
+  /// 텍스트 전용 주의 색. [warning]은 아이콘·테두리·배경에 남는다 — 그 값은 비텍스트
+  /// 3:1은 넘지만 텍스트 4.5:1에는 미달이고(라이트 3.49), 색을 통째로 올리면 플래그
+  /// 아이콘·테두리 톤까지 어두워진다. 다크는 warning이 이미 AA를 넘어 같은 값이다.
+  final Color warningText;
   final Color warningWeak;
 
   static const light = AppColors(
@@ -61,20 +67,21 @@ class AppColors extends ThemeExtension<AppColors> {
     borderStrong: Color(0xFFD6D1C7),
     text: Color(0xFF1B2430),
     textMuted: Color(0xFF5C6573),
-    textFaint: Color(0xFF8A93A0),
+    textFaint: Color(0xFF8A93A0), // 비활성·장식 전용(AA 미달 — M-6 원칙)
     ink: Color(0xFF1B2430),
     onInk: Color(0xFFEFEDE7),
     accent: Color(0xFF0E8175),
     accentStrong: Color(0xFF0B6B61),
     accentWeak: Color(0xFFE0F2EF),
     onAccent: Color(0xFFFFFFFF),
-    correct: Color(0xFF1F8A52),
+    correct: Color(0xFF1C7D4A), // correctWeak 4.52 · surface 5.14 · bg 4.93 (옛 #1F8A52 = 3.83)
     correctWeak: Color(0xFFE5F4EA),
     wrong: Color(0xFFC0392B),
     wrongWeak: Color(0xFFFBEAE7),
     info: Color(0xFF2563B0),
     infoWeak: Color(0xFFE8EFF8),
     warning: Color(0xFFB7791F),
+    warningText: Color(0xFF956319), // bg 4.94 · surface 5.15 · warningWeak 4.51
     warningWeak: Color(0xFFF8EFDD),
   );
 
@@ -86,7 +93,7 @@ class AppColors extends ThemeExtension<AppColors> {
     borderStrong: Color(0xFF3A4350),
     text: Color(0xFFE8EAED),
     textMuted: Color(0xFF9AA4B2),
-    textFaint: Color(0xFF6B7585),
+    textFaint: Color(0xFF6B7585), // 비활성·장식 전용(AA 미달 — M-6 원칙)
     ink: Color(0xFF0F131A),
     onInk: Color(0xFFE8EAED),
     accent: Color(0xFF3FB8AA),
@@ -100,6 +107,7 @@ class AppColors extends ThemeExtension<AppColors> {
     info: Color(0xFF5B9BE0),
     infoWeak: Color(0xFF15212E),
     warning: Color(0xFFD9A441),
+    warningText: Color(0xFFD9A441), // bg 7.91 — 다크 warning은 이미 AA 통과
     warningWeak: Color(0xFF2A2113),
   );
 
@@ -126,6 +134,7 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? info,
     Color? infoWeak,
     Color? warning,
+    Color? warningText,
     Color? warningWeak,
   }) {
     return AppColors(
@@ -150,6 +159,7 @@ class AppColors extends ThemeExtension<AppColors> {
       info: info ?? this.info,
       infoWeak: infoWeak ?? this.infoWeak,
       warning: warning ?? this.warning,
+      warningText: warningText ?? this.warningText,
       warningWeak: warningWeak ?? this.warningWeak,
     );
   }
@@ -179,6 +189,7 @@ class AppColors extends ThemeExtension<AppColors> {
       info: Color.lerp(info, other.info, t)!,
       infoWeak: Color.lerp(infoWeak, other.infoWeak, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
+      warningText: Color.lerp(warningText, other.warningText, t)!,
       warningWeak: Color.lerp(warningWeak, other.warningWeak, t)!,
     );
   }
@@ -351,12 +362,14 @@ TextTheme _textTheme(AppColors c) {
         height: 1.4,
         fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         color: c.text),
+    // ⚠️ 12px 텍스트의 기본색이 textFaint였다 — `t.labelSmall`을 그냥 쓰는 모든
+    // 화면이 AA 미달을 상속하고 있었다(M-6). 텍스트는 textMuted가 하한이다.
     labelSmall: TextStyle(
         fontSize: 12,
         height: 1.3,
         fontWeight: FontWeight.w700, fontVariations: Wght.w700,
         letterSpacing: 0.4,
-        color: c.textFaint),
+        color: c.textMuted),
   );
 }
 

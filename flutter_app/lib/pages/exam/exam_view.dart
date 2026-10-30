@@ -90,6 +90,11 @@ class _ExamViewState extends State<ExamView> {
   late final Set<int> _flagged = {...widget.initialFlagged};
   bool _submitted = false;
   bool _dialogOpen = false;
+
+  /// 좁은 화면에서 문항 그리드를 펼쳤는지(UX-1). 기본 접힘 — 360px에서 65칩이 9줄
+  /// (≈338px)을 차지해 지문을 첫 뷰포트 밖으로 밀어내던 것이 리뷰의 발견이다.
+  /// 데스크톱(≥768)에서는 쓰이지 않는다.
+  bool _gridExpanded = false;
   AttemptRecord? _justFinished; // 제출된 응시(처방 허브가 잠금/현재응시 계산에 사용)
   Timer? _ticker;
 
@@ -242,9 +247,61 @@ class _ExamViewState extends State<ExamView> {
     return '$m:$s';
   }
 
+  /// 문항 번호 그리드 본체. 좁은 화면에서는 [_gridExpanded]일 때만 그린다(UX-1).
+  Widget _grid() => Wrap(
+        spacing: Gap.xs,
+        runSpacing: Gap.xs,
+        children: [
+          for (var k = 0; k < _qs.length; k++)
+            GridChip(
+              label: '${k + 1}',
+              answered: _picked.containsKey(k),
+              flagged: _flagged.contains(k),
+              current: k == _index,
+              onTap: () => _go(k),
+            ),
+        ],
+      );
+
+  /// 미답·플래그 점프 버튼(UX-2). 갈 곳이 없는 버튼은 아예 그리지 않는다 —
+  /// 눌러도 안 움직이거나 비활성으로 남는 버튼보다 없는 쪽이 정직하다.
+  List<Widget> _jumpButtons() {
+    final unanswered = examNextIndex(
+      from: _index,
+      total: _qs.length,
+      matches: (i) => !_picked.containsKey(i),
+    );
+    final flagged = examNextIndex(
+      from: _index,
+      total: _qs.length,
+      matches: _flagged.contains,
+    );
+    return [
+      if (unanswered != null)
+        SecondaryButton(
+          icon: Icons.radio_button_unchecked,
+          label: '다음 미답',
+          onTap: () => _go(unanswered),
+        ),
+      if (flagged != null)
+        SecondaryButton(
+          icon: Icons.flag_outlined,
+          label: '다음 플래그',
+          onTap: () => _go(flagged),
+        ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_submitted) return _results(context);
+    return LayoutBuilder(
+      builder: (context, constraints) =>
+          _runner(context, compact: constraints.maxWidth < examCompactBreakpoint),
+    );
+  }
+
+  Widget _runner(BuildContext context, {required bool compact}) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final q = _qs[_index];
@@ -271,11 +328,24 @@ class _ExamViewState extends State<ExamView> {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   fontVariations: Wght.w700,
-                  color: low ? c.warning : c.text,
+                  color: low ? c.warningText : c.text,
                 ),
               ),
               const Spacer(),
-              Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
+              // 좁은 화면에서는 진행을 요약 칩 한 곳에만 둔다 — 두 곳에 같은 숫자를
+              // 적으면 좁은 상단 행이 중복으로 차고, 요약 칩이 왜 있는지 흐려진다.
+              if (!compact)
+                Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
+              // 상시 제출(UX-2). 하단 기본 버튼이 '제출'로 바뀌는 마지막 문항에서는
+              // 숨긴다 — 제출은 어느 문항에서든 정확히 한 곳에만 있다.
+              if (_index < _qs.length - 1) ...[
+                const SizedBox(width: Gap.md),
+                SecondaryButton(
+                  icon: Icons.check_circle_outline,
+                  label: '제출',
+                  onTap: _onSubmitPressed,
+                ),
+              ],
             ],
           ),
           if (widget.restored)
@@ -289,20 +359,50 @@ class _ExamViewState extends State<ExamView> {
               ),
             ),
           const SizedBox(height: Gap.md),
-          Wrap(
-            spacing: Gap.xs,
-            runSpacing: Gap.xs,
-            children: [
-              for (var k = 0; k < _qs.length; k++)
-                GridChip(
-                  label: '${k + 1}',
-                  answered: _picked.containsKey(k),
-                  flagged: _flagged.contains(k),
-                  current: k == _index,
-                  onTap: () => _go(k),
+          if (compact) ...[
+            Wrap(
+              spacing: Gap.sm,
+              runSpacing: Gap.sm,
+              children: [
+                ExamGridSummaryChip(
+                  label: examGridSummaryLabel(
+                    index: _index,
+                    total: _qs.length,
+                    answered: _picked.length,
+                    flagged: _flagged.length,
+                  ),
+                  expanded: _gridExpanded,
+                  onTap: () => setState(() => _gridExpanded = !_gridExpanded),
                 ),
+                ..._jumpButtons(),
+              ],
+            ),
+            AnimatedSize(
+              // DESIGN.md Motion: short 150–250ms, enter ease-out.
+              // disableAnimations(접근성 7A)에서는 즉시 전환.
+              duration: MediaQuery.disableAnimationsOf(context)
+                  ? Duration.zero
+                  : const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              alignment: Alignment.topLeft,
+              child: _gridExpanded
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: Gap.md),
+                      child: _grid(),
+                    )
+                  : const SizedBox(width: double.infinity),
+            ),
+          ] else ...[
+            _grid(),
+            if (_jumpButtons().isNotEmpty) ...[
+              const SizedBox(height: Gap.md),
+              Wrap(
+                spacing: Gap.sm,
+                runSpacing: Gap.sm,
+                children: _jumpButtons(),
+              ),
             ],
-          ),
+          ],
           const SizedBox(height: Gap.lg),
           Text(q.stem, style: t.titleLarge),
           const SizedBox(height: Gap.lg),

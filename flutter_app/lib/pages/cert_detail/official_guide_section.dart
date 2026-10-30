@@ -34,7 +34,7 @@ class OfficialGuideSection extends StatelessWidget {
           '출처: ${guide.sourceUrl}',
           style: TextStyle(
             fontSize: 11,
-            color: c.textFaint,
+            color: c.textMuted,
             fontFamily: AppTheme.monoFamily,
           ),
         ),
@@ -125,7 +125,7 @@ class _TaskBlock extends StatelessWidget {
                   fontFamily: AppTheme.monoFamily,
                   fontSize: 12,
                   fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                  color: c.accent,
+                  color: c.accentStrong,
                 ),
               ),
               const SizedBox(width: Gap.sm),
