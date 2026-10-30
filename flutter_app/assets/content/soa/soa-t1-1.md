@@ -12,10 +12,10 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
   - title: 지표 작업 (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html
-  - title: 이메일을 보내는 경보 생성 (경보 개념) (공식)
-    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
-  - title: 다른 경보를 기반으로 하는 복합 경보 (공식)
-    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_alarm_on_alarm.html
+  - title: CloudWatch 경보 사용 (경보 개념·복합 경보) (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+  - title: 복합 경보 생성 (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_Composite_Alarm.html
   - title: CloudWatch 대시보드 (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
   - title: EC2 인스턴스 모니터링 (기본 vs 세부) (공식)
@@ -291,25 +291,25 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 ## ⚠️ 흔한 함정
 
 1. **"차원이 같은 이름이면 합쳐서 본다."** → 차원 값이 다르면(InstanceId가 다르면) **별개의 지표**입니다. 전체를 보려면 지표 계산식(Metric Math)이나 집계된 지표(예: ASG 단위)를 따로 써야 합니다.
-   *(원리: §1 — 차원 조합마다 독립 시계열로 저장되어 자동 집계가 발생하지 않는다.)*
+   (원리: §1 — 차원 조합마다 독립 시계열로 저장되어 자동 집계가 발생하지 않는다.)
 
 2. **"경보는 전역(글로벌)이다."** → 경보와 지표는 **리전 단위 리소스**입니다. 멀티 리전 운영이면 각 리전마다 경보를 만들어야 하며, 한 화면에서 보려면 **교차 리전 대시보드**를 씁니다.
-   *(원리: §5 — 경보는 리전별로 독립적으로 평가·실행되는 능동적 리소스이고, 대시보드는 수동적 조회다.)*
+   (원리: §5 — 경보는 리전별로 독립적으로 평가·실행되는 능동적 리소스이고, 대시보드는 수동적 조회다.)
 
 3. **"EC2를 만들면 메모리·디스크 사용량 지표가 바로 나온다."** → CloudWatch 기본 EC2 지표는 CPU·네트워크·디스크 I/O·상태 점검 등 **하이퍼바이저에서 보이는 것**뿐입니다. **메모리·디스크 여유 공간·EBS 파일시스템 사용률**은 게스트 OS 내부 값이라 **CloudWatch agent를 설치**해야 수집됩니다.
-   *(원리: §1 본문 — 메모리·디스크 등 OS 내부 지표는 기본 제공되지 않아 CloudWatch agent로 사용자 지정 지표를 게시해야 한다.)*
+   (원리: §1 본문 — 메모리·디스크 등 OS 내부 지표는 기본 제공되지 않아 CloudWatch agent로 사용자 지정 지표를 게시해야 한다.)
 
 4. **"기본 모니터링(5분)으로 1분 주기 경보를 만든다."** → 데이터가 5분마다 들어오므로 60초 기간 경보는 대부분 `INSUFFICIENT_DATA` 상태가 됩니다. 1분 경보를 원하면 **세부 모니터링**을 켜야 합니다.
-   *(원리: §2 본문 — 경보 기간보다 지표 게시 주기가 길면 평가할 데이터 포인트가 부족해 INSUFFICIENT_DATA가 된다.)*
+   (원리: §2 본문 — 경보 기간보다 지표 게시 주기가 길면 평가할 데이터 포인트가 부족해 INSUFFICIENT_DATA가 된다.)
 
 5. **"고해상도(1초) 지표면 데이터가 오래 남는다."** → 정반대입니다. **60초 미만 해상도 데이터는 3시간만** 보존됩니다. 장기 추세는 자동 롤업된 5분/1시간 데이터로 봅니다. 또한 고해상도 지표·고해상도 경보는 **추가 비용**이 발생합니다.
-   *(원리: §2 — 고해상도 원본은 롤업 설계상 단기 보존에 최적화되고, 오래될수록 낮은 해상도로 집계된다.)*
+   (원리: §2 — 고해상도 원본은 롤업 설계상 단기 보존에 최적화되고, 오래될수록 낮은 해상도로 집계된다.)
 
 6. **"트래픽이 0일 때 경보가 알아서 정상으로 본다."** → 지표가 보고되지 않으면 **누락 데이터 처리 옵션**에 따라 결과가 달라집니다. 기본값 `missing`은 누락을 무시하지만, `breaching`을 선택하면 데이터 없음을 위반으로 보아 의도치 않게 ALARM이 울릴 수 있습니다.
-   *(원리: §3 본문 — 누락 데이터 처리 옵션 4종이 각각 다른 상태 전이 결과를 만든다.)*
+   (원리: §3 본문 — 누락 데이터 처리 옵션 4종이 각각 다른 상태 전이 결과를 만든다.)
 
 7. **"INSUFFICIENT_DATA는 장애다."** → 데이터가 아직 충분히 쌓이지 않았거나 보고되지 않았다는 **중립 상태**입니다. 경보를 막 만든 직후나 트래픽이 없을 때 정상적으로 나타납니다.
-   *(원리: §3 본문 — INSUFFICIENT_DATA는 경보 3상태 중 하나로, 데이터 부족을 나타내는 중립 상태다.)*
+   (원리: §3 본문 — INSUFFICIENT_DATA는 경보 3상태 중 하나로, 데이터 부족을 나타내는 중립 상태다.)
 
 ---
 
@@ -360,7 +360,9 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 
 1. CloudWatch 개념(네임스페이스·차원·기간·통계·해상도) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html
 2. 지표 작업 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html
-3. 이메일을 보내는 경보 생성(경보 상태·평가·누락 데이터) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
-4. 다른 경보를 기반으로 하는 복합 경보 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_alarm_on_alarm.html
-5. CloudWatch 대시보드 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
-6. EC2 인스턴스 모니터링(기본 vs 세부) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
+3. CloudWatch 경보 사용(경보 종류·복합 경보의 노이즈 감소) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+4. 경보 평가(경보 상태·M out of N 평가 기간) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html
+5. 누락 데이터 처리 구성(4가지 옵션) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html
+6. 복합 경보 생성 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_Composite_Alarm.html
+7. CloudWatch 대시보드 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
+8. EC2 인스턴스 모니터링(기본 vs 세부) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html

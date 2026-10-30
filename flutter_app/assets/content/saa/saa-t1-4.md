@@ -147,15 +147,22 @@ CAPTCHA / Challenge → 봇 여부 검증
 
 | 구분 | Shield Standard | Shield Advanced |
 |---|---|---|
-| **비용** | 무료 (모든 AWS 고객 자동 적용) | 유료 구독 (별도 요금) |
+| **비용** | 무료 (모든 AWS 고객 자동 적용) | 유료 구독 — 월 $3,000/조직 + 데이터 전송 사용료 |
 | **보호 계층** | L3/L4 (네트워크·전송) | L3/L4 + L7 (애플리케이션) |
 | **자동 완화** | 일반 DDoS 자동 완화 | 애플리케이션 계층 DDoS 자동 완화 포함 |
 | **보호 대상** | CloudFront, Route 53, ALB, EC2 등 (기본 범위) | EC2, ELB, CloudFront, Route 53, Global Accelerator |
-| **Shield Response Team(SRT)** | 없음 | 전담 DDoS 대응 팀 24/7 지원 |
+| **Shield Response Team(SRT)** | 없음 | 전담 DDoS 대응 팀 — 연락에는 **Business·Enterprise Support 플랜 필요** |
 | **고급 가시성** | 없음 | 상세 이벤트 가시성, CloudWatch 메트릭 |
 | **비용 보호** | 없음 | DDoS로 인한 요금 급증 시 크레딧 제공 |
 
 > **핵심 구분**: Shield Standard는 L3/L4 수준의 기본 DDoS 자동 방어를 무료로 제공합니다. Shield Advanced는 L7 자동 완화, SRT 전담 지원, 이벤트 리포트가 추가됩니다. 고트래픽·고가시성 사이트에 적합합니다.
+
+**Shield Advanced 요금 구조와 SRT 조건 (★ 출제 포인트)**
+
+- **월 $3,000이 조직 단위입니다.** 계정마다 따로 내는 것이 아니라, 계정들이 하나의 **통합 결제** 아래 있으면 월 요금을 **한 번만** 냅니다. 여기에 Shield Advanced **데이터 전송 사용료**가 사용량 기준으로 더해집니다.
+- **표준 AWS WAF 비용이 구독에 포함됩니다.** 보호 리소스의 웹 ACL·규칙·웹 요청 검사 기본 요금이 **1,500 WCU**와 기본 본문 크기까지 포함되고, 월 **500억 요청**까지 포함됩니다. Bot Control·CAPTCHA 규칙 액션, 1,500 WCU를 넘는 웹 ACL처럼 표준 범위를 벗어난 것은 포함되지 않습니다.
+- **자동 L7 완화를 켜면 규칙 그룹이 추가되고 150 WCU를 씁니다.** 1,500 WCU 포함 범위를 계산할 때 이 몫을 빼고 생각해야 합니다.
+- ⚠️ **SRT는 구독만으로 연락이 되지 않습니다.** 공식 FAQ는 SRT에 에스컬레이션하거나 투입을 요청하려면 **Business 또는 Enterprise Support 플랜**이 필요하다고 적고, 응답 시간도 가입한 Support 플랜에 달려 있다고 적습니다. "Advanced만 구독하면 SRT 지원을 받는다"는 보기는 이 조건을 빠뜨린 것입니다.
 
 **DDoS 공격 유형 (Shield가 탐지):**
 
@@ -293,13 +300,59 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 > 악성 요청이 엣지에서 차단되면 오리진 ALB·EC2까지 트래픽이 도달하지 않아 오리진 리소스 소비와 ALB 데이터 처리 비용이 줄어듭니다.
 > 또한 CloudFront의 지역(Geo) 차단과 WAF 규칙을 조합하면 특정 국가 트래픽을 오리진에 접근시키기 전에 글로벌 단계에서 필터링할 수 있습니다.
 
+### 7) 위협 탐지와 조사 — GuardDuty·Detective {#threat-detection}
+
+WAF·Shield가 **막는** 서비스라면, 이 둘은 **알아차리고 파헤치는** 서비스입니다. 공식 시험 가이드가 Task 1.2의 보안 서비스 예시로 GuardDuty를 직접 들기 때문에 역할 구분이 그대로 출제됩니다.
+
+| 서비스 | 하는 일 | 보는 것 |
+|---|---|---|
+| **Amazon GuardDuty** | 위협 **탐지** — 계정·워크로드를 지속 감시해 의심스러운 활동을 결과(finding)로 올립니다 | 기본 데이터원 = **CloudTrail 관리 이벤트 · VPC 흐름 로그 · DNS 로그**. 그 밖은 보호 플랜을 **골라 켜는** 방식(S3·EKS·런타임·악성코드·RDS·Lambda 등)이고 언제든 끌 수 있습니다 |
+| **Amazon Detective** | 근본 원인 **조사** — 올라온 결과나 의심 활동이 어디서 비롯됐는지 분석합니다 | CloudTrail·VPC 흐름 로그를 모아 동작 그래프를 만들고 **GuardDuty 결과도 가져옵니다** |
+
+- **탐지와 조사는 다른 단계입니다.** "이상 징후를 알려 달라"는 GuardDuty, "왜 이렇게 됐는지 파헤쳐 달라"는 Detective입니다. 시험에서 Detective를 탐지 서비스로 고르거나 GuardDuty를 조사 도구로 고르면 오답입니다.
+- ⚠️ **GuardDuty는 방어 서비스가 아닙니다.** 로그를 분석해 결과를 올릴 뿐이라 트래픽을 끊거나 DDoS를 완화하지 않습니다 — 그 몫은 Shield(DDoS)와 WAF(L7 요청 필터)입니다.
+- GuardDuty를 처음 켜면 런타임 모니터링을 뺀 보호 플랜이 자동으로 함께 켜집니다. "기본 데이터원"과 "보호 플랜"은 별개의 층이라는 점이 구분 포인트입니다.
+
+> 🧠 원리: 왜 위협 탐지와 근본 원인 조사를 **별개 서비스**로 나눠 놓았을까요?
+> 탐지는 "지금 이상한 일이 벌어지는가"를 빨리 판단하는 일이라, 계정에 상시 흘러드는 기본 데이터원(CloudTrail 관리 이벤트·흐름 로그·DNS 로그)을 끊임없이 분석하는 구조가 맞습니다.
+> 조사는 "어떻게 여기까지 왔는가"를 과거로 거슬러 보는 일이라, 같은 로그를 **주체·리소스·시간으로 연결한 그래프**로 쌓아 두어야 하고 그 보관·연결 비용은 탐지와 성격이 다릅니다.
+> 두 일을 한 서비스로 묶으면 모든 계정이 조사용 그래프 비용까지 늘 부담하게 되므로, 탐지는 켜 두고 조사는 필요할 때 붙이는 구조로 갈렸습니다.
+
+### 8) 애플리케이션 구성 보안 — IMDSv2·Session Manager {#config-security}
+
+자격증명을 Secrets Manager에 넣는 것만으로 끝이 아닙니다. **인스턴스가 자격증명을 내주는 경로**와 **사람이 인스턴스에 들어가는 경로**도 함께 닫아야 합니다.
+
+**IMDSv2 강제 — 인스턴스 메타데이터**
+
+EC2 인스턴스는 메타데이터 서비스(IMDS)로 자기에게 붙은 IAM 역할의 임시 자격증명을 내줍니다. IMDSv1은 단순 요청만으로 그 자격증명을 돌려주기 때문에, 앱의 요청 위조 취약점이 그대로 자격증명 탈취로 이어질 수 있습니다.
+
+| 설정 | 동작 |
+|---|---|
+| `HttpTokens` = **required** | IMDSv2가 강제됩니다. 메타데이터 조회 요청에 **세션 토큰을 보내야** 하고, IAM 역할 자격증명은 항상 IMDSv2로만 나옵니다 — **IMDSv1 자격증명은 제공되지 않습니다** |
+| `HttpTokens` = optional | 세션 토큰을 보낼지 선택할 수 있습니다. 토큰 없이 조회하면 **IMDSv1 자격증명이 돌아옵니다** |
+
+- 적용 수단: 새로 띄울 때는 `run-instances --metadata-options HttpTokens=required`, 이미 뜬 인스턴스는 `modify-instance-metadata-options --http-tokens required`.
+- `HttpPutResponseHopLimit`은 메타데이터 요청이 **몇 홉까지 갈 수 있는지**를 정합니다. 숫자가 클수록 더 멀리 가므로, 컨테이너가 호스트 메타데이터에 닿는 것을 막으려면 작게 둡니다.
+
+**Session Manager — 접속 경로 자체를 없앤다**
+
+AWS Systems Manager의 Session Manager로 접속하면 **인바운드 포트를 열거나 배스천 호스트를 유지하거나 SSH 키를 관리할 필요가 없습니다.** 노드 접근 권한을 SSH 키가 아니라 **IAM 정책**으로 주기 때문에, 누가 어떤 노드에 들어갈 수 있는지를 중앙에서 통제합니다.
+
+- 세션 기록을 **CloudWatch Logs 로그 그룹**이나 **S3 버킷**으로 보낼 수 있어 감사 추적이 남습니다. ⚠️ 단 **포트 포워딩이나 SSH로 연결한 세션은 로깅되지 않습니다** — "모든 접속이 기록된다"고 단정하면 틀립니다.
+- 시험에서 "프라이빗 서브넷 인스턴스에 SSH 포트를 열지 않고 접속" 요구가 나오면 배스천·VPN보다 Session Manager가 먼저입니다.
+
+> 🧠 원리: 왜 IMDSv2는 **세션 토큰을 먼저 받아 헤더에 싣는** 절차를 끼워 넣었을까요?
+> IMDSv1은 단순 GET 한 번으로 역할 자격증명을 돌려주기 때문에, 앱이 외부에서 받은 주소를 그대로 가져오게 만드는 요청 위조 취약점이 그대로 자격증명 유출로 이어집니다.
+> IMDSv2는 먼저 PUT으로 토큰을 받아 그 값을 요청 헤더에 넣어야 하므로, "주소 하나를 대신 GET하게 만드는" 공격 경로로는 토큰 발급 단계를 넘지 못합니다.
+> 같은 맥락에서 홉 한도를 함께 줄여 두면 컨테이너처럼 한 단계 떨어진 곳에서 온 요청이 호스트의 메타데이터에 닿지 못하게 막을 수 있습니다.
+
 ---
 
 ## ✍️ 시험 포인트
 
 - **WAF vs Shield 역할 구분**: WAF는 L7 HTTP/HTTPS 요청 내용 필터링(SQL injection·XSS·rate limit). Shield는 DDoS(L3/L4/L7) 대용량 공격 방어. WAF는 Shield 없이도 동작하고 반대도 마찬가지이지만, 함께 쓰면 보완됩니다.
 - **Shield Standard는 무료·자동**: 모든 AWS 고객에게 자동 적용. 추가 설정 불필요. Advanced는 별도 유료 구독.
-- **SRT(Shield Response Team)**: Shield Advanced 가입 시에만 이용 가능. DDoS 공격 중 24/7 전담 지원.
+- **SRT(Shield Response Team)**: Shield Advanced 구독자가 쓰는 24/7 전담 DDoS 지원이지만, **연락·에스컬레이션에는 Business 또는 Enterprise Support 플랜이 따로 필요**합니다. 응답 시간도 Support 플랜에 따라 다릅니다.
 - **Cognito User Pool = JWT 발급(인증)**: 앱 로그인 처리. Cognito Identity Pool = AWS STS 임시 자격증명 발급(AWS 권한부여). 둘을 혼동하면 오답.
 - **Secrets Manager = 자동 교체(rotation)**: 시험에서 "DB 비밀번호 자동 교체"가 요구사항이면 Secrets Manager가 정답. Parameter Store는 기본 자동 교체 없음.
 - **Firewall Manager = 다계정 정책 중앙화**: Organizations 기반으로 여러 계정에 WAF·Shield 정책을 일괄 배포.
@@ -310,22 +363,22 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Shield가 SQL injection을 막는다."** → 틀립니다. SQL injection은 L7 HTTP 요청 내용 문제이므로 **WAF**가 담당합니다. Shield는 DDoS(대용량 트래픽 공격) 전용입니다.
-   *(원리: §1 — WAF는 요청 내용(페이로드·헤더)을 파싱해 패턴 매칭하는 L7 필터이고, Shield는 트래픽 볼륨·프로토콜 이상을 감지하는 다른 축의 방어다.)*
+   (원리: §1 — WAF는 요청 내용(페이로드·헤더)을 파싱해 패턴 매칭하는 L7 필터이고, Shield는 트래픽 볼륨·프로토콜 이상을 감지하는 다른 축의 방어다.)
 
 2. **"WAF가 DDoS를 막는다."** → 부분적으로만 맞습니다. WAF의 Rate-based 규칙으로 L7 요청 폭주를 어느 정도 제한할 수 있지만, L3/L4 DDoS 완화는 **Shield**가 담당합니다. 시험에서 "DDoS 방어"는 Shield를 고르세요.
-   *(원리: §2 — L3/L4 공격은 HTTP 요청으로 표현되지 않아 WAF 규칙으로 파싱 자체가 불가하고, 이 계층 완화는 Shield가 인프라 수준에서 처리한다.)*
+   (원리: §2 — L3/L4 공격은 HTTP 요청으로 표현되지 않아 WAF 규칙으로 파싱 자체가 불가하고, 이 계층 완화는 Shield가 인프라 수준에서 처리한다.)
 
 3. **"Cognito User Pool이 AWS 리소스 접근 권한을 준다."** → 틀립니다. User Pool은 앱 인증(JWT 발급)만 담당합니다. AWS 리소스(S3·DynamoDB 등) 접근을 위한 임시 자격증명은 **Identity Pool**이 발급합니다.
-   *(원리: §4 — 인증(누구인가)과 AWS 권한부여(무엇을 할 수 있는가)를 분리한 설계로, JWT는 앱 레이어 신원 증명이고 STS 토큰이 AWS API 호출 권한을 담당한다.)*
+   (원리: §4 — 인증(누구인가)과 AWS 권한부여(무엇을 할 수 있는가)를 분리한 설계로, JWT는 앱 레이어 신원 증명이고 STS 토큰이 AWS API 호출 권한을 담당한다.)
 
 4. **"Secrets Manager와 Parameter Store는 기능이 같다."** → 핵심 차이는 **자동 교체** 지원 여부와 **비용**입니다. 자동 교체가 필요하면 Secrets Manager, 단순 저장·저비용이면 Parameter Store입니다.
-   *(원리: §5 — Secrets Manager의 Lambda 기반 교체 메커니즘은 DB 측 비밀번호 변경까지 포함하는 복합 절차이며, Parameter Store는 단순 키-값 저장소로 이 흐름을 내장하지 않는다.)*
+   (원리: §5 — Secrets Manager의 Lambda 기반 교체 메커니즘은 DB 측 비밀번호 변경까지 포함하는 복합 절차이며, Parameter Store는 단순 키-값 저장소로 이 흐름을 내장하지 않는다.)
 
 5. **"Firewall Manager 없이도 다계정에 WAF를 적용할 수 있다."** → 기술적으로 가능하지만 각 계정마다 수동 설정이 필요합니다. Organizations 환경에서 새 계정·리소스에 자동 정책 적용이 필요하면 **Firewall Manager**가 정답입니다.
-   *(원리: §3 — Firewall Manager의 핵심 가치는 신규 계정 생성 시 보호 공백 없이 즉시 정책을 적용하는 자동화이며, 수동 적용 방식은 이 공백을 제거하지 못한다.)*
+   (원리: §3 — Firewall Manager의 핵심 가치는 신규 계정 생성 시 보호 공백 없이 즉시 정책을 적용하는 자동화이며, 수동 적용 방식은 이 공백을 제거하지 못한다.)
 
 6. **"Shield Advanced는 EC2에 직접 연결된다."** → Shield Advanced는 EC2(Elastic IP), ELB, CloudFront, Route 53, Global Accelerator를 보호합니다. EC2 인스턴스 자체보다는 그 앞단의 로드밸런서·EIP 단위로 적용됩니다.
-   *(원리: §2 — DDoS 완화는 트래픽이 인스턴스에 도달하기 전 네트워크 진입점(EIP·ELB)에서 흡수·필터링해야 하므로, 인스턴스 내부가 아닌 그 앞단 리소스에 보호를 붙이는 구조다.)*
+   (원리: §2 — DDoS 완화는 트래픽이 인스턴스에 도달하기 전 네트워크 진입점(EIP·ELB)에서 흡수·필터링해야 하므로, 인스턴스 내부가 아닌 그 앞단 리소스에 보호를 붙이는 구조다.)
 
 ---
 
@@ -385,6 +438,15 @@ AWS 보안은 "가능한 한 엣지에서 먼저 차단"하는 계층 방어 원
 9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 10. AWS WAF Anti-DDoS 관리형 규칙 그룹(가장 상위 Anti-DDoS 보호·**추가 요금**·웹 ACL에 추가해 민감도 구성) — https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
 
+11. AWS Shield FAQ(월 $3,000/조직·통합 결제에서 1회·데이터 전송 사용료 별도·**SRT 연락에 Business·Enterprise Support 필요**) — https://aws.amazon.com/shield/faqs/
+12. Shield Advanced 도입 판단(표준 WAF 비용 포함 1,500 WCU·자동 L7 완화 규칙 그룹 150 WCU·월 500억 요청) — https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary-deciding.html
+13. What is Amazon GuardDuty?(위협 탐지·기본 데이터원 3종·보호 플랜은 선택) — https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html
+14. What is Amazon Detective?(근본 원인 조사·CloudTrail·VPC 흐름 로그·GuardDuty 결과 수집) — https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html
+15. ModifyInstanceMetadataOptions(HttpTokens required = IMDSv1 자격증명 미제공·홉 한도 의미) — https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceMetadataOptions.html
+16. AWS Systems Manager Session Manager(포트·배스천·SSH 키 불필요·IAM 정책 통제·세션 로깅과 그 예외) — https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
+
 > 📝 **2026-10-19 정정**: ① 웹 ACL 평가를 "첫 매칭 액션 실행"에서 **종료/비종료 구분**(Count는 비종료)으로 고쳤습니다(근거 5번). ② Rate-based 평가 창을 **60·120·300·600초**로 정정했습니다(근거 6번). ③ 보호 대상에 **Amplify·Bedrock AgentCore Gateway**를 더하고 **CLOUDFRONT 스코프는 us-east-1** 규칙을 명시했습니다("리전 제한이 없다"는 단정 삭제, 근거 7번). ④ Cognito MFA 한 줄을 **기능 플랜 3종**으로 바꿨습니다(근거 8번).
+
+> 📝 **2026-10-30 보강(갭 배치 B11)**: ① §2에 Shield Advanced의 **요금 구조**(월 $3,000 조직 단위·통합 결제 1회·데이터 전송 사용료, 구독에 포함되는 표준 WAF 범위 1,500 WCU와 자동 L7 완화 150 WCU)를 더하고, **SRT 연락 조건을 정정**했습니다 — 구독만으로 연락이 되는 것처럼 읽히던 서술을 공식 FAQ의 **Business·Enterprise Support 플랜 필요**로 바꿨습니다(근거 11·12번). ② 공식 Task 1.2가 보안 서비스 예시로 드는 **GuardDuty**와 **Detective**를 §7로 신설했습니다(근거 13·14번). ③ **IMDSv2 강제와 Session Manager**를 §8로 신설했습니다(근거 15·16번). ⚠️ **쓰지 않은 것 3가지:** Shield Advanced의 "1년 약정"은 공식 FAQ 전문에 해당 문장이 없어 넣지 않았습니다(갭 노트가 요구하는 항목이지만 근거 미확보 — `99-gaps.md` 규율). Detective의 데이터원으로 **EKS 감사 로그**는 적지 않았습니다 — 공식 소개 페이지에서 그 로그는 Security Lake가 지원하는 목록에만 나오고 Detective 수집원으로는 적히지 않습니다. `HttpPutResponseHopLimit`의 **기본값**도 API 레퍼런스가 수치로 적지 않아 의미만 썼습니다.
 
 > 📝 **2026-10-28 보강(1건, 2차 검수 우선순위 2)**: §1에 **Anti-DDoS 관리형 규칙 그룹**(`AWSManagedRulesAntiDDoSRuleSet`)을 더했습니다 — WAF도 L7 DDoS를 완화하지만 웹 ACL에 추가해야 동작하는 유료 옵트인이고, "추가 설정 없이 자동 적용되는 무료 방어"는 Shield Standard입니다(근거 10번). 파생 문항 `saa-t1-4-q2`의 오답 근거가 WAF의 DDoS 완화 능력을 전면 부정하고 있어 함께 고쳤습니다.

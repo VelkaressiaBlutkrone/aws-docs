@@ -561,9 +561,18 @@ GitHub은 겹치는 두 PR을 **각각 현재 develop 기준으로만** 판정�
 
 **추가 잔여(B3의 부분 저작에서 넘어옴):** `G-1.2-01`의 **GuardDuty·Detective**(→ `saa-t1-4`) · `G-1.2-02`의 **STS 리전 엔드포인트**(→ `saa-t1-1`). 두 행 자체는 B3가 각자 담당 부분을 저작했으므로 행수에 다시 세지 않는다.
 
-**왜 미루는가:** 이 세 문서는 사람 재검수 → `verified:true` flip 대기 중이다. md를 먼저 바꾸면 **검수자가 본 본문과 어긋난다.** flip 완료 후 착수한다.
+**왜 미뤘고 그 조건이 어떻게 소멸했나:** 이 세 문서는 사람 재검수 → `verified:true` flip 대기 중이었다. md를 먼저 바꾸면 검수자가 본 본문과 어긋나기 때문이다. **2026-10-29 SAA 24 Task 360문항 전부 flip(#272·#273)으로 대기 조건이 사라져** 착수했다. 세 문서의 문항은 이제 라이브이므로 저작 전 **문항 전수 대조**를 했다.
 
-> HANDOFF §0-2026-10-20은 B11을 **13행**으로 적지만 그 행 목록은 기록되지 않았다. 위 7행은 `98-existing-gap.md` §0 문서↔Task 매핑과 각 행이 지목한 파일·행 번호로 재도출한 것이다. B3의 `G-1.2-01`·`G-1.2-03` 판정 결과에 따라 최대 9행이 될 수 있다.
+**저작 판정 (2026-10-30) — 공식 문서 실측이 조사 노트를 이긴 지점:**
+
+- **역할 체이닝 1시간은 콘솔에도 적용된다.** `1-1.md` F-08은 출처가 SDK 문서이고 "CLI/API"로만 적었으나, 공식 `id_roles_terms-and-concepts`는 "AWS Management Console, AWS CLI or AWS API"를 함께 적고 콘솔 예외를 두지 않는다. 콘솔에서 **사용자 → 역할** 전환의 "최대 세션과 남은 시간 중 짧은 쪽"(`reference_iam-quotas`)은 **다른 사실**이므로 섞지 않았다.
+- **ARC 기능은 5종이다.** `2-2.md` F-17이 4종으로 적었고 **readiness check**가 빠져 있었다. 요금은 **what-is 페이지에 0건**이라 `compare-capabilities`로, zonal shift의 3일·prescale은 `arc-zonal-shift`로 출처를 갈랐다(R-30).
+- **쓰지 않은 것 3가지.** Shield Advanced "**1년 약정**"(FAQ 전문에 commitment 문장이 없다 → V-90) · Detective의 "**EKS 감사 로그**"(공식 소개 페이지는 Security Lake 지원 목록에만 적는다 → V-91) · `HttpPutResponseHopLimit` **기본값**(API 레퍼런스에 수치가 없다). ⚠️ 셋 다 **가드로 금지하지 않았다** — 근거가 뒤에 확인되면 막히고 "확인되지 않았다"는 옳은 문장이 걸린다(§4 가드 설계 교훈 1~5).
+- **REL13-BP02 페이지에는 Service Quotas가 0건**이다. 대기 리전 쿼터 함정은 `working-with-rs-service-quota-checks`가 근거다.
+- **출처 URL 24개를 전수 실측해 3건이 리다이렉트였다**(#280 교훈대로 `num_redirects`로 판정): `id_roles_create_for-user_externalid` → `id_roles_common-scenarios_third-party`(이름 변경) · `declarative_policies` → userguide 인덱스(**소멸**, 정본 `orgs_manage_policies_declarative`) · `detective/latest/adminguide/…` → userguide 인덱스(**가이드 이름 변경**). 죽은 세 슬러그는 가드가 0건으로 고정한다.
+- **금지 주장 × SAA 문항 24파일 전수 대조 = 0건**(`가입 시에만 이용 가능` · `수동 페일오버 스크립트 제어용 스위치` · 죽은 슬러그 3종 · `모든 AWS 서비스의 리소스에 적용`). 전파할 정정이 없어 `saa_question_propagation_test`의 `_rules`에 **선제 등재하지 않았다**(§5 운영 규칙).
+
+> HANDOFF §0-2026-10-20은 B11을 **13행**으로 적지만 그 행 목록은 기록되지 않았다. 위 행 목록은 `98-existing-gap.md` §0 문서↔Task 매핑과 각 행이 지목한 파일·행 번호로 재도출한 것이다. **2026-10-30 저작으로 확정: 표의 8행 + B3에서 넘어온 잔여 2건(`G-1.2-01`의 GuardDuty·Detective → `saa-t1-4`, `G-1.2-02`의 STS 리전 엔드포인트 → `saa-t1-1`)이 전부다.** 13행은 근거 없는 수치이므로 §3 배치 맵 표의 **8행**이 정본이다(합계 134행·미배정 0은 그대로).
 
 ## 5. 모든 배치에 걸리는 저작 제약
 

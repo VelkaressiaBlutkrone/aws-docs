@@ -86,10 +86,14 @@ lastVerified: 2026-10-19
 
 | 전략 | 상시 운영 구성 | RTO | RPO | 상대 비용 | 핵심 특징 |
 |---|---|---|---|---|---|
-| **Backup & Restore** | 백업 데이터만 보관 | 수 시간 | 마지막 백업 이후 | 최저 | 재해 시 인프라·앱·데이터 모두 새로 배포 |
-| **Pilot Light** | 핵심 DB/데이터만 상시 복제, 앱 서버는 꺼둠 | 수십 분 | 낮음(연속 복제 시) | 낮음~중 | 재해 시 꺼진 서버를 기동·확장 |
-| **Warm Standby** | 축소판 전체 스택 상시 가동 | 수 분 | 낮음 | 중~높음 | 재해 시 용량만 확장, 즉시 트래픽 처리 가능 |
+| **Backup & Restore** | 백업 데이터만 보관 | **24시간 이하** | **시간 단위** | 최저 | 재해 시 인프라·앱·데이터 모두 새로 배포 |
+| **Pilot Light** | 핵심 DB/데이터만 상시 복제, 앱 서버는 꺼둠 | **수십 분** | **분 단위** | 낮음~중 | 재해 시 꺼진 서버를 기동·확장 |
+| **Warm Standby** | 축소판 전체 스택 상시 가동 | **분 단위** | **초 단위** | 중~높음 | 재해 시 용량만 확장, 즉시 트래픽 처리 가능 |
 | **Multi-Site Active-Active** | 여러 리전에서 동시 프로덕션 운영 | 거의 0 | 거의 0 | 최고 | 페일오버 개념 없음, 트래픽이 자동 우회 |
+
+> **위 수치는 Well-Architected 신뢰성 기둥 REL13-BP02의 공식 값입니다.** 공식 문서는 네 전략을 "비용과 복잡도가 커지는 순서, RTO·RPO가 줄어드는 순서"로 나열하며 Backup & Restore는 RPO 시간 단위·RTO 24시간 이하, Pilot Light는 RPO 분 단위·RTO 수십 분, Warm Standby는 RPO 초 단위·RTO 분 단위, 다중 리전 활성-활성은 RPO 거의 0·RTO 사실상 0으로 적습니다. **시험은 이 네 묶음 중 어디에 해당하는지를 RTO·RPO 숫자로 묻습니다.**
+>
+> 단, Backup & Restore라도 **특정 시점 복구(PITR)** 를 쓰면 경우에 따라 RPO를 5분까지 낮출 수 있습니다 — "백업 주기가 곧 RPO"라고 단정하지 않는 쪽이 공식 서술에 가깝습니다.
 
 비용 ↔ 복구속도 스펙트럼:
 
@@ -144,7 +148,21 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 - **Failover 라우팅 정책**: 기본(Primary) 엔드포인트에 헬스 체크를 설정하고, 장애 감지 시 보조(Secondary) 엔드포인트로 자동 전환
 - **헬스 체크**: 데이터 플레인 작업으로 동작 — 고가용성
 - **AWS Global Accelerator**: AnyCast IP 기반, 엣지 네트워크를 통한 더 낮은 지연시간, DNS 캐싱 문제 없음 (Route 53의 대안)
-- **Amazon Application Recovery Controller (ARC)**: 수동 페일오버 스크립트 제어용 스위치 역할
+- **Amazon Application Recovery Controller (ARC)**: 아래 표처럼 AZ 단위·리전 단위 복구 기능을 묶어 제공합니다
+
+**ARC의 기능 구분 (★ 어느 층의 장애인가)**
+
+| 기능 | 층 | 하는 일 | 요금 |
+|---|---|---|---|
+| **zonal shift** | 다중 AZ | 성능이 나빠진 AZ에서 트래픽을 **직접** 빼냅니다 | 지원 리소스에는 **추가 요금 없음** |
+| **zonal autoshift** | 다중 AZ | AWS가 **대신** 트래픽 이동을 시작합니다 | 지원 리소스에는 **추가 요금 없음** |
+| **Region switch** | 다중 리전 | 리전 전환 계획을 만들어 실행합니다 | **별도 요금** |
+| **routing control** | 다중 리전 | 리전 간 트래픽 전환을 on/off 스위치로 제어합니다 | **별도 요금** |
+| **readiness check** | 감시 | 복구 대상이 전환을 받을 준비가 됐는지 점검합니다 | — |
+
+- **zonal shift는 임시 완화책입니다.** 시작할 때 만료 시각을 **1분부터 최대 3일(72시간)** 사이로 정하며 연장할 수 있지만, 영구 구성이 아닙니다. 리소스를 옵트인해야 쓸 수 있습니다.
+- ⚠️ **사전 용량 확보가 전제입니다.** 한 AZ를 빼면 남은 AZ가 그 몫을 받아야 하므로, 애플리케이션을 미리 **사전 확장(prescale)** 해 충분한 용량을 갖춰 두지 않으면 트래픽 이동이 오히려 장애를 키웁니다.
+- 시험 신호: "AZ 하나의 성능 저하를 빠르게 우회" → zonal shift(또는 autoshift). "리전 전체를 전환" → Region switch·routing control.
 
 > 🧠 원리: 왜 Route 53 헬스 체크는 데이터 플레인에서 동작해야 DR 신뢰성이 높아질까요?
 > 대규모 장애 시 AWS 제어 플레인(API, Auto Scaling 등)이 부하를 받아 응답이 느려질 수 있는데, 헬스 체크가 제어 플레인에 의존하면 장애 감지 자체가 실패할 수 있습니다.
@@ -180,6 +198,30 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 > 파일 레벨 복제는 열려 있는 DB 파일처럼 잠긴 상태의 파일을 일관되게 캡처하기 어렵고, 애플리케이션 레벨 복제는 에이전트가 각 앱을 별도로 지원해야 해 이기종 환경에서 관리 부담이 큽니다.
 > 이 OS 중립적 특성 덕분에 DRS는 온프레미스 Windows·Linux 서버와 타 클라우드 EC2를 추가 에이전트 없이 단일 방식으로 AWS에 복제할 수 있습니다.
 
+### 8) 전략을 실제로 작동시키는 것 — 쿼터·테스트·페일백 {#dr-operations}
+
+전략을 고르는 것만으로 DR이 끝나지 않습니다. 공식 문서가 "계획하고 구현하고 **시험까지 마친** DR 전략"을 요구하는 이유가 여기 있습니다.
+
+**대기 리전의 Service Quotas (★ 잘 안 보이는 실패 원인)**
+
+대기 리전은 복구할 때까지 **축소 용량**으로 돌아가는 일이 많습니다. 그래서 활성 리전에서 수요가 커질 때마다 한도를 올려 두면서 **대기 리전에는 같은 증액을 요청하지 않는** 일이 생깁니다.
+
+- 쿼터는 **계정과 리전 단위**로 적용되므로, 활성 리전에서만 올린 한도는 대기 리전에 전혀 영향이 없습니다.
+- 이 간격은 평소에 드러나지 않습니다. 계획이 멀쩡해 보이다가 **실제 전환 때** 대기 리전이 필요한 만큼의 리소스를 띄우지 못해 실패합니다.
+- ARC의 **Region switch**는 계획의 컴퓨팅·데이터베이스 리소스에 대해 **서비스 쿼터를 점검**하고, 양쪽 리전의 한도가 다르면 낮은 쪽을 높은 쪽에 맞추는 증액 요청을 낼 수 있습니다. 다만 쿼터 경고가 계획 실행 자체를 막아 주지는 않으므로, 경고를 무시하면 실행이 실패할 수 있습니다.
+
+**페일백 — 돌아오는 계획도 함께 만든다**
+
+**페일백**은 워크로드 운영을 원래의 주 리전으로 되돌리는 것입니다. 공식 문서는 페일오버만이 아니라 **페일백 방법까지 설계하라**고 적고, 그 절차를 팀 전원이 볼 수 있는 **플레이북**에 담아 주기적으로 검토하라고 적습니다.
+
+- 돌아갈 때는 그동안 대기 리전에 쌓인 변경을 주 리전으로 되돌려야 하므로, 복제 방향을 바꾸는 절차가 계획에 들어가야 합니다.
+- 공통 복구 전략을 정해 두면 같은 도구와 **같은 시험 절차**를 재사용할 수 있다는 것이 공식 문서가 전략 표준화를 권하는 이유입니다.
+
+> 🧠 원리: 왜 대기 리전의 쿼터 부족은 **평소에 전혀 드러나지 않을까요**?
+> 대기 리전은 복구에 들어갈 때까지 축소 용량으로 돌기 때문에 실제 사용량이 한도 근처에 가지 않고, 그래서 경보로 잡힐 신호 자체가 생기지 않습니다.
+> 게다가 쿼터는 계정과 리전 단위로 적용되므로, 활성 리전에서 수요에 맞춰 올려 온 한도가 대기 리전에는 아무 영향을 주지 않습니다.
+> 결국 부족은 평상시 지표가 아니라 전환을 실제로 실행하는 순간에 드러나고 그때는 되돌릴 시간이 없으므로, 사전 점검을 계획 안에 넣는 것이 유일한 방어입니다.
+
 ---
 
 ## ✍️ 시험 포인트
@@ -201,22 +243,22 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"RTO/RPO가 엄격하면 무조건 Active-Active."** → Active-Active는 가장 비쌉니다. RTO 수 분 허용 + 비용 제약이 있으면 Warm Standby가 더 적합합니다.
-   *(원리: §2 — 각 전략은 미리 가동 중인 용량 범위로 비용과 복구속도가 결정되므로, 요구 RTO/RPO를 충족하는 최소 비용 전략을 선택해야 한다.)*
+   (원리: §2 — 각 전략은 미리 가동 중인 용량 범위로 비용과 복구속도가 결정되므로, 요구 RTO/RPO를 충족하는 최소 비용 전략을 선택해야 한다.)
 
 2. **"Pilot Light = Warm Standby."** → 가장 빈번한 혼동입니다. Pilot Light는 앱 서버가 꺼져 있어 재해 시 기동 시간이 필요합니다. Warm Standby는 이미 실행 중이므로 즉시 트래픽을 받을 수 있습니다.
-   *(원리: §3 — Pilot Light가 DB만 상시 복제하는 이유는 앱은 기동 가능하지만 데이터는 사전 복제 없이 복구 불가이기 때문이다.)*
+   (원리: §3 — Pilot Light가 DB만 상시 복제하는 이유는 앱은 기동 가능하지만 데이터는 사전 복제 없이 복구 불가이기 때문이다.)
 
 3. **"RDS Multi-AZ와 교차 리전 Read Replica는 같다."** → Multi-AZ는 동일 리전 내 동기 복제(AZ 장애 대응), Read Replica는 비동기 교차 리전 복제(리전 장애 DR). 목적과 복제 방식이 다릅니다.
-   *(원리: §6 — AZ 간 왕복 지연은 짧아 동기 복제가 실용적이고, 리전 간 왕복 지연은 물리적으로 커서 비동기가 불가피하다.)*
+   (원리: §6 — AZ 간 왕복 지연은 짧아 동기 복제가 실용적이고, 리전 간 왕복 지연은 물리적으로 커서 비동기가 불가피하다.)
 
 4. **"RPO=0이면 Backup & Restore로 된다."** → Backup & Restore는 RPO가 마지막 백업 이후(수 시간)입니다. RPO 0 요구에는 동기 복제 또는 Active-Active가 필요합니다.
-   *(원리: §1 — RPO는 복구 가능한 가장 최근 시점까지의 거리이며, 백업 주기만큼 반드시 손실이 발생한다.)*
+   (원리: §1 — RPO는 복구 가능한 가장 최근 시점까지의 거리이며, 백업 주기만큼 반드시 손실이 발생한다.)
 
 5. **"AWS DRS는 RDS 관리형 DB에도 사용한다."** → DRS는 서버 기반(EC2) 앱과 DB에만 적용됩니다. RDS 같은 관리형 서비스는 교차 리전 Read Replica·Aurora Global Database를 사용합니다.
-   *(원리: §7 — DRS의 블록 레벨 복제는 OS가 직접 관리하는 디스크를 대상으로 하므로, AWS가 스토리지를 추상화한 관리형 서비스에는 접근 경로가 없다.)*
+   (원리: §7 — DRS의 블록 레벨 복제는 OS가 직접 관리하는 디스크를 대상으로 하므로, AWS가 스토리지를 추상화한 관리형 서비스에는 접근 경로가 없다.)
 
 6. **"Route 53 페일오버는 즉각적이다."** → DNS TTL만큼의 전파 지연이 있습니다. AWS Global Accelerator는 DNS 캐싱 문제가 없어 더 빠른 전환이 가능합니다.
-   *(원리: §5 — Route 53은 헬스 체크 감지 자체는 빠르지만 클라이언트 DNS 캐시가 TTL 동안 이전 IP를 유지해 전환이 지연되며, Global Accelerator는 AnyCast로 이 계층을 우회한다.)*
+   (원리: §5 — Route 53은 헬스 체크 감지 자체는 빠르지만 클라이언트 DNS 캐시가 TTL 동안 이전 IP를 유지해 전환이 지연되며, Global Accelerator는 AnyCast로 이 계층을 우회한다.)
 
 ---
 
@@ -270,5 +312,13 @@ Aurora Global Database는 전용 복제 인프라를 사용해 보조 리전 복
 3. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
 4. DynamoDB 글로벌 테이블("Global tables support two consistency modes: multi-Region eventual consistency (MREC) and multi-Region strong consistency (MRSC)") — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
 5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+
+6. REL13-BP02 재해 복구 계획(전략별 RPO·RTO 공식 수치·페일백 설계·플레이북) — https://docs.aws.amazon.com/wellarchitected/2025-02-25/framework/rel_planning_for_recovery_disaster_recovery.html
+7. ARC란?(다중 AZ = zonal shift·zonal autoshift / 다중 리전 = Region switch·routing control + readiness check) — https://docs.aws.amazon.com/r53recovery/latest/dg/what-is-route53-recovery.html
+8. ARC zonal shift(임시 완화·1분~3일(72시간)·사전 확장 요건·리소스 옵트인) — https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-shift.html
+9. ARC 기능 비교(zonal shift·autoshift = 추가 요금 없음 / routing control·Region switch = 별도 요금) — https://docs.aws.amazon.com/r53recovery/latest/dg/compare-capabilities.html
+10. Region switch의 서비스 쿼터 점검(대기 리전 축소 용량·쿼터는 계정·리전 단위·경고가 실행을 막지 않음) — https://docs.aws.amazon.com/r53recovery/latest/dg/working-with-rs-service-quota-checks.html
+
+> 📝 **2026-10-30 보강(갭 배치 B11)**: ① §2의 RTO·RPO 칸을 **REL13-BP02 공식 수치**로 바꿨습니다(B&R RTO 24시간 이하·RPO 시간 단위 / Pilot Light RTO 수십 분·RPO 분 단위 / Warm Standby RTO 분 단위·RPO 초 단위). PITR로 B&R의 RPO를 5분까지 낮출 수 있다는 단서도 함께 적었습니다(근거 6번). ② §5의 ARC 한 줄을 **공식 기능 5종**(zonal shift·zonal autoshift·Region switch·routing control·readiness check)과 요금·기간·사전 확장 요건으로 늘렸습니다(근거 7~9번). ③ §8을 신설해 **대기 리전 쿼터 함정과 페일백 계획**을 적었습니다(근거 6·10번). ⚠️ 쿼터 서술의 근거는 Well-Architected 쪽이 아니라 **ARC Region switch 문서**입니다 — REL13-BP02 페이지에는 Service Quotas 언급이 없습니다.
 
 > 📝 **2026-10-19 정정**: DynamoDB 글로벌 테이블을 "최종 일관성"만으로 서술했던 칸을 정정했습니다 — 생성 시 **MREC(기본)와 MRSC(강한 일관성)** 중 하나를 고르고, 생성 후에는 바꿀 수 없으며 MRSC는 동일 계정 구성만 지원합니다(근거 4번).

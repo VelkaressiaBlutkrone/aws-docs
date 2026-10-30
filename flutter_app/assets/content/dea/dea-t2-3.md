@@ -62,15 +62,15 @@ lastVerified: 2026-10-20
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
 | **슬라이스** | slice | Redshift 노드 안의 병렬 처리 단위. COPY 파일 수를 여기에 맞춘다 |
-| **매니페스트** | manifest | 적재할 파일 목록을 명시한 JSON — *서로 다른 버킷·폴더*의 파일도 지정 가능 |
-| **폭포 모델** | waterfall model | S3 클래스 전환이 *한 방향(아래)으로만* 가능한 구조 |
-| **최소 보관 기간** | minimum storage duration | 그 전에 지우거나 옮기면 *남은 기간만큼 요금이 붙는* 기간 |
-| **noncurrent 버전** | noncurrent version | 새 버전이 올라와 *현재가 아니게 된* 이전 버전 |
-| **삭제 마커** | delete marker | 버전 관리 버킷에서 삭제 시 *실제 삭제 대신 얹히는* 표식 |
-| **WORM** | write once read many | *한 번 쓰면 바꿀 수 없는* 보존 방식 |
-| **merge-on-read** | merge-on-read | 데이터 파일을 다시 쓰지 않고 *삭제 표식 파일만 써서* 읽을 때 반영하는 방식 |
-| **PITR** | point-in-time recovery | 지정한 *과거 시점으로 되돌리는* 복구 |
-| **RTC** | Replication Time Control | S3 복제에 *시간 목표와 SLA*를 붙이는 옵션 |
+| **매니페스트** | manifest | 적재할 파일 목록을 명시한 JSON — 서로 다른 버킷·폴더의 파일도 지정 가능 |
+| **폭포 모델** | waterfall model | S3 클래스 전환이 한 방향(아래)으로만 가능한 구조 |
+| **최소 보관 기간** | minimum storage duration | 그 전에 지우거나 옮기면 남은 기간만큼 요금이 붙는 기간 |
+| **noncurrent 버전** | noncurrent version | 새 버전이 올라와 현재가 아니게 된 이전 버전 |
+| **삭제 마커** | delete marker | 버전 관리 버킷에서 삭제 시 실제 삭제 대신 얹히는 표식 |
+| **WORM** | write once read many | 한 번 쓰면 바꿀 수 없는 보존 방식 |
+| **merge-on-read** | merge-on-read | 데이터 파일을 다시 쓰지 않고 삭제 표식 파일만 써서 읽을 때 반영하는 방식 |
+| **PITR** | point-in-time recovery | 지정한 과거 시점으로 되돌리는 복구 |
+| **RTC** | Replication Time Control | S3 복제에 시간 목표와 SLA를 붙이는 옵션 |
 
 ---
 

@@ -64,16 +64,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **DQDL** | data quality definition language | Glue Data Quality에서 *품질 규칙을 적는 전용 언어* |
-| **ruleset** | ruleset | *함께 평가되는 규칙 묶음* |
-| **analyzer** | analyzer | 규칙 없이 *통계만 모으는* Glue DQ 구성 요소 |
-| **프로파일 잡** | profile job | 데이터셋을 훑어 *통계와 품질 보고서를 만드는* DataBrew 작업 |
-| **이상 탐지** | anomaly detection | 쌓인 통계의 *평소 범위를 벗어난 값*을 찾아내는 것 |
-| **샘플링** | sampling | 전체를 읽지 않고 *일부만 뽑아* 보는 것 |
-| **데이터 스큐** | data skew | 일부 조각에 *데이터·요청이 몰려* 전체가 느려지는 현상 |
-| **솔팅** | salting | 몰린 키에 *임의 접두어를 붙여* 흩뜨리는 기법 |
-| **AQE** | adaptive query execution | Spark가 *실행 중 통계를 보고 계획을 바꾸는* 기능 |
-| **write sharding** | write sharding | DynamoDB에서 *파티션 키에 접미사를 붙여* 쓰기를 분산하는 것 |
+| **DQDL** | data quality definition language | Glue Data Quality에서 품질 규칙을 적는 전용 언어 |
+| **ruleset** | ruleset | 함께 평가되는 규칙 묶음 |
+| **analyzer** | analyzer | 규칙 없이 통계만 모으는 Glue DQ 구성 요소 |
+| **프로파일 잡** | profile job | 데이터셋을 훑어 통계와 품질 보고서를 만드는 DataBrew 작업 |
+| **이상 탐지** | anomaly detection | 쌓인 통계의 평소 범위를 벗어난 값을 찾아내는 것 |
+| **샘플링** | sampling | 전체를 읽지 않고 일부만 뽑아 보는 것 |
+| **데이터 스큐** | data skew | 일부 조각에 데이터·요청이 몰려 전체가 느려지는 현상 |
+| **솔팅** | salting | 몰린 키에 임의 접두어를 붙여 흩뜨리는 기법 |
+| **AQE** | adaptive query execution | Spark가 실행 중 통계를 보고 계획을 바꾸는 기능 |
+| **write sharding** | write sharding | DynamoDB에서 파티션 키에 접미사를 붙여 쓰기를 분산하는 것 |
 
 ---
 
@@ -163,7 +163,7 @@ DataBrew는 데이터 품질 규칙을 **ruleset**에 정의합니다. ruleset�
 
 ## ✍️ 시험 포인트
 
-1. **진입점부터 가르기** — *"ETL 처리 중 검사, DQDL, Evaluate Data Quality"* → **Glue DQ의 ETL 진입점**. *"이미 카탈로그에 있는 테이블을 정기 평가"* → **Data Catalog 진입점**. *"프로파일 잡, ruleset, 검증 보고서"* → **DataBrew**.
+1. **진입점부터 가르기** — "ETL 처리 중 검사, DQDL, Evaluate Data Quality" → **Glue DQ의 ETL 진입점**. "이미 카탈로그에 있는 테이블을 정기 평가" → **Data Catalog 진입점**. "프로파일 잡, ruleset, 검증 보고서" → **DataBrew**.
 2. **"적재하면 안 된다"는 옵션 변경** — 기본값(None)은 규칙이 실패해도 잡이 계속 돕니다. **"Fail job without loading to target data"** 를 골라야 합니다.
 3. **"불량 레코드만 골라내라"** — **행 수준 출력(`rowLevelOutcomes`)** 입니다. 전체 결과가 FAIL이어도 개별 레코드는 통과일 수 있습니다.
 4. **"규칙을 쓰지 않고 평소 범위 이탈 탐지"** — **analyzer + 이상 탐지**입니다. **최소 세 개의 데이터 포인트**가 필요하고 **점수에는 영향이 없습니다.**

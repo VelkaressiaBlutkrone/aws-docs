@@ -19,7 +19,7 @@ sources:
   - title: 드리프트 감지로 구성되지 않은 변경 탐지 (공식)
     url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html
   - title: DeletionPolicy 속성 (공식)
-    url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
+    url: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html
   - title: AWS CDK v2 개발자 안내서 — synth·diff·bootstrap·배포 (공식)
     url: https://docs.aws.amazon.com/cdk/v2/guide/migrate.html
   - title: AWS CDK 부트스트래핑 사용자 지정 (부트스트랩 리소스·계약) (공식)
@@ -268,22 +268,22 @@ aws cloudformation execute-change-set \
 ## ⚠️ 흔한 함정
 
 1. **"변경 세트를 만들면 변경이 적용된다."** → 아닙니다. 변경 세트 **생성은 미리보기일 뿐**이고, **실행(Execute)**해야 실제로 바뀝니다. 그 사이에 검토·승인을 끼워 넣는 것이 안전 배포의 핵심입니다.
-   *(원리: §3 — 위험 변경 사전 검토를 위해 생성과 실행이 분리된 구조다.)*
+   (원리: §3 — 위험 변경 사전 검토를 위해 생성과 실행이 분리된 구조다.)
 
 2. **"DeletionPolicy 없이 스택을 지워도 DB는 안전하다."** → 기본 동작은 **함께 삭제**입니다. RDS·EBS 등은 `DeletionPolicy: Retain`이나 `Snapshot`을 명시해야 데이터가 보존됩니다.
-   *(원리: §7 — 기본값 Delete로 stateful 리소스도 삭제되므로 명시 정책이 필요하다.)*
+   (원리: §7 — 기본값 Delete로 stateful 리소스도 삭제되므로 명시 정책이 필요하다.)
 
 3. **"StackSets는 한 계정 안에서 여러 스택을 만드는 기능이다."** → StackSets의 본질은 **다중 계정 × 다중 리전** 배포입니다. 한 계정·한 리전에 여러 리소스는 일반 단일 스택으로 충분합니다.
-   *(원리: §5 — StackSets는 다중 계정×리전 전용이며, 단일 계정·리전은 일반 스택으로 충분하다.)*
+   (원리: §5 — StackSets는 다중 계정×리전 전용이며, 단일 계정·리전은 일반 스택으로 충분하다.)
 
 4. **"드리프트 감지가 수동 변경을 자동으로 되돌린다."** → 드리프트 감지는 **차이를 탐지·보고만** 합니다. 복구는 수동 원복 또는 템플릿 재배포로 직접 해야 합니다.
-   *(원리: §6 — 의도적 변경일 수 있어 자동 원복 대신 운영자가 직접 판단해야 한다.)*
+   (원리: §6 — 의도적 변경일 수 있어 자동 원복 대신 운영자가 직접 판단해야 한다.)
 
 5. **"Export한 값은 자유롭게 바꿀 수 있다."** → 다른 스택이 `Fn::ImportValue`로 **참조 중인 Export는 변경·삭제할 수 없습니다**. 먼저 의존 스택을 분리해야 합니다.
-   *(원리: §4 — 참조 중인 Export를 바꾸려면 의존 스택을 먼저 분리해야 하며, 잠금이 이를 강제한다.)*
+   (원리: §4 — 참조 중인 Export를 바꾸려면 의존 스택을 먼저 분리해야 하며, 잠금이 이를 강제한다.)
 
 6. **"리소스를 in-place로 수정하니 안전하다."** → 변경 세트에 **Replacement: True**가 뜨면 해당 리소스는 **삭제 후 새로 생성**됩니다(새 물리 ID·데이터 손실 가능). 적용 전에 반드시 교체 여부를 확인해야 합니다.
-   *(원리: §3 — Replacement: True는 리소스 삭제·재생성이므로 실행 전 반드시 확인한다.)*
+   (원리: §3 — Replacement: True는 리소스 삭제·재생성이므로 실행 전 반드시 확인한다.)
 
 ---
 
@@ -337,4 +337,4 @@ RDS 리소스에 **`DeletionPolicy: Retain`**(리소스를 남김) 또는 **`Sna
 3. 변경 세트로 스택 업데이트 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html
 4. StackSets로 여러 계정·리전에 배포 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html
 5. 드리프트 감지 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html
-6. DeletionPolicy 속성 — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
+6. DeletionPolicy 속성 — https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html

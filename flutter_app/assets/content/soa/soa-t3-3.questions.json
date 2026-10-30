@@ -80,7 +80,7 @@
       "sources": [
         {
           "title": "AWS Systems Manager Run Command",
-          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/execute-remote-commands.html"
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html"
         }
       ],
       "verified": false
@@ -188,7 +188,7 @@
       "sources": [
         {
           "title": "Patch Manager 패치 작업 — Scan과 Install",
-          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-about-aws-runpatchbaseline.html"
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-aws-runpatchbaseline.html"
         }
       ],
       "verified": false
@@ -214,8 +214,8 @@
       },
       "sources": [
         {
-          "title": "패치 그룹에 관리형 노드 추가",
-          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-group-tagging.html"
+          "title": "패치 그룹에 태그 지정(관리형 노드 추가)",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-tag-a-patch-group.html"
         }
       ],
       "verified": false

@@ -80,7 +80,7 @@
       "sources": [
         {
           "title": "CloudFormation Fn::FindInMap",
-          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-findinmap.html"
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/intrinsic-function-reference-findinmap.html"
         },
         {
           "title": "CloudFormation 의사 파라미터 참조",
@@ -164,8 +164,8 @@
       },
       "sources": [
         {
-          "title": "CloudFormation 스택 업데이트 동작",
-          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html"
+          "title": "CloudFormation 프로비저닝 실패 처리 — 롤백 동작",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stack-failure-options.html"
         }
       ],
       "verified": false
@@ -219,7 +219,7 @@
       "sources": [
         {
           "title": "CloudFormation Fn::ImportValue",
-          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-importvalue.html"
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/intrinsic-function-reference-importvalue.html"
         }
       ],
       "verified": false
@@ -354,7 +354,7 @@
       "sources": [
         {
           "title": "CloudFormation DeletionPolicy 속성",
-          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html"
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html"
         }
       ],
       "verified": false

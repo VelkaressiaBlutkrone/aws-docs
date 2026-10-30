@@ -65,16 +65,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **관리 이벤트** | management event | 리소스를 *만들고 바꾸고 지우는* control plane API 기록 |
-| **데이터 이벤트** | data event | 리소스 *안의 데이터*를 읽고 쓰는 data plane 작업 기록 |
-| **구성 항목** | configuration item | AWS Config가 남기는 *그 시점 리소스 구성의 스냅샷* |
-| **메트릭 필터** | metric filter | 로그에서 찾은 패턴을 *CloudWatch 지표로 바꾸는* 규칙 |
-| **구독 필터** | subscription filter | 로그 이벤트를 *거의 실시간으로 다른 서비스에 흘려보내는* 설정 |
-| **이터레이터 나이** | iterator age | 스트림 레코드가 *소비될 때까지 기다린 시간* — 소비 지연의 지표 |
-| **쓰로틀** | throttle | 한도를 넘어 *요청이 거부되는* 것 |
-| **WLM** | workload management | Redshift가 *쿼리를 큐로 나눠 자원을 배분하는* 구조 |
-| **DPU** | data processing unit | Glue·Athena의 *컴퓨트·메모리 단위* |
-| **executor** | executor | Spark에서 *실제 태스크를 실행하는 작업자 프로세스* |
+| **관리 이벤트** | management event | 리소스를 만들고 바꾸고 지우는 control plane API 기록 |
+| **데이터 이벤트** | data event | 리소스 안의 데이터를 읽고 쓰는 data plane 작업 기록 |
+| **구성 항목** | configuration item | AWS Config가 남기는 그 시점 리소스 구성의 스냅샷 |
+| **메트릭 필터** | metric filter | 로그에서 찾은 패턴을 CloudWatch 지표로 바꾸는 규칙 |
+| **구독 필터** | subscription filter | 로그 이벤트를 거의 실시간으로 다른 서비스에 흘려보내는 설정 |
+| **이터레이터 나이** | iterator age | 스트림 레코드가 소비될 때까지 기다린 시간 — 소비 지연의 지표 |
+| **쓰로틀** | throttle | 한도를 넘어 요청이 거부되는 것 |
+| **WLM** | workload management | Redshift가 쿼리를 큐로 나눠 자원을 배분하는 구조 |
+| **DPU** | data processing unit | Glue·Athena의 컴퓨트·메모리 단위 |
+| **executor** | executor | Spark에서 실제 태스크를 실행하는 작업자 프로세스 |
 
 ---
 
@@ -223,8 +223,8 @@ CloudTrail은 **"누가 어떤 API를 호출했는가"** 의 기록입니다. �
 
 ## ✍️ 시험 포인트
 
-1. **알림 경로 식별이 먼저** — *"Glue 작업이 FAILED/TIMEOUT이 되면 코드를 고치지 않고 알려라"* → **EventBridge 규칙 → SNS**(서비스가 이미 상태 이벤트를 발행합니다). *"지표가 N분 연속 임계값 초과"* → **CloudWatch 경보**. *"로그에 특정 문자열이 나오면"* → **메트릭 필터 → 경보**.
-2. **감사 증거 추적** — *"객체를 누가 삭제했는지 1년간"* → **trail + S3 보관 + S3 데이터 이벤트 활성화**. 이벤트 기록(90일·관리 이벤트·현재 리전)으로는 부족합니다. 비용이 걱정이면 **고급 이벤트 선택기로 범위를 좁힙니다.**
+1. **알림 경로 식별이 먼저** — "Glue 작업이 FAILED/TIMEOUT이 되면 코드를 고치지 않고 알려라" → **EventBridge 규칙 → SNS**(서비스가 이미 상태 이벤트를 발행합니다). "지표가 N분 연속 임계값 초과" → **CloudWatch 경보**. "로그에 특정 문자열이 나오면" → **메트릭 필터 → 경보**.
+2. **감사 증거 추적** — "객체를 누가 삭제했는지 1년간" → **trail + S3 보관 + S3 데이터 이벤트 활성화**. 이벤트 기록(90일·관리 이벤트·현재 리전)으로는 부족합니다. 비용이 걱정이면 **고급 이벤트 선택기로 범위를 좁힙니다.**
 3. **신호 지표 고르기** — Kinesis는 **IteratorAge(Maximum)**, Lambda는 **Throttles·ConcurrentExecutions**, DynamoDB는 **쓰로틀 지표**, Redshift는 **WLM 큐 대기**, Glue는 **최대 필요 executor 대비 활성 executor**.
 4. **누락 데이터 처리** — 기본은 **`missing`**. **오류가 날 때만 생기는 지표는 `notBreaching`**, 연속 보고 지표가 끊기면 문제인 경우는 `breaching`. `AWS/DynamoDB` 네임스페이스는 기본이 **`ignore`**.
 5. **아카이브 방식** — **지속적으로** S3에 보내야 하면 **구독**, **한 번에 배치로** 내보내면 **`CreateExportTask`**. 문서가 지속 아카이브에는 내보내기를 권하지 않습니다.

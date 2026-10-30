@@ -326,8 +326,8 @@
       },
       "sources": [
         {
-          "title": "Auto Scaling 그룹에 Elastic Load Balancing 상태 확인 추가",
-          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-add-elb-healthcheck.html"
+          "title": "Auto Scaling 그룹에 로드 밸런서 연결(ELB 상태 확인)",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html"
         }
       ],
       "verified": false

@@ -20,7 +20,8 @@ export function appPath(rel) {
 }
 
 /**
- * 자격증 레지스트리. dir·label은 뷰어가, tests는 flip 끝의 검증이 쓴다.
+ * 자격증 레지스트리. dir·label은 뷰어가, tests는 flip 끝의 검증이,
+ * domains는 사전심사(`prescreen.mjs`)의 taskId 도메인 범위 검사가 쓴다.
  *
  * `flipAllowlist`가 있는 자격증은 flip이 그 Dart 집합에도 taskId를 넣는다 —
  * 목록 밖의 `verified: true`를 테스트가 막기 때문에(AI flip 금지 가드),
@@ -29,32 +30,45 @@ export function appPath(rel) {
  *
  * ⚠️ tests·flipAllowlist에 적는 파일은 실재해야 한다 — 없는 파일을 적으면
  * flip 마지막 단계가 깨지므로 `review.test.mjs`가 존재를 기계로 검사한다.
+ *
+ * ⚠️ **domains는 자격증마다 다르다 — SOA-C03은 5개다.** 4로 못 박으면 SOA의
+ * `soa-t5-*` Task가 "형식 이상"으로 오탐된다(옛 `saa_prescreen.mjs`의
+ * `^saa-t([1-4])-\d+$`가 그랬다). 이 값이 공식 시험 가이드
+ * (`assets/exam_guides/<label>.json`)의 도메인 수와 맞는지는 `review.test.mjs`가
+ * 기계로 검사한다.
  */
 export const CERTS = {
   clf: {
     dir: 'assets/content/clf',
     label: 'CLF-C02',
+    domains: 4,
     // CLF 전용 문항 가드는 보강 문항 테스트뿐이다(수량 정합은 content_index).
     tests: ['test/clf_supplement_questions_test.dart', 'test/content_index_test.dart'],
   },
   saa: {
     dir: 'assets/content/saa',
     label: 'SAA-C03',
+    domains: 4,
     tests: ['test/saa_questions_test.dart', 'test/content_index_test.dart'],
   },
   soa: {
     dir: 'assets/content/soa',
     label: 'SOA-C03',
+    domains: 5, // ⚠️ 유일한 5도메인 자격증(공식명 CloudOps Engineer, 가이드 v1.1)
     tests: ['test/soa_questions_test.dart', 'test/content_index_test.dart'],
+    flipAllowlist: { file: 'test/soa_questions_test.dart', symbol: 'flipApprovedTaskIds' },
   },
   dea: {
     dir: 'assets/content/dea',
     label: 'DEA-C01',
+    domains: 4,
     tests: ['test/dea_questions_test.dart', 'test/content_index_test.dart'],
+    flipAllowlist: { file: 'test/dea_questions_test.dart', symbol: 'flipApprovedTaskIds' },
   },
   mla: {
     dir: 'assets/content/mla',
     label: 'MLA-C01',
+    domains: 4,
     tests: [
       'test/mla_questions_test.dart',
       'test/mla_doc_format_test.dart',

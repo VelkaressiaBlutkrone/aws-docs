@@ -160,8 +160,8 @@
       },
       "sources": [
         {
-          "title": "EventBridge로 CloudTrail 이벤트에 반응",
-          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html"
+          "title": "자습서 — CloudTrail을 통한 AWS API 호출에 반응하는 EventBridge 규칙",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-log-api-call.html"
         }
       ],
       "verified": false

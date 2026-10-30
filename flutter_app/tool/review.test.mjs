@@ -122,7 +122,7 @@ test('renderHtml: label 없으면 자격증명을 박지 않는다', () => {
 
 // ── 자격증 레지스트리 ──────────────────────────────────────────────
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { CERTS, resolveCert, addToAllowlist, appPath, questionFilePath } from './review.mjs';
 
 test('resolveCert: mla는 dir·label·tests·flipAllowlist를 반환', () => {
@@ -145,6 +145,45 @@ test('CERTS: 자격증 5종이 등록돼 있다', () => {
 test('CERTS: 각 dir가 실재하는 디렉터리다', () => {
   for (const [code, cert] of Object.entries(CERTS)) {
     assert.ok(existsSync(appPath(cert.dir)), `${code}: ${cert.dir} 없음`);
+  }
+});
+
+test('CERTS: domains가 공식 시험 가이드의 도메인 수와 같다', () => {
+  // ⚠️ 도메인 수를 4로 못 박으면 **SOA-C03의 D5 Task(t5-1~t5-4, 60문항)**가
+  // 사전심사에서 "형식 이상"으로 오탐된다 — 옛 `saa_prescreen.mjs`의
+  // `^saa-t([1-4])-\d+$`가 그랬다. 정본은 `assets/exam_guides/<label>.json`이므로
+  // 레지스트리 값이 그것과 어긋나면 여기서 먼저 깨진다.
+  for (const [code, cert] of Object.entries(CERTS)) {
+    const guidePath = appPath(`assets/exam_guides/${cert.label}.json`);
+    assert.ok(existsSync(guidePath), `${code}: ${cert.label}.json 없음`);
+    const guide = JSON.parse(readFileSync(guidePath, 'utf8'));
+    assert.equal(cert.domains, guide.domains.length,
+      `${code}: domains ${cert.domains} ≠ 가이드 ${guide.domains.length}`);
+  }
+});
+
+test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위 안이다', () => {
+  // 레지스트리 값이 가이드와 같아도 콘텐츠가 그 범위를 넘으면 사전심사가 오탐한다.
+  //
+  // ⚠️ **파일명으로 보면 안 된다** — CLF만 `t1-1.questions.json`(접두 없음)이고
+  // saa·soa·dea·mla는 `<cert>-t{D}-{n}.questions.json`이다(2026-10-29 실측).
+  // 그래서 `questionFilePath`도 파일명 직접 매칭이 실패하면 뱅크의
+  // `examGuideTaskId`로 다시 찾는다. 사전심사가 쓰는 것도 그 필드이므로
+  // 여기서도 그것을 본다.
+  for (const [code, cert] of Object.entries(CERTS)) {
+    const files = readdirSync(appPath(cert.dir)).filter((f) => f.endsWith('.questions.json'));
+    assert.ok(files.length > 0, `${code}: 문항 파일 없음`);
+    for (const f of files) {
+      const bank = JSON.parse(readFileSync(appPath(`${cert.dir}/${f}`), 'utf8'));
+      const m = new RegExp(`^${code}-t(\\d+)-\\d+$`).exec(String(bank.examGuideTaskId ?? ''));
+      assert.ok(m,
+        `${code}: ${f}의 examGuideTaskId '${bank.examGuideTaskId}'가 ${code}-t{D}-{n} 형식이 아니다`);
+      const d = Number(m[1]);
+      assert.ok(d >= 1 && d <= cert.domains,
+        `${code}: ${f}의 도메인 ${d}이 domains ${cert.domains} 범위 밖이다`);
+      assert.equal(bank.domain, d,
+        `${code}: ${f}의 domain ${bank.domain} ≠ taskId 도메인 ${d}`);
+    }
   }
 });
 
@@ -209,9 +248,35 @@ test('questionFilePath: 없는 taskId는 throw', () => {
   assert.throws(() => questionFilePath(resolveCert('mla'), 'mla-t9-9'), /mla-t9-9/);
 });
 
-test('addToAllowlist: 실제 mla_questions_test.dart에 적용된다', () => {
+test('addToAllowlist: flipAllowlist가 있는 전 자격증의 선언 스타일에 적용된다', () => {
   // 선언 스타일이 바뀌면(한 줄 → 여러 줄 등) 여기서 먼저 깨진다.
-  const { file, symbol } = resolveCert('mla').flipAllowlist;
-  const out = addToAllowlist(readFileSync(appPath(file), 'utf8'), symbol, 'mla-t1-1');
-  assert.match(out, /const flipApprovedTaskIds = <String>\{'mla-t1-1'\};/);
+  //
+  // ⚠️ **목록의 현재 내용을 박지 않는다.** 전에는 결과가
+  // `<String>{'mla-t1-1'}`과 같기를 요구했는데, 그것은 목록이 비어 있던
+  // 시점의 상태였다 — 2026-10-29에 사람이 MLA 12 Task를 전부 flip하자
+  // 이 테스트가 레드가 됐고, node 테스트가 CI에 없어 **조용히** 레드로 남아
+  // 있었다(2026-10-29 실측). 상태가 아니라 **동작**을 본다: 기존 항목을
+  // 보존하면서 새 Task 하나를 뒤에 붙이는가.
+  //
+  // ⚠️ **MLA 하나만 보지 않는다.** 2026-10-29에 SOA·DEA에도 허용 목록이
+  // 생겼고(그 전에는 전수 `verified: false` 단정이 사람의 첫 flip을 막았다),
+  // 한 자격증만 검사하면 다른 자격증의 선언 스타일이 어긋나도 모른다.
+  const certs = Object.entries(CERTS).filter(([, c]) => c.flipAllowlist);
+  assert.ok(certs.length >= 3, `flipAllowlist 보유 자격증 ${certs.length}종 — 줄었으면 확인하라`);
+  for (const [code, cert] of certs) {
+    checkAllowlistStyle(code, cert.flipAllowlist);
+  }
 });
+
+function checkAllowlistStyle(code, { file, symbol }) {
+  const src = readFileSync(appPath(file), 'utf8');
+  const decl = new RegExp(`const\\s+${symbol}\\s*=\\s*<String>\\{([\\s\\S]*?)\\};`);
+  const before = decl.exec(src);
+  assert.ok(before, `${file}에서 ${symbol} 선언을 찾지 못했다 — 선언 스타일이 바뀌었다`);
+
+  const fresh = `${code}-t9-9`; // 실재하지 않는 Task — 목록 내용과 무관하게 새 항목이다
+  const after = decl.exec(addToAllowlist(src, symbol, fresh));
+  assert.ok(after, `${code}: 적용 결과에서 선언을 다시 찾지 못했다`);
+  const kept = before[1].replace(/\s*,?\s*$/, '');
+  assert.equal(after[1], kept.trim() ? `${kept}, '${fresh}'` : `'${fresh}'`, code);
+}

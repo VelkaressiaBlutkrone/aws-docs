@@ -268,7 +268,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 ### 8) Amazon Quick Sight (BI 시각화) {#quicksight}
 
-> ⚠️ **명칭이 바뀌었습니다.** 공식 문서는 **`Amazon Quick`** 을 상위 서비스로 두고, 기존 QuickSight 를 그 안의 **`Amazon Quick Sight`**(두 단어) **기능**으로 잇습니다. 공식 서술은 *"Amazon Quick evolved from Amazon QuickSight. QuickSight continues as Amazon Quick Sight, a feature within Quick"* 이며, ⚠️ **기존 QuickSight API·SDK·연동은 변경 없이 그대로 동작합니다**(API 네임스페이스는 여전히 `quicksight`). 문서 경로도 `/quick/` 으로 옮겨졌습니다. 과거 자료의 `QuickSight` 표기는 **같은 기능의 옛 이름**입니다.
+> ⚠️ **명칭이 바뀌었습니다.** 공식 문서는 **`Amazon Quick`** 을 상위 서비스로 두고, 기존 QuickSight 를 그 안의 **`Amazon Quick Sight`**(두 단어) **기능**으로 잇습니다. 공식 서술은 "Amazon Quick evolved from Amazon QuickSight. QuickSight continues as Amazon Quick Sight, a feature within Quick" 이며, ⚠️ **기존 QuickSight API·SDK·연동은 변경 없이 그대로 동작합니다**(API 네임스페이스는 여전히 `quicksight`). 문서 경로도 `/quick/` 으로 옮겨졌습니다. 과거 자료의 `QuickSight` 표기는 **같은 기능의 옛 이름**입니다.
 >
 > **Amazon Quick** 은 자연어 챗으로 상호작용하며 AI 에이전트가 연결된 데이터·앱에 대해 요청을 처리하는 서비스이고, **Quick Sight**(시각화·BI) 외에 **Quick Flows**(작업 자동화) · **Quick Automate**(업무 프로세스 자동화) · **Quick Index**(사내 문서·데이터 연결) · **Quick Research**(인용 포함 리서치 보고서) · **Apps in Amazon Quick**(자연어로 웹 앱 구축)을 함께 가집니다.
 
@@ -470,25 +470,25 @@ CloudWatch Logs로도 로그를 보지만, 공식이 드는 OpenSearch 전환 �
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Firehose는 실시간이다."** → near real-time(준실시간)입니다. 버퍼 설정(크기·시간)에 따라 수 초~수 분 지연이 발생합니다. 밀리초 단위 실시간 처리가 필요하면 Data Streams + 컨슈머를 사용합니다.
-   *(원리: §2 본문 — Firehose는 버퍼 크기·시간 조건이 충족될 때 전달하는 구조로, 이 버퍼링이 밀리초 실시간이 아닌 near real-time 지연의 원인이다.)*
+   (원리: §2 본문 — Firehose는 버퍼 크기·시간 조건이 충족될 때 전달하는 구조로, 이 버퍼링이 밀리초 실시간이 아닌 near real-time 지연의 원인이다.)
 
 2. **"Firehose로 재처리할 수 있다."** → Firehose는 적재 전용입니다. 전달 후 스트림을 보존하지 않으므로 재처리가 불가합니다. 재처리가 필요하면 Data Streams를 선택합니다.
-   *(원리: §3 — Data Streams는 여러 컨슈머의 fan-out을 위해 데이터를 보존하고, Firehose는 전달 완료 즉시 제거하는 설계 차이가 재처리 가능 여부를 결정한다.)*
+   (원리: §3 — Data Streams는 여러 컨슈머의 fan-out을 위해 데이터를 보존하고, Firehose는 전달 완료 즉시 제거하는 설계 차이가 재처리 가능 여부를 결정한다.)
 
 3. **"Athena는 데이터를 복사해 저장한다."** → Athena는 S3의 데이터를 제자리에서 쿼리합니다. 별도 데이터베이스 서버나 스토리지가 없습니다. 비용은 스캔한 데이터 양으로 결정됩니다.
-   *(원리: §5 — Athena의 비용은 S3에서 읽어야 하는 원본 데이터 크기에 비례하며, 데이터 이동 없이 제자리 쿼리하므로 스캔량이 유일한 과금 기준이 된다.)*
+   (원리: §5 — Athena의 비용은 S3에서 읽어야 하는 원본 데이터 크기에 비례하며, 데이터 이동 없이 제자리 쿼리하므로 스캔량이 유일한 과금 기준이 된다.)
 
 4. **"Glue와 EMR은 항상 교환 가능하다."** → Glue는 서버리스·관리 편의성에 최적화됩니다. EMR은 커스텀 라이브러리 설치, 장기 실행 클러스터, 세밀한 리소스 제어가 필요할 때 선택합니다. 비용·운영 복잡도가 다릅니다.
-   *(원리: §6 — Glue가 추상화한 실행 환경 제어권을 EMR은 직접 허용하므로, 커스텀 의존성이나 클러스터 세밀 조정이 필요한 상황에서는 EMR이 대체 불가한 선택이 된다.)*
+   (원리: §6 — Glue가 추상화한 실행 환경 제어권을 EMR은 직접 허용하므로, 커스텀 의존성이나 클러스터 세밀 조정이 필요한 상황에서는 EMR이 대체 불가한 선택이 된다.)
 
 5. **"Lake Formation이 IAM을 대체한다."** → Lake Formation은 IAM 권한 모델을 대체하지 않고 **확장**합니다. Lake Formation 권한과 IAM 권한 모두 충족해야 접근이 허용됩니다.
-   *(원리: §7 — Lake Formation은 IAM이 표현하기 어려운 데이터 객체 수준 세밀 제어를 추가하는 확장 계층이므로, IAM과 Lake Formation 권한이 모두 만족돼야 접근이 허용된다.)*
+   (원리: §7 — Lake Formation은 IAM이 표현하기 어려운 데이터 객체 수준 세밀 제어를 추가하는 확장 계층이므로, IAM과 Lake Formation 권한이 모두 만족돼야 접근이 허용된다.)
 
 6. **"Kinesis Data Streams 샤드는 늘 수동 관리다."** → 모드에 따라 다릅니다. **온디맨드 모드**는 용량 계획 없이 샤드를 자동 관리하며 **이전 30일 피크의 2배**까지 수용합니다(그 이상 급증하면 약 15분간 스로틀 가능). **프로비저닝 모드**에서만 샤드 수를 직접 정하고 `UpdateShardCount`·Shard Split으로 조정합니다. (Enhanced Fan-Out은 소비 측 처리량을 늘리는 기능입니다.)
-   *(원리: §2 본문 — 샤드는 처리량 단위이므로, 용량 결정을 AWS에 맡기면(온디맨드) 자동 분할·관리가 되고, 직접 통제하면(프로비저닝) 분할 지점을 세밀하게 고를 수 있다.)*
+   (원리: §2 본문 — 샤드는 처리량 단위이므로, 용량 결정을 AWS에 맡기면(온디맨드) 자동 분할·관리가 되고, 직접 통제하면(프로비저닝) 분할 지점을 세밀하게 고를 수 있다.)
 
 7. **"DataSync와 Firehose가 같은 역할이다."** → DataSync는 파일 시스템(NFS·SMB)을 S3·EFS로 동기화하는 전송 도구입니다. Firehose는 스트리밍 레코드를 목적지로 전달하는 적재 서비스입니다. 데이터 성격이 다릅니다.
-   *(원리: §9 — 배치 수집(파일 동기화)과 스트리밍 수집(레코드 단위 실시간)은 데이터 단위와 처리 지연이 근본적으로 다르므로 서비스 역할도 다르다.)*
+   (원리: §9 — 배치 수집(파일 동기화)과 스트리밍 수집(레코드 단위 실시간)은 데이터 단위와 처리 지연이 근본적으로 다르므로 서비스 역할도 다르다.)
 
 ---
 

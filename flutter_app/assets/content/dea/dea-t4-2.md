@@ -72,17 +72,17 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **관리형 정책** | managed policy | *여러 주체에 재사용*할 수 있는 독립 정책 |
-| **인라인 정책** | inline policy | *한 ID와 일대일로 묶인* 정책 |
-| **권한 경계** | permissions boundary | ID 기반 정책이 줄 수 있는 *최대 권한의 상한* |
-| **SCP·RCP** | service/resource control policy | 조직·OU·계정 수준의 *가드레일* |
-| **RBAC** | role-based access control | *역할(직무)* 단위로 권한을 묶는 방식 |
-| **ABAC** | attribute-based access control | *태그(속성) 일치*로 권한을 정하는 방식 |
-| **RLS** | row-level security | 사용자·역할이 *어떤 행*을 볼지 정하는 정책 |
-| **DDM** | dynamic data masking | 저장 데이터는 그대로 두고 *질의 시 표시 방식*을 바꾸는 것 |
-| **LF-Tag** | Lake Formation tag | Lake Formation이 *권한 부여에 쓰는 전용 태그* |
-| **데이터 필터** | data filter | Data Catalog 테이블에 *행·열·셀 제한*을 걸어 두는 정의 |
-| **리소스 링크** | resource link | 공유받은 리소스를 *내 카탈로그에서 가리키는 참조* |
+| **관리형 정책** | managed policy | 여러 주체에 재사용할 수 있는 독립 정책 |
+| **인라인 정책** | inline policy | 한 ID와 일대일로 묶인 정책 |
+| **권한 경계** | permissions boundary | ID 기반 정책이 줄 수 있는 최대 권한의 상한 |
+| **SCP·RCP** | service/resource control policy | 조직·OU·계정 수준의 가드레일 |
+| **RBAC** | role-based access control | 역할(직무) 단위로 권한을 묶는 방식 |
+| **ABAC** | attribute-based access control | 태그(속성) 일치로 권한을 정하는 방식 |
+| **RLS** | row-level security | 사용자·역할이 어떤 행을 볼지 정하는 정책 |
+| **DDM** | dynamic data masking | 저장 데이터는 그대로 두고 질의 시 표시 방식을 바꾸는 것 |
+| **LF-Tag** | Lake Formation tag | Lake Formation이 권한 부여에 쓰는 전용 태그 |
+| **데이터 필터** | data filter | Data Catalog 테이블에 행·열·셀 제한을 걸어 두는 정의 |
+| **리소스 링크** | resource link | 공유받은 리소스를 내 카탈로그에서 가리키는 참조 |
 
 ---
 
@@ -215,7 +215,7 @@ AWS 관리형 정책이 요구에 맞지 않을 때 직접 정책을 만드는 �
 ## ✍️ 시험 포인트
 
 1. **"Lake Formation 권한을 줬는데도 실패"** → **IAM 권한(Glue API 등)도 필요**합니다. 두 검사를 모두 통과해야 합니다.
-2. **필터 조합으로 보안 수준 판정** — *모든 열 + 행 표현식* = **행 수준**, *특정 열 + 모든 행* = **열 수준**, *특정 열 + 행 표현식* = **셀 수준**. 필터와 함께 부여할 수 있는 권한은 **SELECT뿐**입니다.
+2. **필터 조합으로 보안 수준 판정** — 모든 열 + 행 표현식 = **행 수준**, 특정 열 + 모든 행 = **열 수준**, 특정 열 + 행 표현식 = **셀 수준**. 필터와 함께 부여할 수 있는 권한은 **SELECT뿐**입니다.
 3. **"기존 ETL·사용자를 끊지 않고 일부만 Lake Formation 권한 도입"** → **하이브리드 접근 모드(옵트인)**.
 4. **"공유했는데 Athena로 조회가 안 됨"** → 수신 계정의 **리소스 링크**가 없습니다.
 5. **"수백 개 테이블을 분류 태그로 관리"** → **LF-TBAC**. ⚠️ **IAM 태그로는 안 됩니다**(호환 불가).

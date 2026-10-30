@@ -72,16 +72,16 @@ lastVerified: 2026-10-20
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **trail** | trail | CloudTrail 이벤트를 *S3 등으로 지속 기록*하는 설정 |
-| **이벤트 기록** | event history | 설정 없이 볼 수 있는 *최근 90일 관리 이벤트* 목록 |
-| **관리 이벤트** | management event | 리소스를 *만들고 바꾸고 지우는* API 호출 |
-| **데이터 이벤트** | data event | 객체 수준 작업 등 *데이터에 대한* 호출(기본 비활성·추가 비용) |
-| **digest 파일** | digest file | 로그 파일의 *해시·서명을 담아* 무결성을 증명하는 파일 |
-| **Object Lock** | S3 Object Lock | 객체의 *삭제·덮어쓰기를 막는* S3 기능 |
-| **구독 필터** | subscription filter | 로그 이벤트를 *거의 실시간으로 다른 서비스에 전달*하는 설정 |
-| **destination** | destination | 교차 계정 전달을 받으려고 *수신 계정이 만드는 대상* |
-| **EDS** | event data store | CloudTrail Lake가 이벤트를 모아 두는 *불변 컬렉션* |
-| **로그 클래스** | log class | 로그 그룹의 *기능·수집 단가 등급*(Standard·IA·Delivery) |
+| **trail** | trail | CloudTrail 이벤트를 S3 등으로 지속 기록하는 설정 |
+| **이벤트 기록** | event history | 설정 없이 볼 수 있는 최근 90일 관리 이벤트 목록 |
+| **관리 이벤트** | management event | 리소스를 만들고 바꾸고 지우는 API 호출 |
+| **데이터 이벤트** | data event | 객체 수준 작업 등 데이터에 대한 호출(기본 비활성·추가 비용) |
+| **digest 파일** | digest file | 로그 파일의 해시·서명을 담아 무결성을 증명하는 파일 |
+| **Object Lock** | S3 Object Lock | 객체의 삭제·덮어쓰기를 막는 S3 기능 |
+| **구독 필터** | subscription filter | 로그 이벤트를 거의 실시간으로 다른 서비스에 전달하는 설정 |
+| **destination** | destination | 교차 계정 전달을 받으려고 수신 계정이 만드는 대상 |
+| **EDS** | event data store | CloudTrail Lake가 이벤트를 모아 두는 불변 컬렉션 |
+| **로그 클래스** | log class | 로그 그룹의 기능·수집 단가 등급(Standard·IA·Delivery) |
 
 ---
 
