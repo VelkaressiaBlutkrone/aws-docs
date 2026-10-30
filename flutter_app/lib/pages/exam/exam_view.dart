@@ -263,6 +263,35 @@ class _ExamViewState extends State<ExamView> {
         ],
       );
 
+  /// 미답·플래그 점프 버튼(UX-2). 갈 곳이 없는 버튼은 아예 그리지 않는다 —
+  /// 눌러도 안 움직이거나 비활성으로 남는 버튼보다 없는 쪽이 정직하다.
+  List<Widget> _jumpButtons() {
+    final unanswered = examNextIndex(
+      from: _index,
+      total: _qs.length,
+      matches: (i) => !_picked.containsKey(i),
+    );
+    final flagged = examNextIndex(
+      from: _index,
+      total: _qs.length,
+      matches: _flagged.contains,
+    );
+    return [
+      if (unanswered != null)
+        SecondaryButton(
+          icon: Icons.radio_button_unchecked,
+          label: '다음 미답',
+          onTap: () => _go(unanswered),
+        ),
+      if (flagged != null)
+        SecondaryButton(
+          icon: Icons.flag_outlined,
+          label: '다음 플래그',
+          onTap: () => _go(flagged),
+        ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_submitted) return _results(context);
@@ -307,6 +336,16 @@ class _ExamViewState extends State<ExamView> {
               // 적으면 좁은 상단 행이 중복으로 차고, 요약 칩이 왜 있는지 흐려진다.
               if (!compact)
                 Text('${_index + 1} / ${_qs.length}', style: t.labelSmall),
+              // 상시 제출(UX-2). 하단 기본 버튼이 '제출'로 바뀌는 마지막 문항에서는
+              // 숨긴다 — 제출은 어느 문항에서든 정확히 한 곳에만 있다.
+              if (_index < _qs.length - 1) ...[
+                const SizedBox(width: Gap.md),
+                SecondaryButton(
+                  icon: Icons.check_circle_outline,
+                  label: '제출',
+                  onTap: _onSubmitPressed,
+                ),
+              ],
             ],
           ),
           if (widget.restored)
@@ -321,15 +360,22 @@ class _ExamViewState extends State<ExamView> {
             ),
           const SizedBox(height: Gap.md),
           if (compact) ...[
-            ExamGridSummaryChip(
-              label: examGridSummaryLabel(
-                index: _index,
-                total: _qs.length,
-                answered: _picked.length,
-                flagged: _flagged.length,
-              ),
-              expanded: _gridExpanded,
-              onTap: () => setState(() => _gridExpanded = !_gridExpanded),
+            Wrap(
+              spacing: Gap.sm,
+              runSpacing: Gap.sm,
+              children: [
+                ExamGridSummaryChip(
+                  label: examGridSummaryLabel(
+                    index: _index,
+                    total: _qs.length,
+                    answered: _picked.length,
+                    flagged: _flagged.length,
+                  ),
+                  expanded: _gridExpanded,
+                  onTap: () => setState(() => _gridExpanded = !_gridExpanded),
+                ),
+                ..._jumpButtons(),
+              ],
             ),
             AnimatedSize(
               // DESIGN.md Motion: short 150–250ms, enter ease-out.
@@ -346,8 +392,17 @@ class _ExamViewState extends State<ExamView> {
                     )
                   : const SizedBox(width: double.infinity),
             ),
-          ] else
+          ] else ...[
             _grid(),
+            if (_jumpButtons().isNotEmpty) ...[
+              const SizedBox(height: Gap.md),
+              Wrap(
+                spacing: Gap.sm,
+                runSpacing: Gap.sm,
+                children: _jumpButtons(),
+              ),
+            ],
+          ],
           const SizedBox(height: Gap.lg),
           Text(q.stem, style: t.titleLarge),
           const SizedBox(height: Gap.lg),

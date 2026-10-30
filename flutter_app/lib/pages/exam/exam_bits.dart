@@ -27,6 +27,21 @@ String examGridSummaryLabel({
   return flagged > 0 ? '$base · 플래그 $flagged' : base;
 }
 
+/// [from] **다음**부터 [matches]를 만족하는 첫 인덱스. 끝에 닿으면 처음으로 돌아
+/// 찾고(복기는 순환이다), [from] 자신은 후보가 아니다 — 눌러도 안 움직이는 버튼은
+/// 거짓말이므로, 후보가 없으면 `null`을 돌려 호출부가 버튼을 숨기게 한다(UX-2).
+int? examNextIndex({
+  required int from,
+  required int total,
+  required bool Function(int) matches,
+}) {
+  for (var step = 1; step < total; step++) {
+    final i = (from + step) % total;
+    if (matches(i)) return i;
+  }
+  return null;
+}
+
 /// 접힌 문항 그리드의 손잡이 — 진행 요약을 보이고 탭하면 그리드를 펼친다.
 class ExamGridSummaryChip extends StatelessWidget {
   const ExamGridSummaryChip({
