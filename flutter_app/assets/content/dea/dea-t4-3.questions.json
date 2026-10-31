@@ -38,7 +38,7 @@
           "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q2",
@@ -66,7 +66,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_ddm-considerations.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q3",
@@ -94,7 +94,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/detect-PII.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q4",
@@ -122,7 +122,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/best-practice-3.1-privacy-by-design..html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q5",
@@ -154,7 +154,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/grants.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q6",
@@ -186,7 +186,7 @@
           "url": "https://aws.amazon.com/kms/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q7",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q8",
@@ -246,7 +246,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-kms-best-practices/access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q9",
@@ -282,7 +282,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q10",
@@ -314,7 +314,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q11",
@@ -346,7 +346,7 @@
           "url": "https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/client-server-side.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q12",
@@ -382,7 +382,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q13",
@@ -414,7 +414,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q14",
@@ -450,7 +450,7 @@
           "url": "https://docs.aws.amazon.com/msk/latest/developerguide/msk-encryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-3-q15",
@@ -486,7 +486,7 @@
           "url": "https://aws.amazon.com/s3/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

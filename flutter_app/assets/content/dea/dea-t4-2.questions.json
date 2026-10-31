@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q2",
@@ -62,7 +62,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q3",
@@ -94,7 +94,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PutParameter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q4",
@@ -126,7 +126,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-shared-parameters.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q5",
@@ -162,7 +162,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/lf-permissions-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q6",
@@ -194,7 +194,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.Connecting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q7",
@@ -226,7 +226,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q8",
@@ -258,7 +258,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/managing-filters.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q9",
@@ -290,7 +290,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q10",
@@ -318,7 +318,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/cross-data-sharing-lf.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q11",
@@ -350,7 +350,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/register-cross-encrypted.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q12",
@@ -378,7 +378,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q13",
@@ -410,7 +410,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/abac-for-individual-resources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q14",
@@ -442,7 +442,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-2-q15",
@@ -474,7 +474,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

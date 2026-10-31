@@ -34,7 +34,7 @@
           "url": "https://repost.aws/knowledge-center/redshift-load-s3-data"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q2",
@@ -66,7 +66,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-data-load.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q3",
@@ -98,7 +98,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_UNLOAD.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q4",
@@ -130,7 +130,7 @@
           "url": "https://aws.amazon.com/s3/storage-classes/glacier/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q5",
@@ -162,7 +162,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q6",
@@ -190,7 +190,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q7",
@@ -222,7 +222,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q8",
@@ -250,7 +250,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q9",
@@ -278,7 +278,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q10",
@@ -306,7 +306,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q11",
@@ -334,7 +334,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q12",
@@ -362,7 +362,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q13",
@@ -394,7 +394,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/querying-iceberg-data-optimization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q14",
@@ -426,7 +426,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-requirements.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-3-q15",
@@ -454,7 +454,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

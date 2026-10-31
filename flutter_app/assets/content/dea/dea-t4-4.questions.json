@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q2",
@@ -70,7 +70,7 @@
           "url": "https://aws.amazon.com/cloudtrail/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q3",
@@ -102,7 +102,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q4",
@@ -134,7 +134,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q5",
@@ -166,7 +166,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q6",
@@ -194,7 +194,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q7",
@@ -226,7 +226,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q8",
@@ -262,7 +262,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs_Centralization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q9",
@@ -290,7 +290,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs_Centralization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q10",
@@ -318,7 +318,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CrossAccountSubscriptions-Kinesis.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q11",
@@ -350,7 +350,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q12",
@@ -378,7 +378,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q13",
@@ -414,7 +414,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_storage_analytics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q14",
@@ -450,7 +450,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-4-q15",
@@ -486,7 +486,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

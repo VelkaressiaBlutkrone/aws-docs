@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q2",
@@ -62,7 +62,7 @@
           "url": "https://docs.aws.amazon.com/quick/latest/userguide/refreshing-imported-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q3",
@@ -94,7 +94,7 @@
           "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q4",
@@ -122,7 +122,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q5",
@@ -154,7 +154,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/views.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q6",
@@ -182,7 +182,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q7",
@@ -214,7 +214,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q8",
@@ -242,7 +242,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_CREATE_VIEW.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q9",
@@ -270,7 +270,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/views.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q10",
@@ -298,7 +298,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q11",
@@ -330,7 +330,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/notebooks-spark.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q12",
@@ -362,7 +362,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/notebooks-spark-migration-v3-to-v35.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q13",
@@ -390,7 +390,7 @@
           "url": "https://docs.aws.amazon.com/streams/latest/dev/how-do-i-size-a-stream.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q14",
@@ -418,7 +418,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/capacity-management.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-2-q15",
@@ -454,7 +454,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/select.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
