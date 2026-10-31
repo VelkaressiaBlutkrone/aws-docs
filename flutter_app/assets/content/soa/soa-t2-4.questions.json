@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.Promote.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/cross-region-backup.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-4-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_dr_tested.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

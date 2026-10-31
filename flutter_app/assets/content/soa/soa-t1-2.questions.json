@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/MonitoringLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q4",
@@ -114,7 +114,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q5",
@@ -141,7 +141,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q6",
@@ -172,7 +172,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q7",
@@ -203,7 +203,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q8",
@@ -230,7 +230,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q9",
@@ -257,7 +257,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q10",
@@ -284,7 +284,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q11",
@@ -311,7 +311,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q12",
@@ -338,7 +338,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q13",
@@ -365,7 +365,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q14",
@@ -392,7 +392,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-2-q15",
@@ -419,7 +419,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

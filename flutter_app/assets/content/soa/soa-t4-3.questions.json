@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/acm/latest/userguide/dns-renewal-validation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t4-3-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/logging-using-cloudtrail.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
