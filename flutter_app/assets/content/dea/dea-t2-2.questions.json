@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-crawler-crawling.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q2",
@@ -66,7 +66,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/incremental-crawls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q3",
@@ -102,7 +102,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/partition-indexes.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q4",
@@ -138,7 +138,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/webapi/API_BatchCreatePartition.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q5",
@@ -170,7 +170,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/working-with-business-catalog.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q6",
@@ -202,7 +202,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q7",
@@ -234,7 +234,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/crawler-data-stores.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q8",
@@ -266,7 +266,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q9",
@@ -298,7 +298,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/add-crawler.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q10",
@@ -330,7 +330,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/connection-properties.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q11",
@@ -362,7 +362,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q12",
@@ -390,7 +390,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/update-from-job.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q13",
@@ -418,7 +418,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q14",
@@ -446,7 +446,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/add-classifier.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-2-q15",
@@ -478,7 +478,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/msck-repair-table.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
