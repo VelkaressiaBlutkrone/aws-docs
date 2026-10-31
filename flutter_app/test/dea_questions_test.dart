@@ -47,7 +47,7 @@ void main() {
   /// 통합 모의고사 공개에 필요한 양은 도메인당 D1 22 · D2 17 · D3 14 · D4 12
   /// (연습 65문항에 공식 비중 배분)이고 Task는 15문항씩이라 **D1·D2는 2 Task씩,
   /// 합 6 Task 91문항**이면 게이트가 열린다.
-  const flipApprovedTaskIds = <String>{'dea-t1-1'};
+  const flipApprovedTaskIds = <String>{'dea-t1-1', 'dea-t1-2', 'dea-t2-1', 'dea-t2-2', 'dea-t3-1', 'dea-t4-1'};
 
   for (final taskId in deaTaskIds) {
     group(taskId, () {

@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q2",
@@ -66,7 +66,7 @@
           "url": "https://aws.amazon.com/redshift/pricing/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q3",
@@ -98,7 +98,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q4",
@@ -126,7 +126,7 @@
           "url": "https://docs.aws.amazon.com/msk/latest/developerguide/msk-tiered-storage.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q5",
@@ -158,7 +158,7 @@
           "url": "https://docs.aws.amazon.com/memorydb/latest/devguide/related-services-choose-between-memorydb-and-redis.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q6",
@@ -190,7 +190,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q7",
@@ -222,7 +222,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-sort-key.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q8",
@@ -258,7 +258,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/amazon-emr-hardware/storage.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q9",
@@ -290,7 +290,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LSI.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q10",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/documentdb/latest/devguide/vector-search.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q11",
@@ -362,7 +362,7 @@
           "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/snowball-edge-availability-change.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q12",
@@ -398,7 +398,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q13",
@@ -434,7 +434,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_LOCK.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q14",
@@ -470,7 +470,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/querying-iceberg.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-1-q15",
@@ -502,7 +502,7 @@
           "url": "https://aws.amazon.com/blogs/database/optimize-generative-ai-applications-with-pgvector-indexing-a-deep-dive-into-ivfflat-and-hnsw-techniques/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
