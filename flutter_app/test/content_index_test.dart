@@ -361,10 +361,10 @@ void main() {
     // 2026-10-27 실측: SOA·DEA 문항은 전부 드래프트(verified 0)라 정책을 넣어도
     // 라이브 노출은 그대로 잠긴 채였다. SOA 는 2026-10-31 현재도 verified 0 이다.
     //
-    // DEA 는 D1 31/22 · D2 30/17 · D3 15/14 가 충족돼 **D4 한 Task만** 남았고,
-    // 그 flip 이 게이트를 연다. 그래서 아래에서 **DEA 선언을 미리 지웠다**(절차 ①).
-    // 개방 단정은 flip 이 끝난 뒤 `SAA-C03: 게이트 개방` 과 같은 모양으로 넣는다 —
-    // 지금 `isTrue` 로 바꿔 두면 아직 잠겨 있으므로 레드가 된다.
+    // DEA 는 2026-10-31 에 열렸다 — `dea-t4-1` flip 으로 D4 가 채워져 네 도메인이
+    // 모두 충족됐다(D1 31/22 · D2 30/17 · D3 15/14 · D4 15/12, verified 91).
+    // locked 선언을 절차 ① 로 먼저 지우고 flip 한 뒤, 아래 개방 단정으로
+    // 가드를 재부착했다(제거 1 + 추가 1 로 순증 0).
     //
     // ⚠️ **flip 하는 사람에게**: 아래 선언은 `review.mjs flip` 이 마지막에 돌리는
     // `content_index_test` 안에 있다. 게이트를 여는 Task 를 flip 하면 **파일을 다 쓴 뒤**
@@ -378,6 +378,10 @@ void main() {
     // 실제 flip 상태에서 풀어 뒀다(2026-10-29 양쪽 개방 시뮬레이션으로 실측).
     test('SOA-C03: 정책 추가 후에도 현재는 locked', () {
       expect(certExamHasWeightedCapacity('SOA-C03'), isFalse);
+    });
+
+    test('DEA-C01: 게이트 개방 — 네 도메인 모두 충족', () {
+      expect(certExamHasWeightedCapacity('DEA-C01'), isTrue);
     });
 
     test('정책 없는 cert는 fail closed', () {
