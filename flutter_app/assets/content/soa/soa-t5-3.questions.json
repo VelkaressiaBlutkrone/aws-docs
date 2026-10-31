@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-weighted.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geo.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-multivalue.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/georestrictions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-3-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

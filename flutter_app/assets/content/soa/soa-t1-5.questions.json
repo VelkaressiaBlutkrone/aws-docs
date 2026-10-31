@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-unlimited-mode.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/using_cloudwatch_ebs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q12",
@@ -330,7 +330,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q13",
@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-5-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

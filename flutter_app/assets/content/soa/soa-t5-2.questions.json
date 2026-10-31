@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html#vpc-peering-limitations"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-routing.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-route-tables.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNTunnels.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNRoutingTypes.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/encryption-in-transit.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/WorkingWithVirtualInterfaces.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_private_networks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-2-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

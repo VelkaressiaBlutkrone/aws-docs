@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-cloudtrail-events.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q5",
@@ -141,7 +141,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q6",
@@ -168,7 +168,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q7",
@@ -195,7 +195,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-insights-events-with-cloudtrail.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q8",
@@ -222,7 +222,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q9",
@@ -249,7 +249,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q10",
@@ -280,7 +280,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q11",
@@ -307,7 +307,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q12",
@@ -334,7 +334,7 @@
           "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q13",
@@ -361,7 +361,7 @@
           "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-console-servicemap.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q14",
@@ -388,7 +388,7 @@
           "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-console-sampling.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-3-q15",
@@ -415,7 +415,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/monitor-cloudtrail-log-files-with-cloudwatch-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
