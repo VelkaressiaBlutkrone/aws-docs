@@ -30,7 +30,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_choosing_dist_sort.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q2",
@@ -58,7 +58,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_Sorting_data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q3",
@@ -86,7 +86,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_Defining_constraints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q4",
@@ -118,7 +118,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/modernization-rdbms-dynamodb/overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q5",
@@ -150,7 +150,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/modernization-rdbms-dynamodb/overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q6",
@@ -182,7 +182,7 @@
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/tag-based-access-control.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q7",
@@ -210,7 +210,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/schema-registry.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q8",
@@ -242,7 +242,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/handling-schema-updates-chapter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q9",
@@ -270,7 +270,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/r_ALTER_TABLE.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q10",
@@ -302,7 +302,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/schema-registry.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q11",
@@ -338,7 +338,7 @@
           "url": "https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q12",
@@ -366,7 +366,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/lineage-tracking-entities.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q13",
@@ -398,7 +398,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/datazone-data-lineage.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q14",
@@ -426,7 +426,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/performance-tuning-data-optimization-techniques.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t2-4-q15",
@@ -458,7 +458,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_ChunkingConfiguration.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
