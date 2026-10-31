@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/start-connecting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q2",
@@ -70,7 +70,7 @@
           "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-what-is-emr.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q3",
@@ -102,7 +102,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/start-connecting.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q4",
@@ -130,7 +130,7 @@
           "url": "https://repost.aws/knowledge-center/internet-access-lambda-function"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q5",
@@ -162,7 +162,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q6",
@@ -194,7 +194,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q7",
@@ -222,7 +222,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q8",
@@ -250,7 +250,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q9",
@@ -278,7 +278,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create-service-linked-role.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q10",
@@ -310,7 +310,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples_cross.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q11",
@@ -342,7 +342,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_RotationRulesType.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q12",
@@ -370,7 +370,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_lambda-functions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q13",
@@ -402,7 +402,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q14",
@@ -434,7 +434,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-management.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t4-1-q15",
@@ -470,7 +470,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker-unified-studio/latest/adminguide/working-with-domains.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

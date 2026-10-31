@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/t-apache-airflow-202.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q2",
@@ -62,7 +62,7 @@
           "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/update-environment.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q3",
@@ -94,7 +94,7 @@
           "url": "https://docs.aws.amazon.com/mwaa/latest/userguide/t-create-update-environment.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q4",
@@ -126,7 +126,7 @@
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/procedure-cw-metrics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q5",
@@ -154,7 +154,7 @@
           "url": "https://docs.aws.amazon.com/boto3/latest/guide/retries.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q6",
@@ -186,7 +186,7 @@
           "url": "https://docs.aws.amazon.com/boto3/latest/guide/clients.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q7",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-work-with-steps.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q8",
@@ -250,7 +250,7 @@
           "url": "https://aws.amazon.com/emr/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q9",
@@ -282,7 +282,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/about-triggers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q10",
@@ -310,7 +310,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/materialized-view-refresh.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q11",
@@ -338,7 +338,7 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q12",
@@ -374,7 +374,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-prep.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q13",
@@ -406,7 +406,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/workgroups-setting-control-limits-cloudwatch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q14",
@@ -438,7 +438,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t3-1-q15",
@@ -474,7 +474,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

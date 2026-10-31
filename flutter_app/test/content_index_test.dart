@@ -359,9 +359,14 @@ void main() {
     });
 
     // 2026-10-27 실측: SOA·DEA 문항은 전부 드래프트(verified 0)라 정책을 넣어도
-    // 라이브 노출은 그대로 잠긴 채다.
+    // 라이브 노출은 그대로 잠긴 채였다. SOA 는 2026-10-31 현재도 verified 0 이다.
     //
-    // ⚠️ **flip 하는 사람에게**: 아래 두 선언은 `review.mjs flip` 이 마지막에 돌리는
+    // DEA 는 2026-10-31 에 열렸다 — `dea-t4-1` flip 으로 D4 가 채워져 네 도메인이
+    // 모두 충족됐다(D1 31/22 · D2 30/17 · D3 15/14 · D4 15/12, verified 91).
+    // locked 선언을 절차 ① 로 먼저 지우고 flip 한 뒤, 아래 개방 단정으로
+    // 가드를 재부착했다(제거 1 + 추가 1 로 순증 0).
+    //
+    // ⚠️ **flip 하는 사람에게**: 아래 선언은 `review.mjs flip` 이 마지막에 돌리는
     // `content_index_test` 안에 있다. 게이트를 여는 Task 를 flip 하면 **파일을 다 쓴 뒤**
     // 여기서 레드로 끝난다(`--force` 는 쓰기 **전** 구조 검사만 건너뛰어 소용없다).
     // 순서는 ① 그 자격증 선언 삭제 → ② flip → ③ 커밋이다. 2026-10-28 에
@@ -375,8 +380,8 @@ void main() {
       expect(certExamHasWeightedCapacity('SOA-C03'), isFalse);
     });
 
-    test('DEA-C01: 정책 추가 후에도 현재는 locked', () {
-      expect(certExamHasWeightedCapacity('DEA-C01'), isFalse);
+    test('DEA-C01: 게이트 개방 — 네 도메인 모두 충족', () {
+      expect(certExamHasWeightedCapacity('DEA-C01'), isTrue);
     });
 
     test('정책 없는 cert는 fail closed', () {
