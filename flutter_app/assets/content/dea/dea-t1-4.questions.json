@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q2",
@@ -66,7 +66,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q3",
@@ -98,7 +98,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-filesystem.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q4",
@@ -130,7 +130,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q5",
@@ -162,7 +162,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/tuning-aws-glue-for-apache-spark/key-topics-apache-spark.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q6",
@@ -194,7 +194,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/grouping-input-files.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q7",
@@ -226,7 +226,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-filesystem.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q8",
@@ -258,7 +258,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-ephemeral-storage.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q9",
@@ -290,7 +290,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q10",
@@ -322,7 +322,7 @@
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/constructs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q11",
@@ -354,7 +354,7 @@
           "url": "https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q12",
@@ -386,7 +386,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/transform-aws-serverless.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q13",
@@ -418,7 +418,7 @@
           "url": "https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/automating-updates-to-serverless-apps.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q14",
@@ -450,7 +450,7 @@
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EMRforDynamoDB.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-4-q15",
@@ -482,7 +482,7 @@
           "url": "https://aws.amazon.com/neptune/getting-started/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
