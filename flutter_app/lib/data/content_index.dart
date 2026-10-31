@@ -654,7 +654,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-2', title: '권한 부여 메커니즘 적용 (사용자 지정 정책·Lake Formation·RBAC/ABAC·최소 권한)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-2.md', questionsAsset: 'assets/content/dea/dea-t4-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-3', title: '데이터 암호화·마스킹 보장 (DDM·KMS·S3 SSE·교차 계정·전송 중/전)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-3.md', questionsAsset: 'assets/content/dea/dea-t4-3.questions.json', questionCount: 15),
     ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-4', title: '감사용 로그 준비 (CloudTrail·CloudWatch Logs·Lake·로그 분석)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-4.md', questionsAsset: 'assets/content/dea/dea-t4-4.questions.json', questionCount: 15),
-    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-5', title: '데이터 프라이버시·거버넌스 (Redshift 공유·Macie·리전 통제·Config·주권)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-5.md', questionsAsset: 'assets/content/dea/dea-t4-5.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DEA-C01', taskId: 'dea-t4-5', title: '데이터 프라이버시·거버넌스 (Redshift 공유·Macie·리전 통제·Config·주권)', domain: 4, mdAsset: 'assets/content/dea/dea-t4-5.md', questionsAsset: 'assets/content/dea/dea-t4-5.questions.json', questionCount: 15),
   ],
   // MLA-C01: 공식 Task 12개(4도메인 × 3)를 도메인 배치별로 누적 등록한다.
   // 도메인 1(ML을 위한 데이터 준비, 28%)·2(ML 모델 개발, 26%)·
