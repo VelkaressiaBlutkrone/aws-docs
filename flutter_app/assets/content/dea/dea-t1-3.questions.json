@@ -34,7 +34,7 @@
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q2",
@@ -66,7 +66,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/with-step-functions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q3",
@@ -98,7 +98,7 @@
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q4",
@@ -130,7 +130,7 @@
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/concepts-state-machine-alias.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q5",
@@ -162,7 +162,7 @@
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q6",
@@ -194,7 +194,7 @@
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/service-quotas.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q7",
@@ -226,7 +226,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/step-functions-workflows.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q8",
@@ -258,7 +258,7 @@
           "url": "https://aws.amazon.com/managed-workflows-for-apache-airflow/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q9",
@@ -290,7 +290,7 @@
           "url": "https://docs.aws.amazon.com/mwaa/latest/migrationguide/mwaa-architecture.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q10",
@@ -322,7 +322,7 @@
           "url": "https://aws.amazon.com/eventbridge/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q11",
@@ -354,7 +354,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/automating-awsglue-with-cloudwatch-events.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q12",
@@ -386,7 +386,7 @@
           "url": "https://docs.aws.amazon.com/sns/latest/dg/fifo-message-delivery.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q13",
@@ -418,7 +418,7 @@
           "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q14",
@@ -450,7 +450,7 @@
           "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "dea-t1-3-q15",
@@ -482,7 +482,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
