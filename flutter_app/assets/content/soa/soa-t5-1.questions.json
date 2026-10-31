@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_NAT_Instance.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-dns.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-1-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
