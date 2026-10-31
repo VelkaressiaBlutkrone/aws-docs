@@ -612,7 +612,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ),
   ],
   'SOA-C03': [
-    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-1', title: 'CloudWatch 지표·경보·대시보드', domain: 1, mdAsset: 'assets/content/soa/soa-t1-1.md', questionsAsset: 'assets/content/soa/soa-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-1', title: 'CloudWatch 지표·경보·대시보드', domain: 1, mdAsset: 'assets/content/soa/soa-t1-1.md', questionsAsset: 'assets/content/soa/soa-t1-1.questions.json', questionCount: 15),
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-2', title: 'CloudWatch Logs·Logs Insights·구독 필터·에이전트', domain: 1, mdAsset: 'assets/content/soa/soa-t1-2.md', questionsAsset: 'assets/content/soa/soa-t1-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-3', title: 'CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)', domain: 1, mdAsset: 'assets/content/soa/soa-t1-3.md', questionsAsset: 'assets/content/soa/soa-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SOA-C03', taskId: 'soa-t1-4', title: '가용성 지표 기반 문제 식별·해결 (Health Dashboard)', domain: 1, mdAsset: 'assets/content/soa/soa-t1-4.md', questionsAsset: 'assets/content/soa/soa-t1-4.questions.json', questionCount: 0),

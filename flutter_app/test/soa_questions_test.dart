@@ -61,7 +61,7 @@ void main() {
   /// 통합 모의고사 공개에 필요한 양은 도메인당 D1 14 · D2 14 · D3 14 · D4 11 ·
   /// D5 12(연습 65문항에 공식 비중 배분)이고, SOA Task는 전부 15문항이라
   /// **도메인당 1 Task씩 5 Task 75문항**이면 게이트가 열린다.
-  const flipApprovedTaskIds = <String>{};
+  const flipApprovedTaskIds = <String>{'soa-t1-1'};
 
   for (final taskId in soaTaskIds) {
     group(taskId, () {

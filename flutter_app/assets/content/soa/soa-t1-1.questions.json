@@ -33,7 +33,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q2",
@@ -64,7 +64,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q3",
@@ -95,7 +95,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q4",
@@ -126,7 +126,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q5",
@@ -157,7 +157,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q6",
@@ -188,7 +188,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q7",
@@ -219,7 +219,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q8",
@@ -250,7 +250,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-actions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q9",
@@ -281,7 +281,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q10",
@@ -312,7 +312,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q11",
@@ -343,7 +343,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q12",
@@ -374,7 +374,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q13",
@@ -405,7 +405,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q14",
@@ -436,7 +436,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-1-q15",
@@ -467,7 +467,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
