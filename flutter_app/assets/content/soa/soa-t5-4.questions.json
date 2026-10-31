@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/working-with-flow-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/reachability/what-is-reachability-analyzer.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/logging.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t5-4-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

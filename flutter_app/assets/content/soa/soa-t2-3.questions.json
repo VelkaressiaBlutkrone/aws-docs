@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/about-backup-plans.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/create-cross-account-backup.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIT.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CreateSnapshot.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-3-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/restoring-a-backup.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

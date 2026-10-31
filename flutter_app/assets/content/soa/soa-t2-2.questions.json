@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q4",
@@ -114,7 +114,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q5",
@@ -141,7 +141,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q6",
@@ -168,7 +168,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q7",
@@ -195,7 +195,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q8",
@@ -222,7 +222,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q9",
@@ -249,7 +249,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q10",
@@ -276,7 +276,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q11",
@@ -303,7 +303,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q12",
@@ -330,7 +330,7 @@
           "url": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/elasticache-use-cases.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q13",
@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t2-2-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

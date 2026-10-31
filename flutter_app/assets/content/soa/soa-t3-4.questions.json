@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rules.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-patterns.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-use-resource-based.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-log-api-call.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q11",
@@ -303,7 +303,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q12",
@@ -330,7 +330,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q13",
@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventNotifications.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-4-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

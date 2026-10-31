@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/health/latest/ug/aws-health-dashboard-status.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q9",
@@ -249,7 +249,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q10",
@@ -276,7 +276,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q11",
@@ -303,7 +303,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q12",
@@ -330,7 +330,7 @@
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q13",
@@ -357,7 +357,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q14",
@@ -384,7 +384,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t1-4-q15",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

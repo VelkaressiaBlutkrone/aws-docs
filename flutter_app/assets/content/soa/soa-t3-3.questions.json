@@ -29,7 +29,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-setting-up-messageAPIs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q2",
@@ -56,7 +56,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-vpc.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q3",
@@ -83,7 +83,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q4",
@@ -110,7 +110,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q5",
@@ -137,7 +137,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q6",
@@ -164,7 +164,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q7",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-aws-runpatchbaseline.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q8",
@@ -218,7 +218,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-tag-a-patch-group.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q9",
@@ -245,7 +245,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q10",
@@ -272,7 +272,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q11",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q12",
@@ -326,7 +326,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager-automation-runbooks/latest/userguide/automation-runbook-reference.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q13",
@@ -353,7 +353,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q14",
@@ -380,7 +380,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "soa-t3-3-q15",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-logging.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
