@@ -24,7 +24,9 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics.html
   - title: Amazon Bedrock 런타임 지표 모니터링 (공식)
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
-lastVerified: 2026-10-20
+  - title: 경보 작업 (지원되는 작업 목록) (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-actions.html
+lastVerified: 2026-11-01
 ---
 
 # CloudWatch 지표·경보·대시보드
@@ -42,7 +44,7 @@ lastVerified: 2026-10-20
 - [ ] **해상도와 보존** — 표준(1분) vs 고해상도(1초) 지표의 차이와 데이터 보존 기간을 안다
 - [ ] **모니터링 수준** — EC2 기본(5분) vs 세부(1분) 모니터링을 구분하고 활성화할 수 있다
 - [ ] **경보 구성** — 임계값·평가 기간(M out of N)·상태 전이·누락 데이터 처리를 설정할 수 있다
-- [ ] **경보 작업** — SNS·EC2 작업·Auto Scaling·Systems Manager 등 작업 대상을 연결할 수 있다
+- [ ] **경보 작업** — SNS·Lambda·EC2 작업·Auto Scaling·Systems Manager 등 작업을 연결할 수 있다
 - [ ] **복합 경보** — AND/OR로 여러 경보를 결합해 알림 노이즈를 줄이는 패턴을 안다
 - [ ] **대시보드** — 교차 리전 위젯과 리전 단위 경보/지표의 경계를 이해한다
 
@@ -191,15 +193,20 @@ aws cloudwatch put-metric-alarm \
 
 ### 4) 복합 경보와 경보 작업 대상
 
-**경보 작업 대상 — ALARM/OK/INSUFFICIENT_DATA 전이 시 실행:**
+**경보 작업 — 상태 전이 시 실행:**
 
-| 대상 | 용도 |
+| 작업 | 용도 |
 |---|---|
 | **SNS 주제** | 이메일·SMS·Lambda·HTTP 등으로 알림 팬아웃 |
-| **EC2 작업** | 인스턴스 **중지·종료·재부팅·복구(recover)** |
-| **Auto Scaling 정책** | 스케일 아웃/인 트리거(단순/단계 조정 정책) |
-| **Systems Manager** | OpsItem 생성·자동화 런북 실행 |
-| **EventBridge** | 경보 상태 변경 이벤트를 규칙으로 라우팅 |
+| **Lambda 함수** | 경보 상태 변경에 맞춘 사용자 지정 자동화 — 공식이 "가장 쉬운 방법"으로 적는 경로 |
+| **EC2 작업** | 인스턴스 **중지·종료·재부팅·복구(recover)** (EC2 지표 기반 경보만) |
+| **Auto Scaling 정책** | 스케일 아웃/인 트리거(EC2 Auto Scaling·Application Auto Scaling) |
+| **Systems Manager** | **OpsItem 생성** 또는 **Incident Manager 인시던트 생성** |
+| **조사(investigation)** | 경보가 ALARM으로 갈 때 조사 시작 |
+
+> **EventBridge는 경보 작업이 아니라, 경보가 이벤트를 보내는 곳입니다.** 경보는 상태가 바뀔 때 EventBridge로 **이벤트를 내보냅니다** — 그 이벤트를 규칙으로 받아 Lambda·SQS·Step Functions 같은 여러 대상으로 라우팅·필터링하는 구조입니다. "경보가 직접 실행하는 작업"과 "경보 이벤트를 받아 EventBridge가 돌리는 작업"을 가르는 문항이 나옵니다.
+
+> 대부분의 작업은 3개 상태로의 전이마다 지정할 수 있지만, **Systems Manager OpsItem·인시던트와 조사 시작은 ALARM 전이에서만** 실행됩니다. 또 Auto Scaling을 뺀 작업은 **상태가 전이될 때만** 실행되고, 조건이 몇 시간·며칠 지속돼도 다시 실행되지 않습니다.
 
 > **EC2 복구 작업**은 하드웨어/호스트 장애 시 같은 인스턴스를 정상 호스트로 이전(동일 인스턴스 ID·프라이빗 IP 유지)합니다. `StatusCheckFailed_System` 지표 경보와 함께 자주 씁니다.
 
@@ -279,7 +286,7 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 - **경보 상태 3종**: OK / ALARM / **INSUFFICIENT_DATA**(에러가 아님).
 - **M out of N**(Datapoints to Alarm / Evaluation Periods)으로 오탐 억제.
 - **누락 데이터 4종**: missing(기본·제외) / notBreaching / breaching / ignore.
-- **경보 작업 대상**: SNS, EC2(중지·종료·재부팅·복구), Auto Scaling, Systems Manager, EventBridge.
+- **경보 작업**: SNS, **Lambda**, EC2(중지·종료·재부팅·복구), Auto Scaling, Systems Manager(OpsItem·인시던트), 조사 시작. **EventBridge는 작업이 아니라 경보가 이벤트를 내보내는 곳.**
 - **복합 경보**는 AND/OR/NOT로 결합 → **알림 노이즈 감소**가 목적.
 - **사용자 지정 지표는 PutMetricData로 게시**. 메모리·디스크 사용량 등은 기본 지표가 아님 → **CloudWatch agent 필요**.
 - **대시보드는 교차 리전**, **경보·지표는 리전 단위**.
@@ -366,3 +373,4 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 6. 복합 경보 생성 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create_Composite_Alarm.html
 7. CloudWatch 대시보드 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
 8. EC2 인스턴스 모니터링(기본 vs 세부) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
+9. 경보 작업(지원되는 작업 목록 · EventBridge로 이벤트 전송) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-actions.html
