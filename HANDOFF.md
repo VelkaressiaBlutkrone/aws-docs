@@ -60,7 +60,7 @@ _갱신: 2026-11-01(**문항 공개 트랙 종료 — SOA 300/300 으로 다섯 
 - ⚠️ **배포 전 대조군은 md5 불일치에 더해 "옛 오류 문자열 N건"을 함께 센다.** 배포 후 md5 일치 + 그 수가 **0**이 되는 것이 "무엇이 고쳐졌는지"까지 증명한다(여기서는 라이브 md의 `| **EventBridge** |` 1 → 0). md5만으로는 "뭔가 바뀌었다"까지만 말할 수 있다.
 - ⚠️ **한 배치로 돌린 flip은 Task별 커밋으로 쪼갤 수 없다** — `content_index.dart` 15줄과 `flipApprovedTaskIds` 1줄이 Task별로 뒤섞여 경로로 갈리지 않고, 줄 단위로 가르면 일어나지 않은 순서를 꾸미는 꼴이다.
 - ⚠️ **게이트가 이미 열린 cert의 잔여 flip은 2커밋 규율이 없다**(locked 선언이 없으므로 한 커밋). 그 규율은 **게이트를 여는 flip 전용**이다.
-- ⚠️ **분류기는 호출마다 다르다(4회 관측).** `set_monitor` Auto-fix는 #309(develop) 통과 · #310(main) 차단 · #311(develop) 차단 · #312(develop) 통과 · #313(main) 차단으로 **base 브랜치와 무관**했다. 원격 브랜치 삭제는 `git push --delete`·`gh api -X DELETE` 모두 차단됐다(사용자 실행). ⚠️ 다만 **이 레포는 머지 시 head 브랜치를 자동 삭제**하므로 대개 지울 것이 남지 않는다 — 넘기기 전에 `gh api repos/<owner>/<repo>/branches/<name>`으로 실재를 확인한다.
+- ⚠️ **분류기는 호출마다 다르다(4회 관측).** `set_monitor` Auto-fix는 #309(develop) 통과 · #310(main) 차단 · #311(develop) 차단 · #312(develop) 통과 · #313(main) 차단으로 **base 브랜치와 무관**했다. 원격 브랜치 삭제는 `git push --delete`·`gh api -X DELETE` 모두 차단됐다(사용자 실행). ⚠️ **넘기기 전에 `gh api repos/<owner>/<repo>/branches/<name>`으로 실재를 확인한다** — 이미 없는 브랜치의 삭제 명령을 안내해 사용자가 `remote ref does not exist`를 받은 일이 있다. ⚠️ **그 원인을 "레포가 머지 시 자동 삭제한다"로 추정했는데 틀렸다** — `gh api repos/… --jq .delete_branch_on_merge`가 **`false`**이고, #314 머지 직후에도 head 브랜치가 그대로 남아 있었다(실측). 먼저 사라진 두 브랜치는 **사용자가 PR 화면에서 지운 것**이다. 설정은 추정하지 말고 그 한 줄로 조회한다(같은 호출이 `allow_auto_merge: false`도 확인해 준다 — `--auto` 예약이 거부되는 이유다).
 
 ## 0-2026-10-30. 완료: 갭 배치 **B11 종료** — `[누락]`·`[부분]` 134행 배정 전체 완료 (2026-10-30, #289)
 
