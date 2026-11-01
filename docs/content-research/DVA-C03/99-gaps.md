@@ -5,11 +5,16 @@
 
 ## 차단급 — 이것이 열리기 전에는 그 Skill 문항을 쓸 수 없다
 
-| ID | 항목 | 출처 노트 | 왜 차단인가 |
+| ID | 항목 | 출처 노트 | 상태 |
 |---|---|---|---|
-| **G-01** | **Skill 4.3.6(AI로 최적화 기회 식별)에 대응하는 AWS 도구를 특정하지 못했다.** CloudWatch investigations는 문제 해결(4.1.5) 쪽이고, Compute Optimizer는 **in-scope 목록에 없다** | [96](96-ai-assisted-dev.md) | 도구를 모르면 문항의 정답 보기를 만들 수 없다 |
-| **G-02** | **EKS 매니페스트 배포 절차**를 조사하지 못했다 | [95](95-containers.md) | Skill 3.3.2가 예시로 드는데 노트는 ECS 쪽만 담았다 |
-| **G-03** | **`exam_guides/DVA-C03.json`의 시험 시간** — 가이드 본문(영문·한국어 양쪽)에 없다 | [00](00-overview.md) §1·§8 | JSON을 만들 수 없다. 인증 페이지 등 별도 공식 출처 필요 |
+| **G-03** | **`exam_guides/DVA-C03.json`의 시험 시간** — 가이드 본문(영문·한국어 양쪽)에 없다 | [00](00-overview.md) §1·§8 | **열림.** JSON을 만들 수 없다. 인증 페이지 등 별도 공식 출처 필요 — 12월 작업에서 닫는다 |
+
+### ✅ 닫힌 차단급 (2026-11-01)
+
+| ID | 항목 | 판정 |
+|---|---|---|
+| **G-01** | Skill 4.3.6에 대응하는 AWS AI 도구 | **단일 서비스는 없는 것이 답이다.** Compute Optimizer·CodeGuru Profiler는 **in-scope 목록에 없고**(단, out-of-scope 목록에도 없으므로 "범위 밖"으로 단정하지 않는다), Lambda Power Tuning은 **오픈 소스 도구**다. 받칠 수 있는 in-scope AI 기능은 **CloudWatch 자연어 쿼리 생성·결과 요약**과 **Kiro**뿐이다. 저작 규칙: **단일 서비스를 고르게 하는 문항을 쓰지 않고**, `cloudwatch:GenerateQuery` 같은 확인된 사실을 묻는다 → [96](96-ai-assisted-dev.md) §2-b |
+| **G-02** | EKS 매니페스트 배포 절차 | **조사 완료.** `kubectl apply -f`로 `Deployment`·`Service` 매니페스트 적용, `Service` 주석으로 AWS 로드 밸런서 지정, CDK는 `KubernetesManifest`. ⚠️ **EKS의 Fargate는 ECS와 지정 방식이 다르다** — 시작 유형이 아니라 **네임스페이스로 선택하는 Fargate 프로필**이고, Load Balancer Controller 사용 시 Fargate 대상은 **`IP` 유형**이어야 한다 → [95](95-containers.md) §3-b. 남은 것은 `kubectl` 예시 출처가 처방적 지침이라는 점(사용자 가이드 대응 페이지 재확인) |
 
 ## 정본 보강 — 사실은 확보했으나 출처가 약하다
 

@@ -55,6 +55,26 @@ ECS 롤링 업데이트(`ECS` 배포 유형)는 두 값으로 조절한다.
 - ⚠️ **ECS는 컨테이너 배포 과정을 관리하지만 트래픽 라우팅은 하지 않는다** — 로드 밸런서를 쓰면 라우팅은 따로 구성해야 하고, CodeDeploy 블루/그린이면 트래픽 관리 설정을 본다.
 - 작업 교체가 일어나는 경우는 둘이다 — **`UpdateService` 호출로 새 배포가 시작될 때**, 그리고 **활성 배포 안의 작업이 비정상이 될 때**.
 
+## 3-b. EKS 매니페스트 배포 — ECS와 모델이 다르다 (3.3.2)
+
+EKS에는 "작업 정의"가 없다. **Kubernetes 매니페스트**(YAML)를 클러스터에 적용한다.
+
+- 배포 단위는 `apiVersion: apps/v1` · `kind: Deployment`이고, 노출은 `kind: Service`다. 적용은 **`kubectl apply -f <파일>`**.
+- `Deployment`의 `spec.replicas`·`selector.matchLabels`·`template`이 ECS 서비스의 원하는 개수·작업 정의 자리에 해당한다.
+- `Service`에 **주석(annotation)**으로 AWS 로드 밸런서를 지정한다 — 예: `service.beta.kubernetes.io/aws-load-balancer-type: nlb`, 내부용이면 `...-internal: "true"`.
+- IaC로는 CDK의 **`KubernetesManifest`** 구문이나 `cluster.addManifest`로 같은 매니페스트를 올린다.
+
+### ⚠️ EKS의 Fargate는 ECS의 Fargate와 지정 방식이 다르다
+
+| | ECS | EKS |
+|---|---|---|
+| Fargate 쓰는 법 | 서비스·작업의 **시작 유형(launch type)** | **Fargate 프로필**을 만들어 **네임스페이스**(+선택적 레이블)로 선택 |
+| 선택 단위 | 서비스 | 프로필 셀렉터에 걸리는 **파드** |
+
+- 프로필 생성에는 **네임스페이스 지정이 필수**이고 `--labels`는 선택이다(`eksctl create fargateprofile --cluster <c> --name <p> --namespace <ns>`).
+- 네임스페이스·레이블에 **와일드카드**를 쓸 수 있다.
+- ⚠️ **AWS Load Balancer Controller를 쓸 때 대상 파드가 Fargate에 있으면 대상 유형을 `IP`로 해야 한다.** 그리고 ingress·service 객체가 있는 **네임스페이스에 Fargate 프로필이 있어야** 한다.
+
 ## 4. 시험에서 묻는 방식
 
 - "같은 태그로 덮어쓴 이미지가 배포됐다" → **`ImageTagMutability: IMMUTABLE`**
@@ -92,7 +112,13 @@ ECS 롤링 업데이트(`ECS` 배포 유형)는 두 값으로 조절한다.
 
 ## 확인 필요
 
-- **`minimumHealthyPercent`의 Fargate 미사용 서술을 ECS 개발자 가이드 본문에서 다시 확인한다.** 현재 근거(4번)는 Security Hub 모델의 SDK 레퍼런스라 **정본으로 쓰기에 약하다.**
-- **EKS 매니페스트 배포 절차**를 조사하지 못했다. Skill 3.3.2가 "EKS 매니페스트"를 예시로 드는데 이 노트는 ECS 쪽만 담았다 — 학습문서 저작 전에 보강한다.
-- **Dockerfile 작성 모범 사례**(Skill 3.1.2의 "Docker files")를 AWS 공식 문서 기준으로 찾지 못했다. 일반 Docker 지식과 AWS 고유 사실을 섞지 않도록 범위를 정해야 한다.
+- **`minimumHealthyPercent`의 Fargate 미사용 서술을 ECS 개발자 가이드 본문에서 다시 확인한다.** 현재 근거(4번)는 Security Hub 모델의 SDK 레퍼런스라 **정본으로 쓰기에 약하다.**(G-05)
+- ~~**EKS 매니페스트 배포 절차**~~ → ✅ **닫았다(2026-11-01, G-02).** §3-b 참조. ⚠️ 다만 `kubectl apply` 예시의 출처가 **처방적 지침(prescriptive-guidance)**이라, 학습문서에 명령을 그대로 실을 때는 EKS 사용자 가이드 쪽 대응 페이지를 한 번 더 확인한다.
+- **Dockerfile 작성 모범 사례**(Skill 3.1.2의 "Docker files")를 AWS 공식 문서 기준으로 찾지 못했다. 일반 Docker 지식과 AWS 고유 사실을 섞지 않도록 범위를 정해야 한다.(G-10)
 - 블로그·지식 센터 출처(5·6)는 **권장값·동작 설명에만** 썼다.
+
+### 추가 출처 (§3-b)
+
+7. (처방적 지침) EKS 매니페스트 배포·NLB 주석 — https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/access-container-applications-privately-on-amazon-eks-using-aws-privatelink-and-a-network-load-balancer.html
+8. EKS Fargate 시작하기(프로필·네임스페이스·와일드카드) — https://docs.aws.amazon.com/eks/latest/userguide/fargate-getting-started.html
+9. (AWS 지식 센터) Load Balancer Controller — Fargate 대상은 `IP` 유형 — https://repost.aws/knowledge-center/load-balancer-troubleshoot-creating

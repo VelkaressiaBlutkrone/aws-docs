@@ -91,6 +91,33 @@ Kiro는 **스펙 기반 개발(spec-driven development)**을 위해 만들어진
 
 ---
 
+## 2-b. Skill 4.3.6 — **단일 "AI 최적화 서비스"는 없다** (G-01 판정)
+
+조사 결론부터: **가이드가 특정 서비스를 지목하지 않고, 흔히 떠올리는 후보들이 in-scope 목록에 없다.**
+
+| 후보 | 판정 |
+|---|---|
+| **AWS Compute Optimizer** | Lambda 메모리 권장의 정본이지만(옵트인 필요) **in-scope 목록에 없다** |
+| **Amazon CodeGuru Profiler** | in-scope 목록에 없다 |
+| **AWS Lambda Power Tuning** | AWS 서비스가 아니라 **오픈 소스 도구**다(Step Functions 기반) |
+
+> ⚠️ **"목록에 없다"와 "범위 밖이다"는 다르다.** in-scope 목록은 공식적으로 *non-exhaustive*이고, 위 셋은 **out-of-scope 목록에도 없다.** 그러니 "범위 밖"으로 단정하지 말고, **우리가 정답 보기로 쓰지 않는다**로 운영한다.
+
+**그래서 4.3.6을 받칠 수 있는 in-scope AI 기능은 둘이다.**
+
+1. **CloudWatch의 생성형 AI 기능** — 병목을 찾는 분석을 돕는다
+   - **자연어 쿼리 생성**: Logs Insights · Metrics Insights · OpenSearch PPL/SQL용 쿼리를 평문 영어 설명에서 만들어 주고, **줄 단위 설명**과 **유도식 수정**도 제공한다. 권한은 `CloudWatchLogsFullAccess`·`CloudWatchLogsReadOnlyAccess`·`AdministratorAccess`·`ReadOnlyAccess` 중 하나이거나 **`cloudwatch:GenerateQuery`**가 필요하다. **리전 서비스**이고 일부 리전은 프롬프트 처리를 위해 미국 리전으로 교차 호출한다
+   - **쿼리 결과 자연어 요약**: Logs Insights 결과를 요약해 준다
+2. **Kiro** — 코드 효율 개선·리팩터링 제안(§1). 다만 "최적화 기회 식별"을 명시한 공식 문장은 찾지 못했다
+
+### 저작 규칙 (이 판정의 쓸모)
+
+- **"어떤 AWS AI 서비스가 최적화 기회를 알려 주는가"처럼 단일 서비스를 고르게 하는 문항을 쓰지 않는다.** 공식 근거가 없다.
+- 대신 **"CloudWatch에서 쿼리를 자연어로 만들려면 어떤 권한이 필요한가"**(`cloudwatch:GenerateQuery`)처럼 **확인된 사실**을 묻는다.
+- **Compute Optimizer를 정답 보기로 쓰지 않는다**(오답 보기로도 쓰지 않는다 — 목록에 없을 뿐 틀린 서비스가 아니라 판단이 갈린다).
+
+> 덤으로 확인한 4.3.2(메모리·컴퓨팅 최적화) 사실: Lambda 메모리는 **128 MB ~ 10,240 MB**이고 기본은 **128 MB**다. CPU는 메모리에 **선형 비례**하며 **1,769 MB에서 1 vCPU**에 해당한다. ⚠️ 그리고 현행 Lambda 문서의 페이지 제목이 **"Configure Lambda Event Function memory"**다 — C02 노트가 경고한 **"Event Function" 용어 변경이 실제로 반영돼 있다.**
+
 ## 3. 1.1.10 — 관리형 AI 서비스 통합
 
 이 Skill은 "AI로 개발하기"가 아니라 **"AI를 애플리케이션 기능으로 넣기"**다. in-scope 기준 대상은 **Bedrock**(모델 호출)과 **Bedrock AgentCore**(에이전트 런타임·ID)다.
@@ -143,10 +170,13 @@ Kiro는 **스펙 기반 개발(spec-driven development)**을 위해 만들어진
 9. `aiops` CLI 레퍼런스 — https://docs.aws.amazon.com/cli/latest/reference/aiops/index.html
 10. Amazon Quick 에이전트 — https://docs.aws.amazon.com/quick/latest/userguide/agents-desktop.html
 11. (AWS 뉴스 블로그) Amazon Quick Suite 발표 — https://aws.amazon.com/blogs/aws/reimagine-the-way-you-work-with-ai-agents-in-amazon-quick-suite/
+12. CloudWatch Logs 자연어 쿼리 생성(`cloudwatch:GenerateQuery`) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs-Insights-Query-Assist.html
+13. Logs Insights 쿼리 결과 자연어 요약 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs-Insights-Query-Results-Summary.html
+14. Lambda 메모리 구성(128~10,240 MB · 1,769 MB = 1 vCPU · Compute Optimizer 옵트인) — https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html
 
 ## 확인 필요
 
-- **Skill 4.3.6(AI로 최적화 기회 식별)에 대응하는 AWS 도구를 특정하지 못했다.** CloudWatch investigations는 문제 해결(4.1.5) 쪽이고, Compute Optimizer는 in-scope 목록에 **없다**. Kiro가 코드 효율 개선을 맡는 것으로 보이지만 **공식 문장을 찾지 못했다** — 찾기 전에는 문항을 쓰지 않는다.
+- ~~**Skill 4.3.6에 대응하는 AWS 도구를 특정하지 못했다**~~ → ✅ **판정했다(2026-11-01, G-01). §2-b 참조** — 단일 서비스는 **없는 것이 답**이다.
 - **Kiro 공식 문서가 `docs.aws.amazon.com`에 있는지** 확인하지 못했다. 현재 근거는 AWS 블로그·repost이고 세부는 `kiro.dev`를 가리킨다. 학습문서에 CLI 플래그·키 형식을 쓰려면 정본을 다시 찾는다.
 - **`Amazon Quick`이 DVA 문항에 어떤 모습으로 나올지** 단정하지 못했다. 개발 도구가 아닌데 ML/AI in-scope에 있다 — 1.1.10의 "관리형 AI 서비스" 예시로 나올 가능성만 있고 근거는 없다.
 - **Kiro Crew·Powers의 공식 정의** — 블로그 수준 서술만 확보했다.
