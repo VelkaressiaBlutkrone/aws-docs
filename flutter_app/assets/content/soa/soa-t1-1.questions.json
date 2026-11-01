@@ -107,14 +107,14 @@
         "평가 기간(N)과 경보 데이터 포인트(M)를 조정해 M out of N 조건을 강화한다",
         "누락 데이터 처리를 breaching으로 바꾼다",
         "지표를 고해상도로 전환한다",
-        "경보 작업을 SNS에서 EventBridge로 변경한다"
+        "경보 알림 대상을 SNS 주제에서 Lambda 함수로 바꾼다"
       ],
       "correct": 0,
       "explanation": "경보는 최근 N개 데이터 포인트 중 M개가 임계값을 위반할 때 ALARM으로 전이합니다. 예를 들어 M=3, N=5로 두면 순간 스파이크 한 번으로는 전이되지 않아 오탐이 줄어듭니다.",
       "wrongExplanations": {
         "1": "breaching은 누락 데이터를 위반으로 간주해 오히려 ALARM을 더 자주 만듭니다.",
         "2": "고해상도 전환은 더 촘촘히 관측하는 것이라 스파이크 민감도가 올라갑니다.",
-        "3": "작업 대상 변경은 알림 경로를 바꾸는 것이고 전이 판단 기준과 무관합니다."
+        "3": "알림 대상을 바꾸는 것은 알림 경로의 문제이고 전이 판단 기준과 무관합니다."
       },
       "sources": [
         {
@@ -319,7 +319,7 @@
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
       "difficulty": "applied",
-      "stem": "경보 상태 변경을 받아 여러 대상(Lambda·SQS·Step Functions 등)으로 라우팅하고 필터링하려 한다. 어떤 경보 작업 대상을 사용하는가?",
+      "stem": "경보 상태 변경을 받아 여러 대상(Lambda·SQS·Step Functions 등)으로 라우팅하고 필터링하려 한다. 무엇을 사용하는가?",
       "options": [
         "EventBridge — 경보 상태 변경 이벤트를 규칙으로 라우팅한다",
         "Systems Manager OpsItem — 운영 항목만 생성한다",
@@ -327,7 +327,7 @@
         "EC2 작업 — 인스턴스 제어만 수행한다"
       ],
       "correct": 0,
-      "explanation": "경보 작업 대상에는 SNS 주제, EC2 작업, Auto Scaling 정책, Systems Manager, EventBridge가 있습니다. 상태 변경 이벤트를 규칙 기반으로 여러 대상에 라우팅하고 필터링하려면 EventBridge가 적합합니다.",
+      "explanation": "경보 작업에는 SNS 주제, Lambda 함수 호출, EC2 작업, Auto Scaling, Systems Manager(OpsItem·인시던트), 조사 시작이 있습니다. EventBridge는 경보 작업이 아니라, 경보가 상태를 바꿀 때 이벤트를 내보내는 곳입니다. 그 이벤트를 규칙으로 받아 여러 대상에 라우팅하고 필터링합니다.",
       "wrongExplanations": {
         "1": "OpsItem 생성은 운영 항목 등록에 특화된 작업으로 다중 대상 라우팅 수단이 아닙니다.",
         "2": "Auto Scaling 정책은 스케일 아웃·인 트리거입니다.",

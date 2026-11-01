@@ -170,4 +170,36 @@ void main() {
       expect(doc('soa-t2-4').contains('GlobalTables'), isTrue);
     });
   });
+
+  group('F-8 EventBridge 는 경보 작업이 아니다 (soa-t1-1, 2026-11-01)', () {
+    // 근거: alarm-actions — 지원되는 경보 작업은 SNS 알림 · Lambda 함수 호출 ·
+    // EC2 작업(중지·종료·재부팅·복구) · Auto Scaling 그룹 · Application Auto
+    // Scaling · Systems Manager OpsItem · Systems Manager Incident Manager ·
+    // 조사 시작이고, 같은 페이지가 "Alarms also emit events to Amazon
+    // EventBridge when they change state"라고 적는다. 표에도 EventBridge 행이
+    // 없다. 이 문서의 §4 표가 EventBridge 를 작업 대상으로 싣고 있었고,
+    // 거기서 파생된 문항이 soa-t1-1-q11 이다(루브릭 T6 — md 가 선결).
+    test('§4 표에서 EventBridge 행이 사라졌다', () {
+      final t = doc('soa-t1-1');
+      expect(t.contains('| **EventBridge** |'), isFalse,
+          reason: 'EventBridge 는 경보 작업 표에 들어갈 항목이 아니다');
+    });
+
+    test('시험 직전 요약의 작업 목록에서도 빠졌다', () {
+      final t = doc('soa-t1-1');
+      expect(t.contains('Systems Manager, EventBridge.'), isFalse);
+    });
+
+    test('공식 작업 목록의 Lambda 가 들어왔다', () {
+      final t = doc('soa-t1-1');
+      expect(t.contains('**Lambda 함수**'), isTrue,
+          reason: '공식 목록이 "Invoke a Lambda function"을 두 번째로 적는데 빠져 있었다');
+    });
+
+    test('EventBridge 가 이벤트 수신처라는 공식 사실이 들어왔다', () {
+      final t = doc('soa-t1-1');
+      expect(t.contains('이벤트를 내보냅니다'), isTrue);
+      expect(t.contains('경보 작업이 아니라'), isTrue);
+    });
+  });
 }

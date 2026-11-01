@@ -308,6 +308,21 @@ const _factRules = <({String text, String origin, String why})>[
   (text: 'Kiro는 자주 출제', origin: 'soa_v11_topics V-14', why: '같음 — 출제 추측 금지'),
   (text: 'DevOps Agent는 자주 출제', origin: 'soa_v11_topics V-14', why: '같음'),
   (text: 'Security Agent는 자주 출제', origin: 'soa_v11_topics V-14', why: '같음'),
+  // EventBridge 는 경보 작업이 아니다(soa_facts F-8, 2026-11-01). 공식
+  // alarm-actions 의 작업 표에 EventBridge 행이 없고, 같은 페이지가 "Alarms
+  // also emit events to Amazon EventBridge when they change state" 라고 적는다.
+  // soa-t1-1.md §4 표가 EventBridge 를 작업 대상으로 싣고 있었고 거기서 파생된
+  // soa-t1-1-q11 이 같은 전제를 물려받았다 — 그 계열이 다시 번지지 않게 한다.
+  (
+    text: 'Systems Manager, EventBridge',
+    origin: 'soa_facts F-8',
+    why: 'EventBridge 는 경보 작업 목록에 들어가지 않는다 — 경보가 이벤트를 내보내는 곳이다',
+  ),
+  (
+    text: '경보 작업 대상에는',
+    origin: 'soa_facts F-8',
+    why: '같음 — 작업 목록을 열거하면서 EventBridge 를 끼워 넣던 어구',
+  ),
 ];
 
 /// 구식·오표기 **제품 명칭**. 문항 전체(오답 보기·출처 제목 포함)를 본다.

@@ -350,24 +350,31 @@ void main() {
   });
 
   group('V-15 갱신 날짜·공식 출처', () {
-    const changed = [
-      'soa-t1-1',
-      'soa-t1-2',
-      'soa-t1-4',
-      'soa-t1-5',
-      'soa-t2-4',
-      'soa-t3-1',
-      'soa-t3-4',
-      'soa-t4-1',
-      'soa-t4-2',
-      'soa-t5-2',
-    ];
+    // v1.1 주제를 반영한 10개 문서. 기대 날짜를 **문서별로** 적는다 — 하나의
+    // 리터럴로 묶어 두면 그 뒤의 정당한 사실 정정이 이 단정을 깨뜨리고,
+    // 고치는 사람이 "날짜를 올리지 말라"는 뜻으로 오해하게 된다
+    // (soa_facts_test.dart의 lastVerified 맵과 같은 이유로 느슨한 비교가 아니다).
+    // ⚠️ soa-t1-1은 2026-11-01에 경보 작업 목록을 정정해 날짜가 올라갔다 —
+    // EventBridge를 작업 대상으로 적던 §4 표를 공식 alarm-actions 기준으로
+    // 바로잡았다(soa_facts_test.dart F-8).
+    const changed = <String, String>{
+      'soa-t1-1': '2026-11-01',
+      'soa-t1-2': '2026-10-20',
+      'soa-t1-4': '2026-10-20',
+      'soa-t1-5': '2026-10-20',
+      'soa-t2-4': '2026-10-20',
+      'soa-t3-1': '2026-10-20',
+      'soa-t3-4': '2026-10-20',
+      'soa-t4-1': '2026-10-20',
+      'soa-t4-2': '2026-10-20',
+      'soa-t5-2': '2026-10-20',
+    };
 
-    test('v1.1 주제를 반영한 10개 문서의 lastVerified가 2026-10-20이다', () {
-      for (final id in changed) {
-        expect(doc(id).contains('lastVerified: 2026-10-20'), isTrue,
-            reason: '$id lastVerified 누락');
-      }
+    test('v1.1 주제를 반영한 10개 문서의 lastVerified가 문서별 기대값과 같다', () {
+      changed.forEach((id, date) {
+        expect(doc(id).contains('lastVerified: $date'), isTrue,
+            reason: '$id lastVerified가 $date 가 아니다');
+      });
     });
 
     test('새로 인용한 공식 출처가 sources에 실려 있다', () {
@@ -396,7 +403,7 @@ void main() {
       // 통과한다). 본문 정정이 문항으로 번지는지는
       // `soa_dea_question_propagation_test.dart`가 문구 단위로 본다.
       // 그래서 여기서는 파일이 사라지지 않았는지만 확인한다.
-      for (final id in changed) {
+      for (final id in changed.keys) {
         final q = File('assets/content/soa/$id.questions.json');
         expect(q.existsSync(), isTrue, reason: '$id 문항 파일이 사라졌다');
         expect(q.readAsStringSync(), isNotEmpty, reason: '$id 문항 파일이 비었다');
