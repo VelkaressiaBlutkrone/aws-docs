@@ -49,7 +49,9 @@ ECS 롤링 업데이트(`ECS` 배포 유형)는 두 값으로 조절한다.
 | **`minimumHealthyPercent`** | 배포 중 `RUNNING`을 유지해야 하는 작업의 최소 비율. **기본 100%** |
 | **`maximumPercent`** | 원하는 개수 위로 추가 실행할 수 있는 상한. 200%·원하는 개수 8이면 최대 16 |
 
-> ⚠️ **Fargate 시작 유형에서는 `minimumHealthyPercent`가 쓰이지 않는다**(공식 API 문서 서술). EC2 용량과 달리 등록된 인스턴스 수에 묶이지 않기 때문이다. **EC2냐 Fargate냐로 갈리는 몇 안 되는 배포 파라미터다.**
+> ⚠️ **이 줄은 2026-11-01에 정정됐다(G-05 → 판정 D-05).** 이전 서술 "Fargate 시작 유형에서는 `minimumHealthyPercent`가 쓰이지 않는다"는 **과도한 일반화**였다. 정본(`AWS::ECS::Service DeploymentConfiguration`)은 **"`CODE_DEPLOY`(블루/그린) 또는 `EXTERNAL` 배포 유형 + Fargate 시작 유형"**일 때 쓰이지 않는다고 적는다(describe 응답에는 값이 돌아온다). **롤링 업데이트(`ECS`) 배포 유형에서는 Fargate에서도 쓰인다.** 판정과 저작 규칙은 [98-authoring-decisions.md](98-authoring-decisions.md) D-05.
+>
+> 같은 페이지에서 확보한 기본값: replica 서비스 `minimumHealthyPercent` **100%** · `maximumPercent` **200%**, `DAEMON`은 CLI·SDK·API **0%** / 콘솔 **50%**. 최소 정상 작업 수는 `desiredCount` × 비율/100을 **올림**한다. `CODE_DEPLOY`·`EXTERNAL` + **EC2**에서는 **사용자 지정 값을 지정할 수 없다**(기본값으로 설정되어 `DRAINING` 중 하한으로 쓰인다).
 
 - 무중단 롤링 배포 권장값은 **최소 100% · 최대 200%**다.
 - ⚠️ **ECS는 컨테이너 배포 과정을 관리하지만 트래픽 라우팅은 하지 않는다** — 로드 밸런서를 쓰면 라우팅은 따로 구성해야 하고, CodeDeploy 블루/그린이면 트래픽 관리 설정을 본다.
@@ -80,7 +82,7 @@ EKS에는 "작업 정의"가 없다. **Kubernetes 매니페스트**(YAML)를 클
 - "같은 태그로 덮어쓴 이미지가 배포됐다" → **`ImageTagMutability: IMMUTABLE`**
 - "오래된 이미지가 쌓여 비용이 는다" → **수명 주기 정책** + 적용 전 **미리 보기**
 - "규칙을 둘 걸었는데 하나만 먹는다" → 이미지는 **0 또는 1개 규칙**에만 걸리고 **낮은 숫자가 우선**
-- "Fargate 서비스인데 최소 정상 비율을 낮춰도 동작이 같다" → **Fargate에서는 그 값을 쓰지 않는다**
+- "Fargate 서비스인데 최소 정상 비율을 낮춰도 동작이 같다" → **배포 유형을 먼저 본다**(D-05) — `CODE_DEPLOY`·`EXTERNAL`이면 그 값을 쓰지 않고, **롤링 업데이트면 Fargate에서도 쓰인다**
 - "배포는 됐는데 트래픽이 새 작업으로 안 간다" → **라우팅은 ECS가 하지 않는다**
 
 ## 5. 흔한 함정·혼동 짝
@@ -90,7 +92,7 @@ EKS에는 "작업 정의"가 없다. **Kubernetes 매니페스트**(YAML)를 클
 | `MUTABLE`(기본) vs `IMMUTABLE` | 기본이 **덮어쓰기 허용**이다 |
 | 수명 주기 규칙 우선순위 | **작은 숫자가 우선** |
 | `tagPatternList` vs `tagPrefixList` | **한 규칙에 둘 다 못 쓴다**, `tagStatus: tagged`에서만 |
-| `minimumHealthyPercent` | **Fargate에서는 미사용** |
+| `minimumHealthyPercent` | ⚠️ **"Fargate 미사용"은 과도한 일반화다** — `CODE_DEPLOY`·`EXTERNAL` **배포 유형 + Fargate**일 때만 미사용이고 **롤링 업데이트에서는 쓰인다**(D-05) |
 | ECS 배포 vs 트래픽 라우팅 | ECS는 **배포만** |
 
 ## 6. 사실·숫자
@@ -112,9 +114,9 @@ EKS에는 "작업 정의"가 없다. **Kubernetes 매니페스트**(YAML)를 클
 
 ## 확인 필요
 
-- **`minimumHealthyPercent`의 Fargate 미사용 서술을 ECS 개발자 가이드 본문에서 다시 확인한다.** 현재 근거(4번)는 Security Hub 모델의 SDK 레퍼런스라 **정본으로 쓰기에 약하다.**(G-05)
+- ~~**`minimumHealthyPercent`의 Fargate 미사용 서술을 다시 확인한다**~~ → ✅ **닫았다(2026-11-01, G-05 → 판정 D-05).** 정본은 `AWS::ECS::Service DeploymentConfiguration`이고, ⚠️ **옛 서술이 과도한 일반화였다** — 미사용 조건은 "Fargate"가 아니라 **`CODE_DEPLOY`·`EXTERNAL` 배포 유형 + Fargate**다. §3 주석 참조.
 - ~~**EKS 매니페스트 배포 절차**~~ → ✅ **닫았다(2026-11-01, G-02).** §3-b 참조. ⚠️ 다만 `kubectl apply` 예시의 출처가 **처방적 지침(prescriptive-guidance)**이라, 학습문서에 명령을 그대로 실을 때는 EKS 사용자 가이드 쪽 대응 페이지를 한 번 더 확인한다.
-- **Dockerfile 작성 모범 사례**(Skill 3.1.2의 "Docker files")를 AWS 공식 문서 기준으로 찾지 못했다. 일반 Docker 지식과 AWS 고유 사실을 섞지 않도록 범위를 정해야 한다.(G-10)
+- ~~**Dockerfile 작성 모범 사례를 AWS 공식 문서 기준으로 찾지 못했다**~~ → ✅ **닫았다(2026-11-01, G-10 → 판정 D-04).** ⚠️ **검색 범위 문제였다** — `docs.aws.amazon.com` 본문에 두 곳이 있다: **ECR 성능 최적화**(레이어 캐시 순서·명령 체이닝·베이스 이미지 크기·동시 업로드)와 **Well-Architected Container Build Lens**(멀티스테이지·Dockerfile 린팅·골든 부모 이미지). 경계 규칙은 D-04.
 - 블로그·지식 센터 출처(5·6)는 **권장값·동작 설명에만** 썼다.
 
 ### 추가 출처 (§3-b)

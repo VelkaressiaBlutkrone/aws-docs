@@ -21,17 +21,24 @@
 | ID | 항목 | 출처 노트 |
 |---|---|---|
 | **G-04** | **Kiro 공식 문서가 `docs.aws.amazon.com`에 있는지** 확인하지 못했다. 현재 근거는 AWS 블로그·repost이고 세부는 `kiro.dev`를 가리킨다. CLI 플래그·`ksk_` 키 형식을 학습문서에 쓰려면 정본을 찾는다 | [96](96-ai-assisted-dev.md) |
-| **G-05** | **`minimumHealthyPercent`가 Fargate에서 쓰이지 않는다**는 서술의 근거가 Security Hub 모델의 SDK 레퍼런스다. **ECS 개발자 가이드 본문**에서 다시 확인한다 | [95](95-containers.md) |
+| ~~**G-05**~~ | ✅ **닫혔다 — 아래 「닫힌 판정」 표의 G-05 참조.** 정본에서 확인했고 ⚠️ **옛 서술이 과도한 일반화였다** | [98](98-authoring-decisions.md) |
 | **G-06** | **AgentCore Identity 개발자 가이드 정본** — 현재 출처가 콘솔 도움말 패널 경로다 | [2-3](tasks/2-3.md) |
 
 ## 판정 필요 — 사실은 확인됐으나 어떻게 쓸지 정해야 한다
 
-| ID | 항목 | 출처 노트 |
+**남은 항목이 없다** — 저작 전에 정해야 했던 판정은 2026-11-01에 모두 닫혔다(아래 표).
+
+### ✅ 닫힌 판정 (2026-11-01 — 정본은 [98-authoring-decisions.md](98-authoring-decisions.md))
+
+공식 문서를 **다시 읽어** 판정했다. 각 항목의 쟁점·실측·판정·저작 규칙은 98이 정본이고, 아래는 결론만이다.
+
+| ID | 판정 | 기록 |
 |---|---|---|
-| **G-07** | **`Amazon Quick`이 DVA 문항에 어떤 모습으로 나올지** 단정할 수 없다. 개발 도구가 아닌데 ML/AI in-scope에 있고, 그 BI 구성 요소인 **Quick Sight는 out-of-scope**다 | [96](96-ai-assisted-dev.md) §0 |
-| **G-08** | **`AWS Copilot`이 Skill 3.2.4 예시에 그대로 남아 있다.** in-scope 서비스 목록에는 **없고** CLI는 2026-06-12 지원 종료다. 문항에 쓸지 말지 | [97](97-c02-c03-remap.md) §4 |
-| **G-09** | **도메인 1의 공식 한국어 표기가 한 페이지 안에서 갈린다** — Topics는 "AWS 서비스를 **통한** 개발", 내용 개요는 "AWS 서비스를 **사용한** 개발". JSON·학습문서에 넣기 전에 한쪽으로 정한다 | [00](00-overview.md) §2 |
-| **G-10** | **Skill 3.1.2의 "Docker files"** — AWS 공식 문서 기준의 Dockerfile 모범 사례를 찾지 못했다. 일반 Docker 지식과 AWS 고유 사실의 경계를 정해야 한다 | [95](95-containers.md) |
+| **G-09** | **`AWS 서비스를 통한 개발`** — 규칙: **도메인 이름은 도메인 페이지 H1, 비중(%)은 「내용 개요」**에서 가져온다. ⚠️ 이 분기는 C03에서 생긴 것이 아니라 **C02 가이드에도 똑같이 있고**(Topics "통한" / 내용 개요 "사용한"), 레포 `DVA-C02.json`이 이미 "통한"을 쓴다. 실제로 개명된 도메인은 **3번뿐**(`배포` → `테스트 및 배포`) | [98](98-authoring-decisions.md#d-01-g-09--도메인-이름의-한국어-표기) |
+| **G-08** | **학습문서에 한 줄로 설명하고 문항의 정답·오답 근거로는 쓰지 않는다.** 기술 3.2.4의 나머지 예시 네 개(Lambda 별칭·컨테이너 이미지 태그·Amplify 브랜치·API Gateway)가 모두 범위 내라 문항은 그것으로 쓴다. ⚠️ **종료일이 공식 페이지 두 곳에서 엇갈린다** — ECS 개발자 가이드·종료 공지는 **2026-06-12**, 2020년 소개 블로그 배너만 2026-05-22. 출처 등급 규율에 따라 **2026-06-12가 정본**이고, 공식 이전 경로는 **ECS Express Mode·CDK L3** | [98](98-authoring-decisions.md#d-02-g-08--aws-copilot) |
+| **G-10** | **AWS 문서에 Dockerfile 지침이 있다 — "찾지 못했다"는 검색 범위 문제였다.** 정본 둘: **ECR 성능 최적화**(각 줄이 레이어 · 변경 적은 의존성을 앞쪽에 · **명령 체이닝**(중간 파일이 레이어에 남는다) · 작은 베이스 이미지 · 동시 업로드)와 **Well-Architected Container Build Lens**(멀티스테이지 · **Dockerfile 린팅**(hadolint) · 골든 부모 이미지). 경계: **그 사실이 AWS의 동작·비용·보안과 묶이면 쓰고**, `COPY` vs `ADD` 같은 **Docker 문법 레퍼런스는 문항 근거로 쓰지 않는다** | [98](98-authoring-decisions.md#d-04-g-10--skill-312의-docker-파일-경계) |
+| **G-05** | ⚠️ **조사 노트가 과도하게 일반화했다.** `minimumHealthyPercent` 미사용 조건은 "Fargate"가 아니라 **`CODE_DEPLOY`·`EXTERNAL` 배포 유형 + Fargate**이고, **롤링 업데이트에서는 Fargate에서도 쓰인다**(정본 `AWS::ECS::Service DeploymentConfiguration`). 함께 확보: replica 기본 **100%/200%**, `DAEMON`은 CLI·SDK·API **0%** / 콘솔 **50%**, `CODE_DEPLOY`·`EXTERNAL` + EC2는 **사용자 지정 불가** | [98](98-authoring-decisions.md#d-05-g-05--minimumhealthypercent와-fargate--조사-노트가-과도하게-일반화했다) |
+| **G-07** | **기술 1.1.9에서는 쓰지 않고 1.1.10(관리형 AI 서비스 통합)의 재료로만 쓴다.** 공식 정의가 "작업 자동화·데이터 분석·웹 앱 구축·리서치"이고 코드베이스를 다루는 도구가 아니다. ⚠️ **기술 1.1.9 원문은 서비스를 하나도 명시하지 않으므로** Kiro도 "가이드가 지정한 도구"로 적지 않고 "범위 내 목록 중 유일하게 해당하는 개발 도구"로 쓴다 | [98](98-authoring-decisions.md#d-03-g-07--amazon-quick) |
 
 ## 세부 미확인 — 문항 품질에 영향
 
