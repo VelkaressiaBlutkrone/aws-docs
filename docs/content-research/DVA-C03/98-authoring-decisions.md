@@ -111,6 +111,71 @@
 
 ---
 
+## D-04 (G-10) — Skill 3.1.2의 "Docker 파일" 경계
+
+### 쟁점
+
+기술 3.1.2가 공식 예시에 **"Docker 파일"**을 넣었는데, 조사 단계에서 **AWS 공식 문서 기준의 Dockerfile 모범 사례를 찾지 못했다**고 남겼다. 일반 Docker 지식(문법·명령 레퍼런스)과 AWS 고유 사실의 경계를 정해야 한다.
+
+### 공식 실측 — **AWS 문서에 Dockerfile 지침이 있다**
+
+조사 노트의 "찾지 못했다"는 **검색 범위 문제였다.** `docs.aws.amazon.com` 본문에 두 곳이 있다.
+
+| 정본 | 담고 있는 Dockerfile 사실 |
+|---|---|
+| **ECR 성능 최적화**(`AmazonECR/latest/userguide/performance.html`) | ① **각 줄이 레이어를 만든다** ② 더 작은 **베이스 이미지**를 쓴다 ③ ⭐ **변경이 가장 적은 의존성을 Dockerfile 앞쪽에** 둔다(레이어 캐시 — 한 레이어가 바뀌면 **그 뒤 레이어가 모두 재컴파일**된다) ④ ⭐ **명령을 체이닝**한다(중간 파일은 뒤 레이어에서 지워도 **그 레이어에 남는다**) ⑤ Docker 1.10+는 **레이어를 동시 업로드**한다 |
+| **Well-Architected Container Build Lens** | ① **멀티스테이지 빌드**로 빌드 도구를 최종 이미지에서 분리(크기·공격 표면 감소, 재현성) ② **Dockerfile 린팅(hadolint)**을 보안 모범 사례로 둔다 ③ **골든 부모 이미지** 패턴(⚠️ 부모가 바뀌면 **자식 이미지를 다시 빌드**해야 반영된다) |
+
+### 판정
+
+**AWS 문서가 적는 Dockerfile 사실만 쓴다.** 경계는 **"그 사실이 AWS 서비스의 동작·비용·보안과 묶이는가"**다.
+
+- ✅ **쓴다**: 레이어 캐시 순서 · 명령 체이닝 · 베이스 이미지 크기 · 멀티스테이지 · 린팅 · 골든 이미지 — 모두 **ECR 업로드 시간·이미지 크기·공격 표면**과 묶인다.
+- ❌ **쓰지 않는다**: `COPY` vs `ADD`의 일반 차이, `ENTRYPOINT` vs `CMD` 문법, `HEALTHCHECK`·`ARG`·`ONBUILD` 같은 **Docker 문법 레퍼런스**. AWS 문서가 자기 사실로 적지 않으므로 **문항의 정답·오답 근거로 쓰지 않는다**(설명에 필요하면 쓰되 묻지 않는다).
+
+### 저작 규칙
+
+- `dva-t3-1.md`의 3.1.2 절은 **ECR 성능 페이지의 네 가지 + Lens의 세 가지**를 축으로 쓴다. 출처는 두 정본을 적는다.
+- Lambda 컨테이너 이미지의 Dockerfile(베이스 이미지·`CMD` 핸들러)은 **작업 3.3.1(패키징)** 소재이므로 여기서 다루지 않는다.
+- ⚠️ **"AWS가 Dockerfile 모범 사례를 제공하지 않는다"고 적지 않는다** — 이 판정으로 거짓이 됐다.
+
+**출처**
+- https://docs.aws.amazon.com/AmazonECR/latest/userguide/performance.html
+- https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/improving-containerized-cicd-pipelines-from-performance-efficiency-and-cost-perspective.html
+
+---
+
+## D-05 (G-05) — `minimumHealthyPercent`와 Fargate ⚠️ **조사 노트가 과도하게 일반화했다**
+
+### 쟁점
+
+`95-containers.md` §3이 **"Fargate 시작 유형에서는 `minimumHealthyPercent`가 쓰이지 않는다"**로 적었고, 근거가 Security Hub 모델의 SDK 레퍼런스라 **정본으로 약하다**고 스스로 남겼다(G-05).
+
+### 공식 실측 — 범위가 더 좁다
+
+정본(`AWS::ECS::Service DeploymentConfiguration`)은 이렇게 적는다.
+
+> 원문: "If a service is using either the blue/green (`CODE_DEPLOY`) or `EXTERNAL` deployment types and is running tasks that use the Fargate launch type, the minimum healthy percent value is not used, although it is returned when describing your service."
+
+- 즉 **미사용 조건은 "Fargate"가 아니라 "`CODE_DEPLOY`·`EXTERNAL` 배포 유형 + Fargate"**다.
+- **롤링 업데이트(`ECS`) 배포 유형에서는 Fargate에서도 쓰인다** — 그 단락은 시작 유형을 구분하지 않는다.
+- 같은 페이지에서 함께 확보한 사실: 기본값은 replica 서비스 **`minimumHealthyPercent` 100% · `maximumPercent` 200%**이고 **`DAEMON`은 CLI·SDK·API에서 0%, 콘솔에서 50%**다. 최소 정상 작업 수는 **`desiredCount` × 비율/100을 올림**한다. **`CODE_DEPLOY`·`EXTERNAL` + EC2에서는 사용자 지정 값을 지정할 수 없다**(기본값으로 설정되어 `DRAINING` 중 하한으로 쓰인다).
+
+### 판정
+
+**"Fargate에서는 쓰이지 않는다"로 적지 않는다.** 반드시 **배포 유형과 함께** 적는다 — "`CODE_DEPLOY`·`EXTERNAL` 배포 유형에서 Fargate 작업을 돌리면 쓰이지 않는다(describe 응답에는 값이 그대로 돌아온다)".
+
+### 저작 규칙
+
+- `dva-t3-3.md`의 롤링 업데이트 절은 **배포 유형 × 시작 유형 두 축**으로 표를 만든다.
+- ⚠️ **문항에서 "Fargate이므로 최소 정상 비율이 무시된다"를 정답 근거로 쓰지 않는다** — 롤링 업데이트라면 거짓이다.
+- `95-containers.md` §3의 서술은 이 판정에 맞춰 정정했다(같은 PR).
+
+**출처**
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-ecs-service-deploymentconfiguration.html
+
+---
+
 ## 이 기록에 넣지 않은 것
 
 - **G-04~G-06 · G-10~G-18**은 판정이 아니라 **"쓰지 않는다"로 운영**한다(사실은 확보했으나 출처가 약하거나 세부가 미확인). 쓰게 되면 그때 이 파일에 항목을 추가한다.
