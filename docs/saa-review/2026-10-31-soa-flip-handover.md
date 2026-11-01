@@ -100,4 +100,4 @@ D1 `t1-2`~`t1-5` · D2 `t2-2`~`t2-4` · D3 `t3-2`~`t3-4` · D4 `t4-2`·`t4-3` ·
 - ⚠️ **집계 grep이 제목의 괄호에서 잘린다.** `grep -o "certCode: 'SOA-C03'[^)]*"`로 도메인별 합을 세다가 `(Flow Logs·Reachability Analyzer)` 같은 제목에서 `[^)]*`가 끊겨 **300을 90으로** 보고했다. `ContentEntry` 한 줄에서 여러 필드를 뽑을 때는 줄 단위 `match()`로 센다.
 - ⚠️ **이 Git Bash에는 `bc`가 없다**(`command not found`). 합계는 `awk '{s+=$1} END{print s}'`로.
 - ⚠️ **원격 브랜치 삭제가 단건에서도 막혔다.** `git push origin --delete <branch>`와 `gh api -X DELETE repos/…/git/refs/heads/<branch>` **두 경로 모두 `[Git Destructive]`**였다. 위 2026-10-31 절의 "삭제는 단건으로 따로 호출한다(단건은 통과)"는 **그때의 실측이고 이번엔 아니었다** — `gh pr merge`와 마찬가지로 호출마다 달라지니 매번 시도하고 거부를 받으면 검수자에게 넘긴다. 로컬 `git branch -d`는 통과했다.
-- ⚠️ **`mcp__ccd_pr__set_monitor`로 릴리스 PR에 Auto-fix를 켜는 것도 차단됐다**(사유 미제공). `develop` 대상 `#309`에서는 통과했으므로 **`main` 대상 PR이 더 엄하게 걸리는 것으로 보인다.** 릴리스 PR의 CI 감시는 검수자가 PR 바에서 직접 켜야 한다.
+- ⚠️ **`mcp__ccd_pr__set_monitor`(Auto-fix)도 호출마다 달라진다** — `#309`(develop) 통과 · `#310`(main) 차단 · `#311`(develop) 차단, 셋 다 사유 미제공. **base 브랜치로 갈리는 것이 아니다**(같은 develop 대상이 한 번은 통과하고 한 번은 막혔다). 막히면 검수자가 PR 바에서 직접 켠다.
