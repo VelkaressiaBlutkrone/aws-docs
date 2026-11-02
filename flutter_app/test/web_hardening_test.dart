@@ -84,4 +84,35 @@ void main() {
           reason: '`.catch` 없는 옛 형태가 통과하면 가드가 무의미하다');
     });
   });
+
+  group('m-5 브라우저 크롬 색이 저장된 테마를 따른다', () {
+    const path = 'web/index.html';
+    String src() => File(path).readAsStringSync();
+
+    test('저장 테마를 읽는 스크립트가 `theme-color` 메타를 갱신한다', () {
+      // 저장 테마를 즉시 반영하는 인라인 스크립트(스플래시 색 일치용)가 이미
+      // `awsdocs.theme.v1`을 읽는다 — 거기서 크롬 색까지 맞춘다.
+      expect(src(), contains('awsdocs.theme.v1'));
+      expect(src(), contains("meta[name=\"theme-color\"]"),
+          reason: '$path: `theme-color`가 `prefers-color-scheme`만 따르면 '
+              '저장된 다크 테마에서 브라우저 크롬 색이 어긋난다');
+    });
+
+    test('갱신에 쓰는 색이 메타에 선언된 두 값과 같다', () {
+      // ⚠️ 새 색을 만들지 않는다 — 기존 선언값을 그대로 쓴다(DESIGN.md 결정 불필요).
+      final declared = RegExp(r'name="theme-color" content="(#[0-9A-Fa-f]{6})"')
+          .allMatches(src())
+          .map((m) => m.group(1)!)
+          .toSet();
+      expect(declared, isNotEmpty, reason: '$path: theme-color 메타 선언이 사라졌다');
+
+      final scriptFrom = src().indexOf('awsdocs.theme.v1');
+      final script = src().substring(scriptFrom);
+      for (final color in declared) {
+        expect(script, contains(color),
+            reason: '$path: 스크립트가 선언된 색 $color을 쓰지 않는다 — '
+                '다른 색을 하드코딩하면 메타와 어긋난다');
+      }
+    });
+  });
 }
