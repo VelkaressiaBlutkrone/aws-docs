@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/cloud/sync_meta.dart';
@@ -12,7 +13,6 @@ import 'package:aws_docs/models/exam_snapshot.dart';
 import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/models/study_plan.dart';
 import 'package:aws_docs/data/study_plan_store.dart';
-import 'package:aws_docs/data/plan_check_store.dart';
 import 'package:aws_docs/data/plan_progress_store.dart';
 
 AttemptRecord _rec(String certId, String examId) => AttemptRecord(
@@ -209,12 +209,19 @@ void main() {
           mode: PlanMode.period, createdIso: '2026-06-10', items: const []));
       final planId = planStore.plansFor('CLF-C02').first.id;
       PlanProgressStore(backend: b).setDone(planId, 'x', true);
-      PlanCheckStore(backend: b).set('CLF-C02', 'x', true);
+      // 레거시 수동 체크(읽는 화면이 없는 죽은 키) — 자격증 둘을 심어 둔다.
+      b.write(
+          kLegacyPlanChecksKey,
+          jsonEncode({
+            'CLF-C02': {'x': true},
+            'SAA-C03': {'y': true},
+          }));
 
       resetCert('CLF-C02', backend: b);
 
       expect(planStore.plansFor('CLF-C02'), isEmpty);
-      expect(PlanCheckStore(backend: b).overrides('CLF-C02'), isEmpty);
+      expect((b.read(kLegacyPlanChecksKey) ?? '').isEmpty, isTrue,
+          reason: '레거시 키는 **통째로** 지운다 — 읽는 화면이 없어 자격증 단위로 가를 이유가 없다');
       expect(PlanProgressStore(backend: b).donePlan(planId), isEmpty);
     });
 
@@ -249,6 +256,36 @@ void main() {
       resetAll(backend: b);
 
       expect(StudyPlanStore(backend: b).plansFor('CLF-C02'), isEmpty);
+    });
+  });
+
+  group('레거시 수동 체크(PlanCheckStore) 제거', () {
+    test('resetAll도 레거시 키를 지운다', () {
+      final b = MemoryBackend();
+      b.write(kLegacyPlanChecksKey, jsonEncode({'CLF-C02': {'x': true}}));
+
+      resetAll(backend: b);
+
+      expect((b.read(kLegacyPlanChecksKey) ?? '').isEmpty, isTrue);
+    });
+
+    test('lib에 PlanCheckStore 사용처가 없다', () {
+      // 죽은 스토어였다 — `lib`에서 `set(`을 부르는 곳이 없고 읽는 화면도 없었다.
+      // 클라우드 사본은 `SyncService._purgeChecksOnce`가 한 번 지우고(그 가드는
+      // `test/cloud/sync_cleanup_test.dart`), 로컬은 초기화가 지운다.
+      // ⚠️ 되살리면 "동기 대상 제외" 주석과 함께 세 곳에 또 혼동이 생긴다.
+      final offenders = <String>[];
+      for (final f in Directory('lib')
+          .listSync(recursive: true)
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.dart'))) {
+        // ⚠️ 생성자 호출(`PlanCheckStore(`)만 본다 — `study_reset.dart`의 주석이
+        // 제거 경위를 남기려고 그 이름을 인용하고 있어, 이름만 세면 자기 주석에 걸린다.
+        if (f.readAsStringSync().contains('PlanCheckStore(')) {
+          offenders.add(f.path.replaceAll(r'\', '/'));
+        }
+      }
+      expect(offenders, isEmpty, reason: '위반: $offenders');
     });
   });
 }

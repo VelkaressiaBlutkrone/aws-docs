@@ -3,8 +3,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/history_store.dart';
-import 'package:aws_docs/data/plan_check_store.dart';
 import 'package:aws_docs/data/study_plan_store.dart';
+import 'package:aws_docs/data/study_reset.dart' show kLegacyPlanChecksKey;
 import 'package:aws_docs/data/viewed_docs_store.dart';
 import 'package:aws_docs/models/study_plan.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
@@ -286,7 +286,8 @@ void main() {
     final local = _CountingBackend();
     HistoryStore(backend: local).add(_attempt('2026-09-22T10:00:00.000'));
     ViewedDocsStore(backend: local).markViewed('CLF-C02', 't1');
-    PlanCheckStore(backend: local).set('CLF-C02', 'item-1', true);
+    // 레거시 체크 키(죽은 키) — 동기가 건드리지 않는 것을 함께 확인하기 위한 미끼.
+    local.write(kLegacyPlanChecksKey, '{"CLF-C02":{"item-1":true}}');
     final svc =
         SyncService(local: local, cloud: FakeCloudStore(), nowMs: () => 1000);
     await svc.reconcileAll('u1'); // 1회차: push + 사이드카 스탬프
