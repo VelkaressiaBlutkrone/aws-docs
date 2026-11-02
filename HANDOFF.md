@@ -36,6 +36,17 @@ _갱신: 2026-11-02(**`PlanCheckStore` 제거 — 2026-09-22 리뷰 후속(§B�
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
 
+## 0-2026-11-02-e. 완료: **원격·로컬 브랜치 전수 정리** — 남은 브랜치는 `main`·`develop` 둘뿐 (2026-11-02)
+
+세션 마무리로 머지 완료 브랜치를 전부 치웠다. 지금 레포에 있는 브랜치는 **로컬 `main`·`develop`, 원격 `origin/main`·`origin/develop`** 뿐이고, 워크트리 1개·열린 PR 0·작업트리 clean이다.
+
+- 절차: `git branch -r` 전수에 대해 **`git merge-base --is-ancestor origin/<b> origin/main`으로 미도달 0건을 먼저 확인**한 뒤 삭제했다(22개). 도달 확인 없이 지우면 되살릴 커밋을 reflog에서 찾아야 한다.
+- ⚠️ **`git push origin --delete`가 22개를 한 호출에 통과했다** — §0-2026-11-01 계열에 "원격 브랜치 삭제는 차단된다(사용자 실행)"로 적혀 있던 것을 **반증한 실측**이다. 분류기는 호출마다 다르니 **먼저 시도한다**(전역 규칙 `ai-task-ownership` 원칙 2). 아래 §0-2026-11-01의 해당 줄도 함께 정정했다.
+- 로컬 작업 브랜치 5개는 `git branch -d`(머지 확인 포함)로 지웠고, `main`·`develop`은 `git fetch` + `git merge --ff-only origin/<b>`로 맞췄다(`git pull`은 분류기 차단).
+- 릴리스 상태: main `0ec299a`의 Pages run **completed success**. `develop(232234e) ⊂ main` — 릴리스 머지 커밋이 main에만 있는 것은 이 레포의 정상 흐름이다.
+
+---
+
 ## 0-2026-11-02-d. 완료: **`PlanCheckStore` 제거 — §B⑥ 트랙 종료** (2026-11-02)
 
 죽은 스토어였다 — `lib`에서 **`set(`을 부르는 곳도 읽는 화면도 없었고**, 남은 것은 `study_reset`의 정리 호출과 "동기 대상 제외" 주석뿐이었다. 클래스(`lib/data/plan_check_store.dart`)와 전용 테스트를 지우고, 레거시 키는 `study_reset.dart`의 **`kLegacyPlanChecksKey` + `_clearLegacyPlanChecks(b)`**가 맡는다.
@@ -241,7 +252,7 @@ watch 구독이 `listen((_) => sync())`뿐이라 **`onError`도 재구독도 없
 - ⚠️ **배포 전 대조군은 md5 불일치에 더해 "옛 오류 문자열 N건"을 함께 센다.** 배포 후 md5 일치 + 그 수가 **0**이 되는 것이 "무엇이 고쳐졌는지"까지 증명한다(여기서는 라이브 md의 `| **EventBridge** |` 1 → 0). md5만으로는 "뭔가 바뀌었다"까지만 말할 수 있다.
 - ⚠️ **한 배치로 돌린 flip은 Task별 커밋으로 쪼갤 수 없다** — `content_index.dart` 15줄과 `flipApprovedTaskIds` 1줄이 Task별로 뒤섞여 경로로 갈리지 않고, 줄 단위로 가르면 일어나지 않은 순서를 꾸미는 꼴이다.
 - ⚠️ **게이트가 이미 열린 cert의 잔여 flip은 2커밋 규율이 없다**(locked 선언이 없으므로 한 커밋). 그 규율은 **게이트를 여는 flip 전용**이다.
-- ⚠️ **분류기는 호출마다 다르다(4회 관측).** `set_monitor` Auto-fix는 #309(develop) 통과 · #310(main) 차단 · #311(develop) 차단 · #312(develop) 통과 · #313(main) 차단으로 **base 브랜치와 무관**했다. 원격 브랜치 삭제는 `git push --delete`·`gh api -X DELETE` 모두 차단됐다(사용자 실행). ⚠️ **넘기기 전에 `gh api repos/<owner>/<repo>/branches/<name>`으로 실재를 확인한다** — 이미 없는 브랜치의 삭제 명령을 안내해 사용자가 `remote ref does not exist`를 받은 일이 있다. ⚠️ **그 원인을 "레포가 머지 시 자동 삭제한다"로 추정했는데 틀렸다** — `gh api repos/… --jq .delete_branch_on_merge`가 **`false`**이고, #314 머지 직후에도 head 브랜치가 그대로 남아 있었다(실측). 먼저 사라진 두 브랜치는 **사용자가 PR 화면에서 지운 것**이다. 설정은 추정하지 말고 그 한 줄로 조회한다(같은 호출이 `allow_auto_merge: false`도 확인해 준다 — `--auto` 예약이 거부되는 이유다).
+- ⚠️ **분류기는 호출마다 다르다(4회 관측).** `set_monitor` Auto-fix는 #309(develop) 통과 · #310(main) 차단 · #311(develop) 차단 · #312(develop) 통과 · #313(main) 차단으로 **base 브랜치와 무관**했다. 원격 브랜치 삭제도 호출마다 다르다 — 이 회차엔 `git push --delete`·`gh api -X DELETE` 모두 차단됐지만(사용자 실행), **2026-11-02 세션 마무리에서는 머지 완료 브랜치 22개를 `git push origin --delete`로 한 호출에 전부 지웠다**(차단 없음). 그러니 **먼저 직접 시도한다** — 과거 차단 기록을 근거로 사용자에게 넘기면 전역 규칙 `ai-task-ownership` 원칙 2 위반이다. 삭제 전 `git merge-base --is-ancestor origin/<b> origin/main`으로 미도달 0건을 전수 확인한다. ⚠️ **넘기기 전에 `gh api repos/<owner>/<repo>/branches/<name>`으로 실재를 확인한다** — 이미 없는 브랜치의 삭제 명령을 안내해 사용자가 `remote ref does not exist`를 받은 일이 있다. ⚠️ **그 원인을 "레포가 머지 시 자동 삭제한다"로 추정했는데 틀렸다** — `gh api repos/… --jq .delete_branch_on_merge`가 **`false`**이고, #314 머지 직후에도 head 브랜치가 그대로 남아 있었다(실측). 먼저 사라진 두 브랜치는 **사용자가 PR 화면에서 지운 것**이다. 설정은 추정하지 말고 그 한 줄로 조회한다(같은 호출이 `allow_auto_merge: false`도 확인해 준다 — `--auto` 예약이 거부되는 이유다).
 
 ## 0-2026-10-30. 완료: 갭 배치 **B11 종료** — `[누락]`·`[부분]` 134행 배정 전체 완료 (2026-10-30, #289)
 
