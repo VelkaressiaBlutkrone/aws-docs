@@ -18,16 +18,22 @@ class SyncController extends ChangeNotifier {
   /// 비용↔백업 지연 트레이드오프의 단일 조정점.
   static const Duration defaultSyncInterval = Duration(seconds: 30);
 
+  /// watch 스트림이 끊겼을 때 다시 붙기까지 기다리는 시간. ⚠️ 즉시 재구독하면
+  /// 영구 실패(규칙 거부 등)에서 재구독 폭주가 된다.
+  static const Duration defaultWatchRetryDelay = Duration(seconds: 5);
+
   SyncController({
     required AuthService auth,
     required CloudStore cloud,
     required KvBackend local,
     int Function()? nowMs,
     Duration? syncInterval,
+    Duration watchRetryDelay = defaultWatchRetryDelay,
     Stream<void>? onAppResume,
   })  : _auth = auth,
         _cloud = cloud,
         _syncInterval = syncInterval,
+        _watchRetryDelay = watchRetryDelay,
         _onAppResume = onAppResume,
         _svc = SyncService(local: local, cloud: cloud, nowMs: nowMs);
 
@@ -38,6 +44,9 @@ class SyncController extends ChangeNotifier {
   /// signed-in 동안 멱등 reconcile을 재실행할 주기. null이면 주기 트리거 off.
   final Duration? _syncInterval;
 
+  /// watch 재구독 지연(테스트 주입용).
+  final Duration _watchRetryDelay;
+
   /// 앱 복귀(예: web visibilitychange) 신호. 수신 시 sync() — 비로그인이면 무시(가드).
   final Stream<void>? _onAppResume;
 
@@ -45,6 +54,10 @@ class SyncController extends ChangeNotifier {
   StreamSubscription<void>? _resumeSub;
   Timer? _periodic;
   final List<StreamSubscription<dynamic>> _watchSubs = [];
+
+  /// 끊긴 watch를 다시 붙이려고 대기 중인 타이머. ⚠️ 로그아웃·dispose에서
+  /// 반드시 취소한다 — 안 하면 비로그인 상태에서 watch가 되살아난다.
+  final List<Timer> _watchRetries = [];
   AuthUser? _user;
   SyncStatus _status = SyncStatus.off;
   bool _busy = false;
@@ -109,6 +122,10 @@ class SyncController extends ChangeNotifier {
   void _teardownTriggers() {
     _periodic?.cancel();
     _periodic = null;
+    for (final t in List<Timer>.from(_watchRetries)) {
+      t.cancel();
+    }
+    _watchRetries.clear();
     final subs = List<StreamSubscription<dynamic>>.from(_watchSubs);
     _watchSubs.clear();
     for (final s in subs) {
@@ -155,9 +172,36 @@ class SyncController extends ChangeNotifier {
       'plans',
       'progress'
     ]) {
-      _watchSubs.add(
-          _cloud.watchCollection(uid, coll).listen((_) => sync()));
+      _watchOne(uid, coll);
     }
+  }
+
+  /// 컬렉션 하나를 구독한다. ⚠️ **오류를 삼키면 그 컬렉션의 변경 수신이 영구
+  /// 중단된다**(규칙 거부·네트워크 단절). 그래서 오류를 상태로 드러내고
+  /// [_watchRetryDelay] 뒤에 다시 붙인 다음 한 번 reconcile해 그동안의 변경을
+  /// 따라잡는다. 세대(`_gen`)가 바뀌었으면(로그아웃·재로그인·dispose) 붙지 않는다.
+  void _watchOne(String uid, String coll) {
+    if (_disposed || _user?.uid != uid) return;
+    final gen = _gen;
+    late final StreamSubscription<dynamic> sub;
+    sub = _cloud.watchCollection(uid, coll).listen(
+      (_) => sync(),
+      onError: (Object _) {
+        _watchSubs.remove(sub);
+        sub.cancel();
+        if (_disposed || gen != _gen) return;
+        _set(SyncStatus.error); // 변경 수신이 끊긴 것도 사용자에게 보이는 실패다
+        late final Timer t;
+        t = Timer(_watchRetryDelay, () {
+          _watchRetries.remove(t);
+          if (_disposed || gen != _gen) return;
+          _watchOne(uid, coll);
+          sync(); // 끊긴 사이의 변경을 따라잡는다
+        });
+        _watchRetries.add(t);
+      },
+    );
+    _watchSubs.add(sub);
   }
 
   void _set(SyncStatus s) {
