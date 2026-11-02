@@ -2,7 +2,6 @@ import 'cloud/sync_meta.dart';
 import 'content_index.dart';
 import 'exam_session_store.dart';
 import 'history_store.dart';
-import 'plan_check_store.dart';
 import 'plan_progress_store.dart';
 import 'study_plan_store.dart';
 import 'viewed_docs_store.dart';
@@ -25,6 +24,17 @@ Iterable<String> examIdsForCert(String certCode) sync* {
 
 int _utcNowMs() => DateTime.now().toUtc().millisecondsSinceEpoch;
 
+/// 레거시 "플랜 항목 수동 완료 오버라이드" 키. 전용 스토어(`PlanCheckStore`)가 있었는데
+/// **쓰는 코드도 읽는 화면도 없는 죽은 키**여서 2026-11-02에 스토어를 지웠다. 남아 있는
+/// 사용자 데이터만 초기화가 정리한다 — 클라우드 사본은 `SyncService._purgeChecksOnce`가
+/// 한 번 지운다. ⚠️ **자격증 단위로 가르지 않는다**(읽는 곳이 없어 가를 이유가 없다).
+const kLegacyPlanChecksKey = 'awsdocs.plan.checks.v1';
+
+void _clearLegacyPlanChecks(KvBackend b) {
+  if ((b.read(kLegacyPlanChecksKey) ?? '').isEmpty) return;
+  b.write(kLegacyPlanChecksKey, '');
+}
+
 /// 한 자격증의 모든 학습 기록을 삭제한다(다른 자격증은 보존).
 /// 로그인 상태면 다음 동기가 이 표식으로 클라우드·다른 기기까지 정리한다.
 void resetCert(String certCode, {KvBackend? backend, int Function()? nowMs}) {
@@ -37,7 +47,7 @@ void resetCert(String certCode, {KvBackend? backend, int Function()? nowMs}) {
     progress.clearPlan(p.id);
   }
   planStore.clearCert(certCode);
-  PlanCheckStore(backend: b).clearCert(certCode);
+  _clearLegacyPlanChecks(b);
   final sessions = ExamSessionStore(backend: b);
   for (final id in examIdsForCert(certCode)) {
     sessions.clear(id); // 구포맷 단일 키
@@ -53,7 +63,7 @@ void resetAll({KvBackend? backend, int Function()? nowMs}) {
   HistoryStore(backend: b).clearAll();
   ViewedDocsStore(backend: b).clearAll();
   StudyPlanStore(backend: b).clearAll();
-  PlanCheckStore(backend: b).clearAll();
+  _clearLegacyPlanChecks(b);
   PlanProgressStore(backend: b).clearAll();
   ExamSessionStore(backend: b).clearAll();
   SyncMeta(b).markReset(SyncMeta.allCerts, (nowMs ?? _utcNowMs)());
