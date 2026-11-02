@@ -122,45 +122,59 @@ class GridChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
+    // 답변 여부·플래그·현재 위치가 색·테두리로만 전달되면 스크린리더에는 숫자만
+    // 읽힌다(리뷰 M-7). 가드는 `exam_a11y_semantics_test.dart`.
+    final semantics = [
+      '문항 $label',
+      answered ? '답변함' : '미답',
+      if (flagged) '플래그',
+      if (current) '현재 문항',
+    ].join(', ');
     // 인셋 링(DT4): 34px 밀집 그리드라 바깥 링(4px)은 간격을 깨뜨린다.
     return InsetFocusRing(
       borderRadius: BorderRadius.circular(Radii.sm),
-      child: InkWell(
+      child: Semantics(
+        label: semantics,
+        button: true,
         onTap: onTap,
-        borderRadius: BorderRadius.circular(Radii.sm),
-        child: Container(
-          width: 34,
-          height: 34,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: answered ? c.accentWeak : c.surface,
-            borderRadius: BorderRadius.circular(Radii.sm),
-            border: Border.all(
-              color: current ? c.accent : (flagged ? c.warning : c.border),
-              width: current ? 2 : 1,
-            ),
-          ),
-          child: Stack(
-            clipBehavior: Clip.none,
+        excludeSemantics: true,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.sm),
+          child: Container(
+            width: 34,
+            height: 34,
             alignment: Alignment.center,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontFamily: AppTheme.monoFamily,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  fontVariations: Wght.w700,
-                  color: answered ? c.accentStrong : c.textMuted,
-                ),
+            decoration: BoxDecoration(
+              color: answered ? c.accentWeak : c.surface,
+              borderRadius: BorderRadius.circular(Radii.sm),
+              border: Border.all(
+                color: current ? c.accent : (flagged ? c.warning : c.border),
+                width: current ? 2 : 1,
               ),
-              if (flagged)
-                Positioned(
-                  top: -2,
-                  right: -2,
-                  child: Icon(Icons.flag, size: 11, color: c.warning),
+            ),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: AppTheme.monoFamily,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    fontVariations: Wght.w700,
+                    color: answered ? c.accentStrong : c.textMuted,
+                  ),
                 ),
-            ],
+                if (flagged)
+                  Positioned(
+                    top: -2,
+                    right: -2,
+                    child: Icon(Icons.flag, size: 11, color: c.warning),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
