@@ -22,6 +22,12 @@ class SyncController extends ChangeNotifier {
   /// 영구 실패(규칙 거부 등)에서 재구독 폭주가 된다.
   static const Duration defaultWatchRetryDelay = Duration(seconds: 5);
 
+  /// 유휴(변경 없는 회차)가 이어질 때 주기 간격을 늘릴 **상한**. 이 값이 곧
+  /// "watch가 죽어 있는 동안 다른 기기 변경을 받는 최대 지연"이고, 로컬 변경이
+  /// 클라우드로 올라가는 **최대 지연**도 같다(그 회차에 변경이 보이면 즉시
+  /// 기본 간격으로 돌아온다 — 리뷰 M-8).
+  static const Duration defaultIdleIntervalCap = Duration(minutes: 5);
+
   SyncController({
     required AuthService auth,
     required CloudStore cloud,
@@ -29,11 +35,13 @@ class SyncController extends ChangeNotifier {
     int Function()? nowMs,
     Duration? syncInterval,
     Duration watchRetryDelay = defaultWatchRetryDelay,
+    Duration idleIntervalCap = defaultIdleIntervalCap,
     Stream<void>? onAppResume,
   })  : _auth = auth,
         _cloud = cloud,
         _syncInterval = syncInterval,
         _watchRetryDelay = watchRetryDelay,
+        _idleIntervalCap = idleIntervalCap,
         _onAppResume = onAppResume,
         _svc = SyncService(local: local, cloud: cloud, nowMs: nowMs);
 
@@ -46,6 +54,13 @@ class SyncController extends ChangeNotifier {
 
   /// watch 재구독 지연(테스트 주입용).
   final Duration _watchRetryDelay;
+
+  /// 유휴 백오프 상한(테스트 주입용).
+  final Duration _idleIntervalCap;
+
+  /// 다음 주기 틱까지의 간격. 변경 없는 회차마다 2배로 늘고 상한에서 멈추며,
+  /// 변경이 있던 회차 뒤에는 기본 간격으로 돌아온다.
+  Duration? _nextInterval;
 
   /// 앱 복귀(예: web visibilitychange) 신호. 수신 시 sync() — 비로그인이면 무시(가드).
   final Stream<void>? _onAppResume;
@@ -133,10 +148,40 @@ class SyncController extends ChangeNotifier {
     }
   }
 
+  /// 주기 reconcile. ⚠️ **없애지 않는다** — watch가 죽은 사이 다른 기기 변경을 받는
+  /// 마지막 안전망이다(P1의 재구독이 대부분을 자체 복구하지만 그 재구독마저 실패할 수
+  /// 있다). 대신 **변경 없는 회차가 이어지면 간격을 배로 늘려** 상한까지 간다 —
+  /// 무변경 틱이 컬렉션 로드를 반복하던 것이 Firestore 읽기 비용의 유일한
+  /// 조정점이었다(리뷰 M-8).
   void _startPeriodic() {
     final interval = _syncInterval;
     if (interval == null) return;
-    _periodic = Timer.periodic(interval, (_) => sync());
+    _nextInterval = interval;
+    _scheduleNextTick();
+  }
+
+  void _scheduleNextTick() {
+    final interval = _nextInterval;
+    if (interval == null || _disposed || _user == null) return;
+    final gen = _gen;
+    _periodic?.cancel();
+    _periodic = Timer(interval, () {
+      if (_disposed || gen != _gen) return;
+      sync(); // 결과에 따라 _nextInterval을 조정하고 다음 틱을 건다
+    });
+  }
+
+  /// 한 회차의 결과로 다음 간격을 정한다. 변경이 있었으면 기본값으로, 없었으면
+  /// 2배(상한까지)로.
+  void _applyIdleBackoff({required bool mutated}) {
+    final base = _syncInterval;
+    if (base == null) return;
+    if (mutated) {
+      _nextInterval = base;
+    } else {
+      final grown = (_nextInterval ?? base) * 2;
+      _nextInterval = grown > _idleIntervalCap ? _idleIntervalCap : grown;
+    }
   }
 
   /// 멱등 reconcile. 재진입 가드: 진행 중이면 pending 표시 후 1회 재실행.
@@ -150,15 +195,21 @@ class SyncController extends ChangeNotifier {
     _busy = true;
     _set(SyncStatus.syncing);
     try {
-      await _svc.reconcileAll(u.uid);
+      final mutated = await _svc.reconcileAll(u.uid);
+      _applyIdleBackoff(mutated: mutated);
       _set(SyncStatus.idle);
     } catch (_) {
+      // 실패한 회차는 "변경 없음"으로 보지 않는다 — 다음 틱을 늦추면 복구가 느려진다.
+      _applyIdleBackoff(mutated: true);
       _set(SyncStatus.error);
     } finally {
       _busy = false;
       if (_pending) {
         _pending = false;
         await sync();
+      } else {
+        // 틱을 한 번 쓰고 다음 것을 건다(주기 트리거가 켜져 있을 때만).
+        _scheduleNextTick();
       }
     }
   }
