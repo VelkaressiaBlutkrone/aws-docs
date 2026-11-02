@@ -2,21 +2,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
 import 'package:aws_docs/data/cloud/sync_meta.dart';
 import 'package:aws_docs/data/cloud/sync_service.dart';
-import 'package:aws_docs/data/plan_check_store.dart'; // KvBackend도 re-export
+import 'package:aws_docs/data/local_kv.dart';
+import 'package:aws_docs/data/study_reset.dart' show kLegacyPlanChecksKey;
 
 void main() {
   group('레거시 checks 정리', () {
     test('클라우드 checks 문서를 한 번 지우고, 로컬 체크는 건드리지 않는다', () async {
       final local = MemoryBackend();
       final cloud = FakeCloudStore();
-      PlanCheckStore(backend: local).set('CLF-C02', 'x', true);
+      // 레거시 로컬 체크(죽은 키). 전용 스토어는 2026-11-02에 제거됐고 키만 남았다.
+      local.write(kLegacyPlanChecksKey, '{"CLF-C02":{"x":true}}');
       await cloud.setDoc('u1', 'checks', 'CLF-C02', {'x': true});
 
       await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
           .reconcileAll('u1');
 
       expect(await cloud.loadCollection('u1', 'checks'), isEmpty);
-      expect(PlanCheckStore(backend: local).overrides('CLF-C02'), {'x': true});
+      expect(local.read(kLegacyPlanChecksKey), '{"CLF-C02":{"x":true}}',
+          reason: '동기는 로컬 레거시 키를 건드리지 않는다 — 지우는 것은 초기화뿐이다');
       expect(SyncMeta(local).checksPurged, isTrue);
     });
 
@@ -35,7 +38,7 @@ void main() {
     test('로컬 체크는 동기로 올라가지 않는다', () async {
       final local = MemoryBackend();
       final cloud = FakeCloudStore();
-      PlanCheckStore(backend: local).set('CLF-C02', 'x', true);
+      local.write(kLegacyPlanChecksKey, '{"CLF-C02":{"x":true}}');
 
       await SyncService(local: local, cloud: cloud, nowMs: () => 5000)
           .reconcileAll('u1');

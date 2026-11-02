@@ -26,16 +26,40 @@ class SyncService {
 
   static const _kViewed = 'awsdocs.viewed.v1';
 
+  /// 이 회차에서 실제로 쓴 횟수(로컬 + 클라우드). `reconcileAll`이 "변경이 있었는가"로
+  /// 돌려주고, 컨트롤러가 유휴 간격 백오프의 리셋 신호로 쓴다(리뷰 M-8).
+  int _mutations = 0;
+
   /// 값이 달라졌을 때만 쓴다 — 무변경 reconcile(주기 틱)이 로컬을 매번 재기록하지 않게.
   void _writeIfChanged(String key, String value) {
-    if (_local.read(key) != value) _local.write(key, value);
+    if (_local.read(key) != value) {
+      _local.write(key, value);
+      _mutations++;
+    }
+  }
+
+  /// 클라우드 쓰기 두 경로를 한 곳으로 모아 변경을 센다. ⚠️ `_cloud.setDoc`·
+  /// `_cloud.deleteDoc`를 직접 부르면 그 회차가 "무변경"으로 보여 백오프가 잘못 늘어난다.
+  Future<void> _putDoc(String uid, String collection, String docId,
+      Map<String, dynamic> data) {
+    _mutations++;
+    return _cloud.setDoc(uid, collection, docId, data);
+  }
+
+  Future<void> _dropDoc(String uid, String collection, String docId) {
+    _mutations++;
+    return _cloud.deleteDoc(uid, collection, docId);
   }
 
   /// 한 회차에서 지우는 클라우드 문서 수 상한(초기화 직후 동기가 길어지지 않게).
   static const maxDeletesPerRound = 50;
 
   /// 로그인 직후·트리거 시 양방향 화해. 삭제 표식을 먼저 화해해 이번 회차 기준으로 쓴다.
-  Future<void> reconcileAll(String uid) async {
+  /// 돌려주는 값: **이 회차에 실제로 쓴 것이 있었는가**(로컬 또는 클라우드).
+  /// 컨트롤러가 유휴 간격 백오프를 리셋할지 정하는 데 쓴다(리뷰 M-8). `await`만 하는
+  /// 호출부는 그대로 두면 된다.
+  Future<bool> reconcileAll(String uid) async {
+    _mutations = 0;
     var marks = await _reconcileDeletions(uid);
     await _reconcileAttempts(uid, marks.resetAt);
     await _reconcileViewed(uid, marks.resetAt);
@@ -48,7 +72,11 @@ class SyncService {
     await _purgeChecksOnce(uid);
     // 이 기기에 "동기한 적 있음" 흔적을 한 번만 남긴다(비로그인 초기화 안내 근거).
     final meta = SyncMeta(_local);
-    if (meta.syncedAtMs == 0) meta.syncedAtMs = _now();
+    if (meta.syncedAtMs == 0) {
+      meta.syncedAtMs = _now();
+      _mutations++;
+    }
+    return _mutations > 0;
   }
 
   /// 수동 체크 오버라이드(`checks`)는 앱에서 읽는 화면이 없어 동기 대상에서 뺀다.
@@ -57,6 +85,7 @@ class SyncService {
     // 레거시 LWW가 쓰던 사이드카. 이제 읽는 곳이 없다(파생 부기라 복구 불필요).
     if ((_local.read('awsdocs.sync.v1') ?? '').isNotEmpty) {
       _local.write('awsdocs.sync.v1', '');
+      _mutations++;
     }
     final meta = SyncMeta(_local);
     if (meta.checksPurged) return;
@@ -90,7 +119,7 @@ class SyncService {
     }
     if (!_sameMarks(mergedReset, cloudReset) ||
         !_sameMarks(mergedPlans, cloudPlans)) {
-      await _cloud.setDoc(uid, 'meta', 'deletions', {
+      await _putDoc(uid, 'meta', 'deletions', {
         ...doc,
         'resetAt': mergedReset,
         'plans': mergedPlans,
@@ -113,7 +142,7 @@ class SyncService {
   Future<void> _deleteUpTo(
       String uid, String collection, List<String> ids) async {
     for (final id in ids.take(maxDeletesPerRound)) {
-      await _cloud.deleteDoc(uid, collection, id);
+      await _dropDoc(uid, collection, id);
     }
   }
 
@@ -130,7 +159,7 @@ class SyncService {
     final r = mergeAttempts(local, cloud, resetAt: marks);
     store.replaceAll(r.merged);
     for (final e in r.toCloud.entries) {
-      await _cloud.setDoc(uid, 'attempts', e.key, e.value);
+      await _putDoc(uid, 'attempts', e.key, e.value);
     }
     await _deleteUpTo(uid, 'attempts', r.toDelete);
   }
@@ -142,7 +171,7 @@ class SyncService {
     final r = mergeViewed(local, cloud, resetAt: marks);
     _writeIfChanged(_kViewed, jsonEncode(r.merged));
     for (final e in r.toCloud.entries) {
-      await _cloud.setDoc(uid, 'viewed', e.key, e.value);
+      await _putDoc(uid, 'viewed', e.key, e.value);
     }
     await _deleteUpTo(uid, 'viewed', r.toDelete);
   }
@@ -170,8 +199,8 @@ class SyncService {
             (e.value['updatedAt'] as num?)?.toInt() ??
             0,
       }..remove('updatedAt');
-      await _cloud.setDoc(uid, 'plans', id, moved);
-      await _cloud.deleteDoc(uid, 'plans', e.key);
+      await _putDoc(uid, 'plans', id, moved);
+      await _dropDoc(uid, 'plans', e.key);
       cloud.remove(e.key);
       cloud[id] = moved;
     }
@@ -267,7 +296,7 @@ class SyncService {
 
     // 로컬 쓰기를 모두 끝낸 뒤 클라우드에 쓴다.
     for (final e in toPush.entries) {
-      await _cloud.setDoc(uid, 'plans', e.key, e.value);
+      await _putDoc(uid, 'plans', e.key, e.value);
     }
     await _deleteUpTo(uid, 'plans', toDelete);
     return newlyDeleted;
@@ -341,7 +370,7 @@ class SyncService {
         EntityMeta(base: base, updatedAt: updatedAt, dirtyAt: const {}));
 
     for (final e in toPush.entries) {
-      await _cloud.setDoc(uid, 'progress', e.key, e.value);
+      await _putDoc(uid, 'progress', e.key, e.value);
     }
     await _deleteUpTo(uid, 'progress', toDelete);
   }
