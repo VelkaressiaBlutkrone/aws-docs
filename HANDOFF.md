@@ -36,6 +36,43 @@ _갱신: 2026-11-02(**DVA-C03 Phase 3-A 저작 완료 12/12편 — 도메인 4 3
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
 
+## 0-2026-11-02-b. 완료: **2026-09-22 리뷰 후순위 7건** — 보안·실패 가시성·성능·접근성 (2026-11-02)
+
+§B⑥에 "후순위"로 남아 있던 항목을 **우선순위를 정해 순서대로** 처리했다(기준: 보안 → 사용자가 실패를 모르는 것 → 성능 → 접근성 → 일관성). 기준선 **2,658 → 2,679**(가드 21건), analyze 0건. 항목마다 독립 커밋이다.
+
+| # | 항목 | 고친 것 |
+|---|---|---|
+| P1 | **m-1 보안** | `window.open`에 `noopener,noreferrer` — ⚠️ `<a target="_blank">`와 달리 **기본이 아니라서** 열린 페이지가 `window.opener`로 부모 탭을 조작할 수 있었다(reverse tabnabbing) |
+| P2 | m-4 | `initializeEngine().then()`에 `.catch` — 엔진·CanvasKit 로드 실패 시 **20초 stall 문구만** 뜨고 실패가 드러나지 않았다. `bootFailed`가 워치독을 끄고 실패 문구 + 새로고침 링크를 띄운다 |
+| P3 | m-3 | `SyncStatus.error`가 **UI에 전혀 없었다**(syncing 스피너만) → `warningText` `cloud_off` + semanticLabel |
+| P4 | **M-4** | 공용 로더 `loadQuestionBanks` — ⚠️ **네 호출부 중 셋에 `hasQuestions` 가드가 없어 문항 0인 학습문서 Task마다 404를 긁고 있었다**(CODE-P-012 드리프트). 직렬 `await`도 `Future.wait`로(뱅크 19~24개 × RTT) |
+| P5 | m-2 | 1초 ticker가 `setState(() {})`로 러너 전체(65칩·선택지·버튼)를 매초 리빌드 → `ExamClock`이 타이머를 소유 |
+| P6 | **M-7** | `OptionTile`(배타 그룹 + 선택 상태 + 정답·오답 라벨) · `GridChip`("문항 3, 답변함, 플래그, 현재 문항") — 색으로만 전달되던 정보 |
+| P7 | m-5 | `theme-color`가 `prefers-color-scheme` 기준이라 **저장된 다크 테마**와 크롬 색이 어긋났다 → 저장 테마를 읽는 기존 스크립트에서 메타 교체 |
+
+### ⚠️ 검증할 수 없는 것을 어떻게 고정했나 (이 배치의 방법론)
+
+1. ⚠️ **웹 전용 코드는 런타임 검증이 불가능하다** — 조건부 import가 VM 테스트에서 `open_link_stub.dart`(no-op)를 고르고 `web/index.html`은 Flutter가 **빌드 시점에만** 읽는다. 그래서 `web_hardening_test.dart`가 **소스를 문자열로 읽어** 단정하고, 그룹마다 **대조군**(탐지 규칙이 옛 형태를 실제로 잡는지)을 함께 둔다 — 없으면 정규식이 틀렸을 때 조용히 통과한다.
+2. ⚠️ **리빌드 횟수는 Flutter 테스트 API로 직접 셀 수 없다** — 동작(시계가 갱신된다·만료를 1회 통지한다)은 위젯 테스트로, "매초 리빌드 범위가 시계뿐"이라는 **구조**는 소스 가드(`exam_view.dart`에 `Timer.periodic`·`_remainingSec`·`_mmss`가 없다)로 갈랐다.
+3. ⭐ **M-4는 드리프트 가드가 핵심이다** — `questionsAsset`를 공용 로더·정의부·단일 엔트리 페이지(`exam_page`·`quiz_page`) 밖에서 쓰면 레드가 된다. 가드 없이 고치면 다음 사람이 또 네 번째 복사본을 만든다(실제로 그래서 셋에서 빠졌다).
+4. **각 UI 테스트는 "전제"를 먼저 단정한다** — 동기 실패 테스트는 `ctrl.status == SyncStatus.error`를 먼저 확인한다. 전제가 깨지면 UI 단정이 **거짓 통과**한다(#282에서 배운 것과 같은 함정).
+
+### 테스트에서 실측으로 배운 두 함정
+
+- ⚠️ **`ensureSemantics()` 핸들은 테스트 본문에서 `dispose()`해야 한다** — `addTearDown`에 맡기면 프레임워크의 종료 검증이 먼저 돌아 "SemanticsHandle이 살아 있다"로 실패한다.
+- ⚠️ **`getSemantics(find.byType(위젯))`은 조상 노드를 집는다** — semantics 노드가 위젯 **안쪽**(`InsetFocusRing` 아래)에 있으면 루트(`scopesRoute`)가 잡힌다. 지문 텍스트를 앵커로 써야 한다(`excludeSemantics`라 Text 자체 노드는 없다).
+- ⚠️ **`flutter analyze lib`는 게이트가 아니다** — 작업 중 `lib`만 분석해 0건을 확인했는데 전체 분석에서 **7건**이 나왔다(`containsSemantics`는 **v3.40 이후 deprecated**이고 정본은 **`isSemantics`** · 불필요한 `foundation.dart` import). `flutter analyze`는 info에도 비정상 종료하므로 CI가 빨개진다 — **커밋 전 범위 없이 한 번 돌린다.**
+
+### 부수적으로 정정한 낡은 서술
+
+⚠️ §B⑥이 디자인 결정 5건과 `accent/surface2` 감사를 **"미릴리스"**로 적고 있었는데 **둘 다 이미 `origin/main`에 있다**(`theme_contrast_test`·`accent_on_surface2_test` 실측). 메모리의 평문 표기 트랙 "미릴리스"도 같은 종류의 구식 서술이었다.
+
+### 남은 것
+
+**보류 3건뿐이다** — M-8 주기 reconcile(watch에 재구독이 없어 안전망) · m-6 에셋 디렉터리 등록(원본 mp3와 섞인다) · `PlanCheckStore` 제거 여부. **M-10은 사용자가 범위에서 제외**했다.
+
+---
+
 ## 0-2026-11-02. 완료: **DVA-C03 Phase 3-A 저작 완료 12/12편** — 도메인 4 3편으로 공식 Task 12개 전부 (2026-11-02)
 
 학습문서 **3편**(`dva-t4-1`·`t4-2`·`t4-3`)으로 도메인 4의 **기술 16개**를 덮어 **공식 Task 12개·기술 72개 전부**가 저작됐다. 기준선 **2,643 → 2,658**(편수 × 5). 현황표는 [WORKLIST.md](WORKLIST.md) §B⑬. **남은 것은 12월 전환 PR뿐이다.**
