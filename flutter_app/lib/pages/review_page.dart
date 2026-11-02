@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart';
@@ -10,6 +8,7 @@ import '../content/reset_dialog.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
+import '../data/question_banks.dart';
 import '../data/study_reset.dart';
 import '../data/wrong_answer_index.dart';
 import '../models/attempt_record.dart';
@@ -42,19 +41,16 @@ class _ReviewListPageState extends State<ReviewListPage> {
     final taskByQuestionId = <String, String>{};
     final taskTitleById = <String, String>{};
     final taskOrder = <String>[];
+    // 제목·순서는 **전 엔트리**에서 모은다(문항 0인 학습문서 Task도 목록에 든다).
     for (final e in entries) {
       taskTitleById[e.taskId] = e.title;
       taskOrder.add(e.taskId);
-      try {
-        final raw = await rootBundle.loadString(e.questionsAsset);
-        final bank =
-            QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
-        for (final q in bank.questions) {
-          byId[q.id] = q;
-          taskByQuestionId[q.id] = e.taskId;
-        }
-      } catch (_) {
-        // 개별 뱅크 로드 실패는 무시(나머지로 진행)
+    }
+    // 뱅크는 공용 로더로 — 문항 0 Task 생략(404 방지) + 병렬 + 순서 보존(리뷰 M-4).
+    for (final l in await loadQuestionBanks(entries)) {
+      for (final q in l.bank.questions) {
+        byId[q.id] = q;
+        taskByQuestionId[q.id] = l.entry.taskId;
       }
     }
     final index = WrongAnswerIndex.build(

@@ -61,6 +61,17 @@ class SyncEntry extends StatelessWidget {
                     child: CircularProgressIndicator(
                         strokeWidth: 2, color: c.textMuted)),
               ),
+            // 동기 실패(규칙 거부·오프라인)를 알린다 — 스피너만 있던 시절에는
+            // 백업이 멈춘 것을 사용자가 알 수 없었다(리뷰 m-3). 재시도는 다음
+            // 트리거(주기·앱 복귀·클라우드 변경)가 하므로 버튼을 두지 않는다.
+            if (ctrl.status == SyncStatus.error)
+              Padding(
+                padding: const EdgeInsets.only(right: Gap.sm),
+                child: Icon(Icons.cloud_off,
+                    size: 16,
+                    color: c.warningText,
+                    semanticLabel: '동기 실패 — 다음 트리거에 재시도'),
+              ),
             TextButton(
               onPressed: ctrl.signOut,
               child: Text('로그아웃', style: TextStyle(color: c.textMuted)),

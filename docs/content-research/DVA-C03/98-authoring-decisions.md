@@ -176,6 +176,61 @@
 
 ---
 
+## D-06 (저작 중 판정, 2026-11-02) — Lambda 문서의 `Event Function` 개명과 죽은 슬러그 2건
+
+### 쟁점
+
+도메인 4를 쓰려고 Lambda 지표·로깅 페이지를 읽자 **문서가 함수 유형을 `Event Function`으로 부르고** 있었다. 시험 가이드는 "AWS Lambda"로만 적는다 — 학습문서가 어느 용어를 쓰고, 이 차이를 학습자에게 어떻게 설명할지 정해야 했다.
+
+### 공식 실측
+
+- `welcome.html`이 **컴퓨팅 프리미티브 셋**을 적는다 — **Lambda Event Functions**(원래의 함수 유형) · **Lambda Web Functions**(Node.js HTTP 서버) · **Lambda MicroVMs**(최대 8시간 세션).
+- ⭐ 같은 페이지의 Note가 **"기반 리소스는 불변"**이라고 못박는다 — `CreateFunction`·`Invoke` 같은 API, SDK·CLI, `AWS::Lambda::Function` 리소스 유형, ARN이 **전부 `function`을 계속 쓰므로 코드·템플릿·IAM 권한을 바꿀 필요가 없다.**
+- 지속 시간 비교표: Event Functions는 기본 **15분**, **Managed Instances의 비동기·ESM 호출만 90분**, Durable Functions로 최대 1년.
+- ⚠️ **로깅 컨트롤 슬러그 2건이 죽었다**(실측) — `monitoring-cloudwatchlogs-advanced.html`·`monitoring-cloudwatchlogs-loglevel.html`이 **`welcome.html`로 리다이렉트**된다.
+
+### 판정
+
+- 학습문서는 **가이드의 용어("Lambda")를 본문에 쓰고**, 문서 머리글에 **개명 사실과 "기반 리소스 불변"을 한 단락**으로 적는다(`dva-t4-1`에 적용).
+- 출처 URL은 **살아 있는 정본**만 쓴다 — 로그 형식은 **`monitoring-cloudwatchlogs-logformat.html`**, 로그 수준·로그 그룹은 **`API_LoggingConfig.html`**.
+- ⚠️ **"로그 수준 필터는 JSON 형식 전제"는 블로그에만 있다** — 그 문장을 쓸 때는 **블로그 근거임을 표시**한다(출처 등급 규율).
+
+### 저작 규칙
+
+- ⚠️ **용어 차이를 결함으로 읽지 않는다.** 문항에서 "`Event Function`이 아니라 함수다" 같은 용어 구분을 정답 근거로 쓰지 않는다.
+- Managed Instances 전용 동작(90분 · JSON 로그 전용 · 세분화된 스로틀 하위 지표)은 **"Managed Instances에서는"**을 반드시 붙여 적는다 — 붙이지 않으면 일반 Lambda에서 거짓이 된다.
+
+**출처**
+- https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+- https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs-logformat.html
+- https://docs.aws.amazon.com/lambda/latest/api/API_LoggingConfig.html
+
+---
+
+## D-07 (저작 중 판정, 2026-11-02) — 범위 내 목록에 없는데 공식 정본인 서비스 (Compute Optimizer)
+
+### 쟁점
+
+기술 4.3.2(메모리·컴퓨팅 최적화)의 공식 페이지가 **AWS Compute Optimizer의 메모리 권장**을 직접 안내한다. 그런데 G-01 판정대로 Compute Optimizer는 **DVA-C03 범위 내 서비스 목록에 없다**(범위 밖 목록에도 없다). 학습문서에서 아예 지워야 하는지가 쟁점이었다.
+
+### 판정
+
+**학습문서에는 적고, 문항에는 쓰지 않는다.**
+
+- 공식 메모리 페이지가 그 기능을 안내하므로 **지우면 공식 문서와 어긋난다** — 적되 **옵트인이 필요하다는 사실**과 **범위 내 목록에 없다는 사실**을 함께 적는다.
+- ⚠️ **정답 보기로도 오답 보기로도 쓰지 않는다**(G-01의 저작 규칙 그대로) — 목록에 없을 뿐 틀린 서비스가 아니라 **판단이 갈리는 자리**다.
+
+### 저작 규칙
+
+- 같은 처리를 받는 이름들: **Compute Optimizer** · **CodeGuru Profiler**(목록에 없음) · **Lambda Power Tuning**(AWS 서비스가 아니라 오픈 소스 도구).
+- ⚠️ **"목록에 없다"를 "범위 밖이다"로 적지 않는다** — 범위 내 목록은 공식적으로 전수가 아니다.
+
+**출처**
+- https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html
+- https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
+
+---
+
 ## 이 기록에 넣지 않은 것
 
 - **G-04~G-06 · G-10~G-18**은 판정이 아니라 **"쓰지 않는다"로 운영**한다(사실은 확보했으나 출처가 약하거나 세부가 미확인). 쓰게 되면 그때 이 파일에 항목을 추가한다.

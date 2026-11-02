@@ -23,11 +23,12 @@ import 'package:flutter_test/flutter_test.dart';
 /// `dva_questions_test.dart`가 생기면 **두 파일의 목록을 모두** 늘려야 한다
 /// (MLA에서 실제로 한쪽만 늘려 빠뜨린 적이 있다 — CLAUDE.md 기준선 메모).
 void main() {
-  // 2026-11-01 도메인 1·2·3 배치. 도메인 4는 저작하는 배치에서 추가한다.
+  // 2026-11-02 도메인 4 배치로 공식 Task 12개 전부 올라왔다.
   const dvaTaskIds = [
     'dva-t1-1', 'dva-t1-2', 'dva-t1-3',
     'dva-t2-1', 'dva-t2-2', 'dva-t2-3',
     'dva-t3-1', 'dva-t3-2', 'dva-t3-3',
+    'dva-t4-1', 'dva-t4-2', 'dva-t4-3',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;

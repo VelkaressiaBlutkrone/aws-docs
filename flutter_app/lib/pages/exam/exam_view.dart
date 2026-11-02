@@ -12,6 +12,7 @@ import '../../models/question.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/app_header.dart';
 import 'exam_bits.dart';
+import 'exam_clock.dart';
 
 /// 모델 주입식 시험 러너(테스트 대상). 자산/localStorage 의존 없음.
 ///
@@ -96,16 +97,9 @@ class _ExamViewState extends State<ExamView> {
   /// 데스크톱(≥768)에서는 쓰이지 않는다.
   bool _gridExpanded = false;
   AttemptRecord? _justFinished; // 제출된 응시(처방 허브가 잠금/현재응시 계산에 사용)
-  Timer? _ticker;
 
   List<Question> get _qs => widget.bank.questions;
   DateTime _clock() => (widget.now ?? DateTime.now)();
-
-  int get _remainingSec {
-    final elapsed = _clock().difference(widget.startedAt).inSeconds;
-    final left = widget.durationSec - elapsed;
-    return left < 0 ? 0 : left;
-  }
 
   @override
   void initState() {
@@ -114,27 +108,9 @@ class _ExamViewState extends State<ExamView> {
       widget.bank.questions.isNotEmpty,
       'ExamView requires a non-empty question bank',
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (_remainingSec <= 0) {
-        _submit(auto: true);
-      } else {
-        _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
-          if (!mounted) return;
-          if (_remainingSec <= 0) {
-            _submit(auto: true);
-          } else {
-            setState(() {});
-          }
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _ticker?.cancel();
-    super.dispose();
+    // 남은 시간 계산·1초 타이머·만료 통지는 [ExamClock]이 소유한다 — 매초
+    // 리빌드되는 범위를 시계로 좁히기 위해서다(리뷰 m-2). 자동 제출은 그
+    // 위젯의 `onExpired`로 들어온다.
   }
 
   ExamProgress _progress() => ExamProgress(
@@ -172,7 +148,6 @@ class _ExamViewState extends State<ExamView> {
   void _submit({required bool auto}) {
     if (_submitted) return;
     _submitted = true;
-    _ticker?.cancel();
     if (auto && _dialogOpen && mounted) {
       Navigator.of(context).pop();
       _dialogOpen = false;
@@ -241,12 +216,6 @@ class _ExamViewState extends State<ExamView> {
     if (ok == true) _submit(auto: false);
   }
 
-  String _mmss(int sec) {
-    final m = (sec ~/ 60).toString().padLeft(2, '0');
-    final s = (sec % 60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
   /// 문항 번호 그리드 본체. 좁은 화면에서는 [_gridExpanded]일 때만 그린다(UX-1).
   Widget _grid() => Wrap(
         spacing: Gap.xs,
@@ -305,8 +274,6 @@ class _ExamViewState extends State<ExamView> {
     final c = context.c;
     final t = Theme.of(context).textTheme;
     final q = _qs[_index];
-    final remaining = _remainingSec;
-    final low = remaining <= (widget.durationSec * 0.1).ceil();
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
@@ -315,21 +282,12 @@ class _ExamViewState extends State<ExamView> {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.timer_outlined,
-                size: 18,
-                color: low ? c.warning : c.textMuted,
-              ),
-              const SizedBox(width: Gap.xs),
-              Text(
-                _mmss(remaining),
-                style: TextStyle(
-                  fontFamily: AppTheme.monoFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  fontVariations: Wght.w700,
-                  color: low ? c.warningText : c.text,
-                ),
+              // 1초 타이머는 이 위젯이 소유한다 — 매초 리빌드가 시계로 한정된다(m-2).
+              ExamClock(
+                startedAt: widget.startedAt,
+                durationSec: widget.durationSec,
+                now: widget.now,
+                onExpired: () => _submit(auto: true),
               ),
               const Spacer(),
               // 좁은 화면에서는 진행을 요약 칩 한 곳에만 둔다 — 두 곳에 같은 숫자를

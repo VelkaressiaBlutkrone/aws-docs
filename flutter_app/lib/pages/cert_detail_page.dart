@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/question_banks.dart';
 import '../data/resume_exam.dart';
 import '../data/study_progress.dart';
 import '../data/viewed_docs_store.dart';
@@ -13,7 +14,6 @@ import '../data/weighted_exam.dart';
 import '../data/wrong_answer_index.dart';
 import '../models/certification.dart';
 import '../models/exam_guide.dart';
-import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/resume_exam_card.dart';
@@ -68,19 +68,12 @@ class _CertDetailPageState extends State<CertDetailPage> {
     } catch (_) {}
 
     // 오답노트 배지: 뱅크 로드 → taskByQuestionId → 약점 인덱스.
+    // 로드는 공용 로더가 한다(문항 0 Task 생략 + 병렬 + 순서 보존 — 리뷰 M-4).
     final taskByQuestionId = <String, String>{};
-    for (final e in contentFor(cert.code)) {
-      // 학습문서만 있는(문항 0) Task는 questions.json이 없다 → 로드 생략(404 방지).
-      if (!e.hasQuestions) continue;
-      try {
-        final raw = await rootBundle.loadString(e.questionsAsset);
-        final bank = QuestionBank.fromJson(
-          json.decode(raw) as Map<String, dynamic>,
-        );
-        for (final q in bank.questions) {
-          taskByQuestionId[q.id] = e.taskId;
-        }
-      } catch (_) {}
+    for (final l in await loadQuestionBanks(contentFor(cert.code))) {
+      for (final q in l.bank.questions) {
+        taskByQuestionId[q.id] = l.entry.taskId;
+      }
     }
     final history = HistoryStore().all();
     final weakByTask = WrongAnswerIndex.build(
