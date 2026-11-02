@@ -41,7 +41,7 @@ void main() {
     // 지문 텍스트를 앵커로 쓴다(`excludeSemantics`라 Text 자체 노드는 없다).
     expect(
       tester.getSemantics(find.text('필요한 권한만')),
-      containsSemantics(
+      isSemantics(
         label: '필요한 권한만',
         isSelected: true,
         isInMutuallyExclusiveGroup: true,
@@ -53,7 +53,7 @@ void main() {
 
     expect(
       tester.getSemantics(find.text('관리자 먼저')),
-      containsSemantics(label: '관리자 먼저', isSelected: false),
+      isSemantics(label: '관리자 먼저', isSelected: false),
     );
     handle.dispose();
   });
@@ -69,9 +69,9 @@ void main() {
     ])));
 
     expect(tester.getSemantics(find.text('계정 해지')),
-        containsSemantics(label: '계정 해지, 정답'));
+        isSemantics(label: '계정 해지, 정답'));
     expect(tester.getSemantics(find.text('EC2 시작')),
-        containsSemantics(label: 'EC2 시작, 오답'));
+        isSemantics(label: 'EC2 시작, 오답'));
     handle.dispose();
   });
 
@@ -95,7 +95,7 @@ void main() {
 
     expect(
       tester.getSemantics(find.byType(GridChip).first),
-      containsSemantics(
+      isSemantics(
         label: '문항 3, 답변함, 플래그',
         isButton: true,
         hasTapAction: true,
@@ -104,7 +104,7 @@ void main() {
     );
 
     expect(tester.getSemantics(find.byType(GridChip).last),
-        containsSemantics(label: '문항 4, 미답, 현재 문항'));
+        isSemantics(label: '문항 4, 미답, 현재 문항'));
     handle.dispose();
   });
 }
