@@ -12,6 +12,7 @@ import '../data/content_index.dart';
 import '../data/exam_session_store.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
+import '../data/question_banks.dart';
 import '../data/task_score_report.dart';
 import '../data/weighted_exam.dart';
 import '../models/certification.dart';
@@ -104,22 +105,13 @@ class _CertExamPageState extends State<CertExamPage> {
     final taskByQuestionId = <String, String>{};
     final taskOrder = <String>[];
     final taskPool = <String, List<Question>>{};
-    for (final e in entries) {
-      // 학습문서만 있는(문항 0) Task는 questions.json이 없다 → 로드 생략(404 방지).
-      if (!e.hasQuestions) continue;
-      try {
-        final raw = await rootBundle.loadString(e.questionsAsset);
-        final bank = QuestionBank.fromJson(
-          json.decode(raw) as Map<String, dynamic>,
-        );
-        banks.add(bank);
-        taskOrder.add(e.taskId);
-        taskPool[e.taskId] = bank.questions;
-        for (final q in bank.questions) {
-          taskByQuestionId[q.id] = e.taskId;
-        }
-      } catch (_) {
-        // 개별 뱅크 로드 실패는 무시(나머지로 진행)
+    // 공용 로더가 문항 0 Task 생략·병렬 로드·순서 보존을 담당한다(리뷰 M-4).
+    for (final l in await loadQuestionBanks(entries)) {
+      banks.add(l.bank);
+      taskOrder.add(l.entry.taskId);
+      taskPool[l.entry.taskId] = l.bank.questions;
+      for (final q in l.bank.questions) {
+        taskByQuestionId[q.id] = l.entry.taskId;
       }
     }
     final pool = groupByDomain(banks);
