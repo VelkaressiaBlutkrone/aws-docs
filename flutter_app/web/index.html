@@ -256,6 +256,15 @@
       }
       window.addEventListener('flutter-first-frame', removeSplash);
 
+      // 부팅 실패는 stall(느림)과 다르다 — 워치독을 끄고 실패 문구로 바꾼 뒤,
+      // 새로고침 링크가 든 #splash-stall을 노출한다(m-4).
+      function bootFailed(e) {
+        clearTimeout(stallTimer);
+        msg.textContent = '시작하지 못했습니다 — 새로고침해 주세요.';
+        stall.hidden = false;
+        console.error(e);
+      }
+
       setStage(1); // 엔트리포인트 로드
       _flutter.loader.load({
         onEntrypointLoaded: function (engineInitializer) {
@@ -263,7 +272,7 @@
           engineInitializer.initializeEngine().then(function (appRunner) {
             setStage(3); // 앱 시작
             return appRunner.runApp();
-          });
+          }).catch(bootFailed);
         }
       });
     })();

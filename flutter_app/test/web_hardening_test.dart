@@ -45,4 +45,43 @@ void main() {
       expect(threeArgs, isNull, reason: '옛 형태가 세 인수 패턴에 걸리면 가드가 무의미하다');
     });
   });
+
+  group('m-4 엔진 초기화 실패를 사용자에게 알린다', () {
+    const path = 'web/index.html';
+    String src() => File(path).readAsStringSync();
+
+    // `initializeEngine()` 체인의 끝에 붙은 실패 처리기를 찾는다.
+    final catchRe = RegExp(r'initializeEngine\(\)[\s\S]{0,600}?\.catch\(');
+
+    test('`initializeEngine()` 체인에 `.catch`가 붙어 있다', () {
+      expect(catchRe.hasMatch(src()), isTrue,
+          reason: '$path: `initializeEngine().then(...)`에 `.catch`가 없다 — '
+              '엔진·CanvasKit 로드가 실패하면 20초 stall 문구만 뜨고 '
+              '사용자는 실패 사실을 알 수 없다');
+    });
+
+    test('실패 처리기가 문구를 바꾸고 새로고침 안내를 노출한다', () {
+      // ⚠️ 처리기는 `.catch(` 앞에 정의될 수도 있어(`.catch(bootFailed)`)
+      // 체인 뒤쪽만 보면 놓친다 — 부트 스크립트 전체를 본다.
+      final handler = src();
+
+      expect(handler, contains('시작하지 못했습니다'),
+          reason: '$path: 실패 처리기가 `#splash-msg` 문구를 실패로 바꾸지 않는다');
+      expect(handler, contains('stall.hidden = false'),
+          reason: '$path: 실패 처리기가 새로고침 링크가 든 `#splash-stall`을 노출하지 않는다');
+      expect(handler, contains('console.error'),
+          reason: '$path: 실패 처리기가 원인을 콘솔에 남기지 않는다');
+    });
+
+    test('대조군: 탐지 규칙이 `.catch` 없는 옛 형태를 잡는다', () {
+      const old = '''
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            setStage(3);
+            return appRunner.runApp();
+          });
+''';
+      expect(catchRe.hasMatch(old), isFalse,
+          reason: '`.catch` 없는 옛 형태가 통과하면 가드가 무의미하다');
+    });
+  });
 }
