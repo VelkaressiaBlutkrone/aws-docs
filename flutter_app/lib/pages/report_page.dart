@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../content/reset_dialog.dart';
@@ -9,10 +6,10 @@ import '../content/study_deep_link.dart';
 import '../data/concept_report.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
+import '../data/question_banks.dart';
 import '../data/study_reset.dart';
 import '../data/task_score_report.dart';
 import '../models/certification.dart';
-import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
@@ -57,19 +54,18 @@ class _ReportPageState extends State<ReportPage> {
         <String, ({String taskId, String skill, String section})>{};
     final taskTitleById = <String, String>{};
     final taskOrder = <String>[];
+    // 제목·순서는 **전 엔트리**에서 모은다(문항 0인 학습문서 Task도 목록에 든다).
     for (final e in entries) {
       taskTitleById[e.taskId] = e.title;
       taskOrder.add(e.taskId);
-      try {
-        final raw = await rootBundle.loadString(e.questionsAsset);
-        final bank =
-            QuestionBank.fromJson(json.decode(raw) as Map<String, dynamic>);
-        for (final q in bank.questions) {
-          taskByQuestionId[q.id] = e.taskId;
-          questionMeta[q.id] =
-              (taskId: e.taskId, skill: q.skill, section: q.section);
-        }
-      } catch (_) {}
+    }
+    // 뱅크는 공용 로더로 — 문항 0 Task 생략(404 방지) + 병렬 + 순서 보존(리뷰 M-4).
+    for (final l in await loadQuestionBanks(entries)) {
+      for (final q in l.bank.questions) {
+        taskByQuestionId[q.id] = l.entry.taskId;
+        questionMeta[q.id] =
+            (taskId: l.entry.taskId, skill: q.skill, section: q.section);
+      }
     }
     final history = _history.all();
     final report = TaskScoreReport.build(

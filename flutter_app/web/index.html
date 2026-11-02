@@ -162,8 +162,23 @@
     // 키/값 계약: awsdocs.theme.v1 = 'dark' | 'light' (lib/data/theme_pref_store.dart와 공유).
     document.documentElement.classList.add('js');
     try {
-      if (localStorage.getItem('awsdocs.theme.v1') === 'dark') {
+      var saved = localStorage.getItem('awsdocs.theme.v1');
+      if (saved === 'dark') {
         document.documentElement.dataset.theme = 'dark';
+      }
+      // 크롬(주소창) 색도 저장 테마를 따르게 한다(m-5). 위의 theme-color 메타 둘은
+      // prefers-color-scheme 기준이라, 저장 테마가 OS 설정과 다르면 어긋났다.
+      // ⚠️ 색은 그 메타에 선언된 값을 그대로 쓴다 — 새 색을 만들지 않는다.
+      if (saved === 'dark' || saved === 'light') {
+        var color = saved === 'dark' ? '#14181F' : '#FBFAF8';
+        var metas = document.querySelectorAll('meta[name="theme-color"]');
+        for (var i = 0; i < metas.length; i++) {
+          metas[i].parentNode.removeChild(metas[i]); // media 기반 쌍 제거
+        }
+        var m = document.createElement('meta');
+        m.setAttribute('name', 'theme-color');
+        m.setAttribute('content', color);
+        document.head.appendChild(m);
       }
     } catch (e) { /* localStorage 불가 → 라이트 폴백 */ }
   </script>
@@ -256,6 +271,15 @@
       }
       window.addEventListener('flutter-first-frame', removeSplash);
 
+      // 부팅 실패는 stall(느림)과 다르다 — 워치독을 끄고 실패 문구로 바꾼 뒤,
+      // 새로고침 링크가 든 #splash-stall을 노출한다(m-4).
+      function bootFailed(e) {
+        clearTimeout(stallTimer);
+        msg.textContent = '시작하지 못했습니다 — 새로고침해 주세요.';
+        stall.hidden = false;
+        console.error(e);
+      }
+
       setStage(1); // 엔트리포인트 로드
       _flutter.loader.load({
         onEntrypointLoaded: function (engineInitializer) {
@@ -263,7 +287,7 @@
           engineInitializer.initializeEngine().then(function (appRunner) {
             setStage(3); // 앱 시작
             return appRunner.runApp();
-          });
+          }).catch(bootFailed);
         }
       });
     })();

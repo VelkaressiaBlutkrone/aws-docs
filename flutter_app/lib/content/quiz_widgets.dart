@@ -36,23 +36,39 @@ class OptionTile extends StatelessWidget {
         border = selected ? c.accent : c.border;
         bg = selected ? c.accentWeak : c.surface;
     }
+    // 선택·채점 상태가 색으로만 전달되면 스크린리더에는 "텍스트, 버튼"으로만
+    // 읽힌다(리뷰 M-7). 라디오처럼 **배타 그룹 + 선택 상태**로 노출하고,
+    // 채점 뒤에는 정답·오답을 라벨에 담는다. 가드는 `exam_a11y_semantics_test.dart`.
+    final stateSuffix = switch (state) {
+      OptState.correct => ', 정답',
+      OptState.wrong => ', 오답',
+      OptState.idle => '',
+    };
     return Padding(
       padding: const EdgeInsets.only(bottom: Gap.sm),
       // 인셋 링(DT4): 선택지는 키보드(Tab→Enter/Space)로도 답할 수 있어야 한다.
       child: InsetFocusRing(
-        child: InkWell(
+        child: Semantics(
+          label: '$text$stateSuffix',
+          selected: selected,
+          inMutuallyExclusiveGroup: true,
+          button: onTap != null,
           onTap: onTap,
-          borderRadius: BorderRadius.circular(Radii.md),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(Gap.md),
-            decoration: BoxDecoration(
-              color: bg,
-              borderRadius: BorderRadius.circular(Radii.md),
-              border: Border.all(color: border, width: selected ? 2 : 1),
+          excludeSemantics: true,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(Radii.md),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(Gap.md),
+              decoration: BoxDecoration(
+                color: bg,
+                borderRadius: BorderRadius.circular(Radii.md),
+                border: Border.all(color: border, width: selected ? 2 : 1),
+              ),
+              child: Text(text,
+                  style: TextStyle(fontSize: 15, height: 1.5, color: c.text)),
             ),
-            child: Text(text,
-                style: TextStyle(fontSize: 15, height: 1.5, color: c.text)),
           ),
         ),
       ),
