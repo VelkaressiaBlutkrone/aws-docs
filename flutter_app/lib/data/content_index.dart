@@ -674,6 +674,24 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t4-2', title: '인프라·비용 모니터링과 최적화 (지연 분해·CloudTrail·적정 규모·구매 옵션·태깅)', domain: 4, mdAsset: 'assets/content/mla/mla-t4-2.md', questionsAsset: 'assets/content/mla/mla-t4-2.questions.json', questionCount: 35),
     ContentEntry(certCode: 'MLA-C01', taskId: 'mla-t4-3', title: 'AWS 리소스 보호 (실행 역할·조건 키 가드레일·네트워크 격리·CI/CD 보안·감사)', domain: 4, mdAsset: 'assets/content/mla/mla-t4-3.md', questionsAsset: 'assets/content/mla/mla-t4-3.questions.json', questionCount: 35),
   ],
+  // AIF-C01: 공식 Task 14개(5도메인)를 도메인 배치별로 누적 등록한다.
+  // 도메인 1(AI 및 ML의 기초, 20%)·2(GenAI의 기초, 24%)·3(파운데이션 모델의 적용, 28%)·
+  // 4(책임 있는 AI에 대한 가이드라인, 14%)·5(AI 솔루션의 보안·규정 준수·거버넌스, 14%).
+  //
+  // ⚠️ 이 자격증은 도메인이 **5개**다(SOA-C03과 같다). 4개를 전제하는 코드·가드·
+  // 배분을 쓰면 도메인 5가 조용히 빠진다.
+  //
+  // ⚠️ 문항은 아직 저작 전이라 `questionsAsset`이 가리키는 파일이 **없다**.
+  // questionCount 0이면 `hasQuestions`가 false라 로더가 긁지 않고,
+  // content_index_test의 동적 불변식도 `existsSync`로 처리해 통과한다
+  // (MLA·DEA가 같은 순서로 들어왔다). 문항 배치에서 파일과 수를 함께 채운다.
+  //
+  // 저작 결정·가이드 실측의 정본은 docs/content-research/AIF-C01/ 이다.
+  'AIF-C01': [
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-1', title: '기본 AI 개념과 용어 (용어·계층·추론 유형·데이터 유형·학습 유형)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-1.md', questionsAsset: 'assets/content/aif/aif-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-2', title: 'AI의 실제 사용 사례 (가치·부적합·기법 선택·응용·관리형 서비스·FM 대 기존 ML)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-2.md', questionsAsset: 'assets/content/aif/aif-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-3', title: 'ML 개발 수명 주기 (파이프라인 단계·모델 소스·프로덕션 사용·서비스 매핑·MLOps·지표)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-3.md', questionsAsset: 'assets/content/aif/aif-t1-3.questions.json', questionCount: 0),
+  ],
 };
 
 /// 테스트 전용 콘텐츠 인덱스 덮어쓰기(자격증별). 앱 경로에서는 항상 null이다.
