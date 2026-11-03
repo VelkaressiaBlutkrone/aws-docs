@@ -698,6 +698,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-2', title: '효과적인 프롬프트 엔지니어링 기법 선택 (구성·기법 다섯·위험 넷·프롬프트 관리)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-2.md', questionsAsset: 'assets/content/aif/aif-t3-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-3', title: 'FM의 훈련과 미세 조정 (훈련 4요소·미세 조정 방법·데이터 준비와 RLHF)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-3.md', questionsAsset: 'assets/content/aif/aif-t3-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-4', title: 'FM 성능 평가 (평가 접근 방식·지표·애플리케이션 평가·비즈니스 목표 조정)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-4.md', questionsAsset: 'assets/content/aif/aif-t3-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t4-1', title: '책임감 있는 AI 시스템 개발 (특징·Guardrails·모델 선택·법적 위험·데이터세트·편향과 변동·감지 도구)', domain: 4, mdAsset: 'assets/content/aif/aif-t4-1.md', questionsAsset: 'assets/content/aif/aif-t4-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t4-2', title: '투명성과 설명 가능성 (불투명한 모델과의 차이·식별 도구·안전성 절충·인간 중심 설계)', domain: 4, mdAsset: 'assets/content/aif/aif-t4-2.md', questionsAsset: 'assets/content/aif/aif-t4-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-1', title: 'AI 시스템 보안 (보안 서비스·출처 문서화·보안 데이터 엔지니어링·프라이버시·할루시네이션 접지)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-1.md', questionsAsset: 'assets/content/aif/aif-t5-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-2', title: 'AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-2.md', questionsAsset: 'assets/content/aif/aif-t5-2.questions.json', questionCount: 0),
   ],
 };
 
