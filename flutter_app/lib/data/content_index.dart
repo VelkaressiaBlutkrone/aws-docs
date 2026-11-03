@@ -694,6 +694,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t2-1', title: '생성형 AI의 기본 개념 (용어·사용 사례·FM 수명 주기·토큰 요금·컨텍스트 엔지니어링·에이전틱 AI)', domain: 2, mdAsset: 'assets/content/aif/aif-t2-1.md', questionsAsset: 'assets/content/aif/aif-t2-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t2-2', title: 'GenAI의 기능과 한계 (장점·단점·모델 선택 요소·비즈니스 가치와 지표)', domain: 2, mdAsset: 'assets/content/aif/aif-t2-2.md', questionsAsset: 'assets/content/aif/aif-t2-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t2-3', title: 'GenAI 애플리케이션을 위한 AWS 인프라와 기술 (서비스 선택·이점·인프라 보증·비용 절충)', domain: 2, mdAsset: 'assets/content/aif/aif-t2-3.md', questionsAsset: 'assets/content/aif/aif-t2-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-1', title: 'FM 애플리케이션의 설계 고려 사항 (모델 선택 기준·추론 파라미터·RAG·벡터 저장소·사용자 지정 비용 절충·AI 에이전트)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-1.md', questionsAsset: 'assets/content/aif/aif-t3-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-2', title: '효과적인 프롬프트 엔지니어링 기법 선택 (구성·기법 다섯·위험 넷·프롬프트 관리)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-2.md', questionsAsset: 'assets/content/aif/aif-t3-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-3', title: 'FM의 훈련과 미세 조정 (훈련 4요소·미세 조정 방법·데이터 준비와 RLHF)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-3.md', questionsAsset: 'assets/content/aif/aif-t3-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t3-4', title: 'FM 성능 평가 (평가 접근 방식·지표·애플리케이션 평가·비즈니스 목표 조정)', domain: 3, mdAsset: 'assets/content/aif/aif-t3-4.md', questionsAsset: 'assets/content/aif/aif-t3-4.questions.json', questionCount: 0),
   ],
 };
 

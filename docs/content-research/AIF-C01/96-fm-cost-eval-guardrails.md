@@ -25,7 +25,9 @@ v1.1 신규 목표는 "FM이 무엇인가"에서 **운영 축**으로 간다 —
 | 배치 추론 | 토큰 — *"Batch mode costs 50 percent less than On-Demand mode for select AI models"* | `[23]` |
 | 프로비저닝된 처리량(PT) | **모델 단위(MU) × 시간** — *"You're billed hourly for a Provisioned Throughput"* | `[2]` |
 
-**PT** `[2]`: MU 하나가 **1분당 처리 입력 토큰 수와 생성 출력 토큰 수**를 정한다. 약정은 **무약정 / 1개월 / 6개월**이고 길수록 시간당 가격이 할인되며 약정분은 기간 종료 전 삭제 불가. ⚠️ **사용자 지정 모델은 PT 없이 못 쓴다**: *"you must purchase Provisioned Throughput to be able to use it."*
+**PT** `[2]`: MU 하나가 **1분당 처리 입력 토큰 수와 생성 출력 토큰 수**를 정한다. 약정은 **무약정 / 1개월 / 6개월**이고 길수록 시간당 가격이 할인되며 약정분은 기간 종료 전 삭제 불가.
+
+> ⚠️ **정정(2026-11-03, 컨트롤러 실측) — "사용자 지정 모델은 PT 없이 못 쓴다"는 과도한 일반화다.** `prov-throughput.html`은 여전히 *"you must purchase Provisioned Throughput to be able to use it."*로 적지만, **더 구체적인** `model-customization-use.html`(「Set up inference for a custom model」)이 선택지를 **둘**로 적는다: ① **Purchase Provisioned Throughput** ② **Deploy custom model for on-demand inference** — *"you only pay for what you use and **you don't need to set up provisioned compute resources**."* 온디맨드 배포에는 리전·모델·시점 제약이 있다(`deploy-custom-model-on-demand.html`). 레포 규율대로 **더 구체적인 쪽을 정본**으로 보고, 안전한 서술은 **"사용자 지정 모델은 전용 용량을 사거나 배포를 따로 만들어야 호출할 수 있다"**다. ⚠️ **문항에서 "PT가 유일한 경로"를 정답으로 쓰지 말 것.**
 
 **배치 추론** `[3]`: 값은 절반이지만 **비동기**(프롬프트를 파일로 올리고 응답을 S3에서 받는다). 제약 둘 — *"Batch inference isn't supported for provisioned models."* / `Converse` 호출 유형에서는 **도구 호출 미지원**(`toolConfig` 레코드는 400 실패).
 
@@ -135,7 +137,7 @@ v1.1 신규 목표는 "FM이 무엇인가"에서 **운영 축**으로 간다 —
 → **프롬프트 캐싱은 배치 추론과 함께 쓸 수 없다**(캐싱은 온디맨드 추론 엔드포인트 전용) `[1]`.
 
 **Q2.** 미세 조정한 사용자 지정 모델을 호출량이 적어 온디맨드로 쓰고 싶다. 가능한가?
-→ **불가능. PT를 구매해야 쓸 수 있다** — *"you must purchase Provisioned Throughput to be able to use it."* `[2]`
+→ ⚠️ **정정(2026-11-03): 가능하다.** **사용자 지정 모델 배포(custom model deployment)**를 만들면 온디맨드로 호출할 수 있고 *"you don't need to set up provisioned compute resources"*다(`model-customization-use.html`). 리전·기반 모델·사용자 지정 시점 제약이 있다(`deploy-custom-model-on-demand.html`). PT 페이지의 *"you must purchase Provisioned Throughput"*는 더 구체적인 페이지가 갈라 놓은 옛 서술로 읽는다. **이 문항은 "PT만이 유일한 경로"를 정답으로 쓰면 안 된다.**
 
 **Q3.** 접지 소스가 "London is the capital of UK. Tokyo is the capital of Japan", 질의가 "What is the capital of Japan?"일 때 응답 "The capital of UK is London."의 판정은?
 → **접지는 되어 있으나 관련성 점수가 낮다**(사실이 맞고 소스를 썼지만 질의에 답하지 않았다) `[12]`.
@@ -195,6 +197,10 @@ Bedrock 사용자 가이드는 **없는 슬러그에 404를 주지 않고 `what-
 ## 확인 필요
 
 1. **BLEU의 docs 근거** — 3.4.2가 BLEU를 열거하지만 `docs.aws.amazon.com`에서 BLEU를 정의하거나 평가 지표로 올려 둔 페이지를 찾지 못했다. 확인된 것은 ROUGE-L·METEOR·BERTScore `[17]` · BERTScore `[9]` · ROUGE-L `[19b]`이고 BLEU는 **블로그 묶음으로만** 나온다 `[26]`. → BLEU를 "AWS 관리형 평가 작업이 계산해 주는 지표"로 쓰면 안 되고 일반 NLP 지표로 소개한다. 저작 전 docs 재탐색 1회 권장.
-2. **「작업 완료율」의 일반 용어 근거** — `cost per interaction`과 사용자 만족도(**CSAT score improvements**)는 `[19a]`에서 그대로 확인됐다. 그러나 **"task completion rate"을 생성형 AI 애플리케이션의 일반 KPI로 정의하는 docs 페이지는 없다**(가장 가까운 것은 Amazon Connect 전용 지표 `AI_RESPONSE_COMPLETION_RATE`이고, Amazon Q Business 블로그의 **task completion time**은 **완료율과 다른 지표**다). → 문항에서 공식 정의로 인용하지 않는다.
+2. ✅ **「작업 완료율」 — 해소(2026-11-03, 컨트롤러 실측). 근거는 「에이전트 평가·모니터링」 쪽에 있었다.** `cost per interaction`과 사용자 만족도(**CSAT score improvements**)는 `[19a]`에서 그대로 확인됐고, `task completion rate`도 다음 세 자리에서 확인된다:
+   - **`AGENTREL02-BP03`**(Well-Architected Agentic AI Lens)이 수집할 에이전트별 지표로 **"tool invocation frequency, output token count distribution, `task completion rate`, and error rate"**를 직접 든다 — https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentrel02-bp03.html (컨트롤러 원문 확인)
+   - **AgentCore Evaluations**가 에이전트의 **"end-to-end task completion (goal attainment) correctness"**를 계산하고, 내장 평가자 **`GoalSuccessRate`**가 대화가 사용자 목표를 충족했는지를 평가한다.
+   - ⚠️ **옛 판정("일반 KPI로 정의하는 docs가 없다")은 검색 범위 문제였다** — 생성형 AI 일반 KPI 문서가 아니라 **에이전틱 관측성 문서**를 봐야 했다. `Amazon Connect` 전용 지표나 블로그의 **task completion time**(다른 지표다)을 최근접으로 둘 필요가 없다.
+   - **판정:** 목표 3.4.5의 그 낱말은 **3.4.4(에이전트·워크플로 평가)와 같은 자리에서 나온다**는 각도로 가르친다. 다만 **수식은 공식이 적지 않으므로** 수치 공식을 만들지 않는다.
 3. ✅ **해소(컨트롤러 실측, 2026-11-03) — 정본은 `Amazon Bedrock Model Evaluations`다.** 영문 가이드 도메인 4 본문이 "(for example, **Amazon SageMaker Model Cards, Amazon Bedrock Model Evaluations**, open source models, data, licensing)"로 적는다(https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html). 한국어 본문의 「Amazon Bedrock 모델 평가」와 일치하고, **영문 본문에도 `Cartify`는 없다** → 개정 표에만 있는 오표기다. 이 노트의 Clarify 판정(신규 고객 차단)과 합쳐 [99-gaps.md](99-gaps.md) **G-08 · G-15**에 결론을 적었다.
 4. **PT의 MU당 토큰 수치** — 공식 문서가 수치를 적지 않고 **AWS 계정 매니저에게 문의하라**고 보낸다 `[2]`. 따라서 "MU 1개 = N 토큰/분" 형태의 문항은 만들 수 없다.

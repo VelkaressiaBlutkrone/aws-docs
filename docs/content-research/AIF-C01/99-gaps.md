@@ -113,6 +113,35 @@ AIF **범위 외** 목록에 있어 이 자격증 문항에 쓸 수 없는 것 �
 - 공식 인증 페이지의 FAQ가 AIF와의 차이를 설명하며 **`AWS Certified AI Business Strategist`**를 든다("validates business judgment for AI decisions … does not assess knowledge of AWS AI services", 2026-11-03).
 - 이 자격증은 레포 `site_data.dart`의 12종에 **없다.** 콘텐츠 0 자격증 목록을 넓힐 때의 후보로만 기록한다 — 이 PR 범위 밖이다.
 
+### G-20 ⚠️ 도메인 3 저작에서 **문서 간 모순을 두 건 잡았다** (같은 배치 안에서)
+
+네 편을 **병렬**로 쓰면 **서로 어긋난 서술이 같은 PR에 들어올 수 있다.** 실제로 두 건이 나와 머지 전에 고쳤다. **다음 배치도 교차 대조를 반드시 한다.**
+
+1. **「사용자 지정 모델은 PT 필수」 ↔ 「경로가 둘」** — `aif-t3-1`은 공식 추론 설정 페이지를 읽고 **두 경로**로 썼는데, `aif-t3-3`은 PT 페이지의 옛 문장을 그대로 받아 **"PT 없이는 쓸 수 없다"**를 세 곳에 적었다. G-19 판정대로 **t3-3의 세 곳을 두 경로 서술로 고쳤다**(요약 불릿 · 본문 인용 블록 · 시험 포인트).
+2. **「계속 사전 훈련」 ↔ 「지속적인 사전 훈련」** — 공식 가이드 목표 3.3.1·3.3.2의 표기는 **「지속적인 사전 훈련」**이다. `aif-t3-3`은 그것을 썼지만 `aif-t2-1`(2곳)·`aif-t3-1`(5곳)이 **「계속 사전 훈련」**을 쓰고 있었다 → **공식 표기로 통일**(7곳 치환, `t3-3`의 용어표에 "「계속 사전 훈련」으로도 번역된다" 병기 1곳만 남겼다). ⚠️ `aif-t2-1`은 **이미 머지된 편**이라 이 PR에서 함께 고쳤다.
+   - ⚠️ **치환 단정이 수를 바로잡았다** — `grep -n`이 4곳으로 보였는데 실제는 **5건**이었다(한 줄에 두 번 나온 곳이 있다). 단정이 없으면 "4건 고쳤다"는 거짓 기록이 남는다.
+
+### G-18 ⚠️ 한국어 가이드와 영문 가이드가 다르다 — 목표 3.2.1 (컨트롤러 직접 실측)
+
+**이 트랙에서 처음 나온 종류의 불일치다.** 지금까지는 「개정 표 ↔ 본문」이었는데(G-06), 이것은 **같은 목표의 한국어판과 영문판이 다르다**.
+
+| 판 | 목표 3.2.1 예시 |
+|---|---|
+| 한국어 | "예: 컨텍스트, 명령, 네거티브 프롬프트, **모델 잠재 공간**" |
+| 영문 | "(for example, context, instruction, **negative prompts**)" — **latent space가 없다** |
+
+- https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html · https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html (둘 다 2026-11-03)
+- ⚠️ 게다가 **`docs.aws.amazon.com`에 「모델 잠재 공간」의 정의 페이지가 없다**(AWS 블로그 서술만 있다).
+- **판정:** `aif-t3-2`가 한국어 목표를 따라 그 낱말을 **소개**하되 **불일치를 ⚠️로 명시**하고, 수식·차원은 가이드가 **범위 밖**으로 적은 "수학·통계 분석"에 해당한다고 닫았다. ⚠️ **문항에서 이 항목을 정답 근거로 쓰지 않는다.**
+- ⚠️ **다음 배치부터 영문 판도 함께 본다** — 한국어만 읽으면 한쪽에만 있는 낱말을 공식 요구로 착각한다. 지금까지 쓴 6편은 한국어 기준이고, 도메인 1·2에서 같은 종류의 차이가 있는지는 **아직 대조하지 않았다**(열린 확인 항목).
+
+### G-19 ⚠️ "사용자 지정 모델은 프로비저닝 처리량 없이 못 쓴다"는 과도한 일반화다 (컨트롤러 직접 실측)
+
+- `prov-throughput.html`은 *"If you customized a model, you must purchase Provisioned Throughput to be able to use it."*로 적는다.
+- 그러나 **더 구체적인** `model-customization-use.html`(「Set up inference for a custom model」)이 선택지를 **둘**로 적는다: ① **Purchase Provisioned Throughput** ② **Deploy custom model for on-demand inference** — *"you only pay for what you use and **you don't need to set up provisioned compute resources**."* 온디맨드 배포에는 리전·기반 모델·사용자 지정 시점 제약이 있다(`deploy-custom-model-on-demand.html`).
+- **판정:** 레포 규율(공식이 갈리면 **더 구체적인 쪽**)대로 **"PT 필수"로 단정하지 않는다.** 안전한 서술은 **"사용자 지정 모델은 전용 용량을 사거나 배포를 따로 만들어야 호출할 수 있다"**이고, 두 선택지를 함께 적는다. ⚠️ **문항에서 "PT가 유일한 경로"를 정답으로 쓰지 않는다.**
+- 조사 노트 [96-fm-cost-eval-guardrails.md](96-fm-cost-eval-guardrails.md)의 해당 두 줄(요금 표 주석 · 자가 점검 Q2)을 같은 PR에서 **정정했다** — 노트를 고치지 않으면 다음 배치가 같은 오류를 다시 쓴다.
+
 ### G-17 ⚠️ 공식 「생성형 AI 수명 주기」 페이지가 단계 수를 자기모순으로 적는다 (컨트롤러 직접 실측)
 
 - **공식 원문:** "The generative AI lifecycle consists of **seven key phases**: scoping, model selection, model customization, development and integration, deployment, and continuous improvement."
