@@ -113,6 +113,14 @@ AIF **범위 외** 목록에 있어 이 자격증 문항에 쓸 수 없는 것 �
 - 공식 인증 페이지의 FAQ가 AIF와의 차이를 설명하며 **`AWS Certified AI Business Strategist`**를 든다("validates business judgment for AI decisions … does not assess knowledge of AWS AI services", 2026-11-03).
 - 이 자격증은 레포 `site_data.dart`의 12종에 **없다.** 콘텐츠 0 자격증 목록을 넓힐 때의 후보로만 기록한다 — 이 PR 범위 밖이다.
 
+### G-17 ⚠️ 공식 「생성형 AI 수명 주기」 페이지가 단계 수를 자기모순으로 적는다 (컨트롤러 직접 실측)
+
+- **공식 원문:** "The generative AI lifecycle consists of **seven key phases**: scoping, model selection, model customization, development and integration, deployment, and continuous improvement."
+  - https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lifecycle.html (2026-11-03)
+- ⚠️ **"일곱"이라고 적고 **여섯 개**를 센다**(scoping · model selection · model customization · development and integration · deployment · continuous improvement). 페이지의 소절 제목도 여섯 개다.
+- **판정:** **단계 수를 단정하지 않는다.** `aif-t2-1`이 목표 2.1.3을 쓸 때 단계 **이름**만 쓰고 "단계 수를 외우지 마세요"를 명시했다. 문항에서 "FM 수명 주기는 몇 단계인가"를 묻지 않는다.
+- ⚠️ 목표 2.1.3이 드는 공식 예시는 **7개 낱말**(데이터 선택 · 모델 선택 · 사전 훈련 · 미세 조정 · 평가 · 배포 · 피드백)이고 **이 렌즈 페이지의 6단계와 다른 분해**다. 가이드 목표와 렌즈를 섞어 "공식 N단계"를 만들면 둘 다 틀린다.
+
 ### G-16 ℹ️ 은퇴한 가이드를 출처로 쓴 자리 1건 (`aif-t1-2`)
 
 `aif-t1-2.md`가 **"ML을 언제 쓰는가"**의 근거로 `docs.aws.amazon.com/machine-learning/latest/dg/when-to-use-machine-learning.html`을 인용한다. 이 페이지는 **은퇴한 Amazon Machine Learning 개발자 안내서**에 있고 상단에 "서비스를 더 이상 업데이트하지 않고 신규 사용자를 받지 않는다"는 배너가 붙는다.
