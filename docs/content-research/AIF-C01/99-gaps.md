@@ -113,6 +113,14 @@ AIF **범위 외** 목록에 있어 이 자격증 문항에 쓸 수 없는 것 �
 - 공식 인증 페이지의 FAQ가 AIF와의 차이를 설명하며 **`AWS Certified AI Business Strategist`**를 든다("validates business judgment for AI decisions … does not assess knowledge of AWS AI services", 2026-11-03).
 - 이 자격증은 레포 `site_data.dart`의 12종에 **없다.** 콘텐츠 0 자격증 목록을 넓힐 때의 후보로만 기록한다 — 이 PR 범위 밖이다.
 
+### G-16 ℹ️ 은퇴한 가이드를 출처로 쓴 자리 1건 (`aif-t1-2`)
+
+`aif-t1-2.md`가 **"ML을 언제 쓰는가"**의 근거로 `docs.aws.amazon.com/machine-learning/latest/dg/when-to-use-machine-learning.html`을 인용한다. 이 페이지는 **은퇴한 Amazon Machine Learning 개발자 안내서**에 있고 상단에 "서비스를 더 이상 업데이트하지 않고 신규 사용자를 받지 않는다"는 배너가 붙는다.
+
+- 그대로 둔 이유: ① 지금도 `docs.aws.amazon.com`에 게시돼 있고 ② 인용한 두 문장("단순 규칙·계산으로 목표값을 정할 수 있으면 ML이 필요 없다" · "규칙을 코딩할 수 없다 / 확장할 수 없다")이 **현행 Well-Architected ML 렌즈 `MLCOST02-BP01`의 서술과 일치**해 교차 확인된다. ③ 학습문서 본문에 **`Amazon Machine Learning`이라는 서비스 이름은 0건**이라 닫힌 서비스를 권하는 서술이 아니다.
+- ⚠️ **다음 세션이 알아야 할 것:** 이 URL이 사라지면 `MLCOST02-BP01`로 교체하면 된다. 다만 **스팸 메일 예시만 사라진다**(그 예시는 은퇴 가이드에만 있다).
+- 이것이 G-14·G-15와 같은 계열은 **아니다** — 그 둘은 "닫힌 서비스를 지금 쓰는 도구로 가르치는" 문제이고, 이것은 "살아 있는 문장을 은퇴한 페이지에서 인용하는" 문제다.
+
 ### G-13 ℹ️ 저작 선결(갭이 아니라 작업 항목)
 
 - `pubspec.yaml`에 **`- assets/content/aif/` 신규 디렉터리 등록**이 필요하다(MLA에서 확인된 레시피 정정 — pubspec은 디렉터리를 개별 등록한다).
