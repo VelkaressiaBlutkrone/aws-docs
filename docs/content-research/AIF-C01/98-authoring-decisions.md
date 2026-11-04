@@ -68,6 +68,7 @@ MLA 판 가드의 "스킬 태그 실재 + Task별 전 항목 커버리지"를 �
 | `Amazon SageMaker Clarify` | 신규 고객 차단, 신규 기능 미도입 | 편향 지표·SHAP의 **유래**로만 설명. "지금 쓰는 FM 평가 도구"의 정답은 **Bedrock Evaluations / Guardrails** |
 | `Amazon Q` | 양쪽 축 축소 중(Q Business 신규 차단 · Q Developer 구독 2027-04-30 종료) | **정답 보기 금지.** "Quick·Kiro의 전신"으로만, 종료·이전 상태를 병기 |
 | `Amazon MemoryDB` | v1.1에서 범위 내 목록에서 **삭제**(범위 외에도 없음) | 쓰지 않는다 |
+| `AWS Audit Manager` | **유지 관리 모드**, 2026-04-30부터 신규 계정에서 설정 불가(신규 기능·프레임워크·리전 추가 없음) | ⚠️ **공식 범위 목록 양쪽에 아예 없고 레포 JSON에만 있다.** 설명용으로만 쓰고 닫힘을 병기한다. 공식 대체 경로는 **AWS Config 적합성 팩**(한계도 공식이 적는다 — SOC2·GDPR 템플릿 없음, 구성 항목만 증거로 기록) |
 
 ⚠️ **"Q Developer가 전부 끝난다"고 쓰면 틀린다** — Console·문서 사이트·Console Mobile App·Chat Apps는 "not impacted"다.
 
