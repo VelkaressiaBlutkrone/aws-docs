@@ -1,0 +1,453 @@
+{
+  "examGuideTaskId": "aif-t5-2",
+  "taskTitle": "AI 시스템의 거버넌스 및 규정 준수 이해",
+  "domain": 5,
+  "certCode": "AIF-C01",
+  "lastVerified": "2026-11-06",
+  "questions": [
+    {
+      "id": "aif-t5-2-q1",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.1",
+      "section": "services",
+      "difficulty": "foundational",
+      "stem": "보안팀이 \"Amazon Bedrock 가드레일을 누가, 언제, 어느 IP 주소에서 삭제했는가\"를 확인해 달라고 요청합니다. 공식 시험 가이드가 거버넌스·규정 준수를 지원하는 서비스로 드는 다섯 개 중 이 질문에 바로 답하는 것은 무엇입니까?",
+      "options": [
+        "AWS Config — 리소스 설정의 현재 상태와 과거 구성 이력을 기록합니다",
+        "AWS Artifact — AWS의 보안·규정 준수 문서를 온디맨드로 내려받습니다",
+        "AWS CloudTrail — 사용자, 역할, AWS 서비스가 취한 작업을 이벤트로 기록합니다",
+        "AWS Trusted Advisor — 환경을 검사해 모범 사례 기반 권장 사항을 제시합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 CloudTrail 소개는 이 서비스를 AWS 계정의 운영·위험 감사, 거버넌스, 규정 준수를 활성화하는 데 도움을 주는 AWS 서비스로 적고, 사용자나 역할 또는 AWS 서비스가 취한 작업이 이벤트로 기록된다고 명시합니다. 기록 대상에는 AWS Management Console, AWS Command Line Interface, AWS SDK와 API를 통한 작업이 모두 들어가므로 \"누가 언제 무엇을 호출했는가\"는 CloudTrail이 답합니다.",
+      "wrongExplanations": {
+        "0": "AWS Config는 리소스 구성에 대한 상세한 보기를 제공하고 리소스가 서로 어떻게 관련되는지와 과거에 어떻게 구성됐는지를 담습니다. 설정이 바뀐 사실은 보이지만 그 변경을 일으킨 호출 주체와 시각, IP 주소는 CloudTrail 쪽 기록입니다.",
+        "1": "AWS Artifact는 AWS 보안 및 규정 준수 문서의 온디맨드 다운로드를 제공하는 창구입니다. 내 계정에서 일어난 활동을 기록하는 서비스가 아닙니다.",
+        "3": "AWS Trusted Advisor는 AWS 환경을 검사해 비용 절감이나 가용성·성능 개선, 보안 틈을 닫을 기회를 권장 사항으로 제시합니다. 개별 API 호출의 주체를 알려 주는 감사 로그가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What Is AWS CloudTrail? — 사용자·역할·AWS 서비스의 작업을 이벤트로 기록하고 기록 방식이 셋이다",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        },
+        {
+          "title": "What Is AWS Config? — 리소스 구성의 상세한 보기와 과거 구성 접근",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q2",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.1",
+      "section": "pitfalls",
+      "difficulty": "applied",
+      "stem": "어느 팀이 \"AWS Config 규칙은 리소스 구성이 바뀔 때만 평가하므로, 아무도 설정을 건드리지 않는 리소스는 규칙이 영원히 평가하지 않는다\"고 말합니다. 공식 문서에 비춰 이 진술을 평가하면 어떻습니까?",
+      "options": [
+        "옳습니다. AWS Config 규칙의 트리거 유형은 구성 변경 하나뿐이라 변경이 없으면 평가가 일어나지 않습니다",
+        "틀립니다. 트리거 유형은 구성 변경, 주기적, 하이브리드 셋이고 주기적 규칙은 24시간마다처럼 내가 고른 빈도로 평가합니다",
+        "틀립니다. 트리거 유형은 구성 변경과 주기적 둘이지만 한 규칙이 둘을 함께 가질 수는 없습니다",
+        "틀립니다. 변경이 없으면 AWS Config가 평가 결과를 NOT_APPLICABLE로 기록해 준수로 처리합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 규칙 구성 요소 문서는 트리거 유형을 셋으로 적습니다. 구성 변경은 규칙 범위에 맞는 리소스의 구성이 바뀔 때 평가하고, 주기적은 24시간마다처럼 내가 고른 빈도로 평가하며, 하이브리드는 일부 규칙이 구성 변경 트리거와 주기 트리거를 모두 가지는 경우입니다. 그래서 구성이 바뀌지 않는 리소스도 주기적 규칙이나 하이브리드 규칙이면 계속 평가됩니다.",
+      "wrongExplanations": {
+        "0": "트리거가 구성 변경 하나뿐이라는 것이 바로 이 진술의 오류입니다. 공식 문서는 주기적 트리거와 하이브리드 트리거를 함께 표에 싣습니다.",
+        "2": "한 규칙이 둘을 함께 가지는 형태가 바로 하이브리드입니다. 공식 문서는 일부 규칙이 구성 변경 트리거와 주기 트리거를 모두 가진다고 적습니다.",
+        "3": "NOT_APPLICABLE은 규칙의 논리를 적용할 수 없는 리소스를 걸러내는 데 쓰는 평가 결과입니다. 평가가 일어나지 않은 상태를 준수로 바꿔 주는 표시가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Components of an AWS Config Rule — 트리거 유형 3종·평가 모드 2종·평가 결과 4종",
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q3",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.1",
+      "section": "services",
+      "difficulty": "applied",
+      "stem": "추론용 Amazon EC2 인스턴스와 전처리 Lambda 함수에 알려진 CVE가 있는지 보려고 Amazon Inspector를 켰습니다. 운영팀이 \"스캔 일정을 주 단위로 짜 두고, 패치한 뒤에는 발견 항목을 콘솔에서 손으로 닫자\"고 제안합니다. 공식 문서에 비춰 맞는 설명은 무엇입니까?",
+      "options": [
+        "평가 스캔을 수동으로 예약하거나 구성할 필요가 없고, 적절히 수정하면 Inspector가 수정을 자동으로 감지해 발견 항목을 닫습니다",
+        "스캔 일정은 반드시 지정해야 하지만 발견 항목은 수정한 뒤 자동으로 닫힙니다",
+        "스캔은 자동으로 시작되지만 발견 항목은 운영자가 콘솔에서 직접 닫아야 합니다",
+        "스캔 일정과 발견 항목 종료를 모두 운영자가 수동으로 관리해야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 Inspector 소개는 평가 스캔을 수동으로 예약하거나 구성할 필요가 없다고 적고, 적격 워크로드를 자동으로 발견해 소프트웨어 취약점과 의도치 않은 네트워크 노출을 지속적으로 스캔한다고 명시합니다. 또 리소스 수명 주기 전체에 걸쳐 새 취약점을 들일 수 있는 변화에 반응해 자동으로 재스캔한다고 적으며, 그 예로 EC2 인스턴스에 새 패키지를 설치할 때, 패치를 설치할 때, 그 리소스에 영향을 주는 새 CVE가 게시될 때를 듭니다. 종료 쪽도 적절히 수정하면 Inspector가 수정을 자동으로 감지해 발견 항목을 닫는다고 적습니다.",
+      "wrongExplanations": {
+        "1": "스캔 일정을 반드시 지정해야 한다는 부분이 공식 서술과 어긋납니다. 일정을 짜지 않아도 적격 리소스를 자동으로 발견해 스캔을 시작합니다.",
+        "2": "발견 항목을 운영자가 직접 닫아야 한다는 부분이 어긋납니다. 공식은 수정을 자동으로 감지해 발견 항목을 닫는다고 적습니다.",
+        "3": "일정과 종료가 둘 다 수동이라는 설명은 두 자리에서 공식 서술과 어긋납니다. Inspector는 자동 발견과 연속 재스캔, 발견 항목 자동 종료를 함께 제공합니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Inspector? — 취약성 관리 서비스·자동 발견과 재스캔·발견 항목 자동 종료",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q4",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.1",
+      "section": "services",
+      "difficulty": "applied",
+      "stem": "외부 감사자가 두 가지를 요구합니다. 하나는 AWS 인프라가 ISO·PCI·SOC 통제를 지킨다는 증빙이고, 다른 하나는 우리 회사가 그 통제를 지킨다는 증빙입니다. AWS Artifact로 어디까지 해결됩니까?",
+      "options": [
+        "둘 다 해결됩니다. Artifact가 AWS 쪽 보고서와 고객 환경의 규정 준수 보고서를 함께 발행합니다",
+        "둘 다 해결되지 않습니다. Artifact는 AWS와의 협약을 검토하고 수락하는 기능만 제공합니다",
+        "우리 회사 쪽만 해결됩니다. AWS 쪽 보고서는 AWS Support 케이스로 따로 요청해야 합니다",
+        "AWS 쪽만 해결됩니다. 자기 회사의 보안과 규정 준수를 입증하는 문서는 고객이 직접 개발하거나 확보할 책임입니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 Artifact 소개는 이 서비스가 AWS 보안 및 규정 준수 문서의 온디맨드 다운로드를 제공한다고 적고 예로 국제 표준화 기구 표준, 지불 카드 산업 보안 표준, 시스템 및 조직 통제 보고서를 듭니다. 같은 페이지의 주의 문구가 경계를 그어 줍니다. AWS 고객은 자기 회사의 보안과 규정 준수를 입증하는 문서를 직접 개발하거나 확보할 책임이 있다고 못박습니다. 그래서 고객 환경 쪽 증거는 AWS Config의 구성 항목이나 CloudTrail의 활동 기록 같은 다른 경로로 모읍니다.",
+      "wrongExplanations": {
+        "0": "고객 환경의 규정 준수 보고서를 Artifact가 발행한다는 서술이 공식 주의 문구와 정면으로 어긋납니다. 그 문서는 고객 책임으로 적혀 있습니다.",
+        "1": "협약을 검토하고 수락하며 상태를 추적하는 기능은 Artifact의 한 부분이지만 전부가 아닙니다. 보안·규정 준수 문서의 온디맨드 다운로드가 이 서비스의 중심 기능으로 적혀 있습니다.",
+        "2": "방향이 거꾸로입니다. Artifact가 제공하는 쪽이 AWS 문서이고 Support 케이스 없이 내려받습니다. 공식은 AWS가 Artifact 문서와 협약을 무료로 제공한다고도 적습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Artifact? — AWS 보안·규정 준수 문서의 온디맨드 다운로드와 고객 책임 주의 문구",
+          "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q5",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.1",
+      "section": "services",
+      "difficulty": "foundational",
+      "stem": "Basic Support 플랜을 쓰는 계정에서 AWS Trusted Advisor를 열었습니다. 공식 문서가 적는 검사 범주의 수와 Basic 플랜에서 쓸 수 있는 범위를 맞게 짝지은 것은 무엇입니까?",
+      "options": [
+        "범주 5개. Basic 플랜에서도 모든 범주의 모든 검사를 쓸 수 있고 주 1회 자동으로 갱신됩니다",
+        "범주 6개. Basic 플랜은 서비스 한도 범주의 모든 검사와 보안·내결함성 범주의 선택된 검사만 쓸 수 있고 자동 검사 업데이트가 없습니다",
+        "범주 6개. Basic 플랜은 비용 최적화 범주만 쓸 수 있고 나머지 범주는 Enterprise Support 전용입니다",
+        "범주 5개. Basic 플랜은 모든 검사를 볼 수 있지만 권장 조치 내용은 유료 플랜에서만 보입니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 시작 안내는 검사 범주를 여섯으로 적습니다. 비용 최적화, 성능, 보안, 내결함성, 서비스 한도, 운영 우수성입니다. 플랜 쪽은 Basic Support 플랜에서 서비스 한도 범주의 모든 검사와 보안·내결함성 범주의 선택된 검사에 접근할 수 있다고 적고, Basic Support 플랜에서는 자동 검사 업데이트를 쓸 수 없다고 명시합니다. 모든 검사와 주 1회 자동 갱신은 AWS Business Support+, AWS Enterprise Support, AWS Unified Operations 플랜 쪽입니다.",
+      "wrongExplanations": {
+        "0": "범주가 다섯이라는 것과 Basic 플랜에서 모든 검사를 쓴다는 것이 둘 다 어긋납니다. 운영 우수성이 여섯 번째 범주이고, 모든 검사와 주 1회 자동 갱신은 유료 플랜에서 열립니다.",
+        "2": "범주 수는 맞지만 Basic 플랜의 범위가 틀렸습니다. Basic에서 열리는 쪽은 서비스 한도 범주 전체와 보안·내결함성 범주의 일부입니다.",
+        "3": "범주가 다섯이라는 것이 틀렸고, Basic 플랜에서 모든 검사를 본다는 것도 공식 서술과 어긋납니다. Basic에서는 접근 가능한 검사 자체가 제한됩니다."
+      },
+      "sources": [
+        {
+          "title": "Get started with Trusted Advisor Recommendations — 검사 범주 6개와 주 1회 자동 갱신",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/get-started-with-aws-trusted-advisor.html"
+        },
+        {
+          "title": "AWS Trusted Advisor — Basic Support 플랜에서 열리는 검사와 자동 업데이트 제약",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q6",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.2",
+      "section": "data-governance",
+      "difficulty": "applied",
+      "stem": "감사팀이 Amazon Bedrock 챗봇에 대해 \"사용자가 무엇을 물었고 모델이 무엇을 답했는지\"의 본문을 요구합니다. AWS CloudTrail 추적은 이미 켜 두었습니다. 무엇이 더 필요합니까?",
+      "options": [
+        "추가 구성은 필요 없습니다. CloudTrail의 InvokeModel 이벤트에 요청 본문과 응답 본문이 이미 담깁니다",
+        "CloudTrail의 고급 이벤트 선택기로 InvokeModel을 데이터 이벤트에 추가하면 본문이 담깁니다",
+        "Amazon Bedrock 모델 호출 로깅을 켜야 합니다. 기본적으로 비활성이고 대상은 같은 계정·같은 리전의 Amazon S3 또는 Amazon CloudWatch Logs입니다",
+        "Amazon CloudWatch 경보를 만들어 임계값을 넘는 호출의 본문을 캡처하도록 설정해야 합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 Bedrock 로깅 문서는 모델 호출 로깅으로 한 리전의 계정에서 Amazon Bedrock에 수행된 모든 호출의 호출 로그, 모델 입력 데이터, 모델 출력 데이터를 수집할 수 있다고 적고, 모델 호출 로깅이 기본적으로 비활성화되어 있다고 명시합니다. 지원 대상은 Amazon CloudWatch Logs와 Amazon Simple Storage Service이며 같은 계정과 같은 리전의 대상만 지원합니다. CloudTrail 쪽은 공식이 싣는 InvokeModel 로그 예시의 requestParameters가 modelId 한 줄이고 responseElements가 null이라 본문을 담지 않습니다.",
+      "wrongExplanations": {
+        "0": "공식이 싣는 InvokeModel 로그 예시의 requestParameters는 modelId 하나뿐이고 responseElements는 null입니다. CloudTrail은 누가 언제 어느 모델을 불렀는지까지만 답합니다.",
+        "1": "InvokeModel은 데이터 이벤트가 아니라 관리 이벤트로 기록되고 CloudTrail은 관리 이벤트를 기본으로 기록합니다. 이벤트 범주를 바꾸는 것으로는 프롬프트 본문이 생기지 않습니다.",
+        "3": "CloudWatch 경보는 사용자가 정의한 임계값에 대해 지표를 지속적으로 모니터링하고 자동화된 작업을 트리거하는 장치입니다. 프롬프트와 응답 본문을 수집하는 기능이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Monitor model invocation using CloudWatch Logs and Amazon S3 — 기본 비활성·대상 제약·레코드 필드",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+        },
+        {
+          "title": "Monitor Amazon Bedrock API calls using CloudTrail — InvokeModel은 관리 이벤트이고 로그 예시의 본문이 비어 있다",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q7",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.2",
+      "section": "data-governance",
+      "difficulty": "applied",
+      "stem": "규제 기관이 \"감사 로그를 보존 기간 동안 계정의 루트 사용자조차 삭제하거나 덮어쓸 수 없게 하라\"고 요구합니다. Amazon S3 Object Lock에서 무엇을 쓰고, 그 전제 조건은 무엇입니까?",
+      "options": [
+        "컴플라이언스 모드를 쓰고, Object Lock은 S3 버전 관리가 활성화된 버킷에서만 작동합니다",
+        "거버넌스 모드를 쓰고, Object Lock은 버전 관리와 무관하게 모든 버킷에서 작동합니다",
+        "거버넌스 모드에 법적 보존을 함께 걸면 루트 사용자도 삭제할 수 없게 되고, 버전 관리는 필요하지 않습니다",
+        "컴플라이언스 모드를 쓰고, 전제 조건은 버킷 기본 암호화를 S3 관리형 키로 설정하는 것입니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 Object Lock 문서는 컴플라이언스 모드에서 보호된 객체 버전을 AWS 계정의 루트 사용자를 포함한 어떤 사용자도 덮어쓰거나 삭제할 수 없다고 적습니다. 반면 거버넌스 모드는 s3:BypassGovernanceRetention 권한을 가진 사용자가 x-amz-bypass-governance-retention:true를 요청 헤더로 명시적으로 넣으면 우회할 수 있습니다. 전제 조건도 같은 페이지가 못박습니다. Object Lock은 S3 버전 관리가 활성화된 버킷에서만 작동합니다.",
+      "wrongExplanations": {
+        "1": "모드와 전제 조건이 둘 다 틀렸습니다. 거버넌스 모드는 전용 권한과 전용 요청 헤더로 우회할 수 있고, Object Lock은 버전 관리가 활성화된 버킷에서만 작동합니다.",
+        "2": "법적 보존은 보존 기간과 같은 보호를 제공하지만 만료일이 없는 장치입니다. 거버넌스 모드의 우회 경로 자체를 없애지는 못하고, 버전 관리 전제도 그대로 남습니다.",
+        "3": "모드는 맞지만 전제 조건이 틀렸습니다. 공식이 적는 전제는 S3 버전 관리 활성화이고 버킷 기본 암호화 설정이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Locking objects with Object Lock (Amazon S3) — WORM·두 보존 모드·버전 관리 전제",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q8",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.2",
+      "section": "pitfalls",
+      "difficulty": "foundational",
+      "stem": "설계 검토에서 \"데이터 레지던시와 데이터 주권은 같은 말\"이라는 발언이 나왔습니다. AWS 공식 정의에 비춰 두 용어의 관계를 맞게 적은 것은 무엇입니까?",
+      "options": [
+        "같은 말입니다. 공식 정의가 두 용어를 서로의 동의어로 적습니다",
+        "레지던시가 더 넓습니다. 주권은 레지던시의 한 측면으로 데이터 저장 위치만을 가리킵니다",
+        "둘은 무관합니다. 레지던시는 저장 위치 요구 사항이고 주권은 암호화 키 소유권만을 가리킵니다",
+        "주권이 더 넓습니다. 레지던시는 현지 법규를 준수하기 위해 데이터를 특정 지역이나 국가에 유지해야 하는 요구 사항이고, 주권의 주요 측면 안에 레지던시가 들어 있습니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 정의 페이지는 데이터 레지던시를 현지 법규를 준수하기 위해 데이터를 특정 지역이나 국가에 유지해야 하는 요구 사항으로 적습니다. 데이터 주권은 조직이나 국가가 자신이 생성·저장하는 데이터를 완전히 통제·소유하는 능력으로 적고, 그 주요 측면으로 데이터 레지던시, 운영자 액세스 제한, 복원력과 생존성, 기술적 자율성 넷을 듭니다. 레지던시가 그 넷 중 하나이므로 주권이 더 넓은 개념입니다.",
+      "wrongExplanations": {
+        "0": "공식 정의 페이지가 두 용어를 별개 항목으로 나눠 적고 주권의 주요 측면 목록 안에 레지던시를 넣습니다. 동의어로 쓰이지 않습니다.",
+        "1": "포함 방향이 거꾸로입니다. 주권의 주요 측면 목록에 레지던시가 들어 있고, 주권의 정의는 저장 위치보다 넓습니다.",
+        "2": "주권의 공식 정의는 암호화 키 소유권보다 넓습니다. 데이터가 어디에 저장되고 누가 액세스할 수 있는지, 외부 요인으로부터의 복원력과 자급성까지 포함합니다."
+      },
+      "sources": [
+        {
+          "title": "Definitions (Data Residency and Hybrid Cloud Lens) — 데이터 레지던시와 데이터 주권의 공식 정의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/data-residency-hybrid-cloud-services-lens/drhc-definitions.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q9",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.2",
+      "section": "data-governance",
+      "difficulty": "applied",
+      "stem": "생성형 AI 애플리케이션을 배포한 팀이 \"릴리스 기준에서 벗어나는지 보려면 프로덕션 데이터를 최대한 많이 수집해 모니터링하는 것이 항상 옳다\"고 결론 냅니다. 책임 있는 AI 렌즈의 RAIMON01에 비춰 이 결론에서 빠진 것은 무엇입니까?",
+      "options": [
+        "빠진 것이 없습니다. RAIMON01의 모범 사례는 수집 범위를 넓히는 것을 첫 항목으로 둡니다",
+        "첫 모범 사례가 프로덕션 데이터 모니터링에 대한 동의를 받는 것이고, 모니터링되는 데이터의 프라이버시 보존과 액세스 제어 설정도 별도 모범 사례로 있습니다",
+        "RAIMON01은 운영 중 모니터링을 다루지 않고 배포 전 테스트만 다루므로 이 결론과 무관합니다",
+        "RAIMON01이 요구하는 것은 모니터링 데이터를 모두 삭제하는 것이므로 수집 자체를 하지 않아야 합니다"
+      ],
+      "correct": 1,
+      "explanation": "책임 있는 AI 렌즈 RAIMON01은 운영 중에 릴리스 기준에서 예상치 못하게 벗어나는 것을 어떻게 모니터링할 것인지를 묻고 모범 사례 다섯을 둡니다. 첫 항목이 프로덕션 데이터 모니터링에 대한 동의 획득이고 셋째가 모니터링되는 데이터의 프라이버시 보존과 액세스 제어 설정입니다. 나머지는 운영 성능 베이스라인 설정과 드리프트 탐지 방법 적용, 운영 가시성을 위한 모니터링 대시보드 생성, 자동 모니터링 경보에 대해 사람의 감독을 촉발하는 프로토콜 설계입니다. 즉 프로덕션 데이터를 보는 것 자체가 동의와 액세스 제어를 요구하는 행위로 적혀 있습니다.",
+      "wrongExplanations": {
+        "0": "RAIMON01의 첫 모범 사례는 수집 범위 확대가 아니라 동의 획득입니다. 수집 범위를 넓히라고 권하는 항목은 다섯 모범 사례 목록에 없습니다.",
+        "2": "RAIMON01의 질문 자체가 릴리스 후 운영 중의 모니터링을 다루고, 모범 사례도 베이스라인과 드리프트 탐지, 대시보드를 포함합니다. 배포 전 테스트만 다루는 항목이 아닙니다.",
+        "3": "모니터링 데이터를 모두 삭제하라는 모범 사례는 없습니다. RAIMON01이 요구하는 것은 동의와 프라이버시 보존, 액세스 제어를 갖춘 모니터링입니다."
+      },
+      "sources": [
+        {
+          "title": "RAIMON01 Monitoring for deviations (Responsible AI Lens) — 모범 사례 5개",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon01.html"
+        },
+        {
+          "title": "What is Amazon CloudWatch? — 시스템 전반의 관찰 가능성과 사용자 정의 임계값 경보",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q10",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.2",
+      "section": "data-governance",
+      "difficulty": "foundational",
+      "stem": "머신 러닝 렌즈의 MLSEC03-BP05는 관련 있는 데이터만 남기라고 적습니다. 이 모범 사례가 흔한 안티패턴으로 드는 것과 권하는 구현을 맞게 짝지은 것은 무엇입니까?",
+      "options": [
+        "안티패턴은 나중에 유용할지 모른다는 이유로 수집한 데이터를 무기한 보관하는 것이고, 권장은 보존 정책에 따라 자동으로 전환하거나 만료시키는 S3 Lifecycle 구성입니다",
+        "안티패턴은 데이터를 너무 일찍 삭제하는 것이고, 권장은 모든 원본 데이터를 Amazon S3 Glacier로 영구 보관하는 것입니다",
+        "안티패턴은 보존 기간을 규제 요구 사항에 맞추는 것이고, 권장은 보존 기간을 비즈니스 요구만으로 정하는 것입니다",
+        "안티패턴은 데이터 액세스 패턴을 기록하는 것이고, 권장은 로깅을 끄고 저장 비용을 줄이는 것입니다"
+      ],
+      "correct": 0,
+      "explanation": "MLSEC03-BP05는 흔한 안티패턴으로 나중에 유용할지 모른다는 이유로 수집한 데이터를 무기한 보관하는 것과 데이터 보존·제거의 명확한 기한을 세우지 않는 것을 듭니다. 구현 지침 쪽은 보존 정책에 따라 자동으로 전환하거나 만료시키도록 S3 Lifecycle 구성을 설정하라고 적고, 보존 기간은 비즈니스 요구와 규제 요구 사항, 데이터의 목적에 근거해 지정하라고 적습니다. 이유도 함께 적혀 있습니다. 수집하고 저장하는 데이터가 많아질수록 공격 표면과 데이터 침해 가능성이 커집니다.",
+      "wrongExplanations": {
+        "1": "방향이 거꾸로입니다. 이 모범 사례의 안티패턴은 너무 일찍 삭제하는 것이 아니라 무기한 보관하는 것이고, 권장도 영구 보관이 아니라 정책에 따른 자동 전환과 만료입니다.",
+        "2": "보존 기간을 규제 요구 사항에 맞추는 것은 안티패턴이 아니라 권장 쪽입니다. 공식은 비즈니스 요구, 규제 요구 사항, 데이터의 목적 셋에 근거해 보존 기간을 지정하라고 적습니다.",
+        "3": "데이터 액세스 패턴 추적도 권장 쪽입니다. 공식은 AWS CloudTrail과 Amazon CloudWatch로 로깅과 모니터링을 설정해 데이터 액세스 패턴을 추적하라고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "MLSEC03-BP05 Keep only relevant data (Machine Learning Lens) — 안티패턴과 S3 Lifecycle 구성",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec03-bp05.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q11",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.3",
+      "section": "protocols",
+      "difficulty": "applied",
+      "stem": "Amazon Bedrock에서 제공되는 사전 훈련된 파운데이션 모델을 API로 불러 사내 애플리케이션을 만들었고, 모델을 미세 조정하지는 않았습니다. AWS Security Reference Architecture가 이 사용 사례에 대해 적는 범위와 통제 주체는 무엇입니까?",
+      "options": [
+        "범위 2이고, 공급업체가 애플리케이션과 고객 데이터를 모두 통제합니다",
+        "범위 4이고, 내가 모델과 그 훈련 데이터를 통제합니다",
+        "범위 3이고, 내가 애플리케이션과 그것이 사용하는 모든 고객 데이터를 통제하며 파운데이션 모델 제공자가 사전 훈련된 모델과 그 훈련 데이터를 통제합니다",
+        "범위 5이고, 내가 모델의 모든 측면을 소유합니다"
+      ],
+      "correct": 2,
+      "explanation": "AWS Security Reference Architecture의 모델 추론 기능 페이지는 이 사용 사례가 생성형 AI Security Scoping Matrix의 범위 3에 해당한다고 적습니다. 범위 3에서는 Amazon Bedrock에서 제공되는 것과 같은 사전 훈련된 파운데이션 모델을 사용해 생성형 AI를 통합하는 애플리케이션이나 기능을 만들고, 내가 애플리케이션과 그것이 사용하는 모든 고객 데이터를 통제하는 반면 파운데이션 모델 제공자가 사전 훈련된 모델과 그 훈련 데이터를 통제한다고 명시합니다.",
+      "wrongExplanations": {
+        "0": "통제 주체가 거꾸로입니다. 공식 문장은 내가 애플리케이션과 그것이 사용하는 모든 고객 데이터를 통제한다고 적고, 제공자가 통제하는 쪽은 사전 훈련된 모델과 그 훈련 데이터로 한정합니다. 범위도 같은 페이지가 이 사용 사례를 범위 3으로 명시합니다.",
+        "1": "같은 페이지가 내 훈련 데이터로 파운데이션 모델을 사용자 지정하는 경우를 범위 4로 적습니다. 미세 조정을 하지 않은 상황이라 범위 4가 아니고, 사전 훈련된 모델과 그 훈련 데이터는 제공자가 통제합니다.",
+        "3": "같은 페이지가 처음부터 모델을 훈련하는 경우를 범위 5로 적습니다. 제공되는 모델을 API로 부르는 상황이라 해당하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Capability 1. Secure access to generative AI FMs (AWS SRA) — 이 사용 사례가 범위 3에 해당한다",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-ai-model-inference.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q12",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.3",
+      "section": "pitfalls",
+      "difficulty": "foundational",
+      "stem": "팀이 \"AWS Well-Architected Tool의 렌즈 카탈로그에서 Responsible AI 렌즈를 골라 적용하겠다\"고 합니다. 공식 문서에 비춰 맞는 설명은 무엇입니까?",
+      "options": [
+        "카탈로그에서 고를 수 있습니다. 카탈로그의 AI 관련 렌즈는 Responsible AI와 Agentic AI 둘입니다",
+        "카탈로그에서 고를 수 있지만 AWS Enterprise Support 플랜이 있어야 열립니다",
+        "카탈로그에 없고 AWS Support 케이스로 요청해야 계정에 적용됩니다",
+        "카탈로그에 없습니다. 공개 AWS Well-Architected 사용자 지정 렌즈 GitHub 저장소에서 내려받아 가져와야 하고, 카탈로그의 AI 관련 렌즈는 Generative AI와 Machine Learning 둘입니다"
+      ],
+      "correct": 3,
+      "explanation": "책임 있는 AI 렌즈 문서의 렌즈 가용성 절은 AI 워크로드 검토를 시작하려면 공개 AWS Well-Architected 사용자 지정 렌즈 GitHub 저장소에서 Responsible AI 렌즈를 내려받아 AWS Well-Architected Tool로 가져오라고 적습니다. 렌즈 카탈로그 페이지는 현재 제공되는 AWS 공식 렌즈 전체를 표로 싣는데 거기에 Responsible AI는 없고 AI 관련으로는 Generative AI와 Machine Learning이 있습니다. 공식은 렌즈 카탈로그를 AWS가 만들고 유지 관리하는 공식 렌즈로 적고 모든 사용자에게 제공되며 추가 설치가 필요하지 않다고 적습니다.",
+      "wrongExplanations": {
+        "0": "카탈로그의 AI 관련 렌즈는 Generative AI와 Machine Learning입니다. Responsible AI와 Agentic AI 쪽이 사용자 지정 렌즈로 가져오는 경로를 씁니다.",
+        "1": "렌즈 카탈로그는 모든 사용자에게 제공되며 추가 설치가 필요하지 않다고 공식이 적습니다. Support 플랜으로 열리는 항목이 아니고, Responsible AI 렌즈는 애초에 카탈로그 표에 없습니다.",
+        "2": "카탈로그에 없다는 앞부분은 맞지만 적용 경로가 틀렸습니다. 공식이 적는 경로는 Support 케이스가 아니라 공개 GitHub 저장소에서 내려받아 AWS WA Tool로 가져오는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Responsible AI Lens — 렌즈 가용성 절이 적는 사용자 지정 렌즈 가져오기 경로",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        },
+        {
+          "title": "Lens Catalog for AWS WA Tool — 현재 제공되는 AWS 공식 렌즈 전수",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html"
+        },
+        {
+          "title": "Using lenses in AWS WA Tool — 렌즈 카탈로그와 사용자 지정 렌즈의 구분",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q13",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.3",
+      "section": "protocols",
+      "difficulty": "applied",
+      "stem": "투명성 표준을 세우려는 팀이 AWS AI Service Card를 검토합니다. 모든 카드 맨 위에 붙는 공식 정의와 카드가 고객에게 권하는 조치를 맞게 적은 것은 무엇입니까?",
+      "options": [
+        "카드는 그 서비스가 의도하는 사용 사례, 서비스가 기계 학습을 어떻게 사용하는지, 책임 있는 설계와 사용에서의 주요 고려 사항을 설명하며, 고객에게는 최종 사용자에게 기계 학습 사용을 공개하는 것, 피드백 메커니즘을 제공하는 것, 자신의 문서에서 이 Service Card를 참조하는 것을 고려하라고 권합니다",
+        "카드는 고객이 만든 모델의 훈련 데이터와 평가 지표를 고객이 직접 기록하는 양식이며, 작성한 카드를 AWS에 제출하면 검토를 받습니다",
+        "카드는 서비스의 규정 준수 인증서를 담고 있어 감사자에게 그대로 제출하면 고객 환경의 규정 준수가 증명됩니다",
+        "카드는 모델 성능 벤치마크 수치를 담고 있으므로 고객이 자신의 콘텐츠로 따로 평가할 필요가 없습니다"
+      ],
+      "correct": 0,
+      "explanation": "모든 AWS AI Service Card 맨 위에 같은 정의가 붙습니다. 카드는 그 서비스가 의도하는 사용 사례, 서비스가 기계 학습을 어떻게 사용하는지, 그리고 그 서비스의 책임 있는 설계와 사용에서의 주요 고려 사항을 설명합니다. 카드의 투명성 절은 고객이 최종 사용자에게 기계 학습 사용을 공개하는 것, 피드백 메커니즘을 제공하는 것, 자신의 문서에서 이 Service Card를 참조하는 것을 고려해야 한다고 적습니다.",
+      "wrongExplanations": {
+        "1": "고객이 자기 모델을 직접 문서화하는 양식은 AI Service Card가 아닙니다. Service Card는 AWS가 자기 서비스에 대해 발행하는 문서이고, AWS에 제출해 검토받는 절차도 적혀 있지 않습니다.",
+        "2": "규정 준수 보고서와 인증서를 내려받는 창구는 AWS Artifact이고 그 문서도 AWS 쪽 규정 준수를 다룹니다. 고객 환경의 규정 준수를 입증하는 문서는 고객 책임으로 적혀 있습니다.",
+        "3": "카드는 고객이 해결해야 하는 각 사용 사례에 대해 자신의 콘텐츠로 AI 서비스의 성능을 평가할 것을 권장합니다. 또 프롬프트나 서비스의 변경이 결과를 바꿀 수 있으므로 주기적으로 재테스트하라고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock Guardrails (AWS AI Service Cards) — 카드의 정의와 투명성·거버넌스 절",
+          "url": "https://docs.aws.amazon.com/ai/responsible-ai/bedrock-guardrails/overview.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q14",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.3",
+      "section": "protocols",
+      "difficulty": "applied",
+      "stem": "조직이 머신 러닝 팀의 교육 요구 사항을 정리합니다. 머신 러닝 렌즈 MLOPS01-BP01이 흔한 안티패턴으로 드는 것과 그에 대한 권장을 맞게 짝지은 것은 무엇입니까?",
+      "options": [
+        "안티패턴은 윤리 교육에 시간을 쓰는 것이고, 권장은 기술 역량에 집중한 단일 분야 팀을 꾸리는 것입니다",
+        "안티패턴은 윤리적 고려를 무시하고 기술적 기술에만 집중하는 것이고, 권장은 데이터 과학, 엔지니어링, 윤리, 법무, 도메인 전문가를 포함한 여러 분야의 전문가로 다양한 팀을 구성하는 것입니다",
+        "안티패턴은 교차 기능 협업이고, 권장은 각 분야가 독립적으로 움직이는 사일로형 팀을 만드는 것입니다",
+        "안티패턴은 지속적 학습 계획을 세우는 것이고, 권장은 채용 시점의 역량만으로 팀을 유지하는 것입니다"
+      ],
+      "correct": 1,
+      "explanation": "MLOPS01-BP01은 흔한 안티패턴 넷을 적습니다. 지속적 학습 계획 없이 머신 러닝 전문가를 채용하는 것, 윤리적 고려를 무시하고 기술적 기술에만 집중하는 것, 교차 기능 협업 없이 사일로화된 머신 러닝 팀을 만드는 것, 머신 러닝 모델이 본질적으로 편향 없고 공정하다고 가정하는 것입니다. 구현 지침은 데이터 과학, 엔지니어링, 윤리, 법무, 도메인 전문가를 포함한 여러 분야의 전문가로 다양한 팀을 구성하라고 적고 목적을 개발 프로세스 초기에 잠재적 문제를 식별하는 것으로 적습니다. 같은 지침은 법무, 윤리, IT, 데이터 과학, 주요 비즈니스 단위의 대표로 구성된 AI 윤리 위원회 수립도 권합니다.",
+      "wrongExplanations": {
+        "0": "안티패턴과 권장이 둘 다 거꾸로입니다. 윤리적 고려를 무시하는 쪽이 안티패턴이고, 단일 분야 팀은 사일로화된 팀이라 역시 안티패턴으로 적혀 있습니다.",
+        "2": "교차 기능 협업은 권장 쪽입니다. 안티패턴으로 적힌 것은 교차 기능 협업 없이 사일로화된 머신 러닝 팀을 만드는 것입니다.",
+        "3": "지속적 학습 계획은 권장 쪽입니다. 안티패턴으로 적힌 것은 지속적 학습 계획 없이 머신 러닝 전문가를 채용하는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "MLOPS01-BP01 Develop the right skills with accountability and empowerment — 안티패턴과 교차 기능 팀·AI 윤리 위원회",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops01-bp01.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t5-2-q15",
+      "examGuideTaskId": "aif-t5-2",
+      "skill": "5.2.3",
+      "section": "protocols",
+      "difficulty": "applied",
+      "stem": "생성형 AI 시스템을 여러 개 운영하게 된 조직이 거버넌스 실무와 검토 전략을 세우려 합니다. 생성형 AI 렌즈의 책임 있는 AI 서술이 선도 조직의 실무로 드는 네 가지는 무엇입니까?",
+      "options": [
+        "모델 카드 발행, 벤치마크 점수 공개, 외부 감사 계약, 연 1회 침투 테스트",
+        "단일 담당자 지정, 전사 공지, 분기별 비용 검토, 모델 교체 주기 고정",
+        "기술·비즈니스·위험 관리 관점을 포함하는 AI 거버넌스 위원회, 포괄적인 문서화 관행, 명확한 에스컬레이션 경로, 정기적인 검토 프로세스",
+        "모든 프롬프트의 사전 승인, 사용자 접근 전면 차단, 모델 출력 전수 수동 검토, 외부 API 호출 금지"
+      ],
+      "correct": 2,
+      "explanation": "생성형 AI 렌즈의 책임 있는 AI 서술은 선도 조직이 기술, 비즈니스, 위험 관리 관점을 포함하는 AI 거버넌스 위원회를 수립하고 있다고 적고, 그들이 포괄적인 문서화 관행과 명확한 에스컬레이션 경로, 정기적인 검토 프로세스를 개발하여 AI 시스템이 위험을 효과적으로 관리하면서 비즈니스 목표에 계속 기여하게 한다고 적습니다. 위원회, 문서화, 에스컬레이션 경로, 정기 검토 넷이 이 서술이 드는 거버넌스 실무입니다.",
+      "wrongExplanations": {
+        "0": "벤치마크 공개와 외부 감사 계약, 침투 테스트는 이 서술이 드는 네 항목이 아닙니다. 공식 문장은 거버넌스 위원회, 문서화 관행, 에스컬레이션 경로, 정기 검토 프로세스를 적습니다.",
+        "1": "단일 담당자 지정은 공식 서술과 어긋납니다. 거버넌스 위원회가 기술과 비즈니스, 위험 관리 관점을 함께 포함하라는 것이 이 문장의 요지입니다.",
+        "3": "전면 차단과 출력 전수 수동 검토는 이 서술에 없습니다. 공식이 적는 목표는 위험을 효과적으로 관리하면서 AI 시스템이 비즈니스 목표에 계속 기여하게 하는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Responsible AI (Generative AI Lens) — 거버넌스 위원회·문서화·에스컬레이션 경로·정기 검토",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/responsible-ai.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

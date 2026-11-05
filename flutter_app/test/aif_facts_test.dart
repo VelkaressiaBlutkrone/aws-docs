@@ -21,10 +21,13 @@ void main() {
 
   group('대조군: 가드의 입력이 실재하는가', () {
     // 이것이 없으면 아래 「0건」 단정들이 **빈 문자열**을 상대로 통과할 수 있다.
-    test('도메인 1·2 학습문서 6편이 있고 비어 있지 않다', () {
+    test('AIF 학습문서 14편이 있고 비어 있지 않다', () {
       for (final taskId in [
         'aif-t1-1', 'aif-t1-2', 'aif-t1-3',
         'aif-t2-1', 'aif-t2-2', 'aif-t2-3',
+        'aif-t3-1', 'aif-t3-2', 'aif-t3-3', 'aif-t3-4',
+        'aif-t4-1', 'aif-t4-2',
+        'aif-t5-1', 'aif-t5-2',
       ]) {
         final raw = read(taskId);
         // ⚠️ `String.length`는 **문자 수**이고 바이트 수가 아니다 — 한국어는
@@ -289,6 +292,154 @@ void main() {
           raw.split('aws.amazon.com/what-is/machine-learning/').length - 1,
           2,
           reason: '프런트매터 sources와 문서 끝 참고자료 둘 다에 있어야 한다');
+    });
+  });
+
+  // ── 도메인 4·5 문항 저작(2026-11-06)에서 찾은 것 ──────────────────────
+  //
+  // ⚠️ 이 배치의 큰 교훈: **「없다」 규율 3부를 다 해도 표 구조로 표현된 사실은
+  // 못 잡는다.** 한 에이전트가 `glue-data-quality.html`에서 「실패 레코드 식별은
+  // ETL 쪽만」을 "공식에 없다"고 보고했는데(추출 둘 · 대조군 · 다른 표현까지
+  // 적용했다), 실측하면 그 사실은 **Data Catalog 열과 ETL 열을 가진 비교 표**에
+  // `Not supported / Supported`로 들어 있다. 산문 문구 검색으로는 영원히 0건이다.
+  // 보고를 믿고 md를 "고쳤다면 참인 문장을 지웠을" 자리였다 → 아래 마지막 그룹이
+  // 그 문장을 **지우지 못하게** 고정한다(금지 가드가 아니라 **보존 가드**다).
+  group('aif-t4-1: 모범 사례가 「차원 하나당 하나씩」은 아니다', () {
+    // 실측(2026-11-06): `raibr02.html`은 BP01~BP09이고 **BP09는 차원이 아닌
+    // 교차 전략**(`Choose multiple strategies to identify potential harmful
+    // events`), `rairc03.html`은 BP01~BP05·BP07~BP10 **아홉 항목으로 BP06이
+    // 번호에서 빈다.** md가 "차원 하나당 하나씩"으로 단정하고 있었다.
+    test('「차원 하나당 하나씩」 일반화가 0건이다', () {
+      final raw = read('aif-t4-1');
+      expect(raw.contains('차원 하나당 하나씩'), isFalse,
+          reason: 'RAIBR02는 BP09가 차원이 아니고 RAIRC03은 BP06이 빈다');
+    });
+
+    test('모범 사례 개수도 외우지 말라는 단서와 두 근거가 있다', () {
+      final raw = read('aif-t4-1');
+      expect(raw, contains('모범 사례 개수도 외우지 않습니다'));
+      expect(raw, contains('Choose multiple strategies'),
+          reason: 'RAIBR02-BP09가 차원이 아니라는 근거');
+      expect(raw, contains('`BP06`에서 빕니다'),
+          reason: 'RAIRC03 번호 공백이라는 근거');
+    });
+
+    test('측정 쪽에는 제어 가능성이 있다는 것이 함께 적혀 있다', () {
+      // "유해 사건에는 제어 가능성·거버넌스가 없고, 측정에는 거버넌스가 없다"는
+      // **참**이다(RAIRC03-BP07이 제어 가능성). 거꾸로 읽히지 않게 못박는다.
+      expect(read('aif-t4-1'),
+          contains('Measure user controllability of system behavior'));
+    });
+  });
+
+  group('aif-t4-1: AI 서비스 카드 접두사는 목록 페이지가 아니다', () {
+    // 실측(2026-11-06, 내장 브라우저로 직접 열어 확인): `https://docs.aws.
+    // amazon.com/ai/responsible-ai/`는 **403**이고 AWS의 "the web address you
+    // entered is not a functioning page on our site" 오류 페이지가 돌아온다.
+    // 개별 카드(`.../nova-2-lite/overview.html` 등)는 전부 `200 r=0`이다.
+    //
+    // ⚠️ **403이 봇 차단인지 실제 미제공인지는 상태 코드로 갈라지지 않는다** —
+    // `repost.aws`의 403은 봇 차단이었다(SOA·DEA 감사). 그래서 브라우저로 열었다.
+    test('그 접두사를 「아래에 게시된다」로 안내하지 않는다', () {
+      final raw = read('aif-t4-1');
+      expect(raw.contains('`docs.aws.amazon.com/ai/responsible-ai/` 아래에'),
+          isFalse,
+          reason: '그 경로는 제공되지 않아 목록 페이지로 열 수 없다');
+    });
+
+    test('제공되지 않는 경로라는 경고가 있다', () {
+      expect(read('aif-t4-1'), contains('제공되지 않는 경로'));
+    });
+  });
+
+  group('aif-t5-1: 태그 예측 불가능성은 공식 문구가 아니다', () {
+    // 실측(2026-11-06): `guardrails-prompt-attack.html` ·
+    // `guardrails-use-independent-api.html` · `guardrails-use-converse-api.html`
+    // 세 페이지 전부에서 `tagSuffix` · `unpredictable` · `guess` · `random`이
+    // 본문·원시 HTML 양쪽 **0건**이고, 대조군 "If there are no tags, prompt
+    // attacks for those use cases will not be filtered"는 **1건**이다.
+    // 즉 추출은 작동했고 그 서술이 실제로 없다. md의 🧠 원리 블록은 올바른
+    // 층이었지만 **시험 직전 요약과 자가 점검 Q2가 사실처럼** 적고 있었다.
+    test('「예측 불가능해야 하는 이유」로 단정하지 않는다', () {
+      expect(read('aif-t5-1').contains('예측 불가능해야 하는 이유'), isFalse,
+          reason: '공식 문구가 아니라 저작자 추론이다');
+    });
+
+    test('원리임을 밝히면서도 공식이 적는 선은 그대로 인용한다', () {
+      final raw = read('aif-t5-1');
+      expect(raw, contains('공식 문구가 아니라'));
+      expect(
+          raw,
+          contains(
+              'If there are no tags, prompt attacks for those use cases will not be filtered'),
+          reason: '공식이 실제로 적는 한 줄은 유지한다');
+    });
+
+    test('프롬프트 공격 미평가 필드가 공식 경로 표기다', () {
+      // 공식 원문: "Content in messages[].content[].toolResult is not assessed
+      // for prompt attacks, and neither are the tool definitions in
+      // toolConfig.tools[].toolSpec." md가 `toolSpec`만 적어 상위 경로가 빠져
+      // 있었다(틀린 서술은 아니지만 시험에서 갈리는 자리다).
+      expect(read('aif-t5-1'), contains('`toolConfig.tools[].toolSpec`'));
+    });
+  });
+
+  group('보존 가드: 표에만 있는 참인 사실을 지우지 않는다', () {
+    // 위 머리말의 경위 그대로다. `glue-data-quality.html`의 비교 표가
+    // "Data Quality rule recommendations: Supported / Not supported"와
+    // "Identifying records that failed data quality checks: Not supported /
+    // Supported"를 Data Catalog 열·ETL 열로 적는다(실측). md가 옳다.
+    test('aif-t5-1: Glue DQ 진입점별 지원 차이가 남아 있다', () {
+      final raw = read('aif-t5-1');
+      expect(raw, contains('실패한 레코드 식별은'));
+      expect(raw, contains('규칙 추천은'));
+    });
+
+    // 같은 배치에서 **네 번째** 거짓 「없다」가 나왔다. 한 에이전트가
+    // "안전 조치 계층 미지정 시 Classic"의 근거를 못 찾았다고 보고했는데,
+    // 그 문장은 에이전트가 찾아본 **바로 그 페이지**에 있다 —
+    // `guardrails-contextual-grounding-check.html`의
+    // "If you don't specify a tier, your guardrail uses Classic tier."
+    // 탐침이 `If you do not` · `defaults to` · `Classic tier is`였고 실제
+    // 문구가 `If you don't specify a tier`여서 셋 다 빗나갔다.
+    //
+    // ⚠️ **md가 영문을 직접 인용하고 있으면 그 인용문으로 먼저 검색한다.**
+    // (덧붙여 API 참조의 `tierName`은 `Required: Yes`인데 이것과 모순이
+    // 아니다 — 필수인 것은 `TierConfig` **안쪽** 필드이고, 그 객체를 통째로
+    // 빼면 Classic이 된다. 두 사실이 함께 성립한다.)
+    test('aif-t4-1: 계층 기본값의 공식 인용이 남아 있다', () {
+      expect(
+          read('aif-t4-1'),
+          contains(
+              "If you don't specify a tier, your guardrail uses Classic tier."),
+          reason: '공식 원문 확인(2026-11-06) — 근거 없다는 보고로 지우지 않는다');
+    });
+  });
+
+  group('전파: 고친 md 주장이 문항으로 새지 않았다', () {
+    // SAA·SOA 판(`saa_question_propagation_test` ·
+    // `soa_dea_question_propagation_test`)과 같은 계약이다 — 학습문서 정정이
+    // 파생 문항에 전파되지 않는 것을 막는다. AIF는 아직 전용 전파 가드 파일이
+    // 없으므로 이 배치의 세 주장만 여기서 센다.
+    test('AIF 문항 14파일 전수에서 금지 주장이 0건이다', () {
+      final files = Directory('assets/content/aif')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))
+          .toList();
+      expect(files.length, 14,
+          reason: 'AIF 공식 Task 14개 전부 문항이 들어와 있다');
+      const forbidden = [
+        '차원 하나당 하나씩',
+        '예측 불가능해야 하는 이유',
+      ];
+      for (final f in files) {
+        final raw = f.readAsStringSync();
+        for (final needle in forbidden) {
+          expect(raw.contains(needle), isFalse,
+              reason: '${f.uri.pathSegments.last}: 「$needle」이 전파됐다');
+        }
+      }
     });
   });
 }

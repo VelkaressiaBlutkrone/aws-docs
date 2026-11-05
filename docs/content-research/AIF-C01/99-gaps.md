@@ -439,3 +439,90 @@ G-30이 `docs.aws.amazon.com`에서 "없는 페이지도 200 + redirects 1"임�
 - **증류 교사·학생 전제 조건 페이지를 찾지 못했다** — 노트 96 `[5]`가 가리키는 "지원 조합 표에서 짝지어진 모델"의 정본 슬러그 둘이 죽었다. 살아 있는 정의 문장("larger more intelligent model (teacher) → smaller, faster, cost-efficient model (student)")만 쓴다.
 - **`aws.amazon.com/what-is/agentic-ai/`에 오타가 있다** — 코드 전환 절 첫 문장이 `Agentc AI`다(인용 금지).
 - **`lifecycle.html`은 `continuous` pre-training으로 적는다**(`continued`가 아니다). 사실은 같아 md 정정 사안은 아니고, **본문 표기는 D-09대로 「지속적인 사전 훈련」**만 쓴다.
+
+## 도메인 4·5 문항 저작 (2026-11-06)
+
+### G-49 ⚠️⚠️ 「없다」 규율 3부를 다 해도 **표 구조로 표현된 사실**은 못 잡는다
+
+이 배치에서 에이전트 보고 중 **「공식에 없다」가 네 건이었고 그중 두 건이 거짓**이었다. 둘 다 추출 둘·대조군·다른 표현을 **규율대로 적용한 뒤에** 나온 오판이라, 규율의 구멍 자체가 드러났다.
+
+- **① `glue-data-quality.html`의 진입점별 지원 차이** — `aif-t5-1.md`가 "실패한 레코드 식별은 ETL 쪽만, 규칙 추천은 Data Catalog 쪽만"으로 적고, 에이전트는 `failed record`·`records that failed`·`filter out`을 본문·원시 HTML 양쪽에서 0건으로 보고했다(대조군 `DeeQu`는 2건이라 추출은 작동했다). 그런데 **컨트롤러 실측은 `records that failed`를 1건**으로 셌고, 그 자리는 **Data Catalog 열과 ETL 열을 가진 비교 표**였다:
+
+  ```
+  Data Quality rule recommendations            Supported      Not supported
+  Identifying records that failed … checks     Not supported  Supported
+  ```
+
+  **md가 옳다.** 산문 문구로는 "ETL 쪽만"이 어디에도 없고 사실이 **표의 열 구조**에 들어 있어, 문구 검색은 영원히 0건이다. ⚠️ **보고를 믿고 md를 고쳤다면 참인 문장을 지웠을 자리다.**
+
+- **② 안전 조치 계층의 기본값** — `aif-t4-1.md`가 **"If you don't specify a tier, your guardrail uses Classic tier."**를 영문으로 직접 인용하는데, 에이전트는 `If you do not`·`defaults to`·`Classic tier is` 세 탐침으로 0건을 얻고 "근거 없음"으로 보고했다. **그 문장은 에이전트가 찾아본 바로 그 페이지**(`guardrails-contextual-grounding-check.html`)에 **글자 그대로** 있다 — 실제 문구가 `If you don't specify a tier`여서 탐침 셋이 모두 빗나갔다.
+
+  ⚠️ **md가 영문을 직접 인용하고 있으면 그 인용문 자체로 먼저 검색한다.** 패러프레이즈한 탐침부터 쓰면 「없다」가 쉽게 거짓이 된다.
+  ⚠️ 함께 확인한 것: API 참조의 `tierName`은 **`Required: Yes`**(유효값 `CLASSIC | STANDARD`)인데 위 문장과 **모순이 아니다** — 필수인 것은 `TierConfig` **안쪽** 필드이고 그 객체를 통째로 빼면 Classic이 된다. 한쪽만 보고 "미지정 상태는 없다"로 결론 내리면 틀린다(컨트롤러가 한 번 그렇게 결론 내렸다가 더 찾아 바로잡았다).
+
+→ **처리:** 둘 다 **보존 가드**로 고정했다(`aif_facts_test.dart`의 「표에만 있는 참인 사실을 지우지 않는다」 그룹). **금지 가드가 아니라 보존 가드**라는 점이 중요하다 — 앞으로의 거짓 「없다」가 참인 문장을 지우는 것을 막는다.
+
+### G-50 ⚠️ `docs.aws.amazon.com`의 판정 신호는 **세 갈래**다 (G-38 보강)
+
+기록된 규칙은 "없는 페이지에도 404를 주지 않으니 `num_redirects`로 판정한다"였는데, 실측하면 그것은 **포함 가이드가 실재할 때만** 맞다.
+
+| 경우 | 신호 | 실측 예 |
+|---|---|---|
+| 살아 있는 페이지 | `200 r=0` | `bedrock/…/guardrails.html` |
+| **있는 가이드 안**의 없는 슬러그 | `200 r=1`(그 가이드 인덱스로) | `sagemaker/latest/dg/zz-bogus-control.html` → `…/dg/` |
+| **가이드·접두사 자체가 없음** | **진짜 `404 r=0`** | `zz-bogus-guide/latest/dg/zz-bogus.html` · `ai/responsible-ai/zz-bogus-card/overview.html` |
+| 제공되지 않는 디렉터리 인덱스 | **`403`** + AWS 오류 페이지 | `ai/responsible-ai/` |
+
+⚠️ **그래서 상태 코드와 `num_redirects`를 함께 본다**(`200 r=0`만 통과). `-sL`은 여전히 필수다(G-30).
+⚠️ **403이 봇 차단인지 실제 미제공인지는 상태 코드로 갈라지지 않는다** — `repost.aws`의 403은 **봇 차단**이었다(SOA·DEA 출처 감사). 그래서 이번에는 **내장 브라우저로 직접 열어** AWS의 "the web address you entered is not a functioning page on our site" 오류 페이지를 확인했다.
+
+### G-51 ⚠️ `docs.aws.amazon.com/ai/responsible-ai/`는 **목록 페이지가 아니다** (✅ md 정정)
+
+라이브 `aif-t4-1.md`가 학습자에게 그 접두사를 "아래에 모델·서비스별로 게시된다"고 안내하고 있었다. **개별 카드는 전부 `200 r=0`**인데(`nova-2-lite/overview.html` 등) **접두사 자체는 403**이다(G-50). 카드 형태(`…/<모델·서비스>/overview.html`)를 적고 **그 경로를 목록으로 열 수 없다는 경고**를 넣었다. G-26의 "카드 총 개수·전체 목록을 단정하지 않는다"와 같은 계열이고, 이제 그 **이유**가 문서에 적혀 있다.
+
+### G-52 ⚠️ `RAIBR02`·`RAIRC03`은 **「차원 하나당 모범 사례 하나」가 아니다** (✅ md 정정)
+
+라이브 `aif-t4-1.md`가 그렇게 단정하고 있었다. 컨트롤러 직접 실측(2026-11-06):
+
+- **`raibr02.html`** — `BP01`~`BP09`. 차원별은 **`BP01`~`BP08` 여덟 개**(공정성·진실성·견고성·프라이버시·**시스템과 데이터 보안**·설명 가능성·투명성 + 안전성)이고 **`BP09 Choose multiple strategies to identify potential harmful events`는 차원이 아닌 교차 전략**이다.
+- **`rairc03.html`** — `BP01`~`BP05`·**`BP07`~`BP10`**. **아홉 항목이고 `BP06`이 번호에서 빈다**(공식 목록 자체의 공백이라 「어느 쪽이 정본이냐」를 고를 성격이 아니다).
+
+⚠️ **그래서 「모범 사례가 몇 개인가」류 문항은 양쪽에서 성립하지 않는다** — 차원 개수를 묻지 않는 판정(G-22)이 **모범 사례 개수까지 확장된다.**
+⭐ **md의 다른 세 주장은 참이었다** — "프라이버시·보안과 진실성·견고성이 갈려 있다"(10개 분해의 증거) · "유해 사건에는 제어 가능성·거버넌스가 없다" · "측정에는 거버넌스가 없다". 마지막 것은 **측정 쪽에 제어 가능성은 있다**는 뜻이고 맞다(`RAIRC03-BP07 Measure user controllability of system behavior`). 거꾸로 읽히지 않게 그 BP 제목을 본문에 넣었다.
+
+### G-53 ⚠️ 태그 접두사의 「예측 불가능」은 공식 문구가 아니다 (✅ md 층 정정)
+
+`guardrails-prompt-attack.html` · `guardrails-use-independent-api.html` · `guardrails-use-converse-api.html` 세 페이지 전부에서 `tagSuffix` · `unpredictable` · `guess` · `random`이 본문·원시 HTML 양쪽 **0건**이고, 대조군 **"If there are no tags, prompt attacks for those use cases will not be filtered"**는 **1건**이다(추출은 작동했다).
+
+`aif-t5-1.md`의 **🧠 원리 블록은 올바른 층**이었는데 **시험 직전 요약과 자가 점검 Q2가 사실처럼** 적고 있었다. 세 자리를 "공식이 적는 것은 여기까지이고, 예측 불가능하게 두라는 것은 이 구조에서 따라오는 **원리**"로 고쳤다.
+
+⚠️ **공식 태그 예시에는 접미사 자리가 실제로 있다** — `amazon-bedrock-guardrails-guardContent_xyz`. 「예측 불가능하게 두라」는 권고가 없을 뿐이다.
+✅ 함께 정밀화: 미평가 필드를 공식 경로 표기 그대로 바꿨다 — **`messages[].content[].toolResult`**와 **`toolConfig.tools[].toolSpec`**(md는 `toolSpec`만 적어 상위 경로가 빠져 있었다. 틀린 서술은 아니었다).
+
+### G-54 ⚠️ 공식 내부 어긋남 — `policy.html`의 정책 언어 서열
+
+같은 페이지가 "describe rules in plain English instead of writing formal policy code in **Cedar**"(Cedar를 정식 정책 코드로 전제)와 "Policy in AgentCore **also supports** authoring policies in **Dogwood**"를 함께 적는다. AgentCore 개요 표는 거꾸로 "정책 언어 **Dogwood**, Cedar와 **호환**"이다(G-27). **어느 쪽도 주 언어로 단정하지 않고 「두 언어」로만** 쓴다 — `aif-t5-1`의 문항은 언어를 아예 언급하지 않고 정책 조건 축(주체·도구·리소스·입력 파라미터)만 썼다.
+
+### G-55 ⚠️ 공식 내부 어긋남 — Bedrock 관리 이벤트 목록이 한 페이지 안에서 4와 5로 갈린다
+
+`bedrock/latest/userguide/logging-using-cloudtrail.html`이 두 문장을 싣는다 — `such as`가 붙은 쪽은 `ListAsyncInvokes`를 더해 **5개**, 다른 문장은 **4개**다(`InvokeModel` · `InvokeModelWithResponseStream` · `Converse` · `ConverseStream`). 세 번째 문장이 "logs the remainder of Amazon Bedrock API operations as management events"로 받으므로 **열린 목록**이라 모순은 아니다. **판정: 목록 수를 단정하지 않는다** — `aif-t5-2`의 문항은 `InvokeModel`이 관리 이벤트라는 단일 사실만 쓴다.
+
+### G-56 ℹ️ 보강 후보 — 공동 책임 모델의 **세 번째 묶음**이 md에 없다
+
+공식은 **Inherited Controls · Shared Controls · Customer Specific** 셋을 적고 Customer Specific 예로 "Service and Communications Protection or Zone Security"를 든다. `aif-t5-1.md`는 상속·공유 둘만 적는다. **오류가 아니라 누락**이므로 md를 고치지 않았고, 문항에도 쓰지 않았다(쓰면 학습자가 본 적 없는 묶음이 된다).
+
+### G-57 ℹ️ 미래의 「없다」 함정 — `what-is/explainable-ai/`에 오타가 있다
+
+소제목이 **`Transparency and audibility`**다(`auditability`가 아니다 — AWS 쪽 오타). 본문이 "Internal and external auditors should be able to assess AI models…"라서 `aif-t4-2.md`의 한국어 표기 「투명성과 감사 가능성」은 의도에 맞고 md는 영문을 인용하지 않으므로 **정정 대상이 아니다.** ⚠️ 다만 **영문 제목으로 재검색하면 0건이 나와** 다음 검수에서 「없다」 오판을 부를 자리다.
+
+### G-58 ℹ️ 차원 8/10 분기는 **단순 모순이 아니라 갱신되는 집합**이다 (G-22 보강)
+
+Responsible AI Lens가 직접 적는다 — **"we define Responsible AI using a core set of dimensions that we update over time as AI evolves"**(실측). 그래서 개수를 외우지 않는 판정이 더 단단해진다. md §1 각주에 한 줄 보강할 가치가 있다(선택, 이번에 넣지 않았다).
+
+### G-59 ℹ️ 죽은 슬러그 1건 (레포 0건)
+
+**`glue/latest/dg/data-quality-how-it-works.html`** → `200 r=1`로 가이드 인덱스로 간다. 레포에는 **0건**이라 회귀 가드는 세우지 않았다(G-26과 같은 처리).
+
+### G-60 ℹ️ 범위 내 페이지가 **범위 밖 서비스를 끌고 오는** 자리
+
+`Amazon Macie`의 `what-is` 페이지가 통합 대상으로 **`AWS Security Hub CSPM`**을 싣는다(AIF 공식 범위 **밖**). Macie 문항을 쓸 때 그 문장을 그대로 인용하면 범위 밖 이름이 학습 경로에 들어온다 — `aif-t5-1`은 쓰지 않았다. G-10 목록과 같은 계열의 운영 주의다.

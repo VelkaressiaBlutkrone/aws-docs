@@ -1,0 +1,461 @@
+{
+  "examGuideTaskId": "aif-t4-1",
+  "taskTitle": "책임감 있는 AI 시스템 개발 설명",
+  "domain": 4,
+  "certCode": "AIF-C01",
+  "lastVerified": "2026-11-06",
+  "questions": [
+    {
+      "id": "aif-t4-1-q1",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.1",
+      "section": "features",
+      "difficulty": "applied",
+      "stem": "사내 문서 질의응답 어시스턴트를 출시하기 전에, 오타가 섞인 질문이나 형식이 어긋난 입력이 들어와도 시스템이 올바른 출력을 내는지 측정하는 릴리스 기준을 세우려고 합니다. Responsible AI Lens가 정의한 차원 중 이 기준이 속하는 것은 무엇입니까?",
+      "options": [
+        "진실성 — 사실에 맞는 시스템 출력을 달성하는 것",
+        "안전성 — 유해한 시스템 출력과 오용을 차단하는 것",
+        "견고성 — 예상된 입력과 예상 밖 입력 양쪽에서 올바른 시스템 출력을 달성하는 것",
+        "제어 가능성 — 시스템 행동을 모니터링하고 조종하는 메커니즘을 갖추는 것"
+      ],
+      "correct": 2,
+      "explanation": "Responsible AI Lens는 견고성을 \"Achieving correct system outputs for both expected and unexpected inputs\"로 정의합니다. 오타나 어긋난 형식은 예상 밖 입력이고, 그런 입력에서도 올바른 출력이 나오는지를 재는 기준이므로 견고성 차원입니다. 공식 시험 가이드 4.1.1이 견고성과 진실성을 나란히 따로 드는 것도 이 분해와 맞습니다.",
+      "wrongExplanations": {
+        "0": "진실성은 사실에 맞는 시스템 출력을 달성하는 차원입니다. 응답 내용이 사실인지를 재는 축이고, 입력이 망가져 있을 때 동작이 유지되는지를 재는 축이 아닙니다.",
+        "1": "안전성은 유해한 시스템 출력과 오용을 차단하는 차원입니다. 출력의 유해성을 막는 축이어서 예상 밖 입력에 대한 출력 정확성과는 다릅니다.",
+        "3": "제어 가능성은 시스템 행동을 모니터링하고 조종하는 메커니즘을 갖추는 차원입니다. 운영자가 개입할 수단을 두는 쪽이고 입력 변형에 대한 정확성이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Responsible AI Lens - AWS Well-Architected Framework — 차원 10개와 각 차원의 정의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q2",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.1",
+      "section": "features",
+      "difficulty": "foundational",
+      "stem": "공식 시험 가이드가 책임 있는 AI의 특징 예로 드는 낱말 중 하나는 「편향성」입니다. 그런데 AWS는 이 낱말을 책임 있는 AI 「차원」의 이름으로 쓰지 않습니다. 편향은 공식 체계에서 어디에 놓입니까?",
+      "options": [
+        "공정성 차원에서 측정하는 대상입니다 — 그 차원을 재는 공식 모범 사례의 제목이 공정성을 이해관계자 집단 전반의 원치 않는 편향으로 측정하라고 적습니다",
+        "제어 가능성 차원의 하위 항목으로, 시스템 행동을 조종하는 메커니즘에 포함됩니다",
+        "견고성 차원의 측정 지표로, 예상 밖 입력에서 출력이 흔들리는 정도를 재는 데 쓰입니다",
+        "거버넌스 차원의 항목으로, AI 공급망에 모범 사례를 반영하는 과정에서만 다룹니다"
+      ],
+      "correct": 0,
+      "explanation": "AWS의 차원 목록에는 편향성이 없고 공정성이 있습니다. 공정성의 공식 정의는 \"Considering impacts on different groups of stakeholders\"이고, 그 차원을 재는 Responsible AI Lens 모범 사례의 제목이 \"Measure fairness as unwanted bias across stakeholder groups\"입니다. 즉 편향은 차원의 이름이 아니라 공정성 차원을 측정하는 대상입니다. 그래서 「차원이 아닌 것」을 묻는 문항에서 편향성이 답이 되고, 「이 상황은 어느 차원인가」를 묻는 문항에서는 공정성으로 갑니다.",
+      "wrongExplanations": {
+        "1": "제어 가능성은 시스템 행동을 모니터링하고 조종하는 메커니즘을 갖추는 차원입니다. 집단 간 영향을 재는 축이 아니므로 편향이 놓이는 자리가 아닙니다.",
+        "2": "견고성은 예상된 입력과 예상 밖 입력 양쪽에서 올바른 출력을 달성하는 차원입니다. 입력 변형에 대한 정확성을 보는 축이고 집단 간 불리함을 재지 않습니다.",
+        "3": "거버넌스는 제공자와 배포자를 포함한 AI 공급망에 모범 사례를 반영하는 차원입니다. 편향을 다루는 과정이 거버넌스를 거칠 수는 있지만 편향을 측정하는 차원은 공정성입니다."
+      },
+      "sources": [
+        {
+          "title": "RAIRC03-BP02 Measure fairness as unwanted bias across stakeholder groups — 개인·집단·표현적 공정성과 교차 집단",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html"
+        },
+        {
+          "title": "Responsible AI Lens - AWS Well-Architected Framework — 차원 10개와 각 차원의 정의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q3",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.2",
+      "section": "guardrails",
+      "difficulty": "applied",
+      "stem": "보험 자격 심사 챗봇이 사내 자격 규정에 어긋나는 답을 하는지 잡고, 어긋난다면 어느 규칙과 모순되는지까지 감사 기록으로 남기려고 합니다. Amazon Bedrock Guardrails의 어느 정책이 이 요구에 맞습니까?",
+      "options": [
+        "콘텐츠 필터 — 사전 정의된 유해 범주의 강도를 올려 규정에 어긋나는 응답을 차단하고 차단 사유를 범주로 남깁니다",
+        "자동 추론 검사 — 올린 규정 문서에서 추출한 논리 규칙에 응답을 검증하고, 결론을 뒷받침하는 정책 규칙과 변수 할당을 인용한 설명을 돌려줍니다",
+        "거부 주제 — 보험 자격이라는 주제를 정의해 질의와 응답 양쪽에서 차단하고 위반 메시지를 남깁니다",
+        "민감 정보 필터 — 응답에 든 가입자 식별 정보를 마스킹하면서 규정 위반 항목을 함께 표시합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 자동 추론 검사가 생성된 내용이 내 정책 규칙과 모순됨을 수학적으로 증명해 사실이 틀린 진술을 탐지하고, 진술되지 않은 가정을 지적하며, 결론을 뒷받침하는 특정 정책 규칙과 변수 할당을 인용한 검증 가능한 설명을 준다고 적습니다. 쓸 상황으로 드는 「복잡한 규칙 집합」의 예에 insurance eligibility가 직접 들어 있고, 수학적으로 검증 가능한 증명이 있는 감사 가능한 응답이 필요한 규정 준수 시나리오도 함께 듭니다. 공식은 콘텐츠 필터와 주제 정책이 이진 게이트인 것과 달리 이것은 검증 계층이라고 적습니다.",
+      "wrongExplanations": {
+        "0": "콘텐츠 필터는 사전 정의된 유해 콘텐츠 범주 여섯 종류(Hate · Insults · Sexual · Violence · Misconduct · Prompt Attack)를 탐지해 범주별 강도로 막는 이진 게이트입니다. 사내 규정과의 논리적 모순을 증명하지 않습니다.",
+        "2": "거부 주제는 바람직하지 않은 주제를 정의해 질의와 응답 양쪽에서 차단합니다. 정의 길이 상한이 계층마다 달라 Standard는 정의당 1,000자, Classic은 200자입니다. 주제 자체를 막는 정책이고 규정과의 모순을 증명하는 정책이 아닙니다.",
+        "3": "민감 정보 필터는 개인 식별 정보 같은 민감 정보를 확률적 탐지로 차단하거나 마스킹합니다. 규정 위반 여부를 판정하는 정책이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What are Automated Reasoning checks in Amazon Bedrock Guardrails? — 검증 계층과 쓸 상황, 못 하는 것",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html"
+        },
+        {
+          "title": "Safeguard tiers for guardrails policies — 계층을 가진 세 정책과 거부 주제 정의 길이",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q4",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.2",
+      "section": "guardrails",
+      "difficulty": "applied",
+      "stem": "문맥 근거 확인을 켠 RAG 챗봇에서 접지 소스가 \"London is the capital of UK. Tokyo is the capital of Japan\"이고 질의가 \"What is the capital of Japan?\"인데, 모델이 \"The capital of UK is London.\"을 응답했습니다. 공식 문서는 이 응답을 어떻게 판정합니까?",
+      "options": [
+        "미근거이면서 무관입니다 — 소스를 쓰지 않았고 질의에도 답하지 않았습니다",
+        "미근거입니다 — 소스를 잘못 써서 접지 점수가 낮아집니다",
+        "접지와 관련성 양쪽을 통과합니다 — 소스에 있는 문장을 그대로 옮겼기 때문입니다",
+        "무관입니다 — 소스에 근거하고 사실도 맞지만 질의에 답하지 않아 관련성 점수가 낮습니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서가 이 예를 그대로 싣습니다 — \"The capital of UK is London\"은 접지 소스의 정보를 쓰고 사실도 맞지만 질의에 답하지 않으므로 무관으로 판정되고 관련성 점수가 낮아집니다. 반대로 \"The capital of Japan is London\"은 질의에는 관련 있지만 소스를 잘못 써서 미근거이자 사실이 틀린 것으로 판정됩니다. 접지는 \"소스에 근거하는가\", 관련성은 \"질의에 답하는가\"로 갈립니다.",
+      "wrongExplanations": {
+        "0": "소스도 쓰지 않고 질의에도 답하지 않은 경우로 공식이 따로 드는 예는 \"It is raining outside.\" 같은 응답입니다. 이 응답은 소스의 문장을 그대로 썼으므로 접지는 되어 있습니다.",
+        "1": "소스를 잘못 써서 미근거가 되는 쪽은 \"The capital of Japan is London\"입니다. 이 응답은 소스의 문장과 어긋나지 않습니다.",
+        "2": "두 패러다임을 모두 통과하려면 질의에도 답해야 합니다. 임계값은 허용되는 최소 점수이므로 관련성 점수가 임계값보다 낮으면 할루시네이션으로 탐지돼 차단됩니다. 임계값의 유효 범위는 0에서 0.99까지이고 1은 전부 차단하므로 무효입니다."
+      },
+      "sources": [
+        {
+          "title": "Use contextual grounding check to filter hallucinations in responses — 접지와 관련성 판정 예시, 임계값 0~0.99",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q5",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.2",
+      "section": "guardrails",
+      "difficulty": "foundational",
+      "stem": "애플리케이션이 Amazon Bedrock 밖의 모델도 함께 쓰고 있어서, 파운데이션 모델을 호출하지 않고 애플리케이션이 직접 넘긴 텍스트만 가드레일로 평가하려고 합니다. 공식 문서가 적는 방법은 무엇입니까?",
+      "options": [
+        "ApplyGuardrail 작업을 호출합니다 — 직접 공급한 콘텐츠에 가드레일을 적용하므로 어떤 모델에도 묶이지 않고 애플리케이션이 어떤 모델을 쓰든 동작합니다",
+        "추론 API 호출에 가드레일 ID와 버전을 지정하고 모델 ID를 비워 둡니다 — 모델 없이 필터만 실행됩니다",
+        "가드레일의 작업 드래프트를 평가 전용 버전으로 승격한 뒤 그 버전의 ARN을 직접 호출합니다",
+        "지원 모델 목록에서 임베딩 모델을 골라 호출합니다 — 임베딩 경로는 생성 없이 콘텐츠만 평가합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 모델을 호출하지 않고 콘텐츠를 평가하려면 ApplyGuardrail 작업을 쓰라고 적고, 그 작업이 직접 공급한 콘텐츠에 가드레일을 적용하므로 어떤 모델에도 묶이지 않으며 애플리케이션이 어떤 모델을 쓰든 동작한다고 명시합니다. 추론 경로에서는 가드레일 ID와 버전을 지정해 입력 프롬프트와 모델 완성을 평가하지만, 이 경로에는 파운데이션 모델 호출 자체가 없습니다.",
+      "wrongExplanations": {
+        "1": "추론 경로는 가드레일 ID와 버전을 지정해 모델 응답까지 평가하는 방식입니다. 모델 호출 없이 콘텐츠만 평가하는 전용 작업이 따로 있으므로 모델 ID를 비우는 변형을 쓸 필요가 없습니다.",
+        "2": "가드레일을 만들면 작업 드래프트가 자동으로 생기고, 만족하면 버전을 만들어 지원 모델과 함께 씁니다. 다만 버전은 별개 리소스가 아니어서 자체 ARN이 없으므로 버전의 ARN을 직접 호출할 수 없습니다.",
+        "3": "임베딩 모델은 가드레일이 지원하지 않는 유형에 듭니다. 지원하지 않는 모델로 가드레일을 참조하면 \"ValidationException: Guardrail is not supported with the chosen model\"으로 실패하고, 같은 요청에서 가드레일 파라미터만 빼면 성공해 원인을 오진하기 쉽습니다."
+      },
+      "sources": [
+        {
+          "title": "Supported Regions and models for Amazon Bedrock Guardrails — ApplyGuardrail은 어떤 모델에도 묶이지 않는다",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-supported.html"
+        },
+        {
+          "title": "Detect and filter harmful content by using Amazon Bedrock Guardrails — 정책 여섯 종류와 드래프트·버전",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q6",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.3",
+      "section": "model-selection",
+      "difficulty": "applied",
+      "stem": "사내 규정 문서에서 특정 조항을 찾아 주는 기능을 새로 만들려고 합니다. 환경적 고려 사항을 반영하려면 공식 지속 가능성 원칙 중 가장 먼저 해야 하는 일은 무엇입니까?",
+      "options": [
+        "가장 작은 파운데이션 모델을 고른 뒤 양자화와 프루닝으로 추론 자원을 더 내립니다",
+        "생성형 AI가 이 워크로드에 맞는 해법인지 먼저 묻습니다 — 정보를 찾는 일이라면 검색 엔진이 더 적은 자원으로 결과를 돌려줄 수 있습니다",
+        "오토 스케일링과 서버리스로 유휴 자원을 없애 전체 에너지 사용량을 먼저 줄입니다",
+        "Amazon의 재생 에너지 프로젝트에 가깝고 공표된 탄소 집약도가 낮은 리전을 먼저 고릅니다"
+      ],
+      "correct": 1,
+      "explanation": "Generative AI Lens의 지속 가능성 원칙은 \"생성형 AI가 맞는 해법인지 식별한다\"로 시작하고 공식 문장이 \"Always ask if generative AI is right for your workload\"입니다. 더 단순하고 지속 가능한 접근으로 같은 결과를 낼 수 있다면 연산 집약적인 AI를 쓸 이유가 없다고 적으며, 정보를 찾을 때는 검색 엔진이 생성형 AI보다 적은 자원으로 결과를 돌려준다는 예를 직접 듭니다. 생성형 AI의 목적은 기존 정보를 바탕으로 새 콘텐츠를 만드는 것입니다.",
+      "wrongExplanations": {
+        "0": "적정 크기 모델 선택과 양자화·프루닝은 두 번째 원칙인 「환경 효율을 위한 설계」와 그 아래 모범 사례에 드는 수단입니다. 생성형 AI를 쓸지부터 묻는 단계가 그보다 앞입니다.",
+        "2": "오토 스케일링과 서버리스는 세 번째 원칙인 「동적 자원 최적화」입니다. 필요할 때만 자원을 쓰고 유휴 자원 낭비를 피하는 수단이며 해법 자체를 고르는 단계가 아닙니다.",
+        "3": "리전 선택은 별도 모범 사례로 있고 재생 에너지 프로젝트 근처와 낮은 탄소 집약도가 공식 근거입니다. 다만 그것도 생성형 AI를 쓰기로 정한 다음의 선택입니다."
+      },
+      "sources": [
+        {
+          "title": "Sustainability (AWS Well-Architected Generative AI Lens) — 지속 가능성 원칙 셋과 검색 엔진 예시",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html"
+        },
+        {
+          "title": "SUS01-BP01 Choose Region based on both business requirements and sustainability goals — 안티패턴 둘",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q7",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.3",
+      "section": "model-selection",
+      "difficulty": "applied",
+      "stem": "생성형 AI가 필요한 워크로드로 확정하고 대형 언어 모델을 배포했습니다. 성능 목표를 유지하면서 탄소 발자국을 줄이라는 요구가 들어왔을 때, 공식 모범 사례가 드는 수단은 무엇입니까?",
+      "options": [
+        "모든 워크로드 자원을 한 지리적 위치로 통합해 리전 간 데이터 전송을 없앱니다",
+        "훈련이 추론보다 언제나 연산 집약적이므로 재훈련 주기만 늘려 전체 영향을 줄입니다",
+        "양자화·프루닝·모델 증류 같은 최적화 기법을 조합해 모델 크기와 추론 자원 소비를 줄입니다",
+        "모델을 더 오래 훈련시켜 편향과 변동을 함께 줄여 재시도 호출을 없앱니다"
+      ],
+      "correct": 2,
+      "explanation": "「에너지 효율적인 모델 소비」 포커스 영역의 모범 사례는 GENSUS03-BP01 하나이고, 양자화·프루닝·모델 증류 같은 전략이 운영 비용을 낮추고 응답 시간을 개선하며 환경 지속 가능성을 촉진한다고 적습니다. 바라는 결과는 비용 효율적이면서 탄소 효율적인 AI 솔루션이고 위험 등급은 Medium입니다. 양자화는 모델의 가중치와 활성값을 나타내는 수의 정밀도를 낮춰 모델 크기를 줄이고 추론 시간을 단축하는 기법입니다.",
+      "wrongExplanations": {
+        "0": "모든 워크로드 자원을 한 지리적 위치에 통합하는 것은 리전 선택 모범 사례가 적는 안티패턴입니다. 자기 위치를 기준으로 리전을 고르는 것도 같은 안티패턴에 듭니다.",
+        "1": "공식 문서는 큰 모델 훈련이 일반적으로 추론보다 연산 집약적이라고 적으면서도, 모델이 하루에 수백만 건의 예측을 서빙하면 추론 단계가 시간이 지나며 더 큰 누적 영향을 가질 수 있다고 적습니다. 훈련만 보고 판단하면 틀립니다.",
+        "3": "더 훈련하는 것은 절충입니다. 공식 문장이 충분히 복잡한 모델에서는 훈련을 늘리면 편향이 줄지만 변동은 커질 수 있다고 적습니다. 환경 영향을 줄이는 수단으로 제시된 것도 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "GENSUS03-BP01 Leverage smaller models and optimized inference techniques to reduce carbon footprint",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensus03-bp01.html"
+        },
+        {
+          "title": "MLSUS01-BP01 Define the overall environmental impact or benefit — 추론의 누적 영향",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus01-bp01.html"
+        },
+        {
+          "title": "SUS01-BP01 Choose Region based on both business requirements and sustainability goals — 안티패턴 둘",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q8",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.4",
+      "section": "legal-risks",
+      "difficulty": "applied",
+      "stem": "어떤 팀이 생성형 AI 애플리케이션의 응답 거부율을 낮추려고 서비스의 필터링 기능을 끄려고 합니다. AWS의 상한 없는 지적 재산권 면책 관점에서 이 선택의 문제는 무엇입니까?",
+      "options": [
+        "면책은 고객이 제공한 입력 자체에 붙으므로 필터를 끄면 입력에 대한 보호만 사라집니다",
+        "면책은 서비스 약관 50.10절에 열거된 서비스에만 붙으므로 필터를 끄면 그 서비스가 목록에서 빠집니다",
+        "면책의 범위는 그대로이고 상한 없는 면책이 상한 있는 면책으로 축소됩니다",
+        "공식 FAQ는 고객이 서비스를 책임 있게 써야 한다고 적고, 그 예로 침해 데이터를 입력하지 않을 것과 서비스의 필터링 기능을 비활성화하지 않을 것을 듭니다"
+      ],
+      "correct": 3,
+      "explanation": "AWS는 일반 공급된 특정 Amazon 생성형 AI 서비스의 생성 출력에서 비롯되는 저작권 클레임에 상한 없는 지적 재산권 면책을 제공합니다. 대상은 Amazon 모델과 서비스 약관 50.10절에 열거된 서비스이고, 고객은 그 서비스들이 고객 입력에 응답해 생성한 출력이 저작권을 침해한다는 제3자 클레임으로부터 보호됩니다. 같은 답변이 이어서 \"Customers must also use the services responsibly, such as not inputting infringing data or disabling a service’s filtering features\"를 적습니다. 즉 필터링 기능을 끄는 것이 책임 있는 사용의 반례로 공식에 명시돼 있어, 응답률을 올리려는 선택이 법적 보호까지 건드립니다.",
+      "wrongExplanations": {
+        "0": "면책이 붙는 것은 입력이 아니라 생성 출력입니다. 고객이 제공한 입력에 응답해 지정 서비스가 생성한 출력에 대한 제3자 저작권 클레임이 보호 대상입니다.",
+        "1": "서비스 약관 50.10절의 목록은 어느 서비스가 면책 대상인지를 정하는 것이고 고객의 필터 설정에 따라 바뀌지 않습니다. 걸리는 것은 목록이 아니라 책임 있는 사용 요건입니다.",
+        "2": "공식 문서는 이 면책을 상한 없는 것으로 적고, 설정에 따라 상한이 생긴다는 서술은 없습니다. 공식이 드는 조건은 침해 데이터 입력 금지와 필터링 기능 비활성화 금지입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock FAQs — 상한 없는 지적 재산권 면책과 책임 있는 사용 조건",
+          "url": "https://aws.amazon.com/bedrock/faqs/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q9",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.4",
+      "section": "legal-risks",
+      "difficulty": "applied",
+      "stem": "서비스 제공을 위해 수집한 고객 데이터로 공개 파운데이션 모델을 미세 조정해 상업 서비스에 쓰려고 합니다. 공식 문서가 적는 고객의 책임은 무엇입니까?",
+      "options": [
+        "모델 라이선스 약관을 검토·준수하는 것은 고객 책임이고, 데이터를 ML 용도로 쓰려면 일반 수집 동의를 넘어 추가 동의가 필요할 수 있습니다",
+        "AWS의 지적 재산권 면책이 모델 라이선스 위반까지 덮으므로 라이선스 검토는 선택 사항입니다",
+        "공개 파운데이션 모델은 모두 Apache 2.0으로 배포되므로 상업적 사용 제약을 따로 볼 필요가 없습니다",
+        "서비스 제공을 위해 수집한 데이터는 같은 조직 안에서 쓰는 것이므로 모델 훈련에 바로 쓸 수 있습니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 파운데이션 모델이 서드파티 오픈 소스·독점 제공자로부터 온보딩되어 모델 소스가 지정한 서로 다른 라이선스로 배포된다고 적고, \"You are responsible for reviewing and complying with any applicable license terms and making sure they are acceptable for your use case before downloading or using the content\"로 책임의 주체를 고객으로 못박습니다. 그리고 MLSEC01-BP01은 데이터에 ML 애플리케이션용 권한이 있는지를 따로 확인하라고 적으며, 서비스 제공을 위해 수집한 고객 데이터를 ML 모델 훈련에 쓰려면 추가 동의가 필요할 수 있다는 예를 직접 듭니다.",
+      "wrongExplanations": {
+        "1": "지적 재산권 면책은 지정 서비스의 생성 출력에서 비롯되는 저작권 클레임에 붙습니다. 내가 내려받아 쓰는 모델의 라이선스 약관을 지키는 책임은 고객에게 남습니다.",
+        "2": "공식 문서가 흔한 파운데이션 모델 라이선스 예로 드는 것만 해도 Alexa Teacher Model, Apache 2.0, BigScience Responsible AI License v1.0, CreativeML Open RAIL++-M 넷입니다. 라이선스는 모델 소스마다 다릅니다.",
+        "3": "같은 조직이 수집한 데이터라도 ML 용도로 쓸 권한이 있는지는 따로 확인해야 합니다. 한 목적으로 수집한 데이터를 추가 동의 없이 ML 훈련에 쓸 수 있다고 가정하는 것이 공식 안티패턴으로 적혀 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Model sources and license agreements (Amazon SageMaker JumpStart) — 라이선스 검토·준수는 고객 책임",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html"
+        },
+        {
+          "title": "MLSEC01-BP01 Validate ML data permissions, privacy, software, and license terms — ML 용도의 추가 동의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec01-bp01.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q10",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.5",
+      "section": "datasets",
+      "difficulty": "applied",
+      "stem": "평가 데이터세트의 한 인구통계 차원이 치우쳐 있어 계층 표집으로 균형을 맞췄습니다. 공식 모범 사례가 그다음에 하라고 적는 일은 무엇입니까?",
+      "options": [
+        "균형이 맞았으므로 평가로 넘어가고, 재균형은 모델 성능이 떨어질 때 다시 검토합니다",
+        "편향 완화가 새 공정성 문제를 만들지 않았는지 검증합니다 — 한 인구통계 차원을 맞추는 것이 교차 집단에 의도치 않은 불균형을 만드는지 확인합니다",
+        "인구통계 라벨을 알고리즘 예측으로 다시 채워 집단별 표본 수를 정확히 맞춥니다",
+        "과대 대표된 집단에서 샘플을 제거해 모든 집단의 표본 수를 완전히 동일하게 만듭니다"
+      ],
+      "correct": 1,
+      "explanation": "RAIDP03-BP02는 데이터세트의 인구통계 구성을 분석해 과대·과소 대표된 집단을 식별하고, 릴리스 기준에서 역산해 집단별 통계적 검정력을 계산하며, 표현 격차는 과소 대표 집단에서 데이터를 추가 수집하거나 계층 표집으로 메우라고 적습니다. 그리고 마지막 구현 고려 사항이 편향 완화가 새 공정성 문제를 만들지 않았는지 검증하는 것이며, 공식 예가 한 인구통계 차원을 균형 맞추는 것이 교차 집단에 의도치 않은 불균형을 만드는지 확인하라는 것입니다. 위험 등급은 High입니다.",
+      "wrongExplanations": {
+        "0": "균형을 맞춘 것으로 끝내지 말라는 것이 이 모범 사례의 마지막 항목입니다. 한 축을 맞추면 교차 축이 틀어질 수 있으므로 완화 결과 자체를 검증해야 합니다.",
+        "2": "공식 문서는 알고리즘이나 사람이 추측한 인구통계 정보보다 설문 응답이나 사용자가 제공한 정보, 즉 자기 보고 인구통계 라벨을 쓰라고 적습니다.",
+        "3": "표본 수를 완전히 같게 만드는 것이 목표가 아닙니다. 공식 기준은 릴리스 기준의 각 질문을 요구되는 통계적 확신으로 답할 만큼 집단별 예시가 충분한지입니다."
+      },
+      "sources": [
+        {
+          "title": "RAIDP03-BP02 Minimize unwanted bias in your datasets — 자기 보고 라벨·계층 표집·교차 집단 검증",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q11",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.5",
+      "section": "datasets",
+      "difficulty": "foundational",
+      "stem": "이진 분류용 데이터세트의 과소 대표 범주를 SMOTE로 늘리려고 합니다. AWS 문서가 적는 SMOTE의 동작은 무엇입니까?",
+      "options": [
+        "과소 대표 범주의 샘플을 무작위로 복제해 비율을 맞춥니다",
+        "과대 대표 범주에서 샘플을 무작위로 제거해 원하는 비율을 만듭니다",
+        "이웃 샘플로 새 합성 샘플을 보간하며, 수치 특징은 가중 평균으로 만들고 비수치 특징은 보간에 쓰인 실제 샘플 중 하나에서 복사합니다",
+        "열 벡터를 포함한 모든 특징 유형에 대해 거리 계산과 보간을 함께 수행합니다"
+      ],
+      "correct": 2,
+      "explanation": "AWS 문서는 SMOTE를 과소 대표 범주의 샘플로 새 합성 소수 샘플을 보간하는 연산자로 적습니다. 이웃 샘플을 써서 값을 보간하고, 이웃을 정하는 거리 계산에는 수치 특징만 씁니다. 과소 대표 집단의 두 실제 샘플에 대해 수치 특징은 무작위로 할당한 가중치의 가중 평균으로 만들고(예: 0.7A + 0.3B), 비수치 특징은 보간에 쓰인 두 실제 샘플 중 하나에서 무작위로 할당한 확률에 따라 복사합니다.",
+      "wrongExplanations": {
+        "0": "샘플을 무작위로 복제하는 것은 무작위 오버샘플링입니다. 공식 예로 사기가 전체 데이터의 10%면 사기 사례를 8회 복제해 비율을 맞춥니다.",
+        "1": "과대 대표 범주에서 샘플을 무작위로 제거하는 것은 무작위 언더샘플링입니다. 새 합성 샘플을 만들지 않습니다.",
+        "3": "열 벡터를 포함하는 데이터세트는 균형을 맞출 수 없다고 공식이 못박습니다. 그리고 거리 계산에는 수치 특징만 쓰입니다."
+      },
+      "sources": [
+        {
+          "title": "Transform Data (Balance Data) — 무작위 오버샘플링·언더샘플링과 SMOTE의 보간 규칙",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q12",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.6",
+      "section": "bias-variance",
+      "difficulty": "foundational",
+      "stem": "어떤 모델이 훈련 세트에서는 정확한 예측을 내는데 테스트 세트에서는 성능이 크게 떨어집니다. 공식 문서는 이 상태를 무엇이라 부르고 무엇이 높다고 적습니까?",
+      "options": [
+        "과소적합이고 높은 편향입니다",
+        "과소적합이고 높은 변동입니다",
+        "과적합이고 높은 편향입니다",
+        "과적합이고 높은 변동입니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문장이 둘을 나란히 적습니다 — \"Underfit models exhibit high bias, meaning they produce inaccurate results on both the training data and the test set. Overfit models exhibit high variance, meaning they perform well on the training set but not on the test set.\" 훈련에서는 잘하고 테스트에서 못하는 상태가 과적합이고 높은 변동입니다. 변동은 입력이 조금 달라지면 출력이 크게 흔들리는 성질이고, 과적합 모델은 패턴 대신 훈련 데이터를 암기해 이 성질을 보입니다.",
+      "wrongExplanations": {
+        "0": "과소적합과 높은 편향은 공식에서 맞게 묶이는 쌍이지만 증상이 다릅니다. 과소적합은 훈련 데이터와 테스트 세트 양쪽에서 부정확한 결과를 냅니다.",
+        "1": "과소적합에 높은 변동을 붙인 조합은 공식 서술과 어긋납니다. 과소적합에서 높은 것은 편향입니다.",
+        "2": "과적합에 높은 편향을 붙인 조합은 공식 서술과 어긋납니다. 과적합에서 높은 것은 변동입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Overfitting? — 높은 편향 대 높은 변동, 데이터 양 문제를 먼저 배제하는 순서",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q13",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.6",
+      "section": "bias-variance",
+      "difficulty": "applied",
+      "stem": "모델이 훈련 데이터에서는 잘하고 테스트 데이터에서는 나쁩니다. 공식 문서가 하이퍼파라미터를 조정하거나 아키텍처를 바꾸기 전에 먼저 하라고 적는 일은 무엇입니까?",
+      "options": [
+        "기본적인 데이터 양 문제를 먼저 배제하고 훈련 데이터의 양을 늘려 봅니다",
+        "조기 종료를 켜서 모델이 데이터의 노이즈를 학습하기 전에 훈련을 멈춥니다",
+        "L1 Lasso와 L2 Ridge 정규화를 함께 걸어 가중치에 벌점을 줍니다",
+        "앙상블로 바꿔 약한 학습기를 병렬로 훈련하는 부스팅을 적용합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 모델이 훈련에서 잘하고 테스트에서 나쁠 때 그 원인이 늘 모델 유연성이나 복잡한 파라미터에 있는 것은 아니며, 학습 알고리즘이 기저 패턴을 배울 만큼 데이터를 갖지 못했을 수도 있다고 적습니다. 그래서 하이퍼파라미터를 조정하거나 모델 아키텍처를 바꾸기 전에 기본적인 데이터 양 문제를 먼저 배제하는 것이 도움이 되고, 훈련 데이터의 양을 늘려 성능을 개선할 수 있다고 적습니다. 데이터 양이 문제가 아닐 때 모델 유연성을 조정하는 것이 그다음 단계입니다.",
+      "wrongExplanations": {
+        "1": "조기 종료는 모델 유연성을 조정하는 수단이어서 공식 순서상 데이터 양 문제를 배제한 다음입니다. 공식은 멈추는 타이밍을 맞추는 것이 중요하고 그렇지 않으면 여전히 정확한 결과를 주지 못한다고 적습니다.",
+        "2": "정규화도 모델 유연성을 조정하는 수단입니다. L1 Lasso는 가중치의 절댓값에 벌점을 주고 L2 Ridge는 제곱값에 벌점을 주며, 드롭아웃은 인공 신경망 전용으로 훈련 중 무작위 뉴런을 비활성화합니다.",
+        "3": "앙상블은 유연성 조정 수단이고 설명도 거꾸로입니다. 공식 문장은 부스팅이 모델을 차례로 훈련하고 배깅이 병렬로 훈련한다고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Overfitting? — 높은 편향 대 높은 변동, 데이터 양 문제를 먼저 배제하는 순서",
+          "url": "https://aws.amazon.com/what-is/overfitting/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q14",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.7",
+      "section": "detect-monitor",
+      "difficulty": "applied",
+      "stem": "대출 심사 모델의 전체 승인율이 집단 간에 차이가 없습니다. 그래도 하위 그룹으로 갈라 봐야 하는 이유로 공식 문서가 드는 사례는 무엇입니까?",
+      "options": [
+        "훈련 전 편향 지표는 모델 출력에 의존하므로 배포 후에 다시 재야 집단별 차이가 드러납니다",
+        "심슨의 역설입니다 — 공식이 드는 버클리 입학 사례에서 전체적으로는 남성 합격률이 높았지만 학과별 하위 집단으로 조건을 걸자 여성 합격률이 더 높았습니다",
+        "공정성 지표들이 늘 같은 결론을 주므로 전체 지표 하나로 충분하다는 것이 공식 입장입니다",
+        "전체 지표가 공정하면 교차 집단도 공정하므로, 하위 그룹 분석은 성능 지표가 이미 나쁠 때만 의미가 있습니다"
+      ],
+      "correct": 1,
+      "explanation": "AWS 문서는 인구통계 격차를 어떤 측면이 수용된 결과보다 거부된 결과에서 더 큰 비중을 차지하는지로 정의하고(대학 입학 예에서 여성이 거부자의 46%, 합격자의 32%면 격차가 0.46 − 0.32), 하위 집단을 정의하는 속성으로 조건을 거는 조건부 인구통계 격차 지표가 심슨의 역설을 배제하기 위해 필요하다고 적습니다. 고전적 사례로 버클리 입학을 드는데, 전체적으로는 남성이 더 높은 비율로 합격했지만 학과별 하위 집단을 조사하자 학과로 조건을 걸었을 때 여성의 합격률이 더 높았습니다. 설명은 여성이 합격률이 낮은 학과에 지원했다는 것입니다. 전체 숫자만으로는 방향조차 틀릴 수 있습니다.",
+      "wrongExplanations": {
+        "0": "훈련 전 편향 지표는 모델에 무관합니다. 모델 출력에 의존하지 않아 원시 데이터를 훈련에 쓰기 전에 편향을 탐지하도록 설계됐고, 공식이 드는 측정 시점은 훈련 전·훈련 후·배포 후 모니터링 셋입니다.",
+        "2": "공식 문서는 인구통계 평등·기회 균등·균등 확률을 상호 보완적 지표로 적으면서 한 척도에서는 공정해 보이고 다른 척도에서는 그렇지 않을 수 있다고 적습니다. 충돌하는 지표를 식별하고 무엇을 우선할지 명시적으로 정해 근거를 기록하라고도 적습니다.",
+        "3": "교차 집단 분석은 여러 인구통계 특성을 결합한 집단에 같은 지표를 적용하는 것이고, 단일 인구통계만 볼 때 숨어 있는 편향을 드러내는 것이 목적입니다. 전체 성능 지표가 좋을 때도 필요합니다."
+      },
+      "sources": [
+        {
+          "title": "Conditional Demographic Disparity (CDD) — 하위 집단 조건화와 버클리 입학의 심슨의 역설",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html"
+        },
+        {
+          "title": "RAIRC03-BP02 Measure fairness as unwanted bias across stakeholder groups — 개인·집단·표현적 공정성과 교차 집단",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp02.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-1-q15",
+      "examGuideTaskId": "aif-t4-1",
+      "skill": "4.1.7",
+      "section": "detect-monitor",
+      "difficulty": "foundational",
+      "stem": "자동 사실 확인만으로는 잡히지 않는 미묘한 부정확성이 의료 분야 응답에 남아 있습니다. 진실성을 재기 위해 공식 모범 사례가 자동 도구와 함께 쓰라고 적는 방법은 무엇입니까?",
+      "options": [
+        "라벨 품질 분석 — 주석자 간 일치와 시간에 따른 일관성을 재서 데이터 단계에서 잡습니다",
+        "하위 그룹 분석 — 인구통계 집단별로 정확도·정밀도·재현율을 갈라 비교합니다",
+        "전문가 인간 평가 — 도메인 전문가가 자기 분야의 표본 출력을 사실 정확성으로 검토합니다",
+        "런타임 콘텐츠 필터 — 사전 정의 유해 범주의 강도를 올려 추론 시점에 막습니다"
+      ],
+      "correct": 2,
+      "explanation": "RAIRC03-BP03은 자동 사실 확인과 인간 전문가 평가를 둘 다 구현하라고 적고, 도메인 전문가가 자기 분야의 표본 출력을 사실 정확성과 적절성으로 검토하는 전문가 인간 평가를 계획하라고 적습니다. 이유를 공식이 직접 적습니다 — \"Human experts can assess context, nuance, and domain-specific accuracy that automated systems often overlook.\" 나머지 측정은 주장이 소스 문서와 맞는지를 보는 접지도와, 같은 질문을 여러 번·다른 표현으로 물어 답이 사실적으로 일관한지를 보는 일관성입니다. 위험 등급은 High입니다.",
+      "wrongExplanations": {
+        "0": "라벨 품질 분석은 데이터 단계에서 주석자 간 일치, 시간에 따른 일관성, 집단별 라벨링 차이를 보는 방법입니다. 모델이 낸 응답의 사실 정확성을 전문가가 검토하는 자리가 아닙니다.",
+        "1": "하위 그룹 분석은 평가 결과를 인구통계 집단별로 갈라 성능 차이를 드러내는 방법입니다. 공정성 쪽 측정이고 사실 정확성의 미묘한 오류를 잡는 수단이 아닙니다.",
+        "3": "콘텐츠 필터는 사전 정의된 유해 콘텐츠 범주를 추론 시점에 막는 이진 게이트입니다. 유해성이 아니라 사실 정확성이 문제인 자리에는 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "RAIRC03-BP03 Measure veracity of outputs — 자동 사실 확인과 전문가 인간 평가",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp03.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
