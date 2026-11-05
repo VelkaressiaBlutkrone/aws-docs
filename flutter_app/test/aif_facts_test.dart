@@ -21,8 +21,11 @@ void main() {
 
   group('대조군: 가드의 입력이 실재하는가', () {
     // 이것이 없으면 아래 「0건」 단정들이 **빈 문자열**을 상대로 통과할 수 있다.
-    test('도메인 1 학습문서 3편이 있고 비어 있지 않다', () {
-      for (final taskId in ['aif-t1-1', 'aif-t1-2', 'aif-t1-3']) {
+    test('도메인 1·2 학습문서 6편이 있고 비어 있지 않다', () {
+      for (final taskId in [
+        'aif-t1-1', 'aif-t1-2', 'aif-t1-3',
+        'aif-t2-1', 'aif-t2-2', 'aif-t2-3',
+      ]) {
         final raw = read(taskId);
         // ⚠️ `String.length`는 **문자 수**이고 바이트 수가 아니다 — 한국어는
         // UTF-8에서 글자당 3바이트라 둘이 두 배 가까이 벌어진다(실측:
@@ -98,6 +101,60 @@ void main() {
           reason: '이 함정 문구는 서버리스 커스터마이징에서 거짓이 됐다');
       expect(raw.contains('과금은 **컴퓨팅 리소스 사용량 기준**입니다'), isFalse,
           reason: 'SageMaker AI 전체가 그렇다는 단정은 틀렸다');
+    });
+  });
+
+  group('aif-t2-3: 사용자 지정 모델의 추론 설정은 둘이다', () {
+    // ⚠️ **라이브 학습문서가 틀린 것을 단정하고 있었다** — "사용자 지정 모델은
+    // 프로비저닝 처리량 없이 쓸 수 없다"가 **다섯 자리**에 있었다(시험 직전 요약 ·
+    // 용어 표 · §4 서빙 비용 · 숨은 비용 · 흔한 함정 · 자가 점검 Q2 정답).
+    //
+    // 공식 `model-customization-use.html`은 설정을 **둘**로 적는다 —
+    // ① "Purchase Provisioned Throughput" ② "Deploy custom model for
+    // on-demand inference ... With on-demand inference, you only pay for what
+    // you use and **you don't need to set up provisioned compute resources**".
+    //
+    // G-19가 2026-11-03에 같은 오류를 `aif-t3-3`에서 바로잡았는데 **t2-3은
+    // 라이브인 채로 남아 있었다**(G-22 때 같은 파일의 「차원 8개」만 고쳤다).
+    // 조사 노트 `96-fm-cost-eval-guardrails.md` §3에도 한 줄 남아 있어 함께 고쳤다.
+    //
+    // ⚠️ **저작 에이전트는 네 자리로 보고했고 실제로는 다섯이었다** — 용어 표의
+    // "사용자 지정 모델에는 **필수**입니다"를 놓쳤다. 보고의 개수를 그대로
+    // 믿지 않고 컨트롤러가 `grep`으로 전수 센 것이 이것을 잡았다.
+    test('"프로비저닝 처리량 없이 쓸 수 없다"류 단정이 0건이다', () {
+      final raw = read('aif-t2-3');
+      for (final forbidden in [
+        '프로비저닝 처리량 없이 쓸 수 없',
+        '프로비저닝 처리량을 구매해야 한다',
+        '사용자 지정 모델에는 **필수**',
+        'PT 규칙이 그대로 따라붙',
+      ]) {
+        expect(raw.contains(forbidden), isFalse,
+            reason: '공식은 온디맨드 추론용 배포 경로를 함께 적는다: $forbidden');
+      }
+    });
+
+    test('온디맨드 배포 경로가 공식 문구로 적혀 있다', () {
+      final raw = read('aif-t2-3');
+      expect(raw, contains('온디맨드 추론용 배포'));
+      expect(
+          raw.split('프로비저닝된 컴퓨팅 리소스를 설정할 필요가 없').length - 1,
+          greaterThanOrEqualTo(3),
+          reason: '시험 직전 요약 · §4 · 흔한 함정 · 자가 점검 정답에 반영한다');
+    });
+
+    test('자가 점검 Q2 정답이 "가능합니다"로 바뀌었다', () {
+      final raw = read('aif-t2-3');
+      expect(raw.contains('**불가능합니다.** 공식 문장이 단정합니다'), isFalse,
+          reason: '온디맨드 배포가 가능하므로 이 정답은 틀렸다');
+      expect(raw, contains('**가능합니다.** 공식은 사용자 지정 모델의 추론 설정을'));
+    });
+
+    test('정본 출처가 프런트매터와 참고자료 양쪽에 있다', () {
+      expect(
+          read('aif-t2-3').split('model-customization-use.html').length - 1,
+          2,
+          reason: '프런트매터 sources와 문서 끝 참고자료 둘 다에 있어야 한다');
     });
   });
 
