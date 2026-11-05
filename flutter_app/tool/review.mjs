@@ -38,6 +38,21 @@ export function appPath(rel) {
  * 기계로 검사한다.
  */
 export const CERTS = {
+  // AIF-C01은 학습문서 14편이 들어온 뒤, **문항 저작 전에** 등록했다(2026-11-05).
+  // 허용 목록이 없으면 사람의 첫 flip이 반드시 레드로 끝나기 때문이다 —
+  // 드래프트 단정이 아래 tests에 들어 있어 `flip`이 문항 파일을 다 쓴 뒤
+  // 그 단정에서 멈춘다(MLA #246 · SOA/DEA #286과 같은 함정).
+  aif: {
+    dir: 'assets/content/aif',
+    label: 'AIF-C01',
+    domains: 5, // ⚠️ SOA-C03에 이어 두 번째 5도메인 자격증이다
+    tests: [
+      'test/aif_questions_test.dart',
+      'test/aif_doc_format_test.dart',
+      'test/content_index_test.dart',
+    ],
+    flipAllowlist: { file: 'test/aif_questions_test.dart', symbol: 'flipApprovedTaskIds' },
+  },
   clf: {
     dir: 'assets/content/clf',
     label: 'CLF-C02',
