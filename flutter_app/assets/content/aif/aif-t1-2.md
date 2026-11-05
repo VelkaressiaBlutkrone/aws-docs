@@ -12,6 +12,8 @@ sources:
     url: https://docs.aws.amazon.com/machine-learning/latest/dg/when-to-use-machine-learning.html
   - title: MLCOST02-BP01 Identify if machine learning is the right solution
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html
+  - title: What is Machine Learning? (AWS) — Benefits of machine learning (의사 결정 지원·루틴 작업 자동화)
+    url: https://aws.amazon.com/what-is/machine-learning/
   - title: MLPERF06-BP02 Evaluate model explainability
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html
   - title: Autopilot datasets and problem types (Amazon SageMaker AI)
@@ -385,3 +387,4 @@ lastVerified: 2026-11-03
 15. Knowledge bases for Amazon Bedrock · AWS Prescriptive Guidance (수집·검색 두 단계) — `docs.aws.amazon.com/prescriptive-guidance/latest/retrieval-augmented-generation-options/rag-fully-managed-bedrock.html` (2026-11-03 확인)
 16. What is Amazon Bedrock AgentCore? — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html` (2026-11-03 확인)
 17. What are Foundation Models? (FM 장점·과제·Amazon Nova) — `aws.amazon.com/what-is/foundation-models/` (2026-11-03 확인)
+18. What is Machine Learning? (AWS) — Benefits of machine learning 절의 「Enhanced decision making」·「Automation of routine tasks」 — `aws.amazon.com/what-is/machine-learning/` (2026-11-05 확인)
