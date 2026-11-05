@@ -109,6 +109,8 @@ MLA·DVA 판 가드를 승계한다 — ① 학습 목표 체크리스트 **8개
 
 ## D-12 등재는 도메인 배치별 누적
 
-MLA 레시피대로 **배치마다** `content_index.dart`에 등재한다(questionCount는 문항 flip 전까지 **0**). ⚠️ **`pubspec.yaml`에 `- assets/content/aif/` 신규 등록이 필요하다**(pubspec은 디렉터리를 개별 등록한다 — MLA에서 확인된 레시피 정정).
+MLA 레시피대로 **배치마다** `content_index.dart`에 등재한다(questionCount는 문항 flip 전까지 **0**). ✅ **14/14 등재 완료.** ⚠️ **`pubspec.yaml`에 `- assets/content/aif/` 신규 등록이 필요했다**(pubspec은 디렉터리를 개별 등록한다 — MLA에서 확인된 레시피 정정) — ✅ 도메인 1 배치에서 완료했다.
 
-문항 단계에서 `kExamReadinessRequirements`에 AIF 정책을 넣는다 — **도메인 5개**이므로 `{1: 20, 2: 24, 3: 28, 4: 14, 5: 14}`이고, 정책이 없으면 **fail closed**로 모의고사가 영원히 잠긴다.
+✅ **`kExamReadinessRequirements`의 AIF 정책도 넣었다**(Phase 3 선결 셋, 2026-11-05) — **도메인 5개**이므로 `{1: 20, 2: 24, 3: 28, 4: 14, 5: 14}`이고 65문항 배분은 **13·16·18·9·9**다. 정책이 없으면 **fail closed**로 모의고사가 영원히 잠긴다.
+
+⚠️ **정책을 넣으려고 레포 가이드 JSON 교체를 기다릴 필요는 없었다**(이 결정을 세울 때의 전제와 다르다) — readiness 동기화 테스트가 `exam_guides/AIF-C01.json`을 읽지만 그 테스트가 보는 **구조 필드는 공식과 일치**한다(`scored 50 + unscored 15 = 65` · 비중 합 100 · Task 3·3·4·2·2, 실측). **D-06이 가리키는 17건은 목표 본문**이고 그 교체는 문항 저작 PR 몫이다.
