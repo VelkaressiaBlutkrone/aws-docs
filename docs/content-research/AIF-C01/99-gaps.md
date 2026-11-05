@@ -324,3 +324,55 @@ AIF **범위 외** 목록에 있어 이 자격증 문항에 쓸 수 없는 것 �
 ### G-36 ℹ️ `prescriptive-guidance/latest/ml-operations-planning/`에 성숙도 모델 페이지가 없다
 
 가이드 목차는 `introduction`·`data`·`training`·`deployment`·`monitoring` 다섯뿐이다(추측 슬러그 3종 전부 redirects 1). MLOps **성숙도 레벨 0·1·2의 정본은 `aws.amazon.com/what-is/mlops/`**다 — `aif-t1-3-q10`을 그쪽으로 달았다.
+
+---
+
+## 도메인 2 문항 저작에서 새로 드러난 것 (2026-11-05, 컨트롤러 직접 실측)
+
+### G-37 ⚠️⚠️ G-19의 「PT 필수」 오류가 라이브 `aif-t2-3.md`에 **다섯 자리** 남아 있었다 (✅ 정정)
+
+G-19(2026-11-03)가 "사용자 지정 모델은 프로비저닝 처리량 없이 못 쓴다"를 과도한 일반화로 판정하고 `aif-t3-3`의 세 곳을 고쳤는데, **`aif-t2-3.md`는 라이브인 채로 남았다**(그 뒤 G-22 작업에서 같은 파일의 「차원 8개」만 고쳤다). 조사 노트 `96-fm-cost-eval-guardrails.md` §3에도 한 줄 남아 있었다.
+
+- **공식**(`bedrock/latest/userguide/model-customization-use.html`, 실측 redirects 0): 설정이 **둘**이다 — ① "Purchase Provisioned Throughput" ② "Deploy custom model for on-demand inference ... With on-demand inference, **you only pay for what you use and you don't need to set up provisioned compute resources**."
+- 고친 자리 **다섯**: 시험 직전 요약 · 용어 표 · §4 「서빙 비용」 · §4 「숨은 비용」 · 흔한 함정 · 자가 점검 Q2 정답(**「불가능합니다」 → 「가능합니다」**). 가드는 `aif_facts_test.dart`.
+- ⚠️ **저작 에이전트는 네 자리로 보고했고 실제로는 다섯이었다** — 용어 표의 "사용자 지정 모델에는 **필수**입니다"를 놓쳤다. **보고의 개수를 그대로 믿지 않고 `grep`으로 전수 센 것이 이것을 잡았다.**
+- ⚠️ **노트를 고치지 않으면 다음 배치가 같은 오류를 다시 쓴다** — G-19가 적어 둔 그 문장이 바로 이 사례로 증명됐다. 정정은 **md와 조사 노트 양쪽**에 한다.
+
+### G-38 ⚠️ 측정 신호가 도메인마다 다르다 — `aws.amazon.com`은 없는 슬러그에 **진짜 404**를 준다
+
+G-30이 `docs.aws.amazon.com`에서 "없는 페이지도 200 + redirects 1"임을 적었는데, **`aws.amazon.com`(마케팅·개념 페이지)은 다르다** — 없는 슬러그에 `404 redirects=0`을 준다(저작 에이전트 실측: `aws.amazon.com/what-is/zz-bogus-control/` → 404).
+
+- 따라서 판정 규칙이 둘이다: **`docs.aws.amazon.com`은 `redirects`로**, **`aws.amazon.com`은 상태 코드로** 본다. 둘 다 `-sL`로 재야 한다.
+- **대조군을 도메인별로 하나씩** 넣는 것이 옳다(한 도메인의 대조군만으로 다른 도메인의 측정을 보증하지 못한다).
+
+### G-39 ⚠️ 은퇴 URL 1건 — `bedrock/latest/userguide/model-evaluation.html` (도메인 3 배치의 함정)
+
+실측하면 `200 redirects=1`로 Bedrock 사용자 가이드 인덱스로 간다. **정본은 `bedrock/latest/userguide/evaluation.html`**("Evaluate the performance of Amazon Bedrock resources", redirects 0).
+
+- 도메인 2에서는 평가 세부가 **3.4 소관**이라 인용하지 않았다. ⚠️ **도메인 3 배치(`aif-t3-4` 성능 평가)에서 옛 슬러그를 쓰면 출처가 엉뚱한 페이지를 가리킨다.** 레포에 현재 0건이다(실측).
+
+### G-40 ⚠️ `what-is-bedrock.html`이 Quickstart 페이지로 재구성됐다 (md 귀속 보강 후보)
+
+`aif-t2-3.md`가 그 페이지에 귀속시킨 두 표현이 **더 이상 거기 없다** — 「모델 독립적인 단일 API 접근」·「서버리스이므로 인프라를 관리하지 않아도 된다」.
+
+- **두 방법 + 대조군으로 확인했다**(컨트롤러 재실측): 태그 제거 본문과 **원문 HTML 양쪽에서** `serverless` 0 · `single API` 0 · `model-independent` 0이고, 같은 페이지에 실재하는 `fully managed service`는 1/1로 잡힌다. **추출 실패가 아니라 그 표현이 없다.**
+- **현행 정본**(둘 다 이미 이 문서의 출처 목록에 있다): 「서버리스」는 `decision-guides/.../bedrock-or-sagemaker.html`("Amazon Bedrock is serverless, meaning you do not have to manage infrastructure") · 「모델 독립적인 단일 API」는 `decision-guides/.../genai-guide.html`("model-independent, single API access"). `what-is-bedrock.html`의 **「완전관리형」 정의는 여전히 유효**하다.
+- 저작 에이전트는 이 Task의 출처 15개에 `what-is-bedrock.html`을 **넣지 않았다**(그 대신 결정 가이드를 달았다).
+
+### G-41 ℹ️ md가 덮지 않아 **출제하지 않은** 공식 사실들 (보강 후보, 금지 가드는 걸지 않는다)
+
+전부 공식에 실재하지만 학습문서가 적지 않아, **문서만 보고는 풀 수 없으므로** 문항으로 만들지 않았다. ⚠️ **금지 가드를 걸지 않는다** — md에 들어오면 옳은 문장이 막힌다.
+
+- **`what-is/generative-ai`의 한계 목록은 넷이다**(Security · **Creativity** · Cost · Explainability). `aif-t2-2.md`는 비용·설명 가능성만 적는다. Creativity는 "훈련 데이터에 제한되어 반복적·파생적 출력이 나올 수 있다".
+- **`AGENTPERF03-BP02`의 안티패턴은 5개**다(`aif-t2-1.md` §7과 노트 96은 4개로 열거). 다섯째는 "버전 관리·나란히 비교 없이 프롬프트 변경을 내보내 롤아웃 뒤에야 품질·토큰 비용 회귀가 드러나는 것".
+- **프롬프트 캐싱 TTL이 5분만은 아니다** — 같은 페이지가 "5-minute default TTL, or a **1-hour TTL** on Claude Opus 4.5, Haiku 4.5, and Sonnet 4.5"를 적는다.
+- **명시적 캐싱에 서버 지역성 제약이 있다** — 캐시 항목은 그 요청을 처리한 서버에 저장되고 다른 서버(예: 다른 리전)가 처리하면 **읽지 않고 새로 쓴다.** md는 "히트는 보장되지 않는다"까지만 적는다.
+- **「반환 결과 수가 요청보다 적을 수 있다」는 계층형 청킹 전용이 아니다** — `kb-chunking.html`의 `Tables and figures in parsed content` 절이 **최대 토큰 한도를 두는 모든 전략**에 적용한다(「청킹 없음」 제외, 10,000자 이하). `aif-t2-1.md` §1은 계층형에만 귀속한다.
+- **결정 가이드의 「필요 전문성」 칸이 완화됐다**(G-31 계열) — SageMaker AI 쪽이 "**Guided UI and AI agent-assisted workflows simplify customization**; deeper ML expertise helpful for advanced training jobs"이고 본문은 서버리스 커스터마이징에 "**require no ML expertise**"까지 적는다. `aif-t2-3.md`는 뒷절만 적어 **틀리지는 않았지만 절반이다.**
+- **`what-is/large-language-model/`이 코드 생성 예시로 은퇴 제품명 `Amazon CodeWhisperer`를 든다** — 그 문장은 인용하지 않는다.
+
+### G-42 ℹ️ 「없다」 보고 1건이 **낱말 차이**였다 (G-32의 반대 사례)
+
+저작 에이전트가 블로그 원문에서 `attenuat*`를 두 방법으로 0건 확인했는데, **같은 사실이 `decays`라는 낱말로 그 페이지에 실재한다** — "the effectiveness of inferences **decays** as the amount of context increases". 즉 **낱말이 없고 사실은 있었다.** `aif-t2-1.md`의 「추론의 효과가 감쇠」 번역은 옳다.
+
+- G-32(보고된 「없음」이 「못 찾음」이었던 사례)와 짝이 되는 교훈이다: **「없다」를 보고할 때는 ① 추출 방법 둘 ② 대조군 ③ 같은 사실의 다른 표현까지 찾아본 결과를 함께 적는다.**
