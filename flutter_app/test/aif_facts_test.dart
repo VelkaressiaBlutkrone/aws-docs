@@ -156,6 +156,124 @@ void main() {
           2,
           reason: '프런트매터 sources와 문서 끝 참고자료 둘 다에 있어야 한다');
     });
+
+    // ⚠️ **같은 오류가 다른 파일에도 있었다.** t2-3을 고친 뒤 레포 전역을
+    // `grep`으로 쓸자 `aif-t2-1.md`의 「시험 직전 요약」에 "사용자 지정 모델은
+    // **PT 필수**"가 한 줄 더 있었다(저작 에이전트 보고에는 없던 자리다).
+    // 그래서 한 파일이 아니라 **aif 디렉터리 전수**를 집계형으로 고정한다 —
+    // 새 학습문서가 같은 단정을 들고 들어오면 이 테스트가 먼저 깨진다.
+    test('aif 학습문서 전수에서 「PT 필수」류 단정이 0건이다', () {
+      final dir = Directory('assets/content/aif');
+      final docs = dir
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.md'))
+          .toList();
+      // 대조군: 전수 대상이 실제로 있는가(빈 목록을 상대로 통과하지 않게).
+      expect(docs.length, 14, reason: 'AIF 학습문서는 공식 Task 14편이다');
+
+      const forbidden = ['PT 필수', '프로비저닝 처리량 없이 쓸 수 없', '프로비저닝 처리량을 구매해야 한다'];
+      final hits = <String>[];
+      for (final f in docs) {
+        final raw = f.readAsStringSync();
+        for (final needle in forbidden) {
+          if (raw.contains(needle)) hits.add('${f.uri.pathSegments.last}: $needle');
+        }
+      }
+      expect(hits, isEmpty,
+          reason: '공식은 프로비저닝 처리량 구매와 온디맨드 추론용 배포 둘을 적는다');
+    });
+
+    test('「계속 사전 훈련」은 t3-3의 번역 메모 한 곳에만 있다', () {
+      // D-09·G-20이 공식 가이드 표기 「지속적인 사전 훈련」으로 통일했다.
+      // ⚠️ 다만 `aif-t3-3.md`의 용어 표가 "「계속 사전 훈련」으로도 번역됩니다"로
+      // **의도적으로** 병기한다(학습자가 다른 교재에서 만날 표기다). 그래서
+      // 0건이 아니라 **그 한 곳만**으로 고정한다 — `aif-t2-2.md`가 그 낱말을
+      // 용어 자체로 쓰고 있어 이번에 고쳤다.
+      final dir = Directory('assets/content/aif');
+      final hits = <String>[];
+      for (final f in dir.listSync().whereType<File>().where((f) => f.path.endsWith('.md'))) {
+        if (f.readAsStringSync().contains('계속 사전 훈련')) {
+          hits.add(f.uri.pathSegments.last);
+        }
+      }
+      expect(hits, ['aif-t3-3.md'],
+          reason: '병기는 t3-3 용어 표에서만 한다 — 다른 곳은 「지속적인 사전 훈련」');
+    });
+  });
+
+  group('도메인 3: 공식에서 사라진 서술을 되살리지 않는다', () {
+    // ⚠️ **두 건 모두 "출처가 죽었거나 그 사실을 더 이상 담지 않는" 경우**이고,
+    // 도메인 3 문항 저작 중 공식 재실측으로 드러났다(2026-11-05). 문항은 네
+    // Task 모두 이 영역을 **피해서** 썼고(전수 0건 확인), 학습문서를 고쳤다.
+
+    // ① AgentCore 내장 평가자의 **개수(13개)와 ID 이름**이 공식에서 사라졌다.
+    // 개요 페이지는 목록을 싣지 않는 1,500자 소개 문서로 재구성됐고 남은 예시
+    // ID는 `Builtin.Helpfulness` 하나다. 관련 여섯 페이지에서 세션·도구 호출
+    // 수준 ID는 0건이다(대조군: 같은 추출이 `Builtin.Helpfulness`와 새 갈래
+    // `Builtin.SkillSelectionAccuracy`를 잡아낸다 — 추출 실패가 아니다).
+    //
+    // **사라진 것은 이름과 수뿐이고 세 축은 그대로다** — 목표 달성 정확성 ·
+    // 호출한 도구의 정확성 · 사용자 지정 지표(`how-it-works-evaluations.html`).
+    test('aif-t3-4: 사라진 평가자 ID 이름과 「13개」가 없다', () {
+      final raw = read('aif-t3-4');
+      for (final gone in [
+        'GoalSuccessRate',
+        'ToolSelectionAccuracy',
+        'ToolParameterAccuracy',
+        '내장 평가자는 **13개**',
+      ]) {
+        expect(raw.contains(gone), isFalse,
+            reason: '공식 문서에서 확인되지 않는 서술이다: $gone');
+      }
+    });
+
+    test('aif-t3-4: 현행 공식이 적는 세 축이 남아 있다', () {
+      final raw = read('aif-t3-4');
+      expect(raw, contains('종단 간 작업 완료(목표 달성)'));
+      expect(raw, contains('사용자 지정 지표'));
+      expect(raw, contains('개수와 ID 이름은 외우지 않습니다'),
+          reason: '개수·이름에 기대지 말라는 주의가 있어야 한다');
+    });
+
+    test('aif-t3-4: 문항이 사라진 ID에 기대지 않는다', () {
+      final bank =
+          File('assets/content/aif/aif-t3-4.questions.json').readAsStringSync();
+      for (final gone in ['GoalSuccessRate', 'ToolSelectionAccuracy', 'ToolParameterAccuracy']) {
+        expect(bank.contains(gone), isFalse, reason: '$gone은 공식에서 확인되지 않는다');
+      }
+      // ⚠️ G-39: 은퇴 슬러그를 쓰지 않았는지도 함께 본다. 이 Task가 평가
+      // 페이지를 가장 많이 인용하므로 여기가 그 함정의 자리다.
+      expect(bank.contains('userguide/model-evaluation.html'), isFalse,
+          reason: '정본은 userguide/evaluation.html이다');
+      expect(bank, contains('userguide/evaluation.html'),
+          reason: '대조군 — 정본 출처가 실제로 쓰였는지');
+    });
+
+    // ② `AWS CAF for AI` 가이드가 **통째로 은퇴**했다. `aws-caf-for-ai/` 아래
+    // 모든 슬러그가 ML 렌즈 인덱스로 리다이렉트되고 **일부러 틀린 슬러그도
+    // 같은 곳으로 간다**(→ 이름 변경이 아니라 가이드 소멸). 그 렌즈 인덱스에는
+    // `aif-t3-3.md` §5 ①·②가 인용하는 문장이 없다(실측).
+    //
+    // 인용 문장의 대체 출처를 찾는 것은 후속 과제이므로, 지금은 **은퇴 사실을
+    // 참고자료에 명시**하는 것까지 고정한다 — 죽은 링크를 아무 표시 없이 두면
+    // 학습자가 그 페이지를 찾으러 간다.
+    test('aif-t3-3: 은퇴한 AWS CAF for AI 인용에 경고가 붙어 있다', () {
+      final raw = read('aif-t3-3');
+      expect(raw, contains('aws-caf-for-ai'),
+          reason: '대조군 — 그 인용이 아직 문서에 있다');
+      expect(raw, contains('이 가이드가 은퇴했습니다'),
+          reason: '은퇴 사실을 참고자료에 적어야 한다');
+      expect(raw, contains('MLSEC03-BP04'),
+          reason: '살아 있는 인접 출처를 함께 적어 후속 작업을 돕는다');
+    });
+
+    test('aif-t3-3: 문항이 은퇴한 CAF 가이드를 출처로 쓰지 않는다', () {
+      final bank =
+          File('assets/content/aif/aif-t3-3.questions.json').readAsStringSync();
+      expect(bank.contains('aws-caf-for-ai'), isFalse,
+          reason: '그 가이드는 은퇴했다 — 살아 있는 페이지를 인용한다');
+    });
   });
 
   group('aif-t1-2: 1.2.1 사실의 정본이 출처 목록에 있다', () {

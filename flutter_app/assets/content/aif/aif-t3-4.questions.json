@@ -1,0 +1,437 @@
+{
+  "examGuideTaskId": "aif-t3-4",
+  "taskTitle": "FM 성능을 평가하는 방법 설명",
+  "domain": 3,
+  "certCode": "AIF-C01",
+  "lastVerified": "2026-11-05",
+  "questions": [
+    {
+      "id": "aif-t3-4-q1",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.1",
+      "section": "approaches",
+      "difficulty": "applied",
+      "stem": "모델 응답을 사람 작업자 없이 빠르게 채점하면서, 각 프롬프트와 응답 쌍이 왜 그 점수를 받았는지 설명까지 함께 받으려고 합니다. Amazon Bedrock 평가 중 어느 종류를 고릅니까?",
+      "options": [
+        "프로그래매틱 모델 평가 — 평가 알고리즘이 점수를 계산하면서 그 점수의 근거 문장도 함께 생성합니다",
+        "심사 모델 평가 — 두 번째 LLM이 응답을 채점하고 응답마다 설명을 함께 제공합니다",
+        "사람 작업자를 쓰는 모델 평가 — 사내 직원이 점수와 주석을 남깁니다",
+        "RAG 평가 — 지식 기반의 검색 품질 점수와 그 점수의 설명을 제공합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 심사 모델을 쓰는 모델 평가 작업을 두 번째 LLM으로 모델 응답을 빠르게 평가하는 방식으로 적고, 그 LLM이 응답을 채점하고 각 응답에 대한 설명을 제공한다고 명시합니다. 전용 페이지는 이 평가가 생성기 모델과 평가자 모델이라는 서로 다른 모델 두 개를 요구한다고 적고, 점수와 설명을 콘솔의 평가 페이지에서 볼 수 있으며 전체 보고서는 지정한 Amazon S3 버킷에 저장된다고 적습니다.",
+      "wrongExplanations": {
+        "0": "프로그래매틱 모델 평가는 평가 알고리즘이 점수를 계산하는 자동 평가입니다. 모델이 작업을 수행하는 능력을 빠르게 재는 데 맞지만, 응답마다 설명을 생성하는 기능은 심사 모델 평가 쪽에 적혀 있습니다.",
+        "2": "사람 작업자를 쓰는 평가는 평가 과정에 사람의 입력을 들이는 방식이라 주관적 기준에 맞습니다. 다만 작업 팀을 구성해 평점을 받아야 하므로 빠르게 채점한다는 조건과 어긋납니다.",
+        "3": "RAG 평가는 지식 기반이나 RAG 소스가 관련성 높은 정보를 검색하고 유용하며 적절한 응답을 생성하는지를 보는 평가입니다. 모델 응답 자체를 채점해 설명을 받는 자리가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Evaluate model performance using another LLM as a judge (Amazon Bedrock) — 생성기 모델과 평가자 모델 두 개가 필요하다",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html"
+        },
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources — 평가 네 종류와 각자의 쓸모",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q2",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.1",
+      "section": "approaches",
+      "difficulty": "foundational",
+      "stem": "보험 약관 안내 문구의 어조와 공감 표현이 적절한지 평가해야 합니다. 이런 주관적 기준은 사내 직원이나 업계 주제 전문가 집단의 판단이 필요합니다. 공식 문서가 이 용도로 적는 Amazon Bedrock 평가 종류는 무엇입니까?",
+      "options": [
+        "프로그래매틱 모델 평가 — 평가 알고리즘이 Accuracy, Robustness, Toxicity를 계산합니다",
+        "심사 모델 평가 — 평가자 모델이 생성기 모델의 응답을 채점합니다",
+        "사람 작업자를 쓰는 모델 평가 — 사내 직원 또는 업계의 주제 전문가 집단이 평가합니다",
+        "RAG 평가 — LLM이 지식 기반의 검색과 응답 생성을 채점합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 문서는 사람 작업자를 쓰는 모델 평가 작업을 평가 과정에 사람의 입력을 들이는 방식으로 설명하고, 그 작업자가 회사의 직원일 수도 있고 업계의 주제 전문가 집단일 수도 있다고 적습니다. 같은 페이지는 사람 기반 평가가 특정 지표에 대한 사람의 평점과 선호를 모으는 방식이라고 적는데, 어조나 공감처럼 알고리즘이 수식으로 환원하기 어려운 기준이 바로 그 자리입니다.",
+      "wrongExplanations": {
+        "0": "프로그래매틱 모델 평가가 계산하는 내장 지표는 Accuracy, Robustness, Toxicity 셋으로 고정돼 있습니다. 어조나 공감의 적절성은 이 세 수식 어디에도 들어가지 않습니다.",
+        "1": "심사 모델 평가는 응답을 빠르게 채점하는 데 맞습니다. 다만 공식이 사람의 입력을 평가 과정에 들이는 방법으로 따로 적어 둔 종류가 있으므로, 사람의 판단이 필요하다는 조건에는 그쪽이 답입니다.",
+        "3": "RAG 평가는 지식 기반 또는 RAG 소스의 검색과 응답 생성 품질을 보는 평가입니다. 지식 기반이 등장하지 않는 상황이라 평가 대상 자체가 맞지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Evaluate the performance of Amazon Bedrock resources — 사람 작업자 평가는 사내 직원 또는 업계 주제 전문가",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q3",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.1",
+      "section": "approaches",
+      "difficulty": "applied",
+      "stem": "사용자 지정 프롬프트 데이터세트로 자동 모델 평가를 돌리려 합니다. Accuracy와 Robustness를 지표로 골랐는데 데이터세트의 각 줄에는 프롬프트만 넣어 두었습니다. 공식 문서가 이 두 지표의 평가에 필수라고 적는 키는 무엇입니까?",
+      "options": [
+        "referenceResponse — 모델을 대조할 정답 응답이고, 질의응답 작업과 모든 정확도 및 강건성 평가에 필수입니다",
+        "category — 범주별로 평가 점수를 보고하게 하는 키이고, 정확도 계열 지표에 필수입니다",
+        "taskType — 각 줄에 작업 유형을 적어 지표 수식을 고르게 하는 키이고, 정확도 평가에 필수입니다",
+        "metricNames — 각 프롬프트마다 어떤 내장 지표로 채점할지 적는 키이고, 강건성 평가에 필수입니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 사용자 지정 데이터세트에 쓰는 키 세 개를 적고 각자의 필수 여부를 못박습니다. prompt는 모델이 응답할 입력으로 필수이고, referenceResponse는 모델 응답을 대조할 정답을 나타내며 질의응답 작업의 모든 프롬프트와 모든 정확도 및 강건성 평가에서 필수입니다. category는 선택이고 범주별 평가 점수를 보고하게 합니다. 데이터세트는 Amazon S3에 JSON 줄 형식으로 저장하고 확장자가 jsonl이어야 하며, 자동 평가 작업 하나당 프롬프트는 최대 1,000개까지 넣습니다.",
+      "wrongExplanations": {
+        "1": "category는 공식이 선택 항목으로 적는 키이고, 지정하면 범주마다 평가 점수가 따로 보고됩니다. 정확도 평가를 성립시키는 키가 아니라 결과를 쪼개 보는 편의 기능입니다.",
+        "2": "작업 유형은 데이터세트의 각 줄이 아니라 평가 작업 설정에서 한 번 지정합니다. 공식 API 레퍼런스가 유효값을 Summarization, Classification, QuestionAndAnswer, Generation, Custom 다섯으로 고정해 둡니다.",
+        "3": "지표 이름도 데이터세트가 아니라 평가 작업 설정에서 지정합니다. 공식 API 레퍼런스가 평가 종류별로 쓸 수 있는 지표 이름의 유효값을 따로 정의합니다."
+      },
+      "sources": [
+        {
+          "title": "Use prompt datasets for model evaluation in Amazon Bedrock — 사용자 지정 데이터세트의 키와 1,000개 한도",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-prompt-datasets.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q4",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.2",
+      "section": "metrics",
+      "difficulty": "applied",
+      "stem": "텍스트 요약 작업 유형으로 자동 모델 평가를 돌리고 Accuracy를 선택했습니다. 동료는 지난번 질의응답 평가에서 본 Accuracy와 같은 수식일 것이라고 말합니다. 공식 문서에 따르면 요약 작업의 Accuracy 값은 무엇으로 계산됩니까?",
+      "options": [
+        "실세계 지식 점수로 계산되고, 모델이 실세계의 사실 지식을 담고 있는 능력을 봅니다",
+        "F1 점수로 계산되고, 정밀도와 재현율로 0에서 1 사이의 값을 냅니다",
+        "예측 클래스를 정답 레이블과 비교한 분류 정확도로 계산됩니다",
+        "BERT Score로 계산되고, BERT 모델의 사전 훈련 문맥 임베딩으로 후보 문장과 참조 문장의 단어를 코사인 유사도로 맞춥니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서는 같은 이름의 지표가 작업 유형마다 다른 수식으로 계산된다고 적고 네 유형을 각각 설명합니다. 텍스트 요약의 Accuracy는 BERT Score이고, 그 값은 BERT 모델의 사전 훈련 문맥 임베딩으로 계산되며 후보 문장과 참조 문장의 단어를 코사인 유사도로 맞춘다고 적습니다. 질의응답은 F1 점수, 일반 텍스트 생성은 실세계 지식 점수, 텍스트 분류는 예측 클래스를 정답 레이블과 비교한 정확도입니다. 그래서 Accuracy가 보이면 작업 유형을 먼저 확인해야 합니다.",
+      "wrongExplanations": {
+        "0": "실세계 지식 점수는 일반 텍스트 생성 작업 유형의 Accuracy 계산법입니다. 공식은 이 점수가 모델이 실세계의 사실 지식을 담고 있는 능력을 살피며 값이 높으면 정확하다는 뜻이라고 적습니다.",
+        "1": "F1 점수는 질의응답 작업 유형의 Accuracy 계산법입니다. 동료가 기억하는 수식이 바로 이것인데, 작업 유형이 요약으로 바뀌면 같은 지표 이름이라도 수식이 달라집니다.",
+        "2": "예측 클래스를 정답 레이블과 비교하는 정확도는 텍스트 분류 작업 유형의 Accuracy 계산법입니다. 요약에는 비교할 클래스 레이블이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Review metrics for an automated model evaluation job in Amazon Bedrock (console) — 작업 유형별 Accuracy 계산",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-report-programmatic.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q5",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.2",
+      "section": "metrics",
+      "difficulty": "applied",
+      "stem": "텍스트 요약 모델을 교체한 뒤 자동 모델 평가 보고서의 Robustness 값이 전보다 크게 올라갔습니다. 팀은 강건성이 개선됐다고 보고하려 합니다. 공식 문서에 따른 올바른 해석은 무엇입니까?",
+      "options": [
+        "개선입니다. Robustness는 섭동된 프롬프트에서도 유지된 정확도의 비율이므로 값이 높을수록 강건합니다",
+        "개선이 아닙니다. 이 값은 섭동 전후 점수의 차이를 원본 점수로 나눈 퍼센트이고, 공식은 낮은 점수가 더 강건함을 뜻한다고 적습니다",
+        "판단할 수 없습니다. Robustness는 Toxicity와 함께 보지 않으면 좋은 방향이 정해지지 않습니다",
+        "개선입니다. 섭동은 요약 작업 유형에는 적용되지 않으므로 값의 변화는 정확도 개선만을 반영합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 텍스트 요약의 Robustness가 퍼센트 값이며 Delta BERTScore를 BERTScore로 나눈 뒤 100을 곱해 계산된다고 적고, 낮은 점수가 선택한 모델이 더 강건함을 나타낸다고 명시합니다. Delta BERTScore는 섭동된 프롬프트와 원본 프롬프트의 BERT Score 차이입니다. 질의응답도 같은 구조로 Delta F1을 F1으로 나눠 100을 곱합니다. 따라서 값이 커졌다는 것은 작은 입력 변형에 출력이 더 많이 흔들렸다는 뜻입니다.",
+      "wrongExplanations": {
+        "0": "방향이 거꾸로입니다. 이 값은 유지된 정확도의 비율이 아니라 섭동으로 생긴 점수 변화의 비율이고, 공식은 네 작업 유형 모두에서 낮은 점수가 더 강건하다고 적습니다.",
+        "2": "Toxicity와 함께 보아야 방향이 정해진다는 서술은 공식에 없습니다. 두 지표 모두 각자 낮은 값이 좋은 쪽이라고 따로 적혀 있습니다.",
+        "3": "섭동은 요약을 포함한 모든 작업 유형의 강건성 계산에 쓰입니다. 공식은 섭동 종류로 소문자 변환, 키보드 오타, 숫자를 단어로 변환, 무작위 대문자화, 공백의 무작위 추가와 삭제를 들고 데이터세트의 각 프롬프트가 약 5회 섭동된다고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "Review metrics for an automated model evaluation job in Amazon Bedrock (console) — Robustness 계산식과 낮은 점수가 더 강건하다",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-report-programmatic.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q6",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.2",
+      "section": "metrics",
+      "difficulty": "foundational",
+      "stem": "정답 요약과 다른 낱말을 써서 같은 뜻을 전달한 생성 요약이 ROUGE 점수를 낮게 받았습니다. 공식 문서가 적는 이 현상의 이유와 그 한계를 보완하는 지표는 무엇입니까?",
+      "options": [
+        "ROUGE는 문맥 임베딩의 코사인 유사도를 재므로 짧은 텍스트에서 흔들립니다. 보완하는 쪽은 N-gram 겹침을 세는 BERTScore입니다",
+        "ROUGE는 대소문자를 구분하므로 표기만 달라도 점수가 떨어집니다. 보완하는 쪽은 대소문자를 무시하는 METEOR입니다",
+        "ROUGE는 생성 요약과 정답 요약 사이의 N-gram 겹침을 세고 정확한 단어 겹침에 의존하므로 추상적 요약에서 신뢰가 떨어집니다. 보완하는 쪽은 문장 임베딩의 코사인 유사도를 보는 BERTScore입니다",
+        "ROUGE는 정답 요약 없이 계산되므로 의미 비교가 애초에 불가능합니다. 보완하는 쪽은 정답 요약을 요구하는 BERTScore입니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 문서는 ROUGE를 모델이 생성한 요약과 정답 요약 사이의 겹치는 단어 단위, 즉 N-gram을 계산해 요약 품질을 재는 지표 묶음으로 적고 값의 범위를 0에서 1 사이로 둡니다. 그리고 한계를 직접 적습니다 — 점수가 정확한 단어 겹침에 의존하므로 추상적 요약 작업에서는 신뢰할 수 없을 수 있습니다. BERTScore는 BERT 계열의 추가 ML 모델로 문장 임베딩을 만들어 코사인 유사도를 비교하는 지표이고, 공식은 의미가 비슷한 문장이 가까이 임베딩될 수 있어 ROUGE와 METEOR보다 언어적 유연성을 더 반영하려는 지표라고 적습니다.",
+      "wrongExplanations": {
+        "0": "두 지표의 설명이 서로 뒤바뀌었습니다. 임베딩의 코사인 유사도를 재는 쪽이 BERTScore이고 N-gram 겹침을 세는 쪽이 ROUGE입니다. 짧은 텍스트에서 중요한 단어 하나가 바뀌면 흔들린다는 한계도 BERTScore 쪽에 적혀 있습니다.",
+        "1": "공식 문서는 ROUGE 지표가 대소문자를 구분하지 않는다고 적습니다. METEOR는 ROUGE-1에 어간 추출과 동의어 일치를 더한 지표이지만, 정확한 단어와 동의어 겹침에 의존해 추상적 요약에서 신뢰가 떨어진다는 같은 한계가 함께 적혀 있습니다.",
+        "3": "ROUGE는 생성 요약을 정답 요약과 대조해 계산하므로 정답 텍스트가 필요합니다. BERTScore도 참조 문장과 비교하므로, 정답이 필요한지 여부로는 두 지표가 갈리지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Accuracy (Amazon SageMaker AI 파운데이션 모델 평가) — ROUGE, METEOR, BERTScore의 정의와 한계",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-accuracy-evaluation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q7",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.3",
+      "section": "business-fit",
+      "difficulty": "applied",
+      "stem": "엔지니어링 팀은 평가 점수와 지연 시간을 꾸준히 추적하는데, 경영진은 그 숫자가 사업에 무엇을 뜻하는지 모르겠다고 말합니다. 공식 문서가 이 단절의 해법으로 적는 것은 무엇입니까?",
+      "options": [
+        "PoC 단계에서 쓴 평가 프레임워크를 종합적인 라이브 KPI 모니터링 프레임워크로 발전시켜 모든 기술 지표가 의미 있는 비즈니스 성과로 추적되게 하고, 그것으로 기능 팀 사이의 공용어를 만듭니다",
+        "기술 지표 보고를 중단하고 비즈니스 지표만 남겨 경영진 보고를 단순화합니다",
+        "평가를 프로덕션에서 제거하고 출시 전 단계에서만 돌려 추적할 지표의 수를 줄입니다",
+        "더 큰 파운데이션 모델로 교체해 기술 점수를 먼저 올린 뒤 그 상승폭을 사업 성과로 보고합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 생성형 AI 프로젝트의 핵심 과제를 엔지니어링 팀이 추적하는 기술 지표와 리더십이 기대하는 비즈니스 가치 사이의 잠재적 단절로 적습니다. 그 간극을 메우려면 PoC 단계에서 도입한 평가 프레임워크가 종합적인 라이브 KPI 모니터링 프레임워크로 발전해야 하고, 그 프레임워크가 모든 기술 지표를 의미 있는 비즈니스 성과로 추적되게 보장하며 여러 기능 팀에 걸친 공용어를 만든다고 적습니다.",
+      "wrongExplanations": {
+        "1": "공식의 처방은 기술 지표를 버리는 것이 아니라 비즈니스 성과까지 추적 가능하게 잇는 것입니다. 기술 지표를 없애면 성과가 움직인 이유를 설명할 근거도 사라집니다.",
+        "2": "공식은 프로덕션 진입이 프로젝트의 결론이 아니라 전략 자산 수명 주기의 시작이라고 적고, 성능과 관련성이 데이터 드리프트와 개념 드리프트, 사용자 기대 변화로 시간이 지나며 저하될 수 있으므로 라이브 모니터링이 필요하다고 적습니다.",
+        "3": "모델을 키우는 것은 기술 지표를 올리는 수단일 수 있지만, 기술 지표와 비즈니스 가치가 이어지지 않는다는 문제 자체를 건드리지 않습니다. 점수가 올라도 단절은 그대로 남습니다."
+      },
+      "sources": [
+        {
+          "title": "Delivering and sustaining the value of a generative AI application — 기술 지표와 비즈니스 가치의 단절",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-value.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q8",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.3",
+      "section": "business-fit",
+      "difficulty": "foundational",
+      "stem": "생성형 AI 도입 효과를 측정하면서, 공식 처방적 지침의 비즈니스 영향 범주에서 사용자 참여의 증가를 재는 지표를 고르려 합니다. 어느 지표입니까?",
+      "options": [
+        "온보딩 시간 — 새 팀원이 생산적이 되기까지 걸리는 시간의 감소를 추적합니다",
+        "지식 공유 효율 — 정보를 찾거나 반복 질문을 하는 데 쓰는 시간의 감소를 측정합니다",
+        "기능 채택률 — 출시한 새 기능에 대한 사용자 참여의 증가를 측정합니다",
+        "변경 실패율 — 배포한 변경 중 실패로 이어지는 비율의 감소를 측정합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 처방적 지침은 측정 지표를 다섯 범주로 나누고, 비즈니스 영향 범주에 기능 채택률과 고객 만족도 점수, 매출 영향 셋을 둡니다. 기능 채택률의 설명이 출시한 새 기능에 대한 사용자 참여의 증가를 측정한다는 것이어서, 사용자 참여를 직접 가리키는 지표입니다. 고객 만족도 점수는 사용자 피드백과 평점의 개선을, 매출 영향은 출시 속도나 생산성 증가에 기인한 매출 증가를 봅니다.",
+      "wrongExplanations": {
+        "0": "온보딩 시간은 팀 생산성과 만족도 범주에 속합니다. 새 팀원이 생산적이 되기까지 걸리는 시간의 감소를 보므로 내부 생산성 쪽 지표이고 사용자 참여와는 다른 축입니다.",
+        "1": "지식 공유 효율도 팀 생산성과 만족도 범주입니다. 같은 범주에 생산성 개선과 만족도 점수가 함께 있고, 모두 제품 사용자가 아니라 개발 팀을 대상으로 재는 지표입니다.",
+        "3": "변경 실패율은 운영 효율성 범주의 지표입니다. 같은 범주의 배포 빈도와 평균 복구 시간처럼 배포 운영의 건강을 보며 사용자 참여를 재지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Measuring the success of generative AI in software development — 비즈니스 영향 범주의 기능 채택률",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-accelerate-software-dev-lifecycle-gen-ai/measuring-success.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q9",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.3",
+      "section": "business-fit",
+      "difficulty": "applied",
+      "stem": "생성형 AI 개발 도구를 전사에 배포한 뒤 반기 리뷰에서 생산성이 얼마나 올랐는지 묻자, 비교할 수치가 없다는 답이 돌아왔습니다. 공식 문서가 권장 지표를 쓰는 절차의 첫 단계로 적는 것은 무엇입니까?",
+      "options": [
+        "현실적 목표 설정 — 개선 목표를 야심차되 달성 가능하게 정합니다",
+        "베이스라인 수립 — 도입에 착수하기 전에 현재 성능에 대한 종합적인 데이터를 모아 둡니다",
+        "지속적 모니터링 구현 — 자동 도구로 지표 데이터를 상시 수집하고 분석합니다",
+        "정기 리뷰 수행 — 분기 또는 반년 단위로 목표 대비 진행 상황을 점검합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 권장 지표를 효과적으로 쓰는 방법을 다섯 단계로 적고 베이스라인 수립을 첫째로 둡니다. AI 기반 개발 경험을 구현하는 데 뛰어들기 전에 현재 성능에 대한 종합적인 데이터를 모아 두라고 적고, 그것이 명확한 출발점을 제공해 나중에 의미 있는 비교를 할 수 있게 해 준다고 적습니다. 그 뒤가 현실적 목표 설정, 지속적 모니터링 구현, 정기 리뷰 수행, 반복과 조정입니다.",
+      "wrongExplanations": {
+        "0": "현실적 목표 설정은 두 번째 단계입니다. 공식은 베이스라인을 손에 쥔 상태에서 각 지표의 달성 가능한 개선 목표를 정하라고 적으므로, 기준값 없이는 목표 자체를 세울 수 없습니다.",
+        "2": "지속적 모니터링은 세 번째 단계입니다. 상시 수집을 시작해도 도입 전 값이 없으면 수집된 수치를 무엇과 비교할지가 정해지지 않습니다.",
+        "3": "정기 리뷰는 네 번째 단계이고, 지금 막혀 있는 바로 그 활동입니다. 리뷰에서 진행 상황을 평가하려면 그 전에 베이스라인과 목표가 있어야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Measuring the success of generative AI in software development — 베이스라인 수립이 첫 단계",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-accelerate-software-dev-lifecycle-gen-ai/measuring-success.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q10",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.4",
+      "section": "app-eval",
+      "difficulty": "applied",
+      "stem": "지식 기반의 검색 단계만 평가하는 작업을 만들면서, 모델 평가에서 늘 쓰던 Accuracy와 Toxicity를 지표로 넣으려고 합니다. 공식 API 레퍼런스에 따르면 어떻게 됩니까?",
+      "options": [
+        "둘 다 쓸 수 있습니다. 정답 텍스트를 함께 넣으면 Accuracy가 검색된 청크에 대해 계산됩니다",
+        "Toxicity만 쓸 수 있습니다. 검색된 청크의 유해성은 모든 평가 종류에서 공통으로 계산됩니다",
+        "둘 다 쓸 수 없습니다. 검색 전용 지식 기반 평가의 유효 지표는 Builtin.ContextRelevance와 Builtin.ContextCoverage 둘뿐이고, Accuracy와 Robustness, Toxicity는 자동 모델 평가의 유효값입니다",
+        "둘 다 쓸 수 있지만 평가를 검색과 응답 생성 유형으로 바꿔야 하며, 그 경우에는 ContextRelevance를 쓸 수 없습니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 API 레퍼런스는 지표 이름의 유효값을 평가 종류별로 따로 못박습니다. 검색만 평가하는 지식 기반 평가 작업의 유효값은 Builtin.ContextRelevance와 Builtin.ContextCoverage 둘이고, 자동 모델 평가 작업의 유효값은 Builtin.Accuracy와 Builtin.Robustness, Builtin.Toxicity 셋입니다. 검색과 응답 생성을 함께 평가하는 작업은 Correctness, Completeness, Helpfulness, LogicalCoherence, Faithfulness와 책임 있는 AI 지표 셋을 쓰고, 심사 모델 평가는 또 다른 집합을 씁니다. 집합이 겹치지 않게 정의돼 있으므로 모델 평가 지표를 RAG 평가 자리에 섞을 수 없습니다.",
+      "wrongExplanations": {
+        "0": "정답 텍스트를 넣는지와 무관하게 Accuracy는 검색 전용 평가의 유효값 목록에 없습니다. 검색 전용 평가에서 정답을 요구하는 지표는 Context coverage 쪽입니다.",
+        "1": "Toxicity가 평가 종류를 가로질러 공통으로 계산된다는 서술은 공식에 없습니다. 자동 모델 평가의 유효값 셋에 들어 있을 뿐이고, 지식 기반 평가에서 유해성에 해당하는 지표는 검색과 응답 생성 유형의 Harmfulness입니다.",
+        "3": "평가 유형을 바꿔도 Accuracy와 Toxicity는 유효값이 되지 않습니다. 그리고 ContextRelevance는 검색 전용 유형의 유효값이므로, 유형을 바꾸면 쓸 수 없게 되는 것이 그쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "EvaluationDatasetMetricConfig (Amazon Bedrock API Reference) — 평가 종류별 지표 유효값",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_EvaluationDatasetMetricConfig.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q11",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.4",
+      "section": "app-eval",
+      "difficulty": "applied",
+      "stem": "검색 전용 RAG 평가를 돌렸는데 Context relevance 점수는 나왔고 Context coverage는 비어 있습니다. 공식 콘솔 설명에 따른 원인은 무엇입니까?",
+      "options": [
+        "Context coverage는 정답 텍스트를 요구하는 지표이고 검색된 청크가 정답 텍스트에서 제공된 정보를 모두 덮는지를 보기 때문에, 데이터세트에 정답이 없으면 계산되지 않습니다",
+        "Context coverage는 검색과 응답 생성 유형에서만 계산되는 지표이므로 검색 전용 평가에서는 나오지 않습니다",
+        "Context coverage는 Citation precision과 반드시 함께 선택해야 계산되는 지표이므로 둘 중 하나만 고르면 비어 있습니다",
+        "Context coverage는 점수가 0에 가까우면 보고서에 표시되지 않으므로, 비어 있다는 것은 검색 품질이 매우 낮았다는 뜻입니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 콘솔 설명은 검색 전용 평가에 해당하는 지표를 둘 적고, 그중 하나의 제목을 Context coverage이며 정답을 요구한다고 표기합니다. 뜻은 검색된 텍스트 청크가 정답 텍스트에서 제공된 정보를 모두 덮는가이고, 점수가 높을수록 평균적으로 덮는 범위가 넓습니다. Context relevance는 검색된 청크가 질문과 맥락상 관련 있는가만 보므로 정답이 필요하지 않습니다. 두 지표 모두 데이터세트의 전체 프롬프트에 대한 평균 점수이고 0과 1 사이 값입니다.",
+      "wrongExplanations": {
+        "1": "Context coverage는 검색 전용 평가의 지표입니다. 공식 API 레퍼런스가 검색만 평가하는 작업의 유효값으로 Builtin.ContextRelevance와 함께 Builtin.ContextCoverage를 적습니다.",
+        "2": "함께 써야 전체 그림이 나온다고 공식이 적는 짝은 Citation precision과 Citation coverage입니다. 그 둘은 검색과 응답 생성 유형의 지표이고 Context coverage와는 다릅니다.",
+        "3": "공식은 점수가 낮으면 보고서에서 숨긴다는 동작을 적지 않습니다. 각 지표는 낮은 점수도 그대로 표시되고, 점수 구간별 분포를 세는 히스토그램까지 함께 제공됩니다."
+      },
+      "sources": [
+        {
+          "title": "Review metrics for RAG evaluations that use LLMs (console) — Context coverage는 정답을 요구한다",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-eval-llm-results.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q12",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.4",
+      "section": "app-eval",
+      "difficulty": "applied",
+      "stem": "전자상거래 고객 지원 에이전트가 요리 레시피를 묻는 질문에 친절하게 답했는데, 내장 평가자의 점수는 전부 높게 나왔습니다. 공식 문서가 이 상황의 대응책으로 적는 것은 무엇입니까?",
+      "options": [
+        "평가자 모델을 더 큰 모델로 바꿔 범용 기준의 판정 품질을 올립니다",
+        "내장 평가자를 모두 끄고 서드파티 평가 라이브러리의 지표로 교체합니다",
+        "온라인 평가의 샘플링 비율을 100퍼센트로 올려 모든 세션을 빠짐없이 채점합니다",
+        "허용 주제와 필수 행동, 금지 행동처럼 내 에이전트에 특정한 규칙마다 사용자 정의 평가자를 만들고, 범용 기준에는 내장 평가자를 그대로 씁니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서는 내장 평가자가 도메인 특화 실패를 놓친다는 절을 따로 두고 이 상황을 예로 직접 적습니다. 범위를 벗어난 질문에 답한 고객 지원 에이전트에게 유용성 평가자는 잘 답했다고 높은 점수를 주고 정책 준수 평가자도 유해한 것이 없다고 높은 점수를 주므로, 모든 점수가 높은데도 에이전트는 지정된 범위를 벗어났다는 것입니다. 공식의 결론은 어떤 범용 기준도 내 에이전트의 범위가 무엇인지 알지 못한다는 것이고, 지침은 범용 기준에는 내장 평가자를 쓰고 내 에이전트에 특정한 규칙마다 사용자 정의 평가자를 쓰라는 것입니다. 한 문장으로 말할 수 있는 규칙은 심사 모델 방식으로, 기계적으로 검사 가능한 규칙은 코드 기반 평가자로 만듭니다.",
+      "wrongExplanations": {
+        "0": "원인이 평가자 모델의 크기가 아니라 기준 자체의 범용성입니다. 공식은 내장 평가자의 구성이 평가자 모델과 프롬프트 템플릿을 포함해 수정할 수 없다고도 적습니다.",
+        "1": "서드파티 평가자도 범용 지표입니다. 공식은 AWS가 내장 평가자는 테스트하고 벤치마크하지만 그 라이브러리들의 품질은 보증하지 않으므로 내 트레이스로 먼저 검증한 뒤 점수를 신뢰하라고 적습니다.",
+        "2": "샘플링 비율을 올리면 채점되는 세션 수만 늘어납니다. 범용 기준이 이미 높은 점수를 주고 있는 상황이라 더 많이 채점해도 범위 이탈 신호는 생기지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Evaluators and evaluations (Amazon CloudWatch) — 내장 평가자는 도메인 특화 실패를 놓친다",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/omni-agents-evaluators.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q13",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.5",
+      "section": "alignment-metrics",
+      "difficulty": "applied",
+      "stem": "출시 시점에 ROI를 한 번 계산해 승인을 받았으니 더 들여다볼 필요가 없다는 의견이 나왔습니다. 공식 문서의 입장은 무엇입니까?",
+      "options": [
+        "맞습니다. ROI는 출시 시점의 비용과 편익으로 확정되고 이후에는 기술 지표만 모니터링합니다",
+        "아닙니다. ROI는 출시 시점에 수행하는 정적 계산으로 다룰 수 없고, 대시보드에서 지속적으로 추적하고 시각화하는 동적 KPI로 관리해야 합니다",
+        "아닙니다. ROI는 분기마다 다시 계산하되 비용 쪽만 갱신하고 가치 쪽은 출시 시점 값을 그대로 유지합니다",
+        "맞습니다. 다만 파운데이션 모델을 교체할 때만 다시 계산하면 되고 그 밖에는 변하지 않습니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 ROI를 출시 시점에 수행하는 정적 계산으로 다룰 수 없다고 못박고, 대시보드에서 지속적으로 추적하고 시각화하는 동적 KPI로 관리해야 한다고 적습니다. 그래야 ROI가 프로젝트에 대한 과거의 정당화에서 비즈니스 리더를 위한 실시간 운영 건강 지표로 바뀝니다. 비용이 고정되지 않는 이유로는 API 토큰 소비와 수요에 맞춘 인프라 확장, 미세 조정 같은 유지 활동의 연산 비용을 들고, 가치가 고정되지 않는 이유로는 사용자 채택률과 사용자 행동의 변화, 시간 경과에 따른 모델 성능 저하, 비용과 성능 효율을 위한 모델 교체를 듭니다.",
+      "wrongExplanations": {
+        "0": "공식은 프로덕션 진입이 프로젝트의 결론이 아니라 전략 자산 수명 주기의 시작이라고 적습니다. 기술 지표만 보면 비용과 가치가 함께 움직이는 것을 경영진이 볼 수 없습니다.",
+        "2": "비용만 갱신하는 방식은 공식의 서술과 어긋납니다. 공식은 애플리케이션이 전달하는 가치도 정적이지 않다고 적고 그 이유로 채택률과 사용자 행동 변화, 모델 성능 저하를 듭니다.",
+        "3": "모델 교체는 가치가 움직이는 여러 이유 중 하나로만 적혀 있습니다. 토큰 소비와 인프라 확장, 유지 활동의 연산 비용은 모델을 그대로 두어도 ROI를 움직입니다."
+      },
+      "sources": [
+        {
+          "title": "Delivering and sustaining the value of a generative AI application — ROI는 동적 KPI다",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-value.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q14",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.5",
+      "section": "alignment-metrics",
+      "difficulty": "foundational",
+      "stem": "비즈니스 목표 조정 지표로 작업 완료율을 보고하려 합니다. 공식 문서에서 이 숫자가 나오는 자리는 어디입니까?",
+      "options": [
+        "자동 모델 평가의 Accuracy 지표 — 작업 유형별 수식이 작업 완료율을 계산합니다",
+        "RAG 검색과 응답 생성 평가의 Completeness 지표 — 질문의 모든 측면을 해결한 비율이 작업 완료율입니다",
+        "에이전트 평가 — Amazon Bedrock AgentCore Evaluations가 에이전트의 종단 간 작업 완료, 즉 목표 달성의 정확성을 계산하고, Well-Architected도 수집할 에이전트별 지표로 작업 완료율을 직접 듭니다",
+        "Amazon Bedrock Guardrails의 접지 점수 — 응답이 소스에 근거한 비율을 모아 작업 완료율로 집계합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 문서는 Amazon Bedrock AgentCore Evaluations가 AI 에이전트의 성능을 평가하는 기능이며 에이전트의 종단 간 작업 완료, 괄호로 목표 달성이라 덧붙인 그 정확성과 사용자 요청을 처리하며 호출한 도구의 정확성, 그리고 에이전트 행동의 특정 차원을 재는 사용자 정의 지표를 계산할 수 있다고 적습니다. Well-Architected 에이전틱 AI 렌즈도 대표 기간 동안 수집할 에이전트별 지표로 도구 호출 빈도와 출력 토큰 수 분포, 작업 완료율, 유형별 오류율을 직접 열거하고, 고정 임계값 대신 기대 범위를 학습하도록 Amazon CloudWatch Anomaly Detection을 적용하라고 적습니다.",
+      "wrongExplanations": {
+        "0": "자동 모델 평가의 Accuracy는 작업 유형에 따라 실세계 지식 점수나 BERT Score, F1, 분류 정확도로 계산됩니다. 프롬프트 하나에 대한 응답 하나를 보는 지표이고 에이전트의 작업 완료를 재지 않습니다.",
+        "1": "Completeness는 생성된 응답이 질문의 모든 측면을 해결하는지를 보는 RAG 평가 지표입니다. 응답의 충실도를 보는 것이지 에이전트가 목표를 달성했는지를 보는 것이 아닙니다.",
+        "3": "접지 검사는 응답이 제공된 소스에 근거하는지를 보는 안전 장치입니다. 할루시네이션을 막는 런타임 통제이고 비즈니스 목표 조정 지표를 산출하는 자리가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "How it works (Amazon Bedrock AgentCore Evaluations) — 종단 간 작업 완료와 목표 달성 정확성",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/how-it-works-evaluations.html"
+        },
+        {
+          "title": "AGENTREL02-BP03 Implement behavioral anomaly detection and monitoring — 수집할 에이전트별 지표에 작업 완료율",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentrel02-bp03.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t3-4-q15",
+      "examGuideTaskId": "aif-t3-4",
+      "skill": "3.4.5",
+      "section": "alignment-metrics",
+      "difficulty": "foundational",
+      "stem": "ROI 대시보드를 설계하면서 상호 작용당 비용과 CSAT 점수 개선을 각각 어느 범주에 넣을지 정해야 합니다. 공식 문서의 분류는 무엇입니까?",
+      "options": [
+        "상호 작용당 비용은 총 인프라 지출과 함께 재무 지표이고, CSAT 점수 개선은 절약한 시간과 매출 증가와 함께 비즈니스 가치 지표입니다",
+        "둘 다 재무 지표입니다. 만족도는 이탈로 인한 매출 손실로 환산되기 때문입니다",
+        "상호 작용당 비용이 비즈니스 가치 지표이고 CSAT 점수 개선이 재무 지표입니다",
+        "둘 다 비즈니스 가치 지표이고, 재무 지표에는 총 인프라 지출만 들어갑니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 ROI 대시보드를 프로덕션 단계의 주요 산출물로 보아야 한다고 적고, 그 대시보드가 재무 지표와 비즈니스 가치 지표를 통합해야 한다고 적습니다. 재무 지표의 예로 상호 작용당 비용과 총 인프라 지출을 들고, 비즈니스 가치 지표의 예로 절약한 시간과 매출 증가, CSAT 점수 개선을 듭니다. 이 대시보드가 애플리케이션의 존재 근거를 지속적으로 제시하고 향후 투자 결정을 안내한다고 적습니다.",
+      "wrongExplanations": {
+        "1": "공식은 만족도를 매출 손실로 환산하라고 적지 않습니다. CSAT 점수 개선은 절약한 시간과 매출 증가와 같은 자리에 놓인 비즈니스 가치 지표로 열거됩니다.",
+        "2": "두 범주가 서로 뒤바뀌었습니다. 비용은 재무 축이고 만족도는 가치 축이라는 것이 공식의 분류이며, 대시보드는 두 축을 함께 올려야 ROI를 읽을 수 있습니다.",
+        "3": "재무 지표에는 총 인프라 지출과 함께 상호 작용당 비용이 명시됩니다. 상호 작용당 비용은 토큰 소비가 움직이면 함께 움직이는 비용 축의 대표 지표입니다."
+      },
+      "sources": [
+        {
+          "title": "Delivering and sustaining the value of a generative AI application — 재무 지표와 비즈니스 가치 지표",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-value.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
