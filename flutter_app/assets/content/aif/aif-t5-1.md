@@ -154,7 +154,7 @@ lastVerified: 2026-11-03
 
 예시가 **여덟 개**입니다 — IAM 역할·정책·권한 · 암호화 · Amazon Macie · AWS PrivateLink · 공동 책임 모델 · AgentCore Identity · AgentCore의 정책 · Bedrock Guardrails. 외우는 순서가 아니라 **층으로** 쥐어야 합니다.
 
-**공동 책임 모델이 출발점입니다.** AWS는 **"protecting the infrastructure that runs all of the services offered in the AWS Cloud"**(하드웨어·소프트웨어·네트워킹·시설)를 맡고 이것이 **클라우드 "의" 보안**입니다. 고객 쪽은 **"Customer responsibility will be determined by the AWS Cloud services that a customer selects"** — 즉 **고객 책임의 크기는 고른 서비스가 결정합니다.** 고객이 온전히 받는 **상속받는 통제**의 공식 예는 **물리적·환경적 통제**이고, 양쪽에 적용되지만 각자 자기 몫을 구현하는 **공유 통제**는 **패치 관리 · 구성 관리 · 인식 및 교육** 셋입니다.
+**공동 책임 모델이 출발점입니다.** AWS는 **"protecting the infrastructure that runs all of the services offered in the AWS Cloud"**(하드웨어·소프트웨어·네트워킹·시설)를 맡고 이것이 **클라우드 "의" 보안**입니다. 고객 쪽은 **"Customer responsibility will be determined by the AWS Cloud services that a customer selects"** — 즉 **고객 책임의 크기는 고른 서비스가 결정합니다.** 공식이 통제를 가르는 묶음은 **셋**입니다. 고객이 온전히 받는 **상속받는 통제(Inherited Controls)**의 공식 예는 **물리적·환경적 통제**이고, 양쪽에 적용되지만 각자 자기 몫을 구현하는 **공유 통제(Shared Controls)**는 **패치 관리 · 구성 관리 · 인식 및 교육** 셋입니다. ⚠️ **세 번째가 고객 전용 통제(Customer Specific)**로, 고객이 쓰는 애플리케이션에 따라 **전적으로 고객 책임**인 것들입니다 — 공식 예가 **서비스·통신 보호(Service and Communications Protection)**와 **영역 보안(Zone Security)**이고, 고객이 **자기 데이터나 환경을 특정 보안 요구에 맞게 라우팅·구획화**해야 하는 경우입니다.
 
 > 🧠 **원리:** 관리형 AI 서비스일수록 고객 몫이 **작아지지만 사라지지는 않습니다.** Amazon Bedrock에서도 **어떤 IAM 주체가 어떤 모델을 호출하는가 · 프롬프트에 무엇을 넣는가 · 로깅을 켜는가 · 가드레일을 붙이는가**는 전부 고객 몫입니다. "이 위험은 누구 책임인가"가 나오면 **데이터와 설정은 고객**으로 읽습니다.
 

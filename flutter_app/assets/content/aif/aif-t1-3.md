@@ -365,8 +365,8 @@ ROI가 음수일 때 공식이 드는 개선 방향도 함께 기억합니다 �
 2. What is Machine Learning? — `aws.amazon.com/what-is/machine-learning/` (2026-11-03 확인)
 3. What is MLOps? — `aws.amazon.com/what-is/mlops/` (2026-11-03 확인)
 4. Planning for successful MLOps (AWS Prescriptive Guidance) — `docs.aws.amazon.com/prescriptive-guidance/latest/ml-operations-planning/introduction.html` (2026-11-03 확인)
-5. MLSUS06-BP02 Retrain only when necessary — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html` (2026-11-03 확인)
-6. MLPERF06-BP03 Evaluate data drift — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html` (2026-11-03 확인)
+5. MLSUS06-BP02 Retrain only when necessary — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html` (2026-11-06 재확인) · ⭐ **드리프트 두 종류를 한 문장에 정의하는 정본이 여기입니다** — "you can detect both **concept drift (changes in the relationship between input and output variables)** and **data drift (changes in the distribution of input data)**"
+6. MLPERF06-BP03 Evaluate data drift — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html` (2026-11-06 재확인) · ⚠️ **이 페이지는 데이터 드리프트만 정의합니다**(개념 드리프트는 모니터링 도구가 탐지하는 대상으로만 언급). 위 용어 표의 **개념 드리프트 정의는 5번에서** 왔습니다
 7. MLCOST06-BP02 Monitor return on investment for ML models — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp02.html` (2026-11-03 확인)
 8. AutoMLJobObjective (Amazon SageMaker AI API Reference) — `docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobObjective.html` (2026-11-05 확인)
 9. SageMaker JumpStart pretrained models — `docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html` (2026-11-03 확인)
