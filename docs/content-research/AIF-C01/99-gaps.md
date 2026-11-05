@@ -248,13 +248,23 @@ AIF **범위 외** 목록에 있어 이 자격증 문항에 쓸 수 없는 것 �
 - ⚠️ **다음 세션이 알아야 할 것:** 이 URL이 사라지면 `MLCOST02-BP01`로 교체하면 된다. 다만 **스팸 메일 예시만 사라진다**(그 예시는 은퇴 가이드에만 있다).
 - 이것이 G-14·G-15와 같은 계열은 **아니다** — 그 둘은 "닫힌 서비스를 지금 쓰는 도구로 가르치는" 문제이고, 이것은 "살아 있는 문장을 은퇴한 페이지에서 인용하는" 문제다.
 
-### G-13 ℹ️ 저작 선결(갭이 아니라 작업 항목)
+### G-13 ✅ 저작 선결 — 전부 완료 (2026-11-05)
 
-- `pubspec.yaml`에 **`- assets/content/aif/` 신규 디렉터리 등록**이 필요하다(MLA에서 확인된 레시피 정정 — pubspec은 디렉터리를 개별 등록한다).
-- **새 자격증 전용 포맷 가드**(`test/aif_doc_format_test.dart`)를 신설해야 한다 — `content_enrichment_test`는 **명시 허용 목록**(clf 19 · saa 24 · soa 20)이라 신규 자격증을 강제하지 않는다.
-- `content_index.dart`에 14줄 등재(questionCount는 문항 저작 전까지 **0**).
-- `kExamReadinessRequirements`에 AIF 정책 추가가 **필요하다** — 정책이 없는 자격증은 `hasPolicy:false → ready:false`로 **fail closed**라, 사람이 전 문항을 flip해도 모의고사가 영원히 잠긴다(MLA가 #246, SOA·DEA가 #254 전까지 그랬다). 공식 비중 20/24/28/14/14를 65문항에 배분한 값으로 넣는다.
-- ⚠️ **`verified:true` flip은 사람만** 한다. 문항은 전부 드래프트로 저작하고, `flipAllowlist`(`review.mjs`의 `CERTS`)와 Dart 쪽 허용 목록 가드를 **flip 전에** 준비해 둔다 — 없으면 사람의 첫 flip이 "전 문항 드래프트" 단정에서 레드로 끝난다(SOA·DEA가 #285에서 겪은 함정).
+착수 시점의 작업 항목 목록이었고 **다섯 항목이 모두 닫혔다.** 아래는 무엇이 그것을 닫았는지의 기록이다.
+
+| 선결 | 상태 |
+|---|---|
+| `pubspec.yaml`에 `- assets/content/aif/` 등록 | ✅ 도메인 1 배치에서 완료(pubspec은 디렉터리를 개별 등록한다 — MLA에서 확인된 레시피 정정) |
+| 새 자격증 전용 포맷 가드 `test/aif_doc_format_test.dart` | ✅ 도메인 1 배치에서 신설 — `content_enrichment_test`는 **명시 허용 목록**(clf 19 · saa 24 · soa 20)이라 신규 자격증을 강제하지 않는다 |
+| `content_index.dart` 14줄 등재 | ✅ 배치마다 누적해 14/14 완료(`questionCount`는 문항 flip 전까지 **0**) |
+| `kExamReadinessRequirements`에 AIF 정책 | ✅ **Phase 3 선결 셋에서 완료** — `{1: 20, 2: 24, 3: 28, 4: 14, 5: 14}`, 65문항 배분 **13·16·18·9·9** |
+| `flipAllowlist` + Dart 허용 목록 가드 | ✅ **Phase 3 선결 셋에서 완료** — `review.mjs`의 `CERTS.aif.flipAllowlist` + `aif_questions_test.dart`의 `flipApprovedTaskIds` |
+
+⚠️ **왜 「정책 없는 cert는 fail closed」가 선결이었나**는 기록해 둔다 — 정책이 없으면 `hasPolicy:false → ready:false`라 **사람이 전 문항을 flip해도 모의고사가 영원히 잠긴다**(MLA가 #246, SOA·DEA가 #254 전까지 그랬다). 같은 이유로 **허용 목록이 없으면 사람의 첫 flip이 「전 문항 드래프트」 단정에서 레드로 끝난다**(SOA·DEA가 #285에서 겪었다).
+
+⚠️ **선결 함정이 이 목록보다 둘 더 있었다** — 둘 다 `tool/review.test.mjs`다: 하드코딩 자격증 목록과 **「등록된 자격증은 문항 파일이 있어야 한다」** 단정(저작 전 등록이 전제에 없었다 → `preAuthoring` 명시 집합으로 갈랐다). **문항을 넣을 때 그 집합에서 `aif`를 지워야 한다.** 경위는 HANDOFF §0-2026-11-05.
+
+⚠️ **`verified:true` flip은 사람만** 한다. 문항은 전부 드래프트로 저작하고, flip은 `node tool/review.mjs flip aif <taskId>`가 허용 목록 추가까지 대신 해 준다.
 
 ## 출처
 
