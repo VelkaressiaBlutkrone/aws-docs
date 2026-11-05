@@ -415,7 +415,7 @@ void main() {
       // MLA 정책 추가 때 하드코딩 목록을 빠뜨려 **검증 없이 통과**한 적이 있어,
       // 2026-10-27 SOA·DEA 추가에서 루프를 키 집합으로 돌렸다.
       expect(kExamReadinessRequirements.keys.toSet(),
-          {'CLF-C02', 'SAA-C03', 'MLA-C01', 'SOA-C03', 'DEA-C01'},
+          {'CLF-C02', 'SAA-C03', 'MLA-C01', 'SOA-C03', 'DEA-C01', 'AIF-C01'},
           reason: 'readiness 정책을 추가·삭제했으면 이 테스트의 대조 목록도 맞춘다');
       for (final code in kExamReadinessRequirements.keys) {
         final raw = File('assets/exam_guides/$code.json').readAsStringSync();
