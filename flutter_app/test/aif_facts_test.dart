@@ -261,14 +261,18 @@ void main() {
     // 인용 문장의 대체 출처를 찾는 것은 후속 과제이므로, 지금은 **은퇴 사실을
     // 참고자료에 명시**하는 것까지 고정한다 — 죽은 링크를 아무 표시 없이 두면
     // 학습자가 그 페이지를 찾으러 간다.
-    test('aif-t3-3: 은퇴한 AWS CAF for AI 인용에 경고가 붙어 있다', () {
+    // ⚠️ **2026-11-06 정정:** 이 가드는 원래 `'이 가이드가 은퇴했습니다'`를
+    // 단정했는데, **그 판정 자체가 틀렸다.** 아래 「G-43 정정」 그룹의 주석에
+    // 경위를 적었다 — 문서는 그 URL에 그대로 있고 **브라우저로만 못 열린다.**
+    // 그래서 단정을 상태 서술로 바꾸고, 「은퇴」 문구 금지는 그쪽 그룹이 맡는다.
+    test('aif-t3-3: 열리지 않는 CAF 인용에 상태와 대체 경로가 붙어 있다', () {
       final raw = read('aif-t3-3');
       expect(raw, contains('aws-caf-for-ai'),
           reason: '대조군 — 그 인용이 아직 문서에 있다');
-      expect(raw, contains('이 가이드가 은퇴했습니다'),
-          reason: '은퇴 사실을 참고자료에 적어야 한다');
+      expect(raw, contains('302'),
+          reason: '브라우저가 어디로 튕기는지를 참고자료에 적어야 한다');
       expect(raw, contains('MLSEC03-BP04'),
-          reason: '살아 있는 인접 출처를 함께 적어 후속 작업을 돕는다');
+          reason: '살아 있는 인접 출처를 함께 적어 학습자가 열 곳을 준다');
     });
 
     test('aif-t3-3: 문항이 은퇴한 CAF 가이드를 출처로 쓰지 않는다', () {
@@ -440,6 +444,149 @@ void main() {
               reason: '${f.uri.pathSegments.last}: 「$needle」이 전파됐다');
         }
       }
+    });
+  });
+
+  // ── 미해결 보고사항 정리 (2026-11-06) ────────────────────────────────
+  //
+  // 네 문항 배치가 「보강 후보」·「후속 과제」로 남긴 항목을 공식 페이지
+  // 재실측으로 닫았다. ⚠️ 이 정리에서 **갭 노트 자신이 틀린 것을 두 건**
+  // 찾았다 — 아래 각 그룹의 주석에 적는다.
+  group('G-43 정정: CAF for AI는 「소멸」이 아니라 「브라우저로 못 열림」이다', () {
+    // ⚠️⚠️ **갭 노트 G-43의 「가이드 통째로 은퇴」가 부정확했다.**
+    // curl은 `302`(임시)로 머신 러닝 렌즈 인덱스로 보내고 실제 브라우저도
+    // 그렇게 튕기지만, **AWS 문서 리더로 같은 URL을 읽으면 본문이 그대로
+    // 나온다**(거버넌스 14,909자 · 보안 19,086자). 「Data curation」 절
+    // (7,030~9,564자)과 「Data protection」 절(14,971~17,706자)이 md가
+    // 인용하는 문장을 담고 있다.
+    //
+    // 즉 **인용은 유효하고 사람이 열 수 없을 뿐**이다. 「문서가 사라졌다」와
+    // 「사람이 열 수 없다」는 다른 판정이고, 전자로 적으면 다음 작업자가
+    // 참인 인용을 지우려 든다.
+    //
+    // ⚠️ **틀린 슬러그 대조군은 이 둘을 구분하지 못한다** — 가이드가 은퇴한
+    // 경우와 사람 대상 서빙만 꺼진 경우가 같은 신호를 준다. 그래서 판정에
+    // **AWS 문서 리더를 두 번째 방법으로** 쓴다.
+    test('은퇴 단정이 사라지고 정확한 상태가 적혀 있다', () {
+      final raw = read('aif-t3-3');
+      expect(raw.contains('이 가이드가 은퇴했습니다'), isFalse,
+          reason: '문서는 사라지지 않았다 — 브라우저로 열리지 않을 뿐이다');
+      expect(raw.contains('가이드 자체의 소멸'), isFalse);
+      expect(raw, contains('브라우저로는 열리지 않습니다'));
+      expect(raw, contains('문서가 사라진 것은 아닙니다'));
+    });
+
+    test('사람이 열 수 있는 인접 정본이 적혀 있다', () {
+      final raw = read('aif-t3-3');
+      expect(raw, contains('overview-aws-cloud-adoption-framework/governance-perspective.html'));
+      expect(raw, contains('MLSEC-07: Keep only relevant data'),
+          reason: '공식 자신이 머신 러닝 렌즈로 가는 길을 준다');
+      expect(raw, contains('MLSEC03-BP03'));
+    });
+  });
+
+  group('재구성된 페이지의 귀속 정정', () {
+    // 전부 두 방법(본문 추출 + AWS 문서 리더)으로 확인했고 대조군을 함께 뒀다.
+    test('aif-t3-3: custom-models.html이 적는 방법은 세 가지다 (G-45)', () {
+      final raw = read('aif-t3-3');
+      expect(raw, contains('이 페이지가 적는 사용자 지정 방법은 세 가지입니다'));
+      expect(raw, contains('hp-custom-models-create-continued-pre-training-job.html'),
+          reason: '지속적 사전 훈련의 살아 있는 정본');
+    });
+
+    test('aif-t2-3: 「서버리스」·「단일 API」는 개요 페이지가 아니다 (G-40)', () {
+      final raw = read('aif-t2-3');
+      expect(raw, contains('Quickstart 중심의 「Overview」로 재구성'));
+      expect(raw, contains('genai-guide.html`의 `model-independent, single API access'));
+    });
+
+    test('aif-t3-1: 지식 기반은 두 유형이고 옛 귀속이 지워졌다 (G-47)', () {
+      final raw = read('aif-t3-1');
+      expect(raw, contains('현행 지식 기반 페이지에 더 이상 없습니다'));
+      expect(raw, contains('관리형이냐 고객 관리형이냐'));
+    });
+
+    test('aif-t1-2: 지식 기반 두 유형이 적혀 있다 (G-34)', () {
+      expect(read('aif-t1-2'), contains('지식 기반은 이제 두 종류입니다'));
+    });
+
+    test('vector-databases의 실제 제목이 쓰인다 (G-47)', () {
+      // h1은 `Choosing a database for your generative AI applications`다.
+      // 낡은 별칭 「Vector databases on AWS」를 제목처럼 쓰지 않는다.
+      final md = read('aif-t3-1');
+      expect(md, contains('Choosing a database for your generative AI applications'));
+      expect(md.contains('title: Vector databases on AWS'), isFalse);
+      final bank = File('assets/content/aif/aif-t3-1.questions.json')
+          .readAsStringSync();
+      expect(bank.contains('(Vector databases on AWS)'), isFalse,
+          reason: '문항 출처 제목의 낡은 별칭도 지웠다');
+    });
+  });
+
+  group('보강: md가 덮지 않아 반쪽이던 공식 사실 (G-41·G-48·G-56)', () {
+    test('aif-t2-1: 컨텍스트 안티패턴은 다섯 가지다', () {
+      final raw = read('aif-t2-1');
+      expect(raw, contains('안티패턴**으로 드는 **다섯 가지'));
+      expect(raw, contains('버전 관리나 나란히 비교 평가 없이'));
+    });
+
+    test('aif-t2-1: 프롬프트 캐싱 TTL과 서버 지역성', () {
+      final raw = read('aif-t2-1');
+      expect(raw, contains('1시간 TTL'), reason: '5분만이 아니다');
+      expect(raw, contains('서버 지역성'));
+    });
+
+    // ⚠️⚠️ **갭 노트 G-41의 이 항목이 틀렸다.** 「반환 결과 수가 요청보다
+    // 적을 수 있다」가 계층형 전용이 아니라고 적었는데, 계층형 절도 그 말을
+    // 한다 — 다만 표현이 다르다: 계층형은 `the returned number of results
+    // might be **less than** the requested amount`, 표·그림 절은 `the number
+    // of results can be **fewer than** the number that you requested`.
+    // 그래서 md의 계층형 귀속은 **옳고**, 빠진 것은 **두 번째 경로**였다.
+    // 고치지 않고 더하는 것이 맞는 처리다.
+    test('aif-t2-1: 결과 수가 줄어드는 경로가 둘로 적혀 있다', () {
+      final raw = read('aif-t2-1');
+      expect(raw, contains('경로는 둘입니다'));
+      expect(raw, contains('최대 토큰 한도를 두는 모든 청킹 전략'));
+      expect(raw, contains('10,000자 이하'));
+      // 계층형 귀속은 공식 서술이므로 **지우지 않는다**(보존 가드).
+      expect(raw, contains('계층형 청킹은 자식 청크가 부모로 교체되므로'),
+          reason: '공식 Note가 그대로 적는 사실이다 — 지우면 안 된다');
+    });
+
+    test('aif-t2-2: 설명 페이지의 한계 목록 넷이 적혀 있다', () {
+      final raw = read('aif-t2-2');
+      expect(raw, contains('「한계」 목록이 두 개라'));
+      expect(raw, contains('창의성'));
+    });
+
+    test('aif-t2-3: SageMaker AI의 전문성이 두 층으로 적혀 있다', () {
+      final raw = read('aif-t2-3');
+      expect(raw, contains('안내형 UI와 AI 에이전트 지원 워크플로'));
+      expect(raw, contains('무엇을 통제하려 하느냐'));
+    });
+
+    test('aif-t5-1: 공동 책임 모델의 통제 묶음은 셋이다', () {
+      final raw = read('aif-t5-1');
+      expect(raw, contains('통제를 가르는 묶음은 **셋**입니다'));
+      expect(raw, contains('Customer Specific'));
+      expect(raw, contains('영역 보안'));
+    });
+
+    test('aif-t3-3: FAQ의 CPT 수혜는 Titan 한정이다', () {
+      expect(read('aif-t3-3'),
+          contains('이 FAQ 답변의 주어는 `Amazon Titan` 기본 모델입니다'));
+    });
+
+    test('aif-t3-2: 싱글샷·간접 인젝션의 귀속이 갈려 있다', () {
+      final raw = read('aif-t3-2');
+      expect(raw, contains('「싱글샷·원샷」이라는 **낱말은 그 페이지에 없고'));
+      expect(raw, contains('정본은 보안 백서가 아니라'));
+    });
+
+    test('aif-t1-3: 드리프트 두 정의의 정본이 갈려 있다', () {
+      final raw = read('aif-t1-3');
+      expect(raw, contains('드리프트 두 종류를 한 문장에 정의하는 정본'));
+      expect(raw, contains('이 페이지는 데이터 드리프트만 정의합니다'));
     });
   });
 }

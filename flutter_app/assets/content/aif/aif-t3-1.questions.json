@@ -271,7 +271,7 @@
       },
       "sources": [
         {
-          "title": "Choosing a database for your generative AI applications (Vector databases on AWS) — Aurora PostgreSQL과 RDS for PostgreSQL의 pgvector",
+          "title": "Choosing a database for your generative AI applications — Aurora PostgreSQL과 RDS for PostgreSQL의 pgvector",
           "url": "https://docs.aws.amazon.com/vector-databases/"
         },
         {
@@ -303,7 +303,7 @@
       },
       "sources": [
         {
-          "title": "Choosing a database for your generative AI applications (Vector databases on AWS) — MemoryDB의 벡터 검색 성능 서술",
+          "title": "Choosing a database for your generative AI applications — MemoryDB의 벡터 검색 성능 서술",
           "url": "https://docs.aws.amazon.com/vector-databases/"
         },
         {

@@ -374,7 +374,7 @@ G-30이 `docs.aws.amazon.com`에서 "없는 페이지도 200 + redirects 1"임�
 - **`AGENTPERF03-BP02`의 안티패턴은 5개**다(`aif-t2-1.md` §7과 노트 96은 4개로 열거). 다섯째는 "버전 관리·나란히 비교 없이 프롬프트 변경을 내보내 롤아웃 뒤에야 품질·토큰 비용 회귀가 드러나는 것".
 - **프롬프트 캐싱 TTL이 5분만은 아니다** — 같은 페이지가 "5-minute default TTL, or a **1-hour TTL** on Claude Opus 4.5, Haiku 4.5, and Sonnet 4.5"를 적는다.
 - **명시적 캐싱에 서버 지역성 제약이 있다** — 캐시 항목은 그 요청을 처리한 서버에 저장되고 다른 서버(예: 다른 리전)가 처리하면 **읽지 않고 새로 쓴다.** md는 "히트는 보장되지 않는다"까지만 적는다.
-- **「반환 결과 수가 요청보다 적을 수 있다」는 계층형 청킹 전용이 아니다** — `kb-chunking.html`의 `Tables and figures in parsed content` 절이 **최대 토큰 한도를 두는 모든 전략**에 적용한다(「청킹 없음」 제외, 10,000자 이하). `aif-t2-1.md` §1은 계층형에만 귀속한다.
+- ❌ **(2026-11-06 정정 — 이 항목은 틀렸다)** **「반환 결과 수가 요청보다 적을 수 있다」는 계층형 청킹 전용이 아니다** — `kb-chunking.html`의 `Tables and figures in parsed content` 절이 **최대 토큰 한도를 두는 모든 전략**에 적용한다(「청킹 없음」 제외, 10,000자 이하). `aif-t2-1.md` §1은 계층형에만 귀속한다.
 - **결정 가이드의 「필요 전문성」 칸이 완화됐다**(G-31 계열) — SageMaker AI 쪽이 "**Guided UI and AI agent-assisted workflows simplify customization**; deeper ML expertise helpful for advanced training jobs"이고 본문은 서버리스 커스터마이징에 "**require no ML expertise**"까지 적는다. `aif-t2-3.md`는 뒷절만 적어 **틀리지는 않았지만 절반이다.**
 - **`what-is/large-language-model/`이 코드 생성 예시로 은퇴 제품명 `Amazon CodeWhisperer`를 든다** — 그 문장은 인용하지 않는다.
 
@@ -390,7 +390,10 @@ G-30이 `docs.aws.amazon.com`에서 "없는 페이지도 200 + redirects 1"임�
 
 이 배치에서 **라이브 학습문서의 출처가 죽거나 그 사실을 더 이상 담지 않는 경우가 다섯 건** 나왔다. 문항 60개는 네 Task 모두 이 영역을 **피해서** 썼고(전수 0건 확인), 그중 **둘은 이 PR에서 고쳤다.**
 
-### G-43 ⚠️⚠️ `AWS CAF for AI` 가이드가 **통째로 은퇴했다** (라이브 `aif-t3-3.md` 2곳 — 부분 처리)
+### G-43 ⚠️⚠️❌ `AWS CAF for AI` — **「은퇴」 판정이 틀렸다** (2026-11-06 정정·해소)
+
+> ⚠️⚠️ **이 항목의 원래 결론이 틀렸다.** 아래 본문은 **2026-11-05 당시의 기록**으로 남기고, 정정은 G-61에 적는다. 요지: `302`로 튕기는 것은 **사람 대상 서빙**뿐이고 **문서 본문은 그 URL에 그대로 있다.** 「가이드가 소멸했다」로 적어 두면 다음 작업자가 **참인 인용을 지우려 든다** — 실제로 이 정리에서 그럴 뻔했다.
+
 
 `whitepapers/latest/aws-caf-for-ai/` 아래 **모든** 슬러그가 `200 redirects=1`로 Well-Architected 머신 러닝 렌즈 인덱스로 간다.
 
@@ -526,3 +529,56 @@ Responsible AI Lens가 직접 적는다 — **"we define Responsible AI using a 
 ### G-60 ℹ️ 범위 내 페이지가 **범위 밖 서비스를 끌고 오는** 자리
 
 `Amazon Macie`의 `what-is` 페이지가 통합 대상으로 **`AWS Security Hub CSPM`**을 싣는다(AIF 공식 범위 **밖**). Macie 문항을 쓸 때 그 문장을 그대로 인용하면 범위 밖 이름이 학습 경로에 들어온다 — `aif-t5-1`은 쓰지 않았다. G-10 목록과 같은 계열의 운영 주의다.
+
+## 미해결 보고사항 정리 (2026-11-06, 컨트롤러 직접 실측)
+
+네 문항 배치가 「보강 후보」·「후속 과제」로 남긴 항목을 공식 페이지 재실측으로 닫았다. ⚠️ **이 정리에서 갭 노트 자신이 틀린 것을 두 건 찾았다**(G-43 · G-41의 한 항목). 기준선 **2,895 → 2,911**.
+
+### G-61 ⚠️⚠️❌ G-43 정정 — 「문서가 사라졌다」와 「사람이 열 수 없다」는 다른 판정이다
+
+- **실측(2026-11-06):** `curl`은 `302 Moved Temporarily`로 머신 러닝 렌즈 인덱스로 보내고 **실제 브라우저도 그렇게 튕긴다**(내장 브라우저로 확인 — 학습자가 보는 것은 ML 렌즈 인덱스다). **그런데 AWS 문서 리더로 같은 URL을 읽으면 본문이 그대로 나온다** — 거버넌스 관점 **14,909자**, 보안 관점 **19,086자**. 그 안에 md가 인용하는 「Data curation」 절(7,030~9,564자)과 「Data protection」 절(14,971~17,706자)이 **그대로** 있다.
+- ⚠️⚠️ **그래서 인용은 유효하다.** G-43은 "그 렌즈 인덱스에는 인용 문장이 없다"까지는 맞게 적었지만 결론을 **「가이드 자체의 소멸」**로 밀어 버렸다. 그 결론을 믿고 §5 ①·②를 재소싱하거나 축소했다면 **공식 문서에 실재하는 인용을 지우는 일**이 됐다.
+- ⚠️⚠️ **틀린 슬러그 대조군은 이 둘을 구분하지 못한다.** 「가이드 은퇴」와 「사람 대상 서빙만 꺼짐」이 **같은 신호**(실제 슬러그·틀린 슬러그·가이드 루트가 모두 같은 곳으로 `302`)를 준다. G-43이 대조군을 근거로 "이름 변경이 아니라 소멸"이라고 적은 것은 **대조군이 줄 수 없는 결론**이었다.
+- ⚠️ **`302`는 임시 리다이렉트다.** 영구 이동(`301`)과 구별해 읽으면 신호가 하나 더 있었다.
+- **→ 판정과 처리:** **인용을 유지**하고, 참고자료에 **브라우저로는 열리지 않는다는 상태 + 본문이 그 URL에 남아 있다는 사실 + 사람이 열 수 있는 인접 정본**을 적었다. ⭐ **CAF 보안 관점 페이지 자신이 머신 러닝 렌즈를 가리킨다** — 데이터 보호 정책이 "operationalized, like **MLSEC-07: Keep only relevant data** in the Machine Learning Lens"라고 적어, 사람이 열 수 있는 길을 공식이 직접 준다. 그 밖에 `MLSEC03-BP03`·`MLSEC03-BP04`·`MLREL02-BP03`·`MLPERF06-BP03`과 **일반 AWS CAF 거버넌스 관점**(⚠️ 그쪽 「Data curation」은 **메타데이터·데이터 카탈로그 중심이라 내용이 다르다** — 실측)을 적었다.
+- ⚠️ **옛 가드가 틀린 문구를 고정하고 있었다** — `aif_facts_test.dart`의 `'이 가이드가 은퇴했습니다'` 단정이 이 정정에서 레드로 끝났다. **가드는 판정을 굳히므로 판정이 틀리면 가드도 틀린다.** 상태 서술(`302` 명시)로 바꿨다.
+
+### G-62 ⚠️❌ G-41 정정 — 「결과 수가 적어지는」 경로는 **둘이고 계층형 귀속은 옳았다**
+
+- G-41은 "「반환 결과 수가 요청보다 적을 수 있다」는 계층형 전용이 아니다 — `aif-t2-1.md` §1은 계층형에만 귀속한다"고 적었다. **절반이 틀렸다.**
+- **실측:** `kb-chunking.html`의 **계층형 절에도 그 문장이 있다** — "Note **Since child chunks get replaced by parent chunks during retrieval, the returned number of results might be less than the requested amount.**" 내 첫 탐침 `fewer than`이 0건을 돌려준 것은 계층형 절이 **`less than`**을 쓰기 때문이다(표·그림 절은 `fewer than the number that you requested`).
+- ⚠️ **같은 낱말 함정이 이 트랙에서 다섯 번째다**(G-32 · G-42 · 도메인 4·5의 두 건 · 이번). **탐침은 동의어를 함께 센다**(`fewer`/`less`, `versioning`/`version control`).
+- **→ 처리:** 계층형 귀속은 **지우지 않고**(보존 가드로 고정) **두 번째 경로를 더했다** — 표·그림 맥락 교체는 **최대 토큰 한도를 두는 모든 전략**(고정 크기·기본·의미·계층형)에 적용되고 **청킹 없음에만 적용되지 않으며**, 맥락이 붙는 조건은 **페이지 전체 또는 표 전체가 10,000자 이하**다.
+
+### G-63 ✅ 재구성된 페이지의 귀속 정정 3건 (전부 두 방법 + 대조군)
+
+| 대상 | 실측 | 처리 |
+|---|---|---|
+| `custom-models.html` (G-45) | 사용자 지정 방법 **세 가지만**(지도 미세 조정·강화 미세 조정·증류). `pre-training`·`Imported` **0건**, 대조군 `fine-tuning` **8건**. AWS 문서 리더도 동일 | `aif-t3-3` 참고자료 2번에 세 방법 명시 + **CPT 정본을 콘솔 도움말**(`hp-custom-models-create-continued-pre-training-job.html`)과 **API `customizationType` 유효값**으로. 그 콘솔 페이지 실측 전문: "train a model with new **unlabeled** data" · "teach a model new **domain knowledge** that's not already present in the base models" |
+| `what-is-bedrock.html` (G-40) | **Quickstart 중심 「Overview」로 재구성**. `serverless`·`single API`·`model-independent` **각 0건**, 대조군 `fully managed` **1건** | `aif-t2-3`의 두 귀속을 **결정 가이드 둘**로(서버리스 → `bedrock-or-sagemaker.html` · 단일 API → `genai-guide.html`) + 참고자료 1번에 상태 명시 |
+| `knowledge-base.html` (G-34·G-47) | **두 유형**(`Managed` **5건** / `Customer-managed` **1건**)으로 재구성. `fully managed capability`·`entire RAG workflow` **0건**, 대조군 `knowledge base` **18건** | `aif-t3-1` §3의 「완전 관리형 기능」 귀속을 **두 유형**으로 교체, `aif-t1-2` §4에 두 유형과 공식 권장 Important 추가 |
+
+⚠️ **`docs.aws.amazon.com/vector-databases/`의 `h1`은 「Vector databases on AWS」가 아니다** — **`Choosing a database for your generative AI applications`**다(실측). md 프런트매터·참고자료 10번과 **문항 출처 제목 2건**의 낡은 별칭을 지웠다(문항은 바이트 블록 치환 + 치환 횟수 2 단정 + 개행 보존 + JSON 왕복 검증).
+
+### G-64 ✅ 보강 6건 — md가 반쪽만 적던 공식 사실
+
+- **컨텍스트 안티패턴은 다섯 개다**(`AGENTPERF03-BP02`) — 다섯째가 "Shipping prompt changes without **versioning** or side-by-side evaluation, so quality or token-cost regressions are detected only after rollout". ⚠️ 내 첫 탐침 `version control`이 빗나갔다(실제는 `versioning`).
+- **프롬프트 캐싱 TTL은 5분만이 아니다** — `1-hour TTL` **4건**(Claude Opus 4.5·Haiku 4.5·Sonnet 4.5). "모델 카드에서 그 모델의 TTL 조건을 확인하라"가 공식 지시다.
+- **명시적 캐싱에 서버 지역성 제약이 있다** — "A cache entry is stored on the server that processed the request, and a later request can read it only if that server handles it before the entry expires. Requests that are served by a **different server, such as one in another Region**, … write a new entry instead of reading one." 즉 캐시 미스는 접두부 변화만으로 생기는 것이 아니다.
+- **`what-is/generative-ai`의 「한계」는 넷이다** — Security · **Creativity** · Cost · Explainability. 가이드 목표 2.2.2의 넷(할루시네이션·해석 가능성·부정확성·비결정성)과 **다른 목록**이라 섞으면 틀린다. 창의성 서술이 비자명하다 — "the creativity of AI is **bounded by the data it has been trained on**, leading to outputs that may feel repetitive or **derivative**".
+- **SageMaker AI의 필요 전문성은 두 층이다** — 비교 표가 "**Guided UI and AI agent-assisted workflows simplify customization**; deeper ML expertise helpful for advanced training jobs"이고 본문이 "SageMaker AI serves **two audiences** … the guided UI and AI agent-assisted workflow **require no ML expertise**"로 적는다. **갈림길은 전문성 유무가 아니라 무엇을 통제하려 하느냐**다.
+- **공동 책임 모델의 통제 묶음은 셋이다** — Inherited Controls · Shared Controls · **Customer Specific**(공식 예 **Service and Communications Protection**·**Zone Security**). `aif-t5-1`이 둘만 적고 있었다.
+
+### G-65 ✅ 귀속 층 정정 3건 — 「공식이 적는다」와 「따라오는 추론」을 가른다
+
+- **`aif-t3-2` 싱글샷** — 공식 프롬프트 엔지니어링 페이지는 **제로샷·퓨샷만** 가르치고 `single-shot`·`one-shot`이 **0건**이다(대조군 `few-shot` 6건). ⭐ **다만 md의 샷 정의 인용은 정확하다** — 원문이 "where **a shot corresponds to a paired example input and the desired output**"이다. 그래서 「1개 = 싱글샷」은 **그 정의의 산술 + 공식 시험 가이드가 셋을 따로 드는 것**에서 온다고 층을 명시했다.
+- **`aif-t3-2` 간접 프롬프트 인젝션** — 보안 백서 본문에 `indirect prompt injection`·`external source`·`web page`가 **각 0건**이고 `seemingly benign`만 **1건**이다(대조군 `prompt injection` 4건). 「외부 소스에 심는다」의 정본은 **참고자료 22번 블로그**임을 본문에 적었다.
+- **`aif-t3-3` FAQ의 CPT 수혜** — 원문 주어가 **`Amazon Titan` 기본 모델**이다("This job will adapt the **Amazon Titan base model** to the new domain"). 「현저히 더 적은 레이블 레코드」를 모든 기본 모델에 단정하는 근거로는 쓸 수 없다고 적었다.
+
+### G-66 ℹ️ 닫지 않은 것과 그 이유
+
+- **G-58**(렌즈가 "dimensions that we update over time"을 적는다) — `aif-t4-1.md`에 **이미 들어가 있었다**(용어 표와 §1 본문 양쪽, 영문 인용까지). 보강 불필요.
+- **G-57**(`what-is/explainable-ai/`의 `Transparency and audibility` 오타) — md가 영문을 인용하지 않으므로 정정 대상이 아니다. **미래의 「없다」 함정**으로만 남긴다.
+- **G-48의 증류 전제 조건·`Agentc AI` 오타·`lifecycle.html`의 `continuous`** — 전부 「인용하지 않는다」가 처리이고 md에 들어간 적이 없다.
+- **G-59**(`data-quality-how-it-works.html`)·**G-60**(Macie가 범위 밖 서비스를 끌고 온다) — 레포에 0건이거나 운영 주의라 코드 변경 없음.
+- **G-47의 넓은 서비스 목록**(MemoryDB·DocumentDB·DynamoDB) — 참고자료 10번에 적되 **공식 목표 3.1.4 예시 목록에 없어 문항 근거로는 쓰지 않는다**(D-08 운영 유지).
