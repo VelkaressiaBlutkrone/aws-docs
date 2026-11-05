@@ -102,6 +102,18 @@ const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
     practiceQuestionCount: 65,
     weightByDomain: {1: 22, 2: 22, 3: 22, 4: 16, 5: 18},
   ),
+  // AIF-C01은 학습문서 14편이 들어온 뒤 추가했다(2026-11-05, Phase 3 선결).
+  // 정책이 없으면 `examWeightedCapacityStatus`가 `hasPolicy: false`로 fail closed라
+  // 사람이 문항을 전부 flip해도 통합/약점 모의고사가 잠긴 채 남는다(MLA가 #246에서
+  // 같은 함정에 걸렸다). 정책 추가는 공개가 아니다 — 지금은 문항이 0개라 전 도메인이
+  // 부족해 게이트가 그대로 잠겨 있다.
+  //
+  // ⚠️ AIF-C01도 도메인이 **5개**다(SOA-C03과 같다). 4키를 전제하면 안 된다.
+  // 공식 비중 20·24·28·14·14 → 65문항 배분은 13·16·18·9·9.
+  'AIF-C01': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 20, 2: 24, 3: 28, 4: 14, 5: 14},
+  ),
   // DEA-C01 공식 비중 34·26·22·18 → 65문항 배분은 22·17·14·12.
   'DEA-C01': ExamReadinessRequirement(
     practiceQuestionCount: 65,

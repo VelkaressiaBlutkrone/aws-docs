@@ -138,8 +138,10 @@ test('resolveCert: 모르는 코드는 throw', () => {
   assert.throws(() => resolveCert('nope'), /nope/);
 });
 
-test('CERTS: 자격증 5종이 등록돼 있다', () => {
-  assert.deepEqual(Object.keys(CERTS).sort(), ['clf', 'dea', 'mla', 'saa', 'soa']);
+// ⚠️ 이 목록은 **의도 선언**이다 — 자격증을 등록하면 여기도 맞춰야 한다.
+// CI가 node 단계를 Flutter 앞에 둬서 빠뜨리면 1초 만에 레드가 난다(설계대로다).
+test('CERTS: 자격증 6종이 등록돼 있다', () => {
+  assert.deepEqual(Object.keys(CERTS).sort(), ['aif', 'clf', 'dea', 'mla', 'saa', 'soa']);
 });
 
 test('CERTS: 각 dir가 실재하는 디렉터리다', () => {
@@ -170,8 +172,22 @@ test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위
   // 그래서 `questionFilePath`도 파일명 직접 매칭이 실패하면 뱅크의
   // `examGuideTaskId`로 다시 찾는다. 사전심사가 쓰는 것도 그 필드이므로
   // 여기서도 그것을 본다.
+  // ⚠️ **저작 전 자격증은 문항 파일이 0개다** — AIF-C01은 flip 함정을 피하려고
+  // 문항 저작 **전에** 등록했다(2026-11-05). 원래 `files.length > 0`은 아래
+  // per-file 루프가 공허하게 통과하는 것을 막으려던 것이므로, 공허함 방지는
+  // 유지하고 「저작 전」만 **명시 선언**으로 뺀다: 목록에 있으면 0개여야 하고
+  // 없으면 1개 이상이어야 한다(양쪽 다 단정한다). 문항이 들어오면 이 목록에서
+  // 지워야 하고, 안 지우면 이 테스트가 알려 준다.
+  const preAuthoring = new Set(['aif']);
+  let totalBanks = 0;
   for (const [code, cert] of Object.entries(CERTS)) {
     const files = readdirSync(appPath(cert.dir)).filter((f) => f.endsWith('.questions.json'));
+    totalBanks += files.length;
+    if (preAuthoring.has(code)) {
+      assert.equal(files.length, 0,
+        `${code}: 문항이 들어왔으면 preAuthoring 목록에서 지운다`);
+      continue;
+    }
     assert.ok(files.length > 0, `${code}: 문항 파일 없음`);
     for (const f of files) {
       const bank = JSON.parse(readFileSync(appPath(`${cert.dir}/${f}`), 'utf8'));
@@ -185,6 +201,8 @@ test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위
         `${code}: ${f}의 domain ${bank.domain} ≠ taskId 도메인 ${d}`);
     }
   }
+  // 공허함 방지: 저작 전 자격증을 제외하고도 실제로 검사한 뱅크가 있어야 한다.
+  assert.ok(totalBanks > 0, '문항 뱅크를 하나도 검사하지 않았다 — 루프가 공허하다');
 });
 
 test('CERTS: tests에 적힌 테스트 파일이 실재한다', () => {
