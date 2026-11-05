@@ -145,9 +145,11 @@
 - ⚠️ **Guardrails 미지원 모델이 있고 유형으로 추론해서는 안 된다** — 공식 경고 원문 "Don't infer guardrail support from the model type." `bedrock-mantle` 엔드포인트 미지원이고, **같은 요청에서 가드레일 파라미터만 빼면 성공**해 원인을 오진하기 쉽다.
 - ⚠️ **안전 조치 계층(Standard·Classic)은 세 정책에만 있다**(콘텐츠 필터 · 거부 주제 · 문맥 근거 확인). **자동 추론 검사의 「못 하는 것」 6종**이 조사 노트에 전혀 없었다 — 프롬프트 인젝션 미방어 · 인코딩·난독화 시 **제출 전체가 평가되지 않을 수 있음** · 주제 이탈 미탐지 · **스트리밍 미지원** · **영어(미국) 전용** · `VALID`가 정책 변수 범위만 보장("위조 진단서" 공식 반례).
 
-### G-24 ⚠️ 공식 문서가 아직 닫힌 서비스를 권하는 자리가 **네 곳** 있다
+### G-24 ⚠️ 공식 문서가 아직 닫힌 서비스를 권하는 자리들 (배치마다 늘어난다 — 총 수를 단정하지 않는다)
 
 - **머신 러닝 렌즈 `MLPERF06-BP02`** — 설명 가능성 평가 구현 9단계 중 **4단계가 `SageMaker Clarify`를 처방**한다(게다가 9단계에 `Amazon A2I`가 있다).
+- **머신 러닝 렌즈 `MLCOST02-BP01`**(2026-11-05 추가, 컨트롤러 직접 실측) — 「Analyze model explainability」 단계가 **`SageMaker AI Clarify`**를 처방한다(`SageMaker AI Clarify` **2건** / `SageMaker Clarify` 0건). ⚠️ **이 페이지는 `aif-t1-2`가 가장 많이 인용하는 근거다** — 비용 항목·안티패턴·사기 탐지 대 재고 관리 예시는 유효하므로 그 세 부분만 인용하고 Clarify 단계는 쓰지 않았다.
+- **머신 러닝 렌즈 `MLPERF06-BP03`·`MLSUS06-BP02`**(2026-11-05 추가) — 구현 단계가 Clarify·`SageMaker Model Monitor`를 든다. `aif-t1-3`은 **그 서비스 이름이 들어가지 않는 문장만** 인용했다.
 - **Responsible AI Lens `RAIMON01-BP02`**(2025-11-19 게시) — 드리프트 탐지에 Clarify와 `SageMaker Model Monitor`를 든다.
 - **`what-is/ai-bias`의 "How can AWS help?"** 절 — Clarify를 권한다.
 - ⚠️ **교훈: 게시일이 최신이어도 서비스 상태는 따로 확인해야 한다.** 레포 규율대로 **서비스 자신의 가용성 변경 페이지를 정본**으로 잡고, 렌즈의 **방법론은 유효하지만 구현 수단의 이름이 낡았다**고 적었다. `aif-t4-1`의 자가 점검 Q8과 `aif-t4-2`의 함정에 고정돼 있다.
@@ -272,3 +274,53 @@ AIF **범위 외** 목록에 있어 이 자격증 문항에 쓸 수 없는 것 �
 |---|---|---|
 | AWS Certified AI Practitioner (인증 페이지) | https://aws.amazon.com/certification/certified-ai-practitioner/ | 2026-11-03 |
 | 시험 가이드 본문·도메인·범위·개정 | [00-overview.md](00-overview.md) §8의 URL 9건 | 2026-11-03 |
+
+---
+
+## 도메인 1 문항 저작에서 새로 드러난 것 (2026-11-05, 컨트롤러 직접 실측)
+
+### G-30 ⚠️ 측정 도구의 결함 — `curl`에 `-L`이 없으면 `num_redirects`는 **항상 0**이다
+
+위임 지시문이 `curl -s -o /dev/null -w "%{http_code} %{num_redirects} ..."`를 「리다이렉트 실측」 명령으로 줬는데 **그 형태로는 아무것도 잴 수 없다.** `-L`이 없으면 curl이 리다이렉트를 따라가지 않아 `num_redirects`가 0으로 고정된다.
+
+- **실측 대조군:** 일부러 틀린 슬러그 `sagemaker/latest/dg/zz-bogus-control.html` → `-L` 없이 **`302 redirects=0`** / `-L` 있으면 **`200 redirects=1`**(가이드 인덱스 도착).
+- 즉 **`-L` 없이 쓸 때의 판정 신호는 상태 코드**(200 존재 / 302 부재)이고, **`num_redirects`를 쓰려면 `-sL`이 필수**다.
+- ⚠️ **저작 에이전트 셋이 모두 스스로 이 결함을 찾아 재측정했다**(각자 대조군까지 세웠다). 그래도 **컨트롤러가 43개 URL을 전부 다시 쟀다** — 보고는 데이터이고 검증이 아니다. 결과: t1-1 12 · t1-2 16 · t1-3 12 + 공통 3, 고유 **43개 전부 200 · redirects 0**.
+- 다음 배치 지시문과 자체 점검기의 출력에서 고쳤다. **CLAUDE.md·메모리의 「판정 신호는 상태 코드가 아니라 `num_redirects`」도 `-L` 전제가 붙는다.**
+
+### G-31 ⚠️ 결정 가이드가 2026-07-23 갱신으로 과금 서술을 바꿨다 (✅ md 정정)
+
+`decision-guides/.../bedrock-or-sagemaker.html`이 이제 이렇게 적는다 — **"SageMaker AI offers per-token pricing for serverless model customization, providing the same pricing simplicity as Amazon Bedrock."** 그리고 **"For managed training jobs, inference, and HyperPod, SageMaker AI follows usage-based pricing for compute resources, storage, and other services..."**
+
+- `aif-t1-3.md`가 SageMaker AI 과금을 **「컴퓨팅 리소스 사용량 기준」으로만** 적어 **서버리스 커스터마이징이 토큰당이라는 것을 가르치지 못했다.** 비교 표·흔한 함정·자가 점검 정답 **세 자리**를 고쳤다(가드 `aif_facts_test.dart`).
+- 같은 갱신으로 바뀐 다른 자리: Bedrock 과금에 **Priority · Flex · Reserved 서비스 계층**이 추가됐고, 필요 전문성 칸이 SageMaker AI 쪽에서 **"Guided UI and AI agent-assisted workflows simplify customization"**으로 완화됐다(md의 "고급 훈련 작업에는 더 깊은 전문성"은 여전히 맞다).
+- 저작 에이전트는 이 자리를 **피해서** 문항을 썼다(공식과 md가 갈리는 지점을 출제하지 않는 것이 옳은 처리다). 문서를 먼저 고치는 것이 루브릭 T6다.
+
+### G-32 ⚠️ Autopilot 기본 목표 지표의 정본은 개발자 안내서가 아니라 **API 참조**다 (✅ md 정정)
+
+`aif-t1-3.md`가 「이진 분류 기본값 `F1` · 다중 클래스 기본값 `Accuracy`」의 근거로 `sagemaker/latest/dg/autopilot-metrics-validation.html`을 걸고 있었는데, **그 페이지는 그 수치를 적지 않는다** — "Autopilot uses the default validation metric for each problem type that it handles, unless you specify otherwise"까지만 적고 지표 목록으로 링크한다(전문 실측).
+
+- **정본은 `sagemaker/latest/APIReference/API_AutoMLJobObjective.html`**이고 거기에 **"Default objective metrics: ... Binary classification: F1"**, 다중 클래스 **"Accuracy"**, **"Regression: MSE"**가 직접 적혀 있다. 출처를 교체했다(주장 자체는 옳았다).
+- ⚠️ **`sagemaker/latest/dg/autopilot-metrics.html`은 죽은 슬러그다**(redirects 1 → `sagemaker/latest/dg/`). 그쪽으로 교체하면 안 된다.
+- ⚠️ **저작 에이전트 보고 1건은 거짓이었다** — "md의 `o = 3*i + 4` 예시를 현재 `what-is/machine-learning/`에서 찾지 못했다"고 왔지만 **실측하면 그 페이지에 그대로 있다**(`(2,10), (5,19), and (9,31)` · `o=3*i+4` · 입력 7 → 25). 에이전트의 본문 추출이 놓친 것이다. **보고된 「없음」은 「못 찾음」일 수 있다 — 대조군 없이 삭제·정정하면 옳은 문장을 지운다.**
+
+### G-33 ⚠️ 공식 표기 내부 어긋남이 백서뿐 아니라 **ML 렌즈**에도 있다
+
+`MLCOST02-BP01`이 **`SageMaker AI JumpStart`**로 적는다(2건 / `SageMaker JumpStart` 0건 — 실측). 조사 노트 95 §3.6의 판정(**개명은 기능 이름에 적용되지 않는다 → `SageMaker JumpStart`가 맞다**)과 어긋난다.
+
+- 처리: **「무엇이 맞는 표기인가」를 묻는 문항을 만들지 않는다.** 공식 내부가 갈리는 지점 위에 정답을 세우게 된다. 저작 에이전트가 그 대신 **SageMaker AI의 성격**(모델을 직접 만드는 쪽 ↔ 사전 훈련 기능을 호출하는 쪽)을 묻는 쪽으로 돌렸다.
+
+### G-34 ℹ️ `bedrock/latest/userguide/knowledge-base.html`이 재구성됐다 (md 보강 후보)
+
+지금 이 페이지는 지식 기반을 **두 종류**(`Managed Knowledge Base` / `Customer-managed Knowledge Base`)로 가르고 상단에 "For optimized retrieval accuracy and a managed experience, we recommend Amazon Bedrock Managed Knowledge Base"라는 Important 블록을 둔다. `aif-t1-2.md` §4는 단일한 2단계 흐름만 적는다 — **틀린 것은 아니지만 더 이상 전부가 아니다.**
+
+- 문항(`aif-t1-2-q9`)은 **두 종류와 무관하게 참인 사실**(RAG 정의 · 인용 · 청크→임베딩→벡터 DB)로만 썼다.
+- ⚠️ 같은 계열로 `rag-fully-managed-bedrock.html`에 **지식 기반을 Bedrock agent에 붙이는 문장**이 있다(D-07에서 정답 보기 금지로 묶은 Agents Classic 계열) — 그 문장은 인용하지 않았다.
+
+### G-35 ℹ️ 드리프트 두 종류를 한 문장에 적는 정본은 `MLSUS06-BP02`다
+
+`MLPERF06-BP03`은 **데이터 드리프트만** 정의한다. 두 정의를 함께 적는 것은 `MLSUS06-BP02` — "you can detect both **concept drift (changes in the relationship between input and output variables)** and **data drift (changes in the distribution of input data)**". `aif-t1-3.md`는 둘을 다 출처로 들고 있어 **모순은 아니고 귀속 문제**다(§5 서술이 어느 쪽에서 왔는지 모호하다).
+
+### G-36 ℹ️ `prescriptive-guidance/latest/ml-operations-planning/`에 성숙도 모델 페이지가 없다
+
+가이드 목차는 `introduction`·`data`·`training`·`deployment`·`monitoring` 다섯뿐이다(추측 슬러그 3종 전부 redirects 1). MLOps **성숙도 레벨 0·1·2의 정본은 `aws.amazon.com/what-is/mlops/`**다 — `aif-t1-3-q10`을 그쪽으로 달았다.

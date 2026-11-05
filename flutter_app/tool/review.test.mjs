@@ -178,7 +178,9 @@ test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위
   // 유지하고 「저작 전」만 **명시 선언**으로 뺀다: 목록에 있으면 0개여야 하고
   // 없으면 1개 이상이어야 한다(양쪽 다 단정한다). 문항이 들어오면 이 목록에서
   // 지워야 하고, 안 지우면 이 테스트가 알려 준다.
-  const preAuthoring = new Set(['aif']);
+  // 2026-11-05: AIF 도메인 1 문항 3편이 들어와 `aif`를 지웠다. 설계대로
+  // 안 지우면 「문항이 들어왔으면 목록에서 지운다」가 레드다.
+  const preAuthoring = new Set();
   let totalBanks = 0;
   for (const [code, cert] of Object.entries(CERTS)) {
     const files = readdirSync(appPath(cert.dir)).filter((f) => f.endsWith('.questions.json'));

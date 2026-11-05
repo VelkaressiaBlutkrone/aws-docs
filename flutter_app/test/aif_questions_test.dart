@@ -39,11 +39,15 @@ void main() {
   const certCode = 'AIF-C01';
   const dir = 'assets/content/aif';
 
-  /// 문항이 저작된 Task — **배치마다 늘린다.** 지금은 없다.
+  /// 문항이 저작된 Task — **배치마다 늘린다.**
   ///
   /// ⚠️ 늘릴 때 `aif_doc_format_test.dart`의 `aifTaskIds`와 **둘 다** 봐야 한다
   /// (MLA에서 한쪽만 늘려 빠뜨린 적이 있다 — CLAUDE.md 기준선 메모).
-  const authoredTaskIds = <String>{};
+  /// ⚠️ 그리고 `tool/review.test.mjs`의 `preAuthoring` 집합에서 `aif`를
+  /// **지워야 한다** — 첫 배치에서 지웠다.
+  const authoredTaskIds = <String>{
+    'aif-t1-1', 'aif-t1-2', 'aif-t1-3', // 도메인 1 (2026-11-05)
+  };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
   /// `node tool/review.mjs flip aif <taskId>`가 대신 넣어 주고, 그 diff가
