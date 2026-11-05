@@ -338,6 +338,13 @@ G-19(2026-11-03)가 "사용자 지정 모델은 프로비저닝 처리량 없이
 - ⚠️ **저작 에이전트는 네 자리로 보고했고 실제로는 다섯이었다** — 용어 표의 "사용자 지정 모델에는 **필수**입니다"를 놓쳤다. **보고의 개수를 그대로 믿지 않고 `grep`으로 전수 센 것이 이것을 잡았다.**
 - ⚠️ **노트를 고치지 않으면 다음 배치가 같은 오류를 다시 쓴다** — G-19가 적어 둔 그 문장이 바로 이 사례로 증명됐다. 정정은 **md와 조사 노트 양쪽**에 한다.
 
+⚠️⚠️ **추가(2026-11-05, 도메인 3 착수 직전 전역 `grep`): 같은 오류가 `aif-t2-1.md`에도 한 줄 있었다** — 「시험 직전 요약」의 "비용 문항은 조합의 가능 여부를 묻습니다 — … 사용자 지정 모델은 **PT 필수**". **저작 에이전트 보고에는 없던 자리**이고, t2-3을 고친 뒤 **레포 전역을 다시 쓸어서** 찾았다.
+
+- 그래서 가드를 **한 파일이 아니라 `assets/content/aif` 전수 집계형**으로 바꿨다(`aif_facts_test.dart` — 대상 14편을 대조군으로 먼저 단정한다). 금지 문구는 `PT 필수` · `프로비저닝 처리량 없이 쓸 수 없` · `프로비저닝 처리량을 구매해야 한다` 셋이다.
+- **교훈: 한 파일에서 오류를 찾으면 그 문구로 레포 전역을 쓸고, 가드도 전역으로 건다.** 같은 판정이 한 번 내려졌는데 다른 파일에 남는 일이 G-19 → G-37에서 두 번 반복됐다.
+- 같은 사통으로 **표기 회귀 한 건**도 잡았다 — `aif-t2-2.md`가 「계속 사전 훈련」을 용어 자체로 쓰고 있었다(D-09·G-20의 정본은 「지속적인 사전 훈련」). ⚠️ 다만 `aif-t3-3.md` 용어 표의 "「계속 사전 훈련」으로도 번역됩니다"는 **의도된 병기**라 0건이 아니라 **그 한 곳만**으로 고정했다.
+- 함께 쓸어 본 다른 위험 단정 셋은 **전부 올바르게 처리돼 있었다**(실측): 책임 있는 AI 차원 **8/10 분기 명시**(G-22) · Guardrails 유해 범주 수 단정 **0건**(G-23) · 생성형 AI 수명 주기 **단계 수 경고 존재**(G-17. ⚠️ `aif-t1-3.md`의 "공식 수명 주기는 6단계"는 **Well-Architected ML 렌즈의 ML 수명 주기**로 G-17의 GenAI 수명 주기와 **다른 대상**이다 — 오류가 아니다).
+
 ### G-38 ⚠️ 측정 신호가 도메인마다 다르다 — `aws.amazon.com`은 없는 슬러그에 **진짜 404**를 준다
 
 G-30이 `docs.aws.amazon.com`에서 "없는 페이지도 200 + redirects 1"임을 적었는데, **`aws.amazon.com`(마케팅·개념 페이지)은 다르다** — 없는 슬러그에 `404 redirects=0`을 준다(저작 에이전트 실측: `aws.amazon.com/what-is/zz-bogus-control/` → 404).
@@ -376,3 +383,59 @@ G-30이 `docs.aws.amazon.com`에서 "없는 페이지도 200 + redirects 1"임�
 저작 에이전트가 블로그 원문에서 `attenuat*`를 두 방법으로 0건 확인했는데, **같은 사실이 `decays`라는 낱말로 그 페이지에 실재한다** — "the effectiveness of inferences **decays** as the amount of context increases". 즉 **낱말이 없고 사실은 있었다.** `aif-t2-1.md`의 「추론의 효과가 감쇠」 번역은 옳다.
 
 - G-32(보고된 「없음」이 「못 찾음」이었던 사례)와 짝이 되는 교훈이다: **「없다」를 보고할 때는 ① 추출 방법 둘 ② 대조군 ③ 같은 사실의 다른 표현까지 찾아본 결과를 함께 적는다.**
+
+---
+
+## 도메인 3 문항 저작에서 새로 드러난 것 (2026-11-05, 컨트롤러 직접 실측)
+
+이 배치에서 **라이브 학습문서의 출처가 죽거나 그 사실을 더 이상 담지 않는 경우가 다섯 건** 나왔다. 문항 60개는 네 Task 모두 이 영역을 **피해서** 썼고(전수 0건 확인), 그중 **둘은 이 PR에서 고쳤다.**
+
+### G-43 ⚠️⚠️ `AWS CAF for AI` 가이드가 **통째로 은퇴했다** (라이브 `aif-t3-3.md` 2곳 — 부분 처리)
+
+`whitepapers/latest/aws-caf-for-ai/` 아래 **모든** 슬러그가 `200 redirects=1`로 Well-Architected 머신 러닝 렌즈 인덱스로 간다.
+
+- ⚠️ **대조군이 판정을 바꿨다** — 일부러 틀린 슬러그(`aws-caf-for-ai/zz-bogus-control.html`)도 **같은 곳으로 간다.** 즉 **페이지 이름 변경이 아니라 가이드 자체의 소멸**이다(대조군이 없으면 "리다이렉트 도착지로 교체하면 된다"고 잘못 판단한다).
+- 그 리다이렉트 도착지(ML 렌즈 인덱스, 5.5K자)에는 **md가 인용하는 문장이 없다**(실측: `acquire, label` 0 · `cleanse` 0 · `data catalog` 0 · `last 1%` 0 / 대조군 `governance` 1). 대안 슬러그 `aws-caf-for-artificial-intelligence/`는 **404**다.
+- 영향 범위: **`aif-t3-3.md`에만 4줄**(프런트매터 `sources` 2 + 참고자료 2). 레포 전역 `grep`으로 다른 자격증 콘텐츠에는 **0건** 확인.
+- 그 두 출처가 §5 **① 데이터 큐레이션**·**② 거버넌스**의 인용 문장을 받치고 있어, **URL 교체만으로는 닫히지 않는다**(인용 문장의 새 집을 찾거나 서술을 줄여야 한다).
+- **이 PR에서 한 것:** 참고자료 18·19에 **은퇴 사실과 근거를 명시**하고, 살아 있는 인접 출처(`MLSEC03-BP04` 데이터 계보 · `model-customization-submit.html` KMS 키·VPC, 둘 다 실측 `200`·0)를 적어 후속 작업을 돕게 했다. 죽은 링크를 아무 표시 없이 두면 학습자가 그 페이지를 찾으러 간다.
+- **후속 과제:** §5 ①·② 인용 문장의 대체 출처 확정 또는 서술 축소. 가드는 "은퇴 경고가 붙어 있다"까지만 고정한다.
+
+### G-44 ⚠️⚠️ AgentCore **내장 평가자의 개수(13개)와 ID 이름이 공식에서 사라졌다** (✅ md 정정)
+
+`bedrock-agentcore/latest/devguide/built-in-evaluators-overview.html`은 살아 있지만(`200`·0) **목록을 싣지 않는 1,521자 소개 문서로 재구성**됐다.
+
+- **「없다」의 셋**(G-42 규율): ① 추출 둘 — 원문 HTML의 `Builtin\.[A-Za-z]+`와 태그 제거 본문 양쪽에서 `GoalSuccessRate`·`ToolSelectionAccuracy`·`ToolParameterAccuracy` **0건** ② 대조군 — 같은 추출이 `Builtin.Helpfulness`(개요)와 **새 갈래** `Builtin.SkillSelectionAccuracy`·`Builtin.SkillInstructionFollowing`(`skill-evaluators.html`)을 잡아낸다 ③ 다른 표현 — **개념은 살아 있다**(`how-it-works-evaluations.html`의 "end-to-end task completion (**goal attainment**) correctness" · "the accuracy of a **tool invoked**" · "any **custom metric**", `omni-agents-evaluators.html`의 **trace·session·tool call** 세 수준).
+- **이 PR에서 한 것:** `aif-t3-4.md` §4의 **13개 선언과 ID 표를 지우고** 공식이 현재 적는 **세 축**(목표 달성 정확성 · 호출한 도구의 정확성 · 사용자 지정 지표)으로 바꿨다. 세 수준과 텔레메트리 주의는 **그대로 유효**하다(실측). 「작업 완료율」 절과 흔한 함정의 `GoalSuccessRate` 인용 2곳도 함께 걷어냈다.
+- ⚠️ **공식 내부가 갈린다** — `evaluators.html`은 내장 평가자가 "**use LLMs as judges**"라고 적는데 `omni-agents-evaluators.html`은 **일부는 심사 모델, 일부는 규칙 기반**이라고 적는다. **"내장 평가자가 전부 심사 모델인가"를 묻는 문항을 만들지 않는다**(G-22 계열).
+- ⚠️ AIF는 **Foundational** 시험이라 평가자 ID 이름은 애초에 출제 수준이 아니다 — 축만 쥔다.
+
+### G-45 ⚠️ `custom-models.html` 재구성 — **지속적인 사전 훈련이 그 페이지에서 빠졌다**
+
+현재 그 페이지가 적는 사용자 지정 방법은 **세 가지**다(`Supervised fine-tuning` · `Reinforcement fine-tuning` · `Distillation`). `aif-t3-3.md`는 이 페이지를 미세 조정·지속적 사전 훈련의 근거로 걸고 있다.
+
+- **CPT의 살아 있는 정본**: 콘솔 도움말 `help-panel/bedrock/latest/console/hp-custom-models-create-continued-pre-training-job.html`(md가 이미 출처 8로 들고 있다)과 **boto3 `customizationType` 유효값**(`FINE_TUNING | CONTINUED_PRE_TRAINING | DISTILLATION | REINFORCEMENT_FINE_TUNING | IMPORTED`).
+- ⚠️ 사용자 가이드 쪽 CPT·미세 조정 **전용 슬러그 8종이 전부 죽었다**(`continued-pretraining` · `model-customization-cpt` · `custom-models-continued-pre-training` · `fine-tuning` · `custom-models-fine-tuning` · `model-customization` · `distillation-prereq` · `model-distillation-prereq`).
+- 같은 재구성으로 **새로 생긴 사실**: 훈련 요금이 "처리된 토큰 수(코퍼스 토큰 × 에폭) + 월별 모델 스토리지"로 적힌다(md에 없어 출제하지 않았다).
+
+### G-46 ⚠️ 공식 내부 모순 — `hp-custom-models.html`에 **「PT 필수」 옛 문장이 아직 살아 있다**
+
+콘솔 도움말이 지금도 *"To run inference using a custom model (including copied models), you need to purchase Provisioned Throughput for it."*로 적는 반면, `model-customization-use.html`은 선택지를 **둘**로 적는다(G-37). **더 구체적인 쪽(설정 페이지)을 정본으로** 쓰고, 콘솔 도움말의 그 문장은 **출처로 쓰지 않는다.**
+
+- ⚠️ 이것이 G-19 → G-37 → 이 배치까지 **같은 오류가 세 번 새어 나온 이유**다: 공식 자신이 두 가지로 적는다. 그래서 레포 가드를 **문구 전수 금지**로 걸었다(`aif_facts_test.dart`).
+
+### G-47 ℹ️ 벡터 저장소·지식 기반 쪽 보강 후보 (md 수정 안 함)
+
+- **`bedrock/latest/userguide/knowledge-base.html` 재구성**(G-34 확인) — `aif-t3-1.md` §3이 귀속시킨 「수집부터 검색과 프롬프트 증강까지 RAG 워크플로 전체를 구현하는 완전 관리형 기능」 문구가 **현행 페이지에 없다**(두 방법 + 대조군 `Managed Knowledge Base` 1/1로 확인). 현행은 RAG 정의 한 문장과 **Managed / Customer-managed 두 유형** 서술이다.
+- **`docs.aws.amazon.com/vector-databases/`의 H1이 다르다** — 실제 제목은 **「Choosing a database for your generative AI applications」**다(md 참고자료 10번은 「Vector databases on AWS」로만 적는다).
+- **그 페이지의 서비스 목록이 md보다 넓다** — `Amazon MemoryDB` · `Amazon DocumentDB` · `Amazon DynamoDB`(`SearchVectors` API로 네이티브 벡터 인덱스)도 절 제목으로 싣는다. ⚠️ 다만 **공식 목표 3.1.4의 예시 목록에는 없으므로 문항에는 쓰지 않는다**(D-08 운영).
+- ⭐ **MemoryDB 갈림길의 더 좋은 정본을 찾았다** — 95 §5는 `StorageConfiguration` 유효값으로 갈랐는데, **그 의사 결정 가이드 비교 표에 「Amazon Bedrock Knowledge Bases」 열이 있고 MemoryDB 행이 `No`**다. 한 페이지가 "벡터 검색은 있다 + KB 저장소는 아니다"를 **동시에** 적는다.
+
+### G-48 ℹ️ 작은 정밀화 여섯 (전부 문항에 쓰지 않았다)
+
+- **「싱글샷 = 예시 1개」를 못박는 문장은 공식 docs에 없다** — `prompt-engineering-guidelines.html`은 제로샷·퓨샷만 가르고, 처방적 지침은 `one-shot or few-shot`을 **묶어** "하나 이상의 예시"로 적는다. 1개 = 싱글샷은 **공식 시험 가이드가 둘을 따로 드는 것 + 명칭의 산술**에서 나온다.
+- **간접 프롬프트 인젝션의 「외부 소스에 심는다」 서술은 보안 백서가 아니라 블로그 쪽**이다(백서 본문은 "seemingly benign user inputs"까지).
+- **FAQ의 "significantly fewer labeled training records" 문장은 `Amazon Titan` 기본 모델 한정**이다(md는 일반 기본 모델로 패러프레이즈한다).
+- **증류 교사·학생 전제 조건 페이지를 찾지 못했다** — 노트 96 `[5]`가 가리키는 "지원 조합 표에서 짝지어진 모델"의 정본 슬러그 둘이 죽었다. 살아 있는 정의 문장("larger more intelligent model (teacher) → smaller, faster, cost-efficient model (student)")만 쓴다.
+- **`aws.amazon.com/what-is/agentic-ai/`에 오타가 있다** — 코드 전환 절 첫 문장이 `Agentc AI`다(인용 금지).
+- **`lifecycle.html`은 `continuous` pre-training으로 적는다**(`continued`가 아니다). 사실은 같아 md 정정 사안은 아니고, **본문 표기는 D-09대로 「지속적인 사전 훈련」**만 쓴다.

@@ -48,6 +48,7 @@ void main() {
   const authoredTaskIds = <String>{
     'aif-t1-1', 'aif-t1-2', 'aif-t1-3', // 도메인 1 (2026-11-05)
     'aif-t2-1', 'aif-t2-2', 'aif-t2-3', // 도메인 2 (2026-11-05)
+    'aif-t3-1', 'aif-t3-2', 'aif-t3-3', 'aif-t3-4', // 도메인 3 (2026-11-05)
   };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
