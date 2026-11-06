@@ -262,6 +262,26 @@ void main() {
       expect(hits, ['aif-t3-3.md'],
           reason: '병기는 t3-3 용어 표에서만 한다 — 다른 곳은 「지속적인 사전 훈련」');
     });
+
+    test('「계속 사전 훈련」이 문항 파일에는 0건이다', () {
+      // ⚠️⚠️ **위 단정이 `.md` 만 순회해 문항이 새어 나갔다** — 2026-11-06 2단 검토
+      // §P1b-A2 가 `aif-t2-2-q11` 의 **정답 보기 본문과 해설 3개소**에서 구 표기를
+      // 찾아냈다(가드는 초록이었다). md 는 의도된 병기 **한 곳**을 허용해야 하므로
+      // 0건으로 묶을 수 없고, 문항은 병기할 이유가 없으니 **두 단정으로 갈랐다.**
+      final hits = <String>[];
+      for (final f in Directory('assets/content/aif')
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path))) {
+        if (f.readAsStringSync().contains('계속 사전 훈련')) {
+          hits.add(f.uri.pathSegments.last);
+        }
+      }
+      expect(hits, isEmpty,
+          reason: '학습자가 공식과 다른 낱말을 정답으로 외운다: $hits');
+    });
   });
 
   group('도메인 3: 공식에서 사라진 서술을 되살리지 않는다', () {

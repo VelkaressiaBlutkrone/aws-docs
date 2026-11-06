@@ -59,7 +59,7 @@
       },
       "sources": [
         {
-          "title": "Cost optimization in analytics services (AWS 백서) — 행 기반은 쓰기가 잦을 때, 열 기반은 읽기 중심",
+          "title": "Cost optimization in analytics services (AWS 백서) — 행 기반은 쓰기가 잦을 때, 열 기반은 읽기 중심 (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측)",
           "url": "https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html"
         },
         {
