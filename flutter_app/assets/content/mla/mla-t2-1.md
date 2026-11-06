@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-06
 ---
 
 # 모델링 접근 방식 선택 (선택 사다리·내장 알고리즘·AI 서비스·해석 가능성·비용)
@@ -428,7 +428,7 @@ Kendra는 **Maintenance 단계로 신규 고객에게 닫혀** 있어 새로 만
 31. MLCOST02-BP02 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp02.html
 32. MLCOST04-BP14 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost04-bp14.html
 33. MLPERF06-BP02 — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html
-34. Model interpretability (백서) — https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices-healthcare-life-sciences/model-interpretability.html
+34. Model interpretability (백서) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/ml-best-practices-healthcare-life-sciences/model-interpretability.html
 35. ML model interpretability (Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/introduction.html
 36. Local interpretability — https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-model-interpretability/local.html
 37. What Is Explainable AI? — https://aws.amazon.com/what-is/explainable-ai/

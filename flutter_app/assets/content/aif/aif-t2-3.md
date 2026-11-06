@@ -56,7 +56,7 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-inference-architecture-and-best-practices-on-aws/amazon-bedrock.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
-lastVerified: 2026-11-03
+lastVerified: 2026-11-06
 ---
 
 # GenAI 애플리케이션을 위한 AWS 인프라와 기술 (서비스 선택·이점·인프라 보증·비용 절충)
@@ -202,7 +202,7 @@ AgentCore의 모듈 중 시험 범위에서 의미 있는 것만 골라 둡니�
 
 | 필터 | 무엇을 막는가 |
 |---|---|
-| **Content filters** | 유해 텍스트·이미지. 범주는 **Hate · Insults · Sexual · Violence · Misconduct · Prompt Attack**이고 범주별 강도를 설정합니다 |
+| **Content filters** | 유해 텍스트·이미지. 공식 정의 절의 범주는 **Hate · Insults · Sexual · Violence · Misconduct**이고 범주별 강도를 설정합니다(프롬프트 공격은 **별도 정책**이지만 콘솔에서는 같은 화면에서 고릅니다 — **개수는 외우지 않습니다**) |
 | **Denied topics** | 애플리케이션 맥락에서 바람직하지 않은 주제를 **질의와 응답 양쪽에서** 차단합니다 |
 | **Word filters** | 사용자 정의 단어·구. **대소문자 무시 + 전체 단어·구 일치**이고 욕설은 기성 옵션입니다 |
 | **Sensitive information filters** | PII를 **차단 또는 마스킹**합니다(SSN·생년월일·주소 등 + 사용자 정규식) |

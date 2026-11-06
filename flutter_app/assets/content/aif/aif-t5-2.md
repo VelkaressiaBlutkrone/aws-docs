@@ -74,7 +74,7 @@ sources:
     url: https://docs.aws.amazon.com/audit-manager/latest/userguide/audit-manager-availability-change.html
   - title: Securing generative AI — An introduction to the Generative AI Security Scoping Matrix (AWS 보안 블로그)
     url: https://aws.amazon.com/blogs/security/securing-generative-ai-an-introduction-to-the-generative-ai-security-scoping-matrix/
-lastVerified: 2026-11-03
+lastVerified: 2026-11-06
 ---
 
 # AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)
@@ -174,7 +174,7 @@ lastVerified: 2026-11-03
 | 방식 | 성격 | 보존 | 비용 |
 |---|---|---|---|
 | **이벤트 기록(Event history)** | **"한 AWS 리전의 지난 90일 관리 이벤트에 대한, 보기·검색·다운로드가 가능하고 변경 불가능한 기록"**. 계정을 만들면 **자동** 생성. ⚠️ **단일 속성 하나로만 필터** | **90일** | **보기 무료** |
-| **CloudTrail Lake** | **"감사·보안 목적으로 AWS의 사용자·API 활동을 캡처·저장·액세스·분석하는 관리형 데이터 레이크"**. 행 기반 JSON을 **Apache ORC**(열 지향)로 변환해 **이벤트 데이터 스토어**에 모읍니다 | **1년 연장형 요금 최대 3,653일(약 10년)** · **7년 보존 요금 최대 2,557일(약 7년)** | 수집·저장·쿼리 유료 |
+| **CloudTrail Lake**(⚠️ **2026-05-31부터 신규 고객에게 닫혔습니다** — 기존 고객은 계속 사용하며 **추적(Trail)·Insights·집계 이벤트는 영향이 없습니다**) | **"감사·보안 목적으로 AWS의 사용자·API 활동을 캡처·저장·액세스·분석하는 관리형 데이터 레이크"**. 행 기반 JSON을 **Apache ORC**(열 지향)로 변환해 **이벤트 데이터 스토어**에 모읍니다 | **1년 연장형 요금 최대 3,653일(약 10년)** · **7년 보존 요금 최대 2,557일(약 7년)** | 수집·저장·쿼리 유료 |
 | **추적(Trail)** | 활동 기록을 **S3에 전달·저장**하고 **CloudWatch Logs·EventBridge로 선택적 전달**. **Insights 이벤트**로 **API 호출률·오류율의 비정상 행동**을 분석 | S3에 둔 만큼 | **진행 중 관리 이벤트 1부 전달은 CloudTrail 요금 무료**(S3 비용은 발생) |
 
 - 관리 이벤트는 **컨트롤 플레인 작업**이고 **기본으로 기록**됩니다. 데이터 이벤트는 **"리소스에 대해 또는 리소스 안에서 수행된 리소스 작업"**, 즉 **데이터 플레인 작업**이고 공식이 **"대량 활동인 경우가 많아 CloudTrail이 기본으로 기록하지 않는다"**고 적습니다. **추가 요금이 붙습니다.**
