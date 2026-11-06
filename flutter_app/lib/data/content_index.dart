@@ -205,11 +205,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-1.md',
       questionsAsset: 'assets/content/clf/t2-1.questions.json',
       questionCount: 15,
-      // 2026-11-06 전 콘텐츠 검토 P1 정정으로 대본을 고쳐 재합성 — 청취 재승인 전까지
-      // 비노출(audio_meta·script reviewStatus=needs_human_review와 동기화).
-      // ⚠️ approved 로 되돌리는 것은 사람의 청취 서명이다. 재승인 시 audioSha8 도
-      // 새 mp3 의 sha256[:8] 로 함께 넣는다(content_index_test 동기화 단정).
-      audioApproved: false,
+      // 2026-11-06 P1 정정 재합성분을 사람이 청취·승인하고 R2에 발행했다
+      // (audio_meta·script reviewStatus=approved, 공개 URL 206 + Range 실측).
+      audioApproved: true,
+      audioSha8: '82b3e605',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -219,11 +218,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-2.md',
       questionsAsset: 'assets/content/clf/t2-2.questions.json',
       questionCount: 18,
-      // 2026-11-06 전 콘텐츠 검토 P1 정정으로 대본을 고쳐 재합성 — 청취 재승인 전까지
-      // 비노출(audio_meta·script reviewStatus=needs_human_review와 동기화).
-      // ⚠️ approved 로 되돌리는 것은 사람의 청취 서명이다. 재승인 시 audioSha8 도
-      // 새 mp3 의 sha256[:8] 로 함께 넣는다(content_index_test 동기화 단정).
-      audioApproved: false,
+      // 2026-11-06 P1 정정 재합성분을 사람이 청취·승인하고 R2에 발행했다
+      // (audio_meta·script reviewStatus=approved, 공개 URL 206 + Range 실측).
+      audioApproved: true,
+      audioSha8: '6dd14e2b',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -233,11 +231,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t2-3.md',
       questionsAsset: 'assets/content/clf/t2-3.questions.json',
       questionCount: 18,
-      // 2026-11-06 전 콘텐츠 검토 P1 정정으로 대본을 고쳐 재합성 — 청취 재승인 전까지
-      // 비노출(audio_meta·script reviewStatus=needs_human_review와 동기화).
-      // ⚠️ approved 로 되돌리는 것은 사람의 청취 서명이다. 재승인 시 audioSha8 도
-      // 새 mp3 의 sha256[:8] 로 함께 넣는다(content_index_test 동기화 단정).
-      audioApproved: false,
+      // 2026-11-06 P1 정정 재합성분을 사람이 청취·승인하고 R2에 발행했다
+      // (audio_meta·script reviewStatus=approved, 공개 URL 206 + Range 실측).
+      audioApproved: true,
+      audioSha8: '537522ae',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -368,11 +365,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t4-3.md',
       questionsAsset: 'assets/content/clf/t4-3.questions.json',
       questionCount: 15,
-      // 2026-11-06 전 콘텐츠 검토 P1 정정으로 대본을 고쳐 재합성 — 청취 재승인 전까지
-      // 비노출(audio_meta·script reviewStatus=needs_human_review와 동기화).
-      // ⚠️ approved 로 되돌리는 것은 사람의 청취 서명이다. 재승인 시 audioSha8 도
-      // 새 mp3 의 sha256[:8] 로 함께 넣는다(content_index_test 동기화 단정).
-      audioApproved: false,
+      // 2026-11-06 P1 정정 재합성분을 사람이 청취·승인하고 R2에 발행했다
+      // (audio_meta·script reviewStatus=approved, 공개 URL 206 + Range 실측).
+      audioApproved: true,
+      audioSha8: 'a0bf23df',
     ),
   ],
   'SAA-C03': [
