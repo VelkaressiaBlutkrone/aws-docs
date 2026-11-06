@@ -320,7 +320,8 @@
         "3": "Shield Standard는 L3/L4 방어를 포함하며 WAF 없이도 기본 DDoS 완화가 가능합니다."
       },
       "sources": [
-        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" },
+        { "title": "AWS Shield Standard — 개요 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-standard-summary.html" }
       ],
       "verified": true
     },

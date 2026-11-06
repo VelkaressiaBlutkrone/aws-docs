@@ -19,10 +19,10 @@ sources:
   - title: Amazon CloudFront 요금 (공식)
     url: https://aws.amazon.com/cloudfront/pricing/
   - title: AWS Direct Connect 요금 (공식)
-    url: https://aws.amazon.com/directconnect/pricing/
+    url: https://aws.amazon.com/directconnect/pricing/pay-as-you-go/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-24
+lastVerified: 2026-11-06
 ---
 
 # 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink
@@ -424,7 +424,7 @@ VPC 피어링은 완전한 연결을 위해 VPC 쌍마다 개별 연결이 필�
 3. Amazon VPC 요금 — https://aws.amazon.com/vpc/pricing/
 4. AWS PrivateLink 요금 — https://aws.amazon.com/privatelink/pricing/
 5. Amazon CloudFront 요금 — https://aws.amazon.com/cloudfront/pricing/
-6. AWS Direct Connect 요금 — https://aws.amazon.com/directconnect/pricing/
+6. AWS Direct Connect 요금 — https://aws.amazon.com/directconnect/pricing/pay-as-you-go/
 7. EKS 비용 최적화 — 네트워킹("no destination cost associated with inter-AZ traffic that flows through the TGW", 피어링 동일 AZ 무료·교차 AZ 과금, 인터페이스 엔드포인트 교차 AZ 미과금) — https://docs.aws.amazon.com/eks/latest/best-practices/cost-opt-networking.html
 8. EC2 인스턴스 IP 주소 지정(공용 IPv4 과금·NAT 손익 계산식) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html
 9. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

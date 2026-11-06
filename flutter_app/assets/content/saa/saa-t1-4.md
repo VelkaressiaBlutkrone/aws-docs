@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
   - title: AWS WAF Anti-DDoS 관리형 규칙 그룹(유료·웹 ACL에 추가) (공식)
     url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
-lastVerified: 2026-10-28
+lastVerified: 2026-11-06
 ---
 
 # 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager

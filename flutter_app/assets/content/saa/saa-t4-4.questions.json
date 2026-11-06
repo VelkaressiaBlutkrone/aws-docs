@@ -321,7 +321,7 @@
         "2": "Direct Connect 단가는 인터넷의 약 1/4 수준으로 다릅니다."
       },
       "sources": [
-        { "title": "AWS Direct Connect 요금 (공식)", "url": "https://aws.amazon.com/directconnect/pricing/" }
+        { "title": "AWS Direct Connect 요금 (공식)", "url": "https://aws.amazon.com/directconnect/pricing/pay-as-you-go/" }
       ],
       "verified": true
     },
@@ -345,7 +345,7 @@
         "3": "인바운드 전송은 인터넷이든 Direct Connect든 무료입니다. Direct Connect의 비용 절감 효과는 아웃바운드(AWS → 온프레미스) 전송에서 발생합니다."
       },
       "sources": [
-        { "title": "AWS Direct Connect 요금 (공식)", "url": "https://aws.amazon.com/directconnect/pricing/" }
+        { "title": "AWS Direct Connect 요금 (공식)", "url": "https://aws.amazon.com/directconnect/pricing/pay-as-you-go/" }
       ],
       "verified": true
     },

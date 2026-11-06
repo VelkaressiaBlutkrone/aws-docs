@@ -32,7 +32,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-06
 ---
 
 # 컨테이너·서버리스·배치 컴퓨팅 선택
@@ -570,7 +570,7 @@ Lambda의 실행 환경은 요청 처리 후 언제든 종료·재생성될 수 
 25. Application Auto Scaling — CloudWatch 사전 정의 지표 — https://docs.aws.amazon.com/autoscaling/application/userguide/monitoring-cloudwatch.html (갭 배치 B7b: 2026-10-21)
 26. ECS 서비스 대상 추적 조정 정책(동작 규칙) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-targettracking.html (갭 배치 B7b: 2026-10-21)
 27. SQS 큐 기반 ECS 서비스 조정(태스크당 백로그) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-autoscaling-queue.html (갭 배치 B7b: 2026-10-21)
-28. 분석 서비스 비용 최적화 — EMR 배포 네 가지 — https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html (갭 배치 B7b: 2026-10-21)
+28. 분석 서비스 비용 최적화 — EMR 배포 네 가지 — https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html (갭 배치 B7b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 29. EMR 인스턴스 유형 구성·Spot 베스트 프랙티스(태스크 노드) — https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-instances-guidelines.html (갭 배치 B7b: 2026-10-21)
 30. 컴퓨팅 서비스 선택 결정 가이드 — 노드 관리 주체·EKS는 컨트롤 플레인·Lambda 전면 관리 — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/choosing-aws-compute-service.html (2차 검수 정정: 2026-10-27)
 

@@ -39,8 +39,10 @@ import 'package:flutter_test/flutter_test.dart';
 /// `docs.aws.amazon.com` 은 없는 페이지에도 200 을 주고 그 가이드 인덱스로
 /// 보내므로 판정 신호는 **`num_redirects`** 다(#280 교훈). 24개 중 3건이 걸렸다:
 /// `id_roles_create_for-user_externalid` → `id_roles_common-scenarios_third-party`
-/// (이름 변경) · `declarative_policies` → userguide 인덱스(**소멸**, 정본은
-/// `orgs_manage_policies_declarative`) · `detective/latest/adminguide/…` →
+/// (이름 변경) · `declarative_policies` → ⚠️ **이 판정은 2026-11-06 재실측에서
+/// 뒤집혔다** — 도착지가 인덱스가 아니라 `…_declarative_policies.html` 이므로
+/// 「소멸」이 아니라 「이름 변경」이고 **정본은 `…_declarative_policies`** 다
+/// (아래 테스트 주석에 대조군까지 적었다) · `detective/latest/adminguide/…` →
 /// userguide 인덱스(**가이드 이름 변경**, 정본은 `detective/latest/userguide/…`).
 /// 죽은 쪽 두 건은 아래에서 0건으로 고정한다.
 ///
@@ -207,9 +209,28 @@ void main() {
       expect(t.contains('orgs_reference_limits'), isTrue);
     });
 
-    // 실측(2026-10-30): userguide 인덱스로 리다이렉트되는 죽은 슬러그다.
-    test('죽은 declarative_policies 슬러그를 쓰지 않는다', () {
-      expect(doc('saa-t1-1').contains('declarative_policies.html'), isFalse);
+    // ⚠️⚠️ **판정이 뒤집혔다(2026-11-06 재실측 — HANDOFF §0-2026-11-06-n).**
+    // 이 테스트는 2026-10-30 판정(「`declarative_policies` 는 죽은 슬러그」)을 굳히고
+    // 있었는데, 지금 재서 보면 **그것이 정본**이다:
+    //
+    //   orgs_manage_policies_declarative.html         → 200 r=1 → …_declarative_policies.html
+    //   orgs_manage_policies_zz-bogus.html (대조군)    → 200 r=1 → userguide 인덱스
+    //
+    // **도착지가 인덱스가 아니라 특정 페이지**이므로 「소멸」이 아니라 「이름 변경」이고,
+    // 은퇴한 쪽은 md 가 들고 있던 `…_declarative.html` 다. 당시 판정이 반대였거나 AWS 가
+    // 다시 바꿨고, 어느 쪽이든 **가드가 틀린 판정을 굳히면 정정이 막힌다**(2026-11-06
+    // AIF 배치의 「가드는 판정을 굳히므로 판정이 틀리면 가드도 틀린다」와 같은 자리).
+    test('declarative 정본 슬러그를 쓴다 (2026-11-06 판정 역전)', () {
+      final t = doc('saa-t1-1');
+      expect(t.contains('orgs_manage_policies_declarative_policies.html'), isTrue,
+          reason: '현재 정본이다');
+      // 옛 슬러그는 정본의 접두사이므로 **정본을 지운 뒤** 남은 수로 센다.
+      expect(
+          t
+              .replaceAll('orgs_manage_policies_declarative_policies.html', '')
+              .contains('orgs_manage_policies_declarative.html'),
+          isFalse,
+          reason: '이름이 바뀐 옛 슬러그다');
     });
   });
 

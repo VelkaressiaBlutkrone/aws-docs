@@ -73,7 +73,8 @@
         "3": "온디맨드는 약정 없이 사용하는 옵션으로 장기적 안정 운영 시 가장 비용이 높습니다. 3년 이상 운영 계획이 있다면 Savings Plans로 절감이 가능합니다."
       },
       "sources": [
-        { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" }
+        { "title": "AWS Savings Plans — 개요 (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html" },
+        { "title": "Savings Plans 유형 비교 — Compute 최대 66% (공식)", "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html" }
       ],
       "verified": true
     },

@@ -216,7 +216,7 @@
         "3": "DynamoDB 온디맨드는 요청 단위 과금이고 프로비저닝은 시간당 프로비저닝된 RCU/WCU 과금이므로 트래픽 패턴에 따라 비용 차이가 납니다."
       },
       "sources": [
-        { "title": "DynamoDB 읽기/쓰기 용량 모드 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html" }
+        { "title": "DynamoDB 읽기/쓰기 용량 모드 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html" }
       ],
       "verified": true
     },
@@ -240,7 +240,7 @@
         "3": "용량 모드는 과금 단위와 구조 자체가 다르므로 동일 처리량에서 비용 차이가 발생합니다."
       },
       "sources": [
-        { "title": "DynamoDB 읽기/쓰기 용량 모드 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html" }
+        { "title": "DynamoDB 읽기/쓰기 용량 모드 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html" }
       ],
       "verified": true
     },

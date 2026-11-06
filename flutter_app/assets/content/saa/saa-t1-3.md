@@ -37,10 +37,10 @@ sources:
   - title: AWS PrivateLink for DynamoDB — 게이트웨이 vs 인터페이스 엔드포인트 (공식)
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/privatelink-interface-endpoints.html
   - title: AWS Network Firewall FAQ (공식)
-    url: https://aws.amazon.com/network-firewall/faqs
+    url: https://aws.amazon.com/network-firewall/faqs/
   - title: AWS 서비스 엔드포인트 — 리전·글로벌·FIPS·듀얼스택 (공식)
     url: https://docs.aws.amazon.com/general/latest/gr/rande.html
-lastVerified: 2026-10-21
+lastVerified: 2026-11-06
 ---
 
 # VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트
@@ -465,7 +465,7 @@ SG·NACL은 IP·포트·프로토콜 수준의 필터입니다. 도메인 이름
 12. Amazon VPC 쿼터 — 보안 그룹(리전당 2,500·규칙 각 60·ENI당 5~16·규칙×SG ≤ 1,000) — https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html
 13. Route 53 Resolver DNS Firewall 작동 방식(도메인 이름만 필터·IP 해석 안 함·DNS 외 프로토콜 미필터) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-dns-firewall-overview.html
 14. AWS PrivateLink for DynamoDB — 게이트웨이 vs 인터페이스 엔드포인트(온프레미스·타 리전 접근 불가·퍼블릭/사설 IP·과금) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/privatelink-interface-endpoints.html
-15. AWS Network Firewall FAQ(stateless·stateful 규칙·AWS/파트너 관리형 규칙 그룹) — https://aws.amazon.com/network-firewall/faqs
+15. AWS Network Firewall FAQ(stateless·stateful 규칙·AWS/파트너 관리형 규칙 그룹) — https://aws.amazon.com/network-firewall/faqs/
 16. AWS 서비스 엔드포인트(리전·글로벌·FIPS 최소 TLS 1.2·듀얼스택 `api.aws`, S3만 `dualstack.`) — https://docs.aws.amazon.com/general/latest/gr/rande.html
 
 > 📝 **2026-10-21 보강(갭 `G-1.2-02`·`G-1.2-04`·`G-1.2-15`, 배치 B3)**: ① §4에 **Gateway Endpoint의 적용 범위 제약**(온프레미스·피어링 VPC·타 리전 불가 → Interface Endpoint)을 표와 함정으로 추가했습니다(근거 10·14번). ② **§7 심층 트래픽 제어**를 신설해 Network Firewall·DNS Firewall·보안 그룹 쿼터와 **SG·NACL이 걸러내지 못하는 트래픽**(Amazon DNS·같은 서브넷 내부)을 넣었습니다(근거 9·11·12·13·15번). ③ **§8 AWS 서비스 엔드포인트 유형**(리전·글로벌·FIPS·듀얼스택)을 신설했습니다(근거 16번). 기존 §1~§6의 번호와 앵커는 바꾸지 않았습니다.
