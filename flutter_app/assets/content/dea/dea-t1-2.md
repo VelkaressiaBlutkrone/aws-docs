@@ -186,7 +186,7 @@ lastVerified: 2026-10-19
 - "파티션이 100개를 넘어 실패" → CTAS 후 **INSERT INTO 분할**.
 - Zero-ETL 탈락 조건: **기본 키 없는 소스 테이블**, **SaaS 소스에 분 단위 지연 요구**.
 - "ODBC 드라이버가 결과를 못 받음" → **포트 444**와 **GetQueryResultsStream** 권한.
-- "API가 타임아웃" → API Gateway **29초** 벽 → 비동기 + 폴링.
+- "API가 타임아웃" → API Gateway **기본 29초** 벽(Regional·Private REST는 Service Quotas 증액, 응답 스트리밍은 최대 15분) → 비동기 + 폴링.
 - 버전 함정: Glue **1.0·2.0 종료(2026-04-01)**, **Ray 신규 중단(2026-04-30)**, Redshift **Python UDF 2026-06-30 이후 중단**.
 
 ---
