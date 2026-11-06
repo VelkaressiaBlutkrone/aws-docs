@@ -91,7 +91,7 @@ lastVerified: 2026-10-17
 
 ### 1) 도구 지형과 현재 상태 ⚠️ {#tool-landscape}
 
-이 Task의 도구는 네 갈래입니다. **배치 변환**(Data Wrangler·Glue·DataBrew·EMR Spark·SageMaker Processing) · **스트리밍 변환**(Firehose+Lambda·Glue/EMR Spark·Flink) · **특성 저장**(Feature Store) · **레이블링**(Ground Truth·Mechanical Turk·A2I).
+이 Task의 도구는 네 갈래입니다. **배치 변환**(Data Wrangler·Glue·DataBrew·EMR Spark·SageMaker Processing) · **스트리밍 변환**(Firehose+Lambda·Glue/EMR Spark·Flink) · **특성 저장**(Feature Store) · **레이블링**(Ground Truth·Mechanical Turk·A2I — ⚠️ 상태는 9) 참고: 신규 고객 불가 / 유지 모드 / 폐쇄).
 
 | 대상 | 현재 상태 |
 |---|---|
@@ -219,11 +219,11 @@ lastVerified: 2026-10-17
 
 **Ground Truth 핵심**
 
-- 작업 인력 3종: Mechanical Turk · **비공개**(자체 직원, Cognito 또는 자체 OIDC) · **공급업체**(AWS Marketplace).
+- 작업 인력 3종: Mechanical Turk(⚠️ 2026-09-29 지원 종료 — 개념만) · **비공개**(자체 직원, Cognito 또는 자체 OIDC) · **공급업체**(AWS Marketplace).
 - **주석 통합**: 여러 작업자의 주석을 하나로 합칩니다(경계 상자는 IoU 기반 평균, 의미 분할은 픽셀 투표, 다중 클래스는 EM 변형).
 - **자동 데이터 레이블링**: 능동 학습으로 사람이 레이블링할 데이터를 골라 비용을 줄입니다. 지원 유형은 **이미지 분류(단일)·의미 분할·객체 감지(경계 상자)·텍스트 분류(단일)** 4종이고, **최소 1,250개 객체**(5,000개 이상 강력 권장), 사용자 지정 작업 유형과 **스트리밍 잡은 불가**합니다.
 - **검증 vs 조정**: 검증(verification)은 기존 레이블의 정확성을 표시·평가만 하고 **수정하지 못합니다.** 조정(adjustment)이 이전 주석을 수정합니다.
-- MTurk 인력에는 **기밀·개인·보호 건강 정보를 보내면 안 되고**, 입력에 PII가 없음을 지정하지 않으면 잡이 실패합니다.
+- MTurk 인력에는(⚠️ 폐쇄됐지만 개념은 시험 범위) **기밀·개인·보호 건강 정보를 보내면 안 되고**, 입력에 PII가 없음을 지정하지 않으면 잡이 실패합니다.
 
 **A2I**는 AI 서비스(Textract·Rekognition 등)나 자체 모델의 **저신뢰 예측 또는 무작위 표본**을 사람이 검토하게 하는 워크플로입니다. 즉 Ground Truth는 **학습용 레이블을 처음부터 만드는 것**, A2I는 **운영 중 예측을 사람이 검토하는 것**입니다.
 

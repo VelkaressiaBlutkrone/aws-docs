@@ -133,29 +133,57 @@ void main() {
     }
   });
 
-  test('DEA에 md 사실 가드가 생기면 이 파일의 규칙을 채운다', () {
-    // 2026-10-29 실측: DEA에는 md 사실 가드가 **없다**(`dea_questions_test.dart` 는
-    // 구조·밀도 가드다). 그래서 전파할 금지 문장도 아직 없다 — 위 목록이 SOA 전용인
-    // 것은 누락이 아니라 그 사실의 반영이다.
+  test('DEA 사실 가드가 새로 생기면 이 파일의 규칙을 채운다', () {
+    // 2026-10-29 당시 DEA에는 md 사실 가드가 **없었다**(`dea_questions_test.dart` 는
+    // 구조·밀도 가드다). 그래서 전파할 금지 문장도 없었고, 목록이 SOA 전용인 것은
+    // 누락이 아니라 그 사실의 반영이었다. 그때 둔 트립와이어가 **2026-11-06에 실제로
+    // 울렸다** — `dea_mla_p1_review_fix_test.dart` 가 DEA 의 첫 사실 가드다.
     //
-    // 누군가 DEA 학습문서 사실 가드를 추가하면 이 테스트가 먼저 깨진다. 그때
-    // 그 가드의 금지 문장을 위 목록에 옮기고 이 테스트를 지워라 — 그러지 않으면
-    // 2026-10-20 SAA 사고(md만 고치고 문항에 미전파)가 DEA에서 재현된다.
-    final deaGuards = Directory('test')
+    // 설계대로 그 가드의 금지 문장(「29초 벽」류)을 아래 `_factRules` 에 옮겼다.
+    // 트립와이어는 지우지 않고 **등록 목록 방식으로 일반화**했다 — 지우면 다음 DEA
+    // 가드가 같은 누락을 반복해도 아무도 알려 주지 않는다. 새 가드를 추가하는 사람은
+    // ① 그 가드의 금지 문장을 `_factRules` 에 옮기고 ② 파일 이름을 아래에 등록한다.
+    const registered = <String>{
+      'dea_questions_test.dart', // 구조·밀도 가드(사실 가드가 아니다)
+      'dea_mla_p1_review_fix_test.dart', // 2026-11-06 P1 정정 — 29초 규칙을 옮겼다
+    };
+    final unregistered = Directory('test')
         .listSync()
         .whereType<File>()
         .map((f) => f.uri.pathSegments.last)
-        .where((n) => n.startsWith('dea_') && n != 'dea_questions_test.dart')
+        .where((n) => n.startsWith('dea_') && !registered.contains(n))
         .toList()
       ..sort();
-    expect(deaGuards, isEmpty,
-        reason: 'DEA md 가드가 생겼다 — 그 금지 문장을 '
-            'soa_dea_question_propagation_test.dart 의 목록에 옮겨라: $deaGuards');
+    expect(unregistered, isEmpty,
+        reason: 'DEA 가드가 새로 생겼다 — 그 금지 문장을 '
+            'soa_dea_question_propagation_test.dart 의 `_factRules` 에 옮기고 이 '
+            '목록에 등록해라(그러지 않으면 2026-10-20 SAA 사고가 DEA에서 재현된다): '
+            '$unregistered');
   });
 }
 
 /// md 가드의 금지 **사실 서술**. `origin` 은 어느 가드에서 왔는지.
 const _factRules = <({String text, String origin, String why})>[
+  // ── dea_mla_p1_review_fix_test.dart ────────────────────────────────
+  // 2026-11-06 트립와이어가 울려 옮겨 온 규칙. DEA 학습문서가 API Gateway 29초를
+  // 「벽」으로 단정하던 자리를 「기본 29초 + 넘길 경로 둘」로 고쳤고, 그 단정이
+  // 파생 문항으로 다시 새지 않게 막는다. 공식 근거는 response-transfer-mode.html
+  // (`Exceed API Gateway's 29 second timeout limit without requesting an
+  // integration timeout limit increase` · `up to 15 minutes`)와 Service Quotas
+  // 증액(Regional·Private REST 전용).
+  (
+    text: '29초 벽',
+    origin: 'dea_mla_p1_review_fix',
+    why: '29초는 기본값이다 — Regional·Private REST API 는 Service Quotas 증액으로, '
+        '2025-11 응답 스트리밍(STREAM 전송 모드)은 최대 15분까지 넘긴다. 문항은 '
+        '마크다운을 쓰지 않으므로 md 의 `**기본 29초** 벽` 과 달리 이 문구가 그대로 '
+        '나타나면 단정이다',
+  ),
+  (
+    text: '29초를 넘길 수 없',
+    origin: 'dea_mla_p1_review_fix',
+    why: '같음 — 넘길 경로가 둘 있다(쿼터 증액·응답 스트리밍)',
+  ),
   // ── soa_facts_test.dart ─────────────────────────────────────────────
   (
     text: 'REJECT로 잘 드러나지 않',
