@@ -333,4 +333,14 @@ const _nameRules = <({String text, String origin, String why})>[
     why: 'v1.1 공식 KO 명칭은 「규정 준수 팩」이다(Conformance Pack). '
         '공식 ko_kr 도메인 4 Skill 4.1.5 문구이자 assets/exam_guides/SOA-C03.json 표기와 같다',
   ),
+  (
+    text: 'DX over VPN',
+    origin: 'soa_p1_review_fix',
+    why: '공식 명칭은 「VPN over Direct Connect」다 — 얹히는 쪽이 VPN 이므로 '
+        'A over B 에서 A=VPN·B=DX 여야 한다(vpn/latest/s2svpn/private-ip-dx.html: '
+        '"you can deploy IPsec VPN over Direct Connect"). 2026-11-06 전 콘텐츠 검토에서 '
+        'soa-t5-2.md 6개소 + soa-t5-2-q8 이 라벨만 거꾸로 달고 있었고, 같은 레포 '
+        'saa-t3-8 은 이미 정본을 쓰고 있어 자격증 사이에서 어긋나 있었다. '
+        '⚠️ 2026-10-29 감사가 이미 경고한 혼동이 SOA 본문에는 적용되지 않은 자리다',
+  ),
 ];
