@@ -278,7 +278,7 @@
         "AWS Config"
       ],
       "correct": 2,
-      "explanation": "AWS Audit Manager는 AWS 사용에 대한 증거 수집을 자동화해 위험과 규정 준수를 지속적으로 평가하도록 돕습니다. CIS·PCI DSS·GDPR·HIPAA·SOC 2 같은 사전 구축 프레임워크에 증거를 매핑해 감사 준비를 단순화하고, 감사자에게 제출할 수 있는 보고서를 생성합니다. '내 AWS 사용이 규정을 준수함을 증거로 입증'하는 것이 핵심입니다.",
+      "explanation": "AWS Audit Manager는 AWS 사용에 대한 증거 수집을 자동화해 위험과 규정 준수를 지속적으로 평가하도록 돕습니다. CIS·PCI DSS·GDPR·HIPAA·SOC 2 같은 사전 구축 프레임워크에 증거를 매핑해 감사 준비를 단순화하고, 감사자에게 제출할 수 있는 보고서를 생성합니다. '내 AWS 사용이 규정을 준수함을 증거로 입증'하는 것이 핵심입니다. ⚠️ 정직성 메모: AWS Audit Manager는 2026-04-30부터 신규 고객에게 열려 있지 않습니다(기존 고객은 계속 사용). CLF-C02 공식 가이드도 작업 2.2 예시에서 Audit Manager를 뺐으므로 기출 대비로만 기억하세요.",
       "wrongExplanations": {
         "0": "AWS Artifact는 AWS 인프라 자체의 컴플라이언스 보고서(SOC·PCI·ISO 등)를 온디맨드로 다운로드하는 포털입니다. '내 AWS 사용'에 대한 감사 증거를 자동 수집·매핑하는 것은 Audit Manager입니다.",
         "1": "Amazon GuardDuty는 로그를 분석해 악성·비정상 활동을 탐지하는 위협 탐지 서비스로, 컴플라이언스 프레임워크에 증거를 매핑·수집하는 기능이 없습니다.",

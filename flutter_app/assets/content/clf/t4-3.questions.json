@@ -22,7 +22,7 @@
       "wrongExplanations": {
         "1": "Business Support는 유료 플랜으로 24x7 기술 지원과 전체 Trusted Advisor 등을 제공합니다. 무료 기본 플랜이 아닙니다.",
         "2": "Enterprise Support는 전담 TAM 등을 포함하는 최상위 유료 플랜으로, 무료 기본 플랜이 아닙니다.",
-        "3": "Developer Support는 유료 플랜으로 업무 시간 기술 지원을 제공합니다. 무료 기본 플랜이 아닙니다."
+        "3": "Developer Support는 유료 플랜으로 업무 시간 기술 지원을 제공합니다. 무료 기본 플랜이 아닙니다. (⚠️ Developer Support는 2027-01-01 단종 예정이고 현행 최저 유료 플랜은 Business Support+입니다.)"
       },
       "sources": [
         {
@@ -54,7 +54,7 @@
       },
       "sources": [
         {
-          "title": "AWS Support Plans — Business 이상: 24x7 기술 지원·전체 Trusted Advisor(500+ 점검)",
+          "title": "AWS Support Plans — Business Support+: 24x7 기술 지원·전체 Trusted Advisor(More than 500 checks, 500+ 점검)",
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
         }
       ],
@@ -77,7 +77,7 @@
       "explanation": "Enterprise Support는 Business의 모든 혜택에 더해 전담 Technical Account Manager(TAM), 비즈니스 크리티컬(시스템 다운) 케이스에 대한 약 15분 응답, 전략 검토 등을 제공하는 최상위 플랜입니다. 대규모·미션 크리티컬 환경에 적합합니다. (참고: 프로덕션 시스템 다운은 Enterprise에서도 1시간 이내 목표이며, 15분은 비즈니스 크리티컬 등급입니다.)",
       "wrongExplanations": {
         "1": "Business Support는 24x7 기술 지원과 전체 Trusted Advisor를 제공하지만 전담 TAM은 포함하지 않습니다(TAM은 Enterprise).",
-        "2": "Developer Support는 업무 시간 기술 지원 수준으로, 전담 TAM이나 15분 응답을 제공하지 않습니다.",
+        "2": "Developer Support는 업무 시간 기술 지원 수준으로, 전담 TAM이나 15분 응답을 제공하지 않습니다. (⚠️ Developer Support는 2027-01-01 단종 예정이고 현행 최저 유료 플랜은 Business Support+입니다.)",
         "3": "Basic Support는 무료 기본 플랜으로, 전담 TAM이나 빠른 케이스 응답을 제공하지 않습니다."
       },
       "sources": [
@@ -158,7 +158,7 @@
         "Basic Support"
       ],
       "correct": 0,
-      "explanation": "Developer Support는 개발·테스트 용도로, 업무 시간 동안 이메일/웹을 통한 기술 지원을 제공하는 가장 낮은 유료 플랜입니다. 24x7 지원이나 전담 TAM이 필요 없는 개발·테스트 단계에 적합합니다.",
+      "explanation": "Developer Support는 개발·테스트 용도로, 업무 시간 동안 이메일/웹을 통한 기술 지원을 제공하는 가장 낮은 유료 플랜입니다. 24x7 지원이나 전담 TAM이 필요 없는 개발·테스트 단계에 적합합니다. 다만 AWS는 Developer Support를 2027-01-01에 단종하며, 현행 최저 유료 플랜은 Business Support+입니다(공식 가이드의 지원 옵션 예시에서도 Developer Support가 빠졌습니다). 전통 분류 기출 대비로만 기억하세요 — AWS GovCloud(US) 리전에서는 계속 제공됩니다.",
       "wrongExplanations": {
         "1": "Business Support는 24x7 기술 지원과 전체 Trusted Advisor를 제공하는 상위 플랜으로, 업무 시간 지원 요건 대비 과합니다.",
         "2": "Enterprise Support는 전담 TAM 등을 포함하는 최상위 플랜으로, 개발·테스트 요건 대비 과합니다.",
@@ -186,7 +186,7 @@
         "Enterprise Support에서만"
       ],
       "correct": 0,
-      "explanation": "전체 Trusted Advisor 점검은 Business와 Enterprise 플랜에서 제공됩니다. Basic·Developer 플랜은 핵심(core) 점검만 사용할 수 있습니다. 따라서 '전체 점검'의 최소 요건은 Business 플랜 이상입니다(시험 전통 분류 기준 Business이며 현행 공식 명칭은 Business Support+. AWS는 Developer·Business를 2027-01-01 단종 예정).",
+      "explanation": "전체 Trusted Advisor 점검은 Business와 Enterprise 플랜에서 제공됩니다. Basic 플랜은 공식 기준으로 서비스 할당량(Service Limits) 범주의 전체 점검과 보안·내결함성 범주의 일부 점검만 사용할 수 있습니다. 따라서 '전체 점검'의 최소 요건은 Business 플랜 이상입니다(시험 전통 분류 기준 Business이며, 현행 공식 서술은 Business Support+·Enterprise Support·Unified Operations 세 플랜입니다. AWS는 Developer·Business를 2027-01-01 단종 예정).",
       "wrongExplanations": {
         "1": "Basic을 포함한 모든 플랜이 전체 점검을 제공하지는 않습니다. Basic·Developer는 핵심 점검만 제공합니다.",
         "2": "Developer는 핵심 점검만 제공하며, 전체 점검은 Business 이상부터입니다.",
@@ -269,7 +269,7 @@
         "Enterprise Support에서만"
       ],
       "correct": 2,
-      "explanation": "AWS Support API(프로그래밍 방식 케이스 생성·관리 및 Trusted Advisor 점검 결과 조회)에 접근하려면 Business, Enterprise On-Ramp, 또는 Enterprise Support 플랜이 필요합니다. 따라서 최소 요건은 Business Support 이상입니다.",
+      "explanation": "AWS Support API(프로그래밍 방식 케이스 생성·관리 및 Trusted Advisor 점검 결과 조회)에 접근하려면 유료 플랜이 필요하고, 전통 분류로는 Business 이상입니다. 현행 공식 서술은 Business Support+·Enterprise Support·Unified Operations 세 플랜이며, 전통 분류의 Developer·Business·Enterprise On-Ramp는 2027-01-01에 단종됩니다.",
       "wrongExplanations": {
         "0": "Basic·Developer 플랜에서는 AWS Support API에 프로그래밍 방식으로 접근할 수 없습니다. API 접근은 Business 이상부터입니다.",
         "1": "Developer 플랜에서는 AWS Support API에 접근할 수 없습니다. Business 이상이어야 합니다.",

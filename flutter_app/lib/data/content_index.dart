@@ -332,8 +332,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/clf/t3-8.md',
       questionsAsset: 'assets/content/clf/t3-8.questions.json',
       questionCount: 16,
-      audioApproved: true, // 2026-07 AR-2 사실정정 재합성 — 청취 재승인 전 비노출
-      audioSha8: 'dc43492d',
+      // 2026-11-06 §P2-G 재합성 — 「범위 내」 표가 범위 외 서비스를 가르치고 있었고
+      // seg034 가 그 표를 읽어 **승인된 음성이 거짓을 말하고 있었다.** 대본·md 를
+      // 고쳐 재합성했으므로 사람의 청취 재승인까지 비노출이다(`approved` 는 사람 서명).
+      audioApproved: false,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
