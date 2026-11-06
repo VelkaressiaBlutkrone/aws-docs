@@ -413,6 +413,6 @@ CloudFormation은 **독립적인 프로비저닝 경로마다 첫 실패에서 �
 18. Choose how to handle failures when provisioning resources (CloudFormation) — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stack-failure-options.html
 19. Set up an investigation group (CloudWatch investigations) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Investigations-GetStarted-Group.html
 20. CreateInvestigationGroup (CloudWatch investigations API) — https://docs.aws.amazon.com/cloudwatchinvestigations/latest/APIReference/API_CreateInvestigationGroup.html
-21. aiops (AWS CLI 명령 참조) — https://docs.aws.amazon.com/cli/latest/reference/aiops/index.html
+21. aiops (AWS CLI 명령 참조) — https://docs.aws.amazon.com/cli/latest/reference/aiops/
 22. DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain4.html
 23. DVA-C03 범위 내 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html

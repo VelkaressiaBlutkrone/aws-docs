@@ -195,7 +195,7 @@
       "sources": [
         {
           "title": "Amazon Quick(옛 QuickSight; BI·시각화 기능 = Amazon Quick Sight) — 대화형 대시보드·시각화, 비즈니스 인텔리전스(BI)",
-          "url": "https://docs.aws.amazon.com/quicksight/latest/user/welcome.html"
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
         }
       ],
       "verified": true

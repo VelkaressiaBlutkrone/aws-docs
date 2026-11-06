@@ -390,7 +390,7 @@ RDS·Aurora는 **생성 시에만** 암호화를 지정할 수 있고 **끌 수�
 20. Pass Secrets Manager secrets through Amazon ECS environment variables — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-secrets-manager.html
 21. Security best practices for CloudFormation — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/security-best-practices.html
 22. Help protect sensitive log data with masking (CloudWatch Logs) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html
-23. Which fields are encrypted and signed? (AWS Database Encryption SDK for DynamoDB) — https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/DDB-encryption-context.html
+23. Which fields are encrypted and signed? (AWS Database Encryption SDK for DynamoDB) — https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/DDB-encrypted-and-signed.html
 24. Use field-level encryption to help protect sensitive data (CloudFront) — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html
 25. Trust and safety (Amazon Comprehend — PII detection and redaction) — https://docs.aws.amazon.com/comprehend/latest/dg/trust-safety.html
 26. Using managed data identifiers (Amazon Macie) — https://docs.aws.amazon.com/macie/latest/user/managed-data-identifiers.html
