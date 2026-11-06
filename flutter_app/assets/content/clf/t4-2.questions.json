@@ -269,7 +269,7 @@
         "AWS Pricing Calculator"
       ],
       "correct": 1,
-      "explanation": "AWS Billing Conductor는 청구 계정 그룹과 사용자 지정 요금을 구성해 표준 AWS 청구 데이터와 다른 맞춤 청구·비용 데이터를 생성하는 도구입니다. AWS 솔루션 제공자나 기업이 최종 고객·부서별로 사용자 지정 요금을 적용한 청구서를 만들 때 사용합니다.",
+      "explanation": "AWS Billing Conductor는 청구 계정 그룹과 사용자 지정 요금을 구성해 표준 AWS 청구 데이터와 다른 맞춤 청구·비용 데이터를 생성하는 도구입니다. AWS 솔루션 제공자나 기업이 최종 고객·부서별로 사용자 지정 요금을 적용한 청구서를 만들 때 사용합니다. ⚠️ 다만 이 서비스는 공식 CLF-C02 「범위 외 AWS 서비스」 목록(클라우드 재무 관리)에 있습니다 — 개념만 알아 두고, 이 Task의 시험 대비는 Budgets·Cost Explorer·요금 계산기·Organizations 통합 결제·비용 할당 태그에 우선순위를 두세요.",
       "wrongExplanations": {
         "0": "AWS Cost Explorer는 발생한 비용을 시각화·분석하는 도구로, 사용자 지정 요금으로 맞춤 청구서를 생성하지 않습니다.",
         "2": "AWS Budgets는 예산 설정·알림 도구로, 고객별 사용자 지정 청구 데이터를 생성하지 않습니다.",
