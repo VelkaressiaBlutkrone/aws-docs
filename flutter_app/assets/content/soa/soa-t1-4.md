@@ -15,7 +15,7 @@ sources:
   - title: EC2 인스턴스 상태 확인 (시스템 vs 인스턴스) (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html
   - title: EC2 인스턴스 자동 복구 (공식)
-    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recovery.html
+    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
   - title: ELB 대상 상태 확인 (Application Load Balancer) (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
   - title: AWS DevOps Agent 소개 (공식)
@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/ai/responsible-ai/aws-aidevops-agent/overview.html
   - title: Kiro와 Amazon Q Developer의 관계 (공식 FAQ)
     url: https://aws.amazon.com/q/developer/faqs/
-lastVerified: 2026-10-20
+lastVerified: 2026-11-06
 ---
 
 # 가용성 지표 기반 문제 식별·해결 (Health Dashboard·상태 확인)
@@ -311,5 +311,5 @@ ELB는 트래픽 라우팅 담당이고 인스턴스 수명 주기 관리는 Aut
 1. AWS Health란 무엇인가(Health Dashboard) — https://docs.aws.amazon.com/health/latest/ug/what-is-aws-health.html
 2. AWS Health를 EventBridge와 통합 — https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html
 3. EC2 인스턴스 상태 확인(시스템 vs 인스턴스) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html
-4. EC2 인스턴스 자동 복구 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recovery.html
+4. EC2 인스턴스 자동 복구 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
 5. ELB 대상 상태 확인(ALB) — https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html

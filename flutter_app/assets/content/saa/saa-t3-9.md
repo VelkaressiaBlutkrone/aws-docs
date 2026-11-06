@@ -26,7 +26,7 @@ sources:
     url: https://aws.amazon.com/aws-transfer-family/faqs/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-06
 ---
 
 # 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation
@@ -81,7 +81,7 @@ lastVerified: 2026-10-20
 ```
 [수집 계층]           [저장·처리 계층]          [분석·시각화 계층]
 Kinesis Data Streams  →  S3 (데이터 레이크)   →  Athena (서버리스 SQL)
-Kinesis Data Firehose →  Redshift (DW)        →  EMR (Spark/Hadoop)
+Amazon Data Firehose  →  Redshift (DW)        →  EMR (Spark/Hadoop)
 DataSync / 전송 터미널 →  Glue Data Catalog    →  Quick Sight (BI)
 Transfer Family       →  Lake Formation (거버넌스)
 ```

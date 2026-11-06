@@ -151,8 +151,8 @@ void main() {
         'soa-t1-5': '2026-11-06',
         'soa-t2-4': '2026-10-20',
         'soa-t4-2': '2026-10-20',
-        'soa-t4-3': '2026-10-19',
-        'soa-t5-4': '2026-10-19',
+        'soa-t4-3': '2026-11-06',
+        'soa-t5-4': '2026-11-06',
       };
       expected.forEach((id, date) {
         expect(doc(id).contains('lastVerified: $date'), isTrue,

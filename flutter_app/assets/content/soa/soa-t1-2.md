@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html
   - title: CloudWatch Logs·S3로 모델 호출 모니터링 (공식)
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-06
 ---
 
 # CloudWatch Logs·Logs Insights·구독 필터·에이전트
@@ -149,7 +149,7 @@ aws logs put-retention-policy \
 | 대상 | 용도 |
 |---|---|
 | **Kinesis Data Streams** | 대량 로그를 실시간 스트림으로 — 커스텀 컨슈머·분석 파이프라인 |
-| **Kinesis Data Firehose** | S3·OpenSearch·Redshift 등으로 거의 실시간 적재(버퍼링·변환) |
+| **Amazon Data Firehose** | S3·OpenSearch·Redshift 등으로 거의 실시간 적재(버퍼링·변환) 📌 **이전 이름은 Amazon Kinesis Data Firehose**입니다(개명) |
 | **Lambda** | 로그 이벤트를 즉시 함수로 전달 — 커스텀 처리·알림·전달 |
 | **OpenSearch Service** | 로그를 색인해 Kibana/Dashboards로 검색·시각화 |
 
@@ -326,7 +326,7 @@ fields @timestamp, statusCode
 
 <details><summary>정답 보기</summary>
 
-**구독 필터(Subscription Filter)**를 사용합니다. 로그 그룹의 구독 필터로 로그 이벤트를 실시간 전달하되, OpenSearch로 보내 검색을 제공하고, **Kinesis Data Firehose**를 거쳐 **S3**로 적재해 저비용 장기 보관을 구성합니다. 지표 필터가 아니라 구독 필터인 이유는, 숫자 지표가 아니라 로그 이벤트 자체를 다른 서비스로 전달해야 하기 때문입니다.
+**구독 필터(Subscription Filter)**를 사용합니다. 로그 그룹의 구독 필터로 로그 이벤트를 실시간 전달하되, OpenSearch로 보내 검색을 제공하고, **Amazon Data Firehose**를 거쳐 **S3**로 적재해 저비용 장기 보관을 구성합니다. 지표 필터가 아니라 구독 필터인 이유는, 숫자 지표가 아니라 로그 이벤트 자체를 다른 서비스로 전달해야 하기 때문입니다.
 </details>
 
 **Q3.** EC2 웹 서버의 **메모리 사용률**과 **/var/log/nginx/error.log**를 CloudWatch에서 보고 싶습니다. 수백 대 인스턴스에 어떻게 일괄 적용하나요?
