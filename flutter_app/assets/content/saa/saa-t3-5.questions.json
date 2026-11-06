@@ -17,14 +17,15 @@
         "Multi-AZ를 활성화하면 Read Replica가 자동으로 5개 생성된다"
       ],
       "correct": 0,
-      "explanation": "Multi-AZ는 고가용성 전용 기능입니다. 다른 AZ에 동기 복제된 스탠바이를 유지하고, 주 인스턴스 장애 시 AWS가 자동으로 DNS 엔드포인트를 스탠바이로 전환합니다(약 1~2분). 스탠바이는 읽기에 사용되지 않으며 HA 전용입니다.",
+      "explanation": "지문의 Multi-AZ는 스탠바이 1개를 두는 Multi-AZ DB 인스턴스 배포입니다. 다른 AZ에 동기 복제된 스탠바이를 유지하고, 주 인스턴스 장애 시 AWS가 자동으로 DNS 엔드포인트를 스탠바이로 전환합니다(약 1~2분). 이 배포의 스탠바이는 읽기를 처리하지 않고 장애 조치만 담당합니다. 스탠바이 2개를 두는 Multi-AZ DB 클러스터 배포는 별도 옵션이고, 그쪽 리더 인스턴스는 읽기도 처리합니다.",
       "wrongExplanations": {
         "1": "기본 Multi-AZ 인스턴스 배포에서 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장에는 Read Replica를 별도로 추가해야 합니다.",
         "2": "Multi-AZ 스탠바이는 같은 리전의 다른 AZ에 위치합니다. 교차 리전 DR에는 Read Replica나 Aurora Global Database를 사용합니다.",
         "3": "Multi-AZ와 Read Replica는 독립된 기능입니다. Multi-AZ 활성화가 Read Replica를 자동 생성하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon RDS — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html" }
+        { "title": "Amazon RDS — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html" },
+        { "title": "Amazon RDS — Multi-AZ 배포 구성·관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html" }
       ],
       "verified": true
     },
@@ -43,7 +44,7 @@
       "correct": 1,
       "explanation": "Read Replica는 읽기 확장 전용 기능입니다. 비동기 복제로 주 인스턴스의 변경을 복제하고, 읽기 전용 엔드포인트로 읽기 트래픽을 분산해 주 인스턴스 부하를 낮춥니다. RDS DB 인스턴스는 같은 리전에서 소스 1개당 최대 15개를 만들 수 있고(Db2 3개, Oracle·SQL Server 5개는 예외), Aurora도 클러스터당 최대 15개 Aurora Replica를 지원합니다.",
       "wrongExplanations": {
-        "0": "Multi-AZ 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장은 Read Replica의 역할입니다.",
+        "0": "Multi-AZ DB 인스턴스 배포의 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장은 Read Replica의 역할입니다(DB 클러스터 배포의 리더는 읽기를 처리합니다).",
         "2": "Read Replica는 비동기 복제를 사용합니다. 동기 복제를 스탠바이에 적용하는 것은 Multi-AZ의 방식이며 읽기 분산에 사용하지 않습니다.",
         "3": "수직 확장(인스턴스 타입 변경)은 일시적 해결책이며 읽기 부하를 구조적으로 분산하지 못합니다. 수평 확장(Read Replica)이 권장됩니다."
       },
@@ -66,9 +67,9 @@
         "AWS Backup으로 온프레미스 Oracle을 백업한 뒤 Aurora PostgreSQL로 복원한다"
       ],
       "correct": 1,
-      "explanation": "엔진이 달라지는 **이기종(heterogeneous)** 마이그레이션은 두 단계입니다. 원본과 대상의 스키마 구조·데이터 타입·DB 코드가 서로 다르므로 먼저 원본 스키마와 코드를 대상에 맞게 변환하고, 그다음 DMS로 데이터를 옮깁니다. 스키마·코드 객체 변환은 DMS가 아니라 스키마 변환 쪽의 일이며, 공식 문서는 AWS SCT가 원본 스키마를 변환하고 저장 프로시저와 애플리케이션 SQL도 변환한다고 적습니다(콘솔에서 쓰는 DMS Schema Conversion도 같은 일을 합니다). 반대로 같은 엔진끼리 옮기는 **동종(homogeneous)** 마이그레이션에서는 변환할 것이 없어 DMS가 엔진 네이티브 도구를 써서 함수·저장 프로시저 같은 보조 객체까지 그대로 옮깁니다.",
+      "explanation": "엔진이 달라지는 이기종(heterogeneous) 마이그레이션은 두 단계입니다. 원본과 대상의 스키마 구조·데이터 타입·DB 코드가 서로 다르므로 먼저 원본 스키마와 코드를 대상에 맞게 변환하고, 그다음 DMS로 데이터를 옮깁니다. 스키마·코드 객체 변환은 DMS가 아니라 스키마 변환 쪽의 일이며, 공식 문서는 AWS SCT가 원본 스키마를 변환하고 저장 프로시저와 애플리케이션 SQL도 변환한다고 적습니다(콘솔에서 쓰는 DMS Schema Conversion도 같은 일을 합니다). 반대로 같은 엔진끼리 옮기는 동종(homogeneous) 마이그레이션에서는 변환할 것이 없어 DMS가 엔진 네이티브 도구를 써서 함수·저장 프로시저 같은 보조 객체까지 그대로 옮깁니다.",
       "wrongExplanations": {
-        "0": "DMS는 데이터 이전을 담당합니다. 동종 마이그레이션에서는 네이티브 도구로 보조 객체까지 옮기지만, 엔진이 달라질 때 필요한 스키마·코드 객체의 **문법 변환**은 스키마 변환 도구(AWS SCT 또는 DMS Schema Conversion)의 일입니다.",
+        "0": "DMS는 데이터 이전을 담당합니다. 동종 마이그레이션에서는 네이티브 도구로 보조 객체까지 옮기지만, 엔진이 달라질 때 필요한 스키마·코드 객체의 문법 변환은 스키마 변환 도구(AWS SCT 또는 DMS Schema Conversion)의 일입니다.",
         "2": "엔진 네이티브 도구로 스키마를 그대로 옮기는 것은 같은 엔진끼리의 동종 마이그레이션 경로입니다. Oracle의 스키마와 저장 프로시저는 PostgreSQL 문법과 달라 변환 없이는 대상에 적용되지 않습니다.",
         "3": "AWS Backup은 AWS 리소스의 백업을 중앙에서 관리하는 서비스입니다. 다른 엔진으로의 스키마 변환도, 온프레미스 데이터베이스의 지속 복제도 수행하지 않습니다."
       },
@@ -362,7 +363,7 @@
       "correct": 3,
       "explanation": "Multi-AZ와 Read Replica는 함께 사용할 수 있으며, 이것이 프로덕션 베스트 프랙티스입니다. Multi-AZ는 AZ 장애 시 자동 페일오버로 고가용성을 제공하고, Read Replica는 읽기 트래픽을 분산해 주 인스턴스 부하를 낮춥니다. 두 기능은 목적이 달라 상호 보완적으로 동작합니다.",
       "wrongExplanations": {
-        "0": "Multi-AZ 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장은 별도의 Read Replica가 필요합니다.",
+        "0": "Multi-AZ DB 인스턴스 배포의 스탠바이는 읽기를 제공하지 않습니다. 읽기 확장은 별도의 Read Replica가 필요합니다(DB 클러스터 배포의 리더는 읽기를 처리합니다).",
         "1": "Read Replica는 자동 페일오버를 제공하지 않습니다. 주 인스턴스 장애 시 수동으로 승격해야 독립 인스턴스가 됩니다. 자동 페일오버는 Multi-AZ의 기능입니다.",
         "2": "일반 RDS에서도 Multi-AZ와 Read Replica를 함께 구성하면 고가용성과 읽기 확장을 동시에 확보할 수 있습니다. Aurora Global Database는 글로벌 다리전 시나리오에 적합합니다."
       },

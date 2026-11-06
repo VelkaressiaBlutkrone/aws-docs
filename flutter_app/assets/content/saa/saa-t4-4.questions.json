@@ -94,7 +94,7 @@
       "explanation": "S3 Gateway Endpoint를 생성하고 라우팅 테이블에 추가하면 S3 트래픽이 AWS 내부 경로로 직접 전달되어 NAT Gateway를 우회합니다. Gateway Endpoint는 추가 요금이 없으며(무료), 같은 리전 S3 접근 시 데이터 전송 요금도 발생하지 않아 NAT 처리 요금($0.045/GB)이 완전히 제거됩니다.",
       "wrongExplanations": {
         "0": "NAT Gateway 크기 교체는 처리 속도 개선이지 비용 절감과 무관합니다. 처리 요금은 통과 데이터량에 따라 발생합니다.",
-        "2": "S3 Interface Endpoint(PrivateLink)는 처리 데이터 GB당 요금(리전 월 1 PB까지 $0.01/GB)에 더해 AZ별 시간 요금이 발생합니다 — 시간 요금은 ENI 단위가 아니라 엔드포인트가 각 AZ에 프로비저닝돼 있는 시간 기준이며, 서비스 연결 상태와 무관하게 과금됩니다. S3는 무료인 Gateway Endpoint로 커버 가능하므로 Interface Endpoint를 쓸 이유가 없습니다.",
+        "2": "S3 Interface Endpoint(PrivateLink)는 처리 데이터 GB당 요금(리전 월 1 PB까지 $0.01/GB)에 더해 AZ별 시간 요금이 발생합니다 — 시간 요금은 ENI 단위가 아니라 엔드포인트가 각 AZ에 프로비저닝돼 있는 시간 기준이며, 서비스 연결 상태와 무관하게 과금됩니다. 이 지문처럼 같은 리전 VPC 안에서 S3에 접근하는 경우라면 무료인 Gateway Endpoint로 충분합니다(온프레미스나 다른 리전에서 접근해야 하면 Gateway Endpoint로는 닿지 않아 Interface Endpoint가 필요합니다).",
         "3": "퍼블릭 서브넷으로 이동하면 NAT 비용은 없어지지만 인스턴스가 인터넷에 직접 노출되어 보안 위험이 커집니다."
       },
       "sources": [
@@ -169,7 +169,7 @@
       "correct": 1,
       "explanation": "S3와 DynamoDB는 Gateway Endpoint가 지원되는 두 서비스입니다. Gateway Endpoint는 무료이므로 추가 비용 없이 두 서비스 모두에 접근할 수 있습니다. 시험에서 '추가 비용 없이'라는 단서가 나오면 Gateway Endpoint를 선택합니다.",
       "wrongExplanations": {
-        "0": "S3도 Gateway Endpoint를 지원합니다. 비용 관점에서 S3를 Interface Endpoint로 쓸 이유가 없습니다.",
+        "0": "S3도 Gateway Endpoint를 지원하고, 같은 리전 VPC 안에서 쓰는 것뿐이라면 무료인 Gateway Endpoint가 유리합니다. 다만 온프레미스나 다른 리전에서 S3에 닿아야 하면 Interface Endpoint가 필요합니다.",
         "2": "S3·DynamoDB는 NAT 없이 Gateway Endpoint로 직접 접근 가능합니다. NAT Gateway를 경유하면 처리 요금이 발생합니다.",
         "3": "Interface Endpoint는 데이터 처리 요금과 ENI 요금이 발생합니다. S3·DynamoDB는 무료인 Gateway Endpoint로 커버 가능합니다."
       },
