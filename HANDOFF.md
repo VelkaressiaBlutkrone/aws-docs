@@ -64,14 +64,34 @@ _갱신: 2026-11-06(**CLF P1 4건 정정 + 라이브 음성 4편 재합성**: �
 
 ```sh
 cd flutter_app
-npx wrangler@latest whoami                 # R2 로그인 확인(없으면 wrangler login)
-py tool/publish_audio.py clf-t2-1 --verify  # 4편을 각각 발행·검증
-py tool/publish_audio.py clf-t2-2 --verify
-py tool/publish_audio.py clf-t2-3 --verify
-py tool/publish_audio.py clf-t4-3 --verify
+# ① 들을 파일을 한곳에 모은다(PowerShell)
+$o="$env:USERPROFILE\Desktop\clf-audio-check"; mkdir $o -Force | Out-Null; 'clf-t2-1','clf-t2-2','clf-t2-3','clf-t4-3' | % { Copy-Item "D:\workspace\awc-docs\flutter_app\assets\audio\clf\$_\lecture.mp3" "$o\$_.mp3" -Force }; explorer $o
+
+# ② 들은 뒤 승인(8개 자리: script.json 1 + audio_meta.json 2, × 4편)
+cd D:\workspace\awc-docs\flutter_app; foreach ($d in 'clf-t2-1','clf-t2-2','clf-t2-3','clf-t4-3') { foreach ($f in "assets\audio\clf\$d\script.json","assets\audio\clf\$d\audio_meta.json") { $s = Get-Content $f -Raw; $n = ([regex]::Matches($s,'needs_human_review')).Count; if ($n -eq 0) { "SKIP $f"; continue }; Set-Content $f ($s -replace 'needs_human_review','approved') -NoNewline -Encoding utf8NoBOM; "OK $f ($n)" } }
+
+# ③ R2 로그인 확인(없으면 npx wrangler@latest login)
+npx wrangler@latest whoami
+
+# ④ 발행 — 한 번에 네 편
+cd D:\workspace\awc-docs\flutter_app; py tool/publish_audio.py clf-t2-1 clf-t2-2 clf-t2-3 clf-t4-3 --verify
 ```
 
-그다음 **4편을 직접 들어** 확인하고, 괜찮으면 `script.json`·`audio_meta.json` 의 `reviewStatus` 를 `approved` 로 바꾸고 `content_index.dart` 의 네 항목을 `audioApproved: true` + 새 `audioSha8`(= `audio_meta` 의 `audio.sha256[:8]`)로 되돌린다. ⚠️ **AI 는 이 두 단계를 하지 않는다.**
+⚠️⚠️ **순서가 중요하다 — 승인이 발행보다 먼저다.** `publish_audio.py` 의 `publish()` 는 `meta.reviewStatus != "approved"` 면 **`[skip] … (approved만 발행)` 으로 건너뛴다**(코드 실측). ②를 건너뛰고 ④를 돌리면 **아무 일도 일어나지 않으면서 성공처럼 보인다.** (이 절의 첫 판에는 발행을 먼저 적어 두었다 — 2026-11-06 실측으로 정정했다.)
+
+**바뀐 자리만 들어도 된다**(발화 글자 수 비례 추정, ±1분). 네 편 합계는 2시간 12분이지만 고친 곳은 문서마다 한두 세그먼트다:
+
+| 강의 | 길이 | 들을 자리 | 무엇이 바뀌었나 |
+|---|---|---|---|
+| `clf-t2-1` | 24:10 | **0:09~1:33** | 「도메인 2가 가장 크다」 → 「가장 큰 도메인은 34%인 도메인 3」 |
+| `clf-t2-2` | 42:29 | **0:08~1:21** · **31:03~31:54** | 같은 수정 · Audit Manager 「2026년 4월 30일」 + 가이드에서 빠짐 |
+| `clf-t2-3` | 43:16 | **0:10~1:19** | 같은 수정 |
+| `clf-t4-3` | 21:44 | **4:46~5:59** | 「가이드가 전통 분류 명시」 → 「작업 4.3이 신규 플랜으로」 + 대응표 |
+
+발행될 불변 키는 확정돼 있다(`meta sha == 로컬 mp3 sha` 4/4 실측, 발행 전 공개 URL 전부 **404**):
+`clf/clf-t2-1/82b3e605` · `clf/clf-t2-2/6dd14e2b` · `clf/clf-t2-3/537522ae` · `clf/clf-t4-3/a0bf23df`.
+
+발행이 끝나면 **AI 가 이어받는다** — `content_index.dart` 의 네 항목을 `audioApproved: true` + 위 `audioSha8` 로 배선하고(노출 복구), 전체 게이트(`--verify-all` 이 **39/39** 로 복귀하는지)와 릴리스 PR 까지. ⚠️ **AI 가 하지 않는 것은 ①②④ 세 단계뿐이다**(청취·`approved` 서명·R2 발행).
 
 **남은 2단 검토 P1:** DEA 1(`dea-t1-2-q14`) · MLA 1(Mechanical Turk) · AIF `aif-t5-2.md` CloudTrail Lake 5자리. CLF 의 P2·P3(죽은 URL 12건 · 범위 외 서비스가 정답 5건 · 단종 예정 플랜 이름 문항 7건 · Kendra 상태 메모 · `CLF-C02.json` 6곳 낡음 등)과 **⭐ §P2-H 재검토**(500+ 점검 근거를 찾았다)는 보고서에 그대로 있다.
 
