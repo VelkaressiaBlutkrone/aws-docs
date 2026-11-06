@@ -164,4 +164,52 @@ void main() {
       expect(findItalicNotation('**임계값 초과 *알림***'), isNotEmpty);
     });
   });
+
+  /// 문항 JSON 전역 불변식 — **마크다운 표기를 쓰지 않는다.**
+  ///
+  /// 학습문서 `.md` 는 파서를 타므로 `**굵게**` 가 정상 렌더되지만, **문항은
+  /// 파서를 타지 않는다.** 문항 본문을 그리는 네 경로가 모두 평문 `Text` 다 —
+  /// 지문 `quiz_page.dart`, 보기 `quiz_widgets.dart` 의 `OptionTile`,
+  /// 해설·「왜 아닌가」 `ExplainBox`, 시험 결과·복습 화면. 그래서 `**교집합**` 은
+  /// **별표를 포함한 글자 그대로** 학습자에게 보인다.
+  ///
+  /// 경위(2026-11-06): 전 콘텐츠 2단 검토가 SAA 문항에서 20개소를 찾았다
+  /// (8파일 · 9문항, 전부 `explanation` 또는 `wrongExplanations`). **여섯 자격증
+  /// 중 SAA 만 20건이고 나머지 다섯은 0건**이라, 이 표기가 설계가 아니라 규율
+  /// 위반임이 집계로 드러났다(저작자가 md 감각으로 문항에 넣은 것으로 보인다).
+  /// 20개소를 평문화하면서 **면제 집합 없이 전역 불변식**으로 걸었다 — 링크·이탤릭
+  /// 가드가 같은 길을 갔고, 면제 집합은 새 자격증이 조용히 쌓는 구멍이 된다.
+  group('문항 JSON 은 마크다운 굵게 표기를 쓰지 않는다', () {
+    final questionFiles = Directory('assets/content')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.questions.json'))
+        .toList()
+      ..sort((a, b) => a.path.compareTo(b.path));
+
+    List<String> boldIn(String raw) =>
+        RegExp(r'\*\*[^*\n]+\*\*').allMatches(raw).map((m) => m.group(0)!).toList();
+
+    test('어느 자격증의 문항도 `**굵게**` 를 쓰지 않는다', () {
+      final violations = <String>[];
+      for (final f in questionFiles) {
+        final hits = boldIn(f.readAsStringSync());
+        if (hits.isNotEmpty) {
+          violations.add('${relOf(f)}: ${hits.length}건 — 예: ${hits.first}');
+        }
+      }
+      expect(violations, isEmpty,
+          reason: '문항은 평문 Text 로 렌더되므로 별표가 글자로 보인다. '
+              '강조가 필요하면 문장 구조로 옮긴다:\n${violations.join('\n')}');
+    });
+
+    test('대조군: 문항 자산이 실재하고, 같은 탐지기가 학습문서에서는 굵게를 찾는다', () {
+      expect(questionFiles.length, greaterThan(100),
+          reason: '0이면 위 단정이 공허하다 — 여섯 자격증의 Task 별 문항 파일이 있다');
+      final md = mdFiles.map((f) => f.readAsStringSync()).join('\n');
+      expect(boldIn(md), isNotEmpty,
+          reason: '학습문서는 `**굵게**` 를 정상적으로 쓴다(파서를 탄다). '
+              '여기서 0건이면 탐지기가 고장 난 것이다');
+    });
+  });
 }
