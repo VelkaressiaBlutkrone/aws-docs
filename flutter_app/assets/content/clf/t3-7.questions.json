@@ -468,7 +468,7 @@
         "Amazon Forecast"
       ],
       "correct": 0,
-      "explanation": "Amazon Personalize는 사용자의 아이템 상호작용 데이터를 바탕으로 개인화 추천과 사용자 세그먼트를 생성하는 완전관리형 ML 서비스입니다. 추천·개인화라는 특정 기능을 빠르게 붙이는 요구에는 Personalize가 SageMaker보다 직접적입니다.",
+      "explanation": "Amazon Personalize는 사용자의 아이템 상호작용 데이터를 바탕으로 개인화 추천과 사용자 세그먼트를 생성하는 완전관리형 ML 서비스입니다. 추천·개인화라는 특정 기능을 빠르게 붙이는 요구에는 Personalize가 SageMaker보다 직접적입니다. ⚠️ 다만 이 서비스는 공식 CLF-C02 「범위 외 AWS 서비스」 목록(기계 학습)에 있습니다 — 개념만 알아 두고, 이 Task의 시험 대비는 Lex·Polly·Comprehend 같은 범위 내 소재에 우선순위를 두세요.",
       "wrongExplanations": {
         "1": "SageMaker AI는 고객이 직접 ML 모델을 구축·훈련·배포하는 범용 플랫폼입니다. 추천 기능을 관리형 API로 빠르게 붙이는 요구에는 Personalize가 더 직접적입니다.",
         "2": "Lex는 음성·텍스트 챗봇을 만드는 서비스입니다. 상품 추천·개인화 서비스가 아닙니다.",

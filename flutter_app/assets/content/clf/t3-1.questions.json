@@ -533,7 +533,7 @@
         "Elastic Beanstalk가 Git 리포지토리를 호스팅하고, Route 53이 빌드·배포 단계를 실행한다"
       ],
       "correct": 0,
-      "explanation": "CodePipeline은 릴리스 프로세스의 단계를 모델링하고 자동화하는 지속적 전달 서비스입니다. CodeBuild는 소스 코드를 컴파일하고 테스트를 실행해 배포 가능한 산출물을 만들며, CodeDeploy는 EC2·온프레미스·Lambda·ECS 같은 대상으로 애플리케이션 배포를 자동화합니다.",
+      "explanation": "CodePipeline은 릴리스 프로세스의 단계를 모델링하고 자동화하는 지속적 전달 서비스입니다. CodeBuild는 소스 코드를 컴파일하고 테스트를 실행해 배포 가능한 산출물을 만들며, CodeDeploy는 EC2·온프레미스·Lambda·ECS 같은 대상으로 애플리케이션 배포를 자동화합니다. ⚠️ CodePipeline·CodeBuild는 시험 범위 내지만 CodeDeploy는 공식 CLF-C02 「범위 외 AWS 서비스」 목록(개발자 도구)에 있습니다 — 역할만 알아 두세요.",
       "wrongExplanations": {
         "1": "CodeBuild는 빌드 서비스이지 전체 릴리스 흐름 조율자가 아닙니다. CodeCommit은 소스 저장소이고, Systems Manager는 운영 관리 서비스입니다.",
         "2": "CodeDeploy는 배포 자동화 서비스이지 소스 저장소가 아닙니다. CodeCommit은 Git 저장소이고, CodePipeline은 DNS가 아니라 릴리스 파이프라인입니다.",
