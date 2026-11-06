@@ -44,7 +44,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html
   - title: What are Foundation Models?
     url: https://aws.amazon.com/what-is/foundation-models/
-lastVerified: 2026-11-03
+lastVerified: 2026-11-06
 ---
 
 # AI의 실제 사용 사례 (가치·부적합·기법 선택·응용·관리형 서비스·FM 대 기존 ML)
@@ -372,7 +372,7 @@ lastVerified: 2026-11-03
 
 ### 📌 출처
 
-1. When to Use Machine Learning — `docs.aws.amazon.com/machine-learning/latest/dg/when-to-use-machine-learning.html` (2026-11-03 확인)
+1. When to Use Machine Learning (⚠️ Amazon Machine Learning 구서비스 문서 — 신규 사용자 중단, 더 이상 갱신되지 않습니다) — `docs.aws.amazon.com/machine-learning/latest/dg/when-to-use-machine-learning.html` (2026-11-03 확인)
 2. MLCOST02-BP01 Identify if machine learning is the right solution — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html` (2026-11-03 확인)
 3. MLPERF06-BP02 Evaluate model explainability — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html` (2026-11-03 확인)
 4. Autopilot datasets and problem types (회귀·이진 분류·다중 클래스 분류 정의) — `docs.aws.amazon.com/sagemaker/latest/dg/autopilot-datasets-problem-types.html` (2026-11-03 확인)

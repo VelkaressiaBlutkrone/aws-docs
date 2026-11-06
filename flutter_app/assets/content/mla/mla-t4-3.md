@@ -38,7 +38,7 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-06
 ---
 
 # AWS 리소스 보호 (실행 역할·조건 키 가드레일·네트워크 격리·CI/CD 보안·감사)
@@ -676,8 +676,8 @@ SageMaker는 `sagemaker:` 접두 조건 키로 **"리소스를 만들 때 요청
 8. Role Manager availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html
 9. Persona reference (Amazon SageMaker Role Manager, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-personas.html
 10. Actions, resources, and condition keys for Amazon SageMaker (Service Authorization Reference) — https://docs.aws.amazon.com/service-authorization/latest/reference/list_sagemaker.html
-11. Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html
-12. Build a Secure Enterprise Machine Learning Platform on AWS — Networking architecture (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html
+11. Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control (AWS 백서) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html
+12. Build a Secure Enterprise Machine Learning Platform on AWS — Networking architecture (AWS 백서) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html
 13. Protect Data at Rest Using Encryption (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest.html
 14. Notebook instances, SageMaker AI jobs, and Endpoints (encryption at rest 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-at-rest-nbi.html
 15. Protecting Data in Transit with Encryption (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/encryption-in-transit.html
@@ -741,7 +741,7 @@ SageMaker는 `sagemaker:` 접두 조건 키로 **"리소스를 만들 때 요청
 73. Controlling access from VPC endpoints with bucket policies (Amazon S3 공식 문서) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.html
 74. Gateway endpoints for Amazon S3 (Amazon VPC PrivateLink 공식 문서) — https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html
 75. Infrastructure security in Amazon VPC (공식 문서) — https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
-76. Building Data Lakes on AWS — Catalog and search (AWS 백서) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/data-cataloging.html
+76. Building Data Lakes on AWS — Catalog and search (AWS 백서) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/data-cataloging.html
 77. Invoke endpoints with OpenAI-compatible APIs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-openai-compatible.html
 78. What is Amazon SageMaker AI? (개명 안내, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
 79. Clarify availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html

@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-06
 ---
 
 # 데이터 변환 및 처리 (엔진 선택·비용·형식)
@@ -274,7 +274,7 @@ CTAS·INSERT INTO는 **쿼리당 100 파티션 한도**가 있습니다. 먼저 
 12. Planning and configuring instance fleets (Amazon EMR) — https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-instance-fleet.html
 13. Introducing Amazon EMR Managed Scaling — https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-managed-scaling-automatically-resize-clusters-to-lower-cost/
 14. Pre-initialized capacity in EMR Serverless — https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/pre-init-capacity.html
-15. Cost optimization in analytics services (Cost Modeling Data Lakes) — https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html
+15. Cost optimization in analytics services (Cost Modeling Data Lakes) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html
 16. Amazon Athena (Big Data Analytics Options on AWS) — https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-athena.html
 17. Use CTAS and INSERT INTO for ETL and data analysis (Athena) — https://docs.aws.amazon.com/athena/latest/ug/ctas-insert-into-etl.html
 18. Use CTAS and INSERT INTO to work around the 100 partition limit — https://docs.aws.amazon.com/athena/latest/ug/ctas-insert-into.html
