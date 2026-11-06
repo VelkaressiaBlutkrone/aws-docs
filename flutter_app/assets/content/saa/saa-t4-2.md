@@ -478,7 +478,7 @@ ELB 요금은 **시간당 기본 요금 + 용량 단위**로 구성됩니다. �
 
 <details><summary>정답 보기</summary>
 
-**Compute Savings Plans (3년, All Upfront)**입니다. 인스턴스 패밀리·리전·OS를 자유롭게 변경할 수 있으면서 최대 66%의 할인을 제공합니다. Standard RI는 인스턴스 유형 변경이 제한되어 유연성이 낮습니다. AWS 공식 문서도 Reserved Instances보다 Savings Plans를 먼저 고려하도록 권장합니다.
+**Compute Savings Plans (3년, All Upfront)**입니다. 인스턴스 패밀리·리전·OS를 자유롭게 변경할 수 있으면서 최대 66%의 할인을 제공합니다. Standard RI는 인스턴스 유형 변경이 제한되어 유연성이 낮습니다. 공식 비교 페이지는 어느 쪽을 먼저 고르라고 말하지 않습니다. 패밀리·리전·서비스를 바꿀 유연성이 요건이면 Savings Plans, 특정 AZ의 용량 확보가 요건이면 Zonal RI 또는 ODCR입니다.
 </details>
 
 **Q2.** 야간에만 실행되는 데이터 분석 배치 작업이 있습니다. 중간에 중단되더라도 재시작이 가능하도록 설계되어 있습니다. 비용을 최소화하려면 어떤 구매 옵션을 사용해야 합니까?

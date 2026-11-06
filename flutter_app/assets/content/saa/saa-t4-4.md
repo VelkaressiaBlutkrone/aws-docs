@@ -141,7 +141,7 @@ NAT Gateway는 특정 AZ에 생성됩니다. 다른 AZ의 인스턴스가 이 NA
 | **Gateway Endpoint** | S3, DynamoDB만 | **무료** | 프라이빗 서브넷 → S3/DynamoDB, NAT 우회 |
 | **Interface Endpoint (PrivateLink)** | 다수의 AWS 서비스 | $0.01/GB + **엔드포인트·AZ별 시간 요금** | 그 외 AWS 서비스, SaaS, 교차 계정 서비스 |
 
-Interface Endpoint의 시간 요금은 **엔드포인트가 프로비저닝된 AZ마다** 부과되며(서비스 연결 상태와 무관하게 과금되므로 쓰지 않는 엔드포인트는 삭제해야 합니다), 데이터 처리 요금은 리전 내 월 누적 사용량에 따라 단계적으로 인하됩니다(첫 1 PB $0.01/GB → 다음 4 PB $0.006/GB → 5 PB 초과 $0.004/GB). 인터페이스 엔드포인트를 통한 **교차 AZ 데이터 전송은 과금되지 않습니다.** 단, Gateway Endpoint로 커버 가능한 S3·DynamoDB는 Interface Endpoint를 쓸 이유가 없습니다.
+Interface Endpoint의 시간 요금은 **엔드포인트가 프로비저닝된 AZ마다** 부과되며(서비스 연결 상태와 무관하게 과금되므로 쓰지 않는 엔드포인트는 삭제해야 합니다), 데이터 처리 요금은 리전 내 월 누적 사용량에 따라 단계적으로 인하됩니다(첫 1 PB $0.01/GB → 다음 4 PB $0.006/GB → 5 PB 초과 $0.004/GB). 인터페이스 엔드포인트를 통한 **교차 AZ 데이터 전송은 과금되지 않습니다.** 단, 같은 리전의 VPC 안에서 S3·DynamoDB에 닿는 것뿐이라면 무료인 Gateway Endpoint가 유리합니다. 온프레미스나 다른 리전에서 접근해야 하면 Gateway Endpoint로는 닿지 않아 Interface Endpoint가 필요합니다.
 
 > 🧠 원리: 왜 Gateway Endpoint와 Interface Endpoint는 지원 서비스 범위가 다를까요?
 > Gateway Endpoint는 VPC 라우팅 테이블에 경로를 추가해 트래픽을 AWS 내부 경로로 분기하는 방식으로 동작합니다. 이 구조는 S3·DynamoDB처럼 리전 단위로 단일 엔드포인트를 제공하는 서비스에만 적용할 수 있습니다.
