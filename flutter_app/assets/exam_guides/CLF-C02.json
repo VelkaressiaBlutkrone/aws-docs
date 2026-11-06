@@ -45,7 +45,7 @@
           ],
           "skills": [
             "AWS Cloud Adoption Framework(AWS CAF)의 구성 요소 이해(예: 비즈니스 위험 감소, 환경, 사회 및 거버넌스(ESG) 성과 개선, 수익 증대, 운영 효율성 향상)",
-            "적절한 마이그레이션 전략 파악(예: 데이터베이스 복제, AWS Snowball 사용)"
+            "적절한 마이그레이션 전략 파악(예: 데이터베이스 복제)"
           ]
         },
         {
@@ -98,7 +98,7 @@
             "지리적 위치 또는 산업별 규정 준수 요구 사항(예: AWS 규정 준수) 이해",
             "고객이 AWS에서 리소스를 보호하는 방법 설명(예: Amazon Inspector, AWS Security Hub, Amazon GuardDuty, AWS Shield)",
             "암호화 옵션 파악(예: 전송 중 암호화, 저장 시 암호화)",
-            "거버넌스 및 규정 준수를 지원하는 서비스 이해(예: Amazon CloudWatch를 통한 모니터링, AWS CloudTrail, AWS Audit Manager 및 AWS Config를 통한 감사, 액세스 보고서를 통한 보고)",
+            "거버넌스 및 규정 준수를 지원하는 서비스 이해(예: Amazon CloudWatch를 통한 모니터링, AWS CloudTrail, AWS Config를 통한 감사, 액세스 보고서를 통한 보고)",
             "다양한 AWS 서비스별 규정 준수 요구 사항 이해"
           ]
         },
@@ -109,7 +109,7 @@
             "ID 및 액세스 관리(예: AWS Identity and Access Management(AWS IAM))",
             "AWS 루트 사용자 계정 보호의 중요성",
             "최소 권한의 원칙",
-            "AWS IAM Identity Center(AWS Single Sign-On)"
+            "AWS IAM Identity Center"
           ],
           "skills": [
             "액세스 키, 암호 정책 및 자격 증명 스토리지 이해(예: AWS Secrets Manager, AWS Systems Manager)",
@@ -237,7 +237,7 @@
             "AWS 분석 서비스"
           ],
           "skills": [
-            "AI/ML 서비스와 해당 서비스가 수행하는 작업 이해(예: Amazon SageMaker, Amazon Lex, Amazon Kendra)",
+            "AI/ML 서비스와 해당 서비스가 수행하는 작업 이해(예: Amazon SageMaker AI, Amazon Lex)",
             "데이터 분석을 위한 서비스 파악(예: Amazon Athena, Amazon Kinesis, AWS Glue, Amazon QuickSight)"
           ]
         },
@@ -250,7 +250,7 @@
             "고객 지원 서비스(예: AWS Support)",
             "개발자 도구 서비스 및 기능(예: AWS CodeBuild, AWS CodePipeline 및 AWS X-Ray)",
             "Amazon AppStream 2.0, Amazon WorkSpaces 및 Amazon WorkSpaces Secure Browser의 최종 사용자 컴퓨팅 서비스",
-            "AWS Amplify와 AWS AppSync의 프런트엔드 웹 및 모바일 서비스",
+            "AWS Amplify의 프런트엔드 웹 및 모바일 서비스",
             "IoT 서비스(예: AWS IoT Core)"
           ],
           "skills": [
@@ -313,7 +313,7 @@
           "skills": [
             "공식 AWS 웹 사이트에서 AWS 백서, 블로그 및 문서 찾기",
             "AWS 기술 리소스 파악 및 찾기(예: AWS 권장 가이드, AWS Knowledge Center, AWS re:Post)",
-            "AWS 고객을 위한 AWS 지원 옵션 파악(예: 고객 서비스 및 커뮤니티, AWS Developer Support, AWS Business Support, AWS Enterprise On-Ramp Support, AWS Enterprise Support)",
+            "AWS 고객을 위한 AWS 지원 옵션 파악(예: 고객 서비스 및 커뮤니티, 기본 지원, AWS Business Support+, AWS Enterprise Support, AWS Unified Operations)",
             "비용 최적화를 위한 환경을 관리하고 모니터링하는 데 도움이 되는 AWS Trusted Advisor, AWS Health Dashboard 및 AWS Health API의 역할 파악",
             "AWS 리소스 부정 사용을 신고하는 AWS Trust & Safety 팀의 역할 파악",
             "AWS 파트너의 역할 이해(예: AWS Marketplace, Independent Software Vendor(ISV), 시스템 통합 사업자)",

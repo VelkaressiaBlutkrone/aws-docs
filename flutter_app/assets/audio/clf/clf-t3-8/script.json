@@ -2,10 +2,10 @@
   "schemaVersion": 2,
   "docId": "clf-t3-8",
   "sourceAsset": "assets/content/clf/t3-8.md",
-  "sourceHash": "8f26bb13153c0a6d76ff3f256146e87c7d0e990eb0ec7d9d62cedf4a9fcd330a",
+  "sourceHash": "b23907d36617e385394d7dbf858b3d2e8f745d23aa6597f51dcf1fd123411bc7",
   "lexiconVersion": "99e4378737f2",
   "generatedAt": "2026-06-25T10:16:29Z",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "segments": [
     {
       "id": "seg000",
@@ -387,9 +387,9 @@
     {
       "id": "seg034",
       "kind": "table",
-      "sourceExcerpt": "| 묶음 | 대표 서비스(예) |\n|---|---|\n| **비즈니스 앱** | Amazon Connect(콜센터), Amazon SES(이메일 발송) |\n| **개발자 도구** | CloudShell(브라우저 셸), Cloud9(IDE), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적) |\n| **프런트엔드·모바일** | AWS Amplify, AWS AppSync |\n| **고객 지원** | AWS Support, AWS IQ, AWS Managed Services(AMS) |",
+      "sourceExcerpt": "| 묶음 | 대표 서비스(예) |\n|---|---|\n| **비즈니스 앱** | Amazon Connect(콜센터), Amazon SES(이메일 발송) |\n| **개발자 도구** | AWS CLI, CodeBuild, CodePipeline, X-Ray(분산 추적) |\n| **프런트엔드·모바일** | AWS Amplify |\n| **고객 지원(Customer Enablement)** | AWS Support |",
       "scriptText": "",
-      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구는 CloudShell(브라우저 셸), Cloud9(아이디이), CodeCommit/Build/Deploy/Pipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify, 에이더블유에스 AppSync입니다. 고객 지원(Customer Enablement)은 에이더블유에스 Support, 에이더블유에스 아이큐, 에이더블유에스 Managed Services(에이엠에스), 그리고 에이더블유에스 Activate입니다.",
+      "audioSummary": "비즈니스 앱은 Amazon Connect(콜센터), Amazon 에스이에스(이메일 발송)입니다. 개발자 도구는 에이더블유에스 씨엘아이, CodeBuild, CodePipeline, X-Ray(분산 추적)입니다. 프런트엔드·모바일은 에이더블유에스 Amplify입니다. 고객 지원(Customer Enablement)은 에이더블유에스 Support입니다. 이 표에는 공식 범위 내 목록에 있는 이름만 남겼습니다.",
       "skip": false,
       "issues": []
     },
