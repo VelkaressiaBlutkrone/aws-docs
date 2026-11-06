@@ -457,31 +457,27 @@
     {
       "id": "clf-t3-7-q19",
       "examGuideTaskId": "clf-t3-7",
-      "skill": "응용 AI 서비스 식별 (추천·개인화)",
-      "section": "applied-ai-services",
-      "difficulty": "applied",
-      "stem": "한 전자상거래 앱이 사용자 클릭과 구매 이력 같은 item interaction 데이터를 바탕으로 '추천 상품', '함께 본 상품', 사용자 세그먼트 같은 개인화 추천을 빠르게 제공하려 한다. 직접 ML 모델을 설계·훈련하기보다 관리형 추천 서비스를 쓰려면 무엇이 가장 적합한가?",
+      "skill": "분석 서비스 식별 (OpenSearch Service — 로그·검색 분석)",
+      "section": "analytics",
+      "difficulty": "foundational",
+      "stem": "한 팀이 애플리케이션 로그와 클릭스트림을 모아 검색하고 대시보드로 실시간 모니터링하려 한다. OpenSearch 클러스터를 직접 설치·운영·확장하지 않고 관리형으로 쓰려면 가장 적합한 AWS 서비스는?",
       "options": [
-        "Amazon Personalize",
-        "Amazon SageMaker AI",
-        "Amazon Lex",
-        "Amazon Forecast"
+        "Amazon OpenSearch Service",
+        "Amazon Athena",
+        "AWS Glue",
+        "Amazon Redshift"
       ],
       "correct": 0,
-      "explanation": "Amazon Personalize는 사용자의 아이템 상호작용 데이터를 바탕으로 개인화 추천과 사용자 세그먼트를 생성하는 완전관리형 ML 서비스입니다. 추천·개인화라는 특정 기능을 빠르게 붙이는 요구에는 Personalize가 SageMaker보다 직접적입니다. ⚠️ 다만 이 서비스는 공식 CLF-C02 「범위 외 AWS 서비스」 목록(기계 학습)에 있습니다 — 개념만 알아 두고, 이 Task의 시험 대비는 Lex·Polly·Comprehend 같은 범위 내 소재에 우선순위를 두세요.",
+      "explanation": "Amazon OpenSearch Service는 OpenSearch 클러스터를 AWS 클라우드에 배포·운영·확장하는 관리형 서비스이고, 실패한 노드를 자동으로 감지해 교체하므로 자체 운영 부담이 줄어듭니다. OpenSearch 자체는 로그 분석, 실시간 애플리케이션 모니터링, 클릭스트림 분석 같은 용례를 위한 오픈 소스 검색·분석 엔진입니다.",
       "wrongExplanations": {
-        "1": "SageMaker AI는 고객이 직접 ML 모델을 구축·훈련·배포하는 범용 플랫폼입니다. 추천 기능을 관리형 API로 빠르게 붙이는 요구에는 Personalize가 더 직접적입니다.",
-        "2": "Lex는 음성·텍스트 챗봇을 만드는 서비스입니다. 상품 추천·개인화 서비스가 아닙니다.",
-        "3": "Forecast는 시계열 예측 서비스이며 공식 문서상 신규 고객에게 더 이상 제공되지 않습니다. 이 시나리오의 관리형 추천 서비스는 Personalize입니다."
+        "1": "Amazon Athena는 S3에 있는 데이터를 표준 SQL로 바로 쿼리하는 서버리스 쿼리 서비스로, 검색 엔진 클러스터를 운영해 주는 서비스가 아닙니다.",
+        "2": "AWS Glue는 데이터를 추출·변환·적재(ETL)하고 데이터 카탈로그로 메타데이터를 관리하는 서비스입니다. 로그 검색·대시보드를 직접 제공하지는 않습니다.",
+        "3": "Amazon Redshift는 정형 데이터를 모아 복잡한 분석 쿼리를 돌리는 데이터 웨어하우스로, 로그 전문 검색·실시간 모니터링 용도와는 축이 다릅니다."
       },
       "sources": [
         {
-          "title": "What is Amazon Personalize? — 사용자 상호작용 데이터로 추천·개인화·사용자 세그먼트 생성",
-          "url": "https://docs.aws.amazon.com/personalize/latest/dg/what-is-personalize.html"
-        },
-        {
-          "title": "What Is Amazon Forecast? — 신규 고객에게 더 이상 제공되지 않음",
-          "url": "https://docs.aws.amazon.com/forecast/latest/dg/what-is-forecast.html"
+          "title": "What is Amazon OpenSearch Service? — OpenSearch 클러스터를 배포·운영·확장하는 관리형 서비스, 로그 분석·실시간 모니터링·클릭스트림 분석",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html"
         }
       ],
       "verified": true
