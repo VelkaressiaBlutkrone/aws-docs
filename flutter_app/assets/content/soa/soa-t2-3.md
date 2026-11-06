@@ -13,14 +13,14 @@ sources:
   - title: AWS Backup Vault Lock (공식)
     url: https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html
   - title: Amazon EBS 스냅샷 (증분) (공식)
-    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html
   - title: Amazon Data Lifecycle Manager (공식)
-    url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html
   - title: RDS 백업 작업 (자동 백업·PITR·스냅샷) (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
   - title: S3 버전 관리 (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
-lastVerified: 2026-06-12
+lastVerified: 2026-11-06
 ---
 
 # 백업·복원 전략 — AWS Backup·스냅샷·수명주기
@@ -269,7 +269,7 @@ S3 복제는 소스 버킷에서 발생하는 객체 변경을 대상 버킷에 
 
 1. AWS Backup이란? — https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html
 2. AWS Backup Vault Lock — https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html
-3. Amazon EBS 스냅샷(증분) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html
-4. Amazon Data Lifecycle Manager — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html
+3. Amazon EBS 스냅샷(증분) — https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html
+4. Amazon Data Lifecycle Manager — https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html
 5. RDS 백업 작업(자동 백업·PITR·스냅샷) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
 6. S3 버전 관리 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html

@@ -45,7 +45,7 @@ sources:
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
   - title: ALB 대상 그룹 속성 — 교차 영역 끄기·고정 세션 (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html
-lastVerified: 2026-10-28
+lastVerified: 2026-11-06
 ---
 
 # ELB + Auto Scaling — 탄력적 확장 설계
@@ -442,7 +442,7 @@ CodeDeploy는 카나리·블루/그린 배포 구성을, Elastic Beanstalk은 �
 5. **"교차 영역 부하 분산은 항상 활성화가 좋다."** → NLB에서 교차 영역 부하 분산을 활성화하면 AZ 간 데이터 전송 요금이 발생할 수 있습니다. 비용 민감 설계에서는 AZ별 대상 수를 균등하게 배치해 비활성화 상태를 유지하는 편이 나을 수 있습니다.
    (원리: §4 — NLB는 TCP 연결을 종단 간 유지해 AZ 교차 트래픽이 실제 전송 비용으로 직결되므로, 균등 배치로 교차 없이도 균형을 맞추는 설계가 비용 효율적이다.)
 
-6. **"ASG 헬스 체크는 EC2 상태만 본다."** → 기본은 EC2 상태 체크이지만, ELB 헬스 체크를 추가로 활성화하면 애플리케이션 레벨 응답까지 확인합니다. ELB 헬스 체크를 활성화해야 애플리케이션이 다운된 인스턴스를 ASG가 교체합니다.
+6. **"ASG 헬스 체크는 EC2 상태만 본다."** → 기본은 EC2 상태 체크이지만, ELB 헬스 체크를 추가로 활성화하면 애플리케이션 레벨 응답까지 확인합니다. 애플리케이션이 다운된 인스턴스를 ASG가 교체하게 하려면 ELB 헬스 체크를 활성화하는 것이 표준이고, ELB를 붙일 수 없는 구성에서는 **사용자 정의 상태 확인**(`SetInstanceHealth`)으로 같은 신호를 전달합니다.
    (원리: §6 — EC2 상태 체크는 하이퍼바이저 레벨 확인이라 앱 프로세스 크래시는 감지 못하므로, ELB 헬스 체크 결합이 애플리케이션 수준 자가 복구를 완성한다.)
 
 7. **"수명 주기 훅 없이도 인스턴스가 완전히 초기화된다."** → 훅 없이 시작하면 ASG가 인스턴스를 InService로 전환해 ELB가 트래픽을 바로 보냅니다. 초기화에 시간이 필요한 애플리케이션(소프트웨어 설치, DB 마이그레이션)은 시작 훅으로 초기화 완료 전까지 트래픽 수신을 막아야 합니다.

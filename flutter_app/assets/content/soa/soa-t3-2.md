@@ -19,8 +19,8 @@ sources:
   - title: AWS Systems Manager Patch Manager (공식)
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager.html
   - title: 패치 그룹 (Patch Groups) (공식)
-    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-patchgroups.html
-lastVerified: 2026-06-12
+    url: https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-groups.html
+lastVerified: 2026-11-06
 ---
 
 # AMI·리소스 배포·유지 관리·패치 전략
@@ -263,4 +263,4 @@ AMI를 **등록 해제(deregister)해도 연결된 EBS 스냅샷은 자동 삭�
 3. AMI 공유 및 리전 간 복사 — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html
 4. EC2 Image Builder란 무엇인가 — https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html
 5. Systems Manager Patch Manager — https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager.html
-6. 패치 그룹 — https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-patchgroups.html
+6. 패치 그룹 — https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-groups.html
