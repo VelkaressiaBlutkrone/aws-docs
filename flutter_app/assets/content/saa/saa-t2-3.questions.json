@@ -241,7 +241,8 @@
         "3": "원하는 용량을 늘리는 것은 예비 용량 확보이지, 개별 인스턴스의 초기화 완료 전 트래픽 수신 문제를 해결하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
+        { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" },
+        { "title": "Amazon EC2 Auto Scaling 수명 주기 훅 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html" }
       ],
       "verified": true
     },
@@ -265,7 +266,8 @@
         "3": "CloudWatch Alarm은 지표 임계값에 반응해 알림·작업을 트리거하지만, 인스턴스 종료 직전 순간에 자동으로 Lambda를 호출해 정리 작업을 보장하는 구조가 아닙니다. 수명 주기 훅이 이 역할을 합니다."
       },
       "sources": [
-        { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" }
+        { "title": "Amazon EC2 Auto Scaling — 개요 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html" },
+        { "title": "Amazon EC2 Auto Scaling 수명 주기 훅 — 기본 1시간·전역 48시간 (공식)", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html" }
       ],
       "verified": true
     },

@@ -13,7 +13,7 @@ sources:
   - title: Aurora serverless (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
   - title: DynamoDB 읽기/쓰기 용량 모드 (공식)
-    url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
+    url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html
   - title: AWS 데이터베이스 서비스 개요 (공식 화이트페이퍼)
     url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
   - title: AWS DMS 요금(복제 인스턴스·로그 스토리지·SCT 무료) (공식)
@@ -24,7 +24,7 @@ sources:
     url: https://aws.amazon.com/redshift/pricing/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-28
+lastVerified: 2026-11-06
 ---
 
 # 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션
@@ -474,7 +474,7 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07 · 고도화 검수: 2026-06-12)
 
 1. Aurora serverless — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html
-2. DynamoDB 읽기/쓰기 용량 모드 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
+2. DynamoDB 읽기/쓰기 용량 모드 — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html
 3. AWS 데이터베이스 서비스 개요 — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html
 4. RDS 예약 DB 인스턴스(사이즈 유연성 대상 엔진·Multi-AZ 적용·스토리지 미할인) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html
 5. Savings Plans 유형(Database Savings Plans) — https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html
@@ -498,7 +498,7 @@ RDS RI는 인스턴스 클래스·엔진·리전·Multi-AZ 여부의 특정 조�
 23. RDS 백업 무료 범위(계정·리전 전체의 프로비저닝 DB 스토리지 합계 · 증분 백업) — https://aws.amazon.com/rds/faqs/
 24. DynamoDB 요금(예약 용량 1년 최대 54%·3년 최대 77% · Standard-IA 저장 비용 60% 절감) — https://aws.amazon.com/dynamodb/pricing/
 25. DynamoDB 백업·복원 과금(PITR·온디맨드 백업·복원) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/backup-restore-billing.html
-26. DynamoDB 용량 모드(**평균 활용률 35% 미만이면 온디맨드가 저렴**) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html
+26. DynamoDB 용량 모드(**평균 활용률 35% 미만이면 온디맨드가 저렴**) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html
 
 > 📝 **2026-10-24 보강 — 갭 배치 B10a-2(`G-4.3-06`·`07`·`08`·`10`)**: 기존 절 4곳을 깊게 했습니다. ① **§3 읽기 복제본** — 복제본은 **표준 인스턴스와 같은 요율의 별도 인스턴스**라 "주 인스턴스 다운사이즈 절감 > 복제본 요금"이어야 이득이고, **교차 리전 복제본**은 전송이 더 붙으며 MySQL·MariaDB의 **연쇄** 구성으로 전송을 줄일 수 있습니다. ⚠️ Multi-AZ 대기는 읽기를 처리하지 않아 수단이 갈립니다(근거 22번). ② **§3 Aurora 스토리지 구성** — **I/O 지출 25%** 기준과 **최대 40% 절감**, ⚠️ 전환은 **방향마다 제약이 다릅니다**(I/O-Optimized → Standard는 언제든 / Standard → I/O-Optimized는 **30일에 한 번**)(근거 21번). ③ **§4** — 모드 선택의 **정량 기준(평균 활용률 35%)**으로 "기본 권장은 온디맨드"라는 과잉 일반화를 대체하고(근거 27번), **예약 용량·Standard-IA·TTL로 만료·Database SP** 절감 표와 **Redshift Serverless(최소 60초)·ElastiCache Serverless**를 더했습니다(근거 25번). ④ **§5** — 백업이 **증분**이라는 점, **Aurora는 클러스터 총 스토리지의 100%까지 무료**이고 보존 기간 밖 수동 스냅샷·**복사본은 항상 과금**, **DynamoDB PITR·온디맨드 백업·복원**, **AWS Backup** 일원화를 넣었습니다(근거 23·24·26번). ⑤ ⚠️ **작업 중 자기 정정 2건**: `최대 40% 절감`을 블로그 전용으로 보고 금지했다가 **요금 페이지 본문에서 확인**해 금지를 걷고 요구로 바꿨고, I/O-Optimized **전환 방향을 반대로 적었다가** 바로잡았습니다. 가드는 `test/saa_gaps_b10a2_test.dart`.
 

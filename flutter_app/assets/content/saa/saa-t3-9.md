@@ -563,7 +563,7 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 24. Glue 작업 북마크로 처리분 추적(`job.init`/`job.commit`·transformation context·S3 타임스탬프 필터·실행·시도·버전 번호) — https://docs.aws.amazon.com/glue/latest/dg/monitor-continuations.html (갭 배치 B8c: 2026-10-21)
 25. DataSync 태스크 대역폭 제한(`Set bandwidth limit (MiB/s)`·실행 중·대기 중 수정 가능·60초 내 적용·`UpdateTaskExecution`의 `BytesPerSecond`) — https://docs.aws.amazon.com/datasync/latest/userguide/configure-bandwidth.html (갭 배치 B8c: 2026-10-21)
 26. Kinesis Data Streams 인터페이스 VPC 엔드포인트(엔드포인트 정책 예시 3종·IAM 정책과 함께 써야 경로 한정) — https://docs.aws.amazon.com/streams/latest/dev/vpc.html (갭 배치 B8c: 2026-10-21)
-27. 데이터 레이크 제자리 쿼리 — Redshift Spectrum(엑사바이트·CSV/TSV/Parquet/Sequence/RCFile·**Athena와 카탈로그·형식 공유**·역할 분담) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/in-place-querying.html (갭 배치 B8c: 2026-10-21)
+27. 데이터 레이크 제자리 쿼리 — Redshift Spectrum(엑사바이트·CSV/TSV/Parquet/Sequence/RCFile·**Athena와 카탈로그·형식 공유**·역할 분담) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/in-place-querying.html (갭 배치 B8c: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 28. OpenSearch Service 로그 분석 워크로드(전문 검색·Dashboards·알림 플러그인·수집 경로) — https://docs.aws.amazon.com/wellarchitected/latest/amazon-opensearch-service-lens/log-analytics-workloads.html (갭 배치 B8c: 2026-10-21)
 29. CloudWatch 로그 분석에서 OpenSearch 로 넘어가는 사유(필드 수준 접근 제어·다계정·다리전 집계·ES 에이전트·기존 ELK) — https://docs.aws.amazon.com/prescriptive-guidance/latest/implementing-logging-monitoring-cloudwatch/cloudwatch-search-analysis.html (갭 배치 B8c: 2026-10-21)
 

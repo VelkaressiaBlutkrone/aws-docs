@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
   - title: Amazon ECS — 소개 (공식)
     url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
-  - title: AWS Fargate — 소개 (공식)
+  - title: AWS Fargate — Architect for AWS Fargate for Amazon ECS (공식)
     url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
@@ -36,7 +36,7 @@ sources:
     url: https://aws.amazon.com/about-aws/whats-new/2025/10/aws-lambda-payload-size-256-kb-1-mb-invocations/
   - title: Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성 (공식)
     url: https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
-lastVerified: 2026-10-28
+lastVerified: 2026-11-06
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -427,7 +427,7 @@ ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없�
 1. AWS Lambda — 소개 — https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
 2. Amazon API Gateway — 소개 — https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
 3. Amazon ECS — 소개 — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
-4. AWS Fargate — 소개 — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
+4. AWS Fargate — Architect for AWS Fargate for Amazon ECS — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
 5. Lambda 쿼터(함수 타임아웃 900초, Managed Instances 비동기·이벤트 소스 매핑 5,400초, Durable functions 절) — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
 6. PutFunctionEventInvokeConfig(이벤트 큐 최대 6시간·MaximumRetryAttempts 0~2·S3는 on-failure 전용) — https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html

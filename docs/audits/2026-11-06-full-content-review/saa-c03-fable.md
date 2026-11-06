@@ -87,6 +87,15 @@
 
 ### 2-2. [P2 · 출처 적합성] 소개 페이지가 수치를 담지 않는 문항 3건 (1차 P3-9 표본 실측에서 확정)
 
+> ⚠️ **컨트롤러 정정(2026-11-06 반영 PR — HANDOFF §0-2026-11-06-n).** 첫 행이 **`saa-t2-3-q10`·`q11`
+> 둘이 1시간·48시간을 단정한다**고 적었으나 **수치를 단정하는 것은 `q11` 하나**다(`q10` 본문에
+> 숫자가 없다 — 과대). `q10` 의 출처도 `lifecycle-hooks.html` 로 바꿨지만 그것은 **수치 때문이
+> 아니라** 소개 페이지가 그 문항의 기제(`Pending:Wait` · `CONTINUE`)를 적지 않기 때문이다.
+> 가드에 **「`q10` 이 수치를 단정하지 않는다」**를 단정으로 남겨, 나중에 수치가 들어오면 알린다.
+> ⭐ **`lifecycle-hooks.html` 한 페이지가 `one hour by default` · `48 hours` · `100 times` 를 모두
+> 담는다**(실측) — 두 수치를 위해 두 출처를 달 필요가 없었다. 나머지 두 행은 확정이고,
+> `saa-t3-9-q4` 는 Firehose 소개가 그 문항의 다른 주장을 담으므로 **교체가 아니라 추가**했다.
+
 | 문항 | 단정 수치 | 인용 페이지(실측) | 페이지에 있는가 | 정본 후보 |
 |---|---|---|---|---|
 | `saa-t2-3-q10`·`q11` | 수명 주기 훅 기본 **1시간·최대 48시간** | `autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html`(7,652자) | **없음** — 「Lifecycle hooks」 항목은 기능 소개 한 문단뿐, 수치 0건 | `autoscaling/ec2/userguide/lifecycle-hooks.html` — *「default timeout … one hour (heartbeat timeout) … global timeout is 48 hours or 100 times the heartbeat timeout, whichever is smaller」* (전문 확인). ⚠️ **수치 자체는 맞다.** md `saa-t2-3.md:266-267` 은 이미 이 정본을 근거 14번으로 인용 |

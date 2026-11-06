@@ -100,6 +100,16 @@ void main() {
     'https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-checks-custom.html',
     // Bedrock 모델 평가. 정본은 `evaluation.html`(2026-11-06 AIF 배치에서 실측).
     'https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html',
+    // ── 2026-11-06 2단 검토 §3-1(SAA): 이름 변경 3종 ────────────────────────
+    // ⚠️ 셋 다 **도착지가 인덱스가 아니라 특정 페이지**다(대조군 `…_zz-bogus.html`
+    // 은 인덱스로 간다) — 그래서 「소멸」이 아니라 「이름 변경」이다.
+    'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html',
+    'https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html',
+    // ⚠️⚠️ **이 건은 `saa_gaps_b11_test.dart` 가 정본을 금지하고 있었다** —
+    // 2026-10-30 판정(「`declarative_policies` 는 죽은 슬러그」)이 재실측에서
+    // 뒤집혀 가드를 먼저 고쳐야 했다. 가드는 판정을 굳히므로 판정이 틀리면
+    // 가드도 틀린다(2026-11-06 AIF 배치의 교훈이 재현된 자리).
+    'https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
@@ -136,6 +146,17 @@ void main() {
     ],
     'soa/soa-t3-2.md': [
       'https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-groups.html',
+    ],
+    // ── 2026-11-06 §3-1(SAA) 교체 정본 ──────────────────────────────────
+    'saa/saa-t4-3.md': [
+      'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html',
+    ],
+    'saa/saa-t4-3.questions.json': [
+      'https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html',
+    ],
+    'saa/saa-t1-1.md': [
+      'https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html#id_roles_terms-and-concepts',
+      'https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html',
     ],
     'soa/soa-t2-1.questions.json': [
       'https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html',

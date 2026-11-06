@@ -36,7 +36,7 @@ sources:
     url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes.html
   - title: Amazon AppFlow — 목적별 통합 서비스 (공식 백서)
     url: https://docs.aws.amazon.com/whitepapers/latest/patterns-for-ingesting-saas-data-into-aws-data-lakes/purpose-built-integration-service.html
-lastVerified: 2026-10-21
+lastVerified: 2026-11-06
 ---
 
 # 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions
@@ -411,7 +411,7 @@ Task 2.1은 "확장 가능하고 느슨하게 결합된 아키텍처"입니다. 
 11. Application integration 개요 — Amazon MQ(ActiveMQ Classic·RabbitMQ·JMS·NMS·AMQP·STOMP·MQTT·WebSocket) — https://docs.aws.amazon.com/whitepapers/latest/aws-overview/application-integration.html
 12. Amazon MQ 마이그레이션 가이드(IBM MQ·TIBCO EMS 이전·RabbitMQ 교차 리전 복제) — https://docs.aws.amazon.com/amazon-mq/latest/migration-guide/concept-chapter-about.html
 13. Amazon EventBridge Pipes(단일 소스→단일 타깃·필터 과금·보강 동기 호출·응답 6 MB·Express만) — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes.html
-14. Amazon AppFlow — 목적별 통합 서비스(SaaS↔AWS·스케줄/이벤트/온디맨드·변환·전송 중 암호화·PrivateLink) — https://docs.aws.amazon.com/whitepapers/latest/patterns-for-ingesting-saas-data-into-aws-data-lakes/purpose-built-integration-service.html
+14. Amazon AppFlow — 목적별 통합 서비스(SaaS↔AWS·스케줄/이벤트/온디맨드·변환·전송 중 암호화·PrivateLink) — https://docs.aws.amazon.com/whitepapers/latest/patterns-for-ingesting-saas-data-into-aws-data-lakes/purpose-built-integration-service.html (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 
 > 📝 **2026-10-21 보강(갭 `G-2.1-02`·`G-2.1-03`·`G-2.1-05`·`G-2.1-09`, 배치 B5)**: ① §2에 **SQS 세부 사양**(메시지 **1 MiB**·지연 큐 900초·in-flight 약 120,000·`maxReceiveCount`·FIFO 고처리량의 **리전 의존** 상한)을 더했습니다(근거 8·9·10번). 기존 "300 TPS·배치 3,000"은 공식과 일치해 그대로 두고 그 위에 확장했습니다. ② **§8 신설** — 공식 in-scope Application Integration 6종 중 빠져 있던 **Amazon MQ·EventBridge Pipes·AppFlow**(근거 11·12·13·14번). ③ **§9 신설** — 확장·통합 수단 선택 지도. DB·읽기 복제본 수치는 복제하지 않고 `saa-t3-5`·`saa-t3-6`을 가리킵니다. 기존 §1~§7의 번호·앵커는 바꾸지 않았습니다.
 
