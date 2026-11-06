@@ -12,7 +12,9 @@
 - ⭐ **DVA식 함정이 없다.** DVA는 가이드가 공개됐지만 시험 적용이 2026-12-01부터였다. SCS-C03은 이미 약 1년 현행이다.
 - ⭐ **한국어 판이 은퇴 대상이 아니다** — 인증 페이지의 2026-12-31 은퇴 목록은 간체 중국어·스페인어(LatAm)·포르투갈어(BR)뿐이다.
 
-### G-02 ⚠️⚠️ 공식 범위 「내」 목록에 **상태가 닫힌 서비스 넷**이 있다
+### G-02 ⚠️⚠️ 공식 범위 「내」 목록에 **상태가 닫힌 서비스 다섯**이 있다
+
+> ⚠️ **2026-11-06 정정: 「넷」이 아니라 「다섯」이다.** AIF 2차 전수 검토에서 **`AWS CloudTrail Lake`가 2026-05-31부터 신규 고객에게 닫힌 것**이 확인됐고, 그 서비스는 **SCS 범위 내 「AWS 관리 및 거버넌스」 목록에 있다**(아래 표의 다섯째 줄). 즉 Phase 1의 표본은 4/4가 아니라 **5/5가 문제**였고, 나머지 66개 전수 확인(G-06)의 필요성이 더 커졌다. 경위는 AIF 99-gaps **G-68**이다.
 
 이것이 이 자격증 저작의 가장 큰 제약이다. AIF D-07과 같은 계열이지만 **방향이 다르다** — AIF는 *레포 JSON*이 범위 밖 서비스를 들었고, SCS는 **공식 가이드 자신이** 닫힌 서비스를 범위 내로 든다.
 
@@ -22,6 +24,7 @@
 | **`AWS Audit Manager`** | ⚠️ **신규 고객에게 닫혔다.** "AWS Audit Manager is **no longer open to new customers**. Existing customers can continue to use the service as normal." (AIF D-07에서 이미 확인 — 유지 관리 모드, 2026-04-30부터 신규 계정 설정 불가) |
 | **`Amazon Q Business`** | ⚠️ **신규 고객에게 닫혔다.** "Amazon Q Business is **no longer open to new customers**. For capabilities similar to Q Business, explore **Amazon Quick**." |
 | **`Amazon Q Developer`** | ⚠️ **부분 종료.** "On **April 30, 2027**, AWS will discontinue support for Amazon Q Developer **IDE plugins** … explore **Kiro**." 그리고 **콘솔 대화 경험은 이제 「AWS assistant」**다. ⚠️ 종료 대상은 **IDE 플러그인**이고 서비스 전체가 아니다 |
+| **`AWS CloudTrail Lake`** | ⚠️ **신규 고객에게 닫혔다 — 2026-05-31부터**(2026-11-06 추가). 기존 고객은 계속 쓰고 **추적·Insights·집계 이벤트는 영향 없다.** ⚠️ **같은 2026-04-30 유지 관리 전환 묶음에 `Amazon SNS – Message Data Protection(MDP)`도 있고, 그 기능은 공식 신규 `기술 5.3.4`가 예시로 드는 것**이다 — 가이드가 갓 추가한 목표가 유지 관리 기능을 인용한다 |
 
 ⚠️⚠️ **`CodeGuru Security`는 특히 심각하다** — 가이드가 **2026년 3월 26일에 게시**됐는데 그 서비스는 **2025년 11월 20일에 이미 종료**됐다. 즉 **공식 가이드가 게시 시점에 이미 존재하지 않는 서비스를 범위 내로 적고 있다.**
 ⚠️ **문서가 없으므로 사실을 실측할 방법이 없다.** 이 서비스에 기대는 학습문서·문항은 **만들 수 없다**(저작 결정 D-04).
