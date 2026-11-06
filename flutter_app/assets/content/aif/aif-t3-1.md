@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
   - title: Choosing a vector database for your generative AI applications (AWS 의사 결정 가이드)
     url: https://docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html
-  - title: Vector databases on AWS (Choosing a database for your generative AI applications)
+  - title: Choosing a database for your generative AI applications
     url: https://docs.aws.amazon.com/vector-databases/
   - title: GENOPS05-BP01 Learn when to customize models (Well-Architected Generative AI Lens)
     url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops05-bp01.html
@@ -189,7 +189,7 @@ lastVerified: 2026-11-03
 
 **비즈니스 가치 네 가지**도 공식이 절 제목으로 적습니다 — **비용 효율적 구현**(FM 재훈련의 연산·금전 비용이 높은 데 비해 RAG가 새 데이터를 넣는 더 저렴한 방법) · **최신 정보**(최신 연구·통계·뉴스, 심지어 라이브 소셜 미디어 피드까지 연결) · **향상된 사용자 신뢰**(**출처 귀속**과 함께 정보를 제시해 사용자가 원문을 직접 확인할 수 있습니다) · **개발자 통제력 확대**(정보 출처를 바꿀 수 있고, **민감 정보 검색을 권한 수준별로 제한**할 수 있고, LLM이 잘못된 출처를 참조하면 그 지점을 **고칠 수 있습니다**).
 
-**AWS에서의 구현 — Amazon Bedrock Knowledge Bases.** 공식은 이것을 **"수집부터 검색과 프롬프트 증강까지 RAG 워크플로 전체를 구현하는 완전 관리형 기능"**으로 적고, 데이터 소스 통합과 데이터 흐름 관리를 직접 만들지 않아도 된다고 설명합니다. **세션 컨텍스트 관리가 내장**돼 다중 턴 대화를 지원하고, 생성 응답에 **인용(citation)을 넣어** 원본 출처를 참조하고 정확성을 확인할 수 있습니다.
+**AWS에서의 구현 — Amazon Bedrock Knowledge Bases.** ⚠️ **이 문구의 귀속을 2026-11-06에 정정했습니다** — **"수집부터 검색과 프롬프트 증강까지 RAG 워크플로 전체를 구현하는 완전 관리형 기능"**은 **현행 지식 기반 페이지에 더 이상 없습니다**(두 방법으로 확인, 대조군 `Managed Knowledge Base` 5건). 현행 페이지가 적는 것은 **RAG 정의 한 문장**과 **두 유형**(관리형 / 고객 관리형)이고, 맨 앞 Important가 **"검색 정확도 최적화와 관리형 경험을 원하면 관리형 지식 기반을 권장한다"**고 적습니다. 즉 **"완전 관리형"으로 외우는 대신 「관리형이냐 고객 관리형이냐」로** 쥡니다 — 고객 관리형은 벡터 저장소를 포함한 RAG 파이프라인과 설정을 직접 운영하고, 서드파티 커넥터나 문서 수준 권한 같은 요구가 있을 때 고릅니다. **세션 컨텍스트 관리가 내장**돼 다중 턴 대화를 지원하고, 생성 응답에 **인용(citation)을 넣어** 원본 출처를 참조하고 정확성을 확인할 수 있습니다.
 
 지식 기반은 **두 유형**입니다.
 
@@ -395,7 +395,7 @@ v1.1이 이 목표에서 **서비스 예시를 전부 지웠습니다.** 그러�
 7. What is RAG (Retrieval-Augmented Generation)? — `aws.amazon.com/what-is/retrieval-augmented-generation/` (2026-11-03 확인)
 8. Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html` (2026-11-03 확인)
 9. Choosing a vector database for your generative AI applications (AWS 의사 결정 가이드) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html` (2026-11-03 확인)
-10. Vector databases on AWS (Aurora PostgreSQL · RDS for PostgreSQL · OpenSearch · Neptune Analytics) — `docs.aws.amazon.com/vector-databases/` (2026-11-03 확인)
+10. Choosing a database for your generative AI applications (Aurora PostgreSQL · RDS for PostgreSQL · OpenSearch · Neptune Analytics) — `docs.aws.amazon.com/vector-databases/` (2026-11-06 재확인) · ⚠️ **이 페이지의 실제 제목은 「Vector databases on AWS」가 아닙니다** — `h1`이 **`Choosing a database for your generative AI applications`**입니다(실측). ⚠️ 그리고 **그 페이지의 서비스 목록은 이 문서보다 넓습니다** — `Amazon MemoryDB`·`Amazon DocumentDB`·`Amazon DynamoDB`도 절 제목으로 싣습니다. 다만 **공식 목표 3.1.4의 예시 목록에 없으므로 문항 근거로는 쓰지 않습니다**
 11. GENOPS05-BP01 Learn when to customize models — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops05-bp01.html` (2026-11-03 확인)
 12. Customize your model to improve its performance for your use case — `docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html` (2026-11-03 확인)
 13. Customize a model with distillation in Amazon Bedrock — `docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html` (2026-11-03 확인)

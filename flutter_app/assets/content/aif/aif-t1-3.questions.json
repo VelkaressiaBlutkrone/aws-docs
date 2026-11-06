@@ -1,0 +1,445 @@
+{
+  "examGuideTaskId": "aif-t1-3",
+  "taskTitle": "ML 개발 수명 주기 설명",
+  "domain": 1,
+  "certCode": "AIF-C01",
+  "lastVerified": "2026-11-05",
+  "questions": [
+    {
+      "id": "aif-t1-3-q1",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.1",
+      "section": "pipeline",
+      "difficulty": "foundational",
+      "stem": "한 팀이 「구독 이탈을 줄인다」는 사업 목표를 확정한 뒤, 다음 작업으로 무엇을 관측하고 무엇을 예측할지를 레이블(대상 변수)로 정하고 최적화할 성능·오차 지표도 함께 결정했다. 공식 ML 수명 주기에서 이 작업이 속한 단계는 무엇인가?",
+      "options": [
+        "비즈니스 목표 식별",
+        "ML 문제 정의",
+        "데이터 처리",
+        "모델 개발"
+      ],
+      "correct": 1,
+      "explanation": "공식 머신러닝 렌즈는 ML 문제 정의 단계를 「비즈니스 문제를 머신러닝 문제로 구성하는 것 — 무엇이 관측되고 무엇이 예측되어야 하는가(레이블 또는 대상 변수로 알려진 것)」로 정의하고, 「무엇을 예측할지와 성능·오차 지표를 어떻게 최적화해야 하는지를 결정하는 것이 이 단계의 핵심」이라고 적는다. 즉 예측 대상과 지표는 같은 단계의 산출물이다.",
+      "wrongExplanations": {
+        "0": "비즈니스 목표 식별은 풀려는 문제와 그 사업적 가치를 분명히 하고, 특정 비즈니스 목표와 성공 기준에 대해 가치를 측정할 수 있게 만드는 단계다. 예측 대상과 지표를 고르는 일은 그 다음 단계로 넘어간다.",
+        "2": "데이터 처리는 데이터를 사용 가능한 형식으로 바꾸는 단계이고, 데이터 수집·데이터 준비와 함께 변수를 생성·변환·추출·선택하는 특성 엔지니어링이 여기에 속한다. 예측 대상 자체를 정하는 단계가 아니다.",
+        "3": "모델 개발은 모델 구축·훈련·튜닝·평가로 이루어진다. 무엇을 예측할지가 이미 정해진 뒤에 수행되므로 대상 변수와 지표를 처음 확정하는 단계가 아니다."
+      },
+      "sources": [
+        {
+          "title": "Well-Architected machine learning lifecycle — ML problem framing 단계의 산출물",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lifecycle.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q2",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.1",
+      "section": "pipeline",
+      "difficulty": "applied",
+      "stem": "프로덕션 모니터링에서 입력 데이터 분포가 훈련 때와 달라진 것이 드러나, 팀은 데이터 처리 단계로 돌아가 특성을 다시 만들려 한다. 한 팀원이 「수명 주기는 순차 공정이라 배포 뒤에는 앞 단계로 돌아갈 수 없다」며 반대한다. 공식 서술에 근거한 판단은 무엇인가?",
+      "options": [
+        "수명 주기의 단계들은 반드시 순차적이지 않고 피드백 루프를 가질 수 있으므로, 모니터링에서 앞 단계로 되돌아가는 것이 정상 동작이다",
+        "단계는 엄격히 순차적이므로 되돌아가려면 별도의 새 ML 프로젝트를 열어야 한다",
+        "되돌아갈 수 있는 경로는 모델 개발 단계 하나뿐이고 데이터 처리로는 돌아갈 수 없다",
+        "되돌아가려면 비즈니스 목표 식별부터 모든 단계를 처음부터 다시 수행해야 한다"
+      ],
+      "correct": 0,
+      "explanation": "공식 머신러닝 렌즈는 ML 수명 주기를 「순환적이고 반복적인 프로세스」로 소개하고, 「수명 주기의 단계들은 본질적으로 반드시 순차적이지 않으며, 수명 주기 단계들을 가로지르는 피드백 루프를 가질 수 있다」고 명시한다. 모니터링에서 발견한 변화가 데이터 처리나 모델 개발로 되돌아가는 것은 설계된 동작이다.",
+      "wrongExplanations": {
+        "1": "공식 문서는 단계가 순차적이지 않을 수 있다고 적으므로 「엄격히 순차적」이라는 전제가 틀렸다. 되돌아가기 위해 새 프로젝트를 열어야 한다는 절차도 공식 수명 주기에 없다.",
+        "2": "피드백 루프를 특정 단계 하나로 제한하는 서술은 공식에 없다. 공식 그림은 수명 주기 단계들을 가로지르는 여러 피드백 루프를 제시한다.",
+        "3": "피드백 루프의 목적은 필요한 단계로 되돌아가 고치는 것이다. 전 단계를 처음부터 반복해야 한다는 요구는 공식 서술에 없고, 반복적 수명 주기의 취지와도 어긋난다."
+      },
+      "sources": [
+        {
+          "title": "Well-Architected machine learning lifecycle — 단계는 순차적이지 않고 피드백 루프를 가질 수 있다",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lifecycle.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q3",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.1",
+      "section": "pipeline",
+      "difficulty": "applied",
+      "stem": "데이터 과학자가 「훈련 정확도 0.99를 같은 훈련 데이터로 측정했으니 모델 품질이 입증됐다」고 보고한다. 공식 서술에 근거해 평가 작업을 바로잡는 설명은 무엇인가?",
+      "options": [
+        "훈련 정확도가 충분히 높으면 일반화도 함께 보장되므로 추가 측정이 필요하지 않다",
+        "평가는 프로덕션 트래픽을 받은 뒤에만 가능하므로 배포 전에는 품질을 말할 수 없다",
+        "평가의 목적은 모델이 훈련 데이터셋을 넘어 일반화할 수 있는지 확인하는 것이므로, 훈련에 쓰지 않고 떼어 둔 별도의 검증 세트로 측정해야 한다",
+        "특성 엔지니어링을 모델 개발 단계로 옮기면 훈련 데이터로 측정해도 일반화를 확인할 수 있다"
+      ],
+      "correct": 2,
+      "explanation": "공식 설명은 평가 단계의 목표를 「모델이 훈련 데이터셋을 넘어 일반화할 수 있도록 보장하는 것」으로 적고, 「이 목적을 위해 검증 세트라는 별도의 데이터셋을 사용한다」고 명시한다. 훈련에 쓴 데이터로 측정한 수치는 일반화의 근거가 되지 못한다.",
+      "wrongExplanations": {
+        "0": "훈련 데이터에서의 높은 점수는 일반화를 보장하지 않는다. 공식이 검증 세트를 따로 두는 이유가 바로 훈련 데이터를 넘어선 성능을 확인하려는 것이다.",
+        "1": "모델 개발 단계는 구축·훈련·튜닝·평가로 이루어지고, 평가는 배포 전에 수행된다. 공식 수명 주기는 모델이 훈련·튜닝·평가·검증을 거친 뒤 프로덕션에 배포한다고 적는다.",
+        "3": "특성 엔지니어링은 데이터 처리 단계에 속하며, 그 위치를 바꾸는 것과 일반화 확인은 무관하다. 일반화는 훈련에 쓰지 않은 데이터로만 확인할 수 있다."
+      },
+      "sources": [
+        {
+          "title": "What is Machine Learning? — 평가는 검증 세트로 훈련 데이터를 넘어선 일반화를 확인한다",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        },
+        {
+          "title": "Well-Architected machine learning lifecycle — 모델 개발은 구축·훈련·튜닝·평가로 이루어진다",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lifecycle.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q4",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.2",
+      "section": "model-sources",
+      "difficulty": "applied",
+      "stem": "이미 널리 풀린 유형의 이미지 분류 문제를 다루는 팀이, 모델 가중치를 직접 받아 자사 데이터로 점진적으로 훈련·튜닝한 뒤 배포하려 한다. 처음부터 훈련할 예산과 인력은 없다. 공식 문서에 근거해 가장 적합한 모델 소스는 무엇인가?",
+      "options": [
+        "SageMaker JumpStart가 제공하는 사전 훈련된 오픈 소스 모델을 받아 배포 전에 점진적으로 훈련·튜닝한다",
+        "관리형 FM API만 호출해 예측을 받고 가중치는 받지 않는다",
+        "SageMaker AI 훈련 작업으로 모델을 처음부터 훈련한다",
+        "HyperPod 클러스터를 세워 오케스트레이션 계층까지 직접 관리하며 훈련한다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 「Amazon SageMaker JumpStart는 다양한 문제 유형에 대해 사전 훈련된 오픈 소스 모델을 제공한다」고 적고, 바로 이어 「배포 전에 이 모델들을 점진적으로 훈련하고 튜닝할 수 있다」고 명시한다. 가중치를 손에 쥐되 처음부터 만들지는 않는 상황에 정확히 맞는 소스다.",
+      "wrongExplanations": {
+        "1": "관리형 FM API는 사전 훈련 모델을 API 호출로 통합하는 경로이므로 가중치를 받아 점진적으로 훈련·튜닝하려는 요구와 맞지 않는다. 지문은 자사 데이터로 가중치를 손보는 것을 전제한다.",
+        "2": "처음부터 훈련하는 경로는 데이터와 위험 요인이 고유해 사용자 지정 모델이 필요할 때 고른다. 예산과 인력이 없다는 제약과 정면으로 어긋난다.",
+        "3": "HyperPod는 오케스트레이션 계층까지 접근하는 대규모 훈련·추론 인프라다. 이미 풀린 문제에 사전 훈련 모델을 재활용하려는 상황에는 과도한 선택이다."
+      },
+      "sources": [
+        {
+          "title": "SageMaker JumpStart pretrained models — 사전 훈련 오픈 소스 모델 제공과 배포 전 점진적 훈련·튜닝",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q5",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.2",
+      "section": "model-sources",
+      "difficulty": "foundational",
+      "stem": "팀이 SageMaker JumpStart에서 공개 모델을 내려받아 상용 제품에 쓰려 한다. 라이선스와 관련해 공식 문서가 적는 책임 소재는 무엇인가?",
+      "options": [
+        "AWS가 라이선스 조건을 사전에 검토해 승인한 모델만 카탈로그에 올리므로 사용자가 다시 검토할 필요가 없다",
+        "서드파티 콘텐츠를 내려받거나 사용하기 전에 적용되는 라이선스 조건을 검토하고 준수하며 그것이 자신의 사용 사례에 수용 가능한지 확인할 책임은 사용자에게 있다",
+        "오픈 소스 모델이므로 상용 제품에 쓰는 데 라이선스 제약이 없다",
+        "모델 상세 카드에 라이선스가 표시되어 있으면 그 표시만으로 준수 의무가 충족된다"
+      ],
+      "correct": 1,
+      "explanation": "JumpStart 문서는 「서드파티 콘텐츠를 다운로드하거나 사용하기 전에: 적용되는 라이선스 조건을 검토하고 준수하며, 그것이 귀하의 사용 사례에 수용 가능한지 확인할 책임은 귀하에게 있습니다」라고 중요 표시로 적는다. 라이선스 검토는 모델을 쓰는 쪽의 책임이다.",
+      "wrongExplanations": {
+        "0": "공식 문서는 사전 승인으로 사용자 책임을 면제한다고 적지 않는다. 반대로 내려받기 전에 사용자가 검토해야 한다고 명시한다.",
+        "2": "오픈 소스라는 사실은 조건이 없다는 뜻이 아니다. 라이선스마다 상용 사용·재배포·표시 의무가 다르므로 조건 검토가 필요하다.",
+        "3": "라이선스가 표시되어 있다는 것은 검토의 출발점일 뿐이다. 공식 문서가 요구하는 것은 조건을 검토하고 준수하며 사용 사례에 수용 가능한지 확인하는 일이다."
+      },
+      "sources": [
+        {
+          "title": "SageMaker JumpStart pretrained models — 서드파티 콘텐츠 라이선스 검토·준수는 사용자 책임",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q6",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.3",
+      "section": "production-use",
+      "difficulty": "foundational",
+      "stem": "ML 전문성이 제한적인 팀이 사전 훈련 모델을 API 호출로 자사 애플리케이션에 통합해 빠르게 출시하려 한다. 공식 결정 가이드가 적는 Amazon Bedrock의 성격으로 옳은 것은 무엇인가?",
+      "options": [
+        "전용 엔드포인트의 인스턴스 유형을 직접 고르고 노드 수준까지 자원을 제어해야 한다",
+        "사전 훈련 모델을 쓰는 경우에도 깊은 ML 전문성이 먼저 필요하다",
+        "모델을 호출하기 전에 반드시 자사 데이터로 훈련을 거쳐야 한다",
+        "서버리스여서 인프라를 관리하지 않아도 되고, 처리한 입력·출력 토큰 기준의 종량제로 과금된다"
+      ],
+      "correct": 3,
+      "explanation": "공식 결정 가이드는 「Amazon Bedrock은 서버리스이므로 인프라를 관리하지 않아도 된다」고 적고, 과금을 「처리한 입력·출력 토큰에 기반한 종량제 토큰당 요금」으로 적는다. 필요한 전문성도 「사전 훈련 모델을 쓰는 데 필요한 기본 수준의 ML 전문성」으로 적는다.",
+      "wrongExplanations": {
+        "0": "인스턴스 유형 선택과 노드 수준 자원 제어는 SageMaker AI의 훈련 작업·전용 엔드포인트·HyperPod 쪽 특성이다. 관리형 API는 그 계층을 사용자에게 노출하지 않는다.",
+        "1": "공식 비교 표는 Bedrock에 필요한 전문성을 기본 수준으로 적고, ML 전문성이나 리소스가 제한적인 경우에 특히 유용하다고 설명한다. 깊은 전문성이 전제라는 서술은 반대다.",
+        "2": "Bedrock은 사전 훈련 모델을 API 호출로 그대로 통합할 수 있다. 미세 조정·모델 증류·사용자 지정 모델 가져오기는 선택 사항이며 호출의 전제 조건이 아니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock or Amazon SageMaker AI? — 서버리스 호스팅과 토큰당 종량제 과금, 필요한 전문성 비교",
+          "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q7",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.3",
+      "section": "production-use",
+      "difficulty": "applied",
+      "stem": "대규모 생성형 AI 추론을 운영하는 팀이 GPU 사용률을 최대화하면서 비용·지연·처리량의 타협점을 직접 조절해야 하고, 그러려면 컨테이너 또는 오케스트레이션 계층에 접근해야 한다. 공식 결정 가이드의 권고는 무엇인가?",
+      "options": [
+        "관리형 API만 쓰고 추론 자원 설정은 서비스가 알아서 정하도록 맡긴다",
+        "두 서비스 중 하나만 골라야 하므로 관리형 API를 완전히 버리고 프로토타입부터 다시 만든다",
+        "Amazon SageMaker AI를 골라 전용 엔드포인트·훈련 작업·HyperPod로 비용·지연·처리량 타협점을 직접 관리한다",
+        "이런 수준의 제어는 어느 AWS 서비스로도 충족할 수 없으므로 온프레미스로 옮긴다"
+      ],
+      "correct": 2,
+      "explanation": "공식 결정 가이드는 「컨테이너 또는 오케스트레이션 계층에 접근해 비용·지연·처리량과 그 밖의 타협점을 직접 관리해야 할 때 SageMaker AI를 고르라」고 적고, GPU 사용률을 최대화하면서 비용 대비 처리량·지연을 저울질하는 대규모 LLM 배포를 바로 그 예로 든다.",
+      "wrongExplanations": {
+        "0": "관리형 API는 인프라를 추상화하는 것이 장점이지만, 그 때문에 비용·지연·처리량을 직접 조절할 여지도 줄어든다. 지문이 요구하는 제어와 맞지 않는다.",
+        "1": "공식은 두 서비스의 선택이 늘 배타적인 것은 아니라고 적고, 관리형 API에서 프로토타입을 만든 뒤 인프라 제어가 필요해지면 SageMaker AI 엔드포인트나 HyperPod로 옮기는 점진적 경로를 권한다. 또 SageMaker AI에서 훈련한 사용자 지정 모델은 Amazon Bedrock으로 가져와 서버리스 추론으로도 쓸 수 있다.",
+        "3": "SageMaker AI의 훈련 작업·전용 엔드포인트·HyperPod가 바로 이 요구를 위한 경로다. HyperPod는 훈련·추론을 위한 Kubernetes 또는 Slurm 오케스트레이션 계층 접근까지 제공한다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock or Amazon SageMaker AI? — 비용·지연·처리량 타협점을 직접 관리할 때의 선택",
+          "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q8",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.4",
+      "section": "aws-services",
+      "difficulty": "applied",
+      "stem": "Amazon S3 데이터 레이크의 데이터를 ML 훈련에 쓰기 전에, AWS Glue Data Catalog의 테이블에 대해 열·행·셀 수준의 세분화된 접근 권한을 한곳에서 정의하고 Athena·Amazon EMR 같은 분석 서비스에 일관되게 적용해야 한다. 이 일을 맡는 서비스는 무엇인가?",
+      "options": [
+        "AWS Lake Formation",
+        "Amazon EMR",
+        "Amazon Quick",
+        "Amazon Bedrock"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 「AWS Lake Formation으로 Amazon S3의 데이터 레이크 데이터와 AWS Glue Data Catalog의 메타데이터에 대한 세분화된 접근 제어를 관리할 수 있다」고 적고, 「데이터베이스·테이블·열·행·셀 수준에서 데이터 접근을 제한하는 보안 정책을 정의할 수 있다」고 명시한다. 이 권한은 Athena·Amazon EMR·Redshift Spectrum·AWS Glue 등에 걸쳐 적용된다.",
+      "wrongExplanations": {
+        "1": "Amazon EMR은 Spark 같은 프레임워크로 대규모 데이터를 처리하는 클러스터 서비스다. 세분화된 권한의 정의 주체가 아니라, Lake Formation 권한이 적용되는 소비 측 서비스에 해당한다.",
+        "2": "Amazon Quick은 작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스다. 데이터 레이크의 열·행·셀 수준 권한을 정의하는 도구가 아니다.",
+        "3": "Amazon Bedrock은 파운데이션 모델을 API로 제공하는 완전관리형 서비스다. 데이터 레이크의 카탈로그 권한 모델과는 다른 계층에 있다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Lake Formation? — Glue Data Catalog 테이블의 열·행·셀 수준 세분화 권한",
+          "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q9",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.4",
+      "section": "aws-services",
+      "difficulty": "applied",
+      "stem": "모델이 프로덕션에 올라간 뒤, 비즈니스 이해관계자가 모델 성과와 비즈니스 결과의 관계를 대화형 대시보드로 확인하고 그 분석을 사내 애플리케이션에 임베드하려 한다. AI/ML 파이프라인에서 이 일을 맡는 서비스는 무엇인가?",
+      "options": [
+        "Kiro",
+        "Amazon Quick",
+        "Amazon SageMaker JumpStart",
+        "Amazon Bedrock"
+      ],
+      "correct": 1,
+      "explanation": "공식 사용자 가이드는 Amazon Quick을 「작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스」로 정의하고, 그 기능인 Amazon Quick Sight를 「대화형 데이터 시각화와 비즈니스 인텔리전스 — 데이터 소스에 연결하고 대시보드를 만들며 분석을 애플리케이션에 임베드한다」로 적는다. 대시보드와 임베드 분석이 정확히 이 서비스의 일이다.",
+      "wrongExplanations": {
+        "0": "Kiro는 AWS의 에이전틱 개발 시스템으로, 의도를 관리하고 대규모 코드베이스에서 장시간 작업을 완료하며 코드 정확성을 검증한다. IDE·CLI·자율 웹 에이전트 형태로 제공되는 개발 도구이고 분석·BI 서비스가 아니다.",
+        "2": "SageMaker JumpStart는 사전 훈련된 오픈 소스 모델을 제공하는 모델 허브다. 파이프라인에서 모델 소스 자리에 있고 비즈니스 대시보드를 만드는 도구가 아니다.",
+        "3": "Amazon Bedrock은 파운데이션 모델을 API로 제공하는 완전관리형 서비스다. 모델 접근 계층에 있으며 대화형 시각화와 임베드 분석을 담당하지 않는다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Quick? — 서비스 정의와 Amazon Quick Sight의 시각화·대시보드·임베드 분석",
+          "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
+        },
+        {
+          "title": "Machine Learning (ML) and Artificial Intelligence (AI) — Kiro는 AWS의 에이전틱 개발 시스템",
+          "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q10",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.5",
+      "section": "mlops",
+      "difficulty": "applied",
+      "stem": "어느 조직에서는 데이터 준비·훈련·모델 성능 검증이 전부 수동이고, 데이터 과학자가 훈련된 모델을 아티팩트로 넘기면 엔지니어링 팀이 API 인프라에 배포한다. 릴리스는 드물고 능동적인 성능 모니터링도 없다. 공식 MLOps 성숙도 설명에 따르면 현재 수준과 다음 수준의 차이는 무엇인가?",
+      "options": [
+        "레벨 1이고, 레벨 2로 올라가면 배포 대상이 훈련된 모델로 바뀐다",
+        "레벨 2이고, 이미 파이프라인 오케스트레이터와 모델 레지스트리를 갖춘 상태다",
+        "레벨 0이지만 레벨 1에서도 배포 대상은 여전히 훈련된 모델 그대로다",
+        "레벨 0이고, 레벨 1로 올라가면 배포 대상이 반복 실행되는 훈련 파이프라인으로 바뀐다"
+      ],
+      "correct": 3,
+      "explanation": "공식 설명은 레벨 0을 「모든 단계가 수동이며 데이터 준비·ML 훈련·모델 성능과 검증이 포함된다」로 적고, 데이터 과학자가 훈련된 모델을 아티팩트로 넘겨 엔지니어링 팀이 배포하는 형태로 설명한다. 레벨 1은 「ML 파이프라인을 자동화해 모델을 지속적으로 훈련하는 것을 목표로 하며, 반복 실행되어 훈련된 모델을 다른 앱에 제공하는 훈련 파이프라인을 배포한다」고 적는다.",
+      "wrongExplanations": {
+        "0": "지문의 상태는 레벨 1이 아니라 레벨 0이다. 레벨 1은 이미 ML 파이프라인이 자동화되어 지속적으로 훈련되는 단계이고, 배포 대상이 훈련된 모델에서 훈련 파이프라인으로 올라간 상태다.",
+        "1": "레벨 2는 레벨 1의 설정을 모두 갖춘 위에 파이프라인 오케스트레이터와 모델 레지스트리를 더한 단계다. 모든 단계가 수동이고 모니터링이 없는 지문의 조직과는 거리가 멀다.",
+        "2": "현재 수준을 레벨 0으로 본 것은 맞지만 배포 대상의 변화를 놓쳤다. 레벨 1의 핵심이 바로 배포 대상이 훈련된 모델에서 훈련 파이프라인으로 바뀌는 것이다."
+      },
+      "sources": [
+        {
+          "title": "What is MLOps? — MLOps 성숙도 레벨 0·1·2와 각 레벨의 배포 대상",
+          "url": "https://aws.amazon.com/what-is/mlops/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q11",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.5",
+      "section": "mlops",
+      "difficulty": "foundational",
+      "stem": "MLOps의 네 가지 원칙 중 하나인 Continuous X는 시스템 어디든 변경이 생기면 지속적으로 일어나는 네 가지 활동을 묶는다. 이 중 재배포를 위해 ML 모델을 자동으로 재훈련하는 활동은 무엇인가?",
+      "options": [
+        "지속적 통합",
+        "지속적 배포",
+        "지속적 훈련",
+        "지속적 모니터링"
+      ],
+      "correct": 2,
+      "explanation": "공식 설명은 Continuous X의 네 활동을 지속적 통합·지속적 배포·지속적 훈련·지속적 모니터링으로 적고, 그중 「지속적 훈련은 재배포를 위해 ML 모델을 자동으로 재훈련한다」고 정의한다. 목표 1.3.5의 「모델 재훈련」에 대응하는 항목이 이것이다.",
+      "wrongExplanations": {
+        "0": "지속적 통합은 코드의 검증과 테스트를 파이프라인의 데이터와 모델까지 확장하는 활동이다. 모델을 다시 훈련시키는 활동이 아니다.",
+        "1": "지속적 배포는 새로 훈련된 모델이나 모델 예측 서비스를 자동으로 배포하는 활동이다. 재훈련 자체가 아니라 그 결과물을 내보내는 쪽이다.",
+        "3": "지속적 모니터링은 비즈니스와 관련된 지표로 데이터와 모델을 모니터링하는 활동이다. 재훈련이 필요한지 알려 주지만 재훈련을 수행하는 활동은 아니다."
+      },
+      "sources": [
+        {
+          "title": "What is MLOps? — Continuous X의 네 활동과 지속적 훈련의 정의",
+          "url": "https://aws.amazon.com/what-is/mlops/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q12",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.5",
+      "section": "mlops",
+      "difficulty": "applied",
+      "stem": "어느 조직의 ML 솔루션이 해가 갈수록 복잡해지고 유지하기 어려워진다. MLOps 도입을 설득하려는 리드가 근거로 쓸 수 있는, 공식 MLOps 계획 지침의 설명은 무엇인가?",
+      "options": [
+        "ML 솔루션은 애초에 제대로 만들기가 더 까다롭고 데이터 분포가 시간이 지나며 크게 벗어나는 변동성 큰 환경에 존재하며, 많은 ML 실무자가 소프트웨어 공학 배경이 아니어서 테스트 가능한 코드 작성·구성 요소 모듈화·버전 관리 관행에 익숙하지 않아 기술 부채가 복리 효과로 쌓인다",
+        "ML 솔루션의 난이도는 표준 소프트웨어 개발 프로젝트와 같으므로 복잡도 증가의 원인은 전적으로 인프라 선택에 있다",
+        "복잡도 증가의 원인은 모델 알고리즘 선택뿐이며 팀 구성이나 개발 관행과는 무관하다",
+        "데이터 분포는 한 번 고정되면 변하지 않으므로 복잡도 증가는 코드 양이 늘어난 결과일 뿐이다"
+      ],
+      "correct": 0,
+      "explanation": "공식 MLOps 계획 지침은 ML 솔루션을 프로덕션에 배포하는 일이 「표준 소프트웨어 개발 프로젝트에서는 생기지 않는 많은 과제를 가져온다」고 적고, 많은 ML 실무자가 소프트웨어 공학 배경이 아니어서 테스트 가능한 코드·모듈화·버전 관리에 익숙하지 않다고 지적한 뒤 「이런 과제들이 기술 부채를 만들고, 솔루션이 시간이 갈수록 더 복잡하고 유지하기 어려워지며 복리 효과를 탄다」고 적는다.",
+      "wrongExplanations": {
+        "1": "공식 지침의 첫 문장이 바로 ML 솔루션 배포가 표준 소프트웨어 개발에서는 생기지 않는 과제를 가져온다는 것이다. 난이도가 같다는 전제가 공식 서술과 반대다.",
+        "2": "공식 지침은 실무자의 배경과 소프트웨어 공학 관행을 기술 부채의 원인으로 직접 지적한다. 알고리즘 선택만의 문제로 좁히면 지침의 핵심을 빠뜨린다.",
+        "3": "공식 지침은 ML 솔루션이 「데이터 분포가 예상된·예상 못 한 여러 이유로 시간이 지나며 크게 벗어나는 변동성 큰 환경에 존재한다」고 적는다. 데이터 분포가 고정이라는 전제가 틀렸다."
+      },
+      "sources": [
+        {
+          "title": "Planning for successful MLOps — ML 솔루션의 과제와 기술 부채의 복리 효과",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/ml-operations-planning/introduction.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q13",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.6",
+      "section": "metrics",
+      "difficulty": "applied",
+      "stem": "거래 1,000건 중 10건만 사기인 데이터로 만든 이진 분류 모델이 모든 거래를 정상으로 예측해 정확도 99%를 기록했다. 공식 서술에 근거해 취할 조치는 무엇인가?",
+      "options": [
+        "정확도 99%는 올바르게 분류한 항목의 비율이므로 그대로 성능 근거로 보고한다",
+        "양성과 음성의 수가 서로 크게 다른 불균형 데이터셋에서는 BalancedAccuracy가 더 나은 정확도 측정을 주므로 지표를 바꿔 보고, 데이터 리샘플링이나 이상 탐지 알고리즘 적용 같은 완화 기법을 검토한다",
+        "재현율만 1.0이 되도록 임계값을 내리면 불균형 문제 자체가 해소된다",
+        "불균형은 훈련 데이터를 더 모으는 것 외에 다룰 방법이 없으므로 수집이 끝날 때까지 평가를 보류한다"
+      ],
+      "correct": 1,
+      "explanation": "정확도의 공식 정의가 「올바르게 분류된 항목 수와 전체 분류 항목 수의 비율」이라 다수 클래스만 맞혀도 높게 나온다. 공식은 BalancedAccuracy가 「양성 또는 음성의 수가 서로 크게 다른 불균형 데이터셋, 예를 들어 이메일의 1퍼센트만 스팸인 경우에 더 나은 정확도 측정을 준다」고 적고, 불균형 완화 기법으로 데이터 리샘플링·다른 평가 지표 사용·이상 탐지 알고리즘 적용을 든다.",
+      "wrongExplanations": {
+        "0": "공식은 실제 응용에서 데이터가 불균형할 수 있고 그 결과 훈련 과정이 치우쳐 모델이 다수 클래스에서만 잘 동작할 수 있다고 적는다. 사기 거래를 한 건도 찾지 못한 모델을 정확도만으로 긍정 평가할 수 없다.",
+        "2": "재현율만 보는 것은 흔히 불충분하다. 공식은 모든 출력을 참 양성으로 예측하면 완벽한 재현율 점수가 나온다고 직접 경고한다. 재현율 1.0은 불균형의 해소가 아니다.",
+        "3": "공식이 드는 완화 기법은 데이터 리샘플링·다른 평가 지표 사용·이상 탐지 알고리즘 적용이다. 데이터 추가 수집만이 유일한 길이라는 전제가 틀렸고, 평가를 미룰 이유도 없다."
+      },
+      "sources": [
+        {
+          "title": "Metrics and validation (SageMaker Autopilot) — Accuracy와 BalancedAccuracy의 정의, 불균형 데이터셋 예",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html"
+        },
+        {
+          "title": "What is Machine Learning? — 불균형 데이터와 리샘플링·다른 평가 지표·이상 탐지 완화 기법",
+          "url": "https://aws.amazon.com/what-is/machine-learning/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q14",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.6",
+      "section": "metrics",
+      "difficulty": "foundational",
+      "stem": "항공기 안전 시스템이 비행에 안전하다고 거짓으로 판정하는 경우처럼, 거짓 양성의 비용이 매우 큰 이진 분류 문제를 다룬다. 공식 지표 정의에 따라 우선 봐야 하는 지표와 그 식은 무엇인가?",
+      "options": [
+        "재현율 — Recall = TP/(TP+FN)",
+        "정확도 — 올바르게 분류된 항목 수와 전체 분류 항목 수의 비율",
+        "정밀도 — Precision = TP/(TP+FP)",
+        "F1 — 정밀도와 재현율의 조화 평균이며 거짓 양성만을 반영한다"
+      ],
+      "correct": 2,
+      "explanation": "공식 정의는 「정밀도는 알고리즘이 식별한 양성 전체 중에서 참 양성을 얼마나 잘 예측하는지를 재며 Precision = TP/(TP+FP)로 정의된다」이고, 바로 이어 「거짓 양성의 비용이 클 때 중요한 지표」라며 「항공기 안전 시스템이 비행에 안전하다고 거짓으로 판정되면 거짓 양성의 비용이 매우 크다」는 예를 든다.",
+      "wrongExplanations": {
+        "0": "재현율은 데이터셋의 모든 참 양성을 올바르게 예측하는지를 재는 지표이고 거짓 음성을 반영한다. 공식은 암 검사처럼 참 양성을 모두 찾아야 할 때 중요하다고 적고, 재현율만 측정하는 것은 흔히 불충분하다고 경고한다.",
+        "1": "정확도는 전체 중 맞힌 비율이라 거짓 양성과 거짓 음성을 구분하지 않는다. 거짓 양성의 비용이 특별히 큰 상황에서 우선 볼 지표가 아니다.",
+        "3": "F1이 정밀도와 재현율의 조화 평균이라는 앞부분은 맞지만, 거짓 양성만을 반영한다는 뒷부분이 틀렸다. F1은 두 지표의 균형을 보는 값이다."
+      },
+      "sources": [
+        {
+          "title": "Metrics and validation (SageMaker Autopilot) — Precision·Recall·F1의 정의와 거짓 양성 비용 예",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t1-3-q15",
+      "examGuideTaskId": "aif-t1-3",
+      "skill": "1.3.6",
+      "section": "metrics",
+      "difficulty": "applied",
+      "stem": "프로덕션 모델에 대해 「정확도 0.94를 달성했으므로 이 프로젝트는 성공이며, ROI는 배포 직후 한 번 계산해 뒀다」는 보고를 받았다. 공식 모범 사례에 근거해 이 보고를 어떻게 평가해야 하는가?",
+      "options": [
+        "정확도 0.94가 확보되면 비즈니스 결과와의 연결은 자동으로 성립하므로 보고는 완결됐다",
+        "ROI를 초기 배포 직후 한 번 계산하는 것이 공식 권고이므로 이후 측정은 선택 사항이다",
+        "기술 지표를 함께 보고하지 않고 ROI만 보고한 것이 이 보고의 유일한 문제다",
+        "정확도 같은 기술 지표에만 집중해 비즈니스 결과와 연결하지 않는 것과, ROI를 초기 배포 후 한 번만 측정하고 지속적으로 측정하지 않는 것이 둘 다 공식이 적는 안티패턴이다"
+      ],
+      "correct": 3,
+      "explanation": "공식 비용 최적화 모범 사례는 안티패턴으로 「정확도 같은 기술 지표에만 집중하고 비즈니스 결과와 연결하지 않는 것」과 「ROI를 초기 배포 후 한 번만 측정하고 지속적으로 측정하지 않는 것」을 함께 나열한다. 또 모델이 배포되면 전달되는 가치를 추적하는 리포팅 체계를 세워 그 가치를 지속적인 런타임 비용과 비교해 조치를 취하라고 적는다.",
+      "wrongExplanations": {
+        "0": "기술 지표만 보고 비즈니스 결과와 연결하지 않는 것은 공식이 이름 붙인 안티패턴이다. 모니터링 전략에는 정확도·정밀도·재현율 같은 기술 지표와 비즈니스 관련 KPI를 함께 넣어야 한다.",
+        "1": "공식 안티패턴 목록에 「ROI를 초기 배포 후 한 번만 측정하고 지속적으로 측정하지 않는 것」이 들어 있다. 한 번 계산으로 끝내는 것이 권고라는 서술은 반대다.",
+        "2": "이 보고에는 기술 지표(정확도)가 들어 있고 문제는 그것을 비즈니스 결과와 연결하지 않은 쪽이다. 게다가 ROI 측정이 일회성이라는 두 번째 안티패턴도 함께 걸린다."
+      },
+      "sources": [
+        {
+          "title": "MLCOST06-BP02 Monitor return on investment for ML models — ROI 안티패턴과 가치·런타임 비용 비교",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp02.html"
+        },
+        {
+          "title": "MLSUS06-BP02 Retrain only when necessary — 기술 지표와 비즈니스 KPI를 함께 넣는 모니터링 전략",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

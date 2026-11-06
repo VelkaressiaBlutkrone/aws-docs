@@ -12,6 +12,8 @@ sources:
     url: https://docs.aws.amazon.com/machine-learning/latest/dg/when-to-use-machine-learning.html
   - title: MLCOST02-BP01 Identify if machine learning is the right solution
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html
+  - title: What is Machine Learning? (AWS) — Benefits of machine learning (의사 결정 지원·루틴 작업 자동화)
+    url: https://aws.amazon.com/what-is/machine-learning/
   - title: MLPERF06-BP02 Evaluate model explainability
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html
   - title: Autopilot datasets and problem types (Amazon SageMaker AI)
@@ -200,6 +202,8 @@ lastVerified: 2026-11-03
 
 ⚠️ 시험에 쓰이는 성질은 **인용(citation)**입니다. 공식은 지식 기반으로 **생성된 응답에 인용을 포함해 원본 데이터 소스를 참조하고 정확성을 확인할 수 있다**고 적습니다. "출처를 댈 수 있어야 한다"는 요구가 지문에 있으면 이쪽입니다.
 
+> ⚠️ **지식 기반은 이제 두 종류입니다**(2026-11-06 실측 — 공식 페이지가 재구성됐습니다). **관리형 지식 기반(Managed Knowledge Base)**과 **고객 관리형 지식 기반(Customer-managed Knowledge Base)**으로 갈리고, 공식은 페이지 맨 앞 Important 블록에서 **"검색 정확도 최적화와 관리형 경험을 원하면 관리형 지식 기반을 권장한다"**고 적습니다. 위 두 단계 흐름은 **두 유형과 무관하게 참**이지만, "어느 쪽을 고르나"를 묻는 지문이면 **직접 운영할 것이 있느냐**가 갈림길입니다(고객 관리형은 벡터 저장소를 포함한 RAG 파이프라인과 설정을 직접 운영합니다). 자세한 갈림길은 `aif-t3-1`에 있습니다.
+
 **에이전틱 AI 쪽**의 정본은 `Amazon Bedrock AgentCore`입니다. 공식은 이를 **"어떤 프레임워크와 파운데이션 모델로든 매우 효과적인 에이전트를 안전하게 대규모로 구축·배포·운영하는 에이전틱 플랫폼"**으로 정의하고, **인프라 관리 없이** 에이전트가 적절한 권한과 거버넌스 아래 **도구와 데이터에 걸쳐 행동**하게 하고 프로덕션에서 **성능과 품질을 모니터링**할 수 있다고 적습니다. 세부는 도메인 2에서 다룹니다.
 
 ### 5) AWS 관리형 AI/ML 서비스의 기능 (목표 1.2.5) {#managed-services}
@@ -385,3 +389,4 @@ lastVerified: 2026-11-03
 15. Knowledge bases for Amazon Bedrock · AWS Prescriptive Guidance (수집·검색 두 단계) — `docs.aws.amazon.com/prescriptive-guidance/latest/retrieval-augmented-generation-options/rag-fully-managed-bedrock.html` (2026-11-03 확인)
 16. What is Amazon Bedrock AgentCore? — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html` (2026-11-03 확인)
 17. What are Foundation Models? (FM 장점·과제·Amazon Nova) — `aws.amazon.com/what-is/foundation-models/` (2026-11-03 확인)
+18. What is Machine Learning? (AWS) — Benefits of machine learning 절의 「Enhanced decision making」·「Automation of routine tasks」 — `aws.amazon.com/what-is/machine-learning/` (2026-11-05 확인)

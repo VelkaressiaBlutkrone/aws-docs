@@ -1,0 +1,473 @@
+{
+  "examGuideTaskId": "aif-t4-2",
+  "taskTitle": "투명하고 설명 가능한 모델의 중요성 이해",
+  "domain": 4,
+  "certCode": "AIF-C01",
+  "lastVerified": "2026-11-06",
+  "questions": [
+    {
+      "id": "aif-t4-2-q1",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.1",
+      "section": "transparent-vs-opaque",
+      "difficulty": "foundational",
+      "stem": "AWS Well-Architected 책임 있는 AI 렌즈는 책임 있는 AI를 여러 차원으로 나누고 차원마다 한 문장 정의를 붙입니다. 이 가운데 투명성(Transparency)의 정의로 적힌 것은 무엇입니까?",
+      "options": [
+        "AI 시스템의 행동을 감시하고 조종할 메커니즘을 갖는 것",
+        "이해관계자가 AI 시스템과의 관계에 대해 정보에 근거한 선택을 할 수 있게 하는 것",
+        "제공자와 배포자를 포함한 AI 공급망에 모범 사례를 반영하는 것",
+        "서로 다른 이해관계자 집단에 미치는 영향을 고려하는 것"
+      ],
+      "correct": 1,
+      "explanation": "책임 있는 AI 렌즈는 투명성을 이해관계자가 AI 시스템과의 관계에 대해 정보에 근거한 선택을 할 수 있게 하는 것으로 정의합니다. 정의가 바라보는 주체가 시스템 바깥의 사람이라는 점이 핵심이고, 그래서 같은 렌즈의 투명성 모범 사례도 투명성 전략 수립, 시스템 카드 작성, 출력 해석 안내처럼 문서와 안내 쪽에 몰려 있습니다.",
+      "wrongExplanations": {
+        "0": "이것은 같은 목록에 있는 제어 가능성(Controllability)의 정의입니다. 렌즈는 제어 가능성을 AI 시스템 행동을 감시하고 조종할 메커니즘을 갖는 것으로 적습니다.",
+        "2": "이것은 거버넌스(Governance)의 정의입니다. 렌즈는 거버넌스를 제공자와 배포자를 포함한 AI 공급망에 모범 사례를 반영하는 것으로 적습니다.",
+        "3": "이것은 공정성(Fairness)의 정의입니다. 렌즈는 공정성을 서로 다른 이해관계자 집단에 미치는 영향을 고려하는 것으로 적습니다."
+      },
+      "sources": [
+        {
+          "title": "Responsible AI Lens — 책임 있는 AI 차원별 공식 정의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q2",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.1",
+      "section": "transparent-vs-opaque",
+      "difficulty": "applied",
+      "stem": "사내 상담 챗봇은 응답마다 신뢰도 점수와 근거 문서 인용을 함께 보여 줍니다. 그런데 사용자 조사에서 상당수가 상대를 사람 상담원으로 믿고 있었고, 시스템의 의도된 용도와 한계를 적은 문서도 없었습니다. 책임 있는 AI 렌즈가 투명성 품질 측정에서 고려하라고 적는 상황에 비추어 이 시스템을 어떻게 진단합니까?",
+      "options": [
+        "설명 가능성 메커니즘이 들어가 있으므로 투명성 요건도 함께 충족된 상태입니다",
+        "신뢰도 점수를 노출하고 있으므로 문서가 없는 것은 투명성과 무관합니다",
+        "모델 구조가 복잡하지 않다면 사용자 인식 문제는 투명성 범위에 들지 않습니다",
+        "투명성 결핍 상태입니다. 공식은 시스템 문서가 불충분한 경우와 사용자가 AI 시스템의 존재를 알지 못하는 경우를 투명성 품질을 재야 하는 상황으로 적습니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서는 시스템 문서가 불충분한 경우, 사용자가 시스템 출력의 확률적 성질을 이해하지 못하는 경우, 사용자가 AI 시스템의 존재를 알지 못하는 경우를 고려하라고 적고, 투명성 결핍이 잠재적 피해를 가리거나 증폭할 수 있다고 덧붙입니다. 세 상황 가운데 둘은 모델 내부와 무관한 문서와 사용자 인식의 문제여서, 설명 기능을 넣은 것만으로는 해소되지 않습니다.",
+      "wrongExplanations": {
+        "0": "설명 가능성과 투명성은 렌즈에서 서로 다른 차원이고 서로를 대신하지 않습니다. 신뢰도 점수와 근거 인용은 설명 가능성 쪽 메커니즘이고, 사용자가 AI의 존재를 모르는 것은 투명성 쪽 결핍입니다.",
+        "1": "공식이 꼽는 상황의 첫 항목이 바로 시스템 문서가 불충분한 경우입니다. 문서 부재는 투명성 측정에서 빠지는 것이 아니라 핵심 점검 대상입니다.",
+        "2": "모델이 단순해도 사용자가 AI 시스템의 존재를 알지 못하면 공식이 꼽는 상황에 그대로 해당합니다. 투명성은 모델 구조만의 문제가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "RAIRC03-BP10 Measure transparency quality — 투명성 결핍 세 상황과 노출·보안 위험",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp10.html"
+        },
+        {
+          "title": "Responsible AI Lens — 책임 있는 AI 차원별 공식 정의",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q3",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.1",
+      "section": "transparent-vs-opaque",
+      "difficulty": "applied",
+      "stem": "AWS의 설명 가능한 AI 안내는 설명 가능한 AI 기법을 두 큰 범주로 나눕니다. 설명 가능한 머신 러닝과 해석 가능한 머신 러닝의 차이를 공식 서술대로 말한 것은 무엇입니까?",
+      "options": [
+        "설명 가능한 머신 러닝은 결정이 내려진 뒤에 설명하는 사후 방법이고, 해석 가능한 머신 러닝은 특정 모델이 작동하는 방식 자체가 이해 가능하다는 점을 이용해 내부 작동을 확인합니다",
+        "설명 가능한 머신 러닝은 모델 전체의 특징 중요도만 주고, 해석 가능한 머신 러닝은 예측 하나에 대한 설명만 줍니다",
+        "설명 가능한 머신 러닝은 표형 데이터에만 쓰이고, 해석 가능한 머신 러닝은 이미지와 텍스트에만 쓰입니다",
+        "설명 가능한 머신 러닝은 모델을 훈련하기 전에 적용하고, 해석 가능한 머신 러닝은 배포 이후에만 적용합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 안내는 설명 가능한 머신 러닝을 결정이 내려진 뒤에 설명하려는 방법으로 적고 블랙박스 모델에 대한 사후 설명으로 생각할 수 있다고 덧붙이며, 그 예로 LIME과 SHAP 같은 기법을 듭니다. 반면 해석 가능한 머신 러닝은 특정 AI 모델이 어떤 의미에서 작동 방식 자체가 이해 가능하다는 점을 활용해 모델의 내부 작동을 확인하고 이해하는 방법으로 적습니다. 그래서 순서가 다릅니다. 해석 가능성은 모델을 고를 때 확보하고, 설명 가능성은 복잡한 모델에 나중에 덧붙일 수 있습니다.",
+      "wrongExplanations": {
+        "1": "설명 범위를 개별 예측과 모델 전체로 가르는 축은 두 범주의 구분 기준이 아닙니다. 같은 사후 설명 기법이 예측 하나에 대한 설명과 모델 전체의 특징 중요도를 모두 낼 수 있습니다.",
+        "2": "데이터 종류가 두 범주를 가르지 않습니다. 공식 문서는 같은 섀플리 값 알고리즘이 표형 데이터뿐 아니라 컴퓨터 비전과 자연어 처리 설명에도 쓰인다고 적습니다.",
+        "3": "시점이 거꾸로입니다. 사후 설명 방법이 결정이 내려진 뒤에 적용되는 쪽이고, 해석 가능성은 모델 구조를 고르는 단계에서 확보됩니다."
+      },
+      "sources": [
+        {
+          "title": "What is Explainable AI? — 원칙 네 가지와 기법 두 범주",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        },
+        {
+          "title": "Model Explainability (Amazon SageMaker AI 개발자 안내서) — 「왜」 질문·섀플리 값·부분 의존도 그래프",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q4",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.1",
+      "section": "transparent-vs-opaque",
+      "difficulty": "foundational",
+      "stem": "공식 문서는 머신 러닝 맥락에서 설명을 「왜」 질문의 답으로 정의하고, 설명을 쓸 수 있는 곳을 세 가지로 묶어 적습니다. 그 세 가지는 무엇입니까?",
+      "options": [
+        "감사 대응, 런타임에 유해 출력 차단, 모델 추출 방어",
+        "규제 요건 충족, 훈련 비용 절감, 데이터 레이블 자동화",
+        "감사와 규제 요건 충족, 모델에 대한 신뢰 형성과 사람의 의사 결정 지원, 디버깅과 모델 성능 개선",
+        "사용자 신뢰 형성, 모델 가중치 공개, 추론 지연 단축"
+      ],
+      "correct": 2,
+      "explanation": "공식 문서는 설명을 사람이 예측의 원인을 이해하도록 돕는 「왜」 질문의 답으로 정의하고, 그 질문의 예로 왜 이 신청자에게 대출 거절을 예측했는가, 모델은 어떻게 예측하는가, 왜 잘못된 예측을 했는가, 어떤 특징이 모델 행동에 가장 큰 영향을 주는가를 듭니다. 이어서 설명을 감사와 규제 요건 충족, 모델에 대한 신뢰 형성과 사람의 의사 결정 지원, 디버깅과 모델 성능 개선에 쓸 수 있다고 적습니다.",
+      "wrongExplanations": {
+        "0": "감사 대응은 맞지만 나머지 둘이 설명의 쓸모가 아닙니다. 런타임 유해 출력 차단은 가드레일 쪽 통제이고, 모델 추출 방어는 보안 위협 대응입니다.",
+        "1": "규제 요건 충족만 맞습니다. 훈련 비용 절감과 데이터 레이블 자동화는 공식이 설명의 용도로 적는 항목이 아닙니다.",
+        "3": "신뢰 형성만 맞습니다. 모델 가중치 공개는 오히려 모델 추출과 멤버십 추론의 표면을 넓히는 쪽이고, 추론 지연 단축은 설명과 반대 방향입니다. 공식은 결정을 더 설명 가능하게 만들면 처리가 느려질 수 있다고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "Model Explainability (Amazon SageMaker AI 개발자 안내서) — 「왜」 질문·섀플리 값·부분 의존도 그래프",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q5",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.2",
+      "section": "tools",
+      "difficulty": "foundational",
+      "stem": "Amazon SageMaker Model Cards의 편집과 버전 동작에 관한 공식 서술로 옳은 것은 무엇입니까?",
+      "options": [
+        "승인 상태 업데이트를 제외한 어떤 편집이든 추가 모델 카드 버전을 만듭니다. 모델 변경의 불변 기록을 남기기 위한 것입니다",
+        "평가 지표와 설명은 그 자리에서 갱신되고, 의도된 사용을 바꿀 때만 새 버전이 생깁니다",
+        "모든 편집이 새 버전을 만들며 승인 상태 변경도 예외가 아닙니다",
+        "카드는 생성한 뒤 전혀 편집할 수 없으므로 내용을 바꾸려면 새 카드를 만들어야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 문서는 모델 카드에 가해진 승인 상태 업데이트 외의 어떤 편집이든 추가 모델 카드 버전을 만들어 모델 변경의 불변 기록을 남긴다고 적습니다. FAQ는 같은 것을 주어진 모델 버전이 모델 카드 상태를 제외한 모든 속성에 대해 불변이라고 적고, 평가 지표나 설명, 의도된 사용을 바꾸면 새 버전이 생기며 이는 일단 만들어진 모델 카드가 조작될 수 없도록 하기 위한 것이라고 밝힙니다. 상태 유효값은 Draft, PendingReview, Approved, Archived 넷입니다.",
+      "wrongExplanations": {
+        "1": "거꾸로입니다. 평가 지표와 설명을 바꾸는 것이 바로 새 버전을 만드는 편집에 들고, 예외로 적혀 있는 것은 승인 상태 업데이트 하나입니다.",
+        "2": "예외 하나를 빠뜨렸습니다. 승인 상태 업데이트는 새 버전을 만들지 않으며, API 참조는 그 상태의 유효값을 Draft, PendingReview, Approved, Archived로 적습니다.",
+        "3": "편집은 가능합니다. 편집하면 그 자리에서 덮어쓰이는 대신 새 버전이 쌓이는 구조이고, 각 버전은 PDF로 내보내 공유할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Model Cards — 담는 항목과 버전 동작",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        },
+        {
+          "title": "Model card FAQs — 고정된 구조와 상태를 제외한 불변성",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards-faqs.html"
+        },
+        {
+          "title": "CreateModelCard (Amazon SageMaker API Reference) — ModelCardStatus 유효값",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateModelCard.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q6",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.2",
+      "section": "tools",
+      "difficulty": "applied",
+      "stem": "데이터 과학 팀이 훈련에 쓴 데이터세트마다 의도된 사용과 구성, 수집 과정을 문서로 남기려 합니다. 책임 있는 AI 렌즈가 이 용도로 적는 산출물과 그 성격을 올바르게 말한 것은 무엇입니까?",
+      "options": [
+        "모델 카드 — 목표 함수와 하이퍼파라미터, 모델의 위험 등급을 데이터세트 단위로 기록합니다",
+        "시스템 카드 — 배포자가 제공할 특정 입력에 대한 기대 성능 수치를 데이터세트별로 보장합니다",
+        "데이터시트 — 데이터 출처와 수집 방법론, 잠재적인 원치 않는 편향, 권장·금지 사용 사례를 적고 데이터 기여자와 주석자의 특성까지 담으며, 데이터세트가 바뀌거나 새 통찰이 생길 때 갱신하는 살아 있는 문서로 유지합니다",
+        "데이터시트 — 데이터세트를 처음 만들 때 한 번 작성해 서명하고 이후에는 변경하지 않는 고정 기록으로 둡니다"
+      ],
+      "correct": 2,
+      "explanation": "책임 있는 AI 렌즈는 데이터세트마다 의도된 사용과 구성, 수집 과정을 문서화하는 데이터시트를 만들라고 적고, 데이터 출처와 수집 방법론, 잠재적인 원치 않는 편향, 권장되는 사용 사례와 금지된 사용 사례를 담으라고 열거합니다. 데이터 기여자와 주석자의 특성도 인구통계 정보와 원치 않는 편향의 원천까지 포함해 문서화하라고 하고, 데이터시트를 데이터세트가 바뀌거나 그 특성과 한계에 대한 새 통찰이 생길 때 갱신하는 살아 있는 문서로 유지하라고 적습니다.",
+      "wrongExplanations": {
+        "0": "모델 카드는 모델 단위의 거버넌스 문서입니다. 렌즈가 데이터세트 단위로 만들라고 적는 산출물은 데이터시트이고, 거기에는 기여자와 주석자의 특성까지 들어갑니다.",
+        "1": "시스템 카드는 의도된 사용 사례와 한계, 책임 있는 AI 설계 선택, 배포와 성능 최적화 모범 사례를 한곳에 모은 문서입니다. 공식은 시스템 카드가 배포자가 제공할 특정 입력에 대한 기대 성능 지침을 제공하지 않으며 그 테스트는 배포자의 책임이라고 못박습니다.",
+        "3": "산출물 이름은 맞지만 성격이 틀렸습니다. 공식은 데이터시트를 고정 기록이 아니라 데이터세트가 바뀌거나 새 통찰이 생길 때 갱신하는 살아 있는 문서로 유지하라고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "RAIDP04-BP05 Document the characteristics of each dataset using a datasheet",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp04-bp05.html"
+        },
+        {
+          "title": "RAIGT01-BP02 Create a system card that communicates intended usage and limitations",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp02.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q7",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.2",
+      "section": "tools",
+      "difficulty": "applied",
+      "stem": "어떤 조직이 Amazon Bedrock에서 서드파티 파운데이션 모델을 쓰기 전에 법무 검토를 반드시 거치도록 절차를 세우려 합니다. 공식 문서가 적는 라이선스 동의 방식과 그에 맞는 순서는 무엇입니까?",
+      "options": [
+        "콘솔에서 모델을 선택하면 EULA 동의 창이 반드시 뜨므로, 접근을 열어 둔 뒤 그 창에서 법무가 검토하면 됩니다",
+        "서드파티 모델은 처음 호출하거나 사용하는 것으로 EULA에 동의한 것이 되므로, 먼저 정책으로 모델 접근을 차단하고 EULA 조건을 검토한 뒤 조건에 동의하는 경우에만 접근을 허용합니다",
+        "모든 모델이 AWS Marketplace 구독을 요구하므로 구독 승인 단계에서 법무 검토가 자동으로 끼어듭니다",
+        "SDK의 accept_eula 기본값이 True이므로 코드에서 False로 바꿔 두면 동의 전 호출이 차단됩니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 서드파티 모델의 경우 모델을 처음 호출하거나 사용하는 것으로 적용 가능한 최종 사용자 라이선스 계약에 동의하는 것이 된다고 적습니다. 그래서 EULA를 먼저 검토하고 동의해야 하는 조직을 위해 순서를 따로 둡니다. 먼저 서비스 제어 정책이나 IAM 정책으로 모델 접근을 차단하고, EULA 조건을 검토한 뒤, 조건에 동의하는 경우에만 정책으로 접근을 허용합니다.",
+      "wrongExplanations": {
+        "0": "명시적 EULA 창이 뜨는 것은 Amazon SageMaker JumpStart 쪽 동작입니다. Amazon Bedrock의 서드파티 모델은 첫 호출이나 사용으로 암묵적 동의가 성립하므로, 접근을 열어 둔 상태에서 검토하면 이미 동의한 뒤가 됩니다.",
+        "2": "공식 문서는 일부 제공자가 카탈로그의 일부만 AWS Marketplace로 판매한다고 적고, OpenAI 오픈 웨이트 모델인 gpt-oss-120b, gpt-oss-20b, gpt-oss-safeguard-120b, gpt-oss-safeguard-20b는 모든 Amazon Bedrock 사용자에게 제공되며 AWS Marketplace 구독을 요구하지 않는다고 적습니다.",
+        "3": "기본값이 거꾸로이고 서비스도 다릅니다. accept_eula는 Amazon SageMaker JumpStart SDK의 값이며 기본값은 False여서, 동의하려면 명시적으로 True로 설정해야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Request access to models (Amazon Bedrock) — 서드파티 모델의 암묵적 EULA 동의",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html"
+        },
+        {
+          "title": "Model sources and license agreements (Amazon SageMaker JumpStart) — accept_eula 기본값",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q8",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.2",
+      "section": "tools",
+      "difficulty": "applied",
+      "stem": "표형 데이터로 학습한 신용 심사 모델이 있고, 규제 대응을 위해 예측별 특징 기여도 설명을 계속 제공해야 합니다. 그동안 쓰던 관리형 설명 기능을 더 쓸 수 없게 되어 경로를 다시 정합니다. 공식 가용성 변경 안내가 특징 귀속의 경로로 적는 것은 무엇입니까?",
+      "options": [
+        "Amazon Bedrock Evaluations로 옮긴다. 관리형 평가가 표형 모델의 예측별 특징 귀속까지 포함한다",
+        "Amazon Bedrock Guardrails를 켠다. 런타임 정책이 각 예측의 특징 기여도를 함께 생성한다",
+        "fmeval 라이브러리를 쓴다. 표형 분류 모델의 예측별 특징 귀속을 계산해 준다",
+        "SHAP 라이브러리를 직접 채택한다. 섀플리 값 기반 특징 귀속을 그대로 얻는다"
+      ],
+      "correct": 3,
+      "explanation": "공식 가용성 변경 안내는 특징 귀속이 내부적으로 SHAP 라이브러리로 계산돼 왔다고 적고, SHAP을 직접 채택하면 섀플리 값 귀속을 그대로 얻는다고 적습니다. SHAP은 협력 게임 이론의 섀플리 값 개념에 기반해 각 특징에 특정 예측에 대한 중요도 값을 할당합니다. 같은 안내는 Amazon Bedrock Evaluations와 Amazon Bedrock Guardrails가 LLM과 생성형 AI 평가를 위한 AWS 관리형 경로이고 파운데이션 모델 평가 기능을 대체하지만, 예측형 즉 표형·전통 ML의 편향 탐지나 설명 가능성의 대체는 아니라고 못박습니다.",
+      "wrongExplanations": {
+        "0": "공식은 Amazon Bedrock Evaluations를 파운데이션 모델 평가에만 해당하는 경로로 적고, 예측형 즉 표형·전통 ML의 편향 탐지나 설명 가능성의 대체는 아니라고 명시합니다.",
+        "1": "Amazon Bedrock Guardrails는 런타임 안전 쪽 경로입니다. 공식은 이것도 같은 문장에서 표형·전통 ML 설명 가능성의 대체가 아니라고 못박습니다.",
+        "2": "fmeval은 파운데이션 모델 평가 엔진이고 공식이 SageMaker 호스팅 모델에 권장하는 선택지입니다. 표형 모델의 예측별 특징 귀속을 돌려주는 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "가용성 변경 안내 — 표형·전통 ML 설명 가능성의 대체 경로",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html"
+        },
+        {
+          "title": "Model Explainability (Amazon SageMaker AI 개발자 안내서) — 「왜」 질문·섀플리 값·부분 의존도 그래프",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q9",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.3",
+      "section": "tradeoffs",
+      "difficulty": "applied",
+      "stem": "이해관계자가 결정이 어떻게 내려졌는지 정확히 이해해야 하는 요건이 있는데, 목표 정확도를 맞추려면 심층 신경망이 필요합니다. 책임 있는 AI 렌즈가 핵심 AI 시스템에 설명 가능성 메커니즘을 넣으라며 적는 처리 방식은 무엇입니까?",
+      "options": [
+        "정확도를 포기하고 의사결정 트리나 선형 모델만 쓰도록 선택지를 제한한다",
+        "설명이 결정적으로 중요하면 의사결정 트리처럼 이해하기 쉬운 모델을 쓰고, 더 복잡한 모델이 필요하면 SHAP 같은 설명 도구를 나중에 덧붙여 그 결정을 해석한다",
+        "복잡한 모델을 그대로 쓰고 신뢰도 점수만 노출하면 설명 가능성 요건은 충족된다",
+        "모델은 바꾸지 않고 사용자 교육 자료를 늘려 해석의 책임을 사용자에게 넘긴다"
+      ],
+      "correct": 1,
+      "explanation": "공식 모범 사례는 설명이 결정적으로 중요할 때는 이해하기 쉬운 의사결정 트리 같은 해석 가능한 모델을 쓰고, 더 복잡한 모델이 요구되면 그 결정을 해석하기 위해 SHAP 같은 설명 도구를 나중에 추가하라고 적습니다. 같은 페이지는 해석 가능한 모델과 복잡한 모델의 성능 절충을 자신의 사용 사례에 맞춰 비교해, 설명이 주는 이익이 정확도 비용을 정당화하는지 보라고 덧붙입니다.",
+      "wrongExplanations": {
+        "0": "공식은 해석 가능한 모델만 쓰라고 하지 않습니다. 더 복잡한 모델이 필요한 경우를 명시적으로 인정하고, 그때는 사후 설명 도구를 덧붙이라고 적습니다.",
+        "2": "신뢰도 점수는 출력 파이프라인에 넣으라고 적힌 요소이지만 그것만으로 끝나지 않습니다. 공식은 어떤 접근법이 오해를 낳는 신뢰도 점수를 준다고 적고, 정확도와 실제로 상관관계가 있는 계산 방법을 찾도록 여러 방법을 시험하라고 합니다.",
+        "3": "교육 자료는 설명 가능성 메커니즘의 대체물이 아닙니다. 공식은 설명 기능을 핵심 AI 시스템 안에 넣고, 실제 사용자와 정기적으로 설명을 시험해 설명 방법이 오해를 낳게 되거나 쓸모가 없어지는 때를 잡아내라고 적습니다."
+      },
+      "sources": [
+        {
+          "title": "RAISP02-BP07 Incorporate explainability mechanisms into the core AI system",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp07.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q10",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.3",
+      "section": "tradeoffs",
+      "difficulty": "applied",
+      "stem": "프라이버시를 강화하려고 입력 특징을 집계하고 마스킹하면 개별 거절 사유를 설명하기 어려워집니다. 책임 있는 AI 렌즈가 이런 릴리스 기준 간 충돌에 대해 적는 규율과 실행 순서는 무엇입니까?",
+      "options": [
+        "가장 중요한 기준 하나를 골라 그 지표를 최대화하고 나머지 기준은 참고 사항으로만 남깁니다",
+        "충돌이 생기면 더 낮은 쪽 기준을 릴리스 기준 목록에서 제외해 충돌 자체를 없앱니다",
+        "일부에서 뛰어나고 다른 데서 미달하기보다 각 기준의 최소 요건을 충족하는 데 집중하고, 경쟁 지표 관계와 충돌을 행렬로 지도화한 뒤 경쟁 지표마다 한계를 정하고 최종 임계값과 식별된 충돌, 절충 결정의 정당화를 릴리스 문서에 기록합니다",
+        "절충은 설계 단계에서 끝내야 하므로 릴리스 문서에는 남기지 않고 설계 회의록으로만 관리합니다"
+      ],
+      "correct": 2,
+      "explanation": "설계 쪽 모범 사례는 릴리스 기준이 때때로 시스템 설계를 서로 다른 방향으로 끌어당긴다며, 시스템을 더 투명하게 만들면 정확도에 영향이 있을 수 있고 더 강한 프라이버시 보호를 추가하면 결정이 어떻게 내려졌는지 설명하기 더 어려워질 수 있다고 적습니다. 그리고 일부에서 뛰어나고 다른 데서 미달하는 것보다 각 기준의 최소 요건을 충족하는 데 집중하라고 못박으며, 정확도를 최대화하기보다 90퍼센트 프라이버시 보호를 달성하는 데 도움이 된다면 85퍼센트 정확도를 받아들인다는 식의 우선순위 규칙을 팀과 법률 전문가, 비즈니스 이해관계자와 함께 정하라고 적습니다. 릴리스 쪽 모범 사례는 경쟁 지표 관계를 행렬로 지도화하고 지표마다 한계를 정한 뒤, 최종 임계값과 식별된 충돌, 절충 결정의 정당화를 릴리스 문서에 기록해 향후 참조와 감사에 쓰라고 적습니다.",
+      "wrongExplanations": {
+        "0": "공식 규율이 정확히 반대 방향입니다. 한쪽 지표를 최대화하는 것이 아니라 각 기준의 최소 요건을 모두 넘기는 데 집중하라고 적고, 부분을 따로 최적화하지 말고 전체로 보라고 합니다.",
+        "1": "기준을 지우는 것은 공식이 적는 실행이 아닙니다. 공식은 충돌을 없애는 대신 지도로 만들어 드러내고, 지표마다 한계를 정하고 그 결정을 문서로 남기라고 합니다.",
+        "3": "기록의 자리가 틀렸습니다. 공식은 최종 임계값과 식별된 충돌, 절충 결정의 정당화를 릴리스 문서에 기록해 향후 참조와 감사에 쓰라고 명시합니다."
+      },
+      "sources": [
+        {
+          "title": "RAISP01 BP02 Consider design trade-offs across competing objectives — 최소 요건 규율",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp01-bp02.html"
+        },
+        {
+          "title": "RAIRC04-BP02 Consider trade-offs between release criteria — 충돌 행렬과 임계값 기록",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc04-bp02.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q11",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.3",
+      "section": "pitfalls",
+      "difficulty": "applied",
+      "stem": "경영진이 신뢰를 얻기 위해 모델 아키텍처와 훈련 데이터 구성, 특징 중요도 전체를 외부에 공개하자고 제안합니다. 책임 있는 AI 렌즈의 서술로 이 제안을 검토할 때 짚어야 하는 위험과 대응은 무엇입니까?",
+      "options": [
+        "공개가 모델 추출과 멤버십 추론의 재료가 될 수 있으므로, 투명성 측정에 노출과 보안 위험, 의도하지 않은 정보 유출 점검을 함께 넣고, 리더십과 함께 공개 요건을 정해 공개에 적절한 정보와 내부 전용 독점 세부를 가른 뒤 구조화된 발행 검토·승인 프로세스를 거칩니다",
+        "투명성은 높을수록 좋으므로 공개 범위를 넓히는 것이 공식 권고에 맞고, 보안은 별도 계층에서만 다룹니다",
+        "공개의 유일한 위험은 경쟁사의 모방이므로 지식재산 관점의 법무 검토만 통과하면 됩니다",
+        "모델을 공개하면 라이선스 의무가 생기므로 공개 대신 모델 카드의 승인 상태를 Archived로 바꿔 둡니다"
+      ],
+      "correct": 0,
+      "explanation": "공식은 투명성 품질 측정의 목표를 신뢰를 쌓고 요건을 충족할 만큼의 개방성과, 새로운 취약점이나 의도하지 않은 결과를 만들지 않는 것 사이의 균형을 잡아 자신의 상황에 맞는 적절한 투명성 수준을 찾는 것으로 적습니다. 그래서 측정에 신뢰 증가 같은 긍정적 결과와 노출이나 보안 위험 같은 부정적 효과를 함께 포착하고 의도하지 않은 정보 유출과 오용 여부도 점검하라고 합니다. 보안 쪽 모범 사례는 위협에 모델의 역량을 재현하려는 모델 추출과 특정 데이터가 훈련에 쓰였는지 알아내려는 멤버십 추론을 들고, 투명성 전략 쪽은 리더십과 함께 공개 요건을 정해 공개 공유에 적절한 정보와 내부 전용 독점 세부를 가른 뒤 구조화된 발행 검토·승인 프로세스를 구현하라고 적습니다.",
+      "wrongExplanations": {
+        "1": "공식 서술과 어긋납니다. 목표는 개방성의 최대화가 아니라 새 취약점이나 의도하지 않은 결과를 만들지 않으면서 신뢰를 쌓고 요건을 충족할 만큼의 개방성이고, 측정 자체에 노출과 보안 위험이 들어갑니다.",
+        "2": "위험을 하나로 좁혔습니다. 공식 위협 목록에는 모델 추출과 멤버십 추론, 프롬프트 인젝션, 탈옥, 적대적 입력, 데이터 중독이 들어 있고, 모델 설계와 역량에 관한 정보 추출이 명시적으로 적혀 있습니다.",
+        "3": "승인 상태를 Archived로 바꾸는 것은 더 이상 업데이트하지 않는 모델 카드를 보관 처리하는 동작이고, 내보내기는 여전히 가능합니다. 외부 공개 범위를 정하는 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "RAIRC03-BP10 Measure transparency quality — 투명성 결핍 세 상황과 노출·보안 위험",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp10.html"
+        },
+        {
+          "title": "RAIBR02-BP06 Identify potential harmful events impacting system and data security",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raibr02-bp06.html"
+        },
+        {
+          "title": "RAIGT01-BP01 Develop a transparency strategy — 공개 요건 결정과 발행 검토·승인",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp01.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q12",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.4",
+      "section": "human-centered",
+      "difficulty": "foundational",
+      "stem": "책임 있는 AI 렌즈는 사용자 여정을 사전, 초기 상호 작용, 처리 중, 사후 네 단계로 나눠 AI 상호 작용 요건을 식별하라고 적습니다. 사용자가 AI 출력을 이해하고 이의를 제기하고 피드백을 줄 수 있게 한다는 요구는 어느 단계에 적혀 있습니까?",
+      "options": [
+        "사전 — 사용자가 시스템의 역량과 한계를 배우도록 돕는 단계",
+        "초기 상호 작용 — 서로 다른 접근성 요구와 핵심 시스템 입력의 출처를 고려하는 단계",
+        "처리 중 — AI 의사 결정에 대한 투명성을 유지하고 적절한 진행 표시를 제공하는 단계",
+        "사후 — 공식은 이 단계에서 사용자가 출력을 이해하고 이의를 제기하고 피드백을 줄 수 있게 하는 것이 시스템을 책임 있고 개선 가능하게 유지한다고 적습니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 모범 사례는 사후 단계에서 사용자가 AI 출력을 이해하고 이의를 제기하고 피드백을 줄 수 있게 하라고 적으며, 그것이 시스템을 책임 있고 개선 가능하게 유지한다고 덧붙입니다. 구현 고려 사항에서는 사용자가 출력을 받고 해석하고 행동하는 경로를 신뢰도 표시, 설명 기능, 결과의 적절한 사용에 대한 안내와 함께 설계하라고 적습니다.",
+      "wrongExplanations": {
+        "0": "사전 단계의 요구는 사용자가 시스템의 역량과 한계를 배우도록 돕고, 참여 전에 어떤 기대를 갖는지와 어떤 정보가 필요한지를 식별하는 것입니다.",
+        "1": "초기 상호 작용 단계의 요구는 서로 다른 접근성 요구와 핵심 시스템 입력의 출처를 고려하고, 사용자가 출력에 영향을 주려고 입력을 어떻게 바꿀 수 있는지 보는 것입니다.",
+        "2": "처리 중 단계의 요구는 AI 의사 결정에 대한 투명성을 유지하고 적절한 진행 표시를 제공하며, 처리 시간과 처리 중 사용자가 보는 것, 확신 수준을 이해하도록 돕는 정보를 설계하는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "RAIUC04-BP01 Map the user journey to identify AI interaction requirements — 사용자 여정 네 단계",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raiuc04-bp01.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q13",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.4",
+      "section": "human-centered",
+      "difficulty": "applied",
+      "stem": "같은 AI 판정 결과를 대출 심사 담당자와 일반 고객이 함께 봅니다. 책임 있는 AI 렌즈가 사용자에게 시스템 출력 해석을 안내하라며 적는 요구는 무엇입니까?",
+      "options": [
+        "모든 사용자에게 동일한 기술 상세를 제공해 설명의 일관성을 지킵니다",
+        "안내의 복잡도와 형식을 사용자 전문성 수준에 맞추고 높은 수준의 요약과 상세한 기술 정보를 함께 제공하며, 신뢰도 점수와 특징 중요도 표시, 의사 결정 경로, 사고의 연쇄 같은 기능으로 특정 입력이 왜 특정 출력을 냈는지 이해하도록 돕습니다",
+        "일반 고객에게는 설명을 제공하지 않고 담당자에게만 근거를 노출해 혼란을 줄입니다",
+        "설명을 제공하는 대신 자동 승인 비율을 높여 사람이 판단할 자리를 줄입니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 모범 사례는 시스템 출력을 어떻게 해석해야 하는지에 대한 접근 가능한 안내를 제공하고, 특정 입력이 왜 특정 출력을 냈는지 더 잘 이해하도록 사용자가 쓸 수 있는 기능으로 신뢰도 점수, 특징 중요도 표시, 의사 결정 경로, 사고의 연쇄를 듭니다. 이어서 안내의 복잡도와 형식을 사용자 전문성 수준에 맞춰 조정하고 높은 수준의 요약과 상세한 기술 정보를 함께 제공하라고 적으며, 목표를 사용자가 언제 시스템 출력을 신뢰할지, 언제 추가 검증을 구할지, 언제 자신의 도메인 지식에 근거해 권고를 재정의하거나 무시할지 식별하도록 돕는 것으로 적습니다.",
+      "wrongExplanations": {
+        "0": "공식은 동일한 상세를 요구하지 않습니다. 안내의 복잡도와 형식을 사용자 전문성 수준에 맞춰 조정하고, 요약과 기술 상세를 함께 제공하라고 적습니다.",
+        "2": "설명을 특정 집단에서 빼는 것은 공식 서술과 어긋납니다. 접근 가능한 안내를 제공하라는 것이 요구이고, 사용자 집단과 전문성 수준에 따라 형식을 조정하라는 것이 그 방법입니다.",
+        "3": "방향이 반대입니다. 공식의 인간 중심성은 사람을 대체하는 것이 아니라 사람의 역량을 증강하는 것이고, 고위험 결정의 예시도 자동 승인과 사람 검토의 명확한 임계값을 설정하라는 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "RAIGT01-BP04 Guide users on how to understand system outputs — 전문성 수준에 맞춘 안내",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp04.html"
+        },
+        {
+          "title": "What is Explainable AI? — 원칙 네 가지와 기법 두 범주",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q14",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.4",
+      "section": "human-centered",
+      "difficulty": "applied",
+      "stem": "제품에 신뢰도 점수와 추론 경로 표시를 넣었습니다. 책임 있는 AI 렌즈가 시스템 행동의 설명 가능성을 측정하라며 특별히 주의를 두라고 꼽는 것은 무엇입니까?",
+      "options": [
+        "사용자가 시스템 출력을 언제 신뢰하고 언제 의심해야 하는지 정확히 식별할 수 있는지. 신뢰해야 하는 시나리오와 신뢰하면 안 되는 시나리오를 만들어 과신과 과소 신뢰 양쪽을 잡습니다",
+        "설명을 생성하는 데 드는 추론 지연과 비용이 예산 안에 있는지",
+        "설명 문구가 모든 사용자 집단에서 동일하게 읽히는지. 집단 간 차이가 없어야 측정이 유효합니다",
+        "설명을 넣은 뒤에도 모델 정확도가 떨어지지 않았는지. 정확도 유지가 설명 가능성 측정의 핵심 기준입니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 모범 사례는 사용자 연구에 근거한 설명 가능성 지표를 세우고 객관적 지표와 주관적 평가를 함께 쓰라고 적은 뒤, 사용자가 시스템 출력을 언제 신뢰하고 언제 의심해야 하는지 정확히 식별할 수 있는지에 특별히 주의를 두라고 적습니다. 구현 고려 사항은 시스템을 신뢰해야 하는 시나리오와 신뢰하면 안 되는 시나리오를 만들어, 사용자가 높은 확신과 낮은 확신을 올바르게 구별하는지와 권고를 적절히 따르거나 재정의하는지를 보라고 하고, 이 시험이 과신과 과소 신뢰 양쪽을 잡아낸다고 적습니다.",
+      "wrongExplanations": {
+        "1": "지연과 비용은 이 모범 사례의 측정 대상이 아닙니다. 객관적 지표로 적혀 있는 것은 AI 설명에 근거해 행동할 때의 작업 완료율과 결정 정확도, 완료까지의 시간이고, 설명이 있을 때와 없을 때를 모두 재라고 합니다.",
+        "2": "공식은 반대로 적습니다. 사용자 집단과 전문성 수준에 걸쳐 설명의 효과를 추적하고, 주관적 측정값이 집단마다 어떻게 다른지를 봐 설명이 잘 통하는 곳과 부족한 곳을 찾으라고 합니다.",
+        "3": "측정 대상이 다릅니다. 이 모범 사례가 재는 것은 사용자가 출력을 올바르게 해석하는 능력이고, 설명 가능성과 정확도 사이의 절충은 설계와 릴리스 쪽 모범 사례가 따로 다룹니다."
+      },
+      "sources": [
+        {
+          "title": "RAIRC03-BP08 Measure explainability of system behavior — 객관·주관 지표와 과신·과소 신뢰",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp08.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "aif-t4-2-q15",
+      "examGuideTaskId": "aif-t4-2",
+      "skill": "4.2.4",
+      "section": "human-centered",
+      "difficulty": "foundational",
+      "stem": "AWS의 설명 가능한 AI 안내는 설명 가능성을 높이는 핵심 원칙 가운데 하나로 인간 중심성(Human centrism)을 듭니다. 공식이 적는 이 원칙의 뜻은 무엇입니까?",
+      "options": [
+        "사용자 인터페이스를 더 친절하고 읽기 쉽게 만들어 설명을 이해하기 쉽게 하는 것",
+        "사람이 모델을 직접 훈련할 수 있도록 도구와 절차를 단순화하는 것",
+        "사람을 대체하는 AI 시스템을 만드는 대신 인공 지능으로 사람의 역량을 증강하는 것",
+        "모든 AI 결정에 사람의 사전 승인을 받도록 강제하는 것"
+      ],
+      "correct": 2,
+      "explanation": "공식 안내는 사람을 대체하는 AI 시스템을 만드는 대신 설명 가능한 AI의 원칙이 인공 지능으로 사람의 역량을 증강하려 한다고 적고, 그 결과 인력이 더 생산적이고 가치 있게 되어 조직의 성장에 기여한다고 덧붙입니다. 같은 목록의 다른 원칙은 공정성과 편향 제거, 프라이버시와 보안, 투명성과 감사 가능성입니다. 그래서 인간 중심성은 인터페이스를 친절하게 만드는 일반론이 아니라 대체가 아닌 증강이라는 방향 선언입니다.",
+      "wrongExplanations": {
+        "0": "인터페이스를 읽기 쉽게 만드는 것은 좋은 실천이지만 공식이 인간 중심성으로 적는 내용이 아닙니다. 공식 문장의 축은 대체가 아니라 증강입니다.",
+        "1": "도구의 단순화는 이 원칙의 서술에 들어 있지 않습니다. 공식은 사람의 일을 AI가 대체하는지 증강하는지를 기준으로 적습니다.",
+        "3": "사전 승인의 강제는 공식 서술이 아닙니다. 사람 검토가 필요한 자리는 고위험 결정에서 자동 승인과 사람 검토의 임계값을 설정하는 방식으로 다뤄지며, 모든 결정에 승인을 요구하는 것과는 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "What is Explainable AI? — 원칙 네 가지와 기법 두 범주",
+          "url": "https://aws.amazon.com/what-is/explainable-ai/"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

@@ -121,7 +121,7 @@ lastVerified: 2026-11-03
 - ⚠️ **AgentCore의 정책은 집행 지점이 Gateway이고 "에이전트 코드 바깥"입니다** — 공식 문장이 **"evaluated at the boundary outside of agent's code"**입니다. 언어는 **Cedar와 Dogwood 둘**이고 **자연어로도** 작성할 수 있습니다
 - ⚠️ **Amazon Macie는 Amazon S3를 봅니다** — S3 범용 버킷의 인벤토리를 만들고 **관리형 데이터 식별자**와 **사용자 지정 데이터 식별자(정규식)**로 민감 데이터를 찾습니다. "모든 데이터 스토어를 스캔한다"로 읽으면 틀립니다
 - ⚠️ **목표 5.1.1이 드는 `AWS PrivateLink`는 범위 내 서비스 목록에 없습니다** — 목록에는 `Amazon VPC`만 있습니다. 목표 본문이 더 구체적인 정본이니 **쓰되 그 상태를 알고** 씁니다
-- ⚠️ **프롬프트 공격 필터는 입력 태그가 없으면 동작하지 않습니다** — **"If there are no tags, prompt attacks for those use cases will not be filtered"**. 태그 접두사가 **예측 불가능**해야 하는 이유는, 고정 태그면 공격자가 태그를 먼저 닫고 인젝션을 붙일 수 있기 때문입니다
+- ⚠️ **프롬프트 공격 필터는 입력 태그가 없으면 동작하지 않습니다** — **"If there are no tags, prompt attacks for those use cases will not be filtered"**. ⚠️ 공식이 적는 것은 **여기까지**이고, 태그 접두사를 **예측 불가능하게 두라는 것은 공식 문구가 아니라 이 구조에서 따라오는 원리**입니다 — 고정 태그면 공격자가 태그를 먼저 닫고 인젝션을 붙일 수 있습니다
 - **프롬프트 공격은 공식이 세 종류로 나눕니다** — **탈옥(Jailbreak)** · **프롬프트 인젝션** · **프롬프트 누출(Prompt Leakage, Standard 계층 전용)**
 - ⚠️ **모델 호출 로깅은 기본적으로 꺼져 있습니다.** 대상은 **CloudWatch Logs와 Amazon S3**이고 **같은 계정·같은 리전**만 지원하며, 본문이 **100KB**를 넘으면 S3에 별도 객체로 올라갑니다
 - ⚠️ **Guardrails의 PII 마스킹은 로그에 적용되지 않습니다** — **"the `input` field in Amazon CloudWatch Logs always contains the original, unmodified request regardless of guardrail intervention"**. 로그 쪽은 **CloudWatch Logs 데이터 보호 정책**(`logs:Unmask` 권한자만 원문 열람)으로 따로 막습니다
@@ -154,7 +154,7 @@ lastVerified: 2026-11-03
 
 예시가 **여덟 개**입니다 — IAM 역할·정책·권한 · 암호화 · Amazon Macie · AWS PrivateLink · 공동 책임 모델 · AgentCore Identity · AgentCore의 정책 · Bedrock Guardrails. 외우는 순서가 아니라 **층으로** 쥐어야 합니다.
 
-**공동 책임 모델이 출발점입니다.** AWS는 **"protecting the infrastructure that runs all of the services offered in the AWS Cloud"**(하드웨어·소프트웨어·네트워킹·시설)를 맡고 이것이 **클라우드 "의" 보안**입니다. 고객 쪽은 **"Customer responsibility will be determined by the AWS Cloud services that a customer selects"** — 즉 **고객 책임의 크기는 고른 서비스가 결정합니다.** 고객이 온전히 받는 **상속받는 통제**의 공식 예는 **물리적·환경적 통제**이고, 양쪽에 적용되지만 각자 자기 몫을 구현하는 **공유 통제**는 **패치 관리 · 구성 관리 · 인식 및 교육** 셋입니다.
+**공동 책임 모델이 출발점입니다.** AWS는 **"protecting the infrastructure that runs all of the services offered in the AWS Cloud"**(하드웨어·소프트웨어·네트워킹·시설)를 맡고 이것이 **클라우드 "의" 보안**입니다. 고객 쪽은 **"Customer responsibility will be determined by the AWS Cloud services that a customer selects"** — 즉 **고객 책임의 크기는 고른 서비스가 결정합니다.** 공식이 통제를 가르는 묶음은 **셋**입니다. 고객이 온전히 받는 **상속받는 통제(Inherited Controls)**의 공식 예는 **물리적·환경적 통제**이고, 양쪽에 적용되지만 각자 자기 몫을 구현하는 **공유 통제(Shared Controls)**는 **패치 관리 · 구성 관리 · 인식 및 교육** 셋입니다. ⚠️ **세 번째가 고객 전용 통제(Customer Specific)**로, 고객이 쓰는 애플리케이션에 따라 **전적으로 고객 책임**인 것들입니다 — 공식 예가 **서비스·통신 보호(Service and Communications Protection)**와 **영역 보안(Zone Security)**이고, 고객이 **자기 데이터나 환경을 특정 보안 요구에 맞게 라우팅·구획화**해야 하는 경우입니다.
 
 > 🧠 **원리:** 관리형 AI 서비스일수록 고객 몫이 **작아지지만 사라지지는 않습니다.** Amazon Bedrock에서도 **어떤 IAM 주체가 어떤 모델을 호출하는가 · 프롬프트에 무엇을 넣는가 · 로깅을 켜는가 · 가드레일을 붙이는가**는 전부 고객 몫입니다. "이 위험은 누구 책임인가"가 나오면 **데이터와 설정은 고객**으로 읽습니다.
 
@@ -366,13 +366,13 @@ lastVerified: 2026-11-03
 ⚠️ 셋째와 넷째는 겹치지 않고 오히려 **만납니다** — Dogwood 정책이 **Guardrails 같은 정보 공급자**가 내는 **콘텐츠 안전·프롬프트 공격 점수**를 조회해 판단할 수 있습니다.
 </details>
 
-**Q2.** 프롬프트 공격 필터를 `HIGH` 강도로 켜고 `InvokeModel`로 호출하는데 **명백한 인젝션이 통과**합니다. 가장 먼저 확인할 것은 무엇이고, 그 설정값이 **예측 불가능해야 하는 이유**는? (→ 4) 보안·개인 정보 보호)
+**Q2.** 프롬프트 공격 필터를 `HIGH` 강도로 켜고 `InvokeModel`로 호출하는데 **명백한 인젝션이 통과**합니다. 가장 먼저 확인할 것은 무엇이고, 그 설정값을 **예측 불가능하게 두는 원리**는? (→ 4) 보안·개인 정보 보호)
 
 <details><summary>정답 보기</summary>
 
 **입력 태그입니다.** 공식이 주의 상자로 못박습니다 — **"You must always use input tags with your guardrails ... If there are no tags, prompt attacks for those use cases will not be filtered."** 즉 태그가 없으면 **필터가 켜져 있어도 아무것도 걸러내지 않습니다.** 태그가 필요한 이유는 **개발자의 시스템 프롬프트와 그것을 덮어쓰려는 공격이 생긴 모양이 같기 때문**입니다("Prompt attacks can often resemble a system instruction"). 태그로 사용자 입력 구간을 표시하면 **그 안쪽만 평가 대상**이 되고 **개발자 시스템 프롬프트는 제외**돼 의도치 않은 필터링이 피해집니다.
 
-**태그 접두사가 예측 불가능해야 하는 이유**는 고정값이면 공격자가 **자기 입력 안에서 태그를 먼저 닫고** 그 뒤에 본문을 붙여 **"태그 밖의 콘텐츠"처럼 보이게** 만들 수 있기 때문입니다. 태그는 **신뢰 경계의 표시**이고 추측 가능하면 경계가 사라집니다. ⚠️ 함께 확인할 범위 한계 — 이 필터는 **도구 결과(`toolResult`)와 도구 정의(`toolSpec`)를 평가하지 않습니다.**
+**태그 접두사를 예측 불가능하게 두는 원리**는 — ⚠️ **공식 문구가 아니라 위 구조에서 따라오는 추론입니다** — 고정값이면 공격자가 **자기 입력 안에서 태그를 먼저 닫고** 그 뒤에 본문을 붙여 **"태그 밖의 콘텐츠"처럼 보이게** 만들 수 있기 때문입니다. 태그는 **신뢰 경계의 표시**이고 추측 가능하면 경계가 사라집니다. ⚠️ 함께 확인할 범위 한계 — 이 필터는 **도구 결과(`messages[].content[].toolResult`)와 도구 정의(`toolConfig.tools[].toolSpec`)를 평가하지 않습니다**(공식 원문이 적는 경로 표기 그대로입니다).
 </details>
 
 **Q3.** 상담 요약 애플리케이션에서 **민감 정보 필터를 `Mask`로** 설정했습니다. 그런데 감사에서 **CloudWatch Logs에 고객 전화번호 원문이 남아 있다**는 지적을 받았습니다. 설명하고 대책을 말하세요. (→ 4) 보안·개인 정보 보호)

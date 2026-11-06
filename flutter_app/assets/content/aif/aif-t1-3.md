@@ -22,8 +22,8 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html
   - title: MLCOST06-BP02 Monitor return on investment for ML models
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp02.html
-  - title: Metrics and validation (Amazon SageMaker AI Autopilot)
-    url: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+  - title: AutoMLJobObjective (Amazon SageMaker AI API Reference) — 문제 유형별 기본 목표 지표
+    url: https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobObjective.html
   - title: SageMaker JumpStart pretrained models
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html
   - title: Amazon Bedrock or Amazon SageMaker AI?
@@ -146,7 +146,7 @@ AWS Well-Architected 머신러닝 렌즈가 **6단계**로 정리합니다. v1.1
 | 축 | **관리형 API** (`Amazon Bedrock`) | **자체 호스팅** (`Amazon SageMaker AI` 엔드포인트) |
 |---|---|---|
 | 인프라 | **서버리스** — 공식은 **"인프라를 관리하지 않아도 된다"**고 적습니다 | 전용 엔드포인트. 훈련 작업·HyperPod는 **노드 수준까지 제어** |
-| 과금 | **처리한 입력·출력 토큰 기준 종량제** | **컴퓨팅 리소스 사용량 기준** |
+| 과금 | **처리한 입력·출력 토큰 기준 종량제**이고 **Priority · Flex · Reserved 서비스 계층**을 고를 수 있습니다 | **자리에 따라 둘로 갈립니다** — **서버리스 모델 커스터마이징은 토큰당**(공식은 "Bedrock과 같은 요금 단순성"이라고 적습니다), **관리형 훈련 작업 · 추론 · HyperPod는 컴퓨팅·스토리지 사용량 기준**(인스턴스 유형·크기에 따라 다름) |
 | 통합 | **사전 훈련 모델을 API 호출로** 애플리케이션에 통합 | **사용자 지정 모델**을 통합, 선택지가 더 많습니다 |
 | 필요한 전문성 | 사전 훈련 모델을 쓰는 데 **기본적인 ML 전문성** | 고급 훈련 작업에는 **더 깊은 ML 전문성**이 도움 |
 | 대상 사용자 | 기술 의사결정자 · AI 애플리케이션·에이전트를 만드는 개발자 | ML 실무자 · ML 엔지니어 · 데이터 과학자 · AI 플랫폼 팀 |
@@ -269,7 +269,7 @@ v1.1이 AUC를 빼고 **정밀도·재현율**을 넣었습니다. 네 개만 �
 - ❌ **"특성 엔지니어링은 모델 개발 단계의 일이다"** → **데이터 처리** 단계입니다. 모델 개발은 구축·훈련·튜닝·평가입니다.
 - ❌ **"모델 평가는 훈련 데이터로 한다"** → 목적이 **훈련 데이터셋을 넘어 일반화하는지 확인**하는 것이므로 **검증 세트**라는 별도 데이터셋을 씁니다.
 - ❌ **"오픈 소스 사전 훈련 모델은 AWS가 라이선스를 검토해 준다"** → 공식은 **라이선스 조건 검토·준수 책임이 사용자에게 있다**고 명시합니다.
-- ❌ **"관리형 API든 자체 호스팅이든 과금 모델은 같다"** → Bedrock은 **토큰 기준 종량제**, SageMaker AI는 **컴퓨팅 리소스 사용량 기준**입니다.
+- ❌ **"SageMaker AI는 무조건 컴퓨팅 사용량 기준으로만 과금된다"** → **자리에 따라 갈립니다.** 공식은 **서버리스 모델 커스터마이징에 토큰당 요금**을 적용한다고 적고(Bedrock과 같은 요금 단순성), **관리형 훈련 작업 · 추론 · HyperPod**에만 **컴퓨팅·스토리지 사용량 기준**을 적용합니다. Bedrock 쪽은 토큰 기준 종량제입니다.
 - ❌ **"Bedrock과 SageMaker AI 중 하나만 골라야 한다"** → 공식은 **배타적이지 않다**고 적고, 점진적 커스터마이징 파이프라인에서 **함께 쓰는** 경로를 제시합니다.
 - ❌ **"Amazon QuickSight가 Amazon Quick으로 대체되어 기존 API가 끊긴다"** → QuickSight는 Quick 안의 기능 **Amazon Quick Sight**로 이어지고, **기존 API·SDK·통합은 변경 없이 동작**합니다.
 - ❌ **"MLOps는 DevOps의 다른 이름이다"** → MLOps에서는 **원천 데이터가 소스 코드와 나란히 1급 입력**이라, 데이터·모델·파라미터·훈련 구성까지 버전화하고 데이터 변경이 파이프라인을 촉발합니다.
@@ -317,7 +317,7 @@ v1.1이 AUC를 빼고 **정밀도·재현율**을 넣었습니다. 네 개만 �
 
 첫 팀은 **관리형 API(`Amazon Bedrock`)**입니다. 공식 비교 표가 Bedrock의 필요 전문성을 **"사전 훈련 모델을 쓰는 데 필요한 기본적인 ML 전문성"**으로 적고, 통합을 **"API 호출로 사전 훈련 모델을 애플리케이션에 통합"**으로 적습니다. 그리고 **"Bedrock은 서버리스이므로 인프라를 관리하지 않아도 된다"**고 명시합니다. 과금은 **처리한 입력·출력 토큰 기준 종량제**입니다.
 
-둘째 팀은 **자체 호스팅(`Amazon SageMaker AI` 전용 엔드포인트)**입니다. 공식은 **"비용·지연·처리량 트레이드오프를 직접 관리해야 할 때 SageMaker AI를 고려하라"**고 적습니다. 과금은 **컴퓨팅 리소스 사용량 기준**입니다.
+둘째 팀은 **자체 호스팅(`Amazon SageMaker AI` 전용 엔드포인트)**입니다. 공식은 **"비용·지연·처리량 트레이드오프를 직접 관리해야 할 때 SageMaker AI를 고려하라"**고 적습니다. 전용 엔드포인트로 추론을 돌리므로 과금은 **컴퓨팅·스토리지 사용량 기준**입니다 — 다만 **SageMaker AI 전체가 그런 것은 아닙니다.** 공식은 **서버리스 모델 커스터마이징에는 토큰당 요금**을 적용한다고 적습니다.
 
 ⚠️ 덧붙여, 공식은 이 선택이 **배타적이지 않다**고 적습니다. Bedrock에서 프로토타입을 만들고, 인프라 제어가 필요해지면 SageMaker AI 엔드포인트나 HyperPod로 옮기는 경로가 공식 권고입니다.
 </details>
@@ -365,10 +365,10 @@ ROI가 음수일 때 공식이 드는 개선 방향도 함께 기억합니다 �
 2. What is Machine Learning? — `aws.amazon.com/what-is/machine-learning/` (2026-11-03 확인)
 3. What is MLOps? — `aws.amazon.com/what-is/mlops/` (2026-11-03 확인)
 4. Planning for successful MLOps (AWS Prescriptive Guidance) — `docs.aws.amazon.com/prescriptive-guidance/latest/ml-operations-planning/introduction.html` (2026-11-03 확인)
-5. MLSUS06-BP02 Retrain only when necessary — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html` (2026-11-03 확인)
-6. MLPERF06-BP03 Evaluate data drift — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html` (2026-11-03 확인)
+5. MLSUS06-BP02 Retrain only when necessary — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus06-bp02.html` (2026-11-06 재확인) · ⭐ **드리프트 두 종류를 한 문장에 정의하는 정본이 여기입니다** — "you can detect both **concept drift (changes in the relationship between input and output variables)** and **data drift (changes in the distribution of input data)**"
+6. MLPERF06-BP03 Evaluate data drift — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp03.html` (2026-11-06 재확인) · ⚠️ **이 페이지는 데이터 드리프트만 정의합니다**(개념 드리프트는 모니터링 도구가 탐지하는 대상으로만 언급). 위 용어 표의 **개념 드리프트 정의는 5번에서** 왔습니다
 7. MLCOST06-BP02 Monitor return on investment for ML models — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost06-bp02.html` (2026-11-03 확인)
-8. Metrics and validation (Amazon SageMaker AI Autopilot) — `docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html` (2026-11-03 확인)
+8. AutoMLJobObjective (Amazon SageMaker AI API Reference) — `docs.aws.amazon.com/sagemaker/latest/APIReference/API_AutoMLJobObjective.html` (2026-11-05 확인)
 9. SageMaker JumpStart pretrained models — `docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html` (2026-11-03 확인)
 10. Amazon Bedrock or Amazon SageMaker AI? — `docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html` (2026-11-03 확인)
 11. Machine Learning (ML) and Artificial Intelligence (AI) · AWS 서비스 개요 — `docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html` (2026-11-03 확인)

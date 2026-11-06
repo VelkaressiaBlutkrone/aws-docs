@@ -116,16 +116,22 @@
 
 > **읽는 방법:** 개정 표는 v1.1 게시 시점(2026-04-30)의 스냅샷이고, 본문은 그 뒤 **번역 교정·예시 정리**가 반영된 현재 상태로 보인다(5.1.4의 "신속한 삽입" → "프롬프트 인젝션"이 그 증거다). 레포 JSON(2026-06-11 수집)이 개정 표 쪽 문구를 여럿 담고 있는 것도 이 가설과 맞는다.
 
-## 5. 레포 JSON 수정 제안
+## 5. 레포 JSON 수정 — ✅ 전부 반영됐다 (2026-11-05)
 
-> ⚠️ **이 PR에서는 JSON을 고치지 않는다**(조사 단계). 저작 PR에서 아래를 한 번에 반영한다.
+> ✅ **6항목 전부 닫혔다.** 가드는 `flutter_app/test/aif_guide_v11_test.dart`(49건)이고 교체 근거는 [00-overview.md](00-overview.md) §3 전사다. 아래 목록은 **무엇을 했는지의 기록**이다.
+>
+> ⚠️ **이 절의 「불일치 17건」은 공백을 제거한 대조였다 — 바이트로 세면 19건이다.** §1이 "정규화는 공백 제거만 했다"고 적은 그대로이고, 그래서 **공백만 다른 2건이 일치로 세어졌다**: `2.1.6`(`개념 (예:` · `프로토콜 (MCP)`)과 `2.2.1`(`능력) 을`). 둘 다 기계번역 띄어쓰기 잔재다. 교체는 공식 전문을 **그대로** 넣는 것이므로 바이트 기준이 맞고, 그 잔재 패턴(` (` · `) 을` · `) 를` · `) 이` · `) 에` · 연속 공백)은 공식 전사 83건(목표 69 + 제목 14)에서 **0건**이라 금지 가드로 고정했다.
+>
+> ⚠️ **Task 제목 전수 대조는 이때 처음 했다** — 이 문서의 기계 대조는 **목표 본문만** 봤다. 제목 14개 중 차이는 **`2.1`의 마침표 하나**였다(공식 "…설명합니다." — 서술형 종결이라 마침표가 있고, 나머지 13개는 명사형 종결이라 없다).
+>
+> ⚠️ **이 파일은 한 줄 compact JSON이다**(SAA-C03.json도 같다. SOA·DEA·MLA·CLF는 2칸 들여쓰기 다중 행). diff가 `+1/−1`로만 보여 눈으로 검증되지 않으므로 ① 직렬화 왕복이 원본을 바이트 단위로 재현하는지 ② 바뀐 경로가 **정확히** 목표 19 + 제목 1 + 메타 3키인지 ③ 금지·필수 문구가 양방향으로 맞는지를 기계로 단정한 뒤 썼다. **서식 변환(pretty-print)은 하지 않았다** — 레포가 format 게이트를 쓰지 않아 서식 churn이 리뷰 불가 diff를 만든다.
 
-1. **목표 본문 69건을 공식 v1.1 본문으로 교체** — 특히 §2.1의 실질 차이 9건. 공식에 없는 `AWS Audit Manager` · `Amazon A2I` · `SageMaker Model Monitor` · `Amazon Q` 예시를 **지운다**(범위 내 목록에도 없다).
-2. **서비스명 한글 음차를 제거** — `아마존 베드락` → `Amazon Bedrock`, `아마존 퀵` → `Amazon Quick`. 레포 전체가 영문 서비스명을 쓰므로 이 둘은 명백한 기계번역 잔재다.
-3. **오표기 교정** — `AgentCore ID` → `AgentCore Identity`, `Amazon BedRock Guardrail` → `Amazon Bedrock Guardrails`, `신속한 삽입` → `프롬프트 인젝션`, `기초 모델` → `파운데이션 모델`, `환각` → `할루시네이션`.
-4. **메타 필드 추가** — SOA-C03.json과 같은 스키마로 `guideVersion: 1.1` · `guidePublished: "2026-04-30"` · `officialName` · `lastVerified: "2026-11-03"`.
-5. **`durationMinutes: 90`의 출처를 확정하거나 제거** — [99-gaps.md](99-gaps.md) G-01.
-6. **`skills` 빈 배열 처리 방침 결정** — AIF 가이드는 Task 아래 "목표"만 두고 **Skill 계층이 없다**(DVA·SOA와 구조가 다르다). 빈 배열을 유지할지 키를 없앨지는 다른 자격증 JSON 스키마와 함께 판정한다.
+1. ✅ **목표 본문을 공식 v1.1로 교체** — 바이트 기준 **19건**(§2.1의 실질 차이 9 + §2.2의 표기 8 + 공백 잔재 2). 공식에 없는 `AWS Audit Manager` · `Amazon A2I` · `SageMaker Model Monitor` · `Amazon Q` 예시를 지웠고, 함께 들어 있던 `SageMaker Clarify`도 사라졌다(4.1.7·4.2.2). 다섯 이름 모두 **0건 금지 가드**로 고정했다.
+2. ✅ **서비스명 한글 음차 제거** — `아마존 베드락` → `Amazon Bedrock`, `아마존 퀵` → `Amazon Quick`, `아마존 Q`는 **삭제**(공식 본문에 없다). `아마존` 자체를 0건으로 고정했다.
+3. ✅ **오표기 교정** — `AgentCore ID` → `AgentCore Identity`, `Amazon BedRock Guardrail` → `Amazon Bedrock Guardrails`, `신속한 삽입` → `프롬프트 인젝션`, `기초 모델` → `파운데이션 모델`, `환각` → `할루시네이션`, `곡선 밑부분 면적(AUC)` → `정밀도, 재현율`, `사기 탐지` → `사기 행위 탐지`. ⚠️ **`Amazon Q`와 `AgentCore ID`는 공식 문구의 접두사**(`Amazon Quick`·`AgentCore Identity`)라 `contains`로 세면 교체한 공식 문구가 스스로 걸린다 — 음성 전방탐색(`Amazon Q(?![A-Za-z])` · `AgentCore ID(?!entity)`)으로 가르고 그 가름이 되는지 대조군으로 먼저 단정했다.
+4. ✅ **메타 필드 추가** — SOA-C03.json과 같은 키 순서로 `guideVersion: "1.1"` · `guidePublished: "2026-04-30"` · `officialName: "AWS Certified AI Practitioner"`. ⚠️ **`lastVerified`는 넣지 않았다** — `exam_guides/*.json` **12개 전수에서 그 키는 0건**이다(SOA-C03도 없다. 실측). 이 자격증만 넣으면 스키마가 갈리고, 검증 시점은 이 문서와 가드 테스트가 들고 있다. 교체 후 AIF의 키 순서는 **SOA-C03과 완전히 같다**(`code · slug · guideVersion · guidePublished · officialName · overview · domains · sourceUrl`) — 메타 3키를 가진 가이드는 이제 그 둘뿐이다.
+5. ✅ **`durationMinutes: 90` 확정** — 지우지 않았다. [99-gaps.md](99-gaps.md) G-01이 해소돼 값이 옳음이 확인됐다(**가이드 본문에는 없고** 공식 인증 페이지의 "Exam duration 90 minutes"가 근거다). 가드가 `채점 50 + 비채점 15 = 65`와 함께 고정한다.
+6. ✅ **`skills: []` 유지** — SOA-C03.json이 **반대로** `knowledge: []`를 비워 두므로 빈 배열을 남기는 것이 이 레포의 관례이고, `ExamTask.fromJson`이 양쪽 다 `const []`로 기본값을 준다. 키를 없애면 모델은 견디지만 자격증마다 구조가 갈린다. 가드가 "Task마다 `knowledge`는 비지 않고 `skills`는 비어 있다"를 14 Task 전수로 단정한다.
 
 ## 6. 출처
 
