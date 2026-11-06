@@ -46,7 +46,7 @@
         "Dedicated Hosts"
       ],
       "correct": 0,
-      "explanation": "Savings Plans는 1년 또는 3년 동안 시간당 일정한 컴퓨팅 사용량($/시간)을 약정하는 대신 On-Demand보다 낮은 가격을 제공합니다. Compute Savings Plans는 인스턴스 패밀리·크기·OS·테넌시·리전과 무관하게 EC2에 적용되고 Fargate·Lambda 사용에도 적용되어 유연합니다(최대 72% 절감).",
+      "explanation": "Savings Plans는 1년 또는 3년 동안 시간당 일정한 컴퓨팅 사용량($/시간)을 약정하는 대신 On-Demand보다 낮은 가격을 제공합니다. Compute Savings Plans는 인스턴스 패밀리·크기·OS·테넌시·리전과 무관하게 EC2에 적용되고 Fargate·Lambda 사용에도 적용되어 유연합니다(최대 66% 절감). 최대 72%는 패밀리·리전을 고정하는 EC2 Instance Savings Plans의 수치이므로, 유연성과 최고 할인율은 함께 얻을 수 없습니다.",
       "wrongExplanations": {
         "1": "On-Demand는 약정 없이 정가로 지불하는 옵션으로, 약정 기반 할인을 원하는 요구와 다릅니다.",
         "2": "Spot Instances는 미사용 용량을 저렴하게 쓰지만 중단될 수 있고, 약정 기반의 안정적 할인이 아닙니다.",
@@ -54,7 +54,7 @@
       },
       "sources": [
         {
-          "title": "What are Savings Plans? — 1/3년 사용량 약정, On-Demand보다 할인, EC2·Fargate·Lambda 유연 적용(최대 72%)",
+          "title": "What are Savings Plans? — 1/3년 사용량 약정, On-Demand보다 할인, Compute SP 최대 66%(EC2·Fargate·Lambda 유연) / EC2 Instance SP 최대 72%",
           "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
         }
       ],
