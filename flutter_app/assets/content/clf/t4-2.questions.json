@@ -259,26 +259,26 @@
     {
       "id": "clf-t4-2-q10",
       "examGuideTaskId": "clf-t4-2",
-      "skill": "Billing Conductor (커스텀 청구)",
+      "skill": "비용 할당 태그 두 유형 (AWS 생성·사용자 정의) 과 활성화",
       "difficulty": "foundational",
-      "stem": "한 AWS 파트너가 여러 최종 고객 계정에 대해 표준 요금과 다른 사용자 지정 요금·청구 데이터를 적용해 고객별 맞춤 청구서를 생성하려 한다. 가장 적합한 도구는?",
+      "stem": "한 회사가 비용 할당 태그로 비용을 프로젝트별로 분류하려고 리소스에 태그를 붙였다. 그런데 Cost Explorer와 비용 할당 보고서에는 태그별 분류가 나타나지 않는다. 공식 문서 기준으로 가장 정확한 설명은?",
       "options": [
-        "AWS Cost Explorer",
-        "AWS Billing Conductor",
-        "AWS Budgets",
-        "AWS Pricing Calculator"
+        "리소스에 태그를 붙이면 즉시 모든 비용 보고서에 태그별로 자동 반영된다",
+        "비용 할당 태그는 AWS 생성 태그와 사용자 정의 태그 두 유형이고, 둘 다 결제 콘솔에서 따로 활성화해야 Cost Explorer나 비용 할당 보고서에 나타난다",
+        "비용 할당 태그는 AWS가 만들어 주는 한 유형뿐이고 사용자가 직접 정의할 수는 없다",
+        "사용자 정의 태그도 aws: 접두사를 붙여야 결제 보고서에서 인식된다"
       ],
       "correct": 1,
-      "explanation": "AWS Billing Conductor는 청구 계정 그룹과 사용자 지정 요금을 구성해 표준 AWS 청구 데이터와 다른 맞춤 청구·비용 데이터를 생성하는 도구입니다. AWS 솔루션 제공자나 기업이 최종 고객·부서별로 사용자 지정 요금을 적용한 청구서를 만들 때 사용합니다. ⚠️ 다만 이 서비스는 공식 CLF-C02 「범위 외 AWS 서비스」 목록(클라우드 재무 관리)에 있습니다 — 개념만 알아 두고, 이 Task의 시험 대비는 Budgets·Cost Explorer·요금 계산기·Organizations 통합 결제·비용 할당 태그에 우선순위를 두세요.",
+      "explanation": "공식 문서는 비용 할당 태그를 AWS 생성 태그(AWS-generated tags)와 사용자 정의 태그(user-defined tags) 두 유형으로 설명하고, 두 유형을 각각 따로 활성화해야 Cost Explorer나 비용 할당 보고서에 나타난다고 못박습니다. 태그를 붙이는 것과 활성화하는 것은 다른 단계입니다. 활성화하면 AWS가 활성 태그로 묶은 사용량·비용을 CSV 비용 할당 보고서로 만들어 주며, 그 보고서에는 태그가 붙은 리소스와 붙지 않은 리소스가 함께 들어갑니다.",
       "wrongExplanations": {
-        "0": "AWS Cost Explorer는 발생한 비용을 시각화·분석하는 도구로, 사용자 지정 요금으로 맞춤 청구서를 생성하지 않습니다.",
-        "2": "AWS Budgets는 예산 설정·알림 도구로, 고객별 사용자 지정 청구 데이터를 생성하지 않습니다.",
-        "3": "AWS Pricing Calculator는 구축 전 비용을 추정하는 계획 도구로, 맞춤 청구서를 생성하지 않습니다."
+        "0": "태그를 붙이는 것만으로는 보고서에 반영되지 않습니다. 결제 및 비용 관리 콘솔에서 해당 태그를 활성화하는 단계가 따로 필요합니다.",
+        "2": "두 유형이 있습니다 — AWS(또는 AWS Marketplace ISV)가 정의·생성·적용하는 AWS 생성 태그와, 사용자가 직접 정의·생성·적용하는 사용자 정의 태그입니다.",
+        "3": "접두사가 반대입니다. aws: 접두사는 AWS 생성 태그가 쓰고, 사용자 정의 태그는 user 접두사를 씁니다."
       },
       "sources": [
         {
-          "title": "What is AWS Billing Conductor? — 사용자 지정 요금·청구 데이터로 맞춤 청구서 생성",
-          "url": "https://docs.aws.amazon.com/billingconductor/latest/userguide/what-is-billingconductor.html"
+          "title": "비용 할당 태그로 비용 정리·추적 (AWS Billing 사용 설명서) — 두 유형과 각각의 활성화",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html"
         }
       ],
       "verified": true

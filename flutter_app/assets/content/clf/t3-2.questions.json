@@ -259,27 +259,31 @@
     {
       "id": "clf-t3-2-q10",
       "examGuideTaskId": "clf-t3-2",
-      "skill": "근접·확장 인프라 (Wavelength — 5G 초저지연)",
-      "section": "proximity",
+      "skill": "가용 영역의 독립성 (단일 장애 지점 미공유)",
+      "section": "regions-az",
       "difficulty": "foundational",
-      "stem": "한 개발팀이 5G 모바일 사용자에게 초저지연(ultra-low latency)이 필요한 모바일 게임을 만들고 있다. AWS 컴퓨팅·스토리지를 통신사 네트워크의 엣지에 배포해 5G 기기와의 지연을 최소화하려 한다. 가장 적합한 AWS 인프라는?",
+      "stem": "한 아키텍트가 \"같은 리전 안의 가용 영역들은 결국 같은 전력·냉각 설비를 공유하므로, AZ를 나눠 배치해도 같은 장애에 함께 영향을 받는다\"고 주장한다. AWS 공식 설명에 비추어 가장 정확한 반박은?",
       "options": [
-        "AWS Wavelength",
-        "AWS Outposts",
-        "Amazon CloudFront",
-        "여러 가용 영역(AZ)에 분산 배치"
+        "각 AZ는 독립된 전력·냉각·물리 보안을 갖추고 물리적으로 분리돼 있으며, AZ 사이는 중복화된 초저지연 네트워크로 연결된다",
+        "AZ는 같은 건물을 논리적으로 나눈 구획이므로 전력·냉각을 공유한다는 주장이 맞다",
+        "AZ 사이는 거리가 멀어 지연이 크므로, AZ를 나누면 애플리케이션 성능이 반드시 떨어진다",
+        "리전 하나에는 가용 영역이 하나뿐이어서 AZ를 나눠 배치할 수 없다"
       ],
       "correct": 0,
-      "explanation": "AWS Wavelength는 표준 AWS 컴퓨팅·스토리지 서비스를 통신사(CSP) 네트워크의 엣지(Wavelength Zone)에 배포해, 5G 모바일 기기와 최종 사용자에게 저지연을 제공합니다. 5G 망 엣지에서 애플리케이션을 실행하므로 모바일 게임처럼 초저지연이 필요한 워크로드에 적합합니다. ⚠️ 다만 이 서비스는 공식 CLF-C02 「범위 외 AWS 서비스」 목록(컴퓨팅)에 있습니다 — 개념만 알아 두고, 이 Task의 시험 대비는 Outposts·Local Zones 같은 범위 내 소재에 우선순위를 두세요.",
+      "explanation": "AWS 공식 글로벌 인프라 설명은 각 리전이 최소 세 개의 격리되고 물리적으로 분리된 가용 영역으로 구성되며, 각 AZ가 독립된 전력·냉각·물리 보안을 갖추고 중복화된 초저지연 네트워크로 연결된다고 적습니다. 그래서 한 AZ의 설비 장애가 다른 AZ로 번지지 않고, 고가용성이 필요한 애플리케이션을 여러 AZ에 걸쳐 설계하면 더 높은 내결함성을 얻습니다.",
       "wrongExplanations": {
-        "1": "AWS Outposts는 AWS 인프라를 고객의 온프레미스 데이터센터로 확장하는 서비스로, 통신사 5G 네트워크 엣지에 배포하는 것이 아닙니다.",
-        "2": "Amazon CloudFront는 콘텐츠를 엣지 로케이션에 캐시하는 CDN으로, 5G 망 엣지에서 컴퓨팅을 실행해 초저지연을 제공하는 서비스가 아닙니다.",
-        "3": "여러 AZ에 분산하는 것은 한 리전 안의 고가용성을 위한 것으로, 5G 모바일 기기와의 지연을 최소화하는 것과는 목적이 다릅니다."
+        "1": "AZ는 한 건물의 논리적 구획이 아닙니다. 공식 설명은 AZ를 물리적으로 분리된 격리 위치로 적고, 전력·냉각·물리 보안이 각각 독립이라고 명시합니다.",
+        "2": "AZ 사이는 중복화된 초저지연 네트워크로 연결되므로, 여러 AZ에 걸친 설계가 성능을 반드시 떨어뜨리지는 않습니다. 오히려 고가용성을 위한 표준 구성입니다.",
+        "3": "리전은 최소 세 개의 AZ로 구성됩니다. AZ 하나뿐인 리전이라는 전제가 틀렸습니다."
       },
       "sources": [
         {
-          "title": "What is AWS Wavelength? — 표준 AWS 컴퓨팅·스토리지를 통신사 네트워크 엣지에 배포해 모바일 기기에 저지연 제공",
-          "url": "https://docs.aws.amazon.com/wavelength/latest/developerguide/what-is-wavelength.html"
+          "title": "리전 및 가용 영역 (AWS 글로벌 인프라) — 최소 3개의 격리·물리 분리 AZ, 각 AZ의 독립 전력·냉각·물리 보안, 중복 초저지연 네트워크",
+          "url": "https://aws.amazon.com/about-aws/global-infrastructure/regions_az/"
+        },
+        {
+          "title": "Regions and Zones (Amazon EC2) — 리전 안의 여러 격리된 위치가 가용 영역",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
         }
       ],
       "verified": true
