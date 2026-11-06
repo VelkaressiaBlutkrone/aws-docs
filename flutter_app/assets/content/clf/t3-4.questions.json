@@ -266,7 +266,7 @@
         "Amazon RDS"
       ],
       "correct": 0,
-      "explanation": "Amazon MemoryDB는 마이크로초 단위 읽기 성능을 제공하는 내구성 있는 인메모리 데이터베이스 서비스로, Valkey·Redis OSS와 호환됩니다. Multi-AZ 트랜잭션 로그로 데이터를 여러 가용 영역에 내구성 있게 저장하므로, 캐시와 영구 데이터베이스를 따로 관리할 필요 없이 마이크로서비스의 고성능 기본 데이터베이스로 사용할 수 있습니다.",
+      "explanation": "Amazon MemoryDB는 마이크로초 단위 읽기 성능을 제공하는 내구성 있는 인메모리 데이터베이스 서비스로, Valkey·Redis OSS와 호환됩니다. Multi-AZ 트랜잭션 로그로 데이터를 여러 가용 영역에 내구성 있게 저장하므로, 캐시와 영구 데이터베이스를 따로 관리할 필요 없이 마이크로서비스의 고성능 기본 데이터베이스로 사용할 수 있습니다. ⚠️ 다만 이 서비스는 공식 CLF-C02 「범위 외 AWS 서비스」 목록에 Amazon MemoryDB for Redis OSS(데이터베이스)로 올라 있습니다 — 개념만 알아 두고, 이 Task의 시험 대비는 ElastiCache·DynamoDB에 우선순위를 두세요.",
       "wrongExplanations": {
         "1": "Amazon ElastiCache(Memcached)는 인메모리 캐시로, 보통 휘발성 캐싱 계층이며 Multi-AZ 트랜잭션 로그 기반 내구성을 갖춘 기본 데이터베이스로 설계되지 않았습니다.",
         "2": "Amazon DynamoDB는 NoSQL 데이터베이스로 한 자릿수 밀리초 성능을 제공하지만, Valkey·Redis OSS 호환 인메모리 데이터베이스는 아닙니다.",
