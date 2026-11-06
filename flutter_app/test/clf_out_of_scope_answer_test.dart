@@ -132,23 +132,37 @@ void main() {
           reason: '0이면 아래 전수 단정이 공허하다');
     });
 
-    test('탐지기가 다섯 건을 실제로 집는다', () {
+    test('탐지 집합은 CodeDeploy 한 건뿐이다', () {
+      // 2026-11-06 1차: 다섯 건이었다(Billing Conductor · CodeDeploy · Wavelength ·
+      // MemoryDB · Personalize). 그중 **넷을 범위 내 소재로 교체**(사용자 승인)해 하나만
+      // 남았다 — 그리고 **그 줄어듦을 이 단정이 먼저 알렸다**(설계대로다).
+      //
+      // `clf-t3-1-q19` 만 남긴 이유: 정답 보기가 **범위 내 둘**(CodePipeline·CodeBuild)과
+      // 섞여 있어 CodeDeploy 만 떼면 지문("빌드 단계와 배포 단계")이 성립하지 않는다.
+      // 그래서 교체가 아니라 **범위 메모**가 자연스러운 처리다.
       final hit = <String, List<String>>{
         for (final q in allQuestions())
           if (outOfScopeInAnswer(q).isNotEmpty)
             q['id'] as String: outOfScopeInAnswer(q),
       };
-      expect(hit.keys.toList()..sort(), [
-        'clf-t3-1-q19',
+      expect(hit.keys.toList()..sort(), ['clf-t3-1-q19'],
+          reason: '늘었으면 새 문항이 범위 외 서비스를 정답으로 쓴 것이고, 줄었으면 '
+              '문항이 또 교체된 것이다(둘 다 이 가드를 보고 판단해라)');
+      expect(hit['clf-t3-1-q19'], ['AWS CodeDeploy']);
+    });
+
+    test('교체한 네 문항의 정답은 범위 외 서비스가 아니다', () {
+      for (final qid in const [
         'clf-t3-2-q10',
         'clf-t3-4-q10',
         'clf-t3-7-q19',
         'clf-t4-2-q10',
-      ], reason: '2026-11-06 실측과 같아야 한다 — 늘었으면 새 문항이 범위 외 서비스를 '
-          '정답으로 쓴 것이고, 줄었으면 문항이 교체된 것이다(둘 다 이 가드를 '
-          '보고 판단해라)');
-      expect(hit['clf-t3-1-q19'], ['AWS CodeDeploy']);
-      expect(hit['clf-t3-4-q10'], ['Amazon MemoryDB']);
+      ]) {
+        final q = allQuestions().firstWhere((q) => q['id'] == qid,
+            orElse: () => fail('$qid 없음'));
+        expect(outOfScopeInAnswer(q), isEmpty,
+            reason: '$qid 은 2026-11-06 에 범위 내 소재로 교체했다');
+      }
     });
 
     test('범위 내 서비스가 정답인 문항에는 메모를 요구하지 않는다', () {
@@ -172,21 +186,48 @@ void main() {
             '범위 외」 한 줄을 달아 우선순위를 알려 준다:\n${offenders.join('\n')}');
   });
 
-  group('정답 인덱스는 건드리지 않았다', () {
+  group('정답 자리는 교체 전과 같다', () {
+    // ⚠️ 문항을 교체할 때도 **정답을 교체 전과 같은 인덱스**에 두었다. 앱이 전 경로에서
+    // 보기를 셔플하므로 인덱스는 학습자에게 보이지 않고, 그래서 자리를 옮길 이유가
+    // 없다 — 옮기면 `wrongExplanations` 키 집합까지 함께 바꿔야 하고 리뷰가 어려워진다.
     const correct = <String, int>{
-      'clf-t3-1-q19': 0,
-      'clf-t3-2-q10': 0,
-      'clf-t3-4-q10': 0,
-      'clf-t3-7-q19': 0,
-      'clf-t4-2-q10': 1,
+      'clf-t3-1-q19': 0, // 메모만 추가(교체 안 함)
+      'clf-t3-2-q10': 0, // Wavelength → 가용 영역 독립성
+      'clf-t3-4-q10': 0, // MemoryDB → 용도별 DB 매칭(Neptune·DocumentDB·DynamoDB)
+      'clf-t3-7-q19': 0, // Personalize → OpenSearch Service
+      'clf-t4-2-q10': 1, // Billing Conductor → 비용 할당 태그 두 유형·활성화
     };
     correct.forEach((qid, idx) {
       test('$qid: correct == $idx', () {
         final q = allQuestions().firstWhere((q) => q['id'] == qid,
             orElse: () => fail('$qid 없음'));
-        expect(q['correct'], idx,
-            reason: '이 배치는 해설에 메모만 더한다 — 문항 교체·정답 변경은 '
-                '사람의 승인이 필요하다(보고서 §P2-D ⑤)');
+        expect(q['correct'], idx);
+      });
+    });
+  });
+
+  group('교체 문항은 실측한 공식 출처를 든다', () {
+    // 2026-11-06 `curl -sL` 로 네 URL 전부 `200 r=0` 확인. 출처를 지우거나 다른 페이지로
+    // 바꾸면 이 단정이 깨진다 — 「URL 은 200 인데 그 페이지에 인용 사실이 없다」는
+    // 이 레포의 반복 결함을 막는 쪽이다.
+    const required = <String, String>{
+      'clf-t3-2-q10':
+          'https://aws.amazon.com/about-aws/global-infrastructure/regions_az/',
+      'clf-t3-4-q10': 'https://docs.aws.amazon.com/neptune/latest/userguide/intro.html',
+      'clf-t3-7-q19':
+          'https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html',
+      'clf-t4-2-q10':
+          'https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html',
+    };
+    required.forEach((qid, url) {
+      test('$qid: ${url.split('/').where((s) => s.endsWith('.html') || s == 'regions_az').first}',
+          () {
+        final q = allQuestions().firstWhere((q) => q['id'] == qid,
+            orElse: () => fail('$qid 없음'));
+        final urls = (q['sources'] as List)
+            .map((s) => (s as Map<String, dynamic>)['url'] as String)
+            .toList();
+        expect(urls, contains(url));
       });
     });
   });
