@@ -82,6 +82,24 @@ void main() {
     'https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html',
     'https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/DDB-encryption-context.html',
     'https://docs.aws.amazon.com/cli/latest/reference/aiops/index.html',
+    // ── 2026-11-06 전 콘텐츠 2단 검토 §P2-SOA-5: SOA 학습문서 4편 ──────────
+    // ⚠️ **문항은 처음부터 정본을 쓰고 있었다** — `.md` 만 낡은 채 남았다
+    // (문항 가드는 학습문서를 보지 않는다. 2026-10-28 `saa-t4-3.md` 와 같은 자리).
+    // ⚠️ `ec2-instance-recovery.html` 은 **슬러그 이름 차이**다 — 정본은 `recover`
+    //    (끝의 `y` 없음)이고, 틀린 슬러그 대조군과 같은 신호(`200 r=1` → 인덱스)를
+    //    주므로 「페이지 소멸」로 단정할 수 없다. 어느 쪽이든 지금 죽어 있다.
+    'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recovery.html',
+    'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html',
+    'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html',
+    'https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-patch-patchgroups.html',
+    // ⚠️ EBS 문서는 **양방향으로 움직였다** — 2026-10-29 감사가 `ebs/…/ebs-optimized`
+    // → `AWSEC2/…/ebs-optimized` 로 바꾼 것은 지금도 맞고, 위 두 건은 **반대 방향**이다
+    // (`AWSEC2` → `ebs`). 「EBS 문서는 전부 어느 한쪽으로 옮겨졌다」고 일반화하면 틀린다.
+    // ── 같은 배치에서 실측한 인접 은퇴 슬러그(레포에 0건이지만 되살아나지 않게) ──
+    // 사용자 정의 상태 확인 페이지의 옛 이름. 정본은 `set-up-a-custom-health-check.html`.
+    'https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-checks-custom.html',
+    // Bedrock 모델 평가. 정본은 `evaluation.html`(2026-11-06 AIF 배치에서 실측).
+    'https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
@@ -107,6 +125,17 @@ void main() {
     ],
     'soa/soa-t1-5.questions.json': [
       'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html',
+    ],
+    // ── 2026-11-06 §P2-SOA-5 교체 정본(학습문서) ─────────────────────────
+    'soa/soa-t1-4.md': [
+      'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html',
+    ],
+    'soa/soa-t2-3.md': [
+      'https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html',
+      'https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-lifecycle.html',
+    ],
+    'soa/soa-t3-2.md': [
+      'https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-groups.html',
     ],
     'soa/soa-t2-1.questions.json': [
       'https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html',

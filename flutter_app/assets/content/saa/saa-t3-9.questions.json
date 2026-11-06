@@ -31,7 +31,7 @@
     {
       "id": "saa-t3-9-q2",
       "examGuideTaskId": "saa-t3-9",
-      "skill": "Kinesis Data Firehose 관리형 적재",
+      "skill": "Amazon Data Firehose 관리형 적재",
       "difficulty": "foundational",
       "stem": "IoT 센서에서 실시간으로 생성되는 데이터를 Amazon S3에 자동 적재해야 한다. 컨슈머 코드를 작성하지 않고 인프라 관리도 최소화하려 한다. 가장 적합한 서비스는?",
       "options": [

@@ -24,7 +24,9 @@ sources:
     url: https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-overview.html
   - title: AWS Certificate Manager 요금 (공식)
     url: https://aws.amazon.com/certificate-manager/pricing/
-lastVerified: 2026-10-19
+  - title: RDS Blue/Green 배포 TargetResourceConfiguration — green 암호화는 TargetKmsKeyId (공식 API)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
+lastVerified: 2026-11-06
 ---
 
 # 데이터·인프라 보호 — KMS·암호화·Secrets Manager·ACM
@@ -152,7 +154,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 
 > 🧠 원리: 왜 RDS 암호화는 생성 시점에만 활성화할 수 있고 운영 중 전환이 불가할까요?
 > 암호화 여부는 RDS가 사용하는 스토리지 볼륨의 초기화 단계에서 결정되며, 이미 평문으로 기록된 볼륨을 운영 중에 원자적으로 암호화 볼륨으로 교체하는 경로가 서비스 레이어에 없습니다.
-> 스냅샷을 암호화 복사한 뒤 새 인스턴스로 복원하는 절차는 결국 새 볼륨을 만들어 처음부터 암호화 상태로 시작하는 것과 동일한 경로입니다.
+> 스냅샷을 암호화 복사한 뒤 새 인스턴스로 복원하는 절차는 결국 새 볼륨을 만들어 처음부터 암호화 상태로 시작하는 것입니다. 같은 성질의 경로가 하나 더 있습니다 — **Blue/Green 배포**에서 green 리소스에 `TargetKmsKeyId`를 지정하면 공식이 「블루 리소스가 암호화되지 않았고 그린 리소스를 암호화하려는 경우」를 그 용례로 명시합니다(RDS는 DB 인스턴스 수준 암호화).
 > 이 제약을 운영 전에 인지하지 못하면 서비스 중단을 감수한 마이그레이션 윈도우가 필요해지므로, 인스턴스 생성 시 암호화 여부를 확정하는 것이 핵심 운영 판단입니다.
 
 ### 5) 전송 중 암호화 — TLS
@@ -243,7 +245,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
    (원리: §4 — SSE-C는 요청마다 고객이 키를 헤더로 제공하며 AWS는 처리 후 보관하지 않아 키 관리 책임이 전적으로 고객에게 있다.)
 
 4. **"운영 중인 RDS 인스턴스를 콘솔에서 바로 암호화로 전환한다."** → 불가능. **스냅샷 생성 → 암호화 복사 → 복원** 절차를 거쳐야 합니다.
-   (원리: §4 — RDS 암호화는 스토리지 볼륨 초기화 시점에 결정되므로 운영 중 전환 경로가 없고 새 볼륨으로의 이전이 유일한 방법이다.)
+   (원리: §4 — RDS 암호화는 스토리지 볼륨 초기화 시점에 결정되므로 **기존 인스턴스를 제자리에서 전환할 수는 없고** 새로 암호화된 볼륨으로 데이터를 옮기는 경로를 거쳐야 한다. 가장 기본적인 절차가 스냅샷 → 암호화 복사 → 복원이고, **Blue/Green 배포에서 green 리소스에 `TargetKmsKeyId`를 지정하는 경로**도 공식 지원된다.)
 
 5. **"Parameter Store도 시크릿을 자동 교체한다."** → 아닙니다. **자동 교체는 Secrets Manager의 기능**입니다. Parameter Store에는 내장 교체가 없어 직접 구현해야 합니다.
    (원리: §6 — 교체는 새 값 생성·DB 적용·테스트를 포함하는 서비스별 로직이 필요해 Secrets Manager가 Lambda로 이를 위임하는 구조를 갖춘다.)

@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
   - title: 흐름 로그 제한 사항 — 기록되지 않는 트래픽 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-limitations.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-06
 ---
 
 # 네트워크 문제 해결 — Flow Logs·Reachability Analyzer
@@ -88,7 +88,7 @@ lastVerified: 2026-10-19
 |---|---|
 | **CloudWatch Logs** | 실시간 조회·Logs Insights 쿼리·경보 연동 |
 | **S3** | 저비용 장기 보관·Athena 분석 |
-| **Kinesis Data Firehose** | 스트리밍 파이프라인으로 전달 |
+| **Amazon Data Firehose** | 스트리밍 파이프라인으로 전달 |
 
 > Flow Logs는 **나중에 켜는 진단 도구**가 아니라 평소에 켜 두면 사고 시점의 트래픽을 되짚을 수 있습니다. 기존 트래픽을 소급 캡처하지는 못하므로 **사전 활성화**가 운영 정석입니다.
 
