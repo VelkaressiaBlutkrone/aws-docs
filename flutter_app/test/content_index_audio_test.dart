@@ -2,7 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/data/content_index.dart';
 
 void main() {
-  test('approvedAudioEntries: CLF-C02는 승인 오디오 19문서 모두 반환(선언 순서)', () {
+  // ⚠️ 승인 편수를 숫자로 박지 않는다. 2026-11-06 P1 정정으로 clf-t2-1·t2-2·t2-3·
+  // t4-3 의 대본을 고쳐 재합성했고, 그 네 편은 **사람의 청취 재승인 전까지**
+  // audioApproved: false 다(19 → 15). 숫자를 단정하면 재승인이 레드로 끝난다 —
+  // 문항의 `verified: true` flip 과 같은 규율이다. 승인 ↔ 메타 일치는
+  // content_index_test 의 동기화 단정이 양방향으로 지킨다.
+  test('approvedAudioEntries: CLF-C02는 승인 오디오를 선언 순서로 반환', () {
     final list = approvedAudioEntries('CLF-C02');
     expect(list, isNotEmpty);
     expect(list.every((e) => e.audioApproved), isTrue);
