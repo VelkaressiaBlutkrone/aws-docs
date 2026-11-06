@@ -117,7 +117,7 @@
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
       "difficulty": "foundational",
-      "stem": "NAT 게이트웨이에 대한 설명으로 올바른 것은?",
+      "stem": "영역형(zonal) NAT 게이트웨이에 대한 설명으로 올바른 것은?",
       "options": [
         "보안 그룹을 연결할 수 없고 NACL로만 트래픽을 제어한다",
         "보안 그룹을 연결해 인바운드를 제어한다",
@@ -125,16 +125,20 @@
         "VPC 전체가 공유하는 리전 단위 리소스다"
       ],
       "correct": 0,
-      "explanation": "NAT 게이트웨이에는 보안 그룹을 연결할 수 없고 서브넷의 NACL로만 제어합니다. 또한 퍼블릭 서브넷에 생성하는 AZ 단위 리소스이며, AZ 내에서 이중화됩니다.",
+      "explanation": "NAT 게이트웨이에는 보안 그룹을 연결할 수 없고 서브넷의 NACL로만 제어합니다(두 모드 모두). 영역형은 퍼블릭 서브넷에 생성하는 AZ 단위 리소스이며 AZ 내에서 이중화됩니다. 2025-11에 추가된 리전 NAT 게이트웨이는 VPC 수준 리소스로 퍼블릭 서브넷이 필요 없고 단일 ID로 전 AZ를 덮으며 워크로드가 있는 AZ로 자동 확장·축소되므로, 지문이 영역형을 묻는 것이 보기 3을 버리는 근거입니다(프라이빗 NAT 용도에는 영역형을 씁니다).",
       "wrongExplanations": {
         "1": "SG 연결은 NAT 인스턴스에서만 가능합니다.",
-        "2": "NAT 게이트웨이는 퍼블릭 서브넷에 둡니다.",
-        "3": "AZ 단위 리소스입니다."
+        "2": "영역형 NAT 게이트웨이는 퍼블릭 서브넷에 둡니다(리전 NAT 게이트웨이는 퍼블릭 서브넷이 필요 없습니다).",
+        "3": "영역형 NAT 게이트웨이는 AZ 단위 리소스입니다. VPC 수준에서 전 AZ를 덮는 것은 리전 NAT 게이트웨이이고 지문은 영역형을 묻습니다."
       },
       "sources": [
         {
           "title": "NAT 게이트웨이 기본 사항",
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html"
+        },
+        {
+          "title": "리전 NAT 게이트웨이 (자동 다중 AZ 확장)",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html"
         }
       ],
       "verified": true
@@ -152,7 +156,7 @@
         "프라이빗 서브넷에 퍼블릭 IP를 부여하기 위해"
       ],
       "correct": 0,
-      "explanation": "NAT 게이트웨이는 AZ 단위 리소스입니다. 모든 AZ가 하나를 공유하면 그 AZ가 단일 실패점이 되고 AZ 경계를 넘는 전송 요금도 발생합니다. AZ별 NAT + AZ별 라우팅 테이블이 표준 구성입니다.",
+      "explanation": "영역형(zonal) NAT 게이트웨이는 AZ 단위 리소스입니다. 모든 AZ가 하나를 공유하면 그 AZ가 단일 실패점이 되고 AZ 경계를 넘는 전송 요금도 발생합니다. AZ별 NAT + AZ별 라우팅 테이블이 표준 구성입니다.",
       "wrongExplanations": {
         "1": "처리량은 NAT 게이트웨이가 자동 확장합니다.",
         "2": "NAT 게이트웨이에는 SG를 붙일 수 없습니다.",

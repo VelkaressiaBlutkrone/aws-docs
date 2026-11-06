@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
   - title: NAT 게이트웨이 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
-lastVerified: 2026-06-12
+lastVerified: 2026-11-06
 ---
 
 # VPC 네트워킹 구현 — 서브넷·라우팅·SG·NACL·NAT
@@ -151,7 +151,9 @@ lastVerified: 2026-06-12
 | 포트 포워딩/배스천 겸용 | 불가 | 가능(소스/대상 확인 비활성화 필요) |
 | 비용 | 시간당 + 데이터 처리 GB당 | EC2 인스턴스 비용 |
 
-> **운영 핵심:** NAT Gateway는 **단일 AZ 리소스**입니다. AZ 장애에도 견디려면 **AZ마다 NAT Gateway를 두고**, 각 AZ의 프라이빗 라우팅 테이블이 같은 AZ의 NAT를 가리키도록 구성합니다. NAT 인스턴스를 쓸 땐 반드시 **소스/대상 확인(Source/Destination Check)을 비활성화**해야 트래픽을 중계할 수 있습니다.
+> **운영 핵심:** **영역형(zonal)** NAT Gateway는 **단일 AZ 리소스**입니다. AZ 장애에도 견디려면 **AZ마다 NAT Gateway를 두고**, 각 AZ의 프라이빗 라우팅 테이블이 같은 AZ의 NAT를 가리키도록 구성합니다. NAT 인스턴스를 쓸 땐 반드시 **소스/대상 확인(Source/Destination Check)을 비활성화**해야 트래픽을 중계할 수 있습니다.
+>
+> ⚠️ 이 성질은 **영역형(zonal)** NAT 게이트웨이의 것입니다. 2025-11에 추가된 **리전 NAT 게이트웨이**는 VPC 수준 리소스로 **퍼블릭 서브넷이 필요 없고**, 워크로드가 있는 AZ로 자동 확장·축소되며 **단일 NAT ID로 전 AZ를 덮습니다**(AZ당 IP 32개 — 영역형은 8개). 다만 **프라이빗 NAT는 지원하지 않고**, 새 AZ로 확장되는 데 최대 60분이 걸립니다.
 
 > 🧠 원리: NAT 인스턴스는 왜 소스/대상 확인을 비활성화해야 트래픽을 중계할 수 있을까요?
 > EC2는 기본적으로 자신의 IP가 출발지나 목적지인 패킷만 처리하도록 되어 있습니다.
@@ -209,7 +211,7 @@ Outbound 100  TCP 1024-65535 0.0.0.0/0 ALLOW # 응답을 위한 이페머럴 포
 - **퍼블릭 서브넷 = 라우팅 테이블에 IGW 경로 존재.** 서브넷 자체 속성이 아니라 라우팅으로 결정.
 - **인터넷 연결 3박자**: IGW 연결 + `0.0.0.0/0 → igw` 경로 + 퍼블릭 IP/EIP.
 - **NAT는 아웃바운드 전용**(프라이빗 → 외부). 외부에서 프라이빗으로 직접 들어오기는 안 됨.
-- **NAT Gateway = AZ 단위 관리형, SG 연결 불가.** 다중 AZ 가용성은 AZ마다 NAT GW.
+- **영역형 NAT Gateway = AZ 단위 관리형, SG 연결 불가.** 다중 AZ 가용성은 AZ마다 NAT GW(리전 NAT 게이트웨이는 단일 ID로 전 AZ를 덮는다).
 - **NAT Instance = Source/Dest Check 비활성화** 필수, SG 연결 가능.
 - **SG = stateful, allow-only, ENI 단위.** 응답 자동 허용.
 - **NACL = stateless, allow+deny, 서브넷 단위, 규칙 번호 순서.** 응답은 **이페머럴 포트**를 따로 열어야 함.
@@ -229,8 +231,8 @@ Outbound 100  TCP 1024-65535 0.0.0.0/0 ALLOW # 응답을 위한 이페머럴 포
 3. **"NAT Gateway에 보안 그룹을 붙여 제어한다."** → NAT Gateway는 **SG를 연결할 수 없습니다.** 트래픽 제어는 서브넷 NACL과 라우팅으로 합니다. NAT 인스턴스는 SG 연결이 가능합니다.
    (원리: §5 본문 — NAT GW는 관리형 서비스이므로 SG 연결이 불가하며, 트래픽 제어는 서브넷 NACL과 라우팅으로만 가능하다.)
 
-4. **"NAT 하나면 모든 AZ가 안전하다."** → NAT Gateway는 **단일 AZ 리소스**입니다. 그 AZ가 죽으면 다른 AZ 프라이빗 인스턴스의 인터넷도 끊깁니다. **AZ마다 NAT Gateway**를 두고 각 AZ 라우팅을 분리해야 합니다.
-   (원리: §5 본문 — NAT GW는 단일 AZ 배포라 해당 AZ 장애 시 다른 AZ 트래픽도 끊기므로, AZ별 독립 구성이 필요하다.)
+4. **"영역형 NAT 하나면 모든 AZ가 안전하다."** → 영역형 NAT Gateway는 **단일 AZ 리소스**입니다. 그 AZ가 죽으면 다른 AZ 프라이빗 인스턴스의 인터넷도 끊깁니다. **AZ마다 NAT Gateway**를 두고 각 AZ 라우팅을 분리해야 합니다.
+   (원리: §5 본문 — 영역형 NAT GW는 단일 AZ 배포라 해당 AZ 장애 시 다른 AZ 트래픽도 끊기므로, AZ별 독립 구성이 필요하다.)
 
 5. **"NAT 인스턴스를 만들었는데 트래픽 중계가 안 된다."** → **소스/대상 확인(Source/Destination Check)** 이 켜져 있으면 자기 IP가 아닌 트래픽을 버립니다. NAT 인스턴스는 이걸 **비활성화**해야 합니다.
    (원리: §5 — EC2는 자신의 IP가 아닌 패킷을 기본으로 버리므로, NAT 중계 역할은 소스/대상 확인 비활성화가 필수다.)
@@ -265,7 +267,7 @@ Outbound 100  TCP 1024-65535 0.0.0.0/0 ALLOW # 응답을 위한 이페머럴 포
 
 <details><summary>정답 보기</summary>
 
-NAT Gateway는 **단일 AZ 리소스**이므로 AZ-a 장애 시 **AZ-b 프라이빗 인스턴스의 아웃바운드 인터넷도 끊깁니다**(AZ-b 라우팅이 AZ-a NAT를 가리키므로). 올바른 설계는 **각 AZ에 NAT Gateway를 하나씩** 두고, 각 AZ의 프라이빗 라우팅 테이블이 **같은 AZ의 NAT**를 가리키게 하는 것입니다. 이러면 한 AZ가 죽어도 다른 AZ는 독립적으로 인터넷을 유지합니다.
+영역형 NAT Gateway는 **단일 AZ 리소스**이므로 AZ-a 장애 시 **AZ-b 프라이빗 인스턴스의 아웃바운드 인터넷도 끊깁니다**(AZ-b 라우팅이 AZ-a NAT를 가리키므로). 올바른 설계는 **각 AZ에 NAT Gateway를 하나씩** 두고, 각 AZ의 프라이빗 라우팅 테이블이 **같은 AZ의 NAT**를 가리키게 하는 것입니다. 이러면 한 AZ가 죽어도 다른 AZ는 독립적으로 인터넷을 유지합니다.
 </details>
 
 **Q4.** 특정 악성 IP 한 개를 VPC 서브넷 전체에서 차단하고 싶습니다. 보안 그룹으로 가능한가요?

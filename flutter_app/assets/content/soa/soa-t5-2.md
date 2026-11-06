@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html
   - title: Gateway Load Balancer 엔드포인트 서비스 만들기 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-gateway-load-balancer-endpoint-service.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-06
 ---
 
 # 하이브리드·연결 — 피어링·TGW·VPN·Direct Connect·엔드포인트
@@ -153,12 +153,12 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 | **트랜짓 VIF** | Direct Connect 게이트웨이를 통해 **Transit Gateway**에 연결 |
 
 - 구축 시간: **수 주(물리 회선 설치)**. 경로는 전용 회선 → **일관된 대역폭·저지연**.
-- 암호화: **기본 없음**. 전송 암호화가 필요하면 **DX 위에 VPN을 얹음(DX over VPN)**.
+- 암호화: **기본 없음**. 선택지가 둘입니다 — DX 위에 IPsec VPN을 얹는 **VPN over Direct Connect**, 또는 **MACsec**(지원하는 전용 연결에서 데이터센터↔DX 로케이션 구간을 암호화).
 - **DX + VPN 백업:** 평시 DX, DX 장애 시 VPN으로 자동 우회 → 가용성 + 성능 확보.
 
 > 🧠 원리: 운영자가 DX 구성 후 가장 먼저 확인해야 할 보안 항목은 무엇이고 왜인가요?
 > 전송 암호화 활성화 여부입니다. DX는 물리 회선이 전용이라 경로를 줄인다는 의미이지, 트래픽을 암호화한다는 의미가 아닙니다.
-> 암호화는 IPsec 같은 별도 계층이 담당하므로, 의도적으로 DX over VPN 패턴을 구성하지 않으면 데이터는 평문으로 흐릅니다.
+> 암호화는 IPsec 같은 별도 계층이 담당하므로, 의도적으로 VPN over Direct Connect 패턴을 구성하지 않으면 데이터는 평문으로 흐릅니다.
 > 규정 준수 점검 시 "전용 회선이라 이미 안전하다"는 판단은 틀린 것이며, 암호화 요건이 있으면 VIF 위에 IPsec 터널 구성 여부를 반드시 확인해야 합니다.
 
 ### 5) VPC 엔드포인트 — Gateway vs Interface (★ 핵심)
@@ -231,7 +231,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 - **A-B, B-C 피어링인데 A-C 통신 필요** → 직접 피어링 추가 또는 **Transit Gateway**.
 - **Transit Gateway = 허브-스포크 + 전이 라우팅 + 라우팅 테이블 세그먼트화.** 인터-리전은 TGW 피어링.
 - **Site-to-Site VPN = 즉시 구축, IPsec 기본 암호화, 터널 2개**. BGP로 동적 라우팅.
-- **Direct Connect = 전용 회선, 일관된 저지연, 기본 무암호화.** 암호화 필요 시 **DX over VPN**.
+- **Direct Connect = 전용 회선, 일관된 저지연, 기본 무암호화.** 암호화 필요 시 **VPN over Direct Connect**.
 - **VIF**: 프라이빗(VPC), 퍼블릭(AWS 퍼블릭 서비스), 트랜짓(TGW).
 - **Gateway 엔드포인트 = S3·DynamoDB 전용, 라우팅 기반, 무료, SG 없음.**
 - **Interface 엔드포인트 = PrivateLink, ENI+사설 IP, 시간당+데이터 과금, SG 있음, 프라이빗 DNS.**
@@ -259,8 +259,8 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 5. **"인터페이스 엔드포인트도 무료다."** → 인터페이스 엔드포인트는 **시간당 + 데이터 처리 GB당 과금**됩니다. 무료는 **게이트웨이 엔드포인트(S3/DynamoDB)** 뿐입니다.
    (원리: §5 — 인터페이스 엔드포인트는 시간당·GB당 과금이 있으며, 무료 엔드포인트는 게이트웨이(S3/DynamoDB)뿐이다)
 
-6. **"Direct Connect는 전용 회선이라 암호화된다."** → DX는 **기본 암호화가 없습니다.** 물리적 전용성과 암호화는 다릅니다. 전송 암호화가 필요하면 **DX over VPN**.
-   (원리: §4 — DX는 전용 물리 회선이지만 전송 암호화는 기본 포함되지 않아, 필요 시 DX over VPN으로 얹는다)
+6. **"Direct Connect는 전용 회선이라 암호화된다."** → DX는 **기본 암호화가 없습니다.** 물리적 전용성과 암호화는 다릅니다. 전송 암호화가 필요하면 **VPN over Direct Connect**.
+   (원리: §4 — DX는 전용 물리 회선이지만 전송 암호화는 기본 포함되지 않아, 필요 시 VPN over Direct Connect으로 얹는다)
 
 7. **"VPN은 터널이 하나라 장애에 약하다."** → Site-to-Site VPN은 **항상 터널 2개**를 제공합니다. CGW에서 두 터널을 모두 활성화하면 한 터널 장애에도 견딥니다.
    (원리: §3 — VPN 연결은 항상 터널 2개이므로, CGW에서 두 터널 모두 활성화해야 한 터널 장애 시에도 끊기지 않는다)
@@ -296,7 +296,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 
 <details><summary>정답 보기</summary>
 
-두 패턴을 결합합니다. ① **DX over VPN**: Direct Connect 위에 IPsec VPN 터널을 얹어 전송 암호화 요건을 충족합니다(DX는 기본 무암호화). ② **DX + VPN 백업**: 별도 Site-to-Site VPN을 백업 경로로 두어 DX 장애 시 인터넷 기반 VPN으로 자동 우회합니다. BGP 동적 라우팅으로 경로 우선순위를 조정하면 평시 DX, 장애 시 VPN으로 전환됩니다.
+두 패턴을 결합합니다. ① **VPN over Direct Connect**: Direct Connect 위에 IPsec VPN 터널을 얹어 전송 암호화 요건을 충족합니다(DX는 기본 무암호화). ② **DX + VPN 백업**: 별도 Site-to-Site VPN을 백업 경로로 두어 DX 장애 시 인터넷 기반 VPN으로 자동 우회합니다. BGP 동적 라우팅으로 경로 우선순위를 조정하면 평시 DX, 장애 시 VPN으로 전환됩니다.
 </details>
 
 **Q5 (원리).** 왜 Gateway 엔드포인트로 접근한 S3 트래픽에는 보안 그룹을 적용할 수 없는가요?
