@@ -5,7 +5,7 @@
   "sourceHash": "8e5e05f9718db13601e291c76b486196c80ff8f02e4d43bfb2b110332773e9eb",
   "lexiconVersion": "99e4378737f2",
   "generatedAt": "2026-06-25T10:16:30Z",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "segments": [
     {
       "id": "seg000",
@@ -157,12 +157,12 @@
     {
       "id": "seg014",
       "kind": "paragraph",
-      "sourceExcerpt": "ℹ️ 정직성 메모: AWS는 Support 플랜을 **재편 중**입니다(공식 문서 기준, 2026): **Developer·Business·Enterprise On-Ramp**는 **2027-01-01 단종** 예정이고, **Business Support+**·**Unified Operations**가 도입됐습니다(Enterprise는 TAM·15분 응답 유지). 다만 **CLF-C02 공식 시험 가이드는 전통적 분류(Basic·Developer·Business·Enterprise)**를 명시하므로, 시험 대비로는 위 4단계로 기억하면 됩니다.",
-      "scriptText": "ℹ 정직성 메모: 에이더블유에스는 Support 플랜을 재편 중입니다(공식 문서 기준, 2026): Developer·Business·Enterprise On-Ramp는 2027-01-01 단종 예정이고, Business Support 그리고 ·Unified Operations가 도입됐습니다(Enterprise는 티에이엠·15분 응답 유지). 다만 씨엘에프 씨 공이 공식 시험 가이드는 전통적 분류(Basic·Developer·Business·Enterprise)를 명시하므로, 시험 대비로는 위 4단계로 기억하면 됩니다.",
+      "sourceExcerpt": "ℹ️ 정직성 메모: AWS는 Support 플랜을 **재편 중**입니다(공식 문서 기준, 2026): **Developer·Business·Enterprise On-Ramp**는 **2027-01-01 단종** 예정이고, **Business Support+**·**Unified Operations**가 도입됐습니다(Enterprise는 TAM·15분 응답 유지). **공식 CLF-C02 시험 가이드도 작업 4.3의 예시를 신규 플랜으로 바꿨습니다** — 지금은 **기본 지원·Business Support+·Enterprise Support·Unified Operations**가 그 자리입니다. 다만 시중 기출·교재는 아직 전통 4단계로 출제하므로 두 묶음을 대응시켜 기억해 두세요.",
+      "scriptText": "ℹ 정직성 메모: 에이더블유에스는 Support 플랜을 재편 중입니다(공식 문서 기준, 2026): Developer·Business·Enterprise On-Ramp는 2027-01-01 단종 예정이고, Business Support 그리고 ·Unified Operations가 도입됐습니다(Enterprise는 티에이엠·15분 응답 유지). 공식 씨엘에프 씨 공이 시험 가이드도 작업 4.3의 예시를 신규 플랜으로 바꿨습니다. 지금은 기본 지원, 비즈니스 서포트 플러스, 엔터프라이즈 서포트, 유니파이드 오퍼레이션스가 그 자리입니다. 다만 시중 기출과 교재는 아직 전통 4단계로 출제하므로 두 묶음을 대응시켜 기억해 두세요.",
       "audioSummary": null,
       "skip": false,
       "issues": [],
-      "enrichedScriptText": "여기서 잠깐 정직하게 짚고 넘어갈 게 하나 있습니다. 에이더블유에스가 지금 서포트 플랜을 재편하는 중이에요. 공식 문서 기준으로 2026년 상황을 보면, 디벨로퍼와 비즈니스, 그리고 엔터프라이즈 온램프 플랜은 2027년 1월 1일에 단종될 예정입니다. 대신 비즈니스 서포트 플러스와 유니파이드 오퍼레이션스가 새로 도입됐고요. 엔터프라이즈는 그대로 티에이엠과 15분 응답을 유지합니다.\n\n다만 우리가 준비하는 시험, 씨엘에프 씨 공이 공식 시험 가이드에서는 여전히 전통적인 분류를 명시하고 있습니다. 베이직, 디벨로퍼, 비즈니스, 엔터프라이즈 이렇게 네 단계예요. 그러니까 시험 대비로는 방금 말씀드린 이 네 단계로 기억하시면 됩니다."
+      "enrichedScriptText": "여기서 잠깐 정직하게 짚고 넘어갈 게 하나 있습니다. 에이더블유에스가 지금 서포트 플랜을 재편하는 중이에요. 공식 문서 기준으로 2026년 상황을 보면, 디벨로퍼와 비즈니스, 그리고 엔터프라이즈 온램프 플랜은 2027년 1월 1일에 단종될 예정입니다. 대신 비즈니스 서포트 플러스와 유니파이드 오퍼레이션스가 새로 도입됐고요. 엔터프라이즈는 그대로 티에이엠과 15분 응답을 유지합니다.\n\n그리고 씨엘에프 씨 공이 공식 시험 가이드도 이미 바뀌었습니다. 작업 4.3의 예시가 신규 플랜으로 교체돼서, 지금은 기본 지원과 비즈니스 서포트 플러스, 엔터프라이즈 서포트, 그리고 유니파이드 오퍼레이션스 이렇게 적혀 있습니다. 다만 시중에 나와 있는 기출이나 교재는 아직 전통적인 네 단계로 출제하는 경우가 많습니다. 그래서 두 묶음을 서로 대응시켜서 기억해 두시는 게 좋습니다. 24x7 프로덕션 지원의 최소 플랜인 전통 비즈니스가 현행 비즈니스 서포트 플러스에 해당하고, 전담 티에이엠과 비즈니스 크리티컬 15분 응답은 엔터프라이즈입니다. 엔터프라이즈는 현행에서도 그대로 유지됩니다."
     },
     {
       "id": "seg015",
