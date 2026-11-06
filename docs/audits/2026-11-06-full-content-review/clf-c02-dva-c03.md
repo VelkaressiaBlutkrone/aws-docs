@@ -286,6 +286,13 @@ AWS Business Support+, AWS Enterprise Support, AWS Unified Operations)
 
 ## 3. P2 — 출처 결함 · 범위 결함
 
+> ⚠️⚠️ **컨트롤러 정정(2026-11-06 반영 PR)** — 네 가지가 달라졌다.
+>
+> 1. **범위가 「CLF 10 · DVA 2」가 아니다.** 레포 전수로 세면 **33곳**이고, #2 Fargate 슬러그가 **SAA 7곳**(`saa-t2-2.md` ×2 · `saa-t2-2-q12·q13·q14` · `saa-t3-4-q1·q3·q11`)에 번져 있다. **자격증을 나눠 감사하면 공유 URL이 사각지대가 된다.**
+> 2. **#9 Storage Gateway 는 정본이 하나가 아니다.** 2차가 「CLF 맥락은 S3 File Gateway」로 정했지만 **`clf-t3-6-q15` 의 인용은 Tape Gateway**다. 넷 다 files3 로 바꾸면 **그 페이지에 없는 사실을 인용**하게 된다. 인용별로 갈랐다 — `t3-6.md`·`q6` → **서비스 인덱스** `storagegateway/`(`200 r=0`, 통합 what-is 가 사라져 서비스 수준 정본이 그것이다), `q15` → `storagegateway/latest/tgw/WhatIsStorageGateway.html`.
+> 3. **#3 은 URL 만 바꾸면 거짓 인용이 된다.** 정본 `free-tier.html` 에 **「12개월 무료」가 없고**, §P3-3 이 근거로 쓴 **「`aws.amazon.com/free` 는 여전히 세 유형으로 적는다」도 지금은 거짓**이다(목차 실측: `Free plan` · `Paid plan` · `Short-term trial` · `Always free`). 그래서 `clf-t4-1-q10` 의 지문·정답 보기·해설을 현행 구조로 고쳤다(**정답 인덱스 불변**). ⚠️ 보고서가 `repost.aws` 로 적은 **「2025-07-15 이후/레거시 12개월」은 공식 문서에서 확인하지 못해 쓰지 않았다.**
+> 4. **§P2-B 가 확정됐다** — `repost.aws` 를 **브라우저 호환 UA** 로 재면 `200 r=1` 이다. `403` 은 **봇 차단이고 죽은 링크가 아니다.** `clf-t2-4-q15` 의 출처는 **그대로 둔다.** 아울러 **§P2-H 는 근거를 찾았으니 등급 하향 재검토 대상**이다(현행 `aws-support-plans.html` 의 Business Support+ 절에 `More than 500 checks with AWS Trusted Advisor` 가 있다).
+
 ### P2-A. 죽은 출처 URL 12개 (CLF 10 · DVA 2) — 문항 11건 + 학습문서 6편
 
 **① 위치·② 현재 값·④ 실측 신호·⑤ 교체안**을 한 표에 담았다. 측정 명령은 §0-2 S4와 같고 **교체안도 전부 다시 재서 `200 r=0`을 확인**했다.

@@ -248,7 +248,7 @@
       "sources": [
         {
           "title": "What is Amazon DocumentDB (with MongoDB compatibility) — 완전관리형 MongoDB 호환 문서 DB, 동일 코드·드라이버·도구 사용",
-          "url": "https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html"
+          "url": "https://docs.aws.amazon.com/documentdb/latest/devguide/what-is.html"
         }
       ],
       "verified": true

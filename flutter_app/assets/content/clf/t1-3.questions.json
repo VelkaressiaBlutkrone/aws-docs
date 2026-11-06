@@ -82,8 +82,8 @@
       },
       "sources": [
         {
-          "title": "What is AWS Snowball? — 물리 디바이스로 대량 데이터 전송, 네트워크 전송이 느리거나 비현실적일 때",
-          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+          "title": "What is AWS Snowball Edge? — 물리 디바이스로 대량 데이터 전송, 네트워크 전송이 느리거나 비현실적일 때",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
         }
       ],
       "verified": true
@@ -222,8 +222,8 @@
       },
       "sources": [
         {
-          "title": "What is AWS Snowball? — 디바이스 배송→오프라인 적재→반송 업로드, 네트워크 비의존",
-          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+          "title": "What is AWS Snowball Edge? — 디바이스 배송→오프라인 적재→반송 업로드, 네트워크 비의존",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
         }
       ],
       "verified": true
@@ -254,8 +254,8 @@
           "url": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html"
         },
         {
-          "title": "What is AWS Snowball? — 네트워크가 비현실적인 대량 데이터의 오프라인 전송",
-          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+          "title": "What is AWS Snowball Edge? — 네트워크가 비현실적인 대량 데이터의 오프라인 전송",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
         }
       ],
       "verified": true
@@ -283,7 +283,7 @@
       "sources": [
         {
           "title": "Migration strategies for application migration — 7 R(Rehost·Replatform·Refactor·Repurchase·Retire·Retain·Relocate), Rehost는 리프트 앤 시프트",
-          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-migration-strategies.html"
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
         }
       ],
       "verified": true
@@ -311,7 +311,7 @@
       "sources": [
         {
           "title": "7 Rs — 마이그레이션 전략(Rehost·Replatform·Refactor 등)",
-          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-7-rs.html"
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
         }
       ],
       "verified": true
@@ -394,8 +394,8 @@
       },
       "sources": [
         {
-          "title": "What is AWS Snowball? — 네트워크 전송이 느리거나 비싸거나 비현실적일 때 물리 디바이스로 대량 데이터 전송",
-          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html"
+          "title": "What is AWS Snowball Edge? — 네트워크 전송이 느리거나 비싸거나 비현실적일 때 물리 디바이스로 대량 데이터 전송",
+          "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
         }
       ],
       "verified": true

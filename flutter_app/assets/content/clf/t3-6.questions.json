@@ -166,8 +166,8 @@
       },
       "sources": [
         {
-          "title": "What is AWS Storage Gateway? — 온프레미스와 클라우드 스토리지를 연결하는 하이브리드, 로컬 캐싱 저지연",
-          "url": "https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html"
+          "title": "AWS Storage Gateway 문서 — 하이브리드 스토리지(S3 File·FSx File·Tape·Volume 유형별 가이드)",
+          "url": "https://docs.aws.amazon.com/storagegateway/"
         }
       ],
       "verified": true
@@ -422,8 +422,8 @@
       },
       "sources": [
         {
-          "title": "What is AWS Storage Gateway? — Tape Gateway(가상 테이프 아카이브)로 물리 테이프 대체, 하이브리드 백업",
-          "url": "https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html"
+          "title": "What is Tape Gateway? — 가상 테이프 아카이브로 물리 테이프 대체, 기존 백업 애플리케이션 유지",
+          "url": "https://docs.aws.amazon.com/storagegateway/latest/tgw/WhatIsStorageGateway.html"
         }
       ],
       "verified": true
