@@ -335,7 +335,7 @@
       "sources": [
         {
           "title": "AWS Well-Architected Tool 소개",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/tool.html"
         }
       ],
       "verified": true

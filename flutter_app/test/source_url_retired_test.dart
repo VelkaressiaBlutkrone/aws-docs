@@ -67,6 +67,21 @@ void main() {
     'https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html',
     'https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config-rules.html',
     'https://docs.aws.amazon.com/vpc/latest/peering/invalid-peering-configurations.html',
+    // ── 2026-11-06 CLF·DVA·SAA 출처 URL 실측(전 콘텐츠 2단 검토 §P2-A) ──
+    // 2026-10-29 감사는 SOA·DEA 만 쟀다 — 아래 12건은 CLF·DVA 를 처음 재서 찾았고,
+    // 그중 Fargate 슬러그는 **SAA 7곳**에도 번져 있었다(보고서 범위가 하한이었다).
+    'https://aws.amazon.com/compliance/data-center/controls/',
+    'https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html',
+    'https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-free-tier.html',
+    'https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-7-rs.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/migration-retiring-applications/apg-migration-strategies.html',
+    'https://docs.aws.amazon.com/quicksight/latest/user/welcome.html',
+    'https://docs.aws.amazon.com/snowball/latest/developer-guide/whatissnowball.html',
+    'https://docs.aws.amazon.com/storagegateway/latest/userguide/WhatIsStorageGateway.html',
+    'https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html',
+    'https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/DDB-encryption-context.html',
+    'https://docs.aws.amazon.com/cli/latest/reference/aiops/index.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
@@ -133,6 +148,64 @@ void main() {
     ],
     'soa/soa-t5-4.questions.json': [
       'https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html',
+    ],
+    // ── 2026-11-06 CLF·DVA·SAA ──
+    // ⚠️ Storage Gateway 는 **인용별로 갈랐다**: 통합 what-is 가 사라져 서비스 수준
+    // 정본은 디렉터리 인덱스이고(200 r=0), Tape 인용은 tgw 가이드가 정본이다.
+    'clf/t1-3.md': [
+      'https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html',
+      'https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html',
+    ],
+    'clf/t1-3.questions.json': [
+      'https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html',
+      'https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html',
+    ],
+    'clf/t1-2.questions.json': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/userguide/tool.html',
+    ],
+    'clf/t2-1.questions.json': [
+      'https://aws.amazon.com/trust-center/data-center/our-controls/',
+    ],
+    'clf/t3-3.md': [
+      'https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html',
+    ],
+    'clf/t3-3.questions.json': [
+      'https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html',
+    ],
+    'clf/t3-4.questions.json': [
+      'https://docs.aws.amazon.com/documentdb/latest/devguide/what-is.html',
+    ],
+    'clf/t3-6.md': [
+      'https://docs.aws.amazon.com/storagegateway/',
+    ],
+    'clf/t3-6.questions.json': [
+      'https://docs.aws.amazon.com/storagegateway/',
+      'https://docs.aws.amazon.com/storagegateway/latest/tgw/WhatIsStorageGateway.html',
+    ],
+    'clf/t3-7.md': [
+      'https://docs.aws.amazon.com/quick/latest/userguide/what-is.html',
+    ],
+    'clf/t3-7.questions.json': [
+      'https://docs.aws.amazon.com/quick/latest/userguide/what-is.html',
+    ],
+    'clf/t4-1.questions.json': [
+      'https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier.html',
+      'https://aws.amazon.com/free/',
+    ],
+    'saa/saa-t2-2.md': [
+      'https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html',
+    ],
+    'saa/saa-t2-2.questions.json': [
+      'https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html',
+    ],
+    'saa/saa-t3-4.questions.json': [
+      'https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html',
+    ],
+    'dva/dva-t2-2.md': [
+      'https://docs.aws.amazon.com/database-encryption-sdk/latest/devguide/DDB-encrypted-and-signed.html',
+    ],
+    'dva/dva-t4-1.md': [
+      'https://docs.aws.amazon.com/cli/latest/reference/aiops/',
     ],
   };
 

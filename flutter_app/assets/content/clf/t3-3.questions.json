@@ -111,7 +111,7 @@
       "sources": [
         {
           "title": "AWS Fargate — 서버·EC2 클러스터 관리 없이 컨테이너 실행, ECS·EKS와 함께 쓰는 서버리스 엔진",
-          "url": "https://docs.aws.amazon.com/AmazonECS/latest/userguide/what-is-fargate.html"
+          "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
         }
       ],
       "verified": true
