@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-06
 ---
 
 # IAM — 자격증명·권한·페더레이션
@@ -385,11 +385,11 @@ Active Directory가 등장하는 문제는 "AWS에 실제 AD가 필요한가, �
 11. IAM Identity Center ID 소스 관리(외부 IdP·AD·Identity Center 디렉터리) — https://docs.aws.amazon.com/singlesignon/latest/userguide/manage-your-identity-source.html
 
 12. 교차 계정 리소스 접근(리소스 정책은 원 권한 유지·역할 수임은 내려놓음·지원 서비스 예시) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies-cross-account-resource-access.html
-13. IAM 역할 용어와 개념(역할 체이닝은 콘솔·CLI·API 모두 최대 1시간) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html
+13. IAM 역할 용어와 개념(역할 체이닝은 콘솔·CLI·API 모두 최대 1시간) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html#id_roles_terms-and-concepts
 14. IAM 쿼터(콘솔 역할 전환 = 최대 세션과 남은 시간 중 짧은 쪽) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html
 15. 제3자에게 AWS 리소스 접근 권한 부여(외부 ID·혼동된 대리인·비밀이 아님) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_common-scenarios_third-party.html
 16. 리소스 제어 정책(RCP — 조직 밖 주체 제한·지원 서비스 목록) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps.html
-17. 선언적 정책(서비스 수준 적용·조직·OU·계정 범위) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative.html
+17. 선언적 정책(서비스 수준 적용·조직·OU·계정 범위) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html
 18. Organizations 쿼터(직접 연결 SCP 10·RCP 5, 문서 크기 10,240자·5,120자) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
 19. AWS STS 리전 활성화(리전 엔드포인트 권장·세션 토큰 유효 범위·글로벌 단일 리전) — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html
 20. AWS Directory Service 모범 사례(Managed AD 5,000명 초과·신뢰 관계, AD Connector) — https://docs.aws.amazon.com/directoryservice/latest/admin-guide/simple_ad_best_practices.html

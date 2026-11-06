@@ -17,12 +17,12 @@ sources:
   - title: Amazon ElastiCache 개발자 안내서 — What Is ElastiCache? (공식)
     url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html
   - title: AWS 데이터베이스 선택 가이드(목적별 엔진) (공식)
-    url: https://docs.aws.amazon.com/databases-on-aws-how-to-choose/
+    url: https://docs.aws.amazon.com/decision-guides/latest/decision-guides/databases-on-aws-how-to-choose.html
   - title: Amazon MemoryDB란 무엇인가(내구성 인메모리 DB) (공식)
     url: https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-06
 ---
 
 # DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략
@@ -458,7 +458,7 @@ DynamoDB는 파티션 키를 해시해 데이터를 여러 물리 파티션에 �
 6. ElastiCache 엔진 비교(Valkey·Memcached·Redis OSS) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html
 7. DynamoDB 파티션 키 설계(파티션당 3,000 읽기·1,000 쓰기 단위/초) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html
 8. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-9. AWS 데이터베이스 선택 가이드(관계형·키-값·문서·와이드 컬럼·그래프·인메모리 등 목적별 엔진) — https://docs.aws.amazon.com/databases-on-aws-how-to-choose/
+9. AWS 데이터베이스 선택 가이드(관계형·키-값·문서·와이드 컬럼·그래프·인메모리 등 목적별 엔진) — https://docs.aws.amazon.com/decision-guides/latest/decision-guides/databases-on-aws-how-to-choose.html
 10. Amazon MemoryDB란 무엇인가("durable, in-memory database service that delivers ultra-fast performance") — https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
 11. DynamoDB 제약(항목 400 KB·용량 단위 크기·트랜잭션 2배·모드 전환 24시간 4회) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Constraints.html (갭 배치 B8a: 2026-10-21)
 12. DynamoDB 버스트·적응형 용량(파티션 3,000/1,000 초과 시 스로틀·적응형은 기본 활성·무료) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/burst-adaptive-capacity.html (갭 배치 B8a: 2026-10-21)

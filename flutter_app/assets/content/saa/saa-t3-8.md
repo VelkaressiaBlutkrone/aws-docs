@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
-lastVerified: 2026-10-28
+lastVerified: 2026-11-06
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -505,11 +505,11 @@ VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모�
 11. Direct Connect 연결 옵션·복원력 모델 4종(최대 99.99% / 높은 99.9% / 개발·테스트 / Classic 95%) — https://docs.aws.amazon.com/directconnect/latest/UserGuide/connection_options.html (갭 배치 B8b: 2026-10-21)
 12. Site-to-Site VPN 쿼터 — 터널 대역폭·PPS 표와 **ECMP는 동적 라우팅 전용** — https://docs.aws.amazon.com/vpn/latest/s2svpn/vpn-limits.html (갭 배치 B8b: 2026-10-21)
 13. TGW + Site-to-Site VPN 백서(ECMP 집계·IPsec·BGP 동일 CGW 종단·Accelerated VPN = Global Accelerator) — https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-transit-gateway-vpn.html (갭 배치 B8b: 2026-10-21)
-14. Accelerated Site-to-Site VPN(ECMP 합계 ~50 Gbps·흐름당은 터널 상한·⚠️ TGW에서 원격 VPC 보안 그룹 참조 불가) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/aws-accelerated-site-to-site-vpn-aws-transit-gateway-single-aws-region.html (갭 배치 B8b: 2026-10-21)
+14. Accelerated Site-to-Site VPN(ECMP 합계 ~50 Gbps·흐름당은 터널 상한·⚠️ TGW에서 원격 VPC 보안 그룹 참조 불가) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/aws-accelerated-site-to-site-vpn-aws-transit-gateway-single-aws-region.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 15. AWS Transit Gateway 쿼터(어태치먼트 5,000·VPC당 TGW 5·피어링 50·TGW↔CNE 1·VPN Concentrator 5) — https://docs.aws.amazon.com/vpc/latest/tgw/transit-gateway-quotas.html (갭 배치 B8b: 2026-10-21)
 16. VPC 서브넷 CIDR 블록·사이징(`/28`~`/16`·예약 5개·`2^(32−prefix)−5`·BYOIP 예외) — https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html (갭 배치 B8b: 2026-10-21)
 17. VPC와 네트워크 간 DNS 질의 해석(인바운드·아웃바운드 엔드포인트·전달 규칙·⚠️ CIDR `+2` 직접 질의 미지원) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-overview-DSN-queries-to-vpc.html (갭 배치 B8b: 2026-10-21)
-18. 하이브리드 DNS 백서 — Resolver 엔드포인트 운영 규모(ENI당 ~10,000 QPS·로깅 가시성 없음·소스 IP 대체·RAM 공유) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-cloud-dns-options-for-vpc/route-53-resolver-endpoints-and-forwarding-rules.html (갭 배치 B8b: 2026-10-21)
+18. 하이브리드 DNS 백서 — Resolver 엔드포인트 운영 규모(ENI당 ~10,000 QPS·로깅 가시성 없음·소스 IP 대체·RAM 공유) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-cloud-dns-options-for-vpc/route-53-resolver-endpoints-and-forwarding-rules.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 
 > 📝 **2026-10-21 보강 (갭 배치 B8b)**: ① §2에 **TGW 쿼터 표**(어태치먼트 5,000 · **VPC당 TGW 5**(조정 불가) · 피어링 50 · **TGW↔TGW/Cloud WAN CNE 1**(조정 불가) · VPN Concentrator 5·연결 100)와 **동작 제약**(같은 VPC 중복 어태치 불가 · ⚠️ **원격 VPC 보안 그룹 참조 불가** · AZ별 서브넷 지정)을 추가했습니다(근거 14·15번). ② §3에 **터널 대역폭·PPS 표**와 **ECMP**(⚠️ **TGW + 동적 라우팅 전용, 정적 라우팅 불가** · 합계 ~50 Gbps지만 **흐름당은 터널 상한**) · **VPN Concentrator** · **Accelerated VPN**(Global Accelerator로 **경로 품질** 개선, 대역폭 증가가 아님)을 추가했습니다(근거 12·13·14번). ③ §4에 **MACsec**을 추가했습니다 — 기존 서술은 암호화 선택지로 **IPsec 오버레이만** 제시하고 있었습니다(근거 9·10번). 전용/호스팅 구분·**SiteLink**·**복원력 모델 4종**도 함께 적었습니다(근거 11번). ④ 새 절 **§8 서브넷 설계와 IP 주소 지정**·**§9 글로벌 토폴로지·하이브리드 DNS·리소스 배치**를 원리 블록과 함께 넣었습니다(근거 16·17·18번) — 서브섹션이 7→9가 되어 하한이 8로 올라가므로 **원리도 2개 함께** 넣어 9/9로 맞췄고, 가드가 그 하한을 직접 검사합니다.
 >

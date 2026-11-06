@@ -97,7 +97,8 @@
       },
       "sources": [
         { "title": "Amazon Data Firehose — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html" },
-        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" }
+        { "title": "Amazon Kinesis Data Streams — 소개 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html" },
+        { "title": "Kinesis Data Streams 연장 보존 — 최대 365일 (공식)", "url": "https://docs.aws.amazon.com/streams/latest/dev/kinesis-extended-retention.html" }
       ],
       "verified": true
     },
