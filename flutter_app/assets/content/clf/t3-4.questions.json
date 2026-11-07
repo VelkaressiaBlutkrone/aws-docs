@@ -38,7 +38,7 @@
       "skill": "관계형 DB (Aurora)",
       "section": "relational",
       "difficulty": "foundational",
-      "stem": "한 팀이 MySQL 및 PostgreSQL과 호환되면서 표준 MySQL보다 훨씬 높은 처리량(일부 워크로드에서 최대 5배)을 제공하는, Amazon RDS의 완전관리형 관계형 데이터베이스 엔진을 원한다. 가장 적합한 것은?",
+      "stem": "한 팀이 MySQL 및 PostgreSQL과 호환되면서 표준 엔진보다 훨씬 높은 처리량(공식 문서 기준 최대 6배)을 제공하는, Amazon RDS의 완전관리형 관계형 데이터베이스 엔진을 원한다. 가장 적합한 것은?",
       "options": [
         "Amazon Aurora",
         "Amazon DynamoDB",
@@ -46,7 +46,7 @@
         "Amazon ElastiCache"
       ],
       "correct": 0,
-      "explanation": "Amazon Aurora는 MySQL·PostgreSQL과 호환되는 완전관리형 관계형 데이터베이스 엔진으로, Amazon RDS의 일부입니다. 일부 워크로드에서 표준 MySQL의 최대 5배, PostgreSQL의 최대 3배 처리량을 제공하며 기존 애플리케이션을 거의 수정 없이 사용할 수 있습니다.",
+      "explanation": "Amazon Aurora는 MySQL·PostgreSQL과 호환되는 완전관리형 관계형 데이터베이스 엔진으로, Amazon RDS의 일부입니다. Aurora 사용 설명서는 표준 PostgreSQL·MySQL 대비 최대 6배 처리량으로 적고, SysBench 같은 표준 벤치마크가 그 근거입니다. ⚠️ 공식 표현이 갈립니다 — GovCloud(US) 안내서는 같은 사실을 MySQL 최대 5배, PostgreSQL 최대 3배로 적습니다. 둘 다 공식 문구이므로 숫자로 가르지 말고 표준 엔진보다 훨씬 높은 처리량으로 읽습니다. 기존 애플리케이션은 거의 수정 없이 사용할 수 있습니다.",
       "wrongExplanations": {
         "1": "Amazon DynamoDB는 NoSQL(키-값/문서) 데이터베이스로, MySQL·PostgreSQL 호환 관계형 엔진이 아닙니다.",
         "2": "Amazon Redshift는 분석용 데이터 웨어하우스 서비스로, MySQL/PostgreSQL 호환 트랜잭션 관계형 엔진이 아닙니다.",
@@ -54,8 +54,12 @@
       },
       "sources": [
         {
-          "title": "What is Amazon Aurora? — MySQL·PostgreSQL 호환 완전관리형 관계형 엔진, RDS의 일부, MySQL 최대 5배 처리량",
+          "title": "What is Amazon Aurora? — MySQL·PostgreSQL 호환 완전관리형 관계형 엔진, RDS의 일부, 두 엔진 모두 최대 6배 처리량",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"
+        },
+        {
+          "title": "Amazon Aurora in AWS GovCloud (US) — 같은 사실을 MySQL 최대 5배·PostgreSQL 최대 3배로 적는 공식 페이지",
+          "url": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-aurora.html"
         }
       ],
       "verified": true

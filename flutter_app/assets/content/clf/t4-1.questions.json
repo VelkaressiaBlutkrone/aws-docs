@@ -267,7 +267,8 @@
     {
       "id": "clf-t4-1-q10",
       "examGuideTaskId": "clf-t4-1",
-      "skill": "프리 티어 3종",
+      "skill": "프리 티어 (계정 플랜·크레딧·오퍼 유형)",
+      "section": "free-tier",
       "difficulty": "foundational",
       "stem": "AWS 프리 티어(AWS Free Tier)의 현행 무료 제공 구조를 가장 정확하게 설명한 것은?",
       "options": [

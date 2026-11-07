@@ -203,6 +203,53 @@ void main() {
               '강조가 필요하면 문장 구조로 옮긴다:\n${violations.join('\n')}');
     });
 
+    /// 단일 `*이탤릭*` 도 같은 이유로 막는다 — 2026-11-07 CLF P3 배치에서
+    /// `clf-t2-3-q1` 해설의 `계정 *자체*에` 한 건을 평문화하면서 전역으로 걸었다.
+    ///
+    /// ⚠️ **학습문서용 `findItalicNotation` 을 그대로 쓰면 거짓 양성이 난다.**
+    /// `saa-t3-7` 문항이 ALB 경로 규칙을 `/api/orders/*` 처럼 적어, 느슨한
+    /// `\*[^*\n]+\*` 는 **두 글로브 사이**를 이탤릭으로 잡는다(실측 2건).
+    /// 마크다운 규칙대로 **여는 별표 뒤와 닫는 별표 앞이 공백이 아니어야 한다**는
+    /// 조건을 넣고, **백틱 코드 스팬을 먼저 가린다** — 둘 다 필요했다.
+    /// 공백 조건만으로는 `` `/api/orders/*` `` 처럼 **글로브가 백틱 안에**
+    /// 있으면 여는 별표 뒤가 백틱(공백 아님)이라 그대로 걸린다(실측 3건:
+    /// `saa-t2-3` 2 · `soa-t5-3` 1). 학습문서 쪽 `findItalicNotation` 이 이미
+    /// `_maskCodeSpans` 를 쓰는 것과 같은 이유다.
+    List<String> bareItalicIn(String raw) =>
+        RegExp(r'\*(?=\S)[^*\n]*?(?<=\S)\*')
+            .allMatches(_maskCodeSpans(raw)
+                .replaceAll(RegExp(r'\*\*[^*\n]*\*\*'), ''))
+            .map((m) => m.group(0)!)
+            .toList();
+
+    test('어느 자격증의 문항도 단일 `*이탤릭*` 을 쓰지 않는다', () {
+      final violations = <String>[];
+      for (final f in questionFiles) {
+        final hits = bareItalicIn(f.readAsStringSync());
+        if (hits.isNotEmpty) {
+          violations.add('${relOf(f)}: ${hits.length}건 — 예: ${hits.first}');
+        }
+      }
+      expect(violations, isEmpty,
+          reason: '문항은 평문 Text 로 렌더되므로 별표가 글자로 보인다:\n'
+              '${violations.join('\n')}');
+    });
+
+    test('대조군: 이탤릭 탐지기가 옛 문구를 잡고 경로 글로브는 통과한다', () {
+      expect(bareItalicIn('계정 *자체*에 대한 것이거나'), isNotEmpty);
+      expect(
+        bareItalicIn('/api/orders/* 요청은 주문 서비스로, /api/users/*'),
+        isEmpty,
+        reason: 'ALB 경로 규칙은 이탤릭이 아니다 — 여는 별표 뒤가 공백이다',
+      );
+      expect(
+        bareItalicIn('`/api/orders/*` 는 주문, `/static/*` 는 정적 자산'),
+        isEmpty,
+        reason: '백틱 안의 글로브도 걸리면 안 된다 — 코드 스팬을 먼저 가린다',
+      );
+      expect(bareItalicIn('**굵게**만 있는 줄'), isEmpty);
+    });
+
     test('대조군: 문항 자산이 실재하고, 같은 탐지기가 학습문서에서는 굵게를 찾는다', () {
       expect(questionFiles.length, greaterThan(100),
           reason: '0이면 위 단정이 공허하다 — 여섯 자격증의 Task 별 문항 파일이 있다');
