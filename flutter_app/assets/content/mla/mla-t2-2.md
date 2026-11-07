@@ -4,7 +4,7 @@ certCode: MLA-C01
 domain: 2
 domainName: ML 모델 개발
 domainWeightPct: 26
-title: 모델 훈련·개선 (분산·조기 중지·정규화·AMT·파인튜닝·Model Registry)
+title: 모델 훈련·개선 (분산·조기 중지·정규화·AMT·미세 조정·Model Registry)
 coversTasks:
   - "2.2"
 sources:
@@ -28,10 +28,10 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-07
 ---
 
-# 모델 훈련·개선 (분산·조기 중지·정규화·AMT·파인튜닝·Model Registry)
+# 모델 훈련·개선 (분산·조기 중지·정규화·AMT·미세 조정·Model Registry)
 
 > **커버하는 공식 Task** — MLA-C01 · 도메인 2 「ML 모델 개발」(26%) · **Task 2.2 모델 훈련 및 개선** (`mla-t2-2`)
 > 이 문서는 위 한 Task에 1:1로 매핑됩니다. 2.1이 "무엇으로 모델을 얻을까"였다면 2.2는 **"그 훈련을 어떻게 빠르게, 싸게, 더 좋게 만드는가"** — 도메인 2에서 Skill 항목이 가장 많은 Task입니다(지식 8 + 기술 9).
@@ -46,10 +46,10 @@ lastVerified: 2026-10-17
 - [ ] 모델 크기를 바꾸는 요인과 양자화·가지치기·증류·특성 선택의 차이를 안다
 - [ ] 과적합·과소적합 **증상 → 처방**을 정규화·하이퍼파라미터로 연결하고, L1·L2와 **뉴런** 드롭아웃 vs **트리** 드롭아웃(XGBoost DART)을 가른다
 - [ ] AMT의 네 전략을 **병렬성과 알고리즘 전제**로 고르고, 로그 스케일이 필요한 범위를 판단한다
-- [ ] 웜 스타트 두 유형과 외부 모델 반입 세 경로, 도메인 적응 vs 명령 기반 미세조정의 **데이터 형식**을 구분한다
+- [ ] 웜 스타트 두 유형과 외부 모델 반입 세 경로, 도메인 적응 vs 명령 기반 미세 조정의 **데이터 형식**을 구분한다
 - [ ] Model Registry의 Model Group·버전·승인 상태가 CI/CD와 어떻게 연결되는지 안다
 
-> **이 문서가 다루는 것** — 1) 훈련 프로세스의 요소 · 2) 조기 중지 3층위 · 3) 분산 훈련 · 4) 시간·비용 단축 · 5) 모델 크기 · 6) 정규화·과적합·치명적 망각 · 7) 성능 개선과 하이퍼파라미터 · 8) AMT 전략·범위·지표 · 9) AMT 웜 스타트·할당량·Autotune · 10) 내장 알고리즘과 스크립트 모드 · 11) 외부 모델 반입 · 12) 파인튜닝 · 13) 앙상블·부스팅·배깅·스태킹 · 14) Model Registry
+> **이 문서가 다루는 것** — 1) 훈련 프로세스의 요소 · 2) 조기 중지 3층위 · 3) 분산 훈련 · 4) 시간·비용 단축 · 5) 모델 크기 · 6) 정규화·과적합·치명적 망각 · 7) 성능 개선과 하이퍼파라미터 · 8) AMT 전략·범위·지표 · 9) AMT 웜 스타트·할당량·Autotune · 10) 내장 알고리즘과 스크립트 모드 · 11) 외부 모델 반입 · 12) 미세 조정 · 13) 앙상블·부스팅·배깅·스태킹 · 14) Model Registry
 
 ---
 
@@ -57,7 +57,7 @@ lastVerified: 2026-10-17
 
 훈련은 "돌아간다/안 돌아간다"가 아니라 **시간과 돈과 품질의 삼각형**입니다. 같은 모델을 같은 데이터로 학습시켜도 입력 모드·인스턴스·분산 전략·조기 중지 설정에 따라 비용이 몇 배 차이 납니다.
 
-시험이 이 Task에서 묻는 것은 **증상 → 처방**입니다. "훈련이 느리다", "GPU 메모리가 부족하다", "훈련 정확도는 높은데 테스트가 낮다", "미세조정 후 일반 능력이 떨어졌다". 각 증상마다 손댈 층이 정해져 있고, 엉뚱한 층을 고르는 선택지가 함께 나옵니다.
+시험이 이 Task에서 묻는 것은 **증상 → 처방**입니다. "훈련이 느리다", "GPU 메모리가 부족하다", "훈련 정확도는 높은데 테스트가 낮다", "미세 조정 후 일반 능력이 떨어졌다". 각 증상마다 손댈 층이 정해져 있고, 엉뚱한 층을 고르는 선택지가 함께 나옵니다.
 
 ---
 
@@ -73,7 +73,7 @@ lastVerified: 2026-10-17
 - **L1은 특성을 지우고(희소) L2는 모두 줄인다.** ⚠️ **뉴런** 드롭아웃은 신경망 기법이지만 **XGBoost DART의 `rate_drop`은 트리**를 떨어뜨린다 — 보기에 드롭아웃이 보이면 대상을 확인
 - **AMT 전략은 병렬성과 전제로**: 대규모 병렬 → **Random** · 이전 결과 활용 → **Bayesian** · 범주형 전수 → **Grid** · 큰 반복형 → **Hyperband**
 - **학습률처럼 여러 자릿수 범위는 로그 스케일.** 로그 스케일은 **0보다 큰 범위만** 가능
-- **미세조정 유형은 데이터 형식이 단서**: CSV·TXT 묶음 → **도메인 적응** · 프롬프트-응답 JSON Lines → **명령 기반**. 미세조정 뒤 일반 능력이 떨어지면 **치명적 망각**(완화: PEFT·데이터 믹싱·과거 데이터 재사용)
+- **미세 조정 유형은 데이터 형식이 단서**: CSV·TXT 묶음 → **도메인 적응** · 프롬프트-응답 JSON Lines → **명령 기반**. 미세 조정 뒤 일반 능력이 떨어지면 **치명적 망각**(완화: PEFT·데이터 믹싱·과거 데이터 재사용)
 - **Model Registry는 승인 상태가 CI/CD 트리거**다. 스테이징 구성은 별도 체계
 
 ---
@@ -89,7 +89,7 @@ lastVerified: 2026-10-17
 | **하이퍼파라미터** | 훈련 과정 자체를 지배하는 구성 변수(훈련 중 학습되는 모델 파라미터와 다름) |
 | **AMT** | SageMaker AI 자동 모델 튜닝. 지정한 범위로 훈련 작업을 여러 번 돌려 지표 기준 최적 모델을 찾는다 |
 | **allreduce** | 데이터 병렬에서 각 워커의 그래디언트를 평균해 모든 워커에 공유하는 동기화 단계 |
-| **PEFT** | 파라미터 효율 미세조정. LoRA·어댑터처럼 일부 파라미터만 갱신한다 |
+| **PEFT** | 파라미터 효율 미세 조정. LoRA·어댑터처럼 일부 파라미터만 갱신한다 |
 | **Model Group** | Model Registry에서 같은 문제를 푸는 모델 버전들을 담는 묶음 |
 
 ---
@@ -212,12 +212,12 @@ lastVerified: 2026-10-17
 | 데이터 부족 | 훈련·평가 정확도가 모두 낮음 | 훈련 예제 수와 패스 수를 늘림 |
 | 검증 방법 | — | 별도 데이터로 테스트하거나 K-겹 교차 검증. AMT는 **훈련 지표 대신 검증 지표**로 튜닝 |
 
-**치명적 망각(catastrophic forgetting)** — 좁은 도메인 데이터로 미세조정하면 사전 훈련에서 얻은 **일반 능력을 덮어써** 도메인 밖 작업(지시 따르기·추론·폭넓은 지식) 성능이 떨어지는 현상입니다. ⚠️ 이 정의 문장은 **AWS 블로그**에서 확인한 것이고, 공식 문서에는 PEFT 설명 속 "치명적인 언어 능력 손실" 언급만 있습니다.
+**치명적 망각(catastrophic forgetting)** — 좁은 도메인 데이터로 미세 조정하면 사전 훈련에서 얻은 **일반 능력을 덮어써** 도메인 밖 작업(지시 따르기·추론·폭넓은 지식) 성능이 떨어지는 현상입니다. ⚠️ 이 정의 문장은 **AWS 블로그**에서 확인한 것이고, 공식 문서에는 PEFT 설명 속 "치명적인 언어 능력 손실" 언급만 있습니다.
 
 | 완화 방법 | 설명 |
 |---|---|
 | PEFT | LoRA·어댑터·프리픽스 튜닝처럼 **일부 파라미터만 갱신**. 단점은 전체 갱신 대비 성능이 낮을 수 있음. JumpStart는 `lora_r`·`lora_alpha`·`lora_dropout` 제공 |
-| 데이터 믹싱 | 미세조정 중 사용자 데이터에 기반 모델 쪽 데이터를 섞어 일반 능력을 보존 |
+| 데이터 믹싱 | 미세 조정 중 사용자 데이터에 기반 모델 쪽 데이터를 섞어 일반 능력을 보존 |
 | 이전 데이터 재사용 | 재훈련 때 과거 데이터를 일부 보관해 재사용 — 블로그 근거 |
 
 > 🧠 **원리** — 복잡한 모델은 진짜 패턴뿐 아니라 우연한 아티팩트까지 학습해 새 데이터에 일반화하지 못합니다. 정규화는 극단적 가중치에 패널티를 줘 유연성을 낮춥니다. L1은 작은 가중치를 0으로 밀어 특성 수를 줄이고(희소), L2는 모든 가중치를 고르게 줄입니다.
@@ -230,7 +230,7 @@ lastVerified: 2026-10-17
 | 증분 훈련 | 기존 모델 아티팩트 + 확장된 데이터셋으로 새 모델을 훈련 |
 | 특성 처리 | 변수 추가와 더 나은 특성 처리. Autopilot이 분석·전처리·특성 선택을 자동화 |
 | 하이퍼파라미터 튜닝 | 훈련 파라미터의 대안 값을 시도(→ 8·9) |
-| 전이 학습·미세조정 | 사전 훈련 모델을 새 데이터셋으로 이어서 훈련 — 더 작은 데이터셋·더 짧은 시간(→ 12) |
+| 전이 학습·미세 조정 | 사전 훈련 모델을 새 데이터셋으로 이어서 훈련 — 더 작은 데이터셋·더 짧은 시간(→ 12) |
 | 앙상블 | 약한 학습자를 결합(→ 13) |
 | 클래스 불균형 처리 | XGBoost `scale_pos_weight` · Linear Learner `positive_example_weight_mult`·`balance_multiclass_weights` |
 
@@ -334,16 +334,16 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
 
 > 🧠 **원리** — SageMaker 호스팅은 전부 컨테이너 기반이고 프레임워크 컨테이너는 `/opt/ml/model/`에 풀린 아티팩트와 `code/` 아래 추론 스크립트를 찾습니다. 그래서 **구조가 맞는 tar.gz만 만들면** 사전 빌드 컨테이너가 그대로 서빙하고, 구조·런타임을 맞출 수 없을 때만 확장하거나 BYOC로 갑니다.
 
-### 12) 사전 훈련 모델 파인튜닝 {#fine-tuning}
+### 12) 사전 훈련 모델 미세 조정 {#fine-tuning}
 
-파인튜닝은 사전 훈련 모델을 새 데이터셋으로 **처음부터가 아니라 이어서** 훈련하는 것으로, 전이 학습이라고도 하며 더 작은 데이터셋과 더 짧은 시간으로 정확한 모델을 만들 수 있습니다. **모델 가중치를 바꾸는** 맞춤화 방법입니다.
+미세 조정은 사전 훈련 모델을 새 데이터셋으로 **처음부터가 아니라 이어서** 훈련하는 것으로, 전이 학습이라고도 하며 더 작은 데이터셋과 더 짧은 시간으로 정확한 모델을 만들 수 있습니다. **모델 가중치를 바꾸는** 맞춤화 방법입니다.
 
 **SageMaker JumpStart의 두 유형** — 데이터 형식이 구분 기준입니다.
 
 | 유형 | 훈련 데이터 | 특징 |
 |---|---|---|
-| **도메인 적응** 미세조정 | **CSV·JSON·TXT**, 한 폴더 안의 단일 파일. CSV/JSON은 `Text` 열(없으면 첫 열) 사용 | 업계 전문 용어 같은 도메인 언어에 적응. 검증 폴더는 선택이며 없으면 훈련 데이터의 일부를 분할 |
-| **명령 기반** 미세조정 | **JSON Lines**의 프롬프트-응답 쌍 + 선택적 `template.json` | 일부 모델만 호환. `instruction_tuned` 하이퍼파라미터로 전환 |
+| **도메인 적응** 미세 조정 | **CSV·JSON·TXT**, 한 폴더 안의 단일 파일. CSV/JSON은 `Text` 열(없으면 첫 열) 사용 | 업계 전문 용어 같은 도메인 언어에 적응. 검증 폴더는 선택이며 없으면 훈련 데이터의 일부를 분할 |
+| **명령 기반** 미세 조정 | **JSON Lines**의 프롬프트-응답 쌍 + 선택적 `template.json` | 일부 모델만 호환. `instruction_tuned` 하이퍼파라미터로 전환 |
 
 - 공통 하이퍼파라미터: `epoch`·`learning_rate`·`per_device_train_batch_size`·`lora_r`·`lora_alpha`·`lora_dropout`·`int8_quantization`·`enable_fsdp` 등. 모델마다 지원 범위가 다릅니다.
 - Studio에서는 **선택한 모델과 호환되는 인스턴스만** 고를 수 있고 일부 모델은 EULA 수락이 필요합니다. ⚠️ 지원 모델 목록은 변동되므로 암기 대상이 아닙니다.
@@ -352,9 +352,9 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
 
 | 방법 | 데이터 | 목적 |
 |---|---|---|
-| 지도 미세조정(SFT) | 레이블된 입력→출력 예제(JSONL) | 특정 작업 성능 개선 |
-| 강화 미세조정(RFT) | 훈련 프롬프트 + Lambda 보상 함수 | 피드백 기반 정렬 개선 |
-| 증류 | 사용 사례별 프롬프트 — 교사 응답을 생성해 학생 모델을 미세조정 | 큰 모델의 지식을 작고 빠르고 저렴한 모델로 이전 |
+| 지도 미세 조정(SFT) | 레이블된 입력→출력 예제(JSONL) | 특정 작업 성능 개선 |
+| 강화 미세 조정(RFT) | 훈련 프롬프트 + Lambda 보상 함수 | 피드백 기반 정렬 개선 |
+| 증류 | 사용 사례별 프롬프트 — 교사 응답을 생성해 학생 모델을 미세 조정 | 큰 모델의 지식을 작고 빠르고 저렴한 모델로 이전 |
 | 연속 사전 훈련(CPT) | **레이블 없는** 대용량 도메인 데이터 | 새 도메인 지식 학습 ⚠️ 개요 페이지는 이 항목을 열거하지 않고 콘솔 도움말·API는 포함합니다 |
 
 - 데이터는 `.jsonl`(한 줄 = 한 레코드)이며 비대화형은 `prompt`+`completion`, 대화형은 Converse API 형식입니다. 훈련 데이터셋은 필수이고 **검증 데이터셋 지원 여부는 모델마다 다릅니다.**
@@ -406,8 +406,8 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
 - **L1은 특성을 지우고(희소), L2는 모두 줄입니다.** **뉴런** 드롭아웃은 신경망 기법이라 선형 모델 시나리오에서는 오답이지만, XGBoost DART의 `rate_drop`은 **트리**를 떨어뜨리는 다른 기법입니다 — 보기에 드롭아웃이 보이면 대상을 확인하세요.
 - AMT 전략은 **병렬성과 전제**로 고릅니다 — 대규모 병렬은 Random, 이전 결과 활용은 Bayesian, 범주형 전수는 Grid, 큰 반복형 작업은 Hyperband입니다.
 - 학습률처럼 **여러 자릿수에 걸친 범위**는 로그 스케일입니다. 로그 스케일은 0보다 큰 범위만 됩니다.
-- 미세조정 유형은 **데이터 형식**이 단서입니다 — CSV·TXT 묶음은 도메인 적응, 프롬프트-응답 JSON Lines는 명령 기반입니다.
-- 미세조정 뒤 **일반 능력이 떨어졌다**면 치명적 망각이고, 문서가 제시하는 완화는 PEFT·데이터 믹싱·과거 데이터 재사용입니다.
+- 미세 조정 유형은 **데이터 형식**이 단서입니다 — CSV·TXT 묶음은 도메인 적응, 프롬프트-응답 JSON Lines는 명령 기반입니다.
+- 미세 조정 뒤 **일반 능력이 떨어졌다**면 치명적 망각이고, 문서가 제시하는 완화는 PEFT·데이터 믹싱·과거 데이터 재사용입니다.
 - Model Registry는 **승인 상태가 CI/CD 트리거**라는 점이 핵심입니다. 스테이징 구성은 별도 체계입니다.
 
 ---
@@ -462,14 +462,14 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
 전형적인 **과적합**이므로 모델의 유연성을 줄입니다 — ① **`max_depth` 감소**(트리를 얕게) ② **`eta` 감소 + 라운드 수 조절**(학습을 보수적으로) ③ **`subsample`·`colsample_bytree` 감소**로 샘플·특성을 무작위로 덜 쓰기. 그 밖에 `lambda`·`alpha`(L2·L1) 증가, `min_child_weight` 증가, `gamma` 증가도 같은 방향입니다. 과소적합이면 전부 반대로 움직입니다.
 </details>
 
-**Q5.** 사내 보고서 텍스트 파일 묶음으로 FM을 사내 용어에 적응시키려 한다. JumpStart의 어느 유형이고 데이터 형식은? (→ 12) 파인튜닝)
+**Q5.** 사내 보고서 텍스트 파일 묶음으로 FM을 사내 용어에 적응시키려 한다. JumpStart의 어느 유형이고 데이터 형식은? (→ 12) 미세 조정)
 
 <details><summary>정답 보기</summary>
 
-**도메인 적응 미세조정**입니다. 데이터 형식은 **CSV·TXT 같은 비정형 텍스트 묶음**으로, 레이블 쌍이 필요 없습니다. 반대로 **프롬프트-응답 JSON Lines**를 주는 경우가 **명령 기반 미세조정**이므로, 데이터 형식만 봐도 유형이 갈립니다.
+**도메인 적응 미세 조정**입니다. 데이터 형식은 **CSV·TXT 같은 비정형 텍스트 묶음**으로, 레이블 쌍이 필요 없습니다. 반대로 **프롬프트-응답 JSON Lines**를 주는 경우가 **명령 기반 미세 조정**이므로, 데이터 형식만 봐도 유형이 갈립니다.
 </details>
 
-**Q6.** 미세조정 뒤 모델이 일반 상식 질문에 약해졌다. 현상 이름과 문서가 제시하는 완화 방법은? (→ 6) 치명적 망각)
+**Q6.** 미세 조정 뒤 모델이 일반 상식 질문에 약해졌다. 현상 이름과 문서가 제시하는 완화 방법은? (→ 6) 치명적 망각)
 
 <details><summary>정답 보기</summary>
 
@@ -496,7 +496,7 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
 - **삭제된 항목 2개** — C01에서만 묻는 내용이라 C02 대비 학습 비중을 낮출 수 있습니다.
   - 사용자 지정 데이터세트를 사용하여 **사전 훈련된 모델 미세 조정**(예: Amazon Bedrock, SageMaker JumpStart)
   - **모델 크기 축소**(예: 데이터 유형 변경, 정리, 특성 선택 업데이트, 압축)
-- 읽는 법: 이 문서의 5) 모델 크기와 12) 파인튜닝은 **C01 고유 비중이 큰 절**입니다. C02에서는 그 무게가 프롬프트 엔지니어링과 검색·임베딩 최적화로 옮겨갑니다.
+- 읽는 법: 이 문서의 5) 모델 크기와 12) 미세 조정은 **C01 고유 비중이 큰 절**입니다. C02에서는 그 무게가 프롬프트 엔지니어링과 검색·임베딩 최적화로 옮겨갑니다.
 
 출처: MLA-C01 및 MLA-C02 비교 (한국어 공식) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-02/mla-02-comparison.html · 조회일 2026-10-17
 
@@ -549,10 +549,10 @@ AMT는 지정한 알고리즘·하이퍼파라미터 범위로 훈련 작업을 
 43. 커스텀 Docker 컨테이너 — https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers-adapt-your-own.html
 44. MXNet — https://docs.aws.amazon.com/sagemaker/latest/dg/mxnet.html
 45. Chainer — https://docs.aws.amazon.com/sagemaker/latest/dg/chainer.html
-46. JumpStart 미세조정 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning.html
+46. JumpStart 미세 조정 하이퍼파라미터 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning.html
 47. 도메인 적응 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-domain-adaptation.html
 48. 명령 기반 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-instruction-based.html
-49. Studio에서 미세조정 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-use-studio-updated-fine-tune.html
+49. Studio에서 미세 조정 — https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-use-studio-updated-fine-tune.html
 50. Bedrock 모델 맞춤화 — https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html
 51. Bedrock 하이퍼파라미터 — https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models-hp.html
 52. Bedrock 데이터 준비 — https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html
