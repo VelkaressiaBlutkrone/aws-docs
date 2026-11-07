@@ -56,6 +56,8 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html
   - title: Transform Data (Balance Data — 오버샘플링·언더샘플링·SMOTE)
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html
+  - title: Migrate the UI from Studio Classic to Studio
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/studio-updated-migrate-ui.html
   - title: What is Overfitting?
     url: https://aws.amazon.com/what-is/overfitting/
   - title: What Is AI Bias?
@@ -72,7 +74,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (영문)
     url: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
-lastVerified: 2026-11-03
+lastVerified: 2026-11-07
 ---
 
 # 책임감 있는 AI 시스템 개발 (특징·Guardrails·모델 선택·법적 위험·데이터세트·편향과 변동·감지 도구)
@@ -314,7 +316,7 @@ lastVerified: 2026-11-03
 
 > ⚠️ **⑤가 가장 비자명한 사실입니다** — 「균형을 맞췄다」가 끝이 아니고 **한 축을 맞추면 교차 축이 틀어질 수** 있습니다(아래 4.1.7의 교차 집단 분석과 같은 축입니다).
 
-**③ 균형 잡힌 데이터세트 = 세 연산.** AWS 문서가 **데이터 균형 맞추기**를 **이진 분류에 더 좋은 모델을 만드는 데 도움이 된다**고 적고 연산자 셋을 정의합니다 — **무작위 오버샘플링**(소수 범주 샘플을 무작위 복제. 공식 예: 사기가 **전체의 10%**면 사기 사례를 **8회 복제**합니다) · **무작위 언더샘플링**(과대 대표 범주에서 샘플을 무작위 제거) · **SMOTE**(과소 대표 범주의 샘플로 **새 합성 소수 샘플을 보간** — **수치 특징은 가중 평균**(예: 0.7A + 0.3B), **비수치 특징은 보간에 쓰인 실제 샘플 중 하나에서 복사**). ⚠️ **열 벡터를 포함하는 데이터세트는 균형을 맞출 수 없고** SMOTE가 **이웃 거리 계산에는 수치 특징만** 씁니다.
+**③ 균형 잡힌 데이터세트 = 세 연산.** AWS 문서가 **데이터 균형 맞추기**를 **이진 분류에 더 좋은 모델을 만드는 데 도움이 된다**고 적고 연산자 셋을 정의합니다 — **무작위 오버샘플링**(소수 범주 샘플을 무작위 **복제**. 공식 예: 사기가 **전체의 10%**면 사기 사례를 **8회 복제**합니다) · **무작위 언더샘플링**(과대 대표 범주에서 샘플을 무작위 **제거**) · **SMOTE**(과소 대표 범주의 실제 샘플들 사이를 **보간**해 **원래 없던 합성 소수 샘플을 새로 만듭니다**). 시험에서 갈라야 하는 것은 이 **복제 ↔ 제거 ↔ 합성** 구분이고, 보간 가중치나 이웃 거리 계산 방식 같은 도구 내부 규칙이 아닙니다. ⚠️ **Data Wrangler는 새 Studio 경험에서 클래식 UI가 지원되지 않아**, 지금은 **SageMaker Canvas** 애플리케이션에서 같은 데이터 준비 기능을 씁니다.
 
 **④ 놓치기 쉬운 둘.** `RAIDP01-BP01`은 **릴리스 기준에서 역산해** 평가 데이터세트를 식별하고 **목적에 맞는 특성을 갖는지 검증**하라고 적는데 공식 예가 **공정성 시험용 인구통계 라벨 · 안전성 시험용 유해 콘텐츠 예시 · 통계적 확신을 위한 충분한 표본 크기**입니다 — ⚠️ **공정성을 재려면 데이터세트에 인구통계 라벨이 애초에 있어야** 합니다. 그리고 `RAIDP03-BP04`(위험 **High**)가 **변동을 두 종류로** 가릅니다 — **내재 변동(intrinsic)은 시스템이 주의를 기울여야 하는 변동**, **교란 변동(confounding)은 시스템이 무시해야 하는 변동**이고, 견고성 릴리스 기준이 있으면 **평가 세트의 예시마다 변동 유형 라벨**을 붙입니다.
 
@@ -591,7 +593,7 @@ AWS 문서가 **조건부 인구통계 격차** 지표를 설명하며 **버클�
 21. RAIDP02 Dataset quality (질문 본문의 커버리지·충분한 예시 · 모범 사례 넷. `RAIDP01`·`RAIDP03`·`RAIDP04`의 모범 사례 목록도 같은 포커스 영역에 있습니다) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02.html` (2026-11-03 확인)
 22. RAIDP02-BP03 Validate the quality of human and generated labels and features in your dataset (라벨 품질 분석 다섯 항목) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html` (2026-11-03 확인)
 23. RAIDP03-BP02 Minimize unwanted bias in your datasets (인구통계 구성 분석 · 자기 보고 라벨 · 통계적 검정력 · 계층 표집 · 교차 집단 불균형, 위험 High) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html` (2026-11-03 확인)
-24. Transform Data (Balance Data — 무작위 오버샘플링·언더샘플링·SMOTE · 열 벡터 제약 · 사기 10% 예시) — `docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html` (2026-11-03 확인)
+24. Transform Data (Balance Data — 무작위 오버샘플링·언더샘플링·SMOTE 세 연산자 · 사기 10% 예시) — `docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html` (2026-11-07 확인)
 25. What is Overfitting? (높은 편향 대 높은 변동 · 원인·감지·K-겹 교차 검증 · 조기 종료·프루닝·정규화·앙상블·데이터 증강 · 사립대 인구통계 예시) — `aws.amazon.com/what-is/overfitting/` (2026-11-03 확인)
 26. What Is AI Bias? (편향 정의 · 원인 셋 · 유형 여섯 · 예방·해소 전략 · 반사실적 공정성 · 「AWS가 어떻게 도울 수 있는가」가 아직 Clarify를 권하는 자리) — `aws.amazon.com/what-is/ai-bias/` (2026-11-03 확인)
 27. Conditional Demographic Disparity (CDD) (인구통계 격차 수식과 46%/32% 예시 · 하위 집단 조건화와 심슨의 역설 · 버클리 입학 · 편향 측정 세 시점과 훈련 전 지표의 모델 무관성) — `docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html` (2026-11-03 확인)
@@ -600,3 +602,4 @@ AWS 문서가 **조건부 인구통계 격차** 지표를 설명하며 **버클�
 30. What is Trustworthy AI? (설명 불가능성이 미션 크리티컬 도입을 막는다 · 편향된 모델이 취약 집단을 소외시킨다) — `aws.amazon.com/what-is/trustworthy-ai/` (2026-11-03 확인)
 31. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
 32. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (영문 — 한국어판과 목표 11개가 낱말 단위로 일치함을 확인한 대조본) — `docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
+33. Migrate the UI from Studio Classic to Studio (새 Studio 경험은 **클래식 Data Wrangler UI를 지원하지 않고** Data Wrangler 기능을 쓰려면 **Canvas 애플리케이션**을 만들어야 한다 · Canvas의 데이터 준비 기능이 Data Wrangler 기반) — `docs.aws.amazon.com/sagemaker/latest/dg/studio-updated-migrate-ui.html` (2026-11-07 확인)
