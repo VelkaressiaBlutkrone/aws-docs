@@ -45,7 +45,7 @@ sources:
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
   - title: ALB 대상 그룹 속성 — 교차 영역 끄기·고정 세션 (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-07
 ---
 
 # ELB + Auto Scaling — 탄력적 확장 설계
@@ -399,7 +399,7 @@ CodeDeploy는 카나리·블루/그린 배포 구성을, Elastic Beanstalk은 �
 
 | 메커니즘 | 활성화 |
 |---|---|
-| **단순 자동 복구** | 지원 인스턴스에서 **기본 활성** |
+| **간소화된 자동 복구** | 지원 인스턴스에서 **기본 활성** |
 | **CloudWatch 액션 기반 복구** | **수동 구성** — `StatusCheckFailed_System` 지표를 감시하는 경보를 만들고, 값이 **1**(시스템 상태 점검 실패)일 때 **복구 작업**을 수행하게 지정 |
 
 - ⚠️ **시스템 상태 점검**이 실패해야 동작합니다. **인스턴스 상태 점검만 실패하면 자동 복구는 동작하지 않습니다** — 시스템 점검 실패는 호스트의 하드웨어·소프트웨어 문제이고, 인스턴스 점검 실패는 게스트 OS·구성 문제라 복구 대상이 다릅니다.
@@ -510,7 +510,7 @@ CodeDeploy는 카나리·블루/그린 배포 구성을, Elastic Beanstalk은 �
 13. 인스턴스 유지관리 정책(3옵션·정책 없을 때 기본은 "종료와 동시 시작") — https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-maintenance-policy-overview-and-considerations.html
 14. `LifecycleHook` API — `HeartbeatTimeout` 기본 3,600초·범위 30~7,200초, `GlobalTimeout` **172,800초(48시간) 또는 HeartbeatTimeout의 100배 중 더 작은 값**, `DefaultResult`·`RecordLifecycleActionHeartbeat` — https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_LifecycleHook.html
 15. 불변 인프라로 배포 — Well-Architected `REL08-BP04`(in-place 변경 금지·불변 서버·카나리/블루그린·Route 53 가중 라우팅) — https://docs.aws.amazon.com/wellarchitected/2022-03-31/framework/rel_tracking_change_management_immutable_infrastructure.html
-16. EC2 자동 인스턴스 복구(단순 자동 복구 기본 활성·CloudWatch 액션 기반·시스템 점검만 해당·보존/상실 항목·`StatusCheckFailed_System` 0/1) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
+16. EC2 자동 인스턴스 복구(간소화된 자동 복구 기본 활성·CloudWatch 액션 기반·시스템 점검만 해당·보존/상실 항목·`StatusCheckFailed_System` 0/1) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-recover.html
 17. ASG 대상 추적 조정 정책 — 사전 정의 지표 4종·`ResourceLabel`·1분 이하 간격 권장·상세 모니터링 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html (갭 배치 B7b: 2026-10-21)
 18. SQS 기반 조정 정책 — 인스턴스당 백로그·허용 백로그 계산 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-using-sqs-queue.html (갭 배치 B7b: 2026-10-21)
 19. 예측 스케일링 동작(최소 24시간·과거 14일·48시간 시간별 예측·6시간 갱신·예측 전용 모드·축소하지 않음·`SchedulingBufferTime`) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/predictive-scaling-policy-overview.html (갭 배치 B7b: 2026-10-21)
