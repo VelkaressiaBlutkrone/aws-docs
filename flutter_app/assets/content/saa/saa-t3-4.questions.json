@@ -98,7 +98,8 @@
         "3": "AWS Batch는 배치 컴퓨팅 워크로드 전용 오케스트레이터로 지속 실행 마이크로서비스 오케스트레이션에 적합하지 않습니다."
       },
       "sources": [
-        { "title": "Amazon EKS — What is Amazon EKS (공식)", "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html" }
+        { "title": "Amazon EKS — What is Amazon EKS (공식)", "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html" },
+        { "title": "Lambda 할당량 — 함수 제한 시간 최대 900초(15분)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html" }
       ],
       "verified": true
     },
@@ -194,7 +195,8 @@
         "3": "ECS Service는 지속 실행 애플리케이션(웹 서버 등)에 적합하며, 완료 후 종료되는 배치 작업의 탄력적 스케줄링에는 AWS Batch가 더 적합합니다."
       },
       "sources": [
-        { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" }
+        { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" },
+        { "title": "Lambda 할당량 — 함수 제한 시간 최대 900초(15분)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html" }
       ],
       "verified": true
     },
