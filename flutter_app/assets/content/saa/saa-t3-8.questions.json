@@ -49,7 +49,8 @@
       },
       "sources": [
         { "title": "AWS Transit Gateway — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html" },
-        { "title": "VPC 피어링이란? (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html" }
+        { "title": "VPC 피어링이란? (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html" },
+        { "title": "VPC 피어링 기본 — 연결은 두 VPC 사이이며 전이적이지 않아 쌍마다 따로 필요하다", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
       "verified": true
     },
