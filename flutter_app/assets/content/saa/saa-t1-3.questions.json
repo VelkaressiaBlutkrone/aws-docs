@@ -115,12 +115,13 @@
       "correct": 0,
       "explanation": "특정 IP를 차단(Deny)하려면 NACL을 사용합니다. 보안 그룹은 Allow 규칙만 지원하고 Deny 규칙이 없습니다. NACL에서 해당 CIDR에 대한 Deny 규칙을 기존 Allow 규칙보다 낮은 번호로 추가하면, 번호 순 평가에 의해 먼저 적용되어 트래픽이 차단됩니다.",
       "wrongExplanations": {
-        "1": "보안 그룹은 Allow 규칙만 지원합니다 — Deny 규칙 자체가 존재하지 않습니다. 특정 IP 차단은 반드시 NACL을 사용해야 합니다.",
+        "1": "보안 그룹은 Allow 규칙만 지원합니다 — Deny 규칙 자체가 존재하지 않습니다. 그래서 이 보기 집합에서는 NACL이 정답입니다. 다만 IP 차단 수단이 NACL뿐인 것은 아닙니다 — AWS WAF의 IP 세트 일치 규칙도 요청 출처 IP로 허용·차단을 합니다.",
         "2": "라우트 테이블 경로 삭제는 전체 서브넷의 트래픽 방향을 변경하는 것으로 단일 IP 대역 차단 방법이 아닙니다.",
         "3": "VPC 피어링은 두 VPC 간 내부 연결로, 인터넷을 통한 외부 트래픽 차단과는 관계가 없습니다."
       },
       "sources": [
-        { "title": "네트워크 ACL로 서브넷 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" }
+        { "title": "네트워크 ACL로 서브넷 트래픽 제어 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html" },
+        { "title": "AWS WAF IP 세트 일치 규칙 — 요청 출처 IP로 허용·차단", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-ipset-match.html" }
       ],
       "verified": true
     },

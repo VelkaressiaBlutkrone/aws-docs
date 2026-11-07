@@ -56,7 +56,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance.html
   - title: FSx for OpenZFS Intelligent-Tiering 동작 (공식)
     url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance-intelligent-tiering.html
-lastVerified: 2026-10-21
+lastVerified: 2026-11-07
 ---
 
 # 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택
@@ -134,7 +134,7 @@ lastVerified: 2026-10-21
 > 🧠 원리: 왜 EBS 볼륨은 같은 AZ에 있어야만 EC2에 연결할 수 있을까요?
 > EBS 볼륨은 물리적으로 같은 데이터센터(AZ) 내 스토리지 서버에 위치하며, EC2와 EBS 사이의 데이터 경로는 AWS 내부 고속 네트워크를 사용합니다.
 > AZ를 넘어 연결하려면 이 내부 경로 대신 리전 간 네트워크를 거쳐야 해 지연시간이 크게 늘어나므로, AWS는 동일 AZ 내 연결만 허용해 일관된 저지연 성능을 유지합니다.
-> 이 설계 덕분에 EBS는 블록 스토리지 성능을 예측 가능하게 제공하지만, AZ 간 이동이 필요할 때는 스냅샷을 통한 복사가 유일한 경로가 됩니다.
+> 이 설계 덕분에 EBS는 블록 스토리지 성능을 예측 가능하게 제공하지만, **볼륨 자체**를 다른 AZ로 옮길 때는 스냅샷을 거쳐 복사하게 됩니다 — 다만 **데이터**는 인스턴스 사이 네트워크 복사로도 옮길 수 있으므로, 스냅샷이 유일한 경로인 것은 **볼륨**에 한정된 이야기입니다.
 
 ### 3) EBS 볼륨 타입 비교 (★ 시험 핵심) {#ebs-volume-types}
 
