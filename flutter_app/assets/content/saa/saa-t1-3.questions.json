@@ -289,7 +289,8 @@
         "3": "VPC 피어링은 체인 형태여도 비전이이므로 A-C, A-D, B-D 같은 전이 통신이 불가합니다. 전이 라우팅은 Transit Gateway만 지원합니다."
       },
       "sources": [
-        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" }
+        { "title": "Amazon VPC — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html" },
+        { "title": "VPC 피어링 기본 — 연결은 두 VPC 사이이며 전이적이지 않아 쌍마다 따로 필요하다", "url": "https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html" }
       ],
       "verified": true
     },

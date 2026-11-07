@@ -165,11 +165,13 @@
       "wrongExplanations": {
         "0": "SQS 큐 하나에서 여러 소비자가 경쟁하면 1개 메시지를 1개 소비자만 가져갑니다. 세 시스템 모두 독립 처리가 불가합니다.",
         "2": "SNS가 Lambda를 직접 Push할 때 Lambda 동시성 한도 초과 시 재시도가 제한적이어서 메시지를 버릴 수 있습니다. SQS 중간 버퍼가 처리 보장의 핵심입니다.",
-        "3": "EventBridge도 대상마다 재시도 정책(기본 5회 또는 300초)과 전용 데드레터 큐를 설정할 수 있어, 재시도·DLQ 자체가 없는 것은 아닙니다. 다만 그 재시도는 대상 호출 실패를 메우는 장치여서 재시도가 소진되면 이벤트가 DLQ로 가거나 버려집니다. 소비자가 자기 속도로 끌어가며 밀린 이벤트를 쌓아 두는 내구성 버퍼는 SQS 큐이므로, 지문처럼 소비자별 처리 속도를 분리해야 하면 각 구독 앞에 SQS를 둡니다."
+        "3": "EventBridge도 대상마다 재시도 정책과 전용 데드레터 큐를 설정할 수 있어, 재시도·DLQ 자체가 없는 것은 아닙니다. 기본값은 버스 종류마다 다릅니다 — 클래식 규칙 대상은 24시간·최대 185회이고, 사용자 지정 이벤트 버스 구독자는 5회 또는 300초입니다. 다만 그 재시도는 대상 호출 실패를 메우는 장치여서 재시도가 소진되면 이벤트가 DLQ로 가거나 버려집니다. 소비자가 자기 속도로 끌어가며 밀린 이벤트를 쌓아 두는 내구성 버퍼는 SQS 큐이므로, 지문처럼 소비자별 처리 속도를 분리해야 하면 각 구독 앞에 SQS를 둡니다."
       },
       "sources": [
         { "title": "Amazon SNS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html" },
-        { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" }
+        { "title": "Amazon SQS — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html" },
+        { "title": "EventBridge 사용자 지정 이벤트 버스 재시도 — MaxRetryAttempts 기본 5 · MaxEventAgeInSeconds 기본 300(클래식 대상의 24시간·185회보다 짧다)", "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-custom-bus-retry.html" },
+        { "title": "EventBridge 규칙 대상 재시도 — 기본 24시간·최대 185회 후 DLQ 또는 폐기", "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rule-retry-policy.html" }
       ],
       "verified": true
     },
@@ -265,7 +267,8 @@
         "3": "두 워크플로우의 이력 모델이 다릅니다. Standard는 별도 설정 없이 실행 완료 후 90일까지 전체 이력을 API·콘솔로 조회하고, Express는 로깅을 켜야 CloudWatch Logs·콘솔에서 볼 수 있으며 보관 범위도 5분 안에 만들어 낼 수 있는 만큼입니다."
       },
       "sources": [
-        { "title": "AWS Step Functions — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html" }
+        { "title": "AWS Step Functions — 개발자 가이드 (공식)", "url": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html" },
+        { "title": "Step Functions 워크플로 유형 선택 — Standard 최대 1년 실행·이력 90일 / Express 5분", "url": "https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html" }
       ],
       "verified": true
     },

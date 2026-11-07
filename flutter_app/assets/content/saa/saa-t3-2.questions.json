@@ -361,7 +361,8 @@
         "3": "처리량 모드는 EFS의 처리량 성능을 결정하는 설정이며 스토리지 용량 비용을 직접 줄이지 않습니다. 스토리지 비용 절감은 스토리지 클래스 전환으로 달성합니다."
       },
       "sources": [
-        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" }
+        { "title": "Amazon EFS — What is Amazon Elastic File System? (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html" },
+        { "title": "EFS 수명 주기 관리 — 30일 미접근 파일을 Infrequent Access 로 전환", "url": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html" }
       ],
       "verified": true
     }

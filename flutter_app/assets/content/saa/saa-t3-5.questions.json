@@ -268,7 +268,8 @@
         "2": "스토리지 타입은 DB 성능에 직접 영향을 미칩니다. I/O 집약 워크로드에서 잘못된 스토리지 타입은 심각한 성능 저하를 유발합니다."
       },
       "sources": [
-        { "title": "Amazon RDS — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html" }
+        { "title": "Amazon RDS — 소개 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html" },
+        { "title": "RDS 스토리지 — gp3 베이스라인 3,000 IOPS·125 MiB/s", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html" }
       ],
       "verified": true
     },
