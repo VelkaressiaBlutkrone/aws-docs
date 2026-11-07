@@ -314,27 +314,31 @@
     {
       "id": "clf-t4-2-q12",
       "examGuideTaskId": "clf-t4-2",
-      "skill": "Cost Explorer 예측(forecast)",
+      "skill": "AWS 생성 태그의 적용 범위와 결제 보고서 관계",
       "section": "cost-tools",
       "difficulty": "foundational",
-      "stem": "지난 비용·사용량 추세를 바탕으로 향후 비용을 예측하고 시각적으로 분석하려 한다. 가장 적합한 도구는?",
+      "stem": "한 회사가 결제 및 비용 관리 콘솔에서 AWS 생성 태그를 활성화했다. 그런데 활성화 전에 만든 리소스에는 그 태그가 붙지 않고, AWS Tag Editor에서도 그 태그를 찾을 수 없다. 공식 문서 기준으로 가장 정확한 설명은?",
       "options": [
-        "AWS Cost Explorer",
-        "AWS Pricing Calculator",
-        "AWS Trusted Advisor",
-        "AWS Artifact"
+        "AWS 생성 태그는 활성화 이후에 생성된 리소스에만 적용되며, 결제 및 비용 관리 콘솔과 보고서에만 나타나고 Tag Editor에는 나타나지 않는다",
+        "AWS 생성 태그는 활성화 즉시 기존 리소스까지 소급 적용되며 Tag Editor에서 관리한다",
+        "AWS 생성 태그는 멤버 계정마다 따로 활성화해야 하며 관리 계정에서는 활성화할 수 없다",
+        "AWS 생성 태그는 리소스당 태그 쿼터를 차지하므로 쿼터가 가득 차면 적용되지 않는다"
       ],
       "correct": 0,
-      "explanation": "AWS Cost Explorer는 과거 비용·사용량을 시각화·분석하고, 추세를 바탕으로 향후 비용을 예측(forecast)하는 기능을 제공합니다.",
+      "explanation": "AWS 생성 태그의 키는 `aws:createdBy`이고, 관리 계정 소유자가 결제 및 비용 관리 콘솔에서 활성화합니다. 공식 문서는 활성화한 뒤에 생성되는 리소스부터 AWS가 태그를 적용한다고 적으므로, 이미 있던 리소스에는 소급되지 않습니다. 또 이 태그는 결제 및 비용 관리 콘솔과 보고서에서만 볼 수 있고 Tag Editor를 포함한 다른 AWS 콘솔에는 나타나지 않습니다. 활성화한 태그는 결제 보고서로 이어집니다 — 사용자 정의 비용 할당 태그는 Cost and Usage Report에서 `resourceTags/user:<키>` 열로 나타납니다.",
       "wrongExplanations": {
-        "1": "AWS Pricing Calculator는 아직 만들지 않은 구성의 예상 비용을 추정하는 도구로, 실제 사용 추세 기반 예측·분석 도구가 아닙니다.",
-        "2": "AWS Trusted Advisor는 모범 사례 점검·권고 도구로, 비용 추세 예측 분석 도구가 아닙니다.",
-        "3": "AWS Artifact는 컴플라이언스 문서 제공 서비스로, 비용 분석 도구가 아닙니다."
+        "1": "소급 적용되지 않습니다. 그리고 AWS 생성 태그는 결제 및 비용 관리 콘솔과 보고서 밖에서는 보이지 않아 Tag Editor에서 관리할 수 없습니다.",
+        "2": "거꾸로입니다. 관리 계정 소유자가 활성화하면 모든 멤버 계정에도 함께 활성화됩니다.",
+        "3": "`createdBy` 태그는 리소스당 태그 쿼터에 포함되지 않습니다."
       },
       "sources": [
         {
-          "title": "AWS Cost Explorer — 비용 분석·예측(forecast)",
-          "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+          "title": "Using AWS-generated tags — aws:createdBy 키, 활성화 이후 생성된 리소스에 적용, 결제 콘솔·보고서 전용, 태그 쿼터 미포함",
+          "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/aws-tags.html"
+        },
+        {
+          "title": "Resource tags details — CUR 의 resourceTags/user:<키> 열이 사용자 정의 비용 할당 태그를 담는다",
+          "url": "https://docs.aws.amazon.com/cur/latest/userguide/resource-tags-columns.html"
         }
       ],
       "verified": true
