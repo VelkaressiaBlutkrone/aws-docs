@@ -110,6 +110,27 @@ void main() {
     // 뒤집혀 가드를 먼저 고쳐야 했다. 가드는 판정을 굳히므로 판정이 틀리면
     // 가드도 틀린다(2026-11-06 AIF 배치의 교훈이 재현된 자리).
     'https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative.html',
+    // ── 2026-11-08 SCS-C03 P-01(범위 내 71개 서비스 상태 전수 확인)에서 실측 ────
+    // 정본은 docs/content-research/SCS-C03/96-service-status-audit.md §5.
+    // ⭐ 이 측정이 **기존 가드를 독립 검증했다** — 후보 URL 네 개 중 **셋이 이미 위
+    // 목록에 있었다**(`wellarchitected/…/intro.html` · `AWSEC2/…/snapshot-lifecycle.html`
+    // · `snowball/…/whatissnowball.html`). 서로 다른 트랙의 실측이 같은 결론에 닿았다.
+    // 아래 셋만 신규이고, 전부 **레포에 0건**이라 예방(되살림 방지) 가드다.
+    //
+    // ⚠️⚠️ `STS/…/APIReference/welcome.html` 은 특히 위험하다 — **살아 있는
+    // `repost.aws` 문서가 지금도 이 URL 을 링크한다.** 3자 페이지에서 URL 을 베끼면
+    // 죽은 슬러그를 인용한다. 개념 정본은 `IAM/latest/UserGuide/id_credentials_temp.html`,
+    // API 목록은 `STS/latest/APIReference/API_Operations.html` 다.
+    'https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html',
+    // ⚠️ 이 건만 신호가 다르다 — 리다이렉트가 아니라 **`404 r=0`**(= 가이드 자체가
+    // 없다. 없는 가이드 접두사 대조군과 같은 신호)이다. `Amazon CodeGuru Security` 는
+    // 2025-11-20 지원 종료로 **사용자 안내서가 통째로 사라졌고**, 공식 AWS Lifecycle
+    // Changes 세 목록에도 **없다**(96 §8 — 「목록에 없다 ≠ 살아 있다」).
+    'https://docs.aws.amazon.com/codeguru/latest/security-ug/what-is-codeguru-security.html',
+    // 자동 포렌식 오케스트레이터 솔루션. 정본은 `architecture-overview.html` 이고
+    // 가이드 랜딩은 `solutions/automated-forensics-orchestrator-for-amazon-ec2/`
+    // (**`/latest/` 가 없다**)다. ⚠️ 공식 문서 제목에 **EKS 가 추가**됐다.
+    'https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/solution-overview.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
