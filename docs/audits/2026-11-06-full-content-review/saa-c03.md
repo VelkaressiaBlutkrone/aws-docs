@@ -466,6 +466,34 @@ D축에서 찾은 것 중 실제로 문제인 것은 없었다. 오히려 두 �
 
 전수 스캔(Timestream·Snowball Edge·Kinesis Data Analytics·Forecast·CodeGuru·SimpleDB·Elastic Transcoder·CloudSearch·Data Pipeline·OpsWorks·Cloud9·CodeCommit 외 20종)에서 **무처리 사용 0건**.
 
+> ⚠️⚠️ **컨트롤러 정정(2026-11-07 반영 PR — HANDOFF §0-2026-11-07-e).**
+> 반영 전에 레포의 **선행 판정**을 먼저 읽었고, 이 절의 전제가 둘 달라졌다.
+> ① **레포는 이미 더 깊이 판정해 뒀다** — `docs/content-research/SAA-C03/98-existing-gap.md`
+> 의 `G-4.4-13`~`15` 가 AZ 간 **각 방향 $0.01/GB**(확인) · 인터넷 `$0.09/GB`(**직접 인용
+> 미확보**) · DX `$0.02/GB`(**공식 문서가 「예시」라고 밝힘**, 미국 위치) · 포트 시간 요율
+> (**미확보**)로 분류했고, `test/saa_gaps_b10b_test.dart` 가 「**이미 본문에 있는 단가는
+> 건드리지 않는다**」를 못박아 뒀다. 그리고 **`saa-t4-4.md:203·211` 은 이미 한정을 적는다**
+> (`$0.02/GB 수준 (US 기준)` · 「아웃바운드 단가와 비율은 **DX 위치와 리전마다 다릅니다**」).
+> 즉 결함은 「절대값이 있다」가 아니라 **「문항만 그 한정을 빠뜨렸다」**이므로, 수치를 지우지
+> 않고 **문항을 md 수준으로 끌어올렸다.** 절대값을 뺐다면 md·가드·갭 원장 **세 곳의 결정을
+> 동시에 뒤집었다.**
+> ② **범위가 크게 하한이었다** — 이 절은 `q3`·`q5`·`q13` 세 문항을 들었지만 전수 가드로
+> 세니 **`saa-t4-4` 15문항 중 11문항**이 한정 없는 절대 단가를 적고 있었다
+> (`q1`·`q2`·`q3`·`q4`·`q5`·`q6`·`q10`·`q11`·`q12`·`q13`·`q15`). 11문항 전부에 같은 한정을
+> 붙여 **계열을 통째로 닫았다.**
+> ⚠️ **인용 페이지에 단가가 없었다** — `nat-gateway-pricing.html` 은 과금 축만 적는다
+> (`For more information, see Amazon VPC Pricing.`). 단가가 **산문으로** 적힌
+> `aws.amazon.com/vpc/pricing/` 을 함께 달았고, 그 공식 예시의 전제 리전은 **US East
+> (오하이오)**다 — 이 절이 제안한 「버지니아 북부」가 아니다(추측하지 않고 실측했다).
+> ⚠️ **§4-6은 기제까지 적었다** — `network-cost-reduction` 의 `($0.01/GB each way)` 에
+> `cur-data-transfers-charges` 의 `you're charged for both inbound and outbound traffic …
+> two DataTransfer-Regional-Bytes line items` 를 더해 **양 끝 과금**으로 썼다.
+> ⚠️ **§4-7은 ECMP 조건까지 넣었다** — 공식 문구는 `simultaneously use for high
+> availability` 까지이고, 터널을 묶는 ECMP 는 **TGW 종단 + 동적 라우팅**에서만 성립한다
+> (정적 라우팅 미지원). ⭐ **`saa-t3-8.md:175~177` 은 이미 그 조건을 정확히 적고 있었다.**
+> ⚠️ **미확보 사실은 새로 단정하지 않았다** — 「us-east-1 에서는 DX DTO 가 EC2 인터넷 DTO
+> 보다 비싸다」는 근거가 `repost.aws` 뿐이라 쓰지 않았다.
+
 ### 4-5. 지역 미한정 절대 요금 6종
 
 `saa-t4-4` 문항이 지역 한정 없이 단가를 단정한다:
