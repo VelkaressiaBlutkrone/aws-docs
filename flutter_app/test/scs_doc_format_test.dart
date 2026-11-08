@@ -29,10 +29,11 @@ import 'package:flutter_test/flutter_test.dart';
 /// 강제하지 않는다. 그래서 `###` 서브섹션마다 `> 🧠 원리:`를 요구하는 규칙은
 /// 이 자격증에 적용되지 않는다(MLA·DVA·AIF도 그렇다).
 void main() {
-  // 2026-11-08 도메인 1·2 배치 — 공식 Task 16개 중 5개.
+  // 2026-11-08 도메인 1·2·3 배치 — 공식 Task 16개 중 8개.
   const scsTaskIds = [
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3',
     'scs-t2-1', 'scs-t2-2',
+    'scs-t3-1', 'scs-t3-2', 'scs-t3-3',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;
@@ -179,6 +180,65 @@ void main() {
             reason: 'scs-t1-2: 구 `CloudWatch Logs 에이전트`를 언급하면 '
                 '**폐지 상태를 함께 적는다**(공식 가이드가 예시로 드는 기능이 '
                 '이미 폐지된 자리다 — 저작 결정 D-04-b)');
+      }
+    });
+  });
+
+  // 2026-11-08 도메인 3 배치의 G-29 실측이 찾은 셋을 저작 규율로 고정한다.
+  // 셋 다 **공식 시험 가이드가 예시로 드는 이름 자체가 닫혔거나 부분 종료된**
+  // 자리라, 상태를 적지 않으면 학습자가 "지금 이것을 쓰라"로 읽는다.
+  //
+  // ⚠️ 규칙은 **자격증 전수 집계**다. 2026-11-06 AIF 「PT 필수」가 파일별
+  //    리터럴 가드를 어형 하나로 뚫고 라이브에 남은 사고 뒤로, 사실 단정은
+  //    해당 Task 파일만 보지 않고 **저작된 전 문서**를 센다.
+  group('도메인 3 저작 규율', () {
+    String? docOf(String taskId) {
+      final f = File('assets/content/scs/$taskId.md');
+      return f.existsSync() ? f.readAsStringSync() : null;
+    }
+
+    test('Classic 계열을 현행처럼 적지 않는다', () {
+      // `AWS WAF Classic`은 2026-10-07, `Amazon Inspector Classic`은
+      // 2026-05-20 **완전 종료**(SHUTDOWN)다 — 공식 `AWS Lifecycle Changes`
+      // 실측(96-service-status-audit §7-2). "Classic vs 현행" 대비를 그냥
+      // 쓰면 **없는 것과 비교**하게 된다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        for (final name in ['WAF Classic', 'Inspector Classic']) {
+          if (!text.contains(name)) continue;
+          expect(RegExp(r'종료').hasMatch(text), isTrue,
+              reason: '$taskId: `$name`을 언급하면 **종료 상태를 함께 적는다**'
+                  '(저작 결정 D-04-b)');
+        }
+      }
+    });
+
+    test('CodeGuru 보안은 지원 종료 사실만 적는다', () {
+      // 사용자 안내서가 통째로 **404**이고 공지는 SDK 참조에만 남았다(G-02·§8).
+      // 그래서 **기능 서술을 할 근거가 없다** — 상태만 적는다(D-04).
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('CodeGuru')) continue;
+        expect(text.contains('지원 종료'), isTrue,
+            reason: '$taskId: `CodeGuru`를 언급하면 **지원 종료 사실**을 '
+                '함께 적는다 — 공식 문서가 404라 기능 서술의 근거가 없다'
+                '(저작 결정 D-04)');
+      }
+    });
+
+    test('Amazon Q Developer의 종료 범위를 IDE 플러그인으로 한정한다', () {
+      // ⚠️ 종료 대상은 **IDE 플러그인**이고 서비스 전체가 아니다
+      // (Sunset 공지 2026-04-30 → 지원 종료 2027-04-30 · 대안 `Kiro`).
+      // "Q Developer가 종료된다"로 적으면 거짓이 된다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('Q Developer')) continue;
+        expect(text.contains('IDE 플러그인'), isTrue,
+            reason: '$taskId: `Amazon Q Developer`를 언급하면 **IDE 플러그인** '
+                '한정을 함께 적는다 — 서비스 전체 종료가 아니다(저작 결정 D-04)');
       }
     });
   });

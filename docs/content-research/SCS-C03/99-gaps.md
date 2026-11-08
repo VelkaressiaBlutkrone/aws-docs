@@ -285,3 +285,72 @@ lifecycle **집계표**는 **Full Shutdown · 지원 종료 2025-11-12**로 적�
 `기술 2.1.1`의 **SageMaker AI 노트북**은 전용 페이지를 재지 않고 **「런북의 실행 가능한 판」이라는 역할**까지만 적었다(`scs-t2-1` §1-2). `기술 2.1.4`의 **Step Functions**와 **Lambda**도 자동 포렌식 오케스트레이터가 **그것을 쓰는 방식**으로만 다뤘고 두 서비스의 전용 페이지는 재지 않았다.
 
 ⏳ 그 셋을 묻는 문항을 만들려면 전용 페이지를 먼저 재야 한다(특히 Step Functions의 오류 처리·재시도와 Lambda 권한 모델).
+
+### G-37 ✅ GenAI OWASP Top 10의 **docs 안 근거를 찾았다** — D-08의 열린 항목 해소
+
+`기술 3.2.7`이 드는 **GenAI OWASP 상위 10개**는 OWASP의 산출물이지만, **AWS 규범적 지침의 「Security for agentic AI on AWS」 가이드가 자신의 모범 사례를 OWASP Top 10 for LLM Applications 2025에 통제 번호 단위로 직접 매핑**한다(`prescriptive-guidance/latest/agentic-ai-security/owasp-top-ten.html` — `LLM01` 프롬프트 주입 ~ `LLM10` 무제한 소비 전부). 블로그가 아니라 **docs**이므로 출처로 쓸 수 있다.
+
+⭐⭐ **그 매핑에서 가장 시험다운 사실은 「무엇이 무엇에 매핑되지 않는가」다.** **`4.2 Deploy Amazon Bedrock Guardrails`는 `LLM01`과 `LLM02`에만** 달린다.
+
+| 범주 | 공식 매핑의 핵심 통제 |
+|---|---|
+| `LLM01` 프롬프트 주입 | **Guardrails** · 다층 입력 정제 · 프롬프트를 **코드 산출물로 취급** · **엣지 보호** |
+| `LLM02` 민감 정보 노출 | **Guardrails** · **세션 격리** · 공유 메모리 관리 · 데이터 손실 방지 |
+| `LLM06` 과도한 대행 | ⚠️ **Guardrails가 아니다** — 에이전트 범위 결정 · 결정론적 실행 로직 · **비상 종료 기능** |
+| `LLM10` 무제한 소비 | ⚠️ **엣지에서의 속도 제한** · **비상 종료 기능** |
+
+→ **「에이전트가 권한을 넘는다」와 「토큰 소비 폭증」에 Guardrails를 고르면 틀린다.** 후자는 작업 3.1의 **속도 기반 규칙**이 그대로 쓰이는 자리라 **도메인 3 안에서 두 작업이 이어진다**.
+
+### G-38 ⚠️⚠️ WAF **본문 검사 한도가 리소스 유형마다 다르다**
+
+관리형 규칙의 본문 검사는 **Application Load Balancer·AppSync가 8 KB 고정**(올릴 수 없다)이고, **CloudFront·API Gateway·Cognito·App Runner·Verified Access·Bedrock AgentCore Gateway는 기본 16 KB에 보호 팩 설정으로 최대 64 KB**까지다. 코어 규칙 세트의 본문 규칙은 초과 콘텐츠에 **`Continue` 옵션**을 쓰므로 **한도를 넘은 부분이 검사되지 않은 채 통과**한다.
+
+→ "대용량 업로드 경로의 주입 공격이 탐지되지 않는다"는 지문의 답이고, **ALB 오리진에서는 한도를 올릴 수 없어 CloudFront를 앞에 두는 것이 설계 대응**이다.
+
+### G-39 ⚠️⚠️ **CloudFront 지리 제한을 켜면 그 트래픽을 WAF가 보지 못한다**
+
+공식 경고 그대로 — **"지리 제한 기능은 차단한 요청을 AWS WAF로 전달하지 않습니다(허용한 요청은 전달합니다). 지리에 더해 AWS WAF의 다른 조건으로 차단하려면 WAF geo match를 쓰고 CloudFront 지리 제한 기능은 쓰지 마십시오."**
+
+→ 두 기능을 겹쳐 켜면 차단된 국가의 트래픽이 **WAF 로그·지표·속도 제한 집계에서 사라진다.** "차단하면서 패턴을 분석하라"는 지문에서 CloudFront 기능을 고르면 틀린다.
+
+⚠️ 함께 실측된 비자명한 사실 — **CloudFront 관리형 인증서의 검증 경로 `/.well-known/pki-validation/`은 지리 제한에서 제외**되고, **WAF 규칙(봇 제어 포함)이 그 경로를 차단하면 인증서 발급·갱신이 실패**한다.
+
+### G-40 ⚠️⚠️ GuardDuty 런타임 모니터링 — **ECS on Fargate는 되고 EKS on Fargate는 안 된다**
+
+지원 리소스 유형은 **Amazon EKS · AWS Fargate 상의 Amazon ECS · Amazon EC2**이고, 같은 페이지가 **"GuardDuty는 AWS Fargate에서 실행되는 Amazon EKS 클러스터를 지원하지 않습니다"**를 따로 적는다.
+
+→ **「Fargate면 다 된다」로 외우면 거꾸로 틀린다.** 비대칭이 공식 서술에 있다.
+
+### G-41 ⚠️⚠️ Session Manager — **포트 포워딩·SSH 세션은 로깅되지 않는다**
+
+공식 경고 — **"포트 포워딩이나 SSH를 통해 연결하는 Session Manager 세션에는 로깅을 사용할 수 없습니다."** 이유는 **SSH가 AWS CLI와 Session Manager 엔드포인트 사이 TLS 안에서 세션 데이터를 전부 암호화하고 Session Manager는 터널 역할만** 하기 때문이다.
+
+→ "모든 관리 세션의 실행 명령을 보존하라"는 요건은 **IAM에서 SSH·포트 포워딩을 허용하지 않는 것까지** 설계에 들어가야 충족된다. 남는 기록은 CloudTrail의 API 호출과 EventBridge 알림이고 **명령 내용은 아니다**.
+
+⚠️ 함께 실측 — **Session Manager 레거시 콘솔 페이지가 2026년 12월 31일에 폐지**되고 기능은 Systems Manager 통합 콘솔로 옮겨진다(세션 시작·이력·기본 설정은 유지).
+
+### G-42 ⚠️⚠️ Network Firewall의 **미지원 아키텍처 셋**이 동-서 설계를 결정한다
+
+공식이 **지원하지 않는 아키텍처·트래픽 유형**으로 셋을 적는다 — **① VPC 피어링 ② 클라이언트 IP 주소 보존을 켠 AWS Global Accelerator 트래픽 ③ EC2의 AmazonProvidedDNS 트래픽**.
+
+→ `기술 3.3.4`(네트워크 세분화)에서 **피어링으로 묶인 VPC 사이 트래픽은 Network Firewall로 검사할 수 없다.** **Transit Gateway 경유 + 검사 VPC**가 공식 제약에서 따라오는 결론이고, 그때 ⚠️ **어플라이언스 모드**가 필수다(켜지 않으면 응답이 다른 AZ 엔드포인트로 가서 **드롭**된다 — 공식 문서가 그 예를 그림까지 들어 설명한다).
+
+⚠️ 함께 — **방화벽 엔드포인트는 자신이 속한 서브넷으로 드나드는 트래픽을 필터링하지 못하므로** 방화벽 서브넷을 다른 용도로 쓰지 않는다.
+
+### G-43 ⚠️ 방법론 재발 — **통제 번호에서 슬러그를 만들지 않는다**(G-26 보강)
+
+`agentic-ai-security` 가이드의 **6.4 Deploy adequate edge protection** 통제를 읽으려고 `…/agentic-ai-security/edge-protection.html`을 추정했더니 **가이드 `introduction.html`로 리다이렉트**됐다. G-26이 「링크 텍스트에서 슬러그를 유도하지 않는다」였고, 이번은 **통제 제목에서 유도한 같은 실패**다.
+
+→ **목차에 있는 URL만 쓴다.** 이 배치에서는 추정 슬러그를 버리고 **`owasp-top-ten.html`과 `introduction.html`** 둘을 출처로 썼다(둘 다 `200 r=0` 실측).
+
+### G-44 ℹ️ 공식 WAF 문서가 **「보호 팩(protection pack)」으로 전환 중**이다
+
+WAF 개발자 안내서의 여러 페이지가 **「Introducing a new console experience for AWS WAF」** 고지와 함께 본문을 **`protection pack (web ACL)`**으로 바꿔 적는다. 공식 시험 가이드(2026-03-26)는 그 용어를 쓰지 않는다.
+
+→ 처리는 **병기**다(**D-14**). ⚠️ 용어가 과금 설명에도 들어와 있다 — Shield Advanced의 자동 L7 완화가 더하는 150 WCU를 공식이 **「보호 팩 사용량」**으로 센다.
+
+### G-45 ℹ️ 도메인 3에서 **재지 않고 층 설명으로만 둔 것**
+
+`기술 3.1.2`의 **서명된 URL·서명된 쿠키 전용 페이지**, `기술 3.3.1`의 **Route 53 Resolver DNS Firewall 전용 페이지**, `기술 3.2.2`의 **IMDSv2 메타데이터 옵션 전용 페이지**, `기술 3.3.1`의 **Suricata 규칙 작성 문법**, `기술 3.2.7`의 **Guardrails 계층(tier)별 상세 페이지**는 각각 **역할과 경계까지만** 적고 전용 페이지를 재지 않았다.
+
+⏳ 그것들을 묻는 문항을 만들려면 전용 페이지를 먼저 재야 한다(특히 IMDSv2의 홉 제한·끄기 옵션과 Suricata 규칙 작업 우선순위).
