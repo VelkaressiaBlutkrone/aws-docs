@@ -354,3 +354,113 @@ WAF 개발자 안내서의 여러 페이지가 **「Introducing a new console ex
 `기술 3.1.2`의 **서명된 URL·서명된 쿠키 전용 페이지**, `기술 3.3.1`의 **Route 53 Resolver DNS Firewall 전용 페이지**, `기술 3.2.2`의 **IMDSv2 메타데이터 옵션 전용 페이지**, `기술 3.3.1`의 **Suricata 규칙 작성 문법**, `기술 3.2.7`의 **Guardrails 계층(tier)별 상세 페이지**는 각각 **역할과 경계까지만** 적고 전용 페이지를 재지 않았다.
 
 ⏳ 그것들을 묻는 문항을 만들려면 전용 페이지를 먼저 재야 한다(특히 IMDSv2의 홉 제한·끄기 옵션과 Suricata 규칙 작업 우선순위).
+
+## 2026-11-09 도메인 4 저작 배치에서 새로 세운 것
+
+### G-46 ✅ `G-23` 해소 — 정책 시뮬레이터와 Access Analyzer 정책 검증의 경계 (실측)
+
+`기술 4.2.4`가 둘을 함께 들어 **저작 전 선결**로 남겨 뒀던 항목이다. 가설(「시뮬레이터 = 요청 평가 / Access Analyzer = 논리 기반 추론」)의 **방향은 맞았지만 실측이 훨씬 날카로운 갈림길을 줬다.**
+
+**시뮬레이터가 평가하는 것** — ID 기반 정책 · 권한 경계 · **SCP**(조건 키와 거부 문장의 리소스 범위까지) · **내가 제공한** 리소스 기반 정책. 결과는 작업·리소스별 **허용/거부 이진값**이고, 허용이나 명시적 거부면 **어느 정책이 그 결과를 만들었는지**도 돌려준다.
+
+⚠️⚠️ **그런데 RCP는 지원하지 않는다** — `access_policies_testing-policies.html`이 `does not support resource control policies (RCPs)`라고 적는다. ⚠️ **반대로 Access Analyzer 정책 검증에는 RCP 전용 검사가 있다**(`Error – Policy size exceeds RCP quota` · `RCP syntax error principal`·`allow`·`NotAction`·`action` · `General Warning – RCP missing related principal condition key`)고 `access-analyzer-reference-policy-checks.html`이 적는다. **역할 신뢰 정책 전용 검사**(`Role trust policy syntax error notprincipal` 등)와 **Roles Anywhere 신뢰 정책 검사**(`Missing action for roles anywhere trust policy`)도 그쪽에 있다.
+
+함께 실측한 시뮬레이터의 제약:
+
+| 사실 | 공식 근거 |
+|---|---|
+| 모드 둘 — 보안 주체 모드 / 사용자 지정 모드 | 사용자 지정 모드의 정책은 **계정에 저장되지 않는다** |
+| **권한 경계는 한 번에 하나** | 공식 본문 |
+| **SCP의 매칭된 문장은 보여 주지 않는다** | "for security reasons it does not surface the matched statements from an SCP" |
+| **콘솔 외에서는 리소스 정책을 대신 가져오지 않는다** | "Except in the console, the simulator does not retrieve a resource's policy for you" |
+| 실제와 갈릴 수 있는 구성 **셋** | VPC 엔드포인트 정책 · **역할 체이닝** · 한 리소스에 여러 리소스 기반 정책 |
+| 조건 키 자동 채움 **8종** | 보안 주체 5(`aws:PrincipalAccount`·`aws:PrincipalId`·`aws:PrincipalType`·`aws:UserId`·`aws:UserName`) + 조직 3(`aws:PrincipalOrgID`·`aws:PrincipalOrgMasterAccountId`·`aws:PrincipalOrgPaths`) |
+| 콘솔은 **SCP에만 있는 조건 키에 값을 줄 수 없다** | CLI·API에서는 가능 |
+| 글로벌 조건 키의 **서비스 지원 여부를 판정하지 않지만** SCP는 **서비스를 아는 논리**로 평가된다 | 예시로 `aws:TagKeys` |
+| 권한이 모드별로 갈린다 | `iam:SimulateCustomPolicy` / `iam:SimulatePrincipalPolicy`(후자는 **다른 엔터티의 권한을 드러낸다**) |
+
+정책 검증 쪽: 조사 결과 유형 **넷**(오류·보안 경고·일반 경고·제안)이고 ⚠️ **추가 요금이 없다**("There is no additional charge associated with running the policy validation checks").
+
+⚠️⚠️ **`repost.aws` 문서를 근거로 쓰지 않았다** — 검색 상위의 repost 글이 「시뮬레이터는 조건이 있는 SCP를 테스트할 수 없다」고 적는데 **현행 docs는 조건 키와 리소스 범위를 평가한다고 적는다.** repost는 정본이 아니다(2026-11-08 P-01이 `STS/.../welcome.html`에서 얻은 교훈의 반대 방향 사례다 — 거기서는 repost가 **죽은 URL을 링크**했고, 여기서는 **낡은 제약**을 적는다).
+
+### G-47 ⚠️⚠️ **SMS 문자 기반 MFA 지원 종료가 lifecycle 집계표에 없다**
+
+공식 `id_credentials_mfa.html`이 Note로 **`AWS ended support for enabling SMS multi-factor authentication (MFA)`**라고 적고 대안으로 세 유형을 지목한다. 그런데 이 항목은 **공식 `AWS Lifecycle Changes` 134항목에 없고** 96 §7-2의 기능·에디션 28항목에도 없다. **G-16(「목록에 없다 ≠ 살아 있다」)이 그대로 재현됐다.**
+
+⚠️ 공식 MFA 유형은 **셋**이다 — **패스키와 보안 키**(FIDO·피싱 저항) · **가상 인증자 애플리케이션**(TOTP) · **하드웨어 TOTP 토큰**. `기술 4.1.1`은 "다중 인증(MFA)"이라고만 적으므로 **종료된 유형을 현행 선택지로 착각하기 쉬운 자리**다. 저작 규율 가드로 고정했다(`scs_doc_format_test.dart`).
+
+같은 계열로 함께 고정한 비자명한 사실 셋:
+
+- ⚠️ **패스키·보안 키는 콘솔에서만 활성화**할 수 있다(CLI·API 불가)이고 활성화 전에 그 기기에 **물리적으로 접근**해야 한다
+- ⚠️ **하드웨어 TOTP 토큰은 토큰 시드를 AWS와 안전하게 공유한 것만** 작동한다 — 다른 데서 산 토큰은 IAM에서 쓸 수 없다
+- 한 사용자가 **최대 8개** 등록하고 로그인에는 **하나**면 된다. 추가 MFA를 켜거나 끄려면 **기존 MFA로 먼저 인증**해야 한다
+
+### G-48 ⚠️⚠️ 공식 내부 어긋남 — 권한 경계와 리소스 기반 정책
+
+같은 사실을 세 페이지가 다른 해상도로 적는다.
+
+| 페이지 | 서술 |
+|---|---|
+| `troubleshoot_access-denied.html` | **거친 요약** — "Resource-based policies are **not** limited by permissions boundaries" |
+| `access_policies.html` | **정밀** — `Principal`에 **역할 세션이나 사용자**를 적으면 권한 경계의 **명시적 허용이 필요하지 않고**, **역할 ARN**을 적으면 **필요하다** |
+| `access_policies_boundaries.html` | **정밀** — 같은 구분을 **IAM 사용자 / 역할 ARN / 역할 세션 ARN / STS 연동 사용자 세션** 네 경우로 나눠 적는다 |
+
+처리는 **G-03의 판정을 그대로 적용**해 **더 구체적인 쪽을 정본**으로 삼는 것이고, 추가로 **학습문서에 그 어긋남을 인용 블록으로 명시**했다(**D-15**) — 학습자가 다른 공식 페이지를 읽고 혼동할 자리이기 때문이다. 문항으로는 **정밀한 쪽만** 쓴다.
+
+⚠️ 어느 경우에도 **권한 경계의 명시적 거부는 유효하다.** 거친 요약만 외우면 "리소스 정책으로 주면 경계를 우회한다"로 읽힌다.
+
+### G-49 ⚠️ 불완전 ARN — ID 기반 정책에서는 넓어지고 세션 정책에서는 실패한다
+
+`reference_identifiers.html`이 적는다 — 불완전 ARN(표준 6필드보다 적은 것)은 ID 기반 정책에서 **자동으로 와일드카드가 채워져** `arn:aws:sqs`가 `arn:aws:sqs:*:*:*`가 되고 **전 리전·전 계정의 SQS 리소스**를 허용한다. **그런데 `AssumeRole`·`AssumeRoleWithWebIdentity`·`AssumeRoleWithSAML`에 넘기는 세션 정책은 불완전 ARN을 지원하지 않고** `MalformedPolicyDocumentException`을 돌려준다.
+
+즉 **같은 문자열이 한쪽에서는 조용히 넓어지고 다른 쪽에서는 실패한다.** `기술 4.2.3`(최소 권한·세션 정책)의 좋은 출제 각도다.
+
+함께 고정한 와일드카드 규칙: ⚠️⚠️ **`user/*`는 경로가 있는 사용자까지 매칭한다**(`user/John`과 `user/division_abc/subdivision_xyz/JaneDoe` 둘 다). `user/division_abc*`는 경로가 있는 쪽만 잡고, **`user/`·`group/`·`policy/` 부분에는 와일드카드를 쓸 수 없다**(`iam::123456789012:u*`는 불가).
+
+### G-50 ⚠️⚠️ 미리 서명된 URL의 실제 만료는 「설정값」과 「자격 증명 수명」 중 먼저 오는 쪽
+
+`using-presigned-url.html` §Who can create a presigned URL 가 자격 증명별로 적는다.
+
+| 서명에 쓴 자격 증명 | 실제 수명 |
+|---|---|
+| **IAM 사용자**(SigV4) | 최대 **7일** |
+| **IAM 역할 자격 증명** | **역할 세션이 끝날 때** — 더 긴 만료를 적어도 그렇다(`AssumeRole` 기본 **1시간**) |
+| **EC2 인스턴스 프로파일** | 메타데이터 자격 증명 교체 주기, **약 6시간**이 최대 |
+| **STS 임시 자격 증명** | 그 자격 증명의 수명만큼 |
+
+⚠️ **자격 증명이 취소·삭제·비활성화되면 URL도 죽는다.** 콘솔은 **1분~12시간**, CLI·SDK는 **최대 7일**이다. ⚠️ 만료 판정은 **HTTP 요청 시점**이라 만료 직전에 시작한 큰 파일 다운로드는 **계속되지만** 끊겨서 재시작하면 실패한다.
+
+제한 수단 둘 — **`s3:signatureAge`** 조건(버킷·액세스 포인트 정책)과 **네트워크 경로 제한**(퍼블릭 엔드포인트면 `aws:SourceIp`, VPC 엔드포인트 경유면 `aws:SourceVpc`·`aws:SourceVpce`).
+
+### G-51 ⚠️ 권한 세트가 못 하는 것 — 작업 4.1과 4.2를 잇는 자리
+
+`permissionsetsconcept.html`이 한계를 직접 적는다 — **사용자 지정 신뢰 정책 · 역할 태그 · 구성 가능한 역할 경로**가 필요하면 권한 세트로는 안 되고 **IAM의 「계정 액세스 관리자」**를 쓴다(이미 있는 IAM 역할을 Identity Center 사용자·그룹에 할당하고, 권한 세트와 **함께** 쓸 수도 있다).
+
+⭐ **「구성 가능한 역할 경로」가 `기술 4.2.1`의 IAM 경로와 직접 이어진다** — 도메인 4의 두 작업이 한 문장에서 맞물리는 자리다.
+
+⚠️ 그리고 **조직 인스턴스에 「다중 계정 권한」이 켜져 있어야** 권한 세트가 동작한다(기본은 켜짐, 꺼졌으면 설정 또는 `UpdateInstance` API).
+
+### G-52 ⚠️ 서비스 소개 페이지에 상태가 없는 닫힌 기능 둘
+
+`Simple AD`(MAINT 2026-06-30)와 `Cognito Sync`(MAINT 2026-06-30)는 96 §7-2가 이미 실측해 뒀지만, **`directoryservice/.../what_is.html`은 Simple AD를 세 디렉터리 유형 중 하나로 그대로 소개하고 상태를 적지 않는다**(해당 문구 0건). D-04-b의 「상태를 적는다」를 **저작 규율 가드**로 강제했다.
+
+함께 고정한 Simple AD의 **미지원 목록**(공식 본문) — **MFA · 신뢰 관계 · DNS 동적 업데이트 · 스키마 확장 · LDAPS 통신 · PowerShell AD cmdlet · FSMO 역할 전송**이고 **RDS for SQL Server와 호환되지 않는다.** ⚠️ **AD Connector도 RDS for SQL Server와 호환되지 않는다**(프록시이고 기존 **RADIUS 기반 MFA 인프라**에 연결해 MFA를 켠다).
+
+⚠️ **에디션 개수는 단정하지 않는다**(D-07 계열) — 본문은 `AWS Managed Microsoft AD`를 **Standard·Enterprise 둘**로 적는데 「Which to choose」 표에는 **`Hybrid Edition`**이 보인다. 둘 중 하나를 골라 단정하면 다른 쪽과 어긋난다.
+
+### G-53 ⚠️ 방법론 — 가드 트리거를 **약어만으로** 쓰면 한국어 전체 이름이 비켜 간다
+
+시뮬레이터·RCP 규칙을 처음 `RCP` 하나로 썼다. 그러면 **「리소스 제어 정책」으로 적은 줄이 조용히 비켜 간다** — 2026-11-06 AIF 「PT 필수」가 **「된」 한 글자**로 뚫린 것과 같은 계열이다. 트리거를 `RCP|리소스 제어 정책`으로 넓혔다.
+
+⚠️⚠️ **그리고 그 가드가 정당한 줄 둘을 잡았다.**
+
+1. **자가 점검 질문 지문** — "개발자가 시뮬레이터로 돌려 봤지만 전부 허용으로 나온다"는 **틀린 믿음을 제시**하고 바로 아래 정답이 그것을 정정한다. 문서의 단정이 아니다
+2. **영문 원문 인용** — `RCP는 "does not support"입니다`
+
+처리는 선례(2026-11-06 CLF·2026-11-08 SOA 배치)대로 **예외를 성질로 좁히고 그 예외가 모든 줄을 삼키지 않도록 예외 줄 수를 대조군으로 고정**(정확히 1줄)했고, 허용 서술에 `does not support`를 더했다. **문구를 바꿔 가드를 비켜 가지 않았다.**
+
+### G-54 ℹ️ 도메인 4에서 **재지 않고 층 설명으로만 둔 것**
+
+`기술 4.2.2`의 **ABAC 튜토리얼 페이지**(`tutorial_attribute-based-access-control.html`) · `기술 4.2.1`의 **크로스 계정 역할 생성 절차 페이지**(`id_roles_common-scenarios_aws-accounts.html`·`id_roles_common-scenarios_third-party.html`) · **Access Analyzer 사용자 지정 정책 검사의 검사 종류** · **Cedar 정책 문법**. 네 URL은 **실재를 확인했지만 본문을 읽지 않았다**(2026-11-09 `200 r=0`).
+
+⏳ 그것들을 묻는 문항을 만들려면 전용 페이지를 먼저 읽어야 한다 — 특히 ABAC 튜토리얼의 **구체적 태그 설계 단계**와 **사용자 지정 정책 검사가 제공하는 검사 종류·API 이름**이다. ⚠️ 그 API 이름은 이 배치에서 재지 않았으므로 **여기에도 적지 않는다**(기억에 있는 이름을 적으면 그것이 다음 세션에 근거처럼 읽힌다).

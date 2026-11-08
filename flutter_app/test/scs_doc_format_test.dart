@@ -29,11 +29,12 @@ import 'package:flutter_test/flutter_test.dart';
 /// 강제하지 않는다. 그래서 `###` 서브섹션마다 `> 🧠 원리:`를 요구하는 규칙은
 /// 이 자격증에 적용되지 않는다(MLA·DVA·AIF도 그렇다).
 void main() {
-  // 2026-11-08 도메인 1·2·3 배치 — 공식 Task 16개 중 8개.
+  // 2026-11-09 도메인 1·2·3·4 배치 — 공식 Task 16개 중 10개.
   const scsTaskIds = [
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3',
     'scs-t2-1', 'scs-t2-2',
     'scs-t3-1', 'scs-t3-2', 'scs-t3-3',
+    'scs-t4-1', 'scs-t4-2',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;
@@ -240,6 +241,130 @@ void main() {
             reason: '$taskId: `Amazon Q Developer`를 언급하면 **IDE 플러그인** '
                 '한정을 함께 적는다 — 서비스 전체 종료가 아니다(저작 결정 D-04)');
       }
+    });
+  });
+
+  // 2026-11-09 도메인 4 배치. 앞 셋은 **G-29 규율**(저작할 때마다 그 기술이 드는
+  // 예시 서비스의 상태를 확인한다)의 네 번째 적용이고, 넷째는 **G-23 실측**이
+  // 뒤집은 가설을 고정한다.
+  //
+  // ⚠️ 규칙은 전부 **자격증 전수 집계**다(도메인 3 배치와 같은 이유 —
+  //    2026-11-06 AIF 「PT 필수」가 파일별 리터럴 가드를 어형 하나로 뚫었다).
+  group('도메인 4 저작 규율', () {
+    String? docOf(String taskId) {
+      final f = File('assets/content/scs/$taskId.md');
+      return f.existsSync() ? f.readAsStringSync() : null;
+    }
+
+    Iterable<String> authoredDocs() => scsTaskIds
+        .map(docOf)
+        .whereType<String>();
+
+    test('SMS 문자 기반 MFA를 현행 선택지처럼 적지 않는다', () {
+      // ⚠️⚠️ 공식 MFA 유형은 **셋**(패스키·보안 키 / 가상 인증자 앱 / 하드웨어
+      //    TOTP 토큰)이고 **SMS는 지원이 종료됐다**("AWS ended support for
+      //    enabling SMS multi-factor authentication" — `id_credentials_mfa.html`).
+      // ⚠️ 이 항목은 공식 `AWS Lifecycle Changes` 집계표에 **없다** — G-16
+      //    (「목록에 없다 ≠ 살아 있다」)이 그대로 재현된 자리다.
+      // 트리거를 「같은 줄에 SMS와 MFA」로 좁힌다 — SNS의 SMS 전송 같은
+      // 다른 문맥을 거짓 양성으로 잡지 않기 위해서다.
+      var triggered = 0;
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        for (final line in text.split('\n')) {
+          if (!line.contains('SMS') || !line.contains('MFA')) continue;
+          triggered++;
+          expect(line.contains('종료'), isTrue,
+              reason: '$taskId: SMS MFA를 언급한 줄에 **지원 종료**가 없다 — '
+                  '공식 MFA 유형은 셋이고 SMS는 종료됐다(저작 결정 D-04-b)\n'
+                  '  문제의 줄: $line');
+        }
+      }
+      expect(triggered, greaterThanOrEqualTo(1),
+          reason: 'SMS MFA 상태를 적은 줄이 한 곳도 없다 — `기술 4.1.1`이 MFA를 '
+              '예시로 드는데 종료된 유형을 다루지 않으면 규칙이 공허해진다');
+    });
+
+    test('Simple AD를 언급하면 유지 관리 상태를 함께 적는다', () {
+      // ⚠️⚠️ `AWS Directory Service`의 **Simple AD는 유지 관리**(MAINT
+      //    2026-06-30, 공식 `AWS Lifecycle Changes` 실측 —
+      //    96-service-status-audit §7-2)인데 **서비스 what-is 페이지는 그 상태를
+      //    적지 않고** 세 디렉터리 유형 중 하나로 그대로 소개한다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('Simple AD')) continue;
+        expect(text.contains('유지 관리'), isTrue,
+            reason: '$taskId: `Simple AD`를 언급하면 **유지 관리 상태**를 함께 '
+                '적는다 — 서비스 페이지에는 상태가 없다(저작 결정 D-04-b)');
+      }
+      expect(authoredDocs().where((t) => t.contains('Simple AD')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 4.1.3`이 AWS Directory Service를 예시로 드는데 '
+              'Simple AD의 상태를 다룬 문서가 없다');
+    });
+
+    test('Cognito Sync를 언급하면 유지 관리 상태를 함께 적는다', () {
+      // ⚠️ `Amazon Cognito`의 **Cognito Sync는 유지 관리**(MAINT 2026-06-30)다.
+      //    사용자 풀·ID 풀은 정상이므로 **기능 단위로** 갈라 적는다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('Cognito Sync')) continue;
+        expect(text.contains('유지 관리'), isTrue,
+            reason: '$taskId: `Cognito Sync`를 언급하면 **유지 관리 상태**를 '
+                '함께 적는다 — 사용자 풀·ID 풀과 같은 층이 아니다');
+      }
+      expect(authoredDocs().where((t) => t.contains('Cognito Sync')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 4.1.1`이 Amazon Cognito를 예시로 드는데 유지 관리 '
+              '기능을 가르지 않으면 학습자가 셋을 같은 층으로 읽는다');
+    });
+
+    test('정책 시뮬레이터가 RCP를 평가하는 것처럼 적지 않는다', () {
+      // ⚠️⚠️ **G-23 실측이 가설을 넓혔다.** 공식
+      //    `access_policies_testing-policies.html`은 시뮬레이터가 ID 기반 정책·
+      //    권한 경계·**SCP**·내가 제공한 리소스 기반 정책을 평가하지만
+      //    **"does not support resource control policies (RCPs)"**라고 적는다.
+      //    반대로 **Access Analyzer 정책 검증에는 RCP 전용 검사가 있다**
+      //    (`Error – Policy size exceeds RCP quota` 등). 둘의 가장 날카로운
+      //    갈림길이라 "시뮬레이터로 RCP 영향을 본다"는 서술을 막는다.
+      //
+      // ⚠️ 트리거는 **약어와 한국어 전체 이름을 함께** 본다. 처음 `RCP` 만 보게
+      //    썼더니 「리소스 제어 정책」으로 적은 줄이 비켜 갔다 — 2026-11-06 AIF
+      //    「PT 필수」가 어형 한 글자로 뚫린 것과 같은 계열이다.
+      // ⚠️ 자가 점검 **질문 줄**은 예외다. 질문은 "개발자가 시뮬레이터로
+      //    돌려 보니 전부 허용이었다"처럼 **틀린 믿음을 제시**하고 바로 아래
+      //    정답이 그것을 정정한다 — 문서의 단정이 아니다. 예외가 모든 줄을
+      //    삼키지 않도록 **예외 줄 수를 대조군으로 고정**한다.
+      var triggered = 0;
+      var exempted = 0;
+      final rcp = RegExp(r'RCP|리소스 제어 정책');
+      final states = RegExp(r'지원하지 않|못|does not support|안 됩니다');
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        for (final line in text.split('\n')) {
+          if (!line.contains('시뮬레이터') || !rcp.hasMatch(line)) continue;
+          if (line.startsWith('**Q') && line.contains('.**')) {
+            exempted++;
+            continue;
+          }
+          triggered++;
+          expect(states.hasMatch(line), isTrue,
+              reason: '$taskId: 시뮬레이터와 RCP가 같은 줄에 있는데 '
+                  '**지원하지 않는다**는 서술이 없다 — 공식은 '
+                  '"does not support resource control policies (RCPs)"다\n'
+                  '  문제의 줄: $line');
+        }
+      }
+      expect(triggered, greaterThanOrEqualTo(1),
+          reason: '시뮬레이터의 RCP 미지원을 적은 줄이 없다 — `기술 4.2.4`가 '
+              '시뮬레이터와 Access Analyzer를 함께 들므로 이 갈림길은 필수다');
+      expect(exempted, 1,
+          reason: '자가 점검 질문 예외가 $exempted줄이다 — 예외가 늘면 '
+              '규칙이 조용히 느슨해진다(1줄로 고정)');
     });
   });
 }
