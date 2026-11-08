@@ -29,9 +29,10 @@ import 'package:flutter_test/flutter_test.dart';
 /// 강제하지 않는다. 그래서 `###` 서브섹션마다 `> 🧠 원리:`를 요구하는 규칙은
 /// 이 자격증에 적용되지 않는다(MLA·DVA·AIF도 그렇다).
 void main() {
-  // 2026-11-08 도메인 1 배치 — 공식 Task 16개 중 3개.
+  // 2026-11-08 도메인 1·2 배치 — 공식 Task 16개 중 5개.
   const scsTaskIds = [
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3',
+    'scs-t2-1', 'scs-t2-2',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;
