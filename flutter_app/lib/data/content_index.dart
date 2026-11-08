@@ -723,6 +723,25 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-1', title: 'AI 시스템 보안 (보안 서비스·출처 문서화·보안 데이터 엔지니어링·프라이버시·할루시네이션 접지)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-1.md', questionsAsset: 'assets/content/aif/aif-t5-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-2', title: 'AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-2.md', questionsAsset: 'assets/content/aif/aif-t5-2.questions.json', questionCount: 0),
   ],
+
+  // SCS-C03 — 2026-11-08 도메인 1 배치(공식 Task 16개 중 3개).
+  //
+  // ⚠️ 이 자격증은 도메인이 **6개**다 — 이 레포에서 처음이다(다른 자격증은 4개,
+  // SOA·AIF가 5개). 4개나 5개를 전제하는 코드·가드·배분을 쓰면 뒤 도메인이
+  // 조용히 빠진다.
+  //
+  // ⚠️ 문항은 아직 저작 전이라 `questionsAsset`이 가리키는 파일이 **없다**.
+  // questionCount 0이면 `hasQuestions`가 false라 로더가 긁지 않고,
+  // content_index_test의 동적 불변식도 `existsSync`로 처리해 통과한다
+  // (MLA·DEA·AIF가 같은 순서로 들어왔다). 문항 배치에서 파일과 수를 함께 채운다.
+  //
+  // 저작 결정·가이드 실측의 정본은 docs/content-research/SCS-C03/ 이고,
+  // 도메인 1의 서비스 경계는 같은 폴더 `93-detection-pipeline-boundaries.md`다.
+  'SCS-C03': [
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-1', title: '모니터링 및 경보 솔루션 설계 (요구 사항·상태 확인·이벤트 집계·탐지 서비스·평가 자동화)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-1.md', questionsAsset: 'assets/content/scs/scs-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-2', title: '로깅 솔루션 설계 (소스 파악·조직 추적·데이터 레이크·로그 분석·정규화·네트워크 로그)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-2.md', questionsAsset: 'assets/content/scs/scs-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-3', title: '모니터링·로깅·경보 문제 해결 (리소스 기능·권한·구성 분석과 잘못된 구성 교정)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-3.md', questionsAsset: 'assets/content/scs/scs-t1-3.questions.json', questionCount: 0),
+  ],
 };
 
 /// 테스트 전용 콘텐츠 인덱스 덮어쓰기(자격증별). 앱 경로에서는 항상 null이다.
