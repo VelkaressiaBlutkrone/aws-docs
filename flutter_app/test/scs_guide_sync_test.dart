@@ -81,8 +81,25 @@ void main() {
 
   group('대조군: 가드의 입력이 실제로 만들어지는가', () {
     test('JSON이 읽히고 code·slug·sourceUrl이 공식 가이드를 가리킨다', () {
-      expect(raw.length, greaterThan(10000),
-          reason: '파일이 비었거나 경로가 틀렸다');
+      // ⚠️⚠️ **길이 임계는 줄끝에 독립이어야 한다.** `readAsStringSync()` 는
+      // `\r` 를 **포함한** 문자열을 준다. 이 레포는 **blob 이 LF · 작업트리가
+      // CRLF** 라(97 의 2026-11-08 정정 절) 같은 파일의 `String.length` 가
+      // **줄 수만큼 달라진다** — 실측 **CRLF 10,189자 ↔ LF 9,951자**.
+      //
+      // 이 가드는 처음 `greaterThan(10000)` 으로 썼고, 그 값이 **두 변종
+      // 사이에 놓여** Windows 로컬에서는 통과하고 **CI(Linux 체크아웃 = LF)
+      // 에서만 실패**했다. 임계를 눈대중으로 잡은 것이 원인이다.
+      // → **CR 을 걷어낸 길이로 센다.** 그러면 두 환경에서 같은 값이 나온다.
+      //
+      // ⚠️ `String.length` 는 **문자 수**이고 바이트 수가 아니다(한국어는
+      // UTF-8 에서 글자당 3바이트). 바이트로 임계를 잡으면 또 어긋난다.
+      final rawLf = raw.replaceAll('\r', '');
+      expect(rawLf.length, greaterThan(9000),
+          reason: '파일이 비었거나 경로가 틀렸다 (줄끝 독립 길이)');
+      // 줄끝 변종 사이의 차이가 「줄 수」라는 것 자체를 고정한다 — 누가 다시
+      // `raw.length` 로 바꾸면 이 단정이 왜 안 되는지 알려 준다.
+      expect(raw.length - rawLf.length, anyOf(0, raw.split('\n').length - 1),
+          reason: 'CR 수가 줄 수와 다르다 — 줄끝이 균일하지 않다');
       expect(guide['code'], 'SCS-C03');
       expect(guide['slug'], 'security-specialty-03');
       expect(guide['sourceUrl'],
