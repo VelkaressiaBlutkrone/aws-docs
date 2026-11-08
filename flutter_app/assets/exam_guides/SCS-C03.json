@@ -31,7 +31,7 @@
           "title": "로깅 솔루션 설계 및 구현",
           "knowledge": [],
           "skills": [
-            "요구 사항에 따라 로그 수집과 스토리지를 보장할 소스 파악",
+            "요구 사항에 따라 로그 수집과 스토리지를 확보할 소스 파악",
             "AWS 서비스 및 애플리케이션에 대한 로깅 구성(예: 조직의 AWS CloudTrail 추적 구성, 전용 Amazon CloudWatch 로깅 계정 만들기, Amazon CloudWatch Logs 에이전트 구성)",
             "로그 스토리지 및 로그 데이터 레이크(예: Security Lake)를 구현하고 타사 보안 도구와 통합",
             "AWS 서비스를 사용하여 로그 분석(예: CloudWatch Logs Insights, Amazon Athena, Security Hub 조사 결과)",
@@ -218,7 +218,7 @@
             "코드형 인프라(IaC)를 사용하여 계정 전체에 클라우드 리소스를 일관성 있고 안전하게 배포(예: CloudFormation 스택 세트, 타사 IaC 도구, CloudFormation Guard, cfn-lint)",
             "태그를 사용하여 AWS 리소스를 그룹화하여 관리(예: 부서, 비용 센터, 환경별로 그룹화)",
             "중앙 집중화된 소스에서 정책 및 구성 배포 및 적용(예: AWS Firewall Manager)",
-            "AWS 계정 간에 리소스를 안전하게 공유(예: AWS Service Catalog, AWS Resource Access Manager(AWSRAM))"
+            "AWS 계정 간에 리소스를 안전하게 공유(예: AWS Service Catalog, AWS Resource Access Manager(AWSRAM))."
           ]
         },
         {
