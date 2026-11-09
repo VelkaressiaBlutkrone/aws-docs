@@ -49,7 +49,9 @@ void main() {
   /// 한쪽만 늘려 빠뜨린 적이 있어 적어 둔다.
   /// ⚠️ 그리고 첫 배치에서 `tool/review.test.mjs`의 `preAuthoring` 집합에서
   /// `scs`를 **지워야 한다** — 안 지우면 node 단계가 1초 만에 레드다(설계대로다).
-  const authoredTaskIds = <String>{};
+  const authoredTaskIds = <String>{
+    'scs-t1-1', 'scs-t1-2', 'scs-t1-3', // 도메인 1 (2026-11-09)
+  };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
   /// `node tool/review.mjs flip scs <taskId>`가 대신 넣어 주고, 그 diff가
