@@ -1,0 +1,441 @@
+{
+  "examGuideTaskId": "scs-t1-2",
+  "taskTitle": "로깅 솔루션 설계 및 구현",
+  "domain": 1,
+  "certCode": "SCS-C03",
+  "lastVerified": "2026-11-09",
+  "questions": [
+    {
+      "id": "scs-t1-2-q1",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.1",
+      "section": "sources",
+      "difficulty": "foundational",
+      "stem": "로그 소스를 정할 때 쓰는 세 질문과 그에 답하는 소스를 짝지어야 합니다. \"누가 무엇을 했나\", \"무엇이 어디로 흘렀나\", \"무엇을 찾으려 했나\"에 각각 맞는 소스를 올바르게 연결한 것은 무엇입니까?",
+      "options": [
+        "누가 무엇을 했나는 VPC 흐름 로그, 무엇이 어디로 흘렀나는 CloudTrail, 무엇을 찾으려 했나는 AWS Config입니다",
+        "누가 무엇을 했나는 Route 53 Resolver 쿼리 로그, 무엇이 어디로 흘렀나는 CloudTrail, 무엇을 찾으려 했나는 VPC 흐름 로그입니다",
+        "누가 무엇을 했나는 CloudTrail, 무엇이 어디로 흘렀나는 VPC와 전송 게이트웨이 흐름 로그, 무엇을 찾으려 했나는 Route 53 Resolver 쿼리 로그입니다",
+        "세 질문 모두 CloudTrail로 답할 수 있습니다. CloudTrail이 API 호출과 네트워크 흐름과 DNS 질의를 함께 기록합니다"
+      ],
+      "correct": 2,
+      "explanation": "소스를 고르는 축은 셋입니다. API 호출의 주체와 대상과 조건은 CloudTrail, 네트워크 메타데이터는 VPC와 전송 게이트웨이 흐름 로그, 이름 해석은 Route 53 Resolver 쿼리 로그입니다. 여기에 애플리케이션 층 로깅과 구성 변경을 보는 AWS Config가 더해집니다.",
+      "wrongExplanations": {
+        "0": "CloudTrail과 VPC 흐름 로그의 역할이 서로 바뀌었습니다. 그리고 이름 해석에 답하는 것은 AWS Config가 아니라 Resolver 쿼리 로그입니다.",
+        "1": "세 짝이 모두 어긋났습니다. Resolver 쿼리 로그는 이름 해석을, 흐름 로그는 네트워크 메타데이터를 담습니다.",
+        "3": "CloudTrail은 API 호출을 기록합니다. 네트워크 IP 트래픽 메타데이터와 DNS 질의는 각각 흐름 로그와 Resolver 쿼리 로그의 몫입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Transit Gateway Flow Logs — 흐름 로그가 담는 것",
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-flow-logs.html"
+        },
+        {
+          "title": "Resolver query logging (Amazon Route 53) — 기록되는 질의와 값",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q2",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.1",
+      "section": "sources",
+      "difficulty": "applied",
+      "stem": "감사 요구로 \"사고 발생 시 최근 90일보다 더 오래된 CloudTrail 기록까지 조회할 수 있어야 한다\"가 들어왔습니다. 현재는 CloudWatch Logs에 최근 2주만 보관하고 있습니다. 로그 소스 파악 단계에서 함께 설계해야 하는 것은 무엇입니까?",
+      "options": [
+        "장기 보관 위치와 그 위치를 조회할 수단을 한 묶음으로 설계해야 합니다. S3에 쌓고 수명 주기로 보존을 맞추며 Athena로 SQL 조회하는 조합이 그 자리입니다",
+        "CloudWatch Logs의 로그 그룹 보존 기간만 90일로 늘리면 됩니다. Logs Insights가 S3 객체도 함께 조회합니다",
+        "Security Hub CSPM을 켜면 과거 조사 결과까지 집계되므로 별도 보관 설계가 필요하지 않습니다",
+        "조직 추적을 다중 리전으로 바꾸면 보존 기간이 자동으로 무기한이 됩니다"
+      ],
+      "correct": 0,
+      "explanation": "소스 파악 단계에서 자주 빠지는 질문이 보존 기간과 무결성입니다. 오래된 기록을 봐야 한다는 요구가 있으면 쌓는 곳과 쿼리 수단까지 한 묶음으로 설계해야 합니다. S3에 쌓인 대량이고 장기 보존된 데이터는 Athena로 SQL 조회하는 것이 적합합니다.",
+      "wrongExplanations": {
+        "1": "Logs Insights는 CloudWatch Logs의 로그 그룹을 대상으로 합니다. S3 객체를 직접 조회하는 수단이 아닙니다.",
+        "2": "Security Hub CSPM은 소급 적용되지 않습니다. 켠 뒤 생성된 조사 결과만 집계하므로 사고 이전 기록을 찾는 데 쓸 수 없습니다.",
+        "3": "추적을 다중 리전으로 바꾸는 것은 기록 범위에 관한 설정이고 보존 기간을 무기한으로 만드는 기능이 아닙니다. 보존은 쌓는 곳의 수명 주기로 정합니다."
+      },
+      "sources": [
+        {
+          "title": "Analyzing log data with CloudWatch Logs Insights — 대상 범위",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        },
+        {
+          "title": "Introduction to AWS Security Hub CSPM — 소급 적용되지 않음",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q3",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.2",
+      "section": "configure",
+      "difficulty": "applied",
+      "stem": "관리 계정에서 조직 추적을 만들었고 콘솔에는 추적이 정상으로 보입니다. 그런데 일부 멤버 계정의 로그 파일이 대상 S3 버킷에 나타나지 않습니다. 조직 추적의 리소스 검증 동작에 관한 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "리소스 검증이 실패하면 CloudTrail이 멤버 계정에 추적을 만들지 않으므로 멤버 계정에는 추적이 보이지 않습니다",
+        "리소스 검증이 실패해도 CloudTrail은 멤버 계정에 추적을 만듭니다. 잘못된 S3 버킷 정책이나 KMS 키 암호화 권한 부족 등이 원인일 수 있고 멤버 계정은 get-trail-status로 실패를 확인합니다",
+        "리소스 검증 실패는 관리 계정 콘솔에만 표시되고 멤버 계정에서는 어떤 방법으로도 확인할 수 없습니다",
+        "조직 추적은 검증을 하지 않으므로 전달 실패는 CloudTrail 쪽 문제가 아니라 항상 S3 수명 주기 설정 문제입니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서는 리소스 검증이 실패해도 CloudTrail이 멤버 계정에 조직 추적을 만든다고 적습니다. 실패 예로 잘못된 S3 버킷 정책, 잘못된 SNS 주제 정책, CloudWatch Logs 로그 그룹 전달 불가, KMS 키 암호화 권한 부족이 열거됩니다. 멤버 계정은 콘솔의 추적 상세나 get-trail-status로 실패를 볼 수 있습니다.",
+      "wrongExplanations": {
+        "0": "검증이 실패해도 추적은 만들어집니다. 그래서 추적이 정상으로 보이는데 로그가 오지 않는 상황이 생깁니다.",
+        "2": "멤버 계정도 콘솔의 추적 상세나 get-trail-status로 실패를 확인할 수 있습니다.",
+        "3": "열거된 실패 원인이 버킷 정책, SNS 주제 정책, 로그 그룹 전달, KMS 권한입니다. 수명 주기 설정만의 문제로 단정할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Creating a trail for an organization — 리소스 검증 실패와 상태 확인",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q4",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.2",
+      "section": "configure",
+      "difficulty": "applied",
+      "stem": "전용 로깅 계정 설계를 검토하면서 두 가지를 확인하려 합니다. 첫째 멤버 계정 관리자가 조직 추적을 끌 수 있는지, 둘째 관리 계정이 조직의 관리 계정 자격을 잃으면 그 추적이 어떻게 되는지입니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "멤버 계정 관리자는 조직 추적을 끌 수 있고, 관리 계정 자격을 잃으면 추적이 즉시 삭제됩니다",
+        "멤버 계정 관리자는 조직 추적을 볼 수 없고, 관리 계정 자격을 잃어도 추적은 조직 추적으로 남습니다",
+        "멤버 계정 관리자는 조직 추적을 끌 수 있지만 이벤트 유형은 바꿀 수 없고, 관리 계정 자격을 잃으면 추적이 멤버 계정으로 이전됩니다",
+        "멤버 계정 사용자는 조직 추적을 볼 수는 있지만 삭제나 로깅 중단, 이벤트 유형 변경을 할 수 없고, 관리 계정이 자격을 잃으면 그 계정이 만든 조직 추적은 비조직 추적이 됩니다"
+      ],
+      "correct": 3,
+      "explanation": "멤버 계정 사용자는 describe-trails 등으로 조직 추적을 볼 수 있지만 삭제, 로깅 중단, 이벤트 유형 변경 같은 어떤 변경도 할 수 없습니다. 전용 로깅 계정 설계가 성립하는 근거가 이것입니다. 그리고 관리 계정이 관리 계정 자격을 잃으면 그 계정이 만든 조직 추적은 비조직 추적이 됩니다.",
+      "wrongExplanations": {
+        "0": "멤버 계정 관리자는 조직 추적을 끌 수 없습니다. 그리고 관리 계정 자격을 잃으면 추적은 삭제되지 않고 비조직 추적이 됩니다.",
+        "1": "멤버 계정 사용자는 조직 추적을 볼 수 있습니다. 볼 수 없는 것이 아니라 바꿀 수 없는 것입니다.",
+        "2": "멤버 계정은 로깅을 중단할 수 없습니다. 그리고 관리 계정 자격 상실 시 추적은 멤버 계정으로 이전되지 않고 비조직 추적이 됩니다."
+      },
+      "sources": [
+        {
+          "title": "Creating a trail for an organization — 멤버 계정 권한과 관리 계정 자격 변화",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q5",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.2",
+      "section": "configure",
+      "difficulty": "foundational",
+      "stem": "비용 때문에 특정 리전의 활동만 기록하는 단일 리전 조직 추적을 만들려 합니다. 콘솔에서 조직 추적을 만들려는데 리전 범위 선택이 보이지 않습니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "콘솔에서는 조직 추적을 만들 수 없으므로 모든 조직 추적은 CLI로만 만듭니다",
+        "단일 리전 조직 추적은 관리 계정에서만 만들 수 있고 위임 관리자는 다중 리전만 만들 수 있습니다",
+        "콘솔로 만든 조직 추적은 전부 다중 리전이고, 단일 리전 조직 추적은 AWS CLI로만 만들 수 있으며 그때는 그 추적의 홈 리전 활동만 기록합니다",
+        "단일 리전 조직 추적은 지원되지 않으므로 다중 리전으로 만든 뒤 리전별 이벤트 선택기로 제한해야 합니다"
+      ],
+      "correct": 2,
+      "explanation": "콘솔로 만든 조직 추적은 전부 다중 리전입니다. 단일 리전 조직 추적은 AWS CLI로만 만들 수 있고, 그때는 그 추적의 홈 리전 활동만 기록합니다.",
+      "wrongExplanations": {
+        "0": "콘솔에서도 조직 추적을 만들 수 있습니다. 다만 콘솔로 만들면 다중 리전이 됩니다.",
+        "1": "리전 범위는 만드는 주체가 아니라 만드는 수단으로 갈립니다. 조직 추적은 관리 계정 또는 위임 관리자 계정으로 만들 수 있습니다.",
+        "3": "단일 리전 조직 추적은 지원되고 CLI로 만듭니다."
+      },
+      "sources": [
+        {
+          "title": "Creating a trail for an organization — 콘솔과 CLI의 리전 범위",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q6",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.3",
+      "section": "lake",
+      "difficulty": "applied",
+      "stem": "Security Lake를 켜면서 기본 지원 AWS 소스를 추가하려 합니다. 팀은 \"각 서비스에서 로깅을 먼저 켜 둬야 하는지\"를 묻습니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "모든 기본 지원 소스에서 해당 서비스의 로깅을 먼저 구성해야 합니다",
+        "기본 지원 소스는 해당 서비스에서 로깅을 따로 구성할 필요가 없습니다. 다만 CloudTrail 관리 이벤트만 예외이고, 이미 로깅을 구성해 뒀어도 바꿀 필요가 없습니다",
+        "기본 지원 소스는 전부 별도 구성이 필요 없고 예외도 없습니다",
+        "Security Lake는 기존에 구성된 로깅 설정을 덮어쓰므로 기존 로깅을 모두 끈 뒤에 추가해야 합니다"
+      ],
+      "correct": 1,
+      "explanation": "Security Lake의 기본 지원 AWS 소스는 그 서비스들에서 로깅을 따로 구성할 필요가 없습니다. CloudTrail 관리 이벤트만 예외입니다. 그리고 이미 로깅을 구성해 뒀어도 바꿀 필요가 없습니다. Security Lake는 독립적이고 중복된 이벤트 스트림으로 직접 당겨옵니다.",
+      "wrongExplanations": {
+        "0": "대부분의 기본 지원 소스는 별도 로깅 구성이 필요하지 않습니다. 필요한 것은 CloudTrail 관리 이벤트뿐입니다.",
+        "2": "예외가 있습니다. CloudTrail 관리 이벤트는 별도 로깅 구성이 필요합니다.",
+        "3": "기존 로깅 설정을 덮어쓰지 않습니다. 이미 구성해 둔 로깅을 바꿀 필요가 없다는 것이 공식 서술입니다."
+      },
+      "sources": [
+        {
+          "title": "Collecting data from AWS services in Security Lake — 기본 지원 소스와 예외",
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/internal-sources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q7",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.3",
+      "section": "lake",
+      "difficulty": "applied",
+      "stem": "여러 타사 보안 제품의 로그를 Security Lake의 사용자 지정 소스로 넣으려 합니다. 제품이 60종이고, 각 제품이 10분 간격으로 하나의 S3 객체에 여러 이벤트 클래스를 섞어 쓰려 합니다. 공식 요건에 비춰 문제가 되는 것을 올바르게 짚은 것은 무엇입니까?",
+      "options": [
+        "전송 주기 10분과 이벤트 클래스 혼합은 문제이지만 소스 개수에는 상한이 없습니다",
+        "계정당 사용자 지정 로그 소스는 최대 50개이고, 한 객체 안의 레코드는 같은 OCSF 이벤트 클래스여야 합니다. 전송 주기 10분은 5분에서 1 이벤트 일 사이라 허용됩니다",
+        "소스 개수와 이벤트 클래스는 문제없고 전송 주기만 1분 이하로 줄여야 합니다",
+        "세 가지 모두 문제없습니다. 사용자 지정 소스에는 개수나 형식 제약이 없습니다"
+      ],
+      "correct": 1,
+      "explanation": "계정당 사용자 지정 로그 소스는 최대 50개이므로 60종은 상한을 넘습니다. 그리고 한 S3 객체 안의 레코드는 같은 OCSF 이벤트 클래스여야 하므로 섞어 쓸 수 없습니다. 전송 주기는 5분에서 1 이벤트 일 사이이므로 10분은 허용됩니다.",
+      "wrongExplanations": {
+        "0": "소스 개수에 상한이 있습니다. 계정당 최대 50개입니다. 그리고 전송 주기 10분은 허용 범위 안입니다.",
+        "2": "전송 주기는 5분에서 1 이벤트 일 사이이므로 10분은 그대로 괜찮습니다. 문제는 소스 개수와 이벤트 클래스 혼합입니다.",
+        "3": "개수 상한과 형식 요건이 모두 있습니다. 객체는 Parquet이어야 하고 레코드는 같은 OCSF 이벤트 클래스여야 합니다."
+      },
+      "sources": [
+        {
+          "title": "Collecting data from custom sources in Security Lake — 요건과 상한",
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q8",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.3",
+      "section": "lake",
+      "difficulty": "applied",
+      "stem": "데이터 거버넌스팀이 \"보안 데이터 레이크를 도입하면 데이터 소유권이 AWS로 넘어가는지\"와 \"사용자 지정 소스를 추가할 때 우리가 직접 만들어야 하는 것이 무엇인지\"를 묻습니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "데이터는 AWS가 관리하는 계정에 저장되고 소유권도 AWS로 넘어가며, 쓰기용 IAM 역할은 고객이 직접 만들어야 합니다",
+        "데이터 레이크는 내 계정의 S3 버킷에 만들어지지만 소유권은 AWS에 있고, Lake Formation 테이블도 직접 만들어야 합니다",
+        "데이터 레이크는 내 계정의 S3 버킷에 만들어지고 데이터 소유권이 내게 남습니다. 사용자 지정 소스 추가 시 고유 접두사, 쓰기용 IAM 역할, Lake Formation 테이블, Glue 크롤러는 Security Lake가 대신 만들어 줍니다",
+        "데이터 레이크는 Security Lake 서비스 계정에 만들어지고 Glue 크롤러만 고객이 만듭니다"
+      ],
+      "correct": 2,
+      "explanation": "Security Lake는 내 계정의 S3 버킷에 보안 데이터 레이크를 만들고 데이터 소유권을 내게 남깁니다. 사용자 지정 소스를 추가할 때 고유 접두사, 쓰기용 IAM 역할, Lake Formation 테이블, Glue 크롤러는 Security Lake가 대신 만듭니다. 역할의 권한 경계로는 관리형 정책 AmazonSecurityLakePermissionsBoundary가 쓰입니다.",
+      "wrongExplanations": {
+        "0": "데이터는 내 계정의 S3에 저장되고 소유권이 내게 남습니다. 쓰기용 IAM 역할도 Security Lake가 만들어 줍니다.",
+        "1": "저장 위치는 맞지만 소유권 서술이 틀렸습니다. 데이터 소유권은 내게 남고 Lake Formation 테이블도 Security Lake가 만듭니다.",
+        "3": "데이터 레이크는 내 계정의 S3에 만들어집니다. 그리고 Glue 크롤러도 Security Lake가 만들어 주는 것 중 하나입니다."
+      },
+      "sources": [
+        {
+          "title": "Collecting data from custom sources in Security Lake — Security Lake가 만들어 주는 것",
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q9",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.4",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "CloudWatch Logs Insights에서 스캔량을 줄이려고 필드 인덱스를 활용하는 쿼리를 쓰려 하고, 동시에 대시보드에 여러 쿼리를 올려 두려 합니다. 쿼리 언어 선택에 관한 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "filterIndex 명령과 비교 쿼리는 Logs Insights QL 전용이고, 동시 실행 한도는 QL이 계정당 100개인데 PPL과 SQL은 각 15개입니다",
+        "filterIndex는 세 언어 모두에서 쓸 수 있고 동시 실행 한도도 세 언어가 같습니다",
+        "filterIndex는 OpenSearch SQL 전용이고 QL에서는 쓸 수 없습니다",
+        "동시 실행 한도는 QL이 15개이고 PPL과 SQL이 각 100개이므로 대시보드 쿼리는 SQL로 작성해야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "filterIndex 명령은 Logs Insights QL 전용이고 비교 쿼리도 QL 전용입니다. 동시 실행 한도는 QL이 계정당 100개이고 대시보드 쿼리를 포함하며, OpenSearch PPL과 SQL은 각 15개입니다.",
+      "wrongExplanations": {
+        "1": "filterIndex는 QL 전용이고 동시 실행 한도도 언어마다 다릅니다.",
+        "2": "filterIndex는 QL 전용입니다. SQL 전용 기능은 로그 그룹 간 조인과 하위 쿼리입니다.",
+        "3": "한도가 거꾸로입니다. QL이 100개이고 PPL과 SQL이 각 15개입니다."
+      },
+      "sources": [
+        {
+          "title": "Analyzing log data with CloudWatch Logs Insights — 쿼리 언어와 한도",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q10",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.4",
+      "section": "analyze",
+      "difficulty": "foundational",
+      "stem": "OpenSearch SQL로 Logs Insights 쿼리를 작성하는데 message 본문 필드를 참조하려 합니다. 필드 이름 표기에 관한 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "모든 필드 이름을 큰따옴표로 감싸야 합니다",
+        "필드 이름은 어떤 경우에도 그대로 쓰면 되고 특별한 표기가 필요하지 않습니다",
+        "SQL과 PPL에서는 특수문자가 든 필드를 백틱으로 감싸야 합니다. 순수 알파벳 필드는 감쌀 필요가 없습니다",
+        "Logs Insights QL에서만 백틱이 필요하고 SQL과 PPL에서는 필요하지 않습니다"
+      ],
+      "correct": 2,
+      "explanation": "OpenSearch SQL과 PPL에서는 특수문자가 든 필드를 백틱으로 감싸야 합니다. 공식 예가 at 기호로 시작하는 message 필드, 점이 든 Operation.Export, 콜론이 든 Test 필드입니다. 순수 알파벳 필드는 감쌀 필요가 없습니다.",
+      "wrongExplanations": {
+        "0": "큰따옴표가 아니라 백틱입니다.",
+        "1": "특수문자가 든 필드는 그대로 쓸 수 없습니다.",
+        "3": "백틱이 필요한 쪽은 SQL과 PPL입니다. 방향이 거꾸로입니다."
+      },
+      "sources": [
+        {
+          "title": "Analyzing log data with CloudWatch Logs Insights — 필드 이름 표기",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q11",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.4",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "3주 전에 일어난 침해를 조사하는데, 침해 사실을 알고 나서 어제 Security Hub CSPM을 켰습니다. 조사팀이 CSPM 콘솔에서 사고 당시의 제어 조사 결과를 찾으려 합니다. 어떻게 해야 합니까?",
+      "options": [
+        "CSPM의 조사 결과 보존 기간을 90일로 늘리면 사고 당시 결과가 채워집니다",
+        "원시 로그 쪽으로 가야 합니다. Security Hub CSPM은 소급 적용되지 않고 켠 뒤 생성된 조사 결과만 집계하므로 사고 이전 기록은 CSPM에 없습니다",
+        "크로스 리전 집계를 켜면 다른 리전에 남아 있던 과거 조사 결과가 홈 리전으로 모입니다",
+        "CSPM을 끄고 다시 켜면 리소스를 재평가하면서 과거 시점의 조사 결과가 생성됩니다"
+      ],
+      "correct": 1,
+      "explanation": "Security Hub CSPM은 소급 적용되지 않습니다. 켠 뒤 생성된 조사 결과만 집계하므로 사고 이전 기록을 찾으려면 원시 로그 쪽으로 가야 합니다. S3에 쌓인 장기 데이터라면 Athena가 적합합니다.",
+      "wrongExplanations": {
+        "0": "보존 기간을 늘려도 켜기 전에 생성되지 않은 조사 결과가 생기지는 않습니다.",
+        "2": "크로스 리전 집계도 소급되지 않습니다. 집계는 켠 뒤 생성된 조사 결과를 대상으로 합니다.",
+        "3": "끄고 다시 켜도 과거 시점의 조사 결과는 만들어지지 않습니다. 재평가는 현재 구성에 대한 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Introduction to AWS Security Hub CSPM — 소급 적용되지 않음",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q12",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.5",
+      "section": "correlate",
+      "difficulty": "foundational",
+      "stem": "공식 기술이 정규화와 구문 분석, 상관 관계 분석의 예시로 Amazon OpenSearch Service, AWS Lambda, Amazon Managed Grafana를 듭니다. 세 수단을 층으로 배치한 것으로 올바른 것은 무엇입니까?",
+      "options": [
+        "변환은 OpenSearch Service, 색인과 검색은 Managed Grafana, 시각화는 Lambda입니다",
+        "변환은 Managed Grafana, 색인과 검색은 Lambda, 시각화는 OpenSearch Service입니다",
+        "세 수단 모두 같은 층이고 서로 대체할 수 있습니다",
+        "변환은 Lambda, 색인과 검색은 OpenSearch Service, 시각화는 Managed Grafana입니다"
+      ],
+      "correct": 3,
+      "explanation": "층으로 보면 Lambda가 형식이 다른 로그를 받아 파싱하고 정규화해 다음 단계로 넘기는 변환 층, OpenSearch Service가 대량 로그를 색인해 자유 검색과 집계를 제공하는 색인과 검색 층, Managed Grafana가 여러 데이터 소스를 한 대시보드에서 함께 보는 시각화 층입니다.",
+      "wrongExplanations": {
+        "0": "세 짝이 어긋났습니다. 변환은 Lambda이고 시각화가 Managed Grafana입니다.",
+        "1": "세 짝이 모두 어긋났습니다.",
+        "2": "세 수단은 층이 다르고 서로 대체하지 않습니다. 변환과 색인과 시각화가 각각의 자리입니다."
+      },
+      "sources": [
+        {
+          "title": "Analyzing log data with CloudWatch Logs Insights — 분석 수단의 층",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q13",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.5",
+      "section": "correlate",
+      "difficulty": "applied",
+      "stem": "여러 벤더의 보안 로그가 각기 다른 형식으로 들어오고 있어 \"하나의 스키마로 맞춰 함께 질의하고 싶다\"는 요구가 있습니다. 이 요구에 가장 직접 답하는 접근과 Security Lake의 역할을 올바르게 설명한 것은 무엇입니까?",
+      "options": [
+        "OCSF 스키마로 정규화해 모으는 것이 그 요구에 직접 답합니다. Security Lake가 수집 데이터를 OCSF와 Parquet으로 변환해 쌓고, OpenSearch Service와 Managed Grafana 묶음은 쌓인 것을 검색하고 시각화하거나 기본 지원되지 않는 형식을 변환하는 쪽입니다",
+        "Managed Grafana에 벤더별 데이터 소스를 각각 연결하는 것이 정규화이므로 스키마 통일은 필요하지 않습니다",
+        "Security Lake와 OpenSearch 묶음은 경쟁 관계이므로 하나를 골라야 하고, 벤더 로그 통합에는 OpenSearch만 쓸 수 있습니다",
+        "벤더 로그는 ASFF로 변환해야 하며 Security Lake가 ASFF 데이터 레이크를 만듭니다"
+      ],
+      "correct": 0,
+      "explanation": "여러 벤더의 로그 형식을 하나로 맞추는 요구에는 OCSF 정규화가 먼저 떠올라야 합니다. Security Lake는 수집 데이터를 Parquet 형식과 OCSF 스키마로 변환해 쌓는 쪽이고, OpenSearch Service와 Managed Grafana 묶음은 쌓인 것을 검색하고 시각화하거나 Security Lake가 기본 지원하지 않는 형식을 변환하는 쪽입니다. 둘은 경쟁 관계가 아닙니다.",
+      "wrongExplanations": {
+        "1": "데이터 소스를 각각 연결하는 것은 시각화 층의 일이고 스키마 정규화가 아닙니다.",
+        "2": "두 쪽은 경쟁 관계가 아닙니다. Security Lake가 정규화해 쌓고 OpenSearch 묶음이 검색과 시각화를 맡는 구성이 공식 서술입니다.",
+        "3": "Security Lake가 쓰는 스키마는 OCSF입니다. ASFF는 Security Hub CSPM이 조사 결과를 담는 형식입니다."
+      },
+      "sources": [
+        {
+          "title": "What is Amazon Security Lake? — OCSF와 Parquet 변환",
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html"
+        },
+        {
+          "title": "Collecting data from custom sources in Security Lake — 변환 책임",
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q14",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.6",
+      "section": "network",
+      "difficulty": "applied",
+      "stem": "공유된 전송 게이트웨이를 쓰는 조직에서 멤버 계정이 전송 게이트웨이 흐름 로그를 만들려 합니다. 그리고 Connect 어태치먼트에도 흐름 로그를 켜려 하며, 켠 직후 실시간으로 레코드를 확인하려 합니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "멤버 계정도 자유롭게 만들 수 있고 Connect 어태치먼트도 지원되며 레코드는 실시간으로 나타납니다",
+        "전송 게이트웨이의 소유자만 만들 수 있지만 Connect 어태치먼트는 지원되고 레코드도 실시간입니다",
+        "전송 게이트웨이의 소유자만 흐름 로그를 만들 수 있고, Connect 어태치먼트는 지원되지 않으며, 만든 뒤 수집과 게시 시작까지 몇 분이 걸립니다",
+        "누구나 만들 수 있지만 Connect 어태치먼트는 지원되지 않고 레코드는 실시간으로 나타납니다"
+      ],
+      "correct": 2,
+      "explanation": "전송 게이트웨이 흐름 로그는 전송 게이트웨이의 소유자만 만들 수 있고, 아니면 소유자가 권한을 줘야 합니다. Connect 어태치먼트는 지원되지 않고 Connect 흐름 로그는 전송 어태치먼트 아래 나타나므로 전송 게이트웨이나 Connect 전송 어태치먼트에서 켜야 합니다. 그리고 실시간 스트림이 아니어서 만든 뒤 수집과 게시 시작까지 몇 분이 걸립니다.",
+      "wrongExplanations": {
+        "0": "세 전제가 모두 틀렸습니다. 소유자 제약이 있고 Connect 어태치먼트는 지원되지 않으며 실시간이 아닙니다.",
+        "1": "소유자 제약은 맞지만 Connect 어태치먼트 지원과 실시간 서술이 틀렸습니다.",
+        "3": "소유자만 만들 수 있고 레코드도 실시간이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Transit Gateway Flow Logs — 생성 권한과 제한",
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-flow-logs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-2-q15",
+      "examGuideTaskId": "scs-t1-2",
+      "skill": "1.2.6",
+      "section": "network",
+      "difficulty": "applied",
+      "stem": "Route 53 Resolver 쿼리 로깅을 켜고 \"각 인스턴스가 특정 도메인을 하루에 몇 번 조회했는지\"를 집계하는 리포트를 만들려 합니다. 이 설계에 대한 평가로 올바른 것은 무엇입니까?",
+      "options": [
+        "성립합니다. Resolver 쿼리 로그는 모든 질의를 빠짐없이 기록하므로 횟수를 그대로 셀 수 있습니다",
+        "성립하지 않습니다. 공식은 고유 질의만 기록한다고 적고 캐시에서 응답한 질의는 기록되지 않으므로 조회 횟수를 근거로 삼는 설계는 틀립니다",
+        "성립하지 않습니다. Resolver 쿼리 로그에는 질의한 DNS 이름이 담기지 않으므로 도메인별 집계가 불가능합니다",
+        "성립합니다. 다만 인바운드 Resolver 엔드포인트를 쓰는 온프레미스 질의만 기록되므로 VPC 안의 질의는 제외됩니다"
+      ],
+      "correct": 1,
+      "explanation": "공식은 Resolver 쿼리 로그가 고유 질의만 기록한다고 적습니다. 캐시에서 응답한 질의는 기록되지 않으므로 같은 이름을 TTL 안에 다시 조회하면 두 번째 질의는 로그에 없습니다. 조회 횟수나 빈도를 근거로 삼는 설계는 이 성질 때문에 성립하지 않습니다.",
+      "wrongExplanations": {
+        "0": "모든 질의를 기록하지 않습니다. 고유 질의만 남습니다.",
+        "2": "질의한 DNS 이름은 로그에 담깁니다. 함께 담기는 값으로 리전, VPC ID, 발신 인스턴스의 IP와 인스턴스 ID, 시각, 레코드 유형, 응답 코드, 응답 데이터가 있습니다.",
+        "3": "기록할 수 있는 질의에는 지정한 VPC에서 발생한 질의와 그 응답이 포함됩니다. 인바운드 엔드포인트를 쓰는 온프레미스 질의는 기록 대상 네 종류 중 하나일 뿐입니다."
+      },
+      "sources": [
+        {
+          "title": "Resolver query logging (Amazon Route 53) — 고유 질의만 기록",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
