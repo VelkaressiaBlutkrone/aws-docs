@@ -53,6 +53,21 @@ export const CERTS = {
     ],
     flipAllowlist: { file: 'test/aif_questions_test.dart', symbol: 'flipApprovedTaskIds' },
   },
+  // SCS-C03도 학습문서 16편이 들어온 뒤, **문항 저작 전에** 등록했다(2026-11-09).
+  // AIF와 같은 이유다 — 허용 목록이 없으면 사람의 첫 flip이 반드시 레드로 끝난다.
+  // ⚠️ `review.test.mjs`의 `preAuthoring`에 `scs`가 들어 있다(문항 0개가 정상).
+  // 첫 문항 배치에서 그 목록에서 지워야 하고, 안 지우면 node 단계가 레드다.
+  scs: {
+    dir: 'assets/content/scs',
+    label: 'SCS-C03',
+    domains: 6, // ⚠️ 이 레포의 첫 6도메인 자격증이다(SOA·AIF는 5개)
+    tests: [
+      'test/scs_questions_test.dart',
+      'test/scs_doc_format_test.dart',
+      'test/content_index_test.dart',
+    ],
+    flipAllowlist: { file: 'test/scs_questions_test.dart', symbol: 'flipApprovedTaskIds' },
+  },
   clf: {
     dir: 'assets/content/clf',
     label: 'CLF-C02',
