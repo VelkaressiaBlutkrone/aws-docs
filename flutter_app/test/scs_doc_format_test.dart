@@ -29,13 +29,14 @@ import 'package:flutter_test/flutter_test.dart';
 /// 강제하지 않는다. 그래서 `###` 서브섹션마다 `> 🧠 원리:`를 요구하는 규칙은
 /// 이 자격증에 적용되지 않는다(MLA·DVA·AIF도 그렇다).
 void main() {
-  // 2026-11-09 도메인 1·2·3·4·5 배치 — 공식 Task 16개 중 13개.
+  // 2026-11-09 도메인 1~6 배치 — 공식 Task 16개 **전부**.
   const scsTaskIds = [
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3',
     'scs-t2-1', 'scs-t2-2',
     'scs-t3-1', 'scs-t3-2', 'scs-t3-3',
     'scs-t4-1', 'scs-t4-2',
     'scs-t5-1', 'scs-t5-2', 'scs-t5-3',
+    'scs-t6-1', 'scs-t6-2', 'scs-t6-3',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;
@@ -149,6 +150,48 @@ void main() {
       expect(text.contains(marker), isFalse,
           reason: '$taskId: 시험 형식 절이 중복됐다 — scs-t1-1에만 둔다');
     }
+  });
+
+  // 저작 결정 **D-11** — `Conformance Packs`의 한국어 표기가 **셋으로 갈린다**:
+  // **SCS 공식 시험 가이드 「준수 팩」** / SOA 가이드 「규정 준수 팩」 / AWS Config
+  // 한국어 제품 문서(**기계 번역 고지 있음**) 「적합성 팩」. SCS 콘텐츠는 **SCS 가이드
+  // 표기**를 쓴다.
+  //
+  // ⚠️⚠️ 이 가드는 **실제 결함을 잡기 위해 생겼다** — 2026-11-09 도메인 6 배치가
+  //    `scs-t6-3`에 「적합성 팩」을 **15개소** 썼고, 그것은 `scs-t1-1`의 「표기 메모」가
+  //    학습자에게 **「이 사이트의 SCS 문서는 「준수 팩」으로 적습니다」**라고 선언한 것과
+  //    정면으로 어긋났다. 2026-10-29 SOA 전파 가드가 「적합성 팩」을 **구식으로 판정해
+  //    13개소를 정정**한 것과 같은 계열이다.
+  // ⚠️ 다만 **표기 메모 줄 자신은 세 표기를 모두 인용해야** 가르칠 수 있으므로
+  //    예외로 두고, **그 예외가 정확히 한 줄**임을 대조군으로 고정한다(예외가 늘면
+  //    규칙이 조용히 느슨해진다).
+  test('Conformance Packs는 SCS 가이드 표기 「준수 팩」으로 적는다 (D-11)', () {
+    var stray = 0;
+    var memoLines = 0;
+    var canonical = 0;
+    for (final taskId in scsTaskIds) {
+      final f = File('assets/content/scs/$taskId.md');
+      if (!f.existsSync()) continue;
+      final text = f.readAsStringSync();
+      if (text.contains('준수 팩')) canonical++;
+      for (final line in text.split('\n')) {
+        if (!line.contains('적합성 팩')) continue;
+        if (line.contains('표기 메모')) {
+          memoLines++;
+          continue;
+        }
+        stray++;
+        fail('$taskId: 「적합성 팩」은 AWS Config 한국어 제품 문서(기계 번역)의 표기다 — '
+            'SCS 콘텐츠는 공식 시험 가이드 표기 「준수 팩」을 쓴다(D-11). '
+            '해당 줄: ${line.trim()}');
+      }
+    }
+    expect(stray, 0);
+    expect(memoLines, 1,
+        reason: '표기 메모 예외가 $memoLines줄이다 — 세 표기를 인용해 가르치는 줄은 '
+            '`scs-t1-1` 한 곳뿐이어야 한다');
+    expect(canonical, greaterThanOrEqualTo(1),
+        reason: '정본 표기 「준수 팩」을 쓴 문서가 없다 — 규칙이 공허해진다');
   });
 
   // 2026-11-08 조사가 찾은 두 가지를 저작 규율로 고정한다. 둘 다 "공식 가이드가
@@ -464,6 +507,140 @@ void main() {
       expect(triggered, greaterThanOrEqualTo(1),
           reason: 'CloudWatch Logs 데이터 보호 정책을 가르치는 문서가 없다 — '
               '`기술 5.3.4`의 축이 그쪽이다(SNS 쪽은 닫혔다)');
+    });
+  });
+
+  group('도메인 6 저작 규율', () {
+    String? docOf(String taskId) {
+      final f = File('assets/content/scs/$taskId.md');
+      return f.existsSync() ? f.readAsStringSync() : null;
+    }
+
+    Iterable<String> authoredDocs() =>
+        scsTaskIds.map(docOf).whereType<String>();
+
+    test('Audit Manager를 언급하면 신규 고객 차단 상태를 적는다', () {
+      // ⚠️⚠️ **공식 `기술 6.3.2`가 예시로 드는 바로 그 서비스**가 닫혔다.
+      //    `audit-manager/latest/userguide/what-is.html`이 페이지 머리에
+      //    `AWS Audit Manager is no longer open to new customers. Existing
+      //    customers can continue to use the service as normal.`을 적는다
+      //    (2026-11-09 실측. AIF 트랙이 2026-04-30 유지 관리로 먼저 실측했고
+      //    `AWS Lifecycle Changes` 목록에도 있다).
+      // ⚠️ **SCS 범위 「내」 목록에는 있다** — 그래서 지우지 않고 상태를 적는다
+      //    (저작 결정 D-04). 정답 보기로 쓰지 않는 것은 문항 저작 단계의 규율이다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('Audit Manager')) continue;
+        expect(text.contains('신규 고객'), isTrue,
+            reason: '$taskId: `AWS Audit Manager`를 언급하면 **신규 고객 차단 상태**를 '
+                '함께 적는다 — 공식 가이드가 증거 수집 수단으로 드는 서비스가 '
+                '신규 고객에게 열려 있지 않다');
+      }
+      expect(authoredDocs().where((t) => t.contains('Audit Manager')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 6.3.2`가 `AWS Audit Manager`를 예시로 드는데 그 상태를 '
+              '다룬 문서가 없다 — 규칙이 공허해진다');
+    });
+
+    test('AppRegistry를 언급하면 신규 고객 차단 상태를 적는다', () {
+      // ⚠️ `AWS Service Catalog` 자체는 정상이고(Control Tower 의 Account Factory가
+      //    그 위에 올라간다) **AppRegistry 기능만** 닫혔다 —
+      //    `servicecatalog/latest/arguide/intro-app-registry.html`이
+      //    `AWS Service Catalog AppRegistry will no longer be open to new customers
+      //    starting July 30, 2026.`을 적는다(2026-11-09 실측, 96 §7-2).
+      // ⚠️ 그래서 트리거를 `Service Catalog` 로 두지 않는다 — 넓게 걸면 **정상인
+      //    서비스까지 닫힌 것으로** 가르친다(도메인 5의 Glacier 와 같은 판정).
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('AppRegistry')) continue;
+        expect(text.contains('신규 고객'), isTrue,
+            reason: '$taskId: `Service Catalog AppRegistry`를 언급하면 '
+                '**신규 고객 차단 상태**를 함께 적는다 — 서비스 전체가 아니라 '
+                '그 기능만 닫혔다');
+      }
+      expect(authoredDocs().where((t) => t.contains('AppRegistry')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 6.2.4`가 `AWS Service Catalog`를 예시로 드는데 그 안의 '
+              '닫힌 기능을 가르지 않으면 학습자가 둘을 같은 층으로 읽는다');
+    });
+
+    test('Config 사전 평가가 배포를 막는 것처럼 적지 않는다', () {
+      // ⚠️⚠️ **보존 가드**다. Control Tower 의 **사전 제어**는 막는다
+      //    (`Resources that are not compliant will not be provisioned.`)는데
+      //    AWS Config 의 **사전 평가**는 막지 않는다 —
+      //    `config/latest/developerguide/evaluating-your-resources.html`이
+      //    `Proactive rules do not remediate resources that are flagged as
+      //    NON_COMPLIANT or prevent them from being deployed.`를 Note 로 적는다
+      //    (2026-11-09 실측). 둘을 섞으면 어느 쪽이든 거짓이 된다.
+      var triggered = 0;
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('사전 평가')) continue;
+        triggered++;
+        expect(text.contains('막지 않') || text.contains('차단하지 않'), isTrue,
+            reason: '$taskId: AWS Config 의 **사전 평가**를 가르치면 '
+                '**배포를 막지 않는다**를 함께 적는다 — 막는 것은 '
+                'Control Tower 의 사전 제어(CloudFormation 후크)다');
+      }
+      expect(triggered, greaterThanOrEqualTo(1),
+          reason: '`기술 6.3.1`의 축인 Config 규칙 평가 모드를 가르친 문서가 없다');
+    });
+
+    test('사전 제어가 CloudFormation 밖의 경로까지 막는 것처럼 적지 않는다', () {
+      // ⚠️⚠️ **보존 가드**다. 사전 제어는 `preCreate`·`preUpdate` 후크 핸들러로
+      //    구현되므로 공식이 이렇게 적는다 —
+      //    `these controls may not affect requests that are made directly to
+      //    services through the AWS console, through AWS APIs, or through other
+      //    means such as AWS SDKs, or other Infrastructure-as-Code (IaC) tools.`
+      //    (`controltower/latest/controlreference/proactive-controls.html`,
+      //    2026-11-09 실측). 「사전 제어를 켜면 비준수 리소스가 아예 안 생긴다」는
+      //    거짓이다.
+      // ⚠️ 요구 토큰을 `우회` 로 두지 않는다 — `기술 6.1.5`의 **비상용 우회 절차**가
+      //    같은 문서에 있어 엉뚱한 이유로 통과한다. 공식 핸들러 이름으로 고정한다.
+      var triggered = 0;
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('사전 제어')) continue;
+        triggered++;
+        expect(text.contains('preCreate'), isTrue,
+            reason: '$taskId: **사전 제어**를 가르치면 그것이 '
+                '`preCreate`·`preUpdate` 후크로 구현된다는 것을 적는다 — '
+                '그래야 콘솔·API·SDK·다른 IaC 경로를 막지 못하는 이유가 선다');
+      }
+      expect(triggered, greaterThanOrEqualTo(1),
+          reason: '`기술 6.1.2`가 Control Tower 제어를 드는데 사전 제어를 '
+              '가르친 문서가 없다');
+    });
+
+    test('Well-Architected Agent를 언급하면 프리뷰임을 적는다', () {
+      // ⚠️⚠️ 공식 `기술 6.3.3`은 「AWS Well-Architected Framework 도구」 하나를
+      //    드는데 docs 는 **두 서비스로 갈렸다** —
+      //    `wellarchitected/latest/userguide/well-architected.html`이
+      //    `AWS Well-Architected Agent is in preview release and is subject to
+      //    change.`를 머리에 달고 Agent(프로필·AI 분석)와 Tool(워크로드·수동 검토)
+      //    을 표로 가른다(2026-11-09 실측, 최종 갱신 2026-10-01).
+      // ⚠️ 트리거를 `Well-Architected` 전체로 두지 않는다 — **프레임워크·렌즈**
+      //    언급은 정당하고 상태를 적을 대상이 아니다(D-09 와 같은 좁히기).
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('Well-Architected Agent')) continue;
+        expect(text.contains('프리뷰'), isTrue,
+            reason: '$taskId: `AWS Well-Architected Agent`를 언급하면 '
+                '**프리뷰 릴리스**임을 함께 적는다 — 시험이 묻는 쪽은 '
+                '`Well-Architected Tool`이다');
+      }
+      expect(
+          authoredDocs()
+              .where((t) => t.contains('Well-Architected Agent'))
+              .length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 6.3.3`이 드는 「도구」가 지금 둘로 갈렸는데 그 갈림을 '
+              '다룬 문서가 없다 — 학습자가 콘솔에서 두 서비스를 만난다');
     });
   });
 }

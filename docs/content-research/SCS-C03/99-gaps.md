@@ -556,3 +556,134 @@ WAF 개발자 안내서의 여러 페이지가 **「Introducing a new console ex
 **EBS 스냅샷 잠금의 하위 주제**(모드·기간 상세·접근 통제·모니터링) · **S3 수명 주기 구성 요소 페이지**(`Lifecycle configuration elements`·충돌 처리) · **EFS Intelligent-Tiering 전용 페이지** · **AWS Backup Vault Lock 전용 페이지**와 **다자 승인 전용 페이지** · **AWS Signer 개발자 안내서** · **FSx for Lustre 데이터 리포지토리 연결 페이지**.
 
 ⏳ 그것들을 묻는 문항을 만들려면 전용 페이지를 먼저 읽어야 한다 — 특히 **스냅샷 잠금의 거버넌스 모드 해제 권한**과 **Vault Lock 의 유예 기간(cooling-off)** 숫자다. ⚠️ 이 배치에서는 **숫자를 적지 않았다.**
+
+### G-65 ✅ **`G-24` 해소 — 공식이 이제 정책 범주 표를 직접 싣는다**
+
+도메인 6 착수 선결 ①이었다. `94 §3-3`은 "선언적 정책 페이지의 **하위 주제 배치**"만 근거로 삼아 **분류를 단정하지 않는다**로 닫아 뒀는데, 2026-11-09 실측하니 **공식이 두 곳에서 분류를 명시한다.**
+
+1. `orgs_manage_policies.html`이 정책을 **두 범주**로 나눈다 — **권한 부여 정책**(SCP·RCP)과 **선언적 정책**(EC2·백업·태그·채팅 애플리케이션·**AI 서비스 옵트아웃**·Security Hub·Inspector·Bedrock·업그레이드 롤아웃·S3·GuardDuty). 같은 페이지의 요약 표에 **`Policy category` 열**이 있고 `AI services opt-out policy` 행의 값이 **`Declarative`**다.
+2. `orgs_manage_policies_declarative_policies.html`이 **SCP / RCP / 선언적 정책의 3열 비교표**를 싣는다.
+
+⚠️ 그래서 **「SCP로 AI 서비스 데이터 사용을 옵트아웃한다」가 거짓**이라는 판정은 그대로 유효하고, 근거가 **배치**에서 **범주 선언**으로 강해졌다. 다만 **유형의 개수는 여전히 묻지 않는다**(G-66).
+
+⭐ 그리고 이 비교표가 도메인 6의 중심 비대칭 셋을 준다 — **관리 계정 영향** / **서비스 연결 역할 통제** / **OU·계정의 유효 정책 보기**가 모두 **SCP 아니오 · RCP 아니오 · 선언적 예**다. 첨부 한도도 다르다(SCP 10개·10,240자 / RCP **5개·5,120자** / 선언적 10개·10,000자 / AI 옵트아웃 **5개·2,500자**).
+
+### G-66 ⚠️⚠️ 공식 내부 어긋남 — 선언적 정책 **유형 목록이 세 곳에서 다르다**
+
+| 출처 | 목록 |
+|---|---|
+| 선언적 정책 전용 페이지의 `Topics` | EC2 · 백업 · 태그 · 채팅 애플리케이션 · AI 서비스 옵트아웃 · Security Hub · Bedrock · Inspector · 업그레이드 롤아웃 · S3 · **Shield Network Security Director** · GuardDuty |
+| `orgs_manage_policies.html` 불릿 | 위 목록에서 **Shield Network Security Director 없음** |
+| 같은 페이지의 요약 표 | **Shield·GuardDuty 행 없음** |
+
+→ **개수를 단정하지 않는다**(D-07·D-10·D-16 계열의 추가 자리). 유형은 계속 늘어나는 값이다.
+
+### G-67 ⚠️⚠️ **두 「사전」을 섞으면 어느 쪽이든 거짓이 된다** — 이 도메인에서 가장 날카로운 자리
+
+| 축 | Control Tower **사전 제어** | AWS Config **사전 평가** |
+|---|---|---|
+| 막는가 | **막는다** — `Resources that are not compliant will not be provisioned.` | ⚠️⚠️ **막지 않는다** — `Proactive rules do not remediate resources that are flagged as NON_COMPLIANT or prevent them from being deployed.` |
+| 구현 | **`preCreate`·`preUpdate` 후크 핸들러** | 규칙의 `EvaluationModes`에 `PROACTIVE` |
+| 경로 범위 | ⚠️ **CloudFormation 한정** — `these controls may not affect requests that are made directly to services through the AWS console, through AWS APIs, or through other means such as AWS SDKs, or other Infrastructure-as-Code (IaC) tools.` | 평가만 하므로 경로 개념이 없다 |
+| 확인 수단 | 제어 상태 `PASS`/`FAIL`/`SKIP` | `StartResourceEvaluation`·`GetResourceEvaluationSummary` |
+
+⚠️ 사전 제어의 한계는 셋이다 — **경로** · **보안 문자열·보안 암호가 후크로 가기 전에 해결되지 않아 평가되지 않음** · **후크 미지원 리전**(prescriptive guidance). 가드 2건으로 고정했다(`사전 평가`→`막지 않`, `사전 제어`→`preCreate`).
+
+⚠️⚠️ **가드가 실제 결함을 잡았다** — `scs-t6-3`이 교차 참조 네 곳 중 **두 곳에서 한정 없이** 「사전 제어는 비준수 리소스를 프로비저닝하지 않습니다」로 단정하고 있었다. **요구 토큰을 `우회`로 두면 안 된다** — `기술 6.1.5`의 **비상용 우회 절차**가 같은 문서에 있어 엉뚱한 이유로 통과한다. 공식 핸들러 이름으로 고정했다.
+
+### G-68 ⚠️⚠️ 교재가 가장 빨리 낡는 자리 둘 — 예방 제어의 구현 수단과 랜딩 존 4.0
+
+- **예방 제어 = SCP** 가 아니다. 공식은 지금 **SCP · RCP · 선언적 정책 셋**을 적고, 그래서 Control Tower가 **그 셋을 매일 스캔**한다. 옛 교재는 SCP 하나만 적는다.
+- ⚠️⚠️ **랜딩 존 버전 4.0부터 필수 제어가 기본 적용되지 않는다**(`Starting with AWS Control Tower Landing Zone version 4.0, mandatory controls are no longer applied by default.`). "필수니까 켜져 있다"는 전제가 **버전에 달렸다**.
+- 동작별 적용 범위도 다르다 — **예방은 모든 리전**, **탐지는 Control Tower 지원 리전만**. 상태값도 다르다(`enforced`/`not enabled` · `clear`/`in violation`/`not enabled` · `PASS`/`FAIL`/`SKIP`).
+- ⚠️ **필수 제어 일부는 여러 작업을 수행하는 단일 SCP**로 구현돼 제어 참조에서 **같은 SCP가 여러 제어 아래 반복해** 보인다.
+
+### G-69 ⚠️⚠️ **OU를 옮기면 이전 OU의 제어가 제거되지 않는다**
+
+공식 드리프트 문서의 Note다. 대상 OU에서 새 **후크 기반** 제어를 켜면 **옛 후크 기반 제어만** 교체되고, **SCP와 AWS Config 규칙으로 구현된 제어는 계정이 OU를 바꿀 때 항상 수동으로 제거**해야 한다. 즉 OU 이동은 거버넌스 이관의 절반이다.
+
+⚠️ 드리프트 알림의 함정도 같은 페이지에 있다 — **설정에서 계정 자동 등록을 켜면 SNS 드리프트 알림을 쓸 수 없고**, 같은 드리프트는 **중복 제거**돼 첫 번째만 온다(해소 후 재발하면 다시 온다). 멤버 계정 드리프트는 **감사 계정에 집계**되고 토픽 예가 `aws-controltower-AggregateSecurityNotifications`다. 그리고 일일 스캔이 **관리 계정으로** Organizations를 호출하므로 **내 TPS 한도에 계산된다**.
+
+### G-70 ⚠️⚠️ 루트 특권 세션의 한계가 API 참조에 수치로 있다
+
+`STS/latest/APIReference/API_AssumeRoot.html` 실측(2026-11-09) —
+
+- **`DurationSeconds`: 0~900초(15분), 기본 900.** 더 큰 값을 지정하면 **작업이 실패**한다
+- **`TaskPolicyArn` 필수**이고 **다섯 관리형 정책 중 하나**여야 한다 — `IAMAuditRootUserCredentials` · `IAMCreateRootUserPassword` · `IAMDeleteRootUserCredentials` · `S3UnlockBucketPolicy` · `SQSUnlockQueuePolicy`
+- **`TargetPrincipal` 필수**, `MinimumSessionTokenSize`는 **4,096바이트 상한**
+
+⚠️⚠️ 중앙 집중화는 **기능이 둘**이고 비대칭이다 — **「루트 자격 증명 관리」만 켜고 삭제하면 멤버 계정이 복구할 수 없다.** 복구를 허용하려면 **「멤버 계정의 특권 루트 작업」도** 켜야 한다. 제거 대상은 **암호·액세스 키·서명 인증서·MFA 비활성화** 넷이고, **Organizations에서 새로 만드는 계정은 기본적으로 루트 자격 증명이 없다**. 위임 관리자 등록은 서비스 주체 **`iam.amazonaws.com`**으로 한다.
+
+⚠️ 비상용 우회 절차의 공식 근거는 **`SEC03-BP03 Establish emergency access process`**다 — 형태는 **비상용 교차 계정 역할 + 검증·승인 절차**이고 안티패턴 둘은 **비상 프로세스 부재**와 **장기 상승 권한 부여**, 위험 수준은 **중간(Medium)**이다. ⚠️ URL은 `wellarchitected/latest/framework/...`가 살아 있다(검색이 돌려준 `2023-04-10` 스냅샷을 쓰지 않았다).
+
+### G-71 ⚠️ **G-29 여섯 번째 적용 — 도메인 6에서 닫힌 것 둘**
+
+| 이름 | 상태 | 어디서 드는가 |
+|---|---|---|
+| **AWS Audit Manager** | **신규 고객에게 열려 있지 않다**(사용자 안내서 머리의 배너. 2026-04-30 유지 관리, 공식 lifecycle 목록에도 있다) | 공식 `기술 6.3.2`의 **예시** |
+| **AWS Service Catalog AppRegistry** | **2026-07-30부터 신규 고객 차단** | `기술 6.2.4`가 드는 **Service Catalog의 한 기능** |
+
+⚠️ **트리거를 서비스 전체로 두지 않았다** — `Service Catalog` 본체는 정상이고(Control Tower의 Account Factory가 그 위에 올라간다) 닫힌 것은 **AppRegistry 기능**뿐이다. 도메인 5의 **S3 Glacier 저장소 잠금 ↔ 스토리지 클래스**와 같은 판정이다.
+
+⚠️ 그리고 **Audit Manager는 증거를 모으지만 준수 자체를 평가하지 않는다**(공식 Note)는 사실이 상태와 별개로 중요하다 — "켜면 준수 여부를 판정해 준다"는 거짓이다.
+
+### G-72 ⚠️⚠️ **Well-Architected가 두 서비스로 갈렸다** — D-09와 같은 계열
+
+공식 `기술 6.3.3`은 「AWS Well-Architected Framework 도구」 **하나**를 드는데 `wellarchitected/latest/userguide/well-architected.html`(최종 갱신 **2026-10-01**)은 **둘을 표로 가른다**.
+
+| 축 | **Well-Architected Tool** | **Well-Architected Agent** |
+|---|---|---|
+| 접근 | 수동·안내형 자가 검토 | **AI 기반 자동 분석**(배포된 리소스 + IaC 템플릿) |
+| 주 엔티티 | **워크로드** | **프로필**(계정·리전·원칙·목표) |
+| 출력 | **HRI·MRI**와 개선 계획 | 우선순위 권장 사항 + 절충 분석 + 자동화 스크립트 + 갱신된 IaC |
+| 상태 | 일반 사용 | ⚠️⚠️ **프리뷰 릴리스**(`is in preview release and is subject to change`) |
+
+→ **묻는 쪽은 Tool**이다. 가드 1건(`Well-Architected Agent` → `프리뷰`)으로 고정했고 저작 결정은 **D-17**이다. ⚠️ 트리거를 `Well-Architected` 전체로 두지 않았다 — **프레임워크·렌즈** 언급은 정당하다.
+
+⚠️ 옛 슬러그 둘이 모두 이 페이지로 리다이렉트된다 — `userguide/intro.html`(이미 `source_url_retired_test`에 등재)과 `userguide/what-is-wellarchitected-tool.html`. 그래서 출처는 **`well-architected.html`** 하나로 뒀다.
+
+### G-73 ⚠️ 작업 6.2·6.3의 비자명한 사실 묶음
+
+- ⚠️⚠️ **`cfn-lint`는 기본적으로 `us-east-1` 스키마로 검사**하고(`--regions`로 변경) **SAM 변환을 먼저 적용한 뒤** 검사한다. **Guard는 템플릿 외에 변경 세트와 AWS Config 구성 항목도** 검사한다. **둘 다 로컬 검증**이고 공식이 두 페이지에서 똑같이 한계를 따로 안내한다
+- ⚠️ **StackSet은 리전 리소스**다. **템플릿 업데이트는 항상 모든 스택에 영향**을 주고(선택적 불가), **스택 인스턴스는 스택 없이 존재**할 수 있고, **StackSet은 스택 인스턴스가 없을 때만 삭제**된다(`Retain Stacks`로 스택을 남긴다). 백분율은 **내림**이고 `Strict Failure Tolerance`에서 **최대 동시 계정 ≤ 실패 허용 + 1**, **실패 허용은 리전별**이다. 서비스 관리형의 관리자 계정은 **관리 계정 또는 위임된 관리자**다
+- ⚠️⚠️ **태그 정책은 태그되지 않은 리소스와 정책에 정의되지 않은 태그를 평가하지 않는다** — "태그 없는 생성을 막는다"는 거짓이고 그것은 `aws:RequestTag`·`aws:TagKeys` 조건 키의 몫이다. 정책 관리는 **Organizations**, 준수 확인은 **Resource Groups**로 나뉘고, **TagOption은 AWS 태그가 아니라 태그를 만드는 템플릿**이며, 공식이 Important로 **태그에 PII를 넣지 말라**고 적는다. 키·값은 **모두 대소문자 구분**이지만 **IAM 리소스는 대소문자만 다른 키를 막는 추가 검증**이 있다
+- ⚠️⚠️ **Firewall Manager는 AWS Config를 켜야 동작**하고(전제 조건 3단계) **Network Firewall·DNS Firewall 정책은 RAM 리소스 공유 활성화**가 필요하다. **요금은 기반 서비스**(WAF·Config)에 붙는다. 관리 범위 조건은 **계정·OU / 리전 / 정책 유형** 셋이고 **기본 관리자만 3자 방화벽을 관리하고 전체 범위**를 갖는다. 관리자 계정을 만들면 서비스가 **Organizations에 위임 관리자 등록 여부를 확인하고 아니면 설정**한다
+- ⚠️⚠️ **Config 애그리게이터는 읽기 전용 뷰**다 — **규칙을 배포하거나 스냅샷을 푸시할 수 없고**, **추가 비용이 없으며**, **Organizations 소스면 권한 부여가 필요 없다**
+- ⚠️ **Config 수정은 SSM Automation 문서**가 수행한다. 평가 결과는 **`COMPLIANT`·`NON_COMPLIANT`·`ERROR`·`NOT_APPLICABLE`** 넷이고 **`NOT_APPLICABLE`을 「준수」로 읽으면 안 된다**(공식 예: `alb-desync-mode-check`는 ALB만 보고 NLB·GWLB를 무시한다). 트리거는 **구성 변경·주기적·하이브리드** 셋이고 범위는 **리소스 유형 / 유형+ID / 태그 키와 값 / 기록되는 모든 리소스** 넷으로 정한다. **적합성 팩은 규칙과 수정 작업을 함께** 담고 **SSM 문서로 저장·배포**할 수 있다
+- ⚠️ **RAM과 리소스 기반 정책의 차이는 「가시성」이다** — RAM 공유는 **상대의 원래 서비스 콘솔·API에 네이티브처럼 보이고** 리소스 기반 정책 공유는 **ARN으로 명시 참조**해야 한다. 이미 정책으로 공유한 것은 **`PromoteResourceShareCreatedFromPolicy`**로 승격한다. **조직 밖 계정은 초대 수락**이 필요하고 **조직 내 공유 활성화 후에는 불필요**하다. 하나의 리소스 공유에는 **리전 리소스만** 담는다
+- ⚠️ **Artifact는 AWS 쪽 문서**를 주고 **무료**이며, 고객 문서 확보는 **고객 책임**이다(공식 Note). **Security Hub CSPM**은 결과를 **ASFF**로 처리하고 **교차 리전 집계**와 **자동화 규칙**을 갖는다
+
+### G-74 ⚠️ 방법론 셋 — 실측에서 배운 것
+
+**① `exam_guides/SCS-C03.json`의 `domains[].no`는 `int`다.** 문자열로 비교해 추출하면 **조용히 0바이트**가 나온다(실제로 그랬다). **`assert hit == 1`이 없으면 빈 결과를 「도메인 6이 없다」로 오독한다.** 구조 필드의 타입은 쓰기 전에 한 번 찍어 본다.
+
+**② 레드 수는 「편수 × 5 + 신규 집계 수」와 다르다.** 테스트 **수**의 증가는 예측대로 **20**(편별 4 × 3 + 신규 집계 5 + 파서 자동 3 = 3,309 → **3,329**)인데 **레드는 19**였다 — `scsTaskIds`를 순회하며 **`existsSync` 없이 파일을 읽는 기존 집계 테스트 2건**(「시험 형식은 `scs-t1-1`에만」·「Security Hub를 CSPM과 갈라 쓴다」)이 함께 레드가 되고 파일이 생기면 녹색으로 돌아온다. 도메인 3·4·5 그룹은 `docOf`(`existsSync`)를 쓰므로 깨지지 않는다.
+
+**③ 죽은 슬러그 6건을 실측에서 만났다**(레포에는 0건이라 가드 추가 불필요) — `IAM/latest/UserGuide/id_root-user-access-management.html` → `introduction.html` · `AWSCloudFormation/latest/UserGuide/validation-scope.html` → `Welcome.html` · `controltower/latest/controlreference/custom-controls.html` → `introduction.html` · `config/latest/developerguide/cpch-process-checks.html` → `WhatIsConfig.html` · `waf/latest/developerguide/fms-policies.html` → `what-is-aws-waf.html` · `organizations/latest/userguide/services-that-can-integrate.html` → `orgs_introduction.html`. ⚠️ **전부 「목차·링크 텍스트에서 슬러그를 유도」한 것들이다**(G-26·G-43의 재현).
+
+### G-75 ℹ️ 도메인 6에서 **재지 않고 층 설명으로만 둔 것**
+
+**Control Tower 사용자 지정 제어 전용 페이지**(`custom-controls.html`은 죽은 슬러그이고 Control Catalog `GetControl`·`ListControls` API가 입구다) · **적합성 팩의 「프로세스 검사」 전용 페이지**(슬러그 미확인) · **조직 Config 규칙 전용 페이지** · **StackSets 대상 계정 게이트·동시성 모드 전용 페이지** · **Firewall Manager 정책 유형별 페이지** · **RAM 고객 관리형 권한** · **Well-Architected Tool 전용 what-is 페이지**(현재 `well-architected.html`로 합쳐져 보인다).
+
+⏳ 그것들을 묻는 문항을 만들려면 전용 페이지를 먼저 읽어야 한다 — 특히 **사용자 지정 제어의 구현 수단**과 **대상 계정 게이트의 평가 시점**이다. ⚠️ 이 배치에서는 **그 수치·절차를 적지 않았다.**
+
+### G-76 ⚠️⚠️⚠️ **D-11 위반을 내 문서에서 찾았다 — 자격증별 표기 규율은 「표기 메모」만으로 지켜지지 않는다**
+
+**무엇이 있었나:** 2026-11-09 도메인 6 배치가 `scs-t6-3`에 `Conformance Packs`를 **「적합성 팩」으로 15개소**(본문 14 + 프런트매터 `title:` 1) 썼다. 그 표기는 **AWS Config 한국어 개발자 안내서(기계 번역 고지 있음)**의 것이고 **SCS 공식 시험 가이드 표기는 「준수 팩」**이다(가이드 JSON 실측: 「준수 팩」 **1건** · 「적합성 팩」 **0건**).
+
+⭐ **가장 나쁜 점은 자기모순이었다** — 같은 레포의 `scs-t1-1.md:251`이 **표기 메모**로 학습자에게 이렇게 선언해 둔 상태였다:
+
+> 한국어 표기가 세 가지로 갈려 있습니다: SCS 공식 시험 가이드는 **「준수 팩」**, SOA 공식 시험 가이드는 「규정 준수 팩」, AWS Config 한국어 제품 문서(기계 번역)는 「적합성 팩」입니다. **이 사이트의 SCS 문서는 SCS 가이드 표기를 따라 「준수 팩」으로 적습니다.**
+
+즉 **도메인 1을 읽은 학습자가 도메인 6에서 그 선언이 지켜지지 않은 것을 본다.** 2026-10-29 SOA 전파 가드가 「적합성 팩」을 **구식으로 판정해 13개소를 정정**한 것과 같은 계열이다.
+
+**어떻게 찾았나:** 가드가 아니라 **인계 문서를 쓰다가** 찾았다. `D-11`을 인용해 「이 배치는 Config 문서 표기를 따랐으니 나중에 재확인한다」고 **합리화하는 문장을 쓰려는 순간** 그 문장이 D-11을 정면으로 거스른다는 것이 드러났다. ⚠️ **합리화를 문서에 적으려 할 때가 결함 신호다.**
+
+**처리:**
+1. 15개소를 **바이너리 모드 치환 + 횟수 단정**으로 「준수 팩」으로 바꿨다(영문 `Conformance Pack` 병기 2개소는 유지 — D-11이 요구하는 것이다)
+2. **md 프런트매터 `title:`과 `content_index.dart`의 `ContentEntry` title을 함께** 고쳤다 — ⚠️ **둘을 묶는 동기화 테스트가 SCS에는 없다**(MLA·AIF 판만 있다). 어긋나도 아무도 알려 주지 않는다
+3. **전수 가드 1건 신설** — 「적합성 팩」은 **표기 메모 줄에서만** 허용하고 **그 예외가 정확히 한 줄**임을 대조군으로 고정하며, **정본 표기를 쓴 문서 ≥1**로 비공허성을 확보한다
+
+⚠️⚠️ **치환 단정이 또 한 번 사고를 막았다.** 1차 스크립트가 파일을 **텍스트 모드**(`open(p, encoding='utf-8')`)로 읽었는데 파이썬의 유니버설 개행이 **CRLF를 LF로 접는다**. 그대로 썼으면 **파일 전체 줄 끝이 바뀌어 리뷰 불가 diff**가 됐다. **CRLF 불변식 단정이 쓰기 전에 막았고** 바이너리 모드로 고쳤다 — 레포의 「문항 JSON은 json 왕복 금지, 바이트 블록 치환 + 횟수 단정」 규율이 **md에도 그대로 적용된다**.
+
+⚠️ **교훈:** 표기 규율은 **그 규율을 설명하는 메모를 쓰는 것으로 지켜지지 않는다.** 메모는 학습자에게 알리는 장치이고, **지키는 것은 전수 가드**다. 자격증별로 갈리는 표기는 **처음 쓰는 배치에서 바로 가드를 세운다**(D-11을 세운 2026-11-08 배치에서 가드를 함께 세웠다면 이 결함은 레드로 먼저 드러났다).
