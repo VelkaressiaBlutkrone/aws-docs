@@ -724,7 +724,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-2', title: 'AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-2.md', questionsAsset: 'assets/content/aif/aif-t5-2.questions.json', questionCount: 0),
   ],
 
-  // SCS-C03 — 2026-11-09 도메인 1·2·3·4 배치(공식 Task 16개 중 10개).
+  // SCS-C03 — 2026-11-09 도메인 1·2·3·4·5 배치(공식 Task 16개 중 13개).
   //
   // ⚠️ 이 자격증은 도메인이 **6개**다 — 이 레포에서 처음이다(다른 자격증은 4개,
   // SOA·AIF가 5개). 4개나 5개를 전제하는 코드·가드·배분을 쓰면 뒤 도메인이
@@ -748,6 +748,9 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t3-3', title: '네트워크 보안 제어 (허용과 차단·하이브리드 보안 연결·Verified Access·세분화·불필요한 액세스 식별)', domain: 3, mdAsset: 'assets/content/scs/scs-t3-3.md', questionsAsset: 'assets/content/scs/scs-t3-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t4-1', title: '인증 전략 (ID 솔루션 설계·임시 자격 증명 발급·인증 문제 해결)', domain: 4, mdAsset: 'assets/content/scs/scs-t4-1.md', questionsAsset: 'assets/content/scs/scs-t4-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t4-2', title: '권한 부여 전략 (제어 설계·ABAC와 RBAC·최소 권한·실패 분석·의도하지 않은 권한)', domain: 4, mdAsset: 'assets/content/scs/scs-t4-2.md', questionsAsset: 'assets/content/scs/scs-t4-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t5-1', title: '전송 중인 데이터 (암호화 강제·비공개 액세스·리소스 간 암호화)', domain: 5, mdAsset: 'assets/content/scs/scs-t5-1.md', questionsAsset: 'assets/content/scs/scs-t5-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t5-2', title: '저장 데이터 (암호화 선택·무결성·수명 주기와 보존·복제와 백업)', domain: 5, mdAsset: 'assets/content/scs/scs-t5-2.md', questionsAsset: 'assets/content/scs/scs-t5-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t5-3', title: '기밀 데이터와 키 자료 (보안 암호·가져온 키·회전·마스킹·다중 리전 키와 인증서)', domain: 5, mdAsset: 'assets/content/scs/scs-t5-3.md', questionsAsset: 'assets/content/scs/scs-t5-3.questions.json', questionCount: 0),
   ],
 };
 
