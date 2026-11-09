@@ -194,6 +194,49 @@ void main() {
         reason: '정본 표기 「준수 팩」을 쓴 문서가 없다 — 규칙이 공허해진다');
   });
 
+  // ⚠️⚠️ 위 가드는 **`.md`만 순회한다** — 문항 파일은 보지 않는다. 이 레포에서
+  //    반복된 결함이라(2026-11-06 AIF: `aif_facts_test`의 「계속 사전 훈련」 단정이
+  //    md만 보는 사이 문항 3개소가 구 표기를 썼고 가드는 초록이었다) 문항 쪽을
+  //    **별 단정으로 갈라** 둔다.
+  // ⚠️ 문항에는 **예외가 없다.** 「표기 메모」는 학습문서의 장치이고 문항 본문에
+  //    세 표기를 나란히 인용할 이유가 없으므로 0건으로 고정한다.
+  test('문항 파일에도 「적합성 팩」이 없다 (D-11 · 문항 쪽)', () {
+    var canonical = 0;
+    var scanned = 0;
+    for (final taskId in scsTaskIds) {
+      final f = File('assets/content/scs/$taskId.questions.json');
+      if (!f.existsSync()) continue;
+      scanned++;
+      final text = f.readAsStringSync();
+      canonical += '준수 팩'.allMatches(text).length;
+      expect(text.contains('적합성 팩'), isFalse,
+          reason: '$taskId 문항: 「적합성 팩」은 AWS Config 한국어 제품 문서'
+              '(기계 번역)의 표기다 — SCS 콘텐츠는 공식 시험 가이드 표기 '
+              '「준수 팩」을 쓴다(D-11)');
+    }
+    expect(scanned, greaterThanOrEqualTo(1),
+        reason: '문항 파일을 하나도 읽지 않았다 — 루프가 공허하다');
+    expect(canonical, greaterThanOrEqualTo(1),
+        reason: '정본 표기 「준수 팩」을 쓴 문항이 없다 — 탐지기가 살아 있는지 '
+            '확인할 수 없다(`기술 1.1.5`가 준수 팩을 예시로 든다)');
+  });
+
+  // 대조군: 위 두 단정이 쓰는 탐지기가 실제로 「적합성 팩」을 찾아내는가.
+  // 학습문서의 표기 메모 줄이 그 문자열을 인용하고 있으므로, 거기서 1건이
+  // 잡히지 않으면 탐지기가 죽은 것이다(0건을 「문제 없음」으로 읽지 않는다).
+  test('대조군: 탐지기가 표기 메모의 「적합성 팩」을 실제로 찾는다', () {
+    var found = 0;
+    for (final taskId in scsTaskIds) {
+      final f = File('assets/content/scs/$taskId.md');
+      if (!f.existsSync()) continue;
+      found += '적합성 팩'.allMatches(f.readAsStringSync()).length;
+    }
+    expect(found, 1,
+        reason: '표기 메모는 세 표기를 인용해 가르치는 줄이고 그 인용이 정확히 '
+            '한 곳이어야 한다 — 0이면 탐지기가 죽었고, 2 이상이면 메모 밖에 '
+            '구 표기가 생겼다');
+  });
+
   // 2026-11-08 조사가 찾은 두 가지를 저작 규율로 고정한다. 둘 다 "공식 가이드가
   // 드는 예시 자체가 낡았거나 갈린" 자리라 저작자가 무심코 틀리기 쉽다.
   //

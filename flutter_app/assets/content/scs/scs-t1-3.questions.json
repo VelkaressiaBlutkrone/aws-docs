@@ -1,0 +1,437 @@
+{
+  "examGuideTaskId": "scs-t1-3",
+  "taskTitle": "보안 모니터링, 로깅 및 경보 솔루션 문제 해결",
+  "domain": 1,
+  "certCode": "SCS-C03",
+  "lastVerified": "2026-11-09",
+  "questions": [
+    {
+      "id": "scs-t1-3-q1",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "foundational",
+      "stem": "Lambda 함수의 로그를 찾고 있는데 어느 로그 그룹을 봐야 할지 모르겠습니다. 그리고 로그 수집에 따로 요금이 붙는지 확인하려 합니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "기본 로그 그룹은 함수 ARN을 해시한 이름이고 Lambda 로그 수집에 별도 요금이 붙습니다",
+        "기본 로그 그룹은 /aws/lambda/함수 이름 형식이지만 변경할 수 없고, CloudWatch Logs 요금과 별도로 Lambda 로그 요금이 부과됩니다",
+        "기본 로그 그룹은 /aws/lambda/함수 이름 형식이고 다른 로그 그룹으로 보내도록 구성할 수 있습니다. Lambda 로그 자체에는 추가 비용이 없고 CloudWatch Logs 표준 요금이 적용됩니다",
+        "로그 그룹은 함수를 처음 호출할 때 임의 이름으로 만들어지므로 콘솔에서 찾아야 하고 요금은 무료입니다"
+      ],
+      "correct": 2,
+      "explanation": "기본 로그 그룹은 /aws/lambda/함수 이름 형식이고, 콘솔이나 CLI, API로 다른 로그 그룹으로 보내도록 구성할 수 있습니다. 요금은 Lambda 로그 자체에 추가 비용이 없고 CloudWatch Logs 표준 요금이 적용됩니다.",
+      "wrongExplanations": {
+        "0": "로그 그룹 이름은 해시가 아니라 함수 이름을 쓰는 규약이고, Lambda 로그 자체에는 추가 비용이 없습니다.",
+        "1": "기본 이름 형식은 맞지만 변경할 수 있습니다. 그리고 Lambda 로그에 별도 요금이 붙지 않습니다.",
+        "3": "임의 이름이 아니라 함수 이름을 쓰는 규약이고, CloudWatch Logs 표준 요금이 적용되므로 무료가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Sending Lambda Event Function logs to CloudWatch Logs — 로그 그룹과 요금",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q2",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "Lambda 함수의 로그 스트림은 만들어지는데 이벤트가 하나도 기록되지 않습니다. 실행 역할에는 로그 그룹과 로그 스트림을 만드는 권한만 있습니다. 무엇이 빠졌습니까?",
+      "options": [
+        "logs:PutLogEvents 권한입니다. Lambda가 로그를 자동 수집하는 것은 실행 역할에 logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents 세 권한이 있을 때이고 관리형 정책 AWSLambdaBasicExecutionRole이 이를 담습니다",
+        "로그 그룹의 리소스 기반 정책에 Lambda 서비스 주체를 추가해야 합니다",
+        "함수의 환경 변수로 로그 수준을 지정해야 로그 이벤트가 기록됩니다",
+        "CloudWatch Logs의 구독 필터를 만들어야 이벤트가 기록됩니다"
+      ],
+      "correct": 0,
+      "explanation": "Lambda는 기본적으로 모든 호출의 로그를 자동 수집해 CloudWatch Logs로 보내지만 실행 역할에 필요한 권한이 있을 때만 그렇습니다. 필요 권한은 logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents 셋이고 관리형 정책 AWSLambdaBasicExecutionRole이 이를 담습니다. 스트림은 만들어지는데 이벤트가 없다면 PutLogEvents가 빠진 상태입니다.",
+      "wrongExplanations": {
+        "1": "로그 기록 권한은 함수가 맡는 실행 역할에 있습니다. 로그 그룹 쪽 정책에 서비스 주체를 더하는 구성이 아닙니다.",
+        "2": "환경 변수로 로그 수준을 지정하는 것은 애플리케이션이 무엇을 출력할지에 관한 것이고, 권한이 없으면 출력해도 기록되지 않습니다.",
+        "3": "구독 필터는 이미 기록된 로그를 다른 대상으로 흘려보내는 기능입니다. 기록 자체를 가능하게 하는 것이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Sending Lambda Event Function logs to CloudWatch Logs — 필요 권한",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q3",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "REST API 스테이지에서 \"누가 어떻게 접근했는가\"는 내가 정한 형식으로 잘 기록되는데, 요청 처리 중 발생한 오류와 실행 추적은 보이지 않습니다. 원인으로 가장 적절한 것은 무엇입니까?",
+      "options": [
+        "액세스 로깅이 꺼져 있습니다. 실행 추적은 액세스 로그의 한 필드입니다",
+        "실행 로깅이 꺼져 있습니다. API Gateway의 실행 로깅과 액세스 로깅은 서로 독립적으로 켜고, 실행 로깅이 요청 처리 동작과 오류를 담습니다",
+        "두 로깅은 하나의 스위치로 함께 켜지므로 로그 그룹 권한 문제입니다",
+        "실행 로깅은 REST API에서 지원되지 않으므로 HTTP API로 마이그레이션해야 합니다"
+      ],
+      "correct": 1,
+      "explanation": "API Gateway의 CloudWatch 로깅은 실행 로깅과 액세스 로깅 두 종류이고 서로 독립적으로 켤 수 있습니다. 실행 로깅은 API Gateway가 요청을 처리한 동작과 오류, 실행 추적을 담고 로그 그룹을 API Gateway가 관리합니다. 액세스 로깅은 누가 어떻게 접근했는가를 내가 만든 로그 그룹에 내가 고른 형식으로 남깁니다. 액세스 로그만 온다면 실행 로깅이 꺼진 것입니다.",
+      "wrongExplanations": {
+        "0": "액세스 로그는 정상으로 오고 있습니다. 그리고 실행 추적은 액세스 로그의 필드가 아니라 실행 로깅이 담는 내용입니다.",
+        "2": "두 로깅은 독립적으로 켭니다. 하나의 스위치가 아닙니다.",
+        "3": "REST API에서 실행 로깅이 지원됩니다. 마이그레이션이 필요한 상황이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Set up CloudWatch logging for REST APIs in API Gateway — 실행 로깅과 액세스 로깅",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q4",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "API Gateway CloudWatch 로깅을 켜기 위해 계정의 역할 ARN을 설정하려는데 설정 단계에서 오류가 납니다. IAM 역할과 정책은 올바르게 만들었고 같은 구성이 다른 리전에서는 동작합니다. 공식 문서가 안내하는 확인 지점은 무엇입니까?",
+      "options": [
+        "역할의 신뢰 정책에 Lambda 서비스 주체를 추가했는지 확인합니다",
+        "로그 그룹을 먼저 수동으로 만들어야 하므로 로그 그룹 존재를 확인합니다",
+        "계정 수준 설정이 아니라 스테이지 수준 설정이므로 스테이지 배포 상태를 확인합니다",
+        "그 리전에서 AWS STS가 활성화돼 있는지 확인합니다. API Gateway가 IAM 역할을 맡기 위해 STS를 호출하기 때문입니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서는 API Gateway가 IAM 역할을 맡기 위해 AWS STS를 호출하므로 그 리전에서 STS가 활성화돼 있어야 한다고 적습니다. 리전 단위로 STS를 끄는 조직에서 실제로 걸리는 자리입니다.",
+      "wrongExplanations": {
+        "0": "신뢰 주체는 apigateway.amazonaws.com입니다. Lambda 서비스 주체를 더하는 것과 무관합니다.",
+        "1": "실행 로깅의 로그 그룹은 API Gateway가 관리합니다. 수동 생성이 전제가 아닙니다.",
+        "2": "역할 ARN은 계정의 속성이고 CloudWatch Logs를 켜려는 리전마다 따로 설정합니다. 스테이지 수준 설정이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Set up CloudWatch logging for REST APIs in API Gateway — 역할 ARN과 STS",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q5",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "foundational",
+      "stem": "API Gateway가 CloudWatch Logs에 쓰도록 IAM 역할을 만들려 합니다. 신뢰 주체와 붙일 관리형 정책을 올바르게 짝지은 것은 무엇입니까?",
+      "options": [
+        "신뢰 주체는 logs.amazonaws.com이고 정책은 CloudWatchLogsFullAccess입니다",
+        "신뢰 주체는 apigateway.amazonaws.com이고 정책은 AWSLambdaBasicExecutionRole입니다",
+        "신뢰 주체는 apigateway.amazonaws.com이고 정책은 AmazonAPIGatewayPushToCloudWatchLogs입니다",
+        "신뢰 주체는 sts.amazonaws.com이고 정책은 AmazonAPIGatewayPushToCloudWatchLogs입니다"
+      ],
+      "correct": 2,
+      "explanation": "절차는 신뢰 주체가 apigateway.amazonaws.com인 IAM 역할을 만들고 관리형 정책 AmazonAPIGatewayPushToCloudWatchLogs를 붙인 뒤 그 역할 ARN을 계정의 속성에 설정하는 것입니다. 그 관리형 정책이 필요한 권한을 전부 담습니다.",
+      "wrongExplanations": {
+        "0": "신뢰 주체는 API Gateway 서비스 주체여야 하고 공식이 안내하는 관리형 정책은 AmazonAPIGatewayPushToCloudWatchLogs입니다.",
+        "1": "AWSLambdaBasicExecutionRole은 Lambda 실행 역할에 붙이는 정책입니다.",
+        "3": "신뢰 주체는 STS가 아니라 apigateway.amazonaws.com입니다. STS는 API Gateway가 역할을 맡을 때 호출하는 서비스이고 신뢰 주체가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Set up CloudWatch logging for REST APIs in API Gateway — 역할 생성 절차",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q6",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "CloudFront 액세스 로그를 Data Firehose로 보내 실시간 파이프라인에 연결하려 합니다. 현재는 레거시 표준 로깅으로 S3에 쌓고 있습니다. 두 세대의 대상 지원에 관한 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "표준 로깅 v2는 CloudWatch Logs, Data Firehose, S3로 보낼 수 있고 레거시는 S3만 지원합니다",
+        "레거시도 Data Firehose를 지원하므로 세대를 바꾸지 않고 대상만 추가하면 됩니다",
+        "두 세대 모두 S3만 지원하고 Firehose로 보내려면 실시간 로그를 써야 합니다",
+        "표준 로깅 v2는 Data Firehose만 지원하고 S3로는 보낼 수 없습니다"
+      ],
+      "correct": 0,
+      "explanation": "표준 로깅 v2는 CloudWatch Logs와 Data Firehose와 S3로 보낼 수 있고 필드를 고를 수 있습니다. 레거시 표준 로깅은 S3만 지원하고 필드가 고정입니다.",
+      "wrongExplanations": {
+        "1": "레거시는 S3만 지원합니다. Firehose로 보내려면 v2를 씁니다.",
+        "2": "v2가 Firehose를 지원합니다. 실시간 로그로 가야 하는 상황이 아닙니다.",
+        "3": "v2는 S3도 대상으로 지원하고 옵트인 리전 전송, 파티셔닝, Hive 호환 파일명 같은 추가 옵션까지 제공합니다."
+      },
+      "sources": [
+        {
+          "title": "Configure standard logging (v2) — 대상과 필드 선택",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/standard-logging.html"
+        },
+        {
+          "title": "Configure standard logging (legacy) — S3 전용",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/standard-logging-legacy-s3.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q7",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "CloudFront 표준 로깅 v2를 추가로 켜고 기존 레거시 로깅과 같은 S3 버킷의 같은 접두사로 보냈습니다. 며칠 뒤 일부 로그 파일이 사라진 것처럼 보입니다. 원인과 공식 권장은 무엇입니까?",
+      "options": [
+        "v2를 켜면 레거시가 자동으로 꺼지므로 레거시 로그가 중단된 것입니다. 레거시를 다시 켜면 됩니다",
+        "같은 버킷의 같은 경로를 쓰면 로그 파일이 서로 덮어씁니다. 공식은 다른 버킷이나 같은 버킷의 다른 경로를 쓰라고 권합니다",
+        "S3 버전 관리를 켜지 않아 생긴 문제이므로 버전 관리만 켜면 두 세대를 같은 경로에 둘 수 있습니다",
+        "v2와 레거시는 함께 쓸 수 없으므로 하나를 선택해야 하고 공존 자체가 오류입니다"
+      ],
+      "correct": 1,
+      "explanation": "v2를 켜도 레거시에 영향이 없고 둘을 함께 쓸 수 있습니다. 다만 같은 S3 버킷의 같은 경로를 쓰면 로그 파일이 서로 덮어쓰므로, 공식은 다른 버킷이나 같은 버킷의 다른 경로를 쓰라고 권합니다.",
+      "wrongExplanations": {
+        "0": "v2를 켜도 레거시는 그대로 돌아갑니다. 자동으로 꺼지지 않습니다.",
+        "2": "공식 권장은 경로나 버킷을 분리하는 것입니다. 버전 관리로 해결하라는 안내가 아닙니다.",
+        "3": "두 세대를 함께 쓸 수 있습니다. 문제는 공존 자체가 아니라 같은 경로를 쓰는 것입니다."
+      },
+      "sources": [
+        {
+          "title": "Configure standard logging (v2) — 레거시와의 공존 주의",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/standard-logging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q8",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.1",
+      "section": "analyze",
+      "difficulty": "applied",
+      "stem": "로드 밸런서 뒤의 인스턴스가 기동에 약 90초가 걸리는데 상태 확인이 계속 비정상으로 나옵니다. 상태 확인 문제를 좁히는 확인 순서로 가장 적절한 것은 무엇입니까?",
+      "options": [
+        "인스턴스 유형을 먼저 키우고, 그다음 상태 확인 경로를 확인하고, 마지막으로 보안 그룹을 봅니다",
+        "CloudWatch 알람의 누락 데이터 설정을 먼저 바꾸고, 그다음 상태 확인 간격을 늘립니다",
+        "상태 확인 대상 경로와 포트가 맞는지, 보안 그룹과 네트워크 ACL이 상태 확인 트래픽을 허용하는지, 임계값과 간격이 애플리케이션 기동 시간보다 짧지 않은지를 봅니다",
+        "먼저 로드 밸런서를 재생성하고, 그다음 대상 그룹을 다시 등록합니다"
+      ],
+      "correct": 2,
+      "explanation": "상태 확인 문제의 확인 순서는 상태 확인의 대상 경로와 포트가 맞는가, 보안 그룹과 네트워크 ACL이 상태 확인 트래픽을 허용하는가, 임계값과 간격이 애플리케이션 기동 시간보다 짧지 않은가입니다. 기동이 90초 걸리는 환경에서 임계값과 간격이 너무 짧으면 정상 인스턴스가 비정상으로 판정됩니다.",
+      "wrongExplanations": {
+        "0": "인스턴스 유형 변경은 원인 규명이 아니라 추측에 따른 조치입니다. 먼저 경로와 포트, 네트워크 허용, 임계값을 봅니다.",
+        "1": "누락 데이터 설정은 CloudWatch 알람의 평가에 관한 것이고 로드 밸런서 상태 확인의 판정 기준이 아닙니다.",
+        "3": "재생성은 원인을 설명하지 못하는 조치입니다. 구성 확인이 먼저입니다."
+      },
+      "sources": [
+        {
+          "title": "Alarm evaluation (Amazon CloudWatch) — 평가 설정과 임계값",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q9",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "applied",
+      "stem": "통합 CloudWatch 에이전트를 설치했는데 서비스가 시작되지 않습니다. 설치 자체는 성공했습니다. 공식 문서가 먼저 보라고 안내하는 곳은 어디입니까?",
+      "options": [
+        "인스턴스의 시스템 로그에서 커널 메시지를 봅니다",
+        "CloudWatch Logs 콘솔에서 에이전트가 만든 로그 그룹을 찾습니다",
+        "구성 오류일 수 있으므로 configuration-validation.log를 봅니다. Linux는 에이전트 로그 디렉터리 아래, Windows Server는 ProgramData 아래의 로그 경로에 있습니다",
+        "SSM Agent 버전이 2.2.93.0 이상인지 확인합니다"
+      ],
+      "correct": 2,
+      "explanation": "에이전트가 시작되지 않는 경우는 구성 오류일 수 있고, 공식 문서가 configuration-validation.log를 보라고 안내합니다. Linux는 에이전트 로그 디렉터리 아래에 있고 Windows Server는 ProgramData 아래의 로그 경로에 있습니다.",
+      "wrongExplanations": {
+        "0": "공식이 안내하는 첫 확인 지점은 구성 검증 로그입니다.",
+        "1": "에이전트가 시작되지 않았으므로 로그 그룹이 만들어지지 않았을 수 있습니다. 확인 지점은 로컬의 구성 검증 로그입니다.",
+        "3": "SSM Agent 2.2.93.0 이상은 Run Command 설치가 실패할 때의 확인 지점입니다. 이 시나리오는 설치가 성공한 뒤 시작되지 않는 경우입니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshooting the CloudWatch agent — 시작 실패와 구성 검증 로그",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q10",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "applied",
+      "stem": "프록시를 통해서만 외부에 나가는 서버에서 통합 CloudWatch 에이전트 시작이 실패하고 오류 메시지에 EC2 리전 엔드포인트가 나옵니다. 공식 문서가 설명하는 원인은 무엇입니까?",
+      "options": [
+        "구성의 append_dimensions가 EC2 메타데이터에 의존하는데 서버가 EC2 엔드포인트에 접근할 수 없는 경우입니다",
+        "에이전트가 쓰는 자격 증명이 만료된 경우이므로 인스턴스 프로파일을 재생성해야 합니다",
+        "구성 파일이 JSON 문법 오류를 담고 있어 파싱에 실패한 경우입니다",
+        "에이전트 버전이 낮아 리전 엔드포인트 규약을 모르는 경우이므로 에이전트를 업그레이드해야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "시작 실패 오류에 EC2 리전 엔드포인트가 나오는 경우는 구성의 append_dimensions가 EC2 메타데이터에 의존하는데 서버가 EC2 엔드포인트에 접근할 수 없는 경우입니다. 프록시 환경이 전형적인 예입니다.",
+      "wrongExplanations": {
+        "1": "자격 증명 문제는 별도의 확인 항목이고, 엔드포인트가 오류에 나오는 경우의 원인으로 공식이 드는 것은 append_dimensions와 메타데이터 접근입니다.",
+        "2": "구성 문법 오류는 구성 검증 로그에서 드러납니다. 이 증상은 엔드포인트 접근 쪽입니다.",
+        "3": "버전 문제는 Run Command 설치 실패에서 SSM Agent 버전으로 나타납니다. 이 증상의 원인이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshooting the CloudWatch agent — append_dimensions와 EC2 엔드포인트",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q11",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "applied",
+      "stem": "통합 CloudWatch 에이전트의 구성 파일에 새 로그 파일 경로를 추가했는데 CloudWatch Logs에 새 로그가 나타나지 않습니다. 구성 문법은 정상이고 에이전트는 돌고 있습니다. 무엇을 해야 합니까?",
+      "options": [
+        "로그 그룹을 수동으로 먼저 만들어야 합니다",
+        "에이전트를 중지하고 다시 시작해야 변경된 구성이 적용됩니다",
+        "인스턴스를 재부팅해야 하며 에이전트 재시작만으로는 적용되지 않습니다",
+        "구성 변경은 자동 적용되므로 지연일 뿐이고 조치가 필요하지 않습니다"
+      ],
+      "correct": 1,
+      "explanation": "구성을 바꿨는데 새 지표나 로그가 보이지 않으면 에이전트를 중지하고 다시 시작해야 적용됩니다. 공식 문제 해결 문서가 그 항목을 따로 적습니다.",
+      "wrongExplanations": {
+        "0": "로그 그룹을 수동으로 먼저 만드는 것이 전제가 아닙니다. 적용되지 않은 이유는 에이전트가 새 구성을 읽지 않은 것입니다.",
+        "2": "인스턴스 재부팅이 필요한 것이 아니라 에이전트 중지와 재시작이 필요합니다.",
+        "3": "자동 적용되지 않습니다. 중지와 재시작이 필요하다는 것이 공식 서술입니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshooting the CloudWatch agent — 구성 변경 적용",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q12",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "foundational",
+      "stem": "여러 인스턴스에서 CloudWatch 에이전트 문제가 산발적으로 보고되어 점검을 자동화하려 합니다. 공식 문서가 안내하는 자동화 런북과 그것이 수행하는 일로 올바른 것은 무엇입니까?",
+      "options": [
+        "AWSSupport-TroubleshootCloudWatchAgent 런북이 에이전트를 최신 버전으로 강제 업그레이드하고 구성 파일을 초기화합니다",
+        "AmazonCloudWatch-ManageAgent 런북이 IAM 권한을 자동으로 수정하고 인스턴스 프로파일을 교체합니다",
+        "자동화 런북은 제공되지 않으므로 인스턴스마다 수동으로 구성 검증 로그를 확인해야 합니다",
+        "AWSSupport-TroubleshootCloudWatchAgent 런북이 IAM 권한과 인스턴스 프로파일을 검증하고 에이전트 상태와 로그를 분석하며 엔드포인트 연결을 테스트하고 관련 로그를 수집해 S3에 업로드합니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서는 AWSSupport-TroubleshootCloudWatchAgent 자동화 런북을 안내하고, 그 런북이 IAM 권한과 인스턴스 프로파일을 검증하고 에이전트 상태 확인과 로그 분석을 하고 엔드포인트 연결을 테스트하고 관련 로그를 자동 수집해 S3에 업로드한다고 적습니다.",
+      "wrongExplanations": {
+        "0": "런북이 하는 일은 진단입니다. 강제 업그레이드나 구성 초기화가 아닙니다.",
+        "1": "AmazonCloudWatch-ManageAgent는 Run Command에서 에이전트 상태를 확인하거나 관리하는 데 쓰는 문서이고, 권한을 자동 수정하거나 프로파일을 교체하지 않습니다.",
+        "2": "자동화 런북이 제공됩니다. 수동 확인은 그다음 단계입니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshooting the CloudWatch agent — 자동화 런북",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q13",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "applied",
+      "stem": "\"로그가 보이지 않는다\"는 보고를 받고 원인을 체계적으로 좁히려 합니다. KMS로 암호화된 대상에 쓰는 구성도 포함돼 있습니다. 확인할 네 층을 올바르게 묶은 것은 무엇입니까?",
+      "options": [
+        "비용, 리전, 태그, 계정의 네 층으로 봅니다",
+        "네트워크, 인스턴스 유형, 운영 체제, 에이전트 버전의 네 층으로 봅니다",
+        "생성, 권한, 대상, 시간의 네 층으로 봅니다. 권한 층에서는 쓰는 주체의 대상 쓰기 권한과 대상이 KMS로 암호화된 경우의 키 정책까지 봅니다",
+        "탐지, 상관, 알림, 대응의 네 층으로 봅니다"
+      ],
+      "correct": 2,
+      "explanation": "로그가 보이지 않을 때의 원인은 네 층 중 하나입니다. 생성은 그 기능의 로깅이 켜져 있는가, 권한은 쓰는 주체에게 대상 쓰기 권한이 있는가이며 대상이 KMS로 암호화돼 있으면 키 정책까지 봅니다. 대상은 로그가 내가 보고 있는 곳으로 가고 있는가, 시간은 지연인가입니다.",
+      "wrongExplanations": {
+        "0": "비용과 태그는 로그 누락의 원인 층이 아닙니다.",
+        "1": "인스턴스 유형과 운영 체제는 일반적인 원인 층이 아닙니다. 네 층은 생성, 권한, 대상, 시간입니다.",
+        "3": "탐지와 상관과 알림과 대응은 탐지 파이프라인의 단계이고 로그 누락을 좁히는 층이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Troubleshooting the CloudWatch agent — 권한과 대상 확인",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
+        },
+        {
+          "title": "Sending Lambda Event Function logs to CloudWatch Logs — 지연과 대상 로그 그룹",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q14",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "applied",
+      "stem": "데이터가 드물게만 생성되는 지표로 알람을 만들었습니다. 임계값을 넘는 데이터 포인트가 가끔 보이는데 알람은 계속 INSUFFICIENT_DATA에 머물고 ALARM으로 가지 않습니다. 누락 데이터 처리는 지정하지 않았습니다. 원인과 교정 방향은 무엇입니까?",
+      "options": [
+        "기본값이 missing이라 평가 범위의 데이터가 전부 누락이면 INSUFFICIENT_DATA로 갑니다. 오류가 있을 때만 데이터가 생기는 지표라면 notBreaching이 맞는 선택입니다",
+        "기본값이 breaching이라 누락이 이상으로 처리되어 상태가 흔들린 것이므로 missing으로 바꿉니다",
+        "기본값이 ignore라 현재 상태가 유지된 것이므로 평가 기간을 늘립니다",
+        "알람 상태는 지표 데이터와 무관하므로 임계값을 낮추는 것이 유일한 교정입니다"
+      ],
+      "correct": 0,
+      "explanation": "누락 데이터 처리의 기본값은 missing이고, missing은 평가 범위의 데이터가 전부 누락이면 INSUFFICIENT_DATA로 갑니다. 선택 기준은 지표의 성질입니다. 오류가 있을 때만 데이터가 생기는 지표라면 notBreaching이 맞습니다.",
+      "wrongExplanations": {
+        "1": "기본값은 breaching이 아니라 missing입니다.",
+        "2": "ignore가 기본인 것은 AWS/DynamoDB 네임스페이스 지표를 평가하는 알람입니다. 지정하지 않은 일반 알람의 기본은 missing입니다.",
+        "3": "알람 상태는 지표 데이터와 누락 처리 설정으로 결정됩니다. 임계값만의 문제가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Configuring how CloudWatch alarms treat missing data — 기본값과 선택 기준",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t1-3-q15",
+      "examGuideTaskId": "scs-t1-3",
+      "skill": "1.3.2",
+      "section": "fix",
+      "difficulty": "applied",
+      "stem": "알람이 ALARM 상태로 바뀌었는데 연결된 작업이 실행되지 않았다는 보고가 있습니다. 조사해 보니 그 시점의 평가 상태가 IN_WARM_UP이었습니다. 공식 서술로 올바른 것은 무엇입니까?",
+      "options": [
+        "IN_WARM_UP은 평가가 끝났다는 뜻이므로 작업 실행 실패는 대상 권한 문제입니다",
+        "워밍업 기간에는 알람이 아직 평가하지 않고 INSUFFICIENT_DATA에 머물며 작업을 실행하지 않습니다",
+        "IN_WARM_UP은 쿼터 제한으로 데이터를 전부 가져오지 못한 상태이므로 쿼터 증액을 요청해야 합니다",
+        "IN_WARM_UP 상태에서도 작업은 실행되므로 보고 내용은 다른 원인입니다"
+      ],
+      "correct": 1,
+      "explanation": "IN_WARM_UP은 워밍업 기간이라 아직 평가하지 않는다는 뜻입니다. 이 동안 알람은 INSUFFICIENT_DATA에 머물고 작업을 실행하지 않습니다. 방금 만든 알람이 조용한 전형적 원인입니다.",
+      "wrongExplanations": {
+        "0": "IN_WARM_UP은 아직 평가하지 않는다는 뜻입니다. 평가가 끝났다는 뜻이 아닙니다.",
+        "2": "쿼터 제한으로 데이터를 전부 가져오지 못한 상태는 PARTIAL_DATA입니다.",
+        "3": "워밍업 기간에는 작업을 실행하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Alarm evaluation (Amazon CloudWatch) — 평가 상태 IN_WARM_UP",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
