@@ -29,12 +29,13 @@ import 'package:flutter_test/flutter_test.dart';
 /// 강제하지 않는다. 그래서 `###` 서브섹션마다 `> 🧠 원리:`를 요구하는 규칙은
 /// 이 자격증에 적용되지 않는다(MLA·DVA·AIF도 그렇다).
 void main() {
-  // 2026-11-09 도메인 1·2·3·4 배치 — 공식 Task 16개 중 10개.
+  // 2026-11-09 도메인 1·2·3·4·5 배치 — 공식 Task 16개 중 13개.
   const scsTaskIds = [
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3',
     'scs-t2-1', 'scs-t2-2',
     'scs-t3-1', 'scs-t3-2', 'scs-t3-3',
     'scs-t4-1', 'scs-t4-2',
+    'scs-t5-1', 'scs-t5-2', 'scs-t5-3',
   ];
   const maxObjectives = 8;
   const maxSummaryBullets = 10;
@@ -365,6 +366,104 @@ void main() {
       expect(exempted, 1,
           reason: '자가 점검 질문 예외가 $exempted줄이다 — 예외가 늘면 '
               '규칙이 조용히 느슨해진다(1줄로 고정)');
+    });
+  });
+
+  // 2026-11-09 도메인 5 배치. **G-29 규율의 다섯 번째 적용**이고, 이 도메인에서
+  // 가장 날카롭다 — 공식 `기술 5.2.2`가 데이터 무결성 수단으로 드는
+  // **`S3 Glacier 저장소 잠금`(Vault Lock)이 신규 고객에게 닫힌 서비스의 기능**이다.
+  //
+  // ⚠️ 네 규칙 모두 **자격증 전수 집계**다(도메인 3·4와 같은 이유).
+  group('도메인 5 저작 규율', () {
+    String? docOf(String taskId) {
+      final f = File('assets/content/scs/$taskId.md');
+      return f.existsSync() ? f.readAsStringSync() : null;
+    }
+
+    Iterable<String> authoredDocs() =>
+        scsTaskIds.map(docOf).whereType<String>();
+
+    test('Glacier 저장소 잠금을 언급하면 신규 고객 차단 상태를 적는다', () {
+      // ⚠️⚠️ **금고(vault)와 저장소 잠금은 「원래의 독립 Glacier 서비스」의 것**이고
+      //    그 서비스는 **신규 고객을 받지 않는다**(공식 Glacier 개발자 안내서의 모든
+      //    페이지가 `This page is only for existing customers of the Amazon Glacier
+      //    service using Vaults and the original REST API from 2012.` 배너를 단다).
+      // ⚠️ **S3 Glacier 스토리지 클래스**(Instant Retrieval·Flexible Retrieval·
+      //    Deep Archive)는 정상이므로 트리거를 `Glacier` 전체로 두지 않는다 —
+      //    「저장소 잠금 / Vault Lock」으로 좁힌다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('저장소 잠금') && !text.contains('Vault Lock')) continue;
+        expect(text.contains('신규 고객'), isTrue,
+            reason: '$taskId: `Glacier 저장소 잠금`을 언급하면 **신규 고객 차단 상태**를 '
+                '함께 적는다 — 공식 가이드가 데이터 무결성 수단으로 드는 기능이 '
+                '닫힌 서비스의 것이다(저작 결정 D-04-b)');
+      }
+      expect(authoredDocs().where((t) => t.contains('저장소 잠금')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 5.2.2`가 `S3 Glacier 저장소 잠금`을 예시로 드는데 그 상태를 '
+              '다룬 문서가 없다 — 규칙이 공허해진다');
+    });
+
+    test('SNS 메시지 데이터 보호를 언급하면 신규 고객 차단 상태를 적는다', () {
+      // ⚠️⚠️ 공식 `기술 5.3.4`가 **예시로 드는 바로 그 기능**인데
+      //    `sns-message-data-protection-configure.html`이 스스로
+      //    `Amazon SNS message data protection is no longer available to new
+      //    customers.`를 Important 로 적는다(G-15·G-28).
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('메시지 데이터 보호')) continue;
+        expect(text.contains('신규 고객'), isTrue,
+            reason: '$taskId: `Amazon SNS 메시지 데이터 보호`를 언급하면 '
+                '**신규 고객 차단 상태**를 함께 적는다 — 공식 문서가 그 상태를 '
+                '페이지 머리에 적는다');
+      }
+      expect(authoredDocs().where((t) => t.contains('메시지 데이터 보호')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 5.3.4`의 두 예시 중 하나를 다루지 않았다');
+    });
+
+    test('DataSync Discovery를 언급하면 지원 종료를 적는다', () {
+      // ⚠️ `AWS DataSync` 자체는 정상이고 **Discovery 기능만** 2025-05-20
+      //    지원 종료다(96-service-status-audit §7-2). `기술 5.2.4`가 DataSync 를
+      //    예시로 들므로 기능 단위로 갈라 적는다.
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('DataSync Discovery')) continue;
+        expect(text.contains('지원 종료'), isTrue,
+            reason: '$taskId: `DataSync Discovery`를 언급하면 **지원 종료**를 '
+                '함께 적는다 — 서비스 전체가 아니라 그 기능만 닫혔다');
+      }
+      expect(authoredDocs().where((t) => t.contains('DataSync Discovery')).length,
+          greaterThanOrEqualTo(1),
+          reason: '`기술 5.2.4`가 DataSync 를 예시로 드는데 닫힌 기능을 가르지 않으면 '
+              '학습자가 둘을 같은 층으로 읽는다');
+    });
+
+    test('CloudWatch Logs 데이터 보호 정책의 비소급 성질을 함께 적는다', () {
+      // ⚠️⚠️ **보존 가드**다(2026-11-06 AIF 배치에서 처음 쓴 종류) — 금지가 아니라
+      //    **참인 문장이 사라지는 것**을 막는다. 공식 문구:
+      //    `log events ingested to the log group before that time are not masked.`
+      //    AIF 트랙이 먼저 실측했고(00-overview §10) 이 도메인의 핵심 사실이다.
+      var triggered = 0;
+      for (final taskId in scsTaskIds) {
+        final text = docOf(taskId);
+        if (text == null) continue;
+        if (!text.contains('데이터 보호 정책') || !text.contains('CloudWatch Logs')) {
+          continue;
+        }
+        triggered++;
+        expect(text.contains('소급'), isTrue,
+            reason: '$taskId: CloudWatch Logs 데이터 보호 정책을 가르치면 '
+                '**이미 수집된 로그에는 소급 적용되지 않는다**를 함께 적는다 — '
+                '마스킹은 수집 시점에 일어난다');
+      }
+      expect(triggered, greaterThanOrEqualTo(1),
+          reason: 'CloudWatch Logs 데이터 보호 정책을 가르치는 문서가 없다 — '
+              '`기술 5.3.4`의 축이 그쪽이다(SNS 쪽은 닫혔다)');
     });
   });
 }
