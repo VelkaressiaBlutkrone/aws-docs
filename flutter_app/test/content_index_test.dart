@@ -358,6 +358,37 @@ void main() {
       }
     });
 
+    // SCS-C03은 **이 레포의 첫 6도메인 자격증**이다(다른 자격증 4개, SOA·AIF 5개).
+    // 정책을 문항 저작 **전에** 넣는 이유는 AIF와 같다 — 정책이 없으면
+    // `hasPolicy: false`로 fail closed라 사람이 문항을 전부 flip해도 통합·약점
+    // 모의고사가 잠긴 채 남는다(MLA가 #246에서 그 함정에 걸렸다).
+    //
+    // ⚠️ `allocateByWeight`가 6키에서도 합을 N으로 맞추는지는 `mock_exam_test`가
+    // 함수 수준에서 보지만, **그 정책이 `examWeightedCapacityStatus`에 실제로
+    // 꿰어지는지**는 거기서 보지 않는다 — `availableByDomain`을
+    // `requiredByDomain.keys`로 만들기 때문에 키 수 가정이 섞이면 여기서 드러난다.
+    //
+    // ⚠️ **합성 빈 엔트리**(`entries: const []`)를 쓰므로 이 단정은 실제 flip
+    // 상태와 **무관하다.** 「지금 잠긴 cert」를 표본으로 쓰는 locked 선언을
+    // 새로 만들면 안 된다는 위 규율(2026-10-31)을 지키는 형태다.
+    test('SCS-C03: 6도메인 정책이 꿰어지고 정책만으로는 열리지 않는다', () {
+      final s = examWeightedCapacityStatus('SCS-C03', entries: const []);
+      expect(s.hasPolicy, isTrue,
+          reason: 'kExamReadinessRequirements에 SCS-C03이 없으면 게이트가 fail closed다');
+      expect(s.practiceQuestionCount, 65);
+      // 공식 비중 D1 16 · D2 14 · D3 18 · D4 20 · D5 18 · D6 14 를 연습 65문항에
+      // allocateByWeight(floor + 최대 잔여)로 배분한 값. floor 합이 63이라
+      // **잔여 두 자리**가 소수부 0.7인 D3·D5로 간다.
+      expect(s.requiredByDomain, {1: 10, 2: 9, 3: 12, 4: 13, 5: 12, 6: 9});
+      expect(s.requiredByDomain.values.fold(0, (a, b) => a + b), 65,
+          reason: '배분 합이 연습 세트 크기와 달라지면 도메인 하나가 조용히 비거나 넘친다');
+      expect(s.requiredByDomain.keys.toSet(), {1, 2, 3, 4, 5, 6},
+          reason: 'SCS-C03은 도메인이 6개다 — 5키를 전제한 코드가 있으면 여기서 드러난다');
+      expect(s.ready, isFalse);
+      expect(s.deficitByDomain, s.requiredByDomain,
+          reason: 'SCS-C03: 검증 문항 0인데 부족 도메인이 전부가 아니다');
+    });
+
     // 2026-10-27 실측: SOA·DEA 문항은 전부 드래프트(verified 0)라 정책을 넣어도
     // 라이브 노출은 그대로 잠긴 채였다. **둘 다 2026-10-31 에 열렸다.**
     //
@@ -415,7 +446,15 @@ void main() {
       // MLA 정책 추가 때 하드코딩 목록을 빠뜨려 **검증 없이 통과**한 적이 있어,
       // 2026-10-27 SOA·DEA 추가에서 루프를 키 집합으로 돌렸다.
       expect(kExamReadinessRequirements.keys.toSet(),
-          {'CLF-C02', 'SAA-C03', 'MLA-C01', 'SOA-C03', 'DEA-C01', 'AIF-C01'},
+          {
+            'CLF-C02',
+            'SAA-C03',
+            'MLA-C01',
+            'SOA-C03',
+            'DEA-C01',
+            'AIF-C01',
+            'SCS-C03',
+          },
           reason: 'readiness 정책을 추가·삭제했으면 이 테스트의 대조 목록도 맞춘다');
       for (final code in kExamReadinessRequirements.keys) {
         final raw = File('assets/exam_guides/$code.json').readAsStringSync();
