@@ -114,6 +114,21 @@ const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
     practiceQuestionCount: 65,
     weightByDomain: {1: 20, 2: 24, 3: 28, 4: 14, 5: 14},
   ),
+  // SCS-C03은 학습문서 16편이 들어온 뒤 추가했다(2026-11-09, Phase 3 선결).
+  // AIF와 같은 순서다 — 정책이 없으면 `hasPolicy: false`로 fail closed라 사람이
+  // 문항을 전부 flip해도 통합/약점 모의고사가 잠긴 채 남는다(MLA가 #246에서
+  // 같은 함정에 걸렸다). 정책 추가는 공개가 아니다 — 지금은 문항이 0개라 전
+  // 도메인이 부족해 게이트가 그대로 잠겨 있다.
+  //
+  // ⚠️⚠️ SCS-C03은 **이 레포의 첫 6도메인 자격증**이다(다른 자격증 4개,
+  // SOA·AIF 5개). 5키를 전제하면 안 된다. 공식 비중 16·24가 아니라
+  // **16·14·18·20·18·14**(합 100)이고 65문항 배분은 **10·9·12·13·12·9**다 —
+  // floor 합이 63이라 잔여 **두 자리**가 소수부 0.7인 D3·D5로 간다.
+  // 공식 overview: scored 50 + unscored 15 = 65 · 170분 · 합격 750.
+  'SCS-C03': ExamReadinessRequirement(
+    practiceQuestionCount: 65,
+    weightByDomain: {1: 16, 2: 14, 3: 18, 4: 20, 5: 18, 6: 14},
+  ),
   // DEA-C01 공식 비중 34·26·22·18 → 65문항 배분은 22·17·14·12.
   'DEA-C01': ExamReadinessRequirement(
     practiceQuestionCount: 65,

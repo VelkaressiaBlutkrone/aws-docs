@@ -57,6 +57,16 @@ void main() {
     expect(a, {1: 13, 2: 16, 3: 18, 4: 9, 5: 9});
   });
 
+  // ⚠️⚠️ SCS-C03은 **이 레포의 첫 6도메인 자격증**이다(다른 자격증 4개, SOA·AIF
+  // 5개). 비중 16·14·18·20·18·14는 floor 합이 63이라 **잔여가 두 자리**이고,
+  // 소수부가 0.4/0.1/0.7/0.0/0.7/0.1이라 D3·D5가 받는다. 눈대중으로 10·9·12·13·12·9를
+  // 적기 쉬운데 그 수가 맞는지는 여기서 기계로 고정한다.
+  test('allocateByWeight: SCS 6도메인 비중을 65문항에 적용하면 10/9/12/13/12/9', () {
+    final a = allocateByWeight({1: 16, 2: 14, 3: 18, 4: 20, 5: 18, 6: 14}, 65);
+    expect(a.values.fold(0, (s, v) => s + v), 65);
+    expect(a, {1: 10, 2: 9, 3: 12, 4: 13, 5: 12, 6: 9});
+  });
+
   test('allocateByWeight: DEA 공식 비중을 65문항 연습 세트에 적용하면 22/17/14/12', () {
     final a = allocateByWeight({1: 34, 2: 26, 3: 22, 4: 18}, 65);
     expect(a.values.fold(0, (s, v) => s + v), 65);
@@ -68,6 +78,18 @@ void main() {
     for (final n in [1, 2, 5, 13, 50, 64, 65, 66, 100, 237]) {
       final a = allocateByWeight(soa, n);
       expect(a.keys.toSet(), soa.keys.toSet(), reason: 'n=$n 키 누락');
+      expect(a.values.fold(0, (s, v) => s + v), n, reason: 'n=$n 배분 합 불일치');
+    }
+  });
+
+  // ⚠️ 5키 불변식이 「키가 4개」 가정을 잡아낸 것과 같은 이유로, SCS-C03이
+  // 들어온 뒤에는 **6키**에서도 같은 성질을 고정한다. 「키가 5개 이하」라는
+  // 가정이 섞여 들면 위 SCS 배분 한 건만으로는 N을 바꿨을 때 드러나지 않는다.
+  test('allocateByWeight: 6키 배분 합은 모든 N에서 N이다 (키 수 가정 없음)', () {
+    const scs = {1: 16, 2: 14, 3: 18, 4: 20, 5: 18, 6: 14};
+    for (final n in [1, 2, 5, 6, 7, 13, 50, 64, 65, 66, 100, 237]) {
+      final a = allocateByWeight(scs, n);
+      expect(a.keys.toSet(), scs.keys.toSet(), reason: 'n=$n 키 누락');
       expect(a.values.fold(0, (s, v) => s + v), n, reason: 'n=$n 배분 합 불일치');
     }
   });
