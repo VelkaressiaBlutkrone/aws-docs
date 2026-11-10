@@ -30,8 +30,8 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
   - title: "Capability 5. Providing secure access, usage, and implementation of generative AI agents (AWS SRA for generative AI)"
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html
-  - title: AWS Lifecycle Changes
-    url: https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+  - title: Services in Sunset — 종료 예정 항목 목록
+    url: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
 lastVerified: 2026-11-08
 ---
 
@@ -401,6 +401,6 @@ Guardrails는 **기초 모델 전반의 안전·프라이버시 제어**를 제�
 9. Connect to an Amazon EC2 instance using EC2 Instance Connect Endpoint — `docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-using-eice.html` (2026-11-08 확인)
 10. Detect and filter harmful content by using Amazon Bedrock Guardrails — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html` (2026-11-08 확인)
 11. Capability 5. Providing secure access, usage, and implementation of generative AI agents (AWS SRA for generative AI) — `docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html` (2026-11-10 확인)
-12. AWS Lifecycle Changes — `docs.aws.amazon.com/general/latest/gr/service-lifecycle.html` (2026-11-08 확인)
+12. Services in Sunset — 종료 예정 항목 목록 — `docs.aws.amazon.com/general/latest/gr/sunset_services.html` (2026-11-10 확인)
 
 > ⚠️ **은퇴한 인용(2026-11-10 실측).** 이 문서의 §7-1은 처음에 **「Security for agentic AI on AWS」 가이드**(`prescriptive-guidance/latest/agentic-ai-security/`)의 OWASP 매핑을 근거로 썼으나, 그 가이드가 docs에서 더 이상 제공되지 않습니다(네 방법 모두 404 · 가이드 루트도 같은 오류 페이지). 그래서 그 두 URL을 출처에서 내리고 §7-1을 위 11번 가이드와 Bedrock Guardrails 문서로 다시 세웠습니다. 레포 전역 재등장 방지는 `source_url_retired_test.dart`가 맡습니다.

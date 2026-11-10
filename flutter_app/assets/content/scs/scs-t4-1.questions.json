@@ -111,12 +111,8 @@
       },
       "sources": [
         {
-          "title": "AWS Multi-factor authentication in IAM - 공식 MFA 유형과 운용 제약",
+          "title": "AWS Multi-factor authentication in IAM — 공식 MFA 유형과 SMS 지원 종료",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
-        },
-        {
-          "title": "AWS Lifecycle Changes - 유지 관리와 종료 상태 목록",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
         }
       ],
       "verified": false
@@ -403,12 +399,12 @@
       },
       "sources": [
         {
-          "title": "What is AWS Directory Service? - 디렉터리 유형 셋과 지원 범위",
+          "title": "AWS Directory Service — 디렉터리 유형과 지원 범위",
           "url": "https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html"
         },
         {
-          "title": "AWS Lifecycle Changes - 유지 관리와 종료 상태 목록",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
+          "title": "Services in Maintenance — 유지 관리 항목 목록",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
       "verified": false

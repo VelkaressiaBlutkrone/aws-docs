@@ -34,8 +34,8 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html
   - title: CloudTrail record contents for management, data, and network activity events
     url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html
-  - title: AWS Lifecycle Changes
-    url: https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+  - title: Services in Maintenance — 유지 관리 항목 목록
+    url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
 lastVerified: 2026-11-09
 ---
 
@@ -448,4 +448,4 @@ lastVerified: 2026-11-09
 11. What is AWS Directory Service? — `docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html` (2026-11-09 확인)
 12. Troubleshoot access denied error messages — `docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html` (2026-11-09 확인)
 13. CloudTrail record contents for management, data, and network activity events — `docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html` (2026-11-09 확인)
-14. AWS Lifecycle Changes — `docs.aws.amazon.com/general/latest/gr/service-lifecycle.html` (2026-11-09 확인)
+14. Services in Maintenance — 유지 관리 항목 목록 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-10 확인)

@@ -145,20 +145,25 @@
       "id": "scs-t1-3-q8",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 7,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
       "ambiguityFlag": false,
       "sources": [
         {
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html",
           "fetched": true,
-          "supports": "no"
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html",
+          "fetched": true,
+          "supports": "yes"
         }
       ],
-      "recommendation": "resource",
-      "notes": "[probe-confirmed-absent] ⚠️⚠️ **probe로 확인했다** — `alarm-evaluation.html` 본문(7,436자)에 `health check`·`target group`이 **0건**이고 대조군(`M out of N`·`EVALUATION`)은 통과한다. 즉 추출 실패가 아니라 **그 페이지에 상태 확인 서술이 없다.** 로드 밸런서 상태 확인 문서로 교체해야 한다 (⚠️ G-32로 서비스별 기본값·임계값을 재지 않았으므로 교체 페이지를 먼저 실측)."
+      "recommendation": "pass",
+      "notes": "[probe-confirmed-absent] ⚠️⚠️ **probe로 확인했다** — `alarm-evaluation.html` 본문(7,436자)에 `health check`·`target group`이 **0건**이고 대조군(`M out of N`·`EVALUATION`)은 통과한다. 즉 추출 실패가 아니라 **그 페이지에 상태 확인 서술이 없다.** 로드 밸런서 상태 확인 문서로 교체해야 한다 (⚠️ G-32로 서비스별 기본값·임계값을 재지 않았으므로 교체 페이지를 먼저 실측). ✅ **2026-11-10 교정(resource 해소)** — 출처를 ELB 문서 둘로 바꿨다. `target-group-health-checks.html`이 경로·포트·간격·임계값을, `target-group-register-targets.html`이 보안 그룹 요건을 덮는다(⚠️ 상태 확인 페이지에는 `security group`이 **없어서** 둘이 필요했다 — 실측). 둘 다 `200 r=0`이고 md 출처에도 더했다."
     },
     {
       "id": "scs-t1-3-q9",
@@ -240,7 +245,7 @@
       "id": "scs-t1-3-q13",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -249,16 +254,16 @@
         {
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html",
           "fetched": false,
-          "supports": "partial"
+          "supports": "yes"
         },
         {
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html",
           "fetched": false,
-          "supports": "partial"
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[framing-not-in-source] 「생성·권한·대상·시간 네 층」은 저작자의 묶음이고 두 출처가 그 분류를 적지 않는다. KMS 키 정책까지 본다는 내용 자체는 맞으므로 C4 보강 대상."
+      "recommendation": "pass",
+      "notes": "[framing-not-in-source] 「생성·권한·대상·시간 네 층」은 저작자의 묶음이고 두 출처가 그 분류를 적지 않는다. KMS 키 정책까지 본다는 내용 자체는 맞으므로 C4 보강 대상. ✅ **2026-11-10 재판정** — 지문도 해설도 「공식」을 주장하지 않고(「확인할 네 층을 올바르게 묶은 것은」) 구성 요소 사실(KMS 키 정책 등)은 두 출처가 덮는다. 저작자의 묶음 자체는 C4 결함이 아니다."
     },
     {
       "id": "scs-t1-3-q14",
@@ -301,8 +306,8 @@
   ],
   "summary": {
     "suspectOrWrong": 0,
-    "weakOrUnverifiedSources": 2,
+    "weakOrUnverifiedSources": 0,
     "outOfScope": 0,
-    "needsReview": 2
+    "needsReview": 0
   }
 }

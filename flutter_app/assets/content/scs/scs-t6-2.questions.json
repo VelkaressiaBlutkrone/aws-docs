@@ -27,8 +27,8 @@
       },
       "sources": [
         {
-          "title": "Managing stacks across accounts and Regions with StackSets - 권한 모델",
-          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html"
+          "title": "StackSets concepts — 권한 모델과 자동 배포",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
         }
       ],
       "verified": false
