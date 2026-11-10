@@ -1,0 +1,318 @@
+{
+  "taskId": "scs-t4-1",
+  "domain": 4,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t4-1-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "계정 인스턴스로는 계정 액세스 관리와 권한 세트가 안 되고 조직 인스턴스가 전 프로덕션 권장 — probe 확인."
+    },
+    {
+      "id": "scs-t4-1-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-51 그대로 — 권한 세트가 못 하는 셋(사용자 지정 신뢰 정책·역할 태그·구성 가능한 역할 경로)과 IAM 계정 액세스 관리자로의 이동, 다중 계정 권한 전제."
+    },
+    {
+      "id": "scs-t4-1-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "사용자 풀(누구인가·JWT)과 ID 풀(어느 리소스에 닿나·임시 자격 증명 교환)의 구분, JWT는 AWS 자격 증명이 아니라는 갈림길."
+    },
+    {
+      "id": "scs-t4-1-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html",
+          "fetched": false,
+          "supports": "partial"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
+          "fetched": true,
+          "supports": "partial"
+        }
+      ],
+      "recommendation": "review",
+      "notes": "[cannot-verify-source] ⚠️⚠️ **확인 불가로 판정을 낮췄다.** SMS MFA 종료를 `service-lifecycle.html`에 귀속하는데, 그 페이지의 **134항목 표가 JS로 렌더돼 curl 추출에 나오지 않는다**(본문 2,292자에 용어 정의 산문만 있고 **대조군 `Simple AD`도 0건** — 추출 실패이므로 「없다」를 말할 수 없다). 착수 노트 §5는 선행 실측으로 「그 목록에 없다」(G-16 재현)고 적어 두었다. **검수자가 브라우저나 문서 리더로 SMS MFA 항목 유무를 확인한 뒤** 둘째 출처를 걷거나 유지한다 — 사실 자체(SMS 기반 MFA 활성화 지원 종료)는 IAM MFA 페이지가 근거다."
+    },
+    {
+      "id": "scs-t4-1-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "등록 최대 8개·로그인 하나·패스키·보안 키 콘솔 전용·루트 MFA는 루트 자격 증명에만."
+    },
+    {
+      "id": "scs-t4-1-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "MFA는 AssumeRole·GetSessionToken 둘, 세션 정책 미지원은 GetSessionToken 하나 → 교집합이 AssumeRole."
+    },
+    {
+      "id": "scs-t4-1-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "콘솔 SSO는 GetFederationToken만. 비교표 제약 열이 근거다."
+    },
+    {
+      "id": "scs-t4-1-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "1시간은 기본값이고 상한은 역할의 최대 세션 기간 — 「AssumeRole 최대 1시간」 오해를 정면으로 가른다."
+    },
+    {
+      "id": "scs-t4-1-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "실제 만료 = 설정값과 서명 자격 증명 수명 중 먼저 오는 쪽. 역할 1시간·인스턴스 프로파일 약 6시간·IAM 사용자 7일."
+    },
+    {
+      "id": "scs-t4-1-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "소유자 토큰 성질과 서명 나이·네트워크 경로 조건, PUT 덮어쓰기."
+    },
+    {
+      "id": "scs-t4-1-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "거부 메시지의 두 한계(개수 미표기·여러 유형 중 하나만)와 여덟 정책 유형."
+    },
+    {
+      "id": "scs-t4-1-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "userIdentity 항상 존재, VpceAccessDenied, sourceIPAddress의 콘솔 경유 동작, userAgent 1 KB 절단."
+    },
+    {
+      "id": "scs-t4-1-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "조건 키 이름 대소문자 비구분과 VPC 엔드포인트 정책 거부가 CloudTrail에 안 남는 조건."
+    },
+    {
+      "id": "scs-t4-1-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/directoryservice/latest/admin-guide/what_is.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Simple AD 미지원 목록과 RDS for SQL Server 비호환, AD Connector도 비호환 → Managed Microsoft AD. ⭐ 유지 관리 상태 귀속이 정당한 자리(그 서비스는 Lifecycle Changes 목록에 있다)."
+    },
+    {
+      "id": "scs-t4-1-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "권한 세트 수정 시 역할·정책 동반 갱신과 다중 계정 권한 전제."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 1,
+    "outOfScope": 0,
+    "needsReview": 1
+  }
+}

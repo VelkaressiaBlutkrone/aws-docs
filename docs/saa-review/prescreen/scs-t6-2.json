@@ -1,0 +1,318 @@
+{
+  "taskId": "scs-t6-2",
+  "domain": 6,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t6-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 7,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html",
+          "fetched": true,
+          "supports": "no"
+        }
+      ],
+      "recommendation": "resource",
+      "notes": "[source-is-toc-landing-page+probe] ⚠️⚠️ **인용 페이지가 목차만 있는 장 랜딩 페이지다**(본문 2,361자를 직접 내려받아 확인). 「자동 배포는 서비스 관리형 권한에만 있다」·「서비스 관리형은 StackSets가 역할을 대신 만든다」·「조직 밖 계정은 셀프 관리형뿐」이 그 페이지에 없고 목차 항목 제목만 있다. 같은 Task의 q2·q3·q4가 쓰는 `stacksets-concepts.html`로 옮기면 닫힌다 — §4-9 계열의 「URL은 200인데 그 페이지에 인용 사실이 없다」. ⚠️⚠️ **probe로 양쪽을 확인했다** — 인용한 랜딩 페이지(2,361자)에는 `only available`·`automatically deploy`·`creates the IAM roles`가 **0건**이고(대조군 `StackSets concepts`·`service-managed permissions` 통과 — 목차 항목 제목이다), 교체 대상 `stacksets-concepts.html`(16,307자)에는 `automatic deployment`와 `service-managed`가 **실재**한다. 그 페이지로 옮기면 닫히고, 같은 Task의 q2·q3·q4가 이미 쓰는 출처다."
+    },
+    {
+      "id": "scs-t6-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "StackSet은 리전 리소스 + 「일부 스택의 템플릿만 선택적 업데이트 불가」."
+    },
+    {
+      "id": "scs-t6-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "스택 인스턴스가 없을 때만 삭제 + `Retain Stacks`로 독립 스택 전환."
+    },
+    {
+      "id": "scs-t6-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "백분율 내림·Strict Failure Tolerance의 「실패 허용 + 1」·실패 허용은 리전별."
+    },
+    {
+      "id": "scs-t6-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lint.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-guard.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "cfn-lint(스키마·구문, 기본 us-east-1)와 Guard(조직 정책, 변경 세트·Config 구성 항목)의 분담과 「둘 다 로컬 검증」."
+    },
+    {
+      "id": "scs-t6-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 태그 정책은 태그되지 않은 리소스를 평가하지 않으므로 「태그 없는 생성 금지」는 `aws:RequestTag`·`aws:TagKeys` 조건 키의 몫."
+    },
+    {
+      "id": "scs-t6-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Organizations(정책 관리)와 Resource Groups(준수 관리)의 역할 분담."
+    },
+    {
+      "id": "scs-t6-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "태그에 PII 금지(공식 Important)와 키·값 대소문자 구분 + IAM 리소스의 추가 검증."
+    },
+    {
+      "id": "scs-t6-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "TagOption은 AWS 태그가 아니라 태그를 만드는 템플릿 + 단일 계정 → OU → 조직 순 배포 권고."
+    },
+    {
+      "id": "scs-t6-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-prereq.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Firewall Manager 전제 조건 순서와 「요금은 기반 서비스에 붙는다」."
+    },
+    {
+      "id": "scs-t6-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-administrators.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "관리 범위 조건 셋과 기본 관리자만 3자 방화벽·전체 범위."
+    },
+    {
+      "id": "scs-t6-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "적용 범위 셋과 신규 계정 자동 적용, 다루는 보호 다섯."
+    },
+    {
+      "id": "scs-t6-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/ram/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "RAM 공유와 리소스 기반 정책 공유의 가시성 차이 + `PromoteResourceShareCreatedFromPolicy` — probe 확인."
+    },
+    {
+      "id": "scs-t6-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ 인용 페이지를 내려받아 확인했다 — 「어디서 시작할 수 있는지와 어떤 인스턴스 유형」 제한, 「포트폴리오로 묶고 제약 조건과 리소스 태그를 더한 뒤 IAM 사용자와 그룹에 접근 권한」, 「새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오에 전파」가 셋 다 글자 그대로 있다."
+    },
+    {
+      "id": "scs-t6-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/arguide/intro-app-registry.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ AppRegistry는 2026-07-30부터 신규 고객 차단이고 **Service Catalog 본체는 정상**이라는 구분(§5 표의 「기능만 닫혔다」 계열)."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 1,
+    "outOfScope": 0,
+    "needsReview": 1
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "taskId": "scs-t2-2",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t2-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "휘발성 순서(메모리 → 디스크 → 격리)와 종료 보류 판단."
+    },
+    {
+      "id": "scs-t2-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Run Command로 SSM 문서 실행, 포렌식 계정 S3 저장, OS·커널 메타데이터 태그."
+    },
+    {
+      "id": "scs-t2-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "격리 플래그 true이면 수집 결과와 무관하게 격리 — 공식이 못박는 자리."
+    },
+    {
+      "id": "scs-t2-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "partial"
+        }
+      ],
+      "recommendation": "review",
+      "notes": "[answer-element-unsourced+probe] 정답의 둘째 요소인 Athena가 인용 페이지(AnalyzingLogData)에 없다. t1-2-q2·t1-2-q11과 같은 계열이고 ⚠️ G-31로 Athena 페이지를 재지 않았다 — 출처 추가 전 실측이 선행이다. ⚠️⚠️ **probe로 확인했다** — 같은 페이지에 `Athena` 0건(대조군 통과). t1-2-q2와 같은 계열이므로 한 번에 닫는다."
+    },
+    {
+      "id": "scs-t2-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "조인·하위 쿼리는 SQL, 동시 실행 QL 100 / PPL·SQL 각 15."
+    },
+    {
+      "id": "scs-t2-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "필드 자동 발견 대상과 쿼리 결과 KMS 암호화 — probe 확인."
+    },
+    {
+      "id": "scs-t2-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/exposure-findings.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ D-09를 지켜 「신 Security Hub」의 노출 조사 결과로 적고 CSPM과 가른다. 생성 과정 세 평가도 공식 서술."
+    },
+    {
+      "id": "scs-t2-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/exposure-findings.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "「노출 조사 결과가 없다 ≠ 안전하다」와 제약 둘(주 리소스 최대 하나 · 기여 특성 부족 시 미생성)."
+    },
+    {
+      "id": "scs-t2-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "S3 Protection 권고와 공격 시퀀스의 단일 계정 범위."
+    },
+    {
+      "id": "scs-t2-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "격리의 두 축(네트워크·자격 증명)과 이미 발급된 임시 자격 증명의 외부 유효성."
+    },
+    {
+      "id": "scs-t2-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html",
+          "fetched": true,
+          "supports": "partial"
+        }
+      ],
+      "recommendation": "review",
+      "notes": "[answer-not-in-source] ⚠️ probe로 절반만 닫혔다 — `a year`와 `historical`은 Detective 페이지에 실재해 해설의 「최대 1년」은 정당하다. 그러나 **정답 보기의 세 확인**(침해 시점·백업 무결성·경로 차단)은 그 페이지에 없다. 랜섬웨어 복원 순서를 적는 공식 페이지를 보강해야 한다."
+    },
+    {
+      "id": "scs-t2-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/disk-forensics-acquisition-workflow.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 두 단계 복사의 이유(계정 침해·공유 스냅샷 삭제 대비)를 공식 문구로 정확히 인용한다."
+    },
+    {
+      "id": "scs-t2-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Detective가 탐지하지 않는다 + 최대 1년 — probe 확인."
+    },
+    {
+      "id": "scs-t2-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Investigation과 조사 결과 그룹의 구분, StartInvestigation API — probe 확인."
+    },
+    {
+      "id": "scs-t2-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html",
+          "fetched": true,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 지원 소스 목록과 실제로 당겨오는 범위를 가르는 자리다 — 검수에서 이 문항이 기준점이 된다."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 2,
+    "outOfScope": 0,
+    "needsReview": 2
+  }
+}
