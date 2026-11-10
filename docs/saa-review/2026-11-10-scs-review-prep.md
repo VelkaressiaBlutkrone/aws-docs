@@ -74,6 +74,8 @@ flutter test                          # 기준선은 CLAUDE.md 빌드·테스트
 
 ## 3. AI가 이미 끝낸 준비
 
+⭐ **T2 의미·출처 1차 패스가 2026-11-10에 끝났다** — 240문항 전수 판정이 `docs/saa-review/prescreen/scs-t*.json` 16편에 있고 요약은 [2026-11-10-scs-t2-prescreen.md](2026-11-10-scs-t2-prescreen.md)다. `pass` **228** · `review` **10** · `resource` **2**이고 **C1(정답 오류)은 0건**이다. 걸린 12건은 전부 **C4 출처 축**이다. ⚠️ 그 패스는 C1을 보증하지 않는다 — 검수자가 뷰어에서 직접 판정한다.
+
 | 항목 | 결과 |
 |---|---|
 | 구조 전수 사전심사 | `prescreen.mjs build scs` — 문항 플래그 **0건** · 뱅크 플래그 **0 Task** |

@@ -1,0 +1,303 @@
+{
+  "taskId": "scs-t6-3",
+  "domain": 6,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t6-3-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluating-your-resources.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-67 — 「사전 평가는 수정하지도 배포를 막지도 않는다」는 공식 Note와 막는 통제(SCP·RCP·선언적 / 후크 기반 사전 제어)의 구분."
+    },
+    {
+      "id": "scs-t6-3-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "평가 결과 넷과 `NOT_APPLICABLE`의 공식 예시(`alb-desync-mode-check`), 「비준수 0 ≠ 전부 검사됨」."
+    },
+    {
+      "id": "scs-t6-3-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "트리거 셋(구성 변경·주기적·하이브리드)과 범위 넷."
+    },
+    {
+      "id": "scs-t6-3-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "수정은 SSM Automation 문서가 수행하고 Config 규칙은 평가만."
+    },
+    {
+      "id": "scs-t6-3-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "준수 팩의 단위 배포와 SSM 문서 경로, 프로세스 검사."
+    },
+    {
+      "id": "scs-t6-3-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/aggregate-data.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 애그리게이터는 읽기 전용 뷰라 규칙 배포 불가 + 추가 비용 없음·Organizations 소스는 권한 부여 불필요."
+    },
+    {
+      "id": "scs-t6-3-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "ASFF·자동화 규칙·EventBridge·사용자 지정 작업의 역할. ⚠️ 내 탐지기가 이 문항을 `Audit Manager`가 **오답 반박 문장에만** 나온다고 표시했는데 그것이 **설계대로다**(G-105 — 상태 메모를 거기 달면 그 상태가 그 보기를 틀리게 만든 이유처럼 읽힌다)."
+    },
+    {
+      "id": "scs-t6-3-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Config의 1차 산출물이 구성의 시계열이라는 정리와 전제 다섯."
+    },
+    {
+      "id": "scs-t6-3-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html",
+          "fetched": true,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ Artifact 페이지를 내려받아 확인했다 — ISO·PCI·SOC와 인증 기관 인증서, 「무료」가 그 페이지에 있다. Audit Manager의 신규 고객 차단 상태도 가르치는 층에 적혀 있다."
+    },
+    {
+      "id": "scs-t6-3-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 「증거를 모으지만 준수 자체를 평가하지 않는다」는 공식 Note + 신규 고객 차단."
+    },
+    {
+      "id": "scs-t6-3-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ 같은 페이지의 Note — 「AWS 고객은 자기 회사의 보안과 준수를 입증하는 문서를 직접 개발하거나 확보할 책임이 있다」와 Assurance Assistant의 범위까지 맞다."
+    },
+    {
+      "id": "scs-t6-3-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "평가 비활성화·온프레미스 및 멀티클라우드 증거 업로드·주제 전문가 위임 + 상태 표기."
+    },
+    {
+      "id": "scs-t6-3-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ D-17 — Tool(수동 자가 검토·위험·개선 계획·마일스톤)과 Agent(프리뷰)를 가르고 묻는 쪽이 Tool이라는 것까지 적는다."
+    },
+    {
+      "id": "scs-t6-3-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Agent의 프로필 엔티티와 출력 넷, 프리뷰 상태."
+    },
+    {
+      "id": "scs-t6-3-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⚠️ 내 탐지기가 `Audit Manager` 트리거로 표시했지만 **이 문항은 그 이름을 오답 반박에서만 쓴다** — q7과 같은 설계 판정이다. 산출물과 어휘 셋(워크로드·렌즈·마일스톤), HRI·MRI 분류는 정확하다."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 0
+  }
+}

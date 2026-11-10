@@ -1,0 +1,303 @@
+{
+  "taskId": "scs-t5-3",
+  "domain": 5,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t5-3-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "회전 형태 셋과 관리형·관리형 외부가 Lambda를 쓰지 않는다는 갈림길."
+    },
+    {
+      "id": "scs-t5-3-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials_rotation-alternating.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "교대 사용자 전략의 전제가 보안 암호 **둘**이고 관리자 사용자 권한이 필요하다."
+    },
+    {
+      "id": "scs-t5-3-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Secrets Manager(장기 보관·회전)와 STS(짧은 발급)의 축 구분."
+    },
+    {
+      "id": "scs-t5-3-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "가져온 키 자료로 암호화한 암호문도 KMS 밖에서 복호화 불가 + 암호문 형식 비공개. 외부 키 저장소와의 구분도 정확하다."
+    },
+    {
+      "id": "scs-t5-3-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 「회전은 유출된 데이터 키의 영향을 완화하지 못한다」는 공식 단정과 회전 매트릭스(자동=AWS_KMS 대칭 / 온디맨드=+EXTERNAL / 그 밖은 수동)."
+    },
+    {
+      "id": "scs-t5-3-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "가져온 키 자료의 만료·수동 삭제·재가져오기 경로와 키 삭제 예약(7~30일 뒤 복구 불가)의 대비."
+    },
+    {
+      "id": "scs-t5-3-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 「모든 옵션이 똑같이 안전하고 차이는 운영 절충」이라는 공식 서술로 「CloudHSM이 더 안전하다」는 전제 자체를 깨뜨린다 — 이 Task에서 가장 시험다운 자리."
+    },
+    {
+      "id": "scs-t5-3-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/keystore-cloudhsm.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "사용자 지정 키 저장소 제약 연쇄(대칭 전용 → 비대칭·HMAC·가져오기·다중 리전 불가 + 수동 회전) + 계정·리전당 10개 합산."
+    },
+    {
+      "id": "scs-t5-3-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/keystore-external.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "XKS 프록시만 상대·이중 암호화·영구 차단 시 복구 불가 + 공유 책임 이동과 공식 경고."
+    },
+    {
+      "id": "scs-t5-3-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ 인용 페이지를 내려받아 확인했다 — `you control your own user management (outside of IAM roles)`와 `generate, store, import, export, manage, and use`, FIPS·비FIPS 모드, KMS·Payment Cryptography 안내가 모두 그 페이지에 있다."
+    },
+    {
+      "id": "scs-t5-3-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "수집 시점 마스킹·비소급·`logs:Unmask`·유출 지점 셋·계정 전체와 개별 정책의 합집합 적용."
+    },
+    {
+      "id": "scs-t5-3-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/sns/latest/dg/sns-message-data-protection-configure.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-56 — SNS 메시지 데이터 보호가 신규 고객에게 제공되지 않는다는 상태를 그 기능 문서 기준으로 적고 축을 CloudWatch Logs 쪽에 둔다."
+    },
+    {
+      "id": "scs-t5-3-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 「대부분의 AWS 서비스가 다중 리전 키를 단일 리전 키처럼 다룬다」와 S3 CRR 예시를 공식이 직접 드는 자리."
+    },
+    {
+      "id": "scs-t5-3-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "변환 불가·AWS 관리형 키는 항상 단일 리전·관련 키의 독립 관리 축과 과금·쿼터."
+    },
+    {
+      "id": "scs-t5-3-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/privateca/latest/userguide/PcaWelcome.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[probe-algorithms] 프라이빗 CA의 리전 리소스 성질과 EKS 통합 방향은 정확하다. ⚠️ 해설 마지막의 `ML_DSA_44·65·87` 발급 지원과 「KMS는 ML-DSA·ML-KEM에 키 자료를 가져올 수 없다」는 두 수치형 주장이 인용 페이지(PcaWelcome)에 있는지 probe 대상 — 사실이면 그대로, 없으면 출처를 보강한다."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 0
+  }
+}
