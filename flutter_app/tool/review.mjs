@@ -4,7 +4,9 @@
 //   node tool/review.mjs build <cert>
 //   node tool/review.mjs flip  <cert> <taskId> [--force]
 //
-// <cert>는 아래 CERTS의 키(clf·saa·soa·dea·mla).
+// <cert>는 아래 CERTS의 키다. ⚠️ 여기에 목록을 적지 않는다 — 2026-11-10 실측에서
+// 이 줄이 `clf·saa·soa·dea·mla`로 멈춰 있어 **그 뒤 등록한 aif·scs가 빠져** 있었다.
+// 런타임 USAGE는 `Object.keys(CERTS)`에서 유도하므로 늘 정확하다(인자 없이 실행).
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { execSync } from 'node:child_process';

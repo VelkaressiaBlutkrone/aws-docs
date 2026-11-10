@@ -3,7 +3,10 @@
 // review.mjs의 CERTS·questionFlags를 재사용(DRY). 순수 함수는 export(테스트용);
 // main()은 import.meta.url 가드로 직접 실행 시만.
 //
-// 사용법: node tool/prescreen.mjs build <cert>   (<cert>: clf·saa·soa·dea·mla)
+// 사용법: node tool/prescreen.mjs build <cert>
+//   ⚠️ <cert>는 `review.mjs`의 CERTS 키이고 **여기에 목록을 적지 않는다** —
+//   2026-11-10 실측에서 이 줄과 아래 오류 메시지가 `clf·saa·soa·dea·mla`로 멈춰
+//   있어 그 뒤 등록한 **aif·scs가 빠져** 있었다. 오류 메시지는 CERTS에서 유도한다.
 // 산출: build/<cert>_review/<taskId>.prescreen.json (문항id별 구조·정합성 플래그).
 //       뷰어(`review.mjs build <cert>`)와 같은 디렉터리라 자격증별로 한곳에 모인다.
 //       T2(AI 의미+출처 패스)와 사람 검수가 이 위에 의미 판단을 얹는다.
@@ -14,7 +17,7 @@
 // 가이드의 도메인 수와 맞는지는 `review.test.mjs`가 기계로 검사한다).
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
-import { appPath, questionFlags, resolveCert } from './review.mjs';
+import { appPath, CERTS, questionFlags, resolveCert } from './review.mjs';
 
 /** taskId `<cert>-t{D}-{n}`에서 도메인 D 추출. 형식·범위가 안 맞으면 null. */
 export function domainOfTaskId(taskId, cert) {
@@ -114,7 +117,9 @@ function cmdBuild(code) {
 export function main(argv) {
   const [cmd, code] = argv;
   if (cmd === 'build' && code) return cmdBuild(code);
-  console.error('사용법: node tool/prescreen.mjs build <cert>   (clf·saa·soa·dea·mla)');
+  console.error(
+    `사용법: node tool/prescreen.mjs build <cert>   (${Object.keys(CERTS).join('·')})`,
+  );
   process.exit(1);
 }
 
