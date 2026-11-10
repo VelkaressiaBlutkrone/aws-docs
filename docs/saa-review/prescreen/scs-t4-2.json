@@ -1,0 +1,313 @@
+{
+  "taskId": "scs-t4-2",
+  "domain": 4,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t4-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 외부 ID를 제3자가 생성·관리한다는 공식 서술과 역할 ARN이 비밀이 아니라는 전제를 둘 다 적는다."
+    },
+    {
+      "id": "scs-t4-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "경로는 API·CLI·PowerShell 전용, `user/*`가 경로 있는 사용자까지 매칭, 세션 정책의 불완전 ARN 예외."
+    },
+    {
+      "id": "scs-t4-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/rolesanywhere/latest/userguide/introduction.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "신뢰 경계가 계정 수준이라 앵커를 나눠도 격리가 없고 조직 수준 제어·자동 통합이 없다 — probe 확인."
+    },
+    {
+      "id": "scs-t4-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "ABAC·RBAC 다섯 축 비교."
+    },
+    {
+      "id": "scs-t4-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "세션 태그 전달 구성과 「RBAC의 역할 ≠ IAM 역할」을 공식이 못박는 자리."
+    },
+    {
+      "id": "scs-t4-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "세 조건 키 축과 보안 주체 태그, 그리고 공존 권고."
+    },
+    {
+      "id": "scs-t4-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "같은 계정 합집합 / 크로스 계정 양쪽 허용 필요 + 경계·SCP·RCP·세션 정책이 끼면 교집합."
+    },
+    {
+      "id": "scs-t4-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ D-15의 비대칭을 더 구체적인 페이지(access_policies_boundaries) 기준으로 정확히 적는다."
+    },
+    {
+      "id": "scs-t4-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "세션 ARN은 세션 생성 후에 더해져 세션 정책으로 좁혀지지 않는다 — q8과 쌍을 이루는 자리."
+    },
+    {
+      "id": "scs-t4-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-97로 교정된 문항이다 — 지문에서 정책 유형 토큰을 빼고 정답·해설이 「시뮬레이터는 RCP를 지원하지 않는다」를 적는 형태."
+    },
+    {
+      "id": "scs-t4-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/permissions-required_policy-simulator.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "두 모드와 한계 넷(경계 하나·리소스 정책 직접 제공·엔드포인트 정책·역할 체이닝)."
+    },
+    {
+      "id": "scs-t4-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_policy-validator.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-reference-policy-checks.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "조사 결과 4유형·추가 요금 없음·RCP·신뢰 정책·Roles Anywhere 전용 검사."
+    },
+    {
+      "id": "scs-t4-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "기능 6종과 신뢰 영역 개념."
+    },
+    {
+      "id": "scs-t4-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "외부 액세스는 리전마다·미사용 액세스는 리전 무관."
+    },
+    {
+      "id": "scs-t4-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "리소스 유형 15종에 EBS·RDS 스냅샷이 들고 외부 엔터티 정의가 넓다."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 0
+  }
+}

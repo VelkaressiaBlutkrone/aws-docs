@@ -1,0 +1,298 @@
+{
+  "taskId": "scs-t2-1",
+  "domain": 2,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t2-1-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "OpsItem 자동 생성 경로 둘(알람 ALARM 진입 · EventBridge)과 중복 회피 로직(관련 리소스 ARN) — 인용 페이지의 서술과 일치."
+    },
+    {
+      "id": "scs-t2-1-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html",
+          "fetched": false,
+          "supports": "partial"
+        }
+      ],
+      "recommendation": "review",
+      "notes": "[answer-element-unsourced] 정답의 둘째 요소인 「SageMaker AI 노트북」이 인용 페이지(OpsCenter)에 없다. 지문이 「공식 가이드가 드는 두 수단」이라 근거는 시험 가이드 `기술 2.1.x` 본문일 가능성이 높다 — 그 귀속을 출처에 반영할지 C4로 판단."
+    },
+    {
+      "id": "scs-t2-1-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "공개 API 연동과 CloudWatch Application Insights(.NET·SQL Server) 통합 둘 다 공식 서술."
+    },
+    {
+      "id": "scs-t2-1-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "AWS Config·CloudTrail·CloudWatch Events를 리소스 단위로 집계한다는 이점 서술과 일치."
+    },
+    {
+      "id": "scs-t2-1-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "소급 적용 없음 + 활성화한 리전에서만. 사전 준비 지침으로 끌어내는 구성도 작업 2.1에 맞다."
+    },
+    {
+      "id": "scs-t2-1-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "구독이 덮는 범위(1,500 WCU·기본 본문 크기)와 덮지 않는 넷. 1,800 WCU + Bot Control이 두 항목에 걸리는 계산이 맞다."
+    },
+    {
+      "id": "scs-t2-1-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "자동 L7 완화의 150 WCU 규칙 그룹이 보호 팩 사용량에 더해져 1,420 + 150 = 1,570 > 1,500."
+    },
+    {
+      "id": "scs-t2-1-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "멤버 계정 구독의 결제 계정 청구와 통합 결제 가족 전체 적용, 그리고 「구독만으로 보호되지 않는다」 단서까지 정확하다."
+    },
+    {
+      "id": "scs-t2-1-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "실험 템플릿 3요소와 중단 조건 = 내가 정의한 CloudWatch 알람."
+    },
+    {
+      "id": "scs-t2-1-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "실제 리소스에 실제 작업 + 사전 프로덕션 선행 권고."
+    },
+    {
+      "id": "scs-t2-1-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/resilience-hub/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ 인용 페이지 본문을 직접 내려받아 확인했다 — `Within AWS Resilience Hub, you can also create and run AWS Fault Injection Service experiments`가 글자 그대로 있다."
+    },
+    {
+      "id": "scs-t2-1-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "단일 계정 실험과 다중 계정 실험의 구분."
+    },
+    {
+      "id": "scs-t2-1-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/architecture-overview.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "탐지 → 보안 계정 Security Hub → EventBridge → Step Functions 경로와 포렌식 AMI 선행 요건. ⚠️ 이 솔루션은 이름이 `… for Amazon EC2 and EKS`로 바뀌고 스스로를 Guidance로 부른다(G-07) — 인용 URL은 실측 `200 r=0`이지만 flip 직전 재확인 대상이다."
+    },
+    {
+      "id": "scs-t2-1-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/r53recovery/latest/dg/what-is-route53-recovery.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-29 규율이 반영된 자리다 — 준비 상태 확인이 임계 경로용이 아니라는 공식 서술과 2026-03-31 유지 관리 상태를 둘 다 적는다."
+    },
+    {
+      "id": "scs-t2-1-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/architecture-overview.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[framing-ok] 되돌릴 수 있는 작업과 없는 작업의 구분은 저작자의 묶음이지만, 「격리를 메모리 수집 뒤에 둔다」는 근거가 인용 페이지에 있어 추론이 출처에 닿는다."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 1,
+    "outOfScope": 0,
+    "needsReview": 1
+  }
+}

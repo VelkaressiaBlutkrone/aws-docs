@@ -1,0 +1,313 @@
+{
+  "taskId": "scs-t1-2",
+  "domain": 1,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t1-2-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-flow-logs.html",
+          "fetched": false,
+          "supports": "partial"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html",
+          "fetched": true,
+          "supports": "partial"
+        }
+      ],
+      "recommendation": "review",
+      "notes": "[answer-element-unsourced] 정답의 세 짝 중 CloudTrail 축을 뒷받침하는 출처가 없다(출처는 TGW 흐름 로그와 Resolver 쿼리 로그 둘뿐). 사실은 정확하므로 C4만 보강 대상이다."
+    },
+    {
+      "id": "scs-t1-2-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 8,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "partial"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
+          "fetched": true,
+          "supports": "partial"
+        }
+      ],
+      "recommendation": "review",
+      "notes": "[answer-not-in-source+probe] 정답이 Athena를 지목하는데 두 출처 어디에도 Athena가 없다(AnalyzingLogData는 Logs Insights 대상 범위, what-is-securityhub는 소급 적용). ⚠️ G-31로 Athena 전용 페이지를 재지 않았으므로 출처 추가 시 그 페이지를 먼저 실측해야 한다. ⚠️⚠️ **probe로 확인했다** — `AnalyzingLogData.html`(7,468자)에 `Athena`가 **0건**이고 대조군(`filterIndex`·`concurrent`)은 통과한다. 정답이 지목하는 Athena를 뒷받침하는 출처가 없다."
+    },
+    {
+      "id": "scs-t1-2-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "리소스 검증 실패에도 멤버 계정에 추적이 만들어지고 get-trail-status로 확인 — 인용 페이지의 서술과 일치."
+    },
+    {
+      "id": "scs-t1-2-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "멤버 계정은 조회만 가능, 관리 계정 자격 상실 시 비조직 추적 — 같은 페이지."
+    },
+    {
+      "id": "scs-t1-2-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "콘솔 생성은 전부 다중 리전, 단일 리전 조직 추적은 CLI 전용."
+    },
+    {
+      "id": "scs-t1-2-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/internal-sources.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "기본 지원 소스는 별도 로깅 구성 불필요, CloudTrail 관리 이벤트만 예외."
+    },
+    {
+      "id": "scs-t1-2-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "계정당 사용자 지정 소스 50개 상한·객체당 단일 OCSF 클래스·전송 주기 5분~1일 — probe 확인."
+    },
+    {
+      "id": "scs-t1-2-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "데이터 소유권은 고객, 접두사·IAM 역할·Lake Formation 테이블·Glue 크롤러는 Security Lake가 생성."
+    },
+    {
+      "id": "scs-t1-2-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "filterIndex·비교 쿼리 QL 전용, 동시 실행 QL 100 / PPL·SQL 각 15 — probe 확인."
+    },
+    {
+      "id": "scs-t1-2-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "SQL·PPL에서 특수문자 필드는 백틱 — probe 확인."
+    },
+    {
+      "id": "scs-t1-2-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "소급 적용 없음. 다만 해설 마지막의 Athena 언급은 출처가 없다(q2와 같은 계열, 경미)."
+    },
+    {
+      "id": "scs-t1-2-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "G-31을 지켜 수치 없이 층 배치만 묻는다. 출처는 Logs Insights 페이지로 층 설명의 근거가 간접적이지만 단정 수치가 없어 통과."
+    },
+    {
+      "id": "scs-t1-2-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html",
+          "fetched": true,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "OCSF·Parquet 정규화와 두 묶음의 역할 구분이 정확하다."
+    },
+    {
+      "id": "scs-t1-2-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-flow-logs.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "TGW 흐름 로그 소유자 한정·Connect 어태치먼트 미지원·게시 시작까지 몇 분."
+    },
+    {
+      "id": "scs-t1-2-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "고유 질의만 기록되고 캐시 응답은 기록되지 않는다 — probe 확인."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 2,
+    "outOfScope": 0,
+    "needsReview": 2
+  }
+}

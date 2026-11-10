@@ -1,0 +1,303 @@
+{
+  "taskId": "scs-t6-1",
+  "domain": 6,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t6-1-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "조직의 보안 가치 넷과 「조직 차원 CloudTrail은 멤버 계정이 끄거나 수정할 수 없다」."
+    },
+    {
+      "id": "scs-t6-1-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ SCP가 관리 계정의 사용자·역할을 제한하지 않는다는 공식 서술에서 「관리 계정은 그 계정만 할 수 있는 작업에만」 권고를 끌어낸다."
+    },
+    {
+      "id": "scs-t6-1-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/control-behavior.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-68 — 예방 제어의 구현 수단이 SCP·RCP·선언적 정책 셋이고 탐지 제어는 Control Tower 지원 리전 한정."
+    },
+    {
+      "id": "scs-t6-1-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/proactive-controls.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 2026-11-10 배치가 교정한 자리(G-105) — 사전 제어의 `preCreate`·`preUpdate` 핸들러와 CloudFormation 경로 한정, 보안 문자열 미평가 한계까지 적는다."
+    },
+    {
+      "id": "scs-t6-1-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/control-behavior.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/controls.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "랜딩 존 4.0부터 필수 제어가 기본 적용되지 않는다 + 가이던스 셋의 적용 수준."
+    },
+    {
+      "id": "scs-t6-1-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/drift.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-69 — OU 이동 시 후크 기반만 교체되고 SCP·Config 규칙 제어는 수동 제거 + 계정 자동 등록을 켜면 드리프트 SNS를 쓸 수 없다."
+    },
+    {
+      "id": "scs-t6-1-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-24 해소분 그대로 — 관리 계정 영향·서비스 연결 역할 통제·유효 정책 보기의 세 비대칭과 첨부 한도 셋."
+    },
+    {
+      "id": "scs-t6-1-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "AI 서비스 옵트아웃이 SCP가 아니라 전용 선언적 유형이고 한도가 5개·2,500자."
+    },
+    {
+      "id": "scs-t6-1-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ 분리 시 속성 롤백 + 「유형 개수는 공식 안에서 목록이 어긋나므로 단정하지 않는다」(G-66)를 해설에서 명시한다."
+    },
+    {
+      "id": "scs-t6-1-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "위임된 관리자 등록 전 확인 둘(지원 여부·신뢰 액세스)과 받는 권한의 범위."
+    },
+    {
+      "id": "scs-t6-1-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "이 자격증 범위의 위임 대상 묶음과 Firewall Manager의 기본 관리자 전제."
+    },
+    {
+      "id": "scs-t6-1-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ G-70 — 두 기능의 비대칭(자격 증명 관리만 켜고 삭제하면 복구 경로가 없다)과 전제 셋."
+    },
+    {
+      "id": "scs-t6-1-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "특권 세션의 한계(0~900초·`TaskPolicyArn` 필수·관리형 정책 다섯)와 공식 시나리오 둘. ⚠️ 출처가 `STS/latest/APIReference/API_AssumeRoot.html`인데 **P-01이 은퇴로 등재한 것은 같은 가이드의 `welcome.html`**이고 이 페이지는 실측 `200 r=0`이다 — 혼동하지 않는다."
+    },
+    {
+      "id": "scs-t6-1-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "제거 대상 넷과 「Organizations 신규 계정은 기본적으로 루트 자격 증명이 없다」 + 감사 경로."
+    },
+    {
+      "id": "scs-t6-1-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "SEC03-BP03의 비상 접근 프로세스와 안티패턴 둘, 그리고 특권 세션이 그 역할을 상당 부분 대신한다는 연결."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 0
+  }
+}

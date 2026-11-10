@@ -1,0 +1,328 @@
+{
+  "taskId": "scs-t3-3",
+  "domain": 3,
+  "count": 15,
+  "questions": [
+    {
+      "id": "scs-t3-3-q1",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "공식 비교표 다섯 특성이 정확하다."
+    },
+    {
+      "id": "scs-t3-3-q2",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "⭐ NACL이 평가하지 않는 트래픽 일곱과 DNS Firewall·메타데이터 옵션으로의 처방."
+    },
+    {
+      "id": "scs-t3-3-q3",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/architectures.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "VPC 피어링 미지원·검사 VPC 유도·방화벽 서브넷 전용·자기 서브넷 미필터링."
+    },
+    {
+      "id": "scs-t3-3-q4",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "「고가용성을 위해 동시 사용」까지만 적고 부하 분산으로 넘기지 않는다 + VGW는 VPC 하나."
+    },
+    {
+      "id": "scs-t3-3-q5",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "IPv4·IPv6 동시 불가·변경 불가·터널당 5 Gbps는 TGW/Cloud WAN 전용·경로 MTU 탐색 미지원."
+    },
+    {
+      "id": "scs-t3-3-q6",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/MACsec.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "MACsec 점대점 한계와 must_encrypt / 기본값 should_encrypt."
+    },
+    {
+      "id": "scs-t3-3-q7",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ 인용 페이지 본문 확인 — 전통 모델의 「한 번 평가」 대비 요청마다 실시간 평가, ID·디바이스 관리 서비스 통합(AWS·타사)이 글자 그대로 있다."
+    },
+    {
+      "id": "scs-t3-3-q8",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 10,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html",
+          "fetched": true,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "[verified-directly] ⭐ 같은 페이지에 「모든 접근 시도 로깅」과 「애플리케이션당 시간 + 처리 데이터량 과금」이 있다."
+    },
+    {
+      "id": "scs-t3-3-q9",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html",
+          "fetched": true,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "Verified Access의 적용 범위를 넘는 요구를 VPN·DX로 되돌리는 구분."
+    },
+    {
+      "id": "scs-t3-3-q10",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "어플라이언스 모드 미설정 시 AZ 고정으로 응답이 다른 AZ 엔드포인트로 가 드롭되는 기제."
+    },
+    {
+      "id": "scs-t3-3-q11",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "검사 VPC의 서브넷별 라우트 테이블과 AZ당 서브넷 정확히 하나."
+    },
+    {
+      "id": "scs-t3-3-q12",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "ECMP 제약 넷과 DX 게이트웨이의 예외 조건."
+    },
+    {
+      "id": "scs-t3-3-q13",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "세 수단을 「질문의 모양」으로 가른다(G-83이 요구한 층 — 수치를 묻지 않는다)."
+    },
+    {
+      "id": "scs-t3-3-q14",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/working-with-network-access-scopes.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "MatchPaths·ExcludePaths 의미와 자동 추론·온디맨드 성질."
+    },
+    {
+      "id": "scs-t3-3-q15",
+      "scope": "in",
+      "answerVerdict": "likely-correct",
+      "answerConfidence": 9,
+      "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
+      "explanationVerdict": "ok",
+      "wrongExplanationsVerdict": "ok",
+      "ambiguityFlag": false,
+      "sources": [
+        {
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html",
+          "fetched": false,
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html",
+          "fetched": false,
+          "supports": "yes"
+        }
+      ],
+      "recommendation": "pass",
+      "notes": "EC2 전용·12시간·VPC 경계 셋과 평가 입력 구성."
+    }
+  ],
+  "summary": {
+    "suspectOrWrong": 0,
+    "weakOrUnverifiedSources": 0,
+    "outOfScope": 0,
+    "needsReview": 0
+  }
+}
