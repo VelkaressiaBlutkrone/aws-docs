@@ -4,9 +4,9 @@
 > 대상: **사람 검수자(사용자)**. **`verified` flip은 사람만**(AI flip 금지) — 이 문서는 그 사람 공정의 운영 가이드.
 > 전제 인프라(완료): T1 사전심사(`prescreen.mjs` — 2026-10-29부터 **자격증 일반형**)·T3 동적 불변식·T4 공개 게이트·T6 문서 스캔·T8 freeze 가드(**SAA 전용**).
 > 검수 뷰어·flip 도구는 **자격증 일반형**이다(2026-10-27): `tool/review.mjs build <cert>` · `flip <cert> <taskId>`
-> (`<cert>`: clf·saa·soa·dea·mla). 루브릭 C1~C6과 아래 절차는 **다섯 자격증에 그대로 쓴다** — 자격증 전용 주의(flip이 돌리는 테스트,
-> `flipAllowlist` 유무)는 7번 flip 항목에 모아 뒀다. **SOA-C03·DEA-C01 착수 노트**는 [2026-10-29-soa-dea-review-prep.md](2026-10-29-soa-dea-review-prep.md)가
-> 정본이다(게이트 산술·flip 선결 단정·표본 문제·환경 함정).
+> (`<cert>`: `review.mjs`의 CERTS 키 — **인자 없이 실행하면 목록이 나온다**. 2026-11-10 기준 clf·saa·soa·dea·mla·aif·scs **일곱 자격증**이고, ⚠️ 이 문서는 2026-11-10까지 **다섯**으로 멈춰 있어 aif·scs가 빠져 있었다). 루브릭 C1~C6과 아래 절차는 **일곱 자격증에 그대로 쓴다** — 자격증 전용 주의(flip이 돌리는 테스트,
+> `flipAllowlist` 유무)는 7번 flip 항목에 모아 뒀다. **자격증별 착수 노트** — SOA·DEA는 [2026-10-29-soa-dea-review-prep.md](2026-10-29-soa-dea-review-prep.md), **SCS는** [2026-11-10-scs-review-prep.md](2026-11-10-scs-review-prep.md)가
+> 정본이다(게이트 산술·flip 선결 실측·중복 스캔·환경 함정).
 
 ---
 
@@ -26,18 +26,22 @@
 | MLA-C01 | 12 | 321 | **22~35** (t1-1 22 · t1-2 23 · t1-3 24 · t2-1 23 · t2-2 28 · t2-3 27 · t3-1 25 · t3-2 23 · t3-3 26 · t4-1 30 · t4-2 35 · t4-3 35) |
 | SOA-C03 | 20 | 300 | **전 Task 15** (D1 5 · D2 4 · D3 4 · D4 3 · D5 4 Task) |
 | DEA-C01 | 17 | 256 | **t1-1만 16, 나머지 15** (D1 4 · D2 4 · D3 4 · D4 5 Task) |
+| AIF-C01 | 14 | 210 | **전 Task 15** (D1 3 · D2 3 · D3 4 · D4 2 · D5 2 Task) |
+| SCS-C03 | 16 | 240 | **전 Task 15** (D1 3 · D2 2 · D3 3 · D4 2 · D5 3 · D6 3 Task) |
 
-한 문항의 `fix`가 Task 전체를 묶으므로 **MLA는 한 Task의 검수 묶음이 SAA의 2배 안팎**이고, **SOA·DEA는 SAA와 같은 15문항 묶음**이다.
+한 문항의 `fix`가 Task 전체를 묶으므로 **MLA는 한 Task의 검수 묶음이 SAA의 2배 안팎**이고, **SOA·DEA·AIF·SCS는 SAA와 같은 15문항 묶음**이다.
 
 공개 게이트는 "전 도메인 일괄 flip"이 아니라 **도메인별 weighted capacity**다: 앱의 65문항 연습 세트에 공식 비중을 `allocateByWeight`(floor + 최대 잉여법, 동률은 선언 순서)로 배분한 수량 이상을 도메인별로 채우면 통합/약점 모의고사가 열린다.
 
-| 자격증 | 공식 비중(D1·D2·D3·D4[·D5]) | 필요 수량 = 65 배분 | 현재(2026-10-29 실측) |
+| 자격증 | 공식 비중(D1·D2·D3·D4[·D5][·D6]) | 필요 수량 = 65 배분 | 현재(2026-11-10 실측) |
 |---|---|---|---|
 | SAA-C03 | 30 · 26 · 24 · 20 | **D1 19 · D2 17 · D3 16 · D4 13** | ✅ 개방 (360/360 verified) |
 | MLA-C01 | 28 · 26 · 22 · 24 | **D1 18 · D2 17 · D3 14 · D4 16** | ✅ 개방 (321/321) |
 | CLF-C02 | 24 · 30 · 34 · 12 | D1 16 · D2 19 · D3 22 · D4 8 | ✅ 개방 (301/301) |
-| SOA-C03 | 22 · 22 · 22 · 16 · 18 (**5도메인**) | **D1 14 · D2 14 · D3 14 · D4 11 · D5 12** | 🔒 verified **0** — 도메인당 1 Task씩 **5 Task 75문항**이면 열린다 |
-| DEA-C01 | 34 · 26 · 22 · 18 | **D1 22 · D2 17 · D3 14 · D4 12** | 🔒 verified **0** — D1·D2는 15 < 필요라 2 Task씩, 합 **6 Task 91문항** |
+| SOA-C03 | 22 · 22 · 22 · 16 · 18 (**5도메인**) | **D1 14 · D2 14 · D3 14 · D4 11 · D5 12** | ✅ 개방 (300/300) |
+| DEA-C01 | 34 · 26 · 22 · 18 | **D1 22 · D2 17 · D3 14 · D4 12** | ✅ 개방 (256/256) |
+| AIF-C01 | 20 · 24 · 28 · 14 · 14 (**5도메인**) | **D1 13 · D2 16 · D3 18 · D4 9 · D5 9** | 🔒 verified **0** — ⚠️ **D2 16·D3 18이 한 Task(15)를 넘어** 그 둘만 2 Task씩, 합 **7 Task 105문항** |
+| SCS-C03 | 16 · 14 · 18 · 20 · 18 · 14 (**6도메인**) | **D1 10 · D2 9 · D3 12 · D4 13 · D5 12 · D6 9** | 🔒 verified **0** — 필요치 최대가 13(D4)이라 **도메인당 1 Task씩 6 Task 90문항**이면 열린다 |
 
 **권장 순서 = 그 자격증의 비중 큰 도메인부터.** 순서는 권장일 뿐 게이트가 아니다(판정은 수량으로 한다).
 
@@ -47,14 +51,16 @@
 | MLA-C01 | D1 28% → D2 26% → D4 24% → D3 22% |
 | SOA-C03 | D1·D2·D3 22%(동률) → D5 18% → D4 16% |
 | DEA-C01 | D1 34% → D2 26% → D3 22% → D4 18% |
+| AIF-C01 | D3 28% → D2 24% → D1 20% → D4·D5 14%(동률) |
+| SCS-C03 | D4 20% → D3·D5 18%(동률) → D1 16% → D2·D6 14%(동률) |
 
-수치의 정본은 코드다 — 비중은 `kExamReadinessRequirements`(`lib/data/content_index.dart`), 배분 결과는 `test/content_index_test.dart`가 다섯 자격증 모두 고정하고 있고 비중 자체는 `assets/exam_guides/<cert>.json`과 대조된다(대조 루프가 하드코딩 목록이 아니라 `kExamReadinessRequirements.keys`를 돌므로, 정책을 추가하면 테스트를 빠뜨려도 비중 동기화는 검증된다 — 2026-10-27부터). ⚠️ **정책이 없는 자격증은 fail closed**다(`hasPolicy: false` → `ready: false`) — 문항을 전부 flip해도 잠긴 채 남는다. SOA-C03·DEA-C01은 2026-10-27에 정책을 넣어 이 함정을 풀었고(그 전에는 둘 다 정책이 없었다), 남은 자격증(AIF·AIP·ANS·DOP·DVA·SAP·SCS)은 아직 정책이 없다. **정책 추가는 공개가 아니다** — verified가 0이면 전 도메인이 부족해 게이트는 그대로 잠겨 있다. SAA의 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
+수치의 정본은 코드다 — 비중은 `kExamReadinessRequirements`(`lib/data/content_index.dart`), 배분 결과는 `test/content_index_test.dart`가 **정책을 가진 일곱 자격증** 모두 고정하고 있고 비중 자체는 `assets/exam_guides/<cert>.json`과 대조된다(대조 루프가 하드코딩 목록이 아니라 `kExamReadinessRequirements.keys`를 돌므로, 정책을 추가하면 테스트를 빠뜨려도 비중 동기화는 검증된다 — 2026-10-27부터). ⚠️ **정책이 없는 자격증은 fail closed**다(`hasPolicy: false` → `ready: false`) — 문항을 전부 flip해도 잠긴 채 남는다. SOA-C03·DEA-C01은 2026-10-27에 정책을 넣어 이 함정을 풀었고(그 전에는 둘 다 정책이 없었다), **AIF-C01은 2026-11-05 · SCS-C03은 2026-11-09에 문항 저작 전에 넣었다**(⚠️ SCS는 이 레포의 **첫 6도메인 자격증**이라 5키를 전제한 코드가 있으면 거기서 드러난다). 남은 자격증(AIP·ANS·DOP·DVA·SAP)은 아직 정책이 없다. **정책 추가는 공개가 아니다** — verified가 0이면 전 도메인이 부족해 게이트는 그대로 잠겨 있다. SAA의 필요/현재 수량표는 [2026-08-06-weighted-ready-batch.md](2026-08-06-weighted-ready-batch.md).
 
 - 라이브 게이트 함수는 **`certExamHasWeightedCapacity`**(= `examWeightedCapacityStatus().ready`)다. 홈 시험 섹션·`cert_detail`·`exam_page`·`cert_exam_page`·`weighted_exam`이 모두 이 함수를 쓴다.
 - ⚠️ **옛 게이트 `certExamIsBalanced`("전 도메인에 검증 문항 1개 이상")는 2026-10-20에 코드에서 제거됐다** — 2026-08-06 weighted capacity 게이트가 역할을 대신한 뒤 `lib` 호출이 0이었다. 이 문서의 옛 서술(도메인 일괄 flip·부분 flip 미노출)이 그 함수를 공개 조건으로 적고 있었다. 지금 게이트는 `certExamHasWeightedCapacity` 하나다.
 - 도메인 순서는 **권장**일 뿐 게이트가 아니다 — 판정은 순서가 아니라 수량으로 한다. SAA에서는 실제로 D3·D4가 먼저 verified됐고 부족한 쪽이 D1·D2였다(2026-10-28 `t2-5` flip으로 D2를 채워 게이트가 열렸다).
 - ⚠️ **부분 flip은 "열림"이 아니다.** Task 하나만 flip하면 `certHasVerifiedQuestions`가 true가 되어 **약점 모의고사 줄이 잠긴 채로 노출**되고 통합 모의고사는 "준비 중"으로 남는다(MLA `t2-2` 단독 flip에서 실측). 도메인 하나라도 미달이면 게이트는 닫힌 채다.
-- ⚠️ **flip 선결 — 게이트가 열리는 순간 깨지는 테스트 단정을 먼저 치운다.** `flip`은 파일을 **다 쓴 뒤** 마지막에 `cert.tests`를 돌리므로, `content_index_test.dart`에 상태를 박은 단정이 남아 있으면 flip 명령이 레드로 끝나고 파일은 이미 바뀐 상태로 남는다(`--force`는 **쓰기 전** 구조 검사만 건너뛴다). **순서는 ① 선언 변경 → ② 사람 flip → ③ 커밋**이고, 리터럴로 남길 것은 **정책값뿐**이다. SOA·DEA의 해당 단정 목록은 [착수 노트](2026-10-29-soa-dea-review-prep.md) §2·§3.
+- ⚠️ **flip 선결 — 게이트가 열리는 순간 깨지는 테스트 단정을 먼저 치운다.** `flip`은 파일을 **다 쓴 뒤** 마지막에 `cert.tests`를 돌리므로, `content_index_test.dart`에 상태를 박은 단정이 남아 있으면 flip 명령이 레드로 끝나고 파일은 이미 바뀐 상태로 남는다(`--force`는 **쓰기 전** 구조 검사만 건너뛴다). **순서는 ① 선언 변경 → ② 사람 flip → ③ 커밋**이고, 리터럴로 남길 것은 **정책값뿐**이다. SOA·DEA의 해당 단정 목록은 [착수 노트](2026-10-29-soa-dea-review-prep.md) §2·§3이고, **SCS는 2026-11-10 실측에서 선결이 0건**이다 — 허용 목록·locked 선언·`preAuthoring`·`content_index` 등재가 **문항 저작 전에** 서 있었다([SCS 착수 노트](2026-11-10-scs-review-prep.md) §2).
 - 편향 방지는 수량 게이트가 담당한다. 다만 수량만 채우면 공식 Task Statement 하나가 완전히 빈 조합이 가능하므로(SAA D1의 Task 1.3), 품질 균형은 batch 문서의 리스크 항목으로 관리한다.
 
 ### 도메인별 절차
@@ -62,9 +68,9 @@
 2. **결정적 사전심사(T1)**: `cd flutter_app && node tool/prescreen.mjs build <cert>` → `build/<cert>_review/<taskId>.prescreen.json`(구조·정합성 플래그). **빌드 산출물이라 커밋하지 않는다.** 플래그 있는 문항 먼저 손본다. 2026-10-29에 **자격증 일반형**이 됐다(그 전에는 `saa_prescreen.mjs`로 SAA만 돌았다 — 2026-08-06·2026-10-20 검수 시트가 적는 옛 명령이 그것이다).
    - ⚠️ **도메인 수는 자격증별이다** — `CERTS[<cert>].domains`에서 읽는다. **SOA-C03은 5개**이고, 4로 못 박으면 `soa-t5-*`의 60문항이 "형식 이상"으로 오탐된다(옛 도구의 `^saa-t([1-4])-\d+$`가 그랬다). 그 값이 `assets/exam_guides/<label>.json`의 도메인 수와 맞는지는 `review.test.mjs`가 기계로 검사한다.
    - ⚠️ **CLF만 문항 파일명에 자격증 접두가 없다**(`t1-1.questions.json`, 나머지는 `<cert>-t{D}-{n}.questions.json`). 뱅크 안의 `examGuideTaskId`는 다섯 자격증 모두 `<cert>-t{D}-{n}`이라 도구는 그 필드를 본다.
-   - 2026-10-29 실측: 다섯 자격증 전부 **구조·정합성 플래그 0건**(CLF 19 · SAA 24 · SOA 20 · DEA 17 · MLA 12 Task).
+   - 2026-10-29 실측: 다섯 자격증 전부 **구조·정합성 플래그 0건**(CLF 19 · SAA 24 · SOA 20 · DEA 17 · MLA 12 Task). **2026-11-10 추가 실측: AIF 14 Task 210문항 · SCS 16 Task 240문항도 플래그 0건**(뱅크 플래그도 0 Task).
 3. **의미·출처 사전심사(T2)**: AI 읽기전용 패스의 주석 아티팩트(의심 정답·약한 출처) → **`docs/saa-review/prescreen/<taskId>.json`**(키 `taskId`·`domain`·`count`·`questions`·`summary`). 2번의 build 산출물과 **다른 파일이며 이쪽은 커밋된다** — 경로가 둘인 것은 불일치가 아니다. *전용 도구는 없다(2026-10-29 실측: `flutter_app/tool/`의 `prescreen.mjs`·`review.mjs`는 둘 다 **구조·정합성**만 보고 의미 판단을 하지 않는다) — 2026-08-06 AI 패스 산출물이 그 경로에 들어 있고, 없는 Task는 4번 뷰어로 직접 검수한다.* 판정값 `pass`/`review`는 **참고용**이고 최종 판정은 사람이 한다.
-4. **검수 뷰어**: `node tool/review.mjs build <cert>` → `build/<cert>_review/index.html`(정답 강조·기계 플래그). 브라우저로 열어 문항별 검수. `<cert>`는 `clf`·`saa`·`soa`·`dea`·`mla`이고, **산출물 디렉터리는 레지스트리 키**다(`build/soa_review/` — 2026-10-29 실행 확인. **자격증 label이 아니다**: `cmdBuild`가 `build/${cert.code}_review`를 쓴다). 사전심사(2번)도 같은 디렉터리에 쓰므로 자격증별로 한곳에 모인다. **빌드 산출물이라 커밋하지 않는다.**
+4. **검수 뷰어**: `node tool/review.mjs build <cert>` → `build/<cert>_review/index.html`(정답 강조·기계 플래그). 브라우저로 열어 문항별 검수. `<cert>`는 `review.mjs` CERTS의 키이고(2026-11-10 기준 일곱), **산출물 디렉터리는 레지스트리 키**다(`build/soa_review/` — 2026-10-29 실행 확인. **자격증 label이 아니다**: `cmdBuild`가 `build/${cert.code}_review`를 쓴다). 사전심사(2번)도 같은 디렉터리에 쓰므로 자격증별로 한곳에 모인다. **빌드 산출물이라 커밋하지 않는다.**
    - Task 제목의 **"정답 쏠림" 배지는 작성 균형 참고용**이다. 앱은 보기 순서를 문항별로 섞어 내보내므로(`mock_exam.dart`의 `randomOptionOrders`·`applyOptionOrders` — 퀴즈·오답노트·모의고사 전 경로) JSON의 `correct` 인덱스는 학습자에게 그대로 보이지 않는다. **정답 위치를 옮기려고 문항을 고치지 않는다.** MLA 뷰어의 배지 7건이 그 예다(2026-10-27 실측): t2-1만 부분 쏠림(idx1 18/23)이고, **도메인 3·4의 6개 Task는 전 문항이 idx0**이다(t3-1 25/25 · t3-2 23/23 · t3-3 26/26 · t4-1 30/30 · t4-2 35/35 · t4-3 35/35) — 그대로 둔다.
    - ⚠️ **SOA는 쏠림이 20 Task 중 19건**이다(2026-10-29 실측, 전부 idx0 — `t1-1`·`t3-2`·`t3-3`·`t3-4`·`t5-2`·`t5-3`·`t5-4`는 15/15). DEA는 17 Task 중 5건(`t1-1` 13/16 · `t1-2`~`t1-4` 15/15 · `t2-4`만 idx1 9/15). **배지 수가 많은 것은 결함 수가 아니다** — 같은 이유로 그대로 둔다.
    - 반면 **`wrongExplanations` 키가 보기와 어긋나는 것은 실제 결함**이고, 그것은 배지가 아니라 문항별 구조 플래그로 잡힌다(C6). **MLA·SOA·DEA 모두 구조 플래그 0건**이다(MLA 2026-10-27 · SOA 300문항·DEA 256문항 2026-10-29 실측 — `questionFlags`를 전수에 돌려 확인).
