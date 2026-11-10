@@ -66,7 +66,7 @@
       "examGuideTaskId": "scs-t6-1",
       "skill": "6.1.2",
       "section": "control-tower",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "Control Tower 제어를 설계하면서 팀이 예방 제어는 SCP로 구현되고 탐지 제어는 모든 리전에서 동작한다고 적었습니다. 공식 서술과 맞게 정정한 것은 무엇입니까?",
       "options": [
         "예방 제어는 SCP로만 구현되고 탐지 제어는 Control Tower 지원 리전에서만 동작합니다",
@@ -378,7 +378,7 @@
       "examGuideTaskId": "scs-t6-1",
       "skill": "6.1.5",
       "section": "root-credentials",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "루트 액세스 중앙 집중화를 켠 뒤 멤버 계정에서 제거할 수 있는 것을 정리하려 합니다. 보고서에 암호와 액세스 키만 제거된다고 적혀 있습니다. 올바른 정정과 함께 알아야 할 사실은 무엇입니까?",
       "options": [
         "제거 대상은 암호와 액세스 키 둘이고 서명 인증서와 MFA는 멤버 계정이 직접 지워야 합니다",

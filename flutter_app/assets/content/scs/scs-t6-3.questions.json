@@ -66,7 +66,7 @@
       "examGuideTaskId": "scs-t6-3",
       "skill": "6.3.1",
       "section": "config-rules",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "특정 태그가 붙은 리소스만 평가하는 규칙을 만들고, 리소스 구성이 바뀔 때마다 평가하되 하루 한 번은 무조건 돌게 하려 합니다. Config 규칙의 트리거와 범위를 올바르게 설명한 것은 무엇입니까?",
       "options": [
         "트리거는 구성 변경 하나뿐이고 범위는 리소스 유형으로만 정합니다",
@@ -206,7 +206,7 @@
       "examGuideTaskId": "scs-t6-3",
       "skill": "6.3.1",
       "section": "config-rules",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "감사인이 6개월 전 특정 보안 그룹의 구성과 그 사이의 변경 이력을 요구합니다. 그리고 Config를 처음 켜는 계정이 있습니다. Config가 주는 것과 전제를 올바르게 설명한 것은 무엇입니까?",
       "options": [
         "Config는 현재 구성만 보여 주므로 과거 이력은 CloudTrail에서만 볼 수 있습니다",

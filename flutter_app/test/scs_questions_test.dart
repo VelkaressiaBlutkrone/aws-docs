@@ -247,4 +247,38 @@ void main() {
       });
     });
   }
+
+  // ⚠️⚠️ **난이도 쏠림 가드**(2026-11-10 신설). 검수 준비 스캔에서 **도메인 5·6의
+  //    6 Task 가 `foundational` 0~1개**로 흘렀고 `scs-t5-1`·`scs-t6-2` 는 **0개**라
+  //    그 Task 에 진입용 문항이 하나도 없었다(D1~D4 는 Task 당 2~5개). 자격증 전체
+  //    비율(당시 16.7%)은 Specialty 로서 정상 범위였으므로 **문제는 자격증 안의
+  //    쏠림**이고, 전역 비율이 아니라 **Task 단위 하한**으로 잡는다.
+  //
+  // ⚠️ 하한을 **2**로 두는 이유는 실측이다 — D1~D4 의 최솟값이 `scs-t4-1`·
+  //    `scs-t4-2` 의 **2**다. 3으로 올리면 그 두 Task 가 즉시 레드가 되는데 그것은
+  //    저작 판단을 사후에 뒤집는 것이라 하지 않는다.
+  //
+  // ⚠️ 상한은 두지 않는다 — `foundational` 이 많은 것은 결함이 아니다(CLF 는 76%다).
+  test('Task 마다 foundational 문항이 최소 2개다 (난이도 쏠림 방지)', () {
+    const minFoundational = 2;
+    final counts = <String, int>{};
+    for (final taskId in authoredTaskIds) {
+      counts[taskId] = readQuestions(taskId)
+          .where((q) => q['difficulty'] == 'foundational')
+          .length;
+    }
+    // 대조군: 라벨을 읽고 있는지 먼저 센다(전부 0이면 파싱이 샌 것이다).
+    expect(counts.values.fold<int>(0, (a, b) => a + b),
+        greaterThanOrEqualTo(2 * authoredTaskIds.length),
+        reason: '전 Task 합이 하한의 총합보다 적다 — 라벨을 못 읽었는지 먼저 본다');
+    final short = {
+      for (final e in counts.entries)
+        if (e.value < minFoundational) e.key: e.value,
+    };
+    expect(short, isEmpty,
+        reason: 'foundational 이 $minFoundational개 미만인 Task 가 있다 — '
+            '학습자가 그 Task 에서 진입용 문항을 만나지 못한다. '
+            '회상·분류형 문항(「공식 서술로 올바른 것은」·「올바르게 짝지은」)에 '
+            '`foundational` 을 붙인다: $short');
+  });
 }
