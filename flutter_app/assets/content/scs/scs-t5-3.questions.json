@@ -206,7 +206,7 @@
       "examGuideTaskId": "scs-t5-3",
       "skill": "5.3.3",
       "section": "key-stores",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "사용자 지정 키 저장소를 도입하기로 결정한 뒤, 같은 저장소에서 문서 서명용 비대칭 키와 다중 리전 키를 만들고 기존 온프레미스 키 자료를 가져오려는 계획이 올라왔습니다. 공식 제약을 올바르게 반영한 것은 무엇입니까?",
       "options": [
         "비대칭 키는 만들 수 있지만 다중 리전 키만 불가합니다",
@@ -378,7 +378,7 @@
       "examGuideTaskId": "scs-t5-3",
       "skill": "5.3.5",
       "section": "multi-region",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "기존에 쓰던 단일 리전 고객 관리형 키와 AWS 관리형 키를 모두 다중 리전 키로 바꾸고, 관련 키들의 키 정책을 한 번에 관리하려는 계획이 올라왔습니다. 공식 제약을 올바르게 반영한 것은 무엇입니까?",
       "options": [
         "둘 다 변환할 수 있고 정책도 함께 바뀝니다",

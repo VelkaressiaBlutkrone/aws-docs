@@ -150,7 +150,7 @@
       "examGuideTaskId": "scs-t5-1",
       "skill": "5.1.2",
       "section": "private-access",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "감사에서 인터넷 게이트웨이 없이 S3와 내부 마이크로서비스에 접근하는 구성을 설명하라는 요구가 나왔습니다. VPC에는 S3용 게이트웨이 엔드포인트와 서비스용 인터페이스 엔드포인트가 있습니다. 두 엔드포인트의 차이를 올바르게 설명한 것은 무엇입니까?",
       "options": [
         "둘 다 PrivateLink를 쓰고 차이는 DNS 해석 여부뿐입니다",
@@ -326,7 +326,7 @@
       "examGuideTaskId": "scs-t5-1",
       "skill": "5.1.3",
       "section": "inter-resource",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "두 VPC에 걸친 분산 애플리케이션에서 인스턴스 간 하드웨어 암호화를 기대하고 설계했습니다. 두 VPC는 서로 다른 리전에 있고 피어링돼 있으며 인스턴스 유형은 지원 목록에 있습니다. 하드웨어 암호화가 적용됩니까?",
       "options": [
         "적용됩니다. 피어링된 VPC이면 리전이 달라도 조건이 충족됩니다",
@@ -410,7 +410,7 @@
       "examGuideTaskId": "scs-t5-1",
       "skill": "5.1.3",
       "section": "inter-resource",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "규제 대응으로 SageMaker AI 훈련 작업에 컨테이너 간 트래픽 암호화를 켜라는 요구가 왔습니다. 단일 인스턴스로 도는 작업과 분산 딥러닝 작업이 섞여 있습니다. 올바른 설명은 무엇입니까?",
       "options": [
         "단일 인스턴스 작업에서도 훈련 시간이 늘어나므로 두 종류 모두 영향을 검토해야 합니다",

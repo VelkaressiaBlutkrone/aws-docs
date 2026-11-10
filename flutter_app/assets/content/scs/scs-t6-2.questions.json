@@ -94,7 +94,7 @@
       "examGuideTaskId": "scs-t6-2",
       "skill": "6.2.1",
       "section": "iac",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "10개 계정에 스택을 배포하면서 최대 동시 계정을 25퍼센트로, 동시성 모드를 Strict Failure Tolerance로, 실패 허용을 1로 설정했습니다. 실제 동작을 올바르게 설명한 것은 무엇입니까?",
       "options": [
         "2.5계정씩 배포하고 실패 허용은 전체 작업 기준으로 1건입니다",
@@ -214,7 +214,7 @@
       "examGuideTaskId": "scs-t6-2",
       "skill": "6.2.2",
       "section": "tags",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "태그 전략을 세우면서 담당자 이메일을 Owner 태그에 넣고, 같은 의미의 키를 costcenter와 CostCenter로 섞어 쓰자는 제안이 나왔습니다. 공식 서술에 맞는 판단은 무엇입니까?",
       "options": [
         "이메일은 넣어도 되고 키의 대소문자는 구분되지 않으므로 섞어도 무관합니다",
@@ -330,7 +330,7 @@
       "examGuideTaskId": "scs-t6-2",
       "skill": "6.2.3",
       "section": "firewall-manager",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "조직 전체에 보안 그룹 규칙과 DDoS 보호를 일관되게 적용하고 새로 들어오는 계정에도 자동 적용하려 합니다. 비용 담당자는 Firewall Manager 자체 요금이 얼마인지 묻습니다. 올바른 설명은 무엇입니까?",
       "options": [
         "보호 적용은 계정 전체 단위로만 가능하고 요금은 Firewall Manager 자체에 붙습니다",

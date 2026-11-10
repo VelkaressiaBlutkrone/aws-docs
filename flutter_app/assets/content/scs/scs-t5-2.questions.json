@@ -150,7 +150,7 @@
       "examGuideTaskId": "scs-t5-2",
       "skill": "5.2.2",
       "section": "integrity",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "백업 담당자가 EBS 스냅샷을 누구도 지울 수 없게 해 달라고 요청합니다. 요구는 삭제 권한을 가진 관리자도 지울 수 없어야 한다는 것과 추가 비용이 들지 않아야 한다는 것, 그리고 복원에는 평소처럼 쓸 수 있어야 한다는 것입니다. 올바른 설명은 무엇입니까?",
       "options": [
         "스냅샷을 다른 계정으로 복사하고 원본 계정에서 삭제 권한을 회수하면 같은 효과가 납니다",
@@ -210,7 +210,7 @@
       "examGuideTaskId": "scs-t5-2",
       "skill": "5.2.2",
       "section": "integrity",
-      "difficulty": "applied",
+      "difficulty": "foundational",
       "stem": "감사에서 CloudTrail 로그가 전달 후 변조되지 않았음을 증명하고 그 증명 자료에는 더 엄격한 접근 통제를 걸라는 요구가 나왔습니다. 로그 파일 무결성 검증을 켠 상태입니다. 올바른 설명은 무엇입니까?",
       "options": [
         "다이제스트 파일이 로그와 다른 버킷으로 전달되므로 그 버킷에 별도 정책을 걸면 됩니다",
