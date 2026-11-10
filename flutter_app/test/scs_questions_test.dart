@@ -51,6 +51,7 @@ void main() {
   /// `scs`를 **지워야 한다** — 안 지우면 node 단계가 1초 만에 레드다(설계대로다).
   const authoredTaskIds = <String>{
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3', // 도메인 1 (2026-11-09)
+    'scs-t2-1', 'scs-t2-2', // 도메인 2 (2026-11-10)
   };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
