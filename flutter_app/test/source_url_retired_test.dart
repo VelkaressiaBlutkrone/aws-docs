@@ -131,11 +131,44 @@ void main() {
     // 가이드 랜딩은 `solutions/automated-forensics-orchestrator-for-amazon-ec2/`
     // (**`/latest/` 가 없다**)다. ⚠️ 공식 문서 제목에 **EKS 가 추가**됐다.
     'https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/solution-overview.html',
+    // ⚠️⚠️ **가이드가 이틀 만에 사라졌다**(2026-11-10 실측). `scs-t3-2.md` 가
+    // 2026-11-08에 실측해 인용한 **「Security for agentic AI on AWS」**
+    // (`prescriptive-guidance/latest/agentic-ai-security/`)가 docs에서 더 이상
+    // 제공되지 않는다. **네 방법이 모두 일치**했다 — `curl` `404 r=0` · AWS 문서
+    // 리더 `not_found` · docs 검색 색인에 그 가이드의 페이지가 없다 · 실제 브라우저가
+    // AWS의 "not a functioning page" 오류를 렌더한다.
+    //
+    // ⚠️ **신호 조합이 이 레포에서 처음 보는 모양이다** — 개별 슬러그는 `404 r=0`
+    // (= 없는 가이드 접두사와 같은 신호)인데 **같은 가이드의 틀린 슬러그는
+    // `403 r=1`** 로 가이드 루트로 리다이렉트되고, 그 루트가 다시 같은 오류
+    // 페이지를 낸다. 반면 살아 있는 형제 가이드
+    // (`security-reference-architecture-generative-ai/`)의 루트는 `200` 이다.
+    // 그래서 **403 을 "디렉터리 인덱스 미제공"으로 읽으면 안 되는 자리**다 —
+    // 루트가 무엇을 렌더하는지 봐야 가른다.
+    //
+    // ⚠️ **「사라졌다」와 「사람이 열 수 없다」를 구별하는 규율은 그대로다**
+    // (2026-11-06 AIF `AWS CAF for AI`: curl 은 튕기는데 문서 리더로는 읽혔고,
+    // 그래서 인용을 지우지 않았다). 이 건은 **문서 리더까지 못 읽어** 반대 판정이다.
+    //
+    // §7-1 은 현재 제공되는 AWS SRA 생성형 AI 가이드와 Bedrock Guardrails 문서로
+    // 다시 세웠다. ⚠️ OWASP Top 10 for LLM Applications 자체는 **OWASP 발행물**이고
+    // AWS 문서가 아니라서, 그 번호 매핑은 더 이상 AWS 공식 근거가 없다.
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/owasp-top-ten.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/introduction.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
   /// "지웠다"만 보면 **출처를 통째로 삭제해도 통과**하므로 쌍으로 고정한다.
   const replacements = <String, List<String>>{
+    // 2026-11-10 — 은퇴한 agentic-ai-security 가이드를 대신하는 정본.
+    // ⚠️ 문항 쪽도 함께 고정한다(`scs-t3-2-q14`). md 만 보면 문항이 죽은 URL을
+    // 다시 들여도 이 쌍 가드가 알려 주지 않는다(2026-11-10 D-11·G-82 계열).
+    'scs/scs-t3-2.md': [
+      'https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html',
+    ],
+    'scs/scs-t3-2.questions.json': [
+      'https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html',
+    ],
     'soa/soa-t1-1.questions.json': [
       'https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html',
       'https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html',

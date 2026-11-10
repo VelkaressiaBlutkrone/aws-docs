@@ -1,0 +1,453 @@
+{
+  "examGuideTaskId": "scs-t3-3",
+  "taskTitle": "네트워크 보안 제어 설계 및 문제 해결",
+  "domain": 3,
+  "certCode": "SCS-C03",
+  "lastVerified": "2026-11-10",
+  "questions": [
+    {
+      "id": "scs-t3-3-q1",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.1",
+      "section": "controls",
+      "difficulty": "foundational",
+      "stem": "보안 그룹과 네트워크 ACL을 비교해야 합니다. 공식 비교표에 맞는 것은 무엇입니까?",
+      "options": [
+        "보안 그룹은 인스턴스 수준이고 허용 규칙만 쓰고 모든 규칙을 평가한 뒤 결정하며 상태 저장이고, 네트워크 ACL은 서브넷 수준이고 허용과 거부를 쓰고 번호 오름차순으로 첫 매칭에서 중단하며 상태 비저장입니다",
+        "둘 다 상태 저장이고 차이는 적용 수준뿐입니다",
+        "보안 그룹은 허용과 거부를 모두 쓰고 네트워크 ACL은 허용만 씁니다",
+        "네트워크 ACL은 모든 규칙을 평가하고 보안 그룹은 번호 순으로 첫 매칭에서 중단합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 비교표가 다섯 특성을 가릅니다. 보안 그룹은 인스턴스 수준에서 동작하고 허용 규칙만 지원하며 모든 규칙을 평가한 뒤 허용 여부를 결정하고 반환 트래픽을 자동 허용합니다. 네트워크 ACL은 서브넷 수준에서 동작하고 허용과 거부 규칙을 지원하며 번호 오름차순으로 평가해 매칭되면 중단하고 반환 트래픽을 명시적으로 허용해야 합니다. 공식 권고는 보안 그룹만으로도 인스턴스를 보호할 수 있지만 네트워크 ACL을 추가 방어 계층으로 둘 수 있다는 것입니다.",
+      "wrongExplanations": {
+        "1": "네트워크 ACL은 상태 비저장이라 반환 트래픽을 명시적으로 허용해야 합니다.",
+        "2": "허용과 거부를 함께 쓰는 쪽이 네트워크 ACL입니다.",
+        "3": "평가 방식이 뒤바뀌었습니다."
+      },
+      "sources": [
+        {
+          "title": "Infrastructure security in Amazon VPC - 보안 그룹과 네트워크 ACL 비교",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html"
+        },
+        {
+          "title": "Control subnet traffic with network access control lists - 평가 시점과 예외 목록",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q2",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.1",
+      "section": "controls",
+      "difficulty": "applied",
+      "stem": "보안팀이 모든 서브넷의 아웃바운드를 기본 거부로 바꿔 데이터 유출 경로를 없애라는 요구를 네트워크 ACL로 구현했습니다. 적용 후에도 인스턴스가 이름 해석과 시간 동기화를 정상 수행하고 애플리케이션이 인스턴스 메타데이터에서 자격 증명을 계속 읽습니다. 설명과 올바른 수단은 무엇입니까?",
+      "options": [
+        "규칙 번호를 잘못 매겼습니다. 번호를 낮추면 적용됩니다",
+        "그 트래픽은 애초에 네트워크 ACL의 대상이 아닙니다. DNS 필터링은 Route 53 Resolver DNS Firewall로, 인스턴스 메타데이터는 인스턴스 메타데이터 옵션으로 다룹니다",
+        "임시 포트 범위를 열어 두었기 때문입니다. 그 범위를 닫으면 차단됩니다",
+        "상태 저장 동작 때문에 응답이 자동 허용된 것입니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문서가 네트워크 ACL이 필터링하지 않는 대상을 열거합니다 — Amazon DNS와 DHCP와 EC2 인스턴스 메타데이터와 ECS 작업 메타데이터 엔드포인트와 Windows 인스턴스 라이선스 활성화와 Amazon Time Sync Service와 기본 VPC 라우터가 쓰는 예약 IP 주소입니다. 그리고 Route 53 Resolver로 가고 오는 DNS 요청과 인스턴스 메타데이터 서비스로 가는 트래픽을 차단할 수 없다고 명시합니다. 올바른 수단은 DNS는 Route 53 Resolver DNS Firewall, 메타데이터는 인스턴스 메타데이터 옵션입니다.",
+      "wrongExplanations": {
+        "0": "번호 순서 문제가 아니라 평가 대상이 아닙니다.",
+        "2": "임시 포트 범위는 상태 비저장 제어에서 응답 트래픽을 허용하는 문제이고 이 예외 목록과 다릅니다.",
+        "3": "네트워크 ACL은 상태 비저장입니다."
+      },
+      "sources": [
+        {
+          "title": "Control subnet traffic with network access control lists - 평가 시점과 예외 목록",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q3",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.1",
+      "section": "controls",
+      "difficulty": "applied",
+      "stem": "두 VPC를 피어링으로 연결해 쓰고 있고 감사에서 VPC 사이 동-서 트래픽도 침입 방지로 검사하라는 요구가 나왔습니다. 각 VPC에 Network Firewall을 배치하면 됩니까?",
+      "options": [
+        "됩니다. 피어링 트래픽도 방화벽 엔드포인트를 지나게 라우팅하면 검사됩니다",
+        "됩니다. 다만 방화벽 서브넷에 애플리케이션을 함께 두어야 경로가 성립합니다",
+        "안 됩니다. Network Firewall은 VPC 피어링 트래픽을 지원하지 않으므로 Transit Gateway 경유로 바꾸고 검사 VPC로 유도합니다. 방화벽 서브넷은 전용이어야 하고 엔드포인트는 자기 서브넷으로 드나드는 트래픽을 필터링하지 못합니다",
+        "안 됩니다. Network Firewall은 북-남 트래픽만 지원하므로 동-서 검사는 보안 그룹으로만 가능합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식이 미지원 아키텍처로 VPC 피어링을 명시하고 클라이언트 IP 주소 보존을 켠 Global Accelerator 트래픽과 EC2의 AmazonProvidedDNS 트래픽도 함께 적습니다. 해법은 피어링을 Transit Gateway 경유로 바꾸고 검사 VPC로 유도하는 것입니다. 그리고 공식이 방화벽 엔드포인트는 자신이 속한 서브넷으로 들어오거나 나가는 트래픽을 필터링할 수 없으므로 방화벽 서브넷을 Network Firewall 외의 용도로 쓰지 말라고 적습니다. Network Firewall은 상태 저장 검사에 오픈 소스 Suricata를 써서 Suricata 호환 규칙을 지원합니다.",
+      "wrongExplanations": {
+        "0": "피어링으로 오가는 트래픽은 검사할 수 없습니다.",
+        "1": "방화벽 서브넷은 전용이어야 하고 그 서브넷으로 드나드는 트래픽은 필터링되지 않습니다.",
+        "3": "기본 동작 모드인 소스 보존 모드는 동-서와 북-남 검사에 모두 맞습니다. 제약은 피어링입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Network Firewall? - 리소스 구조와 미지원 아키텍처",
+          "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html"
+        },
+        {
+          "title": "AWS Network Firewall example architectures with routing - 방화벽 서브넷 제약",
+          "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/architectures.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q4",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.2",
+      "section": "hybrid",
+      "difficulty": "foundational",
+      "stem": "Site-to-Site VPN 연결의 터널 두 개로 대역폭을 두 배로 쓰려 하고, 가상 프라이빗 게이트웨이 하나에 여러 VPC를 붙이려 합니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "둘 다 가능합니다. 터널 두 개는 부하 분산용이고 가상 프라이빗 게이트웨이는 여러 VPC를 지원합니다",
+        "터널은 부하 분산용이지만 가상 프라이빗 게이트웨이는 VPC 하나에만 붙습니다",
+        "터널은 고가용성용이고 가상 프라이빗 게이트웨이는 여러 VPC를 지원합니다",
+        "공식 표현은 각 VPN 연결에 고가용성을 위해 동시에 사용할 수 있는 터널 두 개가 포함된다는 것이고, 가상 프라이빗 게이트웨이는 VPC 하나에만 연결됩니다. 여러 VPC는 Transit Gateway입니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문장이 각 VPN 연결에는 고가용성을 위해 동시에 사용할 수 있는 VPN 터널 두 개가 포함된다고 적습니다 — 부하 분산이나 대역폭 두 배가 아닙니다. 대상 게이트웨이는 둘이고 가상 프라이빗 게이트웨이는 VPC 하나에만 연결되며, 여러 VPC와 온프레미스를 잇는 허브이자 VPN 종단은 Transit Gateway입니다.",
+      "wrongExplanations": {
+        "0": "공식 표현은 고가용성이고 가상 프라이빗 게이트웨이는 VPC 하나입니다.",
+        "1": "터널 두 개의 목적은 고가용성입니다.",
+        "2": "가상 프라이빗 게이트웨이는 VPC 하나에만 붙습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Site-to-Site VPN? - 터널 두 개의 의미와 한계",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q5",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.2",
+      "section": "hybrid",
+      "difficulty": "applied",
+      "stem": "기존 Site-to-Site VPN 연결로 IPv6 트래픽도 함께 나르려 하고 터널 대역폭을 5 Gbps로 올리려 합니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "한 연결이 IPv4와 IPv6를 동시에 나르지 못하므로 각각 별 연결이 필요하고 기존 IPv4 연결을 IPv6로 변경할 수 없어 삭제한 뒤 재생성해야 합니다. 터널당 최대 5 Gbps인 대규모 대역폭 터널은 Transit Gateway 또는 Cloud WAN에 연결된 VPN에서만 쓸 수 있습니다",
+        "한 연결이 두 체계를 함께 나르고 대역폭은 모든 VPN에서 5 Gbps까지 올릴 수 있습니다",
+        "IPv6는 가상 프라이빗 게이트웨이에서만 지원되고 대역폭 상향은 지원되지 않습니다",
+        "연결 설정을 수정해 IPv6를 추가할 수 있고 대역폭은 터널 수를 늘려 확보합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 한 VPN 연결이 IPv4와 IPv6 트래픽을 동시에 나르지 못한다고 적어 각각 별 연결이 필요하고, 기존 IPv4 연결을 IPv6로 변경할 수 없어 삭제한 뒤 재생성해야 합니다. 가상 프라이빗 게이트웨이에서는 IPv6 트래픽이 지원되지 않아 외부 터널 IP의 IPv6는 Transit Gateway와 Cloud WAN만 지원합니다. 대규모 대역폭 터널은 터널당 최대 5 Gbps이고 표준은 1.25 Gbps이며 Transit Gateway 또는 Cloud WAN에 연결된 VPN에서만 쓸 수 있습니다. 그리고 경로 MTU 탐색은 지원되지 않습니다.",
+      "wrongExplanations": {
+        "1": "한 연결로 두 체계를 함께 나를 수 없고 대역폭 상향에는 종단 조건이 있습니다.",
+        "2": "IPv6는 가상 프라이빗 게이트웨이에서 지원되지 않고 대역폭 상향 옵션은 존재합니다.",
+        "3": "변경이 불가해 삭제한 뒤 재생성해야 하고, 터널 두 개는 고가용성 구성입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Site-to-Site VPN? - 터널 두 개의 의미와 한계",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q6",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.2",
+      "section": "hybrid",
+      "difficulty": "applied",
+      "stem": "온프레미스 데이터센터와 AWS 사이 전송 구간을 암호화하라는 요구에 Direct Connect와 MACsec을 제안했는데 종단 간 암호화 요건을 충족하지 못한다는 지적을 받았습니다. 맞습니까? 그리고 협상 실패 시 비암호화 전송을 막으려면 무엇을 합니까?",
+      "options": [
+        "지적이 틀렸습니다. MACsec이 종단 간을 덮고 기본 모드가 must_encrypt입니다",
+        "지적이 맞습니다. MACsec은 이더넷 링크의 점대점 보안이라 여러 세그먼트를 지나는 종단 간 암호화를 제공하지 않습니다. 비암호화 폴백을 막으려면 must_encrypt로 바꿉니다. 새 연결의 기본값은 should_encrypt입니다",
+        "지적이 맞지만 모드 선택이 없고 항상 암호화를 요구합니다",
+        "지적이 틀렸고 기본 모드가 should_encrypt라 이미 폴백이 차단됩니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 경고가 MACsec은 이더넷 링크의 점대점 보안을 제공하므로 여러 개의 연속된 이더넷이나 다른 네트워크 세그먼트를 지나는 종단 간 암호화를 제공하지 않는다고 적습니다. 덮는 구간은 내 엣지 장치와 Direct Connect 로케이션의 교차 연결입니다. 모드는 둘이고 must_encrypt는 협상이 실패하면 트래픽을 전혀 전송하지 않으며 should_encrypt는 비암호화 통신으로 폴백하는데 새 MACsec 활성 연결의 기본값이 should_encrypt입니다. 애플리케이션 종단까지 요구하면 상위 계층 암호화를 더합니다.",
+      "wrongExplanations": {
+        "0": "점대점 보안이고 새 연결의 기본값은 should_encrypt입니다.",
+        "2": "모드가 둘이고 must_encrypt를 고를 수 있습니다.",
+        "3": "기본값 should_encrypt가 바로 비암호화 폴백을 허용하는 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "MAC Security in Direct Connect - 점대점 범위와 암호화 모드",
+          "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/MACsec.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q7",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.3",
+      "section": "verified-access",
+      "difficulty": "applied",
+      "stem": "협력사 직원이 사내 웹 애플리케이션 세 개 중 하나에만 접근해야 하고 회사 관리 디바이스에서만 허용해야 합니다. VPN 계정을 발급하는 방식의 문제와 대안은 무엇입니까?",
+      "options": [
+        "문제가 없습니다. VPN에 애플리케이션별 접근 제어가 내장돼 있습니다",
+        "문제는 대역폭이고 대안은 Direct Connect입니다",
+        "전통적 모델은 한 번 평가해 모든 애플리케이션 접근을 허용하므로 애플리케이션 단위 제한과 디바이스 조건을 걸기 어렵습니다. 대안은 AWS Verified Access이고 애플리케이션 접근 요청마다 실시간으로 평가합니다",
+        "대안은 Site-to-Site VPN에 ID 공급자를 연결하는 것입니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 비교가 전통적 모델은 한 번 평가해 모든 애플리케이션 접근을 허용하는 것과 달리 Verified Access는 애플리케이션 접근 요청마다 실시간으로 평가해 공격자가 한 애플리케이션에서 다른 애플리케이션으로 이동하기 어렵게 만든다고 적습니다. ID와 디바이스 관리 서비스와 통합되고 그 대상은 AWS와 타사 둘 다이며, 그 데이터로 사용자와 디바이스의 신뢰성을 보안 요구 사항에 대조해 접근 여부를 정합니다. 회사 관리 디바이스에서만이라는 조건이 그 자리입니다.",
+      "wrongExplanations": {
+        "0": "VPN은 네트워크 수준 접근을 주고 애플리케이션 단위 실시간 평가를 하지 않습니다.",
+        "1": "문제는 대역폭이 아니라 접근 제어의 단위입니다.",
+        "3": "Site-to-Site VPN은 네트워크 연결 수단이고 사용자의 애플리케이션 접근을 제어하는 제품이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Verified Access? - 요청별 실시간 평가와 로깅",
+          "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q8",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.3",
+      "section": "verified-access",
+      "difficulty": "applied",
+      "stem": "Verified Access를 도입하면서 감사 추적과 비용 모델과 통합 범위를 확인해야 합니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "접근 거부만 로깅되고 과금은 사용자 수 기준이며 ID 통합은 AWS 서비스만 지원합니다",
+        "로깅은 선택이고 과금은 요청 수 기준이며 ID 통합은 타사만 지원합니다",
+        "모든 접근 시도를 로깅하지만 과금은 사용자 수 기준이고 ID 통합은 AWS 서비스만 지원합니다",
+        "모든 접근 시도를 로깅해 중앙 가시성을 주고, 과금은 애플리케이션당 시간과 처리 데이터량이며, ID와 디바이스 관리 서비스 통합은 AWS와 타사 둘 다 지원합니다"
+      ],
+      "correct": 3,
+      "explanation": "Verified Access는 모든 접근 시도를 로깅해 애플리케이션 접근에 대한 중앙 가시성을 주므로 보안 사고 대응과 감사 요청에 바로 씁니다. 과금은 애플리케이션당 시간과 처리 데이터량입니다. 그리고 ID와 디바이스 관리 서비스와 통합되는데 그 대상은 AWS와 타사 둘 다입니다. VPN이 없어 VPN 관련 지원 요청이 줄어드는 것도 공식이 적는 이점입니다.",
+      "wrongExplanations": {
+        "0": "모든 접근 시도가 로깅되고 통합 대상에 타사도 듭니다.",
+        "1": "로깅은 이 서비스가 적는 핵심 가치이고 과금 축은 애플리케이션당 시간과 처리 데이터량입니다.",
+        "2": "과금 축이 다르고 통합 대상에 타사도 듭니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Verified Access? - 요청별 실시간 평가와 로깅",
+          "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q9",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.3",
+      "section": "verified-access",
+      "difficulty": "foundational",
+      "stem": "온프레미스 데이터센터의 배치 서버가 VPC 안의 데이터베이스에 네트워크 수준으로 접속해야 합니다. 팀이 Verified Access로 하자고 합니다. 어떻게 답해야 합니까?",
+      "options": [
+        "Verified Access는 사용자의 애플리케이션 접근을 요청마다 평가하는 쪽이므로 이 요구에는 맞지 않습니다. 온프레미스와 VPC의 네트워크 수준 연결은 Site-to-Site VPN이나 Direct Connect입니다",
+        "Verified Access로 가능합니다. VPN을 완전히 대체하므로 네트워크 연결도 대신합니다",
+        "Verified Access로 가능하지만 Transit Gateway를 함께 둬야 합니다",
+        "둘 다 불가능하고 퍼블릭 엔드포인트를 열어야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "Verified Access는 VPN을 쓰지 않고 애플리케이션에 안전하게 접근하게 하는 쪽이고 접근 요청마다 사용자와 디바이스의 신뢰성을 평가합니다. 지문이 디바이스 자세나 ID 조건을 말하면 거의 Verified Access이지만, 온프레미스 네트워크와 VPC를 네트워크 수준에서 연결하는 것은 Site-to-Site VPN이나 Direct Connect입니다.",
+      "wrongExplanations": {
+        "1": "VPN 없이 애플리케이션에 접근하게 하는 것이고 네트워크 수준 연결을 대신하지 않습니다.",
+        "2": "Transit Gateway는 네트워크 허브이고 Verified Access가 네트워크 연결을 제공하지는 않습니다.",
+        "3": "네트워크 수준 연결 수단이 있습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Verified Access? - 요청별 실시간 평가와 로깅",
+          "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html"
+        },
+        {
+          "title": "What is AWS Site-to-Site VPN? - 터널 두 개의 의미와 한계",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q10",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.4",
+      "section": "segmentation",
+      "difficulty": "applied",
+      "stem": "여러 AZ에 걸친 VPC들이 Transit Gateway로 공유 서비스 VPC의 상태 저장 방화벽 어플라이언스를 거치게 구성했는데 일부 세션만 간헐적으로 실패합니다. 원인과 해법은 무엇입니까?",
+      "options": [
+        "어플라이언스 성능 한계이므로 인스턴스 유형을 올립니다",
+        "어플라이언스 모드가 꺼져 있어 응답이 다른 AZ의 어플라이언스로 갔습니다. 어플라이언스가 있는 VPC 어태치먼트에서 어플라이언스 모드 지원을 켭니다",
+        "교차 AZ 요금을 피하려는 기본 동작이므로 요금 설정을 바꿉니다",
+        "Transit Gateway 라우트 테이블의 전파가 누락된 것이므로 전파를 켭니다"
+      ],
+      "correct": 1,
+      "explanation": "어플라이언스 모드를 켜지 않으면 Transit Gateway는 VPC 어태치먼트 사이 트래픽을 출발 AZ 안에 유지하려 하고 AZ 장애나 그 AZ에 서브넷이 없을 때만 AZ를 넘습니다. 그래서 VPC A의 AZ 1에서 출발한 요청은 AZ 1의 어플라이언스가 검사하는데 VPC B의 AZ 2에서 나온 응답은 같은 AZ 2로 가고, AZ 2의 어플라이언스는 원래 요청을 모르므로 트래픽이 드롭됩니다. 간헐적으로 보이는 것은 요청과 응답이 같은 AZ에 떨어진 세션만 성공하기 때문입니다. 해법은 어플라이언스가 있는 VPC 어태치먼트에서 어플라이언스 모드 지원을 켜는 것입니다.",
+      "wrongExplanations": {
+        "0": "성능이 아니라 경로 대칭 문제입니다.",
+        "2": "교차 AZ 트래픽에는 추가 Transit Gateway 요금이 없고 기본 동작의 목적도 요금이 아닙니다.",
+        "3": "전파가 있어도 응답이 다른 AZ의 어플라이언스로 가면 드롭됩니다."
+      },
+      "sources": [
+        {
+          "title": "How AWS Transit Gateway works - 어플라이언스 모드와 ECMP 제약",
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q11",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.4",
+      "section": "segmentation",
+      "difficulty": "applied",
+      "stem": "검사 VPC를 설계하면서 라우팅과 어태치먼트를 확인해야 합니다. 공식 설명에 맞는 것은 무엇입니까?",
+      "options": [
+        "검사 VPC는 서브넷 하나와 라우트 테이블 하나로 충분하고 어태치먼트는 리전 전체를 덮습니다",
+        "Transit Gateway가 쓰는 서브넷은 모든 트래픽을 인터넷 게이트웨이로 보내고 어플라이언스 서브넷은 로컬 경로만 둡니다",
+        "검사 VPC는 서브넷마다 다른 라우트 테이블을 두어 Transit Gateway 서브넷은 모든 트래픽을 어플라이언스 네트워크 인터페이스로, 어플라이언스 서브넷은 모든 트래픽을 다시 Transit Gateway로 보냅니다. VPC 어태치먼트는 AZ마다 서브넷을 정확히 하나 지정하고 어태치먼트가 있는 AZ의 리소스만 Transit Gateway에 도달합니다",
+        "라우팅은 Transit Gateway가 자동 구성하므로 VPC 라우트 테이블은 손대지 않습니다"
+      ],
+      "correct": 2,
+      "explanation": "공유 서비스 VPC 설계에서 검사 VPC는 서브넷마다 다른 라우트 테이블을 둡니다. Transit Gateway가 쓰는 서브넷은 모든 트래픽을 어플라이언스 네트워크 인터페이스로 보내고 어플라이언스가 있는 서브넷은 모든 트래픽을 다시 Transit Gateway로 보냅니다. VPC를 붙일 때는 AZ마다 서브넷을 정확히 하나 지정해 네트워크 인터페이스를 두고 어태치먼트가 있는 AZ의 리소스만 Transit Gateway에 도달할 수 있습니다. Transit Gateway는 리전 가상 라우터로 계층 3에서 대상 IP를 보고 다음 홉 어태치먼트로 보냅니다.",
+      "wrongExplanations": {
+        "0": "서브넷마다 다른 라우트 테이블이 필요하고 어태치먼트가 없는 AZ의 리소스는 도달하지 못합니다.",
+        "1": "경로가 반대입니다. Transit Gateway가 쓰는 서브넷이 어플라이언스로 보냅니다.",
+        "3": "VPC 라우트 테이블로 트래픽을 방화벽이나 어플라이언스에 유도하는 것이 설계의 핵심입니다."
+      },
+      "sources": [
+        {
+          "title": "How AWS Transit Gateway works - 어플라이언스 모드와 ECMP 제약",
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q12",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.4",
+      "section": "segmentation",
+      "difficulty": "applied",
+      "stem": "Transit Gateway에서 VPN 어태치먼트와 VPC 어태치먼트 사이에 ECMP로 대역폭을 묶으려 합니다. 가능합니까?",
+      "options": [
+        "가능합니다. 어태치먼트 유형과 무관하게 ECMP가 적용됩니다",
+        "가능합니다. 다만 양쪽 ASN이 달라야 합니다",
+        "가능하지만 VPC 쪽에서 CIDR을 겹치게 설정해야 합니다",
+        "불가능합니다. 서로 다른 어태치먼트 유형 사이에는 ECMP가 적용되지 않고 다른 ASN 사이도 불가하며, VPC는 CIDR이 겹칠 수 없어 ECMP를 지원하지 않고 Transit Gateway 피어링도 지원하지 않습니다"
+      ],
+      "correct": 3,
+      "explanation": "ECMP 제약이 설계에 걸립니다. VPC는 CIDR이 겹칠 수 없으므로 ECMP를 지원하지 않고 Transit Gateway 피어링도 지원하지 않으며, 서로 다른 어태치먼트 유형 사이에도 적용되지 않고 다른 ASN 사이도 불가합니다. Direct Connect 게이트웨이는 네트워크 접두사와 접두사 길이와 AS_PATH가 정확히 같을 때 여러 어태치먼트에 ECMP가 적용됩니다.",
+      "wrongExplanations": {
+        "0": "어태치먼트 유형이 다르면 적용되지 않습니다.",
+        "1": "다른 ASN 사이에도 적용되지 않습니다.",
+        "2": "VPC는 CIDR이 겹칠 수 없어 ECMP를 지원하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "How AWS Transit Gateway works - 어플라이언스 모드와 ECMP 제약",
+          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q13",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.5",
+      "section": "identify",
+      "difficulty": "foundational",
+      "stem": "불필요한 네트워크 액세스를 찾는 세 수단을 질문의 모양에 따라 골라야 합니다. 올바른 짝은 무엇입니까?",
+      "options": [
+        "이 연결이 우리 정책 위반인가는 Network Access Analyzer, 이 EC2가 외부에서 닿는가는 Inspector 네트워크 도달성, 이 사용자가 지금 이 앱에 접근해도 되는가는 Verified Access입니다",
+        "셋 다 선언 없이 열린 경로를 알려 주므로 아무 것이나 씁니다",
+        "정책 위반 경로는 Inspector이고 EC2의 열린 경로는 Network Access Analyzer입니다",
+        "Verified Access가 네트워크 경로 분석을 담당하고 나머지 둘은 로깅 도구입니다"
+      ],
+      "correct": 0,
+      "explanation": "세 수단은 질문의 모양이 다릅니다. Network Access Analyzer는 내가 요구 사항을 선언하고 그 위반 경로를 찾고, Inspector 네트워크 도달성은 선언 없이 열린 경로를 알려 주며, Verified Access는 탐지가 아니라 접근 자체를 조건부로 만듭니다.",
+      "wrongExplanations": {
+        "1": "선언이 필요한 쪽과 필요 없는 쪽이 갈립니다.",
+        "2": "두 수단이 뒤바뀌었습니다.",
+        "3": "Verified Access는 접근 제어이고 경로 분석 도구가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Network Access Analyzer? - 자동 추론과 분석 대상",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
+        },
+        {
+          "title": "Amazon Inspector finding types - 네트워크 도달성 범위",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q14",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.5",
+      "section": "identify",
+      "difficulty": "applied",
+      "stem": "재무 부서 리소스가 개발 부서 리소스에서 절대 도달할 수 없어야 한다는 거버넌스 요구를 검증하라는 과제입니다. Network Access Analyzer를 어떻게 구성하고 무엇을 고려합니까?",
+      "options": [
+        "ExcludePaths에 위반 경로를 적고 MatchPaths에 예외를 적으며 상시 자동 감시가 제공됩니다",
+        "MatchPaths에 위반으로 보는 경로를 적고 ExcludePaths에 정당한 예외를 적습니다. 조사 결과는 MatchPaths 중 하나 이상에 맞고 ExcludePaths 중 어느 것에도 맞지 않는 잠재 경로이며, 온디맨드 분석이므로 상시 검증이 필요하면 주기 실행 자동화를 둡니다",
+        "스코프 없이 전체 VPC를 선택하면 자동으로 정책 위반을 찾아 줍니다",
+        "트래픽을 실제로 흘려 보며 판정하므로 테스트 트래픽을 준비합니다"
+      ],
+      "correct": 1,
+      "explanation": "네트워크 액세스 스코프로 네트워크 접근 요구 사항을 명세하고 MatchPaths에 분석이 찾아낼 경로 유형, 보통 정책이나 준수 위반으로 보는 경로를 적습니다. ExcludePaths에는 조사 결과에 나타나지 않게 할 정당한 예외를 적고, 조사 결과는 MatchPaths 중 하나 이상에 맞고 ExcludePaths 중 어느 것에도 맞지 않는 잠재 경로입니다. 자동 추론 기술을 써서 구성만 보고 수학적으로 판정하므로 트래픽을 흘릴 필요가 없고, 온디맨드 분석이라 상시 검증이 필요하면 주기 실행 자동화를 둡니다. 스코프는 리소스 그룹으로 태그 기반 참조를 할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "두 필드의 역할이 뒤바뀌었고 상시 자동 감시가 아니라 온디맨드 분석입니다.",
+        "2": "요구 사항 선언이 이 수단의 전제입니다.",
+        "3": "자동 추론으로 구성만 보고 판정하므로 트래픽을 흘릴 필요가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Network Access Scopes in Network Access Analyzer - MatchPaths와 ExcludePaths",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/working-with-network-access-scopes.html"
+        },
+        {
+          "title": "What is Network Access Analyzer? - 자동 추론과 분석 대상",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t3-3-q15",
+      "examGuideTaskId": "scs-t3-3",
+      "skill": "3.3.5",
+      "section": "identify",
+      "difficulty": "applied",
+      "stem": "Lambda 함수와 컨테이너의 외부 노출을 Inspector 네트워크 도달성으로 보려 합니다. 가능합니까? 그리고 그 조사 결과가 뜻하는 것은 무엇입니까?",
+      "options": [
+        "가능합니다. 세 리소스 모두 대상이고 1시간마다 스캔합니다",
+        "불가능하고 그 조사 결과는 인스턴스 내부의 포트 설정만 뜻합니다",
+        "불가능합니다. 네트워크 도달성은 EC2 인스턴스 전용이고 12시간마다 스캔하며, 조사 결과는 TCP와 UDP 포트가 VPC 경계에서 닿을 수 있음을 뜻합니다. 경계는 인터넷 게이트웨이와 VPC 피어링 연결과 가상 프라이빗 게이트웨이를 통한 VPN입니다",
+        "불가능하지만 Network Access Analyzer도 EC2 전용이라 다른 수단이 없습니다"
+      ],
+      "correct": 2,
+      "explanation": "네트워크 도달성은 EC2 인스턴스 전용이고 12시간마다 스캔합니다. 조사 결과는 TCP와 UDP 포트가 VPC 경계에서 닿을 수 있음을 뜻하고 경계는 인터넷 게이트웨이와 VPC 피어링 연결과 가상 프라이빗 게이트웨이를 통한 VPN입니다. ALB나 CLB 뒤의 인스턴스도 인터넷 게이트웨이 경계에 듭니다. 평가에 쓰는 구성에 보안 그룹과 네트워크 ACL과 라우트 테이블과 서브넷과 VPC 엔드포인트와 Direct Connect가 모두 듭니다.",
+      "wrongExplanations": {
+        "0": "EC2 전용이고 주기는 12시간입니다.",
+        "1": "인스턴스 내부 설정이 아니라 VPC 경계로부터의 도달 가능성입니다.",
+        "3": "Network Access Analyzer의 분석 대상에는 로드밸런서와 VPC 엔드포인트와 Transit Gateway와 Network Firewall까지 넓게 듭니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Inspector finding types - 네트워크 도달성 범위",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html"
+        },
+        {
+          "title": "What is Network Access Analyzer? - 자동 추론과 분석 대상",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
