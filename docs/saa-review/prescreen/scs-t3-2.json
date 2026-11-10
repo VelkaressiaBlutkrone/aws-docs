@@ -230,11 +230,16 @@
         {
           "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html",
           "fetched": false,
-          "supports": "partial"
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html",
+          "fetched": true,
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "⭐ G-29 적용 — CodeGuru 보안 지원 종료와 「가이드 게시 시점에 이미 없던 서비스」까지 적는다. ⚠️⚠️ **2026-11-10에 새로 드러났다** — 이 문항이 쓰던 `service-lifecycle.html`은 **용어 정의만 담는 랜딩 페이지**이고 134항목은 하위 세 페이지에 있다. 그 세 페이지를 전수로 뒤지니 **유지 관리 목록에 있는 것은 `Amazon CodeGuru Reviewer`(2025-10-07)이고 문항이 다루는 CodeGuru *Security*는 세 목록에 없다**(P-01의 「목록에 없다 ≠ 살아 있다」와 일치 — 그 사용자 안내서는 진짜 404다). 그래서 그 출처를 걷었고 `inspector` 출처만 남겼다. **검수자 판단이 필요한 자리**: 정답 보기의 「지원 종료」와 해설의 「2025년 11월에 이미 종료」가 공식 목록으로 뒷받침되지 않는다 — 문구를 「세 목록에 없고 사용자 안내서 접근이 중단된 상태」로 좁힐지 결정한다."
+      "recommendation": "pass",
+      "notes": "⭐ G-29 적용 — CodeGuru 보안 지원 종료와 「가이드 게시 시점에 이미 없던 서비스」까지 적는다. ⚠️⚠️ **2026-11-10에 새로 드러났다** — 이 문항이 쓰던 `service-lifecycle.html`은 **용어 정의만 담는 랜딩 페이지**이고 134항목은 하위 세 페이지에 있다. 그 세 페이지를 전수로 뒤지니 **유지 관리 목록에 있는 것은 `Amazon CodeGuru Reviewer`(2025-10-07)이고 문항이 다루는 CodeGuru *Security*는 세 목록에 없다**(P-01의 「목록에 없다 ≠ 살아 있다」와 일치 — 그 사용자 안내서는 진짜 404다). 그래서 그 출처를 걷었고 `inspector` 출처만 남겼다. **검수자 판단이 필요한 자리**: 정답 보기의 「지원 종료」와 해설의 「2025년 11월에 이미 종료」가 공식 목록으로 뒷받침되지 않는다 — 문구를 「세 목록에 없고 사용자 안내서 접근이 중단된 상태」로 좁힐지 결정한다. ✅ **2026-11-10 종료(웹 검색 + 신뢰성 판정 후 교정)** — ① **직접 측정**: 사용자 안내서 **전 슬러그가 `404 r=0`**이고(`end-of-support.html` 자체도, `what-is`도, 일부러 틀린 슬러그도 같은 신호 → 가이드 접두사 소멸) 제품 페이지 `aws.amazon.com/codeguru/security/`도 **404**, `aws.amazon.com/codeguru/`는 **Profiler로 리다이렉트**된다. ② **웹 검색**: 복수 출처가 **2025-11-20 지원 종료**로 일치하고 그 뿌리는 **AWS 자신의 (지금은 404인) 종료 공지 페이지**다(검색 색인에만 남아 있다). 보조 증거로 AWS가 운영하는 GitHub 조직의 `aws-actions/codeguru-security`가 **2025-12-04 아카이브**됐다. ③ **판정**: 상태 서술(지원 종료·문서 접근 중단)은 **유지**하고 **날짜 비교는 걷었다** — 지금 열리는 공식 페이지가 그 날짜를 적지 않으므로 레포 규율(CLF 프리 티어 「레거시 12개월」·SAA 「us-east-1 DX 단가」 선례)에 걸린다. 대신 **측정된 사실**(안내서 전 페이지 미응답 · 유지 관리 목록에 **CodeGuru Reviewer만** 있음)을 해설에 넣고 그 근거로 `maintenance_services.html`을 출처에 달았다. 정답 인덱스(3)·`verified` 불변."
     },
     {
       "id": "scs-t3-2-q13",
@@ -296,8 +301,8 @@
   ],
   "summary": {
     "suspectOrWrong": 0,
-    "weakOrUnverifiedSources": 1,
+    "weakOrUnverifiedSources": 0,
     "outOfScope": 0,
-    "needsReview": 1
+    "needsReview": 0
   }
 }
