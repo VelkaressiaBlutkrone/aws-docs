@@ -52,6 +52,7 @@ void main() {
   const authoredTaskIds = <String>{
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3', // 도메인 1 (2026-11-09)
     'scs-t2-1', 'scs-t2-2', // 도메인 2 (2026-11-10)
+    'scs-t3-1', 'scs-t3-2', 'scs-t3-3', // 도메인 3 (2026-11-10)
   };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**

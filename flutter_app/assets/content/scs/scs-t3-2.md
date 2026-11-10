@@ -28,10 +28,8 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-using-eice.html
   - title: Detect and filter harmful content by using Amazon Bedrock Guardrails
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
-  - title: Mapping to OWASP top 10 for LLM applications
-    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/owasp-top-ten.html
-  - title: Security for agentic AI on AWS
-    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/introduction.html
+  - title: "Capability 5. Providing secure access, usage, and implementation of generative AI agents (AWS SRA for generative AI)"
+    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html
   - title: AWS Lifecycle Changes
     url: https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
 lastVerified: 2026-11-08
@@ -228,24 +226,22 @@ EC2 Instance Connect Endpoint(EICE)는 **프라이빗 IP로** 인스턴스에 �
 
 ### 7) 생성형 AI 애플리케이션의 보호와 가드레일 (기술 3.2.7 — 신규) {#genai}
 
-#### 7-1. GenAI OWASP Top 10은 AWS 문서 안에 매핑이 있다
+#### 7-1. 자율 에이전트의 위험과 통제 — 어느 층이 무엇을 보는가
 
-⚠️⚠️ **중요한 실측** — OWASP Top 10 자체는 AWS 문서가 아니지만, **AWS 규범적 지침(Prescriptive Guidance)의 「Security for agentic AI on AWS」 가이드가 자신의 모범 사례를 OWASP Top 10 for LLM Applications 2025에 직접 매핑**합니다. 즉 **공식 docs 안에 근거가 있습니다.**
+> ⚠️⚠️ **인용 상태 변경(2026-11-10 실측).** 이 절은 2026-11-08에 **AWS 규범적 지침의 「Security for agentic AI on AWS」 가이드**(`prescriptive-guidance/latest/agentic-ai-security/`)를 근거로 썼고, 그 가이드가 자신의 모범 사례를 OWASP Top 10 for LLM Applications 2025에 번호 단위로 매핑했습니다. **그런데 그 가이드가 docs에서 더 이상 제공되지 않습니다** — 네 방법(`curl` · AWS 문서 리더 · docs 검색 색인 · 실제 브라우저)이 모두 **404**이고 가이드 루트도 같은 오류 페이지입니다. 그래서 이 사이트는 **그 매핑을 시험 근거로 쓰지 않고**, 같은 주제를 **현재 제공되는 AWS SRA 생성형 AI 가이드**(아래)와 **Bedrock Guardrails 문서**로 다시 세웁니다. ⚠️ **OWASP Top 10 for LLM Applications 자체는 OWASP의 발행물**이고 AWS 문서가 아닙니다 — 범주 번호를 AWS 공식 근거로 외우지 않습니다.
 
-열 범주는 다음과 같습니다 — **LLM01 프롬프트 주입 · LLM02 민감 정보 노출 · LLM03 공급망 · LLM04 데이터·모델 오염 · LLM05 부적절한 출력 처리 · LLM06 과도한 대행(excessive agency) · LLM07 시스템 프롬프트 누출 · LLM08 벡터·임베딩 취약 · LLM09 잘못된 정보 · LLM10 무제한 소비.**
+**공식이 적는 자율 에이전트의 위험 넷** — AWS SRA 생성형 AI 가이드의 「기능 5」가 이렇게 가릅니다.
 
-⚠️⚠️ **가장 시험다운 사실은 「무엇이 무엇에 매핑되지 않는가」입니다.** 공식 매핑에서 **Bedrock Guardrails 배포(4.2)는 LLM01과 LLM02에만** 달립니다.
-
-| 범주 | 공식 매핑이 드는 핵심 통제 |
+| 위험 | 무엇이 문제인가 |
 |---|---|
-| **LLM01 프롬프트 주입** | **Guardrails**가 악성 입력 패턴 필터 · 다층 입력 정제 · 프롬프트를 **코드 산출물로 취급**(검토·버전 관리) · **엣지 보호** |
-| **LLM02 민감 정보 노출** | **Guardrails**가 민감 출력 패턴 차단 · **세션 격리** · 공유 메모리 관리 · 데이터 손실 방지 |
-| **LLM06 과도한 대행** | ⚠️ Guardrails가 아니라 **에이전트 범위 결정 · 필요 없으면 결정론적 실행 로직 · 비상 종료 기능** |
-| **LLM10 무제한 소비** | ⚠️ **엣지에서의 속도 제한** · **비상 종료 기능** · 리소스 소비 모니터링 |
+| **세션 격리** | 공유 메모리·캐시된 컨텍스트·지속 상태로 **한 사용자의 데이터가 다른 세션에 샐 수 있고**, 적대자가 거짓 정보를 심어 뒤 행동을 조종하는 **메모리 오염**이 가능합니다 |
+| **과도한 자율성** | 도구 접근이 넓고 감독이 적은 에이전트는 **의도하지 않은 작업을 실행**하고, 개발자가 예상하지 못한 **도구 연쇄**를 만들고, **저권한 도구를 조합해 권한을 상승**시킬 수 있습니다 |
+| **ID·액세스 관리 복잡성** | 에이전트가 사용자를 대신해 여러 시스템에 인증하므로 **자격 증명이 런타임에 노출**되거나 **권한 범위가 잘못 잡힐 수 있고**, 오케스트레이터가 하위 에이전트를 부르는 다중 에이전트 구조에서 더 복잡해집니다 |
+| **안전한 실행 환경** | 코드 실행은 **임의 코드 실행·리소스 소진·호스트 접근** 위험을, 브라우저 자동화는 **자격 증명 노출·XSS·사용자 대신 의도하지 않은 작업** 위험을 만듭니다 |
 
-즉 **"에이전트가 권한을 넘어 행동한다"나 "토큰 소비가 폭증한다"에 Guardrails를 고르면 틀립니다.** 전자는 **범위 제한과 비상 종료**, 후자는 **엣지 속도 제한**(작업 3.1 §3-2의 속도 기반 규칙이 그대로 쓰이는 자리)입니다.
+⚠️⚠️ **과도한 자율성의 통제는 Guardrails가 아닙니다.** 공식이 드는 처방은 **에이전트에 최소 권한 IAM 역할**(필요한 도구·리소스·보안 암호만), **AgentCore Gateway로 도구 접근을 중앙화**하고 **OAuth 범위로 어느 에이전트가 어느 도구를 부를 수 있는지 제한**, **AgentCore Runtime의 전용 microVM 세션 격리**입니다. 공식 표현이 **"의도하지 않은 도구 조합으로 권한 상승을 가능하게 하는 넓은 권한을 피하라"**입니다.
 
-⚠️ 그 가이드는 **인지–반응–행동(perceive, react, act) 계층 구조**를 전제로 하고, **한 위협에 대해 둘 이상의 보안 제어 유형에 걸쳐 여러 통제를 구현하라**고 적습니다.
+⚠️ 반대로 **Guardrails가 보는 것은 입력과 출력의 내용**입니다(§7-2). 그래서 **"에이전트가 권한을 넘어 행동한다"에 Guardrails를 고르면 틀립니다** — 그 자리는 **권한 범위와 도구 접근 제한**입니다. 그리고 **요청 양과 속도**는 엣지에서 봅니다(작업 3.1 §3-2의 속도 기반 규칙).
 
 #### 7-2. Bedrock Guardrails — 정책과 평가 범위
 
@@ -288,7 +284,7 @@ Guardrails는 **기초 모델 전반의 안전·프라이버시 제어**를 제�
 - **"OS를 2016에서 2019로 올려라"는 Patch Manager가 아니다**
 - **"세션은 연결되는데 명령 기록이 없다"는 SSH·포트 포워딩이다**
 - **"Windows 인스턴스에 프라이빗 IP로 접속"은 EC2 Instance Connect Endpoint의 RDP다**
-- **"에이전트가 권한을 넘어 행동한다"는 Guardrails가 아니라 범위 제한·비상 종료다**
+- **"에이전트가 권한을 넘어 행동한다"는 Guardrails가 아니라 최소 권한 IAM 역할·Gateway 중앙화·OAuth 범위다**
 - **"모델을 호출하지 않고 콘텐츠만 검사"는 `ApplyGuardrail` API다**
 
 ## ⚠️ 흔한 함정 {#pitfalls}
@@ -305,7 +301,7 @@ Guardrails는 **기초 모델 전반의 안전·프라이버시 제어**를 제�
 - ❌ "EC2 Instance Connect Endpoint는 Linux SSH 전용이다" → **RDP도 지원**합니다
 - ❌ "`CodeGuru 보안`으로 파이프라인 스캔을 설계한다" → **지원 종료**이고 문서조차 남아 있지 않습니다
 - ❌ "`Amazon Q Developer`가 서비스 전체로 종료된다" → 종료 대상은 **IDE 플러그인**입니다
-- ❌ "Guardrails가 토큰 폭증과 과도한 대행까지 막는다" → 공식 매핑은 **LLM01·LLM02**에만 Guardrails를 둡니다
+- ❌ "Guardrails가 토큰 폭증과 과도한 자율성까지 막는다" → Guardrails가 보는 것은 **입력과 출력의 내용**이고, 권한은 **최소 권한 IAM 역할과 도구 접근 제한**, 양과 속도는 **엣지**가 봅니다
 - ❌ "프롬프트 일부만 평가하는 태그를 콘솔에서 설정한다" → **SDK 전용**입니다
 
 ## 🧪 자가 점검
@@ -364,17 +360,17 @@ Guardrails는 **기초 모델 전반의 안전·프라이버시 제어**를 제�
 ⚠️ 준수 결과는 **S3에 CSV 보고서**로 보내거나 **Security Hub CSPM**으로 집계합니다.
 </details>
 
-**Q5.** 사내 LLM 에이전트가 도구를 호출해 업무 시스템을 변경합니다. 보안 검토에서 "에이전트가 의도한 범위를 넘어 행동할 위험"과 "토큰 소비 폭증"이 지적됐습니다. 각각의 공식 통제는? (→ 7-1 OWASP 매핑)
+**Q5.** 사내 LLM 에이전트가 도구를 호출해 업무 시스템을 변경합니다. 보안 검토에서 "에이전트가 의도한 범위를 넘어 행동할 위험"과 "토큰 소비 폭증"이 지적됐습니다. 각각 어느 층의 통제입니까? (→ 7-1 자율 에이전트)
 
 <details><summary>정답 보기</summary>
 
-**둘 다 Bedrock Guardrails가 아닙니다. LLM06과 LLM10의 통제는 다른 층입니다.**
+**둘 다 Bedrock Guardrails가 아닙니다. Guardrails가 보는 것은 입력과 출력의 내용입니다.**
 
-- **과도한 대행(LLM06)** — **에이전트 범위 결정**(기능을 제약) · **AI가 필요 없는 곳에는 결정론적 실행 로직** · **고위험 시나리오용 비상 종료 기능** · 적응형 인증 · 민감 시스템에 대한 AI 작업 제한
-- **무제한 소비(LLM10)** — ⚠️ **엣지에서의 속도 제한**(작업 3.1 §3-2의 속도 기반 규칙) · **비상 종료 기능** · 리소스 소비 모니터링
-- ⚠️⚠️ 공식 매핑에서 **Guardrails 배포는 LLM01(프롬프트 주입)과 LLM02(민감 정보 노출)에만** 달립니다. 유해 콘텐츠·PII는 Guardrails가 보지만 **권한과 소비량은 보지 않습니다**
+- **과도한 자율성** — 공식 처방은 **에이전트에 최소 권한 IAM 역할**(필요한 도구·리소스·보안 암호만) · **AgentCore Gateway로 도구 접근 중앙화 + OAuth 범위로 호출 가능한 도구 제한** · **AgentCore Runtime의 전용 microVM 세션 격리**입니다. 공식 표현이 **"의도하지 않은 도구 조합으로 권한 상승을 가능하게 하는 넓은 권한을 피하라"**입니다
+- **요청 양과 속도** — ⚠️ **엣지에서의 속도 제한**(작업 3.1 §3-2의 속도 기반 규칙)이 그 층입니다
+- ⚠️⚠️ Guardrails의 보호 대상은 **사용자 입력과 모델 응답**이고 ⚠️ **추론 콘텐츠 블록은 제외**됩니다 — 유해 콘텐츠와 PII는 보지만 **권한과 소비량은 보지 않습니다**
 
-⚠️ 그 가이드는 **한 위협에 대해 둘 이상의 보안 제어 유형에 걸쳐 여러 통제**를 두라고 적습니다 — 한 가지로 끝내는 보기는 의심합니다.
+⚠️ 공식이 적는 자율 에이전트 위험은 넷입니다 — **세션 격리 · 과도한 자율성 · ID·액세스 관리 복잡성 · 안전한 실행 환경**. 한 가지 통제로 끝내는 보기는 의심합니다.
 </details>
 
 **Q6.** RAG 애플리케이션에서 사용자 입력만 가드레일로 평가하고 검색 결과·시스템 지시는 평가에서 빼려 합니다. 그리고 자체 호스팅 모델 앞단에도 같은 필터를 쓰고 싶습니다. 가능합니까? (→ 7-2 Guardrails)
@@ -404,6 +400,7 @@ Guardrails는 **기초 모델 전반의 안전·프라이버시 제어**를 제�
 8. AWS Systems Manager Session Manager — `docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html` (2026-11-08 확인)
 9. Connect to an Amazon EC2 instance using EC2 Instance Connect Endpoint — `docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-using-eice.html` (2026-11-08 확인)
 10. Detect and filter harmful content by using Amazon Bedrock Guardrails — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html` (2026-11-08 확인)
-11. Mapping to OWASP top 10 for LLM applications — `docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/owasp-top-ten.html` (2026-11-08 확인)
-12. Security for agentic AI on AWS — `docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/introduction.html` (2026-11-08 확인)
-13. AWS Lifecycle Changes — `docs.aws.amazon.com/general/latest/gr/service-lifecycle.html` (2026-11-08 확인)
+11. Capability 5. Providing secure access, usage, and implementation of generative AI agents (AWS SRA for generative AI) — `docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html` (2026-11-10 확인)
+12. AWS Lifecycle Changes — `docs.aws.amazon.com/general/latest/gr/service-lifecycle.html` (2026-11-08 확인)
+
+> ⚠️ **은퇴한 인용(2026-11-10 실측).** 이 문서의 §7-1은 처음에 **「Security for agentic AI on AWS」 가이드**(`prescriptive-guidance/latest/agentic-ai-security/`)의 OWASP 매핑을 근거로 썼으나, 그 가이드가 docs에서 더 이상 제공되지 않습니다(네 방법 모두 404 · 가이드 루트도 같은 오류 페이지). 그래서 그 두 URL을 출처에서 내리고 §7-1을 위 11번 가이드와 Bedrock Guardrails 문서로 다시 세웠습니다. 레포 전역 재등장 방지는 `source_url_retired_test.dart`가 맡습니다.
