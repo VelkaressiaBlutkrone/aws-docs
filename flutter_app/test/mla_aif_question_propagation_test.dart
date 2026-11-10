@@ -84,7 +84,19 @@ void main() {
     return out;
   }
 
-  const allCerts = <String>['clf', 'saa', 'soa', 'dea', 'mla', 'aif', 'dva'];
+  // ⚠️⚠️ **하드코딩 목록이던 것을 디렉터리에서 유도한다**(2026-11-10 SCS 검수 준비
+  // 실측). 이 줄은 `['clf','saa','soa','dea','mla','aif','dva']` 로 멈춰 있었고
+  // 그 뒤 들어온 **`scs` 240문항이 「전역」에서 빠져 있었다** — 이 파일의 머리말이
+  // 「명칭에는 자격증 경계가 없다 → 범위를 레포 전역 문항으로 둔다」고 선언하는데
+  // 그 선언이 240문항만큼 거짓이었다. 유도형으로 바꾸면 **다음 자격증은 첫 커밋부터
+  // 자동으로 덮인다**(`content_format_test` 의 `mdFiles` 와 같은 길).
+  // 실측: 추가 시점의 위반은 **0건**이었다 — 메운 것은 결함이 아니라 **구멍**이다.
+  final allCerts = Directory('assets/content')
+      .listSync()
+      .whereType<Directory>()
+      .map((d) => d.uri.pathSegments.where((s) => s.isNotEmpty).last)
+      .toList()
+    ..sort();
   final scanned = scan(const <String>['mla', 'aif']);
   final scannedAll = scan(allCerts);
 
@@ -94,7 +106,14 @@ void main() {
         reason: 'MLA 12 + AIF 14 Task. 바뀌었다면 검사 범위를 다시 보라');
     expect(scanned.length, greaterThanOrEqualTo(26 * 10));
     expect(scannedAll.length, greaterThanOrEqualTo(1500),
-        reason: '여섯 자격증 1,700문항대 — 명칭 규칙은 전역으로 쓴다');
+        reason: '일곱 자격증 1,900문항대 — 명칭 규칙은 전역으로 쓴다');
+    // ⚠️ 유도가 실제로 넓어졌는지 확인한다(하드코딩으로 되돌아가면 여기서 터진다).
+    expect(allCerts, containsAll(<String>['clf', 'saa', 'soa', 'dea', 'mla',
+        'aif', 'dva', 'scs']),
+        reason: 'assets/content 에서 유도한 자격증 목록이 좁아졌다');
+    expect(scannedAll.any((s) => s.file.startsWith('scs-')), isTrue,
+        reason: 'SCS 문항이 전역 명칭 검사에 들어오지 않았다 — '
+            '2026-11-10에 메운 바로 그 구멍이다');
   });
 
   group('md 가드가 금지한 사실 서술이 MLA·AIF 문항에 전파되지 않았다', () {
