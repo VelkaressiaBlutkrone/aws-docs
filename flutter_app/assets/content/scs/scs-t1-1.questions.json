@@ -11,7 +11,7 @@
       "skill": "1.1.1",
       "section": "requirements",
       "difficulty": "foundational",
-      "stem": "한 팀이 보안 모니터링을 도입하면서 GuardDuty, Inspector, Macie, Security Hub CSPM, Security Lake를 모두 켜고 나서 \"이제 무엇을 볼지 정하자\"고 합니다. 모니터링 요구 사항 결정의 공식 접근과 비교할 때 이 순서의 가장 큰 문제는 무엇입니까?",
+      "stem": "한 팀이 보안 모니터링을 도입하면서 GuardDuty, Inspector, Macie, Security Hub CSPM, Security Lake를 모두 켜고 나서 \"이제 무엇을 볼지 정하자\"고 합니다. 모니터링 요구 사항을 정하는 순서에 비춰 이 접근의 가장 큰 문제는 무엇입니까?",
       "options": [
         "비용은 전부 발생하는데 정작 필요한 사실이 빠질 수 있습니다. 요구 사항은 보호할 자산과 위협에서 출발해 알아야 할 사실을 문장으로 적고, 그 사실을 만들어 주는 신호원과 서비스를 찾는 순서로 정합니다",
         "서비스를 동시에 켜면 조사 결과가 중복 집계되어 보안 점수가 왜곡되므로 한 번에 하나만 켜야 합니다",
@@ -27,7 +27,7 @@
       },
       "sources": [
         {
-          "title": "Introduction to AWS Security Hub CSPM — 조사 결과 수집 범위",
+          "title": "Introduction to AWS Security Hub CSPM — 소급 적용되지 않음",
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
         }
       ],

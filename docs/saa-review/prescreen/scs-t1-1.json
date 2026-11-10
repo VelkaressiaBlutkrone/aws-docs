@@ -7,7 +7,7 @@
       "id": "scs-t1-1-q1",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -16,11 +16,11 @@
         {
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
           "fetched": true,
-          "supports": "partial"
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[framing-not-in-source] 정답 보기가 적는 「자산→위협→사실→신호원→서비스」 순서는 저작자의 프레이밍이고 인용 페이지(what-is-securityhub)가 적는 것은 소급 적용 성질뿐이다. 출처가 뒷받침하는 것은 W3이지 정답이 아니다 — C4 재검토(교체할 공식 페이지가 없다면 출처를 소급 적용 근거로 한정해 적는다)."
+      "recommendation": "pass",
+      "notes": "[framing-not-in-source] 정답 보기가 적는 「자산→위협→사실→신호원→서비스」 순서는 저작자의 프레이밍이고 인용 페이지(what-is-securityhub)가 적는 것은 소급 적용 성질뿐이다. 출처가 뒷받침하는 것은 W3이지 정답이 아니다 — C4 재검토(교체할 공식 페이지가 없다면 출처를 소급 적용 근거로 한정해 적는다). ✅ **2026-11-10 교정** — 지문의 「공식 접근」 주장을 걷고(「요구 사항을 정하는 순서에 비춰」) 출처 제목을 실제 뒷받침(소급 적용)으로 맞췄다. ⚠️ Well-Architected 탐지 페이지를 후보로 실측했지만(3,455자) 그 순서를 적지 않아 **쓰지 않았다** — 뒷받침하지 않는 출처를 더하는 것이 바로 이 패스가 고치는 결함이다."
     },
     {
       "id": "scs-t1-1-q2",
@@ -306,8 +306,8 @@
   ],
   "summary": {
     "suspectOrWrong": 0,
-    "weakOrUnverifiedSources": 1,
+    "weakOrUnverifiedSources": 0,
     "outOfScope": 0,
-    "needsReview": 1
+    "needsReview": 0
   }
 }

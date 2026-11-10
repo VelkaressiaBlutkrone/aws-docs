@@ -113,6 +113,10 @@
         {
           "title": "Analyzing log data with CloudWatch Logs Insights - 쿼리 언어와 동시 실행 한도",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        },
+        {
+          "title": "What is Amazon Athena? — S3 데이터를 표준 SQL로 조회",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
         }
       ],
       "verified": false

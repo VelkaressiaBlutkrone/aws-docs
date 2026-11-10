@@ -33,6 +33,10 @@
         {
           "title": "Resolver query logging (Amazon Route 53) — 기록되는 질의와 값",
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html"
+        },
+        {
+          "title": "How CloudTrail works — 기록되는 이벤트와 주체",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/how-cloudtrail-works.html"
         }
       ],
       "verified": false
@@ -65,6 +69,10 @@
         {
           "title": "Introduction to AWS Security Hub CSPM — 소급 적용되지 않음",
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
+        },
+        {
+          "title": "What is Amazon Athena? — S3 데이터를 표준 SQL로 조회",
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
         }
       ],
       "verified": false

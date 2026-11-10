@@ -227,8 +227,12 @@
       },
       "sources": [
         {
-          "title": "Alarm evaluation (Amazon CloudWatch) — 평가 설정과 임계값",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
+          "title": "Health checks for your target groups — 경로·포트·간격·임계값",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
+        },
+        {
+          "title": "Register targets with your target group — 보안 그룹 요건",
+          "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html"
         }
       ],
       "verified": false

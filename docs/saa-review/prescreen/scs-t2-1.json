@@ -26,7 +26,7 @@
       "id": "scs-t2-1-q2",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -35,11 +35,11 @@
         {
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html",
           "fetched": false,
-          "supports": "partial"
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[answer-element-unsourced] 정답의 둘째 요소인 「SageMaker AI 노트북」이 인용 페이지(OpsCenter)에 없다. 지문이 「공식 가이드가 드는 두 수단」이라 근거는 시험 가이드 `기술 2.1.x` 본문일 가능성이 높다 — 그 귀속을 출처에 반영할지 C4로 판단."
+      "recommendation": "pass",
+      "notes": "[answer-element-unsourced] 정답의 둘째 요소인 「SageMaker AI 노트북」이 인용 페이지(OpsCenter)에 없다. 지문이 「공식 가이드가 드는 두 수단」이라 근거는 시험 가이드 `기술 2.1.x` 본문일 가능성이 높다 — 그 귀속을 출처에 반영할지 C4로 판단. ⭐ **2026-11-10 측정으로 닫혔다** — 공식 시험 가이드 `기술 2.1.1`이 「예: Systems Manager OpsCenter, **Amazon SageMaker AI 노트북**」을 **글자 그대로** 적는다(`exam_guides/SCS-C03.json` 실측). 지문의 「공식 가이드가 드는 두 수단」은 참이고, 이 레포는 가이드 JSON을 URL 출처로 쓰지 않는다."
     },
     {
       "id": "scs-t2-1-q3",
@@ -291,8 +291,8 @@
   ],
   "summary": {
     "suspectOrWrong": 0,
-    "weakOrUnverifiedSources": 1,
+    "weakOrUnverifiedSources": 0,
     "outOfScope": 0,
-    "needsReview": 1
+    "needsReview": 0
   }
 }
