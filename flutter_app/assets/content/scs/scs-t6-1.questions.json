@@ -1,0 +1,433 @@
+{
+  "examGuideTaskId": "scs-t6-1",
+  "taskTitle": "AWS 계정을 중앙에서 배포하고 관리하기 위한 전략 개발",
+  "domain": 6,
+  "certCode": "SCS-C03",
+  "lastVerified": "2026-11-10",
+  "questions": [
+    {
+      "id": "scs-t6-1-q1",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.1",
+      "section": "organizations",
+      "difficulty": "applied",
+      "stem": "감사에서 멤버 계정의 개발자가 자기 계정의 CloudTrail 추적을 중지하거나 지울 수 있는지 물었습니다. 조직 차원에서 CloudTrail을 활성화한 상태입니다. 올바른 답변은 무엇입니까?",
+      "options": [
+        "CloudTrail을 계정 전체에 활성화하면 그 로그는 멤버 계정이 끄거나 수정할 수 없습니다. 계정 자체가 권한과 보안과 비용과 워크로드의 자연스러운 경계이고, 중앙 감사가 조직이 주는 보안 가치 중 하나입니다",
+        "멤버 계정의 관리자는 자기 계정의 추적을 중지할 수 있으므로 SCP로 그 작업을 거부해야만 보장됩니다",
+        "로그는 수정할 수 없지만 추적 자체는 멤버 계정에서 삭제할 수 있습니다",
+        "조직 차원 활성화는 관리 계정의 로그만 모으므로 멤버 계정은 각자 설정해야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 조직의 보안 가치 중 하나로 중앙 감사를 들고, CloudTrail을 계정 전체에 활성화하면 그 로그를 멤버 계정이 끄거나 수정할 수 없다고 적습니다. 같은 문서가 계정을 권한과 보안과 비용과 워크로드의 자연스러운 경계로 설명하고 멀티 계정을 권장 모범 사례로 적습니다. 조직이 중앙에서 주는 것은 계정 관리와 조직 정의와 중앙 감사와 리소스 공유 넷입니다.",
+      "wrongExplanations": {
+        "1": "조직 차원 활성화 자체가 멤버의 중지와 수정을 막습니다.",
+        "2": "로그와 추적 모두 멤버 계정이 건드릴 수 없습니다.",
+        "3": "조직 차원 활성화는 계정 전체를 덮습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Organizations? - 중앙 감사",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q2",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.1",
+      "section": "organizations",
+      "difficulty": "applied",
+      "stem": "조직을 새로 세우면서 공유 서비스와 보안 도구를 관리 계정에 두고 운영하려 합니다. 관리 계정에 조직 루트 SCP를 붙여 두면 통제가 적용될 것이라는 전제가 있습니다. 공식 권고는 무엇이고 왜입니까?",
+      "options": [
+        "관리 계정에 두는 것이 권고입니다. 관리 계정은 조직의 모든 정책을 가장 먼저 적용받습니다",
+        "SCP는 관리 계정의 사용자와 역할을 제한하지 않으므로, 관리 계정은 그 계정만 할 수 있는 작업에만 쓰고 리소스와 일상 운영은 다른 멤버 계정에 둡니다",
+        "관리 계정에 두되 루트 사용자만 비활성화하면 같은 효과가 납니다",
+        "관리 계정과 멤버 계정의 SCP 적용은 동일하므로 어디에 두어도 무관합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식이 위임 관리자 문서에서 Organizations의 서비스 제어 정책 같은 보안 기능이 관리 계정의 사용자나 역할을 제한하지 않는다고 적습니다. 그래서 권고는 관리 계정을 그 계정만 할 수 있는 작업에만 쓰고 리소스는 다른 멤버 계정에 두는 것입니다. 관리 계정에 운영을 쌓으면 조직의 가장 강한 통제가 적용되지 않는 곳에 가장 많은 작업이 모이고, 청구서에서 비용을 가려내기도 어려워집니다. 이것이 위임된 관리자가 존재하는 이유입니다.",
+      "wrongExplanations": {
+        "0": "SCP와 RCP는 관리 계정의 주체에 적용되지 않습니다.",
+        "2": "루트를 비활성화해도 그 계정의 사용자와 역할이 SCP에 묶이지 않는 사실은 그대로입니다.",
+        "3": "적용이 동일하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Delegated administrator for AWS services that work with Organizations - 관리 계정의 특수성",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q3",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.2",
+      "section": "control-tower",
+      "difficulty": "applied",
+      "stem": "Control Tower 제어를 설계하면서 팀이 예방 제어는 SCP로 구현되고 탐지 제어는 모든 리전에서 동작한다고 적었습니다. 공식 서술과 맞게 정정한 것은 무엇입니까?",
+      "options": [
+        "예방 제어는 SCP로만 구현되고 탐지 제어는 Control Tower 지원 리전에서만 동작합니다",
+        "예방 제어는 SCP와 RCP로 구현되고 탐지 제어는 모든 리전에서 동작합니다",
+        "예방 제어는 SCP와 RCP와 선언적 정책으로 구현되고 모든 AWS 리전에 적용되며, 탐지 제어는 AWS Config 규칙으로 구현되고 Control Tower 지원 리전에서만 동작합니다",
+        "예방과 탐지 모두 CloudFormation 후크로 구현되고 후크 지원 리전에서만 동작합니다"
+      ],
+      "correct": 2,
+      "explanation": "공식이 제어 동작 세 가지의 구현 수단과 리전 범위를 표로 적습니다. 예방 제어는 정책 위반으로 이어지는 작업을 금지하고 SCP와 RCP와 선언적 정책으로 구현되며 모든 AWS 리전에 적용됩니다. 탐지 제어는 비준수를 감지해 대시보드로 알리고 AWS Config 규칙으로 구현되며 Control Tower 지원 리전에서만 동작합니다. 사전 제어는 프로비저닝 전에 스캔하고 CloudFormation 후크로 구현되는데, 그 후크는 preCreate와 preUpdate 핸들러라 CloudFormation 경로에 한정됩니다. 옛 교재가 예방 제어를 SCP 하나로 적는데 공식은 지금 셋을 적고, 그래서 Control Tower가 그 세 종류를 매일 스캔합니다.",
+      "wrongExplanations": {
+        "0": "예방 제어의 구현 수단이 셋입니다.",
+        "1": "탐지 제어는 Control Tower 지원 리전에서만 동작합니다.",
+        "3": "후크로 구현되는 것은 사전 제어입니다."
+      },
+      "sources": [
+        {
+          "title": "Control behavior and guidance - 동작 3종과 구현 수단",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/control-behavior.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q4",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.2",
+      "section": "control-tower",
+      "difficulty": "applied",
+      "stem": "비준수 S3 버킷이 아예 만들어지지 않게 하라는 요건에 플랫폼팀이 Control Tower 사전 제어를 활성화했습니다. 그런데 한 팀이 콘솔에서 만든 퍼블릭 버킷이 그대로 생성됐습니다. 원인과 요건을 실제로 만족시키는 방법은 무엇입니까?",
+      "options": [
+        "사전 제어가 preCreate와 preUpdate 후크 핸들러로 구현되므로 콘솔이나 API나 SDK나 다른 IaC 도구로 서비스에 직접 하는 요청에는 영향을 주지 않을 수 있습니다. 경로를 가리지 않아야 하면 예방 제어를 씁니다",
+        "사전 제어가 아직 전파되지 않은 것이므로 24시간 뒤 다시 확인합니다",
+        "사전 제어는 버킷 정책만 보므로 퍼블릭 액세스 차단 설정을 보는 제어를 추가해야 합니다",
+        "콘솔 생성은 사전 제어 대상이지만 그 계정이 OU에 등록되지 않은 것입니다"
+      ],
+      "correct": 0,
+      "explanation": "공식 사전 제어 페이지가 이 제어들은 AWS 콘솔과 AWS API와 AWS SDK와 다른 IaC 도구를 통해 서비스에 직접 하는 요청에는 영향을 주지 않을 수 있다고 적습니다. 사전 제어는 preCreate와 preUpdate 후크 핸들러로 구현되므로 보는 것은 CloudFormation 스택 작업으로 리소스가 만들어지거나 업데이트될 때입니다. 경로를 가리지 않아야 하면 예방 제어가 답이고 그 구현 수단은 SCP와 RCP와 선언적 정책입니다. 앞 둘은 API 앞에서, 선언적 정책은 서비스 제어 플레인 안에서 작동합니다. 함께 기억할 한계가 둘 더 있습니다. 보안 문자열과 보안 암호는 후크로 가기 전에 해결되지 않아 사전 제어가 평가할 수 없고, CloudFormation 후크가 Control Tower 가용 리전 전부에서 지원되지는 않습니다.",
+      "wrongExplanations": {
+        "1": "전파 지연의 문제가 아니라 평가 지점의 문제입니다.",
+        "2": "제어를 더 추가해도 CloudFormation 밖의 경로는 그대로입니다.",
+        "3": "콘솔 생성은 후크 경로가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Proactive controls - 후크 핸들러와 경로 한계",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/proactive-controls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q5",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.2",
+      "section": "control-tower",
+      "difficulty": "applied",
+      "stem": "새 랜딩 존을 버전 4.0으로 세운 뒤 감사에서 필수 제어 일부가 적용되지 않았다는 지적이 나왔습니다. 팀은 필수 제어라 당연히 켜져 있을 것이라고 보고했습니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "필수 제어는 항상 자동 적용되므로 지적이 잘못됐습니다",
+        "필수 제어는 OU 수준에만 적용되므로 계정 수준에서는 보이지 않습니다",
+        "필수 제어는 적극 권장 가이던스로 승격돼야 적용됩니다",
+        "랜딩 존 버전 4.0부터 필수 제어가 기본으로 적용되지 않습니다. 가이던스는 필수와 적극 권장과 선택 셋이고 적극 권장과 선택은 OU 수준에 적용됩니다"
+      ],
+      "correct": 3,
+      "explanation": "공식이 제어 동작 페이지 끝에 랜딩 존 버전 4.0부터 필수 제어가 기본으로 적용되지 않는다고 적습니다. 필수니까 당연히 켜져 있다는 전제가 버전에 달려 있는 셈이라 교재가 가장 빨리 낡는 자리입니다. 가이던스 셋의 성격도 함께 기억합니다. 필수는 환경에서 활성화한 것에 따라 랜딩 존에 적용되어 Control Tower가 배포한 리소스를 보호하고, 적극 권장은 잘 설계된 멀티 계정 환경의 공통 모범 사례로 OU 수준에 적용되며, 선택은 엔터프라이즈에서 흔히 제한하는 작업을 추적하거나 차단하고 OU 수준에 적용됩니다.",
+      "wrongExplanations": {
+        "0": "버전 4.0부터 기본 적용이 아닙니다.",
+        "1": "적용 수준의 문제가 아니라 기본 적용 여부의 문제입니다.",
+        "2": "가이던스는 승격 개념이 아니고 성격 분류입니다."
+      },
+      "sources": [
+        {
+          "title": "Control behavior and guidance - 가이던스와 랜딩 존 4.0",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/control-behavior.html"
+        },
+        {
+          "title": "About controls in AWS Control Tower",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/controls.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q6",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.2",
+      "section": "control-tower",
+      "difficulty": "applied",
+      "stem": "운영팀이 계정 하나를 Sandbox OU에서 Production OU로 옮겼습니다. 샌드박스용으로만 켰던 느슨한 제어가 여전히 적용되는 것처럼 보이고, 드리프트 알림도 오지 않습니다. 각각의 설명은 무엇입니까?",
+      "options": [
+        "둘 다 비정상이므로 랜딩 존을 재설정해야 합니다",
+        "OU를 옮겨도 이전 OU의 제어는 제거되지 않습니다. 후크 기반 제어만 새 제어로 교체되고 SCP와 Config 규칙으로 구현된 제어는 항상 수동으로 제거해야 합니다. 그리고 설정에서 계정 자동 등록을 켜면 드리프트 SNS 알림을 쓸 수 없습니다",
+        "OU 이동과 함께 모든 제어가 교체되므로 보이는 것은 대시보드 캐시이고, 알림은 중복 제거 때문에 생략된 것입니다",
+        "OU 이동 시 SCP는 자동 제거되고 Config 규칙만 남으므로 Config 규칙을 지우면 됩니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 드리프트 문서가 계정 드리프트 유형으로 OU 사이에서 이동된 계정을 적으면서 이전 OU의 제어는 제거되지 않는다고 명시합니다. 자동으로 교체되는 것은 후크 기반 제어뿐이고 대상 OU에서 새 후크 기반 제어를 활성화하면 옛 후크 기반 제어가 제거되며 새 제어가 대체합니다. SCP와 AWS Config 규칙으로 구현된 제어는 계정이 OU를 바꿀 때 항상 수동으로 제거해야 합니다. 알림 쪽은 별개 사실입니다. 멤버 계정 드리프트는 감사 계정에 집계된 SNS 알림으로 드러나는데 설정에서 계정 자동 등록을 켜면 이 SNS 알림을 쓸 수 없습니다. 같은 유형의 드리프트가 같은 리소스에 반복되면 첫 번째만 알리고 해소된 뒤 재발하면 다시 알립니다.",
+      "wrongExplanations": {
+        "0": "제어가 남는 것은 공식이 적는 정상 동작입니다.",
+        "2": "캐시가 아니라 실제로 제어가 남아 있습니다.",
+        "3": "SCP도 수동 제거 대상입니다."
+      },
+      "sources": [
+        {
+          "title": "Detect and resolve drift in AWS Control Tower",
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/drift.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q7",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.3",
+      "section": "org-policies",
+      "difficulty": "applied",
+      "stem": "보안팀이 조직의 모든 계정에서 EC2 퍼블릭 AMI 사용을 금지하는 통제를 만들었습니다. 그런데 관리 계정의 관리자가 퍼블릭 AMI로 인스턴스를 띄우는 데 성공했고 서비스 연결 역할이 수행하는 작업도 막히지 않았습니다. 어떤 정책 유형을 썼고 무엇으로 바꿔야 합니까?",
+      "options": [
+        "SCP 또는 RCP를 썼고 선언적 정책으로 바꿉니다. 공식 표가 관리 계정 영향과 서비스 연결 역할 통제와 유효 정책 보기를 선언적 정책만 예로 적습니다",
+        "SCP를 썼고 RCP로 바꿉니다. RCP는 리소스 쪽을 보므로 관리 계정에도 적용됩니다",
+        "선언적 정책을 썼고 SCP로 바꿉니다. SCP가 API 수준에서 더 강하게 막습니다",
+        "태그 정책을 썼고 SCP로 바꿉니다. 태그 정책은 권한을 거부하지 않습니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 선언적 정책 페이지에 권한 부여 정책과의 차이를 표로 싣습니다. 서비스 연결 역할 통제와 관리 계정 영향과 OU·계정의 유효 정책 보기가 모두 SCP 아니오, RCP 아니오, 선언적 정책 예입니다. 두 증상이 같은 뿌리입니다. SCP와 RCP는 API 수준에서 요청을 평가하는 권한 부여 정책이라 요청 평가에서 빠지는 주체에 닿지 못하고, 선언적 정책은 서비스의 제어 플레인에서 API 작업을 쓰지 않고 기준 구성을 시행하므로 그 둘에도 미칩니다. 공식이 드는 예시 정책이 허용된 이미지 설정입니다. 첨부 한도도 다릅니다. SCP 10개와 10,240자, RCP 5개와 5,120자, 선언적 10개와 10,000자입니다.",
+      "wrongExplanations": {
+        "1": "RCP도 관리 계정에 적용되지 않습니다.",
+        "2": "방향이 반대입니다. 두 증상을 해소하는 쪽이 선언적 정책입니다.",
+        "3": "태그 정책은 이 통제의 수단이 아니고 선언적 범주입니다."
+      },
+      "sources": [
+        {
+          "title": "Declarative policies in AWS Organizations - 권한 부여 정책과의 비교",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q8",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.3",
+      "section": "org-policies",
+      "difficulty": "applied",
+      "stem": "법무팀이 조직 전 계정에서 AWS AI 서비스가 고객 콘텐츠를 서비스 개선에 쓰지 않도록 중단하라고 요구합니다. 담당자가 SCP에 해당 작업 거부 문장을 넣겠다고 합니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "SCP에 거부 문장을 넣는 것이 맞고 조직 루트에 붙이면 전 계정에 적용됩니다",
+        "AI 서비스 옵트아웃 정책이라는 전용 정책 유형을 씁니다. 그 정책은 선언적 범주이고 권한을 부여하거나 거부하지 않으며 첨부 한도가 5개와 2,500자입니다",
+        "RCP로 AI 서비스 리소스의 최대 권한을 제한하는 것이 공식 경로입니다",
+        "서비스별 콘솔에서 계정마다 옵트아웃을 설정하는 것이 유일한 방법입니다"
+      ],
+      "correct": 1,
+      "explanation": "공식이 조직 정책을 두 범주로 나눕니다. 권한 부여 정책은 조직 전체에서 보안을 중앙 관리하고 SCP와 RCP가 그 유형이며, 선언적 정책은 서비스와 그 기능을 중앙에서 구성하고 관리하며 EC2와 백업과 태그와 채팅 애플리케이션과 AI 서비스 옵트아웃 등이 그 유형입니다. 그래서 SCP로 AI 서비스의 데이터 사용을 옵트아웃한다는 서술은 거짓입니다. 그것은 전용 정책 유형이고 권한을 부여하거나 거부하지 않습니다. 한도도 다릅니다. AI 서비스 옵트아웃 정책은 선언적 범주이지만 5개와 2,500자이고 채팅 애플리케이션 정책도 5개입니다.",
+      "wrongExplanations": {
+        "0": "옵트아웃은 권한 부여 정책이 아니라 전용 정책 유형입니다.",
+        "2": "RCP는 리소스의 최대 권한을 API 수준에서 제한하는 쪽이고 이 요구의 수단이 아닙니다.",
+        "3": "조직 수준 정책으로 중앙에서 적용할 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Managing organization policies with AWS Organizations - 정책 범주",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q9",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.3",
+      "section": "org-policies",
+      "difficulty": "applied",
+      "stem": "선언적 정책으로 조직 전체의 기준 구성을 세운 뒤 한 OU에서 그 정책을 떼기로 했습니다. 팀은 정책을 떼도 이미 적용된 구성은 그대로 남을 것이라고 적었습니다. 그리고 선언적 정책 유형이 정확히 몇 가지인지 문서에 쓰려 합니다. 올바른 판단은 무엇입니까?",
+      "options": [
+        "정책을 떼면 구성이 남고 유형은 공식 목록의 수를 그대로 쓰면 됩니다",
+        "정책을 떼면 구성이 남지만 유형 수는 쓰지 않는 것이 좋습니다",
+        "선언적 정책을 분리하면 속성 상태가 정책을 붙이기 전 상태로 롤백됩니다. 그리고 유형의 개수는 공식 안에서 목록이 어긋나므로 단정하지 않습니다",
+        "정책을 떼면 그 OU의 모든 리소스가 삭제되므로 분리 자체를 하지 않습니다"
+      ],
+      "correct": 2,
+      "explanation": "공식이 선언적 정책을 분리하면 속성 상태가 정책을 붙이기 전 상태로 되돌아간다고 적습니다. 정책을 떼도 구성은 남는다는 서술이 거짓입니다. 개수 쪽도 주의가 필요합니다. 선언적 정책 전용 페이지의 주제 목록은 AWS Shield Network Security Director 정책을 포함하는데 정책 관리 페이지의 불릿 목록에는 없고 같은 페이지의 요약 표에는 Shield와 GuardDuty 행이 없습니다. 유형은 계속 늘어나는 값이라 개수를 단정하지 않습니다. 선언적 정책의 다른 성질도 함께 기억합니다. 제어 플레인에서 시행되므로 서비스가 새 기능이나 API를 도입해도 기준 구성이 유지되고, 조직 루트와 OU와 계정에 적용할 수 있으며 상속분과 직접 첨부분을 합친 것이 유효 정책입니다.",
+      "wrongExplanations": {
+        "0": "분리하면 롤백되고 유형 수도 단정할 수 없습니다.",
+        "1": "분리하면 롤백됩니다.",
+        "3": "리소스가 삭제되는 것이 아니라 속성이 이전 상태로 돌아갑니다."
+      },
+      "sources": [
+        {
+          "title": "Declarative policies in AWS Organizations - 성질과 분리 동작",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q10",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.4",
+      "section": "delegated-admin",
+      "difficulty": "applied",
+      "stem": "보안팀이 조직의 모든 계정에서 Security Hub CSPM과 AWS Config를 중앙 관리하려 합니다. 관리 계정에서 전부 운영하는 것이 가장 간단해 보입니다. 공식 권고와 등록 전 확인 사항은 무엇입니까?",
+      "options": [
+        "보안 계정을 각 서비스의 위임된 관리자로 등록합니다. 등록 전에 그 서비스가 위임된 관리자를 지원하는지 확인하고 그 서비스의 신뢰 액세스를 활성화합니다",
+        "관리 계정에서 운영하되 관리 계정에 SCP를 붙여 통제를 보완합니다",
+        "서비스마다 별도 조직을 만들어 관리 계정을 나눕니다",
+        "위임된 관리자를 등록하면 그 계정이 조직 전체의 관리 권한을 받으므로 신뢰 액세스는 필요하지 않습니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 관리 계정의 사용자나 역할을 SCP 같은 보안 기능이 제한하지 않는다고 적으므로, 관리 계정에 운영을 쌓으면 조직의 가장 강한 통제가 적용되지 않는 곳에 작업이 모입니다. 그래서 Organizations와 통합되는 서비스에서 멤버 계정을 위임된 관리자로 등록합니다. 등록 전 확인할 것이 둘입니다. 그 서비스가 위임된 관리자를 지원하는지 Organizations와 함께 쓸 수 있는 서비스 표에서 확인하고, 그 서비스의 신뢰 액세스를 활성화합니다. 위임된 관리자가 받는 것은 그 서비스의 일부 관리 권한과 Organizations 읽기 전용 작업 권한이고 조직 전체의 관리 권한이 아닙니다.",
+      "wrongExplanations": {
+        "1": "SCP는 관리 계정의 주체를 제한하지 않아 보완이 되지 않습니다.",
+        "2": "조직을 나누면 중앙 관리라는 목적 자체가 깨집니다.",
+        "3": "신뢰 액세스 활성화가 전제이고 조직 전체 관리 권한을 받는 것도 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Delegated administrator for AWS services that work with Organizations",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q11",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.4",
+      "section": "delegated-admin",
+      "difficulty": "foundational",
+      "stem": "조직의 보안 계정 하나로 여러 서비스를 중앙 관리하려 합니다. 이 자격증 범위에서 위임된 관리자 패턴이 자주 쓰이는 대상을 올바르게 묶은 것은 무엇입니까?",
+      "options": [
+        "IAM Identity Center와 Route 53과 CloudFront입니다",
+        "Security Hub CSPM과 AWS Config 애그리게이터와 CloudFormation StackSets와 IAM의 루트 액세스 관리와 Firewall Manager입니다",
+        "EC2와 S3와 RDS처럼 리소스를 만드는 서비스 전체입니다",
+        "CloudTrail과 CloudWatch Logs만 위임을 지원합니다"
+      ],
+      "correct": 1,
+      "explanation": "이 자격증 범위에서 자주 나오는 위임 대상은 Security Hub CSPM과 AWS Config의 다중 계정 다중 리전 애그리게이터와 CloudFormation StackSets의 서비스 관리형 권한 관리자 계정과 IAM의 루트 액세스 관리 및 특권 작업과 Firewall Manager의 조직 전 보호 정책입니다. Firewall Manager는 이름이 달라 Firewall Manager 기본 관리자 계정을 만드는 것이 전제 조건의 한 단계입니다. 문항이 관리 계정 사용을 최소화하면서 조직 전 계정의 어떤 것을 중앙 관리하라고 하면 답은 거의 항상 그 서비스의 위임된 관리자 등록입니다.",
+      "wrongExplanations": {
+        "0": "이 묶음은 위임 패턴의 전형적 대상이 아닙니다.",
+        "2": "리소스를 만드는 서비스 전체가 위임 대상인 것은 아닙니다.",
+        "3": "위임을 지원하는 서비스가 그 둘로 한정되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Delegated administrator for AWS services that work with Organizations - 위임 대상",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q12",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.5",
+      "section": "root-credentials",
+      "difficulty": "applied",
+      "stem": "조직 정책으로 멤버 계정의 루트 자격 증명을 모두 삭제하려 합니다. 담당자가 루트 액세스 중앙 집중화에서 루트 자격 증명 관리 기능만 활성화했습니다. 나중에 멤버 계정이 루트를 복구해야 할 수 있다는 요구가 있습니다. 무엇이 빠졌습니까?",
+      "options": [
+        "빠진 것이 없습니다. 자격 증명 관리만 켜도 멤버가 언제든 루트 암호를 복구할 수 있습니다",
+        "멤버 계정마다 루트 이메일을 변경해 두면 복구 경로가 생깁니다",
+        "삭제 대신 루트 사용자에게 MFA만 강제하면 같은 목적이 달성됩니다",
+        "멤버 계정의 특권 루트 작업 기능도 활성화해야 합니다. 공식이 자격 증명이 삭제된 뒤 멤버 계정이 루트 자격 증명을 복구할 수 있게 하려면 그 기능을 활성화해야 한다고 적습니다"
+      ],
+      "correct": 3,
+      "explanation": "루트 액세스 중앙 집중화는 활성화할 기능을 고르게 되어 있고 둘입니다. 루트 자격 증명 관리는 관리 계정과 IAM의 위임된 관리자가 멤버 계정의 루트 자격 증명을 삭제할 수 있게 하고, 멤버 계정의 특권 루트 작업은 루트 자격 증명이 필요한 일부 작업을 수행할 수 있게 합니다. 둘의 관계가 비대칭이라 공식이 자격 증명이 삭제된 뒤 멤버 계정이 루트 자격 증명을 복구할 수 있게 하려면 멤버 계정의 특권 루트 작업을 활성화해야 한다고 적습니다. 자격 증명 관리만 켜고 삭제하면 복구 경로가 없습니다. 전제도 셋입니다. 계정이 Organizations로 관리돼야 하고 IAM의 신뢰 액세스가 활성화돼야 하며 활성화 권한이 필요하고, 위임 관리자 등록은 서비스 주체 iam.amazonaws.com으로 합니다.",
+      "wrongExplanations": {
+        "0": "자격 증명 관리만 켜면 복구 경로가 없습니다.",
+        "1": "이메일 변경이 공식 복구 경로가 아닙니다.",
+        "2": "요구는 자격 증명 삭제와 복구 경로이고 MFA 강제는 다른 축입니다."
+      },
+      "sources": [
+        {
+          "title": "Centralize root access for member accounts",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q13",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.5",
+      "section": "root-credentials",
+      "difficulty": "applied",
+      "stem": "멤버 계정의 개발자가 S3 버킷 정책에 모든 주체를 거부하는 문장을 넣어 자기 자신도 접근할 수 없게 만들었습니다. 그 계정의 루트 자격 증명은 이미 삭제된 상태입니다. 복구 방법과 그 세션의 한계는 무엇입니까?",
+      "options": [
+        "멤버 계정의 루트 암호를 복구해 로그인하는 것이 유일한 경로이고 시간 제한은 없습니다",
+        "관리 계정에서 버킷 소유자를 변경해 정책을 덮어씁니다",
+        "특권 세션을 만들어 버킷 정책을 삭제합니다. DurationSeconds는 0에서 900초이고 더 큰 값을 지정하면 작업이 실패하며, TaskPolicyArn이 필수이고 다섯 관리형 정책 중 하나여야 합니다",
+        "특권 세션을 만들어 버킷 정책을 삭제합니다. 세션은 최대 1시간이고 작업 정책은 선택입니다"
+      ],
+      "correct": 2,
+      "explanation": "루트 자격 증명을 복구하지 않고 멤버 계정의 루트 작업을 하려면 특권 세션을 만듭니다. 전제는 멤버 계정의 특권 루트 작업 기능이 활성화돼 있는 것입니다. 공식 API 참조가 한계를 적습니다. DurationSeconds는 0에서 900초이고 기본값이 900이며 더 큰 값을 지정하면 작업이 실패합니다. TaskPolicyArn은 필수이고 다섯 관리형 정책 중 하나여야 합니다. IAMAuditRootUserCredentials와 IAMCreateRootUserPassword와 IAMDeleteRootUserCredentials와 S3UnlockBucketPolicy와 SQSUnlockQueuePolicy입니다. 그래서 버킷 정책을 풀려고 만든 세션으로 다른 루트 작업을 할 수 없습니다. 공식 모범 사례가 드는 시나리오가 바로 이 S3 사례와 SQS 대기열의 리소스 기반 정책 삭제입니다. MinimumSessionTokenSize는 4,096바이트를 넘을 수 없습니다.",
+      "wrongExplanations": {
+        "0": "특권 세션이 그 경로이고 시간 제한도 있습니다.",
+        "1": "버킷 소유자 변경으로 푸는 경로가 아닙니다.",
+        "3": "최대 900초이고 작업 정책은 필수입니다."
+      },
+      "sources": [
+        {
+          "title": "AssumeRoot - 특권 세션의 한계",
+          "url": "https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q14",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.5",
+      "section": "root-credentials",
+      "difficulty": "applied",
+      "stem": "루트 액세스 중앙 집중화를 켠 뒤 멤버 계정에서 제거할 수 있는 것을 정리하려 합니다. 보고서에 암호와 액세스 키만 제거된다고 적혀 있습니다. 올바른 정정과 함께 알아야 할 사실은 무엇입니까?",
+      "options": [
+        "제거 대상은 암호와 액세스 키 둘이고 서명 인증서와 MFA는 멤버 계정이 직접 지워야 합니다",
+        "제거 대상은 암호뿐이고 나머지는 삭제할 수 없습니다",
+        "제거 대상은 루트 사용자 암호와 액세스 키와 서명 인증서와 MFA 비활성화 넷입니다. 그리고 Organizations에서 새로 만드는 계정은 기본적으로 루트 자격 증명이 없습니다",
+        "제거 대상은 넷이지만 새로 만드는 계정에는 기본적으로 루트 암호가 설정됩니다"
+      ],
+      "correct": 2,
+      "explanation": "공식이 중앙 집중화 후 멤버 계정에서 제거할 수 있는 것을 넷으로 적습니다. 루트 사용자 암호와 루트 사용자 액세스 키와 루트 사용자 서명 인증서와 MFA 비활성화입니다. 그리고 Organizations에서 새로 만드는 계정은 기본적으로 루트 자격 증명이 없고, 계정 복구가 활성화되지 않으면 멤버 계정은 루트로 로그인하거나 루트 암호 복구를 할 수 없습니다. 감사 쪽도 공식이 적습니다. 멤버 계정의 루트 자격 증명 상태를 감사하려면 IAMAuditRootUserCredentials 관리형 정책으로 권한을 좁히거나 iam:GetAccountSummary가 있는 정책을 쓰고, 볼 수 있는 것은 암호 존재 여부와 액세스 키 존재 여부 및 마지막 사용 시점과 서명 인증서 보유 여부와 연결된 MFA 디바이스입니다.",
+      "wrongExplanations": {
+        "0": "서명 인증서와 MFA 비활성화도 제거 대상입니다.",
+        "1": "제거 대상이 넷입니다.",
+        "3": "새 계정은 기본적으로 루트 자격 증명이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Centralize root access for member accounts - 제거 대상과 감사",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-1-q15",
+      "examGuideTaskId": "scs-t6-1",
+      "skill": "6.1.5",
+      "section": "root-credentials",
+      "difficulty": "applied",
+      "stem": "감사인이 루트 자격 증명을 모두 없앴다면 ID 파이프라인이 고장났을 때 어떻게 들어가는지 묻습니다. 무엇을 보여 줘야 하고 피해야 할 설계는 무엇입니까?",
+      "options": [
+        "루트 사용자 하나를 남겨 두고 그 자격 증명을 금고에 보관하는 절차를 보여 줍니다",
+        "관리자 그룹 전원에게 장기 상승 권한을 미리 부여해 둔 구성을 보여 줍니다",
+        "파이프라인 장애 시 자동으로 권한을 상승시키는 자동화를 보여 줍니다",
+        "미리 구성한 비상 접근 프로세스를 보여 줍니다. 공식이 관리자가 요청을 검증하고 승인하는 절차와 비상용 교차 계정 역할을 형태로 들고, 장기 상승 권한 부여를 안티패턴으로 적습니다"
+      ],
+      "correct": 3,
+      "explanation": "Well-Architected 보안 원칙 SEC03-BP03이 자동화된 프로세스나 파이프라인 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스를 요구합니다. 목적은 최소 권한에 의존하면서도 필요할 때 올바른 수준의 접근을 얻게 하는 것이고, 공식이 드는 형태는 관리자가 요청을 검증하고 승인하는 프로세스이며 예로 비상용 교차 계정 역할을 듭니다. 안티패턴이 둘입니다. 기존 ID 구성에 장애가 났을 때 복구할 비상 프로세스가 없는 것과 문제 해결이나 복구를 위해 장기 상승 권한을 부여하는 것입니다. 이 모범 사례를 세우지 않으면 위험 수준이 중간입니다. 중앙 집중화 환경에서는 특권 세션이 그 역할의 상당 부분을 대신합니다. 최대 15분이고 작업 범위가 한정되며 sts:AssumeRoot 권한 보유자만 할 수 있습니다.",
+      "wrongExplanations": {
+        "0": "루트를 남겨 두는 것이 공식이 드는 형태가 아닙니다.",
+        "1": "장기 상승 권한 부여가 공식이 적는 안티패턴입니다.",
+        "2": "승인 절차 없는 자동 상승은 검증과 승인을 전제하는 공식 형태와 어긋납니다."
+      },
+      "sources": [
+        {
+          "title": "SEC03-BP03 Establish emergency access process",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}

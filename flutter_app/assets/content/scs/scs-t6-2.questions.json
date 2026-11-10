@@ -1,0 +1,445 @@
+{
+  "examGuideTaskId": "scs-t6-2",
+  "taskTitle": "클라우드 리소스를 안전하고 일관성 있게 배포할 수 있는 전략 구현",
+  "domain": 6,
+  "certCode": "SCS-C03",
+  "lastVerified": "2026-11-10",
+  "questions": [
+    {
+      "id": "scs-t6-2-q1",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.1",
+      "section": "iac",
+      "difficulty": "applied",
+      "stem": "보안팀이 조직의 모든 계정에 CloudTrail 설정 스택을 StackSets로 배포했습니다. 그런데 지난주 새로 만든 계정 둘에는 스택이 없습니다. 무엇이 빠졌습니까?",
+      "options": [
+        "셀프 관리형 권한으로 배포했거나 서비스 관리형인데 자동 배포를 켜지 않았습니다. 앞으로 조직에 추가되는 계정에 자동 배포하는 기능은 서비스 관리형 권한에만 있습니다",
+        "StackSet의 실패 허용이 초과되어 두 계정에서 작업이 중단된 것입니다",
+        "새 계정은 등록 후 24시간이 지나야 StackSets 대상이 됩니다",
+        "셀프 관리형 권한에서도 자동 배포가 되므로 신뢰 관계 역할이 잘못된 것입니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 권한 모델의 차이에 자동 배포를 적습니다. 서비스 관리형 권한을 쓰면 앞으로 조직에 추가하는 계정에 자동 배포를 켤 수 있고 셀프 관리형에는 그 기능이 없습니다. 서비스 관리형은 StackSets가 필요한 IAM 역할을 대신 만들고 관리자 계정은 조직의 관리 계정 또는 위임된 관리자 계정입니다. 전환에 필요한 단계는 StackSets의 신뢰 액세스 활성화와 위임된 관리자 멤버 계정 등록입니다. 셀프 관리형을 유지해야 하는 경우도 있습니다. 조직 밖 계정에 배포해야 하면 셀프 관리형뿐이고 IAM 역할을 만들 권한이 있는 어떤 AWS 계정에든 배포할 수 있습니다. 기존 계정에 소급 적용하려면 스택 추가로 대상 계정과 리전을 더합니다.",
+      "wrongExplanations": {
+        "1": "실패 허용 초과는 작업 중단으로 드러나고 새 계정 누락의 설명이 아닙니다.",
+        "2": "등록 후 대기 시간 같은 규칙은 없습니다.",
+        "3": "셀프 관리형에는 자동 배포 기능이 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Managing stacks across accounts and Regions with StackSets - 권한 모델",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q2",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.1",
+      "section": "iac",
+      "difficulty": "applied",
+      "stem": "운영자가 다른 리전 콘솔에서 StackSet을 찾지 못했다고 보고하고, 같은 StackSet의 일부 계정만 새 템플릿으로 업데이트하고 싶다고 요청합니다. 두 가지에 대한 올바른 설명은 무엇입니까?",
+      "options": [
+        "StackSet은 글로벌 리소스이고 일부 스택만 선택적으로 업데이트할 수 있습니다",
+        "StackSet은 리전 리소스라 만든 리전에서만 보고 바꿀 수 있고, 템플릿 업데이트는 항상 모든 스택에 영향을 주므로 일부 스택의 템플릿만 선택적으로 업데이트할 수 없습니다",
+        "StackSet은 리전 리소스이지만 템플릿 업데이트는 대상 계정을 골라 적용할 수 있습니다",
+        "StackSet은 글로벌 리소스이고 템플릿 업데이트는 모든 스택에 영향을 줍니다"
+      ],
+      "correct": 1,
+      "explanation": "StackSet은 리전 리소스입니다. 한 리전에서 만들면 그 리전을 보고 있을 때만 보고 바꿀 수 있고, 배포 대상이 여러 리전이어도 StackSet 자체는 한 리전에 있습니다. 그리고 공식이 일부 스택의 템플릿만 선택적으로 업데이트할 수 없다고 명시합니다. 바꿀 수 있는 것은 셋입니다. 기존 설정 변경과 리소스 추가, 템플릿 교체, 그리고 기존과 추가 대상 계정 및 리전에 스택 추가입니다.",
+      "wrongExplanations": {
+        "0": "StackSet은 리전 리소스이고 선택적 템플릿 업데이트가 불가합니다.",
+        "2": "템플릿 업데이트는 모든 스택에 영향을 줍니다.",
+        "3": "StackSet은 리전 리소스입니다."
+      },
+      "sources": [
+        {
+          "title": "StackSets concepts - 리전 리소스와 업데이트 범위",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q3",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.1",
+      "section": "iac",
+      "difficulty": "applied",
+      "stem": "정리 작업으로 StackSet을 삭제하려는데 삭제되지 않습니다. 일부 대상 계정의 스택은 그대로 돌려 두고 싶습니다. 올바른 설명과 방법은 무엇입니까?",
+      "options": [
+        "스택 인스턴스는 스택이 삭제되면 함께 사라지므로 스택을 먼저 지우면 됩니다",
+        "StackSet 삭제 시 스택은 자동으로 분리되어 독립 스택이 되므로 바로 삭제하면 됩니다",
+        "StackSet은 스택 인스턴스가 없을 때만 삭제할 수 있습니다. 스택을 StackSet에서 떼면서 계속 돌게 하려면 Retain Stacks 옵션을 씁니다. 그러면 그 스택은 StackSet 밖의 독립 스택으로 관리됩니다",
+        "StackSet은 언제든 삭제할 수 있고 남은 스택 인스턴스는 고아 상태로 유지됩니다"
+      ],
+      "correct": 2,
+      "explanation": "공식이 삭제의 선후 관계를 적습니다. StackSet은 스택 인스턴스가 없을 때만 삭제할 수 있고, 스택을 StackSet에서 떼면서 계속 돌게 하려면 Retain Stacks 옵션을 써야 그 스택이 CloudFormation에서 StackSet 밖의 독립 스택으로 관리됩니다. 함께 기억할 성질이 있습니다. 스택 인스턴스는 대상 계정의 한 리전에 있는 스택에 대한 참조이고 스택 없이 존재할 수 있습니다. 스택 생성이 실패하면 스택 인스턴스가 실패 이유를 담은 채 남고, 스택 인스턴스는 하나의 StackSet에만 연결됩니다.",
+      "wrongExplanations": {
+        "0": "스택 인스턴스는 스택 없이 존재할 수 있습니다.",
+        "1": "자동 분리는 일어나지 않고 Retain Stacks를 지정해야 합니다.",
+        "3": "스택 인스턴스가 남아 있으면 StackSet을 삭제할 수 없습니다."
+      },
+      "sources": [
+        {
+          "title": "StackSets concepts - 스택 인스턴스와 삭제",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q4",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.1",
+      "section": "iac",
+      "difficulty": "applied",
+      "stem": "10개 계정에 스택을 배포하면서 최대 동시 계정을 25퍼센트로, 동시성 모드를 Strict Failure Tolerance로, 실패 허용을 1로 설정했습니다. 실제 동작을 올바르게 설명한 것은 무엇입니까?",
+      "options": [
+        "2.5계정씩 배포하고 실패 허용은 전체 작업 기준으로 1건입니다",
+        "3계정씩 배포하고 최대 동시 계정은 실패 허용과 무관하게 설정됩니다",
+        "10계정 전체에 동시 배포하고 실패가 1건을 넘으면 중단합니다",
+        "백분율은 내림이라 2계정씩 배포하고, Strict Failure Tolerance 모드에서는 최대 동시 계정이 실패 허용보다 최대 1 큰 값까지만 가능하며 실패 허용은 리전별로 셉니다"
+      ],
+      "correct": 3,
+      "explanation": "공식이 세 규칙을 적습니다. 백분율은 내림이라 10계정에 25퍼센트를 주면 2계정씩 동시 배포합니다. 동시성 모드가 Strict Failure Tolerance면 최대 동시 계정은 실패 허용보다 최대 1 큰 값까지만 가능합니다. 실패 허용은 리전별로 허용하는 스택 작업 실패의 최대 수나 비율이고 넘으면 작업이 자동 중단됩니다. 그리고 최대 동시 계정은 최대값이라 대규모 배포에서는 서비스 스로틀링 때문에 실제 동시 계정 수가 더 낮을 수 있습니다. 작업은 한 리전씩 배포 순서 상자에 지정한 순서로 진행합니다.",
+      "wrongExplanations": {
+        "0": "백분율은 내림이고 실패 허용은 리전별입니다.",
+        "1": "Strict Failure Tolerance 모드에서는 두 값이 묶입니다.",
+        "2": "최대 동시 계정 설정이 그 동시성을 제한합니다."
+      },
+      "sources": [
+        {
+          "title": "StackSets concepts - 작업 옵션과 숫자 규칙",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q5",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.1",
+      "section": "iac",
+      "difficulty": "applied",
+      "stem": "플랫폼팀이 CI에 cfn-lint를 넣었습니다. 그런데 모든 S3 버킷은 반드시 암호화해야 한다는 조직 규칙을 위반한 템플릿이 통과했고, 특정 리전에서만 지원되지 않는 속성도 잡히지 않았습니다. 두 문제의 원인은 무엇입니까?",
+      "options": [
+        "cfn-lint는 리소스 공급자 스키마와 추가 규칙을 보므로 조직 정책 위반은 Guard의 몫이고, cfn-lint는 기본적으로 us-east-1 스키마로 검사하므로 다른 리전은 regions 옵션으로 지정해야 합니다",
+        "cfn-lint 버전이 낮아 두 검사가 모두 빠진 것이므로 최신 버전으로 올리면 해결됩니다",
+        "cfn-lint는 조직 정책을 검사하지만 규칙 파일을 지정하지 않았고, 리전은 자동 감지됩니다",
+        "두 문제 모두 Guard로만 해결되고 cfn-lint는 배포 후 검사 도구입니다"
+      ],
+      "correct": 0,
+      "explanation": "cfn-lint가 보는 것은 CloudFormation 리소스 공급자 스키마와 추가 규칙입니다. 잘못된 리소스 속성과 지원되지 않는 속성 값과 깨진 참조와 흔한 모범 사례 문제를 잡습니다. 모든 S3 버킷은 암호화 같은 조직 정책과 보안 모범 사례와 거버넌스 요건은 Guard의 몫이고, Guard는 필요하거나 금지된 구성을 Guard 언어 규칙으로 쓰고 모든 JSON과 YAML 데이터를 그 규칙에 비춰 검사합니다. 템플릿 외에 변경 세트와 AWS Config 구성 항목도 봅니다. 리전 쪽은 cfn-lint가 기본적으로 us-east-1 스키마로 검사하므로 다른 리전은 regions 옵션으로 지정해야 하고, SAM 변환을 먼저 적용한 뒤 검사합니다. 둘 다 로컬 검증이라 통과가 배포 성공을 보장하지 않고, 이 도구를 거치지 않는 배포 경로가 있으면 통제가 비어 버립니다. 공식 CloudFormation 모범 사례가 Guard를 CI/CD 파이프라인에 넣어 배포 전에 자동 검증하라고 권합니다.",
+      "wrongExplanations": {
+        "1": "버전 문제가 아니라 도구의 역할과 기본 리전의 문제입니다.",
+        "2": "cfn-lint는 조직 정책을 검사하지 않고 리전도 자동 감지하지 않습니다.",
+        "3": "cfn-lint도 배포 전 로컬 검증 도구이고 스키마와 구문을 봅니다."
+      },
+      "sources": [
+        {
+          "title": "Validate templates with cfn-lint",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lint.html"
+        },
+        {
+          "title": "Validate templates with Guard",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cloudformation-guard.html"
+        },
+        {
+          "title": "CloudFormation best practices - 파이프라인 검증",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q6",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.2",
+      "section": "tags",
+      "difficulty": "applied",
+      "stem": "거버넌스팀이 CostCenter 태그 없이는 리소스를 만들 수 없게 하려고 태그 정책을 만들고 시행을 켰습니다. 그런데 태그 없이 만든 EC2 인스턴스가 그대로 생성됐습니다. 원인과 요건을 만족시키는 방법은 무엇입니까?",
+      "options": [
+        "시행 설정이 전파되지 않은 것이므로 조직 루트에 다시 첨부하면 됩니다",
+        "태그 정책은 태그되지 않은 리소스와 정책에 정의되지 않은 태그를 평가하지 않습니다. 태그 없는 생성을 막으려면 aws:RequestTag와 aws:TagKeys 조건 키를 쓰는 SCP나 ID 기반 정책이 필요합니다",
+        "태그 정책의 시행은 리소스 유형을 지정하지 않으면 모든 유형에 걸리므로 유형을 지정하면 해결됩니다",
+        "태그 정책은 선언적 범주이므로 시행 설정 자체가 없고 Resource Groups에서 강제해야 합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 문장 그대로입니다. 태그되지 않은 리소스나 태그 정책에 정의되지 않은 태그는 그 태그 정책의 준수 평가 대상이 아닙니다. 태그 정책이 하는 일은 리소스가 태그될 때의 규칙이고 키의 대소문자 처리와 허용 값입니다. 시행을 켜면 지정한 리소스 유형에 대한 비준수 태그 요청이 완료되지 못하므로 잘못된 태그를 막을 뿐 태그 없음을 막지 않습니다. 태그 정책은 범주상 권한을 부여하거나 거부하지 않는 선언적 정책이라, 요건을 만족시키려면 aws:RequestTag와 aws:TagKeys 조건 키를 쓰는 SCP나 ID 기반 정책으로 태그 없는 생성 요청을 거부해야 합니다. 전제 조건도 있습니다. 태그 정책은 모든 기능이 활성화된 조직에서만 쓸 수 있습니다.",
+      "wrongExplanations": {
+        "0": "전파 문제가 아니라 평가 대상의 문제입니다.",
+        "2": "리소스 유형을 지정해도 태그 없는 리소스는 평가 대상이 아닙니다.",
+        "3": "태그 정책에 시행 설정은 있고, 다만 태그 없음을 막지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Tag policies - 평가 대상과 비대상",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q7",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.2",
+      "section": "tags",
+      "difficulty": "applied",
+      "stem": "조직 전 계정의 태그 준수 상태를 확인하고 비준수 태그를 고치려 합니다. 태그 정책은 이미 Organizations에서 만들어 첨부했습니다. 어디에서 무엇을 합니까?",
+      "options": [
+        "Organizations 콘솔에서 준수 상태를 보고 거기서 태그를 고칩니다",
+        "CloudTrail 이벤트를 조회해 비준수 태그 작업을 찾습니다",
+        "AWS Resource Groups에서 준수를 관리합니다. 계정에 로그인해 비준수 태그를 찾고 Tag Editor와 Resource Groups Tagging API로 태그를 붙이거나 뗍니다. 관리 계정에서 로그인하면 조직 전 계정의 준수 정보를 볼 수 있습니다",
+        "Config 규칙으로 태그 준수를 평가하는 것이 태그 정책의 유일한 확인 경로입니다"
+      ],
+      "correct": 2,
+      "explanation": "공식이 태그 정책을 쓰는 데 서비스 둘이 필요하다고 적고 역할을 나눕니다. AWS Organizations는 태그 정책 자체를 관리합니다. 관리 계정에서 기능을 활성화하고 정책을 만들어 조직 엔티티에 첨부합니다. AWS Resource Groups는 준수를 관리합니다. 계정에 로그인해 비준수 태그를 찾고 Tag Editor와 Resource Groups Tagging API로 태그를 붙이고 뗍니다. 관리 계정에서 로그인하면 조직 전 계정의 준수 정보를 볼 수 있고 멤버 계정에서는 그 계정 것만 봅니다.",
+      "wrongExplanations": {
+        "0": "Organizations는 정책 관리를 맡고 준수 관리는 Resource Groups입니다.",
+        "1": "CloudTrail은 감사 기록이고 준수 상태 뷰가 아닙니다.",
+        "3": "Config 규칙으로도 태그를 볼 수 있지만 태그 정책의 준수 확인 경로는 Resource Groups입니다."
+      },
+      "sources": [
+        {
+          "title": "Tag policies - Organizations와 Resource Groups의 분업",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q8",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.2",
+      "section": "tags",
+      "difficulty": "applied",
+      "stem": "태그 전략을 세우면서 담당자 이메일을 Owner 태그에 넣고, 같은 의미의 키를 costcenter와 CostCenter로 섞어 쓰자는 제안이 나왔습니다. 공식 서술에 맞는 판단은 무엇입니까?",
+      "options": [
+        "이메일은 넣어도 되고 키의 대소문자는 구분되지 않으므로 섞어도 무관합니다",
+        "이메일은 넣으면 안 되지만 키의 대소문자는 구분되지 않습니다",
+        "이메일은 넣어도 되고 키의 대소문자만 구분됩니다",
+        "공식이 태그에 개인 식별 정보나 기밀 정보를 저장하지 말라고 적습니다. 그리고 태그 키와 값은 모두 대소문자를 구분하며 IAM 리소스에는 추가 검증이 있어 대소문자만 다른 키의 적용을 막으므로, 공식 권고는 대소문자만 다른 키를 쓰지 않는 것입니다"
+      ],
+      "correct": 3,
+      "explanation": "공식이 Important로 태그에 개인 식별 정보나 기밀 또는 민감 정보를 저장하지 말라고 적습니다. AWS가 태그를 청구와 관리 서비스 제공에 쓰기 때문이고 태그는 비공개나 민감 데이터용이 아닙니다. 대소문자 쪽도 명확합니다. 태그 키와 값은 모두 대소문자를 구분하고, 다만 IAM 리소스에는 추가 검증이 있어 대소문자만 다른 키의 적용을 막습니다. 공식 권고는 대소문자만 다른 키를 쓰지 않는 것입니다. 태그를 붙이는 방법은 셋입니다. 서비스의 태그 API 작업과 Tag Editor 콘솔과 Resource Groups Tagging API입니다.",
+      "wrongExplanations": {
+        "0": "이메일 같은 개인 정보를 넣지 말라고 적고 대소문자도 구분합니다.",
+        "1": "태그 키와 값은 모두 대소문자를 구분합니다.",
+        "2": "개인 식별 정보를 태그에 저장하지 말라고 공식이 적습니다."
+      },
+      "sources": [
+        {
+          "title": "What is Tag Editor? - 태그의 성질과 주의",
+          "url": "https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q9",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.2",
+      "section": "tags",
+      "difficulty": "applied",
+      "stem": "Service Catalog로 제품을 배포하면서 TagOptions 라이브러리를 구성했습니다. 팀이 TagOption을 AWS 태그로 보고 태그 정책의 평가 대상으로 적었습니다. 그리고 새 태그 정책을 조직 루트에 바로 붙여 시행을 켜려 합니다. 올바른 판단은 무엇입니까?",
+      "options": [
+        "TagOption은 AWS 태그가 아니라 AWS 태그를 만드는 템플릿입니다. 그리고 공식 권고 순서는 단일 계정에 단순한 태그 정책을 붙여 효과를 이해한 뒤 OU와 조직으로 넓히고 시행을 켜기 전에 특히 효과를 확실히 이해하는 것입니다",
+        "TagOption은 AWS 태그이므로 평가 대상이 맞고 조직 루트에 바로 붙여도 됩니다",
+        "TagOption은 AWS 태그가 아니지만 조직 루트에 바로 붙여 시행하는 것이 공식 권고입니다",
+        "TagOption은 AWS 태그이고 시행은 단일 계정에서 먼저 시험해야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 TagOption은 AWS 태그가 아니고 TagOption을 바탕으로 AWS 태그를 만드는 템플릿 역할을 한다고 명시합니다. Service Catalog의 TagOptions 라이브러리는 프로비저닝된 제품의 태그를 관리하는 수단입니다. 배포 순서 쪽도 공식 권고가 명확합니다. 단일 계정에 단순한 태그 정책을 붙여 효과를 이해한 뒤 OU와 조직으로 넓히고 시행을 켜기 전에 특히 효과를 확실히 이해합니다. 전제 조건으로 태그 정책은 모든 기능이 활성화된 조직에서만 쓸 수 있습니다.",
+      "wrongExplanations": {
+        "1": "TagOption은 AWS 태그가 아니고 바로 조직 루트에 시행하는 것도 권고가 아닙니다.",
+        "2": "공식 권고는 단일 계정에서 먼저 효과를 이해하는 것입니다.",
+        "3": "TagOption은 AWS 태그가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "What is Tag Editor? - TagOption",
+          "url": "https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html"
+        },
+        {
+          "title": "Tag policies - 배포 권고 순서와 전제",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q10",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.3",
+      "section": "firewall-manager",
+      "difficulty": "applied",
+      "stem": "보안팀이 Firewall Manager로 조직 전체에 WAF 웹 ACL 정책을 만들었습니다. 정책은 만들어졌는데 준수 상태가 계속 비어 있고 보호가 적용되지 않습니다. 무엇을 먼저 확인합니까?",
+      "options": [
+        "멤버 계정마다 WAF 웹 ACL을 미리 만들어 뒀는지 확인합니다",
+        "Firewall Manager용으로 AWS Config를 활성화했는지 확인합니다. Network Firewall이나 DNS Firewall 정책이면 AWS RAM 리소스 공유 활성화도 확인합니다",
+        "Shield Advanced 구독이 조직 전체에 적용됐는지 확인합니다",
+        "정책에 태그 기반 범위를 지정했는지 확인합니다"
+      ],
+      "correct": 1,
+      "explanation": "공식 전제 조건이 순서대로 적혀 있고 세 번째가 Firewall Manager용으로 AWS Config를 활성화하는 것입니다. Firewall Manager는 Config를 통해 리소스 구성을 보기 때문에 Config가 없으면 평가가 성립하지 않습니다. 요금 구조가 같은 사실을 확인해 줍니다. 공식 Note가 Firewall Manager에서 발생하는 요금은 AWS WAF와 AWS Config 같은 기반 서비스에 대한 것이라고 적습니다. 전제 조건의 전체 순서는 Organizations 가입과 구성, 기본 관리자 계정 생성, AWS Config 활성화, 3자 정책을 쓸 때의 Marketplace 구독과 설정, Network Firewall이나 DNS Firewall 정책을 쓸 때의 AWS RAM 리소스 공유 활성화, 기본 비활성 리전 설정입니다.",
+      "wrongExplanations": {
+        "0": "웹 ACL을 미리 만들 필요는 없고 정책이 보호를 적용합니다.",
+        "2": "Shield Advanced 구독은 다른 정책 유형의 이야기입니다.",
+        "3": "범위는 계정 전체나 리소스 유형이나 태그로 정할 수 있고 태그가 필수는 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Firewall Manager prerequisites",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-prereq.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q11",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.3",
+      "section": "firewall-manager",
+      "difficulty": "applied",
+      "stem": "Firewall Manager 관리자를 여러 명 두고 각자 다룰 수 있는 정책 유형과 리전을 나누려 합니다. 그리고 3자 방화벽 정책도 일부 관리자에게 맡기려 합니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "모든 관리자가 동일한 권한을 가지므로 분리할 수 없습니다",
+        "관리 범위는 리전으로만 나눌 수 있고 정책 유형은 나눌 수 없습니다",
+        "관리 범위 조건 세 가지를 조합합니다. 정책을 적용할 수 있는 계정이나 OU와 작업할 수 있는 리전과 관리할 수 있는 정책 유형입니다. 범위는 전체 또는 제한이고, 3자 방화벽을 관리할 수 있고 전체 범위를 갖는 것은 기본 관리자입니다",
+        "3자 방화벽은 모든 관리자가 관리할 수 있고 관리 범위는 계정 단위로만 정합니다"
+      ],
+      "correct": 2,
+      "explanation": "Firewall Manager는 관리자를 하나 또는 여럿 둘 수 있습니다. 기본 관리자는 조직 온보딩 때 관리 계정이 만들고 3자 방화벽을 관리할 수 있으며 전체 관리 범위를 갖습니다. 그 밖에는 다른 관리자와 같은 동급입니다. Firewall Manager 관리자는 관리 계정이 관리 범위 구성으로 지정한 리소스만 관리합니다. 관리 범위 조건 세 가지를 조합할 수 있습니다. 정책을 적용할 수 있는 계정 또는 OU, 작업할 수 있는 리전, 관리할 수 있는 Firewall Manager 정책 유형입니다. 범위는 전체 또는 제한이고 공식 권고는 역할 수행에 필요한 권한만 주는 것입니다. 위임과도 이어집니다. Firewall Manager 관리자 계정을 만들면 서비스가 Organizations에 그 계정이 이미 Firewall Manager의 위임된 관리자인지 확인하고 아니면 Organizations를 호출해 설정합니다.",
+      "wrongExplanations": {
+        "0": "관리 범위 구성으로 분리할 수 있습니다.",
+        "1": "정책 유형도 관리 범위 조건의 하나입니다.",
+        "3": "3자 방화벽을 관리하는 것은 기본 관리자입니다."
+      },
+      "sources": [
+        {
+          "title": "Using AWS Firewall Manager administrators",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-administrators.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q12",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.3",
+      "section": "firewall-manager",
+      "difficulty": "applied",
+      "stem": "조직 전체에 보안 그룹 규칙과 DDoS 보호를 일관되게 적용하고 새로 들어오는 계정에도 자동 적용하려 합니다. 비용 담당자는 Firewall Manager 자체 요금이 얼마인지 묻습니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "보호 적용은 계정 전체 단위로만 가능하고 요금은 Firewall Manager 자체에 붙습니다",
+        "새로 들어오는 계정에는 자동 적용되지 않아 계정마다 정책을 다시 만들어야 합니다",
+        "보호 대상은 WAF와 Shield Advanced뿐이고 보안 그룹은 범위 밖입니다",
+        "적용 범위를 계정 전체나 특정 유형의 모든 리소스나 특정 태그가 붙은 모든 리소스로 정하고 새 계정과 리소스에도 계속 적용됩니다. 요금은 Firewall Manager 자체가 아니라 AWS WAF와 AWS Config 같은 기반 서비스에 붙습니다"
+      ],
+      "correct": 3,
+      "explanation": "Firewall Manager는 보호를 한 번 설정하면 계정과 리소스 전체에 자동 적용하고 계정과 리소스가 새로 추가돼도 계속 적용합니다. 다루는 보호는 AWS WAF와 AWS Shield Advanced와 Amazon VPC 보안 그룹 및 네트워크 ACL과 AWS Network Firewall과 Amazon Route 53 Resolver DNS Firewall입니다. 적용 범위를 정하는 방식이 셋입니다. 계정 전체, 특정 유형의 모든 리소스, 특정 태그가 붙은 모든 리소스입니다. 조직 차원 기능 둘도 중요합니다. 조직의 모든 멤버 계정을 Shield Advanced에 구독시키고 새로 들어오는 범위 내 계정도 자동 구독하며, 보안 그룹 규칙을 모든 멤버 계정 또는 특정 부분집합에 적용하고 새 계정에도 자동 적용합니다. 요금은 공식 Note가 적는 대로 AWS WAF와 AWS Config 같은 기반 서비스에 붙습니다.",
+      "wrongExplanations": {
+        "0": "범위 지정 방식이 셋이고 요금은 기반 서비스에 붙습니다.",
+        "1": "새로 들어오는 계정에도 자동 적용됩니다.",
+        "2": "보안 그룹과 네트워크 ACL도 다루는 보호에 듭니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Firewall Manager",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q13",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.4",
+      "section": "sharing",
+      "difficulty": "applied",
+      "stem": "네트워크팀이 중앙 VPC의 서브넷을 애플리케이션 계정과 리소스 기반 정책으로 공유했는데 상대 팀이 VPC 콘솔에 아무것도 보이지 않는다고 합니다. 원인과 해결은 무엇입니까?",
+      "options": [
+        "리소스 기반 정책으로 공유한 리소스는 상대의 원래 서비스 콘솔과 API에 나타나지 않고 상대가 ARN으로 찾아 명시적으로 참조해야 합니다. 해결은 PromoteResourceShareCreatedFromPolicy API로 완전한 RAM 관리형 리소스로 승격하는 것입니다",
+        "상대 계정의 IAM 권한이 부족한 것이므로 읽기 권한을 추가하면 보입니다",
+        "서브넷은 리전 리소스라 같은 리전에서만 보이므로 상대가 리전을 바꾸면 됩니다",
+        "리소스 기반 정책 공유는 콘솔 가시성을 주지만 전파에 최대 24시간이 걸립니다"
+      ],
+      "correct": 0,
+      "explanation": "공식이 RAM과 리소스 기반 정책 공유의 차이를 적습니다. RAM으로 공유하면 사용자가 원래 AWS 서비스 콘솔과 API 작업에서 그 리소스를 자기 계정에 직접 있는 것처럼 보고, 예로 RAM으로 공유한 VPC 서브넷은 상대 계정의 VPC 콘솔과 VPC API 결과에 나타납니다. 반대로 리소스 기반 정책을 붙여 공유한 리소스는 그렇게 보이지 않고 상대가 ARN으로 찾아 명시적으로 참조해야 합니다. 이미 리소스 기반 정책으로 공유한 것은 PromoteResourceShareCreatedFromPolicy API나 동일한 CLI 명령으로 완전한 RAM 관리형 리소스로 승격할 수 있습니다. RAM이 추가로 주는 것은 조직과 OU 단위 공유와 소유자가 리소스별 접근 주체를 보는 것과 조직 밖 계정과의 초대 및 수락 절차입니다. 조직 내 공유를 활성화한 뒤에는 조직 내 계정에 초대가 필요 없습니다.",
+      "wrongExplanations": {
+        "1": "권한 문제가 아니라 공유 방식이 주는 가시성의 차이입니다.",
+        "2": "리전이 아니라 공유 방식의 문제입니다.",
+        "3": "리소스 기반 정책 공유는 네이티브 가시성을 주지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "What is AWS Resource Access Manager? - RAM과 리소스 기반 정책의 차이",
+          "url": "https://docs.aws.amazon.com/ram/latest/userguide/what-is.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q14",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.4",
+      "section": "sharing",
+      "difficulty": "applied",
+      "stem": "개발팀이 직접 CloudFormation을 돌리지 않고도 승인된 구성으로만 리소스를 배포하게 하려 합니다. 인스턴스 유형과 시작 가능한 리전을 제한하고, 제품을 새 버전으로 올리면 여러 팀이 쓰는 모든 포트폴리오에 반영되기를 원합니다. 무엇을 씁니까?",
+      "options": [
+        "StackSets로 각 팀 계정에 스택을 직접 배포합니다",
+        "Service Catalog입니다. 제품을 포트폴리오로 묶고 제약 조건과 리소스 태그를 더한 뒤 IAM 사용자와 그룹에 포트폴리오 접근 권한을 주며, 제품을 새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오의 제품에 전파됩니다",
+        "RAM으로 템플릿을 공유하면 팀이 각자 배포할 수 있습니다",
+        "Firewall Manager의 정책으로 허용 구성을 강제합니다"
+      ],
+      "correct": 1,
+      "explanation": "Service Catalog는 AWS에서 승인된 IT 서비스의 카탈로그를 만들고 관리합니다. 최종 사용자는 조직이 정한 제약 조건을 따라 승인된 것만 빠르게 배포합니다. 표준화는 제품을 어디서 시작할 수 있는지와 어떤 인스턴스 유형을 쓸 수 있는지 등 여러 구성 옵션을 제한하는 것이고, 세분화된 액세스 제어는 관리자가 제품을 포트폴리오로 묶고 제약 조건과 리소스 태그를 더한 뒤 IAM 사용자와 그룹에 포트폴리오 접근 권한을 주는 것입니다. 확장성과 버전 관리도 요건에 맞습니다. 제품을 여러 포트폴리오에 복사 없이 넣을 수 있고 제품을 새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오의 제품에 전파됩니다. 작업 6.1과도 이어집니다. Control Tower의 Account Factory가 Service Catalog의 프로비저닝된 제품 위에 만들어진 추상화입니다.",
+      "wrongExplanations": {
+        "0": "StackSets는 중앙에서 스택을 배포하는 쪽이고 셀프 서비스 카탈로그 모델이 아닙니다.",
+        "2": "RAM은 이미 만든 리소스의 사용권을 공유하는 쪽입니다.",
+        "3": "Firewall Manager는 보호 정책을 중앙 적용하는 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "What Is Service Catalog?",
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "scs-t6-2-q15",
+      "examGuideTaskId": "scs-t6-2",
+      "skill": "6.2.4",
+      "section": "sharing",
+      "difficulty": "applied",
+      "stem": "아키텍처팀이 애플리케이션 단위로 리소스를 묶어 거버넌스를 하자며 Service Catalog AppRegistry 도입을 제안했습니다. 지금 새로 시작하는 조직입니다. 무엇을 확인해야 하고 대안은 무엇입니까?",
+      "options": [
+        "AppRegistry는 정상 제공되므로 그대로 도입하면 됩니다",
+        "Service Catalog 본체가 닫혔으므로 StackSets로 대체해야 합니다",
+        "AppRegistry는 2026년 7월 30일부터 신규 고객에게 열려 있지 않으므로 새로 시작하는 조직은 설정할 수 없습니다. AWS Service Catalog 본체는 닫히지 않았으니 포트폴리오와 제품과 제약 조건 모델을 씁니다",
+        "AppRegistry는 신규 고객에게 열려 있지 않고 Service Catalog 본체도 함께 닫혔습니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 사용자 안내서가 페이지 머리에 AWS Service Catalog AppRegistry는 2026년 7월 30일부터 신규 고객에게 열려 있지 않다고 적습니다. 그날 전에 가입했다면 쓸 수 있고 기존 고객은 정상적으로 계속 사용할 수 있습니다. 즉 지금 새로 시작하는 조직은 설정할 수 없으므로 제안 자체가 성립하지 않습니다. 중요한 구분이 있습니다. AWS Service Catalog 본체는 닫히지 않았고 포트폴리오와 제품과 제약 조건과 프로비저닝된 제품은 그대로 쓰이며 Control Tower의 Account Factory도 Service Catalog의 프로비저닝된 제품 위에 올라갑니다. 공부 시간은 본체의 공유와 제약 조건 모델에 쓰고 AppRegistry는 상태만 알아 둡니다. 참고로 AppRegistry는 RAM을 통해 Organizations로 공유되고 Well-Architected Tool과 통합됩니다.",
+      "wrongExplanations": {
+        "0": "신규 고객에게 열려 있지 않습니다.",
+        "1": "본체는 닫히지 않았습니다.",
+        "3": "닫힌 것은 AppRegistry 기능뿐입니다."
+      },
+      "sources": [
+        {
+          "title": "What is AppRegistry? - 신규 고객 차단 상태",
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/arguide/intro-app-registry.html"
+        },
+        {
+          "title": "What Is Service Catalog? - 본체 모델",
+          "url": "https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
