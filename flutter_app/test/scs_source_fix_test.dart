@@ -198,6 +198,49 @@ void main() {
         reason: '뒷받침하는 공식 페이지가 없는 「공식」 주장을 지문에 두지 않는다');
   });
 
+  // ───────────────────────────────── t3-2-q12 (웹 검색 + 신뢰성 판정 후 교정)
+  group('scs-t3-2-q12: CodeGuru 보안 상태', () {
+    // 2026-11-10 실측으로 가른 자리다.
+    //
+    // **직접 측정된 것** — 사용자 안내서 **전 슬러그가 `404 r=0`**이고
+    // (`end-of-support.html` 자체도, `what-is` 도, 일부러 틀린 슬러그도 같은 신호 →
+    // 가이드 접두사 소멸) 제품 페이지 `aws.amazon.com/codeguru/security/` 도 **404**,
+    // `aws.amazon.com/codeguru/` 는 **Profiler 로 리다이렉트**된다.
+    // `AWS Lifecycle Changes` 하위 세 페이지 전수에는 **`Amazon CodeGuru Reviewer`만**
+    // 있고 CodeGuru **Security** 는 없다.
+    //
+    // **웹 검색으로만 뒷받침되는 것** — 복수 출처가 **2025-11-20 지원 종료**로
+    // 일치하고 그 뿌리는 **AWS 자신의 (지금은 404인) 종료 공지 페이지**다. 보조 증거로
+    // AWS 가 운영하는 GitHub 조직의 `aws-actions/codeguru-security` 가
+    // **2025-12-04 아카이브**됐다.
+    //
+    // ⚠️ **그래서 상태 서술은 유지하고 날짜는 걷었다** — 지금 열리는 공식 페이지가
+    // 그 날짜를 적지 않으므로 레포 규율(「근거가 제3자뿐인 날짜·수치는 쓰지 않는다」 —
+    // CLF 프리 티어 「레거시 12개월」· SAA 「us-east-1 DX 단가」 선례)에 걸린다.
+    test('인용할 수 없는 날짜 비교를 적지 않는다', () {
+      final all = jsonEncode(questionById('scs-t3-2-q12'));
+      expect(all.contains('2025년 11월에 이미 종료'), isFalse,
+          reason: '지금 열리는 공식 페이지가 그 날짜를 적지 않는다');
+      expect(all.contains('2026년 3월에 게시'), isFalse,
+          reason: '게시일과 종료일을 비교하는 서술은 그 날짜에 기대고 있었다');
+      // 대조군 — 상태 서술 자체는 남아 있어야 한다(지우는 것이 목적이 아니다).
+      expect(all.contains('지원이 종료'), isTrue,
+          reason: '문서 404 는 직접 측정됐고 복수 출처가 종료 상태로 일치한다');
+    });
+
+    test('목록 사실을 적고 그 근거를 출처로 단다', () {
+      final q = questionById('scs-t3-2-q12');
+      expect((q['explanation'] as String).contains('CodeGuru Reviewer'), isTrue,
+          reason: '유지 관리 목록에 있는 것은 Reviewer 다 — 「목록에 없다 ≠ 살아 '
+              '있다」가 이 문항의 교육 가치다');
+      expect(
+          urlsOf('scs-t3-2-q12')
+              .any((e) => e.contains('general/latest/gr/maintenance_services.html')),
+          isTrue,
+          reason: 'Reviewer 사실의 근거 — ⚠️ 랜딩 페이지가 아니라 하위 페이지다');
+    });
+  });
+
   test('정답 인덱스가 모두 불변이고 전 문항이 드래프트다', () {
     // 이 배치는 **출처와 지문 한 줄**만 고쳤다 — 정답·보기·해설은 건드리지 않았다.
     // ⚠️ 이 맵을 처음 손으로 적었을 때 **14건 중 6건이 틀렸다**(t1-3-q8·t2-2-q4·t3-2-q12·t3-2-q13·t4-1-q4·t5-2-q15).
