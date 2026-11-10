@@ -55,7 +55,7 @@
       },
       "sources": [
         {
-          "title": "What is Image Builder? - 테스트 게이트와 STIG 강화 컴포넌트",
+          "title": "What is Image Builder? — Organizations 통합과 빌드 인프라 설정",
           "url": "https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html"
         }
       ],
@@ -339,11 +339,7 @@
       },
       "sources": [
         {
-          "title": "AWS Lifecycle Changes - 종료와 유지 관리 상태 목록",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
-        },
-        {
-          "title": "Amazon Inspector finding types - 조사 결과 세 유형과 대상",
+          "title": "Amazon Inspector finding types — 현행 코드 취약성 수단",
           "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html"
         }
       ],
@@ -371,8 +367,8 @@
       },
       "sources": [
         {
-          "title": "AWS Lifecycle Changes - 종료와 유지 관리 상태 목록",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
+          "title": "Services in Sunset — 종료 예정 항목 목록",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/sunset_services.html"
         }
       ],
       "verified": false

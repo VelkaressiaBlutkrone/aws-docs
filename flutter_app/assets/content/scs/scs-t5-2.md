@@ -34,8 +34,10 @@ sources:
     url: https://docs.aws.amazon.com/aws-backup/latest/devguide/logicallyairgappedvault.html
   - title: What is AWS DataSync?
     url: https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html
-  - title: AWS Lifecycle Changes
-    url: https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html
+  - title: Services in Maintenance — 유지 관리 항목 목록
+    url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+  - title: Services in Full Shutdown — 완전 종료 항목 목록
+    url: https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html
 lastVerified: 2026-11-09
 ---
 
@@ -437,4 +439,5 @@ DataSync 는 **AWS 스토리지 서비스로·에서·사이에** 파일·객체
 11. How Amazon Data Lifecycle Manager works — `docs.aws.amazon.com/ebs/latest/userguide/dlm-elements.html` (2026-11-09 확인)
 12. Logically air-gapped vault (AWS Backup) — `docs.aws.amazon.com/aws-backup/latest/devguide/logicallyairgappedvault.html` (2026-11-09 확인)
 13. What is AWS DataSync? — `docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html` (2026-11-09 확인)
-14. AWS Lifecycle Changes — `docs.aws.amazon.com/general/latest/gr/service-lifecycle.html` (2026-11-09 확인)
+14. Services in Maintenance — 유지 관리 항목 목록 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-10 확인)
+15. Services in Full Shutdown — 완전 종료 항목 목록 — `docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html` (2026-11-10 확인)

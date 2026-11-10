@@ -26,7 +26,7 @@
       "id": "scs-t3-2-q2",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt1)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -35,11 +35,11 @@
         {
           "url": "https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html",
           "fetched": true,
-          "supports": "partial"
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[source-title-mismatch] ⭐ **probe가 범위를 좁혔다** — `Organizations`와 `terminate`가 인용 페이지에 실재하므로 사실 귀속은 정확하다(대조군 `STIG`·`tests pass` 통과). 남은 결함은 **출처 제목뿐이다** — 「테스트 게이트와 STIG 강화 컴포넌트」는 q1이 쓰는 사실이고 이 문항이 쓰는 사실이 아니다. 제목만 고치면 닫힌다."
+      "recommendation": "pass",
+      "notes": "[source-title-mismatch] ⭐ **probe가 범위를 좁혔다** — `Organizations`와 `terminate`가 인용 페이지에 실재하므로 사실 귀속은 정확하다(대조군 `STIG`·`tests pass` 통과). 남은 결함은 **출처 제목뿐이다** — 「테스트 게이트와 STIG 강화 컴포넌트」는 q1이 쓰는 사실이고 이 문항이 쓰는 사실이 아니다. 제목만 고치면 닫힌다. ✅ **2026-11-10 교정** — 출처 제목을 실제 인용 사실(「Organizations 통합과 빌드 인프라 설정」)로 바꿨다. 사실 귀속은 probe로 이미 확인했다(`Organizations`·`terminate` 실재)."
     },
     {
       "id": "scs-t3-2-q3",
@@ -228,18 +228,13 @@
       "ambiguityFlag": false,
       "sources": [
         {
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
-          "fetched": true,
-          "supports": "yes"
-        },
-        {
           "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html",
           "fetched": false,
-          "supports": "yes"
+          "supports": "partial"
         }
       ],
-      "recommendation": "pass",
-      "notes": "⭐ G-29 적용 — CodeGuru 보안 지원 종료와 「가이드 게시 시점에 이미 없던 서비스」까지 적는다."
+      "recommendation": "review",
+      "notes": "⭐ G-29 적용 — CodeGuru 보안 지원 종료와 「가이드 게시 시점에 이미 없던 서비스」까지 적는다. ⚠️⚠️ **2026-11-10에 새로 드러났다** — 이 문항이 쓰던 `service-lifecycle.html`은 **용어 정의만 담는 랜딩 페이지**이고 134항목은 하위 세 페이지에 있다. 그 세 페이지를 전수로 뒤지니 **유지 관리 목록에 있는 것은 `Amazon CodeGuru Reviewer`(2025-10-07)이고 문항이 다루는 CodeGuru *Security*는 세 목록에 없다**(P-01의 「목록에 없다 ≠ 살아 있다」와 일치 — 그 사용자 안내서는 진짜 404다). 그래서 그 출처를 걷었고 `inspector` 출처만 남겼다. **검수자 판단이 필요한 자리**: 정답 보기의 「지원 종료」와 해설의 「2025년 11월에 이미 종료」가 공식 목록으로 뒷받침되지 않는다 — 문구를 「세 목록에 없고 사용자 안내서 접근이 중단된 상태」로 좁힐지 결정한다."
     },
     {
       "id": "scs-t3-2-q13",
@@ -252,13 +247,13 @@
       "ambiguityFlag": false,
       "sources": [
         {
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/sunset_services.html",
           "fetched": true,
           "supports": "yes"
         }
       ],
       "recommendation": "pass",
-      "notes": "Q Developer는 IDE 플러그인 한정이고 서비스 전체 종료가 아니다 + Kiro 안내."
+      "notes": "Q Developer는 IDE 플러그인 한정이고 서비스 전체 종료가 아니다 + Kiro 안내. ✅ **2026-11-10 교정(URL 정밀화)** — 랜딩 페이지를 `general/latest/gr/sunset_services.html`로 바꿨다. 그 목록에 `Amazon Q Developer IDE plugins`(2026-04-30 / 2027-04-30 end of support)가 실재한다 — 문항의 「IDE 플러그인 한정」과 맞는다."
     },
     {
       "id": "scs-t3-2-q14",

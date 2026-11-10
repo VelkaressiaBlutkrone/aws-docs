@@ -25,6 +25,10 @@ sources:
   - title: Introduction to AWS Security Hub CSPM
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
 lastVerified: 2026-11-08
+  - title: Health checks for your target groups — 경로·포트·간격·임계값
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
+  - title: Register targets with your target group — 보안 그룹 요건
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html
 ---
 
 # 모니터링·로깅·경보 문제 해결 (리소스 기능·권한·구성 분석과 잘못된 구성 교정)
@@ -281,3 +285,5 @@ REST API의 CloudWatch 로깅은 **두 종류**입니다.
 6. Alarm evaluation — `docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html` (2026-11-08 확인)
 7. Configuring how CloudWatch alarms treat missing data — `docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html` (2026-11-08 확인)
 8. Introduction to AWS Security Hub CSPM — `docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html` (2026-11-08 확인)
+9. Health checks for your target groups — 경로·포트·간격·임계값 — `docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html` (2026-11-10 확인)
+10. Register targets with your target group — 보안 그룹 요건 — `docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html` (2026-11-10 확인)

@@ -7,7 +7,7 @@
       "id": "scs-t1-2-q1",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt2)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -16,22 +16,27 @@
         {
           "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-flow-logs.html",
           "fetched": false,
-          "supports": "partial"
+          "supports": "yes"
         },
         {
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html",
           "fetched": true,
-          "supports": "partial"
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/how-cloudtrail-works.html",
+          "fetched": true,
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[answer-element-unsourced] 정답의 세 짝 중 CloudTrail 축을 뒷받침하는 출처가 없다(출처는 TGW 흐름 로그와 Resolver 쿼리 로그 둘뿐). 사실은 정확하므로 C4만 보강 대상이다."
+      "recommendation": "pass",
+      "notes": "[answer-element-unsourced] 정답의 세 짝 중 CloudTrail 축을 뒷받침하는 출처가 없다(출처는 TGW 흐름 로그와 Resolver 쿼리 로그 둘뿐). 사실은 정확하므로 C4만 보강 대상이다. ✅ **2026-11-10 교정** — `how-cloudtrail-works.html`을 더했다(실측 `200 r=0` · 22,270자 · `API`·`management events` 탐침 통과). md 출처에도 더했다."
     },
     {
       "id": "scs-t1-2-q2",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt0)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -40,16 +45,21 @@
         {
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html",
           "fetched": true,
-          "supports": "partial"
+          "supports": "yes"
         },
         {
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html",
           "fetched": true,
-          "supports": "partial"
+          "supports": "yes"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
+          "fetched": true,
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[answer-not-in-source+probe] 정답이 Athena를 지목하는데 두 출처 어디에도 Athena가 없다(AnalyzingLogData는 Logs Insights 대상 범위, what-is-securityhub는 소급 적용). ⚠️ G-31로 Athena 전용 페이지를 재지 않았으므로 출처 추가 시 그 페이지를 먼저 실측해야 한다. ⚠️⚠️ **probe로 확인했다** — `AnalyzingLogData.html`(7,468자)에 `Athena`가 **0건**이고 대조군(`filterIndex`·`concurrent`)은 통과한다. 정답이 지목하는 Athena를 뒷받침하는 출처가 없다."
+      "recommendation": "pass",
+      "notes": "[answer-not-in-source+probe] 정답이 Athena를 지목하는데 두 출처 어디에도 Athena가 없다(AnalyzingLogData는 Logs Insights 대상 범위, what-is-securityhub는 소급 적용). ⚠️ G-31로 Athena 전용 페이지를 재지 않았으므로 출처 추가 시 그 페이지를 먼저 실측해야 한다. ⚠️⚠️ **probe로 확인했다** — `AnalyzingLogData.html`(7,468자)에 `Athena`가 **0건**이고 대조군(`filterIndex`·`concurrent`)은 통과한다. 정답이 지목하는 Athena를 뒷받침하는 출처가 없다. ✅ **2026-11-10 교정** — `athena/latest/ug/what-is.html`을 더했다(실측 `200 r=0` · `standard SQL`·`Amazon S3`·`serverless` 탐침 통과). ⚠️ `querying-aws-service-logs.html`은 **2,488자 목차 페이지에 `SQL`이 0건**이라 쓰지 않았다 — G-31이 열린 채였으므로 후보 둘을 재서 골랐다."
     },
     {
       "id": "scs-t1-2-q3",
@@ -306,8 +316,8 @@
   ],
   "summary": {
     "suspectOrWrong": 0,
-    "weakOrUnverifiedSources": 2,
+    "weakOrUnverifiedSources": 0,
     "outOfScope": 0,
-    "needsReview": 2
+    "needsReview": 0
   }
 }

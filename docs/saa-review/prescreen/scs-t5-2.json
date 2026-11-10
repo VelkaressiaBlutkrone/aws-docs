@@ -133,13 +133,13 @@
           "supports": "yes"
         },
         {
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html",
           "fetched": true,
           "supports": "yes"
         }
       ],
       "recommendation": "pass",
-      "notes": "⭐ G-55 — Glacier 저장소 잠금이 신규 고객에게 닫힌 독립 서비스의 기능임을 적고 **S3 Glacier 스토리지 클래스는 정상**이라고 갈라 준다. 날짜를 단정하지 않는 처리도 노트와 일치."
+      "notes": "⭐ G-55 — Glacier 저장소 잠금이 신규 고객에게 닫힌 독립 서비스의 기능임을 적고 **S3 Glacier 스토리지 클래스는 정상**이라고 갈라 준다. 날짜를 단정하지 않는 처리도 노트와 일치. ✅ **2026-11-10 교정(URL 정밀화)** — `maintenance_services.html`로 바꿨다. ⭐ 그 목록에서 이 기능은 **`Amazon S3 Glacier Direct`**(2025-10-07, 안내가 「Glacier Vaults → S3 데이터 전송」)라는 이름으로 올라 있다 — 문항이 적는 「금고 기반 독립 서비스」가 그것이다."
     },
     {
       "id": "scs-t5-2-q8",
@@ -295,13 +295,13 @@
           "supports": "yes"
         },
         {
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html",
           "fetched": true,
           "supports": "yes"
         }
       ],
       "recommendation": "pass",
-      "notes": "⭐ DataSync 본체는 정상이고 Discovery 기능만 2025-05-20 종료 — 기능 단위로 가르는 처리."
+      "notes": "⭐ DataSync 본체는 정상이고 Discovery 기능만 2025-05-20 종료 — 기능 단위로 가르는 처리. ✅ **2026-11-10 교정(URL 정밀화)** — `full_shutdown_services.html`로 바꿨다. ⭐ 그 목록의 `AWS DataSync Discovery`가 **2025-05-20**으로, 문항이 적는 날짜와 정확히 일치한다."
     }
   ],
   "summary": {

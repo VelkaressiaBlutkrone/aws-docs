@@ -64,7 +64,7 @@
       "id": "scs-t4-1-q4",
       "scope": "in",
       "answerVerdict": "likely-correct",
-      "answerConfidence": 8,
+      "answerConfidence": 9,
       "answerNote": "표시된 정답(opt3)에 사실 오류를 찾지 못했다.",
       "explanationVerdict": "ok",
       "wrongExplanationsVerdict": "ok",
@@ -73,16 +73,11 @@
         {
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html",
           "fetched": false,
-          "supports": "partial"
-        },
-        {
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
-          "fetched": true,
-          "supports": "partial"
+          "supports": "yes"
         }
       ],
-      "recommendation": "review",
-      "notes": "[cannot-verify-source] ⚠️⚠️ **확인 불가로 판정을 낮췄다.** SMS MFA 종료를 `service-lifecycle.html`에 귀속하는데, 그 페이지의 **134항목 표가 JS로 렌더돼 curl 추출에 나오지 않는다**(본문 2,292자에 용어 정의 산문만 있고 **대조군 `Simple AD`도 0건** — 추출 실패이므로 「없다」를 말할 수 없다). 착수 노트 §5는 선행 실측으로 「그 목록에 없다」(G-16 재현)고 적어 두었다. **검수자가 브라우저나 문서 리더로 SMS MFA 항목 유무를 확인한 뒤** 둘째 출처를 걷거나 유지한다 — 사실 자체(SMS 기반 MFA 활성화 지원 종료)는 IAM MFA 페이지가 근거다."
+      "recommendation": "pass",
+      "notes": "[cannot-verify-source] ⚠️⚠️ **확인 불가로 판정을 낮췄다.** SMS MFA 종료를 `service-lifecycle.html`에 귀속하는데, 그 페이지의 **134항목 표가 JS로 렌더돼 curl 추출에 나오지 않는다**(본문 2,292자에 용어 정의 산문만 있고 **대조군 `Simple AD`도 0건** — 추출 실패이므로 「없다」를 말할 수 없다). 착수 노트 §5는 선행 실측으로 「그 목록에 없다」(G-16 재현)고 적어 두었다. **검수자가 브라우저나 문서 리더로 SMS MFA 항목 유무를 확인한 뒤** 둘째 출처를 걷거나 유지한다 — 사실 자체(SMS 기반 MFA 활성화 지원 종료)는 IAM MFA 페이지가 근거다. ✅ **2026-11-10 교정(resource 해소)** — 랜딩 페이지 출처를 걷었다. ⚠️⚠️ **Lifecycle Changes 하위 세 페이지를 전수로 뒤져 `SMS`·`MFA`가 0건임을 확인**했다(착수 노트 §5 G-16의 선행 실측 확인). 남은 출처 `id_credentials_mfa.html`이 `AWS ended support for enabling SMS multi-factor authentication (MFA)`를 직접 적으므로 근거가 충분하다(실측)."
     },
     {
       "id": "scs-t4-1-q5",
@@ -281,13 +276,13 @@
           "supports": "yes"
         },
         {
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html",
           "fetched": true,
           "supports": "yes"
         }
       ],
       "recommendation": "pass",
-      "notes": "Simple AD 미지원 목록과 RDS for SQL Server 비호환, AD Connector도 비호환 → Managed Microsoft AD. ⭐ 유지 관리 상태 귀속이 정당한 자리(그 서비스는 Lifecycle Changes 목록에 있다)."
+      "notes": "Simple AD 미지원 목록과 RDS for SQL Server 비호환, AD Connector도 비호환 → Managed Microsoft AD. ⭐ 유지 관리 상태 귀속이 정당한 자리(그 서비스는 Lifecycle Changes 목록에 있다). ✅ **2026-11-10 교정(URL 정밀화)** — `maintenance_services.html`로 바꿨다. 그 목록에 `AWS Directory Service – Simple AD`(2026-06-30)가 실재한다."
     },
     {
       "id": "scs-t4-1-q15",
@@ -311,8 +306,8 @@
   ],
   "summary": {
     "suspectOrWrong": 0,
-    "weakOrUnverifiedSources": 1,
+    "weakOrUnverifiedSources": 0,
     "outOfScope": 0,
-    "needsReview": 1
+    "needsReview": 0
   }
 }

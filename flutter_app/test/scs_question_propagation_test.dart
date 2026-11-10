@@ -132,6 +132,9 @@ void main() {
       'scs_guide_sync_test.dart', // 가이드 JSON 동기화
       'scs_doc_format_test.dart', // 포맷 + 저작 규율 (md + 문항을 합쳐 읽는다)
       'scs_question_propagation_test.dart', // 이 파일
+      // 2026-11-10 T2 1차 패스의 출처 교정 회귀 가드 — md 금지 문장이
+      // 아니라 **문항 출처**를 고정하므로 옮겨 올 규칙이 없다.
+      'scs_source_fix_test.dart',
     };
     final unregistered = Directory('test')
         .listSync()

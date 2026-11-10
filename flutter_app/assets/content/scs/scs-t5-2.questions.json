@@ -195,12 +195,12 @@
       },
       "sources": [
         {
-          "title": "Amazon Glacier Vault Lock",
+          "title": "S3 Glacier Vault Lock — 금고 기반 독립 서비스",
           "url": "https://docs.aws.amazon.com/amazonglacier/latest/dev/vault-lock.html"
         },
         {
-          "title": "AWS Lifecycle Changes",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
+          "title": "Services in Maintenance — 유지 관리 항목 목록",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
       "verified": false
@@ -427,12 +427,12 @@
       },
       "sources": [
         {
-          "title": "What is AWS DataSync?",
+          "title": "What is AWS DataSync? — 보안 수단과 VPC 엔드포인트",
           "url": "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html"
         },
         {
-          "title": "AWS Lifecycle Changes",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/service-lifecycle.html"
+          "title": "Services in Full Shutdown — 완전 종료 항목 목록",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html"
         }
       ],
       "verified": false
