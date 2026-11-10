@@ -38,6 +38,31 @@ void main() {
     'scs-t5-1', 'scs-t5-2', 'scs-t5-3',
     'scs-t6-1', 'scs-t6-2', 'scs-t6-3',
   ];
+
+  /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
+  ///
+  /// ⚠️⚠️ **아래 「저작 규율」 가드가 보는 범위다.** 2026-11-10 도메인 3 문항
+  /// 배치까지 이 가드들이 `.md`만 순회해서, 문항이 같은 이름(`CodeGuru`·
+  /// `Q Developer` 등)을 상태 없이 써도 초록이었다. 2026-11-06 AIF 「계속 사전
+  /// 훈련」(md만 보는 사이 문항 3개소가 구 표기)과 2026-11-10 SCS D-11
+  /// (표기 가드가 문항을 안 봄)에 이어 **같은 결함이 세 번째**라, 이번에는
+  /// 규칙마다 범위를 넓히지 않고 **읽는 함수 하나를 넓혀** 구조적으로 닫았다.
+  ///
+  /// 규칙의 성질이 「그 이름을 언급하면 상태를 함께 적는다」이므로 md와 문항에
+  /// 예외 차이가 없다 — 그래서 한 텍스트로 합쳐 본다(예외가 필요한 D-11 표기
+  /// 규칙만 md와 문항을 따로 단정한다).
+  /// ⚠️ 새 종류의 파일(대본·요약 등)이 Task 단위로 들어오면 **여기를 늘린다.**
+  String? authoredTextOf(String taskId) {
+    final parts = <String>[];
+    for (final path in [
+      'assets/content/scs/$taskId.md',
+      'assets/content/scs/$taskId.questions.json',
+    ]) {
+      final f = File(path);
+      if (f.existsSync()) parts.add(f.readAsStringSync());
+    }
+    return parts.isEmpty ? null : parts.join('\n');
+  }
   const maxObjectives = 8;
   const maxSummaryBullets = 10;
 
@@ -280,10 +305,7 @@ void main() {
   //    리터럴 가드를 어형 하나로 뚫고 라이브에 남은 사고 뒤로, 사실 단정은
   //    해당 Task 파일만 보지 않고 **저작된 전 문서**를 센다.
   group('도메인 3 저작 규율', () {
-    String? docOf(String taskId) {
-      final f = File('assets/content/scs/$taskId.md');
-      return f.existsSync() ? f.readAsStringSync() : null;
-    }
+    String? docOf(String taskId) => authoredTextOf(taskId);
 
     test('Classic 계열을 현행처럼 적지 않는다', () {
       // `AWS WAF Classic`은 2026-10-07, `Amazon Inspector Classic`은
@@ -338,10 +360,7 @@ void main() {
   // ⚠️ 규칙은 전부 **자격증 전수 집계**다(도메인 3 배치와 같은 이유 —
   //    2026-11-06 AIF 「PT 필수」가 파일별 리터럴 가드를 어형 하나로 뚫었다).
   group('도메인 4 저작 규율', () {
-    String? docOf(String taskId) {
-      final f = File('assets/content/scs/$taskId.md');
-      return f.existsSync() ? f.readAsStringSync() : null;
-    }
+    String? docOf(String taskId) => authoredTextOf(taskId);
 
     Iterable<String> authoredDocs() => scsTaskIds
         .map(docOf)
@@ -461,10 +480,7 @@ void main() {
   //
   // ⚠️ 네 규칙 모두 **자격증 전수 집계**다(도메인 3·4와 같은 이유).
   group('도메인 5 저작 규율', () {
-    String? docOf(String taskId) {
-      final f = File('assets/content/scs/$taskId.md');
-      return f.existsSync() ? f.readAsStringSync() : null;
-    }
+    String? docOf(String taskId) => authoredTextOf(taskId);
 
     Iterable<String> authoredDocs() =>
         scsTaskIds.map(docOf).whereType<String>();
@@ -554,10 +570,7 @@ void main() {
   });
 
   group('도메인 6 저작 규율', () {
-    String? docOf(String taskId) {
-      final f = File('assets/content/scs/$taskId.md');
-      return f.existsSync() ? f.readAsStringSync() : null;
-    }
+    String? docOf(String taskId) => authoredTextOf(taskId);
 
     Iterable<String> authoredDocs() =>
         scsTaskIds.map(docOf).whereType<String>();
