@@ -26,9 +26,9 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html
   - title: What is Amazon Security Lake?
     url: https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html
-lastVerified: 2026-11-08
   - title: What is Amazon Athena? — S3 데이터를 표준 SQL로 조회
     url: https://docs.aws.amazon.com/athena/latest/ug/what-is.html
+lastVerified: 2026-11-08
 ---
 
 # 보안 이벤트에 대응 (아티팩트 캡처·검색과 상관·범위 평가·격리와 복구·근본 원인)

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -34,8 +35,9 @@ import 'package:flutter_test/flutter_test.dart';
 ///   `AWS ended support for enabling SMS multi-factor authentication (MFA)` 로
 ///   직접 적는다(실측).
 /// - `CodeGuru` — 목록에 있는 것은 **CodeGuru Reviewer**(유지 관리, 2025-10-07)이고
-///   문항이 다루는 **CodeGuru Security 는 세 목록에 없다.** 그래서 `scs-t3-2-q12`
-///   의 그 출처도 걷었고, 문구 판정은 검수자에게 남겼다(prescreen `review`).
+///   **CodeGuru Security 는 세 목록에 없다.** 그래서 그 출처를 걷었다.
+///   ⚠️ `scs-t3-2-q12` 는 2026-11-11 외부 검수 보고의 🔴 로 **재작성됐다** — 아래
+///   전용 그룹이 그 판정과, 그때 **뒤집힌 2026-11-10 판정 둘**을 적는다.
 /// - `Amazon S3 Glacier Direct`(유지 관리) · `AWS Directory Service – Simple AD`
 ///   (유지 관리) · `Amazon Q Developer IDE plugins`(종료 예정) ·
 ///   `AWS DataSync Discovery`(완전 종료, **2025-05-20** — 문항이 적는 날짜와 일치)
@@ -198,46 +200,89 @@ void main() {
         reason: '뒷받침하는 공식 페이지가 없는 「공식」 주장을 지문에 두지 않는다');
   });
 
-  // ───────────────────────────────── t3-2-q12 (웹 검색 + 신뢰성 판정 후 교정)
-  group('scs-t3-2-q12: CodeGuru 보안 상태', () {
-    // 2026-11-10 실측으로 가른 자리다.
-    //
-    // **직접 측정된 것** — 사용자 안내서 **전 슬러그가 `404 r=0`**이고
-    // (`end-of-support.html` 자체도, `what-is` 도, 일부러 틀린 슬러그도 같은 신호 →
-    // 가이드 접두사 소멸) 제품 페이지 `aws.amazon.com/codeguru/security/` 도 **404**,
-    // `aws.amazon.com/codeguru/` 는 **Profiler 로 리다이렉트**된다.
-    // `AWS Lifecycle Changes` 하위 세 페이지 전수에는 **`Amazon CodeGuru Reviewer`만**
-    // 있고 CodeGuru **Security** 는 없다.
-    //
-    // **웹 검색으로만 뒷받침되는 것** — 복수 출처가 **2025-11-20 지원 종료**로
-    // 일치하고 그 뿌리는 **AWS 자신의 (지금은 404인) 종료 공지 페이지**다. 보조 증거로
-    // AWS 가 운영하는 GitHub 조직의 `aws-actions/codeguru-security` 가
-    // **2025-12-04 아카이브**됐다.
-    //
-    // ⚠️ **그래서 상태 서술은 유지하고 날짜는 걷었다** — 지금 열리는 공식 페이지가
-    // 그 날짜를 적지 않으므로 레포 규율(「근거가 제3자뿐인 날짜·수치는 쓰지 않는다」 —
-    // CLF 프리 티어 「레거시 12개월」· SAA 「us-east-1 DX 단가」 선례)에 걸린다.
-    test('인용할 수 없는 날짜 비교를 적지 않는다', () {
-      final all = jsonEncode(questionById('scs-t3-2-q12'));
-      expect(all.contains('2025년 11월에 이미 종료'), isFalse,
-          reason: '지금 열리는 공식 페이지가 그 날짜를 적지 않는다');
-      expect(all.contains('2026년 3월에 게시'), isFalse,
-          reason: '게시일과 종료일을 비교하는 서술은 그 날짜에 기대고 있었다');
-      // 대조군 — 상태 서술 자체는 남아 있어야 한다(지우는 것이 목적이 아니다).
-      expect(all.contains('지원이 종료'), isTrue,
-          reason: '문서 404 는 직접 측정됐고 복수 출처가 종료 상태로 일치한다');
+  // ───────────────────── t3-2-q12 (2026-11-11 외부 검수 보고 🔴 재작성)
+  //
+  // ⚠️⚠️ **이 그룹은 2026-11-10 판정을 두 군데 뒤집는다.** 가드는 판정을 굳히므로
+  // 판정이 틀리면 가드도 틀리다 — 옛 가드가 단정했던 두 가지가 모두 잘못이었다.
+  //
+  // ① **「지금 열리는 공식 페이지가 2025-11-20 을 적지 않는다」가 틀렸다.**
+  //    `docs.aws.amazon.com/cli/latest/reference/codeguru-security/` 가 살아 있고
+  //    (`index.html` → `/` 리다이렉트는 **후행 슬래시 정규화**이지 죽은 슬러그가
+  //    아니다) 그 **본문에** `On November 20, 2025, AWS will discontinue support for
+  //    Amazon CodeGuru Security. … you will no longer be able to access the
+  //    /codeguru/security console, service resources, or documentation.` 가 글자
+  //    그대로 있다(추출 본문 2,077자 · 대조군 `batch-get-findings` 3건 양성 ·
+  //    `zzz-known-negative` 0건). 2026-11-10 에는 그 페이지의 **본문을 읽지 않고**
+  //    「명령 참조라 상태를 말하지 않는다」고 **추정**했다 — 추측 금지 위반이었다.
+  //    그래서 이제 **날짜를 쓰고 그 근거를 출처로 단다.**
+  // ② **사용자 안내서 소멸은 그대로 맞다** — `security-ug/` 전 슬러그가 `404 r=0`
+  //    이고 AWS 문서 리더도 not found 다. 외부 검수 보고는 검색 색인이 **그 URL 을
+  //    인용하는** SDK·CLI 페이지를 보여 주는 것을 보고 「페이지가 존재한다」고 적었다.
+  //
+  // 재작성 사유는 보고가 든 「해설이 공식과 다르다」가 **아니다**(해설은 맞았다).
+  // **메타 문항 + 저작 메모 + 길이 단서**다 — 옛 정답 보기는 110자였고 나머지 셋은
+  // 30자 안팎이어서 이 뱅크 길이 단서의 극단 사례였다.
+  group('scs-t3-2-q12: 기술 3.2.6 파이프라인 스캔 구성 (재작성)', () {
+    test('메타 문항·저작 메모가 사라졌다', () {
+      final q = questionById('scs-t3-2-q12');
+      final all = jsonEncode(q);
+      for (final memo in const [
+        '전 페이지가 응답', // 내 측정 과정
+        '목록에 없다', // 저작 규율 메모
+        '기능 서술의 근거가 없', // 메타 서술
+        '공식 시험 가이드가 드는 예시이므로', // 옛 보기
+      ]) {
+        expect(all.contains(memo), isFalse, reason: '저작 메모 잔존: $memo');
+      }
+      // 대조군 — 재작성 뒤에도 설계를 묻는 문항이어야 한다.
+      expect((q['stem'] as String).contains('스캔 구성'), isTrue);
     });
 
-    test('목록 사실을 적고 그 근거를 출처로 단다', () {
+    test('길이 단서를 다시 만들지 않았다', () {
+      // ⚠️ 1차 초안이 정답 86자 · 최장 오답 81자였고 내 생성기 단정이 잡았다.
+      // 보고의 최대 지적(정답이 유일하게 가장 긴 문항 227/240)을 고치는 자리에서
+      // 같은 결함을 재생산하면 안 된다.
       final q = questionById('scs-t3-2-q12');
-      expect((q['explanation'] as String).contains('CodeGuru Reviewer'), isTrue,
-          reason: '유지 관리 목록에 있는 것은 Reviewer 다 — 「목록에 없다 ≠ 살아 '
-              '있다」가 이 문항의 교육 가치다');
+      final opts = (q['options'] as List).cast<String>();
+      final correct = q['correct'] as int;
+      final others = <int>[
+        for (var i = 0; i < opts.length; i++)
+          if (i != correct) opts[i].length,
+      ];
+      expect(opts[correct].length, lessThanOrEqualTo(others.reduce(max)),
+          reason: '정답이 최장 선택지다 — 길이 단서가 돌아왔다');
+      expect((q['explanation'] as String).length, lessThanOrEqualTo(450),
+          reason: '보고 P-1 이 해설 400자 초과를 플래그 후보로 든다');
+    });
+
+    test('공식 사실을 적고 각 근거를 출처로 단다', () {
+      final q = questionById('scs-t3-2-q12');
+      final all = jsonEncode(q);
+      // 규칙 세트 범주 — API 참조가 `Minimum 1 item. Maximum 3 items.` ·
+      // `Valid Values: SAST | IAC | SCA` 로 적는다.
+      for (final fact in const ['SAST', 'IAC', 'SCA', 'PULL_REQUEST', 'WEEKLY']) {
+        expect(all.contains(fact), isTrue, reason: '공식 값 누락: $fact');
+      }
+      // 날짜를 적었다면 그 날짜를 적는 페이지가 출처에 있어야 한다.
+      if (all.contains('2025년 11월 20일')) {
+        expect(
+            urlsOf('scs-t3-2-q12')
+                .any((e) => e.contains('cli/latest/reference/codeguru-security')),
+            isTrue,
+            reason: '그 날짜를 본문에 적는 살아 있는 공식 페이지가 근거다');
+      }
+      final urls = urlsOf('scs-t3-2-q12');
       expect(
-          urlsOf('scs-t3-2-q12')
-              .any((e) => e.contains('general/latest/gr/maintenance_services.html')),
-          isTrue,
-          reason: 'Reviewer 사실의 근거 — ⚠️ 랜딩 페이지가 아니라 하위 페이지다');
+          urls.any((e) =>
+              e.contains('inspector/latest/user/code-security-assessments.html')),
+          isTrue);
+      expect(
+          urls.any((e) => e.contains(
+              'inspector/v2/APIReference/API_CodeSecurityScanConfiguration.html')),
+          isTrue);
+      // ⚠️ 소멸한 사용자 안내서는 다시 들어오면 안 된다.
+      expect(urls.any((e) => e.contains('codeguru/latest/security-ug')), isFalse,
+          reason: '그 가이드는 전 슬러그가 404 다');
     });
   });
 

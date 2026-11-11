@@ -32,9 +32,15 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html
   - title: Services in Sunset — 종료 예정 항목 목록
     url: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
-lastVerified: 2026-11-08
   - title: Services in Maintenance — 유지 관리 항목 목록
     url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+  - title: Amazon Inspector Code Security
+    url: https://docs.aws.amazon.com/inspector/latest/user/code-security-assessments.html
+  - title: CodeSecurityScanConfiguration — 규칙 세트 범주·지속적 통합·정기 스캔
+    url: https://docs.aws.amazon.com/inspector/v2/APIReference/API_CodeSecurityScanConfiguration.html
+  - title: aws codeguru-security (AWS CLI 명령 참조) — 2025-11-20 지원 종료 공지
+    url: https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/
+lastVerified: 2026-11-11
 ---
 
 # 컴퓨팅 워크로드 보안 (이미지 강화·워크로드 승인·취약성 스캔·패치·관리 액세스·파이프라인·생성형 AI 가드레일)
@@ -405,5 +411,8 @@ Guardrails는 **기초 모델 전반의 안전·프라이버시 제어**를 제�
 11. Capability 5. Providing secure access, usage, and implementation of generative AI agents (AWS SRA for generative AI) — `docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-auto-agents.html` (2026-11-10 확인)
 12. Services in Sunset — 종료 예정 항목 목록 — `docs.aws.amazon.com/general/latest/gr/sunset_services.html` (2026-11-10 확인)
 13. Services in Maintenance — 유지 관리 항목 목록 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-10 확인)
+14. Amazon Inspector Code Security — `docs.aws.amazon.com/inspector/latest/user/code-security-assessments.html` (2026-11-11 확인)
+15. CodeSecurityScanConfiguration — 규칙 세트 범주·지속적 통합·정기 스캔 — `docs.aws.amazon.com/inspector/v2/APIReference/API_CodeSecurityScanConfiguration.html` (2026-11-11 확인)
+16. aws codeguru-security (AWS CLI 명령 참조) — 2025-11-20 지원 종료 공지 — `docs.aws.amazon.com/cli/latest/reference/codeguru-security/` (2026-11-11 확인)
 
 > ⚠️ **은퇴한 인용(2026-11-10 실측).** 이 문서의 §7-1은 처음에 **「Security for agentic AI on AWS」 가이드**(`prescriptive-guidance/latest/agentic-ai-security/`)의 OWASP 매핑을 근거로 썼으나, 그 가이드가 docs에서 더 이상 제공되지 않습니다(네 방법 모두 404 · 가이드 루트도 같은 오류 페이지). 그래서 그 두 URL을 출처에서 내리고 §7-1을 위 11번 가이드와 Bedrock Guardrails 문서로 다시 세웠습니다. 레포 전역 재등장 방지는 `source_url_retired_test.dart`가 맡습니다.
