@@ -366,4 +366,109 @@ void main() {
           reason: 'D-16 판정을 학습문서에 명시한 것이다');
     });
   });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 공식 근거가 붙은 🟡 4건 (2026-11-11 외부 검수 보고 §4 3단계)
+  //
+  // 보고가 공식 문서를 들어 지적한 넷을 각각 재측정했다. **정답 인덱스는 네 건 모두
+  // 불변**이고 셋은 보고가 옳았으며 하나는 **방향만** 옳았다.
+  //
+  // ⚠️⚠️ `t3-1-q3` — 보고는 「규칙 작업은 Allow·Block·Count·CAPTCHA·Challenge **다섯**
+  // 이다」로 적었지만 공식 `waf-rule-action.html` 의 불릿은 **넷**이다(`CAPTCHA and
+  // Challenge` 가 한 불릿). 2026-11-10 내 T2 패스가 「인용 페이지 기준으로 정확하다」로
+  // 판정한 것이 그 때문이다. **그런데 같은 페이지에 `Monetize` 작업 절이 따로 있다** —
+  // CloudFront 연결 웹 ACL 전용이고 `MonetizationConfig` 가 필요하며 HTTP 402 와 x402
+  // 결제 지시를 돌려준다(AI 봇·에이전트 과금용). 그래서 **「넷」 단정이 이제 불완전**
+  // 하다. 그리고 보고의 더 중요한 지적이 옳다 — 공식 용어는 **rule action**(규칙 작업)과
+  // **web ACL default action**(기본 작업: Allow/Block)이 **다른 것**인데 문항이
+  // 「기본 규칙 작업」으로 섞었다. → D-16 계열 규율대로 **개수를 묻지 않고** 과금 층만
+  // 묻게 고쳤다. ⭐ 그 결과 정답 보기가 96 → 47자가 되어 **길이 단서까지 해소**됐다.
+  //
+  // ⚠️ `t4-1-q7`·`t6-2-q13`·`t6-1-q15` 는 정답 보기가 아직 최장이다(84 · 151 · 100) —
+  // **§4 5단계(P-2)의 전용 작업**이고, 이 배치는 **길이를 늘리지 않았다**는 것만
+  // 보장한다(`t4-1-q7` 은 1차 초안이 88 → 95로 **늘렸고 내 단정이 잡아** 84로 줄였다).
+  group('공식 근거가 붙은 🟡 4건 (보고 §4 3단계)', () {
+    Map<String, dynamic> q(String id) {
+      final taskId = id.substring(0, id.lastIndexOf('-'));
+      return readQuestions(taskId).firstWhere((e) => e['id'] == id);
+    }
+
+    String allOf(String id) => jsonEncode(q(id));
+
+    test('정답 인덱스가 네 건 모두 불변이다', () {
+      // ⚠️ 보고는 정답 인덱스를 적지 않는다 — 이 값은 실측이다.
+      expect(q('scs-t3-1-q3')['correct'], 2);
+      expect(q('scs-t4-1-q7')['correct'], 2);
+      expect(q('scs-t6-2-q13')['correct'], 0);
+      expect(q('scs-t6-1-q15')['correct'], 3);
+      for (final id in const [
+        'scs-t3-1-q3', 'scs-t4-1-q7', 'scs-t6-2-q13', 'scs-t6-1-q15',
+      ]) {
+        expect(q(id)['verified'], isFalse, reason: '$id 은 드래프트다');
+      }
+    });
+
+    test('t3-1-q3: 규칙 작업 개수를 단정하지 않고 과금 층만 묻는다', () {
+      final all = allOf('scs-t3-1-q3');
+      expect(all.contains('기본 규칙 작업'), isFalse,
+          reason: '공식은 rule action 과 web ACL default action 을 구분한다');
+      expect(all.contains('기본 작업은'), isFalse,
+          reason: '「기본 작업」은 웹 ACL 의 Allow/Block 이고 규칙 작업이 아니다');
+      expect(all.contains('넷입니다'), isFalse,
+          reason: 'Monetize 작업이 추가돼 개수 단정이 불완전하다');
+      // 과금 층은 그대로 가르친다(지우는 것이 목적이 아니다).
+      for (final fact in const ['Bot Control', '계정 탈취 방지', '계정 생성 사기 방지']) {
+        expect(all.contains(fact), isTrue, reason: '추가 요금 층: $fact');
+      }
+      expect(all.contains('CAPTCHA'), isTrue,
+          reason: 'CAPTCHA·Challenge 규칙 작업 자체에도 추가 요금이 붙는다');
+    });
+
+    test('t4-1-q7: AssumeRole 도 쓸 수 있다고 적는다', () {
+      final all = allOf('scs-t4-1-q7');
+      // 공식: "Call the AWS STS AssumeRole (recommended) or GetFederationToken".
+      expect(all.contains('쓸 수 있는 것은 GetFederationToken입니다'), isFalse,
+          reason: '배타 서술이 거짓이었다 — AssumeRole 도 쓸 수 있고 공식이 권장한다');
+      expect(all.contains('AssumeRole'), isTrue);
+      expect((q('scs-t4-1-q7')['explanation'] as String).contains('권장'), isTrue,
+          reason: '공식이 AssumeRole 을 recommended 로 적는다');
+      expect(all.contains('DurationSeconds'), isTrue,
+          reason: 'AssumeRole 계열에 쓰려면 장기 자격 증명 IAM 사용자로 호출해야 하고 '
+              '그러지 않으면 페더레이션 엔드포인트 호출이 실패한다');
+      // 정답의 핵심(GetSessionToken 은 콘솔 SSO 에 못 쓴다)은 그대로다.
+      expect(all.contains('GetSessionToken'), isTrue);
+    });
+
+    test('t6-2-q13: 공식이 뒷받침하지 않는 전제를 쓰지 않는다', () {
+      final stem = q('scs-t6-2-q13')['stem'] as String;
+      // 공식 `ram/what-is.html` 은 리소스 기반 정책 공유를 "some types" 까지만 말하고
+      // **서브넷은 RAM 공유의 공식 예시**다. 그래서 「서브넷을 리소스 기반 정책으로
+      // 공유했다」는 전제가 근거를 얻지 못한다.
+      // ⚠️ 「서브넷은 리소스 기반 정책이 없다」고 **단정하지 않는다** — 공식이 유형을
+      // 열거하지 않는다. 그래서 지문에서 리소스 종류를 빼는 쪽으로 고쳤다.
+      expect(stem.contains('서브넷'), isFalse,
+          reason: '지문이 리소스 종류를 특정하면 그 유형이 리소스 기반 정책을 '
+              '지원하는지까지 공식 근거가 필요하다');
+      expect(stem.contains('리소스 기반 정책'), isTrue);
+      // 대조군 — 해설의 RAM 서브넷 예시는 공식 그대로이므로 남아 있어야 한다.
+      expect((q('scs-t6-2-q13')['explanation'] as String).contains('서브넷'), isTrue,
+          reason: '공식이 드는 대비 예다 — RAM 으로 공유한 VPC 서브넷은 상대 계정의 '
+              'VPC 콘솔과 API 결과에 나타난다');
+    });
+
+    test('t6-1-q15: 멤버 계정으로 한정하고 관리 계정 루트를 따로 적는다', () {
+      final stem = q('scs-t6-1-q15')['stem'] as String;
+      // 공식 중앙 집중화는 **멤버 계정** 루트 자격 증명 제거다. 관리 계정 루트는 그
+      // 대상이 아니라 남아 있고 MFA 로 보호하므로, 보기 [0]의 보관 절차 자체는 실무다.
+      // 갈림길은 그것이 **워크로드 비상 접근 프로세스가 아니라는** 점이다.
+      expect(stem.contains('멤버 계정'), isTrue,
+          reason: '「루트 자격 증명을 모두 없앴다」는 관리 계정까지 포함해 읽힌다');
+      final w0 = (q('scs-t6-1-q15')['wrongExplanations']
+          as Map<String, dynamic>)['0'] as String;
+      expect(w0.contains('관리 계정 루트'), isTrue,
+          reason: '참인 실무를 「공식이 드는 형태가 아니다」로만 반박하면 안 된다');
+      expect(w0.contains('비상 접근'), isTrue,
+          reason: '갈림길은 계정 복구용과 워크로드 비상 접근의 구분이다');
+    });
+  });
 }
