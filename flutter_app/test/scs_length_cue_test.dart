@@ -52,6 +52,14 @@ import 'package:flutter_test/flutter_test.dart';
 ///   그 오답은 손대지 않은 채로 넘어가고, 비율이 이미 통과하면 **아무도 알려 주지
 ///   않는다.** 지운 8항목은 비율에 영향이 없어 **그대로 두는 것이 옳은 처리**였다.
 ///   ⚠️ `t2-1`·`t2-2` 는 **둘 다 끝에 개행이 있다** — 자격증이 아니라 파일마다 다르다.
+/// - **배치 4**(2026-11-12) — `t3-1` 9 + `t3-2` 9 + `t3-3` 12 = 30문항. 전수 cue
+///   170 → **140**. 이 도메인의 정답 보기는 **공식 비교표를 그대로 담아** 115~198자였고
+///   오답은 25~62자였다 — **정답을 줄이는 쪽과 오답을 올리는 쪽을 함께** 써야 1.3배 안에
+///   들어온다(정답만 줄이면 「반대 방향 단서」 단정에 걸린다).
+///   ⚠️⚠️ **왕복 재현 대조군이 내가 PR#445 에서 남긴 들여쓰기 결함을 처음 잡았다** —
+///   `scs-t3-2-q12` 의 `"verified"` 줄만 **4칸**이었다(나머지 14개는 6칸). JSON 으로는
+///   유효해 **파서·전 가드가 통과했고** 그 두 바이트는 대조군만 볼 수 있었다. 같은 PR 에서
+///   수선했다(의미 불변을 `json.loads` 비교로 단정).
 void main() {
   const dir = 'assets/content/scs';
 
@@ -78,11 +86,21 @@ void main() {
     'scs-t2-1-q8', 'scs-t2-1-q10', 'scs-t2-1-q12', 'scs-t2-1-q14',
     'scs-t2-2-q6', 'scs-t2-2-q11', 'scs-t2-2-q12', 'scs-t2-2-q13',
   ];
-  const handled = <String>[...batch1, ...batch2, ...batch3];
+  const batch4 = <String>[
+    'scs-t3-1-q5', 'scs-t3-1-q6', 'scs-t3-1-q7', 'scs-t3-1-q8', 'scs-t3-1-q9',
+    'scs-t3-1-q10', 'scs-t3-1-q11', 'scs-t3-1-q12', 'scs-t3-1-q15',
+    'scs-t3-2-q1', 'scs-t3-2-q4', 'scs-t3-2-q5', 'scs-t3-2-q7', 'scs-t3-2-q8',
+    'scs-t3-2-q9', 'scs-t3-2-q10', 'scs-t3-2-q11', 'scs-t3-2-q15',
+    'scs-t3-3-q1', 'scs-t3-3-q2', 'scs-t3-3-q3', 'scs-t3-3-q4', 'scs-t3-3-q5',
+    'scs-t3-3-q6', 'scs-t3-3-q7', 'scs-t3-3-q9', 'scs-t3-3-q10',
+    'scs-t3-3-q11', 'scs-t3-3-q13', 'scs-t3-3-q14',
+  ];
+  const handled = <String>[...batch1, ...batch2, ...batch3, ...batch4];
 
   /// 지금까지 손댄 Task. 배치가 늘면 여기와 `handled` 를 함께 늘린다.
   const tasks = <String>[
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3', 'scs-t2-1', 'scs-t2-2',
+    'scs-t3-1', 'scs-t3-2', 'scs-t3-3',
   ];
 
   /// 보고 P-1 이 든 임계. `prescreen.mjs` 의 `ANSWER_LENGTH_RATIO` 와 같은 값이다.
@@ -102,7 +120,7 @@ void main() {
     );
   }
 
-  group('길이 단서 제거 배치 1~3 (t1-1 · t1-2 · t1-3 · t2-1 · t2-2)', () {
+  group('길이 단서 제거 배치 1~4 (D1 세 Task · D2 두 Task · D3 세 Task)', () {
     test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
       var n = 0;
       for (final t in tasks) {
@@ -113,7 +131,7 @@ void main() {
           n++;
         }
       }
-      expect(n, 75);
+      expect(n, 120);
     });
 
     test('처리한 문항에서 정답이 최장 오답의 1.3배를 넘지 않는다', () {
@@ -160,6 +178,12 @@ void main() {
         'scs-t2-1-q13',                  // 🟡
         'scs-t2-2-q5', 'scs-t2-2-q10',   // 🟡
         'scs-t2-2-q2', 'scs-t2-2-q15',   // 보류(교체 예정)
+        'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14',  // 🟡
+        'scs-t3-1-q4',                   // 보류(교체 예정)
+        'scs-t3-2-q3', 'scs-t3-2-q14',   // 🟡
+        'scs-t3-2-q13',                  // 보류(교체 예정)
+        'scs-t3-3-q8', 'scs-t3-3-q15',   // 🟡
+        'scs-t3-3-q12',                  // 보류(교체 예정)
       };
       final remaining = <String>{};
       for (final t in tasks) {

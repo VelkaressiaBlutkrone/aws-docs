@@ -13,10 +13,10 @@
       "difficulty": "foundational",
       "stem": "규제 산업에서 강화된 AMI를 파이프라인으로 만들고 테스트를 통과하지 않은 이미지는 배포되지 않게 하라는 요구입니다. EC2 Image Builder가 제공하는 것은 무엇입니까?",
       "options": [
-        "구성한 테스트가 모두 성공한 경우에만 이미지를 배포하고, Amazon 관리형 STIG 강화 컴포넌트를 제공하며 사용자 지정 테스트는 AWSTOE로 만듭니다",
-        "테스트는 보고만 하고 배포를 막지 않으므로 별도 승인 게이트를 둬야 합니다",
+        "구성한 테스트가 모두 성공한 경우에만 배포하고, STIG 강화 컴포넌트를 Amazon 관리형으로 제공합니다",
+        "테스트는 결과를 보고만 하고 배포를 막지 않으므로 별도의 승인 게이트를 둬야 합니다",
         "테스트 통과 여부로 배포를 제어할 수 있지만 강화 컴포넌트는 직접 작성해야 합니다",
-        "테스트는 컨테이너 이미지에만 적용되고 AMI에는 적용되지 않습니다"
+        "테스트는 컨테이너 이미지에만 적용되고 AMI 파이프라인에는 적용되지 않습니다"
       ],
       "correct": 0,
       "explanation": "공식 표현이 구성한 테스트가 모두 성공한 경우에만 이미지를 배포한다는 것입니다. 사용자 지정 테스트는 AWSTOE(AWS Task Orchestrator and Executor)로 만들고, STIG 강화 컴포넌트를 Amazon 관리형으로 제공해 규제 산업의 준수 이미지를 빠르게 만듭니다. 파이프라인은 파이프라인 세부와 이미지 사용자 지정과 워크플로 정의와 빌드 인프라 구성과 배포 정의 다섯 단계로 구성됩니다.",
@@ -100,7 +100,7 @@
         "CLI도 역할을 만들면 같은 이름의 프로파일이 자동 생성되므로 오류 원인은 권한입니다. 그리고 실행 중 인스턴스에는 붙일 수 없습니다",
         "CLI에서는 프로파일이 생성되지 않으므로 콘솔로 다시 만들어야 하고 실행 중 인스턴스에는 붙일 수 없습니다",
         "CLI에서도 자동 생성되지만 이름이 달라지므로 찾을 수 없고 실행 중 인스턴스에는 붙일 수 있습니다",
-        "콘솔에서 EC2 역할을 만들면 같은 이름의 프로파일이 자동 생성되지만 CLI와 API에서는 역할과 프로파일을 따로 만들어야 하고 이름이 다를 수 있으므로 프로파일 이름을 알아야 합니다. 실행 중 인스턴스에도 프로파일을 붙일 수 있습니다"
+        "콘솔에서 만들면 같은 이름의 프로파일이 자동 생성되지만 CLI와 API에서는 따로 만들어야 하고 이름이 다를 수 있습니다. 실행 중 인스턴스에도 붙일 수 있습니다"
       ],
       "correct": 3,
       "explanation": "콘솔에서 EC2 역할을 만들면 같은 이름의 인스턴스 프로파일이 자동 생성되지만, CLI와 API에서는 역할과 프로파일을 따로 만들어야 하고 이름이 다를 수 있으므로 인스턴스를 올릴 때 쓸 프로파일 이름을 알아야 합니다. 그리고 실행 중인 인스턴스에도 프로파일을 연결할 수 있습니다.",
@@ -125,10 +125,10 @@
       "difficulty": "foundational",
       "stem": "Amazon Inspector의 조사 결과 유형과 각 대상을 정리해야 합니다. 올바른 것은 무엇입니까?",
       "options": [
-        "패키지 취약성은 EC2와 ECR 컨테이너 이미지와 Lambda, 코드 취약성은 Lambda 함수 스캔과 Code Security 기능, 네트워크 도달성은 EC2 인스턴스 전용이고 12시간마다 스캔합니다",
-        "세 유형 모두 EC2와 ECR과 Lambda를 공통으로 덮습니다",
-        "네트워크 도달성은 Lambda와 컨테이너까지 덮고 1시간마다 스캔합니다",
-        "코드 취약성은 EC2 전용이고 네트워크 도달성은 ECR 전용입니다"
+        "패키지 취약성은 EC2·ECR 이미지·Lambda, 코드 취약성은 Lambda 스캔과 Code Security, 네트워크 도달성은 EC2 전용 12시간입니다",
+        "세 유형 모두 EC2와 ECR 컨테이너 이미지와 Lambda 함수를 공통으로 덮고 스캔 주기도 12시간으로 모두 같습니다",
+        "네트워크 도달성은 Lambda와 컨테이너 이미지까지 덮고 1시간마다 스캔하며 코드 취약성은 EC2를 봅니다",
+        "코드 취약성은 EC2 전용이고 네트워크 도달성은 ECR 컨테이너 이미지 전용이며 주기는 24시간입니다"
       ],
       "correct": 0,
       "explanation": "Inspector 조사 결과는 패키지 취약성과 코드 취약성과 네트워크 도달성 셋입니다. 패키지 취약성은 EC2와 ECR 컨테이너 이미지와 Lambda를 보고, 코드 취약성은 Lambda 함수 스캔과 Code Security 기능이 보며, 네트워크 도달성은 EC2 인스턴스 전용으로 12시간마다 스캔합니다. 네트워크 도달성이 보는 것은 VPC 경계로부터 열린 경로입니다. 참고로 Windows의 패키지 취약성은 개별 CVE가 아니라 KB ID로 단일 조사 결과를 냅니다.",
@@ -181,10 +181,10 @@
       "difficulty": "applied",
       "stem": "EKS 클러스터와 Fargate 상의 ECS 서비스를 함께 운영하며 컨테이너가 침해돼 권한 상승을 시도하는 것을 실행 중에 탐지하라는 요건입니다. 어디까지 덮을 수 있고 이미지의 CVE는 무엇이 봅니까?",
       "options": [
-        "GuardDuty 런타임 모니터링이 Fargate의 모든 워크로드를 덮고 이미지 CVE도 함께 봅니다",
-        "GuardDuty 런타임은 EC2만 덮고 컨테이너는 Inspector가 런타임까지 봅니다",
-        "GuardDuty 런타임 모니터링은 EKS와 Fargate 상의 ECS와 EC2를 덮지만 Fargate에서 실행되는 EKS 클러스터는 지원하지 않습니다. 이미지의 CVE는 Inspector의 ECR 스캔이 봅니다",
-        "둘 다 Inspector로 처리하고 GuardDuty는 네트워크 위협만 봅니다"
+        "GuardDuty 런타임 모니터링이 EKS와 ECS를 포함해 Fargate의 모든 워크로드를 덮고 컨테이너 이미지의 CVE도 함께 봅니다",
+        "GuardDuty 런타임은 EC2만 덮고 컨테이너는 Inspector가 런타임 행위까지 함께 봅니다",
+        "런타임 모니터링은 EKS·ECS on Fargate·EC2를 덮지만 EKS on Fargate는 지원하지 않습니다. 이미지 CVE는 Inspector ECR 스캔이 봅니다",
+        "둘 다 Inspector로 처리하고 GuardDuty는 네트워크 계층의 위협만 봅니다"
       ],
       "correct": 2,
       "explanation": "런타임 모니터링의 지원 리소스 유형은 Amazon EKS와 AWS Fargate 상의 Amazon ECS와 Amazon EC2이고, 공식이 GuardDuty는 AWS Fargate에서 실행되는 Amazon EKS 클러스터를 지원하지 않는다고 적습니다. 즉 ECS on Fargate는 되고 EKS on Fargate는 안 됩니다. 보안 에이전트는 파일 액세스와 프로세스 실행과 명령줄 인자와 네트워크 연결을 봅니다. Inspector는 무엇이 취약한가를 보고 런타임 모니터링은 지금 무슨 일이 벌어지는가를 보므로 둘은 겹치지 않습니다.",
@@ -213,10 +213,10 @@
       "difficulty": "applied",
       "stem": "Windows Server 2016 노드를 2019로 올리고 올린 뒤 최신 보안 패치를 조직 전체에 일괄 적용하라는 요청입니다. Patch Manager로 어디까지 됩니까?",
       "options": [
-        "둘 다 됩니다. 주 버전 업그레이드도 패치 기준으로 승인하면 적용됩니다",
-        "주 버전 업그레이드는 되지만 조직 전체 일괄 적용은 계정별로 따로 설정해야 합니다",
-        "둘 다 안 됩니다. Patch Manager는 스캔 보고만 하고 설치는 하지 않습니다",
-        "주 버전 업그레이드는 지원하지 않고, 조직 전체 패치는 Quick Setup의 패치 정책이 권장 방법입니다. 그리고 AWS는 Patch Manager에 넣기 전에 패치를 테스트하지 않습니다"
+        "둘 다 됩니다. 주 버전 업그레이드도 패치 기준에서 승인하면 그대로 적용됩니다",
+        "주 버전 업그레이드는 되지만 조직 전체 일괄 적용은 계정마다 따로 설정해야 합니다",
+        "둘 다 안 됩니다. Patch Manager는 스캔 보고만 하고 패치 설치는 하지 않습니다",
+        "주 버전 업그레이드는 지원하지 않고, 조직 전체 패치는 Quick Setup의 패치 정책이 권장 방법입니다"
       ],
       "correct": 3,
       "explanation": "공식이 Patch Manager가 운영 체제의 주 버전 업그레이드를 지원하지 않는다고 명시합니다. Windows 서비스 팩 설치와 Linux 마이너 버전 업그레이드는 됩니다. 조직 전체 패치는 Quick Setup의 패치 정책이 권장 방법이고 하나의 구성으로 조직의 모든 계정과 리전, 고른 계정과 리전, 또는 단일 계정과 리전 쌍을 정의합니다. 그리고 AWS는 패치를 Patch Manager에 제공하기 전에 테스트하지 않으므로 사전 프로덕션 검증은 내 책임입니다.",
@@ -241,10 +241,10 @@
       "difficulty": "applied",
       "stem": "패치 준수 보고에서 심각도 기준을 묻는 감사 질문을 받았고 준수 결과를 조사 결과로 중앙 집계하려 합니다. 올바른 설명은 무엇입니까?",
       "options": [
-        "심각도는 소프트웨어 발행자가 업데이트 공지나 개별 패치에 보고한 값이고 CVSS나 NVD 같은 제3자 출처에서 유도하지 않습니다. 중앙 집계는 Security Hub CSPM 통합으로 합니다",
-        "심각도는 NVD의 CVSS 점수를 그대로 쓰고 중앙 집계는 Security Lake로 합니다",
-        "심각도는 Inspector가 계산해 넘겨주고 중앙 집계는 AWS Config로 합니다",
-        "심각도는 패치 기준에서 내가 정의하는 값이고 중앙 집계는 CloudTrail로 합니다"
+        "심각도는 소프트웨어 발행자가 보고한 값이고 CVSS나 NVD에서 유도하지 않습니다. 중앙 집계는 Security Hub CSPM 통합입니다",
+        "심각도는 NVD가 매긴 CVSS 점수를 그대로 쓰고 준수 결과의 중앙 집계는 Security Lake로 합니다",
+        "심각도는 Inspector가 계산해 넘겨주고 준수 결과의 중앙 집계는 AWS Config로 합니다",
+        "심각도는 패치 기준에서 내가 정의하는 값이고 중앙 집계는 CloudTrail 이벤트로 합니다"
       ],
       "correct": 0,
       "explanation": "공식이 심각도를 소프트웨어 발행자가 업데이트 공지나 개별 패치에 보고한 값으로 적고 CVSS나 NVD 같은 제3자 출처에서 유도하지 않는다고 명시합니다. Patch Manager의 통합 대상은 Organizations와 AWS Security Hub CSPM과 CloudTrail과 AWS Config이고, 패치 준수를 조사 결과로 중앙 집계하려면 Security Hub CSPM 쪽입니다. 준수 보고서를 S3 버킷에 CSV로 보낼 수도 있고 커널 라이브 패치는 Run Command로 적용합니다.",
@@ -271,7 +271,7 @@
       "options": [
         "로깅 KMS 키 권한 문제이므로 키 정책을 고칩니다",
         "포트 포워딩이나 SSH로 연결한 세션에는 로깅을 사용할 수 없습니다. IAM 정책으로 그 두 경로를 허용하지 않는 것까지 설계에 넣습니다",
-        "세션 로그는 CloudTrail에만 남으므로 S3와 CloudWatch Logs 설정이 잘못된 것입니다",
+        "세션 로그는 CloudTrail에만 남으므로 S3와 CloudWatch Logs 쪽 설정이 잘못된 것입니다",
         "SSM Agent 버전이 낮아서이므로 에이전트를 올리면 해결됩니다"
       ],
       "correct": 1,
@@ -297,10 +297,10 @@
       "difficulty": "applied",
       "stem": "퍼블릭 IP가 없는 Windows 인스턴스에 프라이빗 IP로 접속하고 터널 지속 시간을 정책으로 제한하려 합니다. 어떤 수단이고 무엇을 확인합니까?",
       "options": [
-        "Session Manager만 가능하고 터널 시간 제한은 지원되지 않습니다",
-        "EC2 Instance Connect Endpoint는 SSH 전용이라 Windows에는 쓸 수 없습니다",
-        "EC2 Instance Connect Endpoint는 SSH와 RDP를 모두 지원합니다. 엔드포인트가 create-complete 상태여야 하고 IP 주소 유형이 인스턴스와 호환돼야 하며 대상 인스턴스의 보안 그룹이 엔드포인트에서 오는 인바운드를 허용해야 하고, maxTunnelDuration IAM 조건으로 터널 최대 지속 시간을 제한합니다",
-        "EC2 Instance Connect Endpoint는 퍼블릭 IP가 있어야 동작합니다"
+        "Session Manager만 가능하고 터널 지속 시간 제한은 어느 수단에서도 지원되지 않습니다",
+        "EC2 Instance Connect Endpoint는 SSH 전용이라 Windows 인스턴스에는 쓸 수 없고 Session Manager로 가야 합니다",
+        "EC2 Instance Connect Endpoint는 SSH와 RDP를 모두 지원하고, maxTunnelDuration IAM 조건으로 터널 최대 지속 시간을 제한합니다",
+        "EC2 Instance Connect Endpoint는 대상 인스턴스에 퍼블릭 IP가 있어야 동작합니다"
       ],
       "correct": 2,
       "explanation": "EC2 Instance Connect Endpoint는 프라이빗 IP로 인스턴스에 연결하고 SSH와 RDP를 모두 지원하므로 Windows 인스턴스에도 씁니다. 엔드포인트가 create-complete 상태여야 하고 IP 주소 유형이 인스턴스와 호환돼야 하며(dual-stack이면 IPv4와 IPv6 둘 다), 대상 인스턴스의 보안 그룹이 엔드포인트에서 오는 인바운드 트래픽을 허용해야 합니다. maxTunnelDuration IAM 조건으로 터널 최대 지속 시간을 제한할 수 있고 콘솔에서 입력하는 값도 그 정책 조건을 지켜야 합니다.",
@@ -350,7 +350,7 @@
           "url": "https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/"
         }
       ],
-    "verified": false
+      "verified": false
     },
     {
       "id": "scs-t3-2-q13",
@@ -416,10 +416,10 @@
       "difficulty": "applied",
       "stem": "RAG 애플리케이션에서 사용자 입력만 가드레일로 평가하고 검색 결과와 시스템 지시는 평가에서 빼려 하며, 자체 호스팅 모델 앞단에도 같은 필터를 쓰려 합니다. 가능합니까?",
       "options": [
-        "둘 다 불가능합니다. 가드레일은 Bedrock 모델 호출 경로에서 전체 프롬프트만 평가합니다",
-        "입력 일부 평가는 콘솔에서 설정하고 모델 밖 사용은 불가능합니다",
-        "둘 다 가능합니다. 입력 프롬프트에 태그를 적용해 선택적으로 평가하지만 그 기능은 AWS SDK에서만 쓸 수 있고, ApplyGuardrail API는 기초 모델을 호출하지 않고 입력과 출력만 평가합니다",
-        "입력 일부 평가만 가능하고 모델 밖 사용은 Standard 계층에서만 됩니다"
+        "둘 다 불가능합니다. 가드레일은 Bedrock 모델 호출 경로에서만 동작하고 전체 프롬프트를 통째로 평가합니다",
+        "입력 일부 평가는 콘솔에서 설정하고 모델 밖에서 같은 필터를 쓰는 것은 불가능합니다",
+        "둘 다 가능합니다. 태그로 입력 일부만 평가하지만 그 기능은 SDK 전용이고, ApplyGuardrail API는 모델을 호출하지 않습니다",
+        "입력 일부 평가만 가능하고 모델 밖 사용은 Standard 보호 계층에서만 됩니다"
       ],
       "correct": 2,
       "explanation": "입력 프롬프트에 태그를 적용해 일부만 평가할 수 있지만 그 기능은 AWS SDK에서만 쓸 수 있고 콘솔의 Bedrock 플레이그라운드와 Guardrails 관리 콘솔에서는 쓸 수 없습니다. ApplyGuardrail API는 기초 모델을 호출하지 않고 입력과 출력을 정의된 필터에 대해 평가하므로 Bedrock이 아닌 모델의 앞뒤에도 같은 가드레일을 걸 수 있습니다. 평가 범위의 한계도 함께 기억합니다 — 보호 대상은 사용자 입력과 모델 응답이고 추론 콘텐츠 블록은 제외됩니다.",
