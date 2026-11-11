@@ -46,6 +46,12 @@ import 'package:flutter_test/flutter_test.dart';
 ///   최단 오답보다 **짧게** 깎고 있었다. 1.3배 상한만 보는 가드였다면 통과했을 자리다.
 ///   ⚠️ **`scs-t1-3.questions.json` 은 끝에 개행이 있다**(`t1-1`·`t1-2` 는 없었다) —
 ///   왕복 재현 대조군이 그것을 잡았으므로 **파일마다 실측한다.**
+/// - **배치 3**(2026-11-11) — `t2-1` 8 + `t2-2` 4 = 12문항. 전수 cue 182 → **170**.
+///   ⚠️ **「이미 같다」 단정이 무변경 패치를 8항목 잡았다** — 오답을 「올린다」고 적고
+///   **원문을 그대로** 넣은 자리다(배치 2에서 둘, 이 배치에서 여덟). 단정이 없으면
+///   그 오답은 손대지 않은 채로 넘어가고, 비율이 이미 통과하면 **아무도 알려 주지
+///   않는다.** 지운 8항목은 비율에 영향이 없어 **그대로 두는 것이 옳은 처리**였다.
+///   ⚠️ `t2-1`·`t2-2` 는 **둘 다 끝에 개행이 있다** — 자격증이 아니라 파일마다 다르다.
 void main() {
   const dir = 'assets/content/scs';
 
@@ -67,10 +73,17 @@ void main() {
     'scs-t1-3-q6', 'scs-t1-3-q8', 'scs-t1-3-q9', 'scs-t1-3-q10',
     'scs-t1-3-q12',
   ];
-  const handled = <String>[...batch1, ...batch2];
+  const batch3 = <String>[
+    'scs-t2-1-q1', 'scs-t2-1-q3', 'scs-t2-1-q4', 'scs-t2-1-q5',
+    'scs-t2-1-q8', 'scs-t2-1-q10', 'scs-t2-1-q12', 'scs-t2-1-q14',
+    'scs-t2-2-q6', 'scs-t2-2-q11', 'scs-t2-2-q12', 'scs-t2-2-q13',
+  ];
+  const handled = <String>[...batch1, ...batch2, ...batch3];
 
   /// 지금까지 손댄 Task. 배치가 늘면 여기와 `handled` 를 함께 늘린다.
-  const tasks = <String>['scs-t1-1', 'scs-t1-2', 'scs-t1-3'];
+  const tasks = <String>[
+    'scs-t1-1', 'scs-t1-2', 'scs-t1-3', 'scs-t2-1', 'scs-t2-2',
+  ];
 
   /// 보고 P-1 이 든 임계. `prescreen.mjs` 의 `ANSWER_LENGTH_RATIO` 와 같은 값이다.
   const ratioMax = 1.3;
@@ -89,7 +102,7 @@ void main() {
     );
   }
 
-  group('길이 단서 제거 배치 1~2 (t1-1 · t1-2 · t1-3)', () {
+  group('길이 단서 제거 배치 1~3 (t1-1 · t1-2 · t1-3 · t2-1 · t2-2)', () {
     test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
       var n = 0;
       for (final t in tasks) {
@@ -100,7 +113,7 @@ void main() {
           n++;
         }
       }
-      expect(n, 45);
+      expect(n, 75);
     });
 
     test('처리한 문항에서 정답이 최장 오답의 1.3배를 넘지 않는다', () {
@@ -144,6 +157,9 @@ void main() {
         'scs-t1-1-q1', 'scs-t1-1-q13',   // 🟡
         'scs-t1-2-q9', 'scs-t1-2-q11',   // 🟡
         'scs-t1-3-q13', 'scs-t1-3-q14',  // 🟡
+        'scs-t2-1-q13',                  // 🟡
+        'scs-t2-2-q5', 'scs-t2-2-q10',   // 🟡
+        'scs-t2-2-q2', 'scs-t2-2-q15',   // 보류(교체 예정)
       };
       final remaining = <String>{};
       for (final t in tasks) {
