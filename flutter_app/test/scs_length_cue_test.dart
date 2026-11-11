@@ -60,6 +60,12 @@ import 'package:flutter_test/flutter_test.dart';
 ///   `scs-t3-2-q12` 의 `"verified"` 줄만 **4칸**이었다(나머지 14개는 6칸). JSON 으로는
 ///   유효해 **파서·전 가드가 통과했고** 그 두 바이트는 대조군만 볼 수 있었다. 같은 PR 에서
 ///   수선했다(의미 불변을 `json.loads` 비교로 단정).
+/// - **배치 5**(2026-11-12) — `t4-1` 10 + `t4-2` 11 = 21문항. 전수 cue 140 → **119**.
+///   ⚠️ **배치 4의 「필요 길이를 먼저 계산한다」를 초안 출력에 넣었다** — 실패한 줄마다
+///   `need max>=N`(= 정답 ÷ 1.3)을 함께 찍으니 되돌아오는 횟수가 네 번에서 두 번으로
+///   줄었다. ⚠️ **오답을 올려도 모자랄 때는 정답을 줄이는 쪽이 맞다** — 이 Task 의
+///   정답은 공식 비교표 요약이라 **해설에 있는 둘째 사실**을 걷으면 바로 들어온다
+///   (`q12` 의 `VpceAccessDenied` · `q14` 의 RDS 비호환 — 어느 오답과도 갈림길이 아니다).
 void main() {
   const dir = 'assets/content/scs';
 
@@ -95,12 +101,22 @@ void main() {
     'scs-t3-3-q6', 'scs-t3-3-q7', 'scs-t3-3-q9', 'scs-t3-3-q10',
     'scs-t3-3-q11', 'scs-t3-3-q13', 'scs-t3-3-q14',
   ];
-  const handled = <String>[...batch1, ...batch2, ...batch3, ...batch4];
+  const batch5 = <String>[
+    'scs-t4-1-q1', 'scs-t4-1-q4', 'scs-t4-1-q6', 'scs-t4-1-q8',
+    'scs-t4-1-q10', 'scs-t4-1-q11', 'scs-t4-1-q12', 'scs-t4-1-q13',
+    'scs-t4-1-q14', 'scs-t4-1-q15',
+    'scs-t4-2-q1', 'scs-t4-2-q3', 'scs-t4-2-q4', 'scs-t4-2-q5',
+    'scs-t4-2-q6', 'scs-t4-2-q7', 'scs-t4-2-q9', 'scs-t4-2-q10',
+    'scs-t4-2-q11', 'scs-t4-2-q12', 'scs-t4-2-q14',
+  ];
+  const handled = <String>[
+    ...batch1, ...batch2, ...batch3, ...batch4, ...batch5,
+  ];
 
   /// 지금까지 손댄 Task. 배치가 늘면 여기와 `handled` 를 함께 늘린다.
   const tasks = <String>[
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3', 'scs-t2-1', 'scs-t2-2',
-    'scs-t3-1', 'scs-t3-2', 'scs-t3-3',
+    'scs-t3-1', 'scs-t3-2', 'scs-t3-3', 'scs-t4-1', 'scs-t4-2',
   ];
 
   /// 보고 P-1 이 든 임계. `prescreen.mjs` 의 `ANSWER_LENGTH_RATIO` 와 같은 값이다.
@@ -120,7 +136,7 @@ void main() {
     );
   }
 
-  group('길이 단서 제거 배치 1~4 (D1 세 Task · D2 두 Task · D3 세 Task)', () {
+  group('길이 단서 제거 배치 1~5 (D1 3 · D2 2 · D3 3 · D4 2 Task)', () {
     test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
       var n = 0;
       for (final t in tasks) {
@@ -131,7 +147,7 @@ void main() {
           n++;
         }
       }
-      expect(n, 120);
+      expect(n, 150);
     });
 
     test('처리한 문항에서 정답이 최장 오답의 1.3배를 넘지 않는다', () {
@@ -184,6 +200,8 @@ void main() {
         'scs-t3-2-q13',                  // 보류(교체 예정)
         'scs-t3-3-q8', 'scs-t3-3-q15',   // 🟡
         'scs-t3-3-q12',                  // 보류(교체 예정)
+        'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-1-q9',    // 🟡
+        'scs-t4-2-q2', 'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',  // 🟡
       };
       final remaining = <String>{};
       for (final t in tasks) {
