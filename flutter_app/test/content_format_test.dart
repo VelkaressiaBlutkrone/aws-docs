@@ -259,4 +259,106 @@ void main() {
               '여기서 0건이면 탐지기가 고장 난 것이다');
     });
   });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 프런트매터 `sources` 무결성 — 파서가 항목을 조용히 버리지 않는다
+  //
+  // ⚠️⚠️ 경위(2026-11-11): 2026-11-10 SCS 출처 교정(#439)이 `sources` 목록에
+  // 항목을 삽입할 때 앵커를 잘못 잡아 **`lastVerified:` 줄이 목록 중간에** 끼었다.
+  // `markdown_parser.dart` 의 `sources` 루프는 `- ` 로 시작하지 않는 줄에서 멈추고,
+  // 그 뒤의 들여쓴 항목은 키 정규식(`^([A-Za-z][A-Za-z0-9]*):`)에도 걸리지 않아
+  // **조용히 버려진다.** SCS 4편에서 **출처 7개**가 그렇게 사라졌고
+  // (`scs-t1-2` 3 · `scs-t1-3` 2 · `scs-t2-2` 1 · `scs-t3-2` 1)
+  // `study_doc_page.dart` 가 그리는 **「출처 N」 칩이 라이브에서 작게 표시**되고 있었다.
+  //
+  // ⚠️ **기존 가드는 전부 통과했다** — `all_content_parse_test` 는 파서가 예외 없이
+  // 돌기만 하면 되고, G-84(문항 출처 ⊆ md 출처)는 md **텍스트**를 grep 하므로
+  // 파일에 글자가 있으면 찾는다. **「파서가 읽는 것」과 「파일에 있는 것」을 맞대야**
+  // 잡힌다.
+  group('프런트매터 sources 를 파서가 하나도 버리지 않는다', () {
+    /// `markdown_parser.dart` 의 프런트매터 루프를 그대로 재현한다.
+    int parsedSourceCount(List<String> fm) {
+      var i = 0;
+      var n = 0;
+      final keyRe = RegExp(r'^([A-Za-z][A-Za-z0-9]*):\s*(.*)$');
+      while (i < fm.length) {
+        final m = keyRe.firstMatch(fm[i]);
+        if (m == null) {
+          i++;
+          continue;
+        }
+        final key = m.group(1)!;
+        final val = m.group(2)!.trim();
+        if (val.isEmpty && (key == 'sources' || key == 'coversTasks')) {
+          i++;
+          while (i < fm.length && fm[i].trimLeft().startsWith('- ')) {
+            if (key == 'sources') {
+              n++;
+              if (i + 1 < fm.length &&
+                  RegExp(r'^\s*url:').hasMatch(fm[i + 1])) {
+                i++;
+              }
+            }
+            i++;
+          }
+          continue;
+        }
+        i++;
+      }
+      return n;
+    }
+
+    List<String>? frontMatterOf(File f) {
+      final lines = f.readAsStringSync().replaceAll('\r\n', '\n').split('\n');
+      if (lines.isEmpty || lines.first.trim() != '---') return null;
+      final end = lines.indexWhere((l) => l.trim() == '---', 1);
+      if (end < 0) return null;
+      return lines.sublist(1, end);
+    }
+
+    test('모든 자격증의 모든 md에서 유실이 0건이다', () {
+      final titleRe = RegExp(r'^  - title:');
+      final losses = <String, String>{};
+      var checked = 0;
+      for (final f in mdFiles) {
+        final fm = frontMatterOf(f);
+        if (fm == null) continue;
+        checked++;
+        final inFile = fm.where(titleRe.hasMatch).length;
+        final parsed = parsedSourceCount(fm);
+        if (inFile != parsed) {
+          losses[relOf(f)] = '파일 $inFile개 → 파서 $parsed개';
+        }
+      }
+      expect(checked, greaterThan(120),
+          reason: '0이면 단정이 공허하다 — 프런트매터를 가진 md가 130편 안팎이다');
+      expect(losses, isEmpty,
+          reason: '파서가 버리는 출처가 있다. `lastVerified:` 처럼 최상위 키가 '
+              '`sources` 목록 **중간**에 끼었는지 보라: $losses');
+    });
+
+    test('대조군: 탐지기가 끼어든 최상위 키를 실제로 잡는다', () {
+      // 2026-11-10 결함을 그대로 재현한 합성 입력이다.
+      final broken = <String>[
+        'sources:',
+        '  - title: A',
+        '    url: https://example.invalid/a',
+        'lastVerified: 2026-11-08',
+        '  - title: B',
+        '    url: https://example.invalid/b',
+      ];
+      expect(parsedSourceCount(broken), 1,
+          reason: '파서는 끼어든 키에서 멈추므로 B를 못 읽는다');
+      final fixed = <String>[
+        'sources:',
+        '  - title: A',
+        '    url: https://example.invalid/a',
+        '  - title: B',
+        '    url: https://example.invalid/b',
+        'lastVerified: 2026-11-08',
+      ];
+      expect(parsedSourceCount(fixed), 2,
+          reason: '키를 목록 뒤로 옮기면 둘 다 읽힌다 — 이것이 수선 방향이다');
+    });
+  });
 }

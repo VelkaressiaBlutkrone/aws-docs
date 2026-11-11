@@ -28,13 +28,13 @@ sources:
     url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html
   - title: Introduction to AWS Security Hub CSPM
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
-lastVerified: 2026-11-08
   - title: How CloudTrail works — 기록되는 이벤트와 주체
     url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/how-cloudtrail-works.html
   - title: What is Amazon Athena? — S3 데이터를 표준 SQL로 조회
     url: https://docs.aws.amazon.com/athena/latest/ug/what-is.html
   - title: What is Amazon Security Lake? — OCSF·Parquet 정규화
     url: https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html
+lastVerified: 2026-11-08
 ---
 
 # 로깅 솔루션 설계 (소스 파악·조직 추적·데이터 레이크·로그 분석·정규화·네트워크 로그)
