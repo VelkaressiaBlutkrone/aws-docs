@@ -183,15 +183,15 @@
       "options": [
         "됩니다. 임시 자격 증명이면 종류와 무관하게 페더레이션 엔드포인트에 넘길 수 있습니다",
         "안 됩니다. 콘솔 로그인 URL은 장기 액세스 키로만 만들 수 있습니다",
-        "안 됩니다. GetSessionToken으로 받은 자격 증명은 콘솔 SSO에 쓸 수 없고, 그 용도로 쓸 수 있는 것은 GetFederationToken입니다",
+        "안 됩니다. GetSessionToken은 콘솔 SSO에 쓸 수 없고, 그 용도로는 AssumeRole 또는 GetFederationToken을 씁니다",
         "됩니다. 다만 세션 정책을 함께 넘겨야 합니다"
       ],
       "correct": 2,
-      "explanation": "공식 비교표의 제약 열이 이 자리를 가릅니다. GetFederationToken으로 받은 자격 증명은 콘솔 SSO에 쓸 수 있어 페더레이션 엔드포인트에 넘겨 로그인 URL을 만들 수 있지만, GetSessionToken으로 받은 자격 증명은 페더레이션 SSO 엔드포인트에 넘길 수 없습니다. 사용자 지정 연동 브로커는 그 엔드포인트에 임시 자격 증명을 넘겨 토큰을 받고 그 토큰으로 URL을 만듭니다.",
+      "explanation": "공식 비교표의 제약 열이 이 자리를 가릅니다. GetSessionToken으로 받은 자격 증명은 페더레이션 SSO 엔드포인트에 넘길 수 없습니다. 사용자 지정 연동 브로커 절차는 AssumeRole을 권장 경로로 적고 GetFederationToken도 함께 드는데, 둘 중 어느 것으로 받은 임시 자격 증명이든 그 엔드포인트에 넘겨 로그인 토큰을 받고 그 토큰으로 URL을 만듭니다. AssumeRole 계열에 DurationSeconds를 쓰려면 장기 자격 증명을 가진 IAM 사용자로 호출해야 하고, 그러지 않으면 페더레이션 엔드포인트 호출이 실패합니다.",
       "wrongExplanations": {
         "0": "종류에 따라 갈립니다. GetSessionToken은 콘솔 SSO에 쓸 수 없습니다.",
         "1": "임시 자격 증명으로 콘솔 로그인 URL을 만드는 경로가 공식에 있습니다.",
-        "3": "세션 정책 전달과 무관하게 GetSessionToken 자격 증명은 콘솔 SSO에 쓸 수 없습니다."
+        "3": "세션 정책을 넘기는지와 무관하게 GetSessionToken 자격 증명은 콘솔 SSO에 쓸 수 없습니다."
       },
       "sources": [
         {
