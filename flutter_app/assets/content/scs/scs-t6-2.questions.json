@@ -423,7 +423,7 @@
         "AppRegistry는 신규 고객에게 열려 있지 않고 Service Catalog 본체도 함께 닫혔습니다"
       ],
       "correct": 2,
-      "explanation": "공식 사용자 안내서가 페이지 머리에 AWS Service Catalog AppRegistry는 2026년 7월 30일부터 신규 고객에게 열려 있지 않다고 적습니다. 그날 전에 가입했다면 쓸 수 있고 기존 고객은 정상적으로 계속 사용할 수 있습니다. 즉 지금 새로 시작하는 조직은 설정할 수 없으므로 제안 자체가 성립하지 않습니다. 중요한 구분이 있습니다. AWS Service Catalog 본체는 닫히지 않았고 포트폴리오와 제품과 제약 조건과 프로비저닝된 제품은 그대로 쓰이며 Control Tower의 Account Factory도 Service Catalog의 프로비저닝된 제품 위에 올라갑니다. 공부 시간은 본체의 공유와 제약 조건 모델에 쓰고 AppRegistry는 상태만 알아 둡니다. 참고로 AppRegistry는 RAM을 통해 Organizations로 공유되고 Well-Architected Tool과 통합됩니다.",
+      "explanation": "공식 사용자 안내서가 페이지 머리에 AWS Service Catalog AppRegistry는 2026년 7월 30일부터 신규 고객에게 열려 있지 않다고 적습니다. 그날 전에 가입했다면 쓸 수 있고 기존 고객은 정상적으로 계속 사용할 수 있습니다. 즉 지금 새로 시작하는 조직은 설정할 수 없으므로 제안 자체가 성립하지 않습니다. 중요한 구분이 있습니다. AWS Service Catalog 본체는 닫히지 않았고 포트폴리오와 제품과 제약 조건과 프로비저닝된 제품은 그대로 쓰이며 Control Tower의 Account Factory도 Service Catalog의 프로비저닝된 제품 위에 올라갑니다. 따라서 새 설계의 축은 Service Catalog 본체의 포트폴리오 공유와 제약 조건입니다. 참고로 AppRegistry는 RAM을 통해 Organizations로 공유되고 Well-Architected Tool과 통합됩니다.",
       "wrongExplanations": {
         "0": "신규 고객에게 열려 있지 않습니다.",
         "1": "본체는 닫히지 않았습니다.",

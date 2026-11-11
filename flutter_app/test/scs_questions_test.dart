@@ -281,4 +281,89 @@ void main() {
             '회상·분류형 문항(「공식 서술로 올바른 것은」·「올바르게 짝지은」)에 '
             '`foundational` 을 붙인다: $short');
   });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 저작 메모·시험 예측 금지 (2026-11-11 외부 검수 보고 §4 2단계)
+  //
+  // 보고 🟢 가 「해설에 남은 저작 메모」로 든 계열이다. **저작자의 판정 기준·학습
+  // 지시·출제 예측**이 학습자 문장으로 새어 나온 자리이고, 학습자에게 쓸모가 없고
+  // 틀릴 수도 있다. 문항 10개 자리 + **라이브 학습문서 11개 자리**를 사실 서술로
+  // 바꿨다.
+  //
+  // ⚠️⚠️ **보고 대상은 문항 뱅크였지만 같은 문구가 md 에도 있었다** — 레포 규율대로
+  // (「한 파일에서 오류를 찾으면 그 문구로 레포 전역을 쓸고 가드도 전역으로 건다」)
+  // 이 가드는 **md 와 문항을 함께** 본다. 문항만 보면 학습자가 같은 저작 메모를
+  // 옆 학습문서에서 읽는다.
+  //
+  // ⚠️ **아직 금지하지 않는 계열이 셋 있다** — 판정 없이 금지하면 참인 문장을 지운다.
+  //   - `외우` : SCS md 6편 · 전 자격증 md 55편. 「지원 유형 목록은 외우지 않고 CLI
+  //     조회 절차로 확인한다」처럼 **공식이 적어 둔 절차를 안내**하는 정당한 서술이
+  //     섞여 있다. `scs-t3-1-q4` 의 것은 보고가 **보류(교체)**로 분류했다.
+  //   - `단정하지` : `scs-t2-2-q15` · `scs-t6-1-q9` 가 보고 **보류(재작성)** 목록이라
+  //     이 배치의 범위가 아니다(§4 6단계).
+  //   - `묻지 않` : 전 자격증 md 11편. 「개수를 묻지 않는다」는 D-16 판정을 학습문서에
+  //     **의도적으로 명시**한 것이다.
+  //   세 계열의 현재 수를 아래 대조군이 고정해, 범위를 넓힐 때 무엇을 보게 되는지
+  //   남긴다.
+  group('저작 메모·시험 예측이 학습자 문장에 없다', () {
+    /// 저작된 Task 의 md + 문항을 합쳐 읽는다(`scs_doc_format_test` 와 같은 방식).
+    String authoredTextOf(String taskId) {
+      final buf = StringBuffer();
+      for (final ext in const ['.md', '.questions.json']) {
+        final f = File('$dir/$taskId$ext');
+        if (f.existsSync()) buf.writeln(f.readAsStringSync());
+      }
+      return buf.toString();
+    }
+
+    final forbidden = <String, String>{
+      '자주 출제': '출제 예측 — 학습자에게 쓸모가 없고 틀릴 수 있다',
+      '옛 교재': '저작자가 다른 교재를 평가한다',
+      '교재가': '같은 계열 — 「교재가 가장 빨리 낡는 자리」',
+      '공부 시간': '저작자가 학습자의 공부 배분을 지시한다',
+      '쪽이 정본': '저작 규율 메모 — 어느 출처를 정본으로 삼았는지는 저작자의 일이다',
+      '시험이 묻는': '시험 예측',
+      '어느 쪽이든 거짓': '저작 규율 메모 — 사실은 「두 서술이 다른 계층」이다',
+    };
+
+    test('금지 문구가 md·문항 전수에서 0건이다', () {
+      final hits = <String, List<String>>{};
+      for (final taskId in authoredTaskIds) {
+        final text = authoredTextOf(taskId);
+        for (final phrase in forbidden.keys) {
+          if (text.contains(phrase)) {
+            (hits[phrase] ??= <String>[]).add(taskId);
+          }
+        }
+      }
+      expect(hits, isEmpty,
+          reason: '저작 메모가 학습자 문장에 남아 있다. 사실 서술로 바꾼다 '
+              '(지우기만 하면 교육 가치가 빈다): $hits');
+    });
+
+    test('대조군: 탐지기가 글을 실제로 읽고 있다', () {
+      // 0이면 위 단정이 공허하다.
+      final text = authoredTextOf(authoredTaskIds.first);
+      expect(text.length, greaterThan(10000),
+          reason: 'md + 문항을 합쳐 읽어야 한다');
+      expect(text.contains('공식'), isTrue);
+      // 금지 문구를 실제로 잡는지.
+      expect(forbidden.keys.any(('옛 교재는 이렇게 적는다').contains), isTrue);
+    });
+
+    test('아직 금지하지 않는 세 계열의 현재 수를 고정한다', () {
+      // 범위를 넓히는 배치가 무엇을 보게 되는지 남긴다 — 이 수가 늘면
+      // 누군가 새 저작 메모를 넣었다는 뜻이고, 줄면 정리가 진행된 것이다.
+      int filesWith(String phrase, String ext) => authoredTaskIds
+          .where((t) => File('$dir/$t$ext').existsSync())
+          .where((t) => File('$dir/$t$ext').readAsStringSync().contains(phrase))
+          .length;
+      expect(filesWith('외우', '.md'), lessThanOrEqualTo(6),
+          reason: '⚠️ 정당한 용례가 섞여 있다 — 늘어나면 새로 들어온 것을 본다');
+      expect(filesWith('단정하지', '.questions.json'), lessThanOrEqualTo(2),
+          reason: '보고 보류 목록(t2-2-q15 · t6-1-q9)이라 §4 6단계 몫이다');
+      expect(filesWith('묻지 않', '.md'), lessThanOrEqualTo(2),
+          reason: 'D-16 판정을 학습문서에 명시한 것이다');
+    });
+  });
 }
