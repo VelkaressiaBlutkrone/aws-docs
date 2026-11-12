@@ -66,6 +66,11 @@ import 'package:flutter_test/flutter_test.dart';
 ///   줄었다. ⚠️ **오답을 올려도 모자랄 때는 정답을 줄이는 쪽이 맞다** — 이 Task 의
 ///   정답은 공식 비교표 요약이라 **해설에 있는 둘째 사실**을 걷으면 바로 들어온다
 ///   (`q12` 의 `VpceAccessDenied` · `q14` 의 RDS 비호환 — 어느 오답과도 갈림길이 아니다).
+/// - **배치 6**(2026-11-12) — `t5-1` 12 + `t5-2` 11 + `t5-3` 12 = 35문항. 전수 cue
+///   119 → **84**. ⚠️ **무변경 5항목의 처리가 배치마다 갈린다** — 비율에 영향이 없는
+///   둘(`t5-3` q5·q7)은 지웠고, **필요치를 만들어야 하는 최장 오답**인 셋(q11·q14 와
+///   `t5-2` q8)은 올렸다. 지울지 올릴지는 그 보기가 **최장인가**로 정한다.
+///   ⚠️ `t5-1`·`t5-2`·`t5-3` 는 **셋 다 끝에 개행이 있다**(파일마다 실측한다).
 void main() {
   const dir = 'assets/content/scs';
 
@@ -109,14 +114,26 @@ void main() {
     'scs-t4-2-q6', 'scs-t4-2-q7', 'scs-t4-2-q9', 'scs-t4-2-q10',
     'scs-t4-2-q11', 'scs-t4-2-q12', 'scs-t4-2-q14',
   ];
+  const batch6 = <String>[
+    'scs-t5-1-q1', 'scs-t5-1-q3', 'scs-t5-1-q4', 'scs-t5-1-q5',
+    'scs-t5-1-q7', 'scs-t5-1-q8', 'scs-t5-1-q9', 'scs-t5-1-q11',
+    'scs-t5-1-q12', 'scs-t5-1-q13', 'scs-t5-1-q14', 'scs-t5-1-q15',
+    'scs-t5-2-q1', 'scs-t5-2-q3', 'scs-t5-2-q5', 'scs-t5-2-q6',
+    'scs-t5-2-q8', 'scs-t5-2-q9', 'scs-t5-2-q10', 'scs-t5-2-q11',
+    'scs-t5-2-q12', 'scs-t5-2-q13', 'scs-t5-2-q14',
+    'scs-t5-3-q1', 'scs-t5-3-q2', 'scs-t5-3-q4', 'scs-t5-3-q5',
+    'scs-t5-3-q6', 'scs-t5-3-q7', 'scs-t5-3-q8', 'scs-t5-3-q9',
+    'scs-t5-3-q10', 'scs-t5-3-q11', 'scs-t5-3-q13', 'scs-t5-3-q14',
+  ];
   const handled = <String>[
-    ...batch1, ...batch2, ...batch3, ...batch4, ...batch5,
+    ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
   ];
 
   /// 지금까지 손댄 Task. 배치가 늘면 여기와 `handled` 를 함께 늘린다.
   const tasks = <String>[
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3', 'scs-t2-1', 'scs-t2-2',
     'scs-t3-1', 'scs-t3-2', 'scs-t3-3', 'scs-t4-1', 'scs-t4-2',
+    'scs-t5-1', 'scs-t5-2', 'scs-t5-3',
   ];
 
   /// 보고 P-1 이 든 임계. `prescreen.mjs` 의 `ANSWER_LENGTH_RATIO` 와 같은 값이다.
@@ -136,7 +153,7 @@ void main() {
     );
   }
 
-  group('길이 단서 제거 배치 1~5 (D1 3 · D2 2 · D3 3 · D4 2 Task)', () {
+  group('길이 단서 제거 배치 1~6 (D1 3 · D2 2 · D3 3 · D4 2 · D5 3 Task)', () {
     test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
       var n = 0;
       for (final t in tasks) {
@@ -147,7 +164,7 @@ void main() {
           n++;
         }
       }
-      expect(n, 150);
+      expect(n, 195);
     });
 
     test('처리한 문항에서 정답이 최장 오답의 1.3배를 넘지 않는다', () {
@@ -202,6 +219,10 @@ void main() {
         'scs-t3-3-q12',                  // 보류(교체 예정)
         'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-1-q9',    // 🟡
         'scs-t4-2-q2', 'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',  // 🟡
+        'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10',   // 🟡
+        'scs-t5-2-q2', 'scs-t5-2-q4', 'scs-t5-2-q7', 'scs-t5-2-q15',   // 🟡
+        'scs-t5-3-q3', 'scs-t5-3-q15',  // 🟡
+        'scs-t5-3-q12',                 // 보류(교체 예정)
       };
       final remaining = <String>{};
       for (final t in tasks) {
