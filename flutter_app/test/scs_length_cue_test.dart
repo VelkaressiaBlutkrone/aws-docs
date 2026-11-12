@@ -196,10 +196,16 @@ void main() {
     'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7', 'scs-t6-1-q13',
     'scs-t6-1-q15', 'scs-t6-2-q6', 'scs-t6-2-q13', 'scs-t6-3-q8',
   ];
+  /// 🏁 6단계 배치 5-B — 🟢 잠여. 보고 반영의 마지막 배치다.
+  const stage6batch5b = <String>[
+    'scs-t2-1-q6', 'scs-t2-2-q10', 'scs-t3-1-q2', 'scs-t3-1-q8',
+    'scs-t3-2-q2', 'scs-t5-1-q10', 'scs-t5-2-q6', 'scs-t5-3-q3',
+    'scs-t6-1-q8',
+  ];
   const handled = <String>[
     ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
     ...batch7, ...stage6batch1, ...stage6batch2, ...stage6batch3,
-    ...stage6batch4, ...stage6batch5a,
+    ...stage6batch4, ...stage6batch5a, ...stage6batch5b,
   ];
 
   /// 지금까지 손댄 Task. 🏁 배치 7로 **공식 Task 16개 전부**가 들어왔다.

@@ -30,7 +30,9 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html
   - title: Network security - Amazon EKS Best Practices Guide
     url: https://docs.aws.amazon.com/eks/latest/best-practices/network-security.html
-lastVerified: 2026-11-09
+  - title: AWS Client VPN client certificate revocation lists
+    url: https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html
+lastVerified: 2026-11-12
 ---
 
 # 전송 중인 데이터 (암호화 강제·비공개 액세스·리소스 간 암호화)
@@ -404,3 +406,4 @@ SageMaker AI는 기본적으로 훈련 작업을 **AWS가 관리하는 VPC**에�
 9. Encryption options for Amazon EMR — `docs.aws.amazon.com/emr/latest/ManagementGuide/emr-data-encryption-options.html` (2026-11-09 확인)
 10. Protect Communications Between ML Compute Instances in a Distributed Training Job — `docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html` (2026-11-09 확인)
 11. Network security - Amazon EKS Best Practices Guide — `docs.aws.amazon.com/eks/latest/best-practices/network-security.html` (2026-11-09 확인)
+12. AWS Client VPN client certificate revocation lists — `docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html` (2026-11-12 확인)

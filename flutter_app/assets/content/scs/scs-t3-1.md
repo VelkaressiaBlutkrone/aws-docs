@@ -40,7 +40,9 @@ sources:
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-ocsf.html
   - title: Collecting data from custom sources in Security Lake
     url: https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html
-lastVerified: 2026-11-08
+  - title: Services in Maintenance — App Runner 상태
+    url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+lastVerified: 2026-11-12
 ---
 
 # 네트워크 엣지 보안 (전략 선택·엣지 보호 구현·지리와 속도 제한·타사 통합)
@@ -396,3 +398,4 @@ Security Lake **사용자 지정 소스**의 요건이 시험의 갈림길입니
 14. Thing policy variables — `docs.aws.amazon.com/iot/latest/developerguide/thing-policy-variables.html` (2026-11-08 확인)
 15. Security Hub and the OCSF — `docs.aws.amazon.com/securityhub/latest/userguide/securityhub-ocsf.html` (2026-11-08 확인)
 16. Collecting data from custom sources in Security Lake — `docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html` (2026-11-08 확인)
+17. Services in Maintenance — App Runner 상태 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-12 확인)

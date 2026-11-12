@@ -75,7 +75,7 @@
         "STS는 장기 자격 증명을 보관하고 Secrets Manager는 임시 토큰을 발급하는 쪽입니다"
       ],
       "correct": 2,
-      "explanation": "두 서비스의 축이 다릅니다. Secrets Manager는 장기 자격 증명을 안전하게 보관하고 회전하는 쪽이고 AWS STS는 처음부터 짧은 수명의 자격 증명을 발급하는 쪽입니다. 그래서 데이터베이스 암호를 STS로 발급한다는 설계는 성립하지 않습니다. Secrets Manager의 회전은 보안 암호와 데이터베이스나 서비스 양쪽의 자격 증명을 갱신하는 절차이고 형태가 관리형과 관리형 외부 보안 암호와 Lambda 함수 기반 셋입니다.",
+      "explanation": "두 서비스의 축이 다릅니다. Secrets Manager 는 장기 자격 증명을 안전하게 보관하고 회전하는 쪽이고 AWS STS 는 처음부터 짧은 수명의 자격 증명을 발급하는 쪽입니다. 그래서 데이터베이스 암호를 STS 로 발급한다는 설계는 성립하지 않습니다. 다만 암호 자체를 없애는 세 번째 축이 있습니다. IAM 데이터베이스 인증은 MariaDB 와 MySQL 과 PostgreSQL 에서 암호 대신 인증 토큰으로 접속하게 하고, 그 토큰은 Signature Version 4 로 생성되며 수명이 15분입니다. 자격 증명을 데이터베이스에 저장하지 않고 IAM 이 외부에서 관리하며, 토큰은 인증에만 쓰여 세션이 맺어진 뒤의 동작에는 영향이 없습니다. 한계도 함께 알아 둡니다. CloudWatch 와 CloudTrail 이 IAM 인증을 로깅하지 않아 토큰 생성 호출이 추적되지 않고, 데이터베이스 인스턴스에 300에서 1000 MiB 의 여유 메모리가 필요하며 RDS on Outposts 에서는 지원되지 않습니다. Secrets Manager 의 회전은 보안 암호와 데이터베이스나 서비스 양쪽의 자격 증명을 갱신하는 절차이고 형태가 관리형과 관리형 외부 보안 암호와 Lambda 함수 기반 셋입니다.",
       "wrongExplanations": {
         "0": "STS는 데이터베이스 암호를 발급하지 않습니다.",
         "1": "보관과 회전 대상이 장기 자격 증명인 쪽과 짧은 자격 증명을 발급하는 쪽은 다른 축입니다.",
@@ -85,6 +85,10 @@
         {
           "title": "Rotate AWS Secrets Manager secrets - 회전의 정의와 범위",
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
+        },
+        {
+          "title": "IAM database authentication for MariaDB, MySQL, and PostgreSQL",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"
         }
       ],
       "verified": false
