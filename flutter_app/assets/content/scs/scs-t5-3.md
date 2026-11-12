@@ -34,7 +34,9 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html
   - title: Creating data protection policies in Amazon SNS
     url: https://docs.aws.amazon.com/sns/latest/dg/sns-message-data-protection-configure.html
-lastVerified: 2026-11-09
+  - title: IAM database authentication for MariaDB, MySQL, and PostgreSQL
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html
+lastVerified: 2026-11-12
 ---
 
 # 기밀 데이터와 키 자료 (보안 암호·가져온 키·회전·마스킹·다중 리전 키와 인증서)
@@ -451,3 +453,4 @@ lastVerified: 2026-11-09
 11. Set up alternating users rotation for AWS Secrets Manager — `docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials_rotation-alternating.html` (2026-11-09 확인)
 12. Help protect sensitive log data with masking — `docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html` (2026-11-09 확인)
 13. Creating data protection policies in Amazon SNS — `docs.aws.amazon.com/sns/latest/dg/sns-message-data-protection-configure.html` (2026-11-09 확인)
+14. IAM database authentication for MariaDB, MySQL, and PostgreSQL — `docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html` (2026-11-12 확인)

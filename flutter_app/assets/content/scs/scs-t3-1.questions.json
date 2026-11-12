@@ -51,7 +51,7 @@
         "가능합니다. 다만 Network Load Balancer에서는 관리형 규칙 그룹을 쓸 수 없고 사용자 지정 규칙과 속도 기반 규칙만 됩니다"
       ],
       "correct": 1,
-      "explanation": "공식 보호 대상 목록은 CloudFront 배포, API Gateway REST API, Application Load Balancer, AppSync GraphQL API, Cognito 사용자 풀, App Runner 서비스, Amazon Bedrock AgentCore Gateway, AWS Verified Access 인스턴스, AWS Amplify입니다. Network Load Balancer와 EC2 인스턴스는 그 목록에 없으므로 앞단에 Application Load Balancer나 CloudFront를 둬야 WAF를 붙일 수 있습니다. 목록에 Bedrock AgentCore Gateway와 Amplify가 있다는 것도 함께 기억합니다.",
+      "explanation": "공식 보호 대상 목록은 CloudFront 배포, API Gateway REST API, Application Load Balancer, AppSync GraphQL API, Cognito 사용자 풀, App Runner 서비스, Amazon Bedrock AgentCore Gateway, AWS Verified Access 인스턴스, AWS Amplify입니다. Network Load Balancer와 EC2 인스턴스는 그 목록에 없으므로 앞단에 Application Load Balancer나 CloudFront를 둬야 WAF를 붙일 수 있습니다. 목록에 Bedrock AgentCore Gateway와 Amplify가 있다는 것도 함께 기억합니다. 목록 암기에 기대지 않도록 상태도 알아 둡니다. 보호 대상 목록에 든 AWS App Runner 는 2026년 3월 31일 공지로 공식 유지 관리 목록에 올랐습니다.",
       "wrongExplanations": {
         "0": "Network Load Balancer는 목록에 없습니다.",
         "2": "CloudFront 전용이 아닙니다. ALB, API Gateway, AppSync, Cognito, App Runner, Bedrock AgentCore Gateway, Verified Access, Amplify가 함께 들어 있습니다.",
@@ -61,6 +61,10 @@
         {
           "title": "What are AWS WAF, AWS Shield Advanced, AWS Shield network security director and AWS Firewall Manager? - 제품 역할과 보호 대상",
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html"
+        },
+        {
+          "title": "Services in Maintenance — App Runner 상태",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
       "verified": false
@@ -227,7 +231,7 @@
         "ALB·AppSync 한도는 8 KB 고정이고 본문 규칙이 Continue라 뒷부분이 검사되지 않습니다. CloudFront를 앞에 둡니다"
       ],
       "correct": 3,
-      "explanation": "본문 검사 한도가 리소스 유형마다 다릅니다. Application Load Balancer와 AppSync는 8 KB 고정이고 올릴 수 없으며, CloudFront와 API Gateway와 Cognito와 App Runner와 Verified Access와 Bedrock AgentCore Gateway는 기본 16 KB에서 보호 팩 설정으로 최대 64 KB까지 올릴 수 있습니다. 한도를 넘는 부분은 초과 콘텐츠 처리가 결정하고 코어 규칙 세트의 본문 규칙은 Continue 옵션을 씁니다. 참고로 코어 규칙 세트의 다른 크기 제한은 쿼리 문자열 2,048바이트, 쿠키 헤더 10,240바이트, URI 경로 1,024바이트입니다.",
+      "explanation": "본문 검사 한도가 리소스 유형마다 다릅니다. Application Load Balancer 와 AppSync 는 8 KB 고정이고 올릴 수 없으며, CloudFront 와 API Gateway 와 Cognito 와 App Runner 와 Verified Access 와 Bedrock AgentCore Gateway 는 기본 16 KB 에서 보호 팩 설정으로 최대 64 KB 까지 올릴 수 있습니다. 한도를 넘는 부분은 초과 콘텐츠 처리가 결정하고 코어 규칙 세트의 본문 규칙은 Continue 옵션을 씁니다. 목록 암기에 기대지 않도록 상태도 알아 둡니다. 보호 대상 목록에 든 AWS App Runner 는 2026년 3월 31일 공지로 공식 유지 관리 목록에 올랐습니다.",
       "wrongExplanations": {
         "0": "코어 규칙 세트에 본문 규칙이 있습니다. 문제는 검사 한도입니다.",
         "1": "Application Load Balancer의 한도는 8 KB 고정이라 올릴 수 없습니다.",
@@ -241,6 +245,10 @@
         {
           "title": "Using managed rule groups in AWS WAF - 본문 검사 한도와 과금 층",
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-managed-rule-groups.html"
+        },
+        {
+          "title": "Services in Maintenance — App Runner 상태",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
       "verified": false

@@ -47,7 +47,7 @@
         "승인된 AMI 강제는 불가능하고 실패 인스턴스는 기본적으로 남습니다"
       ],
       "correct": 1,
-      "explanation": "공식이 Organizations 통합으로 승인된 AMI만 실행하도록 강제할 수 있다고 적습니다 — 이미지를 잘 만드는 것과 그것만 쓰게 하는 것은 다른 제어입니다. 빌드 인프라 설정에서 실패 시 빌드 인스턴스를 종료할지 남길지 정하고 기본값이 종료인데, 트러블슈팅을 위해 남기도록 바꾸면 침해 표면이 늘어나는 것이 보안 관점의 트레이드오프입니다. 참고로 AWS RAM으로 공유할 수 있는 리소스는 컴포넌트와 이미지와 이미지 레시피와 컨테이너 레시피 넷입니다.",
+      "explanation": "공식이 Organizations 통합으로 승인된 AMI 만 실행하도록 강제할 수 있다고 적습니다 — 이미지를 잘 만드는 것과 그것만 쓰게 하는 것은 다른 제어입니다. EC2 쪽 수단이 허용된 AMI 설정이고 기준을 만족하는 AMI 만 계정에서 보이고 쓸 수 있게 합니다. 설정은 계정 수준이라 통제하려는 리전마다 구성해야 하지만 선언적 정책으로 적용하면 여러 리전과 여러 계정에 동시에 걸리고, 선언적 정책이 쓰이는 동안에는 계정 안에서 설정을 직접 바꿀 수 없습니다. 켜기 전에 감사 모드로 어떤 AMI 가 보이고 안 보이게 될지 미리 확인할 수 있습니다. 범위에 중요한 한정이 있습니다. 이 기능이 통제하는 것은 퍼블릭 AMI 와 내 계정에 공유된 AMI 뿐이고 내 계정이 소유한 AMI 는 기준과 무관하게 항상 보이고 쓸 수 있습니다. 빌드 인프라 설정에서 실패 시 빌드 인스턴스를 종료할지 남길지 정하고 기본값이 종료인데, 트러블슈팅을 위해 남기도록 바꾸면 침해 표면이 늘어나는 것이 보안 관점의 트레이드오프입니다.",
       "wrongExplanations": {
         "0": "자동 차단 기능이 아니라 Organizations 통합으로 강제합니다. 그리고 남은 빌드 인스턴스는 침해 표면입니다.",
         "2": "승인된 AMI 강제는 Image Builder의 Organizations 통합이고 실패 인스턴스 처리는 내가 정하는 설정입니다.",
@@ -57,6 +57,10 @@
         {
           "title": "What is Image Builder? — Organizations 통합과 빌드 인프라 설정",
           "url": "https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html"
+        },
+        {
+          "title": "Control the discovery and use of AMIs with Allowed AMIs",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-allowed-amis.html"
         }
       ],
       "verified": false

@@ -275,7 +275,7 @@
         "격리가 끝났습니다. 네트워크를 끊으면 그 리소스가 쓰던 권한도 함께 무력화됩니다"
       ],
       "correct": 1,
-      "explanation": "격리는 네트워크와 자격 증명 두 축입니다. 네트워크 축은 인바운드와 아웃바운드가 없는 보안 그룹을 부착하고 기존 보안 그룹을 분리하는 공식 포렌식 방식이고, 자격 증명 축은 인스턴스 프로파일과 역할 권한을 걷어 그 리소스가 쓰던 권한을 무력화하는 것입니다. 네트워크만 끊으면 침해된 역할의 이미 발급된 임시 자격 증명이 인스턴스 밖에서도 유효합니다.",
+      "explanation": "격리는 네트워크와 자격 증명 두 축입니다. 네트워크 축은 인바운드와 아웃바운드가 없는 보안 그룹을 부착하고 기존 보안 그룹을 분리하는 공식 포렌식 방식이고, 자격 증명 축은 인스턴스 프로파일과 역할 권한을 걷어 그 리소스가 쓰던 권한을 무력화하는 것입니다. 네트워크만 끊으면 침해된 역할의 이미 발급된 임시 자격 증명이 인스턴스 밖에서도 유효합니다. 이미 나간 세션을 실제로 끊는 공식 수단은 역할 세션 취소입니다. IAM 이 그 역할에 AWSRevokeOlderSessions 인라인 정책을 붙여 취소 시점 이전에 그 역할을 수임한 모든 사용자에게 전체 거부를 걸고, 그 뒤에 수임한 사용자에게는 적용되지 않습니다. 필요한 권한은 PutRolePolicy 이고, 임의 시점을 쓰려면 aws:TokenIssueTime 조건 키를 DateLessThan 으로 둡니다. 다만 그 조건 키는 임시 자격 증명으로 서명된 요청에만 있어 IAM 사용자의 장기 자격 증명에는 걸리지 않고, 서비스 연결 역할의 세션은 취소할 수 없으며, IAM Identity Center 권한 세트로 만든 역할은 IAM 에서 편집할 수 없어 Identity Center 쪽에서 세션을 취소해야 합니다.",
       "wrongExplanations": {
         "0": "공식 포렌식 흐름이 쓰는 방식이 보안 그룹 교체입니다. 방식 자체가 틀린 것이 아닙니다.",
         "2": "격리는 삭제가 아닙니다. 종료하면 메모리 증거가 사라지고 되돌릴 수 없습니다.",
@@ -285,6 +285,10 @@
         {
           "title": "Forensic memory and disk acquisition service - 메모리 수집과 격리 플래그",
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html"
+        },
+        {
+          "title": "Revoke IAM role temporary security credentials",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_revoke-sessions.html"
         }
       ],
       "verified": false
