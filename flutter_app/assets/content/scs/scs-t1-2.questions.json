@@ -335,7 +335,7 @@
       "skill": "1.2.5",
       "section": "correlate",
       "difficulty": "foundational",
-      "stem": "공식 기술이 정규화와 구문 분석, 상관 관계 분석의 예시로 Amazon OpenSearch Service, AWS Lambda, Amazon Managed Grafana를 듭니다. 세 수단을 층으로 배치한 것으로 올바른 것은 무엇입니까?",
+      "stem": "형식이 다른 로그를 받아 파싱하고 정규화한 뒤, 대량 로그를 색인해 자유 검색과 집계를 제공하고, 여러 데이터 소스를 한 대시보드에서 함께 보려 합니다. Amazon OpenSearch Service, AWS Lambda, Amazon Managed Grafana를 세 요구에 맞게 배치한 것으로 올바른 것은 무엇입니까?",
       "options": [
         "변환은 OpenSearch Service, 색인과 검색은 Managed Grafana, 시각화는 Lambda입니다",
         "변환은 Managed Grafana, 색인과 검색은 Lambda, 시각화는 OpenSearch Service입니다",

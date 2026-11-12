@@ -86,6 +86,9 @@ import 'package:flutter_test/flutter_test.dart';
 /// - **6단계 배치 2**(2026-11-12) — 보류 잔여 5문항(`t3-1-q4` · `t5-3-q12` ·
 ///   `t6-1-q9`·`q11` · `t6-3-q14`). 전수 cue 52 → **47**. 이로써 **보고의 보류
 ///   10문항이 전부 닫혔다** — 남은 47은 🟡 과 🟢 쪽이다.
+/// - **6단계 배치 3**(2026-11-12) — 🟡 잠여 13문항과, 정답 보기에 수명주기
+///   상태 문구가 들어 있는 문항을 전수로 세다 찾은 `t4-1-q4`. 전수 cue
+///   47 → **38**. 남은 38은 중복 묶음(배치 4)과 🟢 잠여(배치 5) 몿이다.
 void main() {
   const dir = 'assets/content/scs';
 
@@ -160,9 +163,16 @@ void main() {
     'scs-t3-1-q4', 'scs-t5-3-q12',
     'scs-t6-1-q9', 'scs-t6-1-q11', 'scs-t6-3-q14',
   ];
+  /// 6단계 배치 3 — 🟡 잠여 13문항 + 전수 스캔으로 찾은 `t4-1-q4`.
+  const stage6batch3 = <String>[
+    'scs-t1-2-q12', 'scs-t2-1-q2', 'scs-t2-1-q14', 'scs-t2-1-q15',
+    'scs-t3-2-q3', 'scs-t4-1-q4', 'scs-t4-1-q9',
+    'scs-t5-2-q7', 'scs-t5-2-q15', 'scs-t6-1-q1', 'scs-t6-2-q15',
+    'scs-t6-3-q9', 'scs-t6-3-q10', 'scs-t6-3-q12',
+  ];
   const handled = <String>[
     ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
-    ...batch7, ...stage6batch1, ...stage6batch2,
+    ...batch7, ...stage6batch1, ...stage6batch2, ...stage6batch3,
   ];
 
   /// 지금까지 손댄 Task. 🏁 배치 7로 **공식 Task 16개 전부**가 들어왔다.
@@ -248,19 +258,17 @@ void main() {
         'scs-t2-1-q13',                  // 🟡
         'scs-t2-2-q5', 'scs-t2-2-q10',   // 🟡
         'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14',  // 🟡
-        'scs-t3-2-q3', 'scs-t3-2-q14',   // 🟡
+        'scs-t3-2-q14',                  // 🟡
         'scs-t3-3-q8', 'scs-t3-3-q15',   // 🟡
-        'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-1-q9',    // 🟡
+        'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7',   // 🟡
         'scs-t4-2-q2', 'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',  // 🟡
         'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10',   // 🟡
-        'scs-t5-2-q2', 'scs-t5-2-q4', 'scs-t5-2-q7', 'scs-t5-2-q15',   // 🟡
+        'scs-t5-2-q2', 'scs-t5-2-q4',   // 🟡
         'scs-t5-3-q3', 'scs-t5-3-q15',  // 🟡
-        'scs-t6-1-q1', 'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7',    // 🟡
-        'scs-t6-1-q13', 'scs-t6-1-q15',                                // 🟡
-        'scs-t6-2-q6', 'scs-t6-2-q15',  // 🟡
-        'scs-t6-2-q13',                 // 보류(교체 예정)
-        'scs-t6-3-q8', 'scs-t6-3-q9', 'scs-t6-3-q10', 'scs-t6-3-q12',  // 🟡
-        'scs-t6-3-q13',                                                // 🟡
+        'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7',   // 🟡
+        'scs-t6-1-q13', 'scs-t6-1-q15',                // 🟡
+        'scs-t6-2-q6', 'scs-t6-2-q13',  // 🟡 (내용은 3단계에서 닫혔고 길이만 남았다)
+        'scs-t6-3-q8', 'scs-t6-3-q13',  // 🟡
       };
       final remaining = <String>{};
       for (final t in tasks) {
