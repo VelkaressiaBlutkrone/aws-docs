@@ -171,6 +171,7 @@ void main() {
         'scs-t2-2', 'scs-t3-2', 'scs-t3-3',
         'scs-t3-1', 'scs-t5-3', 'scs-t6-1', 'scs-t6-3',
         'scs-t1-2', 'scs-t2-1', 'scs-t4-1', 'scs-t5-2', 'scs-t6-2',
+        'scs-t1-1', 'scs-t3-3',
       ]) {
         final md = File('$dir/$taskId.md').readAsStringSync();
         for (final e in bank(taskId).values) {
@@ -508,21 +509,39 @@ void main() {
       expect(e['explanation'], contains('2025-05-20'));
     });
 
-    test('t6-1-q1: 「조직의 모든 계정에 걸쳐」로 정정되고 틀린 개수가 사라졌다', () {
-      // ⚠️⚠️ 보고: 정답의 「계정 전체에 활성화」는 공식 `across accounts` 의
-      //    오역이다. 그리고 옛 해설이 조직의 기능을 **넷**으로 적었는데 공식
-      //    기능 목록은 그보다 많다 — 개수를 단정하지 않는다.
-      final e = q('scs-t6-1-q1');
-      final c = correctOf(e);
-      expect(c, contains('조직의 모든 계정에 걸쳐'));
-      expect(c, contains('끄거나 수정할 수 없습니다'));
-      expect(allText(e), isNot(contains('계정 전체에')));
-      expect(e['explanation'], isNot(contains('넷입니다')));
-      // 같은 감사 기능 묶음을 공식이 함께 든다.
-      expect(e['explanation'], contains('AWS Backup'));
-      expect(e['explanation'], contains('AWS Config'));
-      // 지문의 모호함도 닫혔다 — 조직 차원으로 활성화한 기록을 묻는다.
-      expect(e['stem'], contains('조직 차원으로 활성화한'));
+    test('t6-1-q1 계열: CloudTrail 「계정 전체에 활성화」 오역이 전수에서 0건이다', () {
+      // ⚠️⚠️ 보고: 「계정 전체에 활성화」는 공식 `activate AWS CloudTrail
+      //    **across accounts**` 의 오역이다. 그리고 옛 해설이 조직의 기능을
+      //    **넷**으로 적었는데 공식 기능 목록은 일곱이다.
+      // ⚠️ **이 단정은 배치 4 의 교체에 한 번 걸렸다.** 처음에는 `t6-1-q1` 의
+      //    정답 문구를 리터럴로 묶었는데, 배치 4 가 중복 해소로 그 문항의 관점을
+      //    바꾸자 레드가 됐다. 배치의 의도는 「오역이 다시 들어오지 않는다」이므로
+      //    **문항 하나가 아니라 전수를 세는 형태**로 다시 썼다 — 교체에 묶이지
+      //    않는다.
+      var cloudtrail = 0;
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))) {
+        final taskId = f.uri.pathSegments.last.split('.').first;
+        for (final e in bank(taskId).values) {
+          final all = allText(e);
+          if (!all.contains('CloudTrail')) continue;
+          cloudtrail++;
+          expect(all.contains('계정 전체에 활성화'), isFalse,
+              reason: '${e['id']}: 공식은 「조직의 모든 계정에 걸쳐」다');
+        }
+      }
+      expect(cloudtrail, greaterThanOrEqualTo(10),
+          reason: 'CloudTrail 을 다루는 문항이 거의 없다 — 단정이 공허해진다');
+      // 「조직이 주는 것은 넷」이라는 틀린 개수도 돌아오지 않는다.
+      for (final taskId in const ['scs-t6-1']) {
+        final text = File('$dir/$taskId.questions.json').readAsStringSync();
+        expect(text.contains('중앙 감사와 리소스 공유 넷'), isFalse,
+            reason: '$taskId: 공식 기능 목록은 일곱이다 — 개수를 단정하지 않는다');
+      }
+      // 그 사실의 소유자는 `t1-2-q4` 다(배치 4 묶음 8).
+      expect(correctOf(q('scs-t1-2-q4')), contains('로깅 중단'));
     });
 
     test('t6-2-q15: RAM 관리형 권한을 묻고 수명주기를 묻지 않는다', () {
@@ -566,6 +585,258 @@ void main() {
       expect(c, contains('위임'));
       expect(c, isNot(contains('신규 고객')));
       expect(e['explanation'], contains('신규 고객'));
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 6단계 배치 4 — 중복 13묶음 (2026-11-12)
+  //
+  // 보고의 중복 표를 **현 상태로 다시 재서** 판정했다. 자카드(정답 보기 토큰)는
+  // 13묶음 16쌍 전부 임계 아래였다(최고 0.308) — **지표는 하한이고 사람이 읽어
+  // 판정한다.** 읽어 보니 **정답 문장에 같은 사실이 든 것이 7묶음**이고 나머지
+  // 6묶음은 주제만 같았다.
+  //
+  // 관점을 바꾼 7묶음:
+  //  1. CSPM 소급 — `t1-2-q11` 을 1.2.4 의 「Logs Insights 가 닿지 못하는 것」으로.
+  //     ⚠️ Athena 축은 같은 Task 의 `q2` 가 이미 쓴다(형제 전수 확인).
+  //  2. Logs Insights 동시 실행 한도 — 두 정답에서 함께 걷었다(보고 🟢 의
+  //     「개수 암기 제거」와 같은 처방이다).
+  //  5. 「한 객체는 같은 OCSF 이벤트 클래스」 — `t1-2-q7` 을 상한·전송 간격
+  //     축으로. 형식 축은 `t3-1-q14` 가 소유한다.
+  //  6. 「규칙과 수정을 YAML 로 묶는다」 — `t1-1-q15` 를 저장·배포 경로 축으로.
+  //     묶음의 정체는 `t6-3-q5` 가 소유한다.
+  //  7. 「네트워크 도달성은 EC2 전용 12시간」 — `t3-3-q15` 를 조사 결과의 의미와
+  //     평가 구성 축으로. ⚠️ Network Access Analyzer 축은 같은 Task 의 `q13`·
+  //     `q14` 가 이미 쓴다(형제 전수 확인이 두 번째로 값을 했다).
+  //  8. 「멤버가 끄거나 수정할 수 없다」 — `t6-1-q1` 을 계정 경계·보안팀 중앙
+  //     제공 축으로. 추적 상세는 `t1-2-q4` 가 소유한다.
+  // 13. Tool 의 출력이 세 정답에 모두 있었다 — `q13`·`q14` 에서 걷고 `q15` 가
+  //     소유한다.
+  //
+  // 중복이 아니라고 판정한 6묶음(정답 문장에 공통 사실이 없다):
+  //  3. 알람 누락 데이터 — `t1-1-q13` 은 **AWS/DynamoDB 예외와 데이터 포인트
+  //     규칙**, `t1-3-q14` 는 **일반 기본값과 선택 기준**이다(자카드 0.024).
+  //  4. 평가 상태 — `t1-1-q6` 은 PARTIAL_DATA·EVALUATION_FAILURE,
+  //     `t1-3-q15` 는 IN_WARM_UP 이다(0.000).
+  //  9. 포렌식 순서 — **6단계 배치 3 이 이미 해소했다.** `t2-1-q15` 는 조직
+  //     방침에 따른 승인·자동화 구분이고 순서는 해설에만 있다(0.125).
+  // 10. Nitro 암호화 — `t5-1-q11` 은 **계층 축**(중간 홉), `t5-1-q12` 는
+  //     **조건 축**(같은 리전)이다(0.000).
+  // 11. SCP 와 관리 계정 — `t6-1-q2` 는 리소스를 어디 둘지, `t6-1-q10` 은
+  //     위임된 관리자 등록 전제다(0.000).
+  // 12. 두 「사전」 — `t6-1-q4` 는 Control Tower 사전 **제어**(후크 경로),
+  //     `t6-3-q1` 은 Config 사전 **평가**(막지 않는다)다(0.067).
+  //
+  // ⚠️⚠️ **보고 목록 밖에서 하나를 더 찾았고 그것은 6단계 배치 1 이 만든
+  // 중복이다.** 배치 1 이 `t2-2-q3` 를 「두 단계 복사의 **이유**」로 다시 쓰면서
+  // 같은 Task 의 `q12` 정답과 근거 문장이 겹쳤다(자카드 0.222 — 보고가 든 13묶음
+  // 어느 쌍보다 높다). **교체는 새 중복을 만들 수 있으므로 배치마다 전수로 다시
+  // 센다.** 근거는 `q3` 가 소유하고 `q12` 는 무엇을 하는가만 묻게 좁혔다.
+  group('6단계 배치 4 — 중복 묶음 해소 (보고 §4)', () {
+    const ids = <String>[
+      'scs-t1-1-q15', 'scs-t1-2-q7', 'scs-t1-2-q9', 'scs-t1-2-q11',
+      'scs-t2-2-q5', 'scs-t2-2-q12', 'scs-t3-3-q15', 'scs-t6-1-q1',
+      'scs-t6-3-q13', 'scs-t6-3-q14',
+    ];
+
+    /// 정답 보기 토큰의 자카드 — 보고 §0-3 이 쓴 지표와 같은 셈이다.
+    double jaccard(String a, String b) {
+      final re = RegExp(r'[0-9A-Za-z가-힣]+');
+      final sa = re.allMatches(a).map((m) => m[0]!).toSet();
+      final sb = re.allMatches(b).map((m) => m[0]!).toSet();
+      if (sa.isEmpty || sb.isEmpty) return 0;
+      return sa.intersection(sb).length / sa.union(sb).length;
+    }
+
+    test('대조군: 열 문항이 읽히고 전부 드래프트다', () {
+      for (final id in ids) {
+        final e = q(id);
+        expect((e['options'] as List).length, 4, reason: id);
+        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
+      }
+    });
+
+    test('정답 인덱스·skill·section·difficulty 가 전부 불변이다', () {
+      const expected = <String, List<Object>>{
+        'scs-t1-1-q15': [2, '1.1.5', 'automation', 'applied'],
+        'scs-t1-2-q7': [1, '1.2.3', 'lake', 'applied'],
+        'scs-t1-2-q9': [0, '1.2.4', 'analyze', 'applied'],
+        'scs-t1-2-q11': [1, '1.2.4', 'analyze', 'applied'],
+        'scs-t2-2-q5': [0, '2.2.2', 'search', 'applied'],
+        'scs-t2-2-q12': [3, '2.2.4', 'contain', 'applied'],
+        'scs-t3-3-q15': [2, '3.3.5', 'identify', 'applied'],
+        'scs-t6-1-q1': [0, '6.1.1', 'organizations', 'applied'],
+        'scs-t6-3-q13': [0, '6.3.3', 'well-architected', 'applied'],
+        'scs-t6-3-q14': [1, '6.3.3', 'well-architected', 'applied'],
+      };
+      expect(expected.keys.toSet(), ids.toSet());
+      for (final entry in expected.entries) {
+        final e = q(entry.key);
+        expect([e['correct'], e['skill'], e['section'], e['difficulty']],
+            entry.value,
+            reason: '${entry.key} 의 보존 필드가 바뀌었다');
+      }
+    });
+
+    test('묶음 1: CSPM 소급은 t2-1-q5 가 소유하고 t1-2-q11 은 다른 것을 묻는다', () {
+      final a = q('scs-t1-2-q11');
+      expect(correctOf(a), contains('로그 그룹 생성 시각'));
+      expect(allText(a), isNot(contains('소급 적용되지 않')));
+      // 같은 Task 의 q2 가 쓰는 Athena 축과도 겹치지 않는다.
+      expect(allText(a), isNot(contains('Athena')));
+      final b = q('scs-t2-1-q5');
+      expect(correctOf(b), contains('소급 적용되지 않'));
+    });
+
+    test('묶음 2: 동시 실행 한도가 두 정답에서 사라지고 기능 축만 남았다', () {
+      final a = q('scs-t1-2-q9');
+      final b = q('scs-t2-2-q5');
+      for (final e in [a, b]) {
+        expect(correctOf(e), isNot(contains('동시 실행 한도')),
+            reason: '${e['id']}: 개수 암기는 보고 🟢 의 제거 대상이다');
+        expect(correctOf(e), isNot(contains('100개')));
+        expect(correctOf(e), isNot(contains('15개')));
+      }
+      expect(correctOf(a), contains('filterIndex'));
+      expect(correctOf(b), contains('OpenSearch SQL'));
+      expect(jaccard(correctOf(a), correctOf(b)), lessThan(0.15));
+    });
+
+    test('묶음 5: 이벤트 클래스는 t3-1-q14 가 소유하고 t1-2-q7 은 상한·간격을 묻는다',
+        () {
+      final a = q('scs-t1-2-q7');
+      expect(correctOf(a), contains('50개'));
+      // ⚠️ 비자명한 예외 — 256MB 를 넘으면 5분보다 자주 보낼 수 있다.
+      expect(correctOf(a), contains('256MB'));
+      expect(allText(a), isNot(contains('OCSF 이벤트 클래스')));
+      final b = q('scs-t3-1-q14');
+      expect(correctOf(b), contains('OCSF 이벤트 클래스'));
+    });
+
+    test('묶음 6: 묶음의 정체는 t6-3-q5 가 소유하고 t1-1-q15 는 배포 경로를 묻는다',
+        () {
+      final a = q('scs-t1-1-q15');
+      expect(correctOf(a), contains('Systems Manager 문서'));
+      expect(correctOf(a), contains('AWS CLI'));
+      expect(correctOf(a), isNot(contains('개선 조치')));
+      final b = q('scs-t6-3-q5');
+      expect(correctOf(b), contains('수정 작업'));
+    });
+
+    test('묶음 7: EC2 전용 12시간은 t3-2-q5 가 소유하고 t3-3-q15 는 의미를 묻는다',
+        () {
+      final a = q('scs-t3-3-q15');
+      expect(correctOf(a), contains('VPC 경계'));
+      expect(correctOf(a), contains('네트워크 ACL'));
+      expect(correctOf(a), isNot(contains('12시간')));
+      expect(correctOf(a), isNot(contains('EC2 인스턴스 전용')));
+      // ⚠️ NAA 축은 같은 Task 의 q13·q14 가 소유한다 — 정답에 끌어오지 않는다.
+      expect(correctOf(a), isNot(contains('Network Access Analyzer')));
+      final b = q('scs-t3-2-q5');
+      expect(correctOf(b), contains('12시간'));
+    });
+
+    test('묶음 8: 「끄거나 수정할 수 없다」는 t1-2-q4 가 소유한다', () {
+      final a = q('scs-t6-1-q1');
+      expect(correctOf(a), contains('자연스러운 경계'));
+      expect(correctOf(a), contains('읽기 전용'));
+      expect(allText(a), isNot(contains('끄거나 수정할 수 없')));
+      final b = q('scs-t1-2-q4');
+      expect(correctOf(b), contains('로깅 중단'));
+    });
+
+    test('묶음 13: Tool 의 출력은 t6-3-q15 만 정답으로 가진다', () {
+      for (final id in const ['scs-t6-3-q13', 'scs-t6-3-q14']) {
+        expect(correctOf(q(id)), isNot(contains('개선 계획')), reason: id);
+      }
+      expect(correctOf(q('scs-t6-3-q15')), contains('개선 계획'));
+      // q14 는 위험 분류를, q13 은 쓰는 때를 소유한다.
+      expect(correctOf(q('scs-t6-3-q14')), contains('중간 위험 항목'));
+      expect(correctOf(q('scs-t6-3-q13')), contains('마일스톤'));
+    });
+
+    test('⚠️ 보고 목록 밖: 두 단계 복사의 근거는 t2-2-q3 만 가진다', () {
+      final a = q('scs-t2-2-q12');
+      expect(correctOf(a), contains('포렌식 KMS 키'));
+      expect(correctOf(a), isNot(contains('침해')));
+      expect(correctOf(a), isNot(contains('삭제돼도')));
+      final b = q('scs-t2-2-q3');
+      expect(correctOf(b), contains('침해'));
+      expect(jaccard(correctOf(a), correctOf(b)), lessThan(0.15));
+    });
+
+    test('⚠️ 보고 13묶음 전수: 정답 자카드가 0.15 아래다', () {
+      const groups = <List<String>>[
+        ['scs-t1-2-q11', 'scs-t2-1-q5'],
+        ['scs-t1-2-q9', 'scs-t2-2-q5'],
+        ['scs-t1-1-q13', 'scs-t1-3-q14'],
+        ['scs-t1-1-q6', 'scs-t1-3-q15'],
+        ['scs-t1-2-q7', 'scs-t3-1-q14'],
+        ['scs-t1-1-q15', 'scs-t6-3-q5'],
+        ['scs-t3-2-q5', 'scs-t3-3-q15'],
+        ['scs-t1-2-q4', 'scs-t6-1-q1'],
+        ['scs-t2-1-q15', 'scs-t2-2-q1'],
+        ['scs-t5-1-q11', 'scs-t5-1-q12'],
+        ['scs-t6-1-q2', 'scs-t6-1-q10'],
+        ['scs-t6-1-q4', 'scs-t6-3-q1'],
+        ['scs-t6-3-q13', 'scs-t6-3-q14', 'scs-t6-3-q15'],
+      ];
+      // 탐지기가 실제로 높은 값을 낸다는 대조군 — 없으면 0.15 단정이 공허하다.
+      expect(jaccard('같은 문장입니다', '같은 문장입니다'), 1.0);
+      var pairs = 0;
+      for (final g in groups) {
+        for (var i = 0; i < g.length; i++) {
+          for (var j = i + 1; j < g.length; j++) {
+            pairs++;
+            expect(jaccard(correctOf(q(g[i])), correctOf(q(g[j]))),
+                lessThan(0.15),
+                reason: '${g[i]} ↔ ${g[j]} 의 정답이 다시 겹쳤다');
+          }
+        }
+      }
+      // 12묶음 × 1쌍 + 세 항 묶음 1개 × 3쌍 = 15쌍.
+      expect(pairs, 15, reason: '보고 13묶음은 15쌍이다');
+    });
+
+    test('⚠️ SCS 전수: 같은 출처를 공유하는 쌍의 정답 자카드가 0.33 아래다', () {
+      // ⚠️ 지표는 하한이다 — 이 단정이 초록이어도 의미 중복은 사람이 읽어야
+      //    찾는다(보고가 든 13묶음은 전부 0.33 아래였다). 그래도 **글자까지 같은
+      //    정답**이 다시 들어오는 것은 이 불변식이 막는다.
+      final all = <String, String>{};
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))) {
+        final taskId = f.uri.pathSegments.last.split('.').first;
+        for (final e in bank(taskId).values) {
+          all[e['id'] as String] = correctOf(e);
+        }
+      }
+      expect(all.length, 240);
+      final srcs = <String, Set<String>>{};
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))) {
+        final taskId = f.uri.pathSegments.last.split('.').first;
+        for (final e in bank(taskId).values) {
+          srcs[e['id'] as String] = (e['sources'] as List)
+              .map((s) => s['url'] as String)
+              .toSet();
+        }
+      }
+      final keys = all.keys.toList();
+      var shared = 0;
+      for (var i = 0; i < keys.length; i++) {
+        for (var j = i + 1; j < keys.length; j++) {
+          if (srcs[keys[i]]!.intersection(srcs[keys[j]]!).isEmpty) continue;
+          shared++;
+          expect(jaccard(all[keys[i]]!, all[keys[j]]!), lessThan(0.33),
+              reason: '${keys[i]} ↔ ${keys[j]} 의 정답이 너무 비슷하다');
+        }
+      }
+      expect(shared, greaterThanOrEqualTo(200),
+          reason: '출처 공유 쌍이 거의 없다 — 이 단정이 공허해진다');
     });
   });
 }
