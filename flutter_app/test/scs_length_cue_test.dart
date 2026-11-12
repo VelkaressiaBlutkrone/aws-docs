@@ -79,6 +79,10 @@ import 'package:flutter_test/flutter_test.dart';
 ///   **공식 예시·열거를 그대로 담고** 있었고, 그 예시는 해설에 이미 있다.
 ///   ⚠️ **지문에 이미 있는 말은 보기에서 걷는다** — `t6-2-q10` 은 「Firewall Manager용」
 ///   이 지문의 첫 문장에 있어 보기에서 빼도 뜻이 변하지 않는다(76 → 62).
+/// - **6단계 배치 1**(2026-11-12) — 보류 5문항(`t2-2-q2`·`q3`·`q15` · `t3-2-q13` ·
+///   `t3-3-q12`)을 교체·정정하면서 길이도 함께 맞췄다. 전수 cue 56 → **52**.
+///   ⭐ **6단계가 이 가드의 잔여를 줄이는 방식이다** — 5단계가 남긴 56문항은 본문을
+///   바꿀 예정이었고, 바꿀 때 길이를 함께 맞추면 두 번 손대지 않는다.
 void main() {
   const dir = 'assets/content/scs';
 
@@ -143,9 +147,14 @@ void main() {
     'scs-t6-3-q5', 'scs-t6-3-q6', 'scs-t6-3-q7', 'scs-t6-3-q11',
     'scs-t6-3-q15',
   ];
+  /// 6단계에서 본문을 바꾸며 길이도 함께 맞춘 문항(배치 1).
+  const stage6batch1 = <String>[
+    'scs-t2-2-q2', 'scs-t2-2-q3', 'scs-t2-2-q15',
+    'scs-t3-2-q13', 'scs-t3-3-q12',
+  ];
   const handled = <String>[
     ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
-    ...batch7,
+    ...batch7, ...stage6batch1,
   ];
 
   /// 지금까지 손댄 Task. 🏁 배치 7로 **공식 Task 16개 전부**가 들어왔다.
@@ -173,7 +182,7 @@ void main() {
     );
   }
 
-  group('길이 단서 제거 배치 1~7 (공식 Task 16개 전부 · 240문항)', () {
+  group('길이 단서 제거 배치 1~7 + 6단계 (공식 Task 16개 전부 · 240문항)', () {
     test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
       var n = 0;
       for (final t in tasks) {
@@ -230,13 +239,10 @@ void main() {
         'scs-t1-3-q13', 'scs-t1-3-q14',  // 🟡
         'scs-t2-1-q13',                  // 🟡
         'scs-t2-2-q5', 'scs-t2-2-q10',   // 🟡
-        'scs-t2-2-q2', 'scs-t2-2-q15',   // 보류(교체 예정)
         'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14',  // 🟡
         'scs-t3-1-q4',                   // 보류(교체 예정)
         'scs-t3-2-q3', 'scs-t3-2-q14',   // 🟡
-        'scs-t3-2-q13',                  // 보류(교체 예정)
         'scs-t3-3-q8', 'scs-t3-3-q15',   // 🟡
-        'scs-t3-3-q12',                  // 보류(교체 예정)
         'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-1-q9',    // 🟡
         'scs-t4-2-q2', 'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',  // 🟡
         'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10',   // 🟡
