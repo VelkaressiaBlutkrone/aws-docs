@@ -92,6 +92,10 @@ import 'package:flutter_test/flutter_test.dart';
 /// - **6단계 배치 4**(2026-11-12) — 중복 13묶음. 실제 중복 7묶음의
 ///   관점을 바꿨고, 지표 상위 재산정에서 보고 밖의 `t2-2-q12`를 더 찾았다.
 ///   전수 cue 38 → **33**.
+/// - 🏁 **6단계 배치 5-A**(2026-11-12) — 남은 33문항을 닫아 **전수 cue
+///   가 0이 됐다**(227 → 0). 보고 🟢 의 「개수 암기 제거」와 「부적절한 상세
+///   삭제」가 **정답 보기를 길게 만들던 바로 그 텍스트**라 길이 교정과 같은
+///   편집으로 닫혔다.
 void main() {
   const dir = 'assets/content/scs';
 
@@ -179,10 +183,23 @@ void main() {
     'scs-t2-2-q5', 'scs-t2-2-q12', 'scs-t3-3-q15', 'scs-t6-1-q1',
     'scs-t6-3-q13', 'scs-t6-3-q14',
   ];
+  /// 🏁 6단계 배치 5-A — 길이 잠여 33문항. 이로써 전수 cue 가 0이다.
+  const stage6batch5a = <String>[
+    'scs-t1-1-q1', 'scs-t1-1-q13', 'scs-t1-3-q13', 'scs-t1-3-q14',
+    'scs-t2-1-q13', 'scs-t2-2-q10',
+    'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14', 'scs-t3-2-q14',
+    'scs-t3-3-q8',
+    'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-2-q2',
+    'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',
+    'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10', 'scs-t5-2-q2',
+    'scs-t5-2-q4', 'scs-t5-3-q3', 'scs-t5-3-q15',
+    'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7', 'scs-t6-1-q13',
+    'scs-t6-1-q15', 'scs-t6-2-q6', 'scs-t6-2-q13', 'scs-t6-3-q8',
+  ];
   const handled = <String>[
     ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
     ...batch7, ...stage6batch1, ...stage6batch2, ...stage6batch3,
-    ...stage6batch4,
+    ...stage6batch4, ...stage6batch5a,
   ];
 
   /// 지금까지 손댄 Task. 🏁 배치 7로 **공식 Task 16개 전부**가 들어왔다.
@@ -261,24 +278,11 @@ void main() {
       // 지금 남은 것이 그 집합과 정확히 같은지 고정해, 5단계 잔여가 새로 생기면 알린다.
       // ⚠️ `t1-3-q15` 는 🟡 이지만 1.05배라 cue 가 아니다 — 이 집합은 **🟡 목록이
       //    아니라 「아직 1.3배를 넘는 문항」**이다.
-      const expected = <String>{
-        'scs-t1-1-q1', 'scs-t1-1-q13',   // 🟡
-        'scs-t1-3-q13', 'scs-t1-3-q14',  // 🟡
-        'scs-t2-1-q13',                  // 🟡
-        'scs-t2-2-q10',                  // 🟡
-        'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14',  // 🟡
-        'scs-t3-2-q14',                  // 🟡
-        'scs-t3-3-q8',                   // 🟡
-        'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7',   // 🟡
-        'scs-t4-2-q2', 'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',  // 🟡
-        'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10',   // 🟡
-        'scs-t5-2-q2', 'scs-t5-2-q4',   // 🟡
-        'scs-t5-3-q3', 'scs-t5-3-q15',  // 🟡
-        'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7',   // 🟡
-        'scs-t6-1-q13', 'scs-t6-1-q15',                // 🟡
-        'scs-t6-2-q6', 'scs-t6-2-q13',  // 🟡 (내용은 3단계에서 닫혔고 길이만 남았다)
-        'scs-t6-3-q8',                  // 🟡
-      };
+      // 🏁 **전수 cue 가 0이다**(2026-11-12 배치 5-A). 보고 P-2 의
+      //    길이 단서 항목이 닫혔으므로 이 집합은 비어 있어야 한다.
+      //    ⚠️ 항목을 다시 담아야 한다면 그것은 새 문항이 1.3배를 넘었다는
+      //    뜻이다 — 집합에 더하지 말고 그 문항을 고칠다.
+      const expected = <String>{};
       final remaining = <String>{};
       for (final t in tasks) {
         for (final q in readQuestions(t)) {

@@ -172,6 +172,7 @@ void main() {
         'scs-t3-1', 'scs-t5-3', 'scs-t6-1', 'scs-t6-3',
         'scs-t1-2', 'scs-t2-1', 'scs-t4-1', 'scs-t5-2', 'scs-t6-2',
         'scs-t1-1', 'scs-t3-3',
+        'scs-t1-3', 'scs-t4-2', 'scs-t5-1', 'scs-t5-3',
       ]) {
         final md = File('$dir/$taskId.md').readAsStringSync();
         for (final e in bank(taskId).values) {
@@ -837,6 +838,203 @@ void main() {
       }
       expect(shared, greaterThanOrEqualTo(200),
           reason: '출처 공유 쌍이 거의 없다 — 이 단정이 공허해진다');
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 🏁 6단계 배치 5-A — 길이 단서 잔여 33문항 + 겹치는 🟢 항목 (2026-11-12)
+  //
+  // 보고 🟢 의 **「개수 암기 제거」와 「무관한 세부 삭제」가 정답 보기를 길게 만들던
+  // 바로 그 텍스트**라, 길이 교정과 같은 편집으로 닫혔다. 이로써 **전수 길이 단서
+  // cue 가 227 → 0** 이다.
+  //
+  // ⚠️ 보고 🟢 의 **「해설에 남은 저작 메모 삭제」는 §4 2단계가 이미 전부
+  // 닫았다**(일곱 계열 문항 전수 0건). 반영 전에 레포 실상태를 세는 규율이 없었다면
+  // 같은 자리를 두 번 손댔다.
+  //
+  // ⚠️⚠️ **한국어 길이는 눈으로 추정하면 체계적으로 짧다.** 초안 34문항 중 **23건**
+  // 이 1.3배를 넘었고, `정답 ÷ 1.3` 을 계산해 최장 오답을 그 길이까지 올려 닫았다.
+  group('🏁 6단계 배치 5-A — 길이 단서 전수 종료 (보고 §4 P-2 · 🟢)', () {
+    test('대조군: 서른넷이 읽히고 전부 드래프트다', () {
+      for (final id in const [
+        'scs-t1-1-q1', 'scs-t1-1-q13', 'scs-t1-3-q13', 'scs-t1-3-q14',
+        'scs-t2-1-q13', 'scs-t2-2-q7', 'scs-t2-2-q10',
+        'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14', 'scs-t3-2-q14',
+        'scs-t3-3-q8',
+        'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-2-q2',
+        'scs-t4-2-q8', 'scs-t4-2-q13', 'scs-t4-2-q15',
+        'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10', 'scs-t5-2-q2',
+        'scs-t5-2-q4', 'scs-t5-3-q3', 'scs-t5-3-q15',
+        'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7', 'scs-t6-1-q13',
+        'scs-t6-1-q15', 'scs-t6-2-q6', 'scs-t6-2-q13', 'scs-t6-3-q8',
+      ]) {
+        final e = q(id);
+        expect((e['options'] as List).length, 4, reason: id);
+        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
+      }
+    });
+
+    test('정답 인덱스·skill·section 이 전부 불변이다', () {
+      // ⚠️ `difficulty` 는 뺀다 — `t1-3-q13` 만 보고 🟢 의 「자체 프레임 의존 문항은
+      //    foundational 전용」에 따라 바뀐다(아래 별 테스트가 고정한다).
+      const expected = <String, List<Object>>{
+        'scs-t1-1-q1': [0, '1.1.1', 'requirements'],
+        'scs-t1-1-q13': [0, '1.1.4', 'detection'],
+        'scs-t1-3-q13': [2, '1.3.2', 'fix'],
+        'scs-t1-3-q14': [0, '1.3.2', 'fix'],
+        'scs-t2-1-q13': [0, '2.1.4', 'automate'],
+        'scs-t2-2-q7': [2, '2.2.3', 'scope'],
+        'scs-t2-2-q10': [1, '2.2.4', 'contain'],
+        'scs-t3-1-q2': [1, '3.1.1', 'strategy'],
+        'scs-t3-1-q13': [0, '3.1.4', 'third-party'],
+        'scs-t3-1-q14': [1, '3.1.4', 'third-party'],
+        'scs-t3-2-q14': [1, '3.2.7', 'genai'],
+        'scs-t3-3-q8': [3, '3.3.3', 'verified-access'],
+        'scs-t4-1-q2': [1, '4.1.1', 'identity'],
+        'scs-t4-1-q5': [0, '4.1.1', 'identity'],
+        'scs-t4-1-q7': [2, '4.1.2', 'temp'],
+        'scs-t4-2-q2': [1, '4.2.1', 'controls'],
+        'scs-t4-2-q8': [3, '4.2.3', 'least-privilege'],
+        'scs-t4-2-q13': [0, '4.2.5', 'unintended'],
+        'scs-t4-2-q15': [2, '4.2.5', 'unintended'],
+        'scs-t5-1-q2': [1, '5.1.1', 'enforce-tls'],
+        'scs-t5-1-q6': [1, '5.1.2', 'private-access'],
+        'scs-t5-1-q10': [2, '5.1.2', 'private-access'],
+        'scs-t5-2-q2': [1, '5.2.1', 'encrypt-at-rest'],
+        'scs-t5-2-q4': [3, '5.2.2', 'integrity'],
+        'scs-t5-3-q3': [2, '5.3.1', 'secrets'],
+        'scs-t5-3-q15': [2, '5.3.5', 'multi-region'],
+        'scs-t6-1-q5': [3, '6.1.2', 'control-tower'],
+        'scs-t6-1-q6': [1, '6.1.2', 'control-tower'],
+        'scs-t6-1-q7': [0, '6.1.3', 'org-policies'],
+        'scs-t6-1-q13': [2, '6.1.5', 'root-credentials'],
+        'scs-t6-1-q15': [3, '6.1.5', 'root-credentials'],
+        'scs-t6-2-q6': [1, '6.2.2', 'tags'],
+        'scs-t6-2-q13': [0, '6.2.4', 'sharing'],
+        'scs-t6-3-q8': [3, '6.3.1', 'config-rules'],
+      };
+      for (final entry in expected.entries) {
+        final e = q(entry.key);
+        expect([e['correct'], e['skill'], e['section']], entry.value,
+            reason: '${entry.key} 의 보존 필드가 바뀌었다');
+      }
+    });
+
+    test('🟢 자체 프레임 의존 문항 셋은 foundational 이다', () {
+      // 보고: 「요구 사항을 정하는 순서」·「세 질문」·「네 층」은 학습문서의 틀을
+      // 알아야 풀린다. 학습용으로는 좋지만 모의고사 풀에서는 foundational 로 둔다.
+      for (final id in const [
+        'scs-t1-1-q1', 'scs-t1-2-q1', 'scs-t1-3-q13',
+      ]) {
+        expect(q(id)['difficulty'], 'foundational', reason: id);
+      }
+    });
+
+    test('🟢 명칭: 「신 Security Hub」가 문항 전수에서 0건이다', () {
+      // 보고: 「신 Security Hub」 대신 **AWS Security Hub** 로 쓰고 Security Hub
+      // CSPM 과 구분한다는 주석을 한 번 둔다. 시험 가이드 표기는 여전히
+      // 「Security Hub」다.
+      var total = 0;
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))) {
+        final taskId = f.uri.pathSegments.last.split('.').first;
+        for (final e in bank(taskId).values) {
+          total++;
+          expect(allText(e).contains('신 Security Hub'), isFalse,
+              reason: '${e['id']}: 「AWS Security Hub」로 쓴다');
+          expect(allText(e).contains('신 AWS Security Hub'), isFalse,
+              reason: '${e['id']}: 「AWS Security Hub」로 쓴다');
+        }
+      }
+      expect(total, 240);
+      // 구분 주석은 그 자리에 남아 있다.
+      expect(q('scs-t3-1-q13')['explanation'],
+          contains('Security Hub CSPM'));
+      expect(correctOf(q('scs-t3-1-q13')), contains('AWS Security Hub'));
+    });
+
+    test('🟢 명칭: t4-1-q2 가 계정 액세스 관리자를 영문과 병기한다', () {
+      // ⚠️ 영문 병기는 **해설**에 둔다 — 정답 보기에 넣으면 그 보기가 최장이 되어
+      //    길이 단서를 다시 만든다(같은 문항이 P-2 대상이었다).
+      final e = q('scs-t4-1-q2');
+      expect(e['explanation'], contains('계정 액세스 관리자(account access manager)'));
+      expect(correctOf(e), contains('계정 액세스 관리자'));
+      expect(correctOf(e), isNot(contains('account access manager')));
+    });
+
+    test('🟢 개수 암기: 자주 바뀌는 값을 세지 않고 열거한다', () {
+      // 보고: t4-2-q13 「기능 6종」, t4-2-q15 「리소스 유형 15종」, t6-3-q8 「전제
+      // 다섯」, t6-1-q7 첨부 한도 숫자 나열, t5-1-q2 백엔드 정책 이름 여섯 나열.
+      for (final pair in const [
+        ['scs-t4-2-q13', '6종'],
+        ['scs-t4-2-q15', '15종'],
+        ['scs-t6-3-q8', '전제는 다섯'],
+        ['scs-t6-1-q7', '10,240'],
+        ['scs-t5-1-q2', 'RFC9151-INTEROP4-FIPS-2023-07'],
+      ]) {
+        expect(allText(q(pair[0])).contains(pair[1]), isFalse,
+            reason: '${pair[0]}: 「${pair[1]}」을 세지 않고 열거한다');
+      }
+      // 대조군 — 열거 자체는 남아 있어야 한다(세는 것만 걷었다).
+      expect(correctOf(q('scs-t4-2-q13')), contains('미사용 액세스 분석기'));
+      expect(correctOf(q('scs-t6-3-q8')), contains('IAM 역할'));
+      // t5-1-q2 는 시험에서 걸리는 매핑 하나만 남긴다.
+      expect(q('scs-t5-1-q2')['explanation'],
+          contains('ELBSecurityPolicy-2016-08'));
+    });
+
+    test('🟢 무관한 세부: 묻는 축이 아닌 세부를 걷었다', () {
+      // 보고: t6-1-q13 `MinimumSessionTokenSize`, t5-2-q4 Cohasset 평가,
+      // t5-3-q15 ML-DSA 문단.
+      for (final pair in const [
+        ['scs-t6-1-q13', 'MinimumSessionTokenSize'],
+        ['scs-t5-2-q4', 'Cohasset'],
+        ['scs-t5-3-q15', 'ML-DSA'],
+        ['scs-t5-3-q15', 'ML_DSA_44'],
+      ]) {
+        expect(allText(q(pair[0])).contains(pair[1]), isFalse,
+            reason: '${pair[0]}: 「${pair[1]}」은 이 문항이 묻는 축이 아니다');
+      }
+      // 대조군 — 묻는 축은 그대로다.
+      expect(allText(q('scs-t6-1-q13')), contains('TaskPolicyArn'));
+      expect(allText(q('scs-t5-2-q4')), contains('준수 모드'));
+      expect(allText(q('scs-t5-3-q15')), contains('리전 리소스'));
+    });
+
+    test('🟢 보강: t5-2-q2 가 기본값을 SSE-S3 기준으로 적는다', () {
+      // 보고: 「기본 암호화로 설정할 수 있는 것은 SSE-KMS·DSSE-KMS뿐」은 기본값이
+      // SSE-S3 라는 사실을 가린다 → 「SSE-S3 외에 바꿀 수 있는 기본값은」으로.
+      final e = q('scs-t5-2-q2');
+      expect(e['explanation'], contains('기본 암호화는 SSE-S3'));
+      expect(e['explanation'], contains('SSE-KMS와 DSSE-KMS'));
+      expect(e['explanation'], isNot(contains('설정할 수 있는 것은 SSE-KMS와 DSSE-KMS뿐')));
+    });
+
+    test('🏁 전수: 길이 단서가 0건이고 이 배치의 손댄 문항이 모두 그 안이다', () {
+      var over = <String>[];
+      var total = 0;
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))) {
+        final taskId = f.uri.pathSegments.last.split('.').first;
+        for (final e in bank(taskId).values) {
+          total++;
+          final c = correctOf(e);
+          final others = <String>[];
+          final opts = (e['options'] as List).cast<String>();
+          for (var i = 0; i < opts.length; i++) {
+            if (i != e['correct']) others.add(opts[i]);
+          }
+          final mx = others.map((o) => o.length).reduce((a, b) => a > b ? a : b);
+          if (c.length / mx > 1.3) over.add(e['id'] as String);
+        }
+      }
+      expect(total, 240);
+      expect(over, isEmpty,
+          reason: '정답 ÷ 최장 오답이 1.3배를 넘는 문항이 다시 생겼다');
     });
   });
 }
