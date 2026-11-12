@@ -102,8 +102,12 @@ void main() {
         reason: '랜딩 페이지는 용어 정의만 담는다(본문 2,292자) — '
             '항목 사실은 Maintenance·Sunset·Full Shutdown 하위 페이지가 근거다: '
             '$offenders');
-    expect(subPageUses, greaterThanOrEqualTo(4),
-        reason: '하위 페이지 인용이 사라지면 이 단정이 공허해진다(실측 4건)');
+    // ⚠️ 하한을 4 → 3 으로 내렸다(2026-11-12). 6단계 배치 1이 `t3-2-q13` 을 수명 주기
+    //    메타 문항에서 파이프라인 도구 선택으로 **교체**해 `sunset_services.html` 인용
+    //    하나가 정당하게 사라졌다. 공허성 하한은 **그때 측정된 수**이므로 내용이 줄면
+    //    함께 내린다 — 지운 인용을 되살리는 것은 교체를 되돌리는 것이다.
+    expect(subPageUses, greaterThanOrEqualTo(3),
+        reason: '하위 페이지 인용이 사라지면 이 단정이 공허해진다(2026-11-12 실측 3건)');
   });
 
   test('G-84: 문항 출처는 그 Task 학습문서 출처의 부분집합이다', () {

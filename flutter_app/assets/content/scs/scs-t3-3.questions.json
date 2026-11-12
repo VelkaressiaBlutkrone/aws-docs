@@ -331,24 +331,24 @@
       "skill": "3.3.4",
       "section": "segmentation",
       "difficulty": "applied",
-      "stem": "Transit Gateway에서 VPN 어태치먼트와 VPC 어태치먼트 사이에 ECMP로 대역폭을 묶으려 합니다. 가능합니까?",
+      "stem": "동-서 트래픽을 AWS Network Firewall로 검사하는 세분화 설계를 검토합니다. 공식이 미지원으로 적는 아키텍처와 트래픽 종류는 무엇입니까?",
       "options": [
-        "가능합니다. 어태치먼트 유형과 무관하게 ECMP가 적용됩니다",
-        "가능합니다. 다만 양쪽 ASN이 달라야 합니다",
-        "가능하지만 VPC 쪽에서 CIDR을 겹치게 설정해야 합니다",
-        "불가능합니다. 서로 다른 어태치먼트 유형 사이에는 ECMP가 적용되지 않고 다른 ASN 사이도 불가하며, VPC는 CIDR이 겹칠 수 없어 ECMP를 지원하지 않고 Transit Gateway 피어링도 지원하지 않습니다"
+        "검사 VPC를 거치지 않는 모든 경로가 미지원이고 그 밖에는 제한이 없습니다",
+        "Transit Gateway를 거치는 경로만 미지원이므로 VPC 피어링으로 바꾸면 동-서 트래픽을 검사할 수 있습니다",
+        "미지원 목록은 없고 라우팅만 맞추면 어떤 트래픽도 검사할 수 있습니다",
+        "VPC 피어링과, 클라이언트 IP 보존을 켠 Global Accelerator 트래픽과, EC2의 AmazonProvidedDNS 트래픽입니다"
       ],
       "correct": 3,
-      "explanation": "ECMP 제약이 설계에 걸립니다. VPC는 CIDR이 겹칠 수 없으므로 ECMP를 지원하지 않고 Transit Gateway 피어링도 지원하지 않으며, 서로 다른 어태치먼트 유형 사이에도 적용되지 않고 다른 ASN 사이도 불가합니다. Direct Connect 게이트웨이는 네트워크 접두사와 접두사 길이와 AS_PATH가 정확히 같을 때 여러 어태치먼트에 ECMP가 적용됩니다.",
+      "explanation": "공식이 미지원 아키텍처와 트래픽 종류를 셋으로 적습니다. VPC 피어링, 클라이언트 IP 주소 보존을 활성화한 AWS Global Accelerator 트래픽의 검사, Amazon EC2의 AmazonProvidedDNS 트래픽의 검사입니다. 그래서 VPC 사이를 피어링으로 잇고 그 경로를 방화벽으로 보려는 설계는 성립하지 않고, 동-서 검사는 Transit Gateway를 거쳐 검사 VPC로 보내는 쪽으로 갑니다. 이름 확인 DNS 트래픽은 Route 53 Resolver DNS Firewall이 맡습니다.",
       "wrongExplanations": {
-        "0": "어태치먼트 유형이 다르면 적용되지 않습니다.",
-        "1": "다른 ASN 사이에도 적용되지 않습니다.",
-        "2": "VPC는 CIDR이 겹칠 수 없어 ECMP를 지원하지 않습니다."
+        "0": "검사 VPC 경유 여부로 갈리는 것이 아닙니다. 공식은 피어링과 두 트래픽 종류를 미지원으로 적습니다.",
+        "1": "거꾸로입니다. 미지원인 쪽이 VPC 피어링이고 Transit Gateway 경유가 동-서 검사의 권장 경로입니다.",
+        "2": "미지원 목록이 공식 페이지에 있습니다."
       },
       "sources": [
         {
-          "title": "How AWS Transit Gateway works - 어플라이언스 모드와 ECMP 제약",
-          "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html"
+          "title": "AWS Network Firewall example architectures with routing - 미지원 아키텍처",
+          "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/architectures.html"
         }
       ],
       "verified": false

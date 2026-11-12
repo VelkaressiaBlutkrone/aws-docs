@@ -358,24 +358,24 @@
       "skill": "3.2.6",
       "section": "pipeline",
       "difficulty": "foundational",
-      "stem": "팀원이 Amazon Q Developer가 종료되니 관련 설계를 모두 걷어내자고 합니다. 공식 수명 주기 변경 목록에 맞는 정리는 무엇입니까?",
+      "stem": "파이프라인에서 1자 애플리케이션 소스 코드와 3자 애플리케이션 의존성과 코드형 인프라의 취약성을 한 서비스로 찾으려 합니다. 무엇을 쓰고 어떻게 켭니까?",
       "options": [
-        "종료 대상은 IDE 플러그인이고 서비스 전체가 아닙니다. 유사 기능은 Kiro로 안내됩니다",
-        "서비스 전체가 종료되므로 관련 설계를 모두 걷어냅니다",
-        "종료 대상은 CLI이고 IDE 플러그인은 유지됩니다",
-        "종료 공지가 없으므로 그대로 둡니다"
+        "Amazon Inspector Code Security를 씁니다. 콘솔이나 API로 활성화한 뒤 리포지토리에 스캔 구성을 적용해 주기와 시점을 정합니다",
+        "GuardDuty 런타임 모니터링을 씁니다. 에이전트를 배포하면 소스 코드와 의존성과 코드형 인프라를 함께 스캔합니다",
+        "Systems Manager Patch Manager를 씁니다. 패치 기준을 만들면 리포지토리의 의존성과 코드형 인프라까지 검사합니다",
+        "Inspector 네트워크 도달성 조사 결과를 씁니다. 리포지토리를 연결하면 코드 취약성도 같은 조사 결과로 보고됩니다"
       ],
       "correct": 0,
-      "explanation": "공식 수명 주기 변경 목록에서 Amazon Q Developer의 종료 대상은 IDE 플러그인이고 서비스 전체가 아니며 유사 기능은 Kiro로 안내됩니다. 공식 시험 가이드가 기술 3.2.6의 예시로 드는 두 이름 중 Amazon CodeGuru 보안은 지원 종료이고, Amazon Q Developer는 이렇게 범위가 플러그인에 한정됩니다. 종료되거나 유지 관리로 바뀐 이름이 보기에 나오면 정답이 아닐 가능성이 높다고 읽는 것이 실전에서 안전합니다.",
+      "explanation": "공식이 Code Security의 스캔 대상을 1자 애플리케이션 소스 코드와 3자 애플리케이션 의존성과 코드형 인프라 셋으로 적습니다. 켜는 경로는 Amazon Inspector 콘솔 또는 Amazon Inspector API이고, 활성화한 뒤에는 코드 리포지토리에 스캔 구성을 만들어 적용해 얼마나 자주 언제 스캔할지를 정하며 그 구성은 언제든 보고 수정하고 삭제할 수 있습니다. 공식 시험 가이드가 기술 3.2.6의 예시로 드는 두 이름 중 Amazon CodeGuru 보안은 지원이 종료되어 사용자 안내서가 제공되지 않으므로, 파이프라인 취약성 탐지의 축은 이 서비스로 둡니다.",
       "wrongExplanations": {
-        "1": "서비스 전체가 아니라 IDE 플러그인이 대상입니다.",
-        "2": "대상은 IDE 플러그인입니다.",
-        "3": "공지가 있습니다."
+        "1": "GuardDuty 런타임 모니터링은 실행 중인 컴퓨팅의 런타임 동작을 보는 쪽이고 리포지토리의 소스 코드를 스캔하지 않습니다.",
+        "2": "Patch Manager는 운영 체제와 애플리케이션 패치를 배포하는 쪽입니다.",
+        "3": "네트워크 도달성 조사 결과는 의도하지 않은 네트워크 노출을 찾는 쪽이고 코드 취약성과 다른 종류입니다."
       },
       "sources": [
         {
-          "title": "Services in Sunset — 종료 예정 항목 목록",
-          "url": "https://docs.aws.amazon.com/general/latest/gr/sunset_services.html"
+          "title": "Amazon Inspector Code Security - 스캔 대상 셋과 활성화 경로",
+          "url": "https://docs.aws.amazon.com/inspector/latest/user/code-security-assessments.html"
         }
       ],
       "verified": false
