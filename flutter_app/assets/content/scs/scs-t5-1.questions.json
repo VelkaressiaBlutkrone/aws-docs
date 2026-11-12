@@ -275,7 +275,7 @@
         "Active Directory 인증으로 바꾸고 그 사용자 계정을 비활성화하는 것이 상호 인증에서 사용자를 차단하는 유일한 방법입니다"
       ],
       "correct": 2,
-      "explanation": "공식이 클라이언트마다 인증서와 키를 따로 만들면 조직을 떠난 사용자의 인증서를 폐기할 수 있다고 적습니다. 세부 제약이 함께 있습니다. 클라이언트 인증서를 ACM에 업로드해야 하는 것은 그 CA가 서버 인증서의 CA와 다를 때만이고, RSA 1024비트와 2048비트만 지원하며 클라이언트 인증서에는 Subject 필드의 CN 속성이 있어야 합니다. 인증서가 갱신되면 Client VPN이 엔드포인트를 자동으로 갱신하는데 최대 5시간이 걸립니다.",
+      "explanation": "공식이 클라이언트마다 인증서와 키를 따로 만들면 조직을 떠난 사용자의 인증서를 폐기할 수 있다고 적습니다. 폐기의 실제 수단은 클라이언트 인증서 해지 목록입니다. 목록을 새로 만들거나 기존 목록을 가져오고 현재 목록을 내보낼 수 있는데, 생성은 OpenVPN 소프트웨어로 하고 가져오기와 내보내기는 VPC 콘솔이나 AWS CLI 로 합니다. 운영에서 걸리는 함정이 하나 있습니다. 해지 목록이 만료되면 그 엔드포인트에 아무도 접속할 수 없으므로 새로 만들어 다시 가져와야 하고, 목록에 넣을 수 있는 항목 수에도 한도가 있습니다. 세부 제약이 함께 있습니다. 클라이언트 인증서를 ACM 에 업로드해야 하는 것은 그 CA 가 서버 인증서의 CA 와 다를 때만이고, RSA 1024비트와 2048비트만 지원하며 클라이언트 인증서에는 Subject 필드의 CN 속성이 있어야 합니다. 인증서가 갱신되면 Client VPN 이 엔드포인트를 자동으로 갱신하는데 최대 5시간이 걸립니다.",
       "wrongExplanations": {
         "0": "공용 인증서 하나를 쓰면 한 사람을 차단하려고 전원을 재배포해야 합니다.",
         "1": "원격 근무자의 공인 IP는 고정적이지 않고 인증 수준의 차단도 아닙니다.",
@@ -285,6 +285,10 @@
         {
           "title": "Mutual authentication in AWS Client VPN",
           "url": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/mutual.html"
+        },
+        {
+          "title": "AWS Client VPN client certificate revocation lists",
+          "url": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html"
         }
       ],
       "verified": false

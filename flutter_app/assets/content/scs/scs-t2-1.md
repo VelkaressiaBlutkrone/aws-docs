@@ -24,7 +24,9 @@ sources:
     url: https://docs.aws.amazon.com/security-ir/latest/userguide/what-is.html
   - title: Introduction to AWS Security Hub CSPM
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
-lastVerified: 2026-11-08
+  - title: Responding to DDoS events in AWS — SRT 사전 교전
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html
+lastVerified: 2026-11-12
 ---
 
 # 인시던트 대응 계획 설계와 테스트 (런북·사전 구성·혼돈 실험·자동 해결)
@@ -334,3 +336,4 @@ ARC는 **AWS 글로벌 클라우드 인프라에서 도는 애플리케이션의
 6. Architecture overview — Automated Forensics Orchestrator for Amazon EC2 and EKS — `docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/architecture-overview.html` (2026-11-08 확인)
 7. What is AWS Security Incident Response? (범위 메모용) — `docs.aws.amazon.com/security-ir/latest/userguide/what-is.html` (2026-11-08 확인)
 8. Introduction to AWS Security Hub CSPM — `docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html` (2026-11-08 확인)
+9. Responding to DDoS events in AWS — SRT 사전 교전 — `docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html` (2026-11-12 확인)

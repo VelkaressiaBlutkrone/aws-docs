@@ -173,6 +173,7 @@ void main() {
         'scs-t1-2', 'scs-t2-1', 'scs-t4-1', 'scs-t5-2', 'scs-t6-2',
         'scs-t1-1', 'scs-t3-3',
         'scs-t1-3', 'scs-t4-2', 'scs-t5-1', 'scs-t5-3',
+        'scs-t3-2', 'scs-t5-2', 'scs-t6-3',
       ]) {
         final md = File('$dir/$taskId.md').readAsStringSync();
         for (final e in bank(taskId).values) {
@@ -1035,6 +1036,207 @@ void main() {
       expect(total, 240);
       expect(over, isEmpty,
           reason: '정답 ÷ 최장 오답이 1.3배를 넘는 문항이 다시 생겼다');
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 🏁 6단계 배치 5-B — 🟢 잔여 (2026-11-12) · 보고 반영의 마지막 배치
+  //
+  // 보강 4건 · SRT 문항 교체 1건 · 개수 암기와 무관한 세부 삭제 3건 · App Runner
+  // 최신성 메모. 이로써 보고 §4 의 🔴·🟡·🟢·보류·중복이 전부 닫혔다.
+  //
+  // ⚠️⚠️ **보강 4건은 모두 새 출처가 필요했다** — G-84(문항 출처 ⊆ md 출처)에
+  // 걸리므로 md 의 프런트매터 `sources:` 와 본문 「출처」 절을 **둘 다** 늘리고
+  // `lastVerified:` 를 올렸다. ⚠️ 삽입은 **`lastVerified:` 바로 앞**(목록의 끝)이다
+  // — 목록 중간에 최상위 키가 끼면 파서가 뒤쪽 출처를 조용히 버린다(2026-11-11
+  // 수선한 결함이고 `content_format_test` 가 그것을 지킨다).
+  //
+  // ⚠️⚠️ **md 가 CRLF 라 정규식 앵커를 전방탐색으로 둬야 했다** — `\r?$` 로
+  // **소비**하면 삽입이 `\r\r\n` 을 만들거나 치환이 CR 을 하나 지워 CR−LF
+  // 불변식이 깨진다(둘 다 실측으로 막혔다).
+  //
+  // ⚠️ **md 본문은 손대지 않았다** — 레포 선례(2026-11-10 `t1-2-q13`)가 「문항이
+  // 인용하는 URL 을 md 출처에 더해 닫는다」이고, 보강 내용 자체는 보고가 요구한
+  // 대로 **문항 해설**에 둔다. 프런트매터와 「출처」 절의 URL 집합이 같은 것은
+  // 아래 테스트가 단정한다.
+  group('🏁 6단계 배치 5-B — 🟢 잔여 (보고 §4 종료)', () {
+    const ids = <String>[
+      'scs-t2-1-q6', 'scs-t2-2-q10', 'scs-t3-1-q2', 'scs-t3-1-q8',
+      'scs-t3-2-q2', 'scs-t5-1-q10', 'scs-t5-2-q6', 'scs-t5-3-q3',
+      'scs-t6-1-q8',
+    ];
+
+    test('대조군: 아홉 문항이 읽히고 전부 드래프트다', () {
+      for (final id in ids) {
+        final e = q(id);
+        expect((e['options'] as List).length, 4, reason: id);
+        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
+      }
+    });
+
+    test('정답 인덱스·skill·section·difficulty 가 전부 불변이다', () {
+      const expected = <String, List<Object>>{
+        'scs-t2-1-q6': [1, '2.1.2', 'prepare', 'applied'],
+        'scs-t2-2-q10': [1, '2.2.4', 'contain', 'foundational'],
+        'scs-t3-1-q2': [1, '3.1.1', 'strategy', 'applied'],
+        'scs-t3-1-q8': [3, '3.1.2', 'implement', 'applied'],
+        'scs-t3-2-q2': [1, '3.2.1', 'images', 'applied'],
+        'scs-t5-1-q10': [2, '5.1.2', 'private-access', 'applied'],
+        'scs-t5-2-q6': [2, '5.2.2', 'integrity', 'foundational'],
+        'scs-t5-3-q3': [2, '5.3.1', 'secrets', 'foundational'],
+        'scs-t6-1-q8': [1, '6.1.3', 'org-policies', 'applied'],
+      };
+      expect(expected.keys.toSet(), ids.toSet());
+      for (final entry in expected.entries) {
+        final e = q(entry.key);
+        expect([e['correct'], e['skill'], e['section'], e['difficulty']],
+            entry.value,
+            reason: '${entry.key} 의 보존 필드가 바뀌었다');
+      }
+    });
+
+    test('t2-1-q6: 요금 지식이 SRT 사전 대비로 바뀌었다', () {
+      // 보고 🟢: `t2-1-q6`·`q7`(Shield Advanced 가 덮는 WAF 비용)은 2.1.2
+      // 「인시던트 대비」보다 요금 지식이다 → 한 문항만 남기고 SRT 준비 문항으로.
+      // ⚠️ 남긴 쪽은 `q7` 이다 — 「켜기 전에 미리 알아야 할 것」이라 대비 성격이 있다.
+      final e = q('scs-t2-1-q6');
+      final c = correctOf(e);
+      expect(c, contains('사전 교전'));
+      expect(c, contains('SRT'));
+      // 공식: SRT 가 완화 규칙을 만들고 **내 동의를 받아** 적용한다.
+      expect(c, contains('동의'));
+      expect(allText(e), isNot(contains('WCU')),
+          reason: '요금 지식 축은 q7 이 소유한다');
+      // 공격 전에 켜는 또 하나의 선택지와 공격 중 경로는 해설에 있다.
+      expect(e['explanation'], contains('CloudFront'));
+      expect(e['explanation'], contains('Support Center'));
+      expect(correctOf(q('scs-t2-1-q7')), contains('WCU'));
+    });
+
+    test('🟢 보강 4건이 각자의 공식 사실을 적는다', () {
+      // 보고 🟢 「보강」 — 다섯 항목 중 `t5-2-q2`(SSE-S3 기준)는 배치 5-A 가 닫았다.
+      const want = <String, List<String>>{
+        // 이미 나간 세션을 실제로 끊는 공식 수단.
+        'scs-t2-2-q10': [
+          'AWSRevokeOlderSessions', 'PutRolePolicy', 'aws:TokenIssueTime',
+          '서비스 연결 역할의 세션은 취소할 수 없',
+        ],
+        // 해지 목록의 실제 경로와 운영 함정.
+        'scs-t5-1-q10': ['해지 목록', 'OpenVPN', '만료되면'],
+        // 암호를 없애는 세 번째 축 + 비자명한 한계.
+        'scs-t5-3-q3': [
+          'IAM 데이터베이스 인증', '인증 토큰', '15분',
+          'CloudTrail 이 IAM 인증을 로깅하지 않',
+        ],
+        // 이미지를 만드는 것과 그것만 쓰게 하는 것은 다른 제어다.
+        'scs-t3-2-q2': ['허용된 AMI', '선언적 정책', '감사 모드', '퍼블릭 AMI'],
+      };
+      for (final entry in want.entries) {
+        final all = allText(q(entry.key));
+        for (final s in entry.value) {
+          expect(all, contains(s), reason: '${entry.key}: 「$s」이 빠졌다');
+        }
+      }
+    });
+
+    test('⚠️ 보강에 쓰지 않은 사실을 단정하지 않는다', () {
+      // 공식이 적는 범위를 넘지 않는다는 확인 — 허용된 AMI 는 **내 계정이 소유한
+      // AMI 를 제한하지 않는다**(기준과 무관하게 항상 보인다).
+      expect(q('scs-t3-2-q2')['explanation'],
+          contains('내 계정이 소유한 AMI 는 기준과 무관하게'));
+      // IAM DB 인증은 MariaDB·MySQL·PostgreSQL 이고 그 밖의 엔진을 적지 않는다.
+      final db = allText(q('scs-t5-3-q3'));
+      expect(db, contains('MariaDB 와 MySQL 과 PostgreSQL'));
+      expect(db, isNot(contains('Oracle')));
+      expect(db, isNot(contains('SQL Server')));
+    });
+
+    test('🟢 개수 암기·무관한 세부가 문항 전수에서 0건이다', () {
+      // 보고 🟢 의 마지막 잔여 — `t6-1-q8` 첨부 한도 숫자 · `t3-1-q8` 코어 규칙
+      // 세트 크기 제한 수치 · `t5-2-q6` Cohasset 평가.
+      const banned = <String>[
+        '10,240', '5,120', '2,500',          // 정책 첨부 한도 나열
+        '쿼리 문자열 2,048바이트',            // 코어 규칙 세트 크기 제한
+        'Cohasset',                          // 준수 평가 기관
+        'MinimumSessionTokenSize', 'ML-DSA', // 5-A 가 닫은 것의 회귀 가드
+        '기능 6종', '15종', '전제는 다섯',
+      ];
+      var total = 0;
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.questions.json'))) {
+        final taskId = f.uri.pathSegments.last.split('.').first;
+        for (final e in bank(taskId).values) {
+          total++;
+          final all = allText(e);
+          for (final b in banned) {
+            expect(all.contains(b), isFalse,
+                reason: '${e['id']}: 「$b」은 묻는 축이 아니다');
+          }
+        }
+      }
+      expect(total, 240);
+    });
+
+    test('대조군: 같은 문구가 학습문서에는 남아 있다', () {
+      // 지운 것은 **문항**이다 — 학습문서가 그 세부를 계속 가르치는 것은 정당하고,
+      // 이 대조군이 「탐지기가 아무것도 못 찾는다」는 거짓 통과를 막는다.
+      const pairs = <List<String>>[
+        ['scs-t5-2', 'Cohasset'],
+        ['scs-t6-1', 'MinimumSessionTokenSize'],
+        ['scs-t5-3', 'ML-DSA'],
+      ];
+      for (final p in pairs) {
+        final md = File('$dir/${p[0]}.md').readAsStringSync();
+        expect(md, contains(p[1]), reason: '${p[0]}.md 가 ${p[1]} 을 잃었다');
+      }
+    });
+
+    test('🟢 최신성 메모: App Runner 상태가 두 문항에 붙었다', () {
+      // 보고 🟢: WAF 보호 대상 목록에 든 App Runner 는 2026-03-31 공지로 유지 관리
+      // 목록에 올랐다. 목록 암기형이라 영향은 작지만 해설에 한 줄 둔다.
+      // ⚠️ 실측으로 확인했다 — `maintenance_services.html` 에 `AWS App Runner`
+      //    March 31, 2026 이 있고 sunset·full shutdown 목록에는 없다(대조군
+      //    `Simple AD` 가 같은 추출에서 2건).
+      for (final id in const ['scs-t3-1-q2', 'scs-t3-1-q8']) {
+        final e = q(id);
+        expect(e['explanation'], contains('AWS App Runner 는 2026년 3월 31일'));
+        expect(e['explanation'], contains('유지 관리 목록'));
+        // 상태 문구는 **해설에만** 둔다(배치 3 의 전역 단정과 같은 규율).
+        expect(correctOf(e), isNot(contains('유지 관리')), reason: id);
+      }
+    });
+
+    test('⚠️ md 프런트매터 `sources:` 와 「출처」 절의 URL 집합이 같다', () {
+      // ⚠️ 보강이 새 출처를 들이는 배치에서 이것이 어긋나면 어느 쪽이 정본인지
+      //    알 수 없게 된다. 저작 배치들이 손으로 대조해 온 것을 가드로 굳힌다.
+      final re = RegExp(r'^\d+\. .+ — `([^`]+)` \(\d{4}-\d{2}-\d{2} 확인\)$',
+          multiLine: true);
+      var checked = 0;
+      for (final f in Directory(dir)
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.md'))) {
+        final md = f.readAsStringSync();
+        final parts = md.split('---');
+        if (parts.length < 3) continue;
+        final fm = parts[1];
+        if (!fm.contains('sources:')) continue;
+        final fmUrls = RegExp(r'url: (\S+)')
+            .allMatches(fm)
+            .map((m) => m[1]!.trim())
+            .toSet();
+        final bodyUrls = re
+            .allMatches(md)
+            .map((m) => 'https://${m[1]!}')
+            .toSet();
+        expect(bodyUrls, fmUrls,
+            reason: '${f.uri.pathSegments.last}: 프런트매터와 「출처」 절이 '
+                '어긋난다');
+        checked++;
+      }
+      expect(checked, 16, reason: 'SCS 학습문서 16편을 돌지 않았다');
     });
   });
 }

@@ -151,24 +151,24 @@
       "skill": "2.1.2",
       "section": "prepare",
       "difficulty": "applied",
-      "stem": "Shield Advanced를 구독하고 ALB를 보호 대상에 추가했습니다. 그 ALB의 보호 팩에는 Bot Control 규칙 그룹이 있고 전체 용량은 1,800 WCU입니다. 구독이 덮지 않는 비용은 무엇입니까?",
+      "stem": "Shield Advanced 를 구독한 조직이 애플리케이션 계층 DDoS 공격에 대비하려 합니다. 공격이 오기 전에 미리 켜 둘 수 있는 것과 SRT 가 하는 일을 올바르게 설명한 것은 무엇입니까?",
       "options": [
-        "없습니다. 보호 대상 리소스의 AWS WAF 비용은 전부 구독에 포함됩니다",
-        "Bot Control 비용과 1,500 WCU를 넘는 부분이 모두 덮이지 않습니다",
-        "Bot Control은 덮이고 WCU 초과분만 덮이지 않습니다",
-        "WCU 초과분은 덮이고 Bot Control만 덮이지 않습니다"
+        "애플리케이션 계층 공격도 AWS 가 기본적으로 자동 완화하므로 미리 켤 것이 없고 SRT 는 공격이 끝난 뒤 보고서를 주는 쪽입니다",
+        "사전 교전을 켜 두면 큰 애플리케이션 계층 공격을 탐지했을 때 SRT 가 먼저 연락해 이벤트를 분류하고 완화 규칙을 만들며, 내 동의를 받아 그 규칙을 적용합니다",
+        "SRT 는 내 동의 없이 웹 ACL 에 규칙을 적용하고 사전 교전은 네트워크 계층과 전송 계층 공격에만 적용되는 설정입니다",
+        "사전 교전은 내가 Support Center 에 케이스를 열어야 시작되고 SRT 가 먼저 연락해 오는 경로는 공식에 없습니다"
       ],
       "correct": 1,
-      "explanation": "구독은 보호 대상 리소스의 표준 AWS WAF 비용을 덮습니다. 보호 팩당 비용, 규칙당 비용, 웹 요청 검사 백만 건당 기본 가격이고 그 범위가 1,500 WCU까지, 기본 본문 크기까지입니다. 공식이 덮지 않는 것으로 Bot Control, CAPTCHA 규칙 작업, 1,500 WCU를 넘는 보호 팩, 기본 본문 크기를 넘는 본문 검사를 적습니다. 이 구성은 두 항목에 모두 걸립니다.",
+      "explanation": "공식이 계층으로 나눠 적습니다. 네트워크 계층과 전송 계층 공격은 AWS 가 자동으로 완화하고, Shield Advanced 로 EC2 인스턴스를 보호하면 공격 중에 내 VPC 네트워크 ACL 을 AWS 네트워크 경계에 자동 배포해 더 큰 공격까지 막습니다. 애플리케이션 계층은 다릅니다. AWS 가 탐지해 CloudWatch 알람으로 알리려 하지만 정상 사용자 트래픽을 잘못 막지 않으려고 기본적으로는 완화를 자동 적용하지 않습니다. 그래서 공격 전에 선제로 켤 수 있는 것이 둘입니다. CloudFront 배포의 자동 애플리케이션 계층 완화는 Shield Advanced 가 내 웹 ACL 에 완화 규칙을 정의하고 관리하게 하는 것이고, 사전 교전은 큰 애플리케이션 계층 공격이 탐지되면 SRT 가 먼저 연락해 이벤트를 분류하고 완화 규칙을 만든 뒤 내 동의를 받아 적용하는 것입니다. 공격이 이미 시작된 뒤의 선택지는 직접 완화하거나 Support Center 에 문의하는 것이고, Shield Advanced 고객의 중대하고 긴급한 케이스는 DDoS 전문가에게 직접 라우팅됩니다.",
       "wrongExplanations": {
-        "0": "표준 비용만 덮습니다. 비표준 항목과 한도 초과분은 별도로 청구됩니다.",
-        "2": "Bot Control은 공식이 덮지 않는 항목으로 명시한 비표준 비용입니다.",
-        "3": "1,800 WCU는 공식이 적는 1,500 WCU 범위를 넘으므로 그 초과분도 덮이지 않습니다."
+        "0": "자동 완화는 네트워크 계층과 전송 계층 쪽이고 애플리케이션 계층은 기본적으로 자동 적용되지 않습니다.",
+        "2": "SRT 는 내 동의를 받아 규칙을 적용하고, 사전 교전은 애플리케이션 계층 공격을 대상으로 하는 선제 설정입니다.",
+        "3": "Support Center 문의는 공격이 시작된 뒤의 선택지이고, 사전 교전은 SRT 가 먼저 연락해 오게 미리 켜 두는 것입니다."
       },
       "sources": [
         {
-          "title": "AWS Shield Advanced overview - 구독이 덮는 AWS WAF 비용",
-          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html"
+          "title": "Responding to DDoS events in AWS — SRT 사전 교전",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html"
         }
       ],
       "verified": false
