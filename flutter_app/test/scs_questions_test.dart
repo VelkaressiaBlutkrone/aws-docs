@@ -360,8 +360,13 @@ void main() {
           .length;
       expect(filesWith('외우', '.md'), lessThanOrEqualTo(6),
           reason: '⚠️ 정당한 용례가 섞여 있다 — 늘어나면 새로 들어온 것을 본다');
-      expect(filesWith('단정하지', '.questions.json'), lessThanOrEqualTo(2),
-          reason: '보고 보류 목록(t2-2-q15 · t6-1-q9)이라 §4 6단계 몫이다');
+      // ⭐ 계열이 닫혔다(2026-11-12) — 보고가 든 둘(`t2-2-q15` 6단계 배치 1 ·
+      //    `t6-1-q9` 배치 2)을 단정문으로 바꿔 **문항 전수 0건**이다. 하한을
+      //    0으로 고정해 앞으로 문항에 메타 표현이 들어오면 알린다.
+      //    ⚠️ `.md` 쪽 2편은 **D-16 판정을 의도적으로 가르치는 자리**라
+      //    대상이 아니다(이 단정은 `.questions.json` 만 센다).
+      expect(filesWith('단정하지', '.questions.json'), 0,
+          reason: '문항에서 「…단정하지 않습니다」는 메타 표현이다 — 보고 판정');
       expect(filesWith('묻지 않', '.md'), lessThanOrEqualTo(2),
           reason: 'D-16 판정을 학습문서에 명시한 것이다');
     });

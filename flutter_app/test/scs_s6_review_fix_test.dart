@@ -167,7 +167,10 @@ void main() {
     });
 
     test('⚠️ 새 출처가 그 Task 의 학습문서에 실재한다 (G-84)', () {
-      for (final taskId in const ['scs-t2-2', 'scs-t3-2', 'scs-t3-3']) {
+      for (final taskId in const [
+        'scs-t2-2', 'scs-t3-2', 'scs-t3-3',
+        'scs-t3-1', 'scs-t5-3', 'scs-t6-1', 'scs-t6-3',
+      ]) {
         final md = File('$dir/$taskId.md').readAsStringSync();
         for (final e in bank(taskId).values) {
           for (final s in (e['sources'] as List)) {
@@ -176,6 +179,113 @@ void main() {
           }
         }
       }
+    });
+  });
+
+  // ══════════════════════════════════════════════════════════════════
+  // 6단계 배치 2 — 보류 잔여 5문항 (2026-11-12)
+  //
+  // 이 배치로 **보고의 보류 10문항이 전부 닫혔다**. 배치 1과 같은 판정을 썼다 —
+  // 묻는 층을 올리고 같은 Skill·같은 정답 자리를 유지한다.
+  //
+  // ⭐ `t3-1-q4` 는 **보고 §1-3 이 「0문항」으로 적은 빈 주제를 채웠다** — 공식 기술
+  // 3.1.2 가 이름까지 드는 `AWS IoT 정책` 이 240문항에 없었다. 교체 주제를 고를 때
+  // **그 Task 의 형제 문항 전수를 먼저 확인**했고, 보고가 제안한 「전략 선택」 축에서
+  // 아직 안 쓰인 것이 IoT 뿐이었다(지리·속도·핑거프린팅은 `q9`~`q12`, Marketplace·
+  // GovCloud 는 `q15`, 제품 역할·보호 대상·과금은 `q1`~`q3` 가 이미 쓴다).
+  //
+  // ⚠️ `t6-1-q11` 의 보고 수정안(「보안 계정이 Config 애그리게이터·Security Hub CSPM·
+  // Firewall Manager 를 운영하려면 각각 무엇이 필요한가」)은 **같은 Task 의 `q10` 이
+  // 이미 묻는다**(위임된 관리자 등록 + 지원 여부 + 신뢰 액세스). 그래서 그 제안을
+  // 그대로 쓰지 않고 **받는 권한의 범위**로 축을 옮겼다 — 보고가 지적한 결함(「자주
+  // 쓰이는 대상」이라는 주관적 기준)은 그대로 해소된다.
+  group('6단계 배치 2 — 보류 잔여 5문항 (보고 §4)', () {
+    test('대조군: 다섯 문항이 읽히고 전부 드래프트다', () {
+      for (final id in const [
+        'scs-t3-1-q4', 'scs-t5-3-q12',
+        'scs-t6-1-q9', 'scs-t6-1-q11', 'scs-t6-3-q14',
+      ]) {
+        final e = q(id);
+        expect((e['options'] as List).length, 4, reason: id);
+        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
+      }
+    });
+
+    test('정답 인덱스·skill·section·difficulty 가 전부 불변이다', () {
+      const expected = <String, List<Object>>{
+        'scs-t3-1-q4': [3, '3.1.1', 'strategy', 'applied'],
+        'scs-t5-3-q12': [3, '5.3.4', 'masking', 'applied'],
+        'scs-t6-1-q9': [2, '6.1.3', 'org-policies', 'applied'],
+        'scs-t6-1-q11': [1, '6.1.4', 'delegated-admin', 'foundational'],
+        'scs-t6-3-q14': [1, '6.3.3', 'well-architected', 'applied'],
+      };
+      for (final entry in expected.entries) {
+        final e = q(entry.key);
+        expect([e['correct'], e['skill'], e['section'], e['difficulty']],
+            entry.value,
+            reason: '${entry.key} 의 보존 필드가 바뀌었다');
+      }
+    });
+
+    test('t3-1-q4: IoT 사물 정책 변수 전략을 묻고 제품 개명을 묻지 않는다', () {
+      final e = q('scs-t3-1-q4');
+      final c = correctOf(e);
+      expect(c, contains('사물 정책 변수'));
+      expect(c, contains('클라이언트 ID'));
+      // 공식이 함께 못박는 전제 둘.
+      expect(e['explanation'], contains('MQTT 또는 WebSocket 기반 MQTT'));
+      expect(e['explanation'], contains('AttachThingPrincipal'));
+      // 옛 메타 문항(제품 이름이 개명인지)이 되살아나지 않는다.
+      expect(allText(e), isNot(contains('network security director')));
+      expect(allText(e), isNot(contains('시험 가이드')));
+    });
+
+    test('t5-3-q12: 정책 계층·식별자·탐지 지표를 묻고 제공 상태를 묻지 않는다', () {
+      final e = q('scs-t5-3-q12');
+      final c = correctOf(e);
+      expect(c, contains('계정 정책과 로그 그룹 정책을 함께'));
+      expect(c, contains('사용자 지정 데이터'));
+      expect(e['explanation'], contains('LogEventsWithFindings'));
+      expect(e['explanation'], contains('30,720자'));
+      expect(e['explanation'], contains('logs:Unmask'));
+      // 옛 문항은 SNS 메시지 데이터 보호의 **제공 상태**를 정답 근거로 썼다.
+      expect(allText(e), isNot(contains('신규 고객')));
+      expect(allText(e), isNot(contains('SNS')));
+    });
+
+    test('t6-1-q9: 분리 시 롤백만 묻고 유형 개수를 묻지 않는다', () {
+      final e = q('scs-t6-1-q9');
+      final c = correctOf(e);
+      expect(c, contains('롤백'));
+      // ⚠️ 정답 후반부의 「유형의 개수는 … 단정하지 않는다」가 사라졌다.
+      expect(allText(e), isNot(contains('개수')));
+      expect(allText(e), isNot(contains('Shield Network Security Director')));
+      // 남긴 교육 가치 — 요청을 평가하는 정책이 아니라 구성을 선언하는 정책이다.
+      expect(e['explanation'], contains('제어 플레인'));
+      expect(e['explanation'], contains('서비스 연결 역할'));
+    });
+
+    test('t6-1-q11: 받는 권한의 범위를 묻고 주관적 기준을 쓰지 않는다', () {
+      final e = q('scs-t6-1-q11');
+      final c = correctOf(e);
+      expect(c, contains('일부 관리 권한'));
+      expect(c, contains('Organizations 읽기 전용'));
+      expect(c, contains('서비스마다'));
+      // 「자주 쓰이는 대상」이라는 주관적 기준이 사라졌다.
+      expect(allText(e), isNot(contains('자주')));
+      // q10 과 축이 겹치지 않는다 — 전제(지원 여부·신뢰 액세스)는 해설 쪽에만 둔다.
+      expect(correctOf(e), isNot(contains('신뢰 액세스')));
+    });
+
+    test('t6-3-q14: Tool 의 엔티티·출력·병행을 묻고 프리뷰 상태를 묻지 않는다', () {
+      final e = q('scs-t6-3-q14');
+      final c = correctOf(e);
+      expect(c, contains('워크로드'));
+      expect(c, contains('높은 위험 항목'));
+      expect(c, contains('함께 쓸 수'));
+      expect(e['explanation'], contains('서로 보완'));
+      // 프리뷰 상태는 q13 이 다룬다 — 정답 표식이 되지 않게 이 문항에서 뺀다.
+      expect(allText(e), isNot(contains('프리뷰')));
     });
   });
 }

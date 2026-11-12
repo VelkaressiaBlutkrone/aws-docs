@@ -83,6 +83,9 @@ import 'package:flutter_test/flutter_test.dart';
 ///   `t3-3-q12`)을 교체·정정하면서 길이도 함께 맞췄다. 전수 cue 56 → **52**.
 ///   ⭐ **6단계가 이 가드의 잔여를 줄이는 방식이다** — 5단계가 남긴 56문항은 본문을
 ///   바꿀 예정이었고, 바꿀 때 길이를 함께 맞추면 두 번 손대지 않는다.
+/// - **6단계 배치 2**(2026-11-12) — 보류 잔여 5문항(`t3-1-q4` · `t5-3-q12` ·
+///   `t6-1-q9`·`q11` · `t6-3-q14`). 전수 cue 52 → **47**. 이로써 **보고의 보류
+///   10문항이 전부 닫혔다** — 남은 47은 🟡 과 🟢 쪽이다.
 void main() {
   const dir = 'assets/content/scs';
 
@@ -152,9 +155,14 @@ void main() {
     'scs-t2-2-q2', 'scs-t2-2-q3', 'scs-t2-2-q15',
     'scs-t3-2-q13', 'scs-t3-3-q12',
   ];
+  /// 6단계 배치 2 — 보류 잔여 5문항.
+  const stage6batch2 = <String>[
+    'scs-t3-1-q4', 'scs-t5-3-q12',
+    'scs-t6-1-q9', 'scs-t6-1-q11', 'scs-t6-3-q14',
+  ];
   const handled = <String>[
     ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
-    ...batch7, ...stage6batch1,
+    ...batch7, ...stage6batch1, ...stage6batch2,
   ];
 
   /// 지금까지 손댄 Task. 🏁 배치 7로 **공식 Task 16개 전부**가 들어왔다.
@@ -240,7 +248,6 @@ void main() {
         'scs-t2-1-q13',                  // 🟡
         'scs-t2-2-q5', 'scs-t2-2-q10',   // 🟡
         'scs-t3-1-q2', 'scs-t3-1-q13', 'scs-t3-1-q14',  // 🟡
-        'scs-t3-1-q4',                   // 보류(교체 예정)
         'scs-t3-2-q3', 'scs-t3-2-q14',   // 🟡
         'scs-t3-3-q8', 'scs-t3-3-q15',   // 🟡
         'scs-t4-1-q2', 'scs-t4-1-q5', 'scs-t4-1-q7', 'scs-t4-1-q9',    // 🟡
@@ -248,15 +255,12 @@ void main() {
         'scs-t5-1-q2', 'scs-t5-1-q6', 'scs-t5-1-q10',   // 🟡
         'scs-t5-2-q2', 'scs-t5-2-q4', 'scs-t5-2-q7', 'scs-t5-2-q15',   // 🟡
         'scs-t5-3-q3', 'scs-t5-3-q15',  // 🟡
-        'scs-t5-3-q12',                 // 보류(교체 예정)
         'scs-t6-1-q1', 'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7',    // 🟡
         'scs-t6-1-q13', 'scs-t6-1-q15',                                // 🟡
-        'scs-t6-1-q9', 'scs-t6-1-q11',  // 보류(교체 예정)
         'scs-t6-2-q6', 'scs-t6-2-q15',  // 🟡
         'scs-t6-2-q13',                 // 보류(교체 예정)
         'scs-t6-3-q8', 'scs-t6-3-q9', 'scs-t6-3-q10', 'scs-t6-3-q12',  // 🟡
         'scs-t6-3-q13',                                                // 🟡
-        'scs-t6-3-q14',                 // 보류(교체 예정)
       };
       final remaining = <String>{};
       for (final t in tasks) {
