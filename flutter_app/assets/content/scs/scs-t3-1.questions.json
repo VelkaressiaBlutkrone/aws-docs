@@ -46,9 +46,9 @@
       "stem": "Network Load Balancer 뒤에 EC2 인스턴스를 두고 그 앞에 AWS WAF를 붙이려 합니다. 공식 보호 대상 목록에 비추어 가능합니까?",
       "options": [
         "가능합니다. Network Load Balancer는 보호 대상 목록에 있습니다",
-        "불가능합니다. Network Load Balancer와 EC2 인스턴스는 목록에 없으므로 앞단에 Application Load Balancer나 CloudFront를 둬야 WAF를 붙일 수 있습니다",
+        "불가능합니다. Network Load Balancer와 EC2 인스턴스는 목록에 없으므로 앞단에 Application Load Balancer나 CloudFront를 둬야 합니다",
         "불가능합니다. WAF는 CloudFront 배포에만 붙일 수 있습니다",
-        "가능합니다. 다만 Network Load Balancer에서는 관리형 규칙 그룹을 쓸 수 없고 사용자 지정 규칙만 됩니다"
+        "가능합니다. 다만 Network Load Balancer에서는 관리형 규칙 그룹을 쓸 수 없고 사용자 지정 규칙과 속도 기반 규칙만 됩니다"
       ],
       "correct": 1,
       "explanation": "공식 보호 대상 목록은 CloudFront 배포, API Gateway REST API, Application Load Balancer, AppSync GraphQL API, Cognito 사용자 풀, App Runner 서비스, Amazon Bedrock AgentCore Gateway, AWS Verified Access 인스턴스, AWS Amplify입니다. Network Load Balancer와 EC2 인스턴스는 그 목록에 없으므로 앞단에 Application Load Balancer나 CloudFront를 둬야 WAF를 붙일 수 있습니다. 목록에 Bedrock AgentCore Gateway와 Amplify가 있다는 것도 함께 기억합니다.",
@@ -371,15 +371,15 @@
       "skill": "3.1.4",
       "section": "third-party",
       "difficulty": "foundational",
-      "stem": "OCSF가 어디에 쓰이는지 정리해야 합니다. Amazon Security Lake와 신 AWS Security Hub가 OCSF를 쓰는 층을 올바르게 가른 것은 무엇입니까?",
+      "stem": "OCSF가 어디에 쓰이는지 정리해야 합니다. Amazon Security Lake와 AWS Security Hub가 OCSF를 쓰는 층을 올바르게 가른 것은 무엇입니까?",
       "options": [
-        "Security Lake는 로그와 이벤트를 OCSF와 Parquet로 정규화해 적재하고, 신 Security Hub는 조사 결과의 표현 형식으로 씁니다",
+        "Security Lake는 로그와 이벤트를 OCSF와 Parquet로 정규화해 적재하고, AWS Security Hub는 조사 결과의 표현 형식으로 씁니다",
         "둘 다 조사 결과 표현 형식으로만 씁니다",
-        "Security Lake가 조사 결과를, Security Hub가 원시 로그를 OCSF로 정규화합니다",
+        "Security Lake가 조사 결과를, AWS Security Hub가 원시 로그를 OCSF로 정규화해 적재하고 ASFF는 Security Lake 쪽 형식입니다",
         "OCSF는 Security Lake 전용 저장 형식이고 Security Hub와 무관합니다"
       ],
       "correct": 0,
-      "explanation": "OCSF는 확장 가능한 스키마 개발 프레임워크와 벤더 중립 코어 보안 스키마를 제공하는 오픈 소스 프로젝트이고 데이터 타입과 속성 사전과 분류 체계로 이뤄지며 저장 형식과 수집 방법과 ETL 프로세스와 독립입니다. Security Lake는 로그와 이벤트를 OCSF와 Parquet로 정규화해 쿼리 가능한 데이터 레이크를 만들고, 신 Security Hub는 노출 조사 결과의 표현 형식으로 씁니다. 표준 점검과 ASFF는 Security Hub CSPM 쪽이므로 두 이름을 섞지 않습니다.",
+      "explanation": "OCSF는 확장 가능한 스키마 개발 프레임워크와 벤더 중립 코어 보안 스키마를 제공하는 오픈 소스 프로젝트이고 데이터 타입과 속성 사전과 분류 체계로 이뤄지며 저장 형식과 수집 방법과 ETL 프로세스와 독립입니다. Security Lake는 로그와 이벤트를 OCSF와 Parquet로 정규화해 쿼리 가능한 데이터 레이크를 만들고, AWS Security Hub는 노출 조사 결과의 표현 형식으로 씁니다. 표준 점검과 ASFF는 Security Hub CSPM 쪽이므로 두 이름을 섞지 않습니다.",
       "wrongExplanations": {
         "1": "Security Lake가 쓰는 층은 로그와 이벤트의 정규화입니다.",
         "2": "두 역할이 뒤바뀌었습니다.",
@@ -405,8 +405,8 @@
       "difficulty": "applied",
       "stem": "타사 엔드포인트 탐지 제품의 경보를 Security Lake에 넣어 다른 보안 데이터와 함께 조회하려 합니다. 형식 요건을 올바르게 설명한 것은 무엇입니까?",
       "options": [
-        "Security Lake가 수집 후 OCSF로 변환하므로 원본 형식 그대로 보냅니다",
-        "사용자 지정 소스는 보내기 전에 OCSF로 변환해야 하고, 각 객체는 Apache Parquet이며 한 객체의 모든 레코드에 같은 OCSF 이벤트 클래스가 적용돼야 합니다",
+        "Security Lake가 수집한 뒤 OCSF로 변환하므로 원본 형식 그대로 보내면 되고 객체 형식과 파티셔닝도 자동으로 맞춰집니다",
+        "사용자 지정 소스는 보내기 전에 OCSF로 변환해야 하고, 각 객체는 Apache Parquet이며 한 객체의 레코드는 같은 OCSF 이벤트 클래스여야 합니다",
         "JSON Lines로 보내면 Security Lake가 Parquet으로 변환해 적재합니다",
         "Security Hub CSPM을 경유해 보내면 자동으로 OCSF가 됩니다"
       ],

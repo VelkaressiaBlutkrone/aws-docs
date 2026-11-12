@@ -349,7 +349,7 @@
       "difficulty": "foundational",
       "stem": "GuardDuty가 EC2 인스턴스의 악성 활동을 탐지했을 때 자동 포렌식 오케스트레이터로 메모리와 디스크를 수집하려 합니다. 트리거 경로와 선행 요건을 올바르게 설명한 것은 무엇입니까?",
       "options": [
-        "탐지 결과가 보안 계정의 Security Hub로 가고, 기본적으로 모든 Security Hub 조사 결과가 EventBridge로 보내져 Step Functions 워크플로를 시작합니다. 선행 요건은 포렌식 AMI입니다",
+        "탐지 결과가 보안 계정의 Security Hub로 가고 그 조사 결과가 EventBridge를 거쳐 Step Functions 워크플로를 시작합니다. 선행 요건은 포렌식 AMI입니다",
         "GuardDuty가 Step Functions를 직접 호출하고 선행 요건은 Amazon Detective 활성화입니다",
         "Security Hub가 수집 Lambda를 직접 호출하고 선행 요건은 Security Lake 구독입니다",
         "EventBridge가 조사 결과를 받아 Systems Manager Automation 런북을 돌리고 선행 요건은 포렌식 KMS 키뿐입니다"
