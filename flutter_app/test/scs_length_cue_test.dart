@@ -71,6 +71,14 @@ import 'package:flutter_test/flutter_test.dart';
 ///   둘(`t5-3` q5·q7)은 지웠고, **필요치를 만들어야 하는 최장 오답**인 셋(q11·q14 와
 ///   `t5-2` q8)은 올렸다. 지울지 올릴지는 그 보기가 **최장인가**로 정한다.
 ///   ⚠️ `t5-1`·`t5-2`·`t5-3` 는 **셋 다 끝에 개행이 있다**(파일마다 실측한다).
+/// - **배치 7**(2026-11-12) — `t6-1` 7 + `t6-2` 12 + `t6-3` 9 = 28문항. 전수 cue
+///   84 → **56**. 🏁 **5단계가 끝났다** — 이제 **16 Task 240문항 전부**가 이 가드의
+///   범위이고, 남은 cue 56문항은 **정확히 6단계 대상**(🟡 46 + 보류 10)이다.
+///   ⚠️ 이 도메인도 **정답 줄이기가 주력**이었다(정답 85~182자 · 오답 25~65자).
+///   `t6-3-q2`(182 → 62) · `t6-3-q1`(167 → 76) · `t6-2-q7`(146 → 69)처럼 정답이
+///   **공식 예시·열거를 그대로 담고** 있었고, 그 예시는 해설에 이미 있다.
+///   ⚠️ **지문에 이미 있는 말은 보기에서 걷는다** — `t6-2-q10` 은 「Firewall Manager용」
+///   이 지문의 첫 문장에 있어 보기에서 빼도 뜻이 변하지 않는다(76 → 62).
 void main() {
   const dir = 'assets/content/scs';
 
@@ -125,15 +133,27 @@ void main() {
     'scs-t5-3-q6', 'scs-t5-3-q7', 'scs-t5-3-q8', 'scs-t5-3-q9',
     'scs-t5-3-q10', 'scs-t5-3-q11', 'scs-t5-3-q13', 'scs-t5-3-q14',
   ];
+  const batch7 = <String>[
+    'scs-t6-1-q2', 'scs-t6-1-q3', 'scs-t6-1-q4', 'scs-t6-1-q8',
+    'scs-t6-1-q10', 'scs-t6-1-q12', 'scs-t6-1-q14',
+    'scs-t6-2-q1', 'scs-t6-2-q2', 'scs-t6-2-q3', 'scs-t6-2-q4',
+    'scs-t6-2-q5', 'scs-t6-2-q7', 'scs-t6-2-q8', 'scs-t6-2-q9',
+    'scs-t6-2-q10', 'scs-t6-2-q11', 'scs-t6-2-q12', 'scs-t6-2-q14',
+    'scs-t6-3-q1', 'scs-t6-3-q2', 'scs-t6-3-q3', 'scs-t6-3-q4',
+    'scs-t6-3-q5', 'scs-t6-3-q6', 'scs-t6-3-q7', 'scs-t6-3-q11',
+    'scs-t6-3-q15',
+  ];
   const handled = <String>[
     ...batch1, ...batch2, ...batch3, ...batch4, ...batch5, ...batch6,
+    ...batch7,
   ];
 
-  /// 지금까지 손댄 Task. 배치가 늘면 여기와 `handled` 를 함께 늘린다.
+  /// 지금까지 손댄 Task. 🏁 배치 7로 **공식 Task 16개 전부**가 들어왔다.
   const tasks = <String>[
     'scs-t1-1', 'scs-t1-2', 'scs-t1-3', 'scs-t2-1', 'scs-t2-2',
     'scs-t3-1', 'scs-t3-2', 'scs-t3-3', 'scs-t4-1', 'scs-t4-2',
     'scs-t5-1', 'scs-t5-2', 'scs-t5-3',
+    'scs-t6-1', 'scs-t6-2', 'scs-t6-3',
   ];
 
   /// 보고 P-1 이 든 임계. `prescreen.mjs` 의 `ANSWER_LENGTH_RATIO` 와 같은 값이다.
@@ -153,7 +173,7 @@ void main() {
     );
   }
 
-  group('길이 단서 제거 배치 1~6 (D1 3 · D2 2 · D3 3 · D4 2 · D5 3 Task)', () {
+  group('길이 단서 제거 배치 1~7 (공식 Task 16개 전부 · 240문항)', () {
     test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
       var n = 0;
       for (final t in tasks) {
@@ -164,7 +184,7 @@ void main() {
           n++;
         }
       }
-      expect(n, 195);
+      expect(n, 240);
     });
 
     test('처리한 문항에서 정답이 최장 오답의 1.3배를 넘지 않는다', () {
@@ -223,6 +243,14 @@ void main() {
         'scs-t5-2-q2', 'scs-t5-2-q4', 'scs-t5-2-q7', 'scs-t5-2-q15',   // 🟡
         'scs-t5-3-q3', 'scs-t5-3-q15',  // 🟡
         'scs-t5-3-q12',                 // 보류(교체 예정)
+        'scs-t6-1-q1', 'scs-t6-1-q5', 'scs-t6-1-q6', 'scs-t6-1-q7',    // 🟡
+        'scs-t6-1-q13', 'scs-t6-1-q15',                                // 🟡
+        'scs-t6-1-q9', 'scs-t6-1-q11',  // 보류(교체 예정)
+        'scs-t6-2-q6', 'scs-t6-2-q15',  // 🟡
+        'scs-t6-2-q13',                 // 보류(교체 예정)
+        'scs-t6-3-q8', 'scs-t6-3-q9', 'scs-t6-3-q10', 'scs-t6-3-q12',  // 🟡
+        'scs-t6-3-q13',                                                // 🟡
+        'scs-t6-3-q14',                 // 보류(교체 예정)
       };
       final remaining = <String>{};
       for (final t in tasks) {
@@ -232,8 +260,9 @@ void main() {
         }
       }
       expect(remaining, expected,
-          reason: '두 Task 의 cue 잔여가 바뀌었다 — 6단계 대상이 아닌 문항이 남았으면 '
-              '이 배치에서 함께 처리한다');
+          reason: 'cue 잔여가 바뀌었다 — 5단계가 끝난 지금 남은 56문항은 **정확히 '
+              '6단계 대상**이다(🟡 46 + 보류 10). 그 밖의 문항이 남았으면 길이를 '
+              '되돌린 것이다');
     });
 
     test('대조군: 임계가 실제로 걸러 낸다 (합성 입력)', () {
