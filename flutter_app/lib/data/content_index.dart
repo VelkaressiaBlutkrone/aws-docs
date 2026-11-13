@@ -753,7 +753,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   // 저작 결정·가이드 실측의 정본은 docs/content-research/SCS-C03/ 이고,
   // 도메인 1의 서비스 경계는 같은 폴더 `93-detection-pipeline-boundaries.md`다.
   'SCS-C03': [
-    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-1', title: '모니터링 및 경보 솔루션 설계 (요구 사항·상태 확인·이벤트 집계·탐지 서비스·평가 자동화)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-1.md', questionsAsset: 'assets/content/scs/scs-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-1', title: '모니터링 및 경보 솔루션 설계 (요구 사항·상태 확인·이벤트 집계·탐지 서비스·평가 자동화)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-1.md', questionsAsset: 'assets/content/scs/scs-t1-1.questions.json', questionCount: 15),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-2', title: '로깅 솔루션 설계 (소스 파악·조직 추적·데이터 레이크·로그 분석·정규화·네트워크 로그)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-2.md', questionsAsset: 'assets/content/scs/scs-t1-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t1-3', title: '모니터링·로깅·경보 문제 해결 (리소스 기능·권한·구성 분석과 잘못된 구성 교정)', domain: 1, mdAsset: 'assets/content/scs/scs-t1-3.md', questionsAsset: 'assets/content/scs/scs-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t2-1', title: '인시던트 대응 계획 설계와 테스트 (런북·사전 구성·혼돈 실험·자동 해결)', domain: 2, mdAsset: 'assets/content/scs/scs-t2-1.md', questionsAsset: 'assets/content/scs/scs-t2-1.questions.json', questionCount: 0),
