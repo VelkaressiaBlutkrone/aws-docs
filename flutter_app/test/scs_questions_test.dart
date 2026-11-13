@@ -61,7 +61,7 @@ void main() {
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
   /// `node tool/review.mjs flip scs <taskId>`가 대신 넣어 주고, 그 diff가
   /// 사람의 서명이다.
-  const flipApprovedTaskIds = <String>{'scs-t1-1', 'scs-t2-1', 'scs-t3-1', 'scs-t4-1'};
+  const flipApprovedTaskIds = <String>{'scs-t1-1', 'scs-t2-1', 'scs-t3-1', 'scs-t4-1', 'scs-t5-1', 'scs-t6-1'};
 
   /// 공식 Task 16개. 저작 결정 D-01(공식 Task 1개 = 학습문서 1편).
   /// 도메인별 Task 수는 3·2·3·2·3·3이다(2026-11-09 실측).
