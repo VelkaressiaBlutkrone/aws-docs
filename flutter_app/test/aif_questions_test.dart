@@ -56,7 +56,7 @@ void main() {
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
   /// `node tool/review.mjs flip aif <taskId>`가 대신 넣어 주고, 그 diff가
   /// 사람의 서명이다.
-  const flipApprovedTaskIds = <String>{};
+  const flipApprovedTaskIds = <String>{'aif-t1-1'};
 
   /// 공식 Task 14개. 저작 결정 D-01(공식 Task 1개 = 학습문서 1편).
   const allTaskIds = [

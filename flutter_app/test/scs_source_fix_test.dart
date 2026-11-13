@@ -42,6 +42,11 @@ import 'package:flutter_test/flutter_test.dart';
 ///   (유지 관리) · `Amazon Q Developer IDE plugins`(종료 예정) ·
 ///   `AWS DataSync Discovery`(완전 종료, **2025-05-20** — 문항이 적는 날짜와 일치)
 ///   는 실재하므로 **하위 페이지로 정밀화**했다.
+/// ⚠️ 이 파일의 대조군은 **상태(`verified`)를 단정하지 않는다.** 2026-11-13 검수자의
+/// 첫 flip(`scs-t1-1`)이 그 단정 4건에 걸려 전체 스위트가 레드로 끝났다 — 사람의 flip 은
+/// 바로 그 상태를 바꾸는 작업이므로, 「지금 전부 드래프트다」는 테스트가 아니라 기록이다.
+/// flip 을 아는 계약은 `scs_questions_test.dart` 의 `flipApprovedTaskIds` 가 갖는다
+/// (목록 밖 Task 는 전 문항 드래프트 · 목록 안 Task 는 verified 문항 ≥ 1).
 void main() {
   const dir = 'assets/content/scs';
   const tasks = <String>[
@@ -290,7 +295,7 @@ void main() {
     });
   });
 
-  test('정답 인덱스가 모두 불변이고 전 문항이 드래프트다', () {
+  test('정답 인덱스가 모두 불변이다', () {
     // 이 배치는 **출처와 지문 한 줄**만 고쳤다 — 정답·보기·해설은 건드리지 않았다.
     // ⚠️ 이 맵을 처음 손으로 적었을 때 **14건 중 6건이 틀렸다**(t1-3-q8·t2-2-q4·t3-2-q12·t3-2-q13·t4-1-q4·t5-2-q15).
     // 정답 인덱스는 추측하지 않고 실측한다 — 레포가 반복해 밟은 자리다.
@@ -313,12 +318,6 @@ void main() {
     for (final e in expected.entries) {
       expect(questionById(e.key)['correct'], e.value,
           reason: '${e.key}: 정답 인덱스가 바뀌었다');
-    }
-    for (final t in tasks) {
-      for (final q in questionsOf(t)) {
-        expect(q['verified'], isFalse,
-            reason: '${q['id']}: flip 은 사람만 한다');
-      }
     }
   });
 }

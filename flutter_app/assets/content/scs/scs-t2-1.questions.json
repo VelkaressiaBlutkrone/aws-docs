@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q5",
@@ -143,7 +143,7 @@
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q6",
@@ -171,7 +171,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q7",
@@ -199,7 +199,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q8",
@@ -227,7 +227,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q9",
@@ -255,7 +255,7 @@
           "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q10",
@@ -283,7 +283,7 @@
           "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q11",
@@ -311,7 +311,7 @@
           "url": "https://docs.aws.amazon.com/resilience-hub/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q12",
@@ -339,7 +339,7 @@
           "url": "https://docs.aws.amazon.com/fis/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q13",
@@ -367,7 +367,7 @@
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/architecture-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q14",
@@ -395,7 +395,7 @@
           "url": "https://docs.aws.amazon.com/r53recovery/latest/dg/what-is-route53-recovery.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-1-q15",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/architecture-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

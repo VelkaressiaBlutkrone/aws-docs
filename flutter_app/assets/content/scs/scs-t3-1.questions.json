@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ecommerce-security-checklist.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q3",
@@ -99,7 +99,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-managed-rule-groups.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q4",
@@ -127,7 +127,7 @@
           "url": "https://docs.aws.amazon.com/iot/latest/developerguide/thing-policy-variables.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q6",
@@ -187,7 +187,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q7",
@@ -215,7 +215,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/add-origin-custom-headers.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q8",
@@ -251,7 +251,7 @@
           "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q9",
@@ -283,7 +283,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-geo-match.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q10",
@@ -311,7 +311,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-geo-match.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q11",
@@ -343,7 +343,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-aggregation-options.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q12",
@@ -371,7 +371,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-aggregation-options.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q13",
@@ -403,7 +403,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q14",
@@ -431,7 +431,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-1-q15",
@@ -463,7 +463,7 @@
           "url": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-waf.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

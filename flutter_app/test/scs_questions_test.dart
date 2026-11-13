@@ -61,7 +61,7 @@ void main() {
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
   /// `node tool/review.mjs flip scs <taskId>`가 대신 넣어 주고, 그 diff가
   /// 사람의 서명이다.
-  const flipApprovedTaskIds = <String>{};
+  const flipApprovedTaskIds = <String>{'scs-t1-1', 'scs-t2-1', 'scs-t3-1'};
 
   /// 공식 Task 16개. 저작 결정 D-01(공식 Task 1개 = 학습문서 1편).
   /// 도메인별 Task 수는 3·2·3·2·3·3이다(2026-11-09 실측).
@@ -406,11 +406,10 @@ void main() {
       expect(q('scs-t4-1-q7')['correct'], 2);
       expect(q('scs-t6-2-q13')['correct'], 0);
       expect(q('scs-t6-1-q15')['correct'], 3);
-      for (final id in const [
-        'scs-t3-1-q3', 'scs-t4-1-q7', 'scs-t6-2-q13', 'scs-t6-1-q15',
-      ]) {
-        expect(q(id)['verified'], isFalse, reason: '$id 은 드래프트다');
-      }
+      // ⚠️ 여기서 `verified` 를 단정하지 않는다 — 사람의 flip 이 바로 그 값을 바꾼다
+      //    (2026-11-13 `flip scs scs-t1-1` 이 같은 모양의 대조군 4건을 레드로 만들었다).
+      //    「AI 는 verified: true 를 쓰지 않는다」는 계약은 위 `flipApprovedTaskIds` 가
+      //    flip 을 아는 형태로 갖는다.
     });
 
     test('t3-1-q3: 규칙 작업 개수를 단정하지 않고 과금 층만 묻는다', () {

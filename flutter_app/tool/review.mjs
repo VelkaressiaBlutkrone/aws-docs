@@ -269,6 +269,22 @@ function cmdBuild(code) {
   console.log(`${rel}/index.html 생성 — ${tasks.length} Task, ${n}문항`);
 }
 
+/**
+ * flip 이 돌릴 테스트 파일 목록. `CERTS[code].tests` 에 **그 자격증의 가드 전부**
+ * (`test/<code>_*_test.dart`)를 합친다.
+ *
+ * ⚠️ 목록을 손으로만 관리하면 뒤에 생긴 가드가 조용히 빠진다 — 2026-11-13 `flip scs scs-t1-1`
+ * 이 세 파일만 돌려 **통과로 끝났는데** 전체 스위트에서는 4건이 레드였다(`scs_length_cue_test` ·
+ * `scs_s6_review_fix_test` 두 건 · `scs_source_fix_test`). 그 넷은 「전부 드래프트」를 단정하던
+ * 대조군이고 flip 이 바로 그 상태를 바꾼다. 디렉터리에서 유도하면 다음 가드도 자동으로 든다.
+ */
+export function flipTestFiles(code, cert) {
+  const prefixed = readdirSync(join(APP_DIR, 'test'))
+    .filter((f) => f.startsWith(`${code}_`) && f.endsWith('_test.dart'))
+    .map((f) => `test/${f}`);
+  return [...new Set([...cert.tests, ...prefixed])].sort();
+}
+
 function cmdFlip(code, taskId, force) {
   const cert = resolveCert(code);
   const path = questionFilePath(cert, taskId);
@@ -295,8 +311,9 @@ function cmdFlip(code, taskId, force) {
       console.log(`${file}: ${symbol}에 ${taskId} 추가`);
     }
   }
-  execSync(`flutter test ${cert.tests.join(' ')}`, { stdio: 'inherit', cwd: APP_DIR });
-  console.log(`${cert.tests.join('·')} 통과. flip 커밋은 검수자가 직접 하세요.`);
+  const files = flipTestFiles(code, cert);
+  execSync(`flutter test ${files.join(' ')}`, { stdio: 'inherit', cwd: APP_DIR });
+  console.log(`${files.join('·')} 통과. flip 커밋은 검수자가 직접 하세요.`);
 }
 
 const USAGE = `사용법: node tool/review.mjs build <cert> | flip <cert> <taskId> [--force]
