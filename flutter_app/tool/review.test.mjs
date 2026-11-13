@@ -304,3 +304,30 @@ function checkAllowlistStyle(code, { file, symbol }) {
   const kept = before[1].replace(/\s*,?\s*$/, '');
   assert.equal(after[1], kept.trim() ? `${kept}, '${fresh}'` : `'${fresh}'`, code);
 }
+
+import { flipTestFiles } from './review.mjs';
+
+test('flipTestFiles: 그 자격증의 가드 전부를 디렉터리에서 유도한다', () => {
+  // ⚠️ 2026-11-13 `flip scs scs-t1-1` 이 `CERTS.scs.tests` 세 파일만 돌려 **통과로 끝났는데**
+  //    전체 스위트에서는 4건이 레드였다(「전부 드래프트」를 단정하던 대조군들이고 flip 이
+  //    바로 그 상태를 바꾼다). 목록을 손으로만 관리하면 뒤에 생긴 가드가 조용히 빠진다.
+  const files = flipTestFiles('scs', CERTS.scs);
+  for (const t of CERTS.scs.tests) assert.ok(files.includes(t), `${t} 가 빠졌다`);
+  for (const t of [
+    'test/scs_length_cue_test.dart',
+    'test/scs_s6_review_fix_test.dart',
+    'test/scs_source_fix_test.dart',
+  ]) {
+    assert.ok(files.includes(t), `${t} — 2026-11-13 에 빠져 있던 바로 그 가드다`);
+  }
+  // 다른 자격증의 가드는 섞이지 않는다.
+  assert.ok(!files.some((f) => f.startsWith('test/aif_')), 'aif 가드가 섞였다');
+  // 중복 없이 정렬된다(명령줄이 흔들리면 로그 대조가 어려워진다).
+  assert.deepEqual(files, [...new Set(files)].sort());
+  // 없는 파일을 넘기면 flip 마지막 단계가 깨진다.
+  for (const f of files) assert.ok(existsSync(appPath(f)), `${f} 없음`);
+  // 가드가 하나도 없는 자격증도 최소한 tests 목록은 돌린다(공허함 방지).
+  for (const [code, cert] of Object.entries(CERTS)) {
+    assert.ok(flipTestFiles(code, cert).length >= cert.tests.length, code);
+  }
+});

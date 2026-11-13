@@ -94,13 +94,14 @@ void main() {
     expect(allText().length, greaterThan(400));
   });
 
-  test('§P1b-A4: 정답 인덱스·skill·section·difficulty·verified 불변', () {
+  test('§P1b-A4: 정답 인덱스·skill·section·difficulty 불변', () {
     final q = q11();
     expect(q['correct'], 2, reason: '정답은 2 자리에 그대로 둔다');
     expect(q['skill'], '4.1.5');
     expect(q['section'], 'datasets');
     expect(q['difficulty'], 'foundational');
-    expect(q['verified'], false, reason: 'AI는 verified: true를 쓰지 않는다');
+    // ⚠️ `verified` 는 단정하지 않는다 — 사람의 flip 이 바로 그 값을 바꾼다.
+    //    그 계약은 `aif_questions_test.dart` 의 `flipApprovedTaskIds` 가 갖는다.
   });
 
   test('§P1b-A4: 문항에서 도구 구현 세부가 사라졌다', () {

@@ -31,7 +31,7 @@
           "url": "https://aws.amazon.com/what-is/overfitting/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q2",
@@ -59,7 +59,7 @@
           "url": "https://aws.amazon.com/what-is/machine-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q3",
@@ -87,7 +87,7 @@
           "url": "https://aws.amazon.com/what-is/foundation-models/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q4",
@@ -119,7 +119,7 @@
           "url": "https://aws.amazon.com/what-is/machine-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q5",
@@ -147,7 +147,7 @@
           "url": "https://aws.amazon.com/what-is/agentic-ai/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q6",
@@ -179,7 +179,7 @@
           "url": "https://aws.amazon.com/what-is/artificial-intelligence/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q7",
@@ -211,7 +211,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q8",
@@ -243,7 +243,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q9",
@@ -275,7 +275,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q10",
@@ -307,7 +307,7 @@
           "url": "https://aws.amazon.com/what-is/machine-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q11",
@@ -335,7 +335,7 @@
           "url": "https://aws.amazon.com/what-is/structured-data/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q12",
@@ -367,7 +367,7 @@
           "url": "https://aws.amazon.com/what-is/artificial-intelligence/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q13",
@@ -395,7 +395,7 @@
           "url": "https://aws.amazon.com/what-is/machine-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q14",
@@ -423,7 +423,7 @@
           "url": "https://aws.amazon.com/what-is/machine-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-1-q15",
@@ -451,7 +451,7 @@
           "url": "https://aws.amazon.com/what-is/foundation-models/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

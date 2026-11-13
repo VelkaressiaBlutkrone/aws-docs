@@ -40,6 +40,11 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// G-84(문항 출처 ⊆ 학습문서 출처)를 지키려고 새 URL 을 들이지 않았다. 세 파일의 문항
 /// 출처 전수가 md 안에 있는 것을 기계로 확인했다(위반 0건).
+/// ⚠️ 이 파일의 대조군은 **상태(`verified`)를 단정하지 않는다.** 2026-11-13 검수자의
+/// 첫 flip(`scs-t1-1`)이 그 단정 4건에 걸려 전체 스위트가 레드로 끝났다 — 사람의 flip 은
+/// 바로 그 상태를 바꾸는 작업이므로, 「지금 전부 드래프트다」는 테스트가 아니라 기록이다.
+/// flip 을 아는 계약은 `scs_questions_test.dart` 의 `flipApprovedTaskIds` 가 갖는다
+/// (목록 밖 Task 는 전 문항 드래프트 · 목록 안 Task 는 verified 문항 ≥ 1).
 void main() {
   const dir = 'assets/content/scs';
 
@@ -72,14 +77,13 @@ void main() {
       (e['options'] as List)[e['correct'] as int] as String;
 
   group('6단계 배치 1 — 보류 5문항 (보고 §4)', () {
-    test('대조군: 다섯 문항이 읽히고 전부 드래프트다', () {
+    test('대조군: 다섯 문항이 읽히고 구조가 맞다', () {
       for (final id in const [
         'scs-t2-2-q2', 'scs-t2-2-q3', 'scs-t2-2-q15',
         'scs-t3-2-q13', 'scs-t3-3-q12',
       ]) {
         final e = q(id);
         expect((e['options'] as List).length, 4, reason: id);
-        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
       }
     });
 
@@ -204,14 +208,13 @@ void main() {
   // 그대로 쓰지 않고 **받는 권한의 범위**로 축을 옮겼다 — 보고가 지적한 결함(「자주
   // 쓰이는 대상」이라는 주관적 기준)은 그대로 해소된다.
   group('6단계 배치 2 — 보류 잔여 5문항 (보고 §4)', () {
-    test('대조군: 다섯 문항이 읽히고 전부 드래프트다', () {
+    test('대조군: 다섯 문항이 읽히고 구조가 맞다', () {
       for (final id in const [
         'scs-t3-1-q4', 'scs-t5-3-q12',
         'scs-t6-1-q9', 'scs-t6-1-q11', 'scs-t6-3-q14',
       ]) {
         final e = q(id);
         expect((e['options'] as List).length, 4, reason: id);
-        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
       }
     });
 
@@ -321,11 +324,10 @@ void main() {
       'scs-t6-3-q9', 'scs-t6-3-q10', 'scs-t6-3-q12',
     ];
 
-    test('대조군: 열네 문항이 읽히고 전부 드래프트다', () {
+    test('대조군: 열네 문항이 읽히고 구조가 맞다', () {
       for (final id in ids) {
         final e = q(id);
         expect((e['options'] as List).length, 4, reason: id);
-        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
       }
     });
 
@@ -650,11 +652,10 @@ void main() {
       return sa.intersection(sb).length / sa.union(sb).length;
     }
 
-    test('대조군: 열 문항이 읽히고 전부 드래프트다', () {
+    test('대조군: 열 문항이 읽히고 구조가 맞다', () {
       for (final id in ids) {
         final e = q(id);
         expect((e['options'] as List).length, 4, reason: id);
-        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
       }
     });
 
@@ -856,7 +857,7 @@ void main() {
   // ⚠️⚠️ **한국어 길이는 눈으로 추정하면 체계적으로 짧다.** 초안 34문항 중 **23건**
   // 이 1.3배를 넘었고, `정답 ÷ 1.3` 을 계산해 최장 오답을 그 길이까지 올려 닫았다.
   group('🏁 6단계 배치 5-A — 길이 단서 전수 종료 (보고 §4 P-2 · 🟢)', () {
-    test('대조군: 서른넷이 읽히고 전부 드래프트다', () {
+    test('대조군: 서른넷이 읽히고 구조가 맞다', () {
       for (final id in const [
         'scs-t1-1-q1', 'scs-t1-1-q13', 'scs-t1-3-q13', 'scs-t1-3-q14',
         'scs-t2-1-q13', 'scs-t2-2-q7', 'scs-t2-2-q10',
@@ -871,7 +872,6 @@ void main() {
       ]) {
         final e = q(id);
         expect((e['options'] as List).length, 4, reason: id);
-        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
       }
     });
 
@@ -1066,11 +1066,10 @@ void main() {
       'scs-t6-1-q8',
     ];
 
-    test('대조군: 아홉 문항이 읽히고 전부 드래프트다', () {
+    test('대조군: 아홉 문항이 읽히고 구조가 맞다', () {
       for (final id in ids) {
         final e = q(id);
         expect((e['options'] as List).length, 4, reason: id);
-        expect(e['verified'], isFalse, reason: '$id 는 드래프트다 (flip 은 사람만)');
       }
     });
 
