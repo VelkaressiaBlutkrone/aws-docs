@@ -96,6 +96,11 @@ import 'package:flutter_test/flutter_test.dart';
 ///   가 0이 됐다**(227 → 0). 보고 🟢 의 「개수 암기 제거」와 「부적절한 상세
 ///   삭제」가 **정답 보기를 길게 만들던 바로 그 텍스트**라 길이 교정과 같은
 ///   편집으로 닫혔다.
+/// ⚠️ 이 파일의 대조군은 **상태(`verified`)를 단정하지 않는다.** 2026-11-13 검수자의
+/// 첫 flip(`scs-t1-1`)이 그 단정 4건에 걸려 전체 스위트가 레드로 끝났다 — 사람의 flip 은
+/// 바로 그 상태를 바꾸는 작업이므로, 「지금 전부 드래프트다」는 테스트가 아니라 기록이다.
+/// flip 을 아는 계약은 `scs_questions_test.dart` 의 `flipApprovedTaskIds` 가 갖는다
+/// (목록 밖 Task 는 전 문항 드래프트 · 목록 안 Task 는 verified 문항 ≥ 1).
 void main() {
   const dir = 'assets/content/scs';
 
@@ -234,15 +239,12 @@ void main() {
   }
 
   group('길이 단서 제거 배치 1~7 + 6단계 (공식 Task 16개 전부 · 240문항)', () {
-    test('대조군: 문항 자산이 읽히고 전부 드래프트다', () {
+    test('대조군: 문항 자산이 읽히고 Task 마다 15문항이다', () {
       var n = 0;
       for (final t in tasks) {
         final qs = readQuestions(t);
         expect(qs.length, 15, reason: '$t 은 15문항이다');
-        for (final q in qs) {
-          expect(q['verified'], isFalse, reason: '${q['id']} 는 드래프트다');
-          n++;
-        }
+        n += qs.length;
       }
       expect(n, 240);
     });
