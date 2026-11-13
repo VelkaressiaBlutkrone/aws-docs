@@ -155,6 +155,28 @@ void main() {
     // AWS 문서가 아니라서, 그 번호 매핑은 더 이상 AWS 공식 근거가 없다.
     'https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/owasp-top-ten.html',
     'https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/introduction.html',
+    // ── 2026-11-13 AIP-C01 P-01(범위 내 106개 서비스 상태 전수 확인)에서 실측 ────
+    // 정본은 docs/content-research/AIP-C01/96-service-status-audit.md §4.
+    // 둘 다 **레포에 0건**이라 예방(되살림 방지) 가드다.
+    //
+    // ⚠️⚠️ 이 측정에서 **신호 규칙 두 개를 고쳐야 했다**(96 §4):
+    // ① **`.md` 404는 「페이지 없음」이 아니다** — `.md` 렌디션은 보편적이지 않아서
+    //    `quicksight/…/welcome.md` 는 404 인데 `.html` 은 200(16KB)이다. `.md` 가 404 면
+    //    **반드시 `.html` 로 다시 잰다.**
+    // ② **「`200` 이고 2.5KB 이하면 측정이 공허」는 `r >= 1` 일 때만 맞다** — `r=0` 인
+    //    짧은 `.md` 9편을 전수로 열어 **전부 정상 페이지**임을 확인했다.
+    // ⭐ 그리고 인덱스로 튕긴 2.2~2.5KB stub 은 버릴 것이 아니라 **`myDefaultPage` 로
+    //    그 가이드의 현행 기본 페이지를 알려 주는 오라클**이다.
+    //
+    // SageMaker Clarify 의 공정성·설명가능성 페이지. `.html` 은 **`200 r=1` → 가이드
+    // 인덱스**(2,281B)라 소멸이고, 현행 정본은 `clarify-availability-change.html` 이다
+    // (⚠️ 그 페이지가 **`Clarify is no longer open to new customers`** 를 적는다).
+    'https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-fairness-and-explainability.html',
+    // AWS Auto Scaling 의 what-is. `.html` 은 **`200 r=1` → `migrate-scaling-plan.html`**
+    // (67KB, 특정 페이지)이라 **소멸이 아니라 이름 변경**이다. 현행 기본 페이지는
+    // `what-is-a-scaling-plan.html`. ⚠️ **닫힌 서비스가 아니다** — 그 문서에 상태 문구가
+    // 0건이고 lifecycle 세 표에도 없다(96 §6-5).
+    'https://docs.aws.amazon.com/autoscaling/plans/userguide/what-is-aws-auto-scaling.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
