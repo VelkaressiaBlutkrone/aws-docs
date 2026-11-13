@@ -197,6 +197,19 @@ Management Console is now the AWS assistant`**. 범위 내 목록은 `Amazon Q D
    **전부 정상 페이지**임을 확인했다. ⭐ 그리고 인덱스로 튕긴 2.2~2.5KB stub은 버릴 것이 아니라
    **`myDefaultPage`로 현행 기본 페이지를 알려 주는 오라클**이다(96 §4).
 
+### ⚠️ G-23. `기술 1.4.1`의 「벡터 데이터베이스를 갖춘 Amazon DynamoDB」를 공식으로 확정할 수 없다
+
+공식 가이드가 예시로 드는데, 측정 결과 **Bedrock Knowledge Bases 지원 벡터 스토어 8종에
+DynamoDB 는 없고**(탭 전수 — 0건) DynamoDB 개발자 안내서 소개 페이지에 **`vector`·`embedding`이
+각 0건**이다(대조군: 같은 페이지 `table` 48건 — 탐지기는 작동한다).
+
+- ✅ **Bedrock KB 의 벡터 스토어로 DynamoDB 를 고르는 보기를 정답으로 쓰지 않는다**(판정 완료).
+- ⛔ 그러나 **「DynamoDB 에 벡터 검색이 없다」고 단정하지 않는다** — 한 소개 페이지의 부재는
+  제품 전체의 부재가 아니다(「목록에 없다 ≠ 없다」). 가이드 문구는 **직접 구축하는 아키텍처에서
+  메타데이터·임베딩을 DynamoDB 에 담는다**는 읽기가 가능하고, 그 읽기를 공식으로 확정할 근거를
+  찾지 못했다. **그 축으로는 문항을 쓰지 않는다.**
+- 측정 기록은 [95-rag-vector-retrieval.md](95-rag-vector-retrieval.md) §9 다.
+
 ### ⚠️⚠️ G-22. 이 자격증만 연습 세트가 **75문항**이다 — 65를 베끼면 게이트가 틀어진다
 
 레포 `practiceQuestionCount`는 가이드 `overview`의 `scoredQuestions + unscoredQuestions`이고
