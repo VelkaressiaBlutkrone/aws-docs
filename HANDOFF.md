@@ -87,14 +87,16 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 
 | 자격증 | 필요치 | 충족된 도메인 | 남은 flip |
 |---|---|---|---:|
-| **SCS-C03** | 10·9·12·13·12·9 | **D1 15/10 · D2 15/9** | D3~D6 각 1 Task = **4건** |
+| **SCS-C03** | 10·9·12·13·12·9 | **D1 15/10 · D2 15/9 · D3 15/12** | D4·D5·D6 각 1 Task = **3건** |
 | **AIF-C01** | 13·16·18·9·9 | **D1 15/13** | D2 2 · D3 2 · D4 1 · D5 1 = **6건** |
 
 사람이 돌릴 명령은 어느 디렉터리에서나 같다(⚠️ `review.mjs` 는 `APP_DIR` 를 자기 위치에서 유도하고 `execSync` 에 `cwd: APP_DIR` 를 넘기므로 **cwd 와 무관**하다):
 
 ```sh
-node D:/workspace/awc-docs/flutter_app/tool/review.mjs flip scs scs-t3-1
+node D:/workspace/awc-docs/flutter_app/tool/review.mjs flip scs scs-t4-1
 ```
+
+⚠️ **flip 은 멱등이라 여러 번 돌려도 안전하다** — 같은 명령을 두 번 돌리면 도구가 「`flipApprovedTaskIds` 에 **이미 있음**」을 찍고 아무것도 바꾸지 않는다(2026-11-13 `scs-t3-1` 실측).
 
 ⚠️⚠️ **오디오 발행은 승인이 먼저다** — `publish_audio.py clf-t3-8 --verify` 가 `[skip] reviewStatus=needs_human_review (approved만 발행)` 뒤에 **`[publish] OK` 를 찍는다.** 건너뛸 때도 성공으로 보이는 그 동작은 메모리 `audio-r2-hosting` 에 적힌 함정이고, **아무 것도 올라가지 않았다.** 순서는 **사람의 청취 → `script.json`·`audio_meta.json` 의 `reviewStatus` 를 `approved` 로 + `content_index` 의 `audioApproved: true`·`audioSha8` → 발행**이다(동기화 테스트가 그 셋을 묶는다).
 
