@@ -129,6 +129,29 @@ const Map<String, ExamReadinessRequirement> kExamReadinessRequirements = {
     practiceQuestionCount: 65,
     weightByDomain: {1: 16, 2: 14, 3: 18, 4: 20, 5: 18, 6: 14},
   ),
+  // AIP-C01은 **학습문서·문항 저작 전에** 추가했다(2026-11-13, Phase 2 선결 P-04).
+  // AIF·SCS와 같은 순서다 — 정책이 없으면 `examWeightedCapacityStatus`가
+  // `hasPolicy: false`로 fail closed라 사람이 문항을 전부 flip해도 통합/약점
+  // 모의고사가 잠긴 채 남는다(MLA가 #246에서 같은 함정에 걸렸다). 정책 추가는
+  // 공개가 아니다 — 지금은 콘텐츠가 0개라 전 도메인이 부족해 그대로 잠겨 있다.
+  //
+  // ⚠️⚠️ **AIP-C01은 이 레포에서 유일하게 연습 세트가 65문항이 아니다** —
+  // 공식 overview가 `scored 65 + unscored 10`이라 **75**다(나머지 일곱 자격증은
+  // 전부 `50 + 15 = 65`다. 2026-11-13 여덟 가이드 전수 실측). 동기화 루프가
+  // `practiceQuestionCount == scored + unscored`를 단정하므로 65를 적으면 레드다.
+  // ⚠️ 그래서 **도메인 배분도 다르다**: 31·26·20·12·11을 **75**에 적용하면
+  // 23.25·19.50·15.00·9.00·8.25 → floor 합 74, 잔여 한 자리가 소수부 .50인 D2로
+  // 가서 **23·20·15·9·8**이다(65에 적용한 20·17·13·8·7이 아니다 —
+  // `mock_exam_test`가 둘을 함께 고정한다).
+  // ⚠️ D3이 **정확히 15**라 Task 하나(15문항)로 간신히 충족된다 — 게이트는
+  // 2·2·1·1·1 = **7 Task 105문항**이면 열린다.
+  //
+  // ⚠️ AIP-C01은 **5도메인**이고 비중과 Task 수가 반대로 간다 — 최대 비중
+  // D1(31%)이 Task 6개인데 **D5(11%)는 Task 2개뿐**이다(`작업 5.1` 하나에 기술 9개).
+  'AIP-C01': ExamReadinessRequirement(
+    practiceQuestionCount: 75,
+    weightByDomain: {1: 31, 2: 26, 3: 20, 4: 12, 5: 11},
+  ),
   // DEA-C01 공식 비중 34·26·22·18 → 65문항 배분은 22·17·14·12.
   'DEA-C01': ExamReadinessRequirement(
     practiceQuestionCount: 65,
