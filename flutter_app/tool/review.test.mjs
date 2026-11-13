@@ -140,9 +140,10 @@ test('resolveCert: 모르는 코드는 throw', () => {
 
 // ⚠️ 이 목록은 **의도 선언**이다 — 자격증을 등록하면 여기도 맞춰야 한다.
 // CI가 node 단계를 Flutter 앞에 둬서 빠뜨리면 1초 만에 레드가 난다(설계대로다).
-test('CERTS: 자격증 7종이 등록돼 있다', () => {
+test('CERTS: 자격증 8종이 등록돼 있다', () => {
+  // 2026-11-13: AIP-C01 을 **학습문서보다도 먼저** 등록했다(Phase 2 선결 P-04).
   assert.deepEqual(Object.keys(CERTS).sort(),
-    ['aif', 'clf', 'dea', 'mla', 'saa', 'scs', 'soa']);
+    ['aif', 'aip', 'clf', 'dea', 'mla', 'saa', 'scs', 'soa']);
 });
 
 test('CERTS: 각 dir가 실재하는 디렉터리다', () => {
@@ -184,7 +185,10 @@ test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위
   // 2026-11-09: SCS-C03을 **문항 저작 전에** 등록했다(학습문서 16편 완료 뒤,
   // flip 함정을 피하려고 AIF와 같은 순서). 같은 날 도메인 1 문항 3편이 들어와
   // `scs`를 지웠다 — 설계대로 안 지우면 「문항이 들어왔으면 목록에서 지운다」가 레드다.
-  const preAuthoring = new Set();
+  // 2026-11-13: AIP-C01을 **학습문서보다도 먼저** 등록했다(Phase 2 선결 P-04).
+  // 첫 문항 배치에서 이 집합에서 `aip`를 지운다 — 설계대로 안 지우면
+  // 「문항이 들어왔으면 preAuthoring 목록에서 지운다」가 레드다.
+  const preAuthoring = new Set(['aip']);
   let totalBanks = 0;
   for (const [code, cert] of Object.entries(CERTS)) {
     const files = readdirSync(appPath(cert.dir)).filter((f) => f.endsWith('.questions.json'));

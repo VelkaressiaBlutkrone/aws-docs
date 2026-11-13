@@ -67,6 +67,27 @@ void main() {
     expect(a, {1: 10, 2: 9, 3: 12, 4: 13, 5: 12, 6: 9});
   });
 
+  // ⚠️⚠️ **AIP-C01의 연습 세트는 65가 아니라 75다** — 공식 overview가
+  // `scored 65 + unscored 10`이고, 나머지 일곱 자격증은 전부 `50 + 15 = 65`다
+  // (2026-11-13 여덟 가이드 전수 실측). `kExamReadinessRequirements`의
+  // `practiceQuestionCount`가 그 합이라 **게이트 계산도 75로 돈다.**
+  // 그래서 같은 비중에서 **배분이 전혀 다르다** — 두 N을 함께 고정해,
+  // 다음 작업자가 다른 자격증 줄을 베껴 65를 쓰면 여기가 먼저 알려 준다.
+  test('allocateByWeight: AIP 비중은 N에 따라 23/20/15/9/8(75)과 20/17/13/8/7(65)로 갈린다', () {
+    const aip = {1: 31, 2: 26, 3: 20, 4: 12, 5: 11};
+    // 실제 게이트가 쓰는 값: 23.25·19.50·15.00·9.00·8.25 → floor 합 74,
+    // 잔여 한 자리가 소수부 .50인 D2로 간다.
+    final live = allocateByWeight(aip, 75);
+    expect(live.values.fold(0, (s, v) => s + v), 75);
+    expect(live, {1: 23, 2: 20, 3: 15, 4: 9, 5: 8});
+    // ⚠️ D3이 **정확히 15**라 Task 하나(15문항)로 간신히 충족된다.
+    expect(live[3], 15);
+    // 65를 쓰면 이렇게 달라진다(20.15·16.90·13.00·7.80·7.15 → D2·D4가 잔여를 받는다).
+    final wrongN = allocateByWeight(aip, 65);
+    expect(wrongN, {1: 20, 2: 17, 3: 13, 4: 8, 5: 7});
+    expect(wrongN, isNot(live));
+  });
+
   test('allocateByWeight: DEA 공식 비중을 65문항 연습 세트에 적용하면 22/17/14/12', () {
     final a = allocateByWeight({1: 34, 2: 26, 3: 22, 4: 18}, 65);
     expect(a.values.fold(0, (s, v) => s + v), 65);

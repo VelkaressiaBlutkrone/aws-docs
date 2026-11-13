@@ -55,6 +55,25 @@ export const CERTS = {
     ],
     flipAllowlist: { file: 'test/aif_questions_test.dart', symbol: 'flipApprovedTaskIds' },
   },
+  // AIP-C01은 **학습문서보다도 먼저** 등록했다(2026-11-13, Phase 2 선결 P-04).
+  // AIF·SCS와 같은 이유다 — 허용 목록이 없으면 사람의 첫 flip이 반드시 레드로 끝난다.
+  // ⚠️ `tests`에 `aip_doc_format_test.dart`를 적지 않았다: **그 파일이 아직 없고**
+  // 없는 파일을 적으면 `review.test.mjs`의 「tests에 적힌 파일이 실재한다」가 레드다.
+  // 학습문서 배치가 만들면 `flipTestFiles()`가 `test/aip_*_test.dart`를 디렉터리에서
+  // 유도하므로 이 목록을 늘리지 않아도 flip이 함께 돌린다(2026-11-13 신설).
+  // ⚠️ `assets/content/aip/`는 비어 있다(`.gitkeep`만) — `review.test.mjs`가
+  // `readdirSync(cert.dir)`를 돌려서 디렉터리 자체는 있어야 한다.
+  aip: {
+    dir: 'assets/content/aip',
+    label: 'AIP-C01',
+    domains: 5, // ⚠️ SOA·AIF에 이어 세 번째 5도메인 자격증이다(SCS는 6개)
+    tests: [
+      'test/aip_questions_test.dart',
+      'test/aip_guide_sync_test.dart',
+      'test/content_index_test.dart',
+    ],
+    flipAllowlist: { file: 'test/aip_questions_test.dart', symbol: 'flipApprovedTaskIds' },
+  },
   // SCS-C03도 학습문서 16편이 들어온 뒤, **문항 저작 전에** 등록했다(2026-11-09).
   // AIF와 같은 이유다 — 허용 목록이 없으면 사람의 첫 flip이 반드시 레드로 끝난다.
   // ⚠️ 2026-11-09 도메인 1 첫 문항 배치에서 `review.test.mjs`의 `preAuthoring`

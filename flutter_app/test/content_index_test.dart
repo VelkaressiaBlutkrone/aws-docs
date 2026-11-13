@@ -214,7 +214,11 @@ void main() {
   // 옛 `examIsBalanced`/`certExamIsBalanced`(전 도메인 ≥1) 테스트는 함수와 함께
   // 2026-10-20에 제거했다. 게이트는 아래 weighted capacity가 전담하며, 편향
   // 방지는 "도메인별 필요 수량"이 담당한다(HANDOFF.md §0-2026-10-20).
-  group('weighted capacity readiness: 공식 비중을 앱의 65문항 연습 세트에 적용', () {
+  // ⚠️ 연습 세트 크기는 **자격증마다 다르다** — 일곱 자격증은 `50 + 15 = 65`인데
+// **AIP-C01 은 `scored 65 + unscored 10 = 75`**다(2026-11-13 여덟 가이드 전수 실측).
+// 아래 동기화 루프가 `practiceQuestionCount == scored + unscored` 를 단정하므로,
+// 새 자격증을 넣을 때 다른 줄을 베껴 65를 쓰면 이 루프가 먼저 알려 준다.
+  group('weighted capacity readiness: 공식 비중을 앱의 연습 세트에 적용', () {
     test('CLF-C02는 현재 검증 문항으로 통합 모의고사 ready', () {
       final s = examWeightedCapacityStatus('CLF-C02');
       expect(s.hasPolicy, isTrue);
@@ -454,6 +458,7 @@ void main() {
             'DEA-C01',
             'AIF-C01',
             'SCS-C03',
+            'AIP-C01',
           },
           reason: 'readiness 정책을 추가·삭제했으면 이 테스트의 대조 목록도 맞춘다');
       for (final code in kExamReadinessRequirements.keys) {
