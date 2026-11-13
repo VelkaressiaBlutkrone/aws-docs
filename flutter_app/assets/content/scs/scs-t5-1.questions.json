@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q5",
@@ -143,7 +143,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q6",
@@ -171,7 +171,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q7",
@@ -199,7 +199,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q8",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/create-interface-endpoint.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q9",
@@ -259,7 +259,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/client-authentication.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q10",
@@ -291,7 +291,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q11",
@@ -323,7 +323,7 @@
           "url": "https://docs.aws.amazon.com/eks/latest/best-practices/network-security.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q12",
@@ -351,7 +351,7 @@
           "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data-protection.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q13",
@@ -379,7 +379,7 @@
           "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-data-encryption-options.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q14",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-data-encryption-options.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-1-q15",
@@ -435,7 +435,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
