@@ -81,11 +81,22 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 
 ### 다음
 
-**D1 은 15/10 으로 충족**이고 통합·약점 모의고사는 **D2~D6 각 Task 하나씩 5건**을 더 flip 해야 열린다(필요치 10·9·12·13·12·9 이고 한 Task 가 15문항이다). 사람이 돌릴 명령은 어느 디렉터리에서나 같다:
+같은 날 검수자가 **`aif-t1-1` 과 `scs-t2-1` 을 더 flip 했고 둘 다 녹색으로 끝났다** — ⭐ **이 배치의 `flipTestFiles()` 가 바로 값을 했다.** 도구가 AIF 가드 **7파일**(그중 `aif_p1b_a4_fix_test` 가 이 배치에서 걷어낸 `aif-t4-1-q11` 단정을 갖고 있던 파일이다)과 SCS 가드 **8파일**을 돌려 279·294 통과로 끝났다. **수선 전이라면 AIF 쪽이 그 자리에서 레드였다.**
+
+게이트 현황(필요치는 공식 비중에서 유도되고 한 Task 는 15문항이다):
+
+| 자격증 | 필요치 | 충족된 도메인 | 남은 flip |
+|---|---|---|---:|
+| **SCS-C03** | 10·9·12·13·12·9 | **D1 15/10 · D2 15/9** | D3~D6 각 1 Task = **4건** |
+| **AIF-C01** | 13·16·18·9·9 | **D1 15/13** | D2 2 · D3 2 · D4 1 · D5 1 = **6건** |
+
+사람이 돌릴 명령은 어느 디렉터리에서나 같다(⚠️ `review.mjs` 는 `APP_DIR` 를 자기 위치에서 유도하고 `execSync` 에 `cwd: APP_DIR` 를 넘기므로 **cwd 와 무관**하다):
 
 ```sh
-node D:/workspace/awc-docs/flutter_app/tool/review.mjs flip scs scs-t2-1
+node D:/workspace/awc-docs/flutter_app/tool/review.mjs flip scs scs-t3-1
 ```
+
+⚠️⚠️ **오디오 발행은 승인이 먼저다** — `publish_audio.py clf-t3-8 --verify` 가 `[skip] reviewStatus=needs_human_review (approved만 발행)` 뒤에 **`[publish] OK` 를 찍는다.** 건너뛸 때도 성공으로 보이는 그 동작은 메모리 `audio-r2-hosting` 에 적힌 함정이고, **아무 것도 올라가지 않았다.** 순서는 **사람의 청취 → `script.json`·`audio_meta.json` 의 `reviewStatus` 를 `approved` 로 + `content_index` 의 `audioApproved: true`·`audioSha8` → 발행**이다(동기화 테스트가 그 셋을 묶는다).
 
 ## 0-2026-11-13. 완료: **AIP-C01 Phase 1 조사** — 「콘텐츠 0 자격증」 세 번째 착수 (2026-11-13)
 
