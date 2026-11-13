@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/control-behavior.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/proactive-controls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q5",
@@ -147,7 +147,7 @@
           "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/controls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q6",
@@ -175,7 +175,7 @@
           "url": "https://docs.aws.amazon.com/controltower/latest/userguide/drift.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q7",
@@ -203,7 +203,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q8",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q9",
@@ -259,7 +259,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q10",
@@ -287,7 +287,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q11",
@@ -315,7 +315,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q12",
@@ -343,7 +343,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q13",
@@ -371,7 +371,7 @@
           "url": "https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q14",
@@ -399,7 +399,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-1-q15",
@@ -427,7 +427,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
