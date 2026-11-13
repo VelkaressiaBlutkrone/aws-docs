@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q5",
@@ -143,7 +143,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q6",
@@ -171,7 +171,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q7",
@@ -203,7 +203,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q8",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q9",
@@ -259,7 +259,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q10",
@@ -291,7 +291,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/ShareObjectPreSignedURL.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q11",
@@ -319,7 +319,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q12",
@@ -347,7 +347,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q13",
@@ -375,7 +375,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q14",
@@ -407,7 +407,7 @@
           "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t4-1-q15",
@@ -435,7 +435,7 @@
           "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
