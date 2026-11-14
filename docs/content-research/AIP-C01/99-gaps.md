@@ -146,6 +146,22 @@ P-01에서 읽고, **가르치는 층에서 드는 것만** 상태를 병기한�
   `2.1.7`·`2.5.5`·`1.5.6`). AIF의 `Amazon Q`(개정 표에만 있고 본문에 없어 **정답 금지** 판정)와는
   상황이 다르다 — **출제 가능으로 보되 P-03에서 공식 문서 실재를 먼저 확인한다.**
 
+#### ✅ 2026-11-14 측정 — 셋의 결론이 갈렸다 (정본은 [94](94-agentic-mcp-tools.md) §2)
+
+| 이름 | 측정 | 판정 |
+|---|---|---|
+| **`Strands Agents`** | AgentCore 개발자 안내서에 전용 페이지 셋(`supported-frameworks-strands` · `strands-sdk-memory` · `code-interpreter-using-strands`) + ⭐ `harness.html`이 **`the open-source agent framework from AWS`**로 귀속 + `strandsagents.com/latest/` `200 r=0` | ✅ **출제 가능** |
+| **`MCP`** | AgentCore TOC에 전용 페이지 다수(`MCP protocol contract`·`Deploy MCP servers`·`Stateful MCP features`·`MCP targets`·`MCP sessions` 등) | ✅ **출제 가능** |
+| **`AWS Agent Squad`** | `docs.aws.amazon.com/agent-squad/`·`aws.amazon.com/agent-squad/` **둘 다 `404 r=0`** · AgentCore TOC `squad` **0건**(대조군 `Strands Agents` 2건) · 문서 사이트 **404** · `awslabs/agent-squad` → **`2FastLabs/agent-squad`** 리다이렉트 · 이름을 드는 AWS 쪽 근거는 **편집 페이지 하나** | ⚠️ **패턴만 — D-14** |
+
+⚠️⚠️ **Agent Squad는 「문서의 부재」까지만 측정됐다.** 「AWS 제품이 아니다」로 단정하지 않고
+(AWS 편집 페이지가 지금도 `an AWS Labs framework`로 적는다), **GitHub 리다이렉트를 아카이브로
+읽지도 않는다**(`archived` 문구 0건 · GitHub은 공식 문서가 아니다). 처리는 **D-14**다.
+
+⚠️ 그리고 **AgentCore의 공식 프레임워크 목록 둘에 Agent Squad가 없다** — 평가 지원 7종
+(Strands Agents·LangGraph·OpenAI Agents·Vercel AI SDK·LlamaIndex·Google ADK·Claude Agent SDK) ·
+Gateway 호환 4종(CrewAI·LangGraph·LlamaIndex·Strands Agents).
+
 ### (옮김) G-10 원문 — 측정 전 기록
 
 AIF-C01은 `Amazon Quick`만 있었고(AIF 95 §3.1 — Quick Sight는 Quick **안의 기능**),
@@ -250,3 +266,96 @@ P-02 가드 1차 초안에서 Task 제목 20줄을 손으로 적었고 **17개�
 ⚠️ 「범위에 해당하지 않는 작업」은 **모델 개발·훈련 / 고급 ML 기술 / 데이터 엔지니어링·특성 추출**
 셋뿐이므로, **일반 개발 주제를 범위 밖으로 다루면 안 된다.** 다만 **FM과 엮이는 축으로만** 출제한다
 (가이드의 모든 기술이 FM·GenAI 맥락으로 쓰여 있다).
+
+### ⚠️⚠️ G-24. `Agents Classic` 신규 고객 차단일이 **집계표와 전용 페이지에서 다르다**
+
+- AWS Lifecycle Changes 유지 관리 표: **2026-06-30**(G-08 표).
+- 전용 페이지 `agents-classic-maintenance-mode.html` 첫 문단:
+  **`will no longer be open to new customers starting on July 30, 2026`**.
+
+레포 규율(**집계표보다 서비스 전용 페이지가 정본**)대로 **2026-07-30**을 본문 근거로 쓰고,
+⛔ **날짜 자체는 묻지 않는다.** 상태 **사실**(신규 고객에게 열려 있지 않다)만 쓴다.
+⚠️ 그리고 트리거는 **`Agents Classic`**으로 좁힌다 — 같은 페이지가 `Amazon Bedrock continues to be
+fully supported`와 **기존 모델·Knowledge Bases·Guardrails는 영향받지 않는다**를 명시한다(D-13).
+
+### ⚠️ G-25. `ReAct`라는 낱말이 docs-proper에 있는지 확정하지 못했다
+
+`기술 2.1.2`가 「**ReAct 패턴** 및 생각의 사슬 추론」으로 적는다. 측정(94 §9-1):
+
+- Agentic AI Lens가 쓰는 표현은 **`perceive-reason-act loop`**(`AGENTPERF02-BP01`)와
+  `reasoning loop`·`reflection pattern`(`AGENTCOST01-BP01`)이다.
+- `ReAct`를 **논문까지 인용하는 것은 AWS 오픈소스 블로그**다(문서가 아니다).
+- ⛔ **전수 탐색이 아니므로 「docs에 0건」으로 단정하지 않는다**(「목록에 없다 ≠ 없다」).
+- ✅ 처리: **낱말이 아니라 동작을 묻는다** — 추론·행동이 번갈아 일어나는 루프, 반복 상한,
+  신뢰도 기반 조기 종료, 재시도 전략. 전부 docs-proper에 있다.
+
+### ⚠️ G-26. `Amazon Bedrock Prompt Flows` → `Flows` **개명 여부**를 측정으로 가를 수 없다
+
+`기술 2.5.2`는 `Amazon Bedrock Prompt Flows`로 적는데 현행 페이지 제목은
+**`Amazon Bedrock Flows`**이고 Bedrock 사용자 안내서 TOC에 `prompt flow` 제목이 **0건**이다
+(대조군: `flow`를 담은 항목 **57건**).
+
+- ⚠️⚠️ 그런데 `prompt-flows.html`의 신호는 **없는 슬러그와 똑같다**(`200 r=1` → 가이드 인덱스,
+  2,257바이트 — 대조군 `zz-bogus-control.html`도 같다). 「이름이 바뀌었다」와 「그 슬러그가
+  애초에 없었다」를 **이 측정으로 가를 수 없다.**
+- ✅ 적을 수 있는 것: **현행 공식 표기는 `Amazon Bedrock Flows`**이고 TOC에 구 표기가 없다.
+  ⛔ **개명을 사실로 적지 않고, 개명 여부를 묻지 않는다.**
+
+### ⚠️ G-27. MCP 서버 호스팅의 `Lambda ↔ ECS` 서열이 **블로그에만 있다**
+
+`기술 2.1.7`은 「경량 스테이트리스 MCP 서버에 **Lambda**, 복잡한 도구를 제공하는 MCP 서버에
+**Amazon ECS**」로 적는다.
+
+- docs-proper가 적는 경로는 **AgentCore Runtime 호스팅**(직접 코드 배포 또는 **ARM64** 컨테이너)과
+  **Gateway의 MCP 서버 타깃·Lambda 타깃**이다.
+- 세 경로를 가르는 서술(Lambda=경량·버스티 / AgentCore=완전관리 / **ECS on Fargate=런타임·
+  네트워킹·연결 수명 통제**)은 **AWS Containers 블로그**에 있다.
+- ⛔ **블로그 전용 서열·용례는 묻지 않는다.** 문항은 docs-proper 사실로 쓴다(94 §5-3).
+
+### ✅ G-28. (다른 자격증 갭 해소) AIF 트랙의 **Cedar/Dogwood 어긋남**은 현행 페이지에서 갈리지 않는다
+
+AIF-C01 트랙이 「AgentCore 정책 언어가 Cedar/Dogwood로 어긋난다 → 단정하지 않는다」로 남긴 자리인데,
+2026-11-14 현행 `policy.html`은 **둘을 함께** 적는다 — 정책은 **Cedar**로 구성하고,
+**`Dogwood`로도 저작할 수 있다**(입력 기반 + **세션 인식 시간 조건** + **정보 공급자**(Guardrails가
+내는 점수)를 한 정책 안에서 조합). 즉 **어긋남이 아니라 둘 다 지원**이다.
+
+⚠️ 그래도 **정책 언어의 개수나 「어느 쪽이 기본인가」를 묻지 않는다** — 문서가 이 축을 개정 중일
+수 있고, 이 자격증이 묻는 것은 **정책이 게이트웨이에서 트래픽 시점에 평가된다**는 성질이다(94 §8-1).
+
+### ⚠️⚠️ G-29. `기술 5.1.1`이 드는 **「유창성」에 대응하는 내장 지표가 없다**
+
+가이드는 품질 지표로 「관련성, 사실적 정확성, 일관성 및 **유창성**」 넷을 드는데, 측정(93 §3-4):
+
+| 가이드의 지표 | 공식 내장 지표 |
+|---|---|
+| 관련성 | ✅ `Builtin.Relevance` |
+| 사실적 정확성 | ✅ `Builtin.Correctness`(+ `Builtin.Faithfulness`) |
+| 일관성 | ✅ `Builtin.Coherence` |
+| **유창성** | ⚠️ **판정 내장 지표 11종에 없고 자동 평가 지표 셋(정확도·강건성·독성)에도 없다** |
+
+- ⭐ **대조군을 통과한 뒤의 판정이다** — 같은 표에서 앞의 셋은 그대로 찾힌다.
+- ✅ 처리: 그 자리는 **사용자 지정 지표**(판정 프롬프트를 직접 쓰는 경로)로 가르친다.
+  AgentCore 쪽에는 **`Conciseness`** 같은 다른 축이 있다.
+- ⛔ **「공식에 유창성 지표가 없다」를 문항의 정답으로도 쓰지 않는다** — 부재는 개정으로 바뀐다.
+
+### ⚠️⚠️ G-30. AgentCore 내장 평가자 **개수가 공식 안에서 13 ↔ 17로 어긋난다**
+
+| 자리 | 적는 수 |
+|---|---|
+| Agentic AI Lens `AGENTOPS06-BP01`·`AGENTOPS06-BP02` | **`Thirteen built-in evaluators`** |
+| `prompt-templates-builtin.html` | **17개 열거**(세션 수준 2 + 트레이스 수준 11 + 도구 수준 4) |
+| `built-in-evaluators-overview.html` | **수를 적지 않는다** |
+
+- ⛔ **개수를 묻지 않는다.** 가르칠 것은 **세 수준으로 갈린다**는 성질과 **`Builtin.<이름>` ID 형식**이다.
+- ⭐ **AIF-C01 트랙의 기록이 정정된다** — AIF 노트는 「AgentCore 내장 평가자의 **13개와 ID 이름이
+  공식에서 사라졌다**」고 적었는데 2026-11-14 현재 **프롬프트 템플릿 페이지가 전부 열거**한다.
+  ⚠️⚠️ **부재는 영구적이지 않다 — 다른 트랙의 「사라졌다」 기록도 재측정 대상이다.**
+
+### ⚠️ G-31. Agentic AI Lens는 `Amazon Quick Suite`로 적는다 (D-11 보강)
+
+`AGENTOPS05-BP04`가 주간 KPI 보고 수단으로 **`Amazon Quick Suite`**를 든다. 시험 가이드 표기는
+`Amazon Quick`(기계 학습)·`Amazon Quick Sight`(분석) 두 항목이고(G-10), 제품 문서는 둘을
+**`AWS Quick`** 한 서비스로 묶는다.
+
+- ✅ **이름은 가이드 표기를 쓴다**(D-11). 공식 문서를 인용하는 자리에서만 문서 표기를 옮긴다.
+- ⛔ **세 표기의 포함 관계나 개수를 묻지 않는다.**
