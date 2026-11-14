@@ -546,6 +546,62 @@ void main() {
       reason: 'audioApproved/audioSha8 ↔ audio_meta 불일치:\n${issues.join('\n')}',
     );
   });
+
+  // ⚠️⚠️ 이 그룹은 **실제 라이브 결함**에서 생겼다 (2026-11-14, AIP 도메인 1 배치 1).
+  //
+  // `kContentIndex`에 AIP 엔트리 3건을 등재하고 학습문서 3편을 `assets/content/aip/`에
+  // 넣었는데 **`pubspec.yaml`에 그 디렉터리를 선언하지 않아** 빌드에 자산이 들어가지
+  // 않았다. 결과는 **라이브에서 세 문서가 404**이고, 앱은 **열 수 없는 문서를 목록에
+  // 보여 주는** 상태였다(main `0881bb2` 배포 뒤 라이브 실측으로 발견).
+  //
+  // ⚠️⚠️ **전 테스트가 초록이었다** — 기존 가드(`all_content_parse_test`·포맷 가드)는
+  // 전부 `File(...)`로 **파일 시스템**을 읽고, 자산 번들은 **`pubspec.yaml` 선언**이
+  // 정한다. 「파일이 있다」와 「앱이 읽을 수 있다」가 다른 사실이고, 그 사이를 재는
+  // 가드가 없었다. 여기서 그 둘을 맞댄다.
+  //
+  // ⚠️ `assets/content/dva/`가 선언되지 않은 것은 **정상**이다 — DVA는 아직
+  // `kContentIndex`에 등재되지 않았다(12월 전환 PR 몫). 그래서 이 가드는
+  // 「선언된 것이 전부 등재돼야 한다」가 아니라 **「등재된 것은 전부 선언돼야 한다」**
+  // 한 방향만 단정한다.
+  group('등재된 자격증의 콘텐츠 디렉터리가 pubspec 에 선언돼 있다', () {
+    Set<String> declaredContentDirs() {
+      final text = File('pubspec.yaml').readAsStringSync();
+      return RegExp(r'^\s*-\s*(assets/content/[A-Za-z0-9_-]+/)\s*$',
+              multiLine: true)
+          .allMatches(text)
+          .map((m) => m.group(1)!)
+          .toSet();
+    }
+
+    test('대조군: pubspec 에서 콘텐츠 디렉터리를 실제로 읽는다', () {
+      final dirs = declaredContentDirs();
+      // 탐지기가 0건을 돌려주면 아래 단정이 공허하게 통과한다.
+      expect(dirs.length, greaterThanOrEqualTo(5),
+          reason: 'pubspec 에서 읽은 콘텐츠 디렉터리 ${dirs.length}개 — '
+              '정규식이 선언 형식을 못 읽고 있다');
+      expect(dirs, contains('assets/content/clf/'),
+          reason: '알려진 양성(CLF)이 잡히지 않는다 — 탐지기를 먼저 고친다');
+    });
+
+    test('모든 등재 엔트리의 mdAsset·questionsAsset 디렉터리가 선언돼 있다', () {
+      final declared = declaredContentDirs();
+      final missing = <String>{};
+      for (final cert in kContentIndex.entries) {
+        for (final e in cert.value) {
+          for (final asset in [e.mdAsset, e.questionsAsset]) {
+            final i = asset.lastIndexOf('/');
+            if (i == -1) continue;
+            final dir = asset.substring(0, i + 1);
+            if (!declared.contains(dir)) missing.add('${cert.key} → $dir');
+          }
+        }
+      }
+      expect(missing, isEmpty,
+          reason: '등재는 됐는데 pubspec 에 선언되지 않은 콘텐츠 디렉터리가 있다 — '
+              '빌드에 자산이 들어가지 않아 **라이브에서 404**가 된다:\n'
+              '${missing.join('\n')}');
+    });
+  });
 }
 
 ContentEntry _e(int domain, int questionCount) => ContentEntry(
