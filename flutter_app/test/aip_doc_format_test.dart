@@ -38,11 +38,13 @@ void main() {
   // 하기 위해서다(SCS 도메인 3에서 네 편을 병렬로 쓰다 서술이 어긋난 선례).
   // 2026-11-14 도메인 3 배치 1 — 작업 3.1·3.2(막는 통제: Guardrails·Comprehend·Macie 공유).
   // 2026-11-14 도메인 3 배치 2 — 작업 3.3·3.4(증명하는 통제: Glue·CloudTrail·모델 카드·평가).
+  // 2026-11-15 도메인 4 배치 1 — 작업 4.1·4.2(비용·성능이 토큰·캐싱·배치·PT·오토 스케일링을 양쪽에서 인용한다). 남은 작업 4.3은 깊이 노트 `93` 축이라 배치 2다.
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
     'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
     'aip-t3-1', 'aip-t3-2', 'aip-t3-3', 'aip-t3-4',
+    'aip-t4-1', 'aip-t4-2',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -331,6 +333,49 @@ void main() {
     }
     expect(checked, greaterThanOrEqualTo(1),
         reason: '대조군: `Model Monitor`를 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+  test('`SageMaker Profiler`를 언급하면 지원 종료 상태를 함께 적는다', () {
+    // ⚠️⚠️ `기술 4.2.6`이 「프로파일링」을 요구하는데 **Amazon SageMaker Profiler** 는
+    // 공식 `profiler-availability-change.html`(2026-11-15 실측)이 End of support notice 로
+    // **2027년 6월 30일 지원 종료**와 **그 뒤 콘솔·리소스 접근 불가**를 적는다.
+    // 공식이 역량 매핑으로 대체를 지정한다 — 커널 수준은 **프레임워크 네이티브
+    // 프로파일러 + TensorBoard**, 시스템 수준은 **CloudWatch**다.
+    // ⚠️ 트리거를 `Profiler` 로 넓히면 **PyTorch Profiler·TensorFlow Profiler·
+    // TensorBoard Profiler 플러그인** 같은 대체 수단 서술이 전부 걸린다 —
+    // **제품 이름으로 좁힌다**(D-13).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('SageMaker Profiler')) continue;
+      checked++;
+      expect(text.contains('지원 종료'), isTrue,
+          reason: '$taskId: `SageMaker Profiler`를 적으면서 지원 종료 상태를 적지 '
+              '않았다 — 프로파일링의 현행 수단으로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `SageMaker Profiler`를 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('`지연 최적화` 추론을 언급하면 프리뷰 상태를 함께 적는다', () {
+    // ⚠️⚠️ `기술 4.2.1`이 「시간에 민감한 애플리케이션을 위한 지연 시간에 최적화된
+    // Amazon Bedrock 모델」을 드는데 공식 `latency-optimized-inference.html`
+    // (2026-11-15 실측) 첫 줄이 **`The Latency Optimized Inference feature is in
+    // preview release for Amazon Bedrock and is subject to change.`** 다.
+    // ⚠️ `Well-Architected Agent` 가드와 같은 계열이고, 트리거를 `최적화` 로 넓히면
+    // 이 도메인의 거의 모든 문장이 걸린다 — **기능 이름으로 좁힌다**(D-13).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('지연 최적화')) continue;
+      checked++;
+      expect(text.contains('프리뷰'), isTrue,
+          reason: '$taskId: `지연 최적화` 추론을 적으면서 프리뷰 상태를 적지 않았다 — '
+              '프로덕션 설계의 확정된 수단으로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `지연 최적화`를 언급하는 문서가 하나도 없다 — '
             '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
   });
 
