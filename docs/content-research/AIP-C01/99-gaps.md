@@ -394,3 +394,41 @@ Prompt Flows에서 **사전 정의된 공정성 지표**를 사용하여 체계�
   지표**로 올리고 **이상 탐지 알람**을 붙인다.
 - ⭐ 실제로 쓸 수 있는 공식 점수는 **문맥 근거 확인의 근거 점수·관련성 점수**이고
   **임계값으로 차단**까지 걸 수 있다.
+
+### ⚠️ G-35. `Amazon SageMaker Profiler`는 2027-06-30 지원 종료다
+
+`기술 4.2.6`이 「프롬프트 완성 패턴을 위한 API 호출 프로파일링」을 드는데, **훈련 쪽**
+프로파일링 수단인 `Amazon SageMaker Profiler`는 공식 End of support notice 로
+**2027년 6월 30일 지원 종료**이고 **그 뒤 Profiler 콘솔·리소스에 접근할 수 없다**
+(2026-11-15 실측 — `profiler-availability-change.html`).
+
+- ✅ 공식이 **역량 매핑**으로 대체를 지정한다 — 커널 추적·CPU/GPU 사용률·동기화 분석은
+  **PyTorch/TensorFlow Profiler + TensorBoard**, 시스템 리소스는 **CloudWatch**,
+  타임라인 시각화는 **TensorBoard Profiler 플러그인**이다.
+- ⛔ **날짜를 두 가지로 적지 않는다** — 노트 `96`의 lifecycle 집계표는
+  `sunset / June 30, 2026 / June 30, 2027`로 두 날짜를 적지만 **전용 페이지는 2027-06-30만**
+  적는다. 레포 규율대로 **서비스 전용 페이지를 정본**으로 쓴다.
+- ⚠️ 가드 트리거는 **`SageMaker Profiler`**로 좁힌다 — `Profiler`로 넓히면 대체 수단
+  서술(PyTorch Profiler 등)이 전부 걸린다.
+
+### ⚠️ G-36. 지연 최적화 추론은 프리뷰이고 쿼터 초과 시 조용히 표준으로 내려간다
+
+`latency-optimized-inference.html` 첫 줄이 **`The Latency Optimized Inference feature is in
+preview release for Amazon Bedrock and is subject to change.`**다.
+
+- ⚠️⚠️ **사용량 쿼터에 도달하면 표준 지연으로 서빙을 시도하고 그 요청은 표준 요율로 과금**된다
+  — 오류가 아니라 **조용한 하향**이다. 확인 경로는 **API 응답 · CloudTrail 로그**이고
+  CloudWatch 지표는 **`model-id+latency-optimized`** 아래에 있다.
+- ⚠️ **Llama 3.1 405B는 입출력 합계 11K 토큰까지**이고 초과하면 표준 모드로 폴백한다.
+- ✅ 가드는 **`지연 최적화` → 「프리뷰」**로 두고 트리거를 `최적화`로 넓히지 않는다
+  (이 도메인의 거의 모든 문장이 걸린다).
+
+### ⚠️ G-37. 검증 스크립트에 날짜를 리터럴로 박지 않는다
+
+저작 직후 구조 단정 스크립트가 `lastVerified: 2026-11-14`와 `(2026-11-14 확인)`을
+리터럴로 단정하고 있었고, **날이 바뀌자 멀쩡한 문서 2편을 FAIL 4건으로** 보고했다.
+
+- ✅ **프런트매터에서 날짜를 유도**해 「출처 절의 꼬리 날짜 == `lastVerified`」를 단정한다.
+  그것이 더 강한 불변식이기도 하다(둘이 어긋나는 것을 잡는다).
+- ⚠️ 레포의 **「상태 숫자를 테스트에 박으면 사람의 flip이 깨진다」**와 같은 계열이다 —
+  **바뀌는 값은 단정의 입력이 아니라 유도의 결과**로 둔다.

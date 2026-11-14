@@ -797,9 +797,9 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   // 🏁 도메인 2 전체(작업 2.1~2.5, 세 배치 — 배치 1은 깊이 노트 `94` 축) +
   // 🏁 도메인 3 전체(작업 3.1~3.4, 두 배치 — 배치 1 「막는 통제」·배치 2 「증명하는 통제」).
   //
-  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **15편**
-  // (도메인 1 전체 6 + 도메인 2 전체 5 + 도메인 3 전체 4)이다.
-  // 남은 것은 도메인 4(3)·5(2)다.
+  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **17편**
+  // (도메인 1 전체 6 + 도메인 2 전체 5 + 도메인 3 전체 4 + 도메인 4의 작업 4.1·4.2)이다.
+  // 남은 것은 도메인 4의 작업 4.3 + 도메인 5(2)다.
   // ⚠️⚠️ **등재는 세 곳을 함께 늘리는 일이다** — 여기 · `pubspec.yaml`의
   // `assets/content/<cert>/` 선언 · `test/aip_doc_format_test.dart`의 `aipTaskIds`.
   // 2026-11-14 배치 1이 pubspec 선언을 빠뜨려 **라이브에서 문서 3편이 404**였고
@@ -832,6 +832,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-2', title: '데이터 보안과 개인 정보 보호 제어 (네트워크 격리·세분화된 액세스·데이터 보존·PII 탐지·마스킹과 익명화)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-2.md', questionsAsset: 'assets/content/aip/aip-t3-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-3', title: 'AI 거버넌스와 규정 준수 메커니즘 (모델 카드·데이터 계보·조직 정책·지속적 모니터링)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-3.md', questionsAsset: 'assets/content/aip/aip-t3-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-4', title: '책임 있는 AI 원칙 구현 (투명성·추론 추적·공정성 평가·정책 준수)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-4.md', questionsAsset: 'assets/content/aip/aip-t3-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-1', title: '비용 최적화와 리소스 효율성 (토큰 효율성·모델 선택·처리량·지능형 캐싱)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-1.md', questionsAsset: 'assets/content/aip/aip-t4-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-2', title: '애플리케이션 성능 최적화 (지연 절충·검색 성능·처리량·파라미터·오토 스케일링·프로파일링)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-2.md', questionsAsset: 'assets/content/aip/aip-t4-2.questions.json', questionCount: 0),
   ],
 };
 
