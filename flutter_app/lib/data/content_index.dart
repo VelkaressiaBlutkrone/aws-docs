@@ -793,10 +793,14 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-2', title: '일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-2.md', questionsAsset: 'assets/content/scs/scs-t6-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-3', title: '규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-3.md', questionsAsset: 'assets/content/scs/scs-t6-3.questions.json', questionCount: 0),
   ],
-  // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 배치 1.
+  // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 배치 1·2(작업 1.1~1.6, 도메인 1 완료).
   //
-  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 작업 1.1~1.3 셋이다.
-  // 배치마다 여기와 `test/aip_doc_format_test.dart`의 `aipTaskIds`를 **함께** 늘린다.
+  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **도메인 1 전체**(작업 1.1~1.6)다.
+  // ⚠️⚠️ **등재는 세 곳을 함께 늘리는 일이다** — 여기 · `pubspec.yaml`의
+  // `assets/content/<cert>/` 선언 · `test/aip_doc_format_test.dart`의 `aipTaskIds`.
+  // 2026-11-14 배치 1이 pubspec 선언을 빠뜨려 **라이브에서 문서 3편이 404**였고
+  // 그때 전 테스트가 초록이었다(가드는 파일 시스템을 읽고 번들은 pubspec이 정한다).
+  // 지금은 `content_index_test`의 「등재 ↔ 선언」 가드가 그 짝을 기계로 묶는다.
   //
   // ⚠️ 문항은 아직 저작 전이라 `questionsAsset`이 가리키는 파일이 **없다**.
   // questionCount 0이면 `hasQuestions`가 false라 로더가 긁지 않고,
@@ -812,6 +816,9 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-1', title: '요구 사항 분석과 GenAI 솔루션 설계 (아키텍처 설계·개념 증명·표준화된 구성 요소)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-1.md', questionsAsset: 'assets/content/aip/aip-t1-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-2', title: 'FM 선택 및 구성 (평가와 선택·동적 전환·복원력·사용자 지정 배포와 수명 주기)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-2.md', questionsAsset: 'assets/content/aip/aip-t1-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-3', title: '데이터 검증과 처리 파이프라인 (품질 규칙·멀티모달 처리·입력 형식·입력 품질 개선)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-3.md', questionsAsset: 'assets/content/aip/aip-t1-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-4', title: '벡터 저장소 솔루션 설계와 구현 (아키텍처·메타데이터·대규모 성능·통합·데이터 유지 관리)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-4.md', questionsAsset: 'assets/content/aip/aip-t1-4.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-5', title: 'FM 증강을 위한 검색 메커니즘 설계 (청킹·임베딩·벡터 검색·하이브리드와 리랭킹·쿼리 처리·액세스)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-5.md', questionsAsset: 'assets/content/aip/aip-t1-5.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-6', title: '프롬프트 엔지니어링 전략과 거버넌스 (지침 프레임워크·대화 컨텍스트·버전과 감사·품질 보증·반복 개선·프롬프트 체인)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-6.md', questionsAsset: 'assets/content/aip/aip-t1-6.questions.json', questionCount: 0),
   ],
 };
 
