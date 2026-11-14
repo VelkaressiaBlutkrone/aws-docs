@@ -32,10 +32,12 @@ void main() {
   // 측정해 뒀다. 그 둘을 한 배치로 묶은 이유는 **같은 프레임워크를 양쪽에서 인용**하기
   // 때문이다(`기술 2.1.1`·`2.5.5`가 둘 다 Strands·Agent Squad를 든다) — SCS 도메인 3에서
   // 네 편을 병렬로 쓰다 서로 어긋난 서술이 같은 PR에 들어온 일이 있었다.
+  // 배치 2는 작업 **2.2·2.4**다(모델 서빙 + API 계층 — `2.5`와 API Gateway를 공유).
+  // 남은 **작업 2.3**은 서비스 집합이 완전히 달라(하이브리드·엣지·ID·CI/CD) 배치 3이다.
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
-    'aip-t2-1', 'aip-t2-5',
+    'aip-t2-1', 'aip-t2-2', 'aip-t2-4', 'aip-t2-5',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -236,6 +238,36 @@ void main() {
     }
     expect(checked, greaterThanOrEqualTo(1),
         reason: '대조군: `Agents Classic`을 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('사용자 지정 모델 + 프로비저닝 처리량을 다루면 경로가 둘임을 적는다', () {
+    // ⚠️⚠️⚠️ AIF 트랙이 **세 번 고쳤다고 보고한 뒤에도 라이브에 남아 있던** 오류다
+    // (99-gaps G-19 → G-37 → G-46). 공식 자신이 갈려 있어서 새어 나간다:
+    //   · `prov-throughput.html`(2026-11-14 실측) — `If you customized a model, you
+    //     must purchase Provisioned Throughput to be able to use it.`
+    //   · `model-customization-use.html` — 경로가 **둘**(PT 구매 / 온디맨드 배포)
+    // AIF 판 가드는 **리터럴 금지**였고 「프로비저닝**된** 처리량」의 「된」 한 글자와
+    // 어미·조사로 뚫렸다. 그래서 AIP 판은 **금지가 아니라 요구**로 뒤집는다 —
+    // 두 주제를 함께 다루는 문서는 **두 경로를 적어야** 한다. 어형에 둔감하고,
+    // 옛 문구를 인용해 정정하는 줄을 죽이지 않는다(그 줄도 「둘」을 함께 적는다).
+    // ⚠️ 트리거를 `프로비저닝`만으로 넓히면 **서버리스의 프로비저닝된 동시성**과
+    // **PT 일반 서술**까지 걸린다 — `사용자 지정 모델`과의 **동시 등장**으로 좁힌다.
+    final twoPaths = RegExp(r'(경로는?\s*\*{0,2}둘|둘\*{0,2}입니다|거짓입니다)');
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null) continue;
+      if (!text.contains('사용자 지정 모델')) continue;
+      if (!text.contains('프로비저닝') || !text.contains('처리량')) continue;
+      checked++;
+      expect(twoPaths.hasMatch(text), isTrue,
+          reason: '$taskId: 사용자 지정 모델과 프로비저닝 처리량을 함께 다루면서 '
+              '추론 경로가 **둘**(PT 구매 / 온디맨드 배포)임을 적지 않았다 — '
+              '공식 PT 페이지는 아직 「PT를 사야 쓸 수 있다」고 적어 문서 사이가 갈린다');
+    }
+    expect(checked, greaterThanOrEqualTo(2),
+        reason: '대조군: 두 주제를 함께 다루는 문서가 2편 미만이다 — '
             '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
   });
 
