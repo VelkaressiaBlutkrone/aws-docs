@@ -793,9 +793,11 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-2', title: '일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-2.md', questionsAsset: 'assets/content/scs/scs-t6-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-3', title: '규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-3.md', questionsAsset: 'assets/content/scs/scs-t6-3.questions.json', questionCount: 0),
   ],
-  // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 배치 1·2(작업 1.1~1.6, 도메인 1 완료).
+  // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 전체(작업 1.1~1.6) +
+  // 도메인 2 배치 1(작업 2.1·2.5 — 깊이 노트 `94`가 측정해 둔 축).
   //
-  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **도메인 1 전체**(작업 1.1~1.6)다.
+  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **8편**이다.
+  // ⚠️ 도메인 2의 남은 셋(작업 2.2·2.3·2.4)은 깊이 노트가 없어 새로 측정하는 배치 2다.
   // ⚠️⚠️ **등재는 세 곳을 함께 늘리는 일이다** — 여기 · `pubspec.yaml`의
   // `assets/content/<cert>/` 선언 · `test/aip_doc_format_test.dart`의 `aipTaskIds`.
   // 2026-11-14 배치 1이 pubspec 선언을 빠뜨려 **라이브에서 문서 3편이 404**였고
@@ -819,6 +821,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-4', title: '벡터 저장소 솔루션 설계와 구현 (아키텍처·메타데이터·대규모 성능·통합·데이터 유지 관리)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-4.md', questionsAsset: 'assets/content/aip/aip-t1-4.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-5', title: 'FM 증강을 위한 검색 메커니즘 설계 (청킹·임베딩·벡터 검색·하이브리드와 리랭킹·쿼리 처리·액세스)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-5.md', questionsAsset: 'assets/content/aip/aip-t1-5.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-6', title: '프롬프트 엔지니어링 전략과 거버넌스 (지침 프레임워크·대화 컨텍스트·버전과 감사·품질 보증·반복 개선·프롬프트 체인)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-6.md', questionsAsset: 'assets/content/aip/aip-t1-6.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-1', title: '에이전틱 AI 솔루션과 도구 통합 (메모리와 상태·구조화된 추론·제어된 동작·모델 조정·인간 증강·도구 통합·MCP 서버)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-1.md', questionsAsset: 'assets/content/aip/aip-t2-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-5', title: '애플리케이션 통합 패턴과 개발 도구 (API 인터페이스·접근 가능한 UI·비즈니스 시스템·개발자 생산성·오케스트레이션·문제 해결)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-5.md', questionsAsset: 'assets/content/aip/aip-t2-5.questions.json', questionCount: 0),
   ],
 };
 
