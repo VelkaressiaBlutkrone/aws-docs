@@ -794,11 +794,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-3', title: '규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-3.md', questionsAsset: 'assets/content/scs/scs-t6-3.questions.json', questionCount: 0),
   ],
   // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 전체(작업 1.1~1.6) +
-  // 도메인 2 배치 1(작업 2.1·2.5 — 깊이 노트 `94`가 측정해 둔 축).
+  // 🏁 도메인 2 전체(작업 2.1~2.5, 세 배치 — 배치 1은 깊이 노트 `94` 축).
   //
-  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **10편**이다.
-  // ⚠️ 도메인 2의 남은 하나는 **작업 2.3**(엔터프라이즈 통합)이고 서비스 집합이
-  // 완전히 달라(하이브리드·엣지·ID·CI/CD) 배치 3으로 갈랐다.
+  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **11편**
+  // (도메인 1 전체 6 + 도메인 2 전체 5)이다. 남은 것은 도메인 3(4)·4(3)·5(2)다.
   // ⚠️⚠️ **등재는 세 곳을 함께 늘리는 일이다** — 여기 · `pubspec.yaml`의
   // `assets/content/<cert>/` 선언 · `test/aip_doc_format_test.dart`의 `aipTaskIds`.
   // 2026-11-14 배치 1이 pubspec 선언을 빠뜨려 **라이브에서 문서 3편이 404**였고
@@ -824,6 +823,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-6', title: '프롬프트 엔지니어링 전략과 거버넌스 (지침 프레임워크·대화 컨텍스트·버전과 감사·품질 보증·반복 개선·프롬프트 체인)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-6.md', questionsAsset: 'assets/content/aip/aip-t1-6.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-1', title: '에이전틱 AI 솔루션과 도구 통합 (메모리와 상태·구조화된 추론·제어된 동작·모델 조정·인간 증강·도구 통합·MCP 서버)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-1.md', questionsAsset: 'assets/content/aip/aip-t2-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-2', title: '모델 배포 전략 (배포 경로 선택·LLM 고유의 배포 문제·성능과 리소스의 균형)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-2.md', questionsAsset: 'assets/content/aip/aip-t2-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-3', title: '엔터프라이즈 통합 아키텍처 (연결 솔루션·기존 앱 개선·보안 액세스·환경 간 배포·CI/CD와 GenAI 게이트웨이)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-3.md', questionsAsset: 'assets/content/aip/aip-t2-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-4', title: 'FM API 통합 (동기와 비동기·요청 검증·스트리밍과 WebSocket·복원력·모델 라우팅)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-4.md', questionsAsset: 'assets/content/aip/aip-t2-4.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-5', title: '애플리케이션 통합 패턴과 개발 도구 (API 인터페이스·접근 가능한 UI·비즈니스 시스템·개발자 생산성·오케스트레이션·문제 해결)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-5.md', questionsAsset: 'assets/content/aip/aip-t2-5.questions.json', questionCount: 0),
   ],
