@@ -26,10 +26,16 @@ import 'package:flutter_test/flutter_test.dart';
 /// 문항 배치에서는 그쪽 `authoredTaskIds`를 늘린다 — 두 파일의 목록이 **다른 것을
 /// 센다**(이 파일은 학습문서, 그 파일은 문항).
 void main() {
-  // 2026-11-14 도메인 1 배치 1·2 — 작업 1.1~1.6(도메인 1 완료).
+  // 2026-11-14 도메인 1 전체(작업 1.1~1.6) + 도메인 2 배치 1(작업 2.1·2.5).
+  //
+  // ⚠️ 도메인 2는 기술이 **25개**(7·3·5·4·6)이고 깊이 노트 `94`가 **2.1(7)·2.5(6)만**
+  // 측정해 뒀다. 그 둘을 한 배치로 묶은 이유는 **같은 프레임워크를 양쪽에서 인용**하기
+  // 때문이다(`기술 2.1.1`·`2.5.5`가 둘 다 Strands·Agent Squad를 든다) — SCS 도메인 3에서
+  // 네 편을 병렬로 쓰다 서로 어긋난 서술이 같은 PR에 들어온 일이 있었다.
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
+    'aip-t2-1', 'aip-t2-5',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -206,6 +212,55 @@ void main() {
           reason: '$taskId: `Well-Architected Agent`를 적으면서 프리뷰임을 '
               '적지 않았다 — 시험이 묻는 쪽은 Tool이다');
     }
+  });
+
+  test('`Agents Classic`을 언급하는 문서는 신규 고객 상태를 함께 적는다', () {
+    // `기술 2.1.1`·`2.5.5`가 에이전트 오케스트레이션을 묻는 자리라 저작자가
+    // `Amazon Bedrock Agents`를 그대로 쓰기 쉽다. 공식 전용 페이지 첫 문단이
+    // `Amazon Bedrock Agents (launched November 2023) is now Amazon Bedrock Agents
+    // Classic and will no longer be open to new customers starting on July 30, 2026.`
+    // 이므로 **새 설계의 답으로 가리키면 거짓**이 된다(94 §4).
+    // ⚠️ 트리거를 `Bedrock`으로 넓히면 안 된다 — 같은 페이지 Note가
+    // `Amazon Bedrock continues to be fully supported`와 기존 모델·지식 베이스·
+    // Guardrails는 영향받지 않는다를 명시한다. 대상은 **`Agents Classic`뿐**이다(D-13).
+    // ⚠️ **날짜는 요구하지 않는다** — 집계표(2026-06-30)와 전용 페이지(2026-07-30)가
+    // 어긋나 있어 묻지 않는 쪽으로 분류했다(99-gaps **G-24**).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('Agents Classic')) continue;
+      checked++;
+      expect(text.contains('신규 고객'), isTrue,
+          reason: '$taskId: `Agents Classic`을 적으면서 신규 고객에게 열려 있지 '
+              '않다는 상태를 적지 않았다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `Agents Classic`을 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('`Q Developer` IDE 플러그인을 언급하면 지원 종료와 대안을 함께 적는다', () {
+    // `기술 2.5.4`가 「코드 생성 및 리팩터링에 Amazon Q Developer 사용」으로 적지만
+    // 공식 개요 페이지가 **IDE 플러그인 2027-04-30 지원 종료**와
+    // `For capabilities similar to Amazon Q Developer IDE plugins, explore Kiro`를
+    // 적는다(96 §6-3 · 99-gaps **G-15**·**G-16**).
+    // ⚠️ **콘솔 쪽은 개명됐을 뿐이라** 트리거를 `Q Developer`로 넓히면 멀쩡한 서술이
+    // 걸린다 — **`IDE 플러그인`이라는 기능 이름으로 좁힌다**(D-13).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null) continue;
+      if (!text.contains('Q Developer') || !text.contains('IDE 플러그인')) continue;
+      checked++;
+      expect(text.contains('지원 종료'), isTrue,
+          reason: '$taskId: Q Developer IDE 플러그인을 적으면서 지원 종료를 '
+              '적지 않았다 — 대체된 쪽을 정답으로 가르치게 된다');
+      expect(text.contains('Kiro'), isTrue,
+          reason: '$taskId: 공식이 드는 대안 `Kiro`를 적지 않았다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: Q Developer IDE 플러그인을 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
   });
 
   test('용어는 공식 표기 `GenAI`·`FM`을 쓰고 「생성형 AI」를 사실 서술에 쓰지 않는다', () {
