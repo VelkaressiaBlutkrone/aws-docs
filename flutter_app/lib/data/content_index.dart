@@ -793,6 +793,26 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-2', title: '일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-2.md', questionsAsset: 'assets/content/scs/scs-t6-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-3', title: '규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-3.md', questionsAsset: 'assets/content/scs/scs-t6-3.questions.json', questionCount: 0),
   ],
+  // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 배치 1.
+  //
+  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 작업 1.1~1.3 셋이다.
+  // 배치마다 여기와 `test/aip_doc_format_test.dart`의 `aipTaskIds`를 **함께** 늘린다.
+  //
+  // ⚠️ 문항은 아직 저작 전이라 `questionsAsset`이 가리키는 파일이 **없다**.
+  // questionCount 0이면 `hasQuestions`가 false라 로더가 긁지 않고,
+  // content_index_test의 동적 불변식도 `existsSync`로 처리해 통과한다
+  // (MLA·DEA·AIF·SCS가 같은 순서로 들어왔다). 문항 배치에서 파일과 수를 함께 채운다.
+  //
+  // ⚠️⚠️ 이 자격증만 연습 세트가 **75문항**(나머지 일곱은 65)이라 readiness 배분이
+  // **23·20·15·9·8**이다 — 위 `kExamReadinessRequirements`의 AIP 항목 주석을 보라.
+  //
+  // 저작 결정·가이드 실측의 정본은 docs/content-research/AIP-C01/ 8편이고,
+  // 깊이 노트는 `95`(RAG·벡터)·`94`(에이전틱·MCP·도구)·`93`(평가·관찰성)이다.
+  'AIP-C01': [
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-1', title: '요구 사항 분석과 GenAI 솔루션 설계 (아키텍처 설계·개념 증명·표준화된 구성 요소)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-1.md', questionsAsset: 'assets/content/aip/aip-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-2', title: 'FM 선택 및 구성 (평가와 선택·동적 전환·복원력·사용자 지정 배포와 수명 주기)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-2.md', questionsAsset: 'assets/content/aip/aip-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-3', title: '데이터 검증과 처리 파이프라인 (품질 규칙·멀티모달 처리·입력 형식·입력 품질 개선)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-3.md', questionsAsset: 'assets/content/aip/aip-t1-3.questions.json', questionCount: 0),
+  ],
 };
 
 /// 테스트 전용 콘텐츠 인덱스 덮어쓰기(자격증별). 앱 경로에서는 항상 null이다.
