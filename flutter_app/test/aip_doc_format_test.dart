@@ -36,10 +36,13 @@ void main() {
   // 배치 2(2.2·2.4, 모델 서빙 + API 계층) · 배치 3(2.3, 하이브리드·엣지·ID·CI/CD).
   // 서비스 집합으로 가른 이유는 **같은 서비스를 인용하는 편을 한 PR에 묶어 교차 대조**
   // 하기 위해서다(SCS 도메인 3에서 네 편을 병렬로 쓰다 서술이 어긋난 선례).
+  // 2026-11-14 도메인 3 배치 1 — 작업 3.1·3.2(막는 통제: Guardrails·Comprehend·Macie 공유).
+  // 남은 작업 3.3·3.4는 「증명하는 통제」(Glue 계보·CloudTrail·모델 카드·평가)라 배치 2다.
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
     'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
+    'aip-t3-1', 'aip-t3-2',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -240,6 +243,50 @@ void main() {
     }
     expect(checked, greaterThanOrEqualTo(1),
         reason: '대조군: `Agents Classic`을 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('`Governed Tables`를 언급하면 완전 종료 상태를 함께 적는다', () {
+    // ⚠️⚠️ `기술 3.2.1`이 「AWS Lake Formation을 사용하여 세분화된 데이터 액세스 제공」을
+    // 예시로 드는데, 공식 AWS Lifecycle Changes 의 **전체 종료(full shutdown)** 목록에
+    // `Governed Tables in AWS Lake Formation`(December 31, 2024)이 있다(2026-11-14 실측 —
+    // maintenance·sunset 목록에는 없고 full shutdown 에만 있다).
+    // ⚠️ **Lake Formation 본체는 정상**이므로 트리거를 `Lake Formation`으로 넓히면
+    // 멀쩡한 서술이 걸린다 — **기능 이름으로 좁힌다**(D-13). 현행 세분화 수단은
+    // TBAC·행·셀 수준 보안·하이브리드 액세스 모드다.
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('Governed Tables')) continue;
+      checked++;
+      expect(text.contains('완전 종료'), isTrue,
+          reason: '$taskId: `Governed Tables`를 적으면서 완전 종료 상태를 적지 않았다 — '
+              '세분화된 액세스의 현행 수단으로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `Governed Tables`를 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('`프롬프트 안전 분류`를 언급하면 유지 관리 상태를 함께 적는다', () {
+    // `기술 3.1.5`가 「안전 분류기」를 드는데 Amazon Comprehend 의 **프롬프트 안전 분류**는
+    // 주제 모델링·이벤트 탐지와 함께 **유지 관리 상태**다(`Amazon Comprehend – Topic
+    // Modeling, Event Detection, and Prompt Safety Classification`, March 31, 2026).
+    // ⚠️ **Comprehend 전체가 아니라 세 기능만**이라 트리거를 `Comprehend`로 넓히면
+    // 정상인 **PII 탐지·엔터티 탐지** 서술까지 걸린다 — 기능 이름으로 좁힌다(D-13).
+    // ⭐ 대조군이 둘이다 — `aip-t1-6`(의도 인식)과 `aip-t3-1`(안전 분류기)이 각각
+    // 다른 자리에서 같은 기능을 언급한다.
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('프롬프트 안전 분류')) continue;
+      checked++;
+      expect(text.contains('유지 관리'), isTrue,
+          reason: '$taskId: `프롬프트 안전 분류`를 적으면서 유지 관리 상태를 적지 않았다 — '
+              '새 설계의 안전 분류기로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(2),
+        reason: '대조군: `프롬프트 안전 분류`를 언급하는 문서가 2편 미만이다 — '
             '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
   });
 
