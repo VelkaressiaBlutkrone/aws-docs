@@ -26,9 +26,10 @@ import 'package:flutter_test/flutter_test.dart';
 /// 문항 배치에서는 그쪽 `authoredTaskIds`를 늘린다 — 두 파일의 목록이 **다른 것을
 /// 센다**(이 파일은 학습문서, 그 파일은 문항).
 void main() {
-  // 2026-11-14 도메인 1 배치 1 — 작업 1.1~1.3.
+  // 2026-11-14 도메인 1 배치 1·2 — 작업 1.1~1.6(도메인 1 완료).
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
+    'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
