@@ -37,12 +37,12 @@ void main() {
   // 서비스 집합으로 가른 이유는 **같은 서비스를 인용하는 편을 한 PR에 묶어 교차 대조**
   // 하기 위해서다(SCS 도메인 3에서 네 편을 병렬로 쓰다 서술이 어긋난 선례).
   // 2026-11-14 도메인 3 배치 1 — 작업 3.1·3.2(막는 통제: Guardrails·Comprehend·Macie 공유).
-  // 남은 작업 3.3·3.4는 「증명하는 통제」(Glue 계보·CloudTrail·모델 카드·평가)라 배치 2다.
+  // 2026-11-14 도메인 3 배치 2 — 작업 3.3·3.4(증명하는 통제: Glue·CloudTrail·모델 카드·평가).
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
     'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
-    'aip-t3-1', 'aip-t3-2',
+    'aip-t3-1', 'aip-t3-2', 'aip-t3-3', 'aip-t3-4',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -287,6 +287,50 @@ void main() {
     }
     expect(checked, greaterThanOrEqualTo(2),
         reason: '대조군: `프롬프트 안전 분류`를 언급하는 문서가 2편 미만이다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+  test('`Clarify`를 언급하면 신규 고객 비개방 상태를 함께 적는다', () {
+    // ⚠️⚠️ `기술 3.3.4`가 「바이어스 드리프트 모니터링」을, `기술 3.4.2`가 「공정성
+    // 평가」를 요구하는데 그 전통적 수단인 **Amazon SageMaker Clarify** 는 공식
+    // `clarify-availability-change.html`(2026-11-14 실측)이 **`no longer open to new
+    // customers`** 를 적는다(기존 고객은 계속 사용 · 보안·가용성 투자는 이어짐 ·
+    // **새 기능 도입 계획 없음**).
+    // ⚠️ 상태를 적지 않고 들면 **새 설계에서 고를 수 있는 선택지**로 가르치게 된다.
+    // 현행 대체는 표준화된 편향 지표(DPL·DPPL·DI·CI) 직접 계산 + SHAP +
+    // 오픈소스 모니터링 솔루션 + MLflow + CloudWatch + QuickSight 이고,
+    // FM 평가만 Bedrock Evaluations 가 대체한다(예측·표형 편향 탐지는 대체 아님).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('Clarify')) continue;
+      checked++;
+      expect(text.contains('신규 고객'), isTrue,
+          reason: '$taskId: `Clarify`를 적으면서 신규 고객 비개방 상태를 적지 않았다 — '
+              '편향·설명 가능성의 현행 수단으로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `Clarify`를 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('`Model Monitor`를 언급하면 신규 고객 비개방 상태를 함께 적는다', () {
+    // ⚠️⚠️ 위와 같은 계열이다 — 공식 `model-monitor-availability-change.html`
+    // (2026-11-14 실측)이 **`no longer open to new customers`** 를 적는다.
+    // 대체 조합은 오픈소스 모니터링 솔루션(Evidently AI·MLflow 앱) +
+    // **QuickSight 추론 모니터링**(지연된 그라운드 트루스) + CloudWatch 이고,
+    // 덮는 범위는 데이터 품질·모델 품질·편향 드리프트·특성 귀속 드리프트·시스템 성능이다.
+    // ⚠️ 트리거를 `Model` 로 넓히면 멀쩡한 서술이 전부 걸린다 — 기능 이름으로 좁힌다(D-13).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('Model Monitor')) continue;
+      checked++;
+      expect(text.contains('신규 고객'), isTrue,
+          reason: '$taskId: `Model Monitor`를 적으면서 신규 고객 비개방 상태를 적지 '
+              '않았다 — 드리프트 모니터링의 현행 수단으로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `Model Monitor`를 언급하는 문서가 하나도 없다 — '
             '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
   });
 

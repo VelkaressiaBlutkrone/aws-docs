@@ -794,11 +794,12 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-3', title: '규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-3.md', questionsAsset: 'assets/content/scs/scs-t6-3.questions.json', questionCount: 0),
   ],
   // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 전체(작업 1.1~1.6) +
-  // 🏁 도메인 2 전체(작업 2.1~2.5, 세 배치 — 배치 1은 깊이 노트 `94` 축).
+  // 🏁 도메인 2 전체(작업 2.1~2.5, 세 배치 — 배치 1은 깊이 노트 `94` 축) +
+  // 🏁 도메인 3 전체(작업 3.1~3.4, 두 배치 — 배치 1 「막는 통제」·배치 2 「증명하는 통제」).
   //
-  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **13편**
-  // (도메인 1 전체 6 + 도메인 2 전체 5 + 도메인 3의 작업 3.1·3.2)이다.
-  // 남은 것은 도메인 3의 작업 3.3·3.4 + 도메인 4(3)·5(2)다.
+  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **15편**
+  // (도메인 1 전체 6 + 도메인 2 전체 5 + 도메인 3 전체 4)이다.
+  // 남은 것은 도메인 4(3)·5(2)다.
   // ⚠️⚠️ **등재는 세 곳을 함께 늘리는 일이다** — 여기 · `pubspec.yaml`의
   // `assets/content/<cert>/` 선언 · `test/aip_doc_format_test.dart`의 `aipTaskIds`.
   // 2026-11-14 배치 1이 pubspec 선언을 빠뜨려 **라이브에서 문서 3편이 404**였고
@@ -829,6 +830,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t2-5', title: '애플리케이션 통합 패턴과 개발 도구 (API 인터페이스·접근 가능한 UI·비즈니스 시스템·개발자 생산성·오케스트레이션·문제 해결)', domain: 2, mdAsset: 'assets/content/aip/aip-t2-5.md', questionsAsset: 'assets/content/aip/aip-t2-5.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-1', title: '입력과 출력 안전 제어 (콘텐츠 필터·거부 주제·문맥 근거 확인·구조화된 출력·심층 방어·적대적 입력 탐지)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-1.md', questionsAsset: 'assets/content/aip/aip-t3-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-2', title: '데이터 보안과 개인 정보 보호 제어 (네트워크 격리·세분화된 액세스·데이터 보존·PII 탐지·마스킹과 익명화)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-2.md', questionsAsset: 'assets/content/aip/aip-t3-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-3', title: 'AI 거버넌스와 규정 준수 메커니즘 (모델 카드·데이터 계보·조직 정책·지속적 모니터링)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-3.md', questionsAsset: 'assets/content/aip/aip-t3-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t3-4', title: '책임 있는 AI 원칙 구현 (투명성·추론 추적·공정성 평가·정책 준수)', domain: 3, mdAsset: 'assets/content/aip/aip-t3-4.md', questionsAsset: 'assets/content/aip/aip-t3-4.questions.json', questionCount: 0),
   ],
 };
 
