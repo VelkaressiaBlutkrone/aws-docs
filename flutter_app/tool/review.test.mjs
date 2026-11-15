@@ -188,7 +188,11 @@ test('CERTS: 실제 문항 뱅크의 examGuideTaskId 도메인이 domains 범위
   // 2026-11-13: AIP-C01을 **학습문서보다도 먼저** 등록했다(Phase 2 선결 P-04).
   // 첫 문항 배치에서 이 집합에서 `aip`를 지운다 — 설계대로 안 지우면
   // 「문항이 들어왔으면 preAuthoring 목록에서 지운다」가 레드다.
-  const preAuthoring = new Set(['aip']);
+  // 2026-11-15: AIP-C01 도메인 1 문항 3편이 들어와 `aip`를 지웠다(설계대로).
+  // ⚠️ 집합이 비면 아래 `preAuthoring.has(code)` 분기가 한 번도 돌지 않는다 —
+  // 그 자리의 단정이 공허해지는 것이 아니라 **대상이 없는 것**이고, 다음 자격증을
+  // 저작 전에 등록할 때 다시 채운다. 루프 끝의 `totalBanks > 0`이 공허함을 막는다.
+  const preAuthoring = new Set([]);
   let totalBanks = 0;
   for (const [code, cert] of Object.entries(CERTS)) {
     const files = readdirSync(appPath(cert.dir)).filter((f) => f.endsWith('.questions.json'));
