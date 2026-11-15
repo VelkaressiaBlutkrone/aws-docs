@@ -1,0 +1,437 @@
+{
+  "examGuideTaskId": "aip-t2-3",
+  "taskTitle": "엔터프라이즈 통합 아키텍처 설계 및 구현",
+  "domain": 2,
+  "certCode": "AIP-C01",
+  "lastVerified": "2026-11-15",
+  "questions": [
+    {
+      "skill": "2.3.1",
+      "section": "connectivity",
+      "difficulty": "foundational",
+      "stem": "EventBridge 대상 전달이 재시도 가능한 오류로 실패할 때의 기본 재시도 정책과, 끝까지 실패한 이벤트를 잃지 않는 수단은 무엇입니까?",
+      "options": [
+        "기본은 24시간·최대 185회·지수 백오프와 지터이고, 소진되면 드롭되므로 DLQ를 구성합니다",
+        "기본은 1시간·최대 10회·고정 간격이고, 소진된 이벤트는 버스에 보존되므로 리플레이로 복구합니다",
+        "기본은 재시도 없음이고, 유실을 막으려면 대상 쪽에서 멱등 처리와 중복 제거를 구현합니다",
+        "기본은 무한 재시도이고, 성공할 때까지 큐에 남으므로 별도 수단 없이 유실되지 않습니다"
+      ],
+      "correct": 0,
+      "explanation": "전달이 재시도 가능한 오류로 실패하면 EventBridge가 재시도하고, 기간과 횟수는 대상의 재시도 정책에서 정하며 기본값은 24시간, 최대 185회, 지수 백오프와 지터입니다. 중요한 것은 그다음입니다 — 모든 재시도가 소진되면 이벤트가 드롭되고 EventBridge는 더 처리하지 않으므로, DLQ를 구성해 실패 이벤트를 받아 두는 것이 유실을 막는 공식 수단입니다. 공식이 드는 실패 원인 예는 대상 리소스를 쓸 수 없을 때와 네트워크 상황입니다. 그리고 기본 185회라는 사실이 그대로 멱등성 요구가 됩니다.",
+      "wrongExplanations": {
+        "1": "기본값이 24시간·185회입니다. 리플레이용 보존은 재시도 소진과 다른 기능이고 기본 버스의 성질도 아닙니다.",
+        "2": "재시도는 기본으로 동작합니다. 멱등 처리는 함께 필요한 설계이지만 유실 방지 수단이 아닙니다.",
+        "3": "무한 재시도가 아니며 소진되면 드롭됩니다. 그 지점이 이 기술의 핵심입니다."
+      },
+      "sources": [
+        {
+          "title": "EventBridge가 이벤트 전달을 재시도하는 방식",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rule-retry-policy.html"
+        }
+      ],
+      "id": "aip-t2-3-q1",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.1",
+      "section": "connectivity",
+      "difficulty": "applied",
+      "stem": "규칙과 대상을 설정했는데 이벤트가 아무 처리도 받지 않고 오류도 남지 않습니다. 이벤트 버스의 평가 방식에 비추어 먼저 확인할 것은 무엇입니까?",
+      "options": [
+        "대상의 동시 실행 한도를 확인합니다. 한도에 걸린 이벤트는 오류 없이 폐기되기 때문입니다",
+        "패턴이 맞는지와 규칙이 그 버스에 연결됐는지 봅니다. 아무 규칙에도 맞지 않으면 아무 일도 없습니다",
+        "대상의 재시도 정책을 확인합니다. 정책이 비어 있으면 전달이 시도되지 않고 조용히 끝납니다",
+        "이벤트 소스의 권한을 확인합니다. 권한이 없으면 전달이 거부되지만 오류가 남지 않습니다"
+      ],
+      "correct": 1,
+      "explanation": "규칙이 도착하는 이벤트를 이벤트 패턴으로 평가하고, 규칙은 특정 이벤트 버스에 연결되어 그 버스가 받은 이벤트에만 적용됩니다. 이벤트가 여러 규칙에 일치할 수 있고 각 규칙은 최대 다섯 개 대상을 지정합니다. 아무 규칙에도 맞지 않으면 EventBridge는 아무 일도 하지 않으므로 조용한 실패가 되고, 그래서 패턴을 먼저 검증합니다.",
+      "wrongExplanations": {
+        "0": "동시 실행 한도는 대상 쪽 제약이고 전달 시도 자체가 없는 상태를 설명하지 않습니다.",
+        "2": "재시도 정책은 전달이 실패한 뒤의 동작을 정합니다. 매칭이 없으면 그 단계에 닿지 않습니다.",
+        "3": "권한 문제는 전달 실패로 나타나 재시도 대상이 됩니다. 조용한 실패의 전형이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EventBridge 이벤트 버스(기본과 Classic)",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-bus.html"
+        }
+      ],
+      "id": "aip-t2-3-q2",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.1",
+      "section": "connectivity",
+      "difficulty": "applied",
+      "stem": "레거시 큐 하나에서 받은 레코드를 외부 조회로 보강한 뒤 한 대상으로만 보내야 합니다. 이벤트 버스와 Pipes 중 어느 쪽이고 그 이유는 무엇입니까?",
+      "options": [
+        "이벤트 버스입니다. 전달 전 선택적 변환을 할 수 있어 보강까지 한 자리에서 처리됩니다",
+        "이벤트 버스입니다. 규칙 하나에 대상을 다섯까지 둘 수 있어 확장 여지가 더 크기 때문입니다",
+        "Pipes입니다. 점대점 통합용이고 단일 소스에서 단일 대상으로 보내며 고급 변환과 강화를 지원합니다",
+        "Pipes입니다. 소스를 여러 개 묶어 하나의 대상으로 모으는 것이 이 기능의 설계이기 때문입니다"
+      ],
+      "correct": 2,
+      "explanation": "EventBridge Pipes는 점대점 통합용이고 각 파이프가 단일 소스에서 받아 단일 대상으로 처리·전달하며 전달 전 고급 변환과 강화를 지원합니다. 버스 쪽은 이벤트를 받아 0개 이상의 대상에 전달하는 라우터라 다수 소스에서 다수 대상으로 가는 라우팅에 맞습니다. 그래서 「다수에서 다수」는 버스, 「하나에서 하나에 강화」는 Pipes입니다.",
+      "wrongExplanations": {
+        "0": "버스도 전달 전 선택적 변환을 하지만 외부 조회로 보강하는 강화는 Pipes 쪽 기능입니다.",
+        "1": "대상 다섯은 버스의 성질이지만 이 요구는 대상이 하나라 그 여지가 선택 근거가 아닙니다.",
+        "3": "각 파이프는 단일 소스입니다. 여러 소스를 묶는 쪽이 버스입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EventBridge 이벤트 버스(기본과 Classic)",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-bus.html"
+        }
+      ],
+      "id": "aip-t2-3-q3",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.1",
+      "section": "connectivity",
+      "difficulty": "applied",
+      "stem": "새 FM 통합을 이벤트로 설계하면서 어느 버스로 시작할지 고르고 있습니다. 그 권고와 두 쪽의 라우팅 차이를 바르게 설명한 것은 무엇입니까?",
+      "options": [
+        "기본 버스로 시작하라고 권고합니다. 소유자가 규칙과 대상을 쥐므로 통제가 가장 쉽기 때문입니다",
+        "어느 쪽이든 같다고 적습니다. 규칙과 구독자는 이름만 다르고 라우팅 동작이 동일하기 때문입니다",
+        "Classic 이벤트 버스로 시작하라고 권고합니다. 리플레이 보존이 그쪽에만 있기 때문입니다",
+        "새 애플리케이션은 Custom Event Bus로 시작하라고 권고합니다. 소비자가 만든 구독자로 라우팅합니다"
+      ],
+      "correct": 3,
+      "explanation": "공식이 새 애플리케이션에는 Custom Event Bus로 시작하라고 적습니다. 차이는 누가 라우팅을 정하는가입니다 — 기본 버스와 Classic 이벤트 버스(Custom Event Bus - Classic)는 버스 소유자가 쓰는 규칙과 대상으로 라우팅하는 반면, Custom Event Bus는 소비자가 직접 만드는 구독자에게 라우팅하고 리플레이용으로 이벤트를 보존합니다. 기존 규칙을 구독자로 옮기는 마이그레이션 안내가 따로 있습니다.",
+      "wrongExplanations": {
+        "0": "권고 대상이 기본 버스가 아닙니다. 소유자가 규칙을 쥐는 쪽이 기본 버스와 Classic입니다.",
+        "1": "라우팅 주체와 이벤트 보존이 다릅니다. 이름만의 차이가 아닙니다.",
+        "2": "리플레이 보존은 Custom Event Bus 쪽 성질이고 권고도 그쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon EventBridge 이벤트 버스(기본과 Classic)",
+          "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-bus.html"
+        }
+      ],
+      "id": "aip-t2-3-q4",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.2",
+      "section": "augment",
+      "difficulty": "applied",
+      "stem": "외부 SaaS가 HTTP로 밀어 주는 이벤트로 모델을 부르려 하는데 그 SaaS도 우리 앱도 코드를 바꿀 수 없습니다. 표준 경로는 무엇입니까?",
+      "options": [
+        "Lambda 웹훅 핸들러로 받습니다. 상대가 HTTP를 밀어 줄 수 있을 때의 표준 경로입니다",
+        "앱에 SDK를 넣어 직접 호출합니다. 통합 지점이 하나로 줄어 운영이 가장 단순해집니다",
+        "앱이 내는 이벤트를 규칙으로 골라 보냅니다. 원본 앱을 바꾸지 않아도 되기 때문입니다",
+        "API Gateway에 새 엔드포인트를 더합니다. SaaS가 그 주소로 조회하러 오게 하면 됩니다"
+      ],
+      "correct": 0,
+      "explanation": "기존 앱을 고치지 않고 기능을 더하는 방법이 셋입니다 — 앞에 붙이기(API), 옆에서 듣기(이벤트), 안에서 부르기(함수)이고 고르는 기준은 그 앱을 바꿀 수 있는가입니다. 외부 SaaS가 웹훅으로 밀어 주는 이벤트를 받아 모델을 부르는 것이 Lambda 웹훅 핸들러이고, 앱을 바꿀 수 없고 상대가 HTTP를 밀어 줄 수 있을 때의 표준 경로입니다.",
+      "wrongExplanations": {
+        "1": "앱 코드를 바꿀 수 없다는 전제와 어긋납니다.",
+        "2": "그 경로는 앱이 이미 이벤트를 내고 있을 때 성립합니다. 여기서는 외부 SaaS가 미는 쪽입니다.",
+        "3": "SaaS가 미는 방향을 조회로 바꾸려면 상대 쪽 변경이 필요합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon API Gateway 개요",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html"
+        }
+      ],
+      "id": "aip-t2-3-q5",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.2",
+      "section": "augment",
+      "difficulty": "foundational",
+      "stem": "기존 앱 앞에 API 계층을 두고 모델을 부르게 했는데 응답이 길어질 때 호출자가 시간 초과로 끊깁니다. 셋을 섞을 때의 흔한 실수와 올바른 설계는 무엇입니까?",
+      "options": [
+        "권한 부여자를 동기 경로에 둔 것입니다. 인증을 비동기로 옮기면 응답 시간이 짧아집니다",
+        "동기 경로에 긴 작업을 둔 것입니다. API는 수락만 하고 처리는 이벤트나 큐로 넘깁니다",
+        "카나리 릴리스를 쓰지 않은 것입니다. 단계적으로 내보내면 시간 초과가 드러나지 않습니다",
+        "추적을 켜지 않은 것입니다. 지연 추적을 붙이면 호출자 쪽 대기 시간이 함께 늘어납니다"
+      ],
+      "correct": 1,
+      "explanation": "셋을 섞을 때 흔한 실수는 동기 경로에 긴 작업을 두는 것입니다. 모델 응답이 길어질 수 있으면 API는 수락만 하고 처리는 이벤트나 큐로 넘깁니다. API 계층 자리에서 함께 쓰는 것들은 IAM 정책과 Lambda 권한 부여자와 Cognito 사용자 풀로 인증하고, CloudWatch 액세스·실행 로깅과 경보를 걸고, AWS WAF로 일반적인 웹 공격을 막고, AWS X-Ray로 지연을 추적하는 것이며, 변경을 안전하게 내보낼 때는 카나리 릴리스 배포를 씁니다.",
+      "wrongExplanations": {
+        "0": "권한 부여자는 인증 수단이고 긴 모델 처리로 생기는 시간 초과의 원인이 아닙니다.",
+        "2": "카나리 릴리스는 변경을 안전하게 내보내는 수단이고 처리 시간을 줄이지 않습니다.",
+        "3": "추적은 원인을 보이게 하는 수단이고 호출자 대기 시간을 늘리는 설계가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon API Gateway 개요",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html"
+        }
+      ],
+      "id": "aip-t2-3-q6",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.3",
+      "section": "secure-access",
+      "difficulty": "applied",
+      "stem": "Organizations가 관리하는 여러 계정에서 사내 디렉터리의 워크포스 사용자가 FM을 쓰게 하려 합니다. 어느 페더레이션 유형이고 무엇을 받습니까?",
+      "options": [
+        "IAM 페더레이션입니다. 단일 계정에 역할을 두고 SAML 2.0과 OIDC로 사용자를 연결합니다",
+        "Cognito ID 풀 페더레이션입니다. 리소스 접근에 IAM 인가가 필요한 사용자에게 자격 증명을 줍니다",
+        "IAM Identity Center 페더레이션입니다. 워크포스 사용자가 단기 자격 증명을 받아 여러 계정을 씁니다",
+        "세 유형 모두 같습니다. 디렉터리를 연결하면 어느 쪽이든 조직 전체 계정에 접근이 생깁니다"
+      ],
+      "correct": 2,
+      "explanation": "IAM Identity Center 페더레이션이 Organizations가 관리하는 여러 계정에서 워크포스의 사람 사용자를 관리하는 유형이고 ID 소스는 SAML 2.0과 Managed Active Directory와 Identity Center 디렉터리입니다. Identity Center 사용자는 단기 자격 증명을 받고, account access manager로 기존 IAM 역할을 조직의 계정들에 걸쳐 Identity Center 사용자·그룹에 할당할 수 있으며 권한 세트와 함께 또는 단독으로 씁니다.",
+      "wrongExplanations": {
+        "0": "IAM 페더레이션은 단일 독립 계정이고 단기·소규모 배포의 사람 사용자와 머신 사용자를 맡습니다.",
+        "1": "Cognito ID 풀은 앱 사용자를 맡는 쪽이고 워크포스 사용자가 대상이 아닙니다.",
+        "3": "세 유형은 계정 구조와 관리 대상이 서로 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "AWS로의 ID 공급자와 페더레이션",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html"
+        }
+      ],
+      "id": "aip-t2-3-q7",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.3",
+      "section": "secure-access",
+      "difficulty": "applied",
+      "stem": "GitHub Actions 파이프라인이 모델을 호출해야 하는데 장기 액세스 키를 심지 않으려 합니다. 이 용례에 맞는 페더레이션 수단은 무엇입니까?",
+      "options": [
+        "Cognito 사용자 풀입니다. 파이프라인을 앱 사용자로 등록해 토큰을 받아 호출하게 합니다",
+        "Identity Center 권한 세트입니다. 파이프라인용 워크포스 사용자를 만들어 할당합니다",
+        "IAM 사용자와 교대 액세스 키입니다. 자동 교대를 걸면 장기 자격 증명 위험이 사라집니다",
+        "OIDC 기반 IAM 페더레이션입니다. AWS에서 돌지 않는 애플리케이션을 AWS 리소스에 연결합니다"
+      ],
+      "correct": 3,
+      "explanation": "OIDC의 용례가 비자명합니다 — 공식이 AWS에서 돌지 않는 애플리케이션(예: GitHub Actions)을 AWS 리소스에 연결한다고 적습니다. 그래서 CI/CD 파이프라인의 자격 증명 문제가 여기서 풀립니다. 공식 모범 사례도 사람 사용자가 IAM 사용자를 만들지 말고 ID 공급자로 페더레이션하는 것이고, 장기 자격 증명을 애플리케이션에 배포하거나 임베드하지 않아도 되는 것이 보안 이득입니다.",
+      "wrongExplanations": {
+        "0": "Cognito 사용자 풀은 앱 사용자 인증 쪽이고 외부 CI 시스템의 공식 용례로 적히지 않았습니다.",
+        "1": "권한 세트는 워크포스 사람 사용자를 위한 수단입니다.",
+        "2": "교대를 걸어도 장기 자격 증명을 파이프라인에 두는 설계라 공식 모범 사례와 반대입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS로의 ID 공급자와 페더레이션",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers.html"
+        }
+      ],
+      "id": "aip-t2-3-q8",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.3",
+      "section": "secure-access",
+      "difficulty": "applied",
+      "stem": "배치 작업만 돌리는 서비스 계정에 Bedrock 정책을 설계하고 있습니다. 정책 크기를 줄이는 구분과 검증 수단은 무엇입니까?",
+      "options": [
+        "CLI·API만 부르면 콘솔 최소 권한이 필요 없고, Access Analyzer가 100개 이상의 검사로 검증합니다",
+        "콘솔 최소 권한은 모든 주체에 필요하고, 정책 검증은 요청을 실제로 보내 거부 로그로 확인합니다",
+        "관리형 정책만 쓰면 검증이 필요 없고, 고객 관리형 정책을 만들 때만 분석기를 돌립니다",
+        "서비스 계정에는 조건을 걸 수 없으므로, 액션을 넓게 허용한 뒤 리소스로만 범위를 좁힙니다"
+      ],
+      "correct": 0,
+      "explanation": "Bedrock은 기본적으로 사용자·역할에 권한이 없습니다. 콘솔에는 최소 권한 집합이 필요해 그보다 제한적인 정책을 만들면 콘솔이 의도대로 동작하지 않지만, 반대로 CLI·API만 호출하는 주체에게는 콘솔 최소 권한이 필요 없고 수행하려는 API 작업에 맞는 액션만 허용합니다. 그 구분이 그대로 정책 크기를 줄입니다. 그리고 IAM Access Analyzer가 100개 이상의 정책 검사와 실행 가능한 권고를 줍니다.",
+      "wrongExplanations": {
+        "1": "콘솔 최소 권한은 콘솔을 쓰는 주체에만 필요합니다. 거부 로그로 확인하는 것은 검증 수단으로 적히지 않았습니다.",
+        "2": "모범 사례는 관리형 정책으로 시작해 최소 권한으로 이동하는 것이고 검증은 그 과정의 일부입니다.",
+        "3": "조건으로 더 제한하는 것이 모범 사례 중 하나입니다. 액션을 넓게 허용하는 설계는 반대 방향입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock의 ID 기반 정책 예제",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security_iam_id-based-policy-examples.html"
+        }
+      ],
+      "id": "aip-t2-3-q9",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.4",
+      "section": "cross-env",
+      "difficulty": "applied",
+      "stem": "규제로 원본 데이터를 사내에 둬야 해 온프레미스에서 AWS API로 처리하려 합니다. 어느 수단이고 리전과의 통신은 어떻게 이뤄집니까?",
+      "options": [
+        "Wavelength입니다. VPC를 존으로 확장하고 캐리어 게이트웨이로 사내 네트워크와 통신합니다",
+        "Outposts입니다. 서브넷을 만들어 그 인스턴스가 같은 VPC 안에서 사설 IP로 리전과 통신합니다",
+        "Local Zone입니다. 사업장과 가까운 존에 용량을 두고 전용 연결로 사내와 통신합니다",
+        "Outposts입니다. 다만 리전과는 공용 엔드포인트로만 통신하므로 인터넷 경로가 필요합니다"
+      ],
+      "correct": 1,
+      "explanation": "Outposts는 AWS 인프라·서비스·API·도구를 고객 사업장으로 확장해 리전과 같은 프로그래밍 인터페이스로 온프레미스에서 빌드·실행하게 하며, 온프레미스 데이터 통합이 이 기술의 용례입니다. Outpost에 서브넷을 만들어 EC2·EBS·ECS 클러스터·RDS 인스턴스를 그 서브넷으로 만들고, Outpost 서브넷의 인스턴스는 같은 VPC 안에서 사설 IP로 리전의 인스턴스와 통신합니다. 리전 사이의 통신 경로는 서비스 링크이고 각 Outpost는 가용 영역과 그 리전의 확장입니다.",
+      "wrongExplanations": {
+        "0": "Wavelength가 확장하는 대상은 통신 서비스 공급자 네트워크의 엣지이고 고객 사업장이 아닙니다.",
+        "2": "Outpost를 같은 VPC 안의 다른 Outpost나 Local Zone에 연결할 수 없고, 사업장으로 확장하는 수단은 Outposts입니다.",
+        "3": "리전과는 사설 IP로 같은 VPC 안에서 통신하고 경로는 서비스 링크입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Outposts 개요",
+          "url": "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html"
+        }
+      ],
+      "id": "aip-t2-3-q10",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.4",
+      "section": "cross-env",
+      "difficulty": "foundational",
+      "stem": "컴퓨팅 랙 다섯 개 규모의 Outposts 배치를 계획하고 있습니다. 폼 팩터별 온프레미스 연결 수단과 이 규모에서 반드시 필요한 것은 무엇입니까?",
+      "options": [
+        "랙은 로컬 네트워크 인터페이스, 서버는 로컬 게이트웨이이고 랙이 넷 이상이면 전용 연결이 필요합니다",
+        "둘 다 로컬 게이트웨이를 쓰고 규모와 무관하게 추가 랙 없이 그대로 확장할 수 있습니다",
+        "랙은 로컬 게이트웨이, 서버는 로컬 네트워크 인터페이스이고 컴퓨팅 랙 넷 이상이면 ACE 랙이 필요합니다",
+        "둘 다 서비스 링크로 사내와 통신하고 랙이 넷 이상이면 서비스 링크를 두 개로 늘립니다"
+      ],
+      "correct": 2,
+      "explanation": "폼 팩터에 따라 온프레미스 연결 수단이 다릅니다 — Outposts 랙(42U)은 로컬 게이트웨이(LGW)이고 Outposts 서버(1U·2U, 공간·용량이 제한된 사이트)는 로컬 네트워크 인터페이스입니다. 그리고 컴퓨팅 랙이 4개 이상이면 다중 랙 배포의 네트워크 집계 지점인 ACE 랙을 반드시 설치해야 하고, 4개 미만이어도 장차 확장할 계획이면 조기 설치를 권장합니다.",
+      "wrongExplanations": {
+        "0": "두 수단이 뒤바뀌었습니다. 그리고 이 규모에서 필요한 것은 ACE 랙입니다.",
+        "1": "컴퓨팅 랙 4개 이상에서 ACE 랙이 필수이므로 그대로 확장할 수 없습니다.",
+        "3": "서비스 링크는 Outpost와 리전 사이의 경로이고 사내 통신 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Outposts 개요",
+          "url": "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html"
+        }
+      ],
+      "id": "aip-t2-3-q11",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.4",
+      "section": "cross-env",
+      "difficulty": "applied",
+      "stem": "모바일 사용자 지연을 줄이려고 Wavelength Zone에서 모델 추론을 직접 돌리려 합니다. 올바른 판단과 엣지가 실제로 줄이는 것은 무엇입니까?",
+      "options": [
+        "성립합니다. 존이 리전의 논리적 확장이므로 리전의 모델 서비스가 그 존에서 그대로 실행됩니다",
+        "성립합니다. 다만 캐리어 게이트웨이로 아웃바운드를 열어 줘야 추론 호출이 통과합니다",
+        "성립하지 않습니다. 존에는 컴퓨팅이 없고 캐시만 있어 애플리케이션 자체를 둘 수 없습니다",
+        "성립하지 않습니다. 존에서 돌리는 것은 컴퓨팅 워크로드이고 추론은 부모 리전으로 갑니다"
+      ],
+      "correct": 3,
+      "explanation": "엣지에서 FM을 직접 돌린다는 설계는 성립하지 않습니다 — Wavelength에서 돌리는 것은 EC2와 컨테이너 워크로드이고 모델 추론은 부모 리전의 서비스로 갑니다. 엣지가 줄이는 것은 사용자와 애플리케이션 사이의 지연입니다. Wavelength Zone은 리전과 연결된 논리적 확장이고 리전의 컨트롤 플레인이 관리하므로 인터페이스를 쓸 때는 부모 리전을 씁니다. 쓸 수 있는 것은 EC2·EBS·VPC 서브넷·캐리어 게이트웨이와 EC2 Auto Scaling·EKS·ECS·Systems Manager·CloudWatch·CloudTrail·CloudFormation이고 Application Load Balancer는 일부 존에서만 됩니다.",
+      "wrongExplanations": {
+        "0": "논리적 확장이라는 것이 리전의 모든 서비스가 그 존에서 실행된다는 뜻은 아닙니다.",
+        "1": "캐리어 게이트웨이는 인바운드 허용과 아웃바운드 허용 두 목적의 수단이고, 존에서 추론을 실행하게 만들어 주지 않습니다.",
+        "2": "존에는 표준 컴퓨팅·스토리지가 배치됩니다. 애플리케이션을 두는 것이 이 수단의 용례입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Wavelength 개요",
+          "url": "https://docs.aws.amazon.com/wavelength/latest/developerguide/what-is-wavelength.html"
+        }
+      ],
+      "id": "aip-t2-3-q12",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.5",
+      "section": "cicd-gateway",
+      "difficulty": "applied",
+      "stem": "배포 파이프라인에서 앞선 실행이 테스트 스테이지에 머무는 동안 뒤 실행이 들어가지 못하고, 앞 실행이 실패하자 더 최신 실행이 따라잡았습니다. 올바른 설명은 무엇입니까?",
+      "options": [
+        "스테이지는 한 번에 하나만 처리해 잠기고, 실패하면 잠금 해제되어 최신 실행이 들어옵니다",
+        "파이프라인은 실행을 하나만 처리하므로 뒤 실행은 큐에 쌓이고 순서대로만 진행됩니다",
+        "스테이지 잠금은 배포 액션에만 있고, 테스트 액션은 병렬로 여러 실행을 함께 처리합니다",
+        "전환이 비활성화된 상태였고, 실패로 전환이 활성화되면서 대기 실행이 모두 진행됩니다"
+      ],
+      "correct": 0,
+      "explanation": "파이프라인은 여러 실행을 동시에 처리할 수 있지만 스테이지는 한 번에 하나만 처리하므로 처리 중 스테이지는 잠깁니다. 들어가려고 기다리는 것이 인바운드 실행이고 실패·대체·수동 중지될 수 있습니다. 실패하면 스테이지가 잠금 해제되어 더 최신 실행이 따라잡아 들어올 수 있고, 상태에 Superseded가 있는 이유가 그것입니다. 롤백 설계에서 이 동작을 모르면 왜 옛 변경이 사라졌는지 설명할 수 없습니다.",
+      "wrongExplanations": {
+        "1": "파이프라인 자체는 여러 실행을 동시에 처리합니다. 하나만 처리하는 단위는 스테이지입니다.",
+        "2": "잠금은 스테이지 단위이고 액션 유형에 따라 달라지지 않습니다.",
+        "3": "전환 비활성화는 별개 기능이고, 비활성화된 전환에 여러 실행이 도착하면 활성화 시 가장 최신 실행만 계속합니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CodePipeline 개념",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
+        }
+      ],
+      "id": "aip-t2-3-q13",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.5",
+      "section": "cicd-gateway",
+      "difficulty": "applied",
+      "stem": "보안 스캔과 사람 승인과 롤백을 갖춘 GenAI 배포 파이프라인을 설계합니다. 액션 유형과 스테이지 정의에 비추어 올바른 구성은 무엇입니까?",
+      "options": [
+        "스캔은 외부 도구로 돌리고 승인은 수동 중지로 대신하며 롤백은 파이프라인을 다시 만들어 처리합니다",
+        "스캔은 test 액션, 승인은 approval 액션으로 두고 스테이지가 환경과 동시 변경 수를 격리합니다",
+        "스캔과 승인을 한 액션에 묶고 롤백은 전환 비활성화로 구현해 실행이 들어오지 못하게 막습니다",
+        "스캔은 build 액션에 포함하고 승인은 invoke 액션으로 외부 결재 시스템을 불러 처리합니다"
+      ],
+      "correct": 1,
+      "explanation": "CodePipeline의 액션 유형은 여섯입니다 — source, build, test, deploy, approval, invoke이고 직렬·병렬로 돌며 순서는 runOrder가 정합니다. approval이 액션 유형으로 있다는 것이 사람 승인을 파이프라인에 넣는 근거입니다. 그래서 스캔을 test 액션으로, 승인을 approval 액션으로 두고 롤백은 실패 시 스테이지 잠금 해제 동작과 배포 액션의 되돌림으로 설계합니다. 스테이지는 환경을 격리하고 그 환경의 동시 변경 수를 제한하는 논리 단위이므로 GenAI 구성 요소의 테스트 스테이지를 따로 두는 근거가 그 정의에 있습니다.",
+      "wrongExplanations": {
+        "0": "승인은 전용 액션 유형이 있고 중지 방법과 다릅니다. 중지된 실행은 재시도할 수 있습니다.",
+        "2": "전환 비활성화는 실행이 스테이지에 들어가지 못하게 하는 기능이고 롤백 수단이 아닙니다.",
+        "3": "invoke는 외부 작업을 부르는 액션이지만 승인은 approval 유형이 맡습니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CodePipeline 개념",
+          "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html"
+        }
+      ],
+      "id": "aip-t2-3-q14",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    },
+    {
+      "skill": "2.3.5",
+      "section": "cicd-gateway",
+      "difficulty": "applied",
+      "stem": "게이트웨이 지표에서 한 도구의 지연이 오르면서 타임아웃 비율도 함께 오르는데 단일 임계 경보는 울리지 않습니다. 이때 쓸 수단과 그 이유는 무엇입니까?",
+      "options": [
+        "임계를 낮춥니다. 두 지표의 임계를 함께 내리면 열화가 시작되는 지점에서 먼저 울립니다",
+        "지연 백분위수를 평균으로 바꿉니다. 평균이 더 민감해 느린 호출의 영향을 빨리 반영합니다",
+        "복합 알람으로 여러 지표를 묶습니다. 단일 임계로 둘 다 안 울려도 차단에 가까워진 도구입니다",
+        "분당 토큰 제한을 낮춥니다. 소비를 줄이면 그 도구의 지연과 타임아웃이 함께 내려갑니다"
+      ],
+      "correct": 2,
+      "explanation": "게이트웨이의 관찰성은 도구별 호출 수와 성공률과 유형별 오류율과 지연 백분위수를 추적하고 복합 알람으로 여러 지표를 묶습니다. 복합 알람이 필요한 이유가 이 자리입니다 — 지연이 오르면서 타임아웃 비율도 오르는 도구는 단일 임계로는 어느 쪽도 울리지 않아도 차단에 가까워진 도구이고, 복합 보기가 단일 임계보다 먼저 열화를 잡습니다. 게이트웨이는 그 밖에 추상화와 제어와 소비 통제를 함께 모읍니다 — API와 함수와 기존 서비스를 MCP 호환 도구로 변환하고, 정책 엔진을 연결해 도구 접근 전에 요청을 평가하며, 추론 타깃을 분당 토큰으로 엔드포인트의 동시 연결 수를 제한합니다.",
+      "wrongExplanations": {
+        "0": "임계를 낮추면 거짓 경보가 늘어납니다. 공식이 드는 수단은 지표를 묶는 쪽입니다.",
+        "1": "평균은 느린 소수 호출을 가려 백분위수보다 둔감합니다.",
+        "3": "토큰 제한은 소비 통제 수단이고 도구 열화를 탐지하는 수단이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AgentCore Gateway 개요",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html"
+        },
+        {
+          "title": "AGENTOPS04-BP03 도구 신뢰성과 자동 차단",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops04-bp03.html"
+        },
+        {
+          "title": "Policy in AgentCore",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html"
+        }
+      ],
+      "id": "aip-t2-3-q15",
+      "examGuideTaskId": "aip-t2-3",
+      "verified": false
+    }
+  ]
+}

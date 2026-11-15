@@ -70,6 +70,7 @@ void main() {
   /// MLA에서 두 파일 중 한쪽만 늘려 빠뜨린 적이 있어 적어 둔다.
   const authoredTaskIds = <String>{
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3', 'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
+    'aip-t2-1', 'aip-t2-2', 'aip-t2-3',
   };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
@@ -390,7 +391,11 @@ void main() {
   test('section이 학습문서의 실제 앵커다', () {
     for (final taskId in authoredTaskIds) {
       final anchors = mdAnchors(taskId);
-      expect(anchors.length, greaterThanOrEqualTo(5),
+      // 하한은 추측하지 않고 실측해서 잡는다 — aip 20편의 앵커 수 최솟값이 **4**다
+      // (`aip-t2-2`·`aip-t3-2`·`aip-t3-4`가 4, 최대는 `aip-t5-1`의 10).
+      // 2026-11-15 도메인 2 배치 1에서 5로 두었던 하한이 `aip-t2-2`를 거짓으로
+      // 거부했다 — 같은 하한이 생성기 쪽에도 복제돼 있었으므로 **두 곳을 함께** 본다.
+      expect(anchors.length, greaterThanOrEqualTo(4),
           reason: '$taskId: 앵커 ${anchors.length}개 — 추출이 깨졌다');
       for (final q in readQuestions(taskId)) {
         expect(anchors, contains('${q['section']}'),
