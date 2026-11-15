@@ -39,12 +39,17 @@ void main() {
   // 2026-11-14 도메인 3 배치 1 — 작업 3.1·3.2(막는 통제: Guardrails·Comprehend·Macie 공유).
   // 2026-11-14 도메인 3 배치 2 — 작업 3.3·3.4(증명하는 통제: Glue·CloudTrail·모델 카드·평가).
   // 2026-11-15 도메인 4 배치 1 — 작업 4.1·4.2(비용·성능이 토큰·캐싱·배치·PT·오토 스케일링을 양쪽에서 인용한다). 남은 작업 4.3은 깊이 노트 `93` 축이라 배치 2다.
+  // 🏁 2026-11-15 **도메인 4 완료** — 배치 2(작업 4.3). 배치를 가른 기준은 **측정 상태**다:
+  // 작업 4.3은 깊이 노트 `93`이 이미 측정해 뒀고(`4.3.4`는 `94` · `4.3.5`는 `95`)
+  // 4.1·4.2는 노트가 없어 새로 재야 했다.
+  // ⚠️ 다만 `기술 4.3.5`(벡터 저장소 **운영**)는 노트 `95`가 **성능 사실만** 갖고 있어
+  // 운영 모니터링·인덱스 최적화·데이터 품질 검증은 이 배치에서 새로 측정했다.
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
     'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
     'aip-t3-1', 'aip-t3-2', 'aip-t3-3', 'aip-t3-4',
-    'aip-t4-1', 'aip-t4-2',
+    'aip-t4-1', 'aip-t4-2', 'aip-t4-3',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -376,6 +381,31 @@ void main() {
     }
     expect(checked, greaterThanOrEqualTo(1),
         reason: '대조군: `지연 최적화`를 언급하는 문서가 하나도 없다 — '
+            '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  test('`CloudTrail Lake`를 언급하면 신규 고객 상태를 함께 적는다', () {
+    // ⚠️⚠️ `기술 4.3.3`이 「포렌식 추적성 및 감사 로깅」을 요구하는데, 감사 로그 저장소를
+    // 새로 고르는 자리에서 가장 밟기 쉬운 것이 `AWS CloudTrail Lake` 다. 공식
+    // `cloudtrail-lake-service-availability-change.html`(2026-11-15 실측)이 Note 로
+    // **`AWS CloudTrail Lake will no longer be open to new customers starting on
+    // May 31, 2026.`** 와 **치명적 버그 수정·보안 업데이트만 받는다**를 적는다.
+    // ⚠️ 트리거를 `CloudTrail` 로 넓히면 **본체 서술이 전부 걸린다** — 공식이 같은
+    // 페이지에서 **`AWS CloudTrail continues to be fully supported`** 이고
+    // **Trails·Insights·Aggregated Events 는 영향이 없다**고 명시하므로, 닫힌 것은
+    // Lake 뿐이다. **기능 이름으로 좁힌다**(D-13 · Glacier 저장소 잠금 ↔ 스토리지 클래스와
+    // 같은 판정).
+    var checked = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null || !text.contains('CloudTrail Lake')) continue;
+      checked++;
+      expect(text.contains('신규 고객'), isTrue,
+          reason: '$taskId: `CloudTrail Lake`를 적으면서 신규 고객 상태를 적지 않았다 — '
+              '새 감사 설계의 선택지로 가르치면 거짓이 된다');
+    }
+    expect(checked, greaterThanOrEqualTo(1),
+        reason: '대조군: `CloudTrail Lake`를 언급하는 문서가 하나도 없다 — '
             '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
   });
 
