@@ -1,0 +1,461 @@
+{
+  "examGuideTaskId": "aip-t2-2",
+  "taskTitle": "모델 배포 전략 구현",
+  "domain": 2,
+  "certCode": "AIP-C01",
+  "lastVerified": "2026-11-15",
+  "questions": [
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "foundational",
+      "stem": "Provisioned Throughput의 시간당 가격을 정하는 것이 무엇인지 묻는 질문을 받았습니다. 올바르게 든 것은 무엇입니까?",
+      "options": [
+        "고르는 모델과 모델 단위 수와 약정 기간 셋이 가격을 정하고 약정이 길수록 할인됩니다",
+        "요청 수와 리전과 약정 기간 셋이 가격을 정하고 호출이 없는 시간은 과금되지 않습니다",
+        "모델 단위 수와 입력 토큰 수와 출력 토큰 수 셋을 곱해 시간당 가격이 계산됩니다",
+        "인스턴스 유형과 모델 단위 수와 리전 셋이 가격을 정하고 유형이 처리량을 결정합니다"
+      ],
+      "correct": 0,
+      "explanation": "PT 가격을 정하는 것은 셋입니다 — 고르는 모델, 모델 단위(MU) 수, 약정 기간이고 기간이 길수록 시간당 가격이 할인됩니다. 처리량의 정의 자체가 모델이 처리하고 반환하는 입력과 출력의 수와 속도이고, MU 1개가 1분 동안 전 요청에 걸쳐 처리할 입력 토큰 수와 생성할 출력 토큰 수를 정합니다. 구매는 시간당 과금이고 콘솔에서는 By Model Units 모드로 약정 기간과 MU 수를 고릅니다.",
+      "wrongExplanations": {
+        "1": "요청 수에 따라 과금되는 것은 온디맨드 호출입니다. PT는 고정 비용으로 더 높은 처리량을 확보하는 쪽이라 호출이 없는 시간에도 과금됩니다.",
+        "2": "토큰 수는 MU 1개가 무엇을 보장하는지를 설명하는 값이고 가격 공식의 입력이 아닙니다.",
+        "3": "PT에는 고를 인스턴스 유형이 없습니다. 유형을 고르는 것은 SageMaker AI 실시간 추론 엔드포인트 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "Provisioned Throughput으로 모델 호출 용량 늘리기",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        },
+        {
+          "title": "Amazon Bedrock 모델의 Provisioned Throughput 구매",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-purchase.html"
+        }
+      ],
+      "id": "aip-t2-2-q1",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "applied",
+      "stem": "6개월 약정으로 모델 단위를 구매했는데 두 달 뒤 그 기능이 중단돼 더는 쓰지 않습니다. 과금을 멈추려면 무엇을 할 수 있습니까?",
+      "options": [
+        "모델 단위 수를 0으로 줄입니다. 약정은 남지만 그 시점부터 시간당 과금이 멈춥니다",
+        "기간이 끝나기 전에는 삭제할 수 없고 삭제할 때까지 과금이 이어지므로 지금 멈출 수 없습니다",
+        "약정 없음으로 전환하면 즉시 삭제할 수 있고 남은 기간만큼 환불을 함께 받습니다",
+        "호출을 전부 끊으면 상태가 대기로 내려가고 그동안의 시간당 과금은 발생하지 않습니다"
+      ],
+      "correct": 1,
+      "explanation": "약정은 셋입니다 — 약정 없음은 언제든 삭제할 수 있지만 1개월과 6개월은 기간이 끝나기 전에 삭제할 수 없습니다. 그리고 과금은 삭제할 때까지 이어지므로 쓰지 않아도 멈추지 않습니다. 그래서 약정 선택이 되돌릴 수 없는 결정이고, 약정이 있는 모델을 프로비저닝하려면 먼저 AWS Support 센터에 구매 가능한 MU 수 증액을 요청해야 합니다.",
+      "wrongExplanations": {
+        "0": "MU 수를 줄여 과금을 멈추는 경로를 문서가 주지 않습니다. 멈추는 수단은 삭제뿐이고 약정 중에는 그것이 막힙니다.",
+        "2": "약정 유형을 바꿔 조기 삭제와 환불을 얻는 경로는 없습니다.",
+        "3": "호출을 끊어도 확보한 용량에 대한 시간당 과금은 그대로입니다. 상태는 생성 중에서 서비스 중으로 가고 호출량에 따라 내려가지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock 모델의 Provisioned Throughput 구매",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-purchase.html"
+        }
+      ],
+      "id": "aip-t2-2-q2",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "applied",
+      "stem": "1GB 가까운 입력 문서를 한 시간쯤 걸려 처리해야 하고 호출자는 기다릴 수 없습니다. 어느 추론 옵션이고 호출 계약은 무엇입니까?",
+      "options": [
+        "실시간 추론입니다. 스트리밍 응답을 켜면 큰 페이로드를 나눠 보내며 오래 처리할 수 있습니다",
+        "서버리스 추론입니다. 유휴에 0으로 축소되므로 긴 처리와 큰 페이로드에 가장 잘 맞습니다",
+        "비동기 추론입니다. 페이로드를 S3에 두고 그 포인터로 호출하면 식별자와 출력 위치를 즉시 받습니다",
+        "배치 변환입니다. 데이터가 미리 다 있으므로 엔드포인트를 만들어 두고 큐에 넣어 처리합니다"
+      ],
+      "correct": 2,
+      "explanation": "비동기 추론은 요청을 큐에 넣고 페이로드 최대 1GB를 최대 1시간까지 처리하며 요청이 없으면 엔드포인트를 0으로 축소합니다. 호출 계약이 비자명합니다 — 엔드포인트 구성에 AsyncInferenceConfig를 지정해 만들고, 요청 페이로드를 S3에 둔 뒤 InvokeEndpointAsync에 그 포인터를 넘깁니다. 호출은 식별자와 출력 위치를 즉시 반환하고 결과는 S3에 들어오며 통지는 선택적으로 SNS로 받습니다.",
+      "wrongExplanations": {
+        "0": "실시간 추론은 낮은 지연이 필요한 온라인 추론용이고, 호출자가 응답을 기다리는 모양입니다.",
+        "1": "서버리스 추론의 경계는 페이로드 4MB와 처리 60초입니다. 1GB와 한 시간은 그 밖입니다.",
+        "3": "배치 변환은 영구 엔드포인트가 필요 없는 오프라인 처리이고, 큐에 넣어 처리하는 쪽은 비동기 추론입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI의 추론 옵션",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html"
+        },
+        {
+          "title": "SageMaker 비동기 추론",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html"
+        }
+      ],
+      "id": "aip-t2-2-q3",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "applied",
+      "stem": "미세 조정한 모델을 쓰려면 프로비저닝 처리량 구매가 반드시 필요한지 물었습니다. 사용자 지정 모델의 추론 경로를 바르게 설명한 것은 무엇입니까?",
+      "options": [
+        "필요합니다. 사용자 지정 모델은 공유 용량에서 호출할 수 없으므로 전용 용량이 유일한 경로입니다",
+        "필요하지 않습니다. 사용자 지정 모델은 기반 모델과 똑같이 온디맨드로만 호출할 수 있습니다",
+        "리전에 따라 다릅니다. 상업 리전에서는 필요하지 않고 GovCloud(US)에서만 전용 용량이 필수입니다",
+        "경로가 둘입니다. 전용 용량을 구매하거나 온디맨드 추론용 배포를 만들어 호출할 수 있습니다"
+      ],
+      "correct": 3,
+      "explanation": "사용자 지정 모델의 추론 경로는 둘입니다 — 프로비저닝 처리량을 구매하거나 온디맨드 추론용 배포를 만듭니다. 그런데 공식 PT 페이지는 아직 모델을 사용자 지정했다면 그것을 쓰기 위해 PT를 구매해야 한다고 적어, 문서 사이가 갈리는 자리입니다. 그래서 이 사이트는 어느 한쪽으로 단정하지 않고 두 경로를 함께 가르칩니다. 참고로 PT 가격에서 사용자 지정 모델은 기반 모델과 같은 가격입니다.",
+      "wrongExplanations": {
+        "0": "온디맨드 추론용 배포라는 경로가 있으므로 전용 용량이 유일하지 않습니다.",
+        "1": "전용 용량 구매 경로도 유효합니다. 한쪽만 남기면 문서가 갈리는 자리를 지웁니다.",
+        "2": "GovCloud(US)의 제약은 다른 내용입니다 — 거기서는 약정 없는 사용자 지정 모델에만 전용 용량을 살 수 있습니다."
+      },
+      "sources": [
+        {
+          "title": "Provisioned Throughput으로 모델 호출 용량 늘리기",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        },
+        {
+          "title": "Amazon Bedrock 모델의 Provisioned Throughput 구매",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-purchase.html"
+        }
+      ],
+      "id": "aip-t2-2-q4",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "applied",
+      "stem": "비동기 추론으로 쓰던 엔드포인트를 짧은 요청에는 동기로도 쓰자는 제안이 나왔습니다. 엔드포인트 구성에 비추어 올바른 판단은 무엇입니까?",
+      "options": [
+        "성립하지 않습니다. 구성에 비동기 설정이 있으면 그 엔드포인트는 비동기 호출만 받습니다",
+        "성립합니다. 호출 API를 동기 쪽으로 바꿔 부르면 같은 엔드포인트가 둘 다 처리합니다",
+        "성립합니다. 다만 짧은 요청도 S3에 올려야 하므로 지연 이득이 크지 않을 뿐입니다",
+        "성립하지 않습니다. 비동기 엔드포인트는 0으로 축소되므로 동기 호출이 항상 시간 초과됩니다"
+      ],
+      "correct": 0,
+      "explanation": "AsyncInferenceConfig가 엔드포인트 구성에 있다는 것은 그 엔드포인트가 비동기 호출만 받을 수 있다는 뜻입니다. 같은 엔드포인트를 동기로도 쓰려는 설계는 성립하지 않으므로 두 호출 모양이 모두 필요하면 엔드포인트를 따로 둡니다. 참고로 서버리스에는 기능 제외 목록이 있고, 비동기 추론도 그 목록의 기능을 쓰는 엔드포인트에서는 쓸 수 없습니다.",
+      "wrongExplanations": {
+        "1": "호출 API를 바꿔 우회하는 경로가 없습니다. 제약은 엔드포인트 구성 쪽에 있습니다.",
+        "2": "지연 이득의 문제가 아니라 그 엔드포인트가 동기 호출을 받지 않는다는 제약입니다.",
+        "3": "0으로 축소되는 성질은 비용 쪽 이점이고 시간 초과의 원인으로 적히지 않았습니다."
+      },
+      "sources": [
+        {
+          "title": "SageMaker 비동기 추론",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html"
+        },
+        {
+          "title": "SageMaker Serverless Inference로 모델 배포",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html"
+        }
+      ],
+      "id": "aip-t2-2-q5",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "foundational",
+      "stem": "트래픽이 급증과 유휴를 반복하는 워크로드에 서버리스 추론을 골랐습니다. 감내해야 하는 대가와 급증이 예측 가능할 때의 수단은 무엇입니까?",
+      "options": [
+        "페이로드 상한을 감내하고, 급증이 예측 가능하면 비동기 추론으로 바꿔 큐에 쌓아 처리합니다",
+        "콜드 스타트를 감내하고, 급증이 예측 가능하면 프로비저닝된 동시성으로 엔드포인트를 웜으로 둡니다",
+        "GPU 미지원을 감내하고, 급증이 예측 가능하면 조정 정책을 직접 작성해 미리 확장해 둡니다",
+        "유휴 과금을 감내하고, 급증이 예측 가능하면 인스턴스 유형을 큰 것으로 올려 여유를 확보합니다"
+      ],
+      "correct": 1,
+      "explanation": "서버리스 추론은 인스턴스 유형을 고르거나 조정 정책을 관리할 필요가 없고 AWS Lambda와 통합돼 고가용성과 자동 확장을 받으며 요청이 없는 동안 0으로 축소됩니다. 대가는 콜드 스타트를 감내해야 한다는 것이고 공식이 그 조건을 명시합니다. 급증이 예측 가능하면 프로비저닝된 동시성을 켜 엔드포인트를 웜으로 유지해 밀리초 안에 응답하게 하고, Application Auto Scaling과 통합돼 목표 지표나 일정으로 관리합니다.",
+      "wrongExplanations": {
+        "0": "페이로드 상한도 제약이지만 공식이 조건으로 명시한 대가는 콜드 스타트입니다. 그리고 예측 가능한 급증의 수단은 비동기 전환이 아닙니다.",
+        "2": "GPU 미지원도 사실이지만 조정 정책을 직접 작성하는 것은 서버리스의 성질과 반대입니다.",
+        "3": "서버리스는 쓴 만큼만 과금하고 유휴 시간에는 과금되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "SageMaker Serverless Inference로 모델 배포",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html"
+        },
+        {
+          "title": "Amazon SageMaker AI의 추론 옵션",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html"
+        }
+      ],
+      "id": "aip-t2-2-q6",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.1",
+      "section": "deploy-paths",
+      "difficulty": "applied",
+      "stem": "기술 2.2.1이 드는 Lambda 함수와 프로비저닝 처리량과 SageMaker AI 엔드포인트를 두고 「셋 중 무엇이 가장 빠른가」를 물었습니다. 이 질문의 문제는 무엇입니까?",
+      "options": [
+        "지연을 비교할 공식 수치가 없다는 점입니다. 셋의 응답 시간은 문서가 표로 주지 않습니다",
+        "모델을 고정하지 않았다는 점입니다. 같은 모델을 쓰지 않으면 세 경로를 비교할 수 없습니다",
+        "셋이 같은 축의 선택지가 아니라는 점입니다. 호출 방식과 용량 확보 방식과 호스팅 방식입니다",
+        "리전을 고정하지 않았다는 점입니다. 리전마다 제공되는 경로가 달라 비교가 성립하지 않습니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 기술이 드는 셋은 같은 축의 선택지가 아닙니다 — 서버리스 함수가 요청마다 Bedrock을 부르는 것은 호출 방식이고, 프로비저닝 처리량은 용량 확보 방식이며, SageMaker AI 엔드포인트는 호스팅 방식입니다. 그래서 질문이 어느 축을 묻는지 가려야 보기가 갈립니다. 온디맨드는 공유 용량에서 호출한 만큼 과금되므로 트래픽이 일정하지 않을 때 비용이 가장 낮지만 쿼터가 공유라 피크에 스로틀링이 보일 수 있습니다.",
+      "wrongExplanations": {
+        "0": "수치의 유무가 아니라 세 항목이 서로 다른 축에 있다는 것이 문제입니다.",
+        "1": "모델을 고정해도 호출 방식과 호스팅 방식을 같은 줄에 놓고 비교할 수 없습니다.",
+        "3": "리전 제약은 다른 논점입니다. 셋을 한 줄에 세울 수 없는 이유가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI의 추론 옵션",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html"
+        },
+        {
+          "title": "Provisioned Throughput으로 모델 호출 용량 늘리기",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
+        }
+      ],
+      "id": "aip-t2-2-q7",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.2",
+      "section": "llm-deploy",
+      "difficulty": "applied",
+      "stem": "LLM이 가속기 하나의 메모리에 들어가지 않고 토큰 처리량도 모자랍니다. 대규모 모델 추론 컨테이너가 적는 최적화 기능에 비추어 두 문제의 수단은 무엇입니까?",
+      "options": [
+        "메모리는 연속 배칭으로 나누고, 처리량은 양자화로 올려 한 요청의 토큰 수를 줄입니다",
+        "메모리는 프로비저닝된 동시성으로 확보하고, 처리량은 인스턴스 수를 늘려 분산해 올립니다",
+        "메모리는 페이로드 분할로 줄이고, 처리량은 스트리밍 응답으로 체감 지연을 낮춰 해결합니다",
+        "메모리는 텐서 병렬 처리와 양자화로 다루고, 토큰 처리량은 연속 배칭으로 끌어올립니다"
+      ],
+      "correct": 3,
+      "explanation": "기존 ML 모델은 한 인스턴스에 올라가고 처리량의 단위가 요청인데 LLM은 둘 다 깨집니다 — 모델이 단일 가속기 메모리를 넘고 처리량을 토큰으로 셉니다. 그 자리를 위해 AWS가 제공하는 것이 LLM 추론 전용 Docker 컨테이너인 대규모 모델 추론(LMI) 컨테이너이고, AWS docs가 적는 최적화 기능이 양자화와 텐서 병렬 처리와 연속 배칭입니다. 메모리 요구와 모델 로딩 전략은 앞의 둘, 토큰 처리 용량 최적화는 연속 배칭에 대응합니다.",
+      "wrongExplanations": {
+        "0": "두 수단의 역할이 뒤바뀌었습니다. 연속 배칭은 토큰 처리량 쪽이고 양자화는 메모리 쪽입니다.",
+        "1": "프로비저닝된 동시성은 서버리스 엔드포인트를 웜으로 유지하는 수단이고 모델 메모리 요구와 다른 축입니다.",
+        "2": "페이로드 분할과 스트리밍은 요청·응답 전송 쪽이고 모델이 가속기에 들어가지 않는 문제를 다루지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "대규모 모델 추론(LMI) 컨테이너 문서",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/large-model-inference-container-docs.html"
+        }
+      ],
+      "id": "aip-t2-2-q8",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.2",
+      "section": "llm-deploy",
+      "difficulty": "applied",
+      "stem": "GPU가 필요한 LLM을 서버리스 추론 엔드포인트로 호스팅하자는 설계가 올라왔습니다. 지원 기능 표에 비추어 이 설계는 어디서 걸립니까?",
+      "options": [
+        "서버리스 열에 GPU 지원 표시가 없습니다. 실시간과 배치 변환과 비동기에는 표시돼 있습니다",
+        "서버리스 열에 모델 크기 상한이 적혀 있습니다. 그 값을 넘는 모델은 아예 배포되지 않습니다",
+        "서버리스 열에 컨테이너 지원 표시가 없습니다. 전용 추론 컨테이너를 올릴 수 없기 때문입니다",
+        "서버리스 열에 자동 확장 표시가 없습니다. 가속기를 쓰는 작업은 확장이 필요하기 때문입니다"
+      ],
+      "correct": 0,
+      "explanation": "배포 유형과 GPU 지원이 엮입니다 — 지원 기능 표가 실시간 추론과 배치 변환과 비동기 추론에 GPU 지원을 표시하는 반면 서버리스 추론 열에는 표시하지 않습니다. 그래서 GPU가 필요한 LLM을 서버리스로 올리는 설계는 그 자리에서 걸리고, 남는 경로는 실시간 추론이나 비동기 추론입니다.",
+      "wrongExplanations": {
+        "1": "모델 크기 상한이 아니라 GPU 지원 표시가 없다는 것이 걸리는 지점입니다.",
+        "2": "서버리스도 컨테이너로 모델을 배포합니다. 제약은 가속기 쪽입니다.",
+        "3": "서버리스는 자동 확장과 내장 내결함성을 받습니다. 확장이 없는 것이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "추론 옵션별 지원 기능 표",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-deploy-feature-matrix.html"
+        },
+        {
+          "title": "대규모 모델 추론(LMI) 컨테이너 문서",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/large-model-inference-container-docs.html"
+        }
+      ],
+      "id": "aip-t2-2-q9",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.2",
+      "section": "llm-deploy",
+      "difficulty": "applied",
+      "stem": "대규모 모델 추론 컨테이너의 내부 구현 수치를 문항으로 내자는 제안이 나왔습니다. 그 상세 서술이 어디에 있고 따라서 무엇까지 다룰 수 있습니까?",
+      "options": [
+        "AWS docs의 컨테이너 레지스트리 페이지에 있습니다. 따라서 이미지 태그와 버전까지 다룹니다",
+        "상세 문서는 Deep Java Library 쪽에 있습니다. AWS docs는 최적화 기능의 이름과 결정 축까지 적습니다",
+        "AWS docs의 추론 옵션 페이지에 있습니다. 따라서 옵션별 지연과 처리량 수치까지 다룹니다",
+        "상세 문서는 서비스 할당량 페이지에 있습니다. 따라서 모델별 토큰 한도까지 함께 다룹니다"
+      ],
+      "correct": 1,
+      "explanation": "LMI 컨테이너의 상세 문서는 AWS docs 안이 아니라 Deep Java Library 문서 사이트에 있고, AWS docs에는 개요와 그쪽을 가리키는 페이지가 있습니다. 그 페이지가 적는 범위는 컨테이너의 구성 요소와 아키텍처 이해, 용례에 맞는 인스턴스 유형과 백엔드 선택, 구성과 배포, 양자화·텐서 병렬 처리·연속 배칭 같은 기능으로의 최적화, 엔드포인트 벤치마크와 튜닝입니다. 그래서 이 사이트는 특정 라이브러리 이름이나 수치를 묻지 않고 최적화 기능의 이름과 결정 축까지만 다룹니다.",
+      "wrongExplanations": {
+        "0": "레지스트리 페이지는 이미지 주소를 주는 자리이고 컨테이너 내부 동작의 상세를 담지 않습니다.",
+        "2": "추론 옵션 페이지는 옵션별 성질과 경계를 적고, 지연·처리량 수치를 표로 주지 않습니다.",
+        "3": "할당량 페이지는 쿼터를 적는 자리이고 컨테이너 구현을 설명하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "대규모 모델 추론(LMI) 컨테이너 문서",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/large-model-inference-container-docs.html"
+        }
+      ],
+      "id": "aip-t2-2-q10",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.3",
+      "section": "balance",
+      "difficulty": "foundational",
+      "stem": "쉬운 요청은 싼 모델이 처리하고 실패하거나 신뢰도가 낮을 때만 비싼 모델로 올리려 합니다. 이 패턴의 이름과 AWS가 관리형으로 주는 수단은 무엇입니까?",
+      "options": [
+        "모델 앙상블이고, 관리형 수단은 배치 추론으로 여러 모델 응답을 모아 집계하는 것입니다",
+        "프롬프트 체이닝이고, 관리형 수단은 단계마다 모델을 바꿔 부르는 오케스트레이션입니다",
+        "모델 캐스케이딩이고, 관리형 수단은 응답 품질을 예측해 보내는 지능형 프롬프트 라우팅입니다",
+        "모델 샤딩이고, 관리형 수단은 요청을 쪼개 여러 엔드포인트로 분산하는 가중 라우팅입니다"
+      ],
+      "correct": 2,
+      "explanation": "API 기반 모델 캐스케이딩은 싼 모델이 먼저 처리하고 실패하거나 저신뢰일 때만 비싼 모델로 올리는 패턴입니다. 이 패턴의 라우팅 로직 자체는 애플리케이션이 구현하고, AWS가 관리형으로 주는 수단은 지능형 프롬프트 라우팅입니다 — 단일 서버리스 엔드포인트가 요청마다 각 모델의 응답 품질을 예측해 더 좋은 쪽으로 보내고 폴백 모델과 응답 품질 차이 기준을 둡니다.",
+      "wrongExplanations": {
+        "0": "앙상블은 여러 모델의 응답을 합쳐 하나를 만드는 쪽이고, 싼 경로를 먼저 쓰는 패턴이 아닙니다.",
+        "1": "체이닝은 한 모델의 출력을 다음 단계 입력으로 넘기는 쪽입니다.",
+        "3": "모델을 쪼개 분산하는 것은 메모리 문제를 다루는 텐서 병렬 처리 쪽 이야기입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock 지능형 프롬프트 라우팅",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html"
+        }
+      ],
+      "id": "aip-t2-2-q11",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.3",
+      "section": "balance",
+      "difficulty": "applied",
+      "stem": "프로비저닝 처리량을 구매한 모델에 배치 추론 작업을 돌려 야간 일괄 처리를 싸게 하자는 계획이 올라왔습니다. 올바른 판단은 무엇입니까?",
+      "options": [
+        "성립합니다. 확보한 용량이 남는 시간대에 배치를 돌리는 것이 가장 효율적인 활용입니다",
+        "성립합니다. 다만 입력 파일을 S3가 아니라 엔드포인트로 직접 올려야 한다는 차이가 있습니다",
+        "성립하지 않습니다. 배치 추론에는 모델 단위 수를 두 배 이상 확보해 두어야 하기 때문입니다",
+        "성립하지 않습니다. 배치 추론은 프로비저닝된 모델에서 지원되지 않으므로 온디맨드로 돌립니다"
+      ],
+      "correct": 3,
+      "explanation": "배치 추론은 여러 프롬프트를 비동기로 처리하고 입력 파일을 S3에 올려 작업을 제출하면 결과가 S3에 들어오는 비용 절감 경로지만, 프로비저닝된 모델에서는 지원되지 않습니다. 폴링 대신 EventBridge로 작업 상태 변경 알림을 받을 수 있고, 입력 형식은 InvokeModel 또는 Converse 형식입니다.",
+      "wrongExplanations": {
+        "0": "남는 용량을 배치로 돌리는 경로가 열려 있지 않습니다. 지원되지 않는 조합입니다.",
+        "1": "배치 추론의 입력은 S3에 올립니다. 엔드포인트로 직접 올리는 경로가 없습니다.",
+        "2": "모델 단위 수 요건의 문제가 아니라 프로비저닝된 모델이 대상에서 빠진다는 제약입니다."
+      },
+      "sources": [
+        {
+          "title": "배치 추론으로 여러 프롬프트 처리",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        }
+      ],
+      "id": "aip-t2-2-q12",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.3",
+      "section": "balance",
+      "difficulty": "applied",
+      "stem": "배치 추론 작업에서 도구 호출이 든 레코드가 400으로 실패했습니다. 원인과 올바른 작업 구성은 무엇입니까?",
+      "options": [
+        "Converse 호출 유형은 도구 호출을 지원하지 않습니다. InvokeModel 유형으로 작업을 만듭니다",
+        "배치 추론 자체가 도구 호출을 지원하지 않습니다. 도구가 필요하면 온디맨드 호출로 돌립니다",
+        "구조화된 출력과 도구 호출을 함께 쓸 수 없습니다. 둘 중 하나만 남겨 레코드를 다시 만듭니다",
+        "입력 파일 크기가 한도를 넘었습니다. 레코드를 나눠 여러 작업으로 제출하면 통과합니다"
+      ],
+      "correct": 0,
+      "explanation": "배치 추론은 Converse 호출 유형 작업에서 도구 호출을 지원하지 않아 toolConfig가 든 레코드가 400으로 실패합니다. 도구 호출이 필요하면 InvokeModel 호출 유형으로 작업을 만들고 각 modelInput을 모델의 네이티브 요청 형식으로 적습니다. 구조화된 출력은 두 호출 유형 모두 지원되므로 그쪽은 유형 선택과 무관합니다.",
+      "wrongExplanations": {
+        "1": "배치 추론 전체가 막히는 것이 아니라 Converse 호출 유형에서만 막힙니다.",
+        "2": "구조화된 출력은 두 호출 유형 모두 지원되고 도구 호출과 배타적이지 않습니다.",
+        "3": "400의 원인이 파일 크기가 아니라 그 유형에서 지원되지 않는 필드입니다."
+      },
+      "sources": [
+        {
+          "title": "배치 추론으로 여러 프롬프트 처리",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        }
+      ],
+      "id": "aip-t2-2-q13",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.3",
+      "section": "balance",
+      "difficulty": "applied",
+      "stem": "응답은 대개 짧은데 쿼터가 금방 차 전용 용량 구매를 검토하고 있습니다. 구매 전에 먼저 봐야 하는 것은 무엇입니까?",
+      "options": [
+        "리전별 모델 가용성입니다. 일부 리전에만 있는 모델은 쿼터가 더 낮게 설정돼 있습니다",
+        "요청마다 입력 토큰과 최대 출력 토큰 설정이 쿼터에서 선차감되므로 그 설정값을 먼저 봅니다",
+        "출력 토큰의 번다운 배수입니다. 그 배수를 낮추면 같은 응답에도 쿼터 소비가 줄어듭니다",
+        "동시 요청 수 상한입니다. 그 값을 올리면 토큰 쿼터도 비례해 함께 올라가기 때문입니다"
+      ],
+      "correct": 1,
+      "explanation": "온디맨드 쪽 비용과 용량 계획에는 토큰 선차감이 끼어듭니다 — 요청 시작 시점에 입력 토큰과 최대 출력 토큰 설정을 합한 양이 쿼터에서 선차감되므로, 짧게 답하게 설계해도 큰 최대 출력 설정이 쿼터를 먹습니다. 처리량이 모자라 보일 때 전용 용량을 사기 전에 이것을 먼저 봅니다.",
+      "wrongExplanations": {
+        "0": "리전 가용성은 다른 논점이고 쿼터가 빨리 차는 이유를 설명하지 않습니다.",
+        "2": "번다운 배수는 모델 쪽 값이라 애플리케이션이 낮출 수 있는 설정이 아닙니다.",
+        "3": "동시 요청 수와 토큰 쿼터는 비례해 함께 움직이는 값이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock 토큰 번다운과 쿼터",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html"
+        }
+      ],
+      "id": "aip-t2-2-q14",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    },
+    {
+      "skill": "2.2.3",
+      "section": "balance",
+      "difficulty": "applied",
+      "stem": "분류 작업 하나를 가장 큰 범용 모델로 처리하고 있습니다. 기술 2.2.3이 드는 수단 셋에 비추어 가장 먼저 검토할 레버는 무엇입니까?",
+      "options": [
+        "전용 용량 구매입니다. 같은 모델을 유지하면서 처리량을 확보하는 것이 가장 확실한 개선입니다",
+        "배치 추론 전환입니다. 같은 모델로 비동기 처리하면 응답 품질을 그대로 두고 비용이 내려갑니다",
+        "적절한 모델 선택입니다. 작업을 더 작은 모델이 충족하면 지연과 비용과 처리량이 함께 좋아집니다",
+        "프로비저닝된 동시성입니다. 엔드포인트를 웜으로 두면 같은 모델에서 지연이 가장 많이 줄어듭니다"
+      ],
+      "correct": 2,
+      "explanation": "기술 2.2.3이 드는 셋은 전부 덜 쓰고 같은 결과를 얻는 수단이고, 그중 적절한 모델 선택이 가장 큰 레버입니다 — 같은 작업을 더 작은 모델이 충족하면 지연과 비용과 처리량이 함께 좋아집니다. 둘째가 사전 학습된 소규모 모델로 특정 작업을 처리하는 것이고, 큰 범용 모델이 필요한 작업과 작업이 좁아 작은 모델로 충분한 것을 가르는 것이 설계입니다.",
+      "wrongExplanations": {
+        "0": "용량을 사는 것은 같은 소비를 유지한 채 공급을 늘리는 쪽이라 이 기술이 드는 수단이 아닙니다.",
+        "1": "배치 전환은 비용 경로를 바꾸지만 작업에 과한 모델을 쓰고 있다는 문제를 그대로 둡니다.",
+        "3": "프로비저닝된 동시성은 서버리스 엔드포인트의 콜드 스타트를 다루는 수단입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock 지능형 프롬프트 라우팅",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html"
+        },
+        {
+          "title": "Amazon SageMaker AI의 추론 옵션",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/deploy-model-options.html"
+        }
+      ],
+      "id": "aip-t2-2-q15",
+      "examGuideTaskId": "aip-t2-2",
+      "verified": false
+    }
+  ]
+}
