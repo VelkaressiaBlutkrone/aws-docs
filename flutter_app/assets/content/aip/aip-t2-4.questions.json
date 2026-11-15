@@ -1,0 +1,445 @@
+{
+  "examGuideTaskId": "aip-t2-4",
+  "taskTitle": "FM API 통합 구현",
+  "domain": 2,
+  "certCode": "AIP-C01",
+  "lastVerified": "2026-11-15",
+  "questions": [
+    {
+      "skill": "2.4.1",
+      "section": "interaction",
+      "difficulty": "foundational",
+      "stem": "챗봇 응답이 문장 중간에서 끊긴다는 신고가 들어왔습니다. 모델이 끝맺은 것인지 내 설정에 걸린 것인지 무엇으로 가릅니까?",
+      "options": [
+        "응답의 종료 사유 필드를 봅니다. 최대 토큰 값이면 모델이 아니라 내 설정에 걸려 잘린 것입니다",
+        "요청의 온도 값을 봅니다. 값이 낮으면 모델이 짧게 끝맺으므로 문장이 중간에 멈춥니다",
+        "응답의 사용량 필드를 봅니다. 입력 토큰이 출력보다 많으면 잘림이 일어난 것입니다",
+        "모델 목록 조회로 컨텍스트 창을 봅니다. 창보다 긴 대화는 뒤에서부터 잘려 나갑니다"
+      ],
+      "correct": 0,
+      "explanation": "응답에서 반드시 보는 것이 종료 사유(stopReason)입니다 — 최대 토큰 값이면 내 설정에 걸려 잘린 것이고 모델이 끝맺은 것이 아닙니다. Converse는 메시지를 지원하는 모든 Bedrock 모델에 일관된 API를 줘서 한 번 쓴 코드를 다른 모델에 쓸 수 있고 모델 고유 파라미터는 따로 넘깁니다.",
+      "wrongExplanations": {
+        "1": "온도는 분포의 모양을 바꾸는 값이고 응답이 잘렸는지를 말해 주지 않습니다.",
+        "2": "사용량 필드는 과금·쿼터 계산의 입력이고 입력과 출력의 비율이 잘림을 뜻하지 않습니다.",
+        "3": "컨텍스트 창 초과는 종료 사유가 따로 있고, 조회 API는 모델의 지원 기능을 알려 주는 쪽입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock Converse API 참조",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html"
+        }
+      ],
+      "id": "aip-t2-4-q1",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.1",
+      "section": "interaction",
+      "difficulty": "applied",
+      "stem": "요청을 맡기고 나중에 결과를 받는 설계를 검토합니다. AWS가 관리형으로 주는 경로와 직접 설계해야 하는 부분을 바르게 가른 것은 무엇입니까?",
+      "options": [
+        "세 경로 모두 관리형입니다. 진행 상태와 재시도와 결과 저장을 서비스가 전부 맡아 줍니다",
+        "배치 추론과 비동기 추론이 관리형이고, SDK와 큐로 짜는 쪽은 상태·재시도·결과 저장이 내 몫입니다",
+        "SDK와 큐로 짜는 쪽만 관리형입니다. 서비스 경로는 결과 회수 코드를 직접 써야 합니다",
+        "배치 추론만 관리형입니다. 비동기 추론은 결과 위치를 내가 만들어 폴링해야 하기 때문입니다"
+      ],
+      "correct": 1,
+      "explanation": "비동기 경로의 관리형은 둘입니다 — Bedrock 배치 추론은 입력 파일을 S3에 올려 작업을 제출하고 결과를 S3에서 회수하며 폴링 대신 EventBridge로 상태 변경 알림을 받고, SageMaker 비동기 추론은 페이로드를 S3에 두고 포인터를 넘기면 식별자와 출력 위치를 즉시 반환하고 통지는 SNS입니다. 반면 SDK와 큐로 짜는 것은 애플리케이션 패턴이라 진행 상태와 재시도와 결과 저장을 내가 설계해야 합니다.",
+      "wrongExplanations": {
+        "0": "애플리케이션 패턴은 서비스가 맡아 주는 것이 없습니다. 그 설계 부담이 두 관리형 경로와의 차이입니다.",
+        "2": "거꾸로입니다. 두 서비스 경로가 결과 저장과 통지를 맡습니다.",
+        "3": "비동기 추론도 결과를 S3에 두고 통지를 보내므로 폴링을 직접 짜지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "배치 추론으로 여러 프롬프트 처리",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
+        },
+        {
+          "title": "SageMaker 비동기 추론",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html"
+        }
+      ],
+      "id": "aip-t2-4-q2",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.1",
+      "section": "interaction",
+      "difficulty": "applied",
+      "stem": "필수 헤더가 정수인지까지 API Gateway 요청 검증으로 막자는 제안이 나왔습니다. 그 기능이 검증하는 범위에 비추어 올바른 판단은 무엇입니까?",
+      "options": [
+        "가능합니다. 헤더에 JSON 스키마를 붙이면 유형과 범위까지 통합 요청 전에 검증됩니다",
+        "가능합니다. 다만 검증기를 메서드마다 따로 할당해야 유형 검사가 활성화됩니다",
+        "파라미터는 존재와 비어 있지 않음만 확인하므로 유형·형식 검사는 애플리케이션이 맡습니다",
+        "파라미터 검증 자체가 없으므로 모든 검사를 통합 뒤의 애플리케이션 코드로 넘겨야 합니다"
+      ],
+      "correct": 2,
+      "explanation": "요청 검증은 통합 요청으로 넘어가기 전에 두 가지를 봅니다 — URI와 쿼리 문자열과 헤더의 필수 요청 파라미터가 포함되고 비어 있지 않은지, 그리고 요청 페이로드가 해당 콘텐츠 유형에 구성된 JSON 스키마를 따르는지입니다. 파라미터는 존재만 확인하고 유형이나 형식은 확인하지 않습니다. 실패하면 즉시 400을 반환하고 검증 결과를 CloudWatch Logs에 게시해, 불필요한 백엔드 호출을 줄이고 애플리케이션 고유 검증에 집중하게 합니다.",
+      "wrongExplanations": {
+        "0": "JSON 스키마가 적용되는 대상은 요청 페이로드이고 헤더 파라미터가 아닙니다.",
+        "1": "검증기를 메서드에 할당하는 것은 켜는 절차의 한 단계이고 유형 검사를 만들어 주지 않습니다.",
+        "3": "파라미터 검증은 있습니다 — 범위가 존재 확인까지라는 것이 요점입니다."
+      },
+      "sources": [
+        {
+          "title": "API Gateway REST API의 요청 검증",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html"
+        }
+      ],
+      "id": "aip-t2-4-q3",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.1",
+      "section": "interaction",
+      "difficulty": "applied",
+      "stem": "본문 검증을 켰는데 스키마에 맞지 않는 페이로드가 그대로 통과합니다. 가장 먼저 확인할 것과 콘텐츠 유형과 무관하게 적용하는 방법은 무엇입니까?",
+      "options": [
+        "검증기 규칙을 확인합니다. 본문 검증 플래그를 켜지 않으면 파라미터만 검사되기 때문입니다",
+        "모델 스키마를 확인합니다. 필수 속성 목록이 비어 있으면 어떤 본문이든 통과하게 됩니다",
+        "스테이지 로깅을 확인합니다. 로깅이 꺼져 있으면 검증 결과가 적용되지 않고 넘어갑니다",
+        "요청의 콘텐츠 유형을 봅니다. 일치하는 유형이 없으면 검증이 수행되지 않아 기본값으로 둡니다"
+      ],
+      "correct": 3,
+      "explanation": "페이로드 검증은 해당 콘텐츠 유형에 구성된 JSON 스키마로 수행되고, 일치하는 콘텐츠 유형이 없으면 요청 검증이 수행되지 않습니다. 콘텐츠 유형과 무관하게 같은 모델을 쓰려면 데이터 모델의 콘텐츠 유형을 $default로 둡니다. 참고로 요청 본문 검증과 「매핑 템플릿 없는 페이로드의 메서드 요청 동작」은 별개 주제입니다 — 스키마가 맞지 않을 때 원본 페이로드를 패스스루할지 차단할지는 그쪽에서 정합니다.",
+      "wrongExplanations": {
+        "0": "검증기 규칙은 켜는 절차의 입구이고, 켠 뒤에도 통과하는 이 상황을 설명하지 않습니다.",
+        "1": "스키마 내용 문제라면 같은 콘텐츠 유형의 다른 요청에서도 일관되게 통과합니다.",
+        "2": "로깅은 검증 결과를 남기는 쪽이고 검증 수행 여부를 정하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "API Gateway REST API의 요청 검증",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html"
+        }
+      ],
+      "id": "aip-t2-4-q4",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.2",
+      "section": "realtime",
+      "difficulty": "applied",
+      "stem": "새 모델로 스트리밍을 쓰려 합니다. 지원 여부를 확인하는 방법과 검증 수단으로 쓸 수 없는 것은 무엇입니까?",
+      "options": [
+        "모델 조회 API의 스트리밍 지원 필드를 봅니다. 그리고 AWS CLI로는 스트리밍 작업을 쓸 수 없습니다",
+        "모델 목록 API의 모달리티 필드를 봅니다. 그리고 SDK로는 스트리밍 작업을 쓸 수 없습니다",
+        "한 번 호출해 응답 형식을 봅니다. 그리고 콘솔 플레이그라운드로는 스트리밍을 볼 수 없습니다",
+        "모델 요금 페이지를 봅니다. 그리고 리전별로 스트리밍 지원이 갈려 조회로는 알 수 없습니다"
+      ],
+      "correct": 0,
+      "explanation": "모델이 스트리밍을 지원하는지는 GetFoundationModel을 불러 responseStreamingSupported 필드로 확인하고 모델마다 다릅니다. 그리고 AWS CLI는 Bedrock의 스트리밍 작업을 지원하지 않아 CLI로 검증하려다 막히는 자리입니다. 요청에는 가드레일의 스트림 처리 모드나 성능 구성 같은 설정을 함께 넘길 수 있습니다.",
+      "wrongExplanations": {
+        "1": "지원 여부를 알려 주는 필드가 따로 있고, SDK는 스트리밍 작업을 지원합니다.",
+        "2": "조회로 미리 알 수 있으므로 호출해 보는 것이 유일한 방법이 아닙니다.",
+        "3": "요금 페이지는 그 정보를 주지 않고, 지원 여부는 모델 조회로 확인합니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock ConverseStream API 참조",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ConverseStream.html"
+        }
+      ],
+      "id": "aip-t2-4-q5",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.2",
+      "section": "realtime",
+      "difficulty": "foundational",
+      "stem": "특정 모델의 추론을 완전히 막으려고 모델 호출 권한 하나만 거부했는데 여전히 응답이 생성됩니다. 원인과 올바른 조치는 무엇입니까?",
+      "options": [
+        "거부가 리전 조건에 묶여 있습니다. 조건을 지우면 그 하나의 거부만으로 전 경로가 막힙니다",
+        "스트리밍 호출은 별 권한이라 열려 있습니다. 두 권한을 모두 거부해야 경로가 전부 막힙니다",
+        "거부가 전파되지 않았습니다. 잠시 기다리면 남은 경로까지 차단이 적용됩니다",
+        "추론 프로필 경로가 따로 있습니다. 프로필을 삭제해야 그 모델 호출이 전부 막힙니다"
+      ],
+      "correct": 1,
+      "explanation": "스트리밍 호출에 필요한 권한은 bedrock:InvokeModelWithResponseStream이고 일반 호출의 bedrock:InvokeModel과 별개입니다. 그래서 특정 모델에 대한 추론을 완전히 막으려면 둘 다 거부해야 하고, 하나만 거부하면 다른 경로로 열립니다.",
+      "wrongExplanations": {
+        "0": "조건을 지워도 거부가 덮지 않는 다른 작업 이름은 그대로 허용됩니다.",
+        "2": "전파 지연의 문제가 아니라 거부가 덮지 않는 작업이 남아 있는 것입니다.",
+        "3": "추론 프로필은 호출 대상을 가리키는 수단이고 두 권한의 구분과 다른 축입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock ConverseStream API 참조",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ConverseStream.html"
+        }
+      ],
+      "id": "aip-t2-4-q6",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.2",
+      "section": "realtime",
+      "difficulty": "applied",
+      "stem": "백엔드가 처리 도중 클라이언트에 먼저 알림을 보내야 합니다. 어느 전송 계층이고 그 이유는 무엇입니까?",
+      "options": [
+        "서버 전송 이벤트입니다. 연결을 열어 두면 양쪽이 서로에게 메시지를 보낼 수 있기 때문입니다",
+        "응답 전송 모드 변경입니다. 모드를 바꾸면 통합이 클라이언트를 직접 호출할 수 있기 때문입니다",
+        "WebSocket API입니다. 상태 유지 양방향이라 백엔드가 연결된 클라이언트에 콜백을 보낼 수 있습니다",
+        "요청 스트리밍입니다. 요청이 열려 있는 동안 백엔드가 그 통로로 알림을 끼워 보냅니다"
+      ],
+      "correct": 2,
+      "explanation": "전송 계층의 선택 기준은 방향입니다 — 단방향으로 충분하면 서버 전송 이벤트나 청크 전송이고, 상태 유지 양방향이 필요하면 WebSocket API입니다. REST와 달리 백엔드가 연결된 클라이언트에 콜백 메시지를 보낼 수 있고, 역방향 전송은 통합 응답과 라우트 응답 또는 @connections API로 POST하는 경로입니다.",
+      "wrongExplanations": {
+        "0": "서버 전송 이벤트는 서버에서 클라이언트로 가는 단방향입니다.",
+        "1": "응답 전송 모드는 응답을 모아 보내지 않고 흘려보내는 설정이고 역방향 호출을 만들지 않습니다.",
+        "3": "요청 스트리밍은 지원되지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "API Gateway WebSocket API 개요",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-overview.html"
+        }
+      ],
+      "id": "aip-t2-4-q7",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.2",
+      "section": "realtime",
+      "difficulty": "applied",
+      "stem": "WebSocket 연결이 두 시간마다 끊기고 이미지 바이트를 보내면 다른 코드로 닫힙니다. 두 현상을 바르게 설명한 것은 무엇입니까?",
+      "options": [
+        "둘 다 메시지 크기 초과입니다. 큰 페이로드를 쪼개 보내면 두 현상이 함께 사라집니다",
+        "둘 다 클라이언트 요청 과다입니다. 호출 빈도를 낮추면 연결이 유지되고 바이너리도 통과합니다",
+        "앞은 내부 오류이고 뒤는 서비스 재시작입니다. 재시도 로직을 넣으면 둘 다 투명하게 복구됩니다",
+        "앞은 최대 연결 수명에 도달한 정상 종료이고, 뒤는 바이너리 미디어 유형이 지원되지 않는 것입니다"
+      ],
+      "correct": 3,
+      "explanation": "연결 수명이 시험 포인트입니다 — 클라이언트가 10분 유휴이거나 최대 2시간 연결 수명에 도달하면 1001로 닫히므로 긴 대화를 WebSocket 하나로 유지하려는 설계는 여기 걸립니다. 그리고 WebSocket API는 바이너리 미디어 유형을 지원하지 않아 엔드포인트가 받으면 1003입니다. 그 밖에 1008은 특정 클라이언트의 요청 과다, 1009는 메시지가 너무 큼, 1011은 내부 오류, 1012는 서비스 재시작입니다.",
+      "wrongExplanations": {
+        "0": "메시지 크기 초과에는 별 코드가 있고 연결 수명 종료와 다른 사유입니다.",
+        "1": "요청 과다에도 별 코드가 있고, 빈도를 낮춰도 최대 수명과 바이너리 미지원은 그대로입니다.",
+        "2": "내부 오류와 서비스 재시작은 각각 다른 코드이고 이 두 현상의 사유가 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "API Gateway WebSocket API 개요",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-overview.html"
+        }
+      ],
+      "id": "aip-t2-4-q8",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.3",
+      "section": "resilience",
+      "difficulty": "applied",
+      "stem": "한 모델 작업을 고용량으로 호출하는 워크로드에서 스로틀링이 계속 납니다. 이 상황에 맞는 재시도 모드와 그 성질은 무엇입니까?",
+      "options": [
+        "adaptive입니다. 표준 동작에 클라이언트 측 속도 제한기를 더해 초기 요청도 지연·차단합니다",
+        "legacy입니다. 표준화된 재시도 쿼터가 없어 중단 중에도 재시도를 끝까지 밀어붙입니다",
+        "standard입니다. 지수 백오프와 지터만으로 스로틀링을 흡수하도록 설계된 유일한 모드입니다",
+        "모드 변경은 무관합니다. 재시도 횟수를 늘려야 스로틀링이 해소되기 때문입니다"
+      ],
+      "correct": 0,
+      "explanation": "adaptive는 standard에 클라이언트 측 속도 제한기를 더한 모드이고 초기 요청도 지연하거나 차단할 수 있습니다. 쓰는 조건은 클라이언트가 단일 리소스를 향하고 빈번한 스로틀링을 예상할 때이며, 공식이 그 예로 한 API 작업을 고용량으로 부르는 AI 워크로드를 직접 듭니다.",
+      "wrongExplanations": {
+        "1": "legacy는 하위 호환용이고 중단 중에도 전속력으로 재시도해 장애를 키웁니다.",
+        "2": "standard가 기본이고 지수 백오프와 지터를 쓰지만 속도 제한기는 adaptive 쪽입니다.",
+        "3": "횟수를 늘리면 재시도 트래픽이 늘어 장애가 길어집니다."
+      },
+      "sources": [
+        {
+          "title": "AWS SDK의 재시도 동작",
+          "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html"
+        }
+      ],
+      "id": "aip-t2-4-q9",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.3",
+      "section": "resilience",
+      "difficulty": "applied",
+      "stem": "여러 리소스를 함께 쓰는 공용 클라이언트에 adaptive를 켜자는 제안이 나왔습니다. 그 설정의 부작용으로 적힌 것은 무엇입니까?",
+      "options": [
+        "재시도 쿼터가 공유돼 소진됩니다. 쿼터를 리소스마다 나누면 adaptive를 그대로 쓸 수 있습니다",
+        "속도 제한기가 클라이언트 인스턴스 단위라 한 리소스의 스로틀링이 무관한 요청까지 늦춥니다",
+        "백오프가 리소스별로 달라져 순서가 뒤집힙니다. 지터를 끄면 그 영향이 사라집니다",
+        "초기 요청이 병렬로 몰립니다. 최대 시도 횟수를 1로 낮추면 adaptive가 안전해집니다"
+      ],
+      "correct": 1,
+      "explanation": "adaptive를 쓰지 말아야 하는 조건은 클라이언트가 여러 리소스나 여러 테넌트를 향할 때입니다 — 속도 제한기가 SDK 클라이언트 인스턴스 단위라 한 리소스의 스로틀링이 무관한 리소스로 가는 요청까지 늦춥니다. 초기 요청의 예측 가능한 지연이 필요할 때도 아니고, 공식이 일반 기본값으로 권장하지 않는다고 적습니다. 그런 클라이언트는 standard가 맞습니다.",
+      "wrongExplanations": {
+        "0": "재시도 쿼터는 토큰 버킷이고 소진되면 빠르게 실패해 장애 해소를 돕습니다. 쿼터를 나누는 설정도 없습니다.",
+        "2": "지터는 재시도가 몰리는 것을 막는 장치라 끄면 더 나빠집니다.",
+        "3": "최대 시도를 1로 두면 재시도 자체가 비활성됩니다 — adaptive를 안전하게 만드는 설정이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS SDK의 재시도 동작",
+          "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html"
+        }
+      ],
+      "id": "aip-t2-4-q10",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.3",
+      "section": "resilience",
+      "difficulty": "foundational",
+      "stem": "API 키별 한도를 계정 한도보다 높게 잡아 달라는 요청을 받았습니다. 스로틀 한도의 성질과 적용 순서에 비추어 올바른 설명은 무엇입니까?",
+      "options": [
+        "가능합니다. 사용량 계획의 한도가 가장 먼저 적용되므로 계정 한도를 덮어쓰게 됩니다",
+        "가능합니다. 다만 스테이지 메서드 한도를 함께 올려야 클라이언트 한도가 효력을 갖습니다",
+        "클라이언트별 한도는 계정별 한도를 넘을 수 없고, 그 한도들은 보장이 아니라 최선 노력입니다",
+        "모든 한도가 리전 공통이라 조정할 수 없고, 초과 요청은 대기 큐에 쌓여 순서대로 처리됩니다"
+      ],
+      "correct": 2,
+      "explanation": "스로틀과 쿼터는 최선 노력이고 보장된 상한이 아니라 목표로 생각해야 합니다. 한도는 네 종류이고(바꿀 수 없는 AWS 스로틀링 한도 · 증액 요청 가능한 계정별 한도 · API별과 스테이지별 · 사용량 계획의 클라이언트별) 클라이언트별 한도는 계정별 한도보다 높을 수 없습니다. 적용 순서는 사용량 계획의 클라이언트별과 메서드별 → 스테이지의 메서드별 → 리전별 계정 수준 → AWS 리전 스로틀링이고, 초과하면 클라이언트가 429를 받습니다.",
+      "wrongExplanations": {
+        "0": "적용 순서가 앞선다는 것이 상위 한도를 덮어쓴다는 뜻은 아닙니다.",
+        "1": "스테이지 메서드 한도를 올려도 계정별 한도가 천장입니다.",
+        "3": "계정별 한도는 증액을 요청할 수 있고, 초과 요청은 큐에 쌓이지 않고 429로 거부됩니다."
+      },
+      "sources": [
+        {
+          "title": "API Gateway REST API 요청 스로틀링",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html"
+        }
+      ],
+      "id": "aip-t2-4-q11",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.3",
+      "section": "resilience",
+      "difficulty": "applied",
+      "stem": "재시도를 기본 모드로 두고 문서에 적힌 기본 동작을 가정했는데 실제 백오프와 횟수가 다릅니다. 확인할 설정과 재시도 쿼터의 성질은 무엇입니까?",
+      "options": [
+        "쿼터가 초기 요청까지 지연합니다. 모드를 되돌리면 지연 없이 재시도만 동작하게 됩니다",
+        "쿼터는 리전마다 따로 집계됩니다. 리전을 분산하면 소진 없이 재시도를 계속할 수 있습니다",
+        "쿼터가 실패마다 보충됩니다. 최대 시도 횟수를 늘리면 토큰이 차올라 계속 재시도됩니다",
+        "2026 재시도 동작 옵트인을 확인합니다. 쿼터는 토큰 버킷이라 소진되면 빠르게 실패합니다"
+      ],
+      "correct": 3,
+      "explanation": "이 재시도 동작은 AWS_NEW_RETRIES_2026 환경 변수로 옵트인해야 적용되고 설정하지 않으면 2026 이전 동작이라 백오프 타이밍과 재시도 쿼터 비용과 서비스별 기본값이 다릅니다. 재시도 쿼터는 토큰 버킷입니다 — 재시도마다 토큰을 차감하고 요청이 성공하면 보충하며, 소진되면 재시도하지 않고 오류를 반환해 애플리케이션이 빠르게 실패합니다. 그렇게 재시도 트래픽을 줄여 서비스 장애가 더 빨리 해소되게 돕고, 쿼터는 초기 요청을 지연하거나 차단하지 않습니다. 기본 최대 시도는 3회(초기 1회 + 재시도 2회)이고 1로 두면 재시도가 비활성되며 DynamoDB 클라이언트는 기본 4회입니다.",
+      "wrongExplanations": {
+        "0": "초기 요청까지 지연·차단하는 것은 adaptive의 속도 제한기이고 재시도 쿼터가 아닙니다.",
+        "1": "쿼터는 클라이언트의 토큰 버킷이라 리전을 분산해 우회하는 설계가 아닙니다.",
+        "2": "보충은 요청이 성공할 때 일어납니다. 횟수를 늘리면 재시도 트래픽만 늘어납니다."
+      },
+      "sources": [
+        {
+          "title": "AWS SDK의 재시도 동작",
+          "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html"
+        }
+      ],
+      "id": "aip-t2-4-q12",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.4",
+      "section": "routing",
+      "difficulty": "applied",
+      "stem": "작업 유형이 고정이고 경로가 바뀔 일이 없는 기능에 상태 머신 기반 라우팅을 도입하자는 제안이 나왔습니다. 수준 선택의 원리에 비추어 올바른 판단은 무엇입니까?",
+      "options": [
+        "정적 라우팅으로 충분합니다. 코드의 구성으로 두는 쪽이 가장 단순하고 예측 가능하기 때문입니다",
+        "품질 예측 라우팅이 맞습니다. 고정된 작업에서도 요청마다 더 좋은 모델을 고를 수 있기 때문입니다",
+        "요청 변환이 맞습니다. 라우팅이 기대하는 모양으로 바꾸면 구성을 두지 않아도 경로가 정해집니다",
+        "지표 기반 라우팅이 맞습니다. 고정된 작업도 지연과 비용 지표로 경로를 계속 조정해야 합니다"
+      ],
+      "correct": 0,
+      "explanation": "라우팅은 정적에서 동적으로, 다시 지표 기반으로 올라갈수록 비싸고 복잡해지므로 질문은 이 요구 조건에 필요한 최소 수준이 무엇인가입니다. 작업 유형이 고정이면 애플리케이션 코드의 구성으로 두는 정적 라우팅이 가장 단순하고 예측 가능합니다. 입력을 보고 특수 모델을 고르는 요구가 생기면 상태 머신으로 올라가고, 품질을 예측해 고르는 요구라면 프롬프트 라우팅으로 올라갑니다.",
+      "wrongExplanations": {
+        "1": "품질 예측은 요청마다 모델을 고르는 쪽이라 경로가 고정인 요구에는 필요 이상입니다.",
+        "2": "요청 변환은 라우팅 로직이 기대하는 모양으로 요청을 바꾸는 보조 수단이고 경로를 정하지 않습니다.",
+        "3": "지표 기반은 가장 비싼 수준이고, 그 판단을 매 요청에서 하면 라우팅 자체가 지연이 됩니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon Bedrock 지능형 프롬프트 라우팅",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html"
+        },
+        {
+          "title": "Step Functions 워크플로의 오류 처리",
+          "url": "https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html"
+        }
+      ],
+      "id": "aip-t2-4-q13",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.4",
+      "section": "routing",
+      "difficulty": "applied",
+      "stem": "게이트웨이 라우팅 규칙의 고정 경로에 모델 이름을 적었습니다. 호출자 입장에서 생기는 일과 함께 설계해야 하는 것은 무엇입니까?",
+      "options": [
+        "요청이 거부됩니다. 호출자가 요청한 모델과 다른 이름을 적으면 검증 단계에서 막히기 때문입니다",
+        "호출자가 요청한 모델과 다른 모델이 서빙될 수 있고, 호출자가 모르는 변경이라 관찰성이 필요합니다",
+        "호출자에게 경고 헤더가 돌아갑니다. 그 헤더를 읽어 처리하는 코드를 함께 넣어야 합니다",
+        "규칙이 무시됩니다. 모델 이름은 기본 라우팅이 정하고 규칙은 타깃만 바꿀 수 있기 때문입니다"
+      ],
+      "correct": 1,
+      "explanation": "여러 타깃이 같은 모델을 맡으면 기본 라우팅이 아무 쪽으로나 보내므로 규칙이 경로를 고정합니다. 그 고정 경로에 모델을 적으면 호출자가 요청한 모델과 다른 모델을 서빙할 수 있고, 호출자가 모르는 변경이므로 관찰성과 함께 설계합니다. 규칙은 조건으로 대상 모델을 고르고 액션으로 보낼 타깃을 정합니다.",
+      "wrongExplanations": {
+        "0": "검증으로 막히는 동작이 아니라 의도된 덮어쓰기입니다.",
+        "2": "경고 헤더가 돌아간다는 서술은 없습니다 — 그래서 관찰성을 직접 설계해야 합니다.",
+        "3": "규칙이 기본 라우팅을 덮어쓰는 것이 이 기능의 목적입니다."
+      },
+      "sources": [
+        {
+          "title": "AgentCore Gateway의 라우팅 규칙과 폴백",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rules-fallback.html"
+        },
+        {
+          "title": "Amazon Bedrock 지능형 프롬프트 라우팅",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html"
+        }
+      ],
+      "id": "aip-t2-4-q14",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    },
+    {
+      "skill": "2.4.4",
+      "section": "routing",
+      "difficulty": "applied",
+      "stem": "지연과 오류율 지표를 보고 경로를 바꾸는 라우팅을 요청마다 판단하도록 설계했습니다. 어떤 문제가 있고 통상적인 설계는 무엇입니까?",
+      "options": [
+        "지표가 요청마다 갱신되지 않습니다. 갱신 주기를 1초로 낮추면 요청마다 판단할 수 있습니다",
+        "지표 수집이 과금됩니다. 샘플링 비율을 낮추면 요청마다 판단해도 비용이 문제되지 않습니다",
+        "판단 자체가 호출 경로의 지연이 됩니다. 보통 집계된 신호로 구성을 바꾸는 쪽이 설계입니다",
+        "지표 권한이 호출 경로에 필요합니다. 역할에 조회 권한을 더하면 요청마다 판단할 수 있습니다"
+      ],
+      "correct": 2,
+      "explanation": "지표 기반 라우팅은 지연과 오류율과 비용 지표를 보고 경로를 바꾸는 것이고 지표는 X-Ray의 트레이스와 서비스별 지표에서 옵니다. 그 판단을 매 요청에서 하면 라우팅 자체가 지연이 되므로 보통 집계된 신호로 구성을 바꾸는 쪽이 설계입니다. X-Ray는 애플리케이션이 받은 요청뿐 아니라 다운스트림 리소스 호출까지 보여 주고 트레이스 맵으로 병목과 지연 급증을 찾습니다.",
+      "wrongExplanations": {
+        "0": "갱신 주기를 낮춰도 매 요청에서 조회하고 판단하는 비용이 그대로 호출 경로에 남습니다.",
+        "1": "과금은 한 축일 뿐이고 요청 경로에 판단을 넣는 설계의 지연 문제를 설명하지 않습니다.",
+        "3": "권한은 전제 조건이고 매 요청 판단이 지연이 되는 문제와 다른 축입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS X-Ray 개요",
+          "url": "https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html"
+        },
+        {
+          "title": "Amazon Bedrock 지능형 프롬프트 라우팅",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html"
+        }
+      ],
+      "id": "aip-t2-4-q15",
+      "examGuideTaskId": "aip-t2-4",
+      "verified": false
+    }
+  ]
+}
