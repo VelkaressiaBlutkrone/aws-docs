@@ -796,11 +796,11 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 전체(작업 1.1~1.6) +
   // 🏁 도메인 2 전체(작업 2.1~2.5, 세 배치 — 배치 1은 깊이 노트 `94` 축) +
   // 🏁 도메인 3 전체(작업 3.1~3.4, 두 배치 — 배치 1 「막는 통제」·배치 2 「증명하는 통제」) +
-  // 🏁 도메인 4 전체(작업 4.1~4.3, 두 배치 — 배치 1은 미측정이라 새로 재고, 배치 2는 깊이 노트 `93` 축).
+  // 🏁 도메인 4 전체(작업 4.1~4.3, 두 배치 — 배치 1은 미측정이라 새로 재고, 배치 2는 깊이 노트 `93` 축) +
+  // 🏁 도메인 5 전체(작업 5.1·5.2, 한 배치 — 깊이 노트 `93` 축이고 둘이 평가 기계·테스트 계층을 양쪽에서 인용한다).
   //
-  // ⚠️ 공식 Task는 **20개**(도메인별 6·5·4·3·2)이고 지금 저작된 것은 **18편**
-  // (도메인 1 전체 6 + 도메인 2 전체 5 + 도메인 3 전체 4 + 도메인 4 전체 3)이다.
-  // 남은 것은 도메인 5(작업 5.1·5.2, 2편 — 역시 깊이 노트 `93` 축)다.
+  // 🏁 **이로써 AIP-C01 공식 Task 20개 전부 저작**이다(도메인별 6·5·4·3·2).
+  // 남은 것은 Phase 4 문항 저작(20 Task × 15 = 300문항)이고 게이트는 7 Task 105문항이면 열린다.
   // ⚠️⚠️ **등재는 세 곳을 함께 늘리는 일이다** — 여기 · `pubspec.yaml`의
   // `assets/content/<cert>/` 선언 · `test/aip_doc_format_test.dart`의 `aipTaskIds`.
   // 2026-11-14 배치 1이 pubspec 선언을 빠뜨려 **라이브에서 문서 3편이 404**였고
@@ -836,6 +836,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-1', title: '비용 최적화와 리소스 효율성 (토큰 효율성·모델 선택·처리량·지능형 캐싱)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-1.md', questionsAsset: 'assets/content/aip/aip-t4-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-2', title: '애플리케이션 성능 최적화 (지연 절충·검색 성능·처리량·파라미터·오토 스케일링·프로파일링)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-2.md', questionsAsset: 'assets/content/aip/aip-t4-2.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-3', title: 'GenAI 모니터링 시스템 (관찰성 세 계층·이상 탐지·감사·도구·벡터 저장소 운영·실패 모드)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-3.md', questionsAsset: 'assets/content/aip/aip-t4-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-1', title: 'GenAI 평가 시스템 (품질 지표·모델 평가·사람 평가·품질 게이트·RAG·검색·에이전트·보고·배포 검증)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-1.md', questionsAsset: 'assets/content/aip/aip-t5-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-2', title: 'GenAI 애플리케이션 문제 해결 (콘텐츠 처리·API 통합·프롬프트·검색 시스템·프롬프트 운영)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-2.md', questionsAsset: 'assets/content/aip/aip-t5-2.questions.json', questionCount: 0),
   ],
 };
 
