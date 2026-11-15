@@ -70,7 +70,7 @@ void main() {
   /// MLA에서 두 파일 중 한쪽만 늘려 빠뜨린 적이 있어 적어 둔다.
   const authoredTaskIds = <String>{
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3', 'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
-    'aip-t2-1', 'aip-t2-2', 'aip-t2-3',
+    'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
   };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
