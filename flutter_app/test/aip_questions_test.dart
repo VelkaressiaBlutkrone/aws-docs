@@ -1,9 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 
 import 'flip_allowlist.dart';
+
+/// 정답 길이가 최장 오답의 이 배수를 넘으면 「제일 긴 것 고르기」로 맞을 수 있다.
+/// `tool/prescreen.mjs`의 `ANSWER_LENGTH_RATIO`와 같은 값이다.
+const answerLengthRatio = 1.3;
+
+/// Task마다 보장하는 진입용(회상·분류형) 문항 수의 하한.
+/// 저작 카덴스는 q1·q6·q11이고 2026-11-15 배치 1의 실측값이 Task당 정확히 3이다.
+const minFoundationalPerTask = 3;
+
+/// 지문과 정답 보기에서 금지하는 자기 프레임 문구.
+/// 해설의 출처 귀속(「공식 문서가 …라고 적습니다」)은 **정당한 층**이라 세지 않고,
+/// `tool/prescreen.mjs`의 `META_PHRASES`도 같은 둘만 본다.
+const selfFramePhrases = ['공식', '시험 가이드', '단정하지'];
 
 /// AIP-C01 문항 가드 — **문항 저작 전에 미리 세운 선결 가드**(2026-11-13, Phase 2 P-04).
 ///
@@ -50,9 +64,13 @@ void main() {
   ///
   /// ⚠️ 첫 배치에서 `tool/review.test.mjs`의 `preAuthoring` 집합에서 `aip`를
   /// **지워야 한다** — 안 지우면 node 단계가 1초 만에 레드다(설계대로다).
-  /// ⚠️ 학습문서 포맷 가드(`aip_doc_format_test.dart`)는 **아직 없다** — 학습문서
-  /// 저작 배치가 만든다. MLA에서 두 파일 중 한쪽만 늘려 빠뜨린 적이 있어 적어 둔다.
-  const authoredTaskIds = <String>{};
+  /// 2026-11-15 도메인 1 배치 1에서 지웠다.
+  /// ⚠️ 학습문서 포맷 가드(`aip_doc_format_test.dart`)의 `aipTaskIds`는 **이미 20개
+  /// 전부**다(학습문서가 먼저 들어왔다) — 문항 배치에서는 이 목록만 늘린다.
+  /// MLA에서 두 파일 중 한쪽만 늘려 빠뜨린 적이 있어 적어 둔다.
+  const authoredTaskIds = <String>{
+    'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
+  };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
   /// `node tool/review.mjs flip aip <taskId>`가 대신 넣어 주고, 그 diff가
@@ -247,4 +265,209 @@ void main() {
       });
     });
   }
+
+  // ── 저작 품질 불변식 (집계형 — 편수와 무관하게 수가 고정이다) ────────────
+  //
+  // ⚠️⚠️ **이 묶음을 첫 문항 배치에서 세운다.** SCS-C03은 같은 결함을 240문항을
+  // 다 쓴 뒤에 발견해 **일곱 배치**를 들여 되돌렸다(길이 단서 227 → 0). AIP는
+  // 생성 단계에서 같은 규율을 걸어 **첫 배치가 prescreen 품질 신호 0/45문항(0%)**로
+  // 들어왔다(SCS 90% · AIF 92% · SOA 60% · DEA 46% · SAA 42% · CLF 30% · MLA 23%).
+  //
+  // ⚠️ 배치당 테스트 증가는 **Task 수 × 4**다(위 per-Task 묶음). 이 집계형 묶음은
+  // `authoredTaskIds`를 순회하는 한 테스트씩이라 편수가 늘어도 수가 변하지 않는다.
+
+  String mdText(String taskId) => File('$dir/$taskId.md').readAsStringSync();
+
+  Set<String> mdAnchors(String taskId) => RegExp(r'\{#([a-z0-9-]+)\}')
+      .allMatches(mdText(taskId))
+      .map((m) => m.group(1)!)
+      .toSet();
+
+  Set<String> mdSourceUrls(String taskId) {
+    final parts = mdText(taskId).split('---');
+    expect(parts.length, greaterThan(2),
+        reason: '$taskId: 프런트매터를 못 읽었다 — 구분선 규약이 바뀌었는지 본다');
+    return RegExp(r'url: (\S+)')
+        .allMatches(parts[1])
+        .map((m) => m.group(1)!)
+        .toSet();
+  }
+
+  String allText(Map<String, dynamic> q) => [
+        '${q['stem']}',
+        '${q['explanation']}',
+        for (final o in q['options'] as List<dynamic>) '$o',
+        for (final v in (q['wrongExplanations'] as Map).values) '$v',
+        for (final s in q['sources'] as List<dynamic>) '${(s as Map)['title']}',
+      ].join('\n');
+
+  /// 「제일 긴 것 고르기」로 맞출 수 있는지와, **그 반대 방향**까지 함께 본다.
+  /// ⚠️ 상한만 두면 「정답만 짧게 깎는」 결함을 통과시킨다(SCS 배치 2·4의 실측).
+  bool lengthCuePasses(int correctLen, List<int> otherLens) =>
+      correctLen <= otherLens.reduce(max) * answerLengthRatio &&
+      correctLen >= otherLens.reduce(min);
+
+  test('대조군: 길이 단서 판정이 양쪽 방향을 실제로 잡는다', () {
+    expect(lengthCuePasses(50, [40, 45, 38]), isTrue, reason: '1.11배는 통과');
+    expect(lengthCuePasses(58, [40, 45, 38]), isTrue, reason: '1.29배는 통과');
+    expect(lengthCuePasses(63, [40, 45, 38]), isFalse, reason: '1.40배는 걸린다');
+    expect(lengthCuePasses(30, [40, 45, 38]), isFalse,
+        reason: '최단 오답보다 짧으면 걸린다 — 반대 방향 단서');
+  });
+
+  test('길이 단서: 정답 ÷ 최장 오답 ≤ $answerLengthRatio · 정답이 최단 오답보다 짧지 않다', () {
+    var checked = 0;
+    for (final taskId in authoredTaskIds) {
+      for (final q in readQuestions(taskId)) {
+        final c = q['correct'] as int;
+        final lens = [for (final o in q['options'] as List<dynamic>) '$o'.length];
+        final others = [
+          for (var i = 0; i < lens.length; i++)
+            if (i != c) lens[i],
+        ];
+        expect(lengthCuePasses(lens[c], others), isTrue,
+            reason: '${q['id']}: 정답 ${lens[c]}자 · 오답 $others — '
+                '상한 ${(others.reduce(max) * answerLengthRatio).floor()}자 · '
+                '하한 ${others.reduce(min)}자. 오답을 '
+                '${(lens[c] / answerLengthRatio).ceil()}자 이상으로 올리는 쪽이 '
+                '교육 가치도 올린다');
+        checked++;
+      }
+    }
+    expect(checked, authoredTaskIds.length * 15,
+        reason: '대조군: 문항을 전수로 읽지 못했다');
+  });
+
+  test('난이도: Task마다 foundational 최소 $minFoundationalPerTask개', () {
+    final counts = <String, int>{};
+    for (final taskId in authoredTaskIds) {
+      counts[taskId] = readQuestions(taskId)
+          .where((q) => '${q['difficulty']}' == 'foundational')
+          .length;
+      expect(readQuestions(taskId).map((q) => '${q['difficulty']}'),
+          everyElement(anyOf('foundational', 'applied')),
+          reason: '$taskId: 레포가 쓰는 두 난이도 값 밖의 라벨이 있다');
+    }
+    for (final e in counts.entries) {
+      expect(e.value, greaterThanOrEqualTo(minFoundationalPerTask),
+          reason: '${e.key}: foundational ${e.value}개. 진입용 문항이 없는 Task가 '
+              '생기면 그 작업을 처음 공부하는 사람이 붙을 자리가 없다 — '
+              '회상·분류형 문항을 더한다(배분 전체: $counts)');
+    }
+  });
+
+  test('대조군: 난이도 라벨을 실제로 읽고 두 값이 모두 쓰인다', () {
+    var foundational = 0;
+    var total = 0;
+    for (final taskId in authoredTaskIds) {
+      final qs = readQuestions(taskId);
+      total += qs.length;
+      foundational +=
+          qs.where((q) => '${q['difficulty']}' == 'foundational').length;
+    }
+    expect(total, authoredTaskIds.length * 15);
+    expect(foundational,
+        greaterThanOrEqualTo(authoredTaskIds.length * minFoundationalPerTask));
+    expect(foundational, lessThan(total),
+        reason: 'applied가 하나도 없으면 난이도 분리가 무의미하다');
+  });
+
+  test('정답 인덱스가 파일마다 4/4/4/3이다', () {
+    for (final taskId in authoredTaskIds) {
+      final counts = <int, int>{0: 0, 1: 0, 2: 0, 3: 0};
+      for (final q in readQuestions(taskId)) {
+        final c = q['correct'] as int;
+        counts[c] = counts[c]! + 1;
+      }
+      expect(counts, {0: 4, 1: 4, 2: 4, 3: 3},
+          reason: '$taskId: $counts. 앱이 전 경로에서 보기를 셔플하므로 인덱스는 '
+              '학습자에게 안 보이지만 JSON을 읽는 검수자에게는 보인다 — 쏠린 분포는 '
+              '저작자가 「첫 보기를 정답으로 쓰는 습관」에 빠졌다는 신호다. '
+              '문항을 쓰기 전에 표로 정한다(손으로는 지켜지지 않는다)');
+    }
+  });
+
+  test('section이 학습문서의 실제 앵커다', () {
+    for (final taskId in authoredTaskIds) {
+      final anchors = mdAnchors(taskId);
+      expect(anchors.length, greaterThanOrEqualTo(5),
+          reason: '$taskId: 앵커 ${anchors.length}개 — 추출이 깨졌다');
+      for (final q in readQuestions(taskId)) {
+        expect(anchors, contains('${q['section']}'),
+            reason: '${q['id']}: section "${q['section']}"이 학습문서 앵커에 없다. '
+                '앵커는 추측하지 않고 `grep` 으로 센다 (앵커: ${anchors.toList()..sort()})');
+      }
+    }
+  });
+
+  test('문항 출처가 학습문서 출처의 부분집합이다', () {
+    var checked = 0;
+    for (final taskId in authoredTaskIds) {
+      final srcs = mdSourceUrls(taskId);
+      expect(srcs.length, greaterThanOrEqualTo(8),
+          reason: '$taskId: md 출처 ${srcs.length}개 — 추출이 깨졌다');
+      for (final q in readQuestions(taskId)) {
+        final list = q['sources'] as List<dynamic>;
+        expect(list, isNotEmpty, reason: '${q['id']}: 출처가 없다');
+        for (final s in list) {
+          final url = '${(s as Map)['url']}';
+          expect(srcs, contains(url),
+              reason: '${q['id']}: 출처 $url 가 학습문서 출처에 없다. 문항이 새 URL을 '
+                  '들이면 그 URL은 학습문서 저작 때 실측된 대상이 아니었던 것이고, '
+                  '「URL은 200인데 그 페이지에 인용 사실이 없다」의 입구가 된다');
+          checked++;
+        }
+      }
+    }
+    expect(checked, greaterThanOrEqualTo(authoredTaskIds.length * 15),
+        reason: '대조군: 출처를 전수로 읽지 못했다');
+  });
+
+  test('문항은 평문 렌더다 — 굵게·백틱·마크다운 링크 0건', () {
+    for (final taskId in authoredTaskIds) {
+      for (final q in readQuestions(taskId)) {
+        final t = allText(q);
+        expect(t.contains('**'), isFalse, reason: '${q['id']}: 굵게 표기');
+        expect(t.contains('`'), isFalse, reason: '${q['id']}: 백틱');
+        expect(RegExp(r'\[[^\]]+\]\([^)]+\)').hasMatch(t), isFalse,
+            reason: '${q['id']}: 마크다운 링크');
+      }
+    }
+  });
+
+  test('대조군: 같은 탐지기가 학습문서에서는 굵게와 백틱을 찾는다', () {
+    for (final taskId in authoredTaskIds) {
+      final md = mdText(taskId);
+      expect(md.contains('**'), isTrue,
+          reason: '$taskId: 탐지기가 md의 굵게를 못 찾는다 — 탐지기가 죽었다');
+      expect(md.contains('`'), isTrue,
+          reason: '$taskId: 탐지기가 md의 백틱을 못 찾는다 — 탐지기가 죽었다');
+    }
+  });
+
+  test('지문·정답 보기에 자기 프레임 문구가 없다', () {
+    for (final taskId in authoredTaskIds) {
+      for (final q in readQuestions(taskId)) {
+        final options = q['options'] as List<dynamic>;
+        final asked = '${q['stem']}\n${options[q['correct'] as int]}';
+        for (final p in selfFramePhrases) {
+          expect(asked.contains(p), isFalse,
+              reason: '${q['id']}: 지문·정답 보기에 "$p". 실질 질문은 이미 들어 있고 '
+                  '이 문구는 크러치다 — 출처 귀속은 해설로 옮긴다');
+        }
+      }
+    }
+  });
+
+  test('대조군: 해설의 출처 귀속은 그대로 두고 센다', () {
+    var attributed = 0;
+    for (final taskId in authoredTaskIds) {
+      for (final q in readQuestions(taskId)) {
+        if ('${q['explanation']}'.contains('공식')) attributed++;
+      }
+    }
+    expect(attributed, greaterThanOrEqualTo(20),
+        reason: '해설이 출처를 귀속하지 않으면 위 탐지기의 층 분리가 공허하다 '
+            '(2026-11-15 실측 29/45)');
+  });
 }
