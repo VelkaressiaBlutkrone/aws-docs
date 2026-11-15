@@ -44,12 +44,19 @@ void main() {
   // 4.1·4.2는 노트가 없어 새로 재야 했다.
   // ⚠️ 다만 `기술 4.3.5`(벡터 저장소 **운영**)는 노트 `95`가 **성능 사실만** 갖고 있어
   // 운영 모니터링·인덱스 최적화·데이터 품질 검증은 이 배치에서 새로 측정했다.
+  // 🏁 2026-11-15 **도메인 5 완료 = AIP 공식 Task 20개 전부 저작**. 작업 5.1·5.2를 한 배치로
+  // 묶은 이유는 둘이 **평가 기계 둘·테스트 네 계층·`stopReason`을 양쪽에서 인용**하기 때문이다.
+  // ⚠️ `기술 5.1.5`·`5.1.6`·`5.2.4`는 깊이 노트 `95`, `5.1.7`은 `94`가 소유하고 나머지 10개가
+  // `93`이다 — G-38 교훈대로 **소유 선언과 그 노트의 실제 범위 표를 둘 다 확인**했고 이번에는
+  // 셋 다 범위 표에 있었다. 다만 공식 기술의 **예시 항목 일부**(주석 워크플로 · 카나리 테스트 ·
+  // 보고 시각화 · 등급 방법)는 어느 노트에도 없어 이 배치에서 새로 측정했다.
   const aipTaskIds = [
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3',
     'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
     'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
     'aip-t3-1', 'aip-t3-2', 'aip-t3-3', 'aip-t3-4',
     'aip-t4-1', 'aip-t4-2', 'aip-t4-3',
+    'aip-t5-1', 'aip-t5-2',
   ];
 
   /// 한 Task의 **저작된 전 텍스트** — 학습문서 `.md` + 문항 `.questions.json`.
@@ -382,6 +389,86 @@ void main() {
     expect(checked, greaterThanOrEqualTo(1),
         reason: '대조군: `지연 최적화`를 언급하는 문서가 하나도 없다 — '
             '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+  });
+
+  // 도메인 5 저작 규율 — `기술 5.1.2`·`5.1.3`·`5.1.8`이 예시로 드는 수단 넷이
+  // 닫혔거나 다른 서비스로 편입됐다. G-29 규율의 일곱 번째 적용분이다.
+  for (final rule in <Map<String, String>>[
+    // ⚠️⚠️ `기술 5.1.3`의 「주석 워크플로」·「사람의 피드백 수집 인터페이스」가 가리키던 두
+    // 수단이다. 공식 페이지가 둘 다 같은 문구로 적는다 —
+    // `Amazon SageMaker A2I is no longer open to new customers.` / Ground Truth 동일.
+    // ⚠️ `Ground Truth Plus`는 **완전 종료**라 본체와 상태가 다르다(섞으면 거짓).
+    // ⚠️ 트리거를 `SageMaker`로 넓히면 멀쩡한 서술이 전부 걸린다 — 기능 이름으로 좁힌다.
+    {'name': 'A2I', 'need': '신규 고객'},
+    {'name': 'Ground Truth', 'need': '신규 고객'},
+    // ⚠️⚠️ `기술 5.1.2`의 「A/B 테스트 및 카나리 테스트」 자리에서 가장 밟기 쉬운 것이
+    // `Amazon CloudWatch Evidently`다. 공식 Lifecycle Changes 가 **완전 종료**로 적고
+    // 전용 문서 슬러그도 **가이드 인덱스로 돌아간다**(= 없는 슬러그와 같은 신호, 2026-11-15 실측).
+    //
+    // ⚠️⚠️⚠️ **트리거가 `Evidently` 한 낱말이면 안 된다 — 이름이 충돌한다.**
+    // 라이브 `aip-t3-3.md` 가 **오픈소스 `Evidently AI`**(3자 ML 모니터링 라이브러리, AWS 가
+    // 발행한 오픈소스 모니터링 솔루션의 구성요소)를 적는데 그것은 **`Amazon CloudWatch
+    // Evidently` 와 완전히 다른 제품**이다. 1차 가드가 그 줄을 레드로 잡았고 **문구가 아니라
+    // 트리거가 틀린 것**이라 `CloudWatch Evidently` 로 좁혔다. 그 가름이 되는지는 아래
+    // 「이름 충돌」 대조군이 고정한다.
+    {'name': 'CloudWatch Evidently', 'need': '완전 종료'},
+  ]) {
+    final name = rule['name']!;
+    final need = rule['need']!;
+    test('`$name`을 언급하면 「$need」를 함께 적는다', () {
+      var checked = 0;
+      for (final taskId in aipTaskIds) {
+        final text = authoredTextOf(taskId);
+        if (text == null || !text.contains(name)) continue;
+        checked++;
+        expect(text.contains(need), isTrue,
+            reason: '$taskId: `$name`을 적으면서 「$need」를 적지 않았다 — '
+                '현행 수단으로 가르치면 거짓이 된다');
+      }
+      expect(checked, greaterThanOrEqualTo(1),
+          reason: '대조군: `$name`을 언급하는 문서가 하나도 없다 — '
+              '탐지기가 작동하지 않는 상태로 이 가드가 통과하고 있다');
+    });
+  }
+
+  test('이름 충돌: 오픈소스 `Evidently AI`는 CloudWatch Evidently 가드에 걸리지 않는다', () {
+    // ⚠️⚠️ 위 가드의 트리거를 `Evidently` 로 넓히면 이 줄이 걸린다 — 1차 실행에서 실제로
+    // 걸렸고, **AWS 서비스 이름과 3자 오픈소스 이름이 충돌하는 자리**를 이 트랙에서 처음
+    // 만났다. 그 충돌이 사라지면(= 레포에 `Evidently AI` 가 없어지면) 이 대조군이 공허해지고
+    // 트리거를 좁힌 이유도 사라지므로, 존재 자체를 단정으로 묶는다.
+    final hits = <String>[];
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null) continue;
+      if (text.contains('Evidently AI') && !text.contains('CloudWatch Evidently')) {
+        hits.add(taskId);
+      }
+    }
+    expect(hits, isNotEmpty,
+        reason: '대조군: `Evidently AI`(오픈소스)만 적는 문서가 하나도 없다 — '
+            '트리거를 `CloudWatch Evidently`로 좁힌 근거가 사라졌다');
+  });
+
+  test('`AWS Quick` 편입 사실이 사라지지 않는다 (보존 가드)', () {
+    // ⚠️⚠️ **`QuickSight` 를 「상태 메모 필요」로 다루면 안 된다** — 닫힌 것이 아니라
+    // **편입**이다. `quick/latest/userguide/what-is.html` 이
+    // `AWS Quick evolved from Amazon QuickSight. QuickSight continues as AWS Quick Sight,
+    // a feature within Quick.` 와 **기존 QuickSight API·SDK·통합이 변경 없이 동작**한다고
+    // 적는다. 그래서 「QuickSight 를 적으면 AWS Quick 을 병기하라」는 요구형 가드는 **과잉**이고
+    // 1차 실행에서 라이브 `aip-t3-3.md` 를 레드로 잡았다 — 그 문서의 `QuickSight 추론 모니터링`
+    // 은 **AWS 가 발행한 솔루션 이름을 공식 페이지에서 인용한 것**이라 고치면 인용이 거짓이 된다
+    // (레포 전수로도 clf·dea·mla·saa·aif 열 파일 이상이 그 이름을 쓴다).
+    // ✅ 그래서 **금지·요구가 아니라 보존**으로 둔다 — 편입 사실을 적은 자리가 사라지는 것을 막고
+    // 거짓 양성은 내지 않는다(AIF 트랙에서 처음 쓴 보존 가드와 같은 길).
+    var kept = 0;
+    for (final taskId in aipTaskIds) {
+      final text = authoredTextOf(taskId);
+      if (text == null) continue;
+      if (text.contains('AWS Quick Sight') && text.contains('변경 없이')) kept++;
+    }
+    expect(kept, greaterThanOrEqualTo(1),
+        reason: 'QuickSight 가 `AWS Quick Sight` 로 계속되고 기존 API·SDK·통합이 변경 없이 '
+            '동작한다는 측정된 사실을 적은 문서가 하나도 없다 — 참인 서술이 지워졌다');
   });
 
   test('`CloudTrail Lake`를 언급하면 신규 고객 상태를 함께 적는다', () {
