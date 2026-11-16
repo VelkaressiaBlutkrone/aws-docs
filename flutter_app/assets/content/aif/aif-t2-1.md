@@ -60,7 +60,11 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
-lastVerified: 2026-11-03
+  - title: Optimize model inference for latency (Amazon Bedrock)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/latency-optimized-inference.html
+  - title: AGENTPERF05-BP02 Implement optimized multi-agent collaboration models (Well-Architected Agentic AI Lens)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentperf05-bp02.html
+lastVerified: 2026-11-17
 ---
 
 # 생성형 AI의 기본 개념 (용어·사용 사례·FM 수명 주기·토큰 요금·컨텍스트 엔지니어링·에이전틱 AI)
@@ -427,3 +431,5 @@ v1.1 신규 목표이고, 가이드 원문 표기는 **「기본 에이전트 AI
 24. Amazon Bedrock AgentCore 개요 — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html` (2026-11-03 확인)
 25. Amazon Bedrock Agents Classic maintenance mode — `docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html` (2026-11-03 확인)
 26. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어 — 목표 6개 원문) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html` (2026-11-03 확인)
+27. Optimize model inference for latency (Amazon Bedrock) — `docs.aws.amazon.com/bedrock/latest/userguide/latency-optimized-inference.html` (2026-11-17 확인)
+28. AGENTPERF05-BP02 Implement optimized multi-agent collaboration models (Well-Architected Agentic AI Lens) — `docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentperf05-bp02.html` (2026-11-17 확인)

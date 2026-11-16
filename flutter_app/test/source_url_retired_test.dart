@@ -177,6 +177,27 @@ void main() {
     // `what-is-a-scaling-plan.html`. ⚠️ **닫힌 서비스가 아니다** — 그 문서에 상태 문구가
     // 0건이고 lifecycle 세 표에도 없다(96 §6-5).
     'https://docs.aws.amazon.com/autoscaling/plans/userguide/what-is-aws-auto-scaling.html',
+    // ── 2026-11-17 AIF-C01 검수 준비(출처 고유 185개 전수 실측)에서 실측 ──────
+    // 정본은 docs/saa-review/2026-11-17-aif-review-prep.md §3-②.
+    // ⚠️⚠️ **이 둘은 `source_url_retired_test` 가 잡지 못했다** — 이 가드는 **이미 아는
+    // 은퇴 URL만** 안다. 새 콘텐츠·미측정 트랙의 출처는 직접 재야 한다.
+    // ⭐ 네 문항(`aif-t3-1-q9`·`q10`·`aif-t4-1-q6`·`q7`)과 md 2편이 **정본을 이미 함께
+    // 갖고 있어** 교체가 아니라 **중복 항목 삭제**로 닫혔다.
+    //
+    // 벡터 DB 결정 가이드. `200 r=1` → `decision-guides/latest/decision-guides/
+    // vector-database-guide.html`(특정 페이지)이라 **소멸이 아니라 이름 변경**이고,
+    // ⚠️ 그 페이지의 실제 `h1` 은 **`Choosing a vector database for your generative AI
+    // applications`**(「vector」가 들어간다 — 레포가 쓰던 제목에는 없었다).
+    'https://docs.aws.amazon.com/vector-databases/',
+    // Well-Architected 지속 가능성 필라의 리전 선택 BP. ⚠️ 슬러그에 `sus_` 가 **두 번**
+    // 들어간 오기이고 **진짜 `404 r=0`**(리다이렉트조차 없다). ⚠️⚠️ **URL 교체로 닫히는
+    // 건이 아니었다** — 고친 후보 가운데 실재하는 것은 `sustainability-pillar/
+    // region-selection.html` 뿐인데 **문항이 인용하는 사실이 리전 선택과 다르다**
+    // (`q6` 「GenAI 가 맞는 해법인지 먼저 묻는다」 · `q7` 「양자화·프루닝·증류」).
+    // ⭐ **해설이 이미 정본을 인용**하고 있었다 — q6 은 Generative AI Lens
+    // `sustainability.html`("Always ask if generative AI is right for your workload"),
+    // q7 은 `gensus03-bp01.html`(양자화·프루닝·증류). 즉 **출처만 잘못 붙어 있었다.**
+    'https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.

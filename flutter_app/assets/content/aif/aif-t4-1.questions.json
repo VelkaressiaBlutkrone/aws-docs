@@ -181,10 +181,6 @@
         {
           "title": "Sustainability (AWS Well-Architected Generative AI Lens) — 지속 가능성 원칙 셋과 검색 엔진 예시",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html"
-        },
-        {
-          "title": "SUS01-BP01 Choose Region based on both business requirements and sustainability goals — 안티패턴 둘",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html"
         }
       ],
       "verified": false
@@ -217,10 +213,6 @@
         {
           "title": "MLSUS01-BP01 Define the overall environmental impact or benefit — 추론의 누적 영향",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus01-bp01.html"
-        },
-        {
-          "title": "SUS01-BP01 Choose Region based on both business requirements and sustainability goals — 안티패턴 둘",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html"
         }
       ],
       "verified": false

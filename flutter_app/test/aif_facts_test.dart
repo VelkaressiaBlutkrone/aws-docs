@@ -53,9 +53,23 @@ void main() {
     //
     // ⚠️ 보고가 "주장이 어디에도 없다"고 왔지만 **실측하니 정본이 따로 있었다.**
     // 보고는 데이터이고 지시문이 아니다.
-    test('옛 출처 슬러그가 없다', () {
-      expect(read('aif-t1-3').contains('autopilot-metrics-validation'), isFalse,
-          reason: '그 페이지는 문제 유형별 기본 지표를 적지 않는다');
+    // ⚠️⚠️ 2026-11-17 정밀화 — 이 단정은 **과잉이었다.** 금지하려던 것은 「문제 유형별
+    // 기본 목표 지표를 이 페이지에 귀속하는 것」인데 구현이 「md 어디에도 그 슬러그가
+    // 없어야 한다」였다. 그 페이지는 **지표의 정의**(Accuracy·BalancedAccuracy·
+    // Precision·Recall·F1와 불균형 데이터셋·거짓 양성 비용 예)를 실제로 적고,
+    // `aif-t1-3-q13`·`q14` 가 **그 사실로** 인용한다 — 정당한 출처다.
+    // ⭐ 그 위반이 보이지 않았던 이유는 **문항만 그 URL 을 쓰고 md 는 쓰지 않아서**다
+    // (G-84 위반이 가드를 숨기고 있었다). 2026-11-17 에 G-84 를 닫자 드러났다.
+    test('기본 목표 지표를 옛 슬러그에 귀속하지 않는다', () {
+      final lines = read('aif-t1-3').split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        if (!lines[i].contains('autopilot-metrics-validation')) continue;
+        // 프런트매터는 제목이 앞 줄에 있고 참고자료 절은 한 줄에 함께 있다
+        final ctx = (i > 0 ? lines[i - 1] : '') + lines[i];
+        expect(ctx.contains('기본 목표 지표'), isFalse,
+            reason: '그 페이지는 문제 유형별 기본 지표를 적지 않는다 — 정본은 '
+                'API 참조 `AutoMLJobObjective` 다');
+      }
     });
 
     test('정본 출처가 프런트매터와 참고자료 양쪽에 있다', () {
@@ -239,8 +253,12 @@ void main() {
       // 모든 줄을 삼켜 버리면 금지가 아무것도 막지 못하는데, 그 상태와
       // 「정말 0건」이 구별되지 않는다. 인용·정정 줄이 **정확히 둘**임을
       // 고정해 예외의 폭을 묶는다(둘 다 더 구체적인 페이지로 안내한다).
+      // ⚠️ **줄 번호 리터럴은 프런트매터 삽입에 흔들린다.** 2026-11-17 에 G-84 를
+      // 닫으며 `aif-t3-3.md` 프런트매터에 출처 한 항목(두 줄)을 더하자 `168 → 170`
+      // 으로 밀려 이 대조군이 레드가 났다. **내용은 그대로였다** — 다음에 또 밀리면
+      // 기대값만 갱신한다(줄 번호를 버리면 「어느 줄인지」를 잃으므로 유지한다).
       test('대조군: 옛 문구를 인용해 정정하는 줄은 정확히 둘이다', () {
-        expect(scan(citing: true), ['aif-t3-1.md:248', 'aif-t3-3.md:168'],
+        expect(scan(citing: true), ['aif-t3-1.md:248', 'aif-t3-3.md:170'],
             reason: '이 두 줄은 「PT 페이지는 아직 …」으로 인용하며 두 경로를 '
                 '가르친다 — 지우면 같은 오류가 다시 들어온다');
       });
@@ -590,10 +608,16 @@ void main() {
     });
 
     test('vector-databases의 실제 제목이 쓰인다 (G-47)', () {
-      // h1은 `Choosing a database for your generative AI applications`다.
-      // 낡은 별칭 「Vector databases on AWS」를 제목처럼 쓰지 않는다.
+      // ⚠️⚠️ 2026-11-17 정정 — 기대 문자열이 부정확했다. 실제 `h1` 은
+      // **`Choosing a vector database for your generative AI applications`**
+      // 다(「vector」가 들어간다 — 실측: 페이지 제목 `… - AWS Decision Guides`).
+      // 「vector」 없는 쪽은 **죽은 슬러그 `docs.aws.amazon.com/vector-databases/`**
+      // 항목이 달고 있던 제목이고, 그 항목을 2026-11-17 에 지우자 이 단정이 깨져
+      // **가드가 굳힌 판정이 현재 페이지와 어긋남**이 드러났다.
+      // 낡은 별칭 「Vector databases on AWS」를 제목처럼 쓰지 않는 것은 그대로다.
       final md = read('aif-t3-1');
-      expect(md, contains('Choosing a database for your generative AI applications'));
+      expect(md,
+          contains('Choosing a vector database for your generative AI applications'));
       expect(md.contains('title: Vector databases on AWS'), isFalse);
       final bank = File('assets/content/aif/aif-t3-1.questions.json')
           .readAsStringSync();

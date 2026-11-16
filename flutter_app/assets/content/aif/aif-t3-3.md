@@ -62,7 +62,9 @@ sources:
     url: https://aws.amazon.com/what-is/data-governance/
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
-lastVerified: 2026-11-03
+  - title: 5. Data security and governance for agentic AI systems on AWS
+    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/best-practices-data.html
+lastVerified: 2026-11-17
 ---
 
 # FM의 훈련과 미세 조정 (훈련 4요소·미세 조정 방법·데이터 준비와 RLHF)
@@ -408,3 +410,4 @@ RLHF를 쓰는 자리는 **후속 훈련·미세 조정 단계**입니다. 공�
 27. What is Data Governance? — `aws.amazon.com/what-is/data-governance/` (2026-11-03 확인)
 28. Prepare data for open-weight models (강화 미세 조정 데이터) — `docs.aws.amazon.com/bedrock/latest/userguide/rft-prepare-data-open-weight.html` (2026-11-03 확인)
 29. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html` (2026-11-03 확인)
+30. 5. Data security and governance for agentic AI systems on AWS — `docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/best-practices-data.html` (2026-11-17 확인)
