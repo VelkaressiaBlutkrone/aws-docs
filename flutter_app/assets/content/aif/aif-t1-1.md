@@ -26,7 +26,19 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html
   - title: AWS Certified AI Practitioner (인증 페이지)
     url: https://aws.amazon.com/certification/certified-ai-practitioner/
-lastVerified: 2026-11-03
+  - title: Underfitting and overfitting machine learning models (AWS)
+    url: https://aws.amazon.com/what-is/overfitting/
+  - title: Asynchronous inference (Amazon SageMaker AI)
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html
+  - title: Deploy models with Amazon SageMaker Serverless Inference
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html
+  - title: What is Data Labeling? (AWS)
+    url: https://aws.amazon.com/what-is/data-labeling/
+  - title: What is Structured Data? (AWS)
+    url: https://aws.amazon.com/what-is/structured-data/
+  - title: Use the SageMaker AI DeepAR forecasting algorithm
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/deepar.html
+lastVerified: 2026-11-17
 ---
 
 # 기본 AI 개념과 용어 (용어·계층·추론 유형·데이터 유형·학습 유형)
@@ -294,3 +306,9 @@ v1.1에서 **비동기와 서버리스가 추가**된 자리입니다. SageMaker
 7. AIF-C01 공식 시험 가이드 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html` (2026-11-03 확인)
 8. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html` (2026-11-03 확인)
 9. AWS Certified AI Practitioner 인증 페이지 (시험 시간·문항 수) — `aws.amazon.com/certification/certified-ai-practitioner/` (2026-11-03 확인)
+10. Underfitting and overfitting machine learning models (AWS) — `aws.amazon.com/what-is/overfitting/` (2026-11-17 확인)
+11. Asynchronous inference (Amazon SageMaker AI) — `docs.aws.amazon.com/sagemaker/latest/dg/async-inference.html` (2026-11-17 확인)
+12. Deploy models with Amazon SageMaker Serverless Inference — `docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html` (2026-11-17 확인)
+13. What is Data Labeling? (AWS) — `aws.amazon.com/what-is/data-labeling/` (2026-11-17 확인)
+14. What is Structured Data? (AWS) — `aws.amazon.com/what-is/structured-data/` (2026-11-17 확인)
+15. Use the SageMaker AI DeepAR forecasting algorithm — `docs.aws.amazon.com/sagemaker/latest/dg/deepar.html` (2026-11-17 확인)

@@ -36,7 +36,11 @@ sources:
     url: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-lake-formation.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html
-lastVerified: 2026-11-03
+  - title: What is AWS Lake Formation?
+    url: https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html
+  - title: Metrics and validation (SageMaker Autopilot)
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html
+lastVerified: 2026-11-17
 ---
 
 # ML 개발 수명 주기 (파이프라인 단계·모델 소스·프로덕션 사용·서비스 매핑·MLOps·지표)
@@ -375,3 +379,5 @@ ROI가 음수일 때 공식이 드는 개선 방향도 함께 기억합니다 �
 12. What is Amazon Quick? — `docs.aws.amazon.com/quick/latest/userguide/what-is.html` (2026-11-03 확인)
 13. Integrate Amazon EMR with AWS Lake Formation — `docs.aws.amazon.com/emr/latest/ManagementGuide/emr-lake-formation.html` (2026-11-03 확인)
 14. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html` (2026-11-03 확인)
+15. What is AWS Lake Formation? — `docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html` (2026-11-17 확인)
+16. Metrics and validation (SageMaker Autopilot) — `docs.aws.amazon.com/sagemaker/latest/dg/autopilot-metrics-validation.html` (2026-11-17 확인)

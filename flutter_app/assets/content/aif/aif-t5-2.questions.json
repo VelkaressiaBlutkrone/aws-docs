@@ -159,28 +159,24 @@
       "skill": "5.2.2",
       "section": "data-governance",
       "difficulty": "applied",
-      "stem": "감사팀이 Amazon Bedrock 챗봇에 대해 \"사용자가 무엇을 물었고 모델이 무엇을 답했는지\"의 본문을 요구합니다. AWS CloudTrail 추적은 이미 켜 두었습니다. 무엇이 더 필요합니까?",
+      "stem": "이미지 생성 모델의 호출 기록을 남기기로 하고, 대상을 Amazon CloudWatch Logs 하나로만 설정하자는 계획이 올라왔습니다. 공식 모델 호출 로깅 문서에 비춘 판단은 무엇입니까?",
       "options": [
-        "추가 구성은 필요 없습니다. CloudTrail의 InvokeModel 이벤트에 요청 본문과 응답 본문이 이미 담깁니다",
-        "CloudTrail의 고급 이벤트 선택기로 InvokeModel을 데이터 이벤트에 추가하면 본문이 담깁니다",
-        "Amazon Bedrock 모델 호출 로깅을 켜야 합니다. 기본적으로 비활성이고 대상은 같은 계정·같은 리전의 Amazon S3 또는 Amazon CloudWatch Logs입니다",
-        "Amazon CloudWatch 경보를 만들어 임계값을 넘는 호출의 본문을 캡처하도록 설정해야 합니다"
+        "레코드에 본문이 들어가는 상한이 없으므로 대상을 하나만 두어도 기록은 온전합니다",
+        "대상을 하나로 두면 기록이 생기지 않으므로 두 대상을 모두 지정해야 합니다",
+        "대용량 입출력과 바이너리 이미지 출력은 Amazon S3만 지원하므로 그 기록이 빠집니다",
+        "이미지 모달리티는 로깅 대상에서 제외되므로 어느 대상을 골라도 기록되지 않습니다"
       ],
       "correct": 2,
-      "explanation": "공식 Bedrock 로깅 문서는 모델 호출 로깅으로 한 리전의 계정에서 Amazon Bedrock에 수행된 모든 호출의 호출 로그, 모델 입력 데이터, 모델 출력 데이터를 수집할 수 있다고 적고, 모델 호출 로깅이 기본적으로 비활성화되어 있다고 명시합니다. 지원 대상은 Amazon CloudWatch Logs와 Amazon Simple Storage Service이며 같은 계정과 같은 리전의 대상만 지원합니다. CloudTrail 쪽은 공식이 싣는 InvokeModel 로그 예시의 requestParameters가 modelId 한 줄이고 responseElements가 null이라 본문을 담지 않습니다.",
+      "explanation": "공식 문서는 레코드에 최대 100KB의 입력·출력 JSON 본문이 들어간다고 적고, 바이너리나 그 한도를 넘는 본문은 Amazon S3 데이터 접두사 아래 개별 객체로 올라가며 로그에는 그 위치 참조만 남는다고 적습니다. 그래서 대용량 입출력과 바이너리 이미지 출력은 Amazon S3만 지원합니다. 이미지 모달리티를 고르는 것 자체는 가능하고, 고른 모달리티는 입력이든 출력이든 그것을 지원하는 모든 모델에 대해 기록됩니다.",
       "wrongExplanations": {
-        "0": "공식이 싣는 InvokeModel 로그 예시의 requestParameters는 modelId 하나뿐이고 responseElements는 null입니다. CloudTrail은 누가 언제 어느 모델을 불렀는지까지만 답합니다.",
-        "1": "InvokeModel은 데이터 이벤트가 아니라 관리 이벤트로 기록되고 CloudTrail은 관리 이벤트를 기본으로 기록합니다. 이벤트 범주를 바꾸는 것으로는 프롬프트 본문이 생기지 않습니다.",
-        "3": "CloudWatch 경보는 사용자가 정의한 임계값에 대해 지표를 지속적으로 모니터링하고 자동화된 작업을 트리거하는 장치입니다. 프롬프트와 응답 본문을 수집하는 기능이 아닙니다."
+        "0": "레코드가 담는 본문에는 100KB 상한이 있습니다. 넘는 본문과 바이너리는 레코드 안에 들어가지 않고 Amazon S3의 개별 객체로 올라갑니다.",
+        "1": "대상은 Amazon CloudWatch Logs와 Amazon S3 가운데 고를 수 있고 하나만 지정해도 기록은 생깁니다. 다만 그 하나가 담을 수 있는 범위가 다릅니다.",
+        "3": "모달리티는 텍스트·이미지·임베딩·비디오 가운데 고르는 설정이고 이미지가 제외되어 있지 않습니다. 고른 모달리티를 지원하는 모든 모델에 대해 기록됩니다."
       },
       "sources": [
         {
-          "title": "Monitor model invocation using CloudWatch Logs and Amazon S3 — 기본 비활성·대상 제약·레코드 필드",
+          "title": "Monitor model invocation using CloudWatch Logs and Amazon S3 — 100KB 경계와 대상 제약",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
-        },
-        {
-          "title": "Monitor Amazon Bedrock API calls using CloudTrail — InvokeModel은 관리 이벤트이고 로그 예시의 본문이 비어 있다",
-          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html"
         }
       ],
       "verified": false
