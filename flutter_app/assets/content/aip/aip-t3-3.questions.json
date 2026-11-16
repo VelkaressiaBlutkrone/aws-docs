@@ -1,0 +1,441 @@
+{
+  "examGuideTaskId": "aip-t3-3",
+  "taskTitle": "AI 거버넌스 및 규정 준수 메커니즘 구현",
+  "domain": 3,
+  "certCode": "AIP-C01",
+  "lastVerified": "2026-11-15",
+  "questions": [
+    {
+      "skill": "3.3.1",
+      "section": "compliance-framework",
+      "difficulty": "foundational",
+      "stem": "심사관이 6개월 전에 누가 모델의 위험 등급을 바꿨는지 보여 달라고 요구합니다. 모델 카드가 그 요구에 답할 수 있습니까?",
+      "options": [
+        "답할 수 있습니다. 승인 상태 업데이트를 뺀 모든 편집이 새 카드 버전을 만들어 기록이 남습니다",
+        "답할 수 없습니다. 카드를 고치면 이전 내용이 덮어써져 변경 이력이 남지 않습니다",
+        "답할 수 있습니다. 카드 편집이 전부 CloudTrail 데이터 이벤트로 기록되기 때문입니다",
+        "답할 수 있습니다. 모델 레지스트리가 카드 변경을 별 버전으로 복제해 두기 때문입니다"
+      ],
+      "correct": 0,
+      "explanation": "승인 상태 업데이트를 제외한 모든 편집이 추가 모델 카드 버전을 만들고, 공식이 그 설계의 목적을 「모델 변경의 불변 기록을 갖기 위해」라고 직접 적습니다. 위험 등급 변경은 승인 상태 업데이트가 아니므로 새 버전으로 남습니다. 완성된 카드는 PDF로 내보내거나 다운로드해 심사 자료로 제출할 수 있고 Model Registry와 통합되므로 어느 모델 버전에 붙은 판단인지도 따라옵니다.",
+      "wrongExplanations": {
+        "1": "덮어쓰는 구조가 아닙니다. 편집이 버전을 만드는 것이 이 기능의 핵심 설계입니다.",
+        "2": "카드 버전 기록은 카드 자체의 기능이고 호출 이벤트 분류와는 다른 층입니다.",
+        "3": "레지스트리는 카드를 모델 버전에 연결하는 쪽이고 변경 이력을 복제하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI 모델 카드",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ],
+      "id": "aip-t3-3-q1",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.1",
+      "section": "compliance-framework",
+      "difficulty": "applied",
+      "stem": "모델 카드의 「의도된 용도」 절을 채우려 합니다. 그 절에 함께 적는 것은 무엇입니까?",
+      "options": [
+        "적합한 용례와 기대 정확도를 적고 권장되지 않는 용례는 별 절에 적습니다",
+        "일반 목적과 의도된 용례에 더해 의도되지 않은 용례와 개발 시 가정까지 적습니다",
+        "훈련 데이터 위치와 하이퍼파라미터를 함께 적어 용도를 재현 가능하게 만듭니다",
+        "승인자와 승인 일자를 함께 적어 그 용도로 써도 된다는 서명을 남깁니다"
+      ],
+      "correct": 1,
+      "explanation": "「의도된 용도」는 적합한 시나리오만 적는 절이 아닙니다. 공식이 일반 목적과 의도된 용례와 함께 권장되지 않는 시나리오(의도되지 않은 용례)와 개발 당시의 가정까지 적으라고 합니다 — 심사에서 「이 모델을 저 용도에 쓰면 안 된다는 것을 알고 있었는가」를 증명하는 자리가 거기입니다.",
+      "wrongExplanations": {
+        "0": "권장되지 않는 용례가 같은 절에 들어갑니다. 별 절로 분리하지 않습니다.",
+        "2": "훈련 작업·데이터 위치·하이퍼파라미터는 훈련 세부 절의 내용입니다.",
+        "3": "승인 상태는 별 항목이고, 그 업데이트만은 새 카드 버전을 만들지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI 모델 카드",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ],
+      "id": "aip-t3-3-q2",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.1",
+      "section": "compliance-framework",
+      "difficulty": "applied",
+      "stem": "같은 팀이 만든 대출 승인 모델과 이메일 범주 탐지 모델에 위험 등급을 부여합니다. 등급은 무엇으로 정합니까?",
+      "options": [
+        "모델의 검증 정확도로 정합니다. 정확도가 낮을수록 높은 등급을 부여합니다",
+        "훈련 데이터의 양으로 정합니다. 데이터가 적을수록 높은 등급을 부여합니다",
+        "틀렸을 때 사람에게 미치는 영향으로 정합니다. 대출 승인 쪽이 더 높은 등급입니다",
+        "추론 비용과 호출량으로 정합니다. 많이 불리는 모델에 높은 등급을 부여합니다"
+      ],
+      "correct": 2,
+      "explanation": "위험 등급은 unknown·low·medium·high 넷이고, 공식이 드는 예가 바로 대출 승인 모델이 이메일 범주 탐지 모델보다 고위험이라는 것입니다. 등급은 모델의 정확도가 아니라 틀렸을 때 사람에게 미치는 영향으로 정합니다.",
+      "wrongExplanations": {
+        "0": "정확도는 훈련·평가 세부의 지표이고 등급 산정 기준이 아닙니다.",
+        "1": "데이터 양도 훈련 세부에 적는 사실이고 영향 기반 분류와 다릅니다.",
+        "3": "비용과 호출량은 운영 지표이고 위험 등급과 관계가 없습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI 모델 카드",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        }
+      ],
+      "id": "aip-t3-3-q3",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.1",
+      "section": "compliance-framework",
+      "difficulty": "applied",
+      "stem": "새 프로젝트에서 모델 카드의 평가 세부를 채우려 합니다. 보고서를 S3에 올려 지표를 자동 파싱시키는 경로를 전제할 수 있습니까?",
+      "options": [
+        "전제할 수 있습니다. 어떤 평가 도구가 낸 JSON이든 S3 URI를 주면 파싱됩니다",
+        "전제할 수 있습니다. 카드가 지표를 직접 계산하므로 보고서 형식과 무관합니다",
+        "전제할 수 없습니다. 평가 세부는 JSON이 아니라 PDF로만 첨부할 수 있습니다",
+        "전제하지 않습니다. 그 보고서를 내던 Clarify와 Model Monitor가 신규 고객에게 닫혔습니다"
+      ],
+      "correct": 3,
+      "explanation": "공식은 평가 세부를 JSON으로 주라고 하면서 Clarify나 Model Monitor가 생성한 기존 JSON 평가 보고서를 S3에 올려 S3 URI를 주면 지표를 자동 파싱한다고 적습니다. 그런데 두 서비스가 신규 고객에게 더 이상 열려 있지 않으므로 새로 만드는 시스템은 대체 경로가 낸 지표를 JSON으로 넣는 쪽으로 설계합니다.",
+      "wrongExplanations": {
+        "0": "자동 파싱 경로는 그 두 서비스의 보고서 형식을 전제로 적힌 것이라 아무 JSON이나 해당하지 않습니다.",
+        "1": "카드는 기록하는 문서이고 지표를 계산하지 않습니다.",
+        "2": "PDF는 완성된 카드를 내보내는 형식이고, 평가 세부 입력은 JSON입니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker AI 모델 카드",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
+        },
+        {
+          "title": "Amazon SageMaker Clarify 가용성 변경",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html"
+        }
+      ],
+      "id": "aip-t3-3-q4",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.2",
+      "section": "lineage",
+      "difficulty": "applied",
+      "stem": "RAG의 입력 데이터 출처를 추적하려고 Glue Data Catalog를 도입합니다. 카탈로그가 추적에 주는 것은 무엇입니까?",
+      "options": [
+        "위치와 스키마의 색인에 크롤러의 자동 검색과 스키마 버전 관리가 함께 옵니다",
+        "변형 단계마다 입력과 출력을 잇는 계보 그래프를 단계별로 자동 생성합니다",
+        "데이터 접근 기록을 남겨 누가 그 테이블을 읽었는지까지 함께 보여 줍니다",
+        "리전마다 카탈로그를 여러 개 두어 팀별로 분리된 메타데이터를 관리합니다"
+      ],
+      "correct": 0,
+      "explanation": "Data Catalog는 데이터 소스의 위치·스키마·런타임 지표의 색인이고 각 계정이 리전마다 하나를 가집니다. 추적에 직접 쓰이는 기능은 메타데이터 저장소와 크롤러의 자동 데이터 검색(새로 생기거나 바뀐 소스를 발견해 최신으로 유지), 그리고 스키마 추론·진화·버전 관리입니다 — 버전 관리가 「언제 스키마가 바뀌었는가」의 기록입니다.",
+      "wrongExplanations": {
+        "1": "공식 문서가 추적 수단으로 적는 것은 카탈로그 등록과 크롤러의 자동 검색, 스키마 버전 관리, 그리고 CloudTrail·Lake Formation과의 조합까지입니다.",
+        "2": "접근 기록은 CloudTrail의 몫이고 카탈로그는 메타데이터를 담습니다.",
+        "3": "각 계정은 리전마다 Data Catalog를 하나 가집니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue의 데이터 검색과 카탈로그화",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+        }
+      ],
+      "id": "aip-t3-3-q5",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.2",
+      "section": "lineage",
+      "difficulty": "applied",
+      "stem": "데이터 레이크에 포괄적인 감사와 거버넌스 역량을 두려 합니다. 세 가지를 올바르게 묶은 것은 무엇입니까?",
+      "options": [
+        "Data Catalog와 CloudWatch와 IAM을 묶어 스키마 변경과 접근을 함께 봅니다",
+        "Data Catalog와 CloudTrail과 Lake Formation을 묶어 스키마 변경과 액세스 제어를 얻습니다",
+        "Data Catalog와 Macie와 Config를 묶어 민감도 분류까지 함께 다룹니다",
+        "Data Catalog와 S3 서버 액세스 로그와 KMS를 묶어 읽기 기록을 남깁니다"
+      ],
+      "correct": 1,
+      "explanation": "공식이 명시하는 조합이 Data Catalog와 CloudTrail과 Lake Formation이고, 그 셋이 함께 포괄적 감사·거버넌스 역량을 줍니다. 내용은 스키마 변경 추적과 데이터 액세스 제어이고 목적도 적혀 있습니다 — 데이터가 부적절하게 수정되거나 의도치 않게 공유되지 않도록 하는 것입니다.",
+      "wrongExplanations": {
+        "0": "CloudWatch는 지표·로그 쪽이고 이 조합에 들지 않습니다. 액세스 제어 층은 Lake Formation이 맡습니다.",
+        "2": "Macie와 Config는 다른 목적의 서비스이고 이 조합으로 적히지 않습니다.",
+        "3": "S3 서버 액세스 로그와 KMS는 이 조합이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AWS Glue 구성 요소",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/components-overview.html"
+        }
+      ],
+      "id": "aip-t3-3-q6",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.2",
+      "section": "lineage",
+      "difficulty": "applied",
+      "stem": "감사용으로 Bedrock 호출 기록을 장기 보관하려 합니다. CloudTrail의 기본 상태에 비추어 무엇을 해야 합니까?",
+      "options": [
+        "아무 것도 하지 않아도 됩니다. 계정 생성 시 활성이고 모든 이벤트가 영구 보관됩니다",
+        "리전마다 추적을 따로 만들어야 합니다. 추적은 만든 리전의 이벤트만 수집합니다",
+        "추적을 만들어야 합니다. Event history는 최근 이벤트만 보여 주고 지속 기록은 S3로 갑니다",
+        "모델 호출 로깅을 켜야 합니다. CloudTrail은 추적을 만들어도 기록을 보관하지 않습니다"
+      ],
+      "correct": 2,
+      "explanation": "계정을 만들면 CloudTrail이 이미 활성이고 최근 이벤트는 Event history에서 바로 볼 수 있지만, 지속적 기록에는 추적(trail)이 필요하고 추적은 로그 파일을 S3 버킷으로 전달합니다. 콘솔에서 만든 추적은 기본적으로 모든 리전에 적용돼 파티션 전 리전의 이벤트를 지정한 버킷으로 모읍니다.",
+      "wrongExplanations": {
+        "0": "Event history는 최근 이벤트만 담습니다. 영구 보관은 추적과 S3가 맡습니다.",
+        "1": "콘솔에서 만든 추적은 기본적으로 모든 리전에 적용됩니다.",
+        "3": "CloudTrail은 추적으로 기록을 보관합니다. 모델 호출 로깅은 프롬프트와 응답 본문을 남기는 다른 층입니다."
+      },
+      "sources": [
+        {
+          "title": "AWS CloudTrail 사용자 안내서",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        }
+      ],
+      "id": "aip-t3-3-q7",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.3",
+      "section": "org-governance",
+      "difficulty": "foundational",
+      "stem": "책임 있는 AI 렌즈의 두 차원을 구분해 적으라는 요청을 받았습니다. 설명 가능성과 투명성을 올바르게 가른 것은 무엇입니까?",
+      "options": [
+        "설명 가능성은 모델 가중치 공개이고 투명성은 학습 데이터 목록 공개입니다",
+        "설명 가능성은 사용자 안내 문구이고 투명성은 내부 감사 보고서 작성입니다",
+        "둘은 같은 뜻이며 렌즈가 지역별 표기 차이 때문에 두 이름을 함께 적습니다",
+        "설명 가능성은 동작을 이해할 장치이고 투명성은 이해관계자가 스스로 판단하게 하는 것입니다"
+      ],
+      "correct": 3,
+      "explanation": "렌즈의 정의가 그렇게 갈립니다 — 설명 가능성은 시스템 동작을 이해할 장치를 갖추는 것이고, 투명성은 이해관계자가 그 AI 시스템과의 관계를 스스로 판단할 수 있게 하는 것입니다. 지문이 「사용자에게 보여 준다」면 투명성 쪽이고 「왜 그랬는지 이해할 장치」면 설명 가능성 쪽입니다.",
+      "wrongExplanations": {
+        "0": "둘 다 내부 공개를 뜻하지 않습니다. 투명성은 판단 재료를 주는 것입니다.",
+        "1": "안내 문구나 보고서는 구현 수단의 예일 뿐 두 차원의 정의가 아닙니다.",
+        "2": "서로 다른 차원이고 담당하는 문제가 다릅니다."
+      },
+      "sources": [
+        {
+          "title": "책임 있는 AI 렌즈 (AWS Well-Architected Framework)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        }
+      ],
+      "id": "aip-t3-3-q8",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.3",
+      "section": "org-governance",
+      "difficulty": "applied",
+      "stem": "교재에 책임 있는 AI 차원을 여덟으로 적을지 열로 적을지 팀 의견이 갈립니다. 어떻게 처리합니까?",
+      "options": [
+        "개수를 고정하지 않고 차원 이름과 담당 영역으로 정리합니다. 자료마다 수가 갈립니다",
+        "여덟으로 적습니다. 렌즈가 열을 적는 것은 중복을 합치지 않은 초기 판이기 때문입니다",
+        "열로 적습니다. 렌즈가 가장 최신 자료이므로 다른 수는 모두 낡은 것입니다",
+        "팀 투표로 하나를 정하고 교재 전체에 그 수를 일관되게 적용하면 됩니다"
+      ],
+      "correct": 0,
+      "explanation": "책임 있는 AI 렌즈는 열 차원을 적지만 AWS의 다른 공식 면은 여덟 차원으로 적습니다. 공식 자신이 「AI가 진화하면서 갱신하는 핵심 집합」이라고 밝히고 있어 수가 고정이 아니므로, 외울 것은 어떤 차원이 어떤 문제를 담당하는가입니다. 특히 설명 가능성과 투명성의 구분이 자주 갈림길입니다.",
+      "wrongExplanations": {
+        "1": "어느 한쪽을 초기 판으로 볼 근거가 없습니다. 두 서술이 함께 유지되고 있습니다.",
+        "2": "다른 수를 적는 자료가 낡았다고 볼 근거가 없습니다.",
+        "3": "합의로 수를 정해도 자료를 읽을 때 다른 수를 만나므로 개수에 기대면 틀립니다."
+      },
+      "sources": [
+        {
+          "title": "책임 있는 AI 렌즈 (AWS Well-Architected Framework)",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
+        }
+      ],
+      "id": "aip-t3-3-q9",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.3",
+      "section": "org-governance",
+      "difficulty": "applied",
+      "stem": "AI 서비스 옵트아웃 정책을 적용했습니다. 적용 전에 이미 공유된 콘텐츠는 어떻게 됩니까?",
+      "options": [
+        "그대로 남습니다. 정책은 적용 이후에 보내는 콘텐츠에만 효력이 있습니다",
+        "연관 과거 콘텐츠가 삭제됩니다. 다만 서비스 제공에 필요한 저장 콘텐츠는 남습니다",
+        "전부 삭제됩니다. 서비스 제공에 필요한 콘텐츠까지 함께 지워져 기능이 멈춥니다",
+        "보존 기간이 끝날 때까지 남아 있다가 그 뒤에 자동으로 삭제 큐에 들어갑니다"
+      ],
+      "correct": 1,
+      "explanation": "옵트아웃은 과거 콘텐츠도 삭제합니다 — 설정 전에 AWS와 공유된 연관 과거 콘텐츠 전부를 그 서비스가 삭제합니다. 단 삭제는 서비스 기능 제공에 필요하지 않은 저장 콘텐츠로 한정되므로 서비스 개선용 복사본은 삭제되고 서비스를 제공하는 데 쓰이는 콘텐츠는 남습니다. 정책은 개별 AI 서비스별로 또는 지원되는 모든 서비스에 대해 만들 수 있고 계정별 유효 정책을 질의해 결과를 확인합니다.",
+      "wrongExplanations": {
+        "0": "소급해 삭제하는 것이 이 정책의 핵심 동작입니다.",
+        "2": "서비스 제공에 필요한 콘텐츠는 삭제 대상에서 빠지므로 기능이 멈추지 않습니다.",
+        "3": "보존 기간이 끝나기를 기다리는 동작이 아니라 설정 시 삭제가 수행됩니다."
+      },
+      "sources": [
+        {
+          "title": "AI 서비스 옵트아웃 정책",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html"
+        }
+      ],
+      "id": "aip-t3-3-q10",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.3",
+      "section": "org-governance",
+      "difficulty": "applied",
+      "stem": "우리 조직은 두 리전만 활성화해 쓰고 있습니다. 옵트아웃 선호는 어느 리전에 기록됩니까?",
+      "options": [
+        "활성화한 두 리전에만 기록되고 나머지 리전은 쓰기 시작할 때 기록됩니다",
+        "관리 계정의 홈 리전 한 곳에만 기록되고 다른 리전은 그것을 조회해 씁니다",
+        "지원 서비스가 운영되는 모든 리전에 기록되고 비활성 리전까지 포함됩니다",
+        "리전마다 따로 설정해야 하므로 설정하지 않은 리전에는 기록되지 않습니다"
+      ],
+      "correct": 2,
+      "explanation": "AWS는 지원 서비스가 운영되는 모든 리전에 정책을 적용하고 기본적으로 비활성인 리전까지 포함합니다. 선택을 일관되게 강제하기 위해 각 리전이 독립적으로 선호 메타데이터(계정 식별자와 옵트아웃 선택)를 저장하며, 그 리전을 활성화했는지와 무관합니다. 「우리는 그 리전을 안 쓰니 설정이 필요 없다」는 생각이 이 자리의 전형적 오해입니다.",
+      "wrongExplanations": {
+        "0": "활성화 여부와 무관하게 모든 리전에 기록됩니다.",
+        "1": "한 곳에 두고 조회하는 구조가 아니라 각 리전이 독립 저장합니다.",
+        "3": "리전별로 따로 설정하는 정책이 아닙니다."
+      },
+      "sources": [
+        {
+          "title": "AI 서비스 옵트아웃 정책",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html"
+        }
+      ],
+      "id": "aip-t3-3-q11",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.4",
+      "section": "continuous-monitoring",
+      "difficulty": "foundational",
+      "stem": "신규 프로젝트에서 대출 심사 모델의 집단 간 편향을 매주 재려 합니다. SageMaker Clarify와 Model Monitor로 설계할 수 있습니까?",
+      "options": [
+        "쓸 수 있습니다. 두 서비스 모두 정상 제공되고 편향과 드리프트를 함께 다룹니다",
+        "쓸 수 있습니다. 기존 고객 전용이지만 조직 계정이면 신규로도 활성화됩니다",
+        "쓸 수 없습니다. 두 서비스가 완전 종료되어 기존 고객도 더는 쓰지 못합니다",
+        "쓸 수 없습니다. 둘 다 신규 고객에게 열려 있지 않아 대체 조합으로 설계합니다"
+      ],
+      "correct": 3,
+      "explanation": "공식 문서가 두 서비스에 같은 문장을 적습니다 — 기존 고객은 계속 사용할 수 있고 AWS는 보안·가용성 개선에 계속 투자하지만 새 기능을 도입할 계획은 없습니다. 따라서 새로 설계하는 시스템은 대체 경로로 갑니다: AWS가 발행한 오픈소스 모니터링 솔루션, 표준 편향 지표 직접 계산, SHAP, SageMaker AI MLflow, CloudWatch, QuickSight 추론 모니터링, 그리고 FM 평가는 Bedrock Evaluations입니다.",
+      "wrongExplanations": {
+        "0": "두 서비스 모두 신규 고객에게 열려 있지 않습니다.",
+        "1": "계정 형태로 열리는 예외가 없습니다.",
+        "2": "완전 종료가 아니라 신규 고객 비개방이고 기존 고객은 계속 씁니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Clarify 가용성 변경",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html"
+        },
+        {
+          "title": "Amazon SageMaker Model Monitor 가용성 변경",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html"
+        }
+      ],
+      "id": "aip-t3-3-q12",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.4",
+      "section": "continuous-monitoring",
+      "difficulty": "applied",
+      "stem": "닫힌 서비스 대신 집단 간 편향을 직접 재야 합니다. 표준 편향 지표를 어떻게 얻습니까?",
+      "options": [
+        "레이블 수와 혼동 행렬에서 계산합니다. 발행된 산술이라 pandas로 재현됩니다",
+        "해당 서비스의 SDK를 계속 내려받아 로컬에서 같은 계산을 그대로 돌립니다",
+        "모델 가중치를 직접 분석해야 하므로 오픈 가중치 모델만 측정할 수 있습니다",
+        "Bedrock 평가에 표형 데이터를 넣으면 같은 편향 지표가 그대로 산출됩니다"
+      ],
+      "correct": 0,
+      "explanation": "편향 지표는 특정 라이브러리에 묶인 기능이 아니라 공개된 산술입니다. 사전·사후 훈련 편향 지표(DPL·DPPL·DI·CI 등)는 발행된 업계 표준 공식이고 레이블 수와 혼동 행렬 값에서 계산되므로 pandas와 scikit-learn으로 재현할 수 있습니다. 설명 가능성 쪽도 SHAP이 Clarify가 내부에서 쓰던 그 엔진이라 직접 채택하면 같은 Shapley 값 귀속을 얻습니다 — 신규 고객에게 서비스가 닫혔다고 역량이 사라지는 것이 아닙니다.",
+      "wrongExplanations": {
+        "1": "닫힌 서비스의 SDK를 끌어다 쓰는 경로가 아니라 지표 자체를 계산하는 경로입니다.",
+        "2": "지표는 레이블과 예측 결과에서 나오므로 가중치 분석이 필요하지 않습니다.",
+        "3": "Bedrock 평가는 FM 평가 쪽이고 표형 모델의 편향 지표를 산출하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Clarify 가용성 변경",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html"
+        }
+      ],
+      "id": "aip-t3-3-q13",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.4",
+      "section": "continuous-monitoring",
+      "difficulty": "applied",
+      "stem": "표형 신용 평가 모델의 공정성을 재는 수단을 고르려 합니다. Bedrock 평가가 그 자리에 맞습니까?",
+      "options": [
+        "맞습니다. 표형 모델도 평가 작업의 지원 대상이라 같은 지표가 그대로 나옵니다",
+        "맞지 않습니다. FM 평가의 관리형 경로이고 예측 모델의 편향 탐지를 대신하지 않습니다",
+        "맞습니다. 판정 모델이 표형 예측값을 읽어 집단 간 차이까지 채점해 줍니다",
+        "맞지 않습니다. 평가 작업 자체가 신규 고객에게 열려 있지 않기 때문입니다"
+      ],
+      "correct": 1,
+      "explanation": "대체 범위의 경계가 시험 포인트입니다 — Bedrock Evaluations와 Guardrails는 FM·GenAI 평가의 AWS 관리형 경로이고 Clarify의 FM 평가를 대체하지만, 예측(표형·고전 ML) 모델의 편향 탐지와 설명 가능성을 대체하지 않습니다. 표형 모델의 공정성을 보려면 표준 지표를 직접 계산하는 쪽으로 갑니다. FM 평가 쪽 선택지는 fmeval 라이브러리와 Bedrock Evaluations와 Bedrock Guardrails 셋이고 둘 모두 신규 고객에게 열려 있습니다.",
+      "wrongExplanations": {
+        "0": "표형 모델의 편향 지표를 내는 기능이 아닙니다.",
+        "2": "판정 모델은 생성 응답을 채점하는 쪽이고 표형 예측의 집단 간 차이를 재지 않습니다.",
+        "3": "Bedrock 평가는 정상 제공됩니다. 닫힌 쪽은 Clarify와 Model Monitor이고 둘 다 신규 고객에게 열려 있지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Clarify 가용성 변경",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html"
+        }
+      ],
+      "id": "aip-t3-3-q14",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    },
+    {
+      "skill": "3.3.4",
+      "section": "continuous-monitoring",
+      "difficulty": "applied",
+      "stem": "팀이 가드레일 출력 필터를 켠 것으로 지속적 모니터링 요건을 충족했다고 보고합니다. 어디가 부족합니까?",
+      "options": [
+        "임계값이 부족합니다. 필터 강도를 최고로 올리면 세 요건을 모두 덮습니다",
+        "대상이 부족합니다. 입력 쪽 필터까지 함께 켜면 요건이 그대로 충족됩니다",
+        "신호가 하나뿐입니다. 필터는 한 요청을 보고 드리프트와 오용은 다른 것을 봅니다",
+        "보관이 부족합니다. 필터 판정 결과를 S3에 장기 보관하면 요건이 충족됩니다"
+      ],
+      "correct": 2,
+      "explanation": "공식 기술이 드는 것은 오용·드리프트·정책 위반이고 셋은 보는 대상이 다릅니다 — 정책 필터는 한 요청을 보고, 드리프트 모니터링은 입력·출력 분포의 변화를 보고, 오용 탐지는 사용 패턴을 봅니다. 그래서 필터만으로는 모델이 서서히 나빠지는 것과 누군가 시스템을 의도와 다르게 쓰는 것을 잡지 못합니다. 같은 기술이 함께 요구하는 토큰 수준 수정(민감 정보 필터의 Mask)과 응답 로깅, 자동 경고·수정 워크플로(CloudWatch 알람과 EventBridge)도 빠져 있습니다.",
+      "wrongExplanations": {
+        "0": "강도를 올리는 것은 같은 신호를 더 민감하게 만드는 것이고 다른 신호를 주지 않습니다.",
+        "1": "입력 필터를 더해도 여전히 한 요청만 보는 층입니다.",
+        "3": "보관은 증거를 남기는 것이고 분포 변화나 사용 패턴을 판정하지 않습니다."
+      },
+      "sources": [
+        {
+          "title": "Amazon SageMaker Model Monitor 가용성 변경",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html"
+        },
+        {
+          "title": "민감 정보 필터로 대화에서 PII 제거",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html"
+        }
+      ],
+      "id": "aip-t3-3-q15",
+      "examGuideTaskId": "aip-t3-3",
+      "verified": false
+    }
+  ]
+}
