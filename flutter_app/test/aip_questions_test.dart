@@ -72,6 +72,7 @@ void main() {
     'aip-t1-1', 'aip-t1-2', 'aip-t1-3', 'aip-t1-4', 'aip-t1-5', 'aip-t1-6',
     'aip-t2-1', 'aip-t2-2', 'aip-t2-3', 'aip-t2-4', 'aip-t2-5',
     'aip-t3-1', 'aip-t3-2', 'aip-t3-3', 'aip-t3-4',
+    'aip-t4-1', 'aip-t4-2',
   };
 
   /// 사람이 검수를 마쳐 flip한 Task — **AI는 여기에 손대지 않는다.**
