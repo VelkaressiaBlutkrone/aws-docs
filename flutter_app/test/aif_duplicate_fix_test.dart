@@ -38,9 +38,15 @@ import 'package:flutter_test/flutter_test.dart';
 /// 「—」로 비워 둔 쌍이 바로 그런 것들이다. 그래서 전수 불변식과 **쌍별 명시
 /// 단정**을 함께 둔다(MLA 판과 같은 구조).
 ///
-/// ⚠️ **AIF 문항은 전부 드래프트다**(`verified: false`). 교체는 사실 서술을
-/// 바꾸는 작업이고 flip과 무관하며, 교체 스크립트가 원본 `verified` 값을 그대로
-/// 옮기게 해 사람의 서명을 AI가 대신 쓰지 않았다.
+/// ⚠️ 이 배치(2026-11-07) 시점에 **AIF 문항은 전부 드래프트였다**(`verified: false`).
+/// 교체는 사실 서술을 바꾸는 작업이고 flip과 무관하며, 교체 스크립트가 원본
+/// `verified` 값을 그대로 옮기게 해 사람의 서명을 AI가 대신 쓰지 않았다.
+///
+/// ⚠️⚠️ **2026-11-13부터는 그 전제가 깨졌다** — 검수자가 `aif-t1-1` 15문항을
+/// flip했고(`6d20b0d`) AIF는 **부분 flip 상태**다(D1만 충족, 모의고사는 잠김).
+/// 그러니 앞으로 이 파일의 쌍을 손댈 때는 **그 문항이 라이브인지 먼저 센다**
+/// (`grep -l '"verified": true' assets/content/aif/*.questions.json`).
+/// 착수 노트는 `docs/saa-review/2026-11-17-aif-review-prep.md`다.
 void main() {
   const dir = 'assets/content/aif';
 

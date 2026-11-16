@@ -5,7 +5,7 @@
 > 전제 인프라(완료): T1 사전심사(`prescreen.mjs` — 2026-10-29부터 **자격증 일반형**)·T3 동적 불변식·T4 공개 게이트·T6 문서 스캔·T8 freeze 가드(**SAA 전용**).
 > 검수 뷰어·flip 도구는 **자격증 일반형**이다(2026-10-27): `tool/review.mjs build <cert>` · `flip <cert> <taskId>`
 > (`<cert>`: `review.mjs`의 CERTS 키 — **인자 없이 실행하면 목록이 나온다**. 2026-11-16 실측으로 aif·aip·scs·clf·saa·soa·dea·mla **여덟 자격증**이고, ⚠️ 이 문서는 2026-11-10까지 **다섯**으로 멈춰 있어 aif·scs가, 2026-11-16까지 **일곱**으로 멈춰 있어 aip가 빠져 있었다 — **자격증이 늘면 이 문서부터 낡는다**). 루브릭 C1~C6과 아래 절차는 **여덟 자격증에 그대로 쓴다** — 자격증 전용 주의(flip이 돌리는 테스트,
-> `flipAllowlist` 유무)는 7번 flip 항목에 모아 뒀다. **자격증별 착수 노트** — SOA·DEA는 [2026-10-29-soa-dea-review-prep.md](2026-10-29-soa-dea-review-prep.md), **SCS는** [2026-11-10-scs-review-prep.md](2026-11-10-scs-review-prep.md), **AIP는** [2026-11-16-aip-review-prep.md](2026-11-16-aip-review-prep.md)가
+> `flipAllowlist` 유무)는 7번 flip 항목에 모아 뒀다. **자격증별 착수 노트** — SOA·DEA는 [2026-10-29-soa-dea-review-prep.md](2026-10-29-soa-dea-review-prep.md), **SCS는** [2026-11-10-scs-review-prep.md](2026-11-10-scs-review-prep.md), **AIP는** [2026-11-16-aip-review-prep.md](2026-11-16-aip-review-prep.md), **AIF는** [2026-11-17-aif-review-prep.md](2026-11-17-aif-review-prep.md)가
 > 정본이다(게이트 산술·flip 선결 실측·중복 스캔·환경 함정).
 
 ---
