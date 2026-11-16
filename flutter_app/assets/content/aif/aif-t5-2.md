@@ -74,7 +74,9 @@ sources:
     url: https://docs.aws.amazon.com/audit-manager/latest/userguide/audit-manager-availability-change.html
   - title: Securing generative AI — An introduction to the Generative AI Security Scoping Matrix (AWS 보안 블로그)
     url: https://aws.amazon.com/blogs/security/securing-generative-ai-an-introduction-to-the-generative-ai-security-scoping-matrix/
-lastVerified: 2026-11-06
+  - title: Locking objects with Object Lock (Amazon S3)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html
+lastVerified: 2026-11-17
 ---
 
 # AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)
@@ -543,3 +545,4 @@ AI 워크로드 쪽의 관찰 요구를 적는 것은 책임 있는 AI 렌즈 **
 32. AWS Audit Manager availability change (유지 관리 모드·2026-04-30·적합성 팩 대체 경로와 한계) — `docs.aws.amazon.com/audit-manager/latest/userguide/audit-manager-availability-change.html` (2026-11-03 확인)
 33. Securing generative AI — An introduction to the Generative AI Security Scoping Matrix (범위 5개·보안 분야 5개의 정본. ⚠️ `docs.aws.amazon.com`에 이 매트릭스를 정의한 페이지가 없어 블로그를 명시합니다) — `aws.amazon.com/blogs/security/securing-generative-ai-an-introduction-to-the-generative-ai-security-scoping-matrix/` (2026-11-03 확인)
 34. The Agentic AI Security Scoping Matrix (AWS 보안 블로그 — AWS SRA가 참조하는 두 번째 매트릭스) — `aws.amazon.com/blogs/security/the-agentic-ai-security-scoping-matrix-a-framework-for-securing-autonomous-ai-systems/` (2026-11-03 확인)
+35. Locking objects with Object Lock (Amazon S3) — `docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html` (2026-11-17 확인)

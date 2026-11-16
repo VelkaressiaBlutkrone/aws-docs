@@ -38,7 +38,9 @@ sources:
     url: https://aws.amazon.com/aws-startups/learn/how-startup-companies-scale-with-data-analytics/
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
-lastVerified: 2026-11-03
+  - title: AIF-C01 Exam Guide · Content Domain 2 (영문)
+    url: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
+lastVerified: 2026-11-17
 ---
 
 # GenAI의 기능과 한계 (장점·단점·모델 선택 요소·비즈니스 가치와 지표)
@@ -376,3 +378,4 @@ GenAI에서 쓰는 설명 수단을 Well-Architected 책임 있는 AI 렌즈가 
 13. Revenue per Paying User (사용자당 수익의 공식 계산) — `docs.aws.amazon.com/help-panel/pinpoint/latest/helppanel/analytics.revenue.revenuePerPayingUser.html` (2026-11-03 확인)
 14. How startup companies scale with data analytics (고객 평생 가치) — `aws.amazon.com/aws-startups/learn/how-startup-companies-scale-with-data-analytics/` (2026-11-03 확인)
 15. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어 — 목표 2.2.1~2.2.4 원문) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html` (2026-11-03 확인)
+16. AIF-C01 Exam Guide · Content Domain 2 (영문) — `docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html` (2026-11-17 확인)

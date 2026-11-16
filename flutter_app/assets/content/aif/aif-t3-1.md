@@ -26,8 +26,6 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html
   - title: Choosing a vector database for your generative AI applications (AWS 의사 결정 가이드)
     url: https://docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html
-  - title: Choosing a database for your generative AI applications
-    url: https://docs.aws.amazon.com/vector-databases/
   - title: GENOPS05-BP01 Learn when to customize models (Well-Architected Generative AI Lens)
     url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops05-bp01.html
   - title: Customize your model to improve its performance for your use case (Amazon Bedrock)
@@ -48,7 +46,9 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
-lastVerified: 2026-11-03
+  - title: Process multiple prompts with batch inference
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
+lastVerified: 2026-11-17
 ---
 
 # FM 애플리케이션의 설계 고려 사항 (모델 선택 기준·추론 파라미터·RAG·벡터 저장소·사용자 지정 비용 절충·AI 에이전트)
@@ -395,14 +395,14 @@ v1.1이 이 목표에서 **서비스 예시를 전부 지웠습니다.** 그러�
 7. What is RAG (Retrieval-Augmented Generation)? — `aws.amazon.com/what-is/retrieval-augmented-generation/` (2026-11-03 확인)
 8. Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html` (2026-11-03 확인)
 9. Choosing a vector database for your generative AI applications (AWS 의사 결정 가이드) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html` (2026-11-03 확인)
-10. Choosing a database for your generative AI applications (Aurora PostgreSQL · RDS for PostgreSQL · OpenSearch · Neptune Analytics) — `docs.aws.amazon.com/vector-databases/` (2026-11-06 재확인) · ⚠️ **이 페이지의 실제 제목은 「Vector databases on AWS」가 아닙니다** — `h1`이 **`Choosing a database for your generative AI applications`**입니다(실측). ⚠️ 그리고 **그 페이지의 서비스 목록은 이 문서보다 넓습니다** — `Amazon MemoryDB`·`Amazon DocumentDB`·`Amazon DynamoDB`도 절 제목으로 싣습니다. 다만 **공식 목표 3.1.4의 예시 목록에 없으므로 문항 근거로는 쓰지 않습니다**
-11. GENOPS05-BP01 Learn when to customize models — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops05-bp01.html` (2026-11-03 확인)
-12. Customize your model to improve its performance for your use case — `docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html` (2026-11-03 확인)
-13. Customize a model with distillation in Amazon Bedrock — `docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html` (2026-11-03 확인)
-14. Increase model invocation capacity with Provisioned Throughput in Amazon Bedrock — `docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html` (2026-11-03 확인)
-15. Set up inference for a custom model — `docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html` (2026-11-03 확인)
-16. Deploy a custom model for on-demand inference (리전·전제 조건·지원 기반 모델) — `docs.aws.amazon.com/bedrock/latest/userguide/deploy-custom-model-on-demand.html` (2026-11-03 확인)
-17. Agentic AI (Well-Architected Generative AI Lens — 에이전트 정의·패턴 셋) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/agentic-ai.html` (2026-11-03 확인)
-18. What Is Agentic AI? (사용 사례 넷·이점 넷) — `aws.amazon.com/what-is/agentic-ai/` (2026-11-03 확인)
-19. Amazon Bedrock Agents Classic maintenance mode — `docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html` (2026-11-03 확인)
-20. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어 — 목표 6개 원문) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html` (2026-11-03 확인)
+10. GENOPS05-BP01 Learn when to customize models — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops05-bp01.html` (2026-11-03 확인)
+11. Customize your model to improve its performance for your use case — `docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html` (2026-11-03 확인)
+12. Customize a model with distillation in Amazon Bedrock — `docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html` (2026-11-03 확인)
+13. Increase model invocation capacity with Provisioned Throughput in Amazon Bedrock — `docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html` (2026-11-03 확인)
+14. Set up inference for a custom model — `docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html` (2026-11-03 확인)
+15. Deploy a custom model for on-demand inference (리전·전제 조건·지원 기반 모델) — `docs.aws.amazon.com/bedrock/latest/userguide/deploy-custom-model-on-demand.html` (2026-11-03 확인)
+16. Agentic AI (Well-Architected Generative AI Lens — 에이전트 정의·패턴 셋) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/agentic-ai.html` (2026-11-03 확인)
+17. What Is Agentic AI? (사용 사례 넷·이점 넷) — `aws.amazon.com/what-is/agentic-ai/` (2026-11-03 확인)
+18. Amazon Bedrock Agents Classic maintenance mode — `docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html` (2026-11-03 확인)
+19. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어 — 목표 6개 원문) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html` (2026-11-03 확인)
+20. Process multiple prompts with batch inference — `docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html` (2026-11-17 확인)

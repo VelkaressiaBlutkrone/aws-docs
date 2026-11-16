@@ -36,8 +36,6 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html
   - title: GENSUS03-BP01 Leverage smaller models and optimized inference techniques to reduce carbon footprint
     url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensus03-bp01.html
-  - title: SUS01-BP01 Choose Region based on both business requirements and sustainability goals
-    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html
   - title: MLSUS01-BP01 Define the overall environmental impact or benefit
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus01-bp01.html
   - title: MLSEC01-BP01 Validate ML data permissions, privacy, software, and license terms
@@ -74,7 +72,9 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (영문)
     url: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
-lastVerified: 2026-11-07
+  - title: Remove PII from conversations by using sensitive information filters
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+lastVerified: 2026-11-17
 ---
 
 # 책임감 있는 AI 시스템 개발 (특징·Guardrails·모델 선택·법적 위험·데이터세트·편향과 변동·감지 도구)
@@ -584,22 +584,22 @@ AWS 문서가 **조건부 인구통계 격차** 지표를 설명하며 **버클�
 12. What are Automated Reasoning checks in Amazon Bedrock Guardrails? (검증 계층 대 이진 게이트 · 쓸 상황 넷 · 못 하는 것 여섯 · 정책 추출과 충실도 보고서) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-automated-reasoning-checks.html` (2026-11-03 확인)
 13. Sustainability (Generative AI Lens — 세 원칙과 세 포커스 영역 · 검색 엔진 예시) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/sustainability.html` (2026-11-03 확인)
 14. GENSUS03-BP01 Leverage smaller models and optimized inference techniques to reduce carbon footprint (양자화·프루닝·증류, 위험 Medium) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensus03-bp01.html` (2026-11-03 확인)
-15. SUS01-BP01 Choose Region based on both business requirements and sustainability goals (재생 에너지·탄소 집약도 · 안티패턴 둘, 위험 Medium) — `docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html` (2026-11-03 확인)
-16. MLSUS01-BP01 Define the overall environmental impact or benefit (훈련 대 추론의 누적 영향) — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus01-bp01.html` (2026-11-03 확인)
-17. MLSEC01-BP01 Validate ML data permissions, privacy, software, and license terms (ML 용도의 별도 동의 · 오픈 소스 라이브러리의 상업화 제약 · 데이터 주체 요청) — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec01-bp01.html` (2026-11-03 확인)
-18. Model sources and license agreements (SageMaker JumpStart — 라이선스 검토·준수는 고객 책임 · 라이선스 예 넷 · 독점 모델 문의 경로) — `docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html` (2026-11-03 확인)
-19. Amazon Bedrock FAQs (상한 없는 IP 면책 · 서비스 약관 50.10절 · 침해 데이터 입력 금지와 필터링 기능 비활성화 금지 조건 · 프롬프트·출력을 제공자와 공유하지 않음) — `aws.amazon.com/bedrock/faqs/` (2026-11-03 확인)
-20. Amazon Nova 2 Lite (AWS AI Service Card — 카드의 역할과 진화 · 표준 IP 면책의 범위 · 권리 침해 방지에 가드레일을 쓴다는 서술 · Responsible AI Policy·Acceptable Use Policy·Service Terms 검토 권고) — `docs.aws.amazon.com/ai/responsible-ai/nova-2-lite/overview.html` (2026-11-03 확인)
-21. RAIDP02 Dataset quality (질문 본문의 커버리지·충분한 예시 · 모범 사례 넷. `RAIDP01`·`RAIDP03`·`RAIDP04`의 모범 사례 목록도 같은 포커스 영역에 있습니다) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02.html` (2026-11-03 확인)
-22. RAIDP02-BP03 Validate the quality of human and generated labels and features in your dataset (라벨 품질 분석 다섯 항목) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html` (2026-11-03 확인)
-23. RAIDP03-BP02 Minimize unwanted bias in your datasets (인구통계 구성 분석 · 자기 보고 라벨 · 통계적 검정력 · 계층 표집 · 교차 집단 불균형, 위험 High) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html` (2026-11-03 확인)
-24. Transform Data (Balance Data — 무작위 오버샘플링·언더샘플링·SMOTE 세 연산자 · 사기 10% 예시) — `docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html` (2026-11-07 확인)
-25. What is Overfitting? (높은 편향 대 높은 변동 · 원인·감지·K-겹 교차 검증 · 조기 종료·프루닝·정규화·앙상블·데이터 증강 · 사립대 인구통계 예시) — `aws.amazon.com/what-is/overfitting/` (2026-11-03 확인)
-26. What Is AI Bias? (편향 정의 · 원인 셋 · 유형 여섯 · 예방·해소 전략 · 반사실적 공정성 · 「AWS가 어떻게 도울 수 있는가」가 아직 Clarify를 권하는 자리) — `aws.amazon.com/what-is/ai-bias/` (2026-11-03 확인)
-27. Conditional Demographic Disparity (CDD) (인구통계 격차 수식과 46%/32% 예시 · 하위 집단 조건화와 심슨의 역설 · 버클리 입학 · 편향 측정 세 시점과 훈련 전 지표의 모델 무관성) — `docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html` (2026-11-03 확인)
-28. Clarify availability change (신규 고객 차단 · 대체 경로 · 표형 ML 편향 탐지·설명 가능성의 대체는 아니라는 단서) — `docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html` (2026-11-03 확인)
-29. RAIMON01 Monitoring for deviations (모범 사례 다섯 · 첫 항목이 모니터링 동의 · `RAIMON01-BP02`의 드리프트 탐지 절차 · `RAIMON01-BP05`의 인간 감독 프로토콜 · `RAIMON02-BP01`의 피드백 루프) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon01.html` (2026-11-03 확인)
-30. What is Trustworthy AI? (설명 불가능성이 미션 크리티컬 도입을 막는다 · 편향된 모델이 취약 집단을 소외시킨다) — `aws.amazon.com/what-is/trustworthy-ai/` (2026-11-03 확인)
-31. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
-32. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (영문 — 한국어판과 목표 11개가 낱말 단위로 일치함을 확인한 대조본) — `docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
-33. Migrate the UI from Studio Classic to Studio (새 Studio 경험은 **클래식 Data Wrangler UI를 지원하지 않고** Data Wrangler 기능을 쓰려면 **Canvas 애플리케이션**을 만들어야 한다 · Canvas의 데이터 준비 기능이 Data Wrangler 기반) — `docs.aws.amazon.com/sagemaker/latest/dg/studio-updated-migrate-ui.html` (2026-11-07 확인)
+15. MLSUS01-BP01 Define the overall environmental impact or benefit (훈련 대 추론의 누적 영향) — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsus01-bp01.html` (2026-11-03 확인)
+16. MLSEC01-BP01 Validate ML data permissions, privacy, software, and license terms (ML 용도의 별도 동의 · 오픈 소스 라이브러리의 상업화 제약 · 데이터 주체 요청) — `docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec01-bp01.html` (2026-11-03 확인)
+17. Model sources and license agreements (SageMaker JumpStart — 라이선스 검토·준수는 고객 책임 · 라이선스 예 넷 · 독점 모델 문의 경로) — `docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html` (2026-11-03 확인)
+18. Amazon Bedrock FAQs (상한 없는 IP 면책 · 서비스 약관 50.10절 · 침해 데이터 입력 금지와 필터링 기능 비활성화 금지 조건 · 프롬프트·출력을 제공자와 공유하지 않음) — `aws.amazon.com/bedrock/faqs/` (2026-11-03 확인)
+19. Amazon Nova 2 Lite (AWS AI Service Card — 카드의 역할과 진화 · 표준 IP 면책의 범위 · 권리 침해 방지에 가드레일을 쓴다는 서술 · Responsible AI Policy·Acceptable Use Policy·Service Terms 검토 권고) — `docs.aws.amazon.com/ai/responsible-ai/nova-2-lite/overview.html` (2026-11-03 확인)
+20. RAIDP02 Dataset quality (질문 본문의 커버리지·충분한 예시 · 모범 사례 넷. `RAIDP01`·`RAIDP03`·`RAIDP04`의 모범 사례 목록도 같은 포커스 영역에 있습니다) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02.html` (2026-11-03 확인)
+21. RAIDP02-BP03 Validate the quality of human and generated labels and features in your dataset (라벨 품질 분석 다섯 항목) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp02-bp03.html` (2026-11-03 확인)
+22. RAIDP03-BP02 Minimize unwanted bias in your datasets (인구통계 구성 분석 · 자기 보고 라벨 · 통계적 검정력 · 계층 표집 · 교차 집단 불균형, 위험 High) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp02.html` (2026-11-03 확인)
+23. Transform Data (Balance Data — 무작위 오버샘플링·언더샘플링·SMOTE 세 연산자 · 사기 10% 예시) — `docs.aws.amazon.com/sagemaker/latest/dg/data-wrangler-transform.html` (2026-11-07 확인)
+24. What is Overfitting? (높은 편향 대 높은 변동 · 원인·감지·K-겹 교차 검증 · 조기 종료·프루닝·정규화·앙상블·데이터 증강 · 사립대 인구통계 예시) — `aws.amazon.com/what-is/overfitting/` (2026-11-03 확인)
+25. What Is AI Bias? (편향 정의 · 원인 셋 · 유형 여섯 · 예방·해소 전략 · 반사실적 공정성 · 「AWS가 어떻게 도울 수 있는가」가 아직 Clarify를 권하는 자리) — `aws.amazon.com/what-is/ai-bias/` (2026-11-03 확인)
+26. Conditional Demographic Disparity (CDD) (인구통계 격차 수식과 46%/32% 예시 · 하위 집단 조건화와 심슨의 역설 · 버클리 입학 · 편향 측정 세 시점과 훈련 전 지표의 모델 무관성) — `docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-cddl.html` (2026-11-03 확인)
+27. Clarify availability change (신규 고객 차단 · 대체 경로 · 표형 ML 편향 탐지·설명 가능성의 대체는 아니라는 단서) — `docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html` (2026-11-03 확인)
+28. RAIMON01 Monitoring for deviations (모범 사례 다섯 · 첫 항목이 모니터링 동의 · `RAIMON01-BP02`의 드리프트 탐지 절차 · `RAIMON01-BP05`의 인간 감독 프로토콜 · `RAIMON02-BP01`의 피드백 루프) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon01.html` (2026-11-03 확인)
+29. What is Trustworthy AI? (설명 불가능성이 미션 크리티컬 도입을 막는다 · 편향된 모델이 취약 집단을 소외시킨다) — `aws.amazon.com/what-is/trustworthy-ai/` (2026-11-03 확인)
+30. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
+31. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (영문 — 한국어판과 목표 11개가 낱말 단위로 일치함을 확인한 대조본) — `docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
+32. Migrate the UI from Studio Classic to Studio (새 Studio 경험은 **클래식 Data Wrangler UI를 지원하지 않고** Data Wrangler 기능을 쓰려면 **Canvas 애플리케이션**을 만들어야 한다 · Canvas의 데이터 준비 기능이 Data Wrangler 기반) — `docs.aws.amazon.com/sagemaker/latest/dg/studio-updated-migrate-ui.html` (2026-11-07 확인)
+33. Remove PII from conversations by using sensitive information filters — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html` (2026-11-17 확인)

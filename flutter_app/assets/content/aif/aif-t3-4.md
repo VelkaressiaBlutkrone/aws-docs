@@ -42,7 +42,13 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-accelerate-software-dev-lifecycle-gen-ai/measuring-success.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
-lastVerified: 2026-11-03
+  - title: Evaluate model performance using another LLM as a judge (Amazon Bedrock)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html
+  - title: AGENTOPS02-BP04 Maintain feedback control loops for continuous improvement
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp04.html
+  - title: Assessing human-process costs (AWS 처방적 지침)
+    url: https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-economics/assessing-costs.html
+lastVerified: 2026-11-17
 ---
 
 # FM 성능 평가 (평가 접근 방식·지표·애플리케이션 평가·비즈니스 목표 조정)
@@ -376,3 +382,6 @@ v1.1에서 **새로 생긴 목표**입니다. 가이드가 드는 예가 셋이�
 17. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html` (2026-11-03 확인)
 18. BLEU의 정의와 한계 (AWS 블로그 — `docs.aws.amazon.com`에 근거가 없어 블로그를 명시합니다) — `aws.amazon.com/blogs/machine-learning/build-a-multilingual-automatic-translation-pipeline-with-amazon-translate-active-custom-translation/` (2026-11-03 확인)
 19. 프롬프트 체이닝 (AWS 블로그 — 복잡한 작업을 하위 작업으로 쪼개기) — `aws.amazon.com/blogs/machine-learning/building-generative-ai-prompt-chaining-workflows-with-human-in-the-loop/` (2026-11-03 확인)
+20. Evaluate model performance using another LLM as a judge (Amazon Bedrock) — `docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html` (2026-11-17 확인)
+21. AGENTOPS02-BP04 Maintain feedback control loops for continuous improvement — `docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp04.html` (2026-11-17 확인)
+22. Assessing human-process costs (AWS 처방적 지침) — `docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-economics/assessing-costs.html` (2026-11-17 확인)

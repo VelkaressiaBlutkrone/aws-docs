@@ -44,7 +44,9 @@ sources:
     url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html
   - title: What are Foundation Models?
     url: https://aws.amazon.com/what-is/foundation-models/
-lastVerified: 2026-11-06
+  - title: What is Amazon Textract?
+    url: https://docs.aws.amazon.com/textract/latest/dg/what-is.html
+lastVerified: 2026-11-17
 ---
 
 # AI의 실제 사용 사례 (가치·부적합·기법 선택·응용·관리형 서비스·FM 대 기존 ML)
@@ -390,3 +392,4 @@ lastVerified: 2026-11-06
 16. What is Amazon Bedrock AgentCore? — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html` (2026-11-03 확인)
 17. What are Foundation Models? (FM 장점·과제·Amazon Nova) — `aws.amazon.com/what-is/foundation-models/` (2026-11-03 확인)
 18. What is Machine Learning? (AWS) — Benefits of machine learning 절의 「Enhanced decision making」·「Automation of routine tasks」 — `aws.amazon.com/what-is/machine-learning/` (2026-11-05 확인)
+19. What is Amazon Textract? — `docs.aws.amazon.com/textract/latest/dg/what-is.html` (2026-11-17 확인)
