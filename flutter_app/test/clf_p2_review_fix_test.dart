@@ -334,33 +334,41 @@ void main() {
               'content_index 동기화를 동시에 어긋나게 한다');
     });
 
-    test('대조군: 손대지 않은 세그먼트는 그대로다', () {
-      // 보고서가 「CloudShell 을 범위 내로 말한다」고 적은 seg042 는 실제로는
-      // 「범주만 매칭해서 알아 두면 되는 것들」이라 거짓이 아니다 — 손대지 않았다.
+    test('seg042 가 CloudShell 을 범위 외로 말한다 (2026-11-18 사용자 지시)', () {
+      // ⚠️⚠️⚠️ **이 자리의 판정이 두 번 바뀌었다 — 그 경위가 이 주석의 요점이다.**
+      // ① 2026-11-06: 보고서가 「seg042 가 CloudShell 을 범위 내로 말한다」고 적었지만
+      //    실측하면 **「범위 내」라고 말하지 않아** 과대 판정이었다 → 손대지 않았다.
+      // ② 2026-11-17: 2단계가 C-Y10 으로 `t3-8.md` 에서 CloudShell 을 「공식 「범위 외」
+      //    목록에 있다」로 고쳤는데 **그 보고서의 「발화 판정」 절은 `clf-t4-3` 만 읽어**
+      //    이 편의 발화는 범위 밖이었다. 실측하면 seg042 는 CloudShell 을 「범주만
+      //    매칭해서 알아 두시면 되는 것들」에 넣고 같은 음성 seg034 는 「이 표에는 공식
+      //    범위 내 목록에 있는 이름만 남겼습니다」라고 말해 **거짓은 아니지만 음성
+      //    내부에서 어긋났다.** 「재합성 범위는 거짓인 곳」 판정에 따라 기록만 했다.
+      // ③ 2026-11-18: **사용자가 「고쳐」로 지시해** seg042 를 md 구조대로 고치고
+      //    재합성했다 — CloudShell 을 목록에서 빼고 **공식 범위 외 목록에 있다**고
+      //    말하게 했다(seg034 의 어투에 맞춰 괄호 없이). 사용자 지시가 ②의 판정보다
+      //    앞서므로 **가드를 먼저 뒤집고** 콘텐츠를 고쳤다.
       //
-      // ⚠️⚠️ **2026-11-17 재측정 — 판정은 유지하되 기록한다.** 2026-11-17 2단계가
-      // C-Y10 으로 `t3-8.md` 에서 CloudShell 을 「공식 「범위 외」 목록에 있다」로
-      // 고쳤지만 **그 보고서의 「발화 판정」 절은 `clf-t4-3` 만 읽었고** 이 편의 발화는
-      // 보지 않았다. 실측하면 seg042 는 CloudShell 을 **「범주만 매칭해서 알아 두시면
-      // 되는 것들」**에 넣고, 같은 음성 **seg034 는 「이 표에는 공식 범위 내 목록에
-      // 있는 이름만 남겼습니다」**라고 말한다 — **거짓은 아니지만 음성 내부에서
-      // 어긋나고 범위 외 서비스에 공부 시간을 보낸다.** 2026-11-06 사용자 판정
-      // (재합성 범위는 **거짓인 곳**)에 따라 고치지 않았고, 고치려면 seg042 수정 →
-      // 재합성 → **청취 재승인**(승인 서명이 다시 필요하다)이다.
+      // ⚠️ **`클라우드셸` 자체는 지우지 않았다** — 이름을 말하면서 범위 외임을 알려야
+      // 보기에서 만났을 때 가를 수 있다(md 의 범위 메모와 같은 처리다). 그래서 이
+      // 가드는 ①의 「지우지 않았다」와 ③의 「범위 외를 적는다」를 **함께** 지킨다.
       //
-      // ⚠️ **md 의 범위 외 콜아웃은 애초에 대본에 들어가지 않았다** — `cf0e0a3` 이 md 에
-      // 그 줄을 추가했지만 그 배치는 `audioSummary` 만 손으로 고쳤고 `generate` 를
-      // 다시 돌리지 않았다(돌리면 풍부화가 날아간다). 그래서 그 문구는 **어느
-      // 세그먼트의 `sourceExcerpt` 에도 없다**(전수 0건 실측).
+      // ⚠️ **`sourceExcerpt`·`sourceHash` 는 손대지 않았다** — clf-t4-3 과 달리 이 대본은
+      // 현재 md 와 **블록 수가 다르다**(대본 60 seg ↔ `generate` 61 seg). `cf0e0a3` 이
+      // md 에 더한 범위 외 콜아웃이 새 `seg036` 이 되어 그 뒤가 한 칸씩 밀리므로 id 로
+      // 이식할 수 없고, 번호를 다시 매기는 것은 `test/` 가 세그먼트 id 를 참조해 불가다.
+      // 해시를 올리면 「이 대본이 현재 md 에서 왔다」가 **거짓 선언**이 된다.
       final segs = (script('clf-t3-8')['segments'] as List)
           .cast<Map<String, dynamic>>();
       final seg042 =
           segs.firstWhere((e) => e['id'] == 'seg042', orElse: () => fail('없음'));
       final body = spokenBody(seg042);
       expect(body.contains('클라우드셸'), isTrue,
-          reason: '보고서 과대 판정을 따라 지웠다면 멀쩡한 발화를 바꿨다');
+          reason: '이름을 지우면 보기에서 만났을 때 가를 수 없다 (①의 판정)');
+      expect(body.contains('범위 외'), isTrue,
+          reason: '③ 사용자 지시 — CloudShell 이 범위 외임을 말해야 한다');
       expect(body.contains('범위 내'), isFalse,
-          reason: '이 세그먼트는 「범위 내」라고 말하지 않는다 — 그래서 대상이 아니다');
+          reason: '이 세그먼트는 CloudShell 을 「범위 내」로 말하지 않는다');
 
       // 2026-11-06 §P2-G 수정이 음성에 남아 있다(seg034 가 표를 공식 목록으로 한정).
       final seg034 =
@@ -378,6 +386,50 @@ void main() {
               .contains('보기에 나오면')),
           isEmpty,
           reason: 'md 콜아웃이 대본 세그먼트로 들어왔다 — 그렇다면 발화도 다시 본다');
+    });
+
+    test('잔여 범위 기록: 범위 메모 없이 범위 외 이름을 말하는 발화가 13건이다', () {
+      // ⚠️⚠️ **seg042 를 고치다 같은 결함이 라이브 음성 세 편에 더 있는 것을 찾았다.**
+      // 2026-11-06 2단 검토 **C-Y9** 가 `t3-1`(CodeDeploy)·`t3-2`(Wavelength)·
+      // `t3-7`(Personalize) **md** 에 범위 메모를 달았지만(네 편 md 전부 적는다)
+      // **음성에는 어느 편에도 전파되지 않았다** — 「md 를 고치면 발화에 전파되지
+      // 않는다」가 네 번째로 확인된 자리다.
+      //
+      // ⚠️ **불변식으로 걸 수 없다** — 지금 13건이 걸리기 때문이다. 그래서 **현재 수를
+      // 대조군으로 고정**해 ① 누가 한 편을 고치면(줄면) ② 누가 범위 외 이름을 새로
+      // 넣으면(늘면) 양쪽으로 알린다. 세 편을 고치려면 **편당 재합성 + 사람의 청취
+      // 재승인**이 들고 그 동안 그 편이 비노출이 되므로 **사용자 판단이 필요한 범위**다
+      // (2026-11-18 에 사용자가 지시한 것은 `clf-t3-8` seg042 하나였다).
+      const names = <String, String>{
+        '클라우드셸': 'CloudShell',
+        '코드디플로이': 'CodeDeploy',
+        '웨이브렝스': 'Wavelength',
+        '퍼스널라이즈': 'Personalize',
+      };
+      final missing = <String>[];
+      var mentions = 0;
+      for (final dir in Directory('assets/audio/clf').listSync().whereType<Directory>()) {
+        final f = File('${dir.path}/script.json');
+        if (!f.existsSync()) continue;
+        final doc = json.decode(f.readAsStringSync()) as Map<String, dynamic>;
+        for (final seg in (doc['segments'] as List).cast<Map<String, dynamic>>()) {
+          final text = spokenBody(seg);
+          for (final n in names.keys) {
+            if (!text.contains(n)) continue;
+            mentions++;
+            if (!text.contains('범위 외')) {
+              missing.add('${doc['docId']} ${seg['id']} ($n)');
+            }
+          }
+        }
+      }
+      expect(mentions, greaterThanOrEqualTo(14),
+          reason: '대조군 — 탐지기가 음차 이름을 실제로 찾는다');
+      expect(missing.length, 13,
+          reason: '범위 메모 없이 범위 외 이름을 말하는 발화 수가 변했다 — 고쳤거나 '
+              '새로 들어왔다. 현재 목록:\n${missing.join('\n')}');
+      expect(missing.where((e) => e.startsWith('clf-t3-8')), isEmpty,
+          reason: '2026-11-18 에 고친 clf-t3-8 이 다시 목록에 들어왔다');
     });
   });
 
