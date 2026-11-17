@@ -269,7 +269,7 @@
       "sources": [
         {
           "title": "REL02-BP02 — Direct Connect 백업으로서의 Site-to-Site VPN",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_private_networks.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_private_networks.html"
         }
       ],
       "verified": true

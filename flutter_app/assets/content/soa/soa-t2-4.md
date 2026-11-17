@@ -17,7 +17,7 @@ sources:
   - title: RDS 스냅샷 복사 (교차 리전) (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html
   - title: 신뢰성 기둥 — AWS Well-Architected Framework (공식)
-    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
   - title: DynamoDB 글로벌 테이블 — MREC·MRSC (공식)
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
   - title: REL11-BP04 복구 중에는 제어 영역이 아닌 데이터 영역에 의존 (공식)
@@ -322,7 +322,7 @@ CRR은 버킷에서 발생하는 변경 이벤트(PUT·DELETE 등)를 감지해 
 2. S3 객체 복제(CRR·SRR) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html
 3. RDS 교차 리전 읽기 전용 복제본 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.XRgn.html
 4. RDS 스냅샷 복사(교차 리전) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html
-5. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+5. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
 6. DynamoDB 글로벌 테이블(MREC·MRSC 일관성 모드) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
 
 > 📝 **2026-10-19 정정**: DynamoDB 글로벌 테이블 칸에 최종 일관성만 적었던 서술을 정정했습니다 — 생성 시 **MREC(기본)와 MRSC** 중 하나를 고르고, 생성 후에는 바꿀 수 없으며 MRSC는 동일 계정 구성만 지원합니다(근거 6번).

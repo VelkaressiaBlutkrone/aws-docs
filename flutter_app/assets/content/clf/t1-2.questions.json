@@ -26,8 +26,12 @@
       },
       "sources": [
         {
-          "title": "AWS Well-Architected Framework — 아키텍처 모범 사례, 감사가 아닌 건설적 점검",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+          "title": "AWS Well-Architected Framework — 설계 트레이드오프와 감사가 아닌 건설적 대화",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html"
+        },
+        {
+          "title": "Definitions — 6대 기둥 표",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -54,8 +58,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 6대 기둥: 운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 6대 기둥: 운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -82,8 +86,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 안정성(Reliability) 기둥",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 안정성(Reliability) 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -110,8 +114,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 비용 최적화·지속 가능성 기둥",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 비용 최적화·지속 가능성 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -138,8 +142,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 성능 효율성(Performance Efficiency) 기둥",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 성능 효율성(Performance Efficiency) 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -166,8 +170,12 @@
       },
       "sources": [
         {
-          "title": "AWS Well-Architected Framework — 감사가 아닌 건설적 점검, 무료 WA Tool 제공",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+          "title": "AWS Well-Architected Framework — 감사가 아닌 건설적 대화",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html"
+        },
+        {
+          "title": "AWS Well-Architected Tool Pricing — 추가 요금 없음",
+          "url": "https://aws.amazon.com/well-architected-tool/pricing/"
         }
       ],
       "verified": true
@@ -194,8 +202,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 운영 우수성(Operational Excellence) 기둥",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 운영 우수성(Operational Excellence) 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -222,8 +230,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 보안(Security) 기둥",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 보안(Security) 기둥",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -250,8 +258,8 @@
       },
       "sources": [
         {
-          "title": "AWS Well-Architected Framework — 6대 기둥 구성",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 기둥 6개 구성",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -279,7 +287,7 @@
       "sources": [
         {
           "title": "AWS Well-Architected Framework — 설계 결정의 트레이드오프 이해를 돕는 모범 사례",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html"
         }
       ],
       "verified": true
@@ -363,7 +371,7 @@
       "sources": [
         {
           "title": "AWS Well-Architected Framework — 감사가 아닌 트레이드오프 분석 점검",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html"
         }
       ],
       "verified": true
@@ -390,8 +398,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 안정성·성능 효율성 기둥의 구분",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 안정성·성능 효율성 기둥의 구분",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true
@@ -418,8 +426,8 @@
       },
       "sources": [
         {
-          "title": "The pillars of the framework — 운영 우수성·성능 효율성 기둥의 구분",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html"
+          "title": "Definitions (6대 기둥 표) — 운영 우수성·성능 효율성 기둥의 구분",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html"
         }
       ],
       "verified": true

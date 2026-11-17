@@ -357,7 +357,8 @@ Amazon MWAA는 Apache Airflow를 관리형으로 돌려 주는 서비스입니�
 25. CreateJob (AWS Glue Web API Reference) — https://docs.aws.amazon.com/glue/latest/webapi/API_CreateJob.html
 26. Using the Amazon Redshift Data API — https://docs.aws.amazon.com/redshift/latest/mgmt/data-api.html
 27. Limitations for the Amazon RDS Data API — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.limitations.html
-28. AWS Glue DataBrew (AWS Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/databrew.html
+28. What is AWS Glue DataBrew? (코드 없는 시각적 준비 · 250개 넘는 변환) — https://docs.aws.amazon.com/databrew/latest/dg/what-is.html
+   - Using a data preparation recipe in AWS Glue Studio (DataBrew 레시피를 Glue Studio 에서 가져와 편집) — https://docs.aws.amazon.com/glue/latest/dg/glue-studio-data-preparation.html (2026-11-17 확인)
 29. Creating and using AWS Glue DataBrew projects — https://docs.aws.amazon.com/databrew/latest/dg/projects.html
 30. Visual ETL (Amazon SageMaker Unified Studio) — https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/visual-etl.html
 31. Recommendations for choosing the right data preparation tool in SageMaker AI — https://docs.aws.amazon.com/sagemaker/latest/dg/data-prep.html

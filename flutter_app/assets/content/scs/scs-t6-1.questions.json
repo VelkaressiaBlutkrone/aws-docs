@@ -424,7 +424,7 @@
       "sources": [
         {
           "title": "SEC03-BP03 Establish emergency access process",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html"
         }
       ],
       "verified": true
