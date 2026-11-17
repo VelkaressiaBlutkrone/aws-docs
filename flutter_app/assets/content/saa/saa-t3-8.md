@@ -387,7 +387,7 @@ VPC와 온프레미스 사이에서 **DNS 서버를 따로 세우지 않고** �
 
 - 여러 규칙이 겹치면(`example.com`·`acme.example.com`) **가장 구체적인 규칙**을 택해 전달합니다.
 - ⚠️ **온프레미스나 다른 VPC의 DNS 서버에서 VPC CIDR의 `+2` 주소로 프라이빗 질의를 전달하는 것은 지원되지 않습니다** — 불안정한 결과를 냅니다. 반드시 **인바운드 엔드포인트**를 씁니다.
-- 규모: 계정·VPC가 여러 개여도 **공유 서비스 VPC에 AZ 중복 인바운드 엔드포인트 한 세트**와 **아웃바운드 엔드포인트 하나**로 충분합니다(규칙을 공유). 한도는 엔드포인트의 **ENI당 약 10,000 QPS**이고, ⚠️ Resolver가 응답한 질의는 **로깅 가시성이 없으며 질의 소스 IP가 엔드포인트 IP로 대체**됩니다.
+- 규모: 계정·VPC가 여러 개여도 **공유 서비스 VPC에 AZ 중복 인바운드 엔드포인트 한 세트**와 **아웃바운드 엔드포인트 하나**로 충분합니다(규칙을 공유). 한도는 **엔드포인트의 IP 주소당 UDP DNS 10,000 QPS**이고(엔드포인트당 IP는 **6개**까지 · 어느 인터페이스든 용량의 **50%**를 넘으면 인터페이스를 더해 늘립니다), ⚠️ **NLB를 경유하거나 제한적 보안 그룹으로 연결 추적이 강제되면 인바운드는 1,500까지 내려갑니다.** ⚠️ Resolver가 응답한 질의는 **로깅 가시성이 없으며 질의 소스 IP가 엔드포인트 IP로 대체**됩니다.
 
 **리소스를 어디에 둘 것인가 — 리전 밖 선택지**
 
@@ -509,7 +509,8 @@ VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모�
 15. AWS Transit Gateway 쿼터(어태치먼트 5,000·VPC당 TGW 5·피어링 50·TGW↔CNE 1·VPN Concentrator 5) — https://docs.aws.amazon.com/vpc/latest/tgw/transit-gateway-quotas.html (갭 배치 B8b: 2026-10-21)
 16. VPC 서브넷 CIDR 블록·사이징(`/28`~`/16`·예약 5개·`2^(32−prefix)−5`·BYOIP 예외) — https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html (갭 배치 B8b: 2026-10-21)
 17. VPC와 네트워크 간 DNS 질의 해석(인바운드·아웃바운드 엔드포인트·전달 규칙·⚠️ CIDR `+2` 직접 질의 미지원) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-overview-DSN-queries-to-vpc.html (갭 배치 B8b: 2026-10-21)
-18. 하이브리드 DNS 백서 — Resolver 엔드포인트 운영 규모(ENI당 ~10,000 QPS·로깅 가시성 없음·소스 IP 대체·RAM 공유) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-cloud-dns-options-for-vpc/route-53-resolver-endpoints-and-forwarding-rules.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
+18. 하이브리드 DNS 백서 — Resolver 엔드포인트 운영 규모(로깅 가시성 없음·소스 IP 대체·RAM 공유) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-cloud-dns-options-for-vpc/route-53-resolver-endpoints-and-forwarding-rules.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
+19. Route 53 VPC Resolver 쿼터 — 엔드포인트의 **IP 주소당 UDP DNS 10,000 QPS**(⚠️ NLB 경유나 제한적 보안 그룹으로 연결 추적이 강제되면 인바운드는 **1,500까지** 내려간다) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html (2026-11-17 확인)
 
 > 📝 **2026-10-21 보강 (갭 배치 B8b)**: ① §2에 **TGW 쿼터 표**(어태치먼트 5,000 · **VPC당 TGW 5**(조정 불가) · 피어링 50 · **TGW↔TGW/Cloud WAN CNE 1**(조정 불가) · VPN Concentrator 5·연결 100)와 **동작 제약**(같은 VPC 중복 어태치 불가 · ⚠️ **원격 VPC 보안 그룹 참조 불가** · AZ별 서브넷 지정)을 추가했습니다(근거 14·15번). ② §3에 **터널 대역폭·PPS 표**와 **ECMP**(⚠️ **TGW + 동적 라우팅 전용, 정적 라우팅 불가** · 합계 ~50 Gbps지만 **흐름당은 터널 상한**) · **VPN Concentrator** · **Accelerated VPN**(Global Accelerator로 **경로 품질** 개선, 대역폭 증가가 아님)을 추가했습니다(근거 12·13·14번). ③ §4에 **MACsec**을 추가했습니다 — 기존 서술은 암호화 선택지로 **IPsec 오버레이만** 제시하고 있었습니다(근거 9·10번). 전용/호스팅 구분·**SiteLink**·**복원력 모델 4종**도 함께 적었습니다(근거 11번). ④ 새 절 **§8 서브넷 설계와 IP 주소 지정**·**§9 글로벌 토폴로지·하이브리드 DNS·리소스 배치**를 원리 블록과 함께 넣었습니다(근거 16·17·18번) — 서브섹션이 7→9가 되어 하한이 8로 올라가므로 **원리도 2개 함께** 넣어 9/9로 맞췄고, 가드가 그 하한을 직접 검사합니다.
 >

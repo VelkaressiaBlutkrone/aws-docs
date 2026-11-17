@@ -387,17 +387,13 @@
         "sagemaker:VpcSecurityGroupIds가 비어 있으면 Deny한다"
       ],
       "correct": 0,
-      "explanation": "Studio 도메인의 인터넷 접근은 AppNetworkAccessType으로 정해지고 기본값이 PublicInternetOnly입니다. 백서의 가드레일 예제는 이 값이 PublicInternetOnly이면 CreateDomain을 거부합니다. VpcOnly로 두면 EFS 외 모든 트래픽이 지정한 VPC와 서브넷을 경유합니다.",
+      "explanation": "Studio 도메인의 인터넷 접근은 AppNetworkAccessType으로 정해지고 기본값이 PublicInternetOnly입니다. 그래서 이 값이 PublicInternetOnly이면 CreateDomain을 거부하는 조건으로 막습니다. VpcOnly로 두면 EFS 외 모든 트래픽이 지정한 VPC와 서브넷을 경유합니다.",
       "wrongExplanations": {
         "1": "DirectInternetAccess는 노트북 인스턴스의 직접 인터넷 접근을 가리키는 키입니다.",
         "2": "RootAccess는 노트북 인스턴스의 root 권한을 통제하는 키입니다.",
         "3": "VpcSecurityGroupIds는 VPC 안에서만 실행하도록 강제할 때 VpcSubnets와 함께 검사하는 키입니다."
       },
       "sources": [
-        {
-          "title": "Build a Secure Enterprise Machine Learning Platform on AWS — Governance and control (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측)",
-          "url": "https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/governance-and-control.html"
-        },
         {
           "title": "CreateDomain (Amazon SageMaker API Reference)",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateDomain.html"
@@ -759,7 +755,7 @@
         "Amazon Macie로 송신 데이터의 민감도를 분석한다"
       ],
       "correct": 0,
-      "explanation": "VPC 안에서 만든 훈련 작업의 클러스터 입출력 트래픽은 VPC Flow Logs로 감시합니다. 계층 방어 체크리스트에서 관측 층을 담당하며 CloudTrail과 Config가 함께 쓰입니다.",
+      "explanation": "VPC 안에서 만든 훈련 작업의 클러스터 입출력 트래픽은 VPC Flow Logs로 감시합니다. 심층 방어에서 관측 층을 담당하며 CloudTrail과 Config가 함께 쓰입니다.",
       "wrongExplanations": {
         "1": "CloudTrail은 API 호출을 기록하는 감사 기록이며 네트워크 패킷을 담지 않습니다.",
         "2": "Config 타임라인은 리소스 구성 변경 이력이며 실제 트래픽을 보여 주지 않습니다.",
@@ -769,10 +765,6 @@
         {
           "title": "Amazon SageMaker AI identity-based policy examples",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/security_iam_id-based-policy-examples.html"
-        },
-        {
-          "title": "Build a Secure Enterprise Machine Learning Platform on AWS — Networking architecture (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측)",
-          "url": "https://docs.aws.amazon.com/whitepapers/latest/build-secure-enterprise-ml-platform/networking-architecture.html"
         }
       ],
       "verified": true

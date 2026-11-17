@@ -171,12 +171,17 @@ void main() {
 
   // ═════════════════════ §3-2 백서 5종 ═════════════════════
 
-  test('§3-2 백서 5종의 인용을 지우지 않고 상태를 적었다', () {
+  test('§3-2 백서 인용을 지우지 않고 상태를 적었다 (한 건은 2026-11-17 재소싱)', () {
     // ⚠️ 백서는 **살아 있다**(리더로 읽으면 본문이 나온다). `curl -sL` 로는 전혀 다른
     // 서비스 페이지로 튕기므로, 학습자가 링크를 누르면 엉뚱한 곳에 떨어진다.
     // 참인 인용을 지우는 것이 더 나쁘므로 **상태를 명시**한다.
+    //
+    // ⚠️⚠️ 2026-11-17: `saa-t2-1` 의 AppFlow 백서는 이 목록에서 빠졌다. 지운 것이
+    // 아니라 **그 사실을 적는 라이브 정본으로 옮겼다**(아래에서 그 정본의 실재를
+    // 단정한다). 「상태를 적는다」는 **사람이 열 수 있는 정본이 없을 때**의 처리이고,
+    // 있으면 그쪽이 낫다. 정본은
+    // `docs/saa-review/2026-11-17-wa-restructure-source-audit.md` §5-2.
     const papers = <String, String>{
-      'saa-t2-1': 'patterns-for-ingesting-saas-data-into-aws-data-lakes',
       'saa-t3-4': 'cost-modeling-data-lakes',
       'saa-t3-8': 'hybrid-cloud-dns-options-for-vpc',
       'saa-t3-9': 'building-data-lakes',
@@ -191,8 +196,14 @@ void main() {
       if (!t.contains('브라우저')) missing.add('$id: 상태 표기 없음');
     });
     expect(missing, isEmpty, reason: missing.join(' · '));
-    // 다섯 번째(hybrid-connectivity)도 같은 문서에 있다.
+    // 네 번째(hybrid-connectivity)도 같은 문서에 있다.
     expect(doc('saa-t3-8').contains('hybrid-connectivity'), isTrue);
+    // ⚠️ 재소싱한 자리는 **지워진 것이 아니라 옮겨졌다** — 정본이 실재해야 한다.
+    final t21 = doc('saa-t2-1');
+    expect(t21.contains('patterns-for-ingesting-saas-data-into-aws-data-lakes'), isFalse,
+        reason: '2026-11-17 재소싱 — 되살아나면 사람이 열 수 없는 링크로 돌아간다');
+    expect(t21.contains('appflow/latest/userguide/what-is-appflow.html'), isTrue,
+        reason: 'AppFlow 의 트리거·변환·PrivateLink 는 서비스 사용자 안내서가 정본이다');
   });
 
   // ═════════════════════ §3-3 Shield 출처 ═════════════════════

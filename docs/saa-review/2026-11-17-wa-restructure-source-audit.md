@@ -111,3 +111,65 @@ curl -sL -o /dev/null -w '%{http_code} %{num_redirects} %{url_effective}' --max-
 - **대조군을 매번 재현한다**: 있는 가이드의 틀린 슬러그(`…/framework/zz-bogus-xyz.html` → `200 r=1`) · 없는 가이드 접두사(`404 r=0`) · `aws.amazon.com`의 없는 경로(`404 r=0`) · 알려진 생존 페이지(`200 r=0`).
 - **「사라졌다」와 「사람이 열 수 없다」는 네 방법으로 가른다**: `curl` · **AWS 문서 리더**(`read_documentation`) · docs 검색 색인 · 실제 브라우저.
 - 치환은 전부 **횟수 단정**을 걸고, 문항 JSON은 **바이트 블록 치환**(json 왕복 금지) + `correct`·`options`·`stem`·`verified` **불변 단정**으로 막았다.
+
+## 5. 백서 33자리 재소싱 (2026-11-17, 같은 날 후속)
+
+감사가 분류한 **백서 33자리**는 「문서가 사라진 것이 아니라 사람이 브라우저로 열 수 없는」
+묶음이라 **인용을 유지하고 상태를 적는** 것이 레포 정책이다. 그 판정은 지금도 유효하므로
+이 배치는 **백서를 추방하지 않았다**(고유 URL 31개가 그대로 쓰인다). 실제로 한 일은 셋이다.
+
+### 5-1. 되살아난 URL 의 낡은 상태 메모 — **1건**
+
+`aws-vpc-connectivity-options/` 두 페이지는 재측정에서 **`200 r=0` 으로 정상 복귀**했다.
+그중 상태 메모가 달려 있던 자리는 **하나뿐이다** — `saa-t3-8.questions.json:102`
+(TGW + Site-to-Site VPN 출처 제목). 같은 가이드의 `aws-privatelink.html` 은
+`saa-t3-8.questions.json` 에서 쓰이지만 **처음부터 메모가 없었다.**
+
+> ⚠️ 1차 보고에서 이것을 「2건」으로 적었다. **쓰는 자리의 수와 메모가 달린 자리의 수는
+> 다르다** — 전수 스캔은 둘을 따로 세야 한다.
+
+### 5-2. 라이브 정본이 그 사실을 적는 자리 (4건)
+
+| 자리 | 걷은 백서 | 대신 쓴 정본 | 왜 |
+|---|---|---|---|
+| `dea-t1-2-q1` | `big-data-analytics-options/aws-lambda.html` | `lambda/latest/dg/gettingstarted-limits.html` | 그 문항의 `W1` 이 **900초**를 단정하는데 쿼터 페이지가 그 수치를 직접 적는다 |
+| `saa-t2-1.md` #14 | `patterns-for-ingesting-saas-data-into-aws-data-lakes/purpose-built-integration-service.html` | `appflow/.../what-is-appflow.html` + `appflow/.../flows.html` | 트리거 세 가지·변환·PrivateLink 는 **서비스 사용자 안내서**가 정본이다(참고자료 14→14·15) |
+| `mla-t4-3.md` #76 | `building-data-lakes/data-cataloging.html` | `lake-formation/latest/dg/what-is-lake-formation.html` | 카탈로그·검색·권한 모델을 적는 쪽 |
+| `saa-t3-8.md` #18 | (유지) `hybrid-cloud-dns-options-for-vpc/...` | **#19 신설** `Route53/latest/DeveloperGuide/DNSLimitations.html` | **QPS 수치만** 공식 쿼터 페이지로 옮겼다 |
+
+> ⚠️⚠️ **URL 을 바꾸면 그 URL 이 업고 있던 사실을 하나씩 다시 센다**(G-67). QPS 를 백서
+> 줄에서 떼어 공식 쿼터 페이지로 옮겼더니 **본문 §9 가 아직 「ENI당 약 10,000 QPS」로
+> 적어** 참고자료와 단위가 어긋났다. 공식은 **IP 주소당 UDP DNS 10,000 QPS**이고
+> **엔드포인트당 IP 는 6개**까지이며 **어느 인터페이스든 용량의 50% 를 넘으면 인터페이스를
+> 더한다**고 적는다. 그리고 **NLB 를 경유하거나 제한적 보안 그룹으로 연결 추적이 강제되면
+> 인바운드는 1,500까지 내려간다** — 수치만 적으면 거꾸로 오해하는 자리라 함께 넣었다.
+
+### 5-3. 그 문항이 인용하지 않는 백서 줄 (2건, 삭제)
+
+`mla-t2-1-q11`(`ml-best-practices-healthcare-life-sciences/model-interpretability.html`)과
+`mla-t4-3-q25`(`build-secure-enterprise-ml-platform/networking-architecture.html`)는
+**해설이 이미 정본을 인용**하고 있어 백서 줄이 중복이었다(AIF 2026-11-17 교훈: 죽은 출처가
+교체가 아니라 **중복 삭제**로 닫히는 경우가 있다). `.md` 참고자료에는 **상태 메모와 함께
+그대로 남는다** — 문항과 학습문서는 다른 층이다.
+
+**반대로 `mla-t4-3-q12` 는 백서를 유지했다** — SCP 가드레일 예제 묶음
+(`CreateTrainingJob`·`CreateHyperParameterTuningJob` + `sagemaker:NetworkIsolation`)이
+그 백서 고유다. 그래서 그 문항의 「백서의 가드레일 예제는 …」 귀속도 **그대로 둬야 한다.**
+
+### 5-4. ⚠️⚠️ 「백서」 토큰은 귀속 탐지기가 아니다
+
+백서 줄을 지우면서 귀속 문장을 남기면 **출처 없는 귀속**이 된다. 그래서 전수 가드를 걸려고
+「백서」 토큰으로 세 봤더니 **`clf/t4-3` 의 8자리가 걸렸고 전부 정당했다** — 그 문항들은
+**자료 종류로서의 백서**를(블로그·포럼·가이드와 나란히 드는) 묻는다. 「기술」을 말하기
+동사로 넣으면 **「기술 자료」·「기술 리소스」가 또 걸린다**(실측 3건).
+
+최종 트리거는 **백서 + 조사 + 말하기 동사**(`적|말|설명|제시|권|인용|비교|정의|분류|싣|…`)이고
+실측으로 **거짓 양성 0** · **백서 출처가 있는 쪽에서 5건**(`aif-t2-3-q4` · `aif-t3-2-q12` ·
+`saa-t2-5-q4`×3)을 찾는다. 그 5건이 **좁힘이 공허하지 않다는 대조군**이다.
+
+### 5-5. 가드
+
+`flutter_app/test/whitepaper_resourcing_test.dart` **15건**(기준선 3,750 → **3,765**).
+민감도는 **콘텐츠 변경만 `git stash`** 하면 8건이 레드가 되며 항목을 이름과 함께 집어내는
+것으로 확인했다. ⚠️ `verified` 는 보지 않는다 — flip 은 사람의 작업이고, 상태를 단정한
+가드가 2026-11-13 검수자의 첫 SCS flip 을 레드로 끝냈다.

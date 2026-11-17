@@ -99,7 +99,7 @@
       },
       "sources": [
         { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
-        { "title": "AWS Transit Gateway + Site-to-Site VPN — TGW 종단 + 동적 라우팅에서만 ECMP 로 터널을 묶을 수 있다 (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-07 실측)", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-transit-gateway-vpn.html" }
+        { "title": "AWS Transit Gateway + Site-to-Site VPN — TGW 종단 + 동적 라우팅에서만 ECMP 로 터널을 묶을 수 있다", "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-transit-gateway-vpn.html" }
       ],
       "verified": true
     },
