@@ -371,13 +371,15 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t3-8.questions.json',
       questionCount: 16,
       // 2026-11-06 §P2-G 재합성 — 「범위 내」 표가 범위 외 서비스를 가르치고 있었고
-      // seg034 가 그 표를 읽어 **승인된 음성이 거짓을 말하고 있었다.** 대본·md 를
-      // 고쳐 재합성했고, 2026-11-17 사람이 청취·승인해 R2에 발행했다(공개 URL 실측).
-      // ⚠️ 이 편은 **재합성이 아니라 승인만** 했으므로 `script.sourceHash` 는 합성
-      // 시점 md 의 것이다(그 뒤 2단계 C-Y10이 md 를 고쳤다 — 발화 seg042가 CloudShell을
-      // 「범주만 매칭」 목록에 넣는 불완전함이 남아 있고, 고치려면 재합성·재승인이다).
-      audioApproved: true,
-      audioSha8: '47d376c4',
+      // seg034 가 그 표를 읽어 **승인된 음성이 거짓을 말하고 있었다.** 2026-11-17 에
+      // 사람이 그 재합성본을 청취·승인해 R2에 발행했다(`47d376c4`).
+      // 2026-11-18 **사용자 지시로 seg042 를 다시 고쳐 재합성했다** — CloudShell 을
+      // 「범주만 매칭해서 알아 두면 되는 것들」에서 빼고 **공식 범위 외 목록에 있다**고
+      // 말하게 했다(mp3 sha8=65ebad6e · 30분 20초 · −16.4 LUFS). 대본이 바뀌면 사람의
+      // 청취 서명이 무효이므로 청취 재승인·R2 발행까지 비노출이다.
+      // ⚠️ `sourceHash` 는 올리지 않았다 — 이 대본은 현재 md 와 **블록 수가 달라**
+      // (60 ↔ 61) 어느 md 판본과도 블록 단위로 대응하지 않는다(가드 주석 참조).
+      audioApproved: false,
     ),
     ContentEntry(
       certCode: 'CLF-C02',
