@@ -350,4 +350,4 @@ AWS 서비스의 저장 시 암호화는 대부분 KMS 키로 동작합니다. �
 37. Protecting data by using client-side encryption (Amazon S3) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingClientSideEncryption.html
 38. Replicating encrypted objects (SSE-S3, SSE-KMS, DSSE-KMS, SSE-C) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
 39. Encryption in transit over external networks: AWS guidance for NYDFS and beyond (AWS Security Blog) — https://aws.amazon.com/blogs/security/encryption-in-transit-over-external-networks-aws-guidance-for-nydfs-and-beyond/
-40. General encryption best practices (Encryption best practices and features for AWS services) — https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices/general-encryption-best-practices.html
+40. Encryption strategy in AWS — 일반 암호화 모범 사례 (Encryption best practices and features for AWS services) — https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices-and-features-for-aws-services/encryption-strategy-in-aws.html

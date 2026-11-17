@@ -9,7 +9,7 @@ coversTasks:
   - "2.2"
 sources:
   - title: AWS Well-Architected Framework — Reliability Pillar (공식)
-    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
   - title: RDS Multi-AZ DB 인스턴스 배포 (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html
   - title: RDS Multi-AZ 배포 구성 및 관리 (공식)
@@ -544,7 +544,7 @@ RDS Multi-AZ는 다른 AZ에 동기 스탠바이를 유지하므로 Primary 장�
 
 이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (작성·대조: 2026-06-07, WebFetch 200 확인 · 고도화 검수: 2026-06-12)
 
-1. AWS Well-Architected Framework — Reliability Pillar — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+1. AWS Well-Architected Framework — Reliability Pillar — https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
 2. RDS Multi-AZ DB 인스턴스 배포 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html
 3. RDS Multi-AZ 배포 구성 및 관리 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
 4. Route 53 헬스 체크 생성 — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html

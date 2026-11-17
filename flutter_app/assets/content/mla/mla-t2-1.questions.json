@@ -555,7 +555,7 @@
         "결과를 캐시해 같은 이미지를 다시 분석하지 않는다"
       ],
       "correct": 1,
-      "explanation": "Prescriptive Guidance는 이미지 분석이 월 수천 장 이상으로 늘면 SageMaker 엔드포인트로 자체 모델을 호스팅하는 쪽이 더 저렴할 수 있다고 비교합니다. 호출당 과금은 소량이고 변동이 큰 수요에서 유리합니다.",
+      "explanation": "관리형 이미지 분석 API(Ready-to-use 모델)는 분석한 이미지 수대로 기반 서비스 요금이 매겨지고, 자체 모델을 SageMaker 엔드포인트로 호스팅하면 그 엔드포인트가 쓰는 리소스로 과금됩니다. 과금 축이 다르므로 분석 건수가 크게 늘면 두 구조를 비교해 봐야 합니다 — 호출당 과금은 소량이고 변동이 큰 수요에서 유리합니다.",
       "wrongExplanations": {
         "0": "호출당 과금은 분석 요청 수를 기준으로 매겨집니다. 해상도를 낮춰도 건당 단가 구조는 그대로입니다.",
         "2": "요청을 묶어 보내도 분석한 이미지 수만큼 과금됩니다. 호출을 모으는 것이 건당 단가를 바꾸지는 않습니다.",
@@ -563,8 +563,8 @@
       },
       "sources": [
         {
-          "title": "Amazon SageMaker AI Canvas (Prescriptive Guidance: image classification) — 비용 비교",
-          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/image-classification/sagemaker-canvas.html"
+          "title": "Billing and cost in SageMaker Canvas — Ready-to-use 모델은 기반 서비스 과금, 사용자 지정 모델은 예측 리소스 과금",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-manage-cost.html"
         },
         {
           "title": "Amazon Rekognition pricing",

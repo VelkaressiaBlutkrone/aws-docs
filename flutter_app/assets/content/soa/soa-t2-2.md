@@ -9,7 +9,7 @@ coversTasks:
   - "2.2"
 sources:
   - title: 신뢰성 기둥 — AWS Well-Architected Framework (공식)
-    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
   - title: RDS Multi-AZ 배포 구성 및 관리 (공식)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
   - title: RDS 읽기 전용 복제본 작업 (공식)
@@ -305,7 +305,7 @@ RDS Multi-AZ는 장애 조치 시 스탠바이를 Primary로 승격하면서 **R
 
 이 문서의 사실 진술은 아래 공식 AWS 자료를 기준으로 작성했습니다. (작성·대조: 2026-06-09 · 고도화 검수: 2026-06-12)
 
-1. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+1. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
 2. RDS Multi-AZ 배포 구성 및 관리 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
 3. RDS 읽기 전용 복제본 작업 — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html
 4. NAT 게이트웨이 — 고가용성 구성 — https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html

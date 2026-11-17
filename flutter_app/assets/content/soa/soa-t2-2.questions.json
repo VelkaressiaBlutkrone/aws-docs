@@ -138,7 +138,7 @@
       "sources": [
         {
           "title": "AWS Well-Architected 신뢰성 기둥",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html"
         }
       ],
       "verified": true
@@ -354,7 +354,7 @@
       "sources": [
         {
           "title": "AWS Well-Architected 신뢰성 기둥 — 단일 실패점 제거",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html"
         }
       ],
       "verified": true

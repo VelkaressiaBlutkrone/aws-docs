@@ -26,8 +26,8 @@ sources:
     url: https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html
   - title: AWS 전역 조건 컨텍스트 키 — aws:RequestedRegion (공식)
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
-  - title: AWS Security Agent (공식 제품 페이지)
-    url: https://aws.amazon.com/security-agent/
+  - title: AWS Continuum (옛 AWS Security Agent · 공식 제품 페이지)
+    url: https://aws.amazon.com/continuum/
   - title: AWS Security Agent 사용자 안내서 — 조사 결과 (공식)
     url: https://docs.aws.amazon.com/securityagent/latest/userguide/run-diff-scan-s3.html
 lastVerified: 2026-10-20
@@ -229,7 +229,7 @@ lastVerified: 2026-10-20
 
 공식 가이드 v1.1은 Skill 4.2.5의 조사 결과(finding) 소스 목록에 **AWS Security Agent**를 추가했습니다(기존: Security Hub · GuardDuty · Config · Inspector).
 
-> ℹ️ 공식 제품 페이지의 제목은 **"AWS Security Agent (now part of AWS Continuum)"** 로, **AWS Continuum**의 일부로 병기돼 있습니다. v1.1에서 처음 등장한 항목이라 공식 문서가 밝히는 범위만 적습니다.
+> ℹ️ 공식 제품 페이지는 **AWS Continuum**으로 바뀌었고 이 기능을 **"Continuum for penetration testing (f.k.a. AWS Security Agent)"** 로 적습니다(2026-11-17 실측 — 옛 제품 페이지 주소는 Continuum 페이지로 넘어갑니다). 공식 시험 가이드 v1.1 과 사용자 안내서(`securityagent`)는 아직 **AWS Security Agent** 이름을 쓰므로 이 문서도 가이드 표기를 따릅니다. v1.1에서 처음 등장한 항목이라 공식 문서가 밝히는 범위만 적습니다.
 
 - 공식 정의: **개발 수명 주기 전반에서 애플리케이션을 선제적으로 보호하는 프런티어 에이전트**입니다.
 - 주요 기능:

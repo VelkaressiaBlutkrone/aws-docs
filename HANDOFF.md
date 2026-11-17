@@ -1,6 +1,7 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-11-17(**AIP-C01 검수 준비 노트 전수 재점검 — 구조 수치 전부 일치 · 죽은 출처 1건 수선**: 구조·커버리지·G-84·평문·길이 단서·중복은 독립 재측정에서 노트와 전부 일치했고, 바뀐 것은 **공식 문서가 움직인 1건**이다. `wellarchitected/latest/framework/welcome.html` 이 **404**가 됐고 새 정본 `framework/framework.html` 의 `Last updated` 가 **노트를 쓴 2026-11-16** 이다 — ⚠️⚠️ **측정에는 유효 기간이 있다**(G-65). ⚠️⚠️ **살아 있는 가이드 안에서도 지워진 페이지는 진짜 `404 r=0`** 이고 같은 가이드의 **없던** 슬러그는 `200 r=1` 이다(G-66) — `404 r=0` 을 「가이드가 없다」로만 읽으면 오판한다. ⚠️⚠️ **URL 을 바꾸면 그 URL 이 업고 있던 사실을 하나씩 다시 센다**(G-67) — 새 페이지에 「기초 질문」·「감사가 아니다」는 있지만 **「WA Tool 무료」가 없어**(`no cost`·`free` 0건) 요금 페이지를 따로 달고 영문 인용을 `no additional charge` 로 맞췄다. ⚠️ **중복 지표는 조사벗김 목록에 달린다**(G-68) — 목록을 바꾸니 상위 쌍이 51~57쌍으로 갈리고 노트 표에 없던 **같은 Task 쌍 여섯**이 올라왔다(전부 중복 아님 · 그쪽이 검수자에게 더 중요하다). ⏳ 레포 전역 2,572개를 함께 재니 **같은 재구성이 라이브 CLF·SAA·SOA·SCS 를 건드린다** — 노트 §8 표에 적었고 **별 배치**다. 기준선 **3,739 그린** · analyze 0 · 정답 인덱스·`verified` 불변. — §0-2026-11-17-c)_
+_갱신: 2026-11-17(**WA 문서 재구성 출처 교체 11건 — 라이브 6자격증**: 사용자 지시로 AIP 재점검이 찾은 묶음을 전부 닫았다. 기준선 3,739 → **3,750**(+11 = `retiredUrls` 11항목 · 항목 하나가 테스트 하나) · analyze 0 · 손댄 콘텐츠 **19파일**(md 10 · 문항 9, 대부분 **라이브**) · 새 정본 **13개 전부 `200 r=0`** 실측 · 정답 인덱스·보기·`verified` **전부 불변**. ⚠️⚠️ **CLAUDE.md 기준선이 이틀 동안 3,737 에 멈춰 있었다** — 어제 AIF 배치(+2)가 그 줄을 올리지 않았다. 두 증가를 함께 적었다. ⚠️⚠️ **framework 가이드는 BP 번호를 재배정했다** — `framework/sec03-bp03.html` 은 이제 「Analyze public and cross-account access」라 **번호로 매핑하면 멀쩡한 URL 로 엉뚱한 페이지를 인용한다**(비상 접근 BP 정본은 `security-pillar/` 판). ⚠️ 같은 BP 라도 **본문이 재작성되면 인용 문장이 사라진다**(`framework/rel02-bp02.html` 에 「cost-effective backup」 이 없어 `reliability-pillar/` 판을 썼다). ⚠️ **pillar 가이드는 반쪽만 이전됐다** — 랜딩 넷은 `framework/<pillar>.html` 로 넘어가는데 **BP 페이지는 옛 슬러그로 살아 있다**. ⚠️ prescriptive-guidance 는 **개명 1 · 소멸 4**이고 소멸 둘은 **AWS 문서 리더도 `not_found`** 다(2026-11-06 AIF CAF 와 **반대 결론** — 규율은 네 방법을 다 해 보는 것이고 결론은 매번 측정으로 정한다). ⚠️ `aws.amazon.com/security-agent/` 는 **제품 개명**(f.k.a. AWS Security Agent → AWS Continuum)이라 **URL·상태 메모만** 고치고 본문 표기는 시험 가이드를 따랐다. ⚠️ **수집기가 URL 을 발명하지 않아야 한다** — 1차 전역 수집이 `audio/**/script.json` 의 `sourceExcerpt` 에서 각주 번호를 URL 에 붙여 가짜 **223건**을 만들었다. 정본은 `docs/saa-review/2026-11-17-wa-restructure-source-audit.md`. — §0-2026-11-17-d)_
+_이전 갱신: 2026-11-17(**AIP-C01 검수 준비 노트 전수 재점검 — 구조 수치 전부 일치 · 죽은 출처 1건 수선**: 구조·커버리지·G-84·평문·길이 단서·중복은 독립 재측정에서 노트와 전부 일치했고, 바뀐 것은 **공식 문서가 움직인 1건**이다. `wellarchitected/latest/framework/welcome.html` 이 **404**가 됐고 새 정본 `framework/framework.html` 의 `Last updated` 가 **노트를 쓴 2026-11-16** 이다 — ⚠️⚠️ **측정에는 유효 기간이 있다**(G-65). ⚠️⚠️ **살아 있는 가이드 안에서도 지워진 페이지는 진짜 `404 r=0`** 이고 같은 가이드의 **없던** 슬러그는 `200 r=1` 이다(G-66) — `404 r=0` 을 「가이드가 없다」로만 읽으면 오판한다. ⚠️⚠️ **URL 을 바꾸면 그 URL 이 업고 있던 사실을 하나씩 다시 센다**(G-67) — 새 페이지에 「기초 질문」·「감사가 아니다」는 있지만 **「WA Tool 무료」가 없어**(`no cost`·`free` 0건) 요금 페이지를 따로 달고 영문 인용을 `no additional charge` 로 맞췄다. ⚠️ **중복 지표는 조사벗김 목록에 달린다**(G-68) — 목록을 바꾸니 상위 쌍이 51~57쌍으로 갈리고 노트 표에 없던 **같은 Task 쌍 여섯**이 올라왔다(전부 중복 아님 · 그쪽이 검수자에게 더 중요하다). ⏳ 레포 전역 2,572개를 함께 재니 **같은 재구성이 라이브 CLF·SAA·SOA·SCS 를 건드린다** — 노트 §8 표에 적었고 **별 배치**다. 기준선 **3,739 그린** · analyze 0 · 정답 인덱스·`verified` 불변. — §0-2026-11-17-c)_
 _이전 갱신: 2026-11-17(**AIF-C01 결함 세 묶음 해소 — 중복 5쌍 · 죽은 출처 2건 · G-84 19개**: 기준선 3,737 → **3,739**(+2 = `retiredUrls` 두 항목) · analyze 0 · 손댄 문항 **9개**가 전부 드래프트라 **라이브 무영향**이다. 중복은 임계 이상 **3쌍 → 0쌍**(최고 0.450 → 0.233)이고 돌릴 쪽을 **같은 skill 안의 미출제 축**으로 다시 썼다(`skill`·`section`·`difficulty`·`correct`·`verified` 전부 보존, 출처는 그 md 프런트매터 안에서만 골라 G-84 유지). ⚠️⚠️ **생성기 단정이 더 심각한 실수를 잡았다** — `t1-3-q6` 은 `correct` 가 3 인데 정답 내용을 **`[2]` 자리**에 썼고 **길이 하한** 위반으로 표면화됐다(상한만 보는 가드였다면 **오답이 정답 자리에 있는 문항**이 들어갔다). ⭐ **죽은 출처 2건은 교체가 아니라 중복 항목 삭제로 닫혔다** — 네 문항과 md 2편이 정본을 이미 갖고 있었고 특히 `t4-1-q6`·`q7` 은 **해설이 이미 정본을 인용**하고 있었다(출처만 잘못 붙어 있었다). ⚠️⚠️ **G-84 는 15개가 아니라 19개였다** — 노트의 첫 판이 **전역**(어느 md 에도 없는 URL)으로 셌고 정의는 **파일별**(그 문항이 속한 md)이다. ⚠️⚠️ **그 등재가 기존 가드 둘의 판정 결함을 드러냈다** — Autopilot 금지가 **과잉**이었고(그 페이지는 지표 **정의**를 적어 인용이 정당하다. ⭐ G-84 위반이 그 가드를 숨기고 있었다) `G-47` 의 기대 제목이 **부정확**했다(실제 h1 에 「vector」가 들어간다 — 죽은 항목이 옛 제목을 달고 있었다). 줄 번호 리터럴 대조군도 프런트매터 삽입에 밀렸다(168 → 170). 노트는 `docs/saa-review/2026-11-17-aif-review-prep.md` 가 정본이고 게이트는 **추가 6 Task 90문항**이다. ⭐ 같은 날 마무리 정비로 노트 §4 를 교체 후 수치로 갱신하고 **99-gaps 에 G-72~G-76** 을 등재했다(중복 원형만 재기 · **G-84 위반이 가드를 숨긴다** · `G-47` 제목 · G-84 전역 vs 파일별 · md 출처 수선 함정). — §0-2026-11-17-b)_
 _이전 갱신: 2026-11-17(**AIF-C01 검수 착수 노트 — 부분 flip 해소 선결 확인**: 콘텐츠 무변경 · 기준선 **3,737 그린**. flip 선결은 **두 층으로 0건**이다 — 소스 전수 스캔(AIF 를 언급하는 테스트의 `verified`+`false` 5줄은 **전부 주석**)과 **게이트 개방 시뮬레이션**(`questionCount` 만 임시로 채워 7 Task 105문항 상태를 만들고 전체 스위트 → 실패 **1건**, 그것도 「questionCount == verified 수」 불변식이라 **시뮬레이션 산물**. sha256 일치로 원복). ⚠️ **「시뮬레이션이 정말 게이트를 열었나」를 소스로 확인했다** — 게이트가 `entry.questionCount` 를 합산한다(`content_index.dart:930`). ⚠️⚠️⚠️ **그런데 가드 밖에서 결함 세 묶음이 나왔다** — ① **중복 5쌍이 조사벗김으로 비로소 드러났다**(2026-11-07 해소는 **원형만** 셌다. 임계 이상 **3쌍** 0.450·0.391·0.360 + 0.3대 2쌍이고 **원형으로는 전부 임계 아래**. 본문을 읽어 **전부 진짜·거의 중복**으로 판정 — AIP 는 상위 8쌍이 전부 중복 아님이었다. ⚠️ `t3-3-q1`·`q2` 가 **둘 다** 겹쳐 `3.3.1` 축을 다시 봐야 하고 `t1-1-q15` 는 **라이브**다) ② **죽은 출처 2건**(`sus_sus_region_a2` 는 **진짜 404 이고 URL 교체로 닫히지 않는다** — 실재 후보가 담는 사실이 문항 인용과 다르다. `source_url_retired_test` 는 **아는 은퇴 URL만** 안다) ③ **G-84 위반 15개**(그중 다섯은 공개된 `aif-t1-1` 문항이 쓴다). 노트는 `docs/saa-review/2026-11-17-aif-review-prep.md` 이고 게이트는 **추가 6 Task 90문항**이면 열린다. ⚠️ **AIF 가이드는 목표를 `knowledge` 에 담는다**(AIP 는 반대라 베끼면 커버리지 단정이 공허해진다). ⚠️⚠️ **`cmd > file 2>&1; echo "EXIT=$?"` 는 백그라운드 통지에 실패를 `exit 0` 으로 보고한다** — 파일 안의 `EXIT=` 줄만이 진짜 신호다. — §0-2026-11-17)_
 _이전 갱신: 2026-11-16(**전체 문서 점검·갱신 + 로그 통합 + AIP 검수 준비 노트**: 콘텐츠·코드 무변경이고 기준선 **3,737 그린**(변경 전후 동일)이다. ⚠️⚠️⚠️ **문서가 모르는 사실이 있었다 — AIF-C01이 부분 flip 상태다**: 2026-11-13에 검수자가 `aif-t1-1` 15문항을 flip했는데(`6d20b0d`) WORKLIST는 「210문항이 모두 드래프트」로 적고 있었고, 라이브에서 **D1만 충족한 채 모의고사가 잠긴 중간 상태**다(HANDOFF는 적었고 WORKLIST·메모리는 받지 못했다 — **인계문서 사이에서 사실이 갈린다**). ⚠️⚠️ **사용자 대면 README가 가장 낡아 있었다** — 「CLF가 문항·모의고사까지 완성된 유일한 자격증」·「SAA 문항은 준비 중」이 둘 다 거짓이고 「테스트 25개」는 실측 **159개**다. 8종 **142편 · 문항 2,288개 · 공개 1,643개** 표로 바꿨다. ⚠️ **콘텐츠 0 자격증은 여섯이 아니라 셋이고 그중 둘은 저작 대상이 아니다** — SAP-C02는 마지막 응시가 **오늘**이고 ANS-C01은 12-31 은퇴라 **남은 것은 DOP-C02 하나**다. ⚠️ **TODOS P3의 Why가 거짓이었다**(문항 JSON은 `rootBundle.loadString`으로 요청 시 로드돼 `main.dart.js`에 없다). 루브릭은 **여덟 자격증**으로 넓히고 AIF·SCS 게이트 상태를 고쳤다. §0- 엔트리 6개는 관례형으로 옮겨 **125개**가 됐다(`^## §0-` 0건 · 본문 sha256 불변). AIP 검수 노트는 `docs/saa-review/2026-11-16-aip-review-prep.md`다 — 출처 **165개 전부 `200 r=0`** · 품질 신호 **0/300(0%)** · 중복 상위 **8쌍 판정 완료** · flip 선결 **0건** · 게이트 **7 Task 105문항**. — §0-2026-11-16-f)_
@@ -68,6 +69,94 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
+
+## 0-2026-11-17-d. 완료: **WA 문서 재구성 출처 교체 11건 — 라이브 6자격증** (2026-11-17)
+
+**무엇을 했는가** — §0-2026-11-17-c 가 노트 §8 에 남긴 묶음을 사용자 지시로 **전부 닫았다.**
+기준선 3,739 → **3,750**(+11 = `retiredUrls` 11항목) · `analyze` 0건 · node 도구 테스트 통과 ·
+손댄 콘텐츠 **19파일**(md 10 · 문항 9)이 **대부분 라이브**다. 실측·판정의 정본은
+`docs/saa-review/2026-11-17-wa-restructure-source-audit.md`.
+
+| 옛 URL | 신호 | 정본 | 쓰는 곳 |
+|---|---|---|---|
+| `framework/welcome.html` | 404 | `framework/framework.html` · `definitions.html` | clf/t1-2(md 2 · 문항 4) |
+| `framework/the-pillars-of-the-framework.html` | 404 | `framework/definitions.html` | clf/t1-2(md 2 · 문항 9) |
+| `framework/sec_permissions_emergency_process.html` | 404 | `security-pillar/` 판 | scs-t6-1 |
+| `framework/rel_planning_network_topology_…` | 404 | `reliability-pillar/` 판 | soa-t5-2 + **은퇴 가드 정본 등재분** |
+| `reliability-pillar/welcome.html` | 200 r=1 | `framework/reliability.html` | saa-t2-4·t2-5 · soa-t2-2·t2-4 |
+| PG `encryption-best-practices/general-…` | 404 | 개명된 가이드의 `encryption-strategy-in-aws.html` | dea-t4-3 |
+| PG `image-classification/sagemaker-canvas.html` | 404 | `sagemaker/…/canvas-manage-cost.html` | mla-t2-1 |
+| PG `implementing-logging-monitoring-cloudwatch/…` | 404(**리더도 not_found**) | `opensearch-service/…/fgac.html` | saa-t3-9 |
+| PG `least-privilege-cloudformation/…` | 404 | `AWSCloudFormation/…/using-iam-servicerole.html` | dea-t4-1 |
+| PG `serverless-etl-aws-glue/databrew.html` | 404(**리더도 not_found**) | `databrew/…/what-is.html` + Glue Studio | dea-t3-1 |
+| `aws.amazon.com/security-agent/` | 200 r=1 | `aws.amazon.com/continuum/` | soa-t4-2 (**제품 개명**) |
+
+### ⚠️⚠️ 번호로 매핑하면 멀쩡한 URL 로 엉뚱한 페이지를 인용한다
+
+`framework/sec03-bp03.html` 은 **`200 r=0` 으로 살아 있는데** 그 내용이 「**Analyze public and
+cross-account access**」다 — 레포가 인용하는 「Establish emergency access process」가 아니다.
+**framework 가이드가 BP 번호를 재배정했다.** 비상 접근 BP 의 정본은
+`security-pillar/sec_permissions_emergency_process.html`(그 가이드에서는 옛 슬러그가 살아 있다)이고
+제목도 그대로다. 같은 이유로 `framework/rel02-bp02.html` 은 제목이 같은 REL02-BP02 이지만
+**본문이 재작성돼** 레포가 인용하는 「cost-effective backup」 문장이 없어(`costs less` 로 바뀌었다)
+`reliability-pillar/` 판을 썼다.
+
+### ⚠️ pillar 가이드는 반쪽만 이전됐다
+
+`security-pillar`·`reliability-pillar`·`cost-optimization-pillar`·`sustainability-pillar` 의
+`welcome.html` 넷은 전부 `200 r=1` 로 `framework/<pillar>.html` 로 가는데 **그 가이드들의 BP
+페이지는 옛 슬러그로 살아 있다.** 여섯 기둥은 이제 **기둥마다 한 페이지**이고 「six pillars」 표와
+각 기둥 정의는 **`framework/definitions.html`** 이 갖는다(`framework/framework.html` 에 기둥 이름이
+**0건**이다 — 실측). 그래서 CLF 의 기둥별 인용 9건은 definitions 로, 트레이드오프·감사 인용은
+framework.html 로 갈랐다.
+
+### ⚠️ 소멸과 개명을 가르는 것은 네 방법이다
+
+prescriptive-guidance 는 **개명 1**(`encryption-best-practices/` → `…-and-features-for-aws-services/`)
+· **소멸 4**다. `implementing-logging-monitoring-cloudwatch`·`serverless-etl-aws-glue` 는 `curl` 이
+`404 r=0` 이고 **AWS 문서 리더도 `not_found`** 라 **소멸**로 판정했다 — 2026-11-06 AIF
+`AWS CAF for AI`(리더로는 읽혀 인용을 지켰다)와 **반대 결론**이고, **규율은 네 방법을 다 해 보는
+것이고 결론은 매번 측정으로 정한다.** `image-classification`·`least-privilege-cloudformation` 은
+가이드가 남았지만 인용 페이지가 색인에서 사라져 **서비스 자기 가이드**로 옮겼고, CloudFormation 쪽은
+오히려 더 정확해졌다(`using-iam-servicerole.html` 이 「기본은 호출자 자격 증명 · 서비스 역할 · `iam:PassRole`」
+을 한 페이지에 적는다).
+
+### ⚠️ URL 을 바꾸면 그 URL 이 업고 있던 사실을 다시 센다 (G-67 재적용)
+
+- 새 `framework.html` 에 **「WA Tool 무료」가 0건**이라 CLF q6 에 요금 페이지를 따로 달았다.
+- **`mla-t2-1-q18`**(라이브): 사라진 PG 페이지에 기대던 「**월 수천 장 이상**이면 자체 호스팅이
+  더 저렴」의 수치 근거가 없어졌다. 새 정본이 적는 **과금 축의 차이**(Ready-to-use 는 기반 서비스
+  요금 · 사용자 지정은 예측 리소스)로 해설을 바꿨다. **정답·보기·`verified` 불변.**
+- **`saa-t3-9.md`**(라이브): 네 사유를 한 자리에 모아 적던 페이지가 사라져 **「공식이 드는」 귀속을
+  걷고** 첫 사유의 정본으로 `fgac.html` 을 달았다(본문 네 항목은 참이라 지우지 않았다).
+- **`soa-t4-2.md`**(라이브): 2026-11-09 에 적어 둔 「공식 제목은 *AWS Security Agent (now part of
+  AWS Continuum)*」가 낡았다 — 지금은 **f.k.a.** 표기다. ⚠️ **정정 메모에 옛 URL 을 인용하지
+  않았다** — 인용하면 은퇴 가드(레포 전수 0건)가 깨진다.
+
+### ⚠️⚠️ 기준선 정본이 이틀 동안 멈춰 있었다
+
+`CLAUDE.md` 의 기준선 줄이 **3,737** 이었다 — 어제 AIF 배치가 `retiredUrls` 2항목을 더해 3,739 로
+만들었는데 **그 줄을 올리지 않았다.** 그 줄 자신이 「기준선 수치의 정본이다」라고 선언하므로
+이 PR 에서 **두 증가를 함께** 적었다. **테스트 수가 바뀌면 같은 PR 에서 그 줄을 고친다.**
+
+### 방법론
+
+- ⚠️ **수집기가 URL 을 발명하지 않아야 한다** — 1차 전역 수집이 `audio/**/script.json` 의
+  `sourceExcerpt`(md 참고자료 복사본)에서 **각주 번호를 URL 에 붙여** `…/pricing/6`·`Welcome.html2`
+  같은 가짜 **223건**을 만들었다. 2차는 **구조 필드만** 읽는다(프런트매터 `url:` · `sources[].url` ·
+  출처 절 백틱).
+- ⚠️ **SCS 의 「출처」 절은 스킴 없는 백틱 경로**(`docs.aws.amazon.com/…`)라 `https://` 로
+  치환하면 그 줄이 비켜 간다 — 스킴 없는 부분 문자열로 둘을 함께 센다(횟수 단정이 잡았다).
+- ⚠️ **개수 추측이 또 틀렸다** — 기둥 URL 제목 접두사를 7건으로 적었는데 **8건**이었다(9건 중
+  하나만 다른 제목). 단정이 잡았다.
+- ⭐ **은퇴 가드를 먼저 고쳐야 콘텐츠 교체가 막히지 않는다** — `soa-t5-2` 의 **정본으로 등재돼
+  있던** `framework/rel_planning_network_topology_…` 가 이번 측정에서 죽었다(가드가 판정을 굳힌다).
+
+### 다음
+
+- **AIF 검수·flip**(추가 6 Task 90문항) · **AIP 검수·flip**(7 Task 105문항)은 사람 몫이다.
+- ⏳ `whitepapers/latest/…` 11건은 **사람 대상 서빙만 꺼진** 기존 판정 계열로 남겨 뒀다(리더로는
+  읽힌다 → 인용 유지 + 상태 명시). `repost.aws` 403 14건은 봇 차단이고 죽은 링크가 아니다.
 
 ## 0-2026-11-17-c. 완료: **AIP-C01 검수 준비 노트 전수 재점검 — 죽은 출처 1건 수선** (2026-11-17)
 

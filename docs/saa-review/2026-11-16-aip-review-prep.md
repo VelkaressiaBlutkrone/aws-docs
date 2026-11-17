@@ -233,15 +233,18 @@ Task마다 3개 · 공식 기술 98/98 커버 · 평문 위반 0 · 길이 단�
   charge) 기반 AWS 리소스 비용만`**으로 맞췄다. **URL 을 바꿀 때는 그 URL 이 업고 있던
   사실을 하나씩 다시 센다**(G-67). 정답 인덱스·보기 문구·`verified`는 불변이다.
 
-### ⏳ 이 노트 밖의 숙제 — 같은 재구성이 **라이브** 콘텐츠를 건드렸다
+### ✅ 이 노트 밖의 숙제 — 같은 날 전부 닫혔다
 
-AIP만 보면 1건이지만 **레포 전역 고유 URL 2,572개를 함께 재니** 같은 계열이 더 있다.
-AIP 수선만으로는 `source_url_retired_test`의 은퇴 목록에 그 URL 을 **넣을 수 없다**
-(그 가드는 레포 전수 0건을 단정하고 CLF 에 아직 남아 있다). 아래가 그 묶음이고 **별 배치**다.
+AIP만 보면 1건이지만 **레포 전역 고유 URL 2,572개를 함께 재니** 같은 계열이 더 있었다.
+⭐ **2026-11-17 같은 날 사용자 지시로 전부 교체했다** — 손댄 콘텐츠 **19파일**(대부분 라이브) ·
+새 정본 **13개 전부 `200 r=0`** · 기준선 3,739 → **3,750**(은퇴 URL 11항목) ·
+정답 인덱스·보기·`verified` **전부 불변**. 실측·판정의 정본은
+[2026-11-17-wa-restructure-source-audit.md](2026-11-17-wa-restructure-source-audit.md)다.
+아래 표는 그때의 묶음 기록이다.
 
 | 죽은·옮겨진 URL | 신호 | 쓰는 곳 |
 |---|---|---|
-| `framework/welcome.html` | 404 | **clf/t1-2**(md 2 · 문항 3) — ✅ AIP 는 해소 |
+| `framework/welcome.html` | 404 | ✅ 해소 — **clf/t1-2**(md 2 · 문항 4) → `framework.html`·`definitions.html` |
 | `framework/the-pillars-of-the-framework.html` | 404 | **clf/t1-2**(md 2 · 문항 8) |
 | `reliability-pillar/welcome.html` → `framework/reliability.html` | 200 r=1 | **saa-t2-4**(md·문항) · **saa-t2-5** · **soa-t2-2**(md·문항) · **soa-t2-4** |
 | `framework/sec_permissions_emergency_process.html` | 404 | scs-t6-1(md·문항) |

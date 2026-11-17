@@ -24,7 +24,7 @@
         "3": "DR은 리전 단위 대규모 재해를 대상으로 하고, HA는 단일 AZ 장애 수준의 자동 복구를 목표로 합니다. 서술이 반대입니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -48,7 +48,7 @@
         "3": "단일 RDS 인스턴스는 그 인스턴스가 장애를 일으키면 전체 DB가 중단되는 SPOF입니다. RDS Multi-AZ로 제거합니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -72,7 +72,7 @@
         "3": "ELB(ALB 포함)는 내부적으로 다중 AZ 이중화를 제공합니다. AZ마다 별도 ALB를 배치할 필요가 없습니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -216,7 +216,7 @@
         "3": "수동 인스턴스 추가는 동적 조달의 수동 버전으로, 정적 안정성 원칙에 어긋납니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -240,7 +240,7 @@
         "3": "ASG는 세션 데이터를 자동으로 마이그레이션하는 기능이 없습니다. 인스턴스 교체 시 로컬 데이터는 삭제됩니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -264,7 +264,7 @@
         "3": "영역형 NAT 게이트웨이를 하나만 두면 비용은 줄지만 SPOF가 됩니다. 고가용성이 필요하면 AZ마다 영역형을 두거나 리전 NAT 게이트웨이를 씁니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -288,7 +288,7 @@
         "3": "단일 AZ ASG는 AZ 수준 장애를 자동으로 복구할 수 없습니다. AZ 장애 복구를 위해서는 다중 AZ 분산이 필요합니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" }
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" }
       ],
       "verified": true
     },
@@ -360,7 +360,7 @@
         "3": "지연 기반 라우팅은 멀티 리전 성능 최적화를 위한 기능이지, 단일 리전 내 SPOF 제거와 세션 지속성 문제를 해결하지 않습니다."
       },
       "sources": [
-        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html" },
+        { "title": "AWS Well-Architected Framework — Reliability Pillar (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html" },
         { "title": "RDS Multi-AZ 배포 구성 및 관리 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html" }
       ],
       "verified": true
