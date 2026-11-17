@@ -36,7 +36,7 @@ sources:
     url: https://docs.aws.amazon.com/xray/latest/devguide/xray-console-servicemap.html
   - title: Service Quotas 요청 템플릿 (공식)
     url: https://docs.aws.amazon.com/servicequotas/latest/userguide/organization-templates.html
-lastVerified: 2026-10-21
+lastVerified: 2026-11-17
 ---
 
 # 고가용성 패턴 — Multi-AZ·단일 실패점 제거
@@ -94,7 +94,7 @@ CLF에서 Multi-AZ를 개념으로만 봤다면, SAA는 **RDS Multi-AZ와 읽기
 | 개념 | 목표 | 장애 시 동작 | 비용·복잡도 |
 |---|---|---|---|
 | **고가용성(HA)** | 다운타임 최소화·빠른 자동 복구 | 짧은 중단 후 자동 전환 (수 초~수 분) | 중간 |
-| **내결함성(Fault Tolerance)** | 장애 중에도 **완전 무중단** 지속 | 능동 이중화로 중단 없이 계속 동작 | 높음 |
+| **내결함성(Fault Tolerance)** | 장애 중에도 **중단 없이 계속 동작**하는 것이 설계 목표 | 능동 이중화로 중단 없이 계속 동작 | 높음 |
 | **재해 복구(DR)** | 대규모·리전 단위 재해로부터 복구 | RTO/RPO 목표에 따라 복구 | 전략에 따라 다름 |
 
 > **시험 문구 해석**: "highly available" → Multi-AZ + 자동 복구 조합으로 답합니다. "fault tolerant" → 더 강한 요건으로, 완전한 능동 이중화를 암시합니다. "DR"이 나오면 `saa-t2-5`의 4전략으로 답합니다.
@@ -197,7 +197,7 @@ RDS Multi-AZ DB 인스턴스 배포의 핵심 특성:
 - **동일 엔드포인트**: 페일오버 후에도 애플리케이션이 연결하는 DNS 엔드포인트는 변경되지 않음
 
 
-> 🧠 원리: 왜 RDS Multi-AZ는 동기 복제를 선택해 쓰기 지연을 감수할까요?
+> 🧠 원리: 왜 RDS Multi-AZ DB 인스턴스 배포는 동기 복제를 선택해 쓰기 지연을 감수할까요?
 > 페일오버 목적의 스탠바이가 Primary보다 데이터가 뒤처져 있으면, 전환 시 최근 쓰기가 유실되어 "데이터 유실 없음"이라는 HA 보장이 깨집니다.
 > 동기 복제는 Primary와 Standby 모두에 쓰기가 완료돼야 응답을 반환하므로 네트워크 왕복 지연이 추가되지만, 페일오버 시점에 두 인스턴스의 데이터가 항상 동일함을 보장합니다.
 > 이 트레이드오프(쓰기 지연 허용 vs 데이터 유실 방지)가 Multi-AZ를 읽기 확장이 아닌 가용성 전용 기능으로 분류하는 설계 이유입니다.
@@ -470,7 +470,7 @@ ElastiCache Redis / DynamoDB (세션·상태 저장)
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"RDS Multi-AZ DB 인스턴스 배포는 읽기 성능도 높여준다."** → 틀렸습니다. DB 인스턴스 배포의 스탠바이 인스턴스는 읽기 트래픽을 처리하지 않습니다. 읽기 확장이 필요하면 읽기 복제본 또는 Multi-AZ DB 클러스터를 검토합니다.
-   (원리: §4 — Multi-AZ 스탠바이는 가용성 전용 설계로, 동기 복제와 단일 엔드포인트 페일오버가 목적이며 읽기 확장은 읽기 복제본의 역할이다.)
+   (원리: §4 — Multi-AZ DB 인스턴스 배포의 스탠바이는 가용성 전용 설계로, 동기 복제와 단일 엔드포인트 페일오버가 목적이며 읽기 확장은 읽기 복제본의 역할이다.)
 
 2. **"Multi-AZ가 부하를 분산한다."** → 부하 분산은 ELB(ALB/NLB)의 역할입니다. Multi-AZ는 가용성을 위한 이중화이지, 트래픽 분산 기능이 아닙니다.
    (원리: §3 — 표준 HA 구조에서 ALB가 트래픽 분산을, RDS Multi-AZ가 DB 가용성을 각각 전담하므로 한 레이어가 두 역할을 겸하지 않는다.)
@@ -500,7 +500,7 @@ ElastiCache Redis / DynamoDB (세션·상태 저장)
 다음 세 가지를 적용합니다.
 
 1. **ALB + 다중 AZ Auto Scaling Group**: EC2를 최소 2개 AZ에 분산 배치하고, ALB가 헬스 체크로 비정상 인스턴스를 자동 제외합니다.
-2. **RDS Multi-AZ 활성화**: 다른 AZ에 동기 스탠바이를 유지해, Primary 장애 시 자동으로 DNS 전환합니다.
+2. **RDS Multi-AZ(DB 인스턴스 배포) 활성화**: 다른 AZ에 동기 스탠바이를 유지해, Primary 장애 시 자동으로 DNS 전환합니다.
 3. **세션 외부화**: EC2 로컬 세션을 ElastiCache Redis 또는 DynamoDB로 이전해 인스턴스 교체 시에도 세션이 유지되도록 합니다.
 </details>
 
@@ -528,7 +528,7 @@ Route 53이 Primary 엔드포인트의 헬스 체크 실패를 감지하면, DNS
 
 **(B) RDS Multi-AZ 배포**입니다.
 
-RDS Multi-AZ는 다른 AZ에 동기 스탠바이를 유지하므로 Primary 장애 시 자동으로 페일오버됩니다. 단일 실패점이 제거된 상태입니다. (A), (C), (D)는 해당 AZ에 장애가 나면 서비스가 중단되는 단일 실패점입니다.
+RDS Multi-AZ DB 인스턴스 배포는 다른 AZ에 동기 스탠바이를 유지하므로 Primary 장애 시 자동으로 페일오버됩니다. 단일 실패점이 제거된 상태입니다. (A), (C), (D)는 해당 AZ에 장애가 나면 서비스가 중단되는 단일 실패점입니다.
 </details>
 
 **Q5 (원리).** 왜 RDS Multi-AZ의 스탠바이는 읽기 트래픽을 처리하지 않도록 설계됐을까요?

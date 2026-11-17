@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html
   - title: DEA-C01 공식 시험 가이드 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain2.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 스토어 선택 (분석·NoSQL·스트림·벡터·잠금)
@@ -166,7 +166,7 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 - **Kinesis Data Streams** — 보존은 기본 **24시간, 최대 8,760시간(365일)**. **보존 기간을 줄이면 새 기간보다 오래된 레코드가 거의 즉시 접근 불가**가 되니 주의합니다. 샤드 하나는 쓰기 **1 MB/초(1,000 records/초)**, on-demand 신규 스트림의 기본 처리량은 **쓰기 4 MB/s·읽기 8 MB/s**이며 기본적으로 on-demand 스트림은 **50개**까지 만듭니다(한도 증설 요청 가능).
 - **Amazon MSK tiered storage** — primary + 저비용 두 티어로 보존 비용을 낮춥니다. **프로비저닝 모드 전용**, 저비용 스토리지 **최소 보존 3일**, **compacted topic 미지원**입니다.
 - **Aurora** — 한 클러스터 볼륨을 공유하는 **Aurora Replica를 최대 15개**, 복제 지연은 보통 **100밀리초보다 훨씬 짧습니다**. 스토리지 구성은 **I/O 지출이 전체 Aurora 지출의 25% 이상이면 I/O-Optimized**, 그보다 적으면 Standard가 유리하고 **Standard→I/O-Optimized 전환은 30일에 한 번**입니다.
-- **RDS 읽기 복제본 vs Multi-AZ** — 읽기 복제본은 **비동기 복제로 읽기 트래픽을 분산**하고, **Multi-AZ standby는 동기 복제이지만 읽기 트래픽을 받지 못합니다.**
+- **RDS 읽기 복제본 vs Multi-AZ** — 읽기 복제본은 **비동기 복제로 읽기 트래픽을 분산**하고, **Multi-AZ DB 인스턴스 배포(스탠바이 1개)의 standby는 동기 복제이지만 읽기 트래픽을 받지 못합니다.** ⚠️ 스탠바이 2개인 **Multi-AZ DB 클러스터 배포**에서는 스탠바이가 읽기를 처리합니다.
 - **OpenSearch 비용** — 오래된 로그는 **UltraWarm·cold storage**로 옮기고 **ISM**으로 티어 이동·보존을 관리합니다. UltraWarm은 **S3를 스토리지로 써서 데이터가 불변이고 사본이 하나만 필요**하며, hot 데이터가 약 **2.5 TiB** 규모일 때부터 비용 효율적입니다.
 - **S3 클래스(2.1 관점)** — 접근 패턴을 **모르거나 변하면 Intelligent-Tiering**입니다. **30일 연속 미접근** 객체를 Infrequent Access 티어로 옮기고 **retrieval 요금이 없으며**, **128 KB 미만 객체는 모니터링·자동 티어링 대상이 아닙니다.** Standard-IA·One Zone-IA는 **128 KB보다 큰 객체를 30일 이상** 저장하는 용도입니다. (수명 주기 정책 운영은 `dea-t2-3`.)
 
@@ -231,7 +231,7 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 - **데드락** — 스냅샷 격리에서 `INSERT`·`COPY`가 공유 잠금으로 진행하는 중 한 트랜잭션이 `UPDATE`·`DELETE`·`MERGE`·DDL처럼 **독점 잠금이 필요한 문장을 이어 실행**하면 데드락이 날 수 있습니다. **독점 잠금 문장을 별도 트랜잭션으로 분리**하거나 재시도 로직을 둡니다.
 - **RDS for PostgreSQL** — 행 수준 잠금을 세밀하게 쓰므로 같은 행에 동시 요청이 몰리면 충돌이 커집니다. **COMMIT/ROLLBACK 없이 열린 채 둔 `idle in transaction` 세션과 장기 트랜잭션이 잠금을 오래 쥡니다.** `pg_stat_activity`·`pg_locks`로 진단합니다.
 - **RDS for MySQL** — 잠금 대기가 `innodb_lock_wait_timeout`(**기본 50초**)을 넘으면 **error 1205**로 현재 문장이 롤백됩니다. 잠금을 쥔 세션은 `SHOW ENGINE INNODB STATUS`로 확인합니다.
-- **모니터링 도구 공지** — **RDS Performance Insights는 2026-06-30 수명 종료**이며, 업그레이드하지 않으면 **Database Insights의 Standard mode**가 기본이 되고 실행 계획·온디맨드 분석은 Advanced mode에서만 지원됩니다.
+- **모니터링 도구 공지** — **Performance Insights 는 Amazon CloudWatch Database Insights 로 이전됐습니다**(공식 사용자 안내서의 해당 페이지 제목이 이미 Database Insights 이고, 2026-11-17 실측으로 그 페이지는 종료 날짜를 적지 않습니다 — 날짜를 단정하지 않습니다). 업그레이드하지 않으면 **Database Insights의 Standard mode**가 기본이 되고 실행 계획·온디맨드 분석은 Advanced mode에서만 지원됩니다.
 
 ### 12) 오픈 테이블 형식 — Apache Iceberg와 S3 Tables {#open-table-format}
 
@@ -239,7 +239,7 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 
 - **엔진 지원** — **Glue 3.0 이상**은 Iceberg·Hudi·Delta Lake를 지원하고, **EMR은 6.5.0부터** Spark 3에서 Iceberg를 씁니다. **Redshift는 Glue Data Catalog의 Iceberg 테이블을 트랜잭션 일관성으로 조회**하고 S3·S3 table bucket의 Iceberg 테이블을 만들고 쓸 수도 있습니다. 단 **Iceberg 테이블을 Redshift 로컬 테이블로 적재할 때는 `INSERT INTO`·CTAS를 쓰며 `COPY`는 쓸 수 없습니다.**
 - **직접 운영 시 유지 관리 3종** — ① **compaction**(작은 파일·delete 파일 병합) ② **snapshot expiration**(오래된 스냅샷 제거) ③ **unreferenced file removal**(고아 파일 제거). Athena에서는 **`OPTIMIZE`가 bin-packing으로 작은 파일을 병합**하고, **`VACUUM`이 스냅샷 만료와 고아 파일 제거**를 수행합니다. **스냅샷을 만료하면 그 스냅샷으로는 더 이상 time travel할 수 없습니다.** Athena 기본값은 최소 보존 스냅샷 **1개**, 최대 스냅샷 보존 **432,000초(5일)** 입니다.
-- **자동 최적화** — **Glue Data Catalog**는 Iceberg 테이블의 compaction·스냅샷 보존·고아 데이터 관리를 자동 수행합니다(compaction은 파일 수가 설정값(기본 5개)을 넘고 각 파일이 목표 크기의 75% 미만일 때 시작).
+- **자동 최적화** — **Glue Data Catalog**는 Iceberg 테이블의 compaction·스냅샷 보존·고아 데이터 관리를 자동 수행합니다(compaction은 테이블·파티션의 파일이 **100개를 넘고** 각 파일이 목표 크기의 **75% 미만**일 때 시작하며, 목표 크기는 `write.target-file-size-bytes` 로 기본 **512 MB**).
 - **S3 Tables** — **table bucket**은 테이블 전용 버킷으로, 테이블이 **Iceberg 형식**으로 저장되고 **compaction·스냅샷 관리·미참조 파일 제거를 자동 수행**합니다. **Iceberg V3**를 지원하며 compaction 기본 목표 파일 크기는 **512MB**(64MB~512MB로 변경 가능), 스냅샷 관리 기본값은 **MinimumSnapshots 1·MaximumSnapshotAge 120시간**입니다. 일반 버킷의 Iceberg 테이블 대비 **최대 10배 높은 TPS**를 제공합니다.
 
 | 항목 | 일반 S3 버킷의 Iceberg(직접 관리) | S3 Tables(table bucket) |
@@ -260,7 +260,7 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 - "**빈 테이블에 벡터 인덱스를 먼저**" → **HNSW**(훈련 단계 없음). "**IVFFlat**"은 중심점 계산 때문에 **데이터 선적재 필요**.
 - "**트랜잭션이 열린 채 멈춰 다른 세션이 대기**" → `SVV_TRANSACTIONS` 확인 후 **`PG_TERMINATE_BACKEND`**. 트랜잭션 블록 안의 쿼리는 취소할 수 없습니다.
 - "**작은 파일 + 오래된 스냅샷**" → Athena **`OPTIMIZE` + `VACUUM` 둘 다**. 하나로는 둘 다 못 잡습니다. "**유지 관리 부담 자체를 없애고 싶다**" → **S3 Tables** 또는 **Glue 자동 최적화**.
-- 최신성 함정: **Snowball Edge는 신규 고객 제공 중단**(대안은 DataSync), **EMR 7.10.0부터 S3A가 기본 커넥터**, **RDS Performance Insights 2026-06-30 수명 종료**, **DS2 노드 제공 종료**.
+- 최신성 함정: **Snowball Edge는 신규 고객 제공 중단**(대안은 DataSync), **EMR 7.10.0부터 S3A가 기본 커넥터**, **RDS Performance Insights 는 CloudWatch Database Insights 로 이전**(종료 날짜는 공식 문서에서 확인되지 않아 단정하지 않습니다), **DS2 노드 제공 종료**.
 
 ---
 
@@ -279,13 +279,13 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 10. **"`VACUUM`만 돌리면 작은 파일도 정리된다."** → ❌. Athena에서 **작은 파일 병합은 `OPTIMIZE`**, **스냅샷 만료·고아 파일 제거는 `VACUUM`** 입니다. 그리고 **만료한 스냅샷으로는 time travel할 수 없습니다.**
 11. **"Iceberg 테이블도 `COPY`로 Redshift에 적재한다."** → ❌. **`COPY`는 쓸 수 없고** `INSERT INTO`·CTAS를 씁니다.
 12. **"대용량이면 Snowball Edge."** → ❌. **신규 고객에게는 제공되지 않습니다.** 온라인 전송은 **DataSync**가 안내되는 대안입니다.
-13. **"Multi-AZ standby로 읽기를 분산한다."** → ❌. **standby는 읽기 트래픽을 받지 못합니다.** 읽기 확장은 **읽기 복제본**(Aurora는 Aurora Replica, 최대 15개)입니다.
+13. **"Multi-AZ standby로 읽기를 분산한다."** → ❌(**DB 인스턴스 배포** 기준). **스탠바이 1개인 DB 인스턴스 배포의 standby는 읽기 트래픽을 받지 못합니다** — 읽기를 처리하는 것은 스탠바이 2개인 **DB 클러스터 배포**입니다. 읽기 확장은 **읽기 복제본**(Aurora는 Aurora Replica, 최대 15개)입니다.
 
 ---
 
 ## 🧪 자가 점검
 
-> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t2-1.questions.json` — 사람 검수 전이라 사이트에는 노출되지 않습니다)
+> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t2-1.questions.json`)
 
 **Q1.** 주문 이력 DynamoDB 테이블의 데이터 대부분이 오래되어 거의 읽히지 않고, 월 비용에서 **저장 비용이 읽기·쓰기 처리량 비용의 50%를 넘습니다.** 성능·내구성·가용성을 유지하고 **애플리케이션 코드 변경 없이** 총비용을 줄이려면?
 
@@ -335,7 +335,7 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. Amazon Redshift provisioned clusters — https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html
 2. Compute capacity for Amazon Redshift Serverless — https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-capacity.html
@@ -388,7 +388,8 @@ Skill 2.1.1은 "비용·성능 요구 → 저장소"를 고르는 능력입니�
 49. Lock:transactionid (Amazon RDS for PostgreSQL wait event) — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/wait-event.locktransactionid.html
 50. How do I resolve "Error 1205: Lock wait timeout exceeded" in RDS for MySQL? — https://repost.aws/knowledge-center/rds-mysql-error-1205
 51. synch/cond/innodb/row_lock_wait_cond (Amazon Aurora MySQL wait event) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/ams-waits.row-lock-wait-cond.html
-52. How do I troubleshoot a slow query in Amazon RDS for MySQL? (Performance Insights 수명 종료 공지) — https://repost.aws/knowledge-center/rds-mysql-slow-query
+52. How do I troubleshoot a slow query in Amazon RDS for MySQL? (AWS re:Post 지식 센터 — Performance Insights 종료 날짜는 공식 문서에서 확인되지 않았습니다) — https://repost.aws/knowledge-center/rds-mysql-slow-query
+53. Monitoring DB load with Amazon CloudWatch Database Insights on Amazon RDS — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html
 53. Using Apache Iceberg tables with Amazon Redshift — https://docs.aws.amazon.com/redshift/latest/dg/querying-iceberg.html
 54. Writing to Apache Iceberg tables (Amazon Redshift) — https://docs.aws.amazon.com/redshift/latest/dg/iceberg-writes.html
 55. Iceberg (Amazon EMR Release Guide) — https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-iceberg.html

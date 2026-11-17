@@ -169,6 +169,10 @@
         {
           "title": "Compare AWS STS credentials - API별 수명과 MFA와 세션 정책",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html"
+        },
+        {
+          "title": "Policies and permissions in AWS Identity and Access Management — 세션 정책 상한",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
         }
       ],
       "verified": true
@@ -201,6 +205,10 @@
         {
           "title": "Request temporary security credentials - 콘솔 연동 경로",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html"
+        },
+        {
+          "title": "Enable custom identity broker access to the AWS console — AssumeRole 권장과 DurationSeconds",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html"
         }
       ],
       "verified": true

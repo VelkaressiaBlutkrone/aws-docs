@@ -151,17 +151,17 @@
       "skill": "4.2.2",
       "section": "abac",
       "difficulty": "applied",
-      "stem": "태그 기반 접근 제어를 정책으로 쓰려 합니다. 리소스 쪽 태그와 보안 주체 쪽 태그를 참조하는 조건 키와, 기존 RBAC와의 관계를 올바르게 설명한 것은 무엇입니까?",
+      "stem": "태그 기반 접근 제어를 정책으로 쓰려 합니다. 리소스 쪽 태그와 보안 주체 쪽 태그를 참조하는 조건 키를 올바르게 설명한 것은 무엇입니까?",
       "options": [
         "리소스 태그와 보안 주체 태그를 같은 조건 키로 참조하고 기존 RBAC는 폐기해야 합니다",
-        "리소스 태그·요청 태그·태그 키 조건 키로 리소스 쪽을, 보안 주체 태그 조건 키로 주체 쪽을 참조하고 RBAC와 공존을 권합니다",
+        "리소스 태그·요청 태그·태그 키 조건 키로 리소스 쪽을, 보안 주체 태그 조건 키로 주체 쪽을 참조합니다",
         "태그 기반 조건 키는 S3에만 있고 다른 서비스의 정책에는 적용되지 않습니다",
         "보안 주체 쪽 태그는 정책 조건으로 참조할 수 없고 리소스에 붙은 태그만 조건 키로 참조할 수 있습니다"
       ],
       "correct": 1,
-      "explanation": "태그 기반 접근 제어의 조건 키는 리소스의 태그를 보는 것과 요청에 실린 태그를 보는 것과 태그 키 목록을 보는 것으로 갈리고, 보안 주체 쪽 값은 보안 주체 태그 조건 키로 참조합니다. ABAC 정책은 보안 주체 태그와 리소스 태그의 일치를 조건으로 적어 새 리소스에 정책 수정 없이 적용됩니다. 그리고 공식은 ABAC로 전부 바꾸라고 하지 않고 기존 RBAC 옆에 ABAC를 더하는 길을 권합니다.",
+      "explanation": "태그 기반 접근 제어의 조건 키는 리소스의 태그를 보는 것과 요청에 실린 태그를 보는 것과 태그 키 목록을 보는 것으로 갈리고, 보안 주체 쪽 값은 보안 주체 태그 조건 키로 참조합니다. ABAC 정책은 보안 주체 태그와 리소스 태그의 일치를 조건으로 적어 새 리소스에 정책 수정 없이 적용됩니다. 공식은 ABAC의 이점을 전통 RBAC 모델과 비교해 적고, 조건 키는 전역 조건 키 참조 페이지가 열거합니다.",
       "wrongExplanations": {
-        "0": "리소스 쪽과 보안 주체 쪽은 다른 조건 키로 참조하고, 공식은 공존을 권합니다.",
+        "0": "리소스 쪽과 보안 주체 쪽은 다른 조건 키로 참조합니다.",
         "2": "태그 기반 조건 키는 서비스에 걸쳐 쓰입니다.",
         "3": "보안 주체 태그 조건 키로 참조합니다."
       },
@@ -169,6 +169,10 @@
         {
           "title": "Define permissions based on attributes with ABAC authorization - ABAC와 RBAC 비교",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_attribute-based-access-control.html"
+        },
+        {
+          "title": "AWS global condition context keys — 태그 조건 키",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html"
         }
       ],
       "verified": false

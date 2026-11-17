@@ -178,7 +178,7 @@
       "wrongExplanations": {
         "0": "Aurora Replica는 읽기 처리량을 확장하는 수단입니다. Standard 구성에서는 복제본이 처리한 읽기도 I/O 요금 대상이므로 I/O 비용 비중 문제가 해결되지 않습니다.",
         "1": "I/O 요금은 인스턴스 크기가 아니라 I/O 요청 수에 붙습니다. 인스턴스를 줄여도 I/O 비용 비중은 그대로이고 성능만 떨어집니다.",
-        "3": "Amazon RDS의 Multi-AZ 대기 복제본은 읽기 트래픽을 처리하지 않습니다. 또한 이 선택지는 Aurora의 I/O 과금 모델과 무관합니다."
+        "3": "Amazon RDS의 Multi-AZ DB 인스턴스 배포(스탠바이 1개)에서 대기 복제본은 읽기 트래픽을 처리하지 않습니다(읽기를 처리하는 것은 스탠바이 2개인 DB 클러스터 배포입니다). 또한 이 선택지는 Aurora의 I/O 과금 모델과 무관합니다."
       },
       "sources": [
         {
@@ -186,7 +186,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html"
         },
         {
-          "title": "Working with DB instance read replicas (Amazon RDS) — Multi-AZ standby는 읽기 트래픽을 처리하지 않음",
+          "title": "Working with DB instance read replicas (Amazon RDS) — Multi-AZ DB 인스턴스 배포의 standby는 읽기 트래픽을 처리하지 않음",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
         }
       ],

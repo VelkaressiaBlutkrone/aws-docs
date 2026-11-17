@@ -12,7 +12,7 @@ sources:
     url: https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html
   - title: AWS Config 규칙으로 리소스 평가 (공식)
     url: https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html
-  - title: AWS Security Hub — 소개 (공식)
+  - title: AWS Security Hub CSPM — 소개 (공식)
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
   - title: Amazon GuardDuty — 소개 (공식)
     url: https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html
@@ -30,7 +30,13 @@ sources:
     url: https://aws.amazon.com/continuum/
   - title: AWS Security Agent 사용자 안내서 — 조사 결과 (공식)
     url: https://docs.aws.amazon.com/securityagent/latest/userguide/run-diff-scan-s3.html
-lastVerified: 2026-10-20
+  - title: Amazon Macie란 무엇인가 — 머신러닝과 패턴 매칭 (공식)
+    url: https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
+  - title: AWS Trusted Advisor 점검 참조 — 점검 범주 (공식)
+    url: https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor-check-reference.html
+  - title: AWS Config 규칙 구성 요소 — 트리거 유형 (공식)
+    url: https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html
+lastVerified: 2026-11-17
 ---
 
 # 규정 준수·거버넌스 — Config·Security Hub·GuardDuty·Inspector
@@ -49,7 +55,7 @@ lastVerified: 2026-10-20
 - [ ] **Security Hub** — 보안 표준(CIS/FSBP)·통합 결과(ASFF)·보안 점수의 역할을 안다
 - [ ] **GuardDuty** — 에이전트 없이 로그 분석으로 위협을 탐지함을 설명할 수 있다
 - [ ] **Inspector** — EC2·ECR·Lambda 취약점(CVE)을 자동·지속 스캔함을 안다
-- [ ] **Trusted Advisor** — 5개 점검 범주(비용·보안·내결함성·성능·서비스 한도)를 안다
+- [ ] **Trusted Advisor** — 점검 범주(비용 최적화·성능·보안·내결함성·서비스 한도·운영 우수성)를 안다
 - [ ] **결과 통합 운영** — 여러 도구의 결과를 Security Hub로 모으고 자동 대응을 거는 흐름을 그린다
 
 ---
@@ -87,9 +93,9 @@ lastVerified: 2026-10-20
 | **AWS Config** | **구성(설정)이 규칙을 준수하는가** — 리소스 설정 변경 추적 | 리소스 구성 항목 + Config 규칙 |
 | **Amazon GuardDuty** | **위협·악성 활동** — 침해 징후 | 로그 분석(VPC Flow Logs·DNS·CloudTrail), 머신러닝. **에이전트 불필요** |
 | **Amazon Inspector** | **소프트웨어 취약점(CVE)·네트워크 노출** | EC2·ECR·Lambda 자동 스캔 |
-| **Amazon Macie** | **민감정보(PII)가 어디 있는가** | S3 객체 머신러닝 분류 |
+| **Amazon Macie** | **민감정보(PII)가 어디 있는가** | S3 객체를 머신러닝과 패턴 매칭으로 분류 |
 | **Security Hub** | 위 결과들을 **통합·표준 점검·점수화** | ASFF로 결과 집계 + 보안 표준 |
-| **Trusted Advisor** | 계정 전반의 **모범 사례 점검** | 5개 범주 점검 |
+| **Trusted Advisor** | 계정 전반의 **모범 사례 점검** | 범주별 점검 |
 
 > 외우는 한 줄: **Config=구성 준수, GuardDuty=위협 탐지, Inspector=취약점(CVE), Macie=민감정보, Security Hub=통합 대시보드.**
 
@@ -115,12 +121,14 @@ lastVerified: 2026-10-20
 > 🧠 원리: 왜 Config는 "변경이 발생할 때"가 아니라 "지속적으로" 규칙을 평가할까요?
 > 리소스 설정은 콘솔·CLI·자동화 스크립트 등 다양한 경로로 언제든 바뀔 수 있습니다.
 > 변경 이벤트만 감시하면 이벤트가 누락된 경우나 드리프트가 누적된 상태를 놓칩니다.
-> 지속 평가 방식은 어떤 경로로 구성이 바뀌었든 다음 평가 주기에 비준수 상태를 반드시 포착하게 합니다.
+> 지속 평가 방식은 어떤 경로로 구성이 바뀌었든 이후 평가에서 비준수 상태를 포착하게 합니다. 규칙의 평가 트리거는 구성 변경·주기·둘을 함께 쓰는 하이브리드 세 유형이며 규칙마다 정해져 있습니다.
 > 이 덕분에 수동 변경, 자동화 오류, 권한 부여된 예외 처리 후 미복구 같은 상황도 동일한 가드레일 안에 들어옵니다.
 
 ### 2) Security Hub — 보안 표준·통합 결과·점수
 
 > 공식 정의: **"여러 AWS 서비스와 파트너 제품의 보안 경보를 한곳에서 보고, 보안 표준에 대해 환경을 자동 점검하는 서비스."**
+>
+> 표준 점검과 ASFF 결과 집계를 하는 이 서비스의 **현재 공식 이름은 AWS Security Hub CSPM**입니다(공식 소개 문서의 제목도 Security Hub CSPM입니다). 시험 가이드 문구는 「Security Hub」를 쓰므로 이 문서는 그 표기를 따릅니다.
 
 - **보안 표준 자동 점검**: **CIS AWS Foundations Benchmark**, **AWS Foundational Security Best Practices(FSBP)**, PCI DSS 등 표준에 대해 환경을 점검하고 **보안 점수(%)**를 산출합니다.
 - **통합 결과 형식(ASFF)**: GuardDuty·Inspector·Macie·Config 등 여러 서비스의 결과를 **AWS Security Finding Format**으로 정규화해 한 화면에 모읍니다.
@@ -169,7 +177,7 @@ lastVerified: 2026-10-20
 > 이 방식으로 "마지막 스캔 이후 새로 공개된 CVE"가 자동으로 반영되어, 운영자가 스캔 주기를 별도로 관리할 필요가 없습니다.
 > 결과적으로 취약점 스캔 상태가 현재 CVE 데이터베이스 기준으로 항상 최신을 유지합니다.
 
-### 5) Trusted Advisor — 모범 사례 점검 5범주
+### 5) Trusted Advisor — 모범 사례 점검 범주
 
 > 공식 정의: **"AWS 모범 사례에 따라 환경을 점검하고 권장 사항을 제시하는 서비스."**
 
@@ -180,6 +188,7 @@ lastVerified: 2026-10-20
 | **내결함성(Fault Tolerance)** | 다중 AZ, 백업, 스냅샷 구성 |
 | **성능** | 과소/과대 프로비저닝, 서비스 한도 근접 |
 | **서비스 한도(할당량)** | 계정 한도 사용률 |
+| **운영 우수성(Operational Excellence)** | 흐름 로그가 없는 VPC, 작업이 비활성화된 CloudWatch 경보, Systems Manager로 관리되지 않는 EC2 인스턴스 |
 
 > **점검 전체**는 **AWS Business Support+ · AWS Enterprise Support · AWS Unified Operations** 플랜 고객에게 제공됩니다. **Basic Support** 플랜에서는 **서비스 한도 범주의 모든 점검**과 **보안·내결함성 범주의 선택된 점검**만 콘솔에서 볼 수 있고, **자동 갱신이 제공되지 않아** 보안 범주 점검은 수동으로 새로 고쳐야 합니다. (과거 자료의 Developer·Business·Enterprise On-Ramp 플랜은 **2027-01-01 종료** 예정이라 플랜 명칭이 달라졌습니다.)
 
@@ -263,7 +272,7 @@ lastVerified: 2026-10-20
 - **Inspector = 취약점(CVE) 스캔**. 대상은 **EC2·ECR(컨테이너)·Lambda**. 지속 재스캔.
 - **Macie = S3 민감정보(PII) 탐지** (데이터 **내용**). Inspector(취약점)·GuardDuty(위협)와 혼동 금지.
 - **Security Hub = 통합·표준 점검(CIS/FSBP)·보안 점수**. 직접 탐지하지 않고 결과를 **ASFF**로 모은다.
-- **Trusted Advisor 5범주**: 비용·보안·내결함성·성능·서비스 한도. 점검 전체는 **Business Support+·Enterprise·Unified Operations** 플랜, **Basic**은 서비스 한도 전체 + 보안·내결함성 선택 점검(자동 갱신 없음).
+- **Trusted Advisor 범주**: 비용 최적화·성능·보안·내결함성·서비스 한도·운영 우수성. 점검 전체는 **Business Support+·Enterprise·Unified Operations** 플랜, **Basic**은 서비스 한도 전체 + 보안·내결함성 선택 점검(자동 갱신 없음).
 - **Detective = 사후 근본 원인 조사**(탐지 아님).
 - **결과 통합 흐름**: 탐지 도구(GuardDuty/Inspector/Macie/Config) → Security Hub 집계 → EventBridge → Lambda/SSM 자동 대응.
 - **규정 준수 팩 조직 배포 = `PutOrganizationConformancePack`**. **관리 계정 또는 위임 관리자**에서 배포. 배포 전 **Config 기록 활성화** 필요. 삭제 시 회원 계정의 규칙·교정까지 제거.

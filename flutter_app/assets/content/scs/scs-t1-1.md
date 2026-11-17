@@ -34,7 +34,11 @@ sources:
     url: https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html
   - title: AWS Systems Manager State Manager
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html
-lastVerified: 2026-11-08
+  - title: Enabling cross-Region aggregation in Security Hub CSPM
+    url: https://docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation-enable.html
+  - title: Specify which AWS Regions your account can use
+    url: https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html
+lastVerified: 2026-11-17
 ---
 
 # 모니터링 및 경보 솔루션 설계 (요구 사항·상태 확인·이벤트 집계·탐지 서비스·평가 자동화)
@@ -364,3 +368,5 @@ Systems Manager State Manager는 **관리형 노드를 내가 정의한 상태�
 11. CloudWatch cross-account observability — `docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Unified-Cross-Account.html` (2026-11-08 확인)
 12. Conformance Packs for AWS Config — `docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html` (2026-11-08 확인)
 13. AWS Systems Manager State Manager — `docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html` (2026-11-08 확인)
+14. Enabling cross-Region aggregation in Security Hub CSPM — `docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation-enable.html` (2026-11-17 확인)
+15. Specify which AWS Regions your account can use — `docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html` (2026-11-17 확인)

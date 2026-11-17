@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker-unified-studio/latest/adminguide/domain-units.html
   - title: DEA-C01 공식 시험 가이드 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain4.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 인증 메커니즘 적용 (보안 그룹·IAM 역할·VPC 엔드포인트·Secrets Manager)
@@ -98,8 +98,8 @@ VPC 안에서 도는 데이터 서비스(Glue 작업의 ENI, VPC에 붙인 Lambd
 - Glue 작업은 지정한 서브넷에 **ENI를 만들며 사설 IP만 받고 공인 IP는 받지 않습니다.** 연결(connection)에 지정한 보안 그룹이 각 ENI에 적용됩니다.
 - Glue 구성 요소끼리 통신하려면 **모든 TCP 포트에 대한 자기 참조 인바운드 규칙**이 필요하고, ⚠️ **소스가 같은 보안 그룹으로 한정되므로 VPC를 모든 네트워크에 여는 것이 아닙니다.** 공식 절차는 **RDS가 쓰는 보안 그룹에 모든 TCP 포트의 자기 참조 인바운드 규칙을 추가**하는 것입니다.
 - 아웃바운드를 제한한다면 자기 참조 아웃바운드 규칙에 더해 **S3 게이트웨이 엔드포인트의 관리형 prefix list를 대상으로 하는 HTTPS 규칙**을 둡니다.
-- **연결 실패 점검 항목** — 서브넷의 **여유 IP 수가 워커 수보다 많아야** 하고, VPC 밖 데이터(온프레미스, 퍼블릭 호스트명의 RDS)는 **퍼블릭 서브넷의 NAT 게이트웨이 경로가 없으면 연결이 타임아웃**되며, Secrets Manager·STS가 필요하면 엔드포인트를 붙여야 합니다. 작업은 **한 번에 하나의 VPC(서브넷)만** 접근하고, VPC에서 S3에 접근하려면 **VPC 엔드포인트가 필요**합니다.
-- **VPC에 붙인 Lambda** — 인터넷 경로 없이는 **VPC 안 리소스에만** 연결할 수 있습니다. ⚠️ **공용 서브넷에 붙여도 인터넷이 열리지 않으므로** 사설 서브넷 + 공용 서브넷의 NAT 게이트웨이를 쓰고, AWS 서비스는 **인터페이스 VPC 엔드포인트**로 접근할 수 있습니다.
+- **연결 실패 점검 항목** — 서브넷의 **여유 IP 수가 워커 수보다 많아야** 하고, VPC 밖 데이터(온프레미스, 퍼블릭 호스트명의 RDS)는 **나가는 NAT 경로가 없으면 연결이 타임아웃**되며(영역형 NAT 게이트웨이는 퍼블릭 서브넷에 두고, **리전 NAT 게이트웨이는 퍼블릭 서브넷이 필요 없습니다**), Secrets Manager·STS가 필요하면 엔드포인트를 붙여야 합니다. 작업은 **한 번에 하나의 VPC(서브넷)만** 접근하고, VPC에서 S3에 접근하려면 **VPC 엔드포인트가 필요**합니다.
+- **VPC에 붙인 Lambda** — 인터넷 경로 없이는 **VPC 안 리소스에만** 연결할 수 있습니다. ⚠️ **공용 서브넷에 붙여도 인터넷이 열리지 않으므로** 사설 서브넷 + NAT 게이트웨이를 쓰고(영역형은 공용 서브넷에 두고, **리전 NAT 게이트웨이는 공용 서브넷이 필요 없습니다**), AWS 서비스는 **인터페이스 VPC 엔드포인트**로 접근할 수 있습니다.
 
 | 리소스 | 필요한 보안 그룹 규칙 | 시험 단서 |
 |---|---|---|
@@ -334,7 +334,7 @@ Lambda 회전 함수는 **createSecret → setSecret → testSecret → finishSe
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. Security group rules (Amazon VPC User Guide) — https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html
 2. Amazon EC2 security group connection tracking — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html

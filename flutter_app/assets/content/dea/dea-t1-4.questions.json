@@ -314,6 +314,10 @@
       },
       "sources": [
         {
+          "title": "AWS CDK bootstrapping — cdk bootstrap 이 환경마다 CDKToolkit 스택을 배포",
+          "url": "https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html"
+        },
+        {
           "title": "What is the AWS CDK? — 코드 정의 후 CloudFormation으로 프로비저닝",
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/home.html"
         },
@@ -406,7 +410,7 @@
       "wrongExplanations": {
         "1": "canary는 두 단계(일부 → 나머지) 전환입니다. 일정 간격 반복이 아닙니다.",
         "2": "all-at-once는 한 번에 전환합니다.",
-        "3": "rolling with additional batch는 EC2/온프레미스 배포 구성으로 Lambda 전환 유형이 아닙니다."
+        "3": "rolling with additional batch는 AWS Elastic Beanstalk의 배포 정책이며 CodeDeploy의 Lambda 트래픽 전환 구성이 아닙니다. CodeDeploy의 EC2/온프레미스 사전 정의 구성은 AllAtOnce·HalfAtATime·OneAtATime입니다."
       },
       "sources": [
         {

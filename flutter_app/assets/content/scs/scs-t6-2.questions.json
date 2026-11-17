@@ -177,6 +177,10 @@
         {
           "title": "Tag policies - 평가 대상과 비대상",
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+        },
+        {
+          "title": "AWS global condition context keys — aws:RequestTag·aws:TagKeys",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html"
         }
       ],
       "verified": false
@@ -395,7 +399,7 @@
         "Firewall Manager의 정책으로 허용 구성을 강제하고 위반 리소스를 자동으로 되돌립니다"
       ],
       "correct": 1,
-      "explanation": "Service Catalog는 AWS에서 승인된 IT 서비스의 카탈로그를 만들고 관리합니다. 최종 사용자는 조직이 정한 제약 조건을 따라 승인된 것만 빠르게 배포합니다. 표준화는 제품을 어디서 시작할 수 있는지와 어떤 인스턴스 유형을 쓸 수 있는지 등 여러 구성 옵션을 제한하는 것이고, 세분화된 액세스 제어는 관리자가 제품을 포트폴리오로 묶고 제약 조건과 리소스 태그를 더한 뒤 IAM 사용자와 그룹에 포트폴리오 접근 권한을 주는 것입니다. 확장성과 버전 관리도 요건에 맞습니다. 제품을 여러 포트폴리오에 복사 없이 넣을 수 있고 제품을 새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오의 제품에 전파됩니다. 작업 6.1과도 이어집니다. Control Tower의 Account Factory가 Service Catalog의 프로비저닝된 제품 위에 만들어진 추상화입니다.",
+      "explanation": "Service Catalog는 AWS에서 승인된 IT 서비스의 카탈로그를 만들고 관리합니다. 최종 사용자는 조직이 정한 제약 조건을 따라 승인된 것만 빠르게 배포합니다. 표준화는 제품을 어디서 시작할 수 있는지와 어떤 인스턴스 유형을 쓸 수 있는지 등 여러 구성 옵션을 제한하는 것이고, 세분화된 액세스 제어는 관리자가 제품을 포트폴리오로 묶고 제약 조건과 리소스 태그를 더한 뒤 IAM 사용자와 그룹에 포트폴리오 접근 권한을 주는 것입니다. 확장성과 버전 관리도 요건에 맞습니다. 제품을 여러 포트폴리오에 복사 없이 넣을 수 있고 제품을 새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오의 제품에 전파됩니다.",
       "wrongExplanations": {
         "0": "StackSets는 중앙에서 스택을 배포하는 쪽이고 셀프 서비스 카탈로그 모델이 아닙니다.",
         "2": "RAM은 이미 만든 리소스의 사용권을 공유하는 쪽입니다.",

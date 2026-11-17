@@ -159,7 +159,7 @@
         "EBS 스냅샷 잠금은 유료 기능이고 잠긴 동안에는 복원에 쓸 수 없습니다"
       ],
       "correct": 2,
-      "explanation": "공식이 잠긴 스냅샷은 그 사용자의 IAM 권한과 무관하게 어떤 사용자도 삭제할 수 없다고 적고, 잠금과 해제에 추가 비용이 없어 잠긴 스냅샷에도 표준 EBS 스냅샷 스토리지 비용만 낸다고 적습니다. 잠긴 스냅샷도 평소처럼 사용할 수 있습니다. 모드는 준수 모드와 거버넌스 모드 둘이고 특정 기간 또는 특정 날짜까지 잠글 수 있습니다. 운영상 알아 둘 귀결이 하나 있습니다. Data Lifecycle Manager 는 보존 정책과 무관하게 잠긴 스냅샷을 삭제할 수 없습니다.",
+      "explanation": "공식이 잠긴 스냅샷은 그 사용자의 IAM 권한과 무관하게 어떤 사용자도 삭제할 수 없다고 적고, 잠금과 해제에 추가 비용이 없어 잠긴 스냅샷에도 표준 EBS 스냅샷 스토리지 비용만 낸다고 적습니다. 잠긴 스냅샷도 평소처럼 사용할 수 있습니다. 모드는 준수 모드와 거버넌스 모드 둘이고 특정 기간 또는 특정 날짜까지 잠글 수 있습니다. 운영상 알아 둘 귀결이 하나 있습니다. Data Lifecycle Manager 가 만든 스냅샷을 수동으로 잠그고 보존 임계 시점에 아직 잠겨 있으면 Data Lifecycle Manager 가 그 스냅샷을 더 이상 관리하지 않으므로, 필요 없어지면 수동으로 삭제해야 합니다.",
       "wrongExplanations": {
         "0": "권한 회수는 권한을 되돌릴 수 있는 사람이 있으면 깨집니다.",
         "1": "EBS 스냅샷 잠금이 그 기능입니다.",
@@ -169,6 +169,10 @@
         {
           "title": "Amazon EBS snapshot lock",
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshot-lock.html"
+        },
+        {
+          "title": "Snapshot and AMI policies — 잠긴 스냅샷과 DLM 관리",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html"
         }
       ],
       "verified": false
@@ -247,11 +251,11 @@
         "Signer는 컨테이너 이미지 전용이므로 Lambda에는 적용할 수 없고 배포 파이프라인에서 검사해야 합니다"
       ],
       "correct": 0,
-      "explanation": "공식이 코드 서명 구성에서 허용 서명 프로필과 검증 정책을 지정하고 그 정책이 경고 또는 적용 둘이라고 적습니다. 경고는 배포를 허용하고 적용은 차단합니다. 검증은 배포 수락 전에 일어나므로 적용 모드에서 서명 검증이 실패하면 배포가 실패합니다. 전제가 둘 있습니다. 버전 관리가 켜진 S3 버킷이 필요하고 서명 프로필에 플랫폼과 서명 유효 기간을 지정합니다. Signer는 Lambda 외에 IoT와 컨테이너 이미지도 지원하고 컨테이너 쪽은 Notary Project의 Notation CLI와 함께 쓰며 서명이 이미지와 함께 레지스트리에 저장됩니다.",
+      "explanation": "공식이 코드 서명 구성에서 허용 서명 프로필과 검증 정책을 지정하고 그 정책이 경고 또는 적용 둘이라고 적습니다. 경고는 배포를 허용하고 적용은 차단합니다. 검증은 배포 수락 전에 일어나므로 적용 모드에서 서명 검증이 실패하면 배포가 실패합니다. 전제가 둘 있습니다. 버전 관리가 켜진 S3 버킷이 필요하고 서명 프로필에 플랫폼과 서명 유효 기간을 지정합니다.",
       "wrongExplanations": {
         "1": "경고 모드는 배포를 허용합니다.",
         "2": "코드 서명 구성을 만들어 함수에 연결해야 합니다.",
-        "3": "Signer는 Lambda와 IoT와 컨테이너 이미지를 지원합니다."
+        "3": "Lambda 코드 서명이 공식 기능이고 코드 서명 구성을 함수에 연결해 씁니다."
       },
       "sources": [
         {
@@ -303,7 +307,7 @@
         "Archive는 모든 EFS 파일 시스템에서 쓸 수 있고 전환 기준은 POSIX 접근 시각 속성입니다"
       ],
       "correct": 2,
-      "explanation": "공식이 IA로 전환되기 전에는 Archive로 전환할 수 없어서 TransitionToArchive를 설정하지 않거나 TransitionToIA보다 늦게 둬야 한다고 적습니다. 기본값은 IA 30일과 Archive 90일입니다. Standard로 전환은 기본이 되돌리지 않는 것이라 지연이 가장 중요한 용례에서는 첫 접근 시를 따로 골라야 합니다. 그리고 Archive 스토리지 클래스는 Elastic 처리량 모드와 General Purpose 성능 모드 파일 시스템에서만 쓸 수 있습니다. 전환 시점의 기준은 Standard에서 마지막으로 접근된 시점이고 그 시점은 공개된 POSIX 속성이 아니라 내부 타이머가 추적합니다. 파일 시스템당 수명 주기 구성은 하나입니다.",
+      "explanation": "공식 API 참조가 IA로 전환되기 전에는 Archive로 전환할 수 없어서 TransitionToArchive를 설정하지 않거나 TransitionToIA보다 늦게 둬야 한다고 적습니다. 기본값은 IA 30일과 Archive 90일입니다. Standard로 전환은 기본이 되돌리지 않는 것이라 지연이 가장 중요한 용례에서는 첫 접근 시를 따로 골라야 합니다. 그리고 Archive 스토리지 클래스는 Elastic 처리량 모드와 General Purpose 성능 모드 파일 시스템에서만 쓸 수 있습니다. 전환 시점의 기준은 Standard에서 마지막으로 접근된 시점이고 그 시점은 공개된 POSIX 속성이 아니라 내부 타이머가 추적합니다. 파일 시스템당 수명 주기 구성은 하나입니다.",
       "wrongExplanations": {
         "0": "IA를 거치지 않고 Archive로 갈 수 없고 Standard 복귀는 기본이 아닙니다.",
         "1": "파일 시스템당 수명 주기 구성은 하나이고 파일 시스템 전체에 적용됩니다.",
@@ -313,6 +317,10 @@
         {
           "title": "Managing storage lifecycle (Amazon EFS)",
           "url": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html"
+        },
+        {
+          "title": "PutLifecycleConfiguration (Amazon EFS API) — Archive 전환 제약",
+          "url": "https://docs.aws.amazon.com/efs/latest/APIReference/API_PutLifecycleConfiguration.html"
         }
       ],
       "verified": false
@@ -387,7 +395,7 @@
         "기본 정책은 태그로 지정한 리소스만 대상으로 하므로 태그를 붙이면 삭제가 동작합니다"
       ],
       "correct": 1,
-      "explanation": "잠긴 스냅샷은 그 사용자의 IAM 권한과 무관하게 어떤 사용자도 삭제할 수 없고, 그래서 Data Lifecycle Manager도 보존 정책과 무관하게 잠긴 스냅샷을 삭제할 수 없습니다. 정책 갈래의 성질도 함께 기억합니다. 기본 정책은 리전의 모든 볼륨과 인스턴스 중 최근 백업이 없는 것을 백업하고 계정과 리전별로 리소스 유형당 하나만 둘 수 있습니다. 사용자 지정 정책은 태그로 지정한 리소스를 대상으로 하고 빠른 스냅샷 복원과 스냅샷 아카이빙과 교차 계정 복사와 사전 사후 스크립트 같은 고급 기능을 지원하며 한 정책에 스케줄을 최대 4개 둡니다. 보존은 개수 기반 또는 기간 기반입니다.",
+      "explanation": "잠긴 스냅샷은 그 사용자의 IAM 권한과 무관하게 어떤 사용자도 삭제할 수 없고, 그래서 Data Lifecycle Manager도 보존 정책과 무관하게 잠긴 스냅샷을 삭제할 수 없고, 보존 임계 시점에 잠겨 있던 스냅샷은 그 관리에서 벗어나 수동 삭제가 필요합니다. 정책 갈래의 성질도 함께 기억합니다. 기본 정책은 리전의 모든 볼륨과 인스턴스 중 최근 백업이 없는 것을 백업하고 계정과 리전별로 리소스 유형당 하나만 둘 수 있습니다. 사용자 지정 정책은 태그로 지정한 리소스를 대상으로 하고 빠른 스냅샷 복원과 스냅샷 아카이빙과 교차 계정 복사와 사전 사후 스크립트 같은 고급 기능을 지원하며 한 정책에 스케줄을 최대 4개 둡니다. 보존은 개수 기반 또는 기간 기반입니다.",
       "wrongExplanations": {
         "0": "기본 정책은 리소스 유형당 하나이고 태그로 대상을 고르는 쪽은 사용자 지정 정책입니다.",
         "2": "보존은 개수 기반과 기간 기반 둘을 지원합니다.",
@@ -401,6 +409,10 @@
         {
           "title": "Amazon EBS snapshot lock - 잠긴 스냅샷과 보존 자동화",
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshot-lock.html"
+        },
+        {
+          "title": "Snapshot and AMI policies — 잠긴 스냅샷과 DLM 관리",
+          "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html"
         }
       ],
       "verified": false

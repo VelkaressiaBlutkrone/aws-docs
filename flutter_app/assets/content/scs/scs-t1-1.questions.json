@@ -257,6 +257,14 @@
         {
           "title": "Understanding cross-Region aggregation in Security Hub CSPM — 홈 리전과 제어 구성",
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation.html"
+        },
+        {
+          "title": "Enabling cross-Region aggregation — 홈 리전 제약",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation-enable.html"
+        },
+        {
+          "title": "Specify which AWS Regions your account can use — 2019-03-20 이후 옵트인",
+          "url": "https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html"
         }
       ],
       "verified": true

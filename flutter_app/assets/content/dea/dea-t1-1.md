@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-how-to-event-types-and-destinations.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-17
 ---
 
 # 데이터 수집 수행 (스트리밍·배치·트리거)
@@ -129,7 +129,7 @@ KDS는 **샤드가 용량 단위**입니다. 시험은 한도와 모드를 요�
 | 항목 | DynamoDB Streams | Kinesis Data Streams for DynamoDB |
 |---|---|---|
 | 보존 | **24시간** | 기본 24시간, **최대 1년** |
-| 소비자 | 샤드당 2개 이하 | EFO 사용 시 샤드당 최대 20 |
+| 소비자 | 샤드당 2개 이하 | EFO 등록 소비자 **데이터 스트림당** 최대 20(On-demand Advantage 모드 50) |
 | 순서 | **항목별 순서 보장** | 보장 없음 — 클라이언트가 타임스탬프로 정렬 |
 | 중복 | 레코드는 한 번만 | 간헐적 중복 가능 — 클라이언트가 걸러냄 |
 | 시험 단서 | "항목 단위 순서", Lambda 트리거 | "장기 재생", KCL/Flink/Firehose 연동 |
@@ -177,7 +177,7 @@ KDS는 **샤드가 용량 단위**입니다. 시험은 한도와 모드를 요�
 
 ### 7) 스로틀·재처리·연결 제약 {#throttle-replay}
 
-- **Kinesis → Lambda 튜닝**: 지연(IteratorAge 증가)은 `ParallelizationFactor` 상향(1~10, **파티션 키 수준 순서는 유지**) 또는 샤드 증설로 풉니다. 호출 횟수는 `BatchSize`(최대 10,000)·배치 윈도(최대 5분)로 조절합니다. **기본값은 재시도·레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주 막습니다** — `MaximumRetryAttempts`·`MaximumRecordAgeInSeconds`로 끊고, `BisectBatchOnFunctionError`로 불량 레코드를 격리하고, 폐기 레코드는 **실패 대상(SQS/SNS)** 으로 보관합니다.
+- **Kinesis → Lambda 튜닝**: 지연(IteratorAge 증가)은 `ParallelizationFactor` 상향(1~10, **파티션 키 수준 순서는 유지**) 또는 샤드 증설로 풉니다. 호출 횟수는 `BatchSize`(최대 10,000)·배치 윈도(최대 5분)로 조절합니다. **기본값은 재시도·레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주 막습니다** — `MaximumRetryAttempts`·`MaximumRecordAgeInSeconds`로 끊고, `BisectBatchOnFunctionError`로 불량 레코드를 격리하고, 폐기 레코드는 **실패 대상**으로 보관합니다 — 대상은 **SNS 주제·SQS 대기열·S3 버킷·Kafka** 넷이고, **S3 대상에만 호출 레코드 전체**가 메타데이터와 함께 갑니다(SQS·SNS 대상은 메타데이터만).
 - **재처리 수단**: KDS는 보존 기간 안에서 `TRIM_HORIZON`/`AT_TIMESTAMP`로 다시 읽습니다. 이벤트는 **EventBridge 아카이브 재생**, 큐는 **SQS DLQ redrive**. **Firehose는 재생 수단이 아닙니다**(Direct PUT 보관 24시간).
 - **쓰기 스로틀 대처**: SDK의 **지수 백오프 + 지터**(백오프는 간격을 늘리고, 지터는 재시도 시점을 흩뜨려 군집을 막습니다), DynamoDB는 파티션 키 카디널리티·온디맨드 모드 검토, Lambda→RDS 연결 폭증은 **RDS Proxy**.
 - **IP 허용 목록·고정 출구 IP**: 상대 방화벽이 고정 IP만 허용하면 **프라이빗 서브넷의 Lambda + 퍼블릭 서브넷 NAT 게이트웨이의 Elastic IP**로 나갑니다. 퍼블릭 서브넷에 함수를 붙이는 것만으로는 인터넷에 나가지 못하고, `ip-ranges.json`의 AWS 범위는 **서비스 공용 범위이지 우리 고정 출구 IP가 아닙니다.**
@@ -215,7 +215,7 @@ KDS는 **샤드가 용량 단위**입니다. 시험은 한도와 모드를 요�
 
 ## 🧪 자가 점검
 
-> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t1-1.questions.json` — 사람 검수 전이라 사이트에는 노출되지 않습니다)
+> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t1-1.questions.json`)
 
 **Q1.** 애플리케이션 로그를 S3 데이터 레이크에 Parquet으로 적재해야 합니다. 소비자 코드와 서버 운영은 최소화하고 싶습니다. 무엇을 고르나요?
 
@@ -265,7 +265,7 @@ S3 소스의 북마크는 **객체의 수정 시각**으로 처리 여부를 판
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19)
 
 1. Amazon Kinesis Data Streams FAQs — https://aws.amazon.com/kinesis/data-streams/faqs/
 2. Quotas and limits (Kinesis Data Streams) — https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html

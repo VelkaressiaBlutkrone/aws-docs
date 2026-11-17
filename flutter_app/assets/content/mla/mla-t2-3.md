@@ -26,9 +26,11 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/model-ab-testing.html
   - title: MLPERF04-BP05 Perform a performance trade-off analysis (Machine Learning Lens)
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp05.html
+  - title: Evaluating ML Models (Amazon Machine Learning 개발자 가이드, 레거시 서비스 문서)
+    url: https://docs.aws.amazon.com/machine-learning/latest/dg/evaluating_models.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 모델 성능 분석 (지표·기준선·수렴 진단·Clarify 편향·SHAP·섀도 테스트)

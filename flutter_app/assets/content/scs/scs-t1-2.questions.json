@@ -343,7 +343,7 @@
         "변환은 Lambda, 색인과 검색은 OpenSearch Service, 시각화는 Managed Grafana입니다"
       ],
       "correct": 3,
-      "explanation": "층으로 보면 Lambda가 형식이 다른 로그를 받아 파싱하고 정규화해 다음 단계로 넘기는 변환 층, OpenSearch Service가 대량 로그를 색인해 자유 검색과 집계를 제공하는 색인과 검색 층, Managed Grafana가 여러 데이터 소스를 한 대시보드에서 함께 보는 시각화 층입니다.",
+      "explanation": "층으로 보면 Lambda가 서버를 프로비저닝하거나 관리하지 않고 내 코드를 실행하는 서버리스 컴퓨팅이라 형식이 다른 로그를 파싱하고 정규화하는 코드가 놓이는 변환 층, OpenSearch Service가 대량 로그를 색인해 자유 검색과 집계를 제공하는 색인과 검색 층, Managed Grafana가 여러 데이터 소스를 한 대시보드에서 함께 보는 시각화 층입니다.",
       "wrongExplanations": {
         "0": "세 짝이 어긋났습니다. 변환은 Lambda이고 시각화가 Managed Grafana입니다.",
         "1": "세 짝이 모두 어긋났습니다.",
@@ -353,6 +353,18 @@
         {
           "title": "Analyzing log data with CloudWatch Logs Insights — 분석 수단의 층",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+        },
+        {
+          "title": "What is AWS Lambda? — 서버리스 컴퓨팅",
+          "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+        },
+        {
+          "title": "What is Amazon OpenSearch Service? — 검색과 로그 분석 엔진",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html"
+        },
+        {
+          "title": "What is Amazon Managed Grafana? — 여러 소스의 시각화",
+          "url": "https://docs.aws.amazon.com/grafana/latest/userguide/what-is-Amazon-Managed-Service-Grafana.html"
         }
       ],
       "verified": false
@@ -385,6 +397,14 @@
         {
           "title": "Collecting data from custom sources in Security Lake — 변환 책임",
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
+        },
+        {
+          "title": "What is Amazon OpenSearch Service? — 검색과 로그 분석 엔진",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html"
+        },
+        {
+          "title": "What is Amazon Managed Grafana? — 여러 소스의 시각화",
+          "url": "https://docs.aws.amazon.com/grafana/latest/userguide/what-is-Amazon-Managed-Service-Grafana.html"
         }
       ],
       "verified": false

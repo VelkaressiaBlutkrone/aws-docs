@@ -32,7 +32,9 @@ sources:
     url: https://docs.aws.amazon.com/eks/latest/best-practices/network-security.html
   - title: AWS Client VPN client certificate revocation lists
     url: https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html
-lastVerified: 2026-11-12
+  - title: Providing certificates for encrypting data in transit with Amazon EMR encryption
+    url: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-encryption-enable.html
+lastVerified: 2026-11-17
 ---
 
 # 전송 중인 데이터 (암호화 강제·비공개 액세스·리소스 간 암호화)
@@ -232,12 +234,13 @@ EMR의 전송 중 암호화는 **보안 구성(security configuration)**으로 �
 
 ⚠️ **그런데 이 기능들은 오픈 소스 기능이고 애플리케이션별이며 EMR 릴리스 버전마다 다릅니다.** "EMR에서 전송 중 암호화를 켜면 모든 통신이 암호화된다"고 단정할 수 없고, 공식은 **전송 중 암호화 지원 매트릭스**를 보라고 적습니다.
 
-**TLS 인증서를 주는 방법이 둘입니다:**
+**TLS 인증서를 주는 방법은 릴리스에 따라 갈립니다 — 4.8.0~7.10.0은 둘, 7.11.0 이상은 셋입니다:**
 
 | 방법 | 성질 |
 |---|---|
 | **S3 버킷의 `.zip` 파일 경로** | 인증서를 모은 압축 파일을 지정합니다 |
 | **사용자 지정 인증서 공급자(Java 클래스)** | ⚠️ 개인 키를 S3에 두는 것을 금지하는 보안 정책이 있을 때의 경로입니다 |
+| **EMR이 만들어 관리**(릴리스 **7.11.0 이상**에서만) | EMR이 개인 인증서를 만들어 관리하고, 만든 인증 기관의 PEM 인증서를 **Secrets Manager**에 올려 줍니다 |
 
 - ⚠️⚠️ **일부 엔드포인트는 보안 구성만으로 끝나지 않습니다** — **SASL**을 쓰는 오픈 소스 엔드포인트는 그 보안 구성에 **Kerberos 인증이 켜져 있어야** 전송 중 암호화가 동작합니다
 - 오픈 소스 구성을 직접 덮어써서 **TLS 호스트 이름 검증 끄기 · 특정 엔드포인트만 끄기 · TLS 버전과 암호 제어**를 할 수 있습니다
@@ -387,7 +390,7 @@ SageMaker AI는 기본적으로 훈련 작업을 **AWS가 관리하는 VPC**에�
 
 - 공식이 적습니다 — 보안 구성으로 전송 중 암호화를 켜면 EMR이 **지원하는 모든 오픈 소스 애플리케이션 엔드포인트**에 설정을 맞추지만, ⚠️ **일부 통신 채널은 추가 보안 구성이 필요**합니다. **SASL을 쓰는 엔드포인트는 그 EMR 클러스터 보안 구성에 Kerberos 인증이 켜져 있어야** 합니다
 - 그리고 ⚠️ 이 기능들은 **오픈 소스 기능이고 애플리케이션별이며 EMR 릴리스 버전마다 다릅니다** — 어느 엔드포인트가 덮이는지는 **전송 중 암호화 지원 매트릭스**로 확인합니다
-- 인증서를 주는 방법은 둘 — **S3 버킷의 `.zip` 파일 경로**와 **사용자 지정 인증서 공급자(Java 클래스)**입니다. "개인 키를 S3에 두지 말라"는 정책에서는 **후자**가 답입니다
+- 릴리스 **4.8.0~7.10.0**에서 인증서를 주는 방법은 둘 — **S3 버킷의 `.zip` 파일 경로**와 **사용자 지정 인증서 공급자(Java 클래스)**입니다. "개인 키를 S3에 두지 말라"는 정책에서는 **후자**가 답입니다. ⚠️ **릴리스 7.11.0 이상**에서는 **EMR이 개인 인증서를 만들어 관리하는** 세 번째 경로가 더해집니다
 - 필요하면 오픈 소스 구성을 덮어써 **TLS 호스트 이름 검증 끄기 · 특정 엔드포인트만 끄기 · TLS 버전·암호 제어**를 할 수 있습니다
 
 ⚠️ 참고로 **EMR 7.0.0 이상**에서는 대부분의 오픈 소스 프레임워크가 **TLS 1.2 이상을 강제**합니다.
@@ -407,3 +410,4 @@ SageMaker AI는 기본적으로 훈련 작업을 **AWS가 관리하는 VPC**에�
 10. Protect Communications Between ML Compute Instances in a Distributed Training Job — `docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html` (2026-11-09 확인)
 11. Network security - Amazon EKS Best Practices Guide — `docs.aws.amazon.com/eks/latest/best-practices/network-security.html` (2026-11-09 확인)
 12. AWS Client VPN client certificate revocation lists — `docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html` (2026-11-12 확인)
+13. Providing certificates for encrypting data in transit with Amazon EMR encryption — `docs.aws.amazon.com/emr/latest/ManagementGuide/emr-encryption-enable.html` (2026-11-17 확인)

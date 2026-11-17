@@ -26,7 +26,7 @@ sources:
     url: https://aws.amazon.com/aws-transfer-family/faqs/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation
@@ -127,7 +127,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 #### Amazon Kinesis Video Streams (영상 스트리밍)
 
 - 카메라·IoT 디바이스에서 AWS로 비디오 스트림을 안전하게 수집·저장·재생합니다
-- Amazon Rekognition과 연동해 실시간 영상 분석을 할 수 있습니다
+- Amazon Rekognition과 연동해 실시간 영상 분석을 할 수 있습니다 (⚠️ Rekognition의 스트리밍 영상 분석 기능은 신규 고객에게 더 이상 제공되지 않습니다 — 기존 고객은 계속 사용)
 
 > 🧠 원리: 왜 Kinesis 패밀리는 하나의 서비스가 아닌 4가지 서비스로 나뉘어 있을까요?
 > 스트리밍 데이터 파이프라인의 각 단계(수집·보존, 관리형 적재, 분석·집계, 영상 처리)는 요구하는 지연 허용치, 컨슈머 코드 복잡도, 목적지 유형이 서로 달라 단일 서비스로 모든 경우를 최적화하기 어렵습니다.

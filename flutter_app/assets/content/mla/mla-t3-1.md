@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 배포 인프라 선택 (추론 옵션 4종·다중 모델·가드레일·컴퓨팅·컨테이너·엣지)
@@ -355,7 +355,7 @@ SageMaker AI Workflows 개요는 **SageMaker가 직접 제공하는 것**(Pipeli
 | **SageMaker AI 엔드포인트** | 완전 관리형. 가드레일을 쓰면 오케스트레이션·모니터링·롤백을 직접 만들 필요가 없다 | 추론 옵션 4종, MME·IC·파이프라인, Model Registry·Inference Recommender·Neo 연계 | 가드레일(블루/그린·롤링), 섀도 테스트 |
 | **Amazon EKS** (Kubernetes) | 서빙 스택·스케일링을 직접 구성 | 소형 모델 고밀도 CPU 서빙에 적합. **CPU 파드는 디바이스 플러그인·GPU 리소스 타입 없이 표준 스케줄링**. SageMaker Operators(ACK)로 `kubectl`에서 SageMaker 작업도 만들 수 있다 | Kubernetes 방식 |
 | **Amazon ECS** | GPU 인스턴스 + GPU 최적화 AMI(NVIDIA 드라이버 사전 구성), 태스크 정의에서 GPU 수 지정 | GPU 지원 인스턴스: p2·p3·p4d·p5·g3·g4·g5·g6·g6e·g6f | 롤링 업데이트 + **배포 서킷 브레이커** 자동 롤백 |
-| **AWS Lambda** | 서버리스 함수 | 이미지 **10 GB**, 메모리 128–10,240 MB, 타임아웃 **900초(15분)**, 동기 페이로드 **6 MB**(스트리밍 응답 200 MB, 비동기 1 MB), 1,769 MB에서 1 vCPU 상당 | 버전 + **가중 별칭** 카나리 |
+| **AWS Lambda** | 서버리스 함수 | 이미지 **10 GB**, 메모리 128–10,240 MB, 타임아웃 **900초(15분)**(Managed Instances 함수의 비동기·이벤트 소스 매핑 호출은 **최대 90분**), 동기 페이로드 **6 MB**(스트리밍 응답 200 MB, 비동기 1 MB), 1,769 MB에서 1 vCPU 상당 | 버전 + **가중 별칭** 카나리 |
 
 **서버리스 추론 vs Lambda** — 둘 다 "서버리스"지만 다른 서비스입니다. 서버리스 추론은 SageMaker 엔드포인트(메모리 1–6 GB, 4 MB·60초, 엔드포인트당 동시성 ≤200, GPU 불가, Model Registry·MLOps 파이프라인과 통합)이고, Lambda는 범용 함수(메모리 ≤10,240 MB, 이미지 10 GB, 15분, 동기 6 MB)입니다. 서버리스 추론이 내부적으로 Lambda와 통합되어 고가용성을 제공하지만 같은 서비스는 아닙니다.
 

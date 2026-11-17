@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutTargets.html
   - title: AWS DevOps Agent를 EventBridge와 통합 (공식)
     url: https://docs.aws.amazon.com/devopsagent/latest/userguide/configuring-integrations-and-knowledge-integrating-devops-agent-into-event-driven-applications-using-amazon-eventbridge-index.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 자동화 패턴 (EventBridge·Lambda·자동 복구)
@@ -144,7 +144,7 @@ lastVerified: 2026-10-20
 
 > 공식: **"Auto Scaling 그룹은 상태 확인에서 비정상으로 판정된 인스턴스를 종료하고 새 인스턴스로 교체한다."**
 
-- ASG는 **EC2 상태 점검** 또는 **ELB 상태 점검**을 사용해 인스턴스 건강을 판단합니다. 비정상이면 **종료 후 새 인스턴스 시작**으로 원하는 용량을 유지합니다.
+- ASG는 **EC2 상태 점검**에 더해 **ELB 상태 점검**·VPC Lattice·EBS·**사용자 정의 상태 점검** 같은 소스의 통지로 인스턴스 건강을 판단합니다. 비정상이면 **종료 후 새 인스턴스 시작**으로 원하는 용량을 유지합니다.
 - EC2 자동 복구가 **같은 인스턴스를 살리는** 것과 달리, ASG는 **비정상 인스턴스를 버리고 새것으로 대체**합니다. 상태가 인스턴스에 묶이지 않는 무상태(stateless) 워크로드에 적합합니다.
 
 > 시험 단서 구분: "하드웨어 장애 시 **같은 인스턴스** 유지(IP·EBS 보존)" → **EC2 자동 복구**. "비정상 인스턴스를 **교체**해 용량 유지" → **ASG 상태 확인 + 교체**.
@@ -259,8 +259,8 @@ Config 비규정 / GuardDuty 발견  → EventBridge 규칙  → Lambda(교정 �
 5. **"규칙 하나엔 대상 하나만 붙는다."** → EventBridge 규칙에는 **여러 대상**을 붙일 수 있습니다(예: 교정 Lambda + 알림 SNS 동시 실행).
    (원리: §2 — EventBridge가 IAM 역할 범위 안에서 각 대상을 독립 호출하므로 팬아웃이 가능하다)
 
-6. **"ASG는 인스턴스 내부 앱이 죽어도 교체한다."** → 기본 **EC2 상태 점검만**으로는 앱 장애를 못 잡습니다. 애플리케이션 수준 장애로 교체하려면 **ELB 상태 점검**을 ASG에 연결해야 합니다.
-   (원리: §4 — ASG는 연결된 상태 점검이 감지한 장애만 교체하므로, 앱 응답 감지엔 ELB 상태 점검을 연결해야 한다)
+6. **"ASG는 인스턴스 내부 앱이 죽어도 교체한다."** → 기본 **EC2 상태 점검만**으로는 앱 장애를 못 잡습니다. 애플리케이션 수준 장애로 교체하려면 **ELB 상태 점검**을 ASG에 연결하거나 **사용자 정의 상태 점검**으로 비정상을 알립니다.
+   (원리: §4 — ASG는 연결된 상태 점검이 감지한 장애만 교체하므로, 앱 응답 감지엔 ELB 상태 점검이나 사용자 정의 상태 점검 같은 추가 소스가 필요하다)
 
 ---
 
@@ -293,7 +293,7 @@ Config 비규정 / GuardDuty 발견  → EventBridge 규칙  → Lambda(교정 �
 
 <details><summary>정답 보기</summary>
 
-ASG가 기본 **EC2 상태 점검만** 사용하면 인스턴스(VM)는 정상으로 보여 앱 장애를 감지하지 못합니다. ASG에 **ELB(로드밸런서) 상태 점검**을 연결해 애플리케이션 응답을 기준으로 건강을 판단하게 하면, 앱이 응답하지 않는 인스턴스를 비정상으로 보고 **종료 후 새 인스턴스로 교체**합니다.
+ASG가 기본 **EC2 상태 점검만** 사용하면 인스턴스(VM)는 정상으로 보여 앱 장애를 감지하지 못합니다. ASG에 **ELB(로드밸런서) 상태 점검**을 연결해 애플리케이션 응답을 기준으로 건강을 판단하게 하면, 앱이 응답하지 않는 인스턴스를 비정상으로 보고 **종료 후 새 인스턴스로 교체**합니다. 로드 밸런서가 없는 구성이면 **사용자 정의 상태 점검**으로 비정상을 ASG에 알릴 수 있습니다.
 </details>
 
 ---

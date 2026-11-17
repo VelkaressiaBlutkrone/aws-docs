@@ -222,7 +222,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/federated-queries.html"
         },
         {
-          "title": "Amazon Athena (Big Data Analytics Options on AWS) — 커넥터 Lambda 요금과 스캔 과금",
+          "title": "Amazon Athena (Big Data Analytics Options on AWS · 브라우저로는 Athena 사용자 안내서로 리다이렉트되지만 본문은 유효) — 커넥터 Lambda 요금과 스캔 과금",
           "url": "https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-athena.html"
         }
       ],
@@ -373,7 +373,7 @@
       "explanation": "배치 추론은 다수 프롬프트를 비동기로 처리하며 On-Demand 대비 50% 낮은 가격으로 제공됩니다. 지연을 감수할 수 있는 대량 처리에 맞는 선택입니다(프로비저닝 모델은 지원하지 않습니다).",
       "wrongExplanations": {
         "1": "On-Demand 병렬 호출은 단가가 그대로이고 스로틀링 위험도 커집니다.",
-        "2": "Provisioned Throughput은 시간당 과금에 1·6개월 약정이 필요하며 커스텀 모델 사용 시의 선택지입니다. 일회성 대량 배치에는 과도합니다.",
+        "2": "Provisioned Throughput은 전용 용량을 시간 단위로 사는 방식이라 일회성 대량 배치에는 과도합니다. 약정 없는 PT도 있고, 사용자 지정 모델은 PT 구매 또는 온디맨드 추론용 배포 중 하나로 추론합니다.",
         "3": "Bedrock Data Automation은 문서·이미지·오디오·비디오에서 정보를 추출하는 기능으로, 텍스트 분류 대량 처리의 비용 최적화 수단이 아닙니다."
       },
       "sources": [

@@ -156,7 +156,7 @@
         "이벤트 기록(Event history)"
       ],
       "correct": 0,
-      "explanation": "CloudTrail Lake는 이벤트를 불변 데이터 스토어에 보관하고 SQL로 쿼리·분석하게 해 줍니다. 별도의 Athena 구성 없이 감사 조회를 수행할 수 있어 장기 보관·감사 분석에 적합합니다.",
+      "explanation": "CloudTrail Lake는 이벤트를 불변 데이터 스토어에 보관하고 SQL로 쿼리·분석하게 해 줍니다. 별도의 Athena 구성 없이 감사 조회를 수행할 수 있어 장기 보관·감사 분석에 적합합니다. CloudTrail Lake는 2026-05-31부터 신규 고객에게 열려 있지 않으며, 기존 고객은 계속 사용할 수 있습니다.",
       "wrongExplanations": {
         "1": "Insights는 비정상 API 활동 탐지 기능이며 SQL 쿼리 저장소가 아닙니다.",
         "2": "Logs Insights는 CloudWatch Logs의 로그를 분석하는 기능으로 CloudTrail 전용 불변 스토어가 아닙니다.",
@@ -237,7 +237,7 @@
         "`schedule(daily 03:00 UTC)`"
       ],
       "correct": 1,
-      "explanation": "EventBridge cron 표현식은 6개 필드(분 시 일 월 요일 연)를 사용하며, 일·요일 중 하나는 `?`로 지정합니다. 매일 UTC 03:00은 `cron(0 3 * * ? *)`입니다.",
+      "explanation": "EventBridge cron 표현식은 6개 필드(분 시 일 월 요일 연)를 사용하며, 일·요일 중 하나는 `?`로 지정합니다. 매일 UTC 03:00은 `cron(0 3 * * ? *)`입니다. 예약 규칙은 EventBridge의 레거시 기능이며, 새 일정에는 EventBridge Scheduler 사용이 권장됩니다.",
       "wrongExplanations": {
         "0": "`rate`는 간격만 지정하며 시각을 붙이는 구문이 없습니다.",
         "2": "필드 순서가 분·시 순서에 맞지 않고 필드 수도 부족합니다.",
@@ -305,6 +305,10 @@
         {
           "title": "Amazon EventBridge란 무엇인가",
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+        },
+        {
+          "title": "Amazon CloudWatch 문서 — CloudWatch Events는 이제 Amazon EventBridge",
+          "url": "https://docs.aws.amazon.com/cloudwatch/"
         }
       ],
       "verified": true

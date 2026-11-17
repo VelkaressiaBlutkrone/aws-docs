@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html
   - title: What is AWS Well-Architected?
     url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html
-lastVerified: 2026-11-09
+lastVerified: 2026-11-17
 ---
 
 # 규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)
@@ -103,7 +103,7 @@ Config는 계정 안 AWS 리소스 구성의 **상세한 뷰**를 줍니다 — 
 | **구성 변경 추적** | 서로 의존하는 리소스에서 한쪽 변경이 다른 쪽에 주는 영향을 봅니다 |
 | **보안 분석** | 시간에 따른 IAM 권한·보안 그룹 규칙 등을 봅니다 |
 
-⚠️ 전제가 다섯입니다 — 활성 **AWS 계정**, 구성 스냅샷·히스토리를 받을 **S3 버킷**, 변경 알림을 받을 **Amazon SNS 주제**, Config 접근 권한이 있는 **IAM 역할**, 그리고 **기록할 리소스 유형** 선택.
+⚠️ 전제가 이렇습니다 — 활성 **AWS 계정**, 구성 스냅샷·히스토리를 받을 **S3 버킷**, 변경 알림을 받을 **Amazon SNS 주제**, Config 접근 권한이 있는 **IAM 역할**, 그리고 **기록할 리소스 유형** 선택.
 
 > 🧠 **원리:** Config의 1차 산출물은 "지금 준수인가"가 아니라 **구성의 시계열**입니다. 준수 평가는 그 시계열 위에 올라가는 규칙 계층이고, 그래서 **규칙을 나중에 추가해도 평가가 시작됩니다.**
 

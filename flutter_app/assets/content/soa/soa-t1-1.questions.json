@@ -58,10 +58,6 @@
         {
           "title": "CloudWatch 개념 — 해상도별 보존 기간과 롤업",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 지표 보존과 집계",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -89,10 +85,6 @@
         {
           "title": "CloudWatch 개념 — 고해상도 지표와 StorageResolution",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 해상도별 경보 주기",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -120,10 +112,6 @@
         {
           "title": "경보 평가 — 평가 기간과 경보 데이터 포인트",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
-        },
-        {
-          "title": "지표 작업 — 통계와 기간",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -306,10 +294,6 @@
         {
           "title": "CloudWatch 개념 — 네임스페이스·차원·기간·통계",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 차원으로 지표 집계",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -399,10 +383,6 @@
         {
           "title": "CloudWatch 개념 — 해상도별 보존과 롤업 동작",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 보존 기간에 따른 조회 결과",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true

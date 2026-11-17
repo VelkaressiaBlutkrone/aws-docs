@@ -38,7 +38,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-replicas-adding.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시
@@ -53,7 +53,7 @@ lastVerified: 2026-10-20
 이 문서를 끝내면 다음을 스스로 설명할 수 있어야 합니다. (공식 시험 가이드 Task 3.3의 Skill 항목 기반)
 
 - [ ] **RDS 지원 엔진** — MySQL·PostgreSQL·MariaDB·Oracle·SQL Server 각각의 위치를 안다
-- [ ] **Multi-AZ 목적** — 동기 복제·자동 페일오버·가용성(HA)의 의미를 설명할 수 있다
+- [ ] **Multi-AZ 목적** — DB 인스턴스 배포의 동기 복제·자동 페일오버·가용성(HA)의 의미를 설명할 수 있다
 - [ ] **Read Replica 목적** — 비동기 복제·읽기 확장·교차 리전·엔진별 최대 개수를 설명할 수 있다
 - [ ] **Multi-AZ vs Read Replica 구분** — 목적·복제 방식·읽기 가능 여부를 비교 설명할 수 있다
 - [ ] **Aurora 차별점** — 클라우드 네이티브 스토리지(3 AZ·6벌 복제)·15개 복제본·글로벌 DB·Aurora serverless를 설명할 수 있다
@@ -183,7 +183,7 @@ Aurora는 Aurora Replica 수를 대상 추적으로 자동 조정할 수 있습�
 > 둘은 함께 사용할 수 있습니다. Multi-AZ로 가용성을 확보하고, Read Replica로 읽기를 분산하는 구성이 프로덕션 모범 사례입니다.
 
 > 🧠 원리: 왜 Multi-AZ와 Read Replica를 하나의 기능으로 통합하지 않고 별개로 제공할까요?
-> 두 기능은 해결하는 문제가 다릅니다. Multi-AZ는 AZ 장애 시 데이터를 잃지 않고 빠르게 전환하는 것이 목표이므로 동기 복제가 필요합니다.
+> 두 기능은 해결하는 문제가 다릅니다. Multi-AZ DB 인스턴스 배포는 AZ 장애 시 데이터를 잃지 않고 빠르게 전환하는 것이 목표이므로 동기 복제가 필요합니다.
 > Read Replica는 읽기 트래픽을 여러 인스턴스에 분산하는 것이 목표이므로, 주 인스턴스 쓰기 성능을 보호하는 비동기 복제가 적합합니다.
 > 동기와 비동기를 하나의 인스턴스로 혼용하면 각각의 보장 수준을 유지하기 어렵고, 목적별로 독립 운영해야 운용 규모와 비용을 워크로드에 맞게 조정할 수 있습니다.
 

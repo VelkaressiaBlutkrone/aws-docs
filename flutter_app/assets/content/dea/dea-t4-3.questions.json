@@ -182,7 +182,7 @@
           "url": "https://docs.aws.amazon.com/boto3/latest/reference/services/kms/client/enable_key_rotation.html"
         },
         {
-          "title": "AWS Key Management Service (KMS) FAQs — 이전 버전 키를 복호화용으로 유지, 회전 주기 90~2560일, 온디맨드 회전 키당 10회",
+          "title": "AWS Key Management Service (KMS) FAQs — 이전 버전 키를 복호화용으로 유지, 회전 주기 90~2560일",
           "url": "https://aws.amazon.com/kms/faqs/"
         }
       ],

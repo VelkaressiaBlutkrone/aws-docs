@@ -98,7 +98,7 @@
         "백업 보존 기간을 최대로 설정"
       ],
       "correct": 0,
-      "explanation": "Vault Lock 규정 준수 모드는 콜드오프(유예) 기간이 지나면 루트 사용자를 포함해 누구도 잠금을 해제하거나 보존 정책을 약화할 수 없습니다. 거버넌스 모드는 권한을 가진 관리자가 해제할 수 있어 운영 실수 방지용입니다.",
+      "explanation": "Vault Lock 규정 준수 모드는 쿨링오프(cooling-off, 유예) 기간이 지나면 루트 사용자를 포함해 누구도 잠금을 해제하거나 보존 정책을 약화할 수 없습니다. 거버넌스 모드는 권한을 가진 관리자가 해제할 수 있어 운영 실수 방지용입니다.",
       "wrongExplanations": {
         "1": "거버넌스 모드는 권한자가 해제할 수 있어 불가역성 요건을 충족하지 못합니다.",
         "2": "정책은 권한 변경으로 되돌릴 수 있어 불가역 보장이 아닙니다.",
@@ -144,7 +144,7 @@
       "examGuideTaskId": "soa-t2-3",
       "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
       "difficulty": "applied",
-      "stem": "EBS 볼륨과 AMI의 생성·보존·삭제만 태그 기반 정책으로 자동화하려 한다. 가장 알맞은 도구는?",
+      "stem": "EBS 스냅샷과 EBS 기반 AMI의 생성·보존·삭제만 태그 기반 정책으로 자동화하려 한다. 가장 알맞은 도구는?",
       "options": [
         "Amazon Data Lifecycle Manager(DLM)",
         "AWS Backup",
@@ -206,9 +206,9 @@
         "무기한"
       ],
       "correct": 1,
-      "explanation": "RDS 자동 백업은 매일 백업과 트랜잭션 로그를 유지하며 보존 기간을 1~35일로 설정합니다. 보존 기간 내에서는 특정 시점 복원(PITR)이 가능하고, 그보다 긴 보관은 수동 스냅샷이나 AWS Backup으로 처리합니다.",
+      "explanation": "RDS 자동 백업은 매일 백업과 트랜잭션 로그를 유지하며, 자동 백업이 켜진 상태의 보존 기간은 1~35일입니다(DB 인스턴스는 0으로도 설정할 수 있는데 0은 자동 백업 비활성화를 뜻합니다). 보존 기간 내에서는 특정 시점 복원(PITR)이 가능하고, 그보다 긴 보관은 수동 스냅샷이나 AWS Backup으로 처리합니다.",
       "wrongExplanations": {
-        "0": "7일은 기본값에 가까운 값이지만 상한이 아닙니다.",
+        "0": "7일은 콘솔로 만들 때의 기본값이며(API·CLI 기본값은 1일) 상한이 아닙니다.",
         "2": "90일은 자동 백업의 보존 범위가 아닙니다.",
         "3": "무기한 보존은 수동 스냅샷의 특성입니다."
       },
@@ -216,6 +216,10 @@
         {
           "title": "Amazon RDS 자동 백업 소개",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"
+        },
+        {
+          "title": "자동 백업 보존 기간 — 0~35일과 기본값",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.BackupRetention.html"
         }
       ],
       "verified": true
@@ -351,6 +355,10 @@
         {
           "title": "S3 복제 — 요구 사항",
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+        },
+        {
+          "title": "S3 복제 요구 사항 — 소스·대상 버킷 버전 관리",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-requirements.html"
         }
       ],
       "verified": true
@@ -378,6 +386,10 @@
         {
           "title": "S3 수명 주기 구성으로 객체 관리",
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
+        },
+        {
+          "title": "수명 주기 구성 요소 — 비현재 버전 전환·만료",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html"
         }
       ],
       "verified": true

@@ -24,7 +24,7 @@ sources:
     url: https://aws.amazon.com/redshift/pricing/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 비용 최적화 데이터베이스 — DB 서비스 선택·용량 계획·서버리스 옵션
@@ -190,7 +190,7 @@ RDS와 Aurora 모두 스토리지 자동 확장을 지원합니다. 사전에 �
 | 항목 | 내용 |
 |---|---|
 | 스케일 단위 | ACU(Aurora Capacity Unit) — 0.5 ACU 단위로 미세 조정 |
-| 청구 방식 | 실제 사용 ACU × 초당 과금. 유휴 시 최솟값(0.5 ACU)만 과금 |
+| 청구 방식 | 실제 사용 ACU × 초당 과금. 유휴 시 설정한 최솟값만 과금(0이 아닌 가장 작은 용량은 0.5 ACU, 최솟값 0 ACU면 자동 일시 정지) |
 | 최솟값 | 0 ACU(자동 일시정지, 별도 설정 필요) ~ 설정한 최솟값 |
 | 지원 엔진 | Aurora MySQL, Aurora PostgreSQL |
 | 적합한 워크로드 | 트래픽이 불규칙하거나 간헐적인 앱, 개발·테스트 환경, 신규 앱 용량 예측 불가 상황 |

@@ -210,12 +210,12 @@
       "stem": "보안팀이 S3 버킷에 고객 주민번호·신용카드 번호가 포함된 파일이 있는지 자동으로 탐지하고 어느 버킷이 퍼블릭 접근 상태인지 파악하려 한다. 가장 적합한 서비스는?",
       "options": [
         "Amazon Inspector — S3 버킷의 민감정보와 취약점을 동시에 스캔한다",
-        "Amazon Macie — 머신러닝으로 S3를 스캔해 PII를 탐지하고 버킷 공개 접근 상태를 보고한다",
+        "Amazon Macie — 머신러닝과 패턴 매칭으로 S3의 PII를 탐지하고 버킷 공개 상태를 보고한다",
         "Amazon GuardDuty — S3 버킷을 스캔해 PII를 탐지하고 분류한다",
         "AWS Config — S3 객체 내 민감정보 위치를 탐지한다"
       ],
       "correct": 1,
-      "explanation": "Amazon Macie는 머신러닝을 사용해 S3 버킷을 스캔하고 PII(주민번호·신용카드·여권번호 등 개인 식별 정보)를 자동 탐지합니다. 또한 버킷의 공개 접근 상태를 보고하며, 탐지 결과를 Security Hub·EventBridge로 전달해 자동화된 대응 워크플로를 구성할 수 있습니다.",
+      "explanation": "Amazon Macie는 머신러닝과 패턴 매칭(관리형·사용자 지정 데이터 식별자)을 사용해 S3 버킷을 스캔하고 PII(주민번호·신용카드·여권번호 등 개인 식별 정보)를 자동 탐지합니다. 또한 버킷의 공개 접근 상태를 보고하며, 탐지 결과를 Security Hub·EventBridge로 전달해 자동화된 대응 워크플로를 구성할 수 있습니다.",
       "wrongExplanations": {
         "0": "Amazon Inspector는 EC2·컨테이너·Lambda의 소프트웨어 취약점(CVE)을 스캔하는 서비스입니다. S3 데이터 내용의 PII 탐지는 Inspector의 역할이 아닙니다.",
         "2": "Amazon GuardDuty는 위협 탐지 서비스로 비정상적인 API 호출·네트워크 트래픽을 분석합니다. S3 객체의 PII 내용 분류는 GuardDuty의 역할이 아닙니다.",
@@ -239,7 +239,7 @@
         "①: Amazon Inspector, ②: Amazon Macie"
       ],
       "correct": 3,
-      "explanation": "Amazon Inspector는 EC2·컨테이너·Lambda의 소프트웨어 취약점(CVE)을 스캔합니다. Amazon Macie는 S3 버킷의 PII 등 민감정보를 머신러닝으로 탐지합니다. 두 서비스의 역할을 혼동하지 않도록 주의해야 합니다.",
+      "explanation": "Amazon Inspector는 EC2·컨테이너·Lambda의 소프트웨어 취약점(CVE)을 스캔합니다. Amazon Macie는 S3 버킷의 PII 등 민감정보를 머신러닝과 패턴 매칭으로 탐지합니다. 두 서비스의 역할을 혼동하지 않도록 주의해야 합니다.",
       "wrongExplanations": {
         "0": "역할이 뒤바뀐 설명입니다. Macie는 S3 데이터 내용(PII) 탐지이고, Inspector는 EC2·컨테이너·Lambda 취약점(CVE) 스캔입니다.",
         "1": "GuardDuty는 위협 탐지(비정상 API 호출·네트워크 트래픽 분석) 서비스입니다. CVE 취약점 스캔은 Inspector가 담당합니다.",

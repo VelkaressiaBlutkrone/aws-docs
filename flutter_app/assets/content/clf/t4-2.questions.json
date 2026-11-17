@@ -167,7 +167,7 @@
       "sources": [
         {
           "title": "CLF-C02 공식 시험 가이드 — Task 4.2 Skill '비용 할당 태그와 보고서(Cost and Usage Report)' 명시",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true
@@ -260,6 +260,7 @@
       "id": "clf-t4-2-q10",
       "examGuideTaskId": "clf-t4-2",
       "skill": "비용 할당 태그 두 유형 (AWS 생성·사용자 정의) 과 활성화",
+      "section": "cost-tracking",
       "difficulty": "foundational",
       "stem": "한 회사가 비용 할당 태그로 비용을 프로젝트별로 분류하려고 리소스에 태그를 붙였다. 그런데 Cost Explorer와 비용 할당 보고서에는 태그별 분류가 나타나지 않는다. 공식 문서 기준으로 가장 정확한 설명은?",
       "options": [
@@ -325,11 +326,11 @@
         "AWS 생성 태그는 리소스당 태그 쿼터를 차지하므로 쿼터가 가득 차면 적용되지 않는다"
       ],
       "correct": 0,
-      "explanation": "AWS 생성 태그의 키는 `aws:createdBy`이고, 관리 계정 소유자가 결제 및 비용 관리 콘솔에서 활성화합니다. 공식 문서는 활성화한 뒤에 생성되는 리소스부터 AWS가 태그를 적용한다고 적으므로, 이미 있던 리소스에는 소급되지 않습니다. 또 이 태그는 결제 및 비용 관리 콘솔과 보고서에서만 볼 수 있고 Tag Editor를 포함한 다른 AWS 콘솔에는 나타나지 않습니다. 활성화한 태그는 결제 보고서로 이어집니다 — 사용자 정의 비용 할당 태그는 Cost and Usage Report에서 `resourceTags/user:<키>` 열로 나타납니다.",
+      "explanation": "AWS 생성 태그의 키는 aws:createdBy이고, 관리 계정 소유자가 결제 및 비용 관리 콘솔에서 활성화합니다. 공식 문서는 활성화한 뒤에 생성되는 리소스부터 AWS가 태그를 적용한다고 적으므로, 이미 있던 리소스에는 소급되지 않습니다. 또 이 태그는 결제 및 비용 관리 콘솔과 보고서에서만 볼 수 있고 Tag Editor를 포함한 다른 AWS 콘솔에는 나타나지 않습니다. 활성화한 태그는 결제 보고서로 이어집니다 — 사용자 정의 비용 할당 태그는 Cost and Usage Report에서 resourceTags/user:<키> 열로 나타납니다.",
       "wrongExplanations": {
         "1": "소급 적용되지 않습니다. 그리고 AWS 생성 태그는 결제 및 비용 관리 콘솔과 보고서 밖에서는 보이지 않아 Tag Editor에서 관리할 수 없습니다.",
         "2": "거꾸로입니다. 관리 계정 소유자가 활성화하면 모든 멤버 계정에도 함께 활성화됩니다.",
-        "3": "`createdBy` 태그는 리소스당 태그 쿼터에 포함되지 않습니다."
+        "3": "createdBy 태그는 리소스당 태그 쿼터에 포함되지 않습니다."
       },
       "sources": [
         {
@@ -426,7 +427,7 @@
         },
         {
           "title": "CLF-C02 공식 시험 가이드 — Task 4.2 'Organizations 통합 결제 및 비용 할당', '비용 할당 태그' Skill",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true

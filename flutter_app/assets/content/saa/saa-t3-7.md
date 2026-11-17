@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-17
 ---
 
 # 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서
@@ -107,7 +107,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 | **Latency(지연시간)** | 사용자 위치 기준 **네트워크 지연이 가장 낮은** AWS 리전으로 | 글로벌 성능 최적화 |
 | **Failover(장애조치)** | 헬스 체크 기반 — Primary 비정상 시 Secondary로 자동 전환 | DR, 액티브-패시브 고가용성 |
 | **Geolocation(지리위치)** | **사용자의 지리적 위치(국가·대륙)** 기준 라우팅 | 콘텐츠 현지화, 지역 규제 준수 |
-| **Geoproximity(지리근접)** | 리소스 위치 기준 + **bias(편향값)** 로 트래픽 이동 범위 조정 | 트래픽을 특정 리전으로 점진 이동 (Traffic Flow 필요) |
+| **Geoproximity(지리근접)** | 리소스 위치 기준 + **bias(편향값)** 로 트래픽 이동 범위 조정 | 트래픽을 특정 리전으로 점진 이동 (편향 범위 지도는 Traffic Flow) |
 | **IP-based(IP 기반)** | **알고 있는 클라이언트 IP 범위(CIDR)** 를 엔드포인트에 매핑해 라우팅 | ISP·기업망별 경로 고정, 특정 대역을 지정 엔드포인트로 |
 | **Multivalue Answer(다중값)** | **최대 8개** 정상 레코드를 무작위 반환 + 헬스 체크 연동 | 단순 부하 분산 (로드 밸런서 대체 아님) |
 
@@ -117,7 +117,7 @@ Route 53은 **글로벌 서비스**입니다. 리전이 없고, DNS 쿼리 수�
 
 > **Latency vs Geolocation 핵심 구분**: Latency는 **네트워크 지연 시간**(측정값)으로 결정, Geolocation은 **사용자 IP의 지리적 위치**로 결정합니다. "가장 빠른 응답"을 원하면 Latency, "국가별 다른 콘텐츠·규제"를 원하면 Geolocation입니다.
 
-> **Geoproximity 주의**: Geoproximity는 **Route 53 Traffic Flow** 기능에서만 사용할 수 있습니다. bias 값을 양수로 설정하면 해당 리소스 쪽으로 더 많은 트래픽이 흐르고, 음수로 설정하면 줄어듭니다.
+> **Geoproximity 주의**: Geoproximity는 레코드를 만들 때 고르는 라우팅 정책이고 **프라이빗 호스팅 영역**에서도 쓸 수 있습니다 — **Traffic Flow 전용이 아니고**, Traffic Flow에서만 쓸 수 있는 것은 편향 범위를 그려 보여 주는 **지도**입니다. bias 값을 양수로 설정하면 해당 리소스 쪽으로 더 많은 트래픽이 흐르고, 음수로 설정하면 줄어듭니다.
 
 > 🧠 원리: 왜 Latency 정책은 사용자의 "지리적 위치"가 아닌 "실측 지연"을 기준으로 라우팅할까요?
 > 지리적 거리가 가깝더라도 인터넷 경로·피어링 상태에 따라 실제 왕복 지연이 크게 달라질 수 있어, 물리적 위치만으로 "가장 빠른 리전"을 결정하면 오라우팅이 발생합니다.
@@ -315,7 +315,7 @@ ALB는 고정 IP가 없고 NLB는 L7 라우팅이 없습니다. 둘 다 필요�
 
 **추가 포인트:**
 
-- **Geoproximity vs Geolocation**: Geolocation은 사용자 IP 위치가 기준, Geoproximity는 리소스 위치 + bias 값이 기준. Geoproximity는 Traffic Flow 필요.
+- **Geoproximity vs Geolocation**: Geolocation은 사용자 IP 위치가 기준, Geoproximity는 리소스 위치 + bias 값이 기준. Geoproximity는 Traffic Flow 전용이 아니고, Traffic Flow에서만 되는 것은 편향 범위 지도.
 - **Multivalue Answer는 로드 밸런서가 아닙니다**: DNS 쿼리에 최대 8개 정상 IP를 반환하지만, 로드 밸런서의 연결 지속성·세션 관리는 없습니다.
 - **CloudFront ACM 인증서 리전**: 반드시 `us-east-1`. 다른 리전에서 발급한 인증서는 CloudFront에 연결 불가.
 - **OAC vs OAI**: OAI(Origin Access Identity)는 구형. 현재 AWS 권장은 OAC(Origin Access Control).
@@ -336,8 +336,8 @@ ALB는 고정 IP가 없고 NLB는 L7 라우팅이 없습니다. 둘 다 필요�
 4. **"글로벌 저지연이 필요하면 항상 CloudFront."** — 비-HTTP(UDP·TCP 게임·IoT 등) 또는 **고정 IP**가 필요한 시나리오에서는 **Global Accelerator**가 정답입니다.
    (원리: §7 — HTTP가 아닌 프로토콜과 고정 IP 요구는 자동으로 Global Accelerator를 가리키며, CloudFront는 HTTP/HTTPS 전용이다.)
 
-5. **"Geoproximity는 별도 설정 없이 사용할 수 있다."** — Geoproximity는 **Route 53 Traffic Flow** 기능에서만 사용 가능합니다. Traffic Flow 없이는 설정할 수 없습니다.
-   (원리: §3 본문 — Geoproximity는 Traffic Flow 기능에서만 bias 값과 함께 사용 가능하다.)
+5. **"Geoproximity는 Route 53 Traffic Flow에서만 사용할 수 있다."** — Geoproximity는 레코드를 만들 때 고르는 라우팅 정책이고 프라이빗 호스팅 영역에서도 쓸 수 있습니다. Traffic Flow에서만 쓸 수 있는 것은 **편향 범위를 그려 보여 주는 지도**입니다.
+   (원리: §3 본문 — Geoproximity의 bias는 레코드 설정값이고, Traffic Flow가 더해 주는 것은 그 범위를 시각화하는 지도다.)
 
 6. **"CloudFront용 ACM 인증서를 서울 리전(ap-northeast-2)에서 발급했다."** — CloudFront는 **us-east-1(버지니아 북부)** 에서 발급한 ACM 인증서만 사용할 수 있습니다.
    (원리: §5 본문 — CloudFront에 연결할 SSL/TLS 인증서는 반드시 us-east-1에서 발급해야 한다.)

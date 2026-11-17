@@ -210,7 +210,7 @@
         "DynamoDB Accelerator(DAX)를 활성화한다"
       ],
       "correct": 1,
-      "explanation": "Kinesis Data Streams for DynamoDB는 테이블 변경을 KDS로 복제하므로 보존을 최대 1년까지 늘릴 수 있고, EFO 소비자를 샤드당 최대 20개까지 붙여 KCL·Managed Service for Apache Flink·Firehose 등 Kinesis 생태계를 활용할 수 있습니다. 단 순서와 중복 제거를 보장하지 않으므로 ApproximateCreationDateTime으로 클라이언트가 정렬·중복 처리해야 합니다.",
+      "explanation": "Kinesis Data Streams for DynamoDB는 테이블 변경을 KDS로 복제하므로 보존을 최대 1년까지 늘릴 수 있고, EFO 소비자를 데이터 스트림당 최대 20개(On-demand Advantage 모드는 50개)까지 등록해 KCL·Managed Service for Apache Flink·Firehose 등 Kinesis 생태계를 활용할 수 있습니다. 단 순서와 중복 제거를 보장하지 않으므로 ApproximateCreationDateTime으로 클라이언트가 정렬·중복 처리해야 합니다.",
       "wrongExplanations": {
         "0": "DynamoDB Streams는 보존이 24시간이고 샤드당 읽기 프로세스를 2개 이하로 두도록 권장하므로, 6개월 재생과 다수 소비자 요구를 만족할 수 없습니다.",
         "2": "주기적 내보내기 후 비교는 항목 수준 변경 이력을 보존하지 못하고 지연도 큽니다. 변경 캡처(CDC) 요구에 맞지 않습니다.",
@@ -460,13 +460,13 @@
       "difficulty": "applied",
       "stem": "Kinesis Data Streams를 소비하는 Lambda 함수가 특정 불량 레코드에서 계속 실패해 해당 샤드의 처리가 멈췄다. 데이터를 잃지 않으면서 처리를 재개하는 구성은 무엇인가?",
       "options": [
-        "재시도 횟수·레코드 연령 한도를 설정하고 배치 이등분을 켜고 실패 대상(SQS/SNS)을 지정한다",
+        "재시도 횟수·레코드 연령 한도를 설정하고 배치 이등분을 켜고 실패 대상을 지정한다",
         "이벤트 소스 매핑을 삭제하고 다시 만든다",
         "BatchSize를 1로 낮추고 재시도를 무제한으로 유지한다",
         "스트림 보존 기간을 24시간으로 줄여 불량 레코드를 만료시킨다"
       ],
       "correct": 0,
-      "explanation": "기본값은 재시도와 레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주까지 막습니다. MaximumRetryAttempts·MaximumRecordAgeInSeconds로 정체를 끊고, BisectBatchOnFunctionError로 실패 배치를 반으로 나눠 불량 레코드를 격리하며, 폐기되는 레코드는 실패 대상(SQS/SNS)으로 보내 보관합니다.",
+      "explanation": "기본값은 재시도와 레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주까지 막습니다. MaximumRetryAttempts·MaximumRecordAgeInSeconds로 정체를 끊고, BisectBatchOnFunctionError로 실패 배치를 반으로 나눠 불량 레코드를 격리하며, 폐기되는 레코드는 실패 대상(SNS 주제·SQS 대기열·S3 버킷·Kafka)으로 보내 보관합니다. SQS·SNS 대상에는 실패 호출의 메타데이터만 가고, S3 대상에는 호출 레코드 전체가 함께 가므로 데이터를 잃지 않으려면 S3 대상이 더 직접적입니다.",
       "wrongExplanations": {
         "1": "매핑을 재생성하면 체크포인트가 흔들려 재처리·누락 위험이 생기고, 같은 불량 레코드에서 다시 멈춥니다.",
         "2": "BatchSize를 줄이면 영향 범위는 좁아지지만 무제한 재시도가 남아 해당 레코드에서 계속 정체됩니다.",
@@ -498,7 +498,7 @@
         "Lambda 함수에 Elastic IP를 직접 할당한다"
       ],
       "correct": 0,
-      "explanation": "VPC에 연결한 Lambda가 인터넷으로 나가려면 프라이빗 서브넷에 두고 퍼블릭 서브넷의 NAT 게이트웨이를 경유해야 하며, 이때 NAT 게이트웨이의 Elastic IP가 고정 출발 IP가 됩니다.",
+      "explanation": "VPC에 연결한 Lambda가 인터넷으로 나가려면 프라이빗 서브넷에 두고 NAT 게이트웨이를 경유해야 하며(영역형 NAT 게이트웨이는 퍼블릭 서브넷에 두고, 2025-11 리전 NAT 게이트웨이는 퍼블릭 서브넷이 필요 없습니다), 이때 NAT 게이트웨이의 Elastic IP가 고정 출발 IP가 됩니다.",
       "wrongExplanations": {
         "1": "함수를 퍼블릭 서브넷에 연결하는 것만으로는 인터넷에 나갈 수 없습니다. Lambda 함수에는 퍼블릭 IP가 할당되지 않습니다.",
         "2": "ip-ranges.json은 AWS 서비스의 공용 IP 범위로 매우 넓고 변동되며, 우리 애플리케이션의 고정 출구 IP가 아닙니다.",

@@ -24,7 +24,9 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html
   - title: Gateway Load Balancer 엔드포인트 서비스 만들기 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-gateway-load-balancer-endpoint-service.html
-lastVerified: 2026-11-06
+  - title: Site-to-Site VPN 시작하기 — VPN 연결 생성 (공식)
+    url: https://docs.aws.amazon.com/vpn/latest/s2svpn/SetUpVPNConnections.html
+lastVerified: 2026-11-17
 ---
 
 # 하이브리드·연결 — 피어링·TGW·VPN·Direct Connect·엔드포인트
@@ -129,7 +131,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 | **Transit Gateway** | 여러 VPC를 공유하는 VPN 엔드포인트로도 사용 가능 |
 | **VPN 터널** | CGW-VGW 사이의 암호화 통로. 연결당 **2개 터널**(고가용성) |
 
-- 구축 시간: **수 분(즉시)**. 경로는 공용 인터넷 → 대역폭·지연 변동 가능.
+- 구축 시간: **수 분**. 경로는 공용 인터넷 → 대역폭·지연 변동 가능.
 - 암호화: **기본 포함(IPsec)**.
 - **라우팅:** 정적 라우팅 또는 **동적 라우팅(BGP)**. 동적이면 온프레미스 경로가 자동 전파됩니다.
 
@@ -152,7 +154,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 | **퍼블릭 VIF** | 모든 AWS 퍼블릭 서비스에 퍼블릭 IP로 접근 |
 | **트랜짓 VIF** | Direct Connect 게이트웨이를 통해 **Transit Gateway**에 연결 |
 
-- 구축 시간: **수 주(물리 회선 설치)**. 경로는 전용 회선 → **일관된 대역폭·저지연**.
+- 구축 시간: **물리 회선 설치가 필요해 VPN보다 오래 걸림**. 경로는 전용 회선 → **일관된 대역폭·저지연**.
 - 암호화: **기본 없음**. 선택지가 둘입니다 — DX 위에 IPsec VPN을 얹는 **VPN over Direct Connect**, 또는 **MACsec**(지원하는 전용 연결에서 데이터센터↔DX 로케이션 구간을 암호화).
 - **DX + VPN 백업:** 평시 DX, DX 장애 시 VPN으로 자동 우회 → 가용성 + 성능 확보.
 

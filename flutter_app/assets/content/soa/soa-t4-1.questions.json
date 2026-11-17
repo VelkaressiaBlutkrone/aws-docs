@@ -155,13 +155,17 @@
       "explanation": "권한 경계는 상한선이라 줄이는 방향으로만 작용합니다. 자격증명 정책이 Allow하고 경계도 허용 범위에 포함해야 실제로 작동하므로, 경계만으로는 아무 권한도 생기지 않습니다.",
       "wrongExplanations": {
         "1": "경계는 권한을 부여하지 않습니다.",
-        "2": "경계는 상한 제한이며 합집합 평가 대상이 아닙니다.",
+        "2": "경계는 자격증명 기반 정책의 상한이며 리소스 정책과 합쳐 권한을 넓히는 장치가 아닙니다. 다만 같은 계정에서 리소스 기반 정책이 IAM 사용자 ARN에 직접 준 권한은 경계의 암시적 거부에 제한받지 않습니다(IAM 역할 ARN에 준 권한은 제한받습니다).",
         "3": "명시적 Deny는 항상 우선합니다."
       },
       "sources": [
         {
           "title": "IAM 권한 경계 평가",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html"
+        },
+        {
+          "title": "IAM 엔터티의 권한 경계 — 리소스 기반 정책과의 평가",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html"
         }
       ],
       "verified": true
@@ -270,6 +274,10 @@
         {
           "title": "IAM 조건 연산자 — ...IfExists",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html"
+        },
+        {
+          "title": "AWS 전역 조건 컨텍스트 키 — aws:MultiFactorAuthPresent",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html"
         }
       ],
       "verified": true

@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/SecondaryIndexes.html
   - title: DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain1.html
-lastVerified: 2026-11-01
+lastVerified: 2026-11-17
 ---
 
 # 애플리케이션 개발 중 데이터 스토어 사용 (수명 주기·선택·캐싱·DynamoDB)
@@ -172,7 +172,7 @@ TTL은 항목별 만료 시각 속성(**Number 타입, Unix epoch 초**)으로 �
 | Pub/Sub·정렬 집합 | 없음 | 있음 |
 | 백업·복원 | 서버리스 캐시만 | 예 |
 
-**Memcached 선택 기준**(공식)은 가장 단순한 모델, 멀티코어 큰 노드, 노드 추가·제거로 스케일 인·아웃, 객체 캐싱입니다. **Valkey가 ElastiCache의 권장 엔진**이고 Redis OSS·Memcached도 계속 지원합니다.
+**Memcached 선택 기준**(공식)은 가장 단순한 모델, 멀티코어 큰 노드, 노드 추가·제거로 스케일 인·아웃, 객체 캐싱입니다. ElastiCache는 **Valkey · Redis OSS · Memcached** 세 엔진을 지원합니다(공식 권고는 엔진을 고른 뒤 **그 엔진의 최신 버전**을 쓰라는 것입니다).
 
 **DAX**는 DynamoDB 호환 인메모리 캐시입니다. DAX 클라이언트로 클러스터 엔드포인트를 쓰면 되므로 **API 호환 → 코드 변경 최소**이고, VPC 안에서 실행되며 최종적 일관성 읽기 지연을 **밀리초에서 마이크로초로** 줄입니다.
 

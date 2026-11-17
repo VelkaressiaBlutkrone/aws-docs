@@ -26,7 +26,11 @@ sources:
     url: https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html
   - title: DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain2.html
-lastVerified: 2026-11-01
+  - title: Mutual TLS authentication for HTTP APIs in API Gateway
+    url: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-mutual-tls.html
+  - title: Mutual TLS authentication for REST APIs in API Gateway
+    url: https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-mutual-tls.html
+lastVerified: 2026-11-17
 ---
 
 # 인증·권한 부여 메커니즘 구현 (Cognito·토큰·사전 서명 URL·SigV4·IAM 역할)
@@ -87,7 +91,7 @@ lastVerified: 2026-11-01
 | **신뢰 정책** | 역할에 붙는 리소스 기반 정책 — **누가 이 역할을 수임할 수 있는가** |
 | **권한 정책** | 역할을 수임한 뒤 **무엇을 할 수 있는가** |
 | **세션 정책** | 세션을 만들 때 함께 주는 정책. 역할 권한과의 **교집합**만 남는다(확대 불가) |
-| **역할 체이닝** | 역할로 또 다른 역할을 수임하는 것. CLI·API 세션이 **최대 1시간**으로 제한된다 |
+| **역할 체이닝** | 역할로 또 다른 역할을 수임하는 것. 콘솔·CLI·API 역할 세션이 **최대 1시간**으로 제한된다 |
 | **ABAC** | 주체 태그와 리소스 태그를 맞춰 허용하는 방식. 리소스가 늘어도 정책이 늘지 않는다 |
 | **confused deputy** | 권한을 가진 서비스가 제3자에게 속아 대신 행동하는 문제. `aws:SourceArn`·`aws:SourceAccount`·`sts:ExternalId`로 막는다 |
 
@@ -164,7 +168,7 @@ lastVerified: 2026-11-01
 | **JWT 오소라이저** | **HTTP만** | JWT | API Gateway가 issuer·audience·scope 검증 |
 | **리소스 정책** | **REST만** | — | API Gateway가 IP·VPC 엔드포인트·계정 조건 평가 |
 | **API 키 + 사용량 계획** | REST | API 키 | ⚠️ **인증·인가 수단이 아니다**(식별·사용량 제한용) |
-| **mTLS** | REST(Regional 커스텀 도메인) | 클라이언트 X.509 인증서 | TLS 핸드셰이크 — ⚠️ **폐기 검증 없음** |
+| **mTLS** | REST(Regional 커스텀 도메인)·HTTP(커스텀 도메인) | 클라이언트 X.509 인증서 | TLS 핸드셰이크 — ⚠️ **폐기 검증 없음** |
 
 - 메서드에 **스코프를 지정하면 액세스 토큰**이 필요합니다(ID 토큰은 신원 클레임 기반).
 - **JWT 오소라이저**는 **RSA만** 지원하고 공개 키를 최대 2시간 캐시하며 ⚠️ **ID·액세스 토큰을 구분하지 못해** 스코프 요구가 권장됩니다.
@@ -264,7 +268,7 @@ SDK·CLI는 정해진 소스를 **순서대로 확인하고 유효한 자격 증
 | GetFederationToken | IAM 사용자·루트 | 15분~36시간(**기본 12시간**) | 불가 | 가능 |
 | GetSessionToken | IAM 사용자·루트 | 동일 | **가능** | **불가** |
 
-- ⚠️ **역할 체이닝**(역할로 또 다른 역할을 수임)은 CLI·API 세션을 **최대 1시간**으로 제한하고 **늘릴 수 없습니다**(콘솔 역할 전환에는 해당하지 않습니다). 1시간을 넘기면 `exceeds the 1 hour session limit for roles assumed by role chaining` 계열 오류가 납니다.
+- ⚠️ **역할 체이닝**(역할로 또 다른 역할을 수임)은 콘솔·CLI·API 역할 세션을 **최대 1시간**으로 제한하고 **늘릴 수 없습니다**(콘솔에서 역할을 전환해 체이닝해도 같고, 역할별 최대 세션 기간 설정과 무관합니다). 1시간을 넘기면 `exceeds the 1 hour session limit for roles assumed by role chaining` 계열 오류가 납니다.
 - ⚠️ **서비스가 수임한 세션에는 역할의 최대 세션 설정이 적용되지 않습니다.**
 - 보조 파라미터: **`ExternalId`**(서드파티 접근·confused deputy 방지, **비밀이 아닙니다**) · **MFA**(신뢰 정책 `aws:MultiFactorAuthPresent`) · **세션 정책**(인라인 1 + 관리형 최대 10, 합계 **2,048자**, ⚠️ **권한을 넓힐 수 없습니다**) · **세션 태그**(최대 50개, `sts:TagSession` 필요, 전이적 태그는 체이닝으로 전달) · `RoleSessionName`(**CloudTrail에 기록**).
 - 용어 구분: **서비스 역할**(서비스가 대신 수임) · **서비스 연결 역할**(서비스가 소유·편집 불가) · **실행 역할**(예: Lambda).
@@ -351,7 +355,7 @@ SDK·CLI는 정해진 소스를 **순서대로 확인하고 유효한 자격 증
 
 <details><summary>정답 보기</summary>
 
-**역할 체이닝**이기 때문입니다 — 역할로 또 다른 역할을 수임하면 CLI·API 세션이 **최대 1시간**으로 제한되고 **늘릴 수 없습니다**(콘솔 역할 전환에는 해당하지 않습니다). 넘기면 `exceeds the 1 hour session limit for roles assumed by role chaining` 계열 오류가 납니다.
+**역할 체이닝**이기 때문입니다 — 역할로 또 다른 역할을 수임하면 콘솔·CLI·API 역할 세션이 **최대 1시간**으로 제한되고 **늘릴 수 없습니다**(콘솔에서 역할을 전환해 체이닝해도 같고, 역할별 최대 세션 기간 설정과 무관합니다). 넘기면 `exceeds the 1 hour session limit for roles assumed by role chaining` 계열 오류가 납니다.
 
 세션 정책으로는 **권한을 넓힐 수 없습니다** — 결과 권한은 **역할 권한 정책과의 교집합**입니다(인라인 1개 + 관리형 최대 10개, 평문 합계 2,048자). 넓히려면 역할의 권한 정책 자체를 바꿔야 합니다.
 </details>
@@ -400,3 +404,5 @@ SDK·CLI는 정해진 소스를 **순서대로 확인하고 유효한 자격 증
 20. Control access to a REST API with IAM permissions — https://docs.aws.amazon.com/apigateway/latest/developerguide/permissions.html
 21. Using IAM policy conditions for fine-grained access control (DynamoDB) — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/specifying-conditions.html
 22. DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain2.html
+23. HTTP API의 상호 TLS 인증 (커스텀 도메인 필요) — https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-mutual-tls.html
+24. REST API의 상호 TLS 인증 (Regional 커스텀 도메인 필요) — https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-mutual-tls.html

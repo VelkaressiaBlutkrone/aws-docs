@@ -28,7 +28,9 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain1.html
   - title: DVA-C03 범위 내 AWS 서비스 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
-lastVerified: 2026-11-01
+  - title: Amazon SNS large message payloads (MaximumMessageSize topic attribute)
+    url: https://docs.aws.amazon.com/sns/latest/dg/large-message-payloads.html
+lastVerified: 2026-11-17
 ---
 
 # AWS에서 호스팅하는 애플리케이션 코드 개발 (결합도·통신·복원력·API·SDK·스트리밍·AI)
@@ -260,7 +262,7 @@ SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구�
 - 폴링: 짧은 폴링(기본)은 서버 일부만 조회해 **빈 응답**이 가능하고, **긴 폴링**(`WaitTimeSeconds` 최대 20초)은 빈 응답과 비용을 줄입니다.
 - DLQ: 리드라이브 정책의 `maxReceiveCount`번 수신되고도 삭제되지 않으면 DLQ로 이동합니다. ⚠️ 표준 큐는 **원래 enqueue 시각 기준**으로 만료되므로 **DLQ 보존 기간을 원본보다 길게** 둡니다.
 
-**SNS**는 전달 재시도 숫자가 특징입니다 — Lambda·SQS 같은 AWS 관리형 엔드포인트는 **총 100,015회·23일** 동안 재시도하고(즉시 3회 → 1초 간격 2회 → 지수 백오프 10회 → 20초 간격 100,000회), **HTTP/S만 사용자 정의 전달 정책**을 쓸 수 있으며 그 총 재시도 시간은 3,600초 이하입니다. 기본 최대 메시지는 **256 KiB**(속성으로 최대 1 MiB)입니다.
+**SNS**는 전달 재시도 숫자가 특징입니다 — Lambda·SQS 같은 AWS 관리형 엔드포인트는 **총 100,015회·23일** 동안 재시도하고(즉시 3회 → 1초 간격 2회 → 지수 백오프 10회 → 20초 간격 100,000회), **HTTP/S만 사용자 정의 전달 정책**을 쓸 수 있으며 그 총 재시도 시간은 3,600초 이하입니다. 기본 최대 메시지는 **256 KiB**(토픽 속성 `MaximumMessageSize`로 최대 1 MiB)입니다.
 
 **SNS → SQS 팬아웃**이 이 절의 대표 패턴입니다. 구독 서비스 앞마다 큐를 두면 큐가 메시지를 **내구적으로 버퍼링**하므로 구독 프로세스가 몇 시간~며칠 장애여도 유실이 없고, 큐가 "버퍼링 로드밸런서"가 되어 구독자를 쉽게 늘리고 줄일 수 있습니다.
 
@@ -275,9 +277,9 @@ SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구�
 ⚠️ **먼저 바로잡아야 할 두 가지가 있습니다.**
 
 1. **가이드의 이 기술 문구는 서비스 이름을 하나도 적지 않습니다.** 범위 내 「기계 학습 및 인공 지능」은 **Bedrock · Bedrock AgentCore · Amazon Quick · Kiro** 넷이고, 그중 **코드를 다루는 개발 도구는 Kiro뿐**입니다. 그러니 "가이드가 Kiro를 쓰라고 한다"가 아니라 **"범위 내 목록에서 이 기술에 해당하는 유일한 도구가 Kiro"**로 이해합니다.
-2. ⚠️ **`Amazon Q Developer`는 범위 내 목록에 없습니다.** C02 교재는 이 자리를 Q Developer로 다뤘지만 C03 목록에 그 이름이 없고, 공식 문서가 **IDE 플러그인 지원 종료(2027-04-30)**와 신규 가입 차단(2026-05-15)을 알리며 대체재로 **Kiro**를 지목합니다. 콘솔·문서 사이트·모바일 앱·채팅 앱의 Q는 영향이 없습니다.
+2. ⚠️ **`Amazon Q Developer`는 범위 내 목록에 없습니다.** C02 교재는 이 자리를 Q Developer로 다뤘지만 C03 목록에 그 이름이 없고, 공식 문서가 **IDE 플러그인 지원 종료(2027-04-30)**를 알리며 대체재로 **Kiro**를 지목합니다. 콘솔·문서 사이트·모바일 앱·채팅 앱의 Q는 영향이 없습니다.
 
-**Kiro의 구성 요소**(AWS 블로그·지식 센터 수준의 서술입니다 — 세부 플래그는 이 문서에 쓰지 않았습니다)
+**Kiro의 구성 요소**(⚠️ AWS 공식 문서(docs) 밖의 서술입니다 — AWS 블로그·Kiro 자체 문서 수준이고 이 문서의 출처 목록에 없으므로 **문항 근거로 쓰지 않습니다**. 세부 플래그는 이 문서에 쓰지 않았습니다)
 
 | 요소 | 하는 일 | 걸리는 공식 문구 |
 |---|---|---|
@@ -421,3 +423,4 @@ SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구�
 25. DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain1.html
 26. DVA-C03 범위 내 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
 27. DVA-C03 범위 외 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-out-of-scope-services.html
+28. Amazon SNS 대용량 메시지 페이로드 (토픽 속성 MaximumMessageSize) — https://docs.aws.amazon.com/sns/latest/dg/large-message-payloads.html

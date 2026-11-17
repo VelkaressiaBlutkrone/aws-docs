@@ -28,9 +28,11 @@ sources:
     url: https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html
   - title: Give SageMaker AI hosted endpoints access to resources in your VPC (공식 문서)
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/host-vpc.html
+  - title: Set Auto Scaling Policies for Multi-Model Endpoint Deployments (공식 문서)
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints-autoscaling.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 인프라 생성·스크립팅 (오토 스케일링·용량 모델·IaC·컨테이너 운영·VPC)

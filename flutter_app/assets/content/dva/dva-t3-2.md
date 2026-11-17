@@ -26,7 +26,9 @@ sources:
     url: https://docs.aws.amazon.com/step-functions/latest/dg/test-state-isolation.html
   - title: DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain3.html
-lastVerified: 2026-11-01
+  - title: Installing the AWS Copilot CLI (end-of-support notice — June 12, 2026)
+    url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/copilot-install.html
+lastVerified: 2026-11-17
 ---
 
 # 테스트 구현·자동화 (클라우드 테스트·모의·테스트 이벤트·환경·AI 테스트)
@@ -361,3 +363,4 @@ lastVerified: 2026-11-01
 23. Amazon Q Developer IDE 플러그인 지원 종료 — https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/q-developer-ide-end-of-support.html
 24. DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain3.html
 25. DVA-C03 범위 내 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
+26. AWS Copilot CLI 설치 (2026-06-12 지원 종료 고지) — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/copilot-install.html

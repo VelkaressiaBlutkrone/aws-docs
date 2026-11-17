@@ -122,8 +122,8 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
         },
         {
-          "title": "CLF-C02 공식 시험 가이드(한국어) — 콘텐츠 도메인 3의 클라우드 기술 및 서비스 범위",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 작업 3.1: 배포 모델 파악(클라우드·하이브리드·온프레미스)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true
@@ -365,8 +365,8 @@
           "url": "https://aws.amazon.com/types-of-cloud-computing/"
         },
         {
-          "title": "CLF-C02 공식 시험 가이드(한국어) — 콘텐츠 도메인 3: 클라우드 기술 및 서비스",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 작업 3.1: 배포 모델 파악(클라우드·하이브리드·온프레미스)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true
@@ -426,7 +426,7 @@
         },
         {
           "title": "CLF-C02 공식 시험 가이드(한국어) — 도메인 3: 클라우드·하이브리드·온프레미스 배포 모델 구분",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true
@@ -458,7 +458,7 @@
         },
         {
           "title": "CLF-C02 공식 시험 가이드(한국어) — Task 3.1: 일회성 운영과 반복 가능한 프로세스 사용 여부 결정",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true

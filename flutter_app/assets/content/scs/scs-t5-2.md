@@ -38,7 +38,13 @@ sources:
     url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
   - title: Services in Full Shutdown — 완전 종료 항목 목록
     url: https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html
-lastVerified: 2026-11-09
+  - title: Snapshot and AMI policies (Amazon Data Lifecycle Manager)
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html
+  - title: PutLifecycleConfiguration (Amazon EFS API)
+    url: https://docs.aws.amazon.com/efs/latest/APIReference/API_PutLifecycleConfiguration.html
+  - title: What is AWS Signer? — IoT·컨테이너 이미지와 Notation CLI
+    url: https://docs.aws.amazon.com/signer/latest/developerguide/Welcome.html
+lastVerified: 2026-11-17
 ---
 
 # 저장 데이터 (암호화 선택·무결성·수명 주기와 보존·복제와 백업)
@@ -441,3 +447,6 @@ DataSync 는 **AWS 스토리지 서비스로·에서·사이에** 파일·객체
 13. What is AWS DataSync? — `docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html` (2026-11-09 확인)
 14. Services in Maintenance — 유지 관리 항목 목록 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-10 확인)
 15. Services in Full Shutdown — 완전 종료 항목 목록 — `docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html` (2026-11-10 확인)
+16. Snapshot and AMI policies (Amazon Data Lifecycle Manager) — `docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html` (2026-11-17 확인)
+17. PutLifecycleConfiguration (Amazon EFS API) — `docs.aws.amazon.com/efs/latest/APIReference/API_PutLifecycleConfiguration.html` (2026-11-17 확인)
+18. What is AWS Signer? — IoT·컨테이너 이미지와 Notation CLI — `docs.aws.amazon.com/signer/latest/developerguide/Welcome.html` (2026-11-17 확인)

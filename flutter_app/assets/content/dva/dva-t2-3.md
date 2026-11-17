@@ -26,7 +26,11 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
   - title: DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain2.html
-lastVerified: 2026-11-01
+  - title: Amazon Bedrock Agents Classic maintenance mode
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
+  - title: Automate tasks in your application using AI agents (Agents Classic availability)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html
+lastVerified: 2026-11-17
 ---
 
 # AI 서비스 통합의 보안 위험 완화 (모델 접근·사설 연결·Guardrails·에이전트·로그)
@@ -75,7 +79,7 @@ lastVerified: 2026-11-01
 - ⚠️ **VPC 엔드포인트를 통한 요청에는 `aws:SourceIp`가 없습니다** — IAM 정책에 `IpAddress` 조건을 걸면 **충족될 수 없습니다**
 - **사설 연결**: 인터페이스 VPC 엔드포인트(PrivateLink). 런타임 서비스 이름은 **`com.amazonaws.<region>.bedrock-runtime`**이고 **퍼블릭 IP가 필요 없습니다**
 - ⚠️ **"입출력을 학습에 쓰지 않는다"는 서비스 약속이고 설정이 아닙니다** — 그래서 **Bedrock은 AI 서비스 옵트아웃 정책의 대상이 아닙니다.** 단 **일부 모델은 남용 탐지 목적으로 최대 30일 보관**합니다
-- ⚠️ **프롬프트 공격은 별도 보호 장치가 아니라 콘텐츠 필터의 한 범주**입니다(6종: Hate · Insults · Sexual · Violence · Misconduct · **Prompt Attack**)
+- ⚠️ **프롬프트 공격은 별도 보호 장치가 아니라 콘텐츠 필터의 한 범주**입니다(Hate · Insults · Sexual · Violence · Misconduct · **Prompt Attack**)
 - **단어 필터는 정확 일치**, **거부 주제는 주제 단위**입니다. 민감 정보 필터는 PII·정규식을 **차단 또는 마스킹**합니다
 - **`ApplyGuardrail`은 모델을 호출하지 않고** 텍스트를 평가합니다 — RAG의 **검색 전** 검사, **Bedrock 밖 모델**에도 적용
 - ⚠️ **모델 호출 로깅은 기본 꺼짐**이고, 켜면 **가드레일 이전의 사용자 입력**이 담깁니다 — 로그에 민감 정보가 있다고 가정하고 **데이터 보호 정책 + `logs:Unmask` 분리 + KMS**로 막습니다
@@ -139,7 +143,7 @@ lastVerified: 2026-11-01
 
 | 보호 장치 | 하는 일 |
 |---|---|
-| **콘텐츠 필터** | 유해 텍스트·이미지 탐지·필터링. 사전 정의 범주 **6종** — Hate · Insults · Sexual · Violence · Misconduct · **Prompt Attack**. 범주별 **강도 조절** |
+| **콘텐츠 필터** | 유해 텍스트·이미지 탐지·필터링. 사전 정의 범주 — Hate · Insults · Sexual · Violence · Misconduct · **Prompt Attack**. 범주별 **강도 조절** |
 | └ **프롬프트 공격** | ⚠️ **콘텐츠 필터 안의 한 범주**입니다(별도 보호 장치가 아닙니다). **탈옥(jailbreak) · 프롬프트 인젝션 · 프롬프트 유출** 탐지 |
 | **거부 주제** | 애플리케이션 맥락에서 원치 않는 **주제**를 정의해 차단(예: 금융 앱의 불법 투자 조언) |
 | **단어 필터** | 사용자 지정 단어·구문 **정확 일치** 차단. 욕설은 기성 옵션 제공 |
@@ -164,6 +168,8 @@ lastVerified: 2026-11-01
 ### 6) 에이전트 — 도구 권한과 사람 승인 (기술 2.3.4) {#agent-approval}
 
 Skill이 든 예시 세 가지 중 **도구 사용 권한 부여**와 **사람 승인 흐름**이 여기에 해당합니다.
+
+> ⚠️ 상태: 아래 **사용자 확인**과 **제어 반환**은 **Amazon Bedrock Agents Classic**의 기능입니다 — Amazon Bedrock Agents는 Agents Classic으로 이름이 바뀌었고 **2026-07-30부터 신규 고객에게 열려 있지 않습니다**(기존 고객은 계속 사용하고, Bedrock 모델·Knowledge Bases·Guardrails는 영향이 없습니다). 공식 이전 경로는 범위 내 서비스인 **Amazon Bedrock AgentCore**이고, 제어 반환·사람 개입(human-in-the-loop) 패턴은 **인라인 함수 도구**로 제공됩니다.
 
 - **사용자 확인(user confirmation)**: 작업 그룹을 구성할 때 특정 작업에 켭니다. 켜면 에이전트가 **확인 질문을 던지고** 사용자가 승인·거부합니다. ⭐ **공식 문서가 이 기능의 목적을 프롬프트 인젝션 방어로 직접 적습니다** — 응답에 섞여 들어온 지시를 에이전트가 그대로 따르는 것을 **사람이 끊습니다.**
 - **제어 반환(return of control)**: 작업 그룹의 `actionGroupExecutor`에 **`customControl = RETURN_CONTROL`**을 지정하면, Lambda로 넘기는 대신 **`InvokeAgent` 응답의 `invocationInputs`**로 호출 정보를 돌려줍니다(고유 `invocationId` 동반). 애플리케이션이 직접 실행한 뒤 **같은 `invocationId`·`actionGroup`**으로 `sessionState`에 결과를 실어 다시 보냅니다.
@@ -316,3 +322,5 @@ Skill이 든 예시 세 가지 중 **도구 사용 권한 부여**와 **사람 �
 11. AgentCore 정책 세션·ID 전파(WIC·WAT) — https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-session-based-temporal.html
 12. Monitor model invocation using CloudWatch Logs and Amazon S3 — https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
 13. Help protect sensitive log data with masking (CloudWatch Logs) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html
+14. Amazon Bedrock Agents Classic 유지 관리 모드 (2026-07-30부터 신규 고객 비개방, AgentCore 이전) — https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
+15. Amazon Bedrock Agents (현 Agents Classic — 신규 가입 불가 고지) — https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html

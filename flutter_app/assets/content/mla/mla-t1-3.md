@@ -24,9 +24,11 @@ sources:
     url: https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html
   - title: Setting up training jobs to access datasets (SageMaker AI 공식 문서)
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
+  - title: What Is AI Bias? — 편향 소스 분류(레이블·선택·알고리즘·측정·회상)
+    url: https://aws.amazon.com/what-is/ai-bias/
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 데이터 무결성·편향 관리 (지표·불균형·암호화·민감정보·품질)

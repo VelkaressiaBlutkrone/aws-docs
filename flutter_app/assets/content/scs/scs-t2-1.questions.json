@@ -47,10 +47,10 @@
         "둘 다 SageMaker AI 노트북입니다. OpsItem은 운영 지표를 수집하는 용도입니다"
       ],
       "correct": 1,
-      "explanation": "OpsCenter는 서비스 경계를 넘어 OpsItem을 집계하고 표준화하며, 각 OpsItem에 맥락 조사 데이터와 Systems Manager Automation 런북을 함께 제공합니다. 절차 표준화와 중복 축소가 그 자리입니다. 노트북은 조사 절차를 실행 가능한 형태로 보관하는 쪽이라 질의를 셀로 두고 같은 순서로 재현하는 요구에 맞습니다. 노트북은 런북의 실행 가능한 판이지 대응 계획 자체가 아닙니다.",
+      "explanation": "OpsCenter는 서비스 경계를 넘어 OpsItem을 집계하고 표준화하며, 각 OpsItem에 맥락 조사 데이터와 Systems Manager Automation 런북을 함께 제공합니다. 절차 표준화와 중복 축소가 그 자리입니다. 노트북 쪽은 조사 질의를 셀로 보관해 같은 순서로 재현하는 요구에 맞습니다. 공식 시험 가이드가 기술 2.1.1의 예시로 OpsCenter와 SageMaker AI 노트북을 함께 듭니다.",
       "wrongExplanations": {
         "0": "두 짝이 뒤집혔습니다. 표준화와 중복 축소는 OpsItem을 집계하는 OpsCenter의 성질이고, 질의 재현은 노트북입니다.",
-        "2": "노트북은 조사 절차를 실행 가능한 형태로 보관해 같은 순서로 재현하게 합니다. 대응 계획 설계와 무관하다는 서술이 틀렸습니다.",
+        "2": "공식 시험 가이드가 기술 2.1.1의 예시로 OpsCenter와 함께 SageMaker AI 노트북을 듭니다. 대응 계획 설계와 무관하다는 서술이 틀렸습니다.",
         "3": "OpsItem은 운영 지표가 아니라 운영 작업 항목입니다. 운영 엔지니어가 보고 조사하고 해결하는 대상입니다."
       },
       "sources": [
@@ -385,7 +385,7 @@
       "correct": 1,
       "explanation": "준비 상태 확인은 쿼터, 용량, 네트워크 라우팅 정책을 계속 모니터링해 실패 조치 능력에 영향을 줄 변화를 알려 주지만, 공식이 장애 중 실패 조치의 임계 경로에서 쓰도록 의도된 것이 아니라고 적습니다. 게다가 그 기능은 2026-03-31 공지로 유지 관리 상태입니다. 리전 범위 전환은 리전 전환이나 안전 규칙을 쓰는 라우팅 컨트롤이 맡고, 단일 AZ 손상은 영역 전환이나 영역 자동 전환입니다.",
       "wrongExplanations": {
-        "0": "공식이 임계 경로용이 아니라고 적고 그 기능은 유지 관리 상태입니다. 새로 설계한다면 이 기능에 의존하지 않습니다.",
+        "0": "공식이 임계 경로용이 아니라고 적습니다. 준비 상태 확인이 주는 것은 실패 조치 능력에 영향을 줄 변화의 알림이고 전환 트리거가 아닙니다.",
         "2": "준비 상태 확인은 쿼터, 용량, 네트워크 라우팅 정책을 계속 모니터링합니다. 앞부분 서술 자체는 맞습니다.",
         "3": "영역 자동 전환은 다중 AZ 축이고 AWS가 내부 텔레메트리로 시작하고 종료합니다. 리전 장애를 처리하는 기능이 아닙니다."
       },
@@ -393,6 +393,10 @@
         {
           "title": "What is ARC? - 영역 전환, 리전 전환, 준비 상태 확인",
           "url": "https://docs.aws.amazon.com/r53recovery/latest/dg/what-is-route53-recovery.html"
+        },
+        {
+          "title": "Services in Maintenance — ARC 준비 상태 확인 상태",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
       "verified": true
@@ -421,6 +425,10 @@
         {
           "title": "Architecture overview - Automated Forensics Orchestrator for Amazon EC2 and EKS",
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/architecture-overview.html"
+        },
+        {
+          "title": "Forensic memory and disk acquisition service — 메모리 수집 뒤 격리",
+          "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html"
         }
       ],
       "verified": true

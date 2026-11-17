@@ -26,7 +26,11 @@ sources:
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
   - title: Responding to DDoS events in AWS — SRT 사전 교전
     url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html
-lastVerified: 2026-11-12
+  - title: Forensic memory and disk acquisition service
+    url: https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html
+  - title: Services in Maintenance — ARC 준비 상태 확인 상태
+    url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+lastVerified: 2026-11-17
 ---
 
 # 인시던트 대응 계획 설계와 테스트 (런북·사전 구성·혼돈 실험·자동 해결)
@@ -337,3 +341,5 @@ ARC는 **AWS 글로벌 클라우드 인프라에서 도는 애플리케이션의
 7. What is AWS Security Incident Response? (범위 메모용) — `docs.aws.amazon.com/security-ir/latest/userguide/what-is.html` (2026-11-08 확인)
 8. Introduction to AWS Security Hub CSPM — `docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html` (2026-11-08 확인)
 9. Responding to DDoS events in AWS — SRT 사전 교전 — `docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html` (2026-11-12 확인)
+10. Forensic memory and disk acquisition service — `docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html` (2026-11-17 확인)
+11. Services in Maintenance — ARC 준비 상태 확인 상태 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-17 확인)

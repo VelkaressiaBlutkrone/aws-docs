@@ -36,9 +36,11 @@ sources:
     url: https://docs.aws.amazon.com/codepipeline/latest/userguide/security-best-practices.html
   - title: Role Manager availability change (공식 공지)
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/role-manager-availability-change.html
+  - title: AWS PrivateLink for Amazon S3 — VPC 엔드포인트 두 유형 (공식 문서)
+    url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # AWS 리소스 보호 (실행 역할·조건 키 가드레일·네트워크 격리·CI/CD 보안·감사)
@@ -194,7 +196,7 @@ lastVerified: 2026-11-06
 **사용량 기반으로 줄이기**
 
 - **IAM Access Analyzer**는 정책 검증(100개 넘는 점검)과 **CloudTrail 활동 기반 정책 생성**을 제공합니다. 정책 생성은 **최대 90일의 과거 CloudTrail 이벤트**를 분석하며, ⚠️ **서비스 역할과 이벤트를 기록하는 추적(trail)이 먼저 있어야** 합니다
-- **적용 흐름** — 넓은 정책(예: `AmazonSageMakerFullAccess`)으로 **대표 기간 30~90일** 워크로드를 돌린 뒤 Access Analyzer로 **실제 사용 작업만 담은 정책**을 생성해 교체합니다
+- **적용 흐름** — 넓은 정책(예: `AmazonSageMakerFullAccess`)으로 **최대 90일 범위에서 가능한 한 짧은 대표 기간**(공식 권고) 워크로드를 돌린 뒤 Access Analyzer로 **실제 사용 작업만 담은 정책**을 생성해 교체합니다
 - 수동으로 보려면 CloudTrail Event history를 **사용자 이름으로 필터링**하거나 IAM 콘솔의 **Access Advisor**(마지막 접근 정보)를 봅니다
 
 **태그 기반 접근 제어(ABAC).** `sagemaker:ResourceTag/<키>` 조건으로 팀별 리소스를 분리할 수 있지만 ⚠️ **목록·`Search` 계열 API 등 일부 호출에는 태그 기반 정책이 적용되지 않습니다.** 사용자 정의 태그는 **갱신 시 덮어쓸 수 있으므로** 태그 부여 권한을 좁게 줍니다. AWS가 생성하는 태그(`sagemaker:domain-arn`·`user-profile-arn`·`space-arn`)는 **사용자가 바꿀 수 없습니다.**
@@ -536,7 +538,7 @@ SageMaker는 `sagemaker:` 접두 조건 키로 **"리소스를 만들 때 요청
 - **`AmazonSageMakerFullAccess`를 붙였는데 S3 AccessDenied**가 나면 **버킷 이름**을 봅니다 — 이름에 `sagemaker`·`aws-glue`가 없으면 대상 밖입니다
 - **"컨테이너가 외부로 아무것도 못 보내게"** → **네트워크 격리**. VPC 모드는 트래픽 경로를 바꾸는 것이고, 인터넷 차단과 격리는 다릅니다
 - **AWS Marketplace 알고리즘·모델로 훈련·실행하면 네트워크 격리가 필수**입니다
-- **S3는 게이트웨이, SageMaker API·Runtime은 인터페이스 엔드포인트.** 둘을 바꿔 고르면 틀립니다
+- **SageMaker 문서가 S3에 안내하는 것은 게이트웨이 엔드포인트**(라우트 테이블 연결, 과금되지 않음)이고 **SageMaker API·Runtime은 인터페이스 엔드포인트**입니다. 공식 S3 문서는 S3에 쓸 수 있는 VPC 엔드포인트가 게이트웨이와 인터페이스 **두 가지**라고 적으므로 S3가 인터페이스 엔드포인트를 지원하지 않는다고 외우면 틀립니다
 - **Runtime 인터페이스 엔드포인트는 클라이언트가 있는 AZ에서 활성화**해야 사설 DNS가 동작합니다
 - **분산 훈련 노드 간 통신은 기본적으로 암호화되지 않습니다.** 켜면 보안 그룹에 **UDP 500·ESP 50**이 필요하고 단일 인스턴스에는 영향이 없습니다
 - **"막아라"는 조건 키·SCP(예방), "찾아내라"는 Config 규칙(평가).** 질문의 시점을 봅니다

@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html
   - title: DEA-C01 공식 시험 가이드 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain3.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 처리 자동화 (MWAA·Step Functions·SDK·Lambda·EventBridge)
@@ -142,7 +142,7 @@ Amazon MWAA는 Apache Airflow를 관리형으로 돌려 주는 서비스입니�
 | **standard** | 3 (최초 요청 포함) | **서킷 브레이킹**, 확장된 오류 목록, 지수 백오프 **최대 20초** |
 | **adaptive** | standard와 같은 기능 + **클라이언트 측 속도 제한** | **실험적(experimental)** 모드 |
 
-- ⚠️ **기본 모드가 무엇인지는 시점에 따라 다릅니다.** 현행 boto3 문서는 legacy를 기본으로 적지만, AWS는 SDK 재시도 동작을 갱신해 **2026년 11월에 standard를 기본으로** 만든다고 공지했습니다. 시험에서는 **"기본값이 무엇인가"보다 모드별 특성**(서킷 브레이킹·재시도 쿼터 = standard, 클라이언트 측 속도 제한 = adaptive)으로 판단하세요.
+- **기본 모드는 `standard` 입니다.** 현행 boto3 문서가 "Standard mode is the default mode used by any Boto3 client you create"로 적고, 아무 설정도 하지 않으면 `max_attempts` 기본값은 **3**(Amazon DynamoDB·DynamoDB Streams는 **4**)입니다. **예전 기본은 `legacy`** 였으므로 계속 쓰려면 `retry_mode = legacy` 를 명시해야 합니다. 시험에서는 기본값과 함께 **모드별 특성**(서킷 브레이킹·재시도 쿼터 = standard, 클라이언트 측 속도 제한 = adaptive)으로 판단하세요.
 - **`max_attempts`의 의미가 두 가지**입니다. 설정 파일·환경 변수에서는 **최초 요청을 포함**한 총 시도이고, Config 객체에서는 **최초 요청을 제외**한 재시도 횟수입니다. 혼동을 피하려면 Config의 **`total_max_attempts`** 를 씁니다.
 - **Paginator** — 잘린(truncated) API 결과를 전부 순회하는 추상화로 `get_paginator()` 로 만듭니다. 예를 들어 S3 `list_objects` 는 한 번에 **최대 1,000개** 객체를 반환합니다. `PaginationConfig` 의 `MaxItems`·`PageSize`·`StartingToken` 으로 조절하고 JMESPath로 클라이언트 측 필터링을 할 수 있습니다.
 - **Waiter** — 리소스 상태를 폴링하다가 원하는 상태에 도달하거나 실패하면 끝나는 헬퍼로 `get_waiter()` 로 얻어 `wait()` 를 호출합니다. **waiter가 없는 클라이언트도 있습니다**(예: SQS).
@@ -247,7 +247,7 @@ Amazon MWAA는 Apache Airflow를 관리형으로 돌려 주는 서비스입니�
 2. **운영 자동화 수단 고르기** — "연결·드라이버 관리 없이 매일 SQL 실행" → **예약 쿼리**. "여러 SQL 단계를 한 단위로" → **저장 프로시저(CALL)**. "정해진 시각에 반드시 갱신" → **수동·예약 REFRESH**(AUTO REFRESH는 보장되지 않음). "Glue 잡이 매번 전체 재처리" → **잡 북마크 Enable**(기본 Disable). "임시 EMR이 유휴로 남아 비용" → **자동 종료 정책**.
 3. **Lambda 호출 방식 식별이 먼저** — "S3 업로드 트리거 + 실패 이벤트 보관" 이면 **비동기 + DLQ/대상**. "SQS 일부 메시지만 실패" 면 **부분 배치 응답 + 가시성 6배 + maxReceiveCount 5 이상**. "Iterator Age 증가" 면 스트림 **이벤트 소스 매핑**이라 샤드가 막힌 상황입니다.
 4. **데이터 접근·쿼리 통제** — "재시도해도 중복 실행 없이 비동기 SQL" → **Data API + ClientToken**. "팀별 결과 위치 강제 + 스캔량 제한" → **Athena 워크그룹 + 데이터 사용량 제어**. "파티션이 수만 개" → **파티션 프로젝션**.
-5. **기본값을 묻는 문항** — Glue 북반 Disable, Step Functions Standard 콘솔 로깅 꺼짐, MWAA Forced, Scheduler/규칙 재시도 24시간·185회. 다만 **boto3 기본 재시도 모드와 Glue `MaxRetries` 기본값은 자료마다 달라** 이 문서에서 단정하지 않습니다 — 모드·필드의 **특성**으로 푸세요.
+5. **기본값을 묻는 문항** — Glue 북마크 Disable, Step Functions Standard 콘솔 로깅 꺼짐, MWAA Forced, Scheduler/규칙 재시도 24시간·185회, **boto3 재시도 모드 `standard`**(`max_attempts` 3 · DynamoDB 계열 4). 다만 **Glue `MaxRetries` 기본값은 자료마다 달라** 이 문서에서 단정하지 않습니다 — 필드의 **특성**으로 푸세요.
 
 ---
 
@@ -328,7 +328,7 @@ Amazon MWAA는 Apache Airflow를 관리형으로 돌려 주는 서비스입니�
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. Accessing Airflow logs in Amazon CloudWatch (Amazon MWAA) — https://docs.aws.amazon.com/mwaa/latest/userguide/monitoring-airflow.html
 2. Troubleshooting: DAGs, Operators, Connections, and other issues (Amazon MWAA) — https://docs.aws.amazon.com/mwaa/latest/userguide/t-apache-airflow-202.html

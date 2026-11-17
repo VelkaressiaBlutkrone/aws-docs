@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-best-dist-key.html
   - title: DEA-C01 공식 시험 가이드 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain3.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 품질 보장 (Glue DQ·DataBrew 규칙·샘플링·스큐)
@@ -150,12 +150,12 @@ DataBrew는 데이터 품질 규칙을 **ruleset**에 정의합니다. ruleset�
 | 영역 | 스큐 증상·진단 | 완화 메커니즘 |
 |---|---|---|
 | **Spark / AWS Glue** | 소수 태스크만 오래 걸림(**Spark UI 요약 지표 편향**) | **AQE 스큐 조인 최적화**, 고카디널리티·복합 조인 키, **솔팅**, 브로드캐스트 |
-| **Amazon Redshift** | 일부 슬라이스에 행·쿼리 부하 집중(**`SVV_TABLE_INFO`**) | **분산 키 재선택**, 작은 차원 테이블은 **ALL 분산** |
+| **Amazon Redshift** | 일부 슬라이스에 행·쿼리 부하 집중(**`SVV_TABLE_INFO`**) | **분산 키 재선택**, **colocate 할 수 없는** 차원 테이블은 **ALL 분산** |
 | **Amazon DynamoDB** | 특정 파티션 키에 쓰기·읽기 집중(**hot partition**) | **균일한 파티션 키 설계**, **랜덤 접미사 write sharding** |
 | **Kinesis Data Streams** | 일부 샤드로 레코드 집중(**hot shard**) | **hot 샤드 split** / cold 샤드 merge |
 
 - **Spark/Glue** — 스큐는 **Spark 잡의 가장 흔한 병목 원인 중 하나**이며, 스큐된 파티션의 태스크가 오래 걸려 전체 처리 시간을 늦춥니다. **AQE(Adaptive Query Execution)** 의 스큐 조인 최적화를 쓰며 **Glue 4.0부터 기본 활성**입니다. 조인 키는 **카디널리티가 높은 키나 복합 키**가 낫습니다. **솔팅(salting)** 은 스큐된 키에 **임의 접두어를 붙여 파티션에 고르게 분산**하고 처리 후 접두어를 제거하는 기법입니다.
-- **Amazon Redshift** — 분산 키는 조인 컬럼에 맞추되 **팩트 테이블은 분산 키를 하나만** 가질 수 있습니다. ⚠️ **날짜 컬럼을 분산 키로 하고 좁은 날짜 범위로 자주 필터하면 필터된 행이 일부 슬라이스에 몰려 쿼리 워크로드가 스큐됩니다.** 작은 차원 테이블은 **ALL 분산**으로 모든 노드에 두는 선택지가 있습니다. 분포 스큐는 **`SVV_TABLE_INFO` 시스템 뷰(`skew_rows` 등)** 로 진단합니다.
+- **Amazon Redshift** — 분산 키는 조인 컬럼에 맞추되 **팩트 테이블은 분산 키를 하나만** 가질 수 있습니다. ⚠️ **날짜 컬럼을 분산 키로 하고 좁은 날짜 범위로 자주 필터하면 필터된 행이 일부 슬라이스에 몰려 쿼리 워크로드가 스큐됩니다.** **팩트 테이블·주요 조인 테이블과 colocate 할 수 없는** 차원 테이블은 **ALL 분산**으로 모든 노드에 두면 쿼리 성능이 크게 오를 수 있습니다. ⚠️ 반대로 **재분산 비용이 낮은 작은 차원 테이블을 `DISTSTYLE ALL` 로 두는 것은 이점이 크지 않다**고 같은 문서가 적습니다(저장 공간이 노드 수만큼 늘고 적재가 느려집니다). 분포 스큐는 **`SVV_TABLE_INFO` 시스템 뷰(`skew_rows` 등)** 로 진단합니다.
 - **Amazon DynamoDB** — **모든 파티션 키에 걸쳐 균일한 활동**이 되도록 설계해야 합니다. 쓰기가 한 키에 몰리면 파티션 키에 **임의 숫자(랜덤 접미사)** 를 붙이는 **write sharding** 으로 분산하되, ⚠️ **읽을 때는 모든 접미사를 조회해 결과를 병합**해야 합니다.
 - **Kinesis Data Streams** — 지표로 데이터를 훨씬 많이/적게 받는 **hot/cold 샤드**를 찾고, **hot 샤드만 선택적으로 split** 해 해당 해시 키 범위의 용량을 늘립니다(cold 샤드는 merge).
 
@@ -248,7 +248,7 @@ DataBrew는 데이터 품질 규칙을 **ruleset**에 정의합니다. ruleset�
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20)
 
 1. AWS Glue Data Quality — https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html
 2. Evaluating data quality for ETL jobs in AWS Glue Studio — https://docs.aws.amazon.com/glue/latest/dg/tutorial-data-quality.html

@@ -426,8 +426,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — 보안 정보 위치(Knowledge Center·Security Blog·re:Post)",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 — 작업 2.4: 보안 정보 위치(AWS Knowledge Center·AWS Security Center·AWS Security Blog)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain2.html"
         },
         {
           "title": "AWS re:Post Knowledge Center — 자주 묻는 질문의 how-to·트러블슈팅 공식 답변 모음",

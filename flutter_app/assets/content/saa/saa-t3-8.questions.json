@@ -266,7 +266,7 @@
       "wrongExplanations": {
         "1": "S3도 게이트웨이 엔드포인트를 지원합니다. 인터페이스 엔드포인트는 비용이 발생하므로 무료 구성 요건에 맞지 않습니다.",
         "2": "인터페이스 엔드포인트(PrivateLink)는 시간당 요금과 데이터 처리 비용이 발생합니다. S3·DynamoDB 접근에는 무료인 게이트웨이 엔드포인트가 적합합니다.",
-        "3": "NAT 게이트웨이는 비용이 발생하고 인터넷을 경유합니다. S3·DynamoDB에 대한 인터넷 우회 요건과 비용 최소화 요건 모두 충족하지 못합니다."
+        "3": "NAT 게이트웨이 경로는 S3·DynamoDB의 퍼블릭 엔드포인트를 쓰고 시간·데이터 처리 요금이 붙습니다(공식 문서는 그 트래픽이 AWS 네트워크를 벗어나지 않는다고 적습니다). 비용 최소화 요건에 맞지 않습니다."
       },
       "sources": [
         { "title": "게이트웨이 엔드포인트 — S3·DynamoDB 전용·무료 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }

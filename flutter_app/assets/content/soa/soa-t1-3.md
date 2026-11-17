@@ -18,7 +18,13 @@ sources:
     url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
   - title: AWS X-Ray란 무엇인가 (공식)
     url: https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
-lastVerified: 2026-06-12
+  - title: AWS CloudTrail Lake — 신규 고객 제공 변경 공지 (공식)
+    url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html
+  - title: Amazon CloudWatch 문서 — CloudWatch Events는 이제 Amazon EventBridge (공식)
+    url: https://docs.aws.amazon.com/cloudwatch/
+  - title: 예약 규칙(레거시) 생성 — Scheduler 권장 (공식)
+    url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html
+lastVerified: 2026-11-17
 ---
 
 # CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)
@@ -119,7 +125,7 @@ lastVerified: 2026-06-12
 
 | 기능 | 용도 |
 |---|---|
-| **CloudTrail Lake** | 이벤트를 **불변(immutable) 데이터 스토어**에 보관하고 **SQL로 쿼리**·분석. 장기 보관·감사 조회에 적합 |
+| **CloudTrail Lake** | 이벤트를 **불변(immutable) 데이터 스토어**에 보관하고 **SQL로 쿼리**·분석. 장기 보관·감사 조회에 적합. **2026-05-31부터 신규 고객에게 열려 있지 않으며** 기존 고객은 계속 사용할 수 있습니다 |
 | **CloudTrail Insights** | 평소 대비 **비정상적인 API 호출량/오류율 급증**을 자동 탐지(예: 갑작스러운 대량 리소스 생성) |
 
 > Insights는 "정상 패턴 학습 → 이상 징후 탐지" 방식으로, 잘못된 자동화·자격 증명 탈취로 인한 이상 활동을 잡는 데 씁니다. Lake는 Athena를 따로 구성하지 않고도 CloudTrail 이벤트를 SQL로 직접 질의하게 해줍니다.
@@ -192,7 +198,7 @@ rate(5 minutes)
 - **Event history(최근 90일)**는 추적 없이 무료 조회. 장기 보관·전체 수집은 **추적 → S3** 구성.
 - **다중 리전 추적**: 한 번 설정으로 전 리전 통합. **조직 추적**: 모든 멤버 계정 중앙 수집(멤버가 끌 수 없음).
 - **로그 파일 무결성 검증**: 다이제스트 + SHA-256/RSA 서명으로 **변조 탐지**. `validate-logs`.
-- **CloudTrail Lake = SQL 쿼리 기반 감사 분석**, **Insights = 비정상 API 활동 탐지**.
+- **CloudTrail Lake = SQL 쿼리 기반 감사 분석**(2026-05-31부터 신규 고객에게 열려 있지 않음 · 기존 고객은 계속 사용), **Insights = 비정상 API 활동 탐지**.
 - **EventBridge = 이벤트 버스 + 규칙(이벤트 패턴/스케줄) + 대상**. **CloudWatch Events의 후속/상위 호환**.
 - **스케줄 규칙**: `cron(...)` 또는 `rate(...)`로 정기 작업 트리거.
 - **이벤트 기반 자동 대응**: (GuardDuty/CloudTrail/경보 등) 이벤트 → EventBridge 규칙 → Lambda/SSM/Step Functions.

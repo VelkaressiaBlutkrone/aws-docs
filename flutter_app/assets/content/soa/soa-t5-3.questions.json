@@ -27,6 +27,10 @@
         {
           "title": "Route 53 프라이빗 호스팅 영역 사용",
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
+        },
+        {
+          "title": "프라이빗 호스팅 영역 고려 사항 — VPC 설정·분할 뷰 DNS",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zone-private-considerations.html"
         }
       ],
       "verified": true
@@ -54,6 +58,10 @@
         {
           "title": "Route 53 프라이빗 호스팅 영역 사용",
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
+        },
+        {
+          "title": "프라이빗 호스팅 영역 고려 사항 — VPC 설정·분할 뷰 DNS",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zone-private-considerations.html"
         }
       ],
       "verified": true
@@ -101,7 +109,7 @@
       "explanation": "Alias는 Zone Apex 사용이 가능하고, Alias 쿼리에는 요금이 부과되지 않으며, 대상 AWS 리소스의 IP 변경을 Route 53이 자동으로 반영합니다.",
       "wrongExplanations": {
         "1": "임의 도메인 대상 지정은 CNAME의 특성입니다.",
-        "2": "TTL 설정 가능 여부가 핵심 차이는 아닙니다.",
+        "2": "AWS 리소스를 가리키는 Alias 레코드는 TTL을 설정할 수 없습니다(Route 53이 대상 리소스의 기본 TTL을 씁니다). 보기는 거꾸로입니다.",
         "3": "DNSSEC은 별도 기능입니다."
       },
       "sources": [
@@ -243,6 +251,10 @@
         {
           "title": "CloudFront 캐시 동작 설정",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html"
+        },
+        {
+          "title": "캐시 동작 설정 — 경로 패턴",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesCacheBehavior.html"
         }
       ],
       "verified": true
@@ -281,15 +293,15 @@
       "difficulty": "applied",
       "stem": "배포마다 `/*` 전체 무효화를 반복하는 운영 방식의 문제와 권장 대안은?",
       "options": [
-        "잦은 전체 무효화는 비용·부하가 크므로, 파일명·쿼리에 버전을 넣어 새 객체로 취급하게 하는 방식이 권장된다",
+        "무효화해도 사용자 측·중간 캐시의 옛 파일은 남을 수 있으므로, 파일명에 버전을 넣어 새 객체로 취급하게 하는 방식이 권장된다",
         "무효화는 항상 무료이므로 문제가 없다",
         "TTL을 0으로 두는 것이 가장 좋은 대안이다",
         "오리진을 S3에서 ALB로 바꾸면 해결된다"
       ],
       "correct": 0,
-      "explanation": "소수 경로 무효화는 비용이 적지만 잦은 전체 무효화는 비용과 부하가 큽니다. 운영 패턴으로는 `app.v2.js`처럼 버전 문자열을 붙여 새 객체로 인식되게 하는 방식이 권장됩니다.",
+      "explanation": "파일을 자주 갱신한다면 공식 문서는 버전 파일명을 주로 쓰라고 권합니다. 무효화해도 사용자의 로컬 캐시나 중간 프록시에 남은 옛 버전은 만료될 때까지 계속 보일 수 있지만, `app.v2.js`처럼 버전을 붙이면 어떤 파일이 반환될지 통제할 수 있고 버전 간 롤포워드·롤백이 쉬우며 무효화 비용도 들지 않습니다. 무효화는 매월 처음 1,000개 경로까지 무료이고 초과분에 과금되며, `/*`처럼 와일드카드가 든 경로는 파일 수와 무관하게 경로 1개로 셉니다.",
       "wrongExplanations": {
-        "1": "무효화에는 비용·부하 고려가 필요합니다.",
+        "1": "무료인 것은 매월 처음 1,000개 경로까지이며 초과분은 경로마다 과금됩니다.",
         "2": "TTL 0은 캐시 이점을 포기하고 오리진 부하를 키웁니다.",
         "3": "오리진 종류를 바꿔도 캐시 수명 문제는 남습니다."
       },
@@ -297,6 +309,10 @@
         {
           "title": "CloudFront 파일 무효화 — 비용과 대안",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html"
+        },
+        {
+          "title": "무효화 요금 — 월 1,000 경로 무료·와일드카드는 1경로",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PayingForInvalidation.html"
         }
       ],
       "verified": true
@@ -341,7 +357,7 @@
         "리전과 무관하게 아무 곳이나 가능"
       ],
       "correct": 0,
-      "explanation": "CloudFront에 연결할 ACM 인증서는 us-east-1에서 발급해야 합니다. 다른 리전에서 발급하면 CloudFront의 인증서 선택 목록에 나타나지 않습니다. ALB·NLB·API Gateway는 리소스와 같은 리전의 인증서를 씁니다.",
+      "explanation": "CloudFront에 연결할 ACM 인증서는 us-east-1에서 발급해야 합니다. 다른 리전에서 발급하면 CloudFront의 인증서 선택 목록에 나타나지 않습니다. ALB·NLB·리전형 API Gateway는 리소스와 같은 리전의 인증서를 쓰고, 엣지 최적화 API Gateway 사용자 지정 도메인은 us-east-1의 인증서를 씁니다.",
       "wrongExplanations": {
         "1": "콘솔 리전과 무관합니다.",
         "2": "오리진 리전이 아니라 us-east-1 고정입니다.",
@@ -351,6 +367,10 @@
         {
           "title": "CloudFront 사용자 지정 SSL 인증서 요구 사항",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html"
+        },
+        {
+          "title": "API Gateway 엣지 최적화 사용자 지정 도메인 — us-east-1 인증서",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-edge-optimized-custom-domain-name.html"
         }
       ],
       "verified": true

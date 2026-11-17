@@ -38,7 +38,9 @@ sources:
     url: https://docs.aws.amazon.com/verifiedpermissions/latest/userguide/what-is-avp.html
   - title: Resource control policies (RCPs)
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps.html
-lastVerified: 2026-11-09
+  - title: AWS global condition context keys
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
+lastVerified: 2026-11-17
 ---
 
 # 권한 부여 전략 (제어 설계·ABAC와 RBAC·최소 권한·실패 분석·의도하지 않은 권한)
@@ -221,7 +223,7 @@ AWS 밖에서 도는 서버·컨테이너·애플리케이션이 **같은 IAM �
 - ⚠️⚠️ **RBAC의 「역할」은 IAM 역할이 아닙니다** — 공식이 "a person's job function, or role, **which is distinct from an IAM role**"이라고 못박습니다. IAM에는 RBAC 모델을 돕는 **직무별 AWS 관리형 정책**이 따로 있습니다
 - ⚠️ **기업 디렉터리 속성을 그대로 쓸 수 있습니다** — **SAML 또는 OIDC 공급자가 세션 태그를 전달**하도록 구성하면, 직원이 연동해 들어올 때 IAM이 그 속성을 결과 보안 주체에 적용합니다. 그러면 **IdP에서 속성을 바꾸는 것만으로** AWS 권한이 따라 바뀝니다
 - 태그 기반 접근 제어의 조건 키는 **`aws:ResourceTag/키`**, **`aws:RequestTag/키`**, **`aws:TagKeys`**이고, 보안 주체 쪽 값은 **`aws:PrincipalTag/키`**로 참조합니다
-- ⚠️ **AWS는 둘을 공존시킵니다** — "ABAC로 전부 바꿔라"가 아니라 기존 RBAC 옆에 ABAC를 더하는 길이 공식 권고입니다
+- ⚠️ **둘은 함께 쓸 수 있습니다** — 다만 공식 페이지가 적는 것은 **ABAC가 전통 RBAC 모델에 비해 갖는 이점**까지이고 어느 쪽으로 가라는 권고 문구는 그 페이지에 없습니다. 공존 여부는 조직의 설계 판단입니다
 
 ### 3) 최소 권한으로 설계한다 — 겹칠 때의 결과 (기술 4.2.3) {#least-privilege}
 
@@ -513,3 +515,4 @@ AWS 밖에서 도는 서버·컨테이너·애플리케이션이 **같은 IAM �
 13. What is AWS Identity and Access Management Roles Anywhere? — `docs.aws.amazon.com/rolesanywhere/latest/userguide/introduction.html` (2026-11-09 확인)
 14. What is Amazon Verified Permissions? — `docs.aws.amazon.com/verifiedpermissions/latest/userguide/what-is-avp.html` (2026-11-09 확인)
 15. Resource control policies (RCPs) — `docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_rcps.html` (2026-11-09 확인)
+16. AWS global condition context keys — `docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html` (2026-11-17 확인)

@@ -22,7 +22,7 @@ sources:
     url: https://aws.amazon.com/directconnect/pricing/pay-as-you-go/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink
@@ -145,7 +145,7 @@ Interface Endpoint의 시간 요금은 **엔드포인트가 프로비저닝된 A
 
 > 🧠 원리: 왜 Gateway Endpoint와 Interface Endpoint는 지원 서비스 범위가 다를까요?
 > Gateway Endpoint는 VPC 라우팅 테이블에 경로를 추가해 트래픽을 AWS 내부 경로로 분기하는 방식으로 동작합니다. 이 구조는 S3·DynamoDB처럼 리전 단위로 단일 엔드포인트를 제공하는 서비스에만 적용할 수 있습니다.
-> Interface Endpoint(PrivateLink)는 VPC 내부에 ENI를 생성해 서비스마다 프라이빗 IP를 부여하는 방식으로, 200개 이상의 다양한 서비스에 적용 가능합니다. 대신 ENI 유지 비용과 데이터 처리 요금이 발생합니다.
+> Interface Endpoint(PrivateLink)는 VPC 내부에 ENI를 생성해 서비스마다 프라이빗 IP를 부여하는 방식으로, 다수의 AWS 서비스에 적용 가능합니다. 대신 AZ별 시간 요금과 데이터 처리 요금이 발생합니다.
 > S3·DynamoDB는 두 방식 모두 적용 가능하지만 Gateway 방식이 무료이므로, 추가 비용 없이 NAT를 우회할 수 있는 첫 번째 선택지가 됩니다.
 
 ### 4) CloudFront로 오리진 전송 비용 절감 {#cloudfront-origin-cost}
@@ -357,7 +357,7 @@ ELB 요금은 **시간당 기본 요금 + 용량 단위**입니다. 용량 단�
 1. **"프라이빗 서브넷이니까 NAT Gateway를 반드시 써야 한다."** → S3·DynamoDB는 Gateway Endpoint가 있으면 NAT 없이도 접근 가능합니다. NAT는 인터넷 트래픽 전용이고, AWS 서비스 접근에 NAT를 쓰는 것은 불필요한 비용입니다.
    (원리: §2 — NAT는 목적지를 구분하지 않고 통과하는 모든 트래픽에 처리 요금을 부과하므로, 라우팅 테이블에서 Gateway Endpoint로 먼저 분기하면 NAT 처리 대상에서 제외된다.)
 
-2. **"Multi-AZ RDS를 쓰면 교차 AZ 전송 비용이 없다."** → Multi-AZ RDS의 스탠바이는 장애조치용이고 일반 쿼리는 프라이머리에만 갑니다. 그러나 애플리케이션 레이어(EC2, Lambda)가 다른 AZ에 있다면 교차 AZ 트래픽이 발생하고 $0.01/GB가 청구됩니다.
+2. **"Multi-AZ RDS를 쓰면 교차 AZ 전송 비용이 없다."** → Multi-AZ DB 인스턴스 배포의 스탠바이는 장애조치용이라 쿼리는 프라이머리에만 갑니다(리더가 읽기를 받는 것은 Multi-AZ DB 클러스터 배포입니다). 그러나 애플리케이션 레이어(EC2, Lambda)가 다른 AZ에 있다면 교차 AZ 트래픽이 발생하고 $0.01/GB가 청구됩니다.
    (원리: §1 — 장애 격리를 위해 AZ를 분리하면 AZ 경계를 넘는 트래픽 비용이 발생하며, 이는 RDS 내부 복제가 아닌 앱↔DB 구간에서도 동일하게 적용된다.)
 
 3. **"VPC 피어링이 Transit Gateway보다 항상 싸다."** → VPC 수가 많아지면 피어링은 N(N-1)/2개의 연결이 필요하고 운영 복잡도가 폭발합니다. 데이터 전송량이 많고 VPC가 수십 개면 Transit Gateway의 $0.02/GB 처리 요금을 내더라도 총비용이 낮아질 수 있습니다.

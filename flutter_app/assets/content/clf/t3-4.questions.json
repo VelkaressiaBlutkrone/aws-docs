@@ -318,8 +318,8 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
         },
         {
-          "title": "CLF-C02 공식 시험 가이드(한국어) — 데이터베이스 서비스",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 작업 3.4: 데이터베이스 서비스 식별",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true

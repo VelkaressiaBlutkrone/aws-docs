@@ -319,7 +319,7 @@
         "쿼리 결과는 세션 종료 시 삭제되고 과금되지 않는다"
       ],
       "correct": 0,
-      "explanation": "Logs Insights는 계정당 동시 쿼리 100개, 쿼리 타임아웃 60분, 결과 보존 7일 제약이 있고 스캔한 데이터량을 기준으로 과금됩니다. 쿼리 언어는 Logs Insights QL과 OpenSearch PPL, OpenSearch SQL 세 가지를 지원하며 명령은 파이프로 연결합니다.",
+      "explanation": "Logs Insights는 쿼리 타임아웃 60분, 결과 보존 7일 제약이 있고 스캔한 데이터량을 기준으로 과금됩니다. 쿼리 언어는 Logs Insights QL과 OpenSearch PPL, OpenSearch SQL 세 가지를 지원하며 명령은 파이프로 연결합니다. 계정당 동시 쿼리 100개는 Logs Insights QL 기준이고(대시보드에 올린 쿼리 포함) OpenSearch PPL과 SQL은 각 15개입니다.",
       "wrongExplanations": {
         "1": "결과 보존은 7일이며 과금은 실행 횟수가 아니라 스캔한 데이터량 기준입니다.",
         "2": "30일은 CloudWatch 경보 이력의 보존 기간입니다. 로그 그룹 수로 과금되는 구조도 아닙니다.",
@@ -331,7 +331,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         },
         {
-          "title": "StartQuery API — 계정당 동시 쿼리 100개",
+          "title": "StartQuery API — 동시 쿼리 제한",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html"
         }
       ],
@@ -411,7 +411,7 @@
         "대시보드는 임베드가 가능하고, Quick Sight는 콘솔에서만 볼 수 있다"
       ],
       "correct": 0,
-      "explanation": "CloudWatch 대시보드는 콘솔의 사용자 지정 홈 화면으로 여러 리전에 흩어진 리소스의 지표와 경보를 한 화면에서 보는 실시간 상태판입니다. Quick Sight는 데이터 소스에 연결해 대시보드를 만들고 애플리케이션에 임베드하는 데이터셋 기반 BI 도구입니다. 확인된 연동 예는 CUR을 Athena로 쿼리해 데이터셋으로 쓰는 구성입니다.",
+      "explanation": "CloudWatch 대시보드는 콘솔의 사용자 지정 홈 화면으로 여러 리전에 흩어진 리소스의 지표와 경보를 한 화면에서 보는 실시간 상태판입니다. Quick Sight는 데이터 소스에 연결해 대시보드를 만들고 애플리케이션에 임베드하는 데이터셋 기반 BI 도구입니다.",
       "wrongExplanations": {
         "1": "CloudWatch 대시보드는 여러 리전에 흩어진 리소스를 한 화면에서 볼 수 있습니다.",
         "2": "CloudWatch 대시보드에는 Logs Insights 쿼리와 경보도 올릴 수 있습니다.",
@@ -534,7 +534,7 @@
       "explanation": "EventBridge가 받는 이벤트는 AWS API Call via CloudTrail이므로 로깅 중인 추적이 있어야 하고, S3 객체 쓰기는 데이터 이벤트라서 그 버킷의 데이터 이벤트를 캡처하도록 설정돼 있어야 합니다. 그 다음 EventBridge 규칙이 이벤트를 매칭해 SageMaker Pipelines나 Step Functions를 호출합니다. 더 간단한 대안은 S3 버킷의 EventBridge 알림으로 ObjectCreated를 직접 받는 구성입니다.",
       "wrongExplanations": {
         "1": "Model Monitor는 기준선 대비 드리프트를 감시하는 수단이며 S3 업로드 감지 도구가 아닙니다.",
-        "2": "CloudTrail Lake는 2026-05-31부터 신규 고객에게 닫혔고 이 경로의 전제 조건도 아닙니다. 필요한 것은 추적입니다.",
+        "2": "CloudTrail Lake는 이 경로의 전제 조건이 아닙니다. EventBridge가 받는 것은 추적이 기록한 API 호출 이벤트입니다.",
         "3": "Pipelines는 EventBridge 대상으로서 StartPipelineExecution이 호출되며 추적 ARN을 파라미터로 받지 않습니다."
       },
       "sources": [
@@ -991,7 +991,7 @@
       "skill": "비용 분석 도구의 기능(예: AWS Cost Explorer, AWS Billing and Cost Management, AWS Trusted Advisor)(K5)",
       "section": "cost-optimization",
       "difficulty": "applied",
-      "stem": "SageMaker 추론 비용 최적화 모범 사례에서 약정 할인을 구매하기 전에 해야 할 일로 제시된 것은 무엇인가?",
+      "stem": "AWS 기계 학습 블로그의 SageMaker 비용 분석 글이 약정 할인을 구매하기 전에 해야 할 일로 제시하는 것은 무엇인가?",
       "options": [
         "인스턴스를 먼저 적정 규모로 조정한다",
         "모든 엔드포인트를 서버리스로 전환한다",
@@ -999,7 +999,7 @@
         "Trusted Advisor 점검을 끄고 Cost Explorer만 쓴다"
       ],
       "correct": 0,
-      "explanation": "문서가 제시하는 순서는 Savings Plans를 사기 전에 먼저 인스턴스를 적정 규모로 조정하는 것입니다. 과다 프로비저닝된 상태로 약정하면 불필요한 사용량에 할인을 묶어 두게 됩니다. 약정 후보는 오래 실행될 구성요소를 골라 분석하고 Cost Explorer에서 권장 약정 수준을 봅니다.",
+      "explanation": "블로그가 제시하는 순서는 Savings Plans를 사기 전에 먼저 인스턴스를 적정 규모로 조정하는 것입니다. 이 순서는 블로그에 있고 SageMaker 추론 비용 최적화 문서는 적지 않습니다. 과다 프로비저닝된 상태로 약정하면 불필요한 사용량에 할인을 묶어 두게 됩니다. 약정 후보는 오래 실행될 구성요소를 골라 분석하고 Cost Explorer에서 권장 약정 수준을 봅니다.",
       "wrongExplanations": {
         "1": "서버리스 전환은 간헐적이고 예측 불가한 트래픽에 맞는 선택이며 모든 엔드포인트에 적용할 전제 조건이 아닙니다.",
         "2": "비용 할당 태그는 비활성화하면 Cost Explorer에서 비용을 나눠 볼 수 없게 됩니다.",
@@ -1031,9 +1031,9 @@
         "SageMaker Model Monitor"
       ],
       "correct": 0,
-      "explanation": "SageMaker Profiler는 2027-06-30에 지원이 종료될 예정이며, Profiler 문서는 CPU와 GPU, 메모리, 디스크 같은 시스템 자원 모니터링을 CloudWatch로 대체하라고 안내합니다. 참고로 지표 문서가 100밀리초 단위 프로파일링에 권하는 Debugger도 신규 고객에게 닫혀 있습니다.",
+      "explanation": "SageMaker Profiler는 2027-06-30에 지원이 종료될 예정이며, Profiler 문서는 CPU와 GPU, 메모리, 디스크 같은 시스템 자원 모니터링을 CloudWatch로 대체하라고 안내합니다. 참고로 Debugger도 신규 고객에게 닫혀 있습니다.",
       "wrongExplanations": {
-        "1": "Debugger는 신규 고객에게 닫혀 있어 대체 경로가 될 수 없습니다.",
+        "1": "Profiler 공지가 시스템 자원 모니터링의 대체로 안내하는 것은 CloudWatch입니다.",
         "2": "X-Ray는 요청 단위 추적 도구이며 훈련 인스턴스의 시스템 자원 모니터링 대체로 안내되지 않습니다.",
         "3": "Model Monitor는 데이터와 모델 품질 드리프트 감시 수단이고 역시 신규 고객에게 닫혀 있습니다."
       },

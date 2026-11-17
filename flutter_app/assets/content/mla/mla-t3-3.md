@@ -28,9 +28,13 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-git-branch-approach/git-branching-strategies.html
   - title: MLOPS04-BP01 Establish MLOps practices (Machine Learning Lens)
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html
+  - title: Pipelines steps — 단계 병렬성·데이터 의존성·DependsOn (공식 문서)
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps.html
+  - title: MLPERF06-BP05 Establish an automated re-training framework (Machine Learning Lens)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # CI/CD 파이프라인 설정 (CodePipeline·CodeBuild·CodeDeploy·SageMaker Pipelines·재훈련)

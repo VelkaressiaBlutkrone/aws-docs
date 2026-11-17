@@ -24,7 +24,8 @@
         "3": "전용 호스트는 BYOL(Bring Your Own License) 라이선스 요건이나 규제 컴플라이언스를 위한 옵션으로, 단순 개발·테스트 목적에는 비용이 과도합니다."
       },
       "sources": [
-        { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
+        { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" },
+        { "title": "온디맨드 인스턴스 (공식) — 중단할 수 없는 단기·불규칙 워크로드에 권장", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-on-demand-instances.html" }
       ],
       "verified": true
     },
@@ -266,7 +267,8 @@
         "3": "Predictive Scaling은 과거 부하 데이터를 분석해 일간·주간 패턴을 찾아 수요를 예측하고 선제적으로 용량을 늘리는 전략입니다. 초기화가 오래 걸려 동적 스케일링의 반응 지연이 성능에 드러나는 애플리케이션에 특히 적합합니다. 이 지문은 스케일 시각이 이미 고정돼 있어 예측 자체가 필요 없으므로 Scheduled Scaling으로 충분합니다."
       },
       "sources": [
-        { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" }
+        { "title": "Amazon EC2 예약 인스턴스 개요 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html" },
+        { "title": "Auto Scaling 예약된 조정 (공식) — 정해진 시각에 용량을 바꾼다", "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html" }
       ],
       "verified": true
     },

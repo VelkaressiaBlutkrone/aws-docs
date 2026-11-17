@@ -10,7 +10,7 @@ coversTasks:
 sources:
   - title: What is AWS Glue DataBrew? (공식 문서)
     url: https://docs.aws.amazon.com/databrew/latest/dg/what-is.html
-  - title: What is Amazon Quick? (공식 문서)
+  - title: What is AWS Quick? (공식 문서)
     url: https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
   - title: Importing data into SPICE (공식 문서)
     url: https://docs.aws.amazon.com/quick/latest/userguide/spice.html
@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/redshift/latest/dg/c_Window_functions.html
   - title: DEA-C01 공식 시험 가이드 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain3.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 분석 (시각화·정리·뷰·Spark 노트북·SQL 집계)
@@ -83,7 +83,7 @@ lastVerified: 2026-10-20
 
 **AWS Glue DataBrew** 는 코드 없이 데이터를 정리·정규화하는 **시각적 데이터 준비 도구**입니다. 프로젝트 워크스페이스에서 데이터를 격자형 인터페이스로 보며 **값 분포와 차트로 프로파일을 파악**하고, **250개가 넘는 사전 제작 변환**을 클릭으로 적용하며, 변환 단계를 **레시피**로 저장해 다른 데이터셋에 재사용합니다. **서버리스**라 클러스터를 만들거나 인프라를 관리하지 않습니다.
 
-**Amazon Quick과 Quick Sight — 이름이 바뀌었습니다.** 공식 문서는 **Amazon Quick이 Amazon QuickSight에서 진화했고, QuickSight는 Quick 안의 기능인 Amazon Quick Sight로 계속되며, 기존 QuickSight API·SDK·통합은 변경 없이 동작**한다고 설명합니다. 시험 가이드 Skill 문구는 아직 "Amazon QuickSight"를 쓰므로, **보기 표기가 QuickSight여도 같은 BI 기능으로 취급**하세요.
+**Amazon Quick과 Quick Sight — 이름이 바뀌었습니다.** 공식 문서는 **Amazon Quick이 Amazon QuickSight에서 진화했고, QuickSight는 Quick 안의 기능인 Amazon Quick Sight로 계속되며, 기존 QuickSight API·SDK·통합은 변경 없이 동작**한다고 설명합니다. 시험 가이드 Skill 문구는 아직 "Amazon QuickSight"를 쓰므로, **보기 표기가 QuickSight여도 같은 BI 기능으로 취급**하세요. ⚠️ 제품 문서의 표기는 **AWS Quick**(사용자 안내서 제목이 "What is AWS Quick?")이고, 이 사이트 본문은 **시험 가이드 표기인 Amazon Quick**을 씁니다.
 
 **SPICE vs 직접 쿼리**
 
@@ -93,7 +93,7 @@ lastVerified: 2026-10-20
 
 **새로 고침** — SPICE 데이터셋은 **전체 새로 고침이 기본**이고, Redshift·Athena·PostgreSQL·Snowflake 같은 **SQL 기반 소스는 look-back 윈도우 안에서만 증분 새로 고침**을 할 수 있습니다. ⚠️ **데이터베이스 스키마가 바뀌면 Quick Sight가 자동으로 감지하지 못해 ingestion이 실패**하므로, 데이터셋을 편집·저장해 스키마를 갱신해야 합니다.
 
-**과금 구조** — aws.com/quick에서 가입(Free·Plus 플랜)하거나 AWS 콘솔로 프로비저닝(IAM Identity Center 또는 IAM Federation, **사용자별 구독**, 표준 AWS 청구)합니다. **SPICE 용량은 별도로 구매·반납하는 자원**입니다. 사용자 유형별 단가 숫자는 자료마다 달라 이 문서에서는 다루지 않습니다 — **요금 단가를 묻는 문항은 피하세요.**
+**과금 구조** — aws.com/quick에서 가입(Free·Plus 플랜)하거나 AWS 콘솔로 프로비저닝(IAM Identity Center 또는 IAM Federation, **사용자별 구독**, 표준 AWS 청구)합니다. **SPICE 용량은 별도로 구매·반납하는 자원**입니다. 사용자 유형별 단가 숫자는 자료마다 달라 이 문서에서는 다루지 않습니다 — **단가는 외우지 않아도 됩니다.**
 
 ### 2) 데이터 확인·정리 도구 {#verify-clean}
 
@@ -268,10 +268,10 @@ Amazon Athena는 **리소스를 계획·구성·관리하지 않고** Apache Spa
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. What is AWS Glue DataBrew? — https://docs.aws.amazon.com/databrew/latest/dg/what-is.html
-2. What is Amazon Quick? — https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
+2. What is AWS Quick? — https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
 3. Importing data into SPICE (Amazon Quick) — https://docs.aws.amazon.com/quick/latest/userguide/spice.html
 4. Refreshing imported data (Amazon Quick) — https://docs.aws.amazon.com/quick/latest/userguide/refreshing-imported-data.html
 5. Data preparation steps (Amazon Quick) — https://docs.aws.amazon.com/quick/latest/userguide/data-prep-steps.html

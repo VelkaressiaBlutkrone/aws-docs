@@ -24,7 +24,9 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html
   - title: CloudWatch Logs·S3로 모델 호출 모니터링 (공식)
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
-lastVerified: 2026-11-06
+  - title: 로그에 대한 경보 — Log Alarm 방식과 지표 필터 방식 (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Alarm-On-Logs.html
+lastVerified: 2026-11-17
 ---
 
 # CloudWatch Logs·Logs Insights·구독 필터·에이전트
@@ -122,6 +124,7 @@ aws logs put-retention-policy \
 
 - 로그 그룹에 들어오는 이벤트를 **필터 패턴**으로 검사해, 일치하면 지정한 CloudWatch **지표값을 증가/게시**합니다(예: `ERROR` 문자열 발생 횟수를 카운트).
 - 이렇게 만든 지표에 일반 CloudWatch 경보를 걸어 **로그 기반 알림**을 구성합니다.
+- 로그 데이터에 경보를 거는 방법은 **둘**입니다. 위의 **지표 필터 + 지표 경보** 외에, **Logs Insights 쿼리를 일정에 따라 실행**해 집계 결과를 임계값과 직접 비교하는 **Log Alarm**이 있습니다(지표 필터를 중간 단계로 두지 않습니다).
 - **지표 필터는 적용 시점 이후의 신규 로그 이벤트에만 적용**됩니다 — 과거 로그를 소급해 채우지 않습니다.
 
 **운영 절차 — 에러 로그를 경보로 연결하는 흐름:**
@@ -232,7 +235,7 @@ fields @timestamp, statusCode
 
 ### 7) 임베디드 지표 형식(EMF) — 간단 언급
 
-> **EMF(Embedded Metric Format)**: 애플리케이션이 **구조화된 JSON 로그 한 줄**을 CloudWatch Logs에 기록하면, CloudWatch가 그 로그에서 **고대수(custom) 지표를 자동 추출**하는 형식입니다.
+> **EMF(Embedded Metric Format)**: 애플리케이션이 **구조화된 JSON 로그 한 줄**을 CloudWatch Logs에 기록하면, CloudWatch가 그 로그에서 **사용자 지정(custom) 지표를 자동 추출**하는 형식입니다.
 
 - 로그와 지표를 한 번의 기록으로 동시에 남길 수 있어, 별도의 `PutMetricData` 호출 없이 고해상도·고카디널리티 지표를 게시할 때 유용합니다.
 - 서버리스(Lambda)·컨테이너 환경에서 애플리케이션 내부 지표를 효율적으로 내보내는 패턴으로 쓰입니다.
@@ -319,7 +322,7 @@ fields @timestamp, statusCode
 
 <details><summary>정답 보기</summary>
 
-로그 그룹에 **지표 필터(Metric Filter)**를 만들어 패턴 `ERROR`를 CloudWatch 지표(예: `ErrorCount`)로 변환합니다. 그 지표에 **CloudWatch 경보**를 걸어(예: 5분 합계가 임계값 초과 시 ALARM) **SNS**로 알림을 보냅니다. 즉 `로그 → 지표 필터 → 지표 → 경보 → SNS` 순서입니다. 단, 지표 필터는 생성 이후의 신규 로그에만 적용됩니다.
+로그 그룹에 **지표 필터(Metric Filter)**를 만들어 패턴 `ERROR`를 CloudWatch 지표(예: `ErrorCount`)로 변환합니다. 그 지표에 **CloudWatch 경보**를 걸어(예: 5분 합계가 임계값 초과 시 ALARM) **SNS**로 알림을 보냅니다. 즉 `로그 → 지표 필터 → 지표 → 경보 → SNS` 순서입니다. 단, 지표 필터는 생성 이후의 신규 로그에만 적용됩니다. 같은 요건은 Logs Insights 쿼리를 일정에 따라 실행해 결과를 임계값과 직접 비교하는 **Log Alarm**으로도 구성할 수 있습니다.
 </details>
 
 **Q2.** 여러 마이크로서비스의 로그를 실시간으로 한곳에 모아 OpenSearch에서 검색하고, 동시에 S3에 장기 보관하려 합니다. CloudWatch Logs에서 무엇을 사용하나요?

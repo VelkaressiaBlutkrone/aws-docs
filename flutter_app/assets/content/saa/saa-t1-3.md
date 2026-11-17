@@ -40,7 +40,7 @@ sources:
     url: https://aws.amazon.com/network-firewall/faqs/
   - title: AWS 서비스 엔드포인트 — 리전·글로벌·FIPS·듀얼스택 (공식)
     url: https://docs.aws.amazon.com/general/latest/gr/rande.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # VPC 보안 네트워크 — 서브넷·SG·NACL·NAT·엔드포인트
@@ -142,7 +142,7 @@ AWS는 각 서브넷에서 **5개 IP를 예약**합니다 — 첫 번째(네트�
 | **인터넷 게이트웨이(IGW)** | VPC와 인터넷 연결 | 양방향 |
 | **라우트 테이블** | 목적지별 다음 홉 결정, 서브넷에 연결 | — |
 | **NAT 게이트웨이** | 프라이빗 서브넷 → 인터넷 아웃바운드 (관리형) | 아웃바운드 전용 |
-| **NAT 인스턴스** | NAT 게이트웨이 역할을 EC2로 직접 구현 (레거시) | 아웃바운드 전용 |
+| **NAT 인스턴스** | NAT 게이트웨이 역할을 EC2로 직접 구현 (레거시) | 아웃바운드 NAT가 본래 용도 — 공식 비교표는 포트 포워딩·배스천 서버 구성도 지원한다고 적는다 |
 | **Egress-Only IGW** | IPv6 전용 아웃바운드 게이트웨이 | 아웃바운드 전용 |
 
 **NAT 게이트웨이 vs NAT 인스턴스**
@@ -232,7 +232,7 @@ VPC 엔드포인트에는 IAM 리소스 정책(엔드포인트 정책)을 부착
 > 🧠 원리: 왜 S3·DynamoDB만 Gateway Endpoint를 지원하고 다른 서비스는 Interface Endpoint를 사용할까요?
 > Gateway Endpoint는 라우트 테이블에 prefix list를 삽입하는 방식으로 동작합니다 — 서비스의 IP 범위가 고정적이고 사전에 알려져야 prefix list로 표현할 수 있습니다.
 > S3와 DynamoDB는 AWS가 관리하는 공용 IP 대역을 쓰는 서비스로, 그 대역을 prefix list로 노출해 라우트 테이블에 박는 방식이 기술적으로 가능했습니다.
-> Interface Endpoint(PrivateLink)는 반대로 서비스 측에 ENI를 하나 생성해 VPC 내부 사설 IP를 부여하는 방식이라 어떤 서비스든 적용 가능하지만, ENI 유지 비용이 발생합니다.
+> Interface Endpoint(PrivateLink)는 반대로 서비스 측에 ENI를 하나 생성해 VPC 내부 사설 IP를 부여하는 방식이라 어떤 서비스든 적용 가능하지만, AZ별 시간 요금과 데이터 처리 요금이 발생합니다.
 
 ### 5) VPC 피어링 vs Transit Gateway — 연결 아키텍처 보안 관점 {#peering-tgw}
 
@@ -383,10 +383,10 @@ SG·NACL은 IP·포트·프로토콜 수준의 필터입니다. 도메인 이름
 
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
-1. **"NAT 게이트웨이로 인바운드 트래픽을 처리할 수 있다."** → NAT는 **아웃바운드 전용**입니다. 프라이빗 서브넷의 EC2에 외부에서 직접 접근하려면 ALB(퍼블릭)를 앞에 두거나 VPN/Direct Connect를 사용합니다.
+1. **"NAT 게이트웨이로 인바운드 트래픽을 처리할 수 있다."** → NAT 게이트웨이는 **아웃바운드 전용**이고, 공식 비교표가 포트 포워딩·배스천 서버를 **지원하지 않음**으로 적습니다(그 둘을 구성할 수 있는 쪽은 NAT 인스턴스입니다). 프라이빗 서브넷의 EC2에 외부에서 직접 접근하려면 ALB(퍼블릭)를 앞에 두거나 VPN/Direct Connect를 사용합니다.
    (원리: §2 — NAT는 SNAT으로 사설 IP를 퍼블릭 IP로 치환해 내보내는 역할이라 외부에서 먼저 연결을 시작하면 맵핑할 내부 IP를 알 수 없어 인바운드를 처리하지 못한다.)
 
-2. **"보안 그룹으로 특정 IP를 차단(Deny)할 수 있다."** → SG는 Allow 규칙만 지원합니다. IP 차단은 반드시 **NACL**을 사용합니다.
+2. **"보안 그룹으로 특정 IP를 차단(Deny)할 수 있다."** → SG는 Allow 규칙만 지원합니다. 서브넷 수준에서 특정 IP를 차단하려면 **NACL**을 사용합니다(웹 요청이라면 WAF의 IP 집합 규칙으로도 차단할 수 있습니다).
    (원리: §3 — SG는 Allow 전용 화이트리스트 모델로 설계돼 Deny 역할은 NACL에 위임하는 계층 분리 구조다.)
 
 3. **"서브넷 이름이 Public이면 퍼블릭이다."** → 퍼블릭·프라이빗 구분은 **라우트 테이블에 IGW 경로가 있는지**로 결정됩니다. 이름은 관계없습니다.

@@ -50,7 +50,8 @@
       },
       "sources": [
         { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" },
-        { "title": "Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성·준비 전까지 Pending (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html" }
+        { "title": "Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성·준비 전까지 Pending (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html" },
+        { "title": "Lambda 프로비저닝된 동시성 (공식) — 미리 초기화된 실행 환경으로 콜드 스타트를 줄인다", "url": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html" }
       ],
       "verified": true
     },
@@ -364,7 +365,8 @@
         "3": "API Gateway는 Lambda의 진입점 역할을 하는 것으로, Lambda가 외부 API나 RDS에 접근하는 네트워크 경로를 제공하지 않습니다. Lambda 자체의 VPC 설정과 NAT Gateway가 필요합니다."
       },
       "sources": [
-        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" }
+        { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" },
+        { "title": "Lambda 함수에 VPC 연결 (공식) — VPC에 연결한 함수의 인터넷 액세스", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html" }
       ],
       "verified": true
     }

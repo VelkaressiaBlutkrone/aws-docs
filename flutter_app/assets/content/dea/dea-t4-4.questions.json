@@ -213,7 +213,7 @@
       "explanation": "구독 필터는 Standard 클래스 로그 그룹에서만 지원됩니다. 또 로그 클래스는 생성 후 변경할 수 없고 두 클래스는 수집 비용만 다릅니다. IA 클래스는 임시 쿼리와 사후 포렌식 분석에 적합합니다.",
       "wrongExplanations": {
         "0": "IA는 기능 일부만 제공하는 클래스이며, 구독 필터 제약의 해결책으로 Logs Insights 질의가 제시되지 않습니다.",
-        "1": "보존이 짧게 고정된 쪽은 Lambda 로그를 S3나 Firehose로 보내는 용도의 Delivery 클래스에 대한 서술이며, 문서 간 일수 표현에 차이가 있습니다.",
+        "1": "보존이 짧게 고정된 쪽은 Lambda 로그를 S3나 Amazon Data Firehose로 보내는 용도의 Delivery 클래스입니다. 문제의 로그 그룹은 그 클래스가 아닙니다.",
         "3": "제약의 근거는 로그 클래스별 지원 기능이며 KMS 암호화 지원 여부가 아닙니다."
       },
       "sources": [
@@ -326,7 +326,7 @@
       "skill": "중앙 집중식 로깅 쿼리에 AWS CloudTrail Lake 사용(4.4.3)",
       "section": "cloudtrail-lake",
       "difficulty": "applied",
-      "stem": "여러 계정·리전의 CloudTrail 이벤트를 관리형 SQL로 중앙 조사하는 방안을 검토한다. 2026-10 현재 공식 문서를 근거로 고려해야 할 점은?",
+      "stem": "여러 계정·리전의 CloudTrail 이벤트를 관리형 SQL로 중앙 조사하는 방안을 신규 구축에서 검토한다. 고려해야 할 점은?",
       "options": [
         "CloudTrail Lake는 중단 예고가 없어 신규 구축에 그대로 권장된다",
         "CloudTrail Lake 중단에 따라 trail과 CloudTrail Insights도 함께 종료되므로 전면 재설계가 필요하다",

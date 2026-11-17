@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html
   - title: DEA-C01 공식 시험 가이드 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain2.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 모델·스키마 진화 설계 (테이블 설계·스키마 변환·계보·벡터화)
@@ -264,7 +264,7 @@ Lake Formation에서 "스키마 설계"는 **Data Catalog의 데이터베이스�
 
 ## 🧪 자가 점검
 
-> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t2-4.questions.json` — 사람 검수 전이라 사이트에는 노출되지 않습니다)
+> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t2-4.questions.json`)
 
 **Q1.** Redshift에서 큰 팩트 테이블이 큰 디멘션 테이블과 `customer_id`로 자주 조인되고, 쿼리 대부분이 최근 30일 범위 조건을 씁니다. 어떻게 설계하나요?
 
@@ -314,7 +314,7 @@ Parquet의 **기본은 이름 기준 접근이라 이름 변경이 불가**합�
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. Distribution styles (Amazon Redshift) — https://docs.aws.amazon.com/redshift/latest/dg/c_choosing_dist_sort.html
 2. Choose the best distribution style (Amazon Redshift) — https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-best-dist-key.html

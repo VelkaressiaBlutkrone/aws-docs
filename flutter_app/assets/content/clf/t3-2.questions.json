@@ -222,8 +222,8 @@
       },
       "sources": [
         {
-          "title": "Regions and Zones — 리전은 격리된 지리적 영역이며 리전마다 사용 가능한 서비스가 다를 수 있음",
-          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+          "title": "AWS Regions — 필요한 AWS 서비스·기능이 있는 리전을 고른다(리전마다 제공 서비스가 다를 수 있음)",
+          "url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html"
         }
       ],
       "verified": true
@@ -310,12 +310,12 @@
       },
       "sources": [
         {
-          "title": "리전 및 가용 영역 — 지연에 민감한 워크로드는 사용자에 가까운 리전 선택",
-          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+          "title": "AWS Regions — 사용자 대다수와 가까운 리전을 고르면 네트워크 지연이 줄어든다",
+          "url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions.html"
         },
         {
-          "title": "CLF-C02 공식 시험 가이드(한국어) — 리전 선택 기준",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드(한국어) — 작업 3.2: 다중 리전을 사용하는 경우(재해 복구·비즈니스 연속성·최종 사용자를 위한 짧은 지연 시간·데이터 주권)",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true
@@ -342,8 +342,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드(한국어) — 리전 선택 기준(가격 포함)",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "AWS Well-Architected COST07-BP02 Choose Regions based on cost — 리소스 요금은 리전마다 다를 수 있다",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_pricing_model_region_cost.html"
         }
       ],
       "verified": true
@@ -398,8 +398,8 @@
       },
       "sources": [
         {
-          "title": "Regions and Zones — 가용 영역은 하나 이상의 데이터센터로 구성된 리전 내 격리된 위치",
-          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"
+          "title": "AWS Regions and Availability Zones — 각 가용 영역은 하나 이상의 개별 데이터센터로 구성(전력·네트워킹·연결 이중화)",
+          "url": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"
         }
       ],
       "verified": true

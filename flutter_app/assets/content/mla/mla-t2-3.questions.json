@@ -319,8 +319,8 @@
       },
       "sources": [
         {
-          "title": "MLPERF04-BP02 Explore alternatives for performance improvement (Machine Learning Lens)",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp02.html"
+          "title": "Evaluating ML Models — 보조 출처(Amazon Machine Learning, 신규 사용자 중단된 구서비스 문서)",
+          "url": "https://docs.aws.amazon.com/machine-learning/latest/dg/evaluating_models.html"
         },
         {
           "title": "Metrics and validation (Autopilot) — 검증 데이터 분할",
@@ -403,7 +403,7 @@
         "죽은 ReLU — dead_relu"
       ],
       "correct": 1,
-      "explanation": "기울기 절댓값의 평균이 임계값 밑으로 떨어지거나 0이 되어 가중치가 거의 갱신되지 않는 문제가 기울기 소실이며, 해당 내장 규칙은 vanishing_gradient입니다. 너무 작은 가중치 초기화나 포화된 활성화 함수가 원인으로 제시됩니다.",
+      "explanation": "기울기 절댓값의 평균이 임계값 밑으로 떨어지거나 0이 되어 가중치가 거의 갱신되지 않는 문제가 기울기 소실이며, 해당 내장 규칙은 vanishing_gradient입니다. 너무 작은 가중치 초기화나 포화된 활성화 함수가 원인으로 제시됩니다. ⚠️ SageMaker Debugger는 신규 고객에게 닫혀 있습니다(기존 고객은 계속 사용).",
       "wrongExplanations": {
         "0": "기울기 폭주는 텐서에 무한대나 NaN이 나타나는 문제이며 너무 큰 가중치 초기화가 원인으로 제시됩니다.",
         "2": "학습 정체는 일정 시간 동안 새 텐서 출력이 없는 상황을 가리키며 발동 시 훈련을 중지할 수 있습니다.",
@@ -431,7 +431,7 @@
         "상한은 20개이고 규칙 평가 시간만큼 별도 인스턴스 요금이 붙는다"
       ],
       "correct": 1,
-      "explanation": "공식 문서는 한 훈련 작업에 붙일 수 있는 내장 규칙의 최대 개수가 20개라고 적고, 내장 규칙을 쓰는 데 추가 비용이 없다고 적습니다. SageMaker Debugger가 내장 규칙을 완전 관리하며 훈련 작업을 동기적으로 분석합니다.",
+      "explanation": "공식 문서는 한 훈련 작업에 붙일 수 있는 내장 규칙의 최대 개수가 20개라고 적고, 내장 규칙을 쓰는 데 추가 비용이 없다고 적습니다. SageMaker Debugger가 내장 규칙을 완전 관리하며 훈련 작업을 동기적으로 분석합니다. ⚠️ SageMaker Debugger는 신규 고객에게 닫혀 있습니다(기존 고객은 계속 사용).",
       "wrongExplanations": {
         "0": "상한은 10개가 아니라 20개이고, 내장 규칙 자체에는 추가 비용이 없습니다.",
         "2": "상한이 없다는 전제가 틀렸습니다. 공식은 20개를 최대로 적습니다.",

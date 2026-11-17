@@ -225,7 +225,8 @@
       },
       "sources": [
         { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
-        { "title": "Compute Optimizer 유휴 리소스 권장 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
+        { "title": "Compute Optimizer 유휴 리소스 권장 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" },
+        { "title": "Trusted Advisor 비용 최적화 점검 (공식) — Underutilized Amazon EBS volumes", "url": "https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html" }
       ],
       "verified": true
     },

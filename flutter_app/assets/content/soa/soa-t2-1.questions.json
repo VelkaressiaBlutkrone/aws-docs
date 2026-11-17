@@ -112,6 +112,10 @@
         {
           "title": "Amazon EC2 Auto Scaling 예약 조정",
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html"
+        },
+        {
+          "title": "예측 조정 작동 방식 — 최소 24시간 지표와 최근 최대 14일 분석",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/predictive-scaling-policy-overview.html"
         }
       ],
       "verified": true
@@ -129,7 +133,7 @@
         "시작 템플릿 버전이 1개뿐이다"
       ],
       "correct": 0,
-      "explanation": "예측 조정은 최소 24시간의 지표가 있어야 예측을 시작하며 14일 이상의 이력이 권장됩니다. 도입 초기에는 실제 조정 없이 예측만 수행하는 모드로 검증할 수 있습니다.",
+      "explanation": "예측 조정은 최소 24시간의 지표가 있어야 예측을 시작하며, 최근 최대 14일의 지표를 분석해 패턴을 찾습니다. 도입 초기에는 실제 조정 없이 예측만 수행하는 모드로 검증할 수 있습니다.",
       "wrongExplanations": {
         "1": "예측 조정은 동적 조정(타깃 추적 등)과 함께 쓰는 것이 권장 구성입니다.",
         "2": "AZ 수는 예측 생성 조건이 아닙니다.",
@@ -139,6 +143,10 @@
         {
           "title": "Amazon EC2 Auto Scaling 예측 조정",
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html"
+        },
+        {
+          "title": "예측 조정 작동 방식 — 최소 24시간 지표와 최근 최대 14일 분석",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/predictive-scaling-policy-overview.html"
         }
       ],
       "verified": true
@@ -185,7 +193,7 @@
       "correct": 0,
       "explanation": "쿨다운은 단순 조정 정책에서 직전 조정의 효과가 지표에 반영되기까지 추가 조정을 보류해 연속 조정으로 인한 과잉 확장을 방지합니다.",
       "wrongExplanations": {
-        "1": "워밍업은 새 인스턴스를 지표 집계·상태 확인에서 일시 제외하는 설정입니다.",
+        "1": "워밍업은 새 인스턴스가 준비될 때까지 집계 지표 기여에서 일시 제외하는 설정입니다.",
         "2": "유예 기간은 인스턴스 시작 직후 상태 확인을 보류하는 시간입니다.",
         "3": "스케일 인 보호는 특정 인스턴스가 스케일 인으로 종료되지 않게 보호합니다."
       },
@@ -193,6 +201,10 @@
         {
           "title": "Auto Scaling 조정 쿨다운",
           "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-cooldowns.html"
+        },
+        {
+          "title": "기본 인스턴스 워밍업 — 집계 지표 기여 보류",
+          "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html"
         }
       ],
       "verified": true
@@ -291,7 +303,7 @@
         "ELB 상태 확인을 비활성화한다"
       ],
       "correct": 0,
-      "explanation": "상태 확인 유예 기간(기본 300초)은 인스턴스 시작 직후 상태 확인을 보류해 부팅·초기화 중 조기 종료를 방지합니다. 초기화가 더 오래 걸리면 유예 기간을 그만큼 늘려야 합니다.",
+      "explanation": "상태 확인 유예 기간(콘솔 기본 300초, CLI·SDK 기본 0초)은 인스턴스 시작 직후 상태 확인을 보류해 부팅·초기화 중 조기 종료를 방지합니다. 초기화가 더 오래 걸리면 유예 기간을 그만큼 늘려야 합니다.",
       "wrongExplanations": {
         "1": "용량 상한은 교체 루프의 원인이 아닙니다.",
         "2": "목표값 조정은 조정 민감도만 바꿉니다.",

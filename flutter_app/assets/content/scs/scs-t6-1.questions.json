@@ -85,6 +85,14 @@
         {
           "title": "Control behavior and guidance - 동작 3종과 구현 수단",
           "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/control-behavior.html"
+        },
+        {
+          "title": "Detect and resolve drift in AWS Control Tower — 매일 정책 스캔",
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/drift.html"
+        },
+        {
+          "title": "Proactive controls — preCreate·preUpdate 후크 핸들러",
+          "url": "https://docs.aws.amazon.com/controltower/latest/controlreference/proactive-controls.html"
         }
       ],
       "verified": true
@@ -185,13 +193,13 @@
       "difficulty": "applied",
       "stem": "보안팀이 조직의 모든 계정에서 EC2 퍼블릭 AMI 사용을 금지하는 통제를 만들었습니다. 그런데 관리 계정의 관리자가 퍼블릭 AMI로 인스턴스를 띄우는 데 성공했고 서비스 연결 역할이 수행하는 작업도 막히지 않았습니다. 어떤 정책 유형을 썼고 무엇으로 바꿔야 합니까?",
       "options": [
-        "SCP 또는 RCP를 썼고 선언적 정책으로 바꿉니다. 공식 표가 관리 계정 영향과 서비스 연결 역할 통제를 선언적 정책만 예로 적습니다",
+        "SCP 또는 RCP를 썼고 선언적 정책으로 바꿉니다. 관리 계정 영향과 서비스 연결 역할 통제를 「예」로 적는 것은 선언적 정책뿐입니다",
         "SCP를 썼고 RCP로 바꿉니다. RCP는 리소스 쪽을 보므로 관리 계정의 사용자와 역할에도 적용되고 유효 정책도 볼 수 있습니다",
         "선언적 정책을 썼고 SCP로 바꿉니다. SCP가 API 수준에서 더 강하게 막습니다",
         "태그 정책을 썼고 SCP로 바꿉니다. 태그 정책은 권한을 거부하지 않습니다"
       ],
       "correct": 0,
-      "explanation": "공식이 선언적 정책 페이지에 권한 부여 정책과의 차이를 표로 싣습니다. 서비스 연결 역할 통제와 관리 계정 영향과 OU·계정의 유효 정책 보기가 모두 SCP 아니오, RCP 아니오, 선언적 정책 예입니다. 두 증상이 같은 뿌리입니다. SCP와 RCP는 API 수준에서 요청을 평가하는 권한 부여 정책이라 요청 평가에서 빠지는 주체에 닿지 못하고, 선언적 정책은 서비스의 제어 플레인에서 API 작업을 쓰지 않고 기준 구성을 시행하므로 그 둘에도 미칩니다. 공식이 드는 예시 정책이 허용된 이미지 설정입니다.",
+      "explanation": "공식이 두 페이지의 표로 권한 부여 정책과의 차이를 적습니다. 선언적 정책 페이지의 비교표가 서비스 연결 역할 통제를, 정책 관리 페이지의 요약 표가 관리 계정 영향과 OU·계정의 유효 정책 보기를 싣고 셋 모두 SCP 아니오, RCP 아니오, 선언적 정책 예입니다. 두 증상이 같은 뿌리입니다. SCP와 RCP는 API 수준에서 요청을 평가하는 권한 부여 정책이라 요청 평가에서 빠지는 주체에 닿지 못하고, 선언적 정책은 서비스의 제어 플레인에서 API 작업을 쓰지 않고 기준 구성을 시행하므로 그 둘에도 미칩니다. 공식이 드는 예시 정책이 허용된 이미지 설정입니다.",
       "wrongExplanations": {
         "1": "RCP도 관리 계정에 적용되지 않습니다.",
         "2": "방향이 반대입니다. 두 증상을 해소하는 쪽이 선언적 정책입니다.",
@@ -201,6 +209,10 @@
         {
           "title": "Declarative policies in AWS Organizations - 권한 부여 정책과의 비교",
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_declarative_policies.html"
+        },
+        {
+          "title": "Managing policies in AWS Organizations — 정책 유형 요약 표",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html"
         }
       ],
       "verified": true
@@ -412,19 +424,23 @@
         "멤버 계정 루트 사용자 하나를 남겨 두고 그 자격 증명을 금고에 보관하는 절차를 비상 접근 프로세스로 보여 줍니다",
         "관리자 그룹 전원에게 장기 상승 권한을 미리 부여해 둔 구성을 보여 줍니다",
         "파이프라인 장애 시 자동으로 권한을 상승시키는 자동화를 보여 줍니다",
-        "미리 구성한 비상 접근 프로세스를 보여 줍니다. 공식이 비상용 교차 계정 역할을 형태로 들고 장기 상승 권한 부여를 안티패턴으로 적습니다"
+        "미리 구성한 비상 접근 프로세스를 보여 줍니다. 미리 만들어 둔 비상용 교차 계정 역할과 승인 단계를 거치는 요청 절차가 그 형태입니다"
       ],
       "correct": 3,
-      "explanation": "Well-Architected 보안 원칙 SEC03-BP03이 자동화된 프로세스나 파이프라인 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스를 요구합니다. 목적은 최소 권한에 의존하면서도 필요할 때 올바른 수준의 접근을 얻게 하는 것이고, 공식이 드는 형태는 관리자가 요청을 검증하고 승인하는 프로세스이며 예로 비상용 교차 계정 역할을 듭니다. 안티패턴이 둘입니다. 기존 ID 구성에 장애가 났을 때 복구할 비상 프로세스가 없는 것과 문제 해결이나 복구를 위해 장기 상승 권한을 부여하는 것입니다. 이 모범 사례를 세우지 않으면 위험 수준이 중간입니다. 중앙 집중화 환경에서는 특권 세션이 그 역할의 상당 부분을 대신합니다. 최대 15분이고 작업 범위가 한정되며 sts:AssumeRoot 권한 보유자만 할 수 있습니다.",
+      "explanation": "Well-Architected 보안 원칙 SEC03-BP03이 자동화된 프로세스나 파이프라인 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스를 요구합니다. 목적은 최소 권한에 의존하면서도 필요할 때 올바른 수준의 접근을 얻게 하는 것이고, 공식이 드는 형태는 승인 단계를 거치는 요청 절차이고, 비상 접근 계정의 역할과 워크로드 계정의 교차 계정 역할을 미리 만들어 두라고 적습니다. 안티패턴으로는 문서화·시험이 안 된 프로세스, 평소 접근과 같은 시스템에 의존하는 설계, 비상이 아닌 상황에서의 사용, 부족한 로그를 듭니다. 중앙 집중화 환경에서는 특권 세션이 그 역할의 상당 부분을 대신합니다. 최대 15분이고 작업 범위가 한정되며 sts:AssumeRoot 권한 보유자만 할 수 있습니다.",
       "wrongExplanations": {
         "0": "관리 계정 루트는 중앙 집중화의 제거 대상이 아니라 남아 있고 MFA로 보호합니다. 다만 그 보관 절차는 계정 복구용이고 워크로드 비상 접근 프로세스로 공식이 드는 형태가 아닙니다.",
-        "1": "장기 상승 권한 부여가 공식이 적는 안티패턴입니다.",
-        "2": "승인 절차 없는 자동 상승은 검증과 승인을 전제하는 공식 형태와 어긋납니다."
+        "1": "장기 상승 권한을 미리 부여해 두는 것은 최소 권한 원칙에 어긋납니다. 같은 페이지가 관련 모범 사례로 SEC03-BP02 최소 권한 부여를 듭니다.",
+        "2": "승인 절차 없는 자동 상승은 승인 단계를 전제하는 공식 형태와 어긋납니다."
       },
       "sources": [
         {
           "title": "SEC03-BP03 Establish emergency access process",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html"
+        },
+        {
+          "title": "AssumeRoot — 특권 세션 최대 900초(15분)",
+          "url": "https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html"
         }
       ],
       "verified": true

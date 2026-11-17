@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/streams/latest/dev/troubleshooting-consumers.html
   - title: DEA-C01 공식 시험 가이드 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain3.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 파이프라인 유지 관리·모니터링 (로그·알림·성능·CloudTrail)
@@ -179,7 +179,7 @@ CloudTrail은 **"누가 어떤 API를 호출했는가"** 의 기록입니다. �
 
 **AWS Glue**
 
-- **로그** — **4.0 이하는 연속 로깅(`--enable-continuous-cloudwatch-log`)을 켜야** 하며 사용자 지정 로그 그룹·스트림 접두사·변환 패턴을 줄 수 있고 **기본 로그 그룹은 `/aws-glue/jobs/logs-v2`** 입니다. **5.0부터는 모든 작업이 실시간 로깅 기능**을 갖습니다. 버전을 지정하지 않고 만든 작업의 **기본 Glue 버전은 5.1** 입니다.
+- **로그** — **4.0 이하는 연속 로깅(`--enable-continuous-cloudwatch-log`)을 켜야** 하며 사용자 지정 로그 그룹·스트림 접두사·변환 패턴을 줄 수 있고 **기본 로그 그룹은 `/aws-glue/jobs/logs-v2`** 입니다. **5.0부터는 모든 작업이 실시간 로깅 기능**을 갖습니다. 버전을 지정하지 않고 만든 작업의 **기본 Glue 버전은 6.0** 입니다.
 - **Spark UI** — Apache Spark 웹 UI로 Glue ETL 작업을 모니터링·디버깅하며, 콘솔에서 **Spark 이벤트 로그를 쓸 S3 경로**를 입력합니다.
 - **작업 북마크** — **Enable**(상태를 갱신하며 새 데이터만 처리) · **Disable(기본값, 매번 전체 처리)** · **Pause**(상태를 갱신하지 않고 마지막 성공 실행 이후 증분 처리). S3 입력은 **객체의 마지막 수정 시각**으로 재처리 대상을 판단하므로 수정된 파일은 다시 처리됩니다.
 - **재시도·시간 제한·동시 실행** — `MaxRetries` 는 JobRun 실패 후 재시도 횟수, `Timeout` 은 실행이 자원을 쓸 수 있는 최대 시간이며 초과하면 **`TIMEOUT` 상태**가 됩니다. 작업 타임아웃은 **7일(10,080분) 미만**이어야 하고, 비워 두면 **Glue 4.0 이하는 2,880분, 5.0 이상은 480분**이 기본입니다. `MaxConcurrentRuns` **기본 1** 을 넘기면 오류가 반환됩니다.
@@ -197,9 +197,9 @@ CloudTrail은 **"누가 어떤 API를 호출했는가"** 의 기록입니다. �
 
 - **수집** — **CloudWatch 에이전트**로 AWS·온프레미스·멀티클라우드 호스트의 지표와 로그를 수집하고, Lambda를 포함한 많은 AWS 서비스는 CloudWatch와 **직접 통합**됩니다. 텍스트 기반 일반 로그와 **JSON 로그**를 받습니다.
 - **보존** — **기본은 무기한 저장**이며 로그 그룹마다 언제든 바꿀 수 있습니다. 비용 문항에서 자주 나오는 출발점입니다.
-- **로그 클래스** — **Standard**(전체 기능)와 **Infrequent Access(IA)**(부분 기능)이며 두 클래스는 **수집(ingestion) 비용만 다르고 생성 후 클래스를 바꿀 수 없습니다.** IA는 **구독 필터·메트릭 필터·Live Tail·`GetLogEvents`/`FilterLogEvents` 미지원**이고 **Logs Insights·교차 계정 기능은 지원**합니다.
+- **로그 클래스** — **Standard**(전체 기능)와 **Infrequent Access(IA)**(부분 기능 · ⚠️ 공식 현행 명칭은 **Essentials** 이고 `INFREQUENT_ACCESS`·`ESSENTIALS` 둘 다 입력으로 받습니다. **2026-12 부터 API 응답이 `ESSENTIALS`**)이며 두 클래스는 **수집(ingestion) 비용만 다르고 생성 후 클래스를 바꿀 수 없습니다.** IA는 **구독 필터·메트릭 필터·Live Tail·`GetLogEvents`/`FilterLogEvents` 미지원**이고 **Logs Insights·교차 계정 기능은 지원**합니다.
 - **메트릭 필터** — 로그 데이터를 지표로 바꿔 경보에 씁니다. ⚠️ **소급 적용되지 않습니다**(필터를 만든 뒤 발생한 이벤트만 지표가 됩니다). **Standard 클래스에서만** 지원됩니다.
-- **구독 필터** — Kinesis Data Streams·Firehose·Lambda(+OpenSearch)로 전달합니다. **계정 수준 구독 필터는 리전당 1개**이고 **로그 그룹 수준 구독 필터에는 로그 그룹당 개수 한도**가 있습니다(사용자 가이드와 API 레퍼런스의 수치 서술이 달라 이 문서는 숫자를 단정하지 않습니다 — **개수를 묻는 문항은 피하세요**).
+- **구독 필터** — Kinesis Data Streams·Firehose·Lambda(+OpenSearch)로 전달합니다. **계정 수준 구독 필터는 리전당 1개**이고 **로그 그룹 수준 구독 필터에는 로그 그룹당 개수 한도**가 있습니다(사용자 가이드와 API 레퍼런스의 수치 서술이 달라 이 문서는 숫자를 단정하지 않습니다 — **개수는 외우지 않아도 됩니다**).
 - **자동화** — 새 로그 그룹마다 보존 기간을 맞추려면 **EventBridge + Lambda로 로그 그룹 생성 시 보존 정책을 자동 적용**하고, **AWS Config 관리형 규칙 `cw-loggroup-retention-period-check`** 로 최소 보존 기간 미달 로그 그룹을 주기적으로 탐지합니다. 보존은 콘솔 또는 **`put-retention-policy`** CLI로도 설정합니다.
 - **한도** — 로그 이벤트 크기, `PutLogEvents` 배치 크기, 로그 그룹당 필터 개수, 활성 내보내기 작업 수 같은 기본 한도는 **CloudWatch Logs quotas 표**에서 확인하며, 일부는 조정 가능하고 일부는 조정할 수 없습니다.
 
@@ -311,7 +311,7 @@ CloudTrail은 **"누가 어떤 API를 호출했는가"** 의 기록입니다. �
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. AWS CloudTrail FAQs — https://aws.amazon.com/cloudtrail/faqs/
 2. CloudTrail concepts — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html

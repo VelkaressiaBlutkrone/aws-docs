@@ -38,7 +38,7 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 인프라·비용 모니터링과 최적화 (지연 분해·CloudTrail·적정 규모·구매 옵션·태깅)
@@ -190,7 +190,7 @@ ML Lens가 직접 명시하는 것은 **추론 엔드포인트의 핵심 KPI로 
 |---|---|---|---|
 | **AWS X-Ray** | **요청 하나**가 거치는 구성요소와 다운스트림 호출(세그먼트·서브세그먼트), 트레이스 맵 | API Gateway → Lambda → (엔드포인트)처럼 여러 구성요소를 거치는 요청에서 **어느 구간이 느린지** | ML Lens는 "ML 애플리케이션 구성요소 간 요청 추적"에 X-Ray를 권한다. ⚠️ 통합 서비스 목록은 '예시'이며 **SageMaker는 기재돼 있지 않다.** ⚠️ X-Ray SDK/Daemon은 **2026-02-25부터 유지보수 모드**이며 OpenTelemetry 이전 권장(서비스 자체는 계속) |
 | **CloudWatch Lambda Insights** | **Lambda 실행 환경**의 시스템 지표(CPU 시간·메모리·디스크·네트워크)와 **콜드 스타트**·워커 종료 진단 | 추론 전·후처리 Lambda의 콜드 스타트·메모리 문제를 가릴 때 | Lambda 확장(레이어)을 설치하면 호출마다 성능 로그 이벤트가 나가고 **임베디드 메트릭 형식**으로 지표가 추출된다. 지표·로그와 확장 실행 시간에 과금 |
-| **CloudWatch Logs Insights** | **로그 텍스트**의 집계·검색 | 엔드포인트 로그에서 오류 패턴·느린 요청을 찾을 때, 사고 원인 후보 확인과 수정 검증 | 쿼리 언어 3종(Logs Insights QL·OpenSearch PPL·OpenSearch SQL), 계정당 **동시 쿼리 100개**, **60분 타임아웃**, **결과 7일**, **스캔한 데이터량 기준 과금** |
+| **CloudWatch Logs Insights** | **로그 텍스트**의 집계·검색 | 엔드포인트 로그에서 오류 패턴·느린 요청을 찾을 때, 사고 원인 후보 확인과 수정 검증 | 쿼리 언어 3종(Logs Insights QL·OpenSearch PPL·OpenSearch SQL), 동시 쿼리 **QL 100개 / OpenSearch PPL·SQL 각 15개**, **60분 타임아웃**, **결과 7일**, **스캔한 데이터량 기준 과금** |
 
 예시 쿼리 — 엔드포인트 로그에서 최근 오류 20건. 명령은 파이프로 연결하고 `fields`·`filter`·`stats`·`sort`·`limit` 등을 씁니다.
 

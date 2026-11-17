@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 데이터 변환 및 처리 (엔진 선택·비용·형식)
@@ -90,7 +90,7 @@ lastVerified: 2026-11-06
 
 ### 2) Glue 운영 레버 — 작업 유형·버전·워커·스케일링 {#glue-levers}
 
-- **버전**: 최신은 **Glue 6.0**(Spark 4.1.1·Python 3.13)이고, 버전을 지정하지 않고 만든 잡은 **5.1**로 생성됩니다. **Glue 1.0·2.0은 2026-04-01에 수명 종료**됐고, **Glue for Ray는 2026-04-30부터 신규 고객에게 닫혔습니다**(대안: EKS + KubeRay).
+- **버전**: 최신은 **Glue 6.0**(Spark 4.1.1·Python 3.13)이고, 버전을 지정하지 않고 만든 잡은 **6.0**으로 생성됩니다. **Glue 1.0·2.0은 2026-04-01에 수명 종료**됐고, **Glue for Ray는 2026-04-30부터 신규 고객에게 닫혔습니다**(대안: EKS + KubeRay).
 - **워커 타입**: 대부분 **G.1X·G.2X**로 시작합니다. 메모리 부족(OOM)이 잦으면 같은 크기 대비 **메모리가 2배인 R 워커**를 씁니다. G.12X·G.16X·R 워커는 시작 지연이 있을 수 있습니다.
 - **Auto Scaling**(Glue 3.0+): 최대 워커 수만 정하면 Glue가 워커를 자동으로 늘리고 줄입니다 — **부하가 변동하는 잡**의 비용을 낮춥니다.
 - **Flex 실행 클래스**(Glue 3.0+ Spark 잡): 시작·완료 시각이 달라도 되는 **시간 비민감 잡에서 최대 35% 절감**. 긴급한 잡에는 쓰지 않습니다.
@@ -164,7 +164,7 @@ lastVerified: 2026-11-06
 데이터 처리 파이프라인에 **대규모 언어 모델**을 붙이는 방식과 선택 기준입니다.
 
 - **호출 API**: **Converse**는 모델과 무관한 **일관된 인터페이스**라 모델 교체가 쉽습니다. **InvokeModel**은 모델 고유 형식을 쓰며, 배치에서 tool calling이 필요한 경우가 여기에 해당합니다.
-- **추론 방식**: **On-Demand**(토큰 과금) · **배치 추론**(비동기, **On-Demand 대비 50% 낮은 가격**, 프로비저닝 모델 미지원) · **Provisioned Throughput**(시간당 과금·1·6개월 약정, 커스텀 모델에 필수).
+- **추론 방식**: **On-Demand**(토큰 과금) · **배치 추론**(비동기, **On-Demand 대비 50% 낮은 가격**, 프로비저닝 모델 미지원) · **Provisioned Throughput**(시간당 과금 · 약정 **없음/1개월/6개월** 중 선택). ⚠️ 사용자 지정 모델의 추론 경로는 **PT 구매**와 **온디맨드 추론용 모델 배포** 둘입니다 — PT 가 필수는 아닙니다.
 - **문서·이미지 추출**: **Bedrock Data Automation(BDA)** 이 문서·이미지·오디오·비디오에서 표준/커스텀(blueprint) 출력으로 필드를 추출합니다.
 - **파이프라인에 넣는 위치**: **Redshift ML 외부 모델**(SQL 함수로 호출) · **Step Functions**(워크플로 태스크로 호출) · **Lambda**(함수 코드에서 호출).
 
@@ -208,7 +208,7 @@ lastVerified: 2026-11-06
 
 ## 🧪 자가 점검
 
-> 학습용 자가 점검입니다. (문항 뱅크 `dea-t1-2.questions.json` — 사람 검수 전이라 사이트 비노출)
+> 학습용 자가 점검입니다. (문항 뱅크 `dea-t1-2.questions.json`)
 
 **Q1.** 수 TB 규모 S3 데이터를 Spark로 정제해야 하는데, 클러스터 운영은 하고 싶지 않고 Spark 외 도구도 필요 없습니다. 무엇을 고르나요?
 
@@ -258,7 +258,7 @@ CTAS·INSERT INTO는 **쿼리당 100 파티션 한도**가 있습니다. 먼저 
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19)
 
 1. AWS Glue FAQs — https://aws.amazon.com/glue/faqs/
 2. AWS Glue versions — https://docs.aws.amazon.com/glue/latest/dg/release-notes.html
@@ -275,7 +275,7 @@ CTAS·INSERT INTO는 **쿼리당 100 파티션 한도**가 있습니다. 먼저 
 13. Introducing Amazon EMR Managed Scaling — https://aws.amazon.com/blogs/big-data/introducing-amazon-emr-managed-scaling-automatically-resize-clusters-to-lower-cost/
 14. Pre-initialized capacity in EMR Serverless — https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/pre-init-capacity.html
 15. Cost optimization in analytics services (Cost Modeling Data Lakes) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/cost-modeling-data-lakes/cost-optimization-in-analytics-services.html
-16. Amazon Athena (Big Data Analytics Options on AWS) — https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-athena.html
+16. Amazon Athena (Big Data Analytics Options on AWS) (⚠️ 브라우저로는 Athena 사용자 안내서로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-17 실측) — https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-athena.html
 17. Use CTAS and INSERT INTO for ETL and data analysis (Athena) — https://docs.aws.amazon.com/athena/latest/ug/ctas-insert-into-etl.html
 18. Use CTAS and INSERT INTO to work around the 100 partition limit — https://docs.aws.amazon.com/athena/latest/ug/ctas-insert-into.html
 19. Convert input data format in Amazon Data Firehose — https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html

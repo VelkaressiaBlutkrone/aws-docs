@@ -328,6 +328,10 @@
         {
           "title": "Amazon RDS 읽기 전용 복제본 작업",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+        },
+        {
+          "title": "Multi-AZ DB 인스턴스 배포 — 동기 스탠바이는 읽기를 제공하지 않음",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html"
         }
       ],
       "verified": true
@@ -339,13 +343,13 @@
       "difficulty": "applied",
       "stem": "어떤 쿼리와 대기 이벤트가 DB 부하를 유발하는지 식별해야 한다. 가장 적합한 도구는?",
       "options": [
-        "성능 개선 도우미(Performance Insights)",
+        "CloudWatch Database Insights(구 성능 개선 도우미)",
         "DB 파라미터 그룹",
         "CloudTrail 데이터 이벤트",
         "EBS 볼륨 지표"
       ],
       "correct": 0,
-      "explanation": "성능 개선 도우미는 DB 부하를 대기 이벤트와 SQL 단위로 시각화해 어떤 쿼리나 락이 부하를 유발하는지 진단하게 해 줍니다.",
+      "explanation": "CloudWatch Database Insights는 DB 부하를 대기 이벤트와 SQL 단위로 시각화해 어떤 쿼리나 락이 부하를 유발하는지 진단하게 해 줍니다. 이 기능의 옛 이름인 성능 개선 도우미(Performance Insights)는 2026-07-31에 수명이 끝났고 사용자는 Database Insights로 이전됐습니다. 시험 가이드 문구는 옛 이름을 씁니다.",
       "wrongExplanations": {
         "1": "파라미터 그룹은 엔진 설정을 바꾸는 수단이며 진단 도구가 아닙니다.",
         "2": "CloudTrail은 API 호출 감사 기록입니다.",
@@ -353,8 +357,12 @@
       },
       "sources": [
         {
-          "title": "Amazon RDS 성능 개선 도우미로 DB 부하 모니터링",
+          "title": "Amazon RDS에서 CloudWatch Database Insights로 DB 부하 모니터링",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html"
+        },
+        {
+          "title": "CloudWatch Database Insights — Performance Insights 수명 종료와 이전",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Database-Insights.html"
         }
       ],
       "verified": true

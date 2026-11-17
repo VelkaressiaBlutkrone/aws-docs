@@ -25,7 +25,8 @@
       },
       "sources": [
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
-        { "title": "AWS WAF 용도별 관리형 규칙 그룹 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html" }
+        { "title": "AWS WAF 용도별 관리형 규칙 그룹 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html" },
+        { "title": "AWS 관리형 규칙 — 기준 규칙 그룹 (공식) — Core rule set(CRS)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-baseline.html" }
       ],
       "verified": true
     },

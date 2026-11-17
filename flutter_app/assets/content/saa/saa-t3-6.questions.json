@@ -193,7 +193,8 @@
         "3": "DAX의 다수결 처리는 강력 일관성 읽기의 동작 방식이 아닙니다. 강력 일관성 읽기는 DAX를 우회해 DynamoDB에 직접 요청됩니다."
       },
       "sources": [
-        { "title": "DynamoDB Accelerator (DAX) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html" }
+        { "title": "DynamoDB Accelerator (DAX) (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html" },
+        { "title": "DAX와 DynamoDB 일관성 모델 (공식) — 강력한 일관성 읽기는 DynamoDB로 전달된다", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.consistency.html" }
       ],
       "verified": true
     },

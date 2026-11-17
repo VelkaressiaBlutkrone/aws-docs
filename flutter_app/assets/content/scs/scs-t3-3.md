@@ -30,7 +30,9 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/working-with-network-access-scopes.html
   - title: Amazon Inspector finding types
     url: https://docs.aws.amazon.com/inspector/latest/user/findings-types.html
-lastVerified: 2026-11-08
+  - title: How Network Access Analyzer works
+    url: https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/how-network-access-analyzer-works.html
+lastVerified: 2026-11-17
 ---
 
 # 네트워크 보안 제어 (허용과 차단·하이브리드 보안 연결·Verified Access·세분화·불필요한 액세스 식별)
@@ -254,7 +256,7 @@ Transit Gateway는 **리전 가상 라우터**이고 **계층 3에서 대상 IP�
 
 ⚠️ 분석 대상에 **보안 그룹 · CIDR 블록 · 접두사 목록 · 네트워크 인터페이스 · EC2 인스턴스 · 로드밸런서 · VPC·서브넷 · VPC 엔드포인트·엔드포인트 서비스 · Transit Gateway · NAT 게이트웨이 · 인터넷 게이트웨이 · VPN 게이트웨이 · 피어링 연결 · Network Firewall**이 듭니다. 스코프는 **리소스 그룹**으로 태그 기반 참조를 할 수 있습니다.
 
-⚠️ **온디맨드 분석**입니다 — 스코프를 고르고 분석을 시작하면 **몇 분** 뒤 조사 결과가 납니다. "상시 감시"가 필요하면 **주기적으로 분석을 실행하는 자동화**를 따로 둡니다.
+⚠️ **내가 스코프를 골라 시작하는 분석**입니다 — 공식은 **구성만 보는 정적 분석**이라고 적고 「상시 감시」라는 서술은 NAA 페이지에 없습니다. 상시 검증이 필요하면 **주기적으로 분석을 실행하는 자동화**를 따로 둡니다.
 
 #### 5-3. Inspector 네트워크 도달성 — 선언이 없는 쪽
 
@@ -295,7 +297,7 @@ Transit Gateway는 **리전 가상 라우터**이고 **계층 3에서 대상 IP�
 - ❌ "MACsec 키체인에 쌍을 무제한 넣는다" → **세 개까지**입니다
 - ❌ "어플라이언스 모드는 성능 옵션이다" → **상태 저장 검사의 정확성** 문제이고 끄면 **응답이 드롭**됩니다
 - ❌ "Transit Gateway는 VPN과 VPC 사이에도 ECMP를 한다" → **서로 다른 어태치먼트 유형 간에는 불가**합니다
-- ❌ "Network Access Analyzer가 상시로 감시한다" → **온디맨드 분석**입니다
+- ❌ "Network Access Analyzer가 상시로 감시한다" → 분석을 **시작할 때** 그 시점의 구성을 보는 **정적 분석**입니다
 - ❌ "Inspector 네트워크 도달성으로 Lambda·컨테이너의 노출을 본다" → **EC2 전용**입니다
 
 ## 🧪 자가 점검
@@ -362,7 +364,7 @@ Transit Gateway는 **리전 가상 라우터**이고 **계층 3에서 대상 IP�
 - **MatchPaths**에 **위반으로 보는 경로**를 적습니다 — 소스를 개발 리소스, 대상을 재무 리소스로 둡니다. 스코프는 **리소스 그룹**으로 태그 기반 참조를 할 수 있어 "재무 태그가 붙은 모든 리소스"로 쓸 수 있습니다
 - **ExcludePaths**에는 **정당한 예외**를 적습니다. ⚠️ 조사 결과의 정의는 **MatchPaths 중 하나 이상에 맞고 ExcludePaths 중 어느 것에도 맞지 않는 잠재 경로**입니다
 - **자동 추론**으로 구성만 보고 판정하므로 트래픽을 흘릴 필요가 없고, 분석 대상에 **보안 그룹·NACL·라우트 테이블·엔드포인트·Transit Gateway·피어링·Network Firewall**까지 듭니다
-- ⚠️ **온디맨드 분석**이므로 상시 검증이 필요하면 **주기 실행 자동화**를 둡니다
+- ⚠️ **구성만 보는 정적 분석**이고 상시 감시를 적는 공식 서술이 없으므로, 상시 검증이 필요하면 **주기 실행 자동화**를 둡니다
 
 ⚠️ **Inspector 네트워크 도달성과 혼동하지 않습니다** — 그쪽은 **선언 없이 EC2에 열린 경로**를 **12시간마다** 알려 주고 **EC2 전용**입니다. "부서 간 격리 정책 위반"은 스코프를 선언하는 쪽입니다.
 </details>
@@ -396,3 +398,4 @@ Transit Gateway는 **리전 가상 라우터**이고 **계층 3에서 대상 IP�
 9. What is Network Access Analyzer? — `docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html` (2026-11-08 확인)
 10. Network Access Scopes in Network Access Analyzer — `docs.aws.amazon.com/vpc/latest/network-access-analyzer/working-with-network-access-scopes.html` (2026-11-08 확인)
 11. Amazon Inspector finding types — `docs.aws.amazon.com/inspector/latest/user/findings-types.html` (2026-11-08 확인)
+12. How Network Access Analyzer works — `docs.aws.amazon.com/vpc/latest/network-access-analyzer/how-network-access-analyzer-works.html` (2026-11-17 확인)

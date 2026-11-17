@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
   - title: 흐름 로그 제한 사항 — 기록되지 않는 트래픽 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-limitations.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 네트워크 문제 해결 — Flow Logs·Reachability Analyzer
@@ -117,7 +117,7 @@ lastVerified: 2026-11-06
 ```
 
 - **ACCEPT** = SG와 NACL을 모두 통과한 트래픽.
-- **REJECT** = **NACL에 의해 거부된** 트래픽(또는 SG 미일치로 응답이 끊긴 상황의 흔적).
+- **REJECT** = **보안 그룹 또는 NACL이 허용하지 않은** 트래픽(또는 연결이 닫힌 뒤 도착한 패킷).
 
 > 🧠 원리: action 필드가 ACCEPT와 REJECT 두 값만 갖는 구조는 어떤 운영상 판단을 가능하게 할까요?
 > 모든 흐름을 허용/거부로 이분하면 필터 하나(`action = "REJECT"`)로 전체 차단 이벤트를 즉시 조회할 수 있어, 대용량 로그에서 문제가 된 흐름만 추출하는 쿼리 비용이 낮아집니다.
@@ -191,7 +191,7 @@ lastVerified: 2026-11-06
 ```
 
 - **도구 매핑:** 빠른 도달성 판정은 **Reachability Analyzer**, 실제 트래픽 흔적·REJECT 추적은 **Flow Logs(CloudWatch Logs Insights)** 로 확인합니다.
-- **REJECT 추적 절차:** Flow Logs에서 `action=REJECT` + 해당 dstport로 필터 → 어느 ENI/서브넷에서 거부되는지 확인 → 그 서브넷 NACL 규칙(특히 이페머럴 포트) 점검 → REJECT가 없는데도 실패하면 SG 인바운드를 의심.
+- **REJECT 추적 절차:** Flow Logs에서 `action=REJECT` + 해당 dstport로 필터 → 어느 ENI/서브넷에서 거부되는지 확인 → 그 ENI의 보안 그룹과 서브넷 NACL 규칙(특히 이페머럴 포트)을 함께 점검 → 레코드가 아예 없으면 Reachability Analyzer로 구성 도달성을 확인.
 
 ```
 # CloudWatch Logs Insights — 특정 포트의 REJECT 추적

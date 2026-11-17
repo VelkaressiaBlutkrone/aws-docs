@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/glue/latest/dg/workflows_overview.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-17
 ---
 
 # 데이터 파이프라인 오케스트레이션 (워크플로·복원력·알림)
@@ -136,7 +136,7 @@ Task 상태의 Resource URI를 어떻게 쓰느냐로 패턴이 정해집니다.
 ### 6) MWAA와 MWAA Serverless {#mwaa}
 
 - **DAG 배포**: DAG와 지원 파일을 환경에 연결된 **S3 버킷**에 복사하면 MWAA가 워커·스케줄러·웹서버에 동기화합니다. 버킷은 **퍼블릭 액세스 차단과 버전 관리**가 필요하고, `plugins.zip`·`requirements.txt`는 갱신할 때마다 사용할 버전을 지정합니다.
-- **구성요소**: 스케줄러(최소 2·최대 5) · 워커(오토스케일) · 웹서버(Airflow UI) · 메타데이터 DB(AWS 관리 Aurora PostgreSQL). 네트워크는 **서로 다른 AZ의 서브넷 2개**가 필요합니다.
+- **구성요소**: 스케줄러(`mw1.micro` 보다 큰 환경에서 2~5 · 기본 2 · **`mw1.micro` 는 1**) · 워커(오토스케일) · 웹서버(Airflow UI) · 메타데이터 DB(AWS 관리 Aurora PostgreSQL). 네트워크는 **서로 다른 AZ의 서브넷 2개**가 필요합니다.
 - **워커 오토스케일**: 큐 대기 + 실행 중 작업이 기존 용량을 넘으면 늘리고, 합계가 0인 상태가 **2분**을 넘으면 최소 워커 수로 줄입니다.
 - **환경 클래스**: `mw1.micro`~`mw1.2xlarge`. 클수록 기본 동시 작업 수가 늘고(micro 3 → 2xlarge 80), **`mw1.micro`는 오토스케일링을 지원하지 않습니다.**
 - **버전**: 생성 시 지정(미지정이면 최신). **마이너 업그레이드만 지원**하고 최소 3개 마이너 버전을 동시에 지원하며 종료일은 180일 이상 전에 공지합니다.
@@ -166,7 +166,7 @@ Task 상태의 Resource URI를 어떻게 쓰느냐로 패턴이 정해집니다.
 | 실패 격리 | SQS DLQ(`maxReceiveCount`), EventBridge Scheduler DLQ, SNS 구독 DLQ |
 | 체크포인트·재개 | Step Functions **redrive**, Lambda durable functions |
 | 모니터링·알림 | 실패 모니터링(BP 6.2) → 이해관계자 알림(BP 6.3) → EventBridge → SNS |
-| 가용성 | MWAA **다른 AZ 서브넷 2개**, 스케줄러 최소 2 |
+| 가용성 | MWAA **다른 AZ 서브넷 2개**, 스케줄러 기본 2(**`mw1.micro` 는 1**) |
 | 확장성 | MWAA 워커 오토스케일, Distributed Map **10,000 병렬**, Express 높은 시작률, SQS Standard 거의 무제한 처리량 |
 
 ### 10) 알림 — SNS·SQS {#notifications}
@@ -218,7 +218,7 @@ Task 상태의 Resource URI를 어떻게 쓰느냐로 패턴이 정해집니다.
 
 ## 🧪 자가 점검
 
-> 학습용 자가 점검입니다. (문항 뱅크 `dea-t1-3.questions.json` — 사람 검수 전이라 사이트 비노출)
+> 학습용 자가 점검입니다. (문항 뱅크 `dea-t1-3.questions.json`)
 
 **Q1.** Step Functions에서 Glue 잡을 호출한 뒤 **그 잡이 끝난 다음** 단계로 넘어가야 합니다. 어떻게 구성하나요?
 
@@ -268,7 +268,7 @@ Task 상태의 리소스 ARN 끝에 **`.sync`** 를 붙이는 **Run a Job 패턴
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19)
 
 1. Choosing workflow type in Step Functions — https://docs.aws.amazon.com/step-functions/latest/dg/choosing-workflow-type.html
 2. What is Step Functions? — https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html

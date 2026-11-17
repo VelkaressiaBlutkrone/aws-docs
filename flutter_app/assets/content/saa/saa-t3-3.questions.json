@@ -20,7 +20,7 @@
       "explanation": "인스턴스 명명 규칙은 `[패밀리][세대][프로세서][기능].[크기]` 형식입니다. `m`은 범용(General Purpose) 패밀리, `7`은 7세대, `g`는 AWS Graviton(ARM 아키텍처) 프로세서, `2xlarge`는 인스턴스 크기를 나타냅니다. AMD는 `a` 접미사, GPU 가속은 별도 패밀리(P, G)로 표현됩니다.",
       "wrongExplanations": {
         "0": "메모리 최적화 패밀리는 `r`이고 GPU 가속 프로세서를 나타내는 단일 접미사는 없습니다. `g`는 Graviton(ARM) 프로세서를 나타냅니다.",
-        "2": "고대역폭 네트워크 강화 기능 접미사는 `n`입니다. `g`는 프로세서 접미사로 AWS Graviton을 나타냅니다.",
+        "2": "네트워크·EBS 최적화 접미사는 `n`입니다. `g`는 프로세서 접미사로 AWS Graviton을 나타냅니다.",
         "3": "AMD EPYC 프로세서 접미사는 `a`입니다. `g`는 AWS Graviton(ARM) 프로세서를 나타냅니다."
       },
       "sources": [
@@ -41,14 +41,15 @@
         "전용 호스트 전용 유형"
       ],
       "correct": 2,
-      "explanation": "인스턴스 명명 규칙에서 기능 접미사 `d`는 로컬 NVMe 스토리지 내장을 의미합니다. `c7id`는 컴퓨팅 최적화(c), 7세대(7), Intel 프로세서(i), 로컬 NVMe(d)의 조합입니다. AMD는 `a`, 네트워크 강화는 `n`, EBS 최적화는 `b` 접미사를 사용합니다.",
+      "explanation": "인스턴스 명명 규칙에서 기능 접미사 `d`는 로컬 NVMe 스토리지 내장을 의미합니다. `c7id`는 컴퓨팅 최적화(c), 7세대(7), Intel 프로세서(i), 로컬 NVMe(d)의 조합입니다. AMD는 `a`, 네트워크·EBS 최적화는 `n`, 블록 스토리지 최적화는 `b` 접미사를 사용합니다.",
       "wrongExplanations": {
         "0": "AMD EPYC 프로세서를 나타내는 접미사는 `a`입니다. `d`는 로컬 NVMe 스토리지를 의미합니다.",
-        "1": "향상된 네트워킹(ENA)은 Nitro 기반 인스턴스에 기본 포함되며, 네트워크 강화 접미사는 `n`입니다.",
+        "1": "향상된 네트워킹(ENA)은 Nitro 기반 인스턴스에 기본 포함되며, 네트워크·EBS 최적화 접미사는 `n`입니다.",
         "3": "전용 호스트(Dedicated Host)는 인스턴스 명명 규칙의 접미사로 표현되지 않으며 별도 구매 옵션입니다."
       },
       "sources": [
-        { "title": "Amazon EC2 인스턴스 유형 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html" }
+        { "title": "Amazon EC2 인스턴스 유형 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html" },
+        { "title": "EC2 인스턴스 유형 명명 규칙 (공식) — d는 인스턴스 스토어 볼륨, n은 네트워크·EBS 최적화, b는 블록 스토리지 최적화", "url": "https://docs.aws.amazon.com/ec2/latest/instancetypes/instance-type-names.html" }
       ],
       "verified": true
     },
@@ -192,7 +193,8 @@
         "3": "이메일 알림은 스팟 인터럽션 메커니즘이 아닙니다. 경고는 인스턴스 메타데이터 엔드포인트와 EventBridge 이벤트로 제공됩니다."
       },
       "sources": [
-        { "title": "EC2 구매 옵션 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html" }
+        { "title": "EC2 구매 옵션 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html" },
+        { "title": "스팟 인스턴스 중단 공지 (공식) — 중지·종료 2분 전에 발행", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-instance-termination-notices.html" }
       ],
       "verified": true
     },
@@ -240,7 +242,8 @@
         "3": "인스턴스마다 별도 물리 랙에 배치해 장애를 격리하는 것은 분산(Spread) 배치 그룹의 특성입니다."
       },
       "sources": [
-        { "title": "EC2 배치 그룹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" }
+        { "title": "EC2 배치 그룹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" },
+        { "title": "배치 전략 (공식) — 클러스터·파티션·분산 배치 그룹", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html" }
       ],
       "verified": true
     },
@@ -312,7 +315,8 @@
         "3": "구매 옵션(온디맨드·스팟)을 혼합하는 것과는 별개로, 단일 런칭 요청이 아니라 두 번에 걸쳐 시작하면 나중 요청 시 ICE 위험이 있습니다."
       },
       "sources": [
-        { "title": "EC2 배치 그룹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" }
+        { "title": "EC2 배치 그룹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html" },
+        { "title": "배치 전략 (공식) — 클러스터 배치 그룹은 단일 시작 요청 권장", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-strategies.html" }
       ],
       "verified": true
     },
@@ -336,7 +340,8 @@
         "3": "ENA와 EFA는 다른 기술입니다. EFA는 ENA의 상위 집합으로 OS-bypass 경로를 추가로 제공합니다."
       },
       "sources": [
-        { "title": "향상된 네트워킹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html" }
+        { "title": "향상된 네트워킹 (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html" },
+        { "title": "Elastic Fabric Adapter (공식) — HPC·ML용 OS 우회 네트워크 인터페이스", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html" }
       ],
       "verified": true
     },

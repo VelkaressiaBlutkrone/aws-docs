@@ -54,6 +54,10 @@
         {
           "title": "EventBridge 이벤트 패턴",
           "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-event-patterns.html"
+        },
+        {
+          "title": "EC2 인스턴스 상태 변경 이벤트",
+          "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instance-state-changes.html"
         }
       ],
       "verified": true
@@ -125,7 +129,7 @@
         "S3 이벤트 알림으로 Lambda를 트리거한다"
       ],
       "correct": 0,
-      "explanation": "EventBridge 스케줄 규칙은 cron·rate 식으로 지정 시각에 대상을 트리거합니다. Lambda를 대상으로 두면 서버를 관리하지 않고 스냅샷 정리 같은 운영 작업을 주기적으로 실행할 수 있습니다.",
+      "explanation": "EventBridge 스케줄 규칙은 cron·rate 식으로 지정 시각에 대상을 트리거합니다. Lambda를 대상으로 두면 서버를 관리하지 않고 스냅샷 정리 같은 운영 작업을 주기적으로 실행할 수 있습니다. 예약 규칙은 EventBridge의 레거시 기능이며, 새 일정에는 EventBridge Scheduler 사용이 권장됩니다.",
       "wrongExplanations": {
         "1": "전용 인스턴스를 유지해야 하므로 서버리스 요건에 맞지 않습니다.",
         "2": "경보는 지표 임계값 기반이며 시각 기반 트리거가 아닙니다.",

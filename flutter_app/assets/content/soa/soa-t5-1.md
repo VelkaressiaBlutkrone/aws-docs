@@ -20,7 +20,13 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html
   - title: NAT 게이트웨이 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html
-lastVerified: 2026-11-06
+  - title: 서브넷 라우팅 테이블 — 로컬 경로 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/subnet-route-tables.html
+  - title: 로컬 경로의 대상 교체·복원 (공식)
+    url: https://docs.aws.amazon.com/vpc/latest/userguide/replace-local-route-target.html
+  - title: 프라이빗 호스팅 영역 고려 사항 — VPC 설정 (공식)
+    url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zone-private-considerations.html
+lastVerified: 2026-11-17
 ---
 
 # VPC 네트워킹 구현 — 서브넷·라우팅·SG·NACL·NAT
@@ -77,11 +83,11 @@ lastVerified: 2026-11-06
 - **VPC는 리전 단위 리소스**이며, **여러 AZ에 걸칠 수 있습니다.**
 - VPC 생성 시 **IPv4 CIDR 블록**을 지정합니다(예: `10.0.0.0/16`). 프라이빗 IP 대역(RFC 1918)을 쓰는 것이 일반적입니다.
 - CIDR 크기 제약: VPC는 **/16 ~ /28** 범위. 생성 후 보조 CIDR 블록을 추가할 수 있습니다.
-- 각 VPC에는 기본적으로 **로컬 라우팅 경로**가 있어 VPC 내부의 모든 서브넷은 서로 통신할 수 있습니다(이 경로는 삭제 불가).
+- 각 VPC에는 기본적으로 **로컬 라우팅 경로**가 있어 VPC 내부의 모든 서브넷은 서로 통신할 수 있습니다(이 경로는 모든 라우팅 테이블에 기본으로 추가되며, 대상은 교체하거나 기본값으로 되돌릴 수 있습니다).
 
-> 🧠 원리: VPC의 로컬 라우팅 경로는 왜 삭제할 수 없을까요?
+> 🧠 원리: VPC의 로컬 라우팅 경로는 왜 모든 라우팅 테이블에 기본으로 들어 있을까요?
 > 로컬 경로는 VPC CIDR 범위 내 모든 트래픽을 VPC 내부에서 처리하도록 앵커하는 역할을 합니다.
-> 이 경로가 없으면 같은 VPC 안의 서브넷 간 통신도 외부 경로(0.0.0.0/0)로 흘러 의도치 않게 게이트웨이를 거칠 수 있으므로, AWS는 이 경로를 보호된 시스템 항목으로 관리합니다.
+> 이 경로가 없으면 같은 VPC 안의 서브넷 간 통신도 외부 경로(0.0.0.0/0)로 흘러 의도치 않게 게이트웨이를 거칠 수 있으므로, AWS는 이 경로를 모든 라우팅 테이블에 기본으로 추가합니다. 로컬 경로의 대상은 교체하거나 기본값으로 되돌릴 수 있습니다.
 > 운영자 관점에서 "로컬 경로가 없다"는 상황은 없으며, 서브넷 간 트래픽 차단이 필요하면 SG 또는 NACL 규칙으로 처리합니다.
 
 ### 2) 서브넷 — 단일 AZ, 퍼블릭/프라이빗
@@ -110,7 +116,7 @@ lastVerified: 2026-11-06
 
 | 대상(Destination) | 타겟(Target) | 의미 |
 |---|---|---|
-| `10.0.0.0/16` (VPC CIDR) | **local** | VPC 내부 통신(자동 생성, 삭제 불가) |
+| `10.0.0.0/16` (VPC CIDR) | **local** | VPC 내부 통신(기본 추가) |
 | `0.0.0.0/0` | **igw-xxxx** | 모든 외부 트래픽 → 인터넷 게이트웨이(퍼블릭) |
 | `0.0.0.0/0` | **nat-xxxx** | 모든 외부 트래픽 → NAT 게이트웨이(프라이빗) |
 | `0.0.0.0/0` | **eni-xxxx / i-xxxx** | NAT 인스턴스로 보낼 때 |
@@ -196,7 +202,7 @@ Outbound 100  TCP 1024-65535 0.0.0.0/0 ALLOW # 응답을 위한 이페머럴 포
 | **enableDnsSupport** | VPC 내에서 **Amazon DNS 서버(.2 주소) 해석을 켤지** 여부. 켜야 인스턴스가 DNS 이름을 풀 수 있음 |
 | **enableDnsHostnames** | VPC 내 인스턴스가 **퍼블릭 DNS 호스트네임을 받을지** 여부 |
 
-> S3 인터페이스 엔드포인트나 프라이빗 호스팅 영역이 동작하려면 **enableDnsSupport가 켜져 있어야** 합니다. 두 옵션이 꺼져 있어 DNS 이름 해석이 안 되는 것이 의외로 흔한 장애 원인입니다.
+> S3 인터페이스 엔드포인트나 프라이빗 호스팅 영역이 동작하려면 VPC의 DNS 속성이 켜져 있어야 합니다 — 프라이빗 호스팅 영역은 **enableDnsHostnames와 enableDnsSupport 둘 다** true여야 합니다. 두 옵션이 꺼져 있어 DNS 이름 해석이 안 되는 것이 의외로 흔한 장애 원인입니다.
 
 > 🧠 원리: enableDnsSupport가 꺼져 있으면 왜 VPC 엔드포인트나 프라이빗 호스팅 영역이 동작하지 않을까요?
 > VPC 엔드포인트와 프라이빗 호스팅 영역은 서비스 DNS 이름을 VPC 내부 IP로 해석해 트래픽을 AWS 내부 경로로 유도하는 방식으로 동작합니다.

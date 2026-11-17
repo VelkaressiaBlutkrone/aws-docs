@@ -27,6 +27,10 @@
         {
           "title": "Amazon RDS Multi-AZ 배포",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        },
+        {
+          "title": "Multi-AZ DB 인스턴스 배포 — 동기 스탠바이는 읽기를 제공하지 않음",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html"
         }
       ],
       "verified": true
@@ -54,6 +58,10 @@
         {
           "title": "Amazon RDS Multi-AZ 배포 — 장애 조치 프로세스",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        },
+        {
+          "title": "Multi-AZ DB 인스턴스 장애 조치 — DNS 레코드 변경과 소요 시간",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.Failover.html"
         }
       ],
       "verified": true
@@ -112,6 +120,10 @@
         {
           "title": "Amazon RDS 읽기 전용 복제본 작업",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+        },
+        {
+          "title": "Multi-AZ DB 인스턴스 배포 — 동기 스탠바이는 읽기를 제공하지 않음",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html"
         }
       ],
       "verified": true
@@ -139,6 +151,10 @@
         {
           "title": "AWS Well-Architected 신뢰성 기둥",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html"
+        },
+        {
+          "title": "REL10-BP01 워크로드를 여러 위치에 배포 — 다중 AZ와 단일 실패점",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_multiaz_region_system.html"
         }
       ],
       "verified": true
@@ -274,6 +290,10 @@
         {
           "title": "Route 53 상태 확인 작동 방식",
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-determining-health-of-endpoints.html"
+        },
+        {
+          "title": "장애 조치 레코드에 지정하는 값 — TTL 60초 이하 권장",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-values-failover.html"
         }
       ],
       "verified": true
@@ -301,6 +321,10 @@
         {
           "title": "Route 53 상태 확인 유형",
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-types.html"
+        },
+        {
+          "title": "상태 확인 생성 시 지정하는 값 — 프로토콜과 CloudWatch 경보 모니터링",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-values.html"
         }
       ],
       "verified": true
@@ -355,6 +379,10 @@
         {
           "title": "AWS Well-Architected 신뢰성 기둥 — 단일 실패점 제거",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html"
+        },
+        {
+          "title": "REL10-BP01 워크로드를 여러 위치에 배포 — 다중 AZ와 단일 실패점",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_multiaz_region_system.html"
         }
       ],
       "verified": true
@@ -382,6 +410,14 @@
         {
           "title": "Amazon RDS Multi-AZ 배포",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+        },
+        {
+          "title": "Multi-AZ DB 인스턴스 배포 — 동기 스탠바이는 읽기를 제공하지 않음",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html"
+        },
+        {
+          "title": "Multi-AZ DB 인스턴스 장애 조치 — DNS 레코드 변경과 소요 시간",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.Failover.html"
         }
       ],
       "verified": true

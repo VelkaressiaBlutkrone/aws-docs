@@ -26,7 +26,11 @@ sources:
     url: https://aws.amazon.com/s3/features/files/
   - title: S3 Files 콘솔 안내 — 동기화·NFS·암호화 (공식)
     url: https://docs.aws.amazon.com/help-panel/AmazonS3/latest/console/hp-s3-files-page.html
-lastVerified: 2026-11-06
+  - title: Amazon RDS DB 인스턴스 스토리지 — 마그네틱 스토리지 사용 중단 (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html
+  - title: CloudWatch Database Insights — Performance Insights 수명 종료와 이전 (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Database-Insights.html
+lastVerified: 2026-11-17
 ---
 
 # 컴퓨팅·스토리지·DB 성능 최적화 (EC2·EBS·RDS·ElastiCache)
@@ -44,7 +48,7 @@ lastVerified: 2026-11-06
 - [ ] **네트워크 성능** — 향상된 네트워킹·배치 그룹의 용도를 구분한다
 - [ ] **EBS 볼륨 타입** — gp3/gp2/io1/io2/st1/sc1의 특성과 선택 기준을 안다
 - [ ] **EBS 핵심 수치** — gp3 베이스라인(3000 IOPS/125 MB/s), gp2의 3 IOPS/GB·버스트를 안다
-- [ ] **RDS 읽기 확장** — 읽기 전용 복제본·파라미터 그룹·Performance Insights의 용도를 안다
+- [ ] **RDS 읽기 확장** — 읽기 전용 복제본·파라미터 그룹·Database Insights(구 Performance Insights)의 용도를 안다
 - [ ] **ElastiCache** — 엔진 3종(Valkey·Memcached·Redis OSS)과 lazy loading vs write-through 전략을 구분한다
 - [ ] **병목 진단** — 지표를 보고 CPU/IOPS/처리량/메모리 중 무엇이 병목인지 식별할 수 있다
 
@@ -131,7 +135,7 @@ lastVerified: 2026-11-06
 **시험 빈출 수치(반드시 기억):**
 
 - **gp3 베이스라인 = 3,000 IOPS + 125 MB/s**, 용량과 **무관**하게 제공. IOPS와 처리량을 **용량과 독립적으로** 추가 프로비저닝할 수 있어, 작은 볼륨에도 높은 성능을 줄 수 있습니다(gp2 대비 비용·유연성 우위).
-- **gp2 = 1GB당 3 IOPS**(용량에 비례). 작은 볼륨은 **버스트 버킷**으로 일시적으로 **최대 3,000 IOPS**까지 끌어올릴 수 있고, 약 1,000 GB(≈5,334 GiB에서 16,000 IOPS 상한) 이상부터 버스트 없이도 높은 IOPS를 갖습니다. 버스트 크레딧이 소진되면 베이스라인(3 IOPS/GB)으로 제한됩니다.
+- **gp2 = 1GB당 3 IOPS**(용량에 비례). 작은 볼륨은 **버스트 버킷**으로 일시적으로 **최대 3,000 IOPS**까지 끌어올릴 수 있고, 약 1,000 GB 이상부터는 베이스라인이 3,000 IOPS에 이르러 버스트 없이도 높은 IOPS를 갖습니다. gp2의 상한 16,000 IOPS에는 5,334 GiB에서 도달합니다. 버스트 크레딧이 소진되면 베이스라인(3 IOPS/GB)으로 제한됩니다.
 - **io2/io1**은 용량과 별개로 **IOPS를 직접 프로비저닝**하며, 고지속 IOPS·높은 내구성이 필요한 DB에 씁니다.
 
 > 운영 신호: `VolumeQueueLength`(I/O 대기 큐)가 지속적으로 높고 `VolumeReadOps`/`VolumeWriteOps`가 한도에 붙어 있으면 IOPS 병목입니다. gp2에서 버스트 소진이 의심되면 **gp3로 전환해 베이스라인을 확보**하거나 IOPS/처리량을 추가 프로비저닝합니다.
@@ -146,11 +150,11 @@ lastVerified: 2026-11-06
 > 버킷이 가득 찬 상태에서 순간 부하를 처리할 수 있지만, 크레딧 소모 속도가 누적 속도를 지속적으로 앞서면 버킷이 비워지고 기준선 IOPS로 제한됩니다.
 > 이 구조 때문에 짧은 순간 부하엔 버스트가 효과적이지만, 장시간 높은 IOPS가 필요한 워크로드에서는 gp3의 고정 베이스라인이 더 안정적인 선택이 됩니다.
 
-### 3) RDS — 읽기 확장·파라미터·Performance Insights
+### 3) RDS — 읽기 확장·파라미터·Database Insights(구 Performance Insights)
 
 **인스턴스 클래스·스토리지:**
 
-- RDS DB 인스턴스도 EC2처럼 **클래스(컴퓨팅/메모리)**를 선택하며, 스토리지는 **gp3/gp2(범용 SSD)·프로비저닝 IOPS(io1/io2)·마그네틱** 중 선택합니다. 고IOPS DB는 프로비저닝 IOPS 스토리지를 씁니다.
+- RDS DB 인스턴스도 EC2처럼 **클래스(컴퓨팅/메모리)**를 선택하며, 스토리지는 **gp3/gp2(범용 SSD)·프로비저닝 IOPS(io1/io2)** 중 선택합니다(마그네틱 스토리지는 사용이 중단되어 새 DB 인스턴스에 쓸 수 없고, 기존 볼륨은 gp3로 이전됐습니다). 고IOPS DB는 프로비저닝 IOPS 스토리지를 씁니다.
 
 **읽기 전용 복제본(Read Replica) — 읽기 확장:**
 
@@ -160,14 +164,14 @@ lastVerified: 2026-11-06
 - **읽기 확장 ≠ 고가용성.** 읽기 복제본은 읽기 성능용입니다. **자동 장애 조치(HA)**는 **Multi-AZ DB 인스턴스 배포**의 역할입니다(동기 복제 스탠바이 1개). 읽기 가능한 리더 두 개를 두는 **Multi-AZ DB 클러스터 배포**는 별도 옵션으로 **반동기** 복제를 쓰고 리더가 읽기도 처리합니다(`soa-t2-2` §2 참고). 둘을 혼동하지 마세요.
 - 쓰기 부하가 병목이면 읽기 복제본은 도움이 안 됩니다 → 인스턴스 스케일 업, 스토리지 IOPS 증설, 또는 샤딩/Aurora 등을 검토합니다.
 
-**파라미터 그룹·Performance Insights:**
+**파라미터 그룹·Database Insights(구 Performance Insights):**
 
 | 도구 | 용도 |
 |---|---|
 | **DB 파라미터 그룹** | 엔진 설정(버퍼 풀 크기, 연결 수, 타임아웃 등)을 조정. 동적/정적 파라미터 구분(정적은 재부팅 필요) |
-| **Performance Insights** | DB 부하를 **대기 이벤트·SQL 단위로 시각화**해 어떤 쿼리/락이 부하를 유발하는지 진단 |
+| **CloudWatch Database Insights**(구 성능 개선 도우미·Performance Insights) | DB 부하를 **대기 이벤트·SQL 단위로 시각화**해 어떤 쿼리/락이 부하를 유발하는지 진단. Performance Insights는 **2026-07-31에 수명이 끝났고** 사용자는 Database Insights로 이전됐습니다(시험 가이드 문구는 옛 이름을 씁니다) |
 
-> 운영 신호: `CPUUtilization`·`DatabaseConnections`·`ReadIOPS`/`WriteIOPS`·`ReadLatency`·`FreeableMemory`를 봅니다. 읽기 지연·읽기 IOPS가 높으면 읽기 복제본/캐시를, 연결 수 폭주면 연결 풀링(RDS Proxy)을, 특정 쿼리 부하면 Performance Insights로 범인 쿼리를 찾습니다.
+> 운영 신호: `CPUUtilization`·`DatabaseConnections`·`ReadIOPS`/`WriteIOPS`·`ReadLatency`·`FreeableMemory`를 봅니다. 읽기 지연·읽기 IOPS가 높으면 읽기 복제본/캐시를, 연결 수 폭주면 연결 풀링(RDS Proxy)을, 특정 쿼리 부하면 Database Insights(구 Performance Insights)로 범인 쿼리를 찾습니다.
 
 > 🧠 원리: 왜 읽기 전용 복제본은 쓰기 병목을 해소하지 못할까요?
 > 읽기 전용 복제본은 원본(Primary)에서 발생한 변경을 비동기로 받아 자신의 데이터를 최신화하는 방식으로 동작합니다.
@@ -270,7 +274,7 @@ lastVerified: 2026-11-06
 - **io2/io1 = 프로비저닝 IOPS**(고지속·고내구성 DB). **st1 = 순차 처리량 HDD**, **sc1 = 콜드 저비용 HDD**.
 - **EBS 최적화 인스턴스**: 인스턴스의 EBS 대역폭 한도가 볼륨 성능 상한이 될 수 있음 → 인스턴스 크기도 고려.
 - **RDS 읽기 복제본 = 읽기 확장(비동기)**, **Multi-AZ DB 인스턴스 배포 = 고가용성/장애 조치(동기 스탠바이 1개, 읽기 불가)**. 혼동 금지 — **DB 클러스터 배포**는 반동기이고 리더가 읽기도 처리합니다.
-- **Performance Insights**로 부하 유발 쿼리/대기 이벤트 진단. **파라미터 그룹**으로 엔진 튜닝(정적 파라미터는 재부팅).
+- **Database Insights(구 Performance Insights)**로 부하 유발 쿼리/대기 이벤트 진단. **파라미터 그룹**으로 엔진 튜닝(정적 파라미터는 재부팅).
 - **엔진 3종 = Valkey·Memcached·Redis OSS.** **Valkey/Redis OSS = 풍부한 기능·HA·영속성**, **Memcached = 단순·멀티스레드 처리량**.
 - **Lazy Loading(미스 시 적재, stale 가능)** vs **Write-Through(쓰기 시 갱신, 최신성↑·쓰기 지연↑)**, 보통 **TTL** 병행.
 - **공유 스토리지 3축 = EFS(리눅스 NFS) · FSx(Windows/Lustre/ONTAP/OpenZFS) · S3 Files(버킷을 파일 시스템으로)**.

@@ -34,7 +34,11 @@ sources:
     url: https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html
   - title: What is AppRegistry?
     url: https://docs.aws.amazon.com/servicecatalog/latest/arguide/intro-app-registry.html
-lastVerified: 2026-11-09
+  - title: AWS global condition context keys
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
+  - title: Provision and manage accounts with Account Factory
+    url: https://docs.aws.amazon.com/controltower/latest/userguide/account-factory.html
+lastVerified: 2026-11-17
 ---
 
 # 일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)
@@ -264,7 +268,7 @@ Service Catalog는 **AWS에서 승인된 IT 서비스의 카탈로그**를 만�
 | **세분화된 액세스 제어** | 관리자가 제품을 **포트폴리오**로 묶고 **제약 조건과 리소스 태그**를 더한 뒤 **IAM 사용자·그룹에 포트폴리오 접근 권한**을 줍니다 |
 | ⚠️ **확장성과 버전 관리** | 제품을 **여러 포트폴리오에 복사 없이** 넣을 수 있고, **제품을 새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오의 제품에 전파**됩니다 |
 
-⚠️ 작업 6.1과의 연결 — Control Tower의 **Account Factory가 Service Catalog의 프로비저닝된 제품 위에 만들어진 추상화**입니다. 즉 "계정 프로비저닝 표준화"와 "리소스 프로비저닝 표준화"가 같은 기제를 씁니다.
+⚠️ 작업 6.1과의 연결 — Control Tower의 **Account Factory가 vend 한 계정은 프로비저닝된 제품과 연결**됩니다(공식 Account Factory 페이지가 「a provisioned product that's associated with an account that Account Factory vends」로 적습니다). 즉 "계정 프로비저닝 표준화"와 "리소스 프로비저닝 표준화"가 같은 기제를 씁니다.
 
 #### 4-3. AppRegistry — 범위 메모
 
@@ -394,7 +398,7 @@ AppRegistry 자체는 **애플리케이션을 만들어 연관 리소스를 담�
 
 - 공식 사용자 안내서가 페이지 머리에 적습니다 — **`AWS Service Catalog AppRegistry`는 2026년 7월 30일부터 신규 고객에게 열려 있지 않습니다.** 그날 전에 가입했다면 쓸 수 있고 **기존 고객은 정상적으로 계속 사용**할 수 있습니다
 - 즉 **지금 새로 시작하는 조직은 설정할 수 없습니다.** 제안 자체가 성립하지 않습니다
-- ⚠️ **중요한 구분** — **AWS Service Catalog 본체는 닫히지 않았습니다.** 포트폴리오·제품·제약 조건·프로비저닝된 제품은 그대로 쓰이고, Control Tower의 **Account Factory도 Service Catalog의 프로비저닝된 제품 위에** 올라갑니다
+- ⚠️ **중요한 구분** — **AWS Service Catalog 본체는 닫히지 않았습니다.** 포트폴리오·제품·제약 조건·프로비저닝된 제품은 그대로 쓰이고, Control Tower의 **Account Factory가 vend 한 계정도 프로비저닝된 제품과 연결**됩니다
 - 대안은 본체의 모델입니다 — **포트폴리오로 묶고 제약 조건과 리소스 태그를 더해 IAM 사용자·그룹에 접근 권한**을 주고, **제품을 새 버전으로 업데이트하면 그 제품을 참조하는 모든 포트폴리오에 전파**되는 성질을 씁니다
 
 ⚠️ **범위 메모** — AppRegistry는 **상태**를 알아 두고, 설계의 축은 **본체의 공유·제약 조건 모델**과 **RAM과의 차이**입니다. 참고로 AppRegistry는 **RAM을 통해 Organizations로 공유**되고 **Well-Architected Tool**과 통합됩니다.
@@ -415,3 +419,5 @@ AppRegistry 자체는 **애플리케이션을 만들어 연관 리소스를 담�
 11. What is AWS Resource Access Manager? — `docs.aws.amazon.com/ram/latest/userguide/what-is.html` (2026-11-09 확인)
 12. What Is Service Catalog? — `docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html` (2026-11-09 확인)
 13. What is AppRegistry? — `docs.aws.amazon.com/servicecatalog/latest/arguide/intro-app-registry.html` (2026-11-09 확인)
+14. AWS global condition context keys — `docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html` (2026-11-17 확인)
+15. Provision and manage accounts with Account Factory — `docs.aws.amazon.com/controltower/latest/userguide/account-factory.html` (2026-11-17 확인)

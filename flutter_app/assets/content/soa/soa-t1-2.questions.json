@@ -67,20 +67,24 @@
       "options": [
         "로그 그룹에 지표 필터를 만들어 ERROR 발생 횟수를 지표로 게시하고, 그 지표에 CloudWatch 경보를 걸어 SNS로 알린다",
         "로그 그룹에 구독 필터를 만들어 Lambda로 전달하고 Lambda가 직접 횟수를 세어 SNS로 알린다",
-        "Logs Insights 쿼리를 5분마다 실행하는 경보를 만든다",
+        "로그 그룹의 보존 기간을 5분으로 줄여 임계값을 넘는 로그가 SNS로 자동 전달되게 한다",
         "CloudWatch 에이전트 구성에 임계값을 지정해 알림을 보낸다"
       ],
       "correct": 0,
-      "explanation": "지표 필터는 로그 이벤트에서 찾을 패턴을 정의하고, 일치하는 이벤트를 CloudWatch 지표의 수치 데이터로 변환합니다. 이렇게 만든 지표에 일반 CloudWatch 경보(5분 합계 ≥ 10)를 걸고 SNS를 알림 대상으로 지정하는 것이 표준 흐름입니다.",
+      "explanation": "지표 필터는 로그 이벤트에서 찾을 패턴을 정의하고, 일치하는 이벤트를 CloudWatch 지표의 수치 데이터로 변환합니다. 이렇게 만든 지표에 일반 CloudWatch 경보(5분 합계 ≥ 10)를 걸고 SNS를 알림 대상으로 지정하는 것이 표준 흐름입니다. 로그 데이터에 경보를 거는 방법은 둘입니다 — 지표 필터로 만든 지표에 지표 경보를 거는 방법과, Logs Insights 쿼리를 일정에 따라 실행해 집계 결과를 임계값과 직접 비교하는 Log Alarm입니다.",
       "wrongExplanations": {
         "1": "구독 필터 + Lambda로도 구현할 수는 있지만, 카운트와 임계값 판정 로직을 직접 작성해야 하므로 관리형 기능(지표 필터 + 경보)보다 운영 부담이 큽니다.",
-        "2": "Logs Insights는 대화형 분석 쿼리 기능으로, 쿼리 결과에 직접 경보를 거는 방식이 아닙니다. 로그 기반 경보는 지표 필터를 사용합니다.",
+        "2": "보존 기간은 로그 이벤트를 얼마나 오래 보관할지만 정하는 설정이며, 임계값 판정이나 알림 전송 기능이 없습니다.",
         "3": "CloudWatch 에이전트는 지표·로그를 수집해 전송하는 역할이며 임계값 판정·알림 기능이 없습니다."
       },
       "sources": [
         {
           "title": "지표 필터로 로그 이벤트에서 지표 생성",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/MonitoringLogData.html"
+        },
+        {
+          "title": "로그에 대한 경보 — Log Alarm 방식과 지표 필터 방식",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Alarm-On-Logs.html"
         }
       ],
       "verified": true
@@ -255,6 +259,10 @@
         {
           "title": "CloudWatch Logs Insights 쿼리 구문 — 지원되는 필드",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html"
+        },
+        {
+          "title": "Logs Insights가 자동 생성하는 시스템 필드",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_AnalyzeLogData-discoverable-fields.html"
         }
       ],
       "verified": true
@@ -282,6 +290,10 @@
         {
           "title": "EC2 인스턴스에 CloudWatch 에이전트 설치",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
+        },
+        {
+          "title": "CloudWatch 에이전트가 수집하는 지표 — CWAgent 네임스페이스",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/metrics-collected-by-CloudWatch-agent.html"
         }
       ],
       "verified": true
@@ -309,6 +321,10 @@
         {
           "title": "EC2 인스턴스에 CloudWatch 에이전트 설치 — Systems Manager 사용",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
+        },
+        {
+          "title": "Systems Manager로 CloudWatch 에이전트 설치·구성 — 문서와 IAM 정책",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/installing-cloudwatch-agent-ssm.html"
         }
       ],
       "verified": true
@@ -336,6 +352,10 @@
         {
           "title": "EC2 인스턴스에 CloudWatch 에이전트 설치 — IAM 역할",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
+        },
+        {
+          "title": "Systems Manager로 CloudWatch 에이전트 설치·구성 — 문서와 IAM 정책",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/installing-cloudwatch-agent-ssm.html"
         }
       ],
       "verified": true
@@ -363,6 +383,10 @@
         {
           "title": "EC2 인스턴스에 CloudWatch 에이전트 설치",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html"
+        },
+        {
+          "title": "CloudWatch 에이전트가 수집하는 지표 — CWAgent 네임스페이스",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/metrics-collected-by-CloudWatch-agent.html"
         }
       ],
       "verified": true

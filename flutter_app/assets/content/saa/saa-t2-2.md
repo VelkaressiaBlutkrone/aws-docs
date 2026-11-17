@@ -36,7 +36,7 @@ sources:
     url: https://aws.amazon.com/about-aws/whats-new/2025/10/aws-lambda-payload-size-256-kb-1-mb-invocations/
   - title: Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성 (공식)
     url: https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -362,7 +362,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 2. **"Reserved Concurrency를 설정하면 콜드 스타트가 없어진다."** → Reserved Concurrency는 동시 실행 상한을 예약하는 기능으로, 워밍업과 무관합니다. 콜드 스타트 제거는 Provisioned Concurrency를 사용해야 합니다.
    (원리: §1 — 콜드 스타트는 실행 환경 초기화 지연이므로 환경을 미리 워밍업(Provisioned)해야 제거되고, 상한 예약(Reserved)과는 다른 축이다.)
 
-3. **"단순 Lambda 프록시에 REST API를 써야 한다."** → REST API는 캐싱·사용 계획·WAF 등 풍부한 기능을 제공하지만 더 비쌉니다. 단순 프록시라면 HTTP API가 더 저렴하고 지연도 낮습니다.
+3. **"단순 Lambda 프록시에 REST API를 써야 한다."** → REST API는 캐싱·사용 계획·WAF 등 풍부한 기능을 제공하지만 더 비쌉니다. 단순 프록시라면 HTTP API가 더 저렴하고 기능이 최소화돼 있습니다.
    (원리: §2 — API Gateway 유형은 필요 기능과 비용의 트레이드오프로 선택하며, 기능을 쓰지 않는데 REST API를 고르면 비용만 증가한다.)
 
 4. **"Fargate를 쓰면 ECS가 필요 없다."** → Fargate는 ECS(또는 EKS)의 시작 유형입니다. ECS 없이 Fargate만 단독으로 존재하지 않습니다. ECS가 오케스트레이션을 담당하고, Fargate가 인프라(서버 없이 컨테이너 실행)를 담당합니다.

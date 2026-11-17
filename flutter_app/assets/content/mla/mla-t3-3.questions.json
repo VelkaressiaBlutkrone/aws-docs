@@ -483,8 +483,8 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html"
         },
         {
-          "title": "Amazon SageMaker Pipelines — 서비스 정의",
-          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines.html"
+          "title": "Pipelines steps — 단계 병렬성과 DependsOn",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps.html"
         }
       ],
       "verified": true
@@ -511,8 +511,8 @@
       },
       "sources": [
         {
-          "title": "Pipelines overview — 데이터 의존성과 병렬 실행, DependsOn",
-          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/pipelines-overview.html"
+          "title": "Pipelines steps — 데이터 의존성·단계 병렬성·DependsOn",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps.html"
         },
         {
           "title": "Step caching — 재사용 조건과 범위",
@@ -730,7 +730,7 @@
       "explanation": "Condition 단계는 단계 속성을 평가해 조건 목록과 참 분기, 거짓 분기로 흐름을 나눕니다. SageMaker 예제 DAG에서도 평가 지표가 한계 미만인지 검사해 미달이면 등록 단계로 가지 않습니다. 제약은 중첩이 불가능하고 양 분기에 같은 단계를 쓸 수 없다는 것입니다.",
       "wrongExplanations": {
         "1": "Callback 단계는 외부 프로세스를 워크플로에 편입하기 위해 SQS 큐에 토큰 메시지를 보내고 응답을 기다리는 장치입니다. 평가 지표로 분기하는 용도가 아닙니다.",
-        "2": "QualityCheck는 데이터와 모델 품질의 baseline을 제안하고 드리프트를 검사하는 단계로, 평가 지표 임계 판정과는 목적이 다릅니다. 게다가 이 단계는 신규 고객에게 닫힌 Model Monitor 컨테이너를 씁니다.",
+        "2": "QualityCheck는 데이터와 모델 품질의 baseline을 제안하고 드리프트를 검사하는 단계로, 평가 지표 임계 판정과는 목적이 다릅니다.",
         "3": "Fail 단계는 조건이 충족되지 않을 때 실행을 중단하고 사용자 지정 오류 메시지를 남기는 단계입니다. 판정 자체를 하는 것은 Condition이고 Fail은 그 거짓 분기에 붙여 씁니다."
       },
       "sources": [
@@ -767,8 +767,8 @@
       },
       "sources": [
         {
-          "title": "Machine Learning Lens — 재훈련 프레임워크와 안티패턴",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html"
+          "title": "MLPERF06-BP05 Establish an automated re-training framework — 재훈련 조건과 안티패턴",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html"
         },
         {
           "title": "MLSUS06-BP02 — 필요할 때만 재훈련",

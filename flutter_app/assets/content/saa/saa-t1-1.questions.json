@@ -49,7 +49,8 @@
         "3": "버킷을 퍼블릭으로 여는 것은 인증을 우회하는 심각한 보안 위험으로 최소 권한 원칙에 정면으로 어긋납니다."
       },
       "sources": [
-        { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
+        { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" },
+        { "title": "EC2에서 IAM 역할 사용 (공식) — 인스턴스 프로파일로 임시 자격 증명을 전달한다", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html" }
       ],
       "verified": true
     },
@@ -73,7 +74,8 @@
         "3": "보안 그룹은 네트워크 트래픽을 제어하는 도구이지 DynamoDB API 권한을 부여하지 않습니다 — 권한은 IAM 역할/정책으로 부여합니다."
       },
       "sources": [
-        { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" }
+        { "title": "IAM 역할 (공식)", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html" },
+        { "title": "Lambda 실행 역할 (공식) — 함수가 AWS 서비스에 접근할 권한을 부여하는 IAM 역할", "url": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html" }
       ],
       "verified": true
     },

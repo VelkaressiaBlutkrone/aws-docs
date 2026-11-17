@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-policy-generation.html
   - title: DEA-C01 공식 시험 가이드 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain4.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 권한 부여 메커니즘 적용 (사용자 지정 정책·Lake Formation·RBAC/ABAC·최소 권한)
@@ -309,7 +309,7 @@ AWS 관리형 정책이 요구에 맞지 않을 때 직접 정책을 만드는 �
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20)
 
 1. Managed policies and inline policies (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html
 2. Conditions with multiple context keys or values (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html
