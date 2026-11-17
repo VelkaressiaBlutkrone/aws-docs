@@ -164,7 +164,18 @@ void main() {
       // ⚠️ 보고서는 MLA 전용으로 적었지만 같은 백서가 `dea-t1-2.md` 에도 있었다.
       expect(doc('dea', 'dea-t1-2').contains('cost-optimization-in-analytics-services'),
           isTrue, reason: '참인 인용을 지우는 것이 더 나쁘다');
-      expect(doc('mla', 'mla-t4-3').contains('data-cataloging.html'), isTrue);
+      // ⚠️⚠️ 2026-11-17: `mla-t4-3.md` #76 의 `data-cataloging.html` 은 **지운 것이
+      // 아니라 그 사실을 적는 라이브 정본으로 옮겼다**(카탈로그·검색·권한 모델은
+      // Lake Formation 정본이 적는다). 「상태를 적는다」는 사람이 열 수 있는 정본이
+      // 없을 때의 처리이고, 있으면 그쪽이 낫다 —
+      // `docs/saa-review/2026-11-17-wa-restructure-source-audit.md` §5-2.
+      expect(doc('mla', 'mla-t4-3').contains('data-cataloging.html'), isFalse,
+          reason: '되살아나면 사람이 열 수 없는 링크로 돌아간다');
+      expect(
+          doc('mla', 'mla-t4-3')
+              .contains('lake-formation/latest/dg/what-is-lake-formation.html'),
+          isTrue,
+          reason: '옮긴 자리의 정본이 실재해야 한다 — 지우기만 하면 안 된다');
       // `mla-t4-3-q12` 의 둘째 출처는 **사람이 열 수 있는 유일한 근거**다 — 지우지 않는다.
       final q12 = question('mla', 'mla-t4-3', 'mla-t4-3-q12');
       expect(blob(q12).contains('list_sagemaker'), isTrue,

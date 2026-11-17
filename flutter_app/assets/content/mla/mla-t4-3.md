@@ -741,7 +741,7 @@ SageMaker는 `sagemaker:` 접두 조건 키로 **"리소스를 만들 때 요청
 73. Controlling access from VPC endpoints with bucket policies (Amazon S3 공식 문서) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.html
 74. Gateway endpoints for Amazon S3 (Amazon VPC PrivateLink 공식 문서) — https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html
 75. Infrastructure security in Amazon VPC (공식 문서) — https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
-76. Building Data Lakes on AWS — Catalog and search (AWS 백서) (⚠️ 브라우저로는 다른 서비스 페이지로 리다이렉트됩니다 — 문서가 사라진 것은 아니고 본문은 유효합니다 · 2026-11-06 실측) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/data-cataloging.html
+76. What is AWS Lake Formation? — 데이터 카탈로그와 검색·권한 모델 (공식) — https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html (2026-11-17 확인)
 77. Invoke endpoints with OpenAI-compatible APIs (공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/realtime-endpoints-openai-compatible.html
 78. What is Amazon SageMaker AI? (개명 안내, 공식 문서) — https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
 79. Clarify availability change (공식 공지) — https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
