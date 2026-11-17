@@ -178,7 +178,7 @@
       "wrongExplanations": {
         "0": "Aurora Replica는 읽기 처리량을 확장하는 수단입니다. Standard 구성에서는 복제본이 처리한 읽기도 I/O 요금 대상이므로 I/O 비용 비중 문제가 해결되지 않습니다.",
         "1": "I/O 요금은 인스턴스 크기가 아니라 I/O 요청 수에 붙습니다. 인스턴스를 줄여도 I/O 비용 비중은 그대로이고 성능만 떨어집니다.",
-        "3": "Amazon RDS의 Multi-AZ 대기 복제본은 읽기 트래픽을 처리하지 않습니다. 또한 이 선택지는 Aurora의 I/O 과금 모델과 무관합니다."
+        "3": "이 선택지는 Aurora의 I/O 과금 모델과 무관해 I/O 비용 비중을 바꾸지 못합니다. 또한 Amazon RDS의 Multi-AZ DB 인스턴스 배포(스탠바이 1개)에서는 스탠바이가 읽기 트래픽을 처리하지 않습니다(읽기까지 처리하는 것은 스탠바이가 2개인 Multi-AZ DB 클러스터 배포입니다)."
       },
       "sources": [
         {
@@ -186,8 +186,8 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html"
         },
         {
-          "title": "Working with DB instance read replicas (Amazon RDS) — Multi-AZ standby는 읽기 트래픽을 처리하지 않음",
-          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+          "title": "Configuring and managing a Multi-AZ deployment for Amazon RDS — DB 인스턴스 배포의 스탠바이는 읽기 미처리, DB 클러스터 배포의 스탠바이는 읽기 처리",
+          "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
         }
       ],
       "verified": true
@@ -490,7 +490,7 @@
       "wrongExplanations": {
         "1": "다층 그래프로 조직하는 방식은 HNSW(Hierarchical Navigable Small World)의 설명입니다.",
         "2": "K-means로 영역(lists)을 나누고 쿼리 시 가까운 영역 일부(probes)만 검색하는 방식은 IVF(IVFFlat)의 설명입니다.",
-        "3": "제시된 공식 문서에서 MemoryDB의 FLAT을 양자화 기반 압축 방식으로 설명하는 서술은 확인되지 않습니다. FLAT은 전수 선형 비교 방식입니다."
+        "3": "MemoryDB 문서는 FLAT을 인덱스의 각 벡터를 선형으로 처리하는 brute force 방식으로 설명합니다. 양자화로 저장 공간을 줄이는 압축 전용 방식이 아닙니다."
       },
       "sources": [
         {

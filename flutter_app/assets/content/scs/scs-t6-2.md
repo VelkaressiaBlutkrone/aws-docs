@@ -34,7 +34,13 @@ sources:
     url: https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html
   - title: What is AppRegistry?
     url: https://docs.aws.amazon.com/servicecatalog/latest/arguide/intro-app-registry.html
-lastVerified: 2026-11-09
+  - title: AWS global condition context keys
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html
+  - title: Managing organization policies with AWS Organizations
+    url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html
+  - title: What Is AWS Control Tower?
+    url: https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html
+lastVerified: 2026-11-17
 ---
 
 # 일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)
@@ -415,3 +421,6 @@ AppRegistry 자체는 **애플리케이션을 만들어 연관 리소스를 담�
 11. What is AWS Resource Access Manager? — `docs.aws.amazon.com/ram/latest/userguide/what-is.html` (2026-11-09 확인)
 12. What Is Service Catalog? — `docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html` (2026-11-09 확인)
 13. What is AppRegistry? — `docs.aws.amazon.com/servicecatalog/latest/arguide/intro-app-registry.html` (2026-11-09 확인)
+14. AWS global condition context keys — `docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html` (2026-11-17 확인)
+15. Managing organization policies with AWS Organizations — `docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html` (2026-11-17 확인)
+16. What Is AWS Control Tower? — `docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html` (2026-11-17 확인)

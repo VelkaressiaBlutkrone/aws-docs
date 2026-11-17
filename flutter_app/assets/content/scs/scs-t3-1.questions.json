@@ -3,7 +3,7 @@
   "taskTitle": "네트워크 엣지 서비스의 보안 제어 설계, 구현 및 문제 해결",
   "domain": 3,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-10",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t3-1-q1",
@@ -19,7 +19,7 @@
         "첫째 CloudFront, 둘째 Shield, 셋째 AWS WAF 속도 제한, 넷째 Firewall Manager"
       ],
       "correct": 0,
-      "explanation": "공식 소개 페이지가 네 제품을 한 페이지에 두고 역할을 가릅니다. 전송·네트워크 계층 범람은 Shield가 흡수하고 완화하며(Standard는 자동, Advanced는 구독), 요청의 내용을 검사하는 애플리케이션 계층 공격은 AWS WAF가 봅니다. 오리진 직접 접근은 WAF나 Shield로 막을 수 없고 CloudFront 커스텀 헤더와 관리형 접두사 목록을 함께 쓰며, 조직 전체 규칙 일괄 적용은 AWS Firewall Manager입니다.",
+      "explanation": "공식 소개 페이지가 네 제품을 한 페이지에 두고 역할을 가릅니다. 전송·네트워크 계층 범람은 Shield가 흡수하고 완화하며(Standard는 자동, Advanced는 구독), 요청의 내용을 검사하는 애플리케이션 계층 공격은 AWS WAF가 봅니다. 오리진 직접 접근은 WAF나 Shield로 막을 수 없고 CloudFront 커스텀 오리진 헤더로 막고 관리형 접두사 목록으로 접근을 더 좁히며, 조직 전체 규칙 일괄 적용은 AWS Firewall Manager입니다.",
       "wrongExplanations": {
         "1": "계층이 뒤바뀌었습니다. 범람은 Shield, 요청 내용 검사는 WAF입니다.",
         "2": "오리진 직접 접근은 Shield Advanced의 완화 대상이 아닙니다. 그리고 조직 일괄 적용은 Firewall Manager입니다.",
@@ -31,8 +31,12 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html"
         },
         {
-          "title": "Security checklist for ecommerce — 오리진 보호 수단",
+          "title": "Security checklist for marketplace distributions - 오리진 보호 수단",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ecommerce-security-checklist.html"
+        },
+        {
+          "title": "Restrict access to Application Load Balancers - 커스텀 헤더와 접두사 목록",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/restrict-access-to-load-balancer.html"
         }
       ],
       "verified": true
@@ -79,15 +83,15 @@
       "options": [
         "AWS 관리형 규칙 그룹에는 종류와 무관하게 기본 WAF 요금 외의 추가 요금이 붙습니다",
         "추가 요금이 붙는 것은 코어 규칙 세트이고 그 밖의 AWS 관리형 규칙 그룹은 무료입니다",
-        "추가 요금은 Bot Control과 계정 탈취 방지와 계정 생성 사기 방지에 붙습니다",
+        "추가 요금은 Bot Control, 계정 탈취 방지, 계정 생성 사기 방지, Anti-DDoS 규칙 그룹에 붙습니다",
         "추가 요금이 붙는 것은 AWS Marketplace 규칙 그룹뿐이고 AWS 관리형 규칙 그룹은 전부 무료입니다"
       ],
       "correct": 2,
-      "explanation": "과금이 세 층입니다. Bot Control과 Fraud Control 계정 탈취 방지(ATP)와 Fraud Control 계정 생성 사기 방지(ACFP)는 AWS 관리형이지만 기본 WAF 요금 외에 추가 요금이 붙고, 그 밖의 모든 AWS Managed Rules는 추가 비용이 없으며 AWS Marketplace 규칙 그룹은 판매자 구독입니다. 한편 CAPTCHA 또는 Challenge 규칙 작업을 쓰면 그 자체로 추가 요금이 붙습니다. 규칙 작업의 종류는 공식 페이지가 계속 늘려 적으므로 개수를 근거로 삼지 않습니다.",
+      "explanation": "과금이 세 층입니다. Bot Control과 Fraud Control 계정 탈취 방지(ATP)와 Fraud Control 계정 생성 사기 방지(ACFP)는 AWS 관리형이지만 기본 WAF 요금 외에 추가 요금이 붙고, Anti-DDoS 관리형 규칙 그룹도 전용 페이지가 추가 요금을 적습니다. 코어 규칙 세트 같은 기준 규칙 그룹은 추가 비용이 없고 AWS Marketplace 규칙 그룹은 판매자 구독입니다. 한편 CAPTCHA 또는 Challenge 규칙 작업을 쓰면 그 자체로 추가 요금이 붙습니다. 규칙 작업의 종류는 공식 페이지가 계속 늘려 적으므로 개수를 근거로 삼지 않습니다.",
       "wrongExplanations": {
-        "0": "그 밖의 AWS Managed Rules는 추가 비용이 없습니다.",
-        "1": "코어 규칙 세트는 추가 요금 대상이 아닙니다. 추가 요금은 Bot Control과 두 Fraud Control입니다.",
-        "3": "Marketplace 외에 AWS 관리형 중에서도 Bot Control과 두 Fraud Control에 추가 요금이 붙습니다."
+        "0": "코어 규칙 세트 같은 기준 규칙 그룹은 추가 비용이 없습니다.",
+        "1": "코어 규칙 세트는 추가 요금 대상이 아닙니다. 추가 요금은 Bot Control과 두 Fraud Control과 Anti-DDoS 규칙 그룹입니다.",
+        "3": "Marketplace 외에 AWS 관리형 중에서도 Bot Control과 두 Fraud Control과 Anti-DDoS 규칙 그룹에 추가 요금이 붙습니다."
       },
       "sources": [
         {
@@ -97,6 +101,10 @@
         {
           "title": "Using managed rule groups in AWS WAF - 본문 검사 한도와 과금 층",
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-managed-rule-groups.html"
+        },
+        {
+          "title": "AWS WAF Distributed Denial of Service (DDoS) prevention rule group - 추가 요금 고지",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-anti-ddos.html"
         }
       ],
       "verified": true
@@ -137,21 +145,29 @@
       "difficulty": "foundational",
       "stem": "ALB 오리진에 CloudFront를 붙이고 보안 그룹 인바운드를 CloudFront 관리형 접두사 목록으로 제한했는데 감사에서 여전히 우회 가능이라는 지적을 받았습니다. 무엇이 빠졌고 왜입니까?",
       "options": [
-        "커스텀 오리진 헤더가 빠졌습니다. 접두사 목록의 IP 범위는 모든 고객의 배포가 공유하므로 제3자 배포에서 온 요청도 통과합니다",
+        "커스텀 오리진 헤더가 빠졌습니다. 접두사 목록은 CloudFront 서버 전체의 범위라 어느 배포에서 온 요청인지 가르지 못합니다",
         "Shield Advanced 구독이 빠졌습니다. 구독하면 오리진 직접 접근까지 차단 범위에 들어갑니다",
         "WAF 속도 제한이 빠졌습니다. 우회 트래픽은 양으로 걸러야 출처와 무관하게 막힙니다",
         "아무것도 빠지지 않았습니다. 접두사 목록이 CloudFront 범위만 허용하므로 보호가 완결됩니다"
       ],
       "correct": 0,
-      "explanation": "공식 보안 체크리스트가 두 수단을 나란히 적고 함께 쓰는 것이 가장 강한 오리진 보호라고 적습니다. 접두사 목록은 네트워크 수준에서 CloudFront IP 범위만 허용하는데 그 범위는 모든 고객의 배포가 공유하므로, 애플리케이션 수준에서 그 트래픽이 내 특정 배포에서 왔음을 확인하는 커스텀 오리진 헤더가 필요합니다. 값은 Secrets Manager에 두고 주기적으로 교체합니다.",
+      "explanation": "관리형 접두사 목록은 CloudFront의 전역 오리진 대면 서버 전체의 IP 범위를 담습니다. 그래서 CloudFront가 아닌 트래픽은 막지만 그 요청이 어느 배포에서 왔는지는 가르지 못합니다. 내 배포에서 온 요청임을 확인하는 수단은 CloudFront가 오리진 요청에 붙이는 커스텀 헤더이고 ALB가 그 헤더가 있는 요청만 전달하게 합니다. 공식 절차는 헤더를 기본 수단으로 두고 접두사 목록을 접근을 더 좁히는 선택 단계로 적습니다. 헤더 이름과 값은 비밀로 유지하고 Secrets Manager에 두어 주기적으로 교체합니다.",
       "wrongExplanations": {
         "1": "구독은 DDoS 보호 범위를 넓히는 것이고 오리진 직접 접근을 막는 수단이 아닙니다.",
         "2": "속도 제한은 양을 제한하는 것이고 출처가 내 배포인지 확인하지 않습니다.",
-        "3": "접두사 목록만 쓰면 다른 계정의 배포에서 온 요청도 통과합니다."
+        "3": "접두사 목록은 CloudFront가 아닌 트래픽을 막을 뿐이고 그 요청이 어느 배포에서 왔는지는 가르지 못합니다."
       },
       "sources": [
         {
-          "title": "Security checklist for marketplace distributions - 오리진 보호 두 층",
+          "title": "Restrict access to Application Load Balancers - 커스텀 헤더와 접두사 목록",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/restrict-access-to-load-balancer.html"
+        },
+        {
+          "title": "Locations and IP address ranges of CloudFront edge servers - 관리형 접두사 목록의 범위",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html"
+        },
+        {
+          "title": "Security checklist for marketplace distributions - 헤더 값 보관과 교체",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ecommerce-security-checklist.html"
         },
         {
@@ -369,6 +385,10 @@
         {
           "title": "Aggregating rate-based rules in AWS WAF - 집계 키와 그 제약",
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-aggregation-options.html"
+        },
+        {
+          "title": "Using rate-based rule statements in AWS WAF - 기본 2 WCU와 키당 30 WCU",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html"
         }
       ],
       "verified": true
@@ -461,6 +481,10 @@
         {
           "title": "AWS WAF in AWS GovCloud (US) - 타사 규칙 그룹 제약",
           "url": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-waf.html"
+        },
+        {
+          "title": "Using managed rule groups in AWS WAF - 규칙 세부 비공개 사유",
+          "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-managed-rule-groups.html"
         }
       ],
       "verified": true

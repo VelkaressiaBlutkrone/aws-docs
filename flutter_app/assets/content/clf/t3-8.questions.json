@@ -284,7 +284,7 @@
     {
       "id": "clf-t3-8-q11",
       "examGuideTaskId": "clf-t3-8",
-      "skill": "고객 참여 (Amazon Connect — 컨택 센터)",
+      "skill": "비즈니스 애플리케이션 (Amazon Connect — 컨택 센터)",
       "section": "other-services",
       "difficulty": "foundational",
       "stem": "한 회사가 전화·채팅 기반 고객 지원을 위한 클라우드 컨택 센터를 빠르게 구축하려 한다. 가장 적합한 AWS 서비스는?",
@@ -415,8 +415,12 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 (한국어) — Task 3.8 비즈니스 애플리케이션 서비스(Amazon SES 이메일)",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 3 — 작업 3.8 지식 'Amazon Connect와 Amazon Simple Email Service(Amazon SES)의 비즈니스 애플리케이션 서비스'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
+        },
+        {
+          "title": "What is Amazon SES? — 마케팅 이메일·주문 확인 같은 트랜잭션 이메일을 보내는 이메일 플랫폼",
+          "url": "https://docs.aws.amazon.com/ses/latest/dg/Welcome.html"
         }
       ],
       "verified": true

@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
   - title: Parameter Store vs Secrets Manager 선택 (공식)
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/integration-ps-secretsmanager.html
-lastVerified: 2026-06-12
+lastVerified: 2026-11-17
 ---
 
 # Systems Manager 운영 자동화 (Run Command·Patch·State Manager·Parameter Store)
@@ -151,7 +151,7 @@ aws ssm send-command \
 ④ Compliance에서 패치 준수 상태 확인
 ```
 
-> 패치는 **언제(유지 관리 기간) · 무엇을(베이스라인) · 어디에(패치 그룹)**로 분리됩니다. dev는 빨리, prod는 검증 후 늦게 승인하는 식으로 환경별 정책을 다르게 운영합니다. 태그 키는 **`Patch Group`(공백·대소문자 정확히)**여야 인식됩니다.
+> 패치는 **언제(유지 관리 기간) · 무엇을(베이스라인) · 어디에(패치 그룹)**로 분리됩니다. dev는 빨리, prod는 검증 후 늦게 승인하는 식으로 환경별 정책을 다르게 운영합니다. 태그 키는 **`Patch Group` 또는 `PatchGroup`**이어야 인식됩니다(EC2 인스턴스 메타데이터에서 태그를 허용했다면 공백 없는 `PatchGroup`이 필수). 패치 정책(patch policy) 기반 운영에서는 패치 그룹을 쓰지 않습니다.
 
 > 🧠 원리: Patch Manager가 베이스라인·패치 그룹·유지 관리 기간을 세 요소로 분리한 이유는 무엇일까요?
 > 세 요소는 각각 "무엇을 승인할 것인가(정책)", "어떤 인스턴스에 적용할 것인가(범위)", "언제 적용할 것인가(타이밍)"라는 독립된 관심사를 담고 있습니다.
@@ -204,7 +204,7 @@ aws ssm send-command \
 
 > 🧠 원리: Parameter Store와 Secrets Manager 중 어느 쪽을 쓸지 결정할 때 "자동 교체"가 핵심 분기가 되는 이유는 무엇일까요?
 > 비밀 저장 자체는 Parameter Store SecureString도 KMS 암호화로 충분히 처리하지만, 자격증명의 생애주기 관리(주기적 교체, 교체 후 애플리케이션 갱신)는 단순 저장보다 훨씬 복잡한 오케스트레이션을 요구합니다.
-> Secrets Manager는 이 교체 오케스트레이션을 내장 Lambda 로테이터와 RDS 통합으로 서비스화한 반면, Parameter Store는 저장·조회에만 집중해 그 복잡성을 사용자에게 위임합니다.
+> Secrets Manager는 이 교체 오케스트레이션을 내장 교체 기능(관리형 교체·Lambda 교체 함수)과 RDS 통합으로 서비스화한 반면, Parameter Store는 저장·조회에만 집중해 그 복잡성을 사용자에게 위임합니다.
 > 따라서 교체 주기와 연동이 필요한 시나리오에서는 Secrets Manager가 직접 구현 비용을 절약하고, 교체가 필요 없는 정적 설정값에는 Parameter Store가 비용과 관리 복잡도 면에서 유리합니다.
 
 ### 8) Inventory와 Compliance
@@ -224,7 +224,7 @@ aws ssm send-command \
 - **관리형 노드 3대 전제**: **SSM Agent + IAM 인스턴스 프로파일(`AmazonSSMManagedInstanceCore`) + 엔드포인트 도달성**. 안 보이면 보통 IAM 또는 엔드포인트 문제.
 - **Run Command = SSH 없이 일괄 명령**. 대상은 인스턴스 ID·태그. concurrency·error threshold로 안전 실행.
 - **Session Manager = 인바운드 포트 0 · 베이스천/SSH 키 불필요 + CloudWatch Logs/S3 감사 + CloudTrail**. "베이스천 제거" 단서면 정답.
-- **Patch Manager = 베이스라인(무엇) + 패치 그룹(`Patch Group` 태그, 어디) + 유지 관리 기간(언제)**. `AWS-RunPatchBaseline`로 Scan/Install.
+- **Patch Manager = 베이스라인(무엇) + 패치 그룹(`Patch Group`/`PatchGroup` 태그, 어디) + 유지 관리 기간(언제)**. `AWS-RunPatchBaseline`로 Scan/Install.
 - **State Manager = 원하는 상태 지속 유지**(구성 관리). Run Command(일회성)와 구분.
 - **Automation 런북 = 다단계 운영/교정 자동화**(SSM 문서).
 - **Parameter Store SecureString(KMS)** vs **Secrets Manager(자동 교체 내장·비용 높음)**. **자동 교체 필요 → Secrets Manager**.
@@ -240,7 +240,7 @@ aws ssm send-command \
 2. **"Session Manager를 쓰려면 22번 포트를 열어야 한다."** → 정반대입니다. Session Manager는 **인바운드 포트를 전혀 열지 않고** 셸을 제공합니다(에이전트가 아웃바운드로 SSM에 연결). 베이스천도 SSH 키도 필요 없습니다.
    (원리: §3 — Agent가 아웃바운드로 SSM 채널을 유지하며 세션을 열므로 인바운드 포트가 필요 없다.)
 
-3. **"패치 그룹은 콘솔에서 그룹 객체를 만든다."** → 패치 그룹은 **`Patch Group` 태그**로 정의합니다. 태그 키 철자(공백 포함)가 정확해야 하며, 같은 값을 베이스라인에 등록해야 연결됩니다.
+3. **"패치 그룹은 콘솔에서 그룹 객체를 만든다."** → 패치 그룹은 **`Patch Group`(또는 `PatchGroup`) 태그**로 정의합니다. 태그 키 철자가 정확해야 하며, 같은 값을 베이스라인에 등록해야 연결됩니다.
    (원리: §4 — 세 요소는 독립된 관심사(정책·범위·타이밍)이며, 그룹은 태그로 인스턴스와 베이스라인을 연결한다.)
 
 4. **"Run Command로 구성을 한 번 맞추면 계속 유지된다."** → Run Command는 **일회성 실행**입니다. 부팅/드리프트 후에도 상태를 **지속적으로 강제**하려면 **State Manager**(연결)를 써야 합니다.
@@ -305,3 +305,5 @@ State Manager 연결은 일정 주기마다 지정된 SSM 문서를 인스턴스
 4. State Manager — https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html
 5. Parameter Store — https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html
 6. Parameter Store vs Secrets Manager 선택 — https://docs.aws.amazon.com/systems-manager/latest/userguide/integration-ps-secretsmanager.html
+
+> 📝 **2026-11-17 정정**: 패치 그룹 태그 키의 두 형태와 패치 정책 기반 운영의 예외를 더했고(https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-tag-a-patch-group.html · https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-groups.html), Secrets Manager 교체 서술을 두 형태 기준으로 고쳤습니다.

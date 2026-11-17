@@ -49,7 +49,8 @@
         "3": "볼륨을 삭제하고 재생성하는 것은 데이터 손실 위험이 있고 필요하지도 않습니다. 볼륨 타입 변경(gp2→gp3)은 삭제 없이 온라인으로 수행할 수 있습니다."
       },
       "sources": [
-        { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" }
+        { "title": "Amazon EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
+        { "title": "EBS 범용 SSD — gp2는 GiB당 3 IOPS, gp3는 볼륨 크기와 독립적으로 성능 프로비저닝", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html" }
       ],
       "verified": true
     },
@@ -169,7 +170,8 @@
         "3": "암호화된 볼륨에서 만든 스냅샷과 그 스냅샷에서 복원한 볼륨도 자동으로 암호화됩니다. 복원 시 암호화가 해제되지 않습니다."
       },
       "sources": [
-        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" },
+        { "title": "Amazon EBS 스냅샷 — 증분 백업·S3 저장·리전 내 모든 AZ에 자동 복제", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html" }
       ],
       "verified": true
     },
@@ -337,7 +339,8 @@
         "3": "EBS 스냅샷은 리전 리소스라 같은 리전의 어느 AZ에서든 복원할 수 있고, 다른 리전으로는 복사할 수 있습니다. AZ 간 이동이 불가하다는 설명은 틀렸으며, 스냅샷을 경유하는 것이 표준 절차입니다."
       },
       "sources": [
-        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" }
+        { "title": "Amazon EBS — What is Amazon Elastic Block Store? (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html" },
+        { "title": "Amazon EBS 스냅샷 — 증분 백업·S3 저장·리전 내 모든 AZ에 자동 복제", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html" }
       ],
       "verified": true
     },

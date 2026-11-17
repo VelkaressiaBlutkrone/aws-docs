@@ -48,6 +48,10 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html
   - title: Process multiple prompts with batch inference
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
+  - title: What is a Vector Database?
+    url: https://aws.amazon.com/what-is/vector-databases/
+  - title: Prerequisites for model distillation (Amazon Bedrock)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/prequisites-model-distillation.html
 lastVerified: 2026-11-17
 ---
 
@@ -75,7 +79,7 @@ lastVerified: 2026-11-17
 
 ## 🎯 왜 중요한가
 
-도메인 3은 **28%로 다섯 도메인 중 가장 큽니다.** 그런데 3.1은 **FM을 만드는 법이 아니라 고르는 법**을 묻습니다. 공식 의사 결정 가이드가 이 작업의 성격을 한 줄로 요약합니다 — 생성형 AI 서비스를 정한 다음 **"사용 사례에 가장 좋은 결과를 주는 파운데이션 모델을 고른다"**는 것이고, 그 뒤에 **"적절한 FM을 고를 때 고려할 결정적 요소들"**이 나열됩니다.
+도메인 3은 **28%로 다섯 도메인 중 가장 큽니다.** 그런데 3.1은 **FM을 만드는 법이 아니라 고르는 법**을 묻습니다. 공식 의사 결정 가이드가 이 작업의 성격을 한 줄로 요약합니다 — 생성형 AI 서비스를 정한 다음 **"사용 사례에 가장 좋은 결과를 주는 파운데이션 모델을 고른다"**는 것이고, 그 뒤에 **고려할 요소들**이 나열됩니다.
 
 이 작업의 문항은 거의 전부 **절충(trade-off)** 문항입니다. "가장 좋은 모델"을 고르게 하지 않고, 지문에 **지연 요구 · 예산 · 데이터 보유 상황 · 지식의 신선도** 같은 제약을 심어 두고 그 제약에 맞는 것을 고르게 합니다. 그래서 각 선택지가 **무엇을 포기하는지**를 아는 쪽이 이름을 외우는 쪽보다 빠릅니다.
 
@@ -87,7 +91,7 @@ lastVerified: 2026-11-17
 
 > 시험 직전에 이 열 줄만 다시 봅니다. 근거와 맥락은 아래 본문에 있습니다.
 
-- **모델 선택은 "가장 큰 모델"이 아닙니다** — 공식은 파라미터가 많으면 성능이 좋아지는 경향이지만 **훈련이 비싸고 운영에 더 많은 연산 자원이 필요**하고 **추론이 느려질 수 있다**고 적습니다
+- **모델 선택은 "가장 큰 모델"이 아닙니다** — 공식은 **작은 모델이 대체로 더 빠르고 저렴**하고 큰 모델은 **더 상세한 응답을 줄 수 있다**고 적으며, 작은 모델이 **더 낮은 비용으로도 좋은 결과**를 낼 수 있다고 적습니다
 - **모델별 사양표가 선택 기준의 실물입니다** — AWS가 모델마다 문서로 적는 것이 **입력·출력 모달리티 · 컨텍스트 윈도 · 최대 출력 토큰 · 지원 언어 · 미세 조정 가능 여부 · 프로비저닝된 처리량 지원 여부**입니다
 - **온도는 분포의 모양을 바꿉니다** — 낮으면 분포가 **뾰족해져 결정론적**, 높으면 **평평해져 무작위적**입니다. 공식 API 문서는 낮은 예로 0.2~0.3, 높은 예로 0.8~0.9를 듭니다
 - **Top K는 개수, Top P는 비율**입니다 — K=50은 가장 가능성 높은 **50개 토큰**, P=0.8은 누적 확률 분포의 **상위 80%**
@@ -105,7 +109,7 @@ lastVerified: 2026-11-17
 | 용어 | 뜻 |
 |---|---|
 | **모달리티(modality)** | 모델이 처리하는 **데이터 종류** — 텍스트 · 이미지(비전) · 임베딩 |
-| **파라미터 수** | 모델 내부의 설정 변수 개수. 공식은 **모델 복잡도의 핵심 지표**로 적고 **큰 모델은 흔히 500억 개 이상**이라고 설명합니다 |
+| **파라미터 수** | 모델 내부의 설정 변수 개수. 모델 크기·복잡도를 가늠하는 값입니다. ⚠️ 현행 공식 의사 결정 가이드는 **파라미터 수의 기준선을 적지 않으므로 숫자를 외우지 않습니다** |
 | **컨텍스트 윈도** | 응답을 생성할 때 모델이 **한 번에 고려할 수 있는 텍스트 양**(토큰) |
 | **최대 출력 토큰** | 한 응답에서 생성할 수 있는 토큰 상한. `max_tokens`는 **내가 요청에 넣어 이 상한을 정하는 파라미터**입니다 |
 | **추론 파라미터** | 추론 실행 시 응답에 영향을 주는 설정. 공식 분류는 **「무작위성과 다양성」**과 **「길이」** 두 범주입니다 |
@@ -129,10 +133,10 @@ lastVerified: 2026-11-17
 | 축 | 공식이 적는 것 | 가르는 질문 |
 |---|---|---|
 | **모달리티** | 모델이 처리하는 데이터 종류(텍스트·이미지·임베딩). **작업 중인 데이터와 맞아야** 합니다 | 내 입력과 출력이 **무엇인가** |
-| **모델 크기** | 파라미터 수. **큰 모델은 흔히 500억 개 이상** | 얼마나 복잡한 패턴을 잡아야 하는가 |
-| **모델 복잡도** | 파라미터 수가 **복잡도의 핵심 지표**. 복잡하면 성능은 좋아지는 경향이지만 **훈련이 비싸고 운영 연산 자원이 더 든다** | 복잡도의 대가를 치를 수 있는가 |
-| **지연 시간** | 입력을 처리해 출력을 반환하는 시간. 대화형·**즉시 번역** 같은 실시간 용례에서 결정적 | 사용자가 **기다리고 있는가** |
-| **비용** | FM 비용은 **모델 복잡도와 제공자의 가격 구조**가 정합니다. 작고 자원을 덜 쓰는 모델이 예산 친화적 선택지 | 예산이 이 복잡도를 버티는가 |
+| **모델 크기** | 공식은 크기를 **절충**으로 적습니다 — **"작은 모델이 대체로 더 빠르고 저렴하며, 큰 모델은 더 상세한 응답을 줄 수 있다"** | 응답의 상세함이 **속도·비용보다 중요한가** |
+| **모델 복잡도** | 현행 공식 의사 결정 가이드에는 이 이름의 항목이 없고, 같은 절충이 **지연·요금** 항목에 들어 있습니다 — 더 작은 모델이 대체로 더 빠르고 저렴합니다 | 복잡도의 대가를 치를 수 있는가 |
+| **지연 시간** | 모델이 **얼마나 빨리 응답하는가**. 공식은 작은 모델이 대체로 더 빠르다고 적습니다 | 사용자가 **기다리고 있는가** |
+| **비용** | **토큰당 또는 요청당 비용**을 모델이 주는 **가치와 견줍니다**. 공식은 작은 모델이 **더 낮은 비용으로 좋은 결과**를 낼 수 있다고 적습니다 | 예산이 이 복잡도를 버티는가 |
 | **다국어** | AWS는 모델마다 **지원 언어**를 문서로 적습니다. 예로 Amazon Nova 이해 모델 사양표는 **지원 언어 200개 이상**이고 각주가 **최적화된 15개 언어**(영어·독일어·스페인어·프랑스어·이탈리아어·일본어·**한국어**·아라비아어·중국어 간체·러시아어·힌디어·포르투갈어·네덜란드어·터키어·히브리어)를 따로 적습니다 | **"지원한다"와 "최적화됐다"**가 같은가 |
 | **입력/출력 길이** | 같은 사양표가 **컨텍스트 윈도**(입력 쪽)와 **최대 출력 토큰**(출력 쪽)을 **따로** 적습니다 | 긴 문서를 넣는 문제인가, 긴 답을 받는 문제인가 |
 | **사용자 지정** | 사양표에 **미세 조정 가능 여부**가 모델마다 다르게 적혀 있습니다 | 이 모델을 **내 데이터로 고칠 수 있는가** |
@@ -206,10 +210,10 @@ lastVerified: 2026-11-17
 
 | 서비스 | 공식이 적는 역할 | 가르는 질문 |
 |---|---|---|
-| **Amazon OpenSearch Service** | **검색 엔진**이고 관리형 클러스터와 서버리스 컬렉션 양쪽에서 **벡터 엔진**으로 벡터 검색을 지원합니다. **하이브리드 검색**(어휘 검색과 의미 검색 결합)이 강점이고, 벡터 인덱스를 **수평 확장**해야 할 때 이상적입니다 | **키워드와 의미를 함께** 검색해야 하는가 |
-| **Amazon Aurora PostgreSQL** | **pgvector** 오픈 소스 확장을 갖춘 완전 관리형 관계형 데이터베이스입니다. **SQL과 벡터 질의를 함께** 쓰고 Aurora Serverless v2 배포에서도 벡터 검색을 지원합니다 | 관계형 데이터 옆에 **SQL로** 벡터를 두고 싶은가 |
-| **Amazon RDS for PostgreSQL** | 공식이 Aurora PostgreSQL과 **같은 문단에서 함께** 적습니다 — 둘 다 **pgvector 확장을 갖춘 완전 관리형 관계형 데이터베이스**이고, **이미 PostgreSQL에 투자한 경우 이상적인 선택지**입니다 | 이미 **PostgreSQL 전문성**이 있는가 |
-| **Amazon Neptune Analytics** | **그래프 알고리즘과 벡터 검색을 결합**한 분석 그래프 데이터베이스 엔진입니다. 공식이 쓰는 이름이 **GraphRAG** — 엔터티 간 **관계를 사용하는 검색**이고, 대규모 데이터셋에 대한 **더 높은 수준의 이해**가 필요한 질의에 이상적입니다 | 답이 **항목 사이의 관계**에 있는가 |
+| **Amazon OpenSearch Service** | 관리형 클러스터와 서버리스 양쪽에서 **벡터 검색과 하이브리드 검색**(어휘 검색과 의미 검색 결합)을 제공합니다. 서버리스는 **클러스터 관리 없이 확장**되고, 관리형 클러스터는 **클러스터 구성을 완전히 통제**합니다 | **키워드와 의미를 함께** 검색해야 하는가 |
+| **Amazon Aurora PostgreSQL** | **pgvector**로 **관계형 데이터베이스 안에서 SQL 네이티브 벡터 검색**을 합니다. 공식이 적는 적합 대상은 **"PostgreSQL 전문성이 있고 SQL과 벡터 질의를 함께 써야 하는 팀"**입니다 | 관계형 데이터 옆에 **SQL로** 벡터를 두고 싶은가 |
+| **Amazon RDS for PostgreSQL** | 의사 결정 가이드의 표에는 없지만, AWS의 벡터 데이터베이스 설명 페이지가 **Aurora PostgreSQL과 함께 pgvector 확장을 지원한다**고 적습니다 — 임베딩을 데이터베이스에 저장하고 유사도 검색을 수행합니다 | 이미 **PostgreSQL 전문성**이 있는가 |
+| **Amazon Neptune Analytics** | **그래프와 벡터 검색을 결합**합니다. 공식이 쓰는 이름이 **GraphRAG** — **엔터티 관계를 사용하는 검색**입니다 | 답이 **항목 사이의 관계**에 있는가 |
 
 **Bedrock 지식 기반이 쓰는 벡터 저장소.** 공식 지식 기반 문서는 Customer-managed 구성의 벡터 저장소 예로 **Amazon OpenSearch Serverless · Amazon Aurora · Amazon Neptune**을 적습니다. 그리고 의사 결정 가이드의 기능 표가 서비스별로 **최대 차원 수 · 벡터 볼륨 · 하이브리드 검색 지원 · 읽기 지연 · 쓰기 지연**을 비교합니다 — 예컨대 OpenSearch는 **최대 16,000 차원**이고 **하이브리드 검색 가능**, Aurora PostgreSQL은 **인덱싱 2,000 차원**에 하이브리드는 **부분적(SQL)**이며 **커밋된 행이 즉시 질의 가능**합니다.
 
@@ -344,8 +348,8 @@ v1.1이 이 목표에서 **서비스 예시를 전부 지웠습니다.** 그러�
 
 <details><summary>정답 보기</summary>
 
-- **첫 팀 → Amazon Aurora PostgreSQL(pgvector).** 공식은 Aurora PostgreSQL과 **Amazon RDS for PostgreSQL**을 **pgvector 오픈 소스 벡터 검색 확장을 갖춘 완전 관리형 관계형 데이터베이스**로 함께 적고, **"이미 관계형 데이터베이스, 특히 PostgreSQL에 투자했다면 이상적인 선택지"**라고 명시합니다. 의사 결정 가이드도 **「SQL과 벡터」** 요구를 Aurora PostgreSQL에 매핑합니다.
-- **둘째 팀 → Amazon Neptune Analytics.** 공식은 이것을 **그래프 알고리즘과 벡터 검색을 결합한 분석 그래프 데이터베이스 엔진**으로 적고, 그 용례에 **GraphRAG**라는 이름을 붙입니다 — **"엔터티 관계를 사용하는 검색"**입니다.
+- **첫 팀 → Amazon Aurora PostgreSQL(pgvector).** 의사 결정 가이드는 이것을 **관계형 데이터베이스 안의 SQL 네이티브 벡터 검색**으로 적고, 적합 대상을 **"PostgreSQL 전문성이 있고 SQL과 벡터 질의를 함께 써야 하는 팀"**으로 적습니다. **Amazon RDS for PostgreSQL**도 같은 **pgvector 확장**을 지원합니다.
+- **둘째 팀 → Amazon Neptune Analytics.** 공식은 이것을 **그래프와 벡터 검색을 결합한 서비스**로 적고, 그 용례에 **GraphRAG**라는 이름을 붙입니다 — **"엔터티 관계를 사용하는 검색"**입니다.
 
 그리고 관점 하나가 더 중요합니다. 공식이 **"AWS에서 벡터 검색은 별도로 도입해야 하는 데이터베이스가 아니라 이미 운영 중인 많은 데이터베이스와 서비스에 더할 수 있는 기능"**이라고 적으므로, **데이터가 이미 있는 곳에 벡터를 더하는 쪽**이 기본 답입니다.
 </details>
@@ -389,12 +393,12 @@ v1.1이 이 목표에서 **서비스 예시를 전부 지웠습니다.** 그러�
 1. Influence response generation with inference parameters — `docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html` (2026-11-03 확인)
 2. TextInferenceConfig (API 레퍼런스 — 온도·topP·maxTokens 정의와 범위) — `docs.aws.amazon.com/bedrock/latest/APIReference/API_agent-runtime_TextInferenceConfig.html` (2026-11-03 확인)
 3. How tokens are counted in Amazon Bedrock (`max_tokens` 정의) — `docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html` (2026-11-03 확인)
-4. Choosing a generative AI service (AWS 의사 결정 가이드 — FM 선택 기준) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html` (2026-11-03 확인)
+4. Choosing a generative AI service (AWS 의사 결정 가이드 — FM 선택 요소. ⚠️ **2026-11-14 개정판** 기준이고, 이전 판의 파라미터 수 기준선 서술은 현행 판에 없습니다) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html` (2026-11-17 확인)
 5. What is Amazon Nova? (모델 사양표 — 컨텍스트 윈도·최대 출력 토큰·지원 언어·미세 조정) — `docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html` (2026-11-03 확인)
 6. Prompt caching for faster model inference — `docs.aws.amazon.com/bedrock/latest/userguide/prompt-caching.html` (2026-11-03 확인)
 7. What is RAG (Retrieval-Augmented Generation)? — `aws.amazon.com/what-is/retrieval-augmented-generation/` (2026-11-03 확인)
 8. Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html` (2026-11-03 확인)
-9. Choosing a vector database for your generative AI applications (AWS 의사 결정 가이드) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html` (2026-11-03 확인)
+9. Choosing a vector database for your generative AI applications (AWS 의사 결정 가이드 — 서비스별 「무엇을 하는가 · 누구에게 맞는가」 표와 기능 비교 표. ⚠️ 2026-10-30 개정판 기준이고, 옛 벡터 데이터베이스 안내 페이지는 이 가이드로 영구 이동했고 그 페이지의 서비스별 권장 문구는 현행 판에 없습니다) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html` (2026-11-17 확인)
 10. GENOPS05-BP01 Learn when to customize models — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops05-bp01.html` (2026-11-03 확인)
 11. Customize your model to improve its performance for your use case — `docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html` (2026-11-03 확인)
 12. Customize a model with distillation in Amazon Bedrock — `docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html` (2026-11-03 확인)
@@ -406,3 +410,5 @@ v1.1이 이 목표에서 **서비스 예시를 전부 지웠습니다.** 그러�
 18. Amazon Bedrock Agents Classic maintenance mode — `docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html` (2026-11-03 확인)
 19. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 3 (한국어 — 목표 6개 원문) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain3.html` (2026-11-03 확인)
 20. Process multiple prompts with batch inference — `docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html` (2026-11-17 확인)
+21. What is a Vector Database? (Aurora PostgreSQL과 Amazon RDS for PostgreSQL이 pgvector 확장을 지원한다) — `aws.amazon.com/what-is/vector-databases/` (2026-11-17 확인)
+22. Prerequisites for model distillation (교사 모델은 학생 모델보다 현저히 크고 유능한 모델로 고른다) — `docs.aws.amazon.com/bedrock/latest/userguide/prequisites-model-distillation.html` (2026-11-17 확인)

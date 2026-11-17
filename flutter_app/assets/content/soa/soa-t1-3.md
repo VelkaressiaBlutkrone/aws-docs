@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
   - title: AWS X-Ray란 무엇인가 (공식)
     url: https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
-lastVerified: 2026-06-12
+lastVerified: 2026-11-17
 ---
 
 # CloudTrail·EventBridge·X-Ray (감사·이벤트·추적)
@@ -122,6 +122,8 @@ lastVerified: 2026-06-12
 | **CloudTrail Lake** | 이벤트를 **불변(immutable) 데이터 스토어**에 보관하고 **SQL로 쿼리**·분석. 장기 보관·감사 조회에 적합 |
 | **CloudTrail Insights** | 평소 대비 **비정상적인 API 호출량/오류율 급증**을 자동 탐지(예: 갑작스러운 대량 리소스 생성) |
 
+> ⚠️ **상태:** CloudTrail Lake는 **2026-05-31부터 신규 고객에게 열려 있지 않습니다**(기존 고객은 계속 사용할 수 있습니다).
+
 > Insights는 "정상 패턴 학습 → 이상 징후 탐지" 방식으로, 잘못된 자동화·자격 증명 탈취로 인한 이상 활동을 잡는 데 씁니다. Lake는 Athena를 따로 구성하지 않고도 CloudTrail 이벤트를 SQL로 직접 질의하게 해줍니다.
 
 > 🧠 원리: 왜 CloudTrail Insights는 단순 임계치 경보가 아니라 "기준선 비교" 방식으로 이상을 탐지할까요?
@@ -194,7 +196,7 @@ rate(5 minutes)
 - **로그 파일 무결성 검증**: 다이제스트 + SHA-256/RSA 서명으로 **변조 탐지**. `validate-logs`.
 - **CloudTrail Lake = SQL 쿼리 기반 감사 분석**, **Insights = 비정상 API 활동 탐지**.
 - **EventBridge = 이벤트 버스 + 규칙(이벤트 패턴/스케줄) + 대상**. **CloudWatch Events의 후속/상위 호환**.
-- **스케줄 규칙**: `cron(...)` 또는 `rate(...)`로 정기 작업 트리거.
+- **스케줄 규칙**: `cron(...)` 또는 `rate(...)`로 정기 작업 트리거. 공식 문서는 예약 규칙을 레거시 기능으로 적고, 새 일정에는 **EventBridge Scheduler**를 권장합니다.
 - **이벤트 기반 자동 대응**: (GuardDuty/CloudTrail/경보 등) 이벤트 → EventBridge 규칙 → Lambda/SSM/Step Functions.
 - **X-Ray**: 트레이스 = 세그먼트들의 집합, **서브세그먼트**는 DB/외부 호출 같은 세부 구간, **서비스 맵**으로 병목 시각화, **샘플링**으로 비용 절감.
 
@@ -272,3 +274,5 @@ rate(5 minutes)
 3. CloudTrail 로그 파일 무결성 검증 — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html
 4. Amazon EventBridge란 무엇인가 — https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
 5. AWS X-Ray란 무엇인가 — https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
+
+> 📝 **2026-11-17 정정**: CloudTrail Lake의 신규 고객 제한 상태를 §4에 더했습니다(https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake.html). CloudWatch Events와 EventBridge의 관계(같은 Events API · 기본 이벤트 버스)의 근거는 https://docs.aws.amazon.com/cloudwatch/ 입니다.

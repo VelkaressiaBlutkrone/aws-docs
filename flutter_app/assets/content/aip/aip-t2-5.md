@@ -46,7 +46,9 @@ sources:
     url: https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
   - title: Amazon ECS MCP 서버
     url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-mcp-introduction.html
-lastVerified: 2026-11-14
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 2
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html
+lastVerified: 2026-11-17
 ---
 
 # 애플리케이션 통합 패턴과 개발 도구 (API 인터페이스·접근 가능한 UI·비즈니스 시스템·개발자 생산성·오케스트레이션·문제 해결)
@@ -364,3 +366,4 @@ GenAI 기능을 애플리케이션에 붙일 때 실제로 문제가 되는 것�
 17. CloudWatch Logs Insights로 로그 데이터 분석 (언어 셋 · 동시 한도 · 로그 그룹 생성 시각 제약 · 요금) — `docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html` (2026-11-14 확인)
 18. AWS X-Ray 개요 (UDP 데몬 · 배치 업로드 · 트레이스 맵) — `docs.aws.amazon.com/xray/latest/devguide/aws-xray.html` (2026-11-14 확인)
 19. Amazon ECS MCP 서버 (완전관리형 호스팅 · IAM·CloudTrail) — `docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-mcp-introduction.html` (2026-11-14 확인)
+20. AIP-C01 시험 안내서 콘텐츠 도메인 2 (기술 2.5.3의 예시 셋) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html` (2026-11-17 확인)

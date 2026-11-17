@@ -26,7 +26,11 @@ sources:
     url: https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html
   - title: Responding to DDoS events in AWS — SRT 사전 교전
     url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html
-lastVerified: 2026-11-12
+  - title: Forensic memory and disk acquisition service
+    url: https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html
+  - title: Services in Maintenance — ARC 준비 상태 확인 상태
+    url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+lastVerified: 2026-11-17
 ---
 
 # 인시던트 대응 계획 설계와 테스트 (런북·사전 구성·혼돈 실험·자동 해결)
@@ -108,9 +112,9 @@ OpsCenter는 운영 엔지니어가 **AWS 리소스와 관련된 운영 작업 �
 
 #### 1-2. 노트북 — 조사 절차를 코드로 둔다
 
-가이드가 **SageMaker AI 노트북**을 함께 드는 이유는 **조사 절차를 실행 가능한 형태로 보관**하기 위해서입니다. 로그 조회·상관 분석 질의를 노트북 셀로 두면 사고 때 **같은 순서로 재현**할 수 있고 결과가 기록으로 남습니다.
+가이드는 **SageMaker AI 노트북**을 예시로 함께 들지만, **그 역할을 설명하는 공식 문서 페이지는 확인되지 않았습니다.** 노트북의 일반적 성질로 보면 로그 조회·상관 분석 질의를 노트북 셀로 두면 사고 때 **같은 순서로 재현**할 수 있고 결과가 기록으로 남습니다.
 
-⚠️ **노트북은 「런북의 실행 가능한 판」이지 대응 계획 자체가 아닙니다.** 문항이 "대응 절차를 표준화하고 중복을 줄이려면?"을 묻는다면 **OpsCenter + Automation 런북**이고, "조사 질의를 재현 가능하게 보관하려면?"이 노트북입니다.
+⚠️ **노트북은 조사 질의를 재현하는 도구이지 대응 계획 자체가 아닙니다.** 문항이 "대응 절차를 표준화하고 중복을 줄이려면?"을 묻는다면 **OpsCenter + Automation 런북**이고, "조사 질의를 재현 가능하게 보관하려면?"이 노트북입니다.
 
 > ⚠️ **범위 메모** — AWS에는 **`AWS Security Incident Response`**라는 관리형 서비스가 있습니다(NIST 800-61에 맞춰 탐지·트리아지·조사·격리·복구 지침을 다루고, **스스로 조사 결과를 만들지 않고** GuardDuty와 **Security Hub CSPM을 통해 통합된 타사 도구**의 조사 결과를 수집합니다). 그런데 **이 서비스는 SCS-C03 공식 가이드의 범위 내 71개 목록에도, 범위 외 목록에도 없습니다.** 그래서 이 사이트는 **구조만 소개하고 문항으로 만들지 않습니다.** 알아 두면 좋은 두 가지는 ⚠️ **위협 탐지 조사 결과만 트리아지하고 보안 자세·준수 조사 결과는 트리아지하지 않는다**(후자는 활성 위협이 아니라 **상태를 서술**하기 때문입니다)와 ⚠️ **에스컬레이션 통지는 음소거·억제할 수 없다**(검증된 사안만 올라오기 때문입니다)입니다.
 
@@ -337,3 +341,5 @@ ARC는 **AWS 글로벌 클라우드 인프라에서 도는 애플리케이션의
 7. What is AWS Security Incident Response? (범위 메모용) — `docs.aws.amazon.com/security-ir/latest/userguide/what-is.html` (2026-11-08 확인)
 8. Introduction to AWS Security Hub CSPM — `docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html` (2026-11-08 확인)
 9. Responding to DDoS events in AWS — SRT 사전 교전 — `docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html` (2026-11-12 확인)
+10. Forensic memory and disk acquisition service — `docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html` (2026-11-17 확인)
+11. Services in Maintenance — ARC 준비 상태 확인 상태 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-17 확인)

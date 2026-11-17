@@ -222,7 +222,7 @@
       "explanation": "공식 문서는 「AWS Lake Formation으로 Amazon S3의 데이터 레이크 데이터와 AWS Glue Data Catalog의 메타데이터에 대한 세분화된 접근 제어를 관리할 수 있다」고 적고, 「데이터베이스·테이블·열·행·셀 수준에서 데이터 접근을 제한하는 보안 정책을 정의할 수 있다」고 명시한다. 이 권한은 Athena·Amazon EMR·Redshift Spectrum·AWS Glue 등에 걸쳐 적용된다.",
       "wrongExplanations": {
         "1": "Amazon EMR은 Spark 같은 프레임워크로 대규모 데이터를 처리하는 클러스터 서비스다. 세분화된 권한의 정의 주체가 아니라, Lake Formation 권한이 적용되는 소비 측 서비스에 해당한다.",
-        "2": "Amazon Quick은 작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스다. 데이터 레이크의 열·행·셀 수준 권한을 정의하는 도구가 아니다.",
+        "2": "Amazon Quick(제품 문서 표기는 AWS Quick)은 작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스다. 데이터 레이크의 열·행·셀 수준 권한을 정의하는 도구가 아니다.",
         "3": "Amazon Bedrock은 파운데이션 모델을 API로 제공하는 완전관리형 서비스다. 데이터 레이크의 카탈로그 권한 모델과는 다른 계층에 있다."
       },
       "sources": [
@@ -247,7 +247,7 @@
         "Amazon Bedrock"
       ],
       "correct": 1,
-      "explanation": "공식 사용자 가이드는 Amazon Quick을 「작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스」로 정의하고, 그 기능인 Amazon Quick Sight를 「대화형 데이터 시각화와 비즈니스 인텔리전스 — 데이터 소스에 연결하고 대시보드를 만들며 분석을 애플리케이션에 임베드한다」로 적는다. 대시보드와 임베드 분석이 정확히 이 서비스의 일이다.",
+      "explanation": "제품 사용자 가이드는 이 서비스를 AWS Quick이라는 이름으로 「작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스」로 정의하고(시험 가이드 표기는 Amazon Quick이다), 그 기능인 AWS Quick Sight를 「대화형 데이터 시각화와 비즈니스 인텔리전스 — 데이터 소스에 연결하고 대시보드를 만들며 분석을 애플리케이션에 임베드한다」로 적는다. 대시보드와 임베드 분석이 정확히 이 서비스의 일이다.",
       "wrongExplanations": {
         "0": "Kiro는 AWS의 에이전틱 개발 시스템으로, 의도를 관리하고 대규모 코드베이스에서 장시간 작업을 완료하며 코드 정확성을 검증한다. IDE·CLI·자율 웹 에이전트 형태로 제공되는 개발 도구이고 분석·BI 서비스가 아니다.",
         "2": "SageMaker JumpStart는 사전 훈련된 오픈 소스 모델을 제공하는 모델 허브다. 파이프라인에서 모델 소스 자리에 있고 비즈니스 대시보드를 만드는 도구가 아니다.",
@@ -255,7 +255,7 @@
       },
       "sources": [
         {
-          "title": "What is Amazon Quick? — 서비스 정의와 Amazon Quick Sight의 시각화·대시보드·임베드 분석",
+          "title": "What is AWS Quick? — 서비스 정의와 AWS Quick Sight의 시각화·대시보드·임베드 분석",
           "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
         },
         {

@@ -122,7 +122,8 @@
         "3": "태그 부착 권한은 IAM 정책에서 제어하는 것이 맞지만, 이 시나리오에서 태그가 이미 3개월 전부터 붙어 있다고 했으므로 태그 부착 자체의 권한 문제가 아닙니다."
       },
       "sources": [
-        { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
+        { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" },
+        { "title": "비용 할당 태그 백필 — 관리 계정이 최대 12개월 소급 요청", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html" }
       ],
       "verified": true
     },
@@ -163,7 +164,7 @@
         "(1) AWS Compute Optimizer, (2) AWS Trusted Advisor"
       ],
       "correct": 3,
-      "explanation": "Compute Optimizer는 CloudWatch 지표 14일 이상을 수집해 인스턴스 과/저프로비저닝을 감지하고 적정 크기(Rightsizing)를 추천합니다 — '이 인스턴스 크기가 맞나?'에 답합니다. Trusted Advisor는 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목을 현재 상태 스냅샷 기반으로 탐지합니다 — '이 리소스를 아직도 쓰고 있나?'에 답합니다. 참고로 Compute Optimizer에도 유휴 리소스 권장이 있고 거기에는 EBS 볼륨이 포함되지만 로드밸런서는 대상이 아니므로, 유휴 로드밸런서까지 묻는 (2)에는 Trusted Advisor가 맞습니다.",
+      "explanation": "Compute Optimizer는 기본적으로 최근 14일의 CloudWatch 지표를 분석해 인스턴스 과/저프로비저닝을 감지하고 적정 크기(Rightsizing)를 추천합니다 — '이 인스턴스 크기가 맞나?'에 답합니다. Trusted Advisor는 미사용 리소스, 유휴 로드밸런서, 저사용 EC2 등 비용 낭비 항목을 현재 상태 스냅샷 기반으로 탐지합니다 — '이 리소스를 아직도 쓰고 있나?'에 답합니다. 참고로 Compute Optimizer에도 유휴 리소스 권장이 있고 거기에는 EBS 볼륨이 포함되지만 로드밸런서는 대상이 아니므로, 유휴 로드밸런서까지 묻는 (2)에는 Trusted Advisor가 맞습니다.",
       "wrongExplanations": {
         "0": "역할이 바뀌었습니다. Trusted Advisor는 미사용 리소스 탐지용이고, Compute Optimizer는 인스턴스 크기 추천용입니다.",
         "1": "Cost Explorer는 비용 추세 분석·예측 도구이고, Budgets는 예산 알림·차단 도구입니다. 두 도구 모두 인스턴스 크기 추천이나 유휴 리소스 탐지를 직접 수행하지 않습니다.",
@@ -171,7 +172,8 @@
       },
       "sources": [
         { "title": "AWS Cost Explorer — 공식 문서", "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html" },
-        { "title": "Compute Optimizer 유휴 리소스 권장 — 대상 목록 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
+        { "title": "Compute Optimizer 유휴 리소스 권장 — 대상 목록 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" },
+        { "title": "Trusted Advisor 비용 최적화 검사 — Idle Load Balancers·Underutilized Amazon EBS volumes", "url": "https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html" }
       ],
       "verified": true
     },
@@ -293,7 +295,7 @@
         "2": "Cost Explorer에서 태그를 수동으로 합치는 것은 근본 원인(혼용)을 해결하지 않으며 데이터 정확성을 보장하지 않습니다."
       },
       "sources": [
-        { "title": "비용 할당 태그 활성화 (공식)", "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html" }
+        { "title": "AWS Organizations 태그 정책 — 태그 키·값의 대소문자 처리까지 일관되게 유지", "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html" }
       ],
       "verified": true
     },
@@ -334,14 +336,15 @@
         "온디맨드 인스턴스 대신 스팟 인스턴스를 최대한 활용하는 워크로드"
       ],
       "correct": 0,
-      "explanation": "Well-Architected 비용 최적화 기둥의 공식 정의는 '기능 요구사항을 충족하면서 최저 가격으로 결과를 달성하는 워크로드'입니다. '기능 요구사항 충족'이라는 전제가 핵심으로, 보안·안정성·성능을 희생하는 비용 절감은 다른 기둥의 원칙을 위반합니다. 시험에서 'most cost-effective' 선택지는 항상 요구사항을 충족하는 옵션 중에서 고르는 것입니다.",
+      "explanation": "Well-Architected 프레임워크는 비용 최적화된 워크로드를 '기능 요구사항과 성능·안정성·보안·지속 가능성 기준을 충족하면서 가장 낮은 적정 가격으로 비즈니스 성과를 내는 워크로드'로 설명합니다. '기능 요구사항 충족'이라는 전제가 핵심으로, 보안·안정성·성능을 희생하는 비용 절감은 다른 기둥의 원칙을 위반합니다. 시험에서 'most cost-effective' 선택지는 항상 요구사항을 충족하는 옵션 중에서 고르는 것입니다.",
       "wrongExplanations": {
         "1": "무조건 최저 청구액을 추구하는 것이 아닙니다. 기능 요구사항을 충족하는 범위 내에서 최저 비용을 추구하는 것이 정의입니다.",
         "2": "보안·성능·안정성을 완화하는 비용 절감은 Well-Architected의 6개 기둥(운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성) 균형 원칙을 위반합니다. 비용 최적화는 다른 기둥을 지키는 범위 안에서만 유효합니다.",
         "3": "스팟 인스턴스 활용은 비용 효율적 리소스 선택의 한 예이지 비용 최적화 기둥의 정의가 아닙니다."
       },
       "sources": [
-        { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" }
+        { "title": "Well-Architected 비용 최적화 기둥 — 설계 원칙 (공식)", "url": "https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/design-principles.html" },
+        { "title": "Well-Architected 프레임워크 비용 최적화 기둥 — 가장 낮은 적정 가격으로 비즈니스 성과·기능 요구사항 충족", "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/cost-optimization.html" }
       ],
       "verified": true
     },

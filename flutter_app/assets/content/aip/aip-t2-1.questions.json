@@ -3,7 +3,7 @@
   "taskTitle": "에이전틱 AI 솔루션 및 도구 통합 구현",
   "domain": 2,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "2.1.1",
@@ -41,7 +41,7 @@
       "skill": "2.1.1",
       "section": "agentic",
       "difficulty": "applied",
-      "stem": "환율을 조회해 돌려주는 기능을 하위 에이전트로 만들자는 제안이 나왔습니다. 다중 에이전트 모범 사례의 결정 순서에 비추어 올바른 판단은 무엇입니까?",
+      "stem": "환율을 조회해 돌려주는 기능을 하위 에이전트로 만들자는 제안이 나왔습니다. 올바른 판단은 무엇입니까?",
       "options": [
         "하위 에이전트가 맞습니다. 외부 API를 부르는 역량은 독립 실패 격리가 필요하기 때문입니다",
         "도구로 둡니다. 결정적이고 스테이트리스이며 단일 단계이고 2~3초 미만이면 도구 쪽 기준입니다",
@@ -97,7 +97,7 @@
       "skill": "2.1.2",
       "section": "reasoning",
       "difficulty": "applied",
-      "stem": "규제 보고 절차를 에이전트로 자동화하는데 감사팀이 「실행 경로가 매번 같아야 한다」고 요구합니다. 오케스트레이션 두 방식에 비추어 어느 쪽이고 그 차이는 무엇입니까?",
+      "stem": "규제 보고 절차를 에이전트로 자동화하는데 감사팀이 「실행 경로가 매번 같아야 한다」고 요구합니다. 어느 오케스트레이션 방식이 맞고 그 차이는 무엇입니까?",
       "options": [
         "A2A 프로토콜을 쓰는 오케스트레이터 에이전트입니다. 위임 대상이 동적이어도 기록이 남습니다",
         "둘 중 아무 쪽이나 됩니다. 실행 로깅을 켜면 경로가 고정되므로 방식 선택은 무관합니다",
@@ -115,6 +115,10 @@
         {
           "title": "AGENTSEC06-BP02 — 오케스트레이션 두 범위",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec06-bp02.html"
+        },
+        {
+          "title": "AgentCore harness — Step Functions의 InvokeHarness 상태",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness.html"
         }
       ],
       "id": "aip-t2-1-q4",
@@ -189,7 +193,7 @@
       "skill": "2.1.3",
       "section": "control",
       "difficulty": "applied",
-      "stem": "토큰 비용이 급증해 「추론 반복을 5회로 고정」하기로 했습니다. 종료 조건 모범 사례에 비추어 이 결정의 판정과 대안은 무엇입니까?",
+      "stem": "토큰 비용이 급증해 「추론 반복을 5회로 고정」하기로 했습니다. 이 결정의 판정과 대안은 무엇입니까?",
       "options": [
         "권장 설계입니다. 반복 상한이 가장 단순하고 예측 가능한 비용 통제이기 때문입니다",
         "절반만 맞습니다. 상한은 유지하고 실패한 호출을 같은 프롬프트로 재시도하게 바꿉니다",
@@ -207,6 +211,10 @@
         {
           "title": "AGENTCOST01-BP01 — 종료 조건 셋과 고정 반복 안티패턴",
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentcost01-bp01.html"
+        },
+        {
+          "title": "AGENTPERF02-BP01 — 같은 프롬프트·같은 모델 재시도 안티패턴",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentperf02-bp01.html"
         }
       ],
       "id": "aip-t2-1-q7",
@@ -217,7 +225,7 @@
       "skill": "2.1.3",
       "section": "control",
       "difficulty": "applied",
-      "stem": "사용자가 20분 뒤 돌아와 같은 런타임 세션 ID로 요청했는데 이전 대화 맥락이 사라졌습니다. Runtime 세션의 경계에 비추어 원인과 대비책은 무엇입니까?",
+      "stem": "사용자가 20분 뒤 돌아와 같은 런타임 세션 ID로 요청했는데 이전 대화 맥락이 사라졌습니다. 원인과 대비책은 무엇입니까?",
       "options": [
         "세션 ID가 재사용되면 새 microVM이 배정됩니다. ID를 매번 새로 만들어야 맥락이 유지됩니다",
         "같은 세션 ID는 항상 같은 microVM으로 갑니다. 원인은 네트워크 단절이므로 재시도로 해결합니다",
@@ -277,7 +285,7 @@
       "skill": "2.1.4",
       "section": "model-routing",
       "difficulty": "applied",
-      "stem": "게이트웨이 라우팅 규칙에 대체 목적지를 두고 스트리밍 응답을 쓰는데, 공급자가 응답 중간에 죽자 호출자가 오류를 받았습니다. 폴백 동작에 비추어 올바른 설명은 무엇입니까?",
+      "stem": "게이트웨이 라우팅 규칙에 대체 목적지를 두고 스트리밍 응답을 쓰는데, 공급자가 응답 중간에 죽자 호출자가 오류를 받았습니다. 이 폴백 동작에 대한 올바른 설명은 무엇입니까?",
       "options": [
         "서킷 브레이커가 꺼져 있었습니다. 활성화하면 스트리밍 중에도 대체 목적지로 이어 줍니다",
         "스트리밍이 시작된 뒤에는 폴백할 수 없습니다. 호출자는 부분 응답과 오류를 받고 직접 재시도합니다",
@@ -305,7 +313,7 @@
       "skill": "2.1.5",
       "section": "human",
       "difficulty": "foundational",
-      "stem": "에이전트 작업에 사람 승인을 붙이면서 모든 작업을 검토 대기로 보내기로 했습니다. 인간 감독 기준선에 비추어 어떻게 고쳐야 합니까?",
+      "stem": "에이전트 작업에 사람 승인을 붙이면서 모든 작업을 검토 대기로 보내기로 했습니다. 어떻게 고쳐야 합니까?",
       "options": [
         "읽기 전용까지 포함해 전건을 검토하되 검토자 수를 늘려 처리 속도를 맞춥니다",
         "승인을 모두 없애고 사후 감사 로그만 남겨 자율성과 추적성을 함께 얻습니다",
@@ -379,6 +387,10 @@
         {
           "title": "Gateway의 MCP 의미 검색 — 생성 시 활성화",
           "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-using-mcp-semantic-search.html"
+        },
+        {
+          "title": "AgentCore Gateway 개요 — 수천 개의 도구와 프롬프트 크기",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html"
         }
       ],
       "id": "aip-t2-1-q13",

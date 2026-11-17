@@ -3,7 +3,7 @@
   "taskTitle": "GenAI 애플리케이션 문제 해결",
   "domain": 5,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "5.2.1",
@@ -69,24 +69,24 @@
       "skill": "5.2.1",
       "section": "content-processing",
       "difficulty": "applied",
-      "stem": "호출 전에 입력 토큰 수를 세는 API를 붙이려 합니다. 호출할 때 반드시 정해야 하는 것과 응답으로 받는 것은 무엇입니까?",
+      "stem": "표가 많은 문서를 넣은 지식 베이스에서 검색 결과로 일치한 청크가 아니라 표 전체가 돌아옵니다. 표에서도 청크 단위 결과를 받으려면 어떻게 합니까?",
       "options": [
-        "리전만 정하면 되고 응답으로 입력과 출력 토큰 수를 함께 받습니다",
-        "모델과 리전을 정하고 응답으로 입력과 출력 토큰 수를 함께 받습니다",
-        "모델을 정해야 하고 토큰화가 모델별이라 응답으로는 입력 토큰 수만 받습니다",
-        "모델을 정하지 않아도 되고 응답으로는 입력 토큰 수만 받습니다"
+        "청크 최대 토큰을 더 작게 잡습니다. 한도를 낮추면 표 전체로 교체되는 일이 없어집니다",
+        "계층형 청킹으로 바꿉니다. 결과가 자식 청크 단위로 고정돼 표 전체로 교체되지 않습니다",
+        "청킹 없음을 고르고 사용자 지정 변환 Lambda 함수에서 콘텐츠를 직접 청킹합니다",
+        "결과 수를 늘립니다. 요청한 수가 충분하면 표가 청크 단위로 나뉘어 돌아옵니다"
       ],
       "correct": 2,
-      "explanation": "토큰화가 모델마다 달라 모델을 지정해야 합니다. 입력은 호출 본문 형식 둘 가운데 하나를 주고 응답은 입력 토큰 수 하나입니다 — 출력 토큰 수는 호출 전에 알 수 없습니다. 용례는 비용 추정과 토큰 한도에 맞게 프롬프트를 최적화하는 것과 토큰 사용 계획입니다.",
+      "explanation": "표나 그림이 있는 페이지에서는 일치한 청크가 검색 시점에 더 넓은 맥락(페이지 전체 텍스트나 표 전체)으로 교체되고, 이 동작은 고정 크기·기본·시맨틱·계층형처럼 최대 토큰 한도를 두는 모든 청킹 전략에 적용됩니다. 청킹 없음을 고르면 적용되지 않습니다. 그래서 표 콘텐츠에서 청크 단위 결과를 받으려면 청킹 없음을 고르고 사용자 지정 변환 Lambda 함수에서 콘텐츠를 직접 청킹합니다. 참고로 그 맥락은 10,000자 이하일 때만 붙습니다.",
       "wrongExplanations": {
-        "0": "모델을 지정해야 하고 출력 토큰 수는 응답에 없습니다.",
-        "1": "출력 토큰 수는 호출 전에 셀 수 없습니다.",
-        "3": "응답 쪽은 맞지만 모델을 지정하지 않으면 토큰화를 정할 수 없습니다."
+        "0": "최대 토큰 한도를 두는 전략이면 한도의 크기와 무관하게 그 교체가 일어납니다.",
+        "1": "계층형 청킹도 최대 토큰 한도를 두는 전략이라 같은 동작이 적용됩니다.",
+        "3": "결과 수는 최대치일 뿐이고, 같은 맥락을 공유하는 청크는 한 결과로 합쳐져 오히려 요청보다 적게 돌아올 수 있습니다."
       },
       "sources": [
         {
-          "title": "CountTokens API 참조",
-          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_CountTokens.html"
+          "title": "지식 베이스의 콘텐츠 청킹 — 표·그림 맥락 교체와 청크 단위 결과",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html"
         }
       ],
       "id": "aip-t5-2-q3",
@@ -97,24 +97,24 @@
       "skill": "5.2.2",
       "section": "integration",
       "difficulty": "applied",
-      "stem": "대시보드의 오류율은 0인데 사용자는 간헐적 실패를 봅니다. 런타임 지표의 경계를 바르게 짚은 것은 무엇입니까?",
+      "stem": "모델 호출이 간헐적으로 424로 실패합니다. 이 예외의 뜻과 응답에서 진단에 쓸 수 있는 것은 무엇입니까?",
       "options": [
-        "스로틀은 서버 오류에 들어가고 쿼터 초과는 호출 수에서 빠집니다",
-        "스로틀과 쿼터 초과가 모두 클라이언트 오류에 들어가 오류율이 0일 수 없습니다",
-        "스로틀은 호출 수에 들어가고 쿼터 초과는 어느 집합에도 들어가지 않습니다",
-        "스로틀은 어느 집합에도 들어가지 않고 쿼터 초과는 클라이언트 오류에 듭니다"
+        "계정 쿼터를 넘겨 거부된 것이고, 응답에 남은 쿼터와 재시도 가능 시각이 담겨 옵니다",
+        "입력이 제약을 만족하지 못한 것이고, 응답에 위반한 필드 이름 목록이 함께 담겨 옵니다",
+        "모델이 아직 준비되지 않은 것이고, SDK가 자동으로 다섯 번까지 재시도해 줍니다",
+        "모델이 요청을 처리하다 오류가 난 것이고, 원래 상태 코드와 리소스 이름이 함께 옵니다"
       ],
       "correct": 3,
-      "explanation": "경계가 직관과 다릅니다. 스로틀 지표는 호출 수와 클라이언트 오류와 서버 오류 어디에도 들어가지 않고 보이는 수가 SDK 재시도 설정에 따라 달라집니다. 반대로 서비스 쿼터 초과로 거부된 요청은 클라이언트 오류에 들어갑니다. 그래서 오류율만 보면 스로틀로 실패한 호출이 보이지 않아 오류율이 0인데 사용자는 실패를 보는 상태가 성립합니다.",
+      "explanation": "424는 ModelErrorException이고 모델을 처리하는 중에 오류가 나 요청이 실패했다는 뜻입니다. 이 예외는 원래 상태 코드(originalStatusCode)와 리소스 이름(resourceName)을 함께 돌려주므로 어느 리소스에서 무슨 코드가 났는지부터 봅니다. 같은 오류 목록에서 400은 입력이 제약을 만족하지 못한 ValidationException, 408은 처리 시간이 모델 타임아웃 길이를 넘은 ModelTimeoutException이고, 429는 쿼터 초과인 ThrottlingException과 모델 준비 안 됨인 ModelNotReadyException 둘입니다.",
       "wrongExplanations": {
-        "0": "스로틀은 서버 오류에 들어가지 않고 쿼터 초과는 클라이언트 오류에 듭니다.",
-        "1": "스로틀이 어느 집합에도 들어가지 않으므로 오류율이 0으로 보일 수 있습니다.",
-        "2": "두 쪽이 뒤바뀌었습니다."
+        "0": "쿼터 초과로 거부된 요청은 429의 ThrottlingException입니다. 424가 아닙니다.",
+        "1": "입력이 제약을 만족하지 못한 것은 400의 ValidationException입니다.",
+        "2": "모델 준비 안 됨은 429의 ModelNotReadyException이고, SDK 자동 재시도는 그 예외에 붙는 동작입니다."
       },
       "sources": [
         {
-          "title": "Amazon Bedrock 런타임 지표 모니터링",
-          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html"
+          "title": "Converse API 참조 — 오류 목록과 ModelErrorException",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html"
         }
       ],
       "id": "aip-t5-2-q4",
@@ -207,6 +207,10 @@
         {
           "title": "모델 호출 로깅",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 5 — 기술 5.2.3의 예시 셋",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain5.html"
         }
       ],
       "id": "aip-t5-2-q7",
@@ -323,6 +327,10 @@
         {
           "title": "Aurora PostgreSQL을 Amazon Bedrock 지식 베이스로 쓰기",
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 5 — 기술 5.2.4의 예시 목록",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain5.html"
         }
       ],
       "id": "aip-t5-2-q11",
@@ -407,6 +415,10 @@
         {
           "title": "모델 호출 로깅",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 5 — 기술 5.2.5의 예시 목록",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain5.html"
         }
       ],
       "id": "aip-t5-2-q14",

@@ -3,7 +3,7 @@
   "taskTitle": "AI 거버넌스 및 규정 준수 메커니즘 구현",
   "domain": 3,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "3.3.1",
@@ -93,28 +93,24 @@
       "skill": "3.3.1",
       "section": "compliance-framework",
       "difficulty": "applied",
-      "stem": "새 프로젝트에서 모델 카드의 평가 세부를 채우려 합니다. 보고서를 S3에 올려 지표를 자동 파싱시키는 경로를 전제할 수 있습니까?",
+      "stem": "감사 대응으로 모델 카드를 외부 심사관에게 전달해야 하고, Model Registry에 등록한 모델 버전에도 감사 정보를 남기려 합니다. 모델 카드가 주는 수단은 무엇입니까?",
       "options": [
-        "전제할 수 있습니다. 어떤 평가 도구가 낸 JSON이든 S3 URI를 주면 파싱됩니다",
-        "전제할 수 있습니다. 카드가 지표를 직접 계산하므로 보고서 형식과 무관합니다",
-        "전제할 수 없습니다. 평가 세부는 JSON이 아니라 PDF로만 첨부할 수 있습니다",
-        "전제하지 않습니다. 그 보고서를 내던 Clarify와 Model Monitor가 신규 고객에게 닫혔습니다"
+        "카드는 콘솔 안에서만 열람되므로 심사관에게 계정 접근 권한을 주는 것이 유일한 전달 수단입니다",
+        "카드를 공개 링크로 발행해 전달하고, 레지스트리 쪽에는 카드가 지표를 다시 계산해 덮어씁니다",
+        "카드를 CSV로 내보내 전달하고, 레지스트리와는 연결되지 않으므로 감사 정보를 따로 관리합니다",
+        "카드를 PDF로 내보내거나 내려받아 전달하고, Model Registry 통합으로 감사 정보를 더합니다"
       ],
       "correct": 3,
-      "explanation": "공식은 평가 세부를 JSON으로 주라고 하면서 Clarify나 Model Monitor가 생성한 기존 JSON 평가 보고서를 S3에 올려 S3 URI를 주면 지표를 자동 파싱한다고 적습니다. 그런데 두 서비스가 신규 고객에게 더 이상 열려 있지 않으므로 새로 만드는 시스템은 대체 경로가 낸 지표를 JSON으로 넣는 쪽으로 설계합니다.",
+      "explanation": "모델 카드는 만든 뒤 PDF로 내보내거나 내려받아 이해관계자와 공유할 수 있습니다. 그리고 SageMaker Model Registry와 통합돼 있어, 레지스트리에 모델을 등록할 때 그 통합으로 모델 버전에 감사 정보를 더할 수 있습니다. 카드가 담는 것은 의도된 용도와 위험 등급, 훈련 세부와 지표, 평가 결과와 관찰, 고려 사항과 권고이고, 감사 활동을 지원하는 것이 카드를 만드는 목적 가운데 하나입니다.",
       "wrongExplanations": {
-        "0": "자동 파싱 경로는 그 두 서비스의 보고서 형식을 전제로 적힌 것이라 아무 JSON이나 해당하지 않습니다.",
-        "1": "카드는 기록하는 문서이고 지표를 계산하지 않습니다.",
-        "2": "PDF는 완성된 카드를 내보내는 형식이고, 평가 세부 입력은 JSON입니다."
+        "0": "카드는 PDF로 내보내거나 내려받아 공유할 수 있습니다. 계정 접근이 유일한 수단이 아닙니다.",
+        "1": "카드는 기록하는 문서이고 지표를 계산하지 않습니다. 공유 수단으로 적혀 있는 것은 PDF 내보내기와 내려받기입니다.",
+        "2": "내보내기 형식으로 적혀 있는 것은 PDF이고, 카드는 Model Registry와 통합돼 있습니다."
       },
       "sources": [
         {
-          "title": "Amazon SageMaker AI 모델 카드",
+          "title": "Amazon SageMaker AI 모델 카드 — PDF 내보내기와 Model Registry 통합",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-cards.html"
-        },
-        {
-          "title": "Amazon SageMaker Clarify 가용성 변경",
-          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html"
         }
       ],
       "id": "aip-t3-3-q4",
@@ -143,6 +139,10 @@
         {
           "title": "AWS Glue의 데이터 검색과 카탈로그화",
           "url": "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
+        },
+        {
+          "title": "AWS Glue 구성 요소 — 계정마다 리전당 Data Catalog 하나",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/components-overview.html"
         }
       ],
       "id": "aip-t3-3-q5",
@@ -181,7 +181,7 @@
       "skill": "3.3.2",
       "section": "lineage",
       "difficulty": "applied",
-      "stem": "감사용으로 Bedrock 호출 기록을 장기 보관하려 합니다. CloudTrail의 기본 상태에 비추어 무엇을 해야 합니까?",
+      "stem": "감사용으로 Bedrock 호출 기록을 장기 보관하려 합니다. 무엇을 해야 합니까?",
       "options": [
         "아무 것도 하지 않아도 됩니다. 계정 생성 시 활성이고 모든 이벤트가 영구 보관됩니다",
         "리전마다 추적을 따로 만들어야 합니다. 추적은 만든 리전의 이벤트만 수집합니다",
@@ -189,16 +189,20 @@
         "모델 호출 로깅을 켜야 합니다. CloudTrail은 추적을 만들어도 기록을 보관하지 않습니다"
       ],
       "correct": 2,
-      "explanation": "계정을 만들면 CloudTrail이 이미 활성이고 최근 이벤트는 Event history에서 바로 볼 수 있지만, 지속적 기록에는 추적(trail)이 필요하고 추적은 로그 파일을 S3 버킷으로 전달합니다. 콘솔에서 만든 추적은 기본적으로 모든 리전에 적용돼 파티션 전 리전의 이벤트를 지정한 버킷으로 모읍니다.",
+      "explanation": "계정을 만들면 CloudTrail이 이미 활성이고 최근 이벤트는 Event history에서 바로 볼 수 있지만, 지속적 기록에는 추적(trail)이 필요하고 추적은 로그 파일을 S3 버킷으로 전달합니다. 콘솔에서 만든 추적은 모두 다중 리전 추적이라 활성화된 모든 리전의 활동을 지정한 버킷으로 모읍니다.",
       "wrongExplanations": {
         "0": "Event history는 최근 이벤트만 담습니다. 영구 보관은 추적과 S3가 맡습니다.",
-        "1": "콘솔에서 만든 추적은 기본적으로 모든 리전에 적용됩니다.",
+        "1": "콘솔에서 만든 추적은 모두 다중 리전 추적입니다. 리전마다 따로 만들지 않습니다.",
         "3": "CloudTrail은 추적으로 기록을 보관합니다. 모델 호출 로깅은 프롬프트와 응답 본문을 남기는 다른 층입니다."
       },
       "sources": [
         {
           "title": "AWS CloudTrail 사용자 안내서",
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html"
+        },
+        {
+          "title": "CloudTrail 개념 — 콘솔에서 만든 추적은 다중 리전 추적",
+          "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html"
         }
       ],
       "id": "aip-t3-3-q7",
@@ -237,19 +241,19 @@
       "skill": "3.3.3",
       "section": "org-governance",
       "difficulty": "applied",
-      "stem": "교재에 책임 있는 AI 차원을 여덟으로 적을지 열로 적을지 팀 의견이 갈립니다. 어떻게 처리합니까?",
+      "stem": "거버넌스 문서에서 통제를 책임 있는 AI 차원에 매핑하려 합니다. 「사실과 맞는 출력을 낸다」와 「예상 밖 입력에서도 올바른 출력을 낸다」는 각각 어느 차원입니까?",
       "options": [
-        "개수를 고정하지 않고 차원 이름과 담당 영역으로 정리합니다. 자료마다 수가 갈립니다",
-        "여덟으로 적습니다. 렌즈가 열을 적는 것은 중복을 합치지 않은 초기 판이기 때문입니다",
-        "열로 적습니다. 렌즈가 가장 최신 자료이므로 다른 수는 모두 낡은 것입니다",
-        "팀 투표로 하나를 정하고 교재 전체에 그 수를 일관되게 적용하면 됩니다"
+        "앞은 진실성이고 뒤는 견고성입니다. 진실성은 사실 정확성을, 견고성은 예상 밖 입력까지 봅니다",
+        "앞은 견고성이고 뒤는 진실성입니다. 견고성이 사실 정확성을, 진실성이 입력 변화를 맡습니다",
+        "둘 다 안전입니다. 출력 품질에 관한 요구는 모두 안전 차원 하나로 묶어 관리하게 됩니다",
+        "앞은 투명성이고 뒤는 제어 가능성입니다. 정확성은 공개의 문제, 입력 변화는 조종의 문제입니다"
       ],
       "correct": 0,
-      "explanation": "책임 있는 AI 렌즈는 열 차원을 적지만 AWS의 다른 공식 면은 여덟 차원으로 적습니다. 공식 자신이 「AI가 진화하면서 갱신하는 핵심 집합」이라고 밝히고 있어 수가 고정이 아니므로, 외울 것은 어떤 차원이 어떤 문제를 담당하는가입니다. 특히 설명 가능성과 투명성의 구분이 자주 갈림길입니다.",
+      "explanation": "책임 있는 AI 렌즈가 차원을 정의합니다 — 진실성은 사실과 맞는 시스템 출력을 얻는 것이고, 견고성은 예상한 입력과 예상 밖 입력 모두에서 올바른 출력을 얻는 것입니다. 안전은 유해한 출력과 오용을 막는 것, 제어 가능성은 동작을 모니터링하고 조종할 장치를 갖는 것, 투명성은 이해관계자가 스스로 판단하게 하는 것입니다. 렌즈는 이 차원 집합을 AI가 진화하면서 갱신한다고 적으므로 개수보다 각 차원이 맡는 문제를 익힙니다.",
       "wrongExplanations": {
-        "1": "어느 한쪽을 초기 판으로 볼 근거가 없습니다. 두 서술이 함께 유지되고 있습니다.",
-        "2": "다른 수를 적는 자료가 낡았다고 볼 근거가 없습니다.",
-        "3": "합의로 수를 정해도 자료를 읽을 때 다른 수를 만나므로 개수에 기대면 틀립니다."
+        "1": "두 정의가 뒤바뀌었습니다. 사실 정확성이 진실성이고 예상 밖 입력까지 보는 쪽이 견고성입니다.",
+        "2": "안전은 유해한 출력과 오용을 막는 차원입니다. 사실 정확성과 입력 변화에 대한 강건함은 각각 별 차원입니다.",
+        "3": "투명성은 이해관계자의 판단을 돕는 차원이고 제어 가능성은 동작을 모니터링하고 조종하는 차원입니다."
       },
       "sources": [
         {
@@ -389,7 +393,7 @@
         "맞지 않습니다. 평가 작업 자체가 신규 고객에게 열려 있지 않기 때문입니다"
       ],
       "correct": 1,
-      "explanation": "대체 범위의 경계가 시험 포인트입니다 — Bedrock Evaluations와 Guardrails는 FM·GenAI 평가의 AWS 관리형 경로이고 Clarify의 FM 평가를 대체하지만, 예측(표형·고전 ML) 모델의 편향 탐지와 설명 가능성을 대체하지 않습니다. 표형 모델의 공정성을 보려면 표준 지표를 직접 계산하는 쪽으로 갑니다. FM 평가 쪽 선택지는 fmeval 라이브러리와 Bedrock Evaluations와 Bedrock Guardrails 셋이고 둘 모두 신규 고객에게 열려 있습니다.",
+      "explanation": "대체 범위에 경계가 있습니다 — Bedrock Evaluations와 Guardrails는 FM·GenAI 평가의 AWS 관리형 경로이고 Clarify의 FM 평가를 대체하지만, 예측(표형·고전 ML) 모델의 편향 탐지와 설명 가능성을 대체하지 않습니다. 표형 모델의 공정성을 보려면 표준 지표를 직접 계산하는 쪽으로 갑니다. FM 평가 쪽에서는 SageMaker에 호스팅한 모델에 fmeval 라이브러리를 Clarify 없이 따로 쓸 수도 있습니다.",
       "wrongExplanations": {
         "0": "표형 모델의 편향 지표를 내는 기능이 아닙니다.",
         "2": "판정 모델은 생성 응답을 채점하는 쪽이고 표형 예측의 집단 간 차이를 재지 않습니다.",
@@ -431,6 +435,10 @@
         {
           "title": "민감 정보 필터로 대화에서 PII 제거",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 3 — 기술 3.3.4의 예시 목록",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain3.html"
         }
       ],
       "id": "aip-t3-3-q15",

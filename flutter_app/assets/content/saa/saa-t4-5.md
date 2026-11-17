@@ -27,7 +27,7 @@ sources:
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-allocation-backfill.html
   - title: 비용 할당 태그 활성화 — 공식 문서 (게이트 검수 반영: 2026-06-12)
     url: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html
-lastVerified: 2026-10-22
+lastVerified: 2026-11-17
 ---
 
 # 비용 관리 도구 — Cost Explorer·Budgets·CUR·태그·Well-Architected
@@ -230,7 +230,7 @@ CUR / Data Exports CUR 2.0 (S3: CSV·GZIP·Parquet)
 - 활성화·비활성화는 **키 단위**입니다 — 한 키를 활성화하면 그 키를 공유하는 **모든 태그 값**에 적용됩니다.
 - `UpdateCostAllocationTagsStatus` API로 여러 키를 **일괄 활성화**할 수 있습니다.
 - **AWS 생성 태그**(`aws:createdBy` 등)는 **관리 계정이 활성화하면** 조직의 모든 멤버 계정에 적용되며, 결제 콘솔과 비용 보고서에서만 보입니다.
-- **`awsApplication` 태그**는 Service Catalog **AppRegistry**에 등록된 애플리케이션에 연결된 리소스에 자동으로 붙고 **비용 할당 태그로 자동 활성화**됩니다. 비활성화할 수는 있지만 그러면 그 애플리케이션의 비용 보고가 끊기고 **자동으로 다시 켜지지 않습니다**. 이 태그는 비용 할당 태그 **쿼터에 포함되지 않습니다**.
+- **`awsApplication` 태그**는 Service Catalog **AppRegistry**(⚠️ 신규 고객에게 열려 있지 않음 — 기존 고객은 계속 사용)에 등록된 애플리케이션에 연결된 리소스에 자동으로 붙고 **비용 할당 태그로 자동 활성화**됩니다. 비활성화할 수는 있지만 그러면 그 애플리케이션의 비용 보고가 끊기고 **자동으로 다시 켜지지 않습니다**. 이 태그는 비용 할당 태그 **쿼터에 포함되지 않습니다**.
 
 > 🧠 원리: 왜 리소스에 태그를 붙이는 것만으로는 충분하지 않고 Billing Console에서 별도 활성화가 필요할까요?
 > AWS 리소스 태그는 운영 목적(검색·자동화·접근 제어)으로 폭넓게 사용되고, 모든 태그를 자동으로 청구 데이터에 포함하면 관련 없는 태그까지 CUR 컬럼으로 추가되어 데이터가 과도하게 커집니다.

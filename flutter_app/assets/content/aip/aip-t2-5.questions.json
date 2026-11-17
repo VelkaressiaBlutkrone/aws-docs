@@ -3,7 +3,7 @@
   "taskTitle": "애플리케이션 통합 패턴 및 개발 도구 구현",
   "domain": 2,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "2.5.1",
@@ -235,6 +235,10 @@
         {
           "title": "Step Functions 워크플로의 오류 처리",
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 2 — 기술 2.5.3의 예시 셋",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html"
         }
       ],
       "id": "aip-t2-5-q8",
@@ -267,6 +271,10 @@
         {
           "title": "Amazon Bedrock Data Automation",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/bda.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 2 — 기술 2.5.3의 예시 셋",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html"
         }
       ],
       "id": "aip-t2-5-q9",
@@ -279,13 +287,13 @@
       "difficulty": "applied",
       "stem": "IDE에서 쓸 코드 생성 도구를 새로 도입하려 합니다. Amazon Q Developer의 IDE 플러그인에 대해 확인해야 하는 상태와 개요 페이지가 가리키는 대안은 무엇입니까?",
       "options": [
-        "2027-04-30에 지원 종료되고, 개요 페이지가 비슷한 기능으로 Kiro를 살펴보라고 가리킵니다",
+        "지원 종료가 예정돼 있고, 개요 페이지가 비슷한 기능으로 Kiro를 살펴보라고 가리킵니다",
         "이미 완전 종료됐고, 개요 페이지가 콘솔의 어시스턴트를 그대로 대안으로 가리킵니다",
         "유지 관리 상태이고, 공식이 기능 수와 가격을 적은 비교표로 대안을 고르게 안내합니다",
         "상태 변경이 없고, 공식이 다른 도구를 가리키지 않으므로 그대로 도입하면 됩니다"
       ],
       "correct": 0,
-      "explanation": "Amazon Q Developer의 IDE 플러그인은 2027-04-30에 지원 종료되고, 공식 개요 페이지가 그 문장과 함께 비슷한 기능으로 Kiro를 살펴보라고 적습니다. 다만 콘솔의 Amazon Q Developer는 AWS assistant로 개명됐을 뿐이라 둘은 다른 운명입니다. 그리고 Kiro는 AWS docs에 가이드가 없어 지원 종료 페이지가 마이그레이션 가이드를 외부 사이트로 링크하므로, 이 사이트는 Kiro의 기능 수와 가격과 모델 목록을 다루지 않습니다.",
+      "explanation": "Amazon Q Developer의 IDE 플러그인은 2027-04-30에 지원 종료되고, 공식 개요 페이지가 그 문장과 함께 비슷한 기능으로 Kiro를 살펴보라고 적습니다. 다만 콘솔의 Amazon Q Developer는 AWS assistant로 개명됐을 뿐이라 둘은 다른 운명입니다. 그리고 Kiro는 AWS docs에 가이드가 없어 지원 종료 페이지가 마이그레이션 가이드를 외부 사이트로 링크합니다.",
       "wrongExplanations": {
         "1": "지원 종료는 예정된 날짜가 있고, 콘솔 쪽은 개명이라 IDE 플러그인의 대안으로 적히지 않았습니다.",
         "2": "그 기능의 상태 표현은 지원 종료이고, 대안의 기능 수와 가격을 적은 비교표는 AWS docs에 없습니다.",

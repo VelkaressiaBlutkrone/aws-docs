@@ -52,7 +52,11 @@ sources:
     url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/diagnose-evaluation-issues.html
   - title: 판정 모델 평가의 내장 지표
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-metrics.html
-lastVerified: 2026-11-15
+  - title: 지식 베이스용 벡터 스토어 설정
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html
+  - title: Strands Agents 계측
+    url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/supported-frameworks-strands.html
+lastVerified: 2026-11-17
 ---
 
 # GenAI 모니터링 시스템 (관찰성 세 계층·이상 탐지·감사·도구·벡터 저장소 운영·실패 모드)
@@ -236,7 +240,7 @@ GenAI 애플리케이션은 둘 다 성립하지 않습니다. **응답이 200 O
 |---|---|---|
 | **내장 도구 지표** | `Invocations` · `Throttles` · `SystemErrors` · `UserErrors` · `Latency` · `Duration`(+ 브라우저의 테이크오버 수·해제 수·시간) | ⚠️⚠️ **코드 인터프리터와 브라우저 둘에만** 있다. **1분 간격 배치** |
 | **Gateway 쪽** | 게이트웨이 관찰성 데이터 · 속도 제한 지표 · CloudTrail 이벤트 | 도구가 **게이트웨이를 지날 때만** |
-| **에이전트 자신의 도구 호출** | 프레임워크가 내는 스팬 — `gen_ai.operation.name`이 **`invoke_agent` · `execute_tool` · `chat`** | **프레임워크 계측에 달렸다** |
+| **에이전트 자신의 도구 호출** | 프레임워크가 내는 스팬 — 예: Strands는 `gen_ai.operation.name`을 **`invoke_agent` · `execute_tool` · `chat`** 값으로 단다 | **프레임워크 계측에 달렸다** |
 
 - `Throttles`는 TPS·쿼터 초과로 서비스가 거부한 수이고 **`ThrottlingException` + HTTP 429**입니다.
 - ⚠️ `Latency`는 **요청 수신부터 첫 응답 토큰을 보내기 시작할 때까지**입니다 — 전체 처리 시간이 아닙니다.
@@ -251,7 +255,7 @@ GenAI 애플리케이션은 둘 다 성립하지 않습니다. **응답이 200 O
 
 **다중 에이전트 조정 추적** — 스팬이 어디서 오는지의 문제입니다.
 
-- 서비스는 스팬의 **`scope.name`**으로 어느 계측 라이브러리인지 판별하고, 스팬 분류는 **`gen_ai.operation.name`**으로 합니다. 도구 이름은 **`gen_ai.tool.name`**입니다.
+- 서비스는 스팬의 **`scope.name`**으로 어느 계측 라이브러리인지 판별하고, 속성 이름과 대화 내용의 위치는 프레임워크마다 다릅니다 — 예를 들어 **Strands**는 스팬마다 **`gen_ai.operation.name`** 속성을 달아 스팬을 분류하게 하고 도구 이름을 **`gen_ai.tool.name`** 속성에 둡니다.
 - **Strands Agents는 SDK에 계측이 내장**돼 추가 라이브러리가 필요하지 않고, 나머지 지원 프레임워크는 **OpenTelemetry 또는 OpenInference 계측 라이브러리**와 **권장 버전 하한**이 있습니다.
 - AgentCore Runtime + **ADOT**에 배포하면 Runtime이 **`session.id`를 주입**하고 스팬·이벤트를 자동으로 내보냅니다.
 - ⚠️⚠️ **계측만으로는 평가되지 않습니다** — 공식 Note가 계측은 한 단계이고 에이전트가 **관찰성을 켜서 CloudWatch로 텔레메트리를 내보내야** 평가 서비스가 읽는다고 적습니다.
@@ -411,7 +415,7 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 
 <details><summary>정답 보기</summary>
 
-**트레이스 데이터를 모으려면 ADOT로 코드를 계측해야 합니다.** ⚠️⚠️ 공식이 기본 제공 범위를 명확히 가릅니다 — **기본으로 오는 것**은 AgentCore Runtime에서 도는 에이전트의 **세션 수준 지표**와 **메모리·게이트웨이·내장 도구의 기본 지표**이고(⭐ **메모리 리소스는 로그와 스팬도 기본**으로 옵니다), **계측해야 오는 것**은 내 에이전트의 **사용자 지정 지표·로그·스팬**입니다. 도구 호출의 입출력과 실행 시간은 **트레이스**에 담기는 정보이므로(세션이나 스팬이 아닙니다) 계측이 전제입니다. ⭐ **Strands Agents는 SDK에 계측이 내장**돼 추가 라이브러리가 필요하지 않고, 다른 지원 프레임워크는 **OpenTelemetry 또는 OpenInference 계측 라이브러리**와 권장 버전 하한이 있습니다. 배포 후에는 Runtime이 **`session.id`를 주입**하고, 서비스는 스팬의 **`scope.name`**으로 계측 라이브러리를 판별하며 **`gen_ai.operation.name`**(`invoke_agent`·`execute_tool`·`chat`)으로 스팬을 분류합니다. ⚠️ 보는 곳은 **AgentCore 콘솔의 관찰성 페이지**와 **CloudWatch 콘솔의 GenAI 관찰성 페이지** 둘입니다.
+**트레이스 데이터를 모으려면 ADOT로 코드를 계측해야 합니다.** ⚠️⚠️ 공식이 기본 제공 범위를 명확히 가릅니다 — **기본으로 오는 것**은 AgentCore Runtime에서 도는 에이전트의 **세션 수준 지표**와 **메모리·게이트웨이·내장 도구의 기본 지표**이고(⭐ **메모리 리소스는 로그와 스팬도 기본**으로 옵니다), **계측해야 오는 것**은 내 에이전트의 **사용자 지정 지표·로그·스팬**입니다. 도구 호출의 입출력과 실행 시간은 **트레이스**에 담기는 정보이므로(세션이나 스팬이 아닙니다) 계측이 전제입니다. ⭐ **Strands Agents는 SDK에 계측이 내장**돼 추가 라이브러리가 필요하지 않고, 다른 지원 프레임워크는 **OpenTelemetry 또는 OpenInference 계측 라이브러리**와 권장 버전 하한이 있습니다. 배포 후에는 Runtime이 **`session.id`를 주입**하고, 서비스는 스팬의 **`scope.name`**으로 계측 라이브러리를 판별합니다(Strands라면 **`gen_ai.operation.name`**의 `invoke_agent`·`execute_tool`·`chat` 값으로 스팬이 분류됩니다). ⚠️ 보는 곳은 **AgentCore 콘솔의 관찰성 페이지**와 **CloudWatch 콘솔의 GenAI 관찰성 페이지** 둘입니다.
 </details>
 
 **Q2.** 운영팀이 「Bedrock 오류 지표가 0인데 사용자는 실패를 본다」고 보고했습니다. 어떤 지표를 어떻게 봐야 합니까?
@@ -439,7 +443,7 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 
 <details><summary>정답 보기</summary>
 
-**첫째는 성립하지 않고 둘째는 층이 다릅니다.** ⚠️⚠️ 리소스 사용 지표(**`CPUUsed-vCPUHours`·`MemoryUsed-GBHours`**, 차원은 `Service`=`AgentCore.CodeInterpreter`/`AgentCore.Browser`와 `Resource`=도구 ID)는 **1분 해상도로 벤딩**되지만 공식 Note가 **최대 60분 지연될 수 있고 지표마다 정밀도가 다를 수 있다**고 적습니다 — 「실시간으로 CPU·메모리를 보고 스케일한다」는 설계가 그 사실에 걸립니다. 둘째는 **「도구 호출 관찰성」이 세 층**이기 때문입니다: **내장 도구 지표**(`Invocations`·`Throttles`·`SystemErrors`·`UserErrors`·`Latency`·`Duration`)는 ⚠️ **코드 인터프리터와 브라우저 둘에만** 있고 **1분 간격 배치**이며, **Gateway 쪽**은 도구가 **게이트웨이를 지날 때만** 데이터를 주고, **에이전트 자신의 도구 호출**은 프레임워크가 내는 스팬(**`gen_ai.operation.name`=`execute_tool`**, 도구 이름은 **`gen_ai.tool.name`**)에서 봅니다. 사내 API 도구는 뒤의 두 층에서 봐야 합니다. ⚠️ 함께 기억할 것 — `Throttles`는 **`ThrottlingException` + HTTP 429**이고, `Latency`는 **첫 응답 토큰을 보내기 시작할 때까지**(전체 처리 시간이 아닙니다)입니다. ⭐ 도구 열화는 **복합 알람**으로 잡습니다 — 지연이 오르면서 타임아웃 비율도 오르는 도구는 단일 임계로는 어느 쪽도 울리지 않아도 **차단에 가까워진** 상태입니다.
+**첫째는 성립하지 않고 둘째는 층이 다릅니다.** ⚠️⚠️ 리소스 사용 지표(**`CPUUsed-vCPUHours`·`MemoryUsed-GBHours`**, 차원은 `Service`=`AgentCore.CodeInterpreter`/`AgentCore.Browser`와 `Resource`=도구 ID)는 **1분 해상도로 벤딩**되지만 공식 Note가 **최대 60분 지연될 수 있고 지표마다 정밀도가 다를 수 있다**고 적습니다 — 「실시간으로 CPU·메모리를 보고 스케일한다」는 설계가 그 사실에 걸립니다. 둘째는 **「도구 호출 관찰성」이 세 층**이기 때문입니다: **내장 도구 지표**(`Invocations`·`Throttles`·`SystemErrors`·`UserErrors`·`Latency`·`Duration`)는 ⚠️ **코드 인터프리터와 브라우저 둘에만** 있고 **1분 간격 배치**이며, **Gateway 쪽**은 도구가 **게이트웨이를 지날 때만** 데이터를 주고, **에이전트 자신의 도구 호출**은 프레임워크가 내는 스팬(Strands라면 **`gen_ai.operation.name`=`execute_tool`**, 도구 이름은 **`gen_ai.tool.name`**)에서 봅니다. 사내 API 도구는 뒤의 두 층에서 봐야 합니다. ⚠️ 함께 기억할 것 — `Throttles`는 **`ThrottlingException` + HTTP 429**이고, `Latency`는 **첫 응답 토큰을 보내기 시작할 때까지**(전체 처리 시간이 아닙니다)입니다. ⭐ 도구 열화는 **복합 알람**으로 잡습니다 — 지연이 오르면서 타임아웃 비율도 오르는 도구는 단일 임계로는 어느 쪽도 울리지 않아도 **차단에 가까워진** 상태입니다.
 </details>
 
 **Q6.** OpenSearch 벡터 인덱스에 문서를 대량 적재하던 중 **새 벡터 색인이 거부**되기 시작했습니다. 그리고 별도 Aurora 기반 지식 베이스에서는 **오류 없이 검색 결과가 요청보다 적게** 옵니다. 각각의 원인은 무엇입니까?
@@ -492,7 +496,7 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 9. CloudTrail로 Bedrock API 호출 로깅 (호출 API는 관리 이벤트 · 나머지는 데이터 이벤트로 기본 비기록 · 전 리전 기본값 · Event history) — `docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html` (2026-11-15 확인)
 10. CloudTrail Lake 가용성 변경 (2026-05-31 신규 고객 비개방 · 본체·Trails·Insights·Aggregated Events 영향 없음 · 치명 버그·보안 업데이트만 · 조직 EDS ↔ 계정 EDS 비대칭 · CloudWatch 이전 권장과 근거) — `docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html` (2026-11-15 확인)
 11. 내장 도구 관찰성 데이터 (지표 여섯 + 브라우저 테이크오버 · 둘에만 있음 · 1분 배치 · `Throttles`=429 · `Latency`의 경계 · 리소스 지표와 차원 · 최대 60분 지연) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-tool-metrics.html` (2026-11-15 확인)
-12. 관찰성 지원 프레임워크와 계측 (Strands는 SDK 내장 · 나머지는 OTel·OpenInference + 버전 하한 · `scope.name` 판별 · `gen_ai.operation.name` 세 값 · `gen_ai.tool.name` · `session.id` 주입 · 계측만으로는 평가되지 않음 · 기대 도구 궤적) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/supported-frameworks.html` (2026-11-15 확인)
+12. 관찰성 지원 프레임워크와 계측 (Strands는 SDK 내장 · 나머지는 OTel·OpenInference + 버전 하한 · `scope.name` 판별 · 계측만으로는 평가되지 않음 · 기대 도구 궤적) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/supported-frameworks.html` (2026-11-15 확인)
 13. OpenSearch 클러스터 지표 (k-NN 지표 전수 · `KNNGraphMemoryUsagePercentage` 100%에서 색인 거부 · 클러스터 ↔ 노드 관계 · 축출 집계 제외 · 근사 k-NN 한정) — `docs.aws.amazon.com/opensearch-service/latest/developerguide/managedomains-cloudwatchmetrics.html` (2026-11-15 확인)
 14. OpenSearch k-NN 튜닝과 한계 (설정 둘은 변경 불가 · RAM 절반 힙 · 남은 절반의 50% · 32 GiB → 8 GiB 산술 · UltraWarm 이전 2.17+ · warm에서 캐시 정리·웜업 차단 · 첫 쿼리가 S3에서 적재 · TTL 축출) — `docs.aws.amazon.com/opensearch-service/latest/developerguide/knn.html` (2026-11-15 확인)
 15. OpenSearch 샤드 수 선택 (검색 지연 10–30 GiB ↔ 쓰기 중심 30–50 GiB · 기본 샤드 수는 쉽게 바꿀 수 없음) — `docs.aws.amazon.com/opensearch-service/latest/developerguide/bp-sharding.html` (2026-11-15 확인)
@@ -503,3 +507,5 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 20. CountTokens API 참조 (모델별 토큰화 · 과금 토큰과 일치 · 입력 Union · 응답은 `inputTokens` · 용례 셋) — `docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_CountTokens.html` (2026-11-15 확인)
 21. 평가 문제 진단 (빈 결과 · 예외 여섯 종 · 다중 에이전트 스코핑 · 관찰성 전제 · 필요 권한) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/diagnose-evaluation-issues.html` (2026-11-15 확인)
 22. 판정 모델 평가의 내장 지표 (`Builtin.Faithfulness`의 정의 · `Builtin.Correctness`와 참조 응답 · `Coherence`·`FollowingInstructions` · 응답 데이터 직접 제공 시 호출 생략 · 히스토그램과 S3 보고서) — `docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-metrics.html` (2026-11-15 확인)
+23. 지식 베이스용 벡터 스토어 설정 (HNSW 반복 인덱스 스캔 · pgvector 0.8.0 · 필터가 HNSW 스캔 뒤에 적용) — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html` (2026-11-17 확인)
+24. Strands Agents 계측 (`gen_ai.operation.name` 세 값 · `gen_ai.tool.name` · Runtime의 `session.id` 주입) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/supported-frameworks-strands.html` (2026-11-17 확인)

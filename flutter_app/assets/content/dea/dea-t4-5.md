@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/data-mesh-reference-architecture.html
   - title: DEA-C01 공식 시험 가이드 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain4.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 프라이버시·거버넌스 (Redshift 공유·Macie·리전 통제·Config·주권)
@@ -200,7 +200,7 @@ Macie는 S3 객체를 **내장 기준·기법(머신러닝, 패턴 매칭)으로
 - **데이터 메시 참조 구조** — **소비자·생산자·중앙 거버넌스 계층은 각각 독립된 데이터 도메인**이며 ⚠️ **보통 별도 AWS 계정**에 둡니다. **연합 거버넌스 계층**은 **카탈로깅, 자산 검색, 권한 관리, 감사 이력용 중앙 로그**를 맡는 중앙 거버넌스 도메인입니다.
 - **Lake Formation 교차 계정 공유** — 다른 계정과 DB·테이블을 공유하는 방법은 **① 이름 지정 리소스 방식**과 **② LF-TBAC(태그 기반)** 두 가지입니다. 이름 지정 리소스 방식은 **외부 계정에 권한을 줄 때 AWS RAM으로 리소스를 공유**합니다. ⚠️ **대상 Data Catalog 객체가 많을 때는 LF-TBAC가 권장**되며 **LF-Tag는 IAM 태그와 다릅니다.**
 - **Redshift 데이터 공유** — Redshift 간 **라이브 공유**(위 1절), 열·행 수준 중앙 통제가 필요하면 **Lake Formation 관리 datashare**.
-- **S3 Access Points** — 버킷에 붙는 **이름 있는 네트워크 엔드포인트**로, 공유 데이터셋에 대해 **앱·팀별로 서로 다른 권한과 네트워크 제어**를 줄 때 씁니다. **버킷당 최대 10,000개**이며 같은 계정 또는 **신뢰된 다른 계정의 버킷**과 연결할 수 있고, **접근점 정책은 기반 버킷 정책과 함께 평가**됩니다.
+- **S3 Access Points** — 버킷에 붙는 **이름 있는 네트워크 엔드포인트**로, 공유 데이터셋에 대해 **앱·팀별로 서로 다른 권한과 네트워크 제어**를 줄 때 씁니다. **계정·리전당 최대 10,000개**(증액 요청 가능)이며 같은 계정 또는 **신뢰된 다른 계정의 버킷**과 연결할 수 있고, **접근점 정책은 기반 버킷 정책과 함께 평가**됩니다.
 - **AWS Data Exchange for Amazon Redshift** — **제3자 데이터를 구독해 Redshift에서 바로 쿼리**하며, ⚠️ **구독하면 접근이 자동 부여되고 구독이 끝나면 자동 회수**됩니다.
 
 | 수단 | 적합한 경우 | 제약·특이점 | 시험 단서 |
@@ -208,7 +208,7 @@ Macie는 S3 객체를 **내장 기준·기법(머신러닝, 패턴 매칭)으로
 | **Redshift 데이터 공유** | 웨어하우스 간 **복사 없는 라이브 공유** | 교차 계정은 **authorize+associate**, 양쪽 암호화 | "클러스터 간·계정 간 최신 데이터" |
 | **Lake Formation 교차 계정 공유** | 데이터 레이크 Data Catalog 테이블을 다른 계정과 | **이름 지정(RAM) vs LF-TBAC(권장)** | "열·행 수준 중앙 통제, 다계정 레이크" |
 | **Lake Formation 관리 datashare** | Redshift 객체에도 LF 열·행 권한 적용 | ⚠️ **교차 리전·셀 수준 필터 미지원** | "Redshift 공유 + LF 중앙 권한" |
-| **S3 Access Points** | 공유 S3 데이터셋에 **앱별 접근 정책 분리** | **버킷당 10,000개**, 버킷 정책과 함께 평가 | "수많은 앱이 같은 버킷" |
+| **S3 Access Points** | 공유 S3 데이터셋에 **앱별 접근 정책 분리** | **계정·리전당 10,000개**, 버킷 정책과 함께 평가 | "수많은 앱이 같은 버킷" |
 | **AWS Data Exchange** | **제3자 데이터 라이선스 구독** | **구독 종료 시 접근 자동 회수** | "외부 공급자 데이터 구독" |
 
 ---
@@ -319,7 +319,7 @@ Macie는 S3 객체를 **내장 기준·기법(머신러닝, 패턴 매칭)으로
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20)
 
 1. Considerations for data sharing in Amazon Redshift — https://docs.aws.amazon.com/redshift/latest/dg/datashare-considerations.html
 2. Sharing data across AWS accounts (Amazon Redshift Database Developer Guide) — https://docs.aws.amazon.com/redshift/latest/dg/across-account.html
@@ -349,3 +349,4 @@ Macie는 S3 객체를 **내장 기준·기법(머신러닝, 패턴 매칭)으로
 26. Sharing a data lake using Lake Formation tag-based access control and named resources — https://docs.aws.amazon.com/lake-formation/latest/dg/share-dl-tbac-tutorial.html
 27. Access control in Amazon S3 (Access Points) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-management.html
 28. AWS Data Exchange for Amazon Redshift — https://aws.amazon.com/data-exchange/why-aws-data-exchange/redshift-data-tables/
+29. Access points naming rules, restrictions, and limitations (Amazon S3) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points-restrictions-limitations-naming-rules.html

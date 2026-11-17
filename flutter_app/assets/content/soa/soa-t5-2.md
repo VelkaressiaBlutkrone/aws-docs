@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-endpoint-service.html
   - title: Gateway Load Balancer 엔드포인트 서비스 만들기 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/privatelink/create-gateway-load-balancer-endpoint-service.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 하이브리드·연결 — 피어링·TGW·VPN·Direct Connect·엔드포인트
@@ -152,7 +152,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 | **퍼블릭 VIF** | 모든 AWS 퍼블릭 서비스에 퍼블릭 IP로 접근 |
 | **트랜짓 VIF** | Direct Connect 게이트웨이를 통해 **Transit Gateway**에 연결 |
 
-- 구축 시간: **수 주(물리 회선 설치)**. 경로는 전용 회선 → **일관된 대역폭·저지연**.
+- 구축 시간: **VPN보다 김(물리 회선 구축이 필요)**. 경로는 전용 회선 → **일관된 대역폭·저지연**.
 - 암호화: **기본 없음**. 선택지가 둘입니다 — DX 위에 IPsec VPN을 얹는 **VPN over Direct Connect**, 또는 **MACsec**(지원하는 전용 연결에서 데이터센터↔DX 로케이션 구간을 암호화).
 - **DX + VPN 백업:** 평시 DX, DX 장애 시 VPN으로 자동 우회 → 가용성 + 성능 확보.
 
@@ -318,3 +318,5 @@ Gateway 엔드포인트는 서브넷 라우팅 테이블에 경로를 추가하�
 4. AWS Direct Connect란 무엇인가 — https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html
 5. AWS PrivateLink 및 VPC 엔드포인트 — https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html
 6. 게이트웨이 VPC 엔드포인트(S3·DynamoDB) — https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html
+
+> 📝 **2026-11-17 정정**: Direct Connect 구축 기간은 공식 문서에서 수치를 확인하지 못해 수치 없이 고쳤습니다(VPN 쪽 근거: https://docs.aws.amazon.com/vpn/latest/s2svpn/SetUpVPNConnections.html).

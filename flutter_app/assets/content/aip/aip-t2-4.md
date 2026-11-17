@@ -34,7 +34,9 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html
   - title: Step Functions 워크플로의 오류 처리
     url: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html
-lastVerified: 2026-11-14
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 2
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html
+lastVerified: 2026-11-17
 ---
 
 # FM API 통합 (동기와 비동기·요청 검증·스트리밍과 WebSocket·복원력·모델 라우팅)
@@ -316,3 +318,4 @@ GenAI 애플리케이션에서 FM API 통합의 실패는 대부분 **「어느 
 11. AgentCore Gateway의 라우팅 규칙과 폴백 (`targetFallback` · 서킷 브레이커 · 스트리밍 후 폴백 불가) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rules-fallback.html` (2026-11-14 확인)
 12. Amazon Bedrock 지능형 프롬프트 라우팅 (같은 패밀리 · 영어 최적화 · 폴백 모델) — `docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html` (2026-11-14 확인)
 13. Step Functions 워크플로의 오류 처리 (캐처 범위 · EventBridge `TIMED_OUT`) — `docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html` (2026-11-14 확인)
+14. AIP-C01 시험 안내서 콘텐츠 도메인 2 (기술 2.4.4의 라우팅 수단 넷) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html` (2026-11-17 확인)

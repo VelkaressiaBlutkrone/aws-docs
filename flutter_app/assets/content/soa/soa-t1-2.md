@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html
   - title: CloudWatch Logs·S3로 모델 호출 모니터링 (공식)
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # CloudWatch Logs·Logs Insights·구독 필터·에이전트
@@ -136,6 +136,8 @@ aws logs put-retention-policy \
 
 > 차원이 없는 단순 카운트 외에, JSON 로그에서 필드값을 추출해 지표 차원/값으로 게시할 수도 있습니다(예: `{ $.statusCode = 500 }`).
 
+> **두 번째 경로 — Log Alarm:** 공식 문서는 로그 데이터에 경보를 거는 방법을 **둘**로 적습니다. 위의 **지표 필터 + 지표 경보** 방식과, **Logs Insights 쿼리를 일정(예: `rate(5 minutes)`)에 따라 실행해 집계 결과를 임계값과 직접 비교하는 Log Alarm** 방식입니다. Log Alarm은 중간 단계인 지표 필터 없이 로그 데이터를 직접 평가합니다.
+
 > 🧠 원리: 왜 지표 필터는 생성 이전 로그를 소급해 집계하지 않을까요?
 > CloudWatch 지표는 시간축 위의 연속 데이터 포인트로 구성되며, 각 포인트는 "해당 시각에 측정된 값"을 나타냅니다.
 > 과거 로그를 소급해 집계하면 필터 생성 이전 기간에 갑자기 값이 나타나고, 경보는 "언제부터 조건이 충족됐는가"를 정확히 판단할 수 없게 됩니다.
@@ -232,7 +234,7 @@ fields @timestamp, statusCode
 
 ### 7) 임베디드 지표 형식(EMF) — 간단 언급
 
-> **EMF(Embedded Metric Format)**: 애플리케이션이 **구조화된 JSON 로그 한 줄**을 CloudWatch Logs에 기록하면, CloudWatch가 그 로그에서 **고대수(custom) 지표를 자동 추출**하는 형식입니다.
+> **EMF(Embedded Metric Format)**: 애플리케이션이 **구조화된 JSON 로그 한 줄**을 CloudWatch Logs에 기록하면, CloudWatch가 그 로그에서 **사용자 지정(custom) 지표를 자동 추출**하는 형식입니다.
 
 - 로그와 지표를 한 번의 기록으로 동시에 남길 수 있어, 별도의 `PutMetricData` 호출 없이 고해상도·고카디널리티 지표를 게시할 때 유용합니다.
 - 서버리스(Lambda)·컨테이너 환경에서 애플리케이션 내부 지표를 효율적으로 내보내는 패턴으로 쓰입니다.
@@ -319,7 +321,7 @@ fields @timestamp, statusCode
 
 <details><summary>정답 보기</summary>
 
-로그 그룹에 **지표 필터(Metric Filter)**를 만들어 패턴 `ERROR`를 CloudWatch 지표(예: `ErrorCount`)로 변환합니다. 그 지표에 **CloudWatch 경보**를 걸어(예: 5분 합계가 임계값 초과 시 ALARM) **SNS**로 알림을 보냅니다. 즉 `로그 → 지표 필터 → 지표 → 경보 → SNS` 순서입니다. 단, 지표 필터는 생성 이후의 신규 로그에만 적용됩니다.
+로그 그룹에 **지표 필터(Metric Filter)**를 만들어 패턴 `ERROR`를 CloudWatch 지표(예: `ErrorCount`)로 변환합니다. 그 지표에 **CloudWatch 경보**를 걸어(예: 5분 합계가 임계값 초과 시 ALARM) **SNS**로 알림을 보냅니다. 즉 `로그 → 지표 필터 → 지표 → 경보 → SNS` 순서입니다. 단, 지표 필터는 생성 이후의 신규 로그에만 적용됩니다. 로그 데이터에 경보를 거는 또 하나의 공식 경로로, 지표 필터 없이 Logs Insights 쿼리 결과를 임계값과 비교하는 **Log Alarm**도 있습니다.
 </details>
 
 **Q2.** 여러 마이크로서비스의 로그를 실시간으로 한곳에 모아 OpenSearch에서 검색하고, 동시에 S3에 장기 보관하려 합니다. CloudWatch Logs에서 무엇을 사용하나요?
@@ -362,3 +364,5 @@ CloudWatch의 기본 EC2 지표는 하이퍼바이저가 외부에서 관찰할 
 4. 구독 필터를 사용한 실시간 로그 처리 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Subscriptions.html
 5. CloudWatch Logs Insights 쿼리 구문 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html
 6. CloudWatch 에이전트 설치 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-on-EC2-Instance.html
+
+> 📝 **2026-11-17 정정**: 로그 데이터에 경보를 거는 두 번째 공식 경로인 **Log Alarm**(Logs Insights 쿼리를 일정에 따라 실행해 결과를 임계값과 직접 비교)을 §3과 자가 점검에 더했습니다 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Alarm-On-Logs.html

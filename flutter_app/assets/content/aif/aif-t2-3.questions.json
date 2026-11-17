@@ -19,7 +19,7 @@
         "Amazon SageMaker AI 전용 엔드포인트에 에이전트를 배포해야 세션 격리를 얻을 수 있습니다"
       ],
       "correct": 1,
-      "explanation": "공식 문서는 Strands Agents를 AWS가 처음 공개한 오픈소스 SDK로 적고, AgentCore를 어떤 프레임워크와 파운데이션 모델로든 에이전트를 안전하게 규모로 구축·배포·운영하는 에이전틱 플랫폼으로 적으면서 인프라 관리가 없다고 명시합니다. 같은 페이지가 AgentCore 서비스들이 CrewAI, LangGraph, LlamaIndex, Strands Agents 같은 오픈소스 프레임워크와 함께 또는 독립적으로 동작한다고 적고, Runtime을 세션 격리를 제공하는 서버리스 런타임으로 적습니다. 즉 둘은 경쟁 관계가 아니라 층이 다릅니다.",
+      "explanation": "공식 문서는 Strands Agents를 AWS가 처음에 오픈소스 SDK로 공개한 것으로 적고, AgentCore를 어떤 프레임워크와 파운데이션 모델로든 에이전트를 안전하게 규모로 구축·배포·운영하는 에이전틱 플랫폼으로 적으면서 인프라 관리가 없다고 명시합니다. 같은 페이지가 AgentCore 서비스들이 CrewAI, LangGraph, LlamaIndex, Strands Agents 같은 오픈소스 프레임워크와 함께 또는 독립적으로 동작한다고 적고, Runtime을 세션 격리를 제공하는 서버리스 런타임으로 적습니다. 즉 둘은 경쟁 관계가 아니라 층이 다릅니다.",
       "wrongExplanations": {
         "0": "Strands Agents는 오픈소스 SDK이고 AWS 콘솔이나 요금 페이지가 있는 관리형 런타임이 아닙니다. 공식 문서는 Strands Agents를 모델 우선 설계의 SDK로만 서술합니다.",
         "2": "AgentCore 개요는 반대로 적습니다. AgentCore 서비스들은 어떤 오픈소스 프레임워크와도, 그리고 Amazon Bedrock 안이든 밖이든 어떤 파운데이션 모델과도 함께 동작하므로 전용 형식으로 다시 쓸 필요가 없습니다.",
@@ -81,7 +81,7 @@
       "correct": 0,
       "explanation": "공식 개발자 안내서는 SageMaker JumpStart를 머신 러닝을 시작하도록 돕는 ML 허브로 적습니다. 여러 문제 유형의 사전 훈련 오픈소스 모델을 제공하고 배포 전에 점진적으로 훈련·튜닝할 수 있으며, 일반적인 사용 사례의 인프라를 구성하는 솔루션 템플릿과 SageMaker AI용 실행 가능한 예제 노트북도 함께 준다고 적습니다. JumpStart는 독립 서비스가 아니라 SageMaker AI 안의 기능입니다.",
       "wrongExplanations": {
-        "1": "Amazon Quick은 작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스입니다. 사전 훈련 모델을 골라 훈련·배포하는 ML 허브가 아닙니다.",
+        "1": "Amazon Quick(제품 문서 표기는 AWS Quick)은 작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스입니다. 사전 훈련 모델을 골라 훈련·배포하는 ML 허브가 아닙니다.",
         "2": "Kiro는 AWS의 에이전틱 개발 시스템이고 IDE, CLI, 자율 웹 에이전트 형태로 제공되는 개발 도구입니다. 모델 카탈로그를 제공하는 서비스가 아닙니다.",
         "3": "AgentCore Gateway가 MCP 호환 도구로 바꾸는 대상은 API, Lambda 함수, 기존 서비스입니다. 사전 훈련 모델 카탈로그를 제공하는 기능이 아닙니다."
       },
@@ -107,7 +107,7 @@
         "첫째는 Amazon Quick, 둘째는 Kiro입니다. Quick은 작업 자동화·데이터 분석·웹 애플리케이션 구축·리서치를 위한 AI 기반 서비스이고, Kiro는 AWS의 에이전틱 개발 시스템입니다"
       ],
       "correct": 3,
-      "explanation": "공식 사용자 가이드는 Amazon Quick을 작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스로 적고 그 기능으로 대화형 데이터 시각화·비즈니스 인텔리전스를 담당하는 Amazon Quick Sight와 반복 작업 자동화를 담당하는 Amazon Quick Flows를 듭니다. AWS 서비스 개요 백서는 Kiro를 AWS의 에이전틱 개발 시스템으로 적으면서, 의도를 관리하고 큰 코드베이스에서 장기 실행 작업을 완수하며 코드의 정확성을 검증한다고 서술합니다. 둘 다 모델을 API로 제공하는 서비스가 아닙니다.",
+      "explanation": "제품 사용자 가이드는 이 서비스를 AWS Quick이라는 이름으로 작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스로 적고(시험 가이드 표기는 Amazon Quick입니다) 그 기능으로 대화형 데이터 시각화·비즈니스 인텔리전스를 담당하는 AWS Quick Sight와 반복 작업 자동화를 담당하는 AWS Quick Flows를 듭니다. AWS 서비스 개요 백서는 Kiro를 AWS의 에이전틱 개발 시스템으로 적으면서, 의도를 관리하고 큰 코드베이스에서 장기 실행 작업을 완수하며 코드의 정확성을 검증한다고 서술합니다. 둘 다 모델을 API로 제공하는 서비스가 아닙니다.",
       "wrongExplanations": {
         "0": "역할이 뒤바뀌었습니다. 데이터 분석·시각화·업무 자동화 쪽이 Amazon Quick이고, 코드베이스 작업과 코드 정확성 검증 쪽이 Kiro입니다.",
         "1": "Amazon Bedrock은 파운데이션 모델에 안전한 접근을 제공하는 완전관리형 서비스이고, Amazon Quick과 Kiro는 그 안의 기능이 아니라 별개의 서비스입니다. 두 요청은 모델 호출이 아니라 분석·자동화와 개발 작업입니다.",
@@ -115,7 +115,7 @@
       },
       "sources": [
         {
-          "title": "What is Amazon Quick? — 서비스 정의와 기능 6종",
+          "title": "What is AWS Quick? — 서비스 정의와 기능 목록",
           "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
         },
         {

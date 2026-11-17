@@ -3,7 +3,7 @@
   "taskTitle": "GenAI용 평가 시스템 구현",
   "domain": 5,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "5.1.1",
@@ -31,6 +31,10 @@
         {
           "title": "AgentCore Evaluations 작동 방식",
           "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/how-it-works-evaluations.html"
+        },
+        {
+          "title": "AgentCore 평가 유형 — 세션·스팬·트레이스 단위의 평가",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations-types.html"
         }
       ],
       "id": "aip-t5-1-q1",
@@ -277,7 +281,7 @@
         "지식 베이스 동기화가 끝나지 않아 커버리지만 비어 있는 상태입니다"
       ],
       "correct": 1,
-      "explanation": "Retrieve only 작업 유형의 내장 지표는 둘입니다 — 컨텍스트 관련성과 컨텍스트 커버리지이고, 커버리지는 프롬프트 데이터세트에 그라운드 트루스가 있어야 계산됩니다. 관련성은 그라운드 트루스 없이도 나옵니다. 검색 쪽을 따로 재려고 이 작업 유형을 둔 것이고, Retrieve and generate 쪽은 지표가 열 개입니다.",
+      "explanation": "Retrieve only 작업 유형의 내장 지표는 둘입니다 — 컨텍스트 관련성과 컨텍스트 커버리지이고, 커버리지는 프롬프트 데이터세트에 그라운드 트루스가 있어야 계산됩니다. 두 지표 가운데 그라운드 트루스를 반드시 주라고 적혀 있는 것은 커버리지 쪽입니다. 검색 쪽을 따로 재려고 이 작업 유형을 둔 것이고, Retrieve and generate 쪽은 지표가 열 개입니다.",
       "wrongExplanations": {
         "0": "리랭커는 결과 순서를 다시 매기는 수단이고 지표 계산의 전제가 아닙니다.",
         "2": "커버리지는 Retrieve only 쪽 지표입니다. 작업 유형을 바꿀 문제가 아닙니다.",
@@ -297,7 +301,7 @@
       "skill": "5.1.7",
       "section": "agent-perf",
       "difficulty": "applied",
-      "stem": "큐레이션해 둔 세션 집합에 기대 도구 궤적을 붙여 회귀를 보려 합니다. 어느 평가 유형이고 서비스가 무엇을 대신합니까?",
+      "stem": "큐레이션해 둔 세션 집합에 기대 도구 궤적을 붙여 회귀를 보려 합니다. 세션 발견과 스팬 수집까지 서비스에 맡기려면 어느 평가 유형입니까?",
       "options": [
         "온라인 평가입니다. 샘플링 비율을 100으로 올리면 전 세션이 채점됩니다",
         "온디맨드 평가입니다. 스팬을 내가 모아 세션마다 호출하면 궤적이 비교됩니다",
@@ -305,16 +309,20 @@
         "데이터세트 평가입니다. 스키마만 주면 궤적 비교가 바로 제공됩니다"
       ],
       "correct": 2,
-      "explanation": "AgentCore 평가 유형이 셋입니다. 온라인은 배포된 에이전트를 라이브 운영 트래픽으로 계속 평가하며 비율 기반이나 조건 필터로 샘플링하고, 온디맨드는 스팬이나 트레이스 ID를 지정해 고른 상호 작용만 보며 빌드 시점 테스트에 맞습니다. 배치는 여러 세션을 비동기 작업 하나로 돌리고 세션 발견과 스팬 수집과 채점을 서비스가 합니다. 그라운드 트루스를 세션 메타데이터로 받는 것은 배치뿐이고 기대 응답과 어서션과 기대 도구 궤적을 담습니다. 결과로 평가자별 평균과 세션 수가 오고 세션별 상세는 CloudWatch Logs에 씁니다.",
+      "explanation": "AgentCore 평가 유형이 셋입니다. 온라인은 배포된 에이전트를 라이브 운영 트래픽으로 계속 평가하며 비율 기반이나 조건 필터로 샘플링하고, 온디맨드는 스팬이나 트레이스 ID를 지정해 고른 상호 작용만 보며 빌드 시점 테스트에 맞습니다. 배치는 여러 세션을 비동기 작업 하나로 돌리고 세션 발견과 스팬 수집과 채점을 서비스가 합니다. 배치는 그라운드 트루스를 세션 메타데이터로 받아 기대 응답과 어서션과 기대 도구 궤적을 담습니다. 결과로 평가자별 평균과 세션 수가 오고 세션별 상세는 CloudWatch Logs에 씁니다.",
       "wrongExplanations": {
         "0": "온라인은 라이브 트래픽을 샘플링하는 쪽이고 큐레이션한 세션 집합을 돌리는 유형이 아닙니다.",
         "1": "온디맨드는 내가 스팬을 모아 세션마다 호출하는 쪽이라 서비스가 발견과 수집을 대신하지 않습니다.",
-        "3": "데이터세트 유형은 프리뷰이고 궤적 비교의 그라운드 트루스를 받는 것은 배치입니다."
+        "3": "데이터세트 평가는 SDK 러너가 시나리오마다 에이전트를 새로 호출해 평가를 돌리는 방식이고 스키마만으로 끝나지 않습니다. 이미 모아 둔 세션을 서비스가 채점하는 것은 배치 평가입니다."
       },
       "sources": [
         {
           "title": "AgentCore 평가 유형",
           "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations-types.html"
+        },
+        {
+          "title": "AgentCore 데이터세트 평가 — 러너가 에이전트를 호출해 평가",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/dataset-evaluations.html"
         }
       ],
       "id": "aip-t5-1-q11",

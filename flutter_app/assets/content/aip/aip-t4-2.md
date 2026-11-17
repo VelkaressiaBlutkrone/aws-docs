@@ -34,7 +34,11 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html
   - title: AWS X-Ray란 무엇인가
     url: https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html
-lastVerified: 2026-11-15
+  - title: 지식 베이스용 벡터 스토어 설정
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html
+  - title: OpenSearch Service 샤드 수 선택
+    url: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/bp-sharding.html
+lastVerified: 2026-11-17
 ---
 
 # 애플리케이션 성능 최적화 (지연 절충·검색 성능·처리량·파라미터·오토 스케일링·프로파일링)
@@ -338,3 +342,5 @@ GenAI 애플리케이션의 성능은 **한 군데를 고쳐서 좋아지지 않
 11. 조정 정책 정의 (`InvocationsPerInstance` 1분 ↔ 고해상도 10초 · 큐잉 포함 · 스트림은 마지막 토큰까지 · 스케일 인은 같은 속도 · 사전 정의·고해상도·사용자 지정 지표 이름 · 쿨다운 600·300 · 사용자 지정 지표는 먼저 테스트) — `docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-code-define.html` (2026-11-15 확인)
 12. SageMaker Profiler 가용성 변경 (2027-06-30 지원 종료 · 콘솔·리소스 접근 불가 · 역량 매핑 다섯 줄 · 프레임워크 프로파일러+TensorBoard·CloudWatch) — `docs.aws.amazon.com/sagemaker/latest/dg/profiler-availability-change.html` (2026-11-15 확인)
 13. AWS X-Ray란 무엇인가 (요청 데이터 수집으로 병목·오류 식별 · SDK가 직접 보내지 않고 UDP 데몬이 버퍼링·배치 업로드) — `docs.aws.amazon.com/xray/latest/devguide/aws-xray.html` (2026-11-15 확인)
+14. 지식 베이스용 벡터 스토어 설정 (HNSW 반복 인덱스 스캔 · pgvector 0.8.0 · 필터가 HNSW 스캔 뒤에 적용) — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html` (2026-11-17 확인)
+15. OpenSearch Service 샤드 수 선택 (첫 문서 색인 전에 정한다 · 10–30 / 30–50 GiB) — `docs.aws.amazon.com/opensearch-service/latest/developerguide/bp-sharding.html` (2026-11-17 확인)

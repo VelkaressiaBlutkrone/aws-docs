@@ -430,8 +430,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 (ko) — 암호화 옵션: 전송 중 암호화·저장 시 암호화",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 2 — 작업 2.2 기술 '암호화 옵션 파악(예: 전송 중 암호화, 저장 시 암호화)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain2.html"
         },
         {
           "title": "AWS Well-Architected SEC09-BP02 — 전송 중 암호화 강제(TLS로 네트워크 통신 보호)",

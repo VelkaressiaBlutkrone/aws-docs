@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingClientSideEncryption.html
   - title: DEA-C01 공식 시험 가이드 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain4.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 암호화·마스킹 보장 (DDM·KMS·S3 SSE·교차 계정·전송 중/전)
@@ -135,7 +135,7 @@ AWS 서비스의 저장 시 암호화는 대부분 KMS 키로 동작합니다. �
 
 ### 3) 키 회전·봉투 암호화·암호화 컨텍스트 {#kms-rotation}
 
-- **자동 회전 규칙** — ⚠️ **대칭 암호화 KMS 키에서만 지원**합니다. **비대칭 키·HMAC 키·가져온 키 자료·사용자 지정 키 스토어 키는 자동 회전 불가**입니다. 기본 주기는 활성화 시점부터 **1년(약 365일)** 이고 **90~2560일(7년)** 범위에서 지정할 수 있으며, **온디맨드 회전은 키당 평생 10회**까지입니다.
+- **자동 회전 규칙** — ⚠️ **대칭 암호화 KMS 키에서만 지원**합니다. **비대칭 키·HMAC 키·가져온 키 자료·사용자 지정 키 스토어 키는 자동 회전 불가**입니다. 기본 주기는 활성화 시점부터 **1년(약 365일)** 이고 **90~2560일(7년)** 범위에서 지정할 수 있으며, **온디맨드 회전에는 키당 평생 한도**가 있습니다(개발자 안내서의 쿼터는 **25회**이고 조정 불가 — KMS FAQ는 아직 10회로 적어 두 공식 자료가 다릅니다).
 - ⚠️ **회전해도 이전 키 버전이 유지되므로 데이터를 다시 암호화할 필요가 없습니다.**
 - **AWS 관리형 키는 항상 매년 회전하고 사용자가 켜고 끌 수 없으며**(2022년 5월에 약 3년 → 약 1년으로 변경), **AWS 소유 키의 회전은 소유 서비스가 관리**합니다.
 - **봉투 암호화·데이터 키** — KMS는 **최대 4 KB 데이터를 직접 암호화**할 수 있지만, 봉투 암호화는 **작은 데이터 키만 네트워크로 오가므로 성능 이점**이 큽니다. 봉투 암호화는 **평문 데이터를 데이터 키로 암호화한 뒤 그 데이터 키를 다른 키로 암호화**하는 방식이며, 암호화된 데이터 키는 **암호화된 데이터 옆에 안전하게 저장**할 수 있습니다.
@@ -309,7 +309,7 @@ AWS 서비스의 저장 시 암호화는 대부분 KMS 키로 동작합니다. �
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. Best practice 3.1 – Privacy by Design (Data Analytics Lens, Well-Architected) — https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/best-practice-3.1-privacy-by-design..html
 2. Dynamic data masking (Amazon Redshift Database Developer Guide) — https://docs.aws.amazon.com/redshift/latest/dg/t_ddm.html
@@ -351,3 +351,4 @@ AWS 서비스의 저장 시 암호화는 대부분 KMS 키로 동작합니다. �
 38. Replicating encrypted objects (SSE-S3, SSE-KMS, DSSE-KMS, SSE-C) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html
 39. Encryption in transit over external networks: AWS guidance for NYDFS and beyond (AWS Security Blog) — https://aws.amazon.com/blogs/security/encryption-in-transit-over-external-networks-aws-guidance-for-nydfs-and-beyond/
 40. Encryption strategy in AWS — 일반 암호화 모범 사례 (Encryption best practices and features for AWS services) — https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices-and-features-for-aws-services/encryption-strategy-in-aws.html
+41. Resource quotas (AWS KMS, 온디맨드 회전 쿼터) — https://docs.aws.amazon.com/kms/latest/developerguide/resource-limits.html

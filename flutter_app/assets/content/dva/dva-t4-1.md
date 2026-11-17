@@ -32,7 +32,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Investigations-GetStarted-Group.html
   - title: DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain4.html
-lastVerified: 2026-11-02
+lastVerified: 2026-11-17
 ---
 
 # 근본 원인 분석 지원 (디버깅·지표/로그/추적 해석·로그 쿼리·배포 실패 로그·AI 조사)
@@ -170,7 +170,7 @@ lastVerified: 2026-11-02
 - 기본값은 **초당 첫 요청(저수지 1) + 추가 요청의 5%**입니다. 저수지는 **서비스가 요청을 받는 동안 매초 최소 1건은 기록되게** 하고, 비율은 **저수지를 넘은 요청**에 적용됩니다.
 - 규칙 옵션은 **우선순위(Priority)·고정 비율(FixedRate)·저수지 크기(ReservoirSize)**와 호스트·메서드·URL·서비스 이름·서비스 유형·리소스 ARN 일치 조건, 그리고 ⚠️ **요청 속성 일치(최대 5개)**입니다.
 - ⚠️ **로컬 JSON 규칙은 인스턴스마다 독립적으로 샘플링**합니다 — 여러 인스턴스를 돌리면 **저수지가 합산되는 효과**로 전체 샘플 비율이 올라가고, 규칙을 바꾸려면 **코드를 다시 배포**해야 합니다. 콘솔(서비스) 규칙을 쓰면 **서비스가 저수지를 관리하고 실행 중인 인스턴스 수에 맞춰 쿼터를 배분**합니다.
-- 샘플링 구성을 지원하는 **활성 추적** 경로: **API Gateway 스테이지 · AWS AppSync · Step Functions 상태 머신**, 그리고 EC2·ECS·Elastic Beanstalk에서 **ADOT 또는 X-Ray SDK로 계측**한 애플리케이션.
+- 샘플링 구성을 지원하는 **활성 추적** 경로: **API Gateway 스테이지 · AWS AppSync · Step Functions 상태 머신**, 그리고 EC2·ECS·Elastic Beanstalk에서 **ADOT 또는 X-Ray SDK로 계측**한 애플리케이션(⚠️ **X-Ray SDK·데몬은 2026-02-25부터 유지 관리 모드** — 보안 문제만 고치고, 공식 권장은 OpenTelemetry로의 이전입니다).
 
 > 🧠 **원리** — 세 신호는 **해상도와 수명이 다릅니다.** 지표는 **집계값**이라 "언제 나빠졌는가"에 강하고, 로그는 **원문**이라 "무엇이 일어났는가"에 강하며, 추적은 **경로**라 "어느 구간이 느렸는가"에 강합니다. 그래서 문항이 "어떤 구간이 지연을 만드는가"를 물으면 추적, "어떤 요청이 왜 실패했는가"를 물으면 로그, "언제부터 비정상인가"를 물으면 지표가 답입니다.
 

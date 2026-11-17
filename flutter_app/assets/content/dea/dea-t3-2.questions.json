@@ -22,7 +22,7 @@
       "wrongExplanations": {
         "0": "직접 쿼리는 조회할 때마다 원본에 질의하는 방식이라 반복 열람의 응답·비용 문제가 그대로 남습니다. 워크그룹 분리는 비용을 나누어 보여 줄 뿐 쿼리 수를 줄이지 않습니다.",
         "2": "DataBrew는 코드 없이 데이터를 정리·정규화하는 시각적 데이터 준비 도구입니다. BI 대시보드의 조회 응답을 가속하는 수단이 아닙니다.",
-        "3": "구체화된 뷰는 Amazon Redshift의 객체입니다. Athena 테이블을 구체화된 뷰로 바꾸는 선택지는 성립하지 않습니다."
+        "3": "구체화된 뷰(Amazon Redshift, 또는 AWS Glue Data Catalog의 Iceberg 구체화된 뷰)는 미리 계산한 결과를 읽게 해 줄 뿐입니다. 직접 쿼리 모드에서는 대시보드를 열 때마다 Athena 쿼리가 실행되는 구조가 그대로이므로, 반복 열람의 쿼리 비용을 없애는 수단은 SPICE입니다."
       },
       "sources": [
         {
@@ -32,6 +32,10 @@
         {
           "title": "What is AWS Glue DataBrew? — 시각적 데이터 준비 도구",
           "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
+        },
+        {
+          "title": "Using materialized views with AWS Glue — Glue Data Catalog의 구체화된 뷰는 Athena·Redshift에서도 읽힘",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/materialized-views.html"
         }
       ],
       "verified": true
@@ -90,7 +94,7 @@
           "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
         },
         {
-          "title": "What is Amazon Quick? — Quick Sight가 BI·시각화 담당",
+          "title": "What is AWS Quick? — Quick Sight가 BI·시각화 담당",
           "url": "https://docs.aws.amazon.com/quick/latest/userguide/what-is.html"
         }
       ],
@@ -261,7 +265,7 @@
       "explanation": "AWS Glue Data Catalog 뷰는 Athena와 Redshift 같은 여러 AWS 서비스에 걸친 하나의 공통 뷰입니다. 접근 권한이 뷰를 조회하는 사용자가 아니라 만든 사용자 기준(definer semantics)으로 정해지고, 정의가 AWS Glue Data Catalog에 저장되므로 Lake Formation의 리소스·열 grant나 태그 기반 접근 제어로 권한을 줄 수 있습니다.",
       "wrongExplanations": {
         "0": "뷰를 두 벌 만들면 정의가 갈라져 유지 관리 부담이 생기고, Athena 뷰는 Athena 안에서 동작하므로 '하나의 공통 뷰'라는 요구를 만족하지 못합니다.",
-        "2": "구체화된 뷰는 결과를 저장하는 Redshift 객체이며, 요구는 공통 뷰 정의와 Lake Formation 기반 권한 관리입니다. 저장된 사본이 생기는 점도 요구와 다릅니다.",
+        "2": "Redshift 구체화된 뷰는 쿼리 결과를 저장하는 객체이며, 요구는 공통 뷰 정의와 Lake Formation 기반 권한 관리입니다. 저장된 사본이 생기는 점도 요구와 다릅니다.",
         "3": "CTAS 결과 테이블은 실행 시점 스냅샷입니다. 뷰가 아니므로 정의가 갱신되지 않고, definer semantics 기반 권한 모델도 제공하지 않습니다."
       },
       "sources": [

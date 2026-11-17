@@ -106,8 +106,8 @@
       },
       "sources": [
         {
-          "title": "AWS KMS 봉투 암호화",
-          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
+          "title": "AWS KMS 암호화 기본 사항 — 봉투 암호화",
+          "url": "https://docs.aws.amazon.com/kms/latest/developerguide/kms-cryptography.html"
         }
       ],
       "verified": true
@@ -260,7 +260,7 @@
         "배포가 아직 Deployed 상태가 아니다"
       ],
       "correct": 0,
-      "explanation": "CloudFront는 글로벌 엣지 서비스지만 인증서는 us-east-1에서만 연결할 수 있습니다. 다른 리전에서 발급한 인증서는 CloudFront 선택 목록에 나타나지 않습니다. ALB·NLB·API Gateway는 리소스와 같은 리전의 인증서를 사용합니다.",
+      "explanation": "CloudFront는 글로벌 엣지 서비스지만 인증서는 us-east-1에서만 연결할 수 있습니다. 다른 리전에서 발급한 인증서는 CloudFront 선택 목록에 나타나지 않습니다. ALB·NLB·리전형 API Gateway는 리소스와 같은 리전의 인증서를 사용합니다(엣지 최적화 API Gateway 사용자 지정 도메인은 us-east-1).",
       "wrongExplanations": {
         "1": "DNS 검증은 오히려 자동 갱신에 유리한 방식입니다.",
         "2": "와일드카드 인증서도 CloudFront에서 사용할 수 있습니다.",
@@ -270,6 +270,10 @@
         {
           "title": "CloudFront에서 사용자 지정 SSL 인증서 요구 사항",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html"
+        },
+        {
+          "title": "API Gateway 엣지 최적화 사용자 지정 도메인 — 인증서는 us-east-1",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-edge-optimized-custom-domain-name.html"
         }
       ],
       "verified": true
@@ -287,7 +291,7 @@
         "ALB에 연결하면 자동 갱신이 활성화된다"
       ],
       "correct": 0,
-      "explanation": "ACM이 직접 발급한 인증서는 관리형 갱신 대상이지만, 가져온 인증서는 개인 키가 ACM 외부에 있어 ACM이 갱신할 수 없습니다. 만료 전 직접 교체하는 운영 프로세스가 필요합니다.",
+      "explanation": "ACM이 직접 발급한 인증서는 관리형 갱신 대상이지만, 가져온 인증서에는 ACM이 관리형 갱신을 제공하지 않습니다. 갱신하려면 인증서 발급자에게서 새 인증서를 받아 다시 가져와야 하므로, 만료 전 직접 교체하는 운영 프로세스가 필요합니다. 가져올 때 인증서와 함께 개인 키도 ACM에 제공하므로, 키의 위치가 갱신되지 않는 이유는 아닙니다.",
       "wrongExplanations": {
         "1": "가져온 인증서는 자동 재발급되지 않습니다.",
         "2": "가져온 인증서도 조건을 만족하면 사용할 수 있습니다.",
@@ -308,13 +312,13 @@
       "difficulty": "foundational",
       "stem": "ACM의 관리형 갱신이 완전히 자동으로 이뤄지는 조건은?",
       "options": [
-        "ACM이 발급한 인증서이고 DNS 검증을 사용하는 경우",
+        "ACM이 발급해 AWS 서비스에서 사용 중이고, DNS 검증용 CNAME 레코드가 유지되는 경우",
         "인증서를 외부에서 가져온 경우",
         "사설 CA에서 발급한 뒤 수동 승인한 경우",
         "인증서가 와일드카드가 아닌 경우"
       ],
       "correct": 0,
-      "explanation": "ACM이 발급하고 DNS 검증을 사용한 인증서는 관리형 갱신이 완전히 자동화됩니다. 검증 레코드가 유지되는 동안 ACM이 갱신 과정을 처리합니다.",
+      "explanation": "ACM이 발급하고 DNS 검증을 사용한 인증서는, AWS 서비스에서 사용 중이고 검증용 CNAME 레코드가 그대로 유지되는 동안 ACM이 갱신을 자동으로 처리합니다. 가져온 인증서는 관리형 갱신 대상이 아닙니다.",
       "wrongExplanations": {
         "1": "가져온 인증서는 자동 갱신 대상이 아닙니다.",
         "2": "수동 승인 절차가 필요한 구성은 완전 자동이 아닙니다.",
@@ -324,6 +328,10 @@
         {
           "title": "ACM DNS 검증 기반 관리형 갱신",
           "url": "https://docs.aws.amazon.com/acm/latest/userguide/dns-renewal-validation.html"
+        },
+        {
+          "title": "ACM 관리형 인증서 갱신 — 적격 조건",
+          "url": "https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html"
         }
       ],
       "verified": true
@@ -335,13 +343,13 @@
       "difficulty": "applied",
       "stem": "Aurora 자격증명을 90일마다 자동 교체하고 교체 후 연결 테스트까지 자동화하려 한다. 적절한 서비스와 이유는?",
       "options": [
-        "Secrets Manager — Lambda 기반 교체를 내장 지원하고 RDS·Aurora 통합 템플릿을 제공한다",
+        "Secrets Manager — 자동 교체를 내장 지원하고 RDS·Aurora와 통합된다",
         "Parameter Store SecureString — KMS 암호화가 있으므로 교체도 자동이다",
         "KMS — 키 교체 기능으로 비밀번호도 교체된다",
         "ACM — 인증서 갱신 기능으로 자격증명을 갱신한다"
       ],
       "correct": 0,
-      "explanation": "시크릿 교체는 새 값 생성뿐 아니라 DB에 적용하고 연결을 검증해야 완료됩니다. Secrets Manager는 이 절차를 Lambda로 수행하며 RDS·Aurora 등은 AWS 제공 템플릿으로 통합됩니다.",
+      "explanation": "시크릿 교체는 새 값 생성뿐 아니라 DB에 적용하고 연결을 검증해야 완료됩니다. Secrets Manager는 이 절차를 자동 교체로 내장합니다 — 서비스가 관리하는 시크릿은 Lambda 함수를 쓰지 않는 관리형 교체로, 그 밖의 시크릿은 Lambda 함수에 의한 교체로 처리하며, RDS·Aurora 등은 AWS가 교체 함수 템플릿을 제공합니다.",
       "wrongExplanations": {
         "1": "SecureString은 암호화 저장일 뿐 자동 교체가 없습니다.",
         "2": "KMS 키 교체는 암호화 키 자료 교체이며 DB 비밀번호와 무관합니다.",
@@ -351,6 +359,10 @@
         {
           "title": "Secrets Manager 비밀 교체",
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
+        },
+        {
+          "title": "Secrets Manager 교체 함수 템플릿",
+          "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html"
         }
       ],
       "verified": true
