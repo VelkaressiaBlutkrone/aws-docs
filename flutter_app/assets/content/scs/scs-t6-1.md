@@ -31,7 +31,7 @@ sources:
   - title: AssumeRoot
     url: https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html
   - title: SEC03-BP03 Establish emergency access process
-    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html
 lastVerified: 2026-11-09
 ---
 
@@ -453,4 +453,4 @@ Organizations와 통합되는 많은 AWS 서비스가 **멤버 계정 하나 이
 9. Delegated administrator for AWS services that work with Organizations — `docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html` (2026-11-09 확인)
 10. Centralize root access for member accounts — `docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html` (2026-11-09 확인)
 11. AssumeRoot — `docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html` (2026-11-09 확인)
-12. SEC03-BP03 Establish emergency access process — `docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html` (2026-11-09 확인)
+12. SEC03-BP03 Establish emergency access process — `docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html` (2026-11-09 확인)

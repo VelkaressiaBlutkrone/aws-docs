@@ -362,8 +362,12 @@
       },
       "sources": [
         {
-          "title": "AWS Glue DataBrew (AWS Prescriptive Guidance) — 코드 없는 시각적 준비, 250개 넘는 변환, Glue Studio 통합",
-          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/databrew.html"
+          "title": "What is AWS Glue DataBrew? — 코드 없는 시각적 준비, 250개 넘는 변환",
+          "url": "https://docs.aws.amazon.com/databrew/latest/dg/what-is.html"
+        },
+        {
+          "title": "Using a data preparation recipe in AWS Glue Studio — DataBrew 레시피를 Glue Studio 에서 가져와 편집",
+          "url": "https://docs.aws.amazon.com/glue/latest/dg/glue-studio-data-preparation.html"
         },
         {
           "title": "Creating and using AWS Glue DataBrew projects — 읽기 전용 데이터셋과 레시피, 기본 500행 샘플",

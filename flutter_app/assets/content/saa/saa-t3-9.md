@@ -379,7 +379,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 
 **OpenSearch를 CloudWatch 대신 고르는 이유**
 
-CloudWatch Logs로도 로그를 보지만, 공식이 드는 OpenSearch 전환 사유는 이렇습니다.
+CloudWatch Logs로도 로그를 보지만, OpenSearch로 넘어가는 사유는 이렇습니다. ⚠️ 네 사유를 한 자리에 모아 적던 Prescriptive Guidance 페이지는 **2026-11-17 실측에서 사라졌고**(AWS 문서 리더도 `not_found`), 아래 첫 사유는 OpenSearch Service의 **세분화된 액세스 제어** 문서가 정본입니다.
 
 - **필드 수준의 세분화된 데이터 접근 제어** — 사용자 권한에 따라 특정 필드를 익명화할 수 있어, 민감 데이터를 노출하지 않고 트러블슈팅을 맡길 수 있습니다.
 - **여러 계정·리전·인프라의 로그를 한 클러스터에 집계**해 중앙 운영팀이 교차 분석.
@@ -565,7 +565,7 @@ Glue Data Catalog가 Athena·EMR·Redshift Spectrum이 모두 참조하는 중�
 26. Kinesis Data Streams 인터페이스 VPC 엔드포인트(엔드포인트 정책 예시 3종·IAM 정책과 함께 써야 경로 한정) — https://docs.aws.amazon.com/streams/latest/dev/vpc.html (갭 배치 B8c: 2026-10-21)
 27. 데이터 레이크 제자리 쿼리 — Redshift Spectrum(엑사바이트·CSV/TSV/Parquet/Sequence/RCFile·**Athena와 카탈로그·형식 공유**·역할 분담) — https://docs.aws.amazon.com/whitepapers/latest/building-data-lakes/in-place-querying.html (갭 배치 B8c: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 28. OpenSearch Service 로그 분석 워크로드(전문 검색·Dashboards·알림 플러그인·수집 경로) — https://docs.aws.amazon.com/wellarchitected/latest/amazon-opensearch-service-lens/log-analytics-workloads.html (갭 배치 B8c: 2026-10-21)
-29. CloudWatch 로그 분석에서 OpenSearch 로 넘어가는 사유(필드 수준 접근 제어·다계정·다리전 집계·ES 에이전트·기존 ELK) — https://docs.aws.amazon.com/prescriptive-guidance/latest/implementing-logging-monitoring-cloudwatch/cloudwatch-search-analysis.html (갭 배치 B8c: 2026-10-21)
+29. 세분화된 액세스 제어 — 필드 수준 보안과 데이터 마스킹(OpenSearch 전환 사유 ①의 정본) — https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html (갭 배치 B8c: 2026-10-21)
 
 > 📝 **2026-10-21 보강 (갭 배치 B8c — B8 완결)**: ① §3에 **Data Streams 설계 세부**를 추가했습니다 — 보존 기간 모델(**기본 24시간 · 최소 24시간 · 최대 8,760시간(365일)** · 24시간 초과 추가 과금 · 증가는 수 분 내 반영되지만 **이미 만료된 데이터는 되살아나지 않음** · 감소는 거의 즉시 접근 불가)과 **향상된 팬아웃(EFO)** 비교표(공유는 샤드당 2 MB/초를 **나눠 씀** vs EFO는 **소비자별 2 MB/초** · 200/1,000 ms vs **70 ms** · `GetRecords` 풀 vs `SubscribeToShard` **HTTP/2 푸시** · 등록 한도 50/20)입니다(근거 17~20번). ② §8의 **명칭을 `Amazon Quick Sight` 로 정정**하고 **`Amazon Quick` 과의 상위·하위 관계**를 적었습니다 — API·SDK 는 변경 없이 동작합니다. SPICE vs **직접 쿼리**, 데이터셋 **200 GB**, 과금 2요소(작성자 사용자당 / 독자 **30분 세션·월 최대 $5.00**), 임베디드, 그리고 ⚠️ **VPC 연결 지원·미지원 소스 표**(**Athena 미지원**)를 추가했습니다(근거 15·16번). ③ §10에 **전송 시간 산술**과 **DataSync 대역폭 제한**(`BytesPerSecond` · 실행 중에도 변경 가능 · **60초 내** 적용)을 추가했습니다(근거 25번). ④ §11 선택표에 **Redshift/Spectrum·OpenSearch 행**을 넣고 **Athena vs Spectrum 역할 분담**(공통 카탈로그 공유 · Spectrum 은 적재가 아니라 제자리 쿼리)과 **OpenSearch 를 CloudWatch 대신 고르는 사유**를 적었습니다(근거 27~29번). ⑤ 새 절 **§12 데이터 형식 변환과 수집 패턴**(Firehose 변환은 **S3 목적지만** · Snappy 자동 · Athena **CTAS**의 Glue 자동 등록과 **빈 출력 위치 전제** · Glue **북마크** · 마이크로 배치·하이브리드 등 패턴)과 **§13 수집 접점의 보안**(Kinesis 엔드포인트 정책은 **IAM 정책과 겹쳐야** 사설 경로 전용이 된다)을 원리 블록과 함께 추가했습니다(근거 21~24·26번).
 >

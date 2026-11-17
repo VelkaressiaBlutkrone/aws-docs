@@ -15,7 +15,7 @@ sources:
   - title: AWS Elastic Disaster Recovery란? (공식)
     url: https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html
   - title: 신뢰성 기둥 — AWS Well-Architected Framework (공식)
-    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 lastVerified: 2026-10-19
@@ -309,7 +309,7 @@ Aurora Global Database는 전용 복제 인프라를 사용해 보조 리전 복
 
 1. 클라우드의 재해 복구 옵션 — AWS 백서 — https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
 2. AWS Elastic Disaster Recovery란? — https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html
-3. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html
+3. 신뢰성 기둥 — AWS Well-Architected Framework — https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
 4. DynamoDB 글로벌 테이블("Global tables support two consistency modes: multi-Region eventual consistency (MREC) and multi-Region strong consistency (MRSC)") — https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html
 5. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 

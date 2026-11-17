@@ -358,7 +358,7 @@ Lambda 회전 함수는 **createSecret → setSecret → testSecret → finishSe
 20. Control access to a REST API with IAM permissions (Amazon API Gateway) — https://docs.aws.amazon.com/apigateway/latest/developerguide/permissions.html
 21. Set up a method request in API Gateway — https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-settings-method-request.html
 22. AWS CLI Configuration Variables (Using AWS IAM Roles) — https://docs.aws.amazon.com/cli/latest/topic/config-vars.html
-23. Configuring least-privilege permissions to use CloudFormation (AWS Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/least-privilege-cloudformation/permissions-use-cloudformation.html
+23. CloudFormation service role (기본은 호출자 자격 증명 · 서비스 역할을 전달하면 그 역할로 스택 작업) — https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
 24. Credentials and access permissions (Amazon Redshift Database Developer Guide) — https://docs.aws.amazon.com/redshift/latest/dg/loading-data-access-permissions.html
 25. Configure IAM service roles for Amazon EMR permissions — https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-iam-roles.html
 26. Step 2: Create an IAM role for AWS Glue — https://docs.aws.amazon.com/glue/latest/dg/create-an-iam-role.html

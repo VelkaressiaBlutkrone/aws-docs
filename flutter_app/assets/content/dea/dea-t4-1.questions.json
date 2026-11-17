@@ -394,8 +394,8 @@
       },
       "sources": [
         {
-          "title": "Configuring least-privilege permissions to use CloudFormation (AWS Prescriptive Guidance) — 기본은 호출자 자격 증명, 서비스 역할을 전달하면 그 역할로 스택 작업 수행",
-          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/least-privilege-cloudformation/permissions-use-cloudformation.html"
+          "title": "CloudFormation service role — 기본은 호출자 자격 증명, 서비스 역할을 전달하면 그 역할로 스택 작업 수행",
+          "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html"
         },
         {
           "title": "Security best practices in IAM — 권한 경계는 최대 권한을 정하며 권한 자체는 부여하지 않음",

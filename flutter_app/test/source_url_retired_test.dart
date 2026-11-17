@@ -198,6 +198,42 @@ void main() {
     // `sustainability.html`("Always ask if generative AI is right for your workload"),
     // q7 은 `gensus03-bp01.html`(양자화·프루닝·증류). 즉 **출처만 잘못 붙어 있었다.**
     'https://docs.aws.amazon.com/wellarchitected/latest/framework/sus_sus_region_a2.html',
+    // ── 2026-11-17 AWS Well-Architected 문서 세트 재구성 + prescriptive-guidance 소멸 ──
+    // 계기: AIP 검수 노트 재점검에서 `framework/welcome.html` 이 404 로 나왔고,
+    // 레포 전역 고유 URL 2,572개를 함께 재니 **라이브 CLF·SAA·SOA·SCS·DEA·MLA** 가
+    // 같은 계열로 걸렸다. 실측·판정의 정본은
+    // `docs/saa-review/2026-11-17-wa-restructure-source-audit.md` 다.
+    //
+    // ⚠️⚠️ **살아 있는 가이드 안에서도 지워진 페이지는 진짜 `404 r=0`** 이다 — 같은
+    // 가이드의 **없던** 슬러그는 `200 r=1`(가이드 인덱스)이다. 그래서 `404 r=0` 을
+    // 「가이드 접두사가 없다」로만 읽으면 오판한다(대조군을 함께 잰다).
+    // ⚠️⚠️ **framework 가이드는 BP 번호를 재배정했다** — `framework/sec03-bp03.html` 은
+    // 이제 「Analyze public and cross-account access」이고 「Establish emergency access
+    // process」가 아니다. **번호로 매핑하면 틀린 페이지를 인용한다.** 비상 접근 BP 의
+    // 정본은 `security-pillar/sec_permissions_emergency_process.html`(옛 슬러그가 살아 있다)다.
+    // ⚠️ `framework/rel02-bp02.html` 은 같은 BP 이지만 **본문이 재작성돼** 레포가 인용한
+    // 「cost-effective backup」 문장이 없다 — 그래서 `reliability-pillar/` 판을 쓴다.
+    // ⭐ 여섯 기둥은 이제 **기둥마다 한 페이지**이고(`framework/reliability.html` 등)
+    // 「six pillars」 표는 `framework/definitions.html` 이 갖는다.
+    'https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html',
+    'https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html',
+    'https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html',
+    'https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_private_networks.html',
+    'https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html',
+    // prescriptive-guidance — 가이드 개명 1건, 가이드 소멸 4건.
+    // ⚠️ `implementing-logging-monitoring-cloudwatch` 와 `serverless-etl-aws-glue` 는
+    // **AWS 문서 리더도 `not_found`** 라 「사람이 열 수 없다」가 아니라 **소멸**이다
+    // (2026-11-06 AIF `AWS CAF for AI` 와 반대 결론 — 규율은 네 방법을 다 해 보는 것이고
+    // 결론은 매번 측정으로 정한다).
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices/general-encryption-best-practices.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/image-classification/sagemaker-canvas.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/implementing-logging-monitoring-cloudwatch/cloudwatch-search-analysis.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/least-privilege-cloudformation/permissions-use-cloudformation.html',
+    'https://docs.aws.amazon.com/prescriptive-guidance/latest/serverless-etl-aws-glue/databrew.html',
+    // ⚠️ 제품 **개명**이다 — 공식 페이지가 이 기능을 「Continuum for penetration testing
+    // (f.k.a. AWS Security Agent)」로 적는다. 공식 시험 가이드 v1.1 과 사용자 안내서
+    // (`securityagent`)는 아직 옛 이름을 쓰므로 **본문 표기는 가이드를 따르고 URL 만 옮겼다.**
+    'https://aws.amazon.com/security-agent/',
   ];
 
   /// 교체 후 들어간 정본 URL과 그것을 들고 있어야 하는 파일.
@@ -291,7 +327,9 @@ void main() {
     ],
     'soa/soa-t5-2.questions.json': [
       'https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-basics.html#vpc-peering-limitations',
-      'https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_private_networks.html',
+      // ⚠️ 2026-11-17: framework 판이 404 가 돼 `reliability-pillar/` 판으로 옮겼다
+      // (그 판이 레포가 인용하는 「cost-effective backup」 문장을 그대로 갖는다).
+      'https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_private_networks.html',
     ],
     'soa/soa-t5-4.questions.json': [
       'https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html',
@@ -309,6 +347,9 @@ void main() {
     ],
     'clf/t1-2.questions.json': [
       'https://docs.aws.amazon.com/wellarchitected/latest/userguide/tool.html',
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html',
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html',
+      'https://aws.amazon.com/well-architected-tool/pricing/',
     ],
     'clf/t2-1.questions.json': [
       'https://aws.amazon.com/trust-center/data-center/our-controls/',
@@ -354,7 +395,64 @@ void main() {
     'dva/dva-t4-1.md': [
       'https://docs.aws.amazon.com/cli/latest/reference/aiops/',
     ],
+    // ── 2026-11-17 WA 재구성·PG 소멸 교체분 ──
+    'clf/t1-2.md': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html',
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/definitions.html',
+      'https://aws.amazon.com/well-architected-tool/pricing/',
+    ],
+    'scs/scs-t6-1.md': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html',
+    ],
+    'scs/scs-t6-1.questions.json': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html',
+    ],
+    'saa/saa-t2-4.md': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html',
+    ],
+    'saa/saa-t2-4.questions.json': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html',
+    ],
+    'saa/saa-t2-5.md': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html',
+    ],
+    'soa/soa-t2-2.md': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html',
+    ],
+    'soa/soa-t2-2.questions.json': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html',
+    ],
+    'soa/soa-t2-4.md': [
+      'https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html',
+    ],
+    'soa/soa-t4-2.md': [
+      'https://aws.amazon.com/continuum/',
+    ],
+    'saa/saa-t3-9.md': [
+      'https://docs.aws.amazon.com/opensearch-service/latest/developerguide/fgac.html',
+    ],
+    'dea/dea-t3-1.md': [
+      'https://docs.aws.amazon.com/databrew/latest/dg/what-is.html',
+      'https://docs.aws.amazon.com/glue/latest/dg/glue-studio-data-preparation.html',
+    ],
+    'dea/dea-t3-1.questions.json': [
+      'https://docs.aws.amazon.com/databrew/latest/dg/what-is.html',
+      'https://docs.aws.amazon.com/glue/latest/dg/glue-studio-data-preparation.html',
+    ],
+    'dea/dea-t4-1.md': [
+      'https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html',
+    ],
+    'dea/dea-t4-1.questions.json': [
+      'https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html',
+    ],
+    'dea/dea-t4-3.md': [
+      'https://docs.aws.amazon.com/prescriptive-guidance/latest/encryption-best-practices-and-features-for-aws-services/encryption-strategy-in-aws.html',
+    ],
+    'mla/mla-t2-1.questions.json': [
+      'https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-manage-cost.html',
+    ],
   };
+
 
   // 레포 전 자격증을 본다 — 같은 URL이 다른 자격증 콘텐츠에 복사됐을 수 있다.
   final root = Directory('assets/content');
