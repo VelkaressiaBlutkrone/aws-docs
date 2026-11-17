@@ -3,7 +3,7 @@
   "taskTitle": "FM API 통합 구현",
   "domain": 2,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "2.4.1",
@@ -69,7 +69,7 @@
       "skill": "2.4.1",
       "section": "interaction",
       "difficulty": "applied",
-      "stem": "필수 헤더가 정수인지까지 API Gateway 요청 검증으로 막자는 제안이 나왔습니다. 그 기능이 검증하는 범위에 비추어 올바른 판단은 무엇입니까?",
+      "stem": "필수 헤더가 정수인지까지 API Gateway 요청 검증으로 막자는 제안이 나왔습니다. 올바른 판단은 무엇입니까?",
       "options": [
         "가능합니다. 헤더에 JSON 스키마를 붙이면 유형과 범위까지 통합 요청 전에 검증됩니다",
         "가능합니다. 다만 검증기를 메서드마다 따로 할당해야 유형 검사가 활성화됩니다",
@@ -217,7 +217,7 @@
         "앞은 최대 연결 수명에 도달한 정상 종료이고, 뒤는 바이너리 미디어 유형이 지원되지 않는 것입니다"
       ],
       "correct": 3,
-      "explanation": "연결 수명이 시험 포인트입니다 — 클라이언트가 10분 유휴이거나 최대 2시간 연결 수명에 도달하면 1001로 닫히므로 긴 대화를 WebSocket 하나로 유지하려는 설계는 여기 걸립니다. 그리고 WebSocket API는 바이너리 미디어 유형을 지원하지 않아 엔드포인트가 받으면 1003입니다. 그 밖에 1008은 특정 클라이언트의 요청 과다, 1009는 메시지가 너무 큼, 1011은 내부 오류, 1012는 서비스 재시작입니다.",
+      "explanation": "연결 수명에 상한이 있습니다 — 클라이언트가 10분 유휴이거나 최대 2시간 연결 수명에 도달하면 1001로 닫히므로 긴 대화를 WebSocket 하나로 유지하려는 설계는 여기 걸립니다. 그리고 WebSocket API는 바이너리 미디어 유형을 지원하지 않아 엔드포인트가 받으면 1003입니다. 그 밖에 1008은 특정 클라이언트의 요청 과다, 1009는 메시지가 너무 큼, 1011은 내부 오류, 1012는 서비스 재시작입니다.",
       "wrongExplanations": {
         "0": "메시지 크기 초과에는 별 코드가 있고 연결 수명 종료와 다른 사유입니다.",
         "1": "요청 과다에도 별 코드가 있고, 빈도를 낮춰도 최대 수명과 바이너리 미지원은 그대로입니다.",
@@ -293,7 +293,7 @@
       "skill": "2.4.3",
       "section": "resilience",
       "difficulty": "foundational",
-      "stem": "API 키별 한도를 계정 한도보다 높게 잡아 달라는 요청을 받았습니다. 스로틀 한도의 성질과 적용 순서에 비추어 올바른 설명은 무엇입니까?",
+      "stem": "API 키별 한도를 계정 한도보다 높게 잡아 달라는 요청을 받았습니다. 스로틀 한도에 대한 올바른 설명은 무엇입니까?",
       "options": [
         "가능합니다. 사용량 계획의 한도가 가장 먼저 적용되므로 계정 한도를 덮어쓰게 됩니다",
         "가능합니다. 다만 스테이지 메서드 한도를 함께 올려야 클라이언트 한도가 효력을 갖습니다",
@@ -349,7 +349,7 @@
       "skill": "2.4.4",
       "section": "routing",
       "difficulty": "applied",
-      "stem": "작업 유형이 고정이고 경로가 바뀔 일이 없는 기능에 상태 머신 기반 라우팅을 도입하자는 제안이 나왔습니다. 수준 선택의 원리에 비추어 올바른 판단은 무엇입니까?",
+      "stem": "작업 유형이 고정이고 경로가 바뀔 일이 없는 기능에 상태 머신 기반 라우팅을 도입하자는 제안이 나왔습니다. 올바른 판단은 무엇입니까?",
       "options": [
         "정적 라우팅으로 충분합니다. 코드의 구성으로 두는 쪽이 가장 단순하고 예측 가능하기 때문입니다",
         "품질 예측 라우팅이 맞습니다. 고정된 작업에서도 요청마다 더 좋은 모델을 고를 수 있기 때문입니다",
@@ -371,6 +371,10 @@
         {
           "title": "Step Functions 워크플로의 오류 처리",
           "url": "https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 2 — 기술 2.4.4의 라우팅 수단 넷",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html"
         }
       ],
       "id": "aip-t2-4-q13",
@@ -435,6 +439,10 @@
         {
           "title": "Amazon Bedrock 지능형 프롬프트 라우팅",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html"
+        },
+        {
+          "title": "AIP-C01 시험 안내서 도메인 2 — 기술 2.4.4의 라우팅 수단 넷",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html"
         }
       ],
       "id": "aip-t2-4-q15",

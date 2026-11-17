@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html
   - title: Machine Learning (ML) and Artificial Intelligence (AI) — AWS 서비스 개요
     url: https://docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html
-  - title: What is Amazon Quick?
+  - title: What is AWS Quick? (Quick 사용자 가이드)
     url: https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
   - title: Integrate Amazon EMR with AWS Lake Formation
     url: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-lake-formation.html
@@ -179,7 +179,9 @@ v1.1이 예시를 **Amazon Bedrock · Amazon Quick · Kiro · SageMaker AI**로 
 | 경보 | `Amazon CloudWatch` | 드리프트가 임계값을 넘으면 **이해관계자에게 알리는 경보**를 설정합니다 |
 | 개발 도구 | `Kiro` | **"AWS의 에이전틱 개발 시스템"** — 의도를 관리하고 대규모 코드베이스에서 장시간 작업을 완료하며 코드 정확성을 검증합니다. IDE · CLI · 자율 웹 에이전트로 제공됩니다 |
 
-> ⚠️ **Amazon Quick의 이름이 함정입니다.** 공식 문서가 **"Amazon Quick은 Amazon QuickSight에서 발전한 것이고, QuickSight는 Quick 안의 기능인 Amazon Quick Sight로 이어진다"**고 적습니다. 기존 QuickSight API·SDK·통합은 **변경 없이 계속 동작**합니다. Quick의 기능은 `Amazon Quick Sight`(시각화·BI) · `Amazon Quick Flows` · `Amazon Quick Automate` · `Amazon Quick Index` · `Amazon Quick Research` · `Apps in Amazon Quick`입니다.
+> ⚠️ **Amazon Quick의 이름이 함정입니다.** 제품 사용자 가이드가 **"AWS Quick은 Amazon QuickSight에서 발전한 것이고, QuickSight는 Quick 안의 기능인 AWS Quick Sight로 이어진다"**고 적습니다. 기존 QuickSight API·SDK·통합은 **변경 없이 계속 동작**합니다. Quick의 기능은 `AWS Quick Sight`(시각화·BI) · `AWS Quick Flows` · `AWS Quick Automate` · `AWS Quick Index` · `AWS Quick Research` · `Apps in AWS Quick`입니다.
+
+> ⚠️ **표기가 공식 안에서 갈립니다.** 시험 가이드 본문과 공식 범위 내 서비스 목록은 **`Amazon Quick`**으로 적고, 제품 사용자 가이드는 **`AWS Quick`**으로 적습니다(2026-11-17 확인). 이 문서는 서비스 이름을 **시험 가이드 표기**로 적고, 기능 이름은 그것을 정의하는 **제품 가이드 표기** 그대로 적습니다. 둘은 **같은 서비스**입니다.
 
 > ⚠️ **이름 하나로 두 서비스를 가르는 문항**이 나옵니다 — **Bedrock은 모델을 API로 주고**, **SageMaker AI는 모델을 만들고 호스팅하게 해 줍니다.** `Kiro`는 모델 서비스가 아니라 **개발 도구**이고, `Amazon Quick`은 모델 서비스가 아니라 **분석·BI**입니다. 파이프라인에서 자리를 잘못 놓은 보기를 걸러내는 것이 이 목표의 전부입니다.
 
@@ -275,7 +277,7 @@ v1.1이 AUC를 빼고 **정밀도·재현율**을 넣었습니다. 네 개만 �
 - ❌ **"오픈 소스 사전 훈련 모델은 AWS가 라이선스를 검토해 준다"** → 공식은 **라이선스 조건 검토·준수 책임이 사용자에게 있다**고 명시합니다.
 - ❌ **"SageMaker AI는 무조건 컴퓨팅 사용량 기준으로만 과금된다"** → **자리에 따라 갈립니다.** 공식은 **서버리스 모델 커스터마이징에 토큰당 요금**을 적용한다고 적고(Bedrock과 같은 요금 단순성), **관리형 훈련 작업 · 추론 · HyperPod**에만 **컴퓨팅·스토리지 사용량 기준**을 적용합니다. Bedrock 쪽은 토큰 기준 종량제입니다.
 - ❌ **"Bedrock과 SageMaker AI 중 하나만 골라야 한다"** → 공식은 **배타적이지 않다**고 적고, 점진적 커스터마이징 파이프라인에서 **함께 쓰는** 경로를 제시합니다.
-- ❌ **"Amazon QuickSight가 Amazon Quick으로 대체되어 기존 API가 끊긴다"** → QuickSight는 Quick 안의 기능 **Amazon Quick Sight**로 이어지고, **기존 API·SDK·통합은 변경 없이 동작**합니다.
+- ❌ **"Amazon QuickSight가 Amazon Quick으로 대체되어 기존 API가 끊긴다"** → QuickSight는 Quick 안의 기능 **AWS Quick Sight**로 이어지고, **기존 API·SDK·통합은 변경 없이 동작**합니다.
 - ❌ **"MLOps는 DevOps의 다른 이름이다"** → MLOps에서는 **원천 데이터가 소스 코드와 나란히 1급 입력**이라, 데이터·모델·파라미터·훈련 구성까지 버전화하고 데이터 변경이 파이프라인을 촉발합니다.
 - ❌ **"드리프트가 감지되면 즉시 재훈련하는 것이 모범 사례다"** → 재훈련은 자원을 크게 소비하므로 **임계값을 세워 필요할 때만** 합니다.
 - ❌ **"정확도가 99%면 좋은 모델이다"** → **불균형 데이터**에서는 다수 클래스만 맞히고도 그 숫자가 나옵니다. 공식 예가 **이메일의 1%만 스팸인** 데이터셋이고, 이때는 `BalancedAccuracy`나 F1 쪽을 봅니다.
@@ -376,7 +378,7 @@ ROI가 음수일 때 공식이 드는 개선 방향도 함께 기억합니다 �
 9. SageMaker JumpStart pretrained models — `docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html` (2026-11-03 확인)
 10. Amazon Bedrock or Amazon SageMaker AI? — `docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html` (2026-11-03 확인)
 11. Machine Learning (ML) and Artificial Intelligence (AI) · AWS 서비스 개요 — `docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html` (2026-11-03 확인)
-12. What is Amazon Quick? — `docs.aws.amazon.com/quick/latest/userguide/what-is.html` (2026-11-03 확인)
+12. What is AWS Quick? (Quick 사용자 가이드 — 페이지 제목과 본문이 서비스를 `AWS Quick`으로 적습니다) — `docs.aws.amazon.com/quick/latest/userguide/what-is.html` (2026-11-17 확인)
 13. Integrate Amazon EMR with AWS Lake Formation — `docs.aws.amazon.com/emr/latest/ManagementGuide/emr-lake-formation.html` (2026-11-03 확인)
 14. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html` (2026-11-03 확인)
 15. What is AWS Lake Formation? — `docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html` (2026-11-17 확인)

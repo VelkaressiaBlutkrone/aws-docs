@@ -34,7 +34,9 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/ha-resiliency-amazon-eks-apps/probes-checks.html
   - title: DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain4.html
-lastVerified: 2026-11-02
+  - title: Add annotations and metadata to segments with the X-Ray SDK for Java (Maintenance Notice)
+    url: https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-java-segment.html
+lastVerified: 2026-11-17
 ---
 
 # 로깅·모니터링·관찰성 모범 사례 (구조화 로깅·사용자 지정 지표·알림·추적·워크로드 상태)
@@ -227,7 +229,7 @@ lastVerified: 2026-11-02
 **서비스가 직접 지원하는 활성 추적**
 
 - **API Gateway 스테이지** · **AWS AppSync** · **Step Functions 상태 머신**은 활성 추적과 샘플링 구성을 지원합니다.
-- **EC2·ECS·Elastic Beanstalk** 같은 컴퓨팅에서는 애플리케이션을 **AWS Distro for OpenTelemetry(ADOT)** 또는 **X-Ray SDK**로 계측해야 샘플링이 적용됩니다.
+- **EC2·ECS·Elastic Beanstalk** 같은 컴퓨팅에서는 애플리케이션을 **AWS Distro for OpenTelemetry(ADOT)** 또는 **X-Ray SDK**로 계측해야 샘플링이 적용됩니다(⚠️ **X-Ray SDK·데몬은 2026-02-25부터 유지 관리 모드**라 새로 계측한다면 공식 권장은 OpenTelemetry — 즉 ADOT입니다).
 
 **추적을 "쓸 수 있게" 만드는 것은 주석입니다**
 
@@ -458,3 +460,4 @@ lastVerified: 2026-11-02
 19. Configure probes and load balancer health checks (AWS Prescriptive Guidance) — https://docs.aws.amazon.com/prescriptive-guidance/latest/ha-resiliency-amazon-eks-apps/probes-checks.html
 20. DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 4 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain4.html
 21. DVA-C03 범위 내 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
+22. X-Ray SDK for Java (X-Ray SDK·데몬 유지 관리 모드 공지 — 2026-02-25) — https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-java-segment.html

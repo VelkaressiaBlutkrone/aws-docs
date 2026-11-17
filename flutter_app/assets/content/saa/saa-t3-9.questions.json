@@ -170,7 +170,8 @@
         "3": "EMR은 클러스터를 프로비저닝하고 관리해야 하므로 인프라 설정이 불필요한 서버리스 요구사항을 충족하지 못합니다."
       },
       "sources": [
-        { "title": "Amazon Athena — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html" }
+        { "title": "Amazon Athena — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html" },
+        { "title": "Athena 컬럼형 스토리지 형식 — Parquet·ORC", "url": "https://docs.aws.amazon.com/athena/latest/ug/columnar-storage.html" }
       ],
       "verified": true
     },
@@ -204,7 +205,7 @@
       "examGuideTaskId": "saa-t3-9",
       "skill": "AWS Lake Formation 역할과 접근 제어 계층",
       "difficulty": "applied",
-      "stem": "회사가 S3 기반 데이터 레이크를 운영 중이며 Glue Data Catalog로 메타데이터를 관리한다. 분석가 그룹마다 접근 가능한 컬럼을 다르게 제한하고(PII 컬럼 차단), Athena·EMR 쿼리 전체에 이 권한이 일관되게 적용되어야 한다. 어떤 서비스를 추가해야 하는가?",
+      "stem": "회사가 S3 기반 데이터 레이크를 운영 중이며 Glue Data Catalog로 메타데이터를 관리한다. 분석가 그룹마다 접근 가능한 컬럼을 다르게 제한하고(PII 컬럼 차단), Athena 쿼리에 이 권한이 적용되어야 한다. 어떤 서비스를 추가해야 하는가?",
       "options": [
         "AWS IAM — 각 분석가 역할마다 S3 버킷의 컬럼별 접근을 제어하는 IAM 정책을 작성한다",
         "AWS Lake Formation — Glue Data Catalog 위에 컬럼·행·셀 수준의 세밀한 접근 제어를 추가한다",
@@ -212,14 +213,15 @@
         "AWS Glue DataBrew — 코드 없이 PII 컬럼을 마스킹하고 분석가에게 정제된 데이터를 제공한다"
       ],
       "correct": 1,
-      "explanation": "AWS Lake Formation은 Glue Data Catalog 위에 올라가는 권한 제어 계층으로, 컬럼·행·셀 수준의 세밀한(fine-grained) 접근 제어를 지원합니다. Athena·EMR·Redshift Spectrum 쿼리 전반에 Lake Formation 권한이 일관되게 적용되므로, 분석 도구를 바꿔도 동일한 권한 모델이 유지됩니다.",
+      "explanation": "AWS Lake Formation은 Glue Data Catalog 위에 올라가는 권한 제어 계층으로, 컬럼·행·셀 수준의 세밀한(fine-grained) 접근 제어를 지원합니다. Lake Formation 권한은 통합된 분석 서비스에 적용되지만 지원 수준은 엔진마다 다릅니다 — 공식 지원 표에서 Athena SQL과 Redshift Spectrum은 열·행·셀 수준까지 지원하고, EMR은 엔진·배포 형태에 따라 달라 EC2 위의 Hive는 행·셀 수준을, EMR on EKS는 세 수준 모두를 지원하지 않습니다. 분석 도구를 바꿀 때는 지원 표를 확인합니다.",
       "wrongExplanations": {
         "0": "IAM 정책으로 S3 객체 수준 접근을 제어할 수 있지만, 테이블의 특정 컬럼에만 접근을 허용하는 세밀한 데이터 수준 제어를 IAM 정책으로 표현하기는 매우 복잡합니다. Lake Formation이 이 데이터 객체 수준 세밀 제어를 별도 모델로 관리합니다.",
         "2": "S3 버킷 정책은 객체 경로(키) 수준의 접근을 제어하며, 쿼리 결과의 컬럼 수준 접근 제어는 지원하지 않습니다.",
         "3": "Glue DataBrew는 코드 없이 데이터를 클렌징·정규화하는 시각적 도구로, 분석 쿼리에 적용되는 동적 접근 제어 기능이 아닙니다. 데이터를 사전에 마스킹해 별도 데이터셋으로 만드는 방식이라 권한 관리와는 다릅니다."
       },
       "sources": [
-        { "title": "AWS Lake Formation — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html" }
+        { "title": "AWS Lake Formation — 서비스 소개 (공식)", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html" },
+        { "title": "Lake Formation과 다른 AWS 서비스 — 엔진별 테이블·열·행·셀 수준 권한 지원 표", "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/working-with-services.html" }
       ],
       "verified": true
     },
@@ -359,14 +361,15 @@
         "Amazon Managed Service for Apache Flink — Flink로 영상 스트림을 실시간 처리해 Rekognition에 전달한다"
       ],
       "correct": 2,
-      "explanation": "Amazon Kinesis Video Streams는 카메라·IoT 디바이스에서 AWS로 비디오 스트림을 안전하게 수집·저장·재생하는 서비스입니다. Amazon Rekognition과 연동해 실시간 영상 분석을 수행할 수 있습니다. 영상 스트리밍 전용 서비스로 설계된 만큼 비디오 수집·저장 단계에 가장 적합합니다.",
+      "explanation": "Amazon Kinesis Video Streams는 카메라·IoT 디바이스에서 AWS로 비디오 스트림을 안전하게 수집·저장·재생하는 서비스입니다. Amazon Rekognition Video의 스트리밍 영상 분석이 이 서비스를 입력으로 씁니다 — 다만 그 스트리밍 영상 분석 기능은 신규 고객에게 더 이상 제공되지 않습니다(다른 Rekognition 기능은 영향 없음). 영상 스트리밍 전용 서비스로 설계된 만큼 비디오 수집·저장 단계에 가장 적합합니다.",
       "wrongExplanations": {
         "0": "Kinesis Data Streams는 일반 데이터 레코드 스트리밍용 서비스로 영상 스트리밍에 최적화되어 있지 않습니다. 영상은 샤드 기반 레코드 모델이 아닌 Video Streams의 전용 프로토콜과 SDK로 수집합니다.",
         "1": "Firehose는 스트리밍 레코드를 S3·Redshift 등으로 적재하는 서비스로, 실시간 영상 스트리밍과 Rekognition 연동에 적합하지 않습니다. S3 적재 후 배치 분석은 실시간 처리 요구사항을 충족하지 못합니다.",
-        "3": "Managed Service for Apache Flink는 스트림 데이터에 분석 로직(Java·Scala·SQL)을 작성하는 서비스로, 영상 스트림 수집·저장 기능이 아닙니다. 영상 전용 수집·저장에는 Video Streams를 사용합니다."
+        "3": "Managed Service for Apache Flink는 스트림 데이터에 분석 로직(Java·Scala·Python·SQL)을 작성하는 서비스로, 영상 스트림 수집·저장 기능이 아닙니다. 영상 전용 수집·저장에는 Video Streams를 사용합니다."
       },
       "sources": [
-        { "title": "Amazon Kinesis Video Streams란? (공식)", "url": "https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/what-is-kinesis-video.html" }
+        { "title": "Amazon Kinesis Video Streams란? (공식)", "url": "https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/what-is-kinesis-video.html" },
+        { "title": "Rekognition 스트리밍 영상 분석 — Kinesis Video Streams를 입력으로 사용·신규 고객 제공 중단", "url": "https://docs.aws.amazon.com/rekognition/latest/dg/streaming-video.html" }
       ],
       "verified": true
     }

@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
   - title: Control Tower 랜딩 존 통제 — 예방 통제 제약 (공식 Prescriptive Guidance)
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/designing-control-tower-landing-zone/controls.html
-lastVerified: 2026-10-21
+lastVerified: 2026-11-17
 ---
 
 # 다중 계정 보안 — Organizations·Control Tower·SCP
@@ -110,7 +110,7 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 |---|---|---|
 | **관리 계정** | Organizations 소유, 결제 관리 | 워크로드 실행 금지. SCP 미적용 |
 | **로그 아카이브 계정** | 전 계정 CloudTrail·Config 로그 중앙 보관 | 로그 계정 외 수정 불가 |
-| **감사(Audit) 계정** | 보안팀 전용. 전 계정 읽기 전용 접근 | 침해 시 독립 조사 가능 |
+| **감사(Audit) 계정** | 보안·컴플라이언스 팀 전용. 교차 계정 역할(읽기 전용 감사·전체 권한 관리자)로 전 계정 접근 | 침해 시 독립 조사 가능 |
 | **개발·스테이징·운영 계정** | 워크로드 실행 환경 분리 | 각 환경 SCP로 가드레일 적용 |
 
 > 🔐 **멤버 계정 루트는 없애는 것이 현행 모범 사례입니다(중앙 루트 접근 관리).** Organizations에서 이 기능을 켜면 멤버 계정의 루트 비밀번호·액세스 키·서명 인증서·MFA를 제거할 수 있고, 제거된 계정은 **루트 로그인도 비밀번호 복구도 불가**합니다. **새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다.** 루트만 할 수 있는 일(잘못 설정된 S3 버킷 정책·SQS 정책 복구 등)은 관리 계정이나 위임 관리자가 **권한 작업(`sts:AssumeRoot`)** 으로 수행하고, 필요할 때만 **비밀번호 복구 허용**을 켭니다. 관리 계정 루트는 제거할 수 없으므로 **MFA가 요구**되며(첫 로그인 후 35일 유예) 다중 승인 보관을 권장합니다.
@@ -235,7 +235,7 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 
 | 유형 | 작동 방식 | 구현 도구 |
 |---|---|---|
-| **예방적(Preventive)** | 규정 위반 행동 자체를 차단 | SCP |
+| **예방적(Preventive)** | 규정 위반 행동 자체를 차단 | SCP·RCP·선언적 정책 |
 | **탐지적(Detective)** | 규정 위반 상태를 탐지하고 알림 | AWS Config 규칙 |
 | **사전예방적(Proactive)** | 리소스 프로비저닝 전 규정 준수 여부 확인 | CloudFormation 훅 |
 
@@ -250,8 +250,8 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 > **Control Tower vs Organizations 직접 구성:** Organizations를 직접 구성하면 유연하지만 복잡합니다. Control Tower는 모범 사례를 사전 탑재한 오케스트레이션 레이어로, 빠르게 규정 준수 환경을 만들 때 적합합니다.
 
 > 🧠 원리: 왜 Control Tower는 예방적 가드레일만으로 충분하지 않아 탐지·사전예방 유형을 별도로 두었을까요?
-> 예방적 가드레일(SCP)은 IAM API 호출을 차단하지만, 기존에 이미 잘못 구성된 리소스나 콘솔 외부 경로로 생성된 리소스는 감지하지 못합니다.
-> 탐지적 가드레일(AWS Config)은 실시간 구성 변화를 감시해 SCP가 놓친 드리프트를 발견하고, 사전예방적 가드레일(CloudFormation 훅)은 IaC 배포 단계에서 비준수 리소스가 생성되기 전에 차단합니다.
+> 예방적 가드레일(SCP·RCP·선언적 정책)은 금지된 API 작업을 차단하지만, 기존에 이미 잘못 구성된 리소스나 콘솔 외부 경로로 생성된 리소스는 감지하지 못합니다.
+> 탐지적 가드레일(AWS Config)은 실시간 구성 변화를 감시해 예방적 가드레일이 놓친 드리프트를 발견하고, 사전예방적 가드레일(CloudFormation 훅)은 IaC 배포 단계에서 비준수 리소스가 생성되기 전에 차단합니다.
 > 세 유형이 계층을 이루면 배포 전·배포 중·배포 후 세 시점을 모두 커버해 가드레일 사각지대를 줄입니다.
 
 ### 5) IAM Identity Center — 다계정 거버넌스 관점 {#identity-center}
@@ -304,7 +304,7 @@ IAM Identity Center 기초는 `saa-t1-1`에서 다뤘습니다. 여기서는 다
 3. **"Control Tower는 Organizations를 대체한다."** → Control Tower는 Organizations를 오케스트레이션하는 레이어입니다. 내부적으로 Organizations를 사용하며, 대체가 아닌 추상화입니다.
    (원리: §4 — Control Tower는 가드레일·Account Factory를 더하는 추상화층이며 Organizations 트리가 실제 구조를 담당한다.)
 
-4. **"가드레일 = SCP다."** → 예방적 가드레일만 SCP로 구현됩니다. 탐지적 가드레일은 AWS Config 규칙, 사전예방적 가드레일은 CloudFormation 훅으로 구현됩니다.
+4. **"가드레일 = SCP다."** → SCP는 예방적 가드레일의 구현 수단 가운데 하나입니다(예방적 가드레일은 SCP·RCP·선언적 정책으로 구현). 탐지적 가드레일은 AWS Config 규칙, 사전예방적 가드레일은 CloudFormation 훅으로 구현됩니다.
    (원리: §4 — 세 유형은 배포 전·후·중 시점을 분담해 SCP가 커버하지 못하는 드리프트와 IaC 단계 위반을 보완한다.)
 
 5. **"OU에 SCP를 붙이면 상위 OU의 SCP가 무시된다."** → SCP는 **누적 교집합**입니다. 루트→OU→계정 순서로 모든 SCP를 AND로 교집합한 결과가 유효 권한의 상한선입니다. 상위 SCP가 막은 권한은 하위에서 열 수 없습니다.

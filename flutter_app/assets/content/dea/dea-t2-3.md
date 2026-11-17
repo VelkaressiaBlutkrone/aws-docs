@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html
   - title: DEA-C01 공식 시험 가이드 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain2.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 수명 주기 관리 (COPY/UNLOAD·S3 수명 주기·보존·복원성)
@@ -80,7 +80,7 @@ lastVerified: 2026-10-20
 
 `COPY`는 S3·EMR·SSH 호스트·DynamoDB의 데이터를 테이블에 적재하며 **테이블 이름·데이터 소스·인가(IAM 역할)** 세 요소만 있으면 실행됩니다. 기존 행에 **append**하고, **Redshift Spectrum 외부 테이블은 읽기 전용이라 COPY 대상이 될 수 없습니다.** S3 파일 적재에는 **INSERT보다 COPY**가 효율적입니다(MPP로 여러 파일을 동시에 읽음).
 
-- **병렬 로드 설계** — 테이블 데이터를 **여러 파일로 나누고 파일 수를 슬라이스 수의 배수**로 맞춥니다. Redshift는 파일 크기를 고려해 분배하지 않으므로 **압축 후 1 MB~1 GB의 비슷한 크기**로 맞춥니다. 공통 접두사(폴더)로 지정하면 폴더 전체를, **매니페스트**로 명시하면 서로 다른 버킷·폴더의 파일을 적재합니다. **Serverless는 128의 배수**를 권장하고, 압축하지 않은 단일 CSV·Parquet·ORC가 **128 MB보다 크면 Redshift가 자동 분할**합니다.
+- **병렬 로드 설계** — 테이블 데이터를 **여러 파일로 나누고 파일 수를 슬라이스 수의 배수**로 맞춥니다. Redshift는 파일 크기를 고려해 분배하지 않으므로 **압축 후 1 MB~1 GB의 비슷한 크기**로 맞춥니다. 공통 접두사(폴더)로 지정하면 폴더 전체를, **매니페스트**로 명시하면 서로 다른 버킷·폴더의 파일을 적재합니다. 압축하지 않은 단일 CSV·Parquet·ORC가 **128 MB보다 크면 Redshift가 자동 분할**합니다.
 - **인가·암호화** — **SSE-S3·SSE-KMS로 암호화된 파일은 COPY가 자동 인식**해 적재하고 **SSE-C는 지원하지 않습니다.** ⚠️ **클라이언트 측 암호화**(`ENCRYPTED` + `MASTER_SYMMETRIC_KEY`)는 신규 고객에게 **2025-04-30부터 닫혔고 2026-04-30 이후에는 쓸 수 없습니다** — 서버 측 암호화로 전환이 권고됩니다.
 - **오류 허용·검증** — `MAXERROR`는 허용 오류 수(**기본 0, 상한 100000**), `NOLOAD`는 **적재 없이 파일 유효성만 검사**합니다.
 - **통계** — `STATUPDATE`를 쓰지 않으면 **테이블이 처음 비어 있을 때만** 통계가 자동 갱신됩니다. 크기가 크게 바뀌면 `ANALYZE` 또는 `STATUPDATE ON`을 권장합니다.
@@ -186,7 +186,7 @@ lastVerified: 2026-10-20
 | **DynamoDB 온디맨드 백업** | 테이블 전체 백업 | 백업 시점 | **장기 보존·규정 준수용** | "7년 보관" |
 | **DynamoDB 글로벌 테이블** | 다중 리전 복제 | 다중 리전 복원성 | **99.999% 가용성 SLA** | "다중 리전" |
 | **RDS 자동 백업** | DB 인스턴스 | 보존 기간 동안 유지 | **0~35일**(콘솔 기본 7일, API 기본 1일), **0이면 비활성** | "백업 보존 기간" |
-| **RDS Multi-AZ** | 다른 AZ의 **동기식** 대기 복제본 | AZ 장애 시 전환 | **대기 복제본은 읽기 트래픽을 처리하지 않음** | "고가용성이지 읽기 확장 아님" |
+| **RDS Multi-AZ(DB 인스턴스 배포)** | 다른 AZ의 **동기식** 대기 복제본 1개 | AZ 장애 시 전환 | **대기 복제본은 읽기 트래픽을 처리하지 않음**(DB 클러스터 배포는 스탠바이 2개가 읽기도 처리) | "고가용성이지 읽기 확장 아님" |
 
 - S3 복제는 **버전 ID를 지정한 삭제를 전파하지 않아** 악의적 삭제로부터 보호하는 효과가 있고, 최신 복제 구성에서는 **삭제 마커도 기본으로 복제하지 않습니다**(따로 추가 가능).
 - DynamoDB는 기본으로 **3개 AZ에 복제**해 99.99% 가용성 SLA를 제공합니다. S3 클래스는 **One Zone-IA와 Express One Zone을 제외하고** AZ 손실에 견디도록 설계됐습니다.
@@ -200,7 +200,7 @@ lastVerified: 2026-10-20
 - "**아카이브인데 밀리초 조회**" → **Glacier Instant Retrieval**. "**하루 걸려도 된다**" → **Deep Archive**(12–48시간).
 - "**버전 관리 버킷인데 스토리지가 계속 늘어난다**" → `Expiration`만으로는 **삭제 마커만** 얹힙니다. **`NoncurrentVersionExpiration`**(+ `NewerNoncurrentVersions`는 `Filter` 필수), **`ExpiredObjectDeleteMarker`**, **`AbortIncompleteMultipartUpload`** 세트.
 - "**MFA Delete를 켜고 수명 주기도 쓰겠다**" → **불가능**합니다. MFA Delete는 **루트만, CLI/API로만**.
-- "**적재가 느리다**" → 큰 단일 파일 대신 **슬라이스 수의 배수**(Serverless는 128의 배수)로 나눈 **1 MB~1 GB** 파일 + `COPY`. "**불량 행 몇 개는 건너뛰기**" → `MAXERROR`(단, **Parquet·ORC는 미지원**).
+- "**적재가 느리다**" → 큰 단일 파일 대신 **슬라이스 수의 배수**로 나눈 **1 MB~1 GB** 파일 + `COPY`. "**불량 행 몇 개는 건너뛰기**" → `MAXERROR`(단, **Parquet·ORC는 미지원**).
 - "**루트도 못 지우게 N년**" → **Object Lock Compliance**. "**기간 미정 동결**" → **Legal hold**. "**일부 관리자는 우회 가능**" → **Governance**. 백업이면 **Vault Lock Compliance**.
 - "**삭제했는데 S3에 데이터 파일이 남아 있다**" → Iceberg `DELETE`는 **merge-on-read**. 물리 제거는 **`VACUUM`**(또는 S3 Tables 스냅샷 관리). Redshift도 `DELETE` 후 **VACUUM DELETE**가 회수합니다.
 - "**15분 이내 리전 간 복제**" → **CRR + RTC**(단 **기존 객체는 Batch Replication**이고 **RTC는 Batch에 적용되지 않음**).
@@ -225,13 +225,13 @@ lastVerified: 2026-10-20
 12. **"Redshift에서 `DELETE` 했으니 디스크가 바로 줄어든다."** → ❌. 행은 **삭제 표시만** 되고 **백그라운드 VACUUM DELETE**가 공간을 회수합니다.
 13. **"Parquet COPY에서도 `MAXERROR`로 불량 행을 넘긴다."** → ❌. **컬럼형(ORC·Parquet) COPY는 `MAXERROR`를 지원하지 않고**, 버킷이 **같은 리전**이어야 합니다.
 14. **"COPY에 클라이언트 측 암호화를 쓰면 된다."** → ❌. **2026-04-30 이후 사용할 수 없습니다.** SSE-S3·SSE-KMS로 전환이 권고됩니다(**SSE-C는 COPY가 지원하지 않음**).
-15. **"Multi-AZ 대기 복제본으로 읽기를 분산한다."** → ❌. **대기 복제본은 읽기 트래픽을 처리하지 않습니다.**
+15. **"Multi-AZ 대기 복제본으로 읽기를 분산한다."** → ❌(DB 인스턴스 배포 기준). **Multi-AZ DB 인스턴스 배포의 대기 복제본은 읽기 트래픽을 처리하지 않습니다.** 스탠바이가 읽기를 처리하는 것은 Multi-AZ DB 클러스터 배포입니다.
 
 ---
 
 ## 🧪 자가 점검
 
-> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t2-3.questions.json` — 사람 검수 전이라 사이트에는 노출되지 않습니다)
+> 아래는 학습용 자가 점검입니다.
 
 **Q1.** 버전 관리가 켜진 버킷의 저장 비용이 계속 늘어납니다. 수명 주기 규칙에 `Expiration`을 30일로 걸어 뒀는데도 줄지 않습니다. 왜이고, 어떻게 고치나요?
 
@@ -251,7 +251,7 @@ lastVerified: 2026-10-20
 
 <details><summary>정답 보기</summary>
 
-파일을 **여러 개로 나누어 `COPY`** 합니다. 파일 수를 **클러스터 슬라이스 수의 배수**(Redshift Serverless는 **128의 배수**)로 맞추고, **압축 후 1 MB~1 GB의 비슷한 크기**로 분할합니다. Redshift는 파일 크기를 고려해 분배하지 않으므로 크기를 맞추는 것이 중요합니다. 공통 접두사나 **매니페스트**로 지정하고, `INSERT` 대신 `COPY`를 씁니다(MPP 병렬 읽기).
+파일을 **여러 개로 나누어 `COPY`** 합니다. 파일 수를 **클러스터 슬라이스 수의 배수**로 맞추고, **압축 후 1 MB~1 GB의 비슷한 크기**로 분할합니다. Redshift는 파일 크기를 고려해 분배하지 않으므로 크기를 맞추는 것이 중요합니다. 공통 접두사나 **매니페스트**로 지정하고, `INSERT` 대신 `COPY`를 씁니다(MPP 병렬 읽기).
 </details>
 
 **Q4.** 사용자가 개인정보 삭제를 요청했습니다. 데이터는 Athena로 쿼리하는 Iceberg 테이블에 있습니다. `DELETE`를 실행했는데 S3 사용량이 줄지 않았습니다.
@@ -281,7 +281,7 @@ Athena의 Iceberg `DELETE`는 **position delete 파일을 쓰는 merge-on-read �
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. COPY (Amazon Redshift Database Developer Guide) — https://docs.aws.amazon.com/redshift/latest/dg/r_COPY.html
 2. Data load operations (COPY parameter reference) — https://docs.aws.amazon.com/redshift/latest/dg/copy-parameters-data-load.html
@@ -318,3 +318,5 @@ Athena의 Iceberg `DELETE`는 **position delete 파일을 쓰는 merge-on-read �
 33. Multi-AZ DB instance deployments for Amazon RDS — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html
 34. Save on storage costs using Amazon S3 (스토리지 클래스 성능 비교표) — https://aws.amazon.com/s3/cost-optimization/
 35. DEA-C01 공식 시험 가이드 도메인 2 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain2.html
+36. Configuring and managing a Multi-AZ deployment for Amazon RDS — https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html
+37. Loading data files (Amazon Redshift) — https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-use-multiple-files.html

@@ -3,7 +3,7 @@
   "taskTitle": "인증 전략 설계, 구현 및 문제 해결",
   "domain": 4,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-10",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t4-1-q1",
@@ -151,7 +151,7 @@
       "skill": "4.1.2",
       "section": "temp",
       "difficulty": "applied",
-      "stem": "보안팀이 민감 API 호출을 MFA로 인증한 세션에서만 허용하고 그 세션의 권한을 세션 정책으로 더 좁히라고 요구합니다. 공식 비교표에 비추어 어떤 STS API를 씁니까?",
+      "stem": "보안팀이 민감 API 호출을 MFA로 인증한 세션에서만 허용하고 그 세션의 권한을 세션 정책으로 더 좁히라고 요구합니다. 어떤 STS API를 씁니까?",
       "options": [
         "GetSessionToken입니다. MFA 조건과 세션 정책을 모두 받으므로 두 요구를 함께 만족합니다",
         "AssumeRole입니다. MFA를 받는 API는 AssumeRole과 GetSessionToken 둘뿐이고 세션 정책을 못 받는 것이 GetSessionToken입니다",
@@ -169,6 +169,10 @@
         {
           "title": "Compare AWS STS credentials - API별 수명과 MFA와 세션 정책",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_sts-comparison.html"
+        },
+        {
+          "title": "Policies and permissions in AWS Identity and Access Management - 세션 정책 매개변수",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html"
         }
       ],
       "verified": true
@@ -201,6 +205,10 @@
         {
           "title": "Request temporary security credentials - 콘솔 연동 경로",
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_request.html"
+        },
+        {
+          "title": "Enable custom identity broker access to the AWS console - AssumeRole 권장과 DurationSeconds 조건",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html"
         }
       ],
       "verified": true

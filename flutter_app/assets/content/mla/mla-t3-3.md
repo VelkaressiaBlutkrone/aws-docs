@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops04-bp01.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # CI/CD 파이프라인 설정 (CodePipeline·CodeBuild·CodeDeploy·SageMaker Pipelines·재훈련)
@@ -709,5 +709,7 @@ Pipelines 쪽 설계: Model Monitor 위반 때문에 재훈련하는 경우 해�
 54. MLOps 체크리스트 — 지속적 통합 — https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-integration.html
 55. 지속적 배포 — https://docs.aws.amazon.com/prescriptive-guidance/latest/mlops-checklist/continuous-deployment.html
 56. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+57. Pipelines steps — 단계 병렬 실행, DependsOn, ParallelismConfiguration — https://docs.aws.amazon.com/sagemaker/latest/dg/build-and-manage-steps.html
+58. MLPERF06-BP05 Establish an automated re-training framework (Machine Learning Lens) — https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp05.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/3-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

@@ -25,7 +25,8 @@
       },
       "sources": [
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
-        { "title": "AWS WAF 용도별 관리형 규칙 그룹 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html" }
+        { "title": "AWS WAF 용도별 관리형 규칙 그룹 (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-use-case.html" },
+        { "title": "AWS 관리형 규칙 — 기준 규칙 그룹: Core rule set(AWSManagedRulesCommonRuleSet)의 CrossSiteScripting 규칙", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-baseline.html" }
       ],
       "verified": true
     },
@@ -74,7 +75,9 @@
         "2": "Firewall Manager는 WAF·Shield 정책을 다계정에 중앙 배포하는 서비스이며 DDoS 전담 지원 기능이 없습니다."
       },
       "sources": [
-        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" },
+        { "title": "AWS Shield 기능 — Shield Response Team 24/7 지원·DDoS 비용 보호", "url": "https://aws.amazon.com/shield/features/" },
+        { "title": "Shield Advanced 공격 후 크레딧 요청", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-request-service-credit.html" }
       ],
       "verified": true
     },
@@ -91,7 +94,7 @@
         "Amazon API Gateway REST API"
       ],
       "correct": 2,
-      "explanation": "AWS WAF는 HTTP/HTTPS 트래픽을 처리하는 리소스(CloudFront·API Gateway REST API·ALB·AppSync GraphQL API·Cognito User Pool·App Runner·Bedrock AgentCore Gateway·Verified Access·Amplify 9종)에 연결됩니다. RDS는 데이터베이스 서비스로 HTTP 요청을 처리하지 않으며 WAF 웹 ACL 연결 대상이 아닙니다.",
+      "explanation": "AWS WAF는 HTTP/HTTPS 트래픽을 처리하는 리소스(CloudFront·API Gateway REST API·ALB·AppSync GraphQL API·Cognito User Pool·App Runner·Bedrock AgentCore Gateway·Verified Access·Amplify 9종)에 연결됩니다(이 가운데 App Runner는 신규 고객에게 열려 있지 않습니다). RDS는 데이터베이스 서비스로 HTTP 요청을 처리하지 않으며 WAF 웹 ACL 연결 대상이 아닙니다.",
       "wrongExplanations": {
         "0": "CloudFront 배포는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다.",
         "1": "ALB는 WAF 웹 ACL을 연결할 수 있는 공식 지원 리소스입니다.",
@@ -148,7 +151,8 @@
       },
       "sources": [
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
-        { "title": "AWS WAF 규칙 액션 레퍼런스 (공식)", "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-wafv2-webacl-ruleaction.html" }
+        { "title": "AWS WAF 규칙 액션 레퍼런스 (공식)", "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-properties-wafv2-webacl-ruleaction.html" },
+        { "title": "AWS WAF 규칙 우선순위 — 가장 낮은 숫자부터 평가, 종료 액션에 매칭되면 중단", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/web-acl-processing-order.html" }
       ],
       "verified": true
     },
@@ -271,7 +275,8 @@
       },
       "sources": [
         { "title": "What is AWS Secrets Manager? (공식)", "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html" },
-        { "title": "Parameter Store 파라미터 정책 (공식)", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html" }
+        { "title": "Parameter Store 파라미터 정책 (공식)", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-policies.html" },
+        { "title": "Parameter Store 표준·고급 파라미터 — 표준은 추가 요금 없음", "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-advanced-parameters.html" }
       ],
       "verified": true
     },
@@ -296,7 +301,8 @@
       },
       "sources": [
         { "title": "What is AWS WAF? (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html" },
-        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" }
+        { "title": "How AWS Shield and Shield Advanced work (공식)", "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html" },
+        { "title": "CloudFront에서 AWS WAF 보호 사용 — 요청이 서버에 닿기 전에 차단", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-awswaf.html" }
       ],
       "verified": true
     },

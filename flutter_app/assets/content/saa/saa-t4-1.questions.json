@@ -200,7 +200,8 @@
       },
       "sources": [
         { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
-        { "title": "인스턴스 종료 시 데이터 보존 — DeleteOnTermination (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/preserving-volumes-on-termination.html" }
+        { "title": "인스턴스 종료 시 데이터 보존 — DeleteOnTermination (공식)", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/preserving-volumes-on-termination.html" },
+        { "title": "EC2 인스턴스 수명 주기 — 중지 상태에서도 EBS 볼륨 스토리지 요금은 과금", "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html" }
       ],
       "verified": true
     },
@@ -225,7 +226,8 @@
       },
       "sources": [
         { "title": "EBS 볼륨 타입 (공식)", "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html" },
-        { "title": "Compute Optimizer 유휴 리소스 권장 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" }
+        { "title": "Compute Optimizer 유휴 리소스 권장 (공식)", "url": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/view-idle-recommendations.html" },
+        { "title": "Trusted Advisor 비용 최적화 검사 — Underutilized Amazon EBS volumes", "url": "https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html" }
       ],
       "verified": true
     },

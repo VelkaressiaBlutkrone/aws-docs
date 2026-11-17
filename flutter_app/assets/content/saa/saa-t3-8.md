@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -427,7 +427,7 @@ VPC와 온프레미스 사이에서 **DNS 서버를 따로 세우지 않고** �
 1. **"지금 당장 연결이 필요하다" → Direct Connect 선택.** Direct Connect 구축에는 수 주의 리드타임이 걸립니다. 즉시성이 요구되면 **Site-to-Site VPN**이 답입니다.
    (원리: §3 본문 — VPN은 공용 인터넷을 이용한 소프트웨어 설정만으로 즉시 연결이 가능하고, DX는 물리 회선 설치가 선행되어야 한다.)
 
-2. **"Direct Connect는 기본 암호화된다."** Direct Connect는 전용 물리 회선이지만 **기본 암호화가 없습니다.** 전송 암호화가 필요하면 VPN over Direct Connect 패턴을 사용해야 합니다.
+2. **"Direct Connect는 기본 암호화된다."** Direct Connect는 전용 물리 회선이지만 **기본 암호화가 없습니다.** 전송 암호화가 필요하면 VPN over Direct Connect 패턴이나 MACsec을 사용합니다.
    (원리: §4 — 물리적 격리는 전송 계층 암호화가 아니며, 암호화가 필요하면 DX 위에 IPsec 터널을 얹어야 한다.)
 
 3. **"VPC 피어링을 통해 세 VPC가 서로 통신한다."** 피어링은 비전이입니다. A-B, B-C가 있어도 A는 C를 볼 수 없습니다. 세 VPC 모두 통신하려면 Transit Gateway 또는 각 쌍을 직접 피어링해야 합니다.
@@ -469,7 +469,7 @@ VPC 피어링으로만 구성하면 8×7/2 = **28개**의 피어링이 필요하
 
 <details><summary>정답 보기</summary>
 
-Direct Connect는 **기본 암호화를 제공하지 않습니다.** 전용 회선이라는 점이 물리적 보안을 제공하지만 전송 계층 암호화는 아닙니다. 해결책은 **VPN over Direct Connect 패턴**입니다. Direct Connect 연결 위에 IPsec VPN 터널을 구성하면 전용 회선의 일관된 대역폭·저지연 특성을 유지하면서 데이터 암호화 요건도 충족할 수 있습니다.
+Direct Connect는 **기본 암호화를 제공하지 않습니다.** 전용 회선이라는 점이 물리적 보안을 제공하지만 전송 계층 암호화는 아닙니다. 대표적인 해결책은 **VPN over Direct Connect 패턴**입니다(MACsec을 지원하는 전용 연결이면 MACsec도 선택지입니다). Direct Connect 연결 위에 IPsec VPN 터널을 구성하면 전용 회선의 일관된 대역폭·저지연 특성을 유지하면서 데이터 암호화 요건도 충족할 수 있습니다.
 </details>
 
 **Q4.** SaaS 공급자가 자신의 서비스를 여러 고객 AWS 계정에 안전하게 제공하려 합니다. 고객의 VPC CIDR이 공급자 VPC와 겹칠 수 있습니다. 가장 적합한 아키텍처는?

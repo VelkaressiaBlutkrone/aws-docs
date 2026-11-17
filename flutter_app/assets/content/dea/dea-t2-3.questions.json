@@ -18,7 +18,7 @@
         "파일 압축을 풀어 비압축 CSV 한 개로 COPY한다"
       ],
       "correct": 0,
-      "explanation": "Amazon Redshift는 데이터를 여러 파일로 나누고 파일 수를 클러스터 슬라이스 수의 배수로 맞출 때 작업을 균등하게 분배합니다. 파일 크기를 고려해 분배하지 않으므로 압축 후 1 MB~1 GB의 비슷한 크기로 맞추라고 권고합니다(Redshift Serverless는 128의 배수 권장).",
+      "explanation": "Amazon Redshift는 데이터를 여러 파일로 나누고 파일 수를 클러스터 슬라이스 수의 배수로 맞출 때 작업을 균등하게 분배합니다. 파일 크기를 고려해 분배하지 않으므로 압축 후 1 MB~1 GB의 비슷한 크기로 맞추라고 권고합니다.",
       "wrongExplanations": {
         "1": "Amazon S3의 파일을 적재할 때는 INSERT보다 COPY가 효율적입니다. COPY는 MPP로 여러 파일을 동시에 읽습니다.",
         "2": "MAXERROR는 허용할 오류 행 수를 정하는 파라미터(기본 0, 상한 100000)입니다. 병렬성과 무관해 처리량이 개선되지 않고 불량 데이터만 더 들어옵니다.",
@@ -30,8 +30,8 @@
           "url": "https://docs.aws.amazon.com/redshift/latest/dg/t_splitting-data-files.html"
         },
         {
-          "title": "How do I efficiently load data from Amazon S3 into Amazon Redshift? — Serverless는 128의 배수, 128 MB 초과 단일 파일 자동 분할",
-          "url": "https://repost.aws/knowledge-center/redshift-load-s3-data"
+          "title": "Loading data files (Amazon Redshift) — 파일 수는 슬라이스 수의 배수, 128 MB 이상인 비압축 CSV와 Parquet·ORC는 자동 분할",
+          "url": "https://docs.aws.amazon.com/redshift/latest/dg/c_best-practices-use-multiple-files.html"
         }
       ],
       "verified": true

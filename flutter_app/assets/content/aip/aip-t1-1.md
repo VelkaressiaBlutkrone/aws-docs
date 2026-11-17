@@ -26,6 +26,8 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-model-selection.html
   - title: AWS Well-Architected Tool Pricing
     url: https://aws.amazon.com/well-architected-tool/pricing/
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 1
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html
 lastVerified: 2026-11-17
 ---
 
@@ -82,14 +84,14 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 
 - **FM 선택 · 통합 패턴 · 배포 전략** — 요구 사항을 이 세 축으로 번역한다.
 - Generative AI Lens는 **2025-11-19 발행**이고 여섯 기둥(운영 우수성·보안·안정성·성능 효율성·비용 최적화·지속 가능성)을 **GenAI 표현으로 다시 쓴다**.
-- ⚠️⚠️ 렌즈의 범위는 **Bedrock의 FM과 SageMaker AI의 고객 관리형 모델**이고 **모델 훈련·고급 사용자 지정은 명시적으로 제외**된다 — 시험 가이드의 「범위에 해당하지 않는 작업」과 같은 선이다.
+- ⚠️⚠️ 렌즈의 범위는 **Bedrock의 FM 또는 SageMaker AI의 고객 관리형 모델을 쓰는 GenAI 애플리케이션**이고 **전통적인 ML 애플리케이션은 Machine Learning Lens**로 보낸다 — 모델 개발·훈련 자체는 시험 가이드가 「범위에 해당하지 않는 작업」으로 적는다.
 - GenAI 수명 주기 **여섯 단계**: 범위 설정 → 모델 선택 → 사용자 지정 → 개발 → 배포 → 지속적 개선.
 - 책임은 **모델 생산자 · 제공자 · 소비자** 셋이 나눠 진다.
 - 성능은 다섯 지표로 본다 — **추론 지연 · 처리량 · 응답 품질 · 리소스 사용률 · 가용성**.
 - ⚠️ **한 작업에서 성능이 좋다는 것이 다른 작업에서도 좋다는 뜻이 아니다**(요약 ≠ 질의응답).
 - PoC 모델 선택 셋: **기능 요구 매핑 · 성능과 비용 절충 · 지연 허용치**. 함정 셋: **조기 과최적화 · 전문 모델 무시 · 「큰 모델이 낫다」는 가정**.
 - Well-Architected **검토는 감사가 아니라 건설적 대화**이고 **WA Tool은 무료**다. Lens Catalog의 렌즈는 **설치 없이** 쓴다.
-- ⚠️ **WA Tool의 `Well-Architected Agent`는 프리뷰 릴리스**다 — 시험이 묻는 쪽은 Tool이다.
+- ⚠️ **`Well-Architected Agent`는 WA Tool과 별개의 서비스이고 프리뷰 릴리스**다 — 시험이 묻는 쪽은 Tool이다.
 
 ---
 
@@ -125,7 +127,7 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 
 그리고 렌즈는 **GenAI 수명 주기 여섯 단계**에 걸쳐 지침을 줍니다 — **범위 설정 → 모델 선택 → 사용자 지정 → 개발 → 배포 → 지속적 개선**. 책임 있는 AI 관행은 **모델 생산자 · 제공자 · 소비자**가 책임을 나눠 진다는 전제 아래 다룹니다.
 
-⚠️⚠️ **렌즈의 범위를 외우는 것이 아니라 「무엇이 빠져 있는가」를 아는 것이 시험에 쓰입니다.** 공식 범위 문장은 **Bedrock의 FM 또는 SageMaker AI의 고객 관리형 모델**을 쓰는 GenAI 애플리케이션이고, **모델 훈련과 고급 모델 사용자 지정 기법의 모범 사례는 명시적으로 제외**합니다. 전통적인 ML 애플리케이션은 **Machine Learning Lens**가 봅니다. ⭐ 이 선은 시험 가이드가 「범위에 해당하지 않는 작업」으로 적는 **모델 개발·훈련 / 고급 ML 기술 / 데이터 엔지니어링·특성 추출**과 같은 방향입니다.
+⚠️⚠️ **렌즈의 범위를 외우는 것이 아니라 「무엇이 빠져 있는가」를 아는 것이 시험에 쓰입니다.** 공식 범위 문장은 **Bedrock의 FM 또는 SageMaker AI의 고객 관리형 모델**을 쓰는 GenAI 애플리케이션이고, **SageMaker AI로 만든 전통적인 ML 애플리케이션은 Machine Learning Lens를 보라**고 적습니다. ⭐ 이 선은 시험 가이드가 「범위에 해당하지 않는 작업」으로 적는 **모델 개발·훈련 / 고급 ML 기술 / 데이터 엔지니어링·특성 추출**과 같은 방향입니다.
 
 ### 2) PoC로 먼저 증명한다 (기술 1.1.2) {#poc}
 
@@ -153,7 +155,7 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 - **기초가 되는 질문 묶음**을 문서화한다 — 특정 아키텍처가 클라우드 모범 사례에 맞는지 가늠하는 질문들이다.
 - ⚠️⚠️ **아키텍처 검토는 아키텍처 결정에 관한 「건설적 대화」이고 감사 메커니즘이 아니다**(공식 문장). 시험 보기에서 「검토로 규정 준수를 감사한다」는 식의 서술은 이 문장과 어긋납니다.
 - 대상 독자는 CTO·아키텍트·개발자·운영 팀이다.
-- ⭐ **AWS는 워크로드 검토 서비스를 무료로 제공한다** — **AWS Well-Architected Tool(AWS WA Tool)**이다.
+- ⭐ **AWS Well-Architected Tool(AWS WA Tool)에는 추가 요금이 없다**(요금 페이지) — 내는 것은 기반 AWS 리소스 비용뿐이다.
 
 **Lens Catalog**(WA Tool):
 
@@ -236,7 +238,7 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 
 <details><summary>정답 보기</summary>
 
-렌즈의 범위가 **모델 훈련과 고급 모델 사용자 지정 기법을 명시적으로 제외**합니다. 렌즈는 Bedrock의 FM 또는 SageMaker AI의 고객 관리형 모델을 **쓰는** 애플리케이션을 봅니다. ⭐ 이 시험 가이드도 모델 개발·훈련을 「범위에 해당하지 않는 작업」으로 적습니다.
+렌즈의 범위 문장은 Bedrock의 FM 또는 SageMaker AI의 고객 관리형 모델을 **쓰는** GenAI 애플리케이션이고, **SageMaker AI로 만든 전통적인 ML 애플리케이션은 Machine Learning Lens를 보라**고 적습니다 — 모델을 훈련하는 워크로드의 모범 사례를 찾을 자리가 그쪽입니다. ⭐ 이 시험 가이드도 모델 개발·훈련을 「범위에 해당하지 않는 작업」으로 적습니다.
 </details>
 
 **Q5.** 「응답이 빨라야 한다」는 요구 사항을 측정 가능하게 적으려면 렌즈의 어느 지표들을 쓰면 됩니까?
@@ -258,7 +260,7 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 ### 📌 출처
 
 1. AWS Well-Architected Framework (기초 질문 · 검토는 감사가 아니다) — `docs.aws.amazon.com/wellarchitected/latest/framework/framework.html` (2026-11-17 확인)
-2. Generative AI Lens (2025-11-19 발행 · 여섯 기둥 · 수명 주기 여섯 단계 · 범위와 제외) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html` (2026-11-14 확인)
+2. Generative AI Lens (2025-11-19 발행 · 여섯 기둥 · 수명 주기 여섯 단계 · 범위와 Machine Learning Lens 경계) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html` (2026-11-14 확인)
 3. Performance efficiency (Generative AI Lens) (성능 다섯 지표) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/performance-efficiency.html` (2026-11-14 확인)
 4. GENPERF01 (작업별 성능은 전이되지 않는다) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genperf01.html` (2026-11-14 확인)
 5. GENPERF01-BP02 (추론뿐 아니라 훈련·사용자 지정도) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genperf01-bp02.html` (2026-11-14 확인)
@@ -266,3 +268,4 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 7. What is AWS Well-Architected? (`Well-Architected Agent`는 프리뷰) — `docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html` (2026-11-14 확인)
 8. Choosing models for generative AI applications (PoC 모델 선택 세 차원과 함정 셋) — `docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-model-selection.html` (2026-11-14 확인)
 9. AWS Well-Architected Tool Pricing (추가 요금 없음 · 기반 AWS 리소스 비용만) — `aws.amazon.com/well-architected-tool/pricing/` (2026-11-17 확인)
+10. AIP-C01 시험 안내서 콘텐츠 도메인 1 (기술 1.1.1의 예시 — 적절한 FM · 통합 패턴 · 배포 전략) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html` (2026-11-17 확인)

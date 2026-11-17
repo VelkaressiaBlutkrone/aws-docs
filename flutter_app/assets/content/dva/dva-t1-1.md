@@ -28,7 +28,11 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain1.html
   - title: DVA-C03 범위 내 AWS 서비스 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
-lastVerified: 2026-11-01
+  - title: Publishing large messages with Amazon SNS
+    url: https://docs.aws.amazon.com/sns/latest/dg/large-message-payloads.html
+  - title: Retries (Boto3 documentation)
+    url: https://docs.aws.amazon.com/boto3/latest/guide/retries.html
+lastVerified: 2026-11-17
 ---
 
 # AWS에서 호스팅하는 애플리케이션 코드 개발 (결합도·통신·복원력·API·SDK·스트리밍·AI)
@@ -145,16 +149,16 @@ Lambda 호출 경로의 숫자는 그대로 출제 재료입니다.
 - **지터**: 없으면 같은 시점에 실패한 클라이언트가 같은 시점에 재시도해 **재시도 폭주**가 생깁니다. REL05-BP03은 **지수 백오프·지터·최대 재시도 횟수 제한을 함께** 쓰라고 합니다.
 - **멱등성**: 재시도는 멱등 작업에서만 안전합니다. 그렇지 않으면 부분 갱신이 상태를 망칩니다.
 
-SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구분해 외웁니다.
+SDK 재시도는 **두 문서가 서로 다른 층을 적으므로** 둘을 구분해 읽습니다.
 
 | 항목 | SDK·Tools 공통 레퍼런스(새 동작, opt-in) | Boto3 가이드(현행) |
 |---|---|---|
-| 모드 | **standard**(기본) · adaptive · legacy | **legacy**가 기본, standard·adaptive 선택 |
-| 최대 시도(최초 포함) | **3** (DynamoDB·DynamoDB Streams는 4) | **5** (standard로 바꾸면 3) |
+| 모드 | **standard**(기본) · adaptive · legacy | **standard**가 기본(legacy는 그 이전 기본값), adaptive 선택 |
+| 최대 시도(최초 포함) | **3** (DynamoDB·DynamoDB Streams는 4) | **3** (DynamoDB·DynamoDB Streams는 4) — legacy 모드로 두면 5 |
 | 백오프 | 전체 지터 `random(0,1) × min(20,000 ms, base × 2^retry)` — base는 일시 오류 **50 ms**·스로틀링 **1,000 ms** | 지수 백오프(밑 2), standard의 최대 백오프 20초 |
 | 재시도 제한 | **재시도 쿼터**(토큰 500, 일시 재시도 14·스로틀링 재시도 5 소모, 성공 시 복원) | standard 모드에 서킷 브레이킹 기능 |
 
-- 새 동작은 `AWS_NEW_RETRIES_2026=true`로 **opt-in**해야 적용되고, 그때까지 Java·Python·Ruby·PHP·C++·CLI는 **legacy가 기본**(재시도 쿼터 없음)입니다.
+- 새 동작은 `AWS_NEW_RETRIES_2026=true`로 **opt-in**해야 적용되고, 설정하지 않으면 SDK는 **2026년 이전 재시도 동작**(백오프 타이밍·재시도 쿼터 비용·서비스별 기본값이 다름)을 씁니다. **legacy 모드**는 Java·Python·Ruby·PHP·C++·CLI에만 남아 있는 하위 호환용 모드이고 표준화된 재시도 쿼터가 없습니다.
 - **재시도 대상**: 일시 오류(`RequestTimeout`, 연결 끊김, HTTP 500/502/503/504)와 스로틀링 오류(`ThrottlingException`, `ProvisionedThroughputExceededException` 등). ⚠️ `AccessDenied`·`ValidationException`·`ResourceNotFound`는 **즉시 반환**합니다 — 재시도해도 결과가 같습니다.
 - **adaptive 모드**는 클라이언트 측 속도 제한기가 **초기 요청도 지연**시킬 수 있어 단일 리소스·스로틀링이 잦은 워크로드용이고, 범용 기본값으로는 권장되지 않습니다.
 - ⚠️ **배치 API의 부분 실패**: HTTP 200이어도 일부 항목이 실패할 수 있습니다. EventBridge `PutEvents`는 `FailedEntryCount`, Kinesis `PutRecords`는 레코드별 `ErrorCode`, SQS `SendMessageBatch`는 `Failed` 목록을 확인해 **실패분만** 재시도합니다.
@@ -260,7 +264,7 @@ SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구�
 - 폴링: 짧은 폴링(기본)은 서버 일부만 조회해 **빈 응답**이 가능하고, **긴 폴링**(`WaitTimeSeconds` 최대 20초)은 빈 응답과 비용을 줄입니다.
 - DLQ: 리드라이브 정책의 `maxReceiveCount`번 수신되고도 삭제되지 않으면 DLQ로 이동합니다. ⚠️ 표준 큐는 **원래 enqueue 시각 기준**으로 만료되므로 **DLQ 보존 기간을 원본보다 길게** 둡니다.
 
-**SNS**는 전달 재시도 숫자가 특징입니다 — Lambda·SQS 같은 AWS 관리형 엔드포인트는 **총 100,015회·23일** 동안 재시도하고(즉시 3회 → 1초 간격 2회 → 지수 백오프 10회 → 20초 간격 100,000회), **HTTP/S만 사용자 정의 전달 정책**을 쓸 수 있으며 그 총 재시도 시간은 3,600초 이하입니다. 기본 최대 메시지는 **256 KiB**(속성으로 최대 1 MiB)입니다.
+**SNS**는 전달 재시도 숫자가 특징입니다 — Lambda·SQS 같은 AWS 관리형 엔드포인트는 **총 100,015회·23일** 동안 재시도하고(즉시 3회 → 1초 간격 2회 → 지수 백오프 10회 → 20초 간격 100,000회), **HTTP/S만 사용자 정의 전달 정책**을 쓸 수 있으며 그 총 재시도 시간은 3,600초 이하입니다. 기본 최대 메시지는 **256 KiB**(토픽 속성 `MaximumMessageSize`를 설정하면 최대 1 MiB)입니다.
 
 **SNS → SQS 팬아웃**이 이 절의 대표 패턴입니다. 구독 서비스 앞마다 큐를 두면 큐가 메시지를 **내구적으로 버퍼링**하므로 구독 프로세스가 몇 시간~며칠 장애여도 유실이 없고, 큐가 "버퍼링 로드밸런서"가 되어 구독자를 쉽게 늘리고 줄일 수 있습니다.
 
@@ -275,9 +279,9 @@ SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구�
 ⚠️ **먼저 바로잡아야 할 두 가지가 있습니다.**
 
 1. **가이드의 이 기술 문구는 서비스 이름을 하나도 적지 않습니다.** 범위 내 「기계 학습 및 인공 지능」은 **Bedrock · Bedrock AgentCore · Amazon Quick · Kiro** 넷이고, 그중 **코드를 다루는 개발 도구는 Kiro뿐**입니다. 그러니 "가이드가 Kiro를 쓰라고 한다"가 아니라 **"범위 내 목록에서 이 기술에 해당하는 유일한 도구가 Kiro"**로 이해합니다.
-2. ⚠️ **`Amazon Q Developer`는 범위 내 목록에 없습니다.** C02 교재는 이 자리를 Q Developer로 다뤘지만 C03 목록에 그 이름이 없고, 공식 문서가 **IDE 플러그인 지원 종료(2027-04-30)**와 신규 가입 차단(2026-05-15)을 알리며 대체재로 **Kiro**를 지목합니다. 콘솔·문서 사이트·모바일 앱·채팅 앱의 Q는 영향이 없습니다.
+2. ⚠️ **`Amazon Q Developer`는 범위 내 목록에 없습니다.** C02 교재는 이 자리를 Q Developer로 다뤘지만 C03 목록에 그 이름이 없고, 공식 문서가 **IDE 플러그인 지원 종료(2027-04-30)**를 알리며 대체재로 **Kiro**를 지목합니다(그 공지가 적는 대상은 **IDE 플러그인**입니다).
 
-**Kiro의 구성 요소**(AWS 블로그·지식 센터 수준의 서술입니다 — 세부 플래그는 이 문서에 쓰지 않았습니다)
+**Kiro의 구성 요소**(⚠️ **AWS 공식 문서(docs) 밖의 서술**입니다 — AWS 블로그·Kiro 자체 문서 수준이라 **문항의 근거로 쓰지 않습니다**. 세부 플래그는 이 문서에 쓰지 않았습니다)
 
 | 요소 | 하는 일 | 걸리는 공식 문구 |
 |---|---|---|
@@ -421,3 +425,5 @@ SDK 재시도 기본값은 **두 문서가 다르게 적혀 있어** 둘을 구�
 25. DVA-C03 공식 시험 가이드 · 콘텐츠 도메인 1 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/developer-associate-03-domain1.html
 26. DVA-C03 범위 내 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-in-scope-services.html
 27. DVA-C03 범위 외 AWS 서비스 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/developer-associate-03/dva-03-out-of-scope-services.html
+28. Publishing large messages with Amazon SNS (토픽 속성 MaximumMessageSize · 기본 256 KiB · 최대 1 MiB) — https://docs.aws.amazon.com/sns/latest/dg/large-message-payloads.html
+29. Retries — Boto3 (standard가 기본 모드 · 최대 시도 3 · legacy는 이전 기본값) — https://docs.aws.amazon.com/boto3/latest/guide/retries.html

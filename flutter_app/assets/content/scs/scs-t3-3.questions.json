@@ -3,7 +3,7 @@
   "taskTitle": "네트워크 보안 제어 설계 및 문제 해결",
   "domain": 3,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-10",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t3-3-q1",
@@ -108,7 +108,7 @@
         "둘 다 가능합니다. 터널 두 개는 대역폭 부하 분산용이고 가상 프라이빗 게이트웨이는 여러 VPC를 동시에 함께 지원합니다",
         "터널 두 개는 부하 분산용이지만 가상 프라이빗 게이트웨이는 VPC 하나에만 연결할 수 있습니다",
         "터널 두 개는 고가용성용이고 가상 프라이빗 게이트웨이는 여러 VPC를 함께 지원합니다",
-        "공식 표현은 고가용성을 위한 터널 두 개이고, 가상 프라이빗 게이트웨이는 VPC 하나에만 연결됩니다. 여러 VPC는 Transit Gateway입니다"
+        "터널 두 개는 고가용성을 위한 것이고, 가상 프라이빗 게이트웨이는 VPC 하나에만 연결됩니다. 여러 VPC는 Transit Gateway입니다"
       ],
       "correct": 3,
       "explanation": "공식 문장이 각 VPN 연결에는 고가용성을 위해 동시에 사용할 수 있는 VPN 터널 두 개가 포함된다고 적습니다 — 부하 분산이나 대역폭 두 배가 아닙니다. 대상 게이트웨이는 둘이고 가상 프라이빗 게이트웨이는 VPC 하나에만 연결되며, 여러 VPC와 온프레미스를 잇는 허브이자 VPN 종단은 Transit Gateway입니다.",
@@ -393,26 +393,30 @@
       "difficulty": "applied",
       "stem": "재무 부서 리소스가 개발 부서 리소스에서 절대 도달할 수 없어야 한다는 거버넌스 요구를 검증하라는 과제입니다. Network Access Analyzer를 어떻게 구성하고 무엇을 고려합니까?",
       "options": [
-        "ExcludePaths에 위반 경로를 적고 MatchPaths에 정당한 예외를 적으며 상시 자동 감시가 함께 제공됩니다",
-        "MatchPaths에 위반으로 보는 경로를, ExcludePaths에 정당한 예외를 적습니다. 온디맨드 분석이라 상시 검증은 주기 실행 자동화를 둡니다",
+        "ExcludePaths에 위반으로 보는 경로를 적고 MatchPaths에 정당한 예외를 적은 뒤 분석을 시작합니다",
+        "MatchPaths에 위반으로 보는 경로를, ExcludePaths에 정당한 예외를 적고 분석을 시작합니다. 패킷을 보내지 않는 정적 분석입니다",
         "스코프를 선언하지 않고 전체 VPC를 선택하면 자동으로 정책 위반 경로를 찾아 보고합니다",
         "트래픽을 실제로 흘려 보며 판정하므로 부서별 테스트 트래픽을 미리 준비해야 합니다"
       ],
       "correct": 1,
-      "explanation": "네트워크 액세스 스코프로 네트워크 접근 요구 사항을 명세하고 MatchPaths에 분석이 찾아낼 경로 유형, 보통 정책이나 준수 위반으로 보는 경로를 적습니다. ExcludePaths에는 조사 결과에 나타나지 않게 할 정당한 예외를 적고, 조사 결과는 MatchPaths 중 하나 이상에 맞고 ExcludePaths 중 어느 것에도 맞지 않는 잠재 경로입니다. 자동 추론 기술을 써서 구성만 보고 수학적으로 판정하므로 트래픽을 흘릴 필요가 없고, 온디맨드 분석이라 상시 검증이 필요하면 주기 실행 자동화를 둡니다. 스코프는 리소스 그룹으로 태그 기반 참조를 할 수 있습니다.",
+      "explanation": "네트워크 액세스 스코프로 네트워크 접근 요구 사항을 명세하고 MatchPaths에 분석이 찾아낼 경로 유형, 보통 정책이나 준수 위반으로 보는 경로를 적습니다. ExcludePaths에는 조사 결과에 나타나지 않게 할 정당한 예외를 적고, 조사 결과는 MatchPaths 중 하나 이상에 맞고 ExcludePaths 중 어느 것에도 맞지 않는 잠재 경로입니다. 자동 추론 알고리즘으로 네트워크 구성을 정적으로 분석하므로 패킷을 보내지 않습니다. 분석은 스코프를 골라 시작할 때 실행되고 완료까지 몇 분이 걸릴 수 있습니다. 네트워크 접근 요구 사항은 리소스 ID, 리소스 유형, 리소스 태그, IP 주소 범위로 명세할 수 있습니다.",
       "wrongExplanations": {
-        "0": "두 필드의 역할이 뒤바뀌었고 상시 자동 감시가 아니라 온디맨드 분석입니다.",
+        "0": "두 필드의 역할이 뒤바뀌었습니다. MatchPaths가 찾아낼 경로이고 ExcludePaths가 제외할 경로입니다.",
         "2": "요구 사항 선언이 이 수단의 전제입니다.",
         "3": "자동 추론으로 구성만 보고 판정하므로 트래픽을 흘릴 필요가 없습니다."
       },
       "sources": [
         {
-          "title": "Network Access Scopes in Network Access Analyzer - MatchPaths와 ExcludePaths",
-          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/working-with-network-access-scopes.html"
+          "title": "What is Network Access Analyzer? - MatchPaths와 ExcludePaths",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
         },
         {
-          "title": "What is Network Access Analyzer? - 자동 추론과 분석 대상",
-          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
+          "title": "How Network Access Analyzer works - 자동 추론과 정적 분석",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/how-network-access-analyzer-works.html"
+        },
+        {
+          "title": "Getting started with Network Access Analyzer - 분석 실행과 소요 시간",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/getting-started.html"
         }
       ],
       "verified": false
@@ -443,8 +447,8 @@
           "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html"
         },
         {
-          "title": "What is Network Access Analyzer? - 자동 추론과 분석 대상",
-          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/what-is-network-access-analyzer.html"
+          "title": "How Network Access Analyzer works - 자동 추론과 지원 경로 리소스",
+          "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/how-network-access-analyzer-works.html"
         }
       ],
       "verified": false

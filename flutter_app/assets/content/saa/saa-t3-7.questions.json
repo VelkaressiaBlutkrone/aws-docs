@@ -268,7 +268,8 @@
       },
       "sources": [
         { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" },
-        { "title": "CloudFront Anycast 고정 IP 요청 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html" }
+        { "title": "CloudFront Anycast 고정 IP 요청 (공식)", "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html" },
+        { "title": "Global Accelerator 작동 방식 — 고정 IP·TCP·UDP", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works.html" }
       ],
       "verified": true
     },
@@ -292,7 +293,8 @@
         "3": "Global Accelerator는 두 개의 고정 Anycast IP(IPv4)를 제공합니다. 이 IP는 전 세계 어느 엣지에서도 동일하게 수신되며 리전에 따라 달라지지 않습니다."
       },
       "sources": [
-        { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" }
+        { "title": "AWS Global Accelerator 개발자 가이드 — 소개 (공식)", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html" },
+        { "title": "Global Accelerator 작동 방식 — 고정 IP·TCP·UDP", "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works.html" }
       ],
       "verified": true
     },

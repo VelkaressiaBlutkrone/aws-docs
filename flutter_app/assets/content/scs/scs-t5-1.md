@@ -32,7 +32,9 @@ sources:
     url: https://docs.aws.amazon.com/eks/latest/best-practices/network-security.html
   - title: AWS Client VPN client certificate revocation lists
     url: https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html
-lastVerified: 2026-11-12
+  - title: Create keys and certificates for data encryption with Amazon EMR
+    url: https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-encryption-enable.html
+lastVerified: 2026-11-17
 ---
 
 # 전송 중인 데이터 (암호화 강제·비공개 액세스·리소스 간 암호화)
@@ -226,18 +228,19 @@ Verified Access는 **VPN 없이** 기업 애플리케이션에 접근하게 하�
 
 ⚠️ 공식 권고의 기준선도 함께 기억합니다 — **AWS는 TLS 1.2를 요구하고 TLS 1.3을 권장**하며, CLI·API로 접근할 때 **FIPS 140-3 검증 모듈이 필요하면 FIPS 엔드포인트**를 씁니다.
 
-#### 3-2. Amazon EMR — 보안 구성과 인증서 두 경로
+#### 3-2. Amazon EMR — 보안 구성과 인증서 경로
 
 EMR의 전송 중 암호화는 **보안 구성(security configuration)**으로 켭니다. 그러면 EMR이 **전송 중 암호화를 지원하는 모든 오픈 소스 애플리케이션 엔드포인트**에 대해 설정을 자동으로 맞춥니다.
 
 ⚠️ **그런데 이 기능들은 오픈 소스 기능이고 애플리케이션별이며 EMR 릴리스 버전마다 다릅니다.** "EMR에서 전송 중 암호화를 켜면 모든 통신이 암호화된다"고 단정할 수 없고, 공식은 **전송 중 암호화 지원 매트릭스**를 보라고 적습니다.
 
-**TLS 인증서를 주는 방법이 둘입니다:**
+**TLS 인증서를 주는 방법은 릴리스에 따라 다릅니다** — 릴리스 **7.11.0 이상은 셋**이고 **4.8.0~7.10.0은 `.zip` 파일과 Java 클래스 둘**입니다:
 
 | 방법 | 성질 |
 |---|---|
-| **S3 버킷의 `.zip` 파일 경로** | 인증서를 모은 압축 파일을 지정합니다 |
-| **사용자 지정 인증서 공급자(Java 클래스)** | ⚠️ 개인 키를 S3에 두는 것을 금지하는 보안 정책이 있을 때의 경로입니다 |
+| **EMR이 인증서를 만들어 관리** (릴리스 7.11.0 이상) | EMR이 프라이빗 인증서를 만들고 그 **인증 기관 인증서(PEM)를 Secrets Manager**에 올려 줍니다 |
+| **S3 버킷의 `.zip` 파일 경로** | 인증서를 모은 압축 파일을 지정합니다. zip 안에 **`privateKey.pem`**이 들어갑니다 |
+| **사용자 지정 인증서 공급자(Java 클래스)** | `TLSArtifactsProvider` 인터페이스를 구현한 클래스가 아티팩트를 제공합니다. ⚠️ 개인 키를 S3에 둘 수 없는 정책에서 쓸 수 있는 경로입니다 |
 
 - ⚠️⚠️ **일부 엔드포인트는 보안 구성만으로 끝나지 않습니다** — **SASL**을 쓰는 오픈 소스 엔드포인트는 그 보안 구성에 **Kerberos 인증이 켜져 있어야** 전송 중 암호화가 동작합니다
 - 오픈 소스 구성을 직접 덮어써서 **TLS 호스트 이름 검증 끄기 · 특정 엔드포인트만 끄기 · TLS 버전과 암호 제어**를 할 수 있습니다
@@ -387,7 +390,7 @@ SageMaker AI는 기본적으로 훈련 작업을 **AWS가 관리하는 VPC**에�
 
 - 공식이 적습니다 — 보안 구성으로 전송 중 암호화를 켜면 EMR이 **지원하는 모든 오픈 소스 애플리케이션 엔드포인트**에 설정을 맞추지만, ⚠️ **일부 통신 채널은 추가 보안 구성이 필요**합니다. **SASL을 쓰는 엔드포인트는 그 EMR 클러스터 보안 구성에 Kerberos 인증이 켜져 있어야** 합니다
 - 그리고 ⚠️ 이 기능들은 **오픈 소스 기능이고 애플리케이션별이며 EMR 릴리스 버전마다 다릅니다** — 어느 엔드포인트가 덮이는지는 **전송 중 암호화 지원 매트릭스**로 확인합니다
-- 인증서를 주는 방법은 둘 — **S3 버킷의 `.zip` 파일 경로**와 **사용자 지정 인증서 공급자(Java 클래스)**입니다. "개인 키를 S3에 두지 말라"는 정책에서는 **후자**가 답입니다
+- 인증서를 주는 방법은 **S3 버킷의 `.zip` 파일 경로**와 **사용자 지정 인증서 공급자(Java 클래스)**이고, ⚠️ **릴리스 7.11.0 이상에서는 EMR이 인증서를 만들어 관리하는 경로**가 더해집니다. "개인 키를 S3에 두지 말라"는 정책에서는 **`.zip` 경로가 빠집니다** — zip 안의 `privateKey.pem`을 S3에 올려야 하기 때문입니다
 - 필요하면 오픈 소스 구성을 덮어써 **TLS 호스트 이름 검증 끄기 · 특정 엔드포인트만 끄기 · TLS 버전·암호 제어**를 할 수 있습니다
 
 ⚠️ 참고로 **EMR 7.0.0 이상**에서는 대부분의 오픈 소스 프레임워크가 **TLS 1.2 이상을 강제**합니다.
@@ -407,3 +410,4 @@ SageMaker AI는 기본적으로 훈련 작업을 **AWS가 관리하는 VPC**에�
 10. Protect Communications Between ML Compute Instances in a Distributed Training Job — `docs.aws.amazon.com/sagemaker/latest/dg/train-encrypt.html` (2026-11-09 확인)
 11. Network security - Amazon EKS Best Practices Guide — `docs.aws.amazon.com/eks/latest/best-practices/network-security.html` (2026-11-09 확인)
 12. AWS Client VPN client certificate revocation lists — `docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html` (2026-11-12 확인)
+13. Create keys and certificates for data encryption with Amazon EMR — `docs.aws.amazon.com/emr/latest/ManagementGuide/emr-encryption-enable.html` (2026-11-17 확인)

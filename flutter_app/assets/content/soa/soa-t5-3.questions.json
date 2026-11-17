@@ -25,8 +25,8 @@
       },
       "sources": [
         {
-          "title": "Route 53 프라이빗 호스팅 영역 사용",
-          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
+          "title": "프라이빗 호스팅 영역 고려 사항",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zone-private-considerations.html"
         }
       ],
       "verified": true
@@ -52,8 +52,8 @@
       },
       "sources": [
         {
-          "title": "Route 53 프라이빗 호스팅 영역 사용",
-          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-private.html"
+          "title": "프라이빗 호스팅 영역 고려 사항 — 분할 뷰 DNS",
+          "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zone-private-considerations.html"
         }
       ],
       "verified": true
@@ -101,7 +101,7 @@
       "explanation": "Alias는 Zone Apex 사용이 가능하고, Alias 쿼리에는 요금이 부과되지 않으며, 대상 AWS 리소스의 IP 변경을 Route 53이 자동으로 반영합니다.",
       "wrongExplanations": {
         "1": "임의 도메인 대상 지정은 CNAME의 특성입니다.",
-        "2": "TTL 설정 가능 여부가 핵심 차이는 아닙니다.",
+        "2": "AWS 리소스를 가리키는 Alias 레코드는 TTL을 직접 설정할 수 없습니다. 보기는 사실과 반대입니다.",
         "3": "DNSSEC은 별도 기능입니다."
       },
       "sources": [
@@ -241,8 +241,8 @@
       },
       "sources": [
         {
-          "title": "CloudFront 캐시 동작 설정",
-          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html"
+          "title": "CloudFront 캐시 동작 설정 — 경로 패턴",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesCacheBehavior.html"
         }
       ],
       "verified": true
@@ -281,15 +281,15 @@
       "difficulty": "applied",
       "stem": "배포마다 `/*` 전체 무효화를 반복하는 운영 방식의 문제와 권장 대안은?",
       "options": [
-        "잦은 전체 무효화는 비용·부하가 크므로, 파일명·쿼리에 버전을 넣어 새 객체로 취급하게 하는 방식이 권장된다",
+        "무효화는 엣지 캐시만 지워 브라우저·프록시의 옛 버전이 남을 수 있으므로, 파일명에 버전을 넣어 새 객체로 취급하게 하는 방식이 권장된다",
         "무효화는 항상 무료이므로 문제가 없다",
         "TTL을 0으로 두는 것이 가장 좋은 대안이다",
         "오리진을 S3에서 ALB로 바꾸면 해결된다"
       ],
       "correct": 0,
-      "explanation": "소수 경로 무효화는 비용이 적지만 잦은 전체 무효화는 비용과 부하가 큽니다. 운영 패턴으로는 `app.v2.js`처럼 버전 문자열을 붙여 새 객체로 인식되게 하는 방식이 권장됩니다.",
+      "explanation": "무효화는 CloudFront 엣지 캐시에서만 객체를 제거하므로, 사용자 브라우저나 중간 프록시에 캐시된 옛 버전은 만료될 때까지 남을 수 있습니다. `app.v2.js`처럼 파일명에 버전 문자열을 넣으면 그런 캐시의 영향을 받지 않고, 롤백이 쉬우며, 무효화 요금(월 1,000개 경로 초과분부터 과금, `/*`는 1개 경로로 계산)도 들지 않아 공식 문서가 권장합니다.",
       "wrongExplanations": {
-        "1": "무효화에는 비용·부하 고려가 필요합니다.",
+        "1": "무효화는 월 1,000개 경로까지만 무료이고 초과분은 과금됩니다. 요금과 별개로 브라우저·프록시에 남은 옛 버전 문제도 있습니다.",
         "2": "TTL 0은 캐시 이점을 포기하고 오리진 부하를 키웁니다.",
         "3": "오리진 종류를 바꿔도 캐시 수명 문제는 남습니다."
       },
@@ -297,6 +297,10 @@
         {
           "title": "CloudFront 파일 무효화 — 비용과 대안",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html"
+        },
+        {
+          "title": "CloudFront 파일 무효화 요금",
+          "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PayingForInvalidation.html"
         }
       ],
       "verified": true
@@ -341,7 +345,7 @@
         "리전과 무관하게 아무 곳이나 가능"
       ],
       "correct": 0,
-      "explanation": "CloudFront에 연결할 ACM 인증서는 us-east-1에서 발급해야 합니다. 다른 리전에서 발급하면 CloudFront의 인증서 선택 목록에 나타나지 않습니다. ALB·NLB·API Gateway는 리소스와 같은 리전의 인증서를 씁니다.",
+      "explanation": "CloudFront에 연결할 ACM 인증서는 us-east-1에서 발급해야 합니다. 다른 리전에서 발급하면 CloudFront의 인증서 선택 목록에 나타나지 않습니다. ALB·NLB·리전형 API Gateway는 리소스와 같은 리전의 인증서를 씁니다(엣지 최적화 API Gateway 사용자 지정 도메인은 us-east-1).",
       "wrongExplanations": {
         "1": "콘솔 리전과 무관합니다.",
         "2": "오리진 리전이 아니라 us-east-1 고정입니다.",
@@ -351,6 +355,10 @@
         {
           "title": "CloudFront 사용자 지정 SSL 인증서 요구 사항",
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html"
+        },
+        {
+          "title": "API Gateway 엣지 최적화 사용자 지정 도메인 — 인증서는 us-east-1",
+          "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-edge-optimized-custom-domain-name.html"
         }
       ],
       "verified": true
@@ -405,6 +413,10 @@
         {
           "title": "AWS Global Accelerator란 무엇인가",
           "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+        },
+        {
+          "title": "AWS Global Accelerator 구성 요소 — 고정 IP와 TCP/UDP 리스너",
+          "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-components.html"
         }
       ],
       "verified": true

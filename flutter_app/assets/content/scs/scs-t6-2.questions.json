@@ -3,7 +3,7 @@
   "taskTitle": "클라우드 리소스를 안전하고 일관성 있게 배포할 수 있는 전략 구현",
   "domain": 6,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-10",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t6-2-q1",
@@ -177,6 +177,14 @@
         {
           "title": "Tag policies - 평가 대상과 비대상",
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+        },
+        {
+          "title": "AWS global condition context keys - aws:RequestTag와 aws:TagKeys",
+          "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html"
+        },
+        {
+          "title": "Managing organization policies with AWS Organizations - 태그 정책의 정책 범주",
+          "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html"
         }
       ],
       "verified": false
@@ -215,12 +223,12 @@
       "skill": "6.2.2",
       "section": "tags",
       "difficulty": "foundational",
-      "stem": "태그 전략을 세우면서 담당자 이메일을 Owner 태그에 넣고, 같은 의미의 키를 costcenter와 CostCenter로 섞어 쓰자는 제안이 나왔습니다. 공식 서술에 맞는 판단은 무엇입니까?",
+      "stem": "태그 전략을 세우면서 담당자 이메일을 Owner 태그에 넣고, 같은 의미의 키를 costcenter와 CostCenter로 섞어 쓰자는 제안이 나왔습니다. 올바른 판단은 무엇입니까?",
       "options": [
         "이메일은 넣어도 되고 태그 키의 대소문자는 구분되지 않으므로 섞어 써도 무관합니다",
         "이메일은 넣으면 안 되지만 키의 대소문자는 구분되지 않습니다",
         "이메일은 넣어도 되고 키의 대소문자만 구분됩니다",
-        "공식이 태그에 개인 식별 정보를 저장하지 말라고 적고, 태그 키와 값은 모두 대소문자를 구분합니다"
+        "태그에는 개인 식별 정보를 저장하지 말아야 하고, 태그 키와 값은 모두 대소문자를 구분합니다"
       ],
       "correct": 3,
       "explanation": "공식이 Important로 태그에 개인 식별 정보나 기밀 또는 민감 정보를 저장하지 말라고 적습니다. AWS가 태그를 청구와 관리 서비스 제공에 쓰기 때문이고 태그는 비공개나 민감 데이터용이 아닙니다. 대소문자 쪽도 명확합니다. 태그 키와 값은 모두 대소문자를 구분하고, 다만 IAM 리소스에는 추가 검증이 있어 대소문자만 다른 키의 적용을 막습니다. 공식 권고는 대소문자만 다른 키를 쓰지 않는 것입니다. 태그를 붙이는 방법은 셋입니다. 서비스의 태그 API 작업과 Tag Editor 콘솔과 Resource Groups Tagging API입니다.",
@@ -405,6 +413,10 @@
         {
           "title": "What Is Service Catalog?",
           "url": "https://docs.aws.amazon.com/servicecatalog/latest/adminguide/introduction.html"
+        },
+        {
+          "title": "What Is AWS Control Tower? - Account Factory와 Service Catalog",
+          "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html"
         }
       ],
       "verified": false

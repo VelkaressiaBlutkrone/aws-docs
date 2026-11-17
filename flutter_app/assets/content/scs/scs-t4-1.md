@@ -36,7 +36,11 @@ sources:
     url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html
   - title: Services in Maintenance — 유지 관리 항목 목록
     url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
-lastVerified: 2026-11-09
+  - title: Enable custom identity broker access to the AWS console
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html
+  - title: Policies and permissions in AWS Identity and Access Management
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html
+lastVerified: 2026-11-17
 ---
 
 # 인증 전략 (ID 솔루션 설계·임시 자격 증명 발급·인증 문제 해결)
@@ -449,3 +453,5 @@ lastVerified: 2026-11-09
 12. Troubleshoot access denied error messages — `docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html` (2026-11-09 확인)
 13. CloudTrail record contents for management, data, and network activity events — `docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html` (2026-11-09 확인)
 14. Services in Maintenance — 유지 관리 항목 목록 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-10 확인)
+15. Enable custom identity broker access to the AWS console — `docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html` (2026-11-17 확인)
+16. Policies and permissions in AWS Identity and Access Management — `docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html` (2026-11-17 확인)

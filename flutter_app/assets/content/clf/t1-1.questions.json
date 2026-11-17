@@ -365,6 +365,10 @@
         {
           "title": "클라우드 컴퓨팅이란? — 정의와 이점 (AWS 공식)",
           "url": "https://aws.amazon.com/what-is-cloud-computing/"
+        },
+        {
+          "title": "가상화란? (AWS) — 가상화 소프트웨어로 물리 머신 한 대에서 여러 가상 머신을 동시에 실행",
+          "url": "https://aws.amazon.com/what-is/virtualization/"
         }
       ],
       "verified": true

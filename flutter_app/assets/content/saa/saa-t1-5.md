@@ -38,7 +38,7 @@ sources:
     url: https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
   - title: RDS Blue/Green 배포 TargetResourceConfiguration(green 암호화 TargetKmsKeyId) (공식 API)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
-lastVerified: 2026-10-28
+lastVerified: 2026-11-17
 ---
 
 # 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스
@@ -239,10 +239,10 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다. 대신 **데�
 
 > **Macie vs Inspector**: Macie = S3 데이터 내용(민감정보), Inspector = EC2·컨테이너·Lambda 취약점(CVE). 혼동 주의.
 
-> 🧠 원리: 왜 Macie는 규칙 기반이 아닌 머신러닝으로 민감 데이터를 탐지할까요?
+> 🧠 원리: 왜 Macie는 패턴 매칭에 머신러닝을 함께 써서 민감 데이터를 탐지할까요?
 > PII는 신용카드 16자리 같은 고정 패턴도 있지만, 이름 옆 숫자가 생년월일인지 계좌번호인지는 맥락 없이 정규식으로 구별하기 어렵습니다.
 > ML 모델은 공존하는 필드·문서 구조·컨텍스트를 종합해 민감도를 평가하므로, 오탐을 줄이면서 변형된 PII 패턴도 탐지할 수 있습니다.
-> 규칙만 쓰면 새로운 PII 형식마다 수동 업데이트가 필요하지만, ML 모델은 재학습으로 커버리지를 확장하고 AWS가 모델을 관리합니다.
+> 그래서 Macie의 관리형 데이터 식별자는 머신러닝과 패턴 매칭을 함께 쓰고 AWS가 관리하며, 조직 고유의 형식은 정규식 기반 사용자 정의 데이터 식별자로 보탭니다.
 
 ---
 
@@ -354,7 +354,7 @@ CloudFront 배포에 사용하는 ACM 인증서는 **us-east-1(버지니아 북�
 
 <details><summary>정답 보기</summary>
 
-**Amazon Macie**입니다. Macie는 머신러닝을 사용해 S3 버킷을 스캔하고 PII(개인 식별 정보)를 자동 탐지합니다. Inspector는 EC2·컨테이너·Lambda의 소프트웨어 취약점(CVE)을 스캔하는 서비스로, 데이터 내용 분류에는 적합하지 않습니다.
+**Amazon Macie**입니다. Macie는 머신러닝과 패턴 매칭을 사용해 S3 버킷을 스캔하고 PII(개인 식별 정보)를 자동 탐지합니다. Inspector는 EC2·컨테이너·Lambda의 소프트웨어 취약점(CVE)을 스캔하는 서비스로, 데이터 내용 분류에는 적합하지 않습니다.
 </details>
 
 ---

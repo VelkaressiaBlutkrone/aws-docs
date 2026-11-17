@@ -26,7 +26,7 @@ sources:
     url: https://aws.amazon.com/certificate-manager/pricing/
   - title: RDS Blue/Green 배포 TargetResourceConfiguration — green 암호화는 TargetKmsKeyId (공식 API)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 데이터·인프라 보호 — KMS·암호화·Secrets Manager·ACM
@@ -171,37 +171,38 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 
 | 항목 | **Secrets Manager** | **SSM Parameter Store** |
 |---|---|---|
-| **자동 교체(Rotation)** | **내장 지원**(Lambda 기반, RDS/Aurora/Redshift 등 통합) | **없음**(직접 구현해야) |
+| **자동 교체(Rotation)** | **내장 지원**(관리형 교체 또는 Lambda 함수 교체, RDS/Aurora/Redshift 등 통합) | **없음**(직접 구현해야) |
 | **암호화** | KMS로 암호화 | SecureString은 KMS로 암호화 |
 | **비용** | 시크릿당 + API 호출 과금 | 표준 파라미터 **무료**(고급은 유료) |
 | **주 용도** | DB 자격증명·API 키 등 **교체가 필요한 시크릿** | 설정값·구성·시크릿(교체 불요), 환경 변수 |
 
 > **선택 규칙**: "자동 교체가 필요하다"·"RDS 자격증명을 주기적으로 바꾼다" → **Secrets Manager**. "단순 구성값/교체 불요"이고 비용을 아끼려면 → **Parameter Store(SecureString)**. Parameter Store는 Secrets Manager 시크릿을 참조할 수도 있습니다.
 
-> 🧠 원리: 왜 Secrets Manager의 자동 교체는 Lambda를 통해 구현될까요?
+> 🧠 원리: 왜 Secrets Manager의 자동 교체는 값만 바꾸지 않고 별도 교체 절차(관리형 교체·Lambda 함수)로 구현될까요?
 > 시크릿 교체는 단순히 새 값을 생성하는 것을 넘어, DB에 새 비밀번호를 실제로 적용하고 연결 테스트까지 완료해야 교체가 성공입니다.
-> 이 교체 로직은 서비스마다 다른 API·프로토콜·롤오버 순서를 요구하므로, Secrets Manager 자체에 하드코딩하기보다 Lambda 함수로 분리해 각 서비스별 교체 절차를 독립적으로 구현할 수 있습니다.
-> RDS·Aurora·Redshift는 AWS가 제공하는 Lambda 템플릿이 있어 별도 구현 없이 통합되며, 커스텀 서비스는 자체 Lambda를 작성해 동일한 교체 흐름에 연결할 수 있습니다.
+> 이 교체 로직은 서비스마다 다른 API·프로토콜·롤오버 순서를 요구하므로, 교체 방식이 둘로 나뉩니다 — 서비스가 직접 관리하는 시크릿은 **Lambda 함수를 쓰지 않는 관리형 교체**를, 그 밖의 시크릿은 **Lambda 함수에 의한 교체**를 씁니다.
+> Lambda 함수 교체에서도 RDS·Aurora·Redshift 등은 AWS가 제공하는 교체 함수 템플릿이 있고, 커스텀 서비스는 자체 Lambda를 작성해 동일한 교체 흐름에 연결할 수 있습니다.
 
 ### 7) ACM — 인증서 발급·자동 갱신·리전 제약
 
 > 공식 정의: **"공인·사설 SSL/TLS 인증서를 생성·저장·갱신하는 서비스."**
 
-- **공인 인증서**: ACM과 **통합 서비스**(ELB·CloudFront·API Gateway 등)에 쓰는 공인 인증서는 **추가 비용 없이** 발급되고, ACM이 직접 발급한 경우 **만료 전 관리형 갱신**이 이뤄집니다(DNS 검증이면 완전 자동). 단 **내보내기 가능(exportable) 공인 인증서는 유료**로, 발급·갱신 시 표준 FQDN **$7**·와일드카드 **$79**가 청구됩니다(요금 페이지 기준).
+- **공인 인증서**: ACM과 **통합 서비스**(ELB·CloudFront·API Gateway 등)에 쓰는 공인 인증서는 **추가 비용 없이** 발급되고, ACM이 직접 발급한 경우 **만료 전 관리형 갱신**이 이뤄집니다(DNS 검증이고 인증서가 AWS 서비스에서 사용 중이면 자동). 단 **내보내기 가능(exportable) 공인 인증서는 유료**로, 발급·갱신 시 표준 FQDN **$7**·와일드카드 **$79**가 청구됩니다(요금 페이지 기준).
 - **사설 인증서**: **ACM Private CA(AWS Private CA)**로 내부용 사설 인증서 발급.
 - **가져온 인증서**: 외부 CA 인증서를 가져올 수 있으나 **자동 갱신은 미지원**.
 
 | 서비스 | 인증서 리전 |
 |---|---|
 | **Amazon CloudFront** | **반드시 us-east-1(버지니아 북부)** |
-| ALB·NLB·API Gateway | 해당 리소스와 **같은 리전** |
+| ALB·NLB·리전형 API Gateway | 해당 리소스와 **같은 리전** |
+| 엣지 최적화 API Gateway 사용자 지정 도메인 | **us-east-1** |
 
 > CloudFront는 글로벌 엣지 서비스지만 인증서는 **us-east-1에서만** 연결됩니다. 다른 리전에서 발급하면 CloudFront 배포 목록에 나타나지 않습니다.
 
 > 🧠 원리: 왜 ACM 공인 인증서는 만료 전에 자동으로 갱신되지만 가져온 인증서는 갱신되지 않을까요?
-> ACM이 발급한 인증서는 ACM이 키 자료를 직접 보유하므로, 새 인증서를 만들어 엔드포인트에 적용하는 전체 갱신 과정을 서비스가 완전히 통제할 수 있습니다.
-> 반면 외부 CA가 발급한 가져온 인증서는 개인 키가 ACM 외부에 있어, ACM이 유효성을 재검증하거나 새 키 쌍을 갱신할 권한이 없습니다.
-> 이 소유권 차이가 자동 갱신 가능 여부를 가르며, 가져온 인증서는 만료일을 직접 추적해 교체하는 운영 프로세스가 필요합니다.
+> ACM이 발급한 인증서는 ACM이 발급 주체이므로, 도메인 검증을 다시 확인하고 새 인증서를 만들어 연결된 서비스에 적용하는 갱신 과정을 서비스가 처리할 수 있습니다.
+> 반면 가져온 인증서에는 ACM이 관리형 갱신을 제공하지 않습니다. 갱신하려면 인증서 발급자에게서 새 인증서를 받아 다시 가져와야 합니다(가져올 때 개인 키도 ACM에 함께 제공하므로, 키의 위치가 이유는 아닙니다).
+> 이 발급 주체의 차이가 자동 갱신 가능 여부를 가르며, 가져온 인증서는 만료일을 직접 추적해 교체하는 운영 프로세스가 필요합니다.
 
 ### 8) S3 접근 보호 — 버킷 정책·퍼블릭 차단·VPC 엔드포인트
 
@@ -227,7 +228,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 - **SSE-S3**(AWS 관리·간단) / **SSE-KMS**(키 정책·감사·버킷 키로 비용 절감) / **SSE-C**(고객 키 제공·AWS가 저장 안 함·분실 시 복구 불가).
 - **RDS 암호화는 생성 후 직접 전환 불가** → 스냅샷 → 암호화 복사 → 복원.
 - **Secrets Manager = 자동 교체 내장**(RDS 통합), **Parameter Store = 자동 교체 없음**(SecureString은 무료).
-- **ACM 공인 인증서는 통합 서비스에 쓰면 추가 비용 없음 + 관리형 갱신**(내보내기 가능 인증서는 유료). **CloudFront 인증서는 us-east-1**, ALB/API GW는 같은 리전.
+- **ACM 공인 인증서는 통합 서비스에 쓰면 추가 비용 없음 + 관리형 갱신**(내보내기 가능 인증서는 유료). **CloudFront 인증서는 us-east-1**, ALB·리전형 API GW는 같은 리전(엣지 최적화 API GW 사용자 지정 도메인은 us-east-1).
 - **S3 보호**: 버킷 정책 + **퍼블릭 액세스 차단(마스터 스위치)** + VPC 엔드포인트 정책. `aws:SecureTransport`로 HTTPS 강제.
 - **CMK 접근은 키 정책이 출발점**: 명시 허용이 없으면 암시적 거부. 계정 주체(`:root`) 문장은 **IAM 정책으로의 위임** 선언이며, 교차 계정은 키 정책과 상대 계정 IAM 정책 **양쪽** 허용이 필요하다.
 
@@ -248,7 +249,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
    (원리: §4 — RDS 암호화는 스토리지 볼륨 초기화 시점에 결정되므로 **기존 인스턴스를 제자리에서 전환할 수는 없고** 새로 암호화된 볼륨으로 데이터를 옮기는 경로를 거쳐야 한다. 가장 기본적인 절차가 스냅샷 → 암호화 복사 → 복원이고, **Blue/Green 배포에서 green 리소스에 `TargetKmsKeyId`를 지정하는 경로**도 공식 지원된다.)
 
 5. **"Parameter Store도 시크릿을 자동 교체한다."** → 아닙니다. **자동 교체는 Secrets Manager의 기능**입니다. Parameter Store에는 내장 교체가 없어 직접 구현해야 합니다.
-   (원리: §6 — 교체는 새 값 생성·DB 적용·테스트를 포함하는 서비스별 로직이 필요해 Secrets Manager가 Lambda로 이를 위임하는 구조를 갖춘다.)
+   (원리: §6 — 교체는 새 값 생성·DB 적용·테스트를 포함하는 서비스별 로직이 필요해 Secrets Manager가 관리형 교체나 Lambda 교체 함수로 이를 처리하는 구조를 갖춘다.)
 
 6. **"CloudFront 인증서를 서비스 리전(예: 서울)에서 발급하면 된다."** → CloudFront 인증서는 반드시 **us-east-1**에서 발급해야 연결됩니다.
    (원리: §7 — CloudFront는 ACM 인증서를 us-east-1에서만 조회하므로, 다른 리전에서 발급한 인증서는 연결 목록에 표시되지 않는다.)
@@ -276,7 +277,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 
 <details><summary>정답 보기</summary>
 
-**AWS Secrets Manager**입니다. Secrets Manager는 Lambda 기반의 **자동 교체**를 내장하고 있으며 RDS·Aurora·Redshift 등과 통합되어 비밀번호를 주기적으로 교체하고 시크릿을 갱신합니다. 애플리케이션은 Secrets Manager에서 최신 값을 조회하면 됩니다. Parameter Store는 자동 교체 기능이 없어 적합하지 않습니다.
+**AWS Secrets Manager**입니다. Secrets Manager는 **자동 교체**를 내장하고 있으며(관리형 교체 또는 Lambda 함수 교체) RDS·Aurora·Redshift 등과 통합되어 비밀번호를 주기적으로 교체하고 시크릿을 갱신합니다. 애플리케이션은 Secrets Manager에서 최신 값을 조회하면 됩니다. Parameter Store는 자동 교체 기능이 없어 적합하지 않습니다.
 </details>
 
 **Q3.** S3에 저장하는 객체를 KMS 키로 암호화하되, 누가 언제 복호화했는지 CloudTrail로 감사하고 객체별 KMS 호출 비용을 줄이고 싶습니다. 어떤 암호화 방식과 옵션을 쓰나요?
@@ -290,7 +291,7 @@ KMS는 대용량 데이터를 직접 암호화하지 않습니다(직접 암호�
 
 <details><summary>정답 보기</summary>
 
-CloudFront에 연결하는 ACM 인증서는 **반드시 us-east-1(버지니아 북부)에서 발급**해야 합니다. 서울 리전 인증서는 CloudFront에 연결할 수 없어 목록에 나타나지 않습니다. us-east-1에서 동일 도메인 인증서를 새로 요청·검증한 뒤 CloudFront 배포에 연결하면 됩니다. ALB·API Gateway는 반대로 리소스와 같은 리전의 인증서를 씁니다.
+CloudFront에 연결하는 ACM 인증서는 **반드시 us-east-1(버지니아 북부)에서 발급**해야 합니다. 서울 리전 인증서는 CloudFront에 연결할 수 없어 목록에 나타나지 않습니다. us-east-1에서 동일 도메인 인증서를 새로 요청·검증한 뒤 CloudFront 배포에 연결하면 됩니다. ALB·리전형 API Gateway는 반대로 리소스와 같은 리전의 인증서를 씁니다(엣지 최적화 API Gateway 사용자 지정 도메인은 CloudFront처럼 us-east-1).
 </details>
 
 **Q5 (원리).** 왜 S3에 객체를 대량 저장할 때 SSE-KMS를 쓰면서 버킷 키(S3 Bucket Key)를 켜지 않으면 비용 문제가 생길 수 있나요?
@@ -316,3 +317,5 @@ SSE-KMS 기본 구성에서는 객체 1개를 쓰거나 읽을 때마다 KMS API
 8. AWS Certificate Manager 요금(내보내기 가능 인증서 $7·$79) — https://aws.amazon.com/certificate-manager/pricing/
 
 > 📝 **2026-10-19 정정**: ① 키 정책을 IAM 정책과의 교집합으로 설명했던 §1·시험 포인트·함정 7을 공식 구조로 고쳤습니다 — 키 정책의 계정 주체 문장은 **IAM 정책으로의 위임** 선언이고, 명시 허용이 없으면 **암시적 거부**입니다(근거 7번). ② ACM 공인 인증서를 무료로 단정했던 서술을 **통합 서비스 사용 시 추가 비용 없음 / 내보내기 가능 인증서는 유료**로 정정했습니다(근거 8번).
+
+> 📝 **2026-11-17 정정**: 가져온 인증서가 자동 갱신되지 않는 이유를 공식 서술에 맞췄고(https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html), Secrets Manager 교체의 두 형태(관리형 교체 · Lambda 함수 교체)를 구분했으며(https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html), 엣지 최적화 API Gateway 사용자 지정 도메인의 인증서 리전과 관리형 갱신 조건을 더했습니다(https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-edge-optimized-custom-domain-name.html · https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html).

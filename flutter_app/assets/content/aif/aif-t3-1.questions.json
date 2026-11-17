@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
         },
         {
-          "title": "Choosing a generative AI service — FM 선택 시 고려할 결정적 요소(컨텍스트 윈도)",
+          "title": "Choosing a generative AI service — FM 선택 요소의 Context window 항목",
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html"
         }
       ],
@@ -51,7 +51,7 @@
         "모델 복잡도가 높을수록 미세 조정 지원이 보장되므로 파라미터가 더 많은 모델로 바꾸면 해결됩니다"
       ],
       "correct": 0,
-      "explanation": "공식 사양표는 모델마다 미세 조정 지원 여부를 따로 싣고, Amazon Nova 이해 모델 네 종 가운데 가장 유능한 모델이 미세 조정을 지원하지 않음으로 적힌 사례가 그 표에 있습니다. 공식 의사 결정 가이드도 미세 조정과 지속적인 사전 훈련 역량을 FM 선택의 결정적 요소로 들기 때문에, 사용자 지정 가능성은 모델을 고르는 단계에서 함께 확인해야 하는 축입니다.",
+      "explanation": "공식 사양표는 모델마다 미세 조정 지원 여부를 따로 싣고, Amazon Nova 이해 모델 네 종 가운데 가장 유능한 모델이 미세 조정을 지원하지 않음으로 적힌 사례가 그 표에 있습니다. 공식 의사 결정 가이드도 FM 선택 요소로 사용자 지정 지원, 곧 필요한 사용자 지정 방법을 그 모델이 지원하는지를 들기 때문에, 사용자 지정 가능성은 모델을 고르는 단계에서 함께 확인해야 하는 축입니다.",
       "wrongExplanations": {
         "1": "사양표는 모델별로 미세 조정 지원 여부를 다르게 적습니다. 모든 모델이 미세 조정을 지원한다는 전제가 틀렸습니다.",
         "2": "추론 파라미터는 추론 시점에 응답 생성에 영향을 줄 뿐 모델 가중치를 바꾸지 않습니다. 가중치를 바꾸는 쪽은 미세 조정이나 지속적인 사전 훈련입니다.",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html"
         },
         {
-          "title": "Choosing a generative AI service — 미세 조정과 지속적인 사전 훈련 역량을 FM 선택 요소로 든다",
+          "title": "Choosing a generative AI service — FM 선택 요소의 Customization support 항목",
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html"
         }
       ],
@@ -259,19 +259,19 @@
       "options": [
         "전용 벡터 데이터베이스를 새로 도입하고 카탈로그 데이터를 그쪽으로 이전합니다",
         "그래프 알고리즘과 벡터 검색을 결합한 Amazon Neptune Analytics로 옮깁니다",
-        "Amazon Aurora PostgreSQL에서 pgvector 확장으로 벡터 검색을 더합니다 — 공식은 이미 관계형 데이터베이스, 특히 PostgreSQL에 투자한 경우의 이상적인 선택지로 적습니다",
+        "기존 Aurora PostgreSQL에 pgvector로 벡터 검색을 더합니다 — SQL과 벡터 질의를 함께 쓰는 팀에 맞습니다",
         "벡터 검색은 검색 엔진에서만 제공되므로 Amazon OpenSearch Service로 전면 교체합니다"
       ],
       "correct": 2,
-      "explanation": "공식 벡터 데이터베이스 안내는 Amazon Aurora PostgreSQL-Compatible Edition과 Amazon RDS for PostgreSQL을 pgvector 오픈 소스 벡터 검색 확장을 갖춘 완전 관리형 관계형 데이터베이스로 함께 적고, 이미 관계형 데이터베이스 특히 PostgreSQL에 투자했다면 이상적인 선택지라고 명시합니다. 의사 결정 가이드는 관점도 교정해 줍니다 — AWS에서 벡터 검색은 별도로 도입해야 하는 데이터베이스가 아니라 이미 운영 중인 많은 데이터베이스와 서비스에 더할 수 있는 기능입니다.",
+      "explanation": "공식 의사 결정 가이드는 Amazon Aurora PostgreSQL(pgvector)을 관계형 데이터베이스 안에서 pgvector로 하는 SQL 네이티브 벡터 검색으로 적고, 적합 대상을 PostgreSQL 전문성이 있고 SQL과 벡터 질의를 함께 써야 하는 팀으로 적습니다. 같은 가이드는 관점도 교정해 줍니다 — AWS에서 벡터 검색은 별도로 도입해야 하는 데이터베이스가 아니라 이미 운영 중인 많은 데이터베이스와 서비스에 더할 수 있는 기능입니다.",
       "wrongExplanations": {
         "0": "공식 서술과 어긋납니다. 데이터가 이미 있는 저장소에 벡터 검색을 더하면 임베딩을 기존 데이터 옆에 둘 수 있다고 공식이 적습니다.",
-        "1": "Neptune Analytics는 엔터티 사이의 관계를 사용하는 GraphRAG 용례와 대규모 데이터셋에 대한 더 높은 수준의 이해가 필요한 질의에 이상적인 선택지입니다. 지문의 요구는 관계형 질의와 유사도 검색을 함께 쓰는 쪽입니다.",
-        "3": "OpenSearch Service는 벡터 인덱스를 수평 확장해야 할 때와 하이브리드 검색에 적합한 선택지입니다. 벡터 검색이 검색 엔진에서만 제공된다는 전제가 틀렸습니다."
+        "1": "Neptune Analytics는 그래프와 벡터 검색을 결합해 엔터티 사이의 관계를 사용하는 GraphRAG 검색에 맞는 선택지입니다. 지문의 요구는 관계형 질의와 유사도 검색을 함께 쓰는 쪽입니다.",
+        "3": "OpenSearch는 벡터 검색과 하이브리드 검색(어휘 검색과 의미 검색의 결합)을 제공하는 선택지입니다. 벡터 검색이 검색 엔진에서만 제공된다는 전제가 틀렸습니다."
       },
       "sources": [
         {
-          "title": "Choosing a vector database for your generative AI applications — 벡터 검색은 기존 저장소에 더하는 기능이다",
+          "title": "Choosing a vector database for your generative AI applications — 벡터 검색은 기존 저장소에 더하는 기능이고 Aurora PostgreSQL(pgvector)의 적합 대상은 PostgreSQL 전문성이 있는 팀이다",
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html"
         }
       ],
@@ -286,20 +286,20 @@
       "stem": "Customer-managed 지식 기반을 만들면서 벡터 저장소를 고릅니다. 답이 엔터티 사이의 관계를 따라가야 나오는 질의가 많습니다. 공식 문서를 근거로 고를 저장소는 무엇입니까?",
       "options": [
         "Amazon MemoryDB — 밀리초 한 자릿수의 벡터 검색을 제공하므로 관계를 따라가는 질의에도 가장 적합합니다",
-        "Amazon Neptune — 공식이 지식 기반 벡터 저장소 예로 드는 그래프 데이터베이스이고, 그래프 알고리즘과 벡터 검색을 결합해 엔터티 관계를 사용하는 GraphRAG 검색에 이상적입니다",
+        "Amazon Neptune — 공식이 지식 기반 벡터 저장소 예로 드는 그래프 데이터베이스이고, 그래프와 벡터 검색을 결합해 엔터티 관계를 사용하는 GraphRAG 검색을 제공합니다",
         "Amazon Aurora PostgreSQL — pgvector 확장이 그래프 순회를 SQL로 대신하므로 관계 질의의 기본 선택지입니다",
         "Amazon OpenSearch Service — 하이브리드 검색이 키워드와 의미를 결합하므로 관계 질의까지 덮습니다"
       ],
       "correct": 1,
-      "explanation": "공식 벡터 데이터베이스 안내는 Amazon Neptune Analytics를 그래프 알고리즘과 벡터 검색을 결합한 분석 그래프 데이터베이스 엔진으로 적고, 그래프와 RAG를 결합하는 GraphRAG 용례와 대규모 데이터셋에 대한 더 높은 수준의 이해가 필요한 질의에 이상적이라고 명시합니다. 공식 지식 기반 문서도 Customer-managed 구성의 벡터 저장소 예로 Amazon OpenSearch Serverless·Amazon Aurora·Amazon Neptune을 듭니다. 시험 가이드는 이 항목을 Amazon Neptune으로만 적지만, 그래프와 벡터를 결합해 지식 기반이 지원하는 엔진의 정확한 이름은 Amazon Neptune Analytics입니다.",
+      "explanation": "공식 의사 결정 가이드는 Amazon Neptune Analytics를 그래프와 벡터 검색을 결합한 서비스로 적고, 적합한 용례를 GraphRAG, 곧 엔터티 관계를 사용하는 검색으로 적습니다. 공식 지식 기반 문서도 Customer-managed 구성의 벡터 저장소 예로 Amazon OpenSearch Serverless·Amazon Aurora·Amazon Neptune을 듭니다. 시험 가이드는 이 항목을 Amazon Neptune으로만 적지만, 그래프와 벡터를 결합해 지식 기반이 지원하는 엔진의 정확한 이름은 Amazon Neptune Analytics입니다.",
       "wrongExplanations": {
         "0": "Amazon MemoryDB는 벡터 검색을 제공하지만, 공식 의사 결정 가이드의 비교 표에서 Amazon Bedrock Knowledge Bases 지원 열이 지원하지 않음입니다. 공식이 관계 기반 검색에 드는 이름은 그래프 쪽입니다.",
-        "2": "Aurora PostgreSQL은 pgvector로 SQL과 벡터 질의를 함께 쓰는 선택지이고 이미 관계형 데이터베이스에 투자한 경우에 이상적입니다. 그래프 순회가 강점으로 적히지는 않습니다.",
-        "3": "OpenSearch Service는 어휘 검색과 의미 검색을 결합한 하이브리드 검색과 벡터 인덱스의 수평 확장이 강점입니다. 엔터티 관계를 따라가는 검색은 그래프 데이터베이스 쪽입니다."
+        "2": "Aurora PostgreSQL은 pgvector로 SQL과 벡터 질의를 함께 쓰는 선택지이고 공식이 적는 적합 대상은 PostgreSQL 전문성이 있는 팀입니다. 그래프 순회가 강점으로 적히지는 않습니다.",
+        "3": "OpenSearch는 어휘 검색과 의미 검색을 결합한 하이브리드 검색이 강점입니다. 엔터티 관계를 따라가는 검색은 그래프 데이터베이스 쪽입니다."
       },
       "sources": [
         {
-          "title": "Choosing a vector database for your generative AI applications — 저장소별 Amazon Bedrock Knowledge Bases 지원 비교 표",
+          "title": "Choosing a vector database for your generative AI applications — Neptune Analytics의 GraphRAG 용례와 저장소별 Amazon Bedrock Knowledge Bases 지원 비교 표",
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/vector-database-guide.html"
         },
         {
@@ -369,6 +369,10 @@
         {
           "title": "Customize your model to improve its performance for your use case — 훈련 과금 축과 월 저장 과금",
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+        },
+        {
+          "title": "Prerequisites for model distillation — 교사 모델은 학생 모델보다 현저히 크고 유능한 모델로 고른다",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prequisites-model-distillation.html"
         }
       ],
       "verified": false

@@ -341,6 +341,10 @@
         {
           "title": "Evaluators and evaluations (Amazon CloudWatch) — 내장 평가자는 도메인 특화 실패를 놓친다",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/omni-agents-evaluators.html"
+        },
+        {
+          "title": "Built-in evaluators (Amazon Bedrock AgentCore) — 내장 평가자의 구성은 평가자 모델과 프롬프트 템플릿을 포함해 수정할 수 없다",
+          "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/built-in-evaluators-overview.html"
         }
       ],
       "verified": false

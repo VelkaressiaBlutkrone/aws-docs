@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-17
 ---
 
 # 프로그래밍 개념 (코드 최적화·Lambda·IaC·CI/CD)
@@ -79,7 +79,7 @@ lastVerified: 2026-10-19
 | 큰 테이블 조인이 느리고 셔플이 큼 | 조인 전 **행·열 제거** → 작은 쪽이 메모리에 들어가면 **브로드캐스트 해시 조인** · 같은 키로 자주 조인하면 **버킷팅** · 반복 사용 DataFrame은 `cache()` | Glue·EMR(Spark) |
 | 소수 태스크만 매우 오래 걸림(스큐) | **AQE**(Glue 4.0+ 기본 활성: 파티션 병합·조인 전환·스큐 조인 분할) · **카디널리티 높은 키/복합 키** | Glue·EMR(Spark) |
 | Athena가 너무 많이 스캔함 | **파티션 키 설계**(너무 많으면 작은 파일 조각, 없으면 과다 스캔) + 컬럼너·정렬 | Athena |
-| Redshift 적재가 느림 | **여러 파일을 한 COPY**로 병렬 적재, 크기 1 MB~1 GB·개수는 슬라이스 수의 배수(Serverless는 **128의 배수**) | Redshift |
+| Redshift 적재가 느림 | **여러 파일을 한 COPY**로 병렬 적재, 크기 1 MB~1 GB·개수는 슬라이스 수의 배수 | Redshift |
 | 호출마다 연결·클라이언트를 새로 만듦 | SDK 클라이언트·DB 연결을 **핸들러 밖**에서 초기화, 정적 자산은 `/tmp` 캐시, **keep-alive** | Lambda |
 
 > 🧠 원리: 왜 "DynamicFrame 조인 대신 DataFrame·Spark SQL"이 성능 조언이 될까요?
@@ -214,7 +214,7 @@ lastVerified: 2026-10-19
 
 ## 🧪 자가 점검
 
-> 학습용 자가 점검입니다. (문항 뱅크 `dea-t1-4.questions.json` — 사람 검수 전이라 사이트 비노출)
+> 학습용 자가 점검입니다.
 
 **Q1.** 한 Lambda 함수가 트래픽을 몰아 쓰면서 같은 계정의 다른 함수들이 스로틀링된다. 추가 비용 없이 막는 방법은?
 
@@ -264,7 +264,7 @@ lastVerified: 2026-10-19
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-19)
 
 1. Reading input files in larger groups (AWS Glue) — https://docs.aws.amazon.com/glue/latest/dg/grouping-input-files.html
 2. Optimizing reads with pushdown in AWS Glue ETL — https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-pushdown.html
@@ -306,3 +306,4 @@ lastVerified: 2026-10-19
 38. Getting Started with Amazon Neptune — https://aws.amazon.com/neptune/getting-started/
 39. WITH clause (Amazon Redshift SQL reference) — https://docs.aws.amazon.com/redshift/latest/dg/r_WITH_clause.html
 40. DEA-C01 공식 시험 가이드 도메인 1 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
+41. AWS CDK bootstrapping — https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html

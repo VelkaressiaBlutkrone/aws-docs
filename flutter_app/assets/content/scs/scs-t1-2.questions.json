@@ -3,7 +3,7 @@
   "taskTitle": "로깅 솔루션 설계 및 구현",
   "domain": 1,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-09",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t1-2-q1",
@@ -351,8 +351,16 @@
       },
       "sources": [
         {
-          "title": "Analyzing log data with CloudWatch Logs Insights — 분석 수단의 층",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
+          "title": "What is Amazon OpenSearch Service? - 검색·분석 엔진과 로그 분석 용례",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html"
+        },
+        {
+          "title": "What is Amazon Managed Grafana? - 여러 소스의 데이터 시각화",
+          "url": "https://docs.aws.amazon.com/grafana/latest/userguide/what-is-Amazon-Managed-Service-Grafana.html"
+        },
+        {
+          "title": "What is Amazon Security Lake? - Lambda가 맡는 추출·변환·적재",
+          "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html"
         }
       ],
       "verified": false
@@ -365,16 +373,16 @@
       "difficulty": "applied",
       "stem": "여러 벤더의 보안 로그가 각기 다른 형식으로 들어오고 있어 \"하나의 스키마로 맞춰 함께 질의하고 싶다\"는 요구가 있습니다. 이 요구에 가장 직접 답하는 접근과 Security Lake의 역할을 올바르게 설명한 것은 무엇입니까?",
       "options": [
-        "OCSF 정규화가 직접 답입니다. Security Lake가 수집 데이터를 OCSF와 Parquet으로 변환해 쌓고, OpenSearch Service와 Managed Grafana 묶음은 그것을 검색하고 시각화하는 쪽입니다",
+        "OCSF 정규화가 직접 답입니다. Security Lake가 수집 데이터를 OCSF와 Parquet으로 변환해 쌓고, 사용자 지정 소스는 보내기 전에 직접 OCSF로 변환해야 합니다",
         "Managed Grafana에 벤더별 데이터 소스를 각각 연결하면 하나의 대시보드에서 함께 보이므로, 그것이 정규화이고 스키마 통일은 필요하지 않습니다",
         "Security Lake와 OpenSearch 묶음은 경쟁 관계이므로 하나를 골라야 하고, 여러 벤더 로그를 하나의 스키마로 맞추는 일에는 OpenSearch만 쓸 수 있습니다",
         "벤더 로그는 ASFF로 변환해야 하며, Security Lake가 ASFF 스키마로 데이터 레이크를 만들어 함께 질의하게 해 줍니다"
       ],
       "correct": 0,
-      "explanation": "여러 벤더의 로그 형식을 하나로 맞추는 요구에는 OCSF 정규화가 먼저 떠올라야 합니다. Security Lake는 수집 데이터를 Parquet 형식과 OCSF 스키마로 변환해 쌓는 쪽이고, OpenSearch Service와 Managed Grafana 묶음은 쌓인 것을 검색하고 시각화하거나 Security Lake가 기본 지원하지 않는 형식을 변환하는 쪽입니다. 둘은 경쟁 관계가 아닙니다.",
+      "explanation": "여러 벤더의 로그 형식을 하나로 맞추는 요구에는 OCSF 정규화가 먼저 떠올라야 합니다. Security Lake는 수집 데이터를 Parquet 형식과 OCSF 스키마로 변환해 쌓는 쪽이고, 다른 AWS 서비스와 서드파티 서비스가 그 데이터를 구독해 분석합니다. 기본 지원하지 않는 사용자 지정 소스는 보내기 전에 로그를 OCSF와 Parquet으로 직접 변환해야 합니다. 검색 엔진이나 시각화 도구는 그렇게 쌓인 데이터를 쓰는 쪽이라 경쟁 관계가 아닙니다.",
       "wrongExplanations": {
         "1": "데이터 소스를 각각 연결하는 것은 시각화 층의 일이고 스키마 정규화가 아닙니다.",
-        "2": "두 쪽은 경쟁 관계가 아닙니다. Security Lake가 정규화해 쌓고 OpenSearch 묶음이 검색과 시각화를 맡는 구성이 공식 서술입니다.",
+        "2": "두 쪽은 경쟁 관계가 아닙니다. Security Lake는 정규화해 쌓는 쪽이고 OpenSearch Service는 그렇게 쌓인 데이터를 검색하고 분석하는 엔진입니다.",
         "3": "Security Lake가 쓰는 스키마는 OCSF입니다. ASFF는 Security Hub CSPM이 조사 결과를 담는 형식입니다."
       },
       "sources": [
@@ -426,7 +434,7 @@
       "stem": "Route 53 Resolver 쿼리 로깅을 켜고 \"각 인스턴스가 특정 도메인을 하루에 몇 번 조회했는지\"를 집계하는 리포트를 만들려 합니다. 이 설계에 대한 평가로 올바른 것은 무엇입니까?",
       "options": [
         "성립합니다. Resolver 쿼리 로그는 모든 질의를 빠짐없이 기록하므로 횟수를 그대로 셀 수 있습니다",
-        "성립하지 않습니다. 공식은 고유 질의만 기록한다고 적고 캐시에서 응답한 질의는 기록되지 않으므로 조회 횟수를 근거로 삼는 설계는 틀립니다",
+        "성립하지 않습니다. 쿼리 로그는 고유 질의만 기록하고 캐시에서 응답한 질의는 기록하지 않으므로 조회 횟수를 근거로 삼는 설계는 틀립니다",
         "성립하지 않습니다. Resolver 쿼리 로그에는 질의한 DNS 이름이 담기지 않으므로 도메인별 집계가 불가능합니다",
         "성립합니다. 다만 인바운드 Resolver 엔드포인트를 쓰는 온프레미스 질의만 기록되므로 VPC 안의 질의는 제외됩니다"
       ],

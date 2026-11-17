@@ -79,8 +79,8 @@
       },
       "sources": [
         {
-          "title": "VPC 라우팅 테이블 — 경로 우선순위",
-          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
+          "title": "경로 우선순위",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/route-tables-priority.html"
         }
       ],
       "verified": true
@@ -191,8 +191,8 @@
       },
       "sources": [
         {
-          "title": "NAT 인스턴스 — 소스/대상 확인 비활성화",
-          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_NAT_Instance.html"
+          "title": "NAT 인스턴스 작업 — 소스/대상 확인 비활성화",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/work-with-nat-instances.html"
         }
       ],
       "verified": true
@@ -247,6 +247,10 @@
         {
           "title": "네트워크 ACL — 이페머럴 포트",
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        },
+        {
+          "title": "사용자 지정 네트워크 ACL — 이페머럴 포트",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/custom-network-acl.html"
         }
       ],
       "verified": true
@@ -353,8 +357,8 @@
       },
       "sources": [
         {
-          "title": "VPC의 DNS 속성",
-          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-dns.html"
+          "title": "Amazon DNS 이해 — VPC의 DNS 속성",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/AmazonDNS-concepts.html"
         }
       ],
       "verified": true
@@ -366,22 +370,22 @@
       "difficulty": "foundational",
       "stem": "VPC의 로컬 라우팅 경로(VPC CIDR → local)에 대한 설명으로 올바른 것은?",
       "options": [
-        "자동 생성되며 삭제할 수 없고, VPC 내 서브넷 간 통신을 보장한다",
+        "모든 라우팅 테이블에 기본으로 포함되며, VPC 내부 통신을 담당한다",
         "운영자가 직접 추가해야 한다",
-        "삭제하면 서브넷 간 통신을 차단할 수 있다",
+        "IGW가 연결된 퍼블릭 서브넷의 라우팅 테이블에만 포함된다",
         "AZ마다 별도로 생성해야 한다"
       ],
       "correct": 0,
-      "explanation": "로컬 경로는 모든 라우팅 테이블에 자동으로 존재하며 삭제할 수 없습니다. VPC CIDR 범위 트래픽을 VPC 내부에서 처리하도록 보장하므로, 서브넷 간 트래픽 차단이 필요하면 SG·NACL로 처리합니다.",
+      "explanation": "로컬 경로는 모든 라우팅 테이블에 기본으로 포함되어 VPC CIDR 범위 트래픽을 VPC 내부에서 처리합니다. 대상(target)은 바꿀 수 있고 기본값으로 되돌릴 수 있습니다. 서브넷 간 트래픽 차단이 필요하면 SG·NACL로 처리합니다.",
       "wrongExplanations": {
         "1": "자동으로 존재합니다.",
-        "2": "삭제할 수 없습니다.",
+        "2": "로컬 경로는 서브넷 종류와 무관하게 모든 라우팅 테이블에 기본으로 포함됩니다.",
         "3": "AZ별 생성 개념이 아닙니다."
       },
       "sources": [
         {
-          "title": "VPC 라우팅 테이블 — 로컬 경로",
-          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html"
+          "title": "서브넷 라우팅 테이블 — 로컬 경로",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/subnet-route-tables.html"
         }
       ],
       "verified": true

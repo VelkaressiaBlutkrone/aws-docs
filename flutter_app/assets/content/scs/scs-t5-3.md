@@ -36,7 +36,7 @@ sources:
     url: https://docs.aws.amazon.com/sns/latest/dg/sns-message-data-protection-configure.html
   - title: IAM database authentication for MariaDB, MySQL, and PostgreSQL
     url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html
-lastVerified: 2026-11-12
+lastVerified: 2026-11-17
 ---
 
 # 기밀 데이터와 키 자료 (보안 암호·가져온 키·회전·마스킹·다중 리전 키와 인증서)
@@ -129,7 +129,7 @@ lastVerified: 2026-11-12
 
 ⚠️⚠️ **「키 자료에 대한 통제를 입증해야 한다」는 요구의 공식 답은 「표준 키 저장소 + 가져온 키」입니다.** 공식 서술과 거꾸로 읽기 쉬운 자리이고, 이 작업에서 가장 중요한 갈림길입니다.
 
-⚠️ 많은 준수 요구에는 **키 정책으로 키 접근을 통제하는 것으로 충분**하다고 공식이 적습니다. 그리고 **KMS 가 제공하는 모든 키 저장소 유형이 FIPS 140 보안 수준 3으로 검증**되며 **"AWS 운영자를 포함해 누구도" 평문 키에 접근하지 못하게** 설계됩니다. 결제 워크로드에는 **AWS Payment Cryptography** 가 따로 있습니다.
+⚠️ 많은 준수 요구에는 **키 정책으로 키 접근을 통제하는 것으로 충분**하다고 공식이 적습니다. 그리고 **표준 키 저장소의 키 자료는 FIPS 140-3 보안 수준 3 검증 HSM**에서 생성·보호되며, 표준이든 사용자 지정이든 **"AWS 직원을 포함해 누구도" 평문 키에 접근하지 못하게** 설계됩니다. 결제 워크로드에는 **AWS Payment Cryptography** 가 따로 있습니다.
 
 #### 1-3. CloudHSM 키 저장소와 외부 키 저장소
 

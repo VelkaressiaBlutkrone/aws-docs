@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/model-access-training-data.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 데이터 무결성·편향 관리 (지표·불균형·암호화·민감정보·품질)
@@ -394,5 +394,6 @@ SageMaker에서 KMS 키를 주는 자리:
 42. FileSystemDataSource — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_FileSystemDataSource.html
 43. 훈련 작업 VPC 접근 — https://docs.aws.amazon.com/sagemaker/latest/dg/train-vpc.html
 44. S3DataSource — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html
+45. What Is AI Bias? (AWS) — 편향 유형의 정의 — https://aws.amazon.com/what-is/ai-bias/
 
 조사 노트: `docs/content-research/MLA-C01/tasks/1-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

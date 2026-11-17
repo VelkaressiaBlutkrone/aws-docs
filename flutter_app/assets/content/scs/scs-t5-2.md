@@ -38,7 +38,13 @@ sources:
     url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
   - title: Services in Full Shutdown — 완전 종료 항목 목록
     url: https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html
-lastVerified: 2026-11-09
+  - title: Create Amazon Data Lifecycle Manager custom policy for EBS snapshots
+    url: https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html
+  - title: PutLifecycleConfiguration
+    url: https://docs.aws.amazon.com/efs/latest/APIReference/API_PutLifecycleConfiguration.html
+  - title: What is AWS Signer?
+    url: https://docs.aws.amazon.com/signer/latest/developerguide/Welcome.html
+lastVerified: 2026-11-17
 ---
 
 # 저장 데이터 (암호화 선택·무결성·수명 주기와 보존·복제와 백업)
@@ -169,7 +175,7 @@ Object Lock은 **WORM 모델**로 객체를 저장해, 고정·가변 기간 또
 - ⚠️ **잠금과 해제에 추가 비용이 없습니다** — 잠긴 스냅샷에도 표준 EBS 스냅샷 스토리지 비용만 냅니다
 - Object Lock과 같이 **Cohasset Associates**가 SEC 17a-4·CFTC·FINRA 환경용으로 평가했습니다
 
-> ⚠️ 이 잠금은 **보존 자동화와 충돌합니다** — Data Lifecycle Manager는 보존 정책과 무관하게 **잠긴 스냅샷을 삭제할 수 없습니다**(§4-1).
+> ⚠️ 이 잠금은 **보존 자동화와 충돌합니다** — Data Lifecycle Manager는 보존 정책과 무관하게 **잠긴 스냅샷을 삭제할 수 없습니다**(§4-1). 공식 서술은 더 정밀합니다 — DLM이 만든 스냅샷을 수동으로 잠갔고 **보존 임계 시점에도 잠겨 있으면 DLM은 그 스냅샷을 더 관리하지 않으므로**, 필요 없어지면 **직접 삭제**해야 합니다.
 
 #### 2-3. ⚠️⚠️ Glacier 저장소 잠금 — 닫힌 서비스의 기능이다
 
@@ -258,7 +264,7 @@ DLM은 **백업 생성과 보존 요건을 정책으로** 정의합니다. 정�
 
 사용자 지정 정책의 종류는 **EBS 스냅샷 정책 · EBS 기반 AMI 정책 · 교차 계정 복사 이벤트 정책**입니다.
 
-⚠️ **보존은 개수 기반 또는 기간 기반**입니다. 그리고 ⚠️⚠️ **잠긴 스냅샷은 보존 정책과 무관하게 DLM이 삭제할 수 없습니다**(§2-2) — "DLM이 스냅샷을 지우지 않는다"의 원인 중 하나입니다.
+⚠️ **보존은 개수 기반 또는 기간 기반**입니다. 그리고 ⚠️⚠️ **잠긴 스냅샷은 보존 정책과 무관하게 DLM이 삭제할 수 없습니다**(§2-2) — "DLM이 스냅샷을 지우지 않는다"의 원인 중 하나입니다. 보존 임계 시점에 잠겨 있던 스냅샷은 **DLM 관리에서 벗어나** 잠금이 풀린 뒤에도 수동 삭제가 필요합니다.
 
 #### 4-2. AWS Backup 논리적 에어 갭 저장소 — 랜섬웨어 보호의 축
 
@@ -441,3 +447,6 @@ DataSync 는 **AWS 스토리지 서비스로·에서·사이에** 파일·객체
 13. What is AWS DataSync? — `docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html` (2026-11-09 확인)
 14. Services in Maintenance — 유지 관리 항목 목록 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-10 확인)
 15. Services in Full Shutdown — 완전 종료 항목 목록 — `docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html` (2026-11-10 확인)
+16. Create Amazon Data Lifecycle Manager custom policy for EBS snapshots — `docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html` (2026-11-17 확인)
+17. PutLifecycleConfiguration — `docs.aws.amazon.com/efs/latest/APIReference/API_PutLifecycleConfiguration.html` (2026-11-17 확인)
+18. What is AWS Signer? — `docs.aws.amazon.com/signer/latest/developerguide/Welcome.html` (2026-11-17 확인)

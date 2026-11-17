@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략
@@ -394,7 +394,7 @@ AWS는 "하나의 DB로 모든 것"이 아니라 **데이터 모양과 질의 �
 5. **"DAX와 ElastiCache는 같은 용도다."** → DAX는 **DynamoDB 전용** 인메모리 캐시로, DynamoDB API와 호환됩니다. ElastiCache는 RDS·DynamoDB 등 다양한 백엔드에 범용으로 사용하는 캐시입니다.
    (원리: §6 — DAX는 강력 일관성 읽기를 우회하므로 일관성 요건에 따라 캐시 경로가 달라진다.)
 
-6. **"Memcached를 세션 스토어로 쓰면 장애 시에도 안전하다."** → Memcached는 영속성과 복제가 없습니다. 노드 장애 시 세션이 사라집니다. 세션 저장 HA가 필요하면 **Redis**를 사용해야 합니다.
+6. **"Memcached를 세션 스토어로 쓰면 장애 시에도 안전하다."** → 노드 기반 Memcached는 영속성과 복제가 없습니다. 노드 장애 시 세션이 사라집니다. 세션 저장 HA가 필요하면 **Redis**를 사용해야 합니다.
    (원리: §12 — Memcached는 영속 기록 수단 없이 메모리에만 저장하므로 노드 재시작 시 모든 항목이 소실된다.)
 
 7. **"Write-Through만 쓰면 완벽하다."** → Write-Through는 쓰기 지연이 증가하고 실제로 읽히지 않는 데이터도 캐시에 적재됩니다. 서비스 특성에 따라 Lazy Loading + TTL과 병행하거나 선택합니다.
@@ -434,7 +434,7 @@ AWS는 "하나의 DB로 모든 것"이 아니라 **데이터 모양과 질의 �
 
 <details><summary>정답 보기</summary>
 
-**ElastiCache for Redis**를 선택합니다. Redis는 복제와 Multi-AZ 자동 Failover를 지원하므로 노드 장애 시에도 세션이 유지됩니다. Memcached는 영속성과 HA 기능이 없어 노드 장애 시 세션이 사라집니다. DynamoDB도 세션 스토어로 사용할 수 있지만, 인메모리 속도가 필요한 경우 Redis가 적합합니다.
+**ElastiCache for Redis**를 선택합니다. Redis는 복제와 Multi-AZ 자동 Failover를 지원하므로 노드 장애 시에도 세션이 유지됩니다. 노드 기반 Memcached는 영속성과 복제가 없어 노드 장애 시 세션이 사라집니다. DynamoDB도 세션 스토어로 사용할 수 있지만, 인메모리 속도가 필요한 경우 Redis가 적합합니다.
 </details>
 
 **Q5 (원리).** 왜 카디널리티가 낮은 속성을 DynamoDB 파티션 키로 선택하면 프로비저닝 처리량이 충분해도 스로틀이 발생할 수 있나요?

@@ -161,7 +161,7 @@
       "options": [
         "Direct Connect를 Site-to-Site VPN으로 교체해야만 암호화 요건을 충족할 수 있다",
         "Direct Connect에 보안 그룹을 적용해 암호화를 활성화한다",
-        "Direct Connect는 기본 암호화가 없으므로 그 위에 Site-to-Site VPN 터널을 얹는 VPN over Direct Connect 패턴을 적용해야 한다",
+        "Direct Connect는 기본 암호화가 없으므로 그 위에 Site-to-Site VPN 터널을 얹는 VPN over Direct Connect 패턴을 적용한다",
         "Direct Connect는 기본 암호화를 포함하므로 추가 조치가 필요 없다"
       ],
       "correct": 2,
@@ -197,7 +197,8 @@
       },
       "sources": [
         { "title": "AWS Site-to-Site VPN — 소개 (공식)", "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html" },
-        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" }
+        { "title": "AWS Direct Connect — 소개 (공식)", "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html" },
+        { "title": "안정성 기둥 REL02-BP02 — Site-to-Site VPN을 Direct Connect의 비용 효율적 백업으로", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_private_networks.html" }
       ],
       "verified": true
     },
@@ -266,7 +267,7 @@
       "wrongExplanations": {
         "1": "S3도 게이트웨이 엔드포인트를 지원합니다. 인터페이스 엔드포인트는 비용이 발생하므로 무료 구성 요건에 맞지 않습니다.",
         "2": "인터페이스 엔드포인트(PrivateLink)는 시간당 요금과 데이터 처리 비용이 발생합니다. S3·DynamoDB 접근에는 무료인 게이트웨이 엔드포인트가 적합합니다.",
-        "3": "NAT 게이트웨이는 비용이 발생하고 인터넷을 경유합니다. S3·DynamoDB에 대한 인터넷 우회 요건과 비용 최소화 요건 모두 충족하지 못합니다."
+        "3": "NAT 게이트웨이 경로는 인터넷 게이트웨이를 거쳐 S3·DynamoDB의 퍼블릭 엔드포인트에 닿고(트래픽이 AWS 네트워크를 벗어나지는 않습니다) 시간 요금과 데이터 처리 요금이 붙습니다. 비용이 발생하지 않아야 한다는 요건에 맞지 않습니다."
       },
       "sources": [
         { "title": "게이트웨이 엔드포인트 — S3·DynamoDB 전용·무료 (공식)", "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html" }

@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
   - title: 버스트 성능 인스턴스 구성 (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-17
 ---
 
 # EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략
@@ -162,7 +162,7 @@ EC2가 용량을 회수할 때 →
   → 지정된 중단 동작 실행:
      - terminate (기본): 인스턴스 종료
      - stop: EBS 지원 인스턴스 중지
-     - hibernate: 메모리 상태를 EBS에 저장 후 중지
+     - hibernate: 메모리 상태를 EBS에 저장 후 중지(이 경우 절전이 즉시 시작돼 2분 경고가 없음)
 ```
 
 > **EC2 인스턴스 재조정 권장(Rebalance Recommendation)**: 중단 2분 경고보다 앞서 "높은 중단 위험" 신호를 보냅니다. Auto Scaling과 연동하면 사전에 다른 스팟 풀로 재배치할 수 있습니다.

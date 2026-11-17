@@ -34,7 +34,17 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html
   - title: Amazon DynamoDB 개발자 안내서 소개
     url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html
-lastVerified: 2026-11-16
+  - title: 관리형 지식 베이스의 Web Crawler 데이터 소스
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-ds-webcrawler.html
+  - title: 고객 관리형 지식 베이스의 Web Crawler 커넥터
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/webcrawl-data-source-connector.html
+  - title: Amazon Kendra 가용성 변경
+    url: https://docs.aws.amazon.com/kendra/latest/dg/kendra-availability-change.html
+  - title: 에이전틱 검색으로 지식 베이스 질의
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-agentic-retrieve.html
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 1
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html
+lastVerified: 2026-11-17
 ---
 
 # 벡터 저장소 솔루션 설계와 구현 (아키텍처·메타데이터·대규모 성능·통합·데이터 유지 관리)
@@ -104,7 +114,7 @@ RAG에서 **틀리는 답의 절반은 검색에서 나옵니다.** 그리고 �
 | 인프라 | Bedrock이 **수집·색인·스토리지·검색**을 관리한다 | 내가 벡터 스토어를 세운다 |
 | 모델 | 임베딩·리랭킹·추론을 **서비스 관리형 모델**로(내 모델도 가능) | 내가 고른다 |
 | 데이터 | **멀티모달** 수집 · 스토리지 **자동 확장** | — |
-| 검색 | **Agentic Retrieval**(다단계) | 단일 검색 패스 |
+| 검색 | **Agentic Retrieval**(다단계) | 에이전틱 검색 미지원(관리형 전용) |
 | 파싱 | **Smart Parsing**(문서 유형별 전략 자동 선택) | 파싱 옵션을 내가 고른다 |
 
 ⭐ 공식이 **Important로 관리형을 권합니다** — 「최적화된 검색 정확도와 관리형 경험」이 이유입니다.
@@ -115,7 +125,7 @@ RAG에서 **틀리는 답의 절반은 검색에서 나옵니다.** 그리고 �
 **Amazon Aurora(RDS)** · **Neptune Analytics 그래프(GraphRAG)** · **Pinecone** ·
 **Redis Enterprise Cloud** · **MongoDB Atlas**
 
-⚠️⚠️ **두 가지는 「벡터 스토어 고르기」가 아닙니다** — **Neptune Analytics(GraphRAG)**와 **Kendra GenAI 인덱스**는 **다른 종류의 지식 베이스를 만드는 경로**입니다. 보기에서 「벡터 스토어로 GraphRAG를 고른다」처럼 섞어 놓으면 그것이 함정입니다.
+⚠️⚠️ **두 가지는 「벡터 스토어 고르기」가 아닙니다** — **Neptune Analytics(GraphRAG)**와 **Kendra GenAI 인덱스**는 **다른 종류의 지식 베이스를 만드는 경로**입니다. 보기에서 「벡터 스토어로 GraphRAG를 고른다」처럼 섞어 놓으면 그것이 함정입니다. ⚠️ 다만 **Amazon Kendra는 신규 고객에게 열려 있지 않습니다**(유지 관리 상태 · 기존 고객은 계속 사용) — 공식이 비슷한 기능으로 Bedrock Knowledge Bases를 가리키므로 **새 설계에서 Kendra GenAI 인덱스 경로를 새로 고르지 않습니다.**
 
 ⚠️ 공식 기술 본문이 드는 예시 중 **「메타데이터 및 임베딩을 위한 벡터 데이터베이스를 갖춘 Amazon DynamoDB」는 이 사이트가 문항 축으로 쓰지 않습니다.** Bedrock 지식 베이스의 지원 벡터 스토어 여덟에 DynamoDB가 없고, DynamoDB 개발자 안내서 소개 페이지에서 벡터·임베딩 서술을 찾지 못했습니다. ⛔ 그렇다고 **「DynamoDB에 벡터 검색이 없다」고 단정하지도 않습니다** — 한 페이지의 부재는 제품의 부재가 아닙니다. 직접 구축하는 아키텍처에서 **메타데이터를 DynamoDB에 담는** 읽기는 가능하지만, 그 읽기를 공식으로 확정할 근거를 찾지 못했습니다.
 
@@ -151,10 +161,11 @@ OpenSearch 쪽 사실:
 
 > 🧠 원리: 지식 베이스의 가치는 **내부 문서에 닿는 것**입니다. 그 연결은 커넥터가 합니다.
 
-관리형 KB가 제공하는 커넥터(공식): **S3 · SharePoint · Confluence · Google Drive · OneDrive · Web Crawler**.
+관리형 KB 개요 페이지가 드는 커넥터: **S3 · SharePoint · Confluence · Google Drive · OneDrive · Web Crawler**.
 공식 기술 본문이 드는 「문서 관리 시스템 · 지식 기반 · 내부 위키」가 이 커넥터들에 대응합니다.
 
-- ⚠️ **Web Crawler는 예외가 둘 있습니다** — 위에서 본 **ACL 문서 수준 필터링 미적용**이고, 자격 증명 기반으로 보호된 내부 콘텐츠에는 보통 맞지 않습니다.
+- ⚠️ **Web Crawler는 접속이 아니라 권한에서 갈립니다** — 관리형 KB의 Web Crawler는 **기본·폼 기반·SAML 인증**으로 로그인이 필요한 사이트도 크롤하지만(자격 증명은 Secrets Manager 보안 암호), **문서 수준 ACL을 지원하지 않아** 색인된 내용이 **지식 베이스에 접근할 수 있는 모든 사용자에게 열립니다.** ACL 필터링이 필요하면 그것을 지원하는 커넥터(예: S3·SharePoint·OneDrive)를 씁니다.
+- ⚠️ **고객 관리형** 지식 베이스에서는 **2026-09-30부터 Confluence·SharePoint·Salesforce·Web Crawler 커넥터를 새로 만들 수 없습니다**(기존 커넥터는 수집·검색 모두 계속 동작) — 공식이 그 커넥터가 필요한 애플리케이션에 관리형 지식 베이스를 권합니다.
 - ⭐ **커넥터를 쓰지 않는 길도 있습니다** — **사용자 지정 데이터 소스**로 두면 §5의 `KnowledgeBaseDocuments` 작업으로 직접 넣고 지웁니다.
 
 ### 5) 데이터를 최신으로 유지한다 (기술 1.4.5) {#maintenance}
@@ -230,7 +241,7 @@ OpenSearch 쪽 사실:
 
 <details><summary>정답 보기</summary>
 
-**GraphRAG는 「벡터 스토어 고르기」가 아니라 다른 종류의 지식 베이스를 만드는 경로**입니다. Kendra GenAI 인덱스도 같습니다. 벡터 스토어 선택(OpenSearch Serverless·관리형 클러스터·S3 Vectors·Aurora·Pinecone·Redis Enterprise Cloud·MongoDB Atlas 등)과 **별 축**으로 두고 봐야 보기에서 갈립니다.
+**GraphRAG는 「벡터 스토어 고르기」가 아니라 다른 종류의 지식 베이스를 만드는 경로**입니다. Kendra GenAI 인덱스도 같습니다(⚠️ Amazon Kendra는 신규 고객에게 열려 있지 않은 유지 관리 상태입니다). 벡터 스토어 선택(OpenSearch Serverless·관리형 클러스터·S3 Vectors·Aurora·Pinecone·Redis Enterprise Cloud·MongoDB Atlas 등)과 **별 축**으로 두고 봐야 보기에서 갈립니다.
 </details>
 
 **Q3.** 문서 수천 개의 **메타데이터만** 일괄 수정했습니다. 다음 동기화에서 무엇이 일어납니까?
@@ -278,3 +289,8 @@ OpenSearch 쪽 사실:
 11. Amazon S3 Vectors (값과 조건부 지연) — `docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors.html` (2026-11-14 확인)
 12. Aurora PostgreSQL을 Bedrock 지식 베이스로 — `docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html` (2026-11-14 확인)
 13. Amazon DynamoDB 개발자 안내서 소개 (벡터·임베딩 서술 부재 — 문항 축으로 쓰지 않는 근거) — `docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html` (2026-11-14 확인)
+14. 관리형 지식 베이스의 Web Crawler (인증 방식 넷 · 문서 수준 ACL 미지원 · 증분 동기화 · robots.txt 기본 금지) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-managed-ds-webcrawler.html` (2026-11-17 확인)
+15. 고객 관리형 지식 베이스의 Web Crawler 커넥터 (2026-09-30부터 신규 커넥터 생성 미지원 공지) — `docs.aws.amazon.com/bedrock/latest/userguide/webcrawl-data-source-connector.html` (2026-11-17 확인)
+16. Amazon Kendra 가용성 변경 (신규 고객 비개방 · 유지 관리 상태) — `docs.aws.amazon.com/kendra/latest/dg/kendra-availability-change.html` (2026-11-17 확인)
+17. 에이전틱 검색 (관리형 지식 베이스에서만 지원) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-test-agentic-retrieve.html` (2026-11-17 확인)
+18. AIP-C01 시험 안내서 콘텐츠 도메인 1 (기술 1.4.2의 예시 셋) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html` (2026-11-17 확인)

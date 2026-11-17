@@ -184,12 +184,19 @@ void main() {
       'aif_guide_v11_test.dart',
       'aif_p1b_a4_fix_test.dart',
       'aif_questions_test.dart',
+      // 2026-11-17 전 콘텐츠 검증 2단계(보정) 회귀 가드 — 금지 문장을 옮기지
+      // 않는다. 그 가드가 **md 14편 + 문항 14파일을 함께** 전수로 쓸기 때문이다
+      // (`docs`/`banks` 토글로 두 층을 같은 규칙에 넣는다 — 실측 확인).
+      // ⭐ 이 트립와이어가 설계대로 울려 이 등록을 하게 했다.
+      'aif_v2_fix_test.dart',
       'mla_aif_p2_review_fix_test.dart',
       'mla_aif_question_propagation_test.dart',
       'mla_doc_format_test.dart',
       'mla_duplicate_fix_test.dart',
       'mla_p3_review_fix_test.dart',
       'mla_questions_test.dart',
+      // 같은 배치의 MLA 판 — 문항 321개 전수와 md 12편을 함께 읽는다(실측 확인).
+      'mla_v2_fix_test.dart',
     };
     final unregistered = Directory('test')
         .listSync()

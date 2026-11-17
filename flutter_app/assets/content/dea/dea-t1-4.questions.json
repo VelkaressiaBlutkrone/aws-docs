@@ -138,7 +138,7 @@
       "skill": "코드 최적화를 통해 수집·변환 런타임 단축(1.4.1)",
       "section": "code-optimization",
       "difficulty": "applied",
-      "stem": "Glue Spark 잡이 큰 팩트 테이블과 작은 차원 테이블을 조인하는데 셔플이 커서 느리다. 공식 튜닝 가이드가 제시하는 처방은 무엇인가?",
+      "stem": "Glue Spark 잡이 큰 팩트 테이블과 작은 차원 테이블을 조인하는데 셔플이 커서 느리다. 적절한 처방은 무엇인가?",
       "options": [
         "작은 쪽이 메모리에 들어가면 브로드캐스트 해시 조인을 사용한다",
         "조인 키를 카디널리티가 낮은 컬럼으로 바꾼다",
@@ -314,6 +314,10 @@
       },
       "sources": [
         {
+          "title": "AWS CDK bootstrapping — cdk bootstrap이 환경마다 부트스트랩 스택(기본 이름 CDKToolkit)과 S3·ECR·IAM 리소스를 준비",
+          "url": "https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html"
+        },
+        {
           "title": "What is the AWS CDK? — 코드 정의 후 CloudFormation으로 프로비저닝",
           "url": "https://docs.aws.amazon.com/cdk/v2/guide/home.html"
         },
@@ -406,7 +410,7 @@
       "wrongExplanations": {
         "1": "canary는 두 단계(일부 → 나머지) 전환입니다. 일정 간격 반복이 아닙니다.",
         "2": "all-at-once는 한 번에 전환합니다.",
-        "3": "rolling with additional batch는 EC2/온프레미스 배포 구성으로 Lambda 전환 유형이 아닙니다."
+        "3": "rolling with additional batch는 AWS Elastic Beanstalk의 배포 정책입니다. CodeDeploy의 Lambda 트래픽 전환 구성이 아니며, CodeDeploy의 EC2/온프레미스 사전 정의 구성(AllAtOnce·HalfAtATime·OneAtATime)에도 없습니다."
       },
       "sources": [
         {
@@ -416,6 +420,10 @@
         {
           "title": "Deploying serverless applications gradually with AWS SAM — SAM의 전환 유형 연동",
           "url": "https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/automating-updates-to-serverless-apps.html"
+        },
+        {
+          "title": "Deployment policies and settings (AWS Elastic Beanstalk) — Rolling with additional batch는 Elastic Beanstalk의 배포 정책",
+          "url": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.rolling-version-deploy.html"
         }
       ],
       "verified": true

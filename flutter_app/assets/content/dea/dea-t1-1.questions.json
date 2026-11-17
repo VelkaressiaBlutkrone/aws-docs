@@ -74,7 +74,7 @@
       "skill": "제한 구현 및 속도 제한 극복(1.1.9)",
       "section": "kds-capacity",
       "difficulty": "applied",
-      "stem": "프로비저닝 모드 Kinesis Data Streams를 설계한다. 유입은 초당 3 MB, 단일 소비자의 읽기는 초당 4 MB가 필요하다. 공식 산정 방식에 따른 최소 샤드 수는 몇 개인가?",
+      "stem": "프로비저닝 모드 Kinesis Data Streams를 설계한다. 유입은 초당 3 MB, 단일 소비자의 읽기는 초당 4 MB가 필요하다. 최소 샤드 수는 몇 개인가?",
       "options": [
         "2개",
         "3개",
@@ -210,7 +210,7 @@
         "DynamoDB Accelerator(DAX)를 활성화한다"
       ],
       "correct": 1,
-      "explanation": "Kinesis Data Streams for DynamoDB는 테이블 변경을 KDS로 복제하므로 보존을 최대 1년까지 늘릴 수 있고, EFO 소비자를 샤드당 최대 20개까지 붙여 KCL·Managed Service for Apache Flink·Firehose 등 Kinesis 생태계를 활용할 수 있습니다. 단 순서와 중복 제거를 보장하지 않으므로 ApproximateCreationDateTime으로 클라이언트가 정렬·중복 처리해야 합니다.",
+      "explanation": "Kinesis Data Streams for DynamoDB는 테이블 변경을 KDS로 복제하므로 보존을 최대 1년까지 늘릴 수 있고, EFO 소비자를 데이터 스트림당 최대 20개(On-demand Advantage 모드는 50개)까지 등록해 KCL·Managed Service for Apache Flink·Firehose 등 Kinesis 생태계를 활용할 수 있습니다. 단 순서와 중복 제거를 보장하지 않으므로 ApproximateCreationDateTime으로 클라이언트가 정렬·중복 처리해야 합니다.",
       "wrongExplanations": {
         "0": "DynamoDB Streams는 보존이 24시간이고 샤드당 읽기 프로세스를 2개 이하로 두도록 권장하므로, 6개월 재생과 다수 소비자 요구를 만족할 수 없습니다.",
         "2": "주기적 내보내기 후 비교는 항목 수준 변경 이력을 보존하지 못하고 지연도 큽니다. 변경 캡처(CDC) 요구에 맞지 않습니다.",
@@ -224,6 +224,10 @@
         {
           "title": "Change data capture for DynamoDB Streams — 보존 24시간, 샤드당 읽기 프로세스 2개 이하",
           "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html"
+        },
+        {
+          "title": "Quotas and limits (Kinesis Data Streams) — 등록 소비자(EFO)는 데이터 스트림당 20, On-demand Advantage 모드는 50",
+          "url": "https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html"
         }
       ],
       "verified": true
@@ -234,7 +238,7 @@
       "skill": "스트리밍 소스에서 데이터 읽기(1.1.1)",
       "section": "cdc-sources",
       "difficulty": "foundational",
-      "stem": "DynamoDB Streams를 KEYS_ONLY 뷰 타입으로 활성화해 운영 중이다. 이제 변경 전후 항목 값이 모두 필요해졌다. 공식 문서 기준으로 올바른 설명은 무엇인가?",
+      "stem": "DynamoDB Streams를 KEYS_ONLY 뷰 타입으로 활성화해 운영 중이다. 이제 변경 전후 항목 값이 모두 필요해졌다. 올바른 설명은 무엇인가?",
       "options": [
         "스트림 뷰 타입은 설정 후 변경할 수 없으므로 스트림을 다시 만들어야 한다",
         "콘솔에서 뷰 타입을 NEW_AND_OLD_IMAGES로 즉시 변경할 수 있다",
@@ -266,7 +270,7 @@
       "skill": "스트리밍 소스에서 데이터 읽기(1.1.1)",
       "section": "cdc-sources",
       "difficulty": "applied",
-      "stem": "온프레미스 관계형 데이터베이스의 변경을 AWS DMS의 CDC로 복제하는 설계를 검토한다. 이해관계자가 '복제 지연은 항상 1초 이내로 보장되는가'라고 묻는다. 공식 문서에 근거한 답은 무엇인가?",
+      "stem": "온프레미스 관계형 데이터베이스의 변경을 AWS DMS의 CDC로 복제하는 설계를 검토한다. 이해관계자가 '복제 지연은 항상 1초 이내로 보장되는가'라고 묻는다. 올바른 답은 무엇인가?",
       "options": [
         "CDC는 실시간 복제가 아니며 지연에 대한 SLA가 없다",
         "CDC는 트랜잭션 로그를 읽으므로 1초 이내 지연이 보장된다",
@@ -330,7 +334,7 @@
       "skill": "배치 수집을 위한 적절한 구성 옵션 구현(1.1.3)",
       "section": "batch-ingestion",
       "difficulty": "applied",
-      "stem": "Amazon Redshift로 대용량 파일을 COPY로 적재할 때, 공식 모범 사례가 권장하는 입력 파일 구성은 무엇인가?",
+      "stem": "Amazon Redshift로 대용량 파일을 COPY로 적재할 때, 병렬 적재에 맞는 입력 파일 구성은 무엇인가?",
       "options": [
         "압축 후 1 MB~1 GB 크기로 비슷하게 나누고 파일 수를 슬라이스 수의 배수로 맞춘다",
         "단일 대용량 파일 하나로 만들어 한 번에 적재한다",
@@ -460,13 +464,13 @@
       "difficulty": "applied",
       "stem": "Kinesis Data Streams를 소비하는 Lambda 함수가 특정 불량 레코드에서 계속 실패해 해당 샤드의 처리가 멈췄다. 데이터를 잃지 않으면서 처리를 재개하는 구성은 무엇인가?",
       "options": [
-        "재시도 횟수·레코드 연령 한도를 설정하고 배치 이등분을 켜고 실패 대상(SQS/SNS)을 지정한다",
+        "재시도 횟수·레코드 연령 한도를 설정하고 배치 이등분을 켜고 실패 대상을 지정한다",
         "이벤트 소스 매핑을 삭제하고 다시 만든다",
         "BatchSize를 1로 낮추고 재시도를 무제한으로 유지한다",
         "스트림 보존 기간을 24시간으로 줄여 불량 레코드를 만료시킨다"
       ],
       "correct": 0,
-      "explanation": "기본값은 재시도와 레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주까지 막습니다. MaximumRetryAttempts·MaximumRecordAgeInSeconds로 정체를 끊고, BisectBatchOnFunctionError로 실패 배치를 반으로 나눠 불량 레코드를 격리하며, 폐기되는 레코드는 실패 대상(SQS/SNS)으로 보내 보관합니다.",
+      "explanation": "기본값은 재시도와 레코드 연령이 무제한이라 불량 레코드 하나가 샤드를 최대 1주까지 막습니다. MaximumRetryAttempts·MaximumRecordAgeInSeconds로 정체를 끊고, BisectBatchOnFunctionError로 실패 배치를 반으로 나눠 불량 레코드를 격리하며, 폐기되는 배치의 정보는 실패 대상(SNS 주제·SQS 대기열·S3 버킷 등)으로 보내 보관합니다. SNS·SQS 대상에는 실패한 호출의 메타데이터가, S3 대상에는 메타데이터와 함께 호출 레코드 전체가 전달됩니다.",
       "wrongExplanations": {
         "1": "매핑을 재생성하면 체크포인트가 흔들려 재처리·누락 위험이 생기고, 같은 불량 레코드에서 다시 멈춥니다.",
         "2": "BatchSize를 줄이면 영향 범위는 좁아지지만 무제한 재시도가 남아 해당 레코드에서 계속 정체됩니다.",
@@ -498,7 +502,7 @@
         "Lambda 함수에 Elastic IP를 직접 할당한다"
       ],
       "correct": 0,
-      "explanation": "VPC에 연결한 Lambda가 인터넷으로 나가려면 프라이빗 서브넷에 두고 퍼블릭 서브넷의 NAT 게이트웨이를 경유해야 하며, 이때 NAT 게이트웨이의 Elastic IP가 고정 출발 IP가 됩니다.",
+      "explanation": "VPC에 연결한 Lambda가 인터넷으로 나가려면 프라이빗 서브넷에 두고 NAT 게이트웨이를 경유하게 하며, 이때 NAT 게이트웨이의 Elastic IP가 고정 출발 IP가 됩니다. 보기의 구성은 퍼블릭 서브넷에 두는 영역형(zonal) NAT 게이트웨이 기준이고, 리전(regional) NAT 게이트웨이는 호스팅할 퍼블릭 서브넷이 필요 없습니다.",
       "wrongExplanations": {
         "1": "함수를 퍼블릭 서브넷에 연결하는 것만으로는 인터넷에 나갈 수 없습니다. Lambda 함수에는 퍼블릭 IP가 할당되지 않습니다.",
         "2": "ip-ranges.json은 AWS 서비스의 공용 IP 범위로 매우 넓고 변동되며, 우리 애플리케이션의 고정 출구 IP가 아닙니다.",
@@ -512,6 +516,10 @@
         {
           "title": "AWS IP address ranges — ip-ranges.json은 AWS 서비스의 공용 범위",
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/aws-ip-ranges.html"
+        },
+        {
+          "title": "Regional NAT gateways for automatic multi-AZ expansion — 리전 NAT 게이트웨이는 호스팅할 퍼블릭 서브넷이 필요 없음",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html"
         }
       ],
       "verified": true

@@ -60,7 +60,11 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html
   - title: AWS Quick이란 무엇인가
     url: https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
-lastVerified: 2026-11-15
+  - title: AgentCore 데이터세트 평가
+    url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/dataset-evaluations.html
+  - title: AgentCore 그라운드 트루스 평가
+    url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/ground-truth-evaluations.html
+lastVerified: 2026-11-17
 ---
 
 # GenAI 평가 시스템 (품질 지표·모델 평가·사람 평가·품질 게이트·RAG·검색·에이전트·보고·배포 검증)
@@ -315,7 +319,7 @@ FM은 세 가지가 전부 다릅니다. **정답이 하나가 아니고**(같�
 | **배치** | 여러 세션을 **비동기 작업 하나**로 | ⭐ **세션 발견·스팬 수집·채점을 서비스가 한다**(온디맨드는 내가 스팬을 모아 세션마다 호출한다). **CloudWatch Logs 위치**와 평가자를 주면 **평가자별 평균과 세션 수**를 돌려주고 세션별 상세는 CloudWatch Logs에 쓴다 |
 | 데이터세트 (**프리뷰**) | 데이터세트 스키마 + 온디맨드·배치 러너 | — |
 
-⭐ **배치만 그라운드 트루스를 세션 메타데이터로 받습니다**(기대 응답·어서션·**기대 도구 궤적**) — 「도구 사용 효율성 평가」가 여기서 근거를 얻습니다.
+⭐ **그라운드 트루스(기대 응답·어서션·기대 도구 궤적)는 유형마다 받는 길이 다릅니다** — **배치는 세션 메타데이터로**, **온디맨드는 Evaluate API 호출에 참조 입력으로** 받고, ⚠️ **온라인 평가에서는 쓸 수 없습니다**(라이브 운영 트래픽에는 기대값이 없습니다). 「도구 사용 효율성 평가」가 여기서 근거를 얻습니다.
 
 **평가자는 네 갈래**입니다 — **내장**(`Builtin.<이름>` 형식, ⚠️ **구성을 수정할 수 없다**) · **3자**(DeepEval·AutoEval 오픈소스에서 오고 **ID만 고르면 서비스가 실행**한다) · **사용자 지정**(LLM-판정, 또는 ⭐ **코드 기반 — 내 Lambda 함수로 결정적 검사·정규식·업무 규칙을 LLM 없이**) · **파생**(내장·3자의 로직을 내 모델로).
 
@@ -499,7 +503,7 @@ FM은 세 가지가 전부 다릅니다. **정답이 하나가 아니고**(같�
 7. 사람 기반 평가 작업 만들기 (추론 소스 최대 둘·유형 혼합 가능 · Source Name == `modelIdentifier` · 모델 지시는 프롬프트에) — `docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-jobs-management-create-human.html` (2026-11-15 확인)
 8. 사람 기반 평가 보고서 검토 (등급 방법 **다섯**과 JSON 키·시각화 · 보고서 카드의 구성 · 응답 수 부족의 두 원인 · 사람 응답만 지표 계산) — `docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-report-human-customer.html` (2026-11-15 확인)
 9. AgentCore Evaluations 작동 방식 (에이전트 대상 · 밖에 호스팅된 에이전트도 · 목표 달성·도구 정확성) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/how-it-works-evaluations.html` (2026-11-15 확인)
-10. AgentCore 평가 유형 (온라인·온디맨드·배치 + 데이터세트 프리뷰 · 샘플링과 조건 필터 · 배치만 그라운드 트루스 · 평가자별 평균과 세션 수) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations-types.html` (2026-11-15 확인)
+10. AgentCore 평가 유형 (온라인·온디맨드·배치 · 샘플링과 조건 필터 · 배치는 그라운드 트루스를 세션 메타데이터로 · 평가자별 평균과 세션 수) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluations-types.html` (2026-11-15 확인)
 11. AgentCore 평가자 네 갈래 (내장·3자 DeepEval·AutoEval·사용자 지정 LLM·코드 기반 Lambda·파생) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/evaluators.html` (2026-11-15 확인)
 12. AgentCore 내장 평가자 개요 (`Builtin.<이름>` · 구성 수정 불가 · 개수를 적지 않는다) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/built-in-evaluators-overview.html` (2026-11-15 확인)
 13. AgentCore 내장 평가자의 프롬프트 템플릿 (세 수준 열거 · 수준별 플레이스홀더 · 세션 수준 목표 판정 규칙) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/prompt-templates-builtin.html` (2026-11-15 확인)
@@ -516,3 +520,5 @@ FM은 세 가지가 전부 다릅니다. **정답이 하나가 아니고**(같�
 24. Amazon Augmented AI로 사람 검토하기 (신규 고객 비개방 · 기존 고객 계속 · 새 기능 도입 계획 없음 · 저신뢰 예측과 무작위 표본의 사람 검토 루프) — `docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html` (2026-11-15 확인)
 25. SageMaker Ground Truth (신규 고객 비개방 · 같은 문구 · 프라이빗 워크포스와 벤더 · 자동 데이터 레이블링) — `docs.aws.amazon.com/sagemaker/latest/dg/sms.html` (2026-11-15 확인)
 26. AWS Quick이란 무엇인가 (QuickSight에서 발전 · `AWS Quick Sight`로 계속 · **기존 API·SDK·통합은 변경 없이 동작** · 기능 목록) — `docs.aws.amazon.com/quick/latest/userguide/what-is.html` (2026-11-15 확인)
+27. AgentCore 데이터세트 평가 (공개 프리뷰 · 온디맨드·배치 러너가 같은 데이터세트 스키마를 공유) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/dataset-evaluations.html` (2026-11-17 확인)
+28. AgentCore 그라운드 트루스 평가 (Evaluate API의 참조 입력 · 온라인 평가에서는 사용 불가) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/ground-truth-evaluations.html` (2026-11-17 확인)

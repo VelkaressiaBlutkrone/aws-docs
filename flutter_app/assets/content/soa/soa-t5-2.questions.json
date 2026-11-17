@@ -389,13 +389,13 @@
       "difficulty": "applied",
       "stem": "VPN과 Direct Connect의 특성을 비교한 것으로 올바른 것은?",
       "options": [
-        "VPN은 수 분 내 구축·IPsec 암호화 기본 포함이고, DX는 수 주 리드타임·전용 회선이며 암호화는 기본 없음",
+        "VPN은 수 분 내 구축·IPsec 암호화 기본 포함이고, DX는 물리 회선 구축이 필요한 전용 연결이며 암호화는 기본 없음",
         "VPN은 전용 회선, DX는 인터넷 경로다",
         "둘 다 기본 암호화를 제공한다",
         "DX는 즉시 구축되고 VPN은 수 주가 걸린다"
       ],
       "correct": 0,
-      "explanation": "VPN은 공용 인터넷 위 IPsec 터널로 수 분 내 구축되고 암호화가 기본 포함되지만 대역폭·지연이 변동합니다. DX는 물리 회선 설치로 수 주가 걸리고 일관된 대역폭·저지연을 제공하지만 기본 암호화가 없습니다.",
+      "explanation": "VPN은 공용 인터넷 위 IPsec 터널로 수 분 내 구축되고 암호화가 기본 포함되지만 대역폭·지연이 변동합니다. DX는 물리 회선 구축이 필요해 VPN보다 오래 걸리고 일관된 대역폭·저지연을 제공하지만 기본 암호화가 없습니다.",
       "wrongExplanations": {
         "1": "설명이 서로 바뀌었습니다.",
         "2": "DX는 기본 암호화가 없습니다.",
@@ -409,6 +409,10 @@
         {
           "title": "AWS Direct Connect란 무엇인가",
           "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+        },
+        {
+          "title": "Site-to-Site VPN 시작하기 — VPN 연결 생성",
+          "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/SetUpVPNConnections.html"
         }
       ],
       "verified": true

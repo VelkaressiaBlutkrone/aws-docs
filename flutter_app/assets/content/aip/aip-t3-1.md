@@ -28,7 +28,11 @@ sources:
     url: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html
   - title: Step Functions 워크플로의 오류 처리
     url: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html
-lastVerified: 2026-11-14
+  - title: Amazon Bedrock Guardrails로 프롬프트 공격 탐지
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 3
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain3.html
+lastVerified: 2026-11-17
 ---
 
 # 입력과 출력 안전 제어 (콘텐츠 필터·거부 주제·문맥 근거 확인·구조화된 출력·심층 방어·적대적 입력 탐지)
@@ -65,7 +69,7 @@ GenAI 애플리케이션의 안전은 **모델에게 부탁해서 얻는 것이 
 - ⚠️⚠️ **콘텐츠 필터와 민감 정보 필터는 도구 사용 경로를 평가하지 않습니다** — `toolResult` · `toolSpec` · `toolUse.input`의 내용은 차단도 마스킹도 되지 않습니다.
 - ⚠️ 콘텐츠 필터는 **텍스트와 이미지**를 고를 수 있고 범주마다 **None·Low·Medium·High**를, **프롬프트와 응답에 다른 수준**을 둘 수 있으며 ⭐ **`Block` 대신 `Detect`(조치 없음)**도 고를 수 있습니다.
 - ⚠️⚠️ **프롬프트 공격은 별 필터가 아니라 콘텐츠 필터의 한 범주**이고 **탈옥·프롬프트 인젝션·프롬프트 누출**을 덮습니다. **프롬프트 누출 탐지는 Standard tier 전용**입니다.
-- ⚠️⚠️ **tier를 지정하지 않으면 Classic**입니다. Classic은 **영어·프랑스어·스페인어**, Standard는 **크로스 리전 추론을 쓰고** 거부 주제 정의가 **1,000자**(Classic 200자)이며 **코드 요소 안의 유해 콘텐츠**까지 봅니다.
+- ⚠️⚠️ 안전장치 **tier는 둘**(Standard / Classic)이고 차이가 큽니다 — Classic은 **영어·프랑스어·스페인어**, Standard는 **크로스 리전 추론을 쓰고** 거부 주제 정의가 **1,000자**(Classic 200자)이며 **코드 요소 안의 유해 콘텐츠**까지 봅니다.
 - 문맥 근거 확인은 **근거(Grounding)**와 **관련성(Relevance)** 두 축이고 임계는 **0~0.99**(1은 무효)입니다. ⚠️ **응답에 도입된 새 정보는 전부 미근거**로 셉니다.
 - ⚠️⚠️ 근거 확인은 **청크마다 관련성을 보고 하나라도 관련되면 전체를 관련으로** 봅니다 — **스트리밍에서는 무관한 응답이 이미 사용자에게 간 뒤에야 표시**될 수 있습니다.
 - ⭐ **`ApplyGuardrail`은 FM을 호출하지 않고** 임의의 텍스트를 평가합니다(`source`를 **`INPUT`·`OUTPUT`**으로). RAG라면 **검색 전에** 입력을 검사할 수 있습니다.
@@ -104,7 +108,7 @@ GenAI 애플리케이션의 안전은 **모델에게 부탁해서 얻는 것이 
 
 **거부 주제**는 범주가 아니라 **내가 정의하는 주제 집합**입니다. 공식 예가 「은행 어시스턴트가 불법 투자 조언 주제를 피하게」입니다.
 
-**단어 필터**는 **정확히 일치**하는 사용자 지정 단어·구를 막고 **욕설은 바로 쓸 수 있는 옵션**으로 제공됩니다 — 경쟁사 이름처럼 조직 고유의 금지어를 넣는 자리입니다.
+**단어 필터**는 **정확히 일치**(대소문자를 구분하지 않는 전체 단어·구 단위)하는 사용자 지정 단어·구를 막고 **욕설은 바로 쓸 수 있는 옵션**으로 제공됩니다 — 경쟁사 이름처럼 조직 고유의 금지어를 넣는 자리입니다.
 
 **사용자 지정 조정 워크플로**가 필요하면 그 위에 오케스트레이션을 얹습니다. Step Functions 상태 머신이 **검사 → 판정 → 조치**의 순서를 강제하고, ⚠️ 그 흐름의 실패 처리는 명시해야 합니다 — 상태가 오류를 보고하면 Step Functions는 **기본적으로 전체 실행을 실패**시키고, `Retry`와 캐처는 **`Task`·`Parallel`·`Map`에만** 있으며 **최상위 실행 실패에는 캐처가 없습니다**.
 
@@ -184,7 +188,7 @@ GenAI 애플리케이션의 안전은 **모델에게 부탁해서 얻는 것이 
 
 - 「프롬프트 인젝션을 막아라」면 **콘텐츠 필터의 프롬프트 공격 범주**이고 별 필터가 아닙니다.
 - 「프롬프트가 유출되는지 탐지해야 한다」면 **Standard tier**가 필요합니다.
-- 「영어·프랑스어·스페인어만 쓰는데 기존 설정을 유지하고 싶다」면 **Classic**이 맞고, **지정하지 않으면 Classic**입니다.
+- 「영어·프랑스어·스페인어만 쓰는데 기존 설정을 유지하고 싶다」면 **Classic**이 맞습니다.
 - 「코드 안의 유해 콘텐츠·PII까지」면 **Standard tier**(필터)와 **민감 정보 필터의 코드 도메인 지원**입니다.
 - 「도구 호출 인자에 담긴 PII가 마스킹되지 않는다」면 **정상 동작**입니다 — 필터가 그 경로를 평가하지 않습니다.
 - 「맞는 말인데 질문과 상관없는 답」이면 **관련성** 점수이고, 「소스에 없는 사실을 더한 답」이면 **근거** 점수입니다.
@@ -202,7 +206,7 @@ GenAI 애플리케이션의 안전은 **모델에게 부탁해서 얻는 것이 
 
 - ⚠️⚠️ **프롬프트 공격을 별도 필터로 찾기.** **콘텐츠 필터의 범주**입니다.
 - ⚠️ **프롬프트 누출 탐지를 Classic에서 기대하기.** **Standard 전용**입니다.
-- ⚠️⚠️ **tier를 지정하지 않고 Standard 동작을 기대하기.** 기본은 **Classic**입니다.
+- ⚠️⚠️ **지원 리전이 아닌 곳에서 문맥 근거 확인에 Standard tier를 지정하기.** 그 요청은 **검증 오류로 실패**합니다 — Standard는 **크로스 리전 추론**을 쓰고 지원 리전이 부분집합입니다.
 - ⚠️⚠️ **tier를 바꾸고 임계를 그대로 두기.** 같은 응답이 **다른 점수**를 받습니다.
 - ⚠️⚠️ **가드레일이 도구 사용 경로를 본다고 생각하기.** `toolResult`·`toolSpec`·`toolUse.input`은 **평가되지 않습니다**.
 - ⚠️ **근거 임계를 1로 두기.** **무효**이고 전부 차단됩니다.
@@ -225,7 +229,7 @@ GenAI 애플리케이션의 안전은 **모델에게 부탁해서 얻는 것이 
 
 <details><summary>정답 보기</summary>
 
-**콘텐츠 필터 안의 프롬프트 공격 범주**를 켭니다(별개 필터가 아닙니다). 그 범주가 **탈옥 · 프롬프트 인젝션 · 프롬프트 누출**을 덮고, ⚠️ **프롬프트 누출 탐지는 Standard tier 전용**이며 공식이 **프롬프트 공격 보호가 Standard에서 더 일관되고 신뢰성 있게 동작한다**고 적습니다. ⚠️ **tier를 지정하지 않으면 Classic**이고 Classic은 **영어·프랑스어·스페인어**를 지원합니다.
+**콘텐츠 필터 안의 프롬프트 공격 범주**를 켭니다(별개 필터가 아닙니다). 그 범주가 **탈옥 · 프롬프트 인젝션 · 프롬프트 누출**을 덮고, ⚠️ **프롬프트 누출 탐지는 Standard tier 전용**이며 공식이 **프롬프트 공격 보호가 Standard에서 더 일관되고 신뢰성 있게 동작한다**고 적습니다. ⚠️ Classic tier는 **영어·프랑스어·스페인어**를 지원합니다.
 </details>
 
 **Q2.** RAG 챗봇이 「영국의 수도는 런던입니다」라고 답했는데 사용자는 일본의 수도를 물었습니다. 문맥 근거 확인의 어느 점수가 내려가고, 반대 사례는 무엇입니까?
@@ -285,9 +289,11 @@ GenAI 애플리케이션의 안전은 **모델에게 부탁해서 얻는 것이 
 2. 콘텐츠 필터 (유해 범주 정의 · 텍스트·이미지 · None~High · `Block`·`Detect` · 도구 경로 미평가 · KMS·크로스 리전) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-content-filters.html` (2026-11-14 확인)
 3. 민감 정보 필터 (텍스트만 평가 · 도구 경로 미평가 · Block·Mask · 코드 도메인 · PII 유형) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html` (2026-11-14 확인)
 4. 문맥 근거 확인 (근거 ↔ 관련성 · 청크 단위 판정 · 스트리밍 주의 · 임계 0~0.99 · 길이 상한 · tier 차이) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html` (2026-11-14 확인)
-5. 안전장치 tier (지원 정책 셋 · 기본 Classic · 거부 주제 1,000자 ↔ 200자 · 프롬프트 누출 Standard 전용) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html` (2026-11-14 확인)
+5. 안전장치 tier (지원 정책 셋 · 거부 주제 1,000자 ↔ 200자 · 프롬프트 누출 Standard 전용) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tiers.html` (2026-11-14 확인)
 6. `ApplyGuardrail` API (FM 호출 없이 평가 · `INPUT`·`OUTPUT` · `GUARDRAIL_INTERVENED` · 정책 단위 수) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-independent-api.html` (2026-11-14 확인)
 7. 구조화된 출력 (메커니즘 둘 · `additionalProperties: false` · 미지원 기능 · 90초 컴파일·24시간 캐시 · 선택 속성 12개) — `docs.aws.amazon.com/bedrock/latest/userguide/structured-output.html` (2026-11-14 확인)
 8. Amazon Comprehend PII 엔터티 탐지 (영어·스페인어 · 100KB · 오프셋 · 수정은 비동기 배치 · `AWS_ACCESS_KEY`) — `docs.aws.amazon.com/comprehend/latest/dg/how-pii.html` (2026-11-14 확인)
 9. API Gateway 요청 검증 (통합 전 검증 · 400 즉시 반환 · 존재만 확인) — `docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html` (2026-11-14 확인)
 10. Step Functions 오류 처리 (기본은 전체 실행 실패 · 캐처 범위 · `States.ALL` 제약) — `docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html` (2026-11-14 확인)
+11. 프롬프트 공격 탐지 (탈옥 · 프롬프트 인젝션 · 프롬프트 누출은 Standard tier 전용) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html` (2026-11-17 확인)
+12. AIP-C01 시험 안내서 콘텐츠 도메인 3 (기술 3.1.2의 예시 — 텍스트-SQL 변환) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain3.html` (2026-11-17 확인)

@@ -258,7 +258,9 @@ void main() {
       // 으로 밀려 이 대조군이 레드가 났다. **내용은 그대로였다** — 다음에 또 밀리면
       // 기대값만 갱신한다(줄 번호를 버리면 「어느 줄인지」를 잃으므로 유지한다).
       test('대조군: 옛 문구를 인용해 정정하는 줄은 정확히 둘이다', () {
-        expect(scan(citing: true), ['aif-t3-1.md:248', 'aif-t3-3.md:170'],
+        // 2026-11-17 2단계 보정에서 `aif-t3-1.md` 가 네 줄 밀렸다(248 → 252).
+        // **내용은 그대로다** — 인용 줄 본문을 읽어 확인한 뒤 기대값만 올렸다.
+        expect(scan(citing: true), ['aif-t3-1.md:252', 'aif-t3-3.md:170'],
             reason: '이 두 줄은 「PT 페이지는 아직 …」으로 인용하며 두 경로를 '
                 '가르친다 — 지우면 같은 오류가 다시 들어온다');
       });
@@ -594,7 +596,17 @@ void main() {
     test('aif-t2-3: 「서버리스」·「단일 API」는 개요 페이지가 아니다 (G-40)', () {
       final raw = read('aif-t2-3');
       expect(raw, contains('Quickstart 중심의 「Overview」로 재구성'));
-      expect(raw, contains('genai-guide.html`의 `model-independent, single API access'));
+      // ⚠️⚠️ 2026-11-17: 이 단정이 **공식에 더 이상 없는 인용문을 굳히고 있었다.**
+      // 원래 `model-independent, single API access` 한 구절을 요구했는데, 결정
+      // 가이드 2026-11-14 개정판을 다시 재니 **그 결합형은 0건**이고 두 구절로
+      // 갈려 있다 — `through a single API` **2건** · `model-independent API
+      // access` **1건**(대조군 `Bedrock` 168 · `generative AI` 37 · `SageMaker`
+      // 134 로 추출이 유효함을 먼저 확인했다). 가드를 그대로 두고 콘텐츠를
+      // 되돌렸다면 **거짓 인용을 복원**했을 자리다.
+      // ⚠️ `grep -iF` 는 이 페이지에서 제목 문자열조차 0건을 돌려준다(환경 함정) —
+      // 판정은 Python 으로 셌다.
+      expect(raw, contains('genai-guide.html`의 `through a single API`'));
+      expect(raw, contains('model-independent API access'));
     });
 
     test('aif-t3-1: 지식 기반은 두 유형이고 옛 귀속이 지워졌다 (G-47)', () {

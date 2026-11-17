@@ -81,6 +81,10 @@
         {
           "title": "AWS Systems Manager Run Command",
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/run-command.html"
+        },
+        {
+          "title": "여러 관리형 노드에 명령 실행 — 태그·리소스 그룹 대상 지정",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html"
         }
       ],
       "verified": true
@@ -200,13 +204,13 @@
       "difficulty": "applied",
       "stem": "인스턴스에 `patch group = prod-web` 태그를 붙였는데 패치 그룹으로 인식되지 않는다. 가장 가능성 높은 원인은?",
       "options": [
-        "태그 키가 정확히 `Patch Group`(공백·대소문자 포함)이어야 하는데 다르게 입력됐다",
+        "태그 키가 `Patch Group` 또는 `PatchGroup`이어야 하는데 다르게 입력됐다",
         "태그 값에 하이픈을 쓸 수 없다",
         "패치 그룹은 태그가 아니라 리소스 그룹으로만 지정한다",
         "태그는 인스턴스가 중지된 상태에서만 반영된다"
       ],
       "correct": 0,
-      "explanation": "패치 그룹은 태그 키가 정확히 `Patch Group`일 때만 인식됩니다(공백·대소문자 포함). 같은 값을 패치 베이스라인에 등록해 연결해야 그룹별 정책이 적용됩니다.",
+      "explanation": "패치 그룹은 태그 키가 `Patch Group` 또는 `PatchGroup`일 때 인식됩니다(EC2 인스턴스 메타데이터에서 태그를 허용했다면 공백 없는 `PatchGroup`이 필수). 같은 값을 패치 베이스라인에 등록해 연결해야 그룹별 정책이 적용됩니다. 패치 정책(patch policy) 기반 운영에서는 패치 그룹을 쓰지 않습니다.",
       "wrongExplanations": {
         "1": "값에 하이픈을 쓸 수 있습니다.",
         "2": "패치 그룹은 태그 기반입니다.",
@@ -216,6 +220,10 @@
         {
           "title": "패치 그룹에 태그 지정(관리형 노드 추가)",
           "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-tag-a-patch-group.html"
+        },
+        {
+          "title": "패치 그룹 — 패치 정책 기반 운영에서는 쓰지 않음",
+          "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-patch-groups.html"
         }
       ],
       "verified": true

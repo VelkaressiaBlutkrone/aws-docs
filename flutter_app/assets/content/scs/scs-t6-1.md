@@ -32,7 +32,9 @@ sources:
     url: https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html
   - title: SEC03-BP03 Establish emergency access process
     url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html
-lastVerified: 2026-11-09
+  - title: FND05-BP02 Establish emergency access mechanisms
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/fnd05-bp02.html
+lastVerified: 2026-11-17
 ---
 
 # 계정의 중앙 배포와 관리 (조직·Control Tower·조직 정책·위임 관리자·루트 자격 증명)
@@ -314,17 +316,18 @@ Organizations와 통합되는 많은 AWS 서비스가 **멤버 계정 하나 이
 
 #### 5-4. 비상용 우회 절차
 
-루트 자격 증명을 없애고 자동화된 경로로만 접근하는 환경에서는 **그 경로가 고장났을 때의 절차**가 필요합니다. Well-Architected 보안 원칙 `SEC03-BP03`이 이것을 요구합니다 — **자동화된 프로세스나 파이프라인 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스**입니다.
+루트 자격 증명을 없애고 자동화된 경로로만 접근하는 환경에서는 **그 경로가 고장났을 때의 절차**가 필요합니다. Well-Architected의 비상 접근 모범 사례가 이것을 요구합니다 — **중앙 ID 공급자에 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스**입니다.
+
+> ⚠️ 이 모범 사례는 현행 프레임워크판에서 **`FND05-BP02`**입니다. 보안 원칙 백서판(`SEC03-BP03`)은 머리에 **「역사적 참조용」 배너**를 달고 있고, 현행 프레임워크의 `SEC03-BP03`은 **다른 모범 사례**(퍼블릭·교차 계정 액세스 분석)입니다. 번호가 아니라 제목으로 찾습니다.
 
 | 축 | 공식이 적는 것 |
 |---|---|
-| **왜** | 최소 권한에 의존하면서도 **필요할 때 올바른 수준의 접근을 얻게** 하기 위해 |
-| **형태** | 관리자가 요청을 **검증·승인**하는 프로세스. 예: 비상용 **교차 계정 역할**, 또는 비상 요청을 검증·승인하는 정해진 절차 |
-| **안티패턴 ①** | 기존 ID 구성에 장애가 났을 때 **복구할 비상 프로세스가 없는 것** |
-| **안티패턴 ②** | 문제 해결이나 복구를 위해 **장기 상승 권한을 부여하는 것** |
+| **왜** | 평소의 페더레이션 경로가 실패해도 **권한 있는 관리자가 대체 수단으로** 접근해 문제를 고치기 위해. 평소 경로가 복구될 때까지만 씁니다 |
+| **형태** | **미리 만들어 둔** 비상 접근 계정과 워크로드 계정의 **교차 계정 역할**. 권한 있는 사용자만 시작하고 **승인**을 거칩니다 |
+| **안티패턴** | 문서화·시험이 안 된 프로세스 · **평소 접근과 같은 시스템에 의존**하는 프로세스 · **비상이 아닌 상황에서의 사용** · 감사할 **로그가 부족**한 프로세스 |
 | **위험 수준** | 이 모범 사례를 세우지 않으면 **중간(Medium)** |
 
-> 🧠 **원리:** 비상용 우회는 "루트를 남겨 두는 것"이 아닙니다. 공식이 드는 형태는 **미리 구성한 비상용 역할 + 승인 절차 + 단기 권한**입니다. 중앙 집중화 환경에서는 §5-3의 특권 세션이 그 역할의 일부를 대신합니다 — 15분·작업 범위·`sts:AssumeRoot` 권한 보유자만.
+> 🧠 **원리:** 비상용 우회는 "루트를 남겨 두는 것"이 아닙니다. 공식이 드는 형태는 **미리 만들어 둔 비상 접근 계정·교차 계정 역할 + 승인 절차**입니다. 중앙 집중화 환경에서는 §5-3의 특권 세션이 그 역할의 일부를 대신합니다 — 15분·작업 범위·`sts:AssumeRoot` 권한 보유자만.
 
 ## ✍️ 시험 포인트
 
@@ -430,11 +433,11 @@ Organizations와 통합되는 많은 AWS 서비스가 **멤버 계정 하나 이
 
 <details><summary>정답 보기</summary>
 
-**미리 구성한 비상 접근 프로세스입니다.** Well-Architected 보안 원칙 **`SEC03-BP03`**이 이것을 요구합니다.
+**미리 구성한 비상 접근 프로세스입니다.** Well-Architected의 비상 접근 모범 사례(현행 프레임워크 **`FND05-BP02`**, 보안 원칙 백서 `SEC03-BP03`)가 이것을 요구합니다.
 
-- 공식 서술 — **"자동화된 프로세스나 파이프라인 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스"**입니다. 최소 권한에 의존하면서도 **필요할 때 올바른 수준의 접근을 얻게** 하는 것이 목적입니다
-- 공식이 드는 형태는 **관리자가 요청을 검증·승인하는 절차**이고, 예로 **비상용 교차 계정 역할**을 듭니다
-- 안티패턴 둘을 함께 보여 줍니다 — ① 기존 ID 구성 장애에서 **복구할 비상 프로세스가 없는 것** ② 문제 해결·복구를 위해 **장기 상승 권한을 부여하는 것**
+- 공식 서술 — **중앙 ID 공급자에 문제가 생긴 드문 경우에 워크로드에 비상 접근을 허용하는 프로세스**입니다. 권한 있는 관리자가 **대체 수단으로** 접근해 문제를 고치고, 평소의 페더레이션이 복구될 때까지만 씁니다
+- 공식이 드는 형태는 **미리 만들어 둔 비상 접근 계정과 워크로드 계정의 교차 계정 역할**이고, 권한 있는 사용자만 시작하며 **승인**을 거칩니다
+- 안티패턴도 함께 보여 줍니다 — 문서화·시험이 안 된 프로세스 · **평소 접근과 같은 시스템에 의존**하는 프로세스 · **비상이 아닌 상황에서의 사용** · 감사할 **로그가 부족**한 프로세스
 - 이 모범 사례를 세우지 않았을 때의 **위험 수준은 중간(Medium)**입니다
 
 ⚠️ 중앙 집중화 환경에서는 §5-3의 특권 세션이 이 역할의 상당 부분을 대신합니다 — **15분 · 작업 범위 한정 · `sts:AssumeRoot` 권한 보유자만**. 즉 "루트를 남겨 두는 것"이 아니라 **짧고 좁은 경로를 미리 만들어 두는 것**이 답입니다.
@@ -453,4 +456,5 @@ Organizations와 통합되는 많은 AWS 서비스가 **멤버 계정 하나 이
 9. Delegated administrator for AWS services that work with Organizations — `docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_delegated_admin.html` (2026-11-09 확인)
 10. Centralize root access for member accounts — `docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html` (2026-11-09 확인)
 11. AssumeRoot — `docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoot.html` (2026-11-09 확인)
-12. SEC03-BP03 Establish emergency access process — `docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html` (2026-11-09 확인)
+12. SEC03-BP03 Establish emergency access process — `docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html` (2026-11-17 확인)
+13. FND05-BP02 Establish emergency access mechanisms — `docs.aws.amazon.com/wellarchitected/latest/framework/fnd05-bp02.html` (2026-11-17 확인)

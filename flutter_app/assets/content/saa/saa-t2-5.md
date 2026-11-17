@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-19
+lastVerified: 2026-11-17
 ---
 
 # DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active
@@ -158,7 +158,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 | **zonal autoshift** | 다중 AZ | AWS가 **대신** 트래픽 이동을 시작합니다 | 지원 리소스에는 **추가 요금 없음** |
 | **Region switch** | 다중 리전 | 리전 전환 계획을 만들어 실행합니다 | **별도 요금** |
 | **routing control** | 다중 리전 | 리전 간 트래픽 전환을 on/off 스위치로 제어합니다 | **별도 요금** |
-| **readiness check** | 감시 | 복구 대상이 전환을 받을 준비가 됐는지 점검합니다 | — |
+| **readiness check** | 감시 | 복구 대상이 전환을 받을 준비가 됐는지 점검합니다 (⚠️ 신규 고객에게 열려 있지 않음 — 기존 고객은 계속 사용) | — |
 
 - **zonal shift는 임시 완화책입니다.** 시작할 때 만료 시각을 **1분부터 최대 3일(72시간)** 사이로 정하며 연장할 수 있지만, 영구 구성이 아닙니다. 리소스를 옵트인해야 쓸 수 있습니다.
 - ⚠️ **사전 용량 확보가 전제입니다.** 한 AZ를 빼면 남은 AZ가 그 몫을 받아야 하므로, 애플리케이션을 미리 **사전 확장(prescale)** 해 충분한 용량을 갖춰 두지 않으면 트래픽 이동이 오히려 장애를 키웁니다.
@@ -173,15 +173,15 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 
 | 복제 방식 | RPO | 성능 영향 | 사용 예 |
 |---|---|---|---|
-| **동기(Synchronous)** | 거의 0 (데이터 손실 없음) | 레이턴시 증가 가능 | 같은 리전 내 Multi-AZ(RDS Multi-AZ) |
+| **동기(Synchronous)** | 거의 0 (데이터 손실 없음) | 레이턴시 증가 가능 | 같은 리전 내 Multi-AZ(RDS Multi-AZ DB 인스턴스 배포) |
 | **비동기(Asynchronous)** | 복제 지연만큼의 손실 가능 | 성능 영향 최소 | 교차 리전 복제(CRR, Aurora Global DB 보조 클러스터) |
 
-> RDS Multi-AZ는 같은 리전 내 **동기** 복제(AZ 장애 대응), 교차 리전 Read Replica는 **비동기** 복제(리전 장애 대응).
+> RDS Multi-AZ DB 인스턴스 배포는 같은 리전 내 **동기** 복제(AZ 장애 대응), 교차 리전 Read Replica는 **비동기** 복제(리전 장애 대응).
 
 > 🧠 원리: 왜 동기 복제는 같은 리전 내 AZ 간에는 실용적이지만 리전 간에는 잘 쓰지 않을까요?
-> 같은 리전의 AZ 간 왕복 지연은 충분히 짧아 동기 복제로 인한 쓰기 지연이 애플리케이션에서 체감되지 않는 수준입니다.
+> 같은 리전의 AZ 간 왕복 지연은 짧아 동기 복제가 가능하지만, 단일 AZ 배포보다 쓰기·커밋 지연이 늘 수 있습니다.
 > 반면 리전 간 왕복 지연은 물리적 거리로 인해 상당히 크며, 동기 복제를 강제하면 모든 DB 쓰기가 그 지연을 기다려야 해 초당 처리량이 급감합니다.
-> 이 물리적 한계가 "같은 리전 = 동기(RDS Multi-AZ), 리전 간 = 비동기(Read Replica/Aurora Global DB)"라는 복제 방식 이분법의 근거입니다.
+> 이 물리적 한계가 "같은 리전 = 동기(RDS Multi-AZ DB 인스턴스 배포), 리전 간 = 비동기(Read Replica/Aurora Global DB)"라는 복제 방식 이분법의 근거입니다.
 
 ### 7) AWS Elastic Disaster Recovery (DRS) {#aws-drs}
 
@@ -248,7 +248,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 2. **"Pilot Light = Warm Standby."** → 가장 빈번한 혼동입니다. Pilot Light는 앱 서버가 꺼져 있어 재해 시 기동 시간이 필요합니다. Warm Standby는 이미 실행 중이므로 즉시 트래픽을 받을 수 있습니다.
    (원리: §3 — Pilot Light가 DB만 상시 복제하는 이유는 앱은 기동 가능하지만 데이터는 사전 복제 없이 복구 불가이기 때문이다.)
 
-3. **"RDS Multi-AZ와 교차 리전 Read Replica는 같다."** → Multi-AZ는 동일 리전 내 동기 복제(AZ 장애 대응), Read Replica는 비동기 교차 리전 복제(리전 장애 DR). 목적과 복제 방식이 다릅니다.
+3. **"RDS Multi-AZ와 교차 리전 Read Replica는 같다."** → Multi-AZ DB 인스턴스 배포는 동일 리전 내 동기 복제(AZ 장애 대응), Read Replica는 비동기 교차 리전 복제(리전 장애 DR). 목적과 복제 방식이 다릅니다.
    (원리: §6 — AZ 간 왕복 지연은 짧아 동기 복제가 실용적이고, 리전 간 왕복 지연은 물리적으로 커서 비동기가 불가피하다.)
 
 4. **"RPO=0이면 Backup & Restore로 된다."** → Backup & Restore는 RPO가 마지막 백업 이후(수 시간)입니다. RPO 0 요구에는 동기 복제 또는 Active-Active가 필요합니다.
