@@ -301,16 +301,20 @@
         "감사 용도만 어긋납니다. 도구는 검토한 워크로드 수에 따라 과금되므로 예산 항목은 그대로 둡니다"
       ],
       "correct": 2,
-      "explanation": "AWS Well-Architected Framework는 아키텍처 검토를 아키텍처 결정에 관한 건설적 대화이고 감사 메커니즘이 아니라고 적습니다. 그리고 AWS는 워크로드 검토 서비스를 무료로 제공합니다 — AWS Well-Architected Tool입니다. 그래서 감사 용도와 사용료 예산 항목이 둘 다 공식 서술과 어긋납니다.",
+      "explanation": "AWS Well-Architected Framework는 아키텍처 검토를 아키텍처 결정에 관한 건설적 대화이고 감사 메커니즘이 아니라고 적습니다. 그리고 공식 요금 페이지가 AWS Well-Architected Tool에는 추가 요금이 없고 기반 AWS 리소스 비용만 낸다고 적습니다. 그래서 감사 용도와 사용료 예산 항목이 둘 다 공식 서술과 어긋납니다.",
       "wrongExplanations": {
         "0": "감사 용도가 어긋나는 쪽입니다. 공식은 검토를 건설적 대화로 적고 감사 메커니즘이 아니라고 명시합니다.",
-        "1": "둘 다 어긋납니다. 감사 메커니즘이 아니라는 문장과 무료라는 문장이 공식에 그대로 있습니다.",
-        "3": "도구는 무료입니다. 워크로드 수에 따른 과금은 없으므로 예산 항목 자체가 필요하지 않습니다."
+        "1": "둘 다 어긋납니다. 감사 메커니즘이 아니라는 문장은 프레임워크 문서에, 추가 요금이 없다는 문장은 요금 페이지에 그대로 있습니다.",
+        "3": "도구에는 추가 요금이 없습니다. 워크로드 수에 따른 과금은 없으므로 예산 항목 자체가 필요하지 않습니다."
       },
       "sources": [
         {
-          "title": "AWS Well-Architected Framework — 검토는 감사가 아니다 · WA Tool 무료",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html"
+          "title": "AWS Well-Architected Framework — 기초 질문 · 검토는 감사가 아니다",
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html"
+        },
+        {
+          "title": "AWS Well-Architected Tool Pricing — 추가 요금 없음",
+          "url": "https://aws.amazon.com/well-architected-tool/pricing/"
         }
       ],
       "id": "aip-t1-1-q11",
