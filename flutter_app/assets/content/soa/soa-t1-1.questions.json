@@ -58,10 +58,6 @@
         {
           "title": "CloudWatch 개념 — 해상도별 보존 기간과 롤업",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 지표 보존과 집계",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -79,7 +75,7 @@
         "대시보드 자동 새로 고침 간격을 10초로 설정한다"
       ],
       "correct": 0,
-      "explanation": "고해상도 지표는 PutMetricData에서 StorageResolution=1로 게시하며(기본값 60=표준), 이때 경보 주기를 10초 또는 30초로 설정할 수 있습니다. 표준 지표는 60초의 배수만 가능합니다.",
+      "explanation": "고해상도 지표는 PutMetricData에서 StorageResolution=1로 게시하며(기본값 60=표준), 이때 60초 미만의 고해상도 경보 주기(예: 10초·30초)를 설정할 수 있습니다. 표준 지표는 60초의 배수만 가능합니다.",
       "wrongExplanations": {
         "1": "표준 해상도(60초)로 게시된 지표의 경보 최소 주기는 60초의 배수입니다. 10초 경보를 만들 수 없습니다.",
         "2": "EC2 세부 모니터링은 1분 주기 게시이며 10초 평가를 제공하지 않습니다.",
@@ -91,8 +87,8 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
         },
         {
-          "title": "지표 작업 — 해상도별 경보 주기",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
+          "title": "경보 평가 — 고해상도 경보",
+          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
         }
       ],
       "verified": true
@@ -120,10 +116,6 @@
         {
           "title": "경보 평가 — 평가 기간과 경보 데이터 포인트",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
-        },
-        {
-          "title": "지표 작업 — 통계와 기간",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -306,10 +298,6 @@
         {
           "title": "CloudWatch 개념 — 네임스페이스·차원·기간·통계",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 차원으로 지표 집계",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true
@@ -399,10 +387,6 @@
         {
           "title": "CloudWatch 개념 — 해상도별 보존과 롤업 동작",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html"
-        },
-        {
-          "title": "지표 작업 — 보존 기간에 따른 조회 결과",
-          "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html"
         }
       ],
       "verified": true

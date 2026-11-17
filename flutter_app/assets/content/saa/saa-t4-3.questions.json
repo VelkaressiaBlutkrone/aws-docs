@@ -144,7 +144,9 @@
         "3": "스토리지 자동 확장 중 DB 인스턴스가 재부팅되지 않습니다. 운영 중인 DB에 영향 없이 스토리지가 확장됩니다."
       },
       "sources": [
-        { "title": "RDS DB 인스턴스 스토리지 — 증설과 스토리지 오토스케일링 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html" }
+        { "title": "RDS DB 인스턴스 스토리지 — 증설과 스토리지 오토스케일링 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html" },
+        { "title": "RDS 스토리지 용량 증설 — 할당한 공간은 줄일 수 없음", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.ModifyingExisting.html" },
+        { "title": "RDS 스토리지 자동 조정 — 최대 스토리지 임계값", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.Autoscaling.html" }
       ],
       "verified": true
     },
@@ -185,14 +187,15 @@
         "프로비저닝 인스턴스처럼 시간당 고정 인스턴스 클래스 요금이 부과된다"
       ],
       "correct": 2,
-      "explanation": "Aurora serverless는 실제 사용 ACU × 초당 과금 방식입니다. 유휴 상태에서는 설정된 최솟값(기본 0.5 ACU) ACU만 과금되므로, 트래픽이 없을 때 비용이 최소화됩니다. 0.5 ACU 단위로 미세 조정이 가능합니다.",
+      "explanation": "Aurora serverless는 실제 사용 ACU × 초당 과금 방식입니다. 유휴 상태에서는 설정한 최솟값만큼만 과금되므로 트래픽이 없을 때 비용이 최소화됩니다(활성 상태의 최소 용량은 0.5 ACU이고, 최솟값을 0 ACU로 두면 자동 일시 정지 동안 인스턴스 용량 요금이 붙지 않습니다). 0.5 ACU 단위로 미세 조정이 가능합니다.",
       "wrongExplanations": {
         "0": "Aurora serverless는 요청 수 기반이 아닌 ACU 기반 과금입니다. 또한 최솟값 ACU가 있어 완전히 비용이 0이 되지는 않습니다(자동 일시정지 설정 시 제외).",
         "1": "Aurora serverless는 스토리지 비용 외에 컴퓨팅(ACU) 비용도 발생합니다. 스토리지에만 비례하는 것이 아닙니다.",
         "3": "Aurora serverless는 고정 인스턴스 클래스 요금이 아닌 실제 사용 ACU 기반 초당 과금입니다. 프로비저닝 인스턴스와는 과금 구조가 다릅니다."
       },
       "sources": [
-        { "title": "Aurora serverless (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html" }
+        { "title": "Aurora serverless (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html" },
+        { "title": "Aurora serverless 용량 설정 — 최솟값 0.5 ACU(활성 상태 최소)·0 ACU(자동 일시 정지)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.setting-capacity.html" }
       ],
       "verified": true
     },

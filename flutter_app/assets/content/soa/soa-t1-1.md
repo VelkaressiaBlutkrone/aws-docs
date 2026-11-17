@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
   - title: 경보 작업 (지원되는 작업 목록) (공식)
     url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-actions.html
-lastVerified: 2026-11-01
+lastVerified: 2026-11-17
 ---
 
 # CloudWatch 지표·경보·대시보드
@@ -115,7 +115,7 @@ aws cloudwatch put-metric-data \
 | 구분 | 해상도 | 경보 최소 주기 | 용도 |
 |---|---|---|---|
 | **표준 지표** | 1분(60초) | **60초의 배수** (60, 300, ...) | 대부분의 AWS 서비스 기본 지표 |
-| **고해상도 지표** | **1초까지** | **10초 또는 30초** 가능 | 빠른 변동을 잡아야 하는 사용자 지정 지표 |
+| **고해상도 지표** | **1초까지** | **60초 미만(예: 10초·30초)** 가능 | 빠른 변동을 잡아야 하는 사용자 지정 지표 |
 
 > 고해상도 지표는 `PutMetricData`에서 `StorageResolution=1`로 게시합니다. 기본값은 60(표준)입니다.
 
@@ -280,7 +280,7 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 
 - **지표 식별 = 네임스페이스 + 이름 + 차원**. 차원 조합이 다르면 별개 지표. 자동으로 가로질러 합산되지 않는다.
 - **통계 vs 기간**을 혼동하지 말 것. 통계(Average/Sum/Max/p99…)는 "집계 방식", 기간(Period)은 "집계 시간 단위".
-- **표준 경보 최소 주기 = 60초의 배수**, **고해상도 경보 = 10초 또는 30초**. 고해상도 지표는 1초까지 게시 가능.
+- **표준 경보 최소 주기 = 60초의 배수**, **고해상도 경보 = 60초 미만 주기(예: 10초·30초)**. 고해상도 지표는 1초까지 게시 가능.
 - **보존**: 1분=15일, 5분=63일, 1시간=455일(15개월), **고해상도(60초 미만)=3시간**.
 - **EC2 기본=5분(무료), 세부=1분(유료)**. 1분 경보를 원하면 세부 모니터링을 켜야 함.
 - **경보 상태 3종**: OK / ALARM / **INSUFFICIENT_DATA**(에러가 아님).
@@ -374,3 +374,5 @@ ALARM("web-cpu-high") AND ALARM("web-latency-high")
 7. CloudWatch 대시보드 — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Dashboards.html
 8. EC2 인스턴스 모니터링(기본 vs 세부) — https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html
 9. 경보 작업(지원되는 작업 목록 · EventBridge로 이벤트 전송) — https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-actions.html
+
+> 📝 **2026-11-17 정정**: 고해상도 경보 주기는 공식 문서 두 곳의 표기가 달라(https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html · https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html) 가능한 값의 개수를 못박지 않는 표현으로 바꿨습니다.

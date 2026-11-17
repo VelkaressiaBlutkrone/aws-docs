@@ -146,6 +146,11 @@ void main() {
     const registered = <String>{
       'dea_questions_test.dart', // 구조·밀도 가드(사실 가드가 아니다)
       'dea_mla_p1_review_fix_test.dart', // 2026-11-06 P1 정정 — 29초 규칙을 옮겼다
+      // 2026-11-17 전 콘텐츠 검증 2단계(보정) 회귀 가드 — 금지 문장을 옮기지
+      // 않는다. 그 가드가 **md 17편(`mdFiles`) + 문항 전수(`allQuestions`)를
+      // 함께** 쓸기 때문이다(실측 확인). DEA 는 md 사실 가드가 없던 자격증이라
+      // 이 가드가 그 공백을 메운다. ⭐ 트립와이어가 설계대로 또 울렸다.
+      'dea_v2_fix_test.dart',
     };
     final unregistered = Directory('test')
         .listSync()

@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: Compute Savings Plans and Reserved Instances (공식)
     url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing
@@ -175,7 +175,7 @@ Free Tier → RI → EC2 Instance Savings Plans → Compute Savings Plans → �
 **핵심 특성:**
 
 - 온디맨드 대비 최대 **90% 할인**
-- AWS가 용량을 필요로 하면 **2분 인터럽트 알림** 후 회수(종료·중지·동면 중 선택 가능 — **기본값은 종료**)
+- AWS가 용량을 필요로 하면 **2분 인터럽트 알림** 후 회수(종료·중지·동면 중 선택 가능 — **기본값은 종료**, 동면은 즉시 시작돼 2분 알림이 없음)
 - EC2 인스턴스 재조정 권장 신호(Rebalance Recommendation)로 중단 전 사전 알림 제공
 
 **적합 워크로드:**

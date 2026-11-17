@@ -74,6 +74,10 @@ sources:
     url: https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html
   - title: Remove PII from conversations by using sensitive information filters
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
+  - title: SUS01-BP03 Select Regions that align to your sustainability goals (AWS Well-Architected Framework)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sus01-bp03.html
+  - title: Deploy your guardrail (Amazon Bedrock)
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-deploy.html
 lastVerified: 2026-11-17
 ---
 
@@ -122,7 +126,7 @@ lastVerified: 2026-11-17
 - ⚠️ **안전 조치 계층(Classic·Standard)은 세 정책에만** 있습니다 — 콘텐츠 필터(텍스트)·프롬프트 공격 · 거부 주제 · 문맥 근거 확인. **미지정 시 Classic**이고 **Standard는 교차 리전 추론이 필수**입니다
 - **문맥 근거 확인은 패러다임이 둘**입니다 — **접지**(소스에 근거하는가)와 **관련성**(질의에 답하는가). ⚠️ 임계값 유효 범위는 **0~0.99**이고 **1은 무효**(전부 차단)입니다
 - ⚠️ **자동 추론 검사는 이진 게이트가 아니라 검증 계층**입니다. **내가 만든 정책**이 먼저 있어야 하고 **영어(미국)만** 지원하며 **스트리밍을 지원하지 않습니다.** 프롬프트 인젝션도 막지 못합니다
-- **모델 선택의 환경 관행**은 **"생성형 AI가 맞는 해법인지 먼저 묻는다"**에서 시작합니다. 그다음이 **적정 크기 모델 · 양자화 · 프루닝 · 증류**이고, 리전은 **재생 에너지 프로젝트·낮은 탄소 집약도**가 공식 근거입니다
+- **모델 선택의 환경 관행**은 **"생성형 AI가 맞는 해법인지 먼저 묻는다"**에서 시작합니다. 그다음이 **적정 크기 모델 · 양자화 · 프루닝 · 증류**이고, 리전은 필수 요건(비용·지연·서비스 가용성·규정 준수)을 충족하는 후보 가운데 **전력망의 탄소 집약도가 낮은 곳**을 고릅니다
 - ⚠️ **AWS 지적 재산권 면책에는 조건이 있습니다** — 침해 데이터를 넣지 않는 것과 **서비스의 필터링 기능을 끄지 않는 것**이 공식 문장에 있습니다. 가드레일을 끄면 보호가 흔들립니다
 - ⚠️ **과소적합은 높은 편향, 과적합은 높은 변동**입니다. 과소적합은 **훈련·테스트 양쪽에서** 부정확하고 과적합은 **훈련에서는 좋고 테스트에서 나쁩니다.** 「하위 그룹 분석」의 공식 사례는 **심슨의 역설**입니다
 
@@ -261,7 +265,9 @@ lastVerified: 2026-11-17
 
 > ⚠️ **"지속 가능성 때문에 작은 모델"과 "비용 때문에 작은 모델"은 공식에서 같은 문장에 있습니다.** **"환경적 고려 사항"이 보기에 있으면 작은 모델·양자화·프루닝·증류 쪽**을 고르고, 그 선택이 비용에도 유리한 것을 모순으로 읽지 않습니다.
 
-**리전 선택도 책임 있는 관행입니다.** **`SUS01-BP01 Choose Region based on both business requirements and sustainability goals`**가 정본입니다 — 리전을 **비즈니스 요구와 지속 가능성 목표 양쪽**에 근거해 골라 **성능·비용·탄소 발자국을 포함한 KPI를 최적화**합니다. 공식 이점은 **"Amazon의 재생 에너지 프로젝트 근처나 공표된 탄소 집약도가 낮은 리전에 워크로드를 두면 탄소 발자국을 낮추는 데 도움이 된다"**이고 **안티패턴 둘**이 그대로 함정입니다 — ⚠️ **내 위치를 기준으로 리전을 고른다** · ⚠️ **모든 워크로드 자원을 한 지리적 위치에 통합한다.** 위험 등급 **Medium**입니다.
+**리전 선택도 책임 있는 관행입니다.** 현행 Well-Architected Framework의 **`SUS01-BP03 Select Regions that align to your sustainability goals`**가 정본입니다 — 먼저 **비용·지연·서비스 가용성·규정 준수** 같은 필수 요건을 평가하고, 그 요건을 충족하는 후보 리전 가운데 **각 리전 전력망의 탄소 집약도**를 고려해 고릅니다. 바라는 결과는 비즈니스 요구가 허용하는 범위에서 **탄소 집약도가 낮고 무탄소 에너지 가용성이 높은 리전**에 워크로드를 두는 것이고, **안티패턴**이 그대로 함정입니다 — ⚠️ **팀 위치와 가깝다는 이유만으로 리전을 고른다** · ⚠️ **워크로드별 필요를 따지지 않고 모든 워크로드를 한 리전에 배포한다** · ⚠️ **지속 가능성 요소를 리전 결정에서 아예 무시한다.** 위험 등급 **High**입니다.
+
+> ⚠️ **이 모범 사례는 BP 번호로 외우지 않습니다.** 옛 「지속 가능성 원칙」 백서는 같은 주제를 `SUS01-BP01`로 실었는데 그 백서는 지금 **"역사적 참조용"**으로 표시돼 있고, 현행 Framework에서 `SUS01-BP01`은 **다른 모범 사례**(자원 사용 효율의 이해)입니다. 번호가 재배정됐으므로 **제목과 내용**으로 기억합니다.
 
 **수명 주기 전체를 봐야 합니다.** `MLSUS01-BP01`이 적는 사실이 반직관적입니다 — ⚠️ **"큰 모델을 훈련하는 것이 일반적으로 추론보다 연산 집약적이지만, 모델이 하루에 수백만 건의 예측을 서빙한다면 추론 단계가 시간이 지나며 더 큰 누적 영향을 가질 수 있다."** **훈련 1회만 보고 판단하면 틀립니다.**
 
@@ -414,7 +420,7 @@ lastVerified: 2026-11-17
 - ⚠️ **"임베딩 모델에 가드레일"은 실패합니다.** 임베딩·재순위 지정·음성·비디오 생성 모델이 빠지고 **유형으로 추론하지 말라**는 것이 공식 경고입니다.
 - ⚠️ **계층 문항은 세 정책에만 성립합니다.** **Standard는 교차 리전 추론을 요구**하고 **프롬프트 누출 탐지는 Standard 전용**이며 **미지정 시 Classic**입니다. "엄격한 접지가 유효한 응답을 너무 많이 막는다"면 답은 **Standard**입니다.
 - **접지 ↔ 관련성**은 **"소스를 썼는가"와 "질의에 답했는가"**로 갈립니다. **"근거 있고 사실도 맞지만 질의에 답하지 않았다"는 무관**입니다.
-- **환경적 고려 사항**은 **① 생성형 AI가 필요한지 먼저 묻기 → ② 적정 크기 모델·양자화·프루닝·증류 → ③ 오토 스케일링·서버리스** 순서입니다. 리전은 **재생 에너지·낮은 탄소 집약도**이고 안티패턴은 **"내 위치 기준으로 고르기"**입니다.
+- **환경적 고려 사항**은 **① 생성형 AI가 필요한지 먼저 묻기 → ② 적정 크기 모델·양자화·프루닝·증류 → ③ 오토 스케일링·서버리스** 순서입니다. 리전은 필수 요건을 충족하는 후보 가운데 **탄소 집약도가 낮은 곳**이고 안티패턴은 **"팀 위치와 가깝다는 이유만으로 고르기"**입니다.
 - ⚠️ **IP 면책 문항의 함정은 조건입니다** — **침해 데이터를 넣지 않을 것**과 **필터링 기능을 끄지 않을 것**. 그리고 **라이선스 검토·준수는 고객 책임**입니다.
 - ⚠️ **"과소적합은 높은 편향, 과적합은 높은 변동"**이고 과소적합은 **훈련·테스트 양쪽에서** 나쁩니다.
 - **감지 도구 선택**은 **보는 위치**로 갈립니다 — **데이터면 라벨 품질 분석**, **평가 결과를 집단별로 가르면 하위 그룹 분석**, **자동 지표가 놓치는 맥락·뉘앙스면 인간 감사**, **추론 시점이면 Guardrails**입니다.
@@ -603,3 +609,5 @@ AWS 문서가 **조건부 인구통계 격차** 지표를 설명하며 **버클�
 31. AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 4 (영문 — 한국어판과 목표 11개가 낱말 단위로 일치함을 확인한 대조본) — `docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain4.html` (2026-11-03 확인)
 32. Migrate the UI from Studio Classic to Studio (새 Studio 경험은 **클래식 Data Wrangler UI를 지원하지 않고** Data Wrangler 기능을 쓰려면 **Canvas 애플리케이션**을 만들어야 한다 · Canvas의 데이터 준비 기능이 Data Wrangler 기반) — `docs.aws.amazon.com/sagemaker/latest/dg/studio-updated-migrate-ui.html` (2026-11-07 확인)
 33. Remove PII from conversations by using sensitive information filters — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html` (2026-11-17 확인)
+34. SUS01-BP03 Select Regions that align to your sustainability goals (필수 요건을 충족하는 후보 리전 가운데 전력망의 탄소 집약도를 고려 · 안티패턴 · 위험 High. ⚠️ 옛 지속 가능성 원칙 백서의 `SUS01-BP01 Choose Region …`은 "역사적 참조용"으로 표시된 이전 판입니다) — `docs.aws.amazon.com/wellarchitected/latest/framework/sus01-bp03.html` (2026-11-17 확인)
+35. Deploy your guardrail (가드레일 버전은 별개 리소스가 아니고 자체 ARN이 없다 · 특정 버전 제한은 `bedrock:GuardrailIdentifier` 조건 키) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-deploy.html` (2026-11-17 확인)

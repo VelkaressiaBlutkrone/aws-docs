@@ -10,7 +10,7 @@ coversTasks:
 sources:
   - title: Amazon Bedrock Overview
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html
-  - title: What is Amazon Quick?
+  - title: What is AWS Quick? (Quick 사용자 가이드)
     url: https://docs.aws.amazon.com/quick/latest/userguide/what-is.html
   - title: What is Amazon SageMaker AI?
     url: https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
@@ -56,7 +56,7 @@ sources:
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-inference-architecture-and-best-practices-on-aws/amazon-bedrock.html
   - title: AIF-C01 공식 시험 가이드 · 콘텐츠 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # GenAI 애플리케이션을 위한 AWS 인프라와 기술 (서비스 선택·이점·인프라 보증·비용 절충)
@@ -97,7 +97,7 @@ lastVerified: 2026-11-06
 - **Bedrock은 "모델을 API로 쓰는 쪽", SageMaker AI는 "모델을 만들고 호스팅하는 쪽"**입니다. 공식 결정 가이드가 **"Bedrock으로 시작해 사용자 지정 요구가 커지면 SageMaker AI로 넘어가는 것이 일반적 경로"**라고 적습니다
 - **`Strands Agents`는 오픈소스 SDK**이고 관리형 서비스가 아닙니다. **`Amazon Bedrock AgentCore`가 그 코드를 운영하는 플랫폼**이고 "인프라 관리 없이" 돌립니다 — **경쟁이 아니라 층이 다릅니다**
 - ⚠️ **`Amazon Bedrock Agents`는 `Agents Classic`으로 개명되고 2026-07-30부터 신규 고객을 받지 않습니다.** 에이전트 구축의 정본은 **AgentCore**입니다. Bedrock 모델 · Knowledge Bases · Guardrails는 **영향 없습니다**
-- **`Amazon Quick`은 Amazon QuickSight의 개명**입니다 — "QuickSight는 **Quick 안의 기능인 Amazon Quick Sight**로 이어진다"이고 **기존 API·SDK는 변경 없이 동작**합니다
+- **`Amazon Quick`은 Amazon QuickSight에서 발전한 서비스**입니다 — "QuickSight는 **Quick 안의 기능인 AWS Quick Sight**로 이어진다"이고 **기존 API·SDK는 변경 없이 동작**합니다. ⚠️ 시험 가이드는 `Amazon Quick`, 제품 사용자 가이드는 `AWS Quick`으로 적습니다(같은 서비스)
 - **`Kiro`는 "AWS의 에이전틱 개발 시스템"**입니다 — **개발 도구**이고 모델 서비스가 아닙니다
 - **`SageMaker JumpStart`는 SageMaker AI 안의 ML 허브**입니다. 사전 훈련 공개 모델 · **솔루션 템플릿** · 예제 노트북을 줍니다. ⚠️ 2024-12-03 **개명은 기능 이름에 적용되지 않으므로** `SageMaker AI JumpStart`가 아닙니다
 - **AWS를 쓰는 이점의 핵심은 "ML 전문성 없이도 쓸 수 있다"**입니다 — 공식은 Bedrock을 "ML 전문성이나 리소스가 제한적일 때 특히 유용"하다고 적고 필요 전문성을 **"사전 훈련 모델을 쓰는 데 필요한 기본 수준"**으로 적습니다
@@ -136,7 +136,7 @@ lastVerified: 2026-11-06
 | 모델을 **훈련·사용자 지정·배포**하며 통제를 쥔다 | `Amazon SageMaker AI` | **"완전관리형 ML 서비스"** — 구축·훈련·배포를 프로덕션 규모로 |
 | **사전 훈련 공개 모델**을 골라 시작한다 | `SageMaker JumpStart` | **"ML 여정을 가속하는 ML 허브"** — 사전 훈련 공개 모델 · 솔루션 템플릿 · 예제 노트북 |
 | 에이전트를 **안전하게 규모로 운영**한다 | `Amazon Bedrock AgentCore` | **"어떤 프레임워크와 파운데이션 모델로든 매우 효과적인 에이전트를 안전하게 규모로 구축·배포·운영하는 에이전틱 플랫폼"** |
-| 에이전트를 **코드로 짠다** | `Strands Agents` | **"AWS가 처음 공개한 오픈소스 SDK"** — 모델 우선(model-first) 설계 |
+| 에이전트를 **코드로 짠다** | `Strands Agents` | **"AWS가 처음에 오픈소스 SDK로 공개했다"** — 모델 우선(model-first) 설계 |
 | 데이터를 **분석·시각화**하고 업무를 자동화한다 | `Amazon Quick` | **"작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스"** |
 | **코드를 쓰는 작업**을 에이전트에게 맡긴다 | `Kiro` | **"AWS의 에이전틱 개발 시스템"** — IDE · CLI · 자율 웹 에이전트 형태 |
 
@@ -167,7 +167,9 @@ AgentCore의 모듈 중 시험 범위에서 의미 있는 것만 골라 둡니�
 
 > ⚠️ **이름이 비슷한 두 서비스를 섞으면 안 됩니다.** `Amazon Bedrock Agents`는 **`Amazon Bedrock Agents Classic`으로 개명**됐고 공식 문서 첫 문장이 **"2026년 7월 30일부터 신규 고객에게 열리지 않는다"**고 적습니다. 같은 페이지가 범위를 좁혀 둡니다 — **"Amazon Bedrock은 계속 완전히 지원된다. Agents Classic 서비스만 신규 고객에게 열리지 않으며, 기존 Bedrock 모델·Knowledge Bases·Guardrails는 영향을 받지 않는다."** 그래서 **"에이전트를 새로 만든다"는 지문의 정답은 AgentCore**입니다.
 
-> ⚠️ **`Amazon Quick`의 이름이 함정입니다.** 공식 메모가 **"Amazon Quick은 Amazon QuickSight에서 진화했다. QuickSight는 Quick 안의 기능인 Amazon Quick Sight로 이어진다"**고 적고 **"기존 QuickSight API·SDK·통합은 변경 없이 계속 동작한다"**를 덧붙입니다. Quick의 기능은 `Amazon Quick Sight`(시각화·BI) · `Amazon Quick Flows` · `Amazon Quick Automate` · `Amazon Quick Index` · `Amazon Quick Research` · `Apps in Amazon Quick` 여섯입니다. **`Amazon QuickSight`는 개명 전 이름이고, 띄어 쓰지 않는 표기를 현재 기능명으로 쓰지 않습니다.**
+> ⚠️ **`Amazon Quick`의 이름이 함정입니다.** 제품 사용자 가이드의 메모가 **"AWS Quick은 Amazon QuickSight에서 진화했다. QuickSight는 Quick 안의 기능인 AWS Quick Sight로 이어진다"**고 적고 **"기존 QuickSight API·SDK·통합은 변경 없이 계속 동작한다"**를 덧붙입니다. Quick의 기능은 `AWS Quick Sight`(시각화·BI) · `AWS Quick Flows` · `AWS Quick Automate` · `AWS Quick Index` · `AWS Quick Research` · `Apps in AWS Quick` 여섯입니다. **`Amazon QuickSight`는 개명 전 이름이고, 띄어 쓰지 않는 표기를 현재 기능명으로 쓰지 않습니다.**
+
+> ⚠️ **표기가 공식 안에서 갈립니다.** 시험 가이드 본문과 공식 범위 내 서비스 목록은 **`Amazon Quick`**으로 적고, 제품 사용자 가이드는 **`AWS Quick`**으로 적습니다(2026-11-17 확인). 이 문서는 서비스 이름을 **시험 가이드 표기**로 적고, 기능 이름은 그것을 정의하는 **제품 가이드 표기** 그대로 적습니다. 둘은 **같은 서비스**이므로 보기에 어느 표기가 나와도 같은 것으로 읽습니다.
 
 ### 2) AWS GenAI 서비스로 만들 때의 이점 (목표 2.3.2) {#benefits}
 
@@ -175,7 +177,7 @@ AgentCore의 모듈 중 시험 범위에서 의미 있는 것만 골라 둡니�
 
 | 목표의 낱말 | 어디서 나오는가 | 공식 근거 |
 |---|---|---|
-| **접근성** | 모델을 **API 호출 하나**로 쓴다. 모델 독립적인 단일 API라 모델을 바꿔도 **코드 변경이 최소**다 | Bedrock은 "보안·프라이버시·책임 있는 AI를 갖춘 GenAI 애플리케이션 구축에 필요한 것"을 제공하며 "모델 독립적인 단일 API 접근"을 준다(정본은 **생성형 AI 결정 가이드** `genai-guide.html`의 `model-independent, single API access`) |
+| **접근성** | 모델을 **API 호출 하나**로 쓴다. 모델 독립적인 단일 API라 모델을 바꿔도 **코드 변경이 최소**다 | Bedrock은 "보안·프라이버시·책임 있는 AI를 갖춘 애플리케이션 구축에 필요한 것"을 제공하며, **단일 API**로 여러 제공자의 모델을 쓰게 하고 **모델 독립적인 API 접근**을 준다(정본은 **생성형 AI 결정 가이드** `genai-guide.html`의 `through a single API` · `model-independent API access` — 2026-11-14 개정판) |
 | **낮은 진입 장벽** | 필요한 ML 전문성이 **기본 수준**이다. Quick은 "프로비저닝할 인프라도, 호스팅할 모델도, 필요한 ML 전문성도 없다" | Bedrock은 **"ML 전문성이나 리소스가 제한적일 때 특히 유용"**하다 |
 | **효율성** | AWS가 **프로비저닝·확장·유지 보수를 포함한 인프라 수명 주기 전체를 관리**해 팀이 애플리케이션 개발에 집중한다 | "AWS가 수요 패턴에 따라 용량을 자동 조정"한다 |
 | **비용 효과** | **종량제**다. 처리된 입력·출력 토큰으로 과금하고 선행 약정이 필요 없다(절충은 목표 2.3.4) | Bedrock 요금은 "API 소비 기반의 유연한 요금" |
@@ -250,9 +252,9 @@ AgentCore의 모듈 중 시험 범위에서 의미 있는 것만 골라 둡니�
 - **서비스 역할 매칭 문항**은 "무엇을 만드는가"를 먼저 읽습니다 — **FM 호출**은 Bedrock, **모델 훈련·통제**는 SageMaker AI, **사전 훈련 모델 고르기**는 SageMaker JumpStart, **에이전트 코드**는 Strands Agents, **에이전트 운영**은 AgentCore, **BI·분석**은 Amazon Quick, **코딩 작업**은 Kiro입니다.
 - **Bedrock ↔ SageMaker AI 문항**의 갈림길은 **"컨테이너·오케스트레이션 계층 접근이 필요한가"**입니다. GPU 사용률·비용·지연·처리량을 직접 조절하는 지문이면 SageMaker AI입니다.
 - **"관리형 서비스" 함정**은 Strands Agents에 걸립니다 — Strands는 **오픈소스 SDK**이고, AWS 콘솔·요금·API가 있는 쪽은 **AgentCore**입니다.
-- **개명·종료 함정**이 셋 있습니다 — `Bedrock Agents` → **Agents Classic**(신규 고객 차단 2026-07-30) · `QuickSight` → **Amazon Quick Sight**(Quick 안의 기능) · `SageMaker` → **SageMaker AI**(단, **기능 이름에는 개명이 적용되지 않아** `SageMaker JumpStart`가 맞습니다).
+- **개명·종료 함정**이 셋 있습니다 — `Bedrock Agents` → **Agents Classic**(신규 고객 차단 2026-07-30) · `QuickSight` → **AWS Quick Sight**(Quick 안의 기능) · `SageMaker` → **SageMaker AI**(단, **기능 이름에는 개명이 적용되지 않아** `SageMaker JumpStart`가 맞습니다).
 - **이점 문항**은 "ML 전문성"을 자주 집습니다 — Bedrock에 필요한 전문성은 **기본 수준**이고, 공식이 Bedrock을 **"ML 전문성이나 리소스가 제한적일 때 특히 유용"**하다고 적습니다.
-- **비용 절충 문항**은 세 패턴입니다 — **"실시간 불필요 + 대량"**이면 배치, **"사용자 지정 모델 서빙"**이면 PT(필수), **"길고 반복되는 공통 프롬프트"**면 캐싱입니다. 함정은 **배치와 캐싱을 같이 고르게** 유도하는 보기입니다.
+- **비용 절충 문항**은 세 패턴입니다 — **"실시간 불필요 + 대량"**이면 배치, **"사용자 지정 모델 서빙"**이면 **PT 구매 또는 온디맨드 추론용 배포**(처리량 보장이 필요하면 PT, 호출량이 적으면 온디맨드 배포), **"길고 반복되는 공통 프롬프트"**면 캐싱입니다. 함정은 **배치와 캐싱을 같이 고르게** 유도하는 보기입니다.
 - **리전 문항**은 **데이터 상주성 요구가 있는지**만 보면 갈립니다 — 있으면 **지리적**, 비용 최적화가 목적이면 **글로벌**입니다.
 
 ---
@@ -262,7 +264,7 @@ AgentCore의 모듈 중 시험 범위에서 의미 있는 것만 골라 둡니�
 - ❌ **"Strands Agents는 AWS 관리형 에이전트 서비스다"** → **오픈소스 SDK**입니다. AgentCore 문서가 Strands를 CrewAI·LangGraph·LlamaIndex와 **나란히 오픈소스 프레임워크로** 나열하고, 자신은 그것들을 돌리는 플랫폼이라고 적습니다.
 - ❌ **"에이전트를 새로 만들 때는 Amazon Bedrock Agents를 쓴다"** → 그 서비스는 **Agents Classic**이 되었고 **2026-07-30부터 신규 고객에게 열리지 않습니다.** 정본은 **AgentCore**입니다.
 - ❌ **"Agents Classic이 닫히므로 Bedrock의 다른 기능도 영향을 받는다"** → **아닙니다.** 공식이 **"기존 Bedrock 모델·Knowledge Bases·Guardrails는 영향을 받지 않는다"**고 명시합니다.
-- ❌ **"Amazon QuickSight가 현재 BI 서비스 이름이다"** → **개명 전 이름**입니다. 현재는 **`Amazon Quick` 안의 기능인 `Amazon Quick Sight`**이고, 기존 API·SDK는 변경 없이 동작합니다.
+- ❌ **"Amazon QuickSight가 현재 BI 서비스 이름이다"** → **개명 전 이름**입니다. 현재는 **`Amazon Quick` 안의 기능인 `AWS Quick Sight`**이고, 기존 API·SDK는 변경 없이 동작합니다.
 - ❌ **"Kiro와 Amazon Quick도 모델을 제공한다"** → Kiro는 **개발 도구**, Quick은 **분석·자동화 서비스**입니다. 모델을 API로 주는 쪽은 Bedrock입니다.
 - ❌ **"SageMaker AI JumpStart"** → 2024-12-03 개명은 **기존 기능 이름에 적용되지 않습니다.** `SageMaker JumpStart`가 맞습니다.
 - ❌ **"사용자 지정 모델을 쓰려면 프로비저닝 처리량을 반드시 사야 한다"** → 공식은 추론 설정을 **둘**로 적습니다 — 프로비저닝 처리량 구매와 **온디맨드 추론용 배포**("쓴 만큼만 내고 프로비저닝된 컴퓨팅 리소스를 설정할 필요가 없다"). 다만 **처리량을 보장받으려면** 프로비저닝 처리량 쪽입니다.
@@ -282,7 +284,7 @@ AgentCore의 모듈 중 시험 범위에서 의미 있는 것만 골라 둡니�
 
 SDK는 **`Strands Agents`**, 운영 플랫폼은 **`Amazon Bedrock AgentCore`**이고 **둘은 경쟁 관계가 아니라 층이 다릅니다.**
 
-- Strands Agents는 공식 서술로 **"AWS가 처음 공개한 오픈소스 SDK"**이고 모델 우선 설계입니다. AWS 콘솔·요금 페이지가 있는 관리형 서비스가 아닙니다.
+- Strands Agents는 공식 서술로 **AWS가 처음에 오픈소스 SDK로 공개한 것**이고 모델 우선 설계입니다. AWS 콘솔·요금 페이지가 있는 관리형 서비스가 아닙니다.
 - AgentCore는 **"어떤 프레임워크와 파운데이션 모델로든 매우 효과적인 에이전트를 안전하게 규모로 구축·배포·운영하는 에이전틱 플랫폼"**이고 **"인프라 관리 없이"** 돌립니다. 공식 문서가 AgentCore 서비스들이 **"CrewAI·LangGraph·LlamaIndex·Strands Agents 같은 어떤 오픈소스 프레임워크와도 함께 또는 독립적으로 동작한다"**고 적습니다.
 - 세션 격리된 서버리스 실행은 AgentCore의 **Runtime** 모듈이 담당합니다.
 </details>
@@ -324,10 +326,10 @@ SDK는 **`Strands Agents`**, 운영 플랫폼은 **`Amazon Bedrock AgentCore`**�
 
 **두 군데가 틀렸습니다.**
 
-- **이름**: 공식 메모가 **"Amazon Quick은 Amazon QuickSight에서 진화했다. QuickSight는 Quick 안의 기능인 Amazon Quick Sight로 이어진다"**고 적습니다. 즉 QuickSight는 **개명 전 이름**이고 현재 BI 기능의 이름은 **`Amazon Quick Sight`**입니다.
+- **이름**: 제품 사용자 가이드의 메모가 **"AWS Quick은 Amazon QuickSight에서 진화했다. QuickSight는 Quick 안의 기능인 AWS Quick Sight로 이어진다"**고 적습니다. 즉 QuickSight는 **개명 전 이름**이고 현재 BI 기능의 이름은 **`AWS Quick Sight`**입니다(시험 가이드는 서비스 자체를 `Amazon Quick`으로 적습니다).
 - **호환성**: 같은 메모가 **"기존 QuickSight API·SDK·통합은 변경 없이 계속 동작한다"**고 덧붙입니다. 코드가 많다는 것이 이전을 막는 근거가 되지 않습니다.
 
-Quick의 기능은 `Amazon Quick Sight` · `Amazon Quick Flows` · `Amazon Quick Automate` · `Amazon Quick Index` · `Amazon Quick Research` · `Apps in Amazon Quick` 여섯이고, Quick 자체는 **"작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스"**입니다.
+Quick의 기능은 `AWS Quick Sight` · `AWS Quick Flows` · `AWS Quick Automate` · `AWS Quick Index` · `AWS Quick Research` · `Apps in AWS Quick` 여섯이고, Quick 자체는 **"작업 자동화, 데이터 분석, 웹 애플리케이션 구축, 리서치를 위한 AI 기반 서비스"**입니다.
 </details>
 
 **Q6.** 보안 심사에서 "FM 공급자가 우리 프롬프트를 볼 수 있는가"와 "데이터가 리전을 벗어나는가"를 묻습니다. Amazon Bedrock에 대해 공식 서술을 근거로 답하세요. (→ 3) AWS 인프라의 이점)
@@ -358,7 +360,7 @@ Quick의 기능은 `Amazon Quick Sight` · `Amazon Quick Flows` · `Amazon Quick
 ### 📌 출처
 
 1. Amazon Bedrock Overview — `docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html` (2026-11-06 재확인) · ⚠️ **이 페이지는 Quickstart 중심의 「Overview」로 재구성됐습니다.** 여기서 쓰는 사실은 **"fully managed service"**(완전관리형) 정의뿐이고, **「서버리스」와 「모델 독립적인 단일 API」는 이 페이지에 없습니다**(두 방법으로 확인: 본문 추출과 AWS 문서 리더 양쪽에서 `serverless`·`single API`·`model-independent` 각 0건, 대조군 `fully managed` 1건). 그 둘의 정본은 아래 결정 가이드 둘입니다
-2. What is Amazon Quick? — `docs.aws.amazon.com/quick/latest/userguide/what-is.html` (2026-11-03 확인)
+2. What is AWS Quick? (Quick 사용자 가이드 — 페이지 제목과 본문이 서비스를 `AWS Quick`으로 적습니다) — `docs.aws.amazon.com/quick/latest/userguide/what-is.html` (2026-11-17 확인)
 3. What is Amazon SageMaker AI? (개명 메모 포함) — `docs.aws.amazon.com/sagemaker/latest/dg/whatis.html` (2026-11-03 확인)
 4. SageMaker JumpStart pretrained models — `docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html` (2026-11-03 확인)
 5. What is Amazon Bedrock AgentCore? (핵심 서비스 표) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html` (2026-11-03 확인)
@@ -366,7 +368,7 @@ Quick의 기능은 `Amazon Quick Sight` · `Amazon Quick Flows` · `Amazon Quick
 7. Machine Learning (ML) and Artificial Intelligence (AI) — AWS 서비스 개요 백서 (Kiro 정의) — `docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html` (2026-11-03 확인)
 8. Amazon Bedrock Agents Classic maintenance mode — `docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html` (2026-11-03 확인)
 9. Amazon Bedrock or Amazon SageMaker AI? (결정 가이드) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html` (2026-11-03 확인)
-10. Choosing a generative AI service (결정 가이드) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html` (2026-11-03 확인)
+10. Choosing a generative AI service (결정 가이드 — 2026-11-14 개정판) — `docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html` (2026-11-17 확인)
 11. Data protection (Amazon Bedrock — 공동 책임 모델·모델 배포 계정) — `docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html` (2026-11-03 확인)
 12. Protect your data using Amazon VPC and AWS PrivateLink — `docs.aws.amazon.com/bedrock/latest/userguide/usingVPC.html` (2026-11-03 확인)
 13. Compliance validation for Amazon Bedrock (AWS Artifact) — `docs.aws.amazon.com/bedrock/latest/userguide/compliance-validation.html` (2026-11-03 확인)

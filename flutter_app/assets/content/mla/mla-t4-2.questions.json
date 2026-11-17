@@ -3,7 +3,7 @@
   "taskTitle": "인프라 및 비용 모니터링 및 최적화",
   "domain": 4,
   "certCode": "MLA-C01",
-  "lastVerified": "2026-10-26",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "mla-t4-2-q1",
@@ -183,7 +183,7 @@
       "skill": "지연 시간 및 스케일링 문제 모니터링 및 해결(SK6)",
       "section": "latency-breakdown",
       "difficulty": "applied",
-      "stem": "ModelLatency는 그대로인데 OverheadLatency만 올랐다. 문서가 제시하는 원인 후보와 조치는 무엇인가?",
+      "stem": "ModelLatency는 그대로인데 OverheadLatency만 올랐다. 원인 후보와 조치는 무엇인가?",
       "options": [
         "큰 페이로드나 드문 호출이 원인이며 페이로드 축소와 사전 워밍을 쓴다",
         "모델 코드가 느려진 것이며 Neo 컴파일과 GPU 전환을 쓴다",
@@ -199,12 +199,16 @@
       },
       "sources": [
         {
-          "title": "AWS re:Post — How do I troubleshoot high latency with my Amazon SageMaker endpoint?",
-          "url": "https://repost.aws/knowledge-center/sagemaker-endpoint-latency"
+          "title": "Amazon SageMaker AI metrics in Amazon CloudWatch — OverheadLatency의 정의와 변동 요인",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/monitoring-cloudwatch.html"
         },
         {
           "title": "Deploy models with Amazon SageMaker Serverless Inference",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/serverless-endpoints.html"
+        },
+        {
+          "title": "AWS re:Post — How do I troubleshoot high latency with my Amazon SageMaker endpoint? (보조 출처)",
+          "url": "https://repost.aws/knowledge-center/sagemaker-endpoint-latency"
         }
       ],
       "verified": true
@@ -319,7 +323,7 @@
         "쿼리 결과는 세션 종료 시 삭제되고 과금되지 않는다"
       ],
       "correct": 0,
-      "explanation": "Logs Insights는 계정당 동시 쿼리 100개, 쿼리 타임아웃 60분, 결과 보존 7일 제약이 있고 스캔한 데이터량을 기준으로 과금됩니다. 쿼리 언어는 Logs Insights QL과 OpenSearch PPL, OpenSearch SQL 세 가지를 지원하며 명령은 파이프로 연결합니다.",
+      "explanation": "Logs Insights는 Logs Insights QL 기준 계정당 동시 쿼리 100개(OpenSearch PPL·SQL은 각 15개), 쿼리 타임아웃 60분, 결과 보존 7일 제약이 있고 스캔한 데이터량을 기준으로 과금됩니다. 쿼리 언어는 Logs Insights QL과 OpenSearch PPL, OpenSearch SQL 세 가지를 지원하며 명령은 파이프로 연결합니다.",
       "wrongExplanations": {
         "1": "결과 보존은 7일이며 과금은 실행 횟수가 아니라 스캔한 데이터량 기준입니다.",
         "2": "30일은 CloudWatch 경보 이력의 보존 기간입니다. 로그 그룹 수로 과금되는 구조도 아닙니다.",
@@ -331,7 +335,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         },
         {
-          "title": "StartQuery API — 계정당 동시 쿼리 100개",
+          "title": "StartQuery API — Logs Insights 동시 쿼리 100개",
           "url": "https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_StartQuery.html"
         }
       ],
@@ -411,7 +415,7 @@
         "대시보드는 임베드가 가능하고, Quick Sight는 콘솔에서만 볼 수 있다"
       ],
       "correct": 0,
-      "explanation": "CloudWatch 대시보드는 콘솔의 사용자 지정 홈 화면으로 여러 리전에 흩어진 리소스의 지표와 경보를 한 화면에서 보는 실시간 상태판입니다. Quick Sight는 데이터 소스에 연결해 대시보드를 만들고 애플리케이션에 임베드하는 데이터셋 기반 BI 도구입니다. 확인된 연동 예는 CUR을 Athena로 쿼리해 데이터셋으로 쓰는 구성입니다.",
+      "explanation": "CloudWatch 대시보드는 콘솔의 사용자 지정 홈 화면으로 여러 리전에 흩어진 리소스의 지표와 경보를 한 화면에서 보는 실시간 상태판입니다. Quick Sight는 데이터 소스에 연결해 대시보드를 만들고 애플리케이션에 임베드하는 데이터셋 기반 BI 도구입니다.",
       "wrongExplanations": {
         "1": "CloudWatch 대시보드는 여러 리전에 흩어진 리소스를 한 화면에서 볼 수 있습니다.",
         "2": "CloudWatch 대시보드에는 Logs Insights 쿼리와 경보도 올릴 수 있습니다.",
@@ -534,7 +538,7 @@
       "explanation": "EventBridge가 받는 이벤트는 AWS API Call via CloudTrail이므로 로깅 중인 추적이 있어야 하고, S3 객체 쓰기는 데이터 이벤트라서 그 버킷의 데이터 이벤트를 캡처하도록 설정돼 있어야 합니다. 그 다음 EventBridge 규칙이 이벤트를 매칭해 SageMaker Pipelines나 Step Functions를 호출합니다. 더 간단한 대안은 S3 버킷의 EventBridge 알림으로 ObjectCreated를 직접 받는 구성입니다.",
       "wrongExplanations": {
         "1": "Model Monitor는 기준선 대비 드리프트를 감시하는 수단이며 S3 업로드 감지 도구가 아닙니다.",
-        "2": "CloudTrail Lake는 2026-05-31부터 신규 고객에게 닫혔고 이 경로의 전제 조건도 아닙니다. 필요한 것은 추적입니다.",
+        "2": "CloudTrail Lake는 이 경로의 전제 조건이 아닙니다. EventBridge가 받는 것은 추적이 기록한 API 호출 이벤트이므로 필요한 것은 추적입니다.",
         "3": "Pipelines는 EventBridge 대상으로서 StartPipelineExecution이 호출되며 추적 ARN을 파라미터로 받지 않습니다."
       },
       "sources": [
@@ -959,7 +963,7 @@
       "skill": "지연 시간 및 스케일링 문제 모니터링 및 해결(SK6)",
       "section": "scaling-diagnosis",
       "difficulty": "applied",
-      "stem": "트래픽이 줄었는데 실시간 엔드포인트의 인스턴스가 줄어들지 않는다. 가장 먼저 점검할 것은 무엇인가?",
+      "stem": "트래픽이 줄었는데 실시간 엔드포인트의 인스턴스가 줄어들지 않는다. 대상 추적 정책은 사용자 지정 지표인 CPUUtilization을 쓰고 있고, 트래픽이 줄어든 뒤에도 이 값은 목표값 아래로 내려가지 않았다. 가장 먼저 검토할 조치는 무엇인가?",
       "options": [
         "스케일링 지표를 InvocationsPerInstance로 바꾼다",
         "쿨다운을 더 길게 늘려 축소가 안정적으로 일어나게 한다",
@@ -967,7 +971,7 @@
         "Service Quotas에서 최대 인스턴스 쿼터를 낮춘다"
       ],
       "correct": 0,
-      "explanation": "CPU 활용률 기반 정책은 트래픽이 줄어도 스케일 다운하지 않을 수 있습니다. 실시간 엔드포인트의 스케일링 지표로는 InvocationsPerInstance를, 비동기에는 ApproximateBacklogSizePerInstance를 쓰고 임계값과 쿨다운을 조정합니다. 워밍업 중인 인스턴스가 집계 지표에 포함되지 않는 점도 함께 봅니다.",
+      "explanation": "대상 추적에 쓰는 지표는 스케일링 대상이 얼마나 바쁜지를 나타내고 용량에 비례해 오르내려야 합니다. 이 엔드포인트의 CPU 활용률은 트래픽을 따라 내려가지 않아 정책이 축소할 근거를 얻지 못합니다. SageMaker는 변형 오토 스케일링에 인스턴스당 호출 수를 뜻하는 사전 정의 지표 SageMakerVariantInvocationsPerInstance를 강력히 권장하므로, 지표를 이것으로 바꾸고 목표값과 쿨다운을 조정합니다.",
       "wrongExplanations": {
         "1": "쿨다운은 용량의 급격한 변동을 막는 장치여서 길게 늘리면 축소가 더 늦어집니다.",
         "2": "인스턴스 유형 교체는 적정 규모 조정이며 축소가 일어나지 않는 원인을 제거하지 않습니다.",
@@ -975,12 +979,20 @@
       },
       "sources": [
         {
-          "title": "AWS re:Post — How do I troubleshoot auto scaling issues for SageMaker AI endpoints?",
-          "url": "https://repost.aws/knowledge-center/sagemaker-endpoints-scaling-issues"
+          "title": "How target tracking scaling for Application Auto Scaling works — 대상 추적 지표의 요건",
+          "url": "https://docs.aws.amazon.com/autoscaling/application/userguide/target-tracking-scaling-policy-overview.html"
         },
         {
           "title": "SageMaker AI automatic scaling — Define a scaling policy",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/endpoint-auto-scaling-add-code-define.html"
+        },
+        {
+          "title": "Set Auto Scaling Policies for Multi-Model Endpoint Deployments — SageMakerVariantInvocationsPerInstance 강력 권장",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/multi-model-endpoints-autoscaling.html"
+        },
+        {
+          "title": "AWS re:Post — How do I troubleshoot auto scaling issues for SageMaker AI endpoints? (보조 출처)",
+          "url": "https://repost.aws/knowledge-center/sagemaker-endpoints-scaling-issues"
         }
       ],
       "verified": true
@@ -991,7 +1003,7 @@
       "skill": "비용 분석 도구의 기능(예: AWS Cost Explorer, AWS Billing and Cost Management, AWS Trusted Advisor)(K5)",
       "section": "cost-optimization",
       "difficulty": "applied",
-      "stem": "SageMaker 추론 비용 최적화 모범 사례에서 약정 할인을 구매하기 전에 해야 할 일로 제시된 것은 무엇인가?",
+      "stem": "SageMaker 엔드포인트 비용을 줄이려고 Savings Plans 약정을 검토하고 있다. 약정을 구매하기 전에 먼저 해야 할 일은 무엇인가?",
       "options": [
         "인스턴스를 먼저 적정 규모로 조정한다",
         "모든 엔드포인트를 서버리스로 전환한다",
@@ -999,7 +1011,7 @@
         "Trusted Advisor 점검을 끄고 Cost Explorer만 쓴다"
       ],
       "correct": 0,
-      "explanation": "문서가 제시하는 순서는 Savings Plans를 사기 전에 먼저 인스턴스를 적정 규모로 조정하는 것입니다. 과다 프로비저닝된 상태로 약정하면 불필요한 사용량에 할인을 묶어 두게 됩니다. 약정 후보는 오래 실행될 구성요소를 골라 분석하고 Cost Explorer에서 권장 약정 수준을 봅니다.",
+      "explanation": "AWS 규범 가이드는 Savings Plans를 구매하기 전에 유휴 리소스를 정리하고 리소스를 먼저 적정 규모로 조정하라고 권합니다. 과다 프로비저닝된 상태로 약정하면 불필요한 사용량에 할인을 묶어 두게 됩니다. 약정 수준은 꾸준히 유지되는 시간당 사용량을 기준으로 잡고 Cost Explorer의 권장 약정을 참고합니다.",
       "wrongExplanations": {
         "1": "서버리스 전환은 간헐적이고 예측 불가한 트래픽에 맞는 선택이며 모든 엔드포인트에 적용할 전제 조건이 아닙니다.",
         "2": "비용 할당 태그는 비활성화하면 Cost Explorer에서 비용을 나눠 볼 수 없게 됩니다.",
@@ -1007,11 +1019,15 @@
       },
       "sources": [
         {
+          "title": "Optimize spending for Windows on Amazon EC2 (AWS 규범 가이드) — Savings Plans 구매 전 권고",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/optimize-costs-microsoft-workloads/savings-plans.html"
+        },
+        {
           "title": "Inference cost optimization best practices (SageMaker AI)",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/inference-cost-optimization.html"
         },
         {
-          "title": "Analyze Amazon SageMaker spend and determine cost optimization opportunities based on usage, Part 1 (AWS 블로그)",
+          "title": "Analyze Amazon SageMaker spend and determine cost optimization opportunities based on usage, Part 1 (AWS 블로그) — 보조 출처",
           "url": "https://aws.amazon.com/blogs/machine-learning/part-1-analyze-amazon-sagemaker-spend-and-determine-cost-optimization-opportunities-based-on-usage-part-1/"
         }
       ],
@@ -1031,9 +1047,9 @@
         "SageMaker Model Monitor"
       ],
       "correct": 0,
-      "explanation": "SageMaker Profiler는 2027-06-30에 지원이 종료될 예정이며, Profiler 문서는 CPU와 GPU, 메모리, 디스크 같은 시스템 자원 모니터링을 CloudWatch로 대체하라고 안내합니다. 참고로 지표 문서가 100밀리초 단위 프로파일링에 권하는 Debugger도 신규 고객에게 닫혀 있습니다.",
+      "explanation": "SageMaker Profiler는 2027-06-30에 지원이 종료될 예정이며, Profiler 문서는 CPU와 GPU, 메모리, 디스크 같은 시스템 자원 모니터링을 CloudWatch로 대체하라고 안내합니다. 참고로 Debugger도 신규 고객에게 닫혀 있습니다(기존 고객은 계속 사용).",
       "wrongExplanations": {
-        "1": "Debugger는 신규 고객에게 닫혀 있어 대체 경로가 될 수 없습니다.",
+        "1": "Profiler 공지의 역량 대응표가 시스템 자원 모니터링의 대체로 드는 것은 CloudWatch이며 Debugger는 그 표에 없습니다.",
         "2": "X-Ray는 요청 단위 추적 도구이며 훈련 인스턴스의 시스템 자원 모니터링 대체로 안내되지 않습니다.",
         "3": "Model Monitor는 데이터와 모델 품질 드리프트 감시 수단이고 역시 신규 고객에게 닫혀 있습니다."
       },

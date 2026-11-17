@@ -3,7 +3,7 @@
   "taskTitle": "AWS 계정 또는 조직용 모니터링 및 경보 솔루션 설계 및 구현",
   "domain": 1,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-09",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t1-1-q1",
@@ -247,7 +247,7 @@
         "홈 리전으로 옵트인 리전을 지정할 수 있고, 홈 리전에서 끈 제어의 관리는 그 제어가 켜져 있는 연결 리전에서만 가능합니다"
       ],
       "correct": 0,
-      "explanation": "홈 리전은 옵트인 리전일 수 없습니다. 2019년 3월 20일 이후 도입된 리전이 옵트인 리전이고, 조직에서 그 리전을 활성화하기 전에는 그곳에 Security Hub CSPM을 구성할 수도 없습니다. 그리고 연결 리전에서는 켜고 홈 리전에서는 끈 제어는 홈 리전에서 준수 상태만 볼 수 있고 켜거나 끌 수 없으며, 예외는 중앙 구성을 쓰는 경우입니다.",
+      "explanation": "홈 리전은 옵트인 리전일 수 없습니다. 2019년 3월 20일 이후 도입된 리전이 옵트인 리전이고, 옵트인 리전은 활성화하기 전에는 워크로드를 만드는 데 쓸 수 없습니다. 그리고 연결 리전에서는 켜고 홈 리전에서는 끈 제어는 홈 리전에서 준수 상태만 볼 수 있고 켜거나 끌 수 없으며, 예외는 중앙 구성을 쓰는 경우입니다.",
       "wrongExplanations": {
         "1": "홈 리전은 옵트인 리전일 수 없고, 홈 리전에서 끈 제어는 홈 리전에서 켜거나 끌 수 없습니다. 두 전제가 모두 틀렸습니다.",
         "2": "앞 절반은 맞지만 뒤가 틀렸습니다. 중앙 구성 없이는 홈 리전에서 그 제어를 켜거나 끌 수 없고 준수 상태만 볼 수 있습니다.",
@@ -257,6 +257,14 @@
         {
           "title": "Understanding cross-Region aggregation in Security Hub CSPM — 홈 리전과 제어 구성",
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation.html"
+        },
+        {
+          "title": "Enabling cross-Region aggregation - 홈 리전 제약",
+          "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation-enable.html"
+        },
+        {
+          "title": "Enable or disable AWS Regions in your account - 옵트인 리전 기준일",
+          "url": "https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html"
         }
       ],
       "verified": true

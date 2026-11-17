@@ -36,7 +36,11 @@ sources:
     url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/diagnose-evaluation-issues.html
   - title: RAG 평가 지표
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-evaluation-metrics.html
-lastVerified: 2026-11-15
+  - title: 지식 베이스용 벡터 스토어 설정
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 5
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain5.html
+lastVerified: 2026-11-17
 ---
 
 # GenAI 애플리케이션 문제 해결 (콘텐츠 처리·API 통합·프롬프트·검색 시스템·프롬프트 운영)
@@ -130,6 +134,7 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 
 - ⚠️⚠️ **반환 결과 수가 요청보다 적어질 수 있고 오류가 아닙니다** — **계층형 청킹**은 `numberOfResults`가 **자식 청크 수**에 매핑되고 같은 부모를 공유하는 자식들이 **부모 청크로 대체**되며, **표·그림이 있는 페이지**는 같은 맥락을 공유하는 청크가 **한 결과로 합쳐집니다.** ⭐ `numberOfResults`는 **최대치**입니다.
 - ⚠️ **텍스트 전략은 텍스트 문서에만 적용됩니다** — 멀티모달 콘텐츠(오디오·비디오·이미지)는 그 전략을 타지 않고 **임베딩 모델 수준에서** 청킹됩니다.
+- ⭐ **표 콘텐츠에서 청크 단위 결과를 받으려면 「청킹 없음」을 고르고 사용자 지정 변환 Lambda 함수에서 직접 청킹합니다** — 표·그림 맥락 교체는 **최대 토큰 한도를 두는 모든 청킹 전략**에 적용되고(맥락이 **10,000자 이하**일 때만 붙습니다) 청킹 없음에는 적용되지 않습니다.
 
 **프롬프트 설계 최적화**는 `aip-t1-6` 문서의 프롬프트 관리 축과 이어집니다 — ⚠️ 단순 프롬프트 최적화는 **평가 데이터를 쓰지 않고 한 모델만** 보며 **약 1k 토큰 이하**에서 가장 잘 동작합니다.
 
@@ -354,7 +359,7 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 3. 콘텐츠 청킹 전략 (전략 종류 · 표·그림 맥락 교체 · 멀티모달은 텍스트 전략 미적용) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html` (2026-11-15 확인)
 4. 지식 베이스 질의 구성 (검색 유형 · 하이브리드 지원 스토어 · 암시적 필터 · `numberOfResults`의 계층형 매핑과 최대치 · 관리형 KB 필터 연산자) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html` (2026-11-15 확인)
 5. Amazon Titan Text Embeddings (1,024/512/256 차원 · **RPM 스로틀**) — `docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html` (2026-11-15 확인)
-6. Aurora PostgreSQL을 Bedrock 지식 베이스로 (인덱스 셋 — HNSW·텍스트 GIN·메타데이터 GIN · `ef_construction` 256과 pgvector 0.6.0 · 반복 스캔과 0.8.0 · 필터가 HNSW 스캔 뒤에 적용) — `docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html` (2026-11-15 확인)
+6. Aurora PostgreSQL을 Bedrock 지식 베이스로 (인덱스 셋 — HNSW·텍스트 GIN·메타데이터 GIN · `ef_construction` 256과 pgvector 0.6.0) — `docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html` (2026-11-15 확인)
 7. 모델 호출 로깅 (기본 꺼짐 · 대상 작업 넷 · 같은 계정·리전 · `bedrock-runtime`만 · 구성 삭제까지 저장) — `docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html` (2026-11-15 확인)
 8. Bedrock 런타임 지표 (스로틀이 어느 집합에도 없음 · 쿼터 초과는 클라이언트 오류 · 보이는 스로틀 수가 SDK 재시도에 달림) — `docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html` (2026-11-15 확인)
 9. 프롬프트 버전 비교 (JSON 나란히 · `+`·`-` 표시 · 테스트 변수로 두 버전 응답 비교) — `docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-version-compare.html` (2026-11-15 확인)
@@ -363,3 +368,5 @@ content_filtered | malformed_model_output | malformed_tool_use | model_context_w
 12. AWS X-Ray란 무엇인가 (요청 데이터 수집으로 병목·오류 식별 · SDK가 직접 보내지 않고 UDP 데몬이 버퍼링·배치 업로드) — `docs.aws.amazon.com/xray/latest/devguide/aws-xray.html` (2026-11-15 확인)
 13. 평가 문제 진단 (빈 결과 · 예외 여섯 종 · 다중 에이전트 스코핑 · 관찰성 전제 · 필요 권한) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/diagnose-evaluation-issues.html` (2026-11-15 확인)
 14. RAG 평가 지표 (Retrieve only 둘 ↔ Retrieve and generate 열 · ContextCoverage의 그라운드 트루스 요구 · 인용 지표) — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-evaluation-metrics.html` (2026-11-15 확인)
+15. 지식 베이스용 벡터 스토어 설정 (HNSW 반복 인덱스 스캔 · pgvector 0.8.0 · 필터가 HNSW 스캔 뒤에 적용) — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html` (2026-11-17 확인)
+16. AIP-C01 시험 안내서 콘텐츠 도메인 5 (기술 5.2.3·5.2.4·5.2.5의 예시 목록) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain5.html` (2026-11-17 확인)

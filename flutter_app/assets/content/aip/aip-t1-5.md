@@ -32,7 +32,9 @@ sources:
     url: https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-configure-neural-search.html
   - title: Aurora PostgreSQL을 Bedrock 지식 베이스로 (pgvector)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html
-lastVerified: 2026-11-14
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 1
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html
+lastVerified: 2026-11-17
 ---
 
 # FM 증강을 위한 검색 메커니즘 설계 (청킹·임베딩·벡터 검색·하이브리드와 리랭킹·쿼리 처리·액세스)
@@ -72,7 +74,7 @@ lastVerified: 2026-11-14
 - 벡터는 **float32** 또는 **binary**로 담을 수 있고 ⚠️ **binary를 지원하는 스토어가 제한된다**.
 - 검색 유형은 **시맨틱 · 하이브리드** 축으로 갈리고 ⚠️⚠️ **하이브리드는 지원하는 벡터 스토어에서만** 된다.
 - 리랭커는 **기본 순위를 덮어쓴다**. ⚠️ **텍스트 전용**이다.
-- ⚠️⚠️ **Aurora pgvector는 필터 조건에 따라 결과가 조용히 누락**될 수 있다 — 필터 필드 설정이 필요하다.
+- ⚠️⚠️ **Aurora는 메타데이터 필터링에 쓸 필드를 직접 만들어 둬야 한다**(다른 스토어는 필요 없다) — 필드가 있는데도 결과가 모자라면 **반복 인덱스 스캔**을 본다.
 - **에이전틱 검색**이 공식 쿼리 분해 수단이다 — ① **하위 쿼리로 분해** ② **반복 검색** ③ **충분성 평가**.
 - ⭐ **관리형 KB는 AgentCore Gateway와 네이티브 통합**돼 **MCP 호환 에이전트 프레임워크가 사용자 지정 코드 없이 KB를 도구로 발견·호출**한다 — `기술 1.5.6`의 정답 경로다.
 
@@ -126,7 +128,8 @@ lastVerified: 2026-11-14
 | **Aurora PostgreSQL + pgvector** | 기존 관계형 데이터와 **같은 엔진 안에서** 벡터를 다룬다 |
 
 - OpenSearch에서 **시맨틱 검색**과 **Neural/하이브리드 검색**은 구성이 필요하고, 지원이 **엔진 버전에 묶입니다**(공식 문서가 버전을 명시합니다). 「OpenSearch면 당연히 된다」가 아닙니다.
-- ⚠️⚠️ **Aurora pgvector에는 조용한 결과 누락이 있습니다** — **필터에 쓰는 필드를 설정해 두지 않으면** 필터가 걸린 질의에서 결과가 **오류 없이 빠질 수 있습니다.** 벡터 스토어 설정 문서가 그 필드를 지정하라고 적습니다.
+- ⚠️⚠️ **Aurora는 필터에 쓸 메타데이터 필드를 직접 준비해야 합니다** — 벡터 스토어 설정 문서가 **Aurora에서 메타데이터 필터링을 쓰려면** 소스 파일에 붙인 메타데이터용 필드를 만들라고 적고, **다른 벡터 스토어에서는 필터링을 위해 그 필드를 준비할 필요가 없다**고 적습니다. 방법은 둘입니다 — **사용자 지정 메타데이터 열 하나**(JSONB, 쓰면 **GIN 인덱스 필수**)에 모으거나, **속성마다 열**을 만들고 자료형(텍스트·숫자·불리언)을 지정합니다.
+- ⚠️ **필드를 갖춘 뒤에도 선택적인 필터에서 결과가 기대보다 적다면 원인이 다릅니다** — 필터가 HNSW 인덱스 스캔 **뒤에** 적용되기 때문이고 **반복 인덱스 스캔**(`pgvector` 0.8.0 이상)을 켭니다(같은 문서의 Note · `aip-t4-2` §2).
 
 ### 4) 관련성을 올리는 고급 검색 (기술 1.5.4) {#advanced}
 
@@ -174,7 +177,7 @@ lastVerified: 2026-11-14
 - 「저장 비용을 줄이려 binary를 쓴다」면 **스토어가 지원하는지**가 선행 조건입니다.
 - 「제품 코드 검색이 안 맞는다」면 **하이브리드**이고, **스토어 지원**을 확인합니다.
 - 「순위가 마음에 안 든다」면 **리랭커**이고 **텍스트 전용**입니다.
-- 「필터를 걸면 결과가 사라진다 + Aurora」면 **필터 필드 설정**입니다.
+- 「Aurora에 메타데이터 필터링을 붙인다」면 **필터용 메타데이터 필드 준비**이고, 「필드는 있는데 필터를 걸면 결과가 모자란다」면 **반복 인덱스 스캔**입니다.
 - 「한 질문에 두 가지를 묻는다」면 **에이전틱 검색**(분해·반복·충분성 평가)입니다.
 - 「에이전트 프레임워크에서 KB를 도구로 쓰고 싶다」면 **AgentCore Gateway + MCP**입니다.
 
@@ -188,7 +191,7 @@ lastVerified: 2026-11-14
 - ⚠️ **임베딩 스로틀을 토큰 단위로 계산하기.** **RPM**입니다.
 - ⚠️⚠️ **하이브리드 검색이 모든 스토어에서 된다고 생각하기.**
 - ⚠️ **리랭커를 이미지·멀티모달 결과에 쓰려 하기.** 텍스트 전용입니다.
-- ⚠️⚠️ **Aurora pgvector에서 필터 필드를 설정하지 않고 필터를 쓰기.** 결과가 조용히 빠집니다.
+- ⚠️⚠️ **Aurora pgvector에서 메타데이터 필드를 준비하지 않고 필터링을 설계하기.** 다른 스토어와 달리 Aurora는 그 필드를 **직접 만들어야** 합니다.
 - ⚠️ **`multi-hop`이라는 낱말을 공식 용어로 외우기.** 동작으로 외웁니다.
 
 ---
@@ -244,7 +247,7 @@ lastVerified: 2026-11-14
 1. 콘텐츠 청킹 (표·그림 맥락 교체 · 텍스트 전략의 적용 범위) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-chunking.html` (2026-11-14 확인)
 2. Titan Text Embeddings 모델 (1,024 / 512 / 256 · RPM 스로틀) — `docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html` (2026-11-14 확인)
 3. 지식 베이스 동작 방식 (float32 ↔ binary 벡터) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html` (2026-11-14 확인)
-4. 지식 베이스용 벡터 스토어 설정 (binary 지원 · Aurora 필터 필드) — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html` (2026-11-14 확인)
+4. 지식 베이스용 벡터 스토어 설정 (binary 지원 · Aurora 메타데이터 필드 · 반복 인덱스 스캔) — `docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html` (2026-11-14 확인)
 5. 질의 구성 (검색 유형 · 하이브리드 지원 스토어 · 암시적 필터 · 결과 수) — `docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html` (2026-11-14 확인)
 6. 리랭커 모델 (기본 순위 override · 텍스트 전용) — `docs.aws.amazon.com/bedrock/latest/userguide/rerank.html` (2026-11-14 확인)
 7. 리랭커 사용 — `docs.aws.amazon.com/bedrock/latest/userguide/rerank-use.html` (2026-11-14 확인)
@@ -253,3 +256,4 @@ lastVerified: 2026-11-14
 10. OpenSearch Service 시맨틱 검색 (지원이 엔진 버전에 묶인다) — `docs.aws.amazon.com/opensearch-service/latest/developerguide/semantic-search.html` (2026-11-14 확인)
 11. OpenSearch Serverless Neural·하이브리드 검색 구성 — `docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-configure-neural-search.html` (2026-11-14 확인)
 12. Aurora PostgreSQL을 Bedrock 지식 베이스로 (pgvector) — `docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html` (2026-11-14 확인)
+13. AIP-C01 시험 안내서 콘텐츠 도메인 1 (기술 1.5.3·1.5.5·1.5.6의 예시 목록) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html` (2026-11-17 확인)

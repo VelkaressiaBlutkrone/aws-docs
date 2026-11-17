@@ -3,7 +3,7 @@
   "taskTitle": "데이터 무결성을 보장하고 모델링을 위한 데이터 준비",
   "domain": 1,
   "certCode": "MLA-C01",
-  "lastVerified": "2026-10-26",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "mla-t1-3-q1",
@@ -247,8 +247,8 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-data-bias-metric-true-label-imbalance.html"
         },
         {
-          "title": "MLREL03-BP04 데이터 편향 탐지·완화 (Machine Learning Lens)",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html"
+          "title": "What Is AI Bias? (AWS) — 레이블·선택·알고리즘·측정 편향의 정의",
+          "url": "https://aws.amazon.com/what-is/ai-bias/"
         }
       ],
       "verified": true
@@ -735,8 +735,8 @@
       },
       "sources": [
         {
-          "title": "MLREL03-BP04 데이터 편향 탐지·완화 (Machine Learning Lens)",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlrel03-bp04.html"
+          "title": "What Is AI Bias? (AWS) — 선택·회상·레이블·알고리즘 편향의 정의",
+          "url": "https://aws.amazon.com/what-is/ai-bias/"
         },
         {
           "title": "Class Imbalance (CI) — 그룹 표현 점검",

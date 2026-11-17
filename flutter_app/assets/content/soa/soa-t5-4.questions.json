@@ -52,8 +52,8 @@
       },
       "sources": [
         {
-          "title": "VPC 흐름 로그 — 생성 범위",
-          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html"
+          "title": "흐름 로그 기본 사항 — 생성 범위",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-basics.html"
         }
       ],
       "verified": true
@@ -117,7 +117,7 @@
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
       "difficulty": "applied",
-      "stem": "Flow Log 레코드의 `action` 필드가 `REJECT`인 경우 공식 문서가 드는 예시는?",
+      "stem": "Flow Log 레코드의 `action` 필드가 `REJECT`로 기록되는 경우로 올바른 것은?",
       "options": [
         "보안 그룹 또는 네트워크 ACL이 허용하지 않은 트래픽, 또는 연결이 닫힌 뒤 도착한 패킷",
         "네트워크 ACL만 거부한 트래픽",
@@ -243,6 +243,10 @@
         {
           "title": "네트워크 ACL — 이페머럴 포트",
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+        },
+        {
+          "title": "사용자 지정 네트워크 ACL — 이페머럴 포트",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/custom-network-acl.html"
         }
       ],
       "verified": true
@@ -405,6 +409,10 @@
         {
           "title": "S3로 흐름 로그 게시",
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html"
+        },
+        {
+          "title": "Amazon Athena로 흐름 로그 쿼리",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-athena.html"
         }
       ],
       "verified": true

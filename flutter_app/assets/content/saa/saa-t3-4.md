@@ -32,7 +32,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 컨테이너·서버리스·배치 컴퓨팅 선택
@@ -475,8 +475,8 @@ Spark·Hadoop 같은 분산 처리를 돌릴 때는 인스턴스를 직접 묶�
 
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
-1. **"Lambda로 15분 이상 작업을 처리한다."** → Lambda의 최대 실행 시간은 15분입니다. 초과 시 강제 종료됩니다. 장시간 배치 작업은 AWS Batch, 장기 실행 컨테이너는 ECS/Fargate를 사용합니다.
-   (원리: §4 본문 — Lambda의 최대 실행 시간은 15분으로 고정되어 있어, 이를 초과하는 작업은 강제 종료된다.)
+1. **"Lambda로 15분 이상 작업을 처리한다."** → Lambda 함수 타임아웃의 상한은 15분(900초)입니다(Lambda Managed Instances의 비동기·이벤트 소스 매핑 호출만 최대 90분). 초과 시 강제 종료됩니다. 장시간 배치 작업은 AWS Batch, 장기 실행 컨테이너는 ECS/Fargate를 사용합니다.
+   (원리: §4 본문 — Lambda 함수 타임아웃에는 상한(기본 15분)이 있어, 이를 초과하는 작업은 강제 종료된다.)
 
 2. **"메모리를 늘려도 CPU는 그대로다."** → Lambda는 메모리와 CPU가 비례합니다. 메모리를 두 배 늘리면 vCPU도 비례해 증가합니다(1,769 MB에서 1 vCPU). 공식 문서가 메모리를 성능 제어의 **주된(principal) 손잡이**로 설명하는 이유입니다 — 단, CPU 병목을 넘어서면 이득이 줄어듭니다.
    (원리: §4 — Lambda는 메모리 크기에 비례해 연산 용량이 결정되는 구조라 CPU가 독립 설정값으로 존재하지 않는다.)
@@ -490,7 +490,7 @@ Spark·Hadoop 같은 분산 처리를 돌릴 때는 인스턴스를 직접 묶�
 5. **"콜드 스타트는 메모리를 늘리면 해결된다."** → 콜드 스타트는 컨테이너 초기화 지연이 원인입니다. 메모리 증가는 실행 속도를 높이지만 콜드 스타트를 없애지 않습니다. 근본 해결책은 **Provisioned Concurrency**입니다.
    (원리: §4 본문 — 콜드 스타트의 원인은 실행 환경(컨테이너) 초기화 지연이며, 메모리 증가는 함수 실행 속도만 높이므로 초기화 자체를 없애지 않는다.)
 
-6. **"AWS Batch는 Lambda와 같은 이벤트 기반이다."** → AWS Batch는 Job 제출(API 호출·스케줄)로 트리거되는 **배치 오케스트레이터**입니다. 실행 시간 제한이 없고, 작업 완료 후 컴퓨팅 환경이 종료됩니다.
+6. **"AWS Batch는 Lambda와 같은 이벤트 기반이다."** → AWS Batch는 Job 제출(API 호출·스케줄)로 트리거되는 **배치 오케스트레이터**입니다. Lambda의 15분 같은 고정 실행 시간 상한이 없고(단 Fargate 리소스에서 도는 작업은 14일 한도), 작업 완료 후 컴퓨팅 환경이 종료됩니다.
    (원리: §5 — Batch는 Job Queue 버퍼링과 Compute Environment 탄력적 프로비저닝 구조로 설계되어 이벤트 즉시 응답이 아닌 배치 처리에 최적화돼 있다.)
 
 7. **"HPC에서 배치 그룹만 있으면 충분하다."** → 클러스터 배치 그룹은 물리적 배치를 보장하지만, 인터노드 초저지연 통신에는 **EFA**가 추가로 필요합니다. 공유 스토리지에는 **FSx for Lustre**를 함께 구성합니다.
@@ -506,7 +506,7 @@ Spark·Hadoop 같은 분산 처리를 돌릴 때는 인스턴스를 직접 묶�
 
 <details><summary>정답 보기</summary>
 
-**AWS Batch**를 사용합니다. AWS Batch는 Job 제출량에 따라 Compute Environment를 자동으로 프로비저닝·종료하며, 실행 시간 제한이 없습니다. Spot 인스턴스를 Compute Environment로 구성하면 비용도 절감됩니다. Lambda는 15분 제한으로 부적합하고, EC2 직접 관리는 운영 부담이 큽니다.
+**AWS Batch**를 사용합니다. AWS Batch는 Job 제출량에 따라 Compute Environment를 자동으로 프로비저닝·종료하며, Lambda의 15분 같은 고정 실행 시간 상한이 없습니다(단 Fargate 리소스에서 도는 작업은 14일 한도). Spot 인스턴스를 Compute Environment로 구성하면 비용도 절감됩니다. Lambda는 15분 제한으로 부적합하고, EC2 직접 관리는 운영 부담이 큽니다.
 </details>
 
 **Q2.** 회사가 마이크로서비스를 Kubernetes로 운영 중이며 AWS로 이전합니다. 기존 Kubernetes 매니페스트와 도구를 그대로 사용하고, 노드 관리 부담을 없애고 싶습니다. 가장 적합한 선택은?

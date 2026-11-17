@@ -74,7 +74,7 @@
       "skill": "데이터 처리 중 비용 최적화(1.2.4)",
       "section": "emr-options",
       "difficulty": "applied",
-      "stem": "HDFS를 사용하는 장기 실행 Amazon EMR 클러스터의 비용을 낮추기 위해 스팟 인스턴스를 도입한다. 공식 권장에 맞는 구성은 무엇인가?",
+      "stem": "HDFS를 사용하는 장기 실행 Amazon EMR 클러스터의 비용을 낮추기 위해 스팟 인스턴스를 도입한다. 적절한 구성은 무엇인가?",
       "options": [
         "core 노드는 On-Demand로 두고 task 노드에 Spot을 사용한다",
         "core 노드와 task 노드 모두 Spot으로 구성한다",
@@ -222,8 +222,8 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/federated-queries.html"
         },
         {
-          "title": "Amazon Athena (Big Data Analytics Options on AWS) — 커넥터 Lambda 요금과 스캔 과금",
-          "url": "https://docs.aws.amazon.com/whitepapers/latest/big-data-analytics-options/amazon-athena.html"
+          "title": "Amazon Athena pricing — 페더레이션 쿼리는 계정의 Lambda 함수를 호출하고 Lambda 요금이 표준 요율로 부과됨",
+          "url": "https://aws.amazon.com/athena/pricing/"
         }
       ],
       "verified": true
@@ -298,7 +298,7 @@
       "skill": "다양한 데이터 소스에 연결(1.2.2)",
       "section": "connections",
       "difficulty": "applied",
-      "stem": "AWS Glue 잡이 VPC 프라이빗 서브넷의 PostgreSQL에 JDBC로 접속하지 못한다. 공식 문서가 요구하는 네트워크·보안 구성은 무엇인가?",
+      "stem": "AWS Glue 잡이 VPC 프라이빗 서브넷의 PostgreSQL에 JDBC로 접속하지 못한다. 필요한 네트워크·보안 구성은 무엇인가?",
       "options": [
         "보안 그룹에 모든 TCP 포트에 대한 자기참조 인바운드 규칙을 두고, 외부 접근이 필요하면 NAT를 경유한다",
         "서브넷 라우트 테이블에 인터넷 게이트웨이를 추가한다",
@@ -373,7 +373,7 @@
       "explanation": "배치 추론은 다수 프롬프트를 비동기로 처리하며 On-Demand 대비 50% 낮은 가격으로 제공됩니다. 지연을 감수할 수 있는 대량 처리에 맞는 선택입니다(프로비저닝 모델은 지원하지 않습니다).",
       "wrongExplanations": {
         "1": "On-Demand 병렬 호출은 단가가 그대로이고 스로틀링 위험도 커집니다.",
-        "2": "Provisioned Throughput은 시간당 과금에 1·6개월 약정이 필요하며 커스텀 모델 사용 시의 선택지입니다. 일회성 대량 배치에는 과도합니다.",
+        "2": "Provisioned Throughput은 전용 처리 용량을 시간 단위로 사는 방식입니다(약정 없음·1개월·6개월). 다음 날까지만 끝나면 되는 일회성 대량 배치에는 과도합니다.",
         "3": "Bedrock Data Automation은 문서·이미지·오디오·비디오에서 정보를 추출하는 기능으로, 텍스트 분류 대량 처리의 비용 최적화 수단이 아닙니다."
       },
       "sources": [
@@ -382,8 +382,8 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
         },
         {
-          "title": "Effective cost optimization strategies for Amazon Bedrock — 추론 방식별 비용 특성",
-          "url": "https://aws.amazon.com/blogs/machine-learning/effective-cost-optimization-strategies-for-amazon-bedrock/"
+          "title": "Increase model invocation capacity with Provisioned Throughput in Amazon Bedrock — 시간당 과금, 약정 없음·1개월·6개월",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html"
         }
       ],
       "verified": true

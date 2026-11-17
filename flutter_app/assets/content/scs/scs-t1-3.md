@@ -28,7 +28,9 @@ sources:
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
   - title: Register targets with your target group — 보안 그룹 요건
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html
-lastVerified: 2026-11-08
+  - title: View API Gateway log events in the CloudWatch console
+    url: https://docs.aws.amazon.com/apigateway/latest/developerguide/view-cloudwatch-log-events-in-cloudwatch-console.html
+lastVerified: 2026-11-17
 ---
 
 # 모니터링·로깅·경보 문제 해결 (리소스 기능·권한·구성 분석과 잘못된 구성 교정)
@@ -104,7 +106,7 @@ REST API의 CloudWatch 로깅은 **두 종류**입니다.
 | | **실행 로깅** | **액세스 로깅** |
 |---|---|---|
 | 담는 것 | API Gateway가 **요청을 처리한 동작**(오류·실행 추적) | **누가 어떻게 접근했는가** |
-| 로그 그룹 | API Gateway가 관리(전달 대상을 직접 지정할 수도 있습니다) | **내가 만든 로그 그룹** |
+| 로그 그룹 | API Gateway가 스테이지 배포 시 생성(전달 대상을 직접 지정할 수도 있습니다) | **내가 만든 로그 그룹** |
 | 형식 | 고정 | **내가 고르고 `$context` 변수를 지정** |
 
 ⚠️ **둘은 서로 독립적으로 켤 수 있습니다.** "액세스 로그는 오는데 오류 추적이 없다"면 실행 로깅이 꺼진 것입니다.
@@ -287,3 +289,4 @@ REST API의 CloudWatch 로깅은 **두 종류**입니다.
 8. Introduction to AWS Security Hub CSPM — `docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html` (2026-11-08 확인)
 9. Health checks for your target groups — 경로·포트·간격·임계값 — `docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html` (2026-11-10 확인)
 10. Register targets with your target group — 보안 그룹 요건 — `docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html` (2026-11-10 확인)
+11. View API Gateway log events in the CloudWatch console — `docs.aws.amazon.com/apigateway/latest/developerguide/view-cloudwatch-log-events-in-cloudwatch-console.html` (2026-11-17 확인)

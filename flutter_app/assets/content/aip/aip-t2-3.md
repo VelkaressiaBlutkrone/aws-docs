@@ -30,7 +30,11 @@ sources:
     url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html
   - title: AGENTOPS04-BP03 도구 신뢰성과 자동 차단
     url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops04-bp03.html
-lastVerified: 2026-11-14
+  - title: AgentCore Gateway 속도 제한
+    url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits.html
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 2
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html
+lastVerified: 2026-11-17
 ---
 
 # 엔터프라이즈 통합 아키텍처 (연결 솔루션·기존 앱 개선·보안 액세스·환경 간 배포·CI/CD와 GenAI 게이트웨이)
@@ -316,3 +320,5 @@ GenAI 기능이 기존 시스템에 들어갈 때 실패하는 지점은 **모�
 9. AgentCore Gateway 개요 (MCP 변환 · 단일 보안 진입점 · 인그레스·이그레스 인증) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html` (2026-11-14 확인)
 10. Policy in AgentCore (트래픽을 가로채 도구 접근 전에 평가 · 에이전트 코드 밖의 제어) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html` (2026-11-14 확인)
 11. AGENTOPS04-BP03 (도구별 지표 · 복합 알람이 단일 임계보다 먼저 잡는다) — `docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops04-bp03.html` (2026-11-14 확인)
+12. AgentCore Gateway 속도 제한 (추론 타깃의 분당 토큰 제어 · 엔드포인트 동시 연결 제한) — `docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits.html` (2026-11-17 확인)
+13. AIP-C01 시험 안내서 콘텐츠 도메인 2 (기술 2.3.2의 예시 셋) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html` (2026-11-17 확인)

@@ -3,13 +3,13 @@
   "taskTitle": "FM 사용을 위한 데이터 검증 및 처리 파이프라인 구현",
   "domain": 1,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "1.3.1",
       "section": "validation",
       "difficulty": "foundational",
-      "stem": "데이터 품질 검증을 도입하면서 「카탈로그에 이미 등록된 테이블을 그대로 평가하고 싶다」는 요구와 「파이프라인이 도는 동안 걸러내고 싶다」는 요구가 함께 나왔습니다. Glue Data Quality의 진입점에 비추어 올바른 설명은 무엇입니까?",
+      "stem": "데이터 품질 검증을 도입하면서 「카탈로그에 이미 등록된 테이블을 그대로 평가하고 싶다」는 요구와 「파이프라인이 도는 동안 걸러내고 싶다」는 요구가 함께 나왔습니다. Glue Data Quality의 진입점에 대한 올바른 설명은 무엇입니까?",
       "options": [
         "진입점이 둘입니다. Data Catalog는 테이블과 지원되는 Athena 뷰를 평가하고 ETL 작업은 이동 중 데이터를 평가합니다",
         "진입점이 하나뿐입니다. 평가는 항상 ETL 작업 안에서만 수행되므로 카탈로그 요구는 별도 도구가 필요합니다",
@@ -65,7 +65,7 @@
       "skill": "1.3.1",
       "section": "validation",
       "difficulty": "applied",
-      "stem": "조달 검토에서 「품질 규칙을 이 서비스에 쓰면 나중에 다른 도구로 옮길 때 규칙을 전부 다시 써야 하는지」를 묻습니다. Glue Data Quality 서술에 비추어 무엇이라고 답합니까?",
+      "stem": "조달 검토에서 「품질 규칙을 이 서비스에 쓰면 나중에 다른 도구로 옮길 때 규칙을 전부 다시 써야 하는지」를 묻습니다. Glue Data Quality를 놓고 무엇이라고 답합니까?",
       "options": [
         "규칙이 Glue 내부 형식으로만 저장되므로 이전에는 전부 다시 써야 합니다",
         "규칙을 옮길 수는 있지만 라이선스를 따로 구매해야 하고 사용량 과금은 별개입니다",
@@ -171,6 +171,10 @@
         {
           "title": "How SageMaker Processing Configures Input and Output — 컨테이너 경로 규칙",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/byoc-input-and-output.html"
+        },
+        {
+          "title": "How to Build Your Own Processing Container — 환경 변수와 두 JSON 구성 파일",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-your-own-processing-container.html"
         }
       ],
       "id": "aip-t1-3-q6",
@@ -199,6 +203,10 @@
         {
           "title": "How SageMaker Processing Configures Input and Output — 심링크 불가 · S3UploadMode",
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/byoc-input-and-output.html"
+        },
+        {
+          "title": "How to Build Your Own Processing Container — S3UploadMode의 EndOfJob",
+          "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/build-your-own-processing-container.html"
         }
       ],
       "id": "aip-t1-3-q7",
@@ -269,7 +277,7 @@
       "skill": "1.3.3",
       "section": "format",
       "difficulty": "applied",
-      "stem": "여러 FM을 바꿔 쓰면서 애플리케이션 코드를 그대로 두려 합니다. 다만 한 모델에만 있는 추론 파라미터도 써야 합니다. Converse 의 성질에 비추어 올바른 설계는 무엇입니까?",
+      "stem": "여러 FM을 바꿔 쓰면서 애플리케이션 코드를 그대로 두려 합니다. 다만 한 모델에만 있는 추론 파라미터도 써야 합니다. Converse 를 쓰는 올바른 설계는 무엇입니까?",
       "options": [
         "모델마다 요청 본문을 분기해 직접 만듭니다. 고유 파라미터가 있으면 공통 인터페이스를 쓸 수 없습니다",
         "Converse 를 씁니다. 메시지를 지원하는 모든 모델에 일관된 인터페이스를 주고 모델 고유 파라미터도 함께 넘깁니다",
@@ -297,7 +305,7 @@
       "skill": "1.3.3",
       "section": "format",
       "difficulty": "foundational",
-      "stem": "규정 준수 검토에서 「프롬프트로 보낸 계약서 PDF가 Bedrock에 남는지」와 「통화 녹음을 Transcribe로 전사하면 그 음성이 남는지」를 함께 묻습니다. 두 서비스의 데이터 처리 정책에 비추어 올바른 답은 무엇입니까?",
+      "stem": "규정 준수 검토에서 「프롬프트로 보낸 계약서 PDF가 Bedrock에 남는지」와 「통화 녹음을 Transcribe로 전사하면 그 음성이 남는지」를 함께 묻습니다. 올바른 답은 무엇입니까?",
       "options": [
         "둘 다 남지 않습니다. 두 서비스 모두 입력을 처리 후 즉시 폐기한다고 명시합니다",
         "둘 다 남습니다. 두 서비스 모두 품질 개선을 위해 입력을 보관하고 삭제는 Support 케이스로 요청합니다",
@@ -385,7 +393,7 @@
       "skill": "1.3.4",
       "section": "enrich",
       "difficulty": "applied",
-      "stem": "한국어와 영어가 섞인 문서 묶음을 Comprehend 엔터티 탐지로 한 번에 처리하려 합니다. 엔터티 탐지의 제약에 비추어 무엇이 문제이고 어떻게 고칩니까?",
+      "stem": "한국어와 영어가 섞인 문서 묶음을 Comprehend 엔터티 탐지로 한 번에 처리하려 합니다. 무엇이 문제이고 어떻게 고칩니까?",
       "options": [
         "언어 자동 감지가 켜져 있지 않은 것이 문제입니다. 감지를 켜면 한 호출로 섞인 묶음을 처리합니다",
         "모든 문서가 같은 언어여야 하는 것이 문제입니다. 언어가 섞인 묶음은 언어별로 나눠 따로 호출합니다",
@@ -421,10 +429,10 @@
         "두 선택 모두 그대로 둡니다. 유지 관리 상태는 Comprehend 전체에 적용되므로 대안이 없습니다"
       ],
       "correct": 2,
-      "explanation": "공식 가용성 변경 페이지가 주제 모델링, 이벤트 탐지, 프롬프트 안전 분류를 2026-03-31 공지로 적습니다 — 유지 관리 상태이므로 새 설계에서 고르면 공식이 닫고 있는 쪽을 쓰는 것입니다. 엔터티 탐지는 그 목록에 없어 계속 쓸 수 있습니다. 그리고 공백, 대소문자, 단위, 날짜 형식처럼 결정적이고 가벼운 변환은 Lambda가 싸고 빠릅니다 — LLM을 쓰지 않아도 되는 일에 LLM을 쓰지 않는 것이 이 작업의 설계 감각입니다. 입력과 출력 안전 제어는 도메인 3의 수단을 먼저 봅니다.",
+      "explanation": "가용성 변경 페이지가 주제 모델링, 이벤트 탐지, 프롬프트 안전 분류를 신규 고객에게 더는 제공하지 않는다고 적고, AWS 수명 주기 목록이 이 세 기능을 유지 관리 항목으로 올려 둡니다 — 새 설계에서 고르면 닫히고 있는 쪽을 쓰는 것입니다. 엔터티 탐지는 그 목록에 없어 계속 쓸 수 있습니다. 그리고 공백, 대소문자, 단위, 날짜 형식처럼 결정적이고 가벼운 변환은 Lambda가 싸고 빠릅니다 — LLM을 쓰지 않아도 되는 일에 LLM을 쓰지 않는 것이 이 작업의 설계 감각입니다. 입력과 출력 안전 제어는 도메인 3의 수단을 먼저 봅니다.",
       "wrongExplanations": {
         "0": "프롬프트 안전 분류는 유지 관리 상태로 공지된 기능입니다. 그리고 결정적 변환까지 FM으로 돌리면 비용과 지연이 늘고 결과가 흔들립니다.",
-        "1": "엔터티 탐지는 이름과 날짜 같은 항목을 뽑는 기능이고 안전 필터가 아닙니다. 그리고 정규화는 Lambda로 옮기는 쪽이 공식 설계 감각에 맞습니다.",
+        "1": "엔터티 탐지는 이름과 날짜 같은 항목을 뽑는 기능이고 안전 필터가 아닙니다. 그리고 결정적인 정규화는 Lambda로 옮기는 쪽이 싸고 빠릅니다.",
         "3": "유지 관리 공지의 대상은 세 기능이고 Comprehend 전체가 아닙니다. 엔터티 탐지는 그 목록에 없습니다."
       },
       "sources": [
@@ -435,6 +443,10 @@
         {
           "title": "Entities (Amazon Comprehend) — 엔터티 탐지는 그 목록에 없다",
           "url": "https://docs.aws.amazon.com/comprehend/latest/dg/how-entities.html"
+        },
+        {
+          "title": "AWS 수명 주기 변경 — 유지 관리 상태의 서비스와 기능 목록",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
       "id": "aip-t1-3-q15",

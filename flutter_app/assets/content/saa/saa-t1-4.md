@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
   - title: AWS WAF Anti-DDoS 관리형 규칙 그룹(유료·웹 ACL에 추가) (공식)
     url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager
@@ -91,7 +91,7 @@ lastVerified: 2026-11-06
 - Amazon API Gateway REST API
 - AWS AppSync GraphQL API
 - Amazon Cognito User Pool
-- AWS App Runner 서비스
+- AWS App Runner 서비스 (⚠️ 신규 고객에게 열려 있지 않음 — 기존 고객은 계속 사용)
 - AWS Verified Access 인스턴스
 - AWS Amplify 애플리케이션
 - Amazon Bedrock AgentCore Gateway

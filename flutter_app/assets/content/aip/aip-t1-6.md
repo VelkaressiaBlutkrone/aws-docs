@@ -30,7 +30,13 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html
   - title: CloudWatch Logs와 S3로 모델 호출 모니터링
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
-lastVerified: 2026-11-14
+  - title: Prompt management의 버전으로 프롬프트 배포
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-deploy.html
+  - title: PromptFlowNodeResourceConfiguration (API 참조)
+    url: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_PromptFlowNodeResourceConfiguration.html
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 1
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html
+lastVerified: 2026-11-17
 ---
 
 # 프롬프트 엔지니어링 전략과 거버넌스 (지침 프레임워크·대화 컨텍스트·버전과 감사·품질 보증·반복 개선·프롬프트 체인)
@@ -198,9 +204,9 @@ AWS가 제공하는 자동 수단은 **프롬프트 최적화**이고, **한계�
 - 조건은 관계·논리 연산자로 정의합니다 — `==` · `!=`(문자열·숫자·불리언) · `>` · `>=` · `<` · `<=`(⚠️ **숫자만**).
 - ⚠️⚠️ **조건은 순서대로 평가되고, 둘 이상이 만족되면 앞 조건이 우선합니다.** 이것을 모르면 「왜 두 번째 분기가 안 타지?」를 영원히 디버깅합니다.
 
-**재사용 가능한 프롬프트 구성 요소**: Prompt management의 프롬프트를 **프롬프트 노드로 넣습니다**(§1의 통합 경로 ②). 그래서 한 프롬프트를 고치면 **그것을 쓰는 플로들이 함께** 바뀝니다 — 그것이 「재사용」의 실체이고, 동시에 **버전을 고정해야 하는 이유**입니다.
+**재사용 가능한 프롬프트 구성 요소**: Prompt management의 프롬프트를 **프롬프트 노드로 넣습니다**(§1의 통합 경로 ②). 노드는 그 프롬프트를 **ARN으로 가리키고**(`promptArn`) 그 ARN 형식은 끝에 **버전 번호**를 받습니다. 프롬프트 **버전은 작업 초안의 스냅샷**이므로, 운영 플로가 어느 구성으로 도는지 고정하려면 **버전을 만들어 노드가 그 버전을 가리키게** 합니다.
 
-**통합 전처리·후처리**는 **Lambda 함수 노드**와 **인라인 코드 노드**가 맡습니다. 플로는 **불변 워크플로로 배포**해 테스트에서 운영으로 옮깁니다.
+**통합 전처리·후처리**는 **Lambda 함수 노드**와 **인라인 코드 노드**가 맡습니다. 플로는 **불변 워크플로로 배포**해 테스트에서 운영으로 옮깁니다 — **버전을 게시하면 그 시점의 정의가 보존**되고, 애플리케이션은 그 버전을 가리키는 **별칭**으로 호출합니다.
 
 ---
 
@@ -297,3 +303,6 @@ AWS가 제공하는 자동 수단은 **프롬프트 최적화**이고, **한계�
 9. Amazon Comprehend 사용자 지정 분류 (2단계 · 동기·비동기 · 문서 유형 일치) — `docs.aws.amazon.com/comprehend/latest/dg/how-document-classification.html` (2026-11-14 확인)
 10. CloudTrail로 Bedrock API 호출 모니터링 (관리 이벤트 ↔ 데이터 이벤트) — `docs.aws.amazon.com/bedrock/latest/userguide/logging-using-cloudtrail.html` (2026-11-14 확인)
 11. CloudWatch Logs와 S3로 모델 호출 모니터링 (기본 꺼짐 · 같은 계정·리전) — `docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html` (2026-11-14 확인)
+12. Prompt management의 버전으로 프롬프트 배포 (버전은 작업 초안의 스냅샷) — `docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-deploy.html` (2026-11-17 확인)
+13. PromptFlowNodeResourceConfiguration (`promptArn` 형식의 버전 접미사) — `docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_PromptFlowNodeResourceConfiguration.html` (2026-11-17 확인)
+14. AIP-C01 시험 안내서 콘텐츠 도메인 1 (기술 1.6.2·1.6.4의 예시 목록) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain1.html` (2026-11-17 확인)

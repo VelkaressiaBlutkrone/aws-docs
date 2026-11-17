@@ -3,7 +3,7 @@
   "taskTitle": "데이터 보안 및 개인 정보 보호 제어 구현",
   "domain": 3,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "3.2.1",
@@ -167,6 +167,10 @@
         {
           "title": "AWS Lake Formation 개요",
           "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+        },
+        {
+          "title": "AWS 수명 주기 변경 — 완전 종료된 서비스와 기능 목록",
+          "url": "https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html"
         }
       ],
       "id": "aip-t3-2-q6",

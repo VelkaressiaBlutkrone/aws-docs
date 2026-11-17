@@ -318,8 +318,8 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html"
         },
         {
-          "title": "CLF-C02 공식 시험 가이드(한국어) — 데이터베이스 서비스",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 3 — 작업 3.4 기술 '관계형 데이터베이스 파악(예: Amazon RDS, Amazon Aurora)'·'NoSQL 데이터베이스 파악(예: Amazon DynamoDB)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true

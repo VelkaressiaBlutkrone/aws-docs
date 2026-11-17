@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용
@@ -194,7 +194,7 @@ Glacier Flexible Retrieval·Deep Archive 로 전환되는 **객체마다 총 40 
 
 > 🧠 원리: 왜 수명주기 정책은 최소 보관 기간 요금을 부과할까요?
 > IA·Glacier 클래스는 저장 단가가 낮은 대신, 최소 보관 기간이 충족되지 않은 채 삭제·전환이 일어나면 잔여 기간에 해당하는 저장 요금이 청구됩니다.
-> 이 구조에서 30일 이전에 Standard-IA로 전환하면 절감이 아니라 오히려 비용이 늘어날 수 있습니다.
+> 이 구조에서 Standard-IA에 머문 기간이 30일이 안 된 객체를 삭제하거나 다른 클래스로 옮기면 절감이 아니라 오히려 비용이 늘어날 수 있습니다.
 > 따라서 데이터의 실제 보관 주기를 먼저 파악한 뒤 수명주기 전환 시점을 설정해야 절감 효과가 납니다.
 
 ### 4) EBS 비용 최적화 {#ebs-cost}
@@ -458,7 +458,7 @@ S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 
 2. **"EC2를 Stop하면 EBS 요금도 안 낸다."** → EBS는 인스턴스가 중지 상태여도 프로비전된 용량에 대해 계속 과금됩니다. 단, **Terminate가 모든 볼륨을 지우는 것은 아닙니다** — 삭제 여부는 볼륨의 `DeleteOnTermination` 값에 따릅니다. 기본값은 **시작 시 연결된 루트 볼륨만 삭제**이고, 데이터 볼륨은 콘솔로 시작 시 연결하면 **보존**(CLI는 삭제), 시작 후 연결한 볼륨은 모두 보존입니다. 남은 볼륨은 계속 과금되므로 직접 삭제해야 합니다.
    (원리: §4 본문 — EBS 과금은 볼륨 수명에 붙으므로, 인스턴스 수명과 볼륨 수명을 잇는 `DeleteOnTermination` 속성을 확인해야 비용이 멈춘다.)
 
-3. **"수명주기 전환은 언제 해도 최소 보관 기간 요금이 없다."** → Standard-IA는 30일, Glacier 계열은 90일(Deep Archive 180일) 미만 보관 시 해당 기간 요금이 청구됩니다. 30일 이전에 Standard-IA로 전환하면 절감이 아닙니다.
+3. **"수명주기 전환은 언제 해도 최소 보관 기간 요금이 없다."** → Standard-IA는 30일, Glacier 계열은 90일(Deep Archive 180일) 미만 보관 시 해당 기간 요금이 청구됩니다. Standard-IA에 30일을 채우지 못하고 삭제·전환되면 절감이 아닙니다.
    (원리: §3 🧠 — 최소 보관 기간 충족 전 삭제·전환이 일어나면 잔여 기간에 해당하는 저장 요금이 청구된다.)
 
 4. **"같은 리전이면 AZ 간 전송도 무료다."** → 같은 리전이라도 **AZ를 넘는 전송은 과금**됩니다. 고가용성 아키텍처에서 AZ 간 트래픽이 많으면 예상치 못한 비용이 발생합니다. 같은 AZ 내 프라이빗 IP 통신이 무료입니다.
@@ -490,7 +490,7 @@ S3 Storage Lens는 조직 전체 버킷의 스토리지 사용 현황과 활동 
 - Day 90: S3 Glacier Flexible Retrieval 전환 (거의 접근 없음)
 - Day 365: 만료(Expiration) — 객체 자동 삭제
 
-Standard-IA 최소 보관 기간(30일)은 Day 30 전환과 일치하므로 추가 요금 없습니다. Glacier Flexible Retrieval 최소 보관 기간(90일)도 Day 90~365의 275일을 채우므로 문제없습니다.
+Standard-IA 최소 보관 기간(30일)은 Day 30~90의 60일 동안 그 클래스에 머무르므로 채워지고 추가 요금이 없습니다. Glacier Flexible Retrieval 최소 보관 기간(90일)도 Day 90~365의 275일을 채우므로 문제없습니다.
 </details>
 
 **Q2.** 프라이빗 서브넷의 EC2 인스턴스가 NAT Gateway를 통해 S3에 대량 데이터를 쓰고 있습니다. 비용을 줄이면서 보안도 강화하는 방법은?

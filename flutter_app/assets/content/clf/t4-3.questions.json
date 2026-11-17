@@ -21,13 +21,17 @@
       "explanation": "Basic Support는 모든 AWS 고객에게 자동으로 제공되는 무료 플랜으로, 계정·결제 질문에 대한 일대일 응답, 지원 포럼, 서비스 상태 점검, 문서·기술 백서·모범 사례 가이드, 그리고 Trusted Advisor의 핵심 점검을 제공합니다.",
       "wrongExplanations": {
         "1": "Business Support는 유료 플랜으로 24x7 기술 지원과 전체 Trusted Advisor 등을 제공합니다. 무료 기본 플랜이 아닙니다.",
-        "2": "Enterprise Support는 전담 TAM 등을 포함하는 최상위 유료 플랜으로, 무료 기본 플랜이 아닙니다.",
+        "2": "Enterprise Support는 전담 TAM 등을 포함하는 상위 유료 플랜으로, 무료 기본 플랜이 아닙니다.",
         "3": "Developer Support는 유료 플랜으로 업무 시간 기술 지원을 제공합니다. 무료 기본 플랜이 아닙니다. (⚠️ Developer Support는 2027-01-01 단종 예정이고 현행 최저 유료 플랜은 Business Support+입니다.)"
       },
       "sources": [
         {
-          "title": "AWS Support Plans — Basic은 무료, 계정·결제 질문·포럼·서비스 상태·문서·Trusted Advisor 핵심 점검",
+          "title": "AWS Support Plans — Basic은 모든 고객에게 자동 제공(계정·결제 질문 응답·지원 포럼·서비스 상태 점검·문서·기술 백서·모범 사례 가이드)",
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+        },
+        {
+          "title": "AWS Trusted Advisor — Basic Support는 서비스 할당량 범주의 전체 점검과 보안·내결함성 범주의 일부 점검을 사용",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
         }
       ],
       "verified": true
@@ -46,7 +50,7 @@
         "무료 Basic으로 충분하다"
       ],
       "correct": 0,
-      "explanation": "Business Support는 24x7 기술 지원(전화·웹·채팅)과 전체 Trusted Advisor 점검을 제공하는 유료 플랜으로, 프로덕션 워크로드에 적합합니다(Enterprise는 여기에 TAM 등을 더한 상위 플랜). 시험은 전통 분류(Basic·Developer·Business·Enterprise) 기준으로 출제되며, 현행 공식 명칭으로는 Business Support+에 해당합니다(AWS는 Developer·Business 플랜을 2027-01-01 단종하고 Business Support+로 전환 중).",
+      "explanation": "Business Support는 24x7 기술 지원(전화·웹·채팅)과 전체 Trusted Advisor 점검을 제공하는 유료 플랜으로, 프로덕션 워크로드에 적합합니다(Enterprise는 여기에 TAM 등을 더한 상위 플랜). 전통 분류의 Business Support는 현행 공식 명칭으로 Business Support+에 해당합니다(AWS는 Developer·Business 플랜을 2027-01-01 단종하고 Business Support+로 전환 중).",
       "wrongExplanations": {
         "1": "Basic Support는 무료이지만 24x7 기술 케이스 지원을 제공하지 않습니다(계정·결제 질문과 핵심 Trusted Advisor 점검 수준).",
         "2": "Developer Support는 업무 시간 기술 지원만 제공하며 24x7 지원이 아닙니다.",
@@ -66,7 +70,7 @@
       "skill": "Support 플랜 (Enterprise — TAM)",
       "section": "support-plans",
       "difficulty": "foundational",
-      "stem": "대규모 미션 크리티컬 환경에서 전담 Technical Account Manager(TAM)와 비즈니스 크리티컬(시스템 다운) 케이스에 대한 가장 빠른(약 15분) 응답이 필요하다. 가장 적합한 Support 플랜은?",
+      "stem": "대규모 미션 크리티컬 환경에서 전담 Technical Account Manager(TAM)와 비즈니스 크리티컬(시스템 다운) 케이스에 대한 약 15분 응답이 필요하다. 가장 적합한 Support 플랜은?",
       "options": [
         "Enterprise Support",
         "Business Support",
@@ -74,7 +78,7 @@
         "Basic Support"
       ],
       "correct": 0,
-      "explanation": "Enterprise Support는 Business의 모든 혜택에 더해 전담 Technical Account Manager(TAM), 비즈니스 크리티컬(시스템 다운) 케이스에 대한 약 15분 응답, 전략 검토 등을 제공하는 최상위 플랜입니다. 대규모·미션 크리티컬 환경에 적합합니다. (참고: 프로덕션 시스템 다운은 Enterprise에서도 1시간 이내 목표이며, 15분은 비즈니스 크리티컬 등급입니다.)",
+      "explanation": "Enterprise Support는 Business의 모든 혜택에 더해 전담 Technical Account Manager(TAM), 비즈니스 크리티컬(시스템 다운) 케이스에 대한 약 15분 응답, 전략 검토 등을 제공하는 상위 플랜으로, 보기 중 전담 TAM과 15분 응답을 함께 주는 유일한 플랜입니다. 현행 4개 플랜에서는 그 위에 AWS Unified Operations(전담 TAM과 도메인 전문 엔지니어, 중대 인시던트 5분 응답)가 있습니다. (참고: 프로덕션 시스템 다운은 Enterprise에서도 1시간 이내 목표이며, 15분은 비즈니스 크리티컬 등급입니다.)",
       "wrongExplanations": {
         "1": "Business Support는 24x7 기술 지원과 전체 Trusted Advisor를 제공하지만 전담 TAM은 포함하지 않습니다(TAM은 Enterprise).",
         "2": "Developer Support는 업무 시간 기술 지원 수준으로, 전담 TAM이나 15분 응답을 제공하지 않습니다. (⚠️ Developer Support는 2027-01-01 단종 예정이고 현행 최저 유료 플랜은 Business Support+입니다.)",
@@ -84,6 +88,10 @@
         {
           "title": "AWS Support Plans — Enterprise: 전담 TAM, 비즈니스 크리티컬 시스템 다운 ~15분 응답",
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+        },
+        {
+          "title": "Compare AWS Support plans — 응답 시간 표(Business/Mission-critical system down: Enterprise Support 15분 미만 · Unified Operations 5분 미만, Production system down 1시간 미만)",
+          "url": "https://aws.amazon.com/premiumsupport/plans/"
         }
       ],
       "verified": true
@@ -110,8 +118,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — Task 4.3 Skill '기술 리소스 식별(Prescriptive Guidance·Knowledge Center·re:Post)' 명시",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 4 — 작업 4.3 기술 'AWS 기술 리소스 파악 및 찾기(예: AWS 권장 가이드, AWS Knowledge Center, AWS re:Post)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true
@@ -138,8 +146,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — Task 4.3 Skill 'APN(ISV, SI) 역할' 명시; AWS Support의 Partner-Led Support 연계",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 4 — 작업 4.3 기술 'AWS 파트너의 역할 이해(예: AWS Marketplace, Independent Software Vendor(ISV), 시스템 통합 사업자)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true
@@ -161,13 +169,17 @@
       "explanation": "Developer Support는 개발·테스트 용도로, 업무 시간 동안 이메일/웹을 통한 기술 지원을 제공하는 가장 낮은 유료 플랜입니다. 24x7 지원이나 전담 TAM이 필요 없는 개발·테스트 단계에 적합합니다. 다만 AWS는 Developer Support를 2027-01-01에 단종하며, 현행 최저 유료 플랜은 Business Support+입니다(공식 가이드의 지원 옵션 예시에서도 Developer Support가 빠졌습니다). 전통 분류 기출 대비로만 기억하세요 — AWS GovCloud(US) 리전에서는 계속 제공됩니다.",
       "wrongExplanations": {
         "1": "Business Support는 24x7 기술 지원과 전체 Trusted Advisor를 제공하는 상위 플랜으로, 업무 시간 지원 요건 대비 과합니다.",
-        "2": "Enterprise Support는 전담 TAM 등을 포함하는 최상위 플랜으로, 개발·테스트 요건 대비 과합니다.",
+        "2": "Enterprise Support는 전담 TAM 등을 포함하는 상위 플랜으로, 개발·테스트 요건 대비 과합니다.",
         "3": "Basic Support는 무료이지만 기술 질문에 대한 케이스 지원(이메일/웹)을 제공하지 않습니다."
       },
       "sources": [
         {
-          "title": "AWS Support Plans — Developer: 업무 시간 이메일/웹 기술 지원(개발·테스트용)",
+          "title": "AWS Support Plans — Developer Support 2027-01-01 단종 공지(기존 고객은 그때까지 계속 사용, Business Support+로 전환 안내)",
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+        },
+        {
+          "title": "AWS Developer Support — 테스트·초기 개발 단계용, 업무 시간에 이메일로 Cloud Support 엔지니어의 기술 지원",
+          "url": "https://aws.amazon.com/premiumsupport/plans/developers/"
         }
       ],
       "verified": true
@@ -186,7 +198,7 @@
         "Enterprise Support에서만"
       ],
       "correct": 0,
-      "explanation": "전체 Trusted Advisor 점검은 Business와 Enterprise 플랜에서 제공됩니다. Basic 플랜은 공식 기준으로 서비스 할당량(Service Limits) 범주의 전체 점검과 보안·내결함성 범주의 일부 점검만 사용할 수 있습니다. 따라서 '전체 점검'의 최소 요건은 Business 플랜 이상입니다(시험 전통 분류 기준 Business이며, 현행 공식 서술은 Business Support+·Enterprise Support·Unified Operations 세 플랜입니다. AWS는 Developer·Business를 2027-01-01 단종 예정).",
+      "explanation": "전체 Trusted Advisor 점검은 Business와 Enterprise 플랜에서 제공됩니다. Basic 플랜은 공식 기준으로 서비스 할당량(Service Limits) 범주의 전체 점검과 보안·내결함성 범주의 일부 점검만 사용할 수 있습니다. 따라서 '전체 점검'의 최소 요건은 Business 플랜 이상입니다(전통 명칭으로는 Business이며, 현행 공식 서술은 Business Support+·Enterprise Support·Unified Operations 세 플랜입니다. AWS는 Developer·Business를 2027-01-01 단종 예정).",
       "wrongExplanations": {
         "1": "Basic을 포함한 모든 플랜이 전체 점검을 제공하지는 않습니다. Basic·Developer는 핵심 점검만 제공합니다.",
         "2": "Developer는 핵심 점검만 제공하며, 전체 점검은 Business 이상부터입니다.",
@@ -194,7 +206,7 @@
       },
       "sources": [
         {
-          "title": "AWS Trusted Advisor — Business/Enterprise는 전체 점검, Basic/Developer는 핵심 점검",
+          "title": "AWS Trusted Advisor — 전체 점검은 Business Support+·Enterprise Support·Unified Operations, Basic Support는 서비스 할당량 전체와 보안·내결함성 일부",
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
         }
       ],
@@ -222,8 +234,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — Task 4.3: 기술 리소스(Knowledge Center·re:Post·Prescriptive Guidance) 식별",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 4 — 작업 4.3 기술 'AWS 기술 리소스 파악 및 찾기(예: AWS 권장 가이드, AWS Knowledge Center, AWS re:Post)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true
@@ -237,21 +249,21 @@
       "stem": "한 팀이 검증된 전략·모범 사례·마이그레이션 패턴(처방적 가이드)을 AWS와 파트너의 경험에 기반해 무료로 참고하려 한다. 가장 적합한 자료는?",
       "options": [
         "AWS Prescriptive Guidance",
-        "AWS Personal Health Dashboard",
+        "AWS Health Dashboard",
         "Amazon CloudFront",
         "AWS Budgets"
       ],
       "correct": 0,
       "explanation": "AWS Prescriptive Guidance는 AWS와 파트너의 경험에 기반한 처방적(prescriptive) 전략·모범 사례·패턴·마이그레이션 가이드를 제공하는 무료 자료입니다. (how-to는 Knowledge Center, 커뮤니티 Q&A는 re:Post.)",
       "wrongExplanations": {
-        "1": "AWS Personal Health Dashboard는 내 리소스에 영향을 주는 AWS 서비스 상태·이벤트를 보여주는 도구로, 처방적 가이드 자료가 아닙니다.",
+        "1": "AWS Health Dashboard는 내 리소스에 영향을 주는 AWS 서비스 상태·이벤트를 보여주는 도구로, 처방적 가이드 자료가 아닙니다.",
         "2": "Amazon CloudFront는 콘텐츠 전송 네트워크(CDN)로, 기술 가이드 자료가 아닙니다.",
         "3": "AWS Budgets는 예산 설정·알림 도구로, 처방적 가이드 자료가 아닙니다."
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — Task 4.3: Prescriptive Guidance 등 기술 리소스 식별",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 4 — 작업 4.3 기술 'AWS 기술 리소스 파악 및 찾기(예: AWS 권장 가이드, AWS Knowledge Center, AWS re:Post)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true
@@ -277,8 +289,8 @@
       },
       "sources": [
         {
-          "title": "AWS Support — 프로그래밍 방식 접근(AWS Support API)은 Business/Enterprise On-Ramp/Enterprise 플랜 필요",
-          "url": "https://docs.aws.amazon.com/awssupport/latest/user/getting-started.html"
+          "title": "About the AWS Support API — Business Support+·Enterprise Support·Unified Operations 플랜이 있어야 AWS Support API를 사용할 수 있음",
+          "url": "https://docs.aws.amazon.com/awssupport/latest/user/about-support-api.html"
         }
       ],
       "verified": true
@@ -297,7 +309,7 @@
         "Support 플랜과 무관하다"
       ],
       "correct": 0,
-      "explanation": "시험 대비로는 전통 분류인 Business Support를 최소 24x7 프로덕션 기술 지원 플랜으로 기억합니다. 현재 AWS Support 플랜 비교에서는 이에 해당하는 프로덕션 워크로드 최소 권장 플랜이 Business Support+로 표시되며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 짧은 응답 시간 목표를 제공합니다. Basic은 기술 지원 케이스가 없고, Developer Support는 이 24x7 운영 장애 요건을 충족하지 못합니다.",
+      "explanation": "전통 분류에서는 Business Support가 최소 24x7 프로덕션 기술 지원 플랜입니다. 현재 AWS Support 플랜 비교에서는 이에 해당하는 프로덕션 워크로드 최소 권장 플랜이 Business Support+로 표시되며, 24x7 전화·웹·채팅·이메일 기술 지원과 프로덕션 시스템 다운에 대한 짧은 응답 시간 목표를 제공합니다. Basic은 기술 지원 케이스가 없고, Developer Support는 이 24x7 운영 장애 요건을 충족하지 못합니다.",
       "wrongExplanations": {
         "1": "Basic Support는 기술 지원 케이스를 제공하지 않아 긴급 운영 장애 지원에 부적합합니다.",
         "2": "Developer Support는 업무 시간 이메일 지원으로, 24x7·짧은 응답 시간 요건을 충족하지 못합니다.",
@@ -345,15 +357,15 @@
       "skill": "Support 플랜 계층 — 워크로드 적정 선택",
       "section": "support-plans",
       "difficulty": "applied",
-      "stem": "한 스타트업이 외부 사용자가 없는 내부 개발·테스트 전용 계정에 전담 TAM과 비즈니스 크리티컬 시스템 다운 15분 응답이 포함된 최상위 Support 플랜을 가입해 두고 매달 큰 지원 요금을 내고 있다. 이 계정에는 미션 크리티컬 프로덕션 워크로드가 없고, 가끔 업무 시간에 기술 질문만 한다. 이 상황에서 비용 효율을 가장 높이는 선택은?",
+      "stem": "한 스타트업이 외부 사용자가 없는 내부 개발·테스트 전용 계정에 전담 TAM과 비즈니스 크리티컬 시스템 다운 15분 응답이 포함된 상위 Support 플랜을 가입해 두고 매달 큰 지원 요금을 내고 있다. 이 계정에는 미션 크리티컬 프로덕션 워크로드가 없고, 가끔 업무 시간에 기술 질문만 한다. 이 상황에서 비용 효율을 가장 높이는 선택은?",
       "options": [
-        "워크로드 중요도에 맞춰 더 낮은 유료 기술 지원 플랜(시험 가이드 기준 개발·테스트 워크로드용 업무 시간 지원 플랜)으로 다운그레이드한다",
-        "최상위 Enterprise 플랜을 유지해야 전담 TAM의 전략 검토를 계속 받을 수 있으므로 그대로 둔다",
+        "워크로드 중요도에 맞춰, 개발·테스트 용도에 맞는 더 낮은 유료 기술 지원 플랜으로 다운그레이드한다",
+        "상위 Enterprise 플랜을 유지해야 전담 TAM의 전략 검토를 계속 받을 수 있으므로 그대로 둔다",
         "Support 플랜은 계정 생성 시 고정되어 변경할 수 없으므로 새 계정을 만들어 옮긴다",
         "무료 Basic으로 내리면 업무 시간 기술 질문 케이스 지원까지 받을 수 있으므로 Basic으로 내린다"
       ],
       "correct": 0,
-      "explanation": "Support 플랜이 무료 Basic부터 상위 유료 플랜까지 계층 구조로 나뉜 이유는 고객이 워크로드의 중요도와 예산에 맞는 지원 수준을 선택하게 하기 위해서입니다(구체적 플랜 구성·명칭은 시점에 따라 변동될 수 있으므로 시험 가이드 기준으로 이해). 내부 개발·테스트 전용으로 미션 크리티컬 요구가 없고 업무 시간 기술 질문만 하는 계정이 전담 TAM·중요 케이스 단시간 응답이 포함된 최상위 플랜을 유지하는 것은 실제로 필요하지 않은 지원 비용까지 지불하는 비효율입니다. 워크로드 중요도에 맞는 더 낮은 유료 기술 지원 플랜으로 다운그레이드하는 것이 계층 원리에 맞는 비용 효율적 선택입니다.",
+      "explanation": "Support 플랜이 무료 Basic부터 상위 유료 플랜까지 계층 구조로 나뉜 이유는 고객이 워크로드의 중요도와 예산에 맞는 지원 수준을 선택하게 하기 위해서입니다(현행 최저 유료 플랜은 Business Support+이고, 업무 시간 지원의 Developer Support는 2027-01-01 단종 예정). 내부 개발·테스트 전용으로 미션 크리티컬 요구가 없고 업무 시간 기술 질문만 하는 계정이 전담 TAM·중요 케이스 단시간 응답이 포함된 상위 플랜을 유지하는 것은 실제로 필요하지 않은 지원 비용까지 지불하는 비효율입니다. 워크로드 중요도에 맞는 더 낮은 유료 기술 지원 플랜으로 다운그레이드하는 것이 계층 원리에 맞는 비용 효율적 선택입니다.",
       "wrongExplanations": {
         "1": "전담 TAM·전략 검토는 미션 크리티컬 프로덕션 워크로드를 위한 고비용 자원으로, 외부 사용자도 프로덕션도 없는 내부 개발·테스트 계정에는 그 가치가 거의 없습니다. '상위 플랜이 항상 낫다'는 통념으로 비효율을 정당화하는 오답입니다.",
         "2": "Support 플랜은 워크로드 변화에 맞춰 업그레이드·다운그레이드할 수 있습니다. 계정 생성 시 고정된다는 전제가 틀렸고, 새 계정을 만들 필요도 없습니다.",
@@ -361,7 +373,7 @@
       },
       "sources": [
         {
-          "title": "AWS Support Plans — 플랜은 워크로드 중요도에 맞춰 선택(Basic 무료 ~ Enterprise TAM)",
+          "title": "AWS Support Plans — 비즈니스 요구에 맞춰 고르는 네 플랜(Basic · Business Support+ · Enterprise Support · Unified Operations)",
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
         }
       ],
@@ -389,8 +401,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — Task 4.3: APN(ISV·SI 포함) 파트너 네트워크의 역할",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 4 — 작업 4.3 지식 'Independent Software Vendor(ISV) 및 시스템 통합 사업자를 포함한 AWS 파트너 네트워크의 역할'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true
@@ -417,8 +429,8 @@
       },
       "sources": [
         {
-          "title": "CLF-C02 공식 시험 가이드 — Task 4.3: 공식 웹사이트에서 백서·블로그·문서 찾기",
-          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html"
+          "title": "CLF-C02 공식 시험 가이드 도메인 4 — 작업 4.3 기술 '공식 AWS 웹 사이트에서 AWS 백서, 블로그 및 문서 찾기'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain4.html"
         }
       ],
       "verified": true

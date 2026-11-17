@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html
   - title: DEA-C01 공식 시험 가이드 도메인 4 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain4.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 감사용 로그 준비 (CloudTrail·CloudWatch Logs·Lake·로그 분석)
@@ -118,7 +118,7 @@ lastVerified: 2026-10-20
 
 - **보존** — 기본은 **무기한 저장**이며 **로그 그룹마다 언제든 보존 기간을 바꿀 수 있습니다.**
 - **암호화** — 로그 그룹 데이터는 **항상 암호화**되며 기본은 CloudWatch Logs의 서버 측 암호화이고 **대안으로 AWS KMS**를 쓸 수 있습니다. KMS는 **로그 그룹 수준**에서 연결하며(생성 시 또는 이후) ⚠️ **연결 후 새로 수집되는 데이터만 해당 키로 암호화**됩니다. 키를 나중에 분리해도 **이미 그 키로 암호화된 데이터는 그대로 남고 CloudWatch Logs가 계속 읽을 수 있지만, 키가 나중에 비활성화되면 그 로그를 읽지 못합니다.** ⚠️ **대칭 KMS 키만** 지원합니다.
-- **로그 클래스** — **Standard**(전체 기능)와 **Infrequent Access(IA)**(기능 일부·낮은 수집 단가, **임시 쿼리와 사후 포렌식 분석에 적합**)가 있고 ⚠️ **생성 후 클래스를 바꿀 수 없으며 두 클래스는 수집 비용만 다릅니다.** ⚠️ **구독 필터는 Standard 클래스 로그 그룹에서만 지원**됩니다. Lambda 로그를 S3나 Amazon Data Firehose로 보내는 용도의 **Delivery 클래스** 는 **Logs Insights 같은 기능을 제공하지 않습니다.**
+- **로그 클래스** — **Standard**(전체 기능)와 **Infrequent Access(IA, 현재 이름 Essentials)**(기능 일부·낮은 수집 단가, **임시 쿼리와 사후 포렌식 분석에 적합**)가 있고 ⚠️ **생성 후 클래스를 바꿀 수 없으며 두 클래스는 수집 비용만 다릅니다.** ⚠️ **구독 필터는 Standard 클래스 로그 그룹에서만 지원**됩니다. Lambda 로그를 S3나 Amazon Data Firehose로 보내는 용도의 **Delivery 클래스** 는 **Logs Insights 같은 기능을 제공하지 않습니다.**
 - **교차 계정 공유** — **수신 계정이 Kinesis Data Streams를 감싸는 destination을 만들고 송신 계정이 구독 필터로 보냅니다.** 송신자는 단일 계정 또는 조직이 될 수 있고 ⚠️ **로그 그룹과 destination은 같은 리전**이어야 합니다. 한 조직의 여러 계정이 한 수신 계정으로 보내게 하는 정책을 줄 수 있지만 ⚠️ **송신 계정마다 구독 필터는 따로 만들어야** 합니다.
 - **조직 단위 중앙화** — AWS Organizations와 연동한 **중앙화 규칙**으로 여러 멤버 계정·리전의 로그를 조직 내 중앙 계정으로 복제하며, 목적지 계정에서 **백업 리전**을 둘 수 있고 소스의 고객 관리형 KMS 암호화 로그 처리 방식을 고를 수 있습니다. ⚠️ **규칙 생성 이후 도착한 새 로그만 대상이며 과거 로그는 중앙화되지 않습니다.**
 - **S3 내보내기와 구독** — 내보내기(`CreateExportTask`)는 **KMS 암호화 버킷과 보존 기간이 지정된 Object Lock 버킷도 지원**하지만, ⚠️ **지속 아카이브용으로 정기 내보내기를 쓰기보다 구독을 쓰라고 권고**합니다. 구독 필터는 **Kinesis Data Streams, Amazon Data Firehose, Lambda** 로 **거의 실시간**(보통 3분 미만) 전달합니다.
@@ -261,7 +261,7 @@ lastVerified: 2026-10-20
 **교차 계정 구독은 수신 계정이 destination을 만들고 송신 계정마다 구독 필터를 따로 만들며 로그 그룹과 destination이 같은 리전이어야 합니다. 조직 중앙화 규칙은 Organizations 연동으로 여러 계정·리전을 한 번에 복제하지만 ⚠️ 규칙 생성 이후 도착한 새 로그만 대상이고 과거 로그는 중앙화되지 않습니다.** 또 지속 아카이브가 목적이라면 **정기 내보내기(`CreateExportTask`)보다 구독을 권고**합니다(내보내기는 일회성·비동기).
 </details>
 
-**Q5.** 여러 계정·리전의 CloudTrail 이벤트를 SQL로 중앙 조사하려 한다. 2026-10 현재 공식 문서를 근거로 무엇을 고려해야 하는가?
+**Q5.** 여러 계정·리전의 CloudTrail 이벤트를 SQL로 중앙 조사하려 한다. 신규로 구축한다면 무엇을 고려해야 하는가?
 
 <details><summary>정답 보기</summary>
 
@@ -281,7 +281,7 @@ lastVerified: 2026-10-20
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-19 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-19 · 저작: 2026-10-20)
 
 1. AWS CloudTrail FAQs — https://aws.amazon.com/cloudtrail/faqs/
 2. Security best practices in AWS CloudTrail — https://docs.aws.amazon.com/awscloudtrail/latest/userguide/best-practices-security.html

@@ -28,7 +28,9 @@ sources:
     url: https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html
   - title: S3 객체의 수명 주기 관리
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html
-lastVerified: 2026-11-14
+  - title: AWS 수명 주기 변경 — 완전 종료
+    url: https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html
+lastVerified: 2026-11-17
 ---
 
 # 데이터 보안과 개인 정보 보호 제어 (네트워크 격리·세분화된 액세스·데이터 보존·PII 탐지·마스킹과 익명화)
@@ -297,3 +299,4 @@ Lake Formation은 **IAM 권한 모델을 증강하는 자체 권한 모델**이�
 8. Amazon Comprehend PII 엔터티 탐지 (영어·스페인어 · 100KB · 오프셋 · 수정은 비동기 배치 · AWS 키 유형) — `docs.aws.amazon.com/comprehend/latest/dg/how-pii.html` (2026-11-14 확인)
 9. Amazon Macie 개요 (S3 인벤토리·조사 결과 · 자동 발견 ↔ 발견 작업 · 관리형 데이터 식별자 · EventBridge·Security Hub CSPM) — `docs.aws.amazon.com/macie/latest/user/what-is-macie.html` (2026-11-14 확인)
 10. S3 객체의 수명 주기 관리 (전환·만료 · 기존 객체에도 적용 · 버킷 정책으로 막을 수 없다 · 과금 시점) — `docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html` (2026-11-14 확인)
+11. AWS 수명 주기 변경 — 완전 종료 목록 (Governed Tables in AWS Lake Formation) — `docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html` (2026-11-17 확인)

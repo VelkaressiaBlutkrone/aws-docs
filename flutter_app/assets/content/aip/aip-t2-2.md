@@ -28,7 +28,11 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html
   - title: Amazon Bedrock 토큰 번다운과 쿼터
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html
-lastVerified: 2026-11-14
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 2
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html
+  - title: 사용자 지정 모델의 추론 설정
+    url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html
+lastVerified: 2026-11-17
 ---
 
 # 모델 배포 전략 (배포 경로 선택·LLM 고유의 배포 문제·성능과 리소스의 균형)
@@ -106,7 +110,7 @@ GenAI 워크로드의 배포에서 비싼 실수는 **모델을 잘못 고르는
 | **약정 기간** | **길수록 시간당 가격이 할인**된다 |
 
 - 약정 셋: **약정 없음**(언제든 삭제 가능) · **1개월** · **6개월**. ⚠️⚠️ 뒤의 둘은 **기간이 끝나기 전에 삭제할 수 없습니다.** 그리고 **삭제할 때까지 과금이 이어집니다** — 쓰지 않아도 멈추지 않습니다.
-- 구매는 시간당 과금이고 콘솔에서 **`By Model Units`** 모드로 약정 기간과 MU 수를 고릅니다. ⚠️ **약정이 있는 모델을 프로비저닝하려면 먼저 AWS Support 센터에 구매 가능한 MU 수 증액을 요청**해야 합니다. ⚠️ **AWS GovCloud(US)에서는 약정 없는 사용자 지정 모델에만** PT를 살 수 있습니다.
+- 구매는 시간당 과금이고 콘솔에서 **`By Model Units`** 모드로 약정 기간과 MU 수를 고릅니다. ⚠️ **프로비저닝 처리량을 구매하려면 약정 유무와 무관하게 먼저 AWS Support 센터에 MU를 요청**해야 합니다. ⚠️ **AWS GovCloud(US)에서는 약정 없는 사용자 지정 모델에만** PT를 살 수 있습니다.
 - 상태는 **`Creating` → `In service`**(실패하면 `Failed`)로 갑니다.
 - ⚠️⚠️ **사용자 지정 모델의 추론 경로는 둘입니다** — **PT 구매** 또는 **온디맨드 추론용 배포**. 그런데 **공식 PT 페이지는 아직 「모델을 사용자 지정했다면 그것을 쓰기 위해 PT를 구매해야 한다」고 적습니다.** 문서 사이가 갈리는 자리이므로 이 사이트는 **어느 한쪽으로 단정하지 않고 두 경로를 가르칩니다**(작업 1.2와 같은 판정입니다).
 
@@ -175,7 +179,7 @@ GenAI 워크로드의 배포에서 비싼 실수는 **모델을 잘못 고르는
 ## ⚠️ 흔한 함정 {#pitfalls}
 
 - ⚠️⚠️ **약정 PT를 「쓰지 않으면 과금이 멈춘다」고 생각하기.** **삭제할 때까지** 이어지고 약정 중에는 삭제가 **불가능**합니다.
-- ⚠️ **MU 수를 바로 크게 사려 하기.** 약정 있는 모델은 **먼저 Support에 MU 증액을 요청**해야 합니다.
+- ⚠️ **MU 수를 바로 크게 사려 하기.** 약정 유무와 무관하게 **먼저 Support에 MU를 요청**해야 합니다.
 - ⚠️⚠️ **「사용자 지정 모델 = PT 필수」로 단정하기.** 경로가 **둘**이고 공식 문서 사이가 갈립니다.
 - ⚠️ **실시간 추론 페이로드 상한을 외우기.** 공식 안에서 **25MB ↔ 6MB 미만**으로 갈립니다.
 - ⚠️⚠️ **비동기 추론에 페이로드를 직접 실어 보내기.** **S3에 두고 포인터**를 넘깁니다.
@@ -255,3 +259,5 @@ GenAI 워크로드의 배포에서 비싼 실수는 **모델을 잘못 고르는
 8. 배치 추론으로 여러 프롬프트 처리 (프로비저닝 모델 미지원 · `Converse` 도구 호출 미지원 · EventBridge 통지) — `docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html` (2026-11-14 확인)
 9. Amazon Bedrock 지능형 프롬프트 라우팅 (같은 패밀리 · 영어 최적화 · 폴백 모델) — `docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html` (2026-11-14 확인)
 10. Amazon Bedrock 토큰 번다운과 쿼터 (입력 토큰 + `max_tokens` 선차감) — `docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html` (2026-11-14 확인)
+11. AIP-C01 시험 안내서 콘텐츠 도메인 2 (기술 2.2.1·2.2.3의 예시 목록) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain2.html` (2026-11-17 확인)
+12. 사용자 지정 모델의 추론 설정 (PT 구매 또는 온디맨드 추론용 배포 — 경로 둘) — `docs.aws.amazon.com/bedrock/latest/userguide/model-customization-use.html` (2026-11-17 확인)

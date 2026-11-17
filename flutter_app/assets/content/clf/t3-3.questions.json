@@ -110,8 +110,16 @@
       },
       "sources": [
         {
-          "title": "AWS Fargate — 서버·EC2 클러스터 관리 없이 컨테이너 실행, ECS·EKS와 함께 쓰는 서버리스 엔진",
+          "title": "AWS Fargate for Amazon ECS — 서버나 EC2 인스턴스 클러스터를 관리하지 않고 Amazon ECS에서 컨테이너를 실행하는 기술",
           "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+        },
+        {
+          "title": "Simplify compute management with AWS Fargate (Amazon EKS) — Amazon EKS에서 Kubernetes 파드를 Fargate로 실행",
+          "url": "https://docs.aws.amazon.com/eks/latest/userguide/fargate.html"
+        },
+        {
+          "title": "CLF-C02 공식 시험 가이드 도메인 3 — 작업 3.3 기술 '다양한 서버리스 컴퓨팅 옵션의 적절한 사용 이해(예: AWS Fargate, AWS Lambda)'",
+          "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02-domain3.html"
         }
       ],
       "verified": true

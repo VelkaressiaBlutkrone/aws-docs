@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/sagemaker-unified-studio/latest/userguide/concepts.html
   - title: DEA-C01 공식 시험 가이드 도메인 2 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain2.html
-lastVerified: 2026-10-20
+lastVerified: 2026-11-17
 ---
 
 # 데이터 카탈로그 시스템 (Glue Data Catalog·크롤러·파티션·SageMaker Catalog)
@@ -166,7 +166,7 @@ S3에 새 파티션(프리픽스)이 생겨도 **카탈로그에 등록되지 �
 
 - **유형** — JDBC 또는 특정 유형(예: Amazon RDS), **VPC 안의 데이터 소스에 접근하는 Network**, **Kafka**(콤마로 구분한 부트스트랩 서버 URL과 포트; MSK는 다른 계정 클러스터 지정 가능).
 - **VPC 네트워킹** — Glue는 연결의 서브넷에 **사설 IP를 가진 ENI**를 만듭니다. 연결의 보안 그룹 중 하나는 **모든 TCP 포트에 대한 self-referenced 인바운드 규칙**이 있어야 하고 하나는 아웃바운드가 열려 있어야 합니다. **서브넷의 여유 IP 수는 잡 worker 수보다 많아야** 합니다.
-- **VPC 밖 데이터** — 온프레미스나 퍼블릭 호스트명 RDS처럼 VPC 밖 데이터는 서브넷 라우트 테이블에 **퍼블릭 서브넷의 NAT 게이트웨이**가 있어야 하며, 없으면 **연결이 시간 초과**됩니다. Secrets Manager·STS가 필요하면 엔드포인트를 붙이고, S3로 가는 엔드포인트나 NAT 경로를 제공합니다.
+- **VPC 밖 데이터** — 온프레미스나 퍼블릭 호스트명 RDS처럼 VPC 밖 데이터는 서브넷 라우트 테이블에 **NAT 게이트웨이** 경로가 있어야 하며(영역형 NAT 게이트웨이는 퍼블릭 서브넷에 두고, 리전 NAT 게이트웨이는 퍼블릭 서브넷이 필요 없습니다), 없으면 **연결이 시간 초과**됩니다. Secrets Manager·STS가 필요하면 엔드포인트를 붙이고, S3로 가는 엔드포인트나 NAT 경로를 제공합니다.
 
 > ⚠️ "Test connection 실패"의 정답은 **인바운드 전체 개방(0.0.0.0/0)이 아니라 self-referenced 규칙**입니다.
 
@@ -228,7 +228,7 @@ S3에 새 파티션(프리픽스)이 생겨도 **카탈로그에 등록되지 �
 
 ## 🧪 자가 점검
 
-> 아래는 학습용 자가 점검입니다. (문항 뱅크는 `dea-t2-2.questions.json` — 사람 검수 전이라 사이트에는 노출되지 않습니다)
+> 아래는 학습용 자가 점검입니다.
 
 **Q1.** Glue ETL 잡이 산출 테이블의 컬럼 정의를 사람이 다듬어 둔 상태인데, 야간 크롤러가 그 정의를 덮어씁니다. 새로 생기는 컬럼은 반영하되 기존 정의는 지키려면?
 
@@ -278,7 +278,7 @@ S3에 새 파티션(프리픽스)이 생겨도 **카탈로그에 등록되지 �
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 저작: 2026-10-20)
 
 1. AWS Glue concepts — https://docs.aws.amazon.com/glue/latest/dg/components-key-concepts.html
 2. AWS Glue pricing — https://aws.amazon.com/glue/pricing/
@@ -313,3 +313,4 @@ S3에 새 파티션(프리픽스)이 생겨도 **카탈로그에 등록되지 �
 31. DEA-C01 공식 시험 가이드 Revisions (v1.1 변경 이력) — https://docs.aws.amazon.com/aws-certification/latest/data-engineer-associate-01/dea-01-revisions.html
 32. Domains in Amazon SageMaker Unified Studio (Administrator Guide) — https://docs.aws.amazon.com/sagemaker-unified-studio/latest/adminguide/working-with-domains.html
 33. DEA-C01 공식 시험 가이드 도메인 2 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain2.html
+34. Regional NAT gateways for automatic multi-AZ expansion — https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html

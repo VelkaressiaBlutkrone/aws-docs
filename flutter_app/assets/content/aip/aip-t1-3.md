@@ -28,7 +28,11 @@ sources:
     url: https://docs.aws.amazon.com/comprehend/latest/dg/how-entities.html
   - title: Amazon Comprehend availability change
     url: https://docs.aws.amazon.com/comprehend/latest/dg/comprehend-availability-change.html
-lastVerified: 2026-11-14
+  - title: How to Build Your Own Processing Container
+    url: https://docs.aws.amazon.com/sagemaker/latest/dg/build-your-own-processing-container.html
+  - title: AWS 수명 주기 변경 — 유지 관리 상태
+    url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+lastVerified: 2026-11-17
 ---
 
 # 데이터 검증과 처리 파이프라인 (품질 규칙·멀티모달 처리·입력 형식·입력 품질 개선)
@@ -183,7 +187,7 @@ SageMaker AI 엔드포인트를 쓰는 경로라면 형식은 **엔드포인트�
 - ⚠️⚠️ **언어 제약이 둘입니다** — 주요 지원 언어 전체에서 되는 것은 **사전 정의(비사용자 지정) 엔터티 탐지**뿐이고, **모든 문서가 같은 언어여야** 합니다.
 - 응답에는 `Text`·`Score`·`Type`과 **`BeginOffset`·`EndOffset`**이 들어갑니다.
 
-⚠️⚠️ **Comprehend에서 유지 관리 상태인 기능이 있습니다.** 공식 가용성 변경 페이지가 **주제 모델링(Topic Modeling) · 이벤트 탐지(Event Detection) · 프롬프트 안전 분류(Prompt Safety Classification)**를 **2026-03-31** 공지로 적습니다. ⭐ **엔터티 탐지는 그 셋에 들어 있지 않습니다** — 기술 1.3.4가 드는 「Comprehend로 항목 추출」은 유효한 경로입니다. 다만 **새 설계에서 주제 모델링이나 프롬프트 안전 분류를 고르면** 공식이 닫고 있는 쪽을 쓰는 것입니다.
+⚠️⚠️ **Comprehend에서 유지 관리 상태인 기능이 있습니다.** 공식 가용성 변경 페이지가 **주제 모델링(Topic Modeling) · 이벤트 탐지(Event Detection) · 프롬프트 안전 분류(Prompt Safety Classification)**를 **신규 고객에게 더는 제공하지 않는다**고 적고, AWS 수명 주기 목록이 이 세 기능을 **유지 관리 항목**(공지 2026-03-31)으로 올려 둡니다. ⭐ **엔터티 탐지는 그 셋에 들어 있지 않습니다** — 기술 1.3.4가 드는 「Comprehend로 항목 추출」은 유효한 경로입니다. 다만 **새 설계에서 주제 모델링이나 프롬프트 안전 분류를 고르면** 공식이 닫고 있는 쪽을 쓰는 것입니다.
 
 나머지 두 수단:
 
@@ -274,7 +278,7 @@ S3에 올린 파일이므로 **배치 전사**(`StartTranscriptionJob`)이고, �
 
 <details><summary>정답 보기</summary>
 
-공식 가용성 변경 페이지가 **주제 모델링 · 이벤트 탐지 · 프롬프트 안전 분류**를 **2026-03-31** 공지로 적습니다 — **새 설계에서 고르면 공식이 닫고 있는 쪽**입니다. ⭐ 반면 **엔터티 탐지는 그 목록에 없어** 계속 쓸 수 있습니다. 입력·출력 안전 제어는 도메인 3(작업 3.1)에서 다루는 수단을 먼저 봅니다.
+공식 가용성 변경 페이지가 **주제 모델링 · 이벤트 탐지 · 프롬프트 안전 분류**를 **신규 고객에게 더는 제공하지 않는다**고 적고 AWS 수명 주기 목록이 이 세 기능을 **유지 관리 항목**으로 올려 둡니다 — **새 설계에서 고르면 공식이 닫고 있는 쪽**입니다. ⭐ 반면 **엔터티 탐지는 그 목록에 없어** 계속 쓸 수 있습니다. 입력·출력 안전 제어는 도메인 3(작업 3.1)에서 다루는 수단을 먼저 봅니다.
 </details>
 
 ---
@@ -291,3 +295,5 @@ S3에 올린 파일이므로 **배치 전사**(`StartTranscriptionJob`)이고, �
 8. Converse (API Reference) (일관된 인터페이스 · 콘텐츠 미저장 · Prompt management ARN) — `docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html` (2026-11-14 확인)
 9. Entities (Amazon Comprehend) (9개 유형 · 신뢰도 점수 · API 셋 · 언어 제약) — `docs.aws.amazon.com/comprehend/latest/dg/how-entities.html` (2026-11-14 확인)
 10. Amazon Comprehend availability change (유지 관리 상태인 세 기능) — `docs.aws.amazon.com/comprehend/latest/dg/comprehend-availability-change.html` (2026-11-14 확인)
+11. How to Build Your Own Processing Container (환경 변수와 두 JSON 구성 파일 · `S3UploadMode`) — `docs.aws.amazon.com/sagemaker/latest/dg/build-your-own-processing-container.html` (2026-11-17 확인)
+12. AWS 수명 주기 변경 — 유지 관리 상태 목록 (Comprehend 세 기능 · 공지 2026-03-31) — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-17 확인)

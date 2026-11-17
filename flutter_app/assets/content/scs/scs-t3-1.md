@@ -42,7 +42,13 @@ sources:
     url: https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html
   - title: Services in Maintenance — App Runner 상태
     url: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
-lastVerified: 2026-11-12
+  - title: Restrict access to Application Load Balancers
+    url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/restrict-access-to-load-balancer.html
+  - title: Locations and IP address ranges of CloudFront edge servers
+    url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html
+  - title: AWS WAF Distributed Denial of Service (DDoS) prevention rule group
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-anti-ddos.html
+lastVerified: 2026-11-17
 ---
 
 # 네트워크 엣지 보안 (전략 선택·엣지 보호 구현·지리와 속도 제한·타사 통합)
@@ -119,7 +125,7 @@ lastVerified: 2026-11-12
 
 #### 1-2. WAF가 보호할 수 있는 리소스는 정해져 있다
 
-공식 목록은 **CloudFront 배포 · API Gateway REST API · Application Load Balancer · AppSync GraphQL API · Cognito 사용자 풀 · App Runner 서비스 · Amazon Bedrock AgentCore Gateway · AWS Verified Access 인스턴스 · AWS Amplify**입니다.
+공식 목록은 **CloudFront 배포 · API Gateway REST API · Application Load Balancer · AppSync GraphQL API · Cognito 사용자 풀 · App Runner 서비스 · Amazon Bedrock AgentCore Gateway · AWS Verified Access 인스턴스 · AWS Amplify**입니다. ⚠️ 이 가운데 **App Runner는 2026-03-31 공지로 유지 관리 상태**입니다(공식 WAF 문서는 지금도 이 목록에 싣습니다).
 
 ⚠️ **`Bedrock AgentCore Gateway`와 `Amplify`가 목록에 있다는 것이 중요합니다** — 생성형 AI 애플리케이션의 엣지 보호(`기술 3.2.7`)가 **새 서비스가 아니라 기존 WAF로** 이어집니다. 거꾸로 **Network Load Balancer·EC2 인스턴스는 목록에 없습니다** — 그 앞단에 ALB나 CloudFront를 둬야 WAF를 붙일 수 있습니다.
 
@@ -134,7 +140,7 @@ lastVerified: 2026-11-12
 1. **커스텀 오리진 헤더** — CloudFront가 모든 요청에 추가하는 헤더(예: `X-Origin-Verify`)를 두고, **ALB나 애플리케이션이 그 헤더가 없는 요청을 거부**합니다. 값은 **Secrets Manager에 두고 주기적으로 교체**합니다.
 2. **관리형 접두사 목록** — ALB 보안 그룹의 인바운드를 **CloudFront IP 범위로 제한**합니다(`com.amazonaws.global.cloudfront.origin-facing`).
 
-⚠️⚠️ **두 층은 서로를 대신하지 못합니다.** 접두사 목록은 **네트워크 수준**에서 CloudFront IP만 허용하고, 커스텀 헤더는 **애플리케이션 수준**에서 "그 트래픽이 내 특정 배포에서 왔음"을 확인합니다. 공식 안내가 **둘을 함께 쓰는 것이 가장 강한 오리진 보호**라고 적습니다 — 접두사 목록만 쓰면 **다른 사람의 CloudFront 배포**에서 온 요청도 통과합니다.
+⚠️⚠️ **두 층은 서로를 대신하지 못합니다.** 접두사 목록은 **네트워크 수준**에서 CloudFront IP만 허용하고, 커스텀 헤더는 **애플리케이션 수준**에서 "그 트래픽이 내 특정 배포에서 왔음"을 확인합니다. 공식 절차는 **커스텀 헤더를 기본 수단**으로 두고 접두사 목록을 **접근을 더 좁히는 선택 단계**로 적습니다 — 접두사 목록은 **CloudFront의 전역 오리진 대면 서버 전체**의 범위라서 그것만으로는 **어느 배포에서 온 요청인지 가르지 못합니다.**
 
 ⚠️ **위조가 통하지 않는 이유**가 공식 동작에 있습니다 — 지정한 헤더 이름·값이 **뷰어 요청에 이미 있으면 CloudFront가 그 값을 덮어쓰고** 오리진으로 전달합니다. 즉 공격자가 `X-Origin-Verify`를 넣어 보내도 CloudFront를 통과하는 순간 덮어쓰기 됩니다.
 
@@ -257,7 +263,7 @@ Security Lake **사용자 지정 소스**의 요건이 시험의 갈림길입니
 관리형 규칙 그룹은 **AWS와 AWS Marketplace 판매자**가 작성·유지합니다. 과금이 **세 층**입니다.
 
 1. **Bot Control · Fraud Control ATP(계정 탈취 방지) · Fraud Control ACFP(계정 생성 사기 방지)** — AWS 관리형이지만 **기본 WAF 요금 외 추가 요금**
-2. **그 밖의 모든 AWS Managed Rules** — **추가 비용 없음**
+2. **그 밖의 AWS Managed Rules** — 소개 페이지는 **추가 비용 없음**으로 적습니다. ⚠️ 다만 **Anti-DDoS 관리형 규칙 그룹**은 전용 페이지가 **추가 요금**을 명시합니다
 3. **AWS Marketplace 규칙 그룹** — **구독**이고 판매자가 소유·관리하며 요금은 판매자에게 문의
 
 ⚠️⚠️ **Firewall Manager의 WAF 정책에서 Marketplace 규칙 그룹을 쓰려면 조직의 각 계정이 각각 구독해야 합니다.** 중앙에서 한 번 구독해 밀어 넣을 수 없습니다 — `기술 6.2.3`(Firewall Manager)과 이 기술이 만나는 자리입니다.
@@ -273,7 +279,7 @@ Security Lake **사용자 지정 소스**의 요건이 시험의 갈림길입니
 - **"지리 + 다른 조건"은 WAF geo match다** — CloudFront 지리 제한은 차단 요청을 WAF로 보내지 않아 조합이 불가능합니다
 - **"지역(도·주) 단위 차단"은 두 규칙이다** — geo match(국가) + 라벨 매칭(지역)이고 같은 규칙에 못 넣습니다
 - **"오리진으로 직접 오는 요청을 막아라"는 WAF·Shield가 아니다** — 커스텀 헤더 + 접두사 목록입니다
-- **"다른 사람의 CloudFront에서 오는 요청도 막아라"는 커스텀 헤더만이 답이다** — 접두사 목록은 CloudFront IP 전체를 허용합니다
+- **"내 배포에서 온 요청만 받아라"는 커스텀 헤더가 답이다** — 접두사 목록은 CloudFront의 오리진 대면 서버 전체를 허용해 배포를 가르지 못합니다
 - **"큰 본문의 공격이 탐지되지 않는다"는 본문 검사 한도다** — ALB는 8 KB 고정이고 CloudFront 계열은 최대 64 KB까지 올립니다
 - **"속도 제한이 걸리지 않는다"는 집계 키다** — 요청마다 고유한 값으로 집계했거나, 키 구성 요소가 없는 요청이 제외된 것입니다
 - **"IP가 흩어진 자동화 트래픽"은 JA3·JA4다**
@@ -286,7 +292,7 @@ Security Lake **사용자 지정 소스**의 요건이 시험의 갈림길입니
 
 - ❌ "CloudFront 지리 제한과 WAF를 함께 켜면 둘 다 본다" → **차단된 요청은 WAF에 도달하지 않습니다**
 - ❌ "WAF geo match로 미국 오리건만 차단" → 지역은 **라벨 매칭 규칙**이 필요하고 **별 규칙**이어야 합니다
-- ❌ "접두사 목록으로 CloudFront IP만 허용했으니 안전하다" → **다른 계정의 배포**도 그 IP 범위입니다
+- ❌ "접두사 목록으로 CloudFront IP만 허용했으니 안전하다" → 접두사 목록은 **CloudFront의 오리진 대면 서버 전체**의 범위라 **어느 배포의 요청인지 가르지 못합니다**
 - ❌ "공격자가 `X-Origin-Verify`를 위조하면 통과한다" → CloudFront가 **뷰어 값을 덮어씁니다**
 - ❌ "CRS를 켜면 모든 OWASP Top 10이 막힌다" → 공식 표현은 **"OWASP Top 10 같은 발행물이 기술하는 고위험·빈발 취약점을 포함해"**이고 **본문 한도** 같은 제약이 있습니다
 - ❌ "속도 제한은 IP로만 센다" → **ASN·Count all·사용자 지정 키 조합**이 있습니다
@@ -318,9 +324,9 @@ Security Lake **사용자 지정 소스**의 요건이 시험의 갈림길입니
 
 **애플리케이션 계층의 확인이 빠졌습니다 — 커스텀 오리진 헤더입니다.**
 
-- 접두사 목록은 **네트워크 수준**에서 CloudFront의 IP 범위만 허용합니다. 그런데 그 범위는 **모든 고객의 CloudFront 배포**가 공유하므로, 제3자가 자기 배포를 만들어 이 ALB를 오리진으로 지정하면 **같은 IP 범위에서** 요청이 옵니다
+- 접두사 목록은 **네트워크 수준**에서 CloudFront의 IP 범위만 허용합니다. 그런데 그 목록은 **CloudFront의 전역 오리진 대면 서버 전체**의 범위라서, 그 요청이 **어느 배포에서 왔는지는 가르지 못합니다**
 - 해법은 CloudFront가 추가하는 **커스텀 헤더**(예: `X-Origin-Verify`)를 두고 **ALB의 WAF 규칙이나 애플리케이션이 그 헤더·값이 없는 요청을 차단**하는 것입니다. 값은 **Secrets Manager에 두고 교체**합니다
-- 공식 안내가 **두 층을 함께 쓰는 것이 가장 강한 오리진 보호**라고 적습니다
+- 공식 절차는 **커스텀 헤더를 기본 수단**으로 두고 접두사 목록을 **접근을 더 좁히는 선택 단계**로 적습니다. 헤더 이름과 값은 **비밀로 유지**해야 이 방법이 성립합니다
 
 ⚠️ 뷰어가 같은 헤더를 보내도 **CloudFront가 값을 덮어쓰므로** 위조가 통하지 않습니다.
 </details>
@@ -399,3 +405,6 @@ Security Lake **사용자 지정 소스**의 요건이 시험의 갈림길입니
 15. Security Hub and the OCSF — `docs.aws.amazon.com/securityhub/latest/userguide/securityhub-ocsf.html` (2026-11-08 확인)
 16. Collecting data from custom sources in Security Lake — `docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html` (2026-11-08 확인)
 17. Services in Maintenance — App Runner 상태 — `docs.aws.amazon.com/general/latest/gr/maintenance_services.html` (2026-11-12 확인)
+18. Restrict access to Application Load Balancers — `docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/restrict-access-to-load-balancer.html` (2026-11-17 확인)
+19. Locations and IP address ranges of CloudFront edge servers — `docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html` (2026-11-17 확인)
+20. AWS WAF Distributed Denial of Service (DDoS) prevention rule group — `docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-anti-ddos.html` (2026-11-17 확인)

@@ -309,7 +309,7 @@ AWS 관리형 정책이 요구에 맞지 않을 때 직접 정책을 만드는 �
 
 ### 📌 출처
 
-이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20 · 사람 검수 전)
+이 문서의 사실 진술은 아래 공식 자료로 대조했습니다. (수집·대조: 2026-10-17 · 보강: 2026-10-19 · 저작: 2026-10-20)
 
 1. Managed policies and inline policies (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html
 2. Conditions with multiple context keys or values (IAM User Guide) — https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html

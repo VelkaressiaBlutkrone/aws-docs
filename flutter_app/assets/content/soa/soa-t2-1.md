@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html
   - title: Elastic Load Balancing 작동 방식 (공식)
     url: https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-17
 ---
 
 # Auto Scaling·ELB로 확장성·탄력성 구현
@@ -115,7 +115,7 @@ lastVerified: 2026-11-06
 | **적합** | 불규칙·즉각 반응 필요 | 규칙적 주기(요일·시간대), 워밍업이 긴 앱 |
 | **결합** | — | **예측 + 동적을 함께** 사용 권장(예측이 기본 곡선, 동적이 예측 못 한 스파이크 대응) |
 
-> 예측 조정은 최소 **24시간**의 지표가 있어야 예측을 시작하며, 권장은 14일 이상의 이력입니다. 처음엔 **예측만 하고 실제 조정은 안 하는(Forecast Only)** 모드로 검증한 뒤 활성화할 수 있습니다.
+> 예측 조정은 최소 **24시간**의 지표가 있어야 예측을 시작하며, 이력이 **2주치**를 채우면 예측이 더 효과적입니다(분석 대상은 최근 최대 14일). 처음엔 **예측만 하고 실제 조정은 안 하는(Forecast Only)** 모드로 검증한 뒤 활성화할 수 있습니다.
 
 > 🧠 원리: 왜 동적 조정과 예측 조정은 단독보다 함께 쓸 때 더 안정적일까요?
 > 예측 조정은 과거 패턴으로 미래 부하를 추정해 사전에 용량을 확보하지만, 예측하지 못한 갑작스러운 트래픽 스파이크에는 반응하지 않습니다.
@@ -127,7 +127,7 @@ lastVerified: 2026-11-06
 | 항목 | 쿨다운(Cooldown) | 인스턴스 워밍업(Warmup) |
 |---|---|---|
 | **적용 정책** | **단순 조정 정책** | 타깃 추적·단계 조정 정책 |
-| **목적** | 직전 조정 효과가 지표에 반영될 때까지 **추가 조정을 보류** | 새 인스턴스가 워밍업 끝나기 전까지 **지표 집계·상태 확인에서 제외** |
+| **목적** | 직전 조정 효과가 지표에 반영될 때까지 **추가 조정을 보류** | 새 인스턴스가 워밍업 끝나기 전까지 **집계 지표에서 제외** |
 | **효과** | 연속 조정으로 인한 과잉 확장 방지 | 부팅 중 인스턴스가 지표를 왜곡하거나 조기 종료되는 것 방지 |
 
 > **시험 포인트**: 단계·타깃 추적 정책은 쿨다운 대신 **워밍업**을 사용합니다. 워밍업 동안 새 인스턴스는 ASG 지표 집계에 포함되지 않아, "막 켜진 인스턴스 CPU가 100%"라서 또 스케일 아웃되는 폭주를 막습니다.
@@ -165,7 +165,7 @@ lastVerified: 2026-11-06
 
 - ASG가 인스턴스를 unhealthy로 판정하면 **자동 종료 후 교체**합니다(자가 복구).
 - **ELB 상태 확인을 활성화하는 것이 표준입니다** — 애플리케이션이 다운된 인스턴스(프로세스 행, 5xx 응답)를 ASG가 교체하게 하려면 그렇습니다. EC2 상태 확인만으로는 OS는 살아있고 앱만 죽은 경우를 잡지 못합니다. ELB를 쓸 수 없는 구성이라면 **사용자 정의 상태 확인**(`SetInstanceHealth`)으로 같은 신호를 ASG에 전달할 수 있습니다.
-- **상태 확인 유예 기간(Health Check Grace Period)**: 인스턴스 시작 직후 일정 시간(기본 300초) 동안 상태 확인을 보류 → 부팅·초기화 중 조기 종료 방지.
+- **상태 확인 유예 기간(Health Check Grace Period)**: 인스턴스 시작 직후 일정 시간(콘솔 기본 300초 · CLI/SDK 기본 0초) 동안 상태 확인을 보류 → 부팅·초기화 중 조기 종료 방지.
 
 > 🧠 원리: 왜 EC2 상태 확인만으로는 애플리케이션 장애를 잡을 수 없을까요?
 > EC2 상태 확인은 물리 호스트의 하이퍼바이저와 인스턴스 전원 상태를 확인하므로, OS가 살아있는 한 정상으로 판정합니다.
@@ -223,7 +223,7 @@ lastVerified: 2026-11-06
    (원리: §7 본문 — ASG에 대상 그룹을 연결하면 시작·종료 시 자동 등록·해제되어, LB의 분산과 ASG의 수량 조정이 연동된다.)
 
 2. **"EC2 상태 확인만으로 앱 장애 인스턴스가 교체된다."** → 기본 EC2 상태 확인은 OS·하이퍼바이저 관점입니다. 앱 프로세스만 죽고 OS는 살아있으면 잡지 못합니다. **ELB 상태 확인을 활성화**하는 것이 표준이고, ELB가 없는 구성에서는 **사용자 정의 상태 확인**으로 앱 신호를 전달합니다.
-   (원리: §6 — EC2 상태 확인은 OS·인프라 수준만 확인하므로 애플리케이션 수준 장애는 탐지하지 못하며, 앱 계층 장애는 ELB 상태 확인을 통해서만 ASG에 전달된다.)
+   (원리: §6 — EC2 상태 확인은 OS·인프라 수준만 확인하므로 애플리케이션 수준 장애는 탐지하지 못하며, 앱 계층 장애는 ELB 상태 확인(가장 일반적)이나 사용자 정의 상태 확인 같은 추가 소스로 ASG에 전달된다.)
 
 3. **"타깃 추적도 쿨다운을 쓴다."** → 타깃 추적·단계 조정은 쿨다운 대신 **인스턴스 워밍업**을 사용합니다. 쿨다운은 단순 조정 정책 전용입니다.
    (원리: §4 — 쿨다운은 다음 조정을 보류하고, 워밍업은 준비 중인 인스턴스를 지표 집계에서 제외하는 방식으로 동작이 다르다.)
@@ -293,3 +293,5 @@ ASG의 **상태 확인 유형에 ELB 상태 확인을 추가(활성화)**합니�
 4. Auto Scaling 인스턴스의 상태 확인(EC2 vs ELB) — https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html
 5. Amazon EC2 Auto Scaling 수명 주기 후크 — https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html
 6. Elastic Load Balancing 작동 방식 — https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html
+
+> 📝 **2026-11-17 정정**: 상태 확인 유예 기간의 기본값(콘솔 · CLI/SDK), 예측 조정의 이력 요건, 워밍업의 효과, ASG 상태 확인 소스 서술을 공식 문서에 맞췄습니다(https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-check-grace-period.html · https://docs.aws.amazon.com/autoscaling/ec2/userguide/predictive-scaling-policy-overview.html · https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html · https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html).

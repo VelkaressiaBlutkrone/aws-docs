@@ -3,7 +3,7 @@
   "taskTitle": "컴퓨팅 워크로드에 대한 보안 제어 설계, 구현 및 문제 해결",
   "domain": 3,
   "certCode": "SCS-C03",
-  "lastVerified": "2026-11-10",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "id": "scs-t3-2-q1",
@@ -323,6 +323,7 @@
     },
     {
       "id": "scs-t3-2-q12",
+      "examGuideTaskId": "scs-t3-2",
       "skill": "3.2.6",
       "section": "pipeline",
       "difficulty": "applied",
@@ -331,7 +332,7 @@
         "리포지토리 통합만 만들면 세 범주가 기본값으로 켜지고 풀 리퀘스트 스캔도 자동으로 동작하므로 스캔 구성은 따로 만들지 않고 통합 상태만 확인합니다",
         "지속적 통합 스캔과 정기 스캔은 한 스캔 구성에 함께 담을 수 없으므로 풀 리퀘스트 스캔만 켜고 주 1회 정기 스캔 요건은 다른 도구로 넘깁니다",
         "규칙 세트 범주는 구성마다 하나씩만 담을 수 있어 SAST와 IAC와 SCA로 스캔 구성을 세 개 만들고 같은 리포지토리에 그 셋을 모두 적용합니다",
-        "규칙 세트 범주에 SAST와 IAC와 SCA를 함께 담고, 지속적 통합 이벤트는 PULL_REQUEST, 정기 주기는 WEEKLY로 둡니다"
+        "규칙 세트 범주에 SAST와 IAC와 SCA를 함께 담고, 지속적 통합 이벤트는 PULL_REQUEST, 정기 스캔 주기는 WEEKLY로 둡니다"
       ],
       "correct": 3,
       "explanation": "Amazon Inspector Code Security는 1자 애플리케이션 소스 코드와 3자 애플리케이션 의존성과 코드형 인프라를 스캔합니다. 스캔 구성의 규칙 세트 범주는 필수 항목이고 SAST와 IAC와 SCA 중 최소 1개에서 최대 3개까지 담는 배열이라 세 범주를 한 구성에 함께 둡니다. 지속적 통합 스캔 구성은 코드가 바뀔 때 자동으로 도는 스캔이고 대상 이벤트로 PULL_REQUEST나 PUSH를 받습니다. 정기 스캔 구성은 WEEKLY와 MONTHLY와 NEVER 주기를 받습니다. 두 구성은 서로 배타적이지 않아 한 스캔 구성에 함께 둘 수 있습니다. 공식 시험 가이드가 이 기술의 예시로 드는 Amazon CodeGuru 보안은 2025년 11월 20일 지원이 종료됐습니다.",
@@ -352,6 +353,14 @@
         {
           "title": "aws codeguru-security (AWS CLI 명령 참조) — 2025-11-20 지원 종료 공지",
           "url": "https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/"
+        },
+        {
+          "title": "ContinuousIntegrationScanConfiguration — 지원 이벤트 PULL_REQUEST와 PUSH",
+          "url": "https://docs.aws.amazon.com/inspector/v2/APIReference/API_ContinuousIntegrationScanConfiguration.html"
+        },
+        {
+          "title": "PeriodicScanConfiguration — 주기 WEEKLY·MONTHLY·NEVER",
+          "url": "https://docs.aws.amazon.com/inspector/v2/APIReference/API_PeriodicScanConfiguration.html"
         }
       ],
       "verified": false
@@ -380,6 +389,10 @@
         {
           "title": "Amazon Inspector Code Security - 스캔 대상 셋과 활성화 경로",
           "url": "https://docs.aws.amazon.com/inspector/latest/user/code-security-assessments.html"
+        },
+        {
+          "title": "aws codeguru-security (AWS CLI 명령 참조) — 2025-11-20 지원 종료 공지",
+          "url": "https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/"
         }
       ],
       "verified": false

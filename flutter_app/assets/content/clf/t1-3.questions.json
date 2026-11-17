@@ -74,7 +74,7 @@
         "AWS Cloud Adoption Framework(CAF)"
       ],
       "correct": 0,
-      "explanation": "AWS Snowball은 물리 디바이스를 사용해 대량(테라바이트급 이상) 데이터를 AWS로 또는 AWS에서 전송하는 서비스입니다. 네트워크를 통한 전송이 너무 느리거나 비싸거나 비현실적일 때, 디바이스를 배송받아 오프라인으로 데이터를 적재한 뒤 반송해 업로드합니다.",
+      "explanation": "AWS Snowball은 물리 디바이스를 사용해 대량(테라바이트급 이상) 데이터를 AWS로 또는 AWS에서 전송하는 서비스입니다. 네트워크를 통한 전송이 너무 느리거나 비싸거나 비현실적일 때, 디바이스를 배송받아 오프라인으로 데이터를 적재한 뒤 반송해 업로드합니다. (⚠️ AWS Snowball Edge는 신규 고객에게 제공되지 않습니다 — 공식 대안은 온라인 전송의 AWS DataSync, 물리 전송의 AWS Data Transfer Terminal입니다. 제품 페이지는 2026-12-31에 상용 리전의 Snowball 디바이스 지원 종료를 공지합니다.)",
       "wrongExplanations": {
         "1": "AWS DMS는 데이터베이스를 네트워크를 통해 마이그레이션하는 서비스로, 네트워크 대역폭이 부족한 대량 데이터의 오프라인 물리 전송에는 적합하지 않습니다.",
         "2": "S3 콘솔에서 직접 업로드하는 것도 네트워크를 사용하므로, 대역폭이 부족해 전송이 느린 상황을 해결하지 못합니다.",
@@ -84,6 +84,10 @@
         {
           "title": "What is AWS Snowball Edge? — 물리 디바이스로 대량 데이터 전송, 네트워크 전송이 느리거나 비현실적일 때",
           "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
+        },
+        {
+          "title": "AWS Snowball 제품 페이지 — 지원 종료 공지(2026-12-31, 모든 상용 리전의 Snowball 디바이스)",
+          "url": "https://aws.amazon.com/snowball/"
         }
       ],
       "verified": true
@@ -214,7 +218,7 @@
         "여러 AWS 계정의 청구서를 하나로 통합한다"
       ],
       "correct": 1,
-      "explanation": "AWS Snowball은 물리 디바이스를 배송받아 사내 네트워크에서 오프라인으로 데이터를 적재한 뒤, 디바이스를 AWS로 반송하면 데이터가 업로드되는 방식입니다. 인터넷 대역폭에 의존하지 않으므로 네트워크 전송이 느리거나 비현실적인 대량 데이터에 적합합니다.",
+      "explanation": "AWS Snowball은 물리 디바이스를 배송받아 사내 네트워크에서 오프라인으로 데이터를 적재한 뒤, 디바이스를 AWS로 반송하면 데이터가 업로드되는 방식입니다. 인터넷 대역폭에 의존하지 않으므로 네트워크 전송이 느리거나 비현실적인 대량 데이터에 적합합니다. (⚠️ AWS Snowball Edge는 신규 고객에게 제공되지 않습니다 — 공식 대안은 온라인 전송의 AWS DataSync, 물리 전송의 AWS Data Transfer Terminal입니다. 제품 페이지는 2026-12-31에 상용 리전의 Snowball 디바이스 지원 종료를 공지합니다.)",
       "wrongExplanations": {
         "0": "Snowball은 전용 회선을 임대하는 네트워크 전송 방식이 아니라, 물리 디바이스로 오프라인 전송하는 방식입니다.",
         "2": "진행 중 변경을 실시간 복제하는 것은 AWS DMS(데이터베이스 마이그레이션)의 동작이며, Snowball의 방식이 아닙니다.",
@@ -224,6 +228,10 @@
         {
           "title": "What is AWS Snowball Edge? — 디바이스 배송→오프라인 적재→반송 업로드, 네트워크 비의존",
           "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
+        },
+        {
+          "title": "AWS Snowball 제품 페이지 — 지원 종료 공지(2026-12-31, 모든 상용 리전의 Snowball 디바이스)",
+          "url": "https://aws.amazon.com/snowball/"
         }
       ],
       "verified": true
@@ -242,7 +250,7 @@
         "(A)와 (B) 모두 Amazon S3 콘솔 직접 업로드"
       ],
       "correct": 0,
-      "explanation": "운영 중인 DB의 최소 다운타임 마이그레이션은 진행 중 변경을 복제하는 AWS DMS가 적합하고, 네트워크가 제한된 환경의 수백 TB 아카이브는 물리 디바이스로 오프라인 전송하는 AWS Snowball이 적합합니다. 상황에 따라 두 도구를 함께 쓰는 것이 일반적입니다.",
+      "explanation": "운영 중인 DB의 최소 다운타임 마이그레이션은 진행 중 변경을 복제하는 AWS DMS가 적합하고, 네트워크가 제한된 환경의 수백 TB 아카이브는 물리 디바이스로 오프라인 전송하는 AWS Snowball이 적합합니다. 상황에 따라 두 도구를 함께 쓰는 것이 일반적입니다. (⚠️ AWS Snowball Edge는 신규 고객에게 제공되지 않습니다 — 공식 대안은 온라인 전송의 AWS DataSync, 물리 전송의 AWS Data Transfer Terminal입니다. 제품 페이지는 2026-12-31에 상용 리전의 Snowball 디바이스 지원 종료를 공지합니다.)",
       "wrongExplanations": {
         "1": "역할이 뒤바뀌었습니다. 운영 DB의 최소 다운타임은 DMS, 네트워크가 제한된 환경의 대량 아카이브는 Snowball입니다.",
         "2": "운영 중인 DB의 최소 다운타임 마이그레이션에는 Snowball이 아니라 DMS가 적합합니다.",
@@ -256,6 +264,10 @@
         {
           "title": "What is AWS Snowball Edge? — 네트워크가 비현실적인 대량 데이터의 오프라인 전송",
           "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
+        },
+        {
+          "title": "AWS Snowball 제품 페이지 — 지원 종료 공지(2026-12-31, 모든 상용 리전의 Snowball 디바이스)",
+          "url": "https://aws.amazon.com/snowball/"
         }
       ],
       "verified": true
@@ -386,7 +398,7 @@
         "대량 데이터 전송에는 AWS Cloud Adoption Framework(CAF)를 도구로 사용해 직접 파일을 전송해야 한다"
       ],
       "correct": 0,
-      "explanation": "대용량 데이터라도 무조건 인터넷으로 옮기는 것이 답은 아닙니다. 네트워크가 느리거나 비싸면 400TB를 인터넷으로 업로드하는 것은 시간·비용 면에서 비현실적이며, 이때는 물리 디바이스에 오프라인으로 적재해 반송하는 AWS Snowball이 더 빠르고 저렴할 수 있습니다. Snowball은 네트워크 대역폭에 의존하지 않습니다.",
+      "explanation": "대용량 데이터라도 무조건 인터넷으로 옮기는 것이 답은 아닙니다. 네트워크가 느리거나 비싸면 400TB를 인터넷으로 업로드하는 것은 시간·비용 면에서 비현실적이며, 이때는 물리 디바이스에 오프라인으로 적재해 반송하는 AWS Snowball이 더 빠르고 저렴할 수 있습니다. Snowball은 네트워크 대역폭에 의존하지 않습니다. (⚠️ AWS Snowball Edge는 신규 고객에게 제공되지 않습니다 — 공식 대안은 온라인 전송의 AWS DataSync, 물리 전송의 AWS Data Transfer Terminal입니다. 제품 페이지는 2026-12-31에 상용 리전의 Snowball 디바이스 지원 종료를 공지합니다.)",
       "wrongExplanations": {
         "1": "'대용량도 무조건 인터넷으로 옮긴다'는 흔한 오해입니다. 대역폭이 제한적이면 인터넷 업로드가 오히려 느리고 비싸, 물리 전송이 실용적입니다.",
         "2": "이 데이터는 일괄 전송하면 되는 정적 파일이며, 진행 중 변경을 실시간 복제하는 DMS는 운영 중인 데이터베이스 마이그레이션용입니다. 정적 파일 아카이브 대량 전송에는 맞지 않습니다.",
@@ -396,6 +408,10 @@
         {
           "title": "What is AWS Snowball Edge? — 네트워크 전송이 느리거나 비싸거나 비현실적일 때 물리 디바이스로 대량 데이터 전송",
           "url": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
+        },
+        {
+          "title": "AWS Snowball 제품 페이지 — 지원 종료 공지(2026-12-31, 모든 상용 리전의 Snowball 디바이스)",
+          "url": "https://aws.amazon.com/snowball/"
         }
       ],
       "verified": true

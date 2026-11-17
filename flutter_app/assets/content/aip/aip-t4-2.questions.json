@@ -3,7 +3,7 @@
   "taskTitle": "애플리케이션 성능 최적화",
   "domain": 4,
   "certCode": "AIP-C01",
-  "lastVerified": "2026-11-15",
+  "lastVerified": "2026-11-17",
   "questions": [
     {
       "skill": "4.2.1",
@@ -137,8 +137,12 @@
       },
       "sources": [
         {
-          "title": "지식 베이스 질의 구성과 검색 유형",
-          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-config.html"
+          "title": "지식 베이스용 벡터 스토어 설정 — 반복 인덱스 스캔과 필터 적용 순서",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html"
+        },
+        {
+          "title": "OpenSearch Service 샤드 수 선택 — 첫 문서 색인 전에 정한다",
+          "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/bp-sharding.html"
         }
       ],
       "id": "aip-t4-2-q5",
@@ -297,7 +301,7 @@
         "두 모델의 컨텍스트 창 크기를 맞춥니다. 창이 다르면 파라미터가 무시됩니다"
       ],
       "correct": 2,
-      "explanation": "추론 파라미터의 기본값과 범위는 모델마다 다르므로 공식은 모델별 「추론 요청 파라미터와 응답 필드」를 따로 보라고 적습니다. 길이 쪽 파라미터로는 응답 길이의 최소·최대 토큰 수와 페널티가 있습니다. 세 파라미터 사이의 상호작용을 공식이 규정하지 않으므로 한 모델의 조합을 그대로 옮기지 않고 모델별 문서로 확인합니다.",
+      "explanation": "추론 파라미터의 기본값과 범위는 모델마다 다르므로 공식은 모델별 「추론 요청 파라미터와 응답 필드」를 따로 보라고 적습니다. 길이 쪽 파라미터로는 응답 길이의 최소·최대 토큰 수와 페널티가 있습니다. 그래서 한 모델의 조합을 그대로 옮기지 않고 모델별 문서로 확인합니다.",
       "wrongExplanations": {
         "0": "토크나이저는 토큰 수에 영향을 주고 파라미터의 의미를 뒤바꾸지 않습니다.",
         "1": "리전이 파라미터 해석을 바꾸지 않습니다.",

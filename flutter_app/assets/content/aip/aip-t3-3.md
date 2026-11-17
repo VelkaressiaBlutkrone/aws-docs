@@ -30,7 +30,11 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html
   - title: 민감 정보 필터로 대화에서 PII 제거
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html
-lastVerified: 2026-11-14
+  - title: CloudTrail 개념
+    url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html
+  - title: AIP-C01 시험 안내서 — 콘텐츠 도메인 3
+    url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain3.html
+lastVerified: 2026-11-17
 ---
 
 # AI 거버넌스와 규정 준수 메커니즘 (모델 카드·데이터 계보·조직 정책·지속적 모니터링)
@@ -140,7 +144,7 @@ lastVerified: 2026-11-14
 
 ⚠️⚠️ **공식 가이드에 Glue 데이터 계보 전용 페이지는 없습니다.** 공식 기술 본문은 「AWS Glue를 사용하여 데이터 계보 자동 추적」이라고 적지만, 실제 문서가 추적 수단으로 적는 것은 **카탈로그 등록 · 크롤러의 자동 검색 · 스키마 버전 관리 · CloudTrail·Lake Formation과의 조합**입니다. 그래서 이 사이트는 **「Glue가 변형 단계별 계보 그래프를 자동으로 그려 준다」고 단정하지 않습니다** — 근거를 확인하지 못했습니다.
 
-**감사 로깅은 CloudTrail**입니다. 계정을 만들면 **CloudTrail이 이미 활성**이고 최근 이벤트는 **Event history**에서 바로 볼 수 있습니다. ⚠️ 다만 **지속적 기록에는 추적(trail)이 필요**하고, 추적은 로그 파일을 **S3 버킷**으로 전달합니다 — **콘솔에서 만든 추적은 기본적으로 모든 리전**에 적용돼 파티션 전 리전의 이벤트를 지정한 버킷으로 모읍니다. 모든 이벤트는 **누가 요청을 만들었는지**(루트·IAM 사용자 자격 증명인지 · 역할·페더레이션 사용자의 임시 자격 증명인지 · **다른 AWS 서비스인지**)를 `userIdentity`로 담습니다.
+**감사 로깅은 CloudTrail**입니다. 계정을 만들면 **CloudTrail이 이미 활성**이고 최근 이벤트는 **Event history**에서 바로 볼 수 있습니다. ⚠️ 다만 **지속적 기록에는 추적(trail)이 필요**하고, 추적은 로그 파일을 **S3 버킷**으로 전달합니다 — **콘솔에서 만든 추적은 모두 다중 리전 추적**이라 활성화된 모든 리전의 활동을 지정한 버킷으로 모읍니다. 모든 이벤트는 **누가 요청을 만들었는지**(루트·IAM 사용자 자격 증명인지 · 역할·페더레이션 사용자의 임시 자격 증명인지 · **다른 AWS 서비스인지**)를 `userIdentity`로 담습니다.
 
 ⚠️⚠️ Bedrock의 범주 분류가 비자명합니다 — **`InvokeModel`·`InvokeModelWithResponseStream`·`Converse`·`ConverseStream`·`ListAsyncInvokes`는 관리 이벤트로** 로깅되고, **`InvokeModelWithBidirectionalStream` 같은 다른 런타임 작업은 데이터 이벤트**입니다. **데이터 이벤트는 고용량 활동이라 CloudTrail이 기본적으로 로깅하지 않으므로** 그 작업의 호출 기록이 필요하면 **따로 켜야 합니다.**
 
@@ -302,3 +306,5 @@ lastVerified: 2026-11-14
 9. AI 서비스 옵트아웃 정책 (서비스 개선·모델 훈련 · 리전 밖 저장 가능 · 과거 콘텐츠 삭제와 그 한정 · 모든 리전에 선호 기록) — `docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_ai-opt-out.html` (2026-11-14 확인)
 10. 책임 있는 AI 렌즈 (2025-11-19 발행 · 차원 열 · 대상별 용도 · ML과 규칙 기반의 차이) — `docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html` (2026-11-14 확인)
 11. 민감 정보 필터 (`Mask`의 유형 라벨 치환 = 토큰 수준 수정 · 차단과의 차이) — `docs.aws.amazon.com/bedrock/latest/userguide/guardrails-sensitive-filters.html` (2026-11-14 확인)
+12. CloudTrail 개념 (콘솔에서 만든 추적은 다중 리전 추적 · 활성화된 모든 리전) — `docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html` (2026-11-17 확인)
+13. AIP-C01 시험 안내서 콘텐츠 도메인 3 (기술 3.3.4의 예시 목록) — `docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-professional-01/ai-professional-01-domain3.html` (2026-11-17 확인)

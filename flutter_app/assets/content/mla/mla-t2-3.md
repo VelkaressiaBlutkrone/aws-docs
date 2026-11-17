@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf04-bp05.html
   - title: MLA-C01 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
-lastVerified: 2026-10-17
+lastVerified: 2026-11-17
 ---
 
 # 모델 성능 분석 (지표·기준선·수렴 진단·Clarify 편향·SHAP·섀도 테스트)
@@ -577,5 +577,6 @@ ML Lens는 트레이드오프 분석을 "**경쟁하는 요구**(정확도·복�
 55. CreateInferenceExperiment — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateInferenceExperiment.html
 56. ProductionVariant — https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_ProductionVariant.html
 57. MLA-C01 공식 시험 가이드 (한국어) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/machine-learning-engineer-associate-01/machine-learning-engineer-associate-01.html
+58. Evaluating ML Models (레거시 — Amazon Machine Learning, 신규 사용자 중단된 구서비스 문서) — https://docs.aws.amazon.com/machine-learning/latest/dg/evaluating_models.html
 
 조사 노트: `docs/content-research/MLA-C01/tasks/2-3.md` (모든 사실에 공식 URL·조회일 2026-10-17 부착)

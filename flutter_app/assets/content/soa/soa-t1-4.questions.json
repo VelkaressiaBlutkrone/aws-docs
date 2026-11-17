@@ -54,6 +54,10 @@
         {
           "title": "AWS Health Dashboard — 계정 상태 보기",
           "url": "https://docs.aws.amazon.com/health/latest/ug/aws-health-dashboard-status.html"
+        },
+        {
+          "title": "AWS Health Dashboard 시작하기 — 계정 이벤트와 예정된 변경",
+          "url": "https://docs.aws.amazon.com/health/latest/ug/getting-started-health-dashboard.html"
         }
       ],
       "verified": true

@@ -65,13 +65,13 @@
       "difficulty": "applied",
       "stem": "Config가 변경 이벤트만 감시하지 않고 지속적으로 평가하도록 설계된 이유는?",
       "options": [
-        "어떤 경로로 구성이 바뀌었든 다음 평가 주기에 비준수 상태를 반드시 포착하기 위해",
+        "어떤 경로로 구성이 바뀌었든 규칙 평가(변경 트리거·주기 트리거)로 비준수 상태를 포착하기 위해",
         "변경 이벤트를 수집하는 API가 없기 때문",
         "CloudTrail이 비활성화된 계정에서도 과금하기 위해",
         "규칙을 리전별로 복제해야 하기 때문"
       ],
       "correct": 0,
-      "explanation": "리소스 설정은 콘솔·CLI·자동화 등 다양한 경로로 바뀝니다. 변경 이벤트만 감시하면 누락이나 누적 드리프트를 놓칠 수 있어, 지속 평가로 수동 변경·자동화 오류·예외 처리 후 미복구까지 동일한 가드레일에 포함시킵니다.",
+      "explanation": "리소스 설정은 콘솔·CLI·자동화 등 다양한 경로로 바뀝니다. 변경 이벤트만 감시하면 누락이나 누적 드리프트를 놓칠 수 있어, 지속 평가로 수동 변경·자동화 오류·예외 처리 후 미복구까지 동일한 가드레일에 포함시킵니다. Config 규칙의 평가 트리거는 구성 변경·주기적·둘을 함께 쓰는 하이브리드가 있으며 규칙마다 다릅니다.",
       "wrongExplanations": {
         "1": "Config는 변경 트리거 평가도 지원합니다.",
         "2": "과금 목적이 아닙니다.",
@@ -98,7 +98,7 @@
         "AWS CloudTrail Lake"
       ],
       "correct": 0,
-      "explanation": "Security Hub는 여러 서비스·파트너 제품의 결과를 AWS Security Finding Format(ASFF)으로 정규화해 한 화면에 모으고, 보안 표준 점검 결과를 점수로 산출합니다. 직접 탐지하는 도구가 아니라 통합·표준화 계층입니다.",
+      "explanation": "Security Hub는 여러 서비스·파트너 제품의 결과를 AWS Security Finding Format(ASFF)으로 정규화해 한 화면에 모으고, 보안 표준 점검 결과를 점수로 산출합니다. 직접 탐지하는 도구가 아니라 통합·표준화 계층입니다. 이 표준 점검·ASFF 집계 기능의 현재 공식 이름은 AWS Security Hub CSPM입니다(공식 시험 가이드는 Security Hub로 적습니다).",
       "wrongExplanations": {
         "1": "Detective는 탐지된 결과의 근본 원인 조사를 돕는 사후 조사 도구입니다.",
         "2": "Trusted Advisor는 모범 사례 점검 서비스입니다.",
@@ -106,7 +106,7 @@
       },
       "sources": [
         {
-          "title": "AWS Security Hub란 무엇인가",
+          "title": "AWS Security Hub CSPM 소개",
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
         }
       ],
@@ -125,7 +125,7 @@
         "CloudTrail 없이도 API 감사가 가능해진다"
       ],
       "correct": 0,
-      "explanation": "각 탐지 서비스는 고유한 데이터 소스·알고리즘에 최적화돼 있습니다. Security Hub는 중복 구현 대신 ASFF로 결과를 정규화해 모으므로, 도구마다 콘솔을 열지 않고 한 화면에서 우선순위를 판단하고 자동화 규칙을 공통 적용할 수 있습니다.",
+      "explanation": "각 탐지 서비스는 고유한 데이터 소스·알고리즘에 최적화돼 있습니다. Security Hub는 중복 구현 대신 ASFF로 결과를 정규화해 모으므로, 도구마다 콘솔을 열지 않고 한 화면에서 우선순위를 판단하고 자동화 규칙을 공통 적용할 수 있습니다. ASFF로 결과를 집계하는 이 서비스의 현재 공식 이름은 AWS Security Hub CSPM입니다.",
       "wrongExplanations": {
         "1": "소스 서비스를 끄면 그 결과는 더 이상 유입되지 않습니다.",
         "2": "위협 탐지는 GuardDuty가 수행합니다.",
@@ -318,7 +318,7 @@
         "소스 코드 품질"
       ],
       "correct": 3,
-      "explanation": "Trusted Advisor는 비용 최적화·보안·내결함성·성능·서비스 한도(할당량) 범주로 환경을 점검하고 권장 사항을 제시합니다. 소스 코드 품질은 점검 범주가 아닙니다.",
+      "explanation": "Trusted Advisor는 비용 최적화·성능·보안·내결함성·서비스 한도(할당량)·운영 우수성 범주로 환경을 점검하고 권장 사항을 제시합니다. 소스 코드 품질은 점검 범주가 아닙니다.",
       "wrongExplanations": {
         "0": "유휴 리소스·미사용 EIP 등 비용 범주 점검이 있습니다.",
         "1": "퍼블릭 S3·보안 그룹 과개방·루트 MFA 미설정 등 보안 점검이 있습니다.",

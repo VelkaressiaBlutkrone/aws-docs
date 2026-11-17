@@ -34,7 +34,11 @@ sources:
     url: https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html
   - title: AWS Systems Manager State Manager
     url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html
-lastVerified: 2026-11-08
+  - title: Enabling cross-Region aggregation
+    url: https://docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation-enable.html
+  - title: Enable or disable AWS Regions in your account
+    url: https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html
+lastVerified: 2026-11-17
 ---
 
 # 모니터링 및 경보 솔루션 설계 (요구 사항·상태 확인·이벤트 집계·탐지 서비스·평가 자동화)
@@ -182,7 +186,7 @@ Specialty 문항은 거의 항상 **시나리오**로 나옵니다. "S3에 민�
 | 모으는 것 | 조사 결과 · 조사 결과 업데이트 · **통찰(insights)** · **제어 준수 상태** · **보안 점수** | 조사 결과 · **리소스** · **추세** |
 | 용어 | **홈 리전**(옛 이름 「집계 리전」, 일부 API는 아직 옛 용어) | 홈 리전 |
 
-- ⚠️⚠️ **홈 리전은 옵트인 리전일 수 없습니다.** 2019-03-20 이후 도입된 리전이 옵트인 리전이고, 조직에서 그 리전을 활성화하기 전에는 그곳에 Security Hub CSPM을 구성할 수도 없습니다
+- ⚠️⚠️ **홈 리전은 옵트인 리전일 수 없습니다.** 2019-03-20 이후 도입된 리전이 옵트인 리전이고, 옵트인 리전은 활성화하기 전에는 워크로드를 만드는 데 쓸 수 없습니다
 - ⚠️ **연결 리전에서는 켜고 홈 리전에서는 끈 제어**는 홈 리전에서 **준수 상태만 볼 수 있고 켜거나 끌 수 없습니다.** 예외는 **중앙 구성(central configuration)**을 쓰는 경우이고, 그때는 위임 관리자가 홈 리전에서 양쪽을 구성합니다
 - ⚠️ GovCloud(US)와 중국 리전은 **조사 결과·업데이트·통찰만** 집계되고 **각 파티션 안에서만** 됩니다
 - ⚠️ 크로스 리전 **보안 점수와 준수 상태를 보려면** IAM 역할에 `ListSecurityControlDefinitions` · `BatchGetStandardsControlAssociations` · `BatchUpdateStandardsControlAssociations`가 필요합니다
@@ -364,3 +368,5 @@ Systems Manager State Manager는 **관리형 노드를 내가 정의한 상태�
 11. CloudWatch cross-account observability — `docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Unified-Cross-Account.html` (2026-11-08 확인)
 12. Conformance Packs for AWS Config — `docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html` (2026-11-08 확인)
 13. AWS Systems Manager State Manager — `docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-state.html` (2026-11-08 확인)
+14. Enabling cross-Region aggregation — `docs.aws.amazon.com/securityhub/latest/userguide/finding-aggregation-enable.html` (2026-11-17 확인)
+15. Enable or disable AWS Regions in your account — `docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html` (2026-11-17 확인)
