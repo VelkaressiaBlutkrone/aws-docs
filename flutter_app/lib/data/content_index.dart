@@ -406,10 +406,11 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/clf/t4-3.questions.json',
       questionCount: 15,
       // 2026-11-17 전 콘텐츠 검증 2단계가 발화 5세그먼트(seg006·014·030·031·033)의
-      // 거짓·불완전 서술을 고쳐 **재합성**했다(Polly neural Seoyeon → loudnorm -16 LUFS,
-      // mp3 sha8=fe7d6e11). 대본이 바뀌면 사람의 청취 서명이 무효이므로 청취 재승인·R2
-      // 발행까지 비노출이다(`audioSha8` 없음 → 발행된 불변 키가 아직 없다는 뜻).
-      audioApproved: false,
+      // 거짓·불완전 서술을 고쳐 재합성했고(Polly neural Seoyeon → loudnorm -16 LUFS ·
+      // 22분 09초 · -16.4 LUFS 실측) **사람이 청취·승인해 R2에 발행했다**
+      // (script·audio_meta reviewStatus=approved 3자리, 공개 URL 실측).
+      audioApproved: true,
+      audioSha8: 'fe7d6e11',
     ),
   ],
   'SAA-C03': [
