@@ -309,20 +309,49 @@ void main() {
       }
     });
 
-    test('재합성 대기 — 사람의 청취 재승인이 필요하다', () {
-      // ⚠️ `reviewStatus: approved` 는 사람의 청취 서명이다. 대본을 바꿨으므로
-      // 되돌렸고, `content_index.dart` 의 `audioApproved`·`audioSha8` 동기화는
-      // `content_index_test.dart` 가 양방향으로 지킨다.
+    test('두 reviewStatus 가 같은 값으로 움직인다 (반쪽 flip 금지)', () {
+      // ⚠️⚠️ **이 단정은 2026-11-17 에 뒤집혔다.** 원래 `'needs_human_review'` 를
+      // 리터럴로 박아 「AI 가 approved 를 쓰지 않는다」를 지키려 했는데, 그것은
+      // **과정 규칙이고 파일로 검사할 수 없다.** 사람이 실제로 청취·승인하자
+      // 그 단정이 레드로 끝났다 — 문항 `verified` flip·승인 편수와 **같은 함정**이다
+      // (`content_index_audio_test.dart` 의 규율: 상태 숫자·상태 값을 박지 않는다).
+      //
+      // 승인 전·후 모두 녹색이면서 의미가 남는 불변식으로 바꿨다: **top 과 script 의
+      // `reviewStatus` 가 같은 값이고 허용된 두 값 중 하나다.** 반쪽만 올리면
+      // `publish_audio.py` 의 `find_approved()`(둘 다 approved 를 요구)와
+      // `content_index_test` 의 동기화 단정이 어긋나므로 그것이 진짜 결함이다.
+      // 승인 ↔ `audioApproved`·`audioSha8` 정합은 `content_index_test.dart` 가
+      // 양방향으로 지킨다.
       final meta = json.decode(
               File('assets/audio/clf/clf-t3-8/audio_meta.json').readAsStringSync())
           as Map<String, dynamic>;
-      expect(meta['reviewStatus'], 'needs_human_review',
-          reason: 'AI 가 approved 를 쓰지 않는다 — 청취는 사람 몫이다');
+      final top = meta['reviewStatus'];
+      final scriptStatus = (meta['script'] as Map<String, dynamic>)['reviewStatus'];
+      expect(top, anyOf('needs_human_review', 'approved'),
+          reason: '스키마에 없는 reviewStatus');
+      expect(scriptStatus, top,
+          reason: 'top 과 script 의 reviewStatus 가 갈렸다 — 반쪽 flip 은 발행 게이트와 '
+              'content_index 동기화를 동시에 어긋나게 한다');
     });
 
     test('대조군: 손대지 않은 세그먼트는 그대로다', () {
       // 보고서가 「CloudShell 을 범위 내로 말한다」고 적은 seg042 는 실제로는
       // 「범주만 매칭해서 알아 두면 되는 것들」이라 거짓이 아니다 — 손대지 않았다.
+      //
+      // ⚠️⚠️ **2026-11-17 재측정 — 판정은 유지하되 기록한다.** 2026-11-17 2단계가
+      // C-Y10 으로 `t3-8.md` 에서 CloudShell 을 「공식 「범위 외」 목록에 있다」로
+      // 고쳤지만 **그 보고서의 「발화 판정」 절은 `clf-t4-3` 만 읽었고** 이 편의 발화는
+      // 보지 않았다. 실측하면 seg042 는 CloudShell 을 **「범주만 매칭해서 알아 두시면
+      // 되는 것들」**에 넣고, 같은 음성 **seg034 는 「이 표에는 공식 범위 내 목록에
+      // 있는 이름만 남겼습니다」**라고 말한다 — **거짓은 아니지만 음성 내부에서
+      // 어긋나고 범위 외 서비스에 공부 시간을 보낸다.** 2026-11-06 사용자 판정
+      // (재합성 범위는 **거짓인 곳**)에 따라 고치지 않았고, 고치려면 seg042 수정 →
+      // 재합성 → **청취 재승인**(승인 서명이 다시 필요하다)이다.
+      //
+      // ⚠️ **md 의 범위 외 콜아웃은 애초에 대본에 들어가지 않았다** — `cf0e0a3` 이 md 에
+      // 그 줄을 추가했지만 그 배치는 `audioSummary` 만 손으로 고쳤고 `generate` 를
+      // 다시 돌리지 않았다(돌리면 풍부화가 날아간다). 그래서 그 문구는 **어느
+      // 세그먼트의 `sourceExcerpt` 에도 없다**(전수 0건 실측).
       final segs = (script('clf-t3-8')['segments'] as List)
           .cast<Map<String, dynamic>>();
       final seg042 =
@@ -332,6 +361,23 @@ void main() {
           reason: '보고서 과대 판정을 따라 지웠다면 멀쩡한 발화를 바꿨다');
       expect(body.contains('범위 내'), isFalse,
           reason: '이 세그먼트는 「범위 내」라고 말하지 않는다 — 그래서 대상이 아니다');
+
+      // 2026-11-06 §P2-G 수정이 음성에 남아 있다(seg034 가 표를 공식 목록으로 한정).
+      final seg034 =
+          segs.firstWhere((e) => e['id'] == 'seg034', orElse: () => fail('없음'));
+      expect(spokenBody(seg034).contains('공식 범위 내 목록에 있는 이름만'), isTrue,
+          reason: '§P2-G 가 고친 한정 문장이 사라졌다');
+
+      // md 의 범위 외 콜아웃은 어느 세그먼트의 sourceExcerpt 에도 없다 — 위 주석의
+      // 「md 에 블록을 더해도 대본에 자동으로 생기지 않는다」를 기계로 고정한다.
+      final md = File('assets/content/clf/t3-8.md').readAsStringSync();
+      expect(md.contains('보기에 나오면'), isTrue,
+          reason: '대조군 — md 쪽 콜아웃이 실재해야 아래 0건이 의미를 갖는다');
+      expect(
+          segs.where((e) => ((e['sourceExcerpt'] as String?) ?? '')
+              .contains('보기에 나오면')),
+          isEmpty,
+          reason: 'md 콜아웃이 대본 세그먼트로 들어왔다 — 그렇다면 발화도 다시 본다');
     });
   });
 
