@@ -9,7 +9,7 @@ coversTasks:
   - "1.1"
 sources:
   - title: AWS Well-Architected Framework
-    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html
+    url: https://docs.aws.amazon.com/wellarchitected/latest/framework/framework.html
   - title: Generative AI Lens - AWS Well-Architected Framework
     url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html
   - title: Performance efficiency (Generative AI Lens)
@@ -24,7 +24,9 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html
   - title: Choosing models for generative AI applications
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-model-selection.html
-lastVerified: 2026-11-14
+  - title: AWS Well-Architected Tool Pricing
+    url: https://aws.amazon.com/well-architected-tool/pricing/
+lastVerified: 2026-11-17
 ---
 
 # 요구 사항 분석과 GenAI 솔루션 설계 (아키텍처 설계·개념 증명·표준화된 구성 요소)
@@ -198,7 +200,7 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 ## ⚠️ 흔한 함정 {#pitfalls}
 
 - ⚠️ **「검토 = 감사」로 읽기.** Framework 검토는 건설적 대화입니다.
-- ⚠️ **WA Tool이 유료라고 생각하기.** 공식은 **무료(at no charge)**로 적습니다.
+- ⚠️ **WA Tool이 유료라고 생각하기.** 공식 요금 페이지는 **추가 요금이 없고(no additional charge) 기반 AWS 리소스 비용만 낸다**고 적습니다.
 - ⚠️ **렌즈를 쓰려면 설치가 필요하다고 생각하기.** Lens Catalog의 렌즈는 **설치 없이** 모든 사용자가 씁니다.
 - ⚠️⚠️ **벤치마크 1위 모델을 고르면 된다고 생각하기.** 작업이 다르면 순위가 뒤집힙니다.
 - ⚠️⚠️ **PoC에서 비용·지연을 나중 문제로 미루기.** 공식은 **1일차부터** 지능과 운영 비용을 균형 맞추라고 적습니다.
@@ -255,7 +257,7 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 
 ### 📌 출처
 
-1. AWS Well-Architected Framework (기초 질문 · 검토는 감사가 아니다 · WA Tool 무료) — `docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html` (2026-11-14 확인)
+1. AWS Well-Architected Framework (기초 질문 · 검토는 감사가 아니다) — `docs.aws.amazon.com/wellarchitected/latest/framework/framework.html` (2026-11-17 확인)
 2. Generative AI Lens (2025-11-19 발행 · 여섯 기둥 · 수명 주기 여섯 단계 · 범위와 제외) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/generative-ai-lens.html` (2026-11-14 확인)
 3. Performance efficiency (Generative AI Lens) (성능 다섯 지표) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/performance-efficiency.html` (2026-11-14 확인)
 4. GENPERF01 (작업별 성능은 전이되지 않는다) — `docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genperf01.html` (2026-11-14 확인)
@@ -263,3 +265,4 @@ GenAI 프로젝트가 실패하는 지점은 대개 모델이 아니라 **설계
 6. Lens Catalog for AWS WA Tool (설치 불필요 · Framework 렌즈는 기본 적용) — `docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html` (2026-11-14 확인)
 7. What is AWS Well-Architected? (`Well-Architected Agent`는 프리뷰) — `docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html` (2026-11-14 확인)
 8. Choosing models for generative AI applications (PoC 모델 선택 세 차원과 함정 셋) — `docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-model-selection.html` (2026-11-14 확인)
+9. AWS Well-Architected Tool Pricing (추가 요금 없음 · 기반 AWS 리소스 비용만) — `aws.amazon.com/well-architected-tool/pricing/` (2026-11-17 확인)
