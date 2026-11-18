@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q3",
@@ -95,7 +95,7 @@
           "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/architectures.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q5",
@@ -151,7 +151,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q6",
@@ -179,7 +179,7 @@
           "url": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/MACsec.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q7",
@@ -207,7 +207,7 @@
           "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q8",
@@ -235,7 +235,7 @@
           "url": "https://docs.aws.amazon.com/verified-access/latest/ug/what-is-verified-access.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q9",
@@ -267,7 +267,7 @@
           "url": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q10",
@@ -295,7 +295,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q11",
@@ -323,7 +323,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/tgw/how-transit-gateways-work.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q12",
@@ -351,7 +351,7 @@
           "url": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/architectures.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q13",
@@ -383,7 +383,7 @@
           "url": "https://docs.aws.amazon.com/inspector/latest/user/findings-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q14",
@@ -419,7 +419,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/getting-started.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t3-3-q15",
@@ -451,7 +451,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/network-access-analyzer/how-network-access-analyzer-works.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

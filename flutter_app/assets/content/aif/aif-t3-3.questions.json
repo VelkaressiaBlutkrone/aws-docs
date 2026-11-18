@@ -35,7 +35,7 @@
           "url": "https://aws.amazon.com/what-is/foundation-models/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q3",
@@ -99,7 +99,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp01-bp02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q4",
@@ -131,7 +131,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-distillation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q6",
@@ -187,7 +187,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-instruction-based.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q7",
@@ -215,7 +215,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-fine-tuning-domain-adaptation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q8",
@@ -247,7 +247,7 @@
           "url": "https://aws.amazon.com/what-is/transfer-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q9",
@@ -275,7 +275,7 @@
           "url": "https://aws.amazon.com/what-is/transfer-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q10",
@@ -311,7 +311,7 @@
           "url": "https://aws.amazon.com/what-is/transfer-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q11",
@@ -339,7 +339,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-data-considerations-gen-ai/lifecycle.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q12",
@@ -371,7 +371,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-prepare.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q13",
@@ -399,7 +399,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raidp03-bp05.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q14",
@@ -427,7 +427,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/best-practices-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t3-3-q15",
@@ -459,7 +459,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/forensic-memory-and-disk-acquisition-service.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/disk-forensics-acquisition-workflow.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q4",
@@ -119,7 +119,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q5",
@@ -147,7 +147,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q6",
@@ -175,7 +175,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q7",
@@ -203,7 +203,7 @@
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/exposure-findings.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q8",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/exposure-findings.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q9",
@@ -259,7 +259,7 @@
           "url": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q10",
@@ -291,7 +291,7 @@
           "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_revoke-sessions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q11",
@@ -319,7 +319,7 @@
           "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q12",
@@ -347,7 +347,7 @@
           "url": "https://docs.aws.amazon.com/solutions/latest/automated-forensics-orchestrator-for-amazon-ec2/disk-forensics-acquisition-workflow.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q13",
@@ -375,7 +375,7 @@
           "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q14",
@@ -403,7 +403,7 @@
           "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t2-2-q15",
@@ -431,7 +431,7 @@
           "url": "https://docs.aws.amazon.com/detective/latest/userguide/what-is-detective.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

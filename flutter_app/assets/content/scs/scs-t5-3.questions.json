@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials_rotation-alternating.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q3",
@@ -91,7 +91,7 @@
           "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q4",
@@ -119,7 +119,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q5",
@@ -147,7 +147,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q6",
@@ -175,7 +175,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q7",
@@ -203,7 +203,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q8",
@@ -235,7 +235,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/keystore-cloudhsm.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q9",
@@ -263,7 +263,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/keystore-external.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q10",
@@ -291,7 +291,7 @@
           "url": "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q11",
@@ -319,7 +319,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q12",
@@ -347,7 +347,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q13",
@@ -375,7 +375,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q14",
@@ -403,7 +403,7 @@
           "url": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-3-q15",
@@ -431,7 +431,7 @@
           "url": "https://docs.aws.amazon.com/privateca/latest/userguide/PcaWelcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

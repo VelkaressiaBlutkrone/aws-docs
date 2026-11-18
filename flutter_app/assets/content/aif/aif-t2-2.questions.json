@@ -31,7 +31,7 @@
           "url": "https://aws.amazon.com/what-is/foundation-models/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q2",
@@ -59,7 +59,7 @@
           "url": "https://aws.amazon.com/what-is/generative-ai/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q3",
@@ -87,7 +87,7 @@
           "url": "https://aws.amazon.com/what-is/generative-ai/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q4",
@@ -115,7 +115,7 @@
           "url": "https://aws.amazon.com/what-is/foundation-models/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q5",
@@ -143,7 +143,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q6",
@@ -175,7 +175,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q7",
@@ -203,7 +203,7 @@
           "url": "https://aws.amazon.com/what-is/ai-hallucinations/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q8",
@@ -231,7 +231,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp07.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q9",
@@ -263,7 +263,7 @@
           "url": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q10",
@@ -291,7 +291,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q11",
@@ -319,7 +319,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/genai-guide.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q12",
@@ -351,7 +351,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/data-residency-hybrid-cloud-services-lens/drhcops01-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q13",
@@ -383,7 +383,7 @@
           "url": "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q14",
@@ -411,7 +411,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/prod-value.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-2-q15",
@@ -443,7 +443,7 @@
           "url": "https://docs.aws.amazon.com/ko_kr/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain2.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
