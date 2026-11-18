@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/serv-side-encryption.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q5",
@@ -143,7 +143,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q6",
@@ -175,7 +175,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q7",
@@ -207,7 +207,7 @@
           "url": "https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q8",
@@ -235,7 +235,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q9",
@@ -267,7 +267,7 @@
           "url": "https://docs.aws.amazon.com/signer/latest/developerguide/Welcome.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q10",
@@ -295,7 +295,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q11",
@@ -327,7 +327,7 @@
           "url": "https://docs.aws.amazon.com/efs/latest/APIReference/API_PutLifecycleConfiguration.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q12",
@@ -355,7 +355,7 @@
           "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q13",
@@ -383,7 +383,7 @@
           "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/logicallyairgappedvault.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q14",
@@ -419,7 +419,7 @@
           "url": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-ami-policy.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t5-2-q15",
@@ -451,7 +451,7 @@
           "url": "https://docs.aws.amazon.com/general/latest/gr/full_shutdown_services.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
