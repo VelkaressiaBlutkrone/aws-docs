@@ -31,7 +31,7 @@
       ],
       "id": "aip-t1-5-q1",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.1",
@@ -59,7 +59,7 @@
       ],
       "id": "aip-t1-5-q2",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.1",
@@ -87,7 +87,7 @@
       ],
       "id": "aip-t1-5-q3",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.2",
@@ -115,7 +115,7 @@
       ],
       "id": "aip-t1-5-q4",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.2",
@@ -143,7 +143,7 @@
       ],
       "id": "aip-t1-5-q5",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.2",
@@ -175,7 +175,7 @@
       ],
       "id": "aip-t1-5-q6",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.3",
@@ -215,7 +215,7 @@
       ],
       "id": "aip-t1-5-q7",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.3",
@@ -243,7 +243,7 @@
       ],
       "id": "aip-t1-5-q8",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.4",
@@ -271,7 +271,7 @@
       ],
       "id": "aip-t1-5-q9",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.4",
@@ -299,7 +299,7 @@
       ],
       "id": "aip-t1-5-q10",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.4",
@@ -327,7 +327,7 @@
       ],
       "id": "aip-t1-5-q11",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.5",
@@ -355,7 +355,7 @@
       ],
       "id": "aip-t1-5-q12",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.5",
@@ -387,7 +387,7 @@
       ],
       "id": "aip-t1-5-q13",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.6",
@@ -419,7 +419,7 @@
       ],
       "id": "aip-t1-5-q14",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     },
     {
       "skill": "1.5.6",
@@ -451,7 +451,7 @@
       ],
       "id": "aip-t1-5-q15",
       "examGuideTaskId": "aip-t1-5",
-      "verified": false
+      "verified": true
     }
   ]
 }
