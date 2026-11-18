@@ -255,7 +255,9 @@ List<MdSpan> _inline(String text) {
   for (final m in _inlineRe.allMatches(text)) {
     if (m.start > last) spans.add(MdSpan(text.substring(last, m.start)));
     if (m.group(1) != null) {
-      spans.add(MdSpan(m.group(2)!, bold: true));
+      // 굵게 안의 인라인 코드·URL 을 다시 갈라 굵게를 유지한 채 넘긴다 — 한 덩어리로
+      // 넘기면 백틱이 글자로 보였다(2026-11-18 라이브 점검, 전 자격증 약 2,400 구간).
+      spans.addAll(_boldInner(m.group(2)!));
     } else if (m.group(3) != null) {
       spans.add(MdSpan(m.group(4)!, code: true));
     } else {
@@ -266,5 +268,26 @@ List<MdSpan> _inline(String text) {
   }
   if (last < text.length) spans.add(MdSpan(text.substring(last)));
   if (spans.isEmpty) spans.add(MdSpan(text));
+  return spans;
+}
+
+final _boldInnerRe = RegExp(r'(`([^`]+)`)|((?:https?:\/\/)[^\s)]+)');
+
+/// 굵게 구간 안쪽을 코드·URL 로 갈라 모두 `bold: true` 로 돌려준다.
+List<MdSpan> _boldInner(String text) {
+  final spans = <MdSpan>[];
+  var last = 0;
+  for (final m in _boldInnerRe.allMatches(text)) {
+    if (m.start > last) spans.add(MdSpan(text.substring(last, m.start), bold: true));
+    if (m.group(1) != null) {
+      spans.add(MdSpan(m.group(2)!, bold: true, code: true));
+    } else {
+      final url = m.group(3)!;
+      spans.add(MdSpan(url, bold: true, url: url));
+    }
+    last = m.end;
+  }
+  if (last < text.length) spans.add(MdSpan(text.substring(last), bold: true));
+  if (spans.isEmpty) spans.add(MdSpan(text, bold: true));
   return spans;
 }
