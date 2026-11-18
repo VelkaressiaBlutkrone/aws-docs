@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-1",
-  "generatedAt": "2026-06-30T01:53:51Z",
+  "generatedAt": "2026-11-18T00:24:07Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-1.md",
     "sha256": "1157d9965e071552dedb0a2aea24dfb1ed4ee23be13eba526712ceb49558ab4c"
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 11018829,
-    "sha256": "8a553eccfadc49f5bcdd67722f2325ee049f28677ceb5ee46240c55a5b697673",
+    "sizeBytes": 11068077,
+    "sha256": "cb1281152072d8e27132a5964bc486114a96445144c58aff0df221c8156d7542",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,53 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 13686,
+    "speechChars": 13766,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "access-methods",
       "title": "1) 에이더블유에스를 다루는 네 가지 방법 — 콘솔 · 씨엘아이 · 에스디케이 · IaC",
       "level": 3,
-      "fraction": 0.08211354487950233
+      "fraction": 0.08174815894246533
     },
     {
       "anchor": "iac-cloudformation",
       "title": "2) IaC와 에이더블유에스 CloudFormation — 인프라를 코드로",
       "level": 3,
-      "fraction": 0.17159809713001203
+      "fraction": 0.17070441593588176
     },
     {
       "anchor": "oneoff-vs-repeat",
       "title": "3) 일회성 대 반복 프로세스",
       "level": 3,
-      "fraction": 0.3198808092425114
+      "fraction": 0.31794998568789196
     },
     {
       "anchor": "deployment-models",
       "title": "4) 배포 모델 — 클라우드 · 하이브리드 · 온프레미스",
       "level": 3,
-      "fraction": 0.4099796121072717
+      "fraction": 0.407647870098103
     },
     {
       "anchor": "connectivity",
       "title": "5) 연결 옵션 — 공용 인터넷 · 브이피엔 · Direct Connect (3.5 연계)",
       "level": 3,
-      "fraction": 0.47949448481363377
+      "fraction": 0.47730880324754743
     },
     {
       "anchor": "deployment-ops-tools",
       "title": "6) 배포·운영 자동화 도구 — Beanstalk · 씨디케이 · Systems Manager · Code",
       "level": 3,
-      "fraction": 0.5566548172931152
+      "fraction": 0.5543079445210648
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7568221025667834
+      "fraction": 0.7580342970152749
     }
   ],
   "generator": {

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-2",
-  "generatedAt": "2026-06-30T01:55:36Z",
+  "generatedAt": "2026-11-18T00:25:57Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-2.md",
     "sha256": "f6e61b559886b635cf00d93fe915d6905cb8e520abccb9417b028531b82b215a"
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 9335181,
-    "sha256": "987f9f074002f1c637598bbf14ba138bbc444797e6f26c8fcf2ec04b1325342d",
+    "sizeBytes": 9430653,
+    "sha256": "714840d020365e0e4efa3774bc276c41d49fcaa822d56f4c86bef87968dfad19",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,47 +25,47 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 11812,
+    "speechChars": 11922,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "regions-az",
-      "title": "1) 3층 구조 — 리전 ⊃ 가용 영역(에이제트) ⊃ (엣지는 별도 망)",
+      "title": "1) 3층 구조 — 리전 안의 가용 영역(에이제트), 엣지는 별도 망",
       "level": 3,
-      "fraction": 0.11063803529556954
+      "fraction": 0.10957900041229557
     },
     {
       "anchor": "multi-az",
       "title": "2) 고가용성의 핵심 — 여러 에이제트에 분산",
       "level": 3,
-      "fraction": 0.23517524373688758
+      "fraction": 0.23338983309664513
     },
     {
       "anchor": "multi-region",
       "title": "3) 여러 \"리전\"을 쓰는 시점 — 에이제트로는 안 되는 이유들",
       "level": 3,
-      "fraction": 0.38113970134518077
+      "fraction": 0.37778490387405134
     },
     {
       "anchor": "cloudfront-ga",
       "title": "4) 엣지 — 사용자 가까이서 빠르게: CloudFront 대 Global Accelerator (시험 단골)",
       "level": 3,
-      "fraction": 0.5075897815623843
+      "fraction": 0.5028326232687403
     },
     {
       "anchor": "proximity",
       "title": "5) 근접·확장 인프라 — Local Zones · Wavelength · Outposts",
       "level": 3,
-      "fraction": 0.7023941749969147
+      "fraction": 0.6956647884312918
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8872022707639146
+      "fraction": 0.8883442515308382
     }
   ],
   "generator": {
