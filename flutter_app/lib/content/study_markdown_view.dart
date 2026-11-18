@@ -281,7 +281,10 @@ class StudyMarkdownView extends StatelessWidget {
                 ? base.copyWith(
                     fontFamily: AppTheme.monoFamily,
                     fontSize: (base.fontSize ?? 15) - 1,
-                    color: c.accentStrong)
+                    color: c.accentStrong,
+                    // 굵게 안의 코드는 굵기를 유지한다(JetBrainsMono 700 번들).
+                    fontWeight: s.bold ? FontWeight.w700 : null,
+                    fontVariations: s.bold ? Wght.w700 : null)
                 : s.bold
                     ? base.copyWith(fontWeight: FontWeight.w700, fontVariations: Wght.w700, color: c.text)
                     : s.url != null
