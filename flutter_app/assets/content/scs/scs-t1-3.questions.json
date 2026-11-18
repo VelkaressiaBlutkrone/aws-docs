@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q3",
@@ -91,7 +91,7 @@
           "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/view-cloudwatch-log-events-in-cloudwatch-console.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/view-cloudwatch-log-events-in-cloudwatch-console.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q5",
@@ -151,7 +151,7 @@
           "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-logging.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q6",
@@ -183,7 +183,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/standard-logging-legacy-s3.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q7",
@@ -211,7 +211,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/standard-logging.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q8",
@@ -243,7 +243,7 @@
           "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-register-targets.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q9",
@@ -271,7 +271,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q10",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q11",
@@ -327,7 +327,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q12",
@@ -355,7 +355,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/troubleshooting-CloudWatch-Agent.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q13",
@@ -387,7 +387,7 @@
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q14",
@@ -415,7 +415,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-3-q15",
@@ -443,7 +443,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

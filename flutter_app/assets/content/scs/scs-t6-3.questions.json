@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluating-your-resources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/remediation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q5",
@@ -143,7 +143,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/conformance-packs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q6",
@@ -171,7 +171,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/aggregate-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q7",
@@ -199,7 +199,7 @@
           "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q8",
@@ -227,7 +227,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q9",
@@ -259,7 +259,7 @@
           "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q10",
@@ -287,7 +287,7 @@
           "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q11",
@@ -315,7 +315,7 @@
           "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q12",
@@ -343,7 +343,7 @@
           "url": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q13",
@@ -371,7 +371,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q14",
@@ -399,7 +399,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-3-q15",
@@ -427,7 +427,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/well-architected.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

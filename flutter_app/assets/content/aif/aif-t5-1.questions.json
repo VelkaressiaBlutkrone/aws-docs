@@ -39,7 +39,7 @@
           "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/key-features-and-benefits.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q2",
@@ -67,7 +67,7 @@
           "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q3",
@@ -95,7 +95,7 @@
           "url": "https://aws.amazon.com/compliance/shared-responsibility-model/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-test-retrieve-generate.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q5",
@@ -155,7 +155,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/catalog-and-crawler.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q6",
@@ -187,7 +187,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec03-bp03.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q7",
@@ -215,7 +215,7 @@
           "url": "https://docs.aws.amazon.com/glue/latest/dg/glue-data-quality.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q8",
@@ -247,7 +247,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec03-bp03.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q9",
@@ -279,7 +279,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-security/best-practices-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q10",
@@ -307,7 +307,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q11",
@@ -339,7 +339,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q12",
@@ -367,7 +367,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q13",
@@ -395,7 +395,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q14",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-contextual-grounding-check.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-1-q15",
@@ -451,7 +451,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec01-bp03.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

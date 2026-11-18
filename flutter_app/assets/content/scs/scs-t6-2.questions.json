@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q2",
@@ -59,7 +59,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q3",
@@ -87,7 +87,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q4",
@@ -115,7 +115,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q5",
@@ -151,7 +151,7 @@
           "url": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/best-practices.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q6",
@@ -187,7 +187,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q7",
@@ -215,7 +215,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q8",
@@ -243,7 +243,7 @@
           "url": "https://docs.aws.amazon.com/tag-editor/latest/userguide/tagging.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q9",
@@ -275,7 +275,7 @@
           "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q10",
@@ -303,7 +303,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-prereq.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q11",
@@ -331,7 +331,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-administrators.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q12",
@@ -359,7 +359,7 @@
           "url": "https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q13",
@@ -387,7 +387,7 @@
           "url": "https://docs.aws.amazon.com/ram/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q14",
@@ -419,7 +419,7 @@
           "url": "https://docs.aws.amazon.com/controltower/latest/userguide/what-is-control-tower.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t6-2-q15",
@@ -447,7 +447,7 @@
           "url": "https://docs.aws.amazon.com/ram/latest/userguide/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

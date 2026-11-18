@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/agentic-ai-frameworks/strands-agents.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q3",
@@ -91,7 +91,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/studio-jumpstart.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q5",
@@ -151,7 +151,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q6",
@@ -179,7 +179,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q7",
@@ -211,7 +211,7 @@
           "url": "https://docs.aws.amazon.com/decision-guides/latest/decision-guides/bedrock-or-sagemaker.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q8",
@@ -243,7 +243,7 @@
           "url": "https://aws.amazon.com/bedrock/faqs/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q9",
@@ -271,7 +271,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/usingVPC.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q10",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/compliance-validation.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q11",
@@ -327,7 +327,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q12",
@@ -355,7 +355,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q13",
@@ -387,7 +387,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q14",
@@ -415,7 +415,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t2-3-q15",
@@ -443,7 +443,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

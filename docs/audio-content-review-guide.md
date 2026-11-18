@@ -10,6 +10,11 @@
 
 ## 0. 현재 상태 (출발점)
 
+> ⚠️ **이 절은 2026-06 최초 합성 시점의 「출발점」 기록이다 — 지금 상태가 아니다.**
+> 2026-11-18 실측으로 **CLF 19편 · SAA 20편이 전부 `approved`**이고, mp3는 repo가 아니라
+> **R2에서 서빙**된다(`lecture.mp3`는 `.gitignore:42`로 추적 0건). 승인·발행 절차의 현행
+> 정본은 §5이고, 기준선·경위는 레포 `CLAUDE.md`의 기준선 줄이다.
+
 - CLF **19문서**(`clf-t1-1` ~ `clf-t4-3`)의 `script.json`이 `gate` PASS(hard 0 / soft 0), `reviewStatus: "needs_human_review"`.
 - 발음사전(`tool/lexicon.json`, 147 entries)·검수도구(`apply_audio_summary.py`·`dump_tables.py`)는 develop 머지됨(PR #60).
 - 산출물 위치: `flutter_app/assets/audio/clf/clf-<t>/` (모두 **untracked** — approved 후에만 repo·pubspec 등록).
@@ -163,7 +168,9 @@ clf-t2-1 seg017 EC2 보강 예:
 
 `synthesize`는 `audio_meta.json`을 새로 쓰며 **top-level `reviewStatus`를 `needs_human_review`로 리셋**한다(`build_audio_meta`). `meta.script.reviewStatus`는 `script.json` 값을 따라간다. 동기화 테스트(`test/content_index_test.dart`)는 **audio_meta의 top-level + script.reviewStatus가 둘 다 `approved`이고 mp3가 존재**할 때만 `audioApproved=true`와 일치한다고 본다.
 
-따라서 재합성 후에는 **새 mp3를 다시 청취**하고, 승인되면 §5 절차로 `script.json`과 `audio_meta.json`의 `reviewStatus`를 `approved`로 되돌려야 한다. **재승인 전에는 `flutter test`(동기화 테스트)가 실패해 라이브 노출이 막힌다 — 이것이 콘텐츠 변경 시 재검수를 강제하는 의도된 안전장치다.** 내용을 바꿨으니 정직하게 `script.json`의 `reviewStatus`도 편집 시점에 `needs_human_review`로 내렸다가 청취 후 다시 올리는 것을 권장한다.
+따라서 재합성 후에는 **새 mp3를 다시 청취**하고, 승인되면 §5 절차로 `reviewStatus` 3자리를 `approved`로 되돌려야 한다. 내용을 바꿨으니 `script.json`의 `reviewStatus`도 편집 시점에 `needs_human_review`로 내렸다가 청취 후 다시 올린다.
+
+> ⚠️⚠️ **「재승인 전에는 `flutter test`가 실패해 라이브 노출이 막힌다」는 틀렸다**(2026-11-18 실측으로 정정). 동기화 단정은 `e.audioApproved != metaApproved`로 **양방향**이라, `content_index.dart`의 `audioApproved: false`와 `reviewStatus` 3자리를 **함께** 내리면 **전체 스위트가 녹색**이다(미승인 4편 상태에서 4,188 통과). 라이브 노출을 막는 것은 테스트 실패가 아니라 **`audioApproved: false` 그 자체**다 — 그 플래그가 false인 문서는 오디오 허브·재생 큐·학습문서 플레이어에서 모두 빠지고, 발행 게이트(`publish_audio.py --verify-all`)도 `find_approved()` 전수만 돌아 **미승인 문서를 대상에서 제외**하므로 릴리스가 막히지 않는다. 즉 **테스트는 「반쪽만 올린 것」만 잡는다**(top ↔ `script.reviewStatus` 불일치, 미승인 엔트리에 `audioSha8` 잔존).
 
 검증(재승인 후):
 ```powershell
@@ -176,20 +183,23 @@ flutter test test/all_content_parse_test.dart  # 대본 파싱 회귀 가드
 
 ## 5. 승인 (approved)
 
-검수 통과 시:
-1. `script.json`의 `"reviewStatus"`를 `"needs_human_review"` → `"approved"`로 수동 변경.
-2. `audio_meta.json`의 `script.reviewStatus`도 `"approved"`로 변경(또는 변경 후 `synthesize` 재실행 시 자동 반영).
-3. `review_checklist.md`에 `reviewer`·날짜 기입.
+검수 통과 시 — ⚠️ **순서가 중요하다: 청취 → `reviewStatus` 3자리 → R2 발행 → `content_index` → 릴리스.**
 
-> `gate`는 `reviewStatus`를 검사하지 않는다(정적 검증만). 승인은 전적으로 사람의 수동 전환이다.
+1. **무엇을 승인하는지 먼저 확인한다** — 디스크 `lecture.mp3`의 sha256·크기가 `audio_meta.json`의 `audio.sha256`·`sizeBytes`와 일치하는지 본다(다른 파일을 승인한 것으로 만들지 않는다).
+2. `reviewStatus`를 **세 자리** 모두 `"needs_human_review"` → `"approved"`로 바꾼다 — `script.json` 최상위 1 + `audio_meta.json` 최상위 1 + `audio_meta.json`의 `script.reviewStatus` 1. ⚠️ **반쪽만 올리면** `find_approved()`와 `content_index_test` 동기화가 **동시에** 어긋난다.
+3. `py tool/publish_audio.py <docId> --verify` 로 **R2에 먼저 발행**한다(§6).
+4. `content_index.dart`에 `audioApproved: true` + `audioSha8: '<sha256 앞 8자>'`를 쓴다. ⚠️ **발행보다 먼저 쓰면 R2에 그 키가 없어 라이브가 404를 낸다.**
+5. `review_checklist.md`에 `reviewer`·날짜 기입.
+
+> `gate`는 `reviewStatus`를 검사하지 않는다(정적 검증만). **승인은 전적으로 사람의 청취 서명**이고 AI는 `approved`를 쓰지 않는다 — 합성·발행·부기는 AI가 하되 2번의 전환 지시만 사람이 낸다. 그래서 가드에 **승인 상태를 리터럴로 단정하지 않는다**(단정하면 사람의 재승인이 레드로 끝난다 — 문항 `verified` flip과 같은 규율).
 
 ---
 
 ## 6. approved 후 repo 등록 (별도 PR)
 
 approved된 문서만:
-1. `git add` 대상: 해당 폴더의 `script.json` + `lecture.mp3` + `audio_meta.json` (+ `review_checklist.md`).
-2. `pubspec.yaml`의 `assets`에 경로 등록(`assets/audio/clf/...`).
+1. `git add` 대상: 해당 폴더의 `script.json` + `audio_meta.json` (+ `review_checklist.md`). ⚠️ **`lecture.mp3`는 넣지 않는다** — 2026-09-03 R2 분리 호스팅부터 `.gitignore:42`가 막고 추적 중인 mp3는 **0건**이다(실측). mp3는 `py tool/publish_audio.py <docId> --verify`로 R2 불변 키 `{family}/{taskId}/{sha8}/lecture.mp3`에 올리고, 릴리스 전 `--verify-all`이 전수 PASS여야 한다.
+2. `pubspec.yaml`의 `assets`에 경로 등록 — 선언하는 것은 `script.json`·`audio_meta.json`·`review_checklist.md` **셋이고 mp3는 자산이 아니다**. ⚠️ 디렉터리 단위 선언이 아니라 **파일 단위**이므로 새 문서는 세 줄을 각각 더한다.
 3. 라이브 노출 플래그 `audio_lecture`(현재 기본 false)는 별도 결정.
 4. `develop`에서 `feat/*` 분기 → 커밋 → **develop PR**(브랜치 전략). 커밋 직전 `git branch --show-current` 검증.
 
