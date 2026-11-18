@@ -36,12 +36,18 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
               routes: <RouteBase>[
                 GoRoute(
                   path: 'exam',
-                  builder: (context, state) =>
-                      CertExamPage(cert: certByCode(state.pathParameters['code']!)!),
+                  // 같은 exam 라우트로 code만 바뀌는 전환(go/주소창/뒤로가기)에서 State가
+                  // 재사용돼 이전 자격증의 문항 풀·시간·배분이 남던 결함(2026-11-18 라이브
+                  // 점검)을 막는다 — study 라우트와 같은 방식으로 code별 정체성을 분리한다.
+                  builder: (context, state) => CertExamPage(
+                    key: ValueKey('${state.pathParameters['code']}/exam'),
+                    cert: certByCode(state.pathParameters['code']!)!,
+                  ),
                 ),
                 GoRoute(
                   path: 'exam/weak',
                   builder: (context, state) => CertExamPage(
+                    key: ValueKey('${state.pathParameters['code']}/exam/weak'),
                     cert: certByCode(state.pathParameters['code']!)!,
                     weighted: true,
                   ),
