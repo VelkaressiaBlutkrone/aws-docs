@@ -54,13 +54,19 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                 ),
                 GoRoute(
                   path: 'review',
-                  builder: (context, state) =>
-                      ReviewListPage(cert: certByCode(state.pathParameters['code']!)!),
+                  // exam 라우트와 같은 이유로 code별 정체성을 분리한다(_load()가 State 생성 때
+                  // 한 번만 돌아 이전 자격증의 오답 목록이 남던 결함, 2026-11-18).
+                  builder: (context, state) => ReviewListPage(
+                    key: ValueKey('${state.pathParameters['code']}/review'),
+                    cert: certByCode(state.pathParameters['code']!)!,
+                  ),
                 ),
                 GoRoute(
                   path: 'report',
-                  builder: (context, state) =>
-                      ReportPage(cert: certByCode(state.pathParameters['code']!)!),
+                  builder: (context, state) => ReportPage(
+                    key: ValueKey('${state.pathParameters['code']}/report'),
+                    cert: certByCode(state.pathParameters['code']!)!,
+                  ),
                 ),
                 GoRoute(
                   path: 'plan',
@@ -105,7 +111,10 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                   routes: <RouteBase>[
                     GoRoute(
                       path: 'quiz',
+                      // study 라우트와 같은 이유로 taskId별 정체성을 분리한다(2026-11-18).
                       builder: (context, state) => QuizPage(
+                        key: ValueKey(
+                            '${state.pathParameters['code']}/${state.pathParameters['taskId']}/quiz'),
                         entry: entryByTask(
                           state.pathParameters['code']!,
                           state.pathParameters['taskId']!,
@@ -115,6 +124,8 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                     GoRoute(
                       path: 'exam',
                       builder: (context, state) => ExamPage(
+                        key: ValueKey(
+                            '${state.pathParameters['code']}/${state.pathParameters['taskId']}/exam'),
                         entry: entryByTask(
                           state.pathParameters['code']!,
                           state.pathParameters['taskId']!,
