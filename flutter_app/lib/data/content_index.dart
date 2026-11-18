@@ -296,10 +296,11 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       // 2026-11-18 **사용자 지시로 범위 메모를 발화에 반영해 재합성했다** — 2026-11-06
       // C-Y9 가 md 에만 달아 둔 「AWS CodeDeploy 는 공식 「범위 외」 목록에 있다」를
       // 표 발화(seg035) 끝에 넣었다(mp3 sha8=cb128115 · 30분 45초 · −16.4 LUFS).
-      // 대본이 바뀌면 사람의 청취 서명이 무효이므로 청취 재승인·R2 발행까지 비노출이다.
+      // 2026-11-18 사람이 그 재합성본을 청취·승인해 R2 에 발행했다(`cb128115`).
       // ⚠️ `sourceHash` 는 올리지 않았다 — 이 대본은 현재 md 와 **블록 수가 달라**
       // (71 ↔ 63) 어느 md 판본과도 블록 단위로 대응하지 않는다(clf-t3-8 과 같은 판정).
-      audioApproved: false,
+      audioApproved: true,
+      audioSha8: 'cb128115',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -312,9 +313,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       // 2026-11-18 **사용자 지시로 범위 메모를 발화에 반영해 재합성했다** — 2026-11-06
       // C-Y9 가 md 에만 달아 둔 「AWS Wavelength 는 공식 「범위 외」 목록에 있다」를
       // 표 발화(seg033) 끝에 넣었다(mp3 sha8=714840d0 · 26분 12초 · −16.4 LUFS).
-      // 대본이 바뀌면 사람의 청취 서명이 무효이므로 청취 재승인·R2 발행까지 비노출이다.
+      // 2026-11-18 사람이 그 재합성본을 청취·승인해 R2 에 발행했다(`714840d0`).
       // ⚠️ `sourceHash` 는 올리지 않았다 — 현재 md 와 **블록 수가 다르다**(61 ↔ 54).
-      audioApproved: false,
+      audioApproved: true,
+      audioSha8: '714840d0',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -371,9 +373,10 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       // 2026-11-18 **사용자 지시로 범위 메모를 발화에 반영해 재합성했다** — 2026-11-06
       // C-Y9 가 md 에만 달아 둔 「Amazon Personalize 는 공식 「범위 외」 목록에 있다」를
       // 표 발화(seg029) 끝에 넣었다(mp3 sha8=382f716e · 26분 42초 · −16.4 LUFS).
-      // 대본이 바뀌면 사람의 청취 서명이 무효이므로 청취 재승인·R2 발행까지 비노출이다.
+      // 2026-11-18 사람이 그 재합성본을 청취·승인해 R2 에 발행했다(`382f716e`).
       // ⚠️ `sourceHash` 는 올리지 않았다 — 현재 md 와 **블록 수가 다르다**(61 ↔ 54).
-      audioApproved: false,
+      audioApproved: true,
+      audioSha8: '382f716e',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
@@ -388,11 +391,12 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       // 사람이 그 재합성본을 청취·승인해 R2에 발행했다(`47d376c4`).
       // 2026-11-18 **사용자 지시로 seg042 를 다시 고쳐 재합성했다** — CloudShell 을
       // 「범주만 매칭해서 알아 두면 되는 것들」에서 빼고 **공식 범위 외 목록에 있다**고
-      // 말하게 했다(mp3 sha8=65ebad6e · 30분 20초 · −16.4 LUFS). 대본이 바뀌면 사람의
-      // 청취 서명이 무효이므로 청취 재승인·R2 발행까지 비노출이다.
+      // 말하게 했다(mp3 sha8=65ebad6e · 30분 20초 · −16.4 LUFS). 같은 날 사람이 그
+      // 재합성본을 청취·승인해 R2 에 발행했다(`65ebad6e` — 하루 전 `47d376c4` 를 대체).
       // ⚠️ `sourceHash` 는 올리지 않았다 — 이 대본은 현재 md 와 **블록 수가 달라**
       // (60 ↔ 61) 어느 md 판본과도 블록 단위로 대응하지 않는다(가드 주석 참조).
-      audioApproved: false,
+      audioApproved: true,
+      audioSha8: '65ebad6e',
     ),
     ContentEntry(
       certCode: 'CLF-C02',
