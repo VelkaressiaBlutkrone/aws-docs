@@ -84,7 +84,10 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
                       code: code,
                     );
                   },
+                  // initState 에서만 재생 큐를 그 자격증으로 바꾸므로 code별 정체성을 분리한다
+                  // (State 가 재사용되면 다른 자격증 목록에서 이전 큐의 강의가 재생됐다, 2026-11-18).
                   builder: (context, state) => CertAudioPage(
+                      key: ValueKey('${state.pathParameters['code']}/audio'),
                       cert: certByCode(state.pathParameters['code']!)!),
                 ),
                 GoRoute(
