@@ -19,7 +19,7 @@
           "title": "데이터 수집 수행",
           "knowledge": [],
           "skills": [
-            "스트리밍 소스에서 데이터 읽기(예: Amazon Kinesis, Amazon Managed Streaming for Apache Kafka(Amazon MSK), Amazon DynamoDB Streams, AWS Database Migration Service(AWS DMS), AWS Glue, Amazon Redshift)",
+            "스트리밍 소스에서 데이터 읽기(예: Amazon Kinesis, Amazon Managed Streaming for Apache Kafka(Amazon MSK), Amazon DynamoDB Streams, AWS DMS, AWS Glue, Amazon Redshift).",
             "배치 소스에서 데이터 읽기(예: Amazon S3, AWS Glue, Amazon EMR, AWS DMS, Amazon Redshift, AWS Lambda, Amazon AppFlow)",
             "배치 수집을 위한 적절한 구성 옵션 구현",
             "데이터 API 사용",
@@ -38,7 +38,7 @@
           "title": "데이터 변환 및 처리",
           "knowledge": [],
           "skills": [
-            "성능 요구 사항에 맞게 컨테이너 사용 최적화(예: Amazon Elastic Kubernetes Service(Amazon EKS), Amazon Elastic Container Service(Amazon ECS))",
+            "성능 요구 사항에 맞게 컨테이너 사용 최적화(예: Amazon EKS, Amazon ECS)",
             "다양한 데이터 소스에 연결(예: Java Database Connectivity(JDBC), Open Database Connectivity(ODBC))",
             "여러 소스의 데이터 통합",
             "데이터 처리 중 비용 최적화",
@@ -58,7 +58,7 @@
             "오케스트레이션 서비스를 사용하여 데이터 ETL 파이프라인의 워크플로 구축(예: Lambda, EventBridge, Amazon Managed Workflows for Apache Airflow(Amazon MWAA), AWS Step Functions, AWS Glue 워크플로)",
             "성능, 가용성, 확장성, 복원성 및 내결함성이 우수한 데이터 파이프라인 구축",
             "서버리스 워크플로 구현 및 유지 관리",
-            "알림 서비스를 사용하여 알림 전송(예: Amazon Simple Notification Service(Amazon SNS), Amazon Simple Queue Service(Amazon SQS))"
+            "알림 서비스를 사용하여 알림을 전송(예: Amazon SNS, Amazon SQS)"
           ]
         },
         {
@@ -71,9 +71,9 @@
             "데이터 엔지니어링을 위한 프로그래밍 언어 및 프레임워크 사용(예: Python, SQL, Scala, R, Java, Bash, PowerShell)",
             "데이터 엔지니어링에 소프트웨어 엔지니어링 모범 사례 사용(예: 버전 제어, 테스트, 로깅, 모니터링)",
             "코드형 인프라(IaC)를 사용하여 데이터 엔지니어링 솔루션 배포",
-            "AWS Serverless Application Model(AWS SAM)을 사용하여 서버리스 데이터 파이프라인 패키징 및 배포(예: Lambda 함수, Step Functions, Amazon DynamoDB 테이블)",
+            "AWS SAM을 사용하여 서버리스 데이터 파이프라인 패키징 및 배포(예: Lambda 함수, Step Functions, Amazon DynamoDB 테이블)",
             "Lambda 함수 내에서 스토리지 볼륨 사용 및 탑재",
-            "반복 가능한 리소스 배포를 위해 코드형 인프라(IaC) 사용(예: AWS CloudFormation 및 AWS Cloud Development Kit(AWS CDK))",
+            "반복 가능한 리소스 배포를 위해 코드형 인프라(IaC) 사용(예: AWS CloudFormation 및 AWS CDK)",
             "지속적 통합 및 지속적 전달(CI/CD) 설명(데이터 파이프라인의 구현, 테스트 및 배포)",
             "분산 컴퓨팅 정의",
             "데이터 구조 및 알고리즘 설명(예: 그래프 데이터 구조 및 트리 데이터 구조)"
@@ -134,7 +134,7 @@
           "skills": [
             "Amazon Redshift, DynamoDB, Lake Formation을 위한 스키마 설계",
             "데이터 특성에 대한 변경 사항 해결",
-            "스키마 변환 수행(예: AWS 스키마 변환 도구(AWS SCT) 및 AWS Database Migration Service(AWS DMS) 스키마 변환 사용)",
+            "스키마 변환 수행(예: AWS SCT 및 AWS DMS 스키마 변환 사용)",
             "AWS 도구를 사용하여 데이터 계보 설정(예: Amazon SageMaker ML Lineage Tracking 및 Amazon SageMaker Catalog)",
             "인덱싱, 파티셔닝 전략, 압축 및 기타 데이터 최적화 기술에 대한 모범 사례 설명",
             "벡터화 개념 설명(예: Amazon Bedrock Knowledge Base)"
@@ -216,7 +216,7 @@
           "knowledge": [],
           "skills": [
             "VPC 보안 그룹 업데이트",
-            "AWS Identity and Access Management(AWS IAM) 그룹, 역할, 엔드포인트 및 서비스 생성 및 업데이트",
+            "IAM 그룹, 역할, 엔드포인트, 서비스 생성 및 업데이트",
             "암호 관리를 위한 자격 증명 만들기 및 회전(예: AWS Secrets Manager)",
             "액세스를 위한 IAM 역할 설정(예: AWS Lambda, Amazon API Gateway, AWS CLI, AWS CloudFormation)",
             "역할, 엔드포인트 및 서비스에 IAM 정책 적용(예: S3 Access Points, AWS PrivateLink)",
@@ -243,7 +243,7 @@
           "knowledge": [],
           "skills": [
             "규정 준수 법률 또는 회사 정책에 따른 데이터 마스킹 및 익명화 적용",
-            "암호화 키를 사용하여 데이터 암호화하거나 암호 해독(예: AWS Key Management Service(AWS KMS))",
+            "암호화 키를 사용하여 데이터 암호화 또는 해독(예: AWS KMS)",
             "AWS 계정 경계 간에 암호화 구성",
             "전송 중 또는 전송 전 데이터 암호화 사용"
           ]
