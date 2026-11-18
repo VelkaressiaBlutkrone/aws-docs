@@ -815,7 +815,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t5-2', title: '저장 데이터 (암호화 선택·무결성·수명 주기와 보존·복제와 백업)', domain: 5, mdAsset: 'assets/content/scs/scs-t5-2.md', questionsAsset: 'assets/content/scs/scs-t5-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t5-3', title: '기밀 데이터와 키 자료 (보안 암호·가져온 키·회전·마스킹·다중 리전 키와 인증서)', domain: 5, mdAsset: 'assets/content/scs/scs-t5-3.md', questionsAsset: 'assets/content/scs/scs-t5-3.questions.json', questionCount: 15),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-1', title: '계정의 중앙 배포와 관리 (조직·Control Tower·조직 정책·위임 관리자·루트 자격 증명)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-1.md', questionsAsset: 'assets/content/scs/scs-t6-1.questions.json', questionCount: 15),
-    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-2', title: '일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-2.md', questionsAsset: 'assets/content/scs/scs-t6-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-2', title: '일관된 배포와 공유 (StackSets·Guard·cfn-lint·태그 정책·Firewall Manager·RAM)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-2.md', questionsAsset: 'assets/content/scs/scs-t6-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'SCS-C03', taskId: 'scs-t6-3', title: '규정 준수 평가 (Config 규칙·준수 팩·애그리게이터·Security Hub CSPM·증거 수집)', domain: 6, mdAsset: 'assets/content/scs/scs-t6-3.md', questionsAsset: 'assets/content/scs/scs-t6-3.questions.json', questionCount: 0),
   ],
   // AIP-C01 (Generative AI Developer – Professional) — 2026-11-14 도메인 1 전체(작업 1.1~1.6) +
