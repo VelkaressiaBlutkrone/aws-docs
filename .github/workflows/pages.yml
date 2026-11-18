@@ -42,6 +42,17 @@ jobs:
       - name: Disable Jekyll processing
         run: touch build/web/.nojekyll
 
+      # 배포 기준점 — 라이브가 어느 커밋인지 https://<site>/aws-docs/version.json 으로 확인한다.
+      # 콘텐츠는 같은 커밋에 번들되므로 commit 이 곧 콘텐츠 버전이다(deploy_version_stamp_test.dart 가 지킨다).
+      - name: Write version stamp
+        env:
+          COMMIT: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          printf '{"commit":"%s","builtAt":"%s","runId":"%s"}\n' \
+            "$COMMIT" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$RUN_ID" > build/web/version.json
+          cat build/web/version.json
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
