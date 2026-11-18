@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android 서명 키와 Firebase 안드로이드 설정 (A1, 2026-11-18).
+# 업로드 키는 분실하면 앱 업데이트가 불가능하고, 커밋되면 누구나 이 앱으로 서명할 수 있다.
+# 키스토어 보관 위치는 저장소가 아니라 사용자의 비밀 저장소다.
+**/android/key.properties
+**/*.jks
+**/*.keystore
+**/android/app/google-services.json
