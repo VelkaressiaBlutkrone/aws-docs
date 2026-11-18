@@ -13,9 +13,10 @@ import 'lecture_playlist.dart';
 import 'audio_runtime_stub.dart'
     if (dart.library.js_interop) 'audio_runtime_web.dart' as platform;
 
-/// dart-define 게이트. 기본 false → 프로덕션/CI(GitHub Pages) 빌드는 미노출.
-/// 개발자가 `--dart-define=audio_lecture=true`로 빌드할 때만 진입점이 연결된다.
-/// 검수 전 생성 강의를 진짜 학습 콘텐츠로 노출하지 않기 위한 안전장치(이슈 5-9).
+/// dart-define 게이트. 기본 false — `--dart-define=audio_lecture=true`로 빌드할 때만 진입점이
+/// 연결된다(이슈 5-9의 안전장치). ⚠️ 릴리스(`pages.yml`)는 이 플래그를 **켜고** 빌드하고, 일반
+/// `flutter test`는 끈 채 돈다. 켜진 경로는 CI가 `--dart-define=audio_lecture=true`로 따로 돌리는
+/// 테스트가 덮는다(`release_flag_sync_test.dart`가 그 단계의 존재를 지킨다).
 const bool audioLectureEnabled = bool.fromEnvironment('audio_lecture');
 
 /// 미니 플레이어 노출 게이트(순수 함수 — 위젯 밖에서 단위 테스트 가능하게 분리).
