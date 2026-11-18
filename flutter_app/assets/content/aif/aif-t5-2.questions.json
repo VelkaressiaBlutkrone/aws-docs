@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_components.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q3",
@@ -91,7 +91,7 @@
           "url": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q4",
@@ -119,7 +119,7 @@
           "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q5",
@@ -151,7 +151,7 @@
           "url": "https://docs.aws.amazon.com/awssupport/latest/user/trusted-advisor.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q6",
@@ -179,7 +179,7 @@
           "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q7",
@@ -207,7 +207,7 @@
           "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q8",
@@ -235,7 +235,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/data-residency-hybrid-cloud-services-lens/drhc-definitions.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q9",
@@ -267,7 +267,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q10",
@@ -295,7 +295,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlsec03-bp05.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q11",
@@ -323,7 +323,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-ai-model-inference.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q12",
@@ -359,7 +359,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q13",
@@ -387,7 +387,7 @@
           "url": "https://docs.aws.amazon.com/ai/responsible-ai/bedrock-guardrails/overview.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q14",
@@ -415,7 +415,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlops01-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t5-2-q15",
@@ -443,7 +443,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/responsible-ai.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

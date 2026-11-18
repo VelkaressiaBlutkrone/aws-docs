@@ -784,7 +784,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t4-1', title: '책임감 있는 AI 시스템 개발 (특징·Guardrails·모델 선택·법적 위험·데이터세트·편향과 변동·감지 도구)', domain: 4, mdAsset: 'assets/content/aif/aif-t4-1.md', questionsAsset: 'assets/content/aif/aif-t4-1.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t4-2', title: '투명성과 설명 가능성 (불투명한 모델과의 차이·식별 도구·안전성 절충·인간 중심 설계)', domain: 4, mdAsset: 'assets/content/aif/aif-t4-2.md', questionsAsset: 'assets/content/aif/aif-t4-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-1', title: 'AI 시스템 보안 (보안 서비스·출처 문서화·보안 데이터 엔지니어링·프라이버시·할루시네이션 접지)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-1.md', questionsAsset: 'assets/content/aif/aif-t5-1.questions.json', questionCount: 15),
-    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-2', title: 'AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-2.md', questionsAsset: 'assets/content/aif/aif-t5-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t5-2', title: 'AI 거버넌스와 규정 준수 (지원 서비스·데이터 거버넌스 전략·거버넌스 프로토콜)', domain: 5, mdAsset: 'assets/content/aif/aif-t5-2.md', questionsAsset: 'assets/content/aif/aif-t5-2.questions.json', questionCount: 15),
   ],
 
   // SCS-C03 — 2026-11-09 도메인 1~6 배치(공식 Task 16개 **전부**).
