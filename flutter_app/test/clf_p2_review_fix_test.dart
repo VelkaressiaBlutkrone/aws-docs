@@ -388,48 +388,80 @@ void main() {
           reason: 'md 콜아웃이 대본 세그먼트로 들어왔다 — 그렇다면 발화도 다시 본다');
     });
 
-    test('잔여 범위 기록: 범위 메모 없이 범위 외 이름을 말하는 발화가 13건이다', () {
+    test('범위 외 이름의 첫 언급 세그먼트가 범위 메모를 단다', () {
       // ⚠️⚠️ **seg042 를 고치다 같은 결함이 라이브 음성 세 편에 더 있는 것을 찾았다.**
       // 2026-11-06 2단 검토 **C-Y9** 가 `t3-1`(CodeDeploy)·`t3-2`(Wavelength)·
-      // `t3-7`(Personalize) **md** 에 범위 메모를 달았지만(네 편 md 전부 적는다)
-      // **음성에는 어느 편에도 전파되지 않았다** — 「md 를 고치면 발화에 전파되지
-      // 않는다」가 네 번째로 확인된 자리다.
+      // `t3-7`(Personalize) **md** 에 범위 메모를 달았지만 **음성에는 어느 편에도
+      // 전파되지 않았다** — 「md 를 고치면 발화에 전파되지 않는다」가 네 번째로 확인된
+      // 자리다. 2026-11-18 **사용자 지시로 세 편을 고치고 재합성했다.**
       //
-      // ⚠️ **불변식으로 걸 수 없다** — 지금 13건이 걸리기 때문이다. 그래서 **현재 수를
-      // 대조군으로 고정**해 ① 누가 한 편을 고치면(줄면) ② 누가 범위 외 이름을 새로
-      // 넣으면(늘면) 양쪽으로 알린다. 세 편을 고치려면 **편당 재합성 + 사람의 청취
-      // 재승인**이 들고 그 동안 그 편이 비노출이 되므로 **사용자 판단이 필요한 범위**다
-      // (2026-11-18 에 사용자가 지시한 것은 `clf-t3-8` seg042 하나였다).
+      // ⚠️⚠️ **메모는 문서당 한 자리다 — 13곳에 다 달지 않았다.** md 자신이
+      // CodeDeploy 를 **8회** · Wavelength 를 **10회** · Personalize 를 **14회**
+      // 적으면서 범위 메모는 **표 바로 뒤 한 번**만 단다(t3-2·t3-7 은 학습 목표
+      // 체크박스에 짧은 괄호 표기가 하나 더 있다). 음성은 **선형**이라 그 편을 듣는 사람은
+      // 뒤의 언급 전에 이미 메모를 들었고, 13곳에 다 달면 한 편에서 같은 메모를
+      // 다섯 번 읽으며 **md 보다 더 말하게** 된다(문항은 각각 독립이라 반대로
+      // **문항마다** 단다 — 2026-11-06 AIF Model Monitor·MLA Clarify 배치).
+      //
+      // ⚠️ 그래서 단정이 「언급마다」가 아니라 **「각 이름의 첫 언급 세그먼트」**다.
+      // 개수를 박지 않으므로 뒤쪽 언급이 늘어도 깨지지 않고, 메모를 뒤로 옮기거나
+      // 메모 없는 **더 앞선** 언급이 생기면 깨진다(앞을 듣는 사람에게는 메모가 없다).
       const names = <String, String>{
         '클라우드셸': 'CloudShell',
         '코드디플로이': 'CodeDeploy',
         '웨이브렝스': 'Wavelength',
         '퍼스널라이즈': 'Personalize',
       };
-      final missing = <String>[];
-      var mentions = 0;
+      final pairs = <String>[];
+      final violations = <String>[];
       for (final dir in Directory('assets/audio/clf').listSync().whereType<Directory>()) {
         final f = File('${dir.path}/script.json');
         if (!f.existsSync()) continue;
         final doc = json.decode(f.readAsStringSync()) as Map<String, dynamic>;
-        for (final seg in (doc['segments'] as List).cast<Map<String, dynamic>>()) {
-          final text = spokenBody(seg);
-          for (final n in names.keys) {
-            if (!text.contains(n)) continue;
-            mentions++;
-            if (!text.contains('범위 외')) {
-              missing.add('${doc['docId']} ${seg['id']} ($n)');
-            }
+        final segs = (doc['segments'] as List).cast<Map<String, dynamic>>();
+        for (final entry in names.entries) {
+          final i = segs.indexWhere((s) => spokenBody(s).contains(entry.key));
+          if (i < 0) continue;
+          pairs.add('${doc['docId']} ${entry.value} ${segs[i]['id']}');
+          if (!spokenBody(segs[i]).contains('범위 외')) {
+            violations.add('${doc['docId']} ${segs[i]['id']} (${entry.value})');
           }
         }
       }
-      expect(mentions, greaterThanOrEqualTo(14),
-          reason: '대조군 — 탐지기가 음차 이름을 실제로 찾는다');
-      expect(missing.length, 13,
-          reason: '범위 메모 없이 범위 외 이름을 말하는 발화 수가 변했다 — 고쳤거나 '
-              '새로 들어왔다. 현재 목록:\n${missing.join('\n')}');
-      expect(missing.where((e) => e.startsWith('clf-t3-8')), isEmpty,
-          reason: '2026-11-18 에 고친 clf-t3-8 이 다시 목록에 들어왔다');
+      expect(pairs.length, greaterThanOrEqualTo(4),
+          reason: '대조군 — 탐지기가 음차 이름을 실제로 찾는다. 현재 네 자리: '
+              'clf-t3-1 CodeDeploy · clf-t3-2 Wavelength · clf-t3-7 Personalize · '
+              'clf-t3-8 CloudShell');
+      expect(violations, isEmpty,
+          reason: '범위 외 서비스를 **처음** 말하는 발화가 범위 메모 없이 지나간다:\n'
+              '${violations.join('\n')}');
+    });
+
+    test('범위 메모가 공식 목록 근거와 남는 축을 함께 말한다', () {
+      // ⚠️ 「범위 외」 한 마디로 쪼그라들면 학습자가 **그럼 무엇을 공부하나**를 모른다.
+      // md 의 메모는 근거(공식 목록)와 **비중을 둘 곳**을 함께 적으므로 발화도 그렇게
+      // 적는다. 검사 범위를 「범위 외」가 든 세그먼트로 좁혀 문구가 메모 자신에게
+      // 붙어 있는지 본다(편 전체를 보면 다른 자리의 같은 낱말이 통과시킨다).
+      const required = <String, List<String>>{
+        'clf-t3-1': ['공식 범위 외 서비스 목록', '파이프라인의 배포 단계'],
+        'clf-t3-2': ['공식 범위 외 서비스 목록', '아웃포스트에 두'],
+        'clf-t3-7': ['공식 범위 외 서비스 목록', '구분 구조'],
+        'clf-t3-8': ['공식 범위 외 서비스 목록'],
+      };
+      var checked = 0;
+      required.forEach((docId, phrases) {
+        final segs =
+            (script(docId)['segments'] as List).cast<Map<String, dynamic>>();
+        expect(segs.length, greaterThan(20), reason: '대조군 — $docId 를 집었다');
+        final memo =
+            segs.map(spokenBody).where((t) => t.contains('범위 외')).join('\n');
+        for (final p in phrases) {
+          expect(memo.contains(p), isTrue,
+              reason: '$docId 의 범위 메모에서 「$p」가 사라졌다');
+        }
+        checked++;
+      });
+      expect(checked, 4);
     });
   });
 
