@@ -27,7 +27,7 @@
 | §5-3 시험 화면 | 대부분 있음 | 시계 · 미응답 표시 · 플래그 · 상시 제출과 점프(2026-09-22 UX-1·UX-2) | 결과 화면의 **도메인별 점수는 없다**(Task별은 약점 리포트에 있다) — 채택 후보 |
 | §5-4 오답 분석 표본 | 부분 있음 | 약점 리포트가 Task마다 「응시 a/b문항」을 함께 보인다 | 「표본이 적으면 잠정」 표시는 없다 — 채택 후보(작다) |
 | §6-1 CI 확장 | 이미 있음 | `ci.yml` = node 도구 → analyze → test → 릴리스 dart-define 테스트. 콘텐츠 검증은 `flutter test` 안의 가드다 | §4-1의 새 가드가 들어오면 자동으로 CI에 든다 |
-| §6-2 배포 SHA·CHANGELOG | **채택** | `pages.yml`에 커밋 SHA 기록이 없고 CHANGELOG도 없다. 라이브 판정은 지금 자산 md5로 한다 | 빌드에 `--dart-define`으로 SHA·날짜를 넣어 앱 하단에 표시하거나 `version.json` 산출 |
+| §6-2 배포 SHA·CHANGELOG | **채택** | `pages.yml`에 커밋 SHA 기록이 없고 CHANGELOG도 없다. 라이브 판정은 지금 자산 md5로 한다 | ✅ `pages.yml`이 `build/web/version.json`(commit · builtAt · runId)을 쓴다 + `deploy_version_stamp_test.dart`(2026-11-18). 앱 화면 표시는 하지 않았다(디자인 결정 필요). CHANGELOG 는 만들지 않았다 — 릴리스 PR(develop → main) 본문이 그 역할을 한다 |
 | §7 Android 연계 | 이미 있음 | 로드맵 §3과 같은 내용이다 | 없음 |
 | §8 장기 | 이미 있음(일부) | 서비스 종료 추적은 `AWS Lifecycle Changes` 세 목록 + 전수 가드로 하고 있다. 프레젠테이션은 로드맵 §5-④와 같다 | 연내 범위 밖 |
 
