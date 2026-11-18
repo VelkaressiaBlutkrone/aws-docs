@@ -861,7 +861,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-1', title: '비용 최적화와 리소스 효율성 (토큰 효율성·모델 선택·처리량·지능형 캐싱)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-1.md', questionsAsset: 'assets/content/aip/aip-t4-1.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-2', title: '애플리케이션 성능 최적화 (지연 절충·검색 성능·처리량·파라미터·오토 스케일링·프로파일링)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-2.md', questionsAsset: 'assets/content/aip/aip-t4-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t4-3', title: 'GenAI 모니터링 시스템 (관찰성 세 계층·이상 탐지·감사·도구·벡터 저장소 운영·실패 모드)', domain: 4, mdAsset: 'assets/content/aip/aip-t4-3.md', questionsAsset: 'assets/content/aip/aip-t4-3.questions.json', questionCount: 15),
-    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-1', title: 'GenAI 평가 시스템 (품질 지표·모델 평가·사람 평가·품질 게이트·RAG·검색·에이전트·보고·배포 검증)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-1.md', questionsAsset: 'assets/content/aip/aip-t5-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-1', title: 'GenAI 평가 시스템 (품질 지표·모델 평가·사람 평가·품질 게이트·RAG·검색·에이전트·보고·배포 검증)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-1.md', questionsAsset: 'assets/content/aip/aip-t5-1.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-2', title: 'GenAI 애플리케이션 문제 해결 (콘텐츠 처리·API 통합·프롬프트·검색 시스템·프롬프트 운영)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-2.md', questionsAsset: 'assets/content/aip/aip-t5-2.questions.json', questionCount: 0),
   ],
 };
