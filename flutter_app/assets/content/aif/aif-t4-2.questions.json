@@ -31,7 +31,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q2",
@@ -63,7 +63,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/responsible-ai-lens.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q3",
@@ -95,7 +95,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_CreateModelCard.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q6",
@@ -191,7 +191,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q7",
@@ -223,7 +223,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models-choose.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q8",
@@ -255,7 +255,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-explainability.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q9",
@@ -283,7 +283,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp02-bp07.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q10",
@@ -315,7 +315,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc04-bp02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q11",
@@ -351,7 +351,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raigt01-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q12",
@@ -379,7 +379,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raiuc04-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q13",
@@ -411,7 +411,7 @@
           "url": "https://aws.amazon.com/what-is/explainable-ai/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q14",
@@ -439,7 +439,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp08.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t4-2-q15",
@@ -467,7 +467,7 @@
           "url": "https://aws.amazon.com/what-is/explainable-ai/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
