@@ -844,7 +844,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   // 깊이 노트는 `95`(RAG·벡터)·`94`(에이전틱·MCP·도구)·`93`(평가·관찰성)이다.
   'AIP-C01': [
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-1', title: '요구 사항 분석과 GenAI 솔루션 설계 (아키텍처 설계·개념 증명·표준화된 구성 요소)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-1.md', questionsAsset: 'assets/content/aip/aip-t1-1.questions.json', questionCount: 15),
-    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-2', title: 'FM 선택 및 구성 (평가와 선택·동적 전환·복원력·사용자 지정 배포와 수명 주기)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-2.md', questionsAsset: 'assets/content/aip/aip-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-2', title: 'FM 선택 및 구성 (평가와 선택·동적 전환·복원력·사용자 지정 배포와 수명 주기)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-2.md', questionsAsset: 'assets/content/aip/aip-t1-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-3', title: '데이터 검증과 처리 파이프라인 (품질 규칙·멀티모달 처리·입력 형식·입력 품질 개선)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-3.md', questionsAsset: 'assets/content/aip/aip-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-4', title: '벡터 저장소 솔루션 설계와 구현 (아키텍처·메타데이터·대규모 성능·통합·데이터 유지 관리)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-4.md', questionsAsset: 'assets/content/aip/aip-t1-4.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t1-5', title: 'FM 증강을 위한 검색 메커니즘 설계 (청킹·임베딩·벡터 검색·하이브리드와 리랭킹·쿼리 처리·액세스)', domain: 1, mdAsset: 'assets/content/aip/aip-t1-5.md', questionsAsset: 'assets/content/aip/aip-t1-5.questions.json', questionCount: 0),
