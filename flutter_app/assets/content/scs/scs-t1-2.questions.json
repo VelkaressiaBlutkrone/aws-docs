@@ -39,7 +39,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/how-cloudtrail-works.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q2",
@@ -75,7 +75,7 @@
           "url": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q3",
@@ -103,7 +103,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q4",
@@ -131,7 +131,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q5",
@@ -159,7 +159,7 @@
           "url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q6",
@@ -187,7 +187,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/internal-sources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q7",
@@ -215,7 +215,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q8",
@@ -243,7 +243,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q9",
@@ -271,7 +271,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q10",
@@ -299,7 +299,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q11",
@@ -327,7 +327,7 @@
           "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q12",
@@ -363,7 +363,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/what-is-security-lake.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q13",
@@ -395,7 +395,7 @@
           "url": "https://docs.aws.amazon.com/security-lake/latest/userguide/custom-sources.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q14",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/vpc/latest/tgw/tgw-flow-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "scs-t1-2-q15",
@@ -451,7 +451,7 @@
           "url": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-query-logs.html"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }
