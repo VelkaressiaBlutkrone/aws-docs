@@ -1,0 +1,105 @@
+{
+  "cert": "soa",
+  "entries": [
+    {
+      "taskId": "soa-t1-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t1-2",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t1-3",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t1-4",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t1-5",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t2-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t2-2",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t2-3",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t2-4",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t3-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t3-2",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t3-3",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t3-4",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t4-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t4-2",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t4-3",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t5-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t5-2",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t5-3",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    },
+    {
+      "taskId": "soa-t5-4",
+      "verifiedAt": "2026-11-01",
+      "questions": 15
+    }
+  ]
+}

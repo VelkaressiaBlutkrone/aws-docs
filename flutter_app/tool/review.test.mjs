@@ -339,3 +339,32 @@ test('flipTestFiles: 그 자격증의 가드 전부를 디렉터리에서 유도
     assert.ok(flipTestFiles(code, cert).length >= cert.tests.length, code);
   }
 });
+
+// ─── 검수 원장(2026-11-18 외부 리뷰 후속 §3-3) ───
+import { upsertLedgerEntry, serializeLedger, ledgerPath } from './review.mjs';
+
+test('upsertLedgerEntry: 새 Task 를 더하고 taskId 순으로 정렬한다', () => {
+  const l = { cert: 'scs', entries: [{ taskId: 'scs-t2-1', verifiedAt: '2026-11-13', questions: 15 }] };
+  const out = upsertLedgerEntry(l, 'scs-t1-1', '2026-11-18', 15);
+  assert.deepEqual(out.entries.map((e) => e.taskId), ['scs-t1-1', 'scs-t2-1']);
+  assert.equal(l.entries.length, 1, '입력을 바꾸지 않는다');
+});
+
+test('upsertLedgerEntry: 이미 있는 Task 는 최초 공개일을 지키고 문항 수만 갱신한다', () => {
+  const l = { cert: 'scs', entries: [{ taskId: 'scs-t1-1', verifiedAt: '2026-11-13', questions: 14 }] };
+  const out = upsertLedgerEntry(l, 'scs-t1-1', '2026-11-18', 15);
+  assert.deepEqual(out.entries, [{ taskId: 'scs-t1-1', verifiedAt: '2026-11-13', questions: 15 }]);
+});
+
+test('upsertLedgerEntry: 날짜 형식이 아니면 throw', () => {
+  assert.throws(() => upsertLedgerEntry({ cert: 'x', entries: [] }, 'x-t1-1', '11/18/2026', 1));
+});
+
+test('serializeLedger: 2칸 들여쓰기 + 끝 개행(diff 안정성)', () => {
+  const s = serializeLedger({ cert: 'aif', entries: [] });
+  assert.equal(s, '{\n  "cert": "aif",\n  "entries": []\n}\n');
+});
+
+test('ledgerPath: 레포 루트의 docs/review-ledger/<cert>.json', () => {
+  assert.match(ledgerPath('scs').replaceAll('\\', '/'), /\/docs\/review-ledger\/scs\.json$/);
+});

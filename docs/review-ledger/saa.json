@@ -1,0 +1,125 @@
+{
+  "cert": "saa",
+  "entries": [
+    {
+      "taskId": "saa-t1-1",
+      "verifiedAt": "2026-10-27",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t1-2",
+      "verifiedAt": "2026-10-27",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t1-3",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t1-4",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t1-5",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t2-1",
+      "verifiedAt": "2026-06-20",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t2-2",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t2-3",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t2-4",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t2-5",
+      "verifiedAt": "2026-10-28",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-1",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-2",
+      "verifiedAt": "2026-06-20",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-3",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-4",
+      "verifiedAt": "2026-06-20",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-5",
+      "verifiedAt": "2026-06-20",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-6",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-7",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-8",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t3-9",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t4-1",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t4-2",
+      "verifiedAt": "2026-06-20",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t4-3",
+      "verifiedAt": "2026-06-20",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t4-4",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    },
+    {
+      "taskId": "saa-t4-5",
+      "verifiedAt": "2026-10-29",
+      "questions": 15
+    }
+  ]
+}

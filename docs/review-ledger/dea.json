@@ -1,0 +1,90 @@
+{
+  "cert": "dea",
+  "entries": [
+    {
+      "taskId": "dea-t1-1",
+      "verifiedAt": "2026-10-30",
+      "questions": 16
+    },
+    {
+      "taskId": "dea-t1-2",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t1-3",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t1-4",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t2-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t2-2",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t2-3",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t2-4",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t3-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t3-2",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t3-3",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t3-4",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t4-1",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t4-2",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t4-3",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t4-4",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    },
+    {
+      "taskId": "dea-t4-5",
+      "verifiedAt": "2026-10-31",
+      "questions": 15
+    }
+  ]
+}
