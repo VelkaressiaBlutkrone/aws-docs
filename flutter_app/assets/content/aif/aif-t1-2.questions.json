@@ -35,7 +35,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q2",
@@ -63,7 +63,7 @@
           "url": "https://aws.amazon.com/what-is/machine-learning/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q3",
@@ -95,7 +95,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q4",
@@ -123,7 +123,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q5",
@@ -151,7 +151,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlcost02-bp01.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q6",
@@ -179,7 +179,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-datasets-problem-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q7",
@@ -207,7 +207,7 @@
           "url": "https://aws.amazon.com/compare/the-difference-between-machine-learning-supervised-and-unsupervised/"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q8",
@@ -235,7 +235,7 @@
           "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-datasets-problem-types.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q9",
@@ -267,7 +267,7 @@
           "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/retrieval-augmented-generation-options/rag-fully-managed-bedrock.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q10",
@@ -295,7 +295,7 @@
           "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q11",
@@ -323,7 +323,7 @@
           "url": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q12",
@@ -355,7 +355,7 @@
           "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q13",
@@ -395,7 +395,7 @@
           "url": "https://docs.aws.amazon.com/polly/latest/dg/what-is.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q14",
@@ -423,7 +423,7 @@
           "url": "https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/mlperf06-bp02.html"
         }
       ],
-      "verified": false
+      "verified": true
     },
     {
       "id": "aif-t1-2-q15",
@@ -451,7 +451,7 @@
           "url": "https://aws.amazon.com/what-is/foundation-models/"
         }
       ],
-      "verified": false
+      "verified": true
     }
   ]
 }

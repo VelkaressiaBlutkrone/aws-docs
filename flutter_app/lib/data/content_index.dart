@@ -772,7 +772,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
   // 저작 결정·가이드 실측의 정본은 docs/content-research/AIF-C01/ 이다.
   'AIF-C01': [
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-1', title: '기본 AI 개념과 용어 (용어·계층·추론 유형·데이터 유형·학습 유형)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-1.md', questionsAsset: 'assets/content/aif/aif-t1-1.questions.json', questionCount: 15),
-    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-2', title: 'AI의 실제 사용 사례 (가치·부적합·기법 선택·응용·관리형 서비스·FM 대 기존 ML)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-2.md', questionsAsset: 'assets/content/aif/aif-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-2', title: 'AI의 실제 사용 사례 (가치·부적합·기법 선택·응용·관리형 서비스·FM 대 기존 ML)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-2.md', questionsAsset: 'assets/content/aif/aif-t1-2.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t1-3', title: 'ML 개발 수명 주기 (파이프라인 단계·모델 소스·프로덕션 사용·서비스 매핑·MLOps·지표)', domain: 1, mdAsset: 'assets/content/aif/aif-t1-3.md', questionsAsset: 'assets/content/aif/aif-t1-3.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t2-1', title: '생성형 AI의 기본 개념 (용어·사용 사례·FM 수명 주기·토큰 요금·컨텍스트 엔지니어링·에이전틱 AI)', domain: 2, mdAsset: 'assets/content/aif/aif-t2-1.md', questionsAsset: 'assets/content/aif/aif-t2-1.questions.json', questionCount: 0),
     ContentEntry(certCode: 'AIF-C01', taskId: 'aif-t2-2', title: 'GenAI의 기능과 한계 (장점·단점·모델 선택 요소·비즈니스 가치와 지표)', domain: 2, mdAsset: 'assets/content/aif/aif-t2-2.md', questionsAsset: 'assets/content/aif/aif-t2-2.questions.json', questionCount: 0),
