@@ -3,6 +3,7 @@
 //
 //   node tool/review.mjs build <cert>
 //   node tool/review.mjs flip  <cert> <taskId> [--force]
+//   node tool/review.mjs ledger <cert> [--init]   (검수 원장 — 아래 「검수 원장」 절)
 //
 // <cert>는 아래 CERTS의 키다. ⚠️ 여기에 목록을 적지 않는다 — 2026-11-10 실측에서
 // 이 줄이 `clf·saa·soa·dea·mla`로 멈춰 있어 **그 뒤 등록한 aif·scs가 빠져** 있었다.
@@ -304,6 +305,111 @@ export function flipTestFiles(code, cert) {
   return [...new Set([...cert.tests, ...prefixed])].sort();
 }
 
+// ─── 검수 원장 (2026-11-18 외부 리뷰 후속 §3-3) ───
+// `verified: true` 는 「지금 공개 상태」만 말하고 언제 공개됐는지는 말하지 않는다. 자격증별 원장
+// `docs/review-ledger/<cert>.json` 이 Task 단위로 최초 공개일과 공개 문항 수를 담고, flip 이 항목을 더한다.
+// flip 커밋·공개 후 수정 횟수처럼 git 에서 매번 바뀌는 값은 저장하지 않는다 — `ledger` 명령이 로컬에서
+// 계산해 보여 준다(CI 는 얕은 클론이라 이력을 못 보므로 `review_ledger_test.dart` 는 원장만 본다).
+
+const LEDGER_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** 레포 루트의 원장 경로. */
+export function ledgerPath(code) {
+  return join(APP_DIR, '..', 'docs', 'review-ledger', `${code}.json`);
+}
+
+/** 원장에 Task 를 더하거나 문항 수를 갱신한다(최초 공개일은 지킨다). 입력은 바꾸지 않는다. */
+export function upsertLedgerEntry(ledger, taskId, verifiedAt, questions) {
+  if (!LEDGER_DATE.test(verifiedAt)) throw new Error(`verifiedAt 형식이 아니다: ${verifiedAt}`);
+  const prev = ledger.entries.find((e) => e.taskId === taskId);
+  const entry = { taskId, verifiedAt: prev ? prev.verifiedAt : verifiedAt, questions };
+  const entries = [...ledger.entries.filter((e) => e.taskId !== taskId), entry]
+    .sort((a, b) => (a.taskId < b.taskId ? -1 : a.taskId > b.taskId ? 1 : 0));
+  return { ...ledger, entries };
+}
+
+/** 원장 직렬화 — 2칸 들여쓰기 + 끝 개행(LF). */
+export function serializeLedger(ledger) {
+  return `${JSON.stringify(ledger, null, 2)}\n`;
+}
+
+function readLedger(code) {
+  try {
+    return JSON.parse(readFileSync(ledgerPath(code), 'utf8'));
+  } catch (e) {
+    if (e.code === 'ENOENT') return { cert: code, entries: [] };
+    throw e;
+  }
+}
+
+/** 오늘(로컬 시간대) YYYY-MM-DD. */
+function today() {
+  return new Date().toLocaleDateString('sv-SE');
+}
+
+function git(args) {
+  return execSync(`git ${args}`, { cwd: APP_DIR, encoding: 'utf8' }).trim();
+}
+
+/** 문항 파일에 `"verified": true` 가 처음 들어온 커밋(짧은 해시·날짜). 없으면 null. */
+function firstVerifiedCommit(path) {
+  const line = git(`log --reverse --format="%h %ad" --date=short -S"\\"verified\\": true" -- "${path}"`)
+    .split('\n')[0];
+  if (!line) return null;
+  const [hash, date] = line.split(' ');
+  return { hash, date };
+}
+
+/** 공개 문항이 있는 Task 의 디스크 상태: [{ taskId, path, questions }]. */
+function verifiedTasks(cert) {
+  const dir = appPath(cert.dir);
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.questions.json'))
+    .sort()
+    .map((f) => {
+      const j = JSON.parse(readFileSync(join(dir, f), 'utf8'));
+      return {
+        taskId: j.examGuideTaskId,
+        path: join(dir, f),
+        questions: j.questions.filter((q) => q.verified === true).length,
+      };
+    })
+    .filter((t) => t.questions > 0);
+}
+
+/**
+ * `ledger <cert>` — 원장과 git 을 맞대어 Task 별 최초 공개 커밋과 그 뒤 수정 횟수를 보여 준다.
+ * `--init` 은 원장을 git 이력에서 처음 만든다(이미 있으면 거부 — 덮어쓰면 기록이 사라진다).
+ */
+function cmdLedger(code, init) {
+  const cert = resolveCert(code);
+  const tasks = verifiedTasks(cert);
+  if (init) {
+    let ledger = readLedger(code);
+    if (ledger.entries.length) {
+      console.error(`중단: ${ledgerPath(code)} 에 이미 항목이 있다 — --init 은 빈 원장에만 쓴다.`);
+      process.exit(1);
+    }
+    for (const t of tasks) {
+      const first = firstVerifiedCommit(t.path);
+      if (!first) throw new Error(`${t.taskId}: verified 문항이 있는데 git 이력에서 공개 커밋을 못 찾았다`);
+      ledger = upsertLedgerEntry(ledger, t.taskId, first.date, t.questions);
+    }
+    mkdirSync(join(APP_DIR, '..', 'docs', 'review-ledger'), { recursive: true });
+    writeFileSync(ledgerPath(code), serializeLedger(ledger));
+    console.log(`${ledgerPath(code)}: ${ledger.entries.length} Task`);
+    return;
+  }
+  const ledger = readLedger(code);
+  const byTask = new Map(ledger.entries.map((e) => [e.taskId, e]));
+  for (const t of tasks) {
+    const e = byTask.get(t.taskId);
+    const first = firstVerifiedCommit(t.path);
+    const edits = first ? git(`rev-list --count ${first.hash}..HEAD -- "${t.path}"`) : '?';
+    console.log(`${t.taskId}  공개 ${e ? e.verifiedAt : '원장에 없음'}  커밋 ${first ? first.hash : '?'}  공개 후 수정 ${edits}회  문항 ${t.questions}`);
+  }
+}
+
 function cmdFlip(code, taskId, force) {
   const cert = resolveCert(code);
   const path = questionFilePath(cert, taskId);
@@ -320,6 +426,8 @@ function cmdFlip(code, taskId, force) {
   const indexPath = appPath(INDEX_PATH);
   writeFileSync(indexPath, setQuestionCount(readFileSync(indexPath, 'utf8'), taskId, count));
   console.log(`${taskId}: verified ${count}문항 true, content_index questionCount=${count}`);
+  writeFileSync(ledgerPath(code), serializeLedger(upsertLedgerEntry(readLedger(code), taskId, today(), count)));
+  console.log(`${ledgerPath(code)}: ${taskId} 기록(review_ledger_test.dart 가 원장 ↔ verified 상태를 맞댄다)`);
   if (cert.flipAllowlist) {
     const { file, symbol } = cert.flipAllowlist;
     const before = readFileSync(appPath(file), 'utf8');
@@ -335,13 +443,13 @@ function cmdFlip(code, taskId, force) {
   console.log(`${files.join('·')} 통과. flip 커밋은 검수자가 직접 하세요.`);
 }
 
-const USAGE = `사용법: node tool/review.mjs build <cert> | flip <cert> <taskId> [--force]
+const USAGE = `사용법: node tool/review.mjs build <cert> | flip <cert> <taskId> [--force] | ledger <cert> [--init]
   <cert>: ${Object.keys(CERTS).join(' | ')}`;
 
 export function main(argv) {
   const [cmd, ...rest] = argv;
   const pos = rest.filter((a) => !a.startsWith('--'));
-  if ((cmd !== 'build' && cmd !== 'flip') || !pos[0] || (cmd === 'flip' && !pos[1])) {
+  if (!['build', 'flip', 'ledger'].includes(cmd) || !pos[0] || (cmd === 'flip' && !pos[1])) {
     console.error(USAGE);
     process.exit(1);
   }
@@ -349,6 +457,7 @@ export function main(argv) {
     console.error(`모르는 자격증 '${pos[0]}'\n${USAGE}`);
     process.exit(1);
   }
+  if (cmd === 'ledger') return cmdLedger(pos[0], rest.includes('--init'));
   return cmd === 'build'
     ? cmdBuild(pos[0])
     : cmdFlip(pos[0], pos[1], rest.includes('--force'));

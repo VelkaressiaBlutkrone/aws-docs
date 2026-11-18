@@ -82,7 +82,7 @@
    - 반면 **`wrongExplanations` 키가 보기와 어긋나는 것은 실제 결함**이고, 그것은 배지가 아니라 문항별 구조 플래그로 잡힌다(C6). **MLA·SOA·DEA 모두 구조 플래그 0건**이다(MLA 2026-10-27 · SOA 300문항·DEA 256문항 2026-10-29 실측 — `questionFlags`를 전수에 돌려 확인).
 5. **문항별 루브릭(아래)** 적용 → 판정.
 6. **수정 루프(아래)** 반복 → 해당 Task 전 문항 통과.
-7. **flip**: Task별 `node tool/review.mjs flip <cert> <taskId>` (구조 플래그 있으면 중단; `--force`는 신중히). flip이 `verified` 전환 + `content_index` questionCount 동기화 + 그 자격증 테스트 실행. 돌리는 테스트는 `tool/review.mjs`의 `CERTS[<cert>].tests`가 정본이고, 그 파일들이 실재하는지는 `review.test.mjs`가 기계로 검사한다.
+7. **flip**: Task별 `node tool/review.mjs flip <cert> <taskId>` (구조 플래그 있으면 중단; `--force`는 신중히). flip이 `verified` 전환 + `content_index` questionCount 동기화 + **검수 원장 `docs/review-ledger/<cert>.json`에 그 Task의 최초 공개일·문항 수 기록** + 그 자격증 테스트 실행(원장은 flip 커밋에 함께 넣는다 — `review_ledger_test.dart`가 원장 ↔ verified 상태를 맞대고, Task별 flip 커밋·공개 후 수정 횟수는 `node tool/review.mjs ledger <cert>`가 git에서 계산해 보여 준다). 돌리는 테스트는 `tool/review.mjs`의 `CERTS[<cert>].tests`가 정본이고, 그 파일들이 실재하는지는 `review.test.mjs`가 기계로 검사한다.
 
    | 자격증 | flip이 돌리는 테스트 | `flipAllowlist` |
    |---|---|---|
