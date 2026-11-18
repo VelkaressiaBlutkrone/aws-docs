@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-7",
-  "generatedAt": "2026-06-30T02:05:57Z",
+  "generatedAt": "2026-11-18T00:27:51Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-7.md",
     "sha256": "1e33cf837e056dcd1e89afcfd76d965027c4f900cf8b5416ab2a487d41d6b693"
@@ -11,8 +11,8 @@
   "audio": {
     "src": "assets/audio/clf/clf-t3-7/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 9544989,
-    "sha256": "a1f7b60c0fe049d51103a828827fa77f2af726b29154c796e4a3a55565db1d01",
+    "sizeBytes": 9611949,
+    "sha256": "382f716e52c2bd8717a2b54036d5c93a28de4b8b55404b930fa053d7ffe82b09",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,47 +25,47 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 11938,
+    "speechChars": 12021,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "ai-ml",
       "title": "1) 에이아이/엠엘 서비스 3종 — SageMaker · Lex · Kendra",
       "level": 3,
-      "fraction": 0.10416258052835654
+      "fraction": 0.10343691007700836
     },
     {
       "anchor": "analytics",
       "title": "2) 분석 서비스 4종 — Athena · Kinesis · Glue · QuickSight",
       "level": 3,
-      "fraction": 0.2217981020201868
+      "fraction": 0.22025289905013035
     },
     {
       "anchor": "scenario",
       "title": "3) 한눈에 — 시나리오, 서비스",
       "level": 3,
-      "fraction": 0.3524992079178045
+      "fraction": 0.3504929134330147
     },
     {
       "anchor": "language-ai",
       "title": "언어 에이아이 — Amazon Translate · Amazon Transcribe (보강)",
       "level": 3,
-      "fraction": 0.42798086932906865
+      "fraction": 0.42529889431576423
     },
     {
       "anchor": "applied-ai-services",
       "title": "응용 에이아이 서비스 — Rekognition · Comprehend · Textract · Personalize",
       "level": 3,
-      "fraction": 0.5470195078529292
+      "fraction": 0.5435082252119977
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7747619981593519
+      "fraction": 0.776331165912564
     }
   ],
   "generator": {
