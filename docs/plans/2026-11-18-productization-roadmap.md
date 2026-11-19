@@ -113,7 +113,7 @@
 | A0 | Play 개발자 계정 생성·본인 확인, 테스터 모집 시작, 패키지 이름·앱 이름 확정 | Play Console 에서 앱을 만들 수 있다 | 사람 |
 | ~~A1~~ **완료 2026-11-18** (PR #617, 머지 `66f3c82`) | `flutter create --platforms=android --org kr.ai.leva .`, `applicationId` `kr.ai.leva.awsdocs`, `minSdk 24`·`targetSdk 36` 리터럴, `key.properties` 서명 + debug 폴백, main manifest INTERNET, 가드 8건 | ✅ `flutter build appbundle --release` **exit 0** · 에뮬레이터에서 홈 렌더 · **Pretendard(woff2) 렌더 확인**(§8-⑥ 해소). 남은 사람 몫: `flutter doctor --android-licenses`(법적 승인) · 업로드 키스토어 생성·보관 | AI + 사람 |
 | A2 | **로컬 저장소** Android 구현(동기 `KvBackend` 뒤의 영속 캐시) — **가장 먼저** | 단위 테스트: 쓰기 → 새 인스턴스에서 읽힘 · 실기기: 퀴즈 응시 → 앱 강제 종료 → 재실행 후 기록 유지 | AI |
-| A3 | Firebase Android 앱 등록 + `firebase_options.dart`·`cloudConfigured()` 갱신 | 실기기에서 `Firebase.initializeApp` 성공(로그) · VM 테스트 불변 | 사람(콘솔 등록·SHA 지문) + AI |
+| ~~A3~~ **완료 2026-11-19** | Firebase Android 앱 등록(`1:169329324307:android:4209f5427fe911f1b6aae6`, 패키지 `kr.ai.leva.awsdocs`) + `firebase_options.dart` android 엔트리 + 디버그 SHA-1·SHA-256 등록, 가드 7건 | ✅ 에뮬레이터 logcat: 실패 줄 `have not been configured for android` **1건 → 0건**, `FirebaseApp: Device unlocked: initializing all Firebase APIs for app [DEFAULT]` **신규 등장**(= `[DEFAULT]` 앱이 생성됐다는 직접 증거) · VM 테스트 불변 | **사람은 `firebase login --reauth` 한 줄**(브라우저 구글 로그인) + 나머지 AI |
 | A4 | Android Google 로그인(팝업 대체) | 실기기: 로그인 → 다른 기기(웹)의 기록이 내려온다 · 로그아웃 | AI + 사람(실기기 확인) |
 | A5 | 외부 링크 · 앱 복귀 신호(`AppLifecycleListener` 류) | 히어로 출처 링크가 브라우저로 열린다 · 복귀 시 동기 1회(단위 테스트는 신호 스트림 주입) | AI |
 | A6 | 모바일 사용성 점검(시스템 뒤로 가기 · 안전 영역 · 글자 크기 · 스플래시·아이콘) | 주요 라우트(§1-1) 전부를 실기기에서 한 번씩 통과한 체크리스트 | AI + 사람 |
@@ -121,6 +121,8 @@
 | A8 | 개인정보처리방침(공개 URL) · Data safety 답안 초안 · 스토어 등록정보(설명·스크린샷·콘텐츠 등급) | 처리방침 URL 200 · Play Console 「앱 콘텐츠」 항목이 전부 완료 표시 | AI(초안) + 사람(승인·제출) |
 
 - A2 → A3 → A4 는 순서 의존이다(동기는 로컬 저장 위에서 돈다). A5·A6·A7·A8 은 서로 독립이다.
+- **A3 실측(2026-11-19):** 콘솔 작업이 필요하지 않았다 — firebase CLI 가 `apps:create ANDROID`·`apps:sdkconfig`·`apps:android:sha:create` 를 모두 제공하므로 **사람 몫은 만료된 토큰 재인증 한 줄**이다. ⚠️ **`google-services.json` 과 `com.google.gms.google-services` 플러그인은 쓰지 않는다** — FlutterFire 는 `Firebase.initializeApp(options:)` 로 값을 코드에서 받고, 그 플러그인은 Crashlytics·Performance·FCM 을 넣을 때 필요해진다(공식 문서 확인). 그래서 네이티브 `FirebaseInitProvider` 자동 초기화 경고 2건은 **설계대로 남는다**(`no default options were found` → `initialization unsuccessful`); 그 직후 Dart 가 수동 초기화에 성공한다. json 을 넣는 쪽은 레포 관례(`.gitignore` 등재)와 충돌한다 — 커밋되지 않는 파일을 Gradle 플러그인이 요구하면 다른 환경의 빌드가 깨진다.
+- **등록된 디버그 SHA(2026-11-19):** SHA-1 `a71f3ad3fa4363a4dad457ec62b20d1fa11cb6a8` · SHA-256 `a48bb9b2e487d6249e95f3b0a5c2a391ddd1ea87d6e676e0b7c3ac376b9af809` (`~/.android/debug.keystore`, 유효기간 2055). **릴리스 키스토어는 아직 없어**(`android/key.properties` 부재) 릴리스 SHA 는 미등록이고, Play 내부 테스트 빌드는 **Play 앱 서명 키**의 SHA 를 따로 등록해야 한다(§8-⑦·B1). ⚠️ `apps:android:sha:create` 가 SHA-1 등록에서 **실패를 보고했는데 실제로는 등록됐다** — 판정은 `apps:android:sha:list` 로 한다(firebase CLI 는 성공한 다음 명령에서 `firebase-debug.log` 를 지우므로 원인은 사후에 볼 수 없다).
 - Android 빌드는 `audio_lecture` 플래그 **없이** 만든다 — 오디오 진입점이 통째로 숨는다(§1-2). 웹 빌드는 그대로 플래그를 켠다.
 - CI: 필수 체크 이름 `test` 는 그대로 둔다. Android 빌드 확인은 별도 선택 job 으로 더한다(필수 목록에 없는 job 은 게이트가 되지 않는다).
 
