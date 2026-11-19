@@ -207,7 +207,7 @@ class _StudyDocPageState extends State<StudyDocPage> {
                               Gap.xl,
                               headerScrollInset(context),
                               Gap.xl,
-                              Gap.xl4),
+                              scrollBottomInset(context, gap: Gap.xl4)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

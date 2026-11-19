@@ -6,6 +6,7 @@ import '../../data/plan_scheduler.dart';
 import '../../models/attempt_record.dart';
 import '../../models/study_plan.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/app_header.dart';
 import '../../widgets/focus_ring.dart';
 
 /// 자격증의 학습 일정 목록 — 카드 탭으로 어젠다 진입, 하단 "일정 추가".
@@ -35,7 +36,8 @@ class PlanListView extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 720),
         child: ListView(
-          padding: const EdgeInsets.all(Gap.xl),
+          padding: EdgeInsets.all(Gap.xl)
+              .copyWith(bottom: scrollBottomInset(context)),
           children: [
             if (plans.isEmpty)
               Padding(

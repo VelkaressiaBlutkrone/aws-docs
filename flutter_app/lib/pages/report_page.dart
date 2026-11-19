@@ -134,8 +134,9 @@ class _ReportPageState extends State<ReportPage> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 720),
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(Gap.xl)
-              .copyWith(top: headerScrollInset(context)),
+          padding: EdgeInsets.all(Gap.xl).copyWith(
+              top: headerScrollInset(context),
+              bottom: scrollBottomInset(context)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
