@@ -53,11 +53,25 @@ dump`). 싸고, "몇 px 모자란다"를 숫자로 말할 수 있다. Flutter �
 `android/app/src/main/res/mipmap-*/ic_launcher.png` 가 442~1,443바이트의 템플릿
 기본 아이콘(파란 F)이다. 앱에는 이미 브랜드 마크(헤더의 틸 `A`)가 있다.
 
-### A6-4 다크 모드에서도 스플래시가 흰색
+### A6-4 스플래시 색이 앱 배경과 다르다
 
-`values/styles.xml` 과 `values-night/styles.xml` 이 **둘 다** `@drawable/launch_background`
-를 가리키는데, `drawable/launch_background.xml` 은 `@android:color/white` 이고
-**`drawable-night/` 가 없다.** 그래서 다크 모드에서 앱을 열면 흰 화면이 번쩍인다.
+⚠️⚠️ **2026-11-19 정정.** 처음에 「다크에서도 스플래시가 흰색」이라고 적었는데 **틀렸다.**
+`drawable/launch_background.xml`(`@android:color/white`)만 보고 단정했는데,
+**minSdk 24 라 실제로 쓰이는 것은 `drawable-v21/`** 이고 그쪽은 `?android:colorBackground`
+— 테마 속성이다. `values-night/styles.xml` 의 부모가 `Theme.Black.NoTitleBar` 이므로
+**다크 스플래시는 흰색이 아니라 검정**이었다. 같은 이름의 파일이 둘인데 하나만 읽고
+결론을 낸 것이 원인이다.
+
+실제 결함은 「앱 배경과 다르다」다.
+
+| 모드 | 스플래시(고치기 전) | 앱 배경(웹 `theme-color`) |
+|---|---|---|
+| 라이트 | `#FFFFFF` | `#FBFAF8` |
+| 다크 | `#000000` | `#14181F` |
+
+라이트는 미묘하지만, **다크는 순흑에서 짙은 남회색으로 튄다.**
+
+⚠️⚠️ **남은 불일치(수정 범위 밖, 2026-11-19 추가).** Android 스플래시는 `values-night/` 로 **시스템** 테마를 따르는데, 앱은 `ThemePrefStore` 의 저장값을 따르고 **키가 없으면 라이트**다(`theme_pref_store.dart`: 「DESIGN.md: 라이트가 기본」). 그래서 「시스템 다크 + 앱 라이트」 조합에서는 전환이 남는다. ⭐ **웹은 이미 닫혀 있다** — `web/index.html` 의 스플래시 JS 가 같은 키를 직접 읽어 첫 페인트 색을 맞춘다. Android 를 같은 수준으로 닫으려면 네이티브가 저장 테마를 읽어야 하고, A2 로 저장소가 파일 기반이라 Kotlin 에서 그 파일을 읽는 일이 된다. 다만 고치기 전보다는 분명히 낫다 — 네 조합 중 **둘이 완전히 일치**하고, 전에는 넷 다 어긋났다.
 
 ⚠️ A2 측정에서 **설치 직후 첫 실행은 저장소 초기화에만 488ms** 가 걸린다(그 뒤는 3ms).
 그 동안 보이는 것이 이 스플래시다.
@@ -98,7 +112,9 @@ dump`). 싸고, "몇 px 모자란다"를 숫자로 말할 수 있다. Flutter �
 의존 관계가 없어 쪼갤 수 있다.
 
 1. **A6-3 · A6-4 먼저** — 에셋·리소스만 건드리고 코드 위험이 0이다. 아이콘은 브랜드
-   마크에서 뽑고, `drawable-night/launch_background.xml` 을 더해 다크 배경을 준다.
+   마크에서 뽑고, 스플래시는 `values/colors.xml`·`values-night/colors.xml` 로 **색만 갈라**
+   `launch_background` 하나가 그것을 참조하게 한다(`drawable-night/` 를 따로 두는 것보다
+   단순하고, 위의 「파일이 둘」 함정을 되풀이하지 않는다).
 2. **A6-1** — 공통 위젯의 최소 높이를 48dp로 올린다. ⚠️ **웹 레이아웃에 영향이 가므로**
    `DESIGN.md` 의 간격 규칙과 충돌하지 않는지 먼저 본다(이 문서의 범위 밖).
 3. **A6-2** — 하단 콘텐츠에 제스처 바 높이만큼 여백을 준다(`SafeArea` 또는 `MediaQuery

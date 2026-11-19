@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 스플래시 배경(라이트). 웹 index.html 의
+         `theme-color` (prefers-color-scheme: light) 와 같은 값이어야 한다 —
+         `test/app_icon_splash_test.dart` 가 웹에서 읽어 비교한다.
+         ⚠️ 템플릿은 @android:color/white 였는데, 그러면 다크에서 흰 화면이 번쩍이고
+         라이트에서도 미묘하게 틀렸다(이 앱의 배경은 순백이 아니다). -->
+    <color name="splash_background">#FBFAF8</color>
+
+    <!-- 적응형 런처 아이콘의 배경. 앱 헤더 마크와 같은 accent 다
+         (lib/theme/app_theme.dart: accent: Color(0xFF0E8175)). -->
+    <color name="ic_launcher_background">#0E8175</color>
+</resources>

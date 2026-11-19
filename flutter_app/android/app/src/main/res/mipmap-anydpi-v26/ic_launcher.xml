@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 적응형 런처 아이콘(API 26+). 런처가 원·스쿼클 등으로 마스크하므로 배경과 전경을
+     나눠 준다 — 레거시 PNG 를 그대로 쓰면 마스크 안에 축소돼 들어가 작게 보인다.
+     minSdk 24 라 24~25 에서는 mipmap-*/ic_launcher.png(레거시)가 쓰인다. -->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+</adaptive-icon>
