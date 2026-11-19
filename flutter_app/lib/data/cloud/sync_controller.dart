@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../../app_errors.dart';
 import '../local_kv.dart';
 import 'auth_service.dart';
 import 'auth_user.dart';
@@ -75,6 +76,7 @@ class SyncController extends ChangeNotifier {
   final List<Timer> _watchRetries = [];
   AuthUser? _user;
   SyncStatus _status = SyncStatus.off;
+  String? _signInError;
   bool _busy = false;
   bool _pending = false;
   // Guard: signIn/signOut already handle _onUser directly; skip the stream echo.
@@ -96,11 +98,25 @@ class SyncController extends ChangeNotifier {
     _resumeSub ??= _onAppResume?.listen((_) => sync());
   }
 
+  /// 마지막 로그인 시도의 실패 문구. 성공·사용자 취소는 null이다(취소는 실패가 아니다).
+  String? get signInError => _signInError;
+
   Future<void> signIn() async {
     _explicitTransition = true;
+    if (_signInError != null) {
+      _signInError = null;
+      notifyListeners();
+    }
     try {
       await _auth.signInWithGoogle();
       await _onUser(_auth.current);
+    } catch (e, st) {
+      // ⚠️ 호출부가 Future를 버린다(`onPressed: ctrl.signIn`) — 던지면 unhandled async
+      // error가 되고 화면은 아무 변화가 없어 버튼이 고장난 것처럼 보인다. Android에서는
+      // 자격 증명 없음·설정 오류가 흔한 경로다(A4). 삼키지도 않는다 — 로그 + 화면 문구.
+      appLog('Google 로그인 실패: $e\n$st');
+      _signInError = '로그인 실패 — 다시 시도해 주세요';
+      notifyListeners();
     } finally {
       _explicitTransition = false;
     }

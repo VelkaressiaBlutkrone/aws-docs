@@ -49,6 +49,16 @@ dependencies:
   # 필요 없다. 상류가 고치면 이 핀과 `android_local_storage_pin_test.dart` 를 함께 푼다.
   path_provider_android: 2.2.23
   url_launcher: ^6.3.3
+  # A4 — Android Google 로그인. ⚠️ 앱 대면 패키지 `google_sign_in`을 **쓰지 않는다**:
+  # 그 패키지의 웹 구현(`google_sign_in_web`)이 플러그인 **등록 시점**에
+  # `accounts.google.com/gsi/client` 스크립트를 무조건 주입한다(생성자가 `loadWebSdk()`를
+  # 부르고, 그 함수는 조건 없이 <script>를 넣는다 — 실측). 웹은 Firebase 팝업 경로를
+  # 쓰므로 그 SDK가 필요 없는데도 **모든 페이지 로드가 구글에 3자 요청**을 하게 된다.
+  # 그래서 웹 구현이 없는 둘만 의존한다(`google_sign_in_android`는 `platforms: android`).
+  # 호출은 `GoogleSignInPlatform.instance` 직접 호출 — 그 패키지의 예제 앱이 쓰는 방식이다.
+  # 가드: `test/android_google_signin_test.dart`.
+  google_sign_in_android: ^7.2.19
+  google_sign_in_platform_interface: ^3.1.0
 
 dev_dependencies:
   flutter_test:

@@ -33,15 +33,28 @@ class SyncEntry extends StatelessWidget {
       builder: (context, _) {
         final user = ctrl.user;
         if (user == null) {
+          // 로그인 실패를 알린다 — 호출부가 Future를 버려 예외가 화면에 닿지 않으므로
+          // 이 문구가 없으면 버튼이 고장난 것처럼 보인다(A4). 취소는 실패가 아니라
+          // null이므로 아무것도 그리지 않는다.
+          final err = ctrl.signInError;
           return _box(
             c,
-            Row(children: [
-              Expanded(child: Text('기기 간 동기', style: TextStyle(color: c.text))),
-              TextButton(
-                onPressed: ctrl.signIn,
-                child: Text('Google로 동기 켜기',
-                    style: TextStyle(color: c.accentStrong, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
-              ),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                Expanded(child: Text('기기 간 동기', style: TextStyle(color: c.text))),
+                TextButton(
+                  onPressed: ctrl.signIn,
+                  child: Text('Google로 동기 켜기',
+                      style: TextStyle(color: c.accentStrong, fontWeight: FontWeight.w700, fontVariations: Wght.w700)),
+                ),
+              ]),
+              if (err != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: Gap.xs),
+                  // warningText / surface2는 theme_contrast_test가 AA로 단정하는 쌍이다.
+                  child: Text(err,
+                      style: TextStyle(fontSize: 12, color: c.warningText)),
+                ),
             ]),
           );
         }
