@@ -4,6 +4,7 @@ import '../../main.dart' show syncController;
 import '../../theme/app_theme.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/touch_target.dart';
 import '../sync_entry.dart';
 
 /// 홈형 AppHeader(와이어프레임 정답지 2번 섹션 위 변형) — 브랜드 + 내비
@@ -47,7 +48,9 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     // 좁은 폭: 설정 액션을 햄버거 메뉴에 통합(버튼 과다 방지).
                     _NavMenuButton(onNav: onNav, onResetAll: onResetAll),
-                    const SizedBox(width: Gap.sm),
+                    // Gap.sm → Gap.xs: 양쪽 TouchTarget이 2px/side를 더하므로
+                    // 도색 사이 16px이 보존된다(A6-1).
+                    const SizedBox(width: Gap.xs),
                     const ThemeToggleButton(),
                   ],
                 )
@@ -55,15 +58,17 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // 간격은 모두 2px/side씩 줄였다 — TouchTarget이 더하는
+                    // 만큼이라 도색 사이 간격이 그대로다(A6-1).
                     ...onNav.entries.map(
                       (e) => Padding(
-                        padding: const EdgeInsets.only(left: Gap.sm),
+                        padding: const EdgeInsets.only(left: Gap.xs),
                         child: _NavLink(label: e.key, onTap: e.value),
                       ),
                     ),
-                    const SizedBox(width: Gap.md),
-                    const ThemeToggleButton(),
                     const SizedBox(width: Gap.sm),
+                    const ThemeToggleButton(),
+                    const SizedBox(width: Gap.xs),
                     _SettingsButton(onResetAll: onResetAll),
                   ],
                 ),
@@ -122,18 +127,23 @@ class _NavLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
-      borderRadius: BorderRadius.circular(Radii.sm + 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(Radii.sm),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          child: Text(label,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600, fontVariations: Wght.w600,
-                  color: c.textMuted)),
+    // 내비 링크는 ≥768px에서만 보이지만 태블릿도 터치다 — 도색(텍스트+패딩)은
+    // 그대로 두고 탭 영역만 48(A6-1). 라벨이 두 자 이상이면 폭은 이미 48을
+    // 넘으므로 데스크톱 레이아웃이 그대로다.
+    return TouchTarget(
+      child: FocusRing(
+        borderRadius: BorderRadius.circular(Radii.sm + 4),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.sm),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Text(label,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600, fontVariations: Wght.w600,
+                    color: c.textMuted)),
+          ),
         ),
       ),
     );
@@ -151,7 +161,10 @@ class _NavMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
+    // 도색 36 그대로, 탭 영역만 48(A6-1). 아래 본문은 들여쓰기를 바꾸지
+    // 않았다 — 서식 churn이 리뷰 불가 diff를 만든다.
+    return TouchTarget(
+      child: FocusRing(
       borderRadius: BorderRadius.circular(Radii.full),
       child: PopupMenuButton<String>(
         tooltip: '메뉴',
@@ -223,6 +236,7 @@ class _NavMenuButton extends StatelessWidget {
           child: Icon(Icons.menu, size: 18, color: c.textMuted),
         ),
       ),
+      ),
     );
   }
 }
@@ -269,7 +283,9 @@ class _SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
+    // 도색 36 그대로, 탭 영역만 48(A6-1). 들여쓰기 유지 — 위와 같은 이유.
+    return TouchTarget(
+      child: FocusRing(
       borderRadius: BorderRadius.circular(Radii.full),
       child: PopupMenuButton<String>(
         tooltip: '설정',
@@ -310,6 +326,7 @@ class _SettingsButton extends StatelessWidget {
           ),
           child: Icon(Icons.settings_outlined, size: 18, color: c.textMuted),
         ),
+      ),
       ),
     );
   }

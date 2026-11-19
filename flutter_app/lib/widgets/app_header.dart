@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
 import 'focus_ring.dart';
+import 'touch_target.dart';
 
 /// 공용 헤더(PR4) — DESIGN.md Header 규약: 56px · sticky · blur(14px) ·
 /// 88% 불투명 · 하단 1px border. 와이어프레임 정답지 2번 섹션.
@@ -101,12 +102,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           }
 
           // 고정 폭: 셰브론 탭 영역 + 그룹 간 간격 + 액션·토글.
-          // FocusRing(2+2px)·패딩 포함 보수치 — 실제보다 약간 크게 잡아
-          // 드롭이 한 박자 일찍 일어나는 쪽이 오버플로보다 낫다.
-          const buttonW = 44.0;
+          // [TouchTarget](48dp)·FocusRing(2+2px)·패딩 포함 보수치 — 실제보다
+          // 약간 크게 잡아 드롭이 한 박자 일찍 일어나는 쪽이 오버플로보다 낫다.
+          // ⚠️ 버튼 폭과 간격은 **쌍으로** 바꾼다 — 48+Gap.xs == 44+Gap.sm이라
+          // A6-1(탭 영역 48dp)에서 이 예산은 그대로이고 도색 간격도 보존된다.
+          const buttonW = Touch.min;
           var fixed = Gap.md * 2; // 좌·우 그룹 간격
-          if (canPop) fixed += 36; // ‹ 셰브론
-          fixed += (actions.length + 1) * (buttonW + Gap.sm); // 액션 + 토글
+          if (canPop) fixed += Touch.min; // ‹ 셰브론(탭 영역)
+          fixed += (actions.length + 1) * (buttonW + Gap.xs); // 액션 + 토글
           if (metaBadge != null) fixed += Gap.md;
 
           // 제목 최소 가시 12자(스펙) — 그 폭이 나올 때까지 우선순위 드롭.
@@ -173,7 +176,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
               ],
               for (final action in actions) ...[
                 action,
-                const SizedBox(width: Gap.sm),
+                // Gap.sm → Gap.xs: TouchTarget이 2px/side를 더하므로 도색
+                // 사이 간격이 16px 그대로다(A6-1, touch_target_test 가드).
+                const SizedBox(width: Gap.xs),
               ],
               const ThemeToggleButton(),
             ],
@@ -291,24 +296,29 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
-      borderRadius: BorderRadius.circular(Radii.sm + 4),
-      child: Tooltip(
-        message: '뒤로',
-        child: InkWell(
-          onTap: () => Navigator.maybePop(context),
-          borderRadius: BorderRadius.circular(Radii.sm),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.chevron_left, size: 22, color: c.textMuted),
-                if (label != null) ...[
-                  const SizedBox(width: 2),
-                  Text(label!, style: labelStyle, maxLines: 1),
+    // TouchTarget은 FocusRing **바깥**이다 — 링은 도색 경계에 붙어야 한다.
+    // 48 < 56(셸)이라 헤더에 들어가고, 라벨이 보이는 폭에서는 이미 48을
+    // 넘으므로 폭 변화가 없다(라벨이 접힌 모바일에서만 좌우 5px 중앙 정렬).
+    return TouchTarget(
+      child: FocusRing(
+        borderRadius: BorderRadius.circular(Radii.sm + 4),
+        child: Tooltip(
+          message: '뒤로',
+          child: InkWell(
+            onTap: () => Navigator.maybePop(context),
+            borderRadius: BorderRadius.circular(Radii.sm),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.chevron_left, size: 22, color: c.textMuted),
+                  if (label != null) ...[
+                    const SizedBox(width: 2),
+                    Text(label!, style: labelStyle, maxLines: 1),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -353,21 +363,25 @@ class HeaderIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
-      borderRadius: BorderRadius.circular(Radii.full),
-      child: Tooltip(
-        message: tooltip,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(Radii.full),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: c.surface2,
-              borderRadius: BorderRadius.circular(Radii.full),
-              border: Border.all(color: c.border),
+    // 도색은 36(아이콘 18 + 패딩 16 + 테두리 2) 그대로, 탭 영역만 48
+    // (A6-1). TouchTarget은 FocusRing 바깥 — 링은 도색 경계에 붙는다.
+    return TouchTarget(
+      child: FocusRing(
+        borderRadius: BorderRadius.circular(Radii.full),
+        child: Tooltip(
+          message: tooltip,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(Radii.full),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: c.surface2,
+                borderRadius: BorderRadius.circular(Radii.full),
+                border: Border.all(color: c.border),
+              ),
+              child: Icon(icon, size: 18, color: c.textMuted),
             ),
-            child: Icon(icon, size: 18, color: c.textMuted),
           ),
         ),
       ),

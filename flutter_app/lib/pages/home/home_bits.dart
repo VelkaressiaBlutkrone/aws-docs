@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/touch_target.dart';
 
 /// 홈 섹션들이 공유하는 빌딩블록(PR4 분해 — home_page.dart에서 이동).
 /// 홈 전용이라 lib/widgets/ 승격 대상이 아니다(승격 규칙: 2+ 페이지).
@@ -167,7 +168,12 @@ class HomeButton extends StatelessWidget {
               fontWeight: FontWeight.w700, fontVariations: Wght.w700,
               color: primary ? c.onAccent : c.text)),
     );
-    if (onTap == null) return body;
-    return FocusTap(onTap: onTap, radius: Radii.sm, child: body);
+    // 도색 44 그대로, 탭 영역만 48(A6-1). 장식 상태(onTap null)도 함께 감싸
+    // 한 행에 섰을 때 활성 버튼과 높이가 어긋나지 않게 한다.
+    return TouchTarget(
+      child: onTap == null
+          ? body
+          : FocusTap(onTap: onTap, radius: Radii.sm, child: body),
+    );
   }
 }

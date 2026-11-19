@@ -217,9 +217,13 @@ class _ExamViewState extends State<ExamView> {
   }
 
   /// 문항 번호 그리드 본체. 좁은 화면에서는 [_gridExpanded]일 때만 그린다(UX-1).
+  ///
+  /// ⚠️ 칩은 34dp다(2026-10-30 결정 — 65칩이 360px에서 9행에 들어가게 설계했다).
+  /// 48dp로 키우면 그 설계를 되돌리므로, 대신 **간격을 8dp로** 둬 Material의
+  /// 완화 조건(48 미만이면 최소 8dp 간격)을 맞춘다. 가드: `touch_target_test`.
   Widget _grid() => Wrap(
-        spacing: Gap.xs,
-        runSpacing: Gap.xs,
+        spacing: Gap.sm,
+        runSpacing: Gap.sm,
         children: [
           for (var k = 0; k < _qs.length; k++)
             GridChip(

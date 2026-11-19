@@ -4,6 +4,7 @@ import '../../data/site_data.dart';
 import '../../theme/app_theme.dart';
 import '../../util/open_link.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/touch_target.dart';
 import 'home_bits.dart';
 
 /// 히어로 + 공식 출처 스트립(PR4 분해 — home_page.dart에서 이동).
@@ -107,7 +108,10 @@ class _SourcePillState extends State<_SourcePill> {
       child: Semantics(
         link: true,
         label: '${widget.label} (공식 자료, 새 탭으로 열기)',
-        child: InsetFocusRing(
+        // 도색 43 그대로, 탭 영역만 48(A6-1). Wrap 안이라 칩이 차지하는
+        // 높이는 48이 되지만 간격(Gap.sm)은 도색 기준으로 그대로 보인다.
+        child: TouchTarget(
+          child: InsetFocusRing(
           borderRadius: BorderRadius.circular(Radii.full),
           child: InkWell(
             onTap: () => openLink(widget.href),
@@ -138,6 +142,7 @@ class _SourcePillState extends State<_SourcePill> {
               ),
             ),
           ),
+        ),
         ),
       ),
     );
