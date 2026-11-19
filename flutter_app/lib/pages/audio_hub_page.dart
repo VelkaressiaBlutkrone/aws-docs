@@ -19,7 +19,8 @@ class AudioHubPage extends StatelessWidget {
       backgroundColor: c.bg,
       appBar: const AppHeader.document(title: '오디오 강의'),
       body: ListView(
-        padding: const EdgeInsets.all(Gap.lg),
+        padding: EdgeInsets.all(Gap.lg)
+            .copyWith(bottom: scrollBottomInset(context, gap: Gap.lg)),
         children: [
           for (final code in codes)
             AudioCertCard(

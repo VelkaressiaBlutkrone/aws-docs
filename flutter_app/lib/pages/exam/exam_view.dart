@@ -280,7 +280,9 @@ class _ExamViewState extends State<ExamView> {
     final q = _qs[_index];
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
+      padding: EdgeInsets.all(Gap.xl).copyWith(
+          top: headerScrollInset(context),
+          bottom: scrollBottomInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -413,7 +415,9 @@ class _ExamViewState extends State<ExamView> {
   Widget _results(BuildContext context) {
     final pass = widget.passingScore;
     return SingleChildScrollView(
-      padding: EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
+      padding: EdgeInsets.all(Gap.xl).copyWith(
+          top: headerScrollInset(context),
+          bottom: scrollBottomInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

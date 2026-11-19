@@ -251,7 +251,9 @@ class _CertExamPageState extends State<CertExamPage> {
   static Widget _scrollCenter(BuildContext context, Widget child) => Center(
         child: SingleChildScrollView(
           // gap 0 — 자식이 이미 자기 여백을 갖고 있다. 여기서 더하는 건 헤더 높이뿐.
-          padding: EdgeInsets.only(top: headerScrollInset(context, gap: 0)),
+          padding: EdgeInsets.only(
+              top: headerScrollInset(context, gap: 0),
+              bottom: scrollBottomInset(context, gap: 0)),
           child: child,
         ),
       );

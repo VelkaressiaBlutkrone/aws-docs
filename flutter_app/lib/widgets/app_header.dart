@@ -197,6 +197,23 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 double headerScrollInset(BuildContext context, {double gap = Gap.xl}) =>
     MediaQuery.paddingOf(context).top + gap;
 
+/// [headerScrollInset]의 **하단 짝**(A6-2) — 스크롤 콘텐츠 끝의 여백 + 시스템
+/// 내비게이션 바 인셋. 이게 없으면 끝까지 스크롤해도 마지막 요소가 바 밑에 깔린다.
+///
+/// 제스처 내비는 inset이 24dp(반투명 핸들)지만 **3버튼 내비는 48dp이고 실제 바가
+/// 화면을 가린다**(실측). 둘을 구분하지 않아도 되는 게 이 헬퍼의 요점이다 —
+/// `padding.bottom`이 모드에 맞는 값을 돌려준다.
+///
+/// ⚠️ **`viewPadding`이 아니라 `padding`을 쓴다.** Scaffold가 `bottomNavigationBar`
+/// 있는 페이지에서 `padding.bottom`을 소비해 0으로 내려 주므로, 트랜스포트 바처럼
+/// 이미 `SafeArea`로 처리한 곳에서 **이중 여백이 생기지 않는다**(상단이 헤더 높이를
+/// 받는 것과 같은 기제). **반드시 Scaffold body 아래 컨텍스트로 호출할 것.**
+///
+/// 웹은 `padding.bottom`이 0이라 기존 값 그대로다(시각 변화 0).
+/// 가드: `test/scroll_bottom_inset_test.dart`.
+double scrollBottomInset(BuildContext context, {double gap = Gap.xl}) =>
+    MediaQuery.paddingOf(context).bottom + gap;
+
 /// collapse 드롭 판정(순수 함수, 테스트 대상) — 우선순위 고정:
 /// 날짜 → 배지 → 섹션 라벨 → backLabel. 각 단계는 "제목 최소폭까지 포함해
 /// 가용 폭에 들어가는가"로 판정한다. 폭 0인 파트는 처음부터 미표시.
