@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/focus_ring.dart';
+import '../widgets/touch_target.dart';
 
 /// 보기 카드 상태(연습: 공개 후 correct/wrong / 시험: 항상 idle).
 enum OptState { idle, correct, wrong }
@@ -123,24 +124,27 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     final enabled = onTap != null;
-    return InsetFocusRing(
-      borderRadius: BorderRadius.circular(Radii.sm),
-      child: InkWell(
-        onTap: onTap,
+    // 도색 44 그대로, 탭 영역만 48(A6-1).
+    return TouchTarget(
+      child: InsetFocusRing(
         borderRadius: BorderRadius.circular(Radii.sm),
-        child: Container(
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: enabled ? c.accent : c.surface2,
-            borderRadius: BorderRadius.circular(Radii.sm),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.sm),
+          child: Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: enabled ? c.accent : c.surface2,
+              borderRadius: BorderRadius.circular(Radii.sm),
+            ),
+            child: Text(label,
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                    color: enabled ? c.onAccent : c.textFaint)),
           ),
-          child: Text(label,
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                  color: enabled ? c.onAccent : c.textFaint)),
         ),
       ),
     );
@@ -161,25 +165,28 @@ class _FilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return InsetFocusRing(
-      borderRadius: BorderRadius.circular(Radii.full),
-      child: InkWell(
-        onTap: onTap,
+    // 도색 36 그대로, 탭 영역만 48(A6-1).
+    return TouchTarget(
+      child: InsetFocusRing(
         borderRadius: BorderRadius.circular(Radii.full),
-        child: Container(
-          height: 36,
-          padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: selected ? c.accentWeak : c.surface,
-            borderRadius: BorderRadius.circular(Radii.full),
-            border: Border.all(color: selected ? c.accent : c.border),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.full),
+          child: Container(
+            height: 36,
+            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: selected ? c.accentWeak : c.surface,
+              borderRadius: BorderRadius.circular(Radii.full),
+              border: Border.all(color: selected ? c.accent : c.border),
+            ),
+            child: Text(label,
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700, fontVariations: Wght.w700,
+                    color: selected ? c.accentStrong : c.textMuted)),
           ),
-          child: Text(label,
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                  color: selected ? c.accentStrong : c.textMuted)),
         ),
       ),
     );

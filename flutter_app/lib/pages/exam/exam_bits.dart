@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/touch_target.dart';
 
 /// 시험 러너가 쓰는 소형 위젯(분해 — exam_page.dart에서 이동. 분할 전에는
 /// `_GridChip`·`_SecondaryButton`이었다). ExamView 전용이라 lib/widgets/ 승격
@@ -59,43 +60,46 @@ class ExamGridSummaryChip extends StatelessWidget {
     final c = context.c;
     // 칩이므로 full radius(DESIGN.md Layout — 칩·배지만 full). 높이는 러너의
     // 다른 컨트롤(SecondaryButton 44)과 맞춰 한 행에 섰을 때 기준선이 어긋나지 않게.
-    return InsetFocusRing(
-      borderRadius: BorderRadius.circular(Radii.full),
-      child: InkWell(
-        onTap: onTap,
+    // 도색 44 그대로, 탭 영역만 48(A6-1).
+    return TouchTarget(
+      child: InsetFocusRing(
         borderRadius: BorderRadius.circular(Radii.full),
-        child: Container(
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
-          decoration: BoxDecoration(
-            color: c.surface,
-            borderRadius: BorderRadius.circular(Radii.full),
-            border: Border.all(color: c.border),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: AppTheme.monoFamily,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    fontVariations: Wght.w700,
-                    color: c.textMuted,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.full),
+          child: Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: Gap.lg),
+            decoration: BoxDecoration(
+              color: c.surface,
+              borderRadius: BorderRadius.circular(Radii.full),
+              border: Border.all(color: c.border),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: AppTheme.monoFamily,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      fontVariations: Wght.w700,
+                      color: c.textMuted,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: Gap.xs),
-              Icon(
-                expanded ? Icons.expand_less : Icons.expand_more,
-                size: 18,
-                color: c.textMuted,
-              ),
-            ],
+                const SizedBox(width: Gap.xs),
+                Icon(
+                  expanded ? Icons.expand_less : Icons.expand_more,
+                  size: 18,
+                  color: c.textMuted,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -200,34 +204,37 @@ class SecondaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     // 인셋 링(DT4): 플래그·이전 버튼 — Tab으로 닿고 Enter/Space로 동작.
-    return InsetFocusRing(
-      borderRadius: BorderRadius.circular(Radii.sm),
-      child: InkWell(
-        onTap: onTap,
+    // 도색 44 그대로, 탭 영역만 48(A6-1).
+    return TouchTarget(
+      child: InsetFocusRing(
         borderRadius: BorderRadius.circular(Radii.sm),
-        child: Container(
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: Gap.md),
-          decoration: BoxDecoration(
-            color: active ? c.warningWeak : c.surface,
-            borderRadius: BorderRadius.circular(Radii.sm),
-            border: Border.all(color: active ? c.warning : c.border),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 16, color: active ? c.warning : c.textMuted),
-              const SizedBox(width: Gap.xs),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  fontVariations: Wght.w700,
-                  color: active ? c.warningText : c.textMuted,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.sm),
+          child: Container(
+            height: 44,
+            padding: const EdgeInsets.symmetric(horizontal: Gap.md),
+            decoration: BoxDecoration(
+              color: active ? c.warningWeak : c.surface,
+              borderRadius: BorderRadius.circular(Radii.sm),
+              border: Border.all(color: active ? c.warning : c.border),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16, color: active ? c.warning : c.textMuted),
+                const SizedBox(width: Gap.xs),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    fontVariations: Wght.w700,
+                    color: active ? c.warningText : c.textMuted,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

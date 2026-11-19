@@ -5,6 +5,7 @@ import '../data/lecture_playlist.dart';
 import '../theme/app_theme.dart';
 import 'audio_progress_bar.dart';
 import 'focus_ring.dart';
+import 'touch_target.dart';
 
 /// 학습 문서 오디오 강의("주머니 라디오") — 하단 고정 미니 플레이어(UI).
 ///
@@ -118,23 +119,26 @@ class PlayPauseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
-      borderRadius: BorderRadius.circular(Radii.full),
-      child: Material(
-        color: c.accent,
-        shape: const CircleBorder(),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: SizedBox(
-            width: 44,
-            height: 44,
-            child: Center(
-              child: Icon(
-                isPlaying ? Icons.pause : Icons.play_arrow,
-                color: c.onAccent,
-                size: 24,
-                semanticLabel: isPlaying ? '일시정지' : '재생',
+    // 도색 44 원형 그대로, 탭 영역만 48(A6-1).
+    return TouchTarget(
+      child: FocusRing(
+        borderRadius: BorderRadius.circular(Radii.full),
+        child: Material(
+          color: c.accent,
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: SizedBox(
+              width: 44,
+              height: 44,
+              child: Center(
+                child: Icon(
+                  isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: c.onAccent,
+                  size: 24,
+                  semanticLabel: isPlaying ? '일시정지' : '재생',
+                ),
               ),
             ),
           ),
