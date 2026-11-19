@@ -21,10 +21,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for ios - '
@@ -51,6 +48,21 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  /// Android(A3, 2026-11-19) — `firebase apps:create ANDROID` 로 등록하고
+  /// `firebase apps:sdkconfig ANDROID` 값을 옮겼다. 패키지는 `kr.ai.leva.awsdocs`.
+  ///
+  /// `authDomain`·`measurementId`는 웹 SDK 전용이라 넣지 않는다.
+  /// `google-services.json`과 `com.google.gms.google-services` 플러그인은 쓰지 않는다 —
+  /// FlutterFire는 이 값을 코드로 받고, 그 플러그인은 Crashlytics·FCM 같은 제품을
+  /// 넣을 때 필요해진다. 가드: `test/firebase_android_options_test.dart`.
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAadl3t0fLjs_Uwru8G_P04rOW3Y1mGcL8',
+    appId: '1:169329324307:android:4209f5427fe911f1b6aae6',
+    messagingSenderId: '169329324307',
+    projectId: 'awc-docs-cf67d',
+    storageBucket: 'awc-docs-cf67d.firebasestorage.app',
+  );
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyChCowMU1djticwepJearz5PUdDdLu35DM',
