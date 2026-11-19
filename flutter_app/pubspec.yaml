@@ -48,6 +48,7 @@ dependencies:
   # 2.2.23 은 `path_provider: ^2.1.6` 의 제약 `^2.2.5` 안이라 dependency_overrides 가
   # 필요 없다. 상류가 고치면 이 핀과 `android_local_storage_pin_test.dart` 를 함께 푼다.
   path_provider_android: 2.2.23
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:

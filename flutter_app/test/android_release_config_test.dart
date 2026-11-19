@@ -117,6 +117,20 @@ void main() {
     expect(pinned, '2.2.23');
   });
 
+  test('Kotlin 증분 컴파일이 꺼져 있다', () {
+    // ⚠️ `:url_launcher_android:compileReleaseKotlin` 이 Windows 에서
+    // "Could not close incremental caches ... *.tab" 로 **재현 가능하게** 실패한다
+    // (캐시 디렉터리 삭제 · Gradle 데몬 정지 · 에뮬레이터 종료를 모두 해도 동일 —
+    //  2026-11-19 실측, 세 번 연속). 증분 캐시를 쓰지 않으면 그 파일 핸들 자체가
+    // 생기지 않아 같은 빌드가 통과한다.
+    // ⚠️ Linux CI 에서도 같은 문제가 나는지는 **확인하지 않았다** — 지우기 전에 먼저 잰다.
+    final props = File('android/gradle.properties').readAsStringSync();
+    // 대조군: 파일을 실제로 읽었다.
+    expect(props, contains('android.useAndroidX=true'));
+    expect(props, contains('kotlin.incremental=false'),
+        reason: '지우면 Windows 에서 APK 빌드가 다시 깨진다');
+  });
+
   test('잠금 파일에 jni 계열이 들어오지 않는다', () {
     final lock = File('pubspec.lock').readAsStringSync();
     // 대조군: 잠금 파일을 실제로 읽었다(추출이 깨져 0건이 되는 거짓 통과를 막는다).
