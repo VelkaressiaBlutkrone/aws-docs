@@ -39,6 +39,15 @@ dependencies:
   firebase_core: ^4.10.0
   firebase_auth: ^6.5.2
   cloud_firestore: ^6.5.0
+  path_provider: ^2.1.6
+  # ⚠️ Android 구현을 JNI 도입 직전 판에 고정한다(2026-11-19 실측).
+  # path_provider_android 는 2.3.0(2026-04-06)부터 JNI 경로를 쓰는데, 최신 2.3.1 에서
+  # `ClassNotFoundException: Didn't find class "Landroid/content/Context;"` 로 디렉터리
+  # 조회가 실패한다(JNI 시그니처 형식을 클래스 이름 자리에 넘긴다). **릴리스·디버그
+  # 양쪽에서 재현**되므로 R8 축소가 아니라 상류 버그이고, 2.3.1 뒤로 수정판이 없다.
+  # 2.2.23 은 `path_provider: ^2.1.6` 의 제약 `^2.2.5` 안이라 dependency_overrides 가
+  # 필요 없다. 상류가 고치면 이 핀과 `android_local_storage_pin_test.dart` 를 함께 푼다.
+  path_provider_android: 2.2.23
 
 dev_dependencies:
   flutter_test:
