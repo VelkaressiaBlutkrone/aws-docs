@@ -111,7 +111,7 @@
 | # | 작업 | 완료 기준(검증) | 주체 |
 |---|---|---|---|
 | A0 | Play 개발자 계정 생성·본인 확인, 테스터 모집 시작, 패키지 이름·앱 이름 확정 | Play Console 에서 앱을 만들 수 있다 | 사람 |
-| A1 | `flutter create --platforms=android .` 로 플랫폼 추가, `targetSdk` ≥ 36, 릴리스 서명 구성 | `flutter build appbundle --release` 성공 · 실기기에서 홈 렌더 · **Pretendard(woff2)가 제대로 그려진다**(§8-⑥) | AI + 사람(키 생성·보관) |
+| ~~A1~~ **완료 2026-11-18** (PR #617, 머지 `66f3c82`) | `flutter create --platforms=android --org kr.ai.leva .`, `applicationId` `kr.ai.leva.awsdocs`, `minSdk 24`·`targetSdk 36` 리터럴, `key.properties` 서명 + debug 폴백, main manifest INTERNET, 가드 8건 | ✅ `flutter build appbundle --release` **exit 0** · 에뮬레이터에서 홈 렌더 · **Pretendard(woff2) 렌더 확인**(§8-⑥ 해소). 남은 사람 몫: `flutter doctor --android-licenses`(법적 승인) · 업로드 키스토어 생성·보관 | AI + 사람 |
 | A2 | **로컬 저장소** Android 구현(동기 `KvBackend` 뒤의 영속 캐시) — **가장 먼저** | 단위 테스트: 쓰기 → 새 인스턴스에서 읽힘 · 실기기: 퀴즈 응시 → 앱 강제 종료 → 재실행 후 기록 유지 | AI |
 | A3 | Firebase Android 앱 등록 + `firebase_options.dart`·`cloudConfigured()` 갱신 | 실기기에서 `Firebase.initializeApp` 성공(로그) · VM 테스트 불변 | 사람(콘솔 등록·SHA 지문) + AI |
 | A4 | Android Google 로그인(팝업 대체) | 실기기: 로그인 → 다른 기기(웹)의 기록이 내려온다 · 로그아웃 | AI + 사람(실기기 확인) |
@@ -231,18 +231,18 @@ C(DVA 전환, 12-01 이후 · 웹)  ── 독립         └─ D2(게시판)
 
 | # | 무엇 | 왜 중요한가 | 확인 방법 |
 |---|---|---|---|
-| ① | Play 개발자 계정이 이미 있는지, 유형(개인/조직)과 생성일 | 2023-11-13 이전 개인 계정이면 12명×14일이 적용되지 않는다 | 사용자에게 확인 |
-| ② | 신규 계정의 기기 확인·등록비·본인 확인 소요 | A0 가 며칠 걸리는지 | 도움말 answer/14316361(열람 안 함) · Console |
-| ③ | 조직 계정의 테스트 요건 면제 여부 | 열람한 페이지에 언급이 없다 | Console |
+| ① | ~~Play 개발자 계정이 이미 있는지, 유형과 생성일~~ | **해소 2026-11-18 — 계정이 없다.** 지금 만들면 2023-11-13 이후 **개인** 계정이므로 **12명 × 14일이 그대로 적용된다**. 이 전제 위에서 §4 일정을 읽는다 | 사용자 답변 |
+| ② | 신규 계정의 기기 확인·본인 확인 **소요**(등록비는 **US$25 일회성**으로 확인) | A0 가 며칠 걸리는지 | Console |
+| ③ | 조직 계정의 테스트 요건 면제 여부 | **실측 2026-11-18 — 면제를 적은 공식 문장을 찾지 못했다.** 요건 페이지(answer/14151465)는 제목·본문 모두 `personal developer accounts created after November 13, 2023` 로 한정하지만, 계정 유형 선택 페이지(answer/13634885)는 테스트·테스터·프로덕션 액세스를 **한 번도 언급하지 않는다** — 「문면에 없다」가 「면제다」는 아니다. 게다가 조직 계정은 **D-U-N-S 가 필수이고 발급에 최대 30일**(answer/13628312, 무료·신속 경로 없음)이라 연내 일정과 양립하지 않는다 → **개인 계정으로 간다** | 공식 페이지 실측 |
 | ④ | 프로덕션 승인 뒤 첫 출시·이후 업데이트의 심사 소요 | §4 여유와 §5-② 판단 | Console · 도움말 |
 | ⑤ | 운영자 전용 피드백의 UGC 해당 여부, Data safety 에서의 분류 | D2 범위 | 정책 문의 또는 Console 양식 |
-| ⑥ | `PretendardVariable.woff2` 가 Android 엔진에서 렌더되는지 | 안 되면 폰트 자산을 바꿔야 한다(웹 번들 크기와 충돌) | A1 실기기 |
+| ⑥ | ~~`PretendardVariable.woff2` 가 Android 엔진에서 렌더되는지~~ | **해소 2026-11-18 — 렌더된다.** 에뮬레이터(API 36)에 릴리스 APK 를 설치해 실행: 폰트·자산 로드 실패 로그 **0건**(대조군 — 같은 추출에서 `I flutter` 15줄), 굵기가 단계별로 다르게 그려진다(번들 폰트가 하나뿐이고 `fontVariations(wght)` 로 제어하므로 디코드 실패면 불가능). ⭐ 렌더 백엔드는 **Impeller(OpenGLES)** 라 pubspec 주석의 canvaskit 근거와 **다른 경로인데도** 양쪽 다 렌더한다 | A1 에뮬레이터 실측 |
 | ⑦ | Android Google 로그인 방식과 Play 서명 키 지문 등록 절차 | 내부 테스트 빌드에서 로그인이 깨지는 흔한 원인 | A4 착수 시 Context7 · B1 |
 | ⑧ | 백그라운드 오디오의 포그라운드 서비스 선언 요건 | D1 제출 | 도움말 · Console |
-| ⑨ | Flutter 3.47.2 템플릿의 기본 `targetSdk`·`minSdk`, Firebase 플러그인의 최소 SDK | A1 | `flutter create` 결과 |
+| ⑨ | ~~Flutter 3.47.2 템플릿의 기본 `targetSdk`·`minSdk`~~ | **해소 2026-11-18** — `FlutterExtension.kt` 실측으로 **compileSdk 36 · minSdk 24 · targetSdk 36 · ndk 28.2.13676358**. 기본값이 이미 Play 요건(36)을 넘지만 **리터럴로 고정**해 감사 가능하게 했다. minSdk 24 에서 Firebase 플러그인이 빌드된다(AAB·APK 빌드 exit 0) | A1 실측 |
 | ⑩ | DVA-C03 시험 시간(G-03), ANS-C01 은퇴·DOP-C02 개정의 공식 확인 | 단계 C · §6 | AWS 인증 페이지 |
 | ⑪ | Google 로그인만 있는 앱이 「앱 계정」 정의에 드는지 | 페이지는 SSO 를 인증 방식으로 열거할 뿐 확정하지 않는다. **든다고 보고 A7 을 한다** | — |
-| ⑫ | 테스터 12명을 실제로 모을 수 있는지 | 일정 전체 | 사용자 |
+| ⑫ | 테스터 12명을 실제로 모을 수 있는지 | **사용자 답변 2026-11-18 — 확신할 수 없다.** ①에 따라 우회 경로가 없으므로 **연내 출시 여부가 이 하나에 달렸다**. 12-10(테스트 시작 한계일)에 재판정하고, 미달이면 1월로 옮기고 그동안 웹으로 서비스한다. ⚠️ 공식이 거절 사유로 **`insufficient tester engagement`** 도 적으므로 머릿수만 채우는 교환방이 아니라 **실제 수험생 15~18명**을 목표로 한다 | 사용자 · 12-10 재판정 |
 
 ---
 
