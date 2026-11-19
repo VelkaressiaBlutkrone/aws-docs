@@ -100,6 +100,33 @@ void main() {
     expect(m, contains('android:label="$_appLabel"'), reason: '런처 표시명이 웹 PWA 이름과 달라졌다');
   });
 
+  test('path_provider_android 가 JNI 이전 판에 정확한 버전으로 고정돼 있다', () {
+    // ⚠️ 2.3.0(2026-04-06)부터 JNI 경로를 쓰는데, 최신 2.3.1 에서
+    // `ClassNotFoundException: Didn't find class "Landroid/content/Context;"` 로
+    // 디렉터리 조회가 실패한다(릴리스·디버그 양쪽에서 재현 — R8 축소가 아니다).
+    // 그러면 `initLocalStorage()` 가 degrade 해 **학습 기록이 메모리에만 남는다** —
+    // A2 가 고친 바로 그 증상으로 조용히 되돌아간다.
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    final m = RegExp(r'^\s*path_provider_android:\s*(\S+)\s*$', multiLine: true)
+        .firstMatch(pubspec);
+    expect(m, isNotNull,
+        reason: 'path_provider_android 핀이 사라졌다 — 상류가 고쳤다면 이 가드도 함께 푼다');
+    final pinned = m!.group(1)!;
+    expect(pinned, isNot(startsWith('^')),
+        reason: '캐럿 범위면 2.3.x 로 올라가 다시 깨진다 — 정확한 버전이어야 한다');
+    expect(pinned, '2.2.23');
+  });
+
+  test('잠금 파일에 jni 계열이 들어오지 않는다', () {
+    final lock = File('pubspec.lock').readAsStringSync();
+    // 대조군: 잠금 파일을 실제로 읽었다(추출이 깨져 0건이 되는 거짓 통과를 막는다).
+    expect(lock, contains('path_provider_android:'));
+    for (final pkg in const ['jni', 'jni_flutter', 'jni_util']) {
+      expect(RegExp('^  $pkg:\$', multiLine: true).hasMatch(lock), isFalse,
+          reason: '$pkg 가 들어왔다 = path_provider_android 가 2.3.x 로 올라갔다');
+    }
+  });
+
   test('Kotlin 소스 경로가 패키지 이름과 일치한다', () {
     final dir = _appId.replaceAll('.', '/');
     expect(File('android/app/src/main/kotlin/$dir/MainActivity.kt').existsSync(), isTrue,
