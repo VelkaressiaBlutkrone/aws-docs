@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../main.dart' show syncController;
 import '../../theme/app_theme.dart';
+import '../../util/legal_links.dart';
+import '../../util/open_link.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/focus_ring.dart';
 import '../../widgets/touch_target.dart';
@@ -157,6 +159,7 @@ class _NavMenuButton extends StatelessWidget {
 
   static const _resetKey = '__reset_all__';
   static const _syncKey = '__sync__';
+  static const _privacyKey = '__privacy__';
 
   @override
   Widget build(BuildContext context) {
@@ -177,6 +180,8 @@ class _NavMenuButton extends StatelessWidget {
         onSelected: (key) {
           if (key == _syncKey) {
             _SettingsButton.openSyncSheet(context);
+          } else if (key == _privacyKey) {
+            openLink(kPrivacyPolicyUrl);
           } else if (key == _resetKey) {
             onResetAll?.call();
           } else {
@@ -201,6 +206,23 @@ class _NavMenuButton extends StatelessWidget {
                 Icon(Icons.sync_outlined, size: 18, color: c.accent),
                 const SizedBox(width: Gap.sm),
                 Text('기기 간 동기',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600, fontVariations: Wght.w600,
+                        color: c.text)),
+              ],
+            ),
+          ),
+          // A8 — Play 는 처리방침 링크가 **앱 안에도** 있어야 한다고 요구한다
+          // ("a privacy policy link or text within the app itself"). 폰 폭에서는
+          // 헤더가 이 메뉴 하나로 접히므로(설정 기어 없음) 여기에도 둔다.
+          PopupMenuItem<String>(
+            value: _privacyKey,
+            child: Row(
+              children: [
+                Icon(Icons.privacy_tip_outlined, size: 18, color: c.textMuted),
+                const SizedBox(width: Gap.sm),
+                Text('개인정보처리방침',
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600, fontVariations: Wght.w600,
@@ -293,6 +315,7 @@ class _SettingsButton extends StatelessWidget {
         onSelected: (v) {
           if (v == 'reset') onResetAll();
           if (v == 'sync') openSyncSheet(context);
+          if (v == 'privacy') openLink(kPrivacyPolicyUrl);
         },
         itemBuilder: (ctx) => [
           PopupMenuItem<String>(
@@ -302,6 +325,17 @@ class _SettingsButton extends StatelessWidget {
                 Icon(Icons.sync_outlined, size: 18, color: c.accent),
                 const SizedBox(width: Gap.sm),
                 const Text('기기 간 동기'),
+              ],
+            ),
+          ),
+          // A8 — 처리방침 앱 내 링크(Play User Data 정책). 위 _NavMenuButton 과 같은 항목.
+          PopupMenuItem<String>(
+            value: 'privacy',
+            child: Row(
+              children: [
+                Icon(Icons.privacy_tip_outlined, size: 18, color: c.textMuted),
+                const SizedBox(width: Gap.sm),
+                const Text('개인정보처리방침'),
               ],
             ),
           ),
