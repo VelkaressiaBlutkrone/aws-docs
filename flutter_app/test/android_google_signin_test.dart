@@ -59,6 +59,14 @@ class _ScriptedAuth implements AuthService {
   Future<void> signOut() async {
     _current = null;
   }
+
+  // A7 이 인터페이스에 더한 둘 — 이 테스트는 로그인 경로만 보므로 최소 구현이다.
+  @override
+  Future<bool> reauthenticate() async => _current != null;
+  @override
+  Future<void> deleteAccount() async {
+    _current = null;
+  }
 }
 
 class _EmptyCloud implements CloudStore {
