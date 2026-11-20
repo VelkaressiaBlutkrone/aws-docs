@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>계정 삭제 — AWS Docs Roadmap</title>
+  <meta name="description" content="AWS Docs Roadmap(운영자 leva) 계정과 동기된 학습 기록을 삭제하는 방법입니다. 앱을 설치하지 않고 웹에서도 삭제할 수 있습니다.">
+  <link rel="canonical" href="https://velkaressiablutkrone.github.io/aws-docs/delete-account.html">
+  <!--
+    Play 계정 삭제 요건: 경로가 눈에 띄고, 스토어 앱 이름·개발자 이름을 적고,
+    앱을 다시 설치하게 하지 않아야 한다. 외부 글꼴·스크립트를 쓰지 않는다.
+    가드: test/legal_pages_test.dart.
+  -->
+  <style>
+    :root {
+      --bg: #FBFAF8; --surface2: #F3F1EC; --border: #E7E4DD;
+      --text: #1B2430; --muted: #5C6573; --link: #0B6B61;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14181F; --surface2: #222A36; --border: #2A323F;
+        --text: #E8EAED; --muted: #9AA4B2; --link: #5ECABD;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+        "Malgun Gothic", "Noto Sans KR", sans-serif;
+      font-size: 16px; line-height: 1.7; word-break: keep-all;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+    .eyebrow { margin: 0; color: var(--muted); font-size: 14px; font-weight: 600; }
+    h1 { margin: 4px 0 8px; font-size: 32px; line-height: 1.3; }
+    h2 { margin: 0 0 12px; font-size: 21px; line-height: 1.4; }
+    .meta { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+    section { margin-top: 36px; }
+    .panel {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 20px;
+    }
+    a { color: var(--link); text-underline-offset: 3px; }
+    ol, ul { padding-left: 22px; }
+    li { margin: 6px 0; }
+    .small { color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">AWS Docs Roadmap · 운영자 leva</p>
+  <h1>계정 삭제</h1>
+  <p class="meta">AWS Docs Roadmap 계정과 동기된 학습 기록을 삭제하는 방법입니다.</p>
+
+  <div class="panel">
+    <p style="margin:0"><strong>앱을 설치하지 않아도 됩니다.</strong> 같은 기능이 웹 앱에 있어 브라우저에서 바로 삭제할 수
+    있고, 이메일로 요청할 수도 있습니다.</p>
+  </div>
+
+  <section id="path">
+    <h2>방법 1 — 웹이나 앱에서 직접 삭제</h2>
+    <ol>
+      <li>웹 앱 <a href="https://velkaressiablutkrone.github.io/aws-docs/">https://velkaressiablutkrone.github.io/aws-docs/</a>
+        를 열거나 Android 앱을 엽니다.</li>
+      <li>오른쪽 위 <strong>메뉴</strong>(넓은 화면에서는 <strong>설정</strong>)에서 <strong>기기 간 동기</strong>를 누릅니다.</li>
+      <li>로그인되어 있지 않다면 <strong>Google로 동기 켜기</strong>로 삭제할 계정에 로그인합니다.</li>
+      <li><strong>계정 삭제</strong>를 누르고 확인합니다.</li>
+      <li>보안을 위해 Google 계정으로 한 번 더 확인하면 삭제가 끝납니다.</li>
+    </ol>
+  </section>
+
+  <section id="email">
+    <h2>방법 2 — 이메일로 요청</h2>
+    <p><a href="mailto:info@leva.ai.kr?subject=AWS%20Docs%20Roadmap%20%EA%B3%84%EC%A0%95%20%EC%82%AD%EC%A0%9C%20%EC%9A%94%EC%B2%AD">info@leva.ai.kr</a>로
+    제목을 「AWS Docs Roadmap 계정 삭제 요청」으로, 본문에 로그인에 쓴 Google 계정 이메일을 적어 보내 주세요.
+    본인 확인 뒤 지체 없이 삭제하고 결과를 회신합니다.</p>
+  </section>
+
+  <section id="scope">
+    <h2>삭제되는 것과 남는 것</h2>
+    <p><strong>삭제됩니다</strong></p>
+    <ul>
+      <li>Firebase 계정 — Google 계정 이메일, 사용자 ID, 로그인으로 받은 기본 프로필</li>
+      <li>클라우드에 동기된 학습 기록 전부 — 응시 기록, 열람 기록, 학습 계획과 진행 상태, 동기 정보</li>
+      <li>방법 1로 삭제한 경우 그 기기(또는 브라우저)에 저장된 학습 기록</li>
+    </ul>
+    <p><strong>남는 것</strong></p>
+    <ul>
+      <li>삭제를 실행하지 않은 <strong>다른 기기·브라우저에 저장된 학습 기록</strong> — 그 기기에서 「모든 학습 기록 초기화」를
+        누르거나 앱을 삭제하면 지워집니다.</li>
+      <li>서비스 제공자 측 기록 — Google은 Firebase Authentication이 로그인 IP 주소를 몇 주 동안 보관하고, 계정 삭제 뒤
+        그 밖의 인증 정보를 운영 시스템과 백업에서 180일 안에 지운다고 밝힙니다.</li>
+      <li>Google 계정 자체 — 이 앱의 계정만 삭제되며 Google 계정은 그대로입니다.</li>
+    </ul>
+  </section>
+
+  <p class="small" style="margin-top:36px">자세한 내용은 <a href="privacy.html">개인정보처리방침</a>을 보세요.
+  AWS Docs Roadmap은 Amazon Web Services, Inc.와 제휴하거나 그 승인을 받지 않은 비공식 학습 도구입니다.</p>
+</main>
+</body>
+</html>
