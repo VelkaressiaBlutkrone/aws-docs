@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:aws_docs/content/quiz_widgets.dart';
+import 'package:aws_docs/data/cert_lookup.dart';
+import 'package:aws_docs/data/history_store.dart';
+import 'package:aws_docs/models/attempt_record.dart';
 import 'package:aws_docs/models/question.dart';
+import 'package:aws_docs/models/study_plan.dart';
+import 'package:aws_docs/pages/plan/plan_agenda.dart';
+import 'package:aws_docs/pages/report_page.dart';
 import 'package:aws_docs/pages/exam/exam_bits.dart';
 import 'package:aws_docs/pages/home/hero_section.dart';
 import 'package:aws_docs/pages/home/home_bits.dart';
@@ -311,7 +317,121 @@ void main() {
           reason: '4dp로는 34dp 칩의 완화 조건(≥8dp)을 못 맞춘다');
     });
   });
+
+  // A6-1이 공통 위젯 9종을 고쳤지만 **페이지 안에서 직접 만든 표면**은 그 목록에
+  // 없었다. 2026-11-20 A6 체크리스트 순회(에뮬레이터 16화면)가 셋을 더 찾았다 —
+  // 전부 `TouchTarget` 미적용이고 DESIGN.md의 「모든 인터랙티브의 탭 영역은 48dp
+  // 이상」을 어긴다. 수치는 그 측정의 실측값이다.
+  group('A6-5~7 — 페이지 안의 미적용 표면', () {
+    testWidgets('학습 일정 아젠다 — 항목 완료 체크박스', (tester) async {
+      // ⚠️ 가장 심한 미달이자 **실측으로 확정한** 자리다(2026-11-20): 노드 중심
+      // 탭은 먹고, 32dp 밖·48dp 안은 **먹지 않았다**. 29개 항목을 지워 나가는
+      // 이 화면에서 가장 자주 눌리는 요소다.
+      await tester.pumpWidget(_wrap(_agenda()));
+      await tester.pumpAndSettle();
+      final Finder cb = find.byType(Checkbox);
+      expect(cb, findsWidgets, reason: '대조군: 아젠다에 체크박스가 그려졌다');
+      _expectTap(tester, cb.first, alsoWidth: true);
+    });
+
+    testWidgets('학습 일정 아젠다 — 재분배·다시 만들기', (tester) async {
+      await tester.pumpWidget(_wrap(_agenda()));
+      await tester.pumpAndSettle();
+      for (final String label in ['재분배', '다시 만들기']) {
+        final Finder btn = find.ancestor(
+            of: find.text(label), matching: find.byType(TextButton));
+        expect(btn, findsOneWidget, reason: '대조군: $label 버튼이 있다');
+        _expectTap(tester, btn);
+      }
+    });
+
+    testWidgets('학습 일정 아젠다 — 월 보기·일정 삭제', (tester) async {
+      await tester.pumpWidget(_wrap(_agenda(onDelete: () {})));
+      await tester.pumpAndSettle();
+      final Finder icons = find.byType(IconButton);
+      expect(icons, findsNWidgets(2), reason: '대조군: 월 보기 + 일정 삭제');
+      for (var i = 0; i < 2; i++) {
+        _expectTap(tester, icons.at(i), alsoWidth: true);
+      }
+    });
+
+    testWidgets('약점 리포트 — 학습문서 링크·개념 칩', (tester) async {
+      tester.view.physicalSize = const Size(1200, 3000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      final KvBackend b = MemoryBackend();
+      // weak(정답률 70% 미만) Task가 있어야 링크와 개념 칩이 그려진다.
+      // ⚠️ `presentedQuestionIds`를 비우면 `resolvePresented`가 examId로 **그 Task
+      // 전 문항**을 출제로 잡아 13/15 = 87%가 되어 weak가 되지 않는다(실측).
+      HistoryStore(backend: b).add(const AttemptRecord(
+        certId: 'CLF-C02',
+        examId: 'practice:clf-t1-1',
+        mode: 'practice',
+        date: '2026-11-20T00:00:00.000Z',
+        correct: 0,
+        total: 2,
+        presentedQuestionIds: ['clf-t1-1-q1', 'clf-t1-1-q2'],
+        wrongQuestionIds: ['clf-t1-1-q1', 'clf-t1-1-q2'],
+        flaggedQuestionIds: [],
+        durationSpentSec: 10,
+      ));
+      await tester.pumpWidget(_wrap(
+          ReportPage(cert: certByCode('CLF-C02')!, backend: b)));
+      await tester.pumpAndSettle();
+      final Finder link = find.ancestor(
+          of: find.text('학습문서 →'), matching: find.byType(InkWell));
+      expect(link, findsWidgets, reason: '대조군: weak Task의 학습문서 링크');
+      _expectTap(tester, link.first);
+    });
+
+    testWidgets('시험 결과 — 오답 복기의 학습문서 링크', (tester) async {
+      await tester.pumpWidget(_wrap(SingleChildScrollView(
+        child: ResultsView(
+          // ⚠️ 개념 처방 큐는 `!isCorrect && q.skill.isNotEmpty`일 때만 그려진다.
+          bank: _bankWithSkill(),
+          picked: const {0: 0}, // 오답 → 복기 카드가 열린다
+          onOpenStudy: (_, _) {},
+        ),
+      )));
+      await tester.pumpAndSettle();
+      final Finder link = find.ancestor(
+          of: find.text('→ 학습문서'), matching: find.byType(InkWell));
+      expect(link, findsWidgets, reason: '대조군: 개념 처방 큐의 학습 링크');
+      _expectTap(tester, link.first);
+    });
+  });
 }
+
+/// A6-5 가드용 아젠다 — 항목이 있어야 체크박스가 그려진다.
+Widget _agenda({VoidCallback? onDelete}) => PlanAgenda(
+      cert: certByCode('CLF-C02')!,
+      plan: StudyPlan(
+        certCode: 'CLF-C02',
+        startIso: '2026-11-20',
+        endIso: '2026-12-04',
+        mode: PlanMode.examDate,
+        createdIso: '2026-11-20',
+        items: const [
+          PlanItem(
+              id: 'i1',
+              dateIso: '2026-11-20',
+              type: PlanItemType.doc,
+              phase: PlanPhase.learn,
+              refId: 'clf-t1-1'),
+          PlanItem(
+              id: 'i2',
+              dateIso: '2026-11-21',
+              type: PlanItemType.quiz,
+              phase: PlanPhase.learn,
+              refId: 'clf-t1-1'),
+        ],
+      ),
+      today: '2026-11-20',
+      onEdit: () {},
+      onChanged: (_) {},
+      onDelete: onDelete,
+      backend: MemoryBackend(),
+    );
 
 Widget _wrap(Widget child) => ThemeScope(
       isDark: false,
@@ -373,4 +493,26 @@ QuestionBank _bank() => QuestionBank(
       certCode: 'CLF-C02',
       domain: 0,
       questions: [_q('q1', correct: 1), _q('q2', correct: 0)],
+    );
+
+/// A6-7 가드용 — 개념 처방 큐는 `skill`이 있어야 그려진다.
+QuestionBank _bankWithSkill() => QuestionBank(
+      examGuideTaskId: 'clf-t1-1',
+      taskTitle: 'AWS 클라우드의 이점',
+      certCode: 'CLF-C02',
+      domain: 1,
+      questions: [
+        Question(
+          id: 'clf-t1-1-q1',
+          examGuideTaskId: 'clf-t1-1',
+          stem: 'q1 지문',
+          options: const ['보기 A', '보기 B'],
+          correct: 1,
+          explanation: 'q1 해설',
+          wrongExplanations: const {},
+          sources: const [],
+          verified: true,
+          skill: '클라우드 컴퓨팅 정의 (가치 제안)',
+        ),
+      ],
     );

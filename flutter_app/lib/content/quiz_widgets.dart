@@ -470,13 +470,15 @@ class _ConceptCue extends StatelessWidget {
       children: [
         chip,
         if (onOpenStudy != null)
-          InsetFocusRing(
+          // A6-7: 패딩으로 46.1dp까지만 확보돼 48dp에 못 미쳤다. 도색은 그대로
+          // 두고 탭 영역만 넓힌다(TouchTarget은 FocusRing 바깥).
+          TouchTarget(
+            child: InsetFocusRing(
             borderRadius: BorderRadius.circular(Radii.sm),
             child: InkWell(
               onTap: onOpenStudy,
               borderRadius: BorderRadius.circular(Radii.sm),
               child: Padding(
-                // 44px 터치 타깃 확보.
                 padding: const EdgeInsets.symmetric(
                     vertical: Gap.md, horizontal: Gap.xs),
                 child: Text('→ 학습문서',
@@ -486,6 +488,7 @@ class _ConceptCue extends StatelessWidget {
                         color: c.accent)),
               ),
             ),
+          ),
           ),
       ],
     );
