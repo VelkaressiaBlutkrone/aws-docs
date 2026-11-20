@@ -15,4 +15,25 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+
+    <!-- `MainActivity` 가 **저장 테마**에 맞춰 고르는 스플래시 테마 (A6-4 잔여, 2026-11-20).
+         `LaunchTheme` 과 달리 `values-night/` 짝이 없어 시스템 다크 모드와 무관하게
+         고정이다 — 그것이 이 수정의 요점이다.
+
+         ⚠️⚠️ **이름을 바꾸지 마라.** 공식 `SplashScreen.setSplashScreenTheme` javadoc:
+         "Internally, the theme name is resolved and persisted. This means that the theme
+         name must be stable across versions, otherwise it won't be found after your
+         application is updated." 이름을 바꾸면 **이미 설치된 기기**가 업데이트 후
+         스플래시 테마를 찾지 못한다. `test/splash_theme_sync_test.dart` 가 두 이름을
+         Kotlin 과 맞대 고정한다.
+
+         ⚠️ 색은 drawable 을 거치지 않고 `@color/` 를 직접 준다(ColorDrawable 로 해석된다).
+         `launch_background` 처럼 `drawable/` 과 `drawable-v21/` 에 같은 이름을 두면
+         2026-11-19 감사가 밟은 「같은 이름 파일이 둘」 함정을 되풀이한다. -->
+    <style name="SplashThemeLight" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@color/splash_background_light</item>
+    </style>
+    <style name="SplashThemeDark" parent="@android:style/Theme.Black.NoTitleBar">
+        <item name="android:windowBackground">@color/splash_background_dark</item>
+    </style>
 </resources>

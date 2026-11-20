@@ -70,13 +70,24 @@ void main() {
       return m!.group(1)!.toUpperCase();
     }
 
+    // ⚠️ 2026-11-20 부터 `splash_background` 는 색 리터럴이 아니라
+    // `@color/splash_background_light`·`_dark` **참조**다(A6-4 잔여) — 색 정의를 한정자 없는
+    // `values/` 한 곳에 모으고 `MainActivity` 가 저장 테마로 그 둘 중 하나를 고른다.
+    // 그래서 참조를 한 단계 따라가야 한다.
     String androidColor(String path) {
-      final m = RegExp(r'name="splash_background">(#[0-9A-Fa-f]{6,8})<')
-          .firstMatch(_read(path));
-      expect(m, isNotNull, reason: '$path 에 splash_background 가 없다');
-      final v = m!.group(1)!.toUpperCase();
+      String? raw(String p, String n) =>
+          RegExp('name="$n">([^<]+)<').firstMatch(_read(p))?.group(1);
+
+      var v = raw(path, 'splash_background');
+      expect(v, isNotNull, reason: '$path 에 splash_background 가 없다');
+      if (v!.startsWith('@color/')) {
+        final target = v.substring('@color/'.length);
+        v = raw('android/app/src/main/res/values/colors.xml', target);
+        expect(v, isNotNull, reason: '참조 대상 $target 이 values/colors.xml 에 없다');
+      }
+      final up = v!.toUpperCase();
       // #AARRGGBB 로 적었으면 알파를 떼고 비교한다.
-      return v.length == 9 ? '#${v.substring(3)}' : v;
+      return up.length == 9 ? '#${up.substring(3)}' : up;
     }
 
     expect(androidColor('android/app/src/main/res/values/colors.xml'),
