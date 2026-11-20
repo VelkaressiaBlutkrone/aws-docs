@@ -94,7 +94,7 @@ class _AwsDocsAppState extends State<AwsDocsApp> {
       isDark: _mode == ThemeMode.dark,
       toggle: _toggleTheme,
       child: MaterialApp.router(
-        title: 'AWS Docs Roadmap',
+        title: '구름사다리',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
