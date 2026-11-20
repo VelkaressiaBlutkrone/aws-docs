@@ -14,19 +14,25 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
+import '../widgets/touch_target.dart';
 import '../widgets/text.dart';
 
 /// 약점 리포트: cert의 Task별 정답률 표 + 70% 미만 Task 학습문서 처방.
 class ReportPage extends StatefulWidget {
-  const ReportPage({super.key, required this.cert});
+  const ReportPage({super.key, required this.cert, this.backend});
   final Certification cert;
+
+  /// 테스트 주입구 — VM의 `defaultBackend()`는 호출마다 별도 `MemoryBackend`라
+  /// 이것이 없으면 심은 응시 기록을 페이지가 보지 못한다(`HomePage.backend`와
+  /// 같은 사정). 프로덕션은 null이라 동작이 바뀌지 않는다.
+  final KvBackend? backend;
 
   @override
   State<ReportPage> createState() => _ReportPageState();
 }
 
 class _ReportPageState extends State<ReportPage> {
-  final _history = HistoryStore();
+  late final _history = HistoryStore(backend: widget.backend);
   late Future<_ReportLoad> _future = _load();
 
   Future<void> _resetCert() async {
@@ -238,14 +244,19 @@ class _ReportPageState extends State<ReportPage> {
                     style: t.labelSmall),
                 const Spacer(),
                 if (isWeak)
-                  InkWell(
-                    onTap: () => context
-                        .push('/cert/${widget.cert.code}/study/${s.taskId}'),
-                    child: Text('학습문서 →',
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700, fontVariations: Wght.w700,
-                            color: c.accent)),
+                  // A6-6: 패딩이 없어 탭 영역이 텍스트 크기(21.7dp)였다.
+                  // 도색은 그대로 두고 탭 영역만 48dp로 넓힌다.
+                  TouchTarget(
+                    child: InkWell(
+                      onTap: () => context
+                          .push('/cert/${widget.cert.code}/study/${s.taskId}'),
+                      child: Text('학습문서 →',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              fontVariations: Wght.w700,
+                              color: c.accent)),
+                    ),
                   ),
               ],
             ),
@@ -288,12 +299,15 @@ class _ConceptLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return InsetFocusRing(
-      borderRadius: BorderRadius.circular(Radii.full),
-      child: InkWell(
-        onTap: () =>
-            context.push(studyDeepLink(cert, taskId, concept.section)),
+    // A6-6: 세로 패딩이 4dp라 탭 영역이 30dp였다. 도색은 그대로 두고 탭 영역만
+    // 48dp로 넓힌다(TouchTarget은 FocusRing **바깥** — DESIGN.md Touch targets).
+    return TouchTarget(
+      child: InsetFocusRing(
         borderRadius: BorderRadius.circular(Radii.full),
+        child: InkWell(
+          onTap: () =>
+              context.push(studyDeepLink(cert, taskId, concept.section)),
+          borderRadius: BorderRadius.circular(Radii.full),
         child: Container(
           padding: const EdgeInsets.symmetric(
               horizontal: Gap.sm, vertical: Gap.xs),
@@ -319,6 +333,7 @@ class _ConceptLink extends StatelessWidget {
                       fontVariations: Wght.w700,
                       color: c.accentStrong)),
             ],
+          ),
           ),
         ),
       ),
