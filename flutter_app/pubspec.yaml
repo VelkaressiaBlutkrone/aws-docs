@@ -59,6 +59,13 @@ dependencies:
   # 가드: `test/android_google_signin_test.dart`.
   google_sign_in_android: ^7.2.19
   google_sign_in_platform_interface: ^3.1.0
+  # 네이티브(Android) 오디오 재생 — 로드맵 D1-a. 웹은 자체 `WebAudioBackend`
+  # (package:web DOM `<audio>`)를 그대로 쓰고, 이 패키지는 `audio_runtime_io.dart`
+  # 분기에서만 쓰인다.
+  # ⚠️ A4(google_sign_in)의 교훈대로 **웹 번들 오염을 측정하고 넣는다** — 그 패키지는
+  # 웹 구현이 등록 시점에 3자 스크립트를 조건 없이 주입했다. 실측은 PR 설명과
+  # `docs/plans/2026-11-18-productization-roadmap.md` D1 행에 남긴다.
+  just_audio: ^0.10.5
 
 dev_dependencies:
   flutter_test:
