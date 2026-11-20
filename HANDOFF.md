@@ -1,6 +1,7 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-11-20(**A6-4 잔여 해소 — Android 스플래시가 저장 테마를 읽는다**: A6-4 1차가 스플래시 색을 앱 배경에 맞췄지만 그 색이 `values-night/` 한정자로 **시스템** 다크를 따라서, 「시스템 다크 + 앱 라이트」에서 **`#14181F` 가 1,867ms** 보인 뒤 `#FBFAF8` 로 튀었다(30fps 녹화 실측). `MainActivity` 가 저장 파일을 직접 읽어 `setSplashScreenTheme` 으로 고정색 테마를 지정하게 했고 **다섯 조합 실측 전부 OK** — 가장 강한 증거는 「시스템 라이트 + 앱 다크 → 스플래시 다크」다(리소스 한정자만으로는 불가능). ⚠️⚠️ **1차 구현이 틀린 디렉터리를 봤고 내 가드가 그것을 굳히고 있었다**(grep 줄 번호로 두 메서드를 하나로 읽어 `app_flutter`=documents 를 봤다 — Dart 가 쓰는 것은 `files`=support). 가드를 먼저 뒤집고 구현을 고쳤다. 기준선 4,554 → **4,563** · analyze 0 · 측정 도구 `tool/android_splash_trace.py` 커밋. ⏳ A6 남은 것은 **실기기 점검 하나**(사람 몫)다. — §0-2026-11-20-c)_
+_갱신: 2026-11-21(**D1-a — Android 에서 강의 오디오가 재생된다**: Play 신원 확인 대기 중에 로드맵 **D1 의 앞 절반**을 넣었다(단계 A 의 AI 몫이 비어 있었다). Android 빌드는 `audio_lecture` 플래그 없이 만들어 **승인된 강의 39편이 통째로 숨어 있었다** — `NativeAudioBackend`(just_audio)와 `audio_runtime_io.dart` 둘만 더해 열었고, **`AudioController`·`MediaSessionBinder`·`LecturePlaylist` 는 한 줄도 바뀌지 않았다**(경계가 이미 순수 Dart 였다). 에뮬레이터 실측: `ExoPlayerImpl Init` · `MediaCodec adapter for track type audio` · `dumpsys audio` 가 우리 pid 를 `state:started` `USAGE_MEDIA` 24kHz 로 인식 · 미니플레이어 **3:53 / 30:08** 「재생 중입니다」. ⚠️⚠️ **`dart.library.io` 는 VM 테스트도 고른다** — 플랫폼 게이트가 없으면 `flutter test` 가 `AudioPlayer()` 를 만들어 깨진다(민감도에서 전체 3건 레드로 확인). ⭐ 웹 번들 **+1,367 B** 이고 **io 구현을 넣은 뒤에도 1바이트도 늘지 않았다**(A4 의 `google_sign_in` 과 질적으로 다르다 — 등록 시점 부작용이 없다). 기준선 4,563 → **4,573** · analyze 0. ⏳ **D1-b**(잠금화면·포그라운드 서비스·플래그 켜기)가 남았고 §8-⑧ 요건은 해소했다. — §0-2026-11-21)_
+_이전 갱신: 2026-11-20(**A6-4 잔여 해소 — Android 스플래시가 저장 테마를 읽는다**: A6-4 1차가 스플래시 색을 앱 배경에 맞췄지만 그 색이 `values-night/` 한정자로 **시스템** 다크를 따라서, 「시스템 다크 + 앱 라이트」에서 **`#14181F` 가 1,867ms** 보인 뒤 `#FBFAF8` 로 튀었다(30fps 녹화 실측). `MainActivity` 가 저장 파일을 직접 읽어 `setSplashScreenTheme` 으로 고정색 테마를 지정하게 했고 **다섯 조합 실측 전부 OK** — 가장 강한 증거는 「시스템 라이트 + 앱 다크 → 스플래시 다크」다(리소스 한정자만으로는 불가능). ⚠️⚠️ **1차 구현이 틀린 디렉터리를 봤고 내 가드가 그것을 굳히고 있었다**(grep 줄 번호로 두 메서드를 하나로 읽어 `app_flutter`=documents 를 봤다 — Dart 가 쓰는 것은 `files`=support). 가드를 먼저 뒤집고 구현을 고쳤다. 기준선 4,554 → **4,563** · analyze 0 · 측정 도구 `tool/android_splash_trace.py` 커밋. ⏳ A6 남은 것은 **실기기 점검 하나**(사람 몫)다. — §0-2026-11-20-c)_
 _이전 갱신: 2026-11-20(**A6 모바일 사용성 체크리스트 완료 + 터치 타깃 결함 6종 수정**: 2026-11-19 감사가 쓰고도 커밋하지 않은 판정 스크립트를 `tool/android_ui_audit.py` 로 되살려(가드 9건·self-test 17묶음) 미점검 5화면·3조건을 에뮬레이터로 돌았다. **16화면 전부 레이아웃 판정 0건**이지만 터치 타깃에서 **A6-5~7 여섯 자리**(아젠다 체크박스 **32dp** 등)를 찾아 `TouchTarget` 으로 고쳤다(가드 5건). 기준선 4,540 → **4,554** · analyze 0. ⏳ A6 남은 것은 **실기기 점검 하나**(사람 몫)다.)_
 _이전 갱신: 2026-11-20(**Android 제품화 단계 A(A1~A8) + 앱 이름 「구름사다리」 + 한국어 어절 단위 줄바꿈**: Android 플랫폼·로컬 저장·Firebase·Google 로그인·외부 링크·사용성 결함 4건·계정 삭제·개인정보처리방침·스토어 자산을 넣고(#617~#630), 앱 이름을 「구름사다리 — AWS 자격증 학습·모의고사」로 바꿨으며(#631), 앱 전체가 한국어를 글자 단위로 끊던 것을 어절 단위로 고쳤다(#633). 릴리스 3회(#629·#632·#634) · 라이브 `7f38c44`. 기준선 4,355 → **4,540** · analyze 0. ⏳ AI 몫은 A6 체크리스트, 나머지는 사람 몫(Play 계정·업로드 키·Console 제출).)_
 _이전 갱신: 2026-11-18(**제품화 로드맵 + 외부 리뷰 후속 채택 항목 전부 종료**: Fable 5.2 하위 세션이 재점검한 제품화·Google Play 로드맵을 develop에 넣었고(#610, 비공개 테스트 시작 한계 **12-08**), 외부 리뷰 후속 명세서를 레포 실측과 대조해 채택 항목을 닫았다 — 전 자격증 문항 구조 불변식 + 섹션 앵커 가드 142 Task(#611) · SAA·DEA·MLA 가이드 동기화와 공식 판으로 12곳 교체(#612) · 배포 산출물 `version.json`(#613, 릴리스 #614 뒤 라이브 커밋 일치 실측) · Task 단위 검수 원장 142 Task(#615). 기준선 4,201 → **4,355** · analyze 0.)_
@@ -87,6 +88,77 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
+
+## 0-2026-11-21. 완료: **D1-a — Android 오디오 재생 경로** (2026-11-21)
+
+로드맵 **D1 의 앞 절반**. Play 신원 확인이 Google 쪽 처리라 대기하는 동안, 단계 A 의 AI 몫이
+비어 있어 착수했다. Android 빌드는 `audio_lecture` 플래그 없이 만들어 왔으므로 **승인된
+강의 39편(CLF 19 + SAA 20)이 앱에서 통째로 숨어 있었다.**
+
+**⭐ 기존 경계가 그대로 재사용됐다.** `AudioBackend`·`MediaSessionBackend` 가 추상
+인터페이스이고 `AudioController`(상태 머신 137줄)·`MediaSessionBinder`(70줄)·
+`LecturePlaylist`(160줄)가 순수 Dart 라 **한 줄도 바뀌지 않았다**. 새로 쓴 것은
+`NativeAudioBackend`(just_audio 래핑)와 `audio_runtime_io.dart`(플랫폼 게이트 + D1-b 까지의
+no-op 세션) 둘뿐이고, 웹은 `audio_runtime_web` 이 그대로 돈다. URL 도 공짜였다 —
+`lectureAudioSrc` 가 승인분을 **R2 절대 URL** 로 주므로 네이티브가 그대로 `setUrl` 한다.
+
+**실측(에뮬레이터, 플래그를 켠 로컬 전용 APK)**
+- `ExoPlayerImpl Init 13f8f97 [AndroidXMedia3/1.4.1]` · `Creating an asynchronous MediaCodec
+  adapter for track type audio` · `AudioTrack getTimestamp_l`
+- `dumpsys audio` 가 우리 pid 를 **`state:started` · `USAGE_MEDIA` · `CONTENT_TYPE_MUSIC` ·
+  24kHz** 로 인식(= OS 가 보기에 실제로 소리가 나고 있다)
+- 미니플레이어 **3:53 / 30:08**, 진행 바, 일시정지 아이콘, 「재생 중입니다」
+- 간접 검증: 10,851,933 B ÷ 1,808초 ≈ **48 kbps** — Polly 24kHz mono 출력과 일관된다
+
+**⚠️⚠️ `dart.library.io` 분기는 VM 테스트도 고른다.** 지금까지 비웹은 stub(→
+`audioRuntime == null`)이었고 그 성질에 기대는 가드가 있다. 게이트 없이 io 판을 넣으면
+**Windows·CI 의 `flutter test` 가 `AudioPlayer()` 를 만들어** 깨진다 — 민감도 변이에서
+**전체 스위트 3건 레드 + 컴파일 에러**로 확인했다. 그래서 런타임 getter 가 플랫폼을 먼저
+보고, 그 판정을 **순수 함수**(`nativeAudioSupported`)로 뺐다. `Platform.isAndroid` 를 직접
+쓰면 **VM 에서 영원히 false 라 한쪽 분기만 증명된다**(레포 관례 — `shouldShowLecturePlayer`).
+
+**⚠️⚠️ `just_audio` 의 `play()` 는 「재생이 끝날 때까지」 완료되지 않는 Future 다**(공식
+문서: 「Play while waiting for completion」). `AudioController.play()` 가 그것을 await 하므로
+그대로 두면 **트랙 하나가 끝날 때까지 호출이 매달린다.** 웹의 `<audio>.play()` 는 "재생
+시작" Promise 라 **같은 인터페이스 뒤에서 의미가 갈리는 자리**다 — await 하지 않고 실패는
+이벤트로 알린다. 같은 결로 **`completed` 를 `playing` 보다 먼저** 본다(just_audio 의
+`playing` 은 재생 "의도"라 끝난 뒤에도 true 로 남을 수 있고, 뒤집으면 `PlayMode.autoAll` 의
+자동 전환이 돌지 않는다).
+
+**⭐⭐ 웹 번들 오염은 A4 와 질적으로 달랐다.** A4 의 `google_sign_in` 은 웹 구현이 **등록
+시점에** 3자 스크립트를 조건 없이 주입했지만, `just_audio_web` 의 `registerWith` 는
+`JustAudioPlatform.instance = JustAudioPlugin();` **한 줄**이고
+`document.createElement('audio')` 는 `Html5AudioPlayer` 의 **필드**라 플레이어를 만들 때만
+실행된다(우리 웹은 만들지 않는다). 실측 `main.dart.js` **3,280,274 → 3,281,641(+1,367 B ·
+0.04%)**, 마커 **0건**, 대조군(`aws-audio.leva.ai.kr` 1건)으로 grep 유효성 확인. ⭐ **io
+구현을 다 넣은 뒤 다시 빌드해도 3,281,641 로 1바이트도 늘지 않았다** — 조건부 import 가 io
+판을 웹에서 완전히 배제한다는 직접 증거다. APK 는 61.0 → **63.5MB**.
+
+**⚠️⚠️ 백그라운드 재생이 포그라운드 서비스 없이도 유지됐다** — 홈 키로 보낸 뒤 15초,
+`state:started`, 포그라운드 서비스 **0개**. 그래서 **D1-b 의 근거는 「멈춘다」가 아니다**:
+① 서비스가 없으면 OS 가 메모리 압박 시 이 프로세스를 우선 회수할 수 있고 ② **잠금화면·
+알림 컨트롤과 미디어 버튼이 없다**(지금은 `_NoopMediaSession`). 제조사별 배터리 관리가 더
+공격적인 **실기기에서는 다를 수 있고 아직 확인하지 않았다.**
+
+**⚠️⚠️ 측정 방법에서 두 번 틀렸고 둘 다 「화면은 멀쩡한데 내 스크립트가 못 본」 경우다.**
+① uiautomator XML 의 속성 순서가 `index,text,…,content-desc` 라 `(?:content-desc|text)` 로
+쓰면 **앞의 빈 `text=""` 를 먼저 잡아** Flutter 노드가 전부 걸러진다(노드 0건) ② 탭 대상이
+**글래스 헤더 뒤**(상단 ~210px)면 헤더가 받는다(A6 에 적어 둔 함정인데 이 스크립트에만
+필터를 빠뜨렸다). ⭐⭐ **그리고 재생 위치는 접근성 트리에 아예 없다** — Flutter `Text` 가
+Semantics 로 올라가지 않아 `0:00` 만 잡혔고 실제 화면은 `3:53 / 30:08` 이었다. **스크린샷이
+유일한 판정 수단이다**(A6 의 「접근성 노드는 손가락이 닿는 영역이 아니다」와 같은 계열).
+
+**§8-⑧ 해소** — 포그라운드 서비스 요건을 공식 문서로 확인했다(권한 셋 ·
+`foregroundServiceType="mediaPlayback"` · 미디어 버튼 리시버 · **Activity 를
+`AudioServiceActivity` 로 교체**). ⚠️ `MainActivity` 가 A6-4 의 스플래시 코드를 들고 있으므로
+교체는 **상속만** 바꾼다.
+
+가드 **10건** · 민감도 변이 **5종 전부 레드**(복구 sha256 일치) · 기준선 4,563 → **4,573** ·
+analyze **0** · 웹·APK 릴리스 빌드 exit 0.
+⏳ **D1-b**: `audio_service` 세션 + manifest + Activity 교체 → 마지막에 Android 빌드의
+`audio_lecture` 플래그를 켠다.
+
+---
 
 ## 0-2026-11-20-c. 완료: **A6-4 잔여 — Android 스플래시가 저장 테마를 읽는다** (2026-11-20)
 
