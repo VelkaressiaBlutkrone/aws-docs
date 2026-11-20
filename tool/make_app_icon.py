@@ -11,7 +11,9 @@
 필요: Pillow · fontTools · brotli (woff2 디코드).
 사용:  py tool/make_app_icon.py          # 생성
        py tool/make_app_icon.py --check  # 쓰지 않고 치수만 출력
+       py tool/make_app_icon.py --store  # Play 스토어 아이콘·기능 그래픽(docs/play/assets)
 """
+import functools
 import pathlib
 import sys
 import tempfile
@@ -42,15 +44,18 @@ ADAPTIVE_SCALE = 108 / 48
 SAFE_RATIO = 72 / 108
 
 
-def instanced_font() -> pathlib.Path:
-    """Pretendard Variable(woff2) 을 wght=800 으로 인스턴스화해 TTF 로 뽑는다.
+@functools.lru_cache(maxsize=None)
+def instanced_font(weight: int = 800) -> pathlib.Path:
+    """Pretendard Variable(woff2) 을 주어진 wght 로 인스턴스화해 TTF 로 뽑는다.
 
     PIL 은 woff2 를 읽지 못하고, 가변 축을 지정할 수도 없다.
+    ⚠️ 굵기마다 한 번만 만든다 — PIL 이 연 TTF 를 Windows 에서 다시 덮어쓰면
+    `OSError: [Errno 22]` 로 실패한다(make_og_image.py 가 같은 굵기를 두 번 부르다 걸렸다).
     """
     font = TTFont(str(WOFF2))  # woff2 디코드는 brotli 가 한다
-    static = instancer.instantiateVariableFont(font, {"wght": 800})
+    static = instancer.instantiateVariableFont(font, {"wght": weight})
     static.flavor = None
-    out = pathlib.Path(tempfile.gettempdir()) / "PretendardW800.ttf"
+    out = pathlib.Path(tempfile.gettempdir()) / ("PretendardW%d.ttf" % weight)
     static.save(str(out))
     return out
 
@@ -82,8 +87,58 @@ def save(img: Image.Image, path: pathlib.Path, *, rgb: bool = False) -> None:
     (img.convert("RGB") if rgb else img).save(path, "PNG", optimize=True)
 
 
+STORE = ROOT / "docs/play/assets"
+BG = (0xFB, 0xFA, 0xF8)            # app_theme.dart 라이트: bg
+TEXT = (0x1B, 0x24, 0x30)          # app_theme.dart 라이트: text
+# 기능 그래픽 문구(사용자 승인 2026-11-20). 앱 이름(A0) 미정이고 「AWS」 상표를 피해
+# 이름 없이 마크 + 한 줄만 둔다. 이름이 정해지면 여기만 바꿔 다시 생성한다.
+FEATURE_LINE = "클라우드 자격증을 이해하며 공부하기"
+
+
+def main_store(check: bool) -> None:
+    """Play 스토어 그래픽(A8-2). 런처·웹 자산은 건드리지 않는다.
+
+    - 아이콘 512×512 32-bit PNG: Play 가 30% 마스크·그림자를 직접 씌우므로
+      **모서리를 깎지 않은 정사각형**으로 그린다("Don't round the edges of your final asset").
+    - 기능 그래픽 1024×500 no alpha: 라이트 배경에 마크와 한 줄 문구.
+    가드: flutter_app/test/store_assets_test.dart.
+    """
+    ttf = instanced_font()
+    icon = draw_mark(512, ttf, glyph_ratio=MARK_GLYPH,
+                     radius_ratio=None, transparent_bg=False)
+
+    w, h = 1024, 500
+    fg = Image.new("RGB", (w * SS, h * SS), BG)
+    mark_px = 168
+    mark = draw_mark(mark_px * SS, ttf, glyph_ratio=MARK_GLYPH,
+                     radius_ratio=MARK_RADIUS, transparent_bg=False)
+    text_font = ImageFont.truetype(str(instanced_font(700)), 46 * SS)
+    d = ImageDraw.Draw(fg)
+    box = d.textbbox((0, 0), FEATURE_LINE, font=text_font)
+    text_w, text_h = box[2] - box[0], box[3] - box[1]
+    gap = 40 * SS
+    total = mark_px * SS + gap + text_w
+    margin = 64 * SS
+    # 글자가 넘치면 조용히 잘리지 않게 멈춘다(문구를 바꿀 때 걸린다).
+    assert total <= w * SS - 2 * margin, "feature line too wide: %d" % (total // SS)
+    x0 = (w * SS - total) // 2
+    fg.paste(mark, (x0, (h * SS - mark_px * SS) // 2), mark)
+    d.text((x0 + mark_px * SS + gap - box[0], (h * SS - text_h) // 2 - box[1]),
+           FEATURE_LINE, font=text_font, fill=TEXT)
+    feature = fg.resize((w, h), Image.LANCZOS)
+
+    if not check:
+        save(icon, STORE / "icon-512.png")
+        save(feature, STORE / "feature-graphic.png", rgb=True)
+    sys.stdout.write("%s store: icon-512.png 512px, feature-graphic.png %dx%d (line %dpx)\n"
+                     % ("CHECK" if check else "WROTE", w, h, total // SS))
+
+
 def main() -> None:
     check = "--check" in sys.argv
+    if "--store" in sys.argv:
+        main_store(check)
+        return
     ttf = instanced_font()
     made = []
 

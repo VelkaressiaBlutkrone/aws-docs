@@ -28,7 +28,10 @@ const String kPrivacyContactEmail = 'info@leva.ai.kr';
 /// 운영자(개발자) 표기 — Play 스토어의 개발자 이름과 같아야 한다.
 const String kOperatorName = 'leva';
 
-/// 스토어에 보이는 앱 이름 — Android `android:label` 과 같다.
-/// ⚠️ 「AWS Docs」는 아마존 공식 문서의 이름이라 Play 사칭 정책에 걸릴 위험이 있다
-/// (이름 확정은 로드맵 A0 의 사람 몫). 두 페이지가 「비공식」 고지를 함께 싣는다.
-const String kAppDisplayName = 'AWS Docs Roadmap';
+/// 짧은 앱 이름 — Android `android:label` · 웹 `short_name` · 헤더 워드마크(2026-11-20 사용자 확정).
+const String kAppDisplayName = '구름사다리';
+
+/// Play 스토어 등록명 — 웹 제목·PWA `name` 과 같고, 두 정책 페이지가 이 이름을 싣는다
+/// (Play 는 계정 삭제 페이지에 「스토어 등록정보에 보이는 앱 이름」을 요구한다).
+/// Play 앱 이름 한도는 30자다. 「AWS」는 서술적으로만 쓰고 두 페이지가 「비공식」 고지를 싣는다.
+const String kStoreListingName = '$kAppDisplayName — AWS 자격증 학습·모의고사';

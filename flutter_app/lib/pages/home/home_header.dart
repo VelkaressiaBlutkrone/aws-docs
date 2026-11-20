@@ -107,7 +107,13 @@ class _Brand extends StatelessWidget {
         ),
         const SizedBox(width: Gap.sm),
         Flexible(
-          child: Text('AWS Docs Roadmap',
+          // 워드마크: 「구름」 본문색 + 「사다리」 accent(DESIGN.md, 2026-11-20 사용자 확정).
+          // 합친 글자가 kAppDisplayName 과 같아야 한다 — brand_name_test 가 본다.
+          child: Text.rich(
+              TextSpan(children: [
+                TextSpan(text: '구름', style: TextStyle(color: c.text)),
+                TextSpan(text: '사다리', style: TextStyle(color: c.accent)),
+              ]),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

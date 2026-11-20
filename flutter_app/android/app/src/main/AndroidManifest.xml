@@ -3,7 +3,7 @@
          manifest 에만 넣으므로, 여기에 없으면 설치된 앱이 Firestore·R2 에 닿지 못한다. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="AWS Docs Roadmap"
+        android:label="구름사다리"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
