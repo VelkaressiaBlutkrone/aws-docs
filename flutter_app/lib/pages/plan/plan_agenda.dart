@@ -14,6 +14,7 @@ import '../../models/certification.dart';
 import '../../models/study_plan.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/touch_target.dart';
 import 'plan_summary.dart';
 import '../../widgets/text.dart';
 
@@ -125,18 +126,22 @@ class _PlanAgendaState extends State<PlanAgenda> {
                   style: t.bodyMedium?.copyWith(color: c.textMuted)),
             ),
             const Spacer(),
-            IconButton(
-              tooltip: _month ? '어젠다' : '월 보기',
-              visualDensity: VisualDensity.compact,
-              icon: Icon(
-                  _month
-                      ? Icons.view_agenda_outlined
-                      : Icons.calendar_month_outlined,
-                  size: 20,
-                  color: c.textMuted),
-              onPressed: () => setState(() => _month = !_month),
+            // A6-5: 도색(compact 40dp)은 그대로 두고 탭 영역만 48dp로 넓힌다.
+            TouchTarget(
+              child: IconButton(
+                tooltip: _month ? '어젠다' : '월 보기',
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                    _month
+                        ? Icons.view_agenda_outlined
+                        : Icons.calendar_month_outlined,
+                    size: 20,
+                    color: c.textMuted),
+                onPressed: () => setState(() => _month = !_month),
+              ),
             ),
-            TextButton(
+            TouchTarget(
+                child: TextButton(
               style: TextButton.styleFrom(
                 minimumSize: Size.zero,
                 padding: const EdgeInsets.symmetric(horizontal: Gap.sm),
@@ -164,8 +169,9 @@ class _PlanAgendaState extends State<PlanAgenda> {
                 }
               },
               child: const Text('재분배'),
-            ),
-            TextButton(
+            )),
+            TouchTarget(
+                child: TextButton(
               style: TextButton.styleFrom(
                 minimumSize: Size.zero,
                 padding: const EdgeInsets.symmetric(horizontal: Gap.sm),
@@ -173,13 +179,16 @@ class _PlanAgendaState extends State<PlanAgenda> {
               ),
               onPressed: widget.onEdit,
               child: const Text('다시 만들기'),
-            ),
+            )),
             if (widget.onDelete != null)
-              IconButton(
-                tooltip: '일정 삭제',
-                visualDensity: VisualDensity.compact,
-                icon: Icon(Icons.delete_outline, size: 20, color: c.textMuted),
-                onPressed: widget.onDelete,
+              TouchTarget(
+                child: IconButton(
+                  tooltip: '일정 삭제',
+                  visualDensity: VisualDensity.compact,
+                  icon:
+                      Icon(Icons.delete_outline, size: 20, color: c.textMuted),
+                  onPressed: widget.onDelete,
+                ),
               ),
           ],
         ),
@@ -370,12 +379,17 @@ class _PlanAgendaState extends State<PlanAgenda> {
         ),
         child: Row(
           children: [
-            Checkbox(
-              value: done,
-              onChanged: (_) => _toggle(it.id, done),
-              activeColor: c.accent,
-              visualDensity: VisualDensity.compact,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            // A6-5: 이 화면에서 가장 자주 눌리는 요소였는데 탭 영역이 32dp였다
+            // (2026-11-20 에뮬레이터 실측 — 32 밖·48 안 탭이 먹지 않았다).
+            // 도색은 compact 그대로 두고 탭 영역만 48dp로 넓힌다.
+            TouchTarget(
+              child: Checkbox(
+                value: done,
+                onChanged: (_) => _toggle(it.id, done),
+                activeColor: c.accent,
+                visualDensity: VisualDensity.compact,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
             ),
             Expanded(
               child: FocusTap(
