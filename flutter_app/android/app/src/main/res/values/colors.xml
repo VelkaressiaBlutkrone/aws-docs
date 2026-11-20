@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 스플래시 배경(라이트). 웹 index.html 의
-         `theme-color` (prefers-color-scheme: light) 와 같은 값이어야 한다 —
-         `test/app_icon_splash_test.dart` 가 웹에서 읽어 비교한다.
-         ⚠️ 템플릿은 @android:color/white 였는데, 그러면 다크에서 흰 화면이 번쩍이고
-         라이트에서도 미묘하게 틀렸다(이 앱의 배경은 순백이 아니다). -->
-    <color name="splash_background">#FBFAF8</color>
+    <!-- 스플래시 배경의 **색 정의는 이 둘뿐**이다(A6-4 잔여, 2026-11-20).
+         한정자 없는 `values/` 에만 둬서 **시스템 다크 모드와 무관하게 고정**이다 —
+         `MainActivity` 가 저장 테마를 읽어 `SplashThemeLight`·`SplashThemeDark` 중
+         하나를 고르므로, 이 색이 `values-night/` 로 갈리면 그 선택이 무의미해진다.
+         웹 index.html 의 `theme-color` 와 같은 값이어야 하고
+         `test/splash_theme_sync_test.dart` 가 웹에서 읽어 비교한다. -->
+    <color name="splash_background_light">#FBFAF8</color>
+    <color name="splash_background_dark">#14181F</color>
+
+    <!-- `LaunchTheme` 이 쓰는 색 — **시스템** 다크 모드를 따른다(`values-night/` 에 짝이 있다).
+         API 31 미만(시스템 스플래시 API 가 없다)과 **설치 직후 첫 실행**(아직
+         `setSplashScreenTheme` 을 부르기 전)이 이 경로를 쓴다.
+         ⚠️ 색 리터럴을 중복하지 않고 위의 고정색을 참조한다 — 양쪽에 숫자를 적으면
+         한쪽만 바뀌어도 아무도 모른다. -->
+    <color name="splash_background">@color/splash_background_light</color>
 
     <!-- 적응형 런처 아이콘의 배경. 앱 헤더 마크와 같은 accent 다
          (lib/theme/app_theme.dart: accent: Color(0xFF0E8175)). -->

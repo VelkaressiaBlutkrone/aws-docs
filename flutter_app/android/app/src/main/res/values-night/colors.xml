@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 스플래시 배경(다크). 웹 index.html 의
-         `theme-color` (prefers-color-scheme: dark) 와 같은 값이어야 한다.
-         `values-night/styles.xml` 은 이미 있었지만 둘 다 같은 흰 drawable 을 가리켜
-         다크에서도 흰 화면이 번쩍였다 — 색만 여기서 갈라 drawable 은 하나로 둔다. -->
-    <color name="splash_background">#14181F</color>
+    <!-- `LaunchTheme` 이 쓰는 색의 다크 짝 — **시스템** 다크 모드가 이 파일을 고른다.
+         색 리터럴은 `values/colors.xml` 의 `splash_background_dark` 한 곳에만 있다.
+         ⚠️ `splash_background_light`·`_dark` 를 여기에 두면 안 된다 — 그 둘은
+         `MainActivity` 가 저장 테마로 고르는 **고정색**이고, 여기 두면 다시 시스템
+         테마를 따르게 되어 A6-4 잔여 수정이 무의미해진다
+         (`test/splash_theme_sync_test.dart` 가 그것을 단정한다). -->
+    <color name="splash_background">@color/splash_background_dark</color>
 </resources>
