@@ -190,8 +190,9 @@ class _QuizViewState extends State<QuizView> {
   Widget build(BuildContext context) {
     if (_finished) {
       return SingleChildScrollView(
-        padding: EdgeInsets.all(Gap.xl)
-            .copyWith(top: headerScrollInset(context)),
+        padding: EdgeInsets.all(Gap.xl).copyWith(
+            top: headerScrollInset(context),
+            bottom: scrollBottomInset(context)),
         child: ResultsView(bank: widget.bank, picked: _picked),
       );
     }
@@ -202,8 +203,9 @@ class _QuizViewState extends State<QuizView> {
     final picked = _picked[_index];
 
     return SingleChildScrollView(
-      padding:
-          EdgeInsets.all(Gap.xl).copyWith(top: headerScrollInset(context)),
+      padding: EdgeInsets.all(Gap.xl).copyWith(
+          top: headerScrollInset(context),
+          bottom: scrollBottomInset(context)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

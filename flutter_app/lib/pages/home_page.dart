@@ -219,8 +219,11 @@ class _HomePageState extends State<HomePage> {
                   constraints:
                       const BoxConstraints(maxWidth: Layout.content),
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(Gap.xl,
-                        MediaQuery.paddingOf(context).top, Gap.xl, Gap.xl4),
+                    padding: EdgeInsets.fromLTRB(
+                        Gap.xl,
+                        MediaQuery.paddingOf(context).top,
+                        Gap.xl,
+                        scrollBottomInset(context, gap: Gap.xl4)),
                     child: Builder(
                       builder: (context) {
                         final dueBanner = _dueBanner(context);

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../main.dart' show syncController;
 import '../../theme/app_theme.dart';
+import '../../util/legal_links.dart';
+import '../../util/open_link.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/touch_target.dart';
 import '../sync_entry.dart';
 
 /// 홈형 AppHeader(와이어프레임 정답지 2번 섹션 위 변형) — 브랜드 + 내비
@@ -47,7 +50,9 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     // 좁은 폭: 설정 액션을 햄버거 메뉴에 통합(버튼 과다 방지).
                     _NavMenuButton(onNav: onNav, onResetAll: onResetAll),
-                    const SizedBox(width: Gap.sm),
+                    // Gap.sm → Gap.xs: 양쪽 TouchTarget이 2px/side를 더하므로
+                    // 도색 사이 16px이 보존된다(A6-1).
+                    const SizedBox(width: Gap.xs),
                     const ThemeToggleButton(),
                   ],
                 )
@@ -55,15 +60,17 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // 간격은 모두 2px/side씩 줄였다 — TouchTarget이 더하는
+                    // 만큼이라 도색 사이 간격이 그대로다(A6-1).
                     ...onNav.entries.map(
                       (e) => Padding(
-                        padding: const EdgeInsets.only(left: Gap.sm),
+                        padding: const EdgeInsets.only(left: Gap.xs),
                         child: _NavLink(label: e.key, onTap: e.value),
                       ),
                     ),
-                    const SizedBox(width: Gap.md),
-                    const ThemeToggleButton(),
                     const SizedBox(width: Gap.sm),
+                    const ThemeToggleButton(),
+                    const SizedBox(width: Gap.xs),
                     _SettingsButton(onResetAll: onResetAll),
                   ],
                 ),
@@ -122,18 +129,23 @@ class _NavLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
-      borderRadius: BorderRadius.circular(Radii.sm + 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(Radii.sm),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-          child: Text(label,
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600, fontVariations: Wght.w600,
-                  color: c.textMuted)),
+    // 내비 링크는 ≥768px에서만 보이지만 태블릿도 터치다 — 도색(텍스트+패딩)은
+    // 그대로 두고 탭 영역만 48(A6-1). 라벨이 두 자 이상이면 폭은 이미 48을
+    // 넘으므로 데스크톱 레이아웃이 그대로다.
+    return TouchTarget(
+      child: FocusRing(
+        borderRadius: BorderRadius.circular(Radii.sm + 4),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(Radii.sm),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Text(label,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600, fontVariations: Wght.w600,
+                    color: c.textMuted)),
+          ),
         ),
       ),
     );
@@ -147,11 +159,15 @@ class _NavMenuButton extends StatelessWidget {
 
   static const _resetKey = '__reset_all__';
   static const _syncKey = '__sync__';
+  static const _privacyKey = '__privacy__';
 
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
+    // 도색 36 그대로, 탭 영역만 48(A6-1). 아래 본문은 들여쓰기를 바꾸지
+    // 않았다 — 서식 churn이 리뷰 불가 diff를 만든다.
+    return TouchTarget(
+      child: FocusRing(
       borderRadius: BorderRadius.circular(Radii.full),
       child: PopupMenuButton<String>(
         tooltip: '메뉴',
@@ -164,6 +180,8 @@ class _NavMenuButton extends StatelessWidget {
         onSelected: (key) {
           if (key == _syncKey) {
             _SettingsButton.openSyncSheet(context);
+          } else if (key == _privacyKey) {
+            openLink(kPrivacyPolicyUrl);
           } else if (key == _resetKey) {
             onResetAll?.call();
           } else {
@@ -188,6 +206,23 @@ class _NavMenuButton extends StatelessWidget {
                 Icon(Icons.sync_outlined, size: 18, color: c.accent),
                 const SizedBox(width: Gap.sm),
                 Text('기기 간 동기',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600, fontVariations: Wght.w600,
+                        color: c.text)),
+              ],
+            ),
+          ),
+          // A8 — Play 는 처리방침 링크가 **앱 안에도** 있어야 한다고 요구한다
+          // ("a privacy policy link or text within the app itself"). 폰 폭에서는
+          // 헤더가 이 메뉴 하나로 접히므로(설정 기어 없음) 여기에도 둔다.
+          PopupMenuItem<String>(
+            value: _privacyKey,
+            child: Row(
+              children: [
+                Icon(Icons.privacy_tip_outlined, size: 18, color: c.textMuted),
+                const SizedBox(width: Gap.sm),
+                Text('개인정보처리방침',
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600, fontVariations: Wght.w600,
@@ -222,6 +257,7 @@ class _NavMenuButton extends StatelessWidget {
           ),
           child: Icon(Icons.menu, size: 18, color: c.textMuted),
         ),
+      ),
       ),
     );
   }
@@ -269,7 +305,9 @@ class _SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.c;
-    return FocusRing(
+    // 도색 36 그대로, 탭 영역만 48(A6-1). 들여쓰기 유지 — 위와 같은 이유.
+    return TouchTarget(
+      child: FocusRing(
       borderRadius: BorderRadius.circular(Radii.full),
       child: PopupMenuButton<String>(
         tooltip: '설정',
@@ -277,6 +315,7 @@ class _SettingsButton extends StatelessWidget {
         onSelected: (v) {
           if (v == 'reset') onResetAll();
           if (v == 'sync') openSyncSheet(context);
+          if (v == 'privacy') openLink(kPrivacyPolicyUrl);
         },
         itemBuilder: (ctx) => [
           PopupMenuItem<String>(
@@ -286,6 +325,17 @@ class _SettingsButton extends StatelessWidget {
                 Icon(Icons.sync_outlined, size: 18, color: c.accent),
                 const SizedBox(width: Gap.sm),
                 const Text('기기 간 동기'),
+              ],
+            ),
+          ),
+          // A8 — 처리방침 앱 내 링크(Play User Data 정책). 위 _NavMenuButton 과 같은 항목.
+          PopupMenuItem<String>(
+            value: 'privacy',
+            child: Row(
+              children: [
+                Icon(Icons.privacy_tip_outlined, size: 18, color: c.textMuted),
+                const SizedBox(width: Gap.sm),
+                const Text('개인정보처리방침'),
               ],
             ),
           ),
@@ -310,6 +360,7 @@ class _SettingsButton extends StatelessWidget {
           ),
           child: Icon(Icons.settings_outlined, size: 18, color: c.textMuted),
         ),
+      ),
       ),
     );
   }

@@ -216,6 +216,16 @@ abstract final class Radii {
   static const double full = 999;
 }
 
+/// 터치 타깃 최소 치수(DESIGN.md Touch targets — Material 48dp).
+///
+/// **도색 크기가 아니라 탭 영역의 하한이다.** 보이는 버튼은 그대로 두고
+/// `TouchTarget`이 히트테스트만 넓힌다(Material 3 자신의 방식 — 도색 40dp +
+/// 타깃 48dp). 그래서 이 값을 올려도 웹 시각은 바뀌지 않는다.
+/// 가드: `test/touch_target_test.dart`.
+abstract final class Touch {
+  static const double min = 48;
+}
+
 /// Layout widths (DESIGN.md).
 abstract final class Layout {
   static const double content = 1180;

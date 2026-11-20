@@ -111,16 +111,28 @@
 | # | 작업 | 완료 기준(검증) | 주체 |
 |---|---|---|---|
 | A0 | Play 개발자 계정 생성·본인 확인, 테스터 모집 시작, 패키지 이름·앱 이름 확정 | Play Console 에서 앱을 만들 수 있다 | 사람 |
-| A1 | `flutter create --platforms=android .` 로 플랫폼 추가, `targetSdk` ≥ 36, 릴리스 서명 구성 | `flutter build appbundle --release` 성공 · 실기기에서 홈 렌더 · **Pretendard(woff2)가 제대로 그려진다**(§8-⑥) | AI + 사람(키 생성·보관) |
+| ~~A1~~ **완료 2026-11-18** (PR #617, 머지 `66f3c82`) | `flutter create --platforms=android --org kr.ai.leva .`, `applicationId` `kr.ai.leva.awsdocs`, `minSdk 24`·`targetSdk 36` 리터럴, `key.properties` 서명 + debug 폴백, main manifest INTERNET, 가드 8건 | ✅ `flutter build appbundle --release` **exit 0** · 에뮬레이터에서 홈 렌더 · **Pretendard(woff2) 렌더 확인**(§8-⑥ 해소). 남은 사람 몫: `flutter doctor --android-licenses`(법적 승인) · 업로드 키스토어 생성·보관 | AI + 사람 |
 | A2 | **로컬 저장소** Android 구현(동기 `KvBackend` 뒤의 영속 캐시) — **가장 먼저** | 단위 테스트: 쓰기 → 새 인스턴스에서 읽힘 · 실기기: 퀴즈 응시 → 앱 강제 종료 → 재실행 후 기록 유지 | AI |
-| A3 | Firebase Android 앱 등록 + `firebase_options.dart`·`cloudConfigured()` 갱신 | 실기기에서 `Firebase.initializeApp` 성공(로그) · VM 테스트 불변 | 사람(콘솔 등록·SHA 지문) + AI |
-| A4 | Android Google 로그인(팝업 대체) | 실기기: 로그인 → 다른 기기(웹)의 기록이 내려온다 · 로그아웃 | AI + 사람(실기기 확인) |
+| ~~A3~~ **완료 2026-11-19** | Firebase Android 앱 등록(`1:169329324307:android:4209f5427fe911f1b6aae6`, 패키지 `kr.ai.leva.awsdocs`) + `firebase_options.dart` android 엔트리 + 디버그 SHA-1·SHA-256 등록, 가드 7건 | ✅ 에뮬레이터 logcat: 실패 줄 `have not been configured for android` **1건 → 0건**, `FirebaseApp: Device unlocked: initializing all Firebase APIs for app [DEFAULT]` **신규 등장**(= `[DEFAULT]` 앱이 생성됐다는 직접 증거) · VM 테스트 불변 | **사람은 `firebase login --reauth` 한 줄**(브라우저 구글 로그인) + 나머지 AI |
+| ~~A4~~ **코드 완료 2026-11-19** | Android Google 로그인 — `google_sign_in_android` + 플랫폼 인터페이스로 idToken → `GoogleAuthProvider.credential`, 초기화 1회(`OnceInitializer`), 로그인 실패 화면 노출, 로그아웃은 양쪽에서, 가드 16건 | ✅ 에뮬레이터 logcat before/after: `UnimplementedError: signInWithPopup() is only supported on web based platforms`(UncaughtError) **1건 → 0건** · `CredentialManager` **0 → 11건** · `GoogleSignInActivity` **표시됨(+457ms)** · 취소 시 내 코드의 `Google 로그인 취소` 줄이 찍힌다. ⏳ **로그인 성공·기록 내려옴·로그아웃은 사람 몫** — 에뮬레이터에 구글 계정이 없어 시스템이 자격 증명 입력 화면까지 띄웠고 거기서부터는 사람만 진행할 수 있다 | AI + **사람(실기기 로그인 1회)** |
 | A5 | 외부 링크 · 앱 복귀 신호(`AppLifecycleListener` 류) | 히어로 출처 링크가 브라우저로 열린다 · 복귀 시 동기 1회(단위 테스트는 신호 스트림 주입) | AI |
 | A6 | 모바일 사용성 점검(시스템 뒤로 가기 · 안전 영역 · 글자 크기 · 스플래시·아이콘) | 주요 라우트(§1-1) 전부를 실기기에서 한 번씩 통과한 체크리스트 | AI + 사람 |
-| A7 | **계정 삭제**(앱·웹 공통) — 재인증 → `users/{uid}` 하위 문서 삭제 → Auth 계정 삭제 | 단위 테스트(가짜 스토어) + 규칙 테스트 `cd tool/firestore_rules_test && npm ci && npm test` · 실계정 1개로 삭제 후 콘솔에서 문서 0건 확인 | AI + 사람(실계정 확인) |
-| A8 | 개인정보처리방침(공개 URL) · Data safety 답안 초안 · 스토어 등록정보(설명·스크린샷·콘텐츠 등급) | 처리방침 URL 200 · Play Console 「앱 콘텐츠」 항목이 전부 완료 표시 | AI(초안) + 사람(승인·제출) |
+| ~~A7~~ **코드 완료 2026-11-20** | 계정 삭제(앱·웹 공통) — **동기 정지 → 재인증 → 클라우드 문서(6 컬렉션) → Auth 계정 → 로컬 기록·동기 사이드카**, 가드 14건 + 규칙 테스트 2건 | ✅ 단위 14건(순서·취소·부분 실패·드리프트) · 규칙 테스트 **3 → 5건**(에뮬레이터가 `PERMISSION_DENIED: false for 'delete' @ L7` 로 **타인 경로 삭제 거부를 규칙 줄 번호까지** 보여 준다) · 웹·APK 릴리스 빌드 통과 | AI + **사람(실계정 1회 삭제 + 콘솔에서 문서 0건 확인)** |
+| A8 **1차 완료 2026-11-20** | 개인정보처리방침(공개 URL) · Data safety 답안 초안 · 스토어 등록정보(설명·스크린샷·콘텐츠 등급) — 1차: `web/privacy.html` · `web/delete-account.html`(정적, 스크립트·외부 글꼴 없음) + 앱 안 처리방침 링크(메뉴·설정) + 초안 `docs/play/2026-11-20-data-safety-and-listing-draft.md`. **2차(A8-2): 스크린샷 · 콘텐츠 등급 설문 초안** | 처리방침 URL 200 · Play Console 「앱 콘텐츠」 항목이 전부 완료 표시 — ✅ 가드 19건(수집 항목 ↔ `kSyncedCollections` · 앱 코드 서비스 호스트 ↔ 처리방침 · **텔레메트리 SDK 부재** · 메뉴 탭이 실제로 처리방침 URL 을 연다) · 민감도 변이 5종 전부 레드 | AI(초안) + 사람(승인·제출 · `info@leva.ai.kr` 수신 확인 · 앱 이름 A0 · 타겟 연령) |
 
 - A2 → A3 → A4 는 순서 의존이다(동기는 로컬 저장 위에서 돈다). A5·A6·A7·A8 은 서로 독립이다.
+- **A3 실측(2026-11-19):** 콘솔 작업이 필요하지 않았다 — firebase CLI 가 `apps:create ANDROID`·`apps:sdkconfig`·`apps:android:sha:create` 를 모두 제공하므로 **사람 몫은 만료된 토큰 재인증 한 줄**이다. ⚠️ **`google-services.json` 과 `com.google.gms.google-services` 플러그인은 쓰지 않는다** — FlutterFire 는 `Firebase.initializeApp(options:)` 로 값을 코드에서 받고, 그 플러그인은 Crashlytics·Performance·FCM 을 넣을 때 필요해진다(공식 문서 확인). 그래서 네이티브 `FirebaseInitProvider` 자동 초기화 경고 2건은 **설계대로 남는다**(`no default options were found` → `initialization unsuccessful`); 그 직후 Dart 가 수동 초기화에 성공한다. json 을 넣는 쪽은 레포 관례(`.gitignore` 등재)와 충돌한다 — 커밋되지 않는 파일을 Gradle 플러그인이 요구하면 다른 환경의 빌드가 깨진다.
+- **등록된 디버그 SHA(2026-11-19):** SHA-1 `a71f3ad3fa4363a4dad457ec62b20d1fa11cb6a8` · SHA-256 `a48bb9b2e487d6249e95f3b0a5c2a391ddd1ea87d6e676e0b7c3ac376b9af809` (`~/.android/debug.keystore`, 유효기간 2055). **릴리스 키스토어는 아직 없어**(`android/key.properties` 부재) 릴리스 SHA 는 미등록이고, Play 내부 테스트 빌드는 **Play 앱 서명 키**의 SHA 를 따로 등록해야 한다(§8-⑦·B1). ⚠️ `apps:android:sha:create` 가 SHA-1 등록에서 **실패를 보고했는데 실제로는 등록됐다** — 판정은 `apps:android:sha:list` 로 한다(firebase CLI 는 성공한 다음 명령에서 `firebase-debug.log` 를 지우므로 원인은 사후에 볼 수 없다).
+- **A4 실측(2026-11-19):** 공식 문서가 Google 에 적는 네이티브 경로는 **credential** 이다 — firebase_auth 6.7.1 의 `signInWithProvider` 는 Apple·Facebook 같은 generic OAuth 공급자용이고 Google 경로로는 문서에 없다. `google-services.json` 을 쓰지 않으므로(A3) **웹 OAuth 클라이언트 ID**(`apps:sdkconfig` 의 `oauth_client` 중 `client_type: 3`)를 `serverClientId` 로 넘긴다. ⚠️ 그 json 에 **Android OAuth 클라이언트(`client_type: 1`) 항목이 없다**(새로 내려받아도 web 하나뿐) — 공식 문서가 요구하는 것은 web 항목이고, 실제로 Credential Manager 가 `TYPE_GOOGLE_ID_TOKEN_CREDENTIAL meets all filtering condition` 으로 통과했다.
+- ⚠️⚠️ **앱 대면 패키지 `google_sign_in` 을 의존하지 않는다.** 그 패키지의 웹 구현(`google_sign_in_web`)이 플러그인 **등록 시점**에 생성자에서 `loadWebSdk()` 를 불러 `accounts.google.com/gsi/client` `<script>` 를 **조건 없이** 주입한다(패키지 소스 실측). 웹은 Firebase 팝업 경로를 쓰므로 그 SDK 가 필요 없는데도 **모든 페이지 로드가 구글에 3자 요청**을 하게 된다. 그래서 웹 구현이 없는 `google_sign_in_android`(`platforms: android`)와 `google_sign_in_platform_interface` 만 의존하고, 호출은 그 패키지의 **예제 앱이 쓰는** `GoogleSignInPlatform.instance` 직접 호출로 한다. 실측 비교(`main.dart.js`): A4 이전 **3,263,238** → 앱 대면 패키지안 **3,271,818**(+8,580 B, GIS 마커 3건) → 채택안 **3,264,055**(+817 B, **GIS 마커 0건**, 웹 플러그인 등록기의 google import **0건**).
+- **A4 분기는 `kIsWeb` 이다**(`supportsAuthenticate()` 가 아니다) — 공식이 `initialize` 를 **다른 메서드보다 먼저, 정확히 한 번** 부르라고 요구하므로 그 질의부터 초기화 뒤여야 하고, 웹에서 초기화하려면 쓰지도 않을 웹 clientId 설정이 필요해진다. `kIsWeb` 은 컴파일 시점 상수라 네이티브 분기가 웹 번들에서 **죽은 코드로 제거**된다(위 +817 B 가 그 증거다).
+- ⚠️ **로그인 실패를 화면에 알린다**(A4 범위에 포함, 사용자 승인). 호출부가 Future 를 버리므로(`onPressed: ctrl.signIn`) 컨트롤러가 던지면 **unhandled async error** 가 되고 화면에는 아무 변화가 없어 버튼이 고장난 것처럼 보인다 — A4 이전 안드로이드가 정확히 그 상태였다(before 측정의 `UncaughtError`). 취소는 실패가 아니라 null 이다. 문구 색은 `warningText`/`surface2` 로 `theme_contrast_test` 가 이미 AA 로 단정하는 쌍이다.
+- **A7 실측(2026-11-20):** ⚠️⚠️ **Firestore 클라이언트 SDK 는 서브컬렉션을 나열할 수 없다**(`listCollections` 는 서버 SDK 전용). 그래서 계정 삭제는 **알려진 목록**(`lib/data/cloud/synced_collections.dart` 의 `kSyncedCollections` — `attempts`·`checks`·`meta`·`plans`·`progress`·`viewed` 여섯)을 돌며 지울 수밖에 없고, **그 목록이 낡으면 지워지지 않은 데이터가 조용히 남는다**(사용자는 지워졌다고 믿는다). 컬렉션 이름이 `sync_service.dart` 에 리터럴로 24곳 흩어져 있어, 가드가 **그 소스에서 집합을 뽑아 목록과 맞댄다** — 동기가 새 컬렉션을 쓰기 시작하면 그 가드가 먼저 깨진다.
+- ⚠️⚠️ **삭제 순서가 안전 설계다.** `firestore.rules` 가 `request.auth.uid == uid` 를 요구하므로 **Auth 계정을 먼저 지우면 그 사용자의 문서를 영원히 지울 수 없다**(고아 데이터). 문서 → Auth 순서면 중간에 실패해도 계정이 남아 그대로 재시도된다 — 그래서 실패를 **전파하고** 뒷단계를 진행하지 않는다.
+- ⚠️⚠️ **동기를 먼저 멈춘다 — 가드가 실제 결함을 잡았다.** 문서를 지우면 `watchCollection` 이 변경을 내보내고 그 구독이 `sync()` 를 돌려 **삭제 도중에 reconcile 이 끼어든다**(로컬 데이터를 클라우드에 다시 써서 방금 지운 문서를 되살릴 수 있고, Auth 계정이 사라진 뒤라면 규칙 거부로 status 가 error 가 된다). 그래서 첫 단계가 `_onUser(null)` 이다 — `_teardownTriggers()` 가 타이머·구독을 **동기적으로** 끊는다.
+- ⚠️⚠️ **끝에 동기 사이드카를 비운다.** `resetAll()` 은 설계상 삭제 표식을 남기는데(다른 기기의 부활 방지), 계정이 사라진 뒤 그 표식이 남으면 **다음에 다른 계정으로 로그인할 때 그 계정의 클라우드 기록을 「표식보다 오래된 것」으로 보고 지운다.** 계정 삭제는 이 기기를 **동기 미경험 상태**로 되돌려야 한다.
+- ⚠️ **패널 안의 「계정 삭제」는 중립 톤이다**(`textMuted`). `wrong`/`surface2` 는 다크에서 **4.40 으로 AA(4.5) 미달**이다(WCAG 계산 실측 — 라이트는 4.82 로 통과). 레포 관례도 위험 톤을 **다이얼로그의 확인 버튼**에서만 쓴다(`reset_dialog.dart`). ⚠️ 그 계산을 처음 틀리게 했다 — `0xAARRGGBB` 에서 **알파를 R 로 읽어** `wrong`/`surface` 가 1.63(FAIL)으로 나왔고, 레포 가드가 이미 AA 로 단정하는 그 쌍이 **대조군**이 돼 즉시 드러났다.
+- **계정 삭제는 이 기기의 로컬 기록도 지운다**(사용자 판정 2026-11-20) — 남기면 나중에 **다른 계정으로 로그인했을 때 그 기록이 새 계정으로 올라간다**. §8-⑪ 도 이로써 닫힌다(「Google 로그인만 있는 앱도 앱 계정으로 보고 A7 을 한다」를 실제로 구현했다).
 - Android 빌드는 `audio_lecture` 플래그 **없이** 만든다 — 오디오 진입점이 통째로 숨는다(§1-2). 웹 빌드는 그대로 플래그를 켠다.
 - CI: 필수 체크 이름 `test` 는 그대로 둔다. Android 빌드 확인은 별도 선택 job 으로 더한다(필수 목록에 없는 job 은 게이트가 되지 않는다).
 
@@ -231,18 +243,18 @@ C(DVA 전환, 12-01 이후 · 웹)  ── 독립         └─ D2(게시판)
 
 | # | 무엇 | 왜 중요한가 | 확인 방법 |
 |---|---|---|---|
-| ① | Play 개발자 계정이 이미 있는지, 유형(개인/조직)과 생성일 | 2023-11-13 이전 개인 계정이면 12명×14일이 적용되지 않는다 | 사용자에게 확인 |
-| ② | 신규 계정의 기기 확인·등록비·본인 확인 소요 | A0 가 며칠 걸리는지 | 도움말 answer/14316361(열람 안 함) · Console |
-| ③ | 조직 계정의 테스트 요건 면제 여부 | 열람한 페이지에 언급이 없다 | Console |
+| ① | ~~Play 개발자 계정이 이미 있는지, 유형과 생성일~~ | **해소 2026-11-18 — 계정이 없다.** 지금 만들면 2023-11-13 이후 **개인** 계정이므로 **12명 × 14일이 그대로 적용된다**. 이 전제 위에서 §4 일정을 읽는다 | 사용자 답변 |
+| ② | 신규 계정의 기기 확인·본인 확인 **소요**(등록비는 **US$25 일회성**으로 확인) | A0 가 며칠 걸리는지 | Console |
+| ③ | 조직 계정의 테스트 요건 면제 여부 | **실측 2026-11-18 — 면제를 적은 공식 문장을 찾지 못했다.** 요건 페이지(answer/14151465)는 제목·본문 모두 `personal developer accounts created after November 13, 2023` 로 한정하지만, 계정 유형 선택 페이지(answer/13634885)는 테스트·테스터·프로덕션 액세스를 **한 번도 언급하지 않는다** — 「문면에 없다」가 「면제다」는 아니다. 게다가 조직 계정은 **D-U-N-S 가 필수이고 발급에 최대 30일**(answer/13628312, 무료·신속 경로 없음)이라 연내 일정과 양립하지 않는다 → **개인 계정으로 간다** | 공식 페이지 실측 |
 | ④ | 프로덕션 승인 뒤 첫 출시·이후 업데이트의 심사 소요 | §4 여유와 §5-② 판단 | Console · 도움말 |
 | ⑤ | 운영자 전용 피드백의 UGC 해당 여부, Data safety 에서의 분류 | D2 범위 | 정책 문의 또는 Console 양식 |
-| ⑥ | `PretendardVariable.woff2` 가 Android 엔진에서 렌더되는지 | 안 되면 폰트 자산을 바꿔야 한다(웹 번들 크기와 충돌) | A1 실기기 |
-| ⑦ | Android Google 로그인 방식과 Play 서명 키 지문 등록 절차 | 내부 테스트 빌드에서 로그인이 깨지는 흔한 원인 | A4 착수 시 Context7 · B1 |
+| ⑥ | ~~`PretendardVariable.woff2` 가 Android 엔진에서 렌더되는지~~ | **해소 2026-11-18 — 렌더된다.** 에뮬레이터(API 36)에 릴리스 APK 를 설치해 실행: 폰트·자산 로드 실패 로그 **0건**(대조군 — 같은 추출에서 `I flutter` 15줄), 굵기가 단계별로 다르게 그려진다(번들 폰트가 하나뿐이고 `fontVariations(wght)` 로 제어하므로 디코드 실패면 불가능). ⭐ 렌더 백엔드는 **Impeller(OpenGLES)** 라 pubspec 주석의 canvaskit 근거와 **다른 경로인데도** 양쪽 다 렌더한다 | A1 에뮬레이터 실측 |
+| ⑦ | ~~Android Google 로그인 방식~~ / Play 서명 키 지문 등록 절차 | **로그인 방식은 해소 2026-11-19** — 공식은 `google_sign_in` 으로 받은 idToken 을 `GoogleAuthProvider.credential` 로 바꾸는 경로이고 `signInWithProvider` 는 Google 용이 아니다. `google-services.json` 없이는 **웹 OAuth 클라이언트 ID 를 `serverClientId`** 로 넘긴다. ⏳ **Play 서명 키 지문은 B1 에 남는다** — 릴리스 키스토어가 아직 없고, 내부 테스트 빌드는 업로드 키가 아니라 **Play 앱 서명 키**의 SHA-1 을 Firebase 에 등록해야 로그인이 된다 | A4 실측 · B1 |
 | ⑧ | 백그라운드 오디오의 포그라운드 서비스 선언 요건 | D1 제출 | 도움말 · Console |
-| ⑨ | Flutter 3.47.2 템플릿의 기본 `targetSdk`·`minSdk`, Firebase 플러그인의 최소 SDK | A1 | `flutter create` 결과 |
+| ⑨ | ~~Flutter 3.47.2 템플릿의 기본 `targetSdk`·`minSdk`~~ | **해소 2026-11-18** — `FlutterExtension.kt` 실측으로 **compileSdk 36 · minSdk 24 · targetSdk 36 · ndk 28.2.13676358**. 기본값이 이미 Play 요건(36)을 넘지만 **리터럴로 고정**해 감사 가능하게 했다. minSdk 24 에서 Firebase 플러그인이 빌드된다(AAB·APK 빌드 exit 0) | A1 실측 |
 | ⑩ | DVA-C03 시험 시간(G-03), ANS-C01 은퇴·DOP-C02 개정의 공식 확인 | 단계 C · §6 | AWS 인증 페이지 |
-| ⑪ | Google 로그인만 있는 앱이 「앱 계정」 정의에 드는지 | 페이지는 SSO 를 인증 방식으로 열거할 뿐 확정하지 않는다. **든다고 보고 A7 을 한다** | — |
-| ⑫ | 테스터 12명을 실제로 모을 수 있는지 | 일정 전체 | 사용자 |
+| ⑪ | ~~Google 로그인만 있는 앱이 「앱 계정」 정의에 드는지~~ | **해소 2026-11-20 — 든다고 보고 A7 을 구현했다.** 앱·웹 공통 경로로 계정과 클라우드·로컬 데이터를 지운다(로드맵 A7 행). 남은 것은 A8 의 「데이터 삭제 요청 URL」 항목이고 그 URL 로 웹 앱 주소를 쓸 수 있다 | A7 완료 |
+| ⑫ | 테스터 12명을 실제로 모을 수 있는지 | **사용자 답변 2026-11-18 — 확신할 수 없다.** ①에 따라 우회 경로가 없으므로 **연내 출시 여부가 이 하나에 달렸다**. 12-10(테스트 시작 한계일)에 재판정하고, 미달이면 1월로 옮기고 그동안 웹으로 서비스한다. ⚠️ 공식이 거절 사유로 **`insufficient tester engagement`** 도 적으므로 머릿수만 채우는 교환방이 아니라 **실제 수험생 15~18명**을 목표로 한다 | 사용자 · 12-10 재판정 |
 
 ---
 

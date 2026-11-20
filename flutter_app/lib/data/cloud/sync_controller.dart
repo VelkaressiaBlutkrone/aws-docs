@@ -3,11 +3,15 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
+import '../../app_errors.dart';
 import '../local_kv.dart';
+import '../study_reset.dart';
 import 'auth_service.dart';
 import 'auth_user.dart';
 import 'cloud_store.dart';
+import 'sync_meta.dart';
 import 'sync_service.dart';
+import 'synced_collections.dart';
 
 enum SyncStatus { off, idle, syncing, error }
 
@@ -43,10 +47,14 @@ class SyncController extends ChangeNotifier {
         _watchRetryDelay = watchRetryDelay,
         _idleIntervalCap = idleIntervalCap,
         _onAppResume = onAppResume,
+        _local = local,
         _svc = SyncService(local: local, cloud: cloud, nowMs: nowMs);
 
   final AuthService _auth;
   final CloudStore _cloud;
+
+  /// 로컬 저장소 — 계정 삭제(A7)가 이 기기의 기록과 동기 사이드카를 지울 때 쓴다.
+  final KvBackend _local;
   final SyncService _svc;
 
   /// signed-in 동안 멱등 reconcile을 재실행할 주기. null이면 주기 트리거 off.
@@ -75,6 +83,7 @@ class SyncController extends ChangeNotifier {
   final List<Timer> _watchRetries = [];
   AuthUser? _user;
   SyncStatus _status = SyncStatus.off;
+  String? _signInError;
   bool _busy = false;
   bool _pending = false;
   // Guard: signIn/signOut already handle _onUser directly; skip the stream echo.
@@ -96,14 +105,79 @@ class SyncController extends ChangeNotifier {
     _resumeSub ??= _onAppResume?.listen((_) => sync());
   }
 
+  /// 마지막 로그인 시도의 실패 문구. 성공·사용자 취소는 null이다(취소는 실패가 아니다).
+  String? get signInError => _signInError;
+
   Future<void> signIn() async {
     _explicitTransition = true;
+    if (_signInError != null) {
+      _signInError = null;
+      notifyListeners();
+    }
     try {
       await _auth.signInWithGoogle();
       await _onUser(_auth.current);
+    } catch (e, st) {
+      // ⚠️ 호출부가 Future를 버린다(`onPressed: ctrl.signIn`) — 던지면 unhandled async
+      // error가 되고 화면은 아무 변화가 없어 버튼이 고장난 것처럼 보인다. Android에서는
+      // 자격 증명 없음·설정 오류가 흔한 경로다(A4). 삼키지도 않는다 — 로그 + 화면 문구.
+      appLog('Google 로그인 실패: $e\n$st');
+      _signInError = '로그인 실패 — 다시 시도해 주세요';
+      notifyListeners();
     } finally {
       _explicitTransition = false;
     }
+  }
+
+  /// 계정과 데이터를 지운다 — **재인증 → 클라우드 문서 → Auth 계정 → 로컬 기록** (A7).
+  /// 사용자가 재인증을 취소하면 **아무것도 지우지 않고** false를 돌려준다.
+  ///
+  /// ⚠️⚠️ **순서가 안전 설계다.** `firestore.rules`가 `request.auth.uid == uid`를
+  /// 요구하므로 Auth 계정을 먼저 지우면 그 사용자의 문서를 **영원히 지울 수 없다**
+  /// (고아 데이터). 이 순서면 중간에 실패해도 계정이 남아 그대로 재시도된다 —
+  /// 그래서 실패를 **전파하고** 뒷단계를 진행하지 않는다.
+  ///
+  /// ⚠️⚠️ 끝에 **동기 사이드카를 비운다.** `resetAll()`은 설계상 삭제 표식을
+  /// 남기는데(다른 기기의 부활 방지), 계정이 사라진 뒤 그 표식이 남으면 **다음에 다른
+  /// 계정으로 로그인할 때 그 계정의 클라우드 기록을 「표식보다 오래된 것」으로 보고
+  /// 지운다.** 계정 삭제는 이 기기를 동기 미경험 상태로 되돌려야 한다.
+  Future<bool> deleteAccount() async {
+    final uid = _auth.current?.uid;
+    if (uid == null) return false;
+
+    if (!await _auth.reauthenticate()) return false;
+
+    _explicitTransition = true;
+    try {
+      // 1) ⚠️⚠️ **동기를 먼저 멈춘다.** 문서를 지우면 `watchCollection`이 변경을
+      //    내보내고 그 구독이 `sync()`를 돌려 **삭제 도중에 reconcile이 끼어든다** —
+      //    로컬 데이터를 클라우드에 다시 써서 방금 지운 문서를 되살릴 수 있고, Auth
+      //    계정이 사라진 뒤라면 규칙 거부로 status가 error가 된다. `_onUser(null)`이
+      //    `_teardownTriggers()`로 타이머·구독을 **동기적으로** 끊는다.
+      //    (여기서 로그아웃 상태가 되므로 이후 단계가 실패하면 사용자는 로그아웃된
+      //    것처럼 보이지만 계정은 살아 있다 — 다시 로그인하면 그대로 복구된다.)
+      await _onUser(null);
+
+      // 2) 클라우드 문서 — 클라이언트 SDK가 서브컬렉션을 나열할 수 없어
+      //    `kSyncedCollections`를 돈다(그 목록의 드리프트는 가드가 막는다).
+      for (final collection in kSyncedCollections) {
+        final docs = await _cloud.loadCollection(uid, collection);
+        for (final docId in docs.keys) {
+          await _cloud.deleteDoc(uid, collection, docId);
+        }
+      }
+
+      // 3) Auth 계정 — 이 뒤로는 그 uid의 문서를 지울 수 없다.
+      await _auth.deleteAccount();
+    } finally {
+      _explicitTransition = false;
+    }
+
+    // 4) 이 기기의 기록 + 사이드카(위 주석).
+    resetAll(backend: _local);
+    _local.write(SyncMeta.key, '');
+    notifyListeners();
+    return true;
   }
 
   Future<void> signOut() async {

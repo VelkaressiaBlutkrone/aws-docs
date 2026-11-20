@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>개인정보처리방침 — AWS Docs Roadmap</title>
+  <meta name="description" content="AWS Docs Roadmap(웹·Android)이 어떤 정보를 언제 수집하고 어떻게 지우는지 적은 개인정보처리방침입니다.">
+  <link rel="canonical" href="https://velkaressiablutkrone.github.io/aws-docs/privacy.html">
+  <!--
+    정적 페이지다 — Flutter 앱은 JS 가 꺼진 검토자·크롤러에게 빈 화면이라 정책 페이지는
+    앱 밖에 둔다(Play: 로드 오류 없는 공개 URL). 외부 글꼴·스크립트를 쓰지 않는다:
+    쓰면 이 문서가 적지 않은 3자 요청이 생긴다. 가드: test/legal_pages_test.dart.
+  -->
+  <style>
+    :root {
+      --bg: #FBFAF8; --surface: #FFFFFF; --surface2: #F3F1EC; --border: #E7E4DD;
+      --text: #1B2430; --muted: #5C6573; --link: #0B6B61;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14181F; --surface: #1B212B; --surface2: #222A36; --border: #2A323F;
+        --text: #E8EAED; --muted: #9AA4B2; --link: #5ECABD;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+        "Malgun Gothic", "Noto Sans KR", sans-serif;
+      font-size: 16px; line-height: 1.7; word-break: keep-all;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+    .eyebrow { margin: 0; color: var(--muted); font-size: 14px; font-weight: 600; }
+    h1 { margin: 4px 0 8px; font-size: 32px; line-height: 1.3; }
+    h2 { margin: 0 0 12px; font-size: 21px; line-height: 1.4; }
+    h3 { margin: 20px 0 8px; font-size: 17px; }
+    .meta { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+    section { margin-top: 40px; }
+    .panel {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px 20px;
+    }
+    a { color: var(--link); text-underline-offset: 3px; }
+    ul { padding-left: 20px; }
+    li { margin: 4px 0; }
+    code { font-family: "JetBrains Mono", Consolas, monospace; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; }
+    th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-top: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; }
+    .small { color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">AWS Docs Roadmap</p>
+  <h1>개인정보처리방침</h1>
+  <p class="meta">시행일 2026-11-20 · 운영자 leva</p>
+
+  <div class="panel">
+    <p style="margin:0"><strong>요약</strong> — 로그인하지 않고 쓰면 학습 기록은 <strong>이 기기에만</strong> 저장되고
+    운영자에게 전송되지 않습니다. 「기기 간 동기」를 켜서 Google 계정으로 로그인한 경우에만 계정 정보와 학습 기록이
+    Google Firebase에 저장됩니다. 광고·분석·충돌 보고 도구는 쓰지 않습니다. 앱 안에서 언제든 계정과 기록을 삭제할 수
+    있습니다(<a href="delete-account.html">계정 삭제 안내</a>).</p>
+  </div>
+
+  <p class="small">AWS Docs Roadmap은 AWS 자격증을 한국어로 공부하기 위한 <strong>비공식</strong> 학습 도구이며,
+  Amazon Web Services, Inc. 및 Amazon.com, Inc.와 제휴하거나 그 승인·후원을 받지 않았습니다.
+  「AWS」 및 관련 명칭은 해당 소유자의 상표입니다.</p>
+
+  <section id="operator">
+    <h2>1. 운영자와 연락처</h2>
+    <p>이 방침은 웹 앱(<a href="https://velkaressiablutkrone.github.io/aws-docs/">velkaressiablutkrone.github.io/aws-docs</a>)과
+    Android 앱 「AWS Docs Roadmap」에 함께 적용됩니다.</p>
+    <ul>
+      <li>운영자: leva</li>
+      <li>개인정보 문의·열람·삭제 요청: <a href="mailto:info@leva.ai.kr">info@leva.ai.kr</a></li>
+    </ul>
+  </section>
+
+  <section id="collected">
+    <h2>2. 수집하는 정보</h2>
+
+    <h3>로그인하지 않고 쓸 때</h3>
+    <p>응시 기록, 오답·표시한 문항, 학습 문서 열람 기록, 학습 계획과 진행 상태, 화면 설정(다크 모드 등)은
+    <strong>사용하는 기기에만</strong> 저장됩니다(웹은 브라우저 저장소, Android는 앱 전용 저장 공간).
+    로그인하지 않으면 이 기록은 운영자나 다른 곳으로 전송되지 않습니다.</p>
+
+    <h3>「기기 간 동기」를 켜서 Google 계정으로 로그인했을 때</h3>
+    <p>여러 기기에서 같은 기록을 이어 보도록 다음 정보를 Google Firebase에 저장합니다. 동기 기능은 선택이며
+    켜지 않아도 모든 학습 기능을 쓸 수 있습니다.</p>
+    <table>
+      <tr><th>항목</th><th>내용</th></tr>
+      <tr><td>계정 정보</td><td>Google 계정 이메일, Firebase가 만든 사용자 ID, Google 로그인 응답에 담길 수 있는
+        기본 프로필(이름·프로필 사진 주소). 앱 화면과 동기에는 이메일과 사용자 ID만 씁니다.</td></tr>
+      <tr><td>로그인 보안 정보</td><td>Firebase Authentication이 가입·로그인 과정의 보안과 악용 방지를 위해 처리하는
+        IP 주소와 기기·브라우저 정보(운영체제 버전, 기기 모델, SDK 버전 등)</td></tr>
+    </table>
+
+    <h3>동기하는 학습 기록</h3>
+    <p>로그인한 계정 아래(<code>users/사용자 ID</code>)에 다음 종류의 기록이 저장됩니다.</p>
+    <ul>
+      <li data-record="attempts">응시 기록 — 시험·퀴즈 종류, 점수, 제시·오답·표시한 문항 번호, 소요 시간, 응시 시각</li>
+      <li data-record="viewed">열람 기록 — 자격증별로 연 학습 문서와 그 시각</li>
+      <li data-record="plans">학습 계획 — 사용자가 만든 자격증별 학습 일정</li>
+      <li data-record="progress">계획 진행 — 학습 계획 항목의 진행 상태</li>
+      <li data-record="meta">동기 정보 — 초기화·삭제 시각처럼 여러 기기의 기록을 맞추는 데 쓰는 정보</li>
+      <li data-record="checks">이전 버전 기록 — 예전 앱의 계획 체크 기록. 지금은 쓰지 않으며 남아 있으면 동기 과정에서 정리됩니다</li>
+    </ul>
+
+    <h3>웹 앱을 열 때</h3>
+    <p>웹 앱은 화면을 그리는 엔진과 로그인 SDK, 일부 글자의 글꼴을 Google의 콘텐츠 전송망(gstatic.com)에서
+    받고, 페이지 자체는 GitHub Pages에서 받습니다. 강의 음성을 재생하면 음성 파일을 Cloudflare에서 받습니다.
+    이 과정에서 해당 서버가 접속 IP 주소와 브라우저 정보를 처리합니다. 현재 Android 앱에는 강의 음성 기능이 없습니다.</p>
+
+    <h3>수집하지 않는 것</h3>
+    <p>광고 식별자, 위치, 연락처, 사진·파일, 결제 정보는 수집하지 않습니다. 광고·분석·충돌 보고 도구를 쓰지 않으며
+    광고·추적 목적의 쿠키를 쓰지 않습니다.</p>
+  </section>
+
+  <section id="purpose">
+    <h2>3. 이용 목적</h2>
+    <ul>
+      <li>로그인과 계정 관리</li>
+      <li>여러 기기 사이의 학습 기록 동기화</li>
+      <li>로그인 과정의 보안 유지와 악용 방지</li>
+    </ul>
+    <p>수집한 정보를 광고, 판매, 다른 서비스와의 결합, 자동화된 프로필 분석에 쓰지 않습니다.</p>
+  </section>
+
+  <section id="sharing">
+    <h2>4. 제3자 제공과 처리 위탁</h2>
+    <p>개인정보를 판매하거나 제3자에게 제공하지 않습니다. 서비스 운영을 위해 다음 사업자가 운영자를 대신해 정보를
+    처리합니다.</p>
+    <table>
+      <tr><th>사업자</th><th>처리 내용</th></tr>
+      <tr><td>Google LLC — Google Firebase</td><td>로그인(Firebase Authentication)과 동기 기록 저장(Cloud Firestore)</td></tr>
+      <tr><td>Google LLC — gstatic.com</td><td>웹 앱의 화면 엔진·로그인 SDK·글꼴 전송(웹만)</td></tr>
+      <tr><td>Cloudflare, Inc. — R2 (aws-audio.leva.ai.kr)</td><td>강의 음성 파일 전송(웹만)</td></tr>
+      <tr><td>GitHub, Inc. — GitHub Pages</td><td>웹 앱과 이 문서의 호스팅(웹만)</td></tr>
+    </table>
+    <p class="small">학습 문서 안의 AWS 공식 문서 링크는 사용자가 눌렀을 때 기기의 브라우저로 열리며, 그 이후는 해당
+    사이트의 방침이 적용됩니다.</p>
+  </section>
+
+  <section id="transfer">
+    <h2>5. 국외 이전</h2>
+    <ul>
+      <li>동기 학습 기록은 Cloud Firestore의 <strong>서울 리전(asia-northeast3)</strong>에 저장됩니다.</li>
+      <li>로그인 정보는 Firebase Authentication이 처리하며, Google은 이 서비스가 <strong>미국 데이터센터에서만</strong>
+        운영된다고 밝힙니다. 로그인 시점에 네트워크로 이전됩니다.</li>
+      <li>웹 전송망(gstatic.com · Cloudflare · GitHub Pages)은 각 사업자의 전 세계 인프라에서 처리됩니다.</li>
+    </ul>
+  </section>
+
+  <section id="security">
+    <h2>6. 안전성 확보 조치</h2>
+    <ul>
+      <li>모든 전송은 HTTPS(TLS)로 암호화됩니다.</li>
+      <li>데이터베이스 보안 규칙이 <strong>로그인한 본인의 기록만</strong> 읽고 쓰게 하며, 다른 사용자나 로그인하지 않은
+        접근은 거부합니다.</li>
+      <li>비밀번호를 받거나 저장하지 않습니다(Google 계정으로만 로그인).</li>
+    </ul>
+  </section>
+
+  <section id="retention">
+    <h2>7. 보존 기간과 삭제</h2>
+    <ul>
+      <li><strong>동기 학습 기록·계정 정보</strong>: 사용자가 계정을 삭제하거나 삭제를 요청할 때까지 보존합니다.
+        로그아웃만 하면 클라우드의 기록은 남습니다.</li>
+      <li><strong>계정 삭제</strong>: 앱의 「기기 간 동기 → 계정 삭제」를 누르면 클라우드의 동기 기록, Firebase 계정,
+        그 기기의 학습 기록을 지웁니다. 자세한 단계와 앱 없이 요청하는 방법은
+        <a href="delete-account.html">계정 삭제 안내</a>에 있습니다.</li>
+      <li><strong>서비스 제공자 측 보존</strong>: Google은 Firebase Authentication이 로그인 IP 주소를 몇 주 동안
+        보관하고, 계정이 삭제된 뒤 그 밖의 인증 정보를 운영 시스템과 백업에서 180일 안에 지운다고 밝힙니다.
+        Cloud Firestore에는 시점 복구용 백업을 켜 두지 않았습니다.</li>
+      <li><strong>기기의 기록</strong>: 앱의 「모든 학습 기록 초기화」, 앱 삭제, 브라우저 사이트 데이터 삭제로 지울 수 있습니다.</li>
+    </ul>
+  </section>
+
+  <section id="rights">
+    <h2>8. 이용자의 권리</h2>
+    <p>자신의 정보에 대해 열람·정정·삭제·처리 정지를 요청할 수 있습니다. 동기를 멈추려면 로그아웃하고, 계정과 기록을
+    지우려면 앱의 계정 삭제를 쓰거나 <a href="mailto:info@leva.ai.kr">info@leva.ai.kr</a>로 요청하세요.
+    이메일 요청은 본인 확인 뒤 지체 없이 처리합니다.</p>
+  </section>
+
+  <section id="children">
+    <h2>9. 아동의 개인정보</h2>
+    <p>이 서비스는 자격증을 준비하는 성인을 대상으로 하며 만 14세 미만 아동을 대상으로 하지 않습니다.</p>
+  </section>
+
+  <section id="changes">
+    <h2>10. 방침의 변경</h2>
+    <p>이 방침을 바꾸면 이 페이지에 게시하고 위의 시행일을 고칩니다.</p>
+    <p class="small">시행일 2026-11-20</p>
+  </section>
+</main>
+</body>
+</html>
