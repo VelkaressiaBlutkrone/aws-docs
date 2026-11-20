@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../app_errors.dart';
 import '../content/reset_dialog.dart';
 import '../data/cloud/sync_controller.dart';
 import '../theme/app_theme.dart';
+import '../widgets/text.dart';
 
 /// 동기 진입점. 부팅 재배열(WS2)로 컨트롤러가 첫 프레임 뒤 늦게 주입되므로
 /// ValueListenable을 구독해 주입 시점에 리빌드한다. value==null이면 미설정(비활성) 안내.

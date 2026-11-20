@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
 import '../../widgets/touch_target.dart';
+import '../../widgets/text.dart';
 
 /// 홈 섹션들이 공유하는 빌딩블록(PR4 분해 — home_page.dart에서 이동).
 /// 홈 전용이라 lib/widgets/ 승격 대상이 아니다(승격 규칙: 2+ 페이지).

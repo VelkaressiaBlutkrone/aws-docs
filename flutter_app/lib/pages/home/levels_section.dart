@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../../data/site_data.dart';
@@ -6,6 +6,7 @@ import '../../models/certification.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
 import 'home_bits.dart';
+import '../../widgets/text.dart';
 
 /// 단계(레벨)별 자격증 카드 그리드(PR4 분해 — home_page.dart에서 이동).
 class LevelsSection extends StatelessWidget {

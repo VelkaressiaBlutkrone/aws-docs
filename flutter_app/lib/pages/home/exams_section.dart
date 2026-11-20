@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../../data/content_index.dart';
@@ -9,6 +9,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
 import 'content_cert_card.dart';
 import 'home_bits.dart';
+import '../../widgets/text.dart';
 
 /// 학습 문서 기반 모의고사 섹션(PR4 분해 — home_page.dart에서 이동).
 class ExamsSection extends StatelessWidget {

@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../models/certification.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/badges.dart';
 import '../../widgets/focus_ring.dart';
 import 'home_bits.dart';
+import '../../widgets/text.dart';
 
 /// 콘텐츠 보유 자격증 진입 카드 — 학습문서/모의고사/일정 3개 섹션 공용
 /// (PR4 분해 — home_page.dart에서 이동).

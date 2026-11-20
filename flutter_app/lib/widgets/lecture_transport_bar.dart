@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../data/audio_controller.dart';
 import '../data/lecture_playlist.dart';
@@ -6,6 +6,7 @@ import '../theme/app_theme.dart';
 import 'audio_progress_bar.dart';
 import 'focus_ring.dart';
 import 'study_audio_player.dart' show PlayPauseButton;
+import 'text.dart';
 
 /// 자격증 오디오 페이지 하단 고정 트랜스포트(A안). 좌→우: 처음·이전·재생/정지·
 /// 다음·마지막 + 현재 트랙 제목·상태. 경계(첫/끝)에선 해당 버튼 muted+no-op.

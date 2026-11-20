@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:flutter/rendering.dart' show RenderAbstractViewport, RenderBox;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
@@ -21,6 +21,7 @@ import '../widgets/badges.dart';
 import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
 import '../widgets/study_audio_player.dart';
+import '../widgets/text.dart';
 
 class StudyDocPage extends StatefulWidget {
   const StudyDocPage({super.key, required this.entry, this.targetAnchor});

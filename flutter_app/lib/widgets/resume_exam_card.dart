@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../data/resume_exam.dart';
 import '../theme/app_theme.dart';
 import 'focus_ring.dart';
+import 'text.dart';
 
 /// 진행 중인 모의고사 "이어서 풀기" 카드(UX-4). 세션 복원 기능이 이미 있는데도
 /// 발견되지 않던 문제를 메운다 — 탭을 닫은 학습자가 세션이 남아 있는지 알 길이 없었다.

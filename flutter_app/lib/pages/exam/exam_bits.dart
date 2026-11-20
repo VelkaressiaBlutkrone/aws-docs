@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
 import '../../widgets/touch_target.dart';
+import '../../widgets/text.dart';
 
 /// 시험 러너가 쓰는 소형 위젯(분해 — exam_page.dart에서 이동. 분할 전에는
 /// `_GridChip`·`_SecondaryButton`이었다). ExamView 전용이라 lib/widgets/ 승격

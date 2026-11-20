@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../content/reset_dialog.dart';
@@ -14,6 +14,7 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
 import '../widgets/state_views.dart';
+import '../widgets/text.dart';
 
 /// 약점 리포트: cert의 Task별 정답률 표 + 70% 미만 Task 학습문서 처방.
 class ReportPage extends StatefulWidget {

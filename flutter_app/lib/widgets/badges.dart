@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../theme/app_theme.dart';
+import 'text.dart';
 
 /// 둥근 배지 프리미티브(12px·full 반경) — DESIGN.md 배지 체계의 공통 셸.
 /// '✓ 검증됨'(correct), '오답 N'(wrong), '검증 문항 N'(correct),

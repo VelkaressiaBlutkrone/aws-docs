@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../data/cloud/sync_meta.dart';
 import '../data/local_kv.dart';
 import '../main.dart' show syncController;
 import '../theme/app_theme.dart';
+import '../widgets/text.dart';
 
 /// 파괴적 동작(학습 기록 삭제) 확인 다이얼로그. [message]에 영향 범위를 적는다.
 /// 동기 켜짐 상태에서도 삭제 표식이 모든 기기·클라우드로 전파되므로(동기 v2)
