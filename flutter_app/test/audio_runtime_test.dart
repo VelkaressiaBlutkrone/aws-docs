@@ -12,9 +12,15 @@ void main() {
     expect(audioLectureEnabled, isFalse);
   });
 
-  test('VM/test 환경에선 audioRuntime이 null (웹 전용 — 조건부 import가 stub)', () {
+  test('VM/test 환경에선 audioRuntime이 null (플랫폼 게이트)', () {
     // study_doc_page가 web_audio_backend(package:web)를 직접 import하지 않고
     // 이 런타임 경계를 거치므로 app_router_test(VM)가 컴파일된다.
+    //
+    // ⚠️ **이유가 2026-11-21(D1-a)에 바뀌었다.** 전에는 비웹이 전부 `audio_runtime_stub`
+    // (→ null)이었지만, 이제 `dart.library.io` 분기가 생겨 **VM 테스트도 io 판을 고른다**.
+    // null 인 것은 그 안의 플랫폼 게이트(`nativeAudioSupported`) 때문이다 — 게이트를 빼면
+    // 여기서 `AudioPlayer()` 가 만들어져 `MissingPluginException` 으로 깨진다.
+    // 양쪽 분기 증명은 `native_audio_backend_test.dart`.
     expect(audioRuntime, isNull);
   });
 
