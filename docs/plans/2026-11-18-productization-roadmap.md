@@ -156,11 +156,23 @@
 
 | # | 작업 | 완료 기준 |
 |---|---|---|
-| D1 | **Android 오디오** — `AudioBackend`·`MediaSessionBackend` 구현, 백그라운드 재생·잠금화면 컨트롤 | 실기기: R2 강의 재생 · 화면 끔 유지 · 잠금화면 조작 · `flutter test --dart-define=audio_lecture=true test/audio_route_identity_test.dart` · Play Console 포그라운드 서비스 선언(§8-⑧) |
+| D1 | **Android 오디오** — `AudioBackend`·`MediaSessionBackend` 구현, 백그라운드 재생·잠금화면 컨트롤. **둘로 쪼갰다** — ~~**D1-a 재생 경로(완료 2026-11-21)**~~ / D1-b 백그라운드·잠금화면 | **D1-a ✅**: 에뮬레이터에서 R2 강의가 **실제로 재생**된다(`ExoPlayerImpl Init [AndroidXMedia3/1.4.1]` · `MediaCodec adapter for track type audio` · `dumpsys audio` 가 우리 pid 를 `state:started` `USAGE_MEDIA` 24kHz 로 인식 · 미니플레이어 **3:53 / 30:08** 진행 바와 「재생 중입니다」). 웹 번들 **+1,367 B(0.04%)** · 가드 10건 · 민감도 변이 5종 전부 레드. **D1-b ⏳**: 잠금화면 조작 · Play Console 포그라운드 서비스 선언(§8-⑧ 해소 — 아래) |
 | D2 | **공지·피드백 게시판**(§5-③) | 규칙 테스트에 공지(운영자만 쓰기)·피드백(본인만 쓰기, 운영자만 읽기) 케이스 추가 후 그린 · Data safety 답안 갱신 |
 | D3 | **프레젠테이션 화면 설계**(§5-④) | 설계 문서 승인. 구현은 D1·D2 가 끝나고 일정이 남을 때만 |
 
 - 테스트 빌드는 이 기간에 계속 갱신한다. D1·D2 는 서로 독립이라 병행할 수 있다.
+
+**D1-a 실측(2026-11-21).** Play 신원 확인 대기 중에 착수했다(단계 A 의 AI 몫이 비어 있었다).
+
+- ⭐ **기존 경계가 그대로 재사용됐다.** `AudioBackend`·`MediaSessionBackend` 가 추상 인터페이스이고 `AudioController`(상태 머신)·`MediaSessionBinder`·`LecturePlaylist` 가 순수 Dart 라 **한 줄도 바뀌지 않았다**. 새로 쓴 것은 `NativeAudioBackend`(just_audio 래핑)와 `audio_runtime_io.dart` 둘뿐이고, 웹은 `audio_runtime_web` 이 그대로 돈다.
+- ⭐ **URL 이 공짜였다** — `ContentEntry.lectureAudioSrc` 가 승인분을 **R2 절대 URL**(`{base}/{family}/{taskId}/{sha8}/lecture.mp3`)로 주므로 네이티브도 그대로 `setUrl` 한다.
+- ⚠️⚠️ **`dart.library.io` 분기는 VM 테스트도 고른다.** 지금까지 비웹은 stub(→ `audioRuntime == null`)이었고 그 성질에 기대는 가드가 있다. 게이트 없이 io 판을 넣으면 **Windows·CI 의 `flutter test` 가 `AudioPlayer()` 를 만들어** 깨진다 — 민감도 측정에서 그 변이가 **전체 스위트 3건 레드 + 컴파일 에러**로 확인됐다. 그래서 런타임 getter 가 플랫폼을 먼저 보고, 그 판정은 **순수 함수**(`nativeAudioSupported`)로 빼 양쪽 분기를 합성 입력으로 짚는다(`Platform.isAndroid` 를 직접 쓰면 VM 에서 영원히 false 라 한쪽만 증명된다).
+- ⚠️⚠️ **`just_audio` 의 `play()` 는 「재생이 끝날 때까지」 완료되지 않는 Future 다**(공식 문서: 「Play while waiting for completion」). `AudioController.play()` 가 그것을 await 하므로 그대로 두면 **트랙 하나가 끝날 때까지 호출이 매달린다.** 웹의 `<audio>.play()` 는 "재생 시작" Promise 라 **같은 인터페이스 뒤에서 의미가 갈리는 자리**다 — await 하지 않고 실패는 이벤트로 알린다.
+- ⚠️ **`completed` 를 `playing` 보다 먼저 본다** — just_audio 의 `playing` 은 재생 "의도"라 트랙이 끝난 뒤에도 true 로 남을 수 있다. 순서를 뒤집으면 끝난 트랙이 계속 재생 중으로 보이고 `PlayMode.autoAll` 의 자동 다음 트랙이 돌지 않는다.
+- ✅ **웹 번들 오염은 A4 와 질적으로 달랐다.** A4 의 `google_sign_in` 은 웹 구현이 **등록 시점에** 3자 스크립트를 조건 없이 주입했지만, `just_audio_web` 의 `registerWith` 는 `JustAudioPlatform.instance = JustAudioPlugin();` **한 줄**이고 `document.createElement('audio')` 는 `Html5AudioPlayer` 의 **필드**라 플레이어를 만들 때만 실행된다(우리 웹은 만들지 않는다). 실측: `main.dart.js` **3,280,274 → 3,281,641(+1,367 B)** · just_audio 마커 **0건** · 대조군(`aws-audio.leva.ai.kr` 1건)으로 grep 유효성 확인 · 남은 것은 채널 문자열 `com.ryanheise` 1건뿐. APK 는 61.0 → **63.5MB**(네이티브 라이브러리). ⭐ **io 구현을 다 넣은 뒤 다시 빌드해도 `3,281,641` 로 1바이트도 늘지 않았다** — 조건부 import 가 io 판을 웹에서 **완전히** 배제한다는 직접 증거다(그 빌드가 순서 계약의 실측 검증이기도 하다 — io 분기를 앞에 두면 웹이 `dart:io` 를 끌어와 깨진다).
+- ⚠️⚠️ **백그라운드 재생은 포그라운드 서비스 **없이도** 유지됐다**(에뮬레이터 실측 — 홈 키로 보낸 뒤 15초, `state:started`, 포그라운드 서비스 0개). 그래서 **D1-b 의 근거는 「멈춘다」가 아니다**: ① 포그라운드 서비스가 없으면 OS 가 메모리 압박 시 이 프로세스를 우선 회수할 수 있고 ② **잠금화면·알림 컨트롤과 미디어 버튼이 없다**(지금은 `_NoopMediaSession`). 제조사별 배터리 관리가 더 공격적인 실기기에서는 다를 수 있다 — **실기기 확인은 아직이다.**
+- ⚠️ **측정 방법에서 두 번 틀렸고 둘 다 「화면은 멀쩡한데 내 스크립트가 못 본」 경우다.** ① uiautomator XML 의 속성 순서가 `index,text,…,content-desc` 라 `(?:content-desc|text)` 로 쓰면 **앞의 빈 `text=""` 를 먼저 잡아** Flutter 노드가 전부 걸러진다(노드 0건) ② 탭 대상이 글래스 헤더(상단 ~210px) 뒤에 있으면 **헤더가 받는다**(A6 에 적힌 함정인데 이 스크립트에만 필터를 빠뜨렸다). ⭐⭐ 그리고 **재생 위치는 접근성 트리에 없다** — Flutter `Text` 가 Semantics 로 올라가지 않아 `0:00` 만 잡혔고, 실제 화면은 `3:53 / 30:08` 이었다. **스크린샷이 유일한 판정 수단이다**(A6 의 「접근성 노드는 손가락이 닿는 영역이 아니다」와 같은 계열).
+- Android 빌드의 `audio_lecture` 플래그는 **아직 켜지 않는다** — 잠금화면이 붙는 **D1-b 의 마지막 단계**다. D1-a 검증은 플래그를 켠 **로컬 전용** APK 로 했다.
 
 ### 단계 E — 프로덕션 신청·출시 (14일 충족 직후)
 
@@ -252,7 +264,7 @@ C(DVA 전환, 12-01 이후 · 웹)  ── 독립         └─ D2(게시판)
 | ⑤ | 운영자 전용 피드백의 UGC 해당 여부, Data safety 에서의 분류 | D2 범위 | 정책 문의 또는 Console 양식 |
 | ⑥ | ~~`PretendardVariable.woff2` 가 Android 엔진에서 렌더되는지~~ | **해소 2026-11-18 — 렌더된다.** 에뮬레이터(API 36)에 릴리스 APK 를 설치해 실행: 폰트·자산 로드 실패 로그 **0건**(대조군 — 같은 추출에서 `I flutter` 15줄), 굵기가 단계별로 다르게 그려진다(번들 폰트가 하나뿐이고 `fontVariations(wght)` 로 제어하므로 디코드 실패면 불가능). ⭐ 렌더 백엔드는 **Impeller(OpenGLES)** 라 pubspec 주석의 canvaskit 근거와 **다른 경로인데도** 양쪽 다 렌더한다 | A1 에뮬레이터 실측 |
 | ⑦ | ~~Android Google 로그인 방식~~ / Play 서명 키 지문 등록 절차 | **로그인 방식은 해소 2026-11-19** — 공식은 `google_sign_in` 으로 받은 idToken 을 `GoogleAuthProvider.credential` 로 바꾸는 경로이고 `signInWithProvider` 는 Google 용이 아니다. `google-services.json` 없이는 **웹 OAuth 클라이언트 ID 를 `serverClientId`** 로 넘긴다. ⏳ **Play 서명 키 지문은 B1 에 남는다** — 릴리스 키스토어가 아직 없고, 내부 테스트 빌드는 업로드 키가 아니라 **Play 앱 서명 키**의 SHA-1 을 Firebase 에 등록해야 로그인이 된다 | A4 실측 · B1 |
-| ⑧ | 백그라운드 오디오의 포그라운드 서비스 선언 요건 | D1 제출 | 도움말 · Console |
+| ⑧ | ~~백그라운드 오디오의 포그라운드 서비스 선언 요건~~ | **해소 2026-11-21(D1-a 착수 조사)** — `audio_service` 공식 README 가 그대로 적는다: 권한 **`WAKE_LOCK`·`FOREGROUND_SERVICE`**, 그리고 **SDK 34+ 에서 `FOREGROUND_SERVICE_MEDIA_PLAYBACK`**(우리는 targetSdk 36 이라 필수) · `<service android:foregroundServiceType="mediaPlayback">` + 미디어 버튼 리시버 · **Activity 를 `AudioServiceActivity` 로 교체**(매니페스트가 틀리면 `AudioService.init` 이 `PlatformException`). ⚠️ Android 12+ 는 백그라운드에서 포그라운드 서비스를 **재시작할 권한**이 없으면 `ForegroundServiceStartNotAllowedException` 이라, `androidStopForegroundOnPause: false` 로 일시정지 중에도 서비스를 유지하는 쪽을 쓴다. ⚠️ **`MainActivity` 가 A6-4 의 스플래시 테마 코드를 들고 있으므로** 교체는 상속만 바꾼다(`FlutterActivity` → `AudioServiceActivity`). D1-b 범위 | Context7 공식 문서 |
 | ⑨ | ~~Flutter 3.47.2 템플릿의 기본 `targetSdk`·`minSdk`~~ | **해소 2026-11-18** — `FlutterExtension.kt` 실측으로 **compileSdk 36 · minSdk 24 · targetSdk 36 · ndk 28.2.13676358**. 기본값이 이미 Play 요건(36)을 넘지만 **리터럴로 고정**해 감사 가능하게 했다. minSdk 24 에서 Firebase 플러그인이 빌드된다(AAB·APK 빌드 exit 0) | A1 실측 |
 | ⑩ | DVA-C03 시험 시간(G-03), ANS-C01 은퇴·DOP-C02 개정의 공식 확인 | 단계 C · §6 | AWS 인증 페이지 |
 | ⑪ | ~~Google 로그인만 있는 앱이 「앱 계정」 정의에 드는지~~ | **해소 2026-11-20 — 든다고 보고 A7 을 구현했다.** 앱·웹 공통 경로로 계정과 클라우드·로컬 데이터를 지운다(로드맵 A7 행). 남은 것은 A8 의 「데이터 삭제 요청 URL」 항목이고 그 URL 로 웹 앱 주소를 쓸 수 있다 | A7 완료 |
