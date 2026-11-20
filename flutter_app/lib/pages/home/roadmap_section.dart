@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../data/site_data.dart';
 import '../../models/certification.dart';
 import '../../theme/app_theme.dart';
 import 'home_bits.dart';
+import '../../widgets/text.dart';
 
 /// 자격증별 학습 로드맵(수직 단계 카드, PR4 분해 — home_page.dart에서 이동).
 class RoadmapSection extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../content/quiz_widgets.dart' show PrimaryButton;
 import '../../data/content_index.dart';
@@ -7,6 +7,7 @@ import '../../models/certification.dart';
 import '../../models/study_plan.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/text.dart';
 
 const _typeLabels = {
   PlanItemType.doc: '문서 학습',

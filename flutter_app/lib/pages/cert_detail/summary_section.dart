@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../models/exam_guide.dart';
 import '../../theme/app_theme.dart';
 import 'cert_detail_bits.dart';
+import '../../widgets/text.dart';
 
 /// 한국어 학습 요약본 — 공식 가이드 원문과 명확히 구분되는 블록.
 /// (PR4 분해 — cert_detail_page.dart에서 이동.)

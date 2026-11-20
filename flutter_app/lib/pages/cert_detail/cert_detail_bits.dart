@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../theme/app_theme.dart';
+import '../../widgets/text.dart';
 
 /// cert_detail 섹션들이 공유하는 소형 위젯(PR4 분해 — cert_detail_page.dart에서
 /// 이동). 페이지 전용이라 lib/widgets/ 승격 대상이 아니다(승격 규칙: 2+ 페이지).

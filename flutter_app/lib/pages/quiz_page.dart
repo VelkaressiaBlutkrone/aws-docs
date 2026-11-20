@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +15,7 @@ import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
+import '../widgets/text.dart';
 
 /// 얇은 로더: 자산에서 QuestionBank를 읽어 5문항 차출+선택지 셔플 후 QuizView에 주입.
 class QuizPage extends StatefulWidget {

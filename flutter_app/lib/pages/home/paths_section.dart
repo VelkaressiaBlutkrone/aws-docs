@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../data/site_data.dart';
 import '../../theme/app_theme.dart';
 import 'home_bits.dart';
+import '../../widgets/text.dart';
 
 /// 목표별 추천 순서 카드(PR4 분해 — home_page.dart에서 이동).
 class PathsSection extends StatelessWidget {

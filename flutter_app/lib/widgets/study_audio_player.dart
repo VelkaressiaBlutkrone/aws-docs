@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../data/audio_controller.dart';
 import '../data/lecture_playlist.dart';
@@ -6,6 +6,7 @@ import '../theme/app_theme.dart';
 import 'audio_progress_bar.dart';
 import 'focus_ring.dart';
 import 'touch_target.dart';
+import 'text.dart';
 
 /// 학습 문서 오디오 강의("주머니 라디오") — 하단 고정 미니 플레이어(UI).
 ///

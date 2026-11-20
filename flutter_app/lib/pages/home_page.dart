@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../content/reset_dialog.dart';
@@ -26,6 +26,7 @@ import 'home/paths_section.dart';
 import 'home/roadmap_section.dart';
 import 'home/schedule_section.dart';
 import 'home/study_docs_section.dart';
+import '../widgets/text.dart';
 
 /// due 배너 아이콘 — 지난 일정(overdue)이 있으면 주의(busy), 없으면 예정(upcoming).
 IconData dueIcon(int overdue) =>

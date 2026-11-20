@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../data/audio_runtime.dart';
@@ -9,6 +9,7 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
 import '../widgets/lecture_transport_bar.dart';
+import '../widgets/text.dart';
 
 /// 자격증별 오디오 학습 페이지(A안) — 승인 오디오 강의 목록 + 하단 트랜스포트.
 /// 진입 시 전역 플레이리스트가 이 cert 큐가 아니면 setQueue(자동재생 안 함).

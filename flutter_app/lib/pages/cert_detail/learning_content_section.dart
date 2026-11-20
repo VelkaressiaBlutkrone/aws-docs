@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../../data/content_index.dart';
@@ -7,6 +7,7 @@ import '../../data/weighted_exam.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/badges.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/text.dart';
 
 /// 검증된 학습 콘텐츠(학습문서 + 연습 문제) 진입 섹션 + 진행률 배너.
 /// (PR4 분해 — cert_detail_page.dart에서 이동.)

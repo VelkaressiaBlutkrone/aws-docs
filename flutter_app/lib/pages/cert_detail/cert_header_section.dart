@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../models/certification.dart';
 import '../../models/exam_guide.dart';
 import '../../theme/app_theme.dart';
 import 'cert_detail_bits.dart';
+import '../../widgets/text.dart';
 
 /// 자격증 헤더(레벨·타이틀·대상·공식 팩트 필) — PR4 분해로
 /// cert_detail_page.dart에서 이동.

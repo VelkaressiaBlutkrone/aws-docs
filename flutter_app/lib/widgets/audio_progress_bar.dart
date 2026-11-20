@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../theme/app_theme.dart';
+import 'text.dart';
 
 /// 공유 오디오 타임바 — 위치/길이 표시 + 드래그/탭 탐색(seek).
 /// 트랜스포트 바·미니플레이어가 함께 쓴다. position/duration은 컨트롤러의

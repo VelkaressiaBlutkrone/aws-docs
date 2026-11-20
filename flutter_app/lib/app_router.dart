@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import 'data/audio_nav.dart';
@@ -17,6 +17,7 @@ import 'pages/report_page.dart';
 import 'pages/review_page.dart';
 import 'pages/study_doc_page.dart';
 import 'theme/app_theme.dart';
+import 'widgets/text.dart';
 
 /// go_router 설정. 웹 기본 hash 전략(무설정) → GitHub Pages 딥링크 동작.
 /// 라우트 빌더가 path param을 엔티티로 해석해 기존 페이지에 주입한다.
