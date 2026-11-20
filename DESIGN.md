@@ -192,6 +192,14 @@
 - **reduced-motion:** `prefers-reduced-motion: reduce`에서 펄스 정지, 페이드아웃은 즉시 제거로 대체
 - **검증:** `flutter_app/tool/verify_splash.mjs` — 존재→소멸 DOM 어서션 + 스크린샷 + 네트워크 타이밍 기록
 
+### Android 스플래시 (시스템이 그린다)
+워드마크·진행 헤어라인이 없다 — 시스템 스플래시는 **배경색과 런처 아이콘**만 그린다. 디자인 결정은 「색이 앱 배경과 같아야 한다」 하나다.
+- **색:** `splash_background_light` `#FBFAF8` · `splash_background_dark` `#14181F` — 웹 `theme-color` 와 같은 값이고 `test/splash_theme_sync_test.dart` 가 웹에서 읽어 비교한다
+- **테마 일치:** `MainActivity` 가 `ThemePrefStore` 의 **저장 파일을 직접 읽어** `setSplashScreenTheme` 으로 라이트·다크 테마를 지정한다 — 웹의 스플래시 JS 와 같은 수준이다(둘 다 같은 키 `awsdocs.theme.v1` 을 본다)
+- ⚠️ **이번 실행의 스플래시는 바꿀 수 없다.** 프로세스가 시작되기 전에 WindowManager 가 그리므로 그 지정은 **다음** 콜드 스타트부터 유효하다(공식 javadoc: "overrides and **persists**"). 그래서 **설치 직후 첫 실행 한 번**과 **API 31 미만**은 시스템 테마를 따른다 — 고칠 수 없는 한계다
+- ⚠️ 테마 이름(`SplashThemeLight`·`SplashThemeDark`)을 **바꾸면 이미 설치된 기기**가 업데이트 후 스플래시를 못 찾는다(같은 javadoc). 가드가 두 이름을 고정한다
+- **측정:** `tool/android_splash_trace.py` — `screenrecord` + ffmpeg 로 30fps 프레임의 색 전환을 본다. ⚠️ `screencap` 루프는 캡처당 ~800ms 라 2초 안에 끝나는 전환을 놓친다
+
 ## Brand Rules — 정직함의 시각화 (제품 고유)
 - 검증되지 않은(생성) 문항은 노출하지 않는다. UI에서도 "준비 중 · 검증 N"을 정직하게 표기
 - 배지 체계: `검증 문항 N`(correct-weak/correct), `준비 중 · 검증 N`(surface-2/muted), 레벨(info-weak/info), 학습 중(accent-weak/accent)
@@ -222,3 +230,4 @@
 | 2026-11-20 | **제품 이름 「구름사다리」 — 워드마크 「구름」 본문색 + 「사다리」 액센트**(사용자 확정) | 옛 이름 「AWS Docs Roadmap」은 「AWS Docs」가 아마존 공식 문서의 이름이라 Play 사칭 정책 위험이 있었다(로드맵 A0). Play 등록명은 「구름사다리 — AWS 자격증 학습·모의고사」(30자 한도 안), 런처·PWA `short_name`·헤더는 「구름사다리」다. 스플래시가 이미 쓰던 **앞 단어 본문색 + 뒤 단어 액센트** 구조를 그대로 옮겼고, 단색이던 헤더 워드마크도 같은 두 톤으로 맞췄다(액센트/bg 대비는 `theme_contrast_test` 가 AA 로 단정하는 쌍이다). 공유 미리보기 `og-image.png` 는 생성기 없이 손으로 만든 이미지였어서 `tool/make_og_image.py` 로 **같은 배치·같은 문구**에 워드마크만 바꿔 다시 그렸다. 가드: `brand_name_test.dart` |
 | 2026-11-20 | **한국어 어절 단위 줄바꿈(keep-all) — 앱 전체**(사용자 지적) | 홈 소개 「…덤|프 암기…」처럼 앱 전체가 한국어를 **글자 단위로** 끊었다. 웹은 CSS 한 줄이지만 Flutter 3.47.2 에는 그 설정이 없어 한글이 낀 글자 쌍 사이에 U+2060(WORD JOINER)을 넣는다. lib 의 `Text(` 가 42개 파일 205곳이라 호출부를 바꾸지 않고 **같은 이름의 `Text` 위젯**(lib/widgets/text.dart)으로 import 만 바꿨다. 실측이 세 번 설계를 고쳤다 — ① 모든 비공백 쌍을 막으면 URL 「/」 뒤 같은 원래 끊을 자리까지 막혀 긴 덩어리가 엉뚱한 곳에서 잘렸다 → **CSS keep-all 과 같이 한글이 낀 글자·숫자 쌍만** 막는다 ② 「A · B」 구분자에서 다음 줄이 「·」 로 시작했다 → 앞 공백을 U+00A0 으로 ③ **넣은 문자도 자간을 받아** 음수 자간인 제목이 글자마다 당겨지고 끝 쉼표가 잘렸다(에뮬레이터 「자격증,」) → 자간이 0이 아니면 넣은 문자만 자간 0 조각으로 뗀다(본문은 자간 0이라 해당 없음). 대가: 선택·복사한 글에 보이지 않는 문자가 섞인다(낭독 라벨은 원문으로 둔다) |
 | 2026-11-20 | **페이지가 직접 만든 표면도 48dp**(A6-5~7, A6 체크리스트 순회) | A6-1 이 공통 위젯 9종을 고쳤지만 **페이지 안에서 만든 표면**은 그 목록 밖이라 그대로였다 — 에뮬레이터 16화면 순회가 여섯을 찾았다(아젠다 체크박스 **32dp**·텍스트 버튼 21dp·아이콘 버튼 40dp, 리포트 학습문서 링크 21.7dp·개념 칩 30dp, 결과 복기 링크 46.1dp). 체크박스는 **노드가 아니라 손가락으로 확정**했다 — 중심 탭은 먹고 **32dp 밖·48dp 안은 먹지 않았다**(29개 항목을 지워 나가는 화면에서 가장 자주 눌리는 요소다). 전수 grep 으로 Material 기본 48dp 를 끄는 세 설정(`shrinkWrap`·`Size.zero`·`VisualDensity.compact`)이 **`plan_agenda.dart` 한 파일**에만 있음을 확인했고, 그 설정은 도색을 줄이려는 것이므로 **그대로 두고 `TouchTarget` 래퍼만** 씌웠다. 판정 도구를 `tool/android_ui_audit.py` 로 커밋해 재점검이 가능해졌다(가드 9건·self-test 17묶음) — 측정 도구는 커밋하거나, 커밋하지 않았다고 적는다 |
+| 2026-11-20 | **Android 스플래시가 시스템 테마가 아니라 저장 테마를 따른다**(A6-4 잔여) | A6-4 1차가 색을 앱 배경에 맞췄지만 그 색이 `values-night/` 한정자로 **시스템** 다크를 따라서, 「시스템 다크 + 앱 라이트」에서 **`#14181F` 가 1,867ms** 보인 뒤 `#FBFAF8` 로 튀었다(30fps 녹화 실측 — `screencap` 루프로는 세 점만 찍혀 안 보인다). `MainActivity` 가 저장 파일을 직접 읽어 `setSplashScreenTheme` 으로 고정색 테마를 지정한다. **측정이 수정 범위를 줄였다** — `NormalTheme`(흰색·검정) 구간이 전 프레임에서 **관측되지 않아**(시스템 스플래시가 Flutter 첫 프레임까지 유지) `window.setBackgroundDrawable` 을 넣지 않았다. ⚠️ **1차 구현이 틀린 디렉터리를 봤고 가드가 그것을 굳히고 있었다** — grep 결과의 줄 번호(52·58)로 두 메서드를 하나로 읽어 `app_flutter`(= documents)를 봤는데 Dart 가 쓰는 것은 `files`(= support)다. 가드를 먼저 뒤집고 구현을 고쳤다. 다섯 조합 실측 OK이고 가장 강한 증거는 **「시스템 라이트 + 앱 다크 → 스플래시 다크」**(리소스 한정자만으로는 불가능). 가드: `splash_theme_sync_test.dart` 9건, 측정: `tool/android_splash_trace.py` |

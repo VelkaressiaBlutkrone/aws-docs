@@ -6,6 +6,8 @@
 > **상태(2026-11-20):** 결함 A6-1~A6-4 는 해소돼 라이브다(#622·#623·#624 → 릴리스 #629).
 > **체크리스트는 2026-11-20 순회로 닫혔다** — 아래 「2026-11-20 체크리스트 순회」 절이 정본이고,
 > 미점검 5화면 + 3조건을 에뮬레이터에서 돌아 **결함 6종(A6-5~7)을 새로 찾아 고쳤다.**
+> **A6-4 가 남겨 둔 「저장 테마 ↔ 시스템 테마」 불일치도 같은 날 닫혔다**
+> (아래 「A6-4 잔여」 절 — 다섯 조합 실측 OK).
 > 남은 것은 **실기기 점검 하나**(사람 몫)다.
 
 ## 측정 환경
@@ -165,7 +167,8 @@ Material 원본(`_RenderInputPadding.hitTest`)은 폴백에 경계 검사가 없
 
 라이트는 미묘하지만, **다크는 순흑에서 짙은 남회색으로 튄다.**
 
-⚠️⚠️ **남은 불일치(수정 범위 밖, 2026-11-19 추가).** Android 스플래시는 `values-night/` 로 **시스템** 테마를 따르는데, 앱은 `ThemePrefStore` 의 저장값을 따르고 **키가 없으면 라이트**다(`theme_pref_store.dart`: 「DESIGN.md: 라이트가 기본」). 그래서 「시스템 다크 + 앱 라이트」 조합에서는 전환이 남는다. ⭐ **웹은 이미 닫혀 있다** — `web/index.html` 의 스플래시 JS 가 같은 키를 직접 읽어 첫 페인트 색을 맞춘다. Android 를 같은 수준으로 닫으려면 네이티브가 저장 테마를 읽어야 하고, A2 로 저장소가 파일 기반이라 Kotlin 에서 그 파일을 읽는 일이 된다. 다만 고치기 전보다는 분명히 낫다 — 네 조합 중 **둘이 완전히 일치**하고, 전에는 넷 다 어긋났다.
+~~⚠️⚠️ **남은 불일치(수정 범위 밖, 2026-11-19 추가).** Android 스플래시는 `values-night/` 로 **시스템** 테마를 따르는데, 앱은 `ThemePrefStore` 의 저장값을 따르고 **키가 없으면 라이트**다. 그래서 「시스템 다크 + 앱 라이트」 조합에서는 전환이 남는다.~~
+→ ✅ **2026-11-20 해소.** 아래 「A6-4 잔여 — 저장 테마를 네이티브가 읽는다」 절이 정본이다.
 
 ⚠️ A2 측정에서 **설치 직후 첫 실행은 저장소 초기화에만 488ms** 가 걸린다(그 뒤는 3ms).
 그 동안 보이는 것이 이 스플래시다.
@@ -355,9 +358,126 @@ adb shell wm size 1600x2560 && adb shell wm density 320
 3. **같은 라벨이 여러 섹션에 있다** — 홈의 `CLF-C02` 는 자격증 카드·학습문서·모의고사·일정
    넷에 나온다. 레벨 접두사(`Foundational`)까지 함께 봐야 자격증 카드를 집는다.
 
+## A6-4 잔여 — 저장 테마를 네이티브가 읽는다 (2026-11-20)
+
+A6-4 1차가 스플래시 **색**을 앱 배경에 맞췄지만, 그 색은 `values-night/` 리소스 한정자로
+**시스템** 다크 모드를 따랐다. 앱은 `ThemePrefStore` 의 **저장값**을 따르므로 둘이 어긋나는
+조합이 남아 있었다.
+
+### 고치기 전 — 전환이 1,867ms 다
+
+시스템 다크 + 깨끗 설치(저장값 없음 = 앱 라이트)에서 콜드 스타트를 **30fps 로 녹화**해
+프레임마다 색을 읽었다.
+
+| 시각 | 색 | 정체 |
+|---|---|---|
+| ~2,133ms | 벽지 | 런처(아직 `am start` 전) |
+| 2,266 ~ 4,133ms | **`#14181F`** (1,867ms) | 시스템 스플래시 — **시스템** 다크를 따른다 |
+| 4,133 ~ 4,466ms | 페이드 | 스플래시 exit 애니메이션 |
+| 4,466ms~ | **`#FBFAF8`** | Flutter 첫 프레임 — **저장** 테마(라이트) |
+
+⚠️ **`screencap` 루프로는 이걸 못 잡는다.** raw 전송이 캡처당 ~800ms 라 1차 측정에서
+`942ms`·`1,715ms`·`2,634ms` 세 점만 찍혀 구간 경계가 보이지 않았다. 녹화는 기기에서
+하므로 프레임 손실이 없다.
+
+### 구간이 셋이고, 하나는 코드로 바꿀 수 없다
+
+1. **시스템 스플래시** — `LaunchTheme` 의 `windowBackground`. **프로세스가 시작되기 전에
+   WindowManager 가 그린다.** 이번 실행의 것은 어떤 코드로도 바꿀 수 없다.
+2. **`NormalTheme` 구간**(`?android:colorBackground` = 흰색·검정) — **관측되지 않았다.**
+   30fps 전 프레임을 훑어도 검정이 없다(시스템 스플래시가 Flutter 첫 프레임까지 유지된다).
+   ⚠️ 그래서 `window.setBackgroundDrawable` 을 **넣지 않았다** — 보이지 않는 구간을 위해
+   코드를 넣는 것은 추측으로 고치는 것이다. 측정이 수정 범위를 줄였다.
+3. **Flutter 첫 프레임 이후** — 이미 저장 테마를 따른다.
+
+### 해법 — 공식 API 가 테마를 **영속**한다
+
+`android.window.SplashScreen.setSplashScreenTheme(int)` 의 javadoc:
+
+> Overrides the theme used for the SplashScreens of this application. … This method
+> **overrides and persists** the theme used for the SplashScreen of this application.
+> … Internally, the theme name is resolved and persisted. This means that the theme name
+> **must be stable across versions**, otherwise it won't be found after your application
+> is updated.
+
+그래서 1번 구간도 닫힌다 — 다만 **다음** 콜드 스타트부터다. `MainActivity` 가 저장 테마를
+읽어 `SplashThemeLight`·`SplashThemeDark` 중 하나를 지정하고, **`onCreate` 와 `onPause`
+둘 다**에서 부른다(토글 **직후**가 어긋남이 가장 눈에 띄는 순간인데 `onCreate` 만 보면
+토글 후 첫 재시작이 옛 테마로 뜬다).
+
+### 고친 후 — 다섯 조합 전부 OK
+
+`py tool/android_splash_trace.py matrix` 실측(같은 에뮬레이터·같은 측정 방식):
+
+| 조합 | 스플래시 | 판정 |
+|---|---|---|
+| 저장값 없음 + 시스템 다크 (설치 직후 **첫 실행**) | `DARK` 1,767ms → `LIGHT` | **알려진 한계** — 아직 persist 전이다 |
+| 시스템 다크 + 앱 라이트 | **`LIGHT` 2,400ms 단일 구간** | OK — 전환이 **아예 없다** |
+| 시스템 다크 + 앱 다크 | `DARK` 1,867ms | OK |
+| **시스템 라이트 + 앱 다크** | **`DARK` 1,867ms** | OK — ⭐ **가장 강한 증거** |
+| 시스템 라이트 + 앱 라이트 | `LIGHT` 2,367ms | OK |
+
+⭐ 네 번째 줄이 결정적이다 — **시스템이 라이트인데 스플래시가 다크**인 것은 리소스
+한정자만으로는 나올 수 없는 결과다. 네이티브가 저장 파일을 실제로 읽었다는 직접 증거다.
+
+### 남는 한계 (고칠 수 없다)
+
+- **설치 직후 첫 실행 한 번** — persist 할 값이 아직 없다. 그 뒤로는 맞는다.
+- **API 31 미만**(minSdk 24~30) — `setSplashScreenTheme` 이 없고 시스템 스플래시 자체도
+  없다. starting window 는 매니페스트 테마로 고정이라 손댈 수 없다.
+- **앱 업데이트 후** 테마 **이름**이 바뀌면 못 찾는다(위 javadoc). `SplashThemeLight`·
+  `SplashThemeDark` 두 이름을 가드가 Kotlin 과 맞대 고정한다.
+
+### ⚠️⚠️ 내가 틀렸던 것 — grep 조각으로 결론 내지 않는다
+
+1차 구현은 저장 파일을 **`<dataDir>/app_flutter/kv/`** 에서 찾았고, 그 디렉터리는 비어 있어
+네이티브가 **항상 라이트로 폴백**했다. `path_provider_android` 2.2.23 의
+`PathProviderPlugin` 을 grep 했을 때 결과가 이렇게 나왔다:
+
+```
+52:  public @Nullable String getApplicationSupportPath() {
+58:    return PathUtils.getDataDirectory(context);
+```
+
+줄 번호가 6줄 차이라 **한 메서드로 읽었다.** 실제로는 두 메서드가 붙어 있고 서로 다른
+디렉터리를 준다:
+
+| 메서드 | 경로 |
+|---|---|
+| `getApplicationSupportPath()` | `PathUtils.getFilesDir()` = **`<dataDir>/files`** ← Dart 가 쓰는 쪽 |
+| `getApplicationDocumentsPath()` | `getDir("flutter", MODE_PRIVATE)` = `<dataDir>/app_flutter` |
+
+⚠️ **가드가 그 틀린 판정을 굳히고 있었다** — 「Kotlin 이 `getDir("flutter"` 를 쓴다」를
+단정해서, 틀린 코드가 **초록**이었다. 가드를 먼저 뒤집고 구현을 고쳤다(레포 선례:
+「가드는 판정을 굳히므로 판정이 틀리면 가드도 틀린다」).
+
+⚠️ 그리고 **1차 실측의 해석도 틀렸다.** 「3번 조합에서 앱이 라이트」라고 읽었는데 앱은
+다크였고 **스플래시만** 라이트였다. 원인은 측정 스크립트가 **토글 결과를 확인하지 않은
+것**이다 — 토글 버튼의 라벨은 **현재 상태의 반대**를 가리키므로(라이트면 「다크 모드」)
+라벨로 상태를 추정하면 안 되고 **배경색으로 확인**해야 한다. 지금 도구의
+`ensure_app_theme` 가 그 확인을 한다.
+
+### 재현
+
+```sh
+py tool/android_splash_trace.py --self-test        # 기기 없이 판정 로직만
+py tool/android_splash_trace.py matrix             # 다섯 조합(앱 테마를 직접 토글한다)
+py tool/android_splash_trace.py trace --label x --expect LIGHT   # 한 번만
+```
+
+⚠️ `matrix` 는 끝나면 **시스템 다크 모드를 라이트로 남긴다**(마지막 단계). 측정 뒤에
+`adb shell cmd uimode night yes|no` 로 되돌린다.
+
+⚠️ 에뮬레이터가 **production 이미지**라 `adb root`·`run-as` 가 둘 다 거부된다 — 저장 파일을
+직접 볼 수 없어서 **파일명을 Kotlin 상수로 두고 Dart 가드가 검증**하는 설계를 택했다
+(`test/splash_theme_sync_test.dart`). 런타임 계산을 하면 그 계산이 Dart 와 같은지 아무도
+검증하지 못한다.
+
+---
+
 ## 남은 것
 
 - **실기기 점검(사람 몫)** — 터치 타깃 체감과 스플래시 번쩍임은 에뮬레이터와 다를 수 있다.
 - **폴더블**은 이번 순회에 없다(로드맵의 4조건에 들지 않는다).
-- **A6-4 잔여** — 「시스템 다크 + 앱 라이트」에서 스플래시가 어둡다(네이티브가 저장 테마를
-  읽어야 한다). 별 작업으로 둔다.
+- ~~**A6-4 잔여**~~ → ✅ **2026-11-20 해소**(위 절). 남는 것은 구조적 한계 둘(설치 직후
+  첫 실행 · API 31 미만)이고 그 둘은 고칠 수 없다.
