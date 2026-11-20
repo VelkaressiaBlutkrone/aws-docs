@@ -110,7 +110,7 @@
 
 | # | 작업 | 완료 기준(검증) | 주체 |
 |---|---|---|---|
-| A0 | Play 개발자 계정 생성·본인 확인, 테스터 모집 시작, 패키지 이름·앱 이름 확정 | Play Console 에서 앱을 만들 수 있다 | 사람 |
+| A0 | Play 개발자 계정 생성·본인 확인, 테스터 모집 시작, 패키지 이름·앱 이름 확정 — ✅ **앱 이름 확정 2026-11-20**: Play 등록명 「구름사다리 — AWS 자격증 학습·모의고사」 · 짧은 이름 「구름사다리」 · 대상 18세 이상(앱·웹·정책 페이지 전부 반영, 가드 `brand_name_test.dart`) | Play Console 에서 앱을 만들 수 있다 | 사람 |
 | ~~A1~~ **완료 2026-11-18** (PR #617, 머지 `66f3c82`) | `flutter create --platforms=android --org kr.ai.leva .`, `applicationId` `kr.ai.leva.awsdocs`, `minSdk 24`·`targetSdk 36` 리터럴, `key.properties` 서명 + debug 폴백, main manifest INTERNET, 가드 8건 | ✅ `flutter build appbundle --release` **exit 0** · 에뮬레이터에서 홈 렌더 · **Pretendard(woff2) 렌더 확인**(§8-⑥ 해소). 남은 사람 몫: `flutter doctor --android-licenses`(법적 승인) · 업로드 키스토어 생성·보관 | AI + 사람 |
 | A2 | **로컬 저장소** Android 구현(동기 `KvBackend` 뒤의 영속 캐시) — **가장 먼저** | 단위 테스트: 쓰기 → 새 인스턴스에서 읽힘 · 실기기: 퀴즈 응시 → 앱 강제 종료 → 재실행 후 기록 유지 | AI |
 | ~~A3~~ **완료 2026-11-19** | Firebase Android 앱 등록(`1:169329324307:android:4209f5427fe911f1b6aae6`, 패키지 `kr.ai.leva.awsdocs`) + `firebase_options.dart` android 엔트리 + 디버그 SHA-1·SHA-256 등록, 가드 7건 | ✅ 에뮬레이터 logcat: 실패 줄 `have not been configured for android` **1건 → 0건**, `FirebaseApp: Device unlocked: initializing all Firebase APIs for app [DEFAULT]` **신규 등장**(= `[DEFAULT]` 앱이 생성됐다는 직접 증거) · VM 테스트 불변 | **사람은 `firebase login --reauth` 한 줄**(브라우저 구글 로그인) + 나머지 AI |

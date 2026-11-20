@@ -15,8 +15,9 @@ import 'package:flutter_test/flutter_test.dart';
 /// Play 에 영구 등록될 패키지 이름. 사용자가 2026-11-18 에 확정했다.
 const _appId = 'kr.ai.leva.awsdocs';
 
-/// 런처에 보이는 이름. 웹 PWA 의 `name`("AWS Docs Roadmap")과 같은 제품이므로 같은 값을 쓴다.
-const _appLabel = 'AWS Docs Roadmap';
+/// 런처에 보이는 이름. 웹 PWA 의 `short_name` 과 같은 짧은 이름이다(2026-11-20 사용자 확정 —
+/// Play 등록명 「구름사다리 — AWS 자격증 학습·모의고사」는 런처에 넣기엔 길다).
+const _appLabel = '구름사다리';
 
 File get _gradle => File('android/app/build.gradle.kts');
 File get _manifest => File('android/app/src/main/AndroidManifest.xml');

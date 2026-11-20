@@ -25,7 +25,7 @@
    adb shell am broadcast -a com.android.systemui.demo -e command network -e mobile hide
    adb shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
    ```
-4. 라이트 테마·기본 글자 크기로 아래 화면을 `adb exec-out screencap -p` 로 찍는다.
+4. **`adb shell pm clear kr.ai.leva.awsdocs` 로 앱 데이터를 비운 뒤** 라이트 테마·기본 글자 크기로 아래 화면을 `adb exec-out screencap -p` 로 찍는다. ⚠️ 비우지 않으면 앞선 촬영의 모의고사 제출(정답률 2%)이 자격증 상세의 「최고 정답률」·Task별 「오답」으로 남는다(2026-11-20 재촬영에서 실제로 남았다). 모의고사 문항은 매번 섞여 나오므로 05·06 의 문항은 찍을 때마다 다르다.
 5. ⚠️⚠️ **`screencap` 은 RGBA(알파 있음) PNG 를 낸다** — Play 는 알파 없는 24-bit PNG 를 요구하므로 **RGB 로 바꿔 저장**한다(알파가 전부 255 인지 확인한 뒤 바꾸면 픽셀은 그대로다). 가드가 이것을 처음 잡았다.
 6. Git Bash 에서 `adb shell uiautomator dump /sdcard/...` 를 부르면 MSYS 가 경로를 바꾼다 — Python `subprocess` 로 부른다.
 

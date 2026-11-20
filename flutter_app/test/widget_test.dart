@@ -9,7 +9,7 @@ void main() {
     await tester.pump();
 
     // Brand appears in the header.
-    expect(find.text('AWS Docs Roadmap'), findsWidgets);
+    expect(find.text('구름사다리'), findsWidgets);
     // A known certification code is rendered.
     expect(find.text('CLF-C02'), findsWidgets);
   });

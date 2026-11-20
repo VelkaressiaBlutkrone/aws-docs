@@ -13,6 +13,7 @@
        py tool/make_app_icon.py --check  # 쓰지 않고 치수만 출력
        py tool/make_app_icon.py --store  # Play 스토어 아이콘·기능 그래픽(docs/play/assets)
 """
+import functools
 import pathlib
 import sys
 import tempfile
@@ -43,10 +44,13 @@ ADAPTIVE_SCALE = 108 / 48
 SAFE_RATIO = 72 / 108
 
 
+@functools.lru_cache(maxsize=None)
 def instanced_font(weight: int = 800) -> pathlib.Path:
     """Pretendard Variable(woff2) 을 주어진 wght 로 인스턴스화해 TTF 로 뽑는다.
 
     PIL 은 woff2 를 읽지 못하고, 가변 축을 지정할 수도 없다.
+    ⚠️ 굵기마다 한 번만 만든다 — PIL 이 연 TTF 를 Windows 에서 다시 덮어쓰면
+    `OSError: [Errno 22]` 로 실패한다(make_og_image.py 가 같은 굵기를 두 번 부르다 걸렸다).
     """
     font = TTFont(str(WOFF2))  # woff2 디코드는 brotli 가 한다
     static = instancer.instantiateVariableFont(font, {"wght": weight})
