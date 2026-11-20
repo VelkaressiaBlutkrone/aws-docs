@@ -1,11 +1,12 @@
 import 'dart:ui' show FontFeature, ImageFilter;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../theme/app_theme.dart';
 import '../theme/theme_scope.dart';
 import 'focus_ring.dart';
 import 'touch_target.dart';
+import 'text.dart';
 
 /// 공용 헤더(PR4) — DESIGN.md Header 규약: 56px · sticky · blur(14px) ·
 /// 88% 불투명 · 하단 1px border. 와이어프레임 정답지 2번 섹션.

@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/focus_ring.dart';
 import '../widgets/touch_target.dart';
+import '../widgets/text.dart';
 
 /// 보기 카드 상태(연습: 공개 후 correct/wrong / 시험: 항상 idle).
 enum OptState { idle, correct, wrong }

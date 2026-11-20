@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
@@ -24,6 +24,7 @@ import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/state_views.dart';
 import 'exam_page.dart'; // ExamView
+import '../widgets/text.dart';
 
 /// 통합 모의고사 진입점. 자격증 전체 검증 문항 풀을 병합해 도메인 가중으로
 /// N문항을 샘플링·출제하고, 진행 중 세션을 복원한다. ExamView를 재사용한다.

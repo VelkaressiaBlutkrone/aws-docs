@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../data/weighted_exam.dart' show kWeightedExamMinAttempts;
 import '../theme/app_theme.dart';
 import 'quiz_widgets.dart' show PrimaryButton;
+import '../widgets/text.dart';
 
 /// 시험 제출 직후 결과 화면의 "처방 허브".
 /// 점수·오답 복기는 ResultsView가, 다음 행동은 여기서 처방한다.

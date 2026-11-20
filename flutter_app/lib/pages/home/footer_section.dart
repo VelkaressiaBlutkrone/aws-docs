@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../theme/app_theme.dart';
+import '../../widgets/text.dart';
 
 /// 홈 푸터(PR4 분해 — home_page.dart에서 이동).
 class HomeFooter extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../content/quiz_widgets.dart';
 import '../../data/exam_session_store.dart';
@@ -13,6 +13,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/app_header.dart';
 import 'exam_bits.dart';
 import 'exam_clock.dart';
+import '../../widgets/text.dart';
 
 /// 모델 주입식 시험 러너(테스트 대상). 자산/localStorage 의존 없음.
 ///

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart';
@@ -19,6 +19,7 @@ import '../widgets/app_header.dart';
 import '../widgets/badges.dart';
 import '../widgets/state_views.dart';
 import 'quiz_page.dart'; // QuizView
+import '../widgets/text.dart';
 
 /// 오답노트: cert의 weak 문항을 Task별로 모아 보여주고 연습형으로 재응시.
 /// 로더 → 시작 목록 / 복습 러너(QuizView, mode:'review')를 같은 페이지에서 전환.

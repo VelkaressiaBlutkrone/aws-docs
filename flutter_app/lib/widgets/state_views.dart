@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../theme/app_theme.dart';
 import 'focus_ring.dart';
+import 'text.dart';
 
 /// 비동기 페이지 공용 상태 뷰 3종 (DESIGN.md State Views, 시각 리펙토링 WS4).
 ///

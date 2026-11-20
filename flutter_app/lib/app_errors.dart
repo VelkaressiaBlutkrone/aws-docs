@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import 'theme/app_theme.dart';
+import 'widgets/text.dart';
 
 /// 앱 공용 로그 훅(PR4 T9/WS8) — 글로벌 핸들러와 부팅 degrade 경로가 공유.
 /// 현재는 debugPrint(웹 콘솔). 외부 수집을 붙이면 이 한 곳만 바꾼다.

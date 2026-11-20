@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../models/certification.dart';
 import '../../models/exam_guide.dart';
 import '../../theme/app_theme.dart';
 import 'cert_detail_bits.dart';
+import '../../widgets/text.dart';
 
 /// 공식 Exam Guide 원문 섹션(도메인 아코디언) — PR4 분해로
 /// cert_detail_page.dart에서 이동.

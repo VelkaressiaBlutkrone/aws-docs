@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../theme/app_theme.dart';
+import '../../widgets/text.dart';
 
 /// 시험 러너의 남은 시간 표시. **1초 타이머를 이 위젯이 소유해** 매초 리빌드되는
 /// 범위를 시계로 좁힌다(리뷰 m-2) — 전에는 러너가 `setState(() {})`로 문항 그리드

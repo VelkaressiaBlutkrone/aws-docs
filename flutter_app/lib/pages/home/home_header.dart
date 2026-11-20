@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../main.dart' show syncController;
 import '../../theme/app_theme.dart';
@@ -8,6 +8,7 @@ import '../../widgets/app_header.dart';
 import '../../widgets/focus_ring.dart';
 import '../../widgets/touch_target.dart';
 import '../sync_entry.dart';
+import '../../widgets/text.dart';
 
 /// 홈형 AppHeader(와이어프레임 정답지 2번 섹션 위 변형) — 브랜드 + 내비
 /// 앵커 + 토글·설정. 셸(56px·blur 14·88% 불투명·하단 border)은

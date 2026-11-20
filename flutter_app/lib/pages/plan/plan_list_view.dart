@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../data/plan_progress_store.dart';
 import '../../data/plan_progress_view.dart';
@@ -8,6 +8,7 @@ import '../../models/study_plan.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/focus_ring.dart';
+import '../../widgets/text.dart';
 
 /// 자격증의 학습 일정 목록 — 카드 탭으로 어젠다 진입, 하단 "일정 추가".
 /// (멀티 일정 — Part 2.)

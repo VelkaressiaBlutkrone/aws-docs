@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../../data/site_data.dart';
 import '../../theme/app_theme.dart';
@@ -6,6 +6,7 @@ import '../../util/open_link.dart';
 import '../../widgets/focus_ring.dart';
 import '../../widgets/touch_target.dart';
 import 'home_bits.dart';
+import '../../widgets/text.dart';
 
 /// 히어로 + 공식 출처 스트립(PR4 분해 — home_page.dart에서 이동).
 

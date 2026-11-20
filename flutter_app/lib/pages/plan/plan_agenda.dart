@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:flutter/rendering.dart'
     show RenderAbstractViewport, ScrollCacheExtent;
 import 'package:go_router/go_router.dart';
@@ -15,6 +15,7 @@ import '../../models/study_plan.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/focus_ring.dart';
 import 'plan_summary.dart';
+import '../../widgets/text.dart';
 
 /// 학습 일정 어젠다(Task 7) — 진행 헤더(SliverAppBar) + 날짜별 목록/월 보기.
 /// (PR4 분해 — plan_page.dart에서 이동.)

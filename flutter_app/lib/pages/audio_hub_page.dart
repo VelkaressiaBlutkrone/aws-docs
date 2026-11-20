@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
 import '../data/cert_lookup.dart';
@@ -6,6 +6,7 @@ import '../data/content_index.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
+import '../widgets/text.dart';
 
 /// 오디오 허브 — 승인 오디오 강의를 가진 자격증 목록. 각 항목 → /cert/:code/audio.
 class AudioHubPage extends StatelessWidget {

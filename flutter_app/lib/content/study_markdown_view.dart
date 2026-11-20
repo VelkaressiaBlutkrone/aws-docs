@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 
 import '../models/study_content.dart';
 import '../theme/app_theme.dart';
+import '../widgets/text.dart';
 
 enum _Kind { why, pitfalls, plain }
 
