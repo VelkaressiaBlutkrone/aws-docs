@@ -69,4 +69,58 @@ class FirebaseAuthService implements AuthService {
     }
     await _auth.signOut();
   }
+
+  @override
+  Future<bool> reauthenticate() async {
+    final user = _auth.currentUser;
+    if (user == null) return false;
+
+    if (kIsWeb) {
+      try {
+        await user.reauthenticateWithPopup(GoogleAuthProvider());
+        return true;
+      } on FirebaseAuthException catch (e) {
+        // 네이티브 경로가 취소를 false로 돌려주므로 웹도 같은 계약을 지킨다 —
+        // 그러지 않으면 호출부가 플랫폼마다 다르게 취소를 다뤄야 한다.
+        if (e.code == 'popup-closed-by-user' ||
+            e.code == 'cancelled-popup-request' ||
+            e.code == 'user-cancelled') {
+          appLog('재인증 취소(웹): ${e.code}');
+          return false;
+        }
+        rethrow;
+      }
+    }
+
+    // ⭐ A4의 네이티브 흐름을 그대로 쓴다 — 마지막 단계만 로그인에서 재인증으로
+    // 바뀌고, 「취소는 false·그 밖의 실패는 전파·idToken 없으면 던진다」는 계약이
+    // 재인증에도 그대로 맞는다.
+    return runNativeGoogleLogin(
+      ensureInitialized: initGoogleSignIn.call,
+      authenticate: () async => (await GoogleSignInPlatform.instance
+              .authenticate(const AuthenticateParameters()))
+          .authenticationTokens
+          .idToken,
+      signInWithIdToken: (idToken) => user.reauthenticateWithCredential(
+          GoogleAuthProvider.credential(idToken: idToken)),
+    );
+  }
+
+  @override
+  Future<void> deleteAccount() async {
+    final user = _auth.currentUser;
+    if (user == null) return;
+    // ⚠️ 클라우드 문서를 먼저 지운 뒤 불린다(SyncController가 순서를 지킨다).
+    // `requires-recent-login`이 여기서 나면 전파한다 — 재인증을 이미 했는데도
+    // 거부된 상태를 조용히 성공으로 보이게 하면 안 된다.
+    await user.delete();
+    if (!kIsWeb) {
+      try {
+        await initGoogleSignIn();
+        await GoogleSignInPlatform.instance.signOut(const SignOutParams());
+      } catch (e) {
+        appLog('계정 삭제 후 google_sign_in 로그아웃 실패: $e');
+      }
+    }
+  }
 }
