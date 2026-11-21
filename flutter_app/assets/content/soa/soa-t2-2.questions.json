@@ -8,6 +8,7 @@
       "id": "soa-t2-2-q1",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "rds-multi-az",
       "difficulty": "foundational",
       "stem": "RDS Multi-AZ 인스턴스 배포에서 스탠바이 복제본의 역할은?",
       "options": [
@@ -39,6 +40,7 @@
       "id": "soa-t2-2-q2",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "rds-multi-az",
       "difficulty": "applied",
       "stem": "RDS Multi-AZ 장애 조치가 발생한 뒤 애플리케이션 연결 문자열을 바꾸지 않아도 되는 이유는?",
       "options": [
@@ -66,6 +68,7 @@
       "id": "soa-t2-2-q3",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "multi-az-vs-read-replica",
       "difficulty": "applied",
       "stem": "'DB 가용성을 높여 자동 장애 조치를 받고 싶다'는 요건에 읽기 전용 복제본을 추가하는 것이 오답인 이유는?",
       "options": [
@@ -93,6 +96,7 @@
       "id": "soa-t2-2-q4",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "multi-az-vs-read-replica",
       "difficulty": "foundational",
       "stem": "RDS Multi-AZ DB 인스턴스 배포와 읽기 전용 복제본의 복제 방식을 올바르게 짝지은 것은?",
       "options": [
@@ -128,6 +132,7 @@
       "id": "soa-t2-2-q5",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "multi-az-basics",
       "difficulty": "foundational",
       "stem": "단일 AZ 장애에서 생존하기 위한 배포 원칙으로 가장 적절한 것은?",
       "options": [
@@ -159,6 +164,7 @@
       "id": "soa-t2-2-q6",
       "examGuideTaskId": "soa-t2-2",
       "skill": "ELB·Route 53 상태 확인 구성 및 문제 해결(2.2.1)",
+      "section": "elb-multi-az",
       "difficulty": "applied",
       "stem": "한 AZ의 모든 대상이 비정상 판정되면 ELB는 어떻게 동작하는가?",
       "options": [
@@ -186,6 +192,7 @@
       "id": "soa-t2-2-q7",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "nat-gateway-redundancy",
       "difficulty": "applied",
       "stem": "AZ-a의 NAT 게이트웨이 하나를 모든 프라이빗 서브넷이 공유하고 있다. 어떤 위험이 있는가?",
       "options": [
@@ -213,6 +220,7 @@
       "id": "soa-t2-2-q8",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "nat-gateway-redundancy",
       "difficulty": "applied",
       "stem": "프라이빗 서브넷의 아웃바운드 가용성을 AZ 장애에서 지키려면 라우팅을 어떻게 구성하는가?",
       "options": [
@@ -240,6 +248,7 @@
       "id": "soa-t2-2-q9",
       "examGuideTaskId": "soa-t2-2",
       "skill": "ELB·Route 53 상태 확인 구성 및 문제 해결(2.2.1)",
+      "section": "route53-failover",
       "difficulty": "applied",
       "stem": "Active-Passive 구성에서 기본 사이트가 비정상이면 대기 사이트로 DNS 응답을 전환하려 한다. Route 53에서 사용하는 조합은?",
       "options": [
@@ -267,6 +276,7 @@
       "id": "soa-t2-2-q10",
       "examGuideTaskId": "soa-t2-2",
       "skill": "ELB·Route 53 상태 확인 구성 및 문제 해결(2.2.1)",
+      "section": "route53-failover",
       "difficulty": "applied",
       "stem": "Route 53 헬스 체크가 Primary 장애를 감지했는데도 일부 사용자가 한동안 기존 사이트로 계속 접속한다. 이유는?",
       "options": [
@@ -298,6 +308,7 @@
       "id": "soa-t2-2-q11",
       "examGuideTaskId": "soa-t2-2",
       "skill": "ELB·Route 53 상태 확인 구성 및 문제 해결(2.2.1)",
+      "section": "route53-failover",
       "difficulty": "foundational",
       "stem": "Route 53 헬스 체크가 상태를 판정하는 방법으로 올바른 것은?",
       "options": [
@@ -329,6 +340,7 @@
       "id": "soa-t2-2-q12",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "stateless-design",
       "difficulty": "applied",
       "stem": "ASG가 인스턴스를 교체할 때마다 로그인 세션이 사라진다는 불만이 접수됐다. 가장 적절한 조치는?",
       "options": [
@@ -356,6 +368,7 @@
       "id": "soa-t2-2-q13",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "spof-checklist",
       "difficulty": "applied",
       "stem": "컴퓨트를 2개 AZ ASG로 분산했는데 DB는 단일 RDS 인스턴스다. 이 구성의 문제는?",
       "options": [
@@ -387,6 +400,7 @@
       "id": "soa-t2-2-q14",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "rds-multi-az",
       "difficulty": "foundational",
       "stem": "RDS Multi-AZ의 자동 장애 조치에 대해 올바른 설명은?",
       "options": [
@@ -418,6 +432,7 @@
       "id": "soa-t2-2-q15",
       "examGuideTaskId": "soa-t2-2",
       "skill": "내결함성 시스템(다중 AZ 배포) 구성(2.2.2)",
+      "section": "elb-multi-az",
       "difficulty": "applied",
       "stem": "AZ 장애가 발생했을 때 다중 AZ ASG + ELB 조합이 서비스를 유지하는 방식은?",
       "options": [

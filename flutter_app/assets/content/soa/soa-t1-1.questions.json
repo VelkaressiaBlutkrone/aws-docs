@@ -8,6 +8,7 @@
       "id": "soa-t1-1-q1",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "standard-high-resolution",
       "difficulty": "applied",
       "stem": "EC2 인스턴스의 CPU 사용률을 1분 주기로 평가하는 CloudWatch 경보를 만들었는데 INSUFFICIENT_DATA 상태가 자주 발생한다. 가장 가능성 높은 원인은 무엇인가?",
       "options": [
@@ -39,6 +40,7 @@
       "id": "soa-t1-1-q2",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "standard-high-resolution",
       "difficulty": "foundational",
       "stem": "1초 해상도로 게시한 사용자 지정 CloudWatch 지표의 원본 데이터는 얼마 동안 보존되는가?",
       "options": [
@@ -66,6 +68,7 @@
       "id": "soa-t1-1-q3",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "standard-high-resolution",
       "difficulty": "applied",
       "stem": "애플리케이션의 급격한 변동을 10초 주기로 평가하는 경보가 필요하다. 어떻게 지표를 게시해야 하는가?",
       "options": [
@@ -97,6 +100,7 @@
       "id": "soa-t1-1-q4",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "alarms",
       "difficulty": "applied",
       "stem": "일시적인 CPU 스파이크 때문에 경보가 너무 자주 울린다. 지속적인 이상만 잡으려면 어떤 설정을 조정하는가?",
       "options": [
@@ -124,6 +128,7 @@
       "id": "soa-t1-1-q5",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "alarms",
       "difficulty": "applied",
       "stem": "요청이 전혀 없을 때는 요청 수 지표가 보고되지 않는 애플리케이션이 있다. '요청이 끊긴 것은 장애'로 간주해 알림을 받으려면 경보의 누락 데이터 처리를 어떻게 설정하는가?",
       "options": [
@@ -155,6 +160,7 @@
       "id": "soa-t1-1-q6",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "alarms",
       "difficulty": "foundational",
       "stem": "CloudWatch 경보가 가질 수 있는 세 가지 상태는 무엇인가?",
       "options": [
@@ -186,6 +192,7 @@
       "id": "soa-t1-1-q7",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "composite-alarms",
       "difficulty": "applied",
       "stem": "기반 호스트의 하드웨어 장애로 EC2 인스턴스가 응답하지 않을 때, 같은 인스턴스 ID와 프라이빗 IP를 유지하면서 정상 호스트로 이전하려 한다. 어떤 경보 작업을 구성하는가?",
       "options": [
@@ -217,6 +224,7 @@
       "id": "soa-t1-1-q8",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "composite-alarms",
       "difficulty": "applied",
       "stem": "수십 개의 개별 경보가 각각 SNS 알림을 보내 운영자가 알림 폭주를 겪는다. 근본 원인 하나당 알림 하나만 가도록 바꾸려면 어떻게 구성하는가?",
       "options": [
@@ -248,6 +256,7 @@
       "id": "soa-t1-1-q9",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "dashboards",
       "difficulty": "applied",
       "stem": "서울·도쿄·버지니아 리전에서 운영하는 워크로드를 한 화면에서 모니터링하려 한다. CloudWatch의 리전 경계에 대한 설명으로 올바른 것은 무엇인가?",
       "options": [
@@ -279,6 +288,7 @@
       "id": "soa-t1-1-q10",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "metric-structure",
       "difficulty": "foundational",
       "stem": "CloudWatch에서 같은 지표 이름을 서로 다른 리소스별로 구분해 집계할 수 있게 하는 이름/값 쌍은 무엇인가?",
       "options": [
@@ -306,6 +316,7 @@
       "id": "soa-t1-1-q11",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "composite-alarms",
       "difficulty": "applied",
       "stem": "경보 상태 변경을 받아 여러 대상(Lambda·SQS·Step Functions 등)으로 라우팅하고 필터링하려 한다. 무엇을 사용하는가?",
       "options": [
@@ -337,6 +348,7 @@
       "id": "soa-t1-1-q12",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "dashboards",
       "difficulty": "applied",
       "stem": "대시보드를 코드로 관리해 여러 환경에 같은 구성을 반복 배포하려 한다. CloudWatch 대시보드에 대해 올바른 설명은 무엇인가?",
       "options": [
@@ -368,6 +380,7 @@
       "id": "soa-t1-1-q13",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "standard-high-resolution",
       "difficulty": "applied",
       "stem": "60초 해상도로 게시된 지표의 데이터 포인트를 20일 전 시점까지 조회하려 한다. 결과로 맞는 설명은 무엇인가?",
       "options": [
@@ -395,6 +408,7 @@
       "id": "soa-t1-1-q14",
       "examGuideTaskId": "soa-t1-1",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "alarms",
       "difficulty": "applied",
       "stem": "야간 배치 시간대에는 요청 수 지표가 보고되지 않는 서비스가 있다. 그 시간대에 경보가 ALARM으로 전이되지 않게 하려면 누락 데이터 처리를 어떻게 두는가?",
       "options": [
@@ -426,6 +440,7 @@
       "id": "soa-t1-1-q15",
       "examGuideTaskId": "soa-t1-1",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "standard-high-resolution",
       "difficulty": "applied",
       "stem": "EC2 세부 모니터링을 활성화할 때의 효과와 비용에 대한 설명으로 올바른 것은 무엇인가?",
       "options": [
