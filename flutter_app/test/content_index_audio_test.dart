@@ -23,12 +23,20 @@ void main() {
     expect(certsWithApprovedAudio(), contains('CLF-C02'));
   });
 
-  test('approvedAudioEntries: SAA-C03는 청취 승인 20문서(t1~t3 전부 + t4-1) 반환', () {
+  // 위 CLF 규율과 같다. 2026-11-21 saa-t3-2 재합성으로 승인 편수가 잠시 줄었고,
+  // 숫자를 박으면 재합성 PR 과 재승인 PR 양쪽에서 레드가 난다.
+  test('approvedAudioEntries: SAA-C03는 승인 오디오를 선언 순서로 반환', () {
     final list = approvedAudioEntries('SAA-C03');
-    expect(list.length, 20);
+    expect(list, isNotEmpty);
     expect(list.every((e) => e.audioApproved), isTrue);
     expect(list.first.taskId, 'saa-t1-1');
-    expect(list.last.taskId, 'saa-t4-1');
+    // 마지막 항목도 박지 않는다 — saa-t4-1 이 재합성으로 잠시 빠지면 레드가 난다.
+    expect(
+      list.map((e) => e.taskId),
+      contentFor('SAA-C03')
+          .where((e) => e.audioApproved)
+          .map((e) => e.taskId),
+    );
     // t4-2~t4-5는 enrich·합성 전(스캐폴드)이라 미승인.
     expect(list.any((e) => e.taskId == 'saa-t4-2'), isFalse);
   });

@@ -516,9 +516,9 @@
     {
       "id": "seg044",
       "kind": "table",
-      "sourceExcerpt": "| 서비스 | 스토리지 계층 | 비용 특성 |\n|---|---|---|\n| **Amazon EFS** | Standard | 기본, 자주 접근하는 파일 |\n| **Amazon EFS** | Infrequent Access (IA) | Standard보다 저렴, 접근 시 GB당 검색 요금 |\n| **Amazon EFS** | Archive | 거의 접근 안 하는 파일, 최저가 |\n| **Amazon EFS Intelligent-Tiering** | — | 접근 패턴에 따라 Standard↔IA↔Archive 자동 전환 |\n| **Amazon FSx for Windows** | SSD / HDD | HDD 계층이 저렴 — 처리량 중심 워크로드에 HDD 선택 |\n| **Amazon FSx for Lustre** | Persistent / Scratch | Scratch는 임시·저렴, Persistent는 복제·내구성 제공 |",
+      "sourceExcerpt": "| 서비스 | 스토리지 계층 | 비용 특성 |\n|---|---|---|\n| **Amazon EFS** | Standard | 기본, 자주 접근하는 파일 |\n| **Amazon EFS** | Infrequent Access (IA) | Standard보다 저렴, 접근 시 GB당 검색 요금 |\n| **Amazon EFS** | Archive | 거의 접근 안 하는 파일, 최저가 |\n| **Amazon EFS Intelligent-Tiering** | — | 수명 주기 정책이 내린 IA·Archive 파일에 접근하면 Standard로 되올림 (Archive에서 IA로 가는 전환은 없음) |\n| **Amazon FSx for Windows** | SSD / HDD | HDD 계층이 저렴 — 처리량 중심 워크로드에 HDD 선택 |\n| **Amazon FSx for Lustre** | Persistent / Scratch | Scratch는 임시·저렴, Persistent는 복제·내구성 제공 |",
       "scriptText": "",
-      "audioSummary": "이에프에스와 FSx 비용 계층입니다. Amazon 이에프에스 Standard는 기본 계층으로 자주 접근하는 파일용입니다. Amazon 이에프에스 Infrequent Access, 아이에이는 Standard보다 저렴하며 접근 시 기가바이트당 검색 요금이 있습니다. Amazon 이에프에스 Archive는 거의 접근하지 않는 파일용으로 최저가입니다. Amazon 이에프에스 Intelligent-Tiering은 접근 패턴에 따라 Standard, 아이에이, Archive 사이를 자동 전환합니다. Amazon FSx for Windows는 에스에스디와 에이치디디 계층이 있으며 에이치디디 계층이 저렴해 처리량 중심 워크로드에 에이치디디를 선택합니다. Amazon FSx for Lustre는 Persistent와 Scratch 계층이 있으며, Scratch는 임시용으로 저렴하고 Persistent는 복제와 내구성을 제공합니다.",
+      "audioSummary": "이에프에스와 FSx 비용 계층입니다. Amazon 이에프에스 Standard는 기본 계층으로 자주 접근하는 파일용입니다. Amazon 이에프에스 Infrequent Access, 아이에이는 Standard보다 저렴하며 접근 시 기가바이트당 검색 요금이 있습니다. Amazon 이에프에스 Archive는 거의 접근하지 않는 파일용으로 최저가입니다. Amazon 이에프에스 Intelligent-Tiering은 수명 주기 정책이 아이에이나 Archive로 내린 파일에 다시 접근하면 Standard로 되올립니다. Archive에서 아이에이로 가는 전환은 없습니다. Amazon FSx for Windows는 에스에스디와 에이치디디 계층이 있으며 에이치디디 계층이 저렴해 처리량 중심 워크로드에 에이치디디를 선택합니다. Amazon FSx for Lustre는 Persistent와 Scratch 계층이 있으며, Scratch는 임시용으로 저렴하고 Persistent는 복제와 내구성을 제공합니다.",
       "skip": false,
       "issues": [
         "table-needs-summary"
@@ -527,12 +527,12 @@
     {
       "id": "seg045",
       "kind": "paragraph",
-      "sourceExcerpt": "EFS IA/Archive는 S3 IA와 유사한 구조입니다. 자주 접근하지 않는 파일을 EFS Intelligent-Tiering으로 설정하면 자동으로 저렴한 계층으로 이동합니다.",
+      "sourceExcerpt": "EFS IA/Archive는 S3 IA와 유사한 구조입니다. 수명 주기 관리가 자주 접근하지 않는 파일을 IA·Archive로 내리고, EFS Intelligent-Tiering을 켜면 그 파일에 다시 접근할 때 Standard로 되돌립니다.",
       "scriptText": "이에프에스 아이에이/Archive는 에스쓰리 아이에이와 유사한 구조입니다. 자주 접근하지 않는 파일을 이에프에스 Intelligent-Tiering으로 설정하면 자동으로 저렴한 계층으로 이동합니다.",
       "audioSummary": null,
       "skip": false,
       "issues": [],
-      "enrichedScriptText": "이번에는 이에프에스의 저장 계층에 대해 이야기해 보겠습니다. 이에프에스 아이에이와 아카이브는 에스쓰리 아이에이와 상당히 유사한 구조를 가지고 있습니다. 이름에서 짐작하실 수 있듯이 자주 접근하지 않는 파일들을 더 저렴하게 보관하기 위한 계층입니다.\n\n여기서 핵심은 이에프에스 인텔리전트 티어링입니다. 이 기능을 설정해 두면, 자주 접근하지 않는 파일을 여러분이 일일이 옮길 필요 없이 시스템이 자동으로 더 저렴한 계층으로 이동시켜 줍니다. 그래서 접근 빈도가 낮은 데이터에 대한 비용을 자연스럽게 절감할 수 있는 구조라고 이해하시면 되겠습니다."
+      "enrichedScriptText": "이번에는 이에프에스의 저장 계층에 대해 이야기해 보겠습니다. 이에프에스 아이에이와 아카이브는 에스쓰리 아이에이와 상당히 유사한 구조를 가지고 있습니다. 이름에서 짐작하실 수 있듯이 자주 접근하지 않는 파일들을 더 저렴하게 보관하기 위한 계층입니다.\n\n여기서 핵심은 역할 분담입니다. 자주 접근하지 않는 파일을 여러분이 일일이 옮길 필요 없이 더 저렴한 계층으로 내려 주는 것은 수명 주기 관리입니다. 이에프에스 인텔리전트 티어링을 켜면 그 파일에 다시 접근할 때 스탠다드로 되올려 줍니다. 그래서 접근 빈도가 낮은 데이터에 대한 비용을 자연스럽게 절감할 수 있는 구조라고 이해하시면 되겠습니다."
     },
     {
       "id": "seg046",
