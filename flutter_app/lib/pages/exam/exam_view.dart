@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart' hide Text;
+import 'package:go_router/go_router.dart';
 
 import '../../content/quiz_widgets.dart';
+import '../../data/cloud/feedback_service.dart';
 import '../../data/exam_session_store.dart';
 import '../../data/history_store.dart';
 import '../../data/wrong_skills.dart';
@@ -427,6 +429,23 @@ class _ExamViewState extends State<ExamView> {
             picked: _picked,
             flagged: _flagged,
             onOpenStudy: widget.onOpenStudy,
+            // D2 — 문항 오류 신고. 이 뷰가 `certId` 를 이미 알고 자격증 모의고사도
+            // 이 뷰를 재사용하므로, 이 한 자리가 시험·자격증 모의고사 두 화면을
+            // 덮는다. ⚠️ `q.options` 는 **이미 셔플이 적용된** 보기라 그대로 담으면
+            // 사용자가 본 순서가 된다(설계 §7-2).
+            onReport: (q, picked) => context.push(
+              '/feedback',
+              extra: (
+                kind: FeedbackKind.question,
+                context: FeedbackContext(
+                  certCode: widget.certId,
+                  taskId: q.examGuideTaskId,
+                  questionId: q.id,
+                  shownOptions: q.options,
+                  pickedIndex: picked,
+                ),
+              ),
+            ),
             // 합격선은 자격증마다 다르다(700/720/750) — 메타가 없으면 지어내지 않는다.
             subtitle: pass == null
                 ? '플래그 ${_flagged.length}개'

@@ -103,6 +103,7 @@ flutter:
   assets:
     - assets/exam_guides/
     - assets/exam_summaries.json
+    - assets/notices.json
     - assets/content/clf/
     - assets/audio/clf/clf-t1-1/script.json
     - assets/audio/clf/clf-t1-1/audio_meta.json

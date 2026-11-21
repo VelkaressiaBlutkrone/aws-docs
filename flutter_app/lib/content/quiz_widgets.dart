@@ -203,6 +203,7 @@ class ResultsView extends StatefulWidget {
     this.flagged = const {},
     this.subtitle,
     this.onOpenStudy,
+    this.onReport,
   });
   final QuestionBank bank;
   final Map<int, int> picked;
@@ -211,6 +212,9 @@ class ResultsView extends StatefulWidget {
 
   /// 오답 카드의 개념 라벨 → 해당 Task 학습문서의 섹션 이동. null이면 링크 숨김.
   final void Function(String taskId, String section)? onOpenStudy;
+
+  /// 문항 오류 신고(D2) — 카드마다 전달한다. null이면 버튼 숨김.
+  final void Function(Question q, int? pickedIndex)? onReport;
 
   @override
   State<ResultsView> createState() => _ResultsViewState();
@@ -291,7 +295,8 @@ class _ResultsViewState extends State<ResultsView> {
                 // 오답이 하나라도 있을 때만 정답 카드를 접는다 — 전부 정답인 결과의
                 // 할 일은 분류가 아니라 복기다(연습 퀴즈 스펙 §9.3).
                 collapseWhenCorrect: wrongCount > 0,
-                onOpenStudy: widget.onOpenStudy),
+                onOpenStudy: widget.onOpenStudy,
+                onReport: widget.onReport),
       ],
     );
   }
@@ -306,12 +311,18 @@ class ResultCard extends StatefulWidget {
     required this.pickedIndex,
     this.flagged = false,
     this.onOpenStudy,
+    this.onReport,
     this.collapseWhenCorrect = false,
   });
   final int index;
   final Question q;
   final int? pickedIndex;
   final bool flagged;
+
+  /// 문항 오류 신고(D2). **null 이면 버튼을 그리지 않는다**(`onOpenStudy` 와 같은
+  /// 규율) — 기존 호출부·스냅샷에 영향이 없다. 카드는 `q` 를 그대로 받으므로
+  /// 문항 id 와 **보여 준 보기**(이미 셔플이 적용된 `q.options`)를 안다.
+  final void Function(Question q, int? pickedIndex)? onReport;
 
   /// 오답이고 개념(skill) 태그가 있을 때 학습문서 섹션으로 보내는 콜백. null이면 링크 숨김.
   final void Function(String taskId, String section)? onOpenStudy;
@@ -338,6 +349,7 @@ class _ResultCardState extends State<ResultCard> {
     final index = widget.index;
     final flagged = widget.flagged;
     final onOpenStudy = widget.onOpenStudy;
+    final onReport = widget.onReport;
     final pickedIndex = widget.pickedIndex;
     final isCorrect = pickedIndex == q.correct;
     final collapsible = isCorrect && widget.collapseWhenCorrect;
@@ -418,6 +430,13 @@ class _ResultCardState extends State<ResultCard> {
                   : () => onOpenStudy(q.examGuideTaskId, q.section),
             ),
           ],
+          // D2 — 문항 오류 신고. **정답 문항도** 신고할 수 있다(정답이 틀렸을
+          // 수도 있다). 카드가 접혀 있으면 함께 숨는다 — 펼쳐서 읽은 뒤 신고하는
+          // 순서가 자연스럽다.
+          if (onReport != null) ...[
+            const SizedBox(height: Gap.sm),
+            _ReportLink(onTap: () => onReport(q, pickedIndex)),
+          ],
           ],
         ],
       ),
@@ -438,6 +457,36 @@ class _ResultCardState extends State<ResultCard> {
             text: text,
             style: TextStyle(fontSize: 14, color: c.text, height: 1.5)),
       ])),
+    );
+  }
+}
+
+/// 문항 오류 신고 링크 — 결과 카드 오른쪽 아래. 도색은 작게 두고 탭 영역만
+/// 48dp 로 넓힌다(A6-1 규율).
+class _ReportLink extends StatelessWidget {
+  const _ReportLink({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TouchTarget(
+        child: FocusRing(
+          borderRadius: BorderRadius.circular(Radii.sm),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(Radii.sm),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Gap.sm, vertical: Gap.xs),
+              child: Text('신고',
+                  style: TextStyle(fontSize: 13, color: c.textMuted)),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
