@@ -30,7 +30,13 @@ void main() {
     expect(list, isNotEmpty);
     expect(list.every((e) => e.audioApproved), isTrue);
     expect(list.first.taskId, 'saa-t1-1');
-    expect(list.last.taskId, 'saa-t4-1');
+    // 마지막 항목도 박지 않는다 — saa-t4-1 이 재합성으로 잠시 빠지면 레드가 난다.
+    expect(
+      list.map((e) => e.taskId),
+      contentFor('SAA-C03')
+          .where((e) => e.audioApproved)
+          .map((e) => e.taskId),
+    );
     // t4-2~t4-5는 enrich·합성 전(스캐폴드)이라 미승인.
     expect(list.any((e) => e.taskId == 'saa-t4-2'), isFalse);
   });
