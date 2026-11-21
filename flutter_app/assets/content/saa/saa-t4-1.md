@@ -26,7 +26,11 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+  - title: Amazon EFS 스토리지 수명 주기 관리 (공식)
+    url: https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html
+  - title: Amazon EFS FAQ — Intelligent-Tiering (공식)
+    url: https://aws.amazon.com/efs/faq/
+lastVerified: 2026-11-21
 ---
 
 # 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용
@@ -296,11 +300,11 @@ S3에서 직접 인터넷으로 객체를 서비스하면 S3 아웃바운드 요
 | **Amazon EFS** | Standard | 기본, 자주 접근하는 파일 |
 | **Amazon EFS** | Infrequent Access (IA) | Standard보다 저렴, 접근 시 GB당 검색 요금 |
 | **Amazon EFS** | Archive | 거의 접근 안 하는 파일, 최저가 |
-| **Amazon EFS Intelligent-Tiering** | — | 접근 패턴에 따라 Standard↔IA↔Archive 자동 전환 |
+| **Amazon EFS Intelligent-Tiering** | — | 수명 주기 정책이 내린 IA·Archive 파일에 접근하면 Standard로 되올림 (Archive에서 IA로 가는 전환은 없음) |
 | **Amazon FSx for Windows** | SSD / HDD | HDD 계층이 저렴 — 처리량 중심 워크로드에 HDD 선택 |
 | **Amazon FSx for Lustre** | Persistent / Scratch | Scratch는 임시·저렴, Persistent는 복제·내구성 제공 |
 
-> EFS IA/Archive는 S3 IA와 유사한 구조입니다. 자주 접근하지 않는 파일을 EFS Intelligent-Tiering으로 설정하면 자동으로 저렴한 계층으로 이동합니다.
+> EFS IA/Archive는 S3 IA와 유사한 구조입니다. 수명 주기 관리가 자주 접근하지 않는 파일을 IA·Archive로 내리고, EFS Intelligent-Tiering을 켜면 그 파일에 다시 접근할 때 Standard로 되돌립니다.
 
 **FSx for NetApp ONTAP — 티어가 둘이고, 비용은 "볼륨별 정책"으로 정합니다 (★ 시험 포인트)**
 
@@ -559,6 +563,10 @@ gp2는 IOPS가 볼륨 크기(GB)에 연동되어 결정되는 구조였습니다
 21. FSx for ONTAP 스토리지 용량 관리(SSD 티어 + **용량 풀 티어** · 볼륨은 **씬 프로비저닝** · **티어링 정책은 볼륨 수준**·쿨링 기간) — https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/managing-storage-capacity.html (갭 배치 B9a: 2026-10-21)
 22. FSx for ONTAP 동작 방식(**2세대 파일 시스템은 SSD 용량 감소 가능**) — https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/how-it-works-fsx-ontap.html (갭 배치 B9a: 2026-10-21)
 23. S3 Storage Lens 지표 선택(무료 **14일** vs 고급 **15개월**·**추가 요금** · CloudWatch 퍼블리싱·접두어 집계·권장 사항 · ⚠️ **Storage Lens 그룹은 무료 티어만**) — https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage_lens_basics_metrics_recommendations.html (갭 배치 B9a: 2026-10-21)
+24. EFS 수명 주기 정책 셋(into IA · into Archive는 **Standard 또는 IA에서** · into Standard는 **IA 또는 Archive에서**) — https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html
+25. EFS FAQ(Intelligent-Tiering은 **IA·Archive 파일을 접근 시 Standard로 승격**) — https://aws.amazon.com/efs/faq/
+
+> 📝 **2026-11-21 정정**: §6의 EFS 전환 경로를 공식 정책에 맞췄습니다. 수명 주기 관리가 Standard에서 IA로, Standard 또는 IA에서 Archive로 내리고, Intelligent-Tiering은 IA·Archive 파일에 접근할 때 Standard로 되올립니다. Archive에서 IA로 가는 전환은 없습니다(근거 24·25번).
 
 > 📝 **2026-10-21 보강 (갭 배치 B9a — Task 4.1 스토리지 10행)**: ① §1에 **Requester Pays** 를 추가했습니다 — 요청·다운로드는 요청자가 내지만 ⚠️ **저장 비용은 항상 소유자**이고 **익명 접근이 불가**합니다(근거 13번). ② §3에 **작은 객체의 전환 손해**(Glacier 객체당 **40 KB** = 8 KB Standard 요율 + 32 KB Glacier 요율, 집계 권고, 전환 요청 건당 과금)와 **기본 최소 전환 크기**(`all_storage_classes_128K` · 커스텀 필터 우선 · 디렉터리 버킷 미지원), **버전 관리 비용**(`NoncurrentVersionExpiration`·`NewerNoncurrentVersions`)을 추가했습니다(근거 14·15·16·17번). ③ §4에 **HDD 두 종**(⚠️ `sc1` **부팅 불가**·작은 랜덤 I/O 부적합)과 **Snapshots Archive·Recycle Bin**(최소 90일·복원 72시간·**항상 전체 스냅샷**·**일별 증분 아카이브는 더 비쌀 수 있음**·**볼륨 생성 불가**·DLM 최소 90일)을 추가했습니다(근거 18·19·20번). ④ §6에 **FSx ONTAP 두 티어와 볼륨 수준 티어링 정책**(씬 프로비저닝·2세대 SSD 감소)을 추가했습니다(근거 21·22번). ⑤ §7에 **Storage Lens 무료 vs 고급 티어**(14일 vs 15개월·추가 요금·⚠️ **그룹은 무료 티어만**)를 추가했습니다(근거 23번). ⑥ 새 절 **§9 올바른 크기와 오토 스케일링이 필요한 시점**(서비스별 늘리기·줄이기 비대칭 표)과 **§10 스토리지 선택 매트릭스**(요구 → 후보 → 비용 축 순서)를 원리 블록과 함께 넣었습니다.
 >

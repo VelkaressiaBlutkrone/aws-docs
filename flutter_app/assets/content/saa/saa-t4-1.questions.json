@@ -334,7 +334,7 @@
       "difficulty": "applied",
       "stem": "한 팀이 Amazon EFS 파일시스템을 사용하고 있다. 파일 일부는 자주 접근되고, 나머지는 오랫동안 접근되지 않는다. 수동 관리 없이 비용을 자동으로 최적화하는 방법은?",
       "options": [
-        "EFS Intelligent-Tiering을 활성화해 접근 패턴에 따라 Standard↔IA↔Archive 계층을 자동 전환한다",
+        "EFS Intelligent-Tiering과 수명 주기 정책으로 IA·Archive로 내리고 접근 시 Standard로 올린다",
         "EBS gp3로 마이그레이션해 파일당 비용을 낮춘다",
         "자주 접근하지 않는 파일을 수동으로 S3 Glacier로 이동한다",
         "FSx for Windows로 마이그레이션해 HDD 계층을 사용한다"
@@ -347,7 +347,8 @@
         "3": "FSx for Windows HDD 계층은 처리량 중심 워크로드에 적합합니다. EFS의 파일 단위 자동 계층 이동 기능과 동등한 대안이 아니며, 공유 파일시스템 요구를 유지하면서 비용을 자동 최적화하려면 EFS Intelligent-Tiering이 맞습니다."
       },
       "sources": [
-        { "title": "EFS 스토리지 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html" }
+        { "title": "EFS 스토리지 수명 주기 관리 (공식)", "url": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html" },
+        { "title": "Amazon EFS FAQ — Intelligent-Tiering (공식)", "url": "https://aws.amazon.com/efs/faq/" }
       ],
       "verified": true
     },
