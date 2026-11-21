@@ -8,6 +8,7 @@
       "id": "saa-t4-3-q1",
       "examGuideTaskId": "saa-t4-3",
       "skill": "워크로드별 DB 서비스 선택(비용 기준)",
+      "section": "db-service-selection",
       "difficulty": "foundational",
       "stem": "한 스타트업이 신규 소셜 앱을 출시한다. 트래픽이 예측 불가능하고 관계형 스키마가 필요하다. 운영 오버헤드를 최소화하면서 비용도 최적화하려 할 때 가장 적합한 DB 서비스는?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t4-3-q2",
       "examGuideTaskId": "saa-t4-3",
       "skill": "관리형 vs 자체 관리 TCO",
+      "section": "db-service-selection",
       "difficulty": "foundational",
       "stem": "한 팀이 EC2 인스턴스에 PostgreSQL을 직접 설치해 운영하는 방식과 Amazon RDS for PostgreSQL을 비교하고 있다. 총소유비용(TCO) 관점에서 옳은 설명은?",
       "options": [
@@ -56,6 +58,7 @@
       "id": "saa-t4-3-q3",
       "examGuideTaskId": "saa-t4-3",
       "skill": "RDS 예약 인스턴스 — 최대 절감 옵션",
+      "section": "rds-reserved-instances",
       "difficulty": "foundational",
       "stem": "한 기업이 Amazon RDS MySQL 인스턴스를 3년간 안정적으로 운영할 예정이다. 초기 자금에 여유가 있고 비용을 최대한 줄이려 한다. On-Demand 대비 가장 높은 할인율을 제공하는 구매 옵션은?",
       "options": [
@@ -80,6 +83,7 @@
       "id": "saa-t4-3-q4",
       "examGuideTaskId": "saa-t4-3",
       "skill": "RDS RI 구매 제약 조건",
+      "section": "rds-reserved-instances",
       "difficulty": "applied",
       "stem": "한 아키텍트가 us-east-1에서 db.m5.large RDS MySQL Multi-AZ 예약 인스턴스를 구매했다. 이후 워크로드가 변경되어 us-west-2로 리전을 이동하고 Single-AZ로 전환했다. 이 경우 기존 RI 할인은 어떻게 적용되는가?",
       "options": [
@@ -104,6 +108,7 @@
       "id": "saa-t4-3-q5",
       "examGuideTaskId": "saa-t4-3",
       "skill": "Savings Plans의 RDS 미적용",
+      "section": "common-pitfalls",
       "difficulty": "foundational",
       "stem": "한 클라우드 엔지니어가 RDS 비용을 절감하기 위해 Compute Savings Plans를 구매했다. 이에 대한 설명으로 옳은 것은?",
       "options": [
@@ -128,6 +133,7 @@
       "id": "saa-t4-3-q6",
       "examGuideTaskId": "saa-t4-3",
       "skill": "RDS 스토리지 자동 확장 특성",
+      "section": "capacity-planning",
       "difficulty": "foundational",
       "stem": "한 팀이 RDS 스토리지 자동 확장(Storage Auto Scaling)을 활성화했다. 이 기능의 동작 방식으로 옳은 것은?",
       "options": [
@@ -154,6 +160,7 @@
       "id": "saa-t4-3-q7",
       "examGuideTaskId": "saa-t4-3",
       "skill": "읽기 부하 분산으로 인스턴스 다운사이즈",
+      "section": "connection-caching-cost",
       "difficulty": "applied",
       "stem": "한 웹 애플리케이션의 RDS 인스턴스가 읽기 쿼리로 인해 CPU 사용률이 높다. 인스턴스를 업그레이드하지 않고 비용 효율적으로 해결하려 할 때, 가장 적합한 방법은?",
       "options": [
@@ -178,6 +185,7 @@
       "id": "saa-t4-3-q8",
       "examGuideTaskId": "saa-t4-3",
       "skill": "Aurora serverless 과금 단위",
+      "section": "serverless-on-demand",
       "difficulty": "foundational",
       "stem": "Aurora serverless의 과금 방식으로 옳은 것은?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t4-3-q9",
       "examGuideTaskId": "saa-t4-3",
       "skill": "DynamoDB 온디맨드 vs 프로비저닝 모드 선택",
+      "section": "serverless-on-demand",
       "difficulty": "applied",
       "stem": "한 SNS 서비스의 DynamoDB 테이블은 평일 낮에 요청이 몰리고 야간과 주말에는 거의 트래픽이 없다. 다만 피크 시각과 규모가 날마다 크게 달라 용량을 미리 정하기 어렵다. 비용 최적화를 위해 어떤 용량 모드가 적합한가?",
       "options": [
@@ -227,6 +236,7 @@
       "id": "saa-t4-3-q10",
       "examGuideTaskId": "saa-t4-3",
       "skill": "DynamoDB 예측 가능 트래픽 비용 최적화",
+      "section": "serverless-on-demand",
       "difficulty": "applied",
       "stem": "한 전자상거래 플랫폼의 DynamoDB 테이블은 매일 일정한 수준의 읽기·쓰기가 예측 가능하고 안정적이다. 동일한 처리량 기준 비용을 낮추려면 어떤 용량 모드가 유리한가?",
       "options": [
@@ -251,6 +261,7 @@
       "id": "saa-t4-3-q11",
       "examGuideTaskId": "saa-t4-3",
       "skill": "RDS 백업 보존 기간 비용",
+      "section": "backup-retention-cost",
       "difficulty": "foundational",
       "stem": "한 기업이 RDS 인스턴스의 자동 백업 보존 기간을 현재 30일에서 7일로 줄이려 한다. 이 변경이 비용에 미치는 영향으로 옳은 것은?",
       "options": [
@@ -275,6 +286,7 @@
       "id": "saa-t4-3-q12",
       "examGuideTaskId": "saa-t4-3",
       "skill": "수동 스냅샷 비용 특성",
+      "section": "backup-retention-cost",
       "difficulty": "foundational",
       "stem": "한 팀이 RDS 인스턴스를 삭제했다. 이전에 생성한 수동 스냅샷들은 어떻게 되는가?",
       "options": [
@@ -299,6 +311,7 @@
       "id": "saa-t4-3-q13",
       "examGuideTaskId": "saa-t4-3",
       "skill": "목적에 맞는 DB 선택 — 시계열 데이터",
+      "section": "timeseries-columnar-cost",
       "difficulty": "applied",
       "stem": "한 IoT 플랫폼이 수천 개의 센서에서 시계열 데이터를 수집해 분석한다. 현재 RDS MySQL을 사용 중인데 비용과 쿼리 복잡성이 문제다. 비용을 낮추고 운영을 단순화하려면 어떤 서비스로 전환해야 하는가?",
       "options": [
@@ -323,6 +336,7 @@
       "id": "saa-t4-3-q14",
       "examGuideTaskId": "saa-t4-3",
       "skill": "인스턴스 rightsizing 도구",
+      "section": "capacity-planning",
       "difficulty": "foundational",
       "stem": "한 아키텍트가 프로덕션 RDS 인스턴스가 과잉 프로비저닝되었는지 확인하려 한다. CPU·메모리 사용률을 분석해 적정 크기를 추천받을 수 있는 AWS 도구는?",
       "options": [
@@ -347,6 +361,7 @@
       "id": "saa-t4-3-q15",
       "examGuideTaskId": "saa-t4-3",
       "skill": "Aurora serverless 스케일 단위 특성",
+      "section": "serverless-on-demand",
       "difficulty": "applied",
       "stem": "Aurora serverless가 프로비저닝 인스턴스와 달리 최소 0.5 ACU 단위까지 세밀하게 스케일할 수 있는 이유는?",
       "options": [

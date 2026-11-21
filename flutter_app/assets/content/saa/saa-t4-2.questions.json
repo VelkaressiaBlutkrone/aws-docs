@@ -8,6 +8,7 @@
       "id": "saa-t4-2-q1",
       "examGuideTaskId": "saa-t4-2",
       "skill": "EC2 구매 옵션 — 워크로드별 선택",
+      "section": "ec2-purchase-options",
       "difficulty": "foundational",
       "stem": "한 회사가 짧은 기간 동안만 실행되며 수요가 불규칙하게 발생하고, 중단되면 안 되는 개발·테스트 워크로드를 운영하고 있다. 이 워크로드에 가장 적합한 EC2 구매 옵션은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t4-2-q2",
       "examGuideTaskId": "saa-t4-2",
       "skill": "Standard RI vs Convertible RI 할인율 차이",
+      "section": "ri-vs-savings-plans",
       "difficulty": "foundational",
       "stem": "한 솔루션스 아키텍트가 Standard RI와 Convertible RI를 비교하고 있다. 두 옵션의 차이를 올바르게 설명한 것은?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t4-2-q3",
       "examGuideTaskId": "saa-t4-2",
       "skill": "Savings Plans 유형 — Compute vs EC2 Instance",
+      "section": "savings-plans-types",
       "difficulty": "applied",
       "stem": "한 회사가 향후 3년간 EC2를 안정적으로 운영할 예정이지만, 인스턴스 패밀리와 리전을 변경할 가능성이 있다. 또한 일부 워크로드를 AWS Lambda나 Fargate로 전환할 계획이다. 가장 적합한 비용 절감 옵션은?",
       "options": [
@@ -83,6 +86,7 @@
       "id": "saa-t4-2-q4",
       "examGuideTaskId": "saa-t4-2",
       "skill": "Savings Plans 약정 단위",
+      "section": "ri-vs-savings-plans",
       "difficulty": "foundational",
       "stem": "AWS Savings Plans의 약정 단위는 무엇인가?",
       "options": [
@@ -107,6 +111,7 @@
       "id": "saa-t4-2-q5",
       "examGuideTaskId": "saa-t4-2",
       "skill": "Savings Plans vs RI — AWS 공식 권장",
+      "section": "ri-vs-savings-plans",
       "difficulty": "foundational",
       "stem": "한 팀이 3년간 안정적으로 쓸 컴퓨팅에 약정 할인을 적용하려 한다. 다만 일부 워크로드는 재해 복구 요건 때문에 특정 가용 영역(AZ)의 용량을 반드시 확보해야 한다. Savings Plans와 예약 인스턴스(RI)를 어떻게 고르는 것이 맞는가?",
       "options": [
@@ -131,6 +136,7 @@
       "id": "saa-t4-2-q6",
       "examGuideTaskId": "saa-t4-2",
       "skill": "Savings Plans와 스팟 인스턴스 적용 관계",
+      "section": "savings-plans-types",
       "difficulty": "applied",
       "stem": "한 회사가 Compute Savings Plans 약정을 구매한 상태에서 대규모 스팟 인스턴스를 추가로 실행했다. Savings Plans 약정 소진에 대한 올바른 설명은?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t4-2-q7",
       "examGuideTaskId": "saa-t4-2",
       "skill": "RI 납입 옵션 — All Upfront vs No Upfront",
+      "section": "payment-options",
       "difficulty": "foundational",
       "stem": "예약 인스턴스(RI)의 납입 옵션 중 총비용을 가장 낮게 절감할 수 있는 조합은?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t4-2-q8",
       "examGuideTaskId": "saa-t4-2",
       "skill": "스팟 인스턴스 — 적합 워크로드",
+      "section": "spot-instances",
       "difficulty": "applied",
       "stem": "다음 워크로드 중 스팟 인스턴스 사용에 가장 적합한 것은?",
       "options": [
@@ -204,6 +212,7 @@
       "id": "saa-t4-2-q9",
       "examGuideTaskId": "saa-t4-2",
       "skill": "스팟 인스턴스 인터럽트 알림",
+      "section": "spot-instances",
       "difficulty": "foundational",
       "stem": "AWS가 스팟 인스턴스를 회수할 때 애플리케이션에 제공하는 사전 알림 시간은?",
       "options": [
@@ -228,6 +237,7 @@
       "id": "saa-t4-2-q10",
       "examGuideTaskId": "saa-t4-2",
       "skill": "스팟 플릿 전략",
+      "section": "spot-instances",
       "difficulty": "applied",
       "stem": "스팟 플릿(Spot Fleet)을 구성할 때 비용보다 중단 최소화를 우선하여, 가용 용량이 많고 중단 가능성이 낮은 풀을 선택하려면 어떤 전략을 선택해야 하는가?",
       "options": [
@@ -252,6 +262,7 @@
       "id": "saa-t4-2-q11",
       "examGuideTaskId": "saa-t4-2",
       "skill": "오토스케일링 — 비용 절감 스케일링 전략",
+      "section": "auto-scaling-cost",
       "difficulty": "applied",
       "stem": "한 웹 애플리케이션의 트래픽이 평일 낮(09:00~18:00)에는 높고, 야간과 주말에는 매우 낮다. 스케일 아웃·인 시각이 09:00·18:00으로 고정돼 있어 예측 모델 없이도 용량을 미리 정할 수 있다. 인프라 비용을 줄이는 가장 적합한 오토스케일링 전략은?",
       "options": [
@@ -276,6 +287,7 @@
       "id": "saa-t4-2-q12",
       "examGuideTaskId": "saa-t4-2",
       "skill": "AWS Compute Optimizer — 분석 대상 및 동작 방식",
+      "section": "rightsizing",
       "difficulty": "foundational",
       "stem": "AWS Compute Optimizer에 대한 설명으로 옳은 것은?",
       "options": [
@@ -300,6 +312,7 @@
       "id": "saa-t4-2-q13",
       "examGuideTaskId": "saa-t4-2",
       "skill": "서버리스 비용 이점 — Lambda·Fargate",
+      "section": "serverless-graviton",
       "difficulty": "applied",
       "stem": "간헐적으로 요청이 들어오는 백엔드 API가 있다. 하루 중 대부분의 시간은 요청이 없고 짧은 burst만 발생한다. 인프라 비용을 최소화하는 가장 적합한 컴퓨팅 옵션은?",
       "options": [
@@ -324,6 +337,7 @@
       "id": "saa-t4-2-q14",
       "examGuideTaskId": "saa-t4-2",
       "skill": "Graviton — ARM 기반 비용 이점",
+      "section": "serverless-graviton",
       "difficulty": "foundational",
       "stem": "AWS Graviton 인스턴스에 대한 설명으로 옳은 것은?",
       "options": [
@@ -349,6 +363,7 @@
       "id": "saa-t4-2-q15",
       "examGuideTaskId": "saa-t4-2",
       "skill": "No Upfront RI — 약정 의무 오해",
+      "section": "payment-options",
       "difficulty": "foundational",
       "stem": "한 엔지니어가 'No Upfront RI는 선납금이 없으니 약정도 없는 옵션이다'라고 주장했다. 이 주장에 대한 올바른 평가는?",
       "options": [

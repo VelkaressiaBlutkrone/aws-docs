@@ -8,6 +8,7 @@
       "id": "saa-t4-1-q1",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 스토리지 클래스 비용 구조 이해",
+      "section": "s3-cost-structure",
       "difficulty": "foundational",
       "stem": "다음 중 세 항목이 모두 실제 S3 요금 항목인 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t4-1-q2",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 Intelligent-Tiering 적합 조건",
+      "section": "s3-storage-classes",
       "difficulty": "foundational",
       "stem": "S3 Intelligent-Tiering에 대한 설명으로 옳은 것은?",
       "options": [
@@ -57,6 +59,7 @@
       "id": "saa-t4-1-q3",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 스토리지 클래스 선택 — 접근 패턴 불명확",
+      "section": "s3-storage-classes",
       "difficulty": "applied",
       "stem": "한 기업이 S3에 다양한 사용자 생성 콘텐츠를 저장하고 있다. 콘텐츠별 접근 패턴이 불규칙하고 예측하기 어려우며, 검색 요금이 발생하지 않아야 한다. 가장 비용 효율적인 스토리지 클래스는?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t4-1-q4",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 수명주기 정책 설계",
+      "section": "s3-lifecycle",
       "difficulty": "applied",
       "stem": "한 회사가 S3에 로그를 저장합니다. 처음 30일은 자주 접근하고, 30~90일은 가끔 접근합니다. 90일 이후에는 규정상 1년간 보관 후 삭제해야 합니다. 가장 비용 효율적인 수명주기 정책은?",
       "options": [
@@ -108,6 +112,7 @@
       "id": "saa-t4-1-q5",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 수명주기 최소 보관 기간 함정",
+      "section": "s3-lifecycle",
       "difficulty": "applied",
       "stem": "한 팀이 S3 Standard에 업로드된 객체를 생성 20일 뒤 Standard-IA로 전환하고, 전환으로부터 10일 뒤(생성 30일 시점) 만료(삭제)하는 수명주기 정책을 적용했다. 이 설정의 문제점은?",
       "options": [
@@ -134,6 +139,7 @@
       "id": "saa-t4-1-q6",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 Glacier 클래스 선택 — 검색 속도 요구",
+      "section": "s3-storage-classes",
       "difficulty": "applied",
       "stem": "한 의료 기관이 7년 규정 보관이 필요한 환자 기록을 S3에 저장하려 한다. 데이터는 감사 시 밀리초 이내로 즉시 꺼낼 수 있어야 하며, 접근 빈도는 분기에 한 번 수준이다. 가장 비용 효율적인 클래스는?",
       "options": [
@@ -159,6 +165,7 @@
       "id": "saa-t4-1-q7",
       "examGuideTaskId": "saa-t4-1",
       "skill": "EBS gp3 vs gp2 비용 비교",
+      "section": "ebs-cost",
       "difficulty": "foundational",
       "stem": "gp2 EBS 볼륨을 gp3로 전환했을 때 비용과 성능 면에서 기대할 수 있는 변화로 옳은 것은?",
       "options": [
@@ -183,6 +190,7 @@
       "id": "saa-t4-1-q8",
       "examGuideTaskId": "saa-t4-1",
       "skill": "EC2 중지 시 EBS 과금 여부",
+      "section": "ebs-cost",
       "difficulty": "foundational",
       "stem": "팀이 비용 절감을 위해 사용하지 않는 EC2 인스턴스를 Stop(중지) 상태로 유지하고 있다. 이 상황에서 EBS 볼륨 요금에 대한 설명으로 옳은 것은?",
       "options": [
@@ -209,6 +217,7 @@
       "id": "saa-t4-1-q9",
       "examGuideTaskId": "saa-t4-1",
       "skill": "미사용 EBS 자원 탐지 및 정리",
+      "section": "ebs-cost",
       "difficulty": "applied",
       "stem": "한 팀이 여러 EC2 인스턴스를 종료(Terminate)했지만 연결되지 않은 EBS 볼륨이 대량으로 남아 있어 비용이 계속 발생하고 있다. 이 낭비를 탐지하고 정리하는 방법으로 가장 적절한 것은?",
       "options": [
@@ -235,6 +244,7 @@
       "id": "saa-t4-1-q10",
       "examGuideTaskId": "saa-t4-1",
       "skill": "Transfer Family 과금 — 중지와 삭제의 차이",
+      "section": "transfer-service-cost",
       "difficulty": "applied",
       "stem": "외부 파트너가 SFTP 클라이언트로 S3에 파일을 올리도록 AWS Transfer Family 서버를 띄웠다. 두 달간 전송이 전혀 없을 예정이라 비용을 줄이려고 서버를 중지(StopServer)해 두었다. 비용은 어떻게 되는가?",
       "options": [
@@ -259,6 +269,7 @@
       "id": "saa-t4-1-q11",
       "examGuideTaskId": "saa-t4-1",
       "skill": "데이터 전송 비용 — AZ 간 전송",
+      "section": "data-transfer-cost",
       "difficulty": "foundational",
       "stem": "같은 AWS 리전 내에서 서로 다른 가용 영역(AZ)에 있는 두 EC2 인스턴스가 대량의 데이터를 주고받고 있다. 이 트래픽의 요금 처리로 옳은 것은?",
       "options": [
@@ -283,6 +294,7 @@
       "id": "saa-t4-1-q12",
       "examGuideTaskId": "saa-t4-1",
       "skill": "CloudFront를 활용한 S3 아웃바운드 비용 절감",
+      "section": "data-transfer-cost",
       "difficulty": "applied",
       "stem": "한 회사가 S3에 저장된 이미지를 전 세계 사용자에게 직접 서비스하고 있어 S3 인터넷 아웃바운드 전송 요금이 높다. 비용을 줄이면서 사용자 경험도 개선하는 방법은?",
       "options": [
@@ -307,6 +319,7 @@
       "id": "saa-t4-1-q13",
       "examGuideTaskId": "saa-t4-1",
       "skill": "S3 Storage Lens 활용",
+      "section": "s3-storage-lens",
       "difficulty": "foundational",
       "stem": "한 조직이 수십 개의 S3 버킷을 운영하고 있으며 스토리지 비용 최적화 기회를 찾고 싶다. 미완성 멀티파트 업로드, 수명주기 규칙 미적용 버킷, 비접근 객체 분포를 한 번에 파악할 수 있는 AWS 서비스는?",
       "options": [
@@ -331,6 +344,7 @@
       "id": "saa-t4-1-q14",
       "examGuideTaskId": "saa-t4-1",
       "skill": "EFS Intelligent-Tiering 비용 최적화",
+      "section": "efs-fsx-cost",
       "difficulty": "applied",
       "stem": "한 팀이 Amazon EFS 파일시스템을 사용하고 있다. 파일 일부는 자주 접근되고, 나머지는 오랫동안 접근되지 않는다. 수동 관리 없이 비용을 자동으로 최적화하는 방법은?",
       "options": [
@@ -355,6 +369,7 @@
       "id": "saa-t4-1-q15",
       "examGuideTaskId": "saa-t4-1",
       "skill": "멀티파트 업로드 미완성 비용 처리",
+      "section": "s3-lifecycle",
       "difficulty": "applied",
       "stem": "한 팀이 S3 버킷에서 예상보다 높은 스토리지 요금을 발견했다. 조사 결과 대량의 미완성 멀티파트 업로드가 장기간 남아 있음을 알게 되었다. 이 비용을 자동으로 제거하는 가장 효율적인 방법은?",
       "options": [
