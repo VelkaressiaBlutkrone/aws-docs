@@ -8,6 +8,7 @@
       "id": "soa-t1-2-q1",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "log-retention",
       "difficulty": "foundational",
       "stem": "운영팀이 CloudWatch Logs 비용이 매달 증가하는 원인을 조사하고 있다. 로그 그룹을 만들 때 보존 기간을 따로 지정하지 않았다면 로그는 어떻게 되는가?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t1-2-q2",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "log-groups-streams",
       "difficulty": "foundational",
       "stem": "CloudWatch Logs의 보존 기간, 지표 필터, 접근 권한 설정은 어떤 단위로 적용되는가?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t1-2-q3",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "metric-filters",
       "difficulty": "applied",
       "stem": "애플리케이션 로그에 'ERROR' 문자열이 5분 동안 10회 이상 나타나면 SNS로 알림을 보내야 한다. 가장 적절한 구성은?",
       "options": [
@@ -93,6 +96,7 @@
       "id": "soa-t1-2-q4",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "metric-filters",
       "difficulty": "applied",
       "stem": "어제 발생한 장애를 분석하려고 오늘 지표 필터를 만들었다. 그런데 어제 시각의 지표 데이터가 비어 있다. 이유와 대안은?",
       "options": [
@@ -124,6 +128,7 @@
       "id": "soa-t1-2-q5",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "subscription-filters",
       "difficulty": "applied",
       "stem": "로그 이벤트 원문을 거의 실시간으로 OpenSearch Service에 색인해 검색·시각화해야 한다. 어떤 기능을 사용하는가?",
       "options": [
@@ -151,6 +156,7 @@
       "id": "soa-t1-2-q6",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "subscription-filters",
       "difficulty": "foundational",
       "stem": "지표 필터와 구독 필터의 차이를 가장 정확하게 설명한 것은?",
       "options": [
@@ -182,6 +188,7 @@
       "id": "soa-t1-2-q7",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "log-retention",
       "difficulty": "applied",
       "stem": "감사 요건 때문에 로그를 7년간 보관해야 하지만 비용은 최소화하려 한다. 가장 적절한 접근은?",
       "options": [
@@ -213,6 +220,7 @@
       "id": "soa-t1-2-q8",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "logs-insights",
       "difficulty": "applied",
       "stem": "Logs Insights로 HTTP 상태 코드별 요청 수를 많은 순서로 보려고 한다. 쿼리 구성으로 올바른 것은?",
       "options": [
@@ -240,6 +248,7 @@
       "id": "soa-t1-2-q9",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "logs-insights",
       "difficulty": "foundational",
       "stem": "Logs Insights에서 별도 추출 없이 바로 사용할 수 있는 자동 생성 필드는?",
       "options": [
@@ -267,6 +276,7 @@
       "id": "soa-t1-2-q10",
       "examGuideTaskId": "soa-t1-2",
       "skill": "CloudWatch 에이전트 설치 및 구성(1.1.2)",
+      "section": "cloudwatch-agent",
       "difficulty": "foundational",
       "stem": "EC2 인스턴스를 시작한 직후 CloudWatch 콘솔에서 메모리 사용률 지표를 찾을 수 없다. 이유는?",
       "options": [
@@ -294,6 +304,7 @@
       "id": "soa-t1-2-q11",
       "examGuideTaskId": "soa-t1-2",
       "skill": "CloudWatch 에이전트 설치 및 구성(1.1.2)",
+      "section": "cloudwatch-agent",
       "difficulty": "applied",
       "stem": "인스턴스 200대에 동일한 CloudWatch 에이전트 구성을 배포하고 시작해야 한다. 운영 표준에 가장 가까운 방법은?",
       "options": [
@@ -325,6 +336,7 @@
       "id": "soa-t1-2-q12",
       "examGuideTaskId": "soa-t1-2",
       "skill": "CloudWatch 에이전트 설치 및 구성(1.1.2)",
+      "section": "cloudwatch-agent",
       "difficulty": "applied",
       "stem": "CloudWatch 에이전트를 설치하고 구성을 배포했는데 지표와 로그가 전혀 올라오지 않는다. 가장 먼저 확인할 것은?",
       "options": [
@@ -356,6 +368,7 @@
       "id": "soa-t1-2-q13",
       "examGuideTaskId": "soa-t1-2",
       "skill": "CloudWatch 에이전트 설치 및 구성(1.1.2)",
+      "section": "cloudwatch-agent",
       "difficulty": "foundational",
       "stem": "CloudWatch 에이전트가 수집한 OS 지표는 기본적으로 어떤 네임스페이스에 게시되는가?",
       "options": [
@@ -383,6 +396,7 @@
       "id": "soa-t1-2-q14",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "embedded-metric-format",
       "difficulty": "applied",
       "stem": "Lambda 함수에서 사용자 지정 지표를 게시해야 하는데, 함수 실행 시간에 영향을 주는 추가 API 호출을 피하고 싶다. 적절한 방법은?",
       "options": [
@@ -410,6 +424,7 @@
       "id": "soa-t1-2-q15",
       "examGuideTaskId": "soa-t1-2",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "subscription-filters",
       "difficulty": "applied",
       "stem": "로그 그룹에서 ECS 태스크 로그를 즉시 변환·필터링해 사내 알림 시스템으로 보내려 한다. 구독 필터 대상으로 가장 적절한 것은?",
       "options": [

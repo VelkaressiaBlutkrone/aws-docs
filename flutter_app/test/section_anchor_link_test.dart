@@ -64,9 +64,9 @@ List<String> _anchorRuleViolations(String md) {
 }
 
 void main() {
-  // ⚠️ SOA-C03(300문항)은 아직 section 이 **0개**다(학습문서 앵커는 2026-11-21 배치 0 으로 생겼다).
-  // SAA-C03 은 C 트랙 배치 1~3 으로 채우는 중이다. 누가 SOA 에 section 을 달기 시작하면 이 단정이
-  // 깨져 「집합에 넣어라」고 알리고, 아래 Task별 단정은 그 순간부터 자동으로 그 앵커를 검사한다.
+  // ⚠️ SOA-C03(300문항)은 C 트랙 배치 4~6 으로 채우는 중이다(학습문서 앵커는 2026-11-21 배치 0).
+  // 이 집합 밖의 자격증에 section 이 생기면 이 단정이 깨져 「집합에 넣어라」고 알리고, 아래 Task별
+  // 단정은 그 순간부터 자동으로 그 앵커를 검사한다.
   test('대조군: section 을 쓰는 자격증 집합이 고정돼 있고 공허하지 않다', () {
     final linkedByCert = <String, int>{};
     for (final cert in kContentIndex.keys) {
@@ -79,7 +79,7 @@ void main() {
     }
     final linkedCerts =
         linkedByCert.entries.where((e) => e.value > 0).map((e) => e.key).toSet();
-    expect(linkedCerts, {'CLF-C02', 'SAA-C03', 'DEA-C01', 'MLA-C01', 'AIF-C01', 'SCS-C03', 'AIP-C01'},
+    expect(linkedCerts, {'CLF-C02', 'SAA-C03', 'SOA-C03', 'DEA-C01', 'MLA-C01', 'AIF-C01', 'SCS-C03', 'AIP-C01'},
         reason: 'section 연결 현황이 바뀌었다(자격증별 수: $linkedByCert) — 의도한 변경이면 집합을 고친다');
     final total = linkedByCert.values.fold<int>(0, (a, b) => a + b);
     expect(total, greaterThan(1000),
@@ -160,6 +160,8 @@ void main() {
       'saa-t3-1', 'saa-t3-2', 'saa-t3-3', 'saa-t3-4', 'saa-t3-5',
       'saa-t3-6', 'saa-t3-7', 'saa-t3-8', 'saa-t3-9',
       'saa-t4-1', 'saa-t4-2', 'saa-t4-3', 'saa-t4-4', 'saa-t4-5',
+      'soa-t1-1', 'soa-t1-2', 'soa-t1-3', 'soa-t1-4', 'soa-t1-5',
+      'soa-t2-1', 'soa-t2-2', 'soa-t2-3', 'soa-t2-4',
     };
     final entries = [
       for (final cert in kContentIndex.keys)
