@@ -654,9 +654,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t4-1.md',
       questionsAsset: 'assets/content/saa/saa-t4-1.questions.json',
       questionCount: 15,
-      // 2026-11-21 seg044·seg045(EFS 계층 전환) 정정 재합성 — 사람의 청취
-      // 재승인과 R2 발행 전까지 비노출이다.
-      audioApproved: false,
+      audioApproved: true,
+      audioSha8: 'c8e695f0',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
