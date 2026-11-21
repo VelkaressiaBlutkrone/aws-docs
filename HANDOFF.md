@@ -98,7 +98,7 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 
 SAA-C03 도메인 3(9 Task · 135문항)에 `section` 을 넣었다. 방법은 배치 1 과 같다 — Task 마다 절과 문항을 읽어 고르고, 근거어가 그 절 본문에 있는지 **대소문자를 구분해** 대조했다. ⚠️ main 릴리스 전이라 라이브는 아직 그대로다.
 
-- 이번에는 근거어마다 **그 절의 실제 문장을 출력해 읽었다**(배치 1 은 약한 근거어만 골라 읽었다). 1차 매핑에서 근거어가 절에 없던 것이 **10건**이고, 절을 옮긴 것은 **3건**(`t3-4-q1` → 「노드를 누가 관리」가 있는 `compute-decision-tree` · `t3-4-q2` → `lambda-performance` · `t3-9-q1` → `kinesis-family`)이다. `common-pitfalls` 로 보낸 문항은 **0건**이다.
+- 이번에는 근거어마다 **그 절의 실제 문장을 출력해 읽었다**(배치 1 은 약한 근거어만 골라 읽었다). 1차 매핑에서 근거어가 절에 없던 것이 **9건**이고, 절을 옮긴 것은 **3건**(`t3-4-q1` → 「노드를 누가 관리」가 있는 `compute-decision-tree` · `t3-4-q2` → `lambda-performance` · `t3-9-q1` → `kinesis-family`)이다. `common-pitfalls` 로 보낸 문항은 **0건**이다.
 - `completeTaskIds` 에 9 Task 를 더해 가드가 **9건** 늘었다(항목 하나가 테스트 하나).
 
 **⚠️⚠️ 찾았지만 고치지 않은 라이브 결함 — `saa-t3-2.md` 의 EFS 스토리지 클래스 표(313~316행).** `Standard-IA` · `One Zone` · `One Zone-IA` 를 클래스로 적는다. 공식은 **Standard · EFS Infrequent Access(IA) · EFS Archive** 셋이고(`efs/latest/ug/lifecycle-management-efs.html`) **One Zone 은 파일 시스템 유형**이다(`whatisefs.html`: `One Zone file systems store data within a single Availability Zone`). `saa_question_facts_test.dart:773` 이 이미 **「One Zone은 스토리지 클래스가 아니라 파일 시스템 유형이다」**로 문항을 고정해 둬서 **같은 Task 의 문서와 문항이 어긋난다**(`saa-t3-2-q15` 는 `Infrequent Access` 로 옳게 적는다 — 2026-10-27 §C 가 문항만 고친 역방향 잔존이다). 이 배치는 본문을 바꾸지 않는 계약이라 건드리지 않았고 별 작업으로 넘긴다.
