@@ -14,7 +14,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:aws_docs/app_version.dart';
 import 'package:aws_docs/data/cloud/auth_service.dart';
-import 'package:aws_docs/data/cloud/auth_user.dart';
 import 'package:aws_docs/data/cloud/cloud_store.dart';
 import 'package:aws_docs/data/cloud/feedback_service.dart';
 
