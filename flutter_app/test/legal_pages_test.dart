@@ -73,8 +73,10 @@ void main() {
           .map((m) => m.group(1)!)
           .toSet();
       expect(records, isNotEmpty, reason: 'data-record 추출이 깨졌다');
-      expect(records, equals(kSyncedCollections.toSet()),
-          reason: '동기가 쓰는 컬렉션과 처리방침이 적는 기록 종류가 다르다');
+      // D2 — 비교 대상은 **사용자 소유 컬렉션**이다(동기 집합 + 피드백). 처리방침은
+      // 동기하는 것만이 아니라 **기기 밖으로 나가는 모든 기록**을 적어야 한다.
+      expect(records, equals(kUserOwnedCollections.toSet()),
+          reason: '사용자 소유 컬렉션과 처리방침이 적는 기록 종류가 다르다');
     });
 
     test('공유 대상(서비스 제공자)을 적는다', () {

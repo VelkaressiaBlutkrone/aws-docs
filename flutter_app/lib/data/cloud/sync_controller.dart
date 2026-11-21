@@ -159,8 +159,9 @@ class SyncController extends ChangeNotifier {
       await _onUser(null);
 
       // 2) 클라우드 문서 — 클라이언트 SDK가 서브컬렉션을 나열할 수 없어
-      //    `kSyncedCollections`를 돈다(그 목록의 드리프트는 가드가 막는다).
-      for (final collection in kSyncedCollections) {
+      //    `kUserOwnedCollections`를 돈다(동기 컬렉션 + 피드백처럼 동기하지 않는
+      //    사용자 소유 컬렉션. 그 목록의 드리프트는 가드가 막는다).
+      for (final collection in kUserOwnedCollections) {
         final docs = await _cloud.loadCollection(uid, collection);
         for (final docId in docs.keys) {
           await _cloud.deleteDoc(uid, collection, docId);
