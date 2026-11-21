@@ -8,6 +8,7 @@
       "id": "soa-t4-3-q1",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "kms-keys",
       "difficulty": "foundational",
       "stem": "KMS 키에 직접 연결되는 리소스 기반 정책으로, 해당 키에 누가 접근할 수 있는지 정의하는 것은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t4-3-q2",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "kms-keys",
       "difficulty": "foundational",
       "stem": "AWS 관리형 키(`aws/서비스`)와 고객 관리형 키(CMK)의 차이로 올바른 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t4-3-q3",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "key-rotation",
       "difficulty": "applied",
       "stem": "CMK의 자동 교체를 활성화했다. 애플리케이션 코드와 과거 데이터에 어떤 영향이 있는가?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t4-3-q4",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "envelope-encryption",
       "difficulty": "applied",
       "stem": "대용량 S3 객체 암호화에서 KMS가 데이터를 직접 암호화하지 않고 데이터 키를 발급하는 방식을 무엇이라 하는가?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t4-3-q5",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "encryption-at-rest",
       "difficulty": "applied",
       "stem": "SSE-KMS를 쓰는 버킷에서 객체가 수백만 개로 늘어나며 KMS 요청 비용이 증가했다. 적절한 완화책은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t4-3-q6",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "encryption-at-rest",
       "difficulty": "foundational",
       "stem": "S3 서버 측 암호화 방식 중 'AWS가 키를 저장하지 않으며 키 분실 시 복구가 불가능한' 것은?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t4-3-q7",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "encryption-at-rest",
       "difficulty": "applied",
       "stem": "암호화되지 않은 상태로 운영 중인 RDS 인스턴스를 암호화하려 한다. 올바른 절차는?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t4-3-q8",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "encryption-at-rest",
       "difficulty": "foundational",
       "stem": "암호화된 EBS 볼륨에서 만든 스냅샷과 그 스냅샷에서 복원한 볼륨의 암호화 상태는?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t4-3-q9",
       "examGuideTaskId": "soa-t4-3",
       "skill": "전송 중 암호화 구현·구성·문제 해결(ACM)(4.2.3)",
+      "section": "encryption-in-transit",
       "difficulty": "applied",
       "stem": "S3 버킷에 평문(HTTP) 요청을 거부하려 한다. 버킷 정책에서 사용하는 조건 키는?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t4-3-q10",
       "examGuideTaskId": "soa-t4-3",
       "skill": "전송 중 암호화 구현·구성·문제 해결(ACM)(4.2.3)",
+      "section": "acm",
       "difficulty": "applied",
       "stem": "CloudFront 배포에 ACM 인증서를 연결하려는데 목록에 인증서가 보이지 않는다. 가장 가능성 높은 원인은?",
       "options": [
@@ -282,6 +292,7 @@
       "id": "soa-t4-3-q11",
       "examGuideTaskId": "soa-t4-3",
       "skill": "전송 중 암호화 구현·구성·문제 해결(ACM)(4.2.3)",
+      "section": "acm",
       "difficulty": "applied",
       "stem": "외부 CA에서 발급받아 ACM으로 가져온(import) 인증서의 운영상 유의점은?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "soa-t4-3-q12",
       "examGuideTaskId": "soa-t4-3",
       "skill": "전송 중 암호화 구현·구성·문제 해결(ACM)(4.2.3)",
+      "section": "acm",
       "difficulty": "foundational",
       "stem": "ACM의 관리형 갱신이 완전히 자동으로 이뤄지는 조건은?",
       "options": [
@@ -340,6 +352,7 @@
       "id": "soa-t4-3-q13",
       "examGuideTaskId": "soa-t4-3",
       "skill": "AWS 서비스로 보안 암호를 안전하게 저장(4.2.4)",
+      "section": "secrets-vs-parameter-store",
       "difficulty": "applied",
       "stem": "Aurora 자격증명을 90일마다 자동 교체하고 교체 후 연결 테스트까지 자동화하려 한다. 적절한 서비스와 이유는?",
       "options": [
@@ -371,6 +384,7 @@
       "id": "soa-t4-3-q14",
       "examGuideTaskId": "soa-t4-3",
       "skill": "AWS 서비스로 보안 암호를 안전하게 저장(4.2.4)",
+      "section": "secrets-vs-parameter-store",
       "difficulty": "applied",
       "stem": "교체가 필요 없는 환경 설정값(기능 플래그·엔드포인트 URL 등)을 저장하려 한다. 비용을 고려한 선택은?",
       "options": [
@@ -398,6 +412,7 @@
       "id": "soa-t4-3-q15",
       "examGuideTaskId": "soa-t4-3",
       "skill": "저장 시 암호화 구현·구성·문제 해결(KMS)(4.2.2)",
+      "section": "encryption-at-rest",
       "difficulty": "applied",
       "stem": "누가 언제 어떤 KMS 키로 복호화를 호출했는지 감사하려 한다. 어디를 보는가?",
       "options": [

@@ -162,6 +162,8 @@ void main() {
       'saa-t4-1', 'saa-t4-2', 'saa-t4-3', 'saa-t4-4', 'saa-t4-5',
       'soa-t1-1', 'soa-t1-2', 'soa-t1-3', 'soa-t1-4', 'soa-t1-5',
       'soa-t2-1', 'soa-t2-2', 'soa-t2-3', 'soa-t2-4',
+      'soa-t3-1', 'soa-t3-2', 'soa-t3-3', 'soa-t3-4',
+      'soa-t4-1', 'soa-t4-2', 'soa-t4-3',
     };
     final entries = [
       for (final cert in kContentIndex.keys)

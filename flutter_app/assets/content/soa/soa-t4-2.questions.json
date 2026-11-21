@@ -8,6 +8,7 @@
       "id": "soa-t4-2-q1",
       "examGuideTaskId": "soa-t4-2",
       "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "section": "aws-config",
       "difficulty": "foundational",
       "stem": "리소스 '설정'이 정해진 규칙을 준수하는지 지속적으로 평가하고 변경 이력을 기록하는 서비스는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t4-2-q2",
       "examGuideTaskId": "soa-t4-2",
       "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "section": "compliance-requirements",
       "difficulty": "applied",
       "stem": "PCI DSS 운영 모범 사례에 해당하는 Config 규칙 묶음을 한 번에 배포하려 한다. 어떤 기능을 쓰는가?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t4-2-q3",
       "examGuideTaskId": "soa-t4-2",
       "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "section": "aws-config",
       "difficulty": "applied",
       "stem": "Config가 변경 이벤트만 감시하지 않고 지속적으로 평가하도록 설계된 이유는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t4-2-q4",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "security-hub",
       "difficulty": "foundational",
       "stem": "GuardDuty·Inspector·Macie·Config의 결과를 하나의 표준 형식으로 모아 보안 점수와 함께 보여 주는 서비스는?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t4-2-q5",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "security-hub",
       "difficulty": "applied",
       "stem": "Security Hub가 직접 탐지 로직을 구현하지 않고 다른 서비스의 결과를 모으는 방식이 주는 이점은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t4-2-q6",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "security-hub",
       "difficulty": "applied",
       "stem": "Security Hub 결과에 따라 티켓 생성·리소스 격리 같은 자동 조치를 연결하려면?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t4-2-q7",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "guardduty",
       "difficulty": "foundational",
       "stem": "GuardDuty의 기본 탐지가 사용하는 데이터 소스로 올바른 조합은?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t4-2-q8",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "guardduty",
       "difficulty": "applied",
       "stem": "GuardDuty가 인스턴스에 에이전트를 설치하지 않고도 위협을 탐지할 수 있는 이유로 가장 적절한 것은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t4-2-q9",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "inspector",
       "difficulty": "applied",
       "stem": "EC2·ECR 이미지·Lambda 함수의 알려진 CVE와 네트워크 노출을 지속적으로 평가하려 한다. 적절한 서비스는?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t4-2-q10",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "inspector",
       "difficulty": "foundational",
       "stem": "GuardDuty와 Inspector의 역할을 한 줄로 구분한 것으로 올바른 것은?",
       "options": [
@@ -282,6 +292,7 @@
       "id": "soa-t4-2-q11",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "what-each-service-sees",
       "difficulty": "applied",
       "stem": "S3 버킷에 주민번호·카드번호 같은 민감정보가 어디에 저장돼 있는지 찾아야 한다. 적절한 서비스는?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "soa-t4-2-q12",
       "examGuideTaskId": "soa-t4-2",
       "skill": "Trusted Advisor 보안 검사 결과 기반 문제 해결(4.1.4)",
+      "section": "trusted-advisor",
       "difficulty": "foundational",
       "stem": "Trusted Advisor의 점검 범주에 해당하지 않는 것은?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "soa-t4-2-q13",
       "examGuideTaskId": "soa-t4-2",
       "skill": "Trusted Advisor 보안 검사 결과 기반 문제 해결(4.1.4)",
+      "section": "trusted-advisor",
       "difficulty": "applied",
       "stem": "Trusted Advisor 보안 점검에서 '루트 계정 MFA 미설정'이 보고됐다. 적절한 조치는?",
       "options": [
@@ -363,6 +376,7 @@
       "id": "soa-t4-2-q14",
       "examGuideTaskId": "soa-t4-2",
       "skill": "조사 결과 보고서 구성 및 문제 해결(4.2.5)",
+      "section": "detective",
       "difficulty": "applied",
       "stem": "GuardDuty가 의심스러운 IP와의 통신을 경보했다. 이 IP가 어떤 리소스와 언제 통신했는지 연관 관계를 추적해 사고 범위를 파악하려 한다. 적절한 도구는?",
       "options": [
@@ -390,6 +404,7 @@
       "id": "soa-t4-2-q15",
       "examGuideTaskId": "soa-t4-2",
       "skill": "규정 준수 요구 사항 및 지속적인 모니터링 적용(4.1.5)",
+      "section": "aws-config",
       "difficulty": "applied",
       "stem": "'퍼블릭 액세스가 열린 S3 버킷'을 지속적으로 탐지하고 사람 개입 없이 차단까지 하려 한다. 적절한 구성은?",
       "options": [
