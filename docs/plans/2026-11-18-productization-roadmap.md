@@ -39,7 +39,9 @@
 | 계정 삭제·개인정보 고지 | **앱에 없다** (`lib` 에서 「개인정보」 0건, 계정 삭제 호출 0건) | `grep` |
 | CI | `ci.yml`(node 도구 → analyze → test → 릴리스 플래그 테스트) · `pages.yml`(웹 빌드·배포) · `firestore-rules.yml`. Flutter `3.47.2` 고정 | `.github/workflows/` |
 
-### 1-2. 웹 전용 코드 네 곳 (`dart.library.js_interop` 조건부 import, 비웹은 스텁)
+### 1-2. 웹 전용 코드 네 곳 (`dart.library.js_interop` 조건부 import, 비웹은 스텁) — ✅ **네 곳 전부 해소됐다(2026-11-21)**
+
+⚠️ **아래 표는 2026-11-18 시점의 기록이고 「지금」이 아니다.** 해소 매핑: `local_kv` → **A2**(`FileKvBackend`, 2026-11-19) · `audio_runtime` → **D1-a·D1-b**(`NativeAudioBackend` + `audio_service`, 2026-11-21 — `audio_lecture` 플래그도 켰다) · `app_resume`·`open_link` → **A5**(2026-11-20). 표의 「Android 에서의 결과」 열은 **고치기 전의 증상**이니 현재 상태로 읽지 않는다.
 
 | 경계 파일 | 웹 구현 | 비웹 스텁의 동작 | Android 에서의 결과 |
 |---|---|---|---|
@@ -135,7 +137,7 @@
 - ⚠️⚠️ **끝에 동기 사이드카를 비운다.** `resetAll()` 은 설계상 삭제 표식을 남기는데(다른 기기의 부활 방지), 계정이 사라진 뒤 그 표식이 남으면 **다음에 다른 계정으로 로그인할 때 그 계정의 클라우드 기록을 「표식보다 오래된 것」으로 보고 지운다.** 계정 삭제는 이 기기를 **동기 미경험 상태**로 되돌려야 한다.
 - ⚠️ **패널 안의 「계정 삭제」는 중립 톤이다**(`textMuted`). `wrong`/`surface2` 는 다크에서 **4.40 으로 AA(4.5) 미달**이다(WCAG 계산 실측 — 라이트는 4.82 로 통과). 레포 관례도 위험 톤을 **다이얼로그의 확인 버튼**에서만 쓴다(`reset_dialog.dart`). ⚠️ 그 계산을 처음 틀리게 했다 — `0xAARRGGBB` 에서 **알파를 R 로 읽어** `wrong`/`surface` 가 1.63(FAIL)으로 나왔고, 레포 가드가 이미 AA 로 단정하는 그 쌍이 **대조군**이 돼 즉시 드러났다.
 - **계정 삭제는 이 기기의 로컬 기록도 지운다**(사용자 판정 2026-11-20) — 남기면 나중에 **다른 계정으로 로그인했을 때 그 기록이 새 계정으로 올라간다**. §8-⑪ 도 이로써 닫힌다(「Google 로그인만 있는 앱도 앱 계정으로 보고 A7 을 한다」를 실제로 구현했다).
-- Android 빌드는 `audio_lecture` 플래그 **없이** 만든다 — 오디오 진입점이 통째로 숨는다(§1-2). 웹 빌드는 그대로 플래그를 켠다.
+- ~~Android 빌드는 `audio_lecture` 플래그 **없이** 만든다~~ — 단계 A 시점의 판단이고 **D1-b 가 켰다**(2026-11-21). 릴리스 AAB 는 `flutter_app/tool/build_android_release.ps1` 가 단일 출처이고, 가드가 **웹 릴리스(`pages.yml`)가 켜는 dart-define 을 전부 켜는지** 맞댄다. 웹 빌드는 전부터 플래그를 켜고 있었다.
 - CI: 필수 체크 이름 `test` 는 그대로 둔다. Android 빌드 확인은 별도 선택 job 으로 더한다(필수 목록에 없는 job 은 게이트가 되지 않는다).
 
 ### 단계 B — 비공개 테스트 (목표 12-01 ~ 12-05 시작, 14일)
@@ -263,7 +265,7 @@ C(DVA 전환, 12-01 이후 · 웹)  ── 독립         └─ D2(게시판)
 - 문항 `verified` flip, 오디오 청취 승인
 
 **AI가 할 수 있는 일**
-- 단계 A 의 코드 전부(A1~A7)와 테스트, CI job 추가
+- 단계 A 의 코드 전부(A1~A8 — 처리방침·스토어 그래픽의 **생성까지** AI 몫이고 **제출·승인은 사람**)와 테스트, CI job 추가
 - 처리방침·Data safety 답안·스토어 설명·프로덕션 신청 답안의 **초안**(수집 항목은 코드에서 실측)
 - DVA 전환 PR, 게시판·오디오·프레젠테이션의 설계와 구현, 규칙 테스트
 - 머지·릴리스·라이브 확인(상시 승인 범위), R2 오디오 발행
@@ -278,7 +280,7 @@ C(DVA 전환, 12-01 이후 · 웹)  ── 독립         └─ D2(게시판)
 | ② | 신규 계정의 기기 확인·본인 확인 **소요**(등록비는 **US$25 일회성**으로 확인) | A0 가 며칠 걸리는지 | Console |
 | ③ | 조직 계정의 테스트 요건 면제 여부 | **실측 2026-11-18 — 면제를 적은 공식 문장을 찾지 못했다.** 요건 페이지(answer/14151465)는 제목·본문 모두 `personal developer accounts created after November 13, 2023` 로 한정하지만, 계정 유형 선택 페이지(answer/13634885)는 테스트·테스터·프로덕션 액세스를 **한 번도 언급하지 않는다** — 「문면에 없다」가 「면제다」는 아니다. 게다가 조직 계정은 **D-U-N-S 가 필수이고 발급에 최대 30일**(answer/13628312, 무료·신속 경로 없음)이라 연내 일정과 양립하지 않는다 → **개인 계정으로 간다** | 공식 페이지 실측 |
 | ④ | 프로덕션 승인 뒤 첫 출시·이후 업데이트의 심사 소요 | §4 여유와 §5-② 판단 | Console · 도움말 |
-| ⑤ | 운영자 전용 피드백의 UGC 해당 여부, Data safety 에서의 분류 | D2 범위 | 정책 문의 또는 Console 양식 |
+| ⑤ | 운영자 전용 피드백의 UGC 해당 여부, Data safety 에서의 분류 | **초안 답이 생겼다(2026-11-21, D2 종료)** — 「사용자 생성 콘텐츠」는 **다른 사용자에게 보이는 것이 없다**(규칙이 본인·운영자만 읽는다), 수집은 「메시지 > 기타 인앱 메시지」로 넣었다. ⏳ **최종 판정은 Console 양식 화면**이다(사람 몫) | 초안 `docs/play/2026-11-20-data-safety-and-listing-draft.md` · Console 양식 |
 | ⑥ | ~~`PretendardVariable.woff2` 가 Android 엔진에서 렌더되는지~~ | **해소 2026-11-18 — 렌더된다.** 에뮬레이터(API 36)에 릴리스 APK 를 설치해 실행: 폰트·자산 로드 실패 로그 **0건**(대조군 — 같은 추출에서 `I flutter` 15줄), 굵기가 단계별로 다르게 그려진다(번들 폰트가 하나뿐이고 `fontVariations(wght)` 로 제어하므로 디코드 실패면 불가능). ⭐ 렌더 백엔드는 **Impeller(OpenGLES)** 라 pubspec 주석의 canvaskit 근거와 **다른 경로인데도** 양쪽 다 렌더한다 | A1 에뮬레이터 실측 |
 | ⑦ | ~~Android Google 로그인 방식~~ / Play 서명 키 지문 등록 절차 | **로그인 방식은 해소 2026-11-19** — 공식은 `google_sign_in` 으로 받은 idToken 을 `GoogleAuthProvider.credential` 로 바꾸는 경로이고 `signInWithProvider` 는 Google 용이 아니다. `google-services.json` 없이는 **웹 OAuth 클라이언트 ID 를 `serverClientId`** 로 넘긴다. ⏳ **Play 서명 키 지문은 B1 에 남는다** — 릴리스 키스토어가 아직 없고, 내부 테스트 빌드는 업로드 키가 아니라 **Play 앱 서명 키**의 SHA-1 을 Firebase 에 등록해야 로그인이 된다 | A4 실측 · B1 |
 | ⑧ | ~~백그라운드 오디오의 포그라운드 서비스 선언 요건~~ | **해소 2026-11-21(D1-a 착수 조사)** — `audio_service` 공식 README 가 그대로 적는다: 권한 **`WAKE_LOCK`·`FOREGROUND_SERVICE`**, 그리고 **SDK 34+ 에서 `FOREGROUND_SERVICE_MEDIA_PLAYBACK`**(우리는 targetSdk 36 이라 필수) · `<service android:foregroundServiceType="mediaPlayback">` + 미디어 버튼 리시버 · **Activity 를 `AudioServiceActivity` 로 교체**(매니페스트가 틀리면 `AudioService.init` 이 `PlatformException`). ⚠️ Android 12+ 는 백그라운드에서 포그라운드 서비스를 **재시작할 권한**이 없으면 `ForegroundServiceStartNotAllowedException` 이라, `androidStopForegroundOnPause: false` 로 일시정지 중에도 서비스를 유지하는 쪽을 쓴다. ⚠️ **`MainActivity` 가 A6-4 의 스플래시 테마 코드를 들고 있으므로** 교체는 상속만 바꾼다(`FlutterActivity` → `AudioServiceActivity`). **D1-b 에서 전부 적용·실측 완료**(2026-11-21) — 다만 `androidStopForegroundOnPause` 는 `true`·`false` 의 관측 차이가 없었고(플러그인의 `stop()` 이 `stopSelf()` 만 부르는데 Flutter 엔진이 바인딩돼 `onDestroy()` 가 돌지 않는다) 문서 권장값 `false` 를 썼다. ⚠️ 문서에 없던 요건 하나를 실측으로 더 찾았다 — **리소스 축소기가 런타임 이름 조회 아이콘을 지워** `res/raw/keep.xml` 이 필요하다(릴리스 전용 결함) | Context7 공식 문서 + 2026-11-21 실측 |
