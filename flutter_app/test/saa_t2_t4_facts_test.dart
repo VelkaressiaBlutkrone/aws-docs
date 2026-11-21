@@ -181,6 +181,65 @@ void main() {
       expect(t32.contains('Elastic 처리량'), isTrue);
     });
 
+    // 근거: efs/latest/ug/features.html — "Amazon EFS offers Regional and One
+    // Zone file system types." + 스토리지 클래스는 EFS Standard · EFS Infrequent
+    // Access (IA) · EFS Archive 셋이고, 비교 표의 Archive 행만 "=>3 (Regional)"
+    // 이다. "The EFS Archive storage class is supported on EFS file systems
+    // with Elastic throughput."
+    // ⚠️ `Standard-IA`·`One Zone-IA` 는 S3 클래스로는 정상이라 §6(EFS)만 본다.
+    String efsSection() {
+      final t32 = doc('saa-t3-2').replaceAll('\r\n', '\n');
+      final start = t32.indexOf('{#efs}');
+      expect(start, greaterThanOrEqualTo(0), reason: 'EFS 절 앵커가 없다');
+      final end = t32.indexOf('\n### ', start);
+      expect(end, greaterThan(start), reason: 'EFS 절의 끝을 찾지 못했다');
+      return t32.substring(start, end);
+    }
+
+    List<String> tableRowsAfter(String body, String heading) {
+      final at = body.indexOf(heading);
+      expect(at, greaterThanOrEqualTo(0), reason: '$heading 이 없다');
+      return body
+          .substring(at + heading.length)
+          .trimLeft()
+          .split('\n\n')
+          .first
+          .split('\n')
+          .skip(2)
+          .toList();
+    }
+
+    test('EFS 스토리지 클래스 표는 Standard·IA·Archive 셋이다', () {
+      final rows = tableRowsAfter(efsSection(), '**스토리지 클래스:**');
+      final names = [
+        for (final r in rows)
+          RegExp(r'^\| \*\*(.+?)\*\*').firstMatch(r)?.group(1),
+      ];
+      expect(names, ['EFS Standard', 'EFS Infrequent Access(IA)', 'EFS Archive']);
+      expect(rows.last, contains('Elastic 처리량'));
+    });
+
+    test('EFS One Zone은 클래스가 아니라 파일 시스템 유형이고 Archive가 없다', () {
+      final rows =
+          tableRowsAfter(efsSection(), '**파일 시스템 유형 (스토리지 클래스와 별개의 축):**');
+      expect(rows, hasLength(2));
+      expect(rows.first, startsWith('| **Regional**'));
+      expect(rows.first, contains('Archive'));
+      expect(rows.last, startsWith('| **One Zone**'));
+      expect(rows.last, contains('Standard·IA'));
+      expect(rows.last, isNot(contains('Archive')));
+    });
+
+    test('EFS 절에 S3 클래스 이름이 없고 S3 절의 이름은 그대로다', () {
+      final efs = efsSection();
+      expect(efs, isNot(contains('Standard-IA')));
+      expect(efs, isNot(contains('One Zone-IA')));
+      // 대조군: 같은 낱말이 S3 문서에서는 정상 클래스 이름이다.
+      expect(doc('saa-t3-1'), contains('One Zone-IA'));
+      expect(doc('saa-t3-2'),
+          contains('https://docs.aws.amazon.com/efs/latest/ug/features.html'));
+    });
+
     test('G-3.1-13 FSx for Lustre 성능은 스토리지 클래스별로 다르다', () {
       // 근거: fsx lustre what-is — SSD "consistent sub-millisecond latency
       // access to your full dataset", Intelligent-Tiering "sub-millisecond
