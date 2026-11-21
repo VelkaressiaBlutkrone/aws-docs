@@ -8,6 +8,7 @@
       "id": "saa-t1-1-q1",
       "examGuideTaskId": "saa-t1-1",
       "skill": "IAM 기본 성격(글로벌·무료)",
+      "section": "what-is-iam",
       "difficulty": "foundational",
       "stem": "한 솔루션스 아키텍트가 여러 리전에 걸쳐 워크로드를 운영하면서 IAM 사용자·역할·정책을 어떻게 배치할지 검토하고 있다. IAM 서비스의 성격으로 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t1-1-q2",
       "examGuideTaskId": "saa-t1-1",
       "skill": "EC2에서 AWS 서비스 접근(인스턴스 프로필)",
+      "section": "iam-roles-sts",
       "difficulty": "applied",
       "stem": "EC2 인스턴스에서 실행되는 애플리케이션이 S3 버킷에 객체를 업로드해야 한다. 보안 모범 사례에 가장 부합하는 방법은?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t1-1-q3",
       "examGuideTaskId": "saa-t1-1",
       "skill": "Lambda 실행 역할",
+      "section": "iam-roles-sts",
       "difficulty": "applied",
       "stem": "AWS Lambda 함수가 DynamoDB 테이블에 항목을 기록해야 한다. 함수에 권한을 부여하는 올바른 방법은?",
       "options": [
@@ -83,6 +86,7 @@
       "id": "saa-t1-1-q4",
       "examGuideTaskId": "saa-t1-1",
       "skill": "교차 계정 접근(Cross-account Role)",
+      "section": "iam-roles-sts",
       "difficulty": "applied",
       "stem": "계정 A의 개발팀이 계정 B에 있는 DynamoDB 테이블을 읽어야 한다. 가장 적절한 설계는?",
       "options": [
@@ -107,6 +111,7 @@
       "id": "saa-t1-1-q5",
       "examGuideTaskId": "saa-t1-1",
       "skill": "신뢰 정책 vs 권한 정책",
+      "section": "iam-roles-sts",
       "difficulty": "foundational",
       "stem": "한 IAM 역할에 신뢰 정책(trust policy)은 있으나 권한 정책(permissions policy)이 비어 있다. 이 역할을 수임한 주체는 무엇을 할 수 있는가?",
       "options": [
@@ -131,6 +136,7 @@
       "id": "saa-t1-1-q6",
       "examGuideTaskId": "saa-t1-1",
       "skill": "권한 평가 로직(명시적 Deny 우선)",
+      "section": "policy-evaluation",
       "difficulty": "applied",
       "stem": "한 IAM 사용자에게 s3:* 를 Allow하는 정책과, s3:DeleteObject 를 Deny하는 정책이 동시에 적용된다. 이 사용자가 S3 객체를 삭제하려 하면?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t1-1-q7",
       "examGuideTaskId": "saa-t1-1",
       "skill": "다계정 가드레일(SCP)",
+      "section": "multi-account-security",
       "difficulty": "applied",
       "stem": "한 조직이 AWS Organizations의 특정 OU에 속한 모든 계정이 us-east-1 외의 리전을 사용하지 못하도록 강제하려 한다. 가장 적합한 도구는?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t1-1-q8",
       "examGuideTaskId": "saa-t1-1",
       "skill": "세션 정책 — 수임 세션 권한의 교집합",
+      "section": "policy-types",
       "difficulty": "applied",
       "stem": "한 운영 도구가 `sts:AssumeRole`로 역할을 수임할 때 인라인 세션 정책을 함께 전달한다. 역할의 아이덴티티 기반 정책은 `s3:*`를 Allow하고, 전달한 세션 정책은 `s3:GetObject`만 Allow한다. 이 세션 자격증명으로 `s3:PutObject`를 호출하면 어떤 결과가 나오는가?",
       "options": [
@@ -204,6 +212,7 @@
       "id": "saa-t1-1-q9",
       "examGuideTaskId": "saa-t1-1",
       "skill": "권한 경계 vs SCP 적용 범위",
+      "section": "policy-types",
       "difficulty": "foundational",
       "stem": "권한 경계(permissions boundary)와 SCP(서비스 제어 정책)의 차이로 옳은 것은?",
       "options": [
@@ -228,6 +237,7 @@
       "id": "saa-t1-1-q10",
       "examGuideTaskId": "saa-t1-1",
       "skill": "페더레이션 선택(IAM Identity Center)",
+      "section": "federation",
       "difficulty": "applied",
       "stem": "한 기업이 Microsoft Active Directory를 사용 중이며 수백 명의 직원이 여러 AWS 계정에 SSO로 접근해야 한다. 가장 적합한 서비스는?",
       "options": [
@@ -253,6 +263,7 @@
       "id": "saa-t1-1-q11",
       "examGuideTaskId": "saa-t1-1",
       "skill": "페더레이션 선택(OIDC 웹 자격 증명)",
+      "section": "federation",
       "difficulty": "applied",
       "stem": "GitHub Actions CI/CD 파이프라인이 AWS 리소스를 배포해야 한다. 장기 액세스 키를 저장하지 않고 안전하게 권한을 부여하는 방법은?",
       "options": [
@@ -277,6 +288,7 @@
       "id": "saa-t1-1-q12",
       "examGuideTaskId": "saa-t1-1",
       "skill": "페더레이션 선택(Amazon Cognito)",
+      "section": "federation",
       "difficulty": "applied",
       "stem": "모바일 앱이 수백만 명의 일반 소비자 사용자를 인증하고, 인증된 사용자에게 S3 업로드용 임시 AWS 자격증명을 부여해야 한다. 가장 적합한 서비스는?",
       "options": [
@@ -301,6 +313,7 @@
       "id": "saa-t1-1-q13",
       "examGuideTaskId": "saa-t1-1",
       "skill": "STS 임시 자격증명 수명",
+      "section": "iam-roles-sts",
       "difficulty": "foundational",
       "stem": "IAM 역할을 수임할 때 STS가 발급하는 자격증명의 성격으로 옳은 것은?",
       "options": [
@@ -326,6 +339,7 @@
       "id": "saa-t1-1-q14",
       "examGuideTaskId": "saa-t1-1",
       "skill": "리소스 기반 정책(같은 계정 vs 교차 계정)",
+      "section": "common-pitfalls",
       "difficulty": "applied",
       "stem": "같은 계정 내의 한 IAM 역할이 S3 버킷에 접근해야 한다. 그 역할에는 S3 관련 아이덴티티 기반 정책이 없지만, 버킷 정책(리소스 기반)에서 해당 역할에 GetObject를 Allow하고 있다. 접근 결과는?",
       "options": [
@@ -350,6 +364,7 @@
       "id": "saa-t1-1-q15",
       "examGuideTaskId": "saa-t1-1",
       "skill": "루트 사용자 보호 모범 사례",
+      "section": "iam-components",
       "difficulty": "foundational",
       "stem": "AWS 계정의 루트 사용자에 대한 보안 모범 사례로 옳은 것은?",
       "options": [

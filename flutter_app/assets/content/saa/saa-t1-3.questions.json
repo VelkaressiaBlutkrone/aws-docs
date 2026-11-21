@@ -8,6 +8,7 @@
       "id": "saa-t1-3-q1",
       "examGuideTaskId": "saa-t1-3",
       "skill": "퍼블릭·프라이빗 서브넷 구분 기준",
+      "section": "vpc-subnet",
       "difficulty": "foundational",
       "stem": "한 VPC에 'PublicSubnet'이라는 이름의 서브넷이 있다. 이 서브넷에 배치된 EC2 인스턴스가 인터넷에 연결되지 않는다. 솔루션스 아키텍트가 가장 먼저 확인해야 할 항목은?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t1-3-q2",
       "examGuideTaskId": "saa-t1-3",
       "skill": "서브넷 IP 예약 규칙",
+      "section": "vpc-subnet",
       "difficulty": "foundational",
       "stem": "한 솔루션스 아키텍트가 /24 CIDR 서브넷에서 실제로 EC2 인스턴스에 할당 가능한 IP 주소 수를 계산하고 있다. AWS가 각 서브넷에서 예약하는 IP 개수와 그 용도로 옳은 것은?",
       "options": [
@@ -56,6 +58,7 @@
       "id": "saa-t1-3-q3",
       "examGuideTaskId": "saa-t1-3",
       "skill": "보안 그룹 Stateful 특성",
+      "section": "sg-vs-nacl",
       "difficulty": "foundational",
       "stem": "EC2에 연결된 보안 그룹에 인바운드 포트 443(HTTPS) Allow 규칙만 있고, 아웃바운드 규칙은 완전히 비어 있다. 외부 클라이언트가 이 EC2의 443 포트로 HTTPS 요청을 보내면 어떻게 되는가?",
       "options": [
@@ -80,6 +83,7 @@
       "id": "saa-t1-3-q4",
       "examGuideTaskId": "saa-t1-3",
       "skill": "NACL Stateless 특성 — 임시 포트",
+      "section": "sg-vs-nacl",
       "difficulty": "applied",
       "stem": "한 서브넷에 커스텀 NACL이 적용돼 있다. 인바운드 규칙에 포트 443 Allow가 있고, 아웃바운드 규칙에는 어떤 허용 규칙도 없다. 외부 클라이언트가 이 서브넷의 EC2에 HTTPS 요청을 보내면 어떻게 되는가?",
       "options": [
@@ -105,6 +109,7 @@
       "id": "saa-t1-3-q5",
       "examGuideTaskId": "saa-t1-3",
       "skill": "SG vs NACL — 특정 IP 차단",
+      "section": "sg-vs-nacl",
       "difficulty": "applied",
       "stem": "보안팀이 악성 IP 대역 203.0.113.0/24로부터의 모든 트래픽을 즉시 차단하도록 요청했다. 솔루션스 아키텍트가 취해야 할 올바른 조치는?",
       "options": [
@@ -130,6 +135,7 @@
       "id": "saa-t1-3-q6",
       "examGuideTaskId": "saa-t1-3",
       "skill": "NACL 규칙 번호 순 평가",
+      "section": "sg-vs-nacl",
       "difficulty": "applied",
       "stem": "한 서브넷 NACL 인바운드 규칙에 규칙 번호 100으로 포트 80 Allow, 규칙 번호 50으로 포트 80 Deny가 설정돼 있다. 외부에서 포트 80 트래픽을 보내면 어떻게 되는가?",
       "options": [
@@ -154,6 +160,7 @@
       "id": "saa-t1-3-q7",
       "examGuideTaskId": "saa-t1-3",
       "skill": "NAT 게이트웨이 배치 위치와 설정",
+      "section": "network-components",
       "difficulty": "applied",
       "stem": "프라이빗 서브넷의 EC2 인스턴스가 인터넷에 연결해야 한다. 영역형(zonal) NAT 게이트웨이를 배치할 올바른 위치와 필요한 추가 설정은?",
       "options": [
@@ -178,6 +185,7 @@
       "id": "saa-t1-3-q8",
       "examGuideTaskId": "saa-t1-3",
       "skill": "NAT 게이트웨이 아웃바운드 전용",
+      "section": "network-components",
       "difficulty": "foundational",
       "stem": "프라이빗 서브넷의 EC2에 외부 인터넷에서 직접 접근하려 한다. 현재 아키텍처에는 NAT 게이트웨이만 있다. 이 목표를 달성하기 위한 올바른 접근 방법은?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t1-3-q9",
       "examGuideTaskId": "saa-t1-3",
       "skill": "S3 Gateway Endpoint — 비용·경로",
+      "section": "vpc-endpoints",
       "difficulty": "applied",
       "stem": "프라이빗 서브넷의 EC2가 S3 버킷에 접근해야 한다. 보안 정책상 트래픽이 인터넷을 경유하면 안 되며, 비용을 최소화해야 한다. 가장 적합한 설계는?",
       "options": [
@@ -228,6 +237,7 @@
       "id": "saa-t1-3-q10",
       "examGuideTaskId": "saa-t1-3",
       "skill": "Gateway Endpoint vs Interface Endpoint 구분",
+      "section": "vpc-endpoints",
       "difficulty": "foundational",
       "stem": "VPC 엔드포인트에 대한 설명으로 옳은 것은?",
       "options": [
@@ -253,6 +263,7 @@
       "id": "saa-t1-3-q11",
       "examGuideTaskId": "saa-t1-3",
       "skill": "VPC 피어링 비전이 라우팅",
+      "section": "peering-tgw",
       "difficulty": "applied",
       "stem": "회사가 VPC-A↔VPC-B, VPC-B↔VPC-C 간에 각각 VPC 피어링을 설정했다. VPC-A의 EC2가 VPC-C의 데이터베이스에 접근하려 한다. 접근 가능 여부와 이유로 옳은 것은?",
       "options": [
@@ -277,6 +288,7 @@
       "id": "saa-t1-3-q12",
       "examGuideTaskId": "saa-t1-3",
       "skill": "Transit Gateway vs VPC 피어링 선택",
+      "section": "peering-tgw",
       "difficulty": "applied",
       "stem": "한 기업이 10개의 VPC와 온프레미스 데이터센터를 모두 연결하려 한다. 각 환경이 서로 통신 가능해야 하며 관리 복잡도를 최소화해야 한다. 가장 적합한 설계는?",
       "options": [
@@ -302,6 +314,7 @@
       "id": "saa-t1-3-q13",
       "examGuideTaskId": "saa-t1-3",
       "skill": "VPC Flow Logs 수집 정보와 활용",
+      "section": "flow-logs",
       "difficulty": "foundational",
       "stem": "보안팀이 VPC 내 네트워크 트래픽을 모니터링하고 연결 거부 패턴을 분석하려 한다. VPC Flow Logs에 대한 설명으로 옳은 것은?",
       "options": [
@@ -326,6 +339,7 @@
       "id": "saa-t1-3-q14",
       "examGuideTaskId": "saa-t1-3",
       "skill": "SG vs NACL 적용 단위 비교",
+      "section": "sg-vs-nacl",
       "difficulty": "foundational",
       "stem": "한 서브넷에 5개의 EC2 인스턴스가 있다. 이 서브넷 전체에 단일 규칙을 적용해 특정 포트를 차단하려 한다. 보안 그룹과 NACL 중 적합한 도구와 이유로 옳은 것은?",
       "options": [
@@ -351,6 +365,7 @@
       "id": "saa-t1-3-q15",
       "examGuideTaskId": "saa-t1-3",
       "skill": "VPC 피어링 CIDR 중복 제약",
+      "section": "peering-tgw",
       "difficulty": "applied",
       "stem": "두 VPC 간에 피어링을 생성하려 한다. VPC-A와 VPC-B 모두 10.0.0.0/16 CIDR을 사용하고 있다. 피어링 생성 시 어떤 결과가 발생하는가?",
       "options": [
