@@ -92,6 +92,27 @@ void main() {
     });
   });
 
+  group('EFS 발음', () {
+    // 사전(`lexicon.json`)의 EFS 발음은 「이에프에스」다. 표 요약 다섯 자리만
+    // 「이이에프에스」로 적혀 있었다.
+    const fixed = ['seg012', 'seg041', 'seg043', 'seg045', 'seg059'];
+
+    test('대조군 — 고친 다섯 세그먼트가 정상 표기로 EFS 를 말한다', () {
+      for (final id in fixed) {
+        expect(spoken(seg(id)), contains('이에프에스'),
+            reason: '$id 에서 EFS 발화가 사라졌다');
+      }
+    });
+
+    test('이 문서의 어느 발화에도 「이이에프에스」가 없다', () {
+      final hits = [
+        for (final s in segments())
+          if (spoken(s).contains('이이에프에스')) s['id'],
+      ];
+      expect(hits, isEmpty);
+    });
+  });
+
   test('seg045 의 sourceExcerpt 가 현행 md 의 표에서 왔다', () {
     final md = File('assets/content/saa/saa-t3-2.md').readAsStringSync();
     final excerpt = seg('seg045')['sourceExcerpt'] as String;
