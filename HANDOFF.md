@@ -114,6 +114,8 @@ PR [#643](https://github.com/VelkaressiaBlutkrone/aws-docs/pull/643). 로드맵 
 
 **게이트.** `flutter test` **4,611**(+38) · `flutter analyze` **0** · 웹 번들 `main.dart.js` 3,281,641 → **3,282,537(+896 B · 0.027%)**, 마커 0건(대조군 1건) · APK 63.5 → **64.3MB** · lock 추가 11개(기존 버전 변경 0 · 제거 0).
 
+**🔎 D1-b 가 A6 에 낸 구멍을 같은 날 닫았다.** 1·2차 A6 순회 때 Android 빌드는 플래그가 **꺼져** 있어 오디오 라우트가 홈으로 리다이렉트됐다 — 그 화면들은 **앱에 존재하지 않았다.** 플래그를 켠 지금 같은 도구(`tool/android_ui_audit.py`)로 **오디오 허브 · 자격증 오디오(정지) · 자격증 오디오(트랜스포트 바)** 셋을 돌아 **판정 위반 0건**이다(감사 문서 맨 아래 절). ⚠️⚠️ **재생 중에는 이 도구로 판정할 수 없다** — 진행 바가 계속 갱신돼 `uiautomator dump` 가 `ERROR: could not get idle state.` 로 실패한다(두 번 재현). 그래서 트랜스포트 바는 **일시정지 상태**로 쟀다. **초 단위로 갱신되는 화면은 이 도구의 사각지대**이고, 거기서 나오는 0건은 판정이 아니라 측정 실패다.
+
 **⚠️ 판단을 남긴 자리.** `androidStopForegroundOnPause` 는 `true`·`false` 를 다 실측했고 **관측 가능한 차이가 없었다**(플러그인의 `stop()` 이 `stopSelf()` 만 부르는데 Flutter 엔진이 바인딩돼 있어 `onDestroy()` 가 돌지 않는다). 구별이 안 되므로 **문서 권장값 `false`** 를 쓴다. 정지 뒤 남는 카드는 **Android 13+ 의 미디어 재개 카드**이고 우리 세션은 `state=NONE` · `active=false` 다.
 
 ---
