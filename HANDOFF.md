@@ -1,6 +1,7 @@
 # HANDOFF — 다음 세션 이관
 
-_갱신: 2026-11-21(**D1-a — Android 에서 강의 오디오가 재생된다**: Play 신원 확인 대기 중에 로드맵 **D1 의 앞 절반**을 넣었다(단계 A 의 AI 몫이 비어 있었다). Android 빌드는 `audio_lecture` 플래그 없이 만들어 **승인된 강의 39편이 통째로 숨어 있었다** — `NativeAudioBackend`(just_audio)와 `audio_runtime_io.dart` 둘만 더해 열었고, **`AudioController`·`MediaSessionBinder`·`LecturePlaylist` 는 한 줄도 바뀌지 않았다**(경계가 이미 순수 Dart 였다). 에뮬레이터 실측: `ExoPlayerImpl Init` · `MediaCodec adapter for track type audio` · `dumpsys audio` 가 우리 pid 를 `state:started` `USAGE_MEDIA` 24kHz 로 인식 · 미니플레이어 **3:53 / 30:08** 「재생 중입니다」. ⚠️⚠️ **`dart.library.io` 는 VM 테스트도 고른다** — 플랫폼 게이트가 없으면 `flutter test` 가 `AudioPlayer()` 를 만들어 깨진다(민감도에서 전체 3건 레드로 확인). ⭐ 웹 번들 **+1,367 B** 이고 **io 구현을 넣은 뒤에도 1바이트도 늘지 않았다**(A4 의 `google_sign_in` 과 질적으로 다르다 — 등록 시점 부작용이 없다). 기준선 4,563 → **4,573** · analyze 0. ⏳ **D1-b**(잠금화면·포그라운드 서비스·플래그 켜기)가 남았고 §8-⑧ 요건은 해소했다. — §0-2026-11-21)_
+_갱신: 2026-11-21(**D1-b — 백그라운드 재생·잠금화면이 붙었고 D1 이 끝났다**: `_NoopMediaSession` 을 `audio_service` 구현으로 갈아끼웠다. 예고대로 **`AudioController`·`MediaSessionBinder`·`LecturePlaylist` 는 또 한 줄도 바뀌지 않았다**. 포그라운드 서비스(`types=0x00000002` MEDIA_PLAYBACK) · 잠금화면 카드(A 글리프 배지 + 제목 + 구름사다리 + 일시정지·정지) · 미디어 버튼 왕복(`KEYCODE_MEDIA_PAUSE` 로 오디오 트랙 수 0) 전부 에뮬레이터 실측이고, **Android 릴리스 빌드 스크립트**(`flutter_app/tool/build_android_release.ps1`)를 커밋해 `audio_lecture` 플래그를 켰다. ⚠️⚠️⚠️ **릴리스 빌드에서만 잠금화면이 통째로 없었다** — Flutter 가 릴리스에 리소스 축소를 켜는데 audio_service 는 아이콘을 **런타임 이름 조회**로 찾아 드로어블 7개가 지워졌고, SDK 33+ 의 `MediaControl.stop` 은 CustomAction 이라 `IllegalArgumentException` 이 **`setState` 전체를 중단**시켰다(증상: 재생은 되는데 알림·세션·포그라운드가 전부 없음). `res/raw/keep.xml` 로 고정했고 **디버그 빌드에는 축소가 없어 이 결함이 안 보인다** — 미디어 세션 검증은 반드시 릴리스로 한다. ⚠️ **파일 이름으로는 가를 수 없다**(축소기가 경로를 `res/-B.png` 로 줄인다) — 판정은 `aapt2 dump resources` + 대조군(0 → 7, `ic_launcher` 3 불변). 그 밖에 **잠금화면 제목 공백**(`nowPlaying` 호출부가 학습문서 한 곳뿐이었다 → `bindNowPlaying`, 웹도 함께 고쳐짐) · **글리프 없는 앱 배지**(런처 아이콘은 전체가 불투명 → `ic_stat_lecture`) · **stop 뒤 알림 부활**(비동기 `paused` 가 idle 을 덮어씀 → `onStop` 래치)을 실측으로 찾아 고쳤다. 웹 번들 누계 **+896 B(0.027%)** · 기준선 4,573 → **4,611** · analyze 0. ⏳ 남은 것은 **실기기 확인**(사람 몫)이다. — §0-2026-11-21-b)_
+_이전 갱신: 2026-11-21(**D1-a — Android 에서 강의 오디오가 재생된다**: Play 신원 확인 대기 중에 로드맵 **D1 의 앞 절반**을 넣었다(단계 A 의 AI 몫이 비어 있었다). Android 빌드는 `audio_lecture` 플래그 없이 만들어 **승인된 강의 39편이 통째로 숨어 있었다** — `NativeAudioBackend`(just_audio)와 `audio_runtime_io.dart` 둘만 더해 열었고, **`AudioController`·`MediaSessionBinder`·`LecturePlaylist` 는 한 줄도 바뀌지 않았다**(경계가 이미 순수 Dart 였다). 에뮬레이터 실측: `ExoPlayerImpl Init` · `MediaCodec adapter for track type audio` · `dumpsys audio` 가 우리 pid 를 `state:started` `USAGE_MEDIA` 24kHz 로 인식 · 미니플레이어 **3:53 / 30:08** 「재생 중입니다」. ⚠️⚠️ **`dart.library.io` 는 VM 테스트도 고른다** — 플랫폼 게이트가 없으면 `flutter test` 가 `AudioPlayer()` 를 만들어 깨진다(민감도에서 전체 3건 레드로 확인). ⭐ 웹 번들 **+1,367 B** 이고 **io 구현을 넣은 뒤에도 1바이트도 늘지 않았다**(A4 의 `google_sign_in` 과 질적으로 다르다 — 등록 시점 부작용이 없다). 기준선 4,563 → **4,573** · analyze 0. ⏳ **D1-b**(잠금화면·포그라운드 서비스·플래그 켜기)가 남았고 §8-⑧ 요건은 해소했다. — §0-2026-11-21)_
 _이전 갱신: 2026-11-20(**A6-4 잔여 해소 — Android 스플래시가 저장 테마를 읽는다**: A6-4 1차가 스플래시 색을 앱 배경에 맞췄지만 그 색이 `values-night/` 한정자로 **시스템** 다크를 따라서, 「시스템 다크 + 앱 라이트」에서 **`#14181F` 가 1,867ms** 보인 뒤 `#FBFAF8` 로 튀었다(30fps 녹화 실측). `MainActivity` 가 저장 파일을 직접 읽어 `setSplashScreenTheme` 으로 고정색 테마를 지정하게 했고 **다섯 조합 실측 전부 OK** — 가장 강한 증거는 「시스템 라이트 + 앱 다크 → 스플래시 다크」다(리소스 한정자만으로는 불가능). ⚠️⚠️ **1차 구현이 틀린 디렉터리를 봤고 내 가드가 그것을 굳히고 있었다**(grep 줄 번호로 두 메서드를 하나로 읽어 `app_flutter`=documents 를 봤다 — Dart 가 쓰는 것은 `files`=support). 가드를 먼저 뒤집고 구현을 고쳤다. 기준선 4,554 → **4,563** · analyze 0 · 측정 도구 `tool/android_splash_trace.py` 커밋. ⏳ A6 남은 것은 **실기기 점검 하나**(사람 몫)다. — §0-2026-11-20-c)_
 _이전 갱신: 2026-11-20(**A6 모바일 사용성 체크리스트 완료 + 터치 타깃 결함 6종 수정**: 2026-11-19 감사가 쓰고도 커밋하지 않은 판정 스크립트를 `tool/android_ui_audit.py` 로 되살려(가드 9건·self-test 17묶음) 미점검 5화면·3조건을 에뮬레이터로 돌았다. **16화면 전부 레이아웃 판정 0건**이지만 터치 타깃에서 **A6-5~7 여섯 자리**(아젠다 체크박스 **32dp** 등)를 찾아 `TouchTarget` 으로 고쳤다(가드 5건). 기준선 4,540 → **4,554** · analyze 0. ⏳ A6 남은 것은 **실기기 점검 하나**(사람 몫)다.)_
 _이전 갱신: 2026-11-20(**Android 제품화 단계 A(A1~A8) + 앱 이름 「구름사다리」 + 한국어 어절 단위 줄바꿈**: Android 플랫폼·로컬 저장·Firebase·Google 로그인·외부 링크·사용성 결함 4건·계정 삭제·개인정보처리방침·스토어 자산을 넣고(#617~#630), 앱 이름을 「구름사다리 — AWS 자격증 학습·모의고사」로 바꿨으며(#631), 앱 전체가 한국어를 글자 단위로 끊던 것을 어절 단위로 고쳤다(#633). 릴리스 3회(#629·#632·#634) · 라이브 `7f38c44`. 기준선 4,355 → **4,540** · analyze 0. ⏳ AI 몫은 A6 체크리스트, 나머지는 사람 몫(Play 계정·업로드 키·Console 제출).)_
@@ -56,7 +57,7 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 
 ---
 
-## 0. 다음: **Play 출시 — 사람 몫(A0 Play 개발자 계정·테스터 12명 · 업로드 키 · Console 「앱 콘텐츠」 제출 · **A6 실기기 점검**) → B1 내부 테스트** · **AI 몫의 단계 A 는 비었다**(A6 체크리스트는 §0-2026-11-20-b 로 종료) — 비공개 테스트 시작 한계 **12-08**(`docs/plans/2026-11-18-productization-roadmap.md` 단계 A 「남은 것」) · **DVA-C03 12월 전환 PR**(2026-12-01 이후) · 외부 리뷰 후속 잔여(보류 2 · UX 후보 2 · SAA·SOA `section` 660문항). 비-DVA 8자격증은 전 문항 공개 상태라 사람의 검수·flip 대기는 0이다.
+## 0. 다음: **Play 출시 — 사람 몫(A0 Play 개발자 계정·테스터 12명 · 업로드 키 · Console 「앱 콘텐츠」 제출 · **A6 실기기 점검** · **D1 실기기 오디오 확인**) → B1 내부 테스트** · **AI 몫의 단계 A 는 비었고 단계 D 는 D1 이 끝나 D2(공지·피드백 게시판)·D3(프레젠테이션 설계)가 남았다**(A6 체크리스트는 §0-2026-11-20-b, D1 은 §0-2026-11-21-b 로 종료) — 비공개 테스트 시작 한계 **12-08**(`docs/plans/2026-11-18-productization-roadmap.md` 단계 A 「남은 것」) · **DVA-C03 12월 전환 PR**(2026-12-01 이후) · 외부 리뷰 후속 잔여(보류 2 · UX 후보 2 · SAA·SOA `section` 660문항). 비-DVA 8자격증은 전 문항 공개 상태라 사람의 검수·flip 대기는 0이다.
 
 **브랜치 전략(2026-06-15~):** `main` 보호, `develop` 통합. 작업 브랜치 → develop PR → (릴리스 시) develop → main PR. 전역 규칙 `~/.claude/rules/git-branch-flow.md`.
 
@@ -88,6 +89,34 @@ _이전 갱신 이력은 아래 **§0 완료 절**이 그대로 담고 있다(�
 - (이연 기록) cert_detail Master-Detail 적응형(OQ1) · 홈 내비 활성탭 언더라인(허브형 라우팅 도입 시) · plan 글래스 헤더(NestedScrollView 구조 변경 시).
 
 **라이브 dogfood 참고(세션2):** 딥링크 라우트 형식 = `/cert/CLF-C02/study/clf-t1-1?at=<section>`(study는 `cert/:code` 하위 중첩; 잘못된 taskId/code는 `redirect→'/'`, 매칭 없는 경로는 "페이지를 찾을 수 없습니다"). Phase 1 릴리스 PR#19(main fc7b07f).
+
+## 0-2026-11-21-b. 완료: 🏁 **D1-b — 백그라운드 재생·잠금화면 (D1 종료)** (2026-11-21)
+
+PR [#643](https://github.com/VelkaressiaBlutkrone/aws-docs/pull/643). 로드맵 **D1 의 뒤 절반**이고, 이로써 D1 이 끝났다(남은 것은 실기기 확인 — 사람 몫).
+
+**무엇을 했나.** D1-a 가 자리표시자로 끼워 둔 `_NoopMediaSession` 을 `audio_service` 구현으로 갈아끼웠다. 예고대로 **`AudioController`·`MediaSessionBinder`·`LecturePlaylist` 는 또 한 줄도 바뀌지 않았다** — 새로 쓴 것은 `lib/data/audio_service_session.dart`(3-상태 세션 모델 → `PlaybackState`·`MediaItem` 매핑, `LectureAudioHandler`, `AudioServiceSessionBackend`)와 배선뿐이다. 매니페스트에 권한 3종·`AudioService`(`foregroundServiceType=mediaPlayback`)·`MediaButtonReceiver` 를 더했고, `MainActivity` 는 **상속만** `FlutterActivity` → `AudioServiceActivity` 로 바꿔 A6-4 스플래시 코드를 보존했다. `main()` 이 첫 프레임 **앞에서** `initAudioSession()` 을 await 없이 부른다.
+
+**🏁 `audio_lecture` 플래그를 켰다.** 빌드 시점 상수라 켜는 곳이 빌드 명령뿐인데 Android 에는 워크플로가 없어 **켤 자리가 없었다** — 릴리스 AAB 명령을 `flutter_app/tool/build_android_release.ps1` 로 커밋해 단일 출처로 뒀고, 새 가드가 **웹 릴리스(`pages.yml`)가 켜는 dart-define 을 전부 켜는지** 맞댄다.
+
+**⚠️⚠️⚠️ 릴리스 빌드에서만 잠금화면이 통째로 없었다 — 이 배치의 핵심.** Flutter 의 Gradle 플러그인이 릴리스에 `isMinifyEnabled`·`isShrinkResources` 를 켜는데(`FlutterPlugin.kt`, 기본값이 켬) audio_service 는 알림 버튼 아이콘을 **런타임 이름 조회**(`getResources().getIdentifier`)로 찾는다. 축소기가 그 호출을 볼 수 없어 드로어블 7개를 전부 지웠고, SDK 33+ 에서 `MediaControl.stop` 은 **CustomAction** 이라 `IllegalArgumentException: You must specify an icon resource id` 가 **`AudioService.setState` 전체를 중단**시켰다. 증상이 「오디오는 재생되는데 알림도 포그라운드 서비스도 잠금화면도 없다」(`state=NONE(0)` · `metadata: null` · `startForegroundCount=0`)라 **재생만 보면 성공으로 보인다.** `res/raw/keep.xml` 로 고정했다.
+
+- ⚠️⚠️ **파일 이름으로는 가를 수 없다** — 축소기가 경로를 `res/-B.png` 꼴로 줄이므로 **지워진 것과 이름만 바뀐 것이 같아 보인다.** 판정은 `aapt2 dump resources` 의 **자원 테이블**이고 대조군이 필수다(`audio_service` **0 → 7**, 대조군 `ic_launcher` **3 불변**).
+- ⚠️⚠️ **디버그 빌드에는 축소가 없어 이 결함이 보이지 않는다.** 미디어 세션 검증은 반드시 **릴리스 빌드**로 한다.
+- ⚠️ 우리가 만든 알림 아이콘도 같은 경로로 찾는다(`androidNotificationIcon` → `getIdentifier`). 가드는 **내보내는 모든 `MediaControl.androidIcon` + 알림 아이콘이 keep 규칙에 덮이는지**를 기계로 맞댄다.
+
+**실측으로 더 찾은 결함 셋.**
+
+- ⚠️⚠️ **잠금화면 제목이 비어 있었다** — `nowPlaying` 을 부르는 곳이 `study_doc_page` **하나뿐**이라 오디오 허브로 재생하면 `metadata: null` 이었다(웹도 같은 구멍). `audio_runtime.dart` 의 `bindNowPlaying` 이 플레이리스트의 현재 트랙 제목을 민다 — **트랙 자동 전환(`autoAll`)도 여기서 따라온다.**
+- ⚠️⚠️ **앱 배지가 글리프 없는 단색 원이었다** — 안드로이드는 small icon 의 **알파 채널만** 쓰고 강조색으로 칠하는데 런처 아이콘은 전체가 불투명하다. `tool/make_app_icon.py --notification` 으로 배경 없는 흰 'A' 를 5개 밀도에 생성했다.
+- ⚠️⚠️ **stop 뒤 알림이 되살아났다** — stop 이 부른 일시정지가 just_audio 를 거쳐 **비동기로** `paused` 를 돌려줘 방금 실은 idle 을 덮어썼다. `onStop` 래치로 **다시 재생될 때까지** 막는다. ⚠️ 그리고 **`BaseAudioHandler.stop()` 을 그냥 부르면 영원히 매달린다**(기본 구현이 `firstWhere(idle)` 을 await 하는데 우리 바인더에 idle 경로가 없다) — idle 을 **먼저 싣고** super 를 부른다.
+
+**실측 증거.** `isForeground=true types=0x00000002`(MEDIA_PLAYBACK) · `media-session … active=true state=PLAYING(3) custom actions=[Stop, mIcon=2131230815]` · `metadata: size=4, description=AWS 클라우드의 이점, 구름사다리` · **홈 키로 보낸 뒤에도 포그라운드 유지** · `KEYCODE_MEDIA_PAUSE` 로 **오디오 트랙 수 0**, `KEYCODE_MEDIA_PLAY` 로 복귀 · 잠금화면 카드 스크린샷.
+
+**게이트.** `flutter test` **4,611**(+38) · `flutter analyze` **0** · 웹 번들 `main.dart.js` 3,281,641 → **3,282,537(+896 B · 0.027%)**, 마커 0건(대조군 1건) · APK 63.5 → **64.3MB** · lock 추가 11개(기존 버전 변경 0 · 제거 0).
+
+**⚠️ 판단을 남긴 자리.** `androidStopForegroundOnPause` 는 `true`·`false` 를 다 실측했고 **관측 가능한 차이가 없었다**(플러그인의 `stop()` 이 `stopSelf()` 만 부르는데 Flutter 엔진이 바인딩돼 있어 `onDestroy()` 가 돌지 않는다). 구별이 안 되므로 **문서 권장값 `false`** 를 쓴다. 정지 뒤 남는 카드는 **Android 13+ 의 미디어 재개 카드**이고 우리 세션은 `state=NONE` · `active=false` 다.
+
+---
 
 ## 0-2026-11-21. 완료: **D1-a — Android 오디오 재생 경로** (2026-11-21)
 

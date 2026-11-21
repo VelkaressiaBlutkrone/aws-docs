@@ -42,6 +42,13 @@ bool shouldShowLecturePlayer({
 /// 위젯 트리 밖 싱글톤이라 라우팅 전환·위젯 dispose에도 재생이 유지된다.
 AudioRuntime? get audioRuntime => platform.audioRuntime;
 
+/// 미디어 세션(잠금화면·알림·헤드셋)을 연다 — `main()` 이 첫 프레임 앞에서 한 번 부른다(D1-b).
+///
+/// 플랫폼마다 하는 일이 다르다: **네이티브**는 `AudioService.init`(포그라운드 서비스·알림 채널
+/// 등록), **웹·stub** 은 no-op 이다(웹의 `navigator.mediaSession` 은 초기화 단계가 없다).
+/// 그래서 `main.dart` 는 플랫폼을 보지 않고 이 한 줄만 부른다.
+Future<void> initAudioSession() => platform.initAudioSession();
+
 /// 미니 플레이어가 의존하는 런타임 표면. 구현은 web(package:web — DOM `<audio>` +
 /// navigator.mediaSession)과 네이티브(just_audio) 둘이고, 둘 다 같은 [AudioController]·
 /// [MediaSessionBinder] 배선을 쓴다.
@@ -60,5 +67,33 @@ LecturePlaylist? _lecturePlaylist;
 LecturePlaylist? get lecturePlaylist {
   final rt = audioRuntime;
   if (rt == null) return null;
-  return _lecturePlaylist ??= LecturePlaylist(controller: rt.controller);
+  final existing = _lecturePlaylist;
+  if (existing != null) return existing;
+  final playlist = LecturePlaylist(controller: rt.controller);
+  bindNowPlaying(playlist, rt.nowPlaying);
+  return _lecturePlaylist = playlist;
+}
+
+/// 재생 중인 트랙 제목을 잠금화면 메타데이터로 민다(D1-b).
+///
+/// ⚠️⚠️ **이것이 없으면 잠금화면 제목이 빈다.** `nowPlaying` 을 부르는 곳이
+/// `study_doc_page` 한 곳뿐이어서, **오디오 허브·자격증 오디오 페이지로 재생을 시작하면
+/// 메타데이터가 한 번도 실리지 않았다**(2026-11-21 에뮬레이터 실측: `dumpsys media_session`
+/// 의 `metadata: null`). 웹도 같은 구멍이었지만 네이티브는 잠금화면·알림이 주 표면이라
+/// 비어 보이는 것이 바로 드러난다.
+///
+/// ⚠️ 트랙 자동 전환(`PlayMode.autoAll`)도 여기서 따라온다 — 화면 쪽 한 번의 호출로는
+/// 다음 트랙 제목을 갱신할 수 없다.
+///
+/// 제목이 **바뀔 때만** 민다. [LecturePlaylist] 는 재생 상태가 바뀔 때마다 알리므로
+/// 중복 제거가 없으면 세션에 같은 메타데이터를 계속 다시 쓴다.
+void bindNowPlaying(
+    LecturePlaylist playlist, void Function(String title) nowPlaying) {
+  String? last;
+  playlist.addListener(() {
+    final title = playlist.currentTitle;
+    if (title == null || title == last) return;
+    last = title;
+    nowPlaying(title);
+  });
 }

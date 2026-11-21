@@ -9,6 +9,7 @@ import 'data/cloud/firebase_auth_service.dart';
 import 'data/cloud/firebase_bootstrap.dart';
 import 'data/cloud/firestore_cloud_store.dart';
 import 'data/cloud/sync_controller.dart';
+import 'data/audio_runtime.dart' show initAudioSession;
 import 'data/local_kv.dart' show initLocalStorage;
 import 'data/theme_pref_store.dart';
 import 'theme/app_theme.dart';
@@ -34,6 +35,14 @@ void main() async {
   } catch (e, st) {
     appLog('local storage init 실패 — 메모리 전용으로 동작: $e\n$st');
   }
+
+  // 미디어 세션(잠금화면·알림·헤드셋)을 첫 프레임 **앞에서** 시작한다(D1-b).
+  // ⚠️ await 하지 않는다 — WS2(첫 프레임을 늦추지 않는다)와의 거래다. 그래도 `runApp` 앞에
+  // 두는 이유는 공식 문서가 `AudioService.init` 을 「앱 초기화 중 한 번」으로 요구하기
+  // 때문이다(알림에서 재생을 눌러 프로세스가 깨어나는 경로는 프레임이 없을 수 있어
+  // `addPostFrameCallback` 에 두면 영원히 안 돌 수 있다). 웹·데스크톱에서는 no-op 이고,
+  // 실패는 함수 안에서 로그로 삼킨다 — 세션이 없어도 앱 안 재생은 그대로 동작한다.
+  unawaited(initAudioSession());
 
   // 첫 프레임을 Firebase init 뒤로 미루지 않는다(백색 화면 주범 ② — WS2).
   // 스플래시 제거 트리거인 flutter-first-frame이 최대한 일찍 발생해야 한다.

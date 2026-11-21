@@ -12,6 +12,7 @@
 사용:  py tool/make_app_icon.py          # 생성
        py tool/make_app_icon.py --check  # 쓰지 않고 치수만 출력
        py tool/make_app_icon.py --store  # Play 스토어 아이콘·기능 그래픽(docs/play/assets)
+       py tool/make_app_icon.py --notification  # 미디어 알림 아이콘(D1-b)
 """
 import functools
 import pathlib
@@ -134,10 +135,41 @@ def main_store(check: bool) -> None:
                      % ("CHECK" if check else "WROTE", w, h, total // SS))
 
 
+# 알림 small icon 의 밀도별 px — 기준은 24dp 다.
+NOTIFICATION = {"mdpi": 24, "hdpi": 36, "xhdpi": 48, "xxhdpi": 72, "xxxhdpi": 96}
+
+
+def main_notification(check: bool) -> None:
+    """미디어 알림·잠금화면의 small icon (D1-b).
+
+    ⚠️⚠️ **런처 아이콘을 그대로 쓰면 안 된다.** 안드로이드는 small icon 의 **알파 채널만**
+    쓰고 그것을 강조색으로 칠한다 — 런처 아이콘은 사각형 전체가 불투명하라서 잠금화면
+    미디어 카드에 **글리프 없는 단색 원**으로 나온다(2026-11-21 에뮬레이터 실측).
+    그래서 배경 없이 **흰 'A' 만** 그린다. 적응형 foreground 와 같은 그림이고 캔버스만 작다.
+
+    ⚠️ 이 자원도 런타임 이름 조회(`androidNotificationIcon` → `getIdentifier`)로 찾으므로
+    `res/raw/keep.xml` 이 지켜 줘야 릴리스에서 지워지지 않는다.
+    """
+    ttf = instanced_font()
+    made = []
+    for density, px in NOTIFICATION.items():
+        img = draw_mark(px, ttf, glyph_ratio=MARK_GLYPH,
+                        radius_ratio=None, transparent_bg=True)
+        if not check:
+            save(img, RES / ("drawable-%s/ic_stat_lecture.png" % density))
+        made.append(("drawable-%s/ic_stat_lecture.png" % density, px))
+    sys.stdout.write("%s %d files\n" % ("CHECK" if check else "WROTE", len(made)))
+    for name, px in made:
+        sys.stdout.write("  %-46s %dpx\n" % (name, px))
+
+
 def main() -> None:
     check = "--check" in sys.argv
     if "--store" in sys.argv:
         main_store(check)
+        return
+    if "--notification" in sys.argv:
+        main_notification(check)
         return
     ttf = instanced_font()
     made = []

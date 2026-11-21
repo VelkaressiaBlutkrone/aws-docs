@@ -1,7 +1,15 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- 릴리스 빌드는 이 main manifest 를 쓴다. 템플릿은 INTERNET 을 debug·profile
          manifest 에만 넣으므로, 여기에 없으면 설치된 앱이 Firestore·R2 에 닿지 못한다. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 강의 오디오의 백그라운드 재생·잠금화면 컨트롤(D1-b, audio_service).
+         ⚠️ FOREGROUND_SERVICE_MEDIA_PLAYBACK 은 SDK 34 이상을 타깃할 때 필수다 —
+         우리는 targetSdk 36 이라 없으면 포그라운드 시작이 거부된다. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
     <application
         android:label="구름사다리"
         android:name="${applicationName}"
@@ -28,6 +36,35 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- audio_service 의 미디어 세션 서비스·리시버(D1-b).
+             ⚠️⚠️ 이 둘이 없거나 틀리면 `AudioService.init` 이 PlatformException 으로 실패하고,
+             증상은 「재생은 되는데 잠금화면만 없다」로 나타난다. Activity 는 우리
+             `.MainActivity` 를 그대로 가리키고(A6-4 스플래시 코드를 들고 있다) Kotlin 쪽에서
+             `AudioServiceActivity` 를 상속해 공유 FlutterEngine 을 제공한다.
+             ⚠️ `tools:ignore="Instantiatable"` — 플러그인이 제공하는 클래스라 lint 가
+             「인스턴스화 불가」로 본다. 그래서 manifest 에 xmlns:tools 가 필요하다. -->
+        <service
+            android:name="com.ryanheise.audioservice.AudioService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService"/>
+            </intent-filter>
+        </service>
+
+        <!-- 알림·헤드셋 버튼은 이 브로드캐스트 리시버가 받는다(공식 FAQ 의 「버튼이 안 먹는다」
+             원인 1위). -->
+        <receiver
+            android:name="com.ryanheise.audioservice.MediaButtonReceiver"
+            android:exported="true"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+            </intent-filter>
+        </receiver>
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
