@@ -56,7 +56,9 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance.html
   - title: FSx for OpenZFS Intelligent-Tiering 동작 (공식)
     url: https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance-intelligent-tiering.html
-lastVerified: 2026-11-07
+  - title: Amazon EFS 기능 — 파일 시스템 유형·스토리지 클래스 (공식)
+    url: https://docs.aws.amazon.com/efs/latest/ug/features.html
+lastVerified: 2026-11-21
 ---
 
 # 블록·파일 스토리지 — EBS 볼륨 타입·EFS·FSx 선택
@@ -309,11 +311,16 @@ lastVerified: 2026-11-07
 
 | 클래스 | 설명 |
 |---|---|
-| **Standard** | 자주 접근하는 데이터, 다중 AZ |
-| **Standard-IA** | 자주 접근하지 않는 데이터, 다중 AZ, 저비용 |
-| **Archive** | 1년에 몇 번 이하로 접근하는 장기 보관 파일, 다중 AZ, 최저 비용 계층 |
-| **One Zone** | 단일 AZ, 더 저렴 |
-| **One Zone-IA** | 단일 AZ + IA |
+| **EFS Standard** | 자주 접근하는 데이터. 새 데이터는 먼저 이 클래스에 쓰임 |
+| **EFS Infrequent Access(IA)** | 분기에 몇 번만 접근하는 데이터, 저비용 |
+| **EFS Archive** | 1년에 몇 번 이하로 접근하는 장기 보관 파일, 최저 비용 계층. **Regional 파일 시스템 + Elastic 처리량**에서만 사용 |
+
+**파일 시스템 유형 (스토리지 클래스와 별개의 축):**
+
+| 유형 | 데이터 저장 위치 | 쓸 수 있는 클래스 |
+|---|---|---|
+| **Regional** (권장) | 3개 이상의 AZ에 중복 저장 | Standard·IA·Archive |
+| **One Zone** | 단일 AZ에 저장해 더 저렴. 그 AZ를 잃으면 데이터가 유실될 수 있음 | Standard·IA |
 
 > 🧠 원리: 왜 EFS는 용량을 미리 지정하지 않아도 페타바이트까지 확장될까요?
 > EFS는 AWS가 완전 관리하는 분산 스토리지 인프라에 파일 데이터를 저장하며, 사용자가 마운트하는 파일시스템은 그 인프라의 논리적 뷰입니다. 물리 용량 할당은 AWS가 내부적으로 처리하므로 사용자에게 노출되지 않습니다.
@@ -559,6 +566,9 @@ EBS Multi-Attach는 동일 볼륨을 여러 Nitro 인스턴스에 동시 연결�
 24. FSx for Lustre 백업 지원 범위(**S3에 링크되지 않은 persistent만**·scratch 미지원) — https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html
 25. FSx for OpenZFS 성능 — **배포 유형·스토리지 클래스 생성 후 변경 불가**(복원·온디맨드 복제로만 이전, Single-AZ 백업→Multi-AZ 불가) — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance.html
 26. FSx for OpenZFS Intelligent-Tiering(HA 파일 서버 쌍·탄력적 리전 블록 스토리지·SSD 읽기 캐시 3모드·SSD 대비 **최대 85% 절감**·TTFB 수십 ms vs 캐시 1 ms 미만) — https://docs.aws.amazon.com/fsx/latest/OpenZFSGuide/performance-intelligent-tiering.html
+27. EFS 기능 — 파일 시스템 유형(Regional·One Zone)과 스토리지 클래스(Standard·IA·Archive, **Archive는 Regional·Elastic 처리량**) — https://docs.aws.amazon.com/efs/latest/ug/features.html
+
+> 📝 **2026-11-21 정정**: §6의 EFS 스토리지 클래스 표가 S3식 이름과 One Zone을 클래스로 적고 있어 공식 구성으로 고쳤습니다. 클래스는 **EFS Standard·Infrequent Access(IA)·Archive** 셋이고, **One Zone은 Regional과 나란한 파일 시스템 유형**이며, **Archive는 Regional 파일 시스템 + Elastic 처리량**에서만 씁니다(근거 27번).
 
 > 📝 **2026-10-21 보강(갭 `G-3.1-02`·`03`·`04`·`07`·`08`·`14`, 배치 B7a)**: ① **§3에 EBS 성능 결정 조건** — gp3/io2 상한·비율, **io2 256,000은 Nitro 전용**(그 외 32,000, 볼륨은 64,000까지 연결만 가능), I/O 크기 기준(IOPS 16 KiB·처리량 128 KiB), EBS 최적화와 **인스턴스 한계 vs 볼륨 합계 중 작은 쪽** 제약(근거 15·16·17번). ② **§4에 Multi-Attach 보강**(최대 16 Nitro·**NVMe 예약 = 업계 표준 펜싱**·io1↔io2만 변경)과 **Elastic Volumes 규칙**(축소 불가·24시간 4회·취소 불가·**파일 시스템 확장 필요**)(근거 18·19번). ③ **§5에 인스턴스 스토어 소실 조건 공식 표** — 기존 "중지·종료·하드웨어 장애" 외에 **최대 절전·인스턴스 유형 변경·은퇴·셧다운**도 소실이고 **모든 블록이 암호학적으로 소거**됩니다(근거 20번). ④ **§6에 EFS 처리량 모드 선택 기준**(평균/피크 **5%**·Bursting 하루 12시간·80% 초과 시 전환·Provisioned 증액 후 24시간)(근거 21·22번). ⑤ **§7에 FSx 보조 특성** — Lustre DRA 최대 8개·충돌 미방지·**링크된 파일 시스템 백업 미지원**, OpenZFS **배포 유형·스토리지 클래스 변경 불가**와 Intelligent-Tiering(근거 23·24·25·26번).
 >
