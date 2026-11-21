@@ -72,6 +72,8 @@ void main() {
           .allMatches(html)
           .map((m) => m.group(1)!)
           .toSet();
+      expect(records, contains('feedback'),
+          reason: '보낸 의견도 기기 밖으로 나가는 기록이다');
       expect(records, isNotEmpty, reason: 'data-record 추출이 깨졌다');
       // D2 — 비교 대상은 **사용자 소유 컬렉션**이다(동기 집합 + 피드백). 처리방침은
       // 동기하는 것만이 아니라 **기기 밖으로 나가는 모든 기록**을 적어야 한다.
@@ -190,6 +192,17 @@ void main() {
       final s = _section(html, 'scope');
       expect(s, contains('삭제'));
       expect(s, contains('남'), reason: '보존되는 것이 있으면 밝혀야 한다(Play 요건)');
+    });
+
+    // D2 — 피드백은 계정 삭제로 지워지지만, 운영자가 읽고 **검수 노트로 전사한
+    // 사본**과 그로 인한 콘텐츠 정정은 사라지지 않는다. 이 기능의 목적 자체가
+    // 신고를 레포 검수 흐름으로 들이는 것이므로(설계 §1) 그 예외를 공시한다 —
+    // 「전사하지 않는다」는 운영 규율은 목적을 깎는다.
+    test('보낸 의견이 지워지는 범위와 남는 사본을 적는다', () {
+      final s = _section(html, 'scope');
+      expect(s, contains('의견'), reason: '보낸 의견의 삭제 여부를 적어야 한다');
+      expect(s, contains('반영'),
+          reason: '운영자가 읽고 반영한 기록이 남는다는 것을 적어야 한다');
     });
   });
 
