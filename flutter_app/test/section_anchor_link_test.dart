@@ -64,9 +64,8 @@ List<String> _anchorRuleViolations(String md) {
 }
 
 void main() {
-  // ⚠️ SAA-C03(360문항)·SOA-C03(300문항)은 2026-11-18 실측으로 section 을 단 문항이 **0개**다 —
-  // 그 두 자격증은 해설에서 학습문서 절로 가는 딥링크가 없다. 이 가드로 메울 일이 아니라
-  // 콘텐츠 작업이므로 현재 집합을 고정한다. 누가 SAA·SOA 에 section 을 달기 시작하면 이 단정이
+  // ⚠️ SOA-C03(300문항)은 아직 section 이 **0개**다(학습문서 앵커는 2026-11-21 배치 0 으로 생겼다).
+  // SAA-C03 은 C 트랙 배치 1~3 으로 채우는 중이다. 누가 SOA 에 section 을 달기 시작하면 이 단정이
   // 깨져 「집합에 넣어라」고 알리고, 아래 Task별 단정은 그 순간부터 자동으로 그 앵커를 검사한다.
   test('대조군: section 을 쓰는 자격증 집합이 고정돼 있고 공허하지 않다', () {
     final linkedByCert = <String, int>{};
@@ -80,7 +79,7 @@ void main() {
     }
     final linkedCerts =
         linkedByCert.entries.where((e) => e.value > 0).map((e) => e.key).toSet();
-    expect(linkedCerts, {'CLF-C02', 'DEA-C01', 'MLA-C01', 'AIF-C01', 'SCS-C03', 'AIP-C01'},
+    expect(linkedCerts, {'CLF-C02', 'SAA-C03', 'DEA-C01', 'MLA-C01', 'AIF-C01', 'SCS-C03', 'AIP-C01'},
         reason: 'section 연결 현황이 바뀌었다(자격증별 수: $linkedByCert) — 의도한 변경이면 집합을 고친다');
     final total = linkedByCert.values.fold<int>(0, (a, b) => a + b);
     expect(total, greaterThan(1000),
@@ -147,6 +146,39 @@ void main() {
     for (final entry in contentFor('SOA-C03')) {
       test('${entry.taskId}: 핵심 개념·번호 절·흔한 함정에 고유 앵커', () {
         expect(_anchorRuleViolations(File(entry.mdAsset).readAsStringSync()), isEmpty);
+      });
+    }
+  });
+
+  // C 트랙 — section 을 다 채운 Task. 앵커 존재 단정(위)은 빈 section 을 통과시키므로 여기서
+  // 「전 문항이 절을 가리킨다」를 따로 건다. `core-concepts` 는 번호 절 전체를 덮는 상위 제목이라
+  // 거기로 보내면 문서 맨 위로 가는 것과 거의 같다 — 구체적인 절만 인정한다.
+  group('section 완비 Task', () {
+    const completeTaskIds = <String>{
+      'saa-t1-1', 'saa-t1-2', 'saa-t1-3', 'saa-t1-4', 'saa-t1-5',
+      'saa-t2-1', 'saa-t2-2', 'saa-t2-3', 'saa-t2-4', 'saa-t2-5',
+    };
+    final entries = [
+      for (final cert in kContentIndex.keys)
+        for (final entry in contentFor(cert))
+          if (completeTaskIds.contains(entry.taskId)) entry,
+    ];
+
+    test('대조군: 선언한 Task 가 전부 등재돼 있고 문항이 있다', () {
+      expect(entries.map((e) => e.taskId).toSet(), completeTaskIds);
+      for (final entry in entries) {
+        expect(_questionsOf(entry), isNotEmpty, reason: entry.taskId);
+      }
+    });
+
+    for (final entry in entries) {
+      test('${entry.taskId}: 전 문항이 구체적인 절을 가리킨다', () {
+        for (final q in _questionsOf(entry)) {
+          final section = (q['section'] ?? '').toString();
+          expect(section, isNotEmpty, reason: '${q['id']}: section 없음');
+          expect(section, isNot('core-concepts'),
+              reason: '${q['id']}: 상위 제목이 아니라 구체적인 절을 가리켜야 한다');
+        }
       });
     }
   });

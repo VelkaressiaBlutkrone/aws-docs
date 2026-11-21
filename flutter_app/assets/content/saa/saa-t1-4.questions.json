@@ -8,6 +8,7 @@
       "id": "saa-t1-4-q1",
       "examGuideTaskId": "saa-t1-4",
       "skill": "WAF vs Shield 역할 구분",
+      "section": "waf",
       "difficulty": "foundational",
       "stem": "웹 애플리케이션에 SQL injection 및 XSS 공격 시도가 지속적으로 탐지되고 있다. 이 위협을 방어하기에 가장 적합한 AWS 서비스는?",
       "options": [
@@ -34,6 +35,7 @@
       "id": "saa-t1-4-q2",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Shield Standard vs Shield Advanced",
+      "section": "shield",
       "difficulty": "foundational",
       "stem": "모든 AWS 고객에게 추가 설정 없이 자동으로 적용되며 무료로 제공되는 DDoS 방어 서비스는?",
       "options": [
@@ -59,6 +61,7 @@
       "id": "saa-t1-4-q3",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Shield Response Team(SRT)",
+      "section": "shield",
       "difficulty": "foundational",
       "stem": "한 금융 서비스 기업이 대규모 DDoS 공격 발생 시 AWS 전담 대응팀의 24/7 실시간 지원과 공격으로 인한 요금 급증 보호가 필요하다. 어떤 서비스를 구독해야 하는가?",
       "options": [
@@ -85,6 +88,7 @@
       "id": "saa-t1-4-q4",
       "examGuideTaskId": "saa-t1-4",
       "skill": "WAF 연결 가능 리소스",
+      "section": "waf",
       "difficulty": "foundational",
       "stem": "AWS WAF 웹 ACL을 직접 연결할 수 없는 리소스는?",
       "options": [
@@ -109,6 +113,7 @@
       "id": "saa-t1-4-q5",
       "examGuideTaskId": "saa-t1-4",
       "skill": "WAF Rate-based 규칙",
+      "section": "waf",
       "difficulty": "applied",
       "stem": "웹 애플리케이션에 특정 IP에서 짧은 시간 안에 대량 로그인 요청이 발생하는 브루트포스 공격 징후가 탐지됐다. WAF에서 이를 방어하기 위해 사용해야 하는 규칙 유형은?",
       "options": [
@@ -134,6 +139,7 @@
       "id": "saa-t1-4-q6",
       "examGuideTaskId": "saa-t1-4",
       "skill": "WAF 웹 ACL 규칙 평가 방식",
+      "section": "waf",
       "difficulty": "foundational",
       "stem": "AWS WAF 웹 ACL에 여러 규칙이 설정돼 있을 때, 요청에 대한 최종 액션은 어떻게 결정되는가?",
       "options": [
@@ -160,6 +166,7 @@
       "id": "saa-t1-4-q7",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Firewall Manager 다계정 정책 중앙화",
+      "section": "firewall-manager",
       "difficulty": "applied",
       "stem": "한 기업이 AWS Organizations에서 수십 개의 계정을 운영 중이다. 모든 계정의 ALB에 동일한 WAF 웹 ACL 정책을 적용하고, 신규 계정이 추가될 때 보호 공백 없이 자동으로 정책이 배포되어야 한다. 어떤 서비스를 사용해야 하는가?",
       "options": [
@@ -184,6 +191,7 @@
       "id": "saa-t1-4-q8",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Cognito User Pool vs Identity Pool 역할",
+      "section": "cognito",
       "difficulty": "foundational",
       "stem": "Amazon Cognito에서 앱 사용자 로그인 처리 및 JWT 발급을 담당하는 컴포넌트는?",
       "options": [
@@ -208,6 +216,7 @@
       "id": "saa-t1-4-q9",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Cognito Identity Pool AWS 권한부여",
+      "section": "cognito",
       "difficulty": "applied",
       "stem": "모바일 앱이 Google 계정으로 로그인한 사용자에게 특정 S3 버킷에 직접 파일을 업로드할 권한을 부여해야 한다. 서버를 중개자로 사용하지 않는 설계로 가장 적합한 방법은?",
       "options": [
@@ -232,6 +241,7 @@
       "id": "saa-t1-4-q10",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Secrets Manager 자동 교체",
+      "section": "secrets-manager",
       "difficulty": "applied",
       "stem": "애플리케이션이 RDS 데이터베이스에 접속하는 비밀번호를 코드에 하드코딩해 왔다. 보안 강화를 위해 비밀번호를 코드에서 제거하고 90일마다 자동 교체하도록 설계를 변경하려 한다. 가장 적합한 서비스는?",
       "options": [
@@ -258,6 +268,7 @@
       "id": "saa-t1-4-q11",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Secrets Manager vs Parameter Store 선택 기준",
+      "section": "secrets-manager",
       "difficulty": "applied",
       "stem": "솔루션스 아키텍트가 두 가지 요구사항을 검토 중이다. (A) 애플리케이션 설정값(예: 기능 플래그, 환경 이름)을 저장하고 자주 읽어야 하며 비용이 낮아야 한다. (B) RDS 데이터베이스 비밀번호를 저장하고 30일마다 자동 교체해야 한다. 각각 어떤 서비스를 선택해야 하는가?",
       "options": [
@@ -284,6 +295,7 @@
       "id": "saa-t1-4-q12",
       "examGuideTaskId": "saa-t1-4",
       "skill": "엣지 계층 WAF 배치 이점",
+      "section": "layered-defense",
       "difficulty": "applied",
       "stem": "글로벌 사용자를 대상으로 하는 웹 애플리케이션이 CloudFront + ALB + EC2 구성으로 배포돼 있다. WAF 웹 ACL을 어디에 연결하는 것이 오리진 리소스 보호와 비용 절감 측면에서 가장 유리한가?",
       "options": [
@@ -310,6 +322,7 @@
       "id": "saa-t1-4-q13",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Shield 보호 계층(L3/L4 vs L7)",
+      "section": "shield",
       "difficulty": "foundational",
       "stem": "Shield Standard와 Shield Advanced의 보호 계층 차이로 옳은 것은?",
       "options": [
@@ -335,6 +348,7 @@
       "id": "saa-t1-4-q14",
       "examGuideTaskId": "saa-t1-4",
       "skill": "Cognito User Pool WAF 연동",
+      "section": "waf",
       "difficulty": "applied",
       "stem": "Cognito User Pool을 통해 사용자 인증을 처리하는 앱에서 로그인 엔드포인트에 대한 브루트포스 공격과 봇 자동화 가입 시도가 증가하고 있다. WAF 웹 ACL을 어떻게 적용해야 하는가?",
       "options": [
@@ -360,6 +374,7 @@
       "id": "saa-t1-4-q15",
       "examGuideTaskId": "saa-t1-4",
       "skill": "계층별 방어 서비스 매핑",
+      "section": "layered-defense",
       "difficulty": "applied",
       "stem": "다음 위협 유형과 방어 서비스의 매핑 중 옳지 않은 것은?",
       "options": [

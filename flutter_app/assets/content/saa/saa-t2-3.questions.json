@@ -8,6 +8,7 @@
       "id": "saa-t2-3-q1",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ELB 유형 선택 — ALB vs NLB",
+      "section": "elb-types",
       "difficulty": "foundational",
       "stem": "전자상거래 애플리케이션이 `/api/*` 요청은 백엔드 EC2 대상 그룹으로, `/static/*` 요청은 별도 EC2 대상 그룹으로 라우팅해야 한다. 어떤 ELB 유형을 선택해야 하는가?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t2-3-q2",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ELB 유형 선택 — 고정 IP",
+      "section": "nlb-features",
       "difficulty": "foundational",
       "stem": "금융 거래 시스템의 클라이언트가 방화벽 화이트리스트에 로드밸런서 IP를 등록해야 한다. UDP 프로토콜도 지원해야 한다. 어떤 ELB 유형이 가장 적합한가?",
       "options": [
@@ -56,6 +58,7 @@
       "id": "saa-t2-3-q3",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ALB 구성 요소 — 리스너·규칙·대상 그룹",
+      "section": "alb-components",
       "difficulty": "foundational",
       "stem": "ALB를 처음 구성하는 아키텍트가 HTTPS 포트 443으로 들어온 요청을 두 개의 대상 그룹으로 분기해야 한다. ALB의 구성 요소 중 요청 분기 조건(경로·호스트)을 정의하는 것은 무엇인가?",
       "options": [
@@ -80,6 +83,7 @@
       "id": "saa-t2-3-q4",
       "examGuideTaskId": "saa-t2-3",
       "skill": "교차 영역 부하 분산 — 대상 그룹 수준 비활성화",
+      "section": "cross-zone",
       "difficulty": "applied",
       "stem": "ALB 뒤 두 AZ에 EC2 대상을 등록했다. AZ-a에 2대, AZ-b에 8대이며, 대상 그룹 속성 load_balancing.cross_zone.enabled를 false로 바꿨다. 클라이언트 요청이 두 로드밸런서 노드에 50:50으로 들어온다고 할 때 AZ-a의 인스턴스 한 대가 받는 트래픽 비율은?",
       "options": [
@@ -105,6 +109,7 @@
       "id": "saa-t2-3-q5",
       "examGuideTaskId": "saa-t2-3",
       "skill": "교차 영역 부하 분산 — NLB 비용",
+      "section": "cross-zone",
       "difficulty": "applied",
       "stem": "NLB를 사용하는 서비스가 두 AZ에 대상 인스턴스를 균등하게 배치했다. 비용 최적화를 고려할 때 교차 영역 부하 분산 설정을 어떻게 해야 하는가?",
       "options": [
@@ -131,6 +136,7 @@
       "id": "saa-t2-3-q6",
       "examGuideTaskId": "saa-t2-3",
       "skill": "고정 세션(Sticky Session) 한계",
+      "section": "sticky-sessions",
       "difficulty": "applied",
       "stem": "ALB 뒤에 ASG가 있는 웹 애플리케이션이 고정 세션(Sticky Session)을 사용 중이다. 특정 인스턴스가 헬스 체크 실패로 ASG에 의해 종료·교체되었다. 이때 발생할 수 있는 문제는?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t2-3-q7",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ASG 구성 요소 — 최소·원하는·최대 용량",
+      "section": "asg-components",
       "difficulty": "foundational",
       "stem": "ASG의 최소 용량을 2, 원하는 용량을 4, 최대 용량을 10으로 설정했다. 트래픽이 거의 없는 심야에 대상 추적 정책이 스케일 인을 시도할 때 인스턴스 수가 도달할 수 있는 최솟값은?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t2-3-q8",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ASG 조정 정책 — 대상 추적",
+      "section": "asg-scaling-policies",
       "difficulty": "applied",
       "stem": "ASG를 운영하는 팀이 CPU 사용률을 50% 수준으로 유지하고 싶다. 임계값 구간·증감량을 별도로 관리하지 않고 가장 단순하게 구현하려면 어떤 조정 정책을 사용해야 하는가?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t2-3-q9",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ASG 조정 정책 — 예측 vs 예약",
+      "section": "asg-scaling-policies",
       "difficulty": "applied",
       "stem": "온라인 교육 플랫폼이 매주 월요일 오전 9시마다 수업 시작으로 트래픽이 급증하는 패턴을 갖고 있다. 애플리케이션 워밍업에 5분이 필요해 스케일 아웃 지연이 문제다. 어떤 조정 정책이 가장 적합한가?",
       "options": [
@@ -227,6 +236,7 @@
       "id": "saa-t2-3-q10",
       "examGuideTaskId": "saa-t2-3",
       "skill": "수명 주기 훅 — 시작 훅",
+      "section": "lifecycle-hooks",
       "difficulty": "applied",
       "stem": "ASG가 새 인스턴스를 시작할 때 소프트웨어 패키지 설치와 설정 파일 다운로드에 3분이 필요하다. 초기화가 완료되기 전에 ELB가 트래픽을 보내는 문제가 발생하고 있다. 올바른 해결책은?",
       "options": [
@@ -253,6 +263,7 @@
       "id": "saa-t2-3-q11",
       "examGuideTaskId": "saa-t2-3",
       "skill": "수명 주기 훅 — 종료 훅",
+      "section": "lifecycle-hooks",
       "difficulty": "applied",
       "stem": "ASG 스케일 인 시 인스턴스가 종료되기 전에 진행 중인 DB 트랜잭션을 완료하고 S3에 로그를 저장해야 한다. EventBridge와 Lambda를 활용해 구현하는 방법은?",
       "options": [
@@ -279,6 +290,7 @@
       "id": "saa-t2-3-q12",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ASG 자가 복구 — ELB 헬스 체크",
+      "section": "common-pitfalls",
       "difficulty": "applied",
       "stem": "EC2 인스턴스의 OS는 정상이지만 애플리케이션 프로세스가 크래시 나 500 오류를 반환하고 있다. ASG가 이 인스턴스를 자동으로 교체하려면 어떤 헬스 체크 설정이 필요한가?",
       "options": [
@@ -304,6 +316,7 @@
       "id": "saa-t2-3-q13",
       "examGuideTaskId": "saa-t2-3",
       "skill": "고가용성 표준 아키텍처 조합",
+      "section": "asg-components",
       "difficulty": "applied",
       "stem": "가용성 요구사항이 높은 웹 서비스를 설계하고 있다. AZ 하나가 다운돼도 서비스가 유지되고, 트래픽 급증 시 자동으로 확장되며, DB도 고가용성을 갖춰야 한다. 이를 충족하는 표준 아키텍처 조합은?",
       "options": [
@@ -329,6 +342,7 @@
       "id": "saa-t2-3-q14",
       "examGuideTaskId": "saa-t2-3",
       "skill": "시작 템플릿 vs 시작 구성",
+      "section": "asg-components",
       "difficulty": "foundational",
       "stem": "ASG를 구성할 때 On-Demand 인스턴스와 Spot 인스턴스를 혼합(혼합 인스턴스 정책)해 비용을 절감하려 한다. 이를 위해 반드시 사용해야 하는 것은?",
       "options": [
@@ -354,6 +368,7 @@
       "id": "saa-t2-3-q15",
       "examGuideTaskId": "saa-t2-3",
       "skill": "ELB vs ASG 역할 구분",
+      "section": "asg-components",
       "difficulty": "foundational",
       "stem": "트래픽이 급증했을 때 EC2 인스턴스 수를 자동으로 늘려야 한다는 요구사항이 있다. 이 역할을 담당하는 AWS 서비스는 무엇인가?",
       "options": [
