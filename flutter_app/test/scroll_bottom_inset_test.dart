@@ -120,6 +120,7 @@ void main() {
       'lib/pages/plan/plan_list_view.dart': 1,
       'lib/pages/audio_hub_page.dart': 1,
       'lib/pages/cert_exam_page.dart': 1,
+      'lib/pages/notices_page.dart': 1,
     };
 
     test('대조군: 목록의 파일이 모두 스크롤 뷰를 갖는다', () {

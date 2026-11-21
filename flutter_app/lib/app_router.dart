@@ -11,6 +11,7 @@ import 'pages/cert_detail_page.dart';
 import 'pages/cert_exam_page.dart';
 import 'pages/exam_page.dart';
 import 'pages/home_page.dart';
+import 'pages/notices_page.dart';
 import 'pages/quiz_page.dart';
 import 'pages/plan_page.dart';
 import 'pages/report_page.dart';
@@ -141,6 +142,12 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
               ],
             ),
           ],
+        ),
+        // 공지는 경로 파라미터가 없어 ValueKey 가 필요하지 않다(같은 라우트로
+        // 다른 대상을 여는 전환이 없다 — 2026-11-18 State 재사용 결함과 무관).
+        GoRoute(
+          path: '/notices',
+          builder: (context, state) => const NoticesPage(),
         ),
         GoRoute(
           path: '/audio',

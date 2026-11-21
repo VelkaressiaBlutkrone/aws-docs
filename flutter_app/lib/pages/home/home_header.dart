@@ -23,10 +23,20 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.onNav,
     required this.onResetAll,
+    this.onOpenNotices,
+    this.noticeUnread = 0,
   });
 
   final Map<String, VoidCallback> onNav;
   final VoidCallback onResetAll;
+
+  /// 공지 화면으로 보내는 콜백. **null 이면 항목을 그리지 않는다**(`onResetAll`
+  /// 과 같은 규율) — 라우팅 결정은 헤더가 아니라 페이지가 갖는다.
+  final VoidCallback? onOpenNotices;
+
+  /// 안 읽은 공지 수. 0 보다 크면 메뉴 라벨에 함께 보인다. 헤더는 공지를 직접
+  /// 읽지 않는다(표현 계층) — 페이지가 계산해 넘긴다.
+  final int noticeUnread;
 
   static const _navBreakpoint = 768.0;
 
@@ -50,7 +60,11 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // 좁은 폭: 설정 액션을 햄버거 메뉴에 통합(버튼 과다 방지).
-                    _NavMenuButton(onNav: onNav, onResetAll: onResetAll),
+                    _NavMenuButton(
+                        onNav: onNav,
+                        onResetAll: onResetAll,
+                        onOpenNotices: onOpenNotices,
+                        noticeUnread: noticeUnread),
                     // Gap.sm → Gap.xs: 양쪽 TouchTarget이 2px/side를 더하므로
                     // 도색 사이 16px이 보존된다(A6-1).
                     const SizedBox(width: Gap.xs),
@@ -72,7 +86,10 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
                     const SizedBox(width: Gap.sm),
                     const ThemeToggleButton(),
                     const SizedBox(width: Gap.xs),
-                    _SettingsButton(onResetAll: onResetAll),
+                    _SettingsButton(
+                        onResetAll: onResetAll,
+                        onOpenNotices: onOpenNotices,
+                        noticeUnread: noticeUnread),
                   ],
                 ),
             ],
@@ -160,13 +177,21 @@ class _NavLink extends StatelessWidget {
 }
 
 class _NavMenuButton extends StatelessWidget {
-  const _NavMenuButton({required this.onNav, this.onResetAll});
+  const _NavMenuButton({
+    required this.onNav,
+    this.onResetAll,
+    this.onOpenNotices,
+    this.noticeUnread = 0,
+  });
   final Map<String, VoidCallback> onNav;
   final VoidCallback? onResetAll;
+  final VoidCallback? onOpenNotices;
+  final int noticeUnread;
 
   static const _resetKey = '__reset_all__';
   static const _syncKey = '__sync__';
   static const _privacyKey = '__privacy__';
+  static const _noticesKey = '__notices__';
 
   @override
   Widget build(BuildContext context) {
@@ -191,6 +216,8 @@ class _NavMenuButton extends StatelessWidget {
             openLink(kPrivacyPolicyUrl);
           } else if (key == _resetKey) {
             onResetAll?.call();
+          } else if (key == _noticesKey) {
+            onOpenNotices?.call();
           } else {
             onNav[key]?.call();
           }
@@ -206,6 +233,24 @@ class _NavMenuButton extends StatelessWidget {
                       color: c.text)),
             ),
           const PopupMenuDivider(),
+          // D2 — 공지. 콜백이 없으면 그리지 않는다(`onResetAll` 과 같은 규율).
+          if (onOpenNotices != null)
+            PopupMenuItem<String>(
+              value: _noticesKey,
+              child: Row(
+                children: [
+                  Icon(Icons.campaign_outlined,
+                      size: 18,
+                      color: noticeUnread > 0 ? c.accent : c.textMuted),
+                  const SizedBox(width: Gap.sm),
+                  Text(noticeUnread > 0 ? '공지 $noticeUnread개' : '공지',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600, fontVariations: Wght.w600,
+                          color: c.text)),
+                ],
+              ),
+            ),
           PopupMenuItem<String>(
             value: _syncKey,
             child: Row(
@@ -272,8 +317,14 @@ class _NavMenuButton extends StatelessWidget {
 
 /// 설정 버튼 — "기기 간 동기" + "모든 학습 기록 초기화".
 class _SettingsButton extends StatelessWidget {
-  const _SettingsButton({required this.onResetAll});
+  const _SettingsButton({
+    required this.onResetAll,
+    this.onOpenNotices,
+    this.noticeUnread = 0,
+  });
   final VoidCallback onResetAll;
+  final VoidCallback? onOpenNotices;
+  final int noticeUnread;
 
   static void openSyncSheet(BuildContext context) {
     if (!context.mounted) return;
@@ -323,8 +374,23 @@ class _SettingsButton extends StatelessWidget {
           if (v == 'reset') onResetAll();
           if (v == 'sync') openSyncSheet(context);
           if (v == 'privacy') openLink(kPrivacyPolicyUrl);
+          if (v == 'notices') onOpenNotices?.call();
         },
         itemBuilder: (ctx) => [
+          // D2 — 공지. 좁은 폭 메뉴(`_NavMenuButton`)와 같은 항목이다.
+          if (onOpenNotices != null)
+            PopupMenuItem<String>(
+              value: 'notices',
+              child: Row(
+                children: [
+                  Icon(Icons.campaign_outlined,
+                      size: 18,
+                      color: noticeUnread > 0 ? c.accent : c.textMuted),
+                  const SizedBox(width: Gap.sm),
+                  Text(noticeUnread > 0 ? '공지 $noticeUnread개' : '공지'),
+                ],
+              ),
+            ),
           PopupMenuItem<String>(
             value: 'sync',
             child: Row(
