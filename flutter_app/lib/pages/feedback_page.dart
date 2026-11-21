@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart' hide Text;
 
+import '../app_errors.dart';
 import '../data/cloud/auth_user.dart';
 import '../data/cloud/feedback_service.dart';
 import '../theme/app_theme.dart';
@@ -44,6 +45,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
   final _body = TextEditingController();
   late FeedbackKind _kind = widget.initialKind ?? FeedbackKind.bug;
   bool _sending = false;
+  bool _signingIn = false;
+  bool _signInFailed = false;
   bool _mineLoaded = false;
   FeedbackSendResult? _result;
   List<Map<String, dynamic>> _mine = const [];
@@ -76,6 +79,35 @@ class _FeedbackPageState extends State<FeedbackPage> {
     super.dispose();
   }
 
+  /// 로그인 — 실패를 **화면에** 올린다(서비스가 예외를 잡아 false 를 준다).
+  /// 취소는 실패가 아니라 true 이므로 문구가 뜨지 않는다(A4 판정).
+  Future<void> _signIn(FeedbackService svc) async {
+    if (_signingIn) return;
+    setState(() {
+      _signingIn = true;
+      _signInFailed = false;
+    });
+    final ok = await svc.signIn();
+    if (!mounted) return;
+    setState(() {
+      _signingIn = false;
+      _signInFailed = !ok;
+    });
+  }
+
+  Widget? _signInErrorBox(AppColors c) {
+    if (!_signInFailed) return null;
+    return Padding(
+      padding: const EdgeInsets.only(top: Gap.md),
+      child: Text('로그인하지 못했습니다. 잠시 뒤 다시 시도해 주세요.',
+          style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              fontVariations: Wght.w700,
+              color: c.warningText)),
+    );
+  }
+
   Future<void> _loadMine() async {
     final svc = widget.service;
     if (svc == null) return;
@@ -89,6 +121,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   /// ⚠️ `_sending` 가 중복 전송을 막는다 — 같은 의견이 두 문서로 들어오면
   /// 운영자가 중복을 읽는다. 버튼 비활성과 **두 겹**으로 둔다.
+  ///
+  /// ⚠️⚠️ **`finally` 로 반드시 되돌린다.** 이것이 없으면 `send` 가 던질 때
+  /// `_sending` 이 true 로 남아 버튼이 「보내는 중입니다…」로 **영구히 잠기고**
+  /// 사용자는 원인도 못 본다(`onPressed` 가 동기라 호출부가 Future 를 버린다).
+  /// 2026-11-21 리뷰가 Critical 로 잡은 자리다 — `send` 는 내부에서 넓게 잡지만
+  /// 그 `try` **앞** 구간(시각·컨텍스트 직렬화·문서 조립·id 생성)과 아래
+  /// `_loadMine()` 은 보호되지 않는다.
   Future<void> _send() async {
     final svc = widget.service;
     if (svc == null || _sending) return;
@@ -96,20 +135,28 @@ class _FeedbackPageState extends State<FeedbackPage> {
       _sending = true;
       _result = null;
     });
-    final r = await svc.send(
-      kind: _kind,
-      body: _body.text,
-      context: widget.initialContext,
-    );
-    if (!mounted) return;
-    setState(() {
-      _sending = false;
-      _result = r;
-    });
-    // 큐 적립도 성공이다(설계 §7-2) — 본문을 비우고 목록을 갱신한다.
-    if (r == FeedbackSendResult.sent || r == FeedbackSendResult.queued) {
-      _body.clear();
-      await _loadMine();
+    var result = FeedbackSendResult.failed;
+    try {
+      result = await svc.send(
+        kind: _kind,
+        body: _body.text,
+        context: widget.initialContext,
+      );
+      // 큐 적립도 성공이다(설계 §7-2) — 본문을 비우고 목록을 갱신한다.
+      if (result == FeedbackSendResult.sent ||
+          result == FeedbackSendResult.queued) {
+        _body.clear();
+        await _loadMine();
+      }
+    } catch (e, st) {
+      appLog('피드백 전송 실패: $e\n$st'); // 조용히 삼키지 않는다
+    } finally {
+      if (mounted) {
+        setState(() {
+          _sending = false;
+          _result = result;
+        });
+      }
     }
   }
 
@@ -142,9 +189,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
               '보낸 의견을 다시 볼 수 있고, 계정을 지우면 함께 지워집니다.'),
           const SizedBox(height: Gap.lg),
           FilledButton(
-            onPressed: () => unawaited(svc.signIn()),
-            child: const Text('Google로 로그인'),
+            onPressed: _signingIn ? null : () => unawaited(_signIn(svc)),
+            child: Text(_signingIn ? '로그인하고 있습니다…' : 'Google로 로그인'),
           ),
+          // ⚠️ 로그인 실패가 화면에 닿아야 한다 — `onPressed` 는 동기라 호출부가
+          // Future 를 버리고, 그러면 사용자는 버튼이 고장난 줄 안다(A4 선례).
+          ?_signInErrorBox(c),
         ],
       );
     }
@@ -218,7 +268,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
   Widget? _resultBox(AppColors c) {
     final r = _result;
     if (r == null) return null;
-    final failed = r == FeedbackSendResult.failed ||
+    // ⚠️⚠️ 보조 문구(「네트워크가 잠시 불안정…다시 시도하면」)는 **`failed` 에만**
+    // 붙인다. `notSignedIn` 은 Review Focus 3 이 지정한 실제 도달 상태이고 그때
+    // 재시도 조언은 **거짓**이다(다시 시도해도 영원히 안 된다). `invalid` 도
+    // 길이·빈 본문 문제라 네트워크와 무관하다 — 2026-11-21 리뷰 지적.
+    final transient = r == FeedbackSendResult.failed;
+    final bad = transient ||
         r == FeedbackSendResult.invalid ||
         r == FeedbackSendResult.notSignedIn;
     final message = switch (r) {
@@ -227,6 +282,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
       FeedbackSendResult.notSignedIn => '의견을 보내려면 Google 로그인이 필요합니다.',
       FeedbackSendResult.invalid || FeedbackSendResult.failed =>
         '의견을 보내지 못했습니다.',
+    };
+    final hint = switch (r) {
+      FeedbackSendResult.failed =>
+        '네트워크가 잠시 불안정했을 수 있습니다. 다시 시도하면 대부분 해결됩니다.',
+      FeedbackSendResult.invalid =>
+        '본문을 1자 이상 $kFeedbackBodyMax자 이하로 적어 주세요.',
+      FeedbackSendResult.notSignedIn =>
+        '다른 기기나 탭에서 로그아웃됐을 수 있습니다. 다시 로그인하면 보낼 수 있습니다.',
+      FeedbackSendResult.sent || FeedbackSendResult.queued => null,
     };
     return Padding(
       padding: const EdgeInsets.only(top: Gap.md),
@@ -239,12 +303,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   fontVariations: Wght.w700,
-                  color: failed ? c.warningText : c.accentStrong)),
-          if (failed)
+                  color: bad ? c.warningText : c.accentStrong)),
+          if (hint != null)
             Padding(
               padding: const EdgeInsets.only(top: Gap.xs),
-              child: Text(
-                  '네트워크가 잠시 불안정했을 수 있습니다. 다시 시도하면 대부분 해결됩니다.',
+              child: Text(hint,
                   style: TextStyle(fontSize: 13, color: c.textMuted)),
             ),
         ],

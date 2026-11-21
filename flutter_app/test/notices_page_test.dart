@@ -94,6 +94,30 @@ void main() {
       expect(find.text('2026-12-02'), findsOneWidget);
     });
 
+    // ⚠️⚠️ 설계 §7-1 이 「카드 목록, 최신 먼저, **안 읽은 것에 표식**」으로 적는데
+    // 표식이 없었다(2026-11-21 리뷰). 홈 배너가 「새 공지 2개」로 약속한 정보가
+    // 화면에 없으면 사용자는 어느 것이 새 것인지 알 수 없다.
+    // ⚠️ `_load()` 가 `markAllRead` 를 먼저 부르므로 **읽음 값을 그 앞에서
+    // 캡처**해야 한다 — 안 그러면 「무엇이 안 읽은 것이었나」가 지워진다.
+    testWidgets('안 읽은 공지에만 표식이 보인다', (tester) async {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20261201-01');
+      await _pumpNotices(tester, json: _two, backend: kv);
+      expect(find.text('새 공지'), findsOneWidget,
+          reason: '안 읽은 1건에만 표식이 붙어야 한다');
+    });
+
+    testWidgets('전부 읽었으면 표식이 없다', (tester) async {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20261202-01');
+      await _pumpNotices(tester, json: _two, backend: kv);
+      expect(find.text('새 공지'), findsNothing);
+    });
+
+    // 신규 설치는 전부 읽음으로 흡수하므로(§7-1 폴백) 표식도 없다.
+    testWidgets('신규 설치는 표식이 없다', (tester) async {
+      await _pumpNotices(tester, json: _two, backend: MemoryBackend());
+      expect(find.text('새 공지'), findsNothing);
+    });
+
     testWidgets('화면을 열면 최신 id 로 읽음 표시된다', (tester) async {
       final kv = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20261201-01');
       await _pumpNotices(tester, json: _two, backend: kv);

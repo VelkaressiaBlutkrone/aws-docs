@@ -93,7 +93,22 @@ class FeedbackService {
 
   /// 피드백 화면의 로그인 버튼. `SyncController` 를 거치지 않는다 — 그쪽은
   /// 동기 설정 UI(로그아웃·계정 삭제까지)를 들고 있어 이 화면에 섞인다.
-  Future<void> signIn() => _auth.signInWithGoogle();
+  ///
+  /// ⚠️⚠️ **예외를 잡아 false 를 돌려준다.** 그대로 전파하면 호출부가 `Future` 를
+  /// 버려(`onPressed` 는 동기다) **실패가 조용히 사라진다** — `SyncController.signIn`
+  /// 이 같은 이유로 예외를 잡아 화면에 올리고, 설계 §4-5 가 그 선례를 반목표로
+  /// 적는다(A4 에서 겪은 자리다).
+  ///
+  /// ⚠️ **사용자가 취소한 경우는 true 다**(실패가 아니다 — A4 판정). 그때는
+  /// 로그인되지 않은 상태가 그대로 남아 화면이 안내를 계속 보인다.
+  Future<bool> signIn() async {
+    try {
+      await _auth.signInWithGoogle();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
 
   /// 의견 한 건을 보낸다.
   ///
@@ -131,7 +146,16 @@ class FeedbackService {
     };
     // auto-id 가 없는 경로라 클라이언트가 만든다 — 같은 ms 에 두 건을 보내도
     // 덮어쓰지 않게 난수를 붙인다.
-    final id = '$createdAtMs-${_random.nextInt(1 << 32).toRadixString(36)}';
+    //
+    // ⚠️⚠️⚠️ **상한은 32비트 안전 값이어야 한다.** 처음 `1 << 32` 로 썼는데
+    // dart2js 는 비트 연산을 32비트 JS 의미론으로 컴파일해(`_shlPositive` 가
+    // `other > 31` 이면 0) **웹에서 `1 << 32 == 0`** 이고 `nextInt(0)` 이
+    // `RangeError` 를 던진다. 직접 컴파일해 실측했다 — node: `const 1<<32 = 0` ·
+    // `nextInt THREW: RangeError … was 0` / VM: `4294967296` · 정상.
+    // 그래서 **전 테스트 초록 + 웹 릴리스 빌드 성공**을 통과한 채 라이브 웹에서
+    // 모든 전송이 실패할 상태였다(컴파일은 되고 런타임에 터진다).
+    // 회귀 가드: `test/web_hardening_test.dart` 의 「웹 32비트 시프트 함정」.
+    final id = '$createdAtMs-${_random.nextInt(0x7FFFFFFF).toRadixString(36)}';
 
     try {
       await _cloud

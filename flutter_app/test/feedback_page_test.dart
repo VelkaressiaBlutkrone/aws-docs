@@ -34,6 +34,47 @@ class _ThrowingCloud extends FakeCloudStore {
       throw Exception('permission-denied');
 }
 
+/// `send` 자체가 던지는 서비스 — `FeedbackService.send` 의 `try` **앞** 구간
+/// (시각·컨텍스트 직렬화·문서 조립·id 생성)에서 터지는 경우를 흉내낸다.
+/// 2026-11-21 리뷰가 찾은 실제 결함이 그 모양이었다(웹에서 `1 << 32 == 0` →
+/// `Random.nextInt(0)` 이 RangeError).
+class _ThrowingService extends FeedbackService {
+  _ThrowingService(super.cloud, super.auth);
+
+  @override
+  Future<FeedbackSendResult> send({
+    required FeedbackKind kind,
+    required String body,
+    FeedbackContext? context,
+  }) async =>
+      throw StateError('boom');
+}
+
+/// 로그인이 실패하는 서비스.
+class _SignInFailService extends FeedbackService {
+  _SignInFailService(super.cloud, super.auth);
+
+  @override
+  Future<bool> signIn() async => false;
+}
+
+/// 폼은 그리지만 전송 시점에 `notSignedIn` 이 나는 서비스 — 폼을 열어 둔 채
+/// 다른 탭·기기에서 로그아웃한 경우(Review Focus 3)다.
+class _NotSignedInOnSend extends FeedbackService {
+  _NotSignedInOnSend(super.cloud, super.auth);
+
+  @override
+  bool get isSignedIn => true;
+
+  @override
+  Future<FeedbackSendResult> send({
+    required FeedbackKind kind,
+    required String body,
+    FeedbackContext? context,
+  }) async =>
+      FeedbackSendResult.notSignedIn;
+}
+
 Widget _wrap(Widget child) => ThemeScope(
       isDark: false,
       toggle: () {},
@@ -78,6 +119,19 @@ void main() {
       expect(find.byType(TextField), findsNothing);
     });
 
+    // ⚠️⚠️ A4 선례의 재발 — `SyncController.signIn` 은 예외를 잡아 화면에 올리는데
+    // (그 주석이 「호출부가 Future 를 버린다 → 던지면 unhandled async」라고 적는다)
+    // 새 화면이 그 보호 없이 같은 모양을 복제하고 있었다. 설계 §4-5 가 이 선례를
+    // 이름까지 들어 반목표로 적는다.
+    testWidgets('로그인이 실패하면 문구를 보인다', (tester) async {
+      await auth.signOut();
+      await pump(tester, _SignInFailService(cloud, auth));
+      await tester.tap(find.widgetWithText(FilledButton, 'Google로 로그인'));
+      await tester.pumpAndSettle();
+      expect(find.text('로그인하지 못했습니다. 잠시 뒤 다시 시도해 주세요.'),
+          findsOneWidget);
+    });
+
     // 전역 주입이 아직 안 됐거나 Firebase 미설정 — 빈 화면을 두지 않는다.
     testWidgets('서비스 미설정(null)이면 안내를 보인다', (tester) async {
       await pump(tester, null);
@@ -112,6 +166,36 @@ void main() {
       await tapSend(tester);
       expect(find.text('의견을 보내지 못했습니다.'), findsOneWidget);
       expect(find.textContaining('다시 시도하면'), findsOneWidget);
+    });
+
+    // ⚠️⚠️ 2026-11-21 전체 브랜치 리뷰가 찾은 **Critical** — `_send` 에 `finally`
+    // 가 없어 `send` 가 던지면 `_sending` 이 true 로 남고 버튼이 「보내는 중입니다…」
+    // 로 **영구히 잠긴다.** 사용자는 뒤로가기밖에 못 하고 본문도 사라진다.
+    // 설계 §4-5 의 반목표 둘(「전송 결과가 화면에 닿지 않는다」·「끝나지 않는
+    // 스피너」)을 동시에 위반하던 자리다.
+    testWidgets('send 가 던져도 실패를 알리고 버튼이 되살아난다', (tester) async {
+      await pump(tester, _ThrowingService(cloud, auth));
+      await type(tester, '예외가 나는 전송');
+      await tapSend(tester);
+      expect(find.text('의견을 보내지 못했습니다.'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, '보내기'), findsOneWidget,
+          reason: '라벨이 「보내는 중입니다…」로 고정되면 안 된다');
+      expect(
+          tester
+              .widget<FilledButton>(find.widgetWithText(FilledButton, '보내기'))
+              .onPressed,
+          isNotNull,
+          reason: '버튼이 영구 잠기면 안 된다');
+    });
+
+    // Review Focus 3 의 실제 경로 — 「다시 시도하면 대부분 해결됩니다」는 **거짓**
+    // 이다(다시 시도해도 영원히 안 된다). 네트워크 조언은 `failed` 에만 붙인다.
+    testWidgets('notSignedIn 에는 네트워크 조언을 붙이지 않는다', (tester) async {
+      await pump(tester, _NotSignedInOnSend(cloud, auth));
+      await type(tester, '로그아웃된 채 보냅니다');
+      await tapSend(tester);
+      expect(find.text('의견을 보내려면 Google 로그인이 필요합니다.'), findsOneWidget);
+      expect(find.textContaining('네트워크가 잠시 불안정'), findsNothing);
     });
 
     testWidgets('본문이 비면 전송 버튼이 비활성이다', (tester) async {

@@ -36,8 +36,15 @@ class _NoticesPageState extends State<NoticesPage> {
   late final KvBackend _kv = widget.backend ?? defaultBackend();
   late final Future<List<Notice>> _future = _load();
 
+  /// 화면을 열기 **전에** 안 읽은 개수. 목록은 최신 먼저이므로 앞의 이 개수가
+  /// 안 읽은 것들이다.
+  int _unreadAtOpen = 0;
+
   Future<List<Notice>> _load() async {
     final list = await loadNotices(loadString: widget.loadString);
+    // ⚠️⚠️ **`markAllRead` 앞에서 캡처한다** — 그것을 먼저 부르면 「무엇이 안 읽은
+    // 것이었나」가 지워져 표식을 그릴 수 없다(2026-11-21 리뷰 지적).
+    _unreadAtOpen = unreadCount(list, _kv);
     markAllRead(list, _kv); // 목록이 비면 아무것도 쓰지 않는다
     return list;
   }
@@ -67,7 +74,10 @@ class _NoticesPageState extends State<NoticesPage> {
           return ListView(
             padding: const EdgeInsets.all(Gap.lg)
                 .copyWith(bottom: scrollBottomInset(context, gap: Gap.lg)),
-            children: [for (final n in list) NoticeCard(notice: n)],
+            children: [
+              for (var i = 0; i < list.length; i++)
+                NoticeCard(notice: list[i], isNew: i < _unreadAtOpen),
+            ],
           );
         },
       ),
@@ -77,8 +87,12 @@ class _NoticesPageState extends State<NoticesPage> {
 
 /// 공지 한 건 — 날짜·제목·본문. 본문은 **평문**이다(마크다운 파서를 타지 않는다).
 class NoticeCard extends StatelessWidget {
-  const NoticeCard({super.key, required this.notice});
+  const NoticeCard({super.key, required this.notice, this.isNew = false});
   final Notice notice;
+
+  /// 화면을 열기 전에 **안 읽은** 공지였는지. 홈 배너가 「새 공지 N개」로 약속한
+  /// 정보를 화면에서 가려 준다 — 표식이 없으면 어느 것이 새 것인지 알 수 없다.
+  final bool isNew;
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +111,29 @@ class NoticeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(notice.date,
-                style: TextStyle(fontSize: 12, color: c.textMuted)),
+            Row(
+              children: [
+                Text(notice.date,
+                    style: TextStyle(fontSize: 12, color: c.textMuted)),
+                if (isNew) ...[
+                  const SizedBox(width: Gap.sm),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Gap.xs, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: c.accentWeak,
+                      borderRadius: BorderRadius.circular(Radii.sm),
+                    ),
+                    child: Text('새 공지',
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            fontVariations: Wght.w700,
+                            color: c.accentStrong)),
+                  ),
+                ],
+              ],
+            ),
             const SizedBox(height: Gap.xs),
             Text(notice.title,
                 style: t.titleMedium?.copyWith(
