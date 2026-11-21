@@ -6,13 +6,16 @@ import '../data/audio_nav.dart';
 import '../data/audio_runtime.dart' show audioLectureEnabled;
 import '../data/content_index.dart' show certsWithApprovedAudio, certHasContent;
 import '../data/history_store.dart';
+import '../data/notices.dart';
 import '../data/plan_progress.dart';
 import '../data/plan_progress_store.dart';
 import '../data/plan_progress_view.dart';
+import '../data/question_banks.dart' show AssetStringLoader;
 import '../data/resume_exam.dart';
 import '../data/site_data.dart';
 import '../data/study_plan_store.dart';
 import '../data/study_reset.dart';
+import '../models/notice.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_header.dart';
 import '../widgets/focus_ring.dart';
@@ -35,7 +38,7 @@ IconData dueIcon(int overdue) =>
 /// 홈 — 섹션 위젯들은 `pages/home/`(PR4 분해), 이 파일은 골격(스크롤·앵커·
 /// 헤더 배선·오늘-할-일 배너·이어서 풀기 카드)만 가진다.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, this.backend});
+  const HomePage({super.key, this.backend, this.noticesLoader});
 
   /// 로컬 저장소 주입구. 앱에서는 null이라 `defaultBackend()`(웹=localStorage)를 쓰고,
   /// 테스트가 상태를 심어 화면을 검증할 때만 주입한다 — VM의 `defaultBackend()`는
@@ -47,6 +50,11 @@ class HomePage extends StatefulWidget {
   /// 테스트에서 영원히 안 그려져, "배너가 그려졌는가"를 전제로 쓰는 검사가 **거짓
   /// 통과**한다(2026-10-30 `accent_on_surface2_test`에서 실측).
   final KvBackend? backend;
+
+  /// 공지 자산 로더 주입구 — 안 읽은 공지 배너를 테스트가 심을 수 있게 한다.
+  /// `backend` 주석과 같은 사정이고, 주입구가 없으면 「배너가 그려졌는가」를
+  /// 전제로 쓰는 검사가 거짓 통과한다.
+  final AssetStringLoader? noticesLoader;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -60,6 +68,18 @@ class _HomePageState extends State<HomePage> {
   final _docs = GlobalKey();
   final _exams = GlobalKey();
   final _schedule = GlobalKey();
+
+  /// 안 읽은 공지 배너용. 번들 자산이라 **한 번만** 읽는다(build 마다 읽지 않는다).
+  List<Notice> _notices = const [];
+  late final KvBackend _kv = widget.backend ?? defaultBackend();
+
+  @override
+  void initState() {
+    super.initState();
+    loadNotices(loadString: widget.noticesLoader).then((list) {
+      if (mounted) setState(() => _notices = list);
+    });
+  }
 
   @override
   void dispose() {
@@ -184,6 +204,51 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// 안 읽은 공지 배너. 로드 전이거나 안 읽은 것이 없으면 null.
+  ///
+  /// ⚠️ 호출부가 **진행 중인 시험도 오늘 할 일 배너도 없을 때만** 부른다 — 이
+  /// 자리는 「지금 할 일」을 알리는 곳이고 공지가 가장 덜 급하다(시계가 도는
+  /// 시험이 가장 급하다). 공지는 메뉴에서 언제든 읽을 수 있다.
+  Widget? _noticeBanner(BuildContext context) {
+    final c = context.c;
+    final unread = unreadCount(_notices, _kv);
+    if (unread == 0) return null;
+    return Padding(
+      padding: const EdgeInsets.only(top: Gap.lg, bottom: Gap.xl),
+      child: FocusTap(
+        onTap: () => context.push('/notices'),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(Gap.lg),
+          decoration: BoxDecoration(
+            color: c.surface2,
+            borderRadius: BorderRadius.circular(Radii.md),
+            border: Border.all(color: c.border),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.campaign_outlined, size: 18, color: c.accent),
+              const SizedBox(width: Gap.sm),
+              Expanded(
+                child: Text('새 공지 $unread개',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontVariations: Wght.w700,
+                        color: c.accentStrong)),
+              ),
+              Text('공지 보기 →',
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      fontVariations: Wght.w700,
+                      color: c.accentStrong)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.c;
@@ -228,6 +293,13 @@ class _HomePageState extends State<HomePage> {
                     child: Builder(
                       builder: (context) {
                         final dueBanner = _dueBanner(context);
+                        final resumable =
+                            resumableExamsAll(backend: widget.backend);
+                        // 배너는 하나만 — 진행 중 시험 > 오늘 할 일 > 공지.
+                        final noticeBanner =
+                            resumable.isEmpty && dueBanner == null
+                                ? _noticeBanner(context)
+                                : null;
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -237,12 +309,12 @@ class _HomePageState extends State<HomePage> {
                             ),
                             // 진행 중인 시험이 due 배너보다 급하다 — 시계가 돌고 있다.
                             ResumeExamSection(
-                              exams:
-                                  resumableExamsAll(backend: widget.backend),
+                              exams: resumable,
                               showCertCode: true,
                               onOpen: (route) => context.push(route),
                             ),
                             ?dueBanner,
+                            ?noticeBanner,
                             const SourcesRow(),
                             LevelsSection(key: _levels),
                             PathsSection(key: _paths),

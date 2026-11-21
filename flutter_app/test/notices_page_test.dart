@@ -10,9 +10,13 @@ import 'dart:io';
 import 'package:flutter/material.dart' hide Text;
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:aws_docs/data/exam_session_store.dart';
 import 'package:aws_docs/data/local_kv.dart';
 import 'package:aws_docs/data/notices.dart';
+import 'package:aws_docs/models/exam_snapshot.dart';
+import 'package:aws_docs/models/question.dart';
 import 'package:aws_docs/pages/home/home_header.dart';
+import 'package:aws_docs/pages/home_page.dart';
 import 'package:aws_docs/pages/notices_page.dart';
 import 'package:aws_docs/theme/app_theme.dart';
 import 'package:aws_docs/theme/theme_scope.dart';
@@ -145,6 +149,67 @@ void main() {
       await tester.tap(find.byTooltip('메뉴'));
       await tester.pumpAndSettle();
       expect(find.textContaining('공지'), findsNothing);
+    });
+  });
+
+  group('홈 공지 배너', () {
+    Future<void> pumpHome(
+        WidgetTester tester, KvBackend b, String json) async {
+      tester.view.physicalSize = const Size(1280, 4000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(
+          _wrap(HomePage(backend: b, noticesLoader: (_) async => json)));
+      await tester.pump(); // 공지 로드 Future 해소
+      await tester.pump();
+    }
+
+    /// 진행 중인 시험 세션을 심는다(`accent_on_surface2_test` 와 같은 방식).
+    void seedRunningExam(KvBackend b) {
+      ExamSessionStore(backend: b).saveSnapshot(ExamSnapshot(
+        examId: 'exam:CLF-C02-mock',
+        certId: 'CLF-C02',
+        taskId: 'CLF-C02-mock',
+        nonce: 'n1',
+        startedAtIso: DateTime.now().toUtc().toIso8601String(),
+        durationSec: 5400,
+        questions: [
+          const Question(
+              id: 'q1',
+              examGuideTaskId: 'clf-t1-1',
+              stem: 's',
+              options: ['a', 'b'],
+              correct: 0,
+              explanation: 'e',
+              wrongExplanations: {},
+              sources: [],
+              verified: true),
+        ],
+      ));
+    }
+
+    testWidgets('안 읽은 공지가 있으면 배너가 보인다', (tester) async {
+      final b = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20261201-01');
+      await pumpHome(tester, b, _two);
+      expect(find.textContaining('새 공지 1개'), findsOneWidget);
+    });
+
+    // 신규 설치(읽음 키 없음)는 전부 읽음이라 배너가 없다 — 새 테스터의 첫
+    // 화면을 공지로 채우지 않는다(설계 §7-1 폴백).
+    testWidgets('안 읽은 공지가 없으면 배너가 없다', (tester) async {
+      await pumpHome(tester, MemoryBackend(), _two);
+      expect(find.textContaining('새 공지'), findsNothing);
+    });
+
+    // 배너 자리는 「지금 할 일」을 알리는 곳이고 공지가 가장 덜 급하다.
+    // 시계가 도는 시험이 있으면 공지 배너를 그리지 않는다.
+    testWidgets('진행 중인 시험이 있으면 공지 배너를 그리지 않는다', (tester) async {
+      final b = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20261201-01');
+      seedRunningExam(b);
+      await pumpHome(tester, b, _two);
+      // 전제 — 이어서 풀기 카드가 실제로 그려졌다(안 그려지면 거짓 통과다).
+      expect(find.textContaining('이어서 풀기'), findsOneWidget);
+      expect(find.textContaining('새 공지'), findsNothing);
     });
   });
 
