@@ -70,9 +70,9 @@ lastVerified: 2026-10-20
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) RTO와 RPO 정의
+### 1) RTO와 RPO 정의 {#rto-rpo}
 
 | 지표 | 전체 이름 | 의미 | 핵심 질문 |
 |---|---|---|---|
@@ -86,7 +86,7 @@ lastVerified: 2026-10-20
 > RPO를 낮추려면 보조 사이트로의 복제 빈도와 일관성을 높여야 하며, 이는 네트워크·스토리지 구성에서 별도 투자가 필요합니다.
 > 두 지표는 독립된 기술 축에서 각각 비용을 결정하므로, 운영자는 서비스별 다운타임·데이터 손실 허용치를 분리 측정해 과잉 투자 없이 전략을 역산할 수 있습니다.
 
-### 2) DR 전략 4종 (★ 단골 출제)
+### 2) DR 전략 4종 (★ 단골 출제) {#dr-strategies}
 
 | 전략 | 상시 운영 구성 | RTO | RPO | 상대 비용 | 핵심 특징 |
 |---|---|---|---|---|---|
@@ -105,7 +105,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > 상위 전략으로 올라갈수록 운영 절차가 줄어 RTO가 단축되지만, 보조 환경을 상시 실행하는 데 드는 운영 비용이 그만큼 증가합니다.
 > 운영자는 비즈니스가 허용하는 RTO·RPO 수치를 기준으로 절차 축소분이 추가 비용을 정당화하는지 판단해, 과잉 투자 없이 가장 경제적인 전략을 선택해야 합니다.
 
-### 3) Pilot Light vs Warm Standby — 핵심 구분 (★ 혼동 주의)
+### 3) Pilot Light vs Warm Standby — 핵심 구분 (★ 혼동 주의) {#pilot-light-vs-warm-standby}
 
 > 공식 백서: **"Pilot Light는 추가 조치 없이 요청을 처리할 수 없으나, Warm Standby는 (축소 용량으로) 즉시 트래픽을 처리할 수 있다."**
 
@@ -122,7 +122,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > Warm Standby였다면 Auto Scaling 목표값 조정만으로 충분하지만, Pilot Light는 서버 기동 단계가 추가되므로 RTO가 더 깁니다. 운영자는 이 절차 시간이 비즈니스 RTO 내에 들어오는지 게임 데이를 통해 미리 검증해야 합니다.
 > 이 구성의 핵심은 "데이터는 사전 복제 없이 복구 불가, 앱 서버는 재해 시 기동 가능"이라는 비대칭성을 비용 절감에 활용한다는 점입니다.
 
-### 4) S3 복제 — CRR vs SRR
+### 4) S3 복제 — CRR vs SRR {#s3-replication}
 
 > 공식: S3 복제는 버킷 간 객체를 **비동기로 자동 복제**하며, **소스·대상 버킷 모두 버전 관리가 활성화**되어 있어야 합니다.
 
@@ -145,7 +145,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > 버전 관리가 꺼져 있으면 덮어쓰기가 발생해도 이전 상태로 돌아갈 수 없고, 복제 중 충돌이 생겼을 때 어느 쪽이 최신인지 판단할 기준이 없어집니다.
 > 이 이유로 양쪽 버킷 모두 버전 관리를 켜야 복제가 활성화되며, 이는 CRR과 SRR 모두에 공통으로 적용됩니다.
 
-### 5) RDS 교차 리전 복원력
+### 5) RDS 교차 리전 복원력 {#rds-cross-region}
 
 | 수단 | 특성 | 용도 |
 |---|---|---|
@@ -160,7 +160,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > 자동으로 승격하면 그 미반영 데이터는 영구 손실되므로, 운영자가 복제 지연 지표를 확인하고 손실 허용 범위가 RPO 내인지 판단한 뒤 수동으로 승격을 결정하는 절차가 필요합니다.
 > 이 확인·판단·승격 절차 전체가 RTO에 포함되므로, 운영자는 게임 데이 등 사전 훈련으로 이 절차가 목표 RTO 안에 완료되는지 검증해야 합니다.
 
-### 6) 리전 장애 대비 — 데이터 복제 수단 정리
+### 6) 리전 장애 대비 — 데이터 복제 수단 정리 {#region-replication-options}
 
 | 데이터 | 멀티 리전 수단 | 복제 |
 |---|---|---|
@@ -177,7 +177,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > S3는 객체 단위 이벤트 기반으로, RDS는 트랜잭션 로그 스트림으로, DynamoDB는 멀티 리전 쓰기 조정 방식으로 각각 복제를 구현합니다.
 > 운영자 관점에서는 DR 시나리오의 데이터 유형별로 적합한 수단을 조합해야 하며, 이 선택이 RPO 달성 가능 여부를 결정합니다.
 
-### 7) 운영 절차 — RTO/RPO에서 전략 역산
+### 7) 운영 절차 — RTO/RPO에서 전략 역산 {#dr-runbook}
 
 1. **목표 수치 확정**: 비즈니스가 허용하는 RTO(다운타임)·RPO(데이터 손실)를 명시.
 2. **RPO → 복제 수단 결정**: RPO 큼 → 정기 백업/스냅샷 복사. RPO 작음 → 연속 복제(CRR·교차 리전 읽기 복제본·Aurora Global DB).
@@ -190,7 +190,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 > 복제 지연이 목표 RPO 내에 있는지, 승격·트래픽 전환 절차가 목표 RTO 안에 완료되는지는 실제로 수행해 측정해야만 알 수 있습니다.
 > 훈련은 설계와 현실의 차이를 발견하는 가장 직접적인 수단이며, 측정 없이는 RTO·RPO 목표 달성 여부를 보증할 수 없습니다.
 
-### 8) DR 모범 사례 — 전략 선택 다음에 오는 것 (v1.1 신규 범위)
+### 8) DR 모범 사례 — 전략 선택 다음에 오는 것 (v1.1 신규 범위) {#dr-best-practices}
 
 공식 가이드 v1.1은 Skill 2.3.4를 「재해 복구 절차 준수」에서 **「재해 복구 절차 및 모범 사례 준수」**로 확장했습니다(전략 4종은 §2~§3). 여기서는 전략을 고른 **다음**에 지켜야 하는 모범 사례를 정리합니다.
 
@@ -248,7 +248,7 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"RTO/RPO가 엄격하면 무조건 Active-Active."** → Active-Active가 가장 비쌉니다. RTO 수 분 허용 + 비용 제약이면 Warm Standby가 더 적합합니다.
    (원리: §2 — 상위 전략일수록 재해 선언 후 운영자 절차가 줄어 RTO가 단축되지만 상시 운영 비용이 증가하므로, RTO·RPO를 충족하는 최소 비용 전략을 선택해야 한다.)
