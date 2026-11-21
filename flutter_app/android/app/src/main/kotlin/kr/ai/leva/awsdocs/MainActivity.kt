@@ -3,7 +3,7 @@ package kr.ai.leva.awsdocs
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import io.flutter.embedding.android.FlutterActivity
+import com.ryanheise.audioservice.AudioServiceActivity
 import java.io.File
 
 /**
@@ -28,8 +28,15 @@ import java.io.File
  * ⚠️ `NormalTheme`(`?android:colorBackground`)은 **건드리지 않았다** — 같은 실측에서 30fps
  * 전 프레임을 훑어도 보이지 않는다(시스템 스플래시가 Flutter 첫 프레임까지 유지된다).
  * 보이지 않는 구간을 위해 코드를 넣는 것은 추측으로 고치는 것이다.
+ *
+ * ⚠️⚠️ **상속이 `FlutterActivity` 가 아니라 `AudioServiceActivity` 다 (D1-b).** 그 클래스는
+ * `FlutterActivity` 의 하위 클래스로 `provideFlutterEngine` 만 재정의해 audio_service 의
+ * **공유 FlutterEngine** 을 돌려준다(패키지 소스 실측 — 다른 동작은 그대로다). 백그라운드
+ * 재생 중에는 Activity 가 사라져도 그 엔진이 살아 있어야 하고, 매니페스트의 Activity 이름을
+ * 플러그인 기본 `AudioServiceActivity` 로 바꿔 버리면 **위 스플래시 코드가 통째로 사라진다** —
+ * 그래서 교체는 상속만 바꾼다. 가드: `test/android_audio_service_manifest_test.dart`.
  */
-class MainActivity : FlutterActivity() {
+class MainActivity : AudioServiceActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applySavedSplashTheme()
