@@ -66,6 +66,15 @@ dependencies:
   # 웹 구현이 등록 시점에 3자 스크립트를 조건 없이 주입했다. 실측은 PR 설명과
   # `docs/plans/2026-11-18-productization-roadmap.md` D1 행에 남긴다.
   just_audio: ^0.10.5
+  # 백그라운드 재생·잠금화면·미디어 버튼 — 로드맵 D1-b.
+  # ⚠️ A4(google_sign_in)의 교훈대로 **웹 번들 오염을 측정하고 넣었다**. `audio_service_web`
+  # 의 `registerWith` 는 `AudioServicePlatform.instance = AudioServiceWeb()` **대입 한 줄**이고
+  # 생성자의 지원 여부 검사는 지연 클로저라 등록 시점 부수효과가 없다(패키지 소스 실측).
+  # 실측: `main.dart.js` 3,281,641 → 3,282,537 (**+896 B · 0.027%**, `bindNowPlaying` 포함) ·
+  # `audio_service`·`flutter_cache_manager`·`sqflite` 마커 0건(대조군 `aws-audio.leva.ai.kr` 1건).
+  # 전이로 따라오는 `flutter_cache_manager`·`sqflite` 는 `AudioService.init`(네이티브 전용)이
+  # 쓰는 아트워크 캐시라 웹에서는 트리 셰이킹된다.
+  audio_service: ^0.18.19
 
 dev_dependencies:
   flutter_test:

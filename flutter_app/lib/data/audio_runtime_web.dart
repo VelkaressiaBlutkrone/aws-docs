@@ -16,6 +16,13 @@ import 'web_audio_backend.dart';
 AudioRuntime? get audioRuntime => _instance ??= _WebAudioRuntime();
 _WebAudioRuntime? _instance;
 
+/// 웹은 세션 초기화가 필요 없다 — no-op (D1-b).
+///
+/// `navigator.mediaSession` 은 **문서에 이미 있는 싱글톤**이라 [WebMediaSessionBackend] 가
+/// 바인더 생성 시점에 바로 메타데이터·핸들러를 등록한다. 네이티브의 `AudioService.init`
+/// (포그라운드 서비스·알림 채널 등록)에 해당하는 단계가 없다.
+Future<void> initAudioSession() async {}
+
 class _WebAudioRuntime implements AudioRuntime {
   _WebAudioRuntime()
       : _controller = AudioController(backend: WebAudioBackend()) {

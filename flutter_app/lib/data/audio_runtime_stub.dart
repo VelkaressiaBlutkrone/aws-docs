@@ -9,3 +9,6 @@ import 'audio_runtime.dart';
 
 /// 웹이 아닌 타겟에선 런타임 없음(null).
 AudioRuntime? get audioRuntime => null;
+
+/// 런타임이 없으므로 열 세션도 없다(D1-b).
+Future<void> initAudioSession() async {}

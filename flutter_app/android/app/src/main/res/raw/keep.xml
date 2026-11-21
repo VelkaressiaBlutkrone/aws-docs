@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  리소스 축소기가 지워서는 안 되는 자원 (D1-b, 2026-11-21).
+
+  ⚠️⚠️ **이것이 없으면 릴리스 빌드에서만 잠금화면·알림이 통째로 사라진다.**
+  2026-11-21 에뮬레이터 실측으로 확인한 사슬:
+
+    1. Flutter 의 Gradle 플러그인이 릴리스에 `isMinifyEnabled = true` ·
+       `isShrinkResources = true` 를 켠다(`FlutterPlugin.kt` — 기본값이 켬이다).
+    2. audio_service 는 알림 버튼 아이콘을 **런타임 이름 조회**로 찾는다
+       (`AudioService.getResourceId` → `getResources().getIdentifier("audio_service_stop",
+       "drawable", pkg)`). 축소기는 그 호출을 볼 수 없어 7개 드로어블을 전부 지운다.
+    3. `getIdentifier` 가 0 을 돌려주고, SDK 33+ 에서 `MediaControl.stop` 은 **CustomAction**
+       으로 만들어지므로 `PlaybackStateCompat.CustomAction.Builder` 가
+       `IllegalArgumentException: You must specify an icon resource id to build a CustomAction`
+       를 던진다.
+    4. 그 예외가 `AudioService.setState` 를 중단시켜 **세션에 상태가 한 번도 실리지 않는다** —
+       증상은 「오디오는 재생되는데 알림도 포그라운드 서비스도 잠금화면 조작도 없다」다
+       (`dumpsys media_session` 이 `state=NONE(0)` · `metadata: null` · `active=false`,
+       `dumpsys activity services` 가 `startForegroundCount=0`).
+
+  판정 근거(대조군 포함): 릴리스 APK 의 자원 테이블을 `aapt2 dump resources` 로 떠서
+  `audio_service` **0건** · `ic_launcher` **3건**이었다. 파일 이름만 보면 가를 수 없다 —
+  축소기가 경로를 `res/-B.png` 꼴로 줄이므로 **지워진 것과 이름만 바뀐 것이 같아 보인다.**
+
+  ⚠️ 디버그 빌드에서는 축소가 없어 **이 결함이 보이지 않는다.** 미디어 세션 검증은 반드시
+  릴리스 빌드로 한다.
+
+  ⚠️ `ic_stat_lecture`(우리가 만든 알림 small icon)도 같은 경로로 찾는다 —
+  `AudioServiceConfig.androidNotificationIcon` 문자열이 그대로 `getIdentifier` 로 간다.
+
+  가드: `test/android_audio_service_manifest_test.dart` 가 우리가 내보내는 모든
+  `MediaControl` 의 `androidIcon` 과 알림 아이콘이 아래 규칙에 덮이는지 맞댄다.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/audio_service_*,@drawable/ic_stat_lecture" />
