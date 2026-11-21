@@ -10,6 +10,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:aws_docs/data/local_kv.dart';
 import 'package:aws_docs/data/notices.dart';
 import 'package:aws_docs/models/notice.dart';
 
@@ -95,6 +96,65 @@ void main() {
     test('pubspec 이 notices.json 을 선언한다', () {
       expect(File('pubspec.yaml').readAsStringSync(),
           contains('- assets/notices.json'));
+    });
+  });
+
+  // Review Focus 4(런타임 흡수) + 설계 §7-1 의 폴백 둘.
+  //
+  // ⚠️ 읽음 상태는 **기기별 로컬**이다(동기하지 않는다) — 동기 컬렉션을 하나
+  // 늘리면 계정 삭제·처리방침 가드 셋을 모두 건드려야 하고, 공지를 읽었는지는
+  // 기기마다 달라도 해가 없다.
+  group('공지 읽음 상태', () {
+    const a = Notice(
+        id: 'n-20261203-01', date: '2026-12-03', title: 't3', body: 'b');
+    const b = Notice(
+        id: 'n-20261202-01', date: '2026-12-02', title: 't2', body: 'b');
+    const c = Notice(
+        id: 'n-20261201-01', date: '2026-12-01', title: 't1', body: 'b');
+    const all = [a, b, c]; // 최신 먼저
+
+    // 폴백 ① — 새 테스터의 첫 화면이 공지 배너가 되지 않게 한다. 배너는
+    // 「내가 본 뒤에 새로 온 것」만을 뜻한다.
+    test('신규 설치(키 없음)는 전부 읽음이다', () {
+      expect(unreadCount(all, MemoryBackend()), 0);
+    });
+
+    test('저장된 id 뒤에 온 공지만 센다', () {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, c.id);
+      expect(unreadCount(all, kv), 2);
+    });
+
+    test('최신을 읽었으면 0 이다', () {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, a.id);
+      expect(unreadCount(all, kv), 0);
+    });
+
+    // 폴백 ② — append-only 규율이 깨져(공지를 지우거나 id 를 바꿔) 저장값을
+    // 목록에서 찾을 수 없을 때. 「전부 안 읽음」으로 떨어지면 전 기기에 배너가
+    // 되살아나는데 그것이 더 나쁜 실패다.
+    test('번들에 없는 id 는 전부 읽음으로 흡수한다', () {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20250101-99');
+      expect(unreadCount(all, kv), 0);
+    });
+
+    // 레포에서 빈 문자열 쓰기는 「지움」을 뜻한다(동기 표식) — 그 값도 안전해야 한다.
+    test('빈 문자열이 저장돼 있어도 전부 읽음이다', () {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, '');
+      expect(unreadCount(all, kv), 0);
+    });
+
+    test('빈 공지 목록은 0 이고 markAllRead 가 아무것도 쓰지 않는다', () {
+      final kv = MemoryBackend();
+      expect(unreadCount(const [], kv), 0);
+      markAllRead(const [], kv);
+      expect(kv.read(kNoticeReadUpToKey), isNull);
+    });
+
+    test('markAllRead 뒤에는 0 이다', () {
+      final kv = MemoryBackend()..write(kNoticeReadUpToKey, c.id);
+      markAllRead(all, kv);
+      expect(kv.read(kNoticeReadUpToKey), a.id);
+      expect(unreadCount(all, kv), 0);
     });
   });
 }
