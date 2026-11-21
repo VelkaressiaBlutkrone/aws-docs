@@ -566,9 +566,8 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       mdAsset: 'assets/content/saa/saa-t3-2.md',
       questionsAsset: 'assets/content/saa/saa-t3-2.questions.json',
       questionCount: 15,
-      // 2026-11-21 seg045(EFS 스토리지 클래스 표) 정정 재합성 — 사람의 청취
-      // 재승인과 R2 발행 전까지 비노출이다.
-      audioApproved: false,
+      audioApproved: true,
+      audioSha8: 'd533226c',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
