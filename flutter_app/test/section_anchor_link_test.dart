@@ -28,6 +28,41 @@ List<Map<String, dynamic>> _questionsOf(ContentEntry entry) {
   return (qjson['questions'] as List).cast<Map<String, dynamic>>();
 }
 
+/// 앵커가 있어야 하는 제목 — `## 📖 핵심 개념`, 그 아래 `###` 전부, `## ⚠️ 흔한 함정`.
+/// SAA-C03 24편이 쓰는 규칙이다. 체크리스트·용어·시험 포인트·자가 점검·출처는 문항이
+/// 가리킬 자리가 아니라 달지 않는다.
+List<MdHeading> _anchorTargets(List<MdBlock> blocks) {
+  final targets = <MdHeading>[];
+  var inCore = false;
+  for (final h in blocks.whereType<MdHeading>()) {
+    if (h.level == 2) {
+      inCore = h.text.contains('핵심 개념');
+      if (inCore || h.text.contains('흔한 함정')) targets.add(h);
+    } else if (h.level == 3 && inCore) {
+      targets.add(h);
+    }
+  }
+  return targets;
+}
+
+/// 파서가 **실제로 읽은** 제목으로 판정한다(코드블록 안의 `#` 주석은 제목이 아니다).
+/// ⚠️ 중복은 표기 문제가 아니다 — `buildAnchorKeys` 가 앵커 하나에 `GlobalKey` 하나를 주므로
+/// 같은 앵커가 두 제목에 붙으면 그 학습문서가 렌더 중 예외로 깨진다.
+List<String> _anchorRuleViolations(String md) {
+  final blocks = parseStudyDoc(md).blocks;
+  final targets = _anchorTargets(blocks).toSet();
+  final violations = <String>[];
+  final seen = <String>{};
+  for (final h in blocks.whereType<MdHeading>()) {
+    final id = h.anchor;
+    if (targets.contains(h) && id == null) violations.add('앵커 없음: ${h.text}');
+    if (id == null) continue;
+    if (!targets.contains(h)) violations.add('규칙 밖 앵커: ${h.text} {#$id}');
+    if (!seen.add(id)) violations.add('중복 앵커: $id');
+  }
+  return violations;
+}
+
 void main() {
   // ⚠️ SAA-C03(360문항)·SOA-C03(300문항)은 2026-11-18 실측으로 section 을 단 문항이 **0개**다 —
   // 그 두 자격증은 해설에서 학습문서 절로 가는 딥링크가 없다. 이 가드로 메울 일이 아니라
@@ -68,4 +103,51 @@ void main() {
       });
     }
   }
+
+  // 2026-11-21 — SOA-C03 20편에 앵커가 하나도 없어 문항이 가리킬 절이 없었다(배치 0).
+  group('SOA-C03 학습문서 앵커 규칙', () {
+    test('대조군: 탐지기가 누락·중복·규칙 밖·잘못된 형식을 잡고 코드블록은 세지 않는다', () {
+      const ok = '## 📖 핵심 개념 {#core-concepts}\n'
+          '### 1) 가 {#a}\n'
+          '```\n# 코드 주석\n### 코드 안 제목\n```\n'
+          '## ✍️ 시험 포인트\n'
+          '### 시험 포인트 하위\n'
+          '## ⚠️ 흔한 함정 {#common-pitfalls}\n';
+      expect(_anchorRuleViolations(ok), isEmpty);
+
+      final missing = _anchorRuleViolations(ok.replaceFirst(' {#a}', ''));
+      expect(missing, ['앵커 없음: 1) 가']);
+
+      final dup = _anchorRuleViolations(ok.replaceFirst('{#a}', '{#core-concepts}'));
+      expect(dup, ['중복 앵커: core-concepts']);
+
+      final offRule = _anchorRuleViolations(
+          ok.replaceFirst('## ✍️ 시험 포인트', '## ✍️ 시험 포인트 {#exam-points}'));
+      expect(offRule, ['규칙 밖 앵커: ✍️ 시험 포인트 {#exam-points}']);
+
+      // 파서의 앵커 형식(소문자·숫자·하이픈)을 벗어나면 앵커로 읽히지 않는다.
+      final badForm = _anchorRuleViolations(ok.replaceFirst('{#a}', '{#Bad_Id}'));
+      expect(badForm, ['앵커 없음: 1) 가 {#Bad_Id}']);
+    });
+
+    test('대조군: 대상 제목이 공허하지 않다', () {
+      final entries = contentFor('SOA-C03');
+      expect(entries, hasLength(20));
+      var total = 0;
+      for (final entry in entries) {
+        final targets =
+            _anchorTargets(parseStudyDoc(File(entry.mdAsset).readAsStringSync()).blocks);
+        expect(targets.length, greaterThanOrEqualTo(8),
+            reason: '${entry.taskId}: 핵심 개념 + 번호 절 6개 이상 + 흔한 함정');
+        total += targets.length;
+      }
+      expect(total, greaterThanOrEqualTo(180));
+    });
+
+    for (final entry in contentFor('SOA-C03')) {
+      test('${entry.taskId}: 핵심 개념·번호 절·흔한 함정에 고유 앵커', () {
+        expect(_anchorRuleViolations(File(entry.mdAsset).readAsStringSync()), isEmpty);
+      });
+    }
+  });
 }

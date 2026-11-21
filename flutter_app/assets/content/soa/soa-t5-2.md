@@ -72,9 +72,9 @@ lastVerified: 2026-11-17
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) VPC 피어링 — 1:1, 비전이, CIDR 중첩 불가
+### 1) VPC 피어링 — 1:1, 비전이, CIDR 중첩 불가 {#vpc-peering}
 
 > 공식 정의: **"두 VPC 사이의 네트워킹 연결로, 프라이빗 IPv4/IPv6 주소를 사용해 두 VPC 간 트래픽을 라우팅할 수 있게 한다."**
 
@@ -90,7 +90,7 @@ lastVerified: 2026-11-17
 > 패킷이 B를 경유해 C로 가려면 B의 라우팅 테이블에 C 방향 경로가 있어야 하지만, B는 피어링으로 연결된 다른 VPC에 그 경로를 전파하지 않습니다.
 > 운영상 피어링 수가 적을 때는 직접 피어링 추가로 해결하고, VPC 수가 늘어 메시가 복잡해지면 전이 라우팅이 내장된 Transit Gateway 전환이 현실적입니다.
 
-### 2) Transit Gateway(TGW) — 허브-스포크, 전이 라우팅
+### 2) Transit Gateway(TGW) — 허브-스포크, 전이 라우팅 {#transit-gateway}
 
 > 공식 정의: **"VPC와 온프레미스 네트워크를 상호 연결하는 네트워크 전송 허브."**
 
@@ -118,7 +118,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 > TGW는 VPC마다 허브에 어태치먼트 하나만 추가하면 되고, 경로 관리는 TGW 라우팅 테이블 한 곳에서 이루어지므로 VPC가 늘어도 각 VPC에서 관리할 경로 수는 크게 증가하지 않습니다.
 > 온프레미스 연결(VPN·DX)도 TGW 한 곳에 붙이면 모든 어태치먼트에서 공유할 수 있어, 각 VPC마다 별도 VGW를 두는 방식 대비 구성 지점이 줄어듭니다.
 
-### 3) Site-to-Site VPN — 인터넷 위 IPsec 터널
+### 3) Site-to-Site VPN — 인터넷 위 IPsec 터널 {#site-to-site-vpn}
 
 > 공식: 온프레미스 장비와 AWS 사이의 **IPsec VPN 연결**.
 
@@ -140,7 +140,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 > CGW에서 한 터널만 활성화하면 그 터널이 끊길 때 새 터널을 수동으로 올려야 하지만, 두 터널을 모두 상시 활성화하면 장애가 생긴 터널의 트래픽이 살아 있는 터널로 전환됩니다.
 > BGP 동적 라우팅을 쓰면 장애 터널의 경로가 철회되고 살아 있는 터널로 재수렴되어, 터널 전환 후 중단 시간을 줄일 수 있습니다.
 
-### 4) Direct Connect(DX) — 전용 물리 회선
+### 4) Direct Connect(DX) — 전용 물리 회선 {#direct-connect}
 
 > 공식: 표준 이더넷 광케이블로 내부 네트워크를 Direct Connect 위치에 직접 연결. ISP를 우회합니다.
 
@@ -161,7 +161,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 > 암호화는 IPsec 같은 별도 계층이 담당하므로, 의도적으로 VPN over Direct Connect 패턴을 구성하지 않으면 데이터는 평문으로 흐릅니다.
 > 규정 준수 점검 시 "전용 회선이라 이미 안전하다"는 판단은 틀린 것이며, 암호화 요건이 있으면 VIF 위에 IPsec 터널 구성 여부를 반드시 확인해야 합니다.
 
-### 5) VPC 엔드포인트 — Gateway vs Interface (★ 핵심)
+### 5) VPC 엔드포인트 — Gateway vs Interface (★ 핵심) {#vpc-endpoints}
 
 프라이빗 서브넷에서 **인터넷을 거치지 않고** AWS 서비스에 접근하는 메커니즘입니다.
 
@@ -189,7 +189,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 > Interface 엔드포인트는 서브넷에 ENI를 생성하고 프라이빗 DNS로 서비스 도메인을 그 ENI의 사설 IP로 해석하는 방식이어서, 라우팅 변경 없이 어떤 서비스든 사설 접근이 가능합니다.
 > 운영 관점에서 Gateway는 라우팅 테이블 변경·SG 없음, Interface는 ENI 생성·SG 필요·프라이빗 DNS 활성화 여부가 핵심 구성 포인트입니다.
 
-### 6) AWS PrivateLink — 제공자(provider) 관점 (v1.1 신규 범위)
+### 6) AWS PrivateLink — 제공자(provider) 관점 (v1.1 신규 범위) {#privatelink}
 
 공식 가이드 v1.1은 Skill 5.1.2를 「프라이빗 네트워킹 연결 구성」에서 **「… 구성(예: VPC 엔드포인트, AWS PrivateLink, VPC 피어링)」**으로 바꿨습니다. §5가 **소비자(consumer)** 관점이었으므로, 여기서는 **내 서비스를 PrivateLink로 노출하는 제공자 관점**을 봅니다. PrivateLink는 AWS 서비스 전용이 아니라 **자체 서비스도 같은 방식으로 노출**할 수 있습니다.
 
@@ -242,7 +242,7 @@ TGW는 여러 VPC, Site-to-Site VPN, Direct Connect 게이트웨이를 **하나�
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"피어링을 만들면 바로 통신된다."** → 피어링 생성만으로는 안 됩니다. **양쪽 VPC 라우팅 테이블에 상대 CIDR 경로**를 추가하고, 필요 시 SG/NACL도 허용해야 실제 트래픽이 흐릅니다.
    (원리: §1 — 피어링 생성만으로는 통신이 안 되며, 양쪽 VPC 라우팅 테이블에 상대 CIDR 경로를 별도로 추가해야 한다)

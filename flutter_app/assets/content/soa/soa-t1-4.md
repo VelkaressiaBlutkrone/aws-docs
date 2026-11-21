@@ -70,9 +70,9 @@ lastVerified: 2026-11-07
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) AWS Health Dashboard — 두 가지를 구분하라
+### 1) AWS Health Dashboard — 두 가지를 구분하라 {#health-dashboard}
 
 > 공식 정의: **"AWS Health는 AWS 리소스·서비스·계정의 상태에 대한 지속적인 가시성을 제공한다."** 두 대시보드를 구분하는 것이 시험의 핵심입니다.
 
@@ -91,7 +91,7 @@ lastVerified: 2026-11-07
 > Account Health는 내 계정에서 실행 중인 리소스 ID와 이벤트를 교차 참조해 "이 장애가 내게 영향을 주는가"만 필터링하고, 예정된 유지 관리와 권장 조치도 계정 맥락에 맞게 보여줍니다.
 > 두 뷰를 분리하면 운영자는 서비스 전반 현황(Service Health)과 자신의 워크로드 영향(Account Health)을 혼동 없이 파악하고, AWS 측 문제와 자체 구성 문제를 빠르게 분류할 수 있습니다.
 
-### 2) AWS Health API·EventBridge 연동
+### 2) AWS Health API·EventBridge 연동 {#health-api-eventbridge}
 
 - **AWS Health API**로 계정에 영향을 주는 이벤트를 프로그래밍 방식으로 조회할 수 있습니다(상위 지원 플랜에서 제공).
 - **EventBridge 연동**: AWS Health 이벤트는 EventBridge로 들어와 **규칙으로 자동 대응**을 트리거할 수 있습니다. 예: "특정 서비스 운영 이슈 이벤트 발생 → SNS로 운영팀 알림", "EC2 예정된 유지 관리(재부팅) 이벤트 → 사전 조치 자동화".
@@ -103,7 +103,7 @@ lastVerified: 2026-11-07
 > EventBridge는 Health 이벤트를 스트림으로 수신해 규칙이 일치하는 즉시 SNS 알림·Lambda 함수 등 후속 작업을 트리거하므로, 운영자 개입 없이 이벤트 발생과 대응 사이의 간격을 좁힐 수 있습니다.
 > 이 패턴은 단순 알림에 그치지 않고, 예정된 유지 관리 이벤트를 사전에 감지해 트래픽 전환이나 스냅샷 생성 같은 준비 작업도 자동화할 수 있게 합니다.
 
-### 3) EC2 상태 확인 — 시스템 vs 인스턴스 (책임 경계)
+### 3) EC2 상태 확인 — 시스템 vs 인스턴스 (책임 경계) {#ec2-status-checks}
 
 > 공식: EC2는 **자동화된 상태 확인 2종**을 수행하며, 각 확인은 60초(1분)마다 실행되어 `pass`/`fail`을 보고합니다(추가로 EBS·연결 상태 확인 등도 제공).
 
@@ -123,7 +123,7 @@ lastVerified: 2026-11-07
 > 두 확인을 분리하면 시스템 상태 확인 실패 시 "AWS 인프라 문제이므로 호스트 이전"을, 인스턴스 상태 확인 실패 시 "내 OS·구성을 직접 수정"을 즉시 판단할 수 있어 불필요한 OS 점검 시간을 줄입니다.
 > 이 책임 경계 분리가 자동 복구(시스템 층)와 수동 수정(인스턴스 층)이라는 대응 수단의 분기 근거이기도 합니다.
 
-### 4) EC2 자동 복구(Auto Recovery)
+### 4) EC2 자동 복구(Auto Recovery) {#ec2-auto-recovery}
 
 > 공식: **"인스턴스 복구(recover)는 기본 하드웨어 또는 시스템에 영향을 주는 문제로 손상된 인스턴스를 자동으로 복구한다."** 복구된 인스턴스는 **동일한 인스턴스 ID·프라이빗 IP·Elastic IP·메타데이터**를 유지합니다.
 
@@ -149,7 +149,7 @@ aws cloudwatch put-metric-alarm \
 > 인스턴스 ID·프라이빗 IP·Elastic IP·메타데이터는 인스턴스 객체에 귀속된 식별자여서, 호스트가 바뀌어도 인스턴스 객체가 유지되는 한 식별자도 그대로 이어집니다.
 > 이 덕분에 DNS 이름·보안 그룹 참조·탄력적 IP 연결 등 기존 구성을 변경하지 않고도 복구 후 즉시 정상 운영이 가능합니다.
 
-### 5) ELB 대상 상태 확인(Health Check)
+### 5) ELB 대상 상태 확인(Health Check) {#elb-health-checks}
 
 > 공식: **"로드 밸런서는 등록된 대상에 주기적으로 상태 확인 요청을 보내고, healthy인 대상에만 트래픽을 라우팅한다."**
 
@@ -172,7 +172,7 @@ aws cloudwatch put-metric-alarm \
 > ELB가 직접 인스턴스를 종료·교체하면 스케일 정책·용량 설정·시작 템플릿 같은 Auto Scaling 구성이 우회되어 의도치 않은 용량 변동이 생길 수 있습니다.
 > ASG 상태 확인 유형을 ELB로 설정하면, ELB의 unhealthy 판정이 ASG의 상태 확인 실패로 전달되어 ASG가 자체 교체 논리에 따라 인스턴스를 안전하게 종료·재생성합니다.
 
-### 6) 문제 진단 접근 — 탐지 → 격리 → 복구
+### 6) 문제 진단 접근 — 탐지 → 격리 → 복구 {#troubleshooting-approach}
 
 운영에서 가용성 문제를 다루는 표준 흐름:
 
@@ -192,7 +192,7 @@ aws cloudwatch put-metric-alarm \
 > 로그는 개별 요청 단위의 예외 메시지·스택 트레이스·의존성 응답을 기록해, 지표의 이상 신호가 어떤 구체적 원인에서 비롯됐는지 좁혀줍니다.
 > "지표 이상 → 로그 확인 → 근본 원인" 순서는 이 두 신호의 역할 차이를 반영하며, Health Dashboard 확인을 먼저 끼워 AWS 측 문제를 먼저 배제해야 로그 분석이 올바른 레이어에서 이루어집니다.
 
-### 7) AI 에이전트 계열 도구 — AWS DevOps Agent·Kiro (v1.1 신규 범위)
+### 7) AI 에이전트 계열 도구 — AWS DevOps Agent·Kiro (v1.1 신규 범위) {#ai-agent-tools}
 
 공식 가이드 v1.1은 Skill 1.2.1의 **예시 목록**을 바꿨습니다: `AWS User Notifications`·`오토 스케일링`이 빠지고 **`Kiro`·`AWS DevOps Agent`**가 들어왔습니다. 전통 서비스(CloudWatch·Lambda·Systems Manager·CloudTrail)에 **AI 에이전트 계열**이 더해진 형태입니다.
 
@@ -242,7 +242,7 @@ aws cloudwatch put-metric-alarm \
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"서비스가 느리면 곧장 내 인스턴스를 디버깅한다."** → 먼저 **AWS Health Dashboard(특히 Account/Personal Health)**로 AWS 측 이벤트가 있는지 확인합니다. 광역 인프라 문제라면 내 구성을 고쳐도 해결되지 않습니다.
    (원리: §1 — Account Health는 내 리소스에 영향을 주는 이벤트만 필터링해, AWS 측 문제와 자체 구성 문제를 빠르게 분류할 수 있게 한다.)
