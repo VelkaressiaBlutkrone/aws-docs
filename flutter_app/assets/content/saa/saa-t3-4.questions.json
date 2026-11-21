@@ -8,6 +8,7 @@
       "id": "saa-t3-4-q1",
       "examGuideTaskId": "saa-t3-4",
       "skill": "컴퓨팅 선택 — 운영 부담을 가르는 축",
+      "section": "compute-decision-tree",
       "difficulty": "foundational",
       "stem": "솔루션스 아키텍트가 팀에게 AWS 컴퓨팅의 운영 부담 차이를 설명하고 있다. 컨테이너 워크로드에서 운영 부담이 가장 낮은 선택을 가르는 공식 기준으로 가장 정확한 것은?",
       "options": [
@@ -34,6 +35,7 @@
       "id": "saa-t3-4-q2",
       "examGuideTaskId": "saa-t3-4",
       "skill": "Lambda 제약 — 최대 실행 시간",
+      "section": "lambda-performance",
       "difficulty": "foundational",
       "stem": "한 회사가 Lambda 함수를 사용해 야간 재무 보고서를 생성하려 한다. 보고서 생성 작업은 평균 20분이 걸린다. 이 설계의 문제점은?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t3-4-q3",
       "examGuideTaskId": "saa-t3-4",
       "skill": "Fargate — 독립 서비스 여부 및 구조",
+      "section": "containers-ecs-eks-fargate",
       "difficulty": "foundational",
       "stem": "개발팀이 EC2 노드 관리 없이 컨테이너를 실행하려 한다. AWS Fargate에 대한 설명으로 옳은 것은?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t3-4-q4",
       "examGuideTaskId": "saa-t3-4",
       "skill": "ECS vs EKS — 선택 기준",
+      "section": "containers-ecs-eks-fargate",
       "difficulty": "applied",
       "stem": "한 기업이 온프레미스에서 Kubernetes로 운영하던 마이크로서비스를 AWS로 이전하려 한다. 기존 Kubernetes 매니페스트와 도구를 그대로 유지하고 멀티클라우드 이식성도 필요하다. 가장 적합한 서비스는?",
       "options": [
@@ -107,6 +111,7 @@
       "id": "saa-t3-4-q5",
       "examGuideTaskId": "saa-t3-4",
       "skill": "Lambda 성능 튜닝 — 메모리와 CPU 관계",
+      "section": "lambda-performance",
       "difficulty": "foundational",
       "stem": "Lambda 함수의 실행 속도가 느려 성능을 개선하려 한다. Lambda에서 CPU 성능을 높이는 올바른 방법은?",
       "options": [
@@ -131,6 +136,7 @@
       "id": "saa-t3-4-q6",
       "examGuideTaskId": "saa-t3-4",
       "skill": "Lambda 콜드 스타트 — Provisioned Concurrency",
+      "section": "lambda-performance",
       "difficulty": "applied",
       "stem": "고객 대면 API Lambda 함수가 유휴 상태 후 첫 호출에서 수백 밀리초의 지연이 발생한다. 이 문제를 근본적으로 해결하는 방법은?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t3-4-q7",
       "examGuideTaskId": "saa-t3-4",
       "skill": "AWS Batch 3계층 구조",
+      "section": "aws-batch",
       "difficulty": "foundational",
       "stem": "AWS Batch의 구성요소에 대한 설명으로 옳은 것은?",
       "options": [
@@ -180,6 +187,7 @@
       "id": "saa-t3-4-q8",
       "examGuideTaskId": "saa-t3-4",
       "skill": "AWS Batch vs Lambda — 배치 워크로드 선택",
+      "section": "aws-batch",
       "difficulty": "applied",
       "stem": "한 회사가 매일 수천 개의 유전체 데이터 파일을 분석하는 파이프라인을 구축하려 한다. 각 분석 작업은 수 시간이 걸리고, 완료 후 결과를 S3에 저장한다. 가변 컴퓨팅 수요를 운영 부담 최소화로 처리하는 가장 적합한 서비스는?",
       "options": [
@@ -206,6 +214,7 @@
       "id": "saa-t3-4-q9",
       "examGuideTaskId": "saa-t3-4",
       "skill": "HPC 아키텍처 — 클러스터 배치 그룹 + EFA",
+      "section": "hpc-architecture",
       "difficulty": "applied",
       "stem": "기상 예측 회사가 수백 개의 EC2 노드가 MPI로 긴밀하게 통신하는 HPC 클러스터를 AWS에 구축하려 한다. 노드 간 초저지연 통신을 위한 올바른 구성은?",
       "options": [
@@ -231,6 +240,7 @@
       "id": "saa-t3-4-q10",
       "examGuideTaskId": "saa-t3-4",
       "skill": "HPC 공유 스토리지 — FSx for Lustre",
+      "section": "hpc-architecture",
       "difficulty": "applied",
       "stem": "분산 ML 훈련 클러스터의 수백 개 노드가 훈련 데이터에 고속으로 동시 접근해야 한다. S3에 저장된 데이터를 HPC 클러스터에서 공유 파일 시스템으로 활용하는 가장 적합한 스토리지 서비스는?",
       "options": [
@@ -255,6 +265,7 @@
       "id": "saa-t3-4-q11",
       "examGuideTaskId": "saa-t3-4",
       "skill": "Fargate — 보안 격리 특성",
+      "section": "containers-ecs-eks-fargate",
       "difficulty": "foundational",
       "stem": "금융 회사가 컨테이너 워크로드 간 보안 격리를 최대화하고 싶다. ECS EC2 시작 유형과 Fargate 시작 유형의 격리 차이로 옳은 것은?",
       "options": [
@@ -279,6 +290,7 @@
       "id": "saa-t3-4-q12",
       "examGuideTaskId": "saa-t3-4",
       "skill": "ECS 리소스 — Task와 Service 차이",
+      "section": "containers-ecs-eks-fargate",
       "difficulty": "foundational",
       "stem": "ECS에서 웹 서버 컨테이너를 항상 3개 유지하며 실행하려 한다. 이 요구사항에 맞는 ECS 리소스는?",
       "options": [
@@ -303,6 +315,7 @@
       "id": "saa-t3-4-q13",
       "examGuideTaskId": "saa-t3-4",
       "skill": "컴퓨팅 선택 — 워크로드 특성 기반",
+      "section": "compute-decision-tree",
       "difficulty": "applied",
       "stem": "한 회사가 HTTP 요청을 받아 이미지를 리사이즈하는 서비스를 구축한다. 요청은 간헐적으로 발생하고 처리 시간은 5초 이내이며 상태를 저장하지 않는다. 운영 부담 최소화를 원한다. 가장 적합한 컴퓨팅 서비스는?",
       "options": [
@@ -327,6 +340,7 @@
       "id": "saa-t3-4-q14",
       "examGuideTaskId": "saa-t3-4",
       "skill": "Lambda 동시성 — Reserved Concurrency vs Provisioned Concurrency",
+      "section": "lambda-performance",
       "difficulty": "applied",
       "stem": "중요한 Lambda 함수가 다른 함수들과 동시성 풀을 공유해 부하 폭증 시 실행 가능 용량이 부족해지는 문제가 발생한다. 이 함수에 최소 실행 용량을 보장하면서 동시에 최대 호출 수를 제한하려면 어떤 설정을 사용해야 하는가?",
       "options": [
@@ -351,6 +365,7 @@
       "id": "saa-t3-4-q15",
       "examGuideTaskId": "saa-t3-4",
       "skill": "AWS Batch — Spot 인스턴스와 비용 최적화",
+      "section": "aws-batch",
       "difficulty": "applied",
       "stem": "3D 렌더링 스튜디오가 AWS Batch를 사용해 수천 개의 렌더링 작업을 처리한다. 비용을 최소화하면서 가변 작업 부하를 처리하려 한다. Compute Environment 구성으로 가장 적합한 것은?",
       "options": [

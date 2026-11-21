@@ -8,6 +8,7 @@
       "id": "saa-t3-5-q1",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Multi-AZ 목적과 동작",
+      "section": "multi-az",
       "difficulty": "foundational",
       "stem": "한 팀이 프로덕션 RDS MySQL 인스턴스에 Multi-AZ를 활성화했다. Multi-AZ 배포에 대한 설명으로 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t3-5-q2",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Read Replica 목적과 복제 방식",
+      "section": "read-replica",
       "difficulty": "foundational",
       "stem": "전자상거래 사이트의 DB 읽기 트래픽이 급격히 증가해 주 RDS 인스턴스의 응답이 느려지고 있다. 쓰기는 정상이다. 가장 적합한 해결 방법은?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t3-5-q3",
       "examGuideTaskId": "saa-t3-5",
       "skill": "이기종 DB 마이그레이션 — SCT와 DMS의 역할 분담",
+      "section": "db-migration",
       "difficulty": "applied",
       "stem": "온프레미스 Oracle 데이터베이스를 Amazon Aurora PostgreSQL로 옮기려 한다. 엔진이 달라지므로 테이블 정의뿐 아니라 저장 프로시저·트리거 같은 코드 객체도 대상 엔진 문법으로 바꿔야 한다. 도구를 어떻게 조합하는가?",
       "options": [
@@ -84,6 +87,7 @@
       "id": "saa-t3-5-q4",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Read Replica 교차 리전과 수동 승격",
+      "section": "read-replica",
       "difficulty": "applied",
       "stem": "미국 리전에 RDS PostgreSQL 주 인스턴스가 있다. 아시아 리전 사용자의 읽기 지연을 줄이고, 재해 발생 시 아시아 리전에서 서비스를 재개할 수 있도록 하고 싶다. 가장 적합한 구성은?",
       "options": [
@@ -108,6 +112,7 @@
       "id": "saa-t3-5-q5",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Aurora 스토리지 특성",
+      "section": "aurora",
       "difficulty": "foundational",
       "stem": "Amazon Aurora의 스토리지 구조에 대한 설명으로 옳은 것은?",
       "options": [
@@ -134,6 +139,7 @@
       "id": "saa-t3-5-q6",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Aurora vs RDS 페일오버 속도",
+      "section": "aurora-vs-rds",
       "difficulty": "applied",
       "stem": "미션 크리티컬 애플리케이션에서 DB 장애 발생 시 다운타임을 최소화해야 한다. RDS Multi-AZ DB 인스턴스 배포(스탠바이 1개)와 Aurora 중 페일오버 속도가 더 빠른 것은?",
       "options": [
@@ -158,6 +164,7 @@
       "id": "saa-t3-5-q7",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Aurora Global Database",
+      "section": "aurora",
       "difficulty": "applied",
       "stem": "글로벌 SaaS 서비스가 미국에 주 DB를 두고 유럽·아시아 사용자에게 저지연 읽기를 제공해야 한다. 또한 미국 리전 전체 장애 시 RPO 약 1초, RTO 약 1분의 복구 목표를 요구한다. 가장 적합한 솔루션은?",
       "options": [
@@ -182,6 +189,7 @@
       "id": "saa-t3-5-q8",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Aurora serverless 적합 워크로드",
+      "section": "aurora",
       "difficulty": "applied",
       "stem": "스타트업이 새 애플리케이션을 출시했다. 트래픽이 예측 불가능하고 간헐적이며, DB 운영 부담을 최소화하고 싶다. 가장 적합한 DB 옵션은?",
       "options": [
@@ -206,6 +214,7 @@
       "id": "saa-t3-5-q9",
       "examGuideTaskId": "saa-t3-5",
       "skill": "RDS Proxy — Lambda 연결 고갈 해결",
+      "section": "rds-proxy",
       "difficulty": "applied",
       "stem": "Lambda 함수가 RDS MySQL에 연결해 데이터를 조회한다. 동시 Lambda 실행이 수백 개로 늘자 DB에서 연결 오류가 발생하기 시작했다. 근본 원인과 해결 방법으로 옳은 것은?",
       "options": [
@@ -230,6 +239,7 @@
       "id": "saa-t3-5-q10",
       "examGuideTaskId": "saa-t3-5",
       "skill": "RDS Proxy — 페일오버 단축",
+      "section": "rds-proxy",
       "difficulty": "applied",
       "stem": "애플리케이션이 RDS Aurora에 연결되어 있다. Aurora 페일오버 발생 시 애플리케이션의 연결 중단 시간을 최소화하고 싶다. 어떤 방법이 가장 효과적인가?",
       "options": [
@@ -254,6 +264,7 @@
       "id": "saa-t3-5-q11",
       "examGuideTaskId": "saa-t3-5",
       "skill": "RDS 스토리지 타입 선택",
+      "section": "rds-storage",
       "difficulty": "foundational",
       "stem": "금융 서비스의 OLTP 프로덕션 DB는 초당 수천 건의 트랜잭션을 처리하며 I/O 집약적이다. 일관된 낮은 지연이 필수다. 적합한 RDS 스토리지 타입은?",
       "options": [
@@ -279,6 +290,7 @@
       "id": "saa-t3-5-q12",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Aurora vs RDS 선택 기준",
+      "section": "aurora-vs-rds",
       "difficulty": "applied",
       "stem": "한 기업이 Oracle Database에서 오픈소스 DB로 마이그레이션을 검토 중이다. 고가용성이 중요해 Read Replica를 최대한 많이 두면서 페일오버 시간도 최소화해야 한다. 가장 적합한 선택은?",
       "options": [
@@ -305,6 +317,7 @@
       "id": "saa-t3-5-q13",
       "examGuideTaskId": "saa-t3-5",
       "skill": "RDS 완전 관리형 특성",
+      "section": "rds-basics",
       "difficulty": "foundational",
       "stem": "개발팀이 RDS MySQL을 사용 중이다. 팀원 중 한 명이 성능 최적화를 위해 OS 레벨 설정을 변경하고 직접 패치를 적용하려 한다. RDS에서 이 작업이 가능한가?",
       "options": [
@@ -329,6 +342,7 @@
       "id": "saa-t3-5-q14",
       "examGuideTaskId": "saa-t3-5",
       "skill": "RDS 백업 — PITR과 스냅샷",
+      "section": "rds-backup",
       "difficulty": "foundational",
       "stem": "운영 중인 RDS 인스턴스에서 오늘 오전 10시에 실수로 중요 데이터가 삭제되었다. 자동 백업 보존 기간은 7일로 설정되어 있다. 삭제 이전 시점으로 데이터를 복구하는 방법은?",
       "options": [
@@ -355,6 +369,7 @@
       "id": "saa-t3-5-q15",
       "examGuideTaskId": "saa-t3-5",
       "skill": "Multi-AZ + Read Replica 함께 사용",
+      "section": "multi-az-vs-read-replica",
       "difficulty": "applied",
       "stem": "프로덕션 RDS PostgreSQL 환경에서 고가용성과 읽기 확장을 동시에 확보하려 한다. 가장 적합한 구성은?",
       "options": [

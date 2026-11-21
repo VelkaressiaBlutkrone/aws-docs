@@ -8,6 +8,7 @@
       "id": "saa-t3-7-q1",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Route 53 라우팅 정책 선택 — Latency vs Geolocation",
+      "section": "routing-policies",
       "difficulty": "applied",
       "stem": "글로벌 서비스를 운영 중인 회사가 한국·미국·유럽 세 리전에 동일한 애플리케이션을 배포했다. 각 사용자를 네트워크 응답이 가장 빠른 리전으로 보내야 한다. 가장 적합한 Route 53 라우팅 정책은?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t3-7-q2",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Alias 레코드 vs CNAME — Zone Apex 제약",
+      "section": "alias-vs-cname",
       "difficulty": "foundational",
       "stem": "한 솔루션스 아키텍트가 루트 도메인 example.com을 Application Load Balancer(ALB)로 연결하려 한다. Route 53에서 어떤 레코드 유형을 사용해야 하는가?",
       "options": [
@@ -56,6 +58,7 @@
       "id": "saa-t3-7-q3",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Route 53 Failover 정책과 헬스 체크",
+      "section": "route53-health-checks",
       "difficulty": "applied",
       "stem": "한 기업이 Route 53 Failover 정책으로 액티브-패시브 DR을 구성하려 한다. Primary·Secondary 모두 별칭(alias) 레코드를 만들 수 없는 온프레미스 엔드포인트라서 IP로 직접 지정했다. Primary 엔드포인트 장애 시 Secondary로 자동 전환되게 하려면 반드시 추가해야 하는 설정은?",
       "options": [
@@ -81,6 +84,7 @@
       "id": "saa-t3-7-q4",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Route 53 Weighted 정책 — 점진 배포",
+      "section": "routing-policies",
       "difficulty": "foundational",
       "stem": "한 팀이 신버전 애플리케이션을 배포하면서 전체 트래픽의 10%만 신버전으로 보내고, 나머지 90%는 기존 버전으로 유지하려 한다. 어떤 Route 53 라우팅 정책을 사용해야 하는가?",
       "options": [
@@ -105,6 +109,7 @@
       "id": "saa-t3-7-q5",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Route 53 IP 기반 라우팅 — 알고 있는 CIDR 매핑",
+      "section": "routing-policies",
       "difficulty": "applied",
       "stem": "한 글로벌 동영상 서비스가 특정 인터넷 서비스 제공업체(ISP)를 쓰는 사용자들을 네트워크 전송 비용이 더 낮은 지정 엔드포인트로 보내려 한다. 그 ISP가 사용하는 IP 대역(CIDR)은 이미 파악해 두었다. 가장 적합한 Route 53 라우팅 정책은?",
       "options": [
@@ -130,6 +135,7 @@
       "id": "saa-t3-7-q6",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Geoproximity vs Geolocation 구분",
+      "section": "routing-policies",
       "difficulty": "applied",
       "stem": "Route 53 Geoproximity 정책에 대한 설명으로 옳은 것은?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t3-7-q7",
       "examGuideTaskId": "saa-t3-7",
       "skill": "CloudFront OAC — S3 직접 접근 차단",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "한 회사가 S3에 저장된 이미지·CSS·JS를 CloudFront를 통해 전 세계에 배포하고 있다. S3 버킷 URL로 직접 접근하는 것을 완전히 차단하고 CloudFront 경유만 허용하려 한다. 올바른 구성은?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t3-7-q8",
       "examGuideTaskId": "saa-t3-7",
       "skill": "CloudFront Signed URL vs Signed Cookie",
+      "section": "cloudfront",
       "difficulty": "foundational",
       "stem": "한 스트리밍 서비스가 유료 회원에게 콘텐츠 접근을 제한하려 한다. 회원은 로그인 후 여러 강의 영상과 문서 파일에 접근해야 하며, 이 복수 파일에 대한 세션 단위 접근 제한이 필요하다. 어떤 CloudFront 접근 제한 방식을 사용해야 하는가?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t3-7-q9",
       "examGuideTaskId": "saa-t3-7",
       "skill": "CloudFront ACM 인증서 리전 제약",
+      "section": "cloudfront",
       "difficulty": "foundational",
       "stem": "한 팀이 CloudFront 배포에 커스텀 도메인을 설정하고 HTTPS를 활성화하려 한다. AWS Certificate Manager(ACM)에서 SSL/TLS 인증서를 발급할 때 반드시 사용해야 하는 리전은?",
       "options": [
@@ -227,6 +236,7 @@
       "id": "saa-t3-7-q10",
       "examGuideTaskId": "saa-t3-7",
       "skill": "CloudFront vs Global Accelerator — 캐싱 여부",
+      "section": "cloudfront-vs-global-accelerator",
       "difficulty": "applied",
       "stem": "한 회사가 전 세계 사용자에게 정적 이미지와 동영상을 빠르게 제공하려 한다. 오리진 S3 버킷에 대한 반복 요청을 줄이고 엣지에서 캐싱해 응답 속도를 높이는 것이 목표다. 어떤 서비스를 선택해야 하는가?",
       "options": [
@@ -251,6 +261,7 @@
       "id": "saa-t3-7-q11",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Global Accelerator — 고정 IP와 비-HTTP 프로토콜",
+      "section": "global-accelerator",
       "difficulty": "applied",
       "stem": "한 게임 회사가 전 세계 플레이어를 위한 UDP 기반 실시간 멀티플레이어 서버를 AWS에 배포한다. 클라이언트 방화벽에 IP를 화이트리스트로 등록해야 하므로 고정 IP가 필요하고, 초저지연이 요구된다. 가장 적합한 서비스는?",
       "options": [
@@ -277,6 +288,7 @@
       "id": "saa-t3-7-q12",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Global Accelerator — 캐싱 없음",
+      "section": "global-accelerator",
       "difficulty": "foundational",
       "stem": "AWS Global Accelerator에 대한 설명으로 옳은 것은?",
       "options": [
@@ -302,6 +314,7 @@
       "id": "saa-t3-7-q13",
       "examGuideTaskId": "saa-t3-7",
       "skill": "로드 밸런서 선택 — NLB vs ALB",
+      "section": "load-balancer-performance",
       "difficulty": "applied",
       "stem": "한 핀테크 기업이 초당 수백만 건의 TCP 금융 거래를 처리하는 실시간 시스템을 구축한다. 초저지연·고정 IP·TCP 프로토콜 요구 사항을 충족해야 한다. 어떤 로드 밸런서를 선택해야 하는가?",
       "options": [
@@ -327,6 +340,7 @@
       "id": "saa-t3-7-q14",
       "examGuideTaskId": "saa-t3-7",
       "skill": "Multivalue Answer 정책 — 로드 밸런서와의 차이",
+      "section": "routing-policies",
       "difficulty": "foundational",
       "stem": "Route 53 Multivalue Answer 정책에 대한 설명으로 옳은 것은?",
       "options": [
@@ -351,6 +365,7 @@
       "id": "saa-t3-7-q15",
       "examGuideTaskId": "saa-t3-7",
       "skill": "ALB 선택 신호 — 경로 기반 라우팅·컨테이너",
+      "section": "load-balancer-performance",
       "difficulty": "applied",
       "stem": "한 회사가 ECS(컨테이너)로 여러 마이크로서비스를 운영 중이다. /api/orders/* 요청은 주문 서비스 컨테이너로, /api/users/* 요청은 사용자 서비스 컨테이너로 라우팅해야 한다. 가장 적합한 로드 밸런서는?",
       "options": [
