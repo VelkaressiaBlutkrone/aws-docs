@@ -115,6 +115,7 @@ const _routes = <String>[
   '/cert/SAA-C03/report',
   '/cert/SAA-C03/study/saa-t1-3/quiz',
   '/notices',
+  '/feedback',
 ];
 
 void main() {

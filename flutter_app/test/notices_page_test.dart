@@ -203,6 +203,23 @@ void main() {
 
     // 배너 자리는 「지금 할 일」을 알리는 곳이고 공지가 가장 덜 급하다.
     // 시계가 도는 시험이 있으면 공지 배너를 그리지 않는다.
+    // ⚠️⚠️ 위젯 단위 테스트는 `HomeHeader` 에 콜백을 **직접** 주므로 홈이 그것을
+    // 넘기는지 보지 못한다 — 파라미터를 더하고 배선을 빠뜨리면 라이브에서만
+    // 항목이 사라진다(실측으로 그 공백을 발견했다). 홈을 렌더해 메뉴를 연다.
+    testWidgets('홈 헤더 메뉴에 공지·의견 보내기가 배선돼 있다', (tester) async {
+      tester.view.physicalSize = const Size(400, 1600);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(_wrap(HomePage(
+          backend: MemoryBackend(), noticesLoader: (_) async => _two)));
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(find.byTooltip('메뉴'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('공지'), findsWidgets);
+      expect(find.text('의견 보내기'), findsOneWidget);
+    });
+
     testWidgets('진행 중인 시험이 있으면 공지 배너를 그리지 않는다', (tester) async {
       final b = MemoryBackend()..write(kNoticeReadUpToKey, 'n-20261201-01');
       seedRunningExam(b);

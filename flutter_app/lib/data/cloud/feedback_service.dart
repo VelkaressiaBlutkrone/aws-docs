@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 import '../../app_version.dart';
 import 'auth_service.dart';
+import 'auth_user.dart';
 import 'cloud_store.dart';
 
 /// 피드백 유형. `question`·`content` 가 **문항·학습문서 오류 신고를 레포 검수
@@ -82,6 +83,17 @@ class FeedbackService {
   final Duration _ackTimeout;
   final DateTime Function() _now;
   final Random _random;
+
+  /// 로그인 여부 — 화면이 **폼을 그릴지 안내를 그릴지**를 미리 정해야 한다.
+  /// (`send` 의 `notSignedIn` 은 보낸 뒤에야 알 수 있다.)
+  bool get isSignedIn => _auth.current != null;
+
+  /// 로그인 상태 변화 — 화면이 로그인 직후 폼으로 바뀌어야 한다.
+  Stream<AuthUser?> authChanges() => _auth.authChanges();
+
+  /// 피드백 화면의 로그인 버튼. `SyncController` 를 거치지 않는다 — 그쪽은
+  /// 동기 설정 UI(로그아웃·계정 삭제까지)를 들고 있어 이 화면에 섞인다.
+  Future<void> signIn() => _auth.signInWithGoogle();
 
   /// 의견 한 건을 보낸다.
   ///

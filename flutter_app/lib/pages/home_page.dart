@@ -259,6 +259,11 @@ class _HomePageState extends State<HomePage> {
       extendBodyBehindAppBar: true,
       appBar: HomeHeader(
         onResetAll: _resetAll,
+        // D2 — 메뉴 항목 둘. 라우팅 결정은 헤더가 아니라 이 페이지가 갖는다.
+        // `push` 라 뒤로가기로 홈에 돌아온다.
+        onOpenNotices: () => context.push('/notices'),
+        onOpenFeedback: () => context.push('/feedback'),
+        noticeUnread: unreadCount(_notices, _kv),
         onNav: {
           '단계': () => _goto(_levels),
           '추천 순서': () => _goto(_paths),
