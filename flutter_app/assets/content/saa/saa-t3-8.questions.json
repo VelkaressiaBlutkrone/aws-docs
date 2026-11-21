@@ -8,6 +8,7 @@
       "id": "saa-t3-8-q1",
       "examGuideTaskId": "saa-t3-8",
       "skill": "VPC 피어링 비전이 특성",
+      "section": "vpc-peering",
       "difficulty": "foundational",
       "stem": "VPC-A와 VPC-B 사이에 피어링이 있고, VPC-B와 VPC-C 사이에도 피어링이 있다. VPC-A의 인스턴스가 VPC-C의 인스턴스에 직접 통신하려 할 때 어떤 일이 발생하는가?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t3-8-q2",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Transit Gateway 허브-스포크 모델",
+      "section": "vpc-peering",
       "difficulty": "foundational",
       "stem": "한 회사가 AWS에 VPC 10개를 운영한다. 10개 VPC가 서로 모두 통신할 수 있도록 VPC 피어링만으로 완전 메시를 구성하려면 피어링 연결이 몇 개 필요한가?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t3-8-q3",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Site-to-Site VPN 구성 요소",
+      "section": "site-to-site-vpn",
       "difficulty": "foundational",
       "stem": "온프레미스 데이터센터와 AWS VPC를 Site-to-Site VPN으로 연결할 때 온프레미스 측 라우터·방화벽 장비 정보를 AWS에 등록하는 리소스는?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t3-8-q4",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Site-to-Site VPN 고가용성 구조",
+      "section": "site-to-site-vpn",
       "difficulty": "foundational",
       "stem": "Site-to-Site VPN 연결 1개에는 기본적으로 몇 개의 터널이 제공되며, 그 이유는?",
       "options": [
@@ -107,6 +111,7 @@
       "id": "saa-t3-8-q5",
       "examGuideTaskId": "saa-t3-8",
       "skill": "VPN vs Direct Connect 선택 — 즉시성",
+      "section": "vpn-vs-direct-connect",
       "difficulty": "applied",
       "stem": "한 기업이 온프레미스 데이터센터와 AWS VPC를 연결해야 한다. 요구사항은 '오늘 안에 연결을 완료'하고 초기 트래픽은 50 Mbps 수준이다. 가장 적합한 연결 방법은?",
       "options": [
@@ -132,6 +137,7 @@
       "id": "saa-t3-8-q6",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Direct Connect 기본 암호화 여부",
+      "section": "direct-connect",
       "difficulty": "foundational",
       "stem": "Direct Connect에 대한 설명으로 옳은 것은?",
       "options": [
@@ -156,6 +162,7 @@
       "id": "saa-t3-8-q7",
       "examGuideTaskId": "saa-t3-8",
       "skill": "VPN over Direct Connect 암호화 패턴",
+      "section": "direct-connect",
       "difficulty": "applied",
       "stem": "금융 기업이 Direct Connect로 AWS에 연결 중이다. 규정 감사 결과 '모든 전송 중 데이터는 암호화되어야 한다'는 요건이 확인됐다. 현재 구성에서 무엇이 누락되어 있으며 어떻게 해결해야 하는가?",
       "options": [
@@ -180,6 +187,7 @@
       "id": "saa-t3-8-q8",
       "examGuideTaskId": "saa-t3-8",
       "skill": "DX + VPN 백업 패턴",
+      "section": "vpn-vs-direct-connect",
       "difficulty": "applied",
       "stem": "한 기업이 온프레미스와 AWS 사이에 Direct Connect를 운영 중이다. DX 회선 장애 시 서비스 중단 없이 연결을 유지해야 하며, 비용도 최소화해야 한다. 가장 적합한 아키텍처는?",
       "options": [
@@ -206,6 +214,7 @@
       "id": "saa-t3-8-q9",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Direct Connect Gateway 다중 리전 접근",
+      "section": "direct-connect-gateway",
       "difficulty": "applied",
       "stem": "한 기업이 us-east-1에 Direct Connect 연결을 하나 보유하고 있으며, ap-northeast-2(서울) 리전의 VPC에도 같은 DX 연결로 접근하고 싶다. 가장 적합한 방법은?",
       "options": [
@@ -230,6 +239,7 @@
       "id": "saa-t3-8-q10",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Direct Connect Gateway VPC 간 브리지 불가",
+      "section": "direct-connect-gateway",
       "difficulty": "applied",
       "stem": "VPC-X와 VPC-Y가 모두 동일한 Direct Connect Gateway에 연결돼 있다. 온프레미스는 이 DXGW를 통해 두 VPC에 접근한다. VPC-X의 인스턴스가 VPC-Y의 인스턴스와 직접 통신하려면 어떻게 해야 하는가?",
       "options": [
@@ -254,6 +264,7 @@
       "id": "saa-t3-8-q11",
       "examGuideTaskId": "saa-t3-8",
       "skill": "게이트웨이 엔드포인트 대상 서비스",
+      "section": "privatelink",
       "difficulty": "foundational",
       "stem": "프라이빗 서브넷의 EC2 인스턴스가 인터넷 없이 S3와 DynamoDB에 접근해야 한다. 비용이 발생하지 않는 방법으로 구성하려면 어떤 엔드포인트 유형을 사용해야 하는가?",
       "options": [
@@ -278,6 +289,7 @@
       "id": "saa-t3-8-q12",
       "examGuideTaskId": "saa-t3-8",
       "skill": "PrivateLink CIDR 겹침 허용",
+      "section": "privatelink",
       "difficulty": "applied",
       "stem": "SaaS 공급자의 VPC CIDR이 10.0.0.0/16이다. 여러 고객 VPC도 같은 CIDR 범위를 사용하고 있다. 고객이 공급자 서비스에 프라이빗하게 접근할 수 있게 하려면 어떤 방법을 사용해야 하는가?",
       "options": [
@@ -302,6 +314,7 @@
       "id": "saa-t3-8-q13",
       "examGuideTaskId": "saa-t3-8",
       "skill": "PrivateLink 엔드포인트 서비스 구성",
+      "section": "privatelink",
       "difficulty": "applied",
       "stem": "한 회사가 자신의 내부 서비스를 협력사 AWS 계정의 VPC에 인터넷 없이 사설로 제공하려 한다. 서비스 제공자 측 구성으로 올바른 것은?",
       "options": [
@@ -326,6 +339,7 @@
       "id": "saa-t3-8-q14",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Transit Gateway vs VPC 피어링 선택",
+      "section": "transit-gateway",
       "difficulty": "applied",
       "stem": "스타트업이 AWS에 VPC 2개(개발·운영)를 운영하며 서로 통신해야 한다. 온프레미스 연결 계획은 없고 향후 VPC가 늘어날 가능성도 낮다. 가장 비용 효율적인 연결 방법은?",
       "options": [
@@ -350,6 +364,7 @@
       "id": "saa-t3-8-q15",
       "examGuideTaskId": "saa-t3-8",
       "skill": "Direct Connect VIF 유형",
+      "section": "direct-connect",
       "difficulty": "foundational",
       "stem": "온프레미스 데이터센터가 Direct Connect를 통해 특정 VPC의 프라이빗 IP 주소로 접근해야 한다. 이 용도에 맞는 가상 인터페이스(VIF) 유형은?",
       "options": [
