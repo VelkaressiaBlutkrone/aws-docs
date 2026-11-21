@@ -58,3 +58,39 @@ test('타인 uid 문서는 삭제할 수 없다', async () => {
   const db = env.authenticatedContext('u2').firestore();
   await assertFails(deleteDoc(doc(db, 'users/u1/attempts/a1')));
 });
+
+// D2 — 피드백은 `users/{uid}/feedback/{id}` 에 들어간다. **규칙을 바꾸지 않았다**:
+// 아래 셋은 「지금 동작이 의도한 것임」을 못박는 회귀 가드다. 이 쓰기가 기존 규칙으로
+// 되기 때문에 그 기능이 사용자의 콘솔 배포(사람 몫)를 부르지 않는다.
+test('본인 feedback 문서는 쓰고 읽을 수 있다', async () => {
+  const db = env.authenticatedContext('u1').firestore();
+  await assertSucceeds(
+    setDoc(doc(db, 'users/u1/feedback/f1'), { kind: 'bug', body: 'x' }),
+  );
+  // 「내가 보낸 의견」 목록이 이 읽기 권한에 기댄다.
+  await assertSucceeds(getDoc(doc(db, 'users/u1/feedback/f1')));
+});
+
+test('타인 uid 의 feedback 문서는 쓸 수 없다', async () => {
+  const db = env.authenticatedContext('u2').firestore();
+  await assertFails(
+    setDoc(doc(db, 'users/u1/feedback/f2'), { kind: 'bug', body: 'x' }),
+  );
+});
+
+test('비로그인은 feedback 을 쓸 수 없다', async () => {
+  const db = env.unauthenticatedContext().firestore();
+  await assertFails(
+    setDoc(doc(db, 'users/u1/feedback/f3'), { kind: 'bug', body: 'x' }),
+  );
+});
+
+// 계정 삭제가 피드백까지 지운다(`kUserOwnedCollections`) — 그 삭제가 규칙으로
+// 허용되는지 못박는다.
+test('본인 feedback 문서는 삭제할 수 있다', async () => {
+  const db = env.authenticatedContext('u1').firestore();
+  await assertSucceeds(
+    setDoc(doc(db, 'users/u1/feedback/del1'), { kind: 'bug', body: 'x' }),
+  );
+  await assertSucceeds(deleteDoc(doc(db, 'users/u1/feedback/del1')));
+});

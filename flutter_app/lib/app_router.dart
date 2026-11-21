@@ -4,13 +4,17 @@ import 'package:go_router/go_router.dart';
 import 'data/audio_nav.dart';
 import 'data/audio_runtime.dart' show audioLectureEnabled;
 import 'data/cert_lookup.dart';
+import 'data/cloud/feedback_service.dart';
 import 'data/content_index.dart' show approvedAudioEntries, certsWithApprovedAudio;
+import 'main.dart' show feedbackService;
 import 'pages/audio_hub_page.dart';
+import 'pages/feedback_page.dart';
 import 'pages/cert_audio_page.dart';
 import 'pages/cert_detail_page.dart';
 import 'pages/cert_exam_page.dart';
 import 'pages/exam_page.dart';
 import 'pages/home_page.dart';
+import 'pages/notices_page.dart';
 import 'pages/quiz_page.dart';
 import 'pages/plan_page.dart';
 import 'pages/report_page.dart';
@@ -141,6 +145,35 @@ GoRouter createRouter({String initialLocation = '/'}) => GoRouter(
               ],
             ),
           ],
+        ),
+        // 공지는 경로 파라미터가 없어 ValueKey 가 필요하지 않다(같은 라우트로
+        // 다른 대상을 여는 전환이 없다 — 2026-11-18 State 재사용 결함과 무관).
+        GoRoute(
+          path: '/notices',
+          builder: (context, state) => const NoticesPage(),
+        ),
+        // 신고 진입점이 `extra` 로 FeedbackLaunch(유형 + 대상)를 넘긴다.
+        // ⚠️ 그 타입이 아니거나 null 이면 **빈 폼**으로 연다(던지지 않는다) —
+        // 메뉴에서 바로 열 때가 그 경우다.
+        GoRoute(
+          path: '/feedback',
+          builder: (context, state) {
+            final launch = state.extra;
+            // 서비스는 첫 프레임 **뒤에** 주입되므로 구독한다(`SyncEntry` 와 같은
+            // 사정). ⚠️ `ValueKey(svc)` 로 정체성을 분리해야 null → 실제 주입에서
+            // State 가 새로 만들어진다 — 안 그러면 `initState` 의 구독·목록 로드가
+            // 영원히 돌지 않는다(2026-11-18 State 재사용 결함과 같은 계열).
+            return ValueListenableBuilder<FeedbackService?>(
+              valueListenable: feedbackService,
+              builder: (context, svc, _) => FeedbackPage(
+                key: ValueKey(svc),
+                service: svc,
+                initialKind: launch is FeedbackLaunch ? launch.kind : null,
+                initialContext:
+                    launch is FeedbackLaunch ? launch.context : null,
+              ),
+            );
+          },
         ),
         GoRoute(
           path: '/audio',

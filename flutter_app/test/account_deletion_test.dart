@@ -117,16 +117,16 @@ class _SpyCloud implements CloudStore {
           : const Stream.empty();
 }
 
-/// 여섯 컬렉션에 문서를 하나씩 심는다.
+/// 사용자 소유 컬렉션 전부에 문서를 하나씩 심는다(동기 컬렉션 + 피드백).
 Future<void> _seedCloud(CloudStore c) async {
-  for (final col in kSyncedCollections) {
+  for (final col in kUserOwnedCollections) {
     await c.setDoc(_uid, col, 'doc-$col', {'v': 1});
   }
 }
 
 Future<int> _cloudDocCount(CloudStore c) async {
   var n = 0;
-  for (final col in kSyncedCollections) {
+  for (final col in kUserOwnedCollections) {
     n += (await c.loadCollection(_uid, col)).length;
   }
   return n;
@@ -153,7 +153,20 @@ void main() {
           .toSet();
       expect(used, isNotEmpty, reason: '컬렉션 리터럴 추출이 깨졌다');
       expect(used, equals(kSyncedCollections.toSet()),
-          reason: '동기가 쓰는 컬렉션과 계정 삭제가 지우는 목록이 다르다');
+          reason: '동기가 쓰는 컬렉션과 동기 목록이 다르다');
+    });
+
+    // D2 — 피드백은 **동기 화해 대상이 아니지만 삭제 대상**이다. 둘을 한 목록에
+    // 두면 위 소스 대조 가드가 깨지고(피드백은 `sync_service.dart` 를 거치지
+    // 않는다), 삭제 목록에서 빠뜨리면 사용자가 지웠다고 믿는 데이터가 남는다.
+    test('feedback 은 동기 집합에 없고 소유 집합에 있다', () {
+      expect(kSyncedCollections, isNot(contains('feedback')));
+      expect(kUserOwnedCollections, contains('feedback'));
+      expect(kUserOwnedCollections.toSet().length,
+          kUserOwnedCollections.length);
+      // 소유 집합은 동기 집합을 전부 포함한다(동기 데이터도 사용자 소유다).
+      expect(kUserOwnedCollections.toSet(),
+          containsAll(kSyncedCollections.toSet()));
     });
   });
 
@@ -226,13 +239,13 @@ void main() {
           reason: 'watch로 깨어난 reconcile이 지운 문서를 되살린다');
     });
 
-    test('여섯 컬렉션 전부를 돈다', () async {
+    test('사용자 소유 컬렉션 전부를 돈다', () async {
       await ctrl.deleteAccount();
       final touched = log
           .where((e) => e.startsWith('del:'))
           .map((e) => e.substring(4).split('/').first)
           .toSet();
-      expect(touched, equals(kSyncedCollections.toSet()));
+      expect(touched, equals(kUserOwnedCollections.toSet()));
     });
 
     test('로컬 학습 기록도 지운다', () async {

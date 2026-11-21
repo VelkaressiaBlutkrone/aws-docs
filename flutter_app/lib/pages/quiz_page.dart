@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 
 import '../content/quiz_widgets.dart';
+import '../data/cloud/feedback_service.dart';
 import '../data/content_index.dart';
 import '../data/history_store.dart';
 import '../data/mock_exam.dart';
@@ -194,7 +195,25 @@ class _QuizViewState extends State<QuizView> {
         padding: EdgeInsets.all(Gap.xl).copyWith(
             top: headerScrollInset(context),
             bottom: scrollBottomInset(context)),
-        child: ResultsView(bank: widget.bank, picked: _picked),
+        child: ResultsView(
+          bank: widget.bank,
+          picked: _picked,
+          // D2 — 문항 오류 신고. 뱅크가 `certCode` 를 들고 있어 이 뷰가 바로
+          // 보낸다. ⚠️ `q.options` 는 이미 셔플이 적용된 보기다(설계 §7-2).
+          onReport: (q, picked) => context.push(
+            '/feedback',
+            extra: (
+              kind: FeedbackKind.question,
+              context: FeedbackContext(
+                certCode: widget.bank.certCode,
+                taskId: q.examGuideTaskId,
+                questionId: q.id,
+                shownOptions: q.options,
+                pickedIndex: picked,
+              ),
+            ),
+          ),
+        ),
       );
     }
     final c = context.c;

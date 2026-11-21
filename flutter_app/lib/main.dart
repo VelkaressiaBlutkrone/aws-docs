@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'app_errors.dart';
 import 'app_router.dart';
 import 'data/cloud/app_resume.dart';
+import 'data/cloud/feedback_service.dart';
 import 'data/cloud/firebase_auth_service.dart';
 import 'data/cloud/firebase_bootstrap.dart';
 import 'data/cloud/firestore_cloud_store.dart';
@@ -18,6 +19,11 @@ import 'theme/theme_scope.dart';
 /// 클라우드 동기 컨트롤러. 부팅 재배열(WS2)로 첫 프레임 뒤에 늦게 주입된다 —
 /// value==null은 "미설정(graceful degrade) 또는 초기화 전". SyncEntry가 구독해 리빌드.
 final ValueNotifier<SyncController?> syncController = ValueNotifier(null);
+
+/// 피드백 전송 서비스(D2). 동기와 **같은 Auth·Firestore 인스턴스**를 쓰지만 동기
+/// 화해 경로와는 무관하다(단방향 쓰기). `syncController` 와 같은 자리·같은 시점에
+/// 주입되고, value==null 은 「미설정 또는 초기화 전」이다.
+final ValueNotifier<FeedbackService?> feedbackService = ValueNotifier(null);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,14 +66,19 @@ Future<void> initCloudSync(
     {Future<bool> Function() init = initFirebaseIfConfigured}) async {
   try {
     if (!await init()) return;
+    // 동기와 피드백이 **같은 인스턴스**를 공유한다 — 두 번 만들면 Auth 상태가
+    // 갈려 「동기는 켜졌는데 의견은 비로그인」 같은 어긋남이 생긴다.
+    final auth = FirebaseAuthService();
+    final cloud = FirestoreCloudStore();
     syncController.value = SyncController(
-      auth: FirebaseAuthService(),
-      cloud: FirestoreCloudStore(),
+      auth: auth,
+      cloud: cloud,
       local: defaultBackend(),
       // 로컬→클라우드 트리거: 주기(이 기기 변경 백업 지연 최소화) + 앱 복귀.
       syncInterval: SyncController.defaultSyncInterval,
       onAppResume: appResumeSignal(),
     )..start();
+    feedbackService.value = FeedbackService(cloud, auth);
   } catch (e, st) {
     appLog('cloud sync init 실패 — 로컬 전용으로 동작: $e\n$st');
   }

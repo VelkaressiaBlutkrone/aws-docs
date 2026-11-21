@@ -115,4 +115,55 @@ void main() {
       }
     });
   });
+  // ⚠️⚠️⚠️ **웹에서 비트 연산은 32비트다 — VM 테스트로는 잡히지 않는다.**
+  //
+  // dart2js 의 `_shlPositive`(`js_number.dart`)가 `other > 31` 이면 **0** 을
+  // 돌려준다. 그래서 `1 << 32` 는 VM 에서 `4294967296` 이지만 웹에서 **0** 이고,
+  // `Random().nextInt(0)` 은 `RangeError` 를 던진다. 직접 컴파일해 실측했다:
+  //   node  → `const 1<<32 = 0` · `nextInt THREW: RangeError … was 0`
+  //   dart  → `4294967296` · `nextInt = 1898356078`
+  //
+  // 2026-11-21 D2 에서 피드백 문서 id 생성이 `nextInt(1 << 32)` 였고, **전 테스트
+  // 초록 + 웹 릴리스 빌드 성공**을 통과한 채 라이브 웹에서 모든 전송이 실패할
+  // 상태였다(컴파일은 되고 런타임에 터진다). 전체 브랜치 리뷰가 잡았다.
+  //
+  // 이 가드는 소스를 센다 — 런타임으로 검증할 수 없는 자리의 레포 관례다
+  // (`m-1`·`m-5` 와 같은 방식).
+  group('웹 32비트 시프트 함정', () {
+    final libFiles = Directory('lib')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.dart'))
+        .toList();
+
+    test('대조군: lib 의 dart 파일을 읽었다', () {
+      expect(libFiles.length, greaterThan(50));
+    });
+
+    test('32비트를 넘는 왼쪽 시프트가 없다', () {
+      // `<< 32` 이상(32~99)을 센다. 웹에서 전부 0 이 되어 조용히 틀린다.
+      final re = RegExp(r'<<\s*(3[2-9]|[4-9]\d)\b');
+      final hits = <String>[];
+      for (final f in libFiles) {
+        for (final line in f.readAsStringSync().split('\n')) {
+          // 이 함정을 설명하는 주석 줄은 대상이 아니다.
+          if (line.trimLeft().startsWith('//')) continue;
+          if (re.hasMatch(line)) {
+            hits.add('${f.path}: ${line.trim()}');
+          }
+        }
+      }
+      expect(hits, isEmpty,
+          reason: '웹에서 0 이 된다 — 32비트 안전 상수를 쓴다(예: 0x7FFFFFFF)');
+    });
+
+    test('탐지기 대조군: 합성 입력에서 실제로 잡는다', () {
+      final re = RegExp(r'<<\s*(3[2-9]|[4-9]\d)\b');
+      expect(re.hasMatch('final x = 1 << 32;'), isTrue);
+      expect(re.hasMatch('final x = 1 << 33;'), isTrue);
+      expect(re.hasMatch('final x = 1 << 31;'), isFalse,
+          reason: '31 까지는 웹에서도 안전하다');
+      expect(re.hasMatch('final x = 1 << 16;'), isFalse);
+    });
+  });
 }
