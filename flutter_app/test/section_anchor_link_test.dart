@@ -159,6 +159,7 @@ void main() {
       'saa-t2-1', 'saa-t2-2', 'saa-t2-3', 'saa-t2-4', 'saa-t2-5',
       'saa-t3-1', 'saa-t3-2', 'saa-t3-3', 'saa-t3-4', 'saa-t3-5',
       'saa-t3-6', 'saa-t3-7', 'saa-t3-8', 'saa-t3-9',
+      'saa-t4-1', 'saa-t4-2', 'saa-t4-3', 'saa-t4-4', 'saa-t4-5',
     };
     final entries = [
       for (final cert in kContentIndex.keys)
