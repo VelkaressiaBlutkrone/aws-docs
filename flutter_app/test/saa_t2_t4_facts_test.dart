@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -463,6 +464,63 @@ void main() {
   });
 
   group('Task 4.1 — saa-t4-1 / saa-t4-5', () {
+    // 근거: efs/latest/ug/lifecycle-management-efs.html — 정책은 Transition into
+    // IA · into Archive("from the Standard or IA storage class") · into
+    // Standard("out of the IA or Archive storage class") 셋이다. Archive 에서
+    // IA 로 가는 경로는 없다. efs/faq — "enable EFS Intelligent-Tiering to
+    // promote files from EFS IA and EFS Archive back to EFS Standard".
+    final archiveToIa =
+        RegExp(r'IA\s*↔\s*Archive|Archive\s*↔\s*IA|Archive\s*(→|->)\s*IA');
+
+    test('SAA 전수: EFS 계층에 Archive와 IA 사이 양방향 전환을 적지 않는다', () {
+      expect(archiveToIa.hasMatch('Standard↔IA↔Archive'), isTrue,
+          reason: '대조군: 옛 문구를 탐지기가 잡아야 한다');
+      final files = Directory('assets/content/saa')
+          .listSync()
+          .whereType<File>()
+          .where((f) =>
+              f.path.endsWith('.md') || f.path.endsWith('.questions.json'))
+          .toList();
+      expect(files.length, greaterThanOrEqualTo(48));
+      final hits = [
+        for (final f in files)
+          if (archiveToIa.hasMatch(f.readAsStringSync())) f.path,
+      ];
+      expect(hits, isEmpty);
+    });
+
+    test('saa-t4-1 md: 내림은 수명 주기, 되올림은 Intelligent-Tiering이다', () {
+      final lines = doc('saa-t4-1').replaceAll('\r\n', '\n').split('\n');
+      final row =
+          lines.singleWhere((l) => l.startsWith('| **Amazon EFS Intelligent'));
+      expect(row, contains('Standard로'));
+      expect(row, contains('Archive에서 IA로 가는 전환은 없음'));
+      final note = lines.singleWhere((l) => l.startsWith('> EFS IA/Archive는'));
+      expect(note, contains('수명 주기 관리가'));
+      expect(note, contains('Standard로 되돌립니다'));
+      final body = lines.join('\n');
+      expect(body, contains('efs/latest/ug/lifecycle-management-efs.html'));
+      expect(body, contains('https://aws.amazon.com/efs/faq/'));
+    });
+
+    test('saa-t4-1-q14: 정답 자리는 그대로이고 보기가 공식 전환을 말한다', () {
+      final bank = jsonDecode(
+        File('assets/content/saa/saa-t4-1.questions.json').readAsStringSync(),
+      ) as Map<String, dynamic>;
+      final q = (bank['questions'] as List)
+          .cast<Map<String, dynamic>>()
+          .singleWhere((e) => e['id'] == 'saa-t4-1-q14');
+      expect(q['correct'], 0);
+      final answer = (q['options'] as List)[0] as String;
+      expect(answer, contains('IA·Archive'));
+      expect(answer, contains('Standard로'));
+      final urls = [
+        for (final s in (q['sources'] as List).cast<Map<String, dynamic>>())
+          s['url'],
+      ];
+      expect(urls, contains('https://aws.amazon.com/efs/faq/'));
+    });
+
     test('G-4.1-13 Terminate가 모든 EBS 볼륨을 지우지는 않는다', () {
       // 근거: preserving-volumes-on-termination — 루트는 시작 시 Delete,
       // 데이터 볼륨은 콘솔 시작 시 Preserve / CLI 시작 시 Delete, 시작 후 연결은
