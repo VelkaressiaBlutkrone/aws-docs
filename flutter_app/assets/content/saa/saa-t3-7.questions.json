@@ -319,7 +319,7 @@
       "stem": "한 핀테크 기업이 초당 수백만 건의 TCP 금융 거래를 처리하는 실시간 시스템을 구축한다. 초저지연·고정 IP·TCP 프로토콜 요구 사항을 충족해야 한다. 어떤 로드 밸런서를 선택해야 하는가?",
       "options": [
         "ALB(Application Load Balancer) — L7 경로 기반 라우팅으로 금융 트랜잭션을 지능적으로 분배한다",
-        "GLB(Gateway Load Balancer) — 보안 어플라이언스 투명 전달에 특화되어 있다",
+        "GWLB(Gateway Load Balancer) — 보안 어플라이언스 투명 전달에 특화되어 있다",
         "NLB(Network Load Balancer) — L4 TCP/UDP, 초고성능·초저지연, 고정 IP를 제공한다",
         "Classic Load Balancer — 가장 많은 프로토콜을 지원한다"
       ],
@@ -327,12 +327,13 @@
       "explanation": "NLB는 L4(TCP·UDP·TLS) 로드 밸런서로 초고성능·초저지연을 제공하며 수백만 RPS를 처리할 수 있습니다. 고정 IP를 지원해 클라이언트 IP 화이트리스트가 필요한 금융 거래 시스템에 적합합니다. ALB는 L7 파싱이 추가되어 NLB보다 처리 비용이 높습니다.",
       "wrongExplanations": {
         "0": "ALB는 HTTP 헤더·경로·호스트를 파싱하는 L7 처리가 필요해 NLB보다 지연이 높습니다. 경로 기반 라우팅은 마이크로서비스·REST API에 유용하지만 초저지연 TCP 금융 거래에는 NLB가 적합합니다.",
-        "1": "GLB는 L3/L4에서 트래픽을 방화벽·IDS 같은 네트워크 어플라이언스로 투명하게 전달하는 특수 목적 로드 밸런서입니다. 일반 애플리케이션 트래픽 분산에는 사용하지 않습니다.",
+        "1": "GWLB는 L3에서 트래픽을 방화벽·IDS 같은 네트워크 어플라이언스로 투명하게 전달하는 특수 목적 로드 밸런서입니다. 일반 애플리케이션 트래픽 분산에는 사용하지 않습니다.",
         "3": "Classic Load Balancer는 레거시 유형으로 현재 신규 사용이 권장되지 않습니다. 초저지연·고정 IP·수백만 RPS 요구에는 NLB가 적합합니다."
       },
       "sources": [
         { "title": "Network Load Balancer란? — L4·수백만 RPS·고정 IP (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html" },
-        { "title": "Network Load Balancer 제품 페이지 — 초저지연 (공식)", "url": "https://aws.amazon.com/elasticloadbalancing/network-load-balancer/" }
+        { "title": "Network Load Balancer 제품 페이지 — 초저지연 (공식)", "url": "https://aws.amazon.com/elasticloadbalancing/network-load-balancer/" },
+        { "title": "Gateway Load Balancer란? — OSI 3계층(네트워크 계층) (공식)", "url": "https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html" }
       ],
       "verified": true
     },
@@ -370,7 +371,7 @@
       "stem": "한 회사가 ECS(컨테이너)로 여러 마이크로서비스를 운영 중이다. /api/orders/* 요청은 주문 서비스 컨테이너로, /api/users/* 요청은 사용자 서비스 컨테이너로 라우팅해야 한다. 가장 적합한 로드 밸런서는?",
       "options": [
         "NLB(Network Load Balancer) — TCP 레벨에서 경로를 파싱해 마이크로서비스로 분배한다",
-        "GLB(Gateway Load Balancer) — 컨테이너 트래픽을 투명하게 전달한다",
+        "GWLB(Gateway Load Balancer) — 컨테이너 트래픽을 투명하게 전달한다",
         "ALB(Application Load Balancer) — L7 경로 기반 라우팅으로 URL 경로에 따라 다른 대상 그룹으로 분배한다",
         "Route 53 Latency 정책 — 마이크로서비스 경로 분기를 처리한다"
       ],
@@ -378,7 +379,7 @@
       "explanation": "ALB는 L7(HTTP/HTTPS) 로드 밸런서로 URL 경로·호스트 기반 라우팅을 지원합니다. /api/orders/* 요청은 주문 서비스 대상 그룹으로, /api/users/* 요청은 사용자 서비스 대상 그룹으로 분배하는 규칙을 설정할 수 있습니다. Lambda 및 ECS·EKS 컨테이너도 대상으로 지원합니다.",
       "wrongExplanations": {
         "0": "NLB는 L4(TCP·UDP)에서 동작하며 HTTP 경로를 파싱하지 않습니다. URL 경로 기반 라우팅 기능이 없어 마이크로서비스 경로 분기에 사용할 수 없습니다.",
-        "1": "GLB는 방화벽·IDS 같은 네트워크 어플라이언스로 트래픽을 투명하게 전달하는 특수 목적 로드 밸런서입니다. 애플리케이션 URL 경로 기반 라우팅 기능이 없습니다.",
+        "1": "GWLB는 방화벽·IDS 같은 네트워크 어플라이언스로 트래픽을 투명하게 전달하는 특수 목적 로드 밸런서입니다. 애플리케이션 URL 경로 기반 라우팅 기능이 없습니다.",
         "3": "Route 53은 DNS 레벨에서 엔드포인트를 지정하는 역할이며 URL 경로를 파싱하지 않습니다. 마이크로서비스 내부 경로 분기는 로드 밸런서(ALB)가 담당합니다."
       },
       "sources": [
