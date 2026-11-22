@@ -204,6 +204,7 @@
       "id": "clf-t3-7-q8",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Rekognition — 이미지/영상)",
+      "section": "applied-ai-services",
       "difficulty": "foundational",
       "stem": "한 미디어 회사가 업로드된 이미지와 영상에서 객체·장면·얼굴을 자동으로 감지·분석하고 부적절한 콘텐츠를 걸러내려 한다. 머신러닝 전문 지식 없이 컴퓨터 비전 기능을 추가할 수 있는 AWS 서비스는?",
       "options": [
@@ -259,6 +260,7 @@
       "id": "clf-t3-7-q10",
       "examGuideTaskId": "clf-t3-7",
       "skill": "AI/ML 서비스 (Comprehend — NLP)",
+      "section": "applied-ai-services",
       "difficulty": "foundational",
       "stem": "한 회사가 고객 리뷰와 SNS 게시글 같은 텍스트에서 감정(긍정/부정)과 주요 엔터티·핵심 구문 같은 인사이트를 자연어 처리(NLP)로 추출하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
