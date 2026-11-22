@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Text;
 
+import '../../data/content_audit.dart';
 import '../../models/certification.dart';
 import '../../models/exam_guide.dart';
 import '../../theme/app_theme.dart';
@@ -16,6 +17,7 @@ class OfficialGuideSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.c;
     final t = Theme.of(context).textTheme;
+    final provenance = guideProvenance(guide);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,6 +30,10 @@ class OfficialGuideSection extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text('AWS 공식 Exam Guide의 도메인·과제·세부 항목 (한국어).', style: t.bodyMedium),
+        if (provenance != null) ...[
+          const SizedBox(height: Gap.xs),
+          Text(provenance, style: TextStyle(fontSize: 12, color: c.textMuted)),
+        ],
         const SizedBox(height: Gap.xl),
         for (final d in guide.domains) _DomainCard(domain: d),
         const SizedBox(height: Gap.lg),

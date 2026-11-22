@@ -7,12 +7,18 @@ class ExamGuide {
     required this.overview,
     required this.domains,
     required this.sourceUrl,
+    this.guideVersion,
+    this.guidePublished,
   });
 
   final String code;
   final ExamOverview overview;
   final List<ExamDomain> domains;
   final String sourceUrl;
+
+  /// 공식 **한국어** 개정 페이지의 버전·게시일. 그 페이지가 없으면 null 이다.
+  final String? guideVersion;
+  final String? guidePublished;
 
   int get taskCount =>
       domains.fold(0, (sum, d) => sum + d.tasks.length);
@@ -24,6 +30,8 @@ class ExamGuide {
             .map((d) => ExamDomain.fromJson(d as Map<String, dynamic>))
             .toList(),
         sourceUrl: (j['sourceUrl'] as String?) ?? '',
+        guideVersion: j['guideVersion'] as String?,
+        guidePublished: j['guidePublished'] as String?,
       );
 }
 
