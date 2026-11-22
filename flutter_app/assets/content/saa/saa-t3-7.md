@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 네트워크 성능 — Route 53·CloudFront·Global Accelerator·로드밸런서
@@ -40,7 +40,7 @@ lastVerified: 2026-11-17
 - [ ] **Signed URL vs Signed Cookie** — 개별 파일 vs 다중 파일 접근 제한을 구분할 수 있다
 - [ ] **Global Accelerator** — Anycast IP 2개·TCP/UDP 지원·비-HTTP 워크로드 적합성을 설명할 수 있다
 - [ ] **CloudFront vs Global Accelerator 구분** — 캐싱 여부·프로토콜·IP 유형·적합 워크로드를 비교할 수 있다
-- [ ] **로드 밸런서 성능 관점** — ALB·NLB·GLB의 성능 특성과 선택 기준을 설명할 수 있다
+- [ ] **로드 밸런서 성능 관점** — ALB·NLB·GWLB의 성능 특성과 선택 기준을 설명할 수 있다
 
 ---
 
@@ -249,7 +249,7 @@ AWS ELB(Elastic Load Balancing)는 세 가지 유형이 있으며, 시험에서�
 |---|---|---|---|---|
 | **ALB** (Application LB) | L7 | HTTP·HTTPS·WebSocket·**gRPC** | 경로/호스트 기반 라우팅, Lambda·컨테이너 대상 | 마이크로서비스, REST API, gRPC 서비스 |
 | **NLB** (Network LB) | L4 | TCP·UDP·TLS | **초고성능·초저지연**, **고정 IP** 지원, 수백만 RPS | TCP 실시간 게임, 금융 거래, IoT |
-| **GLB** (Gateway LB) | **L3** | 모든 IP 패킷·모든 포트 | 트래픽을 어플라이언스(방화벽·IDS 등)로 투명하게 전달 | 네트워크 어플라이언스 통합 |
+| **GWLB** (Gateway LB) | **L3** | 모든 IP 패킷·모든 포트 | 트래픽을 어플라이언스(방화벽·IDS 등)로 투명하게 전달 | 네트워크 어플라이언스 통합 |
 
 > **NLB 선택 신호**: "초저지연", "TCP/UDP", "고정 IP", "수백만 요청/초" — 이 키워드가 보이면 NLB입니다.
 > **ALB 선택 신호**: "경로 기반 라우팅", "호스트 기반 라우팅", "Lambda 대상", "컨테이너(ECS/EKS)".

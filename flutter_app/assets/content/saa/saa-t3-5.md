@@ -38,7 +38,9 @@ sources:
     url: https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-replicas-adding.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+  - title: RDS API — TargetResourceConfiguration(Blue/Green green 리소스 암호화) (공식)
+    url: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
+lastVerified: 2026-11-22
 ---
 
 # RDS·Aurora 고성능 — Multi-AZ·Read Replica·프록시
@@ -113,7 +115,7 @@ RDS는 **완전 관리형** 서비스입니다. OS 접근·SSH·직접 패치는
 
 ### 2) Multi-AZ — 고가용성(HA) 전용 {#multi-az}
 
-- 다른 AZ에 **동기 복제(synchronous)** 스탠바이 인스턴스를 유지합니다.
+- Multi-AZ DB 인스턴스 배포는 다른 AZ에 **동기 복제(synchronous)** 스탠바이 인스턴스를 유지합니다(DB 클러스터 배포는 반동기 복제).
 - Multi-AZ DB 인스턴스 배포는 스탠바이 1개를 두며, 주 인스턴스 장애 시 AWS가 **자동 페일오버**합니다. 일반적으로 60~120초가 걸릴 수 있습니다.
 - 이 스탠바이 인스턴스는 **읽기에 사용 불가**입니다(고가용성 전용).
 - Multi-AZ DB 클러스터 배포는 스탠바이 2개를 두며, 리더 인스턴스가 읽기를 처리할 수 있고 페일오버 시간도 일반적으로 더 짧습니다.
@@ -173,7 +175,7 @@ Aurora는 Aurora Replica 수를 대상 추적으로 자동 조정할 수 있습�
 | 항목 | Multi-AZ | Read Replica |
 |---|---|---|
 | **목적** | 고가용성(HA) | 읽기 확장(Scale-out) |
-| **복제 방식** | 동기(synchronous) | 비동기(asynchronous) |
+| **복제 방식** | DB 인스턴스 배포는 동기(synchronous), DB 클러스터 배포는 반동기 | 비동기(asynchronous) |
 | **스탠바이/복제본 읽기** | DB 인스턴스 배포는 불가, DB 클러스터 배포는 리더가 처리 | 가능(읽기 전용) |
 | **페일오버** | 자동(DB 인스턴스는 보통 60~120초, DB 클러스터는 더 짧음) | 수동 승격 필요 |
 | **교차 리전** | 불가 | 가능 |
@@ -433,7 +435,7 @@ Performance Insights는 DB 부하를 활성 세션 수로 환산해 보여 줍�
 4. **"Aurora serverless는 아무 때나 쓰면 된다."** → Aurora serverless는 간헐적·예측 불가 워크로드에 최적입니다. 일정한 높은 트래픽에는 프로비저닝 Aurora가 더 저렴하고 안정적입니다.
    (원리: §8 — Aurora serverless는 사용량에 비례해 비용이 조정되므로 부하가 낮은 구간에서 유리하고, 부하가 지속적으로 높으면 프로비저닝 인스턴스가 더 안정적인 성능을 제공할 수 있다.)
 
-5. **"운영 중 비암호화 RDS DB를 클릭 한 번으로 암호화할 수 있다."** → 불가. 스냅샷 생성 → 암호화 복사 → 복원의 절차가 필요합니다. 암호화는 생성 시에 설정하는 것이 권장됩니다.
+5. **"운영 중 비암호화 RDS DB를 클릭 한 번으로 암호화할 수 있다."** → 불가. 그 자리에서(in-place) 전환할 수 없고, 대표 경로는 스냅샷 생성 → 암호화 복사 → 복원입니다(Blue/Green 배포에서 green 리소스에 `TargetKmsKeyId`를 지정하는 경로도 있습니다). 암호화는 생성 시에 설정하는 것이 권장됩니다.
    (원리: §1 본문 — 완전 관리형 서비스는 OS·스토리지 레이어를 AWS가 관리하므로, 운영 중 암호화 적용은 새 암호화 인스턴스로 데이터를 옮기는 절차가 필요하다.)
 
 6. **"RDS Proxy를 사용하면 DB 연결 수가 늘어난다."** → 반대입니다. 프록시가 연결을 풀링·공유하여 DB에 도달하는 실제 연결 수를 줄입니다.
@@ -510,6 +512,7 @@ Lambda는 동시 실행마다 별도 컨테이너에서 새 DB 연결을 생성�
 22. Aurora Global Database 구성 요건(보조 10·1차 Replica 15−s·메모리 최적화 db.r5+) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.configuration.requirements.html (갭 배치 B8a: 2026-10-21)
 23. Aurora Global Database 제한(Backtrack·보조 클러스터 Auto Scaling·자동 마이너 업그레이드 미지원) — https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html (갭 배치 B8a: 2026-10-21)
 24. Performance Insights API(`db.load.avg` = 활성 세션 수의 스케일된 표현) — https://docs.aws.amazon.com/performance-insights/latest/APIReference/API_ResponseResourceMetricKey.html (갭 배치 B8a: 2026-10-21)
+25. RDS API TargetResourceConfiguration("The blue resource is unencrypted and you want to encrypt the green resource.") — https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html (2026-11-22 확인)
 
 > 📝 **2026-10-21 보강 (갭 배치 B8a)**: ① §3에 **Aurora Auto Scaling**(사전 정의 지표 2종·**대상 지표당 정책 1개**·리더 평균 계산에서 **라이터 제외**·커스텀 엔드포인트 리더 포함)과 **PostgreSQL 연쇄 복제본**(14.1+·3단계·소스 자동 백업 전제·무트랜잭션 시 지연 5분)·`ReplicaLag`·승격 비가역을 추가했습니다(근거 19·21번). ② §6에 **스토리지 오토스케일링 발동 3조건**(여유 10% 이하·5분 지속·24시간 4회 미만)과 증분 규칙(10 GiB / 10% / 7시간 예측 중 큰 값)·최대 임계값 권고(10% 필수·**26% 권장**)·**추가 스토리지 볼륨 미지원**을 추가했습니다(근거 17번). ③ §7에 **Aurora I/O-Optimized vs Standard**(25% 분기·**I/O-Optimized 전환은 30일 1회 / Standard 복귀는 수시**·NVMe는 엔진 재시작)·**Performance Insights `db.load.avg`**·**Global Database 구성 요건**(**1차 Replica = 15 − 보조 리전 수**)을 추가했습니다(근거 18·22·23·24번). ④ §9에 **다중화와 핀닝**(세션 종료까지 고정·PostgreSQL은 변수 설정만으로 핀닝·MySQL 세션 핀닝 필터·초기화 쿼리·`DatabaseConnectionsCurrentlySessionPinned`)을 추가했습니다(근거 20번).
 >

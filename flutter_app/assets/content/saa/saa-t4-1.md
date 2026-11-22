@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html
   - title: Amazon EFS FAQ — Intelligent-Tiering (공식)
     url: https://aws.amazon.com/efs/faq/
-lastVerified: 2026-11-21
+lastVerified: 2026-11-22
 ---
 
 # 비용 최적화 스토리지 — S3 티어링·EBS 선택·수명주기·전송 비용
@@ -70,7 +70,7 @@ lastVerified: 2026-11-21
 |---|---|---|
 | **프로비전** | Provision | 서비스에 필요한 용량·자원을 미리 할당하는 것 — 실제 사용량과 무관하게 비용이 발생하는 구조의 근거 |
 | **가용 영역** | Availability Zone (AZ) | 리전 안에 물리적으로 분리된 데이터센터 묶음 — 하나가 장애 나도 다른 AZ는 독립 운영 |
-| **IOPS** | Input/Output Operations Per Second | 디스크가 초당 처리할 수 있는 읽기·쓰기 횟수 — 크고 클수록 빠르지만 비용도 증가 |
+| **IOPS** | Input/Output Operations Per Second | 디스크가 초당 처리할 수 있는 읽기·쓰기 횟수 — 클수록 빠르지만 비용도 증가 |
 | **NAT Gateway** | Network Address Translation Gateway | 프라이빗 서브넷의 인스턴스가 인터넷으로 나갈 수 있게 주소를 변환해주는 관리형 서비스 |
 | **VPC** | Virtual Private Cloud | AWS 안에 논리적으로 격리된 가상 네트워크 — 서브넷·라우트 테이블·게이트웨이를 포함 |
 | **멀티파트 업로드** | Multipart Upload | 대용량 객체를 여러 조각으로 나눠 병렬 업로드하는 방식 — 중단된 업로드가 완료되지 않으면 저장 요금 계속 발생 |
@@ -249,7 +249,7 @@ SSD만 보면 비용 최적화의 한 축을 놓칩니다. HDD 계열은 성능�
 |---|---|
 | 인스턴스 종료 후 남은 볼륨 | 콘솔·AWS Trusted Advisor·Cost Explorer로 미연결 볼륨 탐지 후 삭제 |
 | 누적된 오래된 스냅샷 | Data Lifecycle Manager(DLM)로 보존 정책 설정, 오래된 스냅샷 자동 삭제 |
-| 과잉 프로비전된 볼륨 | Amazon Compute Optimizer가 rightsizing 권장 |
+| 과잉 프로비전된 볼륨 | AWS Compute Optimizer가 rightsizing 권장 |
 | gp2 → gp3 전환 미적용 | Elastic Volumes로 무중단 타입 변경 가능 |
 
 > 🧠 원리: 왜 gp2는 소용량 볼륨일수록 크기를 키워야 했을까요?

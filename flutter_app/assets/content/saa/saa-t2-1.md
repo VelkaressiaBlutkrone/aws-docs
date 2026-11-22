@@ -38,7 +38,7 @@ sources:
     url: https://docs.aws.amazon.com/appflow/latest/userguide/what-is-appflow.html
   - title: Amazon AppFlow 플로우 — 트리거와 데이터 변환 (공식)
     url: https://docs.aws.amazon.com/appflow/latest/userguide/flows.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 느슨한 결합 아키텍처 — SQS·SNS·EventBridge·Step Functions
@@ -246,7 +246,7 @@ Step Functions는 여러 AWS 서비스 호출을 **상태 머신(State Machine)*
 |---|---|---|
 | 컴포넌트 간 부하 흡수·버퍼링 | **SQS** | 소비자가 자기 속도로 Pull. 트래픽 폭증 완충 |
 | 1:N 동시 알림 (여러 구독자) | **SNS** | 토픽 하나로 모든 구독자에 Push |
-| 여러 구독자 + 재시도·처리 보장 | **SNS + SQS 팬아웃** | SQS가 각 소비자 큐를 안정적으로 버퍼링 |
+| 여러 구독자 + 소비자별 버퍼링·독립 속도·재처리 | **SNS + SQS 팬아웃** | SQS가 각 소비자 큐를 안정적으로 버퍼링 |
 | 이벤트 속성 기반 조건 라우팅 | **EventBridge** | 이벤트 패턴 매칭 규칙으로 선택 전달 |
 | SaaS 서비스 이벤트 수신 | **EventBridge** | 파트너 이벤트 소스 네이티브 지원 |
 | 스케줄 기반 트리거 | **EventBridge Scheduler** | Cron/Rate 표현식, 일회성 스케줄 |
@@ -348,7 +348,7 @@ Task 2.1은 "확장 가능하고 느슨하게 결합된 아키텍처"입니다. 
    (원리: §5 — SNS는 구독자 전체에 전파, EventBridge는 이벤트 JSON 속성 조건 매칭으로 선별 라우팅하는 다른 추상화 레이어다.)
 
 6. **"Step Functions Express로 1년짜리 워크플로우 실행"** → Express는 최대 **5분**입니다. 장기 실행·감사 이력이 필요하면 Standard를 사용하세요.
-   (원리: §6 — Express는 상태 전이 이력을 콘솔에 보존하지 않아 고빈도·단기에 최적화됐고, 장기 상태 추적은 Standard의 설계 목적이다.)
+   (원리: §6 — Express는 실행 이력을 Step Functions에 기록하지 않아(로깅을 켜야 CloudWatch Logs·콘솔에서 조회) 고빈도·단기에 최적화됐고, 장기 상태 추적은 Standard의 설계 목적이다.)
 
 7. **"SQS DLQ 없이 운영"** → DLQ 없이 운영하면 처리 실패 메시지가 계속 재시도되거나 조용히 버려집니다. 프로덕션 큐에는 항상 DLQ를 설정하고 알람을 연결합니다.
    (원리: §2 — DLQ는 최대 수신 횟수 초과 메시지를 격리해 장애 메시지가 큐를 오염시키지 않도록 하는 결함 격리 메커니즘이다.)

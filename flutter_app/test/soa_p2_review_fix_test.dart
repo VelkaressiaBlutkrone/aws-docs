@@ -304,10 +304,11 @@ void main() {
     });
 
     test('대조군: 참인 서술은 걸리지 않고, SAA 정본이 그대로다', () {
-      // `saa-t3-5.md` 의 「스냅샷 … 절차가 필요합니다」는 **참**이다(어떤 경로든
-      // 제자리 전환은 아니다). 배타 단정이 아니므로 고치지 않았고 걸려서도 안 된다.
+      // `saa-t3-5.md` 는 2026-11-22 에 대표 경로(스냅샷)와 Blue/Green 경로를 함께
+      // 적도록 정정됐다. 그 참인 서술이 배타 단정 탐지기에 걸려서는 안 된다.
       final t35 = doc('saa', 'saa-t3-5');
-      expect(t35.contains('절차가 필요합니다'), isTrue);
+      expect(t35.contains('대표 경로는 스냅샷'), isTrue);
+      expect(t35.contains('TargetKmsKeyId'), isTrue);
       for (final line in t35.split('\n')) {
         expect(rdsEncryptionExclusive(line), isFalse,
             reason: 'saa-t3-5 의 참인 서술이 걸렸다: $line');

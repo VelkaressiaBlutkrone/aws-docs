@@ -22,7 +22,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: Compute Savings Plans and Reserved Instances (공식)
     url: https://docs.aws.amazon.com/savingsplans/latest/userguide/sp-ris.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 비용 최적화 컴퓨팅 — Savings Plans·RI·Spot·오토스케일링·rightsizing
@@ -47,7 +47,7 @@ lastVerified: 2026-11-17
 
 ## 🎯 왜 중요한가
 
-- 도메인 4(20%)는 시험 비중 3위입니다. "요구 조건을 충족하는 가장 저렴한 선택" 유형의 문제가 이 도메인에 집중됩니다.
+- 도메인 4(20%)는 시험 비중 4위입니다. "요구 조건을 충족하는 가장 저렴한 선택" 유형의 문제가 이 도메인에 집중됩니다.
 - 시험은 워크로드 특성(상시/배치/예측 가능/중단 가능)을 주고 올바른 구매 옵션·스케일링 전략·rightsizing 도구를 고르게 합니다.
 - 비용은 성능·가용성과 트레이드오프합니다. "싸지만 요건을 못 채우는" 보기는 정답이 아닙니다. **요건 충족을 전제로 가장 저렴한 것**이 정답입니다.
 
@@ -328,9 +328,9 @@ Auto Scaling 그룹에서 온디맨드(기반 용량)와 스팟(초과 용량)�
 - **T 계열(버스트)** 은 기본이 **unlimited** 모드입니다 — 24시간 평균이 기준선 이하면 추가 요금이 없지만, 꾸준히 기준선을 넘기면 vCPU-시간 단위 요금이 붙어 **같은 크기의 일반 인스턴스보다 비싸질 수 있습니다.**
 - **Optimize CPUs** — license-included Windows·SQL Server 인스턴스는 vCPU 수와 하이퍼스레딩을 줄여 **vCPU 기반 라이선스 비용**을 낮출 수 있습니다(컴퓨팅 요금이 아니라 라이선스 요금을 줄이는 수단).
 
-> 🧠 원리: 왜 서버리스(Lambda·Fargate) 과금은 유휴 시 비용이 발생하지 않을까요?
+> 🧠 원리: 왜 Lambda는 유휴 시 비용이 발생하지 않고, Fargate는 태스크가 떠 있는 동안 과금될까요?
 > EC2는 인스턴스가 실행 중인 시간 전체에 대해 과금되므로, 요청이 없는 유휴 시간도 동일하게 청구됩니다.
-> Lambda와 Fargate는 요청이 들어올 때만 컨테이너·실행 환경을 프로비저닝하고 완료되면 자원을 반환하므로, 대기 상태에서 점유하는 컴퓨팅이 없어 과금도 발생하지 않습니다.
+> Lambda는 요청이 들어올 때만 실행 환경에서 코드를 돌리고 그 실행 시간만큼만 과금하므로, 요청이 없는 대기 상태에서는 과금이 발생하지 않습니다(프로비저닝 동시성은 예외). Fargate는 서버 관리는 없지만 컨테이너 이미지를 내려받기 시작한 때부터 태스크가 종료될 때까지 요청 유무와 무관하게 과금됩니다.
 > 이 구조 덕분에 간헐적·예측 불가 워크로드는 항상 켜둔 인스턴스 없이도 수요에 맞춰 처리됩니다.
 
 ### 9) 로드 밸런서 비용 — LCU·NLCU {#elb-cost}
