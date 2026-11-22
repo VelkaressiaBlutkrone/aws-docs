@@ -149,7 +149,7 @@
         "Gateway Endpoint는 무료이고, Interface Endpoint(PrivateLink)는 $0.01/GB 데이터 처리 요금과 AZ별 시간 요금이 발생한다"
       ],
       "correct": 3,
-      "explanation": "Gateway Endpoint(S3, DynamoDB만 지원)는 무료입니다. Interface Endpoint(PrivateLink, 200개 이상 서비스 지원)는 $0.01/GB 데이터 처리 요금과 AZ별 시간 요금이 발생합니다. 같은 리전의 VPC 안에서 S3·DynamoDB에 접근하는 경우라면 Gateway Endpoint로 무료로 커버되므로 비용 면에서 유리합니다. 다만 공식 비교 표에 따르면 Gateway Endpoint는 온프레미스에서는 접근할 수 없고 다른 AWS 리전에서도 접근할 수 없습니다 — 온프레미스(VPN·Direct Connect)나 다른 리전·피어링된 VPC에서 접근해야 하면 Interface Endpoint가 필요합니다. 이 단가는 리전마다 다르므로 실제 판단은 쓰는 리전의 요금표로 합니다.",
+      "explanation": "Gateway Endpoint(S3, DynamoDB만 지원)는 무료입니다. Interface Endpoint(PrivateLink, 다수의 AWS 서비스 지원)는 $0.01/GB 데이터 처리 요금과 AZ별 시간 요금이 발생합니다. 같은 리전의 VPC 안에서 S3·DynamoDB에 접근하는 경우라면 Gateway Endpoint로 무료로 커버되므로 비용 면에서 유리합니다. 다만 공식 비교 표에 따르면 Gateway Endpoint는 온프레미스에서는 접근할 수 없고 다른 AWS 리전에서도 접근할 수 없습니다 — 온프레미스(VPN·Direct Connect)나 다른 리전·피어링된 VPC에서 접근해야 하면 Interface Endpoint가 필요합니다. 이 단가는 리전마다 다르므로 실제 판단은 쓰는 리전의 요금표로 합니다.",
       "wrongExplanations": {
         "0": "Gateway Endpoint는 요금이 없습니다. 데이터 처리 요금은 Interface Endpoint에만 해당합니다.",
         "1": "Interface Endpoint는 지원 서비스 범위가 넓지만 유료이므로 '항상 저렴하다'는 서술이 틀렸습니다. 같은 리전 VPC 안에서 S3·DynamoDB를 쓰는 경우라면 Gateway가 비용 면에서 유리하고, 온프레미스나 다른 리전에서 접근해야 할 때만 Interface Endpoint가 필요합니다.",

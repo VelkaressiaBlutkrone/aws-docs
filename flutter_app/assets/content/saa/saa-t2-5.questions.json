@@ -187,13 +187,13 @@
       "difficulty": "applied",
       "stem": "한 회사가 리전 장애 DR을 위해 Aurora 데이터베이스의 교차 리전 복제를 구성하고 있다. RPO를 최소화하기 위해 가장 적합한 Aurora 기능은?",
       "options": [
-        "Aurora Global Database — 전용 인프라로 보조 리전 복제 지연이 1초 미만이며 장애 시 1분 내 승격이 가능하다",
+        "Aurora Global Database — 전용 인프라로 보조 리전 복제 지연이 1초 미만이며 장애 시 보조 리전을 승격할 수 있다",
         "RDS Multi-AZ — 동기 복제로 교차 리전 RPO를 0으로 달성한다",
         "S3 Cross-Region Replication — Aurora 데이터를 비동기로 복제해 RPO를 최소화한다",
         "Aurora Read Replica — 같은 리전 내에서 동기 복제로 RPO를 0으로 만든다"
       ],
       "correct": 0,
-      "explanation": "교차 리전 RPO를 최소화하는 Aurora 기능은 Aurora Global Database입니다. 전용 복제 인프라를 사용해 보조 리전 복제 지연이 통상 1초 미만이며, 장애 시 보조 리전을 통상 1분 내 Primary로 승격할 수 있습니다(보장값이 아니라 전형적 수치입니다). 일반 교차 리전 Read Replica는 비동기 복제 특성상 복제 지연이 더 길 수 있습니다.",
+      "explanation": "교차 리전 RPO를 최소화하는 Aurora 기능은 Aurora Global Database입니다. 전용 복제 인프라를 사용해 보조 리전 복제 지연이 통상 1초 미만이며, 장애 시 보조 리전을 Primary로 승격할 수 있습니다. 승격까지의 RTO는 분 단위이고, 제품 페이지는 1분 미만을 제시합니다. 일반 교차 리전 Read Replica는 비동기 복제 특성상 복제 지연이 더 길 수 있습니다.",
       "wrongExplanations": {
         "1": "RDS Multi-AZ는 같은 리전 안의 다른 AZ에 스탠바이를 두는 고가용성 기능으로(DB 인스턴스 배포는 동기, DB 클러스터 배포는 반동기 복제) AZ 장애 대응에 사용됩니다. 교차 리전 복제 기능이 아닙니다.",
         "2": "S3 Cross-Region Replication은 S3 객체 복제 기능으로 Aurora 데이터베이스에 직접 적용되지 않습니다.",
@@ -201,7 +201,9 @@
       },
       "sources": [
         { "title": "클라우드의 재해 복구 옵션 — AWS 백서 (공식)", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" },
-        { "title": "Aurora 복제 지연 FAQ (공식)", "url": "https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-faq-availability-and-durability.html" }
+        { "title": "Aurora 복제 지연 FAQ (공식)", "url": "https://docs.aws.amazon.com/rds/latest/auroraextendedcontent/aurora-faq-availability-and-durability.html" },
+        { "title": "Aurora Global Database 전환·장애 조치 — RTO는 분 단위 (공식)", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database-disaster-recovery.html" },
+        { "title": "Aurora Global Database 제품 페이지 — 1분 미만 승격 제시 (공식)", "url": "https://aws.amazon.com/rds/aurora/global-database/" }
       ],
       "verified": true
     },

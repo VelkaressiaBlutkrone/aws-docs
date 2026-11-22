@@ -136,7 +136,7 @@
       "skill": "용량 모드 선택 — 온디맨드 vs 프로비저닝",
       "section": "capacity-modes",
       "difficulty": "applied",
-      "stem": "신규 스타트업이 이제 막 론칭한 모바일 앱의 DynamoDB 테이블을 설정하려 한다. 초기에는 트래픽 패턴을 전혀 예측할 수 없고, 예상치 못한 스파이크가 발생해도 스로틀 없이 처리해야 한다. 비용 효율적인 용량 모드 선택은?",
+      "stem": "신규 스타트업이 이제 막 론칭한 모바일 앱의 DynamoDB 테이블을 설정하려 한다. 초기에는 트래픽 패턴을 전혀 예측할 수 없어 처리량을 미리 설정하지 않고 갑작스러운 스파이크에 대응해야 한다. 비용 효율적인 용량 모드 선택은?",
       "options": [
         "프로비저닝 모드 + Auto Scaling — 트래픽에 맞게 자동으로 용량을 조정해준다",
         "온디맨드 모드 — 트래픽 예측 없이 AWS가 실시간으로 처리량을 조정하고 사용량만큼만 과금한다",
@@ -144,14 +144,15 @@
         "온디맨드 모드는 스파이크에 대응하지 못하므로 프로비저닝 모드를 선택해야 한다"
       ],
       "correct": 1,
-      "explanation": "온디맨드 모드는 사전에 처리량을 설정하지 않고 AWS가 실시간 트래픽에 맞춰 용량을 자동 조정합니다. 트래픽 예측이 불가능하거나 스파이크가 잦은 초기 서비스에 적합하며, 사용한 읽기·쓰기 요청 수만큼만 과금됩니다. 프로비저닝 모드는 트래픽 패턴이 안정적이고 예측 가능할 때 비용 최적화를 위해 선택합니다.",
+      "explanation": "온디맨드 모드는 사전에 처리량을 설정하지 않고 AWS가 실시간 트래픽에 맞춰 용량을 자동 조정합니다. 트래픽 예측이 불가능하거나 스파이크가 잦은 초기 서비스에 적합하며, 사용한 읽기·쓰기 요청 수만큼만 과금됩니다. 이전 최고치의 2배까지는 즉시 받지만 30분 안에 그 2배를 넘으면 스로틀이 생길 수 있습니다. 프로비저닝 모드는 트래픽 패턴이 안정적이고 예측 가능할 때 비용 최적화를 위해 선택합니다.",
       "wrongExplanations": {
         "0": "프로비저닝 + Auto Scaling은 트래픽 변화에 일정 수준 대응하지만, Auto Scaling은 실시간 즉각 조정이 아니라 수분 지연이 있을 수 있습니다. 트래픽을 전혀 예측할 수 없는 초기에는 온디맨드가 더 안전합니다.",
         "2": "트래픽 예측이 불가능한 상황에서 고정 RCU/WCU를 높게 설정하면 유휴 처리량에도 비용이 발생해 낭비입니다.",
-        "3": "온디맨드 모드는 트래픽 스파이크에 가장 효과적으로 대응합니다. 프로비저닝 모드가 스파이크에 더 취약합니다."
+        "3": "온디맨드 모드는 이전 최고치의 2배까지 스파이크를 즉시 받습니다. 프로비저닝 모드가 스파이크에 더 취약합니다."
       },
       "sources": [
-        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" }
+        { "title": "Amazon DynamoDB 개발자 안내서 — 소개 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html" },
+        { "title": "DynamoDB 온디맨드 용량 모드 — 이전 최고치 2배·30분 조건 (공식)", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html" }
       ],
       "verified": true
     },
