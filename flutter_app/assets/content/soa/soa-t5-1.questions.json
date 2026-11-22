@@ -8,6 +8,7 @@
       "id": "soa-t5-1-q1",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "internet-gateway",
       "difficulty": "foundational",
       "stem": "서브넷이 '퍼블릭'인지 결정하는 기준은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t5-1-q2",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "subnets",
       "difficulty": "applied",
       "stem": "`10.0.0.0/24` 서브넷에서 실제로 인스턴스에 할당할 수 있는 IP 개수는?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t5-1-q3",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "route-tables",
       "difficulty": "applied",
       "stem": "라우팅 테이블에 `0.0.0.0/0 → igw`와 `10.0.5.0/24 → pcx(피어링)` 경로가 함께 있다. `10.0.5.10`으로 가는 트래픽은 어디로 가는가?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t5-1-q4",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "internet-gateway",
       "difficulty": "applied",
       "stem": "퍼블릭 서브넷의 EC2 인스턴스가 인터넷에 나가지 못한다. 충족해야 하는 세 조건은?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t5-1-q5",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "nat-gateway-vs-instance",
       "difficulty": "foundational",
       "stem": "영역형(zonal) NAT 게이트웨이에 대한 설명으로 올바른 것은?",
       "options": [
@@ -147,6 +152,7 @@
       "id": "soa-t5-1-q6",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "nat-gateway-vs-instance",
       "difficulty": "applied",
       "stem": "NAT 게이트웨이를 AZ마다 두고 각 AZ의 프라이빗 라우팅 테이블이 같은 AZ의 NAT를 가리키게 하는 이유는?",
       "options": [
@@ -174,6 +180,7 @@
       "id": "soa-t5-1-q7",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "nat-gateway-vs-instance",
       "difficulty": "applied",
       "stem": "NAT 인스턴스를 직접 운영하는데 프라이빗 인스턴스의 아웃바운드가 전혀 되지 않는다. 가장 먼저 확인할 설정은?",
       "options": [
@@ -201,6 +208,7 @@
       "id": "soa-t5-1-q8",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "sg-vs-nacl",
       "difficulty": "foundational",
       "stem": "보안 그룹과 네트워크 ACL의 차이로 올바른 것은?",
       "options": [
@@ -228,6 +236,7 @@
       "id": "soa-t5-1-q9",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "sg-vs-nacl",
       "difficulty": "applied",
       "stem": "NACL에서 인바운드 HTTP(80)를 허용했는데도 웹 요청이 응답을 받지 못한다. 원인은?",
       "options": [
@@ -259,6 +268,7 @@
       "id": "soa-t5-1-q10",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "sg-vs-nacl",
       "difficulty": "applied",
       "stem": "특정 악성 IP 한 곳만 차단하려 한다. 어디에 규칙을 넣어야 하는가?",
       "options": [
@@ -286,6 +296,7 @@
       "id": "soa-t5-1-q11",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "sg-vs-nacl",
       "difficulty": "foundational",
       "stem": "보안 그룹이 stateful이라는 말의 실질적 의미는?",
       "options": [
@@ -313,6 +324,7 @@
       "id": "soa-t5-1-q12",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "vpc-cidr",
       "difficulty": "foundational",
       "stem": "VPC IPv4 CIDR 블록에 허용되는 프리픽스 범위는?",
       "options": [
@@ -340,6 +352,7 @@
       "id": "soa-t5-1-q13",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "dns-options",
       "difficulty": "applied",
       "stem": "VPC 안의 인스턴스가 도메인 이름을 해석하지 못한다. 확인해야 할 VPC 속성은?",
       "options": [
@@ -367,6 +380,7 @@
       "id": "soa-t5-1-q14",
       "examGuideTaskId": "soa-t5-1",
       "skill": "VPC 구성(서브넷·라우팅 테이블·NACL·SG·NAT·IGW)(5.1.1)",
+      "section": "route-tables",
       "difficulty": "foundational",
       "stem": "VPC의 로컬 라우팅 경로(VPC CIDR → local)에 대한 설명으로 올바른 것은?",
       "options": [
@@ -394,6 +408,7 @@
       "id": "soa-t5-1-q15",
       "examGuideTaskId": "soa-t5-1",
       "skill": "네트워크 아키텍처 비용 최적화(5.1.4)",
+      "section": "nat-gateway-vs-instance",
       "difficulty": "applied",
       "stem": "프라이빗 서브넷의 EC2가 S3에 대량으로 접근하면서 NAT 게이트웨이 데이터 처리 요금이 커졌다. 비용을 줄이는 첫 조치는?",
       "options": [

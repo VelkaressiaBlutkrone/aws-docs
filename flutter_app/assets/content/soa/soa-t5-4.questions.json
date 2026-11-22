@@ -8,6 +8,7 @@
       "id": "soa-t5-4-q1",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "foundational",
       "stem": "VPC Flow Logs가 기록하는 것은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t5-4-q2",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "foundational",
       "stem": "Flow Logs를 생성할 수 있는 범위(레벨)로 올바른 조합은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t5-4-q3",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "foundational",
       "stem": "Flow Logs의 전달 대상으로 지정할 수 있는 것은?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t5-4-q4",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "applied",
       "stem": "어제 발생한 네트워크 사고를 조사하려고 지금 Flow Logs를 켰다. 결과는?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t5-4-q5",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "reject-unlogged-traffic",
       "difficulty": "applied",
       "stem": "Flow Log 레코드의 `action` 필드가 `REJECT`로 기록되는 경우로 올바른 것은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t5-4-q6",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "flow-log-fields",
       "difficulty": "foundational",
       "stem": "Flow Log의 `log-status`가 `NODATA`인 것은 무엇을 의미하는가?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t5-4-q7",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "applied",
       "stem": "Flow Log의 기본 집계 간격과 선택 가능한 값은?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t5-4-q8",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "connectivity-runbook",
       "difficulty": "applied",
       "stem": "CloudWatch Logs Insights로 '443 포트에 대한 거부된 흐름만' 찾으려 한다. 적절한 쿼리는?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t5-4-q9",
       "examGuideTaskId": "soa-t5-4",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "reject-unlogged-traffic",
       "difficulty": "applied",
       "stem": "NACL에서 인바운드만 열고 응답용 이페머럴 포트 아웃바운드를 열지 않으면 어떤 증상이 나타나는가?",
       "options": [
@@ -255,6 +264,7 @@
       "id": "soa-t5-4-q10",
       "examGuideTaskId": "soa-t5-4",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "reachability-analyzer",
       "difficulty": "applied",
       "stem": "운영 중인 환경에서 트래픽을 발생시키지 않고 'EC2-A → EC2-B 22번 포트' 도달 가능성을 점검하고 차단 구성요소를 찾으려 한다. 적절한 도구는?",
       "options": [
@@ -282,6 +292,7 @@
       "id": "soa-t5-4-q11",
       "examGuideTaskId": "soa-t5-4",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "network-access-analyzer",
       "difficulty": "applied",
       "stem": "'인터넷에서 데이터베이스 서브넷에 도달할 수 있는 경로가 하나라도 존재하는가'를 정기 감사하려 한다. 적절한 도구는?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "soa-t5-4-q12",
       "examGuideTaskId": "soa-t5-4",
       "skill": "VPC 구성 문제 해결(5.3.1)",
+      "section": "connectivity-runbook",
       "difficulty": "foundational",
       "stem": "연결 장애를 진단할 때 인스턴스에 가까운 계층부터 좁혀 가는 순서로 적절한 것은?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "soa-t5-4-q13",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "applied",
       "stem": "ALB를 통과한 각 요청의 클라이언트 IP·응답 코드·지연 시간을 사후 분석해야 한다. 어떤 로그를 켜는가?",
       "options": [
@@ -363,6 +376,7 @@
       "id": "soa-t5-4-q14",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "flow-log-fields",
       "difficulty": "applied",
       "stem": "WAF 웹 ACL이 어떤 규칙으로 요청을 차단했는지 요청 단위로 확인하려 한다. 무엇을 구성하는가?",
       "options": [
@@ -390,6 +404,7 @@
       "id": "soa-t5-4-q15",
       "examGuideTaskId": "soa-t5-4",
       "skill": "네트워킹 로그 수집·해석으로 문제 해결(5.3.2)",
+      "section": "vpc-flow-logs",
       "difficulty": "applied",
       "stem": "Flow Logs를 장기 보관하면서 비용을 낮추고 필요할 때 SQL로 분석하려 한다. 적절한 구성은?",
       "options": [

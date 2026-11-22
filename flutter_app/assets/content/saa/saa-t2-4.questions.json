@@ -8,6 +8,7 @@
       "id": "saa-t2-4-q1",
       "examGuideTaskId": "saa-t2-4",
       "skill": "HA·내결함성·DR 개념 구분",
+      "section": "ha-ft-dr",
       "difficulty": "foundational",
       "stem": "한 아키텍트가 세 가지 복원력 전략을 비교하고 있다. 고가용성(HA), 내결함성(Fault Tolerance), 재해 복구(DR)에 대한 설명으로 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t2-4-q2",
       "examGuideTaskId": "saa-t2-4",
       "skill": "단일 실패점(SPOF) 식별",
+      "section": "single-point-of-failure",
       "difficulty": "foundational",
       "stem": "다음 구성 중 단일 실패점(SPOF)이 아닌 것은?",
       "options": [
@@ -59,6 +61,7 @@
       "id": "saa-t2-4-q3",
       "examGuideTaskId": "saa-t2-4",
       "skill": "표준 HA 아키텍처 레이어 역할",
+      "section": "standard-ha-architecture",
       "difficulty": "foundational",
       "stem": "표준 고가용성 웹 아키텍처에서 각 레이어의 역할로 옳은 것은?",
       "options": [
@@ -83,6 +86,7 @@
       "id": "saa-t2-4-q4",
       "examGuideTaskId": "saa-t2-4",
       "skill": "RDS Multi-AZ 복제 방식",
+      "section": "rds-multi-az",
       "difficulty": "foundational",
       "stem": "RDS Multi-AZ DB 인스턴스 배포(스탠바이 1개)에서 Primary와 Standby 사이의 복제 방식과 그 이유로 옳은 것은?",
       "options": [
@@ -107,6 +111,7 @@
       "id": "saa-t2-4-q5",
       "examGuideTaskId": "saa-t2-4",
       "skill": "RDS Multi-AZ 페일오버 동작",
+      "section": "rds-multi-az",
       "difficulty": "applied",
       "stem": "RDS Multi-AZ 환경에서 Primary DB 인스턴스에 장애가 발생했다. 이후 애플리케이션 동작으로 옳은 것은?",
       "options": [
@@ -132,6 +137,7 @@
       "id": "saa-t2-4-q6",
       "examGuideTaskId": "saa-t2-4",
       "skill": "RDS Multi-AZ vs 읽기 복제본 목적 구분",
+      "section": "multi-az-vs-read-replica",
       "difficulty": "applied",
       "stem": "한 팀이 Multi-AZ DB 인스턴스 배포(스탠바이 1개)로 운영 중인 RDS 데이터베이스의 읽기 쿼리 처리량을 늘리고 싶다. 어떤 기능을 사용해야 하는가?",
       "options": [
@@ -156,6 +162,7 @@
       "id": "saa-t2-4-q7",
       "examGuideTaskId": "saa-t2-4",
       "skill": "재시도 설계 — 지수 백오프와 지터",
+      "section": "distributed-patterns",
       "difficulty": "applied",
       "stem": "수백 대의 클라이언트가 한 내부 API를 호출한다. API가 일시적으로 오류를 내자 모든 클라이언트가 즉시 재시도해 네트워크가 신규·재시도 요청으로 포화되고 가용성이 오히려 더 떨어졌다. 복원력을 높이는 재시도 설계로 가장 적절한 것은?",
       "options": [
@@ -180,6 +187,7 @@
       "id": "saa-t2-4-q8",
       "examGuideTaskId": "saa-t2-4",
       "skill": "Route 53 헬스 체크·페일오버 라우팅",
+      "section": "route53-failover",
       "difficulty": "applied",
       "stem": "한 회사가 Route 53 Active-Passive 페일오버 라우팅을 구성했다. Primary 리소스가 비정상 판정을 받으면 어떤 일이 발생하는가?",
       "options": [
@@ -205,6 +213,7 @@
       "id": "saa-t2-4-q9",
       "examGuideTaskId": "saa-t2-4",
       "skill": "정적 안정성 원칙",
+      "section": "static-stability",
       "difficulty": "applied",
       "stem": "AWS Well-Architected Reliability Pillar의 정적 안정성(Static Stability) 원칙으로 옳은 것은?",
       "options": [
@@ -230,6 +239,7 @@
       "id": "saa-t2-4-q10",
       "examGuideTaskId": "saa-t2-4",
       "skill": "스테이트리스 설계 — ASG 세션 저장",
+      "section": "stateless-asg",
       "difficulty": "applied",
       "stem": "ASG(Auto Scaling Group) 환경에서 사용자 세션 데이터를 저장할 위치로 가장 적합한 것은?",
       "options": [
@@ -254,6 +264,7 @@
       "id": "saa-t2-4-q11",
       "examGuideTaskId": "saa-t2-4",
       "skill": "NAT 게이트웨이 고가용성",
+      "section": "single-point-of-failure",
       "difficulty": "applied",
       "stem": "한 회사가 세 개 AZ에 걸쳐 프라이빗 서브넷을 운영하고 있다. 영역형(zonal) NAT 게이트웨이를 AZ-a 하나에만 배치했을 때 발생할 수 있는 문제는?",
       "options": [
@@ -279,6 +290,7 @@
       "id": "saa-t2-4-q12",
       "examGuideTaskId": "saa-t2-4",
       "skill": "단일 AZ ASG의 한계",
+      "section": "single-point-of-failure",
       "difficulty": "foundational",
       "stem": "한 아키텍트가 ASG를 단일 AZ에서 최소 2개 인스턴스로 구성했다. 이 설계의 고가용성 문제로 옳은 것은?",
       "options": [
@@ -304,6 +316,7 @@
       "id": "saa-t2-4-q13",
       "examGuideTaskId": "saa-t2-4",
       "skill": "Route 53 헬스 체크와 ALB 헬스 체크 레이어 구분",
+      "section": "route53-failover",
       "difficulty": "applied",
       "stem": "Route 53 헬스 체크와 ALB 헬스 체크의 역할 차이로 옳은 것은?",
       "options": [
@@ -329,6 +342,7 @@
       "id": "saa-t2-4-q14",
       "examGuideTaskId": "saa-t2-4",
       "skill": "시나리오 키워드-설계 매핑",
+      "section": "rds-multi-az",
       "difficulty": "applied",
       "stem": "고객사가 \"데이터베이스의 자동 페일오버(automatic failover)가 필요하다\"고 요구했다. 가장 적합한 설계는?",
       "options": [
@@ -354,6 +368,7 @@
       "id": "saa-t2-4-q15",
       "examGuideTaskId": "saa-t2-4",
       "skill": "HA 전체 설계 종합",
+      "section": "standard-ha-architecture",
       "difficulty": "applied",
       "stem": "단일 EC2와 단일 RDS로 운영 중인 웹 서비스를 highly available하게 만들려 한다. 다음 중 세션 지속성을 포함한 가장 완전한 개선 방안은?",
       "options": [

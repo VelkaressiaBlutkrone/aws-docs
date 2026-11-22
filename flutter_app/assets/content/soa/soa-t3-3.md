@@ -69,9 +69,9 @@ lastVerified: 2026-11-17
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 관리형 인스턴스 — SSM이 동작하기 위한 전제
+### 1) 관리형 인스턴스 — SSM이 동작하기 위한 전제 {#managed-instances}
 
 > 공식 정의: **"관리형 노드(managed node)는 Systems Manager용으로 구성된 인스턴스로, SSM Agent가 설치되어 있고 Systems Manager가 관리할 수 있는 상태다."**
 
@@ -90,7 +90,7 @@ lastVerified: 2026-11-17
 > 네트워크가 막히면 등록 요청이 도달하지 않고, IAM이 없으면 요청이 도달해도 거부되므로, 결과는 동일하게 "연결 없음"으로 나타납니다.
 > 이 구조 때문에 운영 현장에서는 "왜 안 보이냐"는 트러블슈팅을 세 조건 체크리스트 순서로 단계적으로 좁혀 나갑니다.
 
-### 2) Run Command — SSH 없이 일괄 명령 실행
+### 2) Run Command — SSH 없이 일괄 명령 실행 {#run-command}
 
 > 공식 정의: **"Run Command를 사용하면 관리형 노드의 구성을 원격으로·안전하게 관리할 수 있으며, SSH나 RDP로 로그인하지 않고 명령을 실행한다."**
 
@@ -112,7 +112,7 @@ aws ssm send-command \
 > 두 설정이 분리된 이유는 속도와 안전성이 독립된 관심사이기 때문입니다 — 빠르게 실행하면서도 오류가 임계를 넘으면 즉시 멈출 수 있고, 느리게 실행하면서도 오류를 몇 건까지는 허용할 수도 있습니다.
 > 이 분리 구조 덕분에 운영자는 플릿 규모와 위험 허용도에 맞게 두 값을 독립적으로 조정할 수 있습니다.
 
-### 3) Session Manager — 포트·베이스천 없는 셸 + 감사
+### 3) Session Manager — 포트·베이스천 없는 셸 + 감사 {#session-manager}
 
 > 공식 정의: **"Session Manager는 인바운드 포트를 열거나 베이스천 호스트를 유지하거나 SSH 키를 관리할 필요 없이 관리형 노드에 대한 대화형 셸·원클릭 액세스를 제공한다."**
 
@@ -131,7 +131,7 @@ aws ssm send-command \
 > 즉 인스턴스는 항상 나가는 방향으로만 통신하므로 인바운드 방화벽 규칙이 필요 없고, 공격자가 외부에서 포트를 스캔해도 열린 포트 자체가 없어 공격 표면이 사라집니다.
 > 이 구조의 부산물로 세션 채널이 SSM을 경유하기 때문에 IAM 정책·CloudTrail·CloudWatch Logs가 일관되게 적용됩니다.
 
-### 4) Patch Manager — 베이스라인·패치 그룹·유지 관리 기간
+### 4) Patch Manager — 베이스라인·패치 그룹·유지 관리 기간 {#patch-manager}
 
 > 공식 정의: **"Patch Manager는 보안 관련 업데이트 및 기타 유형의 업데이트로 관리형 노드에 패치를 적용하는 작업을 자동화한다."**
 
@@ -158,7 +158,7 @@ aws ssm send-command \
 > 만약 하나의 설정으로 합쳐 두면 dev와 prod에서 승인 규칙만 다르게 하거나, 같은 베이스라인을 유지하면서 배포 시간창만 바꾸는 식의 변경이 전체 재구성 없이 불가능합니다.
 > 분리 구조 덕분에 환경이 늘어나도 필요한 요소만 바꿔 조합할 수 있어, 플릿 규모가 커질수록 관리 비용이 선형보다 느리게 증가합니다.
 
-### 5) State Manager — 원하는 상태 유지
+### 5) State Manager — 원하는 상태 유지 {#state-manager}
 
 > 공식 정의: **"State Manager는 관리형 노드를 정의한 상태로 유지하도록 하는 안전하고 확장 가능한 구성 관리 서비스다."**
 
@@ -171,7 +171,7 @@ aws ssm send-command \
 > 이런 환경에서 일회성 명령은 드리프트가 생긴 시점부터 원하는 상태와 실제 상태가 벌어지기 시작해, 감사 시점에 의도와 다른 상태가 발견될 수 있습니다.
 > 반복 적용 연결 구조는 드리프트가 발생하더라도 다음 실행 주기에 자동으로 수렴시키므로, 플릿 규모가 커질수록 수동 개입 없이 준수 상태를 유지하는 비용이 선형보다 낮게 유지됩니다.
 
-### 6) Automation 런북 — 다단계 작업 자동화
+### 6) Automation 런북 — 다단계 작업 자동화 {#automation-runbooks}
 
 > 공식 정의: **"Automation을 사용하면 EC2 인스턴스·기타 AWS 리소스에 대한 일반적인 유지 관리·배포·교정 작업을 자동화하는 런북(runbook)을 정의할 수 있다."**
 
@@ -184,7 +184,7 @@ aws ssm send-command \
 > 런북은 선행 단계 성공 여부를 확인한 뒤 다음 단계로 진행하거나 실패 시 지정된 분기로 이동하는 로직을 문서 안에 내장해, 사람이 체크리스트를 직접 따라가는 부담을 제거합니다.
 > 이 자동 순서 보장 덕분에 야간 배포나 비상 교정처럼 집중력이 떨어지는 상황에서도 절차가 일관되게 실행됩니다.
 
-### 7) Parameter Store vs Secrets Manager
+### 7) Parameter Store vs Secrets Manager {#parameter-store-vs-secrets-manager}
 
 > 공식 정의: **"Parameter Store는 구성 데이터·비밀 관리를 위한 안전한 계층형 저장소를 제공한다."**
 
@@ -207,7 +207,7 @@ aws ssm send-command \
 > Secrets Manager는 이 교체 오케스트레이션을 내장 교체 기능(관리형 교체·Lambda 교체 함수)과 RDS 통합으로 서비스화한 반면, Parameter Store는 저장·조회에만 집중해 그 복잡성을 사용자에게 위임합니다.
 > 따라서 교체 주기와 연동이 필요한 시나리오에서는 Secrets Manager가 직접 구현 비용을 절약하고, 교체가 필요 없는 정적 설정값에는 Parameter Store가 비용과 관리 복잡도 면에서 유리합니다.
 
-### 8) Inventory와 Compliance
+### 8) Inventory와 Compliance {#inventory-compliance}
 
 - **Inventory**: 관리형 노드의 **설치된 소프트웨어·OS·네트워크 구성·업데이트** 등을 수집해 집계합니다(플릿 가시성).
 - **Compliance**: 패치 적용 상태·State Manager 연결 상태가 **규정에 맞는지** 준수/비준수로 보고합니다. 패치 운영의 검증 단계가 여기서 닫힙니다.
@@ -232,7 +232,7 @@ aws ssm send-command \
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"SSM Agent만 깔면 Run Command가 된다."** → 에이전트뿐 아니라 **IAM 인스턴스 프로파일**(`AmazonSSMManagedInstanceCore`)과 **SSM 엔드포인트 도달성**이 모두 있어야 관리형 노드가 됩니다. 보통 누락된 것은 IAM 역할입니다.
    (원리: §1 — SSM 연결은 네트워크·IAM·Agent 세 링크의 체인이며, 하나가 끊기면 목록에서 사라진다.)

@@ -8,6 +8,7 @@
       "id": "soa-t1-5-q1",
       "examGuideTaskId": "soa-t1-5",
       "skill": "성능 지표·태그·AWS 도구로 컴퓨팅 리소스 최적화(1.3.1)",
+      "section": "ec2-instance-types",
       "difficulty": "applied",
       "stem": "t3.medium 인스턴스의 `CPUCreditBalance`가 0에 수렴하고 CPU 사용률이 기준선에 붙어 있다. 이 상태가 의미하는 것은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t1-5-q2",
       "examGuideTaskId": "soa-t1-5",
       "skill": "성능 지표·태그·AWS 도구로 컴퓨팅 리소스 최적화(1.3.1)",
+      "section": "ec2-instance-types",
       "difficulty": "foundational",
       "stem": "T 계열 인스턴스를 unlimited 모드로 두면 어떤 일이 발생하는가?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t1-5-q3",
       "examGuideTaskId": "soa-t1-5",
       "skill": "성능 지표·태그·AWS 도구로 컴퓨팅 리소스 최적화(1.3.1)",
+      "section": "ec2-instance-types",
       "difficulty": "applied",
       "stem": "메모리 집약적 분석 워크로드를 c7i 인스턴스에서 실행하는데 메모리 부족으로 스왑이 발생한다. 가장 효과적인 조치는?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t1-5-q4",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EC2 인스턴스와 스토리지·네트워킹 기능 최적화(1.3.6)",
+      "section": "ec2-instance-types",
       "difficulty": "applied",
       "stem": "HPC 클러스터 노드 간 통신 지연을 최소화하려면 어떤 배치 그룹을 사용하는가?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t1-5-q5",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EC2 인스턴스와 스토리지·네트워킹 기능 최적화(1.3.6)",
+      "section": "ec2-instance-types",
       "difficulty": "foundational",
       "stem": "향상된 네트워킹(Enhanced Networking, ENA)이 제공하는 이점은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t1-5-q6",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EBS 성능 지표 분석·볼륨 유형 최적화(1.3.2)",
+      "section": "ebs-volume-types",
       "difficulty": "foundational",
       "stem": "gp3 볼륨의 기본(베이스라인) 성능은?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t1-5-q7",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EBS 성능 지표 분석·볼륨 유형 최적화(1.3.2)",
+      "section": "ebs-volume-types",
       "difficulty": "applied",
       "stem": "100 GB gp2 볼륨을 쓰는 DB가 평소에는 괜찮지만 배치 작업 중 디스크가 급격히 느려진다. 원인과 가장 적절한 조치는?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t1-5-q8",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EBS 성능 지표 분석·볼륨 유형 최적화(1.3.2)",
+      "section": "ebs-volume-types",
       "difficulty": "applied",
       "stem": "대용량 로그를 순차적으로 읽어 처리하는 빅데이터 워크로드에 비용 효율이 가장 좋은 EBS 볼륨 유형은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t1-5-q9",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EBS 성능 지표 분석·볼륨 유형 최적화(1.3.2)",
+      "section": "common-pitfalls",
       "difficulty": "applied",
       "stem": "io2 볼륨의 IOPS를 크게 올렸는데도 성능이 기대만큼 오르지 않는다. 함께 확인해야 하는 것은?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t1-5-q10",
       "examGuideTaskId": "soa-t1-5",
       "skill": "EBS 성능 지표 분석·볼륨 유형 최적화(1.3.2)",
+      "section": "ebs-volume-types",
       "difficulty": "foundational",
       "stem": "EBS에서 I/O 병목을 시사하는 지표 조합으로 가장 적절한 것은?",
       "options": [
@@ -278,6 +288,7 @@
       "id": "soa-t1-5-q11",
       "examGuideTaskId": "soa-t1-5",
       "skill": "RDS 지표 모니터링·구성 수정으로 성능 개선(1.3.5)",
+      "section": "rds-performance",
       "difficulty": "applied",
       "stem": "RDS의 읽기 지연과 읽기 IOPS가 높아 보고서 쿼리가 느리다. 쓰기 부하는 여유가 있다. 가장 적절한 조치는?",
       "options": [
@@ -305,6 +316,7 @@
       "id": "soa-t1-5-q12",
       "examGuideTaskId": "soa-t1-5",
       "skill": "RDS 지표 모니터링·구성 수정으로 성능 개선(1.3.5)",
+      "section": "rds-performance",
       "difficulty": "foundational",
       "stem": "RDS 읽기 전용 복제본과 Multi-AZ DB 인스턴스 배포(스탠바이 1개)의 차이를 가장 정확히 설명한 것은?",
       "options": [
@@ -340,6 +352,7 @@
       "id": "soa-t1-5-q13",
       "examGuideTaskId": "soa-t1-5",
       "skill": "RDS 지표 모니터링·구성 수정으로 성능 개선(1.3.5)",
+      "section": "rds-performance",
       "difficulty": "applied",
       "stem": "어떤 쿼리와 대기 이벤트가 DB 부하를 유발하는지 식별해야 한다. 가장 적합한 도구는?",
       "options": [
@@ -371,6 +384,7 @@
       "id": "soa-t1-5-q14",
       "examGuideTaskId": "soa-t1-5",
       "skill": "RDS 지표 모니터링·구성 수정으로 성능 개선(1.3.5)",
+      "section": "rds-performance",
       "difficulty": "applied",
       "stem": "서버리스 애플리케이션이 급증하면서 RDS의 `DatabaseConnections`가 폭주해 연결 오류가 발생한다. 가장 적절한 조치는?",
       "options": [
@@ -398,6 +412,7 @@
       "id": "soa-t1-5-q15",
       "examGuideTaskId": "soa-t1-5",
       "skill": "RDS 지표 모니터링·구성 수정으로 성능 개선(1.3.5)",
+      "section": "elasticache",
       "difficulty": "applied",
       "stem": "같은 상품 상세 데이터를 반복 조회하는 읽기 위주 트래픽이 DB를 압박한다. 약간의 오래된 데이터는 허용된다. 가장 적절한 캐싱 구성은?",
       "options": [

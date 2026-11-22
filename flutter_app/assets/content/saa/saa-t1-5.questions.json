@@ -8,6 +8,7 @@
       "id": "saa-t1-5-q1",
       "examGuideTaskId": "saa-t1-5",
       "skill": "저장 데이터 vs 전송 중 데이터 구분",
+      "section": "encryption-states",
       "difficulty": "foundational",
       "stem": "한 솔루션스 아키텍트가 전자상거래 플랫폼의 보안 아키텍처를 검토하고 있다. 고객 주문 데이터가 S3 버킷에 저장될 때와 클라이언트 브라우저에서 ALB로 전달될 때를 각각 보호해야 한다. 두 구간에 맞는 AWS 서비스 조합으로 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t1-5-q2",
       "examGuideTaskId": "saa-t1-5",
       "skill": "KMS 키 유형(AWS 관리형 vs CMK)",
+      "section": "kms",
       "difficulty": "foundational",
       "stem": "한 팀이 S3 버킷에 저장되는 데이터를 암호화하면서 특정 IAM 역할만 복호화할 수 있도록 키 정책으로 세밀하게 제어하려 한다. 어떤 KMS 키 유형을 사용해야 하는가?",
       "options": [
@@ -57,6 +59,7 @@
       "id": "saa-t1-5-q3",
       "examGuideTaskId": "saa-t1-5",
       "skill": "봉투 암호화 흐름",
+      "section": "kms",
       "difficulty": "foundational",
       "stem": "한 개발자가 애플리케이션에서 KMS를 사용해 100MB 파일을 암호화하려 한다. KMS가 대용량 데이터를 직접 암호화하지 않는 이유와 이 경우 올바른 절차는?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t1-5-q4",
       "examGuideTaskId": "saa-t1-5",
       "skill": "KMS 키 정책 필수성",
+      "section": "kms",
       "difficulty": "applied",
       "stem": "한 팀이 CMK를 생성하고 IAM 역할에 kms:GenerateDataKey와 kms:Decrypt를 Allow하는 아이덴티티 기반 정책을 붙였다. 그런데 S3 SSE-KMS 암호화 시 해당 역할이 접근 거부(AccessDenied)를 받는다. 가장 가능성 높은 원인은?",
       "options": [
@@ -107,6 +111,7 @@
       "id": "saa-t1-5-q5",
       "examGuideTaskId": "saa-t1-5",
       "skill": "KMS vs CloudHSM 선택",
+      "section": "kms-vs-cloudhsm",
       "difficulty": "applied",
       "stem": "금융 규제 기관이 \"암호화 키는 전용(단일 테넌트) 하드웨어에서 보관·처리해야 하며, 클라우드 사업자(AWS)도 키에 접근해서는 안 된다\"는 요건을 제시했다. 어떤 서비스를 선택해야 하는가?",
       "options": [
@@ -132,6 +137,7 @@
       "id": "saa-t1-5-q6",
       "examGuideTaskId": "saa-t1-5",
       "skill": "CloudHSM 특성(AWS 서비스 통합 제한)",
+      "section": "kms-vs-cloudhsm",
       "difficulty": "applied",
       "stem": "한 기업이 AWS CloudHSM을 도입해 RDS 암호화에 활용하고 싶다. CloudHSM과 AWS 서비스 통합에 대한 설명으로 옳은 것은?",
       "options": [
@@ -157,6 +163,7 @@
       "id": "saa-t1-5-q7",
       "examGuideTaskId": "saa-t1-5",
       "skill": "ACM 인증서 자동 갱신 조건",
+      "section": "acm",
       "difficulty": "foundational",
       "stem": "한 팀이 ACM으로 TLS 인증서를 발급해 ALB에 연결했다. 인증서 자동 갱신에 대한 설명으로 옳은 것은?",
       "options": [
@@ -182,6 +189,7 @@
       "id": "saa-t1-5-q8",
       "examGuideTaskId": "saa-t1-5",
       "skill": "ACM CloudFront 리전 제약",
+      "section": "acm",
       "difficulty": "applied",
       "stem": "한 팀이 서울 리전(ap-northeast-2)에서 ACM 인증서를 발급해 CloudFront 배포에 연결하려 했으나 인증서 목록에 나타나지 않는다. 원인과 해결책은?",
       "options": [
@@ -206,6 +214,7 @@
       "id": "saa-t1-5-q9",
       "examGuideTaskId": "saa-t1-5",
       "skill": "Amazon Macie 역할(PII 탐지)",
+      "section": "macie",
       "difficulty": "foundational",
       "stem": "보안팀이 S3 버킷에 고객 주민번호·신용카드 번호가 포함된 파일이 있는지 자동으로 탐지하고 어느 버킷이 퍼블릭 접근 상태인지 파악하려 한다. 가장 적합한 서비스는?",
       "options": [
@@ -230,6 +239,7 @@
       "id": "saa-t1-5-q10",
       "examGuideTaskId": "saa-t1-5",
       "skill": "Macie vs Inspector 구분",
+      "section": "macie",
       "difficulty": "foundational",
       "stem": "한 아키텍트가 두 가지 보안 요건을 처리해야 한다. ① EC2 인스턴스의 운영체제 패키지에 알려진 CVE 취약점이 있는지 스캔. ② S3 버킷에 개인정보 파일이 업로드됐는지 자동 탐지. 각 요건에 맞는 서비스 조합은?",
       "options": [
@@ -255,6 +265,7 @@
       "id": "saa-t1-5-q11",
       "examGuideTaskId": "saa-t1-5",
       "skill": "AWS Backup 구성 요소",
+      "section": "aws-backup",
       "difficulty": "foundational",
       "stem": "한 기업이 EC2·RDS·DynamoDB에 대한 백업을 중앙에서 관리하고, 일별 백업 30일 보존 후 자동 만료하는 정책을 적용하려 한다. AWS Backup에서 이 정책을 정의하는 구성 요소는?",
       "options": [
@@ -279,6 +290,7 @@
       "id": "saa-t1-5-q12",
       "examGuideTaskId": "saa-t1-5",
       "skill": "교차 리전·교차 계정 백업",
+      "section": "aws-backup",
       "difficulty": "applied",
       "stem": "한 회사가 프로덕션 계정의 EBS 스냅샷을 재해 복구용으로 다른 리전과 별도 백업 전용 계정에도 저장해 두려 한다. AWS Backup으로 이를 구현하는 방법은?",
       "options": [
@@ -303,6 +315,7 @@
       "id": "saa-t1-5-q13",
       "examGuideTaskId": "saa-t1-5",
       "skill": "Backup Vault Lock(WORM)",
+      "section": "aws-backup",
       "difficulty": "applied",
       "stem": "한 기업이 랜섬웨어 공격에 대비해 백업 볼트의 복구 지점을 루트 계정 관리자도 삭제하거나 보존 기간을 단축할 수 없도록 강제해야 한다. AWS Backup의 어떤 기능을 사용해야 하는가?",
       "options": [
@@ -328,6 +341,7 @@
       "id": "saa-t1-5-q14",
       "examGuideTaskId": "saa-t1-5",
       "skill": "운영 중 RDS 암호화 전환",
+      "section": "kms",
       "difficulty": "applied",
       "stem": "암호화 없이 생성된 RDS MySQL 인스턴스를 암호화 상태로 전환해야 한다. 올바른 절차는?",
       "options": [
@@ -354,6 +368,7 @@
       "id": "saa-t1-5-q15",
       "examGuideTaskId": "saa-t1-5",
       "skill": "KMS CloudTrail 감사 추적",
+      "section": "kms",
       "difficulty": "foundational",
       "stem": "보안팀이 특정 KMS CMK에 대한 모든 암호화·복호화 API 호출 이력을 감사하려 한다. KMS 설계 특성 중 이를 가능하게 하는 것은?",
       "options": [

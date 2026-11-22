@@ -8,6 +8,7 @@
       "id": "saa-t2-5-q1",
       "examGuideTaskId": "saa-t2-5",
       "skill": "RTO와 RPO 구분",
+      "section": "rto-rpo",
       "difficulty": "foundational",
       "stem": "재해 복구 계획을 수립하는 솔루션스 아키텍트가 두 가지 핵심 지표를 정의하려 한다. RTO(Recovery Time Objective)에 대한 설명으로 옳은 것은?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t2-5-q2",
       "examGuideTaskId": "saa-t2-5",
       "skill": "4가지 DR 전략 비용·복구속도 순서",
+      "section": "dr-strategies",
       "difficulty": "foundational",
       "stem": "솔루션스 아키텍트가 4가지 DR 전략을 비용이 낮은 것부터 높은 순서로 정렬하려 한다. 올바른 순서는?",
       "options": [
@@ -56,6 +58,7 @@
       "id": "saa-t2-5-q3",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Backup & Restore 전략 적합 조건",
+      "section": "dr-strategies",
       "difficulty": "applied",
       "stem": "한 전자상거래 회사가 재해 복구 전략을 검토하고 있다. 비즈니스 분석 결과 장애 시 최대 6시간의 다운타임과 2시간의 데이터 손실을 허용할 수 있으며, 비용을 최소화하고 싶어 한다. 가장 적합한 DR 전략은?",
       "options": [
@@ -80,6 +83,7 @@
       "id": "saa-t2-5-q4",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Pilot Light와 Warm Standby 구분",
+      "section": "pilot-light-vs-warm-standby",
       "difficulty": "foundational",
       "stem": "공식 AWS 백서는 Pilot Light와 Warm Standby를 다음과 같이 설명한다. '(A)는 추가 조치 없이 요청을 처리할 수 없으나, (B)는 즉시(축소 용량으로) 트래픽을 처리할 수 있다.' (A)와 (B)에 들어갈 전략을 올바르게 짝지은 것은?",
       "options": [
@@ -104,6 +108,7 @@
       "id": "saa-t2-5-q5",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Pilot Light — 앱 서버를 꺼두는 이유",
+      "section": "pilot-light-vs-warm-standby",
       "difficulty": "applied",
       "stem": "한 회사가 Pilot Light DR 전략을 채택했다. 이 전략에서 앱 서버는 꺼두고 DB 레이어만 상시 복제하는 이유로 옳은 것은?",
       "options": [
@@ -128,6 +133,7 @@
       "id": "saa-t2-5-q6",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Warm Standby 전략 적합 조건",
+      "section": "dr-strategies",
       "difficulty": "applied",
       "stem": "금융 서비스 회사가 리전 장애에 대비한 DR 전략을 수립하고 있다. RTO 10분·RPO 2분을 요구하며, Active-Active보다 비용 효율적인 옵션을 원한다. 가장 적합한 전략은?",
       "options": [
@@ -152,6 +158,7 @@
       "id": "saa-t2-5-q7",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Multi-Site Active-Active 특징",
+      "section": "dr-strategies",
       "difficulty": "foundational",
       "stem": "글로벌 결제 플랫폼이 리전 장애 시 RTO와 RPO를 모두 0에 가깝게 유지해야 한다. 이 요건에 맞는 DR 전략과 그 핵심 특징을 올바르게 설명한 것은?",
       "options": [
@@ -176,6 +183,7 @@
       "id": "saa-t2-5-q8",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Aurora Global Database와 교차 리전 RPO",
+      "section": "cross-region-replication",
       "difficulty": "applied",
       "stem": "한 회사가 리전 장애 DR을 위해 Aurora 데이터베이스의 교차 리전 복제를 구성하고 있다. RPO를 최소화하기 위해 가장 적합한 Aurora 기능은?",
       "options": [
@@ -201,6 +209,7 @@
       "id": "saa-t2-5-q9",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Route 53 페일오버 라우팅",
+      "section": "route53-failover",
       "difficulty": "applied",
       "stem": "솔루션스 아키텍트가 Warm Standby DR 전략에서 리전 장애 발생 시 트래픽을 자동으로 보조 리전으로 전환하려 한다. 어떤 서비스를 어떻게 구성해야 하는가?",
       "options": [
@@ -225,6 +234,7 @@
       "id": "saa-t2-5-q10",
       "examGuideTaskId": "saa-t2-5",
       "skill": "AWS DRS 적용 대상과 특징",
+      "section": "aws-drs",
       "difficulty": "applied",
       "stem": "한 회사가 온프레미스 Windows·Linux 서버에서 실행 중인 애플리케이션의 DR을 AWS에 구성하고 싶다. 서버 전체를 지속적으로 복제하고 장애 시 수 분 안에 AWS에서 기동할 수 있는 관리형 서비스는?",
       "options": [
@@ -249,6 +259,7 @@
       "id": "saa-t2-5-q11",
       "examGuideTaskId": "saa-t2-5",
       "skill": "동기 복제 vs 비동기 복제 구분",
+      "section": "sync-vs-async-replication",
       "difficulty": "foundational",
       "stem": "솔루션스 아키텍트가 RDS 복제 방식을 검토하고 있다. 같은 리전 내 Multi-AZ DB 인스턴스 배포(스탠바이 1개)의 복제와 교차 리전 Read Replica의 복제 방식 차이로 옳은 것은?",
       "options": [
@@ -275,6 +286,7 @@
       "id": "saa-t2-5-q12",
       "examGuideTaskId": "saa-t2-5",
       "skill": "DRS의 DR 전략 기반",
+      "section": "aws-drs",
       "difficulty": "foundational",
       "stem": "AWS Elastic Disaster Recovery(DRS)가 내부적으로 사용하는 DR 전략과 스테이징 영역의 역할로 옳은 것은?",
       "options": [
@@ -300,6 +312,7 @@
       "id": "saa-t2-5-q13",
       "examGuideTaskId": "saa-t2-5",
       "skill": "AWS Backup 다중 서비스 중앙 관리",
+      "section": "cross-region-replication",
       "difficulty": "foundational",
       "stem": "한 회사가 EC2, RDS, EFS, DynamoDB 등 여러 서비스의 백업을 다수 리전과 계정에 걸쳐 정책 기반으로 중앙 관리하려 한다. 가장 적합한 서비스는?",
       "options": [
@@ -324,6 +337,7 @@
       "id": "saa-t2-5-q14",
       "examGuideTaskId": "saa-t2-5",
       "skill": "Route 53 vs Global Accelerator 전환 속도",
+      "section": "route53-failover",
       "difficulty": "applied",
       "stem": "한 회사가 Route 53 Failover 라우팅으로 DR 자동 전환을 구성했는데, 장애 발생 후 일부 클라이언트가 수 분간 이전 엔드포인트로 계속 연결되는 문제를 겪고 있다. 이 문제를 해결하기 위한 더 빠른 전환 방법으로 옳은 것은?",
       "options": [
@@ -348,6 +362,7 @@
       "id": "saa-t2-5-q15",
       "examGuideTaskId": "saa-t2-5",
       "skill": "DRS 적용 범위 — RDS 제외",
+      "section": "aws-drs",
       "difficulty": "applied",
       "stem": "한 회사가 온프레미스 서버와 AWS의 RDS 데이터베이스를 모두 포함하는 DR 솔루션을 설계하고 있다. AWS DRS를 모든 대상에 적용하려 한다. 이 설계의 문제점은?",
       "options": [

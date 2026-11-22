@@ -8,6 +8,7 @@
       "id": "saa-t1-2-q1",
       "examGuideTaskId": "saa-t1-2",
       "skill": "Organizations 구조(관리 계정·OU)",
+      "section": "organizations",
       "difficulty": "foundational",
       "stem": "AWS Organizations에서 OU(Organizational Unit)를 사용하는 주된 이유로 가장 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t1-2-q2",
       "examGuideTaskId": "saa-t1-2",
       "skill": "SCP 권한 부여 여부",
+      "section": "scp",
       "difficulty": "foundational",
       "stem": "AWS Organizations의 멤버 계정에 SCP가 `s3:*`를 Allow하도록 설정되어 있다. 그런데 그 계정의 특정 IAM 사용자에게는 S3 관련 아이덴티티 기반 정책이 전혀 없다. 이 사용자가 S3에 접근하려 하면 어떤 결과가 나오는가?",
       "options": [
@@ -57,6 +59,7 @@
       "id": "saa-t1-2-q3",
       "examGuideTaskId": "saa-t1-2",
       "skill": "관리 계정 SCP 적용 예외",
+      "section": "scp",
       "difficulty": "foundational",
       "stem": "한 보안 팀이 AWS Organizations의 루트(Root)에 모든 리전을 서울(`ap-northeast-2`)로 제한하는 SCP를 적용했다. 이 SCP가 적용되지 않는 대상은?",
       "options": [
@@ -81,6 +84,7 @@
       "id": "saa-t1-2-q4",
       "examGuideTaskId": "saa-t1-2",
       "skill": "SCP 계층 누적 교집합",
+      "section": "scp",
       "difficulty": "applied",
       "stem": "Organizations 루트에 SCP-A가 `ec2:*`를 Deny하고, 하위 OU에 SCP-B가 `ec2:DescribeInstances`를 Allow하도록 설정되어 있다. 이 OU의 멤버 계정 사용자가 EC2 인스턴스를 조회하려 하면?",
       "options": [
@@ -106,6 +110,7 @@
       "id": "saa-t1-2-q5",
       "examGuideTaskId": "saa-t1-2",
       "skill": "서비스 위임 관리자 — 관리 계정 사용 축소",
+      "section": "organizations",
       "difficulty": "applied",
       "stem": "한 조직이 AWS Organizations 관리 계정에서 조직 전체를 대상으로 하는 보안 서비스를 운영하고 있다. 관리 계정 사용은 꼭 그 계정이 해야 하는 일로 줄이면서, 그 서비스의 조직 전체 운영은 계속하고 싶다. 가장 적합한 방법은?",
       "options": [
@@ -130,6 +135,7 @@
       "id": "saa-t1-2-q6",
       "examGuideTaskId": "saa-t1-2",
       "skill": "서비스 연결 역할 SCP 예외",
+      "section": "scp",
       "difficulty": "applied",
       "stem": "한 보안 팀이 OU 전체에 강력한 SCP를 적용해 대부분의 API 호출을 Deny했다. 그런데 일부 AWS 서비스가 해당 계정 내에서 정상 작동하고 있다. 이 서비스들이 SCP 제한에도 불구하고 작동하는 이유는?",
       "options": [
@@ -154,6 +160,7 @@
       "id": "saa-t1-2-q7",
       "examGuideTaskId": "saa-t1-2",
       "skill": "다계정 로그 보호 아키텍처",
+      "section": "multi-account-strategy",
       "difficulty": "applied",
       "stem": "기업 보안 정책에 따라 CloudTrail 로그를 운영 계정의 관리자도 삭제하거나 변조할 수 없어야 한다. 이를 구현하는 가장 적합한 아키텍처는?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t1-2-q8",
       "examGuideTaskId": "saa-t1-2",
       "skill": "Control Tower 용도(빠른 다계정 구축)",
+      "section": "control-tower",
       "difficulty": "applied",
       "stem": "스타트업이 빠르게 AWS 다계정 환경을 구축해야 한다. 보안·규정 준수 모범 사례가 사전 적용된 환경이 필요하고, 새 팀이 계정을 요청할 때마다 표준 구성으로 자동 프로비저닝되어야 한다. 가장 적합한 서비스는?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t1-2-q9",
       "examGuideTaskId": "saa-t1-2",
       "skill": "Control Tower 가드레일 유형(예방·탐지·사전예방)",
+      "section": "control-tower",
       "difficulty": "foundational",
       "stem": "AWS Control Tower에는 세 가지 제어(control, 이전 명칭 가드레일) 유형이 있다. '리소스 프로비저닝 전에 비준수 리소스가 생성되는 것을 IaC 배포 단계에서 차단'하는 유형과 구현 도구의 조합으로 옳은 것은?",
       "options": [
@@ -229,6 +238,7 @@
       "id": "saa-t1-2-q10",
       "examGuideTaskId": "saa-t1-2",
       "skill": "Control Tower vs Organizations 관계",
+      "section": "control-tower",
       "difficulty": "foundational",
       "stem": "AWS Control Tower와 AWS Organizations의 관계에 대한 설명으로 가장 옳은 것은?",
       "options": [
@@ -254,6 +264,7 @@
       "id": "saa-t1-2-q11",
       "examGuideTaskId": "saa-t1-2",
       "skill": "다계정 계정 분리 모범 사례",
+      "section": "multi-account-strategy",
       "difficulty": "applied",
       "stem": "AWS Well-Architected 기반 다계정 전략에서 '감사(Audit) 계정'을 별도로 두는 주된 이유는?",
       "options": [
@@ -278,6 +289,7 @@
       "id": "saa-t1-2-q12",
       "examGuideTaskId": "saa-t1-2",
       "skill": "Organizations 전체 기능 모드",
+      "section": "organizations",
       "difficulty": "foundational",
       "stem": "한 팀이 AWS Organizations를 사용 중인데 SCP를 적용하려 했으나 SCP 기능을 찾을 수 없다. 가장 가능성 높은 원인은?",
       "options": [
@@ -302,6 +314,7 @@
       "id": "saa-t1-2-q13",
       "examGuideTaskId": "saa-t1-2",
       "skill": "IAM Identity Center 다계정 접근 흐름",
+      "section": "identity-center",
       "difficulty": "applied",
       "stem": "한 기업이 50개 AWS 계정과 Active Directory를 보유하고 있다. 직원이 IAM Identity Center 포털에서 특정 계정을 선택해 접근하면 어떤 방식으로 자격증명이 발급되는가?",
       "options": [
@@ -326,6 +339,7 @@
       "id": "saa-t1-2-q14",
       "examGuideTaskId": "saa-t1-2",
       "skill": "IAM Identity Center 권한 세트(Permission Set)",
+      "section": "identity-center",
       "difficulty": "applied",
       "stem": "기업이 30개 AWS 계정에 동일한 '개발자 읽기 전용' 권한을 부여해야 한다. 나중에 이 권한을 일괄 변경할 수도 있어야 한다. IAM Identity Center를 사용할 때 가장 효율적인 방법은?",
       "options": [
@@ -350,6 +364,7 @@
       "id": "saa-t1-2-q15",
       "examGuideTaskId": "saa-t1-2",
       "skill": "폭발 반경 제한(계정 격리 원칙)",
+      "section": "multi-account-strategy",
       "difficulty": "applied",
       "stem": "한 회사가 단일 AWS 계정에서 개발·스테이징·운영 워크로드를 모두 실행하고 있다. 보안 아키텍트가 다계정 전략으로 전환을 권장한다. 가장 중요한 보안 이유는?",
       "options": [

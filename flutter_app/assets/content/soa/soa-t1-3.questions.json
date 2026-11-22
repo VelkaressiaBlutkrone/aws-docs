@@ -8,6 +8,7 @@
       "id": "soa-t1-3-q1",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "management-data-events",
       "difficulty": "foundational",
       "stem": "보안팀이 '특정 IAM 주체가 민감한 S3 객체를 다운로드했는지'를 CloudTrail에서 조회하려 하는데 기록이 없다. 원인은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t1-3-q2",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "management-data-events",
       "difficulty": "foundational",
       "stem": "추적(Trail)을 만들지 않은 계정에서 CloudTrail로 확인할 수 있는 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t1-3-q3",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "trails",
       "difficulty": "applied",
       "stem": "AWS Organizations를 쓰는 기업이 모든 멤버 계정의 관리 이벤트를 중앙 S3 버킷에 모으고, 멤버 계정이 이를 해제할 수 없게 하려 한다. 어떤 구성인가?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t1-3-q4",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "log-file-integrity",
       "difficulty": "applied",
       "stem": "감사인이 'S3에 전달된 CloudTrail 로그가 전달 이후 변경되지 않았음'을 증명해 달라고 요구한다. 어떤 기능을 사용하는가?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t1-3-q5",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "log-file-integrity",
       "difficulty": "applied",
       "stem": "무결성 검증을 켰는데도 누군가 S3의 로그 객체를 삭제했다. 이 사실이 말해 주는 것은?",
       "options": [
@@ -147,6 +152,7 @@
       "id": "soa-t1-3-q6",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "cloudtrail-lake-insights",
       "difficulty": "foundational",
       "stem": "CloudTrail 이벤트를 Athena를 따로 구성하지 않고 SQL로 직접 질의하며 불변 데이터 스토어에 장기 보관하려 한다. 적절한 기능은?",
       "options": [
@@ -174,6 +180,7 @@
       "id": "soa-t1-3-q7",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "cloudtrail-lake-insights",
       "difficulty": "applied",
       "stem": "자격 증명이 탈취돼 갑자기 대량의 리소스가 생성되는 패턴을 탐지하려 한다. 계정마다 정상 호출량이 크게 다른 환경에서 가장 적합한 기능은?",
       "options": [
@@ -201,6 +208,7 @@
       "id": "soa-t1-3-q8",
       "examGuideTaskId": "soa-t1-3",
       "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "section": "eventbridge",
       "difficulty": "foundational",
       "stem": "EventBridge 규칙을 트리거하는 두 가지 방식은 무엇인가?",
       "options": [
@@ -228,6 +236,7 @@
       "id": "soa-t1-3-q9",
       "examGuideTaskId": "soa-t1-3",
       "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "section": "eventbridge",
       "difficulty": "applied",
       "stem": "매일 UTC 03:00에 정리 작업 Lambda를 실행하려 한다. EventBridge 스케줄 표현식으로 올바른 것은?",
       "options": [
@@ -255,6 +264,7 @@
       "id": "soa-t1-3-q10",
       "examGuideTaskId": "soa-t1-3",
       "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "section": "eventbridge",
       "difficulty": "applied",
       "stem": "GuardDuty가 심각도 높은 Finding을 발행하면 해당 EC2 인스턴스를 자동 격리하려 한다. 가장 적절한 구성은?",
       "options": [
@@ -286,6 +296,7 @@
       "id": "soa-t1-3-q11",
       "examGuideTaskId": "soa-t1-3",
       "skill": "EventBridge를 사용하여 이벤트 기반 규칙 구성·문제 해결(1.2.2)",
+      "section": "eventbridge",
       "difficulty": "foundational",
       "stem": "EventBridge와 CloudWatch Events의 관계를 가장 정확히 설명한 것은?",
       "options": [
@@ -313,6 +324,7 @@
       "id": "soa-t1-3-q12",
       "examGuideTaskId": "soa-t1-3",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "x-ray",
       "difficulty": "foundational",
       "stem": "X-Ray에서 하나의 요청이 여러 서비스를 거치며 만든 세그먼트들의 집합을 무엇이라 하는가?",
       "options": [
@@ -340,6 +352,7 @@
       "id": "soa-t1-3-q13",
       "examGuideTaskId": "soa-t1-3",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "x-ray",
       "difficulty": "applied",
       "stem": "CloudWatch 지표로 API 응답이 느려진 것을 확인했다. 마이크로서비스 여러 개 중 어느 다운스트림 호출이 지연의 원인인지 좁히려면 무엇을 보는가?",
       "options": [
@@ -367,6 +380,7 @@
       "id": "soa-t1-3-q14",
       "examGuideTaskId": "soa-t1-3",
       "skill": "성능 지표를 분석하고 문제 해결 전략 자동화(1.2.1)",
+      "section": "x-ray",
       "difficulty": "applied",
       "stem": "트래픽이 많은 서비스에 X-Ray를 도입하려는데 추적 비용과 오버헤드가 걱정된다. 기본적으로 제공되는 완화 수단은?",
       "options": [
@@ -394,6 +408,7 @@
       "id": "soa-t1-3-q15",
       "examGuideTaskId": "soa-t1-3",
       "skill": "AWS 서비스를 사용하여 워크로드 모니터링 및 로깅 구성(1.1.1)",
+      "section": "trails",
       "difficulty": "applied",
       "stem": "보안 기준선으로 '모든 리전의 관리 이벤트를 중앙 S3에 모으고, 핵심 API 호출에는 즉시 경보를 건다'를 구현해야 한다. 추적 구성에 추가해야 할 것은?",
       "options": [

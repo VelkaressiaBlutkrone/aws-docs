@@ -8,6 +8,7 @@
       "id": "soa-t2-4-q1",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "rto-rpo",
       "difficulty": "foundational",
       "stem": "'마지막 복구 지점 이후 잃어도 되는 데이터의 양'을 정의하는 지표는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t2-4-q2",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "dr-strategies",
       "difficulty": "foundational",
       "stem": "DR 전략 네 가지를 복구 속도가 느린 것부터 빠른 순서로 나열한 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t2-4-q3",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "pilot-light-vs-warm-standby",
       "difficulty": "applied",
       "stem": "Pilot Light와 Warm Standby를 가르는 가장 정확한 기준은?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t2-4-q4",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "pilot-light-vs-warm-standby",
       "difficulty": "applied",
       "stem": "Pilot Light 환경에서 재해를 선언했을 때 수행해야 하는 절차에 해당하지 않는 것은?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t2-4-q5",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "dr-strategies",
       "difficulty": "applied",
       "stem": "RTO는 수 시간을 허용하고 비용을 최소화해야 하는 내부 보고 시스템의 DR 전략으로 적절한 것은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t2-4-q6",
       "examGuideTaskId": "soa-t2-4",
       "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "section": "s3-replication",
       "difficulty": "foundational",
       "stem": "S3 CRR과 SRR의 차이는?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t2-4-q7",
       "examGuideTaskId": "soa-t2-4",
       "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "section": "s3-replication",
       "difficulty": "applied",
       "stem": "CRR을 켰는데 기존에 저장돼 있던 객체들이 대상 버킷에 나타나지 않는다. 원인과 해결은?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t2-4-q8",
       "examGuideTaskId": "soa-t2-4",
       "skill": "스토리지 서비스의 버전 관리 구현(2.3.3)",
+      "section": "s3-replication",
       "difficulty": "applied",
       "stem": "여러 계정의 액세스 로그를 한 버킷에 모아 분석하려 한다. 가장 적절한 S3 기능은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t2-4-q9",
       "examGuideTaskId": "soa-t2-4",
       "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "section": "rds-cross-region",
       "difficulty": "applied",
       "stem": "RDS(비-Aurora)에서 리전 장애에 대비하면서 RPO를 가능한 낮추려 한다. 적절한 수단은?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t2-4-q10",
       "examGuideTaskId": "soa-t2-4",
       "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "section": "rds-cross-region",
       "difficulty": "applied",
       "stem": "교차 리전 읽기 전용 복제본이 장애 시 자동으로 Primary가 되지 않는 이유는?",
       "options": [
@@ -278,6 +288,7 @@
       "id": "soa-t2-4-q11",
       "examGuideTaskId": "soa-t2-4",
       "skill": "데이터베이스 복원(특정 시점 복원 등)으로 RTO·RPO 충족(2.3.2)",
+      "section": "rds-cross-region",
       "difficulty": "foundational",
       "stem": "Aurora 워크로드에서 가장 낮은 RPO를 목표로 하는 멀티 리전 수단은?",
       "options": [
@@ -305,6 +316,7 @@
       "id": "soa-t2-4-q12",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "rds-cross-region",
       "difficulty": "applied",
       "stem": "RPO 목표가 '마지막 백업 이후 허용'이고 비용을 최소화해야 하는 DB의 멀티 리전 수단으로 가장 적절한 것은?",
       "options": [
@@ -332,6 +344,7 @@
       "id": "soa-t2-4-q13",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "dr-runbook",
       "difficulty": "applied",
       "stem": "리전 장애 시 트래픽을 보조 리전으로 자동 전환하려면 어떤 구성을 사용하는가?",
       "options": [
@@ -359,6 +372,7 @@
       "id": "soa-t2-4-q14",
       "examGuideTaskId": "soa-t2-4",
       "skill": "AWS Backup으로 스냅샷·백업 자동화(2.3.1)",
+      "section": "region-replication-options",
       "difficulty": "foundational",
       "stem": "여러 서비스의 백업을 정책 하나로 다른 리전에 복사해 리전 장애에 대비하려 한다. 적절한 수단은?",
       "options": [
@@ -386,6 +400,7 @@
       "id": "soa-t2-4-q15",
       "examGuideTaskId": "soa-t2-4",
       "skill": "재해 복구 절차 및 모범 사례 준수(2.3.4)",
+      "section": "dr-best-practices",
       "difficulty": "applied",
       "stem": "DR 설계를 마친 뒤에도 정기적인 DR 훈련(game day)을 수행해야 하는 이유로 가장 적절한 것은?",
       "options": [

@@ -176,6 +176,7 @@
       "id": "clf-t3-8-q7",
       "examGuideTaskId": "clf-t3-8",
       "skill": "앱 통합 (Step Functions — 워크플로 오케스트레이션)",
+      "section": "workflow-api",
       "difficulty": "foundational",
       "stem": "한 팀이 여러 AWS 서비스(Lambda 함수, ECS 작업 등)를 정해진 순서와 분기·재시도 로직에 따라 호출하는 비즈니스 워크플로를, 시각적 상태 머신으로 정의해 오케스트레이션하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -203,6 +204,7 @@
       "id": "clf-t3-8-q8",
       "examGuideTaskId": "clf-t3-8",
       "skill": "최종 사용자 컴퓨팅 (WorkSpaces Applications, 구 AppStream 2.0)",
+      "section": "appstream-mq",
       "difficulty": "foundational",
       "stem": "한 회사가 데스크톱 애플리케이션 한두 개를 사용자에게 설치 없이 웹 브라우저로 스트리밍해 제공하려 한다(전체 데스크톱이 아닌 특정 애플리케이션만 스트리밍). 가장 적합한 완전관리형 AWS 서비스는?",
       "options": [
@@ -230,6 +232,7 @@
       "id": "clf-t3-8-q9",
       "examGuideTaskId": "clf-t3-8",
       "skill": "앱 통합 (API Gateway — API 관리)",
+      "section": "workflow-api",
       "difficulty": "foundational",
       "stem": "한 개발팀이 백엔드(Lambda 함수, HTTP 엔드포인트 등)를 노출하는 REST·HTTP·WebSocket API를 만들고, 트래픽 관리·인증·스로틀링·모니터링을 갖춘 단일 진입점으로 게시·운영하려 한다. 가장 적합한 완전관리형 AWS 서비스는?",
       "options": [

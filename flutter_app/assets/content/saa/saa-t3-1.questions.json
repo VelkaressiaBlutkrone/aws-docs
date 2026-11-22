@@ -8,6 +8,7 @@
       "id": "saa-t3-1-q1",
       "examGuideTaskId": "saa-t3-1",
       "skill": "S3 내구성과 기본 상태",
+      "section": "s3-basics",
       "difficulty": "foundational",
       "stem": "S3 버킷을 새로 생성했을 때 기본 상태와 내구성에 대한 설명으로 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t3-1-q2",
       "examGuideTaskId": "saa-t3-1",
       "skill": "스토리지 클래스 선택(접근 패턴 불명확)",
+      "section": "storage-classes",
       "difficulty": "applied",
       "stem": "한 팀이 데이터 분석 플랫폼용 S3 버킷을 설계 중이다. 어떤 객체가 자주 접근될지, 어떤 객체가 오래 방치될지 예측할 수 없다. 추가 검색 요금 없이 자동으로 비용을 최적화하는 스토리지 클래스는?",
       "options": [
@@ -57,6 +59,7 @@
       "id": "saa-t3-1-q3",
       "examGuideTaskId": "saa-t3-1",
       "skill": "One Zone-IA 적합 데이터 판단",
+      "section": "storage-classes",
       "difficulty": "applied",
       "stem": "다음 중 S3 One Zone-IA에 저장하기 가장 적합한 데이터는?",
       "options": [
@@ -81,6 +84,7 @@
       "id": "saa-t3-1-q4",
       "examGuideTaskId": "saa-t3-1",
       "skill": "Glacier 클래스 복원 시간 비교",
+      "section": "storage-classes",
       "difficulty": "foundational",
       "stem": "의료 기관이 환자 영상 파일을 아카이브하려 한다. 응급 상황에서 복원 절차를 거치지 않고 밀리초 단위로 데이터를 꺼낼 수 있어야 한다. 가장 적합한 S3 스토리지 클래스는?",
       "options": [
@@ -106,6 +110,7 @@
       "id": "saa-t3-1-q5",
       "examGuideTaskId": "saa-t3-1",
       "skill": "최소 보관 기간 과금 규칙",
+      "section": "storage-classes",
       "difficulty": "foundational",
       "stem": "데이터를 S3 Standard-IA에 업로드한 지 15일 만에 삭제했다. 요금 청구에 대한 설명으로 옳은 것은?",
       "options": [
@@ -130,6 +135,7 @@
       "id": "saa-t3-1-q6",
       "examGuideTaskId": "saa-t3-1",
       "skill": "수명 주기 전환 방향 제약",
+      "section": "s3-lifecycle",
       "difficulty": "foundational",
       "stem": "S3 수명 주기 정책의 전환(Transition) 액션에 대한 설명으로 옳은 것은?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t3-1-q7",
       "examGuideTaskId": "saa-t3-1",
       "skill": "수명 주기 만료(Expiration) 액션",
+      "section": "s3-lifecycle",
       "difficulty": "applied",
       "stem": "로그 파일을 S3에 저장하는 애플리케이션이 있다. 로그는 최초 30일간 분석에 자주 사용되고, 이후 90일까지는 가끔 참조하며, 365일이 지나면 더 이상 필요하지 않다. 가장 비용 효율적인 수명 주기 정책은?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t3-1-q8",
       "examGuideTaskId": "saa-t3-1",
       "skill": "멀티파트 업로드 필수 조건",
+      "section": "s3-performance",
       "difficulty": "foundational",
       "stem": "S3에 6 GB 크기의 단일 파일을 업로드하려 한다. 올바른 업로드 방식은?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t3-1-q9",
       "examGuideTaskId": "saa-t3-1",
       "skill": "Transfer Acceleration 사용 시점",
+      "section": "s3-performance",
       "difficulty": "applied",
       "stem": "글로벌 미디어 회사가 전 세계 지사에서 대용량 영상 파일을 ap-northeast-2(서울) 리전의 S3 버킷에 업로드한다. 미국·유럽 지사에서 업로드 속도가 느리다는 불만이 있다. 가장 효과적인 개선 방법은?",
       "options": [
@@ -227,6 +236,7 @@
       "id": "saa-t3-1-q10",
       "examGuideTaskId": "saa-t3-1",
       "skill": "S3 처리량 최적화(프리픽스 병렬화)",
+      "section": "s3-performance",
       "difficulty": "applied",
       "stem": "데이터 파이프라인이 단일 S3 프리픽스(예: logs/)에 초당 8,000개 이상의 GET 요청을 생성하고 있다. 현재 처리량 한도에 도달해 요청이 실패한다. 가장 효과적인 해결책은?",
       "options": [
@@ -251,6 +261,7 @@
       "id": "saa-t3-1-q11",
       "examGuideTaskId": "saa-t3-1",
       "skill": "Block Public Access 우선순위",
+      "section": "s3-access-control",
       "difficulty": "applied",
       "stem": "S3 버킷 정책에 모든 사용자에게 s3:GetObject를 허용하는 설정이 있다. 그런데 버킷 수준의 Block Public Access가 활성화(ON) 상태다. 외부 사용자가 이 버킷의 객체에 접근하면 어떻게 되는가?",
       "options": [
@@ -275,6 +286,7 @@
       "id": "saa-t3-1-q12",
       "examGuideTaskId": "saa-t3-1",
       "skill": "정적 웹사이트 배포 설계(CloudFront + OAC)",
+      "section": "s3-access-control",
       "difficulty": "applied",
       "stem": "글로벌 사용자에게 정적 웹사이트를 빠르게 제공하되, S3 버킷은 외부에서 직접 접근할 수 없도록 비공개로 유지해야 한다. 가장 적합한 설계는?",
       "options": [
@@ -299,6 +311,7 @@
       "id": "saa-t3-1-q13",
       "examGuideTaskId": "saa-t3-1",
       "skill": "프리사인 URL 권한 범위",
+      "section": "s3-access-control",
       "difficulty": "foundational",
       "stem": "IAM 역할 A가 S3 버킷에 대한 s3:GetObject 권한만 가지고 있다. 이 역할로 서명한 프리사인 URL을 생성했다. 이 URL을 받은 사용자가 할 수 있는 것은?",
       "options": [
@@ -323,6 +336,7 @@
       "id": "saa-t3-1-q14",
       "examGuideTaskId": "saa-t3-1",
       "skill": "CRR 전제 조건(버전 관리)",
+      "section": "versioning-replication",
       "difficulty": "foundational",
       "stem": "한 팀이 S3 Cross-Region Replication(CRR)을 설정하려 한다. 설정 전에 반드시 충족해야 하는 전제 조건은?",
       "options": [
@@ -347,6 +361,7 @@
       "id": "saa-t3-1-q15",
       "examGuideTaskId": "saa-t3-1",
       "skill": "복제와 기존 객체 처리",
+      "section": "versioning-replication",
       "difficulty": "applied",
       "stem": "S3 버킷에 이미 10,000개의 객체가 있다. 오늘 새로 CRR을 설정했다. 기존 10,000개 객체와 향후 신규 업로드 객체의 복제 동작으로 옳은 것은?",
       "options": [

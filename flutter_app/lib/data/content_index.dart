@@ -567,7 +567,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t3-2.questions.json',
       questionCount: 15,
       audioApproved: true,
-      audioSha8: '82066b45',
+      audioSha8: 'd533226c',
     ),
     ContentEntry(
       certCode: 'SAA-C03',
@@ -655,7 +655,7 @@ const Map<String, List<ContentEntry>> kContentIndex = {
       questionsAsset: 'assets/content/saa/saa-t4-1.questions.json',
       questionCount: 15,
       audioApproved: true,
-      audioSha8: '3c55e2fd',
+      audioSha8: 'c8e695f0',
     ),
     ContentEntry(
       certCode: 'SAA-C03',

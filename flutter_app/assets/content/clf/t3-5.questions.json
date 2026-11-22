@@ -260,6 +260,7 @@
       "id": "clf-t3-5-q10",
       "examGuideTaskId": "clf-t3-5",
       "skill": "Elastic Load Balancing",
+      "section": "pitfalls",
       "difficulty": "foundational",
       "stem": "한 웹 애플리케이션의 들어오는 트래픽을 하나 이상의 가용 영역에 있는 여러 EC2 인스턴스에 자동으로 분산하고, 정상 상태인 대상에만 트래픽을 보내 가용성과 내결함성을 높이려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -315,6 +316,7 @@
       "id": "clf-t3-5-q12",
       "examGuideTaskId": "clf-t3-5",
       "skill": "VPC 연결 (VPC 피어링)",
+      "section": "vpc-peering",
       "difficulty": "foundational",
       "stem": "서로 다른 두 VPC의 리소스가 공용 인터넷을 거치지 않고 사설 IP로 직접 통신하게 연결하려 한다. 가장 적합한 것은?",
       "options": [

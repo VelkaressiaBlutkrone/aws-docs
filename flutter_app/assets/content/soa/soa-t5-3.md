@@ -20,7 +20,15 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
   - title: S3 정적 웹사이트 호스팅 (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
-lastVerified: 2026-11-17
+  - title: AWS Global Accelerator란 무엇인가 (공식)
+    url: https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
+  - title: AWS Global Accelerator 구성 요소 (공식)
+    url: https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-components.html
+  - title: AWS Global Accelerator FAQ — CloudFront와의 차이 (공식)
+    url: https://aws.amazon.com/global-accelerator/faqs/
+  - title: CloudFront Anycast 고정 IP 요청 (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html
+lastVerified: 2026-11-22
 ---
 
 # Route 53 DNS·CloudFront 콘텐츠 전송
@@ -69,9 +77,9 @@ lastVerified: 2026-11-17
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) Route 53 — 관리형 DNS와 호스팅 영역
+### 1) Route 53 — 관리형 DNS와 호스팅 영역 {#route53-hosted-zones}
 
 > 공식 정의: **"고가용성·확장성 DNS 웹 서비스."** 도메인 등록·DNS 라우팅·상태 확인을 제공합니다. Route 53은 **글로벌 서비스**(리전 없음)입니다.
 
@@ -87,7 +95,7 @@ lastVerified: 2026-11-17
 > VPC 외부에서는 프라이빗 영역의 네임서버가 보이지 않으므로, 동일한 도메인 이름을 인터넷용(퍼블릭)과 내부용(프라이빗)으로 분리해 VPC 안팎에서 다른 IP를 반환하는 스플릿-호라이즌 DNS 구성이 가능합니다.
 > enableDnsSupport 설정은 VPC가 해당 DNS 리졸버를 사용하도록 활성화하는 조건이며, 이것이 꺼져 있으면 프라이빗 영역 응답 자체가 전달되지 않습니다.
 
-### 2) 레코드 타입 — A / AAAA / CNAME / Alias
+### 2) 레코드 타입 — A / AAAA / CNAME / Alias {#record-types}
 
 | 타입 | 의미 |
 |---|---|
@@ -101,7 +109,7 @@ lastVerified: 2026-11-17
 > 타입을 분리함으로써 같은 도메인에 IPv4 주소와 IPv6 주소를 독립적으로 등록하고 각각 다른 대상(예: IPv6 전용 ALB)으로 보낼 수 있습니다.
 > 운영 측면에서 하나의 IP 버전 주소만 바꿔야 할 때 다른 버전 레코드에 영향을 주지 않아 배포·롤백 단위가 명확해집니다.
 
-### 3) Alias vs CNAME (★ 단골 출제)
+### 3) Alias vs CNAME (★ 단골 출제) {#alias-vs-cname}
 
 | 항목 | **Alias 레코드** | **CNAME 레코드** |
 |---|---|---|
@@ -117,7 +125,7 @@ lastVerified: 2026-11-17
 > Alias 레코드는 Route 53이 내부적으로 대상 AWS 리소스의 현재 IP를 조회해 A(또는 AAAA) 응답으로 반환하므로, 리다이렉션 없이 NS·SOA와 공존합니다. 운영자는 "루트 도메인 → ALB/CloudFront"가 필요할 때 Alias를 선택하고, ALB IP 변경에 따른 레코드 수동 갱신도 없앨 수 있습니다.
 > 반면 서브도메인(www.example.com)에서는 CNAME도 표준 위반이 아니지만, AWS 리소스 대상이라면 Alias가 IP 자동 추적과 무료 쿼리 혜택을 제공하므로 운영상 Alias가 권장됩니다.
 
-### 4) 라우팅 정책 (★ 핵심 비교)
+### 4) 라우팅 정책 (★ 핵심 비교) {#routing-policies}
 
 | 정책 | 동작 원리 | 대표 용도 |
 |---|---|---|
@@ -138,7 +146,7 @@ lastVerified: 2026-11-17
 > Geolocation 정책을 Latency처럼 오해하면 "국가 코드로 가장 빠른 리전에 보낸다"고 착각하지만, Geolocation은 네트워크 지연을 전혀 측정하지 않으므로 물리적으로 멀어도 국가 규칙에 따라 라우팅됩니다. 성능 최적화가 목적인데 Geolocation을 선택하면 일부 사용자 응답이 불필요하게 느려집니다.
 > 설계 단계에서 "이 요구사항이 성능인가, 아니면 데이터 주권·콘텐츠 현지화인가"를 먼저 결정해야 정책 혼용 오류를 예방할 수 있습니다.
 
-### 5) 상태 확인(Health Check) + Failover
+### 5) 상태 확인(Health Check) + Failover {#health-check-failover}
 
 - **엔드포인트 상태 확인:** HTTP/HTTPS/TCP로 엔드포인트를 주기적으로 점검.
 - **계산형 상태 확인:** 여러 하위 체크를 AND/OR 조합.
@@ -151,7 +159,7 @@ lastVerified: 2026-11-17
 > 계산형 체크는 하위 체크들을 AND/OR 논리로 묶어 "핵심 DB가 실패하면 전체 실패로 처리하되, 읽기 복제본 중 하나만 실패하면 정상 유지"처럼 세분화된 장애 조건을 정의할 수 있습니다.
 > 이 계층 구조 덕분에 페일오버 임계값을 서비스 실제 가용성 정의와 맞출 수 있어, 불필요한 트래픽 전환을 줄이면서 실질적 장애만 감지하게 됩니다.
 
-### 6) CloudFront — 글로벌 CDN
+### 6) CloudFront — 글로벌 CDN {#cloudfront}
 
 > 공식 정의: **"정적·동적 콘텐츠를 전 세계 사용자에게 빠르게 배포하는 웹 서비스."** 엣지 로케이션에 콘텐츠를 캐싱해 지연과 오리진 부하를 줄입니다.
 
@@ -196,7 +204,14 @@ aws cloudfront create-invalidation \
 > 무효화는 엣지에 "해당 경로 캐시를 지워라"라고 직접 지시하는 방법이고, 버전 파일명은 URL 자체를 바꿔 엣지가 완전히 새로운 객체로 인식하게 하는 방법입니다.
 > 공식 문서는 파일을 자주 갱신한다면 **버전 파일명을 주로 쓰라**고 권장합니다 — 무효화는 엣지 캐시만 지워 브라우저·프록시의 옛 버전이 남을 수 있고, 버전 파일명은 롤백이 쉬우며 무효화 요금이 들지 않기 때문입니다.
 
-### 7) S3 정적 웹사이트 호스팅
+**비-HTTP TCP/UDP 워크로드의 전역 진입점 — AWS Global Accelerator:**
+
+- **고정 IP:** 기본으로 고정 IPv4 주소 **2개**(듀얼 스택은 IPv4 2개 + IPv6 2개)를 제공하고, 이 주소는 AWS 엣지 네트워크에서 **애니캐스트**됩니다. 가속기를 비활성화해도 유지되고 **삭제하면 잃습니다**.
+- **프로토콜:** 리스너는 **TCP, UDP 또는 둘 다**를 처리합니다.
+- **엔드포인트(표준 가속기):** **Network Load Balancer · Application Load Balancer · EC2 인스턴스 · Elastic IP**이며 한 리전 또는 여러 리전에 둘 수 있습니다.
+- **CloudFront와의 갈림길:** CloudFront는 캐시 가능한 콘텐츠와 동적 콘텐츠(API 가속·동적 사이트)의 전송을 개선합니다. Global Accelerator는 패킷을 엣지에서 프록시해 AWS 글로벌 네트워크로 전달하므로 **게임(UDP)·IoT(MQTT)·VoIP 같은 비-HTTP** 워크로드와, 고정 IP나 빠른 리전 장애 조치가 필요한 HTTP 워크로드에 맞습니다. CloudFront도 배포에 쓸 **Anycast 고정 IP 목록**을 요청할 수 있으므로, 「고정 IP」만으로 둘을 가르지 말고 **프로토콜과 워크로드**를 먼저 봅니다.
+
+### 7) S3 정적 웹사이트 호스팅 {#s3-static-website}
 
 - S3 버킷의 **정적 웹사이트 호스팅**을 켜면 인덱스/오류 문서를 지정하고 **웹사이트 엔드포인트**를 얻습니다.
 - 웹사이트 엔드포인트는 **HTTP만** 지원합니다. **HTTPS와 사용자 도메인·캐싱**이 필요하면 앞에 **CloudFront**를 둡니다.
@@ -220,10 +235,11 @@ aws cloudfront create-invalidation \
 - **CloudFront용 ACM 인증서 = 반드시 us-east-1.**
 - **캐시 갱신**: 무효화(즉시 · 월 1,000경로 초과분 과금 · `/*`는 1경로) vs **버전 파일명**(공식 권장).
 - **S3 정적 웹사이트 엔드포인트 = HTTP만.** HTTPS는 앞에 CloudFront.
+- **비-HTTP TCP/UDP + 고정 IP = Global Accelerator**(애니캐스트 고정 IP · 엔드포인트 NLB·ALB·EC2·Elastic IP). CloudFront는 캐시·동적 콘텐츠 전송.
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"루트 도메인(example.com)을 CNAME으로 ALB에 연결한다."** → CNAME은 **Zone Apex에 사용할 수 없습니다**. 루트 도메인은 **Alias** 레코드를 써야 합니다.
    (원리: §3 — CNAME은 SOA·NS와 공존 불가여서 루트 도메인에 사용할 수 없다.)
@@ -302,5 +318,11 @@ enableDnsSupport를 끄면 VPC 내 인스턴스는 VPC가 제공하는 DNS 리�
 4. Amazon CloudFront 개발자 가이드 — 소개 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
 5. CloudFront 캐시 무효화 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
 6. S3 정적 웹사이트 호스팅 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
+7. AWS Global Accelerator란 무엇인가 — https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
+8. AWS Global Accelerator 구성 요소 — https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-components.html
+9. AWS Global Accelerator FAQ(CloudFront와의 차이) — https://aws.amazon.com/global-accelerator/faqs/
+10. CloudFront Anycast 고정 IP 요청 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html
 
 > 📝 **2026-11-17 정정**: 라우팅 정책 표에 **IP 기반 라우팅**을 더하고 정책 개수 단정을 걷었으며, Geoproximity가 레코드 생성 시 고르는 정책이라는 점을 반영했습니다(https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html · https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geoproximity.html). CloudFront 무효화의 과금 방식과 버전 파일명 권장 이유도 공식 서술에 맞췄습니다(https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PayingForInvalidation.html · https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html).
+
+> 📝 **2026-11-22 보강**: 공개 문항이 묻는 **AWS Global Accelerator**(고정 애니캐스트 IP · TCP/UDP · 표준 가속기 엔드포인트)와 CloudFront와의 갈림길을 §6에 더했습니다(근거 7~10번).

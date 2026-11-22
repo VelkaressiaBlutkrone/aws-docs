@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Text;
 
+import '../data/domain_score.dart';
 import '../models/question.dart';
 import '../theme/app_theme.dart';
 import '../widgets/focus_ring.dart';
@@ -204,6 +205,7 @@ class ResultsView extends StatefulWidget {
     this.subtitle,
     this.onOpenStudy,
     this.onReport,
+    this.domainScores = const [],
   });
   final QuestionBank bank;
   final Map<int, int> picked;
@@ -215,6 +217,9 @@ class ResultsView extends StatefulWidget {
 
   /// 문항 오류 신고(D2) — 카드마다 전달한다. null이면 버튼 숨김.
   final void Function(Question q, int? pickedIndex)? onReport;
+
+  /// 도메인별 정답 현황. 비어 있으면 절을 그리지 않는다(Task 단위 시험·퀴즈).
+  final List<DomainScore> domainScores;
 
   @override
   State<ResultsView> createState() => _ResultsViewState();
@@ -257,6 +262,10 @@ class _ResultsViewState extends State<ResultsView> {
           const SizedBox(height: Gap.xs),
           Text(widget.subtitle!, style: t.bodyMedium),
         ],
+        if (widget.domainScores.isNotEmpty) ...[
+          const SizedBox(height: Gap.lg),
+          _DomainScoreSection(scores: widget.domainScores),
+        ],
         if (showChips) ...[
           const SizedBox(height: Gap.lg),
           Wrap(
@@ -298,6 +307,58 @@ class _ResultsViewState extends State<ResultsView> {
                 onOpenStudy: widget.onOpenStudy,
                 onReport: widget.onReport),
       ],
+    );
+  }
+}
+
+/// 결과 화면의 도메인별 정답률. 합격 여부를 뜻하는 색을 쓰지 않는다 — AWS 실제
+/// 점수는 환산 점수라 정답률로 합불을 판정할 수 없다.
+class _DomainScoreSection extends StatelessWidget {
+  const _DomainScoreSection({required this.scores});
+  final List<DomainScore> scores;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.c;
+    final t = Theme.of(context).textTheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(Gap.lg),
+      decoration: BoxDecoration(
+        color: c.surface,
+        borderRadius: BorderRadius.circular(Radii.md),
+        border: Border.all(color: c.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('도메인별 정답률',
+              style: t.labelLarge?.copyWith(color: c.textMuted)),
+          for (final s in scores)
+            Padding(
+              padding: const EdgeInsets.only(top: Gap.sm),
+              child: MergeSemantics(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(s.label,
+                          style: t.bodyMedium?.copyWith(color: c.text)),
+                    ),
+                    const SizedBox(width: Gap.md),
+                    Text(
+                      '${s.correct}/${s.total} · ${s.percent}%',
+                      style: t.labelLarge?.copyWith(
+                        color: c.text,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

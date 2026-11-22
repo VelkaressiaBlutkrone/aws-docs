@@ -4,6 +4,9 @@ import 'attempt_presented.dart';
 /// 약점 임계값 — 정답률 70% 미만이면 weak(처방 대상).
 const double kWeakThreshold = 0.7;
 
+/// 이 수보다 적게 응시한 Task의 정답률은 잠정이다 — 한두 문항으로 약점을 단정하지 않는다.
+const int kProvisionalMinAttempts = 5;
+
 enum TaskStatus { unattempted, weak, ok }
 
 /// 한 Task의 정답률 요약(문항별 최신 결과 기준).
@@ -22,6 +25,10 @@ class TaskScore {
   final int correct; // 최신 결과가 정답인 문항 수
   final double? rate; // null = 미응시
   final TaskStatus status;
+
+  /// 표시 전용이다. [status]는 그대로라 처방과 약점 모의고사 가중이 변하지 않는다.
+  bool get isProvisional =>
+      attempted > 0 && attempted < kProvisionalMinAttempts;
 }
 
 /// 응시 이력에서 Task별 정답률을 파생하는 순수 리포트. review 모드 제외.

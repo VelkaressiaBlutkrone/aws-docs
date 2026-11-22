@@ -8,6 +8,7 @@
       "id": "saa-t4-5-q1",
       "examGuideTaskId": "saa-t4-5",
       "skill": "비용 관리 도구 선택(분석·예측)",
+      "section": "cost-explorer",
       "difficulty": "foundational",
       "stem": "팀장이 \"지난 6개월간 계정의 서비스별 비용 추세를 시각화하고, 향후 3개월 예측도 확인하고 싶다\"고 요청했다. 가장 적합한 AWS 도구는?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t4-5-q2",
       "examGuideTaskId": "saa-t4-5",
       "skill": "AWS Budgets Budget Actions",
+      "section": "budgets",
       "difficulty": "applied",
       "stem": "개발 팀의 월 AWS 지출이 $5,000을 초과하면 재무팀에 이메일로 알리고, $7,000을 초과하면 추가 EC2 인스턴스 시작을 자동으로 차단해야 한다. 이 요구사항을 충족하는 구성으로 옳은 것은?",
       "options": [
@@ -57,6 +59,7 @@
       "id": "saa-t4-5-q3",
       "examGuideTaskId": "saa-t4-5",
       "skill": "CUR 분석 파이프라인",
+      "section": "cur",
       "difficulty": "applied",
       "stem": "데이터 엔지니어링 팀이 AWS 비용 데이터를 리소스·태그·시간 단위로 세분화해 SQL로 직접 쿼리하고, 결과를 비즈니스 인텔리전스 대시보드로 시각화하려 한다. 이 파이프라인을 구성하는 올바른 순서는?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t4-5-q4",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Cost Anomaly Detection 구조",
+      "section": "cost-anomaly-detection",
       "difficulty": "foundational",
       "stem": "지난주 특정 계정에서 EC2 비용이 평소의 4배로 급등했으나 아무도 눈치채지 못했다. 앞으로 이런 예상치 못한 비용 급등을 자동으로 감지하고 알림을 받으려면 어떤 서비스를 사용해야 하는가?",
       "options": [
@@ -106,6 +110,7 @@
       "id": "saa-t4-5-q5",
       "examGuideTaskId": "saa-t4-5",
       "skill": "비용 할당 태그 활성화",
+      "section": "cost-allocation-tags",
       "difficulty": "applied",
       "stem": "운영팀이 모든 EC2 인스턴스에 `team:finance` 태그를 3개월 전부터 붙여뒀지만, AWS Cost Explorer에서 해당 태그로 필터링해도 비용이 표시되지 않는다. 원인으로 가장 가능성이 높은 것은?",
       "options": [
@@ -131,6 +136,7 @@
       "id": "saa-t4-5-q6",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Organizations 통합 결제 볼륨 할인",
+      "section": "consolidated-billing",
       "difficulty": "foundational",
       "stem": "한 기업이 AWS Organizations에서 5개의 멤버 계정을 운영하고 있다. 각 계정은 S3 사용량이 낮아 개별적으로 볼륨 할인 티어에 도달하지 못한다. 통합 결제(Consolidated Billing)를 활성화하면 어떤 효과가 발생하는가?",
       "options": [
@@ -155,6 +161,7 @@
       "id": "saa-t4-5-q7",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Compute Optimizer vs Trusted Advisor 역할 구분",
+      "section": "compute-optimizer-trusted-advisor",
       "difficulty": "foundational",
       "stem": "솔루션스 아키텍트가 두 가지 비용 최적화 작업을 수행해야 한다. (1) CPU 사용률이 10% 미만인 EC2 인스턴스를 더 작은 타입으로 변경할 추천이 필요하다. (2) 6개월째 사용하지 않는 EBS 볼륨과 유휴 로드밸런서를 찾아야 한다. 각 작업에 맞는 도구는?",
       "options": [
@@ -181,6 +188,7 @@
       "id": "saa-t4-5-q8",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Well-Architected 소비 모델 채택",
+      "section": "well-architected-cost",
       "difficulty": "foundational",
       "stem": "Well-Architected 비용 최적화 기둥의 설계 원칙 중 하나는 '소비 모델 채택(Adopt a consumption model)'이다. 이 원칙을 가장 잘 설명하는 것은?",
       "options": [
@@ -205,6 +213,7 @@
       "id": "saa-t4-5-q9",
       "examGuideTaskId": "saa-t4-5",
       "skill": "CUR과 Cost Explorer 차이",
+      "section": "cost-tools-comparison",
       "difficulty": "foundational",
       "stem": "한 회계팀이 AWS 비용 데이터에 대해 두 가지 서로 다른 요구사항을 제시했다. (A) 특정 EC2 인스턴스의 시간 단위 비용을 Athena SQL로 쿼리하는 감사 보고서가 필요하다. (B) 이번 달 전체 계정의 서비스별 비용 분포를 즉시 시각화해서 보고 싶다. 각 요구사항에 맞는 도구는?",
       "options": [
@@ -231,6 +240,7 @@
       "id": "saa-t4-5-q10",
       "examGuideTaskId": "saa-t4-5",
       "skill": "AWS Budgets 예산 유형",
+      "section": "budgets",
       "difficulty": "foundational",
       "stem": "FinOps 팀이 회사에서 구매한 EC2 예약 인스턴스(RI)가 충분히 활용되고 있는지 모니터링하려 한다. RI 사용률이 70% 미만으로 떨어지면 알림을 받고 싶다. 어떤 AWS Budgets 예산 유형을 사용해야 하는가?",
       "options": [
@@ -255,6 +265,7 @@
       "id": "saa-t4-5-q11",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Cost Anomaly Detection 모니터 유형",
+      "section": "cost-anomaly-detection",
       "difficulty": "applied",
       "stem": "대기업이 100개 이상의 AWS 계정을 운영하며 새 계정·태그·서비스가 자주 추가된다. Cost Anomaly Detection으로 전체 조직의 이상 비용을 감시하되, 유지 관리 부담을 최소화하려 한다. 어떤 모니터 유형이 적합한가?",
       "options": [
@@ -279,6 +290,7 @@
       "id": "saa-t4-5-q12",
       "examGuideTaskId": "saa-t4-5",
       "skill": "태그 정책(Tag Policy)",
+      "section": "cost-allocation-tags",
       "difficulty": "applied",
       "stem": "여러 팀이 EC2 인스턴스에 환경 태그를 붙이는데, `Env`, `env`, `ENV`, `environment` 등 일관성 없이 혼용하고 있다. Cost Explorer에서 태그 기반 필터링이 제대로 동작하지 않는다. 태그 키 명칭을 조직 전체에 걸쳐 강제 표준화하는 방법은?",
       "options": [
@@ -303,6 +315,7 @@
       "id": "saa-t4-5-q13",
       "examGuideTaskId": "saa-t4-5",
       "skill": "RI·Savings Plans 할인 공유 범위",
+      "section": "consolidated-billing",
       "difficulty": "applied",
       "stem": "AWS Organizations를 쓰는 회사가 한 멤버 계정에서 Compute Savings Plans를 구매했다. 그 계정의 사용량만으로는 시간당 커밋먼트를 다 쓰지 못한다. 조직의 다른 계정들이 남은 커밋먼트의 혜택을 받을 수 있는가?",
       "options": [
@@ -327,6 +340,7 @@
       "id": "saa-t4-5-q14",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Well-Architected 비용 최적화 기둥 정의",
+      "section": "well-architected-cost",
       "difficulty": "foundational",
       "stem": "시험 문제에서 '가장 비용 효율적인(most cost-effective)' 솔루션을 고를 때 Well-Architected 비용 최적화 기둥의 정의가 판단 기준이 된다. 비용 최적화 기둥의 공식 정의에 가장 부합하는 설명은?",
       "options": [
@@ -352,6 +366,7 @@
       "id": "saa-t4-5-q15",
       "examGuideTaskId": "saa-t4-5",
       "skill": "Cost Explorer API 요금",
+      "section": "cost-explorer",
       "difficulty": "foundational",
       "stem": "개발팀이 AWS Cost Explorer를 콘솔 UI가 아닌 프로그래밍 방식(API)으로 호출해 비용 데이터를 자동으로 수집하는 파이프라인을 구축하려 한다. Cost Explorer API 호출에 대한 요금 정책으로 옳은 것은?",
       "options": [

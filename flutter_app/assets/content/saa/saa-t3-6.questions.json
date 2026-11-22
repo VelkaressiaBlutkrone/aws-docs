@@ -8,6 +8,7 @@
       "id": "saa-t3-6-q1",
       "examGuideTaskId": "saa-t3-6",
       "skill": "DynamoDB 기본 성격(서버리스·밀리초 지연)",
+      "section": "dynamodb-basics",
       "difficulty": "foundational",
       "stem": "글로벌 모바일 게임 회사가 플레이어 프로필 데이터를 저장할 데이터베이스를 선택하고 있다. 요구 사항은 서버리스 운영, 추가 인프라 관리 불필요, 모든 규모에서 한 자릿수 밀리초 성능이다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -32,6 +33,7 @@
       "id": "saa-t3-6-q2",
       "examGuideTaskId": "saa-t3-6",
       "skill": "파티션 키 설계 — 핫 파티션 원인",
+      "section": "primary-key-design",
       "difficulty": "foundational",
       "stem": "한 팀이 DynamoDB 테이블의 파티션 키로 `orderStatus` 필드를 선택했다. 이 필드는 `pending`, `completed`, `cancelled` 세 가지 값만 가진다. 서비스 운영 후 특정 파티션에서만 스로틀이 반복해서 발생하고 있다. 근본 원인은 무엇인가?",
       "options": [
@@ -56,6 +58,7 @@
       "id": "saa-t3-6-q3",
       "examGuideTaskId": "saa-t3-6",
       "skill": "GSI vs LSI — 생성 시점 제약",
+      "section": "gsi-vs-lsi",
       "difficulty": "applied",
       "stem": "전자상거래 서비스가 이미 운영 중인 DynamoDB 상품 테이블(`productId`가 파티션 키)에 `category`별로 상품을 조회하는 새로운 접근 패턴을 추가해야 한다. 가장 적절한 해결책은?",
       "options": [
@@ -80,6 +83,7 @@
       "id": "saa-t3-6-q4",
       "examGuideTaskId": "saa-t3-6",
       "skill": "GSI vs LSI — 읽기 일관성·처리량 차이",
+      "section": "gsi-vs-lsi",
       "difficulty": "foundational",
       "stem": "DynamoDB 보조 인덱스를 설계할 때 GSI(Global Secondary Index)와 LSI(Local Secondary Index)의 차이로 옳은 것은?",
       "options": [
@@ -104,6 +108,7 @@
       "id": "saa-t3-6-q5",
       "examGuideTaskId": "saa-t3-6",
       "skill": "읽기 일관성 — 강력 일관성 RCU 비용",
+      "section": "read-consistency",
       "difficulty": "foundational",
       "stem": "DynamoDB 프로비저닝 모드 테이블에서 최종 일관성 읽기와 강력한 일관성 읽기의 RCU(Read Capacity Unit) 소비 차이에 대한 설명으로 옳은 것은?",
       "options": [
@@ -129,6 +134,7 @@
       "id": "saa-t3-6-q6",
       "examGuideTaskId": "saa-t3-6",
       "skill": "용량 모드 선택 — 온디맨드 vs 프로비저닝",
+      "section": "capacity-modes",
       "difficulty": "applied",
       "stem": "신규 스타트업이 이제 막 론칭한 모바일 앱의 DynamoDB 테이블을 설정하려 한다. 초기에는 트래픽 패턴을 전혀 예측할 수 없고, 예상치 못한 스파이크가 발생해도 스로틀 없이 처리해야 한다. 비용 효율적인 용량 모드 선택은?",
       "options": [
@@ -153,6 +159,7 @@
       "id": "saa-t3-6-q7",
       "examGuideTaskId": "saa-t3-6",
       "skill": "DAX — 용도와 제약",
+      "section": "dax",
       "difficulty": "applied",
       "stem": "소셜 미디어 플랫폼이 DynamoDB 테이블에서 인기 게시물 데이터를 반복해서 읽어 지연이 문제가 되고 있다. 현재 밀리초 단위 지연을 마이크로초 단위로 단축하고, 애플리케이션 코드 변경을 최소화해야 한다. 어떤 솔루션을 사용해야 하는가?",
       "options": [
@@ -177,6 +184,7 @@
       "id": "saa-t3-6-q8",
       "examGuideTaskId": "saa-t3-6",
       "skill": "DAX — 강력 일관성 읽기 우회",
+      "section": "dax",
       "difficulty": "foundational",
       "stem": "DAX(DynamoDB Accelerator)를 사용하는 애플리케이션에서 특정 쿼리에 강력한 일관성(Strongly Consistent) 읽기가 필요하다. DAX의 동작으로 옳은 것은?",
       "options": [
@@ -202,6 +210,7 @@
       "id": "saa-t3-6-q9",
       "examGuideTaskId": "saa-t3-6",
       "skill": "Global Tables — Active-Active 다중 리전",
+      "section": "global-tables",
       "difficulty": "applied",
       "stem": "글로벌 게임 서비스가 미국, 유럽, 아시아 세 리전 사용자 모두에게 낮은 지연으로 읽기와 쓰기를 동시에 제공해야 한다. 재해 복구도 함께 요구된다. 가장 적합한 솔루션은?",
       "options": [
@@ -228,6 +237,7 @@
       "id": "saa-t3-6-q10",
       "examGuideTaskId": "saa-t3-6",
       "skill": "DynamoDB Streams와 TTL",
+      "section": "dynamodb-streams",
       "difficulty": "applied",
       "stem": "전자상거래 플랫폼이 DynamoDB 주문 테이블에 새 주문이 추가될 때마다 자동으로 재고 서비스를 업데이트하려 한다. 또한 완료된 주문 데이터는 90일 후 자동으로 삭제되어야 한다. 이 두 요구사항을 충족하는 DynamoDB 기능 조합은?",
       "options": [
@@ -253,6 +263,7 @@
       "id": "saa-t3-6-q11",
       "examGuideTaskId": "saa-t3-6",
       "skill": "DynamoDB vs RDS 선택 기준",
+      "section": "dynamodb-vs-rds",
       "difficulty": "applied",
       "stem": "한 아키텍트가 신규 애플리케이션의 데이터베이스를 선택하고 있다. 데이터가 복잡한 조인과 집계 쿼리를 자주 사용하고, 고정된 스키마 구조를 유지하며, 금융 거래 데이터를 다룬다. 가장 적합한 서비스는?",
       "options": [
@@ -278,6 +289,7 @@
       "id": "saa-t3-6-q12",
       "examGuideTaskId": "saa-t3-6",
       "skill": "ElastiCache Redis vs Memcached — 선택 기준",
+      "section": "redis-vs-memcached",
       "difficulty": "applied",
       "stem": "Auto Scaling 그룹 뒤에 있는 수십 대의 웹 서버가 사용자 로그인 세션을 공유 저장소에 보관해야 한다. 특정 노드에 장애가 발생해도 세션이 유지되어야 하며(HA), 복잡한 자료구조는 필요 없지만 마이크로초 수준의 인메모리 응답이 필요하다. 가장 적합한 서비스는?",
       "options": [
@@ -303,6 +315,7 @@
       "id": "saa-t3-6-q13",
       "examGuideTaskId": "saa-t3-6",
       "skill": "ElastiCache Redis vs Memcached — 자료구조·영속성",
+      "section": "redis-vs-memcached",
       "difficulty": "foundational",
       "stem": "실시간 리더보드 기능을 구현하려 한다. 플레이어 점수를 저장하고 상위 100명의 순위를 빠르게 조회해야 하며, 서버 재시작 후에도 데이터가 유지되어야 한다. 가장 적합한 서비스는?",
       "options": [
@@ -329,6 +342,7 @@
       "id": "saa-t3-6-q14",
       "examGuideTaskId": "saa-t3-6",
       "skill": "캐싱 전략 — Lazy Loading vs Write-Through",
+      "section": "caching-strategies",
       "difficulty": "applied",
       "stem": "웹 애플리케이션이 ElastiCache를 사용해 RDS 데이터를 캐싱하고 있다. 데이터가 자주 쓰이지 않아도 DB에 쓰기가 발생할 때마다 캐시가 항상 최신 값을 유지해야 하며 stale 데이터가 없어야 한다. 어떤 캐싱 전략이 가장 적합한가?",
       "options": [
@@ -353,6 +367,7 @@
       "id": "saa-t3-6-q15",
       "examGuideTaskId": "saa-t3-6",
       "skill": "ElastiCache 배포 형태 선택 — 서버리스 vs 노드 기반",
+      "section": "elasticache",
       "difficulty": "applied",
       "stem": "새로 출시하는 서비스에 ElastiCache 캐시를 도입한다. 트래픽 패턴을 아직 예측할 수 없어 노드 수와 샤드 수를 정하기 어렵고, 가능한 한 빨리 캐시를 띄우고 싶다. 어떤 배포 형태가 가장 적합한가?",
       "options": [

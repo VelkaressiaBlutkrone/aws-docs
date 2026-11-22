@@ -8,6 +8,7 @@
       "id": "soa-t3-3-q1",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "managed-instances",
       "difficulty": "applied",
       "stem": "EC2 인스턴스가 Systems Manager 관리형 노드 목록에 나타나지 않는다. 확인해야 할 세 가지 전제 조건은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t3-3-q2",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "managed-instances",
       "difficulty": "applied",
       "stem": "인터넷 게이트웨이도 NAT도 없는 프라이빗 서브넷 인스턴스를 SSM으로 관리하려면?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t3-3-q3",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "run-command",
       "difficulty": "applied",
       "stem": "태그가 `Role=web`인 인스턴스 300대에 패키지 업데이트 명령을 SSH 없이 한 번에 실행하려 한다. 어떤 기능을 쓰는가?",
       "options": [
@@ -93,6 +96,7 @@
       "id": "soa-t3-3-q4",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "run-command",
       "difficulty": "applied",
       "stem": "Run Command에서 `--max-concurrency`와 `--max-errors`를 따로 지정하는 이유는?",
       "options": [
@@ -120,6 +124,7 @@
       "id": "soa-t3-3-q5",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "session-manager",
       "difficulty": "applied",
       "stem": "보안팀이 '베이스천 호스트를 없애고 22번 포트를 모두 닫되, 접속 활동은 감사 로그로 남겨라'고 요구한다. 적절한 수단은?",
       "options": [
@@ -147,6 +152,7 @@
       "id": "soa-t3-3-q6",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "session-manager",
       "difficulty": "foundational",
       "stem": "Session Manager가 인바운드 포트 없이 셸 채널을 열 수 있는 이유는?",
       "options": [
@@ -174,6 +180,7 @@
       "id": "soa-t3-3-q7",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "patch-manager",
       "difficulty": "foundational",
       "stem": "Patch Manager에서 패치를 '설치하지 않고 준수 상태만 확인'하려면 어떤 작업을 실행하는가?",
       "options": [
@@ -201,6 +208,7 @@
       "id": "soa-t3-3-q8",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "patch-manager",
       "difficulty": "applied",
       "stem": "인스턴스에 `patch group = prod-web` 태그를 붙였는데 패치 그룹으로 인식되지 않는다. 가장 가능성 높은 원인은?",
       "options": [
@@ -232,6 +240,7 @@
       "id": "soa-t3-3-q9",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "state-manager",
       "difficulty": "applied",
       "stem": "'모든 인스턴스에서 특정 에이전트가 항상 실행 중이어야 한다'를 보장하려 한다. 가장 적절한 SSM 기능은?",
       "options": [
@@ -259,6 +268,7 @@
       "id": "soa-t3-3-q10",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "state-manager",
       "difficulty": "foundational",
       "stem": "Run Command와 State Manager의 차이를 가장 정확히 설명한 것은?",
       "options": [
@@ -286,6 +296,7 @@
       "id": "soa-t3-3-q11",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "automation-runbooks",
       "difficulty": "applied",
       "stem": "'인스턴스 중지 → 패치 → AMI 생성 → 재시작'처럼 여러 단계로 이뤄진 유지 관리 작업을 한 번에 실행하려 한다. 적절한 기능은?",
       "options": [
@@ -313,6 +324,7 @@
       "id": "soa-t3-3-q12",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "automation-runbooks",
       "difficulty": "foundational",
       "stem": "`AWS-RestartEC2Instance`처럼 `AWS-`로 시작하는 Automation 런북의 특징은?",
       "options": [
@@ -340,6 +352,7 @@
       "id": "soa-t3-3-q13",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "parameter-store-vs-secrets-manager",
       "difficulty": "applied",
       "stem": "RDS 자격 증명을 주기적으로 자동 교체(rotation)해야 한다. 기본 제공 기능으로 이를 지원하는 서비스는?",
       "options": [
@@ -367,6 +380,7 @@
       "id": "soa-t3-3-q14",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "parameter-store-vs-secrets-manager",
       "difficulty": "applied",
       "stem": "환경별 애플리케이션 구성값을 `/app/prod/db/host` 같은 경로 구조로 저장하고 KMS로 암호화할 수 있는 서비스는?",
       "options": [
@@ -394,6 +408,7 @@
       "id": "soa-t3-3-q15",
       "examGuideTaskId": "soa-t3-3",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "session-manager",
       "difficulty": "applied",
       "stem": "Session Manager 세션에서 실행된 명령 기록을 규정 준수 목적으로 보관하려 한다. 어떻게 구성하는가?",
       "options": [

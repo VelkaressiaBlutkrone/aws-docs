@@ -8,6 +8,7 @@
       "id": "saa-t3-2-q1",
       "examGuideTaskId": "saa-t3-2",
       "skill": "스토리지 3대 유형 구분",
+      "section": "storage-types",
       "difficulty": "foundational",
       "stem": "솔루션스 아키텍트가 워크로드 요구사항에 맞는 스토리지 유형을 선택하려 한다. 여러 EC2 인스턴스가 동시에 공유 디렉터리를 네트워크 드라이브처럼 마운트해야 하는 경우, 적합한 스토리지 유형은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t3-2-q2",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EBS 볼륨 타입 선택 — gp3 vs gp2",
+      "section": "ebs-volume-types",
       "difficulty": "foundational",
       "stem": "팀이 기존에 gp2 볼륨을 사용 중인데, 용량을 늘리지 않고 IOPS만 빠르게 늘려야 한다. 올바른 접근법은?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t3-2-q3",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EBS 볼륨 타입 선택 — 고IOPS DB",
+      "section": "ebs-volume-types",
       "difficulty": "applied",
       "stem": "미션 크리티컬 OLTP 데이터베이스가 초당 200,000 IOPS를 요구하며 99.999% 내구성이 필요하다. 가장 적합한 EBS 볼륨 타입은?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t3-2-q4",
       "examGuideTaskId": "saa-t3-2",
       "skill": "HDD 볼륨 부팅 불가 제약",
+      "section": "ebs-volume-types",
       "difficulty": "foundational",
       "stem": "아키텍트가 비용 절감을 위해 EC2 인스턴스의 루트(부팅) 볼륨을 st1 HDD로 교체하려 한다. 이 계획에 대한 설명으로 옳은 것은?",
       "options": [
@@ -106,6 +110,7 @@
       "id": "saa-t3-2-q5",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EBS Multi-Attach 조건과 제약",
+      "section": "ebs-features",
       "difficulty": "applied",
       "stem": "고가용성 클러스터 데이터베이스를 구성하려는 팀이 동일 AZ 내 여러 EC2 Nitro 인스턴스에서 하나의 EBS 볼륨을 동시에 마운트해야 한다. 이 요건을 충족하는 EBS 볼륨 타입과 주의사항으로 옳은 것은?",
       "options": [
@@ -130,6 +135,7 @@
       "id": "saa-t3-2-q6",
       "examGuideTaskId": "saa-t3-2",
       "skill": "인스턴스 스토어 휘발성 특성",
+      "section": "instance-store",
       "difficulty": "foundational",
       "stem": "EC2 인스턴스 스토어에 저장된 데이터의 생명주기로 옳은 것은?",
       "options": [
@@ -154,6 +160,7 @@
       "id": "saa-t3-2-q7",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EBS 스냅샷 특성",
+      "section": "ebs-features",
       "difficulty": "foundational",
       "stem": "EBS 볼륨 스냅샷에 대한 설명으로 옳은 것은?",
       "options": [
@@ -179,6 +186,7 @@
       "id": "saa-t3-2-q8",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EFS 선택 기준 — 리눅스 공유 파일시스템",
+      "section": "efs",
       "difficulty": "applied",
       "stem": "웹 서버 Auto Scaling 그룹의 여러 리눅스 EC2 인스턴스가 공통 업로드 파일에 동시 접근해야 한다. 가장 적합한 스토리지 서비스는?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t3-2-q9",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EFS vs Windows 공유 파일시스템",
+      "section": "fsx-family",
       "difficulty": "applied",
       "stem": "기업이 온프레미스에서 사용하던 Windows 파일 서버를 AWS로 마이그레이션하려 한다. Active Directory 인증을 유지하고 SMB 프로토콜로 Windows·Linux 클라이언트 모두 접근해야 한다. 가장 적합한 서비스는?",
       "options": [
@@ -227,6 +236,7 @@
       "id": "saa-t3-2-q10",
       "examGuideTaskId": "saa-t3-2",
       "skill": "FSx for Lustre — HPC·ML S3 통합",
+      "section": "fsx-family",
       "difficulty": "applied",
       "stem": "머신러닝 훈련 클러스터가 Amazon S3에 저장된 수백 TB 데이터셋을 서브밀리초 지연시간으로 처리해야 한다. 가장 적합한 파일 스토리지는?",
       "options": [
@@ -251,6 +261,7 @@
       "id": "saa-t3-2-q11",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EBS 볼륨 타입 선택 — 빅데이터·순차 처리",
+      "section": "ebs-volume-types",
       "difficulty": "foundational",
       "stem": "대용량 로그 파일을 순차적으로 읽어 분석하는 배치 워크로드에 비용 효율적인 EBS 볼륨 타입으로 가장 적합한 것은?",
       "options": [
@@ -275,6 +286,7 @@
       "id": "saa-t3-2-q12",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EFS 성능 모드·처리량 모드",
+      "section": "efs",
       "difficulty": "applied",
       "stem": "수천 개 EC2 인스턴스가 동시에 접근하는 빅데이터 분석 플랫폼을 EFS로 구성하려 한다. 집합 처리량과 IOPS를 최대화하고 워크로드 변화에 맞게 처리량을 자동 조정해야 한다. 가장 적합한 EFS 설정 조합은?",
       "options": [
@@ -299,6 +311,7 @@
       "id": "saa-t3-2-q13",
       "examGuideTaskId": "saa-t3-2",
       "skill": "FSx for NetApp ONTAP 선택 기준",
+      "section": "fsx-family",
       "difficulty": "applied",
       "stem": "기업이 온프레미스 NetApp ONTAP 파일 서버를 AWS로 리프트앤시프트(코드 변경 없이 이전)하려 한다. Linux·Windows·macOS 클라이언트가 동시에 접근해야 한다. 가장 적합한 서비스는?",
       "options": [
@@ -323,6 +336,7 @@
       "id": "saa-t3-2-q14",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EBS AZ 제약과 스냅샷 마이그레이션",
+      "section": "ebs-basics",
       "difficulty": "foundational",
       "stem": "ap-northeast-2a AZ에 있는 EBS 볼륨을 ap-northeast-2c AZ의 새 EC2 인스턴스에 연결해야 한다. 가장 적합한 방법은?",
       "options": [
@@ -348,6 +362,7 @@
       "id": "saa-t3-2-q15",
       "examGuideTaskId": "saa-t3-2",
       "skill": "EFS 스토리지 클래스 — 비용 최적화",
+      "section": "efs",
       "difficulty": "applied",
       "stem": "EFS를 사용 중인 팀이 파일 접근 패턴을 분석한 결과, 파일 대부분이 생성 후 30일 이후에는 거의 접근되지 않는다. 가용성은 다중 AZ를 유지하면서 비용을 줄이려 한다. 가장 적합한 전략은?",
       "options": [

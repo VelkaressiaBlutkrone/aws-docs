@@ -28,7 +28,9 @@ sources:
     url: https://docs.aws.amazon.com/organizations/latest/APIReference/API_CreateOrganization.html
   - title: IAM Identity Center 권한 세트 위임 관리 (공식)
     url: https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetdelegation.html
-lastVerified: 2026-10-20
+  - title: IAM 정책 시뮬레이터로 정책 테스트 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html
+lastVerified: 2026-11-22
 ---
 
 # IAM·계정 보안 운영 — 정책·역할·MFA·자격증명 보고서
@@ -76,9 +78,9 @@ lastVerified: 2026-10-20
 
 ---
 
-## 📖 핵심 개념
+## 📖 핵심 개념 {#core-concepts}
 
-### 1) 정책 유형 — 부여하는 정책 vs 한도만 정하는 정책
+### 1) 정책 유형 — 부여하는 정책 vs 한도만 정하는 정책 {#policy-types}
 
 > 공식 정의: **"정책(Policy)은 권한을 정의하는 객체로, 자격증명이나 리소스에 연결되어 권한을 정의한다."** 핵심은 "권한을 **부여**하는 정책"과 "권한의 **상한선**만 정하는 정책"의 구분입니다.
 
@@ -98,7 +100,7 @@ lastVerified: 2026-10-20
 > 한도를 정의하는 것과 권한을 부여하는 것은 의미가 다릅니다. SCP가 어떤 서비스를 허용 목록에 올렸다고 해서 그 계정의 사용자가 바로 그 서비스에 접근하는 것이 아니라, 그 계정에서 해당 서비스 접근이 원칙적으로 차단되지 않는다는 뜻입니다.
 > 이 설계로 인해 조직 차원의 가드레일(SCP)과 위임 제어(권한 경계)는 실제 권한 구성에 간섭하지 않으면서도 상한선을 안전하게 고정할 수 있습니다.
 
-### 2) 정책 평가 로직 — 명시적 Deny가 항상 이긴다 (★ 단골 출제)
+### 2) 정책 평가 로직 — 명시적 Deny가 항상 이긴다 (★ 단골 출제) {#policy-evaluation}
 
 ```
 1. 기본값은 암묵적 Deny (아무 Allow도 없으면 거부)
@@ -125,7 +127,7 @@ lastVerified: 2026-10-20
 > Allow가 여러 레이어에 흩어져 있어도 단 하나의 Deny가 모든 Allow를 무효화하므로, "이 Deny가 다른 Allow에 묻히지 않을까?"라는 불확실성 없이 차단 규칙을 신뢰할 수 있습니다.
 > 결과적으로 복잡한 다층 정책 환경에서도 "명시적 Deny가 있으면 무조건 거부"라는 단 하나의 규칙으로 접근 결과를 예측할 수 있습니다.
 
-### 3) 권한 경계 (Permissions Boundary)
+### 3) 권한 경계 (Permissions Boundary) {#permissions-boundary}
 
 > 공식: **"권한 경계는 자격증명 기반 정책이 IAM 엔터티(사용자·역할)에 부여할 수 있는 최대 권한을 설정하는 고급 기능."**
 
@@ -137,7 +139,7 @@ lastVerified: 2026-10-20
 > 교집합 방식은 "자격증명 정책이 Allow한 것 중에서 경계가 허용한 것만 실행 가능"하므로, 경계는 항상 줄이는 방향으로만 작용하고 늘리는 방향으로는 작용하지 않습니다.
 > 이 단방향 제한 특성 덕분에 권한 경계는 위임 시나리오에서 최대 권한 상한선을 안전하게 고정할 수 있습니다.
 
-### 4) IAM 역할 운영 — 인스턴스 프로파일·교차 계정·서비스 역할
+### 4) IAM 역할 운영 — 인스턴스 프로파일·교차 계정·서비스 역할 {#iam-roles}
 
 역할에는 항상 두 정책이 붙습니다: **신뢰 정책**(누가 수임 가능한가)과 **권한 정책**(무엇을 할 수 있나).
 
@@ -162,7 +164,7 @@ aws sts assume-role \
 > 어느 한쪽만 허용하면 수임이 거부되는 이유는, 신뢰 정책만으로는 소스 계정 관리자의 의도를 확인할 수 없고, 소스의 Allow만으로는 대상 계정 소유자의 동의가 없기 때문입니다.
 > 이 양방향 동의 구조가 계정 경계 침범을 막는 IAM의 기본 원칙으로, 한쪽이 실수로 Deny를 추가해도 수임이 차단되어 보안 사고를 줄입니다.
 
-### 5) MFA — 루트·IAM 사용자
+### 5) MFA — 루트·IAM 사용자 {#mfa}
 
 | 대상 | 권장 사항 |
 |---|---|
@@ -185,13 +187,14 @@ aws sts assume-role \
 > `BoolIfExists`는 키가 존재하면 값을 비교하고, 키가 없으면 조건을 true로 처리해 Deny가 발동하므로 키 부재 경우까지 안전하게 차단합니다.
 > 이 차이는 운영 환경에서 MFA를 우회하는 구멍이 될 수 있어, AWS 공식 문서가 MFA 강제 정책 예시에 `BoolIfExists`를 권고하는 이유입니다.
 
-### 6) 자격증명 점검 도구 — 보고서·Access Analyzer·마지막 액세스 정보
+### 6) 자격증명 점검 도구 — 보고서·Access Analyzer·마지막 액세스 정보 {#credential-audit-tools}
 
 | 도구 | 무엇을 알려주나 |
 |---|---|
 | **자격증명 보고서(Credential Report)** | 계정 내 **모든 IAM 사용자**의 비밀번호·액세스 키 상태, 마지막 사용 시각, MFA 활성화 여부를 **CSV로 일괄** 출력. 미사용 키·MFA 미설정 사용자 색출에 사용 |
 | **마지막 액세스 정보(Last Accessed)** | 특정 사용자·역할·그룹·정책이 **어떤 서비스에 마지막으로 접근**했는지 → **미사용 권한 회수**에 사용 |
 | **IAM Access Analyzer** | 리소스가 **외부 계정/공개**에 노출됐는지 탐지(S3·IAM 역할·KMS·SQS 등). 사용 내역 기반으로 **최소 권한 정책 생성**도 지원 |
+| **IAM 정책 시뮬레이터(Policy Simulator)** | ID 기반 정책·권한 경계·SCP·내가 제공한 리소스 기반 정책을 평가해, **실제 요청을 보내지 않고** 작업·리소스별 **허용/거부**를 예측. 허용이나 명시적 거부면 어느 정책이 그 결과를 냈는지도 표시(SCP는 일치한 문장을 보여 주지 않음) → **정책 변경 전 영향 확인·접근 거부 원인 진단**에 사용 |
 
 ```bash
 # 자격증명 보고서 생성 후 다운로드
@@ -199,14 +202,16 @@ aws iam generate-credential-report
 aws iam get-credential-report --query 'Content' --output text | base64 -d
 ```
 
-> **운영 절차(최소 권한 유지)**: ① 자격증명 보고서로 90일 이상 미사용 키·MFA 미설정 사용자 식별 → ② 마지막 액세스 정보로 정책의 미사용 서비스 권한 제거 → ③ Access Analyzer로 외부 노출 리소스 점검 → 정기 반복.
+> **운영 절차(최소 권한 유지)**: ① 자격증명 보고서로 90일 이상 미사용 키·MFA 미설정 사용자 식별 → ② 마지막 액세스 정보로 미사용 서비스 권한을 찾아 정책 시뮬레이터로 영향을 확인한 뒤 제거 → ③ Access Analyzer로 외부 노출 리소스 점검 → 정기 반복.
+
+> **정책 시뮬레이터의 한계**: 시뮬레이션 결과는 실제 환경과 다를 수 있으므로 공식 문서는 시뮬레이션 뒤 실제 환경에서 다시 확인하라고 권합니다. SCP는 평가하지만 **리소스 제어 정책(RCP)은 지원하지 않고**, VPC 엔드포인트 정책·역할 체이닝·한 리소스에 여러 리소스 기반 정책이 붙은 구성에서도 결과가 갈릴 수 있습니다. 콘솔 밖에서는 시뮬레이터가 리소스 기반 정책을 가져오지 않으므로 **직접 제공**해야 합니다.
 
 > 🧠 원리: 왜 미사용 권한 회수와 자격증명 상태 점검은 별개 도구로 분리되어 있을까요?
 > 자격증명 보고서는 사용자 수준에서 "키가 존재하는가·언제 마지막으로 사용했는가·MFA가 켜져 있는가"라는 자격증명 객체의 생애 상태를 측정하고, 마지막 액세스 정보는 주체가 실제로 호출한 서비스와 마지막 시각을 측정합니다.
 > 자격증명이 유효해도 해당 정책의 서비스 권한이 한 번도 쓰이지 않았을 수 있고, 반대로 자격증명이 만료에 가까워도 서비스는 매일 사용될 수 있으므로, 두 측정은 직교하는 정보를 제공합니다.
 > 이 분리 덕분에 "누가 키를 오래 안 썼나(보고서)"와 "어떤 서비스 권한이 쓸모없나(마지막 액세스)"를 각각 독립적으로 조회해 최소 권한 유지 절차를 단계별로 진행할 수 있습니다.
 
-### 7) 루트 사용자 보호 & SCP 개요
+### 7) 루트 사용자 보호 & SCP 개요 {#root-user-scp}
 
 **루트 사용자 보호 (모범 사례 첫 항목):**
 
@@ -224,7 +229,7 @@ aws iam get-credential-report --query 'Content' --output text | base64 -d
 > 이 특성 때문에 워크로드를 관리 계정에 두면 그 계정의 주체는 SCP Deny 규칙을 우회하게 되고, 다른 회원 계정에 적용한 가드레일이 해당 워크로드에는 전혀 작동하지 않습니다.
 > 따라서 보안 모범 사례는 관리 계정을 조직 관리 전용으로 격리하고 실제 워크로드는 별도 회원 계정에 배치하도록 권고합니다.
 
-### 8) 다중 계정 전략 — Organizations·SCP·IAM Identity Center (v1.1 신규 범위)
+### 8) 다중 계정 전략 — Organizations·SCP·IAM Identity Center (v1.1 신규 범위) {#multi-account}
 
 공식 가이드 v1.1은 Skill 4.1.3을 「다중 계정 전략을 안전하게 구현」에서 **「… 구현(예: AWS Organizations, 서비스 제어 정책, IAM Identity Center)」**으로 바꿨습니다. §7이 SCP의 성격만 다뤘으므로, 여기서 세 도구의 구조를 정리합니다.
 
@@ -279,6 +284,7 @@ aws iam get-credential-report --query 'Content' --output text | base64 -d
 - **교차 계정** = 대상 계정에 역할 + 신뢰 정책 + 소스의 `sts:AssumeRole`. 서드파티엔 **External ID**.
 - **자격증명 보고서** = 전체 사용자 자격증명 상태 CSV(미사용 키·MFA 점검). **마지막 액세스 정보** = 미사용 권한 회수.
 - **Access Analyzer** = 외부/공개 노출 탐지 + 최소 권한 정책 생성.
+- **IAM 정책 시뮬레이터** = 실제 요청 없이 작업·리소스별 허용/거부 예측(정책 변경 전 확인·접근 거부 진단). 결과는 실제 환경과 다를 수 있고 RCP는 지원하지 않는다.
 - **루트**: MFA 필수, 액세스 키 금지, 일상 사용 금지.
 - **SCP는 루트 사용자에도 적용**되나, **관리 계정**에는 적용되지 않는다.
 - **SCP의 기본값은 「전부 허용」** — Organizations가 루트·OU·계정마다 **`FullAWSAccess`** 관리형 SCP를 자동 연결한다. "SCP를 붙이면 기본적으로 막힌다"는 오답.
@@ -288,7 +294,7 @@ aws iam get-credential-report --query 'Content' --output text | base64 -d
 
 ---
 
-## ⚠️ 흔한 함정
+## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"SCP에서 Allow하면 사용자가 그 작업을 할 수 있다."** → 아닙니다. SCP는 **상한선**일 뿐입니다. 실제로 작업하려면 자격증명 기반 정책에 별도의 Allow가 있어야 합니다. SCP Allow + IAM Allow 둘 다 있어야 합니다.
    (원리: §1 — SCP는 상한선만 정하고 권한을 부여하지 않아 IAM Allow가 별도로 있어야 한다)
@@ -365,3 +371,4 @@ SCP는 계정·OU에 적용되어 해당 계정의 IAM 주체가 수행할 수 �
 5. 자격 증명 보고서 받기 — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html
 6. IAM Access Analyzer — https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
 7. 서비스 제어 정책(SCP) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+8. IAM 정책 시뮬레이터로 정책 테스트 — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html

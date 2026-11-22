@@ -8,6 +8,7 @@
       "id": "saa-t3-3-q1",
       "examGuideTaskId": "saa-t3-3",
       "skill": "인스턴스 명명 규칙 해석",
+      "section": "instance-naming",
       "difficulty": "foundational",
       "stem": "`m7g.2xlarge` 인스턴스 유형 이름에서 각 부분이 나타내는 의미로 옳은 것은?",
       "options": [
@@ -33,6 +34,7 @@
       "id": "saa-t3-3-q2",
       "examGuideTaskId": "saa-t3-3",
       "skill": "인스턴스 명명 규칙 — 기능 접미사",
+      "section": "instance-naming",
       "difficulty": "foundational",
       "stem": "인스턴스 유형 `c7id.4xlarge`에서 기능 접미사 `d`가 나타내는 것은 무엇인가?",
       "options": [
@@ -58,6 +60,7 @@
       "id": "saa-t3-3-q3",
       "examGuideTaskId": "saa-t3-3",
       "skill": "인스턴스 패밀리 선택 — 워크로드 매핑",
+      "section": "instance-families",
       "difficulty": "applied",
       "stem": "기업이 SAP HANA 인메모리 데이터베이스를 AWS로 마이그레이션하려 한다. 수TB 규모의 메모리가 필요하고 CPU보다 메모리 용량이 훨씬 중요하다. 가장 적합한 인스턴스 패밀리는?",
       "options": [
@@ -82,6 +85,7 @@
       "id": "saa-t3-3-q4",
       "examGuideTaskId": "saa-t3-3",
       "skill": "T 패밀리 버스트 메커니즘 — 모드 차이",
+      "section": "instance-families",
       "difficulty": "foundational",
       "stem": "T3 인스턴스를 `standard` 모드로 운영 중인데 CPU 크레딧이 모두 소진됐다. 이후 인스턴스의 동작으로 옳은 것은?",
       "options": [
@@ -106,6 +110,7 @@
       "id": "saa-t3-3-q5",
       "examGuideTaskId": "saa-t3-3",
       "skill": "T 패밀리 vs M 패밀리 선택",
+      "section": "instance-families",
       "difficulty": "applied",
       "stem": "웹 서버가 하루 종일 CPU 70%를 지속적으로 소비하는 워크로드를 운영한다. 현재 T3.xlarge를 unlimited 모드로 사용 중인데 예상치 못한 추가 요금이 발생하고 있다. 가장 적합한 조치는?",
       "options": [
@@ -130,6 +135,7 @@
       "id": "saa-t3-3-q6",
       "examGuideTaskId": "saa-t3-3",
       "skill": "Graviton(ARM) 프로세서 특성",
+      "section": "processor-choice",
       "difficulty": "foundational",
       "stem": "AWS Graviton 기반 인스턴스(예: M8g, C8g)의 특성으로 옳은 것은?",
       "options": [
@@ -154,6 +160,7 @@
       "id": "saa-t3-3-q7",
       "examGuideTaskId": "saa-t3-3",
       "skill": "구매 옵션 — BYOL 라이선스",
+      "section": "purchase-options",
       "difficulty": "applied",
       "stem": "기업이 소켓·코어 수를 기반으로 라이선스가 부과되는 Windows Server Enterprise 소프트웨어를 AWS에서 계속 사용하려 한다. 기존 사내 라이선스를 그대로 활용하고 실행되는 물리 소켓 수를 제어해야 한다. 가장 적합한 구매 옵션은?",
       "options": [
@@ -178,6 +185,7 @@
       "id": "saa-t3-3-q8",
       "examGuideTaskId": "saa-t3-3",
       "skill": "스팟 인터럽션 메커니즘",
+      "section": "purchase-options",
       "difficulty": "foundational",
       "stem": "스팟 인스턴스가 EC2에 의해 중단될 때 발생하는 동작으로 옳은 것은?",
       "options": [
@@ -203,6 +211,7 @@
       "id": "saa-t3-3-q9",
       "examGuideTaskId": "saa-t3-3",
       "skill": "구매 옵션 — 워크로드 특성 매핑",
+      "section": "purchase-options",
       "difficulty": "applied",
       "stem": "야간에 수TB 로그 파일을 병렬 처리하는 배치 파이프라인이 있다. 처리 중 인스턴스가 중단되면 해당 태스크를 재시작할 수 있도록 설계돼 있으며 비용 최소화가 최우선 목표다. 가장 적합한 구매 옵션은?",
       "options": [
@@ -228,6 +237,7 @@
       "id": "saa-t3-3-q10",
       "examGuideTaskId": "saa-t3-3",
       "skill": "배치 그룹 — 클러스터 특성",
+      "section": "placement-strategies",
       "difficulty": "foundational",
       "stem": "클러스터(Cluster) 배치 그룹의 특성으로 옳은 것은?",
       "options": [
@@ -253,6 +263,7 @@
       "id": "saa-t3-3-q11",
       "examGuideTaskId": "saa-t3-3",
       "skill": "배치 그룹 — 파티션 vs 분산 선택",
+      "section": "placement-strategies",
       "difficulty": "applied",
       "stem": "Kafka 클러스터를 AWS에 배포한다. 150개 브로커 인스턴스가 랙 수준 장애로부터 독립적이어야 하며, 어떤 브로커가 어느 랙에 있는지 Kafka가 인식해 복제를 최적화해야 한다. 적합한 배치 전략은?",
       "options": [
@@ -277,6 +288,7 @@
       "id": "saa-t3-3-q12",
       "examGuideTaskId": "saa-t3-3",
       "skill": "배치 그룹 — 분산 제한 및 적용 대상",
+      "section": "placement-strategies",
       "difficulty": "foundational",
       "stem": "분산(Spread) 배치 그룹의 특성으로 옳은 것은?",
       "options": [
@@ -301,6 +313,7 @@
       "id": "saa-t3-3-q13",
       "examGuideTaskId": "saa-t3-3",
       "skill": "클러스터 배치 그룹 — 시작 모범 사례",
+      "section": "placement-strategies",
       "difficulty": "applied",
       "stem": "HPC 클러스터를 위해 클러스터 배치 그룹에 100개의 c7g.8xlarge 인스턴스를 시작하려 한다. 용량 부족(Insufficient Capacity Error)을 최소화하기 위한 모범 사례는?",
       "options": [
@@ -326,6 +339,7 @@
       "id": "saa-t3-3-q14",
       "examGuideTaskId": "saa-t3-3",
       "skill": "ENA vs EFA 구분",
+      "section": "enhanced-networking",
       "difficulty": "foundational",
       "stem": "ENA(Elastic Network Adapter)와 EFA(Elastic Fabric Adapter)의 차이로 옳은 것은?",
       "options": [
@@ -351,6 +365,7 @@
       "id": "saa-t3-3-q15",
       "examGuideTaskId": "saa-t3-3",
       "skill": "EFA 적용 시나리오 및 제약",
+      "section": "enhanced-networking",
       "difficulty": "applied",
       "stem": "수백 개 GPU 노드에서 분산 딥러닝 학습을 수행하는 HPC 클러스터를 구성한다. 노드 간 NCCL 통신의 지연과 불일관성을 최소화해야 한다. 적합한 네트워킹 구성은?",
       "options": [

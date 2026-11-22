@@ -121,6 +121,7 @@ class _CertExamPageState extends State<CertExamPage> {
     // 현재 뱅크에서 문항을 ID로 되찾는 단계가 사라졌다(설계 §4.7).
 
     var weights = <int, int>{};
+    var domainNames = <int, String>{};
     ExamOverview? overview;
     try {
       final gRaw = await rootBundle.loadString(
@@ -131,6 +132,7 @@ class _CertExamPageState extends State<CertExamPage> {
       );
       overview = guide.overview;
       weights = {for (final d in guide.domains) d.no: d.weightPct};
+      domainNames = {for (final d in guide.domains) d.no: d.name};
     } catch (_) {
       overview = null;
     }
@@ -159,6 +161,7 @@ class _CertExamPageState extends State<CertExamPage> {
       taskPool: taskPool,
       taskWeights: taskWeights,
       overview: overview,
+      domainNames: domainNames,
       total: all.length,
       restorable: restorable,
     );
@@ -318,6 +321,7 @@ class _CertExamPageState extends State<CertExamPage> {
             return _examView(
               _running!,
               _running!.passingScore ?? data.overview?.passingScore,
+              data.domainNames,
             );
           }
           if (data.capacityLocked) {
@@ -354,7 +358,11 @@ class _CertExamPageState extends State<CertExamPage> {
     );
   }
 
-  Widget _examView(_RunParams r, int? passingScore) {
+  Widget _examView(
+    _RunParams r,
+    int? passingScore,
+    Map<int, String> domainNames,
+  ) {
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: Layout.exam),
@@ -377,6 +385,10 @@ class _CertExamPageState extends State<CertExamPage> {
           restored: r.restored,
           progressRestored: r.progressRestored,
           passingScore: passingScore,
+          domainByTaskId: {
+            for (final e in contentFor(widget.cert.code)) e.taskId: e.domain,
+          },
+          domainNames: domainNames,
           runNonce: r.nonce,
           onProgress: _onProgress,
           onFinished: (rec) => recordFinishedAttempt(rec,
@@ -560,6 +572,7 @@ class _MockLoad {
     required this.taskPool,
     required this.taskWeights,
     required this.overview,
+    required this.domainNames,
     required this.total,
     required this.restorable,
   }) : readiness = null,
@@ -576,6 +589,7 @@ class _MockLoad {
        taskPool = const <String, List<Question>>{},
        taskWeights = const <String, int>{},
        overview = null,
+       domainNames = const <int, String>{},
        total = 0,
        capacityLocked = true,
        attemptLocked = false;
@@ -589,6 +603,7 @@ class _MockLoad {
        taskPool = const <String, List<Question>>{},
        taskWeights = const <String, int>{},
        overview = null,
+       domainNames = const <int, String>{},
        total = 0,
        capacityLocked = false,
        attemptLocked = true;
@@ -598,6 +613,9 @@ class _MockLoad {
   final Map<String, List<Question>> taskPool; // 약점 모드
   final Map<String, int> taskWeights; // 약점 모드
   final ExamOverview? overview;
+
+  /// 공식 도메인 이름. 잠금 경로는 가이드를 읽지 않아 비어 있고, 결과는 번호만 표시한다.
+  final Map<int, String> domainNames;
   final int total;
   final _Restorable? restorable;
   final ExamReadinessStatus? readiness;

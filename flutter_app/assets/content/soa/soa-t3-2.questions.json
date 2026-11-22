@@ -8,6 +8,7 @@
       "id": "soa-t3-2-q1",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "ami-composition",
       "difficulty": "applied",
       "stem": "사용하지 않는 AMI를 스냅샷 삭제 옵션 없이 등록 해제(deregister)했는데 EBS 비용이 줄지 않았다. 이유는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t3-2-q2",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "ami-composition",
       "difficulty": "foundational",
       "stem": "AMI의 리소스 범위에 대한 설명으로 올바른 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t3-2-q3",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "ami-sharing-copy",
       "difficulty": "applied",
       "stem": "다른 리전의 다른 계정이 우리 표준 AMI로 인스턴스를 시작할 수 있게 하려면?",
       "options": [
@@ -93,6 +96,7 @@
       "id": "soa-t3-2-q4",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "ami-sharing-copy",
       "difficulty": "applied",
       "stem": "KMS로 암호화된 AMI를 다른 계정에 공유했는데 상대 계정에서 인스턴스 시작이 실패한다. 추가로 필요한 조치는?",
       "options": [
@@ -120,6 +124,7 @@
       "id": "soa-t3-2-q5",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "golden-ami",
       "difficulty": "foundational",
       "stem": "골든 AMI 패턴의 목적으로 가장 적절한 것은?",
       "options": [
@@ -147,6 +152,7 @@
       "id": "soa-t3-2-q6",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "golden-ami",
       "difficulty": "applied",
       "stem": "환경별 API 엔드포인트처럼 자주 바뀌는 설정을 골든 AMI에 굽지 않고 런타임에 적용하는 이유는?",
       "options": [
@@ -174,6 +180,7 @@
       "id": "soa-t3-2-q7",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "image-builder",
       "difficulty": "applied",
       "stem": "표준 이미지를 매월 자동으로 패치·테스트·재배포하고 여러 리전·계정에 공유하려 한다. 가장 적절한 서비스는?",
       "options": [
@@ -201,6 +208,7 @@
       "id": "soa-t3-2-q8",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AMI와 컨테이너 이미지 생성·관리(3.1.1)",
+      "section": "image-builder",
       "difficulty": "foundational",
       "stem": "Image Builder 파이프라인이 수작업 AMI 빌드보다 나은 핵심 이유는?",
       "options": [
@@ -228,6 +236,7 @@
       "id": "soa-t3-2-q9",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "patch-strategy",
       "difficulty": "foundational",
       "stem": "Patch Manager에서 '어떤 패치를 승인·거부할지' 규칙을 정의하는 구성 요소는?",
       "options": [
@@ -255,6 +264,7 @@
       "id": "soa-t3-2-q10",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "patch-strategy",
       "difficulty": "applied",
       "stem": "dev와 prod에 서로 다른 패치 정책을 적용하려 한다. 인스턴스를 패치 그룹에 넣는 방법은?",
       "options": [
@@ -286,6 +296,7 @@
       "id": "soa-t3-2-q11",
       "examGuideTaskId": "soa-t3-2",
       "skill": "AWS Systems Manager로 운영 프로세스 자동화(3.2.1)",
+      "section": "patch-strategy",
       "difficulty": "applied",
       "stem": "프로덕션 패치를 서비스 영향이 적은 새벽 시간대에만 적용하려 한다. 어떤 구성 요소를 사용하는가?",
       "options": [
@@ -313,6 +324,7 @@
       "id": "soa-t3-2-q12",
       "examGuideTaskId": "soa-t3-2",
       "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "section": "deployment-strategies",
       "difficulty": "foundational",
       "stem": "롤링 배포의 트레이드오프를 올바르게 설명한 것은?",
       "options": [
@@ -348,6 +360,7 @@
       "id": "soa-t3-2-q13",
       "examGuideTaskId": "soa-t3-2",
       "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "section": "deployment-strategies",
       "difficulty": "applied",
       "stem": "블루/그린 배포가 롤링보다 롤백이 빠른 근본 이유는?",
       "options": [
@@ -375,6 +388,7 @@
       "id": "soa-t3-2-q14",
       "examGuideTaskId": "soa-t3-2",
       "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "section": "deployment-strategies",
       "difficulty": "applied",
       "stem": "새 버전에 소량 트래픽만 먼저 흘려 문제를 확인한 뒤 전체 전환하려 한다. 이 배포 변형의 이름은?",
       "options": [
@@ -402,6 +416,7 @@
       "id": "soa-t3-2-q15",
       "examGuideTaskId": "soa-t3-2",
       "skill": "배포 전략 및 서비스 구현(3.1.5)",
+      "section": "deployment-strategies",
       "difficulty": "applied",
       "stem": "골든 AMI를 새로 구운 뒤 플릿에 반영하는 표준 절차는?",
       "options": [
