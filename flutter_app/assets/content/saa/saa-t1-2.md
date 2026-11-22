@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html
   - title: Control Tower 랜딩 존 통제 — 예방 통제 제약 (공식 Prescriptive Guidance)
     url: https://docs.aws.amazon.com/prescriptive-guidance/latest/designing-control-tower-landing-zone/controls.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 다중 계정 보안 — Organizations·Control Tower·SCP
@@ -113,7 +113,7 @@ AWS Well-Architected 및 Control Tower가 권장하는 계정 분리 패턴입�
 | **감사(Audit) 계정** | 보안·컴플라이언스 팀 전용. 교차 계정 역할(읽기 전용 감사·전체 권한 관리자)로 전 계정 접근 | 침해 시 독립 조사 가능 |
 | **개발·스테이징·운영 계정** | 워크로드 실행 환경 분리 | 각 환경 SCP로 가드레일 적용 |
 
-> 🔐 **멤버 계정 루트는 없애는 것이 현행 모범 사례입니다(중앙 루트 접근 관리).** Organizations에서 이 기능을 켜면 멤버 계정의 루트 비밀번호·액세스 키·서명 인증서·MFA를 제거할 수 있고, 제거된 계정은 **루트 로그인도 비밀번호 복구도 불가**합니다. **새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다.** 루트만 할 수 있는 일(잘못 설정된 S3 버킷 정책·SQS 정책 복구 등)은 관리 계정이나 위임 관리자가 **권한 작업(`sts:AssumeRoot`)** 으로 수행하고, 필요할 때만 **비밀번호 복구 허용**을 켭니다. 관리 계정 루트는 제거할 수 없으므로 **MFA가 요구**되며(첫 로그인 후 35일 유예) 다중 승인 보관을 권장합니다.
+> 🔐 **멤버 계정 루트는 없애는 것이 현행 모범 사례입니다(중앙 루트 접근 관리).** Organizations에서 이 기능을 켜면 멤버 계정의 루트 비밀번호·액세스 키·서명 인증서·MFA를 제거할 수 있고, 제거된 계정은 **루트 로그인도 비밀번호 복구도 불가**합니다. **새로 만드는 계정은 기본적으로 루트 자격증명이 없습니다.** 루트만 할 수 있는 일(잘못 설정된 S3 버킷 정책·SQS 정책 복구 등)은 관리 계정이나 위임 관리자가 **권한 작업(`sts:AssumeRoot`)** 으로 수행하고, 필요할 때만 **비밀번호 복구 허용**을 켭니다. 관리 계정 루트는 제거할 수 없으므로 **MFA가 요구**되며(MFA가 없으면 첫 콘솔 로그인 시도 후 14일 안에 등록) 다중 승인 보관을 권장합니다.
 
 > 폭발 반경 원칙: 운영 계정이 침해되어도 로그 계정의 감사 기록은 변조할 수 없습니다. 계정 분리 = 보안 격리입니다.
 

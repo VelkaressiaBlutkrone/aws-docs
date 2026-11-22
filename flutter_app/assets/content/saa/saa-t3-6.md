@@ -22,7 +22,11 @@ sources:
     url: https://docs.aws.amazon.com/memorydb/latest/devguide/what-is-memorydb.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+  - title: ElastiCache 백업(지원 엔진) (공식)
+    url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/backups.html
+  - title: ElastiCache 엔진 파라미터(Redis OSS 2.8.22 이후 AOF 미지원) (공식)
+    url: https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/ParameterGroups.Engine.html
+lastVerified: 2026-11-22
 ---
 
 # DynamoDB·ElastiCache — NoSQL 성능·캐싱 전략
@@ -165,7 +169,7 @@ LSI는 강력한 일관성 읽기를 지원하지만, GSI는 최종 일관성만
 
 > 🧠 원리: 왜 온디맨드 모드는 트래픽 스파이크에 더 유연할까요?
 > 프로비저닝 모드는 설정한 RCU·WCU 한도 안에서만 요청을 처리하므로, 예상보다 트래픽이 많아지면 초과 요청이 스로틀됩니다.
-> 온디맨드 모드는 사전 처리량 설정 없이 AWS가 실시간 트래픽에 따라 용량을 조정하므로, 예측하기 어려운 스파이크 구간에서도 스로틀 없이 요청을 처리할 수 있습니다.
+> 온디맨드 모드는 사전 처리량 설정 없이 AWS가 실시간 트래픽에 따라 용량을 조정하므로, 이전 최고치의 2배까지는 스파이크도 스로틀 없이 즉시 받습니다. 다만 30분 안에 이전 최고치의 2배를 넘으면 스로틀이 생길 수 있어, 그런 급증이 예상되면 사전 웜업이 필요합니다.
 > 대신 단위 요청당 단가가 프로비저닝 모드보다 높으므로, 트래픽 패턴이 안정적이면 프로비저닝 쪽이 총비용에서 유리할 수 있습니다.
 
 ### 6) DAX (DynamoDB Accelerator) {#dax}
@@ -283,8 +287,8 @@ ElastiCache Serverless의 한도:
 | 구분 | Redis | Memcached |
 |---|---|---|
 | **자료구조** | 문자열·리스트·해시·집합·**Sorted Set**·Bitmap·HyperLogLog·Geo·Pub/Sub | 단순 키-값(문자열) |
-| **영속성** | 스냅샷(RDB) + AOF 로그 **지원** | **없음** (메모리 한정) |
-| **복제·HA** | 복제 + **Multi-AZ 자동 Failover** 지원 | **없음** |
+| **영속성** | 스냅샷(RDB) 백업 **지원**(AOF는 Redis OSS 2.8.22 이후 미지원) | 노드 기반은 **없음** (메모리 한정) — 서버리스 Memcached는 스냅샷 백업 지원 |
+| **복제·HA** | 복제 + **Multi-AZ 자동 Failover** 지원 | 노드 기반은 **없음** — 서버리스 캐시는 여러 AZ에 복제 |
 | **스레딩** | 단일 스레드(명령 처리) | **멀티스레드** |
 | **수평 확장** | 클러스터 모드(샤딩) | 단순 수평 샤딩 |
 | **암호화** | 저장·전송 암호화, IAM 인증 지원 | 제한적 |
@@ -386,7 +390,7 @@ AWS는 "하나의 DB로 모든 것"이 아니라 **데이터 모양과 질의 �
    (원리: §4 본문 — GSI는 최종 일관성만 지원하며, 강력한 일관성이 필요하면 기본 테이블 또는 LSI를 사용해야 한다.)
 
 3. **"DynamoDB Global Tables = RDS Read Replica."** → 전혀 다릅니다. Read Replica는 읽기 전용이지만 Global Tables는 **모든 리전에서 읽기·쓰기가 모두 가능한 Active-Active** 구성입니다.
-   (원리: §7 — Active-Active는 타임스탬프 기반 최후 작성자 우선으로 충돌을 처리하며 모든 리전에서 쓰기를 허용한다.)
+   (원리: §7 — Active-Active는 모든 리전에서 쓰기를 허용하며, 기본 모드(MREC)에서는 타임스탬프 기반 최후 작성자 우선으로 충돌을 처리한다. MRSC에서는 충돌한 쓰기가 예외로 실패한다.)
 
 4. **"핫 파티션이 생겨도 DynamoDB가 자동으로 처리한다."** → DynamoDB는 파티션 키 기반으로 트래픽을 분산하므로, 카디널리티 낮은 PK를 선택하면 특정 파티션에 부하가 집중됩니다. 설계 단계에서 PK를 신중하게 선택해야 합니다.
    (원리: §2 — 카디널리티 낮은 PK는 해시 편중을 유발하고, 해당 파티션 처리량 한도 초과 시 스로틀이 발생한다.)
@@ -420,7 +424,7 @@ AWS는 "하나의 DB로 모든 것"이 아니라 **데이터 모양과 질의 �
 
 <details><summary>정답 보기</summary>
 
-**DynamoDB Global Tables**를 선택합니다. Global Tables는 여러 리전에서 동시에 읽기와 쓰기가 가능한 Active-Active 복제를 제공합니다. RDS Read Replica는 읽기 전용이므로 멀티 리전 쓰기 요구사항을 충족하지 못합니다. 충돌은 최후 작성자 우선(last-writer-wins)으로 자동 해결됩니다.
+**DynamoDB Global Tables**를 선택합니다. Global Tables는 여러 리전에서 동시에 읽기와 쓰기가 가능한 Active-Active 복제를 제공합니다. RDS Read Replica는 읽기 전용이므로 멀티 리전 쓰기 요구사항을 충족하지 못합니다. 충돌은 기본 모드(MREC)에서 최후 작성자 우선(last-writer-wins)으로 자동 해결됩니다.
 </details>
 
 **Q3.** 웹 애플리케이션이 동일한 DB 쿼리를 초당 수천 번 반복 실행해 RDS 부하가 높습니다. 지연도 줄이고 DB 부하도 낮추려면 어떤 서비스와 전략을 사용하나요?
@@ -469,12 +473,14 @@ DynamoDB는 파티션 키를 해시해 데이터를 여러 물리 파티션에 �
 17. ElastiCache Serverless 엔진 버전·한도(Valkey·Redis OSS 7.0+·Memcached 1.6+ / 5,000 GiB·32 GiB·15,000,000 ECPU·키 4 KiB) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/migration-to-serverless-prerequisites.html (갭 배치 B8a: 2026-10-21)
 18. ElastiCache 노드 기반 업그레이드 고려사항(5.0.6+ 최소 다운타임·Valkey 7.2/Redis OSS 6.0+ 단일 버전·Serverless 비적용) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/VersionManagement-upgrade-considerations.html (갭 배치 B8a: 2026-10-21)
 19. MemoryDB 기능(Multi-AZ 트랜잭션 로그·프라이머리 read-after-write 일관성·한 자릿수 ms 쓰기) — https://docs.aws.amazon.com/memorydb/latest/devguide/servicename-feature-overview.html (갭 배치 B8a: 2026-10-21)
+20. ElastiCache 스냅샷·백업("supported only for caches running on Valkey, Redis OSS or Serverless Memcached") — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/backups.html (2026-11-22 확인)
+21. ElastiCache 엔진 파라미터(Redis OSS 2.8.22 절의 `appendonly`·`appendfsync` 미지원) — https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/ParameterGroups.Engine.html (2026-11-22 확인)
 
 > 📝 **2026-10-21 보강 (갭 배치 B8a)**: ① §5에 **파티션 한도**(읽기 3,000·쓰기 1,000)와 **항목 400 KB**(속성 이름 바이트 포함·LSI 합산), `KeyRangeThroughputExceeded`, **적응형 용량**(기본 활성·무료·끌 수 없음·파티션 최대를 못 넘음), **모드 전환 비대칭**(프로비저닝→온디맨드 24시간 4회), 트랜잭션 2배, 그리고 현행 온디맨드 모델인 **warm throughput**(새 테이블 읽기 12,000·쓰기 4,000·사전 웜업·**올린 값 하향 불가**)을 추가했습니다(근거 11~14번). ② §7에 **일관성 모드 두 가지**를 넣었습니다 — 기존 서술이 충돌 해소를 **last-writer-wins로만** 적고 있었는데, 그것은 **기본 모드 MREC의 동작**이고 **MRSC**에서는 충돌이 `ReplicatedWriteConflictException`으로 드러납니다. MRSC의 값(정확히 **3리전**·복제본 2+**증인** 1 가능·**트랜잭션 API 미지원**·쓰기·강력읽기 지연 증가·**생성 후 모드 변경 불가**)도 함께 적었습니다(근거 15·16번). ③ §11에 **ElastiCache Serverless와 한도**, **엔진은 업그레이드만 가능**(다운그레이드 미지원)과 노드 기반 업그레이드 특성, **ElastiCache vs MemoryDB 비교표**를 추가했습니다(근거 17~19번) — §15의 목적별 DB 개요보다 한 단 깊은 층입니다.
 >
 > **파생 문항 1개소 정밀화**: `saa-t3-6.questions.json`의 글로벌 테이블 해설이 충돌 해소를 LWW로만 적어, **기본 모드 MREC에서의 동작**임을 밝히도록 고쳤습니다(정답 인덱스·`verified` 무변경, 드래프트라 라이브 노출 없음).
 >
-> **쓰지 않은 것**: 갭 노트가 적은 온디맨드의 **"이전 피크 2배·30분 규칙"**과 **프로비저닝 버스트 5분** — 현행 공식 문서는 그 규칙 대신 **warm throughput**으로 설명하며 두 수치를 두지 않아 쓰지 않았습니다.
+> **쓰지 않은 것**: 갭 노트가 적은 **프로비저닝 버스트 5분**은 쓰지 않았습니다. 온디맨드의 이전 최고치 2배·30분 조건은 공식 온디맨드 페이지가 적는 사실이라 2026-11-22에 본문 §5에 반영했습니다.
 
 > 📝 **2026-10-19 정정**: ① TTL 삭제 시점을 현행 서술인 **만료 후 수일 내(최선 노력)**로 고쳤습니다(근거 5번). ② ElastiCache 엔진을 **Valkey·Memcached·Redis OSS 3종**으로 갱신했습니다(근거 6번). ③ DynamoDB를 "무제한 처리량"으로 적었던 칸에 **파티션당 읽기 3,000·쓰기 1,000 단위/초** 한도를 명시했습니다(근거 7번).
 

@@ -36,7 +36,7 @@ sources:
     url: https://docs.aws.amazon.com/xray/latest/devguide/xray-console-servicemap.html
   - title: Service Quotas 요청 템플릿 (공식)
     url: https://docs.aws.amazon.com/servicequotas/latest/userguide/organization-templates.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 고가용성 패턴 — Multi-AZ·단일 실패점 제거
@@ -97,13 +97,13 @@ CLF에서 Multi-AZ를 개념으로만 봤다면, SAA는 **RDS Multi-AZ와 읽기
 | **내결함성(Fault Tolerance)** | 구성 요소가 실패해도 **중단 없이** 계속 동작(설계 목표) | 예비(중복) 구성 요소가 일을 넘겨받음 | 높음 |
 | **재해 복구(DR)** | 대규모·리전 단위 재해로부터 복구 | RTO/RPO 목표에 따라 복구 | 전략에 따라 다름 |
 
-> **시험 문구 해석**: "highly available" → Multi-AZ + 자동 복구 조합으로 답합니다. "fault tolerant" → 더 강한 요건으로, 완전한 능동 이중화를 암시합니다. "DR"이 나오면 `saa-t2-5`의 4전략으로 답합니다.
+> **시험 문구 해석**: "highly available" → Multi-AZ + 자동 복구 조합으로 답합니다. "fault tolerant" → 더 강한 요건으로, 구성 요소가 실패해도 예비(중복) 구성 요소가 넘겨받아 중단 없이 동작하는 설계를 암시합니다. "DR"이 나오면 `saa-t2-5`의 4전략으로 답합니다.
 
 
 > 🧠 원리: 왜 HA·내결함성·DR을 같은 개념으로 묶으면 시험에서 오답을 고를까요?
 > 세 개념은 "얼마나 빨리, 얼마나 완전하게 서비스를 유지하느냐"의 요구 강도가 다릅니다.
-> HA는 수 초~수 분의 짧은 중단을 허용하며 비용 대비 자동 복구를 목표로 하고, 내결함성은 중단 자체를 허용하지 않아 능동 이중화 비용이 훨씬 크며, DR은 리전 단위 재해를 대상으로 RTO/RPO로 목표를 수치화합니다.
-> "highly available"이라는 시험 문구는 Multi-AZ 자동 복구를 의미하고, "fault tolerant"는 그보다 강한 무중단 이중화를 암시하므로 두 키워드를 구분해 다른 설계로 답해야 합니다.
+> HA는 수 초~수 분의 짧은 중단을 허용하며 비용 대비 자동 복구를 목표로 하고, 내결함성은 구성 요소가 실패해도 중단 없이 동작하는 것이 목표라 예비(중복) 용량을 미리 갖추는 비용이 훨씬 크며, DR은 리전 단위 재해를 대상으로 RTO/RPO로 목표를 수치화합니다.
+> "highly available"이라는 시험 문구는 Multi-AZ 자동 복구를 의미하고, "fault tolerant"는 그보다 강한, 예비 구성 요소가 넘겨받는 무중단 설계를 암시하므로 두 키워드를 구분해 다른 설계로 답해야 합니다.
 
 ---
 
@@ -119,7 +119,7 @@ CLF에서 Multi-AZ를 개념으로만 봤다면, SAA는 **RDS Multi-AZ와 읽기
 | 단일 가용 영역(AZ) | 리소스를 최소 2개 AZ에 분산 배치 |
 | 단일 RDS 인스턴스 | RDS Multi-AZ (자동 스탠바이 + 페일오버) |
 | 단일 로드 밸런서 노드 | ELB는 내부적으로 다중 AZ 이중화 제공 |
-| 단일 NAT 게이트웨이 | AZ마다 NAT 게이트웨이 1개씩 배치 |
+| 단일 NAT 게이트웨이 | 영역형은 AZ마다 NAT 게이트웨이 1개씩 배치(또는 리전 NAT 게이트웨이) |
 
 > AWS Well-Architected Reliability Pillar는 "이중화를 통한 단일 실패점 제거"를 복원력 설계의 핵심 원칙으로 명시합니다.
 
@@ -270,7 +270,7 @@ Route 53 페일오버 레코드
 |---|---|
 | AZ 장애 | 나머지 AZ의 인스턴스가 이미 실행 중 → 트래픽 수용 가능 |
 | RDS 페일오버 | 스탠바이가 항상 동기 복제 상태로 대기 → 즉시 전환 |
-| NAT 게이트웨이 | AZ마다 미리 배치 → 한 AZ 장애 시 다른 AZ 독립 동작 |
+| NAT 게이트웨이 | 영역형은 AZ마다 미리 배치 → 한 AZ 장애 시 다른 AZ 독립 동작 |
 
 > 🧠 원리: 왜 장애 중에 동적 조달(인스턴스 생성·확장)에 의존하는 방식이 위험할까요?
 > 대규모 장애나 리전 이벤트는 AWS 제어 플레인(EC2 API, Auto Scaling 등)에도 부하를 주어 동적 조달 자체가 지연되거나 실패할 수 있습니다.
@@ -463,7 +463,7 @@ ElastiCache Redis / DynamoDB (세션·상태 저장)
 | "EC2 자동 복구·교체" | ASG 헬스 체크 (self-healing) |
 | "DNS 레벨 페일오버" | Route 53 헬스 체크 + 페일오버 라우팅 |
 | "세션 저장 위치 (ASG 환경)" | ElastiCache Redis 또는 DynamoDB |
-| "fault tolerant" | 능동 이중화(Multi-AZ/Multi-Region)로 무중단 |
+| "fault tolerant" | 예비(중복) 구성 요소가 넘겨받아 중단 없이 동작(Multi-AZ/Multi-Region 중복) |
 
 ---
 
@@ -484,7 +484,7 @@ ElastiCache Redis / DynamoDB (세션·상태 저장)
 5. **"읽기 복제본은 자동으로 페일오버된다."** → 읽기 복제본은 자동 페일오버가 없습니다. 수동 승격(promote)이 필요합니다. 자동 페일오버는 RDS Multi-AZ의 기능입니다.
    (원리: §5 — 비동기 복제 구조에서는 데이터 유실 가능성을 운영자가 확인해야 하므로, 자동 전환을 허용하지 않고 수동 승격을 요구한다.)
 
-6. **"NAT 게이트웨이 1개로 전체 VPC를 커버하면 된다."** → NAT 게이트웨이가 있는 AZ에 장애가 나면 다른 AZ의 프라이빗 서브넷이 인터넷에 나갈 수 없습니다. AZ마다 NAT 게이트웨이를 배치해야 합니다.
+6. **"NAT 게이트웨이 1개로 전체 VPC를 커버하면 된다."** → NAT 게이트웨이가 있는 AZ에 장애가 나면 다른 AZ의 프라이빗 서브넷이 인터넷에 나갈 수 없습니다. 영역형은 AZ마다 배치하고, 리전 NAT 게이트웨이를 쓰면 워크로드가 있는 AZ로 자동 확장됩니다.
    (원리: §7 — 정적 안정성 원칙에 따라 장애 중 동적 조달 없이 각 AZ가 독립 동작하려면 NAT 게이트웨이도 AZ마다 사전 배치돼야 한다.)
 
 ---

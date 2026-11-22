@@ -18,7 +18,7 @@ sources:
     url: https://docs.aws.amazon.com/wellarchitected/latest/framework/reliability.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # DR 전략 — RTO·RPO·Pilot Light·Warm Standby·Active-Active
@@ -130,11 +130,11 @@ Backup & Restore → Pilot Light → Warm Standby → Multi-Site Active-Active
 |---|---|---|
 | S3 | Cross-Region Replication (CRR) | 비동기 연속 복제, 원본·대상 버킷 버전 관리 필수 |
 | RDS | 교차 리전 Read Replica | 비동기, 페일오버 시 Primary로 승격 필요 |
-| Aurora | **Global Database** | 전용 인프라, 보조 리전 복제 지연 **1초 미만**, 장애 시 1분 내 승격 |
+| Aurora | **Global Database** | 전용 인프라, 보조 리전 복제 지연 **1초 미만**, 장애 시 보조 리전 승격(RTO는 분 단위 — 제품 페이지는 1분 미만을 제시) |
 | DynamoDB | Global Tables | 멀티 리전 읽기·쓰기. 생성 시 일관성 모드 선택 — **MREC**(멀티 리전 최종 일관성, 기본) 또는 **MRSC**(멀티 리전 강한 일관성, 동일 계정 구성만). 생성 후 변경 불가 |
 | 통합 백업 | **AWS Backup** | 다중 서비스·리전·계정, 정책 기반 중앙 관리 |
 
-> Aurora Global Database는 RPO를 가장 낮추고 싶을 때 최선택입니다. "리전 간 1초 미만 복제"가 시험 문구로 자주 등장합니다.
+> Aurora Global Database는 RPO를 가장 낮추고 싶을 때 최선의 선택입니다. "리전 간 1초 미만 복제"가 시험 문구로 자주 등장합니다.
 
 > 🧠 원리: 왜 리전 간 데이터 복제는 대부분 비동기 방식을 사용할까요?
 > 두 리전 사이의 물리적 거리로 인해 네트워크 왕복 지연이 상당하며, 동기 복제는 모든 쓰기 작업이 보조 리전의 확인 응답을 기다려야 하므로 쓰기마다 그 지연이 추가됩니다.
@@ -196,7 +196,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 > 🧠 원리: 왜 DRS는 파일 레벨이나 애플리케이션 레벨이 아닌 블록 레벨 복제를 사용할까요?
 > 블록 레벨 복제는 OS와 파일시스템 종류에 상관없이 디스크에 쓰이는 모든 변경을 그대로 캡처하므로, DB 트랜잭션 로그·임시 파일·시스템 파일을 포함한 서버 전체 상태를 빠짐없이 복제합니다.
 > 파일 레벨 복제는 열려 있는 DB 파일처럼 잠긴 상태의 파일을 일관되게 캡처하기 어렵고, 애플리케이션 레벨 복제는 에이전트가 각 앱을 별도로 지원해야 해 이기종 환경에서 관리 부담이 큽니다.
-> 이 OS 중립적 특성 덕분에 DRS는 온프레미스 Windows·Linux 서버와 타 클라우드 EC2를 추가 에이전트 없이 단일 방식으로 AWS에 복제할 수 있습니다.
+> 이 OS 중립적 특성 덕분에 DRS는 온프레미스 Windows·Linux 서버와 다른 클라우드의 서버를, 소스 서버마다 AWS Replication Agent를 설치하는 단일 방식으로 AWS에 복제할 수 있습니다.
 
 ### 8) 전략을 실제로 작동시키는 것 — 쿼터·테스트·페일백 {#dr-operations}
 
@@ -252,7 +252,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
    (원리: §6 — AZ 간 왕복 지연은 짧아 동기 복제가 실용적이고, 리전 간 왕복 지연은 물리적으로 커서 비동기가 불가피하다.)
 
 4. **"RPO=0이면 Backup & Restore로 된다."** → Backup & Restore는 RPO가 마지막 백업 이후(수 시간)입니다. RPO 0 요구에는 동기 복제 또는 Active-Active가 필요합니다.
-   (원리: §1 — RPO는 복구 가능한 가장 최근 시점까지의 거리이며, 백업 주기만큼 반드시 손실이 발생한다.)
+   (원리: §1 — RPO는 복구 가능한 가장 최근 시점까지의 거리이며, 마지막 백업(또는 PITR이 닿는 시점) 이후의 변경은 잃을 수 있어 0이 되지 않는다.)
 
 5. **"AWS DRS는 RDS 관리형 DB에도 사용한다."** → DRS는 서버 기반(EC2) 앱과 DB에만 적용됩니다. RDS 같은 관리형 서비스는 교차 리전 Read Replica·Aurora Global Database를 사용합니다.
    (원리: §7 — DRS의 블록 레벨 복제는 OS가 직접 관리하는 디스크를 대상으로 하므로, AWS가 스토리지를 추상화한 관리형 서비스에는 접근 경로가 없다.)
@@ -277,7 +277,7 @@ Route 53은 Pilot Light / Warm Standby / Active-Active 모두에서 트래픽 �
 
 <details><summary>정답 보기</summary>
 
-전략은 **Warm Standby**가 적합합니다. RTO 15분은 Pilot Light(서버 기동 포함)로는 빠듯하고, Active-Active는 불필요하게 비쌉니다. Warm Standby는 축소판 스택이 상시 가동 중이므로 빠른 확장으로 15분 이내 복구가 가능합니다. DB는 **Aurora Global Database**를 사용합니다. 전용 인프라로 보조 리전 복제 지연이 1초 미만이므로 RPO 1분을 충족하며, 장애 시 1분 내 보조 리전을 Primary로 승격할 수 있습니다.
+전략은 **Warm Standby**가 적합합니다. RTO 15분은 Pilot Light(서버 기동 포함)로는 빠듯하고, Active-Active는 불필요하게 비쌉니다. Warm Standby는 축소판 스택이 상시 가동 중이므로 빠른 확장으로 15분 이내 복구가 가능합니다. DB는 **Aurora Global Database**를 사용합니다. 전용 인프라로 보조 리전 복제 지연이 1초 미만이므로 RPO 1분을 충족하며, 장애 시 보조 리전을 Primary로 승격(RTO는 분 단위)할 수 있습니다.
 </details>
 
 **Q3.** 회사가 온프레미스 서버에서 실행 중인 애플리케이션의 DR을 AWS에 구성하려 합니다. 서버 단위로 지속 복제하고 수 분 내 AWS에서 기동할 수 있는 서비스는?

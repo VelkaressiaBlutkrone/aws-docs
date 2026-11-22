@@ -28,7 +28,7 @@ sources:
     url: https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-sign-in-feature-plans.html
   - title: AWS WAF Anti-DDoS 관리형 규칙 그룹(유료·웹 ACL에 추가) (공식)
     url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 애플리케이션 보안 — Shield·WAF·Cognito·Secrets Manager
@@ -67,7 +67,7 @@ lastVerified: 2026-11-17
 
 | 용어 | 영문 | 한 줄 풀이 |
 |---|---|---|
-| **웹 ACL** | Web Access Control List | WAF의 규칙 컨테이너 — 요청을 순서대로 평가해 첫 매칭 액션(Allow/Block/Count)을 실행 |
+| **웹 ACL** | Web Access Control List | WAF의 규칙 컨테이너 — 규칙을 우선순위 순서로 평가해 처음 매칭된 종료 액션(Allow/Block)에서 끝남(Count는 비종료) |
 | **관리형 규칙 그룹** | Managed Rule Group | AWS 또는 서드파티가 사전 구성한 WAF 규칙 묶음 — OWASP Top 10 등 |
 | **DDoS** | Distributed Denial of Service | 대량 트래픽으로 서비스를 불능 상태로 만드는 분산 공격 |
 | **SRT** | Shield Response Team | Shield Advanced 가입자 전용 24/7 DDoS 대응 전담팀 |

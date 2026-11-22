@@ -26,7 +26,7 @@ sources:
     url: https://aws.amazon.com/aws-transfer-family/faqs/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 데이터 수집·변환·분석 — Kinesis·Glue·Athena·EMR·Lake Formation
@@ -307,7 +307,7 @@ Transfer Family       →  Lake Formation (거버넌스)
 | 특성 | 배치 수집 | 스트리밍 수집 |
 |---|---|---|
 | 처리 단위 | 일정 시간 묶음 | 레코드 단위 실시간 |
-| 지연 | 분~시간 | 밀리초~초 |
+| 지연 | 분~시간 | 밀리초~초 (Firehose는 버퍼 설정에 따라 수 초~수 분) |
 | 대표 서비스 | Glue ETL, EMR, DataSync | Kinesis Data Streams, Firehose |
 | 비용 패턴 | 잡 실행 시에만 과금 | 샤드 시간·레코드 수로 상시 과금 |
 | 적합한 상황 | 정기 리포트, 대용량 이관 | 실시간 알림·모니터링, 클릭스트림 |

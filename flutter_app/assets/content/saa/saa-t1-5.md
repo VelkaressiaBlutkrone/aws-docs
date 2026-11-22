@@ -38,7 +38,7 @@ sources:
     url: https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
   - title: RDS Blue/Green 배포 TargetResourceConfiguration(green 암호화 TargetKmsKeyId) (공식 API)
     url: https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_TargetResourceConfiguration.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 데이터 보안 제어 — KMS·CloudHSM·ACM·백업·거버넌스
@@ -79,7 +79,7 @@ lastVerified: 2026-11-17
 | **봉투 암호화** | Envelope Encryption | 데이터 키를 KMS 키로 다시 암호화하는 이중 래핑 방식 |
 | **데이터 키** | Data Key | 실제 데이터를 암호화하는 대칭키 — KMS가 생성하고 KMS 키로 보호 |
 | **CMK** | Customer Managed Key | 고객이 직접 생성·관리·정책 제어하는 KMS 키 |
-| **키 정책** | Key Policy | CMK에 붙이는 리소스 기반 정책 — IAM 정책만으로는 CMK 접근 불가 |
+| **키 정책** | Key Policy | CMK에 붙이는 리소스 기반 정책 — 키 정책이 허용(계정 위임 문장 포함)해야 IAM 정책이 효력을 가짐 |
 | **HSM** | Hardware Security Module | 키 생성·저장·연산을 전용 하드웨어에서 수행하는 보안 장치 |
 | **PII** | Personally Identifiable Information | 이름·주민번호·카드번호 등 개인을 식별할 수 있는 정보 |
 | **WORM** | Write-Once Read-Many | 쓰기 1회 후 수정·삭제 불가를 보장하는 불변 저장 모델 |

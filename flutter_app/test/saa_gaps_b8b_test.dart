@@ -263,14 +263,16 @@ void main() {
     test('동작 제약이 있다', () {
       final t = doc('saa-t3-8');
       expect(t.contains('같은 VPC'), isTrue, reason: '같은 VPC 중복 어태치 불가');
-      expect(t.contains('보안 그룹'), isTrue, reason: '원격 VPC SG 참조 불가');
+      expect(t.contains('보안 그룹'), isTrue, reason: 'TGW 경유 SG 참조의 전제');
     });
 
-    // 금지: TGW 가 원격 VPC 보안 그룹 참조를 지원한다는 서술.
-    test('TGW가 원격 SG 참조를 지원한다고 적지 않는다', () {
-      final t = body('saa-t3-8');
-      expect(t.contains('전송 게이트웨이에서도 보안 그룹을 참조'), isFalse);
-      expect(t.contains('TGW도 보안 그룹 참조'), isFalse);
+    // 2026-11-22 판정 역전: 공식 `tgw-vpc-attachments` 는 같은 TGW 에 붙은 VPC 사이의
+    // 보안 그룹 참조를 인바운드 규칙에서 지원한다. 옛 가드는 「지원하지 않는다」를 굳혔다.
+    test('TGW 경유 SG 참조를 조건과 함께 적고 불가로 단정하지 않는다', () {
+      final t = doc('saa-t3-8');
+      expect(t.contains('양쪽에서 활성화'), isTrue);
+      expect(t.contains('인바운드 규칙에서만'), isTrue);
+      expect(t.contains('원격 VPC 보안 그룹 참조 불가'), isFalse);
     });
   });
 

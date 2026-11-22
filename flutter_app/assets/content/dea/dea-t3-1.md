@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html
   - title: DEA-C01 공식 시험 가이드 도메인 3 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain3.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 데이터 처리 자동화 (MWAA·Step Functions·SDK·Lambda·EventBridge)
@@ -218,7 +218,7 @@ Amazon MWAA는 Apache Airflow를 관리형으로 돌려 주는 서비스입니�
 | **비동기** | S3, SNS 등이 이벤트를 큐에 넣음 | 함수 오류 시 **2회 재시도**, 큐 보관 **최대 6시간**(재시도 0~2회로 조정 가능), **DLQ 또는 대상(destination)** |
 | **이벤트 소스 매핑(폴링)** | DynamoDB, Kinesis, SQS | **스트림**: 배치 전체 재시도, 오류가 해결되거나 항목이 만료될 때까지 **샤드 처리가 막힘**(Iterator Age로 감시). **큐**: 가시성 제한 시간·redrive 정책으로 제어 |
 
-- 한도: **일반 Lambda 함수의 타임아웃은 최대 900초(15분)**, 메모리 128 MB ~ 10,240 MB, 페이로드 동기 6 MB·비동기 1 MB, 계정·리전별 동시 실행 기본 **1,000**, 함수별 확장 속도는 10초마다 실행 환경 **1,000개** 입니다.
+- 한도: **일반 Lambda 함수의 타임아웃은 최대 1,800초(30분)**, 메모리 128 MB ~ 10,240 MB, 페이로드 동기 6 MB·비동기 1 MB, 계정·리전별 동시 실행 기본 **1,000**, 함수별 확장 속도는 10초마다 실행 환경 **1,000개** 입니다. 2026년 11월 상향 전 자료와 FAQ에는 15분으로 적힌 곳이 있습니다.
 - **동시성 제어** — **예약 동시성**은 함수가 쓸 수 있는 동시 인스턴스의 최소·최대를 정하고 **계정 동시성 한도에서 차감되며 추가 요금이 없습니다.** **프로비저닝 동시성**은 미리 초기화한 실행 환경 수로 **콜드 스타트를 줄이며 추가 요금이 듭니다.**
 - 비동기 실패 처리는 **대상(destination)을 선호**합니다(추가 대상 지원, 추가 정보 포함).
 - 이벤트 소스 매핑은 이벤트를 **최소 한 번** 처리하므로 **중복이 생길 수 있어 함수를 멱등으로** 만들어야 합니다.
