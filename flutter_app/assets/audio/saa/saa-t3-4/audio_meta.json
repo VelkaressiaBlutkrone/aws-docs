@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "saa-t3-4",
-  "generatedAt": "2026-09-03T01:56:58Z",
+  "generatedAt": "2026-11-22T09:30:27Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/saa/saa-t3-4.md",
-    "sha256": "55adf46f7b60d2e6e09c68b6ae5ac081981a04bd41ea7059bb1208bbf06badbd"
+    "sha256": "99b2981528d8bcd462fd714a96170dc3f8a1f445cfae09e18c96138491219c1b"
   },
   "audio": {
     "src": "assets/audio/saa/saa-t3-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 14002653,
-    "sha256": "fb29bb916ce3dd2c61a68335e98ad4fe5f54b35f5bcb10353bfc32f46de238e2",
+    "sizeBytes": 24365181,
+    "sha256": "f149dd617054ea7a8b9dfc5c8a667e34c7c179ac8bd54a7d19117f424e1ac049",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,59 +25,77 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 17635,
+    "speechChars": 30034,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.07271923239096229
+      "fraction": 0.041282749898049045
     },
     {
       "anchor": "compute-decision-tree",
-      "title": "1) 컴퓨팅 선택 결정 트리",
+      "title": "컴퓨팅 선택 결정 트리",
       "level": 3,
-      "fraction": 0.07448810637925893
+      "fraction": 0.042299304369411164
     },
     {
       "anchor": "compute-options",
-      "title": "2) 컴퓨팅 옵션 비교표 (시험 핵심)",
+      "title": "컴퓨팅 옵션 비교표, 시험 핵심입니다",
       "level": 3,
-      "fraction": 0.15286362187233254
+      "fraction": 0.10768976175982127
     },
     {
       "anchor": "containers-ecs-eks-fargate",
-      "title": "3) 컨테이너: 이씨에스 대 이케이에스 대 Fargate",
+      "title": "컨테이너, 이씨에스 대 이케이에스 대 파게이트",
       "level": 3,
-      "fraction": 0.20575501095262091
+      "fraction": 0.14384245769774054
     },
     {
       "anchor": "lambda-performance",
-      "title": "4) Lambda 성능 튜닝",
+      "title": "람다 성능 튜닝",
       "level": 3,
-      "fraction": 0.4877567181217026
+      "fraction": 0.37343601321520814
     },
     {
       "anchor": "aws-batch",
-      "title": "5) 에이더블유에스 Batch — 배치 워크로드 전용 오케스트레이터",
+      "title": "에이더블유에스 배치, 배치 워크로드 전용 오케스트레이터",
       "level": 3,
-      "fraction": 0.5666258728673241
+      "fraction": 0.5170479730967678
     },
     {
       "anchor": "hpc-architecture",
-      "title": "6) 에이치피씨 — 고성능 컴퓨팅 아키텍처",
+      "title": "에이치피씨, 고성능 컴퓨팅 아키텍처",
       "level": 3,
-      "fraction": 0.6844719602620402
+      "fraction": 0.5871252194161904
+    },
+    {
+      "anchor": "edge-compute",
+      "title": "엣지 컴퓨팅, 리전 밖에서 코드를 돌리는 선택지",
+      "level": 3,
+      "fraction": 0.6460144563502148
+    },
+    {
+      "anchor": "compute-scaling-metrics",
+      "title": "컴퓨팅 스케일링 지표, 무엇을 보고 늘릴 것인가",
+      "level": 3,
+      "fraction": 0.7343010301479324
+    },
+    {
+      "anchor": "emr-deployment",
+      "title": "데이터 처리 컴퓨팅, 이엠알 배포 선택",
+      "level": 3,
+      "fraction": 0.8171620399647752
     },
     {
       "anchor": "common-pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8101545707909541
+      "fraction": 0.8848692959178246
     }
   ],
   "generator": {

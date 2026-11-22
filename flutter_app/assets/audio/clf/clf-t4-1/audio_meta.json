@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-1",
-  "generatedAt": "2026-07-03T05:21:13Z",
+  "generatedAt": "2026-11-22T09:12:01Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t4-1.md",
-    "sha256": "f08f18628f4f3ace2dbb0d21b177cb9cda49d47ceb372edd3fe11dc91e781373"
+    "sha256": "5df05ef73660b970412de9561e9ba7996e42226678d6b986c7da60535adaab7c"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t4-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6941037,
-    "sha256": "4855ab76d6fdb387b7992823c928c3e9a6140829e1c6f0bbe5382f9305543167",
+    "sizeBytes": 8026941,
+    "sha256": "b48b553c1fd2dc0dd83ffdd05a251858295281b04efb18f2524d5157fcf0b5de",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,35 +25,41 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8603,
+    "speechChars": 9948,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "purchase-options",
-      "title": "1) 이씨투 컴퓨팅 구매 옵션 (시험 핵심)",
+      "title": "이씨투 컴퓨팅 구매 옵션",
       "level": 3,
-      "fraction": 0.18963963963963965
+      "fraction": 0.1700245788406681
     },
     {
       "anchor": "data-transfer",
-      "title": "2) 데이터 전송 요금",
+      "title": "데이터 전송 요금",
       "level": 3,
-      "fraction": 0.44534534534534537
+      "fraction": 0.406394086725632
     },
     {
       "anchor": "storage-pricing",
-      "title": "3) 스토리지 계층별 요금 (4.x 스토리지와 연계)",
+      "title": "스토리지 계층별 요금",
       "level": 3,
-      "fraction": 0.5872372372372372
+      "fraction": 0.5270815766339547
+    },
+    {
+      "anchor": "free-tier",
+      "title": "에이더블유에스 프리 티어, 계정 플랜과 크레딧",
+      "level": 3,
+      "fraction": 0.6723120256911678
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8585585585585586
+      "fraction": 0.8767469814671953
     }
   ],
   "generator": {

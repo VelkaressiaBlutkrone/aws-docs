@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "saa-t3-8",
-  "generatedAt": "2026-09-03T03:03:06Z",
+  "generatedAt": "2026-11-22T09:35:42Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/saa/saa-t3-8.md",
-    "sha256": "aa49e0285dffb84d2ddea48a559a49d86413322904e3a8e3878e17643b6c4bb2"
+    "sha256": "f5237a4cc46219a2354d6b9e25061d0fd5887e530a7bded8d64abb0febe03a82"
   },
   "audio": {
     "src": "assets/audio/saa/saa-t3-8/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 14923533,
-    "sha256": "19402f502784aa6c9fb28f2143e2ee1eb6bfab29c2ef14ba637e8493e9dad28a",
+    "sizeBytes": 22450989,
+    "sha256": "e408c86752ebcbb74c36d17d532f90d2eac041e1e0ba52d80def86a81ad85cb9",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,65 +25,77 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 18811,
+    "speechChars": 27508,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.07327852400802841
+      "fraction": 0.04910651289879799
     },
     {
       "anchor": "vpc-peering",
-      "title": "1) 브이피씨 피어링 — 1:1 직접 연결, 전이 불가",
+      "title": "1번, 브이피씨 피어링입니다. 일대일 직접 연결이고, 전이는 되지 않습니다.",
       "level": 3,
-      "fraction": 0.0747645514898873
+      "fraction": 0.05009428758354393
     },
     {
       "anchor": "transit-gateway",
-      "title": "2) Transit Gateway — 허브-스포크, 전이 라우팅",
+      "title": "2번, 트랜짓 게이트웨이입니다. 허브 스포크 구조이고, 전이 라우팅이 됩니다.",
       "level": 3,
-      "fraction": 0.16939748340280994
+      "fraction": 0.12070734930021937
     },
     {
       "anchor": "site-to-site-vpn",
-      "title": "3) Site-to-Site 브이피엔 — 인터넷 위 아이피섹 터널",
+      "title": "3번, 사이트 투 사이트 브이피엔입니다. 인터넷 위에 만드는 아이피섹 터널입니다.",
       "level": 3,
-      "fraction": 0.3017118264628686
+      "fraction": 0.247559426834118
     },
     {
       "anchor": "direct-connect",
-      "title": "4) Direct Connect (디엑스) — 전용 물리 회선",
+      "title": "4번, 다이렉트 커넥트, 줄여서 디엑스입니다. 전용 물리 회선입니다.",
       "level": 3,
-      "fraction": 0.41933958622819206
+      "fraction": 0.3672790014495914
     },
     {
       "anchor": "direct-connect-gateway",
-      "title": "5) Direct Connect Gateway — 단일 디엑스로 다중 리전 접근",
+      "title": "5번, 다이렉트 커넥트 게이트웨이입니다. 디엑스 하나로 여러 리전에 접근합니다.",
       "level": 3,
-      "fraction": 0.5131812567546704
+      "fraction": 0.4929765371441766
     },
     {
       "anchor": "vpn-vs-direct-connect",
-      "title": "6) 브이피엔 대 Direct Connect 비교 (단골)",
+      "title": "6번, 브이피엔과 다이렉트 커넥트 비교입니다. 단골 주제입니다.",
       "level": 3,
-      "fraction": 0.5961189593947815
+      "fraction": 0.5599527920670148
     },
     {
       "anchor": "privatelink",
-      "title": "7) PrivateLink와 인터페이스 엔드포인트",
+      "title": "7번, 프라이빗링크와 인터페이스 엔드포인트입니다.",
       "level": 3,
-      "fraction": 0.6792207040296434
+      "fraction": 0.6211691660359447
+    },
+    {
+      "anchor": "subnet-design",
+      "title": "8번, 서브넷 설계와 아이피 주소 지정입니다.",
+      "level": 3,
+      "fraction": 0.7035328980282991
+    },
+    {
+      "anchor": "global-topology-dns",
+      "title": "9번, 글로벌 토폴로지와 하이브리드 디엔에스, 그리고 리소스 배치입니다.",
+      "level": 3,
+      "fraction": 0.7762433774197273
     },
     {
       "anchor": "common-pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8464180947969739
+      "fraction": 0.8986119841442921
     }
   ],
   "generator": {

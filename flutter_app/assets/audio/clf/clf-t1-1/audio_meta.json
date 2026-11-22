@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-1",
-  "generatedAt": "2026-06-29T04:15:06Z",
+  "generatedAt": "2026-11-22T09:00:04Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t1-1.md",
-    "sha256": "499b5adc0d8fe419fde38561f2c4f52c837376ac5efa9a6690a3d588d9d27eee"
+    "sha256": "9251486452f6a303e98daae335b8f9cd11dfe52ba12020af0292d0a792ce897e"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t1-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 4087245,
-    "sha256": "f2433088241576b20d4ad26e8ac052ff257afb7a2d037318ebeaaace7d3f6363",
+    "sizeBytes": 4085373,
+    "sha256": "5f51e3a8f34214b1f24dff031993b85457530536f74909efb0a492f152d52ed8",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,41 +25,47 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 5002,
+    "speechChars": 5008,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.14400986610288935
+      "fraction": 0.14389960164980434
+    },
+    {
+      "anchor": "what-is-cloud",
+      "title": "클라우드 컴퓨팅이란",
+      "level": 3,
+      "fraction": 0.15049176860436422
     },
     {
       "anchor": "core-benefits",
-      "title": "2) 클라우드의 핵심 이점 (시험 핵심)",
+      "title": "클라우드의 핵심 이점",
       "level": 3,
-      "fraction": 0.27864693446088795
+      "fraction": 0.2830754045193358
     },
     {
       "anchor": "ha-elasticity",
-      "title": "3) 고가용성 · 탄력성 · 민첩성 — 헷갈리지 않기",
+      "title": "고가용성, 탄력성, 민첩성, 헷갈리지 않기",
       "level": 3,
-      "fraction": 0.45584918957011983
+      "fraction": 0.4582437339161702
     },
     {
       "anchor": "global-infra",
-      "title": "4) 글로벌 인프라의 이점",
+      "title": "글로벌 인프라의 이점",
       "level": 3,
-      "fraction": 0.6069062720225511
+      "fraction": 0.6077484400888357
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8337209302325581
+      "fraction": 0.8336447280290479
     }
   ],
   "generator": {

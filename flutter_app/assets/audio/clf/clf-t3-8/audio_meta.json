@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-8",
-  "generatedAt": "2026-11-17T22:50:50Z",
+  "generatedAt": "2026-11-22T09:11:43Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-8.md",
-    "sha256": "b23907d36617e385394d7dbf858b3d2e8f745d23aa6597f51dcf1fd123411bc7"
+    "sha256": "0a3efcf22197cf5ec063d7a46ebcc6d88dd98d6cc055866787731ac89253b4dc"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-8/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 10922061,
-    "sha256": "65ebad6efbbfa897d97c7efd174f9a6d970446c516606bb9dbafe68c4c2d3dd6",
+    "sizeBytes": 12268317,
+    "sha256": "15842920c7e0841d16fa96a1c5be1bfdf4597a6356d9c62cb430b68954db230b",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,59 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 13741,
+    "speechChars": 15262,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "messaging",
-      "title": "1) 앱 통합 메시징 — 에스엔에스 · 에스큐에스 · EventBridge (시험 핵심)",
+      "title": "앱 통합 메시징, 에스엔에스, 에스큐에스, 이벤트브리지",
       "level": 3,
-      "fraction": 0.10271082748800169
+      "fraction": 0.09115772422616882
     },
     {
       "anchor": "euc",
-      "title": "2) 최종 사용자 컴퓨팅 — Amazon WorkSpaces",
+      "title": "최종 사용자 컴퓨팅, 아마존 워크스페이스",
       "level": 3,
-      "fraction": 0.2691050050102843
+      "fraction": 0.23724953928139636
     },
     {
       "anchor": "appstream-mq",
-      "title": "애플리케이션 스트리밍과 메시지 브로커 — AppStream 2.0 · Amazon 엠큐",
+      "title": "애플리케이션 스트리밍과 메시지 브로커, 앱스트림 2.0과 아마존 엠큐",
       "level": 3,
-      "fraction": 0.3716576129950952
+      "fraction": 0.3283603112931814
     },
     {
       "anchor": "iot",
-      "title": "3) IoT — 에이더블유에스 IoT Core",
+      "title": "아이오티, 에이더블유에스 아이오티 코어",
       "level": 3,
-      "fraction": 0.4821080111808449
+      "fraction": 0.4296127616118695
     },
     {
       "anchor": "other-services",
-      "title": "4) 그 외 범위 내 서비스 — 위치만 알아 두기",
+      "title": "그 외 범위 내 서비스, 위치만 알아 두기",
       "level": 3,
-      "fraction": 0.5715943251938189
+      "fraction": 0.5092319791532168
     },
     {
       "anchor": "sqs-types",
-      "title": "에스큐에스 큐 유형 — 표준 대 피포 (보강)",
+      "title": "에스큐에스 큐 유형, 표준 대 피포",
       "level": 3,
-      "fraction": 0.6509282210853858
+      "fraction": 0.6066226098388365
+    },
+    {
+      "anchor": "workflow-api",
+      "title": "워크플로와 에이피아이, 에이더블유에스 스텝 펑션스, 아마존 에이피아이 게이트웨이",
+      "level": 3,
+      "fraction": 0.6906201213714742
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8214756605664258
+      "fraction": 0.8415362764546382
     }
   ],
   "generator": {

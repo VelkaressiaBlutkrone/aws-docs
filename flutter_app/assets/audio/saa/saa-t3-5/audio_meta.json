@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "saa-t3-5",
-  "generatedAt": "2026-09-03T02:05:39Z",
+  "generatedAt": "2026-11-22T09:31:17Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/saa/saa-t3-5.md",
-    "sha256": "ed78a02001b01d27e1483da757f05b3279bea9933476fb7f66ccfacf30b6e35f"
+    "sha256": "07f80e1d23aac0e961d312d4f873e052dc21377b160666c8f15b500d95a9350f"
   },
   "audio": {
     "src": "assets/audio/saa/saa-t3-5/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 13050669,
-    "sha256": "b0a8e6a1569c95a5be308e3c4466ba2ceee5f35011a129e0dd5525f78ef5e4dc",
+    "sizeBytes": 19436061,
+    "sha256": "8e4f88cd419bb4200c4d39b82b3b69e28c7ab179e6cb809723305ed87a57c1a6",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,77 +25,89 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 16468,
+    "speechChars": 23987,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.07785845121709002
+      "fraction": 0.05200453437456008
     },
     {
       "anchor": "rds-basics",
-      "title": "1) Amazon 알디에스 기본",
+      "title": "1번, 아마존 알디에스 기본",
       "level": 3,
-      "fraction": 0.07982256747511751
+      "fraction": 0.053323355733538816
     },
     {
       "anchor": "multi-az",
-      "title": "2) Multi-에이제트 — 고가용성(에이치에이) 전용",
+      "title": "2번, 멀티 에이제트. 고가용성, 즉 에이치에이 전용입니다.",
       "level": 3,
-      "fraction": 0.1855427802175976
+      "fraction": 0.12511761960153814
     },
     {
       "anchor": "read-replica",
-      "title": "3) Read Replica — 읽기 확장 전용",
+      "title": "3번, 리드 레플리카. 읽기 확장 전용입니다.",
       "level": 3,
-      "fraction": 0.2534151347295478
+      "fraction": 0.1717357319088087
     },
     {
       "anchor": "multi-az-vs-read-replica",
-      "title": "4) Multi-에이제트 대 Read Replica 비교 (단골 출제)",
+      "title": "4번, 멀티 에이제트와 리드 레플리카 비교. 시험 단골 출제 주제입니다.",
       "level": 3,
-      "fraction": 0.33427493213867987
+      "fraction": 0.2880068756529277
     },
     {
       "anchor": "rds-backup",
-      "title": "5) 알디에스 백업",
+      "title": "5번, 알디에스 백업",
       "level": 3,
-      "fraction": 0.4107651225917507
+      "fraction": 0.345679378227593
     },
     {
       "anchor": "rds-storage",
-      "title": "6) 알디에스 스토리지 타입",
+      "title": "6번, 알디에스 스토리지 타입",
       "level": 3,
-      "fraction": 0.4206629444088893
+      "fraction": 0.3523179396750365
     },
     {
       "anchor": "aurora",
-      "title": "7) Amazon Aurora — 클라우드 네이티브 관계형 디비",
+      "title": "7번, 아마존 오로라. 클라우드 네이티브 관계형 디비입니다.",
       "level": 3,
-      "fraction": 0.46717277602454044
+      "fraction": 0.42566811638228036
     },
     {
       "anchor": "aurora-vs-rds",
-      "title": "8) Aurora 대 알디에스 비교",
+      "title": "8번, 오로라와 알디에스 비교",
       "level": 3,
-      "fraction": 0.6092622426235297
+      "fraction": 0.5948180693344398
     },
     {
       "anchor": "rds-proxy",
-      "title": "9) 알디에스 Proxy",
+      "title": "9번, 알디에스 프록시",
       "level": 3,
-      "fraction": 0.6726215434864167
+      "fraction": 0.6416140002519097
+    },
+    {
+      "anchor": "db-migration",
+      "title": "10번, 디비 마이그레이션. 디엠에스와 에스씨티입니다.",
+      "level": 3,
+      "fraction": 0.7669094384636472
+    },
+    {
+      "anchor": "write-scaling",
+      "title": "11번, 쓰기 집약 워크로드의 한계",
+      "level": 3,
+      "fraction": 0.8214330698160318
     },
     {
       "anchor": "common-pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8475271996998653
+      "fraction": 0.8969170698456682
     }
   ],
   "generator": {

@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "saa-t4-1",
-  "generatedAt": "2026-11-21T11:31:18Z",
+  "generatedAt": "2026-11-22T09:38:09Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/saa/saa-t4-1.md",
-    "sha256": "70c03d510df9190a182ac9b8d6857759b0d2a908619281ad633800d942540225"
+    "sha256": "ac82cd61bcfac1fb596d1b2dec0c340bcec59c25367d3932f63d63d6ee7d1483"
   },
   "audio": {
     "src": "assets/audio/saa/saa-t4-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 13910349,
-    "sha256": "c8e695f0c5847ba0cd1972d37e050102985cec01199c091a976c1b922c5e6927",
+    "sizeBytes": 21611325,
+    "sha256": "4a8c4f7fe6f2a0f0f4af33ac1aa6e89c65cf734d34adb8fd0b1d87c669060a43",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,65 +25,83 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 17758,
+    "speechChars": 26761,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.07083109031429873
+      "fraction": 0.043904714309511914
     },
     {
       "anchor": "s3-cost-structure",
-      "title": "1) 에스쓰리 비용 구조 — 세 가지 요금 축",
+      "title": "첫 번째, 에스쓰리 비용 구조와 세 가지 요금 축",
       "level": 3,
-      "fraction": 0.07248747360139136
+      "fraction": 0.04497084790937864
     },
     {
       "anchor": "s3-storage-classes",
-      "title": "2) 에스쓰리 스토리지 클래스 — 비용 최적화 관점",
+      "title": "두 번째, 비용 최적화 관점에서 본 에스쓰리 스토리지 클래스",
       "level": 3,
-      "fraction": 0.14906414344279267
+      "fraction": 0.12574379476928202
     },
     {
       "anchor": "s3-lifecycle",
-      "title": "3) 에스쓰리 수명주기 정책 — 자동 비용 절감",
+      "title": "세 번째, 자동으로 비용을 줄이는 에스쓰리 수명주기 정책",
       "level": 3,
-      "fraction": 0.2661497370491532
+      "fraction": 0.20247876061969017
     },
     {
       "anchor": "ebs-cost",
-      "title": "4) 이비에스 비용 최적화",
+      "title": "네 번째, 이비에스 비용 최적화",
       "level": 3,
-      "fraction": 0.3455940204563336
+      "fraction": 0.3156088622355489
     },
     {
       "anchor": "data-transfer-cost",
-      "title": "5) 데이터 전송 비용",
+      "title": "다섯 번째, 데이터 전송 비용",
       "level": 3,
-      "fraction": 0.4880015735641227
+      "fraction": 0.46759953356655004
     },
     {
       "anchor": "efs-fsx-cost",
-      "title": "6) 이에프에스·FSx 비용 계층",
+      "title": "여섯 번째, 이에프에스와 에프에스엑스 비용 계층",
       "level": 3,
-      "fraction": 0.6384011760321339
+      "fraction": 0.556768282525404
     },
     {
       "anchor": "s3-storage-lens",
-      "title": "7) 에스쓰리 Storage Lens — 조직 전체 비용 탐지 도구",
+      "title": "일곱 번째, 조직 전체의 비용을 탐지하는 도구, 에스쓰리 스토리지 렌즈",
       "level": 3,
-      "fraction": 0.71443952130523
+      "fraction": 0.6327303015159087
+    },
+    {
+      "anchor": "transfer-service-cost",
+      "title": "여덟 번째, 온프레미스 데이터를 옮기는 비용과 전송, 하이브리드 서비스 선택",
+      "level": 3,
+      "fraction": 0.7140629685157421
+    },
+    {
+      "anchor": "sizing-autoscaling",
+      "title": "아홉 번째, 올바른 크기와 오토 스케일링이 필요한 시점",
+      "level": 3,
+      "fraction": 0.7662435448942195
+    },
+    {
+      "anchor": "storage-selection-matrix",
+      "title": "열 번째, 요구에서 비용으로 가는 스토리지 선택 매트릭스",
+      "level": 3,
+      "fraction": 0.8158254206230218
     },
     {
       "anchor": "common-pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8356350159426892
+      "fraction": 0.9046343494919207
     }
   ],
   "generator": {

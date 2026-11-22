@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-3",
-  "generatedAt": "2026-06-30T01:58:00Z",
+  "generatedAt": "2026-11-22T09:08:16Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-3.md",
-    "sha256": "bef5e547d2c346d2ad88d4e4c194dd1051329fcb8c0827d73a734a087937e674"
+    "sha256": "e228072fc69beb48c5ed2763515e42719ef6ebec8093366b47f2b19519d9e461"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 12428733,
-    "sha256": "5ec02d34ed8385dfddf1413f30d8e66de35f6ac7de028f482049ffd9c8489952",
+    "sizeBytes": 13815597,
+    "sha256": "1597f6b137844189a9c1690caae8b53d7e99f24761b79613e89b5438ca54f7b7",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,59 +25,65 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 15482,
+    "speechChars": 17122,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "ec2",
-      "title": "1) Amazon 이씨투 — 클라우드의 가상 서버 (IaaS)",
+      "title": "아마존 이씨투, 클라우드의 가상 서버, 이아스",
       "level": 3,
-      "fraction": 0.08922798845980048
+      "fraction": 0.08002042986095187
     },
     {
       "anchor": "containers",
-      "title": "2) 컨테이너 — Amazon 이씨에스 대 Amazon 이케이에스",
+      "title": "컨테이너, 아마존 이씨에스 대 아마존 이케이에스",
       "level": 3,
-      "fraction": 0.2229251393282121
+      "fraction": 0.20208884904834373
     },
     {
       "anchor": "registry-batch",
-      "title": "컨테이너 이미지와 배치 작업 — Amazon 이씨알 · 에이더블유에스 Batch",
+      "title": "컨테이너 이미지와 배치 작업, 아마존 이씨알, 에이더블유에스 배치",
       "level": 3,
-      "fraction": 0.31780736209113974
+      "fraction": 0.2873418249285997
     },
     {
       "anchor": "serverless",
-      "title": "3) 서버리스 — 에이더블유에스 Lambda(함수)와 에이더블유에스 Fargate(컨테이너)",
+      "title": "서버리스, 함수를 실행하는 에이더블유에스 람다와 컨테이너를 실행하는 에이더블유에스 파게이트",
       "level": 3,
-      "fraction": 0.4076494374732061
+      "fraction": 0.3694260876816277
     },
     {
       "anchor": "autoscaling",
-      "title": "4) 탄력성 — Amazon 이씨투 Auto Scaling",
+      "title": "탄력성, 아마존 이씨투 오토 스케일링",
       "level": 3,
-      "fraction": 0.5490979874170113
+      "fraction": 0.5003127019533449
     },
     {
       "anchor": "elb",
-      "title": "5) 트래픽 분산 — Elastic Load Balancing(이엘비)",
+      "title": "트래픽 분산, 일래스틱 로드 밸런싱, 줄여서 이엘비",
       "level": 3,
-      "fraction": 0.6520907921721297
+      "fraction": 0.5924972377994121
     },
     {
       "anchor": "spectrum",
-      "title": "6) 한눈에 — 관리 부담 스펙트럼",
+      "title": "한눈에 보는 관리 부담 스펙트럼",
       "level": 3,
-      "fraction": 0.7453161388995099
+      "fraction": 0.6770622693823094
+    },
+    {
+      "anchor": "purchase-options",
+      "title": "이씨투 구매 옵션, 스팟 인스턴스, 예약 인스턴스",
+      "level": 3,
+      "fraction": 0.7493068440034188
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8560719292757251
+      "fraction": 0.8705622381121141
     }
   ],
   "generator": {

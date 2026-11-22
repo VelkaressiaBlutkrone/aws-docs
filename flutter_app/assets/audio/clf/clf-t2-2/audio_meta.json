@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-2",
-  "generatedAt": "2026-11-06T02:17:28Z",
+  "generatedAt": "2026-11-22T09:04:50Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t2-2.md",
-    "sha256": "0dac44170662525215b01fd6063399b089a9a29b955e71adefdcdf033110a993"
+    "sha256": "d49f5070f1467ce702163f89c550188e0034eef91c85ce4ed00b5328b21e2711"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t2-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 15299805,
-    "sha256": "6dd14e2bca7aea95b7dd8673bba2684fcabc24e6cc306f43186d90aaec34100b",
+    "sizeBytes": 15338253,
+    "sha256": "95204e89050c4e83072455fcaeea145a6a9f67f8df8355208e314bf59ff569b2",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,59 +25,59 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 18956,
+    "speechChars": 18971,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "governance-compliance",
-      "title": "1) 거버넌스 대 컴플라이언스 — 두 단어를 먼저 가른다",
+      "title": "거버넌스 대 컴플라이언스, 두 단어를 먼저 가른다",
       "level": 3,
-      "fraction": 0.06557485058120383
+      "fraction": 0.06538230434129488
     },
     {
       "anchor": "artifact",
-      "title": "2) 컴플라이언스 증거는 어디서 받나 — 에이더블유에스 Artifact",
+      "title": "컴플라이언스 증거는 어디서 받나, 에이더블유에스 아티팩트",
       "level": 3,
-      "fraction": 0.15064238317097275
+      "fraction": 0.15282785038305544
     },
     {
       "anchor": "detection-trio",
-      "title": "3) 탐지 3종 — GuardDuty · Inspector · Macie (시험 핵심 구분)",
+      "title": "탐지 3종, 가드듀티와 인스펙터, 메이시",
       "level": 3,
-      "fraction": 0.257809779283731
+      "fraction": 0.2595951629863302
     },
     {
       "anchor": "securityhub-shield",
-      "title": "4) 종합과 보호 — Security Hub(씨에스피엠)와 Shield",
+      "title": "종합과 보호, 시큐리티 허브 씨에스피엠과 실드",
       "level": 3,
-      "fraction": 0.3415219539743047
+      "fraction": 0.34210229833258227
     },
     {
       "anchor": "encryption",
-      "title": "5) 암호화 — 전송 중 대 저장 시, 그리고 케이엠에스",
+      "title": "암호화, 전송 중 대 저장 시, 그리고 케이엠에스",
       "level": 3,
-      "fraction": 0.4645395077415408
+      "fraction": 0.4645110410094637
     },
     {
       "anchor": "certificates-hsm",
-      "title": "인증서·키·전용 에이치에스엠 — 에이씨엠 · 케이엠에스 · CloudHSM",
+      "title": "인증서와 키, 전용 에이치에스엠. 에이씨엠과 케이엠에스, 클라우드에이치에스엠",
       "level": 3,
-      "fraction": 0.5649489387735893
+      "fraction": 0.5643026137899955
     },
     {
       "anchor": "audit-trio",
-      "title": "6) 거버넌스·감사·모니터링 3종 — CloudTrail · Config · CloudWatch (시험 핵심 구분)",
+      "title": "거버넌스, 감사, 모니터링 3종. 클라우드트레일과 컨피그, 클라우드워치",
       "level": 3,
-      "fraction": 0.6568591463127676
+      "fraction": 0.6609396124380351
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8370840980752036
+      "fraction": 0.8374924891092084
     }
   ],
   "generator": {

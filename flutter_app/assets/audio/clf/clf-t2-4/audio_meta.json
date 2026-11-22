@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t2-4",
-  "generatedAt": "2026-06-30T01:31:46Z",
+  "generatedAt": "2026-11-22T09:05:35Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t2-4.md",
-    "sha256": "c029e80d477784ec9b6828f9d4154b01012902ee572a559bf88fc07de422dd4e"
+    "sha256": "cee3c46d21640f00199d8de70bc416990079746361705a7a9bb54620a2ce9014"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t2-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 11656317,
-    "sha256": "d36f5aecc4416828d68e888041f761c258980bcf26c7a08a28cd1488da903d19",
+    "sizeBytes": 12471933,
+    "sha256": "12ae448c7a8748293af40304d737864540b3046f2ded4b712c7d8ca7d9b563d2",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,59 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 14626,
+    "speechChars": 15532,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "sg-vs-nacl",
-      "title": "1) 브이피씨 네트워크 방화벽 2개 층 — 보안 그룹 대 네트워크 에이씨엘 (시험 핵심)",
+      "title": "브이피씨 네트워크 방화벽 2개 층, 보안 그룹 대 네트워크 에이씨엘",
       "level": 3,
-      "fraction": 0.0943874084232114
+      "fraction": 0.0878681861743277
     },
     {
       "anchor": "waf",
-      "title": "2) 에이더블유에스 와프 — 웹 애플리케이션 방화벽 (애플리케이션 계층)",
+      "title": "에이더블유에스 와프, 애플리케이션 계층의 웹 애플리케이션 방화벽",
       "level": 3,
-      "fraction": 0.2800118601979171
+      "fraction": 0.2517810338656229
     },
     {
       "anchor": "trusted-advisor",
-      "title": "3) 보안 이슈를 찾아 주는 점검 도구 — 에이더블유에스 Trusted Advisor",
+      "title": "보안 이슈를 찾아 주는 점검 도구, 에이더블유에스 트러스티드 어드바이저",
       "level": 3,
-      "fraction": 0.4180102047119578
+      "fraction": 0.38032722528202106
     },
     {
       "anchor": "marketplace",
-      "title": "4) 서드파티 보안 제품을 구하는 곳 — 에이더블유에스 Marketplace",
+      "title": "서드파티 보안 제품을 구하는 곳, 에이더블유에스 마켓플레이스",
       "level": 3,
-      "fraction": 0.5401084713934498
+      "fraction": 0.4937938041959657
     },
     {
       "anchor": "info-locations",
-      "title": "5) 보안 정보·문서는 어디서 찾나",
+      "title": "보안 정보와 문서는 어디서 찾나",
       "level": 3,
-      "fraction": 0.6584139456160508
+      "fraction": 0.6038772847460367
     },
     {
       "anchor": "sg-default",
-      "title": "보안 그룹 기본 동작 (보강)",
+      "title": "보안 그룹 기본 동작",
       "level": 3,
-      "fraction": 0.7367283149870897
+      "fraction": 0.677866685140924
+    },
+    {
+      "anchor": "macie-secrets",
+      "title": "민감 데이터와 비밀, 아마존 메이시와 에이더블유에스 시크릿 매니저",
+      "level": 3,
+      "fraction": 0.7661736349255834
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8976193123556082
+      "fraction": 0.9044072650016742
     }
   ],
   "generator": {

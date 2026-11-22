@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-7",
-  "generatedAt": "2026-11-18T00:27:51Z",
+  "generatedAt": "2026-11-22T09:11:10Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-7.md",
-    "sha256": "1e33cf837e056dcd1e89afcfd76d965027c4f900cf8b5416ab2a487d41d6b693"
+    "sha256": "ce2786b6e82dbfbcb3ea72871b6a3a1a09ce0946bb9dddb0e2b410e415498959"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-7/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 9611949,
-    "sha256": "382f716e52c2bd8717a2b54036d5c93a28de4b8b55404b930fa053d7ffe82b09",
+    "sizeBytes": 9995853,
+    "sha256": "c1bdaae72d74577ed5a3bd65468ec6984a2cc0caeaabd7831c9dea625071ff02",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,47 +25,47 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 12021,
+    "speechChars": 12371,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "ai-ml",
-      "title": "1) 에이아이/엠엘 서비스 3종 — SageMaker · Lex · Kendra",
+      "title": "에이아이와 엠엘 서비스 3종, 세이지메이커, 렉스, 켄드라",
       "level": 3,
-      "fraction": 0.10343691007700836
+      "fraction": 0.10025643980867861
     },
     {
       "anchor": "analytics",
-      "title": "2) 분석 서비스 4종 — Athena · Kinesis · Glue · QuickSight",
+      "title": "분석 서비스 4종, 아테나, 키네시스, 글루, 퀵사이트",
       "level": 3,
-      "fraction": 0.22025289905013035
+      "fraction": 0.23393649513052497
     },
     {
       "anchor": "scenario",
-      "title": "3) 한눈에 — 시나리오, 서비스",
+      "title": "한눈에 보기, 시나리오와 서비스",
       "level": 3,
-      "fraction": 0.3504929134330147
+      "fraction": 0.3611191148504581
     },
     {
       "anchor": "language-ai",
-      "title": "언어 에이아이 — Amazon Translate · Amazon Transcribe (보강)",
+      "title": "언어 에이아이, 아마존 트랜슬레이트, 아마존 트랜스크라이브",
       "level": 3,
-      "fraction": 0.42529889431576423
+      "fraction": 0.4354866593672564
     },
     {
       "anchor": "applied-ai-services",
-      "title": "응용 에이아이 서비스 — Rekognition · Comprehend · Textract · Personalize",
+      "title": "응용 에이아이 서비스, 리코그니션, 컴프리헨드, 텍스트랙트, 퍼스널라이즈",
       "level": 3,
-      "fraction": 0.5435082252119977
+      "fraction": 0.5499049155765574
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.776331165912564
+      "fraction": 0.7849219155189304
     }
   ],
   "generator": {

@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-4",
-  "generatedAt": "2026-07-03T05:15:43Z",
+  "generatedAt": "2026-11-22T09:09:20Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-4.md",
-    "sha256": "7e12c0c1200e71d23de0c03f8df9504135d7e52034c373513877b70da6b47d10"
+    "sha256": "7aec096ec2feb202e9857f244a5dc63ee25146d8a48dd6956799f654f1c28901"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 10851933,
-    "sha256": "2782b2a737a6a8a9ef5d611145fe9d321da93725ea385861d773b791e695095c",
+    "sizeBytes": 11887149,
+    "sha256": "41bfd9958e02cd2dbd8ff2f711aea6ace290bd19cb1b0597c12468ac981d7b71",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,47 +25,53 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 13666,
+    "speechChars": 14857,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "managed-vs-ec2",
-      "title": "1) 이씨투에 직접 설치 대 관리형 디비(알디에스) — 누가 관리하나",
+      "title": "이씨투에 직접 설치하는 방식 대 관리형 디비인 알디에스, 누가 관리하나",
       "level": 3,
-      "fraction": 0.10418024392514663
+      "fraction": 0.09764252659123397
     },
     {
       "anchor": "relational",
-      "title": "2) 관계형 데이터베이스 — Amazon 알디에스와 Amazon Aurora",
+      "title": "관계형 데이터베이스, 아마존 알디에스와 아마존 오로라",
       "level": 3,
-      "fraction": 0.21431896471464482
+      "fraction": 0.19616940857219006
     },
     {
       "anchor": "dynamodb",
-      "title": "3) NoSQL — Amazon DynamoDB",
+      "title": "노에스큐엘, 아마존 다이나모디비",
       "level": 3,
-      "fraction": 0.3818080253235267
+      "fraction": 0.35460228236377295
     },
     {
       "anchor": "elasticache",
-      "title": "4) 인메모리 — Amazon ElastiCache",
+      "title": "인메모리, 아마존 일래스티캐시",
       "level": 3,
-      "fraction": 0.5383111442137604
+      "fraction": 0.4957720543696848
     },
     {
       "anchor": "dms",
-      "title": "5) 데이터베이스 마이그레이션 — 에이더블유에스 디엠에스 (그리고 에스씨티)",
+      "title": "데이터베이스 마이그레이션, 에이더블유에스 디엠에스, 그리고 에스씨티",
       "level": 3,
-      "fraction": 0.6525463178475003
+      "fraction": 0.5943473941802146
+    },
+    {
+      "anchor": "purpose-built",
+      "title": "분석, 그래프, 문서 전용 서비스, 레드시프트, 넵튠, 도큐먼트디비",
+      "level": 3,
+      "fraction": 0.7744772611634725
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.9093194302206499
+      "fraction": 0.9156954909989582
     }
   ],
   "generator": {

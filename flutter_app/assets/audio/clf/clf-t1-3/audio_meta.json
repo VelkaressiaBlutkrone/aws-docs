@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-3",
-  "generatedAt": "2026-06-30T01:20:23Z",
+  "generatedAt": "2026-11-22T09:01:52Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t1-3.md",
-    "sha256": "33d2dcd52e352616bd3a3a2caa3ec9759ab709f8ed978da463647cf2bd400d9a"
+    "sha256": "10d5fe938de19c59b006f37989edab3d0f7eba7c9f5509bb0ad3927e019db286"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t1-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 6934845,
-    "sha256": "6a26ccb0babf82bb50c3e1181ee366a596e5dbab868e54511bfc9eb4ed18f07c",
+    "sizeBytes": 7229181,
+    "sha256": "6bfb1bb41ae0f0140e0964968ada776874bf8cf47ca3975b9c889abe0a63bca7",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,35 +25,35 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 8698,
+    "speechChars": 8995,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "caf",
-      "title": "1) 클라우드 도입 전략 — 에이더블유에스 씨에이에프",
+      "title": "클라우드 도입 전략, 에이더블유에스 씨에이에프",
       "level": 3,
-      "fraction": 0.13257190322915585
+      "fraction": 0.1332895077591187
     },
     {
       "anchor": "migration-tools",
-      "title": "2) 마이그레이션 도구 — 디엠에스와 Snowball (시험 핵심)",
+      "title": "마이그레이션 도구, 디엠에스와 스노우볼",
       "level": 3,
-      "fraction": 0.36774997404215554
+      "fraction": 0.3581943863423574
     },
     {
       "anchor": "datasync-7r",
-      "title": "3) 온라인 데이터 전송(DataSync)과 7R 마이그레이션 전략 (보강)",
+      "title": "온라인 데이터 전송 데이터싱크와 세븐 알 마이그레이션 전략",
       "level": 3,
-      "fraction": 0.6064375454262279
+      "fraction": 0.6218251359588837
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8880697746859101
+      "fraction": 0.8920098009920516
     }
   ],
   "generator": {

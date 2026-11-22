@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-6",
-  "generatedAt": "2026-07-03T05:17:48Z",
+  "generatedAt": "2026-11-22T09:10:27Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-6.md",
-    "sha256": "eb7ec609c14a9818c689af02a72ffa0c2ef50592cce9b35f50ed03c8a06cd5b2"
+    "sha256": "d55d0ac51b1bd0c428a927392ebffbe8b7496993a4720f7119b2d03b5271bbb7"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-6/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 11125389,
-    "sha256": "3429c791bbe987e56d1fe00b04c78ea88e4a4fbe94197bd933a6f4776efa0611",
+    "sizeBytes": 11237565,
+    "sha256": "10284956a8e6cfe68ee679aeb132685a5c376f6b8c812a72424c8d329e471bc9",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,59 +25,59 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 14033,
+    "speechChars": 14029,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "storage-types",
-      "title": "1) 세 가지 스토리지 유형 — 객체 대 블록 대 파일 (시험 핵심)",
+      "title": "세 가지 스토리지 유형, 객체 대 블록 대 파일",
       "level": 3,
-      "fraction": 0.09946113800347063
+      "fraction": 0.10007048119433587
     },
     {
       "anchor": "s3",
-      "title": "2) Amazon 에스쓰리 — 객체 스토리지의 표준",
+      "title": "아마존 에스쓰리, 객체 스토리지의 표준",
       "level": 3,
-      "fraction": 0.19033701707918532
+      "fraction": 0.19382328442365604
     },
     {
       "anchor": "s3-classes",
-      "title": "에스쓰리 스토리지 클래스 — 접근 빈도 대 비용 트레이드오프",
+      "title": "에스쓰리 스토리지 클래스, 접근 빈도 대 비용 트레이드오프",
       "level": 4,
-      "fraction": 0.2623983925472646
+      "fraction": 0.2655987697827898
     },
     {
       "anchor": "s3-lifecycle",
-      "title": "에스쓰리 수명 주기(Lifecycle)",
+      "title": "에스쓰리 수명 주기",
       "level": 4,
-      "fraction": 0.42442232167321214
+      "fraction": 0.42908951111680654
     },
     {
       "anchor": "ebs",
-      "title": "3) Amazon 이비에스 — 이씨투에 붙는 블록 디스크",
+      "title": "아마존 이비에스, 이씨투에 붙는 블록 디스크",
       "level": 3,
-      "fraction": 0.48808110329710475
+      "fraction": 0.489972448260396
     },
     {
       "anchor": "efs",
-      "title": "4) Amazon 이에프에스 / FSx — 여러 서버가 공유하는 파일 시스템",
+      "title": "아마존 이에프에스와 에프에스엑스, 여러 서버가 공유하는 파일 시스템",
       "level": 3,
-      "fraction": 0.6016074527354096
+      "fraction": 0.6026013968091241
     },
     {
       "anchor": "hybrid-backup",
-      "title": "5) 하이브리드와 백업 — Storage Gateway · 에이더블유에스 Backup",
+      "title": "하이브리드와 백업, 스토리지 게이트웨이와 에이더블유에스 백업",
       "level": 3,
-      "fraction": 0.7171431180929765
+      "fraction": 0.7184981098225155
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.9001735318293909
+      "fraction": 0.9045684628692253
     }
   ],
   "generator": {

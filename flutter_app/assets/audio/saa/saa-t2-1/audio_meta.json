@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "saa-t2-1",
-  "generatedAt": "2026-07-19T10:52:14Z",
+  "generatedAt": "2026-11-22T09:20:33Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/saa/saa-t2-1.md",
-    "sha256": "03bfeb4818a64972f9bc79f9e931e9a9954f45614b8245428e4379f91886e113"
+    "sha256": "46184d4ef09ba3df469774658d91ea3a093c411b45ac27e84e5afb0e291fa5b1"
   },
   "audio": {
     "src": "assets/audio/saa/saa-t2-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 12460125,
-    "sha256": "e85822df8cff0a62c09bfc4861bdc49d70a678b59985d0180a1cfacf7e06f249",
+    "sizeBytes": 15479085,
+    "sha256": "be01dba2464bc101d0544abf1611448fdab5fbd401981d52a30f0b440c883b52",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,65 +25,77 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 15561,
+    "speechChars": 19077,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "core-concepts",
       "title": "핵심 개념",
       "level": 2,
-      "fraction": 0.0790522970239815
+      "fraction": 0.06348497534654386
     },
     {
       "anchor": "decoupling",
-      "title": "1) 느슨한 결합(Decoupling)이란",
+      "title": "느슨한 결합이란",
       "level": 3,
-      "fraction": 0.08080901473562555
+      "fraction": 0.06500139547864918
     },
     {
       "anchor": "sqs",
-      "title": "2) Amazon 에스큐에스 — 메시지 큐 (Pull 모델)",
+      "title": "아마존 에스큐에스, 메시지 큐, 풀 모델",
       "level": 3,
-      "fraction": 0.17167292689973995
+      "fraction": 0.13729649269699506
     },
     {
       "anchor": "sns",
-      "title": "3) Amazon 에스엔에스 — Pub/Sub (Push 모델)",
+      "title": "아마존 에스엔에스, 발행 구독, 푸시 모델",
       "level": 3,
-      "fraction": 0.2821727824328229
+      "fraction": 0.2875802400223277
     },
     {
       "anchor": "fanout",
-      "title": "4) 팬아웃 패턴 (에스엔에스 그리고 에스큐에스) — 단골 출제",
+      "title": "팬아웃 패턴, 에스엔에스와 에스큐에스",
       "level": 3,
-      "fraction": 0.3893556775498411
+      "fraction": 0.3742301609452042
     },
     {
       "anchor": "eventbridge",
-      "title": "5) Amazon EventBridge — 이벤트 버스",
+      "title": "아마존 이벤트브리지, 이벤트 버스",
       "level": 3,
-      "fraction": 0.480728113262063
+      "fraction": 0.4432319285514932
     },
     {
       "anchor": "step-functions",
-      "title": "6) 에이더블유에스 Step Functions — 워크플로우 오케스트레이션",
+      "title": "에이더블유에스 스텝 펑션스, 워크플로우 오케스트레이션",
       "level": 3,
-      "fraction": 0.577809881537128
+      "fraction": 0.5209693925016281
     },
     {
       "anchor": "messaging-comparison",
-      "title": "7) 에스큐에스 대 에스엔에스 대 EventBridge 선택 비교표 (시험 핵심)",
+      "title": "에스큐에스 대 에스엔에스 대 이벤트브리지 선택 비교",
       "level": 3,
-      "fraction": 0.6685582201675816
+      "fraction": 0.5942878407293701
+    },
+    {
+      "anchor": "other-integration-services",
+      "title": "공식 범위의 나머지 통합 서비스, 아마존 엠큐, 파이프스, 앱플로우",
+      "level": 3,
+      "fraction": 0.6600893106335473
+    },
+    {
+      "anchor": "integration-selection-map",
+      "title": "확장과 통합 수단 선택 지도",
+      "level": 3,
+      "fraction": 0.7679691134058982
     },
     {
       "anchor": "common-pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8157526726379659
+      "fraction": 0.8555493534282259
     }
   ],
   "generator": {

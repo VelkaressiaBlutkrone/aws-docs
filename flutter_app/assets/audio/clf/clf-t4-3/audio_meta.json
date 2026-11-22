@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-3",
-  "generatedAt": "2026-11-17T11:56:46Z",
+  "generatedAt": "2026-11-22T09:13:25Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t4-3.md",
-    "sha256": "838df0c2bfa713df51874463c5ef3f3835bcff0e8db2f3e870783381393dc448"
+    "sha256": "90021539c21a424d4b6bebbbe030b004756e3a3a5537f4c5fd9e4dd55ede2db9"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t4-3/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 7971789,
-    "sha256": "fe7d6e1169b8d67d4de3452407dca429652c503e417ca8266eba3ef3ef1c7a5c",
+    "sizeBytes": 8659677,
+    "sha256": "8842cb1186befbc67c90939b158439f40cb17ab49ff3c6d13df46cf98460e2ef",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,41 +25,47 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 9974,
+    "speechChars": 10807,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "support-plans",
-      "title": "1) 에이더블유에스 Support 플랜 (시험 핵심)",
+      "title": "에이더블유에스 서포트 플랜",
       "level": 3,
-      "fraction": 0.14365199797673242
+      "fraction": 0.13232334990770458
     },
     {
       "anchor": "tech-resources",
-      "title": "2) 무료 기술 리소스 — 어디서 찾나",
+      "title": "무료 기술 리소스, 어디서 찾나",
       "level": 3,
-      "fraction": 0.3525001806488908
+      "fraction": 0.33351071790863585
     },
     {
       "anchor": "apn",
-      "title": "3) 에이피엔 — 에이더블유에스 Partner Network",
+      "title": "에이피엔, 에이더블유에스 파트너 네트워크",
       "level": 3,
-      "fraction": 0.44927379145892044
+      "fraction": 0.4252074568040843
     },
     {
       "anchor": "health-dashboard",
-      "title": "서비스 상태와 Support 응답 — Health Dashboard · 플랜별 응답 (보강)",
+      "title": "서비스 상태와 서포트 응답, 헬스 대시보드와 플랜별 응답",
       "level": 3,
-      "fraction": 0.6187585808223137
+      "fraction": 0.5805630851612259
+    },
+    {
+      "anchor": "support-api",
+      "title": "코드로 지원 업무 자동화, 에이더블유에스 서포트 에이피아이",
+      "level": 3,
+      "fraction": 0.716844328405368
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8882867259195029
+      "fraction": 0.8969284752132772
     }
   ],
   "generator": {

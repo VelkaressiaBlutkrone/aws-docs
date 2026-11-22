@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t4-2",
-  "generatedAt": "2026-06-30T02:10:42Z",
+  "generatedAt": "2026-11-22T09:12:38Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t4-2.md",
-    "sha256": "ba51eb090b328c66f531e6975ee514274d8aafbec28a0bc280b66e49fb3a9d07"
+    "sha256": "25c347baca1b75a993f621500f99e8b8a9d57256dffb1c86ff9e1c4420ee31cb"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t4-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 7399965,
-    "sha256": "d10423fd3b55b5179397c4e44d8078f15c18b51446c1ac8e2fc2149d272da926",
+    "sizeBytes": 7551021,
+    "sha256": "fca0b2932b3d5d9de5986bc8b3221efc57c8c7831a26cbe40bb4c64786981369",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,41 +25,41 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 9253,
+    "speechChars": 9424,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "cost-tools",
-      "title": "1) 비용을 다루는 도구 — 시점으로 구분 (시험 핵심)",
+      "title": "비용을 다루는 도구, 시점으로 구분",
       "level": 3,
-      "fraction": 0.1491875060815413
+      "fraction": 0.145363695312202
     },
     {
       "anchor": "organizations",
-      "title": "2) 에이더블유에스 Organizations — 다계정 중앙 관리 그리고 통합 결제",
+      "title": "에이더블유에스 오거니제이션스, 다계정 중앙 관리와 통합 결제",
       "level": 3,
-      "fraction": 0.29496934903181865
+      "fraction": 0.2867795705076859
     },
     {
       "anchor": "cost-tracking",
-      "title": "3) 비용 추적 — 비용 할당 태그와 씨유알",
+      "title": "비용 추적, 비용 할당 태그와 씨유알",
       "level": 3,
-      "fraction": 0.49045441276637153
+      "fraction": 0.4762940077049243
     },
     {
       "anchor": "anomaly-forecast",
-      "title": "이상 탐지와 비용 예측 — Cost Anomaly Detection · Cost Explorer forecast (보강)",
+      "title": "이상 탐지와 비용 예측, 코스트 어노말리 디텍션과 코스트 익스플로러 예측",
       "level": 3,
-      "fraction": 0.6251629853069962
+      "fraction": 0.6332913758248465
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.870837793130291
+      "fraction": 0.8738032574283862
     }
   ],
   "generator": {

@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t4-2",
+  "generatedAt": "2026-11-22T09:39:01Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t4-2.md",
+    "sha256": "86419b9da2cf63c99f9dec30cfcff4e9acf102337fa6dcca6b64d4cf3d8a1ba1"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t4-2/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 16823901,
+    "sha256": "9153c7883875086e74510c408f8098ff9fbf6f3f69740b20fa6f04d6e6019069",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 20314,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.043542271182668686
+    },
+    {
+      "anchor": "ec2-purchase-options",
+      "title": "첫 번째, 이씨투 구매 옵션 비교",
+      "level": 3,
+      "fraction": 0.04498027030959779
+    },
+    {
+      "anchor": "ri-vs-savings-plans",
+      "title": "두 번째, 알아이와 세이빙스 플랜의 핵심 차이",
+      "level": 3,
+      "fraction": 0.09549854916159516
+    },
+    {
+      "anchor": "savings-plans-types",
+      "title": "세 번째, 세이빙스 플랜 유형",
+      "level": 3,
+      "fraction": 0.2156485119276892
+    },
+    {
+      "anchor": "payment-options",
+      "title": "네 번째, 알아이 납입 옵션. 세이빙스 플랜도 같은 구조입니다",
+      "level": 3,
+      "fraction": 0.26115091287266007
+    },
+    {
+      "anchor": "spot-instances",
+      "title": "다섯 번째, 스팟 인스턴스",
+      "level": 3,
+      "fraction": 0.2879764442047779
+    },
+    {
+      "anchor": "auto-scaling-cost",
+      "title": "여섯 번째, 오토 스케일링으로 비용 절감",
+      "level": 3,
+      "fraction": 0.39164077412286336
+    },
+    {
+      "anchor": "rightsizing",
+      "title": "일곱 번째, 적정 크기 조정과 에이더블유에스 컴퓨트 옵티마이저",
+      "level": 3,
+      "fraction": 0.47783512655248267
+    },
+    {
+      "anchor": "serverless-graviton",
+      "title": "여덟 번째, 서버리스와 그래비톤의 비용 이점",
+      "level": 3,
+      "fraction": 0.5334719975348586
+    },
+    {
+      "anchor": "elb-cost",
+      "title": "아홉 번째, 로드 밸런서 비용과 용량 단위인 엘씨유, 엔엘씨유",
+      "level": 3,
+      "fraction": 0.6559843874380504
+    },
+    {
+      "anchor": "stop-and-shrink",
+      "title": "열 번째, 끄고 줄이는 절감. 최대 절전과 스케줄 중지, 그리고 수평 대 수직 스케일링",
+      "level": 3,
+      "fraction": 0.7106283542613563
+    },
+    {
+      "anchor": "placement-cost",
+      "title": "열한 번째, 배치 결정이 만드는 비용. 리전과 엣지, 하이브리드",
+      "level": 3,
+      "fraction": 0.7856867729758878
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.9373614427924574
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

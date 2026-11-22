@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-2",
-  "generatedAt": "2026-11-18T00:25:57Z",
+  "generatedAt": "2026-11-22T09:07:02Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-2.md",
-    "sha256": "f6e61b559886b635cf00d93fe915d6905cb8e520abccb9417b028531b82b215a"
+    "sha256": "220094c51015a008d954a86933b5982db3ac8b068abe033a3f71f2bc2b770d6a"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 9430653,
-    "sha256": "714840d020365e0e4efa3774bc276c41d49fcaa822d56f4c86bef87968dfad19",
+    "sizeBytes": 9323517,
+    "sha256": "d5c01e30ceb0473c04c1adb72b57c2eff3b93579ab261706021c3eaaabcfe170",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,47 +25,47 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 11922,
+    "speechChars": 11606,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "regions-az",
-      "title": "1) 3층 구조 — 리전 안의 가용 영역(에이제트), 엣지는 별도 망",
+      "title": "3층 구조, 리전 안의 가용 영역, 그리고 별도 망인 엣지",
       "level": 3,
-      "fraction": 0.10957900041229557
+      "fraction": 0.11032852972522125
     },
     {
       "anchor": "multi-az",
-      "title": "2) 고가용성의 핵심 — 여러 에이제트에 분산",
+      "title": "고가용성의 핵심, 여러 에이제트에 분산",
       "level": 3,
-      "fraction": 0.23338983309664513
+      "fraction": 0.2209505274701512
     },
     {
       "anchor": "multi-region",
-      "title": "3) 여러 \"리전\"을 쓰는 시점 — 에이제트로는 안 되는 이유들",
+      "title": "여러 리전을 쓰는 시점, 에이제트로는 안 되는 이유들",
       "level": 3,
-      "fraction": 0.37778490387405134
+      "fraction": 0.3577838530806419
     },
     {
       "anchor": "cloudfront-ga",
-      "title": "4) 엣지 — 사용자 가까이서 빠르게: CloudFront 대 Global Accelerator (시험 단골)",
+      "title": "엣지, 사용자 가까이서 빠르게, 클라우드프론트 대 글로벌 액셀러레이터",
       "level": 3,
-      "fraction": 0.5028326232687403
+      "fraction": 0.4853961045981805
     },
     {
       "anchor": "proximity",
-      "title": "5) 근접·확장 인프라 — Local Zones · Wavelength · Outposts",
+      "title": "근접, 확장 인프라, 로컬 존, 웨이브렝스, 아웃포스트",
       "level": 3,
-      "fraction": 0.6956647884312918
+      "fraction": 0.6797337163863275
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8883442515308382
+      "fraction": 0.8870611494678962
     }
   ],
   "generator": {

@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-5",
-  "generatedAt": "2026-06-30T02:02:00Z",
+  "generatedAt": "2026-11-22T09:09:13Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-5.md",
-    "sha256": "6c9133871d3e6732dc5b32a9e73ff6d96c28cb8ac92ed48241657a571dd7894b"
+    "sha256": "85e26a40a65f4a24a8b8f48b046d21e00b32681f65055f4db7311b2977069550"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-5/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 10199037,
-    "sha256": "39e8e08bb2f5bee8537de324b8a99edd8f8089bce32b5a3d96b37607cac9bfc3",
+    "sizeBytes": 11158221,
+    "sha256": "728d0169e3564caf0d896536ed229b4b4e5ada63957098b31481f056edfd33e3",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,59 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 12865,
+    "speechChars": 13966,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "vpc",
-      "title": "1) Amazon 브이피씨 — 나만의 격리된 가상 네트워크",
+      "title": "아마존 브이피씨, 나만의 격리된 가상 네트워크",
       "level": 3,
-      "fraction": 0.09046496194738997
+      "fraction": 0.083694698260286
     },
     {
       "anchor": "vpc-security",
-      "title": "2) 브이피씨 보안 2층 — 보안 그룹 대 네트워크 에이씨엘 (2.4 복습)",
+      "title": "브이피씨 보안 2층, 보안 그룹 대 네트워크 에이씨엘, 2.4 복습",
       "level": 3,
-      "fraction": 0.2400350168730497
+      "fraction": 0.21841928656238707
     },
     {
       "anchor": "flow-logs-privatelink",
-      "title": "네트워크 관측과 사설 연결 — 브이피씨 Flow Logs · 에이더블유에스 PrivateLink",
+      "title": "네트워크 관측과 사설 연결, 브이피씨 플로우 로그, 에이더블유에스 프라이빗링크",
       "level": 3,
-      "fraction": 0.34557982576281715
+      "fraction": 0.31309689742398433
     },
     {
       "anchor": "route53",
-      "title": "3) Amazon Route 53 — 디엔에스 웹 서비스",
+      "title": "아마존 라우트 피프티스리, 디엔에스 웹 서비스",
       "level": 3,
-      "fraction": 0.4619544498256216
+      "fraction": 0.4217128697537556
     },
     {
       "anchor": "onprem-connect",
-      "title": "4) 온프레미스 연결 — Direct Connect 대 Site-to-Site 브이피엔 (시험 핵심)",
+      "title": "온프레미스 연결, 다이렉트 커넥트 대 사이트 투 사이트 브이피엔",
       "level": 3,
-      "fraction": 0.5538878612879997
+      "fraction": 0.5066594393681276
     },
     {
       "anchor": "edge",
-      "title": "5) 엣지 서비스 — CloudFront · Global Accelerator (3.2 복습)",
+      "title": "엣지 서비스, 클라우드프론트와 글로벌 액셀러레이터, 3.2 복습",
       "level": 3,
-      "fraction": 0.6752749812913884
+      "fraction": 0.6182437664550101
+    },
+    {
+      "anchor": "vpc-peering",
+      "title": "브이피씨끼리 사설로 연결, 브이피씨 피어링",
+      "level": 3,
+      "fraction": 0.7061974084972381
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.8400519605212996
+      "fraction": 0.8538020752671519
     }
   ],
   "generator": {

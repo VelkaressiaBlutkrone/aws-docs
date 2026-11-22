@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-2",
-  "generatedAt": "2026-06-30T01:19:01Z",
+  "generatedAt": "2026-11-22T09:01:31Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t1-2.md",
-    "sha256": "9ce9907c2ef2685f69291739e86d44a2d752df115ab1ddbe5ff9001682538104"
+    "sha256": "876b0df0c45ce718d9c2298b3aa339575839d13cfcbeb525533a7e346bfcb2a4"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t1-2/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 5408301,
-    "sha256": "52b97a4d5cedb90436bd61c4e500a4d66adf0ba5404a6d18077f2388594f86e4",
+    "sizeBytes": 5379069,
+    "sha256": "8f14e56a17e8a69c73fcc1e9ba8c510e87a5d1190e99831618b37489bf8f1e81",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,29 +25,29 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 6710,
+    "speechChars": 6655,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "well-architected",
-      "title": "1) 에이더블유에스 웰 아키텍티드 프레임워크란",
+      "title": "에이더블유에스 웰 아키텍티드 프레임워크란",
       "level": 3,
-      "fraction": 0.1600362145177611
+      "fraction": 0.1589247945168804
     },
     {
       "anchor": "six-pillars",
-      "title": "2) 6대 기둥 (시험 핵심)",
+      "title": "6대 기둥",
       "level": 3,
-      "fraction": 0.31701017201895937
+      "fraction": 0.3165377098337394
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7474303669382756
+      "fraction": 0.745977350004016
     }
   ],
   "generator": {

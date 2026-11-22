@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "docId": "saa-t4-5",
+  "generatedAt": "2026-11-22T09:41:19Z",
+  "mode": "synthesized",
+  "reviewStatus": "needs_human_review",
+  "source": {
+    "asset": "assets/content/saa/saa-t4-5.md",
+    "sha256": "19bd310e670daca35d8e010e57256fd7e3924024d45f01458d4ab0e9f153633b"
+  },
+  "audio": {
+    "src": "assets/audio/saa/saa-t4-5/lecture.mp3",
+    "file": "lecture.mp3",
+    "sizeBytes": 11701389,
+    "sha256": "525104cb7ed56114b869323f71d85a7f9724225d12a0f421f70f26e30ea06a17",
+    "contentType": "audio/mpeg",
+    "containerChecks": {
+      "id3Count": 1,
+      "midFileId3Allowed": false,
+      "ok": true
+    }
+  },
+  "loudness": {
+    "targetLufs": -16,
+    "normalized": true
+  },
+  "script": {
+    "speechChars": 14279,
+    "chunkCount": 0,
+    "qualityIssues": [],
+    "reviewStatus": "needs_human_review"
+  },
+  "chapters": [
+    {
+      "anchor": "core-concepts",
+      "title": "핵심 개념",
+      "level": 2,
+      "fraction": 0.05781726887860589
+    },
+    {
+      "anchor": "cost-tools-comparison",
+      "title": "첫 번째, 비용 관리 도구 비교. 시험 핵심입니다",
+      "level": 3,
+      "fraction": 0.059884808506448756
+    },
+    {
+      "anchor": "cost-explorer",
+      "title": "두 번째, 에이더블유에스 코스트 익스플로러",
+      "level": 3,
+      "fraction": 0.11391158806734272
+    },
+    {
+      "anchor": "budgets",
+      "title": "세 번째, 에이더블유에스 버지츠",
+      "level": 3,
+      "fraction": 0.22349118834301468
+    },
+    {
+      "anchor": "cur",
+      "title": "네 번째, 에이더블유에스 비용 및 사용 보고서, 줄여서 씨유알",
+      "level": 3,
+      "fraction": 0.3050974697253126
+    },
+    {
+      "anchor": "cost-anomaly-detection",
+      "title": "다섯 번째, 에이더블유에스 코스트 어노말리 디텍션",
+      "level": 3,
+      "fraction": 0.4113788520232352
+    },
+    {
+      "anchor": "cost-allocation-tags",
+      "title": "여섯 번째, 비용 할당 태그와 태그 정책",
+      "level": 3,
+      "fraction": 0.4696883922418037
+    },
+    {
+      "anchor": "consolidated-billing",
+      "title": "일곱 번째, 에이더블유에스 오거니제이션스 통합 결제와 볼륨 할인",
+      "level": 3,
+      "fraction": 0.5771019986216402
+    },
+    {
+      "anchor": "compute-optimizer-trusted-advisor",
+      "title": "여덟 번째, 비용 최적화 관점에서 본 컴퓨트 옵티마이저와 트러스티드 어드바이저",
+      "level": 3,
+      "fraction": 0.6225140297331889
+    },
+    {
+      "anchor": "well-architected-cost",
+      "title": "아홉 번째, 웰 아키텍티드 비용 최적화 기둥의 다섯 가지 설계 원칙. 시험 필수입니다",
+      "level": 3,
+      "fraction": 0.7228881559515605
+    },
+    {
+      "anchor": "common-pitfalls",
+      "title": "흔한 함정",
+      "level": 2,
+      "fraction": 0.8583735354927636
+    }
+  ],
+  "generator": {
+    "tool": "flutter_app/tool/gen_lecture_audio.py",
+    "engine": "polly",
+    "voice": "Seoyeon",
+    "pollyEngine": "neural",
+    "region": "ap-northeast-2",
+    "maxChars": 0
+  }
+}

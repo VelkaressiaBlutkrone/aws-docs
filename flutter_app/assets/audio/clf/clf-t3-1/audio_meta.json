@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t3-1",
-  "generatedAt": "2026-11-18T00:24:07Z",
+  "generatedAt": "2026-11-22T09:07:01Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t3-1.md",
-    "sha256": "1157d9965e071552dedb0a2aea24dfb1ed4ee23be13eba526712ceb49558ab4c"
+    "sha256": "aa10428fd558da046f80310cf1ea1c1bf21d8b8203b46a50386db6b2e7e6a364"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t3-1/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 11068077,
-    "sha256": "cb1281152072d8e27132a5964bc486114a96445144c58aff0df221c8156d7542",
+    "sizeBytes": 11168301,
+    "sha256": "45bb6debde2a2b38a31f594b13a6d5dbc8e9111e210e6cd120b89fcefbd9f46b",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,53 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 13766,
+    "speechChars": 13848,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "access-methods",
-      "title": "1) 에이더블유에스를 다루는 네 가지 방법 — 콘솔 · 씨엘아이 · 에스디케이 · IaC",
+      "title": "에이더블유에스를 다루는 네 가지 방법, 콘솔, 씨엘아이, 에스디케이, 아이에이씨",
       "level": 3,
-      "fraction": 0.08174815894246533
+      "fraction": 0.08039559532712691
     },
     {
       "anchor": "iac-cloudformation",
-      "title": "2) IaC와 에이더블유에스 CloudFormation — 인프라를 코드로",
+      "title": "아이에이씨와 에이더블유에스 클라우드포메이션, 인프라를 코드로",
       "level": 3,
-      "fraction": 0.17070441593588176
+      "fraction": 0.16785723495886737
     },
     {
       "anchor": "oneoff-vs-repeat",
-      "title": "3) 일회성 대 반복 프로세스",
+      "title": "일회성 대 반복 프로세스",
       "level": 3,
-      "fraction": 0.31794998568789196
+      "fraction": 0.3129432395492173
     },
     {
       "anchor": "deployment-models",
-      "title": "4) 배포 모델 — 클라우드 · 하이브리드 · 온프레미스",
+      "title": "배포 모델, 클라우드, 하이브리드, 온프레미스",
       "level": 3,
-      "fraction": 0.407647870098103
+      "fraction": 0.4013590530469093
     },
     {
       "anchor": "connectivity",
-      "title": "5) 연결 옵션 — 공용 인터넷 · 브이피엔 · Direct Connect (3.5 연계)",
+      "title": "연결 옵션, 공용 인터넷, 브이피엔, 다이렉트 커넥트",
       "level": 3,
-      "fraction": 0.47730880324754743
+      "fraction": 0.47036903318977746
     },
     {
       "anchor": "deployment-ops-tools",
-      "title": "6) 배포·운영 자동화 도구 — Beanstalk · 씨디케이 · Systems Manager · Code",
+      "title": "배포와 운영 자동화 도구, 빈스토크, 씨디케이, 시스템즈 매니저, 그리고 코드 계열 서비스",
       "level": 3,
-      "fraction": 0.5543079445210648
+      "fraction": 0.5459163937385564
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.7580342970152749
+      "fraction": 0.75969002243598
     }
   ],
   "generator": {

@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
   "docId": "clf-t1-4",
-  "generatedAt": "2026-06-30T01:22:03Z",
+  "generatedAt": "2026-11-22T09:02:08Z",
   "mode": "synthesized",
-  "reviewStatus": "approved",
+  "reviewStatus": "needs_human_review",
   "source": {
     "asset": "assets/content/clf/t1-4.md",
-    "sha256": "f4ee327b55adc0b525bb3dbfd0893d38a983d980e424eb0d37f820117745732e"
+    "sha256": "d6553dc69026e7af0e1d1f05997dd7e35a32b2b93c98fdc6f7623b51f98dea70"
   },
   "audio": {
     "src": "assets/audio/clf/clf-t1-4/lecture.mp3",
     "file": "lecture.mp3",
-    "sizeBytes": 8450877,
-    "sha256": "b8be2740dd21c9eab45d769c73502a3fb0a194ef16cac8443c4a78502d2a3036",
+    "sizeBytes": 8595597,
+    "sha256": "2705b0596bf9c661d2eafa18dc4bb31873c2b2367a57e9a7d3c7e20c28e1a7df",
     "contentType": "audio/mpeg",
     "containerChecks": {
       "id3Count": 1,
@@ -25,53 +25,53 @@
     "normalized": true
   },
   "script": {
-    "speechChars": 10584,
+    "speechChars": 10729,
     "chunkCount": 0,
     "qualityIssues": [],
-    "reviewStatus": "approved"
+    "reviewStatus": "needs_human_review"
   },
   "chapters": [
     {
       "anchor": "capex-opex",
-      "title": "1) 클라우드 경제학의 출발 — 고정비 대 변동비",
+      "title": "클라우드 경제학의 출발, 고정비 대 변동비",
       "level": 3,
-      "fraction": 0.09259921953547023
+      "fraction": 0.0912746280659429
     },
     {
       "anchor": "rightsizing",
-      "title": "2) 적정 크기 조정(rightsizing) — Compute Optimizer",
+      "title": "적정 크기 조정, 라이트사이징과 컴퓨트 옵티마이저",
       "level": 3,
-      "fraction": 0.22144402978716152
+      "fraction": 0.217212840101863
     },
     {
       "anchor": "licensing",
-      "title": "3) 라이선스 — 비와이오엘 대 라이선스 포함",
+      "title": "라이선스, 비와이오엘 대 라이선스 포함",
       "level": 3,
-      "fraction": 0.37975222807286607
+      "fraction": 0.3724534244739311
     },
     {
       "anchor": "automation",
-      "title": "4) 자동화의 비용 이점 — CloudFormation",
+      "title": "자동화의 비용 이점, 클라우드포메이션",
       "level": 3,
-      "fraction": 0.458241739515703
+      "fraction": 0.44963811821471655
     },
     {
       "anchor": "managed-services",
-      "title": "5) 관리형 서비스로 총비용(티씨오) 절감",
+      "title": "관리형 서비스로 총비용, 즉 티씨오 절감",
       "level": 3,
-      "fraction": 0.5947889508034695
+      "fraction": 0.5839364696421391
     },
     {
       "anchor": "autoscaling",
-      "title": "탄력성으로 비용 최적화 — Auto Scaling (보강)",
+      "title": "탄력성으로 비용 최적화, 오토 스케일링",
       "level": 3,
-      "fraction": 0.7197655198268664
+      "fraction": 0.7181510521377832
     },
     {
       "anchor": "pitfalls",
       "title": "흔한 함정",
       "level": 2,
-      "fraction": 0.9006015370720651
+      "fraction": 0.9022751641871063
     }
   ],
   "generator": {
