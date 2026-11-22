@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/glue/latest/dg/workflows_overview.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 데이터 파이프라인 오케스트레이션 (워크플로·복원력·알림)
@@ -77,13 +77,13 @@ lastVerified: 2026-11-17
 | **MWAA Serverless** | 변동·간헐 워크로드를 Airflow 방식으로 | **실행 시간만 과금** · YAML(DAG factory) 정의 · **Airflow UI 직접 접근 불가** | "Airflow인데 유휴 비용 없이" |
 | **Glue 워크플로** | Glue 크롤러·잡·트리거 체인을 Glue 안에서 시각화·관리 | 워크플로당 잡·크롤러·트리거 합계 **100 이하 권장** | "크롤러 완료 후 잡 시작" |
 | **EventBridge** (버스·Scheduler·Pipes) | **무엇을 언제 시작할지** — 이벤트 라우팅·예약·점대점 연결 | Scheduler는 재시도 정책·DLQ 설정 가능 | "이벤트 도착 시 시작", "cron" |
-| **Lambda 단독** | 짧게 끝나는 단일 처리 | **한 번 호출 최대 15분** · 함수 안에서 오케스트레이션은 안티패턴 | "15분 초과", "함수가 함수를 순차 호출" |
+| **Lambda 단독** | 짧게 끝나는 단일 처리 | **한 번 호출 최대 30분**(2026년 11월 상향 전 자료와 FAQ에는 15분으로 적힌 곳이 있습니다.) · 함수 안에서 오케스트레이션은 안티패턴 | "30분 초과", "함수가 함수를 순차 호출" |
 
 > 공식 선택 기준은 간결합니다. **오픈소스·이식성 우선이면 MWAA, 비용·성능 우선이면 Step Functions.** 또 Step Functions는 실행 중인 워크플로가 없으면 비용이 없고, MWAA는 DAG가 돌지 않아도 비용이 발생합니다.
 
 > 🧠 원리: 왜 "함수 안에서 오케스트레이션"이 안티패턴일까요?
 > 단일 Lambda가 다른 함수들을 순차 호출하면 순서·데이터 전달·오류 분류·재시도·보상 로직이 모두 그 함수의 코드가 됩니다.
-> 그 코드는 테스트하기 어렵고, 15분 벽에 걸리며, 중간 실패 시 어디까지 진행됐는지 외부에서 볼 수 없습니다.
+> 그 코드는 테스트하기 어렵고, 30분 벽에 걸리며, 중간 실패 시 어디까지 진행됐는지 외부에서 볼 수 없습니다.
 > Step Functions는 그 제어 흐름을 **상태 머신 정의와 실행 이력**으로 밖으로 끌어내므로, 재시도 정책과 실패 지점이 데이터로 남아 재개(redrive)까지 가능해집니다.
 
 ### 2) Step Functions — Standard vs Express {#standard-vs-express}

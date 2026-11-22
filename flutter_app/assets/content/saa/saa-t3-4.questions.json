@@ -22,7 +22,7 @@
       "wrongExplanations": {
         "1": "공식 문서는 ECS와 EKS 사이에 운영 부담 순서를 매기지 않습니다. 둘의 갈림길은 부담의 크기가 아니라 쿠버네티스 표준 호환이 필요한지입니다. 두 서비스 모두 노드를 직접 관리하는 구성과 Fargate 구성을 함께 가질 수 있어, 오케스트레이터 종류만으로 부담의 크기를 정할 수 없습니다.",
         "2": "EKS가 걷어 주는 것은 쿠버네티스 컨트롤 플레인의 설치·운영·유지보수입니다. 데이터 플레인(노드)의 패치·스케일링은 Fargate나 EKS Auto Mode를 쓰지 않으면 여전히 사용자 책임입니다.",
-        "3": "최대 실행 시간은 운영 부담과 다른 축입니다. Lambda의 15분 한도는 운영 부담이 낮아서 생긴 결과가 아니라 실행 모델의 제약이고, Fargate는 실행 시간 제한 없이도 서버를 관리하지 않습니다."
+        "3": "최대 실행 시간은 운영 부담과 다른 축입니다. Lambda의 30분 한도는 운영 부담이 낮아서 생긴 결과가 아니라 실행 모델의 제약이고, Fargate는 실행 시간 제한 없이도 서버를 관리하지 않습니다."
       },
       "sources": [
         { "title": "Amazon ECS — What is Amazon Elastic Container Service (공식)", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" },
@@ -37,19 +37,19 @@
       "skill": "Lambda 제약 — 최대 실행 시간",
       "section": "lambda-performance",
       "difficulty": "foundational",
-      "stem": "한 회사가 Lambda 함수를 사용해 야간 재무 보고서를 생성하려 한다. 보고서 생성 작업은 평균 20분이 걸린다. 이 설계의 문제점은?",
+      "stem": "한 회사가 Lambda 함수를 사용해 야간 재무 보고서를 생성하려 한다. 보고서 생성 작업은 평균 40분이 걸린다. 이 설계의 문제점은?",
       "options": [
         "Lambda는 메모리 부족으로 대용량 보고서를 처리할 수 없다",
-        "표준 Lambda의 최대 실행 시간은 900초(15분)이므로 20분 작업은 강제 종료된다",
+        "표준 Lambda의 최대 실행 시간은 1,800초(30분)이므로 40분 작업은 강제 종료된다",
         "Lambda는 야간 스케줄 트리거를 지원하지 않는다",
         "Lambda는 재무 데이터 처리에 규정상 사용할 수 없다"
       ],
       "correct": 1,
-      "explanation": "Lambda 함수의 타임아웃은 기본 3초이고 1초 단위로 최대 900초(15분)까지 올릴 수 있습니다. 20분 작업은 이 상한을 초과해 강제 종료됩니다. AWS Lambda Managed Instances를 쓰는 함수의 비동기 호출과 이벤트 소스 매핑 호출(Amazon MQ·DocumentDB 제외)은 최대 5,400초(90분)까지 허용되지만, 일반 호출 경로의 상한은 그대로 900초입니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용합니다.",
+      "explanation": "Lambda 함수의 타임아웃은 기본 3초이고 1초 단위로 최대 1,800초(30분)까지 올릴 수 있습니다. 40분 작업은 이 상한을 초과해 강제 종료됩니다. AWS Lambda Managed Instances를 쓰는 함수의 비동기 호출과 이벤트 소스 매핑 호출(Amazon MQ·DocumentDB 제외)은 최대 5,400초(90분)까지 허용되지만, 일반 호출 경로의 상한은 그대로 1,800초입니다. 장시간 배치 작업에는 AWS Batch 또는 ECS/Fargate를 사용합니다.",
       "wrongExplanations": {
-        "0": "Lambda 메모리는 함수 설정으로 조정할 수 있어 메모리가 이 설계의 걸림돌이 아닙니다. 20분 작업이 막히는 이유는 타임아웃 상한입니다.",
+        "0": "Lambda 메모리는 함수 설정으로 조정할 수 있어 메모리가 이 설계의 걸림돌이 아닙니다. 40분 작업이 막히는 이유는 타임아웃 상한입니다.",
         "2": "Lambda는 EventBridge(CloudWatch Events) 스케줄 트리거를 지원합니다. 야간 스케줄 자체는 문제가 아닙니다.",
-        "3": "재무 데이터 처리 자체는 Lambda의 제약 사항이 아닙니다. 20분 작업이 막히는 이유는 900초 타임아웃 상한입니다."
+        "3": "재무 데이터 처리 자체는 Lambda의 제약 사항이 아닙니다. 40분 작업이 막히는 이유는 1,800초 타임아웃 상한입니다."
       },
       "sources": [
         { "title": "Configure Lambda function timeout (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-timeout.html" }
@@ -98,12 +98,12 @@
       "explanation": "기존 Kubernetes 워크로드·도구 호환성과 멀티클라우드 이식성이 필요한 경우 Amazon EKS를 선택합니다. EKS는 Kubernetes 컨트롤 플레인을 AWS가 관리하는 완전 관리형 Kubernetes 서비스로, CNCF 표준을 따라 온프레미스·멀티클라우드와 호환됩니다.",
       "wrongExplanations": {
         "0": "ECS는 AWS 독자 오케스트레이터로 Kubernetes 표준을 지원하지 않습니다. 기존 K8s 매니페스트·도구를 그대로 사용할 수 없습니다.",
-        "2": "Lambda는 이벤트 기반·짧은 실행의 스테이트리스 워크로드에 적합합니다. 마이크로서비스 전체를 Lambda로 이전하는 것은 15분 제한과 상태 유지 불가 문제로 부적합할 수 있습니다.",
+        "2": "Lambda는 이벤트 기반·짧은 실행의 스테이트리스 워크로드에 적합합니다. 마이크로서비스 전체를 Lambda로 이전하는 것은 30분 제한과 상태 유지 불가 문제로 부적합할 수 있습니다.",
         "3": "AWS Batch는 배치 컴퓨팅 워크로드 전용 오케스트레이터로 지속 실행 마이크로서비스 오케스트레이션에 적합하지 않습니다."
       },
       "sources": [
         { "title": "Amazon EKS — What is Amazon EKS (공식)", "url": "https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html" },
-        { "title": "Lambda 할당량 — 함수 제한 시간 최대 900초(15분)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html" }
+        { "title": "Lambda 할당량 — 함수 제한 시간 최대 1,800초(30분)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html" }
       ],
       "verified": true
     },
@@ -193,19 +193,19 @@
       "options": [
         "AWS Lambda — 이벤트 기반으로 자동 확장된다",
         "EC2 인스턴스 고정 풀 — 작업을 항상 처리할 수 있도록 대기한다",
-        "AWS Batch — 15분 상한 없이 Job 제출량에 따라 Compute Environment를 자동 프로비저닝한다",
+        "AWS Batch — 30분 상한 없이 Job 제출량에 따라 Compute Environment를 자동 프로비저닝한다",
         "Amazon ECS Service — 지속 실행 서비스로 작업을 처리한다"
       ],
       "correct": 2,
-      "explanation": "대규모 배치 작업·완료 후 종료·가변 컴퓨팅 필요 시나리오에 AWS Batch가 적합합니다. AWS Batch는 Job 제출량에 따라 Compute Environment를 자동 프로비저닝·종료하며, 작업 제한 시간(timeout)은 선택 설정이라 Lambda의 15분 같은 고정 상한에 묶이지 않습니다(단 Fargate 리소스에서 도는 작업은 14일을 넘길 수 없습니다). Spot 인스턴스 사용으로 비용도 절감 가능합니다.",
+      "explanation": "대규모 배치 작업·완료 후 종료·가변 컴퓨팅 필요 시나리오에 AWS Batch가 적합합니다. AWS Batch는 Job 제출량에 따라 Compute Environment를 자동 프로비저닝·종료하며, 작업 제한 시간(timeout)은 선택 설정이라 Lambda의 30분 같은 고정 상한에 묶이지 않습니다(단 Fargate 리소스에서 도는 작업은 14일을 넘길 수 없습니다). Spot 인스턴스 사용으로 비용도 절감 가능합니다.",
       "wrongExplanations": {
-        "0": "Lambda는 최대 실행 시간이 15분으로, 수 시간이 걸리는 유전체 분석 작업에 부적합합니다. 15분 초과 시 강제 종료됩니다.",
+        "0": "Lambda는 최대 실행 시간이 30분으로, 수 시간이 걸리는 유전체 분석 작업에 부적합합니다. 30분 초과 시 강제 종료됩니다.",
         "1": "고정 EC2 풀은 작업이 없는 유휴 시간에도 비용이 발생하며 운영 부담(패치·스케일링)도 큽니다. AWS Batch가 탄력적 프로비저닝으로 이 낭비를 줄입니다.",
         "3": "ECS Service는 지속 실행 애플리케이션(웹 서버 등)에 적합하며, 완료 후 종료되는 배치 작업의 탄력적 스케줄링에는 AWS Batch가 더 적합합니다."
       },
       "sources": [
         { "title": "AWS Batch — What is AWS Batch (공식)", "url": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html" },
-        { "title": "Lambda 할당량 — 함수 제한 시간 최대 900초(15분)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html" },
+        { "title": "Lambda 할당량 — 함수 제한 시간 최대 1,800초(30분)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html" },
         { "title": "AWS Batch 작업 제한 시간 — 선택 설정·Fargate 리소스의 작업은 14일 한도", "url": "https://docs.aws.amazon.com/batch/latest/userguide/job_timeouts.html" }
       ],
       "verified": true
@@ -325,7 +325,7 @@
         "AWS Batch — 배치 작업 오케스트레이터로 가변 요청 처리"
       ],
       "correct": 2,
-      "explanation": "이벤트 기반(HTTP 요청), 짧은 처리 시간(5초, 15분 미만), 스테이트리스, 운영 부담 최소화 요구사항이 모두 Lambda에 해당합니다. Lambda는 운영 부담 스펙트럼에서 가장 오른쪽(최소 부담)에 위치합니다.",
+      "explanation": "이벤트 기반(HTTP 요청), 짧은 처리 시간(5초, 30분 미만), 스테이트리스, 운영 부담 최소화 요구사항이 모두 Lambda에 해당합니다. Lambda는 운영 부담 스펙트럼에서 가장 오른쪽(최소 부담)에 위치합니다.",
       "wrongExplanations": {
         "0": "EC2는 운영 부담이 가장 크며, 간헐적 이벤트 처리에 EC2를 상시 유지하는 것은 비효율적입니다. OS 커스텀이나 특수 인스턴스가 필요하지 않은 이 시나리오에 부적합합니다.",
         "1": "ECS EC2 시작 유형은 EC2 노드 관리 부담이 있어 운영 부담 최소화 요구사항에 맞지 않습니다. 간헐적 이벤트 처리에는 Lambda가 더 적합합니다.",

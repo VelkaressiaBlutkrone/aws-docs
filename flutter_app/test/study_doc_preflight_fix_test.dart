@@ -234,7 +234,7 @@ const _fixes = <({String item, String file, String? oldText, String newText})>[
     item: 'A-04:310',
     file: 'saa/saa-t3-4.md',
     oldText: '| 실행 시간 제한 | 15분 | **무제한** |',
-    newText: '| 실행 시간 제한 | 15분 | **고정 상한 없음**(Fargate 리소스 작업은 14일 한도) |',
+    newText: '| 실행 시간 제한 | 30분 | **고정 상한 없음**(Fargate 리소스 작업은 14일 한도) |',
   ),
   (
     item: 'A-05',

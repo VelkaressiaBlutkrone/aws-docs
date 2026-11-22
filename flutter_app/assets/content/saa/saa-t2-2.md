@@ -12,7 +12,7 @@ sources:
     url: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
   - title: Amazon API Gateway — 소개 (공식)
     url: https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
-  - title: Lambda 쿼터(타임아웃 900초·Managed Instances 5,400초·Durable functions) (공식)
+  - title: Lambda 쿼터(타임아웃 1,800초·Managed Instances 5,400초·Durable functions) (공식)
     url: https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
   - title: PutFunctionEventInvokeConfig(이벤트 큐 6시간·재시도 0~2·Destinations) (공식)
     url: https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
@@ -52,7 +52,7 @@ lastVerified: 2026-11-22
 
 - [ ] **Lambda 이벤트 기반 모델** — 동기·비동기·스트림 호출 방식과 재시도·DLQ를 구분할 수 있다
 - [ ] **Lambda 동시성** — Reserved Concurrency와 Provisioned Concurrency의 차이를 설명할 수 있다
-- [ ] **Lambda 제한** — 최대 실행 시간(15분), 스테이트리스 특성, VPC 연결 조건을 안다
+- [ ] **Lambda 제한** — 최대 실행 시간(30분), 스테이트리스 특성, VPC 연결 조건을 안다
 - [ ] **API Gateway 3종** — REST·HTTP·WebSocket API의 용도와 비용 차이를 선택 기준과 함께 설명할 수 있다
 - [ ] **API Gateway 인증** — IAM·Cognito·Lambda Authorizer를 상황별로 선택할 수 있다
 - [ ] **ECS vs EKS** — 두 컨테이너 오케스트레이터의 차이를 설명할 수 있다
@@ -67,7 +67,7 @@ lastVerified: 2026-11-22
 
 핵심 대비 포인트는 세 가지입니다.
 
-1. Lambda — 이벤트에 반응, 서버 없음, 15분 이하 단발 처리
+1. Lambda — 이벤트에 반응, 서버 없음, 30분 이하 단발 처리
 2. Fargate — 컨테이너를 서버 없이 실행, 장시간·상태 유지 가능
 3. ECS/EKS EC2 — 컨테이너지만 인프라 제어권이 필요할 때
 
@@ -129,7 +129,7 @@ Lambda는 **이벤트가 발생하면 코드를 실행**하는 서버리스 함�
 
 **실행 제한 및 기타 특성**
 
-- 최대 실행 시간: **15분** (그 이상이면 Lambda 부적합)
+- 최대 실행 시간: **30분** (그 이상이면 Lambda 부적합). 2026년 11월 상향 전 자료와 FAQ에는 15분으로 적힌 곳이 있습니다.
 - 메모리: 128 MB ~ 10,240 MB. 메모리 증가 시 CPU도 비례 증가
 - 저장: `/tmp` 임시 디렉터리(함수 인스턴스 내에서만 유효)
 - 레이어(Layers): 공통 라이브러리·의존성을 공유
@@ -156,7 +156,7 @@ S3 업로드 → (비동기) Lambda(이미지 리사이즈) → 결과 S3 저장
 | **동시 실행** | 계정·리전당 기본 **1,000** — 증액 가능(수만 단위까지) |
 | **함수당 확장 속도** | **10초마다 1,000개** 실행 환경 |
 | **메모리** | 128 ~ **10,240 MB**(1 MB 단위). **1,769 MB에서 1 vCPU 상당** — CPU는 메모리에 비례해 배정됩니다 |
-| **타임아웃** | **900초(15분)** |
+| **타임아웃** | **1,800초(30분)** |
 | **호출 페이로드** | 요청·응답 **각 6 MB**(동기) · 스트리밍 응답 200 MB(동기) · **1 MB**(비동기) |
 | **`/tmp` 임시 저장소** | 기본 **512 MB**, 설정 범위 512 ~ **10,240 MB**(1 MB 단위) |
 | **컨테이너 이미지** | 코드 패키지 **10 GB**(최대 비압축 이미지 크기, 전 레이어 포함) |
@@ -313,8 +313,8 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 | 요구사항 | 권장 컴퓨팅 | 이유 |
 |---|---|---|
-| 이벤트에 반응, 15분 이하 단발 처리 | **Lambda** | 서버리스, 이벤트 트리거, 호출 기반 과금 |
-| 15분 초과 또는 지속 실행 컨테이너 | **Fargate** | 서버 없이 장시간 컨테이너 실행 |
+| 이벤트에 반응, 30분 이하 단발 처리 | **Lambda** | 서버리스, 이벤트 트리거, 호출 기반 과금 |
+| 30분 초과 또는 지속 실행 컨테이너 | **Fargate** | 서버 없이 장시간 컨테이너 실행 |
 | Kubernetes 표준 필요 | **EKS** | k8s API 호환, 멀티클라우드 이식성 |
 | GPU·특수 인스턴스 컨테이너 | **ECS/EKS EC2** | EC2 시작 유형으로 인스턴스 직접 선택 |
 | OS·네트워크 완전 제어 필요 | **EC2** | 최고 수준의 인프라 제어 |
@@ -324,7 +324,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 | 항목 | Lambda | Fargate |
 |---|---|---|
 | 실행 모델 | 함수(Function), 이벤트 트리거 | 태스크(Task)/서비스, 지속 실행 가능 |
-| 최대 실행 시간 | 15분 | 제한 없음 |
+| 최대 실행 시간 | 30분 | 제한 없음 |
 | 상태 유지 | 불가(스테이트리스) | 가능(EFS 마운트 등) |
 | 과금 단위 | 호출 횟수 + 실행 ms | vCPU + 메모리 사용 시간 |
 | 콜드 스타트 | 있음(Provisioned으로 완화) | 없음(컨테이너 이미지 풀 시간은 있음) |
@@ -342,7 +342,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 - **"S3 업로드 시 자동 처리"** → S3 이벤트 → Lambda(비동기 호출). 재시도 실패 시 DLQ 설정.
 - **"콜드 스타트 지연 제거"** → Provisioned Concurrency. Reserved Concurrency는 상한만 예약할 뿐 워밍업 아님.
-- **"15분 초과 작업"** → Lambda 부적합. Fargate 또는 AWS Batch.
+- **"30분 초과 작업"** → Lambda 부적합. Fargate 또는 AWS Batch.
 - **"실시간 양방향 통신"** → API Gateway **WebSocket API**. REST API 폴링은 비효율.
 - **"단순·저비용 Lambda 프록시"** → API Gateway **HTTP API**. REST API보다 저렴.
 - **"캐싱·사용 계획·WAF 통합 필요"** → API Gateway **REST API**.
@@ -356,7 +356,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
-1. **"Lambda는 15분 이상도 실행할 수 있다."** → 함수 타임아웃 기본 상한은 900초(15분)입니다. 단, **Lambda Managed Instances** 함수를 비동기 또는 이벤트 소스 매핑으로 호출하면 **최대 5,400초(90분)**까지 허용됩니다(Amazon MQ·DocumentDB 제외). 더 긴 워크로드나 장시간 워크플로는 Fargate, AWS Batch, Step Functions로 옮깁니다. 참고로 **Durable functions**는 Step Functions의 일부가 아니라 Lambda의 기능군입니다.
+1. **"Lambda는 30분 이상도 실행할 수 있다."** → 함수 타임아웃 기본 상한은 1,800초(30분)입니다. 단, **Lambda Managed Instances** 함수를 비동기 또는 이벤트 소스 매핑으로 호출하면 **최대 5,400초(90분)**까지 허용됩니다(Amazon MQ·DocumentDB 제외). 더 긴 워크로드나 장시간 워크플로는 Fargate, AWS Batch, Step Functions로 옮깁니다. 참고로 **Durable functions**는 Step Functions의 일부가 아니라 Lambda의 기능군입니다.
    (원리: §4 — Lambda는 단발 이벤트 처리에 최적화된 실행 모델이라 장시간 유지 프로세스는 Fargate·Batch 같은 다른 계층이 담당한다.)
 
 2. **"Reserved Concurrency를 설정하면 콜드 스타트가 없어진다."** → Reserved Concurrency는 동시 실행 상한을 예약하는 기능으로, 워밍업과 무관합니다. 콜드 스타트 제거는 Provisioned Concurrency를 사용해야 합니다.
@@ -404,11 +404,11 @@ Provisioned Concurrency를 설정합니다. Lambda 실행 환경을 미리 초�
 WebSocket API를 선택합니다. WebSocket API는 클라이언트와 서버 간 실시간 양방향(Full-duplex) 통신을 지원합니다. REST API나 HTTP API는 요청-응답(단방향) 모델이므로 채팅처럼 서버가 먼저 메시지를 Push해야 하는 시나리오에 부적합합니다.
 </details>
 
-**Q4.** 한 팀은 컨테이너 기반 마이크로서비스를 배포하려 하는데, 서버 관리 없이 30분 이상 실행되는 배치 작업도 포함됩니다. 가장 적합한 선택은?
+**Q4.** 한 팀은 컨테이너 기반 마이크로서비스를 배포하려 하는데, 서버 관리 없이 40분 이상 실행되는 배치 작업도 포함됩니다. 가장 적합한 선택은?
 
 <details><summary>정답 보기</summary>
 
-ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없이 컨테이너를 실행하며, 실행 시간 제한이 없어 장시간 배치 작업도 처리할 수 있습니다. Lambda는 최대 15분 제한이 있어 부적합합니다. 서버 관리가 불필요하므로 EC2 시작 유형보다 Fargate가 적합합니다.
+ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없이 컨테이너를 실행하며, 실행 시간 제한이 없어 장시간 배치 작업도 처리할 수 있습니다. Lambda는 최대 30분 제한이 있어 부적합합니다. 서버 관리가 불필요하므로 EC2 시작 유형보다 Fargate가 적합합니다.
 </details>
 
 **Q5 (원리).** 왜 Lambda를 RDS에 직접 연결하면 위험할까요?
@@ -428,7 +428,7 @@ ECS + Fargate 시작 유형을 선택합니다. Fargate는 EC2 인스턴스 없�
 2. Amazon API Gateway — 소개 — https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
 3. Amazon ECS — 소개 — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
 4. AWS Fargate — Architect for AWS Fargate for Amazon ECS — https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html
-5. Lambda 쿼터(함수 타임아웃 900초, Managed Instances 비동기·이벤트 소스 매핑 5,400초, Durable functions 절) — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
+5. Lambda 쿼터(함수 타임아웃 1,800초, Managed Instances 비동기·이벤트 소스 매핑 5,400초, Durable functions 절) — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html
 6. PutFunctionEventInvokeConfig(이벤트 큐 최대 6시간·MaximumRetryAttempts 0~2·S3는 on-failure 전용) — https://docs.aws.amazon.com/lambda/latest/api/API_PutFunctionEventInvokeConfig.html
 7. SAA-C03 공식 시험 가이드 (ko) — https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
 8. Lambda 쿼터 — 동시 실행 1,000·함수당 10초마다 1,000 실행 환경·페이로드 동기 6 MB/비동기 1 MB·컨테이너 이미지 10 GB·`/tmp` 512~10,240 MB·1,769 MB=1 vCPU — https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html

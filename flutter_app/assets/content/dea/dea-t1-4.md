@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 프로그래밍 개념 (코드 최적화·Lambda·IaC·CI/CD)
@@ -88,7 +88,7 @@ lastVerified: 2026-11-17
 
 ### 2) Lambda 동시성·성능 {#lambda-concurrency}
 
-- **메모리 = CPU**: 메모리는 **128~10,240 MB**(1 MB 단위)이고 CPU는 메모리에 비례합니다(**1,769 MB에서 1 vCPU**). 별도 CPU 설정은 없습니다. 한 번의 호출은 **최대 15분**입니다.
+- **메모리 = CPU**: 메모리는 **128~10,240 MB**(1 MB 단위)이고 CPU는 메모리에 비례합니다(**1,769 MB에서 1 vCPU**). 별도 CPU 설정은 없습니다. 한 번의 호출은 **최대 30분**입니다. 2026년 11월 상향 전 자료와 FAQ에는 15분으로 적힌 곳이 있습니다.
 - **동시성 계산**: `동시성 = 평균 초당 요청 수 × 평균 처리 시간(초)`. 처리 시간을 줄이면 필요한 동시성도 줄어듭니다.
 - **섞이기 쉬운 한도 3종**
   1. **계정 동시 실행** 기본 **1,000**(리전별, 증설 요청 가능)

@@ -63,15 +63,15 @@
       "skill": "Lambda 실행 시간 제한",
       "section": "lambda",
       "difficulty": "foundational",
-      "stem": "한 팀이 대용량 데이터를 처리하는 배치 작업을 Lambda로 구현하려 한다. 기본(온디맨드) 용량 모드를 쓰고, 작업 완료까지 최대 20분이 소요될 수 있다. 이 설계에서 발생하는 문제는?",
+      "stem": "한 팀이 대용량 데이터를 처리하는 배치 작업을 Lambda로 구현하려 한다. 기본(온디맨드) 용량 모드를 쓰고, 작업 완료까지 최대 40분이 소요될 수 있다. 이 설계에서 발생하는 문제는?",
       "options": [
         "Lambda는 메모리가 부족해 대용량 데이터를 처리할 수 없다",
         "Lambda는 배치 작업을 지원하지 않아 이벤트 소스로 연결할 수 없다",
-        "기본 용량 모드의 Lambda 함수 타임아웃 상한은 15분이므로 20분 작업은 강제 종료된다",
+        "기본 용량 모드의 Lambda 함수 타임아웃 상한은 30분이므로 40분 작업은 강제 종료된다",
         "Lambda는 VPC 내부에서만 실행 가능하므로 인터넷 데이터 처리에 사용할 수 없다"
       ],
       "correct": 2,
-      "explanation": "Lambda 함수 타임아웃은 기본(온디맨드) 용량 모드에서 최대 15분입니다. 20분이 소요되는 작업은 이 제한을 초과하므로 이 설계에서는 강제 종료됩니다. 다만 15분이 절대 상한은 아닙니다 — Lambda Managed Instances에서 비동기 호출이나 이벤트 소스 매핑 호출은 함수 타임아웃을 최대 90분까지 둘 수 있습니다(Amazon MQ·DocumentDB 이벤트 소스 매핑은 15분 유지). 그보다 긴 워크로드는 Fargate, AWS Batch, Step Functions로 옮기거나 Lambda의 Durable functions로 단계를 나눕니다 — Durable functions는 Step Functions가 아니라 Lambda의 기능군입니다.",
+      "explanation": "Lambda 함수 타임아웃은 기본(온디맨드) 용량 모드에서 최대 30분입니다. 40분이 소요되는 작업은 이 제한을 초과하므로 이 설계에서는 강제 종료됩니다. 다만 30분이 절대 상한은 아닙니다 — Lambda Managed Instances에서 비동기 호출이나 이벤트 소스 매핑 호출은 함수 타임아웃을 최대 90분까지 둘 수 있습니다(Amazon MQ·DocumentDB 이벤트 소스 매핑은 30분 유지). 그보다 긴 워크로드는 Fargate, AWS Batch, Step Functions로 옮기거나 Lambda의 Durable functions로 단계를 나눕니다 — Durable functions는 Step Functions가 아니라 Lambda의 기능군입니다.",
       "wrongExplanations": {
         "0": "Lambda 메모리는 128 MB ~ 10,240 MB까지 설정 가능하며, 메모리 한계가 대용량 데이터 처리 자체를 막는 것이 아닙니다. 문제의 핵심은 메모리가 아닌 실행 시간 제한입니다.",
         "1": "Lambda는 SQS, Kinesis, DynamoDB Streams 등의 이벤트 소스와 배치 폴링 방식으로 연결할 수 있습니다. 배치 작업 자체를 지원하지 않는다는 설명은 틀렸습니다.",
@@ -353,9 +353,9 @@
       "correct": 1,
       "explanation": "24시간 지속 실행·상태 유지가 필요한 서비스는 Fargate가 적합합니다. Fargate는 실행 시간 제한이 없고 EFS 마운트 등으로 상태를 유지할 수 있습니다. 간헐적 이벤트 처리(5분 이하)는 Lambda가 적합합니다. Lambda는 이벤트 트리거·호출 기반 과금으로 간헐적 처리에 비용 효율적입니다.",
       "wrongExplanations": {
-        "0": "Lambda는 최대 실행 시간이 15분이고 스테이트리스라 24시간 지속 실행·상태 유지 서비스에 적합하지 않습니다.",
+        "0": "Lambda는 최대 실행 시간이 30분이고 스테이트리스라 24시간 지속 실행·상태 유지 서비스에 적합하지 않습니다.",
         "2": "Fargate를 간헐적 이벤트 처리에 쓰면 태스크 시작·중지 오버헤드가 생기고 vCPU·메모리 사용 시간 과금이므로 Lambda의 호출 기반 과금보다 비용이 높을 수 있습니다.",
-        "3": "Lambda는 최대 15분 제한과 스테이트리스 특성 때문에 지속 실행·상태 유지에 적합하지 않습니다. 선택이 반대로 서술되어 있습니다."
+        "3": "Lambda는 최대 30분 제한과 스테이트리스 특성 때문에 지속 실행·상태 유지에 적합하지 않습니다. 선택이 반대로 서술되어 있습니다."
       },
       "sources": [
         { "title": "AWS Lambda — 소개 (공식)", "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" },

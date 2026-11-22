@@ -775,8 +775,8 @@ void main() {
       (
         task: 'saa-t3-4', qid: 'saa-t3-4-q2', correct: 1,
         forbidden: ['문서에 없습니다'],
-        required: ['900초', '5,400초(90분)'],
-        why: '표준 Lambda 타임아웃 상한은 900초이고, Lambda Managed Instances의 비동기·'
+        required: ['1,800초', '5,400초(90분)'],
+        why: '표준 Lambda 타임아웃 상한은 1,800초이고, Lambda Managed Instances의 비동기·'
             '이벤트 소스 매핑 호출은 5,400초(90분)다. "문서에 없습니다"는 작성자 메모(M2)',
       ),
       (
