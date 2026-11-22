@@ -22,7 +22,13 @@ sources:
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
   - title: 흐름 로그 제한 사항 — 기록되지 않는 트래픽 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-limitations.html
-lastVerified: 2026-11-17
+  - title: Application Load Balancer 액세스 로그 (공식)
+    url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
+  - title: AWS WAF 웹 ACL 트래픽 로깅 (공식)
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/logging.html
+  - title: AWS WAF 로그 필드 (공식)
+    url: https://docs.aws.amazon.com/waf/latest/developerguide/logging-fields.html
+lastVerified: 2026-11-22
 ---
 
 # 네트워크 문제 해결 — Flow Logs·Reachability Analyzer
@@ -92,10 +98,26 @@ lastVerified: 2026-11-17
 
 > Flow Logs는 **나중에 켜는 진단 도구**가 아니라 평소에 켜 두면 사고 시점의 트래픽을 되짚을 수 있습니다. 기존 트래픽을 소급 캡처하지는 못하므로 **사전 활성화**가 운영 정석입니다.
 
+**집계 간격(aggregation interval):** 하나의 흐름을 모아 레코드 하나로 만드는 시간입니다.
+
+| 구분 | 집계 간격 |
+|---|---|
+| 기본값 | 최대 **10분** |
+| 흐름 로그 생성 시 선택 | 최대 **1분**(10분일 때보다 레코드가 더 많이 생긴다) |
+| Nitro 기반 인스턴스에 연결된 네트워크 인터페이스 | 지정값과 무관하게 항상 **1분 이하** |
+
 > 🧠 원리: Flow Logs는 패킷 내용 대신 메타데이터만 기록하는데, 이것으로 연결 진단이 가능한 이유는 무엇일까요?
 > 연결 실패 대부분은 패킷 내용이 아니라 경로 어딘가에서 허용 여부가 결정되는 문제이므로, 누가 어디로 보냈고 허용됐는지(action)를 기록하면 차단 지점을 찾을 수 있습니다.
 > 패킷 전체를 저장하면 용량과 비용이 급증하고 민감한 내용이 포함될 수 있어, 운영 환경에서 상시 켜두기 어려워집니다.
 > 메타데이터만 경량 기록하는 구조 덕분에 VPC·서브넷·ENI 레벨 모두에서 평소에 켜 두고 사고 시점을 소급 조회하는 운영 방식이 현실적으로 가능합니다.
+
+**요청 단위로 봐야 하면 — ELB 액세스 로그:** Flow Logs는 IP 흐름의 메타데이터라 HTTP 요청 하나의 응답 코드나 처리 시간을 담지 않습니다.
+
+- **ELB 액세스 로그**는 로드 밸런서로 들어온 **요청 하나마다** 항목을 남깁니다(WebSocket은 연결 하나마다). 시각, **클라이언트 IP**, 처리 시간(`request_processing_time`·`target_processing_time`·`response_processing_time`), 요청 줄, 응답 코드(`elb_status_code`·`target_status_code`)가 들어갑니다(필드 이름은 ALB 기준).
+- **기본으로 꺼져** 있고, 켜면 지정한 **S3 버킷**에 압축 파일로 저장됩니다. 파일은 로드 밸런서 노드마다 5분 간격으로 게시됩니다.
+- 대상까지 가지 못한 요청(잘못된 요청, 정상 대상 없음)도 기록됩니다. 다만 **최선 노력(best-effort)** 기록이라 전체 요청의 정확한 집계로 쓰지 않습니다.
+- ALB 앞에 프록시가 있으면 `client:port`에는 프록시의 IP가 남습니다.
+- ALB에는 **Integrations** 탭에서 구성하는 CloudWatch Logs 기반 로깅(CloudWatch Logs·Amazon Data Firehose·S3로 전달)도 있습니다.
 
 ### 2) Flow Log 레코드 필드 해석 (★ 핵심) {#flow-log-fields}
 
@@ -123,6 +145,13 @@ lastVerified: 2026-11-17
 > 모든 흐름을 허용/거부로 이분하면 필터 하나(`action = "REJECT"`)로 전체 차단 이벤트를 즉시 조회할 수 있어, 대용량 로그에서 문제가 된 흐름만 추출하는 쿼리 비용이 낮아집니다.
 > dstPort 조건을 함께 걸면 "특정 포트에 대한 차단만"처럼 좁은 범위로 드릴다운할 수 있어, 운영자가 수백만 건 로그에서 단서를 찾는 시간을 단축할 수 있습니다.
 > 이 단순한 필드 구조 덕분에 Logs Insights처럼 인터랙티브 쿼리 도구와 결합해 사고 타임라인을 빠르게 재구성할 수 있습니다.
+
+**어떤 WAF 규칙이 막았는지 보려면 — WAF 웹 ACL 로깅:** Flow Log 레코드의 필드에는 WAF 규칙 정보가 없으므로, 위 `action` 필드로는 WAF 차단 원인을 찾을 수 없습니다.
+
+- **WAF 웹 ACL 로깅**을 켜면 웹 ACL이 분석한 요청마다 받은 시각, 요청 상세, **일치한 규칙**이 기록됩니다. 현재 공식 문서는 웹 ACL을 「보호 팩(protection pack)」으로 함께 적습니다.
+- 전달 대상은 **CloudWatch Logs 로그 그룹 · S3 버킷 · Amazon Data Firehose 전달 스트림**입니다.
+- 요청을 끝낸 규칙은 `terminatingRuleId`에, 그 조치는 WAF 로그의 `action`(allow·block·CAPTCHA·challenge)에 남습니다. 어떤 규칙도 요청을 끝내지 않으면 `terminatingRuleId`는 `Default_Action`입니다.
+- Count처럼 요청을 끝내지 않고 일치만 한 규칙은 `nonTerminatingMatchingRules`에 남습니다.
 
 ### 3) REJECT의 의미와 기록되지 않는 트래픽 (★ 로그 해석) {#reject-unlogged-traffic}
 
@@ -219,6 +248,8 @@ fields @timestamp, srcAddr, dstAddr, dstPort, action
 - **Network Access Analyzer = 의도치 않은 접근 경로 감사**(보안·컴플라이언스).
 - **진단 순서: SG → NACL → 라우팅 → IGW/NAT → DNS.**
 - **Flow Logs는 사전 활성화 필요**(소급 캡처 불가).
+- **Flow Logs 집계 간격**: 기본 최대 10분, 생성 시 1분 지정, Nitro 기반 인스턴스의 ENI는 항상 1분 이하.
+- **요청 단위 분석 = ELB 액세스 로그**(기본 꺼짐 · S3 저장). **어떤 규칙이 막았는가 = WAF 웹 ACL 로깅**(CloudWatch Logs · S3 · Data Firehose).
 
 ---
 
@@ -299,7 +330,12 @@ SG는 stateful이라 허용한 인바운드 연결의 응답 트래픽을 상태
 5. 보안 그룹과 네트워크 ACL 비교(인프라 보안) — https://docs.aws.amazon.com/vpc/latest/userguide/infrastructure-security.html
 6. 흐름 로그 레코드 — action 필드 정의("not allowed by the security groups or network ACLs") — https://docs.aws.amazon.com/vpc/latest/userguide/flow-log-records.html
 7. 흐름 로그 제한 사항 — 기록되지 않는 트래픽 목록 — https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-limitations.html
+8. Application Load Balancer 액세스 로그 — https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html
+9. AWS WAF 웹 ACL 트래픽 로깅 — https://docs.aws.amazon.com/waf/latest/developerguide/logging.html
+10. AWS WAF 로그 필드 — https://docs.aws.amazon.com/waf/latest/developerguide/logging-fields.html
 
 > 📝 **2026-10-19 정정**: 보안 그룹 거부가 Flow Log에 남지 않는다고 적었던 §3·시험 포인트·함정 2·자가 점검 Q1을 공식 `action` 필드 정의에 맞춰 고쳤습니다 — REJECT는 **SG 또는 NACL이 허용하지 않은** 트래픽(또는 연결이 닫힌 뒤 도착한 패킷)이므로 REJECT 유무로 차단 계층을 단정할 수 없습니다(근거 6번). 대신 **기록되지 않는 트래픽 공식 목록**과 "레코드가 없을 때의 진단 순서"를 추가했습니다(근거 7번).
 
 > 📝 **2026-11-17 정정**: §2의 REJECT 요약 한 줄과 진단 절차의 마지막 단계를 같은 문서 §3(공식 `action` 필드 정의)과 일치하도록 맞췄습니다(근거 6번).
+
+> 📝 **2026-11-22 보강**: 공개 문항이 묻는 **Flow Logs 집계 간격**(근거 6번)과 **ELB 액세스 로그**(근거 8번)를 §1에, **WAF 웹 ACL 로깅**(근거 9·10번)을 §2에 더했습니다.
