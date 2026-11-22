@@ -206,4 +206,58 @@ void main() {
       expect(t.contains('경보 작업이 아니라'), isTrue);
     });
   });
+
+  group('F-9 IAM 정책 시뮬레이터 (soa-t4-1 §6, 2026-11-22)', () {
+    // 공개 문항 `soa-t4-1-q15` 의 정답인데 SOA 학습문서 20편 어디에도 없던 도구다.
+    // 근거: access_policies_testing-policies — "without sending a real request
+    // to any AWS service" · "The policy simulator results can differ from your
+    // live AWS environment" · "evaluates SCPs ... but does not support resource
+    // control policies (RCPs)" · "VPC endpoint policies, role chaining, or
+    // multiple resource-based policies on a single resource".
+    const url =
+        'https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html';
+
+    String section6() {
+      final t = doc('soa-t4-1');
+      final start = t.indexOf('{#credential-audit-tools}');
+      final end = t.indexOf('### 7)', start);
+      expect(start, greaterThanOrEqualTo(0), reason: '§6 앵커가 없다');
+      expect(end, greaterThan(start), reason: '§7 경계가 없다');
+      return t.substring(start, end);
+    }
+
+    test('대조군: §6 만 잘라 읽는다', () {
+      final s = section6();
+      expect(s.contains('IAM Access Analyzer'), isTrue);
+      expect(s.contains('루트 사용자 보호'), isFalse);
+    });
+
+    test('§6 표가 실제 요청 없이 허용·거부를 예측하는 도구로 적는다', () {
+      final row = section6()
+          .split('\n')
+          .where((l) => l.startsWith('| **IAM 정책 시뮬레이터'))
+          .toList();
+      expect(row, hasLength(1));
+      expect(row.single.contains('실제 요청을 보내지 않고'), isTrue);
+      expect(row.single.contains('허용/거부'), isTrue);
+    });
+
+    test('§6 이 시뮬레이터의 한계를 공식대로 적는다', () {
+      final s = section6();
+      expect(s.contains('실제 환경과 다를 수'), isTrue);
+      expect(s.contains('리소스 제어 정책(RCP)은 지원하지 않'), isTrue);
+      expect(s.contains('VPC 엔드포인트 정책'), isTrue);
+      expect(s.contains('역할 체이닝'), isTrue);
+    });
+
+    test('공식 URL 이 프런트매터 sources 목록과 출처 절에 있다', () {
+      final t = doc('soa-t4-1');
+      final frontmatter = t.substring(0, t.indexOf('\n---', 3));
+      final at = frontmatter.indexOf(url);
+      expect(at, greaterThanOrEqualTo(0));
+      // `lastVerified:` 뒤에 끼면 파서가 그 항목을 조용히 버린다.
+      expect(at, lessThan(frontmatter.indexOf('lastVerified:')));
+      expect(t.substring(t.indexOf('### 📌 출처')).contains(url), isTrue);
+    });
+  });
 }
