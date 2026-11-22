@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../content/quiz_widgets.dart';
 import '../../data/cloud/feedback_service.dart';
+import '../../data/domain_score.dart';
 import '../../data/exam_session_store.dart';
 import '../../data/history_store.dart';
 import '../../data/wrong_skills.dart';
@@ -42,6 +43,8 @@ class ExamView extends StatefulWidget {
     this.resultsActionsBuilder,
     this.onOpenStudy,
     this.passingScore,
+    this.domainByTaskId = const {},
+    this.domainNames = const {},
   });
 
   final QuestionBank bank;
@@ -81,6 +84,13 @@ class ExamView extends StatefulWidget {
 
   /// 공식 합격선(1000점 만점 환산, 시험 가이드 메타). null이면 결과 부제에서 생략.
   final int? passingScore;
+
+  /// Task → 도메인. 여러 도메인이 섞인 시험만 넘긴다 — 비어 있으면 결과에 도메인별
+  /// 정답률을 그리지 않는다.
+  final Map<String, int> domainByTaskId;
+
+  /// 도메인 번호 → 공식 이름. 없으면 번호만 표시한다.
+  final Map<int, String> domainNames;
 
   @override
   State<ExamView> createState() => _ExamViewState();
@@ -428,6 +438,12 @@ class _ExamViewState extends State<ExamView> {
             bank: widget.bank,
             picked: _picked,
             flagged: _flagged,
+            domainScores: buildDomainScores(
+              questions: widget.bank.questions,
+              picked: _picked,
+              domainByTaskId: widget.domainByTaskId,
+              domainNames: widget.domainNames,
+            ),
             onOpenStudy: widget.onOpenStudy,
             // D2 — 문항 오류 신고. 이 뷰가 `certId` 를 이미 알고 자격증 모의고사도
             // 이 뷰를 재사용하므로, 이 한 자리가 시험·자격증 모의고사 두 화면을
