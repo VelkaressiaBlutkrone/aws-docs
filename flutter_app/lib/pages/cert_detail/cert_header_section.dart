@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart' hide Text;
 
+import '../../data/cert_lifecycle.dart';
 import '../../models/certification.dart';
 import '../../models/exam_guide.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/cert_lifecycle_notice.dart';
 import 'cert_detail_bits.dart';
 import '../../widgets/text.dart';
 
@@ -42,6 +44,10 @@ class CertHeaderSection extends StatelessWidget {
         Text(cert.title, style: t.headlineMedium),
         const SizedBox(height: Gap.sm),
         Text(cert.audience, style: t.bodyMedium),
+        if (certLifecycleNotice(cert.code) != null) ...[
+          const SizedBox(height: Gap.lg),
+          CertLifecycleBanner(code: cert.code),
+        ],
         if (facts.isNotEmpty) ...[
           const SizedBox(height: Gap.lg),
           Wrap(
