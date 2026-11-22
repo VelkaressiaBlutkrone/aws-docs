@@ -27,7 +27,9 @@ docs/superpowers/specs/2026-06-21-clf-t1-1-tts-audio-correction.md 를 따른다
      --out assets/audio/clf/clf-t1-1/lecture.mp3
 """
 import argparse
+import copy
 from datetime import datetime, timezone
+import difflib
 import hashlib
 import json
 import os
@@ -191,11 +193,18 @@ def parse_segments(md: str) -> list[dict]:
         if not s:
             i += 1
             continue
-        if s.startswith("```"):                          # 코드펜스 제외
+        if s.startswith("```"):                          # 코드펜스(닫는 펜스 없어도 안전)
+            start = i
             i += 1
             while i < n and not lines[i].strip().startswith("```"):
                 i += 1
-            i += 1
+            if i < n:
+                i += 1
+            fence = "\n".join(lines[start:i])
+            if in_selfcheck:
+                _add("selfcheck", fence, "", skip=True)
+            else:
+                _add("code", fence, "", issues=["code-needs-summary"])
             continue
         if (re.fullmatch(r"([-*_])\1{2,}", s) or s.startswith("<!--")
                 or s.startswith("![")):                  # 수평선·주석·이미지
@@ -351,9 +360,8 @@ def table_to_summary(table_lines: list[str]) -> tuple:
     return " ".join(parts), ["table-summary-draft"]
 
 
-def build_script_json(md: str, *, doc_id: str, source_asset: str,
-                      lexicon: dict) -> dict:
-    """parse_segments + 발음사전 치환 + (표는 audioSummary 치환) → schemaVersion 2 dict."""
+def _parse_with_lexicon(md: str, lexicon: dict) -> list[dict]:
+    """parse_segments + 발음사전 치환(scriptText·audioSummary)."""
     segs = parse_segments(md)
     seen: set = set()
     for seg in segs:
@@ -363,9 +371,20 @@ def build_script_json(md: str, *, doc_id: str, source_asset: str,
         if seg.get("audioSummary"):
             seg["audioSummary"], li = apply_lexicon(seg["audioSummary"], lexicon, seen)
             seg["issues"] = list(dict.fromkeys(seg["issues"] + li))
-    lex_hash = hashlib.sha256(
+    return segs
+
+
+def _lexicon_version(lexicon: dict) -> str:
+    return hashlib.sha256(
         json.dumps(lexicon, ensure_ascii=False, sort_keys=True).encode("utf-8")
     ).hexdigest()[:12]
+
+
+def build_script_json(md: str, *, doc_id: str, source_asset: str,
+                      lexicon: dict) -> dict:
+    """parse_segments + 발음사전 치환 + (표는 audioSummary 치환) → schemaVersion 2 dict."""
+    segs = _parse_with_lexicon(md, lexicon)
+    lex_hash = _lexicon_version(lexicon)
     return {
         "schemaVersion": 2,
         "docId": doc_id,
@@ -376,6 +395,124 @@ def build_script_json(md: str, *, doc_id: str, source_asset: str,
         "reviewStatus": "needs_human_review",
         "segments": segs,
     }
+
+
+def _resync_text(seg: dict) -> str:
+    """정렬용 본문: sourceExcerpt에서 공백과 *, ` 제거."""
+    return re.sub(r"[\s*`]+", "", seg.get("sourceExcerpt") or "")
+
+
+def _resync_pairs(olds: list[dict], news: list[dict]) -> dict:
+    """한 hunk 안의 짝짓기. 반환 {새 인덱스: 옛 인덱스}. 순서를 유지해 교차 짝이 없다."""
+    pairs: dict = {}
+    next_old = 0
+    for nj, new in enumerate(news):
+        new_text = _resync_text(new)
+        best, best_ratio = None, 0.0
+        for oi in range(next_old, len(olds)):
+            if olds[oi].get("kind") != new.get("kind"):
+                continue
+            ratio = difflib.SequenceMatcher(
+                None, _resync_text(olds[oi]), new_text, autojunk=False).ratio()
+            if ratio >= 0.6 and ratio > best_ratio:
+                best, best_ratio = oi, ratio
+        if best is not None:
+            pairs[nj] = best
+            next_old = best + 1
+    return pairs
+
+
+def resync_segments(old_segments: list[dict], md: str, lexicon: dict) -> tuple:
+    """최신 md에 대본을 맞춘다. 같은 블록의 강의체 문장은 보존하고 바뀐 블록만 표시한다.
+    순수 함수(입력 불변·결정적·멱등). 반환 (segments, report)."""
+    old_roles = _connector_roles(old_segments)
+    old = [copy.deepcopy(s) for s in old_segments if s.get("kind") != "connector"]
+    new = _parse_with_lexicon(md, lexicon)
+    old_keys = [f"{s.get('kind')}\0{_resync_text(s)}" for s in old]
+    new_keys = [f"{s.get('kind')}\0{_resync_text(s)}" for s in new]
+    numbers = [int(m.group(1)) for m in
+               (re.fullmatch(r"seg(\d+)", s.get("id", "")) for s in old) if m]
+    next_id = max(numbers, default=-1) + 1
+    out: list[dict] = []
+    report = {"kept": 0, "changed": 0, "new": 0, "removed": []}
+    matcher = difflib.SequenceMatcher(None, old_keys, new_keys, autojunk=False)
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag == "equal":
+            for o, n in zip(old[i1:i2], new[j1:j2]):
+                o["sourceExcerpt"] = n["sourceExcerpt"]
+                out.append(o)
+                report["kept"] += 1
+            continue
+        olds, news = old[i1:i2], new[j1:j2]
+        pairs = _resync_pairs(olds, news)
+        for nj, n in enumerate(news):
+            if nj in pairs:
+                o = olds[pairs[nj]]
+                seg = copy.deepcopy(o)
+                seg.pop("enrichedScriptText", None)
+                # 이미 있으면 승인 음성 시점의 첫 발화이므로 유지한다.
+                spoken = o["previousSpoken"] if "previousSpoken" in o else _segment_speech(o)
+                seg.update(scriptText=n["scriptText"], audioSummary=n["audioSummary"],
+                           sourceExcerpt=n["sourceExcerpt"], issues=n["issues"],
+                           resyncStatus="changed", previousSpoken=spoken)
+                report["changed"] += 1
+            else:
+                seg = dict(n, id=f"seg{next_id:03d}", resyncStatus="new")
+                next_id += 1
+                report["new"] += 1
+            out.append(seg)
+        paired = set(pairs.values())
+        for oi, o in enumerate(olds):
+            if oi not in paired:
+                report["removed"].append({"id": o.get("id"), "kind": o.get("kind"),
+                                          "previousSpoken": _segment_speech(o)})
+    mark_scaffolding(out)
+    title = next((s.get("scriptText", "") for s in out
+                  if s.get("kind") == "heading"), "")
+    report["connectors"] = insert_connectors(out, title)
+    new_roles = _connector_roles(out)
+    headings = {s.get("id"): s for s in out if s.get("kind") == "heading"}
+    preserved = 0
+    review: list[dict] = []
+    for hid, con in new_roles["transitions"].items():
+        prev = old_roles["transitions"].get(hid)
+        if "resyncStatus" in headings[hid]:
+            review.append({"id": con["id"], "text": con["scriptText"]})
+        elif prev is not None:
+            con["scriptText"] = prev["scriptText"]
+            preserved += 1
+    for role in ("intro", "outro"):
+        if new_roles[role] is not None and old_roles[role] is not None:
+            new_roles[role]["scriptText"] = old_roles[role]["scriptText"]
+            preserved += 1
+    report["connectors_preserved"] = preserved
+    report["connectors_generated"] = report["connectors"] - preserved
+    report["connectors_review"] = review
+    report["needs_summary"] = [s["id"] for s in out
+                               if s.get("kind") in _SUMMARY_KINDS and not s.get("skip")
+                               and not s.get("audioSummary")]
+    report["needs_enrich"] = [s["id"] for s in enrich_targets({"segments": out},
+                                                              resync_only=True)]
+    return out, report
+
+
+def run_resync(args) -> None:
+    script = json.loads(args.script.read_text(encoding="utf-8"))
+    md = args.md.read_text(encoding="utf-8")
+    lexicon = load_lexicon(args.lexicon)
+    segments, report = resync_segments(script["segments"], md, lexicon)
+    print(f"[resync] {script.get('docId', '?')} kept={report['kept']} "
+          f"changed={report['changed']} new={report['new']} "
+          f"removed={len(report['removed'])} "
+          f"needs_enrich={len(report['needs_enrich'])} "
+          f"needs_summary={len(report['needs_summary'])}", file=sys.stderr)
+    if args.dry_run:
+        return
+    script["segments"] = segments
+    script["sourceHash"] = hashlib.sha256(md.encode("utf-8")).hexdigest()
+    script["lexiconVersion"] = _lexicon_version(lexicon)
+    script["reviewStatus"] = "needs_human_review"
+    write_json(args.script, script)
 
 
 def review_checklist_md(doc_id: str) -> str:
@@ -409,13 +546,17 @@ def run_generate(args) -> None:
           f"{n_issues} issues → {args.out_dir / 'script.json'}", file=sys.stderr)
 
 
+# audioSummary로 발화하는 세그먼트 종류.
+_SUMMARY_KINDS = ("table", "code")
+
+
 def script_to_speech(script: dict) -> str:
-    """script.json → 합성용 평문. skip 제외, table은 audioSummary, 그 외 scriptText."""
+    """script.json → 합성용 평문. skip 제외, table·code는 audioSummary, 그 외 scriptText."""
     parts: list[str] = []
     for s in script["segments"]:
         if s.get("skip"):
             continue
-        if s["kind"] == "table":
+        if s["kind"] in _SUMMARY_KINDS:
             if s.get("audioSummary"):
                 parts.append(s["audioSummary"])
         else:
@@ -492,12 +633,15 @@ def gate_script(script: dict, lexicon: dict | None = None) -> tuple:
             hard.append(f"{sid}: 마크다운 링크 잔존")
         if seg.get("kind") == "table" and not seg.get("skip") and not seg.get("audioSummary"):
             hard.append(f"{sid}: table에 audioSummary 또는 skip 필요")
+        if seg.get("kind") == "code" and not seg.get("skip") and not seg.get("audioSummary"):
+            hard.append(f"{sid}: code에 audioSummary 또는 skip 필요")
         if seg.get("kind") == "source" and not seg.get("skip"):
             hard.append(f"{sid}: source는 skip=true 필요")
         for iss in seg.get("issues", []):
             if str(iss).startswith("unmapped-token"):
                 soft.append(f"{sid}: {iss}")
-        if lexicon and not seg.get("skip"):                  # ④ 원문 토큰 보존
+        # ④ 원문 토큰 보존(code는 원문 식별자를 전부 읽을 수 없어 제외)
+        if lexicon and not seg.get("skip") and seg.get("kind") != "code":
             target = (seg.get("audioSummary") if seg.get("kind") == "table"
                       else body) or ""
             source = seg.get("sourceExcerpt") or ""
@@ -601,11 +745,13 @@ def build_enrich_user(seg: dict) -> str:
             f"위 세그먼트를 규칙대로 풍부화한 대본만 반환하세요.")
 
 
-def enrich_targets(script: dict) -> list:
+def enrich_targets(script: dict, resync_only: bool = False) -> list:
     return [s for s in script["segments"]
             if not s.get("skip")
-            and s.get("kind") not in ("heading", "connector", "table")
-            and s.get("scriptText")]
+            and s.get("kind") not in ("heading", "connector", "table", "code")
+            and s.get("scriptText")
+            and (not resync_only or (s.get("resyncStatus") in ("changed", "new")
+                                     and not s.get("enrichedScriptText")))]
 
 
 def merge_enriched(script: dict, results: dict, lexicon: dict) -> int:
@@ -690,7 +836,7 @@ def call_claude_text(system: str, user: str, model: str) -> str:
 def run_enrich(args) -> None:
     script = json.loads(args.script.read_text(encoding="utf-8"))
     lex = load_lexicon(args.lexicon)
-    targets = enrich_targets(script)
+    targets = enrich_targets(script, resync_only=args.resync_only)
     only = set(args.only.split(",")) if args.only else None
     if only:
         targets = [s for s in targets if s["id"] in only]
@@ -917,10 +1063,10 @@ def _spoken_body(seg: dict) -> str:
 
 
 def _segment_speech(seg: dict) -> str:
-    """세그먼트의 발음 텍스트(table=audioSummary, 그 외 enriched|scriptText)."""
+    """세그먼트의 발음 텍스트(table·code=audioSummary, 그 외 enriched|scriptText)."""
     if seg.get("skip"):
         return ""
-    text = (seg.get("audioSummary") if seg.get("kind") == "table"
+    text = (seg.get("audioSummary") if seg.get("kind") in _SUMMARY_KINDS
             else _spoken_body(seg)) or ""
     return text.strip()
 
@@ -1067,6 +1213,54 @@ def _mk_connector(n: int, text: str) -> dict:
             "scriptText": text, "audioSummary": None, "skip": False, "issues": []}
 
 
+def _connector_speaks(s: dict) -> bool:
+    """커넥터 배치 기준의 발화 세그먼트 판정."""
+    if s.get("skip"):
+        return False
+    if s.get("kind") == "code":
+        return bool(s.get("audioSummary"))
+    return bool(s.get("scriptText") or s.get("audioSummary"))
+
+
+def _connector_roles(segments: list[dict]) -> dict:
+    """커넥터를 역할별로 식별한다. 전환=바로 다음 앵커 heading id, 도입=첫 발화 뒤,
+    마무리=마지막 발화 뒤. 반환 {intro, outro, transitions: {heading id: 커넥터}}."""
+    n = len(segments)
+    transitions: dict = {}
+    for i, s in enumerate(segments[:-1]):
+        nxt = segments[i + 1]
+        if (s.get("kind") == "connector" and nxt.get("kind") == "heading"
+                and not nxt.get("skip")
+                and _ANCHOR_RE.search(nxt.get("sourceExcerpt") or "")):
+            transitions[nxt.get("id")] = s
+    roles = {"intro": None, "outro": None, "transitions": transitions}
+    body = [i for i, s in enumerate(segments)
+            if s.get("kind") != "connector" and _connector_speaks(s)]
+    if not body:
+        return roles
+    moved = {id(c) for c in transitions.values()}
+
+    def _after(i: int) -> list[dict]:
+        run: list[dict] = []
+        j = i + 1
+        while j < n and segments[j].get("kind") == "connector":
+            if id(segments[j]) not in moved:
+                run.append(segments[j])
+            j += 1
+        return run
+
+    first, last = body[0], body[-1]
+    if first == last:
+        run = _after(first)
+        roles["intro"] = run[0] if run else None
+        roles["outro"] = run[1] if len(run) > 1 else None
+    else:
+        run_first, run_last = _after(first), _after(last)
+        roles["intro"] = run_first[0] if run_first else None
+        roles["outro"] = run_last[-1] if run_last else None
+    return roles
+
+
 def insert_connectors(segments: list[dict], title: str) -> int:
     """강의 연결 멘트(도입1 + 앵커 섹션 전환N + 마무리1)를 결정적 회전 템플릿으로
     삽입한다. 삽입 세그먼트는 kind='connector', sourceExcerpt='' (gate 토큰검사 스킵),
@@ -1074,11 +1268,7 @@ def insert_connectors(segments: list[dict], title: str) -> int:
     if any(s.get("kind") == "connector" for s in segments):
         return 0
     title = _clean_section_title(title)  # 도입구도 H1 장식(번호·괄호·중점) 정제
-
-    def _speaks(s: dict) -> bool:
-        return (not s.get("skip")) and bool(s.get("scriptText") or s.get("audioSummary"))
-
-    speak_idx = [i for i, s in enumerate(segments) if _speaks(s)]
+    speak_idx = [i for i, s in enumerate(segments) if _connector_speaks(s)]
     if not speak_idx:
         return 0
     first_i, last_i = speak_idx[0], speak_idx[-1]
@@ -1846,6 +2036,234 @@ def _self_test() -> None:
         else:
             os.environ["ANTHROPIC_API_KEY"] = _saved_key
 
+    # --- resync: 코드 블록 세그먼트 ---
+    _cmd = ("# 제목 {#t}\n\n본문입니다.\n\n```bash\naws s3 ls\n```\n\n"
+            "## 🧪 자가 점검\n\n```text\n정답 코드\n```\n")
+    _cs = parse_segments(_cmd)
+    _code = [g for g in _cs if g["kind"] == "code"]
+    assert len(_code) == 1, _cs
+    assert _code[0]["sourceExcerpt"] == "```bash\naws s3 ls\n```", _code
+    assert _code[0]["scriptText"] == "" and _code[0]["audioSummary"] is None, _code
+    assert _code[0]["skip"] is False, _code
+    assert _code[0]["issues"] == ["code-needs-summary"], _code
+    assert any(g["kind"] == "selfcheck" and g["skip"] and "정답 코드" in g["sourceExcerpt"]
+               for g in _cs), _cs                    # 자가 점검 코드는 skip
+    _open = parse_segments("본문.\n\n```bash\naws s3 ls\n")
+    assert _open[-1]["kind"] == "code" \
+        and _open[-1]["sourceExcerpt"] == "```bash\naws s3 ls", _open   # 닫는 펜스 없음
+    assert [g["kind"] for g in parse_segments("문단입니다.\n```\nx\n```\n")] \
+        == ["paragraph", "code"]                     # 문단 파서는 펜스 앞에서 멈춘다
+    _cg_lex = {"EC2": {"say": "이씨투"}}
+    _cgh, _ = gate_script({"segments": [
+        {"id": "c0", "kind": "code", "sourceExcerpt": "```\nEC2\n```", "scriptText": "",
+         "audioSummary": None, "skip": False, "issues": []}]}, _cg_lex)
+    assert "c0: code에 audioSummary 또는 skip 필요" in _cgh, _cgh
+    _cgh, _ = gate_script({"segments": [
+        {"id": "c1", "kind": "code", "sourceExcerpt": "```\nEC2\n```", "scriptText": "",
+         "audioSummary": "명령을 실행합니다.", "skip": False, "issues": []}]}, _cg_lex)
+    assert _cgh == [], _cgh                          # code는 토큰 보존 검사 제외
+    _cgh, _ = gate_script({"segments": [
+        {"id": "c2", "kind": "code", "sourceExcerpt": "```\nx\n```", "scriptText": "",
+         "audioSummary": "A → B", "skip": False, "issues": []}]}, _cg_lex)
+    assert any("기호" in h for h in _cgh), _cgh       # 기호 검사는 audioSummary에 적용
+    _cgh, _ = gate_script({"segments": [
+        {"id": "c3", "kind": "code", "sourceExcerpt": "```\nx\n```", "scriptText": "",
+         "audioSummary": None, "skip": True, "issues": []}]}, _cg_lex)
+    assert _cgh == [], _cgh
+    _cspoken = {"id": "c", "kind": "code", "sourceExcerpt": "```\nx\n```", "scriptText": "",
+                "audioSummary": "코드 요약입니다.", "skip": False, "issues": []}
+    _csilent = dict(_cspoken, audioSummary=None)
+    assert _segment_speech(_cspoken) == "코드 요약입니다.", _cspoken
+    assert _segment_speech(_csilent) == "", _csilent
+    assert script_to_speech({"segments": [_cspoken, _csilent]}) == "코드 요약입니다."
+    assert split_sections([_cspoken])[0]["speech"] == "코드 요약입니다."
+    _cchap = chapters_from_segments([
+        _cspoken,
+        {"id": "h", "kind": "heading", "scriptText": "제목", "skip": False,
+         "sourceExcerpt": "## 제목 {#h}"}])
+    assert _cchap[0]["fraction"] > 0, _cchap         # code 발화가 위치 계산에 든다
+    _csil_only = [dict(_csilent)]
+    assert insert_connectors(_csil_only, "제목") == 0, _csil_only  # 요약 없으면 발화 아님
+    _csp_only = [dict(_cspoken)]
+    assert insert_connectors(_csp_only, "제목") == 2, _csp_only    # 요약 있으면 발화
+    assert enrich_targets({"segments": [dict(_cspoken, scriptText="있어도 제외")]}) == []
+
+    # --- resync_segments ---
+    _rold_md = (
+        "# 강의 제목 {#top}\n\n"
+        "유지되는 문단입니다. 이 문장은 바뀌지 않습니다.\n\n"
+        "바뀌는 문단입니다. 이 문장은 일부만 수정되므로 충분히 비슷합니다.\n\n"
+        "삭제될 내용 가나다라마바사.\n\n"
+        "| 용어 | 설명 | 비고 |\n| --- | --- | --- |\n| 가용 영역 | 격리된 위치 | 중요 |\n\n"
+        "## 둘째 절 {#second}\n\n"
+        "마지막 문단입니다.\n")
+    _rold = parse_segments(_rold_md)
+    for _g in _rold:
+        if _g["kind"] == "paragraph":
+            _g["enrichedScriptText"] = "강의체 " + _g["scriptText"]
+        if _g["kind"] == "table":
+            _g["audioSummary"] = "사람이 쓴 표 요약입니다."
+    _rold_ids = {g["sourceExcerpt"]: g["id"] for g in _rold}
+    insert_connectors(_rold, "강의 제목")
+    _rnew_md = (
+        "# 강의 제목 {#top}\n\n"
+        "**유지되는** 문단입니다. 이 문장은 `바뀌지` 않습니다.\n\n"
+        "바뀌는 문단입니다. 이 문장은 일부만 고쳐지므로 충분히 비슷합니다.\n\n"
+        "QWERTY 12345 zxcvb.\n\n"
+        "| 용어 | 설명 | 비고 |\n| --- | --- | --- |\n| 가용 영역 | 격리된 위치 | 핵심 |\n\n"
+        "## 둘째 절 {#second}\n\n"
+        "마지막 문단입니다.\n\n"
+        "```bash\naws s3 ls\n```\n")
+    _rsnap = json.loads(json.dumps(_rold, ensure_ascii=False))
+    _rout, _rrep = resync_segments(_rold, _rnew_md, {})
+    assert _rold == _rsnap, "입력 변형 금지"
+    _rby = {g["id"]: g for g in _rout}
+    assert len(_rby) == len(_rout), "id 중복"
+    # equal: 강의체 보존 + sourceExcerpt만 갱신 + resyncStatus 없음
+    _kid = _rold_ids["유지되는 문단입니다. 이 문장은 바뀌지 않습니다."]
+    assert _rby[_kid]["enrichedScriptText"].startswith("강의체 "), _rby[_kid]
+    assert _rby[_kid]["sourceExcerpt"].startswith("**유지되는**"), _rby[_kid]
+    assert "resyncStatus" not in _rby[_kid], _rby[_kid]
+    # changed: id 유지 · 강의체 제거 · previousSpoken
+    _cid = _rold_ids["바뀌는 문단입니다. 이 문장은 일부만 수정되므로 충분히 비슷합니다."]
+    assert _rby[_cid]["resyncStatus"] == "changed", _rby[_cid]
+    assert "enrichedScriptText" not in _rby[_cid], _rby[_cid]
+    assert "고쳐지므로" in _rby[_cid]["scriptText"], _rby[_cid]
+    assert _rby[_cid]["previousSpoken"].startswith("강의체 바뀌는"), _rby[_cid]
+    # new: 기존 seg 최댓값 다음 번호
+    _rmax = max(int(g["id"][3:]) for g in _rold if g["id"].startswith("seg"))
+    _rnews = [g for g in _rout if g.get("resyncStatus") == "new"]
+    assert [g["id"] for g in _rnews] == [f"seg{_rmax + 1:03d}", f"seg{_rmax + 2:03d}"], _rnews
+    assert _rnews[0]["scriptText"].startswith("QWERTY"), _rnews
+    assert _rnews[1]["kind"] == "code", _rnews
+    # removed
+    assert [r["id"] for r in _rrep["removed"]] == [_rold_ids["삭제될 내용 가나다라마바사."]], _rrep
+    assert _rrep["removed"][0]["kind"] == "paragraph", _rrep
+    assert _rrep["removed"][0]["previousSpoken"] == "강의체 삭제될 내용 가나다라마바사.", _rrep
+    # 표 changed → 3열이라 요약 없음 → needs_summary
+    _tid = next(g["id"] for g in _rold if g["kind"] == "table")
+    assert _rby[_tid]["resyncStatus"] == "changed" and _rby[_tid]["audioSummary"] is None, _rby[_tid]
+    assert _rby[_tid]["previousSpoken"] == "사람이 쓴 표 요약입니다.", _rby[_tid]
+    assert _tid in _rrep["needs_summary"] and _rnews[1]["id"] in _rrep["needs_summary"], _rrep
+    # 보고 수치
+    assert _rrep["changed"] == 2 and _rrep["new"] == 2 and _rrep["kept"] == 4, _rrep
+    assert set(_rrep["needs_enrich"]) == {_cid, _rnews[0]["id"]}, _rrep
+    # 커넥터 재삽입
+    _rcon = [g for g in _rout if g["kind"] == "connector"]
+    assert _rcon and _rrep["connectors"] == len(_rcon), _rrep
+    assert [g["id"] for g in _rcon] == [f"con{n:03d}" for n in range(len(_rcon))], _rcon
+    assert sum(1 for g in _rout if "둘째 절" in g.get("scriptText", "")
+               and g["kind"] == "connector") == 1, _rcon
+    # 결정성 · 멱등(상태 키 보존)
+    assert resync_segments(_rold, _rnew_md, {}) == (_rout, _rrep), "결정성"
+    _rout2, _rrep2 = resync_segments(_rout, _rnew_md, {})
+    assert _rout2 == _rout, "멱등 위반"
+    assert _rrep2["changed"] == 0 and _rrep2["new"] == 0 and _rrep2["removed"] == [], _rrep2
+    # --resync-only 대상 선별
+    _rdoc = {"segments": _rout}
+    assert {g["id"] for g in enrich_targets(_rdoc, resync_only=True)} \
+        == {_cid, _rnews[0]["id"]}, "resync-only"
+    assert _kid in {g["id"] for g in enrich_targets(_rdoc)}, "기본 호출 불변"
+    # 교차 짝 금지: 순서가 뒤집히면 하나만 짝짓는다
+    _xa = "가나다라마바사아자차카타파하 문단 하나입니다"
+    _xb = "ABCDEFGHIJKLMNOPQRSTUVWXYZ paragraph two"
+    _xold = parse_segments(f"{_xa}\n\n{_xb}\n")
+    _xout, _xrep = resync_segments(
+        _xold, f"{_xb} 고침\n\n{_xa} 고침\n", {})
+    assert _xrep["changed"] == 1 and _xrep["new"] == 1 and len(_xrep["removed"]) == 1, _xrep
+    _xchanged = next(g for g in _xout if g.get("resyncStatus") == "changed")
+    assert _xchanged["id"] == _xold[1]["id"] and _xrep["removed"][0]["id"] == _xold[0]["id"], _xout
+    # 동률이면 앞의 옛 블록
+    _told = parse_segments("가나다라마바사아자차 일\n\n가나다라마바사아자차 이\n")
+    _tout, _trep = resync_segments(_told, "가나다라마바사아자차 삼\n", {})
+    assert [g["id"] for g in _tout if g.get("resyncStatus") == "changed"] == [_told[0]["id"]], _tout
+    assert [r["id"] for r in _trep["removed"]] == [_told[1]["id"]], _trep
+    # resync 서브커맨드 I/O
+    from types import SimpleNamespace as _NS3
+    with tempfile.TemporaryDirectory() as _rd:
+        _rp = Path(_rd) / "script.json"
+        _rm = Path(_rd) / "doc.md"
+        _rm.write_text(_rnew_md, encoding="utf-8")
+        write_json(_rp, {"schemaVersion": 2, "docId": "d", "sourceHash": "old",
+                         "lexiconVersion": "old", "reviewStatus": "approved",
+                         "extra": "보존", "segments": _rold})
+        _rbefore = _rp.read_bytes()
+        run_resync(_NS3(script=_rp, md=_rm, lexicon=None, dry_run=True))
+        assert _rp.read_bytes() == _rbefore, "dry-run은 쓰지 않는다"
+        run_resync(_NS3(script=_rp, md=_rm, lexicon=None, dry_run=False))
+        _rw = json.loads(_rp.read_text(encoding="utf-8"))
+    assert _rw["reviewStatus"] == "needs_human_review" and _rw["extra"] == "보존", _rw
+    assert _rw["sourceHash"] == hashlib.sha256(_rnew_md.encode("utf-8")).hexdigest(), _rw
+    assert _rw["lexiconVersion"] == build_script_json(
+        "x\n", doc_id="d", source_asset="a", lexicon=load_lexicon(None))["lexiconVersion"], _rw
+    # --- resync 보완: 커넥터 보존 ---
+    _pold_md = ("# 커넥터 제목 {#top}\n\n첫 본문입니다.\n\n## 유지 절 {#keep}\n\n유지 본문입니다.\n\n"
+                "## 바뀔 절 제목입니다 {#chg}\n\n바뀔 본문입니다.\n")
+    _pnew_md = ("# 커넥터 제목 {#top}\n\n첫 본문입니다.\n\n## 유지 절 {#keep}\n\n유지 본문입니다.\n\n"
+                "## 바뀔 절 제목입니다 정리 {#chg}\n\n바뀔 본문입니다.\n\n"
+                "## 새 절 XYZ {#added}\n\nQWERTY 본문.\n")
+    _pold = parse_segments(_pold_md)
+    insert_connectors(_pold, "커넥터 제목")
+    for _g in _pold:
+        if _g["kind"] == "connector":
+            _g["scriptText"] = f"손본 문구 {_g['id']}"
+
+    def _before(_segs, _needle):
+        _k = next(n for n, g in enumerate(_segs)
+                  if g["kind"] == "heading" and _needle in g["sourceExcerpt"])
+        assert _segs[_k - 1]["kind"] == "connector", _segs[_k - 1]
+        return _segs[_k - 1]["scriptText"]
+
+    _pout, _prep = resync_segments(_pold, _pnew_md, {})
+    _pcon = [g["scriptText"] for g in _pout if g["kind"] == "connector"]
+    assert _before(_pout, "{#top}") == _before(_pold, "{#top}"), _pcon
+    assert _before(_pout, "{#keep}") == _before(_pold, "{#keep}"), _pcon   # kept heading 보존
+    assert "정리" in _before(_pout, "{#chg}"), _pcon                       # changed는 생성 문구
+    assert "새 절" in _before(_pout, "{#added}"), _pcon                    # new는 생성 문구
+    _pold_con = [g["scriptText"] for g in _pold if g["kind"] == "connector"]
+    assert _pcon[1] == _pold_con[1], (_pcon, _pold_con)                    # 도입
+    assert _pcon[-1] == _pold_con[-1], (_pcon, _pold_con)                  # 마무리
+    assert _prep["connectors"] == 6 and _prep["connectors_preserved"] == 4 \
+        and _prep["connectors_generated"] == 2, _prep
+    assert [r["text"] for r in _prep["connectors_review"]] \
+        == [_before(_pout, "{#chg}"), _before(_pout, "{#added}")], _prep
+    assert all(r["id"].startswith("con") for r in _prep["connectors_review"]), _prep
+    _pout2, _prep2 = resync_segments(_pout, _pnew_md, {})
+    assert _pout2 == _pout, "커넥터 보존 멱등"
+    # 발화 세그먼트가 하나면 도입·마무리를 순서대로 가른다
+    _pone = parse_segments("본문 하나입니다.\n")
+    insert_connectors(_pone, "제목")
+    _pone[1]["scriptText"], _pone[2]["scriptText"] = "손본 도입", "손본 마무리"
+    _pone_out, _pone_rep = resync_segments(_pone, "본문 하나입니다.\n", {})
+    assert [g["scriptText"] for g in _pone_out if g["kind"] == "connector"] \
+        == ["손본 도입", "손본 마무리"], _pone_out
+    assert _pone_rep["connectors_preserved"] == 2, _pone_rep
+
+    # --- resync 보완: --resync-only는 아직 풍부화 안 된 것만 ---
+    _ronly = {"segments": [
+        {"id": "a", "kind": "paragraph", "scriptText": "가", "resyncStatus": "changed"},
+        {"id": "b", "kind": "paragraph", "scriptText": "나", "resyncStatus": "new",
+         "enrichedScriptText": "이미 풍부화"},
+        {"id": "c", "kind": "paragraph", "scriptText": "다"},
+    ]}
+    assert [g["id"] for g in enrich_targets(_ronly, resync_only=True)] == ["a"], _ronly
+    assert [g["id"] for g in enrich_targets(_ronly)] == ["a", "b", "c"], _ronly
+
+    # --- resync 보완: previousSpoken은 첫 발화를 유지 ---
+    _fmd1 = "처음 문단입니다. 내용이 충분히 길어서 비슷하게 유지됩니다.\n"
+    _fmd2 = "처음 문단입니다. 내용이 충분히 길어서 비슷하게 남습니다.\n"
+    _fmd3 = "처음 문단입니다. 내용이 충분히 길어서 비슷하게 머뭅니다.\n"
+    _fold = parse_segments(_fmd1)
+    _fold[0]["enrichedScriptText"] = "승인 음성의 첫 발화"
+    _f1, _ = resync_segments(_fold, _fmd2, {})
+    _f2, _ = resync_segments(_f1, _fmd3, {})
+    _fp = [g for g in _f2 if g["kind"] == "paragraph"][0]
+    assert _fp["resyncStatus"] == "changed" and "머뭅니다" in _fp["scriptText"], _fp
+    assert _fp["previousSpoken"] == "승인 음성의 첫 발화", _fp
+    print("[self-test] resync 보완 OK", file=sys.stderr)
+
+    print("[self-test] resync OK", file=sys.stderr)
+
     print("self-test OK")
 
 
@@ -1897,11 +2315,20 @@ def main() -> None:
     en.add_argument("--model", default="claude-opus-4-8")
     en.add_argument("--only", help="쉼표구분 seg id만 풍부화(재작업용)")
     en.add_argument("--dry-run", action="store_true", help="API 호출 없이 대상만 출력")
+    en.add_argument("--resync-only", action="store_true",
+                    help="resync가 changed·new로 표시하고 아직 풍부화 안 된 세그먼트만")
     en.add_argument("--lexicon", type=Path)
 
     ve = sub.add_parser("verify", help="풍부화본 사실검증(원문 대조 플래그)")
     ve.add_argument("--script", type=Path, required=True)
     ve.add_argument("--model", default="claude-opus-4-8")
+
+    rs = sub.add_parser("resync",
+                        help="최신 md에 대본 재동기화(바뀐 블록만 표시, API 호출 없음)")
+    rs.add_argument("--script", type=Path, required=True)
+    rs.add_argument("--md", type=Path, required=True)
+    rs.add_argument("--lexicon", type=Path)
+    rs.add_argument("--dry-run", action="store_true", help="파일을 쓰지 않고 요약만 출력")
 
     args = ap.parse_args()
     if args.self_test:
@@ -1923,8 +2350,10 @@ def main() -> None:
         run_enrich(args)
     elif args.cmd == "verify":
         run_verify(args)
+    elif args.cmd == "resync":
+        run_resync(args)
     else:
-        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors/enrich/verify) 또는 --self-test 가 필요합니다.")
+        ap.error("서브커맨드(generate/synthesize/gate/chapters/descaffold/connectors/enrich/verify/resync) 또는 --self-test 가 필요합니다.")
 
 
 if __name__ == "__main__":
