@@ -180,6 +180,7 @@
       "id": "clf-t3-4-q7",
       "examGuideTaskId": "clf-t3-4",
       "skill": "데이터 웨어하우스 (Redshift)",
+      "section": "purpose-built",
       "difficulty": "foundational",
       "stem": "한 분석 팀이 페타바이트 규모의 누적 데이터를 SQL과 BI 도구로 분석해 비즈니스 인사이트를 얻으려 한다. 대규모 분석 쿼리에 최적화된 완전관리형 데이터 웨어하우스가 필요하다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -207,6 +208,7 @@
       "id": "clf-t3-4-q8",
       "examGuideTaskId": "clf-t3-4",
       "skill": "그래프 DB (Neptune)",
+      "section": "purpose-built",
       "difficulty": "foundational",
       "stem": "한 회사가 추천 엔진과 부정행위 탐지를 위해 사용자·거래·관계처럼 고도로 연결된 데이터를 저장하고, 밀리초 단위로 그래프를 탐색·쿼리하려 한다. Gremlin, openCypher, SPARQL 같은 그래프 쿼리 언어를 지원하는 완전관리형 서비스로 가장 적합한 것은?",
       "options": [
@@ -234,6 +236,7 @@
       "id": "clf-t3-4-q9",
       "examGuideTaskId": "clf-t3-4",
       "skill": "문서 DB (DocumentDB)",
+      "section": "purpose-built",
       "difficulty": "foundational",
       "stem": "한 팀이 기존 MongoDB 애플리케이션을 AWS로 옮기면서 동일한 드라이버·도구·애플리케이션 코드를 그대로 사용하고 싶다. MongoDB 호환 문서 데이터베이스를 운영 부담 없이 관리형으로 사용하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -261,6 +264,7 @@
       "id": "clf-t3-4-q10",
       "examGuideTaskId": "clf-t3-4",
       "skill": "용도별 데이터베이스 매칭 (그래프·문서·키-값)",
+      "section": "purpose-built",
       "difficulty": "foundational",
       "stem": "세 가지 요구를 각각 가장 적합한 AWS 데이터베이스에 짝지으려 한다 — ① 소셜 네트워크의 친구 관계를 여러 단계로 따라가며 질의 ② JSON 문서를 MongoDB 호환 API·드라이버로 저장·조회 ③ 한 자리 밀리초 지연으로 키-값을 읽고 쓰는 서버리스 NoSQL. 가장 알맞은 조합은?",
       "options": [

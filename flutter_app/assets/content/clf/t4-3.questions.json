@@ -272,6 +272,7 @@
       "id": "clf-t4-3-q10",
       "examGuideTaskId": "clf-t4-3",
       "skill": "AWS Support API (프로그래밍 방식 케이스)",
+      "section": "support-api",
       "difficulty": "foundational",
       "stem": "한 운영팀이 Support 케이스 생성·조회와 Trusted Advisor 점검 결과 조회를 콘솔이 아닌 코드(API)로 자동화하려 한다. AWS Support API에 프로그래밍 방식으로 접근하려면 어떤 Support 플랜 이상이어야 하는가?",
       "options": [

@@ -216,6 +216,7 @@
       "id": "clf-t3-3-q8",
       "examGuideTaskId": "clf-t3-3",
       "skill": "EC2 구매 옵션 (Spot Instances)",
+      "section": "purchase-options",
       "difficulty": "foundational",
       "stem": "한 회사가 중단되어도 괜찮은(내결함성·유연한) 배치 처리 워크로드를 실행하려 한다. 사용하지 않는 EC2 용량을 온디맨드 가격보다 크게 할인된 가격으로 활용해 비용을 최대한 절감하고 싶다. 가장 적합한 EC2 구매 옵션은?",
       "options": [
@@ -327,6 +328,7 @@
       "id": "clf-t3-3-q12",
       "examGuideTaskId": "clf-t3-3",
       "skill": "EC2 구매 옵션 (Reserved Instances)",
+      "section": "purchase-options",
       "difficulty": "foundational",
       "stem": "한 회사가 향후 3년간 꾸준히 가동될 안정적인 EC2 워크로드의 비용을 최대한 낮추려 한다. 1년 또는 3년 약정으로 온디맨드 대비 큰 할인을 받는 구매 옵션은?",
       "options": [
