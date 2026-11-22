@@ -28,7 +28,9 @@ sources:
     url: https://docs.aws.amazon.com/organizations/latest/APIReference/API_CreateOrganization.html
   - title: IAM Identity Center 권한 세트 위임 관리 (공식)
     url: https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetdelegation.html
-lastVerified: 2026-10-20
+  - title: IAM 정책 시뮬레이터로 정책 테스트 (공식)
+    url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html
+lastVerified: 2026-11-22
 ---
 
 # IAM·계정 보안 운영 — 정책·역할·MFA·자격증명 보고서
@@ -192,6 +194,7 @@ aws sts assume-role \
 | **자격증명 보고서(Credential Report)** | 계정 내 **모든 IAM 사용자**의 비밀번호·액세스 키 상태, 마지막 사용 시각, MFA 활성화 여부를 **CSV로 일괄** 출력. 미사용 키·MFA 미설정 사용자 색출에 사용 |
 | **마지막 액세스 정보(Last Accessed)** | 특정 사용자·역할·그룹·정책이 **어떤 서비스에 마지막으로 접근**했는지 → **미사용 권한 회수**에 사용 |
 | **IAM Access Analyzer** | 리소스가 **외부 계정/공개**에 노출됐는지 탐지(S3·IAM 역할·KMS·SQS 등). 사용 내역 기반으로 **최소 권한 정책 생성**도 지원 |
+| **IAM 정책 시뮬레이터(Policy Simulator)** | ID 기반 정책·권한 경계·SCP·내가 제공한 리소스 기반 정책을 평가해, **실제 요청을 보내지 않고** 작업·리소스별 **허용/거부**를 예측. 허용이나 명시적 거부면 어느 정책이 그 결과를 냈는지도 표시(SCP는 일치한 문장을 보여 주지 않음) → **정책 변경 전 영향 확인·접근 거부 원인 진단**에 사용 |
 
 ```bash
 # 자격증명 보고서 생성 후 다운로드
@@ -199,7 +202,9 @@ aws iam generate-credential-report
 aws iam get-credential-report --query 'Content' --output text | base64 -d
 ```
 
-> **운영 절차(최소 권한 유지)**: ① 자격증명 보고서로 90일 이상 미사용 키·MFA 미설정 사용자 식별 → ② 마지막 액세스 정보로 정책의 미사용 서비스 권한 제거 → ③ Access Analyzer로 외부 노출 리소스 점검 → 정기 반복.
+> **운영 절차(최소 권한 유지)**: ① 자격증명 보고서로 90일 이상 미사용 키·MFA 미설정 사용자 식별 → ② 마지막 액세스 정보로 미사용 서비스 권한을 찾아 정책 시뮬레이터로 영향을 확인한 뒤 제거 → ③ Access Analyzer로 외부 노출 리소스 점검 → 정기 반복.
+
+> **정책 시뮬레이터의 한계**: 시뮬레이션 결과는 실제 환경과 다를 수 있으므로 공식 문서는 시뮬레이션 뒤 실제 환경에서 다시 확인하라고 권합니다. SCP는 평가하지만 **리소스 제어 정책(RCP)은 지원하지 않고**, VPC 엔드포인트 정책·역할 체이닝·한 리소스에 여러 리소스 기반 정책이 붙은 구성에서도 결과가 갈릴 수 있습니다. 콘솔 밖에서는 시뮬레이터가 리소스 기반 정책을 가져오지 않으므로 **직접 제공**해야 합니다.
 
 > 🧠 원리: 왜 미사용 권한 회수와 자격증명 상태 점검은 별개 도구로 분리되어 있을까요?
 > 자격증명 보고서는 사용자 수준에서 "키가 존재하는가·언제 마지막으로 사용했는가·MFA가 켜져 있는가"라는 자격증명 객체의 생애 상태를 측정하고, 마지막 액세스 정보는 주체가 실제로 호출한 서비스와 마지막 시각을 측정합니다.
@@ -279,6 +284,7 @@ aws iam get-credential-report --query 'Content' --output text | base64 -d
 - **교차 계정** = 대상 계정에 역할 + 신뢰 정책 + 소스의 `sts:AssumeRole`. 서드파티엔 **External ID**.
 - **자격증명 보고서** = 전체 사용자 자격증명 상태 CSV(미사용 키·MFA 점검). **마지막 액세스 정보** = 미사용 권한 회수.
 - **Access Analyzer** = 외부/공개 노출 탐지 + 최소 권한 정책 생성.
+- **IAM 정책 시뮬레이터** = 실제 요청 없이 작업·리소스별 허용/거부 예측(정책 변경 전 확인·접근 거부 진단). 결과는 실제 환경과 다를 수 있고 RCP는 지원하지 않는다.
 - **루트**: MFA 필수, 액세스 키 금지, 일상 사용 금지.
 - **SCP는 루트 사용자에도 적용**되나, **관리 계정**에는 적용되지 않는다.
 - **SCP의 기본값은 「전부 허용」** — Organizations가 루트·OU·계정마다 **`FullAWSAccess`** 관리형 SCP를 자동 연결한다. "SCP를 붙이면 기본적으로 막힌다"는 오답.
@@ -365,3 +371,4 @@ SCP는 계정·OU에 적용되어 해당 계정의 IAM 주체가 수행할 수 �
 5. 자격 증명 보고서 받기 — https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html
 6. IAM Access Analyzer — https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html
 7. 서비스 제어 정책(SCP) — https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+8. IAM 정책 시뮬레이터로 정책 테스트 — https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html
