@@ -32,7 +32,7 @@ sources:
     url: https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 컨테이너·서버리스·배치 컴퓨팅 선택
@@ -118,7 +118,7 @@ lastVerified: 2026-11-17
 | **ECS (EC2 시작)** | O | 무제한 | Cluster/Service AS | 중간 | 컨테이너 + EC2 노드 직접 제어 |
 | **ECS / EKS + Fargate** | 제한적 | 무제한 (태스크 단위) | 태스크 자동 스케일 | 낮음 | 노드 관리 없이 컨테이너 |
 | **Lambda** | X (스테이트리스) | **최대 15분** | 자동(동시 실행) | 최소 | 이벤트성, 짧은 실행 |
-| **AWS Batch** | 작업 단위 상태 | 무제한 | 자동 Compute Env | 낮음 | 대규모 배치, 완료 후 종료 |
+| **AWS Batch** | 작업 단위 상태 | 고정 상한 없음(Fargate 리소스 작업은 14일) | 자동 Compute Env | 낮음 | 대규모 배치, 완료 후 종료 |
 | **EC2 HPC (클러스터 PG + EFA)** | O | 무제한 | 수동/ASG | 높음 | MPI 과학연산, ML 분산 학습 |
 
 > 🧠 원리: 왜 Lambda만 "상태 유지 X"로 표기되고 다른 서비스들은 상태를 유지할 수 있을까요?
@@ -307,7 +307,7 @@ AWS Batch는 제출된 Job 수·규모에 따라 컴퓨팅 리소스를 자동 �
 
 | 항목 | Lambda | AWS Batch |
 |---|---|---|
-| 실행 시간 제한 | 15분 | **무제한** |
+| 실행 시간 제한 | 15분 | **고정 상한 없음**(Fargate 리소스 작업은 14일 한도) |
 | 상태 유지 | X | O (컨테이너 내) |
 | 트리거 | 이벤트 | Job 제출 (API/콘솔/스케줄) |
 | 대표 용도 | 실시간 이벤트 처리 | 유전체 분석, 재무 보고, 3D 렌더링 |
@@ -476,7 +476,7 @@ Spark·Hadoop 같은 분산 처리를 돌릴 때는 인스턴스를 직접 묶�
 ## ⚠️ 흔한 함정 {#common-pitfalls}
 
 1. **"Lambda로 15분 이상 작업을 처리한다."** → Lambda 함수 타임아웃의 상한은 15분(900초)입니다(Lambda Managed Instances의 비동기·이벤트 소스 매핑 호출만 최대 90분). 초과 시 강제 종료됩니다. 장시간 배치 작업은 AWS Batch, 장기 실행 컨테이너는 ECS/Fargate를 사용합니다.
-   (원리: §4 본문 — Lambda 함수 타임아웃에는 상한(기본 15분)이 있어, 이를 초과하는 작업은 강제 종료된다.)
+   (원리: §4 본문 — Lambda 함수 타임아웃에는 상한이 있어(기본값은 3초), 이를 초과하는 작업은 강제 종료된다.)
 
 2. **"메모리를 늘려도 CPU는 그대로다."** → Lambda는 메모리와 CPU가 비례합니다. 메모리를 두 배 늘리면 vCPU도 비례해 증가합니다(1,769 MB에서 1 vCPU). 공식 문서가 메모리를 성능 제어의 **주된(principal) 손잡이**로 설명하는 이유입니다 — 단, CPU 병목을 넘어서면 이득이 줄어듭니다.
    (원리: §4 — Lambda는 메모리 크기에 비례해 연산 용량이 결정되는 구조라 CPU가 독립 설정값으로 존재하지 않는다.)

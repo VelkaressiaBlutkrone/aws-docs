@@ -26,7 +26,7 @@ sources:
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html
   - title: 버스트 성능 인스턴스 구성 (공식)
     url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-how-to.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # EC2 컴퓨팅 성능 — 인스턴스 패밀리·구매 옵션·배치 전략
@@ -181,7 +181,7 @@ EC2가 용량을 회수할 때 →
 |---|---|---|---|---|
 | **배치 방식** | 단일 AZ 내 밀집 배치 | 파티션(랙 집합)별 분리 | 인스턴스마다 별도 랙 | 고정밀 시간 소스 접근 가능한 하드웨어에 배치 |
 | **AZ 범위** | 단일 AZ만 | 동일 리전 다중 AZ 가능 | 동일 리전 다중 AZ 가능 | 지원 하드웨어가 있는 AZ |
-| **최대 인스턴스 수** | 제한 없음(용량 의존) | AZ당 최대 7파티션, 인스턴스 수 제한 없음 | AZ당 최대 **7개** | 용량·지원 하드웨어 의존 |
+| **최대 인스턴스 수** | 제한 없음(용량 의존) | AZ당 최대 7파티션, 인스턴스 수는 계정 한도까지 | AZ당 최대 **7개** | 용량·지원 하드웨어 의존 |
 | **네트워크 성능** | 인스턴스 간 단일 플로우 최대 **10 Gbps** (ENA 기준) | 파티션 내 일반 성능 | 일반 성능 | 네트워크가 아니라 시간 동기화 최적화 |
 | **장애 격리** | 낮음 (동일 랙 공유 가능) | 파티션 단위 (랙·전원 분리) | 최고 (인스턴스별 별도 랙) | 목적 아님 |
 | **주요 워크로드** | HPC·MPI·저지연 클러스터 | Hadoop·Cassandra·Kafka | 소수 핵심 인스턴스 (ZooKeeper·마스터 노드) | 분산 DB·금융 시스템·이벤트 순서화 |

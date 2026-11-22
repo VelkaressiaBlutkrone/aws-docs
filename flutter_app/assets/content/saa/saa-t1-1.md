@@ -30,7 +30,7 @@ sources:
     url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-06
+lastVerified: 2026-11-22
 ---
 
 # IAM — 자격증명·권한·페더레이션
@@ -72,7 +72,7 @@ lastVerified: 2026-11-06
 | **신뢰 정책** | trust policy | 역할에 붙여 누가 이 역할을 수임할 수 있는지를 정의하는 정책 |
 | **권한 경계** | permissions boundary | 사용자·역할이 받을 수 있는 권한의 상한선 — 실제 권한을 부여하지는 않음 |
 | **OU** | Organizational Unit | AWS Organizations에서 계정을 묶는 논리 그룹 — SCP를 OU 단위로 적용 가능 |
-| **SAML 2.0** | Security Assertion Markup Language | 기업 디렉터리(AD 등) IdP가 발급하는 XML 기반 인증 토큰 표준 |
+| **SAML 2.0** | Security Assertion Markup Language | SAML 2.0 호환 IdP(AD FS·Shibboleth·Okta 등)가 발급하는 XML 기반 인증 토큰 표준 |
 | **OIDC** | OpenID Connect | OAuth 2.0 위에서 신원 확인을 추가한 표준 — GitHub Actions, 모바일 앱 등에서 사용 |
 
 ---
@@ -268,7 +268,7 @@ Active Directory가 등장하는 문제는 "AWS에 실제 AD가 필요한가, �
 
 > 🧠 원리: 왜 OIDC 페더레이션은 외부 자격증명을 신뢰할 때 IAM 사용자를 생성하는 대신 임시 자격증명을 발급할까요?
 > 외부 사용자마다 IAM 사용자를 만들면 사용자 수만큼 생성·삭제·키 교체 작업이 필요하고, 퇴사 처리나 권한 회수가 누락될 위험이 있습니다.
-> OIDC 토큰을 검증해 임시 자격증명을 발급하면 IAM 사용자 수명 주기 관리 자체가 없어집니다 — 외부 IdP에서 사용자가 삭제되면 즉시 AWS 접근이 차단됩니다.
+> OIDC 토큰을 검증해 임시 자격증명을 발급하면 IAM 사용자 수명 주기 관리 자체가 없어집니다 — 외부 IdP에서 사용자가 삭제되면 새 임시 자격증명을 받을 수 없고, 이미 발급된 자격증명은 만료될 때까지만 유효합니다(만료 전에 끊으려면 역할 세션 취소).
 > GitHub Actions CICD처럼 실행 수만큼 자격증명이 필요한 환경에서도 장기 키 없이 각 실행에 독립적인 단수명 토큰을 줄 수 있습니다.
 
 ### 7) 다계정 보안 (AWS Organizations + SCP) {#multi-account-security}

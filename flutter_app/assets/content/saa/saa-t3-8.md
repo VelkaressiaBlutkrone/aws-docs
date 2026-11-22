@@ -24,7 +24,7 @@ sources:
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
   - title: AWS Transit Gateway — VPC 어태치먼트 (공식)
     url: https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 하이브리드 네트워크 — VPC 심화·VPN·Direct Connect·PrivateLink
@@ -129,7 +129,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 **동작 제약 (★ 함정)**
 
 - ⚠️ **하나의 TGW는 같은 VPC에 두 개의 VPC 어태치먼트를 가질 수 없습니다.**
-- ⚠️ **원격 VPC의 보안 그룹을 TGW에서 참조할 수 없습니다.** VPC 피어링은 보안 그룹 참조를 지원하므로, "SG 참조로 소스를 제한하라"는 요구가 있으면 TGW 허브-스포크만으로는 충족되지 않습니다 — 이것이 피어링을 완전히 대체하지 못하는 대표적 이유입니다.
+- ⚠️ **TGW 경유 보안 그룹 참조는 따로 켜야 동작합니다.** 보안 그룹 참조 지원을 **트랜짓 게이트웨이와 VPC 어태치먼트 양쪽에서 활성화**해야 같은 TGW에 붙은 VPC 사이에서 상대 보안 그룹을 참조할 수 있고, **인바운드 규칙에서만** 가능합니다(아웃바운드 규칙은 미지원). "SG 참조로 소스를 제한하라"는 요구에 TGW 허브-스포크를 쓰려면 이 설정이 전제입니다.
 - VPC 어태치먼트는 **트래픽을 보낼 AZ마다 서브넷을 하나씩** 지정해야 합니다. 서브넷을 지정하지 않은 AZ의 리소스는 TGW에 도달하지 못합니다.
 - 리전 간은 **TGW 피어링**이고, 피어링 어태치먼트는 쌍마다 **1개**뿐이라 두 TGW를 여러 경로로 이중화할 수 없습니다.
 
@@ -191,7 +191,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 > 🧠 원리: 왜 Site-to-Site VPN은 연결당 터널을 2개 제공할까요?
 > VPN 터널은 특정 AWS 가용 영역의 엔드포인트 장비에 종단되는데, 단일 터널이면 그 장비나 AZ에 문제가 생길 때 연결 전체가 끊깁니다.
 > 2개의 터널은 서로 다른 AWS 엔드포인트로 각각 연결되어 있어, 하나가 장애를 일으키면 온프레미스 장비가 자동으로 다른 터널로 트래픽을 넘길 수 있습니다.
-> 이 중복 구조가 VPN 연결의 기본 가용성을 높이는 메커니즘이며, 두 터널을 동시에 활성화하면 부하 분산도 가능합니다.
+> 이 중복 구조가 VPN 연결의 기본 가용성을 높이는 메커니즘입니다. 여러 터널에 트래픽을 나눠 싣는 부하 분산은 Transit Gateway에 종단하고 동적 라우팅(BGP)을 쓰는 ECMP 구성에서만 가능합니다.
 
 ### 4) Direct Connect (DX) — 전용 물리 회선 {#direct-connect}
 
@@ -248,7 +248,7 @@ Transit Gateway(TGW)는 여러 VPC, VPN 연결, Direct Connect 게이트웨이�
 > 🧠 원리: 왜 Direct Connect는 기본 암호화를 포함하지 않을까요?
 > Direct Connect는 ISP를 거치지 않는 전용 물리 회선으로, 공용 인터넷과 달리 경로상 제3자가 패킷을 가로채기 어려운 물리적 격리를 제공합니다.
 > 그러나 물리적 격리는 전송 계층 암호화와 다르며, 내부 위협이나 DX 위치(교환 시설)에서의 트래픽 접근 가능성을 배제하지 않습니다.
-> 암호화가 필요한 규정 환경에서는 DX 위에 IPsec VPN 터널을 얹는 패턴으로 물리 회선의 낮은 지연과 전송 암호화를 함께 확보할 수 있습니다.
+> 암호화가 필요한 규정 환경에서는 DX 위에 IPsec VPN 터널을 얹는 패턴으로 물리 회선의 낮은 지연과 전송 암호화를 함께 확보하거나, MACsec을 지원하는 연결이라면 MACsec으로 암호화할 수 있습니다.
 
 ### 5) Direct Connect Gateway — 단일 DX로 다중 리전 접근 {#direct-connect-gateway}
 
@@ -428,7 +428,7 @@ VPC와 온프레미스 사이에서 **DNS 서버를 따로 세우지 않고** �
    (원리: §3 본문 — VPN은 공용 인터넷을 이용한 소프트웨어 설정만으로 즉시 연결이 가능하고, DX는 물리 회선 설치가 선행되어야 한다.)
 
 2. **"Direct Connect는 기본 암호화된다."** Direct Connect는 전용 물리 회선이지만 **기본 암호화가 없습니다.** 전송 암호화가 필요하면 VPN over Direct Connect 패턴이나 MACsec을 사용합니다.
-   (원리: §4 — 물리적 격리는 전송 계층 암호화가 아니며, 암호화가 필요하면 DX 위에 IPsec 터널을 얹어야 한다.)
+   (원리: §4 — 물리적 격리는 전송 계층 암호화가 아니며, 암호화가 필요하면 DX 위에 IPsec 터널을 얹거나 MACsec을 써야 한다.)
 
 3. **"VPC 피어링을 통해 세 VPC가 서로 통신한다."** 피어링은 비전이입니다. A-B, B-C가 있어도 A는 C를 볼 수 없습니다. 세 VPC 모두 통신하려면 Transit Gateway 또는 각 쌍을 직접 피어링해야 합니다.
    (원리: §1 — 피어링은 1:1 네트워크 약속이어서 중간 VPC가 트래픽을 중계하지 않으므로 전이 통신이 성립하지 않는다.)
@@ -505,14 +505,14 @@ VPC 피어링은 비전이 특성상 온프레미스와 통신해야 하는 모�
 11. Direct Connect 연결 옵션·복원력 모델 4종(최대 99.99% / 높은 99.9% / 개발·테스트 / Classic 95%) — https://docs.aws.amazon.com/directconnect/latest/UserGuide/connection_options.html (갭 배치 B8b: 2026-10-21)
 12. Site-to-Site VPN 쿼터 — 터널 대역폭·PPS 표와 **ECMP는 동적 라우팅 전용** — https://docs.aws.amazon.com/vpn/latest/s2svpn/vpn-limits.html (갭 배치 B8b: 2026-10-21)
 13. TGW + Site-to-Site VPN 백서(ECMP 집계·IPsec·BGP 동일 CGW 종단·Accelerated VPN = Global Accelerator) — https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/aws-transit-gateway-vpn.html (갭 배치 B8b: 2026-10-21)
-14. Accelerated Site-to-Site VPN(ECMP 합계 ~50 Gbps·흐름당은 터널 상한·⚠️ TGW에서 원격 VPC 보안 그룹 참조 불가) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/aws-accelerated-site-to-site-vpn-aws-transit-gateway-single-aws-region.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
+14. Accelerated Site-to-Site VPN(ECMP 합계 ~50 Gbps·흐름당은 터널 상한) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/aws-accelerated-site-to-site-vpn-aws-transit-gateway-single-aws-region.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 15. AWS Transit Gateway 쿼터(어태치먼트 5,000·VPC당 TGW 5·피어링 50·TGW↔CNE 1·VPN Concentrator 5) — https://docs.aws.amazon.com/vpc/latest/tgw/transit-gateway-quotas.html (갭 배치 B8b: 2026-10-21)
 16. VPC 서브넷 CIDR 블록·사이징(`/28`~`/16`·예약 5개·`2^(32−prefix)−5`·BYOIP 예외) — https://docs.aws.amazon.com/vpc/latest/userguide/subnet-sizing.html (갭 배치 B8b: 2026-10-21)
 17. VPC와 네트워크 간 DNS 질의 해석(인바운드·아웃바운드 엔드포인트·전달 규칙·⚠️ CIDR `+2` 직접 질의 미지원) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver-overview-DSN-queries-to-vpc.html (갭 배치 B8b: 2026-10-21)
 18. 하이브리드 DNS 백서 — Resolver 엔드포인트 운영 규모(로깅 가시성 없음·소스 IP 대체·RAM 공유) — https://docs.aws.amazon.com/whitepapers/latest/hybrid-cloud-dns-options-for-vpc/route-53-resolver-endpoints-and-forwarding-rules.html (갭 배치 B8b: 2026-10-21) (백서 본문은 유효하나 브라우저로 열면 서비스 페이지로 리다이렉트됨 · 2026-11-06 실측)
 19. Route 53 VPC Resolver 쿼터 — 엔드포인트의 **IP 주소당 UDP DNS 10,000 QPS**(⚠️ NLB 경유나 제한적 보안 그룹으로 연결 추적이 강제되면 인바운드는 **1,500까지** 내려간다) — https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html (2026-11-17 확인)
 
-> 📝 **2026-10-21 보강 (갭 배치 B8b)**: ① §2에 **TGW 쿼터 표**(어태치먼트 5,000 · **VPC당 TGW 5**(조정 불가) · 피어링 50 · **TGW↔TGW/Cloud WAN CNE 1**(조정 불가) · VPN Concentrator 5·연결 100)와 **동작 제약**(같은 VPC 중복 어태치 불가 · ⚠️ **원격 VPC 보안 그룹 참조 불가** · AZ별 서브넷 지정)을 추가했습니다(근거 14·15번). ② §3에 **터널 대역폭·PPS 표**와 **ECMP**(⚠️ **TGW + 동적 라우팅 전용, 정적 라우팅 불가** · 합계 ~50 Gbps지만 **흐름당은 터널 상한**) · **VPN Concentrator** · **Accelerated VPN**(Global Accelerator로 **경로 품질** 개선, 대역폭 증가가 아님)을 추가했습니다(근거 12·13·14번). ③ §4에 **MACsec**을 추가했습니다 — 기존 서술은 암호화 선택지로 **IPsec 오버레이만** 제시하고 있었습니다(근거 9·10번). 전용/호스팅 구분·**SiteLink**·**복원력 모델 4종**도 함께 적었습니다(근거 11번). ④ 새 절 **§8 서브넷 설계와 IP 주소 지정**·**§9 글로벌 토폴로지·하이브리드 DNS·리소스 배치**를 원리 블록과 함께 넣었습니다(근거 16·17·18번) — 서브섹션이 7→9가 되어 하한이 8로 올라가므로 **원리도 2개 함께** 넣어 9/9로 맞췄고, 가드가 그 하한을 직접 검사합니다.
+> 📝 **2026-10-21 보강 (갭 배치 B8b)**: ① §2에 **TGW 쿼터 표**(어태치먼트 5,000 · **VPC당 TGW 5**(조정 불가) · 피어링 50 · **TGW↔TGW/Cloud WAN CNE 1**(조정 불가) · VPN Concentrator 5·연결 100)와 **동작 제약**(같은 VPC 중복 어태치 불가 · 보안 그룹 참조 조건(2026-11-22 정정: 양쪽 활성화 시 인바운드 규칙에서 가능) · AZ별 서브넷 지정)을 추가했습니다(근거 14·15번). ② §3에 **터널 대역폭·PPS 표**와 **ECMP**(⚠️ **TGW + 동적 라우팅 전용, 정적 라우팅 불가** · 합계 ~50 Gbps지만 **흐름당은 터널 상한**) · **VPN Concentrator** · **Accelerated VPN**(Global Accelerator로 **경로 품질** 개선, 대역폭 증가가 아님)을 추가했습니다(근거 12·13·14번). ③ §4에 **MACsec**을 추가했습니다 — 기존 서술은 암호화 선택지로 **IPsec 오버레이만** 제시하고 있었습니다(근거 9·10번). 전용/호스팅 구분·**SiteLink**·**복원력 모델 4종**도 함께 적었습니다(근거 11번). ④ 새 절 **§8 서브넷 설계와 IP 주소 지정**·**§9 글로벌 토폴로지·하이브리드 DNS·리소스 배치**를 원리 블록과 함께 넣었습니다(근거 16·17·18번) — 서브섹션이 7→9가 되어 하한이 8로 올라가므로 **원리도 2개 함께** 넣어 9/9로 맞췄고, 가드가 그 하한을 직접 검사합니다.
 >
 > **쓰지 않은 것**: ① **리전 선택 4요소**(규정·지연·비용·서비스 가용성) — 갭 노트 `G-3.4-08`의 틀이지만 공식 문장을 확보하지 못해 **리전 밖 배치 선택지는 `saa-t3-4` §7 교차 참조**로만 채웠습니다. ② **Cloud WAN의 수치·세부 기능** — `99-gaps.md` **V-72**로 공식 in/out-of-scope 어디에도 없어 **범위 판정 자체가 불확실**합니다. 개념과 TGW 접점(CNE 피어링)만 적고 **범위 불확실을 본문에 명시**했으며, 가드가 출제 단정을 금지합니다.
 

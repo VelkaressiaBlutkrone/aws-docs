@@ -36,7 +36,7 @@ sources:
     url: https://aws.amazon.com/about-aws/whats-new/2025/10/aws-lambda-payload-size-256-kb-1-mb-invocations/
   - title: Lambda VPC 연결 — Hyperplane ENI는 VPC 설정 시점에 생성 (공식)
     url: https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 서버리스 패턴 — Lambda·API Gateway·Fargate·ECS/EKS
@@ -188,7 +188,7 @@ API Gateway는 Lambda·백엔드 서비스 앞단의 **진입점(Front Door)**�
 | 유형 | 특징 | 주요 용도 |
 |---|---|---|
 | **REST API** | 기능 풍부(캐싱·사용계획·요청 검증·WAF·CloudTrail 통합) | 세밀한 제어가 필요한 전통적 API |
-| **HTTP API** | 더 저렴·단순·저지연. 기본 기능 위주 | 단순 Lambda 프록시, 비용 우선 |
+| **HTTP API** | 더 저렴·단순. 기능을 최소화한 기본 기능 위주 | 단순 Lambda 프록시, 비용 우선 |
 | **WebSocket API** | 실시간 양방향(Full-duplex) 통신 | 채팅·실시간 알림·게임 |
 
 **인증·인가 방식**

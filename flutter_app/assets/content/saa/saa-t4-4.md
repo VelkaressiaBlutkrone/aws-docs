@@ -22,7 +22,7 @@ sources:
     url: https://aws.amazon.com/directconnect/pricing/pay-as-you-go/
   - title: SAA-C03 공식 시험 가이드 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 비용 최적화 네트워크 — NAT 전략·전송 비용·CDN·피어링·PrivateLink
@@ -145,7 +145,7 @@ Interface Endpoint의 시간 요금은 **엔드포인트가 프로비저닝된 A
 
 > 🧠 원리: 왜 Gateway Endpoint와 Interface Endpoint는 지원 서비스 범위가 다를까요?
 > Gateway Endpoint는 VPC 라우팅 테이블에 경로를 추가해 트래픽을 AWS 내부 경로로 분기하는 방식으로 동작합니다. 이 구조는 S3·DynamoDB처럼 리전 단위로 단일 엔드포인트를 제공하는 서비스에만 적용할 수 있습니다.
-> Interface Endpoint(PrivateLink)는 VPC 내부에 ENI를 생성해 서비스마다 프라이빗 IP를 부여하는 방식으로, 200개 이상의 다양한 서비스에 적용 가능합니다. 대신 AZ별 시간 요금과 데이터 처리 요금이 발생합니다.
+> Interface Endpoint(PrivateLink)는 VPC 내부에 ENI를 생성해 서비스마다 프라이빗 IP를 부여하는 방식으로, 다수의 AWS 서비스에 적용 가능합니다. 대신 AZ별 시간 요금과 데이터 처리 요금이 발생합니다.
 > S3·DynamoDB는 두 방식 모두 적용 가능하지만 Gateway 방식이 무료이므로, 추가 비용 없이 NAT를 우회할 수 있는 첫 번째 선택지가 됩니다.
 
 ### 4) CloudFront로 오리진 전송 비용 절감 {#cloudfront-origin-cost}
