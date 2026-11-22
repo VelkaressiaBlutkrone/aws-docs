@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart' hide Text;
 
+import '../../data/cert_lifecycle.dart';
 import '../../models/certification.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/badges.dart';
+import '../../widgets/cert_lifecycle_notice.dart';
 import '../../widgets/focus_ring.dart';
 import 'home_bits.dart';
 import '../../widgets/text.dart';
@@ -49,6 +51,10 @@ class ContentCertCard extends StatelessWidget {
               fg: c.textMuted,
               strong: false,
             ),
+            if (certLifecycleNotice(cert.code) != null) ...[
+              const SizedBox(height: Gap.xs),
+              CertLifecycleBadge(code: cert.code),
+            ],
             if (viewedBadge != null) ...[
               const SizedBox(height: Gap.xs),
               AppBadge(
