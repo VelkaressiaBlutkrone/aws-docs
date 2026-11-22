@@ -149,7 +149,9 @@ class _ReportPageState extends State<ReportPage> {
             children: [
               Text('약점 리포트', style: t.headlineSmall),
               const SizedBox(height: Gap.sm),
-              Text('연습·시험에서의 문항별 최신 결과로 Task별 정답률을 계산합니다(복습 제외).',
+              Text(
+                  '연습·시험에서의 문항별 최신 결과로 Task별 정답률을 계산합니다(복습 제외). '
+                  '응시 문항이 $kProvisionalMinAttempts문항 미만이면 잠정 결과로 표시합니다.',
                   style: t.bodyMedium),
               const SizedBox(height: Gap.lg),
               if (!r.hasAnyAttempt)
@@ -206,8 +208,12 @@ class _ReportPageState extends State<ReportPage> {
     final title = d.taskTitleById[s.taskId] ?? s.taskId;
     final isWeak = s.status == TaskStatus.weak;
     final isUnattempted = s.status == TaskStatus.unattempted;
-    final Color tone =
-        isUnattempted ? c.textMuted : (isWeak ? c.wrong : c.correct);
+    // 표본이 적으면 맞고 틀림을 색으로 단정하지 않는다. 처방 링크는 그대로 둔다.
+    final isProvisional = s.isProvisional;
+    final emphasizeWeak = isWeak && !isProvisional;
+    final Color tone = isUnattempted || isProvisional
+        ? c.textMuted
+        : (isWeak ? c.wrong : c.correct);
     final String rateLabel =
         isUnattempted ? '미응시' : '정답률 ${((s.rate ?? 0) * 100).round()}%';
     return Padding(
@@ -215,10 +221,12 @@ class _ReportPageState extends State<ReportPage> {
       child: Container(
         padding: const EdgeInsets.all(Gap.lg),
         decoration: BoxDecoration(
-          color: isWeak ? c.wrongWeak : c.surface,
+          color: emphasizeWeak ? c.wrongWeak : c.surface,
           borderRadius: BorderRadius.circular(Radii.md),
           border: Border.all(
-              color: isWeak ? c.wrong.withValues(alpha: 0.35) : c.border),
+              color: emphasizeWeak
+                  ? c.wrong.withValues(alpha: 0.35)
+                  : c.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,12 +245,14 @@ class _ReportPageState extends State<ReportPage> {
             const SizedBox(height: Gap.xs),
             Row(
               children: [
-                Text(
-                    isUnattempted
-                        ? '총 ${s.total}문항'
-                        : '응시 ${s.attempted}/${s.total}문항',
-                    style: t.labelSmall),
-                const Spacer(),
+                Expanded(
+                  child: Text(
+                      isUnattempted
+                          ? '총 ${s.total}문항'
+                          : '응시 ${s.attempted}/${s.total}문항'
+                              '${isProvisional ? ' · 표본 적음 · 잠정' : ''}',
+                      style: t.labelSmall),
+                ),
                 if (isWeak)
                   // A6-6: 패딩이 없어 탭 영역이 텍스트 크기(21.7dp)였다.
                   // 도색은 그대로 두고 탭 영역만 48dp로 넓힌다.
