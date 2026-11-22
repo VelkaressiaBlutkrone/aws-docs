@@ -20,7 +20,15 @@ sources:
     url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
   - title: S3 정적 웹사이트 호스팅 (공식)
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
-lastVerified: 2026-11-17
+  - title: AWS Global Accelerator란 무엇인가 (공식)
+    url: https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
+  - title: AWS Global Accelerator 구성 요소 (공식)
+    url: https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-components.html
+  - title: AWS Global Accelerator FAQ — CloudFront와의 차이 (공식)
+    url: https://aws.amazon.com/global-accelerator/faqs/
+  - title: CloudFront Anycast 고정 IP 요청 (공식)
+    url: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html
+lastVerified: 2026-11-22
 ---
 
 # Route 53 DNS·CloudFront 콘텐츠 전송
@@ -196,6 +204,13 @@ aws cloudfront create-invalidation \
 > 무효화는 엣지에 "해당 경로 캐시를 지워라"라고 직접 지시하는 방법이고, 버전 파일명은 URL 자체를 바꿔 엣지가 완전히 새로운 객체로 인식하게 하는 방법입니다.
 > 공식 문서는 파일을 자주 갱신한다면 **버전 파일명을 주로 쓰라**고 권장합니다 — 무효화는 엣지 캐시만 지워 브라우저·프록시의 옛 버전이 남을 수 있고, 버전 파일명은 롤백이 쉬우며 무효화 요금이 들지 않기 때문입니다.
 
+**비-HTTP TCP/UDP 워크로드의 전역 진입점 — AWS Global Accelerator:**
+
+- **고정 IP:** 기본으로 고정 IPv4 주소 **2개**(듀얼 스택은 IPv4 2개 + IPv6 2개)를 제공하고, 이 주소는 AWS 엣지 네트워크에서 **애니캐스트**됩니다. 가속기를 비활성화해도 유지되고 **삭제하면 잃습니다**.
+- **프로토콜:** 리스너는 **TCP, UDP 또는 둘 다**를 처리합니다.
+- **엔드포인트(표준 가속기):** **Network Load Balancer · Application Load Balancer · EC2 인스턴스 · Elastic IP**이며 한 리전 또는 여러 리전에 둘 수 있습니다.
+- **CloudFront와의 갈림길:** CloudFront는 캐시 가능한 콘텐츠와 동적 콘텐츠(API 가속·동적 사이트)의 전송을 개선합니다. Global Accelerator는 패킷을 엣지에서 프록시해 AWS 글로벌 네트워크로 전달하므로 **게임(UDP)·IoT(MQTT)·VoIP 같은 비-HTTP** 워크로드와, 고정 IP나 빠른 리전 장애 조치가 필요한 HTTP 워크로드에 맞습니다. CloudFront도 배포에 쓸 **Anycast 고정 IP 목록**을 요청할 수 있으므로, 「고정 IP」만으로 둘을 가르지 말고 **프로토콜과 워크로드**를 먼저 봅니다.
+
 ### 7) S3 정적 웹사이트 호스팅 {#s3-static-website}
 
 - S3 버킷의 **정적 웹사이트 호스팅**을 켜면 인덱스/오류 문서를 지정하고 **웹사이트 엔드포인트**를 얻습니다.
@@ -220,6 +235,7 @@ aws cloudfront create-invalidation \
 - **CloudFront용 ACM 인증서 = 반드시 us-east-1.**
 - **캐시 갱신**: 무효화(즉시 · 월 1,000경로 초과분 과금 · `/*`는 1경로) vs **버전 파일명**(공식 권장).
 - **S3 정적 웹사이트 엔드포인트 = HTTP만.** HTTPS는 앞에 CloudFront.
+- **비-HTTP TCP/UDP + 고정 IP = Global Accelerator**(애니캐스트 고정 IP · 엔드포인트 NLB·ALB·EC2·Elastic IP). CloudFront는 캐시·동적 콘텐츠 전송.
 
 ---
 
@@ -302,5 +318,11 @@ enableDnsSupport를 끄면 VPC 내 인스턴스는 VPC가 제공하는 DNS 리�
 4. Amazon CloudFront 개발자 가이드 — 소개 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
 5. CloudFront 캐시 무효화 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html
 6. S3 정적 웹사이트 호스팅 — https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html
+7. AWS Global Accelerator란 무엇인가 — https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html
+8. AWS Global Accelerator 구성 요소 — https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-components.html
+9. AWS Global Accelerator FAQ(CloudFront와의 차이) — https://aws.amazon.com/global-accelerator/faqs/
+10. CloudFront Anycast 고정 IP 요청 — https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/request-static-ips.html
 
 > 📝 **2026-11-17 정정**: 라우팅 정책 표에 **IP 기반 라우팅**을 더하고 정책 개수 단정을 걷었으며, Geoproximity가 레코드 생성 시 고르는 정책이라는 점을 반영했습니다(https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html · https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geoproximity.html). CloudFront 무효화의 과금 방식과 버전 파일명 권장 이유도 공식 서술에 맞췄습니다(https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PayingForInvalidation.html · https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html).
+
+> 📝 **2026-11-22 보강**: 공개 문항이 묻는 **AWS Global Accelerator**(고정 애니캐스트 IP · TCP/UDP · 표준 가속기 엔드포인트)와 CloudFront와의 갈림길을 §6에 더했습니다(근거 7~10번).
