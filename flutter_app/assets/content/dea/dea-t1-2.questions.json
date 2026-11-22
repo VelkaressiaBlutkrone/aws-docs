@@ -20,7 +20,7 @@
       "correct": 0,
       "explanation": "공식 문서는 배치 ETL에 Glue 또는 EMR을 제시하며, Glue는 Apache Spark 위에서 변환 잡을 스케일아웃하는 서버리스 환경입니다. 클러스터 운영 회피 + Spark로 충분이라는 조건에 Glue Spark ETL이 정확히 맞습니다.",
       "wrongExplanations": {
-        "1": "Lambda는 함수당 900초 제약이 있어 TB급 일괄 변환에 부적합합니다. 공식 문서도 더 긴 작업은 EC2·EKS·ECS나 Step Functions 분할을 권합니다.",
+        "1": "Lambda는 함수당 1,800초 제약이 있어 TB급 일괄 변환에 부적합합니다. 공식 문서도 더 긴 작업은 EC2·EKS·ECS나 Step Functions 분할을 권합니다.",
         "2": "Python shell 잡은 단일 머신에서 돌아 약 10 GB까지의 소·중규모 스크립트에 맞습니다. 분산 처리가 아닙니다.",
         "3": "EMR on EC2는 Hadoop 환경에 대한 세밀한 통제가 필요할 때 고릅니다. 여기서는 Spark로 충분하고 운영 회피가 요구사항이라 과한 선택입니다."
       },
@@ -30,7 +30,7 @@
           "url": "https://aws.amazon.com/glue/faqs/"
         },
         {
-          "title": "Lambda quotas — 함수 제한 시간 최대 900초(15분)",
+          "title": "Lambda quotas — 함수 제한 시간 최대 1,800초(30분)",
           "url": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html"
         }
       ],
@@ -434,9 +434,9 @@
         "API Gateway 통합 타임아웃은 기본 900초라 1분 쿼리는 그대로 동기 호출해도 된다"
       ],
       "correct": 0,
-      "explanation": "API Gateway의 동기 통합 타임아웃은 기본 29초입니다. 긴 쿼리는 Redshift Data API로 비동기 실행을 시작하고 쿼리 ID로 상태·결과를 폴링하는 구조로 만들어야 합니다(Lambda 자체 한도는 900초). 29초를 넘기려면 Regional·Private REST API의 쿼터 증액이나 응답 스트리밍(최대 15분)이 필요하고, 이 문항은 그 선택지 없이 기본값을 전제로 설계합니다.",
+      "explanation": "API Gateway의 동기 통합 타임아웃은 기본 29초입니다. 긴 쿼리는 Redshift Data API로 비동기 실행을 시작하고 쿼리 ID로 상태·결과를 폴링하는 구조로 만들어야 합니다(Lambda 자체 한도는 1,800초). 29초를 넘기려면 Regional·Private REST API의 쿼터 증액이나 응답 스트리밍(최대 15분)이 필요하고, 이 문항은 그 선택지 없이 기본값을 전제로 설계합니다.",
       "wrongExplanations": {
-        "1": "Lambda의 제한 시간은 900초입니다. 29초는 API Gateway 통합 타임아웃입니다.",
+        "1": "Lambda의 제한 시간은 1,800초입니다. 29초는 API Gateway 통합 타임아웃입니다.",
         "2": "Redshift Data API 호출은 비동기이며 쿼리 ID로 결과를 조회합니다.",
         "3": "기본 통합 타임아웃은 29초이므로 \"기본 900초\"라는 서술은 거짓입니다. 29초를 넘기는 경로는 있지만 둘 다 별도 선택입니다 — Regional·Private REST API의 Service Quotas 증액, 또는 2025-11 응답 스트리밍(전송 모드를 STREAM으로 바꾸면 최대 15분)."
       },

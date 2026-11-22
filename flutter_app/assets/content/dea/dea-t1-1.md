@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-how-to-event-types-and-destinations.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 데이터 수집 수행 (스트리밍·배치·트리거)
@@ -147,7 +147,7 @@ KDS는 **샤드가 용량 단위**입니다. 시험은 한도와 모드를 요�
 - **JDBC → Glue 북마크**: 기본키를 북마크 키로 쓰되 **순증가(또는 순감소)해야** 합니다. 병렬 읽기는 해시 필드·해시 표현식으로 나눕니다.
 - **Amazon Redshift**: 적재는 **COPY** — 파일을 비슷한 크기(압축 후 **1 MB~1 GB**)로 나누고 **파일 수를 슬라이스 수의 배수**로 맞춥니다. 추출은 **UNLOAD** — 파일 **128~512 MB**를 권장하고 Parquet이 텍스트보다 저장 공간이 적습니다.
 - **Amazon AppFlow**: SaaS ↔ AWS 전송. 트리거는 **온디맨드·이벤트·스케줄** 세 종류이며, 스케줄 플로는 전체/증분을 고르고 **첫 증분 실행은 30일 치**를 가져옵니다.
-- **AWS Lambda**: 함수 제한 시간이 **900초(15분)** 이라 장시간 배치 읽기에는 부적합합니다.
+- **AWS Lambda**: 함수 제한 시간이 **1,800초(30분)** 이라 장시간 배치 읽기에는 부적합합니다. 2026년 11월 상향 전 자료와 FAQ에는 15분으로 적힌 곳이 있습니다.
 - **Amazon EMR**: `S3DistCp`로 S3의 대량 데이터를 HDFS로 효율적으로 복사합니다.
 - **Redshift Data API**: 드라이버·연결·네트워크를 관리하지 않고 SDK/HTTP로 SQL을 실행합니다. **호출은 비동기**이고 자격은 Secrets Manager 또는 임시 DB 자격 증명을 씁니다. 쿼리 최대 24시간, 결과 500 MB(gzip 후)·보관 24시간입니다.
 
@@ -188,7 +188,7 @@ KDS는 **샤드가 용량 단위**입니다. 시험은 한도와 모드를 요�
 ## ✍️ 시험 포인트
 
 - "**코드·서버 없이** S3/Redshift로 적재 + Parquet" → **Firehose**. "**여러 앱이 독립 소비**·재처리·순서" → **KDS**. "**기존 Kafka**" → **MSK**. "DynamoDB 항목 변경 + 항목별 순서" → **DynamoDB Streams**.
-- 숫자로 갈리는 보기: 샤드 **1 MB/s 쓰기·2 MB/s 읽기**, 온디맨드 기본 **4/8 MB/s**, Firehose S3 기본 버퍼 **5 MB·300초**, DynamoDB Streams 보존 **24시간**, Lambda 제한 시간 **900초**.
+- 숫자로 갈리는 보기: 샤드 **1 MB/s 쓰기·2 MB/s 읽기**, 온디맨드 기본 **4/8 MB/s**, Firehose S3 기본 버퍼 **5 MB·300초**, DynamoDB Streams 보존 **24시간**, Lambda 제한 시간 **1,800초**.
 - "소비자를 추가하니 읽기 스로틀" → **EFO**(소비자당 전용 2 MB/s).
 - "전달 실패 후 **언제 데이터가 사라지나**" → Direct PUT **24시간**, KDS 소스는 **KDS 보존 기간**, Redshift COPY는 **최대 120분 재시도**.
 - "FIFO 큐로 S3 이벤트" → 직접 알림 불가, **EventBridge 경유**. "여러 대상·고급 필터·재생" → **EventBridge**.

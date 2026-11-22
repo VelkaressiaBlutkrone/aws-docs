@@ -20,7 +20,7 @@ sources:
     url: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html
   - title: DEA-C01 공식 시험 가이드 도메인 1 (한국어)
     url: https://docs.aws.amazon.com/ko_kr/aws-certification/latest/data-engineer-associate-01/data-engineer-associate-01-domain1.html
-lastVerified: 2026-11-17
+lastVerified: 2026-11-22
 ---
 
 # 데이터 변환 및 처리 (엔진 선택·비용·형식)
@@ -77,14 +77,14 @@ lastVerified: 2026-11-17
 | **Glue Python shell** | 단일 머신에서 돌리는 기본 스크립트, **약 10 GB까지** | 분산 처리가 아님 | "작은 데이터", "간단한 스크립트" |
 | **Glue Streaming** | 스트림 마이크로배치 변환(**exactly-once**) | 저용량 스트리밍용 G.025X 워커 | "스트리밍 ETL" |
 | **EMR** | Hadoop 환경 **직접 접근** — Spark 밖 도구, 세밀한 구성 | 클러스터 운영(배포 옵션은 §3) | "Spark 외 도구", "커스텀 구성" |
-| **Lambda** | 이벤트로 트리거되는 짧은 변환 | **함수당 900초**, 메모리 128~10,240 MB | "15분 이내", "이벤트 기반" |
+| **Lambda** | 이벤트로 트리거되는 짧은 변환 | **함수당 1,800초**, 메모리 128~10,240 MB | "30분 이내", "이벤트 기반" |
 | **Redshift (ELT)** | 이미 적재된 데이터를 SQL로 변환 | **Python UDF는 2026-06-30 이후 지원 중단** | "적재 후 변환" |
 | **Athena** | S3 데이터를 SQL로 변환(CTAS·INSERT INTO·UNLOAD) | 매우 큰 ETL은 EMR/Glue 권장 · **스캔 바이트 과금** | "SQL만으로", "형식 변환" |
 
 > 공식 문서의 기준은 단순합니다. **배치 ETL = Glue 또는 EMR**, 그 둘의 차이는 "서버리스 Spark(Glue) vs 하위 수준 접근과 유연성(EMR)". ETL이 아닌 일반 배치는 **AWS Batch**가 더 맞을 수 있습니다.
 
-> 🧠 원리: 왜 "900초"가 Lambda를 변환 엔진에서 탈락시키는 결정적 숫자일까요?
-> Lambda는 요청 단위로 수명이 끝나는 실행 모델이라 함수당 최대 실행 시간이 15분으로 고정돼 있습니다.
+> 🧠 원리: 왜 "1,800초"가 Lambda를 변환 엔진에서 탈락시키는 결정적 숫자일까요?
+> Lambda는 요청 단위로 수명이 끝나는 실행 모델이라 함수당 최대 실행 시간이 30분으로 고정돼 있습니다. 2026년 11월 상향 전 자료와 FAQ에는 15분으로 적힌 곳이 있습니다.
 > 대용량 변환은 데이터량에 따라 실행 시간이 선형으로 늘어나므로, 데이터가 커지면 언젠가 반드시 이 벽에 부딪힙니다.
 > 그래서 공식 문서도 더 긴 작업은 EC2·EKS·ECS를 쓰거나 Step Functions로 쪼개라고 안내합니다 — 시험에서 "처리 시간이 늘어나는 추세"라는 문장은 Lambda 보기를 지우라는 신호입니다.
 
@@ -172,14 +172,14 @@ lastVerified: 2026-11-17
 
 ### 10) 데이터 API 만들기와 볼륨·속도·다양성 {#data-apis}
 
-- **데이터 API 만들기(1.2.8)**: Redshift **Data API**는 비동기로 SQL을 실행하고 쿼리 ID로 결과를 받아, Lambda를 VPC에 넣지 않고도 호출할 수 있습니다. 외부에 노출할 때는 **API Gateway 동기 통합 타임아웃 기본 29초**를 넘기지 않도록 **비동기 시작 + 폴링** 구조로 만듭니다(Lambda 자체는 900초).
+- **데이터 API 만들기(1.2.8)**: Redshift **Data API**는 비동기로 SQL을 실행하고 쿼리 ID로 결과를 받아, Lambda를 VPC에 넣지 않고도 호출할 수 있습니다. 외부에 노출할 때는 **API Gateway 동기 통합 타임아웃 기본 29초**를 넘기지 않도록 **비동기 시작 + 폴링** 구조로 만듭니다(Lambda 자체는 1,800초).
 - **볼륨·속도·다양성(1.2.9)**: **정형**은 미리 정의된 스키마(웨어하우스), **비정형**은 정해진 데이터 모델이 없음(문서·이미지), **반정형**은 JSON·XML처럼 자기기술 요소를 가집니다(Redshift는 SUPER 타입으로 질의).
 
 ---
 
 ## ✍️ 시험 포인트
 
-- "서버 관리 없이 Spark ETL" → **Glue**. "Spark 밖 도구·세밀한 구성" → **EMR**. "15분 이내 이벤트 변환" → **Lambda**. "적재 후 SQL 변환" → **Redshift ELT**. "SQL로 S3 형식 변환" → **Athena CTAS**.
+- "서버 관리 없이 Spark ETL" → **Glue**. "Spark 밖 도구·세밀한 구성" → **EMR**. "30분 이내 이벤트 변환" → **Lambda**. "적재 후 SQL 변환" → **Redshift ELT**. "SQL로 S3 형식 변환" → **Athena CTAS**.
 - 비용 보기를 가르는 숫자: Glue **1 DPU = 4 vCPU·16 GB**, Flex **최대 35% 절감**, Graviton **최대 30% 절감**, Athena 스캔 **최소 10 MB**·압축/파티셔닝으로 **30~90% 절감**, Lambda 기본 메모리 **128 MB**.
 - "지연 허용 비긴급 잡" → **Flex**. "부하 변동" → **Auto Scaling**. 둘을 섞지 마세요.
 - "Spot을 어디에" → **task 노드만**. core는 HDFS 때문에 On-Demand.
@@ -214,7 +214,7 @@ lastVerified: 2026-11-17
 
 <details><summary>정답 보기</summary>
 
-**AWS Glue(Spark ETL 잡).** 서버리스 Spark 환경에서 워커를 늘려 스케일아웃합니다. Spark 밖 도구나 Hadoop 환경에 대한 하위 수준 접근이 필요할 때가 EMR이고, Lambda는 함수당 900초 제약으로 TB급 변환에 맞지 않습니다.
+**AWS Glue(Spark ETL 잡).** 서버리스 Spark 환경에서 워커를 늘려 스케일아웃합니다. Spark 밖 도구나 Hadoop 환경에 대한 하위 수준 접근이 필요할 때가 EMR이고, Lambda는 함수당 1,800초 제약으로 TB급 변환에 맞지 않습니다.
 </details>
 
 **Q2.** 매일 새벽에 도는 리포트 생성 Glue 잡이 있습니다. 완료 시각이 한두 시간 늦어도 괜찮습니다. 비용을 줄이는 설정은?

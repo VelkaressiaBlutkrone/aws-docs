@@ -197,19 +197,19 @@ void main() {
 
   // ═════════════════════ 🟡 한정 없는 수치·단정 ═════════════════════
 
-  group('Lambda 타임아웃 900초는 표준 함수의 상한이다', () {
-    test('MLA 전수: 타임아웃 900초를 적는 자리는 Managed Instances 예외를 함께 적는다', () {
+  group('Lambda 타임아웃 1,800초는 표준 함수의 상한이다', () {
+    test('MLA 전수: 타임아웃 1,800초를 적는 자리는 Managed Instances 예외를 함께 적는다', () {
       final offenders = <String>[];
       var seen = 0;
       for (final x in all) {
         final hit = factFields(x)
             .values
-            .any((v) => v.contains('900초') && v.contains('타임아웃'));
+            .any((v) => v.contains('1,800초') && v.contains('타임아웃'));
         if (!hit) continue;
         seen++;
         if (!blob(x).contains('Managed Instances')) offenders.add('${x['id']}');
       }
-      final mdRule = RegExp(r'타임아웃[^|]{0,12}900초');
+      final mdRule = RegExp(r'타임아웃[^|]{0,12}1,800초');
       var seenMd = 0;
       for (final l in mdLines()) {
         if (!mdRule.hasMatch(l.value)) continue;
@@ -219,7 +219,7 @@ void main() {
       expect(seen, greaterThanOrEqualTo(1));
       expect(seenMd, greaterThanOrEqualTo(1));
       expect(offenders, isEmpty,
-          reason: '공식 Lambda quotas: "Function timeout: 900 seconds (15 minutes). '
+          reason: '공식 Lambda quotas: "Function timeout 1,800 seconds (30 minutes). '
               'For functions using AWS Lambda Managed Instances, asynchronous '
               'invocations and event source mapping invocations (except Amazon MQ '
               'and Amazon DocumentDB) support a maximum allowed value of 5,400 '
