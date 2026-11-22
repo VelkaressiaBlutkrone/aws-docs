@@ -8,6 +8,7 @@
       "id": "soa-t3-1-q1",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "template-sections",
       "difficulty": "foundational",
       "stem": "CloudFormation 템플릿에서 유일하게 필수인 섹션은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t3-1-q2",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "template-sections",
       "difficulty": "applied",
       "stem": "하나의 템플릿을 개발·운영 환경에 재사용하면서 인스턴스 크기만 다르게 하고, 입력한 DB 비밀번호가 콘솔에 노출되지 않게 하려 한다. 어떤 섹션과 속성을 쓰는가?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t3-1-q3",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "pseudo-params-intrinsics",
       "difficulty": "applied",
       "stem": "리전마다 다른 AMI ID를 템플릿 수정 없이 자동으로 고르려 한다. 가장 적절한 조합은?",
       "options": [
@@ -93,6 +96,7 @@
       "id": "soa-t3-1-q4",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "stacks-change-sets",
       "difficulty": "foundational",
       "stem": "변경 세트(Change Set)를 생성했을 때 인프라에 일어나는 변화는?",
       "options": [
@@ -120,6 +124,7 @@
       "id": "soa-t3-1-q5",
       "examGuideTaskId": "soa-t3-1",
       "skill": "배포 문제 식별 및 해결(3.1.3)",
+      "section": "stacks-change-sets",
       "difficulty": "applied",
       "stem": "변경 세트 검토 화면에서 RDS 리소스에 `Replacement: True`가 표시됐다. 의미와 적절한 대응은?",
       "options": [
@@ -147,6 +152,7 @@
       "id": "soa-t3-1-q6",
       "examGuideTaskId": "soa-t3-1",
       "skill": "배포 문제 식별 및 해결(3.1.3)",
+      "section": "stacks-change-sets",
       "difficulty": "foundational",
       "stem": "스택 업데이트가 중간에 실패하면 CloudFormation의 기본 동작은?",
       "options": [
@@ -174,6 +180,7 @@
       "id": "soa-t3-1-q7",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "nested-vs-cross-stack",
       "difficulty": "applied",
       "stem": "네트워크 스택이 만든 VPC ID를 독립적으로 관리되는 앱 스택이 참조해야 한다. 적절한 방식은?",
       "options": [
@@ -201,6 +208,7 @@
       "id": "soa-t3-1-q8",
       "examGuideTaskId": "soa-t3-1",
       "skill": "배포 문제 식별 및 해결(3.1.3)",
+      "section": "nested-vs-cross-stack",
       "difficulty": "applied",
       "stem": "네트워크 스택의 Export 값을 바꾸려 하는데 업데이트가 거부된다. 이유와 해결 순서는?",
       "options": [
@@ -228,6 +236,7 @@
       "id": "soa-t3-1-q9",
       "examGuideTaskId": "soa-t3-1",
       "skill": "여러 리전·계정에 리소스 프로비저닝 및 공유(3.1.4)",
+      "section": "stacksets",
       "difficulty": "applied",
       "stem": "조직의 모든 계정과 3개 리전에 표준 IAM 역할과 로깅 구성을 한 번의 작업으로 배포해야 한다. 적절한 수단은?",
       "options": [
@@ -255,6 +264,7 @@
       "id": "soa-t3-1-q10",
       "examGuideTaskId": "soa-t3-1",
       "skill": "여러 리전·계정에 리소스 프로비저닝 및 공유(3.1.4)",
+      "section": "stacksets",
       "difficulty": "applied",
       "stem": "조직에 새 계정이 추가될 때마다 기준선 스택이 자동으로 배포되게 하려면 StackSets의 어떤 권한 모델을 사용하는가?",
       "options": [
@@ -282,6 +292,7 @@
       "id": "soa-t3-1-q11",
       "examGuideTaskId": "soa-t3-1",
       "skill": "배포 문제 식별 및 해결(3.1.3)",
+      "section": "drift-detection",
       "difficulty": "applied",
       "stem": "장애 대응 중 누군가 콘솔에서 보안 그룹 규칙을 직접 추가했다. 이 상태를 CloudFormation에서 어떻게 확인하는가?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "soa-t3-1-q12",
       "examGuideTaskId": "soa-t3-1",
       "skill": "배포 문제 식별 및 해결(3.1.3)",
+      "section": "drift-detection",
       "difficulty": "foundational",
       "stem": "드리프트 감지가 차이를 자동으로 원복하지 않는 이유로 가장 적절한 것은?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "soa-t3-1-q13",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "deletion-policy",
       "difficulty": "applied",
       "stem": "스택을 삭제해도 RDS 데이터가 사라지지 않게 하면서 복구 지점은 남기고 싶다. 어떤 설정을 쓰는가?",
       "options": [
@@ -363,6 +376,7 @@
       "id": "soa-t3-1-q14",
       "examGuideTaskId": "soa-t3-1",
       "skill": "CloudFormation 및 AWS CDK로 AWS 리소스 생성·관리(3.1.2)",
+      "section": "nested-vs-cross-stack",
       "difficulty": "foundational",
       "stem": "표준 VPC 구성을 여러 템플릿에서 모듈처럼 재사용하려 한다. 적절한 방식은?",
       "options": [
@@ -390,6 +404,7 @@
       "id": "soa-t3-1-q15",
       "examGuideTaskId": "soa-t3-1",
       "skill": "여러 리전·계정에 리소스 프로비저닝 및 공유(3.1.4)",
+      "section": "stacksets",
       "difficulty": "applied",
       "stem": "StackSets로 수백 개 스택 인스턴스를 배포할 때 한꺼번에 전부 적용하지 않고 점진적으로 펼치려면?",
       "options": [

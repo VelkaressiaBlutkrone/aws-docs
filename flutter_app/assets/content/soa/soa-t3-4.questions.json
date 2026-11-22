@@ -8,6 +8,7 @@
       "id": "soa-t3-4-q1",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "eventbridge-rules",
       "difficulty": "foundational",
       "stem": "EventBridge 규칙에서 '이벤트 패턴 규칙'과 '스케줄 규칙'의 차이는?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t3-4-q2",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "eventbridge-rules",
       "difficulty": "applied",
       "stem": "EC2 인스턴스가 `stopped` 상태가 될 때만 자동화를 트리거하려 한다. 이벤트 패턴으로 적절한 것은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t3-4-q3",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "eventbridge-targets",
       "difficulty": "foundational",
       "stem": "하나의 EventBridge 규칙으로 교정과 알림을 동시에 수행하려면?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t3-4-q4",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "eventbridge-targets",
       "difficulty": "applied",
       "stem": "EventBridge 규칙이 SSM Automation 런북을 실행하려면 왜 IAM 역할이 필요한가?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t3-4-q5",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "eventbridge-rules",
       "difficulty": "applied",
       "stem": "매일 새벽 2시에 오래된 스냅샷을 정리하는 작업을 서버 없이 자동화하려 한다. 가장 적절한 구성은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t3-4-q6",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "event-driven-remediation",
       "difficulty": "applied",
       "stem": "루트 계정 로그인이 발생하면 즉시 보안팀에 알리려 한다. 가장 적절한 자동화 경로는?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t3-4-q7",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "event-driven-remediation",
       "difficulty": "applied",
       "stem": "퍼블릭으로 공개된 S3 버킷이 생기면 자동으로 퍼블릭 액세스를 차단하고 알림을 보내려 한다. 일반적인 구성은?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t3-4-q8",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "config-auto-remediation",
       "difficulty": "foundational",
       "stem": "AWS Config의 자동 교정이 실제 변경 작업을 수행하는 실행 레이어로 주로 사용하는 것은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t3-4-q9",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "alarm-actions",
       "difficulty": "applied",
       "stem": "호스트 하드웨어 장애로 손상된 인스턴스를 인스턴스 ID·프라이빗 IP·EBS를 유지한 채 복구하려 한다. 어떤 자동화인가?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t3-4-q10",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "asg-self-healing",
       "difficulty": "applied",
       "stem": "무상태 웹 플릿에서 비정상 인스턴스를 버리고 새 인스턴스로 대체해 용량을 유지하려 한다. 적절한 메커니즘은?",
       "options": [
@@ -278,6 +288,7 @@
       "id": "soa-t3-4-q11",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "asg-self-healing",
       "difficulty": "foundational",
       "stem": "EC2 자동 복구와 ASG 자동 교체를 구분하는 시험 단서로 올바른 것은?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "soa-t3-4-q12",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "lambda-ops-automation",
       "difficulty": "applied",
       "stem": "표준 AWS 작업(인스턴스 재시작·태그 강제 등)과 조직 고유 로직(사내 CMDB 연동 후 조건 판단)을 각각 자동화해야 한다. 역할 분담으로 적절한 것은?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "soa-t3-4-q13",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "event-driven-remediation",
       "difficulty": "applied",
       "stem": "탐지·라우팅·교정을 세 레이어로 분리하는 설계가 주는 운영 이점은?",
       "options": [
@@ -363,6 +376,7 @@
       "id": "soa-t3-4-q14",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "lambda-ops-automation",
       "difficulty": "applied",
       "stem": "S3 버킷에 객체가 업로드될 때마다 후처리 Lambda를 실행하려 한다. 가장 직접적인 구성은?",
       "options": [
@@ -390,6 +404,7 @@
       "id": "soa-t3-4-q15",
       "examGuideTaskId": "soa-t3-4",
       "skill": "AWS 서비스로 이벤트 기반 자동화 구현(3.2.2)",
+      "section": "config-auto-remediation",
       "difficulty": "applied",
       "stem": "Config 규칙이 비준수 리소스를 찾았을 때 사람 개입 없이 즉시 바로잡히게 하려면?",
       "options": [
