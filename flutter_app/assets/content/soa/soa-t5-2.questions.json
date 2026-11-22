@@ -8,6 +8,7 @@
       "id": "soa-t5-2-q1",
       "examGuideTaskId": "soa-t5-2",
       "skill": "프라이빗 네트워킹 연결 구성(엔드포인트·PrivateLink·피어링)(5.1.2)",
+      "section": "vpc-peering",
       "difficulty": "foundational",
       "stem": "VPC 피어링을 만들 수 없는 조건은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t5-2-q2",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "vpc-peering",
       "difficulty": "applied",
       "stem": "A↔B, B↔C 피어링이 있는데 A에서 C로 통신이 되지 않는다. 원인과 해결은?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t5-2-q3",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "vpc-peering",
       "difficulty": "applied",
       "stem": "피어링 연결을 생성·수락했는데도 두 VPC 사이 통신이 되지 않는다. 가장 흔한 누락은?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t5-2-q4",
       "examGuideTaskId": "soa-t5-2",
       "skill": "프라이빗 네트워킹 연결 구성(엔드포인트·PrivateLink·피어링)(5.1.2)",
+      "section": "transit-gateway",
       "difficulty": "applied",
       "stem": "VPC 20개와 온프레미스를 서로 통신하게 해야 한다. 운영 부담이 가장 낮은 구성은?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t5-2-q5",
       "examGuideTaskId": "soa-t5-2",
       "skill": "프라이빗 네트워킹 연결 구성(엔드포인트·PrivateLink·피어링)(5.1.2)",
+      "section": "transit-gateway",
       "difficulty": "applied",
       "stem": "Transit Gateway에서 운영망과 개발망 VPC가 서로 통신하지 못하게 격리하려면?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t5-2-q6",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "site-to-site-vpn",
       "difficulty": "foundational",
       "stem": "Site-to-Site VPN 연결이 기본으로 제공하는 터널 수와 그 이유는?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t5-2-q7",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "site-to-site-vpn",
       "difficulty": "applied",
       "stem": "온프레미스 네트워크 경로를 수동 입력 없이 AWS로 자동 전파하려 한다. VPN 라우팅 구성은?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t5-2-q8",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "direct-connect",
       "difficulty": "applied",
       "stem": "Direct Connect를 도입했고 규정상 전송 구간 암호화가 필요하다. 올바른 판단은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t5-2-q9",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "direct-connect",
       "difficulty": "foundational",
       "stem": "Direct Connect를 통해 Transit Gateway에 연결하려면 어떤 가상 인터페이스(VIF)를 사용하는가?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t5-2-q10",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "direct-connect",
       "difficulty": "applied",
       "stem": "DX의 가용성을 높이면서 비용을 과도하게 늘리지 않는 일반적인 패턴은?",
       "options": [
@@ -278,6 +288,7 @@
       "id": "soa-t5-2-q11",
       "examGuideTaskId": "soa-t5-2",
       "skill": "프라이빗 네트워킹 연결 구성(엔드포인트·PrivateLink·피어링)(5.1.2)",
+      "section": "vpc-endpoints",
       "difficulty": "foundational",
       "stem": "게이트웨이 VPC 엔드포인트를 사용할 수 있는 서비스는?",
       "options": [
@@ -305,6 +316,7 @@
       "id": "soa-t5-2-q12",
       "examGuideTaskId": "soa-t5-2",
       "skill": "프라이빗 네트워킹 연결 구성(엔드포인트·PrivateLink·피어링)(5.1.2)",
+      "section": "vpc-endpoints",
       "difficulty": "applied",
       "stem": "인터페이스 엔드포인트(PrivateLink)의 동작과 제어 방식으로 올바른 것은?",
       "options": [
@@ -332,6 +344,7 @@
       "id": "soa-t5-2-q13",
       "examGuideTaskId": "soa-t5-2",
       "skill": "프라이빗 네트워킹 연결 구성(엔드포인트·PrivateLink·피어링)(5.1.2)",
+      "section": "vpc-endpoints",
       "difficulty": "applied",
       "stem": "프라이빗 서브넷의 애플리케이션이 SQS에 접근해야 하는데 NAT 게이트웨이를 쓰지 않으려 한다. 적절한 구성은?",
       "options": [
@@ -359,6 +372,7 @@
       "id": "soa-t5-2-q14",
       "examGuideTaskId": "soa-t5-2",
       "skill": "네트워크 아키텍처 비용 최적화(5.1.4)",
+      "section": "vpc-endpoints",
       "difficulty": "applied",
       "stem": "S3 트래픽에 게이트웨이 엔드포인트를 쓰는 것이 인터페이스 엔드포인트보다 비용 면에서 유리한 이유는?",
       "options": [
@@ -386,6 +400,7 @@
       "id": "soa-t5-2-q15",
       "examGuideTaskId": "soa-t5-2",
       "skill": "하이브리드·프라이빗 연결 문제 해결(5.3.4)",
+      "section": "direct-connect",
       "difficulty": "applied",
       "stem": "VPN과 Direct Connect의 특성을 비교한 것으로 올바른 것은?",
       "options": [

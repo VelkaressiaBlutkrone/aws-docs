@@ -64,7 +64,7 @@ List<String> _anchorRuleViolations(String md) {
 }
 
 void main() {
-  // ⚠️ SOA-C03(300문항)은 C 트랙 배치 4~6 으로 채우는 중이다(학습문서 앵커는 2026-11-21 배치 0).
+  // ⚠️ SOA-C03(300문항)은 C 트랙 배치 4~6 으로 전 문항이 연결됐다(학습문서 앵커는 2026-11-21 배치 0).
   // 이 집합 밖의 자격증에 section 이 생기면 이 단정이 깨져 「집합에 넣어라」고 알리고, 아래 Task별
   // 단정은 그 순간부터 자동으로 그 앵커를 검사한다.
   test('대조군: section 을 쓰는 자격증 집합이 고정돼 있고 공허하지 않다', () {
@@ -164,6 +164,7 @@ void main() {
       'soa-t2-1', 'soa-t2-2', 'soa-t2-3', 'soa-t2-4',
       'soa-t3-1', 'soa-t3-2', 'soa-t3-3', 'soa-t3-4',
       'soa-t4-1', 'soa-t4-2', 'soa-t4-3',
+      'soa-t5-1', 'soa-t5-2', 'soa-t5-3', 'soa-t5-4',
     };
     final entries = [
       for (final cert in kContentIndex.keys)

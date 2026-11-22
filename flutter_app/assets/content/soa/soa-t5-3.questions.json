@@ -8,6 +8,7 @@
       "id": "soa-t5-3-q1",
       "examGuideTaskId": "soa-t5-3",
       "skill": "DNS 구성(Route 53 Resolver)(5.2.1)",
+      "section": "route53-hosted-zones",
       "difficulty": "foundational",
       "stem": "프라이빗 호스팅 영역이 동작하려면 연결된 VPC에서 켜져 있어야 하는 설정은?",
       "options": [
@@ -35,6 +36,7 @@
       "id": "soa-t5-3-q2",
       "examGuideTaskId": "soa-t5-3",
       "skill": "DNS 구성(Route 53 Resolver)(5.2.1)",
+      "section": "route53-hosted-zones",
       "difficulty": "applied",
       "stem": "같은 도메인 이름을 VPC 내부에서는 사설 IP로, 인터넷에서는 공인 IP로 해석하게 하려 한다. 이 구성을 무엇이라 하는가?",
       "options": [
@@ -62,6 +64,7 @@
       "id": "soa-t5-3-q3",
       "examGuideTaskId": "soa-t5-3",
       "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "section": "alias-vs-cname",
       "difficulty": "applied",
       "stem": "루트 도메인 `example.com`을 ALB로 보내려는데 CNAME 생성이 거부된다. 올바른 해결은?",
       "options": [
@@ -89,6 +92,7 @@
       "id": "soa-t5-3-q4",
       "examGuideTaskId": "soa-t5-3",
       "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "section": "alias-vs-cname",
       "difficulty": "foundational",
       "stem": "Alias 레코드가 AWS 리소스 대상에서 CNAME보다 유리한 점은?",
       "options": [
@@ -116,6 +120,7 @@
       "id": "soa-t5-3-q5",
       "examGuideTaskId": "soa-t5-3",
       "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "section": "routing-policies",
       "difficulty": "applied",
       "stem": "새 버전에 트래픽 10%만 보내 점진적으로 비중을 늘리려 한다. 적절한 Route 53 라우팅 정책은?",
       "options": [
@@ -143,6 +148,7 @@
       "id": "soa-t5-3-q6",
       "examGuideTaskId": "soa-t5-3",
       "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "section": "routing-policies",
       "difficulty": "applied",
       "stem": "데이터 주권 규정상 한국 사용자는 반드시 서울 리전으로 보내야 한다. 적절한 정책과 그 이유는?",
       "options": [
@@ -170,6 +176,7 @@
       "id": "soa-t5-3-q7",
       "examGuideTaskId": "soa-t5-3",
       "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "section": "routing-policies",
       "difficulty": "foundational",
       "stem": "Multivalue(다중값) 응답 라우팅의 특징으로 올바른 것은?",
       "options": [
@@ -197,6 +204,7 @@
       "id": "soa-t5-3-q8",
       "examGuideTaskId": "soa-t5-3",
       "skill": "Route 53 라우팅 정책·구성·쿼리 로깅 구현(5.2.2)",
+      "section": "health-check-failover",
       "difficulty": "applied",
       "stem": "웹 서버는 살아 있지만 DB 연결이 끊긴 경우에만 페일오버하고, 읽기 복제본 하나가 죽은 경우에는 유지하려 한다. 적절한 상태 확인 구성은?",
       "options": [
@@ -224,6 +232,7 @@
       "id": "soa-t5-3-q9",
       "examGuideTaskId": "soa-t5-3",
       "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "section": "cloudfront",
       "difficulty": "foundational",
       "stem": "CloudFront에서 '경로 패턴별로 캐시 정책·TTL·헤더 전달'을 구성하는 단위는?",
       "options": [
@@ -251,6 +260,7 @@
       "id": "soa-t5-3-q10",
       "examGuideTaskId": "soa-t5-3",
       "skill": "CloudFront 캐싱 문제 파악 및 해결(5.3.3)",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "오리진에서 파일을 교체했는데 사용자에게 여전히 이전 버전이 보인다. 원인과 두 가지 해결책은?",
       "options": [
@@ -278,6 +288,7 @@
       "id": "soa-t5-3-q11",
       "examGuideTaskId": "soa-t5-3",
       "skill": "CloudFront 캐싱 문제 파악 및 해결(5.3.3)",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "배포마다 `/*` 전체 무효화를 반복하는 운영 방식의 문제와 권장 대안은?",
       "options": [
@@ -309,6 +320,7 @@
       "id": "soa-t5-3-q12",
       "examGuideTaskId": "soa-t5-3",
       "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "S3 정적 사이트를 CloudFront 경유로만 접근하게 하고 S3 URL 직접 접근은 막으려 한다. 올바른 구성은?",
       "options": [
@@ -336,6 +348,7 @@
       "id": "soa-t5-3-q13",
       "examGuideTaskId": "soa-t5-3",
       "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "CloudFront 배포에 사용자 지정 도메인과 HTTPS를 적용하려 한다. ACM 인증서 발급 리전은?",
       "options": [
@@ -367,6 +380,7 @@
       "id": "soa-t5-3-q14",
       "examGuideTaskId": "soa-t5-3",
       "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "특정 국가에서의 접근만 차단해야 한다. CloudFront에서 사용할 기능은?",
       "options": [
@@ -394,6 +408,7 @@
       "id": "soa-t5-3-q15",
       "examGuideTaskId": "soa-t5-3",
       "skill": "콘텐츠·서비스 배포 구성(CloudFront·Global Accelerator)(5.2.3)",
+      "section": "cloudfront",
       "difficulty": "applied",
       "stem": "비-HTTP TCP/UDP 게임 서버에 고정 IP 두 개로 전 세계 저지연 접속을 제공해야 한다. 적절한 서비스는?",
       "options": [
