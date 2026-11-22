@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart' hide Text;
 import 'package:go_router/go_router.dart';
 
+import '../../data/cert_lifecycle.dart';
 import '../../data/site_data.dart';
 import '../../models/certification.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/cert_lifecycle_notice.dart';
 import '../../widgets/focus_ring.dart';
 import 'home_bits.dart';
 import '../../widgets/text.dart';
@@ -58,11 +60,14 @@ class _CertCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            Wrap(
+              spacing: Gap.sm,
+              runSpacing: Gap.xs,
               children: [
                 HomePill(label: cert.level.short, tone: PillTone.level),
-                const SizedBox(width: Gap.sm),
                 HomePill(label: cert.code, tone: PillTone.code),
+                if (certLifecycleNotice(cert.code) != null)
+                  CertLifecycleBadge(code: cert.code),
               ],
             ),
             const SizedBox(height: Gap.md),
