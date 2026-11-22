@@ -203,6 +203,7 @@
       "id": "clf-t3-8-q8",
       "examGuideTaskId": "clf-t3-8",
       "skill": "최종 사용자 컴퓨팅 (WorkSpaces Applications, 구 AppStream 2.0)",
+      "section": "appstream-mq",
       "difficulty": "foundational",
       "stem": "한 회사가 데스크톱 애플리케이션 한두 개를 사용자에게 설치 없이 웹 브라우저로 스트리밍해 제공하려 한다(전체 데스크톱이 아닌 특정 애플리케이션만 스트리밍). 가장 적합한 완전관리형 AWS 서비스는?",
       "options": [

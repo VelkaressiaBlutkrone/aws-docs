@@ -184,6 +184,7 @@
       "id": "clf-t2-4-q7",
       "examGuideTaskId": "clf-t2-4",
       "skill": "위협 탐지 (Amazon GuardDuty)",
+      "section": "trusted-advisor",
       "difficulty": "foundational",
       "stem": "한 회사가 VPC 흐름 로그, DNS 로그, CloudTrail 이벤트 등을 지속적으로 분석해 비정상적인 API 호출, 권한 없는 배포, 손상된 인스턴스 같은 악의적 활동·위협을 탐지하는 관리형 서비스를 찾고 있다. 가장 적합한 것은?",
       "options": [
@@ -211,6 +212,7 @@
       "id": "clf-t2-4-q8",
       "examGuideTaskId": "clf-t2-4",
       "skill": "취약점 스캔 (Amazon Inspector)",
+      "section": "trusted-advisor",
       "difficulty": "foundational",
       "stem": "한 회사가 자사 Amazon EC2 인스턴스, 컨테이너 이미지, AWS Lambda 함수의 소프트웨어 취약점(CVE)과 의도치 않은 네트워크 노출을 자동·지속적으로 스캔하려 한다. 가장 적합한 AWS 서비스는?",
       "options": [

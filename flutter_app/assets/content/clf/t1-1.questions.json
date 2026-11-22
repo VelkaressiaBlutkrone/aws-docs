@@ -8,6 +8,7 @@
       "id": "clf-t1-1-q1",
       "examGuideTaskId": "clf-t1-1",
       "skill": "클라우드 컴퓨팅 정의 (가치 제안)",
+      "section": "what-is-cloud",
       "difficulty": "foundational",
       "stem": "AWS는 클라우드 컴퓨팅을 어떻게 정의하는가?",
       "options": [
@@ -63,6 +64,7 @@
       "id": "clf-t1-1-q3",
       "examGuideTaskId": "clf-t1-1",
       "skill": "탄력성",
+      "section": "ha-elasticity",
       "difficulty": "foundational",
       "stem": "한 전자상거래 사이트가 세일 기간에 트래픽이 급증하고 평소에는 낮다. 수요에 맞춰 컴퓨팅 용량을 즉시 늘리고 줄여 필요한 만큼만 사용하려 한다. 이는 클라우드의 어떤 이점인가?",
       "options": [
@@ -182,6 +184,7 @@
       "id": "clf-t1-1-q7",
       "examGuideTaskId": "clf-t1-1",
       "skill": "민첩성 (속도·혁신)",
+      "section": "ha-elasticity",
       "difficulty": "applied",
       "stem": "한 개발팀이 머신러닝, 데이터 분석, 컨테이너 같은 광범위한 기술에 즉시 접근해, 새 기능을 며칠이 아니라 몇 분 만에 프로비저닝하고 실험·출시 속도를 높이려 한다. 이는 클라우드의 어떤 이점을 가장 잘 나타내는가?",
       "options": [
@@ -237,6 +240,7 @@
       "id": "clf-t1-1-q9",
       "examGuideTaskId": "clf-t1-1",
       "skill": "용량 추측 제거 (탄력성 함정)",
+      "section": "ha-elasticity",
       "difficulty": "applied",
       "stem": "온프레미스 환경에서는 미래 수요를 예측해 서버 용량을 미리 넉넉하게 구매해 두는 경우가 많다. 클라우드가 권장하는 접근 방식으로 가장 적절한 것은?",
       "options": [
@@ -264,6 +268,7 @@
       "id": "clf-t1-1-q10",
       "examGuideTaskId": "clf-t1-1",
       "skill": "데이터센터 운영 부담 제거 (비용 이점)",
+      "section": "core-benefits",
       "difficulty": "foundational",
       "stem": "AWS는 클라우드의 비용 이점 중 하나로 '데이터센터와 물리 서버에 대한 지출을 멈추는 것'을 든다. 이것이 의미하는 바를 가장 잘 설명한 것은?",
       "options": [
@@ -319,6 +324,7 @@
       "id": "clf-t1-1-q12",
       "examGuideTaskId": "clf-t1-1",
       "skill": "민첩성 (실험 비용 절감)",
+      "section": "ha-elasticity",
       "difficulty": "foundational",
       "stem": "한 팀이 새 아이디어를 빠르게 시험하고, 안 되면 즉시 접고 싶어 한다. 클라우드가 이를 가능하게 하는 핵심 이점은?",
       "options": [
@@ -346,6 +352,7 @@
       "id": "clf-t1-1-q13",
       "examGuideTaskId": "clf-t1-1",
       "skill": "온디맨드 가능 원리 (가상화·자원 풀)",
+      "section": "what-is-cloud",
       "difficulty": "applied",
       "stem": "한 스타트업이 AWS에서 대규모 서버를 몇 초 만에 실행했다가, 작업이 끝나자 즉시 종료했다. 이처럼 AWS가 필요한 만큼의 컴퓨팅을 즉시 제공하고 쓰지 않으면 회수할 수 있는 근본적인 이유는 무엇인가?",
       "options": [
@@ -377,6 +384,7 @@
       "id": "clf-t1-1-q14",
       "examGuideTaskId": "clf-t1-1",
       "skill": "민첩성과 비용 이점의 혼동 방지",
+      "section": "ha-elasticity",
       "difficulty": "applied",
       "stem": "한 제품팀이 AWS에서 머신러닝 서비스와 컨테이너 인프라를 즉시 활용해 경쟁사보다 3개월 먼저 신규 기능을 출시했다. 담당자가 \"클라우드 덕분에 비용을 절감했다\"고 보고했다. 이 상황에서 가장 정확한 이점 분류는?",
       "options": [
@@ -404,6 +412,7 @@
       "id": "clf-t1-1-q15",
       "examGuideTaskId": "clf-t1-1",
       "skill": "멀티 AZ와 상관 장애 차단 원리",
+      "section": "global-infra",
       "difficulty": "applied",
       "stem": "한 서비스가 동일한 AWS 리전의 세 가용 영역(AZ)에 분산 배치되어 있다. 그중 한 AZ에서 정전이 발생했지만 서비스는 계속 작동했다. 이것이 가능한 이유를 가장 잘 설명하는 것은?",
       "options": [

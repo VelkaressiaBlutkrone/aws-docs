@@ -243,6 +243,7 @@
       "id": "clf-t3-3-q9",
       "examGuideTaskId": "clf-t3-3",
       "skill": "배치 컴퓨팅 (AWS Batch)",
+      "section": "registry-batch",
       "difficulty": "foundational",
       "stem": "한 연구팀이 수천 개의 배치 컴퓨팅 작업(batch job)을 실행하려 한다. 작업량에 맞춰 컴퓨팅 리소스를 자동으로 프로비저닝하고 작업을 큐에 넣어 스케줄링·실행하는 일을, 클러스터나 스케줄링 소프트웨어를 직접 운영하지 않고 처리하고 싶다. 가장 적합한 AWS 서비스는?",
       "options": [
@@ -270,6 +271,7 @@
       "id": "clf-t3-3-q10",
       "examGuideTaskId": "clf-t3-3",
       "skill": "단순 컴퓨팅 (Amazon Lightsail)",
+      "section": "ec2",
       "difficulty": "foundational",
       "stem": "AWS를 처음 쓰는 한 소규모 팀이 간단한 웹사이트와 블로그를 빠르게 띄우려 한다. 가상 서버·스토리지·네트워킹이 미리 구성된 패키지를, 저렴하고 예측 가능한 월정액 요금으로 손쉽게 시작하고 싶다. 가장 적합한 AWS 서비스는?",
       "options": [
