@@ -332,6 +332,7 @@
       "id": "clf-t4-1-q12",
       "examGuideTaskId": "clf-t4-1",
       "skill": "비용의 3대 동인",
+      "section": "data-transfer",
       "difficulty": "foundational",
       "stem": "AWS 요금이 결정되는 근본적인 세 가지 비용 동인을 가장 정확히 묶은 것은?",
       "options": [
