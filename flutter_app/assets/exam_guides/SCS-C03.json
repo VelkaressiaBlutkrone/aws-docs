@@ -1,6 +1,8 @@
 {
   "code": "SCS-C03",
   "slug": "security-specialty-03",
+  "guideVersion": "1.0",
+  "guidePublished": "2026-03-26",
   "overview": {
     "level": "Specialty",
     "passingScore": 750,

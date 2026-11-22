@@ -1,6 +1,8 @@
 {
   "code": "DEA-C01",
   "slug": "data-engineer-associate-01",
+  "guideVersion": "1.1",
+  "guidePublished": "2025-12-12",
   "overview": {
     "level": "Associate",
     "passingScore": 720,
