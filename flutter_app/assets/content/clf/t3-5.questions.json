@@ -316,6 +316,7 @@
       "id": "clf-t3-5-q12",
       "examGuideTaskId": "clf-t3-5",
       "skill": "VPC 연결 (VPC 피어링)",
+      "section": "vpc-peering",
       "difficulty": "foundational",
       "stem": "서로 다른 두 VPC의 리소스가 공용 인터넷을 거치지 않고 사설 IP로 직접 통신하게 연결하려 한다. 가장 적합한 것은?",
       "options": [

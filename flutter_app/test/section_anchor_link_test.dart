@@ -191,64 +191,32 @@ void main() {
     }
   });
 
-  // C 트랙 배치 7 — 전 문항이 절을 가리킨다. 예외는 **정답 사실이 그 Task 학습문서에 없는**
-  // 문항뿐이다. 없는 내용을 가까운 절로 연결하면 학습자가 답이 없는 곳에 도착하므로, 빈 값으로
-  // 두어 문서 맨 위로 보낸다. 값은 그 사실을 대표하는 낱말이고, 문서에 그 낱말이 생기면 아래
-  // 단정이 깨져 「section 을 달고 목록에서 빼라」고 알린다.
+  // C 트랙 배치 7 — 전 문항이 절을 가리킨다. 배치 7 은 정답 사실이 학습문서에 없는 CLF 12문항을
+  // 예외로 남겼고, 2026-11-22 그 사실을 학습문서에 보강해 연결하면서 **예외가 없어졌다**
+  // (문항별 근거는 `clf_doc_coverage_test.dart` 가 그 절 안에서 본다). 앞으로 답이 문서에 없는
+  // 문항이 생기면 가까운 절로 연결하지 말고 학습문서를 먼저 보강한다.
   group('전 자격증 section 불변식', () {
-    const noDocCoverage = <String, String>{
-      'clf-t2-4-q9': 'Macie',
-      'clf-t2-4-q10': 'Secrets Manager',
-      'clf-t3-3-q8': 'Spot',
-      'clf-t3-3-q12': 'Reserved',
-      'clf-t3-4-q7': 'Redshift',
-      'clf-t3-4-q8': 'Neptune',
-      'clf-t3-4-q9': 'DocumentDB',
-      'clf-t3-4-q10': 'Neptune',
-      'clf-t3-5-q12': '피어링',
-      'clf-t3-8-q7': 'Step Functions',
-      'clf-t3-8-q9': 'API Gateway',
-      'clf-t4-3-q10': 'Support API',
-    };
-
     final entries = [
       for (final cert in kContentIndex.keys) ...contentFor(cert),
     ];
 
-    test('대조군: 예외 문항이 전부 실재하고 section 이 비어 있다', () {
-      final byId = {
-        for (final entry in entries)
-          for (final q in _questionsOf(entry)) q['id'] as String: q,
-      };
-      expect(byId.length, greaterThan(2000), reason: '문항을 읽지 못하면 불변식이 공허하다');
-      for (final id in noDocCoverage.keys) {
-        expect(byId.containsKey(id), isTrue, reason: '$id: 문항 없음');
-        expect((byId[id]!['section'] ?? '').toString(), isEmpty,
-            reason: '$id: section 을 달았다면 예외 목록에서 뺀다');
-      }
+    test('대조군: 전 자격증 문항을 읽었다', () {
+      final count =
+          entries.fold<int>(0, (n, entry) => n + _questionsOf(entry).length);
+      expect(count, greaterThan(2000), reason: '문항을 읽지 못하면 불변식이 공허하다');
     });
 
-    test('예외 밖의 전 문항이 구체적인 절을 가리킨다', () {
+    test('전 문항이 구체적인 절을 가리킨다', () {
       final missing = <String>[];
       for (final entry in entries) {
         for (final q in _questionsOf(entry)) {
-          final id = q['id'] as String;
-          if (noDocCoverage.containsKey(id)) continue;
           final section = (q['section'] ?? '').toString();
-          if (section.isEmpty || section == 'core-concepts') missing.add(id);
+          if (section.isEmpty || section == 'core-concepts') {
+            missing.add(q['id'] as String);
+          }
         }
       }
       expect(missing, isEmpty);
-    });
-
-    test('예외 문항의 정답 사실은 그 Task 학습문서에 없다', () {
-      final byTask = {for (final entry in entries) entry.taskId: entry};
-      noDocCoverage.forEach((id, term) {
-        final entry = byTask[id.split('-q').first];
-        expect(entry, isNotNull, reason: id);
-        expect(File(entry!.mdAsset).readAsStringSync().contains(term), isFalse,
-            reason: '$id: 문서에 「$term」이 생겼다 — section 을 달고 예외 목록에서 뺀다');
-      });
     });
   });
 }
