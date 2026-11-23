@@ -68,7 +68,7 @@ void main() {
 
   test('certHasContent: 콘텐츠 보유 true, 미보유/미지정 false', () {
     expect(certHasContent('CLF-C02'), isTrue);
-    expect(certHasContent('DVA-C02'), isFalse);
+    expect(certHasContent('DOP-C02'), isFalse);
     expect(certHasContent('NOPE'), isFalse);
   });
 
@@ -92,7 +92,7 @@ void main() {
   });
 
   test('certContentSummary: 콘텐츠 없는 cert는 0', () {
-    final s = certContentSummary('DVA-C02');
+    final s = certContentSummary('DOP-C02');
     expect(s.docs, 0);
     expect(s.questions, 0);
   });
@@ -559,10 +559,8 @@ void main() {
   // 정한다. 「파일이 있다」와 「앱이 읽을 수 있다」가 다른 사실이고, 그 사이를 재는
   // 가드가 없었다. 여기서 그 둘을 맞댄다.
   //
-  // ⚠️ `assets/content/dva/`가 선언되지 않은 것은 **정상**이다 — DVA는 아직
-  // `kContentIndex`에 등재되지 않았다(12월 전환 PR 몫). 그래서 이 가드는
-  // 「선언된 것이 전부 등재돼야 한다」가 아니라 **「등재된 것은 전부 선언돼야 한다」**
-  // 한 방향만 단정한다.
+  // 이 가드는 「선언된 것이 전부 등재돼야 한다」가 아니라
+  // **「등재된 것은 전부 선언돼야 한다」** 한 방향만 단정한다.
   group('등재된 자격증의 콘텐츠 디렉터리가 pubspec 에 선언돼 있다', () {
     Set<String> declaredContentDirs() {
       final text = File('pubspec.yaml').readAsStringSync();

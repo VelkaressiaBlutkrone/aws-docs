@@ -864,6 +864,22 @@ const Map<String, List<ContentEntry>> kContentIndex = {
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-1', title: 'GenAI 평가 시스템 (품질 지표·모델 평가·사람 평가·품질 게이트·RAG·검색·에이전트·보고·배포 검증)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-1.md', questionsAsset: 'assets/content/aip/aip-t5-1.questions.json', questionCount: 15),
     ContentEntry(certCode: 'AIP-C01', taskId: 'aip-t5-2', title: 'GenAI 애플리케이션 문제 해결 (콘텐츠 처리·API 통합·프롬프트·검색 시스템·프롬프트 운영)', domain: 5, mdAsset: 'assets/content/aip/aip-t5-2.md', questionsAsset: 'assets/content/aip/aip-t5-2.questions.json', questionCount: 15),
   ],
+  // DVA-C03: 2026-12-01 전환. 학습문서 12편만 등재했고 문항은 아직 없다.
+  // 조사·저작 결정의 정본은 docs/content-research/DVA-C03/ 이다.
+  'DVA-C03': [
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t1-1', title: 'AWS에서 호스팅하는 애플리케이션 코드 개발 (결합도·통신·복원력·API·SDK·스트리밍·AI)', domain: 1, mdAsset: 'assets/content/dva/dva-t1-1.md', questionsAsset: 'assets/content/dva/dva-t1-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t1-2', title: 'AWS Lambda용 코드 개발 (VPC 접근·구성 파라미터·수명 주기·통합)', domain: 1, mdAsset: 'assets/content/dva/dva-t1-2.md', questionsAsset: 'assets/content/dva/dva-t1-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t1-3', title: '애플리케이션 개발 중 데이터 스토어 사용 (수명 주기·선택·캐싱·DynamoDB)', domain: 1, mdAsset: 'assets/content/dva/dva-t1-3.md', questionsAsset: 'assets/content/dva/dva-t1-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t2-1', title: '인증·권한 부여 메커니즘 구현 (Cognito·토큰·사전 서명 URL·SigV4·IAM 역할)', domain: 2, mdAsset: 'assets/content/dva/dva-t2-1.md', questionsAsset: 'assets/content/dva/dva-t2-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t2-2', title: '암호화 구현과 민감 데이터 관리 (KMS·ACM·클라이언트 측·마스킹·시크릿)', domain: 2, mdAsset: 'assets/content/dva/dva-t2-2.md', questionsAsset: 'assets/content/dva/dva-t2-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t2-3', title: 'AI 서비스 통합의 보안 위험 완화 (모델 접근·사설 연결·Guardrails·에이전트·로그)', domain: 2, mdAsset: 'assets/content/dva/dva-t2-3.md', questionsAsset: 'assets/content/dva/dva-t2-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t3-1', title: '배포 아티팩트 준비 (패키지·Dockerfile·ECR·환경별 구성·API Gateway 스테이지)', domain: 3, mdAsset: 'assets/content/dva/dva-t3-1.md', questionsAsset: 'assets/content/dva/dva-t3-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t3-2', title: '테스트 구현·자동화 (클라우드 테스트·모의·테스트 이벤트·환경·AI 테스트)', domain: 3, mdAsset: 'assets/content/dva/dva-t3-2.md', questionsAsset: 'assets/content/dva/dva-t3-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t3-3', title: 'CI/CD로 코드 배포 (패키징·컨테이너·IaC·CodeDeploy·CodePipeline·전략·롤백)', domain: 3, mdAsset: 'assets/content/dva/dva-t3-3.md', questionsAsset: 'assets/content/dva/dva-t3-3.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t4-1', title: '근본 원인 분석 지원 (디버깅·지표/로그/추적 해석·로그 쿼리·배포 실패 로그·AI 조사)', domain: 4, mdAsset: 'assets/content/dva/dva-t4-1.md', questionsAsset: 'assets/content/dva/dva-t4-1.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t4-2', title: '로깅·모니터링·관찰성 모범 사례 (구조화 로깅·사용자 지정 지표·알림·추적·워크로드 상태)', domain: 4, mdAsset: 'assets/content/dva/dva-t4-2.md', questionsAsset: 'assets/content/dva/dva-t4-2.questions.json', questionCount: 0),
+    ContentEntry(certCode: 'DVA-C03', taskId: 'dva-t4-3', title: '애플리케이션 최적화 (동시성·메모리/컴퓨팅·메시징·캐싱·병목 탐지·AI 최적화)', domain: 4, mdAsset: 'assets/content/dva/dva-t4-3.md', questionsAsset: 'assets/content/dva/dva-t4-3.questions.json', questionCount: 0),
+  ],
 };
 
 /// 테스트 전용 콘텐츠 인덱스 덮어쓰기(자격증별). 앱 경로에서는 항상 null이다.

@@ -15,6 +15,7 @@ const Map<String, String> kOfficialDocsAuditDates = {
   'AIF-C01': '2026-11-17',
   'SCS-C03': '2026-11-17',
   'AIP-C01': '2026-11-17',
+  'DVA-C03': '2026-11-17',
 };
 
 /// 상세 화면의 공식 가이드 절에 적는 기준 정보. 적을 것이 없으면 null 이다.

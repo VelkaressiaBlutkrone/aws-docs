@@ -229,6 +229,7 @@ flutter:
     - assets/content/aif/
     - assets/content/scs/
     - assets/content/aip/
+    - assets/content/dva/
 
   fonts:
     # Pretendard Variable 단일 파일(woff2 ~2.0MB — 정적 4 OTF 6.3MB 대체, PR3).

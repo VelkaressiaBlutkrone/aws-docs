@@ -56,14 +56,15 @@ final List<Certification> certifications = [
     id: 'developer-associate',
     level: Level.associate,
     title: 'AWS Certified Developer - Associate',
-    code: 'DVA-C02',
+    code: 'DVA-C03',
     audience: 'AWS 기반 애플리케이션을 개발하고 배포하는 개발자',
-    focus: const ['개발', '보안', '배포', '문제 해결'],
+    focus: const ['개발', '보안', '테스트·배포', '문제 해결'],
     roadmap: const [
       'IAM, SDK, CLI, 환경별 자격 증명 흐름을 정리합니다.',
       'Lambda, API Gateway, SQS, SNS, EventBridge를 구현 흐름으로 학습합니다.',
       'DynamoDB, S3, ElastiCache 사용 패턴을 비교합니다.',
       'X-Ray, CloudWatch, CodePipeline 기반 운영 문제를 풉니다.',
+      'AI 지원 개발 도구와 AI 서비스 통합의 보안 통제를 익힙니다.',
     ],
   ),
   Certification(

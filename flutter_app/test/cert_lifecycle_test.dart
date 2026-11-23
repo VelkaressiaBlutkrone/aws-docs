@@ -25,10 +25,9 @@ void main() {
       }
     });
 
-    test('안내 대상은 정확히 네 자격증이고 전부 앱에 등재돼 있다', () {
+    test('안내 대상은 정확히 세 자격증이고 전부 앱에 등재돼 있다', () {
       expect(kCertLifecycles.keys.toSet(), {
         'SAP-C02',
-        'DVA-C02',
         'ANS-C01',
         'MLA-C01',
       });
@@ -53,16 +52,6 @@ void main() {
       expect(n.message, contains('2026년 11월 16일'));
       expect(n.message, contains('SAP-C03'));
       expect(n.message, contains('SAP-C02 기준'));
-    });
-
-    test('DVA-C02는 11월 30일까지 응시 가능으로 표시한다', () {
-      final n = certLifecycleNotice('DVA-C02', DateTime(2026, 11, 30))!;
-      expect(n.phase, CertLifecyclePhase.upcoming);
-      expect(n.message, contains('DVA-C03'));
-      expect(
-        certLifecycleNotice('DVA-C02', DateTime(2026, 12, 1))!.phase,
-        CertLifecyclePhase.ended,
-      );
     });
 
     test('ANS-C01은 후속 시험이 없고 기존 자격 3년 유지를 적는다', () {
@@ -125,7 +114,7 @@ void main() {
       addTearDown(tester.view.reset);
       await tester.pumpWidget(_host(const LevelsSection()));
       expect(find.text('응시 종료'), findsOneWidget); // SAP-C02
-      expect(find.text('11월 30일까지 응시'), findsOneWidget);
+      expect(find.text('11월 30일까지 응시'), findsNothing); // DVA-C02 전환 완료
       expect(find.text('12월 31일까지 응시'), findsOneWidget);
       expect(find.text('MLA-C02 전환 예정'), findsOneWidget);
     });
@@ -152,7 +141,6 @@ void main() {
     final noscript = html.substring(start, html.indexOf('</noscript>', start));
     final expected = {
       'SAP-C02': '2026-11-16',
-      'DVA-C02': '2026-11-30',
       'ANS-C01': '2026-12-31',
       'MLA-C01': 'MLA-C02',
     };
