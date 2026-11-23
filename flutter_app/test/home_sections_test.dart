@@ -57,7 +57,7 @@ void main() {
     expect(find.textContaining('검증 학습문서'), findsWidgets);
     // 콘텐츠 없는 자격증은 "준비 중" 그룹에.
     expect(find.text('준비 중'), findsWidgets);
-    expect(find.text('DVA-C02'), findsWidgets);
+    expect(find.text('DOP-C02'), findsWidgets);
   });
 
   testWidgets('학습문서만 cert: 학습 섹션 노출 + 문항 준비 중 라벨', (tester) async {

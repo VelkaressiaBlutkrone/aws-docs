@@ -56,11 +56,6 @@ final Map<String, CertLifecycle> kCertLifecycles = {
     successor: 'SAP-C03',
     sourceUrl: _guides,
   ),
-  'DVA-C02': CertLifecycle(
-    lastExamDate: DateTime(2026, 11, 30),
-    successor: 'DVA-C03',
-    sourceUrl: _guides,
-  ),
   'ANS-C01': CertLifecycle(
     lastExamDate: DateTime(2026, 12, 31),
     sourceUrl:
