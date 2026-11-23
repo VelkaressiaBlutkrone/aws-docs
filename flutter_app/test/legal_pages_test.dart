@@ -93,6 +93,30 @@ void main() {
       }
     });
 
+    // D1 로 Android 도 강의 음성을 R2 에서 받는다. 처리방침이 「웹만」으로 남으면
+    // Play 에 제출하는 공개 문서가 앱 동작과 어긋난다.
+    test('Android 강의 음성 전송을 처리방침이 적는다', () {
+      // 대조군: Android 앱이 실제로 미디어 재생 서비스를 선언한다.
+      expect(_read('android/app/src/main/AndroidManifest.xml'),
+          contains('FOREGROUND_SERVICE_MEDIA_PLAYBACK'));
+      expect(html, isNot(contains('Android 앱에는 강의 음성 기능이 없습니다')));
+
+      final collected = _section(html, 'collected');
+      expect(collected, contains('강의 음성을 재생할 때'));
+      expect(collected, contains('웹 앱과 Android 앱'));
+
+      final row = RegExp(r'<tr><td>Cloudflare[^\n]*</tr>')
+          .firstMatch(_section(html, 'sharing'))
+          ?.group(0);
+      expect(row, isNotNull, reason: 'Cloudflare 행 추출이 깨졌다');
+      expect(row, contains('웹·Android'));
+      expect(row, isNot(contains('웹만')));
+
+      final transfer = _section(html, 'transfer');
+      expect(transfer, contains('강의 음성 전송(Cloudflare)'));
+      expect(transfer, isNot(contains('gstatic.com · Cloudflare')));
+    });
+
     // 앱 코드가 접속하는 서비스 호스트는 처리방침에 적혀 있어야 한다. 사용자가 직접 누르는
     // 학습 자료 링크(AWS 공식 문서)는 브라우저로 여는 외부 페이지라 제외한다.
     test('앱 코드의 서비스 호스트가 처리방침에 적혀 있다', () {
